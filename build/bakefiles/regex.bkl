@@ -2,7 +2,7 @@
 <!-- $Id$ -->
 
 <makefile>
-    
+
     <if cond="FORMAT=='autoconf'">
         <option name="wxUSE_REGEX"/>
         <set var="LIB_REGEX">
@@ -38,6 +38,7 @@
         <include cond="FORMAT!='autoconf'">$(TOP_SRCDIR)include</include>
         <include cond="FORMAT!='autoconf'">$(SETUPHDIR)</include>
         <define>__WX$(TOOLKIT)__</define>
+        <define>$(WXUNIV_DEFINE)</define>
         <define>$(UNICODE_DEFINE)</define>
         <dirname>$(LIBDIRNAME)</dirname>
         <cflags-borland>-w-8008 -w-8012 -w-8057 -w-8064 -w-8066 -w-8070</cflags-borland>

@@ -187,6 +187,8 @@ ____MONOLIB_GUI_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_framemanager.obj &
 	$(OBJS)\monodll_dockart.obj &
 	$(OBJS)\monodll_floatpane.obj &
+	$(OBJS)\monodll_auibook.obj &
+	$(OBJS)\monodll_tabmdi.obj &
 	$(OBJS)\monodll_richtextctrl.obj &
 	$(OBJS)\monodll_richtextbuffer.obj &
 	$(OBJS)\monodll_richtextstyles.obj &
@@ -197,12 +199,13 @@ ____CORE_SRC_FILENAMES_OBJECTS =
 !ifeq USE_GUI 1
 ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_caret.obj &
+	$(OBJS)\monodll_colour.obj &
+	$(OBJS)\monodll_icon.obj &
 	$(OBJS)\monodll_timer.obj &
 	$(OBJS)\monodll_app.obj &
 	$(OBJS)\monodll_bitmap.obj &
 	$(OBJS)\monodll_brush.obj &
 	$(OBJS)\monodll_clipbrd.obj &
-	$(OBJS)\monodll_colour.obj &
 	$(OBJS)\monodll_cursor.obj &
 	$(OBJS)\monodll_data.obj &
 	$(OBJS)\monodll_dc.obj &
@@ -214,8 +217,6 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_font.obj &
 	$(OBJS)\monodll_fontenum.obj &
 	$(OBJS)\monodll_fontutil.obj &
-	$(OBJS)\monodll_gdiobj.obj &
-	$(OBJS)\monodll_icon.obj &
 	$(OBJS)\monodll_palette.obj &
 	$(OBJS)\monodll_pen.obj &
 	$(OBJS)\monodll_region.obj &
@@ -495,6 +496,8 @@ ____MONOLIB_GUI_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_framemanager.obj &
 	$(OBJS)\monolib_dockart.obj &
 	$(OBJS)\monolib_floatpane.obj &
+	$(OBJS)\monolib_auibook.obj &
+	$(OBJS)\monolib_tabmdi.obj &
 	$(OBJS)\monolib_richtextctrl.obj &
 	$(OBJS)\monolib_richtextbuffer.obj &
 	$(OBJS)\monolib_richtextstyles.obj &
@@ -505,12 +508,13 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =
 !ifeq USE_GUI 1
 ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_caret.obj &
+	$(OBJS)\monolib_colour.obj &
+	$(OBJS)\monolib_icon.obj &
 	$(OBJS)\monolib_timer.obj &
 	$(OBJS)\monolib_app.obj &
 	$(OBJS)\monolib_bitmap.obj &
 	$(OBJS)\monolib_brush.obj &
 	$(OBJS)\monolib_clipbrd.obj &
-	$(OBJS)\monolib_colour.obj &
 	$(OBJS)\monolib_cursor.obj &
 	$(OBJS)\monolib_data.obj &
 	$(OBJS)\monolib_dc.obj &
@@ -522,8 +526,6 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_font.obj &
 	$(OBJS)\monolib_fontenum.obj &
 	$(OBJS)\monolib_fontutil.obj &
-	$(OBJS)\monolib_gdiobj.obj &
-	$(OBJS)\monolib_icon.obj &
 	$(OBJS)\monolib_palette.obj &
 	$(OBJS)\monolib_pen.obj &
 	$(OBJS)\monolib_region.obj &
@@ -734,12 +736,13 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =
 !ifeq USE_GUI 1
 ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_caret.obj &
+	$(OBJS)\coredll_colour.obj &
+	$(OBJS)\coredll_icon.obj &
 	$(OBJS)\coredll_timer.obj &
 	$(OBJS)\coredll_app.obj &
 	$(OBJS)\coredll_bitmap.obj &
 	$(OBJS)\coredll_brush.obj &
 	$(OBJS)\coredll_clipbrd.obj &
-	$(OBJS)\coredll_colour.obj &
 	$(OBJS)\coredll_cursor.obj &
 	$(OBJS)\coredll_data.obj &
 	$(OBJS)\coredll_dc.obj &
@@ -751,8 +754,6 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_font.obj &
 	$(OBJS)\coredll_fontenum.obj &
 	$(OBJS)\coredll_fontutil.obj &
-	$(OBJS)\coredll_gdiobj.obj &
-	$(OBJS)\coredll_icon.obj &
 	$(OBJS)\coredll_palette.obj &
 	$(OBJS)\coredll_pen.obj &
 	$(OBJS)\coredll_region.obj &
@@ -935,12 +936,13 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =
 !ifeq USE_GUI 1
 ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_caret.obj &
+	$(OBJS)\corelib_colour.obj &
+	$(OBJS)\corelib_icon.obj &
 	$(OBJS)\corelib_timer.obj &
 	$(OBJS)\corelib_app.obj &
 	$(OBJS)\corelib_bitmap.obj &
 	$(OBJS)\corelib_brush.obj &
 	$(OBJS)\corelib_clipbrd.obj &
-	$(OBJS)\corelib_colour.obj &
 	$(OBJS)\corelib_cursor.obj &
 	$(OBJS)\corelib_data.obj &
 	$(OBJS)\corelib_dc.obj &
@@ -952,8 +954,6 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_font.obj &
 	$(OBJS)\corelib_fontenum.obj &
 	$(OBJS)\corelib_fontutil.obj &
-	$(OBJS)\corelib_gdiobj.obj &
-	$(OBJS)\corelib_icon.obj &
 	$(OBJS)\corelib_palette.obj &
 	$(OBJS)\corelib_pen.obj &
 	$(OBJS)\corelib_region.obj &
@@ -1486,8 +1486,8 @@ OBJS = wat_$(PORTNAME)univ$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
 LIBDIRNAME = ..\..\lib\wat_$(LIBTYPE_SUFFIX)$(CFG)
 SETUPHDIR = $(LIBDIRNAME)\$(PORTNAME)univ$(WXUNICODEFLAG)$(WXDEBUGFLAG)
 WXREGEX_CFLAGS = $(____DOS_CFLAG_p) $(__DEBUGINFO) $(__OPTIMIZEFLAG) &
-	-i=..\..\include -i=$(SETUPHDIR) -d__WXMGL__ $(__UNICODE_DEFINE_p) &
-	$(CPPFLAGS) $(CFLAGS)
+	-i=..\..\include -i=$(SETUPHDIR) -d__WXMGL__ -d__WXUNIVERSAL__ &
+	$(__UNICODE_DEFINE_p) $(CPPFLAGS) $(CFLAGS)
 WXREGEX_OBJECTS =  &
 	$(OBJS)\wxregex_regcomp.obj &
 	$(OBJS)\wxregex_regexec.obj &
@@ -1674,6 +1674,7 @@ MONODLL_OBJECTS =  &
 	$(OBJS)\monodll_module.obj &
 	$(OBJS)\monodll_mstream.obj &
 	$(OBJS)\monodll_object.obj &
+	$(OBJS)\monodll_platinfo.obj &
 	$(OBJS)\monodll_powercmn.obj &
 	$(OBJS)\monodll_process.obj &
 	$(OBJS)\monodll_regex.obj &
@@ -1768,6 +1769,7 @@ MONOLIB_OBJECTS =  &
 	$(OBJS)\monolib_module.obj &
 	$(OBJS)\monolib_mstream.obj &
 	$(OBJS)\monolib_object.obj &
+	$(OBJS)\monolib_platinfo.obj &
 	$(OBJS)\monolib_powercmn.obj &
 	$(OBJS)\monolib_process.obj &
 	$(OBJS)\monolib_regex.obj &
@@ -1862,6 +1864,7 @@ BASEDLL_OBJECTS =  &
 	$(OBJS)\basedll_module.obj &
 	$(OBJS)\basedll_mstream.obj &
 	$(OBJS)\basedll_object.obj &
+	$(OBJS)\basedll_platinfo.obj &
 	$(OBJS)\basedll_powercmn.obj &
 	$(OBJS)\basedll_process.obj &
 	$(OBJS)\basedll_regex.obj &
@@ -1943,6 +1946,7 @@ BASELIB_OBJECTS =  &
 	$(OBJS)\baselib_module.obj &
 	$(OBJS)\baselib_mstream.obj &
 	$(OBJS)\baselib_object.obj &
+	$(OBJS)\baselib_platinfo.obj &
 	$(OBJS)\baselib_powercmn.obj &
 	$(OBJS)\baselib_process.obj &
 	$(OBJS)\baselib_regex.obj &
@@ -2410,7 +2414,9 @@ AUIDLL_OBJECTS =  &
 	$(OBJS)\auidll_dummy.obj &
 	$(OBJS)\auidll_framemanager.obj &
 	$(OBJS)\auidll_dockart.obj &
-	$(OBJS)\auidll_floatpane.obj
+	$(OBJS)\auidll_floatpane.obj &
+	$(OBJS)\auidll_auibook.obj &
+	$(OBJS)\auidll_tabmdi.obj
 AUILIB_CXXFLAGS = $(____DOS_CFLAG_p) $(__DEBUGINFO) $(__OPTIMIZEFLAG) &
 	-d__WXMGL__ -d__WXUNIVERSAL__ $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) &
 	$(__RTTI_DEFINE_p) -dwxNO_THREADS $(__UNICODE_DEFINE_p) -i=$(SETUPHDIR) &
@@ -2423,7 +2429,9 @@ AUILIB_OBJECTS =  &
 	$(OBJS)\auilib_dummy.obj &
 	$(OBJS)\auilib_framemanager.obj &
 	$(OBJS)\auilib_dockart.obj &
-	$(OBJS)\auilib_floatpane.obj
+	$(OBJS)\auilib_floatpane.obj &
+	$(OBJS)\auilib_auibook.obj &
+	$(OBJS)\auilib_tabmdi.obj
 RICHTEXTDLL_CXXFLAGS = $(____DOS_CFLAG_p) -bd $(__DEBUGINFO) $(__OPTIMIZEFLAG) &
 	-d__WXMGL__ -d__WXUNIVERSAL__ $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) &
 	$(__RTTI_DEFINE_p) -dwxNO_THREADS $(__UNICODE_DEFINE_p) -i=$(SETUPHDIR) &
@@ -2695,14 +2703,14 @@ $(LIBDIRNAME)\wx$(PORTNAME)univ$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)
 !ifeq MONOLITHIC 0
 !ifeq SHARED 1
 !ifeq USE_GUI 1
-$(LIBDIRNAME)\wx$(PORTNAME)univ$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_adv.dll :  $(ADVDLL_OBJECTS) $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(LIBDIRNAME)\wxexpat$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxzlib$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib $(__htmldll___depname) $(__xmldll___depname) $(__coredll___depname) $(__basedll___depname)
+$(LIBDIRNAME)\wx$(PORTNAME)univ$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_adv.dll :  $(ADVDLL_OBJECTS) $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(LIBDIRNAME)\wxexpat$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxzlib$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib $(__coredll___depname) $(__basedll___depname)
 	@%create $(OBJS)\advdll.lbc
 	@%append $(OBJS)\advdll.lbc option quiet
 	@%append $(OBJS)\advdll.lbc name $^@
 	@%append $(OBJS)\advdll.lbc option caseexact
 	@%append $(OBJS)\advdll.lbc $(LDFLAGS) $(__DEBUGINFO_3)  libpath $(LIBDIRNAME) libpath $(%SCITECH)\lib\$(__BUILD_FILENAMES)\dos32\ow10 libpath $(%SCITECH)\lib\$(__BUILD_FILENAMES)\dos32\ow10\$(__MGLPMLIBPATH_FILENAMES)
 	@for %i in ($(ADVDLL_OBJECTS)) do @%append $(OBJS)\advdll.lbc file %i
-	@for %i in ( $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) mgl.lib mglcpp.lib pm.lib $(LIBDIRNAME)\wx$(PORTNAME)univ$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_html.lib $(LIBDIRNAME)\wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_xml.lib $(LIBDIRNAME)\wx$(PORTNAME)univ$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core.lib $(LIBDIRNAME)\wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).lib ) do @%append $(OBJS)\advdll.lbc library %i
+	@for %i in ( $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) mgl.lib mglcpp.lib pm.lib $(LIBDIRNAME)\wx$(PORTNAME)univ$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core.lib $(LIBDIRNAME)\wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).lib ) do @%append $(OBJS)\advdll.lbc library %i
 	@%append $(OBJS)\advdll.lbc
 	@%append $(OBJS)\advdll.lbc system
 	wlink @$(OBJS)\advdll.lbc
@@ -3545,6 +3553,9 @@ $(OBJS)\monodll_mstream.obj :  .AUTODEPEND ..\..\src\common\mstream.cpp
 $(OBJS)\monodll_object.obj :  .AUTODEPEND ..\..\src\common\object.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
+$(OBJS)\monodll_platinfo.obj :  .AUTODEPEND ..\..\src\common\platinfo.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
 $(OBJS)\monodll_powercmn.obj :  .AUTODEPEND ..\..\src\common\powercmn.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
@@ -3665,6 +3676,12 @@ $(OBJS)\monodll_url.obj :  .AUTODEPEND ..\..\src\common\url.cpp
 $(OBJS)\monodll_caret.obj :  .AUTODEPEND ..\..\src\generic\caret.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
+$(OBJS)\monodll_colour.obj :  .AUTODEPEND ..\..\src\generic\colour.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_icon.obj :  .AUTODEPEND ..\..\src\generic\icon.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
 $(OBJS)\monodll_timer.obj :  .AUTODEPEND ..\..\src\generic\timer.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
@@ -3678,9 +3695,6 @@ $(OBJS)\monodll_brush.obj :  .AUTODEPEND ..\..\src\mgl\brush.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_clipbrd.obj :  .AUTODEPEND ..\..\src\mgl\clipbrd.cpp
-	$(CXX) -bt=dos -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
-
-$(OBJS)\monodll_colour.obj :  .AUTODEPEND ..\..\src\mgl\colour.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_cursor.obj :  .AUTODEPEND ..\..\src\mgl\cursor.cpp
@@ -3714,12 +3728,6 @@ $(OBJS)\monodll_fontenum.obj :  .AUTODEPEND ..\..\src\mgl\fontenum.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_fontutil.obj :  .AUTODEPEND ..\..\src\mgl\fontutil.cpp
-	$(CXX) -bt=dos -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
-
-$(OBJS)\monodll_gdiobj.obj :  .AUTODEPEND ..\..\src\mgl\gdiobj.cpp
-	$(CXX) -bt=dos -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
-
-$(OBJS)\monodll_icon.obj :  .AUTODEPEND ..\..\src\mgl\icon.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_palette.obj :  .AUTODEPEND ..\..\src\mgl\palette.cpp
@@ -4523,6 +4531,12 @@ $(OBJS)\monodll_dockart.obj :  .AUTODEPEND ..\..\src\aui\dockart.cpp
 $(OBJS)\monodll_floatpane.obj :  .AUTODEPEND ..\..\src\aui\floatpane.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
+$(OBJS)\monodll_auibook.obj :  .AUTODEPEND ..\..\src\aui\auibook.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_tabmdi.obj :  .AUTODEPEND ..\..\src\aui\tabmdi.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
 $(OBJS)\monodll_richtextctrl.obj :  .AUTODEPEND ..\..\src\richtext\richtextctrl.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
@@ -4652,6 +4666,9 @@ $(OBJS)\monolib_mstream.obj :  .AUTODEPEND ..\..\src\common\mstream.cpp
 $(OBJS)\monolib_object.obj :  .AUTODEPEND ..\..\src\common\object.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
+$(OBJS)\monolib_platinfo.obj :  .AUTODEPEND ..\..\src\common\platinfo.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
 $(OBJS)\monolib_powercmn.obj :  .AUTODEPEND ..\..\src\common\powercmn.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
@@ -4772,6 +4789,12 @@ $(OBJS)\monolib_url.obj :  .AUTODEPEND ..\..\src\common\url.cpp
 $(OBJS)\monolib_caret.obj :  .AUTODEPEND ..\..\src\generic\caret.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
+$(OBJS)\monolib_colour.obj :  .AUTODEPEND ..\..\src\generic\colour.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_icon.obj :  .AUTODEPEND ..\..\src\generic\icon.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
 $(OBJS)\monolib_timer.obj :  .AUTODEPEND ..\..\src\generic\timer.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
@@ -4785,9 +4808,6 @@ $(OBJS)\monolib_brush.obj :  .AUTODEPEND ..\..\src\mgl\brush.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_clipbrd.obj :  .AUTODEPEND ..\..\src\mgl\clipbrd.cpp
-	$(CXX) -bt=dos -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
-
-$(OBJS)\monolib_colour.obj :  .AUTODEPEND ..\..\src\mgl\colour.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_cursor.obj :  .AUTODEPEND ..\..\src\mgl\cursor.cpp
@@ -4821,12 +4841,6 @@ $(OBJS)\monolib_fontenum.obj :  .AUTODEPEND ..\..\src\mgl\fontenum.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_fontutil.obj :  .AUTODEPEND ..\..\src\mgl\fontutil.cpp
-	$(CXX) -bt=dos -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
-
-$(OBJS)\monolib_gdiobj.obj :  .AUTODEPEND ..\..\src\mgl\gdiobj.cpp
-	$(CXX) -bt=dos -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
-
-$(OBJS)\monolib_icon.obj :  .AUTODEPEND ..\..\src\mgl\icon.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_palette.obj :  .AUTODEPEND ..\..\src\mgl\palette.cpp
@@ -5630,6 +5644,12 @@ $(OBJS)\monolib_dockart.obj :  .AUTODEPEND ..\..\src\aui\dockart.cpp
 $(OBJS)\monolib_floatpane.obj :  .AUTODEPEND ..\..\src\aui\floatpane.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
+$(OBJS)\monolib_auibook.obj :  .AUTODEPEND ..\..\src\aui\auibook.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_tabmdi.obj :  .AUTODEPEND ..\..\src\aui\tabmdi.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
 $(OBJS)\monolib_richtextctrl.obj :  .AUTODEPEND ..\..\src\richtext\richtextctrl.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
@@ -5757,6 +5777,9 @@ $(OBJS)\basedll_mstream.obj :  .AUTODEPEND ..\..\src\common\mstream.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
 $(OBJS)\basedll_object.obj :  .AUTODEPEND ..\..\src\common\object.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
+
+$(OBJS)\basedll_platinfo.obj :  .AUTODEPEND ..\..\src\common\platinfo.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
 $(OBJS)\basedll_powercmn.obj :  .AUTODEPEND ..\..\src\common\powercmn.cpp
@@ -5954,6 +5977,9 @@ $(OBJS)\baselib_mstream.obj :  .AUTODEPEND ..\..\src\common\mstream.cpp
 $(OBJS)\baselib_object.obj :  .AUTODEPEND ..\..\src\common\object.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
+$(OBJS)\baselib_platinfo.obj :  .AUTODEPEND ..\..\src\common\platinfo.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
+
 $(OBJS)\baselib_powercmn.obj :  .AUTODEPEND ..\..\src\common\powercmn.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
@@ -6125,6 +6151,12 @@ $(OBJS)\coredll_utilscmn.obj :  .AUTODEPEND ..\..\src\common\utilscmn.cpp
 $(OBJS)\coredll_caret.obj :  .AUTODEPEND ..\..\src\generic\caret.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
+$(OBJS)\coredll_colour.obj :  .AUTODEPEND ..\..\src\generic\colour.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+
+$(OBJS)\coredll_icon.obj :  .AUTODEPEND ..\..\src\generic\icon.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+
 $(OBJS)\coredll_timer.obj :  .AUTODEPEND ..\..\src\generic\timer.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
@@ -6138,9 +6170,6 @@ $(OBJS)\coredll_brush.obj :  .AUTODEPEND ..\..\src\mgl\brush.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
 $(OBJS)\coredll_clipbrd.obj :  .AUTODEPEND ..\..\src\mgl\clipbrd.cpp
-	$(CXX) -bt=dos -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
-
-$(OBJS)\coredll_colour.obj :  .AUTODEPEND ..\..\src\mgl\colour.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
 $(OBJS)\coredll_cursor.obj :  .AUTODEPEND ..\..\src\mgl\cursor.cpp
@@ -6174,12 +6203,6 @@ $(OBJS)\coredll_fontenum.obj :  .AUTODEPEND ..\..\src\mgl\fontenum.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
 $(OBJS)\coredll_fontutil.obj :  .AUTODEPEND ..\..\src\mgl\fontutil.cpp
-	$(CXX) -bt=dos -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
-
-$(OBJS)\coredll_gdiobj.obj :  .AUTODEPEND ..\..\src\mgl\gdiobj.cpp
-	$(CXX) -bt=dos -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
-
-$(OBJS)\coredll_icon.obj :  .AUTODEPEND ..\..\src\mgl\icon.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
 $(OBJS)\coredll_palette.obj :  .AUTODEPEND ..\..\src\mgl\palette.cpp
@@ -6704,6 +6727,12 @@ $(OBJS)\corelib_utilscmn.obj :  .AUTODEPEND ..\..\src\common\utilscmn.cpp
 $(OBJS)\corelib_caret.obj :  .AUTODEPEND ..\..\src\generic\caret.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
+$(OBJS)\corelib_colour.obj :  .AUTODEPEND ..\..\src\generic\colour.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+
+$(OBJS)\corelib_icon.obj :  .AUTODEPEND ..\..\src\generic\icon.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+
 $(OBJS)\corelib_timer.obj :  .AUTODEPEND ..\..\src\generic\timer.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
@@ -6717,9 +6746,6 @@ $(OBJS)\corelib_brush.obj :  .AUTODEPEND ..\..\src\mgl\brush.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
 $(OBJS)\corelib_clipbrd.obj :  .AUTODEPEND ..\..\src\mgl\clipbrd.cpp
-	$(CXX) -bt=dos -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
-
-$(OBJS)\corelib_colour.obj :  .AUTODEPEND ..\..\src\mgl\colour.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
 $(OBJS)\corelib_cursor.obj :  .AUTODEPEND ..\..\src\mgl\cursor.cpp
@@ -6753,12 +6779,6 @@ $(OBJS)\corelib_fontenum.obj :  .AUTODEPEND ..\..\src\mgl\fontenum.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
 $(OBJS)\corelib_fontutil.obj :  .AUTODEPEND ..\..\src\mgl\fontutil.cpp
-	$(CXX) -bt=dos -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
-
-$(OBJS)\corelib_gdiobj.obj :  .AUTODEPEND ..\..\src\mgl\gdiobj.cpp
-	$(CXX) -bt=dos -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
-
-$(OBJS)\corelib_icon.obj :  .AUTODEPEND ..\..\src\mgl\icon.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
 $(OBJS)\corelib_palette.obj :  .AUTODEPEND ..\..\src\mgl\palette.cpp
@@ -7913,6 +7933,12 @@ $(OBJS)\auidll_dockart.obj :  .AUTODEPEND ..\..\src\aui\dockart.cpp
 $(OBJS)\auidll_floatpane.obj :  .AUTODEPEND ..\..\src\aui\floatpane.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(AUIDLL_CXXFLAGS) $<
 
+$(OBJS)\auidll_auibook.obj :  .AUTODEPEND ..\..\src\aui\auibook.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(AUIDLL_CXXFLAGS) $<
+
+$(OBJS)\auidll_tabmdi.obj :  .AUTODEPEND ..\..\src\aui\tabmdi.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(AUIDLL_CXXFLAGS) $<
+
 $(OBJS)\auilib_dummy.obj :  .AUTODEPEND ..\..\src\common\dummy.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(AUILIB_CXXFLAGS) $<
 
@@ -7923,6 +7949,12 @@ $(OBJS)\auilib_dockart.obj :  .AUTODEPEND ..\..\src\aui\dockart.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(AUILIB_CXXFLAGS) $<
 
 $(OBJS)\auilib_floatpane.obj :  .AUTODEPEND ..\..\src\aui\floatpane.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(AUILIB_CXXFLAGS) $<
+
+$(OBJS)\auilib_auibook.obj :  .AUTODEPEND ..\..\src\aui\auibook.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(AUILIB_CXXFLAGS) $<
+
+$(OBJS)\auilib_tabmdi.obj :  .AUTODEPEND ..\..\src\aui\tabmdi.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(AUILIB_CXXFLAGS) $<
 
 $(OBJS)\richtextdll_dummy.obj :  .AUTODEPEND ..\..\src\common\dummy.cpp
