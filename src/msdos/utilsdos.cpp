@@ -488,3 +488,8 @@ wxOperatingSystemId wxGetOsVersion(int *verMaj, int *verMin)
     return wxOS_DOS;
 }
 
+bool wxIsPlatform64Bit()
+{
+    return false;
+}
+
