@@ -76,6 +76,7 @@ BASE_CMN_SRC = \
 ../../src/common/module.cpp \
 ../../src/common/mstream.cpp \
 ../../src/common/object.cpp \
+../../src/common/platinfo.cpp \
 ../../src/common/process.cpp \
 ../../src/common/regex.cpp \
 ../../src/common/stdpbase.cpp \
@@ -135,7 +136,7 @@ PALMOS_LOWLEVEL_SRC = \
 ../../src/palmos/brush.cpp \
 ../../src/palmos/caret.cpp \
 ../../src/palmos/clipbrd.cpp \
-../../src/palmos/colour.cpp \
+../../src/generic/colour.cpp \
 ../../src/palmos/cursor.cpp \
 ../../src/palmos/data.cpp \
 ../../src/palmos/dc.cpp \
@@ -150,8 +151,7 @@ PALMOS_LOWLEVEL_SRC = \
 ../../src/palmos/fontenum.cpp \
 ../../src/palmos/fontutil.cpp \
 ../../src/palmos/gdiimage.cpp \
-../../src/palmos/gdiobj.cpp \
-../../src/palmos/icon.cpp \
+../../src/generic/icon.cpp \
 ../../src/palmos/minifram.cpp \
 ../../src/palmos/palette.cpp \
 ../../src/palmos/pen.cpp \

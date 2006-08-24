@@ -104,7 +104,7 @@ public:
 
 
 #if defined(__WXPALMOS__)
-#include "wx/palmos/colour.h"
+#include "wx/generic/colour.h"
 #elif defined(__WXMSW__)
 #include "wx/msw/colour.h"
 #elif defined(__WXMOTIF__)
