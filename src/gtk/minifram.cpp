@@ -293,8 +293,7 @@ bool wxMiniFrame::Create( wxWindow *parent, wxWindowID id, const wxString &title
         ((style & wxCAPTION) || (style & wxTINY_CAPTION_HORIZ) || (style & wxTINY_CAPTION_VERT)))
     {
         wxImage img = wxBitmap((const char*)close_bits, 16, 16).ConvertToImage();
-        img.Replace(255,255,255,123,123,123);
-        img.Replace(0,0,0,255,255,255);
+        img.Replace(0,0,0,123,123,123);
         img.SetMaskColour(123,123,123);
         m_closeButton = wxBitmap( img );
     }

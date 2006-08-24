@@ -445,7 +445,7 @@ wxBitmap::wxBitmap(const char bits[], int width, int height, int depth)
                     reversed |= (unsigned char)(val & 0x01);
                     val >>= 1;
                 }
-                *dst++ = reversed;
+                *dst++ = ~reversed;
             }
 
             if ( padding )
