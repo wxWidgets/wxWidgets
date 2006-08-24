@@ -651,7 +651,8 @@ int wxTreebook::DoSetSelection(size_t pagePos)
     else // page change vetoed
     {
         // tree selection might have already had changed
-        tree->SelectItem(DoInternalGetPage(oldSel));
+        if ( oldSel != wxNOT_FOUND )
+            tree->SelectItem(DoInternalGetPage(oldSel));
     }
 
     return oldSel;
