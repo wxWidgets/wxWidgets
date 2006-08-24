@@ -178,7 +178,7 @@ public:
     virtual WXWidget GetHandle(void) const { return GetHWND(); }
     bool             GetUseCtl3D(void) const { return m_bUseCtl3D; }
     bool             GetTransparentBackground(void) const { return m_bBackgroundTransparent; }
-    void             SetTransparent(bool bT = true) { m_bBackgroundTransparent = bT; }
+    void             SetTransparentBackground(bool bT = true) { m_bBackgroundTransparent = bT; }
 
     // event handlers
     // --------------
