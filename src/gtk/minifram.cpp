@@ -317,7 +317,8 @@ void wxMiniFrame::SetTitle( const wxString &title )
 {
     wxFrame::SetTitle( title );
 
-    gdk_window_invalidate_rect( GTK_PIZZA(m_mainWidget)->bin_window, NULL, true );
+    if (GTK_PIZZA(m_mainWidget)->bin_window)
+        gdk_window_invalidate_rect( GTK_PIZZA(m_mainWidget)->bin_window, NULL, true );
 }
 
 #endif // wxUSE_MINIFRAME
