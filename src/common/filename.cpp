@@ -2040,7 +2040,10 @@ wxULongLong wxFileName::GetSize(const wxString &filename)
     if (!wxFileExists(filename))
         return wxInvalidSize;
 
-#ifdef __WIN32__
+#if defined(__WXPALMOS__)
+    // TODO
+    return wxInvalidSize;
+#elif defined(__WIN32__)
     wxFileHandle f(filename, wxFileHandle::Read);
     if (!f.IsOk())
         return wxInvalidSize;

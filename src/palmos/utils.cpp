@@ -197,6 +197,11 @@ void wxBell()
     SndPlaySystemSound(sndWarning);
 }
 
+bool wxIsPlatform64Bit()
+{
+    return false;
+}
+
 wxString wxGetOsDescription()
 {
     wxString strOS = _T("PalmOS");
