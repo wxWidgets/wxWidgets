@@ -13,9 +13,9 @@
 #if wxUSE_MINIFRAME
 
 #include "wx/minifram.h"
-#include "wx/settings.h"
 
 #ifndef WX_PRECOMP
+    #include "wx/settings.h"
     #include "wx/dcscreen.h"
 #endif
 
@@ -80,11 +80,11 @@ static void gtk_window_own_expose_callback( GtkWidget *widget, GdkEventExpose *g
                       win->m_width, win->m_height);
 
     int style = win->GetWindowStyle();
-    
+
     wxClientDC dc(win);
     // Hack alert
     dc.m_window = pizza->bin_window;
-        
+
     if (style & wxRESIZE_BORDER)
     {
         dc.SetBrush( *wxGREY_BRUSH );
@@ -136,7 +136,7 @@ static gint gtk_window_button_press_callback( GtkWidget *widget, GdkEventButton 
 
     int y = (int)gdk_event->y;
     int x = (int)gdk_event->x;
-    
+
     if ((style & wxRESIZE_BORDER) &&
         (x > win->m_width-14) && (y > win->m_height-14))
     {
@@ -154,7 +154,7 @@ static gint gtk_window_button_press_callback( GtkWidget *widget, GdkEventButton 
                                   org_x + x,
                                   org_y + y,
                                   0);
-                                  
+
         return TRUE;
     }
 
@@ -167,7 +167,7 @@ static gint gtk_window_button_press_callback( GtkWidget *widget, GdkEventButton 
             return TRUE;
         }
     }
-        
+
     wxClientDC dc(win);
     dc.SetFont( *wxSMALL_FONT );
     int height = dc.GetCharHeight() + 1;
@@ -249,7 +249,7 @@ gtk_window_leave_callback( GtkWidget *widget, GdkEventCrossing *gdk_event, wxMin
     if (g_blockEventsOnDrag) return FALSE;
 
     gdk_window_set_cursor( widget->window, NULL );
-    
+
     return FALSE;
 }
 }
@@ -259,10 +259,10 @@ gtk_window_leave_callback( GtkWidget *widget, GdkEventCrossing *gdk_event, wxMin
 //-----------------------------------------------------------------------------
 
 extern "C" {
-static gint 
+static gint
 gtk_window_motion_notify_callback( GtkWidget *widget, GdkEventMotion *gdk_event, wxMiniFrame *win )
 {
-    if (g_isIdle) 
+    if (g_isIdle)
         wxapp_install_idle_handler();
 
     if (!win->m_hasVMT) return FALSE;
@@ -281,10 +281,10 @@ gtk_window_motion_notify_callback( GtkWidget *widget, GdkEventMotion *gdk_event,
     }
 
     int style = win->GetWindowStyle();
-    
+
     int x = (int)gdk_event->x;
     int y = (int)gdk_event->y;
-    
+
     if (!win->m_isDragging)
     {
         if (style & wxRESIZE_BORDER)
@@ -296,7 +296,7 @@ gtk_window_motion_notify_callback( GtkWidget *widget, GdkEventMotion *gdk_event,
         }
         return TRUE;
     }
-        
+
     win->m_oldX = x - win->m_diffX;
     win->m_oldY = y - win->m_diffY;
 
