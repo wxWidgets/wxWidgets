@@ -846,7 +846,9 @@ void wxTextCtrl::SetValue( const wxString &value )
         const wxCharBuffer buffer(wxGTK_CONV_ENC(value, GetTextEncoding()));
         if ( !buffer )
         {
-            // what else can we do? at least don't crash...
+            // see comment in WriteText() as to why we must warn the user about
+            // this
+            wxLogWarning(_("Failed to set text in the text control."));
             return;
         }
 

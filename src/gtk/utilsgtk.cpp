@@ -172,25 +172,48 @@ wxWindow* wxFindWindowAtPoint(const wxPoint& pt)
 
 wxCharBuffer wxConvertToGTK(const wxString& s, wxFontEncoding enc)
 {
+    wxCharBuffer buf;
     if ( enc == wxFONTENCODING_UTF8 )
     {
-        // no need for conversion at all
-        return wxCharBuffer(s);
-    }
+        // no need for conversion at all, but do check that we have a valid
+        // UTF-8 string because passing invalid UTF-8 to GTK+ is going to
+        // result in a GTK+ error message and, especially, loss of data which
+        // was supposed to be shown in the GUI
+        if ( wxConvUTF8.ToWChar(NULL, 0, s, s.length()) == wxCONV_FAILED )
+        {
+            // warn the programmer that something is probably wrong in his code
+            //
+            // NB: don't include the string in output because chances are that
+            //     this invalid UTF-8 string could result in more errors itself
+            //     if the application shows logs in the GUI and so we get into
+            //     an infinite loop
+            wxLogDebug(_T("Invalid UTF-8 string in wxConvertToGTK()"));
 
-    wxWCharBuffer wbuf;
-    if ( enc == wxFONTENCODING_SYSTEM || enc == wxFONTENCODING_DEFAULT )
-    {
-        wbuf = wxConvUI->cMB2WC(s);
+            // but still try to show at least something on the screen
+            wxMBConvUTF8 utf8permissive(wxMBConvUTF8::MAP_INVALID_UTF8_TO_OCTAL);
+            wxWCharBuffer wbuf(utf8permissive.cMB2WC(s));
+            buf = wxConvUTF8.cWC2MB(wbuf);
+        }
+        else // valid UTF-8 string, no need to convert
+        {
+            buf = wxCharBuffer(s);
+        }
     }
-    else // another encoding, use generic conversion class
+    else // !UTF-8
     {
-        wbuf = wxCSConv(enc).cMB2WC(s);
-    }
+        wxWCharBuffer wbuf;
+        if ( enc == wxFONTENCODING_SYSTEM || enc == wxFONTENCODING_DEFAULT )
+        {
+            wbuf = wxConvUI->cMB2WC(s);
+        }
+        else // another encoding, use generic conversion class
+        {
+            wbuf = wxCSConv(enc).cMB2WC(s);
+        }
 
-    wxCharBuffer buf;
-    if ( wbuf )
-        buf = wxConvUTF8.cWC2MB(wbuf);
+        if ( wbuf )
+            buf = wxConvUTF8.cWC2MB(wbuf);
+    }
 
     return buf;
 }
