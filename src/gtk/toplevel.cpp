@@ -625,10 +625,19 @@ bool wxTopLevelWindowGTK::Create( wxWindow *parent,
                       G_CALLBACK (gtk_frame_focus_out_callback), this);
 
     // decorations
-    if ((m_miniEdge > 0) || (style & wxSIMPLE_BORDER) || (style & wxNO_BORDER))
+    if ((style & wxSIMPLE_BORDER) || (style & wxNO_BORDER))
     {
         m_gdkDecor = 0;
         m_gdkFunc = 0;
+    }
+    else
+    if (m_miniEdge > 0)
+    {
+        m_gdkDecor = 0;
+        m_gdkFunc = 0;
+        
+        if ((style & wxRESIZE_BORDER) != 0)
+           m_gdkFunc |= GDK_FUNC_RESIZE;
     }
     else
     {

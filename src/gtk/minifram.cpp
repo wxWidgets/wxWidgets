@@ -81,15 +81,22 @@ static void gtk_window_own_expose_callback( GtkWidget *widget, GdkEventExpose *g
 
     int style = win->GetWindowStyle();
     
+    wxClientDC dc(win);
+    // Hack alert
+    dc.m_window = pizza->bin_window;
+        
+    if (style & wxRESIZE_BORDER)
+    {
+        dc.SetBrush( *wxGREY_BRUSH );
+        dc.SetPen( *wxTRANSPARENT_PEN );
+        dc.DrawRectangle( win->m_width - 14, win->m_height-14, 14, 14 );
+    }
+
     if (!win->GetTitle().empty() &&
         ((style & wxCAPTION) ||
          (style & wxTINY_CAPTION_HORIZ) ||
          (style & wxTINY_CAPTION_VERT)))
     {
-        wxClientDC dc(win);
-        // Hack alert
-        dc.m_window = pizza->bin_window;
-        
         dc.SetFont( *wxSMALL_FONT );
         int height = dc.GetCharHeight();
 
@@ -125,10 +132,32 @@ static gint gtk_window_button_press_callback( GtkWidget *widget, GdkEventButton 
     GtkPizza *pizza = GTK_PIZZA(widget);
     if (gdk_event->window != pizza->bin_window) return TRUE;
 
+    int style = win->GetWindowStyle();
+
     int y = (int)gdk_event->y;
     int x = (int)gdk_event->x;
+    
+    if ((style & wxRESIZE_BORDER) &&
+        (x > win->m_width-14) && (y > win->m_height-14))
+    {
+        GtkWidget *ancestor = gtk_widget_get_toplevel( widget );
 
-    int style = win->GetWindowStyle();
+        GdkWindow *source = GTK_PIZZA(widget)->bin_window;
+
+        int org_x = 0;
+        int org_y = 0;
+        gdk_window_get_origin( source, &org_x, &org_y );
+
+        gtk_window_begin_resize_drag (GTK_WINDOW (ancestor),
+                                  GDK_WINDOW_EDGE_SOUTH_EAST,
+                                  1,
+                                  org_x + x,
+                                  org_y + y,
+                                  0);
+                                  
+        return TRUE;
+    }
+
     if ((style & wxCLOSE_BOX) &&
         ((style & wxCAPTION) || (style & wxTINY_CAPTION_HORIZ) || (style & wxTINY_CAPTION_VERT)))
     {
@@ -206,19 +235,39 @@ static gint gtk_window_button_release_callback( GtkWidget *widget, GdkEventButto
 }
 
 //-----------------------------------------------------------------------------
+// "leave_notify_event" of m_mainWidget
+//-----------------------------------------------------------------------------
+
+extern "C" {
+static gboolean
+gtk_window_leave_callback( GtkWidget *widget, GdkEventCrossing *gdk_event, wxMiniFrame *win )
+{
+    if (g_isIdle)
+        wxapp_install_idle_handler();
+
+    if (!win->m_hasVMT) return FALSE;
+    if (g_blockEventsOnDrag) return FALSE;
+
+    gdk_window_set_cursor( widget->window, NULL );
+    
+    return FALSE;
+}
+}
+
+//-----------------------------------------------------------------------------
 // "motion_notify_event" of m_mainWidget
 //-----------------------------------------------------------------------------
 
 extern "C" {
-static gint gtk_window_motion_notify_callback( GtkWidget *widget, GdkEventMotion *gdk_event, wxMiniFrame *win )
+static gint 
+gtk_window_motion_notify_callback( GtkWidget *widget, GdkEventMotion *gdk_event, wxMiniFrame *win )
 {
-    if (g_isIdle) wxapp_install_idle_handler();
+    if (g_isIdle) 
+        wxapp_install_idle_handler();
 
     if (!win->m_hasVMT) return FALSE;
     if (g_blockEventsOnDrag) return TRUE;
     if (g_blockEventsOnScroll) return TRUE;
-
-    if (!win->m_isDragging) return TRUE;
 
     if (gdk_event->is_hint)
     {
@@ -231,12 +280,26 @@ static gint gtk_window_motion_notify_callback( GtkWidget *widget, GdkEventMotion
        gdk_event->state = state;
     }
 
-    win->m_oldX = (int)gdk_event->x - win->m_diffX;
-    win->m_oldY = (int)gdk_event->y - win->m_diffY;
-
+    int style = win->GetWindowStyle();
+    
     int x = (int)gdk_event->x;
     int y = (int)gdk_event->y;
     
+    if (!win->m_isDragging)
+    {
+        if (style & wxRESIZE_BORDER)
+        {
+            if ((x > win->m_width-14) && (y > win->m_height-14))
+               gdk_window_set_cursor( widget->window, gdk_cursor_new( GDK_BOTTOM_RIGHT_CORNER ) );
+            else
+               gdk_window_set_cursor( widget->window, NULL );
+        }
+        return TRUE;
+    }
+        
+    win->m_oldX = x - win->m_diffX;
+    win->m_oldY = y - win->m_diffY;
+
     int org_x = 0;
     int org_y = 0;
     gdk_window_get_origin( widget->window, &org_x, &org_y );
@@ -273,7 +336,7 @@ bool wxMiniFrame::Create( wxWindow *parent, wxWindowID id, const wxString &title
         m_miniTitle = 16;
 
     if (style & wxRESIZE_BORDER)
-        m_miniEdge = 5;
+        m_miniEdge = 4;
     else
         m_miniEdge = 3;
     m_isDragging = false;
@@ -309,7 +372,8 @@ bool wxMiniFrame::Create( wxWindow *parent, wxWindowID id, const wxString &title
                       G_CALLBACK (gtk_window_button_release_callback), this);
     g_signal_connect (m_mainWidget, "motion_notify_event",
                       G_CALLBACK (gtk_window_motion_notify_callback), this);
-
+    g_signal_connect (m_mainWidget, "leave_notify_event",
+                      G_CALLBACK (gtk_window_leave_callback), this);
     return true;
 }
 
