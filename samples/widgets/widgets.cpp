@@ -137,6 +137,7 @@ protected:
     void OnExit(wxCommandEvent& event);
 
 #if wxUSE_MENUS
+    void OnPageChanging(WidgetsBookCtrlEvent& event);
     void OnPageChanged(WidgetsBookCtrlEvent& event);
     void OnGoToPage(wxCommandEvent& event);
 
@@ -156,7 +157,7 @@ protected:
     // initialize the book: add all pages to it
     void InitBook();
 
-    // finding current page assuming book inside book
+    // return the currently selected page (never NULL)
     WidgetsPage *CurrentPage();
 
 private:
@@ -268,6 +269,7 @@ BEGIN_EVENT_TABLE(WidgetsFrame, wxFrame)
 #endif // wxUSE_TOOLTIPS
 
 #if wxUSE_MENUS
+    EVT_WIDGETS_PAGE_CHANGING(wxID_ANY, WidgetsFrame::OnPageChanging)
     EVT_WIDGETS_PAGE_CHANGED(wxID_ANY, WidgetsFrame::OnPageChanged)
     EVT_MENU_RANGE(Widgets_GoToPage, Widgets_GoToPageLast,
                    WidgetsFrame::OnGoToPage)
@@ -556,10 +558,11 @@ void WidgetsFrame::InitBook()
         for ( size_t n = 0; n < count; n++ )
         {
 #if USE_TREEBOOK
-            m_book->AddSubPage(
+            m_book->AddSubPage
 #else
-            books[cat]->AddPage(
+            books[cat]->AddPage
 #endif
+                           (
                             pages[cat][n],
                             labels[cat][n],
                             false, // don't select
@@ -569,26 +572,28 @@ void WidgetsFrame::InitBook()
     }
 
 #if USE_TREEBOOK
-    // for treebook page #0 is empty parent page only
+    // for treebook page #0 is empty parent page only so select the first page
+    // with some contents
     m_book->SetSelection(1);
-    m_book->SetSelection(0);
-#endif
+
+    // but ensure that the top of the tree is shown nevertheless
+    wxTreeCtrl * const tree = m_book->GetTreeCtrl();
+    tree->EnsureVisible(tree->GetRootItem());
+#endif // USE_TREEBOOK
 }
 
 WidgetsPage *WidgetsFrame::CurrentPage()
 {
     wxWindow *page = m_book->GetCurrentPage();
-    if(!page) return NULL;
 
-#if USE_TREEBOOK
-    return wxStaticCast(page, WidgetsPage);
-#else
+#if !USE_TREEBOOK
     WidgetsBookCtrl *subBook = wxStaticCast(page, WidgetsBookCtrl);
-    if (!subBook) return NULL;
+    wxCHECK_MSG( subBook, NULL, _T("no WidgetsBookCtrl?") );
+
     page = subBook->GetCurrentPage();
-    if(!page) return NULL;
+#endif // !USE_TREEBOOK
+
     return wxStaticCast(page, WidgetsPage);
-#endif
 }
 
 WidgetsFrame::~WidgetsFrame()
@@ -616,15 +621,24 @@ void WidgetsFrame::OnButtonClearLog(wxCommandEvent& WXUNUSED(event))
 
 #if wxUSE_MENUS
 
+void WidgetsFrame::OnPageChanging(WidgetsBookCtrlEvent& event)
+{
+    if ( !m_book->GetPage(event.GetSelection()) )
+        event.Veto();
+}
+
 void WidgetsFrame::OnPageChanged(WidgetsBookCtrlEvent& event)
 {
+    const int sel = event.GetSelection();
+
     // adjust "Page" menu selection
-    wxMenuItem *item = GetMenuBar()->FindItem(Widgets_GoToPage + event.GetSelection());
-    if (item) item->Check();
+    wxMenuItem *item = GetMenuBar()->FindItem(Widgets_GoToPage + sel);
+    if ( item )
+        item->Check();
 
     // lazy creation of the pages
-    WidgetsPage* page = CurrentPage();
-    if (page && (page->GetChildren().GetCount()==0))
+    WidgetsPage *page = CurrentPage();
+    if ( page->GetChildren().empty() )
     {
         wxWindowUpdateLocker noUpdates(page);
         page->CreateContent();
@@ -633,7 +647,7 @@ void WidgetsFrame::OnPageChanged(WidgetsBookCtrlEvent& event)
         for ( size_t i = 0; i < book->GetPageCount(); ++i )
         {
             wxWindow *page = book->GetPage(i);
-            if (page)
+            if ( page )
             {
                 size.IncTo(page->GetSize());
             }
@@ -659,14 +673,6 @@ void WidgetsFrame::OnGoToPage(wxCommandEvent& event)
 
 void WidgetsFrame::OnSetTooltip(wxCommandEvent& WXUNUSED(event))
 {
-    WidgetsPage *page = CurrentPage();
-
-    if(!page)
-    {
-        wxLogMessage(_T("Page not selected."));
-        return;
-    }
-
     static wxString s_tip = _T("This is a tooltip");
 
     wxTextEntryDialog dialog
@@ -683,6 +689,8 @@ void WidgetsFrame::OnSetTooltip(wxCommandEvent& WXUNUSED(event))
     s_tip = dialog.GetValue();
     s_tip.Replace(_T("\\n"), _T("\n"));
 
+    WidgetsPage *page = CurrentPage();
+
     page->GetWidget()->SetToolTip(s_tip);
 
     wxControl *ctrl2 = page->GetWidget2();
@@ -697,11 +705,6 @@ void WidgetsFrame::OnSetFgCol(wxCommandEvent& WXUNUSED(event))
 #if wxUSE_COLOURDLG
     // allow for debugging the default colour the first time this is called
     WidgetsPage *page = CurrentPage();
-    if(!page)
-    {
-        wxLogMessage(_T("Page not selected."));
-        return;
-    }
 
     if (!m_colFg.Ok())
         m_colFg = page->GetForegroundColour();
@@ -730,11 +733,6 @@ void WidgetsFrame::OnSetBgCol(wxCommandEvent& WXUNUSED(event))
 {
 #if wxUSE_COLOURDLG
     WidgetsPage *page = CurrentPage();
-    if(!page)
-    {
-        wxLogMessage(_T("Page not selected."));
-        return;
-    }
 
     if ( !m_colBg.Ok() )
         m_colBg = page->GetBackgroundColour();
@@ -763,11 +761,6 @@ void WidgetsFrame::OnSetFont(wxCommandEvent& WXUNUSED(event))
 {
 #if wxUSE_FONTDLG
     WidgetsPage *page = CurrentPage();
-    if(!page)
-    {
-        wxLogMessage(_T("Page not selected."));
-        return;
-    }
 
     if (!m_font.Ok())
         m_font = page->GetFont();
@@ -794,14 +787,7 @@ void WidgetsFrame::OnSetFont(wxCommandEvent& WXUNUSED(event))
 
 void WidgetsFrame::OnEnable(wxCommandEvent& event)
 {
-    WidgetsPage *page = CurrentPage();
-    if(!page)
-    {
-        wxLogMessage(_T("Page not selected."));
-        return;
-    }
-
-    page->GetWidget()->Enable(event.IsChecked());
+    CurrentPage()->GetWidget()->Enable(event.IsChecked());
 }
 
 void WidgetsFrame::OnSetBorder(wxCommandEvent& event)
@@ -828,12 +814,6 @@ void WidgetsFrame::OnSetBorder(wxCommandEvent& event)
 
     WidgetsPage *page = CurrentPage();
 
-    if(!page)
-    {
-        wxLogMessage(_T("Page not selected."));
-        return;
-    }
-
     page->RecreateWidget();
 }
 
@@ -847,9 +827,9 @@ void WidgetsFrame::OnToggleGlobalBusyCursor(wxCommandEvent& event)
 
 void WidgetsFrame::OnToggleBusyCursor(wxCommandEvent& event)
 {
-    WidgetsPage *page = CurrentPage();
-    page->GetWidget()->SetCursor(*(event.IsChecked() ? wxHOURGLASS_CURSOR
-                                                     : wxSTANDARD_CURSOR));
+    CurrentPage()->GetWidget()->SetCursor(*(event.IsChecked()
+                                                ? wxHOURGLASS_CURSOR
+                                                : wxSTANDARD_CURSOR));
 }
 
 #endif // wxUSE_MENUS
