@@ -92,11 +92,11 @@ public:
 
     virtual void SetAxisOrientation( bool xLeftRight, bool yBottomUp );
 
+    virtual void ComputeScaleAndOrigin();
+
 protected:
     // implementation
     // --------------
-
-    virtual void ComputeScaleAndOrigin();
 
     wxCoord XDEV2LOG(wxCoord x) const
     {
