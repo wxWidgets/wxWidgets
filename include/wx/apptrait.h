@@ -244,6 +244,8 @@ public:
     #include "wx/mac/apptrait.h"
 #elif defined(__WXPM__)
     #include "wx/os2/apptrait.h"
+#elif defined(__DOS__)
+    #include "wx/msdos/apptrait.h"
 #else
     #if wxUSE_GUI
         class wxGUIAppTraits : public wxGUIAppTraitsBase
