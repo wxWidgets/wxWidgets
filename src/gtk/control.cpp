@@ -374,10 +374,13 @@ void wxControl::OnInternalIdle()
 {
     if ( GtkShowFromOnIdle() )
         return;
-    
-    GTKUpdateCursor();
 
-    GTKSetDelayedFocusIfNeeded();
+    if ( IsShown() )
+    {
+        GTKUpdateCursor();
+
+        GTKSetDelayedFocusIfNeeded();
+    }
 
     if ( wxUpdateUIEvent::CanUpdate(this) )
         UpdateWindowUI(wxUPDATE_UI_FROMIDLE);
