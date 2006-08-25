@@ -33,6 +33,7 @@
     #include "wx/combobox.h"
 #endif
 
+#include "wx/tokenzr.h"
 #include "wx/msw/private.h"
 
 // include <commctrl.h> "properly"
@@ -326,14 +327,27 @@ void wxToolTip::Add(WXHWND hWnd)
                     wxLogLastError(wxT("SelectObject(hfont)"));
                 }
 
-                SIZE sz;
-                if ( !::GetTextExtentPoint32(hdc, m_text, index, &sz) )
+                // find the width of the widest line
+                int max = 0;
+                wxStringTokenizer tokenizer(m_text, _T("\n"));
+                wxString token = tokenizer.GetNextToken();
+                while (token.length())
                 {
-                    wxLogLastError(wxT("GetTextExtentPoint32"));
+                    SIZE sz;
+                    if ( !::GetTextExtentPoint32(hdc, token, token.length(), &sz) )
+                    {
+                        wxLogLastError(wxT("GetTextExtentPoint32"));
+                    }
+                    if ( sz.cx > max )
+                        max = sz.cx;
+                    
+                    token = tokenizer.GetNextToken();
                 }
 
-                SendTooltipMessage(GetToolTipCtrl(), TTM_SETMAXTIPWIDTH,
-                                        (void *)sz.cx);
+                // only set a new width if it is bigger than the current setting
+                if (max > SendTooltipMessage(GetToolTipCtrl(), TTM_GETMAXTIPWIDTH, 0))
+                    SendTooltipMessage(GetToolTipCtrl(), TTM_SETMAXTIPWIDTH,
+                                       (void *)max);
             }
             else
 #endif // comctl32.dll >= 4.70
