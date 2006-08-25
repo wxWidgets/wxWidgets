@@ -89,40 +89,16 @@
 //                  wxHTML internal constants
 //--------------------------------------------------------------------------------
 
-#define wxHTML_SCROLL_STEP               16
     /* size of one scroll step of wxHtmlWindow in pixels */
-#define wxHTML_BUFLEN                  1024
+#define wxHTML_SCROLL_STEP               16
+
     /* size of temporary buffer used during parsing */
-#define wxHTML_PRINT_MAX_PAGES          999
+#define wxHTML_BUFLEN                  1024
+
     /* maximum number of pages printable via html printing */
+#define wxHTML_PRINT_MAX_PAGES          999
 
+#endif // wxUSE_HTML
 
-    /* default font sizes */
-#ifdef __WXMSW__
-   #define wxHTML_FONT_SIZE_1              7
-   #define wxHTML_FONT_SIZE_2              8
-   #define wxHTML_FONT_SIZE_3             10
-   #define wxHTML_FONT_SIZE_4             12
-   #define wxHTML_FONT_SIZE_5             16
-   #define wxHTML_FONT_SIZE_6             22
-   #define wxHTML_FONT_SIZE_7             30
-#elif defined(__WXMAC__)
-   #define wxHTML_FONT_SIZE_1              9
-   #define wxHTML_FONT_SIZE_2             12
-   #define wxHTML_FONT_SIZE_3             14
-   #define wxHTML_FONT_SIZE_4             18
-   #define wxHTML_FONT_SIZE_5             24
-   #define wxHTML_FONT_SIZE_6             30
-   #define wxHTML_FONT_SIZE_7             36
-#else
-   #define wxHTML_FONT_SIZE_1             10
-   #define wxHTML_FONT_SIZE_2             12
-   #define wxHTML_FONT_SIZE_3             14
-   #define wxHTML_FONT_SIZE_4             16
-   #define wxHTML_FONT_SIZE_5             19
-   #define wxHTML_FONT_SIZE_6             24
-   #define wxHTML_FONT_SIZE_7             32
-#endif
+#endif // _WX_HTMLDEFS_H_
 
-#endif
-#endif

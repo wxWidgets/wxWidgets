@@ -110,25 +110,39 @@ void wxHtmlWinParser::RemoveModule(wxHtmlTagsModule *module)
     m_Modules.DeleteObject(module);
 }
 
-void wxHtmlWinParser::SetFonts(const wxString& normal_face, const wxString& fixed_face,
+// build all HTML font sizes (1..7) from the given base size
+static void wxBuildFontSizes(int *sizes, int size)
+{
+    // using a fixed factor (1.2, from CSS2) is a bad idea as explained at
+    // http://www.w3.org/TR/CSS21/fonts.html#font-size-props but this is by far
+    // simplest thing to do so still do it like this for now
+    sizes[0] = int(size * 0.69);
+    sizes[1] = int(size * 0.83);
+    sizes[2] = size;
+    sizes[3] = int(size * 1.2);
+    sizes[4] = int(size * 1.44);
+    sizes[5] = int(size * 1.73);
+    sizes[6] = int(size * 2);
+}
+
+void wxHtmlWinParser::SetFonts(const wxString& normal_face,
+                               const wxString& fixed_face,
                                const int *sizes)
 {
-    static int default_sizes[7] =
-        {
-            wxHTML_FONT_SIZE_1,
-            wxHTML_FONT_SIZE_2,
-            wxHTML_FONT_SIZE_3,
-            wxHTML_FONT_SIZE_4,
-            wxHTML_FONT_SIZE_5,
-            wxHTML_FONT_SIZE_6,
-            wxHTML_FONT_SIZE_7
-        };
+    static int default_sizes[7] = { 0 };
+    if ( !sizes )
+    {
+        if ( !default_sizes[0] )
+            wxBuildFontSizes(default_sizes, wxNORMAL_FONT->GetPointSize());
 
-    if (sizes == NULL) sizes = default_sizes;
+        sizes = default_sizes;
+    }
 
     int i, j, k, l, m;
 
-    for (i = 0; i < 7; i++) m_FontsSizes[i] = sizes[i];
+    for (i = 0; i < 7; i++)
+        m_FontsSizes[i] = sizes[i];
+
     m_FontFaceFixed = fixed_face;
     m_FontFaceNormal = normal_face;
 
@@ -153,22 +167,15 @@ void wxHtmlWinParser::SetStandardFonts(int size,
                                        const wxString& normal_face,
                                        const wxString& fixed_face)
 {
-    wxFont defaultFont = wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT);
+    if (size == -1)
+        size = wxNORMAL_FONT->GetPointSize();
 
     int f_sizes[7];
-    if (size == -1)
-        size = defaultFont.GetPointSize();
+    wxBuildFontSizes(f_sizes, size);
 
-    f_sizes[0] = int(size * 0.6);
-    f_sizes[1] = int(size * 0.8);
-    f_sizes[2] = size;
-    f_sizes[3] = int(size * 1.2);
-    f_sizes[4] = int(size * 1.4);
-    f_sizes[5] = int(size * 1.6);
-    f_sizes[6] = int(size * 1.8);
-
-    wxString normal = normal_face.empty() ?
-                      defaultFont.GetFaceName() : normal_face;
+    wxString normal = normal_face;
+    if ( normal.empty() )
+        normal = wxNORMAL_FONT->GetFaceName();
 
     SetFonts(normal, fixed_face, f_sizes);
 }
