@@ -16,6 +16,10 @@
 #include <wx/rawbmp.h>
 %}
 
+
+// Turn off the aquisition of the Global Interpreter Lock for this file
+%threadWrapperOff
+
 //---------------------------------------------------------------------------
 
 %{
@@ -443,7 +447,7 @@ def BitmapFromBuffer(width, height, dataBuffer, alphaBuffer=None):
 
 %newobject _BitmapFromBufferRGBA;
 %inline %{
-    wxBitmap* _BitmapFromBufferRGBA(int width, int height, buffer data, int DATASIZE)                                   
+    wxBitmap* _BitmapFromBufferRGBA(int width, int height, buffer data, int DATASIZE)
     {
         if (DATASIZE != width*height*4) {
             wxPyErr_SetString(PyExc_ValueError, "Invalid data buffer size.");
@@ -458,7 +462,7 @@ def BitmapFromBuffer(width, height, dataBuffer, alphaBuffer=None):
                               "Failed to gain raw access to bitmap data.");
             return NULL;
         }
-                
+               
         pixels.UseAlpha();
         wxAlphaPixelData::Iterator p(pixels);
         for (int y=0; y<height; y++) {
@@ -507,6 +511,144 @@ def BitmapFromBufferRGBA(width, height, dataBuffer):
 
 //---------------------------------------------------------------------------
 
+class wxPixelDataBase
+{
+public:
+    // origin of the rectangular region we represent
+    wxPoint GetOrigin() const { return m_ptOrigin; }
+
+    // width and height of the region we represent
+    int GetWidth() const { return m_width; }
+    int GetHeight() const { return m_height; }
+
+    wxSize GetSize() const { return wxSize(m_width, m_height); }
+
+    // the distance between two rows
+    int GetRowStride() const { return m_stride; }
+
+};
+
+
+
+%define PIXELDATA(PixelData)
+%{
+    typedef PixelData##::Iterator PixelData##_Iterator;
+%}
+class PixelData##_Iterator;
+class PixelData : public wxPixelDataBase
+{
+public:
+    %nokwargs PixelData;
+    
+    PixelData(wxBitmap& bmp);
+    PixelData(wxBitmap& bmp, const wxRect& rect);
+    PixelData(wxBitmap& bmp, const wxPoint& pt, const wxSize& sz);
+
+    ~PixelData();
+
+    %extend {
+        bool __nonzero__() { return self->operator bool(); }
+    }
+
+    PixelData##_Iterator GetPixels() const;
+    void UseAlpha();
+};
+
+
+class PixelData##_Iterator
+{
+public:
+    %nokwargs PixelData##_Iterator;
+    
+    PixelData##_Iterator(PixelData& data);
+    PixelData##_Iterator(wxBitmap& bmp, PixelData& data);
+    PixelData##_Iterator();
+
+    ~PixelData##_Iterator();
+
+    void Reset(const PixelData& data);
+    bool IsOk() const;
+
+    %extend {
+        // PixelData##_Iterator& nextPixel() { return ++(*self); }
+        void nextPixel() { ++(*self); }
+    }
+
+    void Offset(const PixelData& data, int x, int y);
+    void OffsetX(const PixelData& data, int x);
+    void OffsetY(const PixelData& data, int y);
+    void MoveTo(const PixelData& data, int x, int y);
+
+    %extend {
+        byte _get_Red()   { return self->Red(); }
+        byte _get_Green() { return self->Green(); }
+        byte _get_Blue()  { return self->Blue(); }
+
+        void _set_Red(byte val)   { self->Red() = val; }
+        void _set_Green(byte val) { self->Green() = val; }
+        void _set_Blue(byte val)  { self->Blue() = val; }
+    }
+
+    %pythoncode {
+        Red   = property(_get_Red,   _set_Red)
+        Green = property(_get_Green, _set_Green)
+        Blue  = property(_get_Blue,  _set_Blue)
+    }
+
+};
+%enddef
+
+
+PIXELDATA(wxNativePixelData)
+PIXELDATA(wxAlphaPixelData)    
+
+
+// Add in a few things that are different between the wxNativePixelData and
+// wxAlphaPixelData iterators and so are not included in our macro...
+
+%extend wxNativePixelData_Iterator {
+    void Set(byte red, byte green, byte blue) {
+        self->Red()   = red;
+        self->Green() = green;
+        self->Blue()  = blue;
+    }
+    
+    PyObject* Get() {
+        PyObject* rv = PyTuple_New(3);
+        PyTuple_SetItem(rv, 0, PyInt_FromLong(self->Red()));
+        PyTuple_SetItem(rv, 1, PyInt_FromLong(self->Green()));
+        PyTuple_SetItem(rv, 2, PyInt_FromLong(self->Blue()));
+        return rv;            
+    }    
+}
+
+%extend wxAlphaPixelData_Iterator {
+    byte _get_Alpha()         { return self->Alpha(); }
+    void _set_Alpha(byte val) { self->Alpha() = val; }
+    
+    %pythoncode {
+        Alpha = property(_get_Alpha, _set_Alpha)
+    }
+
+    void Set(byte red, byte green, byte blue, byte alpha) {
+        self->Red()   = red;
+        self->Green() = green;
+        self->Blue()  = blue;
+        self->Alpha() = alpha;
+    }
+    
+    PyObject* Get() {
+        PyObject* rv = PyTuple_New(4);
+        PyTuple_SetItem(rv, 0, PyInt_FromLong(self->Red()));
+        PyTuple_SetItem(rv, 1, PyInt_FromLong(self->Green()));
+        PyTuple_SetItem(rv, 2, PyInt_FromLong(self->Blue()));
+        PyTuple_SetItem(rv, 3, PyInt_FromLong(self->Alpha()));
+        return rv;            
+    }
+}
+
+//---------------------------------------------------------------------------
+
 DocStr(wxMask,
 "This class encapsulates a monochrome mask bitmap, where the masked
 area is black and the unmasked area is white. When associated with a
@@ -548,3 +690,4 @@ passed then BLACK is used.
 
 //---------------------------------------------------------------------------
 //---------------------------------------------------------------------------
+%threadWrapperOn
