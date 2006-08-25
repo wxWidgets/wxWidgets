@@ -619,11 +619,15 @@ void wxApp::CleanUp()
 
 #ifdef __WXDEBUG__
 
-void wxApp::OnAssert(const wxChar *file, int line, const wxChar* cond, const wxChar *msg)
+void wxApp::OnAssertFailure(const wxChar *file,
+                            int line,
+                            const wxChar* func,
+                            const wxChar* cond,
+                            const wxChar *msg)
 {
     m_isInAssert = true;
 
-    wxAppBase::OnAssert(file, line, cond, msg);
+    wxAppBase::OnAssertFailure(file, line, func, cond, msg);
 
     m_isInAssert = false;
 }
