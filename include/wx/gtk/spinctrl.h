@@ -61,7 +61,6 @@ public:
     // implementation
     void OnChar( wxKeyEvent &event );
     
-    bool IsOwnGtkWindow( GdkWindow *window );
     void GtkDisableEvents();
     void GtkEnableEvents();
 
@@ -69,6 +68,7 @@ public:
 
 protected:
     virtual wxSize DoGetBestSize() const;
+    virtual GdkWindow *GTKGetWindow(wxArrayGdkWindows& windows) const;
 
     // Widgets that use the style->base colour for the BG colour should
     // override this and return true.

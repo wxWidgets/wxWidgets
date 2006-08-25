@@ -67,6 +67,7 @@ wxMac:
 wxGTK:
 
 - Automatically use stock items for the menu items with standard ids
+- Setting cursor now works for all controls
 
 
 2.7.0

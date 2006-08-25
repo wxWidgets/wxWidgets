@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __GTKRADIOBUTTONH__
-#define __GTKRADIOBUTTONH__
+#ifndef _WX_GTK_RADIOBUT_H_
+#define _WX_GTK_RADIOBUT_H_
 
 //-----------------------------------------------------------------------------
 // wxRadioButton
@@ -51,17 +51,15 @@ public:
 
     virtual bool IsRadioButton() const { return TRUE; }
 
-    bool IsOwnGtkWindow( GdkWindow *window );
-    void OnInternalIdle();
-
     bool m_blockEvent;
 
 protected:
-    void DoApplyWidgetStyle(GtkRcStyle *style);
     virtual wxSize DoGetBestSize() const;
+    virtual void DoApplyWidgetStyle(GtkRcStyle *style);
+    virtual GdkWindow *GTKGetWindow(wxArrayGdkWindows& windows) const;
 
 private:
     DECLARE_DYNAMIC_CLASS(wxRadioButton)
 };
 
-#endif // __GTKRADIOBUTTONH__
+#endif // _WX_GTK_RADIOBUT_H_

@@ -30,7 +30,6 @@
 #include "wx/gtk/private.h"
 
 extern bool      g_blockEventsOnDrag;
-extern wxCursor   g_globalCursor;
 
 extern "C" {
 static void gtk_togglebutton_clicked_callback(GtkWidget *WXUNUSED(widget), wxToggleButton *cb)
@@ -174,36 +173,11 @@ void wxToggleBitmapButton::DoApplyWidgetStyle(GtkRcStyle *style)
     gtk_widget_modify_style(GTK_BIN(m_widget)->child, style);
 }
 
-bool wxToggleBitmapButton::IsOwnGtkWindow(GdkWindow *window)
+GdkWindow *
+wxToggleBitmapButton::GTKGetWindow(wxArrayGdkWindows& WXUNUSED(windows)) const
 {
-    return window == GTK_BUTTON(m_widget)->event_window;
+    return GTK_BUTTON(m_widget)->event_window;
 }
-
-void wxToggleBitmapButton::OnInternalIdle()
-{
-    // Check if we have to show window now
-    if (GtkShowFromOnIdle()) return;
-    
-    wxCursor cursor = m_cursor;
-
-    if (g_globalCursor.Ok())
-        cursor = g_globalCursor;
-
-    GdkWindow *win = GTK_BUTTON(m_widget)->event_window;
-    if ( win && cursor.Ok() )
-    {
-      /* I now set the cursor the anew in every OnInternalIdle call
-         as setting the cursor in a parent window also effects the
-         windows above so that checking for the current cursor is
-         not possible. */
-
-        gdk_window_set_cursor(win, cursor.GetCursor());
-    }
-
-    if (wxUpdateUIEvent::CanUpdate(this))
-        UpdateWindowUI(wxUPDATE_UI_FROMIDLE);
-}
-
 
 // Get the "best" size for this control.
 wxSize wxToggleBitmapButton::DoGetBestSize() const
@@ -318,33 +292,11 @@ void wxToggleButton::DoApplyWidgetStyle(GtkRcStyle *style)
     gtk_widget_modify_style(GTK_BIN(m_widget)->child, style);
 }
 
-bool wxToggleButton::IsOwnGtkWindow(GdkWindow *window)
+GdkWindow *
+wxToggleButton::GTKGetWindow(wxArrayGdkWindows& WXUNUSED(windows)) const
 {
-    return window == GTK_BUTTON(m_widget)->event_window;
+    return GTK_BUTTON(m_widget)->event_window;
 }
-
-void wxToggleButton::OnInternalIdle()
-{
-    wxCursor cursor = m_cursor;
-
-    if (g_globalCursor.Ok())
-        cursor = g_globalCursor;
-
-    GdkWindow *win = GTK_BUTTON(m_widget)->event_window;
-    if ( win && cursor.Ok() )
-    {
-      /* I now set the cursor the anew in every OnInternalIdle call
-         as setting the cursor in a parent window also effects the
-         windows above so that checking for the current cursor is
-         not possible. */
-
-        gdk_window_set_cursor(win, cursor.GetCursor());
-    }
-
-    if (wxUpdateUIEvent::CanUpdate(this))
-        UpdateWindowUI(wxUPDATE_UI_FROMIDLE);
-}
-
 
 // Get the "best" size for this control.
 wxSize wxToggleButton::DoGetBestSize() const

@@ -31,12 +31,6 @@
 #include "wx/gtk/private.h"
 #include <gdk/gdkkeysyms.h>
 
-//-----------------------------------------------------------------------------
-// data
-//-----------------------------------------------------------------------------
-
-extern wxWindowGTK *g_delayedFocus;
-
 // ----------------------------------------------------------------------------
 // helpers
 // ----------------------------------------------------------------------------
@@ -1547,15 +1541,16 @@ GtkWidget* wxTextCtrl::GetConnectWidget()
     return GTK_WIDGET(m_text);
 }
 
-bool wxTextCtrl::IsOwnGtkWindow( GdkWindow *window )
+GdkWindow *wxTextCtrl::GTKGetWindow(wxArrayGdkWindows& WXUNUSED(windows)) const
 {
     if ( IsMultiLine() )
     {
-        return window == gtk_text_view_get_window( GTK_TEXT_VIEW( m_text ), GTK_TEXT_WINDOW_TEXT );  // pure guesswork
+        return gtk_text_view_get_window(GTK_TEXT_VIEW(m_text),
+                                        GTK_TEXT_WINDOW_TEXT );
     }
     else
     {
-        return (window == GTK_ENTRY(m_text)->text_area);
+        return GTK_ENTRY(m_text)->text_area;
     }
 }
 
@@ -1715,24 +1710,6 @@ void wxTextCtrl::OnUpdateUndo(wxUpdateUIEvent& event)
 void wxTextCtrl::OnUpdateRedo(wxUpdateUIEvent& event)
 {
     event.Enable( CanRedo() );
-}
-
-void wxTextCtrl::OnInternalIdle()
-{
-    // Check if we have to show window now
-    if (GtkShowFromOnIdle()) return;
-
-    if (g_delayedFocus == this)
-    {
-        if (GTK_WIDGET_REALIZED(m_widget))
-        {
-            gtk_widget_grab_focus( m_widget );
-            g_delayedFocus = NULL;
-        }
-    }
-    
-    if (wxUpdateUIEvent::CanUpdate(this))
-        UpdateWindowUI(wxUPDATE_UI_FROMIDLE);
 }
 
 wxSize wxTextCtrl::DoGetBestSize() const

@@ -21,8 +21,6 @@
 //-----------------------------------------------------------------------------
 
 extern bool           g_blockEventsOnDrag;
-extern wxCursor       g_globalCursor;
-extern wxWindowGTK   *g_delayedFocus;
 
 //-----------------------------------------------------------------------------
 // "clicked"
@@ -225,41 +223,9 @@ void wxCheckBox::DoApplyWidgetStyle(GtkRcStyle *style)
     gtk_widget_modify_style(m_widgetLabel, style);
 }
 
-bool wxCheckBox::IsOwnGtkWindow( GdkWindow *window )
+GdkWindow *wxCheckBox::GTKGetWindow(wxArrayGdkWindows& WXUNUSED(windows)) const
 {
-    return window == GTK_BUTTON(m_widget)->event_window;
-}
-
-void wxCheckBox::OnInternalIdle()
-{
-    // Check if we have to show window now
-    if (GtkShowFromOnIdle()) return;
-    
-    wxCursor cursor = m_cursor;
-    if (g_globalCursor.Ok()) cursor = g_globalCursor;
-
-    GdkWindow *event_window = GTK_BUTTON(m_widgetCheckbox)->event_window;
-    if ( event_window && cursor.Ok() )
-    {
-        /* I now set the cursor the anew in every OnInternalIdle call
-           as setting the cursor in a parent window also effects the
-           windows above so that checking for the current cursor is
-           not possible. */
-
-       gdk_window_set_cursor( event_window, cursor.GetCursor() );
-    }
-
-    if (g_delayedFocus == this)
-    {
-        if (GTK_WIDGET_REALIZED(m_widget))
-        {
-            gtk_widget_grab_focus( m_widget );
-            g_delayedFocus = NULL;
-        }
-    }
-
-    if (wxUpdateUIEvent::CanUpdate(this))
-        UpdateWindowUI(wxUPDATE_UI_FROMIDLE);
+    return GTK_BUTTON(m_widgetCheckbox)->event_window;
 }
 
 wxSize wxCheckBox::DoGetBestSize() const

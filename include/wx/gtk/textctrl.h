@@ -138,9 +138,7 @@ public:
     bool SetBackgroundColour(const wxColour& colour);
 
     GtkWidget* GetConnectWidget();
-    bool IsOwnGtkWindow( GdkWindow *window );
     void CalculateScrollbar();
-    void OnInternalIdle();
 
     void SetUpdateFont(bool WXUNUSED(update)) { }
 
@@ -175,7 +173,8 @@ public:
 
 protected:
     virtual wxSize DoGetBestSize() const;
-    void DoApplyWidgetStyle(GtkRcStyle *style);
+    virtual void DoApplyWidgetStyle(GtkRcStyle *style);
+    virtual GdkWindow *GTKGetWindow(wxArrayGdkWindows& windows) const;
 
     // common part of all ctors
     void Init();

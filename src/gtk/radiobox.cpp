@@ -52,7 +52,6 @@ public:
 WX_DEFINE_LIST( wxRadioBoxButtonsInfoList );
 
 extern bool          g_blockEventsOnDrag;
-extern wxWindowGTK  *g_delayedFocus;
 
 //-----------------------------------------------------------------------------
 // "clicked"
@@ -638,30 +637,27 @@ void wxRadioBox::DoSetItemToolTip(unsigned int n, wxToolTip *tooltip)
 
 #endif // wxUSE_TOOLTIPS
 
-bool wxRadioBox::IsOwnGtkWindow( GdkWindow *window )
+GdkWindow *wxRadioBox::GTKGetWindow(wxArrayGdkWindows& windows) const
 {
-    if (window == m_widget->window)
-        return true;
+    windows.push_back(m_widget->window);
 
     wxRadioBoxButtonsInfoList::compatibility_iterator node = m_buttonsInfo.GetFirst();
     while (node)
     {
         GtkWidget *button = GTK_WIDGET( node->GetData()->button );
 
-        if (window == button->window)
-            return true;
+        windows.push_back(button->window);
 
         node = node->GetNext();
     }
 
-    return false;
+    return NULL;
 }
 
 void wxRadioBox::OnInternalIdle()
 {
-    // Check if we have to show window now
-    if (GtkShowFromOnIdle()) return;
-    
+    wxControl::OnInternalIdle();
+
     if ( m_lostFocus )
     {
         m_hasFocus = false;
@@ -672,18 +668,6 @@ void wxRadioBox::OnInternalIdle()
 
         (void)GetEventHandler()->ProcessEvent( event );
     }
-
-    if (g_delayedFocus == this)
-    {
-        if (GTK_WIDGET_REALIZED(m_widget))
-        {
-            g_delayedFocus = NULL;
-            SetFocus();
-        }
-    }
-
-    if (wxUpdateUIEvent::CanUpdate(this))
-        UpdateWindowUI(wxUPDATE_UI_FROMIDLE);
 }
 
 // static

@@ -80,8 +80,6 @@ public:
     // implementation from now on
 
     GtkWidget *GetConnectWidget();
-    bool IsOwnGtkWindow( GdkWindow *window );
-    void OnInternalIdle();
 
 #if wxUSE_TOOLTIPS
     void ApplyToolTip( GtkTooltips *tips, const wxChar *tip );
@@ -105,6 +103,9 @@ public:
 
 protected:
     virtual wxSize DoGetBestSize() const;
+    virtual void DoApplyWidgetStyle(GtkRcStyle *style);
+    virtual GdkWindow *GTKGetWindow(wxArrayGdkWindows& windows) const;
+
     virtual void DoSetSelection(int n, bool select);
     virtual int DoAppend(const wxString& item);
     virtual void DoInsertItems(const wxArrayString& items, unsigned int pos);
@@ -115,8 +116,6 @@ protected:
     virtual void DoSetItemClientObject(unsigned int n, wxClientData* clientData);
     virtual wxClientData* DoGetItemClientObject(unsigned int n) const;
     virtual int DoListHitTest(const wxPoint& point) const;
-
-    void DoApplyWidgetStyle(GtkRcStyle *style);
 
 private:
     void Init(); //common construction

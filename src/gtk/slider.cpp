@@ -401,10 +401,9 @@ int wxSlider::GetLineSize() const
     return int(gtk_range_get_adjustment (GTK_RANGE (m_widget))->step_increment);
 }
 
-bool wxSlider::IsOwnGtkWindow( GdkWindow *window )
+GdkWindow *wxSlider::GTKGetWindow(wxArrayGdkWindows& WXUNUSED(windows)) const
 {
-    GtkRange *range = GTK_RANGE(m_widget);
-    return (range->event_window == window);
+    return GTK_RANGE(m_widget)->event_window;
 }
 
 // static

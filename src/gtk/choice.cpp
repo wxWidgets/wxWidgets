@@ -599,7 +599,7 @@ wxSize wxChoice::DoGetBestSize() const
     return ret;
 }
 
-bool wxChoice::IsOwnGtkWindow( GdkWindow *window )
+GdkWindow *wxChoice::GTKGetWindow(wxArrayGdkWindows& WXUNUSED(windows)) const
 {
     return GTK_BUTTON(m_widget)->event_window;
 }

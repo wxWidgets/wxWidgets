@@ -48,12 +48,11 @@ public:
     // implementation
     void OnSize( wxSizeEvent &event );
 
-    bool IsOwnGtkWindow( GdkWindow *window );
-
     int m_pos;
 
 protected:
     virtual wxSize DoGetBestSize() const;
+    virtual GdkWindow *GTKGetWindow(wxArrayGdkWindows& windows) const;
 
 private:
     DECLARE_EVENT_TABLE()

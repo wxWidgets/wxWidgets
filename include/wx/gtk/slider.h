@@ -60,11 +60,12 @@ public:
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
     
     // implementation
-    bool IsOwnGtkWindow( GdkWindow *window );
-
     double m_pos;
     int m_scrollEventType;
     bool m_needThumbRelease;
+
+protected:
+    virtual GdkWindow *GTKGetWindow(wxArrayGdkWindows& windows) const;
 
 private:
     DECLARE_DYNAMIC_CLASS(wxSlider)

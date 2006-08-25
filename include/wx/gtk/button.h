@@ -61,8 +61,6 @@ public:
     // implementation
     // --------------
 
-    bool IsOwnGtkWindow( GdkWindow *window );
-
     // Since this wxButton doesn't derive from wxButtonBase (why?) we need
     // to override this here too...
     virtual bool ShouldInheritColours() const { return false; }
@@ -75,7 +73,9 @@ public:
 
 protected:
     virtual wxSize DoGetBestSize() const;
-    void DoApplyWidgetStyle(GtkRcStyle *style);
+    virtual void DoApplyWidgetStyle(GtkRcStyle *style);
+
+    virtual GdkWindow *GTKGetWindow(wxArrayGdkWindows& windows) const;
 
 private:
     DECLARE_DYNAMIC_CLASS(wxButton)

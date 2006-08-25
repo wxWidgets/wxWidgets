@@ -176,9 +176,9 @@ void wxSpinButton::OnSize( wxSizeEvent &WXUNUSED(event) )
     gtk_widget_set_size_request( m_widget, m_width, m_height );
 }
 
-bool wxSpinButton::IsOwnGtkWindow( GdkWindow *window )
+GdkWindow *wxSpinButton::GTKGetWindow(wxArrayGdkWindows& WXUNUSED(windows)) const
 {
-    return GTK_SPIN_BUTTON(m_widget)->panel == window;
+    return GTK_SPIN_BUTTON(m_widget)->panel;
 }
 
 wxSize wxSpinButton::DoGetBestSize() const

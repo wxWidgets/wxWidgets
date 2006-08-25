@@ -131,7 +131,6 @@ public:
     void SetFocus();
     void GtkDisableEvents();
     void GtkEnableEvents();
-    bool IsOwnGtkWindow( GdkWindow *window );
 #if wxUSE_TOOLTIPS
     void ApplyToolTip( GtkTooltips *tips, const wxChar *tip );
 #endif // wxUSE_TOOLTIPS
@@ -147,7 +146,8 @@ protected:
     virtual void DoSetItemToolTip(unsigned int n, wxToolTip *tooltip);
 #endif
 
-    void DoApplyWidgetStyle(GtkRcStyle *style);
+    virtual void DoApplyWidgetStyle(GtkRcStyle *style);
+    virtual GdkWindow *GTKGetWindow(wxArrayGdkWindows& windows) const;
 
     virtual bool GTKWidgetNeedsMnemonic() const;
     virtual void GTKWidgetDoSetMnemonic(GtkWidget* w);

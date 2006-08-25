@@ -7,12 +7,16 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __GTKWINDOWH__
-#define __GTKWINDOWH__
+#ifndef _WX_GTK_WINDOW_H_
+#define _WX_GTK_WINDOW_H_
+
+#include "wx/dynarray.h"
 
 // helper structure that holds class that holds GtkIMContext object and
 // some additional data needed for key events processing
 struct wxGtkIMData;
+
+WX_DEFINE_EXPORTED_ARRAY_PTR(GdkWindow *, wxArrayGdkWindows);
 
 //-----------------------------------------------------------------------------
 // callback definition for inserting a window (internal)
@@ -117,6 +121,8 @@ public:
 
     virtual WXWidget GetHandle() const { return m_widget; }
 
+    // many important things are done here, this function must be called
+    // regularly
     virtual void OnInternalIdle();
 
     // Internal represention of Update()
@@ -153,8 +159,10 @@ public:
     // widget where (most of) the input goes. even tooltips have
     // to be applied to all subwidgets.
     virtual GtkWidget* GetConnectWidget();
-    virtual bool IsOwnGtkWindow( GdkWindow *window );
     void ConnectWidget( GtkWidget *widget );
+
+    // Called from several event handlers
+    bool GTKCallbackCommonPrologue(struct _GdkEventAny *event) const;
 
 protected:
     // Override GTKWidgetNeedsMnemonic and return true if your
@@ -163,6 +171,24 @@ protected:
     // setting of the widget inside GTKWidgetDoSetMnemonic
     virtual bool GTKWidgetNeedsMnemonic() const;
     virtual void GTKWidgetDoSetMnemonic(GtkWidget* w);
+
+    // Get the GdkWindows making part of this window: usually there will be
+    // only one of them in which case it should be returned directly by this
+    // function. If there is more than one GdkWindow (can be the case for
+    // composite widgets), return NULL and fill in the provided array
+    //
+    // This is not pure virtual for backwards compatibility but almost
+    // certainly must be overridden in any wxControl-derived class!
+    virtual GdkWindow *GTKGetWindow(wxArrayGdkWindows& windows) const;
+
+    // Check if the given window makes part of this widget
+    bool GTKIsOwnWindow(GdkWindow *window) const;
+
+    // Set the focus to this window if its setting was delayed because the
+    // widget hadn't been realized when SetFocus() was called
+    //
+    // Return true if focus was set to us, false if nothing was done
+    bool GTKSetDelayedFocusIfNeeded();
 
 public:
     // Returns the default context which usually is anti-aliased
@@ -323,6 +349,12 @@ protected:
     // sets the border of a given GtkScrolledWindow from a wx style
     static void GtkScrolledWindowSetBorder(GtkWidget* w, int style);
 
+    // set the current cursor for all GdkWindows making part of this widget
+    // (see GTKGetWindow)
+    //
+    // should be called from OnInternalIdle() if it's overridden
+    void GTKUpdateCursor();
+
 private:
     enum ScrollUnit { ScrollUnit_Line, ScrollUnit_Page, ScrollUnit_Max };
 
@@ -340,4 +372,4 @@ private:
 
 extern WXDLLIMPEXP_CORE wxWindow *wxFindFocusedChild(wxWindowGTK *win);
 
-#endif // __GTKWINDOWH__
+#endif // _WX_GTK_WINDOW_H_

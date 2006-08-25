@@ -257,7 +257,7 @@ bool wxButton::Enable( bool enable )
     return true;
 }
 
-bool wxButton::IsOwnGtkWindow( GdkWindow *window )
+GdkWindow *wxButton::GTKGetWindow(wxArrayGdkWindows& WXUNUSED(windows)) const
 {
     return GTK_BUTTON(m_widget)->event_window;
 }

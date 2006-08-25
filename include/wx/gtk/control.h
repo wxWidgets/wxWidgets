@@ -59,6 +59,8 @@ public:
 
     virtual wxVisualAttributes GetDefaultAttributes() const;
 
+    virtual void OnInternalIdle();
+
 protected:
     virtual wxSize DoGetBestSize() const;
     void PostCreation(const wxSize& size);

@@ -47,9 +47,6 @@ public:
     // implementation
     // --------------
 
-    bool IsOwnGtkWindow( GdkWindow *window );
-    void OnInternalIdle();
-
     GtkWidget *m_widgetCheckbox;
     GtkWidget *m_widgetLabel;
 
@@ -57,7 +54,8 @@ public:
 
 protected:
     virtual wxSize DoGetBestSize() const;
-    void DoApplyWidgetStyle(GtkRcStyle *style);
+    virtual void DoApplyWidgetStyle(GtkRcStyle *style);
+    virtual GdkWindow *GTKGetWindow(wxArrayGdkWindows& windows) const;
 
     void DoSet3StateValue(wxCheckBoxState state);
     wxCheckBoxState DoGet3StateValue() const;
