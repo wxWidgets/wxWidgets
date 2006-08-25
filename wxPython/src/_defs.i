@@ -54,7 +54,10 @@
 
 // This one will turn off the generation of the thread wrapper code
 %define %threadWrapperOff
-%exception 
+%exception {
+    $action
+    if (PyErr_Occurred()) SWIG_fail;
+}
 %enddef
 
 // Turn it on by default
@@ -74,7 +77,7 @@
 
 
 // This macro can be used to disable the releasing of the GIL when calling the
-// C++ function.
+// C++ function.  This is like using threadWrapperOff for just this function.
 %define KeepGIL(name)
 %exception name {
     $action
