@@ -84,7 +84,7 @@ bool wxMask::Create( const wxBitmap& bitmap,
     // one bit per pixel, each row starts on a byte boundary
     const size_t out_size = size_t((w + 7) / 8) * unsigned(h);
     wxByte* out = new wxByte[out_size];
-    // set bits are white
+    // set bits are unmasked
     memset(out, 0xff, out_size);
     unsigned bit_index = 0;
     if (bitmap.HasPixbuf())
@@ -496,7 +496,7 @@ bool wxBitmap::CreateFromImageAsPixmap(const wxImage& image, int depth)
         // one bit per pixel, each row starts on a byte boundary
         const size_t out_size = size_t((w + 7) / 8) * unsigned(h);
         wxByte* out = new wxByte[out_size];
-        // set bits are white
+        // set bits are black
         memset(out, 0xff, out_size);
         const wxByte* in = image.GetData();
         unsigned bit_index = 0;
@@ -580,7 +580,7 @@ bool wxBitmap::CreateFromImageAsPixbuf(const wxImage& image)
     wxASSERT( gdk_pixbuf_get_width(pixbuf) == width );
     wxASSERT( gdk_pixbuf_get_height(pixbuf) == height );
 
-    SetDepth(wxTheApp->GetGdkVisual()->depth);
+    SetDepth(32);
     SetPixbuf(pixbuf);
 
     // Copy the data:
@@ -646,7 +646,7 @@ wxImage wxBitmap::ConvertToImage() const
         GdkPixmap* pixmap_invert = NULL;
         if (GetDepth() == 1)
         {
-            // mono bitmaps are inverted
+            // mono bitmaps are inverted, i.e. 0 is white
             pixmap_invert = gdk_pixmap_new(pixmap, w, h, 1);
             GdkGC* gc = gdk_gc_new(pixmap_invert);
             gdk_gc_set_function(gc, GDK_COPY_INVERT);
