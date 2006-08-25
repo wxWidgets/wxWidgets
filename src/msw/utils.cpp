@@ -1266,6 +1266,9 @@ wxWinVersion wxGetWinVersion()
             }
             break;
 
+        default:
+            // Do nothing just to silence GCC warning
+            break;
     }
 
     return wxWinVersion_Unknown;
