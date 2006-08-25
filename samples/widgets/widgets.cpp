@@ -636,6 +636,8 @@ void WidgetsFrame::OnPageChanged(WidgetsBookCtrlEvent& event)
     if ( item )
         item->Check();
 
+    GetMenuBar()->Check(Widgets_BusyCursor, false);
+
     // lazy creation of the pages
     WidgetsPage *page = CurrentPage();
     if ( page->GetChildren().empty() )
