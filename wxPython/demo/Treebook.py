@@ -60,6 +60,7 @@ class TestTB(wx.Treebook):
         self.Bind(wx.EVT_TREEBOOK_PAGE_CHANGED, self.OnPageChanged)
         self.Bind(wx.EVT_TREEBOOK_PAGE_CHANGING, self.OnPageChanging)
 
+        # This is a workaround for a sizing bug on Mac...
         wx.FutureCall(100, self.AdjustSize)
 
     def AdjustSize(self):
