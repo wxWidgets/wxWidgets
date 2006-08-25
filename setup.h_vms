@@ -3,7 +3,7 @@
  * Template for the set.h file for VMS                                       *
  * Created from setup.h_in                                                   *
  * Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                            *
- * Date : 9 June 2006                                                        *
+ * Date : 16 August 2006                                                     *
  *                                                                           *
  *****************************************************************************/
 
@@ -873,6 +873,10 @@ typedef pid_t GPid;
  * with 'char*' for the 3rd parameter instead of 'const char*' */
 #undef HAVE_BROKEN_SNPRINTF_DECL
 
+/* Define if you have a snprintf() which supports positional arguments
+   (defined in the unix98 standard) */
+#undef HAVE_UNIX98_PRINTF
+
 /* define if you have statfs function */
 #undef HAVE_STATFS
 
@@ -1155,9 +1159,6 @@ typedef pid_t GPid;
 /* Define if you have Pango xft support */
 #undef HAVE_PANGO_XFT
 
-/* Define if you have the <sys/select.h> header file.  */
-#undef HAVE_SYS_SELECT_H
-
 /* ---------------------------------------------------------------------
    Win32 adjustments section
    ---------------------------------------------------------------------
@@ -1188,5 +1189,7 @@ typedef pid_t GPid;
 
 /* define this when wxDC::Blit() respects SetDeviceOrigin() in wxGTK */
 #define wxHAS_WORKING_GTK_DC_BLIT 1
+
+#undef HAVE_SYS_SELECT_H
 
 #endif /* __WX_SETUP_H__ */

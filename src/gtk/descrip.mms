@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 20 March 2006                                                       *
+# Date : 22 August 2006                                                      *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -52,10 +52,8 @@ OBJECTS = \
         evtloop.obj,\
 	filedlg.obj,\
 	font.obj,\
-	gdiobj.obj,\
         glcanvas.obj,\
 	gsockgtk.obj,\
-        icon.obj,\
 	main.obj,\
 	minifram.obj,\
 	pen.obj,\
@@ -134,10 +132,8 @@ SOURCES =\
 	fontdlg.cpp,\
 	frame.cpp,\
 	gauge.cpp,\
-	gdiobj.cpp,\
         glcanvas.cpp,\
 	gsockgtk.cpp,\
-        icon.cpp,\
 	listbox.cpp,\
 	main.cpp,\
 	mdi.cpp,\
@@ -221,10 +217,8 @@ font.obj : font.cpp
 fontdlg.obj : fontdlg.cpp
 frame.obj : frame.cpp
 gauge.obj : gauge.cpp
-gdiobj.obj : gdiobj.cpp
 glcanvas.obj : glcanvas.cpp
 gsockgtk.obj : gsockgtk.cpp
-icon.obj : icon.cpp
 listbox.obj : listbox.cpp
 main.obj : main.cpp
 msgdlg.obj : msgdlg.cpp

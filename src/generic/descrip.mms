@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 10 February 2006                                                    *
+# Date : 18 August 2006                                                      *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -106,6 +106,7 @@ SOURCES = \
 		gridctrl.cpp,\
 		gridsel.cpp,\
 		helpext.cpp,\
+		icon.cpp,\
 		imaglist.cpp,\
 		laywin.cpp,\
 		listbkg.cpp,\
@@ -152,9 +153,9 @@ OBJECTS0=,statusbr.obj,statline.obj,notebook.obj,spinctlg.obj
 .ifdef __WXX11__
 OBJECTS0=,accel.obj,filedlgg.obj,dragimgg.obj,fdrepdlg.obj,htmllbox.obj,\
 	listbkg.obj,mdig.obj,spinctlg.obj,splash.obj,timer.obj,\
-	vlbox.obj,vscroll.obj,combog.obj
+	vlbox.obj,vscroll.obj,combog.obj,icon.obj
 .else
-OBJECTS0=,accel.obj,statusbr.obj,filedlgg.obj,paletteg.obj
+OBJECTS0=,accel.obj,statusbr.obj,filedlgg.obj,paletteg.obj,icon.obj
 .endif
 .endif
 
@@ -193,6 +194,7 @@ grid.obj : grid.cpp
 gridctrl.obj : gridctrl.cpp
 gridsel.obj : gridsel.cpp
 helpext.obj : helpext.cpp
+icon.obj : icon.cpp
 imaglist.obj : imaglist.cpp
 laywin.obj : laywin.cpp
 listctrl.obj : listctrl.cpp
