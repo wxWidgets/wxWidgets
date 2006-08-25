@@ -1410,7 +1410,7 @@ wxWindowGTK *FindWindowForMouseEvent(wxWindowGTK *win, wxCoord& x, wxCoord& y)
 // common event handlers helpers
 // ----------------------------------------------------------------------------
 
-bool wxWindowGTK::GTKCallbackCommonPrologue(GdkEventAny *event) const
+int wxWindowGTK::GTKCallbackCommonPrologue(GdkEventAny *event) const
 {
     DEBUG_MAIN_THREAD
 
@@ -1418,23 +1418,23 @@ bool wxWindowGTK::GTKCallbackCommonPrologue(GdkEventAny *event) const
         wxapp_install_idle_handler();
 
     if (!m_hasVMT)
-        return false;
+        return FALSE;
     if (g_blockEventsOnDrag)
-        return true;
+        return TRUE;
     if (g_blockEventsOnScroll)
-        return true;
+        return TRUE;
 
     if (!GTKIsOwnWindow(event->window))
-        return false;
+        return FALSE;
 
-    return true;
+    return -1;
 }
 
 // overloads for all GDK event types we use here: we need to have this as
 // GdkEventXXX can't be implicitly cast to GdkEventAny even if it, in fact,
 // derives from it in the sense that the structs have the same layout
 #define wxDEFINE_COMMON_PROLOGUE_OVERLOAD(T)                                  \
-    static bool wxGtkCallbackCommonPrologue(T *event, wxWindowGTK *win)       \
+    static int wxGtkCallbackCommonPrologue(T *event, wxWindowGTK *win)        \
     {                                                                         \
         return win->GTKCallbackCommonPrologue((GdkEventAny *)event);          \
     }
@@ -1444,6 +1444,11 @@ wxDEFINE_COMMON_PROLOGUE_OVERLOAD(GdkEventMotion)
 wxDEFINE_COMMON_PROLOGUE_OVERLOAD(GdkEventCrossing)
 
 #undef wxDEFINE_COMMON_PROLOGUE_OVERLOAD
+
+#define wxCOMMON_CALLBACK_PROLOGUE(event, win)                                \
+    const int rc = wxGtkCallbackCommonPrologue(event, win);                   \
+    if ( rc != -1 )                                                           \
+        return rc
 
 // send the wxChildFocusEvent and wxFocusEvent, common code of
 // gtk_window_focus_in_callback() and SetFocus()
@@ -1473,8 +1478,7 @@ gtk_window_button_press_callback( GtkWidget *widget,
                                   GdkEventButton *gdk_event,
                                   wxWindowGTK *win )
 {
-    if ( !wxGtkCallbackCommonPrologue(gdk_event, win) )
-        return FALSE;
+    wxCOMMON_CALLBACK_PROLOGUE(gdk_event, win);
 
     if (win->m_wxwindow && (g_focusWindow != win) && win->AcceptsFocus())
     {
@@ -1646,8 +1650,7 @@ gtk_window_button_release_callback( GtkWidget *widget,
                                     GdkEventButton *gdk_event,
                                     wxWindowGTK *win )
 {
-    if ( !wxGtkCallbackCommonPrologue(gdk_event, win) )
-        return FALSE;
+    wxCOMMON_CALLBACK_PROLOGUE(gdk_event, win);
 
     wxEventType event_type = wxEVT_NULL;
 
@@ -1703,8 +1706,7 @@ gtk_window_motion_notify_callback( GtkWidget *widget,
                                    GdkEventMotion *gdk_event,
                                    wxWindowGTK *win )
 {
-    if ( !wxGtkCallbackCommonPrologue(gdk_event, win) )
-        return FALSE;
+    wxCOMMON_CALLBACK_PROLOGUE(gdk_event, win);
 
     if (gdk_event->is_hint)
     {
@@ -1956,8 +1958,7 @@ gtk_window_enter_callback( GtkWidget *widget,
                            GdkEventCrossing *gdk_event,
                            wxWindowGTK *win )
 {
-    if ( !wxGtkCallbackCommonPrologue(gdk_event, win) )
-        return FALSE;
+    wxCOMMON_CALLBACK_PROLOGUE(gdk_event, win);
 
     // Event was emitted after a grab
     if (gdk_event->mode != GDK_CROSSING_NORMAL) return FALSE;
@@ -2001,8 +2002,7 @@ gtk_window_leave_callback( GtkWidget *widget,
                            GdkEventCrossing *gdk_event,
                            wxWindowGTK *win )
 {
-    if ( !wxGtkCallbackCommonPrologue(gdk_event, win) )
-        return FALSE;
+    wxCOMMON_CALLBACK_PROLOGUE(gdk_event, win);
 
     // Event was emitted after an ungrab
     if (gdk_event->mode != GDK_CROSSING_NORMAL) return FALSE;

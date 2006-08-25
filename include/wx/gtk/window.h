@@ -161,8 +161,10 @@ public:
     virtual GtkWidget* GetConnectWidget();
     void ConnectWidget( GtkWidget *widget );
 
-    // Called from several event handlers
-    bool GTKCallbackCommonPrologue(struct _GdkEventAny *event) const;
+    // Called from several event handlers, if it returns true or false, the
+    // same value should be immediately returned by the handler without doing
+    // anything else. If it returns -1, the handler should continue as usual
+    int GTKCallbackCommonPrologue(struct _GdkEventAny *event) const;
 
 protected:
     // Override GTKWidgetNeedsMnemonic and return true if your
