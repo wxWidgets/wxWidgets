@@ -60,6 +60,14 @@ class TestTB(wx.Treebook):
         self.Bind(wx.EVT_TREEBOOK_PAGE_CHANGED, self.OnPageChanged)
         self.Bind(wx.EVT_TREEBOOK_PAGE_CHANGING, self.OnPageChanging)
 
+        wx.FutureCall(100, self.AdjustSize)
+
+    def AdjustSize(self):
+        print self.GetTreeCtrl().GetBestSize()
+        self.GetTreeCtrl().InvalidateBestSize()
+        self.SendSizeEvent()
+        print self.GetTreeCtrl().GetBestSize()
+        
 
     def makeColorPanel(self, color):
         p = wx.Panel(self, -1)
