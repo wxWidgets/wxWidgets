@@ -520,6 +520,12 @@ struct wxPixelDataOut<wxBitmap>
                             bmp.GetRawData(data, PixelFormat::BitsPerPixel);
             }
 
+            // default constructor
+            Iterator()
+            {
+                m_ptr = NULL;
+            }
+            
             // return true if this iterator is valid
             bool IsOk() const { return m_ptr != NULL; }
 
