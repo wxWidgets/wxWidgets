@@ -2754,6 +2754,62 @@ int wxPyImageHandler::GetImageCount( wxInputStream& stream ) {
 
 
 //----------------------------------------------------------------------
+// Function to test if the Display (or whatever is the platform equivallent)
+// can be connected to.  This is accessable from wxPython as a staticmethod of
+// wx.App called DisplayAvailable().
+
+
+bool wxPyTestDisplayAvailable()
+{
+#ifdef __WXGTK__
+    Display* display;
+    display = XOpenDisplay(NULL);
+    if (display == NULL)
+        return false;
+    XCloseDisplay(display);
+    return true;
+#endif
+
+#ifdef __WXMAC__
+    // This is adapted from Python's Mac/Modules/MacOS.c in the
+    // MacOS_WMAvailable function.
+    bool rv;
+    ProcessSerialNumber psn;
+		
+    /*
+    ** This is a fairly innocuous call to make if we don't have a window
+    ** manager, or if we have no permission to talk to it. It will print
+    ** a message on stderr, but at least it won't abort the process.
+    ** It appears the function caches the result itself, and it's cheap, so
+    ** no need for us to cache.
+    */
+#ifdef kCGNullDirectDisplay
+    /* On 10.1 CGMainDisplayID() isn't available, and
+    ** kCGNullDirectDisplay isn't defined.
+    */
+    if (CGMainDisplayID() == 0) {
+        rv = false;
+    } else 
+#endif
+    {
+        // Also foreground the application on the first call as a side-effect.
+        if (GetCurrentProcess(&psn) < 0 || SetFrontProcess(&psn) < 0) {
+            rv = false;
+        } else {
+            rv = true;
+        }
+    }
+    return rv;
+#endif
+
+#ifdef __WXMSW__
+    // TODO...
+    return true;
+#endif
+}
+
+
+//----------------------------------------------------------------------
 //----------------------------------------------------------------------
 
 

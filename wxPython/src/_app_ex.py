@@ -69,7 +69,7 @@ class PyOnDemandOutputWindow:
 #----------------------------------------------------------------------
 
 _defRedirect = (wx.Platform == '__WXMSW__' or wx.Platform == '__WXMAC__')
-
+        
 class App(wx.PyApp):
     """
     The ``wx.App`` class represents the application and is used to:
@@ -127,22 +127,26 @@ class App(wx.PyApp):
             initialization to ensure that the system, toolkit and
             wxWidgets are fully initialized.
         """
+        
         wx.PyApp.__init__(self)
 
-        if wx.Platform == "__WXMAC__":
-            try:
-                import MacOS
-                if not MacOS.WMAvailable():
-                    print """\
-This program needs access to the screen. Please run with 'pythonw',
-not 'python', and only when you are logged in on the main display of
-your Mac."""
-                    _sys.exit(1)
-            except SystemExit:
-                raise
-            except:
-                pass
+        # make sure we can create a GUI
+        if not self.DisplayAvailable():
+            
+            if wx.Platform == "__WXMAC__":
+                msg = """This program needs access to the screen.
+Please run with 'pythonw', not 'python', and only when you are logged
+in on the main display of your Mac."""
+                
+            elif wx.Platform == "__WXGTK__":
+                msg ="Unable to access the X Display, is $DISPLAY set properly?"
 
+            else:
+                msg = "Unable to create GUI"
+                # TODO: more description is needed for wxMSW...
+
+            raise SystemExit(msg)
+        
         # This has to be done before OnInit
         self.SetUseBestVisual(useBestVisual)
 

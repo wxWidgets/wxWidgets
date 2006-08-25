@@ -162,8 +162,9 @@ Added wx.HyperlinkCtrl.
 Added battery and power related functions and events (wxMSW only so
 far.)  See wx.PowerEvent, wx.GetPowerType and wx.GetBatteryState.
 
-Added wx.ListCtrl.HitTestSubItem which returns the sub-item that was
-hit (if any) in addition to the item and flags.
+Added wx.ListCtrl.HitTestSubItem which returns the sub-item (i.e. the
+column in report mode) that was hit (if any) in addition to the item
+and flags.
 
 Added wrappers for wx.ColourPickerCtrl, wx.DirPickerCtrl,
 wx.FilePickerCtrl, and wx.FontPickerCtrl.
@@ -195,6 +196,9 @@ wx.BitmapFromBufferRGBA factory functions.  They enable loading of am
 image or bitmap directly from a Python object that implements the
 buffer interface, such as strings, arrays, etc.
 
+Added wx.App.DisplayAvailable() which can be used to determine if a
+GUI can be created in the current environment.  (Still need an
+implementation for wxMSW...)
 
 
 

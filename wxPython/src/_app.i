@@ -290,6 +290,27 @@ it wasn't found at all.  Raises an exception on non-Windows platforms.", "");
             { wxPyRaiseNotImplemented(); return 0; }
     }
 #endif
+
+    %extend {
+        DocStr(DisplayAvailable,
+               "Tests if it is possible to create a GUI in the current environment.
+This will mean different things on the different platforms.
+
+   * On X Windows systems this function will return ``False`` if it is
+     not able to open a connection to the X display, which can happen
+     if $DISPLAY is not set, or is not set correctly.
+
+   * On Mac OS X a ``False`` return value will mean that wx is not
+     able to access the window manager, which can happen if logged in
+     remotely or if running from the normal version of python instead
+     of the framework version, (i.e., pythonw.)
+
+   * On MS Windows...
+", "");
+        static bool DisplayAvailable() {
+            return wxPyTestDisplayAvailable();
+        }
+    }
 };
 
 

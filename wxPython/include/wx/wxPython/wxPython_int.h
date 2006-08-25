@@ -251,10 +251,11 @@ bool wxPoint2D_helper(PyObject* source, wxPoint2D** obj);
 bool wxPySimple_typecheck(PyObject* source, const wxChar* classname, int seqLen);
 bool wxColour_typecheck(PyObject* source);
 
-bool wxPyCheckForApp();
-
 
 // Other helpful stuff
+bool wxPyCheckForApp();
+bool wxPyTestDisplayAvailable();
+
 bool wxPy2int_seq_helper(PyObject* source, int* i1, int* i2);
 bool wxPy4int_seq_helper(PyObject* source, int* i1, int* i2, int* i3, int* i4);
 
