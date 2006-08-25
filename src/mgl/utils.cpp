@@ -42,6 +42,15 @@
 // misc.
 //----------------------------------------------------------------------------
 
+// Get free memory in bytes, or -1 if cannot determine amount (e.g. on UNIX)
+wxMemorySize wxGetFreeMemory()
+{
+    // TODO - probably should be extracted to
+    //        src/msdos/utilsdos.cpp and src/unix/utilsunx.cpp
+    //        to avoid code duplication
+    return -1;
+}
+
 void wxBell()
 {
     // FIXME_MGL
