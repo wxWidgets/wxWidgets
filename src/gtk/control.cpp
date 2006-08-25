@@ -375,7 +375,7 @@ void wxControl::OnInternalIdle()
     if ( GtkShowFromOnIdle() )
         return;
 
-    if ( IsShown() )
+    if ( GTK_WIDGET_REALIZED(m_widget) )
     {
         GTKUpdateCursor();
 
