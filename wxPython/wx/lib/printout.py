@@ -612,6 +612,8 @@ class PrintTableDraw(wx.ScrolledWindow, PrintBase):
             except:
                 size = self.row_def_line_size
 
+            if size < 1: return
+
             try:
                 colour = self.row_line_colour[self.data_cnt]
             except:
@@ -632,6 +634,8 @@ class PrintTableDraw(wx.ScrolledWindow, PrintBase):
                     size = self.column_line_size[col]
                 except:
                     size = self.column_def_line_size
+
+                if size < 1: continue
 
                 try:
                     colour = self.column_line_colour[col]
