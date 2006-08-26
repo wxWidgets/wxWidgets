@@ -57,7 +57,7 @@ protected :
 
     void InitWith( unsigned char red, unsigned char green, unsigned char blue ) 
     {
-        InitWith( red, green, blue , 255) ;
+        InitWith( red, green, blue , wxALPHA_OPAQUE ) ;
     }
 
     void InitWith( unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha );

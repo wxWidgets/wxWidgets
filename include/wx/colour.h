@@ -36,6 +36,8 @@
 
 class WXDLLEXPORT wxColour;
 
+const unsigned char wxALPHA_TRANSPARENT = 0;
+const unsigned char wxALPHA_OPAQUE = 0xff;
 
 //-----------------------------------------------------------------------------
 // wxColourBase: this class has no data members, just some functions to avoid
@@ -64,7 +66,7 @@ public:
     // Set() functions
     // ---------------
 
-    void Set(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha = 255)
+    void Set(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha = wxALPHA_OPAQUE)
         { InitWith(red,green,blue, alpha); }
 
     // implemented in colourcmn.cpp
@@ -94,7 +96,7 @@ public:
     virtual unsigned char Green() const = 0;
     virtual unsigned char Blue() const = 0;
     virtual unsigned char Alpha() const
-        { return 255 ; }
+        { return wxALPHA_OPAQUE ; }
 
     // implemented in colourcmn.cpp
     virtual wxString GetAsString(long flags = wxC2S_NAME | wxC2S_CSS_SYNTAX) const;
