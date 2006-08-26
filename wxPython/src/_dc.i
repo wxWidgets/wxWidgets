@@ -585,7 +585,7 @@ current or specified font. Only works for single line strings.", "",
         void, GetMultiLineTextExtent(const wxString& text,
                                      wxCoord *OUTPUT, wxCoord *OUTPUT, wxCoord *OUTPUT,
                                      wxFont *font = NULL),
-        "GetMultiLineTextExtent(wxString string, Font font=None) ->\n   (width, height, descent, externalLeading)",
+        "GetMultiLineTextExtent(wxString string, Font font=None) ->\n   (width, height, lineHeight)",
         "Get the width, height, decent and leading of the text using the
 current or specified font. Works for single as well as multi-line
 strings.", "");
@@ -883,12 +883,12 @@ colour.
 ", "");
     
 
-//     DocDeclStr(
-//         void , ComputeScaleAndOrigin(),
-//         "Performs all necessary computations for given platform and context
-// type after each change of scale and origin parameters. Usually called
-// automatically internally after such changes.
-// ", "");
+    DocDeclStr(
+        void , ComputeScaleAndOrigin(),
+        "Performs all necessary computations for given platform and context
+type after each change of scale and origin parameters. Usually called
+automatically internally after such changes.
+", "");
     
 
     
