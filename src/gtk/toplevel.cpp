@@ -25,22 +25,16 @@
 #include "wx/toplevel.h"
 
 #ifndef WX_PRECOMP
+    #include "wx/frame.h"
+    #include "wx/icon.h"
     #include "wx/log.h"
     #include "wx/app.h"
-    #include "wx/dcclient.h"
-    #include "wx/dialog.h"
-    #include "wx/timer.h"
-    #include "wx/settings.h"
-    #include "wx/control.h"
 #endif
 
 #include "wx/gtk/private.h"
 #include "wx/evtloop.h"
 
-#include <glib.h>
-#include <gdk/gdk.h>
 #include <gtk/gtk.h>
-#include <gdk/gdkkeysyms.h>
 #include <gdk/gdkx.h>
 
 #include "wx/gtk/win_gtk.h"

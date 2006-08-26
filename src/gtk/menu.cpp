@@ -15,18 +15,13 @@
 #ifndef WX_PRECOMP
     #include "wx/intl.h"
     #include "wx/log.h"
-    #include "wx/app.h"
+    #include "wx/frame.h"
     #include "wx/bitmap.h"
 #endif
 
-#if wxUSE_ACCEL
-    #include "wx/accel.h"
-#endif // wxUSE_ACCEL
-
+#include "wx/accel.h"
 #include "wx/stockitem.h"
 #include "wx/gtk/private.h"
-
-#include <gdk/gdkkeysyms.h>
 
 // FIXME: is this right? somehow I don't think so (VZ)
 
