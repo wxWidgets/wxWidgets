@@ -640,6 +640,7 @@ ALL_BASE_SOURCES =  \
 	src/common/sckstrm.cpp \
 	src/common/socket.cpp \
 	src/common/url.cpp \
+	src/common/sockettable.cpp \
 	src/msw/urlmsw.cpp \
 	$(NET_WINCE_SRC) \
 	src/xml/xml.cpp \
@@ -734,6 +735,7 @@ MONODLL_OBJECTS =  \
 	monodll_sckstrm.o \
 	monodll_socket.o \
 	monodll_url.o \
+	monodll_sockettable.o \
 	$(__NET_PLATFORM_SRC_OBJECTS) \
 	$(__MONOLIB_GUI_SRC_OBJECTS) \
 	monodll_xml.o \
@@ -827,6 +829,7 @@ MONOLIB_OBJECTS =  \
 	monolib_sckstrm.o \
 	monolib_socket.o \
 	monolib_url.o \
+	monolib_sockettable.o \
 	$(__NET_PLATFORM_SRC_OBJECTS_1) \
 	$(__MONOLIB_GUI_SRC_OBJECTS_1) \
 	monolib_xml.o \
@@ -1006,6 +1009,7 @@ NETDLL_OBJECTS =  \
 	netdll_sckstrm.o \
 	netdll_socket.o \
 	netdll_url.o \
+	netdll_sockettable.o \
 	$(__NET_PLATFORM_SRC_OBJECTS_2)
 NETDLL_ODEP =  $(___pch_wxprec_netdll_wx_wxprec_h_gch___depname)
 NETLIB_CXXFLAGS = $(__netlib_PCH_INC) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
@@ -1026,6 +1030,7 @@ NETLIB_OBJECTS =  \
 	netlib_sckstrm.o \
 	netlib_socket.o \
 	netlib_url.o \
+	netlib_sockettable.o \
 	$(__NET_PLATFORM_SRC_OBJECTS_3)
 NETLIB_ODEP =  $(___pch_wxprec_netlib_wx_wxprec_h_gch___depname)
 COREDLL_CFLAGS = $(__coredll_PCH_INC) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
@@ -1796,6 +1801,7 @@ COND_TOOLKIT_X11_LOWLEVEL_HDR =  \
 	wx/x11/reparent.h \
 	wx/x11/textctrl.h \
 	wx/x11/toplevel.h \
+	wx/sockettable.h \
 	wx/x11/window.h
 @COND_TOOLKIT_X11@LOWLEVEL_HDR = $(COND_TOOLKIT_X11_LOWLEVEL_HDR)
 COND_TOOLKIT_COCOA_GUI_HDR =  \
@@ -11807,6 +11813,9 @@ monodll_socket.o: $(srcdir)/src/common/socket.cpp $(MONODLL_ODEP)
 monodll_url.o: $(srcdir)/src/common/url.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/url.cpp
 
+monodll_sockettable.o: $(srcdir)/src/common/sockettable.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/sockettable.cpp
+
 monodll_urlmsw.o: $(srcdir)/src/msw/urlmsw.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/urlmsw.cpp
 
@@ -15676,6 +15685,9 @@ monolib_socket.o: $(srcdir)/src/common/socket.cpp $(MONOLIB_ODEP)
 
 monolib_url.o: $(srcdir)/src/common/url.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/url.cpp
+
+monolib_sockettable.o: $(srcdir)/src/common/sockettable.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/sockettable.cpp
 
 monolib_urlmsw.o: $(srcdir)/src/msw/urlmsw.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/urlmsw.cpp
@@ -20426,6 +20438,9 @@ netdll_socket.o: $(srcdir)/src/common/socket.cpp $(NETDLL_ODEP)
 netdll_url.o: $(srcdir)/src/common/url.cpp $(NETDLL_ODEP)
 	$(CXXC) -c -o $@ $(NETDLL_CXXFLAGS) $(srcdir)/src/common/url.cpp
 
+netdll_sockettable.o: $(srcdir)/src/common/sockettable.cpp $(NETDLL_ODEP)
+	$(CXXC) -c -o $@ $(NETDLL_CXXFLAGS) $(srcdir)/src/common/sockettable.cpp
+
 netdll_urlmsw.o: $(srcdir)/src/msw/urlmsw.cpp $(NETDLL_ODEP)
 	$(CXXC) -c -o $@ $(NETDLL_CXXFLAGS) $(srcdir)/src/msw/urlmsw.cpp
 
@@ -20470,6 +20485,9 @@ netlib_socket.o: $(srcdir)/src/common/socket.cpp $(NETLIB_ODEP)
 
 netlib_url.o: $(srcdir)/src/common/url.cpp $(NETLIB_ODEP)
 	$(CXXC) -c -o $@ $(NETLIB_CXXFLAGS) $(srcdir)/src/common/url.cpp
+
+netlib_sockettable.o: $(srcdir)/src/common/sockettable.cpp $(NETLIB_ODEP)
+	$(CXXC) -c -o $@ $(NETLIB_CXXFLAGS) $(srcdir)/src/common/sockettable.cpp
 
 netlib_urlmsw.o: $(srcdir)/src/msw/urlmsw.cpp $(NETLIB_ODEP)
 	$(CXXC) -c -o $@ $(NETLIB_CXXFLAGS) $(srcdir)/src/msw/urlmsw.cpp

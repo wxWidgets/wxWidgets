@@ -42,173 +42,7 @@
 #include <sys/time.h>
 #include <unistd.h>
 
-#if wxUSE_SOCKETS
-// ----------------------------------------------------------------------------
-// wxSocketTable
-// ----------------------------------------------------------------------------
-
-#include "wx/gsocket.h"
-
-class wxSocketTableEntry: public wxObject
-{
-  public:
-    wxSocketTableEntry()
-    {
-        m_fdInput = -1; m_fdOutput = -1;
-        m_socket = NULL;
-    }
-
-    int m_fdInput;
-    int m_fdOutput;
-    GSocket* m_socket;
-};
-
-typedef enum
-{ wxSocketTableInput, wxSocketTableOutput } wxSocketTableType ;
-
-class wxSocketTable: public wxHashTable
-{
-  public:
-    wxSocketTable(): wxHashTable(wxKEY_INTEGER)
-    {
-    }
-    ~wxSocketTable()
-    {
-        WX_CLEAR_HASH_TABLE(*this)
-    }
-
-    wxSocketTableEntry* FindEntry(int fd);
-
-    void RegisterCallback(int fd, wxSocketTableType socketType, GSocket* socket);
-
-    void UnregisterCallback(int fd, wxSocketTableType socketType);
-
-    void FillSets(fd_set* readset, fd_set* writeset, int* highest);
-
-    void ProcessEvents(fd_set* readset, fd_set* writeset);
-};
-
-wxSocketTableEntry* wxSocketTable::FindEntry(int fd)
-{
-    wxSocketTableEntry* entry = (wxSocketTableEntry*) Get(fd);
-    return entry;
-}
-
-void wxSocketTable::RegisterCallback(int fd, wxSocketTableType socketType, GSocket* socket)
-{
-    wxSocketTableEntry* entry = FindEntry(fd);
-    if (!entry)
-    {
-        entry = new wxSocketTableEntry();
-        Put(fd, entry);
-    }
-
-    if (socketType == wxSocketTableInput)
-        entry->m_fdInput = fd;
-    else
-        entry->m_fdOutput = fd;
-     
-    entry->m_socket = socket;
-}
-
-void wxSocketTable::UnregisterCallback(int fd, wxSocketTableType socketType)
-{
-    wxSocketTableEntry* entry = FindEntry(fd);
-    if (entry)
-    {
-        if (socketType == wxSocketTableInput)
-            entry->m_fdInput = -1;
-        else
-            entry->m_fdOutput = -1;
-        
-        if (entry->m_fdInput == -1 && entry->m_fdOutput == -1)
-        {
-            entry->m_socket = NULL;          
-            Delete(fd);
-            delete entry;
-        }
-    }
-}
-
-void wxSocketTable::FillSets(fd_set* readset, fd_set* writeset, int* highest)
-{
-    BeginFind();
-    wxHashTable::compatibility_iterator node = Next();
-    while (node)
-    {
-        wxSocketTableEntry* entry = (wxSocketTableEntry*) node->GetData();
-
-        if (entry->m_fdInput != -1)
-        {
-            wxFD_SET(entry->m_fdInput, readset);
-            if (entry->m_fdInput > *highest)
-                * highest = entry->m_fdInput;
-        }
-
-        if (entry->m_fdOutput != -1)
-        {
-            wxFD_SET(entry->m_fdOutput, writeset);
-            if (entry->m_fdOutput > *highest)
-                * highest = entry->m_fdOutput;
-        }
-
-        node = Next();
-    }
-}
-
-void wxSocketTable::ProcessEvents(fd_set* readset, fd_set* writeset)
-{
-    BeginFind();
-    wxHashTable::compatibility_iterator node = Next();
-    while (node)
-    {
-        // We have to store the next node here, because the event processing can 
-        // destroy the object before we call Next()
-
-        wxHashTable::compatibility_iterator next_node = Next();	
-
-        wxSocketTableEntry* entry = (wxSocketTableEntry*) node->GetData();
-
-        wxCHECK_RET(entry->m_socket, wxT("Critical: Processing a NULL socket in wxSocketTable"));
-      
-        if (entry->m_fdInput != -1 && wxFD_ISSET(entry->m_fdInput, readset))
-            entry->m_socket->Detected_Read();
-
-        if (entry->m_fdOutput != -1 && wxFD_ISSET(entry->m_fdOutput, writeset))
-            entry->m_socket->Detected_Write();;
-
-        node = next_node;
-    }
-}
-
-wxSocketTable* wxTheSocketTable = NULL;
-
-class wxSocketTableModule: public wxModule
-{
-DECLARE_DYNAMIC_CLASS(wxSocketTableModule)
-public:
-    wxSocketTableModule() {}
-    bool OnInit() { wxTheSocketTable = new wxSocketTable; return true; };
-    void OnExit() { delete wxTheSocketTable; wxTheSocketTable = NULL; };
-};
-
-IMPLEMENT_DYNAMIC_CLASS(wxSocketTableModule, wxModule)
-
-// Implement registration functions as C functions so they
-// can be called from gsock11.c
-
-extern "C" void wxRegisterSocketCallback(int fd, wxSocketTableType socketType, GSocket* socket)
-{
-    if (wxTheSocketTable)
-        wxTheSocketTable->RegisterCallback(fd, socketType, socket);
-}
-
-extern "C" void wxUnregisterSocketCallback(int fd, wxSocketTableType socketType)
-{
-    if (wxTheSocketTable)
-        wxTheSocketTable->UnregisterCallback(fd, socketType);
-}
-#endif
+#include "wx/sockettable.h"
 
 // ----------------------------------------------------------------------------
 // wxEventLoopImpl
@@ -417,35 +251,16 @@ bool wxEventLoop::Dispatch()
 
         fd_set readset;
         fd_set writeset;
-        int highest = fd;
         wxFD_ZERO(&readset);
         wxFD_ZERO(&writeset);
-
         wxFD_SET(fd, &readset);
 
-#if wxUSE_SOCKETS
-        if (wxTheSocketTable)
-            wxTheSocketTable->FillSets( &readset, &writeset, &highest );
-#endif
-
-        if (select( highest+1, &readset, &writeset, NULL, &tv ) == 0)
+        if (select( fd+1, &readset, &writeset, NULL, &tv ) != 0)
         {
-            // Timed out, so no event to process
-            return true;
-        }
-        else
-        {
-            // An X11 event was pending, so get it
+            // An X11 event was pending, get it
             if (wxFD_ISSET( fd, &readset ))
                 XNextEvent( wxGlobalDisplay(), &event );
-
-#if wxUSE_SOCKETS
-            // Check if any socket events were pending,
-            // and if so, call their callbacks
-            if (wxTheSocketTable)
-                wxTheSocketTable->ProcessEvents( &readset, &writeset );
-#endif
-        }
+        }    
 #endif
     }
     else
@@ -453,6 +268,13 @@ bool wxEventLoop::Dispatch()
         XNextEvent( wxGlobalDisplay(), &event );
     }
 
+    // Check if any socket events were pending,
+    // and if so, call their callbacks. If sockets are not enabled,
+    // wxTheSocketTable will be null and so it won't be called.
+    if (wxTheSocketTable)
+    {
+        wxTheSocketTable->RunLoop();
+    }        
 
     (void) m_impl->ProcessEvent( &event );
     return true;

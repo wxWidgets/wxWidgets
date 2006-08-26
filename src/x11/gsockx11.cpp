@@ -17,17 +17,12 @@
 
 #include <stdlib.h>
 #include "wx/gsocket.h"
+#include "wx/sockettable.h"
 
 /*
  * FIXME: have these in a common header instead of being repeated
  * in evtloop.cpp and gsockx11.c
  */
-
-typedef enum
-{ wxSocketTableInput, wxSocketTableOutput } wxSocketTableType ;
-
-extern "C" void wxRegisterSocketCallback(int fd, wxSocketTableType socketType, GSocket* socket);
-extern "C" void wxUnregisterSocketCallback(int fd, wxSocketTableType socketType);
 
 typedef struct {
   int input;
@@ -111,13 +106,17 @@ void CheckCurrentState(GSocket* socket, char event)
     {
       // We have to use *current_state here because the socket->fd 
       // might have already been set to -1.
-      wxUnregisterSocketCallback(*current_state, table);
+      if (wxTheSocketTable) {
+        wxTheSocketTable->UnregisterCallback(*current_state, table);
+      }
       *current_state = -1;
     }
   }
   else if (socket->m_eventflags | event)
   {
-    wxRegisterSocketCallback(socket->m_fd, table, socket);
+    if (wxTheSocketTable) {
+        wxTheSocketTable->RegisterCallback(socket->m_fd, table, socket);
+    }
     *current_state = socket->m_fd;
   } 
 }

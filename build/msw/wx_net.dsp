@@ -502,6 +502,10 @@ SOURCE=..\..\src\common\socket.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\common\sockettable.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\common\url.cpp
 # End Source File
 # End Group

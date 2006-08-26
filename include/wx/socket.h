@@ -86,9 +86,9 @@ enum wxSocketType
 enum wxSocketProxyType
 {
 	wxPROXY_NONE = 0,
-	wxPROXY_SOCKS5,
 	wxPROXY_SOCKS4,
 	wxPROXY_SOCKS4a,
+	wxPROXY_SOCKS5,
 	wxPROXY_HTTP,
   wxPROXY_INVALID
 };
@@ -269,7 +269,6 @@ public:
   bool Connect(wxSockAddress& addr, wxSockAddress& local, bool wait = true);
 
   bool WaitOnConnect(long seconds = -1, long milliseconds = 0);
-
 
   void SetProxy(wxIPV4address& addr, wxSocketProxyType type, wxString login = wxEmptyString, wxString password = wxEmptyString);
 

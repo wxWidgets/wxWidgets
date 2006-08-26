@@ -511,6 +511,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/common/sckstrm.cpp
     src/common/socket.cpp
     src/common/url.cpp
+    src/common/sockettable.cpp
 </set>
 <set var="NET_CMN_HDR" hints="files">
     wx/fs_inet.h
@@ -1426,6 +1427,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/x11/reparent.h
     wx/x11/textctrl.h
     wx/x11/toplevel.h
+    wx/sockettable.h
     wx/x11/window.h
 </set>
 
