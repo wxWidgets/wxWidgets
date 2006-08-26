@@ -155,14 +155,14 @@ class pdcBeginDrawingOp : public pdcOp
 {
     public:
         pdcBeginDrawingOp() {}
-        virtual void DrawToDC(wxDC *dc) {dc->BeginDrawing();}
+        virtual void DrawToDC(wxDC *) {}
 };
 
 class pdcEndDrawingOp : public pdcOp
 {
     public:
         pdcEndDrawingOp() {}
-        virtual void DrawToDC(wxDC *dc) {dc->EndDrawing();}
+        virtual void DrawToDC(wxDC *) {}
 };
 
 class pdcFloodFillOp : public pdcOp
@@ -713,10 +713,10 @@ public:
 
     void Clear()
         {AddToList(new pdcClearOp());}
-        void BeginDrawing()
-                {AddToList(new pdcBeginDrawingOp());}
-        void EndDrawing()
-                {AddToList(new pdcEndDrawingOp());}
+    void BeginDrawing()
+        {AddToList(new pdcBeginDrawingOp());}
+    void EndDrawing()
+        {AddToList(new pdcEndDrawingOp());}
 
 protected:
     // ------------------------------------------------------------------------
