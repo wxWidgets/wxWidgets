@@ -7,12 +7,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __GTKAPPH__
-#define __GTKAPPH__
-
-#include "wx/frame.h"
-#include "wx/icon.h"
-#include "wx/strconv.h"
+#ifndef _WX_GTK_APP_H_
+#define _WX_GTK_APP_H_
 
 //-----------------------------------------------------------------------------
 // classes
@@ -56,7 +52,7 @@ public:
     bool IsInAssert() const { return m_isInAssert; }
 #endif // __WXDEBUG__
 
-    gint            m_idleTag;
+    guint m_idleTag;
     void RemoveIdleTag();
 
     // Used by the the wxGLApp and wxGLCanvas class for GL-based X visual
@@ -77,4 +73,4 @@ private:
     DECLARE_EVENT_TABLE()
 };
 
-#endif // __GTKAPPH__
+#endif // _WX_GTK_APP_H_
