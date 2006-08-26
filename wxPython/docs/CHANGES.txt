@@ -200,6 +200,10 @@ Added wx.App.DisplayAvailable() which can be used to determine if a
 GUI can be created in the current environment.  (Still need an
 implementation for wxMSW...)
 
+The wx.html.HTML_FONT_SIZE_x constants are no longer available as the
+default sizes are now calculated at runtime based on the size of the
+normal GUI font.
+
 
 
 
