@@ -947,6 +947,7 @@ class NumCtrl(BaseMaskedTextCtrl, NumCtrlAccessorsMixin):
 ##                dbg('calling base BaseMaskedTextCtrl._SetValue(self, "%s")' % value)
                 BaseMaskedTextCtrl._SetValue(self, value)
                 self.Refresh()
+##                dbg(indent=0)
                 return
             elif self._min > 0 and self.IsLimited():
                 replacement = self._min
@@ -964,6 +965,11 @@ class NumCtrl(BaseMaskedTextCtrl, NumCtrlAccessorsMixin):
 
 ##            dbg('integer: "%s"' % int)
             try:
+                # if a float value, this will implicitly verify against limits,
+                # and generate an exception if out-of-bounds and limited
+                # if not a float, it will just return 0.0, and we therefore
+                # have to test against the limits explicitly after testing
+                # special cases for handling -0 and empty controls...
                 fracval = self.GetFraction(value)
             except ValueError, e:
 ##                dbg('Exception:', e, 'must be out of bounds; disallow value')
@@ -971,13 +977,20 @@ class NumCtrl(BaseMaskedTextCtrl, NumCtrlAccessorsMixin):
 ##                dbg(indent=0)
                 return
 
-            if fracval == 0.0:
+            if fracval == 0.0: # (can be 0 for floats as well as integers)
+                # we have to do special testing to account for emptying controls, or -0
+                # and/or just leaving the sign character or changing the sign,
+                # so we can do appropriate things to the value of the control,
+                # we can't just immediately test to see if the value is valid
+                # If all of these special cases are not in play, THEN we can do 
+                # a limits check and see if the value is otherwise ok...
+
 ##                dbg('self._isNeg?', self._isNeg)
                 if int == '-' and self._oldvalue < 0 and not self._typedSign:
 ##                    dbg('just a negative sign; old value < 0; setting replacement of 0')
                     replacement = 0
                     self._isNeg = False
-                elif int[:2] == '-0' and self._fractionWidth == 0:
+                elif int[:2] == '-0': 
                     if self._oldvalue < 0:
 ##                        dbg('-0; setting replacement of 0')
                         replacement = 0
@@ -992,7 +1005,7 @@ class NumCtrl(BaseMaskedTextCtrl, NumCtrlAccessorsMixin):
 ##                        dbg(indent=0)
                         return
 
-                elif int == '-' and (self._oldvalue >= 0 or self._typedSign) and self._fractionWidth == 0:
+                elif int == '-' and (self._oldvalue >= 0 or self._typedSign):
                     if not self._limited or (self._min < -1 and self._max >= -1):
 ##                        dbg('just a negative sign; setting replacement of -1')
                         replacement = -1
@@ -1030,13 +1043,21 @@ class NumCtrl(BaseMaskedTextCtrl, NumCtrlAccessorsMixin):
 ##                        dbg(indent=0)
                         return
 
-                    if int[0] == '0' and len(int) > 1:
-##                        dbg('numvalue: "%s"' % numvalue.replace(' ', ''))
+##                    dbg('numvalue: "%s"' % numvalue.replace(' ', ''))
+                    # finally, (potentially re) verify that numvalue will pass any limits imposed:
+                    try:
                         if self._fractionWidth:
                             value = self._toGUI(string.atof(numvalue))
                         else:
                             value = self._toGUI(string.atol(numvalue))
+                    except ValueError, e:
+##                        dbg('Exception:', e, 'must be out of bounds; disallow value')
+                        self._disallowValue()
+##                        dbg(indent=0)
+                        return
+
 ##                        dbg('modified value: "%s"' % value)
+
 
         self._typedSign = False     # reset state var
 

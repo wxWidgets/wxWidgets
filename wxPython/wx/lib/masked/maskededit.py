@@ -3200,7 +3200,7 @@ class MaskedEditMixin:
             Should return False to skip other processing. """
 ##        dbg("MaskedEditMixin::_OnCtrl_V", indent=1)
         self.Paste()
-        dbg(indent=0)
+##        dbg(indent=0)
         return False
 
     def _OnInsert(self, event=None):
