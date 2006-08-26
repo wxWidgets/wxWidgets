@@ -157,7 +157,7 @@ gtk_listbox_button_press_callback( GtkWidget *widget,
                                    GdkEventButton *gdk_event,
                                    wxListBox *listbox )
 {
-    if (g_isIdle) wxapp_install_idle_handler();
+    // don't need to install idle handler, its done from "event" signal
 
     if (g_blockEventsOnDrag) return FALSE;
     if (g_blockEventsOnScroll) return FALSE;
@@ -203,7 +203,7 @@ gtk_listbox_key_press_callback( GtkWidget *widget,
                                 GdkEventKey *gdk_event,
                                 wxListBox *listbox )
 {
-    if (g_isIdle) wxapp_install_idle_handler();
+    // don't need to install idle handler, its done from "event" signal
 
     if (g_blockEventsOnDrag) return FALSE;
 

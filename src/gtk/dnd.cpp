@@ -706,8 +706,7 @@ extern "C" {
 static gint
 gtk_dnd_window_configure_callback( GtkWidget *WXUNUSED(widget), GdkEventConfigure *WXUNUSED(event), wxDropSource *source )
 {
-    if (g_isIdle)
-        wxapp_install_idle_handler();
+    // don't need to install idle handler, its done from "event" signal
 
     source->GiveFeedback( ConvertFromGTK(source->m_dragContext->action) );
 

@@ -204,7 +204,7 @@ static gint gtk_toolbar_tool_callback( GtkWidget *WXUNUSED(widget),
                                        GdkEventCrossing *gdk_event,
                                        wxToolBarTool *tool )
 {
-    if (g_isIdle) wxapp_install_idle_handler();
+    // don't need to install idle handler, its done from "event" signal
 
     if (g_blockEventsOnDrag) return TRUE;
 

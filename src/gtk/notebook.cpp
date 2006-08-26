@@ -192,8 +192,7 @@ gtk_notebook_key_press_callback( GtkWidget   *widget,
                                  GdkEventKey *gdk_event,
                                  wxNotebook  *notebook )
 {
-    if (g_isIdle)
-        wxapp_install_idle_handler();
+    // don't need to install idle handler, its done from "event" signal
 
     if (!notebook->m_hasVMT) return FALSE;
     if (g_blockEventsOnDrag) return FALSE;

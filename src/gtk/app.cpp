@@ -184,6 +184,16 @@ void wxApp::WakeUpIdle()
 extern "C"
 {
 
+// One-shot emission hook for "event" signal, to install idle handler.
+// This will be called when the "event" signal is issued on any GtkWidget object.
+static gboolean
+event_emission_hook(GSignalInvocationHint*, guint, const GValue*, gpointer)
+{
+    wxapp_install_idle_handler();
+    // remove hook
+    return false;
+}
+
 static gint wxapp_idle_callback( gpointer WXUNUSED(data) )
 {
     if (!wxTheApp)
@@ -221,6 +231,13 @@ static gint wxapp_idle_callback( gpointer WXUNUSED(data) )
 
     // Release lock again
     gdk_threads_leave();
+
+    if (!moreIdles)
+    {
+        // add emission hook for "event" signal, to re-install idle handler when needed
+        guint sig_id = g_signal_lookup("event", GTK_TYPE_WIDGET);
+        g_signal_add_emission_hook(sig_id, 0, event_emission_hook, NULL, NULL);
+    }
 
     // Return FALSE if no more idle events are to be sent
     return moreIdles;

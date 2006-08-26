@@ -111,8 +111,7 @@ static gboolean gtk_frame_focus_in_callback( GtkWidget *widget,
                                          GdkEvent *WXUNUSED(event),
                                          wxTopLevelWindowGTK *win )
 {
-    if (g_isIdle)
-        wxapp_install_idle_handler();
+    // don't need to install idle handler, its done from "event" signal
 
     switch ( g_sendActivateEvent )
     {
@@ -173,8 +172,7 @@ static gboolean gtk_frame_focus_out_callback( GtkWidget *widget,
                                           GdkEventFocus *WXUNUSED(gdk_event),
                                           wxTopLevelWindowGTK *win )
 {
-    if (g_isIdle)
-        wxapp_install_idle_handler();
+    // don't need to install idle handler, its done from "event" signal
 
     // if the focus goes out of our app alltogether, OnIdle() will send
     // wxActivateEvent, otherwise gtk_window_focus_in_callback() will reset
@@ -257,8 +255,7 @@ gtk_frame_delete_callback( GtkWidget *WXUNUSED(widget),
                            GdkEvent *WXUNUSED(event),
                            wxTopLevelWindowGTK *win )
 {
-    if (g_isIdle)
-        wxapp_install_idle_handler();
+    // don't need to install idle handler, its done from "event" signal
 
     if (win->IsEnabled() &&
         (g_openDialogs == 0 || (win->GetExtraStyle() & wxTOPLEVEL_EX_DIALOG) ||
@@ -280,8 +277,7 @@ gtk_frame_configure_callback( GtkWidget *WXUNUSED(widget),
                               GdkEventConfigure *WXUNUSED(event),
                               wxTopLevelWindowGTK *win )
 {
-    if (g_isIdle)
-        wxapp_install_idle_handler();
+    // don't need to install idle handler, its done from "event" signal
 
     if (!win->m_hasVMT || !win->IsShown())
         return FALSE;

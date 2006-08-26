@@ -480,8 +480,7 @@ gtk_window_expose_callback( GtkWidget *widget,
 {
     DEBUG_MAIN_THREAD
 
-    if (g_isIdle)
-        wxapp_install_idle_handler();
+    // don't need to install idle handler, its done from "event" signal
 
     // This callback gets called in drawing-idle time under
     // GTK 2.0, so we don't need to defer anything to idle
@@ -991,8 +990,7 @@ gtk_window_key_press_callback( GtkWidget *widget,
 {
     DEBUG_MAIN_THREAD
 
-    if (g_isIdle)
-        wxapp_install_idle_handler();
+    // don't need to install idle handler, its done from "event" signal
 
     if (!win->m_hasVMT)
         return FALSE;
@@ -1244,8 +1242,7 @@ gtk_window_key_release_callback( GtkWidget *widget,
 {
     DEBUG_MAIN_THREAD
 
-    if (g_isIdle)
-        wxapp_install_idle_handler();
+    // don't need to install idle handler, its done from "event" signal
 
     if (!win->m_hasVMT)
         return FALSE;
@@ -1414,8 +1411,7 @@ int wxWindowGTK::GTKCallbackCommonPrologue(GdkEventAny *event) const
 {
     DEBUG_MAIN_THREAD
 
-    if (g_isIdle)
-        wxapp_install_idle_handler();
+    // don't need to install idle handler, its done from "event" signal
 
     if (!m_hasVMT)
         return FALSE;
@@ -1778,8 +1774,7 @@ window_scroll_event(GtkWidget*, GdkEventScroll* gdk_event, wxWindow* win)
 {
     DEBUG_MAIN_THREAD
 
-    if (g_isIdle)
-        wxapp_install_idle_handler();
+    // don't need to install idle handler, its done from "event" signal
 
     if (gdk_event->direction != GDK_SCROLL_UP &&
         gdk_event->direction != GDK_SCROLL_DOWN)
@@ -1837,8 +1832,7 @@ gtk_window_focus_in_callback( GtkWidget *widget,
 {
     DEBUG_MAIN_THREAD
 
-    if (g_isIdle)
-        wxapp_install_idle_handler();
+    // don't need to install idle handler, its done from "event" signal
 
     if (win->m_imData)
         gtk_im_context_focus_in(win->m_imData->context);
@@ -1895,8 +1889,7 @@ gtk_window_focus_out_callback( GtkWidget *widget,
 {
     DEBUG_MAIN_THREAD
 
-    if (g_isIdle)
-        wxapp_install_idle_handler();
+    // don't need to install idle handler, its done from "event" signal
 
     if (win->m_imData)
         gtk_im_context_focus_out(win->m_imData->context);
@@ -2074,8 +2067,7 @@ gtk_scrollbar_button_press_event(GtkRange*, GdkEventButton*, wxWindow* win)
 {
     DEBUG_MAIN_THREAD
 
-    if (g_isIdle)
-        wxapp_install_idle_handler();
+    // don't need to install idle handler, its done from "event" signal
 
     g_blockEventsOnScroll = true;
     win->m_mouseButtonDown = true;
