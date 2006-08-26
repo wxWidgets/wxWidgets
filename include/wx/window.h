@@ -25,6 +25,7 @@
 #include "wx/colour.h"
 #include "wx/region.h"
 #include "wx/utils.h"
+#include "wx/intl.h"
 
 #include "wx/validate.h"        // for wxDefaultValidator (always include it)
 
@@ -189,6 +190,9 @@ public:
         // it is wxID_ANY which means "don't care"
     void SetId( wxWindowID winid ) { m_windowId = winid; }
     wxWindowID GetId() const { return m_windowId; }
+    
+    virtual void SetLayoutDirection(wxLayoutDirection dir) = 0;
+    virtual wxLayoutDirection GetLayoutDirection() const = 0;
 
         // generate a control id for the controls which were not given one by
         // user

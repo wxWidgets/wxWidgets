@@ -506,6 +506,26 @@ wxSizerItem* wxSizer::Insert( size_t index, wxSizerItem *item )
     return item;
 }
 
+void wxSizer::SetLayoutDirection(const wxLayoutDirection d)
+{
+    wxASSERT_MSG(d != wxLayout_Default, wxT("Invalid argument value: wxLayout_Default is not allowed"));
+    m_layout = d;
+
+    wxSizerItemList::compatibility_iterator node = m_children.GetFirst();
+    while (node)
+    {
+        wxSizerItem *const item = node->GetData();
+        wxSizer *const sizer = item->GetSizer();
+
+        if (sizer)
+        {
+            sizer->SetLayoutDirection(d);
+        }
+
+        node = node->GetNext();
+    }
+}
+
 #if WXWIN_COMPATIBILITY_2_6
 bool wxSizer::Remove( wxWindow *window )
 {
@@ -1597,6 +1617,12 @@ void wxBoxSizer::RecalcSizes()
                 //     wxALIGN_CENTER should be used in new code
                     child_pos.y += (m_size.y - size.y) / 2;
 
+                if (m_layout == wxLayout_RightToLeft)
+                {
+                    child_pos.x = m_size.x - child_pos.x;
+                    child_pos.x -= width;
+                }
+                
                 item->SetDimension( child_pos, child_size );
 
                 pt.x += width;

@@ -2817,6 +2817,8 @@ void wxWindowGTK::PostCreation()
     InheritAttributes();
 
     m_hasVMT = true;
+    
+    SetLayoutDirection(wxLayout_Default);
 
     // unless the window was created initially hidden (i.e. Hide() had been
     // called before Create()), we should show it at GTK+ level as well
@@ -3469,6 +3471,8 @@ bool wxWindowGTK::Reparent( wxWindowBase *newParentBase )
 
     /* reverse: prevent GTK from deleting the widget arbitrarily */
     gtk_widget_unref( m_widget );
+    
+    SetLayoutDirection(wxLayout_Default);
 
     return true;
 }
@@ -3502,6 +3506,40 @@ void wxWindowGTK::RemoveChild(wxWindowBase *child)
     m_dirtyTabOrder = true;
     if (g_isIdle)
         wxapp_install_idle_handler();
+}
+
+wxLayoutDirection wxWindowGTK::GetLayoutDirection() const
+{
+    return gtk_widget_get_direction(GTK_WIDGET(m_widget)) == GTK_TEXT_DIR_RTL ? wxLayout_RightToLeft : wxLayout_LeftToRight;
+}
+
+void wxWindowGTK::SetLayoutDirection(wxLayoutDirection dir)
+{
+    wxLayoutDirection actualDir;
+    if (dir == wxLayout_Default)
+    {
+        const wxWindow *const parent = GetParent();
+        if (parent)
+        {
+            // inherit layout from parent.
+            actualDir = parent->GetLayoutDirection();
+        }
+        else
+        {
+            // todo: now that this window doesn't have a parent, should it call
+            // wxTheApp->GetLayoutDirection() to query for the default layout direction?
+            actualDir = wxTheApp->GetLayoutDirection();
+        }
+    }
+    /*
+    else
+    {
+        //gtk_widget_set_direction(GTK_WIDGET(m_widget), gtkTextDir);
+    }
+    */
+    const GtkTextDirection gtkTextDir = actualDir == wxLayout_RightToLeft ? GTK_TEXT_DIR_RTL : GTK_TEXT_DIR_LTR;
+
+    gtk_widget_set_direction(GTK_WIDGET(m_widget), gtkTextDir);
 }
 
 void wxWindowGTK::DoMoveInTabOrder(wxWindow *win, MoveKind move)
