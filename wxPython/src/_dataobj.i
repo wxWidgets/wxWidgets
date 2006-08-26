@@ -809,7 +809,7 @@ DocStr(wxURLDataObject,
 browsers such that it is able to be dragged to or from them.", "");
 class wxURLDataObject : public wxDataObject/*Composite*/ {
 public:
-    wxURLDataObject();
+    wxURLDataObject(const wxString& url = wxPyEmptyString);
 
     DocDeclStr(
         wxString , GetURL(),
