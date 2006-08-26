@@ -1657,6 +1657,13 @@ void wxWindowBase::SetSizer(wxSizer *sizer, bool deleteOld)
         delete m_windowSizer;
 
     m_windowSizer = sizer;
+    
+    #ifdef __WXGTK__
+    if (m_windowSizer)
+    {
+        m_windowSizer->SetLayoutDirection(this->GetLayoutDirection());
+    }
+    #endif // __WXGTK__
 
     SetAutoLayout( sizer != NULL );
 }

@@ -18,6 +18,7 @@
 #include "wx/window.h"
 #include "wx/frame.h"
 #include "wx/dialog.h"
+#include "wx/intl.h"
 
 //---------------------------------------------------------------------------
 // classes
@@ -410,7 +411,9 @@ public:
     inline wxSizerItem* PrependSpacer(int size);
     inline wxSizerItem* PrependStretchSpacer(int prop = 1);
 
-
+    void SetLayoutDirection(const wxLayoutDirection d);
+    wxLayoutDirection GetLayoutDirection() const
+        { return m_layout; }
 #if WXWIN_COMPATIBILITY_2_6
     // Deprecated in 2.6 since historically it does not delete the window,
     // use Detach instead.
@@ -503,6 +506,7 @@ protected:
     wxSize              m_minSize;
     wxPoint             m_position;
     wxSizerItemList     m_children;
+    wxLayoutDirection	m_layout;
 
     wxSize GetMaxWindowSize( wxWindow *window ) const;
     wxSize GetMinWindowSize( wxWindow *window );
