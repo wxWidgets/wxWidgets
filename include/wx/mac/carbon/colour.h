@@ -35,6 +35,7 @@ public:
     unsigned char Red() const { return m_red; }
     unsigned char Green() const { return m_green; }
     unsigned char Blue() const { return m_blue; }
+    unsigned char Alpha() const { return m_alpha; }
 
     // comparison
     bool operator == (const wxColour& colour) const
@@ -42,7 +43,8 @@ public:
         return (m_isInit == colour.m_isInit
                 && m_red == colour.m_red
                 && m_green == colour.m_green
-                && m_blue == colour.m_blue);
+                && m_blue == colour.m_blue
+                && m_alpha == colour.m_alpha);
     }
     bool operator != (const wxColour& colour) const { return !(*this == colour); }
 
@@ -53,13 +55,19 @@ protected :
     // Helper function
     void Init();
 
-    void InitWith( unsigned char red, unsigned char green, unsigned char blue );
+    void InitWith( unsigned char red, unsigned char green, unsigned char blue ) 
+    {
+        InitWith( red, green, blue , 255) ;
+    }
+
+    void InitWith( unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha );
 
 private:
     bool          m_isInit;
     unsigned char m_red;
     unsigned char m_blue;
     unsigned char m_green;
+    unsigned char m_alpha;
 
 public:
     WXCOLORREF m_pixel ;

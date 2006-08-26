@@ -20,11 +20,11 @@
 // this macro avoids to repeat these lines across all colour.h files, since
 // Set() is a virtual function and thus cannot be called by wxColourBase
 // constructors
-#define DEFINE_STD_WXCOLOUR_CONSTRUCTORS                                    \
-    wxColour( unsigned char red, unsigned char green, unsigned char blue )  \
-        { Set(red, green, blue); }                                          \
-    wxColour( unsigned long colRGB ) { Set(colRGB); }                       \
-    wxColour(const wxString &colourName) { Set(colourName); }               \
+#define DEFINE_STD_WXCOLOUR_CONSTRUCTORS                                                              \
+    wxColour( unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha = 255 ) \
+        { Set(red, green, blue, alpha); }                                                             \
+    wxColour( unsigned long colRGB ) { Set(colRGB); }                                                 \
+    wxColour(const wxString &colourName) { Set(colourName); }                                         \
     wxColour(const wxChar *colourName) { Set(colourName); }
 
 
@@ -47,6 +47,13 @@ class WXDLLEXPORT wxColourBase : public wxGDIObject
 protected:
 
     virtual void InitWith(unsigned char red, unsigned char green, unsigned char blue) = 0;
+
+    // this will be overridden in alpha supporting classes
+    virtual void InitWith(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha) 
+    {
+        InitWith( red, green, blue ) ;
+    }
+
     virtual bool FromString(const wxChar *);
 
 public:
@@ -57,8 +64,8 @@ public:
     // Set() functions
     // ---------------
 
-    void Set(unsigned char red, unsigned char green, unsigned char blue)
-        { InitWith(red,green,blue); }
+    void Set(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha = 255)
+        { InitWith(red,green,blue, alpha); }
 
     // implemented in colourcmn.cpp
     bool Set(const wxChar *str)
@@ -86,6 +93,8 @@ public:
     virtual unsigned char Red() const = 0;
     virtual unsigned char Green() const = 0;
     virtual unsigned char Blue() const = 0;
+    virtual unsigned char Alpha() const
+        { return 255 ; }
 
     // implemented in colourcmn.cpp
     virtual wxString GetAsString(long flags = wxC2S_NAME | wxC2S_CSS_SYNTAX) const;

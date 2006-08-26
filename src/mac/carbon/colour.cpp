@@ -44,11 +44,12 @@ wxColour::~wxColour ()
 {
 }
 
-void wxColour::InitWith (unsigned char r, unsigned char g, unsigned char b)
+void wxColour::InitWith (unsigned char r, unsigned char g, unsigned char b, unsigned char a)
 {
     m_red = r;
     m_green = g;
     m_blue = b;
+    m_alpha = a ;
     m_isInit = true;
 
     wxComposeRGBColor( &m_pixel , m_red , m_blue , m_green );
