@@ -19,11 +19,6 @@
 #include "wx/gsocket.h"
 #include "wx/sockettable.h"
 
-/*
- * FIXME: have these in a common header instead of being repeated
- * in evtloop.cpp and gsockx11.c
- */
-
 typedef struct {
   int input;
   int output;
