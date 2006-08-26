@@ -552,8 +552,8 @@ void wxMacCGContext::SetPen( const wxPen &pen )
 
         if ( stroke )
         {
-            RGBColor col = MAC_WXCOLORREF( pen.GetColour().GetPixel() ) ;
-            CGContextSetRGBStrokeColor( m_cgContext , col.red / 65536.0 , col.green / 65536.0 , col.blue / 65536.0 , 1.0 ) ;
+            CGContextSetRGBStrokeColor( m_cgContext , pen.GetColour().Red() / 255.0 , pen.GetColour().Green() / 255.0 , 
+                    pen.GetColour().Blue() / 255.0 , pen.GetColour().Alpha() / 255.0 ) ;
 
             // TODO: * m_dc->m_scaleX
             CGFloat penWidth = pen.GetWidth();
@@ -678,8 +678,8 @@ void wxMacCGContext::SetPen( const wxPen &pen )
                         CGContextSetStrokeColorSpace( m_cgContext , patternSpace ) ;
                         wxMacCFRefHolder<CGPatternRef> pattern( *( new HatchPattern( pen.GetStyle() , CGContextGetCTM( m_cgContext ) ) ) );
 
-                        RGBColor col = MAC_WXCOLORREF( pen.GetColour().GetPixel() ) ;
-                        CGFloat  colorArray[4] = { col.red / 65536.0 , col.green / 65536.0 , col.blue / 65536.0 , 1.0 } ;
+                        CGFloat  colorArray[4] = { pen.GetColour().Red() / 255.0 , pen.GetColour().Green() / 255.0 , 
+                            pen.GetColour().Blue() / 255.0 , pen.GetColour().Alpha() / 255.0 } ;
 
                         CGContextSetStrokePattern( m_cgContext, pattern , colorArray ) ;
                     }
@@ -731,8 +731,8 @@ void wxMacCGContext::SetBrush( const wxBrush &brush )
         {
             if ( brush.GetStyle() == wxSOLID )
             {
-                RGBColor col = MAC_WXCOLORREF( brush.GetColour().GetPixel() ) ;
-                CGContextSetRGBFillColor( m_cgContext , col.red / 65536.0 , col.green / 65536.0 , col.blue / 65536.0 , 1.0 ) ;
+                CGContextSetRGBFillColor( m_cgContext , brush.GetColour().Red() / 255.0 , brush.GetColour().Green() / 255.0 , 
+                    brush.GetColour().Blue() / 255.0 , brush.GetColour().Alpha() / 255.0 ) ;
             }
             else if ( brush.IsHatch() )
             {
@@ -740,8 +740,8 @@ void wxMacCGContext::SetBrush( const wxBrush &brush )
                 CGContextSetFillColorSpace( m_cgContext , patternSpace ) ;
                 wxMacCFRefHolder<CGPatternRef> pattern( *( new HatchPattern( brush.GetStyle() , CGContextGetCTM( m_cgContext ) ) ) );
 
-                RGBColor col = MAC_WXCOLORREF( brush.GetColour().GetPixel() ) ;
-                CGFloat  colorArray[4] = { col.red / 65536.0 , col.green / 65536.0 , col.blue / 65536.0 , 1.0 } ;
+                CGFloat  colorArray[4] = { brush.GetColour().Red() / 255.0 , brush.GetColour().Green() / 255.0 , 
+                    brush.GetColour().Blue() / 255.0 , brush.GetColour().Alpha() / 255.0 } ;
 
                 CGContextSetFillPattern( m_cgContext, pattern , colorArray ) ;
             }
