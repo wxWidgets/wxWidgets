@@ -187,14 +187,14 @@ extern "C"
 static gint wxapp_idle_callback( gpointer WXUNUSED(data) )
 {
     if (!wxTheApp)
-        return TRUE;
+        return false;
 
 #ifdef __WXDEBUG__
     // don't generate the idle events while the assert modal dialog is shown,
     // this completely confuses the apps which don't expect to be reentered
     // from some safely-looking functions
     if ( wxTheApp->IsInAssert() )
-        return TRUE;
+        return false;
 #endif // __WXDEBUG__
 
     // When getting called from GDK's time-out handler
