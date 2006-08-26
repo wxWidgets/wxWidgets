@@ -2510,7 +2510,7 @@ bool wxColour_helper(PyObject* source, wxColour** obj) {
             return true;
         }
     }
-    // last chance: 3-tuple of integers is expected
+    // last chance: 3-tuple or 4-tuple of integers is expected
     else if (PySequence_Check(source) && PyObject_Length(source) == 3) {
         PyObject* o1 = PySequence_GetItem(source, 0);
         PyObject* o2 = PySequence_GetItem(source, 1);
@@ -2527,10 +2527,29 @@ bool wxColour_helper(PyObject* source, wxColour** obj) {
         Py_DECREF(o3);
         return true;
     }
+    else if (PySequence_Check(source) && PyObject_Length(source) == 4) {
+        PyObject* o1 = PySequence_GetItem(source, 0);
+        PyObject* o2 = PySequence_GetItem(source, 1);
+        PyObject* o3 = PySequence_GetItem(source, 2);
+        PyObject* o4 = PySequence_GetItem(source, 3);
+        if (!PyNumber_Check(o1) || !PyNumber_Check(o2) || !PyNumber_Check(o3) || !PyNumber_Check(o4)) {
+            Py_DECREF(o1);
+            Py_DECREF(o2);
+            Py_DECREF(o3);
+            Py_DECREF(o4);
+            goto error;
+        }
+        **obj = wxColour(PyInt_AsLong(o1), PyInt_AsLong(o2), PyInt_AsLong(o3), PyInt_AsLong(o4));
+        Py_DECREF(o1);
+        Py_DECREF(o2);
+        Py_DECREF(o3);
+        Py_DECREF(o4);
+        return true;
+    }
 
  error:
     PyErr_SetString(PyExc_TypeError,
-                    "Expected a wxColour object or a string containing a colour name or '#RRGGBB'.");
+                    "Expected a wxColour object, a string containing a colour name or '#RRGGBB', or a 3- or 4-tuple of integers.");
     return false;
 }
 

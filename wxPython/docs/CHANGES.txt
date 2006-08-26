@@ -204,6 +204,11 @@ The wx.html.HTML_FONT_SIZE_x constants are no longer available as the
 default sizes are now calculated at runtime based on the size of the
 normal GUI font.
 
+wx.Colour now includes an alpha component, which defaults to
+wx.ALPHA_OPAQUE.  This is in preparation for allowing various new
+alpha blening functionality using wx.Colour objects, such as drawing
+with pens and brushes on a wx.DC.  
+
 
 
 
