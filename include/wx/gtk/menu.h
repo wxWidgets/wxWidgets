@@ -38,6 +38,7 @@ public:
     virtual wxString GetLabelTop( size_t pos ) const;
 
     void SetLayoutDirection(wxLayoutDirection dir);
+    wxLayoutDirection GetLayoutDirection() const;
 
     void Attach(wxFrame *frame);
 
@@ -72,6 +73,11 @@ public:
     wxMenu(long style = 0) : wxMenuBase(style) { Init(); }
 
     virtual ~wxMenu();
+
+    void Attach(wxMenuBarBase *menubar);
+    
+    void SetLayoutDirection(const wxLayoutDirection dir);
+    wxLayoutDirection GetLayoutDirection() const;
 
     // TODO: virtual void SetTitle(const wxString& title);
 

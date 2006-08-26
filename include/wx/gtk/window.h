@@ -110,7 +110,7 @@ public:
     virtual void RemoveChild( wxWindowBase *child );
 
     virtual void SetLayoutDirection(wxLayoutDirection dir);
-    wxLayoutDirection GetLayoutDirection() const;
+    virtual wxLayoutDirection GetLayoutDirection() const;
 
     // currently wxGTK2-only
     void SetDoubleBuffered(bool on);
