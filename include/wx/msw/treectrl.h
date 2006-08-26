@@ -9,8 +9,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_TREECTRL_H_
-#define _WX_TREECTRL_H_
+#ifndef _WX_MSW_TREECTRL_H_
+#define _WX_MSW_TREECTRL_H_
 
 // ----------------------------------------------------------------------------
 // headers
@@ -280,6 +280,11 @@ private:
 
     void DeleteTextCtrl();
 
+    // return true if the item is the hidden root one (i.e. it's the root item
+    // and the tree has wxTR_HIDE_ROOT style)
+    bool IsHiddenRoot(const wxTreeItemId& item) const;
+
+
     // the hash storing the items attributes (indexed by item ids)
     wxMapTreeAttr m_attrs;
 
@@ -305,5 +310,4 @@ private:
 
 #endif // wxUSE_TREECTRL
 
-#endif
-    // _WX_TREECTRL_H_
+#endif // _WX_MSW_TREECTRL_H_

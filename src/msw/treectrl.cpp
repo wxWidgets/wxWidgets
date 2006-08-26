@@ -451,16 +451,18 @@ public:
 
     virtual bool OnVisit(const wxTreeItemId& item)
     {
+        const wxTreeCtrl * const tree = GetTree();
+
         // can't visit a virtual node.
-        if ( (GetTree()->GetRootItem() == item) && (GetTree()->GetWindowStyle() & wxTR_HIDE_ROOT))
+        if ( (tree->GetRootItem() == item) && tree->HasFlag(wxTR_HIDE_ROOT) )
         {
             return true;
         }
 
 #if wxUSE_CHECKBOXES_IN_MULTI_SEL_TREE
-        if ( GetTree()->IsItemChecked(item) )
+        if ( tree->IsItemChecked(item) )
 #else
-        if ( ::IsItemSelected(GetHwndOf(GetTree()), HITEM(item)) )
+        if ( ::IsItemSelected(GetHwndOf(tree), HITEM(item)) )
 #endif
         {
             m_selections.Add(item);
@@ -933,6 +935,11 @@ bool wxTreeCtrl::SetForegroundColour(const wxColour &colour)
 // Item access
 // ----------------------------------------------------------------------------
 
+bool wxTreeCtrl::IsHiddenRoot(const wxTreeItemId& item) const
+{
+    return HITEM(item) == TVI_ROOT && HasFlag(wxTR_HIDE_ROOT);
+}
+
 wxString wxTreeCtrl::GetItemText(const wxTreeItemId& item) const
 {
     wxCHECK_MSG( item.IsOk(), wxEmptyString, wxT("invalid tree item") );
@@ -982,7 +989,7 @@ int wxTreeCtrl::GetItemImage(const wxTreeItemId& item,
 {
     wxCHECK_MSG( item.IsOk(), -1, wxT("invalid tree item") );
 
-    if ( (HITEM(item) == TVI_ROOT) && (m_windowStyle & wxTR_HIDE_ROOT) )
+    if ( IsHiddenRoot(item) )
     {
         // no images for hidden root item
         return -1;
@@ -1002,7 +1009,7 @@ void wxTreeCtrl::SetItemImage(const wxTreeItemId& item, int image,
                  wxT("invalid image index"));
 
 
-    if ( (HITEM(item) == TVI_ROOT) && (m_windowStyle & wxTR_HIDE_ROOT) )
+    if ( IsHiddenRoot(item) )
     {
         // no images for hidden root item
         return;
@@ -1564,7 +1571,7 @@ wxTreeItemId wxTreeCtrl::AddRoot(const wxString& text,
                                  wxTreeItemData *data)
 {
 
-    if ( m_windowStyle & wxTR_HIDE_ROOT )
+    if ( HasFlag(wxTR_HIDE_ROOT) )
     {
         // create a virtual root item, the parent for all the others
         wxTreeItemParam *param = new wxTreeItemParam;
@@ -1669,7 +1676,7 @@ void wxTreeCtrl::DoExpand(const wxTreeItemId& item, int flag)
                   wxT("Unknown flag in wxTreeCtrl::DoExpand") );
 
     // A hidden root can be neither expanded nor collapsed.
-    wxCHECK_RET( !(m_windowStyle & wxTR_HIDE_ROOT) || (HITEM(item) != TVI_ROOT),
+    wxCHECK_RET( !IsHiddenRoot(item),
                  wxT("Can't expand/collapse hidden root node!") );
 
     // TreeView_Expand doesn't send TVN_ITEMEXPAND(ING) messages, so we must
@@ -1798,6 +1805,8 @@ void wxTreeCtrl::SelectItem(const wxTreeItemId& item, bool select)
 
 void wxTreeCtrl::EnsureVisible(const wxTreeItemId& item)
 {
+    wxCHECK_RET( !IsHiddenRoot(item), _T("can't show hidden root item") );
+
     // no error return
     TreeView_EnsureVisible(GetHwnd(), HITEM(item));
 }
