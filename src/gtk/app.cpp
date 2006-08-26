@@ -22,18 +22,12 @@
     #include "wx/intl.h"
     #include "wx/log.h"
     #include "wx/utils.h"
-    #include "wx/dialog.h"
-    #include "wx/settings.h"
-    #include "wx/msgdlg.h"
     #include "wx/memory.h"
     #include "wx/font.h"
-    #include "wx/gdicmn.h"
-    #include "wx/image.h"
 #endif
 
 #include "wx/file.h"
 #include "wx/filename.h"
-#include "wx/module.h"
 #include "wx/thread.h"
 
 #ifdef __WXGPE__
@@ -95,7 +89,6 @@ FORCE_LINK(gnome_vfs)
 //-----------------------------------------------------------------------------
 
 bool   g_mainThreadLocked = false;
-gint   g_pendingTag = 0;
 
 static GtkWidget *gs_RootWindow = (GtkWidget*) NULL;
 
@@ -191,38 +184,6 @@ void wxApp::WakeUpIdle()
 extern "C"
 {
 
-static gint wxapp_pending_callback( gpointer WXUNUSED(data) )
-{
-    if (!wxTheApp) return TRUE;
-
-    // When getting called from GDK's time-out handler
-    // we are no longer within GDK's grab on the GUI
-    // thread so we must lock it here ourselves.
-    gdk_threads_enter();
-
-    // Sent idle event to all who request them.
-    wxTheApp->ProcessPendingEvents();
-
-    {
-#if wxUSE_THREADS
-        wxMutexLocker lock(gs_idleTagsMutex);
-#endif
-        g_pendingTag = 0;
-    }
-
-    // Flush the logged messages if any.
-#if wxUSE_LOG
-    wxLog::FlushActive();
-#endif // wxUSE_LOG
-
-    // Release lock again
-    gdk_threads_leave();
-
-    // Return FALSE to indicate that no more idle events are
-    // to be sent (single shot instead of continuous stream)
-    return FALSE;
-}
-
 static gint wxapp_idle_callback( gpointer WXUNUSED(data) )
 {
     if (!wxTheApp)
@@ -233,16 +194,7 @@ static gint wxapp_idle_callback( gpointer WXUNUSED(data) )
     // this completely confuses the apps which don't expect to be reentered
     // from some safely-looking functions
     if ( wxTheApp->IsInAssert() )
-    {
-        // But repaint the assertion message if necessary
-        if (wxTopLevelWindows.GetCount() > 0)
-        {
-            wxWindow* win = (wxWindow*) wxTopLevelWindows.GetLast()->GetData();
-            if (win->IsKindOf(CLASSINFO(wxMessageDialog)))
-                win->OnInternalIdle();
-        }
         return TRUE;
-    }
 #endif // __WXDEBUG__
 
     // When getting called from GDK's time-out handler
@@ -385,15 +337,12 @@ void wxapp_install_idle_handler()
 
     g_isIdle = false;
 
-    if (g_pendingTag == 0)
-        g_pendingTag = g_idle_add_full( 900, wxapp_pending_callback, NULL, NULL );
-
     // This routine gets called by all event handlers
     // indicating that the idle is over. It may also
     // get called from other thread for sending events
     // to the main thread (and processing these in
     // idle time). Very low priority.
-    wxTheApp->m_idleTag = g_idle_add_full( 1000, wxapp_idle_callback, NULL, NULL );
+    wxTheApp->m_idleTag = g_idle_add_full(G_PRIORITY_LOW, wxapp_idle_callback, NULL, NULL);
 }
 
 //-----------------------------------------------------------------------------
