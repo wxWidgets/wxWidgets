@@ -49,7 +49,7 @@ protected:
     virtual void InitWith(unsigned char red, unsigned char green, unsigned char blue) = 0;
 
     // this will be overridden in alpha supporting classes
-    virtual void InitWith(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha) 
+    virtual void InitWith(unsigned char red, unsigned char green, unsigned char blue, unsigned char WXUNUSED(alpha)) 
     {
         InitWith( red, green, blue ) ;
     }
