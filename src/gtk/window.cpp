@@ -2903,9 +2903,6 @@ void wxWindowGTK::OnInternalIdle()
         m_needsStyleChange = false;
     }
     
-    // Update invalidated regions.
-    GtkUpdate();
-
     wxCursor cursor = m_cursor;
     if (g_globalCursor.Ok()) cursor = g_globalCursor;
 
