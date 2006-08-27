@@ -3159,7 +3159,7 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
 
     if test "$wxUSE_DFB" = 1; then
        PKG_CHECK_MODULES(DIRECTFB,
-                         [directfb >= 0.9.25],
+                         [directfb >= 0.9.22],
                          [
                            wxUSE_UNIVERSAL="yes"
                            TOOLKIT_INCLUDE="$DIRECTFB_CFLAGS"
