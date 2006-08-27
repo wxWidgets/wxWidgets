@@ -66,7 +66,7 @@ protected:
     DECLARE_NO_COPY_CLASS(wxEventLoopBase)
 };
 
-#if defined(__WXMSW__) || defined(__WXMAC__)
+#if defined(__WXMSW__) || defined(__WXMAC__) || defined(__WXDFB__)
 
 // this class can be used to implement a standard event loop logic using
 // Pending() and Dispatch()
@@ -115,6 +115,8 @@ protected:
     #include "wx/msw/evtloop.h"
 #elif defined(__WXMAC__)
     #include "wx/mac/evtloop.h"
+#elif defined(__WXDFB__)
+    #include "wx/dfb/evtloop.h"
 #else // other platform
 
 class WXDLLEXPORT wxEventLoopImpl;

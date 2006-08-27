@@ -28,6 +28,8 @@
     #include "wx/x11/cursor.h"
 #elif defined(__WXMGL__)
     #include "wx/mgl/cursor.h"
+#elif defined(__WXDFB__)
+    #include "wx/dfb/cursor.h"
 #elif defined(__WXMAC__)
     #include "wx/mac/cursor.h"
 #elif defined(__WXCOCOA__)

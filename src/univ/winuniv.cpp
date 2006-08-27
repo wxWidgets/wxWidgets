@@ -71,6 +71,8 @@
     IMPLEMENT_DYNAMIC_CLASS(wxWindow, wxWindowGTK)
 #elif defined(__WXMGL__)
     IMPLEMENT_DYNAMIC_CLASS(wxWindow, wxWindowMGL)
+#elif defined(__WXDFB__)
+    IMPLEMENT_DYNAMIC_CLASS(wxWindow, wxWindowDFB)
 #elif defined(__WXX11__)
     IMPLEMENT_DYNAMIC_CLASS(wxWindow, wxWindowX11)
 #elif defined(__WXPM__)

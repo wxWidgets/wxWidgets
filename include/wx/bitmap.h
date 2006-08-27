@@ -29,6 +29,7 @@ class WXDLLEXPORT wxMask;
 class WXDLLEXPORT wxPalette;
 
 #if defined(__WXMGL__) || \
+    defined(__WXDFB__) || \
     defined(__WXMAC__) || \
     defined(__WXGTK__) || \
     defined(__WXCOCOA__) || \
@@ -170,6 +171,8 @@ protected:
 #include "wx/x11/bitmap.h"
 #elif defined(__WXMGL__)
 #include "wx/mgl/bitmap.h"
+#elif defined(__WXDFB__)
+#include "wx/dfb/bitmap.h"
 #elif defined(__WXMAC__)
 #include "wx/mac/bitmap.h"
 #elif defined(__WXCOCOA__)

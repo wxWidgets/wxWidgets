@@ -1774,6 +1774,61 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 
 
 <!-- ====================================================================== -->
+<!--                                wxDFB                                   -->
+<!-- ====================================================================== -->
+
+<set var="DFB_LOWLEVEL_SRC" hints="files">
+    src/dfb/app.cpp
+    src/dfb/bitmap.cpp
+    src/dfb/brush.cpp
+    src/dfb/cursor.cpp
+    <!--    src/dfb/data.cpp -->
+    src/dfb/dc.cpp
+    src/dfb/dcclient.cpp
+    src/dfb/dcmemory.cpp
+    src/dfb/dcscreen.cpp
+    src/dfb/evtloop.cpp
+    src/dfb/font.cpp
+    src/dfb/fontenum.cpp
+    src/dfb/ifacehelpers.cpp
+    src/dfb/pen.cpp
+    src/dfb/region.cpp
+    src/dfb/settings.cpp
+    src/dfb/toplevel.cpp
+    src/dfb/utils.cpp
+    src/dfb/window.cpp
+    src/generic/caret.cpp
+    src/generic/colour.cpp
+    src/generic/icon.cpp
+    src/generic/timer.cpp
+</set>
+<set var="DFB_LOWLEVEL_HDR" hints="files">
+    wx/dfb/app.h
+    wx/dfb/bitmap.h
+    wx/dfb/brush.h
+    wx/dfb/chkconf.h
+    wx/dfb/cursor.h
+    wx/dfb/dc.h
+    wx/dfb/dcclient.h
+    wx/dfb/dcmemory.h
+    wx/dfb/dcscreen.h
+    wx/dfb/evtloop.h
+    wx/dfb/font.h
+    wx/dfb/ifacehelpers.h
+    wx/dfb/pen.h
+    wx/dfb/popupwin.h
+    wx/dfb/private.h
+    wx/dfb/region.h
+    wx/dfb/toplevel.h
+    wx/dfb/window.h
+    wx/generic/caret.h
+    wx/generic/colour.h
+    wx/generic/icon.h
+    wx/generic/timer.h
+</set>
+
+
+<!-- ====================================================================== -->
 <!--                               wxOS/2                                   -->
 <!-- ====================================================================== -->
 
@@ -3128,6 +3183,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
         <if cond="TOOLKIT=='PM'">$(OS2_LOWLEVEL_SRC)</if>
         <if cond="TOOLKIT=='X11'">$(X11_LOWLEVEL_SRC)</if>
         <if cond="TOOLKIT=='MGL'">$(MGL_LOWLEVEL_SRC)</if>
+        <if cond="TOOLKIT=='DFB'">$(DFB_LOWLEVEL_SRC)</if>
     </set>
     <set var="LOWLEVEL_HDR" hints="files">
         <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION=='2'">$(GTK_LOWLEVEL_HDR)</if>
@@ -3140,6 +3196,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
         <if cond="TOOLKIT=='PM'">$(OS2_LOWLEVEL_HDR)</if>
         <if cond="TOOLKIT=='X11'">$(X11_LOWLEVEL_HDR)</if>
         <if cond="TOOLKIT=='MGL'">$(MGL_LOWLEVEL_HDR)</if>
+        <if cond="TOOLKIT=='DFB'">$(DFB_LOWLEVEL_HDR)</if>
     </set>
 
     <set var="GUI_SRC" hints="files">

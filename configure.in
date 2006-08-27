@@ -89,7 +89,7 @@ NEEDS_D_REENTRANT_FOR_R_FUNCS=0
 dnl the list of all available toolkits
 dnl
 dnl update NUM_TOOLKITS calculation below when adding a new toolkit here!
-ALL_TOOLKITS="COCOA GTK MAC MGL MICROWIN MOTIF MSW PM X11"
+ALL_TOOLKITS="COCOA GTK MAC MGL MICROWIN MOTIF MSW PM X11 DFB"
 
 dnl NB: these wxUSE_XXX constants have value of 0 or 1 unlike all the other ones
 dnl     which are either yes or no
@@ -102,6 +102,7 @@ DEFAULT_wxUSE_MOTIF=0
 DEFAULT_wxUSE_MSW=0
 DEFAULT_wxUSE_PM=0
 DEFAULT_wxUSE_X11=0
+DEFAULT_wxUSE_DFB=0
 
 dnl these are the values which are really default for the given platform -
 dnl they're not cached and are only used if no --with-toolkit was given *and*
@@ -115,6 +116,7 @@ DEFAULT_DEFAULT_wxUSE_MOTIF=0
 DEFAULT_DEFAULT_wxUSE_MSW=0
 DEFAULT_DEFAULT_wxUSE_PM=0
 DEFAULT_DEFAULT_wxUSE_X11=0
+DEFAULT_DEFAULT_wxUSE_DFB=0
 
 PROGRAM_EXT=
 SO_SUFFIX=so
@@ -839,6 +841,7 @@ AC_ARG_WITH(wine,          [  --with-wine             use Wine], [wxUSE_WINE="$w
 AC_ARG_WITH(msw,           [  --with-msw              use MS-Windows], [wxUSE_MSW="$withval" CACHE_MSW=1 TOOLKIT_GIVEN=1])
 AC_ARG_WITH(pm,            [  --with-pm               use OS/2 Presentation Manager], [wxUSE_PM="$withval" CACHE_PM=1 TOOLKIT_GIVEN=1])
 AC_ARG_WITH(mgl,           [  --with-mgl              use SciTech MGL], [wxUSE_MGL="$withval" wxUSE_UNIVERSAL="yes" CACHE_MGL=1 TOOLKIT_GIVEN=1])
+AC_ARG_WITH(directfb,      [  --with-directfb         use DirectFB], [wxUSE_DFB="$withval" wxUSE_UNIVERSAL="yes" CACHE_DFB=1 TOOLKIT_GIVEN=1])
 AC_ARG_WITH(microwin,      [  --with-microwin         use MicroWindows], [wxUSE_MICROWIN="$withval" CACHE_MICROWIN=1 TOOLKIT_GIVEN=1])
 AC_ARG_WITH(x11,           [  --with-x11              use X11], [wxUSE_X11="$withval" wxUSE_UNIVERSAL="yes" CACHE_X11=1 TOOLKIT_GIVEN=1])
 WX_ARG_ENABLE(nanox,       [  --enable-nanox          use NanoX], wxUSE_NANOX)
@@ -1320,7 +1323,7 @@ if test "$wxUSE_GUI" = "yes"; then
     dnl we suppose that expr is available (maybe there is a better way to do
     dnl this? what about using ALL_TOOLKITS? TODO)
     NUM_TOOLKITS=`expr ${wxUSE_COCOA:-0} + ${wxUSE_GTK:-0} + ${wxUSE_MAC:-0} \
-                  + ${wxUSE_MGL:-0} + ${wxUSE_MICROWIN:-0} \
+                  + ${wxUSE_MGL:-0} + ${wxUSE_DFB:-0} + ${wxUSE_MICROWIN:-0} \
                   + ${wxUSE_MOTIF:-0} + ${wxUSE_MSW:-0} + ${wxUSE_X11:-0}`
 
     dnl Allow wxUSE_PM only for OS/2 with EMX.
@@ -3152,6 +3155,22 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
         AFMINSTALL=afminstall
         TOOLKIT=MGL
         GUIDIST=MGL_DIST
+    fi
+
+    if test "$wxUSE_DFB" = 1; then
+       PKG_CHECK_MODULES(DIRECTFB,
+                         [directfb >= 0.9.25],
+                         [
+                           wxUSE_UNIVERSAL="yes"
+                           TOOLKIT_INCLUDE="$DIRECTFB_CFLAGS"
+                           GUI_TK_LIBRARY="$DIRECTFB_LIBS"
+                           TOOLKIT=DFB
+                           GUIDIST=DFB_DIST
+                         ],
+                         [
+                           AC_MSG_ERROR([DirectFB not found.])
+                         ]
+                         )
     fi
 
     if test "$wxUSE_MICROWIN" = 1; then

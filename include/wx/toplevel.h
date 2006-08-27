@@ -316,6 +316,9 @@ protected:
 #elif defined(__WXMGL__)
     #include "wx/mgl/toplevel.h"
     #define wxTopLevelWindowNative wxTopLevelWindowMGL
+#elif defined(__WXDFB__)
+    #include "wx/dfb/toplevel.h"
+    #define wxTopLevelWindowNative wxTopLevelWindowDFB
 #elif defined(__WXMAC__)
     #include "wx/mac/toplevel.h"
     #define wxTopLevelWindowNative wxTopLevelWindowMac

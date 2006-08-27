@@ -827,6 +827,8 @@ private:
     #include "wx/x11/dc.h"
 #elif defined(__WXMGL__)
     #include "wx/mgl/dc.h"
+#elif defined(__WXDFB__)
+    #include "wx/dfb/dc.h"
 #elif defined(__WXMAC__)
     #include "wx/mac/dc.h"
 #elif defined(__WXCOCOA__)

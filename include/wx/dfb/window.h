@@ -1,0 +1,181 @@
+/////////////////////////////////////////////////////////////////////////////
+// Name:        wx/dfb/window.h
+// Purpose:     wxWindow class
+// Author:      Vaclav Slavik
+// Created:     2006-08-10
+// RCS-ID:      $Id$
+// Copyright:   (c) 2006 REA Elektronik GmbH
+// Licence:     wxWindows licence
+/////////////////////////////////////////////////////////////////////////////
+
+#ifndef _WX_DFB_WINDOW_H_
+#define _WX_DFB_WINDOW_H_
+
+// ---------------------------------------------------------------------------
+// headers
+// ---------------------------------------------------------------------------
+
+#include "wx/dfb/ifacehelpers.h"
+
+wxDFB_DECLARE_INTERFACE(IDirectFBSurface);
+struct wxDFBWindowEvent;
+
+class WXDLLIMPEXP_CORE wxFont;
+class WXDLLIMPEXP_CORE wxTopLevelWindowDFB;
+
+// ---------------------------------------------------------------------------
+// wxWindow
+// ---------------------------------------------------------------------------
+
+class WXDLLIMPEXP_CORE wxWindowDFB : public wxWindowBase
+{
+public:
+    wxWindowDFB() { Init(); }
+
+    wxWindowDFB(wxWindow *parent,
+                wxWindowID id,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                long style = 0,
+                const wxString& name = wxPanelNameStr)
+    {
+        Init();
+        Create(parent, id, pos, size, style, name);
+    }
+
+    virtual ~wxWindowDFB();
+
+    bool Create(wxWindow *parent,
+                wxWindowID id,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                long style = 0,
+                const wxString& name = wxPanelNameStr);
+
+    // implement base class (pure) virtual methods
+    // -------------------------------------------
+
+    virtual void SetLabel( const wxString &WXUNUSED(label) ) {}
+    virtual wxString GetLabel() const { return wxEmptyString; }
+
+    virtual void Raise();
+    virtual void Lower();
+
+    virtual bool Show(bool show = true);
+
+    virtual void SetFocus();
+
+    virtual bool Reparent(wxWindowBase *newParent);
+
+    virtual void WarpPointer(int x, int y);
+
+    virtual void Refresh(bool eraseBackground = true,
+                         const wxRect *rect = (const wxRect *) NULL);
+    virtual void Update();
+    virtual void Clear();
+    virtual void Freeze();
+    virtual void Thaw();
+    bool IsFrozen() const { return m_frozenness > 0; }
+
+    virtual bool SetCursor(const wxCursor &cursor);
+    virtual bool SetFont(const wxFont &font) { m_font = font; return true; }
+
+    virtual int GetCharHeight() const;
+    virtual int GetCharWidth() const;
+    virtual void GetTextExtent(const wxString& string,
+                               int *x, int *y,
+                               int *descent = (int *) NULL,
+                               int *externalLeading = (int *) NULL,
+                               const wxFont *theFont = (const wxFont *) NULL)
+                               const;
+
+#if wxUSE_DRAG_AND_DROP
+    virtual void SetDropTarget(wxDropTarget *dropTarget);
+
+    // Accept files for dragging
+    virtual void DragAcceptFiles(bool accept);
+#endif // wxUSE_DRAG_AND_DROP
+
+    virtual WXWidget GetHandle() const { return this; }
+
+    // implementation from now on
+    // --------------------------
+
+    // Returns DirectFB surface used for rendering of this window
+    IDirectFBSurfacePtr GetDfbSurface();
+
+    // returns toplevel window the window belongs to
+    wxTopLevelWindowDFB *GetTLW() const { return m_tlw; }
+
+    void OnInternalIdle();
+
+protected:
+    // implement the base class pure virtuals
+    virtual void DoClientToScreen(int *x, int *y) const;
+    virtual void DoScreenToClient(int *x, int *y) const;
+    virtual void DoGetPosition(int *x, int *y) const;
+    virtual void DoGetSize(int *width, int *height) const;
+    virtual void DoGetClientSize(int *width, int *height) const;
+    virtual void DoSetSize(int x, int y,
+                           int width, int height,
+                           int sizeFlags = wxSIZE_AUTO);
+    virtual void DoSetClientSize(int width, int height);
+
+    virtual void DoCaptureMouse();
+    virtual void DoReleaseMouse();
+
+    // move the window to the specified location and resize it: this is called
+    // from both DoSetSize() and DoSetClientSize() and would usually just call
+    // ::MoveWindow() except for composite controls which will want to arrange
+    // themselves inside the given rectangle
+    virtual void DoMoveWindow(int x, int y, int width, int height);
+
+    // return DFB surface used to render this window (will be assigned to
+    // m_surface if the window is visible)
+    virtual IDirectFBSurfacePtr ObtainDfbSurface() const;
+
+    // this method must be called when window's position, size or visibility
+    // changes; it resets m_surface so that ObtainDfbSurface has to be called
+    // next time GetDfbSurface is called
+    void InvalidateDfbSurface();
+
+    // called by parent to render (part of) the window
+    void PaintWindow(const wxRect& rect, bool eraseBackground);
+
+    // implementation of Refresh()
+    void DoRefreshWindow(bool eraseBack = true);
+    virtual void DoRefreshRect(const wxRect& rect, bool eraseBack = true);
+
+    // DirectFB events handling
+    void HandleKeyEvent(const wxDFBWindowEvent& event_);
+
+private:
+    // common part of all ctors
+    void Init();
+    // counterpart to SetFocus
+    void KillFocus();
+
+protected:
+    // toplevel window (i.e. DirectFB window) this window belongs to
+    wxTopLevelWindowDFB *m_tlw;
+
+private:
+    // subsurface of TLW's surface covered by this window
+    IDirectFBSurfacePtr m_surface;
+
+    // position of the window (relative to the parent, not used by wxTLW, so
+    // don't access it directly)
+    wxRect m_rect;
+
+    // number of calls to Freeze() minus number of calls to Thaw()
+    unsigned m_frozenness;
+
+    friend class wxTopLevelWindowDFB; // for HandleXXXEvent
+
+    DECLARE_DYNAMIC_CLASS(wxWindowDFB)
+    DECLARE_NO_COPY_CLASS(wxWindowDFB)
+    DECLARE_EVENT_TABLE()
+};
+
+
+#endif // _WX_DFB_WINDOW_H_

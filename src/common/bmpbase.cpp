@@ -16,6 +16,7 @@
 #endif
 
 #if defined(__WXMGL__)   || \
+    defined(__WXDFB__)   || \
     defined(__WXMAC__)   || \
     defined(__WXGTK__)   || \
     defined(__WXMOTIF__) || \

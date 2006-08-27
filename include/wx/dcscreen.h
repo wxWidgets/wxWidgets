@@ -28,6 +28,8 @@
 #include "wx/x11/dcscreen.h"
 #elif defined(__WXMGL__)
 #include "wx/mgl/dcscreen.h"
+#elif defined(__WXDFB__)
+#include "wx/dfb/dcscreen.h"
 #elif defined(__WXMAC__)
 #include "wx/mac/dcscreen.h"
 #elif defined(__WXCOCOA__)

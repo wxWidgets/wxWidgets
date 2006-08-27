@@ -35,6 +35,7 @@
          !defined(__WXCOCOA__) && \
          !defined(__X__)       && \
          !defined(__WXMGL__)   && \
+         !defined(__WXDFB__)   && \
          !defined(__WXX11__)   && \
           wxUSE_GUI
 #       ifdef __UNIX__
@@ -2890,6 +2891,12 @@ typedef struct _PangoFontDescription PangoFontDescription;
 #ifdef __WXMGL__
 typedef struct window_t *WXWidget;
 #endif /*  MGL */
+
+#ifdef __WXDFB__
+/* DirectFB doesn't have the concept of non-TLW window, so use
+   something arbitrary */
+typedef const void* WXWidget;
+#endif /*  DFB */
 
 /*  This is required because of clashing macros in windows.h, which may be */
 /*  included before or after wxWidgets classes, and therefore must be */

@@ -27,6 +27,8 @@
 #  include "wx/os2/chkconf.h"
 #elif defined(__WXMGL__)
 #  include "wx/mgl/chkconf.h"
+#elif defined(__WXDFB__)
+#  include "wx/dfb/chkconf.h"
 #elif defined(__WXMOTIF__)
 #  include "wx/motif/chkconf.h"
 #elif defined(__WXX11__)

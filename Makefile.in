@@ -1659,6 +1659,30 @@ COND_PLATFORM_WIN32_1_BASE_PLATFORM_HDR =  \
 @COND_PLATFORM_WIN32_1@NET_PLATFORM_HDR = \
 @COND_PLATFORM_WIN32_1@	wx/msw/gsockmsw.h $(NET_WINCE_HDR)
 @COND_TOOLKIT_COCOA@LOWLEVEL_HDR = 
+COND_TOOLKIT_DFB_LOWLEVEL_HDR =  \
+	wx/dfb/app.h \
+	wx/dfb/bitmap.h \
+	wx/dfb/brush.h \
+	wx/dfb/chkconf.h \
+	wx/dfb/cursor.h \
+	wx/dfb/dc.h \
+	wx/dfb/dcclient.h \
+	wx/dfb/dcmemory.h \
+	wx/dfb/dcscreen.h \
+	wx/dfb/evtloop.h \
+	wx/dfb/font.h \
+	wx/dfb/ifacehelpers.h \
+	wx/dfb/pen.h \
+	wx/dfb/popupwin.h \
+	wx/dfb/private.h \
+	wx/dfb/region.h \
+	wx/dfb/toplevel.h \
+	wx/dfb/window.h \
+	wx/generic/caret.h \
+	wx/generic/colour.h \
+	wx/generic/icon.h \
+	wx/generic/timer.h
+@COND_TOOLKIT_DFB@LOWLEVEL_HDR = $(COND_TOOLKIT_DFB_LOWLEVEL_HDR)
 COND_TOOLKIT_GTK_TOOLKIT_VERSION__LOWLEVEL_HDR =  \
 	wx/generic/caret.h \
 	wx/unix/fontutil.h \
@@ -3534,6 +3558,30 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS =  \
 @COND_USE_GUI_1_WXUNIV_1@__CORE_SRC_OBJECTS = $(COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS)
 @COND_TOOLKIT_COCOA@__LOWLEVEL_SRC_OBJECTS = \
 @COND_TOOLKIT_COCOA@	monodll_gsockosx.o monodll_hid.o monodll_utilsexc_cf.o
+COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS =  \
+	monodll_app.o \
+	monodll_bitmap.o \
+	monodll_brush.o \
+	monodll_cursor.o \
+	monodll_dc.o \
+	monodll_dcclient.o \
+	monodll_dcmemory.o \
+	monodll_dcscreen.o \
+	monodll_evtloop.o \
+	monodll_font.o \
+	monodll_fontenum.o \
+	monodll_ifacehelpers.o \
+	monodll_pen.o \
+	monodll_region.o \
+	monodll_settings.o \
+	monodll_toplevel.o \
+	monodll_utils.o \
+	monodll_window.o \
+	monodll_caret.o \
+	monodll_colour.o \
+	monodll_icon.o \
+	monodll_timer.o
+@COND_TOOLKIT_DFB@__LOWLEVEL_SRC_OBJECTS = $(COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS)
 COND_TOOLKIT_GTK_TOOLKIT_VERSION____LOWLEVEL_SRC_OBJECTS =  \
 	monodll_caret.o \
 	monodll_dialup.o \
@@ -4327,6 +4375,30 @@ COND_PLATFORM_MACOSX_1___MAC_OSX_SRC_OBJECTS =  \
 @COND_PLATFORM_MACOSX_1@__MAC_OSX_SRC_OBJECTS = $(COND_PLATFORM_MACOSX_1___MAC_OSX_SRC_OBJECTS)
 @COND_TOOLKIT_COCOA@__LOWLEVEL_SRC_OBJECTS_1 = \
 @COND_TOOLKIT_COCOA@	monodll_gsockosx.o monodll_hid.o monodll_utilsexc_cf.o
+COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_1 =  \
+	monodll_app.o \
+	monodll_bitmap.o \
+	monodll_brush.o \
+	monodll_cursor.o \
+	monodll_dc.o \
+	monodll_dcclient.o \
+	monodll_dcmemory.o \
+	monodll_dcscreen.o \
+	monodll_evtloop.o \
+	monodll_font.o \
+	monodll_fontenum.o \
+	monodll_ifacehelpers.o \
+	monodll_pen.o \
+	monodll_region.o \
+	monodll_settings.o \
+	monodll_toplevel.o \
+	monodll_utils.o \
+	monodll_window.o \
+	monodll_caret.o \
+	monodll_colour.o \
+	monodll_icon.o \
+	monodll_timer.o
+@COND_TOOLKIT_DFB@__LOWLEVEL_SRC_OBJECTS_1 = $(COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_1)
 COND_TOOLKIT_GTK_TOOLKIT_VERSION____LOWLEVEL_SRC_OBJECTS_1 =  \
 	monodll_caret.o \
 	monodll_dialup.o \
@@ -5186,6 +5258,30 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_1 =  \
 @COND_USE_GUI_1_WXUNIV_1@__CORE_SRC_OBJECTS_1 = $(COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_1)
 @COND_TOOLKIT_COCOA@__LOWLEVEL_SRC_OBJECTS_2 = \
 @COND_TOOLKIT_COCOA@	monolib_gsockosx.o monolib_hid.o monolib_utilsexc_cf.o
+COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_2 =  \
+	monolib_app.o \
+	monolib_bitmap.o \
+	monolib_brush.o \
+	monolib_cursor.o \
+	monolib_dc.o \
+	monolib_dcclient.o \
+	monolib_dcmemory.o \
+	monolib_dcscreen.o \
+	monolib_evtloop.o \
+	monolib_font.o \
+	monolib_fontenum.o \
+	monolib_ifacehelpers.o \
+	monolib_pen.o \
+	monolib_region.o \
+	monolib_settings.o \
+	monolib_toplevel.o \
+	monolib_utils.o \
+	monolib_window.o \
+	monolib_caret.o \
+	monolib_colour.o \
+	monolib_icon.o \
+	monolib_timer.o
+@COND_TOOLKIT_DFB@__LOWLEVEL_SRC_OBJECTS_2 = $(COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_2)
 COND_TOOLKIT_GTK_TOOLKIT_VERSION____LOWLEVEL_SRC_OBJECTS_2 =  \
 	monolib_caret.o \
 	monolib_dialup.o \
@@ -5980,6 +6076,30 @@ COND_PLATFORM_MACOSX_1___MAC_OSX_SRC_OBJECTS_1 =  \
 @COND_PLATFORM_MACOSX_1@__MAC_OSX_SRC_OBJECTS_1 = $(COND_PLATFORM_MACOSX_1___MAC_OSX_SRC_OBJECTS_1)
 @COND_TOOLKIT_COCOA@__LOWLEVEL_SRC_OBJECTS_3 = \
 @COND_TOOLKIT_COCOA@	monolib_gsockosx.o monolib_hid.o monolib_utilsexc_cf.o
+COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_3 =  \
+	monolib_app.o \
+	monolib_bitmap.o \
+	monolib_brush.o \
+	monolib_cursor.o \
+	monolib_dc.o \
+	monolib_dcclient.o \
+	monolib_dcmemory.o \
+	monolib_dcscreen.o \
+	monolib_evtloop.o \
+	monolib_font.o \
+	monolib_fontenum.o \
+	monolib_ifacehelpers.o \
+	monolib_pen.o \
+	monolib_region.o \
+	monolib_settings.o \
+	monolib_toplevel.o \
+	monolib_utils.o \
+	monolib_window.o \
+	monolib_caret.o \
+	monolib_colour.o \
+	monolib_icon.o \
+	monolib_timer.o
+@COND_TOOLKIT_DFB@__LOWLEVEL_SRC_OBJECTS_3 = $(COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_3)
 COND_TOOLKIT_GTK_TOOLKIT_VERSION____LOWLEVEL_SRC_OBJECTS_3 =  \
 	monolib_caret.o \
 	monolib_dialup.o \
@@ -7057,6 +7177,30 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_2 =  \
 @COND_USE_GUI_1_WXUNIV_1@__CORE_SRC_OBJECTS_2 = $(COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_2)
 @COND_TOOLKIT_COCOA@__LOWLEVEL_SRC_OBJECTS_4 = \
 @COND_TOOLKIT_COCOA@	coredll_gsockosx.o coredll_hid.o coredll_utilsexc_cf.o
+COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_4 =  \
+	coredll_app.o \
+	coredll_bitmap.o \
+	coredll_brush.o \
+	coredll_cursor.o \
+	coredll_dc.o \
+	coredll_dcclient.o \
+	coredll_dcmemory.o \
+	coredll_dcscreen.o \
+	coredll_evtloop.o \
+	coredll_font.o \
+	coredll_fontenum.o \
+	coredll_ifacehelpers.o \
+	coredll_pen.o \
+	coredll_region.o \
+	coredll_settings.o \
+	coredll_toplevel.o \
+	coredll_utils.o \
+	coredll_window.o \
+	coredll_caret.o \
+	coredll_colour.o \
+	coredll_icon.o \
+	coredll_timer.o
+@COND_TOOLKIT_DFB@__LOWLEVEL_SRC_OBJECTS_4 = $(COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_4)
 COND_TOOLKIT_GTK_TOOLKIT_VERSION____LOWLEVEL_SRC_OBJECTS_4 =  \
 	coredll_caret.o \
 	coredll_dialup.o \
@@ -7851,6 +7995,30 @@ COND_PLATFORM_MACOSX_1___MAC_OSX_SRC_OBJECTS_2 =  \
 @COND_PLATFORM_MACOSX_1@__MAC_OSX_SRC_OBJECTS_2 = $(COND_PLATFORM_MACOSX_1___MAC_OSX_SRC_OBJECTS_2)
 @COND_TOOLKIT_COCOA@__LOWLEVEL_SRC_OBJECTS_5 = \
 @COND_TOOLKIT_COCOA@	coredll_gsockosx.o coredll_hid.o coredll_utilsexc_cf.o
+COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_5 =  \
+	coredll_app.o \
+	coredll_bitmap.o \
+	coredll_brush.o \
+	coredll_cursor.o \
+	coredll_dc.o \
+	coredll_dcclient.o \
+	coredll_dcmemory.o \
+	coredll_dcscreen.o \
+	coredll_evtloop.o \
+	coredll_font.o \
+	coredll_fontenum.o \
+	coredll_ifacehelpers.o \
+	coredll_pen.o \
+	coredll_region.o \
+	coredll_settings.o \
+	coredll_toplevel.o \
+	coredll_utils.o \
+	coredll_window.o \
+	coredll_caret.o \
+	coredll_colour.o \
+	coredll_icon.o \
+	coredll_timer.o
+@COND_TOOLKIT_DFB@__LOWLEVEL_SRC_OBJECTS_5 = $(COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_5)
 COND_TOOLKIT_GTK_TOOLKIT_VERSION____LOWLEVEL_SRC_OBJECTS_5 =  \
 	coredll_caret.o \
 	coredll_dialup.o \
@@ -8406,6 +8574,30 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_3 =  \
 @COND_USE_GUI_1_WXUNIV_1@__CORE_SRC_OBJECTS_3 = $(COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_3)
 @COND_TOOLKIT_COCOA@__LOWLEVEL_SRC_OBJECTS_6 = \
 @COND_TOOLKIT_COCOA@	corelib_gsockosx.o corelib_hid.o corelib_utilsexc_cf.o
+COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_6 =  \
+	corelib_app.o \
+	corelib_bitmap.o \
+	corelib_brush.o \
+	corelib_cursor.o \
+	corelib_dc.o \
+	corelib_dcclient.o \
+	corelib_dcmemory.o \
+	corelib_dcscreen.o \
+	corelib_evtloop.o \
+	corelib_font.o \
+	corelib_fontenum.o \
+	corelib_ifacehelpers.o \
+	corelib_pen.o \
+	corelib_region.o \
+	corelib_settings.o \
+	corelib_toplevel.o \
+	corelib_utils.o \
+	corelib_window.o \
+	corelib_caret.o \
+	corelib_colour.o \
+	corelib_icon.o \
+	corelib_timer.o
+@COND_TOOLKIT_DFB@__LOWLEVEL_SRC_OBJECTS_6 = $(COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_6)
 COND_TOOLKIT_GTK_TOOLKIT_VERSION____LOWLEVEL_SRC_OBJECTS_6 =  \
 	corelib_caret.o \
 	corelib_dialup.o \
@@ -9200,6 +9392,30 @@ COND_PLATFORM_MACOSX_1___MAC_OSX_SRC_OBJECTS_3 =  \
 @COND_PLATFORM_MACOSX_1@__MAC_OSX_SRC_OBJECTS_3 = $(COND_PLATFORM_MACOSX_1___MAC_OSX_SRC_OBJECTS_3)
 @COND_TOOLKIT_COCOA@__LOWLEVEL_SRC_OBJECTS_7 = \
 @COND_TOOLKIT_COCOA@	corelib_gsockosx.o corelib_hid.o corelib_utilsexc_cf.o
+COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_7 =  \
+	corelib_app.o \
+	corelib_bitmap.o \
+	corelib_brush.o \
+	corelib_cursor.o \
+	corelib_dc.o \
+	corelib_dcclient.o \
+	corelib_dcmemory.o \
+	corelib_dcscreen.o \
+	corelib_evtloop.o \
+	corelib_font.o \
+	corelib_fontenum.o \
+	corelib_ifacehelpers.o \
+	corelib_pen.o \
+	corelib_region.o \
+	corelib_settings.o \
+	corelib_toplevel.o \
+	corelib_utils.o \
+	corelib_window.o \
+	corelib_caret.o \
+	corelib_colour.o \
+	corelib_icon.o \
+	corelib_timer.o
+@COND_TOOLKIT_DFB@__LOWLEVEL_SRC_OBJECTS_7 = $(COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_7)
 COND_TOOLKIT_GTK_TOOLKIT_VERSION____LOWLEVEL_SRC_OBJECTS_7 =  \
 	corelib_caret.o \
 	corelib_dialup.o \
@@ -12460,6 +12676,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@monodll_utils.o: $(srcdir)/src/mgl/utils.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/mgl/utils.cpp
 
+@COND_TOOLKIT_DFB_USE_GUI_1@monodll_utils.o: $(srcdir)/src/dfb/utils.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/dfb/utils.cpp
+
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@monodll_utils.o: $(srcdir)/src/motif/utils.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/motif/utils.cpp
 
@@ -12631,6 +12850,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@monodll_caret.o: $(srcdir)/src/generic/caret.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/caret.cpp
 
+@COND_TOOLKIT_DFB_USE_GUI_1@monodll_caret.o: $(srcdir)/src/generic/caret.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/caret.cpp
+
 @COND_TOOLKIT_MSW_USE_GUI_1@monodll_caret.o: $(srcdir)/src/msw/caret.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/caret.cpp
 
@@ -12675,6 +12897,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 
 @COND_TOOLKIT_MGL_USE_GUI_1@monodll_fontenum.o: $(srcdir)/src/mgl/fontenum.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/mgl/fontenum.cpp
+
+@COND_TOOLKIT_DFB_USE_GUI_1@monodll_fontenum.o: $(srcdir)/src/dfb/fontenum.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/dfb/fontenum.cpp
 
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@monodll_fontenum.o: $(srcdir)/src/mac/carbon/fontenum.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/mac/carbon/fontenum.cpp
@@ -12751,6 +12976,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@monodll_icon.o: $(srcdir)/src/generic/icon.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/icon.cpp
 
+@COND_TOOLKIT_DFB_USE_GUI_1@monodll_icon.o: $(srcdir)/src/generic/icon.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/icon.cpp
+
 @COND_TOOLKIT_MSW_USE_GUI_1@monodll_icon.o: $(srcdir)/src/msw/icon.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/icon.cpp
 
@@ -12796,6 +13024,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@monodll_app.o: $(srcdir)/src/mgl/app.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/mgl/app.cpp
 
+@COND_TOOLKIT_DFB_USE_GUI_1@monodll_app.o: $(srcdir)/src/dfb/app.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/dfb/app.cpp
+
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@monodll_app.o: $(srcdir)/src/motif/app.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/motif/app.cpp
 
@@ -12829,6 +13060,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@monodll_bitmap.o: $(srcdir)/src/mgl/bitmap.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/mgl/bitmap.cpp
 
+@COND_TOOLKIT_DFB_USE_GUI_1@monodll_bitmap.o: $(srcdir)/src/dfb/bitmap.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/dfb/bitmap.cpp
+
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@monodll_bitmap.o: $(srcdir)/src/mac/carbon/bitmap.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/mac/carbon/bitmap.cpp
 
@@ -12858,6 +13092,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 
 @COND_TOOLKIT_MGL_USE_GUI_1@monodll_brush.o: $(srcdir)/src/mgl/brush.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/mgl/brush.cpp
+
+@COND_TOOLKIT_DFB_USE_GUI_1@monodll_brush.o: $(srcdir)/src/dfb/brush.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/dfb/brush.cpp
 
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@monodll_brush.o: $(srcdir)/src/mac/carbon/brush.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/mac/carbon/brush.cpp
@@ -12916,6 +13153,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@monodll_colour.o: $(srcdir)/src/generic/colour.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/colour.cpp
 
+@COND_TOOLKIT_DFB_USE_GUI_1@monodll_colour.o: $(srcdir)/src/generic/colour.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/colour.cpp
+
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@monodll_colour.o: $(srcdir)/src/motif/colour.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/motif/colour.cpp
 
@@ -12945,6 +13185,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 
 @COND_TOOLKIT_MGL_USE_GUI_1@monodll_cursor.o: $(srcdir)/src/mgl/cursor.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/mgl/cursor.cpp
+
+@COND_TOOLKIT_DFB_USE_GUI_1@monodll_cursor.o: $(srcdir)/src/dfb/cursor.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/dfb/cursor.cpp
 
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@monodll_cursor.o: $(srcdir)/src/motif/cursor.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/motif/cursor.cpp
@@ -13033,6 +13276,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@monodll_dc.o: $(srcdir)/src/mgl/dc.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/mgl/dc.cpp
 
+@COND_TOOLKIT_DFB_USE_GUI_1@monodll_dc.o: $(srcdir)/src/dfb/dc.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/dfb/dc.cpp
+
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@monodll_dc.o: $(srcdir)/src/motif/dc.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/motif/dc.cpp
 
@@ -13062,6 +13308,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 
 @COND_TOOLKIT_MGL_USE_GUI_1@monodll_dcclient.o: $(srcdir)/src/mgl/dcclient.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/mgl/dcclient.cpp
+
+@COND_TOOLKIT_DFB_USE_GUI_1@monodll_dcclient.o: $(srcdir)/src/dfb/dcclient.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/dfb/dcclient.cpp
 
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@monodll_dcclient.o: $(srcdir)/src/motif/dcclient.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/motif/dcclient.cpp
@@ -13093,6 +13342,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@monodll_dcmemory.o: $(srcdir)/src/mgl/dcmemory.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/mgl/dcmemory.cpp
 
+@COND_TOOLKIT_DFB_USE_GUI_1@monodll_dcmemory.o: $(srcdir)/src/dfb/dcmemory.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/dfb/dcmemory.cpp
+
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@monodll_dcmemory.o: $(srcdir)/src/motif/dcmemory.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/motif/dcmemory.cpp
 
@@ -13122,6 +13374,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 
 @COND_TOOLKIT_MGL_USE_GUI_1@monodll_dcscreen.o: $(srcdir)/src/mgl/dcscreen.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/mgl/dcscreen.cpp
+
+@COND_TOOLKIT_DFB_USE_GUI_1@monodll_dcscreen.o: $(srcdir)/src/dfb/dcscreen.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/dfb/dcscreen.cpp
 
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@monodll_dcscreen.o: $(srcdir)/src/motif/dcscreen.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/motif/dcscreen.cpp
@@ -13165,6 +13420,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@monodll_evtloop.o: $(srcdir)/src/mgl/evtloop.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/mgl/evtloop.cpp
 
+@COND_TOOLKIT_DFB_USE_GUI_1@monodll_evtloop.o: $(srcdir)/src/dfb/evtloop.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/dfb/evtloop.cpp
+
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@monodll_evtloop.o: $(srcdir)/src/motif/evtloop.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/motif/evtloop.cpp
 
@@ -13194,6 +13452,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 
 @COND_TOOLKIT_MGL_USE_GUI_1@monodll_font.o: $(srcdir)/src/mgl/font.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/mgl/font.cpp
+
+@COND_TOOLKIT_DFB_USE_GUI_1@monodll_font.o: $(srcdir)/src/dfb/font.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/dfb/font.cpp
 
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@monodll_font.o: $(srcdir)/src/motif/font.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/motif/font.cpp
@@ -13255,6 +13516,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@monodll_pen.o: $(srcdir)/src/mgl/pen.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/mgl/pen.cpp
 
+@COND_TOOLKIT_DFB_USE_GUI_1@monodll_pen.o: $(srcdir)/src/dfb/pen.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/dfb/pen.cpp
+
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@monodll_pen.o: $(srcdir)/src/mac/carbon/pen.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/mac/carbon/pen.cpp
 
@@ -13306,6 +13570,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@monodll_region.o: $(srcdir)/src/mgl/region.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/mgl/region.cpp
 
+@COND_TOOLKIT_DFB_USE_GUI_1@monodll_region.o: $(srcdir)/src/dfb/region.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/dfb/region.cpp
+
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@monodll_region.o: $(srcdir)/src/mac/carbon/region.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/mac/carbon/region.cpp
 
@@ -13348,6 +13615,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@monodll_settings.o: $(srcdir)/src/mgl/settings.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/mgl/settings.cpp
 
+@COND_TOOLKIT_DFB_USE_GUI_1@monodll_settings.o: $(srcdir)/src/dfb/settings.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/dfb/settings.cpp
+
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@monodll_settings.o: $(srcdir)/src/motif/settings.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/motif/settings.cpp
 
@@ -13377,6 +13647,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 
 @COND_TOOLKIT_MGL_USE_GUI_1@monodll_timer.o: $(srcdir)/src/generic/timer.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/timer.cpp
+
+@COND_TOOLKIT_DFB_USE_GUI_1@monodll_timer.o: $(srcdir)/src/generic/timer.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/timer.cpp
 
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@monodll_timer.o: $(srcdir)/src/motif/timer.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/motif/timer.cpp
@@ -13429,6 +13702,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@monodll_toplevel.o: $(srcdir)/src/mgl/toplevel.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/mgl/toplevel.cpp
 
+@COND_TOOLKIT_DFB_USE_GUI_1@monodll_toplevel.o: $(srcdir)/src/dfb/toplevel.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/dfb/toplevel.cpp
+
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@monodll_toplevel.o: $(srcdir)/src/motif/toplevel.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/motif/toplevel.cpp
 
@@ -13470,6 +13746,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 
 @COND_TOOLKIT_MGL_USE_GUI_1@monodll_window.o: $(srcdir)/src/mgl/window.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/mgl/window.cpp
+
+@COND_TOOLKIT_DFB_USE_GUI_1@monodll_window.o: $(srcdir)/src/dfb/window.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/dfb/window.cpp
 
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@monodll_window.o: $(srcdir)/src/motif/window.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/motif/window.cpp
@@ -13665,6 +13944,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 
 @COND_TOOLKIT_MGL_USE_GUI_1@monodll_dirmgl.o: $(srcdir)/src/mgl/dirmgl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/mgl/dirmgl.cpp
+
+@COND_TOOLKIT_DFB_USE_GUI_1@monodll_ifacehelpers.o: $(srcdir)/src/dfb/ifacehelpers.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/dfb/ifacehelpers.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@monodll_accel.o: $(srcdir)/src/generic/accel.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/accel.cpp
@@ -16327,6 +16609,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@monolib_utils.o: $(srcdir)/src/mgl/utils.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/mgl/utils.cpp
 
+@COND_TOOLKIT_DFB_USE_GUI_1@monolib_utils.o: $(srcdir)/src/dfb/utils.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/dfb/utils.cpp
+
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@monolib_utils.o: $(srcdir)/src/motif/utils.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/motif/utils.cpp
 
@@ -16498,6 +16783,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@monolib_caret.o: $(srcdir)/src/generic/caret.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/caret.cpp
 
+@COND_TOOLKIT_DFB_USE_GUI_1@monolib_caret.o: $(srcdir)/src/generic/caret.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/caret.cpp
+
 @COND_TOOLKIT_MSW_USE_GUI_1@monolib_caret.o: $(srcdir)/src/msw/caret.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/caret.cpp
 
@@ -16542,6 +16830,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_TOOLKIT_MGL_USE_GUI_1@monolib_fontenum.o: $(srcdir)/src/mgl/fontenum.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/mgl/fontenum.cpp
+
+@COND_TOOLKIT_DFB_USE_GUI_1@monolib_fontenum.o: $(srcdir)/src/dfb/fontenum.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/dfb/fontenum.cpp
 
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@monolib_fontenum.o: $(srcdir)/src/mac/carbon/fontenum.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/mac/carbon/fontenum.cpp
@@ -16618,6 +16909,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@monolib_icon.o: $(srcdir)/src/generic/icon.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/icon.cpp
 
+@COND_TOOLKIT_DFB_USE_GUI_1@monolib_icon.o: $(srcdir)/src/generic/icon.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/icon.cpp
+
 @COND_TOOLKIT_MSW_USE_GUI_1@monolib_icon.o: $(srcdir)/src/msw/icon.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/icon.cpp
 
@@ -16663,6 +16957,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@monolib_app.o: $(srcdir)/src/mgl/app.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/mgl/app.cpp
 
+@COND_TOOLKIT_DFB_USE_GUI_1@monolib_app.o: $(srcdir)/src/dfb/app.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/dfb/app.cpp
+
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@monolib_app.o: $(srcdir)/src/motif/app.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/motif/app.cpp
 
@@ -16696,6 +16993,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@monolib_bitmap.o: $(srcdir)/src/mgl/bitmap.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/mgl/bitmap.cpp
 
+@COND_TOOLKIT_DFB_USE_GUI_1@monolib_bitmap.o: $(srcdir)/src/dfb/bitmap.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/dfb/bitmap.cpp
+
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@monolib_bitmap.o: $(srcdir)/src/mac/carbon/bitmap.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/mac/carbon/bitmap.cpp
 
@@ -16725,6 +17025,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_TOOLKIT_MGL_USE_GUI_1@monolib_brush.o: $(srcdir)/src/mgl/brush.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/mgl/brush.cpp
+
+@COND_TOOLKIT_DFB_USE_GUI_1@monolib_brush.o: $(srcdir)/src/dfb/brush.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/dfb/brush.cpp
 
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@monolib_brush.o: $(srcdir)/src/mac/carbon/brush.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/mac/carbon/brush.cpp
@@ -16783,6 +17086,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@monolib_colour.o: $(srcdir)/src/generic/colour.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/colour.cpp
 
+@COND_TOOLKIT_DFB_USE_GUI_1@monolib_colour.o: $(srcdir)/src/generic/colour.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/colour.cpp
+
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@monolib_colour.o: $(srcdir)/src/motif/colour.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/motif/colour.cpp
 
@@ -16812,6 +17118,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_TOOLKIT_MGL_USE_GUI_1@monolib_cursor.o: $(srcdir)/src/mgl/cursor.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/mgl/cursor.cpp
+
+@COND_TOOLKIT_DFB_USE_GUI_1@monolib_cursor.o: $(srcdir)/src/dfb/cursor.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/dfb/cursor.cpp
 
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@monolib_cursor.o: $(srcdir)/src/motif/cursor.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/motif/cursor.cpp
@@ -16900,6 +17209,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@monolib_dc.o: $(srcdir)/src/mgl/dc.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/mgl/dc.cpp
 
+@COND_TOOLKIT_DFB_USE_GUI_1@monolib_dc.o: $(srcdir)/src/dfb/dc.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/dfb/dc.cpp
+
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@monolib_dc.o: $(srcdir)/src/motif/dc.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/motif/dc.cpp
 
@@ -16929,6 +17241,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_TOOLKIT_MGL_USE_GUI_1@monolib_dcclient.o: $(srcdir)/src/mgl/dcclient.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/mgl/dcclient.cpp
+
+@COND_TOOLKIT_DFB_USE_GUI_1@monolib_dcclient.o: $(srcdir)/src/dfb/dcclient.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/dfb/dcclient.cpp
 
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@monolib_dcclient.o: $(srcdir)/src/motif/dcclient.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/motif/dcclient.cpp
@@ -16960,6 +17275,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@monolib_dcmemory.o: $(srcdir)/src/mgl/dcmemory.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/mgl/dcmemory.cpp
 
+@COND_TOOLKIT_DFB_USE_GUI_1@monolib_dcmemory.o: $(srcdir)/src/dfb/dcmemory.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/dfb/dcmemory.cpp
+
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@monolib_dcmemory.o: $(srcdir)/src/motif/dcmemory.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/motif/dcmemory.cpp
 
@@ -16989,6 +17307,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_TOOLKIT_MGL_USE_GUI_1@monolib_dcscreen.o: $(srcdir)/src/mgl/dcscreen.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/mgl/dcscreen.cpp
+
+@COND_TOOLKIT_DFB_USE_GUI_1@monolib_dcscreen.o: $(srcdir)/src/dfb/dcscreen.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/dfb/dcscreen.cpp
 
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@monolib_dcscreen.o: $(srcdir)/src/motif/dcscreen.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/motif/dcscreen.cpp
@@ -17032,6 +17353,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@monolib_evtloop.o: $(srcdir)/src/mgl/evtloop.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/mgl/evtloop.cpp
 
+@COND_TOOLKIT_DFB_USE_GUI_1@monolib_evtloop.o: $(srcdir)/src/dfb/evtloop.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/dfb/evtloop.cpp
+
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@monolib_evtloop.o: $(srcdir)/src/motif/evtloop.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/motif/evtloop.cpp
 
@@ -17061,6 +17385,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_TOOLKIT_MGL_USE_GUI_1@monolib_font.o: $(srcdir)/src/mgl/font.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/mgl/font.cpp
+
+@COND_TOOLKIT_DFB_USE_GUI_1@monolib_font.o: $(srcdir)/src/dfb/font.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/dfb/font.cpp
 
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@monolib_font.o: $(srcdir)/src/motif/font.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/motif/font.cpp
@@ -17122,6 +17449,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@monolib_pen.o: $(srcdir)/src/mgl/pen.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/mgl/pen.cpp
 
+@COND_TOOLKIT_DFB_USE_GUI_1@monolib_pen.o: $(srcdir)/src/dfb/pen.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/dfb/pen.cpp
+
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@monolib_pen.o: $(srcdir)/src/mac/carbon/pen.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/mac/carbon/pen.cpp
 
@@ -17173,6 +17503,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@monolib_region.o: $(srcdir)/src/mgl/region.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/mgl/region.cpp
 
+@COND_TOOLKIT_DFB_USE_GUI_1@monolib_region.o: $(srcdir)/src/dfb/region.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/dfb/region.cpp
+
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@monolib_region.o: $(srcdir)/src/mac/carbon/region.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/mac/carbon/region.cpp
 
@@ -17215,6 +17548,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@monolib_settings.o: $(srcdir)/src/mgl/settings.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/mgl/settings.cpp
 
+@COND_TOOLKIT_DFB_USE_GUI_1@monolib_settings.o: $(srcdir)/src/dfb/settings.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/dfb/settings.cpp
+
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@monolib_settings.o: $(srcdir)/src/motif/settings.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/motif/settings.cpp
 
@@ -17244,6 +17580,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_TOOLKIT_MGL_USE_GUI_1@monolib_timer.o: $(srcdir)/src/generic/timer.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/timer.cpp
+
+@COND_TOOLKIT_DFB_USE_GUI_1@monolib_timer.o: $(srcdir)/src/generic/timer.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/timer.cpp
 
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@monolib_timer.o: $(srcdir)/src/motif/timer.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/motif/timer.cpp
@@ -17296,6 +17635,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@monolib_toplevel.o: $(srcdir)/src/mgl/toplevel.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/mgl/toplevel.cpp
 
+@COND_TOOLKIT_DFB_USE_GUI_1@monolib_toplevel.o: $(srcdir)/src/dfb/toplevel.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/dfb/toplevel.cpp
+
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@monolib_toplevel.o: $(srcdir)/src/motif/toplevel.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/motif/toplevel.cpp
 
@@ -17337,6 +17679,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_TOOLKIT_MGL_USE_GUI_1@monolib_window.o: $(srcdir)/src/mgl/window.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/mgl/window.cpp
+
+@COND_TOOLKIT_DFB_USE_GUI_1@monolib_window.o: $(srcdir)/src/dfb/window.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/dfb/window.cpp
 
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@monolib_window.o: $(srcdir)/src/motif/window.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/motif/window.cpp
@@ -17532,6 +17877,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_TOOLKIT_MGL_USE_GUI_1@monolib_dirmgl.o: $(srcdir)/src/mgl/dirmgl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/mgl/dirmgl.cpp
+
+@COND_TOOLKIT_DFB_USE_GUI_1@monolib_ifacehelpers.o: $(srcdir)/src/dfb/ifacehelpers.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/dfb/ifacehelpers.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@monolib_accel.o: $(srcdir)/src/generic/accel.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/accel.cpp
@@ -20716,6 +21064,9 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@coredll_utils.o: $(srcdir)/src/mgl/utils.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/mgl/utils.cpp
 
+@COND_TOOLKIT_DFB_USE_GUI_1@coredll_utils.o: $(srcdir)/src/dfb/utils.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/dfb/utils.cpp
+
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@coredll_utils.o: $(srcdir)/src/motif/utils.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/motif/utils.cpp
 
@@ -20745,6 +21096,9 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 
 @COND_TOOLKIT_MGL_USE_GUI_1@coredll_caret.o: $(srcdir)/src/generic/caret.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/caret.cpp
+
+@COND_TOOLKIT_DFB_USE_GUI_1@coredll_caret.o: $(srcdir)/src/generic/caret.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/caret.cpp
 
 @COND_TOOLKIT_MSW_USE_GUI_1@coredll_caret.o: $(srcdir)/src/msw/caret.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/caret.cpp
@@ -20790,6 +21144,9 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 
 @COND_TOOLKIT_MGL_USE_GUI_1@coredll_fontenum.o: $(srcdir)/src/mgl/fontenum.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/mgl/fontenum.cpp
+
+@COND_TOOLKIT_DFB_USE_GUI_1@coredll_fontenum.o: $(srcdir)/src/dfb/fontenum.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/dfb/fontenum.cpp
 
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@coredll_fontenum.o: $(srcdir)/src/mac/carbon/fontenum.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/mac/carbon/fontenum.cpp
@@ -20866,6 +21223,9 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@coredll_icon.o: $(srcdir)/src/generic/icon.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/icon.cpp
 
+@COND_TOOLKIT_DFB_USE_GUI_1@coredll_icon.o: $(srcdir)/src/generic/icon.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/icon.cpp
+
 @COND_TOOLKIT_MSW_USE_GUI_1@coredll_icon.o: $(srcdir)/src/msw/icon.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/icon.cpp
 
@@ -20911,6 +21271,9 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@coredll_app.o: $(srcdir)/src/mgl/app.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/mgl/app.cpp
 
+@COND_TOOLKIT_DFB_USE_GUI_1@coredll_app.o: $(srcdir)/src/dfb/app.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/dfb/app.cpp
+
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@coredll_app.o: $(srcdir)/src/motif/app.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/motif/app.cpp
 
@@ -20944,6 +21307,9 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@coredll_bitmap.o: $(srcdir)/src/mgl/bitmap.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/mgl/bitmap.cpp
 
+@COND_TOOLKIT_DFB_USE_GUI_1@coredll_bitmap.o: $(srcdir)/src/dfb/bitmap.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/dfb/bitmap.cpp
+
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@coredll_bitmap.o: $(srcdir)/src/mac/carbon/bitmap.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/mac/carbon/bitmap.cpp
 
@@ -20973,6 +21339,9 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 
 @COND_TOOLKIT_MGL_USE_GUI_1@coredll_brush.o: $(srcdir)/src/mgl/brush.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/mgl/brush.cpp
+
+@COND_TOOLKIT_DFB_USE_GUI_1@coredll_brush.o: $(srcdir)/src/dfb/brush.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/dfb/brush.cpp
 
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@coredll_brush.o: $(srcdir)/src/mac/carbon/brush.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/mac/carbon/brush.cpp
@@ -21031,6 +21400,9 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@coredll_colour.o: $(srcdir)/src/generic/colour.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/colour.cpp
 
+@COND_TOOLKIT_DFB_USE_GUI_1@coredll_colour.o: $(srcdir)/src/generic/colour.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/colour.cpp
+
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@coredll_colour.o: $(srcdir)/src/motif/colour.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/motif/colour.cpp
 
@@ -21060,6 +21432,9 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 
 @COND_TOOLKIT_MGL_USE_GUI_1@coredll_cursor.o: $(srcdir)/src/mgl/cursor.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/mgl/cursor.cpp
+
+@COND_TOOLKIT_DFB_USE_GUI_1@coredll_cursor.o: $(srcdir)/src/dfb/cursor.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/dfb/cursor.cpp
 
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@coredll_cursor.o: $(srcdir)/src/motif/cursor.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/motif/cursor.cpp
@@ -21148,6 +21523,9 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@coredll_dc.o: $(srcdir)/src/mgl/dc.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/mgl/dc.cpp
 
+@COND_TOOLKIT_DFB_USE_GUI_1@coredll_dc.o: $(srcdir)/src/dfb/dc.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/dfb/dc.cpp
+
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@coredll_dc.o: $(srcdir)/src/motif/dc.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/motif/dc.cpp
 
@@ -21177,6 +21555,9 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 
 @COND_TOOLKIT_MGL_USE_GUI_1@coredll_dcclient.o: $(srcdir)/src/mgl/dcclient.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/mgl/dcclient.cpp
+
+@COND_TOOLKIT_DFB_USE_GUI_1@coredll_dcclient.o: $(srcdir)/src/dfb/dcclient.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/dfb/dcclient.cpp
 
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@coredll_dcclient.o: $(srcdir)/src/motif/dcclient.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/motif/dcclient.cpp
@@ -21208,6 +21589,9 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@coredll_dcmemory.o: $(srcdir)/src/mgl/dcmemory.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/mgl/dcmemory.cpp
 
+@COND_TOOLKIT_DFB_USE_GUI_1@coredll_dcmemory.o: $(srcdir)/src/dfb/dcmemory.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/dfb/dcmemory.cpp
+
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@coredll_dcmemory.o: $(srcdir)/src/motif/dcmemory.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/motif/dcmemory.cpp
 
@@ -21237,6 +21621,9 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 
 @COND_TOOLKIT_MGL_USE_GUI_1@coredll_dcscreen.o: $(srcdir)/src/mgl/dcscreen.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/mgl/dcscreen.cpp
+
+@COND_TOOLKIT_DFB_USE_GUI_1@coredll_dcscreen.o: $(srcdir)/src/dfb/dcscreen.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/dfb/dcscreen.cpp
 
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@coredll_dcscreen.o: $(srcdir)/src/motif/dcscreen.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/motif/dcscreen.cpp
@@ -21280,6 +21667,9 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@coredll_evtloop.o: $(srcdir)/src/mgl/evtloop.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/mgl/evtloop.cpp
 
+@COND_TOOLKIT_DFB_USE_GUI_1@coredll_evtloop.o: $(srcdir)/src/dfb/evtloop.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/dfb/evtloop.cpp
+
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@coredll_evtloop.o: $(srcdir)/src/motif/evtloop.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/motif/evtloop.cpp
 
@@ -21309,6 +21699,9 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 
 @COND_TOOLKIT_MGL_USE_GUI_1@coredll_font.o: $(srcdir)/src/mgl/font.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/mgl/font.cpp
+
+@COND_TOOLKIT_DFB_USE_GUI_1@coredll_font.o: $(srcdir)/src/dfb/font.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/dfb/font.cpp
 
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@coredll_font.o: $(srcdir)/src/motif/font.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/motif/font.cpp
@@ -21370,6 +21763,9 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@coredll_pen.o: $(srcdir)/src/mgl/pen.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/mgl/pen.cpp
 
+@COND_TOOLKIT_DFB_USE_GUI_1@coredll_pen.o: $(srcdir)/src/dfb/pen.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/dfb/pen.cpp
+
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@coredll_pen.o: $(srcdir)/src/mac/carbon/pen.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/mac/carbon/pen.cpp
 
@@ -21421,6 +21817,9 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@coredll_region.o: $(srcdir)/src/mgl/region.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/mgl/region.cpp
 
+@COND_TOOLKIT_DFB_USE_GUI_1@coredll_region.o: $(srcdir)/src/dfb/region.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/dfb/region.cpp
+
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@coredll_region.o: $(srcdir)/src/mac/carbon/region.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/mac/carbon/region.cpp
 
@@ -21463,6 +21862,9 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@coredll_settings.o: $(srcdir)/src/mgl/settings.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/mgl/settings.cpp
 
+@COND_TOOLKIT_DFB_USE_GUI_1@coredll_settings.o: $(srcdir)/src/dfb/settings.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/dfb/settings.cpp
+
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@coredll_settings.o: $(srcdir)/src/motif/settings.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/motif/settings.cpp
 
@@ -21492,6 +21894,9 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 
 @COND_TOOLKIT_MGL_USE_GUI_1@coredll_timer.o: $(srcdir)/src/generic/timer.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/timer.cpp
+
+@COND_TOOLKIT_DFB_USE_GUI_1@coredll_timer.o: $(srcdir)/src/generic/timer.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/timer.cpp
 
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@coredll_timer.o: $(srcdir)/src/motif/timer.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/motif/timer.cpp
@@ -21544,6 +21949,9 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@coredll_toplevel.o: $(srcdir)/src/mgl/toplevel.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/mgl/toplevel.cpp
 
+@COND_TOOLKIT_DFB_USE_GUI_1@coredll_toplevel.o: $(srcdir)/src/dfb/toplevel.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/dfb/toplevel.cpp
+
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@coredll_toplevel.o: $(srcdir)/src/motif/toplevel.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/motif/toplevel.cpp
 
@@ -21585,6 +21993,9 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 
 @COND_TOOLKIT_MGL_USE_GUI_1@coredll_window.o: $(srcdir)/src/mgl/window.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/mgl/window.cpp
+
+@COND_TOOLKIT_DFB_USE_GUI_1@coredll_window.o: $(srcdir)/src/dfb/window.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/dfb/window.cpp
 
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@coredll_window.o: $(srcdir)/src/motif/window.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/motif/window.cpp
@@ -21780,6 +22191,9 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 
 @COND_TOOLKIT_MGL_USE_GUI_1@coredll_dirmgl.o: $(srcdir)/src/mgl/dirmgl.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/mgl/dirmgl.cpp
+
+@COND_TOOLKIT_DFB_USE_GUI_1@coredll_ifacehelpers.o: $(srcdir)/src/dfb/ifacehelpers.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/dfb/ifacehelpers.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@coredll_accel.o: $(srcdir)/src/generic/accel.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/accel.cpp
@@ -23518,6 +23932,9 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@corelib_utils.o: $(srcdir)/src/mgl/utils.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/mgl/utils.cpp
 
+@COND_TOOLKIT_DFB_USE_GUI_1@corelib_utils.o: $(srcdir)/src/dfb/utils.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/dfb/utils.cpp
+
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@corelib_utils.o: $(srcdir)/src/motif/utils.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/motif/utils.cpp
 
@@ -23547,6 +23964,9 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 
 @COND_TOOLKIT_MGL_USE_GUI_1@corelib_caret.o: $(srcdir)/src/generic/caret.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/caret.cpp
+
+@COND_TOOLKIT_DFB_USE_GUI_1@corelib_caret.o: $(srcdir)/src/generic/caret.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/caret.cpp
 
 @COND_TOOLKIT_MSW_USE_GUI_1@corelib_caret.o: $(srcdir)/src/msw/caret.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/caret.cpp
@@ -23592,6 +24012,9 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 
 @COND_TOOLKIT_MGL_USE_GUI_1@corelib_fontenum.o: $(srcdir)/src/mgl/fontenum.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/mgl/fontenum.cpp
+
+@COND_TOOLKIT_DFB_USE_GUI_1@corelib_fontenum.o: $(srcdir)/src/dfb/fontenum.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/dfb/fontenum.cpp
 
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@corelib_fontenum.o: $(srcdir)/src/mac/carbon/fontenum.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/mac/carbon/fontenum.cpp
@@ -23668,6 +24091,9 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@corelib_icon.o: $(srcdir)/src/generic/icon.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/icon.cpp
 
+@COND_TOOLKIT_DFB_USE_GUI_1@corelib_icon.o: $(srcdir)/src/generic/icon.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/icon.cpp
+
 @COND_TOOLKIT_MSW_USE_GUI_1@corelib_icon.o: $(srcdir)/src/msw/icon.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/icon.cpp
 
@@ -23713,6 +24139,9 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@corelib_app.o: $(srcdir)/src/mgl/app.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/mgl/app.cpp
 
+@COND_TOOLKIT_DFB_USE_GUI_1@corelib_app.o: $(srcdir)/src/dfb/app.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/dfb/app.cpp
+
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@corelib_app.o: $(srcdir)/src/motif/app.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/motif/app.cpp
 
@@ -23746,6 +24175,9 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@corelib_bitmap.o: $(srcdir)/src/mgl/bitmap.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/mgl/bitmap.cpp
 
+@COND_TOOLKIT_DFB_USE_GUI_1@corelib_bitmap.o: $(srcdir)/src/dfb/bitmap.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/dfb/bitmap.cpp
+
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@corelib_bitmap.o: $(srcdir)/src/mac/carbon/bitmap.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/mac/carbon/bitmap.cpp
 
@@ -23775,6 +24207,9 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 
 @COND_TOOLKIT_MGL_USE_GUI_1@corelib_brush.o: $(srcdir)/src/mgl/brush.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/mgl/brush.cpp
+
+@COND_TOOLKIT_DFB_USE_GUI_1@corelib_brush.o: $(srcdir)/src/dfb/brush.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/dfb/brush.cpp
 
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@corelib_brush.o: $(srcdir)/src/mac/carbon/brush.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/mac/carbon/brush.cpp
@@ -23833,6 +24268,9 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@corelib_colour.o: $(srcdir)/src/generic/colour.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/colour.cpp
 
+@COND_TOOLKIT_DFB_USE_GUI_1@corelib_colour.o: $(srcdir)/src/generic/colour.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/colour.cpp
+
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@corelib_colour.o: $(srcdir)/src/motif/colour.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/motif/colour.cpp
 
@@ -23862,6 +24300,9 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 
 @COND_TOOLKIT_MGL_USE_GUI_1@corelib_cursor.o: $(srcdir)/src/mgl/cursor.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/mgl/cursor.cpp
+
+@COND_TOOLKIT_DFB_USE_GUI_1@corelib_cursor.o: $(srcdir)/src/dfb/cursor.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/dfb/cursor.cpp
 
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@corelib_cursor.o: $(srcdir)/src/motif/cursor.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/motif/cursor.cpp
@@ -23950,6 +24391,9 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@corelib_dc.o: $(srcdir)/src/mgl/dc.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/mgl/dc.cpp
 
+@COND_TOOLKIT_DFB_USE_GUI_1@corelib_dc.o: $(srcdir)/src/dfb/dc.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/dfb/dc.cpp
+
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@corelib_dc.o: $(srcdir)/src/motif/dc.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/motif/dc.cpp
 
@@ -23979,6 +24423,9 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 
 @COND_TOOLKIT_MGL_USE_GUI_1@corelib_dcclient.o: $(srcdir)/src/mgl/dcclient.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/mgl/dcclient.cpp
+
+@COND_TOOLKIT_DFB_USE_GUI_1@corelib_dcclient.o: $(srcdir)/src/dfb/dcclient.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/dfb/dcclient.cpp
 
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@corelib_dcclient.o: $(srcdir)/src/motif/dcclient.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/motif/dcclient.cpp
@@ -24010,6 +24457,9 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@corelib_dcmemory.o: $(srcdir)/src/mgl/dcmemory.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/mgl/dcmemory.cpp
 
+@COND_TOOLKIT_DFB_USE_GUI_1@corelib_dcmemory.o: $(srcdir)/src/dfb/dcmemory.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/dfb/dcmemory.cpp
+
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@corelib_dcmemory.o: $(srcdir)/src/motif/dcmemory.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/motif/dcmemory.cpp
 
@@ -24039,6 +24489,9 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 
 @COND_TOOLKIT_MGL_USE_GUI_1@corelib_dcscreen.o: $(srcdir)/src/mgl/dcscreen.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/mgl/dcscreen.cpp
+
+@COND_TOOLKIT_DFB_USE_GUI_1@corelib_dcscreen.o: $(srcdir)/src/dfb/dcscreen.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/dfb/dcscreen.cpp
 
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@corelib_dcscreen.o: $(srcdir)/src/motif/dcscreen.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/motif/dcscreen.cpp
@@ -24082,6 +24535,9 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@corelib_evtloop.o: $(srcdir)/src/mgl/evtloop.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/mgl/evtloop.cpp
 
+@COND_TOOLKIT_DFB_USE_GUI_1@corelib_evtloop.o: $(srcdir)/src/dfb/evtloop.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/dfb/evtloop.cpp
+
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@corelib_evtloop.o: $(srcdir)/src/motif/evtloop.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/motif/evtloop.cpp
 
@@ -24111,6 +24567,9 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 
 @COND_TOOLKIT_MGL_USE_GUI_1@corelib_font.o: $(srcdir)/src/mgl/font.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/mgl/font.cpp
+
+@COND_TOOLKIT_DFB_USE_GUI_1@corelib_font.o: $(srcdir)/src/dfb/font.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/dfb/font.cpp
 
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@corelib_font.o: $(srcdir)/src/motif/font.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/motif/font.cpp
@@ -24172,6 +24631,9 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@corelib_pen.o: $(srcdir)/src/mgl/pen.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/mgl/pen.cpp
 
+@COND_TOOLKIT_DFB_USE_GUI_1@corelib_pen.o: $(srcdir)/src/dfb/pen.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/dfb/pen.cpp
+
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@corelib_pen.o: $(srcdir)/src/mac/carbon/pen.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/mac/carbon/pen.cpp
 
@@ -24223,6 +24685,9 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@corelib_region.o: $(srcdir)/src/mgl/region.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/mgl/region.cpp
 
+@COND_TOOLKIT_DFB_USE_GUI_1@corelib_region.o: $(srcdir)/src/dfb/region.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/dfb/region.cpp
+
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@corelib_region.o: $(srcdir)/src/mac/carbon/region.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/mac/carbon/region.cpp
 
@@ -24265,6 +24730,9 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@corelib_settings.o: $(srcdir)/src/mgl/settings.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/mgl/settings.cpp
 
+@COND_TOOLKIT_DFB_USE_GUI_1@corelib_settings.o: $(srcdir)/src/dfb/settings.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/dfb/settings.cpp
+
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@corelib_settings.o: $(srcdir)/src/motif/settings.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/motif/settings.cpp
 
@@ -24294,6 +24762,9 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 
 @COND_TOOLKIT_MGL_USE_GUI_1@corelib_timer.o: $(srcdir)/src/generic/timer.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/timer.cpp
+
+@COND_TOOLKIT_DFB_USE_GUI_1@corelib_timer.o: $(srcdir)/src/generic/timer.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/timer.cpp
 
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@corelib_timer.o: $(srcdir)/src/motif/timer.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/motif/timer.cpp
@@ -24346,6 +24817,9 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@corelib_toplevel.o: $(srcdir)/src/mgl/toplevel.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/mgl/toplevel.cpp
 
+@COND_TOOLKIT_DFB_USE_GUI_1@corelib_toplevel.o: $(srcdir)/src/dfb/toplevel.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/dfb/toplevel.cpp
+
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@corelib_toplevel.o: $(srcdir)/src/motif/toplevel.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/motif/toplevel.cpp
 
@@ -24387,6 +24861,9 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 
 @COND_TOOLKIT_MGL_USE_GUI_1@corelib_window.o: $(srcdir)/src/mgl/window.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/mgl/window.cpp
+
+@COND_TOOLKIT_DFB_USE_GUI_1@corelib_window.o: $(srcdir)/src/dfb/window.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/dfb/window.cpp
 
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@corelib_window.o: $(srcdir)/src/motif/window.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/motif/window.cpp
@@ -24582,6 +25059,9 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 
 @COND_TOOLKIT_MGL_USE_GUI_1@corelib_dirmgl.o: $(srcdir)/src/mgl/dirmgl.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/mgl/dirmgl.cpp
+
+@COND_TOOLKIT_DFB_USE_GUI_1@corelib_ifacehelpers.o: $(srcdir)/src/dfb/ifacehelpers.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/dfb/ifacehelpers.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@corelib_accel.o: $(srcdir)/src/generic/accel.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/accel.cpp

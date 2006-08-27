@@ -78,7 +78,8 @@ enum wxPortId
     wxPORT_MAC      = 1 << 7,       // wxMac, using Carbon or Classic Mac API
     wxPORT_COCOA    = 1 << 8,       // wxCocoa, using Cocoa NextStep/Mac API
     wxPORT_WINCE    = 1 << 9,       // wxWinCE, toolkit is WinCE SDK API
-    wxPORT_PALMOS   = 1 << 10       // wxPalmOS, toolkit is PalmOS API
+    wxPORT_PALMOS   = 1 << 10,      // wxPalmOS, toolkit is PalmOS API
+    wxPORT_DFB      = 1 << 11       // wxDFB, using wxUniversal
 };
 
 // architecture of the operating system

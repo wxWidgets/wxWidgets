@@ -29,6 +29,8 @@
 #elif defined(__WXMGL__)
   #define wxICON_DEFAULT_BITMAP_TYPE wxBITMAP_TYPE_ICO_RESOURCE
   #include "wx/generic/icon.h"
+#elif defined(__WXDFB__)
+  #include "wx/generic/icon.h"
 #elif defined(__WXMAC__)
   #include "wx/mac/icon.h"
 #elif defined(__WXCOCOA__)

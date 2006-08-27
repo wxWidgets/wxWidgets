@@ -58,10 +58,12 @@ struct WXDLLEXPORT wxNativeEncodingInfo
     // seems to be handled internally.
 #elif defined(__WXMGL__)
     int      mglEncoding;
+#elif defined(__WXDFB__)
+    // DirectFB uses UTF-8 internally, doesn't use font encodings
 #else
     #error "Unsupported toolkit"
 #endif
-#endif
+#endif // !__WXPALMOS__
     // this struct is saved in config by wxFontMapper, so it should know to
     // serialise itself (implemented in platform-specific code)
     bool FromString(const wxString& s);

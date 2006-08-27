@@ -28,6 +28,8 @@
 #include "wx/x11/dcclient.h"
 #elif defined(__WXMGL__)
 #include "wx/mgl/dcclient.h"
+#elif defined(__WXDFB__)
+#include "wx/dfb/dcclient.h"
 #elif defined(__WXMAC__)
 #include "wx/mac/dcclient.h"
 #elif defined(__WXCOCOA__)

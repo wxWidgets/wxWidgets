@@ -113,7 +113,7 @@ protected:
     #include "wx/gtk/timer.h"
 #elif defined(__WXGTK__)
     #include "wx/gtk1/timer.h"
-#elif defined(__WXX11__) || defined(__WXMGL__)
+#elif defined(__WXX11__) || defined(__WXMGL__) || defined(__WXDFB__)
     #include "wx/generic/timer.h"
 #elif defined (__WXCOCOA__)
     #include "wx/cocoa/timer.h"

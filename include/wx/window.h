@@ -1397,12 +1397,11 @@ private:
     #endif // wxUniv
     #include "wx/x11/window.h"
 #elif defined(__WXMGL__)
-    #ifdef __WXUNIVERSAL__
-        #define wxWindowNative wxWindowMGL
-    #else // !wxUniv
-        #define wxWindowMGL wxWindow
-    #endif // wxUniv
+    #define wxWindowNative wxWindowMGL
     #include "wx/mgl/window.h"
+#elif defined(__WXDFB__)
+    #define wxWindowNative wxWindowDFB
+    #include "wx/dfb/window.h"
 #elif defined(__WXMAC__)
     #ifdef __WXUNIVERSAL__
         #define wxWindowNative wxWindowMac

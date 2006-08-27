@@ -26,6 +26,8 @@
 #include "wx/gtk1/pen.h"
 #elif defined(__WXMGL__)
 #include "wx/mgl/pen.h"
+#elif defined(__WXDFB__)
+#include "wx/dfb/pen.h"
 #elif defined(__WXMAC__)
 #include "wx/mac/pen.h"
 #elif defined(__WXCOCOA__)

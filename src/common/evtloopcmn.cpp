@@ -37,7 +37,7 @@
 wxEventLoop *wxEventLoopBase::ms_activeLoop = NULL;
 
 // wxEventLoopManual is unused in the other ports
-#if defined(__WXMSW__) || defined(__WXMAC__)
+#if defined(__WXMSW__) || defined(__WXMAC__) || defined(__WXDFB__)
 
 // ============================================================================
 // wxEventLoopManual implementation
@@ -152,4 +152,4 @@ void wxEventLoopManual::Exit(int rc)
     WakeUp();
 }
 
-#endif // __WXMSW__ || __WXMAC__
+#endif // __WXMSW__ || __WXMAC__ || __WXDFB__
