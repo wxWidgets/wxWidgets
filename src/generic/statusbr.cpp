@@ -148,7 +148,12 @@ void wxStatusBarGeneric::SetStatusText(const wxString& text, int number)
         wxRect rect;
         GetFieldRect(number, rect);
 
-        Refresh( true, &rect );
+        Refresh(true, &rect);
+
+        // it's common to show some text in the status bar before starting a
+        // relatively lengthy operation, ensure that the text is shown to the
+        // user immediately and not after the lengthy operation end
+        Update();
     }
 }
 
