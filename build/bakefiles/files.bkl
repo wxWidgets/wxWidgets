@@ -1880,7 +1880,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/os2/frame.cpp
     src/os2/gauge.cpp
     src/os2/gdiimage.cpp
-    src/os2/gdiobj.cpp
     src/os2/gsockpm.cpp
     src/os2/helpwin.cpp
     src/os2/icon.cpp

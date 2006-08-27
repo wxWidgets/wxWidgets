@@ -13822,9 +13822,6 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@monodll_gdiobj.o: $(srcdir)/src/mac/carbon/gdiobj.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/mac/carbon/gdiobj.cpp
 
-@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@monodll_gdiobj.o: $(srcdir)/src/os2/gdiobj.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/os2/gdiobj.cpp
-
 @COND_TOOLKIT_MSW_USE_GUI_1@monodll_gsockmsw.o: $(srcdir)/src/msw/gsockmsw.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/gsockmsw.cpp
 
@@ -17754,9 +17751,6 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@monolib_gdiobj.o: $(srcdir)/src/mac/carbon/gdiobj.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/mac/carbon/gdiobj.cpp
-
-@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@monolib_gdiobj.o: $(srcdir)/src/os2/gdiobj.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/os2/gdiobj.cpp
 
 @COND_TOOLKIT_MSW_USE_GUI_1@monolib_gsockmsw.o: $(srcdir)/src/msw/gsockmsw.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/gsockmsw.cpp
@@ -22069,9 +22063,6 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@coredll_gdiobj.o: $(srcdir)/src/mac/carbon/gdiobj.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/mac/carbon/gdiobj.cpp
 
-@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@coredll_gdiobj.o: $(srcdir)/src/os2/gdiobj.cpp $(COREDLL_ODEP)
-@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/os2/gdiobj.cpp
-
 @COND_TOOLKIT_MSW_USE_GUI_1@coredll_gsockmsw.o: $(srcdir)/src/msw/gsockmsw.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/gsockmsw.cpp
 
@@ -24936,9 +24927,6 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@corelib_gdiobj.o: $(srcdir)/src/mac/carbon/gdiobj.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/mac/carbon/gdiobj.cpp
-
-@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@corelib_gdiobj.o: $(srcdir)/src/os2/gdiobj.cpp $(CORELIB_ODEP)
-@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/os2/gdiobj.cpp
 
 @COND_TOOLKIT_MSW_USE_GUI_1@corelib_gsockmsw.o: $(srcdir)/src/msw/gsockmsw.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/gsockmsw.cpp
