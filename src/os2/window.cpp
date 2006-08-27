@@ -2647,6 +2647,7 @@ MRESULT wxWindowOS2::OS2WindowProc( WXUINT uMsg,
                     }
                     break;
 
+                case CBN_LBSELECT:
                 case BN_CLICKED: // Dups as LN_SELECT and CBN_LBSELECT
                     {
                         HWND                hWnd = ::WinWindowFromID((HWND)GetHwnd(), SHORT1FROMMP(wParam));
@@ -2702,6 +2703,14 @@ MRESULT wxWindowOS2::OS2WindowProc( WXUINT uMsg,
                             pComboBox->OS2Command( (WXUINT)SHORT2FROMMP(wParam)
                                                   ,(WXWORD)SHORT1FROMMP(wParam)
                                                  );
+                        }
+                        if (pWin->IsKindOf(CLASSINFO(wxChoice)))
+                        {
+                            wxChoice*           pChoice = wxDynamicCast(pWin, wxChoice);
+
+                            pChoice->OS2Command( (WXUINT)SHORT2FROMMP(wParam)
+                                                ,(WXWORD)SHORT1FROMMP(wParam)
+                                               );
                         }
                         return 0;
                     }
@@ -3579,10 +3588,6 @@ bool wxWindowOS2::HandlePaint()
     // rectangles to "the other" coordinate system and reassemble a
     // region from the rectangles, to be feed into m_updateRegion.
     //
-    // FIXME: This is a bad hack since OS/2 API specifies that rectangles
-    //        passed into GpiSetRegion must not have Bottom > Top,
-    //        however, at first sight, it _seems_ to work nonetheless.
-    //
     RGNRECT                     vRgnData;
     PRECTL                      pUpdateRects = NULL;
     vRgnData.ulDirection = RECTDIR_LFRT_TOPBOT;
@@ -3612,8 +3617,8 @@ bool wxWindowOS2::HandlePaint()
             {
                 int                 rectHeight;
                 rectHeight = pUpdateRects[i].yTop - pUpdateRects[i].yBottom;
-                pUpdateRects[i].yTop = height - pUpdateRects[i].yTop;
-                pUpdateRects[i].yBottom = pUpdateRects[i].yTop + rectHeight;
+                pUpdateRects[i].yBottom = height - pUpdateRects[i].yTop;
+                pUpdateRects[i].yTop = pUpdateRects[i].yBottom + rectHeight;
             }
             ::GpiSetRegion(hPS, hRgn, vRgnData.crc, pUpdateRects);
             delete [] pUpdateRects;
