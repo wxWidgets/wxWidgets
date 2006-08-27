@@ -1,0 +1,17 @@
+List of classes which should use their native GTK+ equivalents but don't:
+
+- wxStatusBar:
+    Problem with multiple fields, GtkStatusbar only seems to support one pane
+
+- wxTreeCtrl
+- wxListCtrl
+    Could be reimplemeted in terms of wxDataViewCtrl?
+
+- wxSplitterWindow
+
+- wxDatePickerCtrl
+- wxCalendarCtrl
+    Use GtkCalendar
+
+- wxWizard
+    Can GtkAssistant be used?
