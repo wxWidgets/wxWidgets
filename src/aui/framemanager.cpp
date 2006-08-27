@@ -480,6 +480,7 @@ wxFrameManager::wxFrameManager(wxWindow* managed_wnd, unsigned int flags)
     m_art = new wxDefaultDockArt;
     m_hint_wnd = NULL;
     m_flags = flags;
+    m_skipping = false;
 
     if (managed_wnd)
     {
@@ -2349,8 +2350,7 @@ bool wxFrameManager::DoDrop(wxDockInfoArray& docks,
     {
         if (!part || !part->dock)
             return false;
-
-
+            
         // calculate the offset from where the dock begins
         // to the point where the user dropped the pane
         int dock_drop_offset = 0;
@@ -2365,15 +2365,39 @@ bool wxFrameManager::DoDrop(wxDockInfoArray& docks,
         // should float if being dragged over center pane windows
         if (!part->dock->fixed || part->dock->dock_direction == wxAUI_DOCK_CENTER)
         {
-            if ((m_flags & wxAUI_MGR_ALLOW_FLOATING) &&
+            if (m_last_rect.IsEmpty() || m_last_rect.Inside(pt.x, pt.y ))
+            {
+                m_skipping = true;
+            }
+            else
+            {
+                if ((m_flags & wxAUI_MGR_ALLOW_FLOATING) &&
                    (drop.IsFloatable() ||
                     (part->dock->dock_direction != wxAUI_DOCK_CENTER &&
                      part->dock->dock_direction != wxAUI_DOCK_NONE)))
-            {
-                drop.Float();
+                {
+                    drop.Float();
+                }
+                
+                m_skipping = false;
+                
+                return ProcessDockResult(target, drop);
             }
+            
+            drop.Position(pt.x - GetDockPixelOffset(drop) - offset.x);
 
             return ProcessDockResult(target, drop);
+        }
+        else
+        {
+            m_skipping = false;
+        }
+        
+        if (!m_skipping)
+        {
+            m_last_rect = part->dock->rect;
+            m_last_rect.Offset( -10, -10 );
+            m_last_rect.Inflate( 20, 20 );
         }
 
         drop.Dock().

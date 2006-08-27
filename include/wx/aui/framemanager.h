@@ -555,6 +555,8 @@ protected:
     wxDockUIPart* m_action_part; // ptr to the part the action happened to
     wxWindow* m_action_window;   // action frame or window (NULL if none)
     wxRect m_action_hintrect;    // hint rectangle for the action
+    bool m_skipping;
+    wxRect m_last_rect;
     wxDockUIPart* m_hover_button;// button uipart being hovered over
     wxRect m_last_hint;          // last hint rectangle
     wxPoint m_last_mouse_move;   // last mouse move position (see OnMotion)
