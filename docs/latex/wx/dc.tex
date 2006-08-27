@@ -18,6 +18,12 @@ there are also versions which accept single {\tt wxPoint} parameter instead of
 two {\tt wxCoord} ones or {\tt wxPoint} and {\tt wxSize} instead of four of
 them.
 
+\wxheading{Support for Transparency / Alpha Channel}
+
+On Mac OS X when using Core Graphics (wx\_MAC\_USE\_CORE\_GRAPHICS set to 1) 
+colors with alpha are supported, so instances  {\tt wxPen} or  {\tt wxBrush} that are built from  {\tt wxColour} use
+the color's alpha values when stroking or filling.
+
 \wxheading{Derived from}
 
 \helpref{wxObject}{wxobject}
