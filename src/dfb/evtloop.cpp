@@ -147,7 +147,9 @@ void wxEventLoop::HandleDFBEvent(const wxDFBEvent& event)
         case DFEC_NONE:
         case DFEC_INPUT:
         case DFEC_USER:
+#if wxCHECK_DFB_VERSION(0,9,23)
         case DFEC_UNIVERSAL:
+#endif
         {
             wxLogTrace(TRACE_EVENTS,
                        _T("ignoring event of unsupported class %i"),
