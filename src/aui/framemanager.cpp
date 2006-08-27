@@ -2396,8 +2396,7 @@ bool wxFrameManager::DoDrop(wxDockInfoArray& docks,
         if (!m_skipping)
         {
             m_last_rect = part->dock->rect;
-            m_last_rect.Offset( -10, -10 );
-            m_last_rect.Inflate( 20, 20 );
+            m_last_rect.Inflate( 15, 15 );
         }
 
         drop.Dock().
