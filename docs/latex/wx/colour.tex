@@ -58,9 +58,9 @@ wxLIGHT\_GREY}
 
 Default constructor.
 
-\func{}{wxColour}{\param{unsigned char}{ red}, \param{unsigned char}{ green}, \param{unsigned char}{ blue}}
+\func{}{wxColour}{\param{unsigned char}{ red}, \param{unsigned char}{ green}, \param{unsigned char}{ blue}, \param{unsigned char}{ alpha=wxALPHA\_OPAQUE}}
 
-Constructs a colour from red, green and blue values.
+Constructs a colour from red, green, blue and alpha values.
 
 \func{}{wxColour}{\param{const wxString\& }{colourNname}}
 
@@ -78,6 +78,8 @@ Copy constructor.
 
 \docparam{blue}{The blue value.}
 
+\docparam{alpha}{The alpha value. Alpha values range from 0 (wxALPHA\_TRANSPARENT) to 255 (wxALPHA\_OPAQUE).}
+
 \docparam{colourName}{The colour name.}
 
 \docparam{colour}{The colour to copy.}
@@ -93,6 +95,13 @@ Copy constructor.
 \end{twocollist}}
 }
 
+
+
+\membersection{wxColour::Alpha}\label{wxcolouralpha}
+
+\constfunc{unsigned char}{Alpha}{\void}
+
+Returns the alpha value, on platforms where alpha is not yet supported, this always returns wxALPHA\_OPAQUE.
 
 
 \membersection{wxColour::Blue}\label{wxcolourblue}
@@ -153,7 +162,7 @@ Returns the red intensity.
 
 \membersection{wxColour::Set}\label{wxcolourset}
 
-\func{void}{Set}{\param{unsigned char}{ red}, \param{unsigned char}{ green}, \param{unsigned char}{ blue}}
+\func{void}{Set}{\param{unsigned char}{ red}, \param{unsigned char}{ green}, \param{unsigned char}{ blue}, \param{unsigned char}{ alpha=wxALPHA\_OPAQUE}}
 
 \func{void}{Set}{\param{unsigned long}{ RGB}}
 
@@ -187,14 +196,14 @@ Assignment operator, using a colour name to be found in the colour database.
 
 \func{bool}{operator $==$}{\param{const wxColour\&}{ colour}}
 
-Tests the equality of two colours by comparing individual red, green blue colours.
+Tests the equality of two colours by comparing individual red, green, blue colours and alpha values.
 
 
 \membersection{wxColour::operator $!=$}\label{wxcolourinequality}
 
 \func{bool}{operator $!=$}{\param{const wxColour\&}{ colour}}
 
-Tests the inequality of two colours by comparing individual red, green blue colours.
+Tests the inequality of two colours by comparing individual red, green, blue colours and alpha values.
 
 \section{\class{wxColourData}}\label{wxcolourdata}
 
