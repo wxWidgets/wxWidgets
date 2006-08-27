@@ -3499,14 +3499,17 @@ void wxCSConv::CreateConvIfNeeded() const
     {
         wxCSConv *self = (wxCSConv *)this; // const_cast
 
-#if wxUSE_INTL
         // if we don't have neither the name nor the encoding, use the default
         // encoding for this system
         if ( !m_name && m_encoding == wxFONTENCODING_SYSTEM )
         {
+#if wxUSE_INTL
             self->m_name = wxStrdup(wxLocale::GetSystemEncodingName());
-        }
+#else
+            // fallback to some reasonable default:
+            self->m_encoding = wxFONTENCODING_ISO8859_1;
 #endif // wxUSE_INTL
+        }
 
         self->m_convReal = DoCreate();
         self->m_deferred = false;
