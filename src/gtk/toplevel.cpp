@@ -208,7 +208,6 @@ static gboolean gtk_frame_focus_callback( GtkWidget *widget, GtkDirectionType WX
         wxapp_install_idle_handler();
 
     // This disables GTK's tab traversal
-    g_signal_stop_emission_by_name (widget, "focus");
     return TRUE;
 }
 }

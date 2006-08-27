@@ -1122,10 +1122,6 @@ gtk_window_key_press_callback( GtkWidget *widget,
         }
     }
 
-
-
-
-
     // win is a control: tab can be propagated up
     if ( !ret &&
          ((gdk_event->keyval == GDK_Tab) || (gdk_event->keyval == GDK_ISO_Left_Tab)) &&
@@ -1150,13 +1146,7 @@ gtk_window_key_press_callback( GtkWidget *widget,
         ret = win->GetParent()->GetEventHandler()->ProcessEvent( new_event );
     }
 
-    if (ret)
-    {
-        g_signal_stop_emission_by_name (widget, "key_press_event");
-        return TRUE;
-    }
-
-    return FALSE;
+    return ret;
 }
 }
 
@@ -1257,11 +1247,7 @@ gtk_window_key_release_callback( GtkWidget *widget,
         return FALSE;
     }
 
-    if ( !win->GetEventHandler()->ProcessEvent( event ) )
-        return FALSE;
-
-    g_signal_stop_emission_by_name (widget, "key_release_event");
-    return TRUE;
+    return win->GetEventHandler()->ProcessEvent(event);
 }
 }
 
@@ -1613,7 +1599,6 @@ gtk_window_button_press_callback( GtkWidget *widget,
 
     if (win->GetEventHandler()->ProcessEvent( event ))
     {
-        g_signal_stop_emission_by_name (widget, "button_press_event");
         return TRUE;
     }
 
@@ -1684,13 +1669,7 @@ gtk_window_button_release_callback( GtkWidget *widget,
     event.SetEventObject( win );
     event.SetId( win->GetId() );
 
-    if (win->GetEventHandler()->ProcessEvent( event ))
-    {
-        g_signal_stop_emission_by_name (widget, "button_release_event");
-        return TRUE;
-    }
-
-    return FALSE;
+    return win->GetEventHandler()->ProcessEvent(event);
 }
 
 //-----------------------------------------------------------------------------
@@ -1756,13 +1735,7 @@ gtk_window_motion_notify_callback( GtkWidget *widget,
         }
     }
 
-    if (win->GetEventHandler()->ProcessEvent( event ))
-    {
-        g_signal_stop_emission_by_name (widget, "motion_notify_event");
-        return TRUE;
-    }
-
-    return FALSE;
+    return win->GetEventHandler()->ProcessEvent(event);
 }
 
 //-----------------------------------------------------------------------------
@@ -1977,13 +1950,7 @@ gtk_window_enter_callback( GtkWidget *widget,
         }
     }
 
-    if (win->GetEventHandler()->ProcessEvent( event ))
-    {
-       g_signal_stop_emission_by_name (widget, "enter_notify_event");
-       return TRUE;
-    }
-
-    return FALSE;
+    return win->GetEventHandler()->ProcessEvent(event);
 }
 
 //-----------------------------------------------------------------------------
@@ -2022,13 +1989,7 @@ gtk_window_leave_callback( GtkWidget *widget,
     event.m_x = x + pt.x;
     event.m_y = y + pt.y;
 
-    if (win->GetEventHandler()->ProcessEvent( event ))
-    {
-        g_signal_stop_emission_by_name (widget, "leave_notify_event");
-        return TRUE;
-    }
-
-    return FALSE;
+    return win->GetEventHandler()->ProcessEvent(event);
 }
 
 //-----------------------------------------------------------------------------

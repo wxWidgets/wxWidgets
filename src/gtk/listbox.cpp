@@ -240,13 +240,7 @@ gtk_listbox_key_press_callback( GtkWidget *widget,
         listbox->m_spacePressed = true;
     }
 
-    if (ret)
-    {
-        g_signal_stop_emission_by_name (widget, "key_press_event");
-        return TRUE;
-    }
-
-    return FALSE;
+    return ret;
 }
 }
 

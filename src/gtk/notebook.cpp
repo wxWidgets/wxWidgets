@@ -220,7 +220,6 @@ gtk_notebook_key_press_callback( GtkWidget   *widget,
         // m_selection = page;
         gtk_notebook_set_current_page( GTK_NOTEBOOK(widget), page );
 
-        g_signal_stop_emission_by_name (widget, "key_press_event");
         return TRUE;
     }
 
@@ -248,7 +247,6 @@ gtk_notebook_key_press_callback( GtkWidget   *widget,
              client->SetFocus();
         }
 
-        g_signal_stop_emission_by_name (widget, "key_press_event");
         return TRUE;
     }
 

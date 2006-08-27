@@ -76,7 +76,6 @@ static gint gtk_dialog_focus_callback( GtkWidget *widget, GtkDirectionType WXUNU
         wxapp_install_idle_handler();
 
     /* This disables GTK's tab traversal */
-    g_signal_stop_emission_by_name (widget, "focus");
     return TRUE;
 }
 }
