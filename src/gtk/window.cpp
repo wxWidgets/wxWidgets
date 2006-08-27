@@ -3562,7 +3562,14 @@ void wxWindowGTK::GTKUpdateCursor()
             const size_t count = windowsThis.size();
             for ( size_t n = 0; n < count; n++ )
             {
-                gdk_window_set_cursor(windowsThis[n], cursor.GetCursor());
+                GdkWindow *win = windowsThis[n];
+                if ( !win )
+                {
+                    wxFAIL_MSG(_T("NULL window returned by GTKGetWindow()?"));
+                    continue;
+                }
+
+                gdk_window_set_cursor(win, cursor.GetCursor());
             }
         }
     }
