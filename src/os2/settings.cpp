@@ -16,6 +16,7 @@
     #include <stdio.h>
     #include "wx/pen.h"
     #include "wx/brush.h"
+    #include "wx/fontutil.h"
     #include "wx/gdicmn.h"
     #include "wx/window.h"
     #include "wx/settings.h"
@@ -69,6 +70,7 @@ void wxSystemSettingsModule::OnExit()
     sm_optionNames.Clear();
     sm_optionValues.Clear();
     delete gs_fontDefault;
+    gs_fontDefault = NULL;
 }
 
 wxColour wxSystemSettingsNative::GetColour(
@@ -200,39 +202,50 @@ wxColour wxSystemSettingsNative::GetColour(
     return(vCol);
 } // end of wxSystemSettingsNative::GetColour
 
+// ----------------------------------------------------------------------------
+// fonts
+// ----------------------------------------------------------------------------
+
+wxFont wxCreateFontFromStockObject(int index)
+{
+    wxFont font;
+
+    FONTMETRICS metrics;
+    HPS hPS = ::WinGetScreenPS(HWND_DESKTOP);
+    if (::GpiQueryFontMetrics(hPS, sizeof(FONTMETRICS), &metrics))
+    {
+        wxNativeFontInfo info;
+        info.fm = metrics;
+        font.Create(info);
+    }
+    else // GetStockObject() failed
+    {
+        wxFAIL_MSG( _T("stock font not found") );
+    }
+
+    return font;
+}
+
 wxFont wxSystemSettingsNative::GetFont(
   wxSystemFont                      index
 )
 {
-    // TODO
-    switch (index)
+    const bool isDefaultRequested = index == wxSYS_DEFAULT_GUI_FONT;
+    if ( isDefaultRequested )
     {
-        case wxSYS_DEVICE_DEFAULT_FONT:
-        {
-            break;
-        }
-        case wxSYS_DEFAULT_PALETTE:
-        {
-            break;
-        }
-        case wxSYS_SYSTEM_FIXED_FONT:
-        {
-            break;
-        }
-        case wxSYS_SYSTEM_FONT:
-        {
-            break;
-        }
-        default:
-        case wxSYS_DEFAULT_GUI_FONT:
-        {
-            break;
-        }
+        if ( gs_fontDefault )
+            return *gs_fontDefault;
     }
-    if(wxSWISS_FONT)
-         return *wxSWISS_FONT;
 
-    return wxNullFont;
+    wxFont font = wxCreateFontFromStockObject(index);
+
+    if ( isDefaultRequested )
+    {
+        // if we got here it means we hadn't cached it yet - do now
+        gs_fontDefault = new wxFont(font);
+    }
+
+    return font;
 }
 
 // Get a system metric, e.g. scrollbar size
