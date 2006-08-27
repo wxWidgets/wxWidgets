@@ -161,6 +161,7 @@ is returned if the pixel is invalid (on X, unallocated).", "");
 
 
     %extend {
+        KeepGIL(Get);
         DocAStr(Get,
                 "Get() -> (r, g, b)",
                 "Returns the RGB intensity values as a tuple.", "");
@@ -184,6 +185,7 @@ is returned if the pixel is invalid (on X, unallocated).", "");
             return rv;
         }
 
+        KeepGIL(GetRGB);
         DocStr(GetRGB,
                "Return the colour as a packed RGB value", "");
         unsigned long GetRGB() {

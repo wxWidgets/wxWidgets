@@ -327,8 +327,10 @@ the ``type`` parameter.", "");
 // automatically do it for wxMSW here.
 #ifdef __WXMSW__
 #define wxPy_premultiply(p, a)   ((p) * (a) / 256)
+#define wxPy_unpremultiply(p, a) ((a) ? ((p) * 256 / (a)) : (p))    
 #else
 #define wxPy_premultiply(p, a)   (p)
+#define wxPy_unpremultiply(p, a) (p)    
 #endif
 %}
 
@@ -351,16 +353,16 @@ the ``type`` parameter.", "");
         }
 
         wxBitmap* bmp = new wxBitmap(width, height, 32);
-        wxAlphaPixelData pixels(*bmp, wxPoint(0,0), wxSize(width,height));
-        if (! pixels) {
+        wxAlphaPixelData pixData(*bmp, wxPoint(0,0), wxSize(width,height));
+        if (! pixData) {
             // raise an exception...
             wxPyErr_SetString(PyExc_RuntimeError,
                               "Failed to gain raw access to bitmap data.");
             return NULL;
         }
                 
-        pixels.UseAlpha();
-        wxAlphaPixelData::Iterator p(pixels);
+        pixData.UseAlpha();
+        wxAlphaPixelData::Iterator p(pixData);
         for (int y=0; y<height; y++) {
             wxAlphaPixelData::Iterator rowStart = p;
             for (int x=0; x<width; x++) {
@@ -372,7 +374,7 @@ the ``type`` parameter.", "");
                 ++p; 
             }
             p = rowStart;
-            p.OffsetY(pixels, 1);
+            p.OffsetY(pixData, 1);
         }
         return bmp;
     }        
@@ -385,15 +387,15 @@ the ``type`` parameter.", "");
         }
 
         wxBitmap* bmp = new wxBitmap(width, height, 24);
-        wxNativePixelData pixels(*bmp, wxPoint(0,0), wxSize(width,height));
-        if (! pixels) {
+        wxNativePixelData pixData(*bmp, wxPoint(0,0), wxSize(width,height));
+        if (! pixData) {
             // raise an exception...
             wxPyErr_SetString(PyExc_RuntimeError,
                               "Failed to gain raw access to bitmap data.");
             return NULL;
         }
                 
-        wxNativePixelData::Iterator p(pixels);
+        wxNativePixelData::Iterator p(pixData);
         for (int y=0; y<height; y++) {
             wxNativePixelData::Iterator rowStart = p;
             for (int x=0; x<width; x++) {
@@ -403,7 +405,7 @@ the ``type`` parameter.", "");
                 ++p; 
             }
             p = rowStart;
-            p.OffsetY(pixels, 1);
+            p.OffsetY(pixData, 1);
         }
         return bmp;
     }
@@ -455,16 +457,16 @@ def BitmapFromBuffer(width, height, dataBuffer, alphaBuffer=None):
         }
 
         wxBitmap* bmp = new wxBitmap(width, height, 32);
-        wxAlphaPixelData pixels(*bmp, wxPoint(0,0), wxSize(width,height));
-        if (! pixels) {
+        wxAlphaPixelData pixData(*bmp, wxPoint(0,0), wxSize(width,height));
+        if (! pixData) {
             // raise an exception...
             wxPyErr_SetString(PyExc_RuntimeError,
                               "Failed to gain raw access to bitmap data.");
             return NULL;
         }
                
-        pixels.UseAlpha();
-        wxAlphaPixelData::Iterator p(pixels);
+        pixData.UseAlpha();
+        wxAlphaPixelData::Iterator p(pixData);
         for (int y=0; y<height; y++) {
             wxAlphaPixelData::Iterator rowStart = p;
             for (int x=0; x<width; x++) {
@@ -476,7 +478,7 @@ def BitmapFromBuffer(width, height, dataBuffer, alphaBuffer=None):
                 ++p; 
             }
             p = rowStart;
-            p.OffsetY(pixels, 1);
+            p.OffsetY(pixData, 1);
         }
         return bmp;
     }        
@@ -555,6 +557,7 @@ public:
 };
 
 
+
 class PixelData##_Iterator
 {
 public:
@@ -579,22 +582,26 @@ public:
     void OffsetY(const PixelData& data, int y);
     void MoveTo(const PixelData& data, int x, int y);
 
-    %extend {
-        byte _get_Red()   { return self->Red(); }
-        byte _get_Green() { return self->Green(); }
-        byte _get_Blue()  { return self->Blue(); }
+// NOTE: For now I'm not wrapping the Red, Green, Blue and Alpha functions
+// because I can't hide the premultiplying needed on wxMSW if only the
+// individual components are wrapped.  Instead I've added the Set and Get
+// functions and put the puemultiplying in there.
+    
+//     %extend {
+//         byte _get_Red()   { return self->Red(); }
+//         byte _get_Green() { return self->Green(); }
+//         byte _get_Blue()  { return self->Blue(); }
 
-        void _set_Red(byte val)   { self->Red() = val; }
-        void _set_Green(byte val) { self->Green() = val; }
-        void _set_Blue(byte val)  { self->Blue() = val; }
-    }
+//         void _set_Red(byte val)   { self->Red() = val; }
+//         void _set_Green(byte val) { self->Green() = val; }
+//         void _set_Blue(byte val)  { self->Blue() = val; }
+//     }
 
-    %pythoncode {
-        Red   = property(_get_Red,   _set_Red)
-        Green = property(_get_Green, _set_Green)
-        Blue  = property(_get_Blue,  _set_Blue)
-    }
-
+//     %pythoncode {
+//         Red   = property(_get_Red,   _set_Red)
+//         Green = property(_get_Green, _set_Green)
+//         Blue  = property(_get_Blue,  _set_Blue)
+//     }
 };
 %enddef
 
@@ -623,26 +630,31 @@ PIXELDATA(wxAlphaPixelData)
 }
 
 %extend wxAlphaPixelData_Iterator {
-    byte _get_Alpha()         { return self->Alpha(); }
-    void _set_Alpha(byte val) { self->Alpha() = val; }
+//     byte _get_Alpha()         { return self->Alpha(); }
+//     void _set_Alpha(byte val) { self->Alpha() = val; }
     
-    %pythoncode {
-        Alpha = property(_get_Alpha, _set_Alpha)
-    }
+//     %pythoncode {
+//         Alpha = property(_get_Alpha, _set_Alpha)
+//     }
 
     void Set(byte red, byte green, byte blue, byte alpha) {
-        self->Red()   = red;
-        self->Green() = green;
-        self->Blue()  = blue;
+        self->Red()   = wxPy_premultiply(red,   alpha);
+        self->Green() = wxPy_premultiply(green, alpha);
+        self->Blue()  = wxPy_premultiply(blue,  alpha);
         self->Alpha() = alpha;
     }
     
     PyObject* Get() {
         PyObject* rv = PyTuple_New(4);
-        PyTuple_SetItem(rv, 0, PyInt_FromLong(self->Red()));
-        PyTuple_SetItem(rv, 1, PyInt_FromLong(self->Green()));
-        PyTuple_SetItem(rv, 2, PyInt_FromLong(self->Blue()));
-        PyTuple_SetItem(rv, 3, PyInt_FromLong(self->Alpha()));
+        int red   = self->Red();
+        int green = self->Green();
+        int blue  = self->Blue();
+        int alpha = self->Alpha();
+            
+        PyTuple_SetItem(rv, 0, PyInt_FromLong( wxPy_unpremultiply(red,   alpha) ));
+        PyTuple_SetItem(rv, 1, PyInt_FromLong( wxPy_unpremultiply(green, alpha) ));
+        PyTuple_SetItem(rv, 2, PyInt_FromLong( wxPy_unpremultiply(blue,  alpha) ));
+        PyTuple_SetItem(rv, 3, PyInt_FromLong( alpha ));
         return rv;            
     }
 }
