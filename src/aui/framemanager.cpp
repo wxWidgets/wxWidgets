@@ -2337,7 +2337,12 @@ bool wxFrameManager::DoDrop(wxDockInfoArray& docks,
     else if (pt.y >= cli_size.y - layer_insert_offset &&
              pt.y < cli_size.y - layer_insert_offset + auiLayerInsertPixels)
     {
+        int new_layer = wxMax( wxMax( GetMaxLayer(docks, wxAUI_DOCK_BOTTOM),
+                                      GetMaxLayer(docks, wxAUI_DOCK_LEFT)),
+                                      GetMaxLayer(docks, wxAUI_DOCK_RIGHT)) + 1;
+    
         drop.Dock().Bottom().
+             Layer(new_layer).
              Row(0).
              Position(pt.x - GetDockPixelOffset(drop) - offset.x);
         return ProcessDockResult(target, drop);
@@ -2410,11 +2415,22 @@ bool wxFrameManager::DoDrop(wxDockInfoArray& docks,
             ((pt.x < part->dock->rect.x + 2) && part->dock->IsVertical())
             ) && part->dock->panes.GetCount() > 1)
         {
-            int row = drop.dock_row;
-            DoInsertDockRow(panes, part->dock->dock_direction,
-                            part->dock->dock_layer,
-                            part->dock->dock_row);
-            drop.dock_row = row;
+            if ((part->dock->dock_direction == wxAUI_DOCK_TOP) ||
+                (part->dock->dock_direction == wxAUI_DOCK_LEFT))
+            {
+                int row = drop.dock_row;
+                DoInsertDockRow(panes, part->dock->dock_direction,
+                                part->dock->dock_layer,
+                                part->dock->dock_row);
+                drop.dock_row = row;
+            }
+            else
+            {
+                DoInsertDockRow(panes, part->dock->dock_direction,
+                                part->dock->dock_layer,
+                                part->dock->dock_row+1);
+                drop.dock_row = part->dock->dock_row+1;
+            }
         }
 
         if ((
@@ -2422,10 +2438,22 @@ bool wxFrameManager::DoDrop(wxDockInfoArray& docks,
             ((pt.x > part->dock->rect.x + part->dock->rect.width - 2 ) && part->dock->IsVertical())
             ) && part->dock->panes.GetCount() > 1)
         {
-            DoInsertDockRow(panes, part->dock->dock_direction,
-                            part->dock->dock_layer,
-                            part->dock->dock_row+1);
-            drop.dock_row = part->dock->dock_row+1;
+            if ((part->dock->dock_direction == wxAUI_DOCK_TOP) ||
+                (part->dock->dock_direction == wxAUI_DOCK_LEFT))
+            {
+                DoInsertDockRow(panes, part->dock->dock_direction,
+                                part->dock->dock_layer,
+                                part->dock->dock_row+1);
+                drop.dock_row = part->dock->dock_row+1;
+            }
+            else
+            {
+                int row = drop.dock_row;
+                DoInsertDockRow(panes, part->dock->dock_direction,
+                                part->dock->dock_layer,
+                                part->dock->dock_row);
+                drop.dock_row = row;
+            }
         }
 
         return ProcessDockResult(target, drop);
