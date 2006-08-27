@@ -77,7 +77,7 @@ class TestPanel(wx.Panel):
         # Make a bitmap using an array of RGB bytes plus a separate
         # buffer for the alpha channel
         bpp = 3  # bytes per pixel
-        bytes = array.array('B', [1,2,3] * width*height)#*bpp)
+        bytes = array.array('B', [0] * width*height*bpp)
 
         def offset(x, y):
             # return the offset into the bytes array for the start of

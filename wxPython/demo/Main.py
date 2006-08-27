@@ -50,7 +50,6 @@ _treeList = [
         'AnalogClock',
         'AUI_DockingWindowMgr',
         'AUI_Notebook',
-        'BitmapFromBuffer',
         'CheckListCtrlMixin',
         'ComboTreeBox',
         'Pickers',
@@ -58,6 +57,8 @@ _treeList = [
         'RichTextCtrl',
         'Treebook',
         'Toolbook',
+        'BitmapFromBuffer',
+        'RawBitmapAccess',
         ]),
 
     # managed windows == things with a (optional) caption you can close
@@ -239,6 +240,7 @@ _treeList = [
         'ImageAlpha',
         'ImageFromStream',
         'Mask',
+        'RawBitmapAccess',
         'Throbber',
         ]),
 
