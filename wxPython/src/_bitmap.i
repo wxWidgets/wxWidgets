@@ -531,12 +531,14 @@ public:
 };
 
 
+// Both wxNativePixelData and wxAlphaPixelData have the same interface, so
+// make a macro to declare them both.
 
 %define PIXELDATA(PixelData)
 %{
-    typedef PixelData##::Iterator PixelData##_Iterator;
+    typedef PixelData##::Iterator PixelData##_Accessor;
 %}
-class PixelData##_Iterator;
+class PixelData##_Accessor;
 class PixelData : public wxPixelDataBase
 {
 public:
@@ -548,32 +550,82 @@ public:
 
     ~PixelData();
 
+    PixelData##_Accessor GetPixels() const;
+    void UseAlpha();
+
     %extend {
         bool __nonzero__() { return self->operator bool(); }
     }
 
-    PixelData##_Iterator GetPixels() const;
-    void UseAlpha();
+    %pythoncode {
+    def __iter__(self):
+        """Create and return an iterator object for this pixel data object."""
+        return self.PixelIterator(self)
+
+    class PixelIterator(object):
+        """
+        Sequential iterator which returns pixel accessor objects starting at the
+        the top-left corner, and going row-by-row until the bottom-right
+        corner is reached.
+        """
+
+        class PixelAccessor(object):
+            """
+            This class is what is returned by the iterator and allows the pixel
+            to be Get or Set.
+            """
+            def __init__(self, data, pixels, x, y):
+                self.data = data
+                self.pixels = pixels
+                self.x = x
+                self.y = y
+            def Set(self, *args, **kw):
+                self.pixels.MoveTo(self.data, self.x, self.y)
+                return self.pixels.Set(*args, **kw)
+            def Get(self):
+                self.pixels.MoveTo(self.data, self.x, self.y)
+                return self.pixels.Get()
+
+        def __init__(self, pixelData):
+            self.x = self.y = 0
+            self.w = pixelData.GetWidth()
+            self.h = pixelData.GetHeight()
+            self.data = pixelData
+            self.pixels = pixelData.GetPixels()
+
+        def __iter__(self):
+            return self
+
+        def next(self):
+            if self.y >= self.h:
+                raise StopIteration
+            p = self.PixelAccessor(self.data, self.pixels, self.x, self.y)
+            self.x += 1
+            if self.x >= self.w:
+                self.x = 0
+                self.y += 1
+            return p
+    }
 };
 
 
 
-class PixelData##_Iterator
+class PixelData##_Accessor
 {
 public:
-    %nokwargs PixelData##_Iterator;
+    %nokwargs PixelData##_Accessor;
     
-    PixelData##_Iterator(PixelData& data);
-    PixelData##_Iterator(wxBitmap& bmp, PixelData& data);
-    PixelData##_Iterator();
+    PixelData##_Accessor(PixelData& data);
+    PixelData##_Accessor(wxBitmap& bmp, PixelData& data);
+    PixelData##_Accessor();
 
-    ~PixelData##_Iterator();
+    ~PixelData##_Accessor();
 
     void Reset(const PixelData& data);
     bool IsOk() const;
 
     %extend {
-        // PixelData##_Iterator& nextPixel() { return ++(*self); }
+        // PixelData##_Accessor& nextPixel() { return ++(*self); }
         void nextPixel() { ++(*self); }
     }
 
@@ -606,14 +658,18 @@ public:
 %enddef
 
 
+%pythonAppend wxAlphaPixelData::wxAlphaPixelData "self.UseAlpha()"
+
+// Make the classes
 PIXELDATA(wxNativePixelData)
 PIXELDATA(wxAlphaPixelData)    
 
 
 // Add in a few things that are different between the wxNativePixelData and
-// wxAlphaPixelData iterators and so are not included in our macro...
+// wxAlphaPixelData and the iterator classes and so are not included in our
+// macro...
 
-%extend wxNativePixelData_Iterator {
+%extend wxNativePixelData_Accessor {
     void Set(byte red, byte green, byte blue) {
         self->Red()   = red;
         self->Green() = green;
@@ -629,7 +685,7 @@ PIXELDATA(wxAlphaPixelData)
     }    
 }
 
-%extend wxAlphaPixelData_Iterator {
+%extend wxAlphaPixelData_Accessor {
 //     byte _get_Alpha()         { return self->Alpha(); }
 //     void _set_Alpha(byte val) { self->Alpha() = val; }
     
@@ -658,6 +714,7 @@ PIXELDATA(wxAlphaPixelData)
         return rv;            
     }
 }
+
 
 //---------------------------------------------------------------------------
 
