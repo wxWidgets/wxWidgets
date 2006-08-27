@@ -15,6 +15,7 @@
 #include "wx/log.h"
 
 #include <directfb.h>
+#include <directfb_version.h>
 
 #include "wx/dfb/ifacehelpers.h"
 
@@ -152,5 +153,17 @@ WXDFB_DEFINE_EVENT_WRAPPER(DFBWindowEvent)
 #define wxDFB_EVENT_TIMESTAMP(event) \
         ((event).timestamp.tv_sec * 1000 + (event).timestamp.tv_usec / 1000)
 
+/**
+    Check if DirectFB library version is at least @a major.@a minor.@a release.
+
+    @sa wxCHECK_VERSION
+ */
+#define wxCHECK_DFB_VERSION(major,minor,release) \
+    (DIRECTFB_MAJOR_VERSION > (major) || \
+    (DIRECTFB_MAJOR_VERSION == (major) && \
+        DIRECTFB_MINOR_VERSION > (minor)) || \
+    (DIRECTFB_MAJOR_VERSION == (major) && \
+        DIRECTFB_MINOR_VERSION == (minor) && \
+            DIRECTFB_MICRO_VERSION >= (release)))
 
 #endif // _WX_DFB_PRIVATE_H_
