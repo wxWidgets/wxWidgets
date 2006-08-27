@@ -4266,7 +4266,6 @@ COND_TOOLKIT_PM___GUI_SRC_OBJECTS =  \
 	monodll_frame.o \
 	monodll_gauge.o \
 	monodll_gdiimage.o \
-	monodll_gdiobj.o \
 	monodll_gsockpm.o \
 	monodll_helpwin.o \
 	monodll_icon.o \
@@ -5967,7 +5966,6 @@ COND_TOOLKIT_PM___GUI_SRC_OBJECTS_1 =  \
 	monolib_frame.o \
 	monolib_gauge.o \
 	monolib_gdiimage.o \
-	monolib_gdiobj.o \
 	monolib_gsockpm.o \
 	monolib_helpwin.o \
 	monolib_icon.o \
@@ -7886,7 +7884,6 @@ COND_TOOLKIT_PM___GUI_SRC_OBJECTS_2 =  \
 	coredll_frame.o \
 	coredll_gauge.o \
 	coredll_gdiimage.o \
-	coredll_gdiobj.o \
 	coredll_gsockpm.o \
 	coredll_helpwin.o \
 	coredll_icon.o \
@@ -9283,7 +9280,6 @@ COND_TOOLKIT_PM___GUI_SRC_OBJECTS_3 =  \
 	corelib_frame.o \
 	corelib_gauge.o \
 	corelib_gdiimage.o \
-	corelib_gdiobj.o \
 	corelib_gsockpm.o \
 	corelib_helpwin.o \
 	corelib_icon.o \
