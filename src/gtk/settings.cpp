@@ -533,7 +533,7 @@ int wxSystemSettingsNative::GetMetric( wxSystemMetric index, wxWindow* win )
                              "gtk-dnd-drag-threshold", &drag_threshold, NULL);
             }
 
-            return drag_threshold * 2;
+            return drag_threshold;
 
         // MBN: ditto for icons
         case wxSYS_ICON_X:     return 32;
