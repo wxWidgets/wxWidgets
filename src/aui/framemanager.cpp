@@ -2312,11 +2312,7 @@ bool wxFrameManager::DoDrop(wxDockInfoArray& docks,
     if (pt.x < layer_insert_offset &&
         pt.x > layer_insert_offset-auiLayerInsertPixels)
     {
-        int new_layer = wxMax(wxMax(GetMaxLayer(docks, wxAUI_DOCK_LEFT),
-                                    GetMaxLayer(docks, wxAUI_DOCK_BOTTOM)),
-                                    GetMaxLayer(docks, wxAUI_DOCK_TOP)) + 1;
         drop.Dock().Left().
-             Layer(new_layer).
              Row(0).
              Position(pt.y - GetDockPixelOffset(drop) - offset.y);
         return ProcessDockResult(target, drop);
@@ -2324,11 +2320,7 @@ bool wxFrameManager::DoDrop(wxDockInfoArray& docks,
     else if (pt.y < layer_insert_offset &&
              pt.y > layer_insert_offset-auiLayerInsertPixels)
     {
-        int new_layer = wxMax(wxMax(GetMaxLayer(docks, wxAUI_DOCK_TOP),
-                                    GetMaxLayer(docks, wxAUI_DOCK_LEFT)),
-                                    GetMaxLayer(docks, wxAUI_DOCK_RIGHT)) + 1;
         drop.Dock().Top().
-             Layer(new_layer).
              Row(0).
              Position(pt.x - GetDockPixelOffset(drop) - offset.x);
         return ProcessDockResult(target, drop);
@@ -2336,11 +2328,7 @@ bool wxFrameManager::DoDrop(wxDockInfoArray& docks,
     else if (pt.x >= cli_size.x - layer_insert_offset &&
              pt.x < cli_size.x - layer_insert_offset + auiLayerInsertPixels)
     {
-        int new_layer = wxMax(wxMax(GetMaxLayer(docks, wxAUI_DOCK_RIGHT),
-                                    GetMaxLayer(docks, wxAUI_DOCK_TOP)),
-                                    GetMaxLayer(docks, wxAUI_DOCK_BOTTOM)) + 1;
         drop.Dock().Right().
-             Layer(new_layer).
              Row(0).
              Position(pt.y - GetDockPixelOffset(drop) - offset.y);
         return ProcessDockResult(target, drop);
@@ -2348,16 +2336,11 @@ bool wxFrameManager::DoDrop(wxDockInfoArray& docks,
     else if (pt.y >= cli_size.y - layer_insert_offset &&
              pt.y < cli_size.y - layer_insert_offset + auiLayerInsertPixels)
     {
-        int new_layer = wxMax(wxMax(GetMaxLayer(docks, wxAUI_DOCK_BOTTOM),
-                                    GetMaxLayer(docks, wxAUI_DOCK_LEFT)),
-                                    GetMaxLayer(docks, wxAUI_DOCK_RIGHT)) + 1;
         drop.Dock().Bottom().
-             Layer(new_layer).
              Row(0).
              Position(pt.x - GetDockPixelOffset(drop) - offset.x);
         return ProcessDockResult(target, drop);
     }
-
 
     wxDockUIPart* part = HitTest(pt.x, pt.y);
 
