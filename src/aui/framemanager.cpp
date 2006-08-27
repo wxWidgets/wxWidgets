@@ -2411,8 +2411,8 @@ bool wxFrameManager::DoDrop(wxDockInfoArray& docks,
              Position(dock_drop_offset);
 
         if ((
-            ((pt.y < part->dock->rect.y + 2) && part->dock->IsHorizontal()) ||
-            ((pt.x < part->dock->rect.x + 2) && part->dock->IsVertical())
+            ((pt.y < part->dock->rect.y + 1) && part->dock->IsHorizontal()) ||
+            ((pt.x < part->dock->rect.x + 1) && part->dock->IsVertical())
             ) && part->dock->panes.GetCount() > 1)
         {
             if ((part->dock->dock_direction == wxAUI_DOCK_TOP) ||
