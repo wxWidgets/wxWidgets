@@ -815,6 +815,10 @@ SOURCE=.\common\socket.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\common\sockettable.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\common\sstream.cpp
 # End Source File
 # Begin Source File

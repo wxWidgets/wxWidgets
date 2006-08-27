@@ -3770,7 +3770,6 @@ COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS =  \
 	monodll_evtloop.o \
 	monodll_font.o \
 	monodll_gdiobj.o \
-	monodll_gsockx11.o \
 	monodll_icon.o \
 	monodll_minifram.o \
 	monodll_nanox.o \
@@ -3783,7 +3782,8 @@ COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS =  \
 	monodll_toplevel.o \
 	monodll_utils.o \
 	monodll_utilsx.o \
-	monodll_window.o
+	monodll_window.o \
+	monodll_gsockbase.o
 @COND_TOOLKIT_X11@__LOWLEVEL_SRC_OBJECTS = $(COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS)
 COND_TOOLKIT_COCOA___GUI_SRC_OBJECTS =  \
 	monodll_NSBox.o \
@@ -4569,7 +4569,6 @@ COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_1 =  \
 	monodll_evtloop.o \
 	monodll_font.o \
 	monodll_gdiobj.o \
-	monodll_gsockx11.o \
 	monodll_icon.o \
 	monodll_minifram.o \
 	monodll_nanox.o \
@@ -4582,7 +4581,8 @@ COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_1 =  \
 	monodll_toplevel.o \
 	monodll_utils.o \
 	monodll_utilsx.o \
-	monodll_window.o
+	monodll_window.o \
+	monodll_gsockbase.o
 @COND_TOOLKIT_X11@__LOWLEVEL_SRC_OBJECTS_1 = $(COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_1)
 COND_WXUNIV_0___ADVANCED_SRC_OBJECTS =  \
 	monodll_datavcmn.o \
@@ -5430,7 +5430,6 @@ COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_2 =  \
 	monolib_evtloop.o \
 	monolib_font.o \
 	monolib_gdiobj.o \
-	monolib_gsockx11.o \
 	monolib_icon.o \
 	monolib_minifram.o \
 	monolib_nanox.o \
@@ -5443,7 +5442,8 @@ COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_2 =  \
 	monolib_toplevel.o \
 	monolib_utils.o \
 	monolib_utilsx.o \
-	monolib_window.o
+	monolib_window.o \
+	monolib_gsockbase.o
 @COND_TOOLKIT_X11@__LOWLEVEL_SRC_OBJECTS_2 = $(COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_2)
 COND_TOOLKIT_COCOA___GUI_SRC_OBJECTS_1 =  \
 	monolib_NSBox.o \
@@ -6230,7 +6230,6 @@ COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_3 =  \
 	monolib_evtloop.o \
 	monolib_font.o \
 	monolib_gdiobj.o \
-	monolib_gsockx11.o \
 	monolib_icon.o \
 	monolib_minifram.o \
 	monolib_nanox.o \
@@ -6243,7 +6242,8 @@ COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_3 =  \
 	monolib_toplevel.o \
 	monolib_utils.o \
 	monolib_utilsx.o \
-	monolib_window.o
+	monolib_window.o \
+	monolib_gsockbase.o
 @COND_TOOLKIT_X11@__LOWLEVEL_SRC_OBJECTS_3 = $(COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_3)
 COND_WXUNIV_0___ADVANCED_SRC_OBJECTS_1 =  \
 	monolib_datavcmn.o \
@@ -7309,7 +7309,6 @@ COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_4 =  \
 	coredll_evtloop.o \
 	coredll_font.o \
 	coredll_gdiobj.o \
-	coredll_gsockx11.o \
 	coredll_icon.o \
 	coredll_minifram.o \
 	coredll_nanox.o \
@@ -7322,7 +7321,8 @@ COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_4 =  \
 	coredll_toplevel.o \
 	coredll_utils.o \
 	coredll_utilsx.o \
-	coredll_window.o
+	coredll_window.o \
+	coredll_gsockbase.o
 @COND_TOOLKIT_X11@__LOWLEVEL_SRC_OBJECTS_4 = $(COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_4)
 COND_TOOLKIT_COCOA___GUI_SRC_OBJECTS_2 =  \
 	coredll_NSBox.o \
@@ -8109,7 +8109,6 @@ COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_5 =  \
 	coredll_evtloop.o \
 	coredll_font.o \
 	coredll_gdiobj.o \
-	coredll_gsockx11.o \
 	coredll_icon.o \
 	coredll_minifram.o \
 	coredll_nanox.o \
@@ -8122,7 +8121,8 @@ COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_5 =  \
 	coredll_toplevel.o \
 	coredll_utils.o \
 	coredll_utilsx.o \
-	coredll_window.o
+	coredll_window.o \
+	coredll_gsockbase.o
 @COND_TOOLKIT_X11@__LOWLEVEL_SRC_OBJECTS_5 = $(COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_5)
 COND_MONOLITHIC_0_SHARED_0_USE_GUI_1___corelib___depname = \
 	$(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core-$(WX_RELEASE)$(HOST_SUFFIX)$(LIBEXT)
@@ -8668,7 +8668,6 @@ COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_6 =  \
 	corelib_evtloop.o \
 	corelib_font.o \
 	corelib_gdiobj.o \
-	corelib_gsockx11.o \
 	corelib_icon.o \
 	corelib_minifram.o \
 	corelib_nanox.o \
@@ -8681,7 +8680,8 @@ COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_6 =  \
 	corelib_toplevel.o \
 	corelib_utils.o \
 	corelib_utilsx.o \
-	corelib_window.o
+	corelib_window.o \
+	corelib_gsockbase.o
 @COND_TOOLKIT_X11@__LOWLEVEL_SRC_OBJECTS_6 = $(COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_6)
 COND_TOOLKIT_COCOA___GUI_SRC_OBJECTS_3 =  \
 	corelib_NSBox.o \
@@ -9468,7 +9468,6 @@ COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_7 =  \
 	corelib_evtloop.o \
 	corelib_font.o \
 	corelib_gdiobj.o \
-	corelib_gsockx11.o \
 	corelib_icon.o \
 	corelib_minifram.o \
 	corelib_nanox.o \
@@ -9481,7 +9480,8 @@ COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_7 =  \
 	corelib_toplevel.o \
 	corelib_utils.o \
 	corelib_utilsx.o \
-	corelib_window.o
+	corelib_window.o \
+	corelib_gsockbase.o
 @COND_TOOLKIT_X11@__LOWLEVEL_SRC_OBJECTS_7 = $(COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_7)
 COND_MONOLITHIC_0_SHARED_1_USE_GUI_1___advdll___depname = \
 	$(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_adv$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3)
@@ -13688,14 +13688,14 @@ monodll_gsocket.o: $(srcdir)/src/common/gsocket.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_COCOA_USE_GUI_1@monodll_utilsexc_cf.o: $(srcdir)/src/mac/corefoundation/utilsexc_cf.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_COCOA_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/mac/corefoundation/utilsexc_cf.cpp
 
-@COND_TOOLKIT_X11_USE_GUI_1@monodll_gsockx11.o: $(srcdir)/src/x11/gsockx11.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/x11/gsockx11.cpp
-
 @COND_TOOLKIT_X11_USE_GUI_1@monodll_nanox.o: $(srcdir)/src/x11/nanox.c $(MONODLL_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CCC) -c -o $@ $(MONODLL_CFLAGS) $(srcdir)/src/x11/nanox.c
 
 @COND_TOOLKIT_X11_USE_GUI_1@monodll_reparent.o: $(srcdir)/src/x11/reparent.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/x11/reparent.cpp
+
+@COND_TOOLKIT_X11_USE_GUI_1@monodll_gsockbase.o: $(srcdir)/src/common/gsockbase.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/gsockbase.cpp
 
 @COND_TOOLKIT_MGL_USE_GUI_1@monodll_dirmgl.o: $(srcdir)/src/mgl/dirmgl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/mgl/dirmgl.cpp
@@ -17561,14 +17561,14 @@ monolib_gsocket.o: $(srcdir)/src/common/gsocket.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_COCOA_USE_GUI_1@monolib_utilsexc_cf.o: $(srcdir)/src/mac/corefoundation/utilsexc_cf.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_COCOA_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/mac/corefoundation/utilsexc_cf.cpp
 
-@COND_TOOLKIT_X11_USE_GUI_1@monolib_gsockx11.o: $(srcdir)/src/x11/gsockx11.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/x11/gsockx11.cpp
-
 @COND_TOOLKIT_X11_USE_GUI_1@monolib_nanox.o: $(srcdir)/src/x11/nanox.c $(MONOLIB_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CCC) -c -o $@ $(MONOLIB_CFLAGS) $(srcdir)/src/x11/nanox.c
 
 @COND_TOOLKIT_X11_USE_GUI_1@monolib_reparent.o: $(srcdir)/src/x11/reparent.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/x11/reparent.cpp
+
+@COND_TOOLKIT_X11_USE_GUI_1@monolib_gsockbase.o: $(srcdir)/src/common/gsockbase.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/gsockbase.cpp
 
 @COND_TOOLKIT_MGL_USE_GUI_1@monolib_dirmgl.o: $(srcdir)/src/mgl/dirmgl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/mgl/dirmgl.cpp
@@ -21815,14 +21815,14 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_COCOA_USE_GUI_1@coredll_utilsexc_cf.o: $(srcdir)/src/mac/corefoundation/utilsexc_cf.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_COCOA_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/mac/corefoundation/utilsexc_cf.cpp
 
-@COND_TOOLKIT_X11_USE_GUI_1@coredll_gsockx11.o: $(srcdir)/src/x11/gsockx11.cpp $(COREDLL_ODEP)
-@COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/x11/gsockx11.cpp
-
 @COND_TOOLKIT_X11_USE_GUI_1@coredll_nanox.o: $(srcdir)/src/x11/nanox.c $(COREDLL_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CCC) -c -o $@ $(COREDLL_CFLAGS) $(srcdir)/src/x11/nanox.c
 
 @COND_TOOLKIT_X11_USE_GUI_1@coredll_reparent.o: $(srcdir)/src/x11/reparent.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/x11/reparent.cpp
+
+@COND_TOOLKIT_X11_USE_GUI_1@coredll_gsockbase.o: $(srcdir)/src/common/gsockbase.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/gsockbase.cpp
 
 @COND_TOOLKIT_MGL_USE_GUI_1@coredll_dirmgl.o: $(srcdir)/src/mgl/dirmgl.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/mgl/dirmgl.cpp
@@ -24635,14 +24635,14 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_COCOA_USE_GUI_1@corelib_utilsexc_cf.o: $(srcdir)/src/mac/corefoundation/utilsexc_cf.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_COCOA_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/mac/corefoundation/utilsexc_cf.cpp
 
-@COND_TOOLKIT_X11_USE_GUI_1@corelib_gsockx11.o: $(srcdir)/src/x11/gsockx11.cpp $(CORELIB_ODEP)
-@COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/x11/gsockx11.cpp
-
 @COND_TOOLKIT_X11_USE_GUI_1@corelib_nanox.o: $(srcdir)/src/x11/nanox.c $(CORELIB_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CCC) -c -o $@ $(CORELIB_CFLAGS) $(srcdir)/src/x11/nanox.c
 
 @COND_TOOLKIT_X11_USE_GUI_1@corelib_reparent.o: $(srcdir)/src/x11/reparent.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/x11/reparent.cpp
+
+@COND_TOOLKIT_X11_USE_GUI_1@corelib_gsockbase.o: $(srcdir)/src/common/gsockbase.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/gsockbase.cpp
 
 @COND_TOOLKIT_MGL_USE_GUI_1@corelib_dirmgl.o: $(srcdir)/src/mgl/dirmgl.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/mgl/dirmgl.cpp

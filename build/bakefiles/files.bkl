@@ -1382,7 +1382,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/x11/evtloop.cpp
     src/x11/font.cpp
     src/x11/gdiobj.cpp
-    src/x11/gsockx11.cpp
     src/x11/icon.cpp
     src/x11/minifram.cpp
     src/x11/nanox.c
@@ -1396,6 +1395,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/x11/utils.cpp
     src/x11/utilsx.cpp
     src/x11/window.cpp
+    src/common/gsockbase.cpp
 </set>
 <set var="X11_LOWLEVEL_HDR" hints="files">
     $(XWIN_LOWLEVEL_HDR)
