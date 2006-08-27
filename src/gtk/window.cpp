@@ -219,8 +219,6 @@ extern bool       g_blockEventsOnDrag;
 extern bool       g_blockEventsOnScroll;
 extern wxCursor   g_globalCursor;
 
-static GdkGC *g_eraseGC = NULL;
-
 // mouse capture state: the window which has it and if the mouse is currently
 // inside it
 static wxWindowGTK  *g_captureWindow = (wxWindowGTK*) NULL;
@@ -4319,32 +4317,3 @@ void wxRemoveGrab(wxWindow* window)
     gtk_grab_remove( (GtkWidget*) window->GetHandle() );
 }
 
-// ----------------------------------------------------------------------------
-// wxWinModule
-// ----------------------------------------------------------------------------
-
-class wxWinModule : public wxModule
-{
-public:
-    bool OnInit();
-    void OnExit();
-
-private:
-    DECLARE_DYNAMIC_CLASS(wxWinModule)
-};
-
-IMPLEMENT_DYNAMIC_CLASS(wxWinModule, wxModule)
-
-bool wxWinModule::OnInit()
-{
-    // g_eraseGC = gdk_gc_new( gdk_get_default_root_window() );
-    // gdk_gc_set_fill( g_eraseGC, GDK_SOLID );
-
-    return true;
-}
-
-void wxWinModule::OnExit()
-{
-    if (g_eraseGC)
-        g_object_unref (g_eraseGC);
-}
