@@ -9,9 +9,9 @@ class TestPanel(wx.Panel):
         wx.Panel.__init__(self, parent, -1)
         self.Bind(wx.EVT_PAINT, self.OnPaint)
         
-        self.redBmp   = self.MakeBitmap(188, 143, 234)
-        self.greenBmp = self.MakeBitmap(35,  142,  35)
-        self.blueBmp  = self.MakeBitmap(50,  153, 204)
+        self.redBmp   = self.MakeBitmap(178,  34,  34)
+        self.greenBmp = self.MakeBitmap( 35, 142,  35)
+        self.blueBmp  = self.MakeBitmap(  0,   0, 139)
 
     def MakeBitmap(self, red, green, blue, alpha=128):
         bmp = wx.EmptyBitmap(100, 100, 32)
