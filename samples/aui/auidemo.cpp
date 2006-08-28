@@ -61,6 +61,7 @@ class MyFrame : public wxFrame
         ID_TextContent,
         ID_TreeContent,
         ID_HTMLContent,
+        ID_NotebookContent,
         ID_SizeReportContent,
         ID_CreatePerspective,
         ID_CopyPerspectiveCode,
@@ -96,6 +97,7 @@ private:
     wxSizeReportCtrl* CreateSizeReportCtrl(int width = 80, int height = 80);
     wxPoint GetStartPosition();
     wxHtmlWindow* CreateHTMLCtrl();
+    wxAuiMultiNotebook* CreateNotebook();
 
     wxString GetIntroText();
 
@@ -107,6 +109,7 @@ private:
     void OnCreateTree(wxCommandEvent& evt);
     void OnCreateGrid(wxCommandEvent& evt);
     void OnCreateHTML(wxCommandEvent& evt);
+    void OnCreateNotebook(wxCommandEvent& evt);
     void OnCreateText(wxCommandEvent& evt);
     void OnCreateSizeReport(wxCommandEvent& evt);
     void OnChangeContentPane(wxCommandEvent& evt);
@@ -564,6 +567,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(ID_TextContent, MyFrame::OnChangeContentPane)
     EVT_MENU(ID_SizeReportContent, MyFrame::OnChangeContentPane)
     EVT_MENU(ID_HTMLContent, MyFrame::OnChangeContentPane)
+    EVT_MENU(ID_NotebookContent, MyFrame::OnChangeContentPane)
     EVT_MENU(wxID_EXIT, MyFrame::OnExit)
     EVT_MENU(wxID_ABOUT, MyFrame::OnAbout)
     EVT_UPDATE_UI(ID_AllowFloating, MyFrame::OnUpdateUI)
@@ -611,6 +615,7 @@ MyFrame::MyFrame(wxWindow* parent,
     view_menu->Append(ID_TextContent, _("Use a Text Control for the Content Pane"));
     view_menu->Append(ID_HTMLContent, _("Use an HTML Control for the Content Pane"));
     view_menu->Append(ID_TreeContent, _("Use a Tree Control for the Content Pane"));
+    view_menu->Append(ID_NotebookContent, _("Use a AUI wxMultiNotebook control for the Content Pane"));
     view_menu->Append(ID_SizeReportContent, _("Use a Size Reporter for the Content Pane"));
 
     wxMenu* options_menu = new wxMenu;
@@ -797,6 +802,9 @@ MyFrame::MyFrame(wxWindow* parent,
                   CenterPane().Hide());
 
     m_mgr.AddPane(CreateHTMLCtrl(), wxPaneInfo().Name(wxT("html_content")).
+                  CenterPane());
+
+    m_mgr.AddPane(CreateNotebook(), wxPaneInfo().Name(wxT("notebook_content")).
                   CenterPane());
 
     // add the toolbars to the manager
@@ -1052,6 +1060,15 @@ void MyFrame::OnCreateHTML(wxCommandEvent& WXUNUSED(event))
     m_mgr.Update();
 }
 
+void MyFrame::OnCreateNotebook(wxCommandEvent& WXUNUSED(event))
+{
+    m_mgr.AddPane(CreateNotebook(), wxPaneInfo().
+                  Name(wxT("Test")).Caption(wxT("Notebook")).
+                  Float().FloatingPosition(GetStartPosition()).
+                  FloatingSize(wxSize(300,200)));
+    m_mgr.Update();
+}
+
 void MyFrame::OnCreateText(wxCommandEvent& WXUNUSED(event))
 {
     m_mgr.AddPane(CreateTextCtrl(), wxPaneInfo().
@@ -1075,6 +1092,7 @@ void MyFrame::OnChangeContentPane(wxCommandEvent& event)
     m_mgr.GetPane(wxT("tree_content")).Show(event.GetId() == ID_TreeContent ? true:false);
     m_mgr.GetPane(wxT("sizereport_content")).Show(event.GetId() == ID_SizeReportContent ? true:false);
     m_mgr.GetPane(wxT("html_content")).Show(event.GetId() == ID_HTMLContent ? true:false);
+    m_mgr.GetPane(wxT("notebook_content")).Show(event.GetId() == ID_NotebookContent ? true:false);
     m_mgr.Update();
 }
 
@@ -1170,6 +1188,35 @@ wxHtmlWindow* MyFrame::CreateHTMLCtrl()
     return ctrl;
 }
 
+wxAuiMultiNotebook* MyFrame::CreateNotebook()
+{
+   wxAuiMultiNotebook* ctrl = new wxAuiMultiNotebook( this, wxID_ANY,
+                                    wxDefaultPosition, wxSize(400,300) );
+                                    
+   wxPanel *panel = new wxPanel( ctrl, wxID_ANY );
+   wxFlexGridSizer *flex = new wxFlexGridSizer( 2 );
+   flex->AddGrowableRow( 0 );
+   flex->AddGrowableRow( 3 );
+   flex->AddGrowableCol( 1 );
+   flex->Add( 5,5 );   flex->Add( 5,5 );
+   flex->Add( new wxStaticText( panel, -1, wxT("wxTextCtrl:") ), 0, wxALL|wxALIGN_CENTRE, 5 );
+   flex->Add( new wxTextCtrl( panel, -1, wxT(""), wxDefaultPosition, wxSize(100,-1) ), 
+                1, wxALL|wxALIGN_CENTRE, 5 );
+   flex->Add( new wxStaticText( panel, -1, wxT("wxSpinCtrl:") ), 0, wxALL|wxALIGN_CENTRE, 5 );
+   flex->Add( new wxSpinCtrl( panel, -1, wxT("5"), wxDefaultPosition, wxSize(100,-1), 
+                wxSP_ARROW_KEYS, 5, 50, 5 ), 0, wxALL|wxALIGN_CENTRE, 5 );
+   flex->Add( 5,5 );   flex->Add( 5,5 );
+   panel->SetSizer( flex );
+   ctrl->AddPage( panel, wxT("wxPanel") );
+   
+   ctrl->AddPage( new wxTextCtrl( ctrl, wxID_ANY, wxT("Some text"),
+                wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE) , wxT("wxTextCtrl I") );
+                
+   ctrl->AddPage( new wxTextCtrl( ctrl, wxID_ANY, wxT("Some more text"),
+                wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE) , wxT("wxTextCtrl II") );
+   
+   return ctrl;
+}
 
 wxString MyFrame::GetIntroText()
 {
