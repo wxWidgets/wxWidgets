@@ -30,44 +30,38 @@
 
 
 // temporary buffers
-static wxChar buf[MAX_TEST_LEN], buf2[MAX_TEST_LEN];
-
+static wxChar buf[MAX_TEST_LEN];
 
 // these macros makes it possible to write all tests without repeating a lot of times wxT() macro
 
+#define ASSERT_STR_EQUAL( a, b ) \
+    CPPUNIT_ASSERT( wxString(a) == wxString(b) );
+
 #define CMP5(expected, x, y, z, w)                  \
     wxSnprintf(buf, MAX_TEST_LEN, wxT(x), y, z, w); \
-    snprintf(buf2, MAX_TEST_LEN, wxT(x), y, z, w);  \
                                                     \
-    CPPUNIT_ASSERT_STR_EQUAL( buf2, buf );          \
-    CPPUNIT_ASSERT_STR_EQUAL( expected, buf );
+    ASSERT_STR_EQUAL( wxT(expected), buf );
 
 #define CMP4(expected, x, y, z)                     \
     wxSnprintf(buf, MAX_TEST_LEN, wxT(x), y, z);    \
-    snprintf(buf2, MAX_TEST_LEN, wxT(x), y, z);     \
                                                     \
-    CPPUNIT_ASSERT_STR_EQUAL( buf2, buf );          \
-    CPPUNIT_ASSERT_STR_EQUAL( expected, buf );
+    ASSERT_STR_EQUAL( wxT(expected), buf );
 
 #define CMP3(expected, x, y)                        \
     wxSnprintf(buf, MAX_TEST_LEN, wxT(x), y);       \
-    snprintf(buf2, MAX_TEST_LEN, wxT(x), y);        \
                                                     \
-    CPPUNIT_ASSERT_STR_EQUAL( buf2, buf );          \
-    CPPUNIT_ASSERT_STR_EQUAL( expected, buf );
+    ASSERT_STR_EQUAL( wxT(expected), buf );
 
 #define CMP2(expected, x)                           \
     wxSnprintf(buf, MAX_TEST_LEN, wxT(x));          \
-    snprintf(buf2, MAX_TEST_LEN, wxT(x));           \
                                                     \
-    CPPUNIT_ASSERT_STR_EQUAL( buf2, buf );          \
-    CPPUNIT_ASSERT_STR_EQUAL( expected, buf );
+    ASSERT_STR_EQUAL( wxT(expected), buf );
 
-#define CMPTOSIZE(buffer, size, fmt, x, y, z, w)                        \
-    wxSnprintf(buf, MAX_TEST_LEN, wxT(fmt), x, y, z, w);                \
-    snprintf(buf2, MAX_TEST_LEN, wxT(fmt), x, y, z, w);                 \
-                                                                        \
-    CPPUNIT_ASSERT_EQUAL( wxString(buf2, size), wxString(buf, size) );
+#define CMPTOSIZE(buffer, size, expected, fmt, x, y, z, w)  \
+    wxSnprintf(buffer, size, wxT(fmt), x, y, z, w);         \
+                                                            \
+    CPPUNIT_ASSERT( wxString(wxT(expected)).Left(size - 1) == buffer )
+
 
 
 // ----------------------------------------------------------------------------
@@ -185,8 +179,8 @@ void VsnprintfTestCase::S()
     CMP3("abcde", "%.5s", wxT("abcdefghi"));
 
     // some tests without any argument passed through ...
-    CMP2(wxT("%"), wxT("%%"));
-    CMP2(wxT("%%%"), wxT("%%%%%%"));
+    CMP2("%", "%%");
+    CMP2("%%%", "%%%%%%");
 
     // do not test odd number of '%' symbols as different implementations
     // of snprintf() give different outputs as this situation is not considered
@@ -206,35 +200,38 @@ void VsnprintfTestCase::Asterisk()
 
 void VsnprintfTestCase::Misc(wxChar *buffer, int size)
 {
-    // NB: remember that wx*printf could be mapped either to system implementation or to
-    //     wx implementation.
-    //     In the first case, when the output buffer is too small, the returned value can
-    //     be the number of characters required for the output buffer (conforming to ISO C99;
-    //     implemented in e.g. GNU libc >= 2.1), or just a negative number, usually -1;
-    //     (this is how e.g. MSVC's *printf() behaves).
-    //     Fortunately, in all implementations, when the output buffer is too small, it's
-    //     nonetheless filled up to its max size.
+    // NB: remember that wx*printf could be mapped either to system
+    //     implementation or to wx implementation.
+    //     In the first case, when the output buffer is too small, the returned
+    //     value can be the number of characters required for the output buffer
+    //     (conforming to ISO C99; implemented in e.g. GNU libc >= 2.1), or
+    //     just a negative number, usually -1; (this is how e.g. MSVC's
+    //     *printf() behaves).  Fortunately, in all implementations, when the
+    //     output buffer is too small, it's nonetheless filled up to its max
+    //     size.
 
     // test without positionals
-    CMPTOSIZE(buffer, size,
-              wxT("%i %li - test - %d %.3f"),
+    CMPTOSIZE(buffer, size, "123 444444444 - test - 555 -0.666",
+              "%i %li - test - %d %.3f",
               123, (long int)444444444, 555, -0.666);
 
 #if wxUSE_PRINTF_POS_PARAMS
     // test with positional
-    CMPTOSIZE(buffer, size,
-              wxT("%4$.3f %1$i - test - %2$li %3$d"),
+    CMPTOSIZE(buffer, size, "-0.666 123 - test - 444444444 555",
+              "%4$.3f %1$i - test - %2$li %3$d",
               123, (long int)444444444, 555, -0.666);
 #endif
 
     // test unicode/ansi conversion specifiers
     // NB: this line will output two warnings like these, on GCC:
-    //        warning: use of ‘h’ length modifier with ‘s’ type character
-    //     (i.e. GCC warns you that 'h' is not legal on 's' conv spec) but they must be ignored
-    //     as here we explicitely want to test the wxSnprintf() behaviour in such case
+    //     warning: use of 'h' length modifier with 's' type character (i.e.
+    //     GCC warns you that 'h' is not legal on 's' conv spec) but they must
+    //     be ignored as here we explicitely want to test the wxSnprintf()
+    //     behaviour in such case
 
     CMPTOSIZE(buffer, size,
-              wxT("unicode string: %ls %lc - ansi string: %hs %hc\n\n"),
+              "unicode string: unicode!! W - ansi string: ansi!! w\n\n",
+              "unicode string: %ls %lc - ansi string: %hs %hc\n\n",
               L"unicode!!", L'W', "ansi!!", 'w');
 }
 
