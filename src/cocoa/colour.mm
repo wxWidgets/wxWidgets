@@ -36,6 +36,7 @@ wxColour::wxColour (const wxColour& col)
 ,   m_red(col.m_red)
 ,   m_green(col.m_green)
 ,   m_blue(col.m_blue)
+,   m_alpha(col.m_alpha)
 {
     [m_cocoaNSColor retain];
 }
@@ -52,6 +53,7 @@ wxColour& wxColour::operator =(const wxColour& col)
     m_red = col.m_red;
     m_green = col.m_green;
     m_blue = col.m_blue;
+    m_alpha = col.m_alpha;
     [m_cocoaNSColor retain];
     return *this;
 }
@@ -61,14 +63,18 @@ wxColour::~wxColour ()
     [m_cocoaNSColor release];
 }
 
-void wxColour::InitWith (unsigned char r, unsigned char g, unsigned char b)
+void wxColour::InitWith(unsigned char r,
+                        unsigned char g,
+                        unsigned char b,
+                        unsigned char a)
 {
     wxAutoNSAutoreleasePool pool;
     [m_cocoaNSColor release];
-    m_cocoaNSColor = [[NSColor colorWithCalibratedRed:r/255.0 green:g/255.0 blue:b/255.0 alpha:1.0] retain];
+    m_cocoaNSColor = [[NSColor colorWithCalibratedRed:r/255.0 green:g/255.0 blue:b/255.0 alpha:a/255.0] retain];
     m_red = r;
     m_green = g;
     m_blue = b;
+    m_alpha = a;
 }
 
 void wxColour::Set( WX_NSColor aColor )
@@ -84,4 +90,5 @@ void wxColour::Set( WX_NSColor aColor )
     m_red   = (wxUint8) ([rgbColor redComponent]   * 255.0);
     m_green = (wxUint8) ([rgbColor greenComponent] * 255.0);
     m_blue  = (wxUint8) ([rgbColor blueComponent]  * 255.0);
+    m_alpha  = (wxUint8) ([rgbColor alphaComponent]  * 255.0);
 }

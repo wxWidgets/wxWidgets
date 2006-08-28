@@ -46,47 +46,54 @@ public:
     unsigned char Red() const { return m_red; }
     unsigned char Green() const { return m_green; }
     unsigned char Blue() const { return m_blue; }
+    unsigned char Alpha() const { return m_alpha; }
 
     // comparison
     bool operator == (const wxColour& colour) const
     {
-        // TODO: Really compare the NSColor
-        return (m_cocoaNSColor == colour.m_cocoaNSColor
-            || (m_red == colour.m_red
-            && m_green == colour.m_green
-            && m_blue == colour.m_blue));
+        return m_cocoaNSColor == colour.m_cocoaNSColor ||
+               (m_red == colour.m_red &&
+                m_green == colour.m_green &&
+                m_blue == colour.m_blue &&
+                m_alpha == colour.m_alpha);
     }
     bool operator != (const wxColour& colour) const
-    {   return !(*this == colour); }
+        { return !(*this == colour); }
 
     // Set() functions
     void Set( WX_NSColor aColor );
-    
+
     // reroute the inherited ones
-    void Set(unsigned char red, unsigned char green, unsigned char blue)
-    { wxColourBase::Set(red,green,blue); }
-    
-    // implemented in colourcmn.cpp
+    void Set(unsigned char red,
+             unsigned char green,
+             unsigned char blue,
+             unsigned char alpha = wxALPHA_OPAQUE)
+        { wxColourBase::Set(red, green, blue, alpha); }
+
     bool Set(const wxChar *str)
-    { return wxColourBase::Set(str); }
-    
+        { return wxColourBase::Set(str); }
+
     bool Set(const wxString &str)
-    { return wxColourBase::Set(str); }
-    
+        { return wxColourBase::Set(str); }
+
     void Set(unsigned long colRGB)
-    { wxColourBase::Set(colRGB); }
-    
+        { wxColourBase::Set(colRGB); }
+
 protected:
     // puts the object in an invalid, uninitialized state
     void Init();
 
-    virtual void InitWith( unsigned char red, unsigned char green, unsigned char blue );
+    virtual void InitWith(unsigned char red,
+                          unsigned char green,
+                          unsigned char blue,
+                          unsigned char alpha);
 
 private:
     WX_NSColor m_cocoaNSColor;
     unsigned char m_red;
     unsigned char m_green;
     unsigned char m_blue;
+    unsigned char m_alpha;
 
     DECLARE_DYNAMIC_CLASS(wxColour)
 };
