@@ -3,7 +3,7 @@
 # Name:        wx-config-inplace
 # Purpose:     wx configuration in tree search and query tool
 # Author:      Ron <ron@debian.org>
-# Modified by:
+# Modified by: VZ on 2005-09-20 to make it work with Bourne shell
 # Created:     14/9/2004
 # RCS-ID:      $Id$
 # Copyright:   (c) 2004 Ron <ron@debian.org>
@@ -24,8 +24,16 @@ check_dirname()
     ( cd $1 && pwd )
 }
 
-this_prefix=$(check_dirname "@abs_top_srcdir@")         || exit
-this_exec_prefix=$(check_dirname "@abs_top_builddir@")  || exit
+# set the variables which allow the real wx-config to check if we're using it
+# in place or after installation
+this_prefix=`check_dirname "@abs_top_srcdir@"`
+if [ "x$this_prefix" = "x" ]; then
+    exit 1
+fi
+this_exec_prefix=`check_dirname "@abs_top_builddir@"`
+if [ "x$this_exec_prefix" = "x" ]; then
+    exit 1
+fi
 
 . "$this_exec_prefix/lib/wx/config/@TOOLCHAIN_FULLNAME@"
 
