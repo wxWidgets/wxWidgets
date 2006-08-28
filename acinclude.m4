@@ -228,6 +228,72 @@ AC_DEFUN([WX_CPP_EXPLICIT],
 ])
 
 dnl ---------------------------------------------------------------------------
+dnl WX_CHECK_FUNCS(FUNCTIONS...,
+dnl                [ACTION-IF-FOUND],
+dnl                [ACTION-IF-NOT-FOUND],
+dnl                [EXTRA-DEFINES-AND-INCLUDES],
+dnl                [EXTRA-TEST-CODE])
+dnl
+dnl Checks that the functions listed in FUNCTIONS exist in the headers and the
+dnl libs. For each function, if it is found then defines 'HAVE_FUNCTION' and
+dnl executes ACTION-IF-FOUND, otherwise executes ACTION-IF-NOT-FOUND.
+dnl
+dnl The code from EXTRA-DEFINES-AND-INCLUDES is inserted into the test before
+dnl the default headers are included, and EXTRA-TEST-CODE is inserted into
+dnl the main() function after the default test for existence.
+dnl
+dnl Examples:
+dnl   # the simple case
+dnl   WX_CHECK_FUNCS(stat)
+dnl   # use break to finish the loop early
+dnl   WX_CHECK_FUNCS(mkstemp mktemp, break)
+dnl   # extra defines
+dnl   WX_CHECK_FUNCS(strtok_r, [], [], [#define _RREENTRANT])
+dnl   # extra includes
+dnl   WX_CHECK_FUNCS(swprintf, [], [], [#include <wchar.h>])
+dnl   # checking the signature with extra test code
+dnl   WX_CHECK_FUNCS(gettimeofday, [], [], [#include <sys/time.h>]
+dnl     [struct timeval tv; struct timezone tz; gettimeofday(&tv, &tz)])
+dnl ---------------------------------------------------------------------------
+
+AC_DEFUN([WX_CHECK_FUNCS],
+[
+  for wx_func in $1
+  do
+    AC_CACHE_CHECK(
+      [for $wx_func],
+      [wx_cv_func_$wx_func],
+      [
+        AC_LINK_IFELSE(
+          [
+            AC_LANG_PROGRAM(
+              [
+                $4
+                AC_INCLUDES_DEFAULT
+              ],
+              [
+                #ifndef $wx_func
+                  &$wx_func;
+                #endif
+                $5
+              ])
+          ],
+          [eval wx_cv_func_$wx_func=yes],
+          [eval wx_cv_func_$wx_func=no])
+      ])
+
+    if eval test \$wx_cv_func_$wx_func = yes
+    then
+      AC_DEFINE_UNQUOTED([HAVE_`echo $wx_func | tr 'a-z' 'A-Z'`])
+      $2
+    else
+      :
+      $3
+    fi
+  done
+])
+
+dnl ---------------------------------------------------------------------------
 dnl a slightly better AC_C_BIGENDIAN macro which allows cross-compiling
 dnl ---------------------------------------------------------------------------
 
