@@ -1470,6 +1470,10 @@ int wxSnprintf( wxChar *str, size_t size, const wxChar *format, ... )
 
     int ret = vswprintf( str, size, wxFormatConverter(format), argptr );
 
+    // VsnprintfTestCase reveals that glibc's implementation of vswprintf
+    // doesn't nul terminate on truncation.
+    str[size - 1] = 0;
+
     va_end(argptr);
 
     return ret;
