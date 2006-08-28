@@ -4678,10 +4678,7 @@ fi
 dnl check for uname (POSIX) and gethostname (BSD)
 AC_CHECK_FUNCS(uname gethostname, break)
 
-SAVE_CPPFLAGS="$CPPFLAGS"
-CPPFLAGS="$CPPFLAGS -D_REENTRANT"
-AC_CHECK_DECLS(strtok_r, AC_DEFINE(HAVE_STRTOK_R))
-CPPFLAGS="$SAVE_CPPFLAGS"
+WX_CHECK_FUNCS(strtok_r, [], [], [#define _REENTRANT])
 
 dnl check for inet_addr and inet_aton (these may live either in libc, or in
 dnl libnsl or libresolv or libsocket)
@@ -5156,7 +5153,7 @@ if test "$wxUSE_THREADS" = "yes"; then
 else
   dnl on some systems, _REENTRANT should be defined if we want to use any _r()
   dnl functions - add tests for other functions here as well
-  if test "$ac_cv_have_decl_strtok_r" = "yes"; then
+  if test "$wx_cv_func_strtok_r" = "yes"; then
     AC_MSG_CHECKING(if -D_REENTRANT is needed)
     if test "$NEEDS_D_REENTRANT_FOR_R_FUNCS" = 1; then
         WXCONFIG_CPPFLAGS="$WXCONFIG_CPPFLAGS -D_REENTRANT"

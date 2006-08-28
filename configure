@@ -37021,34 +37021,43 @@ fi
 done
 
 
-SAVE_CPPFLAGS="$CPPFLAGS"
-CPPFLAGS="$CPPFLAGS -D_REENTRANT"
-echo "$as_me:$LINENO: checking whether strtok_r is declared" >&5
-echo $ECHO_N "checking whether strtok_r is declared... $ECHO_C" >&6
-if test "${ac_cv_have_decl_strtok_r+set}" = set; then
+
+  for wx_func in strtok_r
+  do
+    echo "$as_me:$LINENO: checking for $wx_func" >&5
+echo $ECHO_N "checking for $wx_func... $ECHO_C" >&6
+if eval "test \"\${wx_cv_func_$wx_func+set}\" = set"; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
 else
-  cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
+
+        cat >conftest.$ac_ext <<_ACEOF
+
+            /* confdefs.h.  */
 _ACEOF
 cat confdefs.h >>conftest.$ac_ext
 cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
-$ac_includes_default
+
+                #define _REENTRANT
+                $ac_includes_default
+
 int
 main ()
 {
-#ifndef strtok_r
-  char *p = (char *) strtok_r;
-#endif
+
+                #ifndef $wx_func
+                  &$wx_func;
+                #endif
+
 
   ;
   return 0;
 }
+
 _ACEOF
-rm -f conftest.$ac_objext
-if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
-  (eval $ac_compile) 2>conftest.er1
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+  (eval $ac_link) 2>conftest.er1
   ac_status=$?
   grep -v '^ *+' conftest.er1 >conftest.err
   rm -f conftest.er1
@@ -37061,43 +37070,39 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   ac_status=$?
   echo "$as_me:$LINENO: \$? = $ac_status" >&5
   (exit $ac_status); }; } &&
-	 { ac_try='test -s conftest.$ac_objext'
+	 { ac_try='test -s conftest$ac_exeext'
   { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
   (eval $ac_try) 2>&5
   ac_status=$?
   echo "$as_me:$LINENO: \$? = $ac_status" >&5
   (exit $ac_status); }; }; then
-  ac_cv_have_decl_strtok_r=yes
+  eval wx_cv_func_$wx_func=yes
 else
   echo "$as_me: failed program was:" >&5
 sed 's/^/| /' conftest.$ac_ext >&5
 
-ac_cv_have_decl_strtok_r=no
+eval wx_cv_func_$wx_func=no
 fi
-rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
+rm -f conftest.err conftest.$ac_objext \
+      conftest$ac_exeext conftest.$ac_ext
+
 fi
-echo "$as_me:$LINENO: result: $ac_cv_have_decl_strtok_r" >&5
-echo "${ECHO_T}$ac_cv_have_decl_strtok_r" >&6
-if test $ac_cv_have_decl_strtok_r = yes; then
+echo "$as_me:$LINENO: result: `eval echo '${'wx_cv_func_$wx_func'}'`" >&5
+echo "${ECHO_T}`eval echo '${'wx_cv_func_$wx_func'}'`" >&6
 
-cat >>confdefs.h <<_ACEOF
-#define HAVE_DECL_STRTOK_R 1
-_ACEOF
-
-cat >>confdefs.h <<\_ACEOF
-#define HAVE_STRTOK_R 1
-_ACEOF
-
-else
-  cat >>confdefs.h <<_ACEOF
-#define HAVE_DECL_STRTOK_R 0
+    if eval test \$wx_cv_func_$wx_func = yes
+    then
+      cat >>confdefs.h <<_ACEOF
+#define HAVE_`echo $wx_func | tr 'a-z' 'A-Z'` 1
 _ACEOF
 
 
-fi
+    else
+      :
 
+    fi
+  done
 
-CPPFLAGS="$SAVE_CPPFLAGS"
 
 INET_LINK=
 
@@ -40581,7 +40586,7 @@ _ACEOF
 
   SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS thread"
 else
-      if test "$ac_cv_have_decl_strtok_r" = "yes"; then
+      if test "$wx_cv_func_strtok_r" = "yes"; then
     echo "$as_me:$LINENO: checking if -D_REENTRANT is needed" >&5
 echo $ECHO_N "checking if -D_REENTRANT is needed... $ECHO_C" >&6
     if test "$NEEDS_D_REENTRANT_FOR_R_FUNCS" = 1; then
