@@ -151,7 +151,7 @@ void UnicodeTestCase::ConversionEmpty()
     wxWCharBuffer wbuf = wxConvLibc.cMB2WC("", 0, &len);
 #endif // wxUSE_UNICODE/!wxUSE_UNICODE
 
-    CPPUNIT_ASSERT_EQUAL(0u, len);
+    CPPUNIT_ASSERT(len == 0);
 }
 
 void UnicodeTestCase::ConversionWithNULs()
