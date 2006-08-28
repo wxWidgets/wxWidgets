@@ -533,6 +533,12 @@ int wxSystemSettingsNative::GetMetric( wxSystemMetric index, wxWindow* win )
                              "gtk-dnd-drag-threshold", &drag_threshold, NULL);
             }
 
+            // The correct thing here would be to double the value
+            // since that is what the API wants. But the values
+            // are much bigger under GNOME than under Windows and
+            // just seem to much in many cases to be useful.
+            // drag_threshold *= 2;   
+
             return drag_threshold;
 
         // MBN: ditto for icons
