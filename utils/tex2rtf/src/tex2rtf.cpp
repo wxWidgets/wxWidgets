@@ -448,13 +448,13 @@ bool MyApp::OnInit()
     if (!path.empty())
         ReadCustomMacros(path);
 
-    Go();
-    if (runTwice)
+    bool rc = Go();
+    if ( rc && runTwice )
     {
-        Go();
+        rc = Go();
     }
 #ifdef NO_GUI
-    return true;
+    return rc;
 #else
     OnExit(); // Do cleanup since OnExit won't be called now
     return false;
