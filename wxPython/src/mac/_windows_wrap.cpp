@@ -2830,35 +2830,6 @@ SWIGINTERN void wxTopLevelWindow_MacSetMetalAppearance(wxTopLevelWindow *self,bo
         }
 SWIGINTERN bool wxTopLevelWindow_EnableCloseButton(wxTopLevelWindow *self,bool enable=true){ return false; }
 
-SWIGINTERN int 
-SWIG_AsVal_unsigned_SS_long (PyObject* obj, unsigned long* val)
-{
-    long v = 0;
-    if (SWIG_AsVal_long(obj, &v) && v < 0) {
-        return SWIG_TypeError;
-    }
-    else if (val)
-        *val = (unsigned long)v;
-    return SWIG_OK;
-}
-
-
-SWIGINTERN int
-SWIG_AsVal_unsigned_SS_char (PyObject * obj, unsigned char *val)
-{
-  unsigned long v;
-  int res = SWIG_AsVal_unsigned_SS_long (obj, &v);
-  if (SWIG_IsOK(res)) {
-    if ((v > UCHAR_MAX)) {
-      return SWIG_OverflowError;
-    } else {
-      if (val) *val = static_cast< unsigned char >(v);
-    }
-  }  
-  return res;
-}
-
-
 
 SWIGINTERN wxRect wxStatusBar_GetFieldRect(wxStatusBar *self,int i){
             wxRect r;
@@ -2974,6 +2945,19 @@ IMPLEMENT_ABSTRACT_CLASS(wxPyVScrolledWindow, wxVScrolledWindow);
 IMP_PYCALLBACK_COORD_SIZET_constpure(wxPyVScrolledWindow, wxVScrolledWindow, OnGetLineHeight);
 IMP_PYCALLBACK_VOID_SIZETSIZET_const(wxPyVScrolledWindow, wxVScrolledWindow, OnGetLinesHint);
 IMP_PYCALLBACK_COORD_const          (wxPyVScrolledWindow, wxVScrolledWindow, EstimateTotalHeight);
+
+
+SWIGINTERN int 
+SWIG_AsVal_unsigned_SS_long (PyObject* obj, unsigned long* val)
+{
+    long v = 0;
+    if (SWIG_AsVal_long(obj, &v) && v < 0) {
+        return SWIG_TypeError;
+    }
+    else if (val)
+        *val = (unsigned long)v;
+    return SWIG_OK;
+}
 
 
 SWIGINTERNINLINE int
@@ -6095,77 +6079,6 @@ SWIGINTERN PyObject *_wrap_TopLevelWindow_EnableCloseButton(PyObject *SWIGUNUSED
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
     result = (bool)wxTopLevelWindow_EnableCloseButton(arg1,arg2);
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) SWIG_fail;
-  }
-  {
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
-  }
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_TopLevelWindow_SetTransparent(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
-  PyObject *resultobj = 0;
-  wxTopLevelWindow *arg1 = (wxTopLevelWindow *) 0 ;
-  byte arg2 ;
-  bool result;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  unsigned char val2 ;
-  int ecode2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  char *  kwnames[] = {
-    (char *) "self",(char *) "alpha", NULL 
-  };
-  
-  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:TopLevelWindow_SetTransparent",kwnames,&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxTopLevelWindow, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "TopLevelWindow_SetTransparent" "', expected argument " "1"" of type '" "wxTopLevelWindow *""'"); 
-  }
-  arg1 = reinterpret_cast< wxTopLevelWindow * >(argp1);
-  ecode2 = SWIG_AsVal_unsigned_SS_char(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "TopLevelWindow_SetTransparent" "', expected argument " "2"" of type '" "byte""'");
-  } 
-  arg2 = static_cast< byte >(val2);
-  {
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    result = (bool)(arg1)->SetTransparent(arg2);
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) SWIG_fail;
-  }
-  {
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
-  }
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_TopLevelWindow_CanSetTransparent(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  wxTopLevelWindow *arg1 = (wxTopLevelWindow *) 0 ;
-  bool result;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject *swig_obj[1] ;
-  
-  if (!args) SWIG_fail;
-  swig_obj[0] = args;
-  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxTopLevelWindow, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "TopLevelWindow_CanSetTransparent" "', expected argument " "1"" of type '" "wxTopLevelWindow *""'"); 
-  }
-  arg1 = reinterpret_cast< wxTopLevelWindow * >(argp1);
-  {
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    result = (bool)(arg1)->CanSetTransparent();
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
@@ -30893,8 +30806,6 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"TopLevelWindow_MacGetMetalAppearance", (PyCFunction)_wrap_TopLevelWindow_MacGetMetalAppearance, METH_O, NULL},
 	 { (char *)"TopLevelWindow_CenterOnScreen", (PyCFunction) _wrap_TopLevelWindow_CenterOnScreen, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"TopLevelWindow_EnableCloseButton", (PyCFunction) _wrap_TopLevelWindow_EnableCloseButton, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"TopLevelWindow_SetTransparent", (PyCFunction) _wrap_TopLevelWindow_SetTransparent, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"TopLevelWindow_CanSetTransparent", (PyCFunction)_wrap_TopLevelWindow_CanSetTransparent, METH_O, NULL},
 	 { (char *)"TopLevelWindow_GetDefaultItem", (PyCFunction)_wrap_TopLevelWindow_GetDefaultItem, METH_O, NULL},
 	 { (char *)"TopLevelWindow_SetDefaultItem", (PyCFunction) _wrap_TopLevelWindow_SetDefaultItem, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"TopLevelWindow_SetTmpDefaultItem", (PyCFunction) _wrap_TopLevelWindow_SetTmpDefaultItem, METH_VARARGS | METH_KEYWORDS, NULL},
@@ -33843,10 +33754,13 @@ SWIGEXPORT void SWIG_init(void) {
   SWIG_Python_SetConstant(d, "FRAME_DRAWER",SWIG_From_int(static_cast< int >(wxFRAME_DRAWER)));
   SWIG_Python_SetConstant(d, "FRAME_EX_METAL",SWIG_From_int(static_cast< int >(wxFRAME_EX_METAL)));
   SWIG_Python_SetConstant(d, "DIALOG_EX_METAL",SWIG_From_int(static_cast< int >(wxDIALOG_EX_METAL)));
+  SWIG_Python_SetConstant(d, "WS_EX_CONTEXTHELP",SWIG_From_int(static_cast< int >(wxWS_EX_CONTEXTHELP)));
   SWIG_Python_SetConstant(d, "DIALOG_MODAL",SWIG_From_int(static_cast< int >(wxDIALOG_MODAL)));
   SWIG_Python_SetConstant(d, "DIALOG_MODELESS",SWIG_From_int(static_cast< int >(wxDIALOG_MODELESS)));
   SWIG_Python_SetConstant(d, "USER_COLOURS",SWIG_From_int(static_cast< int >(wxUSER_COLOURS)));
   SWIG_Python_SetConstant(d, "NO_3D",SWIG_From_int(static_cast< int >(wxNO_3D)));
+  SWIG_Python_SetConstant(d, "FRAME_EX_CONTEXTHELP",SWIG_From_int(static_cast< int >(wxFRAME_EX_CONTEXTHELP)));
+  SWIG_Python_SetConstant(d, "DIALOG_EX_CONTEXTHELP",SWIG_From_int(static_cast< int >(wxDIALOG_EX_CONTEXTHELP)));
   SWIG_Python_SetConstant(d, "FULLSCREEN_NOMENUBAR",SWIG_From_int(static_cast< int >(wxFULLSCREEN_NOMENUBAR)));
   SWIG_Python_SetConstant(d, "FULLSCREEN_NOTOOLBAR",SWIG_From_int(static_cast< int >(wxFULLSCREEN_NOTOOLBAR)));
   SWIG_Python_SetConstant(d, "FULLSCREEN_NOSTATUSBAR",SWIG_From_int(static_cast< int >(wxFULLSCREEN_NOSTATUSBAR)));

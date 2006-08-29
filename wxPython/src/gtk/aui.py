@@ -1388,7 +1388,7 @@ class DefaultDockArt(DockArt):
         _aui.DefaultDockArt_swiginit(self,_aui.new_DefaultDockArt(*args, **kwargs))
 _aui.DefaultDockArt_swigregister(DefaultDockArt)
 
-class FloatingPane(_windows.Frame):
+class FloatingPane(_windows.MiniFrame):
     """Proxy of C++ FloatingPane class"""
     thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
     __repr__ = _swig_repr

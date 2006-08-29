@@ -91,6 +91,8 @@ class CalendarDateAttr(object):
         Create a CalendarDateAttr.
         """
         _calendar.CalendarDateAttr_swiginit(self,_calendar.new_CalendarDateAttr(*args, **kwargs))
+    __swig_destroy__ = _calendar.delete_CalendarDateAttr
+    __del__ = lambda self : None;
     def SetTextColour(*args, **kwargs):
         """SetTextColour(self, Colour colText)"""
         return _calendar.CalendarDateAttr_SetTextColour(*args, **kwargs)
@@ -217,7 +219,7 @@ class CalendarCtrl(_core.Control):
 
     An item without custom attributes is drawn with the default colours
     and font and without border, but setting custom attributes with
-    SetAttr allows to modify its appearance. Just create a custom
+    `SetAttr` allows to modify its appearance. Just create a custom
     attribute object and set it for the day you want to be displayed
     specially A day may be marked as being a holiday, (even if it is not
     recognized as one by `wx.DateTime`) by using the SetHoliday method.

@@ -5692,8 +5692,6 @@ def PrePyControl(*args, **kwargs):
 
 #---------------------------------------------------------------------------
 
-FRAME_EX_CONTEXTHELP = _controls_.FRAME_EX_CONTEXTHELP
-DIALOG_EX_CONTEXTHELP = _controls_.DIALOG_EX_CONTEXTHELP
 wxEVT_HELP = _controls_.wxEVT_HELP
 wxEVT_DETAILED_HELP = _controls_.wxEVT_DETAILED_HELP
 EVT_HELP = wx.PyEventBinder( wxEVT_HELP, 1)
@@ -5804,7 +5802,7 @@ class ContextHelp(_core.Object):
 
     There are a couple of ways to invoke this behaviour implicitly:
 
-        * Use the wx.DIALOG_EX_CONTEXTHELP extended style for a dialog
+        * Use the wx.WS_EX_CONTEXTHELP extended style for a dialog or frame
           (Windows only). This will put a question mark in the titlebar,
           and Windows will put the application into context-sensitive help
           mode automatically, with further programming.
@@ -5812,7 +5810,7 @@ class ContextHelp(_core.Object):
         * Create a `wx.ContextHelpButton`, whose predefined behaviour is
           to create a context help object. Normally you will write your
           application so that this button is only added to a dialog for
-          non-Windows platforms (use ``wx.DIALOG_EX_CONTEXTHELP`` on
+          non-Windows platforms (use ``wx.WS_EX_CONTEXTHELP`` on
           Windows).
 
     :see: `wx.ContextHelpButton`

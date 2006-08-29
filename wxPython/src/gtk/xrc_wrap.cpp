@@ -3046,17 +3046,21 @@ SWIGINTERN PyObject *_wrap_new_XmlResource(PyObject *SWIGUNUSEDPARM(self), PyObj
   PyObject *resultobj = 0;
   wxString *arg1 = 0 ;
   int arg2 = (int) wxXRC_USE_LOCALE ;
+  wxString const &arg3_defvalue = wxEmptyString ;
+  wxString *arg3 = (wxString *) &arg3_defvalue ;
   wxXmlResource *result = 0 ;
   bool temp1 = false ;
   int val2 ;
   int ecode2 = 0 ;
+  bool temp3 = false ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
   char *  kwnames[] = {
-    (char *) "filemask",(char *) "flags", NULL 
+    (char *) "filemask",(char *) "flags",(char *) "domain", NULL 
   };
   
-  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|O:new_XmlResource",kwnames,&obj0,&obj1)) SWIG_fail;
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|OO:new_XmlResource",kwnames,&obj0,&obj1,&obj2)) SWIG_fail;
   {
     arg1 = wxString_in_helper(obj0);
     if (arg1 == NULL) SWIG_fail;
@@ -3069,9 +3073,16 @@ SWIGINTERN PyObject *_wrap_new_XmlResource(PyObject *SWIGUNUSEDPARM(self), PyObj
     } 
     arg2 = static_cast< int >(val2);
   }
+  if (obj2) {
+    {
+      arg3 = wxString_in_helper(obj2);
+      if (arg3 == NULL) SWIG_fail;
+      temp3 = true;
+    }
+  }
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    result = (wxXmlResource *)new wxXmlResource((wxString const &)*arg1,arg2);
+    result = (wxXmlResource *)new wxXmlResource((wxString const &)*arg1,arg2,(wxString const &)*arg3);
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
@@ -3080,11 +3091,19 @@ SWIGINTERN PyObject *_wrap_new_XmlResource(PyObject *SWIGUNUSEDPARM(self), PyObj
     if (temp1)
     delete arg1;
   }
+  {
+    if (temp3)
+    delete arg3;
+  }
   return resultobj;
 fail:
   {
     if (temp1)
     delete arg1;
+  }
+  {
+    if (temp3)
+    delete arg3;
   }
   return NULL;
 }
@@ -3093,15 +3112,19 @@ fail:
 SWIGINTERN PyObject *_wrap_new_EmptyXmlResource(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   int arg1 = (int) wxXRC_USE_LOCALE ;
+  wxString const &arg2_defvalue = wxEmptyString ;
+  wxString *arg2 = (wxString *) &arg2_defvalue ;
   wxXmlResource *result = 0 ;
   int val1 ;
   int ecode1 = 0 ;
+  bool temp2 = false ;
   PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
   char *  kwnames[] = {
-    (char *) "flags", NULL 
+    (char *) "flags",(char *) "domain", NULL 
   };
   
-  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"|O:new_EmptyXmlResource",kwnames,&obj0)) SWIG_fail;
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"|OO:new_EmptyXmlResource",kwnames,&obj0,&obj1)) SWIG_fail;
   if (obj0) {
     ecode1 = SWIG_AsVal_int(obj0, &val1);
     if (!SWIG_IsOK(ecode1)) {
@@ -3109,15 +3132,30 @@ SWIGINTERN PyObject *_wrap_new_EmptyXmlResource(PyObject *SWIGUNUSEDPARM(self), 
     } 
     arg1 = static_cast< int >(val1);
   }
+  if (obj1) {
+    {
+      arg2 = wxString_in_helper(obj1);
+      if (arg2 == NULL) SWIG_fail;
+      temp2 = true;
+    }
+  }
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    result = (wxXmlResource *)new wxXmlResource(arg1);
+    result = (wxXmlResource *)new wxXmlResource(arg1,(wxString const &)*arg2);
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_wxXmlResource, SWIG_POINTER_OWN |  0 );
+  {
+    if (temp2)
+    delete arg2;
+  }
   return resultobj;
 fail:
+  {
+    if (temp2)
+    delete arg2;
+  }
   return NULL;
 }
 
@@ -4599,6 +4637,85 @@ SWIGINTERN PyObject *_wrap_XmlResource_SetFlags(PyObject *SWIGUNUSEDPARM(self), 
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_XmlResource_GetDomain(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxXmlResource *arg1 = (wxXmlResource *) 0 ;
+  wxString result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxXmlResource, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "XmlResource_GetDomain" "', expected argument " "1"" of type '" "wxXmlResource const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxXmlResource * >(argp1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = ((wxXmlResource const *)arg1)->GetDomain();
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  {
+#if wxUSE_UNICODE
+    resultobj = PyUnicode_FromWideChar((&result)->c_str(), (&result)->Len());
+#else
+    resultobj = PyString_FromStringAndSize((&result)->c_str(), (&result)->Len());
+#endif
+  }
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_XmlResource_SetDomain(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxXmlResource *arg1 = (wxXmlResource *) 0 ;
+  wxString *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  bool temp2 = false ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "domain", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:XmlResource_SetDomain",kwnames,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxXmlResource, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "XmlResource_SetDomain" "', expected argument " "1"" of type '" "wxXmlResource *""'"); 
+  }
+  arg1 = reinterpret_cast< wxXmlResource * >(argp1);
+  {
+    arg2 = wxString_in_helper(obj1);
+    if (arg2 == NULL) SWIG_fail;
+    temp2 = true;
+  }
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    (arg1)->SetDomain((wxString const &)*arg2);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  {
+    if (temp2)
+    delete arg2;
+  }
+  return resultobj;
+fail:
+  {
+    if (temp2)
+    delete arg2;
+  }
   return NULL;
 }
 
@@ -8381,6 +8498,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"XmlResource_Set", (PyCFunction) _wrap_XmlResource_Set, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"XmlResource_GetFlags", (PyCFunction)_wrap_XmlResource_GetFlags, METH_O, NULL},
 	 { (char *)"XmlResource_SetFlags", (PyCFunction) _wrap_XmlResource_SetFlags, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"XmlResource_GetDomain", (PyCFunction)_wrap_XmlResource_GetDomain, METH_O, NULL},
+	 { (char *)"XmlResource_SetDomain", (PyCFunction) _wrap_XmlResource_SetDomain, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"XmlResource_swigregister", XmlResource_swigregister, METH_VARARGS, NULL},
 	 { (char *)"XmlResource_swiginit", XmlResource_swiginit, METH_VARARGS, NULL},
 	 { (char *)"new_XmlSubclassFactory", (PyCFunction)_wrap_new_XmlSubclassFactory, METH_NOARGS, NULL},

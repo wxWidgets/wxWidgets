@@ -20410,13 +20410,6 @@ SWIGEXPORT void SWIG_init(void) {
   SWIG_Python_SetConstant(d, "HTML_COND_ISANCHOR",SWIG_From_int(static_cast< int >(wxHTML_COND_ISANCHOR)));
   SWIG_Python_SetConstant(d, "HTML_COND_ISIMAGEMAP",SWIG_From_int(static_cast< int >(wxHTML_COND_ISIMAGEMAP)));
   SWIG_Python_SetConstant(d, "HTML_COND_USER",SWIG_From_int(static_cast< int >(wxHTML_COND_USER)));
-  SWIG_Python_SetConstant(d, "HTML_FONT_SIZE_1",SWIG_From_int(static_cast< int >(wxHTML_FONT_SIZE_1)));
-  SWIG_Python_SetConstant(d, "HTML_FONT_SIZE_2",SWIG_From_int(static_cast< int >(wxHTML_FONT_SIZE_2)));
-  SWIG_Python_SetConstant(d, "HTML_FONT_SIZE_3",SWIG_From_int(static_cast< int >(wxHTML_FONT_SIZE_3)));
-  SWIG_Python_SetConstant(d, "HTML_FONT_SIZE_4",SWIG_From_int(static_cast< int >(wxHTML_FONT_SIZE_4)));
-  SWIG_Python_SetConstant(d, "HTML_FONT_SIZE_5",SWIG_From_int(static_cast< int >(wxHTML_FONT_SIZE_5)));
-  SWIG_Python_SetConstant(d, "HTML_FONT_SIZE_6",SWIG_From_int(static_cast< int >(wxHTML_FONT_SIZE_6)));
-  SWIG_Python_SetConstant(d, "HTML_FONT_SIZE_7",SWIG_From_int(static_cast< int >(wxHTML_FONT_SIZE_7)));
   SWIG_Python_SetConstant(d, "HW_SCROLLBAR_NEVER",SWIG_From_int(static_cast< int >(wxHW_SCROLLBAR_NEVER)));
   SWIG_Python_SetConstant(d, "HW_SCROLLBAR_AUTO",SWIG_From_int(static_cast< int >(wxHW_SCROLLBAR_AUTO)));
   SWIG_Python_SetConstant(d, "HW_NO_SELECTION",SWIG_From_int(static_cast< int >(wxHW_NO_SELECTION)));

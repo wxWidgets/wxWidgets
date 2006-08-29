@@ -194,6 +194,7 @@ ID_REDO = _core_.ID_REDO
 ID_HELP = _core_.ID_HELP
 ID_PRINT = _core_.ID_PRINT
 ID_PRINT_SETUP = _core_.ID_PRINT_SETUP
+ID_PAGE_SETUP = _core_.ID_PAGE_SETUP
 ID_PREVIEW = _core_.ID_PREVIEW
 ID_ABOUT = _core_.ID_ABOUT
 ID_HELP_CONTENTS = _core_.ID_HELP_CONTENTS
@@ -1344,6 +1345,15 @@ class Rect(object):
         Return True if the point is (not strcitly) inside the rect.
         """
         return _core_.Rect_Inside(*args, **kwargs)
+
+    def InsideRect(*args, **kwargs):
+        """
+        InsideRect(self, Rect rect) -> bool
+
+        Returns ``True`` if the given rectangle is completely inside this
+        rectangle or touches its boundary.
+        """
+        return _core_.Rect_InsideRect(*args, **kwargs)
 
     def Intersects(*args, **kwargs):
         """
@@ -2652,11 +2662,23 @@ class Image(Object):
         return _core_.Image_SetAlphaData(*args, **kwargs)
 
     def GetAlphaBuffer(*args, **kwargs):
-        """GetAlphaBuffer(self) -> PyObject"""
+        """
+        GetAlphaBuffer(self) -> PyObject
+
+        Returns a writable Python buffer object that is pointing at the Alpha
+        data buffer inside the wx.Image. You need to ensure that you do not
+        use this buffer object after the image has been destroyed.
+        """
         return _core_.Image_GetAlphaBuffer(*args, **kwargs)
 
     def SetAlphaBuffer(*args, **kwargs):
-        """SetAlphaBuffer(self, buffer alpha)"""
+        """
+        SetAlphaBuffer(self, buffer alpha)
+
+        Sets the internal image alpha pointer to point at a Python buffer
+        object.  This can save making an extra copy of the data but you must
+        ensure that the buffer object lives as long as the wx.Image does.
+        """
         return _core_.Image_SetAlphaBuffer(*args, **kwargs)
 
     def SetMaskColour(*args, **kwargs):
@@ -3040,6 +3062,45 @@ def Image_HSVtoRGB(*args, **kwargs):
     Converts a color in HSV color space to RGB color space.
     """
   return _core_.Image_HSVtoRGB(*args, **kwargs)
+
+
+def _ImageFromBuffer(*args, **kwargs):
+  """_ImageFromBuffer(int width, int height, buffer data, buffer alpha=None) -> Image"""
+  return _core_._ImageFromBuffer(*args, **kwargs)
+def ImageFromBuffer(width, height, dataBuffer, alphaBuffer=None):
+    """
+    Creates a `wx.Image` from the data in dataBuffer.  The dataBuffer
+    parameter must be a Python object that implements the buffer interface, or
+    is convertable to a buffer object, such as a string, array, etc.  The
+    dataBuffer object is expected to contain a series of RGB bytes and be
+    width*height*3 bytes long.  A buffer object can optionally be supplied for
+    the image's alpha channel data, and it is expected to be width*height
+    bytes long.
+
+    The wx.Image will be created with its data and alpha pointers initialized
+    to the memory address pointed to by the buffer objects, thus saving the
+    time needed to copy the image data from the buffer object to the wx.Image.
+    While this has advantages, it also has the shoot-yourself-in-the-foot
+    risks associated with sharing a C pointer between two objects.
+
+    To help alleviate the risk a reference to the data and alpha buffer
+    objects are kept with the wx.Image, so that they won't get deleted until
+    after the wx.Image is deleted.  However please be aware that it is not
+    guaranteed that an object won't move its memory buffer to a new location
+    when it needs to resize its contents.  If that happens then the wx.Image
+    will end up referring to an invalid memory location and could cause the
+    application to crash.  Therefore care should be taken to not manipulate
+    the objects used for the data and alpha buffers in a way that would cause
+    them to change size.
+    """
+    if not isinstance(dataBuffer, buffer):
+        dataBuffer = buffer(dataBuffer)
+    if alphaBuffer is not None and not isinstance(alphaBuffer, buffer):
+        alphaBuffer = buffer(alphaBuffer)
+    image = _core_._ImageFromBuffer(width, height, dataBuffer, alphaBuffer)
+    image._buffer = dataBuffer
+    image._alpha = alphaBuffer
+    return image
 
 def InitAllImageHandlers():
     """
@@ -6816,6 +6877,28 @@ class PyApp(EvtHandler):
         return _core_.PyApp_GetComCtl32Version(*args, **kwargs)
 
     GetComCtl32Version = staticmethod(GetComCtl32Version)
+    def DisplayAvailable(*args, **kwargs):
+        """
+        DisplayAvailable() -> bool
+
+        Tests if it is possible to create a GUI in the current environment.
+        This will mean different things on the different platforms.
+
+           * On X Windows systems this function will return ``False`` if it is
+             not able to open a connection to the X display, which can happen
+             if $DISPLAY is not set, or is not set correctly.
+
+           * On Mac OS X a ``False`` return value will mean that wx is not
+             able to access the window manager, which can happen if logged in
+             remotely or if running from the normal version of python instead
+             of the framework version, (i.e., pythonw.)
+
+           * On MS Windows...
+
+        """
+        return _core_.PyApp_DisplayAvailable(*args, **kwargs)
+
+    DisplayAvailable = staticmethod(DisplayAvailable)
 _core_.PyApp_swigregister(PyApp)
 
 def PyApp_IsMainLoopRunning(*args):
@@ -6875,6 +6958,27 @@ def PyApp_GetComCtl32Version(*args):
     it wasn't found at all.  Raises an exception on non-Windows platforms.
     """
   return _core_.PyApp_GetComCtl32Version(*args)
+
+def PyApp_DisplayAvailable(*args):
+  """
+    PyApp_DisplayAvailable() -> bool
+
+    Tests if it is possible to create a GUI in the current environment.
+    This will mean different things on the different platforms.
+
+       * On X Windows systems this function will return ``False`` if it is
+         not able to open a connection to the X display, which can happen
+         if $DISPLAY is not set, or is not set correctly.
+
+       * On Mac OS X a ``False`` return value will mean that wx is not
+         able to access the window manager, which can happen if logged in
+         remotely or if running from the normal version of python instead
+         of the framework version, (i.e., pythonw.)
+
+       * On MS Windows...
+
+    """
+  return _core_.PyApp_DisplayAvailable(*args)
 
 #---------------------------------------------------------------------------
 
@@ -7045,7 +7149,7 @@ class PyOnDemandOutputWindow:
 #----------------------------------------------------------------------
 
 _defRedirect = (wx.Platform == '__WXMSW__' or wx.Platform == '__WXMAC__')
-
+        
 class App(wx.PyApp):
     """
     The ``wx.App`` class represents the application and is used to:
@@ -7103,22 +7207,26 @@ class App(wx.PyApp):
             initialization to ensure that the system, toolkit and
             wxWidgets are fully initialized.
         """
+        
         wx.PyApp.__init__(self)
 
-        if wx.Platform == "__WXMAC__":
-            try:
-                import MacOS
-                if not MacOS.WMAvailable():
-                    print """\
-This program needs access to the screen. Please run with 'pythonw',
-not 'python', and only when you are logged in on the main display of
-your Mac."""
-                    _sys.exit(1)
-            except SystemExit:
-                raise
-            except:
-                pass
+        # make sure we can create a GUI
+        if not self.DisplayAvailable():
+            
+            if wx.Platform == "__WXMAC__":
+                msg = """This program needs access to the screen.
+Please run with 'pythonw', not 'python', and only when you are logged
+in on the main display of your Mac."""
+                
+            elif wx.Platform == "__WXGTK__":
+                msg ="Unable to access the X Display, is $DISPLAY set properly?"
 
+            else:
+                msg = "Unable to create GUI"
+                # TODO: more description is needed for wxMSW...
+
+            raise SystemExit(msg)
+        
         # This has to be done before OnInit
         self.SetUseBestVisual(useBestVisual)
 
@@ -9590,6 +9698,32 @@ class Window(EvtHandler):
         wxControl where it returns true.
         """
         return _core_.Window_ShouldInheritColours(*args, **kwargs)
+
+    def CanSetTransparent(*args, **kwargs):
+        """
+        CanSetTransparent(self) -> bool
+
+        Returns ``True`` if the platform supports setting the transparency for
+        this window.  Note that this method will err on the side of caution,
+        so it is possible that this will return ``False`` when it is in fact
+        possible to set the transparency.
+
+        NOTE: On X-windows systems the X server must have the composite
+        extension loaded, and there must be a composite manager program (such
+        as xcompmgr) running.
+        """
+        return _core_.Window_CanSetTransparent(*args, **kwargs)
+
+    def SetTransparent(*args, **kwargs):
+        """
+        SetTransparent(self, byte alpha) -> bool
+
+        Attempt to set the transparency of this window to the ``alpha`` value,
+        returns True on success.  The ``alpha`` value is an integer in the
+        range of 0 to 255, where 0 is fully transparent and 255 is fully
+        opaque.
+        """
+        return _core_.Window_SetTransparent(*args, **kwargs)
 
     def PostCreate(self, pre):
         """

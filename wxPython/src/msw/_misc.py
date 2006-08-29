@@ -328,41 +328,6 @@ def Shell(*args, **kwargs):
 def StartTimer(*args):
   """StartTimer()"""
   return _misc_.StartTimer(*args)
-UNKNOWN_PLATFORM = _misc_.UNKNOWN_PLATFORM
-CURSES = _misc_.CURSES
-XVIEW_X = _misc_.XVIEW_X
-MOTIF_X = _misc_.MOTIF_X
-COSE_X = _misc_.COSE_X
-NEXTSTEP = _misc_.NEXTSTEP
-MAC = _misc_.MAC
-MAC_DARWIN = _misc_.MAC_DARWIN
-BEOS = _misc_.BEOS
-GTK = _misc_.GTK
-GTK_WIN32 = _misc_.GTK_WIN32
-GTK_OS2 = _misc_.GTK_OS2
-GTK_BEOS = _misc_.GTK_BEOS
-GEOS = _misc_.GEOS
-OS2_PM = _misc_.OS2_PM
-WINDOWS = _misc_.WINDOWS
-MICROWINDOWS = _misc_.MICROWINDOWS
-PENWINDOWS = _misc_.PENWINDOWS
-WINDOWS_NT = _misc_.WINDOWS_NT
-WIN32S = _misc_.WIN32S
-WIN95 = _misc_.WIN95
-WIN386 = _misc_.WIN386
-WINDOWS_CE = _misc_.WINDOWS_CE
-WINDOWS_POCKETPC = _misc_.WINDOWS_POCKETPC
-WINDOWS_SMARTPHONE = _misc_.WINDOWS_SMARTPHONE
-MGL_UNIX = _misc_.MGL_UNIX
-MGL_X = _misc_.MGL_X
-MGL_WIN32 = _misc_.MGL_WIN32
-MGL_OS2 = _misc_.MGL_OS2
-MGL_DOS = _misc_.MGL_DOS
-WINDOWS_OS2 = _misc_.WINDOWS_OS2
-UNIX = _misc_.UNIX
-X11 = _misc_.X11
-PALMOS = _misc_.PALMOS
-DOS = _misc_.DOS
 
 def GetOsVersion(*args):
   """GetOsVersion() -> (platform, major, minor)"""
@@ -371,6 +336,14 @@ def GetOsVersion(*args):
 def GetOsDescription(*args):
   """GetOsDescription() -> String"""
   return _misc_.GetOsDescription(*args)
+
+def IsPlatformLittleEndian(*args):
+  """IsPlatformLittleEndian() -> bool"""
+  return _misc_.IsPlatformLittleEndian(*args)
+
+def IsPlatform64Bit(*args):
+  """IsPlatform64Bit() -> bool"""
+  return _misc_.IsPlatform64Bit(*args)
 
 def GetFreeMemory(*args):
   """GetFreeMemory() -> wxMemorySize"""
@@ -1050,6 +1023,155 @@ def PreSingleInstanceChecker(*args, **kwargs):
     """PreSingleInstanceChecker() -> SingleInstanceChecker"""
     val = _misc_.new_PreSingleInstanceChecker(*args, **kwargs)
     return val
+
+#---------------------------------------------------------------------------
+
+OS_UNKNOWN = _misc_.OS_UNKNOWN
+OS_MAC_OS = _misc_.OS_MAC_OS
+OS_MAC_OSX_DARWIN = _misc_.OS_MAC_OSX_DARWIN
+OS_MAC = _misc_.OS_MAC
+OS_WINDOWS_9X = _misc_.OS_WINDOWS_9X
+OS_WINDOWS_NT = _misc_.OS_WINDOWS_NT
+OS_WINDOWS_MICRO = _misc_.OS_WINDOWS_MICRO
+OS_WINDOWS_CE = _misc_.OS_WINDOWS_CE
+OS_WINDOWS = _misc_.OS_WINDOWS
+OS_UNIX_LINUX = _misc_.OS_UNIX_LINUX
+OS_UNIX_FREEBSD = _misc_.OS_UNIX_FREEBSD
+OS_UNIX_OPENBSD = _misc_.OS_UNIX_OPENBSD
+OS_UNIX_NETBSD = _misc_.OS_UNIX_NETBSD
+OS_UNIX_SOLARIS = _misc_.OS_UNIX_SOLARIS
+OS_UNIX_AIX = _misc_.OS_UNIX_AIX
+OS_UNIX_HPUX = _misc_.OS_UNIX_HPUX
+OS_UNIX = _misc_.OS_UNIX
+OS_DOS = _misc_.OS_DOS
+OS_OS2 = _misc_.OS_OS2
+PORT_UNKNOWN = _misc_.PORT_UNKNOWN
+PORT_BASE = _misc_.PORT_BASE
+PORT_MSW = _misc_.PORT_MSW
+PORT_MOTIF = _misc_.PORT_MOTIF
+PORT_GTK = _misc_.PORT_GTK
+PORT_MGL = _misc_.PORT_MGL
+PORT_X11 = _misc_.PORT_X11
+PORT_PM = _misc_.PORT_PM
+PORT_OS2 = _misc_.PORT_OS2
+PORT_MAC = _misc_.PORT_MAC
+PORT_COCOA = _misc_.PORT_COCOA
+PORT_WINCE = _misc_.PORT_WINCE
+PORT_PALMOS = _misc_.PORT_PALMOS
+PORT_DFB = _misc_.PORT_DFB
+ARCH_INVALID = _misc_.ARCH_INVALID
+ARCH_32 = _misc_.ARCH_32
+ARCH_64 = _misc_.ARCH_64
+ARCH_MAX = _misc_.ARCH_MAX
+ENDIAN_INVALID = _misc_.ENDIAN_INVALID
+ENDIAN_BIG = _misc_.ENDIAN_BIG
+ENDIAN_LITTLE = _misc_.ENDIAN_LITTLE
+ENDIAN_PDP = _misc_.ENDIAN_PDP
+ENDIAN_MAX = _misc_.ENDIAN_MAX
+class PlatformInformation(object):
+    """Proxy of C++ PlatformInformation class"""
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
+        """__init__(self) -> PlatformInformation"""
+        _misc_.PlatformInformation_swiginit(self,_misc_.new_PlatformInformation(*args, **kwargs))
+    def __eq__(*args, **kwargs):
+        """__eq__(self, PlatformInformation t) -> bool"""
+        return _misc_.PlatformInformation___eq__(*args, **kwargs)
+
+    def __ne__(*args, **kwargs):
+        """__ne__(self, PlatformInformation t) -> bool"""
+        return _misc_.PlatformInformation___ne__(*args, **kwargs)
+
+    def GetOSMajorVersion(*args, **kwargs):
+        """GetOSMajorVersion(self) -> int"""
+        return _misc_.PlatformInformation_GetOSMajorVersion(*args, **kwargs)
+
+    def GetOSMinorVersion(*args, **kwargs):
+        """GetOSMinorVersion(self) -> int"""
+        return _misc_.PlatformInformation_GetOSMinorVersion(*args, **kwargs)
+
+    def GetToolkitMajorVersion(*args, **kwargs):
+        """GetToolkitMajorVersion(self) -> int"""
+        return _misc_.PlatformInformation_GetToolkitMajorVersion(*args, **kwargs)
+
+    def GetToolkitMinorVersion(*args, **kwargs):
+        """GetToolkitMinorVersion(self) -> int"""
+        return _misc_.PlatformInformation_GetToolkitMinorVersion(*args, **kwargs)
+
+    def IsUsingUniversalWidgets(*args, **kwargs):
+        """IsUsingUniversalWidgets(self) -> bool"""
+        return _misc_.PlatformInformation_IsUsingUniversalWidgets(*args, **kwargs)
+
+    def GetOperatingSystemId(*args, **kwargs):
+        """GetOperatingSystemId(self) -> int"""
+        return _misc_.PlatformInformation_GetOperatingSystemId(*args, **kwargs)
+
+    def GetPortId(*args, **kwargs):
+        """GetPortId(self) -> int"""
+        return _misc_.PlatformInformation_GetPortId(*args, **kwargs)
+
+    def GetArchitecture(*args, **kwargs):
+        """GetArchitecture(self) -> int"""
+        return _misc_.PlatformInformation_GetArchitecture(*args, **kwargs)
+
+    def GetEndianness(*args, **kwargs):
+        """GetEndianness(self) -> int"""
+        return _misc_.PlatformInformation_GetEndianness(*args, **kwargs)
+
+    def GetOperatingSystemFamilyName(*args, **kwargs):
+        """GetOperatingSystemFamilyName(self) -> String"""
+        return _misc_.PlatformInformation_GetOperatingSystemFamilyName(*args, **kwargs)
+
+    def GetOperatingSystemIdName(*args, **kwargs):
+        """GetOperatingSystemIdName(self) -> String"""
+        return _misc_.PlatformInformation_GetOperatingSystemIdName(*args, **kwargs)
+
+    def GetPortIdName(*args, **kwargs):
+        """GetPortIdName(self) -> String"""
+        return _misc_.PlatformInformation_GetPortIdName(*args, **kwargs)
+
+    def GetPortIdShortName(*args, **kwargs):
+        """GetPortIdShortName(self) -> String"""
+        return _misc_.PlatformInformation_GetPortIdShortName(*args, **kwargs)
+
+    def GetArchName(*args, **kwargs):
+        """GetArchName(self) -> String"""
+        return _misc_.PlatformInformation_GetArchName(*args, **kwargs)
+
+    def GetEndiannessName(*args, **kwargs):
+        """GetEndiannessName(self) -> String"""
+        return _misc_.PlatformInformation_GetEndiannessName(*args, **kwargs)
+
+    def SetOSVersion(*args, **kwargs):
+        """SetOSVersion(self, int major, int minor)"""
+        return _misc_.PlatformInformation_SetOSVersion(*args, **kwargs)
+
+    def SetToolkitVersion(*args, **kwargs):
+        """SetToolkitVersion(self, int major, int minor)"""
+        return _misc_.PlatformInformation_SetToolkitVersion(*args, **kwargs)
+
+    def SetOperatingSystemId(*args, **kwargs):
+        """SetOperatingSystemId(self, int n)"""
+        return _misc_.PlatformInformation_SetOperatingSystemId(*args, **kwargs)
+
+    def SetPortId(*args, **kwargs):
+        """SetPortId(self, int n)"""
+        return _misc_.PlatformInformation_SetPortId(*args, **kwargs)
+
+    def SetArchitecture(*args, **kwargs):
+        """SetArchitecture(self, int n)"""
+        return _misc_.PlatformInformation_SetArchitecture(*args, **kwargs)
+
+    def SetEndianness(*args, **kwargs):
+        """SetEndianness(self, int n)"""
+        return _misc_.PlatformInformation_SetEndianness(*args, **kwargs)
+
+    def IsOk(*args, **kwargs):
+        """IsOk(self) -> bool"""
+        return _misc_.PlatformInformation_IsOk(*args, **kwargs)
+
+_misc_.PlatformInformation_swigregister(PlatformInformation)
 
 
 def DrawWindowOnDC(*args, **kwargs):
@@ -4891,7 +5013,7 @@ class URLDataObject(DataObject):
     __repr__ = _swig_repr
     def __init__(self, *args, **kwargs): 
         """
-        __init__(self) -> URLDataObject
+        __init__(self, String url=EmptyString) -> URLDataObject
 
         This data object holds a URL in a format that is compatible with some
         browsers such that it is able to be dragged to or from them.

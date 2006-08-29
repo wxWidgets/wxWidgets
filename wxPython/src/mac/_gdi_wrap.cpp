@@ -2463,148 +2463,156 @@ SWIG_Python_MustGetPtr(PyObject *obj, swig_type_info *ty, int argnum, int flags)
 
 /* -------- TYPES TABLE (BEGIN) -------- */
 
-#define SWIGTYPE_p_char swig_types[0]
-#define SWIGTYPE_p_double swig_types[1]
-#define SWIGTYPE_p_form_ops_t swig_types[2]
-#define SWIGTYPE_p_int swig_types[3]
-#define SWIGTYPE_p_unsigned_char swig_types[4]
-#define SWIGTYPE_p_unsigned_int swig_types[5]
-#define SWIGTYPE_p_unsigned_long swig_types[6]
-#define SWIGTYPE_p_wxANIHandler swig_types[7]
-#define SWIGTYPE_p_wxAcceleratorTable swig_types[8]
-#define SWIGTYPE_p_wxActivateEvent swig_types[9]
-#define SWIGTYPE_p_wxBMPHandler swig_types[10]
-#define SWIGTYPE_p_wxBitmap swig_types[11]
-#define SWIGTYPE_p_wxBoxSizer swig_types[12]
-#define SWIGTYPE_p_wxBrush swig_types[13]
-#define SWIGTYPE_p_wxBrushList swig_types[14]
-#define SWIGTYPE_p_wxBufferedDC swig_types[15]
-#define SWIGTYPE_p_wxBufferedPaintDC swig_types[16]
-#define SWIGTYPE_p_wxCURHandler swig_types[17]
-#define SWIGTYPE_p_wxChildFocusEvent swig_types[18]
-#define SWIGTYPE_p_wxClientDC swig_types[19]
-#define SWIGTYPE_p_wxClipboardTextEvent swig_types[20]
-#define SWIGTYPE_p_wxCloseEvent swig_types[21]
-#define SWIGTYPE_p_wxColour swig_types[22]
-#define SWIGTYPE_p_wxColourDatabase swig_types[23]
-#define SWIGTYPE_p_wxCommandEvent swig_types[24]
-#define SWIGTYPE_p_wxContextMenuEvent swig_types[25]
-#define SWIGTYPE_p_wxControl swig_types[26]
-#define SWIGTYPE_p_wxControlWithItems swig_types[27]
-#define SWIGTYPE_p_wxCursor swig_types[28]
-#define SWIGTYPE_p_wxDC swig_types[29]
-#define SWIGTYPE_p_wxDash swig_types[30]
-#define SWIGTYPE_p_wxDateEvent swig_types[31]
-#define SWIGTYPE_p_wxDisplayChangedEvent swig_types[32]
-#define SWIGTYPE_p_wxDropFilesEvent swig_types[33]
-#define SWIGTYPE_p_wxDuplexMode swig_types[34]
-#define SWIGTYPE_p_wxEffects swig_types[35]
-#define SWIGTYPE_p_wxEncodingConverter swig_types[36]
-#define SWIGTYPE_p_wxEraseEvent swig_types[37]
-#define SWIGTYPE_p_wxEvent swig_types[38]
-#define SWIGTYPE_p_wxEvtHandler swig_types[39]
-#define SWIGTYPE_p_wxFSFile swig_types[40]
-#define SWIGTYPE_p_wxFileSystem swig_types[41]
-#define SWIGTYPE_p_wxFlexGridSizer swig_types[42]
-#define SWIGTYPE_p_wxFocusEvent swig_types[43]
-#define SWIGTYPE_p_wxFont swig_types[44]
-#define SWIGTYPE_p_wxFontList swig_types[45]
-#define SWIGTYPE_p_wxFontMapper swig_types[46]
-#define SWIGTYPE_p_wxGBSizerItem swig_types[47]
-#define SWIGTYPE_p_wxGDIObjListBase swig_types[48]
-#define SWIGTYPE_p_wxGDIObject swig_types[49]
-#define SWIGTYPE_p_wxGIFHandler swig_types[50]
-#define SWIGTYPE_p_wxGridBagSizer swig_types[51]
-#define SWIGTYPE_p_wxGridSizer swig_types[52]
-#define SWIGTYPE_p_wxICOHandler swig_types[53]
-#define SWIGTYPE_p_wxIcon swig_types[54]
-#define SWIGTYPE_p_wxIconBundle swig_types[55]
-#define SWIGTYPE_p_wxIconLocation swig_types[56]
-#define SWIGTYPE_p_wxIconizeEvent swig_types[57]
-#define SWIGTYPE_p_wxIdleEvent swig_types[58]
-#define SWIGTYPE_p_wxImage swig_types[59]
-#define SWIGTYPE_p_wxImageHandler swig_types[60]
-#define SWIGTYPE_p_wxImageList swig_types[61]
-#define SWIGTYPE_p_wxIndividualLayoutConstraint swig_types[62]
-#define SWIGTYPE_p_wxInitDialogEvent swig_types[63]
-#define SWIGTYPE_p_wxJPEGHandler swig_types[64]
-#define SWIGTYPE_p_wxKeyEvent swig_types[65]
-#define SWIGTYPE_p_wxLanguageInfo swig_types[66]
-#define SWIGTYPE_p_wxLayoutConstraints swig_types[67]
-#define SWIGTYPE_p_wxLocale swig_types[68]
-#define SWIGTYPE_p_wxMask swig_types[69]
-#define SWIGTYPE_p_wxMaximizeEvent swig_types[70]
-#define SWIGTYPE_p_wxMemoryDC swig_types[71]
-#define SWIGTYPE_p_wxMenu swig_types[72]
-#define SWIGTYPE_p_wxMenuBar swig_types[73]
-#define SWIGTYPE_p_wxMenuEvent swig_types[74]
-#define SWIGTYPE_p_wxMenuItem swig_types[75]
-#define SWIGTYPE_p_wxMetaFile swig_types[76]
-#define SWIGTYPE_p_wxMetaFileDC swig_types[77]
-#define SWIGTYPE_p_wxMirrorDC swig_types[78]
-#define SWIGTYPE_p_wxMouseCaptureChangedEvent swig_types[79]
-#define SWIGTYPE_p_wxMouseCaptureLostEvent swig_types[80]
-#define SWIGTYPE_p_wxMouseEvent swig_types[81]
-#define SWIGTYPE_p_wxMoveEvent swig_types[82]
-#define SWIGTYPE_p_wxNativeEncodingInfo swig_types[83]
-#define SWIGTYPE_p_wxNativeFontInfo swig_types[84]
-#define SWIGTYPE_p_wxNavigationKeyEvent swig_types[85]
-#define SWIGTYPE_p_wxNcPaintEvent swig_types[86]
-#define SWIGTYPE_p_wxNotifyEvent swig_types[87]
-#define SWIGTYPE_p_wxObject swig_types[88]
-#define SWIGTYPE_p_wxPCXHandler swig_types[89]
-#define SWIGTYPE_p_wxPNGHandler swig_types[90]
-#define SWIGTYPE_p_wxPNMHandler swig_types[91]
-#define SWIGTYPE_p_wxPaintDC swig_types[92]
-#define SWIGTYPE_p_wxPaintEvent swig_types[93]
-#define SWIGTYPE_p_wxPalette swig_types[94]
-#define SWIGTYPE_p_wxPaletteChangedEvent swig_types[95]
-#define SWIGTYPE_p_wxPaperSize swig_types[96]
-#define SWIGTYPE_p_wxPen swig_types[97]
-#define SWIGTYPE_p_wxPenList swig_types[98]
-#define SWIGTYPE_p_wxPoint swig_types[99]
-#define SWIGTYPE_p_wxPostScriptDC swig_types[100]
-#define SWIGTYPE_p_wxPrintData swig_types[101]
-#define SWIGTYPE_p_wxPrinterDC swig_types[102]
-#define SWIGTYPE_p_wxPseudoDC swig_types[103]
-#define SWIGTYPE_p_wxPyApp swig_types[104]
-#define SWIGTYPE_p_wxPyCommandEvent swig_types[105]
-#define SWIGTYPE_p_wxPyEvent swig_types[106]
-#define SWIGTYPE_p_wxPyFontEnumerator swig_types[107]
-#define SWIGTYPE_p_wxPyImageHandler swig_types[108]
-#define SWIGTYPE_p_wxPySizer swig_types[109]
-#define SWIGTYPE_p_wxPyValidator swig_types[110]
-#define SWIGTYPE_p_wxQueryNewPaletteEvent swig_types[111]
-#define SWIGTYPE_p_wxRect swig_types[112]
-#define SWIGTYPE_p_wxRegion swig_types[113]
-#define SWIGTYPE_p_wxRegionIterator swig_types[114]
-#define SWIGTYPE_p_wxRendererNative swig_types[115]
-#define SWIGTYPE_p_wxRendererVersion swig_types[116]
-#define SWIGTYPE_p_wxScreenDC swig_types[117]
-#define SWIGTYPE_p_wxScrollEvent swig_types[118]
-#define SWIGTYPE_p_wxScrollWinEvent swig_types[119]
-#define SWIGTYPE_p_wxSetCursorEvent swig_types[120]
-#define SWIGTYPE_p_wxShowEvent swig_types[121]
-#define SWIGTYPE_p_wxSize swig_types[122]
-#define SWIGTYPE_p_wxSizeEvent swig_types[123]
-#define SWIGTYPE_p_wxSizer swig_types[124]
-#define SWIGTYPE_p_wxSizerItem swig_types[125]
-#define SWIGTYPE_p_wxSplitterRenderParams swig_types[126]
-#define SWIGTYPE_p_wxStaticBoxSizer swig_types[127]
-#define SWIGTYPE_p_wxStdDialogButtonSizer swig_types[128]
-#define SWIGTYPE_p_wxStockGDI swig_types[129]
-#define SWIGTYPE_p_wxString swig_types[130]
-#define SWIGTYPE_p_wxSysColourChangedEvent swig_types[131]
-#define SWIGTYPE_p_wxTIFFHandler swig_types[132]
-#define SWIGTYPE_p_wxUpdateUIEvent swig_types[133]
-#define SWIGTYPE_p_wxValidator swig_types[134]
-#define SWIGTYPE_p_wxWindow swig_types[135]
-#define SWIGTYPE_p_wxWindowCreateEvent swig_types[136]
-#define SWIGTYPE_p_wxWindowDC swig_types[137]
-#define SWIGTYPE_p_wxWindowDestroyEvent swig_types[138]
-#define SWIGTYPE_p_wxXPMHandler swig_types[139]
-static swig_type_info *swig_types[141];
-static swig_module_info swig_module = {swig_types, 140, 0, 0, 0, 0};
+#define SWIGTYPE_p_buffer swig_types[0]
+#define SWIGTYPE_p_char swig_types[1]
+#define SWIGTYPE_p_double swig_types[2]
+#define SWIGTYPE_p_form_ops_t swig_types[3]
+#define SWIGTYPE_p_int swig_types[4]
+#define SWIGTYPE_p_unsigned_char swig_types[5]
+#define SWIGTYPE_p_unsigned_int swig_types[6]
+#define SWIGTYPE_p_unsigned_long swig_types[7]
+#define SWIGTYPE_p_wxANIHandler swig_types[8]
+#define SWIGTYPE_p_wxAcceleratorTable swig_types[9]
+#define SWIGTYPE_p_wxActivateEvent swig_types[10]
+#define SWIGTYPE_p_wxAlphaPixelData swig_types[11]
+#define SWIGTYPE_p_wxAlphaPixelData_Accessor swig_types[12]
+#define SWIGTYPE_p_wxBMPHandler swig_types[13]
+#define SWIGTYPE_p_wxBitmap swig_types[14]
+#define SWIGTYPE_p_wxBoxSizer swig_types[15]
+#define SWIGTYPE_p_wxBrush swig_types[16]
+#define SWIGTYPE_p_wxBrushList swig_types[17]
+#define SWIGTYPE_p_wxBufferedDC swig_types[18]
+#define SWIGTYPE_p_wxBufferedPaintDC swig_types[19]
+#define SWIGTYPE_p_wxCURHandler swig_types[20]
+#define SWIGTYPE_p_wxChar swig_types[21]
+#define SWIGTYPE_p_wxChildFocusEvent swig_types[22]
+#define SWIGTYPE_p_wxClientDC swig_types[23]
+#define SWIGTYPE_p_wxClipboardTextEvent swig_types[24]
+#define SWIGTYPE_p_wxCloseEvent swig_types[25]
+#define SWIGTYPE_p_wxColour swig_types[26]
+#define SWIGTYPE_p_wxColourDatabase swig_types[27]
+#define SWIGTYPE_p_wxCommandEvent swig_types[28]
+#define SWIGTYPE_p_wxContextMenuEvent swig_types[29]
+#define SWIGTYPE_p_wxControl swig_types[30]
+#define SWIGTYPE_p_wxControlWithItems swig_types[31]
+#define SWIGTYPE_p_wxCursor swig_types[32]
+#define SWIGTYPE_p_wxDC swig_types[33]
+#define SWIGTYPE_p_wxDash swig_types[34]
+#define SWIGTYPE_p_wxDateEvent swig_types[35]
+#define SWIGTYPE_p_wxDisplayChangedEvent swig_types[36]
+#define SWIGTYPE_p_wxDropFilesEvent swig_types[37]
+#define SWIGTYPE_p_wxDuplexMode swig_types[38]
+#define SWIGTYPE_p_wxEffects swig_types[39]
+#define SWIGTYPE_p_wxEncodingConverter swig_types[40]
+#define SWIGTYPE_p_wxEraseEvent swig_types[41]
+#define SWIGTYPE_p_wxEvent swig_types[42]
+#define SWIGTYPE_p_wxEvtHandler swig_types[43]
+#define SWIGTYPE_p_wxFSFile swig_types[44]
+#define SWIGTYPE_p_wxFileSystem swig_types[45]
+#define SWIGTYPE_p_wxFlexGridSizer swig_types[46]
+#define SWIGTYPE_p_wxFocusEvent swig_types[47]
+#define SWIGTYPE_p_wxFont swig_types[48]
+#define SWIGTYPE_p_wxFontList swig_types[49]
+#define SWIGTYPE_p_wxFontMapper swig_types[50]
+#define SWIGTYPE_p_wxGBSizerItem swig_types[51]
+#define SWIGTYPE_p_wxGDIObjListBase swig_types[52]
+#define SWIGTYPE_p_wxGDIObject swig_types[53]
+#define SWIGTYPE_p_wxGIFHandler swig_types[54]
+#define SWIGTYPE_p_wxGridBagSizer swig_types[55]
+#define SWIGTYPE_p_wxGridSizer swig_types[56]
+#define SWIGTYPE_p_wxICOHandler swig_types[57]
+#define SWIGTYPE_p_wxIcon swig_types[58]
+#define SWIGTYPE_p_wxIconBundle swig_types[59]
+#define SWIGTYPE_p_wxIconLocation swig_types[60]
+#define SWIGTYPE_p_wxIconizeEvent swig_types[61]
+#define SWIGTYPE_p_wxIdleEvent swig_types[62]
+#define SWIGTYPE_p_wxImage swig_types[63]
+#define SWIGTYPE_p_wxImageHandler swig_types[64]
+#define SWIGTYPE_p_wxImageList swig_types[65]
+#define SWIGTYPE_p_wxIndividualLayoutConstraint swig_types[66]
+#define SWIGTYPE_p_wxInitDialogEvent swig_types[67]
+#define SWIGTYPE_p_wxJPEGHandler swig_types[68]
+#define SWIGTYPE_p_wxKeyEvent swig_types[69]
+#define SWIGTYPE_p_wxLanguageInfo swig_types[70]
+#define SWIGTYPE_p_wxLayoutConstraints swig_types[71]
+#define SWIGTYPE_p_wxLocale swig_types[72]
+#define SWIGTYPE_p_wxMask swig_types[73]
+#define SWIGTYPE_p_wxMaximizeEvent swig_types[74]
+#define SWIGTYPE_p_wxMemoryDC swig_types[75]
+#define SWIGTYPE_p_wxMenu swig_types[76]
+#define SWIGTYPE_p_wxMenuBar swig_types[77]
+#define SWIGTYPE_p_wxMenuEvent swig_types[78]
+#define SWIGTYPE_p_wxMenuItem swig_types[79]
+#define SWIGTYPE_p_wxMetaFile swig_types[80]
+#define SWIGTYPE_p_wxMetaFileDC swig_types[81]
+#define SWIGTYPE_p_wxMirrorDC swig_types[82]
+#define SWIGTYPE_p_wxMouseCaptureChangedEvent swig_types[83]
+#define SWIGTYPE_p_wxMouseCaptureLostEvent swig_types[84]
+#define SWIGTYPE_p_wxMouseEvent swig_types[85]
+#define SWIGTYPE_p_wxMoveEvent swig_types[86]
+#define SWIGTYPE_p_wxNativeEncodingInfo swig_types[87]
+#define SWIGTYPE_p_wxNativeFontInfo swig_types[88]
+#define SWIGTYPE_p_wxNativePixelData swig_types[89]
+#define SWIGTYPE_p_wxNativePixelData_Accessor swig_types[90]
+#define SWIGTYPE_p_wxNavigationKeyEvent swig_types[91]
+#define SWIGTYPE_p_wxNcPaintEvent swig_types[92]
+#define SWIGTYPE_p_wxNotifyEvent swig_types[93]
+#define SWIGTYPE_p_wxObject swig_types[94]
+#define SWIGTYPE_p_wxPCXHandler swig_types[95]
+#define SWIGTYPE_p_wxPNGHandler swig_types[96]
+#define SWIGTYPE_p_wxPNMHandler swig_types[97]
+#define SWIGTYPE_p_wxPaintDC swig_types[98]
+#define SWIGTYPE_p_wxPaintEvent swig_types[99]
+#define SWIGTYPE_p_wxPalette swig_types[100]
+#define SWIGTYPE_p_wxPaletteChangedEvent swig_types[101]
+#define SWIGTYPE_p_wxPaperSize swig_types[102]
+#define SWIGTYPE_p_wxPen swig_types[103]
+#define SWIGTYPE_p_wxPenList swig_types[104]
+#define SWIGTYPE_p_wxPixelDataBase swig_types[105]
+#define SWIGTYPE_p_wxPoint swig_types[106]
+#define SWIGTYPE_p_wxPostScriptDC swig_types[107]
+#define SWIGTYPE_p_wxPrintData swig_types[108]
+#define SWIGTYPE_p_wxPrinterDC swig_types[109]
+#define SWIGTYPE_p_wxPseudoDC swig_types[110]
+#define SWIGTYPE_p_wxPyApp swig_types[111]
+#define SWIGTYPE_p_wxPyCommandEvent swig_types[112]
+#define SWIGTYPE_p_wxPyEvent swig_types[113]
+#define SWIGTYPE_p_wxPyFontEnumerator swig_types[114]
+#define SWIGTYPE_p_wxPyImageHandler swig_types[115]
+#define SWIGTYPE_p_wxPyLocale swig_types[116]
+#define SWIGTYPE_p_wxPySizer swig_types[117]
+#define SWIGTYPE_p_wxPyValidator swig_types[118]
+#define SWIGTYPE_p_wxQueryNewPaletteEvent swig_types[119]
+#define SWIGTYPE_p_wxRect swig_types[120]
+#define SWIGTYPE_p_wxRegion swig_types[121]
+#define SWIGTYPE_p_wxRegionIterator swig_types[122]
+#define SWIGTYPE_p_wxRendererNative swig_types[123]
+#define SWIGTYPE_p_wxRendererVersion swig_types[124]
+#define SWIGTYPE_p_wxScreenDC swig_types[125]
+#define SWIGTYPE_p_wxScrollEvent swig_types[126]
+#define SWIGTYPE_p_wxScrollWinEvent swig_types[127]
+#define SWIGTYPE_p_wxSetCursorEvent swig_types[128]
+#define SWIGTYPE_p_wxShowEvent swig_types[129]
+#define SWIGTYPE_p_wxSize swig_types[130]
+#define SWIGTYPE_p_wxSizeEvent swig_types[131]
+#define SWIGTYPE_p_wxSizer swig_types[132]
+#define SWIGTYPE_p_wxSizerItem swig_types[133]
+#define SWIGTYPE_p_wxSplitterRenderParams swig_types[134]
+#define SWIGTYPE_p_wxStaticBoxSizer swig_types[135]
+#define SWIGTYPE_p_wxStdDialogButtonSizer swig_types[136]
+#define SWIGTYPE_p_wxStockGDI swig_types[137]
+#define SWIGTYPE_p_wxString swig_types[138]
+#define SWIGTYPE_p_wxSysColourChangedEvent swig_types[139]
+#define SWIGTYPE_p_wxTIFFHandler swig_types[140]
+#define SWIGTYPE_p_wxUpdateUIEvent swig_types[141]
+#define SWIGTYPE_p_wxValidator swig_types[142]
+#define SWIGTYPE_p_wxWindow swig_types[143]
+#define SWIGTYPE_p_wxWindowCreateEvent swig_types[144]
+#define SWIGTYPE_p_wxWindowDC swig_types[145]
+#define SWIGTYPE_p_wxWindowDestroyEvent swig_types[146]
+#define SWIGTYPE_p_wxXPMHandler swig_types[147]
+static swig_type_info *swig_types[149];
+static swig_module_info swig_module = {swig_types, 148, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -2802,19 +2810,41 @@ SWIGINTERN bool wxColour___ne__(wxColour *self,PyObject *other){
             }
             return self->operator!=(*obj);
         }
-SWIGINTERN PyObject *wxColour_Get(wxColour *self){
-            PyObject* rv = PyTuple_New(3);
+
+SWIGINTERN int
+SWIG_AsVal_bool (PyObject *obj, bool *val)
+{
+  if (obj == Py_True) {
+    if (val) *val = true;
+    return SWIG_OK;
+  } else if (obj == Py_False) {
+    if (val) *val = false;
+    return SWIG_OK;
+  } else {
+    long v = 0;
+    int res = SWIG_AddCast(SWIG_AsVal_long (obj, val ? &v : 0));
+    if (SWIG_IsOK(res) && val) *val = v ? true : false;
+    return res;
+  }
+}
+
+SWIGINTERN PyObject *wxColour_Get(wxColour *self,bool includeAlpha=false){
+            PyObject* rv = PyTuple_New(includeAlpha ? 4 : 3);
             int red = -1;
             int green = -1;
             int blue = -1;
+            int alpha = wxALPHA_OPAQUE;
             if (self->Ok()) {
                 red =   self->Red();
                 green = self->Green();
                 blue =  self->Blue();
+                alpha = self->Alpha();
             }
             PyTuple_SetItem(rv, 0, PyInt_FromLong(red));
             PyTuple_SetItem(rv, 1, PyInt_FromLong(green));
             PyTuple_SetItem(rv, 2, PyInt_FromLong(blue));
+            if (includeAlpha)
+                PyTuple_SetItem(rv, 3, PyInt_FromLong(alpha));                
             return rv;
         }
 SWIGINTERN unsigned long wxColour_GetRGB(wxColour *self){
@@ -2894,6 +2924,9 @@ SWIG_AsVal_short (PyObject * obj, short *val)
 }
 
 
+#include <wx/rawbmp.h>
+
+
 #include <wx/image.h>
     
     static char** ConvertListOfStrings(PyObject* listOfStrings) {
@@ -2916,22 +2949,22 @@ SWIG_AsVal_short (PyObject * obj, short *val)
 
 
 SWIGINTERN wxBitmap *new_wxBitmap(PyObject *listOfStrings){
-            char**    cArray = NULL;
-            wxBitmap* bmp;
+                char**    cArray = NULL;
+                wxBitmap* bmp;
 
-            cArray = ConvertListOfStrings(listOfStrings);
-            if (! cArray)
-                return NULL;
-            bmp = new wxBitmap(cArray);
-            delete [] cArray;
-            return bmp;
-        }
+                cArray = ConvertListOfStrings(listOfStrings);
+                if (! cArray)
+                    return NULL;
+                bmp = new wxBitmap(cArray);
+                delete [] cArray;
+                return bmp;
+            }
 SWIGINTERN wxBitmap *new_wxBitmap(PyObject *bits,int width,int height,int depth=1){
-            char*      buf;
-            Py_ssize_t length;
-            PyString_AsStringAndSize(bits, &buf, &length);
-            return new wxBitmap(buf, width, height, depth);
-        }
+                char*      buf;
+                Py_ssize_t length;
+                PyString_AsStringAndSize(bits, &buf, &length);
+                return new wxBitmap(buf, width, height, depth);
+            }
 SWIGINTERN wxSize wxBitmap_GetSize(wxBitmap *self){
             wxSize size(self->GetWidth(), self->GetHeight());
             return size;
@@ -2946,6 +2979,167 @@ SWIGINTERN void wxBitmap_SetSize(wxBitmap *self,wxSize const &size){
         }
 SWIGINTERN bool wxBitmap___eq__(wxBitmap *self,wxBitmap const *other){ return other ? (*self == *other) : false; }
 SWIGINTERN bool wxBitmap___ne__(wxBitmap *self,wxBitmap const *other){ return other ? (*self != *other) : true;  }
+
+// See http://tinyurl.com/e5adr for what premultiplying alpha means.  It
+// appears to me that the other platforms are already doing it, so I'll just
+// automatically do it for wxMSW here.
+#ifdef __WXMSW__
+#define wxPy_premultiply(p, a)   ((p) * (a) / 256)
+#define wxPy_unpremultiply(p, a) ((a) ? ((p) * 256 / (a)) : (p))    
+#else
+#define wxPy_premultiply(p, a)   (p)
+#define wxPy_unpremultiply(p, a) (p)    
+#endif
+
+
+    wxBitmap* _BitmapFromBufferAlpha(int width, int height,
+                                    buffer data, int DATASIZE,
+                                    buffer alpha, int ALPHASIZE)
+    {
+        if (DATASIZE != width*height*3) {
+            wxPyErr_SetString(PyExc_ValueError, "Invalid data buffer size.");
+            return NULL;
+        }
+
+        if (ALPHASIZE != width*height) {
+            wxPyErr_SetString(PyExc_ValueError, "Invalid alpha buffer size.");
+            return NULL;
+        }
+
+        wxBitmap* bmp = new wxBitmap(width, height, 32);
+        wxAlphaPixelData pixData(*bmp, wxPoint(0,0), wxSize(width,height));
+        if (! pixData) {
+            // raise an exception...
+            wxPyErr_SetString(PyExc_RuntimeError,
+                              "Failed to gain raw access to bitmap data.");
+            return NULL;
+        }
+                
+        pixData.UseAlpha();
+        wxAlphaPixelData::Iterator p(pixData);
+        for (int y=0; y<height; y++) {
+            wxAlphaPixelData::Iterator rowStart = p;
+            for (int x=0; x<width; x++) {
+                byte a = *(alpha++);
+                p.Red()   = wxPy_premultiply(*(data++), a);
+                p.Green() = wxPy_premultiply(*(data++), a);
+                p.Blue()  = wxPy_premultiply(*(data++), a);
+                p.Alpha() = a;
+                ++p; 
+            }
+            p = rowStart;
+            p.OffsetY(pixData, 1);
+        }
+        return bmp;
+    }        
+        
+    wxBitmap* _BitmapFromBuffer(int width, int height, buffer data, int DATASIZE)
+    {
+        if (DATASIZE != width*height*3) {
+            wxPyErr_SetString(PyExc_ValueError, "Invalid data buffer size.");
+            return NULL;
+        }
+
+        wxBitmap* bmp = new wxBitmap(width, height, 24);
+        wxNativePixelData pixData(*bmp, wxPoint(0,0), wxSize(width,height));
+        if (! pixData) {
+            // raise an exception...
+            wxPyErr_SetString(PyExc_RuntimeError,
+                              "Failed to gain raw access to bitmap data.");
+            return NULL;
+        }
+                
+        wxNativePixelData::Iterator p(pixData);
+        for (int y=0; y<height; y++) {
+            wxNativePixelData::Iterator rowStart = p;
+            for (int x=0; x<width; x++) {
+                p.Red()   = *(data++);
+                p.Green() = *(data++);
+                p.Blue()  = *(data++);
+                ++p; 
+            }
+            p = rowStart;
+            p.OffsetY(pixData, 1);
+        }
+        return bmp;
+    }
+
+
+    wxBitmap* _BitmapFromBufferRGBA(int width, int height, buffer data, int DATASIZE)
+    {
+        if (DATASIZE != width*height*4) {
+            wxPyErr_SetString(PyExc_ValueError, "Invalid data buffer size.");
+            return NULL;
+        }
+
+        wxBitmap* bmp = new wxBitmap(width, height, 32);
+        wxAlphaPixelData pixData(*bmp, wxPoint(0,0), wxSize(width,height));
+        if (! pixData) {
+            // raise an exception...
+            wxPyErr_SetString(PyExc_RuntimeError,
+                              "Failed to gain raw access to bitmap data.");
+            return NULL;
+        }
+               
+        pixData.UseAlpha();
+        wxAlphaPixelData::Iterator p(pixData);
+        for (int y=0; y<height; y++) {
+            wxAlphaPixelData::Iterator rowStart = p;
+            for (int x=0; x<width; x++) {
+                byte a = data[3];
+                p.Red()   = wxPy_premultiply(*(data++), a);
+                p.Green() = wxPy_premultiply(*(data++), a);
+                p.Blue()  = wxPy_premultiply(*(data++), a);
+                p.Alpha() = a; data++;
+                ++p; 
+            }
+            p = rowStart;
+            p.OffsetY(pixData, 1);
+        }
+        return bmp;
+    }        
+
+
+    typedef wxNativePixelData::Iterator wxNativePixelData_Accessor;
+
+SWIGINTERN bool wxNativePixelData___nonzero__(wxNativePixelData *self){ return self->operator bool(); }
+SWIGINTERN void wxNativePixelData_Accessor_nextPixel(wxNativePixelData_Accessor *self){ ++(*self); }
+SWIGINTERN void wxNativePixelData_Accessor_Set(wxNativePixelData_Accessor *self,byte red,byte green,byte blue){
+        self->Red()   = red;
+        self->Green() = green;
+        self->Blue()  = blue;
+    }
+SWIGINTERN PyObject *wxNativePixelData_Accessor_Get(wxNativePixelData_Accessor *self){
+        PyObject* rv = PyTuple_New(3);
+        PyTuple_SetItem(rv, 0, PyInt_FromLong(self->Red()));
+        PyTuple_SetItem(rv, 1, PyInt_FromLong(self->Green()));
+        PyTuple_SetItem(rv, 2, PyInt_FromLong(self->Blue()));
+        return rv;            
+    }
+
+    typedef wxAlphaPixelData::Iterator wxAlphaPixelData_Accessor;
+
+SWIGINTERN bool wxAlphaPixelData___nonzero__(wxAlphaPixelData *self){ return self->operator bool(); }
+SWIGINTERN void wxAlphaPixelData_Accessor_nextPixel(wxAlphaPixelData_Accessor *self){ ++(*self); }
+SWIGINTERN void wxAlphaPixelData_Accessor_Set(wxAlphaPixelData_Accessor *self,byte red,byte green,byte blue,byte alpha){
+        self->Red()   = wxPy_premultiply(red,   alpha);
+        self->Green() = wxPy_premultiply(green, alpha);
+        self->Blue()  = wxPy_premultiply(blue,  alpha);
+        self->Alpha() = alpha;
+    }
+SWIGINTERN PyObject *wxAlphaPixelData_Accessor_Get(wxAlphaPixelData_Accessor *self){
+        PyObject* rv = PyTuple_New(4);
+        int red   = self->Red();
+        int green = self->Green();
+        int blue  = self->Blue();
+        int alpha = self->Alpha();
+            
+        PyTuple_SetItem(rv, 0, PyInt_FromLong( wxPy_unpremultiply(red,   alpha) ));
+        PyTuple_SetItem(rv, 1, PyInt_FromLong( wxPy_unpremultiply(green, alpha) ));
+        PyTuple_SetItem(rv, 2, PyInt_FromLong( wxPy_unpremultiply(blue,  alpha) ));
+        PyTuple_SetItem(rv, 3, PyInt_FromLong( alpha ));
+        return rv;            
+    }
 SWIGINTERN wxMask *new_wxMask(wxBitmap const &bitmap,wxColour const &colour=wxNullColour){
             if ( !colour.Ok() )
                 return new wxMask(bitmap, *wxBLACK);
@@ -3014,24 +3208,6 @@ SWIGINTERN bool wxRegionIterator___nonzero__(wxRegionIterator *self){
 #include <wx/fontutil.h>
 #include <wx/fontmap.h>
 #include <wx/fontenum.h>
-
-
-SWIGINTERN int
-SWIG_AsVal_bool (PyObject *obj, bool *val)
-{
-  if (obj == Py_True) {
-    if (val) *val = true;
-    return SWIG_OK;
-  } else if (obj == Py_False) {
-    if (val) *val = false;
-    return SWIG_OK;
-  } else {
-    long v = 0;
-    int res = SWIG_AddCast(SWIG_AsVal_long (obj, val ? &v : 0));
-    if (SWIG_IsOK(res) && val) *val = v ? true : false;
-    return res;
-  }
-}
 
 SWIGINTERN wxString wxNativeFontInfo___str__(wxNativeFontInfo *self){
             return self->ToString();
@@ -3154,6 +3330,137 @@ SWIGINTERN bool wxLocale_Init2(wxLocale *self,int language=wxLANGUAGE_DEFAULT,in
             setlocale(LC_NUMERIC, "C");
 #endif
             return rc;
+        }
+
+class wxPyLocale : public wxLocale
+{
+public:
+    wxPyLocale();
+
+    wxPyLocale(const wxChar *szName,                             // name (for messages)
+             const wxChar *szShort = (const wxChar *) NULL,      // dir prefix (for msg files)
+             const wxChar *szLocale = (const wxChar *) NULL,     // locale (for setlocale)
+             bool bLoadDefault = true,                           // preload wxstd.mo?
+             bool bConvertEncoding = false);                     // convert Win<->Unix if necessary?
+
+    wxPyLocale(int language, // wxLanguage id or custom language
+             int flags = wxLOCALE_LOAD_DEFAULT | wxLOCALE_CONV_ENCODING);
+             
+    ~wxPyLocale();
+
+    virtual const wxChar *GetString(const wxChar *szOrigString,
+                                    const wxChar *szDomain = NULL) const;
+    virtual const wxChar *GetString(const wxChar *szOrigString,
+                                    const wxChar *szOrigString2, size_t n,
+                                    const wxChar *szDomain = NULL) const;
+    
+    virtual wxChar *GetSingularString(const wxChar *szOrigString,
+                                      const wxChar *szDomain = NULL) const;
+    virtual wxChar *GetPluralString(const wxChar *szOrigString,
+                                    const wxChar *szOrigString2, size_t n,
+                                    const wxChar *szDomain = NULL) const;
+
+    PYPRIVATE;
+private:
+    DECLARE_NO_COPY_CLASS(wxPyLocale)
+};
+
+wxPyLocale::wxPyLocale() : wxLocale()
+{
+}
+
+wxPyLocale::wxPyLocale(const wxChar *szName,  // name (for messages)
+             const wxChar *szShort,           // dir prefix (for msg files)
+             const wxChar *szLocale,          // locale (for setlocale)
+             bool bLoadDefault,               // preload wxstd.mo?
+             bool bConvertEncoding)           // convert Win<->Unix if necessary?
+             : wxLocale(szName, szShort, szLocale, bLoadDefault, bConvertEncoding)
+{
+}
+
+wxPyLocale::wxPyLocale(int language, // wxLanguage id or custom language
+                       int flags) : wxLocale(language, flags)
+{
+}
+             
+wxPyLocale::~wxPyLocale()
+{
+}
+
+const wxChar *wxPyLocale::GetString(const wxChar *szOrigString,
+                                    const wxChar *szDomain) const 
+{
+    wxChar *str = GetSingularString(szOrigString, szDomain);
+    return (str != NULL) ? str : wxLocale::GetString(szOrigString, szDomain);
+}
+
+const wxChar *wxPyLocale::GetString(const wxChar *szOrigString,
+                                    const wxChar *szOrigString2, size_t n,
+                                    const wxChar *szDomain) const
+{
+    wxChar *str = GetPluralString(szOrigString, szOrigString2, n, szDomain);
+    return (str != NULL) ? str : wxLocale::GetString(szOrigString, szOrigString2, n, szDomain);
+}
+
+wxChar *wxPyLocale::GetSingularString(const wxChar *szOrigString,
+                                      const wxChar *szDomain) const
+{
+    bool found;
+    static wxString str;
+    str = _T("error in translation"); // when the first if condition is true but the second if condition is not we do not want to return the previously queried string.
+    wxPyBlock_t blocked = wxPyBeginBlockThreads();
+    if((found=wxPyCBH_findCallback(m_myInst, "GetSingularString"))) {
+        PyObject* param1 = wx2PyString(szOrigString);
+        PyObject* param2 = wx2PyString(szDomain);
+        PyObject* ret = wxPyCBH_callCallbackObj(m_myInst, Py_BuildValue("(OO)", param1, param2));
+        Py_DECREF(param1);
+        Py_DECREF(param2);
+        if (ret) {
+            str = Py2wxString(ret);
+            Py_DECREF(ret);
+        }
+    }
+    wxPyEndBlockThreads(blocked);
+    return (found ? (wxChar*)str.c_str() : NULL);
+}
+
+wxChar *wxPyLocale::GetPluralString(const wxChar *szOrigString,
+                                    const wxChar *szOrigString2, size_t n,
+                                    const wxChar *szDomain) const
+{
+    bool found;
+    static wxString str;
+    str = _T("error in translation"); // when the first if condition is true but the second if condition is not we do not want to return the previously queried string.
+    wxPyBlock_t blocked = wxPyBeginBlockThreads();
+    if((found=wxPyCBH_findCallback(m_myInst, "GetPluralString"))) {
+        PyObject* param1 = wx2PyString(szOrigString);
+        PyObject* param2 = wx2PyString(szOrigString2);
+        PyObject* param4 = wx2PyString(szDomain);
+        PyObject* ret = wxPyCBH_callCallbackObj(m_myInst, Py_BuildValue("(OOiO)", param1, param2, (int)n, param4));
+        Py_DECREF(param1);
+        Py_DECREF(param2);
+        Py_DECREF(param4);
+        if( ret) {
+            str = Py2wxString(ret);
+            Py_DECREF(ret);
+        }
+    }
+    wxPyEndBlockThreads(blocked);
+    return (found ? (wxChar*)str.c_str() : NULL);
+}
+
+SWIGINTERN wxPyLocale *new_wxPyLocale(int language=-1,int flags=wxLOCALE_LOAD_DEFAULT|wxLOCALE_CONV_ENCODING){
+            wxPyLocale* loc;
+            if (language == -1)
+                loc = new wxPyLocale();
+            else
+                loc = new wxPyLocale(language, flags);
+            // Python before 2.4 needs to have LC_NUMERIC set to "C" in order
+            // for the floating point conversions and such to work right.
+#if PY_VERSION_HEX < 0x02040000
+            setlocale(LC_NUMERIC, "C");
+#endif
+            return loc;
         }
 
 #include "wx/wxPython/pydrawxxx.h"
@@ -3369,6 +3676,7 @@ SWIGINTERN PyObject *_wrap_new_Colour(PyObject *SWIGUNUSEDPARM(self), PyObject *
   byte arg1 = (byte) 0 ;
   byte arg2 = (byte) 0 ;
   byte arg3 = (byte) 0 ;
+  byte arg4 = (byte) wxALPHA_OPAQUE ;
   wxColour *result = 0 ;
   unsigned char val1 ;
   int ecode1 = 0 ;
@@ -3376,14 +3684,17 @@ SWIGINTERN PyObject *_wrap_new_Colour(PyObject *SWIGUNUSEDPARM(self), PyObject *
   int ecode2 = 0 ;
   unsigned char val3 ;
   int ecode3 = 0 ;
+  unsigned char val4 ;
+  int ecode4 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
   char *  kwnames[] = {
-    (char *) "red",(char *) "green",(char *) "blue", NULL 
+    (char *) "red",(char *) "green",(char *) "blue",(char *) "alpha", NULL 
   };
   
-  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"|OOO:new_Colour",kwnames,&obj0,&obj1,&obj2)) SWIG_fail;
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"|OOOO:new_Colour",kwnames,&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
   if (obj0) {
     ecode1 = SWIG_AsVal_unsigned_SS_char(obj0, &val1);
     if (!SWIG_IsOK(ecode1)) {
@@ -3405,9 +3716,16 @@ SWIGINTERN PyObject *_wrap_new_Colour(PyObject *SWIGUNUSEDPARM(self), PyObject *
     } 
     arg3 = static_cast< byte >(val3);
   }
+  if (obj3) {
+    ecode4 = SWIG_AsVal_unsigned_SS_char(obj3, &val4);
+    if (!SWIG_IsOK(ecode4)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "new_Colour" "', expected argument " "4"" of type '" "byte""'");
+    } 
+    arg4 = static_cast< byte >(val4);
+  }
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    result = (wxColour *)new wxColour(arg1,arg2,arg3);
+    result = (wxColour *)new wxColour(arg1,arg2,arg3,arg4);
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
@@ -3598,6 +3916,34 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_Colour_Alpha(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxColour *arg1 = (wxColour *) 0 ;
+  byte result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxColour, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Colour_Alpha" "', expected argument " "1"" of type '" "wxColour *""'"); 
+  }
+  arg1 = reinterpret_cast< wxColour * >(argp1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = (byte)(arg1)->Alpha();
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_From_unsigned_SS_char(static_cast< unsigned char >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_Colour_Ok(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   wxColour *arg1 = (wxColour *) 0 ;
@@ -3634,6 +3980,7 @@ SWIGINTERN PyObject *_wrap_Colour_Set(PyObject *SWIGUNUSEDPARM(self), PyObject *
   byte arg2 ;
   byte arg3 ;
   byte arg4 ;
+  byte arg5 = (byte) wxALPHA_OPAQUE ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   unsigned char val2 ;
@@ -3642,15 +3989,18 @@ SWIGINTERN PyObject *_wrap_Colour_Set(PyObject *SWIGUNUSEDPARM(self), PyObject *
   int ecode3 = 0 ;
   unsigned char val4 ;
   int ecode4 = 0 ;
+  unsigned char val5 ;
+  int ecode5 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
   PyObject * obj3 = 0 ;
+  PyObject * obj4 = 0 ;
   char *  kwnames[] = {
-    (char *) "self",(char *) "red",(char *) "green",(char *) "blue", NULL 
+    (char *) "self",(char *) "red",(char *) "green",(char *) "blue",(char *) "alpha", NULL 
   };
   
-  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOO:Colour_Set",kwnames,&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOO|O:Colour_Set",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxColour, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Colour_Set" "', expected argument " "1"" of type '" "wxColour *""'"); 
@@ -3671,9 +4021,16 @@ SWIGINTERN PyObject *_wrap_Colour_Set(PyObject *SWIGUNUSEDPARM(self), PyObject *
     SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "Colour_Set" "', expected argument " "4"" of type '" "byte""'");
   } 
   arg4 = static_cast< byte >(val4);
+  if (obj4) {
+    ecode5 = SWIG_AsVal_unsigned_SS_char(obj4, &val5);
+    if (!SWIG_IsOK(ecode5)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "Colour_Set" "', expected argument " "5"" of type '" "byte""'");
+    } 
+    arg5 = static_cast< byte >(val5);
+  }
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    (arg1)->Set(arg2,arg3,arg4);
+    (arg1)->Set(arg2,arg3,arg4,arg5);
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
@@ -3908,25 +4265,36 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_Colour_Get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_Colour_Get(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   wxColour *arg1 = (wxColour *) 0 ;
+  bool arg2 = (bool) false ;
   PyObject *result = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  PyObject *swig_obj[1] ;
+  bool val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "includeAlpha", NULL 
+  };
   
-  if (!args) SWIG_fail;
-  swig_obj[0] = args;
-  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxColour, 0 |  0 );
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|O:Colour_Get",kwnames,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxColour, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Colour_Get" "', expected argument " "1"" of type '" "wxColour *""'"); 
   }
   arg1 = reinterpret_cast< wxColour * >(argp1);
+  if (obj1) {
+    ecode2 = SWIG_AsVal_bool(obj1, &val2);
+    if (!SWIG_IsOK(ecode2)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Colour_Get" "', expected argument " "2"" of type '" "bool""'");
+    } 
+    arg2 = static_cast< bool >(val2);
+  }
   {
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    result = (PyObject *)wxColour_Get(arg1);
-    wxPyEndAllowThreads(__tstate);
+    result = (PyObject *)wxColour_Get(arg1,arg2);
     if (PyErr_Occurred()) SWIG_fail;
   }
   resultobj = result;
@@ -3952,9 +4320,7 @@ SWIGINTERN PyObject *_wrap_Colour_GetRGB(PyObject *SWIGUNUSEDPARM(self), PyObjec
   }
   arg1 = reinterpret_cast< wxColour * >(argp1);
   {
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
     result = (unsigned long)wxColour_GetRGB(arg1);
-    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
   resultobj = SWIG_From_unsigned_SS_long(static_cast< unsigned long >(result));
@@ -5396,10 +5762,8 @@ SWIGINTERN PyObject *_wrap_delete_Bitmap(PyObject *SWIGUNUSEDPARM(self), PyObjec
   }
   arg1 = reinterpret_cast< wxBitmap * >(argp1);
   {
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
     delete arg1;
     
-    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
   resultobj = SWIG_Py_Void();
@@ -5634,9 +5998,7 @@ SWIGINTERN PyObject *_wrap_Bitmap_Ok(PyObject *SWIGUNUSEDPARM(self), PyObject *a
   }
   arg1 = reinterpret_cast< wxBitmap * >(argp1);
   {
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
     result = (bool)(arg1)->Ok();
-    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
   {
@@ -5664,9 +6026,7 @@ SWIGINTERN PyObject *_wrap_Bitmap_GetWidth(PyObject *SWIGUNUSEDPARM(self), PyObj
   }
   arg1 = reinterpret_cast< wxBitmap * >(argp1);
   {
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
     result = (int)(arg1)->GetWidth();
-    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
   resultobj = SWIG_From_int(static_cast< int >(result));
@@ -5692,9 +6052,7 @@ SWIGINTERN PyObject *_wrap_Bitmap_GetHeight(PyObject *SWIGUNUSEDPARM(self), PyOb
   }
   arg1 = reinterpret_cast< wxBitmap * >(argp1);
   {
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
     result = (int)(arg1)->GetHeight();
-    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
   resultobj = SWIG_From_int(static_cast< int >(result));
@@ -5720,9 +6078,7 @@ SWIGINTERN PyObject *_wrap_Bitmap_GetDepth(PyObject *SWIGUNUSEDPARM(self), PyObj
   }
   arg1 = reinterpret_cast< wxBitmap * >(argp1);
   {
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
     result = (int)(arg1)->GetDepth();
-    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
   resultobj = SWIG_From_int(static_cast< int >(result));
@@ -5748,9 +6104,7 @@ SWIGINTERN PyObject *_wrap_Bitmap_GetSize(PyObject *SWIGUNUSEDPARM(self), PyObje
   }
   arg1 = reinterpret_cast< wxBitmap * >(argp1);
   {
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
     result = wxBitmap_GetSize(arg1);
-    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
   resultobj = SWIG_NewPointerObj((new wxSize(static_cast< const wxSize& >(result))), SWIGTYPE_p_wxSize, SWIG_POINTER_OWN |  0 );
@@ -5776,9 +6130,7 @@ SWIGINTERN PyObject *_wrap_Bitmap_ConvertToImage(PyObject *SWIGUNUSEDPARM(self),
   }
   arg1 = reinterpret_cast< wxBitmap * >(argp1);
   {
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
     result = ((wxBitmap const *)arg1)->ConvertToImage();
-    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
   resultobj = SWIG_NewPointerObj((new wxImage(static_cast< const wxImage& >(result))), SWIGTYPE_p_wxImage, SWIG_POINTER_OWN |  0 );
@@ -5804,9 +6156,7 @@ SWIGINTERN PyObject *_wrap_Bitmap_GetMask(PyObject *SWIGUNUSEDPARM(self), PyObje
   }
   arg1 = reinterpret_cast< wxBitmap * >(argp1);
   {
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
     result = (wxMask *)((wxBitmap const *)arg1)->GetMask();
-    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_wxMask, 0 |  0 );
@@ -5840,9 +6190,7 @@ SWIGINTERN PyObject *_wrap_Bitmap_SetMask(PyObject *SWIGUNUSEDPARM(self), PyObje
     SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Bitmap_SetMask" "', expected argument " "2"" of type '" "wxMask *""'");
   }
   {
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
     (arg1)->SetMask(arg2);
-    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
   resultobj = SWIG_Py_Void();
@@ -5876,9 +6224,7 @@ SWIGINTERN PyObject *_wrap_Bitmap_SetMaskColour(PyObject *SWIGUNUSEDPARM(self), 
     if ( ! wxColour_helper(obj1, &arg2)) SWIG_fail;
   }
   {
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
     wxBitmap_SetMaskColour(arg1,(wxColour const &)*arg2);
-    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
   resultobj = SWIG_Py_Void();
@@ -5913,9 +6259,7 @@ SWIGINTERN PyObject *_wrap_Bitmap_GetSubBitmap(PyObject *SWIGUNUSEDPARM(self), P
     if ( ! wxRect_helper(obj1, &arg2)) SWIG_fail;
   }
   {
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
     result = ((wxBitmap const *)arg1)->GetSubBitmap((wxRect const &)*arg2);
-    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
   resultobj = SWIG_NewPointerObj((new wxBitmap(static_cast< const wxBitmap& >(result))), SWIGTYPE_p_wxBitmap, SWIG_POINTER_OWN |  0 );
@@ -5971,9 +6315,7 @@ SWIGINTERN PyObject *_wrap_Bitmap_SaveFile(PyObject *SWIGUNUSEDPARM(self), PyObj
     arg4 = reinterpret_cast< wxPalette * >(argp4);
   }
   {
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
     result = (bool)(arg1)->SaveFile((wxString const &)*arg2,arg3,arg4);
-    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
   {
@@ -6028,9 +6370,7 @@ SWIGINTERN PyObject *_wrap_Bitmap_LoadFile(PyObject *SWIGUNUSEDPARM(self), PyObj
   } 
   arg3 = static_cast< wxBitmapType >(val3);
   {
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
     result = (bool)(arg1)->LoadFile((wxString const &)*arg2,arg3);
-    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
   {
@@ -6066,9 +6406,7 @@ SWIGINTERN PyObject *_wrap_Bitmap_GetPalette(PyObject *SWIGUNUSEDPARM(self), PyO
   }
   arg1 = reinterpret_cast< wxBitmap * >(argp1);
   {
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
     result = (wxPalette *)((wxBitmap const *)arg1)->GetPalette();
-    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_wxPalette, 0 |  0 );
@@ -6108,9 +6446,7 @@ SWIGINTERN PyObject *_wrap_Bitmap_CopyFromIcon(PyObject *SWIGUNUSEDPARM(self), P
   }
   arg2 = reinterpret_cast< wxIcon * >(argp2);
   {
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
     result = (bool)(arg1)->CopyFromIcon((wxIcon const &)*arg2);
-    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
   {
@@ -6148,9 +6484,7 @@ SWIGINTERN PyObject *_wrap_Bitmap_SetHeight(PyObject *SWIGUNUSEDPARM(self), PyOb
   } 
   arg2 = static_cast< int >(val2);
   {
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
     (arg1)->SetHeight(arg2);
-    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
   resultobj = SWIG_Py_Void();
@@ -6186,9 +6520,7 @@ SWIGINTERN PyObject *_wrap_Bitmap_SetWidth(PyObject *SWIGUNUSEDPARM(self), PyObj
   } 
   arg2 = static_cast< int >(val2);
   {
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
     (arg1)->SetWidth(arg2);
-    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
   resultobj = SWIG_Py_Void();
@@ -6224,9 +6556,7 @@ SWIGINTERN PyObject *_wrap_Bitmap_SetDepth(PyObject *SWIGUNUSEDPARM(self), PyObj
   } 
   arg2 = static_cast< int >(val2);
   {
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
     (arg1)->SetDepth(arg2);
-    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
   resultobj = SWIG_Py_Void();
@@ -6260,9 +6590,7 @@ SWIGINTERN PyObject *_wrap_Bitmap_SetSize(PyObject *SWIGUNUSEDPARM(self), PyObje
     if ( ! wxSize_helper(obj1, &arg2)) SWIG_fail;
   }
   {
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
     wxBitmap_SetSize(arg1,(wxSize const &)*arg2);
-    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
   resultobj = SWIG_Py_Void();
@@ -6299,9 +6627,7 @@ SWIGINTERN PyObject *_wrap_Bitmap___eq__(PyObject *SWIGUNUSEDPARM(self), PyObjec
   }
   arg2 = reinterpret_cast< wxBitmap * >(argp2);
   {
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
     result = (bool)wxBitmap___eq__(arg1,(wxBitmap const *)arg2);
-    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
   {
@@ -6340,9 +6666,7 @@ SWIGINTERN PyObject *_wrap_Bitmap___ne__(PyObject *SWIGUNUSEDPARM(self), PyObjec
   }
   arg2 = reinterpret_cast< wxBitmap * >(argp2);
   {
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
     result = (bool)wxBitmap___ne__(arg1,(wxBitmap const *)arg2);
-    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
   {
@@ -6362,6 +6686,1813 @@ SWIGINTERN PyObject *Bitmap_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObjec
 }
 
 SWIGINTERN PyObject *Bitmap_swiginit(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  return SWIG_Python_InitShadowInstance(args);
+}
+
+SWIGINTERN PyObject *_wrap__BitmapFromBufferAlpha(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  int arg1 ;
+  int arg2 ;
+  buffer arg3 ;
+  int arg4 ;
+  buffer arg5 ;
+  int arg6 ;
+  wxBitmap *result = 0 ;
+  int val1 ;
+  int ecode1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  char *  kwnames[] = {
+    (char *) "width",(char *) "height",(char *) "data",(char *) "alpha", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOO:_BitmapFromBufferAlpha",kwnames,&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
+  ecode1 = SWIG_AsVal_int(obj0, &val1);
+  if (!SWIG_IsOK(ecode1)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "_BitmapFromBufferAlpha" "', expected argument " "1"" of type '" "int""'");
+  } 
+  arg1 = static_cast< int >(val1);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "_BitmapFromBufferAlpha" "', expected argument " "2"" of type '" "int""'");
+  } 
+  arg2 = static_cast< int >(val2);
+  {
+    if (obj2 != Py_None) {
+      if (!PyArg_Parse(obj2, "t#", &arg3, &arg4)) SWIG_fail;
+    }
+  }
+  {
+    if (obj3 != Py_None) {
+      if (!PyArg_Parse(obj3, "t#", &arg5, &arg6)) SWIG_fail;
+    }
+  }
+  {
+    result = (wxBitmap *)_BitmapFromBufferAlpha(arg1,arg2,arg3,arg4,arg5,arg6);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_wxBitmap, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap__BitmapFromBuffer(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  int arg1 ;
+  int arg2 ;
+  buffer arg3 ;
+  int arg4 ;
+  wxBitmap *result = 0 ;
+  int val1 ;
+  int ecode1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  char *  kwnames[] = {
+    (char *) "width",(char *) "height",(char *) "data", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:_BitmapFromBuffer",kwnames,&obj0,&obj1,&obj2)) SWIG_fail;
+  ecode1 = SWIG_AsVal_int(obj0, &val1);
+  if (!SWIG_IsOK(ecode1)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "_BitmapFromBuffer" "', expected argument " "1"" of type '" "int""'");
+  } 
+  arg1 = static_cast< int >(val1);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "_BitmapFromBuffer" "', expected argument " "2"" of type '" "int""'");
+  } 
+  arg2 = static_cast< int >(val2);
+  {
+    if (obj2 != Py_None) {
+      if (!PyArg_Parse(obj2, "t#", &arg3, &arg4)) SWIG_fail;
+    }
+  }
+  {
+    result = (wxBitmap *)_BitmapFromBuffer(arg1,arg2,arg3,arg4);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_wxBitmap, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap__BitmapFromBufferRGBA(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  int arg1 ;
+  int arg2 ;
+  buffer arg3 ;
+  int arg4 ;
+  wxBitmap *result = 0 ;
+  int val1 ;
+  int ecode1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  char *  kwnames[] = {
+    (char *) "width",(char *) "height",(char *) "data", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:_BitmapFromBufferRGBA",kwnames,&obj0,&obj1,&obj2)) SWIG_fail;
+  ecode1 = SWIG_AsVal_int(obj0, &val1);
+  if (!SWIG_IsOK(ecode1)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "_BitmapFromBufferRGBA" "', expected argument " "1"" of type '" "int""'");
+  } 
+  arg1 = static_cast< int >(val1);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "_BitmapFromBufferRGBA" "', expected argument " "2"" of type '" "int""'");
+  } 
+  arg2 = static_cast< int >(val2);
+  {
+    if (obj2 != Py_None) {
+      if (!PyArg_Parse(obj2, "t#", &arg3, &arg4)) SWIG_fail;
+    }
+  }
+  {
+    result = (wxBitmap *)_BitmapFromBufferRGBA(arg1,arg2,arg3,arg4);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_wxBitmap, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_PixelDataBase_GetOrigin(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxPixelDataBase *arg1 = (wxPixelDataBase *) 0 ;
+  wxPoint result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxPixelDataBase, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "PixelDataBase_GetOrigin" "', expected argument " "1"" of type '" "wxPixelDataBase const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxPixelDataBase * >(argp1);
+  {
+    result = ((wxPixelDataBase const *)arg1)->GetOrigin();
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_NewPointerObj((new wxPoint(static_cast< const wxPoint& >(result))), SWIGTYPE_p_wxPoint, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_PixelDataBase_GetWidth(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxPixelDataBase *arg1 = (wxPixelDataBase *) 0 ;
+  int result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxPixelDataBase, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "PixelDataBase_GetWidth" "', expected argument " "1"" of type '" "wxPixelDataBase const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxPixelDataBase * >(argp1);
+  {
+    result = (int)((wxPixelDataBase const *)arg1)->GetWidth();
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_From_int(static_cast< int >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_PixelDataBase_GetHeight(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxPixelDataBase *arg1 = (wxPixelDataBase *) 0 ;
+  int result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxPixelDataBase, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "PixelDataBase_GetHeight" "', expected argument " "1"" of type '" "wxPixelDataBase const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxPixelDataBase * >(argp1);
+  {
+    result = (int)((wxPixelDataBase const *)arg1)->GetHeight();
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_From_int(static_cast< int >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_PixelDataBase_GetSize(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxPixelDataBase *arg1 = (wxPixelDataBase *) 0 ;
+  wxSize result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxPixelDataBase, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "PixelDataBase_GetSize" "', expected argument " "1"" of type '" "wxPixelDataBase const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxPixelDataBase * >(argp1);
+  {
+    result = ((wxPixelDataBase const *)arg1)->GetSize();
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_NewPointerObj((new wxSize(static_cast< const wxSize& >(result))), SWIGTYPE_p_wxSize, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_PixelDataBase_GetRowStride(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxPixelDataBase *arg1 = (wxPixelDataBase *) 0 ;
+  int result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxPixelDataBase, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "PixelDataBase_GetRowStride" "', expected argument " "1"" of type '" "wxPixelDataBase const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxPixelDataBase * >(argp1);
+  {
+    result = (int)((wxPixelDataBase const *)arg1)->GetRowStride();
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_From_int(static_cast< int >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *PixelDataBase_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *obj;
+  if (!SWIG_Python_UnpackTuple(args,(char*)"swigregister", 1, 1,&obj)) return NULL;
+  SWIG_TypeNewClientData(SWIGTYPE_p_wxPixelDataBase, SWIG_NewClientData(obj));
+  return SWIG_Py_Void();
+}
+
+SWIGINTERN PyObject *_wrap_new_NativePixelData__SWIG_0(PyObject *SWIGUNUSEDPARM(self), int nobjs, PyObject **swig_obj) {
+  PyObject *resultobj = 0;
+  wxBitmap *arg1 = 0 ;
+  wxNativePixelData *result = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  
+  if ((nobjs < 1) || (nobjs > 1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1, SWIGTYPE_p_wxBitmap,  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_NativePixelData" "', expected argument " "1"" of type '" "wxBitmap &""'"); 
+  }
+  if (!argp1) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_NativePixelData" "', expected argument " "1"" of type '" "wxBitmap &""'"); 
+  }
+  arg1 = reinterpret_cast< wxBitmap * >(argp1);
+  {
+    result = (wxNativePixelData *)new wxNativePixelData(*arg1);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_wxNativePixelData, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_NativePixelData__SWIG_1(PyObject *SWIGUNUSEDPARM(self), int nobjs, PyObject **swig_obj) {
+  PyObject *resultobj = 0;
+  wxBitmap *arg1 = 0 ;
+  wxRect *arg2 = 0 ;
+  wxNativePixelData *result = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  wxRect temp2 ;
+  
+  if ((nobjs < 2) || (nobjs > 2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1, SWIGTYPE_p_wxBitmap,  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_NativePixelData" "', expected argument " "1"" of type '" "wxBitmap &""'"); 
+  }
+  if (!argp1) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_NativePixelData" "', expected argument " "1"" of type '" "wxBitmap &""'"); 
+  }
+  arg1 = reinterpret_cast< wxBitmap * >(argp1);
+  {
+    arg2 = &temp2;
+    if ( ! wxRect_helper(swig_obj[1], &arg2)) SWIG_fail;
+  }
+  {
+    result = (wxNativePixelData *)new wxNativePixelData(*arg1,(wxRect const &)*arg2);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_wxNativePixelData, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_NativePixelData__SWIG_2(PyObject *SWIGUNUSEDPARM(self), int nobjs, PyObject **swig_obj) {
+  PyObject *resultobj = 0;
+  wxBitmap *arg1 = 0 ;
+  wxPoint *arg2 = 0 ;
+  wxSize *arg3 = 0 ;
+  wxNativePixelData *result = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  wxPoint temp2 ;
+  wxSize temp3 ;
+  
+  if ((nobjs < 3) || (nobjs > 3)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1, SWIGTYPE_p_wxBitmap,  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_NativePixelData" "', expected argument " "1"" of type '" "wxBitmap &""'"); 
+  }
+  if (!argp1) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_NativePixelData" "', expected argument " "1"" of type '" "wxBitmap &""'"); 
+  }
+  arg1 = reinterpret_cast< wxBitmap * >(argp1);
+  {
+    arg2 = &temp2;
+    if ( ! wxPoint_helper(swig_obj[1], &arg2)) SWIG_fail;
+  }
+  {
+    arg3 = &temp3;
+    if ( ! wxSize_helper(swig_obj[2], &arg3)) SWIG_fail;
+  }
+  {
+    result = (wxNativePixelData *)new wxNativePixelData(*arg1,(wxPoint const &)*arg2,(wxSize const &)*arg3);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_wxNativePixelData, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_NativePixelData(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[4];
+  
+  if (!(argc = SWIG_Python_UnpackTuple(args,"new_NativePixelData",0,3,argv))) SWIG_fail;
+  --argc;
+  if (argc == 1) {
+    return _wrap_new_NativePixelData__SWIG_0(self, argc, argv);
+  }
+  if (argc == 2) {
+    return _wrap_new_NativePixelData__SWIG_1(self, argc, argv);
+  }
+  if (argc == 3) {
+    return _wrap_new_NativePixelData__SWIG_2(self, argc, argv);
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"No matching function for overloaded 'new_NativePixelData'");
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_delete_NativePixelData(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxNativePixelData *arg1 = (wxNativePixelData *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxNativePixelData, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_NativePixelData" "', expected argument " "1"" of type '" "wxNativePixelData *""'"); 
+  }
+  arg1 = reinterpret_cast< wxNativePixelData * >(argp1);
+  {
+    delete arg1;
+    
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_NativePixelData_GetPixels(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxNativePixelData *arg1 = (wxNativePixelData *) 0 ;
+  wxNativePixelData_Accessor result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxNativePixelData, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "NativePixelData_GetPixels" "', expected argument " "1"" of type '" "wxNativePixelData const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxNativePixelData * >(argp1);
+  {
+    result = ((wxNativePixelData const *)arg1)->GetPixels();
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_NewPointerObj((new wxNativePixelData_Accessor(static_cast< const wxNativePixelData_Accessor& >(result))), SWIGTYPE_p_wxNativePixelData_Accessor, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_NativePixelData_UseAlpha(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxNativePixelData *arg1 = (wxNativePixelData *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxNativePixelData, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "NativePixelData_UseAlpha" "', expected argument " "1"" of type '" "wxNativePixelData *""'"); 
+  }
+  arg1 = reinterpret_cast< wxNativePixelData * >(argp1);
+  {
+    (arg1)->UseAlpha();
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_NativePixelData___nonzero__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxNativePixelData *arg1 = (wxNativePixelData *) 0 ;
+  bool result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxNativePixelData, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "NativePixelData___nonzero__" "', expected argument " "1"" of type '" "wxNativePixelData *""'"); 
+  }
+  arg1 = reinterpret_cast< wxNativePixelData * >(argp1);
+  {
+    result = (bool)wxNativePixelData___nonzero__(arg1);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  {
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+  }
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *NativePixelData_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *obj;
+  if (!SWIG_Python_UnpackTuple(args,(char*)"swigregister", 1, 1,&obj)) return NULL;
+  SWIG_TypeNewClientData(SWIGTYPE_p_wxNativePixelData, SWIG_NewClientData(obj));
+  return SWIG_Py_Void();
+}
+
+SWIGINTERN PyObject *NativePixelData_swiginit(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  return SWIG_Python_InitShadowInstance(args);
+}
+
+SWIGINTERN PyObject *_wrap_new_NativePixelData_Accessor__SWIG_0(PyObject *SWIGUNUSEDPARM(self), int nobjs, PyObject **swig_obj) {
+  PyObject *resultobj = 0;
+  wxNativePixelData *arg1 = 0 ;
+  wxNativePixelData_Accessor *result = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  
+  if ((nobjs < 1) || (nobjs > 1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1, SWIGTYPE_p_wxNativePixelData,  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_NativePixelData_Accessor" "', expected argument " "1"" of type '" "wxNativePixelData &""'"); 
+  }
+  if (!argp1) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_NativePixelData_Accessor" "', expected argument " "1"" of type '" "wxNativePixelData &""'"); 
+  }
+  arg1 = reinterpret_cast< wxNativePixelData * >(argp1);
+  {
+    result = (wxNativePixelData_Accessor *)new wxNativePixelData_Accessor(*arg1);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_wxNativePixelData_Accessor, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_NativePixelData_Accessor__SWIG_1(PyObject *SWIGUNUSEDPARM(self), int nobjs, PyObject **swig_obj) {
+  PyObject *resultobj = 0;
+  wxBitmap *arg1 = 0 ;
+  wxNativePixelData *arg2 = 0 ;
+  wxNativePixelData_Accessor *result = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  
+  if ((nobjs < 2) || (nobjs > 2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1, SWIGTYPE_p_wxBitmap,  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_NativePixelData_Accessor" "', expected argument " "1"" of type '" "wxBitmap &""'"); 
+  }
+  if (!argp1) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_NativePixelData_Accessor" "', expected argument " "1"" of type '" "wxBitmap &""'"); 
+  }
+  arg1 = reinterpret_cast< wxBitmap * >(argp1);
+  res2 = SWIG_ConvertPtr(swig_obj[1], &argp2, SWIGTYPE_p_wxNativePixelData,  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "new_NativePixelData_Accessor" "', expected argument " "2"" of type '" "wxNativePixelData &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_NativePixelData_Accessor" "', expected argument " "2"" of type '" "wxNativePixelData &""'"); 
+  }
+  arg2 = reinterpret_cast< wxNativePixelData * >(argp2);
+  {
+    result = (wxNativePixelData_Accessor *)new wxNativePixelData_Accessor(*arg1,*arg2);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_wxNativePixelData_Accessor, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_NativePixelData_Accessor__SWIG_2(PyObject *SWIGUNUSEDPARM(self), int nobjs, PyObject **SWIGUNUSEDPARM(swig_obj)) {
+  PyObject *resultobj = 0;
+  wxNativePixelData_Accessor *result = 0 ;
+  
+  if ((nobjs < 0) || (nobjs > 0)) SWIG_fail;
+  {
+    result = (wxNativePixelData_Accessor *)new wxNativePixelData_Accessor();
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_wxNativePixelData_Accessor, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_NativePixelData_Accessor(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[3];
+  
+  if (!(argc = SWIG_Python_UnpackTuple(args,"new_NativePixelData_Accessor",0,2,argv))) SWIG_fail;
+  --argc;
+  if (argc == 0) {
+    return _wrap_new_NativePixelData_Accessor__SWIG_2(self, argc, argv);
+  }
+  if (argc == 1) {
+    return _wrap_new_NativePixelData_Accessor__SWIG_0(self, argc, argv);
+  }
+  if (argc == 2) {
+    return _wrap_new_NativePixelData_Accessor__SWIG_1(self, argc, argv);
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"No matching function for overloaded 'new_NativePixelData_Accessor'");
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_delete_NativePixelData_Accessor(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxNativePixelData_Accessor *arg1 = (wxNativePixelData_Accessor *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxNativePixelData_Accessor, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_NativePixelData_Accessor" "', expected argument " "1"" of type '" "wxNativePixelData_Accessor *""'"); 
+  }
+  arg1 = reinterpret_cast< wxNativePixelData_Accessor * >(argp1);
+  {
+    delete arg1;
+    
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_NativePixelData_Accessor_Reset(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxNativePixelData_Accessor *arg1 = (wxNativePixelData_Accessor *) 0 ;
+  wxNativePixelData *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "data", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:NativePixelData_Accessor_Reset",kwnames,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxNativePixelData_Accessor, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "NativePixelData_Accessor_Reset" "', expected argument " "1"" of type '" "wxNativePixelData_Accessor *""'"); 
+  }
+  arg1 = reinterpret_cast< wxNativePixelData_Accessor * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_wxNativePixelData,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "NativePixelData_Accessor_Reset" "', expected argument " "2"" of type '" "wxNativePixelData const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "NativePixelData_Accessor_Reset" "', expected argument " "2"" of type '" "wxNativePixelData const &""'"); 
+  }
+  arg2 = reinterpret_cast< wxNativePixelData * >(argp2);
+  {
+    (arg1)->Reset((wxNativePixelData const &)*arg2);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_NativePixelData_Accessor_IsOk(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxNativePixelData_Accessor *arg1 = (wxNativePixelData_Accessor *) 0 ;
+  bool result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxNativePixelData_Accessor, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "NativePixelData_Accessor_IsOk" "', expected argument " "1"" of type '" "wxNativePixelData_Accessor const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxNativePixelData_Accessor * >(argp1);
+  {
+    result = (bool)((wxNativePixelData_Accessor const *)arg1)->IsOk();
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  {
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+  }
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_NativePixelData_Accessor_nextPixel(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxNativePixelData_Accessor *arg1 = (wxNativePixelData_Accessor *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxNativePixelData_Accessor, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "NativePixelData_Accessor_nextPixel" "', expected argument " "1"" of type '" "wxNativePixelData_Accessor *""'"); 
+  }
+  arg1 = reinterpret_cast< wxNativePixelData_Accessor * >(argp1);
+  {
+    wxNativePixelData_Accessor_nextPixel(arg1);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_NativePixelData_Accessor_Offset(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxNativePixelData_Accessor *arg1 = (wxNativePixelData_Accessor *) 0 ;
+  wxNativePixelData *arg2 = 0 ;
+  int arg3 ;
+  int arg4 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  int val3 ;
+  int ecode3 = 0 ;
+  int val4 ;
+  int ecode4 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "data",(char *) "x",(char *) "y", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOO:NativePixelData_Accessor_Offset",kwnames,&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxNativePixelData_Accessor, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "NativePixelData_Accessor_Offset" "', expected argument " "1"" of type '" "wxNativePixelData_Accessor *""'"); 
+  }
+  arg1 = reinterpret_cast< wxNativePixelData_Accessor * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_wxNativePixelData,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "NativePixelData_Accessor_Offset" "', expected argument " "2"" of type '" "wxNativePixelData const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "NativePixelData_Accessor_Offset" "', expected argument " "2"" of type '" "wxNativePixelData const &""'"); 
+  }
+  arg2 = reinterpret_cast< wxNativePixelData * >(argp2);
+  ecode3 = SWIG_AsVal_int(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "NativePixelData_Accessor_Offset" "', expected argument " "3"" of type '" "int""'");
+  } 
+  arg3 = static_cast< int >(val3);
+  ecode4 = SWIG_AsVal_int(obj3, &val4);
+  if (!SWIG_IsOK(ecode4)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "NativePixelData_Accessor_Offset" "', expected argument " "4"" of type '" "int""'");
+  } 
+  arg4 = static_cast< int >(val4);
+  {
+    (arg1)->Offset((wxNativePixelData const &)*arg2,arg3,arg4);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_NativePixelData_Accessor_OffsetX(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxNativePixelData_Accessor *arg1 = (wxNativePixelData_Accessor *) 0 ;
+  wxNativePixelData *arg2 = 0 ;
+  int arg3 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  int val3 ;
+  int ecode3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "data",(char *) "x", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:NativePixelData_Accessor_OffsetX",kwnames,&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxNativePixelData_Accessor, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "NativePixelData_Accessor_OffsetX" "', expected argument " "1"" of type '" "wxNativePixelData_Accessor *""'"); 
+  }
+  arg1 = reinterpret_cast< wxNativePixelData_Accessor * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_wxNativePixelData,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "NativePixelData_Accessor_OffsetX" "', expected argument " "2"" of type '" "wxNativePixelData const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "NativePixelData_Accessor_OffsetX" "', expected argument " "2"" of type '" "wxNativePixelData const &""'"); 
+  }
+  arg2 = reinterpret_cast< wxNativePixelData * >(argp2);
+  ecode3 = SWIG_AsVal_int(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "NativePixelData_Accessor_OffsetX" "', expected argument " "3"" of type '" "int""'");
+  } 
+  arg3 = static_cast< int >(val3);
+  {
+    (arg1)->OffsetX((wxNativePixelData const &)*arg2,arg3);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_NativePixelData_Accessor_OffsetY(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxNativePixelData_Accessor *arg1 = (wxNativePixelData_Accessor *) 0 ;
+  wxNativePixelData *arg2 = 0 ;
+  int arg3 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  int val3 ;
+  int ecode3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "data",(char *) "y", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:NativePixelData_Accessor_OffsetY",kwnames,&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxNativePixelData_Accessor, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "NativePixelData_Accessor_OffsetY" "', expected argument " "1"" of type '" "wxNativePixelData_Accessor *""'"); 
+  }
+  arg1 = reinterpret_cast< wxNativePixelData_Accessor * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_wxNativePixelData,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "NativePixelData_Accessor_OffsetY" "', expected argument " "2"" of type '" "wxNativePixelData const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "NativePixelData_Accessor_OffsetY" "', expected argument " "2"" of type '" "wxNativePixelData const &""'"); 
+  }
+  arg2 = reinterpret_cast< wxNativePixelData * >(argp2);
+  ecode3 = SWIG_AsVal_int(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "NativePixelData_Accessor_OffsetY" "', expected argument " "3"" of type '" "int""'");
+  } 
+  arg3 = static_cast< int >(val3);
+  {
+    (arg1)->OffsetY((wxNativePixelData const &)*arg2,arg3);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_NativePixelData_Accessor_MoveTo(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxNativePixelData_Accessor *arg1 = (wxNativePixelData_Accessor *) 0 ;
+  wxNativePixelData *arg2 = 0 ;
+  int arg3 ;
+  int arg4 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  int val3 ;
+  int ecode3 = 0 ;
+  int val4 ;
+  int ecode4 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "data",(char *) "x",(char *) "y", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOO:NativePixelData_Accessor_MoveTo",kwnames,&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxNativePixelData_Accessor, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "NativePixelData_Accessor_MoveTo" "', expected argument " "1"" of type '" "wxNativePixelData_Accessor *""'"); 
+  }
+  arg1 = reinterpret_cast< wxNativePixelData_Accessor * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_wxNativePixelData,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "NativePixelData_Accessor_MoveTo" "', expected argument " "2"" of type '" "wxNativePixelData const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "NativePixelData_Accessor_MoveTo" "', expected argument " "2"" of type '" "wxNativePixelData const &""'"); 
+  }
+  arg2 = reinterpret_cast< wxNativePixelData * >(argp2);
+  ecode3 = SWIG_AsVal_int(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "NativePixelData_Accessor_MoveTo" "', expected argument " "3"" of type '" "int""'");
+  } 
+  arg3 = static_cast< int >(val3);
+  ecode4 = SWIG_AsVal_int(obj3, &val4);
+  if (!SWIG_IsOK(ecode4)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "NativePixelData_Accessor_MoveTo" "', expected argument " "4"" of type '" "int""'");
+  } 
+  arg4 = static_cast< int >(val4);
+  {
+    (arg1)->MoveTo((wxNativePixelData const &)*arg2,arg3,arg4);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_NativePixelData_Accessor_Set(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxNativePixelData_Accessor *arg1 = (wxNativePixelData_Accessor *) 0 ;
+  byte arg2 ;
+  byte arg3 ;
+  byte arg4 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  unsigned char val2 ;
+  int ecode2 = 0 ;
+  unsigned char val3 ;
+  int ecode3 = 0 ;
+  unsigned char val4 ;
+  int ecode4 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "red",(char *) "green",(char *) "blue", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOO:NativePixelData_Accessor_Set",kwnames,&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxNativePixelData_Accessor, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "NativePixelData_Accessor_Set" "', expected argument " "1"" of type '" "wxNativePixelData_Accessor *""'"); 
+  }
+  arg1 = reinterpret_cast< wxNativePixelData_Accessor * >(argp1);
+  ecode2 = SWIG_AsVal_unsigned_SS_char(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "NativePixelData_Accessor_Set" "', expected argument " "2"" of type '" "byte""'");
+  } 
+  arg2 = static_cast< byte >(val2);
+  ecode3 = SWIG_AsVal_unsigned_SS_char(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "NativePixelData_Accessor_Set" "', expected argument " "3"" of type '" "byte""'");
+  } 
+  arg3 = static_cast< byte >(val3);
+  ecode4 = SWIG_AsVal_unsigned_SS_char(obj3, &val4);
+  if (!SWIG_IsOK(ecode4)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "NativePixelData_Accessor_Set" "', expected argument " "4"" of type '" "byte""'");
+  } 
+  arg4 = static_cast< byte >(val4);
+  {
+    wxNativePixelData_Accessor_Set(arg1,arg2,arg3,arg4);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_NativePixelData_Accessor_Get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxNativePixelData_Accessor *arg1 = (wxNativePixelData_Accessor *) 0 ;
+  PyObject *result = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxNativePixelData_Accessor, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "NativePixelData_Accessor_Get" "', expected argument " "1"" of type '" "wxNativePixelData_Accessor *""'"); 
+  }
+  arg1 = reinterpret_cast< wxNativePixelData_Accessor * >(argp1);
+  {
+    result = (PyObject *)wxNativePixelData_Accessor_Get(arg1);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = result;
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *NativePixelData_Accessor_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *obj;
+  if (!SWIG_Python_UnpackTuple(args,(char*)"swigregister", 1, 1,&obj)) return NULL;
+  SWIG_TypeNewClientData(SWIGTYPE_p_wxNativePixelData_Accessor, SWIG_NewClientData(obj));
+  return SWIG_Py_Void();
+}
+
+SWIGINTERN PyObject *NativePixelData_Accessor_swiginit(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  return SWIG_Python_InitShadowInstance(args);
+}
+
+SWIGINTERN PyObject *_wrap_new_AlphaPixelData__SWIG_0(PyObject *SWIGUNUSEDPARM(self), int nobjs, PyObject **swig_obj) {
+  PyObject *resultobj = 0;
+  wxBitmap *arg1 = 0 ;
+  wxAlphaPixelData *result = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  
+  if ((nobjs < 1) || (nobjs > 1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1, SWIGTYPE_p_wxBitmap,  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_AlphaPixelData" "', expected argument " "1"" of type '" "wxBitmap &""'"); 
+  }
+  if (!argp1) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_AlphaPixelData" "', expected argument " "1"" of type '" "wxBitmap &""'"); 
+  }
+  arg1 = reinterpret_cast< wxBitmap * >(argp1);
+  {
+    result = (wxAlphaPixelData *)new wxAlphaPixelData(*arg1);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_wxAlphaPixelData, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_AlphaPixelData__SWIG_1(PyObject *SWIGUNUSEDPARM(self), int nobjs, PyObject **swig_obj) {
+  PyObject *resultobj = 0;
+  wxBitmap *arg1 = 0 ;
+  wxRect *arg2 = 0 ;
+  wxAlphaPixelData *result = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  wxRect temp2 ;
+  
+  if ((nobjs < 2) || (nobjs > 2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1, SWIGTYPE_p_wxBitmap,  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_AlphaPixelData" "', expected argument " "1"" of type '" "wxBitmap &""'"); 
+  }
+  if (!argp1) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_AlphaPixelData" "', expected argument " "1"" of type '" "wxBitmap &""'"); 
+  }
+  arg1 = reinterpret_cast< wxBitmap * >(argp1);
+  {
+    arg2 = &temp2;
+    if ( ! wxRect_helper(swig_obj[1], &arg2)) SWIG_fail;
+  }
+  {
+    result = (wxAlphaPixelData *)new wxAlphaPixelData(*arg1,(wxRect const &)*arg2);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_wxAlphaPixelData, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_AlphaPixelData__SWIG_2(PyObject *SWIGUNUSEDPARM(self), int nobjs, PyObject **swig_obj) {
+  PyObject *resultobj = 0;
+  wxBitmap *arg1 = 0 ;
+  wxPoint *arg2 = 0 ;
+  wxSize *arg3 = 0 ;
+  wxAlphaPixelData *result = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  wxPoint temp2 ;
+  wxSize temp3 ;
+  
+  if ((nobjs < 3) || (nobjs > 3)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1, SWIGTYPE_p_wxBitmap,  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_AlphaPixelData" "', expected argument " "1"" of type '" "wxBitmap &""'"); 
+  }
+  if (!argp1) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_AlphaPixelData" "', expected argument " "1"" of type '" "wxBitmap &""'"); 
+  }
+  arg1 = reinterpret_cast< wxBitmap * >(argp1);
+  {
+    arg2 = &temp2;
+    if ( ! wxPoint_helper(swig_obj[1], &arg2)) SWIG_fail;
+  }
+  {
+    arg3 = &temp3;
+    if ( ! wxSize_helper(swig_obj[2], &arg3)) SWIG_fail;
+  }
+  {
+    result = (wxAlphaPixelData *)new wxAlphaPixelData(*arg1,(wxPoint const &)*arg2,(wxSize const &)*arg3);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_wxAlphaPixelData, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_AlphaPixelData(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[4];
+  
+  if (!(argc = SWIG_Python_UnpackTuple(args,"new_AlphaPixelData",0,3,argv))) SWIG_fail;
+  --argc;
+  if (argc == 1) {
+    return _wrap_new_AlphaPixelData__SWIG_0(self, argc, argv);
+  }
+  if (argc == 2) {
+    return _wrap_new_AlphaPixelData__SWIG_1(self, argc, argv);
+  }
+  if (argc == 3) {
+    return _wrap_new_AlphaPixelData__SWIG_2(self, argc, argv);
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"No matching function for overloaded 'new_AlphaPixelData'");
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_delete_AlphaPixelData(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxAlphaPixelData *arg1 = (wxAlphaPixelData *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxAlphaPixelData, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_AlphaPixelData" "', expected argument " "1"" of type '" "wxAlphaPixelData *""'"); 
+  }
+  arg1 = reinterpret_cast< wxAlphaPixelData * >(argp1);
+  {
+    delete arg1;
+    
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_AlphaPixelData_GetPixels(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxAlphaPixelData *arg1 = (wxAlphaPixelData *) 0 ;
+  wxAlphaPixelData_Accessor result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxAlphaPixelData, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AlphaPixelData_GetPixels" "', expected argument " "1"" of type '" "wxAlphaPixelData const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxAlphaPixelData * >(argp1);
+  {
+    result = ((wxAlphaPixelData const *)arg1)->GetPixels();
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_NewPointerObj((new wxAlphaPixelData_Accessor(static_cast< const wxAlphaPixelData_Accessor& >(result))), SWIGTYPE_p_wxAlphaPixelData_Accessor, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_AlphaPixelData_UseAlpha(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxAlphaPixelData *arg1 = (wxAlphaPixelData *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxAlphaPixelData, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AlphaPixelData_UseAlpha" "', expected argument " "1"" of type '" "wxAlphaPixelData *""'"); 
+  }
+  arg1 = reinterpret_cast< wxAlphaPixelData * >(argp1);
+  {
+    (arg1)->UseAlpha();
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_AlphaPixelData___nonzero__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxAlphaPixelData *arg1 = (wxAlphaPixelData *) 0 ;
+  bool result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxAlphaPixelData, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AlphaPixelData___nonzero__" "', expected argument " "1"" of type '" "wxAlphaPixelData *""'"); 
+  }
+  arg1 = reinterpret_cast< wxAlphaPixelData * >(argp1);
+  {
+    result = (bool)wxAlphaPixelData___nonzero__(arg1);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  {
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+  }
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *AlphaPixelData_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *obj;
+  if (!SWIG_Python_UnpackTuple(args,(char*)"swigregister", 1, 1,&obj)) return NULL;
+  SWIG_TypeNewClientData(SWIGTYPE_p_wxAlphaPixelData, SWIG_NewClientData(obj));
+  return SWIG_Py_Void();
+}
+
+SWIGINTERN PyObject *AlphaPixelData_swiginit(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  return SWIG_Python_InitShadowInstance(args);
+}
+
+SWIGINTERN PyObject *_wrap_new_AlphaPixelData_Accessor__SWIG_0(PyObject *SWIGUNUSEDPARM(self), int nobjs, PyObject **swig_obj) {
+  PyObject *resultobj = 0;
+  wxAlphaPixelData *arg1 = 0 ;
+  wxAlphaPixelData_Accessor *result = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  
+  if ((nobjs < 1) || (nobjs > 1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1, SWIGTYPE_p_wxAlphaPixelData,  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_AlphaPixelData_Accessor" "', expected argument " "1"" of type '" "wxAlphaPixelData &""'"); 
+  }
+  if (!argp1) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_AlphaPixelData_Accessor" "', expected argument " "1"" of type '" "wxAlphaPixelData &""'"); 
+  }
+  arg1 = reinterpret_cast< wxAlphaPixelData * >(argp1);
+  {
+    result = (wxAlphaPixelData_Accessor *)new wxAlphaPixelData_Accessor(*arg1);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_wxAlphaPixelData_Accessor, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_AlphaPixelData_Accessor__SWIG_1(PyObject *SWIGUNUSEDPARM(self), int nobjs, PyObject **swig_obj) {
+  PyObject *resultobj = 0;
+  wxBitmap *arg1 = 0 ;
+  wxAlphaPixelData *arg2 = 0 ;
+  wxAlphaPixelData_Accessor *result = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  
+  if ((nobjs < 2) || (nobjs > 2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1, SWIGTYPE_p_wxBitmap,  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_AlphaPixelData_Accessor" "', expected argument " "1"" of type '" "wxBitmap &""'"); 
+  }
+  if (!argp1) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_AlphaPixelData_Accessor" "', expected argument " "1"" of type '" "wxBitmap &""'"); 
+  }
+  arg1 = reinterpret_cast< wxBitmap * >(argp1);
+  res2 = SWIG_ConvertPtr(swig_obj[1], &argp2, SWIGTYPE_p_wxAlphaPixelData,  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "new_AlphaPixelData_Accessor" "', expected argument " "2"" of type '" "wxAlphaPixelData &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_AlphaPixelData_Accessor" "', expected argument " "2"" of type '" "wxAlphaPixelData &""'"); 
+  }
+  arg2 = reinterpret_cast< wxAlphaPixelData * >(argp2);
+  {
+    result = (wxAlphaPixelData_Accessor *)new wxAlphaPixelData_Accessor(*arg1,*arg2);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_wxAlphaPixelData_Accessor, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_AlphaPixelData_Accessor__SWIG_2(PyObject *SWIGUNUSEDPARM(self), int nobjs, PyObject **SWIGUNUSEDPARM(swig_obj)) {
+  PyObject *resultobj = 0;
+  wxAlphaPixelData_Accessor *result = 0 ;
+  
+  if ((nobjs < 0) || (nobjs > 0)) SWIG_fail;
+  {
+    result = (wxAlphaPixelData_Accessor *)new wxAlphaPixelData_Accessor();
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_wxAlphaPixelData_Accessor, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_AlphaPixelData_Accessor(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[3];
+  
+  if (!(argc = SWIG_Python_UnpackTuple(args,"new_AlphaPixelData_Accessor",0,2,argv))) SWIG_fail;
+  --argc;
+  if (argc == 0) {
+    return _wrap_new_AlphaPixelData_Accessor__SWIG_2(self, argc, argv);
+  }
+  if (argc == 1) {
+    return _wrap_new_AlphaPixelData_Accessor__SWIG_0(self, argc, argv);
+  }
+  if (argc == 2) {
+    return _wrap_new_AlphaPixelData_Accessor__SWIG_1(self, argc, argv);
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"No matching function for overloaded 'new_AlphaPixelData_Accessor'");
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_delete_AlphaPixelData_Accessor(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxAlphaPixelData_Accessor *arg1 = (wxAlphaPixelData_Accessor *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxAlphaPixelData_Accessor, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_AlphaPixelData_Accessor" "', expected argument " "1"" of type '" "wxAlphaPixelData_Accessor *""'"); 
+  }
+  arg1 = reinterpret_cast< wxAlphaPixelData_Accessor * >(argp1);
+  {
+    delete arg1;
+    
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_AlphaPixelData_Accessor_Reset(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxAlphaPixelData_Accessor *arg1 = (wxAlphaPixelData_Accessor *) 0 ;
+  wxAlphaPixelData *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "data", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:AlphaPixelData_Accessor_Reset",kwnames,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxAlphaPixelData_Accessor, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AlphaPixelData_Accessor_Reset" "', expected argument " "1"" of type '" "wxAlphaPixelData_Accessor *""'"); 
+  }
+  arg1 = reinterpret_cast< wxAlphaPixelData_Accessor * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_wxAlphaPixelData,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "AlphaPixelData_Accessor_Reset" "', expected argument " "2"" of type '" "wxAlphaPixelData const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "AlphaPixelData_Accessor_Reset" "', expected argument " "2"" of type '" "wxAlphaPixelData const &""'"); 
+  }
+  arg2 = reinterpret_cast< wxAlphaPixelData * >(argp2);
+  {
+    (arg1)->Reset((wxAlphaPixelData const &)*arg2);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_AlphaPixelData_Accessor_IsOk(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxAlphaPixelData_Accessor *arg1 = (wxAlphaPixelData_Accessor *) 0 ;
+  bool result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxAlphaPixelData_Accessor, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AlphaPixelData_Accessor_IsOk" "', expected argument " "1"" of type '" "wxAlphaPixelData_Accessor const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxAlphaPixelData_Accessor * >(argp1);
+  {
+    result = (bool)((wxAlphaPixelData_Accessor const *)arg1)->IsOk();
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  {
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+  }
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_AlphaPixelData_Accessor_nextPixel(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxAlphaPixelData_Accessor *arg1 = (wxAlphaPixelData_Accessor *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxAlphaPixelData_Accessor, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AlphaPixelData_Accessor_nextPixel" "', expected argument " "1"" of type '" "wxAlphaPixelData_Accessor *""'"); 
+  }
+  arg1 = reinterpret_cast< wxAlphaPixelData_Accessor * >(argp1);
+  {
+    wxAlphaPixelData_Accessor_nextPixel(arg1);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_AlphaPixelData_Accessor_Offset(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxAlphaPixelData_Accessor *arg1 = (wxAlphaPixelData_Accessor *) 0 ;
+  wxAlphaPixelData *arg2 = 0 ;
+  int arg3 ;
+  int arg4 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  int val3 ;
+  int ecode3 = 0 ;
+  int val4 ;
+  int ecode4 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "data",(char *) "x",(char *) "y", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOO:AlphaPixelData_Accessor_Offset",kwnames,&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxAlphaPixelData_Accessor, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AlphaPixelData_Accessor_Offset" "', expected argument " "1"" of type '" "wxAlphaPixelData_Accessor *""'"); 
+  }
+  arg1 = reinterpret_cast< wxAlphaPixelData_Accessor * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_wxAlphaPixelData,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "AlphaPixelData_Accessor_Offset" "', expected argument " "2"" of type '" "wxAlphaPixelData const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "AlphaPixelData_Accessor_Offset" "', expected argument " "2"" of type '" "wxAlphaPixelData const &""'"); 
+  }
+  arg2 = reinterpret_cast< wxAlphaPixelData * >(argp2);
+  ecode3 = SWIG_AsVal_int(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "AlphaPixelData_Accessor_Offset" "', expected argument " "3"" of type '" "int""'");
+  } 
+  arg3 = static_cast< int >(val3);
+  ecode4 = SWIG_AsVal_int(obj3, &val4);
+  if (!SWIG_IsOK(ecode4)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "AlphaPixelData_Accessor_Offset" "', expected argument " "4"" of type '" "int""'");
+  } 
+  arg4 = static_cast< int >(val4);
+  {
+    (arg1)->Offset((wxAlphaPixelData const &)*arg2,arg3,arg4);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_AlphaPixelData_Accessor_OffsetX(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxAlphaPixelData_Accessor *arg1 = (wxAlphaPixelData_Accessor *) 0 ;
+  wxAlphaPixelData *arg2 = 0 ;
+  int arg3 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  int val3 ;
+  int ecode3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "data",(char *) "x", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:AlphaPixelData_Accessor_OffsetX",kwnames,&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxAlphaPixelData_Accessor, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AlphaPixelData_Accessor_OffsetX" "', expected argument " "1"" of type '" "wxAlphaPixelData_Accessor *""'"); 
+  }
+  arg1 = reinterpret_cast< wxAlphaPixelData_Accessor * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_wxAlphaPixelData,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "AlphaPixelData_Accessor_OffsetX" "', expected argument " "2"" of type '" "wxAlphaPixelData const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "AlphaPixelData_Accessor_OffsetX" "', expected argument " "2"" of type '" "wxAlphaPixelData const &""'"); 
+  }
+  arg2 = reinterpret_cast< wxAlphaPixelData * >(argp2);
+  ecode3 = SWIG_AsVal_int(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "AlphaPixelData_Accessor_OffsetX" "', expected argument " "3"" of type '" "int""'");
+  } 
+  arg3 = static_cast< int >(val3);
+  {
+    (arg1)->OffsetX((wxAlphaPixelData const &)*arg2,arg3);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_AlphaPixelData_Accessor_OffsetY(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxAlphaPixelData_Accessor *arg1 = (wxAlphaPixelData_Accessor *) 0 ;
+  wxAlphaPixelData *arg2 = 0 ;
+  int arg3 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  int val3 ;
+  int ecode3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "data",(char *) "y", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:AlphaPixelData_Accessor_OffsetY",kwnames,&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxAlphaPixelData_Accessor, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AlphaPixelData_Accessor_OffsetY" "', expected argument " "1"" of type '" "wxAlphaPixelData_Accessor *""'"); 
+  }
+  arg1 = reinterpret_cast< wxAlphaPixelData_Accessor * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_wxAlphaPixelData,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "AlphaPixelData_Accessor_OffsetY" "', expected argument " "2"" of type '" "wxAlphaPixelData const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "AlphaPixelData_Accessor_OffsetY" "', expected argument " "2"" of type '" "wxAlphaPixelData const &""'"); 
+  }
+  arg2 = reinterpret_cast< wxAlphaPixelData * >(argp2);
+  ecode3 = SWIG_AsVal_int(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "AlphaPixelData_Accessor_OffsetY" "', expected argument " "3"" of type '" "int""'");
+  } 
+  arg3 = static_cast< int >(val3);
+  {
+    (arg1)->OffsetY((wxAlphaPixelData const &)*arg2,arg3);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_AlphaPixelData_Accessor_MoveTo(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxAlphaPixelData_Accessor *arg1 = (wxAlphaPixelData_Accessor *) 0 ;
+  wxAlphaPixelData *arg2 = 0 ;
+  int arg3 ;
+  int arg4 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  int val3 ;
+  int ecode3 = 0 ;
+  int val4 ;
+  int ecode4 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "data",(char *) "x",(char *) "y", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOO:AlphaPixelData_Accessor_MoveTo",kwnames,&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxAlphaPixelData_Accessor, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AlphaPixelData_Accessor_MoveTo" "', expected argument " "1"" of type '" "wxAlphaPixelData_Accessor *""'"); 
+  }
+  arg1 = reinterpret_cast< wxAlphaPixelData_Accessor * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_wxAlphaPixelData,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "AlphaPixelData_Accessor_MoveTo" "', expected argument " "2"" of type '" "wxAlphaPixelData const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "AlphaPixelData_Accessor_MoveTo" "', expected argument " "2"" of type '" "wxAlphaPixelData const &""'"); 
+  }
+  arg2 = reinterpret_cast< wxAlphaPixelData * >(argp2);
+  ecode3 = SWIG_AsVal_int(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "AlphaPixelData_Accessor_MoveTo" "', expected argument " "3"" of type '" "int""'");
+  } 
+  arg3 = static_cast< int >(val3);
+  ecode4 = SWIG_AsVal_int(obj3, &val4);
+  if (!SWIG_IsOK(ecode4)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "AlphaPixelData_Accessor_MoveTo" "', expected argument " "4"" of type '" "int""'");
+  } 
+  arg4 = static_cast< int >(val4);
+  {
+    (arg1)->MoveTo((wxAlphaPixelData const &)*arg2,arg3,arg4);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_AlphaPixelData_Accessor_Set(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxAlphaPixelData_Accessor *arg1 = (wxAlphaPixelData_Accessor *) 0 ;
+  byte arg2 ;
+  byte arg3 ;
+  byte arg4 ;
+  byte arg5 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  unsigned char val2 ;
+  int ecode2 = 0 ;
+  unsigned char val3 ;
+  int ecode3 = 0 ;
+  unsigned char val4 ;
+  int ecode4 = 0 ;
+  unsigned char val5 ;
+  int ecode5 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  PyObject * obj4 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "red",(char *) "green",(char *) "blue",(char *) "alpha", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOOO:AlphaPixelData_Accessor_Set",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxAlphaPixelData_Accessor, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AlphaPixelData_Accessor_Set" "', expected argument " "1"" of type '" "wxAlphaPixelData_Accessor *""'"); 
+  }
+  arg1 = reinterpret_cast< wxAlphaPixelData_Accessor * >(argp1);
+  ecode2 = SWIG_AsVal_unsigned_SS_char(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "AlphaPixelData_Accessor_Set" "', expected argument " "2"" of type '" "byte""'");
+  } 
+  arg2 = static_cast< byte >(val2);
+  ecode3 = SWIG_AsVal_unsigned_SS_char(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "AlphaPixelData_Accessor_Set" "', expected argument " "3"" of type '" "byte""'");
+  } 
+  arg3 = static_cast< byte >(val3);
+  ecode4 = SWIG_AsVal_unsigned_SS_char(obj3, &val4);
+  if (!SWIG_IsOK(ecode4)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "AlphaPixelData_Accessor_Set" "', expected argument " "4"" of type '" "byte""'");
+  } 
+  arg4 = static_cast< byte >(val4);
+  ecode5 = SWIG_AsVal_unsigned_SS_char(obj4, &val5);
+  if (!SWIG_IsOK(ecode5)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "AlphaPixelData_Accessor_Set" "', expected argument " "5"" of type '" "byte""'");
+  } 
+  arg5 = static_cast< byte >(val5);
+  {
+    wxAlphaPixelData_Accessor_Set(arg1,arg2,arg3,arg4,arg5);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_AlphaPixelData_Accessor_Get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxAlphaPixelData_Accessor *arg1 = (wxAlphaPixelData_Accessor *) 0 ;
+  PyObject *result = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxAlphaPixelData_Accessor, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AlphaPixelData_Accessor_Get" "', expected argument " "1"" of type '" "wxAlphaPixelData_Accessor *""'"); 
+  }
+  arg1 = reinterpret_cast< wxAlphaPixelData_Accessor * >(argp1);
+  {
+    result = (PyObject *)wxAlphaPixelData_Accessor_Get(arg1);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = result;
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *AlphaPixelData_Accessor_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *obj;
+  if (!SWIG_Python_UnpackTuple(args,(char*)"swigregister", 1, 1,&obj)) return NULL;
+  SWIG_TypeNewClientData(SWIGTYPE_p_wxAlphaPixelData_Accessor, SWIG_NewClientData(obj));
+  return SWIG_Py_Void();
+}
+
+SWIGINTERN PyObject *AlphaPixelData_Accessor_swiginit(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   return SWIG_Python_InitShadowInstance(args);
 }
 
@@ -6424,10 +8555,8 @@ SWIGINTERN PyObject *_wrap_delete_Mask(PyObject *SWIGUNUSEDPARM(self), PyObject 
   }
   arg1 = reinterpret_cast< wxMask * >(argp1);
   {
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
     delete arg1;
     
-    wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
   resultobj = SWIG_Py_Void();
@@ -14030,6 +16159,241 @@ SWIGINTERN PyObject *Locale_swiginit(PyObject *SWIGUNUSEDPARM(self), PyObject *a
   return SWIG_Python_InitShadowInstance(args);
 }
 
+SWIGINTERN PyObject *_wrap_new_PyLocale(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  int arg1 = (int) -1 ;
+  int arg2 = (int) wxLOCALE_LOAD_DEFAULT|wxLOCALE_CONV_ENCODING ;
+  wxPyLocale *result = 0 ;
+  int val1 ;
+  int ecode1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "language",(char *) "flags", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"|OO:new_PyLocale",kwnames,&obj0,&obj1)) SWIG_fail;
+  if (obj0) {
+    ecode1 = SWIG_AsVal_int(obj0, &val1);
+    if (!SWIG_IsOK(ecode1)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "new_PyLocale" "', expected argument " "1"" of type '" "int""'");
+    } 
+    arg1 = static_cast< int >(val1);
+  }
+  if (obj1) {
+    ecode2 = SWIG_AsVal_int(obj1, &val2);
+    if (!SWIG_IsOK(ecode2)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "new_PyLocale" "', expected argument " "2"" of type '" "int""'");
+    } 
+    arg2 = static_cast< int >(val2);
+  }
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = (wxPyLocale *)new_wxPyLocale(arg1,arg2);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_wxPyLocale, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_delete_PyLocale(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxPyLocale *arg1 = (wxPyLocale *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxPyLocale, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_PyLocale" "', expected argument " "1"" of type '" "wxPyLocale *""'"); 
+  }
+  arg1 = reinterpret_cast< wxPyLocale * >(argp1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    delete arg1;
+    
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_PyLocale__setCallbackInfo(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxPyLocale *arg1 = (wxPyLocale *) 0 ;
+  PyObject *arg2 = (PyObject *) 0 ;
+  PyObject *arg3 = (PyObject *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "self",(char *) "_class", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:PyLocale__setCallbackInfo",kwnames,&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxPyLocale, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "PyLocale__setCallbackInfo" "', expected argument " "1"" of type '" "wxPyLocale *""'"); 
+  }
+  arg1 = reinterpret_cast< wxPyLocale * >(argp1);
+  arg2 = obj1;
+  arg3 = obj2;
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    (arg1)->_setCallbackInfo(arg2,arg3);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_PyLocale_GetSingularString(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxPyLocale *arg1 = (wxPyLocale *) 0 ;
+  wxChar *arg2 = (wxChar *) 0 ;
+  wxChar *arg3 = (wxChar *) NULL ;
+  wxChar *result = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "szOrigString",(char *) "szDomain", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|O:PyLocale_GetSingularString",kwnames,&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxPyLocale, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "PyLocale_GetSingularString" "', expected argument " "1"" of type '" "wxPyLocale const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxPyLocale * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_wxChar, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "PyLocale_GetSingularString" "', expected argument " "2"" of type '" "wxChar const *""'"); 
+  }
+  arg2 = reinterpret_cast< wxChar * >(argp2);
+  if (obj2) {
+    res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p_wxChar, 0 |  0 );
+    if (!SWIG_IsOK(res3)) {
+      SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "PyLocale_GetSingularString" "', expected argument " "3"" of type '" "wxChar const *""'"); 
+    }
+    arg3 = reinterpret_cast< wxChar * >(argp3);
+  }
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = (wxChar *)((wxPyLocale const *)arg1)->GetSingularString((wxChar const *)arg2,(wxChar const *)arg3);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_wxChar, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_PyLocale_GetPluralString(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxPyLocale *arg1 = (wxPyLocale *) 0 ;
+  wxChar *arg2 = (wxChar *) 0 ;
+  wxChar *arg3 = (wxChar *) 0 ;
+  size_t arg4 ;
+  wxChar *arg5 = (wxChar *) NULL ;
+  wxChar *result = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  size_t val4 ;
+  int ecode4 = 0 ;
+  void *argp5 = 0 ;
+  int res5 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  PyObject * obj4 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "szOrigString",(char *) "szOrigString2",(char *) "n",(char *) "szDomain", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOO|O:PyLocale_GetPluralString",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxPyLocale, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "PyLocale_GetPluralString" "', expected argument " "1"" of type '" "wxPyLocale const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxPyLocale * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_wxChar, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "PyLocale_GetPluralString" "', expected argument " "2"" of type '" "wxChar const *""'"); 
+  }
+  arg2 = reinterpret_cast< wxChar * >(argp2);
+  res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p_wxChar, 0 |  0 );
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "PyLocale_GetPluralString" "', expected argument " "3"" of type '" "wxChar const *""'"); 
+  }
+  arg3 = reinterpret_cast< wxChar * >(argp3);
+  ecode4 = SWIG_AsVal_size_t(obj3, &val4);
+  if (!SWIG_IsOK(ecode4)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "PyLocale_GetPluralString" "', expected argument " "4"" of type '" "size_t""'");
+  } 
+  arg4 = static_cast< size_t >(val4);
+  if (obj4) {
+    res5 = SWIG_ConvertPtr(obj4, &argp5,SWIGTYPE_p_wxChar, 0 |  0 );
+    if (!SWIG_IsOK(res5)) {
+      SWIG_exception_fail(SWIG_ArgError(res5), "in method '" "PyLocale_GetPluralString" "', expected argument " "5"" of type '" "wxChar const *""'"); 
+    }
+    arg5 = reinterpret_cast< wxChar * >(argp5);
+  }
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = (wxChar *)((wxPyLocale const *)arg1)->GetPluralString((wxChar const *)arg2,(wxChar const *)arg3,arg4,(wxChar const *)arg5);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_wxChar, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *PyLocale_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *obj;
+  if (!SWIG_Python_UnpackTuple(args,(char*)"swigregister", 1, 1,&obj)) return NULL;
+  SWIG_TypeNewClientData(SWIGTYPE_p_wxPyLocale, SWIG_NewClientData(obj));
+  return SWIG_Py_Void();
+}
+
+SWIGINTERN PyObject *PyLocale_swiginit(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  return SWIG_Python_InitShadowInstance(args);
+}
+
 SWIGINTERN PyObject *_wrap_GetLocale(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   wxLocale *result = 0 ;
@@ -14091,6 +16455,60 @@ SWIGINTERN PyObject *_wrap_GetTranslation__SWIG_1(PyObject *SWIGUNUSEDPARM(self)
   PyObject *resultobj = 0;
   wxString *arg1 = 0 ;
   wxString *arg2 = 0 ;
+  wxString result;
+  bool temp1 = false ;
+  bool temp2 = false ;
+  
+  if ((nobjs < 2) || (nobjs > 2)) SWIG_fail;
+  {
+    arg1 = wxString_in_helper(swig_obj[0]);
+    if (arg1 == NULL) SWIG_fail;
+    temp1 = true;
+  }
+  {
+    arg2 = wxString_in_helper(swig_obj[1]);
+    if (arg2 == NULL) SWIG_fail;
+    temp2 = true;
+  }
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = wxGetTranslation((wxString const &)*arg1,(wxString const &)*arg2);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  {
+#if wxUSE_UNICODE
+    resultobj = PyUnicode_FromWideChar((&result)->c_str(), (&result)->Len());
+#else
+    resultobj = PyString_FromStringAndSize((&result)->c_str(), (&result)->Len());
+#endif
+  }
+  {
+    if (temp1)
+    delete arg1;
+  }
+  {
+    if (temp2)
+    delete arg2;
+  }
+  return resultobj;
+fail:
+  {
+    if (temp1)
+    delete arg1;
+  }
+  {
+    if (temp2)
+    delete arg2;
+  }
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_GetTranslation__SWIG_2(PyObject *SWIGUNUSEDPARM(self), int nobjs, PyObject **swig_obj) {
+  PyObject *resultobj = 0;
+  wxString *arg1 = 0 ;
+  wxString *arg2 = 0 ;
   size_t arg3 ;
   wxString result;
   bool temp1 = false ;
@@ -14149,17 +16567,100 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_GetTranslation__SWIG_3(PyObject *SWIGUNUSEDPARM(self), int nobjs, PyObject **swig_obj) {
+  PyObject *resultobj = 0;
+  wxString *arg1 = 0 ;
+  wxString *arg2 = 0 ;
+  size_t arg3 ;
+  wxString *arg4 = 0 ;
+  wxString result;
+  bool temp1 = false ;
+  bool temp2 = false ;
+  size_t val3 ;
+  int ecode3 = 0 ;
+  bool temp4 = false ;
+  
+  if ((nobjs < 4) || (nobjs > 4)) SWIG_fail;
+  {
+    arg1 = wxString_in_helper(swig_obj[0]);
+    if (arg1 == NULL) SWIG_fail;
+    temp1 = true;
+  }
+  {
+    arg2 = wxString_in_helper(swig_obj[1]);
+    if (arg2 == NULL) SWIG_fail;
+    temp2 = true;
+  }
+  ecode3 = SWIG_AsVal_size_t(swig_obj[2], &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "GetTranslation" "', expected argument " "3"" of type '" "size_t""'");
+  } 
+  arg3 = static_cast< size_t >(val3);
+  {
+    arg4 = wxString_in_helper(swig_obj[3]);
+    if (arg4 == NULL) SWIG_fail;
+    temp4 = true;
+  }
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = wxGetTranslation((wxString const &)*arg1,(wxString const &)*arg2,arg3,(wxString const &)*arg4);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  {
+#if wxUSE_UNICODE
+    resultobj = PyUnicode_FromWideChar((&result)->c_str(), (&result)->Len());
+#else
+    resultobj = PyString_FromStringAndSize((&result)->c_str(), (&result)->Len());
+#endif
+  }
+  {
+    if (temp1)
+    delete arg1;
+  }
+  {
+    if (temp2)
+    delete arg2;
+  }
+  {
+    if (temp4)
+    delete arg4;
+  }
+  return resultobj;
+fail:
+  {
+    if (temp1)
+    delete arg1;
+  }
+  {
+    if (temp2)
+    delete arg2;
+  }
+  {
+    if (temp4)
+    delete arg4;
+  }
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_GetTranslation(PyObject *self, PyObject *args) {
   int argc;
-  PyObject *argv[4];
+  PyObject *argv[5];
   
-  if (!(argc = SWIG_Python_UnpackTuple(args,"GetTranslation",0,3,argv))) SWIG_fail;
+  if (!(argc = SWIG_Python_UnpackTuple(args,"GetTranslation",0,4,argv))) SWIG_fail;
   --argc;
   if (argc == 1) {
     return _wrap_GetTranslation__SWIG_0(self, argc, argv);
   }
-  if (argc == 3) {
+  if (argc == 2) {
     return _wrap_GetTranslation__SWIG_1(self, argc, argv);
+  }
+  if (argc == 3) {
+    return _wrap_GetTranslation__SWIG_2(self, argc, argv);
+  }
+  if (argc == 4) {
+    return _wrap_GetTranslation__SWIG_3(self, argc, argv);
   }
   
 fail:
@@ -28236,6 +30737,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Colour_Red", (PyCFunction)_wrap_Colour_Red, METH_O, NULL},
 	 { (char *)"Colour_Green", (PyCFunction)_wrap_Colour_Green, METH_O, NULL},
 	 { (char *)"Colour_Blue", (PyCFunction)_wrap_Colour_Blue, METH_O, NULL},
+	 { (char *)"Colour_Alpha", (PyCFunction)_wrap_Colour_Alpha, METH_O, NULL},
 	 { (char *)"Colour_Ok", (PyCFunction)_wrap_Colour_Ok, METH_O, NULL},
 	 { (char *)"Colour_Set", (PyCFunction) _wrap_Colour_Set, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Colour_SetRGB", (PyCFunction) _wrap_Colour_SetRGB, METH_VARARGS | METH_KEYWORDS, NULL},
@@ -28244,7 +30746,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Colour_GetPixel", (PyCFunction)_wrap_Colour_GetPixel, METH_O, NULL},
 	 { (char *)"Colour___eq__", (PyCFunction) _wrap_Colour___eq__, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Colour___ne__", (PyCFunction) _wrap_Colour___ne__, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"Colour_Get", (PyCFunction)_wrap_Colour_Get, METH_O, NULL},
+	 { (char *)"Colour_Get", (PyCFunction) _wrap_Colour_Get, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Colour_GetRGB", (PyCFunction)_wrap_Colour_GetRGB, METH_O, NULL},
 	 { (char *)"Colour_swigregister", Colour_swigregister, METH_VARARGS, NULL},
 	 { (char *)"Colour_swiginit", Colour_swiginit, METH_VARARGS, NULL},
@@ -28320,6 +30822,55 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Bitmap___ne__", (PyCFunction) _wrap_Bitmap___ne__, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Bitmap_swigregister", Bitmap_swigregister, METH_VARARGS, NULL},
 	 { (char *)"Bitmap_swiginit", Bitmap_swiginit, METH_VARARGS, NULL},
+	 { (char *)"_BitmapFromBufferAlpha", (PyCFunction) _wrap__BitmapFromBufferAlpha, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"_BitmapFromBuffer", (PyCFunction) _wrap__BitmapFromBuffer, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"_BitmapFromBufferRGBA", (PyCFunction) _wrap__BitmapFromBufferRGBA, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"PixelDataBase_GetOrigin", (PyCFunction)_wrap_PixelDataBase_GetOrigin, METH_O, NULL},
+	 { (char *)"PixelDataBase_GetWidth", (PyCFunction)_wrap_PixelDataBase_GetWidth, METH_O, NULL},
+	 { (char *)"PixelDataBase_GetHeight", (PyCFunction)_wrap_PixelDataBase_GetHeight, METH_O, NULL},
+	 { (char *)"PixelDataBase_GetSize", (PyCFunction)_wrap_PixelDataBase_GetSize, METH_O, NULL},
+	 { (char *)"PixelDataBase_GetRowStride", (PyCFunction)_wrap_PixelDataBase_GetRowStride, METH_O, NULL},
+	 { (char *)"PixelDataBase_swigregister", PixelDataBase_swigregister, METH_VARARGS, NULL},
+	 { (char *)"new_NativePixelData", _wrap_new_NativePixelData, METH_VARARGS, NULL},
+	 { (char *)"delete_NativePixelData", (PyCFunction)_wrap_delete_NativePixelData, METH_O, NULL},
+	 { (char *)"NativePixelData_GetPixels", (PyCFunction)_wrap_NativePixelData_GetPixels, METH_O, NULL},
+	 { (char *)"NativePixelData_UseAlpha", (PyCFunction)_wrap_NativePixelData_UseAlpha, METH_O, NULL},
+	 { (char *)"NativePixelData___nonzero__", (PyCFunction)_wrap_NativePixelData___nonzero__, METH_O, NULL},
+	 { (char *)"NativePixelData_swigregister", NativePixelData_swigregister, METH_VARARGS, NULL},
+	 { (char *)"NativePixelData_swiginit", NativePixelData_swiginit, METH_VARARGS, NULL},
+	 { (char *)"new_NativePixelData_Accessor", _wrap_new_NativePixelData_Accessor, METH_VARARGS, NULL},
+	 { (char *)"delete_NativePixelData_Accessor", (PyCFunction)_wrap_delete_NativePixelData_Accessor, METH_O, NULL},
+	 { (char *)"NativePixelData_Accessor_Reset", (PyCFunction) _wrap_NativePixelData_Accessor_Reset, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"NativePixelData_Accessor_IsOk", (PyCFunction)_wrap_NativePixelData_Accessor_IsOk, METH_O, NULL},
+	 { (char *)"NativePixelData_Accessor_nextPixel", (PyCFunction)_wrap_NativePixelData_Accessor_nextPixel, METH_O, NULL},
+	 { (char *)"NativePixelData_Accessor_Offset", (PyCFunction) _wrap_NativePixelData_Accessor_Offset, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"NativePixelData_Accessor_OffsetX", (PyCFunction) _wrap_NativePixelData_Accessor_OffsetX, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"NativePixelData_Accessor_OffsetY", (PyCFunction) _wrap_NativePixelData_Accessor_OffsetY, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"NativePixelData_Accessor_MoveTo", (PyCFunction) _wrap_NativePixelData_Accessor_MoveTo, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"NativePixelData_Accessor_Set", (PyCFunction) _wrap_NativePixelData_Accessor_Set, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"NativePixelData_Accessor_Get", (PyCFunction)_wrap_NativePixelData_Accessor_Get, METH_O, NULL},
+	 { (char *)"NativePixelData_Accessor_swigregister", NativePixelData_Accessor_swigregister, METH_VARARGS, NULL},
+	 { (char *)"NativePixelData_Accessor_swiginit", NativePixelData_Accessor_swiginit, METH_VARARGS, NULL},
+	 { (char *)"new_AlphaPixelData", _wrap_new_AlphaPixelData, METH_VARARGS, NULL},
+	 { (char *)"delete_AlphaPixelData", (PyCFunction)_wrap_delete_AlphaPixelData, METH_O, NULL},
+	 { (char *)"AlphaPixelData_GetPixels", (PyCFunction)_wrap_AlphaPixelData_GetPixels, METH_O, NULL},
+	 { (char *)"AlphaPixelData_UseAlpha", (PyCFunction)_wrap_AlphaPixelData_UseAlpha, METH_O, NULL},
+	 { (char *)"AlphaPixelData___nonzero__", (PyCFunction)_wrap_AlphaPixelData___nonzero__, METH_O, NULL},
+	 { (char *)"AlphaPixelData_swigregister", AlphaPixelData_swigregister, METH_VARARGS, NULL},
+	 { (char *)"AlphaPixelData_swiginit", AlphaPixelData_swiginit, METH_VARARGS, NULL},
+	 { (char *)"new_AlphaPixelData_Accessor", _wrap_new_AlphaPixelData_Accessor, METH_VARARGS, NULL},
+	 { (char *)"delete_AlphaPixelData_Accessor", (PyCFunction)_wrap_delete_AlphaPixelData_Accessor, METH_O, NULL},
+	 { (char *)"AlphaPixelData_Accessor_Reset", (PyCFunction) _wrap_AlphaPixelData_Accessor_Reset, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"AlphaPixelData_Accessor_IsOk", (PyCFunction)_wrap_AlphaPixelData_Accessor_IsOk, METH_O, NULL},
+	 { (char *)"AlphaPixelData_Accessor_nextPixel", (PyCFunction)_wrap_AlphaPixelData_Accessor_nextPixel, METH_O, NULL},
+	 { (char *)"AlphaPixelData_Accessor_Offset", (PyCFunction) _wrap_AlphaPixelData_Accessor_Offset, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"AlphaPixelData_Accessor_OffsetX", (PyCFunction) _wrap_AlphaPixelData_Accessor_OffsetX, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"AlphaPixelData_Accessor_OffsetY", (PyCFunction) _wrap_AlphaPixelData_Accessor_OffsetY, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"AlphaPixelData_Accessor_MoveTo", (PyCFunction) _wrap_AlphaPixelData_Accessor_MoveTo, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"AlphaPixelData_Accessor_Set", (PyCFunction) _wrap_AlphaPixelData_Accessor_Set, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"AlphaPixelData_Accessor_Get", (PyCFunction)_wrap_AlphaPixelData_Accessor_Get, METH_O, NULL},
+	 { (char *)"AlphaPixelData_Accessor_swigregister", AlphaPixelData_Accessor_swigregister, METH_VARARGS, NULL},
+	 { (char *)"AlphaPixelData_Accessor_swiginit", AlphaPixelData_Accessor_swiginit, METH_VARARGS, NULL},
 	 { (char *)"new_Mask", (PyCFunction) _wrap_new_Mask, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"delete_Mask", (PyCFunction)_wrap_delete_Mask, METH_O, NULL},
 	 { (char *)"Mask_swigregister", Mask_swigregister, METH_VARARGS, NULL},
@@ -28548,6 +31099,13 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Locale_GetName", (PyCFunction)_wrap_Locale_GetName, METH_O, NULL},
 	 { (char *)"Locale_swigregister", Locale_swigregister, METH_VARARGS, NULL},
 	 { (char *)"Locale_swiginit", Locale_swiginit, METH_VARARGS, NULL},
+	 { (char *)"new_PyLocale", (PyCFunction) _wrap_new_PyLocale, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"delete_PyLocale", (PyCFunction)_wrap_delete_PyLocale, METH_O, NULL},
+	 { (char *)"PyLocale__setCallbackInfo", (PyCFunction) _wrap_PyLocale__setCallbackInfo, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"PyLocale_GetSingularString", (PyCFunction) _wrap_PyLocale_GetSingularString, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"PyLocale_GetPluralString", (PyCFunction) _wrap_PyLocale_GetPluralString, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"PyLocale_swigregister", PyLocale_swigregister, METH_VARARGS, NULL},
+	 { (char *)"PyLocale_swiginit", PyLocale_swiginit, METH_VARARGS, NULL},
 	 { (char *)"GetLocale", (PyCFunction)_wrap_GetLocale, METH_NOARGS, NULL},
 	 { (char *)"GetTranslation", _wrap_GetTranslation, METH_VARARGS, NULL},
 	 { (char *)"new_EncodingConverter", (PyCFunction)_wrap_new_EncodingConverter, METH_NOARGS, NULL},
@@ -28918,6 +31476,9 @@ static void *_p_wxBufferedDCTo_p_wxMemoryDC(void *x) {
 }
 static void *_p_wxBufferedPaintDCTo_p_wxMemoryDC(void *x) {
     return (void *)((wxMemoryDC *) (wxBufferedDC *) ((wxBufferedPaintDC *) x));
+}
+static void *_p_wxPyLocaleTo_p_wxLocale(void *x) {
+    return (void *)((wxLocale *)  ((wxPyLocale *) x));
 }
 static void *_p_wxIconTo_p_wxGDIObject(void *x) {
     return (void *)((wxGDIObject *)  ((wxIcon *) x));
@@ -29318,6 +31879,13 @@ static void *_p_wxControlWithItemsTo_p_wxWindow(void *x) {
 static void *_p_wxMenuBarTo_p_wxWindow(void *x) {
     return (void *)((wxWindow *)  ((wxMenuBar *) x));
 }
+static void *_p_wxNativePixelDataTo_p_wxPixelDataBase(void *x) {
+    return (void *)((wxPixelDataBase *)  ((wxNativePixelData *) x));
+}
+static void *_p_wxAlphaPixelDataTo_p_wxPixelDataBase(void *x) {
+    return (void *)((wxPixelDataBase *)  ((wxAlphaPixelData *) x));
+}
+static swig_type_info _swigt__p_buffer = {"_p_buffer", "buffer *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_char = {"_p_char", "char *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_double = {"_p_double", "double *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_form_ops_t = {"_p_form_ops_t", "enum form_ops_t *|form_ops_t *", 0, 0, (void*)0, 0};
@@ -29325,11 +31893,14 @@ static swig_type_info _swigt__p_int = {"_p_int", "int *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_unsigned_char = {"_p_unsigned_char", "unsigned char *|byte *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_unsigned_int = {"_p_unsigned_int", "unsigned int *|time_t *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_unsigned_long = {"_p_unsigned_long", "unsigned long *|wxUIntPtr *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_wxAlphaPixelData = {"_p_wxAlphaPixelData", "wxAlphaPixelData *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_wxAlphaPixelData_Accessor = {"_p_wxAlphaPixelData_Accessor", "wxAlphaPixelData_Accessor *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_wxBitmap = {"_p_wxBitmap", "wxBitmap *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_wxBrush = {"_p_wxBrush", "wxBrush *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_wxBrushList = {"_p_wxBrushList", "wxBrushList *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_wxBufferedDC = {"_p_wxBufferedDC", "wxBufferedDC *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_wxBufferedPaintDC = {"_p_wxBufferedPaintDC", "wxBufferedPaintDC *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_wxChar = {"_p_wxChar", "wxChar *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_wxClientDC = {"_p_wxClientDC", "wxClientDC *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_wxColour = {"_p_wxColour", "wxColour *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_wxColourDatabase = {"_p_wxColourDatabase", "wxColourDatabase *", 0, 0, (void*)0, 0};
@@ -29358,6 +31929,8 @@ static swig_type_info _swigt__p_wxMetaFileDC = {"_p_wxMetaFileDC", "wxMetaFileDC
 static swig_type_info _swigt__p_wxMirrorDC = {"_p_wxMirrorDC", "wxMirrorDC *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_wxNativeEncodingInfo = {"_p_wxNativeEncodingInfo", "wxNativeEncodingInfo *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_wxNativeFontInfo = {"_p_wxNativeFontInfo", "wxNativeFontInfo *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_wxNativePixelData = {"_p_wxNativePixelData", "wxNativePixelData *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_wxNativePixelData_Accessor = {"_p_wxNativePixelData_Accessor", "wxNativePixelData_Accessor *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_wxObject = {"_p_wxObject", "wxObject *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_wxLayoutConstraints = {"_p_wxLayoutConstraints", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_wxSizerItem = {"_p_wxSizerItem", 0, 0, 0, 0, 0};
@@ -29440,12 +32013,14 @@ static swig_type_info _swigt__p_wxPalette = {"_p_wxPalette", "wxPalette *", 0, 0
 static swig_type_info _swigt__p_wxPaperSize = {"_p_wxPaperSize", "enum wxPaperSize *|wxPaperSize *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_wxPen = {"_p_wxPen", "wxPen *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_wxPenList = {"_p_wxPenList", "wxPenList *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_wxPixelDataBase = {"_p_wxPixelDataBase", "wxPixelDataBase *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_wxPoint = {"_p_wxPoint", "wxPoint *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_wxPostScriptDC = {"_p_wxPostScriptDC", "wxPostScriptDC *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_wxPrintData = {"_p_wxPrintData", "wxPrintData *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_wxPrinterDC = {"_p_wxPrinterDC", "wxPrinterDC *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_wxPseudoDC = {"_p_wxPseudoDC", "wxPseudoDC *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_wxPyFontEnumerator = {"_p_wxPyFontEnumerator", "wxPyFontEnumerator *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_wxPyLocale = {"_p_wxPyLocale", "wxPyLocale *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_wxRect = {"_p_wxRect", "wxRect *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_wxRegion = {"_p_wxRegion", "wxRegion *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_wxRegionIterator = {"_p_wxRegionIterator", "wxRegionIterator *", 0, 0, (void*)0, 0};
@@ -29460,6 +32035,7 @@ static swig_type_info _swigt__p_wxWindow = {"_p_wxWindow", "wxWindow *", 0, 0, (
 static swig_type_info _swigt__p_wxWindowDC = {"_p_wxWindowDC", "wxWindowDC *", 0, 0, (void*)0, 0};
 
 static swig_type_info *swig_type_initial[] = {
+  &_swigt__p_buffer,
   &_swigt__p_char,
   &_swigt__p_double,
   &_swigt__p_form_ops_t,
@@ -29470,6 +32046,8 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_wxANIHandler,
   &_swigt__p_wxAcceleratorTable,
   &_swigt__p_wxActivateEvent,
+  &_swigt__p_wxAlphaPixelData,
+  &_swigt__p_wxAlphaPixelData_Accessor,
   &_swigt__p_wxBMPHandler,
   &_swigt__p_wxBitmap,
   &_swigt__p_wxBoxSizer,
@@ -29478,6 +32056,7 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_wxBufferedDC,
   &_swigt__p_wxBufferedPaintDC,
   &_swigt__p_wxCURHandler,
+  &_swigt__p_wxChar,
   &_swigt__p_wxChildFocusEvent,
   &_swigt__p_wxClientDC,
   &_swigt__p_wxClipboardTextEvent,
@@ -29545,6 +32124,8 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_wxMoveEvent,
   &_swigt__p_wxNativeEncodingInfo,
   &_swigt__p_wxNativeFontInfo,
+  &_swigt__p_wxNativePixelData,
+  &_swigt__p_wxNativePixelData_Accessor,
   &_swigt__p_wxNavigationKeyEvent,
   &_swigt__p_wxNcPaintEvent,
   &_swigt__p_wxNotifyEvent,
@@ -29559,6 +32140,7 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_wxPaperSize,
   &_swigt__p_wxPen,
   &_swigt__p_wxPenList,
+  &_swigt__p_wxPixelDataBase,
   &_swigt__p_wxPoint,
   &_swigt__p_wxPostScriptDC,
   &_swigt__p_wxPrintData,
@@ -29569,6 +32151,7 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_wxPyEvent,
   &_swigt__p_wxPyFontEnumerator,
   &_swigt__p_wxPyImageHandler,
+  &_swigt__p_wxPyLocale,
   &_swigt__p_wxPySizer,
   &_swigt__p_wxPyValidator,
   &_swigt__p_wxQueryNewPaletteEvent,
@@ -29602,6 +32185,7 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_wxXPMHandler,
 };
 
+static swig_cast_info _swigc__p_buffer[] = {  {&_swigt__p_buffer, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_char[] = {  {&_swigt__p_char, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_double[] = {  {&_swigt__p_double, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_form_ops_t[] = {  {&_swigt__p_form_ops_t, 0, 0, 0},{0, 0, 0, 0}};
@@ -29609,11 +32193,14 @@ static swig_cast_info _swigc__p_int[] = {  {&_swigt__p_int, 0, 0, 0},{0, 0, 0, 0
 static swig_cast_info _swigc__p_unsigned_char[] = {  {&_swigt__p_unsigned_char, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_unsigned_int[] = {  {&_swigt__p_unsigned_int, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_unsigned_long[] = {  {&_swigt__p_unsigned_long, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_wxAlphaPixelData[] = {  {&_swigt__p_wxAlphaPixelData, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_wxAlphaPixelData_Accessor[] = {  {&_swigt__p_wxAlphaPixelData_Accessor, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxBitmap[] = {  {&_swigt__p_wxBitmap, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxBrush[] = {  {&_swigt__p_wxBrush, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxBrushList[] = {  {&_swigt__p_wxBrushList, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxBufferedDC[] = {  {&_swigt__p_wxBufferedDC, 0, 0, 0},  {&_swigt__p_wxBufferedPaintDC, _p_wxBufferedPaintDCTo_p_wxBufferedDC, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxBufferedPaintDC[] = {  {&_swigt__p_wxBufferedPaintDC, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_wxChar[] = {  {&_swigt__p_wxChar, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxClientDC[] = {  {&_swigt__p_wxClientDC, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxColour[] = {  {&_swigt__p_wxColour, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxColourDatabase[] = {  {&_swigt__p_wxColourDatabase, 0, 0, 0},{0, 0, 0, 0}};
@@ -29634,7 +32221,7 @@ static swig_cast_info _swigc__p_wxIconLocation[] = {  {&_swigt__p_wxIconLocation
 static swig_cast_info _swigc__p_wxImage[] = {  {&_swigt__p_wxImage, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxImageList[] = {  {&_swigt__p_wxImageList, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxLanguageInfo[] = {  {&_swigt__p_wxLanguageInfo, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_wxLocale[] = {  {&_swigt__p_wxLocale, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_wxLocale[] = {  {&_swigt__p_wxPyLocale, _p_wxPyLocaleTo_p_wxLocale, 0, 0},  {&_swigt__p_wxLocale, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxMask[] = {  {&_swigt__p_wxMask, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxMemoryDC[] = {  {&_swigt__p_wxBufferedDC, _p_wxBufferedDCTo_p_wxMemoryDC, 0, 0},  {&_swigt__p_wxMemoryDC, 0, 0, 0},  {&_swigt__p_wxBufferedPaintDC, _p_wxBufferedPaintDCTo_p_wxMemoryDC, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxMetaFile[] = {  {&_swigt__p_wxMetaFile, 0, 0, 0},{0, 0, 0, 0}};
@@ -29642,6 +32229,8 @@ static swig_cast_info _swigc__p_wxMetaFileDC[] = {  {&_swigt__p_wxMetaFileDC, 0,
 static swig_cast_info _swigc__p_wxMirrorDC[] = {  {&_swigt__p_wxMirrorDC, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxNativeEncodingInfo[] = {  {&_swigt__p_wxNativeEncodingInfo, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxNativeFontInfo[] = {  {&_swigt__p_wxNativeFontInfo, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_wxNativePixelData[] = {  {&_swigt__p_wxNativePixelData, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_wxNativePixelData_Accessor[] = {  {&_swigt__p_wxNativePixelData_Accessor, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxLayoutConstraints[] = {{&_swigt__p_wxLayoutConstraints, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxSizerItem[] = {{&_swigt__p_wxSizerItem, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxGBSizerItem[] = {{&_swigt__p_wxGBSizerItem, 0, 0, 0},{0, 0, 0, 0}};
@@ -29724,12 +32313,14 @@ static swig_cast_info _swigc__p_wxPalette[] = {  {&_swigt__p_wxPalette, 0, 0, 0}
 static swig_cast_info _swigc__p_wxPaperSize[] = {  {&_swigt__p_wxPaperSize, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxPen[] = {  {&_swigt__p_wxPen, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxPenList[] = {  {&_swigt__p_wxPenList, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_wxPixelDataBase[] = {  {&_swigt__p_wxPixelDataBase, 0, 0, 0},  {&_swigt__p_wxNativePixelData, _p_wxNativePixelDataTo_p_wxPixelDataBase, 0, 0},  {&_swigt__p_wxAlphaPixelData, _p_wxAlphaPixelDataTo_p_wxPixelDataBase, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxPoint[] = {  {&_swigt__p_wxPoint, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxPostScriptDC[] = {  {&_swigt__p_wxPostScriptDC, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxPrintData[] = {  {&_swigt__p_wxPrintData, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxPrinterDC[] = {  {&_swigt__p_wxPrinterDC, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxPseudoDC[] = {  {&_swigt__p_wxPseudoDC, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxPyFontEnumerator[] = {  {&_swigt__p_wxPyFontEnumerator, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_wxPyLocale[] = {  {&_swigt__p_wxPyLocale, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxRect[] = {  {&_swigt__p_wxRect, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxRegion[] = {  {&_swigt__p_wxRegion, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxRegionIterator[] = {  {&_swigt__p_wxRegionIterator, 0, 0, 0},{0, 0, 0, 0}};
@@ -29744,6 +32335,7 @@ static swig_cast_info _swigc__p_wxWindow[] = {  {&_swigt__p_wxControl, _p_wxCont
 static swig_cast_info _swigc__p_wxWindowDC[] = {  {&_swigt__p_wxWindowDC, 0, 0, 0},{0, 0, 0, 0}};
 
 static swig_cast_info *swig_cast_initial[] = {
+  _swigc__p_buffer,
   _swigc__p_char,
   _swigc__p_double,
   _swigc__p_form_ops_t,
@@ -29754,6 +32346,8 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_wxANIHandler,
   _swigc__p_wxAcceleratorTable,
   _swigc__p_wxActivateEvent,
+  _swigc__p_wxAlphaPixelData,
+  _swigc__p_wxAlphaPixelData_Accessor,
   _swigc__p_wxBMPHandler,
   _swigc__p_wxBitmap,
   _swigc__p_wxBoxSizer,
@@ -29762,6 +32356,7 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_wxBufferedDC,
   _swigc__p_wxBufferedPaintDC,
   _swigc__p_wxCURHandler,
+  _swigc__p_wxChar,
   _swigc__p_wxChildFocusEvent,
   _swigc__p_wxClientDC,
   _swigc__p_wxClipboardTextEvent,
@@ -29829,6 +32424,8 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_wxMoveEvent,
   _swigc__p_wxNativeEncodingInfo,
   _swigc__p_wxNativeFontInfo,
+  _swigc__p_wxNativePixelData,
+  _swigc__p_wxNativePixelData_Accessor,
   _swigc__p_wxNavigationKeyEvent,
   _swigc__p_wxNcPaintEvent,
   _swigc__p_wxNotifyEvent,
@@ -29843,6 +32440,7 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_wxPaperSize,
   _swigc__p_wxPen,
   _swigc__p_wxPenList,
+  _swigc__p_wxPixelDataBase,
   _swigc__p_wxPoint,
   _swigc__p_wxPostScriptDC,
   _swigc__p_wxPrintData,
@@ -29853,6 +32451,7 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_wxPyEvent,
   _swigc__p_wxPyFontEnumerator,
   _swigc__p_wxPyImageHandler,
+  _swigc__p_wxPyLocale,
   _swigc__p_wxPySizer,
   _swigc__p_wxPyValidator,
   _swigc__p_wxQueryNewPaletteEvent,
@@ -30390,6 +32989,8 @@ SWIGEXPORT void SWIG_init(void) {
   SWIG_Python_SetConstant(d, "C2S_NAME",SWIG_From_int(static_cast< int >(wxC2S_NAME)));
   SWIG_Python_SetConstant(d, "C2S_CSS_SYNTAX",SWIG_From_int(static_cast< int >(wxC2S_CSS_SYNTAX)));
   SWIG_Python_SetConstant(d, "C2S_HTML_SYNTAX",SWIG_From_int(static_cast< int >(wxC2S_HTML_SYNTAX)));
+  SWIG_Python_SetConstant(d, "ALPHA_TRANSPARENT",SWIG_From_int(static_cast< int >(wxALPHA_TRANSPARENT)));
+  SWIG_Python_SetConstant(d, "ALPHA_OPAQUE",SWIG_From_int(static_cast< int >(wxALPHA_OPAQUE)));
   SWIG_Python_SetConstant(d, "OutRegion",SWIG_From_int(static_cast< int >(wxOutRegion)));
   SWIG_Python_SetConstant(d, "PartRegion",SWIG_From_int(static_cast< int >(wxPartRegion)));
   SWIG_Python_SetConstant(d, "InRegion",SWIG_From_int(static_cast< int >(wxInRegion)));

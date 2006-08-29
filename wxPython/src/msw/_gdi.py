@@ -75,6 +75,8 @@ _gdi_.GDIObject_swigregister(GDIObject)
 C2S_NAME = _gdi_.C2S_NAME
 C2S_CSS_SYNTAX = _gdi_.C2S_CSS_SYNTAX
 C2S_HTML_SYNTAX = _gdi_.C2S_HTML_SYNTAX
+ALPHA_TRANSPARENT = _gdi_.ALPHA_TRANSPARENT
+ALPHA_OPAQUE = _gdi_.ALPHA_OPAQUE
 class Colour(_core.Object):
     """
     A colour is an object representing a combination of Red, Green, and
@@ -102,7 +104,7 @@ class Colour(_core.Object):
     __repr__ = _swig_repr
     def __init__(self, *args, **kwargs): 
         """
-        __init__(self, byte red=0, byte green=0, byte blue=0) -> Colour
+        __init__(self, byte red=0, byte green=0, byte blue=0, byte alpha=ALPHA_OPAQUE) -> Colour
 
         Constructs a colour from red, green and blue values.
 
@@ -136,6 +138,14 @@ class Colour(_core.Object):
         """
         return _gdi_.Colour_Blue(*args, **kwargs)
 
+    def Alpha(*args, **kwargs):
+        """
+        Alpha(self) -> byte
+
+        Returns the Alpha value.
+        """
+        return _gdi_.Colour_Alpha(*args, **kwargs)
+
     def Ok(*args, **kwargs):
         """
         Ok(self) -> bool
@@ -147,7 +157,7 @@ class Colour(_core.Object):
 
     def Set(*args, **kwargs):
         """
-        Set(self, byte red, byte green, byte blue)
+        Set(self, byte red, byte green, byte blue, byte alpha=ALPHA_OPAQUE)
 
         Sets the RGB intensity values.
         """
@@ -227,11 +237,11 @@ class Colour(_core.Object):
         return _gdi_.Colour_GetRGB(*args, **kwargs)
 
     asTuple = wx._deprecated(Get, "asTuple is deprecated, use `Get` instead")
-    def __str__(self):                  return str(self.Get())
-    def __repr__(self):                 return 'wx.Colour' + str(self.Get())
+    def __str__(self):                  return str(self.Get(True))
+    def __repr__(self):                 return 'wx.Colour' + str(self.Get(True))
     def __nonzero__(self):              return self.Ok()
     __safe_for_unpickling__ = True
-    def __reduce__(self):               return (Colour, self.Get())
+    def __reduce__(self):               return (Colour, self.Get(True))
 
 _gdi_.Colour_swigregister(Colour)
 
@@ -726,6 +736,354 @@ def BitmapFromBits(*args, **kwargs):
     """
     val = _gdi_.new_BitmapFromBits(*args, **kwargs)
     return val
+
+
+def _BitmapFromBufferAlpha(*args, **kwargs):
+  """_BitmapFromBufferAlpha(int width, int height, buffer data, buffer alpha) -> Bitmap"""
+  return _gdi_._BitmapFromBufferAlpha(*args, **kwargs)
+
+def _BitmapFromBuffer(*args, **kwargs):
+  """_BitmapFromBuffer(int width, int height, buffer data) -> Bitmap"""
+  return _gdi_._BitmapFromBuffer(*args, **kwargs)
+def BitmapFromBuffer(width, height, dataBuffer, alphaBuffer=None):
+    """
+    Creates a `wx.Bitmap` from the data in dataBuffer.  The dataBuffer
+    parameter must be a Python object that implements the buffer interface, or
+    is convertable to a buffer object, such as a string, array, etc.  The
+    dataBuffer object is expected to contain a series of RGB bytes and be
+    width*height*3 bytes long.  A buffer object can optionally be supplied for
+    the image's alpha channel data, and it is expected to be width*height
+    bytes long.  On Windows the RGB values are 'premultiplied' by the alpha
+    values.  (The other platforms appear to already be premultiplying the
+    alpha.)
+
+    Unlike `wx.ImageFromBuffer` the bitmap created with this function does not
+    share the memory buffer with the buffer object.  This is because the
+    native pixel buffer format varies on different platforms, and so instead
+    an efficient as possible copy of the data is made from the buffer objects
+    to the bitmap's native pixel buffer.  For direct access to a bitmap's
+    pixel buffer see `wx.NativePixelData` and `wx.AlphaPixelData`.
+
+    :see: `wx.Bitmap`, `wx.BitmapFromBufferRGBA`, `wx.NativePixelData`,
+          `wx.AlphaPixelData`, `wx.ImageFromBuffer`
+    """
+    if not isinstance(dataBuffer, buffer):
+        dataBuffer = buffer(dataBuffer)
+    if alphaBuffer is not None and not isinstance(alphaBuffer, buffer):
+        alphaBuffer = buffer(alphaBuffer)
+    if alphaBuffer is not None:
+        return _gdi_._BitmapFromBufferAlpha(width, height, dataBuffer, alphaBuffer)
+    else:
+        return _gdi_._BitmapFromBuffer(width, height, dataBuffer)
+
+
+def _BitmapFromBufferRGBA(*args, **kwargs):
+  """_BitmapFromBufferRGBA(int width, int height, buffer data) -> Bitmap"""
+  return _gdi_._BitmapFromBufferRGBA(*args, **kwargs)
+def BitmapFromBufferRGBA(width, height, dataBuffer):
+    """
+    Creates a `wx.Bitmap` from the data in dataBuffer.  The dataBuffer
+    parameter must be a Python object that implements the buffer interface, or
+    is convertable to a buffer object, such as a string, array, etc.  The
+    dataBuffer object is expected to contain a series of RGBA bytes (red,
+    green, blue and alpha) and be width*height*4 bytes long.  On Windows the
+    RGB values are 'premultiplied' by the alpha values.  (The other platforms
+    appear to already be premultiplying the alpha.)
+
+    Unlike `wx.ImageFromBuffer` the bitmap created with this function does not
+    share the memory buffer with the buffer object.  This is because the
+    native pixel buffer format varies on different platforms, and so instead
+    an efficient as possible copy of the data is made from the buffer object
+    to the bitmap's native pixel buffer.  For direct access to a bitmap's
+    pixel buffer see `wx.NativePixelData` and `wx.AlphaPixelData`.
+
+    :see: `wx.Bitmap`, `wx.BitmapFromBuffer`, `wx.NativePixelData`,
+          `wx.AlphaPixelData`, `wx.ImageFromBuffer`
+    """
+    if not isinstance(dataBuffer, buffer):
+        dataBuffer = buffer(dataBuffer)
+    return _gdi_._BitmapFromBufferRGBA(width, height, dataBuffer)
+
+class PixelDataBase(object):
+    """Proxy of C++ PixelDataBase class"""
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    def __init__(self): raise AttributeError, "No constructor defined"
+    __repr__ = _swig_repr
+    def GetOrigin(*args, **kwargs):
+        """GetOrigin(self) -> Point"""
+        return _gdi_.PixelDataBase_GetOrigin(*args, **kwargs)
+
+    def GetWidth(*args, **kwargs):
+        """GetWidth(self) -> int"""
+        return _gdi_.PixelDataBase_GetWidth(*args, **kwargs)
+
+    def GetHeight(*args, **kwargs):
+        """GetHeight(self) -> int"""
+        return _gdi_.PixelDataBase_GetHeight(*args, **kwargs)
+
+    def GetSize(*args, **kwargs):
+        """GetSize(self) -> Size"""
+        return _gdi_.PixelDataBase_GetSize(*args, **kwargs)
+
+    def GetRowStride(*args, **kwargs):
+        """GetRowStride(self) -> int"""
+        return _gdi_.PixelDataBase_GetRowStride(*args, **kwargs)
+
+_gdi_.PixelDataBase_swigregister(PixelDataBase)
+
+class NativePixelData(PixelDataBase):
+    """Proxy of C++ NativePixelData class"""
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args): 
+        """
+        __init__(self, Bitmap bmp) -> NativePixelData
+        __init__(self, Bitmap bmp, Rect rect) -> NativePixelData
+        __init__(self, Bitmap bmp, Point pt, Size sz) -> NativePixelData
+        """
+        _gdi_.NativePixelData_swiginit(self,_gdi_.new_NativePixelData(*args))
+    __swig_destroy__ = _gdi_.delete_NativePixelData
+    __del__ = lambda self : None;
+    def GetPixels(*args, **kwargs):
+        """GetPixels(self) -> NativePixelData_Accessor"""
+        return _gdi_.NativePixelData_GetPixels(*args, **kwargs)
+
+    def UseAlpha(*args, **kwargs):
+        """UseAlpha(self)"""
+        return _gdi_.NativePixelData_UseAlpha(*args, **kwargs)
+
+    def __nonzero__(*args, **kwargs):
+        """__nonzero__(self) -> bool"""
+        return _gdi_.NativePixelData___nonzero__(*args, **kwargs)
+
+    def __iter__(self):
+        """Create and return an iterator object for this pixel data object."""
+        return self.PixelIterator(self)
+
+    class PixelIterator(object):
+        """
+        Sequential iterator which returns pixel accessor objects starting at the
+        the top-left corner, and going row-by-row until the bottom-right
+        corner is reached.
+        """
+
+        class PixelAccessor(object):
+            """
+            This class is what is returned by the iterator and allows the pixel
+            to be Get or Set.
+            """
+            def __init__(self, data, pixels, x, y):
+                self.data = data
+                self.pixels = pixels
+                self.x = x
+                self.y = y
+            def Set(self, *args, **kw):
+                self.pixels.MoveTo(self.data, self.x, self.y)
+                return self.pixels.Set(*args, **kw)
+            def Get(self):
+                self.pixels.MoveTo(self.data, self.x, self.y)
+                return self.pixels.Get()
+
+        def __init__(self, pixelData):
+            self.x = self.y = 0
+            self.w = pixelData.GetWidth()
+            self.h = pixelData.GetHeight()
+            self.data = pixelData
+            self.pixels = pixelData.GetPixels()
+
+        def __iter__(self):
+            return self
+
+        def next(self):
+            if self.y >= self.h:
+                raise StopIteration
+            p = self.PixelAccessor(self.data, self.pixels, self.x, self.y)
+            self.x += 1
+            if self.x >= self.w:
+                self.x = 0
+                self.y += 1
+            return p
+
+_gdi_.NativePixelData_swigregister(NativePixelData)
+
+class NativePixelData_Accessor(object):
+    """Proxy of C++ NativePixelData_Accessor class"""
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args): 
+        """
+        __init__(self, NativePixelData data) -> NativePixelData_Accessor
+        __init__(self, Bitmap bmp, NativePixelData data) -> NativePixelData_Accessor
+        __init__(self) -> NativePixelData_Accessor
+        """
+        _gdi_.NativePixelData_Accessor_swiginit(self,_gdi_.new_NativePixelData_Accessor(*args))
+    __swig_destroy__ = _gdi_.delete_NativePixelData_Accessor
+    __del__ = lambda self : None;
+    def Reset(*args, **kwargs):
+        """Reset(self, NativePixelData data)"""
+        return _gdi_.NativePixelData_Accessor_Reset(*args, **kwargs)
+
+    def IsOk(*args, **kwargs):
+        """IsOk(self) -> bool"""
+        return _gdi_.NativePixelData_Accessor_IsOk(*args, **kwargs)
+
+    def nextPixel(*args, **kwargs):
+        """nextPixel(self)"""
+        return _gdi_.NativePixelData_Accessor_nextPixel(*args, **kwargs)
+
+    def Offset(*args, **kwargs):
+        """Offset(self, NativePixelData data, int x, int y)"""
+        return _gdi_.NativePixelData_Accessor_Offset(*args, **kwargs)
+
+    def OffsetX(*args, **kwargs):
+        """OffsetX(self, NativePixelData data, int x)"""
+        return _gdi_.NativePixelData_Accessor_OffsetX(*args, **kwargs)
+
+    def OffsetY(*args, **kwargs):
+        """OffsetY(self, NativePixelData data, int y)"""
+        return _gdi_.NativePixelData_Accessor_OffsetY(*args, **kwargs)
+
+    def MoveTo(*args, **kwargs):
+        """MoveTo(self, NativePixelData data, int x, int y)"""
+        return _gdi_.NativePixelData_Accessor_MoveTo(*args, **kwargs)
+
+    def Set(*args, **kwargs):
+        """Set(self, byte red, byte green, byte blue)"""
+        return _gdi_.NativePixelData_Accessor_Set(*args, **kwargs)
+
+    def Get(*args, **kwargs):
+        """Get(self) -> PyObject"""
+        return _gdi_.NativePixelData_Accessor_Get(*args, **kwargs)
+
+_gdi_.NativePixelData_Accessor_swigregister(NativePixelData_Accessor)
+
+class AlphaPixelData(PixelDataBase):
+    """Proxy of C++ AlphaPixelData class"""
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args): 
+        """
+        __init__(self, Bitmap bmp) -> AlphaPixelData
+        __init__(self, Bitmap bmp, Rect rect) -> AlphaPixelData
+        __init__(self, Bitmap bmp, Point pt, Size sz) -> AlphaPixelData
+        """
+        _gdi_.AlphaPixelData_swiginit(self,_gdi_.new_AlphaPixelData(*args))
+        self.UseAlpha()
+
+    __swig_destroy__ = _gdi_.delete_AlphaPixelData
+    __del__ = lambda self : None;
+    def GetPixels(*args, **kwargs):
+        """GetPixels(self) -> AlphaPixelData_Accessor"""
+        return _gdi_.AlphaPixelData_GetPixels(*args, **kwargs)
+
+    def UseAlpha(*args, **kwargs):
+        """UseAlpha(self)"""
+        return _gdi_.AlphaPixelData_UseAlpha(*args, **kwargs)
+
+    def __nonzero__(*args, **kwargs):
+        """__nonzero__(self) -> bool"""
+        return _gdi_.AlphaPixelData___nonzero__(*args, **kwargs)
+
+    def __iter__(self):
+        """Create and return an iterator object for this pixel data object."""
+        return self.PixelIterator(self)
+
+    class PixelIterator(object):
+        """
+        Sequential iterator which returns pixel accessor objects starting at the
+        the top-left corner, and going row-by-row until the bottom-right
+        corner is reached.
+        """
+
+        class PixelAccessor(object):
+            """
+            This class is what is returned by the iterator and allows the pixel
+            to be Get or Set.
+            """
+            def __init__(self, data, pixels, x, y):
+                self.data = data
+                self.pixels = pixels
+                self.x = x
+                self.y = y
+            def Set(self, *args, **kw):
+                self.pixels.MoveTo(self.data, self.x, self.y)
+                return self.pixels.Set(*args, **kw)
+            def Get(self):
+                self.pixels.MoveTo(self.data, self.x, self.y)
+                return self.pixels.Get()
+
+        def __init__(self, pixelData):
+            self.x = self.y = 0
+            self.w = pixelData.GetWidth()
+            self.h = pixelData.GetHeight()
+            self.data = pixelData
+            self.pixels = pixelData.GetPixels()
+
+        def __iter__(self):
+            return self
+
+        def next(self):
+            if self.y >= self.h:
+                raise StopIteration
+            p = self.PixelAccessor(self.data, self.pixels, self.x, self.y)
+            self.x += 1
+            if self.x >= self.w:
+                self.x = 0
+                self.y += 1
+            return p
+
+_gdi_.AlphaPixelData_swigregister(AlphaPixelData)
+
+class AlphaPixelData_Accessor(object):
+    """Proxy of C++ AlphaPixelData_Accessor class"""
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args): 
+        """
+        __init__(self, AlphaPixelData data) -> AlphaPixelData_Accessor
+        __init__(self, Bitmap bmp, AlphaPixelData data) -> AlphaPixelData_Accessor
+        __init__(self) -> AlphaPixelData_Accessor
+        """
+        _gdi_.AlphaPixelData_Accessor_swiginit(self,_gdi_.new_AlphaPixelData_Accessor(*args))
+    __swig_destroy__ = _gdi_.delete_AlphaPixelData_Accessor
+    __del__ = lambda self : None;
+    def Reset(*args, **kwargs):
+        """Reset(self, AlphaPixelData data)"""
+        return _gdi_.AlphaPixelData_Accessor_Reset(*args, **kwargs)
+
+    def IsOk(*args, **kwargs):
+        """IsOk(self) -> bool"""
+        return _gdi_.AlphaPixelData_Accessor_IsOk(*args, **kwargs)
+
+    def nextPixel(*args, **kwargs):
+        """nextPixel(self)"""
+        return _gdi_.AlphaPixelData_Accessor_nextPixel(*args, **kwargs)
+
+    def Offset(*args, **kwargs):
+        """Offset(self, AlphaPixelData data, int x, int y)"""
+        return _gdi_.AlphaPixelData_Accessor_Offset(*args, **kwargs)
+
+    def OffsetX(*args, **kwargs):
+        """OffsetX(self, AlphaPixelData data, int x)"""
+        return _gdi_.AlphaPixelData_Accessor_OffsetX(*args, **kwargs)
+
+    def OffsetY(*args, **kwargs):
+        """OffsetY(self, AlphaPixelData data, int y)"""
+        return _gdi_.AlphaPixelData_Accessor_OffsetY(*args, **kwargs)
+
+    def MoveTo(*args, **kwargs):
+        """MoveTo(self, AlphaPixelData data, int x, int y)"""
+        return _gdi_.AlphaPixelData_Accessor_MoveTo(*args, **kwargs)
+
+    def Set(*args, **kwargs):
+        """Set(self, byte red, byte green, byte blue, byte alpha)"""
+        return _gdi_.AlphaPixelData_Accessor_Set(*args, **kwargs)
+
+    def Get(*args, **kwargs):
+        """Get(self) -> PyObject"""
+        return _gdi_.AlphaPixelData_Accessor_Get(*args, **kwargs)
+
+_gdi_.AlphaPixelData_Accessor_swigregister(AlphaPixelData_Accessor)
 
 class Mask(_core.Object):
     """
@@ -2426,6 +2784,34 @@ def Locale_AddLanguage(*args, **kwargs):
   """Locale_AddLanguage(LanguageInfo info)"""
   return _gdi_.Locale_AddLanguage(*args, **kwargs)
 
+class PyLocale(Locale):
+    """Proxy of C++ PyLocale class"""
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
+        """__init__(self, int language=-1, int flags=wxLOCALE_LOAD_DEFAULT|wxLOCALE_CONV_ENCODING) -> PyLocale"""
+        _gdi_.PyLocale_swiginit(self,_gdi_.new_PyLocale(*args, **kwargs))
+        self._setCallbackInfo(self, PyLocale)
+
+    __swig_destroy__ = _gdi_.delete_PyLocale
+    __del__ = lambda self : None;
+    def _setCallbackInfo(*args, **kwargs):
+        """_setCallbackInfo(self, PyObject self, PyObject _class)"""
+        return _gdi_.PyLocale__setCallbackInfo(*args, **kwargs)
+
+    def GetSingularString(*args, **kwargs):
+        """GetSingularString(self, wxChar szOrigString, wxChar szDomain=None) -> wxChar"""
+        return _gdi_.PyLocale_GetSingularString(*args, **kwargs)
+
+    def GetPluralString(*args, **kwargs):
+        """
+        GetPluralString(self, wxChar szOrigString, wxChar szOrigString2, size_t n, 
+            wxChar szDomain=None) -> wxChar
+        """
+        return _gdi_.PyLocale_GetPluralString(*args, **kwargs)
+
+_gdi_.PyLocale_swigregister(PyLocale)
+
 
 def GetLocale(*args):
   """GetLocale() -> Locale"""
@@ -2477,7 +2863,9 @@ _gdi_.EncodingConverter_swigregister(EncodingConverter)
 def GetTranslation(*args):
   """
     GetTranslation(String str) -> String
+    GetTranslation(String str, String domain) -> String
     GetTranslation(String str, String strPlural, size_t n) -> String
+    GetTranslation(String str, String strPlural, size_t n, String domain) -> String
     """
   return _gdi_.GetTranslation(*args)
 
@@ -3296,7 +3684,7 @@ class DC(_core.Object):
     def GetMultiLineTextExtent(*args, **kwargs):
         """
         GetMultiLineTextExtent(wxString string, Font font=None) ->
-           (width, height, descent, externalLeading)
+           (width, height, lineHeight)
 
         Get the width, height, decent and leading of the text using the
         current or specified font. Works for single as well as multi-line

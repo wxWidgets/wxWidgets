@@ -328,10 +328,13 @@ FRAME_SHAPED = _windows_.FRAME_SHAPED
 FRAME_DRAWER = _windows_.FRAME_DRAWER
 FRAME_EX_METAL = _windows_.FRAME_EX_METAL
 DIALOG_EX_METAL = _windows_.DIALOG_EX_METAL
+WS_EX_CONTEXTHELP = _windows_.WS_EX_CONTEXTHELP
 DIALOG_MODAL = _windows_.DIALOG_MODAL
 DIALOG_MODELESS = _windows_.DIALOG_MODELESS
 USER_COLOURS = _windows_.USER_COLOURS
 NO_3D = _windows_.NO_3D
+FRAME_EX_CONTEXTHELP = _windows_.FRAME_EX_CONTEXTHELP
+DIALOG_EX_CONTEXTHELP = _windows_.DIALOG_EX_CONTEXTHELP
 FULLSCREEN_NOMENUBAR = _windows_.FULLSCREEN_NOMENUBAR
 FULLSCREEN_NOTOOLBAR = _windows_.FULLSCREEN_NOTOOLBAR
 FULLSCREEN_NOSTATUSBAR = _windows_.FULLSCREEN_NOSTATUSBAR
@@ -430,14 +433,6 @@ class TopLevelWindow(_core.Window):
     def EnableCloseButton(*args, **kwargs):
         """EnableCloseButton(self, bool enable=True) -> bool"""
         return _windows_.TopLevelWindow_EnableCloseButton(*args, **kwargs)
-
-    def SetTransparent(*args, **kwargs):
-        """SetTransparent(self, byte alpha) -> bool"""
-        return _windows_.TopLevelWindow_SetTransparent(*args, **kwargs)
-
-    def CanSetTransparent(*args, **kwargs):
-        """CanSetTransparent(self) -> bool"""
-        return _windows_.TopLevelWindow_CanSetTransparent(*args, **kwargs)
 
     def GetDefaultItem(*args, **kwargs):
         """
@@ -1780,19 +1775,11 @@ class VScrolledWindow(Panel):
         return _windows_.VScrolledWindow_RefreshLines(*args, **kwargs)
 
     def HitTestXY(*args, **kwargs):
-        """
-        HitTestXY(self, int x, int y) -> int
-
-        Test where the given (in client coords) point lies
-        """
+        """HitTestXY(self, int x, int y) -> int"""
         return _windows_.VScrolledWindow_HitTestXY(*args, **kwargs)
 
     def HitTest(*args, **kwargs):
-        """
-        HitTest(self, Point pt) -> int
-
-        Test where the given (in client coords) point lies
-        """
+        """HitTest(self, Point pt) -> int"""
         return _windows_.VScrolledWindow_HitTest(*args, **kwargs)
 
     def RefreshAll(*args, **kwargs):

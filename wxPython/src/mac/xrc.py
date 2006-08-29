@@ -73,7 +73,7 @@ class XmlResource(_core.Object):
     thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
     __repr__ = _swig_repr
     def __init__(self, *args, **kwargs): 
-        """__init__(self, String filemask, int flags=XRC_USE_LOCALE) -> XmlResource"""
+        """__init__(self, String filemask, int flags=XRC_USE_LOCALE, String domain=wxEmptyString) -> XmlResource"""
         _xrc.XmlResource_swiginit(self,_xrc.new_XmlResource(*args, **kwargs))
         self.InitAllHandlers()
 
@@ -203,6 +203,14 @@ class XmlResource(_core.Object):
         """SetFlags(self, int flags)"""
         return _xrc.XmlResource_SetFlags(*args, **kwargs)
 
+    def GetDomain(*args, **kwargs):
+        """GetDomain(self) -> String"""
+        return _xrc.XmlResource_GetDomain(*args, **kwargs)
+
+    def SetDomain(*args, **kwargs):
+        """SetDomain(self, String domain)"""
+        return _xrc.XmlResource_SetDomain(*args, **kwargs)
+
 _xrc.XmlResource_swigregister(XmlResource)
 cvar = _xrc.cvar
 UTF8String = cvar.UTF8String
@@ -214,7 +222,7 @@ IconString = cvar.IconString
 FontString = cvar.FontString
 
 def EmptyXmlResource(*args, **kwargs):
-    """EmptyXmlResource(int flags=XRC_USE_LOCALE) -> XmlResource"""
+    """EmptyXmlResource(int flags=XRC_USE_LOCALE, String domain=wxEmptyString) -> XmlResource"""
     val = _xrc.new_EmptyXmlResource(*args, **kwargs)
     val.InitAllHandlers()
     return val

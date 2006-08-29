@@ -48858,8 +48858,6 @@ SWIGEXPORT void SWIG_init(void) {
   SWIG_Python_SetConstant(d, "DIRCTRL_SHOW_FILTERS",SWIG_From_int(static_cast< int >(wxDIRCTRL_SHOW_FILTERS)));
   SWIG_Python_SetConstant(d, "DIRCTRL_3D_INTERNAL",SWIG_From_int(static_cast< int >(wxDIRCTRL_3D_INTERNAL)));
   SWIG_Python_SetConstant(d, "DIRCTRL_EDIT_LABELS",SWIG_From_int(static_cast< int >(wxDIRCTRL_EDIT_LABELS)));
-  SWIG_Python_SetConstant(d, "FRAME_EX_CONTEXTHELP",SWIG_From_int(static_cast< int >(wxFRAME_EX_CONTEXTHELP)));
-  SWIG_Python_SetConstant(d, "DIALOG_EX_CONTEXTHELP",SWIG_From_int(static_cast< int >(wxDIALOG_EX_CONTEXTHELP)));
   PyDict_SetItemString(d, "wxEVT_HELP", PyInt_FromLong(wxEVT_HELP));
   PyDict_SetItemString(d, "wxEVT_DETAILED_HELP", PyInt_FromLong(wxEVT_DETAILED_HELP));
   SWIG_Python_SetConstant(d, "HelpEvent_Origin_Unknown",SWIG_From_int(static_cast< int >(wxHelpEvent::Origin_Unknown)));
