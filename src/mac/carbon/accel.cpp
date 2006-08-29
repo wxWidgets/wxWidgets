@@ -93,7 +93,8 @@ int wxAcceleratorTable::GetCommand( wxKeyEvent &event )
         if ((event.m_keyCode == entry->GetKeyCode()) &&
            (((entry->GetFlags() & wxACCEL_CTRL) == 0) || event.ControlDown()) &&
            (((entry->GetFlags() & wxACCEL_SHIFT) == 0) || event.ShiftDown()) &&
-           (((entry->GetFlags() & wxACCEL_ALT) == 0) || event.AltDown() || event.MetaDown()))
+           (((entry->GetFlags() & wxACCEL_ALT) == 0) || event.AltDown()) && 
+           (((entry->GetFlags() & wxACCEL_CMD) == 0) || event.CmdDown()))
         {
             return entry->GetCommand();
         }
