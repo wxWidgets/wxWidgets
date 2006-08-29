@@ -319,16 +319,19 @@ MAKE_INT_ARRAY_TYPEMAPS(styles, styles_field)
 // Typemaps for loading a image or bitmap from an object that implements the
 // buffer interface
 
-
 %typemap(in) (buffer data, int DATASIZE)
-{ if ($input != Py_None) {
-        if (!PyArg_Parse($input, "t#", &$1, &$2)) SWIG_fail;
-}}
+{
+    if (PyObject_AsReadBuffer($input, (const void**)(&$1), &$2) == -1) SWIG_fail;
+}
 
 %typemap(in) (buffer alpha, int ALPHASIZE)
-{ if ($input != Py_None) {
-        if (!PyArg_Parse($input, "t#", &$1, &$2)) SWIG_fail;
-}}
+{
+    if ($input != Py_None) {
+        if (PyObject_AsReadBuffer($input, (const void**)(&$1), &$2) == -1) SWIG_fail;
+    }
+}
+
+
 
 //---------------------------------------------------------------------------
 // Typemaps to convert return values that are base class pointers
