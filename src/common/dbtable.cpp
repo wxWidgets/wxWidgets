@@ -65,7 +65,7 @@ ULONG lastTableID = 0;
 
 void csstrncpyt(wxChar *target, const wxChar *source, int n)
 {
-    while ( (*target++ = *source++) != '\0' && --n )
+    while ( (*target++ = *source++) != '\0' && --n != 0 )
         ;
 
     *target = '\0';

@@ -7957,8 +7957,8 @@ void wxGrid::DrawTextRectangle(wxDC& dc,
             continue;
         }
 
-        long lineWidth,
-             lineHeight;
+        long lineWidth = 0,
+             lineHeight = 0;
         dc.GetTextExtent(line, &lineWidth, &lineHeight);
 
         switch ( horizAlign )
