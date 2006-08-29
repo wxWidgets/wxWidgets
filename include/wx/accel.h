@@ -32,7 +32,12 @@ enum
     wxACCEL_NORMAL  = 0x0000,   // no modifiers
     wxACCEL_ALT     = 0x0001,   // hold Alt key down
     wxACCEL_CTRL    = 0x0002,   // hold Ctrl key down
-    wxACCEL_SHIFT   = 0x0004    // hold Shift key down
+    wxACCEL_SHIFT   = 0x0004,   // hold Shift key down
+#if defined(__WXMAC__) || defined(__WXCOCOA__)
+    wxACCEL_CMD      = 0x0008   // Command key on OS X
+#else
+    wxACCEL_CMD      = wxACCEL_CTRL
+#endif
 };
 
 // ----------------------------------------------------------------------------
