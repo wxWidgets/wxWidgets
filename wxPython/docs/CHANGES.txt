@@ -192,7 +192,7 @@ IDs.
 Added wx.lib.combotreebox from Frank Niessink
 
 Added wx.ImageFromBuffer, wx.BitmapFromBuffer and
-wx.BitmapFromBufferRGBA factory functions.  They enable loading of am
+wx.BitmapFromBufferRGBA factory functions.  They enable loading of an
 image or bitmap directly from a Python object that implements the
 buffer interface, such as strings, arrays, etc.
 
@@ -208,6 +208,10 @@ wx.Colour now includes an alpha component, which defaults to
 wx.ALPHA_OPAQUE.  This is in preparation for allowing various new
 alpha blening functionality using wx.Colour objects, such as drawing
 with pens and brushes on a wx.DC.  
+
+Added wx.NativePixelBuffer, wx.AlphPixelBuffer and related iterator
+and accessor classes.  They allow platform independent direct access
+to the platform specific pixel buffer inside of a wx.Bitmap object.
 
 
 
