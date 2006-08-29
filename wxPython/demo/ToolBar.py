@@ -18,7 +18,7 @@ class TestToolBar(wx.Frame):
         tb = self.CreateToolBar( wx.TB_HORIZONTAL
                                  | wx.NO_BORDER
                                  | wx.TB_FLAT
-                                 | wx.TB_TEXT
+                                 #| wx.TB_TEXT
                                  )
 
         # Here's a 'simple' toolbar example, and how to bind it using SetToolBar()
