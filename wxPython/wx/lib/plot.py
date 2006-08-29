@@ -462,11 +462,12 @@ class PlotCanvas(wx.Panel):
     plotting canvas (self.canvas). It allows for simple general plotting
     of data with zoom, labels, and automatic axis scaling."""
 
-    def __init__(self, parent):
+    def __init__(self, parent, id=wx.ID_ANY, pos=wx.DefaultPosition,
+                 size=wx.DefaultSize, style=0, name="plotCanvas"):
         """Constructs a panel, which can be a child of a frame or
         any other non-control window"""
     
-        wx.Panel.__init__(self, parent)
+        wx.Panel.__init__(self, parent, id, pos, size, style, name)
 
         sizer = wx.FlexGridSizer(2,2,0,0)
         self.canvas = wx.Window(self, -1)
