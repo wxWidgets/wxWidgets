@@ -649,6 +649,8 @@ static pascal OSStatus ControlToolbarItemHandler( EventHandlerCallRef inCallRef,
                     if ( wxwindow )
                     {
                         wxSize sz = wxwindow->GetSize() ;
+                        sz.x -= wxwindow->MacGetLeftBorderSize() + wxwindow->MacGetRightBorderSize();
+                        sz.y -= wxwindow->MacGetTopBorderSize() + wxwindow->MacGetBottomBorderSize();
                         // during toolbar layout the native window sometimes gets negative sizes
                         // so we always keep the last valid size here, to make sure we survive the
                         // shuffle ...
