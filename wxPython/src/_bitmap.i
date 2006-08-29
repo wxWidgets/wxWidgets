@@ -108,8 +108,8 @@ public:
         * wx.BITMAP_TYPE_IFF
 
 :see: Alternate constructors `wx.EmptyBitmap`, `wx.BitmapFromIcon`,
-      `wx.BitmapFromImage`, `wx.BitmapFromXPMData`,
-      `wx.BitmapFromBits`
+      `wx.BitmapFromImage`, `wx.BitmapFromXPMData`, `wx.BitmapFromBits`,
+      `wx.BitmapFromBuffer`, `wx.BitmapFromBufferRGBA`,
 ");
         
     ~wxBitmap();
@@ -213,7 +213,6 @@ bitmap. This preserves mask information so that bitmaps and images can
 be converted back and forth without loss in that respect.", "");
     
 
-    
     DocDeclStr(
         virtual wxMask* , GetMask() const,
         "Gets the associated mask (if any) which may have been loaded from a
