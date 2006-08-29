@@ -6680,13 +6680,11 @@ SWIGINTERN PyObject *_wrap__BitmapFromBufferAlpha(PyObject *SWIGUNUSEDPARM(self)
   } 
   arg2 = static_cast< int >(val2);
   {
-    if (obj2 != Py_None) {
-      if (!PyArg_Parse(obj2, "t#", &arg3, &arg4)) SWIG_fail;
-    }
+    if (PyObject_AsReadBuffer(obj2, (const void**)(&arg3), &arg4) == -1) SWIG_fail;
   }
   {
     if (obj3 != Py_None) {
-      if (!PyArg_Parse(obj3, "t#", &arg5, &arg6)) SWIG_fail;
+      if (PyObject_AsReadBuffer(obj3, (const void**)(&arg5), &arg6) == -1) SWIG_fail;
     }
   }
   {
@@ -6730,9 +6728,7 @@ SWIGINTERN PyObject *_wrap__BitmapFromBuffer(PyObject *SWIGUNUSEDPARM(self), PyO
   } 
   arg2 = static_cast< int >(val2);
   {
-    if (obj2 != Py_None) {
-      if (!PyArg_Parse(obj2, "t#", &arg3, &arg4)) SWIG_fail;
-    }
+    if (PyObject_AsReadBuffer(obj2, (const void**)(&arg3), &arg4) == -1) SWIG_fail;
   }
   {
     result = (wxBitmap *)_BitmapFromBuffer(arg1,arg2,arg3,arg4);
@@ -6775,9 +6771,7 @@ SWIGINTERN PyObject *_wrap__BitmapFromBufferRGBA(PyObject *SWIGUNUSEDPARM(self),
   } 
   arg2 = static_cast< int >(val2);
   {
-    if (obj2 != Py_None) {
-      if (!PyArg_Parse(obj2, "t#", &arg3, &arg4)) SWIG_fail;
-    }
+    if (PyObject_AsReadBuffer(obj2, (const void**)(&arg3), &arg4) == -1) SWIG_fail;
   }
   {
     result = (wxBitmap *)_BitmapFromBufferRGBA(arg1,arg2,arg3,arg4);

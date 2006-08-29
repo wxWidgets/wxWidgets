@@ -13414,9 +13414,7 @@ SWIGINTERN PyObject *_wrap_new_ImageFromData(PyObject *SWIGUNUSEDPARM(self), PyO
   } 
   arg2 = static_cast< int >(val2);
   {
-    if (obj2 != Py_None) {
-      if (!PyArg_Parse(obj2, "t#", &arg3, &arg4)) SWIG_fail;
-    }
+    if (PyObject_AsReadBuffer(obj2, (const void**)(&arg3), &arg4) == -1) SWIG_fail;
   }
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -13464,13 +13462,11 @@ SWIGINTERN PyObject *_wrap_new_ImageFromDataWithAlpha(PyObject *SWIGUNUSEDPARM(s
   } 
   arg2 = static_cast< int >(val2);
   {
-    if (obj2 != Py_None) {
-      if (!PyArg_Parse(obj2, "t#", &arg3, &arg4)) SWIG_fail;
-    }
+    if (PyObject_AsReadBuffer(obj2, (const void**)(&arg3), &arg4) == -1) SWIG_fail;
   }
   {
     if (obj3 != Py_None) {
-      if (!PyArg_Parse(obj3, "t#", &arg5, &arg6)) SWIG_fail;
+      if (PyObject_AsReadBuffer(obj3, (const void**)(&arg5), &arg6) == -1) SWIG_fail;
     }
   }
   {
@@ -15493,9 +15489,7 @@ SWIGINTERN PyObject *_wrap_Image_SetData(PyObject *SWIGUNUSEDPARM(self), PyObjec
   }
   arg1 = reinterpret_cast< wxImage * >(argp1);
   {
-    if (obj1 != Py_None) {
-      if (!PyArg_Parse(obj1, "t#", &arg2, &arg3)) SWIG_fail;
-    }
+    if (PyObject_AsReadBuffer(obj1, (const void**)(&arg2), &arg3) == -1) SWIG_fail;
   }
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -15558,9 +15552,7 @@ SWIGINTERN PyObject *_wrap_Image_SetDataBuffer(PyObject *SWIGUNUSEDPARM(self), P
   }
   arg1 = reinterpret_cast< wxImage * >(argp1);
   {
-    if (obj1 != Py_None) {
-      if (!PyArg_Parse(obj1, "t#", &arg2, &arg3)) SWIG_fail;
-    }
+    if (PyObject_AsReadBuffer(obj1, (const void**)(&arg2), &arg3) == -1) SWIG_fail;
   }
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -15624,7 +15616,7 @@ SWIGINTERN PyObject *_wrap_Image_SetAlphaData(PyObject *SWIGUNUSEDPARM(self), Py
   arg1 = reinterpret_cast< wxImage * >(argp1);
   {
     if (obj1 != Py_None) {
-      if (!PyArg_Parse(obj1, "t#", &arg2, &arg3)) SWIG_fail;
+      if (PyObject_AsReadBuffer(obj1, (const void**)(&arg2), &arg3) == -1) SWIG_fail;
     }
   }
   {
@@ -15689,7 +15681,7 @@ SWIGINTERN PyObject *_wrap_Image_SetAlphaBuffer(PyObject *SWIGUNUSEDPARM(self), 
   arg1 = reinterpret_cast< wxImage * >(argp1);
   {
     if (obj1 != Py_None) {
-      if (!PyArg_Parse(obj1, "t#", &arg2, &arg3)) SWIG_fail;
+      if (PyObject_AsReadBuffer(obj1, (const void**)(&arg2), &arg3) == -1) SWIG_fail;
     }
   }
   {
@@ -17066,14 +17058,12 @@ SWIGINTERN PyObject *_wrap__ImageFromBuffer(PyObject *SWIGUNUSEDPARM(self), PyOb
   } 
   arg2 = static_cast< int >(val2);
   {
-    if (obj2 != Py_None) {
-      if (!PyArg_Parse(obj2, "t#", &arg3, &arg4)) SWIG_fail;
-    }
+    if (PyObject_AsReadBuffer(obj2, (const void**)(&arg3), &arg4) == -1) SWIG_fail;
   }
   if (obj3) {
     {
       if (obj3 != Py_None) {
-        if (!PyArg_Parse(obj3, "t#", &arg5, &arg6)) SWIG_fail;
+        if (PyObject_AsReadBuffer(obj3, (const void**)(&arg5), &arg6) == -1) SWIG_fail;
       }
     }
   }
@@ -56310,10 +56300,6 @@ SWIGEXPORT void SWIG_init(void) {
   SWIG_Python_SetConstant(d, "ID_UNDELETE",SWIG_From_int(static_cast< int >(wxID_UNDELETE)));
   SWIG_Python_SetConstant(d, "ID_REVERT_TO_SAVED",SWIG_From_int(static_cast< int >(wxID_REVERT_TO_SAVED)));
   SWIG_Python_SetConstant(d, "ID_HIGHEST",SWIG_From_int(static_cast< int >(wxID_HIGHEST)));
-  SWIG_Python_SetConstant(d, "ACCEL_ALT",SWIG_From_int(static_cast< int >(wxACCEL_ALT)));
-  SWIG_Python_SetConstant(d, "ACCEL_CTRL",SWIG_From_int(static_cast< int >(wxACCEL_CTRL)));
-  SWIG_Python_SetConstant(d, "ACCEL_SHIFT",SWIG_From_int(static_cast< int >(wxACCEL_SHIFT)));
-  SWIG_Python_SetConstant(d, "ACCEL_NORMAL",SWIG_From_int(static_cast< int >(wxACCEL_NORMAL)));
   SWIG_Python_SetConstant(d, "PD_AUTO_HIDE",SWIG_From_int(static_cast< int >(wxPD_AUTO_HIDE)));
   SWIG_Python_SetConstant(d, "PD_APP_MODAL",SWIG_From_int(static_cast< int >(wxPD_APP_MODAL)));
   SWIG_Python_SetConstant(d, "PD_CAN_ABORT",SWIG_From_int(static_cast< int >(wxPD_CAN_ABORT)));
@@ -56962,6 +56948,11 @@ SWIGEXPORT void SWIG_init(void) {
   SWIG_Python_SetConstant(d, "PYAPP_ASSERT_LOG",SWIG_From_int(static_cast< int >(wxPYAPP_ASSERT_LOG)));
   SWIG_Python_SetConstant(d, "PRINT_WINDOWS",SWIG_From_int(static_cast< int >(wxPRINT_WINDOWS)));
   SWIG_Python_SetConstant(d, "PRINT_POSTSCRIPT",SWIG_From_int(static_cast< int >(wxPRINT_POSTSCRIPT)));
+  SWIG_Python_SetConstant(d, "ACCEL_ALT",SWIG_From_int(static_cast< int >(wxACCEL_ALT)));
+  SWIG_Python_SetConstant(d, "ACCEL_CTRL",SWIG_From_int(static_cast< int >(wxACCEL_CTRL)));
+  SWIG_Python_SetConstant(d, "ACCEL_SHIFT",SWIG_From_int(static_cast< int >(wxACCEL_SHIFT)));
+  SWIG_Python_SetConstant(d, "ACCEL_NORMAL",SWIG_From_int(static_cast< int >(wxACCEL_NORMAL)));
+  SWIG_Python_SetConstant(d, "ACCEL_CMD",SWIG_From_int(static_cast< int >(wxACCEL_CMD)));
   SWIG_addvarlink(SWIG_globals(),(char*)"NullAcceleratorTable",NullAcceleratorTable_get, NullAcceleratorTable_set);
   SWIG_addvarlink(SWIG_globals(),(char*)"PanelNameStr",PanelNameStr_get, PanelNameStr_set);
   SWIG_Python_SetConstant(d, "WINDOW_VARIANT_NORMAL",SWIG_From_int(static_cast< int >(wxWINDOW_VARIANT_NORMAL)));

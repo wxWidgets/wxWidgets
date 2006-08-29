@@ -275,10 +275,6 @@ ID_ZOOM_OUT = _core_.ID_ZOOM_OUT
 ID_UNDELETE = _core_.ID_UNDELETE
 ID_REVERT_TO_SAVED = _core_.ID_REVERT_TO_SAVED
 ID_HIGHEST = _core_.ID_HIGHEST
-ACCEL_ALT = _core_.ACCEL_ALT
-ACCEL_CTRL = _core_.ACCEL_CTRL
-ACCEL_SHIFT = _core_.ACCEL_SHIFT
-ACCEL_NORMAL = _core_.ACCEL_NORMAL
 PD_AUTO_HIDE = _core_.PD_AUTO_HIDE
 PD_APP_MODAL = _core_.PD_APP_MODAL
 PD_CAN_ABORT = _core_.PD_CAN_ABORT
@@ -3070,12 +3066,11 @@ def _ImageFromBuffer(*args, **kwargs):
 def ImageFromBuffer(width, height, dataBuffer, alphaBuffer=None):
     """
     Creates a `wx.Image` from the data in dataBuffer.  The dataBuffer
-    parameter must be a Python object that implements the buffer interface, or
-    is convertable to a buffer object, such as a string, array, etc.  The
-    dataBuffer object is expected to contain a series of RGB bytes and be
-    width*height*3 bytes long.  A buffer object can optionally be supplied for
-    the image's alpha channel data, and it is expected to be width*height
-    bytes long.
+    parameter must be a Python object that implements the buffer interface,
+    such as a string, array, etc.  The dataBuffer object is expected to
+    contain a series of RGB bytes and be width*height*3 bytes long.  A buffer
+    object can optionally be supplied for the image's alpha channel data, and
+    it is expected to be width*height bytes long.
 
     The wx.Image will be created with its data and alpha pointers initialized
     to the memory address pointed to by the buffer objects, thus saving the
@@ -3093,10 +3088,6 @@ def ImageFromBuffer(width, height, dataBuffer, alphaBuffer=None):
     the objects used for the data and alpha buffers in a way that would cause
     them to change size.
     """
-    if not isinstance(dataBuffer, buffer):
-        dataBuffer = buffer(dataBuffer)
-    if alphaBuffer is not None and not isinstance(alphaBuffer, buffer):
-        alphaBuffer = buffer(alphaBuffer)
     image = _core_._ImageFromBuffer(width, height, dataBuffer, alphaBuffer)
     image._buffer = dataBuffer
     image._alpha = alphaBuffer
@@ -7461,6 +7452,11 @@ _core_.EventLoopActivator_swigregister(EventLoopActivator)
 
 #---------------------------------------------------------------------------
 
+ACCEL_ALT = _core_.ACCEL_ALT
+ACCEL_CTRL = _core_.ACCEL_CTRL
+ACCEL_SHIFT = _core_.ACCEL_SHIFT
+ACCEL_NORMAL = _core_.ACCEL_NORMAL
+ACCEL_CMD = _core_.ACCEL_CMD
 class AcceleratorEntry(object):
     """
     A class used to define items in an `wx.AcceleratorTable`.  wxPython

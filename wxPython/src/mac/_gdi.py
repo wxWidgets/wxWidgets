@@ -728,29 +728,26 @@ def _BitmapFromBuffer(*args, **kwargs):
 def BitmapFromBuffer(width, height, dataBuffer, alphaBuffer=None):
     """
     Creates a `wx.Bitmap` from the data in dataBuffer.  The dataBuffer
-    parameter must be a Python object that implements the buffer interface, or
-    is convertable to a buffer object, such as a string, array, etc.  The
-    dataBuffer object is expected to contain a series of RGB bytes and be
-    width*height*3 bytes long.  A buffer object can optionally be supplied for
-    the image's alpha channel data, and it is expected to be width*height
-    bytes long.  On Windows the RGB values are 'premultiplied' by the alpha
-    values.  (The other platforms appear to already be premultiplying the
-    alpha.)
+    parameter must be a Python object that implements the buffer
+    interface, such as a string, array, etc.  The dataBuffer object is
+    expected to contain a series of RGB bytes and be width*height*3
+    bytes long.  A buffer object can optionally be supplied for the
+    image's alpha channel data, and it is expected to be width*height
+    bytes long.  On Windows the RGB values are 'premultiplied' by the
+    alpha values.  (The other platforms do the multiplication
+    themselves.)
 
-    Unlike `wx.ImageFromBuffer` the bitmap created with this function does not
-    share the memory buffer with the buffer object.  This is because the
-    native pixel buffer format varies on different platforms, and so instead
-    an efficient as possible copy of the data is made from the buffer objects
-    to the bitmap's native pixel buffer.  For direct access to a bitmap's
-    pixel buffer see `wx.NativePixelData` and `wx.AlphaPixelData`.
+    Unlike `wx.ImageFromBuffer` the bitmap created with this function
+    does not share the memory buffer with the buffer object.  This is
+    because the native pixel buffer format varies on different
+    platforms, and so instead an efficient as possible copy of the
+    data is made from the buffer objects to the bitmap's native pixel
+    buffer.  For direct access to a bitmap's pixel buffer see
+    `wx.NativePixelData` and `wx.AlphaPixelData`.
 
     :see: `wx.Bitmap`, `wx.BitmapFromBufferRGBA`, `wx.NativePixelData`,
           `wx.AlphaPixelData`, `wx.ImageFromBuffer`
     """
-    if not isinstance(dataBuffer, buffer):
-        dataBuffer = buffer(dataBuffer)
-    if alphaBuffer is not None and not isinstance(alphaBuffer, buffer):
-        alphaBuffer = buffer(alphaBuffer)
     if alphaBuffer is not None:
         return _gdi_._BitmapFromBufferAlpha(width, height, dataBuffer, alphaBuffer)
     else:
@@ -763,25 +760,24 @@ def _BitmapFromBufferRGBA(*args, **kwargs):
 def BitmapFromBufferRGBA(width, height, dataBuffer):
     """
     Creates a `wx.Bitmap` from the data in dataBuffer.  The dataBuffer
-    parameter must be a Python object that implements the buffer interface, or
-    is convertable to a buffer object, such as a string, array, etc.  The
-    dataBuffer object is expected to contain a series of RGBA bytes (red,
-    green, blue and alpha) and be width*height*4 bytes long.  On Windows the
-    RGB values are 'premultiplied' by the alpha values.  (The other platforms
-    appear to already be premultiplying the alpha.)
+    parameter must be a Python object that implements the buffer
+    interface, such as a string, array, etc.  The dataBuffer object is
+    expected to contain a series of RGBA bytes (red, green, blue and
+    alpha) and be width*height*4 bytes long.  On Windows the RGB
+    values are 'premultiplied' by the alpha values.  (The other
+    platforms do the multiplication themselves.)
 
-    Unlike `wx.ImageFromBuffer` the bitmap created with this function does not
-    share the memory buffer with the buffer object.  This is because the
-    native pixel buffer format varies on different platforms, and so instead
-    an efficient as possible copy of the data is made from the buffer object
-    to the bitmap's native pixel buffer.  For direct access to a bitmap's
-    pixel buffer see `wx.NativePixelData` and `wx.AlphaPixelData`.
+    Unlike `wx.ImageFromBuffer` the bitmap created with this function
+    does not share the memory buffer with the buffer object.  This is
+    because the native pixel buffer format varies on different
+    platforms, and so instead an efficient as possible copy of the
+    data is made from the buffer object to the bitmap's native pixel
+    buffer.  For direct access to a bitmap's pixel buffer see
+    `wx.NativePixelData` and `wx.AlphaPixelData`.
 
     :see: `wx.Bitmap`, `wx.BitmapFromBuffer`, `wx.NativePixelData`,
           `wx.AlphaPixelData`, `wx.ImageFromBuffer`
     """
-    if not isinstance(dataBuffer, buffer):
-        dataBuffer = buffer(dataBuffer)
     return _gdi_._BitmapFromBufferRGBA(width, height, dataBuffer)
 
 class PixelDataBase(object):
