@@ -34,6 +34,7 @@
     #include "wx/textdlg.h"
     #include "wx/log.h"
     #include "wx/msgdlg.h"
+    #include "wx/icon.h"
 #endif
 
 #include "wx/apptrait.h"
