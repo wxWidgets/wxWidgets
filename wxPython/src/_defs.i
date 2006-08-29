@@ -158,6 +158,11 @@ typedef unsigned long   wxUIntPtr;
 %typemap(constcode) wxEventType "PyDict_SetItemString(d, \"$symname\", PyInt_FromLong($value));";
 
 
+%define %property(NAME, STUFF...)
+    %pythoncode {
+        NAME = property(STUFF)
+    }
+%enddef
 
 //----------------------------------------------------------------------
 // Macros for the docstring and autodoc features of SWIG.  These will
@@ -686,11 +691,6 @@ enum {
     wxID_REVERT_TO_SAVED,
    
     wxID_HIGHEST,
-
-    wxACCEL_ALT,
-    wxACCEL_CTRL,
-    wxACCEL_SHIFT,
-    wxACCEL_NORMAL,
 
     wxPD_AUTO_HIDE,
     wxPD_APP_MODAL,

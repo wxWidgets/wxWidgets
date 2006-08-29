@@ -30,6 +30,14 @@
 //---------------------------------------------------------------------------
 %newgroup;
 
+enum {
+    wxACCEL_ALT,
+    wxACCEL_CTRL,
+    wxACCEL_SHIFT,
+    wxACCEL_NORMAL,
+    wxACCEL_CMD,
+};
+
 DocStr(wxAcceleratorEntry,
 "A class used to define items in an `wx.AcceleratorTable`.  wxPython
 programs can choose to use wx.AcceleratorEntry objects, but using a
@@ -45,8 +53,8 @@ public:
         "Construct a wx.AcceleratorEntry.",
         "
     :param flags: A bitmask of wx.ACCEL_ALT, wx.ACCEL_SHIFT,
-                wx.ACCEL_CTRL or wx.ACCEL_NORMAL used to specify
-                which modifier keys are held down.
+                wx.ACCEL_CTRL, wx.ACCEL_CMD,  or wx.ACCEL_NORMAL
+                used to specify which modifier keys are held down.
     :param keyCode: The keycode to be detected
     :param cmdID: The menu or control command ID to use for the
                 accellerator event.
@@ -93,7 +101,7 @@ convenient way to program some event handling. For example, you can
 use an accelerator table to make a hotkey generate an event no matter
 which window within a frame has the focus.
 
-Foe example::
+For example::
 
     aTable = wx.AcceleratorTable([(wx.ACCEL_ALT,  ord('X'), exitID),
                                   (wx.ACCEL_CTRL, ord('H'), helpID),
