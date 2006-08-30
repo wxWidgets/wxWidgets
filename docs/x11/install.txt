@@ -217,6 +217,20 @@ untested).
 
 The SGI native compiler support has only been tested on Irix 6.5.
 
+* Building wxX11 on Cygwin
+--------------------------
+
+The normal build instructions should work fine on Cygwin. The one difference
+with Cygwin is that when using the "--enable-shared" configure option (which
+is the default) the API is exported explicitly using __declspec(dllexport)
+rather than all global symbols being available.
+
+This shouldn't make a difference using the library and should be a little
+more efficient. However if an export attribute has been missed somewhere you
+will see linking errors. If this happens then you can work around the
+problem by setting LDFLAGS=-Wl,--export-all-symbols. Please also let us know
+about it on the wx-dev mailing list.
+
 * Create your configuration
 ---------------------------
 
