@@ -999,6 +999,7 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
                 // This is necessary (don't know why);
                 // otherwise the tab will not be inserted.
                 WriteText(wxT("\t"));
+                eat_key = true;
             }
             break;
 
