@@ -9,14 +9,11 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __COLORDLG_H__
-#define __COLORDLG_H__
+#ifndef _WX_GTK_COLORDLG_H_
+#define _WX_GTK_COLORDLG_H_
 
-#include "wx/defs.h"
-#include "wx/gdicmn.h"
 #include "wx/dialog.h"
 #include "wx/cmndata.h"
-
 
 class WXDLLEXPORT wxColourDialog : public wxDialog
 {

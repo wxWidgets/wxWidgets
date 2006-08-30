@@ -15,12 +15,10 @@
 #ifndef WX_PRECOMP
     #include "wx/app.h"
     #include "wx/utils.h"
+    #include "wx/image.h"
 #endif // WX_PRECOMP
 
 #include "wx/gtk/private.h" //for idle stuff
-
-#include <gdk/gdk.h>
-#include <gtk/gtk.h>
 
 //-----------------------------------------------------------------------------
 // wxCursor

@@ -7,31 +7,10 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __MDIH__
-#define __MDIH__
+#ifndef _WX_GTK_MDI_H_
+#define _WX_GTK_MDI_H_
 
-#include "wx/defs.h"
-#include "wx/object.h"
-#include "wx/list.h"
-#include "wx/control.h"
-#include "wx/panel.h"
 #include "wx/frame.h"
-#include "wx/toolbar.h"
-
-//-----------------------------------------------------------------------------
-// classes
-//-----------------------------------------------------------------------------
-
-class WXDLLIMPEXP_CORE wxMDIParentFrame;
-class WXDLLIMPEXP_CORE wxMDIClientWindow;
-class WXDLLIMPEXP_CORE wxMDIChildFrame;
-
-//-----------------------------------------------------------------------------
-// global data
-//-----------------------------------------------------------------------------
-
-extern WXDLLEXPORT_DATA(const wxChar) wxFrameNameStr[];
-extern WXDLLEXPORT_DATA(const wxChar) wxStatusLineNameStr[];
 
 //-----------------------------------------------------------------------------
 // wxMDIParentFrame
@@ -211,4 +190,4 @@ private:
     DECLARE_DYNAMIC_CLASS(wxMDIClientWindow)
 };
 
-#endif // __MDIH__
+#endif // _WX_GTK_MDI_H_

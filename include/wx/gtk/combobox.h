@@ -8,27 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __GTKCOMBOBOXH__
-#define __GTKCOMBOBOXH__
-
-#include "wx/defs.h"
-
-#if wxUSE_COMBOBOX
-
-#include "wx/object.h"
-
-//-----------------------------------------------------------------------------
-// classes
-//-----------------------------------------------------------------------------
-
-class WXDLLIMPEXP_CORE wxComboBox;
-
-//-----------------------------------------------------------------------------
-// global data
-//-----------------------------------------------------------------------------
-
-extern WXDLLEXPORT_DATA(const wxChar) wxComboBoxNameStr[];
-extern WXDLLIMPEXP_BASE const wxChar* wxEmptyString;
+#ifndef _WX_GTK_COMBOBOX_H_
+#define _WX_GTK_COMBOBOX_H_
 
 //-----------------------------------------------------------------------------
 // wxComboBox
@@ -184,8 +165,4 @@ private:
     DECLARE_EVENT_TABLE()
 };
 
-#endif
-
-#endif
-
-  // __GTKCOMBOBOXH__
+#endif // _WX_GTK_COMBOBOX_H_

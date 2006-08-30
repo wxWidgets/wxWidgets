@@ -7,16 +7,13 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __GTKCURSORH__
-#define __GTKCURSORH__
+#ifndef _WX_GTK_CURSOR_H_
+#define _WX_GTK_CURSOR_H_
 
-#include "wx/defs.h"
 #include "wx/object.h"
-#include "wx/gdicmn.h"
 
-#if wxUSE_IMAGE
-#include "wx/image.h"
-#endif
+class WXDLLIMPEXP_CORE wxColour;
+class WXDLLIMPEXP_CORE wxImage;
 
 //-----------------------------------------------------------------------------
 // wxCursor
@@ -47,4 +44,4 @@ private:
     DECLARE_DYNAMIC_CLASS(wxCursor)
 };
 
-#endif // __GTKCURSORH__
+#endif // _WX_GTK_CURSOR_H_

@@ -7,20 +7,11 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __GTKPENH__
-#define __GTKPENH__
+#ifndef _WX_GTK_PEN_H_
+#define _WX_GTK_PEN_H_
 
-#include "wx/defs.h"
-#include "wx/object.h"
-#include "wx/string.h"
 #include "wx/gdiobj.h"
 #include "wx/gdicmn.h"
-
-//-----------------------------------------------------------------------------
-// classes
-//-----------------------------------------------------------------------------
-
-class WXDLLIMPEXP_CORE wxPen;
 
 typedef    gint8 wxGTKDash;
 
@@ -66,4 +57,4 @@ protected:
     DECLARE_DYNAMIC_CLASS(wxPen)
 };
 
-#endif // __GTKPENH__
+#endif // _WX_GTK_PEN_H_

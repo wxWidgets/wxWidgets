@@ -7,25 +7,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __GTKBUTTONH__
-#define __GTKBUTTONH__
-
-#include "wx/defs.h"
-#include "wx/object.h"
-#include "wx/list.h"
-#include "wx/control.h"
-
-//-----------------------------------------------------------------------------
-// classes
-//-----------------------------------------------------------------------------
-
-class WXDLLIMPEXP_CORE wxButton;
-
-//-----------------------------------------------------------------------------
-// global data
-//-----------------------------------------------------------------------------
-
-extern WXDLLIMPEXP_CORE const wxChar wxButtonNameStr[];
+#ifndef _WX_GTK_BUTTON_H_
+#define _WX_GTK_BUTTON_H_
 
 //-----------------------------------------------------------------------------
 // wxButton
@@ -81,4 +64,4 @@ private:
     DECLARE_DYNAMIC_CLASS(wxButton)
 };
 
-#endif // __GTKBUTTONH__
+#endif // _WX_GTK_BUTTON_H_

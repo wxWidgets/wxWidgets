@@ -7,31 +7,11 @@
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __GTKGAUGEH__
-#define __GTKGAUGEH__
-
-#include "wx/defs.h"
-
-#if wxUSE_GAUGE
-
-#include "wx/object.h"
-#include "wx/list.h"
-#include "wx/control.h"
+#ifndef _WX_GTK_GAUGE_H_
+#define _WX_GTK_GAUGE_H_
 
 //-----------------------------------------------------------------------------
-// classes
-//-----------------------------------------------------------------------------
-
-class WXDLLIMPEXP_CORE wxGauge;
-
-//-----------------------------------------------------------------------------
-// global data
-//-----------------------------------------------------------------------------
-
-extern WXDLLIMPEXP_CORE const wxChar wxGaugeNameStr[];
-
-//-----------------------------------------------------------------------------
-// wxGaugeBox
+// wxGauge
 //-----------------------------------------------------------------------------
 
 class WXDLLIMPEXP_CORE wxGauge: public wxControl
@@ -97,6 +77,4 @@ private:
     DECLARE_DYNAMIC_CLASS(wxGauge)
 };
 
-#endif
-
-#endif // __GTKGAUGEH__
+#endif // _WX_GTK_GAUGE_H_

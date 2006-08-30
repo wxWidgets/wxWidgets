@@ -13,10 +13,9 @@
 #include "wx/brush.h"
 
 #ifndef WX_PRECOMP
+    #include "wx/bitmap.h"
     #include "wx/colour.h"
 #endif
-
-#include <gdk/gdk.h>
 
 //-----------------------------------------------------------------------------
 // wxBrush

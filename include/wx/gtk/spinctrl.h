@@ -8,14 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __GTKSPINCTRLH__
-#define __GTKSPINCTRLH__
-
-#include "wx/defs.h"
-
-#if wxUSE_SPINCTRL
-
-#include "wx/control.h"
+#ifndef _WX_GTK_SPINCTRL_H_
+#define _WX_GTK_SPINCTRL_H_
 
 //-----------------------------------------------------------------------------
 // wxSpinCtrl
@@ -79,8 +73,4 @@ private:
     DECLARE_EVENT_TABLE()
 };
 
-#endif
-    // wxUSE_SPINCTRL
-
-#endif
-    // __GTKSPINCTRLH__
+#endif // _WX_GTK_SPINCTRL_H_

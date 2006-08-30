@@ -7,17 +7,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-
-#ifndef __GTKCLIPBOARDH__
-#define __GTKCLIPBOARDH__
-
-#if wxUSE_CLIPBOARD
-
-#include "wx/object.h"
-#include "wx/list.h"
-#include "wx/dataobj.h"
-#include "wx/control.h"
-#include "wx/module.h"
+#ifndef _WX_GTK_CLIPBOARD_H_
+#define _WX_GTK_CLIPBOARD_H_
 
 // ----------------------------------------------------------------------------
 // wxClipboard
@@ -77,8 +68,4 @@ private:
     DECLARE_DYNAMIC_CLASS(wxClipboard)
 };
 
-#endif
-   // wxUSE_CLIPBOARD
-
-#endif
-    // __GTKCLIPBOARDH__
+#endif // _WX_GTK_CLIPBOARD_H_

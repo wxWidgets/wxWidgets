@@ -7,21 +7,11 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+#ifndef _WX_GTK_BRUSH_H_
+#define _WX_GTK_BRUSH_H_
 
-#ifndef __GTKBRUSHH__
-#define __GTKBRUSHH__
-
-#include "wx/defs.h"
-#include "wx/object.h"
-#include "wx/string.h"
-#include "wx/gdiobj.h"
-#include "wx/bitmap.h"
-
-//-----------------------------------------------------------------------------
-// classes
-//-----------------------------------------------------------------------------
-
-class WXDLLIMPEXP_CORE wxBrush;
+class WXDLLIMPEXP_CORE wxBitmap;
+class WXDLLIMPEXP_CORE wxColour;
 
 //-----------------------------------------------------------------------------
 // wxBrush
@@ -58,4 +48,4 @@ protected:
     DECLARE_DYNAMIC_CLASS(wxBrush)
 };
 
-#endif // __GTKBRUSHH__
+#endif // _WX_GTK_BRUSH_H_

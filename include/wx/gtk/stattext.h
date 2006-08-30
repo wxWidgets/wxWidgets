@@ -7,23 +7,8 @@
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __GTKSTATICTEXTH__
-#define __GTKSTATICTEXTH__
-
-#include "wx/defs.h"
-#include "wx/object.h"
-#include "wx/list.h"
-#include "wx/control.h"
-
-//-----------------------------------------------------------------------------
-// classes
-//-----------------------------------------------------------------------------
-
-class WXDLLIMPEXP_CORE wxStaticText;
-
-//-----------------------------------------------------------------------------
-// global data
-//-----------------------------------------------------------------------------
+#ifndef _WX_GTK_STATTEXT_H_
+#define _WX_GTK_STATTEXT_H_
 
 //-----------------------------------------------------------------------------
 // wxStaticText
@@ -77,4 +62,4 @@ protected:
     DECLARE_DYNAMIC_CLASS(wxStaticText)
 };
 
-#endif // __GTKSTATICTEXTH__
+#endif // _WX_GTK_STATTEXT_H_

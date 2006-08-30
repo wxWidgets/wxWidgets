@@ -7,25 +7,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __GTKCOLOURH__
-#define __GTKCOLOURH__
-
-#include "wx/defs.h"
-#include "wx/object.h"
-#include "wx/string.h"
-#include "wx/gdiobj.h"
-#include "wx/palette.h"
-
-//-----------------------------------------------------------------------------
-// classes
-//-----------------------------------------------------------------------------
-
-class WXDLLIMPEXP_CORE wxDC;
-class WXDLLIMPEXP_CORE wxPaintDC;
-class WXDLLIMPEXP_CORE wxBitmap;
-class WXDLLIMPEXP_CORE wxWindow;
-
-class WXDLLIMPEXP_CORE wxColour;
+#ifndef _WX_GTK_COLOUR_H_
+#define _WX_GTK_COLOUR_H_
 
 //-----------------------------------------------------------------------------
 // wxColour
@@ -72,4 +55,4 @@ private:
     DECLARE_DYNAMIC_CLASS(wxColour)
 };
 
-#endif // __GTKCOLOURH__
+#endif // _WX_GTK_COLOUR_H_

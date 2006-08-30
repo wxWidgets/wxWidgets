@@ -8,12 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __GTKPOPUPWINH__
-#define __GTKPOPUPWINH__
-
-#include "wx/defs.h"
-#include "wx/panel.h"
-#include "wx/icon.h"
+#ifndef _WX_GTK_POPUPWIN_H_
+#define _WX_GTK_POPUPWIN_H_
 
 //-----------------------------------------------------------------------------
 // wxPopUpWindow
@@ -54,4 +50,4 @@ private:
     DECLARE_DYNAMIC_CLASS(wxPopupWindow)
 };
 
-#endif // __GTKPOPUPWINDOWH__
+#endif // _WX_GTK_POPUPWIN_H_

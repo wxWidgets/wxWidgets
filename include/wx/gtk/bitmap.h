@@ -7,27 +7,11 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-
-#ifndef __GTKBITMAPH__
-#define __GTKBITMAPH__
-
-#include "wx/defs.h"
-#include "wx/object.h"
-#include "wx/string.h"
-#include "wx/palette.h"
-#include "wx/gdiobj.h"
+#ifndef _WX_GTK_BITMAP_H_
+#define _WX_GTK_BITMAP_H_
 
 typedef struct _GdkPixbuf GdkPixbuf;
-
 class WXDLLEXPORT wxPixelDataBase;
-
-//-----------------------------------------------------------------------------
-// classes
-//-----------------------------------------------------------------------------
-
-class WXDLLIMPEXP_CORE wxMask;
-class WXDLLIMPEXP_CORE wxBitmap;
-class WXDLLIMPEXP_CORE wxImage;
 
 //-----------------------------------------------------------------------------
 // wxMask
@@ -174,5 +158,4 @@ private:
     DECLARE_DYNAMIC_CLASS(wxBitmapHandler)
 };
 
-
-#endif // __GTKBITMAPH__
+#endif // _WX_GTK_BITMAP_H_

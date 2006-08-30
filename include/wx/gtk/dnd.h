@@ -7,29 +7,10 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef __GTKDNDH__
-#define __GTKDNDH__
+#ifndef _WX_GTK_DND_H_
+#define _WX_GTK_DND_H_
 
-#if wxUSE_DRAG_AND_DROP
-
-#include "wx/object.h"
-#include "wx/string.h"
-#include "wx/dataobj.h"
-#include "wx/cursor.h"
 #include "wx/icon.h"
-#include "wx/gdicmn.h"
-
-//-------------------------------------------------------------------------
-// classes
-//-------------------------------------------------------------------------
-
-class WXDLLIMPEXP_CORE wxWindow;
-
-class WXDLLIMPEXP_CORE wxDropTarget;
-class WXDLLIMPEXP_CORE wxTextDropTarget;
-class WXDLLIMPEXP_CORE wxFileDropTarget;
-
-class WXDLLIMPEXP_CORE wxDropSource;
 
 // ----------------------------------------------------------------------------
 // macros
@@ -124,7 +105,5 @@ private:
                   const wxIcon& none);
 };
 
-#endif // wxUSE_DRAG_AND_DROP
-
-#endif //__GTKDNDH__
+#endif // _WX_GTK_DND_H_
 

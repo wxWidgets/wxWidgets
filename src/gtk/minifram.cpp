@@ -16,16 +16,12 @@
 
 #ifndef WX_PRECOMP
     #include "wx/settings.h"
-    #include "wx/dcscreen.h"
+    #include "wx/dcclient.h"
+    #include "wx/image.h"
 #endif
 
-#include "gtk/gtk.h"
 #include "wx/gtk/win_gtk.h"
 #include "wx/gtk/private.h"
-
-#include <gdk/gdk.h>
-#include <gdk/gdkprivate.h>
-#include <gdk/gdkx.h>
 
 //-----------------------------------------------------------------------------
 // data

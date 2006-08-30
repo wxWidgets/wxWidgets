@@ -7,20 +7,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __GTKFONTH__
-#define __GTKFONTH__
-
-#include "wx/hash.h"
-
-// ----------------------------------------------------------------------------
-// classes
-// ----------------------------------------------------------------------------
-
-class WXDLLIMPEXP_CORE wxDC;
-class WXDLLIMPEXP_CORE wxPaintDC;
-class WXDLLIMPEXP_CORE wxWindow;
-
-class WXDLLIMPEXP_CORE wxFont;
+#ifndef _WX_GTK_FONT_H_
+#define _WX_GTK_FONT_H_
 
 // ----------------------------------------------------------------------------
 // wxFont
@@ -100,4 +88,4 @@ private:
     DECLARE_DYNAMIC_CLASS(wxFont)
 };
 
-#endif // __GTKFONTH__
+#endif // _WX_GTK_FONT_H_

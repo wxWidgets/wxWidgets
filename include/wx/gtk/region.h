@@ -10,15 +10,8 @@
 #ifndef _WX_GTK_REGION_H_
 #define _WX_GTK_REGION_H_
 
-#include "wx/list.h"
 #include "wx/gdiobj.h"
 #include "wx/gdicmn.h"
-
-//-----------------------------------------------------------------------------
-// classes
-//-----------------------------------------------------------------------------
-
-class WXDLLIMPEXP_CORE wxRegion;
 
 //-----------------------------------------------------------------------------
 // constants

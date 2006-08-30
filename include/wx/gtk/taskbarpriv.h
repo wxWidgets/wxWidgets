@@ -9,11 +9,10 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_TASKBARPRIV_H_
-#define _WX_TASKBARPRIV_H_
+#ifndef _WX_GTK_TASKBARPRIV_H_
+#define _WX_GTK_TASKBARPRIV_H_
 
 #include "wx/toplevel.h"
-#include "wx/bitmap.h"
 
 #ifdef __WXGTK20__
 #include <gtk/gtkversion.h>
@@ -37,4 +36,4 @@ protected:
 
 #endif // __WXGTK20__
 #endif // GTK_CHECK_VERSION(2, 1, 0)
-#endif // _WX_TASKBARPRIV_H_
+#endif // _WX_GTK_TASKBARPRIV_H_

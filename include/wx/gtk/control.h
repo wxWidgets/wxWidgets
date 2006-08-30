@@ -7,19 +7,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __GTKCONTROLH__
-#define __GTKCONTROLH__
-
-#include "wx/defs.h"
-#include "wx/object.h"
-#include "wx/list.h"
-#include "wx/window.h"
-
-//-----------------------------------------------------------------------------
-// classes
-//-----------------------------------------------------------------------------
-
-class WXDLLIMPEXP_CORE wxControl;
+#ifndef _WX_GTK_CONTROL_H_
+#define _WX_GTK_CONTROL_H_
 
 typedef struct _GtkLabel GtkLabel;
 typedef struct _GtkFrame GtkFrame;
@@ -113,4 +102,4 @@ private:
     DECLARE_DYNAMIC_CLASS(wxControl)
 };
 
-#endif // __GTKCONTROLH__
+#endif // _WX_GTK_CONTROL_H_
