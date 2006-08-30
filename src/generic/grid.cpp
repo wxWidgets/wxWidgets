@@ -8532,15 +8532,23 @@ int wxGrid::XToCol( int x, bool clipToMinMax )
     return GetColAt( maxPos );
 }
 
-// return the row number that that the y coord is near the edge of, or
-// -1 if not near an edge
+// return the row number that that the y coord is near
+//  the edge of, or -1 if not near an edge.
+// coords can only possibly be near an edge if
+//    (a) the row/column is large enough to still allow for an "inner" area
+//        that is _not_ nead the edge (i.e., if the height/width is smaller
+//        than WXGRID_LABEL_EDGE_ZONE, coords are _never_ considered to be
+//        near the edge).
+//   and
+//    (b) resizing rows/columns (the thing for which edge detection is
+//        relevant at all) is enabled.
 //
 int wxGrid::YToEdgeOfRow( int y )
 {
     int i;
     i = internalYToRow(y);
 
-    if ( GetRowHeight(i) > WXGRID_LABEL_EDGE_ZONE )
+    if ( GetRowHeight(i) > WXGRID_LABEL_EDGE_ZONE && CanDragRowSize() )
     {
         // We know that we are in row i, test whether we are
         // close enough to lower or upper border, respectively.
@@ -8555,13 +8563,14 @@ int wxGrid::YToEdgeOfRow( int y )
 
 // return the col number that that the x coord is near the edge of, or
 // -1 if not near an edge
+// See comment at YToEdgeOfRow for conditions on edge detection.
 //
 int wxGrid::XToEdgeOfCol( int x )
 {
     int i;
     i = internalXToCol(x);
 
-    if ( GetColWidth(i) > WXGRID_LABEL_EDGE_ZONE )
+    if ( GetColWidth(i) > WXGRID_LABEL_EDGE_ZONE && CanDragColSize() )
     {
         // We know that we are in column i; test whether we are
         // close enough to right or left border, respectively.
