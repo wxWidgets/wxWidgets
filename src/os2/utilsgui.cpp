@@ -437,9 +437,10 @@ void wxGUIAppTraits::TerminateGui(unsigned long ulHab)
     ::WinTerminate(ulHab);
 }
 
-wxPortId wxGUIAppTraits::GetToolkitVersion(int *WXUNUSED(verMaj), int *WXUNUSED(verMin)) const
+wxPortId wxGUIAppTraits::GetToolkitVersion(int *verMaj, int *verMin) const
 {
-    // TODO: how to get version of PM ?
+    // How to get version of PM ? I guess, just reusing the OS version is OK.
+    (void) wxGetOsVersion(verMaj, verMin);
     return wxPORT_OS2;
 }
 
