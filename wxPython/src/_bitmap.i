@@ -325,8 +325,8 @@ the ``type`` parameter.", "");
 // appears to me that the other platforms are already doing it, so I'll just
 // automatically do it for wxMSW here.
 #ifdef __WXMSW__
-#define wxPy_premultiply(p, a)   ((p) * (a) / 256)
-#define wxPy_unpremultiply(p, a) ((a) ? ((p) * 256 / (a)) : (p))    
+#define wxPy_premultiply(p, a)   ((p) * (a) / 0xff)
+#define wxPy_unpremultiply(p, a) ((a) ? ((p) * 0xff / (a)) : (p))    
 #else
 #define wxPy_premultiply(p, a)   (p)
 #define wxPy_unpremultiply(p, a) (p)    
@@ -554,52 +554,39 @@ public:
 
     %pythoncode {
     def __iter__(self):
-        """Create and return an iterator object for this pixel data object."""
-        return self.PixelIterator(self)
-
-    class PixelIterator(object):
         """
-        Sequential iterator which returns pixel accessor objects starting at the
-        the top-left corner, and going row-by-row until the bottom-right
-        corner is reached.
+        Create and return an iterator object for this pixel data
+        object.  (It's really a generator but I won't tell if you
+        don't tell.)
         """
-
-        class PixelAccessor(object):
-            """
-            This class is what is returned by the iterator and allows the pixel
-            to be Get or Set.
-            """
-            def __init__(self, data, pixels, x, y):
-                self.data = data
-                self.pixels = pixels
-                self.x = x
-                self.y = y
-            def Set(self, *args, **kw):
-                self.pixels.MoveTo(self.data, self.x, self.y)
-                return self.pixels.Set(*args, **kw)
+        width  = self.GetWidth()
+        height = self.GetHeight()
+        pixels = self.GetPixels()
+        
+        # This class is a facade over the pixels object (using the one
+        # in the enclosing scope) that only allows Get() and Set() to
+        # be called.
+        class PixelFacade(object):
             def Get(self):
-                self.pixels.MoveTo(self.data, self.x, self.y)
-                return self.pixels.Get()
-
-        def __init__(self, pixelData):
-            self.x = self.y = 0
-            self.w = pixelData.GetWidth()
-            self.h = pixelData.GetHeight()
-            self.data = pixelData
-            self.pixels = pixelData.GetPixels()
-
-        def __iter__(self):
-            return self
-
-        def next(self):
-            if self.y >= self.h:
-                raise StopIteration
-            p = self.PixelAccessor(self.data, self.pixels, self.x, self.y)
-            self.x += 1
-            if self.x >= self.w:
-                self.x = 0
-                self.y += 1
-            return p
+                return pixels.Get()
+            def Set(self, *args, **kw):
+                return pixels.Set(*args, **kw)
+            def __str__(self):
+                return str(self.Get())
+            def __repr__(self):
+                return 'pixel(%d,%d): %s' % (x,y,self.Get())
+            X = property(lambda self: x)
+            Y = property(lambda self: y)
+            
+        pf = PixelFacade()        
+        for y in xrange(height):
+            for x in xrange(width):
+                # We always generate the same pf instance, but it
+                # accesses the pixels object which we use to iterate
+                # over the pixel buffer.
+                yield pf    
+                pixels.nextPixel()
+            pixels.MoveTo(self, 0, y)
     }
 };
 
@@ -629,10 +616,12 @@ public:
     void OffsetY(const PixelData& data, int y);
     void MoveTo(const PixelData& data, int x, int y);
 
-// NOTE: For now I'm not wrapping the Red, Green, Blue and Alpha functions
-// because I can't hide the premultiplying needed on wxMSW if only the
-// individual components are wrapped.  Instead I've added the Set and Get
-// functions and put the premultiplying in there.
+// NOTE: For now I'm not wrapping the Red, Green, Blue and Alpha
+// functions because I can't hide the premultiplying needed on wxMSW
+// if only the individual components are wrapped, plus it would mean 3
+// or 4 trips per pixel from Python to C++ instead of just one.
+// Instead I've added the Set and Get functions and put the
+// premultiplying in there.
     
 //     %extend {
 //         byte _get_Red()   { return self->Red(); }
