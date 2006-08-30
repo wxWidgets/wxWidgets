@@ -35,7 +35,7 @@ static wxChar buf[MAX_TEST_LEN];
 // these macros makes it possible to write all tests without repeating a lot of times wxT() macro
 
 #define ASSERT_STR_EQUAL( a, b ) \
-    CPPUNIT_ASSERT( wxString(a) == wxString(b) );
+    CPPUNIT_ASSERT_EQUAL( wxString(a), wxString(b) );
 
 #define CMP5(expected, x, y, z, w)                  \
     wxSnprintf(buf, MAX_TEST_LEN, wxT(x), y, z, w); \
@@ -57,10 +57,11 @@ static wxChar buf[MAX_TEST_LEN];
                                                     \
     ASSERT_STR_EQUAL( wxT(expected), buf );
 
-#define CMPTOSIZE(buffer, size, expected, fmt, x, y, z, w)  \
-    wxSnprintf(buffer, size, wxT(fmt), x, y, z, w);         \
-                                                            \
-    CPPUNIT_ASSERT( wxString(wxT(expected)).Left(size - 1) == buffer )
+#define CMPTOSIZE(buffer, size, expected, fmt, x, y, z, w)          \
+    wxSnprintf(buffer, size, wxT(fmt), x, y, z, w);                 \
+                                                                    \
+    CPPUNIT_ASSERT_EQUAL( wxString(wxT(expected)).Left(size - 1),   \
+                          wxString(buffer) )
 
 
 
