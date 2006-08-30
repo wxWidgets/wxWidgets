@@ -2984,8 +2984,8 @@ SWIGINTERN bool wxBitmap___ne__(wxBitmap *self,wxBitmap const *other){ return ot
 // appears to me that the other platforms are already doing it, so I'll just
 // automatically do it for wxMSW here.
 #ifdef __WXMSW__
-#define wxPy_premultiply(p, a)   ((p) * (a) / 256)
-#define wxPy_unpremultiply(p, a) ((a) ? ((p) * 256 / (a)) : (p))    
+#define wxPy_premultiply(p, a)   ((p) * (a) / 0xff)
+#define wxPy_unpremultiply(p, a) ((a) ? ((p) * 0xff / (a)) : (p))    
 #else
 #define wxPy_premultiply(p, a)   (p)
 #define wxPy_unpremultiply(p, a) (p)    

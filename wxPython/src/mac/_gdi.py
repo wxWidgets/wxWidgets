@@ -833,52 +833,39 @@ class NativePixelData(PixelDataBase):
         return _gdi_.NativePixelData___nonzero__(*args, **kwargs)
 
     def __iter__(self):
-        """Create and return an iterator object for this pixel data object."""
-        return self.PixelIterator(self)
-
-    class PixelIterator(object):
         """
-        Sequential iterator which returns pixel accessor objects starting at the
-        the top-left corner, and going row-by-row until the bottom-right
-        corner is reached.
+        Create and return an iterator object for this pixel data
+        object.  (It's really a generator but I won't tell if you
+        don't tell.)
         """
+        width  = self.GetWidth()
+        height = self.GetHeight()
+        pixels = self.GetPixels()
+        
 
-        class PixelAccessor(object):
-            """
-            This class is what is returned by the iterator and allows the pixel
-            to be Get or Set.
-            """
-            def __init__(self, data, pixels, x, y):
-                self.data = data
-                self.pixels = pixels
-                self.x = x
-                self.y = y
-            def Set(self, *args, **kw):
-                self.pixels.MoveTo(self.data, self.x, self.y)
-                return self.pixels.Set(*args, **kw)
+
+
+        class PixelFacade(object):
             def Get(self):
-                self.pixels.MoveTo(self.data, self.x, self.y)
-                return self.pixels.Get()
+                return pixels.Get()
+            def Set(self, *args, **kw):
+                return pixels.Set(*args, **kw)
+            def __str__(self):
+                return str(self.Get())
+            def __repr__(self):
+                return 'pixel(%d,%d): %s' % (x,y,self.Get())
+            X = property(lambda self: x)
+            Y = property(lambda self: y)
+            
+        pf = PixelFacade()        
+        for y in xrange(height):
+            for x in xrange(width):
 
-        def __init__(self, pixelData):
-            self.x = self.y = 0
-            self.w = pixelData.GetWidth()
-            self.h = pixelData.GetHeight()
-            self.data = pixelData
-            self.pixels = pixelData.GetPixels()
 
-        def __iter__(self):
-            return self
 
-        def next(self):
-            if self.y >= self.h:
-                raise StopIteration
-            p = self.PixelAccessor(self.data, self.pixels, self.x, self.y)
-            self.x += 1
-            if self.x >= self.w:
-                self.x = 0
-                self.y += 1
-            return p
+                yield pf    
+                pixels.nextPixel()
+            pixels.MoveTo(self, 0, y)
 
 _gdi_.NativePixelData_swigregister(NativePixelData)
 
@@ -961,52 +948,39 @@ class AlphaPixelData(PixelDataBase):
         return _gdi_.AlphaPixelData___nonzero__(*args, **kwargs)
 
     def __iter__(self):
-        """Create and return an iterator object for this pixel data object."""
-        return self.PixelIterator(self)
-
-    class PixelIterator(object):
         """
-        Sequential iterator which returns pixel accessor objects starting at the
-        the top-left corner, and going row-by-row until the bottom-right
-        corner is reached.
+        Create and return an iterator object for this pixel data
+        object.  (It's really a generator but I won't tell if you
+        don't tell.)
         """
+        width  = self.GetWidth()
+        height = self.GetHeight()
+        pixels = self.GetPixels()
+        
 
-        class PixelAccessor(object):
-            """
-            This class is what is returned by the iterator and allows the pixel
-            to be Get or Set.
-            """
-            def __init__(self, data, pixels, x, y):
-                self.data = data
-                self.pixels = pixels
-                self.x = x
-                self.y = y
-            def Set(self, *args, **kw):
-                self.pixels.MoveTo(self.data, self.x, self.y)
-                return self.pixels.Set(*args, **kw)
+
+
+        class PixelFacade(object):
             def Get(self):
-                self.pixels.MoveTo(self.data, self.x, self.y)
-                return self.pixels.Get()
+                return pixels.Get()
+            def Set(self, *args, **kw):
+                return pixels.Set(*args, **kw)
+            def __str__(self):
+                return str(self.Get())
+            def __repr__(self):
+                return 'pixel(%d,%d): %s' % (x,y,self.Get())
+            X = property(lambda self: x)
+            Y = property(lambda self: y)
+            
+        pf = PixelFacade()        
+        for y in xrange(height):
+            for x in xrange(width):
 
-        def __init__(self, pixelData):
-            self.x = self.y = 0
-            self.w = pixelData.GetWidth()
-            self.h = pixelData.GetHeight()
-            self.data = pixelData
-            self.pixels = pixelData.GetPixels()
 
-        def __iter__(self):
-            return self
 
-        def next(self):
-            if self.y >= self.h:
-                raise StopIteration
-            p = self.PixelAccessor(self.data, self.pixels, self.x, self.y)
-            self.x += 1
-            if self.x >= self.w:
-                self.x = 0
-                self.y += 1
-            return p
+                yield pf    
+                pixels.nextPixel()
+            pixels.MoveTo(self, 0, y)
 
 _gdi_.AlphaPixelData_swigregister(AlphaPixelData)
 
