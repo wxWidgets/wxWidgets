@@ -365,19 +365,18 @@ void wxBell()
 wxString wxGetOsDescription()
 {
     wxString strVer(_T("OS/2"));
-    ULONG ulSysInfo[QSV_MAX] = {0};
+    ULONG ulSysInfo = 0;
 
-    if (::DosQuerySysInfo( 1L,
-                           QSV_MAX,
-                           (PVOID)ulSysInfo,
-                           sizeof(ULONG) * QSV_MAX
+    if (::DosQuerySysInfo( QSV_VERSION_MINOR,
+                           QSV_VERSION_MINOR,
+                           (PVOID)&ulSysInfo,
+                           sizeof(ULONG)
                          ) == 0L )
     {
         wxString ver;
-        ver.Printf( _T(" ver. %d.%d rev. %c"),
-                    int(ulSysInfo[QSV_VERSION_MAJOR] / 10),
-                    int(ulSysInfo[QSV_VERSION_MINOR]),
-                    char(ulSysInfo[QSV_VERSION_REVISION])
+        ver.Printf( _T(" ver. %d.%d"),
+                    int(ulSysInfo / 10),
+                    int(ulSysInfo % 10)
                   );
         strVer += ver;
     }
@@ -396,19 +395,19 @@ void wxAppTraits::TerminateGui(unsigned long WXUNUSED(ulHab))
 wxToolkitInfo & wxConsoleAppTraits::GetToolkitInfo()
 {
     static wxToolkitInfo  vInfo;
-    ULONG                 ulSysInfo[QSV_MAX] = {0};
+    ULONG                 ulSysInfo = 0;
     APIRET                ulrc;
 
     vInfo.name = _T("wxBase");
-    ulrc = ::DosQuerySysInfo( 1L
-                             ,QSV_MAX
-                             ,(PVOID)ulSysInfo
-                             ,sizeof(ULONG) * QSV_MAX
+    ulrc = ::DosQuerySysInfo( QSV_VERSION_MINOR,
+                              QSV_VERSION_MINOR,
+                              (PVOID)&ulSysInfo,
+                              sizeof(ULONG)
                             );
     if (ulrc == 0L)
     {
-        vInfo.versionMajor = ulSysInfo[QSV_VERSION_MAJOR] / 10;
-        vInfo.versionMinor = ulSysInfo[QSV_VERSION_MINOR];
+        vInfo.versionMajor = ulSysInfo / 10;
+        vInfo.versionMinor = ulSysInfo % 10;
     }
     vInfo.os = wxOS2_PM;
     return vInfo;

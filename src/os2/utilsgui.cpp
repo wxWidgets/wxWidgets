@@ -485,7 +485,7 @@ void wxGUIAppTraits::TerminateGui(unsigned long ulHab)
 wxToolkitInfo & wxGUIAppTraits::GetToolkitInfo()
 {
     static wxToolkitInfo	    vInfo;
-    ULONG                           ulSysInfo[QSV_MAX] = {0};
+    ULONG                           ulSysInfo = 0;
     APIRET                          ulrc;
 
     vInfo.shortName = _T("PM");
@@ -494,15 +494,15 @@ wxToolkitInfo & wxGUIAppTraits::GetToolkitInfo()
     vInfo.shortName << _T("univ");
     vInfo.name << _T("/wxUniversal");
 #endif
-    ulrc = ::DosQuerySysInfo( 1L
-                             ,QSV_MAX
-                             ,(PVOID)ulSysInfo
-                             ,sizeof(ULONG) * QSV_MAX
+    ulrc = ::DosQuerySysInfo( QSV_VERSION_MINOR,
+                              QSV_VERSION_MINOR,
+                              (PVOID)&ulSysInfo,
+                              sizeof(ULONG)
                             );
     if (ulrc == 0L)
     {
-        vInfo.versionMajor = ulSysInfo[QSV_VERSION_MAJOR] / 10;
-        vInfo.versionMinor = ulSysInfo[QSV_VERSION_MINOR];
+        vInfo.versionMajor = ulSysInfo / 10;
+        vInfo.versionMinor = ulSysInfo % 10;
     }
     vInfo.os = wxOS2_PM;
     return vInfo;
