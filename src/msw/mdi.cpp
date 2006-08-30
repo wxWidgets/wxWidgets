@@ -1043,6 +1043,11 @@ bool wxMDIChildFrame::HandleMDIActivate(long WXUNUSED(activate),
 
             menuToSet = child_menu;
         }
+        else
+        {
+            HMENU parent_menu = (HMENU)parent->GetWinMenu();
+            menuToSet = parent_menu ;
+        }
     }
     else if ( m_hWnd == hwndDeact )
     {
