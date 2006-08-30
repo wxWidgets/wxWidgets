@@ -34,18 +34,13 @@ class TestPanel(wx.Panel):
         bpp = 3  # bytes per pixel
         bytes = array.array('B', [0] * width*height*bpp)
 
-        def offset(x, y):
-            # return the offset into the bytes array for the start of
-            # the x,y pixel
-            return y*width*bpp + x*bpp
-
         for y in xrange(height):
             for x in xrange(width):
+                offset = y*width*bpp + x*bpp
                 r,g,b = self.GetRGB(x, y, bpp)
-                bytes[offset(x, y) + 0] = r
-                bytes[offset(x, y) + 1] = g
-                bytes[offset(x, y) + 2] = b
-                ##print (x, y), offset(x, y), (r, g, b)
+                bytes[offset + 0] = r
+                bytes[offset + 1] = g
+                bytes[offset + 2] = b
 
         self.rgbBmp = wx.BitmapFromBuffer(width, height, bytes)
         
@@ -56,19 +51,14 @@ class TestPanel(wx.Panel):
         bpp = 4  # bytes per pixel
         bytes = array.array('B', [0] * width*height*bpp)
 
-        def offset(x, y):
-            # return the offset into the bytes array for the start of
-            # the x,y pixel
-            return y*width*bpp + x*bpp
-
         for y in xrange(height):
             for x in xrange(width):
+                offset = y*width*bpp + x*bpp
                 r,g,b,a = self.GetRGB(x, y, bpp)
-                bytes[offset(x, y) + 0] = r
-                bytes[offset(x, y) + 1] = g
-                bytes[offset(x, y) + 2] = b
-                bytes[offset(x, y) + 3] = a
-                ##print (x, y), offset(x, y), (r, g, b, a)
+                bytes[offset + 0] = r
+                bytes[offset + 1] = g
+                bytes[offset + 2] = b
+                bytes[offset + 3] = a
 
         self.rgbaBmp = wx.BitmapFromBufferRGBA(width, height, bytes)
 
@@ -79,18 +69,13 @@ class TestPanel(wx.Panel):
         bpp = 3  # bytes per pixel
         bytes = array.array('B', [0] * width*height*bpp)
 
-        def offset(x, y):
-            # return the offset into the bytes array for the start of
-            # the x,y pixel
-            return y*width*bpp + x*bpp
-
         for y in xrange(height):
             for x in xrange(width):
+                offset = y*width*bpp + x*bpp
                 r,g,b = self.GetRGB(x, y, bpp)
-                bytes[offset(x, y) + 0] = r
-                bytes[offset(x, y) + 1] = g
-                bytes[offset(x, y) + 2] = b
-                ##print (x, y), offset(x, y), (r, g, b)
+                bytes[offset + 0] = r
+                bytes[offset + 1] = g
+                bytes[offset + 2] = b
 
         # just use an alpha buffer with a constant alpha value for all
         # pixels for this example, it could just as easily have
