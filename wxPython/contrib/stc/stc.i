@@ -49,6 +49,13 @@ MustHaveApp(wxStyledTextCtrl);
 
 %include stc.h
 
+%extend wxStyleTextCtrl {
+    %pythoncode {
+        GetCaretLineBack = GetCaretLineBackground
+        SetCaretLineBack = SetCaretLineBackground
+    }
+}
+
 //---------------------------------------------------------------------------
 // Python functions to act like the event macros
 
