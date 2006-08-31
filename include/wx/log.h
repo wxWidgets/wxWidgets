@@ -121,13 +121,6 @@ public:
     // ctor
     wxLog(){}
 
-    // Internal buffer.
-
-    // Allow replacement of the fixed size static buffer with
-    // a user allocated one.  Pass in NULL to restore the
-    // built in static buffer.
-    static wxChar *SetLogBuffer( wxChar *buf, size_t size = 0 );
-
     // these functions allow to completely disable all log messages
 
     // is logging disabled now?
@@ -135,7 +128,7 @@ public:
 
     // change the flag state, return the previous one
     static bool EnableLogging(bool doIt = true)
-    { bool doLogOld = ms_doLog; ms_doLog = doIt; return doLogOld; }
+        { bool doLogOld = ms_doLog; ms_doLog = doIt; return doLogOld; }
 
     // static sink function - see DoLog() for function to overload in the
     // derived classes
@@ -190,7 +183,7 @@ public:
     // log the count of repeating messages instead of logging the messages
     // multiple times
     static void SetRepetitionCounting(bool bRepetCounting = true)
-    { ms_bRepetCounting = bRepetCounting; }
+        { ms_bRepetCounting = bRepetCounting; }
 
     // gets duplicate counting status
     static bool GetRepetitionCounting() { return ms_bRepetCounting; }
@@ -200,7 +193,7 @@ public:
 
     // add string trace mask
     static void AddTraceMask(const wxString& str)
-    { ms_aTraceMasks.push_back(str); }
+        { ms_aTraceMasks.push_back(str); }
 
     // add string trace mask
     static void RemoveTraceMask(const wxString& str);
@@ -247,6 +240,11 @@ public:
 
     // this method exists for backwards compatibility only, don't use
     bool HasPendingMessages() const { return true; }
+
+#if WXWIN_COMPATIBILITY_2_6
+    // this function doesn't do anything any more, don't call it
+    wxDEPRECATED( static wxChar *SetLogBuffer(wxChar *buf, size_t size = 0) );
+#endif
 
 protected:
     // the logging functions that can be overriden

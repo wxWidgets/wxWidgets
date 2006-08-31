@@ -76,53 +76,17 @@
 // ============================================================================
 
 // ----------------------------------------------------------------------------
-// globals
-// ----------------------------------------------------------------------------
-
-// log functions can't allocate memory (LogError("out of memory...") should
-// work!), so we use a static buffer for all log messages
-#define LOG_BUFFER_SIZE   (4096)
-
-// static buffer for error messages
-static wxChar   s_szBufStatic[LOG_BUFFER_SIZE];
-
-static wxChar  *s_szBuf     = s_szBufStatic;
-static size_t   s_szBufSize = WXSIZEOF( s_szBufStatic );
-
-#if wxUSE_THREADS
-
-// the critical section protecting the static buffer
-static wxCriticalSection gs_csLogBuf;
-
-#endif // wxUSE_THREADS
-
-// ----------------------------------------------------------------------------
 // implementation of Log functions
 //
 // NB: unfortunately we need all these distinct functions, we can't make them
 //     macros and not all compilers inline vararg functions.
 // ----------------------------------------------------------------------------
 
-// wrapper for wxVsnprintf(s_szBuf) which always NULL-terminates it
-static inline void PrintfInLogBuf(const wxChar *szFormat, va_list argptr)
-{
-    if ( wxVsnprintf(s_szBuf, s_szBufSize, szFormat, argptr) < 0 )
-    {
-        // must NUL-terminate it manually
-        s_szBuf[s_szBufSize - 1] = _T('\0');
-    }
-    //else: NUL-terminated by vsnprintf()
-}
-
 // generic log function
 void wxVLogGeneric(wxLogLevel level, const wxChar *szFormat, va_list argptr)
 {
     if ( wxLog::IsEnabled() ) {
-        wxCRIT_SECT_LOCKER(locker, gs_csLogBuf);
-
-        PrintfInLogBuf(szFormat, argptr);
-
-        wxLog::OnLog(level, s_szBuf, time(NULL));
+        wxLog::OnLog(level, wxString::FormatV(szFormat, argptr), time(NULL));
     }
 }
 
@@ -138,11 +102,8 @@ void wxLogGeneric(wxLogLevel level, const wxChar *szFormat, ...)
   void wxVLog##level(const wxChar *szFormat, va_list argptr)        \
   {                                                                 \
     if ( wxLog::IsEnabled() ) {                                     \
-      wxCRIT_SECT_LOCKER(locker, gs_csLogBuf);                      \
-                                                                    \
-      PrintfInLogBuf(szFormat, argptr);                             \
-                                                                    \
-      wxLog::OnLog(wxLOG_##level, s_szBuf, time(NULL));             \
+      wxLog::OnLog(wxLOG_##level,                                   \
+                   wxString::FormatV(szFormat, argptr), time(NULL));\
     }                                                               \
   }                                                                 \
                                                                     \
@@ -174,9 +135,7 @@ void wxSafeShowMessage(const wxString& title, const wxString& text)
 // always terminate the program
 void wxVLogFatalError(const wxChar *szFormat, va_list argptr)
 {
-    wxVsnprintf(s_szBuf, s_szBufSize, szFormat, argptr);
-
-    wxSafeShowMessage(_T("Fatal Error"), s_szBuf);
+    wxSafeShowMessage(_T("Fatal Error"), wxString::FormatV(szFormat, argptr));
 
 #ifdef __WXWINCE__
     ExitThread(3);
@@ -201,11 +160,8 @@ void wxVLogVerbose(const wxChar *szFormat, va_list argptr)
 {
     if ( wxLog::IsEnabled() ) {
         if ( wxLog::GetActiveTarget() != NULL && wxLog::GetVerbose() ) {
-            wxCRIT_SECT_LOCKER(locker, gs_csLogBuf);
-
-            wxVsnprintf(s_szBuf, s_szBufSize, szFormat, argptr);
-
-            wxLog::OnLog(wxLOG_Info, s_szBuf, time(NULL));
+            wxLog::OnLog(wxLOG_Info,
+                         wxString::FormatV(szFormat, argptr), time(NULL));
         }
     }
 }
@@ -224,13 +180,11 @@ void wxLogVerbose(const wxChar *szFormat, ...)
   void wxVLog##level(const wxChar *szFormat, va_list argptr)        \
   {                                                                 \
     if ( wxLog::IsEnabled() ) {                                     \
-      wxCRIT_SECT_LOCKER(locker, gs_csLogBuf);                      \
-                                                                    \
-      wxVsnprintf(s_szBuf, s_szBufSize, szFormat, argptr);    \
-                                                                    \
-      wxLog::OnLog(wxLOG_##level, s_szBuf, time(NULL));             \
+      wxLog::OnLog(wxLOG_##level,                                   \
+                   wxString::FormatV(szFormat, argptr), time(NULL));\
     }                                                               \
   }                                                                 \
+                                                                    \
   void wxLog##level(const wxChar *szFormat, ...)                    \
   {                                                                 \
     va_list argptr;                                                 \
@@ -242,25 +196,10 @@ void wxLogVerbose(const wxChar *szFormat, ...)
   void wxVLogTrace(const wxChar *mask, const wxChar *szFormat, va_list argptr)
   {
     if ( wxLog::IsEnabled() && wxLog::IsAllowedTraceMask(mask) ) {
-      wxCRIT_SECT_LOCKER(locker, gs_csLogBuf);
-
-      wxChar *p = s_szBuf;
-      size_t len = s_szBufSize;
-      wxStrncpy(s_szBuf, _T("("), len);
-      len -= 1; // strlen("(")
-      p += 1;
-      wxStrncat(p, mask, len);
-      size_t lenMask = wxStrlen(mask);
-      len -= lenMask;
-      p += lenMask;
-
-      wxStrncat(p, _T(") "), len);
-      len -= 2;
-      p += 2;
-
-      wxVsnprintf(p, len, szFormat, argptr);
-
-      wxLog::OnLog(wxLOG_Trace, s_szBuf, time(NULL));
+      wxString msg;
+      msg << _T("(") << mask << _T(") ") << wxString::FormatV(szFormat, argptr);
+          
+      wxLog::OnLog(wxLOG_Trace, msg, time(NULL));
     }
   }
 
@@ -278,11 +217,7 @@ void wxLogVerbose(const wxChar *szFormat, ...)
     // that wxLogTrace(wxTraceRefCount | wxTraceOle) will only do something
     // if both bits are set.
     if ( wxLog::IsEnabled() && ((wxLog::GetTraceMask() & mask) == mask) ) {
-      wxCRIT_SECT_LOCKER(locker, gs_csLogBuf);
-
-      wxVsnprintf(s_szBuf, s_szBufSize, szFormat, argptr);
-
-      wxLog::OnLog(wxLOG_Trace, s_szBuf, time(NULL));
+      wxLog::OnLog(wxLOG_Trace, wxString::FormatV(szFormat, argptr), time(NULL));
     }
   }
 
@@ -304,26 +239,15 @@ IMPLEMENT_LOG_DEBUG_FUNCTION(Trace)
 // wxLogSysError: one uses the last error code, for other  you must give it
 // explicitly
 
-// common part of both wxLogSysError
-void wxLogSysErrorHelper(long lErrCode)
+// return the system error message description
+static inline wxString wxLogSysErrorHelper(long err)
 {
-    wxChar szErrMsg[LOG_BUFFER_SIZE / 2];
-    wxSnprintf(szErrMsg, WXSIZEOF(szErrMsg),
-               _(" (error %ld: %s)"), lErrCode, wxSysErrorMsg(lErrCode));
-    wxStrncat(s_szBuf, szErrMsg, s_szBufSize - wxStrlen(s_szBuf));
-
-    wxLog::OnLog(wxLOG_Error, s_szBuf, time(NULL));
+    return wxString::Format(_(" (error %ld: %s)"), err, wxSysErrorMsg(err));
 }
 
 void WXDLLEXPORT wxVLogSysError(const wxChar *szFormat, va_list argptr)
 {
-    if ( wxLog::IsEnabled() ) {
-        wxCRIT_SECT_LOCKER(locker, gs_csLogBuf);
-
-        wxVsnprintf(s_szBuf, s_szBufSize, szFormat, argptr);
-
-        wxLogSysErrorHelper(wxSysErrorCode());
-    }
+    wxVLogSysError(wxSysErrorCode(), szFormat, argptr);
 }
 
 void WXDLLEXPORT wxLogSysError(const wxChar *szFormat, ...)
@@ -334,14 +258,12 @@ void WXDLLEXPORT wxLogSysError(const wxChar *szFormat, ...)
     va_end(argptr);
 }
 
-void WXDLLEXPORT wxVLogSysError(long lErrCode, const wxChar *szFormat, va_list argptr)
+void WXDLLEXPORT wxVLogSysError(long err, const wxChar *fmt, va_list argptr)
 {
     if ( wxLog::IsEnabled() ) {
-        wxCRIT_SECT_LOCKER(locker, gs_csLogBuf);
-
-        wxVsnprintf(s_szBuf, s_szBufSize, szFormat, argptr);
-
-        wxLogSysErrorHelper(lErrCode);
+        wxLog::OnLog(wxLOG_Error,
+                     wxString::FormatV(fmt, argptr) + wxLogSysErrorHelper(err),
+                     time(NULL));
     }
 }
 
@@ -417,22 +339,10 @@ void wxLog::OnLog(wxLogLevel level, const wxChar *szString, time_t t)
     }
 }
 
-wxChar *wxLog::SetLogBuffer( wxChar *buf, size_t size)
+// deprecated function
+wxChar *wxLog::SetLogBuffer(wxChar * WXUNUSED(buf), size_t WXUNUSED(size))
 {
-    wxChar *oldbuf = s_szBuf;
-
-    if( buf == 0 )
-    {
-        s_szBuf = s_szBufStatic;
-        s_szBufSize = WXSIZEOF( s_szBufStatic );
-    }
-    else
-    {
-        s_szBuf = buf;
-        s_szBufSize = size;
-    }
-
-    return (oldbuf == s_szBufStatic ) ? 0 : oldbuf;
+    return NULL;
 }
 
 wxLog *wxLog::GetActiveTarget()
@@ -834,7 +744,7 @@ const wxChar *wxSysErrorMsg(unsigned long nErrCode)
         nErrCode = wxSysErrorCode();
 
 #if defined(__WXMSW__) && !defined(__WXMICROWIN__)
-    static wxChar s_szBuf[LOG_BUFFER_SIZE / 2];
+    static wxChar s_szBuf[1024];
 
     // get error message from system
     LPVOID lpMsgBuf;
@@ -876,21 +786,22 @@ const wxChar *wxSysErrorMsg(unsigned long nErrCode)
         }
     }
     else
-#endif
+#endif // !__SMARTPHONE__
     {
         s_szBuf[0] = wxT('\0');
     }
 
     return s_szBuf;
-#else   // Unix-WXMICROWIN
-#if wxUSE_UNICODE
-    static wxChar s_szBuf[LOG_BUFFER_SIZE / 2];
-    wxConvCurrent->MB2WC(s_szBuf, strerror(nErrCode), WXSIZEOF(s_szBuf) -1);
-    return s_szBuf;
-#else
-    return strerror((int)nErrCode);
-#endif
-#endif  // Win/Unix-WXMICROWIN
+#else // !__WXMSW__
+    #if wxUSE_UNICODE
+        static wchar_t s_wzBuf[1024];
+        wxConvCurrent->MB2WC(s_wzBuf, strerror((int)nErrCode),
+                             WXSIZEOF(s_wzBuf) - 1);
+        return s_wzBuf;
+    #else
+        return strerror((int)nErrCode);
+    #endif
+#endif  // __WXMSW__/!__WXMSW__
 }
 
 #endif // wxUSE_LOG
