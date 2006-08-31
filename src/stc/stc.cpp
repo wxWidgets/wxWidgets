@@ -786,13 +786,13 @@ void wxStyledTextCtrl::SetCaretLineVisible(bool show) {
 }
 
 // Get the colour of the background of the line containing the caret.
-wxColour wxStyledTextCtrl::GetCaretLineBack() {
+wxColour wxStyledTextCtrl::GetCaretLineBackground() {
     long c = SendMsg(2097, 0, 0);
     return wxColourFromLong(c);
 }
 
 // Set the colour of the background of the line containing the caret.
-void wxStyledTextCtrl::SetCaretLineBack(const wxColour& back) {
+void wxStyledTextCtrl::SetCaretLineBackground(const wxColour& back) {
     SendMsg(2098, wxColourAsLong(back), 0);
 }
 

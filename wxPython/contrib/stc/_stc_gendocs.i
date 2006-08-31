@@ -306,10 +306,10 @@ DocStr(wxStyledTextCtrl::GetCaretLineVisible,
 DocStr(wxStyledTextCtrl::SetCaretLineVisible,
 "Display the background of the line containing the caret in a different colour.", "");
 
-DocStr(wxStyledTextCtrl::GetCaretLineBack,
+DocStr(wxStyledTextCtrl::GetCaretLineBackground,
 "Get the colour of the background of the line containing the caret.", "");
 
-DocStr(wxStyledTextCtrl::SetCaretLineBack,
+DocStr(wxStyledTextCtrl::SetCaretLineBackground,
 "Set the colour of the background of the line containing the caret.", "");
 
 DocStr(wxStyledTextCtrl::StyleSetChangeable,
