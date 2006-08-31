@@ -166,7 +166,7 @@ protected:
                                   const wxSize& WXUNUSED(size)) = 0;
 
 private:
-    static void InitProvidersList();
+    static void CommonAddingProvider();
 
 private:
     // list of providers:
