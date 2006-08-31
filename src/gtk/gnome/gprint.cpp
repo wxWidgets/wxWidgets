@@ -30,6 +30,7 @@
 #include "wx/gtk/private.h"
 #include "wx/module.h"
 #include "wx/dynlib.h"
+#include "wx/image.h"
 
 #include <libgnomeprint/gnome-print.h>
 #include <libgnomeprint/gnome-print-pango.h>
