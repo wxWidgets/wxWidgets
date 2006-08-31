@@ -112,8 +112,13 @@ typedef wxString wxArtID;
 class WXDLLEXPORT wxArtProvider : public wxObject
 {
 public:
-    // Add new provider to the top of providers stack.
+    // Add new provider to the top of providers stack (i.e. the provider will
+    // be querier first of all).
     static void PushProvider(wxArtProvider *provider);
+
+    // Add new provider to the bottom of providers stack (i.e. the provider
+    // will be queried as the last one).
+    static void InsertProvider(wxArtProvider *provider);
 
     // Remove latest added provider and delete it.
     static bool PopProvider();
@@ -152,13 +157,16 @@ protected:
     {
         return GetSizeHint(client, true);
     }
-                             
+
     // Derived classes must override this method to create requested
     // art resource. This method is called only once per instance's
     // lifetime for each requested wxArtID.
     virtual wxBitmap CreateBitmap(const wxArtID& WXUNUSED(id),
                                   const wxArtClient& WXUNUSED(client),
                                   const wxSize& WXUNUSED(size)) = 0;
+
+private:
+    static void InitProvidersList();
 
 private:
     // list of providers:

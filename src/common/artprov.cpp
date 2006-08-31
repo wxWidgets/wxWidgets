@@ -99,7 +99,7 @@ IMPLEMENT_ABSTRACT_CLASS(wxArtProvider, wxObject)
 wxArtProvidersList *wxArtProvider::sm_providers = NULL;
 wxArtProviderCache *wxArtProvider::sm_cache = NULL;
 
-/*static*/ void wxArtProvider::PushProvider(wxArtProvider *provider)
+/*static*/ void wxArtProvider::CommonAddingProvider()
 {
     if ( !sm_providers )
     {
@@ -107,8 +107,19 @@ wxArtProviderCache *wxArtProvider::sm_cache = NULL;
         sm_cache = new wxArtProviderCache;
     }
 
-    sm_providers->Insert(provider);
     sm_cache->Clear();
+}
+
+/*static*/ void wxArtProvider::PushProvider(wxArtProvider *provider)
+{
+    CommonAddingProvider();
+    sm_providers->Insert(provider);
+}
+
+/*static*/ void wxArtProvider::InsertProvider(wxArtProvider *provider)
+{
+    CommonAddingProvider();
+    sm_providers->Append(provider);
 }
 
 /*static*/ bool wxArtProvider::PopProvider()

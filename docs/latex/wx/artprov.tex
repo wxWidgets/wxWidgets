@@ -183,6 +183,17 @@ Returns a suitable size hint for the given {\it wxArtClient}. If
 otherwise return the size from the topmost wxArtProvider. {\it wxDefaultSize} may be 
 returned if the client doesn't have a specified size, like wxART\_OTHER for example.
 
+\membersection{wxArtProvider::InsertProvider}\label{wxartproviderinsertprovider}
+
+\func{static void}{InsertProvider}{\param{wxArtProvider* }{provider}}
+
+Register new art provider and add it to the bottom of providers stack (i.e.
+it will be queried as the last one).
+
+\wxheading{See also}
+
+\helpref{PushProvider}{wxartproviderpushprovider}
+
 \membersection{wxArtProvider::PopProvider}\label{wxartproviderctor}
 
 \func{static bool}{PopProvider}{\void}
@@ -193,7 +204,12 @@ Remove latest added provider and delete it.
 
 \func{static void}{PushProvider}{\param{wxArtProvider* }{provider}}
 
-Register new art provider (add it to the top of providers stack).
+Register new art provider and add it to the top of providers stack (i.e. it
+will be queried as the first provider).
+
+\wxheading{See also}
+
+\helpref{InsertProvider}{wxartproviderinsertprovider}
 
 \membersection{wxArtProvider::RemoveProvider}\label{wxartproviderremoveprovider}
 
