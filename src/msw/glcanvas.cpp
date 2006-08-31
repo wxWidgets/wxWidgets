@@ -12,7 +12,7 @@
 #include "wx/wxprec.h"
 
 #if defined(__BORLANDC__)
-#pragma hdrstop
+    #pragma hdrstop
 #endif
 
 #if wxUSE_GLCANVAS
@@ -23,9 +23,8 @@
     #include "wx/intl.h"
     #include "wx/log.h"
     #include "wx/app.h"
+    #include "wx/module.h"
 #endif
-
-#include "wx/module.h"
 
 #include "wx/msw/private.h"
 

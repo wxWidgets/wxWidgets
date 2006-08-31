@@ -29,17 +29,18 @@
     #include "wx/event.h"
     #include "wx/app.h"
     #include "wx/window.h"
+    #include "wx/module.h"
 #endif //WX_PRECOMP
 
 #include "wx/evtloop.h"
 
 #ifdef __VMS__
-#pragma message disable nosimpint
+    #pragma message disable nosimpint
 #endif
 #include <Xm/Xm.h>
 #include <X11/Xlib.h>
 #ifdef __VMS__
-#pragma message enable nosimpint
+    #pragma message enable nosimpint
 #endif
 
 #include "wx/unix/private.h"
@@ -376,8 +377,6 @@ bool wxDoEventLoopIteration( wxEventLoop& evtLoop )
 
 // also wxEventLoop::Exit is implemented that way, so that exiting an
 // event loop won't require an event being in the queue
-
-#include "wx/module.h"
 
 #include <sys/types.h>
 #include <sys/time.h>

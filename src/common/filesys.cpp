@@ -20,10 +20,10 @@
 
 #ifndef WX_PRECOMP
     #include "wx/log.h"
+    #include "wx/module.h"
 #endif
 
 #include "wx/wfstream.h"
-#include "wx/module.h"
 #include "wx/mimetype.h"
 #include "wx/filename.h"
 #include "wx/tokenzr.h"

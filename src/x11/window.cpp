@@ -46,9 +46,9 @@
     #include "wx/scrolwin.h"
     #include "wx/layout.h"
     #include "wx/menuitem.h"
+    #include "wx/module.h"
 #endif
 
-#include "wx/module.h"
 #include "wx/fontutil.h"
 #include "wx/univ/renderer.h"
 

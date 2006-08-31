@@ -25,9 +25,9 @@
     #include "wx/log.h"
     #include "wx/utils.h"
     #include "wx/memory.h"
+    #include "wx/module.h"
 #endif
 
-#include "wx/module.h"
 #include "wx/evtloop.h"
 
 #if wxUSE_THREADS
@@ -35,7 +35,7 @@
 #endif
 
 #ifdef __VMS__
-#pragma message disable nosimpint
+    #pragma message disable nosimpint
 #endif
 #include <Xm/Xm.h>
 #include <X11/Xlib.h>
@@ -43,7 +43,7 @@
 #include <X11/Xresource.h>
 #include <X11/Xatom.h>
 #ifdef __VMS__
-#pragma message enable nosimpint
+    #pragma message enable nosimpint
 #endif
 
 #include "wx/motif/private.h"

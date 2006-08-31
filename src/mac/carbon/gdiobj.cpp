@@ -15,9 +15,9 @@
 
 #ifndef WX_PRECOMP
     #include "wx/gdicmn.h"
+    #include "wx/module.h"
 #endif
 
-#include "wx/module.h"
 #include "wx/link.h"
 #include "wx/mac/private.h"
 

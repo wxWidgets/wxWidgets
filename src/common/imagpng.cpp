@@ -30,13 +30,13 @@
     #include "wx/log.h"
     #include "wx/app.h"
     #include "wx/bitmap.h"
+    #include "wx/module.h"
 #endif
 
 #include "png.h"
 #include "wx/filefn.h"
 #include "wx/wfstream.h"
 #include "wx/intl.h"
-#include "wx/module.h"
 
 // For memcpy
 #include <string.h>

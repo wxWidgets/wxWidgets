@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        module.h
+// Name:        wx/module.h
 // Purpose:     Modules handling
 // Author:      Wolfram Gloger/adapted by Guilhem Lavaux
 // Modified by:
@@ -85,7 +85,7 @@ private:
     static void DoCleanUpModules(const wxModuleList& modules);
 
 
-    // module dependencies: contains 
+    // module dependencies: contains
     wxArrayClassInfo m_dependencies;
 
     // used internally while initiliazing/cleaning up modules
@@ -101,4 +101,3 @@ private:
 };
 
 #endif // _WX_MODULE_H_
-

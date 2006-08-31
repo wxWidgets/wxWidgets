@@ -29,6 +29,7 @@
 #include "wx/memory.h"
 #include "wx/math.h"
 #include "wx/stopwatch.h"
+#include "wx/module.h"
 
 #if wxUSE_GUI
 

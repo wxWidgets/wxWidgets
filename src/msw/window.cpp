@@ -48,6 +48,7 @@
     #include "wx/log.h"
     #include "wx/textctrl.h"
     #include "wx/menuitem.h"
+    #include "wx/module.h"
 #endif
 
 #if wxUSE_OWNER_DRAWN && !defined(__WXUNIVERSAL__)
@@ -55,7 +56,6 @@
 #endif
 
 #include "wx/evtloop.h"
-#include "wx/module.h"
 #include "wx/power.h"
 #include "wx/sysopt.h"
 

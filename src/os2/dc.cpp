@@ -25,9 +25,8 @@
     #include "wx/msgdlg.h"
     #include "wx/dcprint.h"
     #include "wx/statusbr.h"
+    #include "wx/module.h"
 #endif
-
-#include "wx/module.h"
 
 #include <string.h>
 

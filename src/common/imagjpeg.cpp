@@ -23,6 +23,7 @@
     #include "wx/app.h"
     #include "wx/intl.h"
     #include "wx/bitmap.h"
+    #include "wx/module.h"
 #endif
 
 // NB: Some compilers define boolean type in Windows headers
@@ -45,7 +46,6 @@ extern "C"
 
 #include "wx/filefn.h"
 #include "wx/wfstream.h"
-#include "wx/module.h"
 
 // For memcpy
 #include <string.h>

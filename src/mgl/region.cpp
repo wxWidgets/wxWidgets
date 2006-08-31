@@ -18,10 +18,10 @@
 
 #ifndef WX_PRECOMP
     #include "wx/gdicmn.h"
+    #include "wx/module.h"
 #endif
 
 #include "wx/thread.h"
-#include "wx/module.h"
 
 #include <mgraph.hpp>
 

@@ -35,10 +35,10 @@
     #include "wx/log.h"
     #include "wx/icon.h"
     #include "wx/dcprint.h"
+    #include "wx/module.h"
 #endif
 
 #include "wx/sysopt.h"
-#include "wx/module.h"
 #include "wx/dynload.h"
 
 #ifdef wxHAVE_RAW_BITMAP

@@ -33,10 +33,10 @@
     #include "wx/app.h"
     #include "wx/utils.h"
     #include "wx/timer.h"
+    #include "wx/module.h"
 #endif
 
 #include "wx/apptrait.h"
-#include "wx/module.h"
 
 #include "wx/sckaddr.h"
 #include "wx/datetime.h"

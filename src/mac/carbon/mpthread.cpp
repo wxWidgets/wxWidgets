@@ -25,9 +25,9 @@
 
 #ifndef WX_PRECOMP
     #include "wx/wx.h"
+    #include "wx/module.h"
 #endif
 
-#include "wx/module.h"
 #include "wx/thread.h"
 
 #ifdef __WXMAC__
@@ -216,11 +216,11 @@ wxMutexError wxMutexInternal::TryLock()
 wxMutexError wxMutexInternal::Unlock()
 {
     wxCHECK_MSG( m_isOk , wxMUTEX_MISC_ERROR , wxT("Invalid Mutex") ) ;
-	OSStatus err = MPSignalSemaphore( m_semaphore);
-	if ( err)
+    OSStatus err = MPSignalSemaphore( m_semaphore);
+    if ( err)
     {
-		wxLogSysError(_("Could not unlock mutex"));
-		return wxMUTEX_MISC_ERROR;
+        wxLogSysError(_("Could not unlock mutex"));
+        return wxMUTEX_MISC_ERROR;
     }
 
     return wxMUTEX_NO_ERROR;
@@ -231,13 +231,13 @@ wxMutexError wxMutexInternal::Unlock()
 class wxMutexInternal
 {
 public:
-	wxMutexInternal(wxMutexType mutexType) ;
-	~wxMutexInternal() ;
-	bool IsOk() const { return m_isOk; }
+    wxMutexInternal(wxMutexType mutexType) ;
+    ~wxMutexInternal() ;
+    bool IsOk() const { return m_isOk; }
 
-	wxMutexError Lock() ;
-	wxMutexError TryLock() ;
-	wxMutexError Unlock();
+    wxMutexError Lock() ;
+    wxMutexError TryLock() ;
+    wxMutexError Unlock();
 private:
     MPCriticalRegionID m_critRegion ;
     bool m_isOk ;
@@ -259,17 +259,17 @@ wxMutexInternal::wxMutexInternal(wxMutexType mutexType )
 wxMutexInternal::~wxMutexInternal()
 {
     if ( m_critRegion != kInvalidID )
-	    MPDeleteCriticalRegion( m_critRegion);
+        MPDeleteCriticalRegion( m_critRegion);
 }
 
 wxMutexError wxMutexInternal::Lock()
 {
     wxCHECK_MSG( m_isOk , wxMUTEX_MISC_ERROR , wxT("Invalid Mutex") ) ;
-	OSStatus err = MPEnterCriticalRegion( m_critRegion, kDurationForever);
-	if ( err)
+    OSStatus err = MPEnterCriticalRegion( m_critRegion, kDurationForever);
+    if ( err)
     {
-		wxLogSysError(wxT("Could not lock mutex"));
-		return wxMUTEX_MISC_ERROR;
+        wxLogSysError(wxT("Could not lock mutex"));
+        return wxMUTEX_MISC_ERROR;
     }
 
     return wxMUTEX_NO_ERROR;
@@ -278,15 +278,15 @@ wxMutexError wxMutexInternal::Lock()
 wxMutexError wxMutexInternal::TryLock()
 {
     wxCHECK_MSG( m_isOk , wxMUTEX_MISC_ERROR , wxT("Invalid Mutex") ) ;
-	OSStatus err = MPEnterCriticalRegion( m_critRegion, kDurationImmediate);
-	if ( err)
+    OSStatus err = MPEnterCriticalRegion( m_critRegion, kDurationImmediate);
+    if ( err)
     {
-		if ( err == kMPTimeoutErr)
-		{
-			return wxMUTEX_BUSY;
-		}
-		wxLogSysError(wxT("Could not try lock mutex"));
-		return wxMUTEX_MISC_ERROR;
+        if ( err == kMPTimeoutErr)
+        {
+            return wxMUTEX_BUSY;
+        }
+        wxLogSysError(wxT("Could not try lock mutex"));
+        return wxMUTEX_MISC_ERROR;
     }
 
     return wxMUTEX_NO_ERROR;
@@ -295,11 +295,11 @@ wxMutexError wxMutexInternal::TryLock()
 wxMutexError wxMutexInternal::Unlock()
 {
     wxCHECK_MSG( m_isOk , wxMUTEX_MISC_ERROR , wxT("Invalid Mutex") ) ;
-	OSStatus err = MPExitCriticalRegion( m_critRegion);
-	if ( err)
+    OSStatus err = MPExitCriticalRegion( m_critRegion);
+    if ( err)
     {
-		wxLogSysError(_("Could not unlock mutex"));
-		return wxMUTEX_MISC_ERROR;
+        wxLogSysError(_("Could not unlock mutex"));
+        return wxMUTEX_MISC_ERROR;
     }
 
     return wxMUTEX_NO_ERROR;
@@ -314,23 +314,23 @@ wxMutexError wxMutexInternal::Unlock()
 class wxSemaphoreInternal
 {
 public:
-	wxSemaphoreInternal(int initialcount, int maxcount);
-	~wxSemaphoreInternal();
+    wxSemaphoreInternal(int initialcount, int maxcount);
+    ~wxSemaphoreInternal();
 
-	bool IsOk() const { return m_isOk; }
+    bool IsOk() const { return m_isOk; }
 
-	wxSemaError WaitTimeout(unsigned long milliseconds);
+    wxSemaError WaitTimeout(unsigned long milliseconds);
 
-	wxSemaError Wait() { return WaitTimeout( kDurationForever); }
+    wxSemaError Wait() { return WaitTimeout( kDurationForever); }
 
-	wxSemaError TryWait()
-	{
-	    wxSemaError err = WaitTimeout(kDurationImmediate);
-	    if ( err == wxSEMA_TIMEOUT )
-	        err = wxSEMA_BUSY ;
-	    return err ;
-	}
-	wxSemaError Post();
+    wxSemaError TryWait()
+    {
+        wxSemaError err = WaitTimeout(kDurationImmediate);
+        if ( err == wxSEMA_TIMEOUT )
+            err = wxSEMA_BUSY ;
+        return err ;
+    }
+    wxSemaError Post();
 
 private:
     MPSemaphoreID m_semaphore;
@@ -342,12 +342,12 @@ wxSemaphoreInternal::wxSemaphoreInternal(int initialcount, int maxcount)
     wxMacMPThreadsInitVerify() ;
     m_isOk = false ;
     m_semaphore = kInvalidID ;
-	if ( maxcount == 0 )
+    if ( maxcount == 0 )
     {
-		// make it practically infinite
-		maxcount = INT_MAX;
+        // make it practically infinite
+        maxcount = INT_MAX;
     }
-	verify_noerr( MPCreateSemaphore( maxcount, initialcount, & m_semaphore) );
+    verify_noerr( MPCreateSemaphore( maxcount, initialcount, & m_semaphore) );
     m_isOk = ( m_semaphore != kInvalidID ) ;
 
     if ( !IsOk() )
@@ -357,31 +357,31 @@ wxSemaphoreInternal::wxSemaphoreInternal(int initialcount, int maxcount)
 wxSemaphoreInternal::~wxSemaphoreInternal()
 {
     if( m_semaphore != kInvalidID )
-	    MPDeleteSemaphore( m_semaphore);
+        MPDeleteSemaphore( m_semaphore);
 }
 
 wxSemaError wxSemaphoreInternal::WaitTimeout(unsigned long milliseconds)
 {
-	OSStatus err = MPWaitOnSemaphore( m_semaphore, milliseconds);
-	if ( err)
+    OSStatus err = MPWaitOnSemaphore( m_semaphore, milliseconds);
+    if ( err)
     {
-		if ( err == kMPTimeoutErr)
-		{
-			return wxSEMA_TIMEOUT;
-		}
-		return wxSEMA_MISC_ERROR;
+        if ( err == kMPTimeoutErr)
+        {
+            return wxSEMA_TIMEOUT;
+        }
+        return wxSEMA_MISC_ERROR;
     }
-	return wxSEMA_NO_ERROR;
+    return wxSEMA_NO_ERROR;
 }
 
 wxSemaError wxSemaphoreInternal::Post()
 {
-	OSStatus err = MPSignalSemaphore( m_semaphore);
-	if ( err)
+    OSStatus err = MPSignalSemaphore( m_semaphore);
+    if ( err)
     {
-		return wxSEMA_MISC_ERROR;
+        return wxSEMA_MISC_ERROR;
     }
-	return wxSEMA_NO_ERROR;
+    return wxSEMA_NO_ERROR;
 }
 
 // ----------------------------------------------------------------------------
@@ -394,50 +394,50 @@ class wxConditionInternal
 {
 public:
 
-	wxConditionInternal(wxMutex& mutex)
+    wxConditionInternal(wxMutex& mutex)
     : m_mutex( mutex),
-	m_semaphore( 0, 1),
-	m_gate( 1, 1)
-	{
-		m_waiters = 0;
-		m_signals = 0;
-		m_canceled = 0;
-	}
+    m_semaphore( 0, 1),
+    m_gate( 1, 1)
+    {
+        m_waiters = 0;
+        m_signals = 0;
+        m_canceled = 0;
+    }
 
-	~wxConditionInternal()
-	{
-	}
+    ~wxConditionInternal()
+    {
+    }
 
-	bool IsOk() const { return m_mutex.IsOk() ; }
+    bool IsOk() const { return m_mutex.IsOk() ; }
 
-	wxCondError Wait()
-	{
-		return WaitTimeout( kDurationForever);
-	}
+    wxCondError Wait()
+    {
+        return WaitTimeout( kDurationForever);
+    }
 
-	wxCondError WaitTimeout(unsigned long msectimeout);
+    wxCondError WaitTimeout(unsigned long msectimeout);
 
-	wxCondError Signal()
-	{
-		return DoSignal( false);
-	}
+    wxCondError Signal()
+    {
+        return DoSignal( false);
+    }
 
-	wxCondError Broadcast()
-	{
-		return DoSignal( true);
-	}
+    wxCondError Broadcast()
+    {
+        return DoSignal( true);
+    }
 
 private:
 
-		wxCondError DoSignal( bool signalAll);
+    wxCondError DoSignal( bool signalAll);
 
-	wxMutex&	  m_mutex;
-	wxSemaphoreInternal     m_semaphore;  // Signals the waiting threads.
-	wxSemaphoreInternal	  m_gate;
-	wxCriticalSection m_varSection;
-	size_t	  m_waiters;	// Number of threads waiting for a signal.
-	size_t          m_signals;	// Number of signals to send.
-	size_t	  m_canceled;   // Number of canceled waiters in m_waiters.
+    wxMutex&                m_mutex;
+    wxSemaphoreInternal     m_semaphore;  // Signals the waiting threads.
+    wxSemaphoreInternal     m_gate;
+    wxCriticalSection       m_varSection;
+    size_t                  m_waiters;    // Number of threads waiting for a signal.
+    size_t                  m_signals;    // Number of signals to send.
+    size_t                  m_canceled;   // Number of canceled waiters in m_waiters.
 };
 
 

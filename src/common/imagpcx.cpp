@@ -24,11 +24,11 @@
     #include "wx/intl.h"
     #include "wx/palette.h"
     #include "wx/hash.h"
+    #include "wx/module.h"
 #endif
 
 #include "wx/imagpcx.h"
 #include "wx/wfstream.h"
-#include "wx/module.h"
 
 //-----------------------------------------------------------------------------
 // wxPCXHandler

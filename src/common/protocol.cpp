@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        protocol.cpp
+// Name:        src/common/protocol.cpp
 // Purpose:     Implement protocol base class
 // Author:      Guilhem Lavaux
 // Modified by:
@@ -13,14 +13,18 @@
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-  #pragma hdrstop
+    #pragma hdrstop
 #endif
 
 #if wxUSE_PROTOCOL
 
 #include "wx/protocol/protocol.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/module.h"
+#endif
+
 #include "wx/url.h"
-#include "wx/module.h"
 
 #include <stdlib.h>
 
@@ -198,7 +202,7 @@ wxProtocolError GetLine(wxSocketBase *sock, wxString& result)
     *ret = 0;
 
     result = wxString::FromAscii( tmp_str );
-    result = result.Left(result.Length()-1);
+    result = result.Left(result.length()-1);
 
     size = ret-tmp_str+1;
     sock->Unread(&tmp_buf[size], avail-size);
@@ -209,4 +213,3 @@ wxProtocolError GetLine(wxSocketBase *sock, wxString& result)
 #endif // wxUSE_SOCKETS
 
 #endif // wxUSE_PROTOCOL
-

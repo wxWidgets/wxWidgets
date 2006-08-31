@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        artstd.cpp
+// Name:        src/gtk/artstd.cpp
 // Purpose:     stock wxArtProvider instance with native GTK+ stock icons
 // Author:      Vaclav Slavik
 // Modified by:
@@ -23,7 +23,11 @@
 #if defined(__WXGTK20__) && !defined(__WXUNIVERSAL__)
 
 #include "wx/artprov.h"
-#include "wx/module.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/module.h"
+#endif
+
 #include "wx/gtk/private.h"
 
 #include <gtk/gtk.h>
@@ -175,7 +179,7 @@ static GtkIconSize FindClosestIconSize(const wxSize& size)
         if (size.x > s_sizes[i].x || size.y > s_sizes[i].y)
             continue;
 
-        unsigned dist = (size.x - s_sizes[i].x) * (size.x - s_sizes[i].x) + 
+        unsigned dist = (size.x - s_sizes[i].x) * (size.x - s_sizes[i].x) +
                         (size.y - s_sizes[i].y) * (size.y - s_sizes[i].y);
         if (dist == 0)
             return s_sizes[i].icon;

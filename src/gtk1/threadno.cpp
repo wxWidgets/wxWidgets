@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/gtk1/thread.cpp
+// Name:        src/gtk1/threadno.cpp
 // Purpose:     Solaris thread support
 // Author:      Guilhem Lavaux
 // Modified by:
@@ -17,9 +17,8 @@
 #ifndef WX_PRECOMP
     #include "wx/wx.h"
     #include "wx/log.h"
+    #include "wx/module.h"
 #endif
-
-#include "wx/module.h"
 
 wxMutex::wxMutex()
 {
@@ -69,7 +68,7 @@ void wxCondition::Wait(wxMutex& WXUNUSED(mutex))
 bool wxCondition::Wait(wxMutex& WXUNUSED(mutex), unsigned long WXUNUSED(sec),
         unsigned long WXUNUSED(nsec))
 {
-    return FALSE;
+    return false;
 }
 
 void wxCondition::Signal()
@@ -128,17 +127,17 @@ unsigned long wxThread::GetID() const
 
 bool wxThread::IsMain()
 {
-    return TRUE;
+    return true;
 }
 
 bool wxThread::IsRunning() const
 {
-    return FALSE;
+    return false;
 }
 
 bool wxThread::IsAlive() const
 {
-    return FALSE;
+    return false;
 }
 
 void wxThread::SetPriority(int WXUNUSED(prio)) { }
@@ -170,7 +169,7 @@ bool wxThreadModule::OnInit()
 {
     wxMainMutex = new wxMutex();
     wxMainMutex->Lock();
-    return TRUE;
+    return true;
 }
 
 void wxThreadModule::OnExit()

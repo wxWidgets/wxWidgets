@@ -18,11 +18,11 @@
 
 #ifndef WX_PRECOMP
     #include "wx/wx.h"
+    #include "wx/module.h"
 #endif
 
 #if wxUSE_THREADS
 
-#include "wx/module.h"
 #include "wx/thread.h"
 
 #ifdef __WXMAC__

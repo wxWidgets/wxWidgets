@@ -23,10 +23,10 @@
     #include "wx/utils.h"
     #include "wx/settings.h"
     #include "wx/intl.h"
+    #include "wx/module.h"
 #endif
 
 #include "wx/paper.h"
-#include "wx/module.h"
 
 #include <stdlib.h>
 #include <string.h>

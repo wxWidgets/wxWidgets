@@ -27,11 +27,11 @@
 #ifndef WX_PRECOMP
     #include "wx/gdicmn.h"
     #include "wx/window.h"
+    #include "wx/module.h"
 #endif //WX_PRECOMP
 
 #include "wx/display.h"
 #include "wx/display_impl.h"
-#include "wx/module.h"
 
 #if wxUSE_DISPLAY
 

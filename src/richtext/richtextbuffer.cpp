@@ -25,12 +25,12 @@
     #include "wx/intl.h"
     #include "wx/log.h"
     #include "wx/dataobj.h"
+    #include "wx/module.h"
 #endif
 
 #include "wx/filename.h"
 #include "wx/clipbrd.h"
 #include "wx/wfstream.h"
-#include "wx/module.h"
 #include "wx/mstream.h"
 #include "wx/sstream.h"
 

@@ -37,9 +37,9 @@
     #include "wx/textdlg.h"
     #include "wx/gdicmn.h"
     #include "wx/image.h"
+    #include "wx/module.h"
 #endif
 
-#include "wx/module.h"
 #include "wx/filefn.h"
 #include "wx/imaglist.h"
 #include "wx/tokenzr.h"

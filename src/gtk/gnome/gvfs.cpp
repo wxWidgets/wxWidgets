@@ -21,11 +21,11 @@
 
 #ifndef WX_PRECOMP
     #include "wx/log.h"
+    #include "wx/module.h"
 #endif
 
 #include "wx/mimetype.h"
 #include "wx/gtk/private.h"
-#include "wx/module.h"
 #include "wx/dynlib.h"
 
 #include <libgnomevfs/gnome-vfs-mime-handlers.h>

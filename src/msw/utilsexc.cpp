@@ -32,13 +32,13 @@
     #if wxUSE_STREAMS
         #include "wx/stream.h"
     #endif
+    #include "wx/module.h"
 #endif
 
 #include "wx/process.h"
 
 #include "wx/apptrait.h"
 
-#include "wx/module.h"
 
 #include "wx/msw/private.h"
 

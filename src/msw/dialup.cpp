@@ -34,12 +34,12 @@
     #include "wx/event.h"
     #include "wx/app.h"
     #include "wx/timer.h"
+    #include "wx/module.h"
 #endif
 
 #include "wx/generic/choicdgg.h"
 
 #include "wx/dynlib.h"
-#include "wx/module.h"
 
 DEFINE_EVENT_TYPE(wxEVT_DIALUP_CONNECTED)
 DEFINE_EVENT_TYPE(wxEVT_DIALUP_DISCONNECTED)

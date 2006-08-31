@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        thread.cpp
+// Name:        src/mac/classic/thread.cpp
 // Purpose:     wxThread Implementation
 // Author:      Original from Wolfram Gloger/Guilhem Lavaux/Vadim Zeitlin
 // Modified by: Stefan Csomor
@@ -23,11 +23,11 @@
 
 #ifndef WX_PRECOMP
     #include "wx/wx.h"
+    #include "wx/module.h"
 #endif
 
 #if wxUSE_THREADS
 
-#include "wx/module.h"
 #include "wx/thread.h"
 
 #ifdef __WXMAC__
@@ -60,7 +60,7 @@ enum wxThreadState
 // ----------------------------------------------------------------------------
 
 static ThreadID gs_idMainThread = kNoThreadID ;
-static bool gs_waitingForThread = FALSE ;
+static bool gs_waitingForThread = false ;
 size_t g_numberOfThreads = 0;
 
 // ============================================================================
@@ -433,7 +433,7 @@ bool wxThreadInternal::Create(wxThread *thread, unsigned int stackSize)
     if ( err != noErr )
     {
         wxLogSysError(_("Can't create thread"));
-        return FALSE;
+        return false;
     }
 
     if ( m_priority != WXTHREAD_DEFAULT_PRIORITY )
@@ -443,7 +443,7 @@ bool wxThreadInternal::Create(wxThread *thread, unsigned int stackSize)
 
     m_state = STATE_NEW;
 
-    return TRUE;
+    return true;
 }
 
 bool wxThreadInternal::Suspend()
@@ -458,14 +458,14 @@ bool wxThreadInternal::Suspend()
         err = ::ThreadEndCritical() ;
         wxASSERT( err == noErr ) ;
         wxLogSysError(_("Can not suspend thread %x"), m_tid);
-        return FALSE;
+        return false;
     }
 
     m_state = STATE_PAUSED;
 
     err = ::SetThreadStateEndCritical(m_tid, kStoppedThreadState, kNoThreadID);
 
-    return TRUE;
+    return true;
 }
 
 bool wxThreadInternal::Resume()
@@ -485,7 +485,7 @@ bool wxThreadInternal::Resume()
         err = ::ThreadEndCritical() ;
         wxASSERT( err == noErr ) ;
         wxLogSysError(_("Can not resume thread %x"), m_tid);
-        return FALSE;
+        return false;
 
     }
     err = ::SetThreadStateEndCritical(m_tid, kReadyThreadState, kNoThreadID);
@@ -494,7 +494,7 @@ bool wxThreadInternal::Resume()
     err = ::ThreadEndCritical() ;
     wxASSERT( err == noErr ) ;
     ::YieldToAnyThread() ;
-    return TRUE;
+    return true;
 }
 
 // static functions
@@ -545,7 +545,7 @@ void wxThread::Sleep(unsigned long milliseconds)
     double mssleep = milliseconds * 1000 ;
     double msstart, msnow ;
     msstart = (start.hi * 4294967296.0 + start.lo) ;
-    
+
     do
     {
         YieldToAnyThread();
@@ -583,7 +583,7 @@ bool wxThread::SetConcurrency(size_t level)
         return level == 1;
     }
 
-    return TRUE ;
+    return true ;
 }
 
 // ctor and dtor
@@ -688,7 +688,7 @@ wxThreadError wxThread::Delete(ExitCode *pRc)
     // Delete() is always safe to call, so consider all possible states
 
     // has the thread started to run?
-    bool shouldResume = FALSE;
+    bool shouldResume = false;
 
     {
         wxCriticalSectionLocker lock(m_critsect);
@@ -698,7 +698,7 @@ wxThreadError wxThread::Delete(ExitCode *pRc)
             // WinThreadStart() will see it and terminate immediately
             m_internal->SetState(STATE_EXITED);
 
-            shouldResume = TRUE;
+            shouldResume = true;
         }
     }
 
@@ -712,7 +712,7 @@ wxThreadError wxThread::Delete(ExitCode *pRc)
         if ( IsMain() )
         {
             // set flag for wxIsWaitingForThread()
-            gs_waitingForThread = TRUE;
+            gs_waitingForThread = true;
 
 #if wxUSE_GUI
             wxBeginBusyCursor();
@@ -742,7 +742,7 @@ wxThreadError wxThread::Delete(ExitCode *pRc)
 
         if ( IsMain() )
         {
-            gs_waitingForThread = FALSE;
+            gs_waitingForThread = false;
 
 #if wxUSE_GUI
             wxEndBusyCursor();
@@ -879,13 +879,13 @@ bool wxThreadModule::OnInit()
     if ( !hasThreadManager )
     {
         wxLogSysError( wxT("Thread Support is not available on this System") );
-        return FALSE ;
+        return false ;
     }
 
     // no error return for GetCurrentThreadId()
     MacGetCurrentThread( &gs_idMainThread ) ;
 
-    return TRUE;
+    return true;
 }
 
 void wxThreadModule::OnExit()

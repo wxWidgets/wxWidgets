@@ -34,9 +34,8 @@
     #include "wx/settings.h"
     #include "wx/intl.h"
     #include "wx/image.h"
+    #include "wx/module.h"
 #endif
-
-#include "wx/module.h"
 
 // ----------------------------------------------------------------------------
 // private classes

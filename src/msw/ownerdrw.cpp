@@ -26,11 +26,11 @@
     #include "wx/utils.h"
     #include "wx/settings.h"
     #include "wx/menuitem.h"
+    #include "wx/module.h"
 #endif
 
 #include "wx/ownerdrw.h"
 #include "wx/fontutil.h"
-#include "wx/module.h"
 
 #if wxUSE_OWNER_DRAWN
 

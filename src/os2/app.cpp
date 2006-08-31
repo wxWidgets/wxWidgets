@@ -30,12 +30,11 @@
     #include "wx/intl.h"
     #include "wx/wxchar.h"
     #include "wx/log.h"
+    #include "wx/module.h"
 #endif
 
 #include "wx/stdpaths.h"
 #include "wx/filename.h"
-
-#include "wx/module.h"
 
 #include "wx/os2/private.h"
 

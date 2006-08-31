@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        common/fmapbase.cpp
+// Name:        src/common/fmapbase.cpp
 // Purpose:     wxFontMapperBase class implementation
 // Author:      Vadim Zeitlin
 // Modified by:
@@ -30,18 +30,18 @@
     #include "wx/app.h"
     #include "wx/log.h"
     #include "wx/intl.h"
+    #include "wx/module.h"
 #endif //WX_PRECOMP
 
 #if defined(__WXMSW__)
-  #include  "wx/msw/private.h"  // includes windows.h for LOGFONT
-  #include  "wx/msw/winundef.h"
+    #include  "wx/msw/private.h"  // includes windows.h for LOGFONT
+    #include  "wx/msw/winundef.h"
 #endif
 
 #include "wx/fontmap.h"
 #include "wx/fmappriv.h"
 
 #include "wx/apptrait.h"
-#include "wx/module.h"
 
 // wxMemoryConfig uses wxFileConfig
 #if wxUSE_CONFIG && wxUSE_FILECONFIG
@@ -344,7 +344,7 @@ const wxChar *wxFontMapperBase::GetDefaultConfigPath()
 
 void wxFontMapperBase::SetConfigPath(const wxString& prefix)
 {
-    wxCHECK_RET( !prefix.IsEmpty() && prefix[0] == wxCONFIG_PATH_SEPARATOR,
+    wxCHECK_RET( !prefix.empty() && prefix[0] == wxCONFIG_PATH_SEPARATOR,
                  wxT("an absolute path should be given to wxFontMapper::SetConfigPath()") );
 
     m_configRootPath = prefix;
@@ -399,7 +399,7 @@ bool wxFontMapperBase::ChangePath(const wxString& pathNew, wxString *pathOld)
     *pathOld = config->GetPath();
 
     wxString path = GetConfigPath();
-    if ( path.IsEmpty() || path.Last() != wxCONFIG_PATH_SEPARATOR )
+    if ( path.empty() || path.Last() != wxCONFIG_PATH_SEPARATOR )
     {
         path += wxCONFIG_PATH_SEPARATOR;
     }
@@ -482,7 +482,7 @@ wxFontMapperBase::NonInteractiveCharsetToEncoding(const wxString& charset)
             config->SetPath(FONTMAPPER_CHARSET_ALIAS_PATH);
 
             wxString alias = config->Read(charset);
-            if ( !alias.IsEmpty() )
+            if ( !alias.empty() )
             {
                 // yes, we do - use it instead
                 cs = alias;
@@ -731,4 +731,3 @@ wxFontEncoding wxFontMapperBase::GetEncodingFromName(const wxString& name)
 }
 
 #endif // wxUSE_FONTMAP
-

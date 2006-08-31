@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:         dynload.cpp
+// Name:         src/common/dynload.cpp
 // Purpose:      Dynamic loading framework
 // Author:       Ron Lee, David Falkinder, Vadim Zeitlin and a cast of 1000's
 //               (derived in part from dynlib.cpp (c) 1998 Guilhem Lavaux)
@@ -31,12 +31,12 @@
     #include "wx/intl.h"
     #include "wx/hash.h"
     #include "wx/utils.h"
+    #include "wx/module.h"
 #endif
 
 #include "wx/strconv.h"
 
 #include "wx/dynload.h"
-#include "wx/module.h"
 
 
 // ---------------------------------------------------------------------------
@@ -360,4 +360,3 @@ void wxPluginManager::Unload()
 }
 
 #endif  // wxUSE_DYNAMIC_LOADER
-

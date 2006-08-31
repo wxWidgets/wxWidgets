@@ -38,9 +38,9 @@
     #include "wx/checkbox.h"
     #include "wx/radiobut.h"
     #include "wx/slider.h"
+    #include "wx/module.h"
 #endif //WX_PRECOMP
 
-#include "wx/module.h"
 #include "wx/display.h"
 
 // controls for sending select event

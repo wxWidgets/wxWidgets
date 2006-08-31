@@ -23,6 +23,7 @@
     #include "wx/dc.h"
     #include "wx/settings.h"
     #include "wx/msgdlg.h"
+    #include "wx/module.h"
 #endif
 
 #include "wx/print.h"
@@ -30,7 +31,6 @@
 #include "wx/html/htmprint.h"
 #include "wx/wxhtml.h"
 #include "wx/wfstream.h"
-#include "wx/module.h"
 
 
 //--------------------------------------------------------------------------------

@@ -25,11 +25,11 @@
     #include "wx/icon.h"
     #include "wx/math.h"
     #include "wx/image.h"
+    #include "wx/module.h"
 #endif
 
 #include "wx/fontutil.h"
 #include "wx/gtk/private.h"
-#include "wx/module.h"
 #include "wx/dynlib.h"
 
 #include <libgnomeprint/gnome-print.h>

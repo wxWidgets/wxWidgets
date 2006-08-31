@@ -33,9 +33,8 @@
     #include "wx/layout.h"
     #include "wx/statusbr.h"
     #include "wx/math.h"
+    #include "wx/module.h"
 #endif
-
-#include "wx/module.h"
 
 #if wxUSE_DRAG_AND_DROP
     #include "wx/dnd.h"
@@ -2359,7 +2358,7 @@ void wxWindowGTK::Init()
     m_hasVMT = false;
     m_needParent = true;
     m_isBeingDeleted = false;
-    
+
     m_showOnIdle= false;
 
     m_noExpose = false;
@@ -2878,7 +2877,7 @@ bool wxWindowGTK::GtkShowFromOnIdle()
         m_showOnIdle = false;
         return true;
     }
-    
+
     return false;
 }
 
@@ -2900,7 +2899,7 @@ void wxWindowGTK::OnInternalIdle()
         SetBackgroundStyle(GetBackgroundStyle());
         m_needsStyleChange = false;
     }
-    
+
     wxCursor cursor = m_cursor;
     if (g_globalCursor.Ok()) cursor = g_globalCursor;
 
@@ -3381,7 +3380,7 @@ bool wxWindowGTK::Reparent( wxWindowBase *newParentBase )
             m_showOnIdle = true;
             gtk_widget_hide( m_widget );
         }
-    
+
         /* insert GTK representation */
         (*(newParent->m_insertCallback))(newParent, this);
     }
@@ -3643,7 +3642,7 @@ void wxWindowGTK::Refresh( bool eraseBackground, const wxRect *rect )
     if (m_wxwindow)
     {
         if (!GTK_PIZZA(m_wxwindow)->bin_window) return;
-    
+
         GdkRectangle gdk_rect,
                     *p;
         if (rect)
@@ -4316,4 +4315,3 @@ void wxRemoveGrab(wxWindow* window)
 {
     gtk_grab_remove( (GtkWidget*) window->GetHandle() );
 }
-

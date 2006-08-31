@@ -21,9 +21,9 @@
     #include "wx/dcmemory.h"
     #include "wx/math.h" // for floating-point functions
     #include "wx/image.h"
+    #include "wx/module.h"
 #endif
 
-#include "wx/module.h"
 #include "wx/fontutil.h"
 
 #include "wx/gtk1/win_gtk.h"

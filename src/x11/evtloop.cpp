@@ -27,10 +27,10 @@
     #include "wx/app.h"
     #include "wx/window.h"
     #include "wx/timer.h"
+    #include "wx/module.h"
 #endif
 
 #include "wx/tooltip.h"
-#include "wx/module.h"
 #include "wx/unix/private.h"
 #include "wx/x11/private.h"
 #include "X11/Xlib.h"

@@ -32,9 +32,8 @@
     #include "wx/layout.h"
     #include "wx/statusbr.h"
     #include "wx/math.h"
+    #include "wx/module.h"
 #endif
-
-#include "wx/module.h"
 
 #if wxUSE_DRAG_AND_DROP
     #include "wx/dnd.h"

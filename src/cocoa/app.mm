@@ -17,9 +17,8 @@
     #include "wx/dc.h"
     #include "wx/intl.h"
     #include "wx/log.h"
+    #include "wx/module.h"
 #endif
-
-#include "wx/module.h"
 
 #include "wx/cocoa/ObjcPose.h"
 #include "wx/cocoa/autorelease.h"

@@ -19,9 +19,8 @@
     #include "wx/colour.h"
     #include "wx/font.h"
     #include "wx/gdicmn.h"
+    #include "wx/module.h"
 #endif
-
-#include "wx/module.h"
 
 // ----------------------------------------------------------------------------
 // global data

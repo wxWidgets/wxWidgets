@@ -31,11 +31,11 @@
     #include "wx/dc.h"
     #include "wx/settings.h"
     #include "wx/gdicmn.h"
+    #include "wx/module.h"
 #endif //WX_PRECOMP
 
 #include "wx/splitter.h"
 #include "wx/dcmirror.h"
-#include "wx/module.h"
 
 // ----------------------------------------------------------------------------
 // wxRendererGeneric: our wxRendererNative implementation

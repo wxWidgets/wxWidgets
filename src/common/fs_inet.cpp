@@ -1,15 +1,16 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        fs_inet.cpp
+// Name:        src/common/fs_inet.cpp
 // Purpose:     HTTP and FTP file system
 // Author:      Vaclav Slavik
 // Copyright:   (c) 1999 Vaclav Slavik
+// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-#pragma hdrstop
+    #pragma hdrstop
 #endif
 
 #if !wxUSE_SOCKETS
@@ -20,13 +21,13 @@
 #if wxUSE_FILESYSTEM && wxUSE_FS_INET
 
 #ifndef WXPRECOMP
+    #include "wx/module.h"
 #endif
 
 #include "wx/wfstream.h"
 #include "wx/url.h"
 #include "wx/filesys.h"
 #include "wx/fs_inet.h"
-#include "wx/module.h"
 
 // ----------------------------------------------------------------------------
 // Helper classes

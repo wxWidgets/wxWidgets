@@ -34,12 +34,12 @@
     #include "wx/intl.h"
     #include "wx/textdlg.h"
     #include "wx/sizer.h"
+    #include "wx/module.h"
 #endif // !WX_PRECOMP
 
 #include "wx/prntbase.h"
 #include "wx/printdlg.h"
 #include "wx/print.h"
-#include "wx/module.h"
 
 #include <stdlib.h>
 #include <string.h>

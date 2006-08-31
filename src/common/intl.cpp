@@ -47,6 +47,7 @@
     #include "wx/utils.h"
     #include "wx/app.h"
     #include "wx/hashmap.h"
+    #include "wx/module.h"
 #endif // WX_PRECOMP
 
 #ifndef __WXWINCE__
@@ -69,7 +70,6 @@
 #include "wx/file.h"
 #include "wx/filename.h"
 #include "wx/tokenzr.h"
-#include "wx/module.h"
 #include "wx/fontmap.h"
 #include "wx/encconv.h"
 #include "wx/ptr_scpd.h"

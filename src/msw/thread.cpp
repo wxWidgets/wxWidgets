@@ -28,6 +28,7 @@
 #ifndef WX_PRECOMP
     #include "wx/intl.h"
     #include "wx/app.h"
+    #include "wx/module.h"
 #endif
 
 #include "wx/apptrait.h"
@@ -38,7 +39,6 @@
 #include "wx/msw/seh.h"
 
 #include "wx/except.h"
-#include "wx/module.h"
 
 // must have this symbol defined to get _beginthread/_endthread declarations
 #ifndef _MT

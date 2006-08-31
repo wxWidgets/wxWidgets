@@ -36,9 +36,8 @@
     #include "wx/log.h"
     #include "wx/app.h"
     #include "wx/menu.h"
+    #include "wx/module.h"
 #endif
-
-#include "wx/module.h"
 
 #if wxUSE_CLIPBOARD
     #include "wx/clipbrd.h"

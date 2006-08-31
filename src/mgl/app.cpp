@@ -22,10 +22,10 @@
     #include "wx/dialog.h"
     #include "wx/log.h"
     #include "wx/intl.h"
+    #include "wx/module.h"
 #endif
 
 #include "wx/evtloop.h"
-#include "wx/module.h"
 #include "wx/fontutil.h"
 #include "wx/univ/theme.h"
 #include "wx/univ/renderer.h"

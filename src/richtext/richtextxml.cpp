@@ -22,13 +22,13 @@
 
 #ifndef WX_PRECOMP
     #include "wx/intl.h"
+    #include "wx/module.h"
 #endif
 
 #include "wx/filename.h"
 #include "wx/clipbrd.h"
 #include "wx/wfstream.h"
 #include "wx/sstream.h"
-#include "wx/module.h"
 #include "wx/txtstrm.h"
 #include "wx/xml/xml.h"
 

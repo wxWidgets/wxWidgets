@@ -26,9 +26,8 @@
 
 #ifndef WX_PRECOMP
     #include "wx/log.h"
+    #include "wx/module.h"
 #endif
-
-#include "wx/module.h"
 
 // ----------------------------------------------------------------------------
 // Time input function

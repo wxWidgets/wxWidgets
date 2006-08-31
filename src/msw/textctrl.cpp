@@ -36,9 +36,9 @@
     #include "wx/app.h"
     #include "wx/menu.h"
     #include "wx/math.h"
+    #include "wx/module.h"
 #endif
 
-#include "wx/module.h"
 #include "wx/sysopt.h"
 
 #if wxUSE_CLIPBOARD

@@ -32,11 +32,11 @@
     #include "wx/encinfo.h"
     #include "wx/hash.h"
     #include "wx/utils.h"       // for wxGetDisplay()
+    #include "wx/module.h"
 #endif // PCH
 
 #include "wx/fontmap.h"
 #include "wx/tokenzr.h"
-#include "wx/module.h"
 #include "wx/fontenum.h"
 
 #if wxUSE_PANGO

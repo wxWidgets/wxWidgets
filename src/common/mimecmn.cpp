@@ -34,9 +34,9 @@
     #include "wx/string.h"
     #include "wx/intl.h"
     #include "wx/log.h"
+    #include "wx/module.h"
 #endif //WX_PRECOMP
 
-#include "wx/module.h"
 #include "wx/file.h"
 #include "wx/iconloc.h"
 #include "wx/confbase.h"

@@ -29,11 +29,11 @@
     #include "wx/font.h"
     #include "wx/gdicmn.h"
     #include "wx/image.h"
+    #include "wx/module.h"
 #endif
 
 #include "wx/file.h"
 #include "wx/filename.h"
-#include "wx/module.h"
 #include "wx/thread.h"
 
 #ifdef __WXGPE__

@@ -17,6 +17,7 @@
 #ifndef WX_PRECOMP
     #include "wx/log.h"
     #include "wx/utils.h"
+    #include "wx/module.h"
 #endif
 
 #include <stdio.h>
@@ -25,7 +26,6 @@
 #include <signal.h>
 #include <sys/wait.h>
 #include <sys/prctl.h>
-#include "wx/module.h"
 
 #include "gdk/gdk.h"
 #include "gtk/gtk.h"

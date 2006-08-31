@@ -34,20 +34,20 @@
     #include "wx/intl.h"
     #include "wx/frame.h"
     #include "wx/containr.h"        // wxSetFocusToChild()
+    #include "wx/module.h"
 #endif //WX_PRECOMP
 
-#include "wx/module.h"
 #include "wx/dynlib.h"
 
 #include "wx/msw/private.h"
 #if defined(__WXWINCE__) && !defined(__HANDHELDPC__)
-  #include <ole2.h>
-  #include <shellapi.h>
-  // Standard SDK doesn't have aygshell.dll: see include/wx/msw/wince/libraries.h
-  #if _WIN32_WCE < 400 || !defined(__WINCE_STANDARDSDK__)
-    #include <aygshell.h>
-  #endif
-#include "wx/msw/wince/missing.h"
+    #include <ole2.h>
+    #include <shellapi.h>
+    // Standard SDK doesn't have aygshell.dll: see include/wx/msw/wince/libraries.h
+    #if _WIN32_WCE < 400 || !defined(__WINCE_STANDARDSDK__)
+        #include <aygshell.h>
+    #endif
+    #include "wx/msw/wince/missing.h"
 #endif
 
 #include "wx/msw/missing.h"
@@ -1073,13 +1073,13 @@ bool wxTopLevelWindowMSW::SetTransparent(wxByte alpha)
     if ((exstyle & WS_EX_LAYERED) == 0 )
         SetWindowLong(GetHwnd(), GWL_EXSTYLE, exstyle | WS_EX_LAYERED);
 
-    return pSetLayeredWindowAttributes(GetHwnd(), 0, (BYTE)alpha, LWA_ALPHA) != 0;   
+    return pSetLayeredWindowAttributes(GetHwnd(), 0, (BYTE)alpha, LWA_ALPHA) != 0;
 }
 
 bool wxTopLevelWindowMSW::CanSetTransparent()
 {
     // The API is available on win2k and above
-    
+
     static int os_type = -1;
     static int ver_major = -1;
 

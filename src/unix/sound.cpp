@@ -13,7 +13,7 @@
 #include "wx/wxprec.h"
 
 #if defined(__BORLANDC__)
-#pragma hdrstop
+    #pragma hdrstop
 #endif
 
 #if wxUSE_SOUND
@@ -31,11 +31,11 @@
     #include "wx/event.h"
     #include "wx/intl.h"
     #include "wx/log.h"
+    #include "wx/module.h"
 #endif
 
 #include "wx/thread.h"
 #include "wx/file.h"
-#include "wx/module.h"
 #include "wx/sound.h"
 #include "wx/dynlib.h"
 
@@ -640,7 +640,7 @@ bool wxSound::LoadWAV(const wxUint8 *data, size_t length, bool copyData)
     //      28  average bytes per second    |
     //      32  bytes per frame             |
     //      34  bits per sample             |
-    //  
+    //
     //      36  "data"
     //      40  number of data bytes
     //      44  (wave signal) data

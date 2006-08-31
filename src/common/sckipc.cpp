@@ -36,6 +36,7 @@
 #ifndef WX_PRECOMP
     #include "wx/log.h"
     #include "wx/event.h"
+    #include "wx/module.h"
 #endif
 
 #include <stdlib.h>
@@ -43,7 +44,6 @@
 #include <errno.h>
 
 #include "wx/socket.h"
-#include "wx/module.h"
 
 // --------------------------------------------------------------------------
 // macros and constants

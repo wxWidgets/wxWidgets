@@ -24,9 +24,8 @@
     #include "wx/list.h"
     #include "wx/string.h"
     #include "wx/utils.h"
+    #include "wx/module.h"
 #endif
-
-#include "wx/module.h"
 
 #include <string.h>
 #include <ctype.h>

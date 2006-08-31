@@ -23,6 +23,7 @@
     #include "wx/app.h"
     #include "wx/intl.h"
     #include "wx/bitmap.h"
+    #include "wx/module.h"
 #endif
 
 extern "C"
@@ -32,7 +33,6 @@ extern "C"
 }
 #include "wx/filefn.h"
 #include "wx/wfstream.h"
-#include "wx/module.h"
 
 #ifndef TIFFLINKAGEMODE
     #if defined(__WATCOMC__) && defined(__WXMGL__)

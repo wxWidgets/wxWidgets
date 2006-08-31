@@ -24,15 +24,16 @@
     #pragma hdrstop
 #endif
 
+#include "wx/fontutil.h"
+
 #ifndef WX_PRECOMP
     #include "wx/hash.h"
     #include "wx/utils.h"
+    #include "wx/module.h"
 #endif // PCH
 
-#include "wx/fontutil.h"
 #include "wx/fontmap.h"
 #include "wx/tokenzr.h"
-#include "wx/module.h"
 #include "wx/encinfo.h"
 
 #ifdef __WXGTK20__

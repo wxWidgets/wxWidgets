@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/palmos/windows.cpp
+// Name:        src/palmos/window.cpp
 // Purpose:     wxWindow
 // Author:      William Osborne - minimal working wxPalmOS port
 // Modified by: Wlodzimierz ABX Skiba - more than minimal functionality
@@ -46,13 +46,12 @@
     #include "wx/log.h"
     #include "wx/textctrl.h"
     #include "wx/menuitem.h"
+    #include "wx/module.h"
 #endif
 
 #if wxUSE_OWNER_DRAWN && !defined(__WXUNIVERSAL__)
     #include "wx/ownerdrw.h"
 #endif
-
-#include "wx/module.h"
 
 #if wxUSE_DRAG_AND_DROP
     #include "wx/dnd.h"

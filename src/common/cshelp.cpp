@@ -28,10 +28,10 @@
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
+    #include "wx/module.h"
 #endif
 
 #include "wx/tipwin.h"
-#include "wx/module.h"
 #include "wx/cshelp.h"
 
 // wxUSE_MS_HTML_HELP is not defined under platforms other than MSW

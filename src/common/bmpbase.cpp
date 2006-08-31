@@ -30,9 +30,8 @@
     #include "wx/palette.h"
     #include "wx/icon.h"
     #include "wx/image.h"
+    #include "wx/module.h"
 #endif // WX_PRECOMP
-
-#include "wx/module.h"
 
 IMPLEMENT_ABSTRACT_CLASS(wxBitmapBase, wxGDIObject)
 IMPLEMENT_ABSTRACT_CLASS(wxBitmapHandlerBase,wxObject)

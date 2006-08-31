@@ -20,9 +20,9 @@
     #include "wx/gdicmn.h"
     #include "wx/window.h"
     #include "wx/settings.h"
+    #include "wx/module.h"
 #endif
 
-#include "wx/module.h"
 #include "wx/os2/private.h"
 
 // the module which is used to clean up wxSystemSettings data (this is a

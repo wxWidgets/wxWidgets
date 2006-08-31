@@ -40,9 +40,9 @@
     #include "wx/scrolwin.h"
     #include "wx/layout.h"
     #include "wx/menuitem.h"
+    #include "wx/module.h"
 #endif
 
-#include "wx/module.h"
 #include "wx/evtloop.h"
 
 #if  wxUSE_DRAG_AND_DROP
@@ -65,7 +65,7 @@
 // 2) call DoMoveWindow from DoSetSize, allowing controls to override it
 
 #ifdef __VMS__
-#pragma message disable nosimpint
+    #pragma message disable nosimpint
 #endif
 #include <Xm/Xm.h>
 
@@ -76,7 +76,7 @@
 #include <Xm/Label.h>
 #include <Xm/RowColumn.h>           // for XmMenuPosition
 #ifdef __VMS__
-#pragma message enable nosimpint
+    #pragma message enable nosimpint
 #endif
 
 #include "wx/motif/private.h"

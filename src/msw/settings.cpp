@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        msw/settings.cpp
+// Name:        src/msw/settings.cpp
 // Purpose:     wxSystemSettingsNative implementation for MSW
 // Author:      Julian Smart
 // Modified by:
@@ -29,6 +29,7 @@
 #ifndef WX_PRECOMP
     #include "wx/utils.h"
     #include "wx/gdicmn.h"
+    #include "wx/module.h"
 #endif
 
 #include "wx/msw/private.h"
@@ -37,7 +38,6 @@
 #define SPI_GETFLATMENU                     0x1022
 #endif
 
-#include "wx/module.h"
 #include "wx/fontutil.h"
 
 // for SM_CXCURSOR, SM_CYCURSOR, SM_TABLETPC

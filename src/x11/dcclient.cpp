@@ -20,9 +20,9 @@
     #include "wx/dcmemory.h"
     #include "wx/math.h"
     #include "wx/image.h"
+    #include "wx/module.h"
 #endif
 
-#include "wx/module.h"
 #include "wx/fontutil.h"
 
 #include "wx/x11/private.h"

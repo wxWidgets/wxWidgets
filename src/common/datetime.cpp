@@ -70,11 +70,11 @@
     #include "wx/log.h"
     #include "wx/intl.h"
     #include "wx/stopwatch.h"           // for wxGetLocalTimeMillis()
+    #include "wx/module.h"
 #endif // WX_PRECOMP
 
 #include "wx/thread.h"
 #include "wx/tokenzr.h"
-#include "wx/module.h"
 
 #include <ctype.h>
 

@@ -32,9 +32,9 @@
     #include "wx/textctrl.h"
     #include "wx/memory.h"
     #include "wx/gdicmn.h"
+    #include "wx/module.h"
 #endif
 
-#include "wx/module.h"
 #include "wx/tooltip.h"
 #include "wx/docview.h"
 #include "wx/filename.h"
@@ -45,9 +45,9 @@
 // mac
 
 #ifndef __DARWIN__
-  #if __option(profile)
-    #include <profiler.h>
-  #endif
+    #if __option(profile)
+        #include <profiler.h>
+    #endif
 #endif
 
 // #include "apprsrc.h"
