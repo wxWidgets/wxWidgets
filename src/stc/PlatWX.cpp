@@ -349,6 +349,10 @@ void SurfaceImpl::AlphaRectangle(PRectangle rc, int cornerSize,
                                  ColourAllocated outline, int alphaOutline,
                                  int /*flags*/) {
 #ifdef wxHAVE_RAW_BITMAP
+
+    // TODO:  do something with cornerSize
+    wxUnusedVar(cornerSize);
+    
     int x, y;
     wxRect r = wxRectFromPRectangle(rc);
     wxBitmap bmp(r.width, r.height, 32);
@@ -408,7 +412,10 @@ void SurfaceImpl::AlphaRectangle(PRectangle rc, int cornerSize,
     hdc->DrawBitmap(bmp, r.x, r.y, true);
 
 #else
-        RectangleDraw(rc, outline, fill);
+    wxUnusedVar(cornerSize);
+    wxUnusedVar(alphaFill);
+    wxUnusedVar(alphaOutline);
+    RectangleDraw(rc, outline, fill);
 #endif
 }
 
