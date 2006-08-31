@@ -853,10 +853,11 @@ void wxTextCtrl::SetValue( const wxString &value )
     }
     else // single line
     {
-        // gtk_entry_set_text() emits two "changed" signals because internally
-        // it calls gtk_editable_delete_text() and gtk_editable_insert_text()
-        // but we want to have only one event
-        IgnoreNextTextUpdate();
+        // gtk_entry_set_text() emits two "changed" signals if the control is
+        // not empty because internally it calls gtk_editable_delete_text() and
+        // gtk_editable_insert_text() but we want to have only one event
+        if ( !GetValue().empty() )
+            IgnoreNextTextUpdate();
 
         gtk_entry_set_text( GTK_ENTRY(m_text), wxGTK_CONV(value) );
     }
