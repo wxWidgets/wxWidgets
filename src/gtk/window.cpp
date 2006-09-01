@@ -1729,6 +1729,8 @@ gtk_window_motion_notify_callback( GtkWidget *widget,
         if (win->GetEventHandler()->ProcessEvent( cevent ))
         {
             // Rewrite cursor handling here (away from idle).
+            win->SetCursor( cevent.GetCursor() );
+            win->GTKUpdateCursor();
         }
     }
 
@@ -1944,6 +1946,8 @@ gtk_window_enter_callback( GtkWidget *widget,
         if (win->GetEventHandler()->ProcessEvent( cevent ))
         {
             // Rewrite cursor handling here (away from idle).
+            win->SetCursor( cevent.GetCursor() );
+            win->GTKUpdateCursor();
         }
     }
 

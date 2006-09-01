@@ -353,7 +353,7 @@ protected:
 
     // set the current cursor for all GdkWindows making part of this widget
     // (see GTKGetWindow)
-    //
+public:
     // should be called from OnInternalIdle() if it's overridden
     void GTKUpdateCursor();
 
