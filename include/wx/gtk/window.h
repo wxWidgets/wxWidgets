@@ -166,6 +166,12 @@ public:
     // anything else. If it returns -1, the handler should continue as usual
     int GTKCallbackCommonPrologue(struct _GdkEventAny *event) const;
 
+    // override this if some events should never be consumed by wxWidgets but
+    // but have to be left for the native control
+    //
+    // base version just does GetEventHandler()->ProcessEvent()
+    virtual bool GTKProcessEvent(wxEvent& event) const;
+
 protected:
     // Override GTKWidgetNeedsMnemonic and return true if your
     // needs to set its mnemonic widget, such as for a 

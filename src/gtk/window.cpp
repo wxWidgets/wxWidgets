@@ -1244,7 +1244,7 @@ gtk_window_key_release_callback( GtkWidget *widget,
         return FALSE;
     }
 
-    return win->GetEventHandler()->ProcessEvent(event);
+    return win->GTKProcessEvent(event);
 }
 }
 
@@ -1389,6 +1389,12 @@ wxWindowGTK *FindWindowForMouseEvent(wxWindowGTK *win, wxCoord& x, wxCoord& y)
 // ----------------------------------------------------------------------------
 // common event handlers helpers
 // ----------------------------------------------------------------------------
+
+bool wxWindowGTK::GTKProcessEvent(wxEvent& event) const
+{
+    // nothing special at this level
+    return GetEventHandler()->ProcessEvent(event);
+}
 
 int wxWindowGTK::GTKCallbackCommonPrologue(GdkEventAny *event) const
 {
@@ -1594,7 +1600,7 @@ gtk_window_button_press_callback( GtkWidget *widget,
     event.SetEventObject( win );
     event.SetId( win->GetId() );
 
-    if (win->GetEventHandler()->ProcessEvent( event ))
+    if (win->GTKProcessEvent( event ))
     {
         return TRUE;
     }
@@ -1613,7 +1619,7 @@ gtk_window_button_press_callback( GtkWidget *widget,
             win->GetId(),
             win->ClientToScreen(event.GetPosition()));
         evtCtx.SetEventObject(win);
-        return win->GetEventHandler()->ProcessEvent(evtCtx);
+        return win->GTKProcessEvent(evtCtx);
     }
 
     return FALSE;
@@ -1666,7 +1672,7 @@ gtk_window_button_release_callback( GtkWidget *widget,
     event.SetEventObject( win );
     event.SetId( win->GetId() );
 
-    return win->GetEventHandler()->ProcessEvent(event);
+    return win->GTKProcessEvent(event);
 }
 
 //-----------------------------------------------------------------------------
@@ -1711,7 +1717,7 @@ gtk_window_motion_notify_callback( GtkWidget *widget,
                                                         : wxEVT_LEAVE_WINDOW);
             InitMouseEvent(win, eventM, gdk_event);
             eventM.SetEventObject(win);
-            win->GetEventHandler()->ProcessEvent(eventM);
+            win->GTKProcessEvent(eventM);
         }
     }
     else // no capture
@@ -1726,13 +1732,13 @@ gtk_window_motion_notify_callback( GtkWidget *widget,
     if ( !g_captureWindow )
     {
         wxSetCursorEvent cevent( event.m_x, event.m_y );
-        if (win->GetEventHandler()->ProcessEvent( cevent ))
+        if (win->GTKProcessEvent( cevent ))
         {
             win->SetCursor( cevent.GetCursor() );
         }
     }
 
-    return win->GetEventHandler()->ProcessEvent(event);
+    return win->GTKProcessEvent(event);
 }
 
 //-----------------------------------------------------------------------------
@@ -1777,7 +1783,7 @@ window_scroll_event(GtkWidget*, GdkEventScroll* gdk_event, wxWindow* win)
     event.SetId( win->GetId() );
     event.SetTimestamp( gdk_event->time );
 
-    return win->GetEventHandler()->ProcessEvent(event);
+    return win->GTKProcessEvent(event);
 }
 
 //-----------------------------------------------------------------------------
@@ -1788,7 +1794,7 @@ static gboolean wxgtk_window_popup_menu_callback(GtkWidget*, wxWindowGTK* win)
 {
     wxContextMenuEvent event(wxEVT_CONTEXT_MENU, win->GetId(), wxPoint(-1, -1));
     event.SetEventObject(win);
-    return win->GetEventHandler()->ProcessEvent(event);
+    return win->GTKProcessEvent(event);
 }
 
 //-----------------------------------------------------------------------------
@@ -1899,7 +1905,7 @@ gtk_window_focus_out_callback( GtkWidget *widget,
         wxFocusEvent event( wxEVT_KILL_FOCUS, win->GetId() );
         event.SetEventObject( win );
 
-        (void)win->GetEventHandler()->ProcessEvent( event );
+        (void)win->GTKProcessEvent( event );
 
         ret = TRUE;
     }
@@ -1941,13 +1947,13 @@ gtk_window_enter_callback( GtkWidget *widget,
     if ( !g_captureWindow )
     {
         wxSetCursorEvent cevent( event.m_x, event.m_y );
-        if (win->GetEventHandler()->ProcessEvent( cevent ))
+        if (win->GTKProcessEvent( cevent ))
         {
             win->SetCursor( cevent.GetCursor() );
         }
     }
 
-    return win->GetEventHandler()->ProcessEvent(event);
+    return win->GTKProcessEvent(event);
 }
 
 //-----------------------------------------------------------------------------
@@ -1986,7 +1992,7 @@ gtk_window_leave_callback( GtkWidget *widget,
     event.m_x = x + pt.x;
     event.m_y = y + pt.y;
 
-    return win->GetEventHandler()->ProcessEvent(event);
+    return win->GTKProcessEvent(event);
 }
 
 //-----------------------------------------------------------------------------
@@ -2011,7 +2017,7 @@ gtk_scrollbar_value_changed(GtkRange* range, wxWindow* win)
         event.SetEventObject(win);
 
         win->m_blockValueChanged[dir] = true;
-        win->GetEventHandler()->ProcessEvent(event);
+        win->GTKProcessEvent(event);
         win->m_blockValueChanged[dir] = false;
     }
 }
@@ -2048,7 +2054,7 @@ gtk_scrollbar_event_after(GtkRange* range, GdkEvent* event, wxWindow* win)
                                         win->ScrollDirFromRange(range));
         wxScrollWinEvent event(wxEVT_SCROLLWIN_THUMBRELEASE, win->GetScrollPos(orient), orient);
         event.SetEventObject(win);
-        win->GetEventHandler()->ProcessEvent(event);
+        win->GTKProcessEvent(event);
     }
 }
 
@@ -2100,7 +2106,7 @@ gtk_window_realized_callback( GtkWidget *m_widget, wxWindow *win )
 
     wxWindowCreateEvent event( win );
     event.SetEventObject( win );
-    win->GetEventHandler()->ProcessEvent( event );
+    win->GTKProcessEvent( event );
 }
 
 //-----------------------------------------------------------------------------
@@ -2128,7 +2134,7 @@ void gtk_window_size_callback( GtkWidget *WXUNUSED(widget),
     {
         wxSizeEvent event( win->GetSize(), win->GetId() );
         event.SetEventObject( win );
-        win->GetEventHandler()->ProcessEvent( event );
+        win->GTKProcessEvent( event );
     }
 }
 
