@@ -1728,7 +1728,6 @@ gtk_window_motion_notify_callback( GtkWidget *widget,
         wxSetCursorEvent cevent( event.m_x, event.m_y );
         if (win->GetEventHandler()->ProcessEvent( cevent ))
         {
-            // Rewrite cursor handling here (away from idle).
             win->SetCursor( cevent.GetCursor() );
         }
     }
@@ -1944,7 +1943,6 @@ gtk_window_enter_callback( GtkWidget *widget,
         wxSetCursorEvent cevent( event.m_x, event.m_y );
         if (win->GetEventHandler()->ProcessEvent( cevent ))
         {
-            // Rewrite cursor handling here (away from idle).
             win->SetCursor( cevent.GetCursor() );
         }
     }
@@ -3534,7 +3532,7 @@ void wxWindowGTK::Lower()
 
 bool wxWindowGTK::SetCursor( const wxCursor &cursor )
 {
-    if ( !wxWindowBase::SetCursor( cursor.Ok() ? cursor : *wxSTANDARD_CURSOR) )
+    if ( !wxWindowBase::SetCursor(cursor.Ok() ? cursor : *wxSTANDARD_CURSOR) )
         return false;
 
     GTKUpdateCursor();
