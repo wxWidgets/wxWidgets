@@ -86,7 +86,7 @@ wxCursor::wxCursor( int cursorId )
         case wxCURSOR_ARROWWAIT:
         case wxCURSOR_WAIT:
         case wxCURSOR_WATCH:            gdk_cur = GDK_WATCH; break;
-        case wxCURSOR_SIZING:           gdk_cur = GDK_SIZING; break;
+        case wxCURSOR_SIZING:           gdk_cur = GDK_FLEUR; break;
         case wxCURSOR_SPRAYCAN:         gdk_cur = GDK_SPRAYCAN; break;
         case wxCURSOR_IBEAM:            gdk_cur = GDK_XTERM; break;
         case wxCURSOR_PENCIL:           gdk_cur = GDK_PENCIL; break;
