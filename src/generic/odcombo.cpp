@@ -556,8 +556,16 @@ void wxVListBoxComboPopup::Delete( unsigned int item )
     if ( (int)item == m_widestItem )
         m_findWidest = true;
 
+    int sel = GetSelection();
+
     if ( IsCreated() )
         wxVListBox::SetItemCount( wxVListBox::GetItemCount()-1 );
+
+    // Fix selection
+    if ( (int)item < sel )
+        SetSelection(sel-1);
+    else if ( (int)item == sel )
+        SetSelection(wxNOT_FOUND);
 }
 
 int wxVListBoxComboPopup::FindString(const wxString& s, bool bCase) const
