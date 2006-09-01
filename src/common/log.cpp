@@ -340,10 +340,14 @@ void wxLog::OnLog(wxLogLevel level, const wxChar *szString, time_t t)
 }
 
 // deprecated function
+#if WXWIN_COMPATIBILITY_2_6
+
 wxChar *wxLog::SetLogBuffer(wxChar * WXUNUSED(buf), size_t WXUNUSED(size))
 {
     return NULL;
 }
+
+#endif // WXWIN_COMPATIBILITY_2_6
 
 wxLog *wxLog::GetActiveTarget()
 {
