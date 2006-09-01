@@ -406,6 +406,7 @@ struct wxXmlParsingContext
     wxXmlNode *lastAsText;
     wxString   encoding;
     wxString   version;
+	bool	bLastCdata;
 };
 
 extern "C" {
@@ -449,8 +450,16 @@ static void TextHnd(void *userData, const char *s, int len)
 
     if (ctx->lastAsText)
     {
-        ctx->lastAsText->SetContent(ctx->lastAsText->GetContent() +
+		if ( ctx->bLastCdata )
+		{
+			ctx->lastAsText->SetContent(ctx->lastAsText->GetContent() +
+                                    CharToString(NULL, buf));
+		}
+		else
+		{
+			ctx->lastAsText->SetContent(ctx->lastAsText->GetContent() +
                                     CharToString(ctx->conv, buf));
+		}
     }
     else
     {
@@ -470,6 +479,27 @@ static void TextHnd(void *userData, const char *s, int len)
     }
 
     delete[] buf;
+}
+}
+
+extern "C" {
+static void StartCdataHnd(void *userData)
+{
+    wxXmlParsingContext *ctx = (wxXmlParsingContext*)userData;
+
+	ctx->bLastCdata = true;
+   
+	ctx->lastAsText = new wxXmlNode(wxXML_CDATA_SECTION_NODE, wxT("cdata"),wxT(""));
+    ctx->node->AddChild(ctx->lastAsText);         
+}
+}
+
+extern "C" {
+static void EndCdataHnd(void *userData)
+{
+    wxXmlParsingContext *ctx = (wxXmlParsingContext*)userData;
+
+	ctx->bLastCdata = false;      
 }
 }
 
@@ -565,10 +595,12 @@ bool wxXmlDocument::Load(wxInputStream& stream, const wxString& encoding)
     if ( encoding != wxT("UTF-8") && encoding != wxT("utf-8") )
         ctx.conv = new wxCSConv(encoding);
 #endif
+	ctx.bLastCdata = false;
 
     XML_SetUserData(parser, (void*)&ctx);
     XML_SetElementHandler(parser, StartElementHnd, EndElementHnd);
     XML_SetCharacterDataHandler(parser, TextHnd);
+	XML_SetCdataSectionHandler(parser, StartCdataHnd, EndCdataHnd );
     XML_SetCommentHandler(parser, CommentHnd);
     XML_SetDefaultHandler(parser, DefaultHnd);
     XML_SetUnknownEncodingHandler(parser, UnknownEncodingHnd, NULL);
@@ -711,6 +743,12 @@ static void OutputNode(wxOutputStream& stream, wxXmlNode *node, int indent,
 
     switch (node->GetType())
     {
+		case wxXML_CDATA_SECTION_NODE:
+			OutputString( stream, wxT("<![CDATA["));
+			OutputString( stream, node->GetContent() );
+			OutputString( stream, wxT("]]>") );
+			break;
+
         case wxXML_TEXT_NODE:
             OutputStringEnt(stream, node->GetContent(), convMem, convFile);
             break;
