@@ -49,7 +49,7 @@ MustHaveApp(wxStyledTextCtrl);
 
 %include stc.h
 
-%extend wxStyleTextCtrl {
+%extend wxStyledTextCtrl {
     %pythoncode {
         GetCaretLineBack = GetCaretLineBackground
         SetCaretLineBack = SetCaretLineBackground
