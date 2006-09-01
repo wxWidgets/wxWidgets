@@ -1817,6 +1817,18 @@ void wxTextCtrl::OnUrlMouseEvent(wxMouseEvent& event)
     GetEventHandler()->ProcessEvent(url_event);
 }
 
+bool wxTextCtrl::GTKProcessEvent(wxEvent& event) const
+{
+    bool rc = wxTextCtrlBase::GTKProcessEvent(event);
+
+    // GtkTextView starts a drag operation when left mouse button is pressed
+    // and ends it when it is released and if it doesn't get the release event
+    // the next click on a control results in an assertion failure inside
+    // gtk_text_view_start_selection_drag() which simply *kills* the program
+    // without anything we can do about it, so always let GTK+ have this event
+    return rc && (IsSingleLine() || event.GetEventType() != wxEVT_LEFT_UP);
+}
+
 // static
 wxVisualAttributes
 wxTextCtrl::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))

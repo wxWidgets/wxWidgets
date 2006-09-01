@@ -167,6 +167,9 @@ public:
     // should we mark the control as dirty? always resets the flag
     bool MarkDirtyOnChange();
 
+    // always let GTK have mouse release events for multiline controls
+    virtual bool GTKProcessEvent(wxEvent& event) const;
+
 
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
