@@ -253,6 +253,10 @@ public:
     DocDeclStr(
         static void , PushProvider(wxPyArtProvider *provider),
         "Add new provider to the top of providers stack.", "");
+
+    DocDeclStr(
+        static void , InsertProvider(wxPyArtProvider *provider),
+        "Add new provider to the bottom of providers stack.", "");
     %cleardisown( wxPyArtProvider *provider );
     
 
