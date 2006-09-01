@@ -1730,7 +1730,6 @@ gtk_window_motion_notify_callback( GtkWidget *widget,
         {
             // Rewrite cursor handling here (away from idle).
             win->SetCursor( cevent.GetCursor() );
-            win->GTKUpdateCursor();
         }
     }
 
@@ -1947,7 +1946,6 @@ gtk_window_enter_callback( GtkWidget *widget,
         {
             // Rewrite cursor handling here (away from idle).
             win->SetCursor( cevent.GetCursor() );
-            win->GTKUpdateCursor();
         }
     }
 
@@ -3536,15 +3534,12 @@ void wxWindowGTK::Lower()
 
 bool wxWindowGTK::SetCursor( const wxCursor &cursor )
 {
-    wxCHECK_MSG( (m_widget != NULL), false, wxT("invalid window") );
+    if ( !wxWindowBase::SetCursor( cursor.Ok() ? cursor : *wxSTANDARD_CURSOR) )
+        return false;
 
-    if (cursor == m_cursor)
-       return false;
+    GTKUpdateCursor();
 
-    if (g_isIdle)
-        wxapp_install_idle_handler();
-
-    return wxWindowBase::SetCursor( cursor.Ok() ? cursor : *wxSTANDARD_CURSOR );
+    return true;
 }
 
 void wxWindowGTK::GTKUpdateCursor()
