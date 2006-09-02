@@ -293,9 +293,14 @@ TAG_HANDLER_BEGIN(TITLE, "TITLE")
                                     tag.GetBeginPos(),
                                     tag.GetEndPos1()-tag.GetBeginPos());
 #if !wxUSE_UNICODE && wxUSE_WCHAR_T
-            wxCSConv conv(m_WParser->GetInputEncoding());
-            title = wxString(title.wc_str(conv), wxConvLocal);
-#endif
+            const wxFontEncoding enc = m_WParser->GetInputEncoding();
+            if ( enc != wxFONTENCODING_DEFAULT )
+            {
+                // need to convert to the current one
+                title = wxString(title.wc_str(wxCSConv(enc)), wxConvLocal);
+            }
+#endif // !wxUSE_UNICODE
+
             title = m_WParser->GetEntitiesParser()->Parse(title);
 
             winIface->SetHTMLWindowTitle(title);
