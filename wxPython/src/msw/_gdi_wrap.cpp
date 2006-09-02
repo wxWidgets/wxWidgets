@@ -6854,6 +6854,8 @@ SWIGINTERN PyObject *_wrap__BitmapFromBufferAlpha(PyObject *SWIGUNUSEDPARM(self)
   int ecode1 = 0 ;
   int val2 ;
   int ecode2 = 0 ;
+  Py_ssize_t temp3 ;
+  Py_ssize_t temp5 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
@@ -6874,11 +6876,13 @@ SWIGINTERN PyObject *_wrap__BitmapFromBufferAlpha(PyObject *SWIGUNUSEDPARM(self)
   } 
   arg2 = static_cast< int >(val2);
   {
-    if (PyObject_AsReadBuffer(obj2, (const void**)(&arg3), &arg4) == -1) SWIG_fail;
+    if (PyObject_AsReadBuffer(obj2, (const void**)(&arg3), &temp3) == -1) SWIG_fail;
+    arg4 = (int)temp3;
   }
   {
     if (obj3 != Py_None) {
-      if (PyObject_AsReadBuffer(obj3, (const void**)(&arg5), &arg6) == -1) SWIG_fail;
+      if (PyObject_AsReadBuffer(obj3, (const void**)(&arg5), &temp5) == -1) SWIG_fail;
+      arg6 = (int)temp5;
     }
   }
   {
@@ -6903,6 +6907,7 @@ SWIGINTERN PyObject *_wrap__BitmapFromBuffer(PyObject *SWIGUNUSEDPARM(self), PyO
   int ecode1 = 0 ;
   int val2 ;
   int ecode2 = 0 ;
+  Py_ssize_t temp3 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
@@ -6922,7 +6927,8 @@ SWIGINTERN PyObject *_wrap__BitmapFromBuffer(PyObject *SWIGUNUSEDPARM(self), PyO
   } 
   arg2 = static_cast< int >(val2);
   {
-    if (PyObject_AsReadBuffer(obj2, (const void**)(&arg3), &arg4) == -1) SWIG_fail;
+    if (PyObject_AsReadBuffer(obj2, (const void**)(&arg3), &temp3) == -1) SWIG_fail;
+    arg4 = (int)temp3;
   }
   {
     result = (wxBitmap *)_BitmapFromBuffer(arg1,arg2,arg3,arg4);
@@ -6946,6 +6952,7 @@ SWIGINTERN PyObject *_wrap__BitmapFromBufferRGBA(PyObject *SWIGUNUSEDPARM(self),
   int ecode1 = 0 ;
   int val2 ;
   int ecode2 = 0 ;
+  Py_ssize_t temp3 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
@@ -6965,7 +6972,8 @@ SWIGINTERN PyObject *_wrap__BitmapFromBufferRGBA(PyObject *SWIGUNUSEDPARM(self),
   } 
   arg2 = static_cast< int >(val2);
   {
-    if (PyObject_AsReadBuffer(obj2, (const void**)(&arg3), &arg4) == -1) SWIG_fail;
+    if (PyObject_AsReadBuffer(obj2, (const void**)(&arg3), &temp3) == -1) SWIG_fail;
+    arg4 = (int)temp3;
   }
   {
     result = (wxBitmap *)_BitmapFromBufferRGBA(arg1,arg2,arg3,arg4);
