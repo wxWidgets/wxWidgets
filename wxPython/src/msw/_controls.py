@@ -297,6 +297,13 @@ class BitmapButton(Button):
         """GetMarginY(self) -> int"""
         return _controls_.BitmapButton_GetMarginY(*args, **kwargs)
 
+    BitmapDisabled = property(GetBitmapDisabled,SetBitmapDisabled,doc="See `GetBitmapDisabled` and `SetBitmapDisabled`") 
+    BitmapFocus = property(GetBitmapFocus,SetBitmapFocus,doc="See `GetBitmapFocus` and `SetBitmapFocus`") 
+    BitmapHover = property(GetBitmapHover,SetBitmapHover,doc="See `GetBitmapHover` and `SetBitmapHover`") 
+    BitmapLabel = property(GetBitmapLabel,SetBitmapLabel,doc="See `GetBitmapLabel` and `SetBitmapLabel`") 
+    BitmapSelected = property(GetBitmapSelected,SetBitmapSelected,doc="See `GetBitmapSelected` and `SetBitmapSelected`") 
+    MarginX = property(GetMarginX,doc="See `GetMarginX`") 
+    MarginY = property(GetMarginY,doc="See `GetMarginY`") 
 _controls_.BitmapButton_swigregister(BitmapButton)
 
 def PreBitmapButton(*args, **kwargs):
@@ -434,6 +441,8 @@ class CheckBox(_core.Control):
         return _controls_.CheckBox_GetClassDefaultAttributes(*args, **kwargs)
 
     GetClassDefaultAttributes = staticmethod(GetClassDefaultAttributes)
+    ThreeStateValue = property(Get3StateValue,Set3StateValue,doc="See `Get3StateValue` and `Set3StateValue`") 
+    Value = property(GetValue,SetValue,doc="See `GetValue` and `SetValue`") 
 _controls_.CheckBox_swigregister(CheckBox)
 CheckBoxNameStr = cvar.CheckBoxNameStr
 
@@ -525,6 +534,7 @@ class Choice(_core.ControlWithItems):
         return _controls_.Choice_GetClassDefaultAttributes(*args, **kwargs)
 
     GetClassDefaultAttributes = staticmethod(GetClassDefaultAttributes)
+    CurrentSelection = property(GetCurrentSelection,doc="See `GetCurrentSelection`") 
 _controls_.Choice_swigregister(Choice)
 ChoiceNameStr = cvar.ChoiceNameStr
 
@@ -821,6 +831,11 @@ class ComboBox(Choice):
         return _controls_.ComboBox_GetClassDefaultAttributes(*args, **kwargs)
 
     GetClassDefaultAttributes = staticmethod(GetClassDefaultAttributes)
+    CurrentSelection = property(GetCurrentSelection,doc="See `GetCurrentSelection`") 
+    InsertionPoint = property(GetInsertionPoint,SetInsertionPoint,doc="See `GetInsertionPoint` and `SetInsertionPoint`") 
+    LastPosition = property(GetLastPosition,doc="See `GetLastPosition`") 
+    Mark = property(GetMark,SetMark,doc="See `GetMark` and `SetMark`") 
+    Value = property(GetValue,SetValue,doc="See `GetValue` and `SetValue`") 
 _controls_.ComboBox_swigregister(ComboBox)
 ComboBoxNameStr = cvar.ComboBoxNameStr
 
@@ -1452,6 +1467,7 @@ class CheckListBox(ListBox):
         """GetItemHeight(self) -> int"""
         return _controls_.CheckListBox_GetItemHeight(*args, **kwargs)
 
+    ItemHeight = property(GetItemHeight,doc="See `GetItemHeight`") 
 _controls_.CheckListBox_swigregister(CheckListBox)
 
 def PreCheckListBox(*args, **kwargs):
@@ -2921,6 +2937,17 @@ class BookCtrlBase(_core.Control):
         return _controls_.BookCtrlBase_GetClassDefaultAttributes(*args, **kwargs)
 
     GetClassDefaultAttributes = staticmethod(GetClassDefaultAttributes)
+    ControlMargin = property(GetControlMargin,SetControlMargin,doc="See `GetControlMargin` and `SetControlMargin`") 
+    ControlSizer = property(GetControlSizer,doc="See `GetControlSizer`") 
+    CurrentPage = property(GetCurrentPage,doc="See `GetCurrentPage`") 
+    FitToCurrentPage = property(GetFitToCurrentPage,SetFitToCurrentPage,doc="See `GetFitToCurrentPage` and `SetFitToCurrentPage`") 
+    ImageList = property(GetImageList,SetImageList,doc="See `GetImageList` and `SetImageList`") 
+    InternalBorder = property(GetInternalBorder,SetInternalBorder,doc="See `GetInternalBorder` and `SetInternalBorder`") 
+    Page = property(GetPage,doc="See `GetPage`") 
+    PageCount = property(GetPageCount,doc="See `GetPageCount`") 
+    PageImage = property(GetPageImage,SetPageImage,doc="See `GetPageImage` and `SetPageImage`") 
+    PageText = property(GetPageText,SetPageText,doc="See `GetPageText` and `SetPageText`") 
+    Selection = property(GetSelection,SetSelection,doc="See `GetSelection` and `SetSelection`") 
 _controls_.BookCtrlBase_swigregister(BookCtrlBase)
 NotebookNameStr = cvar.NotebookNameStr
 
@@ -2972,6 +2999,8 @@ class BookCtrlBaseEvent(_core.NotifyEvent):
         """SetOldSelection(self, int nOldSel)"""
         return _controls_.BookCtrlBaseEvent_SetOldSelection(*args, **kwargs)
 
+    OldSelection = property(GetOldSelection,SetOldSelection,doc="See `GetOldSelection` and `SetOldSelection`") 
+    Selection = property(GetSelection,SetSelection,doc="See `GetSelection` and `SetSelection`") 
 _controls_.BookCtrlBaseEvent_swigregister(BookCtrlBaseEvent)
 
 #---------------------------------------------------------------------------
@@ -3197,6 +3226,7 @@ class Choicebook(BookCtrlBase):
         """GetChoiceCtrl(self) -> Choice"""
         return _controls_.Choicebook_GetChoiceCtrl(*args, **kwargs)
 
+    ChoiceCtrl = property(GetChoiceCtrl,doc="See `GetChoiceCtrl`") 
 _controls_.Choicebook_swigregister(Choicebook)
 
 def PreChoicebook(*args, **kwargs):
@@ -6112,6 +6142,7 @@ class DragImage(_core.Object):
         """RedrawImage(self, Point oldPos, Point newPos, bool eraseOld, bool drawNew) -> bool"""
         return _controls_.DragImage_RedrawImage(*args, **kwargs)
 
+    ImageRect = property(GetImageRect,doc="See `GetImageRect`") 
 _controls_.DragImage_swigregister(DragImage)
 
 def DragIcon(*args, **kwargs):
@@ -6232,6 +6263,9 @@ class DatePickerCtrl(_core.Control):
         """
         return _controls_.DatePickerCtrl_GetUpperLimit(*args, **kwargs)
 
+    LowerLimit = property(GetLowerLimit,doc="See `GetLowerLimit`") 
+    UpperLimit = property(GetUpperLimit,doc="See `GetUpperLimit`") 
+    Value = property(GetValue,SetValue,doc="See `GetValue` and `SetValue`") 
 _controls_.DatePickerCtrl_swigregister(DatePickerCtrl)
 DatePickerCtrlNameStr = cvar.DatePickerCtrlNameStr
 
@@ -6546,6 +6580,7 @@ class ColourPickerCtrl(PickerBase):
         """
         return _controls_.ColourPickerCtrl_SetColour(*args, **kwargs)
 
+    Colour = property(GetColour,SetColour,doc="See `GetColour` and `SetColour`") 
 _controls_.ColourPickerCtrl_swigregister(ColourPickerCtrl)
 ColourPickerCtrlNameStr = cvar.ColourPickerCtrlNameStr
 
@@ -6579,6 +6614,7 @@ class ColourPickerEvent(_core.CommandEvent):
         """SetColour(self, Colour c)"""
         return _controls_.ColourPickerEvent_SetColour(*args, **kwargs)
 
+    Colour = property(GetColour,SetColour,doc="See `GetColour` and `SetColour`") 
 _controls_.ColourPickerEvent_swigregister(ColourPickerEvent)
 
 #---------------------------------------------------------------------------
@@ -6690,6 +6726,8 @@ class DirPickerCtrl(PickerBase):
         """GetTextCtrlValue(self) -> String"""
         return _controls_.DirPickerCtrl_GetTextCtrlValue(*args, **kwargs)
 
+    Path = property(GetPath,SetPath,doc="See `GetPath` and `SetPath`") 
+    TextCtrlValue = property(GetTextCtrlValue,doc="See `GetTextCtrlValue`") 
 _controls_.DirPickerCtrl_swigregister(DirPickerCtrl)
 
 def PreDirPickerCtrl(*args, **kwargs):

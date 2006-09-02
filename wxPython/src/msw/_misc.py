@@ -875,6 +875,9 @@ class Caret(object):
         return _misc_.Caret_SetBlinkTime(*args, **kwargs)
 
     SetBlinkTime = staticmethod(SetBlinkTime)
+    Position = property(GetPosition,doc="See `GetPosition`") 
+    Size = property(GetSize,SetSize,doc="See `GetSize` and `SetSize`") 
+    Window = property(GetWindow,doc="See `GetWindow`") 
 _misc_.Caret_swigregister(Caret)
 
 def Caret_GetBlinkTime(*args):
@@ -2546,6 +2549,15 @@ class ArtProvider(object):
         return _misc_.ArtProvider_PushProvider(*args, **kwargs)
 
     PushProvider = staticmethod(PushProvider)
+    def InsertProvider(*args, **kwargs):
+        """
+        InsertProvider(ArtProvider provider)
+
+        Add new provider to the bottom of providers stack.
+        """
+        return _misc_.ArtProvider_InsertProvider(*args, **kwargs)
+
+    InsertProvider = staticmethod(InsertProvider)
     def PopProvider(*args, **kwargs):
         """
         PopProvider() -> bool
@@ -2668,6 +2680,14 @@ def ArtProvider_PushProvider(*args, **kwargs):
     Add new provider to the top of providers stack.
     """
   return _misc_.ArtProvider_PushProvider(*args, **kwargs)
+
+def ArtProvider_InsertProvider(*args, **kwargs):
+  """
+    ArtProvider_InsertProvider(ArtProvider provider)
+
+    Add new provider to the bottom of providers stack.
+    """
+  return _misc_.ArtProvider_InsertProvider(*args, **kwargs)
 
 def ArtProvider_PopProvider(*args):
   """
@@ -3086,6 +3106,17 @@ class ConfigBase(object):
         """GetStyle(self) -> long"""
         return _misc_.ConfigBase_GetStyle(*args, **kwargs)
 
+    AppName = property(GetAppName,SetAppName,doc="See `GetAppName` and `SetAppName`") 
+    EntryType = property(GetEntryType,doc="See `GetEntryType`") 
+    FirstEntry = property(GetFirstEntry,doc="See `GetFirstEntry`") 
+    FirstGroup = property(GetFirstGroup,doc="See `GetFirstGroup`") 
+    NextEntry = property(GetNextEntry,doc="See `GetNextEntry`") 
+    NextGroup = property(GetNextGroup,doc="See `GetNextGroup`") 
+    NumberOfEntries = property(GetNumberOfEntries,doc="See `GetNumberOfEntries`") 
+    NumberOfGroups = property(GetNumberOfGroups,doc="See `GetNumberOfGroups`") 
+    Path = property(GetPath,SetPath,doc="See `GetPath` and `SetPath`") 
+    Style = property(GetStyle,SetStyle,doc="See `GetStyle` and `SetStyle`") 
+    VendorName = property(GetVendorName,SetVendorName,doc="See `GetVendorName` and `SetVendorName`") 
 _misc_.ConfigBase_swigregister(ConfigBase)
 
 def ConfigBase_Set(*args, **kwargs):
@@ -3859,6 +3890,30 @@ class DateTime(object):
         else:
             return "INVALID DateTime"
 
+    Day = property(GetDay,SetDay,doc="See `GetDay` and `SetDay`") 
+    DayOfYear = property(GetDayOfYear,doc="See `GetDayOfYear`") 
+    Hour = property(GetHour,SetHour,doc="See `GetHour` and `SetHour`") 
+    JDN = property(GetJDN,SetJDN,doc="See `GetJDN` and `SetJDN`") 
+    JulianDayNumber = property(GetJulianDayNumber,doc="See `GetJulianDayNumber`") 
+    LastMonthDay = property(GetLastMonthDay,doc="See `GetLastMonthDay`") 
+    LastWeekDay = property(GetLastWeekDay,doc="See `GetLastWeekDay`") 
+    MJD = property(GetMJD,doc="See `GetMJD`") 
+    Millisecond = property(GetMillisecond,SetMillisecond,doc="See `GetMillisecond` and `SetMillisecond`") 
+    Minute = property(GetMinute,SetMinute,doc="See `GetMinute` and `SetMinute`") 
+    ModifiedJulianDayNumber = property(GetModifiedJulianDayNumber,doc="See `GetModifiedJulianDayNumber`") 
+    Month = property(GetMonth,SetMonth,doc="See `GetMonth` and `SetMonth`") 
+    NextWeekDay = property(GetNextWeekDay,doc="See `GetNextWeekDay`") 
+    PrevWeekDay = property(GetPrevWeekDay,doc="See `GetPrevWeekDay`") 
+    RataDie = property(GetRataDie,doc="See `GetRataDie`") 
+    Second = property(GetSecond,SetSecond,doc="See `GetSecond` and `SetSecond`") 
+    Ticks = property(GetTicks,doc="See `GetTicks`") 
+    Week = property(GetWeek,doc="See `GetWeek`") 
+    WeekDay = property(GetWeekDay,doc="See `GetWeekDay`") 
+    WeekDayInSameWeek = property(GetWeekDayInSameWeek,doc="See `GetWeekDayInSameWeek`") 
+    WeekOfMonth = property(GetWeekOfMonth,doc="See `GetWeekOfMonth`") 
+    WeekOfYear = property(GetWeekOfYear,doc="See `GetWeekOfYear`") 
+    Year = property(GetYear,SetYear,doc="See `GetYear` and `SetYear`") 
+    YearDay = property(GetYearDay,doc="See `GetYearDay`") 
 _misc_.DateTime_swigregister(DateTime)
 DefaultDateTimeFormat = cvar.DefaultDateTimeFormat
 DefaultTimeSpanFormat = cvar.DefaultTimeSpanFormat
@@ -4369,6 +4424,11 @@ class DateSpan(object):
         """__ne__(self, DateSpan other) -> bool"""
         return _misc_.DateSpan___ne__(*args, **kwargs)
 
+    Days = property(GetDays,SetDays,doc="See `GetDays` and `SetDays`") 
+    Months = property(GetMonths,SetMonths,doc="See `GetMonths` and `SetMonths`") 
+    TotalDays = property(GetTotalDays,doc="See `GetTotalDays`") 
+    Weeks = property(GetWeeks,SetWeeks,doc="See `GetWeeks` and `SetWeeks`") 
+    Years = property(GetYears,SetYears,doc="See `GetYears` and `SetYears`") 
 _misc_.DateSpan_swigregister(DateSpan)
 
 def DateSpan_Days(*args, **kwargs):
@@ -4510,6 +4570,8 @@ class DataFormat(object):
         """
         return _misc_.DataFormat_SetId(*args, **kwargs)
 
+    Id = property(GetId,SetId,doc="See `GetId` and `SetId`") 
+    Type = property(GetType,SetType,doc="See `GetType` and `SetType`") 
 _misc_.DataFormat_swigregister(DataFormat)
 DefaultDateTime = cvar.DefaultDateTime
 
@@ -4607,6 +4669,11 @@ class DataObject(object):
         """
         return _misc_.DataObject_SetData(*args, **kwargs)
 
+    AllFormats = property(GetAllFormats,doc="See `GetAllFormats`") 
+    DataHere = property(GetDataHere,doc="See `GetDataHere`") 
+    DataSize = property(GetDataSize,doc="See `GetDataSize`") 
+    FormatCount = property(GetFormatCount,doc="See `GetFormatCount`") 
+    PreferredFormat = property(GetPreferredFormat,doc="See `GetPreferredFormat`") 
 _misc_.DataObject_swigregister(DataObject)
 FormatInvalid = cvar.FormatInvalid
 
@@ -4675,6 +4742,7 @@ class DataObjectSimple(DataObject):
         """
         return _misc_.DataObjectSimple_SetData(*args, **kwargs)
 
+    Format = property(GetFormat,SetFormat,doc="See `GetFormat` and `SetFormat`") 
 _misc_.DataObjectSimple_swigregister(DataObjectSimple)
 
 class PyDataObjectSimple(DataObjectSimple):
@@ -4763,6 +4831,7 @@ class DataObjectComposite(DataObject):
         """
         return _misc_.DataObjectComposite_GetReceivedFormat(*args, **kwargs)
 
+    ReceivedFormat = property(GetReceivedFormat,doc="See `GetReceivedFormat`") 
 _misc_.DataObjectComposite_swigregister(DataObjectComposite)
 
 class TextDataObject(DataObjectSimple):
@@ -4893,6 +4962,7 @@ class BitmapDataObject(DataObjectSimple):
         """
         return _misc_.BitmapDataObject_SetBitmap(*args, **kwargs)
 
+    Bitmap = property(GetBitmap,SetBitmap,doc="See `GetBitmap` and `SetBitmap`") 
 _misc_.BitmapDataObject_swigregister(BitmapDataObject)
 
 class PyBitmapDataObject(BitmapDataObject):
@@ -5002,6 +5072,8 @@ class CustomDataObject(DataObjectSimple):
         """
         return _misc_.CustomDataObject_GetData(*args, **kwargs)
 
+    Data = property(GetData,SetData,doc="See `GetData` and `SetData`") 
+    Size = property(GetSize,doc="See `GetSize`") 
 _misc_.CustomDataObject_swigregister(CustomDataObject)
 
 class URLDataObject(DataObject):
@@ -5112,6 +5184,7 @@ class DropSource(object):
     base_GiveFeedback = wx._deprecated(base_GiveFeedback,
                                    "Please use DropSource.GiveFeedback instead.")
 
+    DataObject = property(GetDataObject,SetData,doc="See `GetDataObject` and `SetData`") 
 _misc_.DropSource_swigregister(DropSource)
 
 def DROP_ICON(filename):
@@ -5197,6 +5270,9 @@ class DropTarget(object):
         """GetDefaultAction(self) -> int"""
         return _misc_.DropTarget_GetDefaultAction(*args, **kwargs)
 
+    Data = property(GetData,doc="See `GetData`") 
+    DataObject = property(GetDataObject,SetDataObject,doc="See `GetDataObject` and `SetDataObject`") 
+    DefaultAction = property(GetDefaultAction,SetDefaultAction,doc="See `GetDefaultAction` and `SetDefaultAction`") 
 _misc_.DropTarget_swigregister(DropTarget)
 
 PyDropTarget = DropTarget 
@@ -5472,6 +5548,7 @@ class Clipboard(_core.Object):
         return _misc_.Clipboard_Get(*args, **kwargs)
 
     Get = staticmethod(Get)
+    Data = property(GetData,SetData,doc="See `GetData` and `SetData`") 
 _misc_.Clipboard_swigregister(Clipboard)
 
 def Clipboard_Get(*args):
@@ -5742,6 +5819,11 @@ class Display(object):
         """
         return _misc_.Display_ResetMode(*args, **kwargs)
 
+    ClientArea = property(GetClientArea,doc="See `GetClientArea`") 
+    CurrentMode = property(GetCurrentMode,doc="See `GetCurrentMode`") 
+    Geometry = property(GetGeometry,doc="See `GetGeometry`") 
+    Modes = property(GetModes,doc="See `GetModes`") 
+    Name = property(GetName,doc="See `GetName`") 
 _misc_.Display_swigregister(Display)
 DefaultVideoMode = cvar.DefaultVideoMode
 
