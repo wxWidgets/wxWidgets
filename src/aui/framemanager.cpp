@@ -3163,22 +3163,22 @@ void wxFrameManager::OnRender(wxFrameManagerEvent& evt)
         {
             case wxDockUIPart::typeDockSizer:
             case wxDockUIPart::typePaneSizer:
-                m_art->DrawSash(*dc, part.orientation, part.rect);
+                m_art->DrawSash(*dc, m_frame, part.orientation, part.rect);
                 break;
             case wxDockUIPart::typeBackground:
-                m_art->DrawBackground(*dc, part.orientation, part.rect);
+                m_art->DrawBackground(*dc, m_frame, part.orientation, part.rect);
                 break;
             case wxDockUIPart::typeCaption:
-                m_art->DrawCaption(*dc, part.pane->caption, part.rect, *part.pane);
+                m_art->DrawCaption(*dc, m_frame, part.pane->caption, part.rect, *part.pane);
                 break;
             case wxDockUIPart::typeGripper:
-                m_art->DrawGripper(*dc, part.rect, *part.pane);
+                m_art->DrawGripper(*dc, m_frame, part.rect, *part.pane);
                 break;
             case wxDockUIPart::typePaneBorder:
-                m_art->DrawBorder(*dc, part.rect, *part.pane);
+                m_art->DrawBorder(*dc, m_frame, part.rect, *part.pane);
                 break;
             case wxDockUIPart::typePaneButton:
-                m_art->DrawPaneButton(*dc, part.button->button_id,
+                m_art->DrawPaneButton(*dc, m_frame, part.button->button_id,
                         wxAUI_BUTTON_STATE_NORMAL, part.rect, *part.pane);
                 break;
         }
@@ -3329,7 +3329,7 @@ void wxFrameManager::UpdateButtonOnScreen(wxDockUIPart* button_ui_part,
     if (pt.x != 0 || pt.y != 0)
         cdc.SetDeviceOrigin(pt.x, pt.y);
 
-    m_art->DrawPaneButton(cdc,
+    m_art->DrawPaneButton(cdc, m_frame,
               button_ui_part->button->button_id,
               state,
               button_ui_part->rect,
