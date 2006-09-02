@@ -205,6 +205,11 @@ public:
 
 #if defined(__WXMSW__) || defined(__WXGTK__)
     int GetItemHeight();
+#else
+    %pythoncode {
+        def GetItemHeight(self):
+            raise NotImplementedError
+    }
 #endif
 
     %property(ItemHeight, GetItemHeight, doc="See `GetItemHeight`");

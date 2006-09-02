@@ -677,6 +677,9 @@ class ComboBox(_core.Control,_core.ItemContainer):
         """
         return _controls_.ComboBox_SetMark(*args, **kwargs)
 
+    def GetMark(self):
+        raise NotImplementedError
+
     def GetCurrentSelection(*args, **kwargs):
         """
         GetCurrentSelection(self) -> int
@@ -1453,6 +1456,9 @@ class CheckListBox(ListBox):
     def Check(*args, **kwargs):
         """Check(self, unsigned int index, int check=True)"""
         return _controls_.CheckListBox_Check(*args, **kwargs)
+
+    def GetItemHeight(self):
+        raise NotImplementedError
 
     ItemHeight = property(GetItemHeight,doc="See `GetItemHeight`") 
 _controls_.CheckListBox_swigregister(CheckListBox)

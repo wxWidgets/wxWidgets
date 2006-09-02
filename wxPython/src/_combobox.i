@@ -164,7 +164,13 @@ combobox text field.", "");
         "Gets the positions of the begining and ending of the selection mark in
 the combobox text field.", "",
         GetMark);
+#else
+    %pythoncode {
+        def GetMark(self):
+            raise NotImplementedError
+    }
 #endif
+    
 
     DocDeclStr(
         int , GetCurrentSelection() const,
