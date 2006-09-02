@@ -166,6 +166,19 @@ wx.NB_HITTEST flags.", "");
 
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
+
+    %property(ControlMargin, GetControlMargin, SetControlMargin, doc="See `GetControlMargin` and `SetControlMargin`");
+    %property(ControlSizer, GetControlSizer, doc="See `GetControlSizer`");
+    %property(CurrentPage, GetCurrentPage, doc="See `GetCurrentPage`");
+    %property(FitToCurrentPage, GetFitToCurrentPage, SetFitToCurrentPage, doc="See `GetFitToCurrentPage` and `SetFitToCurrentPage`");
+    %property(ImageList, GetImageList, SetImageList, doc="See `GetImageList` and `SetImageList`");
+    %property(InternalBorder, GetInternalBorder, SetInternalBorder, doc="See `GetInternalBorder` and `SetInternalBorder`");
+    %property(Page, GetPage, doc="See `GetPage`");
+    %property(PageCount, GetPageCount, doc="See `GetPageCount`");
+    %property(PageImage, GetPageImage, SetPageImage, doc="See `GetPageImage` and `SetPageImage`");
+    %property(PageText, GetPageText, SetPageText, doc="See `GetPageText` and `SetPageText`");
+    %property(Selection, GetSelection, SetSelection, doc="See `GetSelection` and `SetSelection`");
+
 };
 
 
@@ -182,6 +195,10 @@ public:
         // the page that was selected before the change (-1 if none)
     int GetOldSelection() const;
     void SetOldSelection(int nOldSel);
+
+    %property(OldSelection, GetOldSelection, SetOldSelection, doc="See `GetOldSelection` and `SetOldSelection`");
+    %property(Selection, GetSelection, SetSelection, doc="See `GetSelection` and `SetSelection`");
+
 };
 
 
@@ -423,6 +440,9 @@ public:
     wxChoice* GetChoiceCtrl() const;
 
     virtual bool DeleteAllPages();
+
+    %property(ChoiceCtrl, GetChoiceCtrl, doc="See `GetChoiceCtrl`");
+
 };
 
 

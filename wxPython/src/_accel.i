@@ -81,6 +81,11 @@ public:
     DocDeclStr(
         int , GetCommand(),
         "Get the AcceleratorEntry's command ID.", "");
+
+    %property(Command, GetCommand, doc="See `GetCommand`");
+    %property(Flags, GetFlags, doc="See `GetFlags`");
+    %property(KeyCode, GetKeyCode, doc="See `GetKeyCode`");
+    
 };
 
 

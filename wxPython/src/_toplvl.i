@@ -399,6 +399,10 @@ public:
 
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
+
+    %property(AffirmativeId, GetAffirmativeId, SetAffirmativeId, doc="See `GetAffirmativeId` and `SetAffirmativeId`");
+    %property(EscapeId, GetEscapeId, SetEscapeId, doc="See `GetEscapeId` and `SetEscapeId`");
+    %property(ReturnCode, GetReturnCode, SetReturnCode, doc="See `GetReturnCode` and `SetReturnCode`");
 };
 
 //---------------------------------------------------------------------------

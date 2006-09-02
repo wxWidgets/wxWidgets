@@ -312,6 +312,15 @@ the ``type`` parameter.", "");
         bool __eq__(const wxBitmap* other) { return other ? (*self == *other) : false; }
         bool __ne__(const wxBitmap* other) { return other ? (*self != *other) : true;  }
     }
+
+    %property(Depth, GetDepth, SetDepth, doc="See `GetDepth` and `SetDepth`");
+    %property(Height, GetHeight, SetHeight, doc="See `GetHeight` and `SetHeight`");
+    %property(Mask, GetMask, SetMask, doc="See `GetMask` and `SetMask`");
+    %property(Palette, GetPalette, doc="See `GetPalette`");
+    %property(Size, GetSize, SetSize, doc="See `GetSize` and `SetSize`");
+    %property(SubBitmap, GetSubBitmap, doc="See `GetSubBitmap`");
+    %property(Width, GetWidth, SetWidth, doc="See `GetWidth` and `SetWidth`");
+
 };
 
 
@@ -588,6 +597,8 @@ public:
                 pixels.nextPixel()
             pixels.MoveTo(self, 0, y)
     }
+
+    %property(Pixels, GetPixels, doc="See `GetPixels`");
 };
 
 

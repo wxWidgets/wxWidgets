@@ -122,6 +122,9 @@ standard format).", "");
     DocDeclStr(
         void , SetId(const wxString& format),
         "Sets the format to be the custom format identified by the given name.", "");    
+
+    %property(Id, GetId, SetId, doc="See `GetId` and `SetId`");
+    %property(Type, GetType, SetType, doc="See `GetType` and `SetType`");
 };
 
 
@@ -310,6 +313,11 @@ in the given direction.", "");
         }
     }
     
+    %property(AllFormats, GetAllFormats, doc="See `GetAllFormats`");
+    %property(DataHere, GetDataHere, doc="See `GetDataHere`");
+    %property(DataSize, GetDataSize, doc="See `GetDataSize`");
+    %property(FormatCount, GetFormatCount, doc="See `GetFormatCount`");
+    %property(PreferredFormat, GetPreferredFormat, doc="See `GetPreferredFormat`");
 
 };
 
@@ -397,6 +405,7 @@ derived class if the object supports setting its data.
         }
     }
     
+    %property(Format, GetFormat, SetFormat, doc="See `GetFormat` and `SetFormat`");
 };
 
 
@@ -532,6 +541,7 @@ format of the data object within the composite that recieved data from
 the clipboard or the DnD operation.  You can use this method to find
 out what kind of data object was recieved.", "");
     
+    %property(ReceivedFormat, GetReceivedFormat, doc="See `GetReceivedFormat`");
 };
 
 //---------------------------------------------------------------------------
@@ -649,6 +659,7 @@ internals. Use this method to get data in bitmap form from the
 when the data object receives data. Usually there will be no reason to
 override this function.", "");
     
+    %property(Bitmap, GetBitmap, SetBitmap, doc="See `GetBitmap` and `SetBitmap`");
 };
 
 
@@ -799,6 +810,10 @@ public:
             return obj;
         }
     }
+
+    %property(Data, GetData, SetData, doc="See `GetData` and `SetData`");
+    %property(Size, GetSize, doc="See `GetSize`");
+
 };
 
 

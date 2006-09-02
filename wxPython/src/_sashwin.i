@@ -223,6 +223,10 @@ public:
     // Set by the app
     void SetRect(const wxRect& rect);
     wxRect GetRect() const;
+
+    %property(Flags, GetFlags, SetFlags, doc="See `GetFlags` and `SetFlags`");
+    %property(Rect, GetRect, SetRect, doc="See `GetRect` and `SetRect`");
+
 };
 
 

@@ -86,6 +86,8 @@ public:
 
     bool GiveFeedback(wxDragResult effect);
     %MAKE_BASE_FUNC(DropSource, GiveFeedback);
+
+    %property(DataObject, GetDataObject, SetData, doc="See `GetDataObject` and `SetData`");
 };
 
 
@@ -176,6 +178,10 @@ public:
     // returns default action for drag and drop or
     // wxDragNone if this not specified
     wxDragResult GetDefaultAction();
+    
+    %property(Data, GetData, doc="See `GetData`");
+    %property(DataObject, GetDataObject, SetDataObject, doc="See `GetDataObject` and `SetDataObject`");
+    %property(DefaultAction, GetDefaultAction, SetDefaultAction, doc="See `GetDefaultAction` and `SetDefaultAction`");
 };
 
 

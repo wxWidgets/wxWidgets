@@ -603,6 +603,12 @@ deselection), or a boolean value representing the value of a checkbox.", "");
 
     virtual wxEvent *Clone() const;
 
+    %property(ClientData, GetClientData, SetClientData, doc="See `GetClientData` and `SetClientData`");
+    %property(ClientObject, GetClientObject, SetClientObject, doc="See `GetClientObject` and `SetClientObject`");
+    %property(ExtraLong, GetExtraLong, SetExtraLong, doc="See `GetExtraLong` and `SetExtraLong`");
+    %property(Int, GetInt, SetInt, doc="See `GetInt` and `SetInt`");
+    %property(Selection, GetSelection, doc="See `GetSelection`");
+    %property(String, GetString, SetString, doc="See `GetString` and `SetString`");
 };
 
 //---------------------------------------------------------------------------
@@ -1587,6 +1593,7 @@ public:
         wxWindow *, GetWindow() const,
         "The window which has just received the focus.", "");
 
+    %property(Window, GetWindow, doc="See `GetWindow`");
 };
 
 //---------------------------------------------------------------------------
@@ -1631,6 +1638,7 @@ public:
         "Returns true if the application or window is being activated, false
 otherwise.", "");
 
+    %property(Active, GetActive, doc="See `GetActive`");
 };
 
 
@@ -1791,6 +1799,9 @@ event. Vetoing a window close event is not possible if the calling
 code wishes to force the application to exit, and so this function
 must be called to check this.", "");
 
+    %property(LoggingOff, GetLoggingOff, SetLoggingOff, doc="See `GetLoggingOff` and `SetLoggingOff`");
+    %property(Veto, GetVeto, doc="See `GetVeto`");
+    
 };
 
 
@@ -1901,6 +1912,10 @@ public:
             return list;
         }
     }
+
+    %property(Files, GetFiles, doc="See `GetFiles`");
+    %property(NumberOfFiles, GetNumberOfFiles, doc="See `GetNumberOfFiles`");
+    %property(Position, GetPosition, doc="See `GetPosition`");
 };
 
 
@@ -2383,6 +2398,7 @@ be shown.", "");
         void , SetPosition(const wxPoint& pos),
         "Sets the position at which the menu should be shown.", "");
 
+    %property(Position, GetPosition, SetPosition, doc="See `GetPosition` and `SetPosition`");
 };
 
 //---------------------------------------------------------------------------
@@ -2576,6 +2592,7 @@ public:
         "Sets the date carried by the event, normally only used by the library
 internally.", "");
 
+    %property(Date, GetDate, SetDate, doc="See `GetDate` and `SetDate`");
 
 };
 

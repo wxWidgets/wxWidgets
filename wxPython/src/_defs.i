@@ -159,9 +159,7 @@ typedef unsigned long   wxUIntPtr;
 
 
 %define %property(NAME, STUFF...)
-    %pythoncode {
-        NAME = property(STUFF)
-    }
+    %pythoncode { NAME = property(STUFF) }
 %enddef
 
 //----------------------------------------------------------------------

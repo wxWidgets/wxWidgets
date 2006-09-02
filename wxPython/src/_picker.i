@@ -200,6 +200,7 @@ public:
         void , SetColour(const wxColour& col),
         "Set the displayed colour.", "");
 
+    %property(Colour, GetColour, SetColour, doc="See `GetColour` and `SetColour`");
 };
 
 
@@ -216,6 +217,8 @@ public:
 
     wxColour GetColour() const;
     void SetColour(const wxColour &c);
+
+    %property(Colour, GetColour, SetColour, doc="See `GetColour` and `SetColour`");
 };
 
 
@@ -331,6 +334,10 @@ public:
 
     // Returns the filtered value currently placed in the text control (if present).
     wxString GetTextCtrlValue() const;
+
+    %property(Path, GetPath, SetPath, doc="See `GetPath` and `SetPath`");
+    %property(TextCtrlValue, GetTextCtrlValue, doc="See `GetTextCtrlValue`");
+    
 };
 
 

@@ -306,6 +306,14 @@ supported in wxMSW.", "");
     void SetMargins(int x, int y);
     int GetMarginX() const;
     int GetMarginY() const;
+    
+    %property(BitmapDisabled, GetBitmapDisabled, SetBitmapDisabled, doc="See `GetBitmapDisabled` and `SetBitmapDisabled`");
+    %property(BitmapFocus, GetBitmapFocus, SetBitmapFocus, doc="See `GetBitmapFocus` and `SetBitmapFocus`");
+    %property(BitmapHover, GetBitmapHover, SetBitmapHover, doc="See `GetBitmapHover` and `SetBitmapHover`");
+    %property(BitmapLabel, GetBitmapLabel, SetBitmapLabel, doc="See `GetBitmapLabel` and `SetBitmapLabel`");
+    %property(BitmapSelected, GetBitmapSelected, SetBitmapSelected, doc="See `GetBitmapSelected` and `SetBitmapSelected`");
+    %property(MarginX, GetMarginX, doc="See `GetMarginX`");
+    %property(MarginY, GetMarginY, doc="See `GetMarginY`");
 };
 
 

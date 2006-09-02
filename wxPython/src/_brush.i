@@ -112,6 +112,11 @@ uninitialised bitmap (`wx.Bitmap.Ok` returns False).", "");
 #endif
 
     %pythoncode { def __nonzero__(self): return self.Ok() }
+
+    %property(Colour, GetColour, SetColour, doc="See `GetColour` and `SetColour`");
+    %property(Stipple, GetStipple, SetStipple, doc="See `GetStipple` and `SetStipple`");
+    %property(Style, GetStyle, SetStyle, doc="See `GetStyle` and `SetStyle`");
+
 };
 
 //---------------------------------------------------------------------------

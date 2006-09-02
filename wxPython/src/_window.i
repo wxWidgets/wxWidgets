@@ -2022,9 +2022,69 @@ opaque.", "");
     def SendSizeEvent(self):
         self.GetEventHandler().ProcessEvent(wx.SizeEvent((-1,-1)))
     }
+
+    
+    %property(AcceleratorTable, GetAcceleratorTable, SetAcceleratorTable, doc="See `GetAcceleratorTable` and `SetAcceleratorTable`");
+    %property(AdjustedBestSize, GetAdjustedBestSize, doc="See `GetAdjustedBestSize`");
+    %property(AutoLayout, GetAutoLayout, SetAutoLayout, doc="See `GetAutoLayout` and `SetAutoLayout`");
+    %property(BackgroundColour, GetBackgroundColour, SetBackgroundColour, doc="See `GetBackgroundColour` and `SetBackgroundColour`");
+    %property(BackgroundStyle, GetBackgroundStyle, SetBackgroundStyle, doc="See `GetBackgroundStyle` and `SetBackgroundStyle`");
+    %property(BestFittingSize, GetBestFittingSize, SetBestFittingSize, doc="See `GetBestFittingSize` and `SetBestFittingSize`");
+    %property(BestSize, GetBestSize, doc="See `GetBestSize`");
+    %property(BestVirtualSize, GetBestVirtualSize, doc="See `GetBestVirtualSize`");
+    %property(Border, GetBorder, doc="See `GetBorder`");
+    %property(Caret, GetCaret, SetCaret, doc="See `GetCaret` and `SetCaret`");
+    %property(CharHeight, GetCharHeight, doc="See `GetCharHeight`");
+    %property(CharWidth, GetCharWidth, doc="See `GetCharWidth`");
+    %property(Children, GetChildren, doc="See `GetChildren`");
+    %property(ClientAreaOrigin, GetClientAreaOrigin, doc="See `GetClientAreaOrigin`");
+    %property(ClientRect, GetClientRect, SetClientRect, doc="See `GetClientRect` and `SetClientRect`");
+    %property(ClientSize, GetClientSize, SetClientSize, doc="See `GetClientSize` and `SetClientSize`");
+    %property(Constraints, GetConstraints, SetConstraints, doc="See `GetConstraints` and `SetConstraints`");
+    %property(ContainingSizer, GetContainingSizer, SetContainingSizer, doc="See `GetContainingSizer` and `SetContainingSizer`");
+    %property(Cursor, GetCursor, SetCursor, doc="See `GetCursor` and `SetCursor`");
+    %property(DefaultAttributes, GetDefaultAttributes, doc="See `GetDefaultAttributes`");
+    %property(DropTarget, GetDropTarget, SetDropTarget, doc="See `GetDropTarget` and `SetDropTarget`");
+    %property(EventHandler, GetEventHandler, SetEventHandler, doc="See `GetEventHandler` and `SetEventHandler`");
+    %property(ExtraStyle, GetExtraStyle, SetExtraStyle, doc="See `GetExtraStyle` and `SetExtraStyle`");
+    %property(Font, GetFont, SetFont, doc="See `GetFont` and `SetFont`");
+    %property(ForegroundColour, GetForegroundColour, SetForegroundColour, doc="See `GetForegroundColour` and `SetForegroundColour`");
+    %property(FullTextExtent, GetFullTextExtent, doc="See `GetFullTextExtent`");
+    %property(GrandParent, GetGrandParent, doc="See `GetGrandParent`");
+    %property(Handle, GetHandle, doc="See `GetHandle`");
+    %property(HelpText, GetHelpText, SetHelpText, doc="See `GetHelpText` and `SetHelpText`");
+    %property(HelpTextAtPoint, GetHelpTextAtPoint, doc="See `GetHelpTextAtPoint`");
+    %property(Id, GetId, SetId, doc="See `GetId` and `SetId`");
+    %property(Label, GetLabel, SetLabel, doc="See `GetLabel` and `SetLabel`");
+    %property(MaxHeight, GetMaxHeight, doc="See `GetMaxHeight`");
+    %property(MaxSize, GetMaxSize, SetMaxSize, doc="See `GetMaxSize` and `SetMaxSize`");
+    %property(MaxWidth, GetMaxWidth, doc="See `GetMaxWidth`");
+    %property(MinHeight, GetMinHeight, doc="See `GetMinHeight`");
+    %property(MinSize, GetMinSize, SetMinSize, doc="See `GetMinSize` and `SetMinSize`");
+    %property(MinWidth, GetMinWidth, doc="See `GetMinWidth`");
+    %property(Name, GetName, SetName, doc="See `GetName` and `SetName`");
+    %property(Parent, GetParent, doc="See `GetParent`");
+    %property(Position, GetPosition, SetPosition, doc="See `GetPosition` and `SetPosition`");
+    %property(Rect, GetRect, SetRect, doc="See `GetRect` and `SetRect`");
+    %property(ScreenPosition, GetScreenPosition, doc="See `GetScreenPosition`");
+    %property(ScreenRect, GetScreenRect, doc="See `GetScreenRect`");
+    %property(ScrollPos, GetScrollPos, SetScrollPos, doc="See `GetScrollPos` and `SetScrollPos`");
+    %property(ScrollRange, GetScrollRange, doc="See `GetScrollRange`");
+    %property(ScrollThumb, GetScrollThumb, doc="See `GetScrollThumb`");
+    %property(Size, GetSize, SetSize, doc="See `GetSize` and `SetSize`");
+    %property(Sizer, GetSizer, SetSizer, doc="See `GetSizer` and `SetSizer`");
+    %property(TextExtent, GetTextExtent, doc="See `GetTextExtent`");
+    %property(ThemeEnabled, GetThemeEnabled, SetThemeEnabled, doc="See `GetThemeEnabled` and `SetThemeEnabled`");
+    %property(ToolTip, GetToolTip, SetToolTip, doc="See `GetToolTip` and `SetToolTip`");
+    %property(UpdateClientRect, GetUpdateClientRect, doc="See `GetUpdateClientRect`");
+    %property(UpdateRegion, GetUpdateRegion, doc="See `GetUpdateRegion`");
+    %property(Validator, GetValidator, SetValidator, doc="See `GetValidator` and `SetValidator`");
+    %property(VirtualSize, GetVirtualSize, SetVirtualSize, doc="See `GetVirtualSize` and `SetVirtualSize`");
+    %property(WindowStyle, GetWindowStyle, SetWindowStyle, doc="See `GetWindowStyle` and `SetWindowStyle`");
+    %property(WindowStyleFlag, GetWindowStyleFlag, SetWindowStyleFlag, doc="See `GetWindowStyleFlag` and `SetWindowStyleFlag`");
+    %property(WindowVariant, GetWindowVariant, SetWindowVariant, doc="See `GetWindowVariant` and `SetWindowVariant`");
+
 };
-
-
 
 
 

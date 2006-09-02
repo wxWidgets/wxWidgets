@@ -234,6 +234,13 @@ Returns True if succeeded, False otherwise", "");
         }
 
     } // end of %extend
+
+    %property(ClientArea, GetClientArea, doc="See `GetClientArea`");
+    %property(CurrentMode, GetCurrentMode, doc="See `GetCurrentMode`");
+    %property(Geometry, GetGeometry, doc="See `GetGeometry`");
+    %property(Modes, GetModes, doc="See `GetModes`");
+    %property(Name, GetName, doc="See `GetName`");
+    
 };
 
 //---------------------------------------------------------------------------

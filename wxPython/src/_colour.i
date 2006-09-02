@@ -202,6 +202,10 @@ is returned if the pixel is invalid (on X, unallocated).", "");
         __safe_for_unpickling__ = True
         def __reduce__(self):               return (Colour, self.Get(True))
         }
+
+    %property(Pixel, GetPixel, doc="See `GetPixel`");
+    %property(RGB, GetRGB, SetRGB, doc="See `GetRGB` and `SetRGB`");
+    
 };
 
 %pythoncode {

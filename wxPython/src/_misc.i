@@ -87,6 +87,11 @@ public:
 
     static int GetBlinkTime();
     static void SetBlinkTime(int milliseconds);
+
+    %property(Position, GetPosition, doc="See `GetPosition`");
+    %property(Size, GetSize, SetSize, doc="See `GetSize` and `SetSize`");
+    %property(Window, GetWindow, doc="See `GetWindow`");
+    
 };
 
 

@@ -883,6 +883,32 @@ public:
         else:
             return "INVALID DateTime"
     }
+
+    %property(Day, GetDay, SetDay, doc="See `GetDay` and `SetDay`");
+    %property(DayOfYear, GetDayOfYear, doc="See `GetDayOfYear`");
+    %property(Hour, GetHour, SetHour, doc="See `GetHour` and `SetHour`");
+    %property(JDN, GetJDN, SetJDN, doc="See `GetJDN` and `SetJDN`");
+    %property(JulianDayNumber, GetJulianDayNumber, doc="See `GetJulianDayNumber`");
+    %property(LastMonthDay, GetLastMonthDay, doc="See `GetLastMonthDay`");
+    %property(LastWeekDay, GetLastWeekDay, doc="See `GetLastWeekDay`");
+    %property(MJD, GetMJD, doc="See `GetMJD`");
+    %property(Millisecond, GetMillisecond, SetMillisecond, doc="See `GetMillisecond` and `SetMillisecond`");
+    %property(Minute, GetMinute, SetMinute, doc="See `GetMinute` and `SetMinute`");
+    %property(ModifiedJulianDayNumber, GetModifiedJulianDayNumber, doc="See `GetModifiedJulianDayNumber`");
+    %property(Month, GetMonth, SetMonth, doc="See `GetMonth` and `SetMonth`");
+    %property(NextWeekDay, GetNextWeekDay, doc="See `GetNextWeekDay`");
+    %property(PrevWeekDay, GetPrevWeekDay, doc="See `GetPrevWeekDay`");
+    %property(RataDie, GetRataDie, doc="See `GetRataDie`");
+    %property(Second, GetSecond, SetSecond, doc="See `GetSecond` and `SetSecond`");
+    %property(Ticks, GetTicks, doc="See `GetTicks`");
+    %property(Week, GetWeek, doc="See `GetWeek`");
+    %property(WeekDay, GetWeekDay, doc="See `GetWeekDay`");
+    %property(WeekDayInSameWeek, GetWeekDayInSameWeek, doc="See `GetWeekDayInSameWeek`");
+    %property(WeekOfMonth, GetWeekOfMonth, doc="See `GetWeekOfMonth`");
+    %property(WeekOfYear, GetWeekOfYear, doc="See `GetWeekOfYear`");
+    %property(Year, GetYear, SetYear, doc="See `GetYear` and `SetYear`");
+    %property(YearDay, GetYearDay, doc="See `GetYearDay`");
+    
 };
 
 //---------------------------------------------------------------------------
@@ -1162,6 +1188,12 @@ public:
         bool __eq__(const wxDateSpan* other) { return other ? (*self == *other) : false; }
         bool __ne__(const wxDateSpan* other) { return other ? (*self != *other) : true;  }
     }
+
+    %property(Days, GetDays, SetDays, doc="See `GetDays` and `SetDays`");
+    %property(Months, GetMonths, SetMonths, doc="See `GetMonths` and `SetMonths`");
+    %property(TotalDays, GetTotalDays, doc="See `GetTotalDays`");
+    %property(Weeks, GetWeeks, SetWeeks, doc="See `GetWeeks` and `SetWeeks`");
+    %property(Years, GetYears, SetYears, doc="See `GetYears` and `SetYears`");
 };
 
 

@@ -154,6 +154,10 @@ state.", "");
     
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
+
+    %property(ThreeStateValue, Get3StateValue, Set3StateValue, doc="See `Get3StateValue` and `Set3StateValue`");
+    %property(Value, GetValue, SetValue, doc="See `GetValue` and `SetValue`");
+    
 };
 
 //---------------------------------------------------------------------------

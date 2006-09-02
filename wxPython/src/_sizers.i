@@ -1087,6 +1087,7 @@ sizer.", "");
         void , SetOrientation(int orient),
         "Resets the orientation of the sizer.", "");
 
+    %property(Orientation, GetOrientation, SetOrientation, doc="See `GetOrientation` and `SetOrientation`");
 };
 
 //---------------------------------------------------------------------------

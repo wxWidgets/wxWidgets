@@ -72,6 +72,11 @@ black.", "");
         "Sets the i'th custom colour for the colour dialog. i should be an
 integer between 0 and 15. The default custom colours are all invalid colours.", "");
 
+
+    %property(ChooseFull, GetChooseFull, SetChooseFull, doc="See `GetChooseFull` and `SetChooseFull`");
+    %property(Colour, GetColour, SetColour, doc="See `GetColour` and `SetColour`");
+    %property(CustomColour, GetCustomColour, SetCustomColour, doc="See `GetCustomColour` and `SetCustomColour`");
+   
 };
 
 
@@ -95,6 +100,8 @@ instance.", "");
     DocDeclStr(
         wxColourData& , GetColourData(),
         "Returns a reference to the `wx.ColourData` used by the dialog.", "");
+
+    %property(ColourData, GetColourData, doc="See `GetColourData`");
 };
 
 
@@ -175,6 +182,8 @@ public:
         void , SetPath(const wxString& path),
         "Sets the default path.", "");
 
+    %property(Message, GetMessage, SetMessage, doc="See `GetMessage` and `SetMessage`");
+    %property(Path, GetPath, SetPath, doc="See `GetPath` and `SetPath`");
 };
 
 

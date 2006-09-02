@@ -122,6 +122,8 @@ normal clipboard, if primary is True.", "");
     DocDeclStr(
         static wxClipboard *, Get(),
         "Returns global instance (wxTheClipboard) of the object.", "");
+
+    %property(Data, GetData, SetData, doc="See `GetData` and `SetData`");
     
 };
 

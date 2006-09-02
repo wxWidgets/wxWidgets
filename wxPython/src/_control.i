@@ -115,6 +115,11 @@ __init__ as a plain old wx.Control is not very useful.", "");
     
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
+
+    %property(Alignment, GetAlignment, doc="See `GetAlignment`");
+    %property(Label, GetLabel, doc="See `GetLabel`");
+    %property(LabelText, GetLabelText, doc="See `GetLabelText`");
+
 };
 
 

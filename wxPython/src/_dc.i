@@ -1171,6 +1171,35 @@ box doesn't contain anything.", "");
         return  self._DrawTextList(textList, coords, foregrounds, backgrounds)
     }
 
+    %property(Background, GetBackground, SetBackground, doc="See `GetBackground` and `SetBackground`");
+    %property(BackgroundMode, GetBackgroundMode, SetBackgroundMode, doc="See `GetBackgroundMode` and `SetBackgroundMode`");
+    %property(BoundingBox, GetBoundingBox, doc="See `GetBoundingBox`");
+    %property(Brush, GetBrush, SetBrush, doc="See `GetBrush` and `SetBrush`");
+    %property(CharHeight, GetCharHeight, doc="See `GetCharHeight`");
+    %property(CharWidth, GetCharWidth, doc="See `GetCharWidth`");
+    %property(ClippingBox, GetClippingBox, doc="See `GetClippingBox`");
+    %property(ClippingRect, GetClippingRect, SetClippingRect, doc="See `GetClippingRect` and `SetClippingRect`");
+    %property(Depth, GetDepth, doc="See `GetDepth`");
+    %property(DeviceOrigin, GetDeviceOrigin, SetDeviceOrigin, doc="See `GetDeviceOrigin` and `SetDeviceOrigin`");
+    %property(Font, GetFont, SetFont, doc="See `GetFont` and `SetFont`");
+    %property(FullTextExtent, GetFullTextExtent, doc="See `GetFullTextExtent`");
+    %property(LogicalFunction, GetLogicalFunction, SetLogicalFunction, doc="See `GetLogicalFunction` and `SetLogicalFunction`");
+    %property(LogicalOrigin, GetLogicalOrigin, SetLogicalOrigin, doc="See `GetLogicalOrigin` and `SetLogicalOrigin`");
+    %property(LogicalScale, GetLogicalScale, SetLogicalScale, doc="See `GetLogicalScale` and `SetLogicalScale`");
+    %property(MapMode, GetMapMode, SetMapMode, doc="See `GetMapMode` and `SetMapMode`");
+    %property(MultiLineTextExtent, GetMultiLineTextExtent, doc="See `GetMultiLineTextExtent`");
+    %property(Optimization, GetOptimization, SetOptimization, doc="See `GetOptimization` and `SetOptimization`");
+    %property(PPI, GetPPI, doc="See `GetPPI`");
+    %property(PartialTextExtents, GetPartialTextExtents, doc="See `GetPartialTextExtents`");
+    %property(Pen, GetPen, SetPen, doc="See `GetPen` and `SetPen`");
+    %property(Pixel, GetPixel, doc="See `GetPixel`");
+    %property(PixelPoint, GetPixelPoint, doc="See `GetPixelPoint`");
+    %property(Size, GetSize, doc="See `GetSize`");
+    %property(SizeMM, GetSizeMM, doc="See `GetSizeMM`");
+    %property(TextBackground, GetTextBackground, SetTextBackground, doc="See `GetTextBackground` and `SetTextBackground`");
+    %property(TextExtent, GetTextExtent, doc="See `GetTextExtent`");
+    %property(TextForeground, GetTextForeground, SetTextForeground, doc="See `GetTextForeground` and `SetTextForeground`");
+    %property(UserScale, GetUserScale, SetUserScale, doc="See `GetUserScale` and `SetUserScale`");
 };
 
 

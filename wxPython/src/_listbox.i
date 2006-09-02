@@ -206,6 +206,8 @@ public:
 #if defined(__WXMSW__) || defined(__WXGTK__)
     int GetItemHeight();
 #endif
+
+    %property(ItemHeight, GetItemHeight, doc="See `GetItemHeight`");
 };
 
 //---------------------------------------------------------------------------
