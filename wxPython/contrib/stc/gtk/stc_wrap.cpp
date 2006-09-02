@@ -6970,7 +6970,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_StyledTextCtrl_GetCaretLineBack(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_StyledTextCtrl_GetCaretLineBackground(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
   wxColour result;
@@ -6982,12 +6982,12 @@ SWIGINTERN PyObject *_wrap_StyledTextCtrl_GetCaretLineBack(PyObject *SWIGUNUSEDP
   swig_obj[0] = args;
   res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxStyledTextCtrl, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "StyledTextCtrl_GetCaretLineBack" "', expected argument " "1"" of type '" "wxStyledTextCtrl *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "StyledTextCtrl_GetCaretLineBackground" "', expected argument " "1"" of type '" "wxStyledTextCtrl *""'"); 
   }
   arg1 = reinterpret_cast< wxStyledTextCtrl * >(argp1);
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    result = (arg1)->GetCaretLineBack();
+    result = (arg1)->GetCaretLineBackground();
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
@@ -6998,7 +6998,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_StyledTextCtrl_SetCaretLineBack(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+SWIGINTERN PyObject *_wrap_StyledTextCtrl_SetCaretLineBackground(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
   wxColour *arg2 = 0 ;
@@ -7011,10 +7011,10 @@ SWIGINTERN PyObject *_wrap_StyledTextCtrl_SetCaretLineBack(PyObject *SWIGUNUSEDP
     (char *) "self",(char *) "back", NULL 
   };
   
-  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextCtrl_SetCaretLineBack",kwnames,&obj0,&obj1)) SWIG_fail;
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextCtrl_SetCaretLineBackground",kwnames,&obj0,&obj1)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxStyledTextCtrl, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "StyledTextCtrl_SetCaretLineBack" "', expected argument " "1"" of type '" "wxStyledTextCtrl *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "StyledTextCtrl_SetCaretLineBackground" "', expected argument " "1"" of type '" "wxStyledTextCtrl *""'"); 
   }
   arg1 = reinterpret_cast< wxStyledTextCtrl * >(argp1);
   {
@@ -7023,7 +7023,7 @@ SWIGINTERN PyObject *_wrap_StyledTextCtrl_SetCaretLineBack(PyObject *SWIGUNUSEDP
   }
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    (arg1)->SetCaretLineBack((wxColour const &)*arg2);
+    (arg1)->SetCaretLineBackground((wxColour const &)*arg2);
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
@@ -21298,8 +21298,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"StyledTextCtrl_GetMaxLineState", (PyCFunction)_wrap_StyledTextCtrl_GetMaxLineState, METH_O, NULL},
 	 { (char *)"StyledTextCtrl_GetCaretLineVisible", (PyCFunction)_wrap_StyledTextCtrl_GetCaretLineVisible, METH_O, NULL},
 	 { (char *)"StyledTextCtrl_SetCaretLineVisible", (PyCFunction) _wrap_StyledTextCtrl_SetCaretLineVisible, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"StyledTextCtrl_GetCaretLineBack", (PyCFunction)_wrap_StyledTextCtrl_GetCaretLineBack, METH_O, NULL},
-	 { (char *)"StyledTextCtrl_SetCaretLineBack", (PyCFunction) _wrap_StyledTextCtrl_SetCaretLineBack, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"StyledTextCtrl_GetCaretLineBackground", (PyCFunction)_wrap_StyledTextCtrl_GetCaretLineBackground, METH_O, NULL},
+	 { (char *)"StyledTextCtrl_SetCaretLineBackground", (PyCFunction) _wrap_StyledTextCtrl_SetCaretLineBackground, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"StyledTextCtrl_StyleSetChangeable", (PyCFunction) _wrap_StyledTextCtrl_StyleSetChangeable, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"StyledTextCtrl_AutoCompShow", (PyCFunction) _wrap_StyledTextCtrl_AutoCompShow, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"StyledTextCtrl_AutoCompCancel", (PyCFunction)_wrap_StyledTextCtrl_AutoCompCancel, METH_O, NULL},

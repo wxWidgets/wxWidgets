@@ -243,6 +243,8 @@ class Colour(_core.Object):
     __safe_for_unpickling__ = True
     def __reduce__(self):               return (Colour, self.Get(True))
 
+    Pixel = property(GetPixel,doc="See `GetPixel`") 
+    RGB = property(GetRGB,SetRGB,doc="See `GetRGB` and `SetRGB`") 
 _gdi_.Colour_swigregister(Colour)
 
 def NamedColour(*args, **kwargs):
@@ -475,6 +477,9 @@ class Brush(GDIObject):
         return _gdi_.Brush_MacSetTheme(*args, **kwargs)
 
     def __nonzero__(self): return self.Ok() 
+    Colour = property(GetColour,SetColour,doc="See `GetColour` and `SetColour`") 
+    Stipple = property(GetStipple,SetStipple,doc="See `GetStipple` and `SetStipple`") 
+    Style = property(GetStyle,SetStyle,doc="See `GetStyle` and `SetStyle`") 
 _gdi_.Brush_swigregister(Brush)
 
 def BrushFromBitmap(*args, **kwargs):
@@ -661,6 +666,13 @@ class Bitmap(GDIObject):
         """__ne__(self, Bitmap other) -> bool"""
         return _gdi_.Bitmap___ne__(*args, **kwargs)
 
+    Depth = property(GetDepth,SetDepth,doc="See `GetDepth` and `SetDepth`") 
+    Height = property(GetHeight,SetHeight,doc="See `GetHeight` and `SetHeight`") 
+    Mask = property(GetMask,SetMask,doc="See `GetMask` and `SetMask`") 
+    Palette = property(GetPalette,doc="See `GetPalette`") 
+    Size = property(GetSize,SetSize,doc="See `GetSize` and `SetSize`") 
+    SubBitmap = property(GetSubBitmap,doc="See `GetSubBitmap`") 
+    Width = property(GetWidth,SetWidth,doc="See `GetWidth` and `SetWidth`") 
 _gdi_.Bitmap_swigregister(Bitmap)
 
 def EmptyBitmap(*args, **kwargs):
@@ -867,6 +879,7 @@ class NativePixelData(PixelDataBase):
                 pixels.nextPixel()
             pixels.MoveTo(self, 0, y)
 
+    Pixels = property(GetPixels,doc="See `GetPixels`") 
 _gdi_.NativePixelData_swigregister(NativePixelData)
 
 class NativePixelData_Accessor(object):
@@ -982,6 +995,7 @@ class AlphaPixelData(PixelDataBase):
                 pixels.nextPixel()
             pixels.MoveTo(self, 0, y)
 
+    Pixels = property(GetPixels,doc="See `GetPixels`") 
 _gdi_.AlphaPixelData_swigregister(AlphaPixelData)
 
 class AlphaPixelData_Accessor(object):
@@ -2768,7 +2782,7 @@ def EncodingConverter_CanConvert(*args, **kwargs):
 # to the default catalog path.
 if wx.Platform == "__WXMSW__":
     import os
-    _localedir = os.path.join(os.path.split(__file__)[0], "locale")
+    _localedir = os.path.join(os.path.split(__file__)[0], "i18n")
     Locale.AddCatalogLookupPathPrefix(_localedir)
     del os
 
@@ -4235,6 +4249,35 @@ class DC(_core.Object):
            raise ValueError('backgrounds and coords must have same length')
         return  self._DrawTextList(textList, coords, foregrounds, backgrounds)
 
+    Background = property(GetBackground,SetBackground,doc="See `GetBackground` and `SetBackground`") 
+    BackgroundMode = property(GetBackgroundMode,SetBackgroundMode,doc="See `GetBackgroundMode` and `SetBackgroundMode`") 
+    BoundingBox = property(GetBoundingBox,doc="See `GetBoundingBox`") 
+    Brush = property(GetBrush,SetBrush,doc="See `GetBrush` and `SetBrush`") 
+    CharHeight = property(GetCharHeight,doc="See `GetCharHeight`") 
+    CharWidth = property(GetCharWidth,doc="See `GetCharWidth`") 
+    ClippingBox = property(GetClippingBox,doc="See `GetClippingBox`") 
+    ClippingRect = property(GetClippingRect,SetClippingRect,doc="See `GetClippingRect` and `SetClippingRect`") 
+    Depth = property(GetDepth,doc="See `GetDepth`") 
+    DeviceOrigin = property(GetDeviceOrigin,SetDeviceOrigin,doc="See `GetDeviceOrigin` and `SetDeviceOrigin`") 
+    Font = property(GetFont,SetFont,doc="See `GetFont` and `SetFont`") 
+    FullTextExtent = property(GetFullTextExtent,doc="See `GetFullTextExtent`") 
+    LogicalFunction = property(GetLogicalFunction,SetLogicalFunction,doc="See `GetLogicalFunction` and `SetLogicalFunction`") 
+    LogicalOrigin = property(GetLogicalOrigin,SetLogicalOrigin,doc="See `GetLogicalOrigin` and `SetLogicalOrigin`") 
+    LogicalScale = property(GetLogicalScale,SetLogicalScale,doc="See `GetLogicalScale` and `SetLogicalScale`") 
+    MapMode = property(GetMapMode,SetMapMode,doc="See `GetMapMode` and `SetMapMode`") 
+    MultiLineTextExtent = property(GetMultiLineTextExtent,doc="See `GetMultiLineTextExtent`") 
+    Optimization = property(GetOptimization,SetOptimization,doc="See `GetOptimization` and `SetOptimization`") 
+    PPI = property(GetPPI,doc="See `GetPPI`") 
+    PartialTextExtents = property(GetPartialTextExtents,doc="See `GetPartialTextExtents`") 
+    Pen = property(GetPen,SetPen,doc="See `GetPen` and `SetPen`") 
+    Pixel = property(GetPixel,doc="See `GetPixel`") 
+    PixelPoint = property(GetPixelPoint,doc="See `GetPixelPoint`") 
+    Size = property(GetSize,doc="See `GetSize`") 
+    SizeMM = property(GetSizeMM,doc="See `GetSizeMM`") 
+    TextBackground = property(GetTextBackground,SetTextBackground,doc="See `GetTextBackground` and `SetTextBackground`") 
+    TextExtent = property(GetTextExtent,doc="See `GetTextExtent`") 
+    TextForeground = property(GetTextForeground,SetTextForeground,doc="See `GetTextForeground` and `SetTextForeground`") 
+    UserScale = property(GetUserScale,SetUserScale,doc="See `GetUserScale` and `SetUserScale`") 
 _gdi_.DC_swigregister(DC)
 
 #---------------------------------------------------------------------------

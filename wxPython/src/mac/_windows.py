@@ -705,6 +705,9 @@ class Dialog(TopLevelWindow):
         return _windows_.Dialog_GetClassDefaultAttributes(*args, **kwargs)
 
     GetClassDefaultAttributes = staticmethod(GetClassDefaultAttributes)
+    AffirmativeId = property(GetAffirmativeId,SetAffirmativeId,doc="See `GetAffirmativeId` and `SetAffirmativeId`") 
+    EscapeId = property(GetEscapeId,SetEscapeId,doc="See `GetEscapeId` and `SetEscapeId`") 
+    ReturnCode = property(GetReturnCode,SetReturnCode,doc="See `GetReturnCode` and `SetReturnCode`") 
 _windows_.Dialog_swigregister(Dialog)
 
 def PreDialog(*args, **kwargs):
@@ -1573,6 +1576,8 @@ class CalculateLayoutEvent(_core.Event):
         """GetRect(self) -> Rect"""
         return _windows_.CalculateLayoutEvent_GetRect(*args, **kwargs)
 
+    Flags = property(GetFlags,SetFlags,doc="See `GetFlags` and `SetFlags`") 
+    Rect = property(GetRect,SetRect,doc="See `GetRect` and `SetRect`") 
 _windows_.CalculateLayoutEvent_swigregister(CalculateLayoutEvent)
 
 EVT_QUERY_LAYOUT_INFO = wx.PyEventBinder( wxEVT_QUERY_LAYOUT_INFO )
@@ -2111,6 +2116,9 @@ class ColourData(_core.Object):
         """
         return _windows_.ColourData_SetCustomColour(*args, **kwargs)
 
+    ChooseFull = property(GetChooseFull,SetChooseFull,doc="See `GetChooseFull` and `SetChooseFull`") 
+    Colour = property(GetColour,SetColour,doc="See `GetColour` and `SetColour`") 
+    CustomColour = property(GetCustomColour,SetCustomColour,doc="See `GetCustomColour` and `SetCustomColour`") 
 _windows_.ColourData_swigregister(ColourData)
 FileSelectorPromptStr = cvar.FileSelectorPromptStr
 DirSelectorPromptStr = cvar.DirSelectorPromptStr
@@ -2142,6 +2150,7 @@ class ColourDialog(Dialog):
         """
         return _windows_.ColourDialog_GetColourData(*args, **kwargs)
 
+    ColourData = property(GetColourData,doc="See `GetColourData`") 
 _windows_.ColourDialog_swigregister(ColourDialog)
 
 
@@ -2205,6 +2214,8 @@ class DirDialog(Dialog):
         """
         return _windows_.DirDialog_SetPath(*args, **kwargs)
 
+    Message = property(GetMessage,SetMessage,doc="See `GetMessage` and `SetMessage`") 
+    Path = property(GetPath,SetPath,doc="See `GetPath` and `SetPath`") 
 _windows_.DirDialog_swigregister(DirDialog)
 
 OPEN = _windows_.OPEN

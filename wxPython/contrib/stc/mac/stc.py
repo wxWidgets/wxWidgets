@@ -2215,21 +2215,21 @@ class StyledTextCtrl(_core.Control):
         """
         return _stc.StyledTextCtrl_SetCaretLineVisible(*args, **kwargs)
 
-    def GetCaretLineBack(*args, **kwargs):
+    def GetCaretLineBackground(*args, **kwargs):
         """
-        GetCaretLineBack(self) -> Colour
+        GetCaretLineBackground(self) -> Colour
 
         Get the colour of the background of the line containing the caret.
         """
-        return _stc.StyledTextCtrl_GetCaretLineBack(*args, **kwargs)
+        return _stc.StyledTextCtrl_GetCaretLineBackground(*args, **kwargs)
 
-    def SetCaretLineBack(*args, **kwargs):
+    def SetCaretLineBackground(*args, **kwargs):
         """
-        SetCaretLineBack(self, Colour back)
+        SetCaretLineBackground(self, Colour back)
 
         Set the colour of the background of the line containing the caret.
         """
-        return _stc.StyledTextCtrl_SetCaretLineBack(*args, **kwargs)
+        return _stc.StyledTextCtrl_SetCaretLineBackground(*args, **kwargs)
 
     def StyleSetChangeable(*args, **kwargs):
         """
@@ -5272,6 +5272,9 @@ class StyledTextCtrl(_core.Control):
             text = u.encode(wx.GetDefaultPyEncoding())
         self.AppendTextRaw(text)
 
+
+    GetCaretLineBack = GetCaretLineBackground
+    SetCaretLineBack = SetCaretLineBackground
 
 _stc.StyledTextCtrl_swigregister(StyledTextCtrl)
 cvar = _stc.cvar

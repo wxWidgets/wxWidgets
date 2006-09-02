@@ -4085,6 +4085,12 @@ class CommandEvent(Event):
         """Clone(self) -> Event"""
         return _core_.CommandEvent_Clone(*args, **kwargs)
 
+    ClientData = property(GetClientData,SetClientData,doc="See `GetClientData` and `SetClientData`") 
+    ClientObject = property(GetClientObject,SetClientObject,doc="See `GetClientObject` and `SetClientObject`") 
+    ExtraLong = property(GetExtraLong,SetExtraLong,doc="See `GetExtraLong` and `SetExtraLong`") 
+    Int = property(GetInt,SetInt,doc="See `GetInt` and `SetInt`") 
+    Selection = property(GetSelection,doc="See `GetSelection`") 
+    String = property(GetString,SetString,doc="See `GetString` and `SetString`") 
 _core_.CommandEvent_swigregister(CommandEvent)
 
 #---------------------------------------------------------------------------
@@ -5189,6 +5195,7 @@ class ChildFocusEvent(CommandEvent):
         """
         return _core_.ChildFocusEvent_GetWindow(*args, **kwargs)
 
+    Window = property(GetWindow,doc="See `GetWindow`") 
 _core_.ChildFocusEvent_swigregister(ChildFocusEvent)
 
 #---------------------------------------------------------------------------
@@ -5228,6 +5235,7 @@ class ActivateEvent(Event):
         """
         return _core_.ActivateEvent_GetActive(*args, **kwargs)
 
+    Active = property(GetActive,doc="See `GetActive`") 
 _core_.ActivateEvent_swigregister(ActivateEvent)
 
 #---------------------------------------------------------------------------
@@ -5388,6 +5396,8 @@ class CloseEvent(Event):
         """
         return _core_.CloseEvent_CanVeto(*args, **kwargs)
 
+    LoggingOff = property(GetLoggingOff,SetLoggingOff,doc="See `GetLoggingOff` and `SetLoggingOff`") 
+    Veto = property(GetVeto,doc="See `GetVeto`") 
 _core_.CloseEvent_swigregister(CloseEvent)
 
 #---------------------------------------------------------------------------
@@ -5501,6 +5511,9 @@ class DropFilesEvent(Event):
         """
         return _core_.DropFilesEvent_GetFiles(*args, **kwargs)
 
+    Files = property(GetFiles,doc="See `GetFiles`") 
+    NumberOfFiles = property(GetNumberOfFiles,doc="See `GetNumberOfFiles`") 
+    Position = property(GetPosition,doc="See `GetPosition`") 
 _core_.DropFilesEvent_swigregister(DropFilesEvent)
 
 #---------------------------------------------------------------------------
@@ -6233,6 +6246,7 @@ class ContextMenuEvent(CommandEvent):
         """
         return _core_.ContextMenuEvent_SetPosition(*args, **kwargs)
 
+    Position = property(GetPosition,SetPosition,doc="See `GetPosition` and `SetPosition`") 
 _core_.ContextMenuEvent_swigregister(ContextMenuEvent)
 
 #---------------------------------------------------------------------------
@@ -6501,6 +6515,7 @@ class DateEvent(CommandEvent):
         """
         return _core_.DateEvent_SetDate(*args, **kwargs)
 
+    Date = property(GetDate,SetDate,doc="See `GetDate` and `SetDate`") 
 _core_.DateEvent_swigregister(DateEvent)
 
 wxEVT_DATE_CHANGED = _core_.wxEVT_DATE_CHANGED
@@ -7510,6 +7525,9 @@ class AcceleratorEntry(object):
         """
         return _core_.AcceleratorEntry_GetCommand(*args, **kwargs)
 
+    Command = property(GetCommand,doc="See `GetCommand`") 
+    Flags = property(GetFlags,doc="See `GetFlags`") 
+    KeyCode = property(GetKeyCode,doc="See `GetKeyCode`") 
 _core_.AcceleratorEntry_swigregister(AcceleratorEntry)
 
 class AcceleratorTable(Object):
@@ -9733,6 +9751,65 @@ class Window(EvtHandler):
     def SendSizeEvent(self):
         self.GetEventHandler().ProcessEvent(wx.SizeEvent((-1,-1)))
 
+    AcceleratorTable = property(GetAcceleratorTable,SetAcceleratorTable,doc="See `GetAcceleratorTable` and `SetAcceleratorTable`") 
+    AdjustedBestSize = property(GetAdjustedBestSize,doc="See `GetAdjustedBestSize`") 
+    AutoLayout = property(GetAutoLayout,SetAutoLayout,doc="See `GetAutoLayout` and `SetAutoLayout`") 
+    BackgroundColour = property(GetBackgroundColour,SetBackgroundColour,doc="See `GetBackgroundColour` and `SetBackgroundColour`") 
+    BackgroundStyle = property(GetBackgroundStyle,SetBackgroundStyle,doc="See `GetBackgroundStyle` and `SetBackgroundStyle`") 
+    BestFittingSize = property(GetBestFittingSize,SetBestFittingSize,doc="See `GetBestFittingSize` and `SetBestFittingSize`") 
+    BestSize = property(GetBestSize,doc="See `GetBestSize`") 
+    BestVirtualSize = property(GetBestVirtualSize,doc="See `GetBestVirtualSize`") 
+    Border = property(GetBorder,doc="See `GetBorder`") 
+    Caret = property(GetCaret,SetCaret,doc="See `GetCaret` and `SetCaret`") 
+    CharHeight = property(GetCharHeight,doc="See `GetCharHeight`") 
+    CharWidth = property(GetCharWidth,doc="See `GetCharWidth`") 
+    Children = property(GetChildren,doc="See `GetChildren`") 
+    ClientAreaOrigin = property(GetClientAreaOrigin,doc="See `GetClientAreaOrigin`") 
+    ClientRect = property(GetClientRect,SetClientRect,doc="See `GetClientRect` and `SetClientRect`") 
+    ClientSize = property(GetClientSize,SetClientSize,doc="See `GetClientSize` and `SetClientSize`") 
+    Constraints = property(GetConstraints,SetConstraints,doc="See `GetConstraints` and `SetConstraints`") 
+    ContainingSizer = property(GetContainingSizer,SetContainingSizer,doc="See `GetContainingSizer` and `SetContainingSizer`") 
+    Cursor = property(GetCursor,SetCursor,doc="See `GetCursor` and `SetCursor`") 
+    DefaultAttributes = property(GetDefaultAttributes,doc="See `GetDefaultAttributes`") 
+    DropTarget = property(GetDropTarget,SetDropTarget,doc="See `GetDropTarget` and `SetDropTarget`") 
+    EventHandler = property(GetEventHandler,SetEventHandler,doc="See `GetEventHandler` and `SetEventHandler`") 
+    ExtraStyle = property(GetExtraStyle,SetExtraStyle,doc="See `GetExtraStyle` and `SetExtraStyle`") 
+    Font = property(GetFont,SetFont,doc="See `GetFont` and `SetFont`") 
+    ForegroundColour = property(GetForegroundColour,SetForegroundColour,doc="See `GetForegroundColour` and `SetForegroundColour`") 
+    FullTextExtent = property(GetFullTextExtent,doc="See `GetFullTextExtent`") 
+    GrandParent = property(GetGrandParent,doc="See `GetGrandParent`") 
+    Handle = property(GetHandle,doc="See `GetHandle`") 
+    HelpText = property(GetHelpText,SetHelpText,doc="See `GetHelpText` and `SetHelpText`") 
+    HelpTextAtPoint = property(GetHelpTextAtPoint,doc="See `GetHelpTextAtPoint`") 
+    Id = property(GetId,SetId,doc="See `GetId` and `SetId`") 
+    Label = property(GetLabel,SetLabel,doc="See `GetLabel` and `SetLabel`") 
+    MaxHeight = property(GetMaxHeight,doc="See `GetMaxHeight`") 
+    MaxSize = property(GetMaxSize,SetMaxSize,doc="See `GetMaxSize` and `SetMaxSize`") 
+    MaxWidth = property(GetMaxWidth,doc="See `GetMaxWidth`") 
+    MinHeight = property(GetMinHeight,doc="See `GetMinHeight`") 
+    MinSize = property(GetMinSize,SetMinSize,doc="See `GetMinSize` and `SetMinSize`") 
+    MinWidth = property(GetMinWidth,doc="See `GetMinWidth`") 
+    Name = property(GetName,SetName,doc="See `GetName` and `SetName`") 
+    Parent = property(GetParent,doc="See `GetParent`") 
+    Position = property(GetPosition,SetPosition,doc="See `GetPosition` and `SetPosition`") 
+    Rect = property(GetRect,SetRect,doc="See `GetRect` and `SetRect`") 
+    ScreenPosition = property(GetScreenPosition,doc="See `GetScreenPosition`") 
+    ScreenRect = property(GetScreenRect,doc="See `GetScreenRect`") 
+    ScrollPos = property(GetScrollPos,SetScrollPos,doc="See `GetScrollPos` and `SetScrollPos`") 
+    ScrollRange = property(GetScrollRange,doc="See `GetScrollRange`") 
+    ScrollThumb = property(GetScrollThumb,doc="See `GetScrollThumb`") 
+    Size = property(GetSize,SetSize,doc="See `GetSize` and `SetSize`") 
+    Sizer = property(GetSizer,SetSizer,doc="See `GetSizer` and `SetSizer`") 
+    TextExtent = property(GetTextExtent,doc="See `GetTextExtent`") 
+    ThemeEnabled = property(GetThemeEnabled,SetThemeEnabled,doc="See `GetThemeEnabled` and `SetThemeEnabled`") 
+    ToolTip = property(GetToolTip,SetToolTip,doc="See `GetToolTip` and `SetToolTip`") 
+    UpdateClientRect = property(GetUpdateClientRect,doc="See `GetUpdateClientRect`") 
+    UpdateRegion = property(GetUpdateRegion,doc="See `GetUpdateRegion`") 
+    Validator = property(GetValidator,SetValidator,doc="See `GetValidator` and `SetValidator`") 
+    VirtualSize = property(GetVirtualSize,SetVirtualSize,doc="See `GetVirtualSize` and `SetVirtualSize`") 
+    WindowStyle = property(GetWindowStyle,SetWindowStyle,doc="See `GetWindowStyle` and `SetWindowStyle`") 
+    WindowStyleFlag = property(GetWindowStyleFlag,SetWindowStyleFlag,doc="See `GetWindowStyleFlag` and `SetWindowStyleFlag`") 
+    WindowVariant = property(GetWindowVariant,SetWindowVariant,doc="See `GetWindowVariant` and `SetWindowVariant`") 
 _core_.Window_swigregister(Window)
 
 def PreWindow(*args, **kwargs):
@@ -10616,6 +10693,9 @@ class Control(Window):
         return _core_.Control_GetClassDefaultAttributes(*args, **kwargs)
 
     GetClassDefaultAttributes = staticmethod(GetClassDefaultAttributes)
+    Alignment = property(GetAlignment,doc="See `GetAlignment`") 
+    Label = property(GetLabel,doc="See `GetLabel`") 
+    LabelText = property(GetLabelText,doc="See `GetLabelText`") 
 _core_.Control_swigregister(Control)
 ControlNameStr = cvar.ControlNameStr
 
@@ -11672,6 +11752,7 @@ class BoxSizer(Sizer):
         """
         return _core_.BoxSizer_SetOrientation(*args, **kwargs)
 
+    Orientation = property(GetOrientation,SetOrientation,doc="See `GetOrientation` and `SetOrientation`") 
 _core_.BoxSizer_swigregister(BoxSizer)
 
 #---------------------------------------------------------------------------

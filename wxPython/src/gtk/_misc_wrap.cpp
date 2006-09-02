@@ -20326,6 +20326,33 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_ArtProvider_InsertProvider(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxPyArtProvider *arg1 = (wxPyArtProvider *) 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  char *  kwnames[] = {
+    (char *) "provider", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:ArtProvider_InsertProvider",kwnames,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, SWIG_as_voidptrptr(&arg1), SWIGTYPE_p_wxPyArtProvider, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ArtProvider_InsertProvider" "', expected argument " "1"" of type '" "wxPyArtProvider *""'");
+  }
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxPyArtProvider::InsertProvider(arg1);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_ArtProvider_PopProvider(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   bool result;
@@ -37660,6 +37687,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"delete_ArtProvider", (PyCFunction)_wrap_delete_ArtProvider, METH_O, NULL},
 	 { (char *)"ArtProvider__setCallbackInfo", (PyCFunction) _wrap_ArtProvider__setCallbackInfo, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"ArtProvider_PushProvider", (PyCFunction) _wrap_ArtProvider_PushProvider, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"ArtProvider_InsertProvider", (PyCFunction) _wrap_ArtProvider_InsertProvider, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"ArtProvider_PopProvider", (PyCFunction)_wrap_ArtProvider_PopProvider, METH_NOARGS, NULL},
 	 { (char *)"ArtProvider_RemoveProvider", (PyCFunction) _wrap_ArtProvider_RemoveProvider, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"ArtProvider_GetBitmap", (PyCFunction) _wrap_ArtProvider_GetBitmap, METH_VARARGS | METH_KEYWORDS, NULL},
