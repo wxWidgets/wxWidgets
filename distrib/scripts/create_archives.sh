@@ -126,7 +126,7 @@ dospinport(){
     portfiles="/tmp/wx$port.files"
     getfilelist "$port" "$portfiles"
     
-    TMPFILESDIR=/tmp/wx$port/wxWidgets-$VERSION
+    TMPFILESDIR=/tmp/wx$port/wx$portname-$VERSION
     rm -rf $TMPFILESDIR
     mkdir -p $TMPFILESDIR
 
@@ -140,7 +140,7 @@ dospinport(){
     pushd /tmp/wx$port
     # use DOS line endings for text files for MSW archives.
     if [ $port = "msw" ]; then
-        pushd /tmp/wx$port/wxWidgets-$VERSION
+        pushd /tmp/wx$port/wx$portname-$VERSION
         for file in `cat /tmp/textfiles`; do
             unix2dos $file
         done
@@ -149,7 +149,7 @@ dospinport(){
     echo "Creating wx$portname-$VERSION.zip..."
     zip $ZIPFLAGS -r -9 $APPDIR/deliver/wx$portname-$VERSION.zip .
     echo "Creating wx$portname-$VERSION.tar.gz..."
-    tar czf $APPDIR/deliver/wx$portname-$VERSION.tar.gz wxWidgets-$VERSION
+    tar czf $APPDIR/deliver/wx$portname-$VERSION.tar.gz wx$portname-$VERSION
     echo "Creating wx$portname-$VERSION.tar.bz2..."
     tar ch wxWidgets-$VERSION | bzip2 -f9 > $APPDIR/deliver/wx$portname-$VERSION.tar.bz2
     popd
