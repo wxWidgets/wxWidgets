@@ -319,15 +319,17 @@ MAKE_INT_ARRAY_TYPEMAPS(styles, styles_field)
 // Typemaps for loading a image or bitmap from an object that implements the
 // buffer interface
 
-%typemap(in) (buffer data, int DATASIZE)
+%typemap(in) (buffer data, int DATASIZE) (Py_ssize_t temp)
 {
-    if (PyObject_AsReadBuffer($input, (const void**)(&$1), &$2) == -1) SWIG_fail;
+    if (PyObject_AsReadBuffer($input, (const void**)(&$1), &temp) == -1) SWIG_fail;
+    $2 = (int)temp;
 }
 
-%typemap(in) (buffer alpha, int ALPHASIZE)
+%typemap(in) (buffer alpha, int ALPHASIZE) (Py_ssize_t temp)
 {
     if ($input != Py_None) {
-        if (PyObject_AsReadBuffer($input, (const void**)(&$1), &$2) == -1) SWIG_fail;
+        if (PyObject_AsReadBuffer($input, (const void**)(&$1), &temp) == -1) SWIG_fail;
+        $2 = (int)temp;
     }
 }
 
