@@ -156,8 +156,8 @@ CLEANUP.append('licence')
 
 
 if os.name == 'nt':
-    build_locale_dir(opj(PKGDIR, 'locale'))
-    DATA_FILES += build_locale_list(opj(PKGDIR, 'locale'))
+    build_locale_dir(opj(PKGDIR, 'i18n'))
+    DATA_FILES += build_locale_list(opj(PKGDIR, 'i18n'))
 
 
 if os.name == 'nt':

@@ -582,7 +582,7 @@ def build_locale_string(pkgdir):
             if not os.path.isdir(filename):
                 lst.append( locale_template % (filename, pkgdir, dirname) )
 
-    os.path.walk('wx\\locale', walk_helper, stringlst)
+    os.path.walk('wx\\i18n', walk_helper, stringlst)
     return '\n'.join(stringlst)
 
 
