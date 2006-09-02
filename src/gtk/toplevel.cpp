@@ -913,16 +913,20 @@ void wxTopLevelWindowGTK::DoGetClientSize( int *width, int *height ) const
 {
     wxASSERT_MSG( (m_widget != NULL), wxT("invalid frame") );
 
-    wxWindow::DoGetClientSize( width, height );
     if (height)
     {
+        *height = m_height;
+    
         // mini edge
         *height -= m_miniEdge*2 + m_miniTitle;
     }
     if (width)
     {
+        *width = m_width;
+    
         *width -= m_miniEdge*2;
     }
+    
 }
 
 void wxTopLevelWindowGTK::DoSetClientSize( int width, int height )
