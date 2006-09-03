@@ -128,8 +128,6 @@ bool wxSpinCtrl::Create( wxWindow*       pParent,
                          int             nInitial,
                          const wxString& rsName )
 {
-    SWP                             vSwp;
-
     if (vId == wxID_ANY)
         m_windowId = NewControlId();
     else
@@ -177,20 +175,11 @@ bool wxSpinCtrl::Create( wxWindow*       pParent,
     m_hWndBuddy = m_hWnd; // One in the same for OS/2
     if(pParent)
         pParent->AddChild((wxSpinButton *)this);
-    wxFont*                          pTextFont = new wxFont( 10
-                                                            ,wxMODERN
-                                                            ,wxNORMAL
-                                                            ,wxNORMAL
-                                                           );
-    SetFont(*pTextFont);
-    ::WinQueryWindowPos(m_hWnd, &vSwp);
-    SetXComp(vSwp.x);
-    SetYComp(vSwp.y);
-    SetSize( rPos.x
-            ,rPos.y
-            ,rSize.x
-            ,rSize.y
-           );
+
+    SetFont(*wxSMALL_FONT);
+    SetXComp(0);
+    SetYComp(0);
+    SetSize( rPos.x, rPos.y, rSize.x, rSize.y );
 
     SetRange(nMin, nMax);
     SetValue(nInitial);
@@ -204,7 +193,6 @@ bool wxSpinCtrl::Create( wxWindow*       pParent,
     ::WinSetWindowULong(GetHwnd(), QWL_USER, (LONG)this);
     fnWndProcSpinCtrl = (WXFARPROC)::WinSubclassWindow(m_hWnd, (PFNWP)wxSpinCtrlWndProc);
     m_svAllSpins.Add(this);
-    delete pTextFont;
     return true;
 } // end of wxSpinCtrl::Create
 
@@ -221,7 +209,7 @@ wxSize wxSpinCtrl::DoGetBestSize() const
                   ,&nHeight
                   ,&vFont
                  );
-    nHeight = EDIT_HEIGHT_FROM_CHAR_HEIGHT(nHeight);
+    nHeight = EDIT_HEIGHT_FROM_CHAR_HEIGHT(nHeight)+4;
 
     if (vSizeBtn.y < nHeight)
     {
@@ -238,13 +226,7 @@ void wxSpinCtrl::DoGetPosition(
 , int*                              pnY
 ) const
 {
-    WXHWND                          hWnd = GetHWND();
-
-    wxConstCast(this, wxSpinCtrl)->m_hWnd = m_hWndBuddy;
-    wxSpinButton::DoGetPosition( pnX
-                                ,pnY
-                               );
-    wxConstCast(this, wxSpinCtrl)->m_hWnd = hWnd;
+    wxSpinButton::DoGetPosition( pnX,pnY );
 } // end of wxpinCtrl::DoGetPosition
 
 void wxSpinCtrl::DoGetSize(
