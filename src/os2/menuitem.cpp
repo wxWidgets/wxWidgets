@@ -375,7 +375,7 @@ void wxMenuItem::SetText( const wxString& rText )
 
     if (sText.IsEmpty())
     {
-        wxASSERT_MSG(wxIsStockId(GetId()), wxT("A non-stock menu item with an empty label?"));
+        wxASSERT_MSG(wxIsStockID(GetId()), wxT("A non-stock menu item with an empty label?"));
         sText = wxGetStockLabel(GetId(), wxSTOCK_WITH_ACCELERATOR|wxSTOCK_WITH_MNEMONIC);
     }
 

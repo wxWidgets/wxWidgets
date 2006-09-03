@@ -179,7 +179,7 @@ void wxMenuItem::CreateItem (WXWidget menu, wxMenuBar * menuBar,
 
         if (m_text.IsEmpty())
         {
-            wxASSERT_MSG(wxIsStockId(GetId()), wxT("A non-stock menu item with an empty label?"));
+            wxASSERT_MSG(wxIsStockID(GetId()), wxT("A non-stock menu item with an empty label?"));
             txt = wxGetStockLabel(GetId(), wxSTOCK_WITH_ACCELERATOR|wxSTOCK_WITH_MNEMONIC);
         }
 
