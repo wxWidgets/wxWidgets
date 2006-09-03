@@ -733,6 +733,12 @@ wxString wxMenuItemBase::GetLabelFromText(const wxString& text)
 
 void wxMenuItem::SetText( const wxString& str )
 {
+    // cache some data which must be used later
+    bool isstock = wxIsStockID(GetId());
+    const char *stockid = NULL;
+    if (isstock)
+        stockid = wxGetStockGtkID(GetId());
+
     // Some optimization to avoid flicker
     wxString oldLabel = m_text;
     oldLabel = wxStripMenuCodes(oldLabel);
@@ -744,7 +750,7 @@ void wxMenuItem::SetText( const wxString& str )
     DoSetText(str);
 
     if (oldLabel == label1 &&
-             oldhotkey == GetHotKey())    // Make sure we can change a hotkey even if the label is unaltered
+        oldhotkey == GetHotKey())    // Make sure we can change a hotkey even if the label is unaltered
         return;
 
     if (m_menuItem)
@@ -755,38 +761,78 @@ void wxMenuItem::SetText( const wxString& str )
         else
             label = GTK_LABEL( GTK_BIN(m_menuItem)->child );
 
-        gtk_label_set_text_with_mnemonic( GTK_LABEL(label), wxGTK_CONV_SYS(m_text) );
+        // stock menu items can have empty labels:
+        wxString text = m_text;
+        if (text.IsEmpty() && !IsSeparator())
+        {
+            wxASSERT_MSG(isstock, wxT("A non-stock menu item with an empty label?"));
+            text = wxGetStockLabel(GetId());
+
+            // need & => _ conversion
+            text = GTKProcessMenuItemLabel(text, NULL);
+        }
+
+        gtk_label_set_text_with_mnemonic( GTK_LABEL(label), wxGTK_CONV_SYS(text) );
     }
 
+    // remove old accelerator from our parent's accelerator group, if present
     guint accel_key;
     GdkModifierType accel_mods;
-    gtk_accelerator_parse( (const char*) oldbuf, &accel_key, &accel_mods);
-    if (accel_key != 0)
+    if (oldbuf[(size_t)0] != '\0')
     {
-        gtk_widget_remove_accelerator( GTK_WIDGET(m_menuItem),
-                                       m_parentMenu->m_accel,
-                                       accel_key,
-                                       accel_mods );
+        gtk_accelerator_parse( (const char*) oldbuf, &accel_key, &accel_mods);
+        if (accel_key != 0)
+        {
+            gtk_widget_remove_accelerator( GTK_WIDGET(m_menuItem),
+                                        m_parentMenu->m_accel,
+                                        accel_key,
+                                        accel_mods );
+        }
+    }
+    else if (isstock)
+    {
+        // if the accelerator was taken from a stock ID, just get it back from GTK+ stock
+        if (wxGetStockGtkAccelerator(stockid, &accel_mods, &accel_key))
+            gtk_widget_remove_accelerator( GTK_WIDGET(m_menuItem),
+                                           m_parentMenu->m_accel,
+                                           accel_key,
+                                           accel_mods );
     }
 
+    // add new accelerator to our parent's accelerator group
     wxCharBuffer buf = wxGTK_CONV_SYS( GetGtkHotKey(*this) );
-    gtk_accelerator_parse( (const char*) buf, &accel_key, &accel_mods);
-    if (accel_key != 0)
+    if (buf[(size_t)0] != '\0')
     {
-        gtk_widget_add_accelerator( GTK_WIDGET(m_menuItem),
-                                    "activate",
-                                    m_parentMenu->m_accel,
-                                    accel_key,
-                                    accel_mods,
-                                    GTK_ACCEL_VISIBLE);
+        gtk_accelerator_parse( (const char*) buf, &accel_key, &accel_mods);
+        if (accel_key != 0)
+        {
+            gtk_widget_add_accelerator( GTK_WIDGET(m_menuItem),
+                                        "activate",
+                                        m_parentMenu->m_accel,
+                                        accel_key,
+                                        accel_mods,
+                                        GTK_ACCEL_VISIBLE);
+        }
+    }
+    else if (isstock)
+    {
+        // if the accelerator was taken from a stock ID, just get it back from GTK+ stock
+        if (wxGetStockGtkAccelerator(stockid, &accel_mods, &accel_key))
+            gtk_widget_remove_accelerator( GTK_WIDGET(m_menuItem),
+                                           m_parentMenu->m_accel,
+                                           accel_key,
+                                           accel_mods );
     }
 }
 
-// it's valid for this function to be called even if m_menuItem == NULL
-void wxMenuItem::DoSetText( const wxString& str )
+// NOTE: this function is different from the similar functions GTKProcessMnemonics()
+//       implemented in control.cpp and from wxMenuItemBase::GetLabelFromText...
+//       so there's no real code duplication
+wxString wxMenuItem::GTKProcessMenuItemLabel(const wxString& str, wxString *hotKey)
 {
+    wxString text;
+
     // '\t' is the deliminator indicating a hot key
-    m_text.Empty();
     const wxChar *pc = str;
     while ( (*pc != wxT('\0')) && (*pc != wxT('\t')) )
     {
@@ -794,31 +840,41 @@ void wxMenuItem::DoSetText( const wxString& str )
         {
             // "&" is doubled to indicate "&" instead of accelerator
             ++pc;
-            m_text << wxT('&');
+            text << wxT('&');
         }
         else if (*pc == wxT('&'))
         {
-            m_text << wxT('_');
+            text << wxT('_');
         }
         else if ( *pc == wxT('_') )    // escape underscores
         {
-            m_text << wxT("__");
+            text << wxT("__");
         }
         else
         {
-            m_text << *pc;
+            text << *pc;
         }
         ++pc;
     }
 
-    m_hotKey = wxT("");
-
-    if(*pc == wxT('\t'))
+    if (hotKey)
     {
-       pc++;
-       m_hotKey = pc;
+        hotKey->Empty();
+        if(*pc == wxT('\t'))
+        {
+            pc++;
+            *hotKey = pc;
+        }
     }
 
+    return text;
+}
+
+// it's valid for this function to be called even if m_menuItem == NULL
+void wxMenuItem::DoSetText( const wxString& str )
+{
+    m_text.Empty();
+    m_text = GTKProcessMenuItemLabel(str, &m_hotKey);
     // wxPrintf( wxT("DoSetText(): str %s m_text %s hotkey %s\n"), str.c_str(), m_text.c_str(), m_hotKey.c_str() );
 }
 
@@ -935,17 +991,31 @@ bool wxMenu::GtkAppend(wxMenuItem *mitem, int pos)
 {
     GtkWidget *menuItem;
 
-    wxString text;
+    // cache some data used later
+    wxString text = mitem->GetText();
+    int id = mitem->GetId();
+    bool isstock = wxIsStockID(id);
+    const char *stockid = NULL;
+    if (isstock)
+        stockid = wxGetStockGtkID(mitem->GetId());
+
+    // stock menu items can have an empty label
+    if (text.IsEmpty() && !mitem->IsSeparator())
+    {
+        wxASSERT_MSG(isstock, wxT("A non-stock menu item with an empty label?"));
+        text = wxGetStockLabel(id);
+
+        // need & => _ conversion
+        text = wxMenuItem::GTKProcessMenuItemLabel(text, NULL);
+    }
 
     if ( mitem->IsSeparator() )
     {
         menuItem = gtk_separator_menu_item_new();
     }
     else if ( mitem->GetBitmap().Ok() ||
-                (mitem->GetKind() == wxITEM_NORMAL &&
-                    wxIsStockID(mitem->GetId())) )
+                (mitem->GetKind() == wxITEM_NORMAL && isstock) )
     {
-        text = mitem->GetText();
         wxBitmap bitmap(mitem->GetBitmap());
 
         menuItem = gtk_image_menu_item_new_with_mnemonic( wxGTK_CONV_SYS( text ) );
@@ -955,9 +1025,8 @@ bool wxMenu::GtkAppend(wxMenuItem *mitem, int pos)
         {
             // use stock bitmap for this item if available on the assumption
             // that it never hurts to follow GTK+ conventions more closely
-            const char *stock = wxGetStockGtkID(mitem->GetId());
-            image = stock ? gtk_image_new_from_stock(stock, GTK_ICON_SIZE_MENU)
-                          : NULL;
+            image = stockid ? gtk_image_new_from_stock(stockid, GTK_ICON_SIZE_MENU)
+                            : NULL;
         }
         else // we have a custom bitmap
         {
@@ -989,8 +1058,8 @@ bool wxMenu::GtkAppend(wxMenuItem *mitem, int pos)
     }
     else // a normal item
     {
-        // text has "_" instead of "&" after mitem->SetText() so don't use it
-        text = mitem->GetText() ;
+        // NB: 'text' variable has "_" instead of "&" after mitem->SetText()
+        //     so don't use it
 
         switch ( mitem->GetKind() )
         {
@@ -1038,15 +1107,29 @@ bool wxMenu::GtkAppend(wxMenuItem *mitem, int pos)
     wxCharBuffer buf = wxGTK_CONV_SYS( GetGtkHotKey(*mitem) );
 
     // wxPrintf( wxT("item: %s hotkey %s\n"), mitem->GetText().c_str(), GetGtkHotKey(*mitem).c_str() );
-    gtk_accelerator_parse( (const char*) buf, &accel_key, &accel_mods);
-    if (accel_key != 0)
+    if (buf[(size_t)0] != '\0')
     {
-        gtk_widget_add_accelerator (GTK_WIDGET(menuItem),
-                                    "activate",
-                                    m_accel,
-                                    accel_key,
-                                    accel_mods,
-                                    GTK_ACCEL_VISIBLE);
+        gtk_accelerator_parse( (const char*) buf, &accel_key, &accel_mods);
+        if (accel_key != 0)
+        {
+            gtk_widget_add_accelerator (GTK_WIDGET(menuItem),
+                                        "activate",
+                                        m_accel,
+                                        accel_key,
+                                        accel_mods,
+                                        GTK_ACCEL_VISIBLE);
+        }
+    }
+    else if (isstock)
+    {
+        // if the accelerator was taken from a stock ID, just get it back from GTK+ stock
+        if (wxGetStockGtkAccelerator(stockid, &accel_mods, &accel_key))
+            gtk_widget_add_accelerator( GTK_WIDGET(menuItem),
+                                        "activate",
+                                        m_accel,
+                                        accel_key,
+                                        accel_mods,
+                                        GTK_ACCEL_VISIBLE);
     }
 
     if (pos == -1)

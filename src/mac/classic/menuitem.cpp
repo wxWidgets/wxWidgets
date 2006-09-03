@@ -16,6 +16,7 @@
 #include "wx/wxprec.h"
 
 #include "wx/menuitem.h"
+#include "wx/stockitem.h"
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
@@ -150,8 +151,15 @@ void wxMenuItem::UpdateItemText()
     if( mhandle == NULL || index == 0)
         return ;
 
-    UMASetMenuItemText( mhandle , index , m_text , wxFont::GetDefaultEncoding() ) ;
-    wxAcceleratorEntry *entry = wxGetAccelFromString( m_text ) ;
+    wxString text = m_text;
+    if (text.IsEmpty() && !IsSeparator())
+    {
+        wxASSERT_MSG(wxIsStockID(GetId()), wxT("A non-stock menu item with an empty label?"));
+        text = wxGetStockLabel(GetId(), wxSTOCK_WITH_ACCELERATOR|wxSTOCK_WITH_MNEMONIC);
+    }
+
+    UMASetMenuItemText( mhandle , index , text , wxFont::GetDefaultEncoding() ) ;
+    wxAcceleratorEntry *entry = wxGetAccelFromString( text ) ;
     UMASetMenuItemShortcut( mhandle , index , entry ) ;
     delete entry ;
 }

@@ -21,6 +21,7 @@
 #include "wx/wxprec.h"
 
 #include "wx/menuitem.h"
+#include "wx/stockitem.h"
 
 #ifndef WX_PRECOMP
     #include "wx/utils.h"
@@ -172,9 +173,17 @@ void wxMenuItem::CreateItem (WXWidget menu, wxMenuBar * menuBar,
             (wxStripMenuCodes(m_text),
             xmLabelGadgetClass, (Widget) menu, NULL);
     }
-    else if (!m_text.empty() && !m_subMenu)
+    else if (!IsSeparator() && !m_subMenu)
     {
-        wxString strName = wxStripMenuCodes(m_text);
+        wxString txt = m_text;
+
+        if (m_text.IsEmpty())
+        {
+            wxASSERT_MSG(wxIsStockId(GetId()), wxT("A non-stock menu item with an empty label?"));
+            txt = wxGetStockLabel(GetId(), wxSTOCK_WITH_ACCELERATOR|wxSTOCK_WITH_MNEMONIC);
+        }
+
+        wxString strName = wxStripMenuCodes(txt);
         if (IsCheckable())
         {
             m_buttonWidget = (WXWidget) XtVaCreateManagedWidget (strName,
@@ -230,7 +239,7 @@ void wxMenuItem::CreateItem (WXWidget menu, wxMenuBar * menuBar,
             (XtCallbackProc) wxMenuItemDisarmCallback,
             (XtPointer) this);
     }
-    else if (GetId() == wxID_SEPARATOR)
+    else if (IsSeparator())
     {
         m_buttonWidget = (WXWidget) XtVaCreateManagedWidget ("separator",
             xmSeparatorGadgetClass, (Widget) menu,

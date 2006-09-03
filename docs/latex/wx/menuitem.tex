@@ -42,6 +42,12 @@ only implemented for Windows and GTK+.
 
 Constructs a wxMenuItem object.
 
+The preferred way to create standard menu items is to use default value of
+\arg{text}. If no text is supplied and \arg{id} is one of standard IDs from
+\helpref{this list}{stockitems}, a standard label and a standard accelerator
+will be used. In addition to that, the button will be decorated with stock
+icons under GTK+ 2.
+
 \wxheading{Parameters}
 
 \docparam{parentMenu}{Menu that the menu item belongs to.}

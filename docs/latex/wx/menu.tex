@@ -127,7 +127,7 @@ and recreation of internal data structures.
 
 \membersection{wxMenu::Append}\label{wxmenuappend}
 
-\func{wxMenuItem*}{Append}{\param{int}{ id}, \param{const wxString\& }{ item}, \param{const wxString\& }{helpString = ""},\rtfsp
+\func{wxMenuItem*}{Append}{\param{int}{ id}, \param{const wxString\& }{ item = ""}, \param{const wxString\& }{helpString = ""},\rtfsp
 \param{wxItemKind}{ kind = wxITEM\_NORMAL}}
 
 Adds a string item to the end of the menu.
@@ -475,7 +475,7 @@ menubar.
 \func{wxMenuItem*}{Insert}{\param{size\_t }{pos}, \param{wxMenuItem *}{item}}
 
 \func{wxMenuItem*}{Insert}{\param{size\_t }{pos}, \param{int}{ id},\rtfsp
-\param{const wxString\& }{ item}, \param{const wxString\& }{helpString = ""},\rtfsp
+\param{const wxString\& }{ item = ""}, \param{const wxString\& }{helpString = ""},\rtfsp
 \param{wxItemKind}{ kind = wxITEM\_NORMAL}}
 
 Inserts the given {\it item} before the position {\it pos}. Inserting the item
@@ -569,7 +569,7 @@ true if the menu item is enabled, false otherwise.
 \func{wxMenuItem*}{Prepend}{\param{wxMenuItem *}{item}}
 
 \func{wxMenuItem*}{Prepend}{\param{int}{ id},\rtfsp
-\param{const wxString\& }{ item}, \param{const wxString\& }{helpString = ""},\rtfsp
+\param{const wxString\& }{ item = ""}, \param{const wxString\& }{helpString = ""},\rtfsp
 \param{wxItemKind}{ kind = wxITEM\_NORMAL}}
 
 Inserts the given {\it item} at position $0$, i.e. before all the other

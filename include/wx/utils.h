@@ -567,7 +567,9 @@ wxDEPRECATED(
 
 #if wxUSE_ACCEL
 class WXDLLEXPORT wxAcceleratorEntry;
-WXDLLEXPORT wxAcceleratorEntry *wxGetAccelFromString(const wxString& label);
+wxDEPRECATED(
+    WXDLLEXPORT wxAcceleratorEntry *wxGetAccelFromString(const wxString& label)
+);
 #endif // wxUSE_ACCEL
 
 // ----------------------------------------------------------------------------

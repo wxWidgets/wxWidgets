@@ -78,7 +78,7 @@ void wxTopLevelWindowMSW::ButtonMenu::SetButton(int id, const wxString& label, w
     m_assigned = true;
     m_id = id;
     if(label.empty() && wxIsStockID(id))
-        m_label = wxGetStockLabel(id, false);
+        m_label = wxGetStockLabel(id, wxSTOCK_NOFLAGS);
     else
         m_label = label;
     m_menu = subMenu;

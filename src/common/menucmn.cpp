@@ -48,36 +48,9 @@ WX_DEFINE_LIST(wxMenuItemList)
 // ============================================================================
 
 // ----------------------------------------------------------------------------
-// wxMenuItem
+// wxAcceleratorEntry
 // ----------------------------------------------------------------------------
 
-wxMenuItemBase::wxMenuItemBase(wxMenu *parentMenu,
-                               int id,
-                               const wxString& text,
-                               const wxString& help,
-                               wxItemKind kind,
-                               wxMenu *subMenu)
-              : m_text(text),
-                m_help(help)
-{
-    wxASSERT_MSG( parentMenu != NULL, wxT("menuitem should have a menu") );
-
-    m_parentMenu  = parentMenu;
-    m_subMenu     = subMenu;
-    m_isEnabled   = true;
-    m_isChecked   = false;
-    m_id          = id;
-    m_kind        = kind;
-    if (m_id == wxID_ANY)
-        m_id = wxNewId();
-    if (m_id == wxID_SEPARATOR)
-        m_kind = wxITEM_SEPARATOR;
-}
-
-wxMenuItemBase::~wxMenuItemBase()
-{
-    delete m_subMenu;
-}
 
 #if wxUSE_ACCEL
 
@@ -172,11 +145,11 @@ static inline bool CompareAccelString(const wxString& str, const wxChar *accel)
 //
 // first and last parameter specify the valid domain for "number" part
 static int
-IsNumberedAccelKey(const wxString& str,
-                   const wxChar *prefix,
-                   wxKeyCode prefixCode,
-                   unsigned first,
-                   unsigned last)
+        IsNumberedAccelKey(const wxString& str,
+                           const wxChar *prefix,
+                           wxKeyCode prefixCode,
+                           unsigned first,
+                           unsigned last)
 {
     const size_t lenPrefix = wxStrlen(prefix);
     if ( !CompareAccelString(str.Left(lenPrefix), prefix) )
@@ -197,13 +170,19 @@ IsNumberedAccelKey(const wxString& str,
     return prefixCode + num - first;
 }
 
-// return wxAcceleratorEntry for the given menu string or NULL if none
-wxAcceleratorEntry *wxGetAccelFromString(const wxString& label)
+bool wxAcceleratorEntry::FromString(const wxString& text)
 {
+    // the parser won't like leading/trailing spaces
+    wxString label = text.Strip(wxString::both);
+
+    // set to invalid state:
+    m_flags = 0;
+    m_keyCode = 0;
+
     // check for accelerators: they are given after '\t'
     int posTab = label.Find(wxT('\t'));
     if ( posTab == wxNOT_FOUND )
-        return NULL;
+        return false;
 
     // parse the accelerator string
     int accelFlags = wxACCEL_NORMAL;
@@ -252,7 +231,7 @@ wxAcceleratorEntry *wxGetAccelFromString(const wxString& label)
     {
         case 0:
             wxLogDebug(wxT("No accel key found, accel string ignored."));
-            return NULL;
+            return false;
 
         case 1:
             // it's just a letter
@@ -267,7 +246,7 @@ wxAcceleratorEntry *wxGetAccelFromString(const wxString& label)
 
         default:
             keyCode = IsNumberedAccelKey(current, wxTRANSLATE("F"),
-                                            WXK_F1, 1, 12);
+                                         WXK_F1, 1, 12);
             if ( !keyCode )
             {
                 for ( size_t n = 0; n < WXSIZEOF(wxKeyNames); n++ )
@@ -283,24 +262,115 @@ wxAcceleratorEntry *wxGetAccelFromString(const wxString& label)
 
             if ( !keyCode )
                 keyCode = IsNumberedAccelKey(current, wxTRANSLATE("KP_"),
-                                                WXK_NUMPAD0, 0, 9);
+                                             WXK_NUMPAD0, 0, 9);
             if ( !keyCode )
                 keyCode = IsNumberedAccelKey(current, wxTRANSLATE("SPECIAL"),
-                                                WXK_SPECIAL1, 1, 20);
+                                             WXK_SPECIAL1, 1, 20);
 
             if ( !keyCode )
             {
                 wxLogDebug(wxT("Unrecognized accel key '%s', accel string ignored."),
                            current.c_str());
-                return NULL;
+                return false;
             }
     }
 
 
     wxASSERT_MSG( keyCode, _T("logic error: should have key code here") );
 
-    return new wxAcceleratorEntry(accelFlags, keyCode);
+    m_flags = accelFlags;
+    m_keyCode = keyCode;
+    return true;
 }
+
+wxString wxAcceleratorEntry::ToString() const
+{
+    wxString text;
+
+    int flags = GetFlags();
+    if ( flags & wxACCEL_ALT )
+        text += _("Alt-");
+    if ( flags & wxACCEL_CTRL )
+        text += _("Ctrl-");
+    if ( flags & wxACCEL_SHIFT )
+        text += _("Shift-");
+
+    const int code = GetKeyCode();
+
+    if ( wxIsalnum(code) )
+        text << (wxChar)code;
+    else if ( code >= WXK_F1 && code <= WXK_F12 )
+        text << _("F") << code - WXK_F1 + 1;
+    else if ( code >= WXK_NUMPAD0 && code <= WXK_NUMPAD9 )
+        text << _("KP_") << code - WXK_NUMPAD0;
+    else if ( code >= WXK_SPECIAL1 && code <= WXK_SPECIAL20 )
+        text << _("SPECIAL") << code - WXK_SPECIAL1 + 1;
+    else // check the named keys
+    {
+        size_t n;
+        for ( n = 0; n < WXSIZEOF(wxKeyNames); n++ )
+        {
+            const wxKeyName& kn = wxKeyNames[n];
+            if ( code == kn.code )
+            {
+                text << wxGetTranslation(kn.name);
+                break;
+            }
+        }
+
+        wxASSERT_MSG( n != WXSIZEOF(wxKeyNames),
+                      wxT("unknown keyboard accelerator code") );
+    }
+
+    return text;
+}
+
+wxAcceleratorEntry *wxGetAccelFromString(const wxString& label)
+{
+    wxAcceleratorEntry *ret = new wxAcceleratorEntry();
+    if (ret->FromString(label))
+        return ret;
+
+    wxDELETE(ret);
+    return NULL;
+}
+
+#endif      // wxUSE_ACCEL
+
+
+// ----------------------------------------------------------------------------
+// wxMenuItem
+// ----------------------------------------------------------------------------
+
+wxMenuItemBase::wxMenuItemBase(wxMenu *parentMenu,
+                               int id,
+                               const wxString& text,
+                               const wxString& help,
+                               wxItemKind kind,
+                               wxMenu *subMenu)
+              : m_text(text),
+                m_help(help)
+{
+    wxASSERT_MSG( parentMenu != NULL, wxT("menuitem should have a menu") );
+
+    m_parentMenu  = parentMenu;
+    m_subMenu     = subMenu;
+    m_isEnabled   = true;
+    m_isChecked   = false;
+    m_id          = id;
+    m_kind        = kind;
+    if (m_id == wxID_ANY)
+        m_id = wxNewId();
+    if (m_id == wxID_SEPARATOR)
+        m_kind = wxITEM_SEPARATOR;
+}
+
+wxMenuItemBase::~wxMenuItemBase()
+{
+    delete m_subMenu;
+}
+
+#if wxUSE_ACCEL
 
 wxAcceleratorEntry *wxMenuItemBase::GetAccel() const
 {
@@ -313,41 +383,7 @@ void wxMenuItemBase::SetAccel(wxAcceleratorEntry *accel)
     if ( accel )
     {
         text += wxT('\t');
-
-        int flags = accel->GetFlags();
-        if ( flags & wxACCEL_ALT )
-            text += _("Alt-");
-        if ( flags & wxACCEL_CTRL )
-            text += _("Ctrl-");
-        if ( flags & wxACCEL_SHIFT )
-            text += _("Shift-");
-
-        const int code = accel->GetKeyCode();
-
-        if ( wxIsalnum(code) )
-            text << (wxChar)code;
-        else if ( code >= WXK_F1 && code <= WXK_F12 )
-            text << _("F") << code - WXK_F1 + 1;
-        else if ( code >= WXK_NUMPAD0 && code <= WXK_NUMPAD9 )
-            text << _("KP_") << code - WXK_NUMPAD0;
-        else if ( code >= WXK_SPECIAL1 && code <= WXK_SPECIAL20 )
-            text << _("SPECIAL") << code - WXK_SPECIAL1 + 1;
-        else // check the named keys
-        {
-            size_t n;
-            for ( n = 0; n < WXSIZEOF(wxKeyNames); n++ )
-            {
-                const wxKeyName& kn = wxKeyNames[n];
-                if ( code == kn.code )
-                {
-                    text << wxGetTranslation(kn.name);
-                    break;
-                }
-            }
-
-            wxASSERT_MSG( n != WXSIZEOF(wxKeyNames),
-                            wxT("unknown keyboard accelerator code") );
-        }
+        text += accel->ToString();
     }
 
     SetText(text);

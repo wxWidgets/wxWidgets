@@ -26,6 +26,7 @@
 #if wxUSE_MENUS
 
 #include "wx/menu.h"
+#include "wx/stockitem.h"
 
 #ifndef WX_PRECOMP
     #include "wx/dynarray.h"
@@ -1537,10 +1538,17 @@ void wxMenuItem::UpdateAccelInfo()
     m_strAccel = m_text.AfterFirst(_T('\t'));
 }
 
-void wxMenuItem::SetText(const wxString& text)
+void wxMenuItem::SetText(const wxString& txt)
 {
-    if ( text != m_text )
+    if ( txt != m_text )
     {
+        wxString text = txt;
+        if (text.IsEmpty())
+        {
+            wxASSERT_MSG(wxIsStockId(GetId()), wxT("A non-stock menu item with an empty label?"));
+            text = wxGetStockLabel(GetId(), wxSTOCK_WITH_ACCELERATOR|wxSTOCK_WITH_MNEMONIC);
+        }
+
         // first call the base class version to change m_text
         wxMenuItemBase::SetText(text);
 

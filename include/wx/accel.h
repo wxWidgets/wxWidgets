@@ -100,6 +100,26 @@ public:
     bool MatchesEvent(const wxKeyEvent& event) const;
 #endif
 
+    bool IsOk() const
+    {
+        return m_flags != 0 &&
+               m_keyCode != 0;
+    }
+
+
+    // string <-> wxAcceleratorEntry conversion
+    // ----------------------------------------
+
+    // returns a wxString for the this accelerator.
+    // this function formats it using the <flags>-<keycode> format
+    // where <flags> maybe a hyphen-separed list of "shift|alt|ctrl"
+    wxString ToString() const;
+
+    // returns true if the given string correctly initialized this object
+    // (i.e. if IsOk() returns true after this call)
+    bool FromString(const wxString &str);
+
+
 private:
     int m_flags;    // combination of wxACCEL_XXX constants
     int m_keyCode;  // ASCII or virtual keycode

@@ -11,6 +11,7 @@
 #include "wx/wxprec.h"
 
 #include "wx/menu.h"
+#include "wx/stockitem.h"
 
 #ifndef WX_PRECOMP
     #include "wx/intl.h"
@@ -765,8 +766,15 @@ wxString wxMenuItemBase::GetLabelFromText(const wxString& text)
     return label;
 }
 
-void wxMenuItem::SetText( const wxString& str )
+void wxMenuItem::SetText( const wxString& string )
 {
+    wxString str = string;
+    if (str.IsEmpty())
+    {
+        wxASSERT_MSG(wxIsStockId(GetId()), wxT("A non-stock menu item with an empty label?"));
+        str = wxGetStockLabel(GetId(), wxSTOCK_WITH_ACCELERATOR|wxSTOCK_WITH_MNEMONIC);
+    }
+
     // Some optimization to avoid flicker
     wxString oldLabel = m_text;
     oldLabel = wxStripMenuCodes(oldLabel);

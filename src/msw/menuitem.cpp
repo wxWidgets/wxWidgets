@@ -27,6 +27,7 @@
 #if wxUSE_MENUS
 
 #include "wx/menuitem.h"
+#include "wx/stockitem.h"
 
 #ifndef WX_PRECOMP
     #include "wx/font.h"
@@ -153,6 +154,12 @@ wxMenuItem::wxMenuItem(wxMenu *parentMenu,
 
 void wxMenuItem::Init()
 {
+    if (m_text.IsEmpty())
+    {
+        wxASSERT_MSG(wxIsStockId(GetId()), wxT("A non-stock menu item with an empty label?"));
+        m_text = wxGetStockLabel(GetId(), wxSTOCK_WITH_ACCELERATOR|wxSTOCK_WITH_MNEMONIC);
+    }
+
     m_radioGroup.start = -1;
     m_isRadioGroupStart = false;
 
@@ -336,11 +343,19 @@ void wxMenuItem::Check(bool check)
     wxMenuItemBase::Check(check);
 }
 
-void wxMenuItem::SetText(const wxString& text)
+void wxMenuItem::SetText(const wxString& txt)
 {
+    wxString text = txt;
+
     // don't do anything if label didn't change
-    if ( m_text == text )
+    if ( m_text == txt )
         return;
+
+    if (text.IsEmpty())
+    {
+        wxASSERT_MSG(wxIsStockId(GetId()), wxT("A non-stock menu item with an empty label?"));
+        text = wxGetStockLabel(GetId(), wxSTOCK_WITH_ACCELERATOR|wxSTOCK_WITH_MNEMONIC);
+    }
 
     wxMenuItemBase::SetText(text);
     OWNER_DRAWN_ONLY( wxOwnerDrawn::SetName(text) );

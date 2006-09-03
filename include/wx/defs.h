@@ -1759,7 +1759,8 @@ enum
     wxID_CLOSE_ALL,
     wxID_PREFERENCES,
 
-    wxID_CUT = 5030,
+    wxID_EDIT = 5030,
+    wxID_CUT,
     wxID_COPY,
     wxID_PASTE,
     wxID_CLEAR,
@@ -1780,7 +1781,8 @@ enum
     wxID_VIEW_SORTSIZE,
     wxID_VIEW_SORTTYPE,
 
-    wxID_FILE1 = 5050,
+    wxID_FILE = 5050,
+    wxID_FILE1,
     wxID_FILE2,
     wxID_FILE3,
     wxID_FILE4,

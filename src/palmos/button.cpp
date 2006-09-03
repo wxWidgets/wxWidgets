@@ -169,7 +169,7 @@ bool wxButton::Create(wxWindow *parent,
     // take the stock label
     wxString palmLabel = label;
     if( palmLabel.empty() && wxIsStockID(id) )
-        palmLabel = wxGetStockLabel(id, false);
+        palmLabel = wxGetStockLabel(id, wxSTOCK_NOFLAGS);
 
     if(!wxControl::Create(parent, id, palmPos, palmSize, style, validator, name))
         return false;

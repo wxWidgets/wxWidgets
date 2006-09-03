@@ -17,6 +17,7 @@
 #include "wx/wxprec.h"
 
 #include "wx/menuitem.h"
+#include "wx/stockitem.h"
 
 #ifndef WX_PRECOMP
     #include "wx/font.h"
@@ -372,10 +373,19 @@ void wxMenuItem::SetText( const wxString& rText )
     if (m_text == sText)
         return;
 
+    if (sText.IsEmpty())
+    {
+        wxASSERT_MSG(wxIsStockId(GetId()), wxT("A non-stock menu item with an empty label?"));
+        sText = wxGetStockLabel(GetId(), wxSTOCK_WITH_ACCELERATOR|wxSTOCK_WITH_MNEMONIC);
+    }
+
     wxMenuItemBase::SetText(sText);
     OWNER_DRAWN_ONLY(wxOwnerDrawn::SetName(sText));
 #if  wxUSE_OWNER_DRAWN
-    SetAccelString(rText.AfterFirst(_T('\t')));
+    if (rText.IsEmpty())
+        SetAccelString(sText.AfterFirst(_T('\t')));
+    else
+        SetAccelString(rText.AfterFirst(_T('\t')));
 #endif // wxUSE_OWNER_DRAWN
 
     HWND                            hMenu = GetHmenuOf(m_parentMenu);

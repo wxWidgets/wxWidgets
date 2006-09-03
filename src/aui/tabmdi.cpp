@@ -161,7 +161,7 @@ void wxTabMDIParentFrame::SetChildMenuBar(wxTabMDIChildFrame* pChild)
     {
         if (pChild->GetMenuBar() == NULL)
             return;
-            
+
         // Do we need to save the current bar?
         if (m_pMyMenuBar == NULL)
             m_pMyMenuBar = GetMenuBar();
@@ -283,7 +283,7 @@ void wxTabMDIParentFrame::AddWindowMenu(wxMenuBar *pMenuBar)
 {
     if (pMenuBar && m_pWindowMenu)
     {
-        int pos = pMenuBar->FindMenu(wxGetStockLabel(wxID_HELP,false));
+        int pos = pMenuBar->FindMenu(wxGetStockLabel(wxID_HELP,wxSTOCK_NOFLAGS));
         if (pos == wxNOT_FOUND)
             pMenuBar->Append(m_pWindowMenu, _("&Window"));
              else

@@ -48,6 +48,10 @@ public:
 
     wxString GetHotKey() const { return m_hotKey; }
 
+    // splits given string in the label, doing & => _ translation, which is returned,
+    // and in the hotkey which is used to set given pointer
+    static wxString GTKProcessMenuItemLabel(const wxString& str, wxString *hotKey);
+
     // compatibility only, don't use in new code
     wxMenuItem(wxMenu *parentMenu,
                int id,
