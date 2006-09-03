@@ -138,6 +138,8 @@ bool wxControl::OS2CreateControl( const wxChar*   zClassname,
     else
         sLabel = rsLabel;
 
+    dwStyle &= ~WS_CLIPSIBLINGS;
+
     m_hWnd = (WXHWND)::WinCreateWindow( (HWND)GetHwndOf(pParent) // Parent window handle
                                        ,(PSZ)zClass              // Window class
                                        ,(PSZ)sLabel.c_str()      // Initial Text
