@@ -239,7 +239,7 @@ static void wxMSWDrawFocusRect( wxDC& dc, const wxRect& rect )
 }
 
 // draw focus background on area in a way typical on platform
-void wxComboCtrl::DrawFocusBackground( wxDC& dc, const wxRect& rect, int flags ) const
+void wxComboCtrl::PrepareBackground( wxDC& dc, const wxRect& rect, int flags ) const
 {
     wxUxThemeEngine* theme = (wxUxThemeEngine*) NULL;
 
@@ -376,6 +376,11 @@ void wxComboCtrl::DrawFocusBackground( wxDC& dc, const wxRect& rect, int flags )
     if ( drawDottedEdge )
         wxMSWDrawFocusRect(dc,selRect);
 
+    // Don't clip exactly to the selection rectangle so we can draw
+    // to the non-selected area in front of it.
+    wxRect clipRect(rect.x,rect.y,
+                    (selRect.x+selRect.width)-rect.x-1,rect.height);
+    dc.SetClippingRegion(clipRect);
 }
 
 void wxComboCtrl::OnPaintEvent( wxPaintEvent& WXUNUSED(event) )

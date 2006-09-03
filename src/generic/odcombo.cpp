@@ -1059,12 +1059,15 @@ void wxOwnerDrawnComboBox::OnDrawBackground(wxDC& dc, const wxRect& rect, int it
     if ( GetVListBoxComboPopup()->IsCurrent((size_t)item) ||
          (flags & wxODCB_PAINTING_CONTROL) )
     {
-        int focusFlag = wxCONTROL_SELECTED;
+        int bgFlags = wxCONTROL_SELECTED;
 
         if ( (flags & wxODCB_PAINTING_CONTROL) != wxODCB_PAINTING_CONTROL )
-            focusFlag |= wxCONTROL_ISSUBMENU;
-
-        DrawFocusBackground(dc, rect, focusFlag );
+        {
+            bgFlags |= wxCONTROL_ISSUBMENU;
+            PrepareBackground(dc, rect, bgFlags);
+        }
+        else if ( HasFlag(wxCB_READONLY) )
+            PrepareBackground(dc, rect, bgFlags);
     }
     //else: do nothing for the normal items
 }

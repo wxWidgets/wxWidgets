@@ -386,7 +386,7 @@ void wxComboPopup::DefaultPaintComboControl( wxComboCtrlBase* combo,
 {
     if ( combo->GetWindowStyle() & wxCB_READONLY ) // ie. no textctrl
     {
-        combo->DrawFocusBackground(dc,rect,0);
+        combo->PrepareBackground(dc,rect,0);
 
         dc.DrawText( combo->GetValue(),
                      rect.x + combo->GetTextIndent(),
@@ -1036,8 +1036,9 @@ void wxComboCtrlBase::DoSetToolTip(wxToolTip *tooltip)
 // painting
 // ----------------------------------------------------------------------------
 
-// draw focus background on area in a way typical on platform
-void wxComboCtrlBase::DrawFocusBackground( wxDC& dc, const wxRect& rect, int flags ) const
+#if (!defined(__WXMSW__)) || defined(__WXUNIVERSAL__)
+// prepare combo box background on area in a way typical on platform
+void wxComboCtrlBase::PrepareBackground( wxDC& dc, const wxRect& rect, int flags ) const
 {
     wxSize sz = GetClientSize();
     bool isEnabled;
@@ -1106,7 +1107,19 @@ void wxComboCtrlBase::DrawFocusBackground( wxDC& dc, const wxRect& rect, int fla
     dc.SetBrush( bgCol );
     dc.SetPen( bgCol );
     dc.DrawRectangle( selRect );
+
+    // Don't clip exactly to the selection rectangle so we can draw
+    // to the non-selected area in front of it.
+    wxRect clipRect(rect.x,rect.y,
+                    (selRect.x+selRect.width)-rect.x,rect.height);
+    dc.SetClippingRegion(clipRect);
 }
+#else
+// Save the library size a bit for platforms that re-implement this.
+void wxComboCtrlBase::PrepareBackground( wxDC&, const wxRect&, int ) const
+{
+}
+#endif
 
 void wxComboCtrlBase::DrawButton( wxDC& dc, const wxRect& rect, bool paintBg )
 {
