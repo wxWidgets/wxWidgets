@@ -416,6 +416,30 @@ currently no wxSizer method that will both detach and destroy a wxWindow item.
 Returns true if the child item was found and removed, false otherwise.
 
 
+\membersection{wxSizer::Replace}\label{wxsizerreplace}
+
+\func{bool}{Replace}{\param{wxWindow* }{oldwin}, \param{wxWindow* }{newwin}, \param{bool }{recursive = false}}
+
+\func{bool}{Replace}{\param{wxSizer* }{oldsz}, \param{wxSizer* }{newsz}, \param{bool }{recursive = false}}
+
+\func{bool}{Remove}{\param{size\_t }{oldindex}, \param{wxSizerItem* }{newitem}}
+
+Detaches the given \arg{oldwin}, \arg{oldsz} child from the sizer and 
+replaces it with the given window, sizer, or wxSizerItem.
+
+The detached child is removed {\bf only} if it is a sizer or a spacer
+(because windows are owned by their parent window, not the sizer).
+
+Use parameter \arg{recursive} to search the given element recursively in subsizers.
+
+
+This method does not cause any layout or resizing to take place, call
+\helpref{wxSizer::Layout}{wxsizerlayout} to update the layout "on screen" after replacing a
+child from the sizer.
+
+Returns true if the child item was found and removed, false otherwise.
+
+
 \membersection{wxSizer::SetDimension}\label{wxsizersetdimension}
 
 \func{void}{SetDimension}{\param{int }{x}, \param{int }{y}, \param{int }{width}, \param{int }{height}}

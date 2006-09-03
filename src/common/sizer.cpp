@@ -621,6 +621,80 @@ bool wxSizer::Detach( int index )
     return true;
 }
 
+bool wxSizer::Replace( wxWindow *oldwin, wxWindow *newwin, bool recursive )
+{
+    wxASSERT_MSG( oldwin, _T("Replacing NULL window") );
+    wxASSERT_MSG( newwin, _T("Replacing with NULL window") );
+
+    wxSizerItemList::compatibility_iterator node = m_children.GetFirst();
+    while (node)
+    {
+        wxSizerItem     *item = node->GetData();
+
+        if (item->GetWindow() == oldwin)
+        {
+            item->GetWindow()->SetContainingSizer( NULL );
+            item->SetWindow(newwin);
+            newwin->SetContainingSizer( this );
+            return true;
+        }
+        else if (recursive && item->IsSizer())
+        {
+            if (item->GetSizer()->Replace( oldwin, newwin, true ))
+                return true;
+        }
+        
+        node = node->GetNext();
+    }
+
+    return false;
+}
+
+bool wxSizer::Replace( wxSizer *oldsz, wxSizer *newsz, bool recursive )
+{
+    wxASSERT_MSG( oldsz, _T("Replacing NULL sizer") );
+    wxASSERT_MSG( newsz, _T("Replacing with NULL sizer") );
+
+    wxSizerItemList::compatibility_iterator node = m_children.GetFirst();
+    while (node)
+    {
+        wxSizerItem     *item = node->GetData();
+
+        if (item->GetSizer() == oldsz)
+        {
+            wxSizer *old = item->GetSizer();
+            item->SetSizer(newsz);
+            delete old;
+            return true;
+        }
+        else if (recursive && item->IsSizer())
+        {
+            if (item->GetSizer()->Replace( oldsz, newsz, true ))
+                return true;
+        }        
+        
+        node = node->GetNext();
+    }
+
+    return false;
+}
+
+bool wxSizer::Replace( size_t old, wxSizerItem *newitem )
+{
+    wxCHECK_MSG( old < m_children.GetCount(), false, _T("Replace index is out of range") );
+    wxASSERT_MSG( newitem, _T("Replacing with NULL item") );
+
+    wxSizerItemList::compatibility_iterator node = m_children.Item( old );
+
+    wxCHECK_MSG( node, false, _T("Failed to find child node") );
+
+    wxSizerItem *item = node->GetData();
+    node->SetData(newitem);
+    delete item;    
+
+    return true;
+}
+
 void wxSizer::Clear( bool delete_windows )
 {
     // First clear the ContainingSizer pointers
