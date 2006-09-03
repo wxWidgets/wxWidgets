@@ -129,9 +129,18 @@ _tiffSeekOProc(thandle_t handle, toff_t off, int whence)
 }
 
 int TIFFLINKAGEMODE
-_tiffCloseProc(thandle_t WXUNUSED(handle))
+_tiffCloseIProc(thandle_t WXUNUSED(handle))
 {
-    return 0;  // ?
+    // there is no need to close the input stream
+    return 0;
+}
+
+int TIFFLINKAGEMODE
+_tiffCloseOProc(thandle_t handle)
+{
+    wxOutputStream *stream = (wxOutputStream*) handle;
+
+    return stream->Close() ? 0 : -1;
 }
 
 toff_t TIFFLINKAGEMODE
@@ -196,7 +205,7 @@ TIFFwxOpen(wxInputStream &stream, const char* name, const char* mode)
     TIFF* tif = TIFFClientOpen(name, mode,
         (thandle_t) &stream,
         _tiffReadProc, _tiffNullProc,
-        _tiffSeekIProc, _tiffCloseProc, _tiffSizeProc,
+        _tiffSeekIProc, _tiffCloseIProc, _tiffSizeProc,
         _tiffMapProc, _tiffUnmapProc);
 
     return tif;
@@ -208,7 +217,7 @@ TIFFwxOpen(wxOutputStream &stream, const char* name, const char* mode)
     TIFF* tif = TIFFClientOpen(name, mode,
         (thandle_t) &stream,
         _tiffNullProc, _tiffWriteProc,
-        _tiffSeekOProc, _tiffCloseProc, _tiffSizeProc,
+        _tiffSeekOProc, _tiffCloseOProc, _tiffSizeProc,
         _tiffMapProc, _tiffUnmapProc);
 
     return tif;
