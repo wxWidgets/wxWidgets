@@ -69,6 +69,8 @@ class MyFrame : public wxFrame
         ID_AllowActivePane,
         ID_TransparentHint,
         ID_TransparentHintFade,
+        ID_DisableVenetian,
+        ID_DisableVenetianFade,
         ID_TransparentDrag,
         ID_NoGradient,
         ID_VerticalGradient,
@@ -532,7 +534,7 @@ bool MyApp::OnInit()
 {
     wxFrame* frame = new MyFrame(NULL,
                                  wxID_ANY,
-                                 wxT("wxAUI 0.9.2 Test Application"),
+                                 wxT("wxAUI Sample Application"),
                                  wxDefaultPosition,
                                  wxSize(800, 600));
     SetTopWindow(frame);
@@ -556,6 +558,8 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(ID_AllowFloating, MyFrame::OnManagerFlag)
     EVT_MENU(ID_TransparentHint, MyFrame::OnManagerFlag)
     EVT_MENU(ID_TransparentHintFade, MyFrame::OnManagerFlag)
+    EVT_MENU(ID_DisableVenetian, MyFrame::OnManagerFlag)
+    EVT_MENU(ID_DisableVenetianFade, MyFrame::OnManagerFlag)
     EVT_MENU(ID_TransparentDrag, MyFrame::OnManagerFlag)
     EVT_MENU(ID_AllowActivePane, MyFrame::OnManagerFlag)
     EVT_MENU(ID_NoGradient, MyFrame::OnGradient)
@@ -573,6 +577,8 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_UPDATE_UI(ID_AllowFloating, MyFrame::OnUpdateUI)
     EVT_UPDATE_UI(ID_TransparentHint, MyFrame::OnUpdateUI)
     EVT_UPDATE_UI(ID_TransparentHintFade, MyFrame::OnUpdateUI)
+    EVT_UPDATE_UI(ID_DisableVenetian, MyFrame::OnUpdateUI)
+    EVT_UPDATE_UI(ID_DisableVenetianFade, MyFrame::OnUpdateUI)
     EVT_UPDATE_UI(ID_TransparentDrag, MyFrame::OnUpdateUI)
     EVT_UPDATE_UI(ID_NoGradient, MyFrame::OnUpdateUI)
     EVT_UPDATE_UI(ID_VerticalGradient, MyFrame::OnUpdateUI)
@@ -622,6 +628,8 @@ MyFrame::MyFrame(wxWindow* parent,
     options_menu->AppendCheckItem(ID_AllowFloating, _("Allow Floating"));
     options_menu->AppendCheckItem(ID_TransparentHint, _("Transparent Hint"));
     options_menu->AppendCheckItem(ID_TransparentHintFade, _("Transparent Hint Fade-in"));
+    options_menu->AppendCheckItem(ID_DisableVenetian, _("Disable Venetian Blinds Hint"));
+    options_menu->AppendCheckItem(ID_DisableVenetianFade, _("Disable Venetian Blinds Hint Fade-in"));
     options_menu->AppendCheckItem(ID_TransparentDrag, _("Transparent Drag"));
     options_menu->AppendCheckItem(ID_AllowActivePane, _("Allow Active Pane"));
     options_menu->AppendSeparator();
@@ -937,6 +945,8 @@ void MyFrame::OnManagerFlag(wxCommandEvent& event)
         case ID_TransparentDrag: flag = wxAUI_MGR_TRANSPARENT_DRAG; break;
         case ID_TransparentHint: flag = wxAUI_MGR_TRANSPARENT_HINT; break;
         case ID_TransparentHintFade: flag = wxAUI_MGR_TRANSPARENT_HINT_FADE; break;
+        case ID_DisableVenetian: flag = wxAUI_MGR_DISABLE_VENETIAN_BLINDS; break;
+        case ID_DisableVenetianFade: flag = wxAUI_MGR_DISABLE_VENETIAN_BLINDS_FADE; break;
         case ID_AllowActivePane: flag = wxAUI_MGR_ALLOW_ACTIVE_PANE; break;
     }
     m_mgr.SetFlags(m_mgr.GetFlags() ^ flag);
@@ -969,6 +979,12 @@ void MyFrame::OnUpdateUI(wxUpdateUIEvent& event)
             break;
         case ID_TransparentHintFade:
             event.Check(flags & wxAUI_MGR_TRANSPARENT_HINT_FADE ? true : false);
+            break;
+        case ID_DisableVenetian:
+            event.Check(flags & wxAUI_MGR_DISABLE_VENETIAN_BLINDS ? true : false);
+            break;
+        case ID_DisableVenetianFade:
+            event.Check(flags & wxAUI_MGR_DISABLE_VENETIAN_BLINDS_FADE ? true : false);
             break;
     }
 }
@@ -1222,13 +1238,13 @@ wxString MyFrame::GetIntroText()
 {
     const char* text =
         "<html><body>"
-        "<h3>Welcome to wxAUI 0.9.2</h3>"
+        "<h3>Welcome to wxAUI</h3>"
         "<br/><b>Overview</b><br/>"
         "<p>wxAUI is an Advanced User Interface library for the wxWidgets toolkit "
         "that allows developers to create high-quality, cross-platform user "
         "interfaces quickly and easily.</p>"
         "<p><b>Features</b></p>"
-        "<p>With wxAUI version 0.9.2, developers can create application frameworks with:</p>"
+        "<p>With wxAUI, developers can create application frameworks with:</p>"
         "<ul>"
         "<li>Native, dockable floating frames</li>"
         "<li>Perspective saving and loading</li>"
