@@ -87,7 +87,7 @@ extern "C"
 {
 
 tsize_t TIFFLINKAGEMODE
-_tiffNullProc(thandle_t WXUNUSED(handle),
+wxTIFFNullProc(thandle_t WXUNUSED(handle),
           tdata_t WXUNUSED(buf),
           tsize_t WXUNUSED(size))
 {
@@ -95,7 +95,7 @@ _tiffNullProc(thandle_t WXUNUSED(handle),
 }
 
 tsize_t TIFFLINKAGEMODE
-_tiffReadProc(thandle_t handle, tdata_t buf, tsize_t size)
+wxTIFFReadProc(thandle_t handle, tdata_t buf, tsize_t size)
 {
     wxInputStream *stream = (wxInputStream*) handle;
     stream->Read( (void*) buf, (size_t) size );
@@ -103,7 +103,7 @@ _tiffReadProc(thandle_t handle, tdata_t buf, tsize_t size)
 }
 
 tsize_t TIFFLINKAGEMODE
-_tiffWriteProc(thandle_t handle, tdata_t buf, tsize_t size)
+wxTIFFWriteProc(thandle_t handle, tdata_t buf, tsize_t size)
 {
     wxOutputStream *stream = (wxOutputStream*) handle;
     stream->Write( (void*) buf, (size_t) size );
@@ -111,7 +111,7 @@ _tiffWriteProc(thandle_t handle, tdata_t buf, tsize_t size)
 }
 
 toff_t TIFFLINKAGEMODE
-_tiffSeekIProc(thandle_t handle, toff_t off, int whence)
+wxTIFFSeekIProc(thandle_t handle, toff_t off, int whence)
 {
     wxInputStream *stream = (wxInputStream*) handle;
 
@@ -120,7 +120,7 @@ _tiffSeekIProc(thandle_t handle, toff_t off, int whence)
 }
 
 toff_t TIFFLINKAGEMODE
-_tiffSeekOProc(thandle_t handle, toff_t off, int whence)
+wxTIFFSeekOProc(thandle_t handle, toff_t off, int whence)
 {
     wxOutputStream *stream = (wxOutputStream*) handle;
 
@@ -129,14 +129,14 @@ _tiffSeekOProc(thandle_t handle, toff_t off, int whence)
 }
 
 int TIFFLINKAGEMODE
-_tiffCloseIProc(thandle_t WXUNUSED(handle))
+wxTIFFCloseIProc(thandle_t WXUNUSED(handle))
 {
     // there is no need to close the input stream
     return 0;
 }
 
 int TIFFLINKAGEMODE
-_tiffCloseOProc(thandle_t handle)
+wxTIFFCloseOProc(thandle_t handle)
 {
     wxOutputStream *stream = (wxOutputStream*) handle;
 
@@ -144,14 +144,14 @@ _tiffCloseOProc(thandle_t handle)
 }
 
 toff_t TIFFLINKAGEMODE
-_tiffSizeProc(thandle_t handle)
+wxTIFFSizeProc(thandle_t handle)
 {
     wxStreamBase *stream = (wxStreamBase*) handle;
     return (toff_t) stream->GetSize();
 }
 
 int TIFFLINKAGEMODE
-_tiffMapProc(thandle_t WXUNUSED(handle),
+wxTIFFMapProc(thandle_t WXUNUSED(handle),
              tdata_t* WXUNUSED(pbase),
              toff_t* WXUNUSED(psize))
 {
@@ -159,7 +159,7 @@ _tiffMapProc(thandle_t WXUNUSED(handle),
 }
 
 void TIFFLINKAGEMODE
-_tiffUnmapProc(thandle_t WXUNUSED(handle),
+wxTIFFUnmapProc(thandle_t WXUNUSED(handle),
                tdata_t WXUNUSED(base),
                toff_t WXUNUSED(size))
 {
@@ -204,9 +204,9 @@ TIFFwxOpen(wxInputStream &stream, const char* name, const char* mode)
 {
     TIFF* tif = TIFFClientOpen(name, mode,
         (thandle_t) &stream,
-        _tiffReadProc, _tiffNullProc,
-        _tiffSeekIProc, _tiffCloseIProc, _tiffSizeProc,
-        _tiffMapProc, _tiffUnmapProc);
+        wxTIFFReadProc, wxTIFFNullProc,
+        wxTIFFSeekIProc, wxTIFFCloseIProc, wxTIFFSizeProc,
+        wxTIFFMapProc, wxTIFFUnmapProc);
 
     return tif;
 }
@@ -216,9 +216,9 @@ TIFFwxOpen(wxOutputStream &stream, const char* name, const char* mode)
 {
     TIFF* tif = TIFFClientOpen(name, mode,
         (thandle_t) &stream,
-        _tiffNullProc, _tiffWriteProc,
-        _tiffSeekOProc, _tiffCloseOProc, _tiffSizeProc,
-        _tiffMapProc, _tiffUnmapProc);
+        wxTIFFNullProc, wxTIFFWriteProc,
+        wxTIFFSeekOProc, wxTIFFCloseOProc, wxTIFFSizeProc,
+        wxTIFFMapProc, wxTIFFUnmapProc);
 
     return tif;
 }
