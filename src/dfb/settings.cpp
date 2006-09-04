@@ -28,7 +28,7 @@
 
 wxColour wxSystemSettingsNative::GetColour(wxSystemColour WXUNUSED(index))
 {
-    // not implemented, the mean is in wxUniversal
+    // overridden by wxSystemSettings::GetColour in wxUniversal
     return wxColour(0,0,0);
 }
 
