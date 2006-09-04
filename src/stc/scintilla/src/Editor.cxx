@@ -519,7 +519,10 @@ int Editor::LinesOnScreen() {
 	PRectangle rcClient = GetClientRectangle();
 	int htClient = rcClient.bottom - rcClient.top;
 	//Platform::DebugPrintf("lines on screen = %d\n", htClient / lineHeight + 1);
-	return htClient / vs.lineHeight;
+	int n = htClient / vs.lineHeight;
+        if (n < 0)
+            n = 0;
+        return n;
 }
 
 int Editor::LinesToScroll() {
