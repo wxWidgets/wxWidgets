@@ -33,7 +33,7 @@ public:
     
     // append any kind of item (normal/check/radio/separator)
     wxMenuItem* Append(int id,
-                       const wxString& text,
+                       const wxString& text = wxPyEmptyString,
                        const wxString& help = wxPyEmptyString,
                        wxItemKind kind = wxITEM_NORMAL);
 
@@ -76,7 +76,7 @@ public:
     // insert an item before given position
     wxMenuItem* Insert(size_t pos,
                        int id,
-                       const wxString& text,
+                       const wxString& text = wxPyEmptyString,
                        const wxString& help = wxPyEmptyString,
                        wxItemKind kind = wxITEM_NORMAL);
 
@@ -104,7 +104,7 @@ public:
 
     // prepend any item to the menu
     wxMenuItem* Prepend(int id,
-                        const wxString& text,
+                        const wxString& text = wxPyEmptyString,
                         const wxString& help = wxPyEmptyString,
                         wxItemKind kind = wxITEM_NORMAL);
 

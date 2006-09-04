@@ -154,6 +154,11 @@ all top level windows have been closed and destroyed.", "");
 
     
     DocDeclStr(
+        virtual wxLayoutDirection , GetLayoutDirection() const,
+        "Return the layout direction for the current locale.", "");
+    
+    
+    DocDeclStr(
         virtual void, ExitMainLoop(),
         "Exit the main GUI loop during the next iteration of the main
 loop, (i.e. it does not stop the program immediately!)", "");

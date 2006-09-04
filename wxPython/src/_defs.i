@@ -611,6 +611,7 @@ enum {
     wxID_CLOSE_ALL,
     wxID_PREFERENCES,
 
+    wxID_EDIT,
     wxID_CUT,
     wxID_COPY,
     wxID_PASTE,
@@ -633,6 +634,7 @@ enum {
     wxID_VIEW_SORTSIZE,
     wxID_VIEW_SORTTYPE,
 
+    wxID_FILE,
     wxID_FILE1,
     wxID_FILE2,
     wxID_FILE3,

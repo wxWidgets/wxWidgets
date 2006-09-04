@@ -38,11 +38,18 @@ bool wxIsStockID(wxWindowID id);
 // given ID
 bool wxIsStockLabel(wxWindowID id, const wxString& label);
 
+enum wxStockLabelQueryFlag
+{
+    wxSTOCK_NOFLAGS = 0,
+
+    wxSTOCK_WITH_MNEMONIC = 1,
+    wxSTOCK_WITH_ACCELERATOR = 2
+};
+
 // Returns label that should be used for given stock UI element (e.g. "&OK"
 // for wxID_OK):
 wxString wxGetStockLabel(wxWindowID id,
-                         bool withCodes = true,
-                         wxString accelerator = wxPyEmptyString);
+                         long flags = wxSTOCK_WITH_MNEMONIC);
  
 
 MustHaveApp(wxBell);

@@ -213,6 +213,9 @@ Added wx.NativePixelBuffer, wx.AlphPixelBuffer and related iterator
 and accessor classes.  They allow platform independent direct access
 to the platform specific pixel buffer inside of a wx.Bitmap object.
 
+The beginnings of support for RTL languages has been added, thanks to
+a Google SoC project.  
+
 
 
 

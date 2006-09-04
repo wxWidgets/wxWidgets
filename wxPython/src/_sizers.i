@@ -608,6 +608,7 @@ this sizer.  See `Add` for a description of the parameters.", "");
 //    virtual wxSizerItem* PrependSpacer(int size);
 //    virtual wxSizerItem* PrependStretchSpacer(int prop = 1);
 
+        
         DocAStr(Remove,
                 "Remove(self, item) -> bool",
                 "Removes an item from the sizer and destroys it.  This method does not
@@ -691,6 +692,48 @@ the item to be found.", "");
                 self->SetItemMinSize(info.pos, size);
         }
     }
+
+    
+    %Rename(_ReplaceWin,
+            bool, Replace( wxWindow *oldwin, wxWindow *newwin, bool recursive = false ));
+    %Rename(_ReplaceSizer,
+            bool, Replace( wxSizer *oldsz, wxSizer *newsz, bool recursive = false ));
+    %Rename(_ReplaceItem,
+            bool, Replace( size_t index, wxSizerItem *newitem ));
+    %pythoncode {
+        def Replace(self, olditem, item, recursive=False):
+            """
+            Detaches the given ``olditem`` from the sizer and replaces it with
+            ``item`` which can be a window, sizer, or `wx.SizerItem`.  The
+            detached child is destroyed only if it is not a window, (because
+            windows are owned by their parent, not the sizer.)  The
+            ``recursive`` parameter can be used to search for the given
+            element recursivly in subsizers.
+
+            This method does not cause any layout or resizing to take place,
+            call `Layout` to do so.
+
+            Returns ``True`` if the child item was found and removed.
+            """
+            if isinstance(olditem, wx.Window):
+                return self._ReplaceWin(olditem, item, recursive)
+            elif isinstnace(olditem, wx.Sizer):
+                return self._ReplaceSizer(olditem, item, recursive)
+            elif isinstnace(olditem, int):
+                return self._ReplaceItem(olditem, item)
+            else:
+                raise TypeError("Expected Window, Sizer, or integer for first parameter.")
+    }
+    
+    
+    DocDeclStr(
+        void , SetContainingWindow(wxWindow *window),
+        "Set (or unset) the window this sizer is used in.", "");
+    
+    DocDeclStr(
+        wxWindow *, GetContainingWindow() const,
+        "Get the window this sizer is used in.", "");
+        
 
     %pythoncode {
     def SetItemMinSize(self, item, *args):

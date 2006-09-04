@@ -81,7 +81,25 @@ public:
     DocDeclStr(
         int , GetCommand(),
         "Get the AcceleratorEntry's command ID.", "");
+    
+    DocDeclStr(
+        bool , IsOk() const,
+        "", "");
+    
+    
+    DocDeclStr(
+        wxString , ToString() const,
+        "Returns a string representation for the this accelerator.  The string
+is formatted using the <flags>-<keycode> format where <flags> maybe a
+hyphen-separed list of \"shift|alt|ctrl\"
+", "");
+    
 
+    DocDeclStr(
+        bool , FromString(const wxString &str),
+        "Returns true if the given string correctly initialized this object.", "");
+    
+    
     %property(Command, GetCommand, doc="See `GetCommand`");
     %property(Flags, GetFlags, doc="See `GetFlags`");
     %property(KeyCode, GetKeyCode, doc="See `GetKeyCode`");

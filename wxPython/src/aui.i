@@ -264,6 +264,7 @@ class wxPyDockArt :  public wxDefaultDockArt
     DEC_PYCALLBACK__INTCOLOUR(SetColour);
 
     virtual void DrawSash(wxDC& dc,
+                          wxWindow* window,
                           int orientation,
                           const wxRect& rect)
     {
@@ -271,18 +272,20 @@ class wxPyDockArt :  public wxDefaultDockArt
         wxPyBlock_t blocked = wxPyBeginBlockThreads();
         if ((found = wxPyCBH_findCallback(m_myInst, "DrawSash"))) {
             PyObject* odc = wxPyMake_wxObject(&dc, false);
+            PyObject* owin = wxPyMake_wxObject(window, false);
             PyObject* orect = wxPyConstructObject((void*)&rect, wxT("wxRect"), 0);
-            wxPyCBH_callCallback(m_myInst, Py_BuildValue("(OiO)",
-                                                         odc, orientation, orect));
+            wxPyCBH_callCallback(m_myInst, Py_BuildValue("(OOiO)",
+                                                         odc, owin, orientation, orect));
             Py_DECREF(odc);
             Py_DECREF(orect);
         }
         wxPyEndBlockThreads(blocked);
         if (! found)
-            wxDefaultDockArt::DrawSash(dc, orientation, rect);
+            wxDefaultDockArt::DrawSash(dc, window, orientation, rect);
     }
 
     virtual void DrawBackground(wxDC& dc,
+                          wxWindow* window,
                           int orientation,
                           const wxRect& rect)
     {
@@ -290,18 +293,20 @@ class wxPyDockArt :  public wxDefaultDockArt
         wxPyBlock_t blocked = wxPyBeginBlockThreads();
         if ((found = wxPyCBH_findCallback(m_myInst, "DrawBackground"))) {
             PyObject* odc = wxPyMake_wxObject(&dc, false);
+            PyObject* owin = wxPyMake_wxObject(window, false);
             PyObject* orect = wxPyConstructObject((void*)&rect, wxT("wxRect"), 0);
-            wxPyCBH_callCallback(m_myInst, Py_BuildValue("(OiO)",
-                                                         odc, orientation, orect));
+            wxPyCBH_callCallback(m_myInst, Py_BuildValue("(OOiO)",
+                                                         odc, owin, orientation, orect));
             Py_DECREF(odc);
             Py_DECREF(orect);
         }
         wxPyEndBlockThreads(blocked);
         if (! found)
-            wxDefaultDockArt::DrawBackground(dc, orientation, rect);
+            wxDefaultDockArt::DrawBackground(dc, window, orientation, rect);
     }
 
     virtual void DrawCaption(wxDC& dc,
+                          wxWindow* window,
                           const wxString& text,
                           const wxRect& rect,
                           wxPaneInfo& pane)
@@ -310,11 +315,12 @@ class wxPyDockArt :  public wxDefaultDockArt
         wxPyBlock_t blocked = wxPyBeginBlockThreads();
         if ((found = wxPyCBH_findCallback(m_myInst, "DrawCaption"))) {
             PyObject* odc = wxPyMake_wxObject(&dc, false);
+            PyObject* owin = wxPyMake_wxObject(window, false);
             PyObject* otext = wx2PyString(text);
             PyObject* orect = wxPyConstructObject((void*)&rect, wxT("wxRect"), 0);
             PyObject* opane = wxPyConstructObject((void*)&pane, wxT("wxPaneInfo"), 0);
-            wxPyCBH_callCallback(m_myInst, Py_BuildValue("(OOOO)",
-                                                         odc, otext, orect, opane));
+            wxPyCBH_callCallback(m_myInst, Py_BuildValue("(OOOOO)",
+                                                         odc, owin, otext, orect, opane));
             Py_DECREF(odc);
             Py_DECREF(otext);
             Py_DECREF(orect);
@@ -322,10 +328,11 @@ class wxPyDockArt :  public wxDefaultDockArt
        }
         wxPyEndBlockThreads(blocked);
         if (! found)
-            wxDefaultDockArt::DrawCaption(dc, text, rect, pane);
+            wxDefaultDockArt::DrawCaption(dc, window, text, rect, pane);
     }
 
     virtual void DrawGripper(wxDC& dc,
+                          wxWindow* window,
                           const wxRect& rect,
                           wxPaneInfo& pane)
     {
@@ -333,19 +340,21 @@ class wxPyDockArt :  public wxDefaultDockArt
         wxPyBlock_t blocked = wxPyBeginBlockThreads();
         if ((found = wxPyCBH_findCallback(m_myInst, "DrawGripper"))) {
             PyObject* odc = wxPyMake_wxObject(&dc, false);
+            PyObject* owin = wxPyMake_wxObject(window, false);
             PyObject* orect = wxPyConstructObject((void*)&rect, wxT("wxRect"), 0);
             PyObject* opane = wxPyConstructObject((void*)&pane, wxT("wxPaneInfo"), 0);
-            wxPyCBH_callCallback(m_myInst, Py_BuildValue("(OOO)", odc, orect, opane));
+            wxPyCBH_callCallback(m_myInst, Py_BuildValue("(OOOO)", odc, owin, orect, opane));
             Py_DECREF(odc);
             Py_DECREF(orect);
             Py_DECREF(opane);
         }
         wxPyEndBlockThreads(blocked);
         if (! found)
-            wxDefaultDockArt::DrawGripper(dc, rect, pane);
+            wxDefaultDockArt::DrawGripper(dc, window, rect, pane);
     }
 
     virtual void DrawBorder(wxDC& dc,
+                          wxWindow* window,
                           const wxRect& rect,
                           wxPaneInfo& pane)
     {
@@ -353,6 +362,7 @@ class wxPyDockArt :  public wxDefaultDockArt
         wxPyBlock_t blocked = wxPyBeginBlockThreads();
         if ((found = wxPyCBH_findCallback(m_myInst, "DrawBorder"))) {
             PyObject* odc = wxPyMake_wxObject(&dc, false);
+            PyObject* owin = wxPyMake_wxObject(window, false);
             PyObject* orect = wxPyConstructObject((void*)&rect, wxT("wxRect"), 0);
             PyObject* opane = wxPyConstructObject((void*)&pane, wxT("wxPaneInfo"), 0);
             wxPyCBH_callCallback(m_myInst, Py_BuildValue("(OOO)", odc, orect, opane));
@@ -362,10 +372,11 @@ class wxPyDockArt :  public wxDefaultDockArt
        }
         wxPyEndBlockThreads(blocked);
         if (! found)
-            wxDefaultDockArt::DrawBorder(dc, rect, pane);
+            wxDefaultDockArt::DrawBorder(dc, window, rect, pane);
     }
 
     virtual void DrawPaneButton(wxDC& dc,
+                          wxWindow* window,
                           int button,
                           int button_state,
                           const wxRect& rect,
@@ -375,10 +386,11 @@ class wxPyDockArt :  public wxDefaultDockArt
         wxPyBlock_t blocked = wxPyBeginBlockThreads();
         if ((found = wxPyCBH_findCallback(m_myInst, "DrawPaneButton"))) {
             PyObject* odc = wxPyMake_wxObject(&dc, false);
+            PyObject* owin = wxPyMake_wxObject(window, false);
             PyObject* orect = wxPyConstructObject((void*)&rect, wxT("wxRect"), 0);
             PyObject* opane = wxPyConstructObject((void*)&pane, wxT("wxPaneInfo"), 0);
-            wxPyCBH_callCallback(m_myInst, Py_BuildValue("(OiIOO)",
-                                                         odc, button, button_state,
+            wxPyCBH_callCallback(m_myInst, Py_BuildValue("(OOiIOO)",
+                                                         odc, owin, button, button_state,
                                                          orect, opane));
             Py_DECREF(odc);
             Py_DECREF(orect);
@@ -386,7 +398,7 @@ class wxPyDockArt :  public wxDefaultDockArt
         }
         wxPyEndBlockThreads(blocked);
         if (! found)
-            wxDefaultDockArt::DrawPaneButton(dc, button, button_state, rect, pane);
+            wxDefaultDockArt::DrawPaneButton(dc, window, button, button_state, rect, pane);
     }
 
     PYPRIVATE;
