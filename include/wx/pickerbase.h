@@ -14,6 +14,7 @@
 
 #include "wx/control.h"
 #include "wx/sizer.h"
+#include "wx/containr.h"
 
 class WXDLLIMPEXP_CORE wxTextCtrl;
 

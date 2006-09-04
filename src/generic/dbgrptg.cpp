@@ -35,6 +35,7 @@
     #include "wx/stattext.h"
     #include "wx/filedlg.h"
     #include "wx/valtext.h"
+    #include "wx/button.h"
 #endif // WX_PRECOMP
 
 #include "wx/filename.h"

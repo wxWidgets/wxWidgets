@@ -24,6 +24,7 @@
 #include "wx/aui/framemanager.h"
 #include "wx/aui/dockart.h"
 #include "wx/aui/floatpane.h"
+#include "wx/control.h"
 
 
 // event declarations/classes

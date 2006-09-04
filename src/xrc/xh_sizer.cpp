@@ -24,6 +24,9 @@
     #include "wx/panel.h"
     #include "wx/statbox.h"
     #include "wx/sizer.h"
+    #include "wx/frame.h"
+    #include "wx/dialog.h"
+    #include "wx/button.h"
 #endif
 
 #include "wx/gbsizer.h"

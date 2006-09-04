@@ -27,6 +27,7 @@
     #include "wx/settings.h"
     #include "wx/button.h"
     #include "wx/statbox.h"
+    #include "wx/toplevel.h"
 #endif // WX_PRECOMP
 
 #include "wx/listimpl.cpp"
