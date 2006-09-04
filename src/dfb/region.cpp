@@ -33,6 +33,8 @@ public:
 
     ~wxRegionRefData() {}
 
+    // default assignment and comparision operators are OK
+
     wxRect m_rect;
 };
 
@@ -80,11 +82,14 @@ wxRegion::~wxRegion()
 
 bool wxRegion::operator==(const wxRegion& region) const
 {
-    if ( m_refData != region.m_refData )
-        return false;
+    if ( m_refData == region.m_refData )
+        return true;
 
     if ( !Ok() )
-        return true; // both invalid
+    {
+        // only equal if both are invalid, otherwise different
+        return !region.Ok();
+    }
 
     return M_REGION->m_rect == M_REGION_OF(region)->m_rect;
 }
