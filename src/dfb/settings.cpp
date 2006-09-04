@@ -23,8 +23,6 @@
     #include "wx/gdicmn.h"
 #endif
 
-#include "wx/dfb/private.h"
-
 
 wxColour wxSystemSettingsNative::GetColour(wxSystemColour WXUNUSED(index))
 {
