@@ -329,7 +329,7 @@ WX_DECLARE_EXPORTED_LIST( wxSizerItem, wxSizerItemList );
 class WXDLLEXPORT wxSizer: public wxObject, public wxClientDataContainer
 {
 public:
-    wxSizer() { }
+    wxSizer() { m_containingWindow = NULL; }
     ~wxSizer();
 
     // methods for adding elements to the sizer: there are Add/Insert/Prepend
@@ -410,6 +410,10 @@ public:
     inline wxSizerItem* PrependSpacer(int size);
     inline wxSizerItem* PrependStretchSpacer(int prop = 1);
 
+    // set (or possibly unset if window is NULL) or get the window this sizer
+    // is used in 
+    void SetContainingWindow(wxWindow *window);
+    wxWindow *GetContainingWindow() const { return m_containingWindow; }
 
 #if WXWIN_COMPATIBILITY_2_6
     // Deprecated in 2.6 since historically it does not delete the window,
@@ -507,6 +511,9 @@ protected:
     wxSize              m_minSize;
     wxPoint             m_position;
     wxSizerItemList     m_children;
+
+    // the window this sizer is used in, can be NULL
+    wxWindow *m_containingWindow;
 
     wxSize GetMaxWindowSize( wxWindow *window ) const;
     wxSize GetMinWindowSize( wxWindow *window );

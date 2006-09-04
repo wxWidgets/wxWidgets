@@ -1650,12 +1650,21 @@ void wxWindowBase::SetSizer(wxSizer *sizer, bool deleteOld)
     if ( sizer == m_windowSizer)
         return;
 
-    if ( deleteOld )
-        delete m_windowSizer;
+    if ( m_windowSizer )
+    {
+        m_windowSizer->SetContainingWindow(NULL);
+
+        if ( deleteOld )
+            delete m_windowSizer;
+    }
 
     m_windowSizer = sizer;
+    if ( m_windowSizer )
+    {
+        m_windowSizer->SetContainingWindow((wxWindow *)this);
+    }
 
-    SetAutoLayout( sizer != NULL );
+    SetAutoLayout(m_windowSizer != NULL);
 }
 
 void wxWindowBase::SetSizerAndFit(wxSizer *sizer, bool deleteOld)

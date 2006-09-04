@@ -506,6 +506,29 @@ wxSizerItem* wxSizer::Insert( size_t index, wxSizerItem *item )
     return item;
 }
 
+void wxSizer::SetContainingWindow(wxWindow *win)
+{
+    if ( win == m_containingWindow )
+        return;
+
+    m_containingWindow = win;
+
+    // set the same window for all nested sizers as well, they also are in the
+    // same window
+    for ( wxSizerItemList::compatibility_iterator node = m_children.GetFirst();
+          node;
+          node = node->GetNext() )
+    {
+        wxSizerItem *const item = node->GetData();
+        wxSizer *const sizer = item->GetSizer();
+
+        if ( sizer )
+        {
+            sizer->SetContainingWindow(win);
+        }
+    }
+}
+
 #if WXWIN_COMPATIBILITY_2_6
 bool wxSizer::Remove( wxWindow *window )
 {
@@ -643,7 +666,7 @@ bool wxSizer::Replace( wxWindow *oldwin, wxWindow *newwin, bool recursive )
             if (item->GetSizer()->Replace( oldwin, newwin, true ))
                 return true;
         }
-        
+
         node = node->GetNext();
     }
 
@@ -671,8 +694,8 @@ bool wxSizer::Replace( wxSizer *oldsz, wxSizer *newsz, bool recursive )
         {
             if (item->GetSizer()->Replace( oldsz, newsz, true ))
                 return true;
-        }        
-        
+        }
+
         node = node->GetNext();
     }
 
@@ -690,7 +713,7 @@ bool wxSizer::Replace( size_t old, wxSizerItem *newitem )
 
     wxSizerItem *item = node->GetData();
     node->SetData(newitem);
-    delete item;    
+    delete item;
 
     return true;
 }
