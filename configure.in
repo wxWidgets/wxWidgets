@@ -2836,6 +2836,9 @@ if test "$USE_WIN32" = 1 ; then
     dnl defined then jmorecfg.h doesn't declare it, so checking for it here
     dnl solves the problem.
     AC_CHECK_TYPES(boolean, [], [], [#include <windows.h>])
+
+    dnl pbt.h is missing on Wine at least
+    AC_CHECK_HEADERS(pbt.h, [], [AC_DEFINE(NEED_PBT_H)])
 fi
 
 if test "$wxUSE_GUI" = "yes"; then
