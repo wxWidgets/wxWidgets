@@ -418,5 +418,18 @@ typedef struct _OSVERSIONINFOEX {
     #include "wx/msw/wince/missing.h"
 #endif
 
+ /*
+  * The following are specifically required for Wine
+  */
+
+#ifdef __WINE__
+    #ifndef ENUM_CURRENT_SETTINGS
+        #define ENUM_CURRENT_SETTINGS   ((DWORD)-1)
+    #endif
+    #ifndef BROADCAST_QUERY_DENY
+        #define BROADCAST_QUERY_DENY    1112363332
+    #endif
+#endif  // defined __WINE__
+
 #endif
     // _WX_MISSING_H_

@@ -686,7 +686,10 @@ size_t wxDataObject::GetBufferOffset(const wxDataFormat& format )
 const void* wxDataObject::GetSizeFromBuffer( const void* buffer, size_t* size,
                                                const wxDataFormat& format )
 {
-    size_t realsz = ::HeapSize(::GetProcessHeap(), 0, buffer);
+    // hack: the third parameter is declared non-const in Wine's headers so
+    // cast away the const
+    size_t realsz = ::HeapSize(::GetProcessHeap(), 0,
+                               wx_const_cast(void*, buffer));
     if ( realsz == (size_t)-1 )
     {
         // note that HeapSize() does not set last error

@@ -106,7 +106,7 @@
 // include <commctrl.h> "properly"
 #include "wx/msw/wrapcctl.h"
 
-#ifndef __WXWINCE__
+#if !defined __WXWINCE__ && !defined __WINE__
     #include <pbt.h>
 #endif
 

@@ -33,6 +33,8 @@
     #include "wx/frame.h"
 #endif
 
+#include "wx/msw/missing.h"
+
 #include "wx/dynload.h"
 #include "wx/sysopt.h"
 
