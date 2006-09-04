@@ -255,6 +255,50 @@ void wxMenuBar::SetInvokingWindow( wxWindow *win )
     }
 }
 
+void wxMenuBar::SetLayoutDirection(wxLayoutDirection dir)
+{
+    if ( dir == wxLayout_Default )
+    {
+        const wxWindow *const frame = GetFrame();
+        if ( frame )
+        {
+            // inherit layout from frame.
+            dir = frame->GetLayoutDirection();
+        }
+        else // use global layout
+        {
+            dir = wxTheApp->GetLayoutDirection();
+        }
+    }
+
+    if ( dir == wxLayout_Default )
+        return;
+
+    GTKSetLayout(m_menubar, dir);
+
+    // also set the layout of all menus we already have (new ones will inherit
+    // the current layout)
+    for ( wxMenuList::compatibility_iterator node = m_menus.GetFirst();
+          node;
+          node = node->GetNext() )
+    {
+        wxMenu *const menu = node->GetData();
+        menu->SetLayoutDirection(dir);
+    }
+}
+
+wxLayoutDirection wxMenuBar::GetLayoutDirection() const
+{
+    return GTKGetLayout(m_menubar);
+}
+
+void wxMenuBar::Attach(wxFrame *frame)
+{
+    wxMenuBarBase::Attach(frame);
+
+    SetLayoutDirection(wxLayout_Default);
+}
+
 void wxMenuBar::UnsetInvokingWindow( wxWindow *win )
 {
     m_invokingWindow = (wxWindow*) NULL;
@@ -288,6 +332,7 @@ bool wxMenuBar::GtkAppend(wxMenu *menu, const wxString& title, int pos)
 
     // The "m_owner" is the "menu item"
     menu->m_owner = gtk_menu_item_new_with_mnemonic( wxGTK_CONV( str ) );
+    menu->SetLayoutDirection(GetLayoutDirection());
 
     gtk_widget_show( menu->m_owner );
 
@@ -987,6 +1032,18 @@ wxMenu::~wxMenu()
    }
 }
 
+void wxMenu::SetLayoutDirection(const wxLayoutDirection dir)
+{
+    if ( m_owner )
+        wxWindow::GTKSetLayout(m_owner, dir);
+    //else: will be called later by wxMenuBar again
+}
+
+wxLayoutDirection wxMenu::GetLayoutDirection() const
+{
+    return wxWindow::GTKGetLayout(m_owner);
+}
+
 bool wxMenu::GtkAppend(wxMenuItem *mitem, int pos)
 {
     GtkWidget *menuItem;
@@ -1223,6 +1280,14 @@ int wxMenu::FindMenuIdByMenuItem( GtkWidget *menuItem ) const
     }
 
     return wxNOT_FOUND;
+}
+
+void wxMenu::Attach(wxMenuBarBase *menubar)
+{
+    wxMenuBase::Attach(menubar);
+
+    // inherit layout direction from menubar.
+    SetLayoutDirection(menubar->GetLayoutDirection());
 }
 
 // ----------------------------------------------------------------------------

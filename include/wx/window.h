@@ -25,6 +25,7 @@
 #include "wx/colour.h"
 #include "wx/region.h"
 #include "wx/utils.h"
+#include "wx/intl.h"
 
 #include "wx/validate.h"        // for wxDefaultValidator (always include it)
 
@@ -180,15 +181,29 @@ public:
     virtual void SetName( const wxString &name ) { m_windowName = name; }
     virtual wxString GetName() const { return m_windowName; }
 
-    // sets the window variant, calls internally DoSetVariant if variant has changed
-    void SetWindowVariant( wxWindowVariant variant ) ;
-    wxWindowVariant GetWindowVariant() const { return m_windowVariant ; }
+        // sets the window variant, calls internally DoSetVariant if variant
+        // has changed
+    void SetWindowVariant(wxWindowVariant variant);
+    wxWindowVariant GetWindowVariant() const { return m_windowVariant; }
 
 
         // window id uniquely identifies the window among its siblings unless
         // it is wxID_ANY which means "don't care"
     void SetId( wxWindowID winid ) { m_windowId = winid; }
     wxWindowID GetId() const { return m_windowId; }
+    
+        // get or change the layout direction (LTR or RTL) for this window,
+        // wxLayout_Default is returned if layout direction is not supported
+    virtual wxLayoutDirection GetLayoutDirection() const
+        { return wxLayout_Default; }
+    virtual void SetLayoutDirection(wxLayoutDirection WXUNUSED(dir))
+        { }
+
+        // mirror coordinates for RTL layout if this window uses it and if the
+        // mirroring is not done automatically like Win32
+    virtual wxCoord AdjustForLayoutDirection(wxCoord x,
+                                             wxCoord width,
+                                             wxCoord widthTotal) const;
 
         // generate a control id for the controls which were not given one by
         // user

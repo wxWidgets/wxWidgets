@@ -113,6 +113,9 @@ public:
     virtual void AddChild( wxWindowBase *child );
     virtual void RemoveChild( wxWindowBase *child );
 
+    virtual void SetLayoutDirection(wxLayoutDirection dir);
+    virtual wxLayoutDirection GetLayoutDirection() const;
+
     // currently wxGTK2-only
     void SetDoubleBuffered(bool on);
 
@@ -171,6 +174,10 @@ public:
     //
     // base version just does GetEventHandler()->ProcessEvent()
     virtual bool GTKProcessEvent(wxEvent& event) const;
+
+    // Map GTK widget direction of the given widget to/from wxLayoutDirection
+    static wxLayoutDirection GTKGetLayout(GtkWidget *widget);
+    static void GTKSetLayout(GtkWidget *widget, wxLayoutDirection dir);
 
 protected:
     // Override GTKWidgetNeedsMnemonic and return true if your

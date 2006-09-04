@@ -16,6 +16,7 @@
         <files>internat.po internat.mo</files>
     </template>
 
+    <wx-data id="ar" template="catalog"/>
     <wx-data id="bg" template="catalog"/>
     <wx-data id="cs" template="catalog"/>
     <wx-data id="de" template="catalog"/>

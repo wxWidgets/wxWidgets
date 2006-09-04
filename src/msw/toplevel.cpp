@@ -503,6 +503,9 @@ bool wxTopLevelWindowMSW::CreateFrame(const wxString& title,
 
     const wxSize sz = IsAlwaysMaximized() ? wxDefaultSize : size;
 
+    if ( wxTheApp->GetLayoutDirection() == wxLayout_RightToLeft )
+        exflags |= WS_EX_LAYOUTRTL;
+
     return MSWCreate(wxCanvasClassName, title, pos, sz, flags, exflags);
 }
 
@@ -561,6 +564,11 @@ bool wxTopLevelWindowMSW::Create(wxWindow *parent,
 
         // all dialogs are popups
         dlgTemplate->style |= WS_POPUP;
+        
+        if ( wxTheApp->GetLayoutDirection() == wxLayout_RightToLeft )
+        {
+            dlgTemplate->dwExtendedStyle |= WS_EX_LAYOUTRTL;
+        }
 
 #ifndef __WXWINCE__
         // force 3D-look if necessary, it looks impossibly ugly otherwise
@@ -759,6 +767,15 @@ bool wxTopLevelWindowMSW::IsIconized() const
 void wxTopLevelWindowMSW::Restore()
 {
     DoShowWindow(SW_RESTORE);
+}
+
+void wxTopLevelWindowMSW::SetLayoutDirection(wxLayoutDirection dir)
+{
+    if ( dir == wxLayout_Default )
+        dir = wxTheApp->GetLayoutDirection();
+
+    if ( dir != wxLayout_Default )
+        wxTopLevelWindowBase::SetLayoutDirection(dir);
 }
 
 // ----------------------------------------------------------------------------

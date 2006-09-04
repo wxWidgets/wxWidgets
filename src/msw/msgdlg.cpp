@@ -97,6 +97,9 @@ int wxMessageDialog::ShowModal()
     if ( wxStyle & wxSTAY_ON_TOP )
         msStyle |= MB_TOPMOST;
 
+    if ( wxTheApp->GetLayoutDirection() == wxLayout_RightToLeft )
+        msStyle |= MB_RTLREADING | MB_RIGHT;
+
     if (hWnd)
         msStyle |= MB_APPLMODAL;
     else

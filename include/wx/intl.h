@@ -302,6 +302,13 @@ enum wxLanguage
 
 // --- --- --- generated code ends here --- --- ---
 
+enum wxLayoutDirection
+{
+    wxLayout_Default,
+    wxLayout_LeftToRight,
+    wxLayout_RightToLeft
+};
+
 // ----------------------------------------------------------------------------
 // wxLanguageInfo: encapsulates wxLanguage to OS native lang.desc.
 //                 translation information
@@ -316,6 +323,7 @@ struct WXDLLIMPEXP_BASE wxLanguageInfo
              WinSublang;
 #endif // __WIN32__
     wxString Description;           // human-readable name of the language
+    wxLayoutDirection LayoutDirection;
 };
 
 // ----------------------------------------------------------------------------

@@ -55,6 +55,8 @@ public:
     virtual void SetIcon(const wxIcon& icon);
     virtual void SetIcons(const wxIconBundle& icons );
     virtual void Restore();
+    
+    virtual void SetLayoutDirection(wxLayoutDirection dir);
 
 #ifndef __WXWINCE__
     virtual bool SetShape(const wxRegion& region);

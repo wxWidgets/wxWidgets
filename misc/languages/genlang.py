@@ -12,7 +12,7 @@ def ReadTable():
     f = open('langtabl.txt')
     for i in f.readlines():
         ispl = i.split()
-        table.append((ispl[0], ispl[1], ispl[2], ispl[3], string.join(ispl[4:])))
+        table.append((ispl[0], ispl[1], ispl[2], ispl[3], ispl[4], string.join(ispl[5:])))
     f.close()
     return table
 
@@ -87,8 +87,14 @@ def GenTable(table):
        if ilang == '-': ilang = '0'
        isublang = i[3]
        if isublang == '-': isublang = '0'
-       lngtable += '   LNG(%-38s %-7s, %-15s, %-34s, %s)\n' % \
-                     ((i[0]+','), ican, ilang, isublang, i[4])
+       if (i[4] == "LTR") :
+           ilayout = "wxLayout_LeftToRight"
+       elif (i[4] == "RTL"):
+           ilayout = "wxLayout_RightToLeft"
+       else:
+           print "ERROR: Invalid value for the layout direction";
+       lngtable += '   LNG(%-38s %-7s, %-15s, %-34s, %s, %s)\n' % \
+                     ((i[0]+','), ican, ilang, isublang, ilayout, i[5])
        if ilang not in all_langs: all_langs.append(ilang)
        if isublang not in all_sublangs: all_sublangs.append(isublang)
 
@@ -119,10 +125,11 @@ def GenTable(table):
 
 #endif // __WIN32__
 
-#define LNG(wxlang, canonical, winlang, winsublang, desc) \\
+#define LNG(wxlang, canonical, winlang, winsublang, layout, desc) \\
     info.Language = wxlang;                               \\
     info.CanonicalName = wxT(canonical);                  \\
-    info.Description = desc;                              \\
+    info.LayoutDirection = layout;                        \\
+    info.Description = wxT(desc);                         \\
     SETWINLANG(info, winlang, winsublang)                 \\
     AddLanguage(info);
 

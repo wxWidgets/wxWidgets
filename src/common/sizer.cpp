@@ -1695,6 +1695,16 @@ void wxBoxSizer::RecalcSizes()
                 //     wxALIGN_CENTER should be used in new code
                     child_pos.y += (m_size.y - size.y) / 2;
 
+                if ( m_containingWindow )
+                {
+                    child_pos.x = m_containingWindow->AdjustForLayoutDirection
+                                                      (
+                                                        child_pos.x,
+                                                        width,
+                                                        m_size.x
+                                                      );
+                }
+
                 item->SetDimension( child_pos, child_size );
 
                 pt.x += width;

@@ -102,7 +102,9 @@ static const wxLanguage langIds[] =
 #if wxUSE_UNICODE
     wxLANGUAGE_GEORGIAN,
     wxLANGUAGE_ENGLISH,
-    wxLANGUAGE_ENGLISH_US
+    wxLANGUAGE_ENGLISH_US,
+    wxLANGUAGE_ARABIC,
+    wxLANGUAGE_ARABIC_EGYPT
 #endif
 };
 
@@ -124,7 +126,9 @@ const wxString langNames[] =
 #if wxUSE_UNICODE
     _T("Georgian"),
     _T("English"),
-    _T("English (U.S.)")
+    _T("English (U.S.)"),
+    _T("Arabic"),
+    _T("Arabic (Egypt)")
 #endif
 };
 
@@ -253,7 +257,13 @@ MyFrame::MyFrame(wxLocale& locale)
                  _("International wxWidgets App")),
          m_locale(locale)
 {
-    // Empty
+    // this demonstrates RTL layout mirroring for Arabic locales
+    wxSizer *sizer = new wxBoxSizer(wxHORIZONTAL);
+    sizer->Add(new wxStaticText(this, wxID_ANY, _("First")),
+                wxSizerFlags().Border());
+    sizer->Add(new wxStaticText(this, wxID_ANY, _("Second")),
+                wxSizerFlags().Border());
+    SetSizer(sizer);
 }
 
 void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event) )

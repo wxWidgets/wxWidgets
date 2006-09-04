@@ -110,6 +110,12 @@ public:
     virtual bool ScrollLines(int lines);
     virtual bool ScrollPages(int pages);
 
+    virtual void SetLayoutDirection(wxLayoutDirection dir);
+    virtual wxLayoutDirection GetLayoutDirection() const;
+    virtual wxCoord AdjustForLayoutDirection(wxCoord x,
+                                             wxCoord width,
+                                             wxCoord widthTotal) const;
+
 #if wxUSE_DRAG_AND_DROP
     virtual void SetDropTarget( wxDropTarget *dropTarget );
 #endif // wxUSE_DRAG_AND_DROP

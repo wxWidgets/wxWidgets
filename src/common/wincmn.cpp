@@ -2980,3 +2980,21 @@ wxAccStatus wxWindowAccessible::GetSelections(wxVariant* WXUNUSED(selections))
 }
 
 #endif // wxUSE_ACCESSIBILITY
+
+// ----------------------------------------------------------------------------
+// RTL support
+// ----------------------------------------------------------------------------
+
+wxCoord
+wxWindowBase::AdjustForLayoutDirection(wxCoord x,
+                                       wxCoord width,
+                                       wxCoord widthTotal) const
+{
+    if ( GetLayoutDirection() == wxLayout_RightToLeft )
+    {
+        x = widthTotal - x - width;
+    }
+
+    return x;
+}
+

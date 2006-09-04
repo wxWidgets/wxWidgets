@@ -27,6 +27,7 @@
 
 #include "wx/build.h"
 #include "wx/init.h"        // we must declare wxEntry()
+#include "wx/intl.h"
 
 class WXDLLIMPEXP_BASE wxAppConsole;
 class WXDLLIMPEXP_BASE wxAppTraits;
@@ -112,6 +113,9 @@ public:
 
     // Called from wxExit() function, should terminate the application a.s.a.p.
     virtual void Exit();
+    
+    // Return the layout direction for the current locale
+    virtual wxLayoutDirection GetLayoutDirection() const;
 
 
     // application info: name, description, vendor

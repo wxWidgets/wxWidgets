@@ -1018,6 +1018,59 @@ bool wxWindowMSW::ScrollPages(int pages)
                             down ? pages : -pages);
 }
 
+// ----------------------------------------------------------------------------
+// RTL support
+// ----------------------------------------------------------------------------
+
+void wxWindowMSW::SetLayoutDirection(wxLayoutDirection dir)
+{
+    const HWND hwnd = GetHwnd();
+    wxCHECK_RET( hwnd, _T("layout direction must be set after window creation") );
+
+    LONG styleOld = ::GetWindowLong(hwnd, GWL_EXSTYLE);
+
+    LONG styleNew = styleOld;
+    switch ( dir )
+    {
+        case wxLayout_LeftToRight:
+            styleNew &= ~WS_EX_LAYOUTRTL;
+            break;
+
+        case wxLayout_RightToLeft:
+            styleNew |= WS_EX_LAYOUTRTL;
+            break;
+
+        default:
+            wxFAIL_MSG(_T("unsupported layout direction"));
+            break;
+    }
+
+    if ( styleNew != styleOld )
+    {
+        ::SetWindowLong(hwnd, GWL_EXSTYLE, styleNew);
+    }
+}
+
+wxLayoutDirection wxWindowMSW::GetLayoutDirection() const
+{
+    const HWND hwnd = GetHwnd();
+    wxCHECK_MSG( hwnd, wxLayout_Default, _T("invalid window") );
+
+    return ::GetWindowLong(hwnd, GWL_EXSTYLE) & WS_EX_LAYOUTRTL
+                ? wxLayout_RightToLeft
+                : wxLayout_LeftToRight;
+}
+
+wxCoord
+wxWindowMSW::AdjustForLayoutDirection(wxCoord x,
+                                      wxCoord WXUNUSED(width),
+                                      wxCoord WXUNUSED(widthTotal)) const
+{
+    // Win32 mirrors the coordinates of RTL windows automatically, so don't
+    // redo it ourselves
+    return x;
+}
+
 // ---------------------------------------------------------------------------
 // subclassing
 // ---------------------------------------------------------------------------

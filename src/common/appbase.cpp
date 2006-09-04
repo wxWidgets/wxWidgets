@@ -216,6 +216,24 @@ void wxAppConsole::Exit()
     exit(-1);
 }
 
+wxLayoutDirection wxAppConsole::GetLayoutDirection() const
+{
+#if wxUSE_INTL
+    const wxLocale *const locale = wxGetLocale();
+    if ( locale )
+    {
+        const wxLanguageInfo *const
+            info = wxLocale::GetLanguageInfo(locale->GetLanguage());
+        
+        if ( info )
+            return info->LayoutDirection;
+    }
+#endif // wxUSE_INTL
+
+    // we don't know
+    return wxLayout_Default;
+}
+
 // ----------------------------------------------------------------------------
 // traits stuff
 // ----------------------------------------------------------------------------

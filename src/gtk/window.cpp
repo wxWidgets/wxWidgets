@@ -2690,6 +2690,8 @@ void wxWindowGTK::PostCreation()
     InheritAttributes();
 
     m_hasVMT = true;
+    
+    SetLayoutDirection(wxLayout_Default);
 
     // unless the window was created initially hidden (i.e. Hide() had been
     // called before Create()), we should show it at GTK+ level as well
@@ -3393,6 +3395,8 @@ bool wxWindowGTK::Reparent( wxWindowBase *newParentBase )
 
     /* reverse: prevent GTK from deleting the widget arbitrarily */
     gtk_widget_unref( m_widget );
+    
+    SetLayoutDirection(wxLayout_Default);
 
     return true;
 }
@@ -3426,6 +3430,51 @@ void wxWindowGTK::RemoveChild(wxWindowBase *child)
     m_dirtyTabOrder = true;
     if (g_isIdle)
         wxapp_install_idle_handler();
+}
+
+/* static */
+wxLayoutDirection wxWindowGTK::GTKGetLayout(GtkWidget *widget)
+{
+    return gtk_widget_get_direction(GTK_WIDGET(widget)) == GTK_TEXT_DIR_RTL
+                ? wxLayout_RightToLeft
+                : wxLayout_LeftToRight;
+}
+
+/* static */
+void wxWindowGTK::GTKSetLayout(GtkWidget *widget, wxLayoutDirection dir)
+{
+    wxASSERT_MSG( dir != wxLayout_Default, _T("invalid layout direction") );
+
+    gtk_widget_set_direction(GTK_WIDGET(widget),
+                             dir == wxLayout_RightToLeft ? GTK_TEXT_DIR_RTL
+                                                         : GTK_TEXT_DIR_LTR);
+}
+
+wxLayoutDirection wxWindowGTK::GetLayoutDirection() const
+{
+    return GTKGetLayout(m_widget);
+}
+
+void wxWindowGTK::SetLayoutDirection(wxLayoutDirection dir)
+{
+    if ( dir == wxLayout_Default )
+    {
+        const wxWindow *const parent = GetParent();
+        if ( parent )
+        {
+            // inherit layout from parent.
+            dir = parent->GetLayoutDirection();
+        }
+        else // no parent, use global default layout
+        {
+            dir = wxTheApp->GetLayoutDirection();
+        }
+    }
+
+    if ( dir == wxLayout_Default )
+        return;
+
+    GTKSetLayout(m_widget, dir);
 }
 
 void wxWindowGTK::DoMoveInTabOrder(wxWindow *win, MoveKind move)

@@ -203,16 +203,23 @@ WXHWND wxToolTip::GetToolTipCtrl()
 {
     if ( !ms_hwndTT )
     {
+        WXDWORD exflags = 0;
+        if ( wxTheApp->GetLayoutDirection() == wxLayout_RightToLeft )
+        {
+            exflags |= WS_EX_LAYOUTRTL;
+        }
+
         // we want to show the tooltips always (even when the window is not
         // active) and we don't want to strip "&"s from them
-        ms_hwndTT = (WXHWND)::CreateWindow(TOOLTIPS_CLASS,
-                                           (LPCTSTR)NULL,
-                                           TTS_ALWAYSTIP | TTS_NOPREFIX,
-                                           CW_USEDEFAULT, CW_USEDEFAULT,
-                                           CW_USEDEFAULT, CW_USEDEFAULT,
-                                           NULL, (HMENU)NULL,
-                                           wxGetInstance(),
-                                           NULL);
+        ms_hwndTT = (WXHWND)::CreateWindowEx(exflags,
+                                             TOOLTIPS_CLASS,
+                                             (LPCTSTR)NULL,
+                                             TTS_ALWAYSTIP | TTS_NOPREFIX,
+                                             CW_USEDEFAULT, CW_USEDEFAULT,
+                                             CW_USEDEFAULT, CW_USEDEFAULT,
+                                             NULL, (HMENU)NULL,
+                                             wxGetInstance(),
+                                             NULL);
        if ( ms_hwndTT )
        {
            HWND hwnd = (HWND)ms_hwndTT;

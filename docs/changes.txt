@@ -57,6 +57,7 @@ All:
 
 All (GUI):
 
+- Support for right-to-left text layout (Diaa Sami during Google Summer of Code)
 - Added wxID_PAGE_SETUP standard id
 
 wxMac:
