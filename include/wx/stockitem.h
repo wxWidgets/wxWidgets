@@ -43,9 +43,13 @@ enum wxStockLabelQueryFlag
 WXDLLEXPORT wxString wxGetStockLabel(wxWindowID id,
                                      long flags = wxSTOCK_WITH_MNEMONIC);
 
-// Returns the accelerator that should be used for given stock UI element
-// (e.g. "Ctrl+x" for wxSTOCK_EXIT)
-WXDLLEXPORT wxAcceleratorEntry wxGetStockAccelerator(wxWindowID id);
+#if wxUSE_ACCEL
+
+    // Returns the accelerator that should be used for given stock UI element
+    // (e.g. "Ctrl+x" for wxSTOCK_EXIT)
+    WXDLLEXPORT wxAcceleratorEntry wxGetStockAccelerator(wxWindowID id);
+
+#endif
 
 #ifdef __WXGTK20__
 

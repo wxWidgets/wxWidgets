@@ -191,7 +191,7 @@ public:
         // it is wxID_ANY which means "don't care"
     void SetId( wxWindowID winid ) { m_windowId = winid; }
     wxWindowID GetId() const { return m_windowId; }
-    
+
         // get or change the layout direction (LTR or RTL) for this window,
         // wxLayout_Default is returned if layout direction is not supported
     virtual wxLayoutDirection GetLayoutDirection() const
@@ -1042,7 +1042,7 @@ public:
     wxAccessible* GetOrCreateAccessible() ;
 #endif
 
-    
+
     // Set window transparency if the platform supports it
     virtual bool SetTransparent(wxByte WXUNUSED(alpha)) { return false; }
     virtual bool CanSetTransparent() { return false; }

@@ -174,6 +174,8 @@ wxString wxGetStockLabel(wxWindowID id, long flags)
         stockLabel = wxStripMenuCodes( stockLabel );
     }
 
+#if wxUSE_ACCEL
+
     if (!stockLabel.empty() && (flags & wxSTOCK_WITH_ACCELERATOR))
     {
         stockLabel += _T("\t");
@@ -183,8 +185,12 @@ wxString wxGetStockLabel(wxWindowID id, long flags)
             stockLabel += accel.ToString();
     }
 
+#endif // wxUSE_ACCEL
+
     return stockLabel;
 }
+
+#if wxUSE_ACCEL
 
 wxAcceleratorEntry wxGetStockAccelerator(wxWindowID id)
 {
@@ -219,6 +225,8 @@ wxAcceleratorEntry wxGetStockAccelerator(wxWindowID id)
     // always use wxAcceleratorEntry::IsOk on returned value !
     return ret;
 }
+
+#endif // wxUSE_ACCEL
 
 bool wxIsStockLabel(wxWindowID id, const wxString& label)
 {

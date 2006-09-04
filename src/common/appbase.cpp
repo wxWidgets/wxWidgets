@@ -224,7 +224,7 @@ wxLayoutDirection wxAppConsole::GetLayoutDirection() const
     {
         const wxLanguageInfo *const
             info = wxLocale::GetLanguageInfo(locale->GetLanguage());
-        
+
         if ( info )
             return info->LayoutDirection;
     }

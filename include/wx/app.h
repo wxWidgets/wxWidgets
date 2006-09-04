@@ -113,7 +113,7 @@ public:
 
     // Called from wxExit() function, should terminate the application a.s.a.p.
     virtual void Exit();
-    
+
     // Return the layout direction for the current locale
     virtual wxLayoutDirection GetLayoutDirection() const;
 
