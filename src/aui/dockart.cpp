@@ -372,6 +372,8 @@ void wxDefaultDockArt::DrawSash(wxDC& dc, wxWindow *window, int orientation, con
     );
 
 #else
+    wxUnusedVar(window);
+    wxUnusedVar(orientation);
     dc.SetPen(*wxTRANSPARENT_PEN);
     dc.SetBrush(m_sash_brush);
     dc.DrawRectangle(rect.x, rect.y, rect.width, rect.height);
@@ -379,7 +381,7 @@ void wxDefaultDockArt::DrawSash(wxDC& dc, wxWindow *window, int orientation, con
 }
 
 
-void wxDefaultDockArt::DrawBackground(wxDC& dc, wxWindow *window, int, const wxRect& rect)
+void wxDefaultDockArt::DrawBackground(wxDC& dc, wxWindow *WXUNUSED(window), int, const wxRect& rect)
 {
     dc.SetPen(*wxTRANSPARENT_PEN);
 #ifdef __WXMAC__
@@ -392,7 +394,7 @@ void wxDefaultDockArt::DrawBackground(wxDC& dc, wxWindow *window, int, const wxR
     dc.DrawRectangle(rect.x, rect.y, rect.width, rect.height);
 }
 
-void wxDefaultDockArt::DrawBorder(wxDC& dc, wxWindow *window, const wxRect& _rect,
+void wxDefaultDockArt::DrawBorder(wxDC& dc, wxWindow *WXUNUSED(window), const wxRect& _rect,
                                   wxPaneInfo& pane)
 {
     dc.SetPen(m_border_pen);
@@ -474,7 +476,7 @@ void wxDefaultDockArt::DrawCaptionBackground(wxDC& dc, const wxRect& rect, bool 
 }
 
 
-void wxDefaultDockArt::DrawCaption(wxDC& dc, wxWindow *window, 
+void wxDefaultDockArt::DrawCaption(wxDC& dc, wxWindow *WXUNUSED(window),
                                    const wxString& text,
                                    const wxRect& rect,
                                    wxPaneInfo& pane)
@@ -499,7 +501,7 @@ void wxDefaultDockArt::DrawCaption(wxDC& dc, wxWindow *window,
     dc.DestroyClippingRegion();
 }
 
-void wxDefaultDockArt::DrawGripper(wxDC& dc, wxWindow *window, 
+void wxDefaultDockArt::DrawGripper(wxDC& dc, wxWindow *WXUNUSED(window),
                                    const wxRect& rect,
                                    wxPaneInfo& pane)
 {
@@ -550,7 +552,7 @@ void wxDefaultDockArt::DrawGripper(wxDC& dc, wxWindow *window,
     }
 }
 
-void wxDefaultDockArt::DrawPaneButton(wxDC& dc, wxWindow *window, 
+void wxDefaultDockArt::DrawPaneButton(wxDC& dc, wxWindow *WXUNUSED(window),
                                       int button,
                                       int button_state,
                                       const wxRect& _rect,
