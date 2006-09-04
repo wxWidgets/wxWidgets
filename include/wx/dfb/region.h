@@ -76,11 +76,11 @@ public:
 
     // Outer bounds of region
     void GetBox(wxCoord& x, wxCoord& y, wxCoord&w, wxCoord &h) const;
-    wxRect GetBox(void) const;
+    wxRect GetBox() const;
 
     // Is region empty?
-    bool Empty(void) const;
-    inline bool IsEmpty(void) const { return Empty(); }
+    bool Empty() const;
+    bool IsEmpty() const { return Empty(); }
 
     // Does the region contain the point (x,y)?
     wxRegionContain Contains(wxCoord x, wxCoord y) const;
