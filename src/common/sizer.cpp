@@ -25,6 +25,7 @@
     #include "wx/math.h"
     #include "wx/utils.h"
     #include "wx/settings.h"
+    #include "wx/button.h"
     #include "wx/statbox.h"
 #endif // WX_PRECOMP
 

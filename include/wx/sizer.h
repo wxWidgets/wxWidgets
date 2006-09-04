@@ -14,19 +14,16 @@
 
 #include "wx/defs.h"
 
-#include "wx/button.h"
 #include "wx/window.h"
-#include "wx/frame.h"
-#include "wx/dialog.h"
 
 //---------------------------------------------------------------------------
 // classes
 //---------------------------------------------------------------------------
 
+class WXDLLEXPORT wxButton;
+class WXDLLEXPORT wxBoxSizer;
 class WXDLLEXPORT wxSizerItem;
 class WXDLLEXPORT wxSizer;
-class WXDLLEXPORT wxBoxSizer;
-
 
 // ----------------------------------------------------------------------------
 // wxSizerFlags: flags used for an item in the sizer
@@ -334,81 +331,81 @@ public:
 
     // methods for adding elements to the sizer: there are Add/Insert/Prepend
     // overloads for each of window/sizer/spacer/wxSizerItem
-    inline wxSizerItem* Add( wxWindow *window,
-                             int proportion = 0,
-                             int flag = 0,
-                             int border = 0,
-                             wxObject* userData = NULL );
-    inline wxSizerItem* Add( wxSizer *sizer,
-                             int proportion = 0,
-                             int flag = 0,
-                             int border = 0,
-                             wxObject* userData = NULL );
-    inline wxSizerItem* Add( int width,
-                             int height,
-                             int proportion = 0,
-                             int flag = 0,
-                             int border = 0,
-                             wxObject* userData = NULL );
-    inline wxSizerItem* Add( wxWindow *window, const wxSizerFlags& flags );
-    inline wxSizerItem* Add( wxSizer *sizer, const wxSizerFlags& flags );
-    inline wxSizerItem* Add( wxSizerItem *item );
+    wxSizerItem* Add(wxWindow *window,
+                     int proportion = 0,
+                     int flag = 0,
+                     int border = 0,
+                     wxObject* userData = NULL);
+    wxSizerItem* Add(wxSizer *sizer,
+                     int proportion = 0,
+                     int flag = 0,
+                     int border = 0,
+                     wxObject* userData = NULL);
+    wxSizerItem* Add(int width,
+                     int height,
+                     int proportion = 0,
+                     int flag = 0,
+                     int border = 0,
+                     wxObject* userData = NULL);
+    wxSizerItem* Add( wxWindow *window, const wxSizerFlags& flags);
+    wxSizerItem* Add( wxSizer *sizer, const wxSizerFlags& flags);
+    wxSizerItem* Add( wxSizerItem *item);
 
-    inline wxSizerItem* AddSpacer(int size);
-    inline wxSizerItem* AddStretchSpacer(int prop = 1);
+    wxSizerItem* AddSpacer(int size);
+    wxSizerItem* AddStretchSpacer(int prop = 1);
 
-    inline wxSizerItem* Insert( size_t index,
-                                wxWindow *window,
-                                int proportion = 0,
-                                int flag = 0,
-                                int border = 0,
-                                wxObject* userData = NULL );
-    inline wxSizerItem* Insert( size_t index,
-                                wxSizer *sizer,
-                                int proportion = 0,
-                                int flag = 0,
-                                int border = 0,
-                                wxObject* userData = NULL );
-    inline wxSizerItem* Insert( size_t index,
-                                int width,
-                                int height,
-                                int proportion = 0,
-                                int flag = 0,
-                                int border = 0,
-                                wxObject* userData = NULL );
-    inline wxSizerItem* Insert( size_t index,
-                                wxWindow *window,
-                                const wxSizerFlags& flags );
-    inline wxSizerItem* Insert( size_t index,
-                                wxSizer *sizer,
-                                const wxSizerFlags& flags );
-    virtual wxSizerItem* Insert( size_t index, wxSizerItem *item );
+    wxSizerItem* Insert(size_t index,
+                        wxWindow *window,
+                        int proportion = 0,
+                        int flag = 0,
+                        int border = 0,
+                        wxObject* userData = NULL);
+    wxSizerItem* Insert(size_t index,
+                        wxSizer *sizer,
+                        int proportion = 0,
+                        int flag = 0,
+                        int border = 0,
+                        wxObject* userData = NULL);
+    wxSizerItem* Insert(size_t index,
+                        int width,
+                        int height,
+                        int proportion = 0,
+                        int flag = 0,
+                        int border = 0,
+                        wxObject* userData = NULL);
+    wxSizerItem* Insert(size_t index,
+                        wxWindow *window,
+                        const wxSizerFlags& flags);
+    wxSizerItem* Insert(size_t index,
+                        wxSizer *sizer,
+                        const wxSizerFlags& flags);
+    virtual wxSizerItem* Insert( size_t index, wxSizerItem *item);
 
-    inline wxSizerItem* InsertSpacer(size_t index, int size);
-    inline wxSizerItem* InsertStretchSpacer(size_t index, int prop = 1);
+    wxSizerItem* InsertSpacer(size_t index, int size);
+    wxSizerItem* InsertStretchSpacer(size_t index, int prop = 1);
 
-    inline wxSizerItem* Prepend( wxWindow *window,
-                                 int proportion = 0,
-                                 int flag = 0,
-                                 int border = 0,
-                                 wxObject* userData = NULL );
-    inline wxSizerItem* Prepend( wxSizer *sizer,
-                                 int proportion = 0,
-                                 int flag = 0,
-                                 int border = 0,
-                                 wxObject* userData = NULL );
-    inline wxSizerItem* Prepend( int width,
-                                 int height,
-                                 int proportion = 0,
-                                 int flag = 0,
-                                 int border = 0,
-                                 wxObject* userData = NULL );
-    inline wxSizerItem* Prepend( wxWindow *window, const wxSizerFlags& flags );
-    inline wxSizerItem* Prepend( wxSizer *sizer, const wxSizerFlags& flags );
-    inline wxSizerItem* Prepend( wxSizerItem *item );
+    wxSizerItem* Prepend(wxWindow *window,
+                         int proportion = 0,
+                         int flag = 0,
+                         int border = 0,
+                         wxObject* userData = NULL);
+    wxSizerItem* Prepend(wxSizer *sizer,
+                         int proportion = 0,
+                         int flag = 0,
+                         int border = 0,
+                         wxObject* userData = NULL);
+    wxSizerItem* Prepend(int width,
+                         int height,
+                         int proportion = 0,
+                         int flag = 0,
+                         int border = 0,
+                         wxObject* userData = NULL);
+    wxSizerItem* Prepend(wxWindow *window, const wxSizerFlags& flags);
+    wxSizerItem* Prepend(wxSizer *sizer, const wxSizerFlags& flags);
+    wxSizerItem* Prepend(wxSizerItem *item);
 
-    inline wxSizerItem* PrependSpacer(int size);
-    inline wxSizerItem* PrependStretchSpacer(int prop = 1);
+    wxSizerItem* PrependSpacer(int size);
+    wxSizerItem* PrependStretchSpacer(int prop = 1);
 
     // set (or possibly unset if window is NULL) or get the window this sizer
     // is used in 
