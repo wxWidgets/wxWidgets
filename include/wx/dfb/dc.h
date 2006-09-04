@@ -27,8 +27,6 @@ public:
     wxDC();
 
     // Ctor.
-    // Takes ownership of the surface, i.e. does not call AddRef() on it
-    // but calls Release() on it from dtor.
     wxDC(const IDirectFBSurfacePtr& surface);
 
 public:
