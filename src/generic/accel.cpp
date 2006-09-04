@@ -138,8 +138,8 @@ void wxAcceleratorTable::Remove(const wxAcceleratorEntry& entry)
         const wxAcceleratorEntry *entryCur = node->GetData();
 
         // given entry contains only the information of the accelerator key
-        // because it was set that way in wxGetAccelFromString()
-        // so do not perform full ( *entryCur == entry ) comparison
+        // because it was set that way during creation so do not use the
+        // comparison operator which also checks the command field
         if ((entryCur->GetKeyCode() == entry.GetKeyCode()) &&
             (entryCur->GetFlags() == entry.GetFlags()))
         {

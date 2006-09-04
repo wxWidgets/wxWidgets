@@ -920,7 +920,6 @@ void wxMenuItem::DoSetText( const wxString& str )
 {
     m_text.Empty();
     m_text = GTKProcessMenuItemLabel(str, &m_hotKey);
-    // wxPrintf( wxT("DoSetText(): str %s m_text %s hotkey %s\n"), str.c_str(), m_text.c_str(), m_hotKey.c_str() );
 }
 
 #if wxUSE_ACCEL
@@ -930,14 +929,15 @@ wxAcceleratorEntry *wxMenuItem::GetAccel() const
     if ( !GetHotKey() )
     {
         // nothing
-        return (wxAcceleratorEntry *)NULL;
+        return NULL;
     }
 
-    // as wxGetAccelFromString() looks for TAB, insert a dummy one here
+    // accelerator parsing code looks for them after a TAB, so insert a dummy
+    // one here
     wxString label;
     label << wxT('\t') << GetHotKey();
 
-    return wxGetAccelFromString(label);
+    return wxAcceleratorEntry::Create(label);
 }
 
 #endif // wxUSE_ACCEL
@@ -1536,7 +1536,7 @@ static wxString GetGtkHotKey( const wxMenuItem& item )
                 hotkey += wxString::Format(wxT("Special%d"), code - WXK_SPECIAL1 + 1);
                 break;
           */
-                // if there are any other keys wxGetAccelFromString() may
+                // if there are any other keys wxAcceleratorEntry::Create() may
                 // return, we should process them here
 
             default:

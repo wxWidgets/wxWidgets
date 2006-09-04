@@ -698,7 +698,8 @@ void wxMenuBar::MacInstallMenuBar()
                     }
                     else
                     {
-                        wxAcceleratorEntry* entry = wxGetAccelFromString( item->GetText() ) ;
+                        wxAcceleratorEntry*
+                            entry = wxAcceleratorEntry::Create( item->GetText() ) ;
 
                         if ( item->GetId() == wxApp::s_macAboutMenuItemId )
                         {
@@ -733,7 +734,8 @@ void wxMenuBar::MacInstallMenuBar()
         wxMenuItem *aboutMenuItem = FindItem(wxApp::s_macAboutMenuItemId , &aboutMenu) ;
         if ( aboutMenuItem )
         {
-            wxAcceleratorEntry* entry = wxGetAccelFromString( aboutMenuItem->GetText() ) ;
+            wxAcceleratorEntry*
+                entry = wxAcceleratorEntry::Create( aboutMenuItem->GetText() ) ;
             UMASetMenuItemText( GetMenuHandle( kwxMacAppleMenuId ) , 1 , wxStripMenuCodes ( aboutMenuItem->GetText() ) , wxFont::GetDefaultEncoding() );
             UMAEnableMenuItem( GetMenuHandle( kwxMacAppleMenuId ) , 1 , true );
             SetMenuItemCommandID( GetMenuHandle( kwxMacAppleMenuId ) , 1 , kHICommandAbout ) ;

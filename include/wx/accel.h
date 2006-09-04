@@ -62,6 +62,10 @@ public:
         , m_item(entry.m_item)
         { }
 
+    // create accelerator corresponding to the specified string, return NULL if
+    // string couldn't be parsed or a pointer to be deleted by the caller
+    static wxAcceleratorEntry *Create(const wxString& str);
+
     wxAcceleratorEntry& operator=(const wxAcceleratorEntry& entry)
     {
         Set(entry.m_flags, entry.m_keyCode, entry.m_command, entry.m_item);
@@ -117,10 +121,14 @@ public:
 
     // returns true if the given string correctly initialized this object
     // (i.e. if IsOk() returns true after this call)
-    bool FromString(const wxString &str);
+    bool FromString(const wxString& str);
 
 
 private:
+    // common part of Create() and FromString()
+    static bool ParseAccel(const wxString& str, int *flags, int *keycode);
+
+
     int m_flags;    // combination of wxACCEL_XXX constants
     int m_keyCode;  // ASCII or virtual keycode
     int m_command;  // Command id to generate

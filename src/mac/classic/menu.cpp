@@ -574,7 +574,7 @@ void wxMenuBar::MacInstallMenuBar()
                     }
                     else
                     {
-                        wxAcceleratorEntry* entry = wxGetAccelFromString( item->GetText() ) ;
+                        wxAcceleratorEntry* entry = wxAcceleratorEntry::Create( item->GetText() ) ;
 
                         if ( item->GetId() == wxApp::s_macAboutMenuItemId )
                         {

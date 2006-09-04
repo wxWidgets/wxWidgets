@@ -910,6 +910,14 @@ wxDragResult wxDropSource::DoDragDrop(int flags)
 
     UnregisterWindow();
 
+    // this shouldn't be needed but somehow, sometimes, without this the cursor
+    // stays grabbed even when the DND operation ends and the application
+    // becomes unresponsive and has to be killed resulting in loss of all
+    // unsaved data, so while this fix is ugly it's still better than
+    // alternative
+    if ( gdk_pointer_is_grabbed() )
+        gdk_pointer_ungrab(GDK_CURRENT_TIME);
+
     return m_retValue;
 }
 

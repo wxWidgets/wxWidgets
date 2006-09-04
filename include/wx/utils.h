@@ -558,19 +558,22 @@ enum
 WXDLLEXPORT wxString
 wxStripMenuCodes(const wxString& str, int flags = wxStrip_All);
 
-// obsolete and deprecated version, do not use
 #if WXWIN_COMPATIBILITY_2_6
+// obsolete and deprecated version, do not use, use the above overload instead
 wxDEPRECATED(
     WXDLLEXPORT wxChar* wxStripMenuCodes(const wxChar *in, wxChar *out = NULL)
 );
-#endif
 
 #if wxUSE_ACCEL
 class WXDLLEXPORT wxAcceleratorEntry;
+
+// use wxAcceleratorEntry::Create() or FromString() methods instead
 wxDEPRECATED(
     WXDLLEXPORT wxAcceleratorEntry *wxGetAccelFromString(const wxString& label)
 );
 #endif // wxUSE_ACCEL
+
+#endif // WXWIN_COMPATIBILITY_2_6
 
 // ----------------------------------------------------------------------------
 // Window search

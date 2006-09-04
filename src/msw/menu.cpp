@@ -315,7 +315,7 @@ void wxMenu::UpdateAccel(wxMenuItem *item)
         }
 
         // find the (new) accel for this item
-        wxAcceleratorEntry *accel = wxGetAccelFromString(item->GetText());
+        wxAcceleratorEntry *accel = wxAcceleratorEntry::Create(item->GetText());
         if ( accel )
             accel->m_command = item->GetId();
 

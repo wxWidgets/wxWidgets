@@ -121,7 +121,7 @@ void wxMenuItem::UpdateItemStatus()
             ::SetItemMark( mhandle , index , 0 ) ; // no mark
 
         UMASetMenuItemText( mhandle , index , wxStripMenuCodes(m_text) , wxFont::GetDefaultEncoding() ) ;
-        wxAcceleratorEntry *entry = wxGetAccelFromString( m_text ) ;
+        wxAcceleratorEntry *entry = wxAcceleratorEntry::Create( m_text ) ;
         UMASetMenuItemShortcut( mhandle , index , entry ) ;
         delete entry ;
     }
@@ -145,7 +145,7 @@ void wxMenuItem::UpdateItemText()
     }
 
     UMASetMenuItemText( mhandle , index , wxStripMenuCodes(text) , wxFont::GetDefaultEncoding() ) ;
-    wxAcceleratorEntry *entry = wxGetAccelFromString( text ) ;
+    wxAcceleratorEntry *entry = wxAcceleratorEntry::Create( text ) ;
     UMASetMenuItemShortcut( mhandle , index , entry ) ;
     delete entry ;
 }

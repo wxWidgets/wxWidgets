@@ -170,14 +170,12 @@ static int
     return prefixCode + num - first;
 }
 
-bool wxAcceleratorEntry::FromString(const wxString& text)
+/* static */
+bool
+wxAcceleratorEntry::ParseAccel(const wxString& text, int *flagsOut, int *keyOut)
 {
     // the parser won't like leading/trailing spaces
     wxString label = text.Strip(wxString::both);
-
-    // set to invalid state:
-    m_flags = 0;
-    m_keyCode = 0;
 
     // check for accelerators: they are given after '\t'
     int posTab = label.Find(wxT('\t'));
@@ -278,9 +276,28 @@ bool wxAcceleratorEntry::FromString(const wxString& text)
 
     wxASSERT_MSG( keyCode, _T("logic error: should have key code here") );
 
-    m_flags = accelFlags;
-    m_keyCode = keyCode;
+    if ( flagsOut )
+        *flagsOut = accelFlags;
+    if ( keyOut )
+        *keyOut = keyCode;
+
     return true;
+}
+
+/* static */
+wxAcceleratorEntry *wxAcceleratorEntry::Create(const wxString& str)
+{
+    int flags,
+        keyCode;
+    if ( !ParseAccel(str, &flags, &keyCode) )
+        return NULL;
+
+    return new wxAcceleratorEntry(flags, keyCode);
+}
+
+bool wxAcceleratorEntry::FromString(const wxString& str)
+{
+    return ParseAccel(str, &m_flags, &m_keyCode);
 }
 
 wxString wxAcceleratorEntry::ToString() const
@@ -327,15 +344,10 @@ wxString wxAcceleratorEntry::ToString() const
 
 wxAcceleratorEntry *wxGetAccelFromString(const wxString& label)
 {
-    wxAcceleratorEntry *ret = new wxAcceleratorEntry();
-    if (ret->FromString(label))
-        return ret;
-
-    wxDELETE(ret);
-    return NULL;
+    return wxAcceleratorEntry::Create(label);
 }
 
-#endif      // wxUSE_ACCEL
+#endif // wxUSE_ACCEL
 
 
 // ----------------------------------------------------------------------------
@@ -374,7 +386,7 @@ wxMenuItemBase::~wxMenuItemBase()
 
 wxAcceleratorEntry *wxMenuItemBase::GetAccel() const
 {
-    return wxGetAccelFromString(GetText());
+    return wxAcceleratorEntry::Create(GetText());
 }
 
 void wxMenuItemBase::SetAccel(wxAcceleratorEntry *accel)
