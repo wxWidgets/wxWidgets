@@ -27,7 +27,7 @@ public:
 
     // copy ctors and assignment operators
     wxColour(const wxColour& col);
-    wxColour& operator = (const wxColour& col);
+    wxColour& operator=(const wxColour& col);
 
     // dtor
     ~wxColour();
@@ -38,30 +38,38 @@ public:
     unsigned char Red() const { return m_red; }
     unsigned char Green() const { return m_green; }
     unsigned char Blue() const { return m_blue; }
+    unsigned char Alpha() const { return m_alpha; }
 
     // comparison
-    bool operator == (const wxColour& colour) const
+    bool operator==(const wxColour& colour) const
     {
         return (m_red == colour.m_red &&
                 m_green == colour.m_green &&
                 m_blue == colour.m_blue &&
+                m_alpha == colour.m_alpha &&
                 m_isInit == colour.m_isInit);
     }
-    bool operator != (const wxColour& colour) const { return !(*this == colour); }
 
+    bool operator!=(const wxColour& colour) const { return !(*this == colour); }
 
 protected:
 
     // Helper function
     void Init();
 
-    virtual void InitWith(unsigned char red, unsigned char green, unsigned char blue);
+    virtual void InitWith(unsigned char red, unsigned char green, unsigned char blue)
+    {
+        InitWith(red, green, blue, wxALPHA_OPAQUE);
+    }
+
+    virtual void InitWith(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha);
 
 private:
     bool m_isInit;
     unsigned char m_red;
     unsigned char m_blue;
     unsigned char m_green;
+    unsigned char m_alpha;
 
 private:
     DECLARE_DYNAMIC_CLASS(wxColour)

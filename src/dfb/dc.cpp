@@ -141,7 +141,7 @@ void wxDC::Clear()
 
     wxColour clr = m_backgroundBrush.GetColour();
     DFB_CALL( m_surface->Clear(m_surface,
-                               clr.Red(), clr.Green(), clr.Blue(), 255) );
+                               clr.Red(), clr.Green(), clr.Blue(), clr.Alpha()) );
 }
 
 extern bool wxDoFloodFill(wxDC *dc, wxCoord x, wxCoord y,
@@ -339,7 +339,7 @@ void wxDC::SetBrush(const wxBrush& brush)
 void wxDC::SelectColour(const wxColour& clr)
 {
     DFB_CALL( m_surface->SetColor(m_surface,
-                                  clr.Red(), clr.Green(), clr.Blue(), 255) );
+                                  clr.Red(), clr.Green(), clr.Blue(), clr.Alpha()) );
     #warning "use SetColorIndex?"
 }
 

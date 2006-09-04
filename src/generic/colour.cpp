@@ -31,6 +31,7 @@ void wxColour::Init()
     m_red =
     m_blue =
     m_green = 0;
+    m_alpha = wxALPHA_OPAQUE;
     m_isInit = false;
 }
 
@@ -44,11 +45,12 @@ wxColour::wxColour(const wxColour& col)
     *this = col;
 }
 
-wxColour& wxColour::operator =(const wxColour& col)
+wxColour& wxColour::operator=(const wxColour& col)
 {
     m_red = col.m_red;
     m_green = col.m_green;
     m_blue = col.m_blue;
+    m_alpha = col.m_alpha;
     m_isInit = col.m_isInit;
     return *this;
 }
@@ -57,10 +59,12 @@ wxColour::~wxColour()
 {
 }
 
-void wxColour::InitWith(unsigned char r, unsigned char g, unsigned char b)
+void wxColour::InitWith(unsigned char r, unsigned char g, unsigned char b,
+                        unsigned char a)
 {
     m_red = r;
     m_green = g;
     m_blue = b;
+    m_alpha = a;
     m_isInit = true;
 }
