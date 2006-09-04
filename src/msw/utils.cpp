@@ -1393,7 +1393,7 @@ extern WXDLLIMPEXP_BASE long wxEncodingToCodepage(wxFontEncoding encoding)
         case wxFONTENCODING_ISO8859_11:     ret = 874; break;
         // case wxFONTENCODING_ISO8859_12,      // doesn't exist currently, but put it
         case wxFONTENCODING_ISO8859_13:     ret = 28603; break;
-        case wxFONTENCODING_ISO8859_14:     ret = 28604; break;
+        // case wxFONTENCODING_ISO8859_14:     ret = 28604; break; // no correspondence on Windows
         case wxFONTENCODING_ISO8859_15:     ret = 28605; break;
         case wxFONTENCODING_KOI8:           ret = 20866; break;
         case wxFONTENCODING_KOI8_U:         ret = 21866; break;
