@@ -373,17 +373,16 @@ void wxMenuItem::SetText( const wxString& rText )
     if (m_text == sText)
         return;
 
-    if (sText.IsEmpty())
-    {
-        wxASSERT_MSG(wxIsStockID(GetId()), wxT("A non-stock menu item with an empty label?"));
-        sText = wxGetStockLabel(GetId(), wxSTOCK_WITH_ACCELERATOR|wxSTOCK_WITH_MNEMONIC);
-    }
-
+    // wxMenuItemBase will do stock ID checks
     wxMenuItemBase::SetText(sText);
-    OWNER_DRAWN_ONLY(wxOwnerDrawn::SetName(sText));
+
+    // m_text could now be different from 'text' if we are a stock menu item,
+    // so use only m_text below
+
+    OWNER_DRAWN_ONLY(wxOwnerDrawn::SetName(m_text));
 #if  wxUSE_OWNER_DRAWN
     if (rText.IsEmpty())
-        SetAccelString(sText.AfterFirst(_T('\t')));
+        SetAccelString(m_text.AfterFirst(_T('\t')));
     else
         SetAccelString(rText.AfterFirst(_T('\t')));
 #endif // wxUSE_OWNER_DRAWN
@@ -428,7 +427,7 @@ void wxMenuItem::SetText( const wxString& rText )
 #endif  //owner drawn
         {
             uFlagsOld |= MIS_TEXT;
-            pData = (BYTE*)sText.c_str();
+            pData = (BYTE*)m_text.c_str();
         }
 
         //

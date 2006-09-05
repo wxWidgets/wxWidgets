@@ -1538,18 +1538,12 @@ void wxMenuItem::UpdateAccelInfo()
     m_strAccel = m_text.AfterFirst(_T('\t'));
 }
 
-void wxMenuItem::SetText(const wxString& txt)
+void wxMenuItem::SetText(const wxString& text)
 {
-    if ( txt != m_text )
+    if ( text != m_text )
     {
-        wxString text = txt;
-        if (text.IsEmpty())
-        {
-            wxASSERT_MSG(wxIsStockID(GetId()), wxT("A non-stock menu item with an empty label?"));
-            text = wxGetStockLabel(GetId(), wxSTOCK_WITH_ACCELERATOR|wxSTOCK_WITH_MNEMONIC);
-        }
-
         // first call the base class version to change m_text
+        // (and also check if we don't have a stock menu item)
         wxMenuItemBase::SetText(text);
 
         UpdateAccelInfo();

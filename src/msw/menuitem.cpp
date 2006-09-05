@@ -154,12 +154,6 @@ wxMenuItem::wxMenuItem(wxMenu *parentMenu,
 
 void wxMenuItem::Init()
 {
-    if (m_text.IsEmpty())
-    {
-        wxASSERT_MSG(wxIsStockID(GetId()), wxT("A non-stock menu item with an empty label?"));
-        m_text = wxGetStockLabel(GetId(), wxSTOCK_WITH_ACCELERATOR|wxSTOCK_WITH_MNEMONIC);
-    }
-
     m_radioGroup.start = -1;
     m_isRadioGroupStart = false;
 
@@ -351,17 +345,16 @@ void wxMenuItem::SetText(const wxString& txt)
     if ( m_text == txt )
         return;
 
-    if (text.IsEmpty())
-    {
-        wxASSERT_MSG(wxIsStockID(GetId()), wxT("A non-stock menu item with an empty label?"));
-        text = wxGetStockLabel(GetId(), wxSTOCK_WITH_ACCELERATOR|wxSTOCK_WITH_MNEMONIC);
-    }
-
+    // wxMenuItemBase will do stock ID checks
     wxMenuItemBase::SetText(text);
-    OWNER_DRAWN_ONLY( wxOwnerDrawn::SetName(text) );
+
+    // m_text could now be different from 'text' if we are a stock menu item,
+    // so use only m_text below
+
+    OWNER_DRAWN_ONLY( wxOwnerDrawn::SetName(m_text) );
 #if wxUSE_OWNER_DRAWN
     // tell the owner drawing code to to show the accel string as well
-    SetAccelString(text.AfterFirst(_T('\t')));
+    SetAccelString(m_text.AfterFirst(_T('\t')));
 #endif
 
     HMENU hMenu = GetHMenuOf(m_parentMenu);
@@ -399,7 +392,7 @@ void wxMenuItem::SetText(const wxString& txt)
 #endif  //owner drawn
         {
             flagsOld |= MF_STRING;
-            data = (wxChar*) text.c_str();
+            data = (wxChar*) m_text.c_str();
         }
 
 #ifdef __WXWINCE__
@@ -413,7 +406,7 @@ void wxMenuItem::SetText(const wxString& txt)
         info.cbSize = sizeof(info);
         info.fMask = MIIM_TYPE;
         info.fType = MFT_STRING;
-        info.cch = text.length();
+        info.cch = m_text.length();
         info.dwTypeData = (LPTSTR) data ;
         if ( !::SetMenuItemInfo(hMenu, id, FALSE, & info) )
         {

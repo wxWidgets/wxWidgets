@@ -769,10 +769,11 @@ wxString wxMenuItemBase::GetLabelFromText(const wxString& text)
 void wxMenuItem::SetText( const wxString& string )
 {
     wxString str = string;
-    if (str.IsEmpty())
+    if ( str.empty() && !IsSeparator() )
     {
         wxASSERT_MSG(wxIsStockID(GetId()), wxT("A non-stock menu item with an empty label?"));
-        str = wxGetStockLabel(GetId(), wxSTOCK_WITH_ACCELERATOR|wxSTOCK_WITH_MNEMONIC);
+        str = wxGetStockLabel(GetId(), wxSTOCK_WITH_ACCELERATOR |
+                                       wxSTOCK_WITH_MNEMONIC);
     }
 
     // Some optimization to avoid flicker

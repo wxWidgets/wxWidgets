@@ -190,6 +190,42 @@ wxString wxGetStockLabel(wxWindowID id, long flags)
     return stockLabel;
 }
 
+wxString wxGetStockHelpString(wxWindowID id, wxStockHelpStringClient client)
+{
+    wxString stockHelp;
+
+    #define STOCKITEM(stockid, ctx, helpstr)             \
+        case stockid:                                    \
+            if (client==ctx) stockHelp = helpstr;        \
+            break;
+
+    switch (id)
+    {
+        // NB: these help string should be not too specific as they could be used
+        //     in completely different programs!
+        STOCKITEM(wxID_ABOUT,    wxSTOCK_MENU, _("Show about dialog"))
+        STOCKITEM(wxID_COPY,     wxSTOCK_MENU, _("Copy selection"))
+        STOCKITEM(wxID_CUT,      wxSTOCK_MENU, _("Cut selection"))
+        STOCKITEM(wxID_DELETE,   wxSTOCK_MENU, _("Delete selection"))
+        STOCKITEM(wxID_REPLACE,  wxSTOCK_MENU, _("Replace selection"))
+        STOCKITEM(wxID_PASTE,    wxSTOCK_MENU, _("Paste selection"))
+        STOCKITEM(wxID_EXIT,     wxSTOCK_MENU, _("Quit this program"))
+        STOCKITEM(wxID_REDO,     wxSTOCK_MENU, _("Redo last action"))
+        STOCKITEM(wxID_UNDO,     wxSTOCK_MENU, _("Undo last action"))
+        STOCKITEM(wxID_CLOSE,    wxSTOCK_MENU, _("Close current document"))
+        STOCKITEM(wxID_SAVE,     wxSTOCK_MENU, _("Save current document"))
+        STOCKITEM(wxID_SAVEAS,   wxSTOCK_MENU, _("Save current document with a different filename"))
+
+        default:
+            // there's no stock help string for this ID / client
+            return wxEmptyString;
+    }
+
+    #undef STOCKITEM
+
+    return stockHelp;
+}
+
 #if wxUSE_ACCEL
 
 wxAcceleratorEntry wxGetStockAccelerator(wxWindowID id)

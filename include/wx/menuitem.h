@@ -64,7 +64,7 @@ public:
     //     any), i.e. it may contain '&' or '_' or "\t..." and thus is
     //     different from the item's label which only contains the text shown
     //     in the menu
-    virtual void SetText(const wxString& str) { m_text = str; }
+    virtual void SetText(const wxString& str);
     wxString GetLabel() const { return GetLabelFromText(m_text); }
     const wxString& GetText() const { return m_text; }
 
@@ -92,7 +92,7 @@ public:
     void Toggle() { Check(!m_isChecked); }
 
     // help string (displayed in the status bar by default)
-    void SetHelp(const wxString& str) { m_help = str; }
+    void SetHelp(const wxString& str);
     const wxString& GetHelp() const { return m_help; }
 
 #if wxUSE_ACCEL

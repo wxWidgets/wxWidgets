@@ -34,6 +34,8 @@
     #include "wx/menu.h"
 #endif
 
+#include "wx/stockitem.h"
+
 // ----------------------------------------------------------------------------
 // template lists
 // ----------------------------------------------------------------------------
@@ -174,13 +176,17 @@ static int
 bool
 wxAcceleratorEntry::ParseAccel(const wxString& text, int *flagsOut, int *keyOut)
 {
-    // the parser won't like leading/trailing spaces
-    wxString label = text.Strip(wxString::both);
+    // the parser won't like trailing spaces
+    wxString label = text;
+    label.Trim(true);  // the initial \t must be preserved so don't strip leading whitespaces
 
     // check for accelerators: they are given after '\t'
     int posTab = label.Find(wxT('\t'));
     if ( posTab == wxNOT_FOUND )
+    {
+        wxLogDebug(wxT("Invalid menu label: no accelerators"));
         return false;
+    }
 
     // parse the accelerator string
     int accelFlags = wxACCEL_NORMAL;
@@ -360,8 +366,6 @@ wxMenuItemBase::wxMenuItemBase(wxMenu *parentMenu,
                                const wxString& help,
                                wxItemKind kind,
                                wxMenu *subMenu)
-              : m_text(text),
-                m_help(help)
 {
     wxASSERT_MSG( parentMenu != NULL, wxT("menuitem should have a menu") );
 
@@ -375,6 +379,9 @@ wxMenuItemBase::wxMenuItemBase(wxMenu *parentMenu,
         m_id = wxNewId();
     if (m_id == wxID_SEPARATOR)
         m_kind = wxITEM_SEPARATOR;
+
+    SetText(text);
+    SetHelp(help);
 }
 
 wxMenuItemBase::~wxMenuItemBase()
@@ -402,6 +409,30 @@ void wxMenuItemBase::SetAccel(wxAcceleratorEntry *accel)
 }
 
 #endif // wxUSE_ACCEL
+
+void wxMenuItemBase::SetText(const wxString& str)
+{
+    m_text = str;
+
+    if ( m_text.empty() && !IsSeparator() )
+    {
+        wxASSERT_MSG( wxIsStockID(GetId()),
+                      wxT("A non-stock menu item with an empty label?") );
+        m_text = wxGetStockLabel(GetId(), wxSTOCK_WITH_ACCELERATOR |
+                                          wxSTOCK_WITH_MNEMONIC);
+    }
+}
+
+void wxMenuItemBase::SetHelp(const wxString& str)
+{
+    m_help = str;
+
+    if ( m_help.empty() && !IsSeparator() && wxIsStockID(GetId()) )
+    {
+        // get a stock help string
+        m_help = wxGetStockHelpString(GetId());
+    }
+}
 
 bool wxMenuBase::ms_locked = true;
 

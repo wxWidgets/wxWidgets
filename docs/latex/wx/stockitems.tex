@@ -1,9 +1,11 @@
 \section{Stock items}\label{stockitems}
 
-Window IDs for which stock buttons are created
-(see \helpref{wxButton constructor}{wxbuttonctor}):
+Window IDs for which stock buttons and menu items are created
+(see \helpref{wxButton constructor}{wxbuttonctor} and 
+\helpref{wxMenuItem constructor}{wxmenuitemctor}):
 
 \begin{twocollist}\itemsep=0pt
+\twocolitem{{\bf Stock ID}}{{\bf Stock label}}
 \twocolitem{wxID\_ABOUT}{"\&About"}
 \twocolitem{wxID\_ADD}{"Add"}
 \twocolitem{wxID\_APPLY}{"\&Apply"}
@@ -58,4 +60,8 @@ Window IDs for which stock buttons are created
 \twocolitem{wxID\_ZOOM\_FIT}{"Zoom to \&Fit"}
 \twocolitem{wxID\_ZOOM\_IN}{"Zoom \&In"}
 \twocolitem{wxID\_ZOOM\_OUT}{"Zoom \&Out"}
-\end{twocollist}\itemsep=0pt
+\end{twocollist}
+
+
+Note that some of the IDs listed above have also a stock accelerator
+and an help string associated.

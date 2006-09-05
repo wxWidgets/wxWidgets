@@ -42,11 +42,36 @@ only implemented for Windows and GTK+.
 
 Constructs a wxMenuItem object.
 
-The preferred way to create standard menu items is to use default value of
-\arg{text}. If no text is supplied and \arg{id} is one of standard IDs from
-\helpref{this list}{stockitems}, a standard label and a standard accelerator
-will be used. In addition to that, the button will be decorated with stock
-icons under GTK+ 2.
+Menu items can be standard, or ``stock menu items'', or custom. For the
+standard menu items (such as commands to open a file, exit the program and so
+on, see \helpref{stock items}{stockitems} for the full list) it is enough to
+specify just the stock ID and leave \arg{text} and \arg{helpString} empty. In
+fact, leaving at least \arg{text} empty for the stock menu items is strongly
+recommended as they will have appearance and keyboard interface (including
+standard accelerators) familiar to the user.
+
+For the custom (non-stock) menu items, \arg{text} must be specified and while 
+\arg{helpString} may be left empty, it's recommended to pass the item
+description (which is automatically shown by the library in the status bar when
+the menu item is selected) in this parameter.
+
+Finally note that you can e.g. use a stock menu label without using its stock
+help string:
+
+\begin{verbatim}
+// use all stock properties:
+helpMenu->Append(wxID_ABOUT);
+
+// use the stock label and the stock accelerator but not the stock help string:
+helpMenu->Append(wxID_ABOUT, wxEmptyString, wxT("My custom help string"));
+
+// use all stock properties except for the bitmap:
+wxMenuItem *mymenu = new wxMenuItem(helpMenu, wxID_ABOUT);
+mymenu->SetBitmap(wxArtProvider::GetBitmap(wxART_WARNING));
+helpMenu->Append(mymenu);
+\end{verbatim}
+
+that is, stock properties are set independently one from the other.
 
 \wxheading{Parameters}
 
