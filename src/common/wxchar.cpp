@@ -183,7 +183,7 @@ bool WXDLLEXPORT wxOKlibc()
 #endif
 
 // some limits of our implementation
-#define wxMAX_SVNPRINTF_ARGUMENTS         64
+#define wxMAX_SVNPRINTF_ARGUMENTS         16
 #define wxMAX_SVNPRINTF_FLAGBUFFER_LEN    32
 
 // the conversion specifiers accepted by wxVsnprintf_
@@ -248,36 +248,37 @@ class wxPrintfConvSpec
 public:
 
     // the position of the argument relative to this conversion specifier
-    size_t pos;
+    size_t m_pos;
 
     // the type of this conversion specifier
-    wxPrintfArgType type;
+    wxPrintfArgType m_type;
 
     // the minimum and maximum width
     // when one of this var is set to -1 it means: use the following argument
     // in the stack as minimum/maximum width for this conversion specifier
-    int min_width, max_width;
+    int m_nMinWidth, m_nMaxWidth;
 
     // does the argument need to the be aligned to left ?
-    bool adj_left;
+    bool m_bAlignLeft;
 
     // pointer to the '%' of this conversion specifier in the format string
     // NOTE: this points somewhere in the string given to the Parse() function -
     //       it's task of the caller ensure that memory is still valid !
-    const wxChar *argpos;
+    const wxChar *m_pArgPos;
 
     // pointer to the last character of this conversion specifier in the
     // format string
     // NOTE: this points somewhere in the string given to the Parse() function -
     //       it's task of the caller ensure that memory is still valid !
-    const wxChar *argend;
+    const wxChar *m_pArgEnd;
 
     // a little buffer where formatting flags like #+\.hlqLZ are stored by Parse()
     // for use in Process()
-    // NB: this buffer can be safely a char buffer instead of a wchar_t buffer
-    //     since it's used only for numeric conversion specifier and always
-    //     with sprintf().
-    char szFlags[wxMAX_SVNPRINTF_FLAGBUFFER_LEN];
+    // NB: even if this buffer is used only for numeric conversion specifiers and
+    //     thus could be safely declared as a char[] buffer, we want it to be wxChar
+    //     so that in Unicode builds we can avoid to convert its contents to Unicode
+    //     chars when copying it in user's buffer.
+    wxChar m_szFlags[wxMAX_SVNPRINTF_FLAGBUFFER_LEN];
 
 
 public:
@@ -307,16 +308,16 @@ private:
 
 void wxPrintfConvSpec::Init()
 {
-    min_width = 0;
-    max_width = 0xFFFF;
-    pos = 0;
-    adj_left = false;
-    argpos = argend = NULL;
-    type = wxPAT_INVALID;
+    m_nMinWidth = 0;
+    m_nMaxWidth = 0xFFFF;
+    m_pos = 0;
+    m_bAlignLeft = false;
+    m_pArgPos = m_pArgEnd = NULL;
+    m_type = wxPAT_INVALID;
 
-    // this character will never be removed from szFlags array and
+    // this character will never be removed from m_szFlags array and
     // is important when calling sprintf() in wxPrintfConvSpec::Process() !
-    szFlags[0] = '%';
+    m_szFlags[0] = wxT('%');
 }
 
 bool wxPrintfConvSpec::Parse(const wxChar *format)
@@ -328,19 +329,19 @@ bool wxPrintfConvSpec::Parse(const wxChar *format)
     bool in_prec, prec_dot;
     int ilen = 0;
 
-    adj_left = in_prec = prec_dot = false;
-    argpos = argend = format;
+    m_bAlignLeft = in_prec = prec_dot = false;
+    m_pArgPos = m_pArgEnd = format;
     do
     {
 #define CHECK_PREC \
         if (in_prec && !prec_dot) \
         { \
-            szFlags[flagofs++] = (char)'.'; \
+            m_szFlags[flagofs++] = '.'; \
             prec_dot = true; \
         }
 
         // what follows '%'?
-        const wxChar ch = *(++argend);
+        const wxChar ch = *(++m_pArgEnd);
         switch ( ch )
         {
             case wxT('\0'):
@@ -355,47 +356,51 @@ bool wxPrintfConvSpec::Parse(const wxChar *format)
             case wxT('+'):
             case wxT('\''):
                 CHECK_PREC
-                szFlags[flagofs++] = (char)ch;
+                m_szFlags[flagofs++] = ch;
                 break;
 
             case wxT('-'):
                 CHECK_PREC
-                adj_left = true;
-                szFlags[flagofs++] = (char)ch;
+                m_bAlignLeft = true;
+                m_szFlags[flagofs++] = ch;
                 break;
 
             case wxT('.'):
                 CHECK_PREC
                 in_prec = true;
                 prec_dot = false;
-                max_width = 0;
-                // dot will be auto-added to szFlags if non-negative
+                m_nMaxWidth = 0;
+                // dot will be auto-added to m_szFlags if non-negative
                 // number follows
                 break;
 
             case wxT('h'):
                 ilen = -1;
                 CHECK_PREC
-                szFlags[flagofs++] = (char)ch;
+                m_szFlags[flagofs++] = ch;
                 break;
 
             case wxT('l'):
+                // NB: it's safe to use flagofs-1 as flagofs always start from 1
+                if (m_szFlags[flagofs-1] == 'l')       // 'll' modifier is the same as 'L' or 'q'
+                    ilen = 2;
+                else
                 ilen = 1;
                 CHECK_PREC
-                szFlags[flagofs++] = (char)ch;
+                m_szFlags[flagofs++] = ch;
                 break;
 
             case wxT('q'):
             case wxT('L'):
                 ilen = 2;
                 CHECK_PREC
-                szFlags[flagofs++] = (char)ch;
+                m_szFlags[flagofs++] = ch;
                 break;
 
             case wxT('Z'):
                 ilen = 3;
                 CHECK_PREC
-                szFlags[flagofs++] = (char)ch;
+                m_szFlags[flagofs++] = ch;
                 break;
 
             case wxT('*'):
@@ -405,18 +410,18 @@ bool wxPrintfConvSpec::Parse(const wxChar *format)
 
                     // tell Process() to use the next argument
                     // in the stack as maxwidth...
-                    max_width = -1;
+                    m_nMaxWidth = -1;
                 }
                 else
                 {
                     // tell Process() to use the next argument
                     // in the stack as minwidth...
-                    min_width = -1;
+                    m_nMinWidth = -1;
                 }
 
                 // save the * in our formatting buffer...
                 // will be replaced later by Process()
-                szFlags[flagofs++] = (char)ch;
+                m_szFlags[flagofs++] = ch;
                 break;
 
             case wxT('1'): case wxT('2'): case wxT('3'):
@@ -425,41 +430,41 @@ bool wxPrintfConvSpec::Parse(const wxChar *format)
                 {
                     int len = 0;
                     CHECK_PREC
-                    while ( (*argend >= wxT('0')) &&
-                            (*argend <= wxT('9')) )
+                    while ( (*m_pArgEnd >= wxT('0')) &&
+                            (*m_pArgEnd <= wxT('9')) )
                     {
-                        szFlags[flagofs++] = (char)(*argend);
-                        len = len*10 + (*argend - wxT('0'));
-                        argend++;
+                        m_szFlags[flagofs++] = (*m_pArgEnd);
+                        len = len*10 + (*m_pArgEnd - wxT('0'));
+                        m_pArgEnd++;
                     }
 
                     if (in_prec)
-                        max_width = len;
+                        m_nMaxWidth = len;
                     else
-                        min_width = len;
+                        m_nMinWidth = len;
 
-                    argend--; // the main loop pre-increments n again
+                    m_pArgEnd--; // the main loop pre-increments n again
                 }
                 break;
 
             case wxT('$'):      // a positional parameter (e.g. %2$s) ?
                 {
-                    if (min_width <= 0)
+                    if (m_nMinWidth <= 0)
                         break;      // ignore this formatting flag as no
                                     // numbers are preceding it
 
-                    // remove from szFlags all digits previously added
+                    // remove from m_szFlags all digits previously added
                     do {
                         flagofs--;
-                    } while (szFlags[flagofs] >= '1' &&
-                             szFlags[flagofs] <= '9');
+                    } while (m_szFlags[flagofs] >= '1' &&
+                             m_szFlags[flagofs] <= '9');
 
                     // re-adjust the offset making it point to the
-                    // next free char of szFlags
+                    // next free char of m_szFlags
                     flagofs++;
 
-                    pos = min_width;
-                    min_width = 0;
+                    m_pos = m_nMinWidth;
+                    m_nMinWidth = 0;
                 }
                 break;
 
@@ -470,25 +475,25 @@ bool wxPrintfConvSpec::Parse(const wxChar *format)
             case wxT('x'):
             case wxT('X'):
                 CHECK_PREC
-                szFlags[flagofs++] = (char)ch;
-                szFlags[flagofs] = (char)'\0';
+                m_szFlags[flagofs++] = ch;
+                m_szFlags[flagofs] = '\0';
                 if (ilen == 0)
-                    type = wxPAT_INT;
+                    m_type = wxPAT_INT;
                 else if (ilen == -1)
                     // NB: 'short int' value passed through '...'
                     //      is promoted to 'int', so we have to get
                     //      an int from stack even if we need a short
-                    type = wxPAT_INT;
+                    m_type = wxPAT_INT;
                 else if (ilen == 1)
-                    type = wxPAT_LONGINT;
+                    m_type = wxPAT_LONGINT;
                 else if (ilen == 2)
 #if SIZEOF_LONG_LONG
-                    type = wxPAT_LONGLONGINT;
+                    m_type = wxPAT_LONGLONGINT;
 #else // !long long
-                    type = wxPAT_LONGINT;
+                    m_type = wxPAT_LONGINT;
 #endif // long long/!long long
                 else if (ilen == 3)
-                    type = wxPAT_SIZET;
+                    m_type = wxPAT_SIZET;
                 done = true;
                 break;
 
@@ -498,17 +503,17 @@ bool wxPrintfConvSpec::Parse(const wxChar *format)
             case wxT('g'):
             case wxT('G'):
                 CHECK_PREC
-                szFlags[flagofs++] = (char)ch;
-                szFlags[flagofs] = (char)'\0';
+                m_szFlags[flagofs++] = ch;
+                m_szFlags[flagofs] = '\0';
                 if (ilen == 2)
-                    type = wxPAT_LONGDOUBLE;
+                    m_type = wxPAT_LONGDOUBLE;
                 else
-                    type = wxPAT_DOUBLE;
+                    m_type = wxPAT_DOUBLE;
                 done = true;
                 break;
 
             case wxT('p'):
-                type = wxPAT_POINTER;
+                m_type = wxPAT_POINTER;
                 done = true;
                 break;
 
@@ -517,22 +522,22 @@ bool wxPrintfConvSpec::Parse(const wxChar *format)
                 {
                     // in Unicode mode %hc == ANSI character
                     // and in ANSI mode, %hc == %c == ANSI...
-                    type = wxPAT_CHAR;
+                    m_type = wxPAT_CHAR;
                 }
                 else if (ilen == 1)
                 {
                     // in ANSI mode %lc == Unicode character
                     // and in Unicode mode, %lc == %c == Unicode...
-                    type = wxPAT_WCHAR;
+                    m_type = wxPAT_WCHAR;
                 }
                 else
                 {
 #if wxUSE_UNICODE
                     // in Unicode mode, %c == Unicode character
-                    type = wxPAT_WCHAR;
+                    m_type = wxPAT_WCHAR;
 #else
                     // in ANSI mode, %c == ANSI character
-                    type = wxPAT_CHAR;
+                    m_type = wxPAT_CHAR;
 #endif
                 }
                 done = true;
@@ -543,20 +548,20 @@ bool wxPrintfConvSpec::Parse(const wxChar *format)
                 {
                     // Unicode mode wx extension: we'll let %hs mean non-Unicode
                     // strings (when in ANSI mode, %s == %hs == ANSI string)
-                    type = wxPAT_PCHAR;
+                    m_type = wxPAT_PCHAR;
                 }
                 else if (ilen == 1)
                 {
                     // in Unicode mode, %ls == %s == Unicode string
                     // in ANSI mode, %ls == Unicode string
-                    type = wxPAT_PWCHAR;
+                    m_type = wxPAT_PWCHAR;
                 }
                 else
                 {
 #if wxUSE_UNICODE
-                    type = wxPAT_PWCHAR;
+                    m_type = wxPAT_PWCHAR;
 #else
-                    type = wxPAT_PCHAR;
+                    m_type = wxPAT_PCHAR;
 #endif
                 }
                 done = true;
@@ -564,11 +569,11 @@ bool wxPrintfConvSpec::Parse(const wxChar *format)
 
             case wxT('n'):
                 if (ilen == 0)
-                        type = wxPAT_NINT;
+                    m_type = wxPAT_NINT;
                 else if (ilen == -1)
-                        type = wxPAT_NSHORTINT;
+                    m_type = wxPAT_NSHORTINT;
                 else if (ilen >= 1)
-                        type = wxPAT_NLONGINT;
+                    m_type = wxPAT_NLONGINT;
                 done = true;
                 break;
 
@@ -577,6 +582,12 @@ bool wxPrintfConvSpec::Parse(const wxChar *format)
                 // leave it unchanged
                 return false;
         }
+
+        if (flagofs == wxMAX_SVNPRINTF_FLAGBUFFER_LEN)
+        {
+            wxLogDebug(wxT("Too many flags specified for a single conversion specifier!"));
+            return false;
+        }
     }
     while (!done);
 
@@ -584,55 +595,61 @@ bool wxPrintfConvSpec::Parse(const wxChar *format)
 }
 
 
-void wxPrintfConvSpec::ReplaceAsteriskWith(int w)
+void wxPrintfConvSpec::ReplaceAsteriskWith(int width)
 {
-    char temp[wxMAX_SVNPRINTF_FLAGBUFFER_LEN];
+    wxChar temp[wxMAX_SVNPRINTF_FLAGBUFFER_LEN];
 
     // find the first * in our flag buffer
-    char *pwidth = strchr(szFlags, '*');
+    wxChar *pwidth = wxStrchr(m_szFlags, wxT('*'));
     wxASSERT(pwidth);
 
-    // save what follows the * (the +1 is to skip it!)
-    strcpy(temp, pwidth+1);
-    if (w < 0) {
-        pwidth[0] = '-';
+    // save what follows the * (the +1 is to skip the asterisk itself!)
+    wxStrcpy(temp, pwidth+1);
+    if (width < 0)
+    {
+        pwidth[0] = wxT('-');
         pwidth++;
     }
 
     // replace * with the actual integer given as width
-    int offset = ::sprintf(pwidth,"%d",abs(w));
+#if wxUSE_UNICODE
+    int maxlen = (m_szFlags + wxMAX_SVNPRINTF_FLAGBUFFER_LEN - pwidth) / sizeof(wxChar);
+    int offset = ::swprintf(pwidth, maxlen, L"%d", abs(width));
+#else
+    int offset = ::sprintf(pwidth, "%d", abs(width));
+#endif
 
     // restore after the expanded * what was following it
-    strcpy(pwidth+offset, temp);
+    wxStrcpy(pwidth+offset, temp);
 }
 
 bool wxPrintfConvSpec::LoadArg(wxPrintfArg *p, va_list &argptr)
 {
     // did the '*' width/precision specifier was used ?
-    if (max_width == -1)
+    if (m_nMaxWidth == -1)
     {
         // take the maxwidth specifier from the stack
-        max_width = va_arg(argptr, int);
-        if (max_width < 0)
-            max_width = 0;
+        m_nMaxWidth = va_arg(argptr, int);
+        if (m_nMaxWidth < 0)
+            m_nMaxWidth = 0;
         else
-            ReplaceAsteriskWith(max_width);
+            ReplaceAsteriskWith(m_nMaxWidth);
     }
 
-    if (min_width == -1)
+    if (m_nMinWidth == -1)
     {
         // take the minwidth specifier from the stack
-        min_width = va_arg(argptr, int);
+        m_nMinWidth = va_arg(argptr, int);
 
-        ReplaceAsteriskWith(min_width);
-        if (min_width < 0)
+        ReplaceAsteriskWith(m_nMinWidth);
+        if (m_nMinWidth < 0)
         {
-            adj_left = !adj_left;
-            min_width = -min_width;
+            m_bAlignLeft = !m_bAlignLeft;
+            m_nMinWidth = -m_nMinWidth;
         }
     }
 
-    switch (type) {
+    switch (m_type) {
         case wxPAT_INT:
             p->pad_int = va_arg(argptr, int);
             break;
@@ -658,7 +675,7 @@ bool wxPrintfConvSpec::LoadArg(wxPrintfArg *p, va_list &argptr)
             break;
 
         case wxPAT_CHAR:
-            p->pad_char = (char)va_arg(argptr, int);  // char is promoted to int when passed through '...'
+            p->pad_char = va_arg(argptr, int);  // char is promoted to int when passed through '...'
             break;
         case wxPAT_WCHAR:
             p->pad_wchar = (wchar_t)va_arg(argptr, int);  // char is promoted to int when passed through '...'
@@ -691,9 +708,19 @@ bool wxPrintfConvSpec::LoadArg(wxPrintfArg *p, va_list &argptr)
 
 int wxPrintfConvSpec::Process(wxChar *buf, size_t lenMax, wxPrintfArg *p)
 {
-    // buffer to avoid dynamic memory allocation each time for small strings
-    static char szScratch[1024];
-    size_t lenCur = 0;
+    // buffer to avoid dynamic memory allocation each time for small strings;
+    // note that this buffer is used only to hold results of number formatting,
+    // %s directly writes user's string in buf, without using szScratch
+#define wxSCRATCH_BUFFER_SIZE       512
+
+    wxChar szScratch[wxSCRATCH_BUFFER_SIZE];
+    size_t lenScratch = 0, lenCur = 0;
+
+#if wxUSE_UNICODE
+#define system_sprintf(buff, flags, data)      ::swprintf(buff, wxSCRATCH_BUFFER_SIZE, flags, data)
+#else
+#define system_sprintf                         ::sprintf
+#endif
 
 #define APPEND_CH(ch) \
                 { \
@@ -711,36 +738,36 @@ int wxPrintfConvSpec::Process(wxChar *buf, size_t lenMax, wxPrintfArg *p)
                     } \
                 }
 
-    switch ( type )
+    switch ( m_type )
     {
         case wxPAT_INT:
-            ::sprintf(szScratch, szFlags, p->pad_int);
+            lenScratch = system_sprintf(szScratch, m_szFlags, p->pad_int);
             break;
 
         case wxPAT_LONGINT:
-            ::sprintf(szScratch, szFlags, p->pad_longint);
+            lenScratch = system_sprintf(szScratch, m_szFlags, p->pad_longint);
             break;
 
 #if SIZEOF_LONG_LONG
         case wxPAT_LONGLONGINT:
-            ::sprintf(szScratch, szFlags, p->pad_longlongint);
+            lenScratch = system_sprintf(szScratch, m_szFlags, p->pad_longlongint);
             break;
 #endif // SIZEOF_LONG_LONG
 
         case wxPAT_SIZET:
-            ::sprintf(szScratch, szFlags, p->pad_sizet);
+            lenScratch = system_sprintf(szScratch, m_szFlags, p->pad_sizet);
             break;
 
         case wxPAT_LONGDOUBLE:
-            ::sprintf(szScratch, szFlags, p->pad_longdouble);
+            lenScratch = system_sprintf(szScratch, m_szFlags, p->pad_longdouble);
             break;
 
         case wxPAT_DOUBLE:
-            ::sprintf(szScratch, szFlags, p->pad_double);
+            lenScratch = system_sprintf(szScratch, m_szFlags, p->pad_double);
             break;
 
         case wxPAT_POINTER:
-            ::sprintf(szScratch, szFlags, p->pad_pointer);
+            lenScratch = system_sprintf(szScratch, m_szFlags, p->pad_pointer);
             break;
 
         case wxPAT_CHAR:
@@ -750,33 +777,39 @@ int wxPrintfConvSpec::Process(wxChar *buf, size_t lenMax, wxPrintfArg *p)
 #if wxUSE_UNICODE
                     p->pad_wchar;
 
-                if (type == wxPAT_CHAR) {
+                if (m_type == wxPAT_CHAR)
+                {
                     // user passed a character explicitely indicated as ANSI...
                     const char buf[2] = { p->pad_char, 0 };
                     val = wxString(buf, wxConvLibc)[0u];
+
+                    //wprintf(L"converting ANSI=>Unicode");   // for debug
                 }
 #else
                     p->pad_char;
 
 #if wxUSE_WCHAR_T
-                if (type == wxPAT_WCHAR) {
+                if (m_type == wxPAT_WCHAR)
+                {
                     // user passed a character explicitely indicated as Unicode...
                     const wchar_t buf[2] = { p->pad_wchar, 0 };
                     val = wxString(buf, wxConvLibc)[0u];
+
+                    //printf("converting Unicode=>ANSI");   // for debug
                 }
 #endif
 #endif
 
                 size_t i;
 
-                if (!adj_left)
-                    for (i = 1; i < (size_t)min_width; i++)
+                if (!m_bAlignLeft)
+                    for (i = 1; i < (size_t)m_nMinWidth; i++)
                         APPEND_CH(_T(' '));
 
                 APPEND_CH(val);
 
-                if (adj_left)
-                    for (i = 1; i < (size_t)min_width; i++)
+                if (m_bAlignLeft)
+                    for (i = 1; i < (size_t)m_nMinWidth; i++)
                         APPEND_CH(_T(' '));
             }
             break;
@@ -789,17 +822,23 @@ int wxPrintfConvSpec::Process(wxChar *buf, size_t lenMax, wxPrintfArg *p)
 #if wxUSE_UNICODE
                     p->pad_pwchar;
 
-                if (type == wxPAT_PCHAR) {
+                if (m_type == wxPAT_PCHAR)
+                {
                     // user passed a string explicitely indicated as ANSI...
                     val = s = wxString(p->pad_pchar, wxConvLibc);
+
+                    //wprintf(L"converting ANSI=>Unicode");   // for debug
                 }
 #else
                     p->pad_pchar;
 
 #if wxUSE_WCHAR_T
-                if (type == wxPAT_PWCHAR) {
+                if (m_type == wxPAT_PWCHAR)
+                {
                     // user passed a string explicitely indicated as Unicode...
                     val = s = wxString(p->pad_pwchar, wxConvLibc);
+
+                    //printf("converting Unicode=>ANSI");   // for debug
                 }
 #endif
 #endif
@@ -808,15 +847,15 @@ int wxPrintfConvSpec::Process(wxChar *buf, size_t lenMax, wxPrintfArg *p)
                 if (val)
                 {
 #if wxUSE_STRUTILS
-                    // at this point we are sure that max_width is positive or null
+                    // at this point we are sure that m_nMaxWidth is positive or null
                     // (see top of wxPrintfConvSpec::LoadArg)
-                    len = wxMin((unsigned int)max_width, wxStrlen(val));
+                    len = wxMin((unsigned int)m_nMaxWidth, wxStrlen(val));
 #else
-                    for ( len = 0; val[len] && (len < max_width); len++ )
+                    for ( len = 0; val[len] && (len < m_nMaxWidth); len++ )
                         ;
 #endif
                 }
-                else if (max_width >= 6)
+                else if (m_nMaxWidth >= 6)
                 {
                     val = wxT("(null)");
                     len = 6;
@@ -829,15 +868,13 @@ int wxPrintfConvSpec::Process(wxChar *buf, size_t lenMax, wxPrintfArg *p)
 
                 int i;
 
-                if (!adj_left)
+                if (!m_bAlignLeft)
                 {
-                    for (i = len; i < min_width; i++)
+                    for (i = len; i < m_nMinWidth; i++)
                         APPEND_CH(_T(' '));
                 }
 
 #if wxUSE_STRUTILS
-                // at this point we are sure that max_width is positive or null
-                // (see top of wxPrintfConvSpec::LoadArg)
                 len = wxMin((unsigned int)len, lenMax-lenCur);
                 wxStrncpy(buf+lenCur, val, len);
                 lenCur += len;
@@ -846,9 +883,9 @@ int wxPrintfConvSpec::Process(wxChar *buf, size_t lenMax, wxPrintfArg *p)
                     APPEND_CH(val[i]);
 #endif
 
-                if (adj_left)
+                if (m_bAlignLeft)
                 {
-                    for (i = len; i < min_width; i++)
+                    for (i = len; i < m_nMinWidth; i++)
                         APPEND_CH(_T(' '));
                 }
             }
@@ -873,7 +910,7 @@ int wxPrintfConvSpec::Process(wxChar *buf, size_t lenMax, wxPrintfArg *p)
 
     // if we used system's sprintf() then we now need to append the s_szScratch
     // buffer to the given one...
-    switch (type)
+    switch (m_type)
     {
         case wxPAT_INT:
         case wxPAT_LONGINT:
@@ -886,16 +923,19 @@ int wxPrintfConvSpec::Process(wxChar *buf, size_t lenMax, wxPrintfArg *p)
         case wxPAT_POINTER:
 #if wxUSE_STRUTILS
             {
-               const wxMB2WXbuf tmp = wxConvLibc.cMB2WX(szScratch);
-               size_t len = wxMin(lenMax, wxStrlen(tmp));
-               wxStrncpy(buf, tmp, len);
-               lenCur += len;
+                wxASSERT(lenScratch >= 0 && lenScratch < wxSCRATCH_BUFFER_SIZE);
+                if (lenMax < lenScratch)
+                {
+                    // fill output buffer and then return -1
+                    wxStrncpy(buf, szScratch, lenMax);
+                    return -1;
+                }
+                wxStrncpy(buf, szScratch, lenScratch);
+                lenCur += lenScratch;
             }
 #else
             {
-                const wxMB2WXbuf tmp =
-                    wxConvLibc.cMB2WX(szScratch);
-                APPEND_STR(tmp);
+                APPEND_STR(szScratch);
             }
 #endif
             break;
@@ -940,10 +980,16 @@ static int wxCopyStrWithPercents(wxChar *dest, const wxChar *source, size_t n)
 int WXDLLEXPORT wxVsnprintf_(wxChar *buf, size_t lenMax,
                              const wxChar *format, va_list argptr)
 {
-    // cached data
-    static wxPrintfConvSpec arg[wxMAX_SVNPRINTF_ARGUMENTS];
-    static wxPrintfArg argdata[wxMAX_SVNPRINTF_ARGUMENTS];
-    static wxPrintfConvSpec *pspec[wxMAX_SVNPRINTF_ARGUMENTS] = { NULL };
+    // useful for debugging, to understand if we are really using this function
+    // rather than the system implementation
+#if 0
+    wprintf(L"Using wxVsnprintf_\n");
+#endif
+
+    // required memory:
+    wxPrintfConvSpec arg[wxMAX_SVNPRINTF_ARGUMENTS];
+    wxPrintfArg argdata[wxMAX_SVNPRINTF_ARGUMENTS];
+    wxPrintfConvSpec *pspec[wxMAX_SVNPRINTF_ARGUMENTS] = { NULL };
 
     size_t i;
 
@@ -968,24 +1014,38 @@ int WXDLLEXPORT wxVsnprintf_(wxChar *buf, size_t lenMax,
                 wxPrintfConvSpec *current = &arg[nargs];
 
                 // make toparse point to the end of this specifier
-                toparse = current->argend;
+                toparse = current->m_pArgEnd;
 
-                if (current->pos > 0) {
+                if (current->m_pos > 0)
+                {
                     // the positionals start from number 1... adjust the index
-                    current->pos--;
+                    current->m_pos--;
                     posarg_present = true;
-                } else {
+                }
+                else
+                {
                     // not a positional argument...
-                    current->pos = nargs;
+                    current->m_pos = nargs;
                     nonposarg_present = true;
                 }
 
                 // this conversion specifier is tied to the pos-th argument...
-                pspec[current->pos] = current;
+                pspec[current->m_pos] = current;
                 nargs++;
 
                 if (nargs == wxMAX_SVNPRINTF_ARGUMENTS)
+                {
+                    wxLogDebug(wxT("A single call to wxVsnprintf() has more than %d arguments; ")
+                               wxT("ignoring all remaining arguments."), wxMAX_SVNPRINTF_ARGUMENTS);
                     break;  // cannot handle any additional conv spec
+                }
+            }
+            else
+            {
+                // it's safe to look in the next character of toparse as at worst
+                // we'll hit its \0
+                if (*(toparse+1) == wxT('%'))
+                    toparse++;      // the Parse() returned false because we've found a %%
             }
         }
     }
@@ -1001,10 +1061,11 @@ int WXDLLEXPORT wxVsnprintf_(wxChar *buf, size_t lenMax,
     wxVaCopy(ap, argptr);
 
     // now load arguments from stack
-    for (i=0; i < nargs && ok; i++) {
-        // !pspec[i] if user forgot a positional parameter (e.g. %$1s %$3s) ?
-        // or LoadArg false if wxPrintfConvSpec::Parse failed to set its 'type'
-        // to a valid value...
+    for (i=0; i < nargs && ok; i++)
+    {
+        // !pspec[i] means that the user forgot a positional parameter (e.g. %$1s %$3s);
+        // LoadArg == false means that wxPrintfConvSpec::Parse failed to set the
+        // conversion specifier 'type' to a valid value...
         ok = pspec[i] && pspec[i]->LoadArg(&argdata[i], ap);
     }
 
@@ -1020,21 +1081,30 @@ int WXDLLEXPORT wxVsnprintf_(wxChar *buf, size_t lenMax,
     {
         // copy in the output buffer the portion of the format string between
         // last specifier and the current one
-        size_t tocopy = ( arg[i].argpos - toparse );
+        size_t tocopy = ( arg[i].m_pArgPos - toparse );
         if (lenCur+tocopy >= lenMax)
-            return -1;      // not enough space in the output buffer !
+        {
+            // not enough space in the output buffer !
+            // copy until the end of remaining space and then stop
+            wxCopyStrWithPercents(buf+lenCur, toparse, lenMax - lenCur - 1);
+            buf[lenMax-1] = wxT('\0');
+            return -1;
+        }
 
         lenCur += wxCopyStrWithPercents(buf+lenCur, toparse, tocopy);
 
         // process this specifier directly in the output buffer
-        int n = arg[i].Process(buf+lenCur, lenMax - lenCur, &argdata[arg[i].pos]);
+        int n = arg[i].Process(buf+lenCur, lenMax - lenCur, &argdata[arg[i].m_pos]);
         if (n == -1)
+        {
+            buf[lenMax-1] = wxT('\0');  // be sure to always NUL-terminate the string
             return -1;      // not enough space in the output buffer !
+        }
         lenCur += n;
 
-        // the +1 is because wxPrintfConvSpec::argend points to the last character
+        // the +1 is because wxPrintfConvSpec::m_pArgEnd points to the last character
         // of the format specifier, but we are not interested to it...
-        toparse = arg[i].argend + 1;
+        toparse = arg[i].m_pArgEnd + 1;
     }
 
     // copy portion of the format string after last specifier
@@ -1047,10 +1117,6 @@ int WXDLLEXPORT wxVsnprintf_(wxChar *buf, size_t lenMax,
 
     // the -1 is because of the '\0'
     lenCur += wxCopyStrWithPercents(buf+lenCur, toparse, tocopy) - 1;
-
-    // clean the static array portion used...
-    // NOTE: other arrays do not need cleanup!
-    memset(pspec, 0, sizeof(wxPrintfConvSpec*)*nargs);
 
     wxASSERT(lenCur == wxStrlen(buf));
     return lenCur;

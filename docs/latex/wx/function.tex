@@ -1746,6 +1746,12 @@ wxGetTranslation wouldn't find them.
 The same as \helpref{wxSnprintf}{wxsnprintf} but takes a {\tt va\_list }
 argument instead of arbitrary number of parameters.
 
+Note that if \texttt{wxUSE_PRINTF_POS_PARAMS} is set to 1, then this function supports
+positional arguments (see \helpref{wxString::Printf}{wxstringprintf} for more information).
+However other functions of the same family (wxPrintf, wxSprintf, wxFprintf, wxVfprintf,
+wxVfprintf, wxVprintf, wxVsprintf) currently do not to support positional parameters
+even when \texttt{wxUSE_PRINTF_POS_PARAMS} is 1.
+
 \wxheading{See also}
 
 \helpref{wxSnprintf}{wxsnprintf}, \helpref{wxString::PrintfV}{wxstringprintfv}

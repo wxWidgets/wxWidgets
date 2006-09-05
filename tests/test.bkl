@@ -88,4 +88,17 @@
         <files>testdata.fc</files>
     </wx-data>
 
+
+
+    <!-- BENCHMARKS -->
+
+    <exe id="printfbench" template="wx_sample_console,wx_test"
+                          template_append="wx_append_base">
+        <sources>
+            benchmarks/printfbench.cpp
+        </sources>
+        <wx-lib>base</wx-lib>
+    </exe>
+
+
 </makefile>

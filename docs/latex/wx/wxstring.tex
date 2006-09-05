@@ -897,6 +897,19 @@ Prepends {\it str} to this string, returning a reference to this string.
 Similar to the standard function {\it sprintf()}. Returns the number of
 characters written, or an integer less than zero on error.
 
+Note that if {\tt wxUSE_PRINTF_POS_PARAMS} is set to 1, then this function supports
+Unix98-style positional parameters:
+
+\begin{verbatim}
+    wxString str;
+
+    str.Printf(wxT("%d %d %d"), 1, 2, 3);
+    // str now contains "1 2 3"
+
+    str.Printf(wxT("%2$d %3$d %1$d"), 1, 2, 3);
+    // str now contains "2 3 1"
+\end{verbatim}
+
 {\bf NB:} This function will use a safe version of {\it vsprintf()} (usually called 
 {\it vsnprintf()}) whenever available to always allocate the buffer of correct
 size. Unfortunately, this function is not available on all platforms and the

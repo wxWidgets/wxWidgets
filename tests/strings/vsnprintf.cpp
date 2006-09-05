@@ -81,6 +81,8 @@ private:
         CPPUNIT_TEST( G );
         CPPUNIT_TEST( S );
         CPPUNIT_TEST( Asterisk );
+        CPPUNIT_TEST( Percent );
+        CPPUNIT_TEST( LongLong );
 
         CPPUNIT_TEST( BigToSmallBuffer );
     CPPUNIT_TEST_SUITE_END();
@@ -90,6 +92,9 @@ private:
     void G();
     void S();
     void Asterisk();
+    void Percent();
+    void LongLong();
+    void Unicode();
 
     void BigToSmallBuffer();
     void Misc(wxChar *buffer, int size);
@@ -179,15 +184,30 @@ void VsnprintfTestCase::S()
 
     CMP3("abcde", "%.5s", wxT("abcdefghi"));
 
-    // some tests without any argument passed through ...
-    CMP2("%", "%%");
-    CMP2("%%%", "%%%%%%");
+    // do the same tests but with Unicode characters:
+#if wxUSE_UNICODE
+    #define ALPHA     "\x3B1"
+    #define BETA      "\x3B2"
+    #define GAMMA     "\x3B3"
+    #define DELTA     "\x3B4"
+    #define EPSILON   "\x3B5"
+    #define ZETA      "\x3B6"
+    #define ETA       "\x3B7"
+    #define THETA     "\x3B8"
+    #define IOTA      "\x3B9"
 
-    // do not test odd number of '%' symbols as different implementations
-    // of snprintf() give different outputs as this situation is not considered
-    // by any standard (in fact, GCC will also warn you about a spurious % if
-    // you write %%% as argument of some *printf function !)
-    // Compare(wxT("%"), wxT("%%%"));
+    #define ABC         ALPHA BETA GAMMA
+    #define ABCDE       ALPHA BETA GAMMA DELTA EPSILON
+    #define ABCDEFGHI   ALPHA BETA GAMMA DELTA EPSILON ZETA ETA THETA IOTA
+
+    CMP3("  " ABC, "%5s", wxT(ABC));
+    CMP3("    " ALPHA, "%5s", wxT(ALPHA));
+    CMP3(ABCDEFGHI, "%5s", wxT(ABCDEFGHI));
+    CMP3(ABC "  ", "%-5s", wxT(ABC));
+    CMP3(ABCDEFGHI, "%-5s", wxT(ABCDEFGHI));
+
+    CMP3(ABCDE, "%.5s", wxT(ABCDEFGHI));
+#endif
 }
 
 void VsnprintfTestCase::Asterisk()
@@ -197,6 +217,30 @@ void VsnprintfTestCase::Asterisk()
     CMP5("0.1", "%*.*f", 3, 1, 0.123);
 
     CMP4("%0.002", "%%%.*f", 3, 0.0023456789);
+}
+
+void VsnprintfTestCase::Percent()
+{
+    // some tests without any argument passed through ...
+    CMP2("%", "%%");
+    CMP2("%%%", "%%%%%%");
+
+    CMP3("%  abc", "%%%5s", wxT("abc"));
+    CMP3("%  abc%", "%%%5s%%", wxT("abc"));
+
+    // do not test odd number of '%' symbols as different implementations
+    // of snprintf() give different outputs as this situation is not considered
+    // by any standard (in fact, GCC will also warn you about a spurious % if
+    // you write %%% as argument of some *printf function !)
+    // Compare(wxT("%"), wxT("%%%"));
+}
+
+void VsnprintfTestCase::LongLong()
+{
+    CMP3("123456789", "%lld", (long long int)123456789);
+    CMP3("-123456789", "%lld", (long long int)-123456789);
+
+    CMP3("123456789", "%llu", (unsigned long long int)123456789);
 }
 
 void VsnprintfTestCase::Misc(wxChar *buffer, int size)
