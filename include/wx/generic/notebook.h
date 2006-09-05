@@ -52,7 +52,7 @@ public:
               long style = 0,
               const wxString& name = wxNotebookNameStr);
     // dtor
-  ~wxNotebook();
+  virtual ~wxNotebook();
 
   // accessors
   // ---------

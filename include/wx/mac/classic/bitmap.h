@@ -46,7 +46,7 @@ public:
   // Construct a mask from a mono bitmap (copies the bitmap).
   wxMask(const wxBitmap& bitmap);
 
-  ~wxMask();
+  virtual ~wxMask();
 
   bool Create(const wxBitmap& bitmap, const wxColour& colour);
   bool Create(const wxBitmap& bitmap, int paletteIndex);
@@ -74,7 +74,7 @@ class WXDLLEXPORT wxBitmapRefData: public wxGDIRefData
     friend class WXDLLEXPORT wxCursor;
 public:
     wxBitmapRefData();
-    ~wxBitmapRefData();
+    virtual ~wxBitmapRefData();
 
 public:
   int           m_width;
@@ -153,7 +153,7 @@ public:
   // Convert from wxImage:
   wxBitmap(const wxImage& image, int depth = -1);
   
-  ~wxBitmap();
+  virtual ~wxBitmap();
   
   wxImage ConvertToImage() const;
 

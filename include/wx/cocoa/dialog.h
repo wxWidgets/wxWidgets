@@ -65,7 +65,7 @@ public:
                 long style = wxDEFAULT_DIALOG_STYLE,
                 const wxString& name = wxDialogNameStr);
 
-    ~wxDialog();
+    virtual ~wxDialog();
 protected:
     void Init();
 

@@ -226,7 +226,7 @@ public:
         extents = refData.extents;
     }
 
-    ~wxRegionRefData()
+    virtual ~wxRegionRefData()
     {
         free(rects);
     }

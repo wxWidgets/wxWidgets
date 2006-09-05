@@ -53,7 +53,7 @@ public:
     }
 
     wxRegion();
-    ~wxRegion();
+    virtual ~wxRegion();
 
     //
     // Modify region
@@ -243,7 +243,7 @@ DECLARE_DYNAMIC_CLASS(wxRegionIterator);
 public:
     wxRegionIterator();
     wxRegionIterator(const wxRegion& rRegion);
-    ~wxRegionIterator();
+    virtual ~wxRegionIterator();
 
     void Reset(void) { m_lCurrent = 0; }
     void Reset(const wxRegion& rRegion);

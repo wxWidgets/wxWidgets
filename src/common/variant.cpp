@@ -60,7 +60,7 @@ DECLARE_DYNAMIC_CLASS(wxVariantDataList)
 public:
     wxVariantDataList() {}
     wxVariantDataList(const wxList& list);
-    ~wxVariantDataList();
+    virtual ~wxVariantDataList();
 
     wxList& GetValue() { return m_value; }
     void SetValue(const wxList& value) ;

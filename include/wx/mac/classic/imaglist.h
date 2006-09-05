@@ -60,7 +60,7 @@ class WXDLLEXPORT wxImageList: public wxObject
   {
     Create(width, height, mask, initialCount);
   }
-  ~wxImageList();
+  virtual ~wxImageList();
 
 
   // Attributes

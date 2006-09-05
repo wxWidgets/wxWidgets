@@ -45,7 +45,7 @@ public:
 
         Create(parent, id, pos, size, choices, style, validator, name);
     }
-    ~wxChoice();
+    virtual ~wxChoice();
     bool Create( wxWindow *parent, wxWindowID id,
             const wxPoint& pos = wxDefaultPosition,
             const wxSize& size = wxDefaultSize,

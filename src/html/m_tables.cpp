@@ -98,7 +98,7 @@ private:
 
 public:
     wxHtmlTableCell(wxHtmlContainerCell *parent, const wxHtmlTag& tag, double pixel_scale = 1.0);
-    ~wxHtmlTableCell();
+    virtual ~wxHtmlTableCell();
 
     virtual void RemoveExtraSpacing(bool top, bool bottom);
 

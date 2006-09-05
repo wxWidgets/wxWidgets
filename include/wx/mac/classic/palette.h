@@ -24,7 +24,7 @@ class WXDLLEXPORT wxPaletteRefData: public wxGDIRefData
     friend class WXDLLEXPORT wxPalette;
 public:
     wxPaletteRefData();
-    ~wxPaletteRefData();
+    virtual ~wxPaletteRefData();
 protected:
     wxColour* m_palette;
     wxInt32   m_count ;
@@ -40,7 +40,7 @@ public:
   wxPalette();
 
   wxPalette(int n, const unsigned char *red, const unsigned char *green, const unsigned char *blue);
-  ~wxPalette();
+  virtual ~wxPalette();
   bool Create(int n, const unsigned char *red, const unsigned char *green, const unsigned char *blue);
   int GetPixel(unsigned char red, unsigned char green, unsigned char blue) const;
   bool GetRGB(int pixel, unsigned char *red, unsigned char *green, unsigned char *blue) const;

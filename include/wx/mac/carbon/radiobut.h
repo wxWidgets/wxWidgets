@@ -27,7 +27,7 @@ public:
     {
         Create(parent, id, label, pos, size, style, validator, name);
     }
-    ~wxRadioButton();
+    virtual ~wxRadioButton();
 
     bool Create(wxWindow *parent, wxWindowID id,
            const wxString& label,

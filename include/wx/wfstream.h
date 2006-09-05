@@ -34,7 +34,7 @@ public:
     wxFileInputStream(const wxString& ifileName);
     wxFileInputStream(wxFile& file);
     wxFileInputStream(int fd);
-    ~wxFileInputStream();
+    virtual ~wxFileInputStream();
 
     wxFileOffset GetLength() const;
 
@@ -133,7 +133,7 @@ public:
     wxFFileInputStream(const wxString& fileName, const wxChar *mode = _T("rb"));
     wxFFileInputStream(wxFFile& file);
     wxFFileInputStream(FILE *file);
-    ~wxFFileInputStream();
+    virtual ~wxFFileInputStream();
 
     wxFileOffset GetLength() const;
 

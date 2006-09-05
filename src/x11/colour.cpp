@@ -45,7 +45,7 @@ public:
         m_hasPixel = data.m_hasPixel;
     }
 
-    ~wxColourRefData()
+    virtual ~wxColourRefData()
     {
         FreeColour();
     }

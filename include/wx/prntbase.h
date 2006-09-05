@@ -306,7 +306,7 @@ public:
                     const wxSize& size = wxDefaultSize,
                     long style = 0,
                     const wxString& name = wxT("canvas"));
-    ~wxPreviewCanvas();
+    virtual ~wxPreviewCanvas();
 
     void OnPaint(wxPaintEvent& event);
     void OnChar(wxKeyEvent &event);
@@ -340,7 +340,7 @@ public:
                    const wxSize& size = wxDefaultSize,
                    long style = wxDEFAULT_FRAME_STYLE,
                    const wxString& name = wxT("frame"));
-    ~wxPreviewFrame();
+    virtual ~wxPreviewFrame();
 
     void OnCloseWindow(wxCloseEvent& event);
     virtual void Initialize();
@@ -401,7 +401,7 @@ public:
                         const wxSize& size = wxDefaultSize,
                         long style = wxTAB_TRAVERSAL,
                         const wxString& name = wxT("panel"));
-    ~wxPreviewControlBar();
+    virtual ~wxPreviewControlBar();
 
     virtual void CreateButtons();
     virtual void SetZoomControl(int zoom);

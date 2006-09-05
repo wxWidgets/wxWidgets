@@ -40,7 +40,7 @@ class WXDLLEXPORT wxApp : public wxAppBase
 
 public:
     wxApp();
-    ~wxApp();
+    virtual ~wxApp();
 
     // override base class (pure) virtuals
     // -----------------------------------

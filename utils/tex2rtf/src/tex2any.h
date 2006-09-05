@@ -53,7 +53,7 @@ class TexMacroDef: public wxObject
   int macroId;
 
   TexMacroDef(int the_id, const wxChar *the_name, int n, bool ig, bool forbidLevel = FORBID_OK);
-  ~TexMacroDef(void);
+  virtual ~TexMacroDef(void);
 };
 
 #define CHUNK_TYPE_MACRO    1
@@ -135,7 +135,7 @@ class TexTopic: public wxObject
   wxChar *filename;
   wxStringList *keywords;
   TexTopic(wxChar *f = NULL);
-  ~TexTopic(void);
+  virtual ~TexTopic(void);
 };
 extern wxHashTable TopicTable;
 void AddKeyWordForTopic(wxChar *topic, wxChar *entry, wxChar *filename = NULL);
@@ -403,7 +403,7 @@ class TexRef: public wxObject
   wxChar *sectionNumber; // Section or figure number (as a string)
   wxChar *sectionName; // name e.g. 'section'
   TexRef(const wxChar *label, const wxChar *file, const wxChar *section, const wxChar *sectionN = NULL);
-  ~TexRef(void);
+  virtual ~TexRef(void);
 };
 
 /*
@@ -515,7 +515,7 @@ public:
         else
             macroBody = NULL;
     }
-    ~CustomMacro();
+    virtual ~CustomMacro();
 };
 
 bool ReadCustomMacros(const wxString& filename);
@@ -537,7 +537,7 @@ class ColourTableEntry: public wxObject
   unsigned int blue;
 
   ColourTableEntry(const wxChar *theName, unsigned int r,  unsigned int g,  unsigned int b);
-  ~ColourTableEntry(void);
+  virtual ~ColourTableEntry(void);
 };
 
 extern wxList ColourTable;

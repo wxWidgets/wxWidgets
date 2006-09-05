@@ -22,7 +22,7 @@ class WXDLLEXPORT wxCursorRefData: public wxObjectRefData
     friend class WXDLLEXPORT wxCursor;
 public:
     wxCursorRefData();
-    ~wxCursorRefData();
+    virtual ~wxCursorRefData();
 
 protected:
     int m_width, m_height;
@@ -47,7 +47,7 @@ public:
    int hotSpotX = 0, int hotSpotY = 0);
 
   wxCursor(int cursor_type);
-  ~wxCursor();
+  virtual ~wxCursor();
 
   virtual bool Ok() const { return m_refData ; }
 

@@ -168,7 +168,7 @@ public:
     }
 #endif
 
-    ~wxDragImage();
+    virtual ~wxDragImage();
 
     // Attributes
     ////////////////////////////////////////////////////////////////////////////

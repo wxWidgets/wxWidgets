@@ -1185,7 +1185,7 @@ public:
         g_isPainting++;
     }
 
-    ~wxPaintEvent()
+    virtual ~wxPaintEvent()
     {
         g_isPainting--;
     }

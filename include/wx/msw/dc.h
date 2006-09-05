@@ -30,7 +30,7 @@ class wxDCCacheEntry: public wxObject
 public:
     wxDCCacheEntry(WXHBITMAP hBitmap, int w, int h, int depth);
     wxDCCacheEntry(WXHDC hDC, int depth);
-    ~wxDCCacheEntry();
+    virtual ~wxDCCacheEntry();
 
     WXHBITMAP   m_bitmap;
     WXHDC       m_dc;
@@ -46,7 +46,7 @@ class WXDLLEXPORT wxDC : public wxDCBase
 {
 public:
     wxDC(WXHDC hDC) { Init(); m_hDC = hDC; }
-    ~wxDC();
+    virtual ~wxDC();
 
     // implement base class pure virtuals
     // ----------------------------------

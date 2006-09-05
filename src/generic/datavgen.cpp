@@ -55,7 +55,7 @@ public:
                             const wxPoint &pos = wxDefaultPosition,
                             const wxSize &size = wxDefaultSize,
                             const wxString &name = wxT("wxdataviewctrlheaderwindow") );
-    ~wxDataViewHeaderWindow();
+    virtual ~wxDataViewHeaderWindow();
 
     void SetOwner( wxDataViewCtrl* owner ) { m_owner = owner; }
     wxDataViewCtrl *GetOwner() { return m_owner; }
@@ -140,7 +140,7 @@ public:
                             const wxPoint &pos = wxDefaultPosition,
                             const wxSize &size = wxDefaultSize,
                             const wxString &name = wxT("wxdataviewctrlmainwindow") );
-    ~wxDataViewMainWindow();
+    virtual ~wxDataViewMainWindow();
 
     // notifications from wxDataViewListModel
     bool RowAppended();

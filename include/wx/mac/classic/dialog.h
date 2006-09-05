@@ -58,7 +58,7 @@ public:
                 long style = wxDEFAULT_DIALOG_STYLE,
                 const wxString& name = wxDialogNameStr);
 
-    ~wxDialog();
+    virtual ~wxDialog();
 
 //    virtual bool Destroy();
     virtual bool Show(bool show = true);

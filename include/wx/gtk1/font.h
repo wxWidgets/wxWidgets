@@ -62,7 +62,7 @@ public:
     // wxGTK-specific
     bool Create(const wxString& fontname);
 
-    ~wxFont();
+    virtual ~wxFont();
 
     // implement base class pure virtuals
     virtual int GetPointSize() const;

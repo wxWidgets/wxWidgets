@@ -37,7 +37,7 @@ class LifeSamplesDialog : public wxDialog
 public:
     // ctor and dtor
     LifeSamplesDialog(wxWindow *parent);
-    ~LifeSamplesDialog();
+    virtual ~LifeSamplesDialog();
 
     // members
     const LifePattern& GetPattern();

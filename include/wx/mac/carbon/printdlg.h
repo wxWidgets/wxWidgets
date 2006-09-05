@@ -31,7 +31,7 @@ public:
     wxMacPrintDialog();
     wxMacPrintDialog(wxWindow *parent, wxPrintDialogData* data = NULL);
     wxMacPrintDialog(wxWindow *parent, wxPrintData* data );
-    ~wxMacPrintDialog();
+    virtual ~wxMacPrintDialog();
 
     bool Create(wxWindow *parent, wxPrintDialogData* data = NULL);
     virtual int ShowModal();
@@ -59,7 +59,7 @@ class WXDLLEXPORT wxMacPageSetupDialog: public wxPageSetupDialogBase
 {
 public:
     wxMacPageSetupDialog(wxWindow *parent, wxPageSetupDialogData *data = NULL);
-    ~wxMacPageSetupDialog();
+    virtual ~wxMacPageSetupDialog();
 
     virtual wxPageSetupData& GetPageSetupDialogData();
     

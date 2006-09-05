@@ -257,7 +257,7 @@ class WXDLLIMPEXP_ADV wxDataViewColumnBase: public wxObject
 public:
     wxDataViewColumnBase( const wxString &title, wxDataViewCell *cell, size_t model_column,
         int fixed_width = 80, wxDataViewColumnSizing sizing = wxDATAVIEW_COL_WIDTH_FIXED, int flags = 0 );
-    ~wxDataViewColumnBase();
+    virtual ~wxDataViewColumnBase();
 
     virtual void SetTitle( const wxString &title );
     virtual wxString GetTitle();
@@ -297,7 +297,7 @@ class WXDLLIMPEXP_ADV wxDataViewCtrlBase: public wxControl
 {
 public:
     wxDataViewCtrlBase();
-    ~wxDataViewCtrlBase();
+    virtual ~wxDataViewCtrlBase();
 
     virtual bool AssociateModel( wxDataViewListModel *model );
     wxDataViewListModel* GetModel();

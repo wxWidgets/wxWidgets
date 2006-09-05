@@ -21,7 +21,7 @@ class WXDLLEXPORT wxBitmapButton: public wxBitmapButtonBase
     DECLARE_DYNAMIC_CLASS(wxBitmapButton)
 public:
     wxBitmapButton();
-    ~wxBitmapButton();
+    virtual ~wxBitmapButton();
     wxBitmapButton(wxWindow *parent, wxWindowID id, const wxBitmap& bitmap,
         const wxPoint& pos = wxDefaultPosition,
         const wxSize& size = wxDefaultSize, long style = wxBU_AUTODRAW,

@@ -34,7 +34,7 @@ class WXDLLEXPORT wxPluginApp: public wxApp
 
 public:
   wxPluginApp(void);
-  ~wxPluginApp(void);
+  virtual ~wxPluginApp(void);
 
   // Find a frame given a NP instance
   wxPluginFrame *FindFrame(NPP instance);

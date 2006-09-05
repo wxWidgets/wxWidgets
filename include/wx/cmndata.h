@@ -31,7 +31,7 @@ class WXDLLEXPORT wxColourData: public wxObject
 public:
     wxColourData();
     wxColourData(const wxColourData& data);
-    ~wxColourData();
+    virtual ~wxColourData();
 
     void SetChooseFull(bool flag) { m_chooseFull = flag; }
     bool GetChooseFull() const { return m_chooseFull; }
@@ -172,7 +172,7 @@ class WXDLLEXPORT wxPrintData: public wxObject
 public:
     wxPrintData();
     wxPrintData(const wxPrintData& printData);
-    ~wxPrintData();
+    virtual ~wxPrintData();
 
     int GetNoCopies() const { return m_printNoCopies; }
     bool GetCollate() const { return m_printCollate; }
@@ -282,7 +282,7 @@ public:
     wxPrintDialogData();
     wxPrintDialogData(const wxPrintDialogData& dialogData);
     wxPrintDialogData(const wxPrintData& printData);
-    ~wxPrintDialogData();
+    virtual ~wxPrintDialogData();
 
     int GetFromPage() const { return m_printFromPage; };
     int GetToPage() const { return m_printToPage; };
@@ -363,7 +363,7 @@ public:
     wxPageSetupDialogData();
     wxPageSetupDialogData(const wxPageSetupDialogData& dialogData);
     wxPageSetupDialogData(const wxPrintData& printData);
-    ~wxPageSetupDialogData();
+    virtual ~wxPageSetupDialogData();
 
     wxSize GetPaperSize() const { return m_paperSize; };
     wxPaperSize GetPaperId() const { return m_printData.GetPaperId(); };

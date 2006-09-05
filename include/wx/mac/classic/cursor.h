@@ -22,7 +22,7 @@ class WXDLLEXPORT wxCursorRefData: public wxBitmapRefData
     friend class WXDLLEXPORT wxCursor;
 public:
     wxCursorRefData();
-    ~wxCursorRefData();
+    virtual ~wxCursorRefData();
 
 protected:
     WXHCURSOR     m_hCursor;
@@ -53,7 +53,7 @@ public:
         int hotSpotX = 0, int hotSpotY = 0);
 
   wxCursor(int cursor_type);
-  ~wxCursor();
+  virtual ~wxCursor();
 
 	bool CreateFromXpm(const char **bits) ;
   virtual bool Ok() const { return (m_refData != NULL && ( M_CURSORDATA->m_hCursor != NULL || M_CURSORDATA->m_themeCursor != -1 ) ) ; }

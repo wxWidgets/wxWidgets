@@ -140,7 +140,7 @@ public:
                 const wxString& name = "htmlAppletWindow");
 
             // Destructor
-            ~wxHtmlAppletWindow();
+            virtual ~wxHtmlAppletWindow();
 
             // Create an instance of an applet based on it's class name
             wxApplet *CreateApplet(

@@ -34,7 +34,7 @@ public:
       Create(parent, id, title, pos, size, style | wxFRAME_TOOL_WINDOW | wxFRAME_FLOAT_ON_PARENT , name);
   }
 
-  ~wxMiniFrame() {}
+  virtual ~wxMiniFrame() {}
 protected:
 };
 

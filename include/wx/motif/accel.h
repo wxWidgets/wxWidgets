@@ -24,7 +24,7 @@ public:
     wxAcceleratorTable(const wxString& resource); // Load from .rc resource
     wxAcceleratorTable(int n, const wxAcceleratorEntry entries[]); // Load from array
 
-    ~wxAcceleratorTable();
+    virtual ~wxAcceleratorTable();
 
     bool operator == (const wxAcceleratorTable& accel) const { return m_refData == accel.m_refData; }
     bool operator != (const wxAcceleratorTable& accel) const { return m_refData != accel.m_refData; }

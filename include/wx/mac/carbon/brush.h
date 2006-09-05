@@ -35,7 +35,7 @@ public:
     wxBrush(short macThemeBrush ) ;
     wxBrush(const wxColour& col, int style = wxSOLID);
     wxBrush(const wxBitmap& stipple);
-    ~wxBrush();
+    virtual ~wxBrush();
 
     virtual void SetColour(const wxColour& col) ;
     virtual void SetColour(unsigned char r, unsigned char g, unsigned char b) ;

@@ -59,7 +59,7 @@ public:
         const wxPalette& WXUNUSED(palette),
         const wxGLContext *other /* for sharing display lists */ );
 
-    ~wxGLContext();
+    virtual ~wxGLContext();
 
 
     void SetCurrent();
@@ -111,7 +111,7 @@ public:
         int *attribList = 0,
         const wxPalette& palette = wxNullPalette);
 
-    ~wxGLCanvas();
+    virtual ~wxGLCanvas();
 
     // Replaces wxWindow::Create functionality, since
     // we need to use a different window class

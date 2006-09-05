@@ -66,7 +66,7 @@ public:
             wxLoadPageEvent(const wxString &hRef = "",wxHtmlAppletWindow *htmlWindow = NULL);
 
             // Destructor
-            ~wxLoadPageEvent() {}
+            virtual ~wxLoadPageEvent() {}
 
             // Clone Virtual
             virtual wxEvent *Clone() const { return new wxLoadPageEvent(m_hRef, m_htmlWindow); }
@@ -96,7 +96,7 @@ public:
             wxPageLoadedEvent();
 
             // Destructor
-            ~wxPageLoadedEvent() {}
+            virtual ~wxPageLoadedEvent() {}
 
             // Clone Virtual
             virtual wxEvent *Clone() const {

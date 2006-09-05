@@ -25,7 +25,7 @@ public:
   // creation
   // --------
   wxTextCtrl() { Init(); }
-  ~wxTextCtrl();
+  virtual ~wxTextCtrl();
   wxTextCtrl(wxWindow *parent, wxWindowID id,
              const wxString& value = wxEmptyString,
              const wxPoint& pos = wxDefaultPosition,

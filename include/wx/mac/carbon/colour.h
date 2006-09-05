@@ -27,7 +27,7 @@ public:
     DEFINE_STD_WXCOLOUR_CONSTRUCTORS
 
     // dtor
-    ~wxColour();
+    virtual ~wxColour();
 
     // accessors
     bool Ok() const {return m_isInit; }

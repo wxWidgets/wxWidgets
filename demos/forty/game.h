@@ -24,7 +24,7 @@ const int MaxMoves = 800;
 class Pack : public Pile {
 public:
     Pack(int x, int y);
-    ~Pack();
+    virtual ~Pack();
     void Redraw(wxDC& dc);
     void ResetPile() { m_topCard = NumCards - 1; }
     void Shuffle();
@@ -39,7 +39,7 @@ public:
 class Base : public Pile {
 public:
     Base(int x, int y);
-    ~Base(){};
+    virtual ~Base(){}
     bool AcceptCard(Card* card);
 };
 
@@ -50,7 +50,7 @@ public:
 class Foundation : public Pile {
 public:
     Foundation(int x, int y);
-    ~Foundation(){};
+    virtual ~Foundation(){}
     bool AcceptCard(Card* card);
 };
 
@@ -61,7 +61,7 @@ public:
 class Discard : public Pile {
 public:
     Discard(int x, int y);
-    ~Discard(){};
+    virtual ~Discard(){}
     void Redraw(wxDC& dc);
     void GetTopCardPos(int& x, int& y);
     Card* RemoveTopCard(wxDC& dc, int m_xOffset, int m_yOffset);

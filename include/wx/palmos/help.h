@@ -23,8 +23,8 @@ class WXDLLEXPORT wxPalmHelpController: public wxHelpControllerBase
     DECLARE_CLASS(wxPalmHelpController)
 
 public:
-    wxPalmHelpController() {};
-    ~wxPalmHelpController() {};
+    wxPalmHelpController() {}
+    virtual ~wxPalmHelpController() {}
 
     // Must call this to set the filename
     virtual bool Initialize(const wxString& file);

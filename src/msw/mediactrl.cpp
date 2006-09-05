@@ -1507,7 +1507,7 @@ class WXDLLIMPEXP_MEDIA wxMCIMediaBackend : public wxMediaBackendCommonBase
 {
 public:
     wxMCIMediaBackend();
-    ~wxMCIMediaBackend();
+    virtual ~wxMCIMediaBackend();
 
     virtual bool CreateControl(wxControl* ctrl, wxWindow* parent,
                                      wxWindowID id,
@@ -1867,7 +1867,7 @@ class WXDLLIMPEXP_MEDIA wxQTMediaBackend : public wxMediaBackendCommonBase
 {
 public:
     wxQTMediaBackend();
-    ~wxQTMediaBackend();
+    virtual ~wxQTMediaBackend();
 
     virtual bool CreateControl(wxControl* ctrl, wxWindow* parent,
                                      wxWindowID id,
@@ -2133,7 +2133,7 @@ public:
         pGB->Release();
     }
 
-    ~wxAMPlayTimer()
+    virtual ~wxAMPlayTimer()
     {
         SAFE_RELEASE(m_pME);
     }

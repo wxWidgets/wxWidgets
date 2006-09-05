@@ -56,7 +56,7 @@ public:
         LoadFile(loc.GetFileName(), wxBITMAP_TYPE_ICO);
     }
 
-    ~wxIcon();
+    virtual ~wxIcon();
 
     bool LoadFile( const wxString& rName
                   ,long            lFlags = wxBITMAP_TYPE_ICO_RESOURCE

@@ -41,7 +41,7 @@ class WXDLLEXPORT wxDropTarget: public wxObject
 public:
     
     wxDropTarget();
-    ~wxDropTarget();
+    virtual ~wxDropTarget();
     
     virtual void OnEnter() { }
     virtual void OnLeave() { }
@@ -143,7 +143,7 @@ public:
     wxDropSource( wxWindow *win );
     wxDropSource( wxDataObject &data, wxWindow *win );
     
-    ~wxDropSource(void);
+    virtual ~wxDropSource(void);
     
     void SetData( wxDataObject &data  );
     wxDragResult DoDragDrop(int flags = wxDrag_CopyOnly);

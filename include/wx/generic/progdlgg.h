@@ -44,7 +44,7 @@ public:
    /* Destructor.
        Re-enables event handling for other windows.
    */
-   ~wxProgressDialog();
+   virtual ~wxProgressDialog();
 
    /* Update the status bar to the new value.
        @param value new value

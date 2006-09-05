@@ -65,7 +65,7 @@ public:
     wxDocMDIChildFrame(wxDocument *doc, wxView *view, wxMDIParentFrame *frame, wxWindowID id,
         const wxString& title, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
         long type = wxDEFAULT_FRAME_STYLE, const wxString& name = wxT("frame"));
-    ~wxDocMDIChildFrame();
+    virtual ~wxDocMDIChildFrame();
 
     bool Create(wxDocument *doc,
                 wxView *view,

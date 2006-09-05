@@ -75,7 +75,7 @@ class wxHIDJoystick : public wxHIDDevice
 {
 public:
     wxHIDJoystick();
-    ~wxHIDJoystick();
+    virtual ~wxHIDJoystick();
 
     bool Create(int nWhich);
     virtual void BuildCookies(CFArrayRef Array);

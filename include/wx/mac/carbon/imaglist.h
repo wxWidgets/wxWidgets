@@ -55,7 +55,7 @@ class WXDLLEXPORT wxImageList: public wxObject
 public:
     wxImageList() { m_width = m_height = 0; }
     wxImageList( int width, int height, bool mask = true, int initialCount = 1 );
-    ~wxImageList();
+    virtual ~wxImageList();
     bool Create( int width, int height, bool mask = true, int initialCount = 1 );
     bool Create();
     

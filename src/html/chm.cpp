@@ -364,7 +364,7 @@ public:
     wxChmInputStream(const wxString& archive,
                      const wxString& file, bool simulate = false);
     /// Destructor
-    ~wxChmInputStream();
+    virtual ~wxChmInputStream();
 
     /// Return the size of the accessed file in archive
     virtual size_t GetSize() const { return m_size; }
@@ -743,7 +743,7 @@ class wxChmFSHandler : public wxFileSystemHandler
 public:
     /// Constructor and Destructor
     wxChmFSHandler();
-    ~wxChmFSHandler();
+    virtual ~wxChmFSHandler();
 
     /// Is able to open location?
     virtual bool CanOpen(const wxString& location);

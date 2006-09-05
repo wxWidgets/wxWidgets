@@ -45,7 +45,7 @@ public:
             const wxSize &size = wxDefaultSize,
             long style = wxDEFAULT_DIALOG_STYLE,
             const wxString &name = wxDialogNameStr );
-    ~wxDialog() {}
+    virtual ~wxDialog() {}
 
     virtual bool Show( bool show = TRUE );
     virtual int ShowModal();

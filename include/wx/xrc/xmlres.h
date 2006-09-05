@@ -125,7 +125,7 @@ public:
                   const wxString& domain=wxEmptyString);
 
     // Destructor.
-    ~wxXmlResource();
+    virtual ~wxXmlResource();
 
     // Loads resources from XML files that match given filemask.
     // This method understands VFS (see filesys.h).

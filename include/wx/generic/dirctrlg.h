@@ -60,7 +60,7 @@ class WXDLLEXPORT wxDirItemData : public wxTreeItemData
 {
 public:
     wxDirItemData(const wxString& path, const wxString& name, bool isDir);
-    ~wxDirItemData(){}
+    virtual ~wxDirItemData(){}
     void SetNewDirName(const wxString& path);
 
     bool HasSubDirs() const;
@@ -225,7 +225,7 @@ public:
 
     void Init();
 
-    ~wxDirFilterListCtrl() {}
+    virtual ~wxDirFilterListCtrl() {}
 
     //// Operations
     void FillFilterList(const wxString& filter, int defaultFilter);

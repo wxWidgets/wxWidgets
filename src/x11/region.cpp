@@ -45,7 +45,7 @@ public:
         XUnionRegion( refData.m_region, m_region, m_region );
     }
 
-    ~wxRegionRefData()
+    virtual ~wxRegionRefData()
     {
         if (m_region)
             XDestroyRegion( m_region );
@@ -432,7 +432,7 @@ class wxRIRefData: public wxObjectRefData
 public:
 
     wxRIRefData() : m_rects(0), m_numRects(0){}
-   ~wxRIRefData();
+   virtual ~wxRIRefData();
 
     wxRect *m_rects;
     size_t  m_numRects;

@@ -61,7 +61,7 @@ public:
                const wxPalette& WXUNUSED(palette),
                const wxGLContext *other        /* for sharing display lists */
     );
-   ~wxGLContext();
+   virtual ~wxGLContext();
 
    void SetCurrent();
    void Update();  // must be called after window drag/grows/zoom or clut change
@@ -94,7 +94,7 @@ class WXDLLEXPORT wxGLCanvas: public wxWindow
         const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = 0,
         const wxString& name = wxT("GLCanvas"), int *attribList = 0, const wxPalette& palette = wxNullPalette );
 
-   ~wxGLCanvas();
+   virtual ~wxGLCanvas();
 
    bool Create(wxWindow *parent, const wxGLContext *shared, wxWindowID id,
                const wxPoint& pos, const wxSize& size, long style, const wxString& name,

@@ -28,7 +28,7 @@ public:
     wxPen();
     wxPen(const wxColour& col, int width = 1, int style = wxSOLID);
     wxPen(const wxBitmap& stipple, int width);
-    ~wxPen();
+    virtual ~wxPen();
 
     // wxObjectRefData
     wxObjectRefData *CreateRefData() const;

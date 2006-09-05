@@ -32,7 +32,7 @@ public:
         const wxPalette& WXUNUSED(palette),
         const wxGLContext *other /* for sharing display lists */ );
 
-    ~wxGLContext();
+    virtual ~wxGLContext();
 
 
     void SetCurrent();

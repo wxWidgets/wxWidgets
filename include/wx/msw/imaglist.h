@@ -62,7 +62,7 @@ public:
   {
     Create(width, height, mask, initialCount);
   }
-  ~wxImageList();
+  virtual ~wxImageList();
 
 
   // Attributes

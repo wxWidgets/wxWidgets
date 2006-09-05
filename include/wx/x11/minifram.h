@@ -34,7 +34,7 @@ public:
         Create(parent, id, title, pos, size, style, name);
     }
     
-    ~wxMiniFrame() {}
+    virtual ~wxMiniFrame() {}
 protected:
 };
 

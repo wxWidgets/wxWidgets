@@ -21,7 +21,7 @@ class WXDLLEXPORT wxComboBox: public wxChoice
 
 public:
     wxComboBox() { m_inSetSelection = false; }
-    ~wxComboBox();
+    virtual ~wxComboBox();
 
     inline wxComboBox(wxWindow *parent, wxWindowID id,
         const wxString& value = wxEmptyString,

@@ -72,7 +72,7 @@ public:
               );
     }
 
-    ~wxRadioBox();
+    virtual ~wxRadioBox();
 
     bool Create( wxWindow*          pParent
                 ,wxWindowID         vId

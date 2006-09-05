@@ -70,7 +70,7 @@ class WXDLLIMPEXP_CORE wxDC : public wxDCBase
 {
 public:
     wxDC();
-    ~wxDC() { }
+    virtual ~wxDC() { }
 
 #if wxUSE_PALETTE
     void SetColourMap( const wxPalette& palette ) { SetPalette(palette); };

@@ -57,7 +57,7 @@ class WXDLLIMPEXP_CORE wxAdoptedWindow: public wxWindow
   public:
     wxAdoptedWindow();
     wxAdoptedWindow(WXWindow window);
-    ~wxAdoptedWindow();
+    virtual ~wxAdoptedWindow();
 
     void SetHandle(WXWindow window) { m_mainWindow = window; m_clientWindow = window; }
     WXWindow GetHandle() const { return GetMainWindow(); }

@@ -30,7 +30,7 @@ public:
     {
         Create(pParent, vId, rsValue, rPos, rSize, lStyle, rValidator, rsName);
     }
-    ~wxTextCtrl();
+    virtual ~wxTextCtrl();
 
     bool Create( wxWindow*          pParent
                 ,wxWindowID         vId

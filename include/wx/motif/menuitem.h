@@ -30,7 +30,7 @@ public:
                const wxString& help = wxEmptyString,
                wxItemKind kind = wxITEM_NORMAL,
                wxMenu *subMenu = (wxMenu *)NULL);
-    ~wxMenuItem();
+    virtual ~wxMenuItem();
 
     // accessors (some more are inherited from wxOwnerDrawn or are below)
     virtual void SetText(const wxString& label);

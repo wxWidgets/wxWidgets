@@ -21,7 +21,7 @@ class WXDLLIMPEXP_NET wxSocketOutputStream : public wxOutputStream
 {
  public:
   wxSocketOutputStream(wxSocketBase& s);
-  ~wxSocketOutputStream();
+  virtual ~wxSocketOutputStream();
 
   wxFileOffset SeekO( wxFileOffset WXUNUSED(pos), wxSeekMode WXUNUSED(mode) )
     { return -1; }
@@ -40,7 +40,7 @@ class WXDLLIMPEXP_NET wxSocketInputStream : public wxInputStream
 {
  public:
   wxSocketInputStream(wxSocketBase& s);
-  ~wxSocketInputStream();
+  virtual ~wxSocketInputStream();
 
   wxFileOffset SeekI( wxFileOffset WXUNUSED(pos), wxSeekMode WXUNUSED(mode) )
     { return -1; }
@@ -60,7 +60,7 @@ class WXDLLIMPEXP_NET wxSocketStream : public wxSocketInputStream,
 {
  public:
   wxSocketStream(wxSocketBase& s);
-  ~wxSocketStream();
+  virtual ~wxSocketStream();
 
   DECLARE_NO_COPY_CLASS(wxSocketStream)
 };

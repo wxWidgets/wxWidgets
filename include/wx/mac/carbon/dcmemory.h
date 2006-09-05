@@ -21,7 +21,7 @@ class WXDLLEXPORT wxMemoryDC: public wxPaintDC
   public:
     wxMemoryDC(void);
     wxMemoryDC( wxDC *dc ); // Create compatible DC
-    ~wxMemoryDC(void);
+    virtual ~wxMemoryDC(void);
     virtual void SelectObject( const wxBitmap& bitmap );
         wxBitmap    GetSelectedObject() { return m_selected ; }
 

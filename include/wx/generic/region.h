@@ -27,7 +27,7 @@ public:
     wxRegionGeneric(const wxPoint& topLeft, const wxPoint& bottomRight);
     wxRegionGeneric(const wxRect& rect);
     wxRegionGeneric();
-    ~wxRegionGeneric();
+    virtual ~wxRegionGeneric();
 
     bool Ok() const { return m_refData != NULL; }
 
@@ -109,7 +109,7 @@ public:
     wxRegionIteratorGeneric();
     wxRegionIteratorGeneric(const wxRegionGeneric& region);
     wxRegionIteratorGeneric(const wxRegionIteratorGeneric& iterator);
-    ~wxRegionIteratorGeneric();
+    virtual ~wxRegionIteratorGeneric();
 
     wxRegionIteratorGeneric& operator=(const wxRegionIteratorGeneric& iterator);
 

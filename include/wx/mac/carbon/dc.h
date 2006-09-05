@@ -81,7 +81,7 @@ class WXDLLEXPORT wxDC: public wxDCBase
 
 public:
     wxDC();
-    ~wxDC();
+    virtual ~wxDC();
 
     // implement base class pure virtuals
     // ----------------------------------

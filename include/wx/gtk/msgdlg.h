@@ -27,7 +27,7 @@ public:
                     const wxString& caption = wxMessageBoxCaptionStr,
                     long style = wxOK|wxCENTRE,
                     const wxPoint& pos = wxDefaultPosition);
-    ~wxMessageDialog();
+    virtual ~wxMessageDialog();
 
     int ShowModal();
     virtual bool Show( bool WXUNUSED(show) = true ) { return false; };

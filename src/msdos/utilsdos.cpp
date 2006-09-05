@@ -329,7 +329,7 @@ public:
         : wxFFileInputStream(name, _T("rt"))
     { }
 
-    ~wxTempFileInStream()
+    virtual ~wxTempFileInStream()
     {
         m_file->Close();
         wxRemoveFile(m_file->GetName());

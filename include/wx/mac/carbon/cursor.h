@@ -32,7 +32,7 @@ public:
         int hotSpotX = 0, int hotSpotY = 0);
 
   wxCursor(int cursor_type);
-  ~wxCursor();
+  virtual ~wxCursor();
 
 	bool CreateFromXpm(const char **bits) ;
   virtual bool Ok() const ;

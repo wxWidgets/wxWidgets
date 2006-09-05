@@ -54,7 +54,7 @@ public:
         Init() ;
     }
 
-    ~wxToolBarTool()
+    virtual ~wxToolBarTool()
     {
         if ( m_controlHandle )
             DisposeControl( m_controlHandle ) ;

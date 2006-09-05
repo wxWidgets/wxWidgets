@@ -33,7 +33,7 @@ public:
     wxBrush() {}
     wxBrush(const wxColour &colour, int style = wxSOLID);
     wxBrush(const wxBitmap &stippleBitmap);
-    ~wxBrush() {}
+    virtual ~wxBrush() {}
     bool operator == (const wxBrush& brush) const;
     bool operator != (const wxBrush& brush) const;
     bool Ok() const;

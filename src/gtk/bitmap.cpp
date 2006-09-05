@@ -184,7 +184,7 @@ class wxBitmapRefData: public wxObjectRefData
 {
 public:
     wxBitmapRefData();
-    ~wxBitmapRefData();
+    virtual ~wxBitmapRefData();
 
     GdkPixmap      *m_pixmap;
     GdkPixbuf      *m_pixbuf;

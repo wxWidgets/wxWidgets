@@ -25,7 +25,7 @@ class WXDLLEXPORT wxStatusBarMac : public wxStatusBarGeneric
       Create(parent, id, style, name);
   }
 
-  ~wxStatusBarMac();
+  virtual ~wxStatusBarMac();
 
   bool Create(wxWindow *parent, wxWindowID id,
               long style ,

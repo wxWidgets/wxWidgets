@@ -22,7 +22,7 @@ class WXDLLEXPORT wxStatusBarMac : public wxStatusBarGeneric
            long style = 0,
            const wxString& name = wxPanelNameStr);
 
-    ~wxStatusBarMac();
+    virtual ~wxStatusBarMac();
 
     bool Create(wxWindow *parent, wxWindowID id,
               long style ,

@@ -36,7 +36,7 @@ public:
     wxWindowDC();
     wxWindowDC( wxWindow *win );
 
-    ~wxWindowDC();
+    virtual ~wxWindowDC();
 
     // TODO this function is Motif-only for now - should it go into base class?
     void Clear(const wxRect& rect);
@@ -174,7 +174,7 @@ public:
     wxPaintDC() { }
     wxPaintDC(wxWindow* win);
 
-    ~wxPaintDC();
+    virtual ~wxPaintDC();
 };
 
 class WXDLLEXPORT wxClientDC: public wxWindowDC

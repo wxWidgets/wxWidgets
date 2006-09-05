@@ -90,7 +90,7 @@ public:
                 bool bShow = true,        // show window immediately?
                 bool bPassToOld = true);  // pass messages to the old target?
 
-    ~wxLogWindow();
+    virtual ~wxLogWindow();
 
     // window operations
         // show/hide the log window

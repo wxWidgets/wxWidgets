@@ -41,7 +41,7 @@ class LifeCanvas : public wxWindow
 public:
     // ctor and dtor
     LifeCanvas(wxWindow* parent, Life* life, bool interactive = true);
-    ~LifeCanvas();
+    virtual ~LifeCanvas();
 
     // view management
     int  GetCellSize() const { return m_cellsize; };
@@ -122,7 +122,7 @@ class LifeFrame : public wxFrame
 public:
     // ctor and dtor
     LifeFrame();
-    ~LifeFrame();
+    virtual ~LifeFrame();
 
     // member functions
     void UpdateInfoText();

@@ -175,7 +175,7 @@ DECLARE_CLASS(ctOutputWindow)
 public:
     ctOutputWindow(wxWindow* parent, wxWindowID id,
         const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = 0);
-    ~ctOutputWindow(){};
+    virtual ~ctOutputWindow(){}
 
     /// Initialise the windows.
     void CreateWindows();

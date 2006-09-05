@@ -86,7 +86,7 @@ public:
                  const wxCursor &cursorMove = wxNullCursor,
                  const wxCursor &cursorStop = wxNullCursor);
 
-    ~wxDropSource();
+    virtual ~wxDropSource();
 
     // do it (call this in response to a mouse button press, for example)
     // params: if bAllowMove is false, data can be only copied

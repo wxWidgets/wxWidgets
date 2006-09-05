@@ -33,7 +33,7 @@ public:
         Create(parent, id, value, minValue, maxValue, pos, size, style, validator, name);
     }
 
-    ~wxSlider();
+    virtual ~wxSlider();
 
     bool Create(wxWindow *parent, wxWindowID id,
             int value, int minValue, int maxValue,

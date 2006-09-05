@@ -77,7 +77,7 @@ public:
     {
         Create(parent, winid, pos, size, style, validator, name);
     }
-    ~wxGenericListCtrl();
+    virtual ~wxGenericListCtrl();
 
     bool Create( wxWindow *parent,
                  wxWindowID winid = wxID_ANY,

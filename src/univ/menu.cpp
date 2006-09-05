@@ -123,7 +123,7 @@ class wxPopupMenuWindow : public wxPopupTransientWindow
 public:
     wxPopupMenuWindow(wxWindow *parent, wxMenu *menu);
 
-    ~wxPopupMenuWindow();
+    virtual ~wxPopupMenuWindow();
 
     // override the base class version to select the first item initially
     virtual void Popup(wxWindow *focus = NULL);

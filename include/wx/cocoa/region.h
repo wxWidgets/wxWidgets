@@ -37,7 +37,7 @@ public:
              const wxColour& transColour, int tolerance = 0)
     :   wxRegionGeneric()
         { Union(bmp, transColour, tolerance); }
-    ~wxRegion() {}
+    virtual ~wxRegion() {}
     wxRegion(const wxRegion& r)
     :   wxRegionGeneric(r)
     {}
@@ -82,7 +82,7 @@ public:
     wxRegionIterator(const wxRegionIterator& iterator)
     :   wxRegionIteratorGeneric(iterator)
     {}
-    ~wxRegionIterator() {}
+    virtual ~wxRegionIterator() {}
 
     wxRegionIterator& operator=(const wxRegionIterator& iter)
     {   return *(wxRegionIterator*)&(this->wxRegionIteratorGeneric::operator=(iter)); }

@@ -48,7 +48,7 @@ public:
         Union(bmp, transColour, tolerance);
     }
 
-    ~wxRegion();
+    virtual ~wxRegion();
 
     //# Modify region
     // Clear current region
@@ -137,7 +137,7 @@ public:
     wxRegionIterator();
     wxRegionIterator(const wxRegion& region);
     wxRegionIterator(const wxRegionIterator& iterator);
-    ~wxRegionIterator();
+    virtual ~wxRegionIterator();
 
     wxRegionIterator& operator=(const wxRegionIterator& iterator);
 

@@ -131,7 +131,7 @@ class ctProperties: public wxObject
 public:
     ctProperties() {}
     ctProperties(const ctProperties& properties) : wxObject() { Copy(properties); }
-    ~ctProperties() { Clear(); }
+    virtual ~ctProperties() { Clear(); }
 
     void operator = (const ctProperties& properties) { Clear(); Copy(properties); }
     void Copy(const ctProperties& properties);

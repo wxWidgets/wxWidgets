@@ -71,7 +71,7 @@ public:
 
     // note that default copy ctor and assignment operators are ok
 
-    ~wxIndividualLayoutConstraint(){}
+    virtual ~wxIndividualLayoutConstraint(){}
 
     void Set(wxRelationship rel, wxWindowBase *otherW, wxEdge otherE, int val = 0, int marg = wxLAYOUT_DEFAULT_MARGIN);
 
@@ -174,7 +174,7 @@ public:
 
     // note that default copy ctor and assignment operators are ok
 
-    ~wxLayoutConstraints(){}
+    virtual ~wxLayoutConstraints(){}
 
     bool SatisfyConstraints(wxWindowBase *win, int *noChanges);
     bool AreSatisfied() const

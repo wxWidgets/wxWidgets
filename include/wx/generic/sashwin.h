@@ -87,7 +87,7 @@ public:
         Create(parent, id, pos, size, style, name);
     }
 
-    ~wxSashWindow();
+    virtual ~wxSashWindow();
 
     bool Create(wxWindow *parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition,
         const wxSize& size = wxDefaultSize, long style = wxSW_3D|wxCLIP_CHILDREN, const wxString& name = wxT("sashWindow"));

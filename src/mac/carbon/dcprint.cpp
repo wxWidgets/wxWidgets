@@ -53,7 +53,7 @@ class wxMacCarbonPrinterDC : public wxNativePrinterDC
 {
 public :
     wxMacCarbonPrinterDC( wxPrintData* data ) ;
-    ~wxMacCarbonPrinterDC() ;
+    virtual ~wxMacCarbonPrinterDC() ;
     virtual bool StartDoc(  wxPrinterDC* dc , const wxString& message ) ;
     virtual void EndDoc( wxPrinterDC* dc ) ;
     virtual void StartPage( wxPrinterDC* dc ) ;

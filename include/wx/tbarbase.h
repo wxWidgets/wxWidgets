@@ -105,7 +105,7 @@ public:
         m_toolStyle = wxTOOL_STYLE_CONTROL;
     }
 
-    ~wxToolBarToolBase(){}
+    virtual ~wxToolBarToolBase(){}
 
     // accessors
     // ---------

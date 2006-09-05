@@ -39,7 +39,7 @@ public:
     ctSettings(const ctSettings& settings);
 
     /// Destructor.
-    ~ctSettings(){};
+    virtual ~ctSettings(){}
 
 // Operations
 

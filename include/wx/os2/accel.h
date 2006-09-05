@@ -38,7 +38,7 @@ public:
                        ,const wxAcceleratorEntry vaEntries[]
                       ); // Load from array
 
-    ~wxAcceleratorTable();
+    virtual ~wxAcceleratorTable();
 
     inline bool operator== (const wxAcceleratorTable& rAccel) const
     { return m_refData == rAccel.m_refData; };

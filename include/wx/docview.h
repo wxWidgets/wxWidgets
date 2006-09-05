@@ -65,7 +65,7 @@ class WXDLLEXPORT wxDocument : public wxEvtHandler
 {
 public:
     wxDocument(wxDocument *parent = (wxDocument *) NULL);
-    ~wxDocument();
+    virtual ~wxDocument();
 
     // accessors
     void SetFilename(const wxString& filename, bool notifyViews = false);
@@ -175,7 +175,7 @@ class WXDLLEXPORT wxView: public wxEvtHandler
 public:
     //  wxView(wxDocument *doc = (wxDocument *) NULL);
     wxView();
-    ~wxView();
+    virtual ~wxView();
 
     wxDocument *GetDocument() const { return m_viewDocument; }
     virtual void SetDocument(wxDocument *doc);
@@ -249,7 +249,7 @@ public:
                   wxClassInfo *viewClassInfo = (wxClassInfo *)NULL,
                   long flags = wxDEFAULT_TEMPLATE_FLAGS);
 
-    ~wxDocTemplate();
+    virtual ~wxDocTemplate();
 
     // By default, these two member functions dynamically creates document and
     // view using dynamic instance construction. Override these if you need a
@@ -315,7 +315,7 @@ class WXDLLEXPORT wxDocManager: public wxEvtHandler
 {
 public:
     wxDocManager(long flags = wxDEFAULT_DOCMAN_FLAGS, bool initialize = true);
-    ~wxDocManager();
+    virtual ~wxDocManager();
 
     virtual bool Initialize();
 
@@ -468,7 +468,7 @@ public:
                     const wxSize& size = wxDefaultSize,
                     long type = wxDEFAULT_FRAME_STYLE,
                     const wxString& name = wxT("frame"));
-    ~wxDocChildFrame(){}
+    virtual ~wxDocChildFrame(){}
 
     // Extend event processing to search the view's event table
     virtual bool ProcessEvent(wxEvent& event);
@@ -559,7 +559,7 @@ class WXDLLEXPORT wxFileHistory : public wxObject
 {
 public:
     wxFileHistory(size_t maxFiles = 9, wxWindowID idBase = wxID_FILE1);
-    ~wxFileHistory();
+    virtual ~wxFileHistory();
 
     // Operations
     virtual void AddFileToHistory(const wxString& file);

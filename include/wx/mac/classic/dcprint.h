@@ -25,7 +25,7 @@ class WXDLLEXPORT wxPrinterDC: public wxDC
 #if wxUSE_PRINTING_ARCHITECTURE
   // Create a printer DC
   wxPrinterDC(const wxPrintData& printdata );
-  ~wxPrinterDC();
+  virtual ~wxPrinterDC();
 
     virtual bool StartDoc( const wxString& WXUNUSED(message) ) ;
     virtual void EndDoc(void) ;

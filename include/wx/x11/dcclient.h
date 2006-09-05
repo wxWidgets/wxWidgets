@@ -35,7 +35,7 @@ public:
     wxWindowDC();
     wxWindowDC( wxWindow *win );
 
-    ~wxWindowDC();
+    virtual ~wxWindowDC();
 
     virtual bool CanDrawBitmap() const { return true; }
     virtual bool CanGetTextExtent() const { return true; }

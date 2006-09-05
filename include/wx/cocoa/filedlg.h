@@ -33,7 +33,7 @@ public:
                  const wxPoint& pos = wxDefaultPosition,
                  const wxSize& sz = wxDefaultSize,
                  const wxString& name = wxFileDialogNameStr);
-    ~wxFileDialog();
+    virtual ~wxFileDialog();
 
     virtual void SetPath(const wxString& path);
     virtual void GetPaths(wxArrayString& paths) const;

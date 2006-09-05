@@ -18,7 +18,7 @@ class WXDLLEXPORT wxCursorRefData: public wxGDIImageRefData
 {
 public:
     wxCursorRefData();
-    ~wxCursorRefData() { Free(); }
+    virtual ~wxCursorRefData() { Free(); }
     virtual void Free(void);
     bool                            m_bDestroyCursor;
 }; // end of CLASS wxCursorRefData

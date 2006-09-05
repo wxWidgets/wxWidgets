@@ -49,7 +49,7 @@ public:
     // implementation helper only : construct a mask from a 32 bit memory buffer
     wxMask(const wxMemoryBuffer& buf, int width , int height , int bytesPerRow ) ;
 
-    ~wxMask();
+    virtual ~wxMask();
 
     bool Create(const wxBitmap& bitmap, const wxColour& colour);
     bool Create(const wxBitmap& bitmap);
@@ -127,7 +127,7 @@ public:
     // Convert from wxIcon
     wxBitmap(const wxIcon& icon) { CopyFromIcon(icon); }
 
-    ~wxBitmap();
+    virtual ~wxBitmap();
 
     wxImage ConvertToImage() const;
 

@@ -23,7 +23,7 @@ class WXDLLEXPORT wxScrollBar: public wxControl
 
 public:
   inline wxScrollBar() { m_pageSize = 0; m_viewSize = 0; m_objectSize = 0; }
-  ~wxScrollBar();
+  virtual ~wxScrollBar();
 
   inline wxScrollBar(wxWindow *parent, wxWindowID id,
            const wxPoint& pos = wxDefaultPosition,

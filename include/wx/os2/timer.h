@@ -27,7 +27,7 @@ public:
                          ,nId
                         )
         { Init(); }
-    ~wxTimer();
+    virtual ~wxTimer();
 
     virtual void Notify(void);
     virtual bool Start( int  nMilliseconds = -1

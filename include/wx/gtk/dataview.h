@@ -85,7 +85,7 @@ public:
     wxDataViewCustomCell( const wxString &varianttype = wxT("string"), 
                           wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
                           bool no_init = false );
-    ~wxDataViewCustomCell();
+    virtual ~wxDataViewCustomCell();
     bool Init();
     
     virtual bool Render( wxRect cell, wxDC *dc, int state ) = 0;
@@ -125,7 +125,7 @@ public:
     wxDataViewProgressCell( const wxString &label = wxEmptyString, 
                             const wxString &varianttype = wxT("long"), 
                             wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT );
-    ~wxDataViewProgressCell();
+    virtual ~wxDataViewProgressCell();
     
     bool SetValue( const wxVariant &value );
     

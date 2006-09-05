@@ -22,7 +22,7 @@ public:
     wxAcceleratorTable();
     wxAcceleratorTable(int n, const wxAcceleratorEntry entries[]); // Load from array
 
-    ~wxAcceleratorTable();
+    virtual ~wxAcceleratorTable();
 
     bool operator == (const wxAcceleratorTable& accel) const
     { return m_refData == accel.m_refData; }

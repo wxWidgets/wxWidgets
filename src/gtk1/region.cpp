@@ -63,7 +63,7 @@ public:
         m_region = gdk_regions_union(wxGdkRegion(), refData.m_region);
     }
 
-    ~wxRegionRefData()
+    virtual ~wxRegionRefData()
     {
         if (m_region)
             gdk_region_destroy( m_region );

@@ -151,7 +151,7 @@ public:
     }
 #endif
 
-    ~wxGenericDragImage();
+    virtual ~wxGenericDragImage();
 
     // Attributes
     ////////////////////////////////////////////////////////////////////////////

@@ -33,7 +33,7 @@ public:
     {
         Create(parent, id, pos, size, style, name);
     }
-    ~wxSpinButton();
+    virtual ~wxSpinButton();
 
     bool Create(wxWindow *parent,
         wxWindowID id = wxID_ANY,

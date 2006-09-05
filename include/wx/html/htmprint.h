@@ -34,7 +34,7 @@ class WXDLLIMPEXP_HTML wxHtmlDCRenderer : public wxObject
 {
 public:
     wxHtmlDCRenderer();
-    ~wxHtmlDCRenderer();
+    virtual ~wxHtmlDCRenderer();
 
     // Following 3 methods *must* be called before any call to Render:
 
@@ -117,7 +117,7 @@ class WXDLLIMPEXP_HTML wxHtmlPrintout : public wxPrintout
 {
 public:
     wxHtmlPrintout(const wxString& title = wxT("Printout"));
-    ~wxHtmlPrintout();
+    virtual ~wxHtmlPrintout();
 
     void SetHtmlText(const wxString& html, const wxString &basepath = wxEmptyString, bool isdir = true);
             // prepares the class for printing this html document.
@@ -217,7 +217,7 @@ class WXDLLIMPEXP_HTML wxHtmlEasyPrinting : public wxObject
 {
 public:
     wxHtmlEasyPrinting(const wxString& name = wxT("Printing"), wxWindow *parentWindow = NULL);
-    ~wxHtmlEasyPrinting();
+    virtual ~wxHtmlEasyPrinting();
 
     bool PreviewFile(const wxString &htmlfile);
     bool PreviewText(const wxString &htmltext, const wxString& basepath = wxEmptyString);

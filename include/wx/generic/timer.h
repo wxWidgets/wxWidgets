@@ -23,7 +23,7 @@ public:
     wxTimer() { Init(); }
     wxTimer(wxEvtHandler *owner, int timerid = -1) : wxTimerBase(owner, timerid)
         { Init(); }
-    ~wxTimer();
+    virtual ~wxTimer();
 
     virtual bool Start(int millisecs = -1, bool oneShot = false);
     virtual void Stop();

@@ -65,7 +65,7 @@ class wxXFont : public wxObject
 {
 public:
     wxXFont();
-    ~wxXFont();
+    virtual ~wxXFont();
 
     WXFontStructPtr     m_fontStruct;   // XFontStruct
     WXDisplay*          m_display;      // XDisplay

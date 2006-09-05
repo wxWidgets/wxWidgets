@@ -42,7 +42,7 @@ public:
            long style = wxSB_HORIZONTAL,
            const wxValidator& validator = wxDefaultValidator,
            const wxString& name = wxScrollBarNameStr );
-    ~wxScrollBar();
+    virtual ~wxScrollBar();
     int GetThumbPosition() const;
     int GetThumbSize() const;
     int GetPageSize() const;

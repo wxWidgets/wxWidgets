@@ -41,7 +41,7 @@ public:
     wxColour() { }
     DEFINE_STD_WXCOLOUR_CONSTRUCTORS
 
-    ~wxColour();
+    virtual ~wxColour();
 
     virtual bool FromString(const wxChar *str);
 

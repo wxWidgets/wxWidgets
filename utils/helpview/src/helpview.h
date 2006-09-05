@@ -65,7 +65,7 @@ class hvConnection : public wxConnection
 {
 public:
     hvConnection();
-    ~hvConnection();
+    virtual ~hvConnection();
 
     bool OnExecute(const wxString& topic, wxChar*data, int size, wxIPCFormat format);
     wxChar *OnRequest(const wxString& topic, const wxString& item, int *size, wxIPCFormat format);

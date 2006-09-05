@@ -42,7 +42,7 @@ public:
     wxColour() {}
     DEFINE_STD_WXCOLOUR_CONSTRUCTORS
 
-    ~wxColour();
+    virtual ~wxColour();
 
     bool Ok() const { return m_refData != NULL; }
 

@@ -45,7 +45,7 @@ private:
 
 public:
     wxEchoPrep() : wxHtmlProcessor() {}
-    ~wxEchoPrep() {}
+    virtual ~wxEchoPrep() {}
 	
 	// Process input text and return processed result
     wxString Process(const wxString& text) const;

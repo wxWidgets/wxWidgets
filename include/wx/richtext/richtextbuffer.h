@@ -533,7 +533,7 @@ public:
 // Constructors
 
     wxRichTextObject(wxRichTextObject* parent = NULL);
-    ~wxRichTextObject();
+    virtual ~wxRichTextObject();
 
 // Overrideables
 
@@ -686,7 +686,7 @@ public:
 // Constructors
 
     wxRichTextCompositeObject(wxRichTextObject* parent = NULL);
-    ~wxRichTextCompositeObject();
+    virtual ~wxRichTextCompositeObject();
 
 // Overrideables
 
@@ -1110,7 +1110,7 @@ public:
 
     wxRichTextParagraph(wxRichTextObject* parent = NULL, wxTextAttrEx* style = NULL);
     wxRichTextParagraph(const wxString& text, wxRichTextObject* parent = NULL, wxTextAttrEx* style = NULL);
-    ~wxRichTextParagraph();
+    virtual ~wxRichTextParagraph();
     wxRichTextParagraph(const wxRichTextParagraph& obj):wxRichTextBox() { Copy(obj); }
 
 // Overrideables
@@ -1280,7 +1280,7 @@ class WXDLLIMPEXP_RICHTEXT wxRichTextImageBlock: public wxObject
 public:
     wxRichTextImageBlock();
     wxRichTextImageBlock(const wxRichTextImageBlock& block);
-    ~wxRichTextImageBlock();
+    virtual ~wxRichTextImageBlock();
 
     void Init();
     void Clear();
@@ -1427,7 +1427,7 @@ public:
 
     wxRichTextBuffer() { Init(); }
     wxRichTextBuffer(const wxRichTextBuffer& obj):wxRichTextParagraphLayoutBox() { Init(); Copy(obj); }
-    ~wxRichTextBuffer() ;
+    virtual ~wxRichTextBuffer() ;
 
 // Accessors
 
@@ -1728,7 +1728,7 @@ public:
     // Ctor for multiple actions
     wxRichTextCommand(const wxString& name);
 
-    ~wxRichTextCommand();
+    virtual ~wxRichTextCommand();
 
     bool Do();
     bool Undo();
@@ -1754,7 +1754,7 @@ public:
     wxRichTextAction(wxRichTextCommand* cmd, const wxString& name, wxRichTextCommandId id, wxRichTextBuffer* buffer,
         wxRichTextCtrl* ctrl, bool ignoreFirstTime = false);
 
-    ~wxRichTextAction();
+    virtual ~wxRichTextAction();
 
     bool Do();
     bool Undo();

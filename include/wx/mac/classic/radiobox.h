@@ -41,7 +41,7 @@ public:
          Create(parent, id, title, pos, size, choices,
                 majorDim, style, val, name);
      }
-    ~wxRadioBox();
+    virtual ~wxRadioBox();
     bool Create(wxWindow *parent, wxWindowID id, const wxString& title,
              const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
              int n = 0, const wxString choices[] = NULL,

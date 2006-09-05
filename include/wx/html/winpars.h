@@ -41,7 +41,7 @@ class WXDLLIMPEXP_HTML wxHtmlWinParser : public wxHtmlParser
 public:
     wxHtmlWinParser(wxHtmlWindowInterface *wndIface = NULL);
 
-    ~wxHtmlWinParser();
+    virtual ~wxHtmlWinParser();
 
     virtual void InitParser(const wxString& source);
     virtual void DoneParser();

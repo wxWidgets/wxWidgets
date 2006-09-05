@@ -26,7 +26,7 @@ protected:
   wxProtocolError m_error;
 public:
   wxFileProto();
-  ~wxFileProto();
+  virtual ~wxFileProto();
 
   wxProtocolError GetError() { return m_error; }
   bool Abort() { return TRUE; }

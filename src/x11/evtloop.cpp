@@ -80,7 +80,7 @@ class wxSocketTable: public wxHashTable
     wxSocketTable(): wxHashTable(wxKEY_INTEGER)
     {
     }
-    ~wxSocketTable()
+    virtual ~wxSocketTable()
     {
         WX_CLEAR_HASH_TABLE(*this)
     }

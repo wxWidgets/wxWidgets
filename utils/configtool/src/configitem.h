@@ -49,7 +49,7 @@ public:
     /// Ctor and dtor
     ctConfigItem(ctConfigItem* parent, ctConfigType type, const wxString& name);
     ctConfigItem();
-    ~ctConfigItem();
+    virtual ~ctConfigItem();
 
     /// Copy constructor.
     ctConfigItem(const ctConfigItem& item) : wxObject()

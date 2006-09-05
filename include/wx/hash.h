@@ -426,7 +426,7 @@ public:
 
     wxHashTable(int the_key_type = wxKEY_INTEGER,
                 int size = wxHASH_SIZE_DEFAULT);
-    ~wxHashTable();
+    virtual ~wxHashTable();
 
     // copy ctor and assignment operator
     wxHashTable(const wxHashTable& table) : wxObject()
@@ -542,7 +542,7 @@ private:
                   size_t size = wxHASH_SIZE_DEFAULT)                           \
             { Create(keyType, size); }                                         \
                                                                                \
-        ~hashclass() { Destroy(); }                                            \
+        virtual ~hashclass() { Destroy(); }                                            \
                                                                                \
         void Put(long key, long val, eltype *data) { DoPut(key, val, data); }  \
         void Put(long key, eltype *data) { DoPut(key, key, data); }            \

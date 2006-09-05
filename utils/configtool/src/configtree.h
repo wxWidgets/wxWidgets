@@ -28,7 +28,7 @@ class ctTreeItemData : public wxTreeItemData
 {
 public:
     ctTreeItemData(ctConfigItem* item) : m_configItem(item) { }
-    ~ctTreeItemData() ;
+    virtual ~ctTreeItemData() ;
 
     ctConfigItem *GetConfigItem() const { return m_configItem; }
     void SetConfigItem(ctConfigItem *item) { m_configItem = item; }
@@ -49,7 +49,7 @@ class ctConfigTreeCtrl: public wxTreeCtrl
 public:
     ctConfigTreeCtrl(wxWindow* parent, wxWindowID id, const wxPoint& pt = wxDefaultPosition,
         const wxSize& sz = wxDefaultSize, long style = wxTR_HAS_BUTTONS);
-    ~ctConfigTreeCtrl();
+    virtual ~ctConfigTreeCtrl();
 
 //// Event handlers    
     void OnMouseEvent(wxMouseEvent& event);

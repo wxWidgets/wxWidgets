@@ -286,7 +286,7 @@ class wxFontColourSwatchCtrl: public wxControl
     DECLARE_CLASS(wxFontColourSwatchCtrl)
 public:
     wxFontColourSwatchCtrl(wxWindow* parent, wxWindowID id, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = 0);
-    ~wxFontColourSwatchCtrl();
+    virtual ~wxFontColourSwatchCtrl();
 
     void OnPaint(wxPaintEvent& event);
     void OnMouseEvent(wxMouseEvent& event);

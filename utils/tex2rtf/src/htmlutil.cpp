@@ -114,7 +114,7 @@ class TexNextPage: public wxObject
     label = copystring(theLabel);
     filename = copystring(theFile);
   }
-  ~TexNextPage(void)
+  virtual ~TexNextPage(void)
   {
     delete[] label;
     delete[] filename;

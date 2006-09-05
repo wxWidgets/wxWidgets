@@ -25,7 +25,7 @@ public:
     DEFINE_STD_WXCOLOUR_CONSTRUCTORS
     wxColour(const GdkColor& gdkColor);
 
-    ~wxColour();
+    virtual ~wxColour();
 
     bool Ok() const { return m_refData != NULL; }
 

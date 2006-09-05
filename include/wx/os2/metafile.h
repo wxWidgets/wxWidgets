@@ -37,7 +37,7 @@ class WXDLLEXPORT wxMetafileRefData: public wxGDIRefData
     friend class WXDLLEXPORT wxMetafile;
 public:
     wxMetafileRefData(void);
-    ~wxMetafileRefData(void);
+    virtual ~wxMetafileRefData(void);
 
 public:
     WXHANDLE m_metafile;
@@ -51,7 +51,7 @@ class WXDLLEXPORT wxMetafile: public wxGDIObject
     DECLARE_DYNAMIC_CLASS(wxMetafile)
 public:
     wxMetafile(const wxString& file = wxEmptyString);
-    ~wxMetafile(void);
+    virtual ~wxMetafile(void);
 
     // After this is called, the metafile cannot be used for anything
     // since it is now owned by the clipboard.
@@ -86,7 +86,7 @@ public:
     // Then don't need to supply them to wxMakeMetaFilePlaceable.
     wxMetafileDC(const wxString& file, int xext, int yext, int xorg, int yorg);
 
-    ~wxMetafileDC(void);
+    virtual ~wxMetafileDC(void);
 
     // Should be called at end of drawing
     virtual wxMetafile *Close(void);

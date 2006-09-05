@@ -65,7 +65,7 @@ class MyApp : public wxApp
 public:
 
     MyApp();
-    ~MyApp();
+    virtual ~MyApp();
 
     virtual bool OnInit();
     

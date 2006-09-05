@@ -55,7 +55,7 @@ class WXDLLEXPORT wxPrintDialog : public wxObject
 public:
     wxPrintDialog(wxWindow *parent, wxPrintDialogData* data = NULL);
     wxPrintDialog(wxWindow *parent, wxPrintData* data);
-    ~wxPrintDialog();
+    virtual ~wxPrintDialog();
 
     virtual int ShowModal();
 
@@ -101,7 +101,7 @@ class WXDLLEXPORT wxPageSetupDialog: public wxObject
 {
 public:
     wxPageSetupDialog(wxWindow *parent, wxPageSetupDialogData *data = NULL);
-    ~wxPageSetupDialog();
+    virtual ~wxPageSetupDialog();
 
     int ShowModal();
     wxPageSetupDialogData& GetPageSetupDialogData();

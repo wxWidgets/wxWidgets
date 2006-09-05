@@ -31,7 +31,7 @@ class WXDLLEXPORT wxAutomationObject: public wxObject
 {
 public:
     wxAutomationObject(WXIDISPATCH* dispatchPtr = NULL);
-    ~wxAutomationObject();
+    virtual ~wxAutomationObject();
 
     // Set/get dispatch pointer
     inline void SetDispatchPtr(WXIDISPATCH* dispatchPtr) { m_dispatchPtr = dispatchPtr; };

@@ -24,7 +24,7 @@ class WXDLLEXPORT wxTimer: public wxTimerBase
 public:
     wxTimer() { Init(); }
     wxTimer(wxEvtHandler *owner, int id = -1) : wxTimerBase(owner, id) { Init(); }
-    ~wxTimer();
+    virtual ~wxTimer();
 
     virtual bool Start(int milliseconds = -1,
                        bool one_shot = FALSE); // Start timer

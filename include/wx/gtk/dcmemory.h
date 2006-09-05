@@ -28,7 +28,7 @@ class WXDLLIMPEXP_CORE wxMemoryDC : public wxWindowDC
 public:
     wxMemoryDC();
     wxMemoryDC( wxDC *dc ); // Create compatible DC
-    ~wxMemoryDC();
+    virtual ~wxMemoryDC();
     virtual void SelectObject( const wxBitmap& bitmap );
 
     // these get reimplemented for mono-bitmaps to behave

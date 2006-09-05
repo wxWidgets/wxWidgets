@@ -37,7 +37,7 @@ public:
 #endif
 
     wxCursor(wxStockCursor id);
-    ~wxCursor();
+    virtual ~wxCursor();
 
     virtual bool Ok() const;
 

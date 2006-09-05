@@ -88,7 +88,7 @@ public:
 
     wxSize GetGridSizeInPixels() const;
 
-    ~BombsCanvas();
+    virtual ~BombsCanvas();
 
 private:
 

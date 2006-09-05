@@ -127,7 +127,7 @@ public:
     {
         Create(parent, id, pos, size, style, validator, name);
     }
-    ~wxTreeCtrl();
+    virtual ~wxTreeCtrl();
 
     bool Create(wxWindow *parent, wxWindowID id = wxID_ANY,
                 const wxPoint& pos = wxDefaultPosition,

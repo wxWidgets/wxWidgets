@@ -403,7 +403,7 @@ class WXDLLIMPEXP_HTML wxHtmlContainerCell : public wxHtmlCell
 {
 public:
     wxHtmlContainerCell(wxHtmlContainerCell *parent);
-    ~wxHtmlContainerCell();
+    virtual ~wxHtmlContainerCell();
 
     virtual void Layout(int w);
     virtual void Draw(wxDC& dc, int x, int y, int view_y1, int view_y2,
@@ -593,7 +593,7 @@ public:
     // it's width according to parent container's width
     // (w is percent of parent's width)
     wxHtmlWidgetCell(wxWindow *wnd, int w = 0);
-    ~wxHtmlWidgetCell() { m_Wnd->Destroy(); }
+    virtual ~wxHtmlWidgetCell() { m_Wnd->Destroy(); }
     virtual void Draw(wxDC& dc, int x, int y, int view_y1, int view_y2,
                       wxHtmlRenderingInfo& info);
     virtual void DrawInvisible(wxDC& dc, int x, int y,

@@ -24,7 +24,7 @@ class WXDLLEXPORT wxPenRefData: public wxGDIRefData
 public:
     wxPenRefData();
     wxPenRefData(const wxPenRefData& data);
-    ~wxPenRefData();
+    virtual ~wxPenRefData();
 
     wxPenRefData& operator=(const wxPenRefData& data);
 
@@ -52,7 +52,7 @@ public:
   wxPen();
   wxPen(const wxColour& col, int width = 1, int style = wxSOLID);
   wxPen(const wxBitmap& stipple, int width);
-  ~wxPen();
+  virtual ~wxPen();
 
   inline bool operator == (const wxPen& pen) const { return m_refData == pen.m_refData; }
   inline bool operator != (const wxPen& pen) const { return m_refData != pen.m_refData; }

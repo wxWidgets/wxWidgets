@@ -43,7 +43,7 @@ public:
     wxPostScriptDC(const wxPrintData& printData);
 
     // Recommended destructor :-)
-    ~wxPostScriptDC();
+    virtual ~wxPostScriptDC();
 
   virtual bool Ok() const;
 

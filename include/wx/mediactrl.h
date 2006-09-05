@@ -151,7 +151,7 @@ public:
     {   Create(parent, winid, location, pos, size, style,
                szBackend, validator, name);                             }
 
-    ~wxMediaCtrl();
+    virtual ~wxMediaCtrl();
 
     bool Create(wxWindow* parent, wxWindowID winid,
                 const wxString& fileName = wxEmptyString,

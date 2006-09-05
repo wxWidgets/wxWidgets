@@ -40,7 +40,7 @@ class WXDLLEXPORT wxMetafile: public wxGDIObject
     DECLARE_DYNAMIC_CLASS(wxMetafile)
 public:
     wxMetafile(const wxString& file = wxEmptyString);
-    ~wxMetafile(void);
+    virtual ~wxMetafile(void);
 
     // After this is called, the metafile cannot be used for anything
     // since it is now owned by the clipboard.
@@ -75,7 +75,7 @@ class WXDLLEXPORT wxMetafileDC: public wxDC
                     int width = 0, int height = 0,
                     const wxString& description = wxEmptyString);
 
-  ~wxMetafileDC(void);
+  virtual ~wxMetafileDC(void);
 
   // Should be called at end of drawing
   virtual wxMetafile *Close(void);

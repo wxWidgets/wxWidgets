@@ -541,7 +541,7 @@ public:
 #if !wxUSE_STL
     wxResourceCache(const unsigned int keyType) : wxList(keyType) { }
 #endif
-    ~wxResourceCache();
+    virtual ~wxResourceCache();
 };
 
 // ---------------------------------------------------------------------------

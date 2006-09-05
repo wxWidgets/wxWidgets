@@ -63,7 +63,7 @@ public:
         const wxValidator& validator = wxDefaultValidator,
         const wxString& name = wxListBoxNameStr);
 
-    ~wxListBox();
+    virtual ~wxListBox();
 
     // implementation of wxControlWithItems
     virtual unsigned int GetCount() const;

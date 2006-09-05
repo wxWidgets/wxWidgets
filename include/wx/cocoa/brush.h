@@ -31,7 +31,7 @@ public:
     wxBrush();
     wxBrush(const wxColour& col, int style = wxSOLID);
     wxBrush(const wxBitmap& stipple);
-    ~wxBrush();
+    virtual ~wxBrush();
 
 // ------------------------------------------------------------------------
 // Implementation

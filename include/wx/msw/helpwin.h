@@ -24,7 +24,7 @@ class WXDLLEXPORT wxWinHelpController: public wxHelpControllerBase
 
 public:
     wxWinHelpController(wxWindow* parentWindow = NULL): wxHelpControllerBase(parentWindow) {}
-    ~wxWinHelpController() {}
+    virtual ~wxWinHelpController() {}
 
     // Must call this to set the filename
     virtual bool Initialize(const wxString& file);

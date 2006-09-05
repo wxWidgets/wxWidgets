@@ -31,7 +31,7 @@ public:
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 const wxString& name = wxDirDialogNameStr);
-    ~wxDirDialog();
+    virtual ~wxDirDialog();
 
     virtual int ShowModal();
     

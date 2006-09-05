@@ -408,7 +408,7 @@ protected :
         }
     }
 
-    ~ImagePattern()
+    virtual ~ImagePattern()
     {
         if ( m_image )
             CGImageRelease( m_image ) ;
@@ -523,7 +523,7 @@ public :
     }
 
 protected :
-    ~HatchPattern() {}
+    virtual ~HatchPattern() {}
 
     CGRect      m_imageBounds ;
     int         m_hatch ;

@@ -29,7 +29,7 @@ public:
         Create(parent, id, label, pos, size, style, name);
     }
 
-    ~wxStaticBox();
+    virtual ~wxStaticBox();
 
     bool Create(wxWindow *parent, wxWindowID id,
         const wxString& label,

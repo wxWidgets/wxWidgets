@@ -91,7 +91,7 @@ public:
                 const wxSize& size = wxDefaultSize,
                 int style = wxTAB_TRAVERSAL|wxNO_BORDER,
                 int helpStyle = wxHF_DEFAULT_STYLE);
-    ~wxHtmlHelpWindow();
+    virtual ~wxHtmlHelpWindow();
 
     wxHtmlHelpData* GetData() { return m_Data; }
     wxHtmlHelpController* GetController() const { return m_helpController; }

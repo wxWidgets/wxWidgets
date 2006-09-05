@@ -58,7 +58,7 @@ public:
 
     bool Create(const wxNativeFontInfo& fontinfo);
 
-    ~wxFont() {}
+    virtual ~wxFont() {}
 
     // implement base class pure virtuals
     virtual int GetPointSize() const;

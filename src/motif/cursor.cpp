@@ -54,7 +54,7 @@ class WXDLLEXPORT wxCursorRefData: public wxObjectRefData
     friend class WXDLLEXPORT wxCursor;
 public:
     wxCursorRefData();
-    ~wxCursorRefData();
+    virtual ~wxCursorRefData();
 
     wxXCursorList m_cursors;  // wxXCursor objects, one per display
     wxStockCursor m_cursorId; // wxWidgets standard cursor id

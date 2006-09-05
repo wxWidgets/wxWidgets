@@ -70,7 +70,7 @@ class WXDLLIMPEXP_ANIMATE wxAnimationPlayer : public wxObject
 
 public:
     wxAnimationPlayer(wxAnimationBase *animation = (wxAnimationBase *) NULL, bool destroyAnimation = false);
-    ~wxAnimationPlayer();
+    virtual ~wxAnimationPlayer();
 
 //// Accessors
 
@@ -226,8 +226,8 @@ class WXDLLIMPEXP_ANIMATE wxAnimationBase : public wxObject
     DECLARE_ABSTRACT_CLASS(wxAnimationBase)
 
 public:
-    wxAnimationBase() {};
-    ~wxAnimationBase() {};
+    wxAnimationBase() {}
+    virtual ~wxAnimationBase() {}
 
 //// Accessors. Should be overridden by each derived class.
 
@@ -262,7 +262,7 @@ class WXDLLIMPEXP_ANIMATE wxGIFAnimation : public wxAnimationBase
 
 public:
     wxGIFAnimation();
-    ~wxGIFAnimation();
+    virtual ~wxGIFAnimation();
 
 //// Accessors
 
@@ -308,7 +308,7 @@ public:
     {
         Create(parent, id, filename, pos, size, style, name);
     }
-    ~wxAnimationCtrlBase();
+    virtual ~wxAnimationCtrlBase();
 
     bool Create(wxWindow *parent, wxWindowID id,
             const wxString& filename = wxEmptyString,

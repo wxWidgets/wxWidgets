@@ -33,7 +33,7 @@ class wxPaletteRefData: public wxObjectRefData
   public:
 
     wxPaletteRefData(void);
-    ~wxPaletteRefData(void);
+    virtual ~wxPaletteRefData(void);
 
     int m_count;
     wxPaletteEntry *m_entries;

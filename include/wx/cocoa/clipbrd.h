@@ -22,7 +22,7 @@ class wxClipboard : public wxClipboardBase
     DECLARE_DYNAMIC_CLASS(wxClipboard)
 public:
     wxClipboard();
-    ~wxClipboard();
+    virtual ~wxClipboard();
 
     // open the clipboard before SetData() and GetData()
     virtual bool Open();

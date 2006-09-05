@@ -75,7 +75,7 @@ class WXDLLIMPEXP_MEDIA wxQTMediaBackend : public wxMediaBackendCommonBase
 {
 public:
     wxQTMediaBackend();
-    ~wxQTMediaBackend();
+    virtual ~wxQTMediaBackend();
 
     virtual bool CreateControl(wxControl* ctrl, wxWindow* parent,
                                      wxWindowID id,

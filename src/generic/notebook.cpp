@@ -84,7 +84,7 @@ class WXDLLEXPORT wxNotebookTabView: public wxTabView
 DECLARE_DYNAMIC_CLASS(wxNotebookTabView)
 public:
     wxNotebookTabView(wxNotebook* notebook, long style = wxTAB_STYLE_DRAW_BOX | wxTAB_STYLE_COLOUR_INTERIOR);
-    ~wxNotebookTabView(void);
+    virtual ~wxNotebookTabView(void);
 
     // Called when a tab is activated
     virtual void OnTabActivate(int activateId, int deactivateId);

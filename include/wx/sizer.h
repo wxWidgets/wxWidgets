@@ -327,7 +327,7 @@ class WXDLLEXPORT wxSizer: public wxObject, public wxClientDataContainer
 {
 public:
     wxSizer() { m_containingWindow = NULL; }
-    ~wxSizer();
+    virtual ~wxSizer();
 
     // methods for adding elements to the sizer: there are Add/Insert/Prepend
     // overloads for each of window/sizer/spacer/wxSizerItem

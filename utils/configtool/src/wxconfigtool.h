@@ -40,7 +40,7 @@ public:
     ctApp();
 
     /// Destructor.
-    ~ctApp(){};
+    virtual ~ctApp(){}
 
 // Accessors
 

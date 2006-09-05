@@ -231,7 +231,7 @@ class wxBitmapRefData: public wxObjectRefData
 {
 public:
     wxBitmapRefData();
-    ~wxBitmapRefData();
+    virtual ~wxBitmapRefData();
 
     WXPixmap        m_pixmap;
     WXPixmap        m_bitmap;

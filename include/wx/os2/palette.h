@@ -22,7 +22,7 @@ class WXDLLEXPORT wxPaletteRefData: public wxGDIRefData
     friend class WXDLLEXPORT wxPalette;
 public:
     wxPaletteRefData();
-    ~wxPaletteRefData();
+    virtual ~wxPaletteRefData();
 // protected:
     WXHPALETTE                      m_hPalette;
     HPS                             m_hPS;
@@ -42,7 +42,7 @@ public:
               ,const unsigned char* pGreen
               ,const unsigned char* pBlue
              );
-    ~wxPalette();
+    virtual ~wxPalette();
 
     bool Create( int                  n
                 ,const unsigned char* pRed

@@ -24,7 +24,7 @@ public:
     wxBitmapDataObject(const wxBitmap& bitmap);
 
     // destr
-    ~wxBitmapDataObject();
+    virtual ~wxBitmapDataObject();
 
     // override base class virtual to update PNG data too
     virtual void SetBitmap(const wxBitmap& bitmap);

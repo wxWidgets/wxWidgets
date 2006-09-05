@@ -39,7 +39,7 @@ public:
         CopyRgn( data.m_macRgn , m_macRgn ) ;
     }
 
-    ~wxRegionRefData()
+    virtual ~wxRegionRefData()
     {
         DisposeRgn( m_macRgn ) ;
     }

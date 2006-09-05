@@ -38,7 +38,7 @@ class wxMetafileRefData: public wxGDIRefData
 
 public:
     wxMetafileRefData();
-    ~wxMetafileRefData();
+    virtual ~wxMetafileRefData();
 
 private:
     PicHandle m_metafile;

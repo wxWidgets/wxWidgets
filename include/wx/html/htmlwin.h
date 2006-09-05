@@ -249,7 +249,7 @@ public:
         Init();
         Create(parent, id, pos, size, style, name);
     }
-    ~wxHtmlWindow();
+    virtual ~wxHtmlWindow();
 
     bool Create(wxWindow *parent, wxWindowID id = wxID_ANY,
                 const wxPoint& pos = wxDefaultPosition,

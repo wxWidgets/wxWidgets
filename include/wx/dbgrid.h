@@ -115,7 +115,7 @@ class WXDLLIMPEXP_DBGRID wxDbGridTableBase : public wxGridTableBase
 public:
     wxDbGridTableBase(wxDbTable *tab, wxDbGridColInfo *ColInfo,
               int count = wxUSE_QUERY, bool takeOwnership = true);
-    ~wxDbGridTableBase();
+    virtual ~wxDbGridTableBase();
 
     virtual int GetNumberRows()
     {

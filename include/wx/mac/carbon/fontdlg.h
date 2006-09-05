@@ -30,7 +30,7 @@ class WXDLLEXPORT wxFontDialog : public wxDialog
 public:
     wxFontDialog();
     wxFontDialog(wxWindow *parent, const wxFontData& data);
-    ~wxFontDialog();
+    virtual ~wxFontDialog();
 
     bool Create(wxWindow *parent, const wxFontData& data);
 
@@ -89,7 +89,7 @@ DECLARE_EVENT_TABLE()
 public:
     wxFontDialog();
     wxFontDialog(wxWindow *parent, const wxFontData& data);
-    ~wxFontDialog();
+    virtual ~wxFontDialog();
 
     bool Create(wxWindow *parent, const wxFontData& data);
 

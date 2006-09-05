@@ -44,7 +44,7 @@ public:
 // Constructors
 
     wxRichTextStyleDefinition(const wxString& name = wxEmptyString) { Init(); m_name = name; }
-    ~wxRichTextStyleDefinition() {}
+    virtual ~wxRichTextStyleDefinition() {}
 
     void Init() {}
 
@@ -80,7 +80,7 @@ public:
 
     wxRichTextCharacterStyleDefinition(const wxString& name = wxEmptyString):
         wxRichTextStyleDefinition(name) {}
-    ~wxRichTextCharacterStyleDefinition() {}
+    virtual ~wxRichTextCharacterStyleDefinition() {}
 
 protected:
 };
@@ -98,7 +98,7 @@ public:
 
     wxRichTextParagraphStyleDefinition(const wxString& name = wxEmptyString):
         wxRichTextStyleDefinition(name) {}
-    ~wxRichTextParagraphStyleDefinition() {}
+    virtual ~wxRichTextParagraphStyleDefinition() {}
 
     /// The next style.
     void SetNextStyle(const wxString& name) { m_nextStyle = name; }
@@ -121,7 +121,7 @@ class WXDLLIMPEXP_RICHTEXT wxRichTextStyleSheet: public wxObject
 public:
     /// Constructors
     wxRichTextStyleSheet() { Init(); }
-    ~wxRichTextStyleSheet() { DeleteStyles(); }
+    virtual ~wxRichTextStyleSheet() { DeleteStyles(); }
 
     /// Initialisation
     void Init();
@@ -190,7 +190,7 @@ class WXDLLIMPEXP_RICHTEXT wxRichTextStyleListBox: public wxHtmlListBox
 public:
     wxRichTextStyleListBox(wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition,
         const wxSize& size = wxDefaultSize, long style = 0);
-    ~wxRichTextStyleListBox();
+    virtual ~wxRichTextStyleListBox();
 
     /// Creates a suitable HTML fragment for a definition
     wxString CreateHTML(wxRichTextStyleDefinition* def) const;

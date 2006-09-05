@@ -32,7 +32,7 @@ public:
     wxCursor(const wxString& name,
              long flags = wxBITMAP_TYPE_CUR_RESOURCE,
              int hotSpotX = 0, int hotSpotY = 0);
-    ~wxCursor();
+    virtual ~wxCursor();
     bool operator == (const wxCursor& cursor) const;
     bool operator != (const wxCursor& cursor) const;
     bool Ok() const;

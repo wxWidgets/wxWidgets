@@ -951,7 +951,7 @@ class wxMacDataBrowserListControl : public wxMacDataItemBrowserControl , public 
 {
 public:
     wxMacDataBrowserListControl( wxListBox *peer, const wxPoint& pos, const wxSize& size, long style );
-    ~wxMacDataBrowserListControl();
+    virtual ~wxMacDataBrowserListControl();
 
     // create a list item (can be a subclass of wxMacListBoxItem)
 
@@ -1034,7 +1034,7 @@ public:
     wxMacCGContext( CGrafPtr port );
     wxMacCGContext( CGContextRef cgcontext );
     wxMacCGContext();
-    ~wxMacCGContext();
+    virtual ~wxMacCGContext();
 
     virtual void Clip( const wxRegion &region );
     virtual void StrokePath( const wxGraphicPath *p );
@@ -1073,7 +1073,7 @@ class WXDLLEXPORT wxBitmapRefData: public wxGDIRefData
 public:
     wxBitmapRefData(int width , int height , int depth);
     wxBitmapRefData();
-    ~wxBitmapRefData();
+    virtual ~wxBitmapRefData();
 
     void Free();
     bool Ok() const { return m_ok; }

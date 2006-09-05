@@ -30,7 +30,7 @@ public:
     wxColour& operator=(const wxColour& col);
 
     // dtor
-    ~wxColour();
+    virtual ~wxColour();
 
     // accessors
     bool Ok() const { return m_isInit; }

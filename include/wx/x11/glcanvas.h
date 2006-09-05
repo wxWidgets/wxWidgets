@@ -57,7 +57,7 @@ public:
         const wxPalette& WXUNUSED(palette),
         const wxGLContext *other  /* for sharing display lists */
         );
-    ~wxGLContext();
+    virtual ~wxGLContext();
 
     void SetCurrent();
     void SetColour(const wxChar *colour);
@@ -124,7 +124,7 @@ public:
         int *attribList = (int*) NULL,
         const wxPalette& palette = wxNullPalette );
 
-    ~wxGLCanvas();
+    virtual ~wxGLCanvas();
 
     void SetCurrent();
     void SetColour(const wxChar *colour);

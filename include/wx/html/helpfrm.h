@@ -77,7 +77,7 @@ public:
                     int style = wxHF_DEFAULT_STYLE, wxHtmlHelpData* data = NULL);
     bool Create(wxWindow* parent, wxWindowID id, const wxString& title = wxEmptyString,
                 int style = wxHF_DEFAULT_STYLE);
-    ~wxHtmlHelpFrame();
+    virtual ~wxHtmlHelpFrame();
 
     /// Returns the data associated with the window.
     wxHtmlHelpData* GetData() { return m_Data; }

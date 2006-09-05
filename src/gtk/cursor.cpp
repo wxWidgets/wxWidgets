@@ -29,7 +29,7 @@ class wxCursorRefData: public wxObjectRefData
   public:
 
     wxCursorRefData();
-    ~wxCursorRefData();
+    virtual ~wxCursorRefData();
 
     GdkCursor *m_cursor;
 };

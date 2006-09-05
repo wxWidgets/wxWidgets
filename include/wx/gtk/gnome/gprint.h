@@ -98,7 +98,7 @@ public:
     wxGnomePrintDialog( wxWindow *parent,
                          wxPrintDialogData* data = NULL );
     wxGnomePrintDialog( wxWindow *parent, wxPrintData* data);
-    ~wxGnomePrintDialog();
+    virtual ~wxGnomePrintDialog();
 
     wxPrintData& GetPrintData()
         { return m_printDialogData.GetPrintData(); }
@@ -138,7 +138,7 @@ class wxGnomePageSetupDialog: public wxPageSetupDialogBase
 public:
     wxGnomePageSetupDialog( wxWindow *parent,
                             wxPageSetupDialogData* data = NULL );
-    ~wxGnomePageSetupDialog();
+    virtual ~wxGnomePageSetupDialog();
 
     virtual wxPageSetupDialogData& GetPageSetupDialogData();
 
@@ -198,7 +198,7 @@ class wxGnomePrintDC: public wxDC
 {
 public:
     wxGnomePrintDC( wxGnomePrinter *printer );
-    ~wxGnomePrintDC();
+    virtual ~wxGnomePrintDC();
 
     bool Ok() const;
 

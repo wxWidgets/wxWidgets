@@ -39,7 +39,7 @@ private:
 public:
     wxHtmlTagsCache() : wxObject() {m_CacheSize = 0; m_Cache = NULL;}
     wxHtmlTagsCache(const wxString& source);
-    ~wxHtmlTagsCache() {free(m_Cache);}
+    virtual ~wxHtmlTagsCache() {free(m_Cache);}
 
     // Finds parameters for tag starting at at and fills the variables
     void QueryTag(int at, int* end1, int* end2);
@@ -68,7 +68,7 @@ protected:
               wxHtmlEntitiesParser *entParser);
     friend class wxHtmlParser;
 public:
-    ~wxHtmlTag();
+    virtual ~wxHtmlTag();
 
     wxHtmlTag *GetParent() const {return m_Parent;}
     wxHtmlTag *GetFirstSibling() const;

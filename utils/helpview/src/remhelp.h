@@ -22,7 +22,7 @@ class rhhcConnection : public wxConnection
 {
 public:
     rhhcConnection(bool *isconn_a);
-    ~rhhcConnection();
+    virtual ~rhhcConnection();
 
     bool OnAdvise(const wxString& topic, const wxString& item, char *data, int size, wxIPCFormat format);
     bool OnDisconnect();
@@ -44,7 +44,7 @@ class wxRemoteHtmlHelpController : public wxHelpControllerBase
     DECLARE_CLASS(wxRemoteHtmlHelpController)
 public:
     wxRemoteHtmlHelpController(int style = wxHF_DEFAULT_STYLE);
-    ~wxRemoteHtmlHelpController();
+    virtual ~wxRemoteHtmlHelpController();
     void OnQuit(void);
 
     void SetService(wxString& a_service);

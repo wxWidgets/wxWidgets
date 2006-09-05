@@ -109,7 +109,7 @@ public:
 #endif
 
     wxVariant(const wxVariant& variant);
-    ~wxVariant();
+    virtual ~wxVariant();
 
 // Generic operators
     // Assignment

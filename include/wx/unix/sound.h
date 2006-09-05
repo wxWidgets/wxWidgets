@@ -61,7 +61,7 @@ public:
     wxSound();
     wxSound(const wxString& fileName, bool isResource = false);
     wxSound(int size, const wxByte* data);
-    ~wxSound();
+    virtual ~wxSound();
 
     // Create from resource or file
     bool Create(const wxString& fileName, bool isResource = false);

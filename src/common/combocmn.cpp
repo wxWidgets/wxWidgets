@@ -140,7 +140,7 @@ class wxComboFrameEventHandler : public wxEvtHandler
 {
 public:
     wxComboFrameEventHandler( wxComboCtrlBase* pCb );
-    ~wxComboFrameEventHandler();
+    virtual ~wxComboFrameEventHandler();
 
     void OnPopup();
 
@@ -438,7 +438,7 @@ public:
     {
         m_combo = combo;
     }
-    ~wxComboBoxExtraInputHandler() { }
+    virtual ~wxComboBoxExtraInputHandler() { }
     void OnKey(wxKeyEvent& event);
     void OnFocus(wxFocusEvent& event);
 
@@ -510,7 +510,7 @@ public:
         m_combo = combo;
         m_beenInside = false;
     }
-    ~wxComboPopupExtraEventHandler() { }
+    virtual ~wxComboPopupExtraEventHandler() { }
 
     void OnMouseEvent( wxMouseEvent& event );
 

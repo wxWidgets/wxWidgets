@@ -38,7 +38,7 @@ class WXDLLEXPORT wxToolBar: public wxToolBarBase
     Init();
     Create(parent, id, pos, size, style, name);
   }
-  ~wxToolBar();
+  virtual ~wxToolBar();
 
   bool Create(wxWindow *parent, wxWindowID id, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
             long style = wxNO_BORDER|wxTB_HORIZONTAL,

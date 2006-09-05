@@ -35,7 +35,7 @@ public:
         m_colormap = NULL;
     }
 
-    ~wxColourRefData()
+    virtual ~wxColourRefData()
     {
         FreeColour();
     }

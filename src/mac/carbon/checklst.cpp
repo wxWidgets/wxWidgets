@@ -37,7 +37,7 @@ class wxMacDataBrowserCheckListControl : public wxMacDataBrowserListControl , pu
 {
 public:
     wxMacDataBrowserCheckListControl( wxListBox *peer, const wxPoint& pos, const wxSize& size, long style );
-    ~wxMacDataBrowserCheckListControl();
+    virtual ~wxMacDataBrowserCheckListControl();
 
     virtual wxMacListBoxItem* CreateItem();
 
@@ -174,7 +174,7 @@ public :
         m_isChecked = false;
     }
 
-    ~wxMacCheckListBoxItem()
+    virtual ~wxMacCheckListBoxItem()
     {
     }
 

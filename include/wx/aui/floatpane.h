@@ -37,7 +37,7 @@ public:
                    const wxPaneInfo& pane,
                    wxWindowID id = wxID_ANY
                    );
-    ~wxFloatingPane();
+    virtual ~wxFloatingPane();
     void SetPaneWindow(const wxPaneInfo& pane);
 private:
     void OnSize(wxSizeEvent& event);

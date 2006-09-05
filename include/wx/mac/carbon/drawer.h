@@ -43,7 +43,7 @@ public:
         this->Create(parent, id, title, size, edge, name);
     }
      
-    ~wxDrawerWindow();
+    virtual ~wxDrawerWindow();
     
     // Create a drawer window. 
     // If parent is NULL, create as a tool window.

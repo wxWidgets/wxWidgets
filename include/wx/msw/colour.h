@@ -30,7 +30,7 @@ public:
 
 
     // dtor
-    ~wxColour();
+    virtual ~wxColour();
 
 
     // accessors

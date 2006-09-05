@@ -36,7 +36,7 @@ public:
 
     wxPen( const wxColour &colour, int width = 1, int style = wxSOLID );
     wxPen( const wxBitmap &stipple, int width );
-    ~wxPen();
+    virtual ~wxPen();
 
     bool Ok() const { return m_refData != NULL; }
 

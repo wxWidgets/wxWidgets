@@ -34,7 +34,7 @@ class WXDLLIMPEXP_BASE wxZipFSHandler : public wxFileSystemHandler
         virtual wxString FindFirst(const wxString& spec, int flags = 0);
         virtual wxString FindNext();
         void Cleanup();
-        ~wxZipFSHandler();
+        virtual ~wxZipFSHandler();
 
     private:
         // these vars are used by FindFirst/Next:

@@ -25,7 +25,7 @@ public:
     wxPen() { }
 
     wxPen( const wxColour &colour, int width = 1, int style = wxSOLID );
-    ~wxPen();
+    virtual ~wxPen();
 
     bool Ok() const { return m_refData != NULL; }
 

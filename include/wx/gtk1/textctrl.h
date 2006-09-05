@@ -28,7 +28,7 @@ public:
                const wxValidator& validator = wxDefaultValidator,
                const wxString &name = wxTextCtrlNameStr);
 
-    ~wxTextCtrl();
+    virtual ~wxTextCtrl();
 
     bool Create(wxWindow *parent,
                 wxWindowID id,

@@ -26,7 +26,7 @@ class WXDLLEXPORT wxJoystick: public wxObject
      */
 
     wxJoystick(int joystick = wxJOYSTICK1);
-    ~wxJoystick();
+    virtual ~wxJoystick();
 
     // Attributes
     ////////////////////////////////////////////////////////////////////////////

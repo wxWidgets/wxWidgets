@@ -31,7 +31,7 @@ public:
     wxColour&operator = (const wxColour& rCol);
 
     // Dtor
-    ~wxColour();
+    virtual ~wxColour();
 
     // Accessors
     bool Ok(void) const {return m_bIsInit; }

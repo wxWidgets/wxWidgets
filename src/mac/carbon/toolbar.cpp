@@ -79,7 +79,7 @@ public:
             SetControlHandle( (ControlRef) control->GetHandle() );
     }
 
-    ~wxToolBarTool()
+    virtual ~wxToolBarTool()
     {
         ClearControl();
 

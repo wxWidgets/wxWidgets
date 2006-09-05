@@ -27,7 +27,7 @@ public:
                      int maximum = 100,
                      wxWindow *parent = NULL,
                      int style = wxPD_APP_MODAL | wxPD_AUTO_HIDE);
-    ~wxProgressDialog();
+    virtual ~wxProgressDialog();
 
     virtual bool Update(int value, const wxString& newmsg = wxEmptyString, bool *skip = NULL);
     void Resume();

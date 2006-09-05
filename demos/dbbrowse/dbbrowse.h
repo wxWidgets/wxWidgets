@@ -14,7 +14,7 @@ class MainFrame: public wxFrame
 {
 public:
     MainFrame(wxFrame *frame, wxChar *title,  const wxPoint& pos, const wxSize& size);
-    ~MainFrame(void);
+    virtual ~MainFrame(void);
 
 public:
     // menu callbacks

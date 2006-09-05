@@ -28,7 +28,7 @@ class WXDLLEXPORT wxChoice: public wxChoiceBase
 
 public:
     wxChoice();
-    ~wxChoice();
+    virtual ~wxChoice();
 
     wxChoice(wxWindow *parent, wxWindowID id,
         const wxPoint& pos = wxDefaultPosition,

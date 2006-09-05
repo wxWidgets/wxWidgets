@@ -31,7 +31,7 @@ class ctPropertyEditor: public wxPanel
     DECLARE_CLASS(ctPropertyEditor)
   public:
     ctPropertyEditor(wxWindow *parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style);
-    ~ctPropertyEditor(){};
+    virtual ~ctPropertyEditor(){}
 
 // Event handlers
 

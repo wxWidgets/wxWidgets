@@ -33,7 +33,7 @@ public:
         (void)Create(parent, id, title, pos, size, style, name);
     }
 
-    ~wxMDIParentFrame();
+    virtual ~wxMDIParentFrame();
     bool Create( wxWindow *parent,
                  wxWindowID id,
                  const wxString& title,
@@ -183,7 +183,7 @@ class WXDLLIMPEXP_CORE wxMDIClientWindow: public wxWindow
 public:
     wxMDIClientWindow();
     wxMDIClientWindow( wxMDIParentFrame *parent, long style = 0 );
-    ~wxMDIClientWindow();
+    virtual ~wxMDIClientWindow();
     virtual bool CreateClient( wxMDIParentFrame *parent, long style = wxVSCROLL | wxHSCROLL );
 
 private:

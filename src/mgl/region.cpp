@@ -45,7 +45,7 @@ public:
         m_region = data.m_region;
     }
 
-    ~wxRegionRefData() {}
+    virtual ~wxRegionRefData() {}
 
     MGLRegion m_region;
 };

@@ -73,7 +73,7 @@ public:
         Union(bmp, transColour, tolerance);
     }
 
-    ~wxRegion();
+    virtual ~wxRegion();
 
     bool Ok() const { return m_refData != NULL; }
 

@@ -40,7 +40,7 @@ public:
     }
 
     wxRegion();
-    ~wxRegion();
+    virtual ~wxRegion();
 
     //# Modify region
     // Clear current region
@@ -120,7 +120,7 @@ class WXDLLEXPORT wxRegionIterator : public wxObject
 public:
     wxRegionIterator(void);
     wxRegionIterator(const wxRegion& region);
-    ~wxRegionIterator(void);
+    virtual ~wxRegionIterator(void);
 
     void Reset(void) { m_currentNode = NULL; }
     void Reset(const wxRegion& region);

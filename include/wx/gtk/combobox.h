@@ -42,7 +42,7 @@ public:
         Create(parent, id, value, pos, size, choices, style, validator, name);
     }
 
-    ~wxComboBox();
+    virtual ~wxComboBox();
 
     bool Create(wxWindow *parent, wxWindowID id,
            const wxString& value = wxEmptyString,

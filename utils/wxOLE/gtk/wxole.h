@@ -44,7 +44,7 @@ class wxOleServerEnv : public wxObject
 public:
   
   wxOleServerEnv( const wxString &name, const wxString &version );
-  ~wxOleServerEnv();
+  virtual ~wxOleServerEnv();
 
 private:
 
@@ -68,7 +68,7 @@ class wxOleServer : public wxObject
 public:
   
   wxOleServer( const wxString &id );
-  ~wxOleServer();
+  virtual ~wxOleServer();
   
   virtual wxOleControl *CreateOleControl();
   
@@ -91,7 +91,7 @@ class wxOleControl : public wxFrame
 public:
   
     wxOleControl( wxWindowID id, long style = 0, const wxString &name = wxOleNameStr );
-    ~wxOleControl();
+    virtual ~wxOleControl();
     bool Create( wxWindowID id, long style = 0, const wxString &name = wxOleNameStr );
 
 protected:

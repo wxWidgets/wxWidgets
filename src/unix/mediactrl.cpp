@@ -166,7 +166,7 @@ class WXDLLIMPEXP_MEDIA
 public:
 
     wxGStreamerMediaBackend();
-    ~wxGStreamerMediaBackend();
+    virtual ~wxGStreamerMediaBackend();
 
     virtual bool CreateControl(wxControl* ctrl, wxWindow* parent,
                                      wxWindowID id,

@@ -25,7 +25,7 @@ class WXDLLIMPEXP_XML wxXmlWriter : public wxWriter
 public :
 
     wxXmlWriter( wxXmlNode * parent ) ;
-    ~wxXmlWriter() ;
+    virtual ~wxXmlWriter() ;
 
     //
     // streaming callbacks
@@ -84,7 +84,7 @@ class WXDLLIMPEXP_XML wxXmlReader : public wxReader
 {
 public:
     wxXmlReader(wxXmlNode *parent) { m_parent = parent ; }
-    ~wxXmlReader() {}
+    virtual ~wxXmlReader() {}
 
     // Reads a component from XML.  The return value is the root object ID, which can
     // then be used to ask the depersister about that object

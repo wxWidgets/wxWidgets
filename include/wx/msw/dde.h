@@ -47,7 +47,7 @@ class WXDLLIMPEXP_BASE wxDDEConnection: public wxConnectionBase
 public:
   wxDDEConnection(wxChar *buffer, int size); // use external buffer
   wxDDEConnection(); // use internal buffer
-  ~wxDDEConnection(void);
+  virtual ~wxDDEConnection(void);
 
   // Calls that CLIENT can make
   virtual bool Execute(const wxChar *data, int size = -1, wxIPCFormat format = wxIPC_TEXT);
@@ -85,7 +85,7 @@ class WXDLLIMPEXP_BASE wxDDEServer: public wxServerBase
  public:
 
   wxDDEServer(void);
-  ~wxDDEServer(void);
+  virtual ~wxDDEServer(void);
   bool Create(const wxString& server_name); // Returns false if can't create server (e.g. port
                                   // number is already in use)
   virtual wxConnectionBase *OnAcceptConnection(const wxString& topic);
@@ -113,7 +113,7 @@ class WXDLLIMPEXP_BASE wxDDEClient: public wxClientBase
   DECLARE_DYNAMIC_CLASS(wxDDEClient)
  public:
   wxDDEClient(void);
-  ~wxDDEClient(void);
+  virtual ~wxDDEClient(void);
   bool ValidHost(const wxString& host);
   virtual wxConnectionBase *MakeConnection(const wxString& host, const wxString& server, const wxString& topic);
                                                 // Call this to make a connection.

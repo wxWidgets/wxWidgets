@@ -31,7 +31,7 @@ public:
 
         Create(parent, id, value, pos, size, style, validator, name);
     }
-    ~wxTextCtrl();
+    virtual ~wxTextCtrl();
 
     bool Create(wxWindow *parent, wxWindowID id,
                 const wxString& value = wxEmptyString,

@@ -54,7 +54,7 @@ class wxXFont : public wxObject
 {
 public:
     wxXFont();
-    ~wxXFont();
+    virtual ~wxXFont();
 
 #if !wxMOTIF_NEW_FONT_HANDLING
     WXFontStructPtr     m_fontStruct;   // XFontStruct
@@ -91,7 +91,7 @@ public:
              data.m_underlined, data.m_faceName, data.m_encoding);
     }
 
-    ~wxFontRefData();
+    virtual ~wxFontRefData();
 
 protected:
     // common part of all ctors

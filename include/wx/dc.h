@@ -132,7 +132,7 @@ public:
         ResetClipping();
     }
 
-    ~wxDCBase() { }
+    virtual ~wxDCBase() { }
 
 #if WXWIN_COMPATIBILITY_2_6
     wxDEPRECATED( virtual void BeginDrawing() );

@@ -124,7 +124,7 @@ class wxRootWindow : public wxWindow
             SetMGLwindow_t(MGL_wmGetRootWindow(g_winMng));
             SetBackgroundColour(wxTHEME_COLOUR(DESKTOP));
         }
-        ~wxRootWindow()
+        virtual ~wxRootWindow()
         {
             // we don't want to delete MGL_WM's rootWnd
             m_wnd = NULL;

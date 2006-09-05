@@ -25,7 +25,7 @@ public:
                const wxString& help = wxEmptyString,
                wxItemKind kind = wxITEM_NORMAL,
                wxMenu *subMenu = (wxMenu *)NULL);
-    ~wxMenuItem();
+    virtual ~wxMenuItem();
 
     // implement base class virtuals
     virtual void SetText( const wxString& str );

@@ -654,7 +654,7 @@ class wxWin32FrameInputHandler : public wxStdFrameInputHandler
 {
 public:
     wxWin32FrameInputHandler(wxInputHandler *handler);
-    ~wxWin32FrameInputHandler();
+    virtual ~wxWin32FrameInputHandler();
 
     virtual bool HandleMouse(wxInputConsumer *control,
                              const wxMouseEvent& event);

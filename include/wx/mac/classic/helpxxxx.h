@@ -23,7 +23,7 @@ class WXDLLEXPORT wxXXXXHelpController: public wxHelpControllerBase
 
  public:
   wxXXXXHelpController();
-  ~wxXXXXHelpController();
+  virtual ~wxXXXXHelpController();
 
   // Must call this to set the filename and server name
   virtual bool Initialize(const wxString& file);

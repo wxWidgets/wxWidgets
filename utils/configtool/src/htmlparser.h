@@ -142,7 +142,7 @@ class wxSimpleHtmlParser : public wxObject
     
 public:
     wxSimpleHtmlParser();
-    ~wxSimpleHtmlParser();
+    virtual ~wxSimpleHtmlParser();
 
 //// Operations
     bool ParseFile(const wxString& filename);

@@ -24,7 +24,7 @@ class WXDLLEXPORT wxBrushRefData: public wxGDIRefData
 public:
     wxBrushRefData();
     wxBrushRefData(const wxBrushRefData& rData);
-    ~wxBrushRefData();
+    virtual ~wxBrushRefData();
 
 protected:
     int         m_nStyle;
@@ -45,7 +45,7 @@ public:
     wxBrush();
     wxBrush(const wxColour& rCol, int nStyle = wxSOLID);
     wxBrush(const wxBitmap& rStipple);
-    ~wxBrush();
+    virtual ~wxBrush();
 
     inline bool operator == (const wxBrush& rBrush) const { return m_refData == rBrush.m_refData; }
     inline bool operator != (const wxBrush& rBrush) const { return m_refData != rBrush.m_refData; }

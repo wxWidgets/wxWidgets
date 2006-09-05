@@ -27,7 +27,7 @@ class WXDLLEXPORT wxBrushRefData: public wxGDIRefData
 public:
     wxBrushRefData();
     wxBrushRefData(const wxBrushRefData& data);
-    ~wxBrushRefData();
+    virtual ~wxBrushRefData();
 
 protected:
     wxMacBrushKind m_macBrushKind ;

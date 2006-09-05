@@ -289,7 +289,7 @@ public:
                     wxFSFile *input, int w = wxDefaultCoord, int h = wxDefaultCoord,
                     double scale = 1.0, int align = wxHTML_ALIGN_BOTTOM,
                     const wxString& mapname = wxEmptyString);
-    ~wxHtmlImageCell();
+    virtual ~wxHtmlImageCell();
     void Draw(wxDC& dc, int x, int y, int view_y1, int view_y2,
               wxHtmlRenderingInfo& info);
     virtual wxHtmlLinkInfo *GetLink(int x = 0, int y = 0) const;

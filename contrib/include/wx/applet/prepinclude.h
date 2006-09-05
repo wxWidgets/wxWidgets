@@ -49,7 +49,7 @@ private:
     wxFileSystem *m_FS;
 public:
     wxIncludePrep() : wxHtmlProcessor() {}
-    ~wxIncludePrep() {}
+    virtual ~wxIncludePrep() {}
 	
 	// Process input text and return processed result
     wxString Process(const wxString& text) const;

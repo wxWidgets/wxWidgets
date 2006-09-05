@@ -70,7 +70,7 @@ public:
         }
     }
 
-    ~wxRegionRefData()
+    virtual ~wxRegionRefData()
     {
         ::GpiDestroyRegion(m_hPS, m_hRegion);
     }

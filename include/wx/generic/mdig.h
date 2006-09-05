@@ -48,7 +48,7 @@ public:
                      long style = wxDEFAULT_FRAME_STYLE | wxVSCROLL | wxHSCROLL,
                      const wxString& name = wxFrameNameStr);
 
-    ~wxGenericMDIParentFrame();
+    virtual ~wxGenericMDIParentFrame();
     bool Create( wxWindow *parent,
                  wxWindowID winid,
                  const wxString& title,
@@ -230,7 +230,7 @@ class WXDLLEXPORT wxGenericMDIClientWindow: public wxNotebook
 public:
     wxGenericMDIClientWindow();
     wxGenericMDIClientWindow( wxGenericMDIParentFrame *parent, long style = 0 );
-    ~wxGenericMDIClientWindow();
+    virtual ~wxGenericMDIClientWindow();
     virtual bool CreateClient( wxGenericMDIParentFrame *parent, long style = wxVSCROLL | wxHSCROLL );
 
     virtual int SetSelection(size_t nPage);

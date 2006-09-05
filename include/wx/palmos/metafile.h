@@ -30,7 +30,7 @@ class WXDLLEXPORT wxMetafileRefData: public wxGDIRefData
     friend class WXDLLEXPORT wxMetafile;
 public:
     wxMetafileRefData();
-    ~wxMetafileRefData();
+    virtual ~wxMetafileRefData();
 
 public:
     WXHANDLE m_metafile;

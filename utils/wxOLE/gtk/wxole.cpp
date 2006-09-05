@@ -65,7 +65,7 @@ class wxOleInputStream : public wxInputStream
 public:
 
   wxOleInputStream( GNOME_Stream stream );
-  ~wxOleInputStream();
+  virtual ~wxOleInputStream();
 
   bool Ok() const { return m_error; }
 

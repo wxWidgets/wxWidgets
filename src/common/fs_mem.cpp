@@ -49,7 +49,7 @@ class MemFSHashObj : public wxObject
             InitTime();
         }
 
-        ~MemFSHashObj()
+        virtual ~MemFSHashObj()
         {
             delete[] m_Data;
         }

@@ -54,7 +54,7 @@ public:
                majorDim, style, val, name);
     }
 
-    ~wxRadioBox();
+    virtual ~wxRadioBox();
 
     bool Create(wxWindow *parent, wxWindowID id, const wxString& title,
                 const wxPoint& pos = wxDefaultPosition,

@@ -29,7 +29,7 @@ class WXDLLEXPORT wxApp: public wxAppBase
 {
 public:
     wxApp();
-    ~wxApp();
+    virtual ~wxApp();
 
     /* override for altering the way wxGTK intializes the GUI
      * (palette/visual/colorcube). under wxMSW, OnInitGui() does nothing by

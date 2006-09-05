@@ -24,7 +24,7 @@ public:
 
     wxBrush( const wxColour &colour, int style = wxSOLID );
     wxBrush( const wxBitmap &stippleBitmap );
-    ~wxBrush();
+    virtual ~wxBrush();
 
     bool Ok() const { return m_refData != NULL; }
 

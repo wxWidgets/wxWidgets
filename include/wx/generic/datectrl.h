@@ -26,7 +26,7 @@ class WXDLLIMPEXP_ADV wxDatePickerCtrlGeneric : public wxDatePickerCtrlBase
 public:
     // creating the control
     wxDatePickerCtrlGeneric() { Init(); }
-    ~wxDatePickerCtrlGeneric() ;
+    virtual ~wxDatePickerCtrlGeneric() ;
     wxDatePickerCtrlGeneric(wxWindow *parent,
                             wxWindowID id,
                             const wxDateTime& date = wxDefaultDateTime,

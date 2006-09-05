@@ -21,7 +21,7 @@ class WXDLLEXPORT wxScreenDC: public wxWindowDC
 public:
     // Create a DC representing the whole screen
     wxScreenDC();
-    ~wxScreenDC();
+    virtual ~wxScreenDC();
 
     // Compatibility with X's requirements for
     // drawing on top of all windows

@@ -26,7 +26,7 @@ class WXDLLIMPEXP_BASE wxStandardPathsCF : public wxStandardPathsBase
 {
 public:
     wxStandardPathsCF();
-    ~wxStandardPathsCF();
+    virtual ~wxStandardPathsCF();
 
     // wxMac specific: allow user to specify a different bundle
     wxStandardPathsCF(wxCFBundleRef bundle);

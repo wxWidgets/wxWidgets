@@ -21,7 +21,7 @@ class WXDLLEXPORT wxStaticBitmap : public wxStaticBitmapBase
 
 public:
     wxStaticBitmap() { }
-    ~wxStaticBitmap();
+    virtual ~wxStaticBitmap();
 
     wxStaticBitmap(wxWindow *parent, wxWindowID id,
         const wxBitmap& label,

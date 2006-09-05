@@ -25,7 +25,7 @@ class WXDLLIMPEXP_NET wxHTTP : public wxProtocol
 {
 public:
   wxHTTP();
-  ~wxHTTP();
+  virtual ~wxHTTP();
 
   virtual bool Connect(const wxString& host, unsigned short port);
   virtual bool Connect(const wxString& host) { return Connect(host, 0); }

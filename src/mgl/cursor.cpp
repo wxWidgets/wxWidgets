@@ -36,7 +36,7 @@ class wxCursorRefData: public wxObjectRefData
   public:
 
     wxCursorRefData();
-    ~wxCursorRefData();
+    virtual ~wxCursorRefData();
 
     MGLCursor *m_cursor;
 };

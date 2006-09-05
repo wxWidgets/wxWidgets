@@ -37,7 +37,7 @@ class WXDLLIMPEXP_ADV wxExtHelpController : public wxHelpControllerBase
 {
 public:
    wxExtHelpController(wxWindow* parentWindow = NULL);
-   ~wxExtHelpController();
+   virtual ~wxExtHelpController();
 
    /** Tell it which browser to use.
        The Netscape support will check whether Netscape is already

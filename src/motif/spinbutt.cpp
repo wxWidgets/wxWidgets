@@ -93,7 +93,7 @@ public:
         Create( parent, id, d, pos, size );
     }
 
-    ~wxArrowButton()
+    virtual ~wxArrowButton()
         { delete m_timer; }
 
     bool Create( wxSpinButton* parent, wxWindowID id, ArrowDirection d,

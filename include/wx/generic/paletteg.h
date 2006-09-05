@@ -35,7 +35,7 @@ class WXDLLIMPEXP_CORE wxPalette: public wxPaletteBase
 
     wxPalette();
     wxPalette( int n, const unsigned char *red, const unsigned char *green, const unsigned char *blue );
-    ~wxPalette();
+    virtual ~wxPalette();
     bool operator == ( const wxPalette& palette ) const;
     bool operator != ( const wxPalette& palette ) const;
     virtual bool Ok() const;

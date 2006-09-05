@@ -2585,7 +2585,7 @@ public:
         Init( wxCFStringEncFromFontEnc(encoding) );
     }
 
-    ~wxMBConv_cocoa()
+    virtual ~wxMBConv_cocoa()
     {
     }
 
@@ -2740,7 +2740,7 @@ public:
         Init( wxMacGetSystemEncFromFontEnc(encoding) );
     }
 
-    ~wxMBConv_mac()
+    virtual ~wxMBConv_mac()
     {
         OSStatus status = noErr ;
         if (m_MB2WC_converter)
@@ -2913,7 +2913,7 @@ public :
         m_uniBack = NULL ;
     }
      
-    ~wxMBConv_macUTF8D()
+    virtual ~wxMBConv_macUTF8D()
     {
         if (m_uni!=NULL)
             DisposeUnicodeToTextInfo(&m_uni);

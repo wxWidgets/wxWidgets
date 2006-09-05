@@ -296,7 +296,7 @@ class wxSoundSyncOnlyAdaptor : public wxSoundBackend
 public:
     wxSoundSyncOnlyAdaptor(wxSoundBackend *backend)
         : m_backend(backend), m_playing(false) {}
-    ~wxSoundSyncOnlyAdaptor()
+    virtual ~wxSoundSyncOnlyAdaptor()
     {
         delete m_backend;
     }

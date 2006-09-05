@@ -768,7 +768,7 @@ class wxSetter##property : public wxSetter \
 public: \
     wxINFUNC_CLASS_TYPE_FIX(Klass) \
     wxSetter##property() : wxSetter( wxT(#setterMethod) ) {} \
-    ~wxSetter##property() {} \
+    virtual ~wxSetter##property() {} \
     void Set( wxObject *object, const wxxVariant &variantValue ) const \
 { \
     Klass *obj = dynamic_cast<Klass*>(object) ;  \
@@ -785,7 +785,7 @@ class wxGetter##property : public wxGetter \
 public : \
     wxINFUNC_CLASS_TYPE_FIX(Klass) \
     wxGetter##property() : wxGetter( wxT(#gettermethod) ) {} \
-    ~wxGetter##property() {} \
+    virtual ~wxGetter##property() {} \
     void Get( const wxObject *object , wxxVariant &result) const \
 { \
     const Klass *obj = dynamic_cast<const Klass*>(object) ;  \
@@ -799,7 +799,7 @@ class wxAdder##property : public wxAdder \
 public: \
     wxINFUNC_CLASS_TYPE_FIX(Klass) \
     wxAdder##property() : wxAdder( wxT(#addermethod) ) {} \
-    ~wxAdder##property() {} \
+    virtual ~wxAdder##property() {} \
     void Add( wxObject *object, const wxxVariant &variantValue ) const \
 { \
     Klass *obj = dynamic_cast<Klass*>(object) ;  \
@@ -816,7 +816,7 @@ class wxCollectionGetter##property : public wxCollectionGetter \
 public : \
     wxINFUNC_CLASS_TYPE_FIX(Klass) \
     wxCollectionGetter##property() : wxCollectionGetter( wxT(#gettermethod) ) {} \
-    ~wxCollectionGetter##property() {} \
+    virtual ~wxCollectionGetter##property() {} \
     void Get( const wxObject *object , wxxVariantArray &result) const \
 { \
     const Klass *obj = dynamic_cast<const Klass*>(object) ;  \
@@ -873,7 +873,7 @@ class WXDLLIMPEXP_BASE wxGenericPropertyAccessor : public wxPropertyAccessor
 {
 public :
     wxGenericPropertyAccessor( const wxString &propName ) ;
-    ~wxGenericPropertyAccessor() ;
+    virtual ~wxGenericPropertyAccessor() ;
 
     void RenameProperty( const wxString& WXUNUSED_UNLESS_DEBUG(oldName),
         const wxString& newName )

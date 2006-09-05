@@ -73,7 +73,7 @@ class WXDLLEXPORT wxDialUpManagerImpl : public wxDialUpManager
 {
 public:
    wxDialUpManagerImpl();
-   ~wxDialUpManagerImpl();
+   virtual ~wxDialUpManagerImpl();
 
    /** Could the dialup manager be initialized correctly? If this function
        returns false, no other functions will work neither, so it's a good idea

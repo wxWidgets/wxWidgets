@@ -42,7 +42,7 @@ DECLARE_DYNAMIC_CLASS(wxQuantize)
 //// Constructor
 
     wxQuantize() {}
-    ~wxQuantize() {}
+    virtual ~wxQuantize() {}
 
 //// Operations
 

@@ -286,7 +286,7 @@ public:
     // --------
 
     wxTextCtrlBase(){}
-    ~wxTextCtrlBase(){}
+    virtual ~wxTextCtrlBase(){}
 
     // accessors
     // ---------

@@ -29,7 +29,7 @@ class ctConfigToolDoc: public wxDocument
     DECLARE_DYNAMIC_CLASS(ctConfigToolDoc)
 public:
     ctConfigToolDoc();
-    ~ctConfigToolDoc();
+    virtual ~ctConfigToolDoc();
 
 //// Overrides
     virtual bool OnCreate(const wxString& path, long flags);
@@ -120,7 +120,7 @@ public:
     /// Ctor and dtor
     ctConfiguration(ctConfiguration* parent, const wxString& name);
     ctConfiguration();
-    ~ctConfiguration();
+    virtual ~ctConfiguration();
 
     /// Copy constructor.
     ctConfiguration(const ctConfiguration& configuration) : wxObject()
@@ -260,7 +260,7 @@ public:
     ctConfigCommand(const wxString& name, int cmdId,
         ctConfigItem* activeState, ctProperties* properties,
         bool ignoreFirstTime = false);
-    ~ctConfigCommand();
+    virtual ~ctConfigCommand();
 
     bool Do();
     bool Undo();

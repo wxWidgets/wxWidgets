@@ -17,7 +17,7 @@ class WXDLLEXPORT wxRadioButton: public wxControl
     DECLARE_DYNAMIC_CLASS(wxRadioButton)
 public:
     wxRadioButton();
-    ~wxRadioButton() { RemoveFromCycle(); }
+    virtual ~wxRadioButton() { RemoveFromCycle(); }
 
     inline wxRadioButton(wxWindow *parent, wxWindowID id,
         const wxString& label,

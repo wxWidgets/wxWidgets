@@ -155,7 +155,7 @@ class wxBitmapRefData: public wxObjectRefData
 {
 public:
     wxBitmapRefData();
-    ~wxBitmapRefData();
+    virtual ~wxBitmapRefData();
 
     int             m_width;
     int             m_height;

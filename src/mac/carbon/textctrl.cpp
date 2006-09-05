@@ -118,7 +118,7 @@ public :
         m_param1 = p1 ;
     }
 
-    ~wxMacObjectFunctor1() {}
+    virtual ~wxMacObjectFunctor1() {}
 
     virtual void* operator()()
     {
@@ -177,7 +177,7 @@ class wxMacTextControl : public wxMacControl
 {
 public :
     wxMacTextControl( wxTextCtrl *peer ) ;
-    ~wxMacTextControl() ;
+    virtual ~wxMacTextControl() ;
 
     virtual wxString GetStringValue() const = 0 ;
     virtual void SetStringValue( const wxString &val ) = 0 ;
@@ -305,7 +305,7 @@ public :
                              const wxString& str,
                              const wxPoint& pos,
                              const wxSize& size, long style ) ;
-    ~wxMacMLTEHIViewControl() ;
+    virtual ~wxMacMLTEHIViewControl() ;
 
     virtual OSStatus SetFocus( ControlFocusPart focusPart ) ;
     virtual bool HasFocus() const ;
@@ -326,7 +326,7 @@ public :
                              const wxString& str,
                              const wxPoint& pos,
                              const wxSize& size, long style ) ;
-    ~wxMacUnicodeTextControl();
+    virtual ~wxMacUnicodeTextControl();
 
     virtual void VisibilityChanged(bool shown);
     virtual wxString GetStringValue() const ;
@@ -362,7 +362,7 @@ public :
                              const wxString& str,
                              const wxPoint& pos,
                              const wxSize& size, long style ) ;
-    ~wxMacMLTEClassicControl() ;
+    virtual ~wxMacMLTEClassicControl() ;
 
     virtual void VisibilityChanged(bool shown) ;
     virtual void SuperChangedPosition() ;

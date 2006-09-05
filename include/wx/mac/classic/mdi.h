@@ -40,7 +40,7 @@ public:
       Create(parent, id, title, pos, size, style, name);
   }
 
-  ~wxMDIParentFrame();
+  virtual ~wxMDIParentFrame();
 
   bool Create(wxWindow *parent,
            wxWindowID id,
@@ -109,7 +109,7 @@ public:
       Create(parent, id, title, pos, size, style, name);
   }
 
-  ~wxMDIChildFrame();
+  virtual ~wxMDIChildFrame();
 
   bool Create(wxMDIParentFrame *parent,
            wxWindowID id,
@@ -154,7 +154,7 @@ class WXDLLEXPORT wxMDIClientWindow: public wxWindow
       CreateClient(parent, style);
   }
 
-  ~wxMDIClientWindow();
+  virtual ~wxMDIClientWindow();
 
   // Note: this is virtual, to allow overridden behaviour.
   virtual bool CreateClient(wxMDIParentFrame *parent, long style = wxVSCROLL | wxHSCROLL);

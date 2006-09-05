@@ -54,7 +54,7 @@ class WXDLLEXPORT wxClipboard : public wxObject
 
 public:
     wxClipboard();
-    ~wxClipboard();
+    virtual ~wxClipboard();
 
     // open the clipboard before SetData() and GetData()
     virtual bool Open();

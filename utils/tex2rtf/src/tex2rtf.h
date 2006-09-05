@@ -73,7 +73,7 @@ class Tex2RTFConnection: public wxDDEConnection
 {
  public:
   Tex2RTFConnection(wxChar *buf, int size);
-  ~Tex2RTFConnection(void){};
+  virtual ~Tex2RTFConnection(void){}
   bool OnExecute(const wxString& topic, wxChar *data, int size, wxIPCFormat format);
   wxChar *OnRequest(const wxString& topic, const wxString& item, int *size, wxIPCFormat format);
 };

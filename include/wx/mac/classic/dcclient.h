@@ -31,7 +31,7 @@ class WXDLLEXPORT wxWindowDC: public wxDC
   // Create a DC corresponding to a canvas
   wxWindowDC(wxWindow *win);
 
-  ~wxWindowDC(void);
+  virtual ~wxWindowDC(void);
   virtual void DoGetSize( int *width, int *height ) const;
   protected :
     wxWindow     *m_window;
@@ -48,7 +48,7 @@ class WXDLLEXPORT wxClientDC: public wxWindowDC
   // Create a DC corresponding to a canvas
   wxClientDC(wxWindow *win);
 
-  ~wxClientDC(void);
+  virtual ~wxClientDC(void);
   virtual void DoGetSize( int *width, int *height ) const;
 };
 
@@ -62,7 +62,7 @@ class WXDLLEXPORT wxPaintDC: public wxWindowDC
   // Create a DC corresponding to a canvas
   wxPaintDC(wxWindow *win);
 
-  ~wxPaintDC(void);
+  virtual ~wxPaintDC(void);
   virtual void DoGetSize( int *width, int *height ) const;
 };
 

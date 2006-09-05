@@ -36,7 +36,7 @@ class WXDLLEXPORT wxCursorRefData: public wxBitmapRefData
 
 public:
     wxCursorRefData();
-    ~wxCursorRefData();
+    virtual ~wxCursorRefData();
 
 protected:
     WXHCURSOR     m_hCursor;

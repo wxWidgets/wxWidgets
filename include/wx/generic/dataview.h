@@ -32,7 +32,7 @@ class WXDLLIMPEXP_ADV wxDataViewCell: public wxDataViewCellBase
 {
 public:
     wxDataViewCell( const wxString &varianttype, wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT );
-    ~wxDataViewCell();
+    virtual ~wxDataViewCell();
 
     virtual bool Render( wxRect cell, wxDC *dc, int state ) = 0;
     virtual wxSize GetSize() = 0;
@@ -143,7 +143,7 @@ public:
     wxDataViewProgressCell( const wxString &label = wxEmptyString,
                             const wxString &varianttype = wxT("long"),
                             wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT );
-    ~wxDataViewProgressCell();
+    virtual ~wxDataViewProgressCell();
 
     bool SetValue( const wxVariant &value );
 

@@ -90,7 +90,7 @@ public:
     {
     }
 
-    ~wxQTTimer()
+    virtual ~wxQTTimer()
     {
         if(m_pbPlaying)
             *m_pbPlaying = false;
@@ -156,7 +156,7 @@ public:
     {
     }
 
-    ~wxSMTimer()
+    virtual ~wxSMTimer()
     {
         if(m_pbPlaying)
             *m_pbPlaying = false;
