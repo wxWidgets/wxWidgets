@@ -321,6 +321,22 @@ public:
         static bool GetAutoWindowMenu() { return false; }
     }
 #endif
+
+    %pythoncode {
+        def GetMenus(self):
+            """Return a list of (menu, label) items for the menus in the MenuBar. """
+            return [(self.GetMenu(i), self.GetLabelTop(i)) 
+                    for i in range(self.GetMenuCount())]
+            
+        def SetMenus(self, items):
+            """Clear and add new menus to the MenuBar from a list of (menu, label) items. """
+            for i in range(self.GetMenuCount()-1, -1, -1):
+                self.Remove(i)
+            for m, l in items:
+                self.Append(m, l)
+    }
+    %property(Menus, GetMenus, SetMenus);
+    
 };
 
 //---------------------------------------------------------------------------

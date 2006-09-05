@@ -277,6 +277,18 @@ is selected.", "");
 slightly more natural for controls which support multiple selection.", "");
     
 
+    %pythoncode {
+        def GetItems(self):
+            """Return a list of the strings in the control"""
+            return [self.GetString(i) for i in xrange(self.GetCount())]
+            
+        def SetItems(self, items):
+            """Clear and set the strings in the control from a list"""
+            self.Clear()
+            for i in items:
+                self.Append(i)        
+    }
+    %property(Items, GetItems, SetItems);
     
 };
 
