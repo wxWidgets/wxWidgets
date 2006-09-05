@@ -17,6 +17,7 @@
     #include "wx/log.h"
     #include "wx/frame.h"
     #include "wx/bitmap.h"
+    #include "wx/app.h"
 #endif
 
 #include "wx/accel.h"
