@@ -391,13 +391,6 @@ typedef void (wxEvtHandler::*wxFileDirPickerEventFunction)(wxFileDirPickerEvent&
 #define EVT_DIRPICKER_CHANGED(id, fn) \
     wx__DECLARE_EVT1(wxEVT_COMMAND_DIRPICKER_CHANGED, id, wxFileDirPickerEventHandler(fn))
 
-#ifdef _WX_DEFINE_DATE_EVENTS_
-    DEFINE_EVENT_TYPE(wxEVT_COMMAND_FILEPICKER_CHANGED)
-    DEFINE_EVENT_TYPE(wxEVT_COMMAND_DIRPICKER_CHANGED)
-
-    IMPLEMENT_DYNAMIC_CLASS(wxFileDirPickerEvent, wxCommandEvent)
-#endif
-
 
 #endif // wxUSE_FILEPICKERCTRL || wxUSE_DIRPICKERCTRL
 

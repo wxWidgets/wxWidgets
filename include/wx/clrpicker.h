@@ -193,13 +193,6 @@ typedef void (wxEvtHandler::*wxColourPickerEventFunction)(wxColourPickerEvent&);
 #define EVT_COLOURPICKER_CHANGED(id, fn) \
     wx__DECLARE_EVT1(wxEVT_COMMAND_COLOURPICKER_CHANGED, id, wxColourPickerEventHandler(fn))
 
-#ifdef _WX_DEFINE_DATE_EVENTS_
-    DEFINE_EVENT_TYPE(wxEVT_COMMAND_COLOURPICKER_CHANGED)
-
-    IMPLEMENT_DYNAMIC_CLASS(wxColourPickerEvent, wxCommandEvent)
-#endif
-
-
 
 #endif // wxUSE_COLOURPICKERCTRL
 

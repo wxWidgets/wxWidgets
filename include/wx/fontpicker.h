@@ -216,13 +216,6 @@ typedef void (wxEvtHandler::*wxFontPickerEventFunction)(wxFontPickerEvent&);
 #define EVT_FONTPICKER_CHANGED(id, fn) \
     wx__DECLARE_EVT1(wxEVT_COMMAND_FONTPICKER_CHANGED, id, wxFontPickerEventHandler(fn))
 
-#ifdef _WX_DEFINE_DATE_EVENTS_
-    DEFINE_EVENT_TYPE(wxEVT_COMMAND_FONTPICKER_CHANGED)
-
-    IMPLEMENT_DYNAMIC_CLASS(wxFontPickerEvent, wxCommandEvent)
-#endif
-
-
 
 #endif // wxUSE_FONTPICKERCTRL
 
