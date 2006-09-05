@@ -1024,6 +1024,9 @@ bool wxWindowMSW::ScrollPages(int pages)
 
 void wxWindowMSW::SetLayoutDirection(wxLayoutDirection dir)
 {
+#ifdef __WXWINCE__
+    wxUnusedVar(dir);
+#else
     const HWND hwnd = GetHwnd();
     wxCHECK_RET( hwnd, _T("layout direction must be set after window creation") );
 
@@ -1049,16 +1052,21 @@ void wxWindowMSW::SetLayoutDirection(wxLayoutDirection dir)
     {
         ::SetWindowLong(hwnd, GWL_EXSTYLE, styleNew);
     }
+#endif
 }
 
 wxLayoutDirection wxWindowMSW::GetLayoutDirection() const
 {
+#ifdef __WXWINCE__
+    return wxLayout_Default;
+#else
     const HWND hwnd = GetHwnd();
     wxCHECK_MSG( hwnd, wxLayout_Default, _T("invalid window") );
 
     return ::GetWindowLong(hwnd, GWL_EXSTYLE) & WS_EX_LAYOUTRTL
                 ? wxLayout_RightToLeft
                 : wxLayout_LeftToRight;
+#endif
 }
 
 wxCoord
