@@ -1931,6 +1931,31 @@ else
     fi
 fi
 
+dnl Check if variadic macros (C99 feature) are supported:
+AC_CACHE_CHECK(
+    [whether the compiler supports variadic macros],
+    [wx_cv_have_variadic_macros],
+    [
+        AC_COMPILE_IFELSE(
+            AC_LANG_PROGRAM(
+                [
+                    #include <stdio.h>
+                    #define test(fmt, ...) printf(fmt, __VA_ARGS__)
+                ],
+                [
+                    test("%s %d %p", "test", 1, 0);
+                ]
+            ),
+            [wx_cv_have_variadic_macros=yes],
+            [wx_cv_have_variadic_macros=no]
+            )
+    ]
+)
+
+if test $wx_cv_have_variadic_macros = "yes"; then
+    AC_DEFINE(HAVE_VARIADIC_MACROS)
+fi
+
 dnl check for large file support
 AC_SYS_LARGEFILE
 

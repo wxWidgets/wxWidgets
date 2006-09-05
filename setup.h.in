@@ -568,6 +568,11 @@
 #undef VA_LIST_IS_ARRAY
 
 /*
+ * Define if the compiler supports variadic macros
+ */
+#undef HAVE_VARIADIC_MACROS
+
+/*
  * Define if your compiler has std::wstring
  */
 #undef HAVE_STD_WSTRING

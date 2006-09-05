@@ -567,14 +567,21 @@ DECLARE_LOG_FUNCTION2(SysError, long, lErrCode);
 #else   //!debug || !wxUSE_LOG
     // these functions do nothing in release builds
 
+    #define wxVLogDebug(fmt, valist)
+    #define wxVLogTrace(mask, fmt, valist)
+
+    #ifdef HAVE_VARIADIC_MACROS
+    // unlike the inline functions below, this completely removes the
+    // wxLogXXX calls from the object file:
+    #define wxLogDebug(fmt, ...)
+    #define wxLogTrace(mask, fmt, ...)
+    #else // !HAVE_VARIADIC_MACROS
     // note that leaving out "fmt" in the vararg functions provokes a warning
     // from SGI CC: "the last argument of the varargs function is unnamed"
-    inline void wxVLogDebug(const wxChar *, va_list) { }
     inline void wxLogDebug(const wxChar *fmt, ...) { wxUnusedVar(fmt); }
-    inline void wxVLogTrace(wxTraceMask, const wxChar *, va_list) { }
     inline void wxLogTrace(wxTraceMask, const wxChar *fmt, ...) { wxUnusedVar(fmt); }
-    inline void wxVLogTrace(const wxChar *, const wxChar *, va_list) { }
     inline void wxLogTrace(const wxChar *, const wxChar *fmt, ...) { wxUnusedVar(fmt); }
+    #endif // HAVE_VARIADIC_MACROS/!HAVE_VARIADIC_MACROS
 #endif // debug/!debug
 
 // wxLogFatalError helper: show the (fatal) error to the user in a safe way,
@@ -605,8 +612,8 @@ wxSafeShowMessage(const wxString& title, const wxString& text);
     #define wxLogLastError(api) wxLogApiError(api, wxSysErrorCode())
 
 #else   //!debug
-    inline void wxLogApiError(const wxChar *, long) { }
-    inline void wxLogLastError(const wxChar *) { }
+    #define wxLogApiError(api, err)
+    #define wxLogLastError(api)
 #endif  //debug/!debug
 
 // wxCocoa has additiional trace masks
