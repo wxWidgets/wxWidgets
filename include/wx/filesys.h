@@ -48,6 +48,7 @@ public:
              )
     {
         m_Stream = stream;
+        m_destroy = true;
         m_Location = loc;
         m_MimeType = mimetype; m_MimeType.MakeLower();
         m_Anchor = anchor;
@@ -56,11 +57,14 @@ public:
 #endif // wxUSE_DATETIME
     }
 
-    virtual ~wxFSFile() { if (m_Stream) delete m_Stream; }
+    virtual ~wxFSFile() { if (m_Stream && m_destroy) delete m_Stream; }
 
     // returns stream. This doesn't _create_ stream, it only returns
     // pointer to it.
     wxInputStream *GetStream() const {return m_Stream;}
+
+    // gives away the ownership of stream
+    void DetachStream() { m_destroy = false; }
 
     // returns file's mime type
     const wxString& GetMimeType() const {return m_MimeType;}
@@ -76,6 +80,7 @@ public:
 
 private:
     wxInputStream *m_Stream;
+    bool m_destroy;
     wxString m_Location;
     wxString m_MimeType;
     wxString m_Anchor;

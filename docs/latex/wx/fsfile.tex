@@ -71,6 +71,15 @@ class wxMyFSFile : public wxFSFile
 };
 \end{verbatim}
 
+\membersection{wxFSFile::DetachStream}\label{wxfsfiledetachstream}
+
+\func{void}{DetachStream}{\void}
+
+Detaches the stream from the wxFSFile object. That is, the
+stream obtained with {\tt GetStream()} will continue its existance
+after the wxFSFile object is deleted. You will have to delete
+the stream yourself.
+
 \membersection{wxFSFile::GetAnchor}\label{wxfsfilegetanchor}
 
 \constfunc{const wxString\&}{GetAnchor}{\void}
