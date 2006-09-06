@@ -354,6 +354,11 @@ void wxSizerItem::SetDimension( const wxPoint& pos_, const wxSize& size_ )
         size.y -= m_border;
     }
 
+    if (size.x < 0)
+        size.x = 0;
+    if (size.y < 0)
+        size.y = 0;
+
     m_rect = wxRect(pos, size);
 
     switch ( m_kind )
