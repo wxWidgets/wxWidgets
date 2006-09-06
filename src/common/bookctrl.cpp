@@ -310,6 +310,8 @@ wxRect wxBookCtrlBase::GetPageRect() const
 
         case wxBK_BOTTOM:
             rectPage.height -= size.y + GetInternalBorder();
+            if (rectPage.height < 0)
+                rectPage.height = 0;
             break;
 
         case wxBK_LEFT:
@@ -318,6 +320,8 @@ wxRect wxBookCtrlBase::GetPageRect() const
 
         case wxBK_RIGHT:
             rectPage.width -= size.x + GetInternalBorder();
+            if (rectPage.width < 0)
+                rectPage.width = 0;
             break;
     }
 
