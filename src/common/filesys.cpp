@@ -487,6 +487,20 @@ void wxFileSystem::AddHandler(wxFileSystemHandler *handler)
     m_Handlers.Insert((size_t)0, handler);
 }
 
+wxFileSystemHandler* wxFileSystem::RemoveHandler(wxFileSystemHandler *handler)
+{
+    // if handler has already been removed (or deleted)
+    // we return NULL. This is by design in case
+    // CleanUpHandlers() is called before RemoveHandler
+    // is called, as we cannot control the order
+    // which modules are unloaded
+    if (!m_Handlers.DeleteObject(handler))
+        return NULL;
+
+    return handler;
+}
+
+
 bool wxFileSystem::HasHandlerForPath(const wxString &location)
 {
     for ( wxList::compatibility_iterator node = m_Handlers.GetFirst();
@@ -589,15 +603,28 @@ class wxFileSystemModule : public wxModule
     DECLARE_DYNAMIC_CLASS(wxFileSystemModule)
 
     public:
+        wxFileSystemModule() :
+            wxModule(),
+            m_handler(NULL)
+        {
+        }
+
         virtual bool OnInit()
         {
-            wxFileSystem::AddHandler(new wxLocalFSHandler);
+            m_handler = new wxLocalFSHandler;
+            wxFileSystem::AddHandler(m_handler);
             return true;
         }
         virtual void OnExit()
         {
+            delete wxFileSystem::RemoveHandler(m_handler);
+
             wxFileSystem::CleanUpHandlers();
         }
+
+    private:
+        wxFileSystemHandler* m_handler;
+
 };
 
 IMPLEMENT_DYNAMIC_CLASS(wxFileSystemModule, wxModule)

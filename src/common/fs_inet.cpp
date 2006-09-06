@@ -140,12 +140,26 @@ class wxFileSystemInternetModule : public wxModule
     DECLARE_DYNAMIC_CLASS(wxFileSystemInternetModule)
 
     public:
+        wxFileSystemInternetModule() :
+           wxModule(),
+           m_handler(NULL)
+        {
+        }
+
         virtual bool OnInit()
         {
-            wxFileSystem::AddHandler(new wxInternetFSHandler);
+            m_handler = new wxInternetFSHandler;
+            wxFileSystem::AddHandler(m_handler);
             return true;
         }
-        virtual void OnExit() {}
+
+        virtual void OnExit() 
+        {
+            delete wxFileSystem::RemoveHandler(m_handler);
+        }
+
+    private:
+        wxFileSystemHandler* m_handler;
 };
 
 IMPLEMENT_DYNAMIC_CLASS(wxFileSystemInternetModule, wxModule)

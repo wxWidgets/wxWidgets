@@ -188,6 +188,10 @@ public:
     // In fact, this class is only front-end to the FS handlers :-)
     static void AddHandler(wxFileSystemHandler *handler);
 
+    // Removes FS handler
+    static wxFileSystemHandler* RemoveHandler(wxFileSystemHandler *handler);
+
+
     // Returns true if there is a handler which can open the given location.
     static bool HasHandlerForPath(const wxString& location);
 
