@@ -26,6 +26,7 @@
 
 // for all others, include the necessary headers
 #ifndef WX_PRECOMP
+    #include "wx/frame.h"
     #include "wx/stattext.h"
     #include "wx/log.h"
     #include "wx/app.h"

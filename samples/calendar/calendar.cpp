@@ -35,13 +35,13 @@
     #include "wx/layout.h"
     #include "wx/msgdlg.h"
     #include "wx/icon.h"
+    #include "wx/button.h"
+    #include "wx/sizer.h"
+    #include "wx/textctrl.h"
+    #include "wx/settings.h"
 #endif
 
-#include "wx/sizer.h"
-#include "wx/textctrl.h"
-
 #include "wx/calctrl.h"
-#include "wx/settings.h"
 
 #if wxUSE_DATEPICKCTRL
     #include "wx/datectrl.h"
