@@ -56,6 +56,7 @@ public:
     wxGLContext(wxGLCanvas *win, const wxGLContext* other=NULL /* for sharing display lists */ );
     virtual ~wxGLContext();
 
+    void SetCurrent(const wxGLCanvas& win) const;
     inline HGLRC GetGLRC() const { return m_glContext; }
 
 protected:
