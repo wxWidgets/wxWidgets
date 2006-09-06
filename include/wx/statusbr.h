@@ -20,6 +20,8 @@
 #include "wx/list.h"
 #include "wx/dynarray.h"
 
+extern WXDLLIMPEXP_DATA_CORE(const wxChar) wxStatusBarNameStr[];
+
 WX_DECLARE_LIST(wxString, wxListString);
 
 // ----------------------------------------------------------------------------

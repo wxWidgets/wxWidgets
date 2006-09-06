@@ -12,36 +12,17 @@
 #ifndef _WX_GENERIC_STATUSBR_H_
 #define _WX_GENERIC_STATUSBR_H_
 
-#include "wx/defs.h"
-
-#if wxUSE_STATUSBAR
-
 #include "wx/pen.h"
-#include "wx/font.h"
-#include "wx/statusbr.h"
 #include "wx/arrstr.h"
-
-extern WXDLLEXPORT_DATA(const wxChar) wxPanelNameStr[];
 
 class WXDLLEXPORT wxStatusBarGeneric : public wxStatusBarBase
 {
 public:
     wxStatusBarGeneric() { Init(); }
     wxStatusBarGeneric(wxWindow *parent,
-                       wxWindowID winid,
-                       const wxPoint& pos = wxDefaultPosition,
-                       const wxSize& size = wxDefaultSize,
-                       long style = wxFULL_REPAINT_ON_RESIZE,
-                       const wxString& name = wxPanelNameStr)
-    {
-        Init();
-
-        Create(parent, winid, pos, size, style, name);
-    }
-    wxStatusBarGeneric(wxWindow *parent,
-                       wxWindowID winid,
-                       long style,
-                       const wxString& name = wxPanelNameStr)
+                       wxWindowID winid = wxID_ANY,
+                       long style = wxST_SIZEGRIP,
+                       const wxString& name = wxStatusBarNameStr)
     {
         Init();
 
@@ -50,18 +31,9 @@ public:
 
     virtual ~wxStatusBarGeneric();
 
-    bool Create(wxWindow *parent, wxWindowID winid,
-                const wxPoint& WXUNUSED(pos) = wxDefaultPosition,
-                const wxSize& WXUNUSED(size) = wxDefaultSize,
-                long style = wxFULL_REPAINT_ON_RESIZE,
-                const wxString& name = wxPanelNameStr)
-    {
-        return Create(parent, winid, style, name);
-    }
-
-    bool Create(wxWindow *parent, wxWindowID winid,
-                long style,
-                const wxString& name = wxPanelNameStr);
+    bool Create(wxWindow *parent, wxWindowID winid = wxID_ANY,
+                long style = wxST_SIZEGRIP,
+                const wxString& name = wxStatusBarNameStr);
 
     // Create status line
     virtual void SetFieldsCount(int number = 1,
@@ -124,8 +96,6 @@ private:
     DECLARE_EVENT_TABLE()
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxStatusBarGeneric)
 };
-
-#endif // wxUSE_STATUSBAR
 
 #endif
     // _WX_GENERIC_STATUSBR_H_

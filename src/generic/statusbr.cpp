@@ -21,14 +21,13 @@
 #include "wx/statusbr.h"
 
 #ifndef WX_PRECOMP
-    #include "wx/frame.h"
     #include "wx/settings.h"
     #include "wx/dcclient.h"
 #endif
 
 #ifdef __WXGTK20__
-#include "wx/gtk/private.h"
-#include "wx/gtk/win_gtk.h"
+    #include <gtk/gtk.h>
+    #include "wx/gtk/win_gtk.h"
 #endif
 
 // we only have to do it here when we use wxStatusBarGeneric in addition to the
@@ -67,9 +66,10 @@ bool wxStatusBarGeneric::Create(wxWindow *parent,
                                 long style,
                                 const wxString& name)
 {
+    style |= wxTAB_TRAVERSAL | wxFULL_REPAINT_ON_RESIZE;
     if ( !wxWindow::Create(parent, id,
                            wxDefaultPosition, wxDefaultSize,
-                           style | wxTAB_TRAVERSAL, name) )
+                           style, name) )
         return false;
 
     // The status bar should have a themed background

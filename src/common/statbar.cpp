@@ -24,16 +24,18 @@
     #pragma hdrstop
 #endif
 
+#if wxUSE_STATUSBAR
+
 #include "wx/statusbr.h"
 
 #ifndef WX_PRECOMP
     #include "wx/frame.h"
 #endif //WX_PRECOMP
 
-#if wxUSE_STATUSBAR
-
 #include "wx/listimpl.cpp"
 WX_DEFINE_LIST(wxListString)
+
+const wxChar wxStatusBarNameStr[] = wxT("statusBar");
 
 // ============================================================================
 // wxStatusBarBase implementation

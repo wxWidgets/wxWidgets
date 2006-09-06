@@ -18,15 +18,15 @@ class WXDLLEXPORT wxStatusBarMac : public wxStatusBarGeneric
     DECLARE_DYNAMIC_CLASS(wxStatusBarMac)
 
     wxStatusBarMac();
-    wxStatusBarMac(wxWindow *parent, wxWindowID id,
-           long style = 0,
-           const wxString& name = wxPanelNameStr);
+    wxStatusBarMac(wxWindow *parent, wxWindowID id = wxID_ANY,
+           long style = wxST_SIZEGRIP,
+           const wxString& name = wxStatusBarNameStr);
 
     virtual ~wxStatusBarMac();
 
-    bool Create(wxWindow *parent, wxWindowID id,
-              long style ,
-              const wxString& name = wxPanelNameStr);
+    bool Create(wxWindow *parent, wxWindowID id = wxID_ANY,
+              long style = wxST_SIZEGRIP,
+              const wxString& name = wxStatusBarNameStr);
 
     virtual void DrawFieldText(wxDC& dc, int i);
     virtual void DrawField(wxDC& dc, int i);
