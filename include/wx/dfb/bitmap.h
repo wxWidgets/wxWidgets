@@ -11,7 +11,7 @@
 #ifndef _WX_DFB_BITMAP_H_
 #define _WX_DFB_BITMAP_H_
 
-#include "wx/dfb/ifacehelpers.h"
+#include "wx/dfb/dfbptr.h"
 
 wxDFB_DECLARE_INTERFACE(IDirectFBSurface);
 
@@ -110,7 +110,7 @@ public:
     virtual void SetDepth(int depth);
 
     // get underlying native representation:
-    IDirectFBSurfacePtr GetDirectFBSurface() const;
+    wxIDirectFBSurfacePtr GetDirectFBSurface() const;
 
 protected:
     bool CreateFromXpm(const char **bits);

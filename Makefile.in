@@ -1669,15 +1669,16 @@ COND_TOOLKIT_DFB_LOWLEVEL_HDR =  \
 	wx/dfb/dcclient.h \
 	wx/dfb/dcmemory.h \
 	wx/dfb/dcscreen.h \
+	wx/dfb/dfbptr.h \
 	wx/dfb/evtloop.h \
 	wx/dfb/font.h \
-	wx/dfb/ifacehelpers.h \
 	wx/dfb/pen.h \
 	wx/dfb/popupwin.h \
 	wx/dfb/private.h \
 	wx/dfb/region.h \
 	wx/dfb/toplevel.h \
 	wx/dfb/window.h \
+	wx/dfb/wrapdfb.h \
 	wx/generic/caret.h \
 	wx/generic/colour.h \
 	wx/generic/icon.h \
@@ -3570,13 +3571,13 @@ COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS =  \
 	monodll_evtloop.o \
 	monodll_font.o \
 	monodll_fontenum.o \
-	monodll_ifacehelpers.o \
 	monodll_pen.o \
 	monodll_region.o \
 	monodll_settings.o \
 	monodll_toplevel.o \
 	monodll_utils.o \
 	monodll_window.o \
+	monodll_wrapdfb.o \
 	monodll_caret.o \
 	monodll_colour.o \
 	monodll_icon.o \
@@ -4386,13 +4387,13 @@ COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_1 =  \
 	monodll_evtloop.o \
 	monodll_font.o \
 	monodll_fontenum.o \
-	monodll_ifacehelpers.o \
 	monodll_pen.o \
 	monodll_region.o \
 	monodll_settings.o \
 	monodll_toplevel.o \
 	monodll_utils.o \
 	monodll_window.o \
+	monodll_wrapdfb.o \
 	monodll_caret.o \
 	monodll_colour.o \
 	monodll_icon.o \
@@ -5269,13 +5270,13 @@ COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_2 =  \
 	monolib_evtloop.o \
 	monolib_font.o \
 	monolib_fontenum.o \
-	monolib_ifacehelpers.o \
 	monolib_pen.o \
 	monolib_region.o \
 	monolib_settings.o \
 	monolib_toplevel.o \
 	monolib_utils.o \
 	monolib_window.o \
+	monolib_wrapdfb.o \
 	monolib_caret.o \
 	monolib_colour.o \
 	monolib_icon.o \
@@ -6086,13 +6087,13 @@ COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_3 =  \
 	monolib_evtloop.o \
 	monolib_font.o \
 	monolib_fontenum.o \
-	monolib_ifacehelpers.o \
 	monolib_pen.o \
 	monolib_region.o \
 	monolib_settings.o \
 	monolib_toplevel.o \
 	monolib_utils.o \
 	monolib_window.o \
+	monolib_wrapdfb.o \
 	monolib_caret.o \
 	monolib_colour.o \
 	monolib_icon.o \
@@ -7187,13 +7188,13 @@ COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_4 =  \
 	coredll_evtloop.o \
 	coredll_font.o \
 	coredll_fontenum.o \
-	coredll_ifacehelpers.o \
 	coredll_pen.o \
 	coredll_region.o \
 	coredll_settings.o \
 	coredll_toplevel.o \
 	coredll_utils.o \
 	coredll_window.o \
+	coredll_wrapdfb.o \
 	coredll_caret.o \
 	coredll_colour.o \
 	coredll_icon.o \
@@ -8004,13 +8005,13 @@ COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_5 =  \
 	coredll_evtloop.o \
 	coredll_font.o \
 	coredll_fontenum.o \
-	coredll_ifacehelpers.o \
 	coredll_pen.o \
 	coredll_region.o \
 	coredll_settings.o \
 	coredll_toplevel.o \
 	coredll_utils.o \
 	coredll_window.o \
+	coredll_wrapdfb.o \
 	coredll_caret.o \
 	coredll_colour.o \
 	coredll_icon.o \
@@ -8583,13 +8584,13 @@ COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_6 =  \
 	corelib_evtloop.o \
 	corelib_font.o \
 	corelib_fontenum.o \
-	corelib_ifacehelpers.o \
 	corelib_pen.o \
 	corelib_region.o \
 	corelib_settings.o \
 	corelib_toplevel.o \
 	corelib_utils.o \
 	corelib_window.o \
+	corelib_wrapdfb.o \
 	corelib_caret.o \
 	corelib_colour.o \
 	corelib_icon.o \
@@ -9400,13 +9401,13 @@ COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_7 =  \
 	corelib_evtloop.o \
 	corelib_font.o \
 	corelib_fontenum.o \
-	corelib_ifacehelpers.o \
 	corelib_pen.o \
 	corelib_region.o \
 	corelib_settings.o \
 	corelib_toplevel.o \
 	corelib_utils.o \
 	corelib_window.o \
+	corelib_wrapdfb.o \
 	corelib_caret.o \
 	corelib_colour.o \
 	corelib_icon.o \
@@ -13938,8 +13939,8 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@monodll_dirmgl.o: $(srcdir)/src/mgl/dirmgl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/mgl/dirmgl.cpp
 
-@COND_TOOLKIT_DFB_USE_GUI_1@monodll_ifacehelpers.o: $(srcdir)/src/dfb/ifacehelpers.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/dfb/ifacehelpers.cpp
+@COND_TOOLKIT_DFB_USE_GUI_1@monodll_wrapdfb.o: $(srcdir)/src/dfb/wrapdfb.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/dfb/wrapdfb.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@monodll_accel.o: $(srcdir)/src/generic/accel.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/accel.cpp
@@ -17868,8 +17869,8 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@monolib_dirmgl.o: $(srcdir)/src/mgl/dirmgl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/mgl/dirmgl.cpp
 
-@COND_TOOLKIT_DFB_USE_GUI_1@monolib_ifacehelpers.o: $(srcdir)/src/dfb/ifacehelpers.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/dfb/ifacehelpers.cpp
+@COND_TOOLKIT_DFB_USE_GUI_1@monolib_wrapdfb.o: $(srcdir)/src/dfb/wrapdfb.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/dfb/wrapdfb.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@monolib_accel.o: $(srcdir)/src/generic/accel.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/accel.cpp
@@ -22179,8 +22180,8 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@coredll_dirmgl.o: $(srcdir)/src/mgl/dirmgl.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/mgl/dirmgl.cpp
 
-@COND_TOOLKIT_DFB_USE_GUI_1@coredll_ifacehelpers.o: $(srcdir)/src/dfb/ifacehelpers.cpp $(COREDLL_ODEP)
-@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/dfb/ifacehelpers.cpp
+@COND_TOOLKIT_DFB_USE_GUI_1@coredll_wrapdfb.o: $(srcdir)/src/dfb/wrapdfb.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/dfb/wrapdfb.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@coredll_accel.o: $(srcdir)/src/generic/accel.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/accel.cpp
@@ -25044,8 +25045,8 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@corelib_dirmgl.o: $(srcdir)/src/mgl/dirmgl.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/mgl/dirmgl.cpp
 
-@COND_TOOLKIT_DFB_USE_GUI_1@corelib_ifacehelpers.o: $(srcdir)/src/dfb/ifacehelpers.cpp $(CORELIB_ODEP)
-@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/dfb/ifacehelpers.cpp
+@COND_TOOLKIT_DFB_USE_GUI_1@corelib_wrapdfb.o: $(srcdir)/src/dfb/wrapdfb.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/dfb/wrapdfb.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@corelib_accel.o: $(srcdir)/src/generic/accel.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/accel.cpp

@@ -11,7 +11,7 @@
 #ifndef _WX_DFB_EVTLOOP_H_
 #define _WX_DFB_EVTLOOP_H_
 
-#include "wx/dfb/ifacehelpers.h"
+#include "wx/dfb/dfbptr.h"
 
 wxDFB_DECLARE_INTERFACE(IDirectFBEventBuffer);
 struct wxDFBEvent;
@@ -29,7 +29,7 @@ public:
     virtual bool Dispatch();
 
     // returns DirectFB event buffer used by wx
-    static IDirectFBEventBufferPtr GetDirectFBEventBuffer();
+    static wxIDirectFBEventBufferPtr GetDirectFBEventBuffer();
 
 protected:
     virtual void WakeUp();
@@ -41,7 +41,7 @@ private:
     static void InitBuffer();
 
 private:
-    static IDirectFBEventBufferPtr ms_buffer;
+    static wxIDirectFBEventBufferPtr ms_buffer;
 
     friend class wxApp; // calls WakeUp()
 

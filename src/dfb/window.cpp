@@ -141,23 +141,21 @@ bool wxWindowDFB::Create(wxWindow *parent,
 // surface access
 // ---------------------------------------------------------------------------
 
-IDirectFBSurfacePtr wxWindowDFB::ObtainDfbSurface() const
+wxIDirectFBSurfacePtr wxWindowDFB::ObtainDfbSurface() const
 {
     wxCHECK_MSG( m_parent, NULL, _T("parentless window?") );
 
-    IDirectFBSurfacePtr parentSurface(m_parent->GetDfbSurface());
+    wxIDirectFBSurfacePtr parentSurface(m_parent->GetDfbSurface());
     wxCHECK_MSG( parentSurface, NULL, _T("invalid parent surface") );
 
     wxRect r(GetRect());
     AdjustForParentClientOrigin(r.x, r.y, 0);
     DFBRectangle rect = { r.x, r.y, r.width, r.height };
 
-    IDirectFBSurfacePtr surface;
-    DFB_CALL( parentSurface->GetSubSurface(parentSurface, &rect, &surface) );
-    return surface;
+    return parentSurface->GetSubSurface(&rect);
 }
 
-IDirectFBSurfacePtr wxWindowDFB::GetDfbSurface()
+wxIDirectFBSurfacePtr wxWindowDFB::GetDfbSurface()
 {
     if ( !m_surface )
     {
@@ -192,9 +190,9 @@ void wxWindowDFB::SetFocus()
 
 #warning "FIXME: implement in terms of DWET_{GOT,LOST}FOCUS"
 
-    IDirectFBWindowPtr dfbwin(m_tlw->GetDirectFBWindow());
+    wxIDirectFBWindowPtr dfbwin(m_tlw->GetDirectFBWindow());
 #warning "FIXME: RequestFocus() may only be called on visible TLW"
-    if ( !DFB_CALL( dfbwin->RequestFocus(dfbwin) ) )
+    if ( !dfbwin->RequestFocus() )
         return;
 
     gs_focusedWindow = this;
@@ -368,10 +366,10 @@ void wxWindowDFB::WarpPointer(int x, int y)
     if ( x >= w ) x = w-1;
     if ( y >= h ) y = h-1;
 
-    IDirectFBDisplayLayerPtr layer = wxDfbGetDisplayLayer();
+    wxIDirectFBDisplayLayerPtr layer(wxDfbGetDisplayLayer());
     wxCHECK_RET( layer, _T("no display layer") );
 
-    layer->WarpCursor(layer, x, y);
+    layer->WarpCursor(x, y);
 }
 
 // Set this window to be the child of 'parent'.

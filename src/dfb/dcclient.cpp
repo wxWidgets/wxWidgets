@@ -65,9 +65,9 @@ wxClientDCBase::wxClientDCBase(wxWindow *win)
     wxRect rect = win->GetClientRect();
     DFBRectangle dfbrect = { rect.x, rect.y, rect.width, rect.height };
 
-    IDirectFBSurfacePtr winsurf(win->GetDfbSurface());
-    IDirectFBSurfacePtr subsurf;
-    if ( !DFB_CALL( winsurf->GetSubSurface(winsurf, &dfbrect, &subsurf) ) )
+    wxIDirectFBSurfacePtr subsurf(
+            win->GetDfbSurface()->GetSubSurface(&dfbrect));
+    if ( !subsurf )
         return;
 
     Init(subsurf);
@@ -86,9 +86,9 @@ IMPLEMENT_DYNAMIC_CLASS(wxClientDC, wxWindowDC)
 wxClientDC::~wxClientDC()
 {
     // flip to surface so that the changes become visible
-    IDirectFBSurfacePtr surface(GetDirectFBSurface());
+    wxIDirectFBSurfacePtr surface(GetDirectFBSurface());
     if ( surface )
-        surface->Flip(surface, NULL, DSFLIP_NONE);
+        surface->Flip(NULL, DSFLIP_NONE);
 }
 
 //-----------------------------------------------------------------------------

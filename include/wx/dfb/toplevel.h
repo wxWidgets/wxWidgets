@@ -11,7 +11,7 @@
 #ifndef _WX_DFB_TOPLEVEL_H_
 #define _WX_DFB_TOPLEVEL_H_
 
-#include "wx/dfb/ifacehelpers.h"
+#include "wx/dfb/dfbptr.h"
 
 wxDFB_DECLARE_INTERFACE(IDirectFBWindow);
 
@@ -75,13 +75,13 @@ public:
 
     void OnInternalIdle();
 
-    IDirectFBWindowPtr GetDirectFBWindow() const { return m_dfbwin; }
+    wxIDirectFBWindowPtr GetDirectFBWindow() const { return m_dfbwin; }
 
 protected:
     // common part of all ctors
     void Init();
 
-    virtual IDirectFBSurfacePtr ObtainDfbSurface() const;
+    virtual wxIDirectFBSurfacePtr ObtainDfbSurface() const;
 
     // overriden wxWindow methods
     virtual void DoGetPosition(int *x, int *y) const;
@@ -116,7 +116,7 @@ protected:
     wxByte        m_opacity;
 
     // interface to the underlying DirectFB window
-    IDirectFBWindowPtr m_dfbwin;
+    wxIDirectFBWindowPtr m_dfbwin;
 
 private:
     wxDfbQueuedPaintRequests *m_toPaint;

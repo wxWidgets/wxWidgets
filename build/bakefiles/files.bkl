@@ -1790,13 +1790,13 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/dfb/evtloop.cpp
     src/dfb/font.cpp
     src/dfb/fontenum.cpp
-    src/dfb/ifacehelpers.cpp
     src/dfb/pen.cpp
     src/dfb/region.cpp
     src/dfb/settings.cpp
     src/dfb/toplevel.cpp
     src/dfb/utils.cpp
     src/dfb/window.cpp
+    src/dfb/wrapdfb.cpp
     src/generic/caret.cpp
     src/generic/colour.cpp
     src/generic/icon.cpp
@@ -1812,15 +1812,16 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/dfb/dcclient.h
     wx/dfb/dcmemory.h
     wx/dfb/dcscreen.h
+    wx/dfb/dfbptr.h
     wx/dfb/evtloop.h
     wx/dfb/font.h
-    wx/dfb/ifacehelpers.h
     wx/dfb/pen.h
     wx/dfb/popupwin.h
     wx/dfb/private.h
     wx/dfb/region.h
     wx/dfb/toplevel.h
     wx/dfb/window.h
+    wx/dfb/wrapdfb.h
     wx/generic/caret.h
     wx/generic/colour.h
     wx/generic/icon.h

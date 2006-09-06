@@ -87,8 +87,8 @@ void wxClientDisplayRect(int *x, int *y, int *width, int *height)
 // surface manipulation helpers
 //-----------------------------------------------------------------------------
 
-IDirectFBSurfacePtr wxDfbCloneSurface(const IDirectFBSurfacePtr& s,
-                                      wxDfbCloneSurfaceMode mode)
+wxIDirectFBSurfacePtr wxDfbCloneSurface(const wxIDirectFBSurfacePtr& s,
+                                        wxDfbCloneSurfaceMode mode)
 {
     if ( !s )
         return NULL;
@@ -96,63 +96,56 @@ IDirectFBSurfacePtr wxDfbCloneSurface(const IDirectFBSurfacePtr& s,
     DFBSurfaceDescription desc;
     desc.flags = (DFBSurfaceDescriptionFlags)(
             DSDESC_CAPS | DSDESC_WIDTH | DSDESC_HEIGHT | DSDESC_PIXELFORMAT);
-    s->GetCapabilities(s, &desc.caps);
-    s->GetSize(s, &desc.width, &desc.height);
-    s->GetPixelFormat(s, &desc.pixelformat);
+    s->GetCapabilities(&desc.caps);
+    s->GetSize(&desc.width, &desc.height);
+    s->GetPixelFormat(&desc.pixelformat);
 
-    IDirectFBPtr dfb(wxTheApp->GetDirectFBInterface());
-
-    IDirectFBSurfacePtr snew;
-    if ( !DFB_CALL( dfb->CreateSurface(dfb, &desc, &snew) ) )
+    wxIDirectFBSurfacePtr snew(wxIDirectFB::Get()->CreateSurface(&desc));
+    if ( !snew )
         return NULL;
 
-    IDirectFBPalettePtr pal;
-    if ( s->GetPalette(s, &pal) == DFB_OK )
+    if ( desc.pixelformat == DSPF_LUT8 )
     {
-        if ( !DFB_CALL( snew->SetPalette(snew, pal) ) )
-            return NULL;
+        wxIDirectFBPalettePtr pal(s->GetPalette());
+        if ( s )
+        {
+            if ( !snew->SetPalette(pal) )
+                return NULL;
+        }
     }
 
     if ( mode == wxDfbCloneSurface_CopyPixels )
     {
-        if ( !DFB_CALL( snew->SetBlittingFlags(snew, DSBLIT_NOFX) ) )
+        if ( !snew->SetBlittingFlags(DSBLIT_NOFX) )
             return NULL;
-        if ( !DFB_CALL( snew->Blit(snew, s, NULL, 0, 0) ) )
+        if ( !snew->Blit(s, NULL, 0, 0) )
             return NULL;
     }
 
     return snew;
 }
 
-int wxDfbGetSurfaceDepth(const IDirectFBSurfacePtr& s)
+int wxDfbGetSurfaceDepth(const wxIDirectFBSurfacePtr& s)
 {
     wxCHECK_MSG( s, -1, _T("invalid surface") );
 
     DFBSurfacePixelFormat format = DSPF_UNKNOWN;
 
-    if ( !DFB_CALL( s->GetPixelFormat(s, &format) ) )
+    if ( !s->GetPixelFormat(&format) )
         return -1;
 
     return DFB_BITS_PER_PIXEL(format);
 }
 
-IDirectFBDisplayLayerPtr wxDfbGetDisplayLayer()
+wxIDirectFBDisplayLayerPtr wxDfbGetDisplayLayer()
 {
-    IDirectFBPtr dfb(wxTheApp->GetDirectFBInterface());
-
-    IDirectFBDisplayLayerPtr layer;
-    if ( !DFB_CALL( dfb->GetDisplayLayer(dfb, DLID_PRIMARY, &layer) ) )
-        return NULL;
-
-    return layer;
+    return wxIDirectFB::Get()->GetDisplayLayer(DLID_PRIMARY);
 }
 
-IDirectFBSurfacePtr wxDfbGetPrimarySurface()
+wxIDirectFBSurfacePtr wxDfbGetPrimarySurface()
 {
-    IDirectFBDisplayLayerPtr layer(wxDfbGetDisplayLayer());
-    IDirectFBSurfacePtr surface;
-    DFB_CALL( layer->GetSurface(layer, &surface) );
-    return surface;
+    wxIDirectFBDisplayLayerPtr layer(wxDfbGetDisplayLayer());
+    return layer ? layer->GetSurface() : NULL;
 }
 
 
@@ -162,8 +155,9 @@ IDirectFBSurfacePtr wxDfbGetPrimarySurface()
 
 void wxGetMousePosition(int *x, int *y)
 {
-    IDirectFBDisplayLayerPtr layer(wxDfbGetDisplayLayer());
-    DFB_CALL( layer->GetCursorPosition(layer, x, y) );
+    wxIDirectFBDisplayLayerPtr layer(wxDfbGetDisplayLayer());
+    if ( layer )
+        layer->GetCursorPosition(x, y);
 }
 
 wxPoint wxGetMousePosition()

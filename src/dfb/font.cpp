@@ -37,7 +37,7 @@
 // ----------------------------------------------------------------------------
 
 // FIXME: for now, always use single font
-static IDirectFBFontPtr gs_font = NULL;
+static wxIDirectFBFontPtr gs_font = NULL;
 static unsigned gs_fontRefCnt = 0;
 
 class wxFontRefData : public wxObjectRefData
@@ -71,12 +71,10 @@ public:
         // FIXME: always use default font for now
         if ( !gs_font )
         {
-            IDirectFBPtr dfb(wxTheApp->GetDirectFBInterface());
-
             DFBFontDescription desc;
             desc.flags = (DFBFontDescriptionFlags)0;
-            IDirectFBFontPtr f;
-            if ( DFB_CALL( dfb->CreateFont(dfb, NULL, &desc, &f) ) )
+            wxIDirectFBFontPtr f(wxIDirectFB::Get()->CreateFont(NULL, &desc));
+            if ( f )
                 gs_font = f;
         }
         if ( gs_font ) // the above may fail
@@ -104,7 +102,7 @@ public:
     }
 
     wxNativeFontInfo m_info;
-    IDirectFBFontPtr m_font;
+    wxIDirectFBFontPtr m_font;
 };
 
 
@@ -148,7 +146,7 @@ wxObjectRefData *wxFont::CloneRefData(const wxObjectRefData *data) const
 // accessors
 // ----------------------------------------------------------------------------
 
-IDirectFBFontPtr wxFont::GetDirectFBFont() const
+wxIDirectFBFontPtr wxFont::GetDirectFBFont() const
 {
     wxCHECK_MSG( Ok(), NULL, wxT("invalid font") );
 

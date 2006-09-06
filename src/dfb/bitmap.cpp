@@ -174,10 +174,10 @@ public:
 #endif
     }
 
-    IDirectFBSurfacePtr m_surface;
-    wxMask             *m_mask;
+    wxIDirectFBSurfacePtr m_surface;
+    wxMask               *m_mask;
 #if wxUSE_PALETTE
-    wxPalette          *m_palette;
+    wxPalette            *m_palette;
 #endif
 };
 
@@ -208,9 +208,8 @@ bool wxBitmap::Create(int width, int height, int depth)
     desc.width = width;
     desc.height = height;
 
-    IDirectFBSurfacePtr surface;
-    IDirectFBPtr dfb(wxTheApp->GetDirectFBInterface());
-    if ( !DFB_CALL( dfb->CreateSurface(dfb, &desc, &surface) ) )
+    wxIDirectFBSurfacePtr surface(wxIDirectFB::Get()->CreateSurface(&desc));
+    if ( !surface )
         return false;
 
     m_refData = new wxBitmapRefData();
@@ -278,7 +277,7 @@ int wxBitmap::GetHeight() const
     wxCHECK_MSG( Ok(), -1, wxT("invalid bitmap") );
 
     int h = -1;
-    DFB_CALL( M_BITMAP->m_surface->GetSize(M_BITMAP->m_surface, NULL, &h) );
+    M_BITMAP->m_surface->GetSize(NULL, &h);
     return h;
 }
 
@@ -287,7 +286,7 @@ int wxBitmap::GetWidth() const
     wxCHECK_MSG( Ok(), -1, wxT("invalid bitmap") );
 
     int w = -1;
-    DFB_CALL( M_BITMAP->m_surface->GetSize(M_BITMAP->m_surface, &w, NULL) );
+    M_BITMAP->m_surface->GetSize(&w, NULL);
     return w;
 }
 
@@ -424,7 +423,7 @@ void wxBitmap::SetDepth(int depth)
 #warning "todo"
 }
 
-IDirectFBSurfacePtr wxBitmap::GetDirectFBSurface() const
+wxIDirectFBSurfacePtr wxBitmap::GetDirectFBSurface() const
 {
     wxCHECK_MSG( Ok(), NULL, wxT("invalid bitmap") );
 

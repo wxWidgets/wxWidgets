@@ -11,7 +11,7 @@
 #ifndef _WX_DFB_APP_H_
 #define _WX_DFB_APP_H_
 
-#include "wx/dfb/ifacehelpers.h"
+#include "wx/dfb/dfbptr.h"
 
 wxDFB_DECLARE_INTERFACE(IDirectFB);
 
@@ -35,11 +35,7 @@ public:
     virtual wxVideoMode GetDisplayMode() const;
     virtual bool SetDisplayMode(const wxVideoMode& mode);
 
-    // implementation - get singleton DirectFB interface
-    IDirectFBPtr GetDirectFBInterface();
-
 private:
-    IDirectFBPtr m_dfb;
     wxVideoMode m_videoMode;
 
     DECLARE_DYNAMIC_CLASS(wxApp)

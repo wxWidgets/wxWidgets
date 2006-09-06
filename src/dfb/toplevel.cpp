@@ -99,7 +99,7 @@ bool wxTopLevelWindowDFB::Create(wxWindow *parent,
         pos.y = 0;
 
     // create DirectFB window:
-    IDirectFBDisplayLayerPtr layer = wxDfbGetDisplayLayer();
+    wxIDirectFBDisplayLayerPtr layer = wxDfbGetDisplayLayer();
     wxCHECK_MSG( layer, false, _T("no display layer") );
 
     DFBWindowDescription desc;
@@ -111,17 +111,18 @@ bool wxTopLevelWindowDFB::Create(wxWindow *parent,
     desc.posy = pos.y;
     desc.width = size.x;
     desc.height = size.y;
-    if ( !DFB_CALL( layer->CreateWindow(layer, &desc, &m_dfbwin) ) )
+    m_dfbwin = layer->CreateWindow(&desc);
+    if ( !layer )
         return false;
 
     // add the new TLW to DFBWindowID->wxTLW map:
     DFBWindowID winid;
-    if ( !DFB_CALL( m_dfbwin->GetID(m_dfbwin, &winid) ) )
+    if ( !m_dfbwin->GetID(&winid) )
         return false;
     gs_dfbWindowsMap[winid] = this;
 
     // TLWs are created initially hidden:
-    if ( !DFB_CALL( m_dfbwin->SetOpacity(m_dfbwin, 0) ) )
+    if ( !m_dfbwin->SetOpacity(wxALPHA_TRANSPARENT) )
         return false;
 
     wxWindow::Create(NULL, id, pos, size, style, name);
@@ -135,12 +136,11 @@ bool wxTopLevelWindowDFB::Create(wxWindow *parent,
 
     if ( style & (wxSTAY_ON_TOP | wxPOPUP_WINDOW) )
     {
-        DFB_CALL( m_dfbwin->SetStackingClass(m_dfbwin, DWSC_UPPER) );
+        m_dfbwin->SetStackingClass(DWSC_UPPER);
     }
 
     // direct events in this window to the global event buffer:
-    DFB_CALL( m_dfbwin->AttachEventBuffer(
-                            m_dfbwin, wxEventLoop::GetDirectFBEventBuffer()) );
+    m_dfbwin->AttachEventBuffer(wxEventLoop::GetDirectFBEventBuffer());
 
     return true;
 }
@@ -164,7 +164,7 @@ wxTopLevelWindowDFB::~wxTopLevelWindowDFB()
 
     // remove the TLW from DFBWindowID->wxTLW map:
     DFBWindowID winid;
-    if ( DFB_CALL( m_dfbwin->GetID(m_dfbwin, &winid) ) )
+    if ( m_dfbwin->GetID(&winid) )
         gs_dfbWindowsMap.erase(winid);
 }
 
@@ -174,12 +174,12 @@ wxTopLevelWindowDFB::~wxTopLevelWindowDFB()
 
 void wxTopLevelWindowDFB::DoGetPosition(int *x, int *y) const
 {
-    DFB_CALL( m_dfbwin->GetPosition(m_dfbwin, x, y) );
+    m_dfbwin->GetPosition(x, y);
 }
 
 void wxTopLevelWindowDFB::DoGetSize(int *width, int *height) const
 {
-    DFB_CALL( m_dfbwin->GetSize(m_dfbwin, width, height) );
+    m_dfbwin->GetSize(width, height);
 }
 
 void wxTopLevelWindowDFB::DoMoveWindow(int x, int y, int width, int height)
@@ -187,13 +187,13 @@ void wxTopLevelWindowDFB::DoMoveWindow(int x, int y, int width, int height)
     wxPoint curpos = GetPosition();
     if ( curpos.x != x || curpos.y != y )
     {
-        DFB_CALL( m_dfbwin->MoveTo(m_dfbwin, x, y) );
+        m_dfbwin->MoveTo(x, y);
     }
 
     wxSize cursize = GetSize();
     if ( cursize.x != width || cursize.y != height )
     {
-        DFB_CALL( m_dfbwin->Resize(m_dfbwin, width, height) );
+        m_dfbwin->Resize(width, height);
         // we must repaint the window after it changed size:
         Refresh();
     }
@@ -242,7 +242,7 @@ bool wxTopLevelWindowDFB::Show(bool show)
         return false;
 
     // hide/show the window by setting its opacity to 0/full:
-    DFB_CALL( m_dfbwin->SetOpacity(m_dfbwin, show ? m_opacity : 0) );
+    m_dfbwin->SetOpacity(show ? m_opacity : 0);
 
     // If this is the first time Show was called, send size event,
     // so that the frame can adjust itself (think auto layout or single child)
@@ -266,7 +266,7 @@ bool wxTopLevelWindowDFB::SetTransparent(wxByte alpha)
 {
     if ( IsShown() )
     {
-        if ( !DFB_CALL( m_dfbwin->SetOpacity(m_dfbwin, alpha) ) )
+        if ( !m_dfbwin->SetOpacity(alpha) )
             return false;
     }
 
@@ -328,11 +328,9 @@ bool wxTopLevelWindowDFB::IsIconized() const
 // surfaces and painting
 // ----------------------------------------------------------------------------
 
-IDirectFBSurfacePtr wxTopLevelWindowDFB::ObtainDfbSurface() const
+wxIDirectFBSurfacePtr wxTopLevelWindowDFB::ObtainDfbSurface() const
 {
-    IDirectFBSurfacePtr surface;
-    DFB_CALL( m_dfbwin->GetSurface(m_dfbwin, &surface) );
-    return surface;
+    return m_dfbwin->GetSurface();
 }
 
 void wxTopLevelWindowDFB::HandleQueuedPaintRequests()
@@ -380,8 +378,7 @@ void wxTopLevelWindowDFB::HandleQueuedPaintRequests()
                    paintedRect.GetRight(), paintedRect.GetBottom()};
     DFBRegion *rptr = (winRect == paintedRect) ? NULL : &r;
 
-    IDirectFBSurfacePtr surface(GetDfbSurface());
-    DFB_CALL( surface->Flip(surface, rptr, DSFLIP_NONE) );
+    GetDfbSurface()->Flip(rptr, DSFLIP_NONE);
 }
 
 void wxTopLevelWindowDFB::DoRefreshRect(const wxRect& rect, bool eraseBack)

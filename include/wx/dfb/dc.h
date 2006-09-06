@@ -13,7 +13,7 @@
 
 #include "wx/defs.h"
 #include "wx/region.h"
-#include "wx/dfb/ifacehelpers.h"
+#include "wx/dfb/dfbptr.h"
 
 wxDFB_DECLARE_INTERFACE(IDirectFBSurface);
 
@@ -27,7 +27,7 @@ public:
     wxDC();
 
     // Ctor.
-    wxDC(const IDirectFBSurfacePtr& surface);
+    wxDC(const wxIDirectFBSurfacePtr& surface);
 
 public:
     // implement base class pure virtuals
@@ -140,12 +140,12 @@ public:
     }
 
     // Returns the surface (and increases its ref count)
-    IDirectFBSurfacePtr GetDirectFBSurface() const { return m_surface; }
+    wxIDirectFBSurfacePtr GetDirectFBSurface() const { return m_surface; }
 
 protected:
     // initializes the DC from a surface, must be called if default ctor
     // was used
-    void Init(const IDirectFBSurfacePtr& surface);
+    void Init(const wxIDirectFBSurfacePtr& surface);
 
     virtual bool DoFloodFill(wxCoord x, wxCoord y, const wxColour& col,
                              int style = wxFLOOD_SURFACE);
@@ -208,7 +208,7 @@ private:
     void SelectColour(const wxColour& clr);
 
 protected:
-    IDirectFBSurfacePtr m_surface;
+    wxIDirectFBSurfacePtr m_surface;
 
     double            m_mm_to_pix_x, m_mm_to_pix_y;
 

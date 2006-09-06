@@ -15,7 +15,7 @@
 // headers
 // ---------------------------------------------------------------------------
 
-#include "wx/dfb/ifacehelpers.h"
+#include "wx/dfb/dfbptr.h"
 
 wxDFB_DECLARE_INTERFACE(IDirectFBSurface);
 struct wxDFBWindowEvent;
@@ -102,7 +102,7 @@ public:
     // --------------------------
 
     // Returns DirectFB surface used for rendering of this window
-    IDirectFBSurfacePtr GetDfbSurface();
+    wxIDirectFBSurfacePtr GetDfbSurface();
 
     // returns toplevel window the window belongs to
     wxTopLevelWindowDFB *GetTLW() const { return m_tlw; }
@@ -132,7 +132,7 @@ protected:
 
     // return DFB surface used to render this window (will be assigned to
     // m_surface if the window is visible)
-    virtual IDirectFBSurfacePtr ObtainDfbSurface() const;
+    virtual wxIDirectFBSurfacePtr ObtainDfbSurface() const;
 
     // this method must be called when window's position, size or visibility
     // changes; it resets m_surface so that ObtainDfbSurface has to be called
@@ -161,7 +161,7 @@ protected:
 
 private:
     // subsurface of TLW's surface covered by this window
-    IDirectFBSurfacePtr m_surface;
+    wxIDirectFBSurfacePtr m_surface;
 
     // position of the window (relative to the parent, not used by wxTLW, so
     // don't access it directly)

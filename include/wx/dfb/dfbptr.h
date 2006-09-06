@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/dfb/ifacehelpers.h
-// Purpose:     helpers for dealing with DFB interfaces
+// Name:        wx/dfb/dfbptr.h
+// Purpose:     wxDfbPtr<T> for holding objects declared in wrapdfb.h
 // Author:      Vaclav Slavik
 // Created:     2006-08-09
 // RCS-ID:      $Id$
@@ -8,51 +8,50 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_DFB_IFACEHELPERS_H_
-#define _WX_DFB_IFACEHELPERS_H_
+#ifndef _WX_DFB_DFBPTR_H_
+#define _WX_DFB_DFBPTR_H_
 
 //-----------------------------------------------------------------------------
 // wxDFB_DECLARE_INTERFACE
 //-----------------------------------------------------------------------------
 
 /**
-    Forward declares DirectFB interface @a name.
+    Forward declares wx wrapper around DirectFB interface @a name.
 
-    Also declares name##Ptr typedef for wxDfbPtr<name> pointer.
+    Also declares wx##name##Ptr typedef for wxDfbPtr<wx##name> pointer.
 
     @param name  name of the DirectFB interface
  */
 #define wxDFB_DECLARE_INTERFACE(name)            \
-    struct _##name;                              \
-    typedef _##name name;                        \
-    typedef wxDfbPtr<name> name##Ptr;
+    class wx##name;                              \
+    typedef wxDfbPtr<wx##name> wx##name##Ptr;
 
 
 //-----------------------------------------------------------------------------
-// wxDfbPtr
+// wxDfbPtr<T>
 //-----------------------------------------------------------------------------
 
-// base class for wxDfbPtr
+class wxDfbWrapperBase;
+
 class wxDfbPtrBase
 {
 protected:
-    // increment/decrement refcount; see ifacehelpers.cpp for why using
-    // void* is safe
-    static void DoAddRef(void *ptr);
-    static void DoRelease(void *ptr);
+    static void DoAddRef(wxDfbWrapperBase *ptr);
+    static void DoRelease(wxDfbWrapperBase *ptr);
 };
 
 /**
     This template implements smart pointer for keeping pointers to DirectFB
-    interfaces. Interface's reference count is increased on copying and the
-    interface is released when the pointer is deleted.
+    wrappers (i.e. wxIFoo classes derived from wxDfbWrapper<T>). Interface's
+    reference count is increased on copying and the interface is released when
+    the pointer is deleted.
  */
 template<typename T>
 class wxDfbPtr : private wxDfbPtrBase
 {
 public:
     /**
-        Creates the pointer from raw interface pointer.
+        Creates the pointer from raw pointer to the wrapper.
 
         Takes ownership of @a ptr, i.e. AddRef() is @em not called on it.
      */
@@ -69,27 +68,22 @@ public:
     {
         if ( m_ptr )
         {
-            DoRelease(m_ptr);
+            this->DoRelease((wxDfbWrapperBase*)m_ptr);
             m_ptr = NULL;
         }
     }
 
-    /// Cast to raw pointer
+    /// Cast to the wrapper pointer
     operator T*() const { return m_ptr; }
 
-    /**
-        Cast to @em writeable raw pointer so that code like
-        "dfb->CreateFont(dfb, NULL, &desc, &fontPtr)" works.
+    // standard operators:
 
-        Note that this operator calls Reset(), so using it looses the value.
-     */
-    T** operator&()
+    wxDfbPtr& operator=(T *ptr)
     {
         Reset();
-        return &m_ptr;
+        m_ptr = ptr;
+        return *this;
     }
-
-    // standard operators:
 
     wxDfbPtr& operator=(const wxDfbPtr& ptr)
     {
@@ -106,11 +100,11 @@ private:
     {
         m_ptr = ptr.m_ptr;
         if ( m_ptr )
-            DoAddRef(m_ptr);
+            this->DoAddRef((wxDfbWrapperBase*)m_ptr);
     }
 
 private:
     T *m_ptr;
 };
 
-#endif // _WX_DFB_IFACEHELPERS_H_
+#endif // _WX_DFB_DFBPTR_H_

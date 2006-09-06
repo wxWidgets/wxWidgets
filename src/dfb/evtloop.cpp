@@ -38,7 +38,7 @@
 // wxEventLoop initialization
 //-----------------------------------------------------------------------------
 
-IDirectFBEventBufferPtr wxEventLoop::ms_buffer;
+wxIDirectFBEventBufferPtr wxEventLoop::ms_buffer;
 
 wxEventLoop::wxEventLoop()
 {
@@ -49,12 +49,11 @@ wxEventLoop::wxEventLoop()
 /* static */
 void wxEventLoop::InitBuffer()
 {
-    IDirectFBPtr dfb(wxTheApp->GetDirectFBInterface());
-    DFB_CALL( dfb->CreateEventBuffer(dfb, &ms_buffer) );
+    ms_buffer = wxIDirectFB::Get()->CreateEventBuffer();
 }
 
 /* static */
-IDirectFBEventBufferPtr wxEventLoop::GetDirectFBEventBuffer()
+wxIDirectFBEventBufferPtr wxEventLoop::GetDirectFBEventBuffer()
 {
     if ( !ms_buffer )
         InitBuffer();
@@ -70,8 +69,7 @@ bool wxEventLoop::Pending() const
 {
     wxCHECK_MSG( ms_buffer, false, _T("invalid event buffer") );
 
-    // returns DFB_OK if there is >=1 event, DFB_BUFFER_EMPTY otherwise
-    return ms_buffer->HasEvent(ms_buffer) == DFB_OK;
+    return ms_buffer->HasEvent();
 }
 
 bool wxEventLoop::Dispatch()
@@ -85,27 +83,28 @@ bool wxEventLoop::Dispatch()
     //     FIXME: call NotifyTimers() from here (and loop) instead?
     const int TIMEOUT = 100;
 
-    DFBResult ret = ms_buffer->WaitForEventWithTimeout(ms_buffer, 0, TIMEOUT);
-
-    switch ( ret )
+    if ( ms_buffer->WaitForEventWithTimeout(0, TIMEOUT) )
     {
-        case DFB_OK:
+        switch ( ms_buffer->GetLastResult() )
         {
-            wxDFBEvent e;
-            ms_buffer->GetEvent(ms_buffer, &e);
-            HandleDFBEvent(e);
-            break;
+            case DFB_OK:
+            {
+                wxDFBEvent e;
+                ms_buffer->GetEvent(e);
+                HandleDFBEvent(e);
+                break;
+            }
+
+            case DFB_TIMEOUT:
+                // timed out, pretend we processed an event so that
+                // OnNextIteration is called
+                break;
+
+            default:
+                // don't terminate the loop due to errors (they were reported
+                // already by ms_buffer)
+                break;
         }
-
-        case DFB_TIMEOUT:
-            // timed out, pretend we processed an event so that OnNextIteration
-            // is called
-            break;
-
-        default:
-            // report any errors, but don't terminate the loop due to them
-            wxDfbCheckReturn(ret);
-            break;
     }
 
     return true;
@@ -115,7 +114,7 @@ void wxEventLoop::WakeUp()
 {
     wxCHECK_RET( ms_buffer, _T("invalid event buffer") );
 
-    DFB_CALL( ms_buffer->WakeUp(ms_buffer) );
+    ms_buffer->WakeUp();
 }
 
 void wxEventLoop::OnNextIteration()

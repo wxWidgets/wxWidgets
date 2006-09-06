@@ -11,7 +11,7 @@
 #ifndef _WX_DFB_FONT_H_
 #define _WX_DFB_FONT_H_
 
-#include "wx/dfb/ifacehelpers.h"
+#include "wx/dfb/dfbptr.h"
 
 wxDFB_DECLARE_INTERFACE(IDirectFBFont);
 
@@ -64,7 +64,7 @@ public:
     virtual void SetEncoding(wxFontEncoding encoding);
 
     // implementation from now on:
-    IDirectFBFontPtr GetDirectFBFont() const;
+    wxIDirectFBFontPtr GetDirectFBFont() const;
 
 protected:
     // ref counting code

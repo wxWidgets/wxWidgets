@@ -39,20 +39,15 @@ wxApp::~wxApp()
 {
 }
 
-IDirectFBPtr wxApp::GetDirectFBInterface()
-{
-    return m_dfb;
-}
-
 bool wxApp::Initialize(int& argc, wxChar **argv)
 {
     if ( !wxAppBase::Initialize(argc, argv) )
         return false;
 
-    if ( !DFB_CALL( DirectFBInit(&argc, &argv) ) )
+    if ( !wxDfbCheckReturn(DirectFBInit(&argc, &argv)) )
         return false;
 
-    if ( !DFB_CALL( DirectFBCreate(&m_dfb) ) )
+    if ( !wxIDirectFB::Get() )
         return false;
 
     #warning "FIXME: theme override is temporary"
@@ -65,7 +60,7 @@ void wxApp::CleanUp()
 {
     wxAppBase::CleanUp();
 
-    m_dfb.Reset();
+    wxIDirectFB::CleanUp();
 }
 
 //-----------------------------------------------------------------------------
@@ -76,11 +71,11 @@ static wxVideoMode GetCurrentVideoMode()
 {
     wxVideoMode m;
 
-    IDirectFBSurfacePtr surface(wxDfbGetPrimarySurface());
+    wxIDirectFBSurfacePtr surface(wxDfbGetPrimarySurface());
     if ( !surface )
         return m; // invalid
 
-    DFB_CALL( surface->GetSize(surface, &m.w, &m.h) );
+    surface->GetSize(&m.w, &m.h);
     m.bpp = wxDfbGetSurfaceDepth(surface);
 
     return m;
@@ -96,7 +91,7 @@ wxVideoMode wxApp::GetDisplayMode() const
 
 bool wxApp::SetDisplayMode(const wxVideoMode& mode)
 {
-    if ( !DFB_CALL( m_dfb->SetVideoMode(m_dfb, mode.w, mode.h, mode.bpp) ) )
+    if ( !wxIDirectFB::Get()->SetVideoMode(mode.w, mode.h, mode.bpp) )
         return false;
 
     m_videoMode = mode;

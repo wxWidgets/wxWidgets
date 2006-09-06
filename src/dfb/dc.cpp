@@ -46,12 +46,12 @@ wxDC::wxDC()
     m_ok = false;
 }
 
-wxDC::wxDC(const IDirectFBSurfacePtr& surface)
+wxDC::wxDC(const wxIDirectFBSurfacePtr& surface)
 {
     Init(surface);
 }
 
-void wxDC::Init(const IDirectFBSurfacePtr& surface)
+void wxDC::Init(const wxIDirectFBSurfacePtr& surface)
 {
     m_ok = (surface != NULL);
     wxCHECK_RET( surface != NULL, _T("invalid surface") );
@@ -93,7 +93,7 @@ void wxDC::DoSetClippingRegion(wxCoord cx, wxCoord cy, wxCoord cw, wxCoord ch)
     r.x2 = r.x1 + XLOG2DEVREL(cw) - 1;
     r.y2 = r.y1 + XLOG2DEVREL(ch) - 1;
 
-    if ( !DFB_CALL( m_surface->SetClip(m_surface, &r) ) )
+    if ( !m_surface->SetClip(&r) )
         return;
 
     m_clipX1 = cx;
@@ -114,7 +114,7 @@ void wxDC::DestroyClippingRegion()
 {
     wxCHECK_RET( Ok(), wxT("invalid dc") );
 
-    DFB_CALL( m_surface->SetClip(m_surface, NULL) );
+    m_surface->SetClip(NULL);
 
     ResetClipping();
 }
@@ -140,8 +140,7 @@ void wxDC::Clear()
         return;
 
     wxColour clr = m_backgroundBrush.GetColour();
-    DFB_CALL( m_surface->Clear(m_surface,
-                               clr.Red(), clr.Green(), clr.Blue(), clr.Alpha()) );
+    m_surface->Clear(clr.Red(), clr.Green(), clr.Blue(), clr.Alpha());
 }
 
 extern bool wxDoFloodFill(wxDC *dc, wxCoord x, wxCoord y,
@@ -175,9 +174,8 @@ void wxDC::DoDrawLine(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2)
     if ( m_pen.GetStyle() == wxTRANSPARENT )
         return;
 
-    DFB_CALL( m_surface->DrawLine(m_surface,
-                                  XLOG2DEV(x1), YLOG2DEV(y1),
-                                  XLOG2DEV(x2), YLOG2DEV(y2)) );
+    m_surface->DrawLine(XLOG2DEV(x1), YLOG2DEV(y1),
+                        XLOG2DEV(x2), YLOG2DEV(y2));
 
     CalcBoundingBox(x1, y1);
     CalcBoundingBox(x2, y2);
@@ -241,14 +239,14 @@ void wxDC::DoDrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
     if ( m_brush.GetStyle() != wxTRANSPARENT )
     {
         SelectColour(m_brush.GetColour());
-        DFB_CALL( m_surface->FillRectangle(m_surface, xx, yy, ww, hh) );
+        m_surface->FillRectangle(xx, yy, ww, hh);
         // restore pen's colour
         SelectColour(m_pen.GetColour());
     }
 
     if ( m_pen.GetStyle() != wxTRANSPARENT )
     {
-        DFB_CALL( m_surface->DrawRectangle(m_surface, xx, yy, ww, hh) );
+        m_surface->DrawRectangle(xx, yy, ww, hh);
     }
 
     CalcBoundingBox(x, y);
@@ -295,18 +293,13 @@ void wxDC::DoDrawText(const wxString& text, wxCoord x, wxCoord y)
         wxCHECK_RET( m_backgroundBrush.Ok(), wxT("invalid background brush") );
 
         SelectColour(m_backgroundBrush.GetColour());
-        DFB_CALL( m_surface->FillRectangle(m_surface,
-                                           xx, yy,
-                                           XLOG2DEVREL(w), YLOG2DEVREL(h)) );
+        m_surface->FillRectangle(xx, yy, XLOG2DEVREL(w), YLOG2DEVREL(h));
         // restore pen's colour
         SelectColour(m_pen.GetColour());
     }
 
     // finally draw the text itself:
-    DFB_CALL(m_surface->DrawString(m_surface,
-                                   wxSTR_TO_DFB(text), -1,
-                                   xx, yy,
-                                   DFBSurfaceTextFlags(DSTF_LEFT | DSTF_TOP)));
+    m_surface->DrawString(wxSTR_TO_DFB(text), -1, xx, yy, DSTF_LEFT | DSTF_TOP);
 }
 
 void wxDC::DoDrawRotatedText(const wxString& text,
@@ -338,8 +331,7 @@ void wxDC::SetBrush(const wxBrush& brush)
 
 void wxDC::SelectColour(const wxColour& clr)
 {
-    DFB_CALL( m_surface->SetColor(m_surface,
-                                  clr.Red(), clr.Green(), clr.Blue(), clr.Alpha()) );
+    m_surface->SetColor(clr.Red(), clr.Green(), clr.Blue(), clr.Alpha());
     #warning "use SetColorIndex?"
 }
 
@@ -359,7 +351,7 @@ void wxDC::SetFont(const wxFont& font)
     if ( !font.Ok() )
         return;
 
-    if ( !DFB_CALL( m_surface->SetFont(m_surface, font.GetDirectFBFont()) ) )
+    if ( !m_surface->SetFont(font.GetDirectFBFont()) )
         return;
 
     m_font = font;
@@ -416,8 +408,7 @@ wxCoord wxDC::GetCharHeight() const
     wxCHECK_MSG( m_font.Ok(), -1, wxT("no font selected") );
 
     int h = -1;
-    IDirectFBFontPtr f = m_font.GetDirectFBFont();
-    DFB_CALL( f->GetHeight(f, &h) );
+    m_font.GetDirectFBFont()->GetHeight(&h);
     return YDEV2LOGREL(h);
 }
 
@@ -427,8 +418,7 @@ wxCoord wxDC::GetCharWidth() const
     wxCHECK_MSG( m_font.Ok(), -1, wxT("no font selected") );
 
     int w = -1;
-    IDirectFBFontPtr f = m_font.GetDirectFBFont();
-    DFB_CALL( f->GetStringWidth(f, "H", 1, &w) );
+    m_font.GetDirectFBFont()->GetStringWidth("H", 1, &w);
     // VS: YDEV is corrent, it should *not* be XDEV, because font's are only
     //     scaled according to m_scaleY
     return YDEV2LOGREL(w);
@@ -451,9 +441,9 @@ void wxDC::DoGetTextExtent(const wxString& string, wxCoord *x, wxCoord *y,
 
     wxCoord xx = 0, yy = 0;
     DFBRectangle rect;
-    IDirectFBFontPtr f = m_font.GetDirectFBFont();
+    wxIDirectFBFontPtr f = m_font.GetDirectFBFont();
 
-    if (DFB_CALL(f->GetStringExtents(f, wxSTR_TO_DFB(string), -1, &rect, NULL)))
+    if ( f->GetStringExtents(wxSTR_TO_DFB(string), -1, &rect, NULL) )
     {
         // VS: YDEV is corrent, it should *not* be XDEV, because font's are
         //     only scaled according to m_scaleY
@@ -463,7 +453,7 @@ void wxDC::DoGetTextExtent(const wxString& string, wxCoord *x, wxCoord *y,
         if ( descent )
         {
             int d;
-            if ( DFB_CALL( f->GetDescender(f, &d) ) )
+            if ( f->GetDescender(&d) )
                 *descent = YDEV2LOGREL(-d);
             else
                 *descent = 0;
@@ -614,7 +604,7 @@ void wxDC::DoGetSize(int *w, int *h) const
 {
     wxCHECK_RET( Ok(), wxT("invalid dc") );
 
-    DFB_CALL( m_surface->GetSize(m_surface, w, h) );
+    m_surface->GetSize(w, h);
 }
 
 void wxDC::DoGetSizeMM(int *width, int *height) const
