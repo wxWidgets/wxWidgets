@@ -642,7 +642,7 @@ else
   DEFAULT_wxUSE_SOUND=yes
   DEFAULT_wxUSE_MEDIACTRL=no
   DEFAULT_wxUSE_GSTREAMER8=no
-  DEFAULT_wxUSE_PRINTF_POS_PARAMS=no
+  DEFAULT_wxUSE_PRINTF_POS_PARAMS=yes
   DEFAULT_wxUSE_INTL=yes
   DEFAULT_wxUSE_CONFIG=yes
   DEFAULT_wxUSE_FONTMAP=yes
@@ -963,7 +963,7 @@ WX_ARG_ENABLE(timer,         [  --enable-timer          use wxTimer class], wxUS
 WX_ARG_ENABLE(unicode,       [  --enable-unicode        compile wxString with Unicode support], wxUSE_UNICODE)
 WX_ARG_ENABLE(sound,         [  --enable-sound          use wxSound class], wxUSE_SOUND)
 WX_ARG_ENABLE(mediactrl,     [  --enable-mediactrl      use wxMediaCtrl class], wxUSE_MEDIACTRL)
-WX_ARG_ENABLE(gstreamer8,     [  --enable-gstreamer8      force GStreamer 0.8 instead of 0.10 with the wxMediaCtrl class on unix], wxUSE_GSTREAMER8)
+WX_ARG_ENABLE(gstreamer8,    [  --enable-gstreamer8     force GStreamer 0.8 instead of 0.10 with the wxMediaCtrl class on unix], wxUSE_GSTREAMER8)
 WX_ARG_ENABLE(printfposparam,[  --enable-printfposparam use wxVsnprintf() which supports positional parameters], wxUSE_PRINTF_POS_PARAMS)
 WX_ARG_ENABLE(zipstream,     [  --enable-zipstream      use wxZip streams], wxUSE_ZIPSTREAM)
 
