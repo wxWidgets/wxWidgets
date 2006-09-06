@@ -183,73 +183,26 @@ void wxGLModule::UnregisterClasses()
  * GLContext implementation
  */
 
-wxGLContext::wxGLContext(bool WXUNUSED(isRGB), wxGLCanvas *win, const wxPalette& WXUNUSED(palette))
+IMPLEMENT_CLASS(wxGLContext, wxObject)
+
+wxGLContext::wxGLContext(wxGLCanvas* win, const wxGLContext* other /* for sharing display lists */)
 {
-  m_window = win;
-
-  m_hDC = win->GetHDC();
-
-  m_glContext = wglCreateContext((HDC) m_hDC);
-  wxCHECK_RET( m_glContext, wxT("Couldn't create OpenGL context") );
-
-  wglMakeCurrent((HDC) m_hDC, m_glContext);
-}
-
-wxGLContext::wxGLContext(
-               bool WXUNUSED(isRGB), wxGLCanvas *win,
-               const wxPalette& WXUNUSED(palette),
-               const wxGLContext *other  /* for sharing display lists */
-             )
-{
-  m_window = win;
-
-  m_hDC = win->GetHDC();
-
-  m_glContext = wglCreateContext((HDC) m_hDC);
+  m_glContext = wglCreateContext((HDC) win->GetHDC());
   wxCHECK_RET( m_glContext, wxT("Couldn't create OpenGL context") );
 
   if( other != 0 )
     wglShareLists( other->m_glContext, m_glContext );
-
-  wglMakeCurrent((HDC) m_hDC, m_glContext);
 }
 
 wxGLContext::~wxGLContext()
 {
-  if (m_glContext)
-  {
-    wglMakeCurrent(NULL, NULL);
+    // If this context happens to be the current context, wglDeleteContext() makes it un-current first.
     wglDeleteContext(m_glContext);
-  }
 }
 
-void wxGLContext::SwapBuffers()
+void wxGLContext::SetCurrent(const wxGLCanvas& win) const
 {
-  if (m_glContext)
-  {
-    wglMakeCurrent((HDC) m_hDC, m_glContext);
-    ::SwapBuffers((HDC) m_hDC);    //blits the backbuffer into DC
-  }
-}
-
-void wxGLContext::SetCurrent()
-{
-  if (m_glContext)
-  {
-    wglMakeCurrent((HDC) m_hDC, m_glContext);
-  }
-}
-
-void wxGLContext::SetColour(const wxChar *colour)
-{
-    wxColour col = wxTheColourDatabase->Find(colour);
-    if (col.Ok())
-    {
-        float r = (float)(col.Red()/256.0);
-        float g = (float)(col.Green()/256.0);
-        float b = (float)(col.Blue()/256.0);
-        glColor3f( r, g, b);
-    }
+    wglMakeCurrent((HDC) win.GetHDC(), m_glContext);
 }
 
 
@@ -264,6 +217,26 @@ BEGIN_EVENT_TABLE(wxGLCanvas, wxWindow)
     EVT_PALETTE_CHANGED(wxGLCanvas::OnPaletteChanged)
     EVT_QUERY_NEW_PALETTE(wxGLCanvas::OnQueryNewPalette)
 END_EVENT_TABLE()
+
+wxGLCanvas::wxGLCanvas(wxWindow *parent, wxWindowID id, int *attribList,
+    const wxPoint& pos, const wxSize& size, long style,
+    const wxString& name, const wxPalette& palette) : wxWindow()
+{
+    m_glContext = NULL;
+
+    if (Create(parent, id, pos, size, style, name))
+    {
+        SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE));
+    }
+
+    m_hDC = (WXHDC) ::GetDC((HWND) GetHWND());
+
+    SetupPixelFormat(attribList);
+    SetupPalette(palette);
+
+    // This ctor does *not* create an instance of wxGLContext,
+    // m_glContext intentionally remains NULL.
+}
 
 wxGLCanvas::wxGLCanvas(wxWindow *parent, wxWindowID id,
     const wxPoint& pos, const wxSize& size, long style, const wxString& name,
@@ -283,7 +256,7 @@ wxGLCanvas::wxGLCanvas(wxWindow *parent, wxWindowID id,
   SetupPixelFormat(attribList);
   SetupPalette(palette);
 
-  m_glContext = new wxGLContext(true, this, palette);
+  m_glContext = new wxGLContext(this);
 }
 
 wxGLCanvas::wxGLCanvas( wxWindow *parent,
@@ -306,7 +279,7 @@ wxGLCanvas::wxGLCanvas( wxWindow *parent,
   SetupPixelFormat(attribList);
   SetupPalette(palette);
 
-  m_glContext = new wxGLContext(true, this, palette, shared );
+  m_glContext = new wxGLContext(this, shared);
 }
 
 // Not very useful for wxMSW, but this is to be wxGTK compliant
@@ -332,7 +305,7 @@ wxGLCanvas::wxGLCanvas( wxWindow *parent, const wxGLCanvas *shared, wxWindowID i
 
   wxGLContext *sharedContext=0;
   if (shared) sharedContext=shared->GetContext();
-  m_glContext = new wxGLContext(true, this, palette, sharedContext );
+  m_glContext = new wxGLContext(this, sharedContext);
 }
 
 wxGLCanvas::~wxGLCanvas()
@@ -566,12 +539,21 @@ wxPalette wxGLCanvas::CreateDefaultPalette()
 
 void wxGLCanvas::SwapBuffers()
 {
-  if (m_glContext)
-    m_glContext->SwapBuffers();
+    ::SwapBuffers((HDC) m_hDC);
 }
 
 void wxGLCanvas::OnSize(wxSizeEvent& WXUNUSED(event))
 {
+}
+
+void wxGLCanvas::SetCurrent(const wxGLContext& RC) const
+{
+    // although on MSW it works even if the window is still hidden, it doesn't
+  	// under wxGTK and documentation mentions that SetCurrent() can only be
+  	// called for a shown window, so check it
+  	wxASSERT_MSG( GetParent()->IsShown(), _T("can't make hidden GL canvas current") );
+
+    RC.SetCurrent(*this);
 }
 
 void wxGLCanvas::SetCurrent()
@@ -584,14 +566,21 @@ void wxGLCanvas::SetCurrent()
 
   if (m_glContext)
   {
-    m_glContext->SetCurrent();
+    m_glContext->SetCurrent(*this);
   }
 }
 
 void wxGLCanvas::SetColour(const wxChar *colour)
 {
-  if (m_glContext)
-    m_glContext->SetColour(colour);
+    wxColour col = wxTheColourDatabase->Find(colour);
+
+    if (col.Ok())
+    {
+        float r = (float)(col.Red()/256.0);
+        float g = (float)(col.Green()/256.0);
+        float b = (float)(col.Blue()/256.0);
+        glColor3f( r, g, b);
+    }
 }
 
 // TODO: Have to have this called by parent frame (?)
@@ -622,146 +611,6 @@ void wxGLCanvas::OnPaletteChanged(wxPaletteChangedEvent& event)
     ::RealizePalette((HDC) GetHDC());
     Refresh();
   }
-}
-
-/* Give extensions proper function names. */
-
-/* EXT_vertex_array */
-void glArrayElementEXT(GLint WXUNUSED(i))
-{
-}
-
-void glColorPointerEXT(GLint WXUNUSED(size), GLenum WXUNUSED(type), GLsizei WXUNUSED(stride), GLsizei WXUNUSED(count), const GLvoid *WXUNUSED(pointer))
-{
-}
-
-void glDrawArraysEXT(GLenum  WXUNUSED_WITHOUT_GL_EXT_vertex_array(mode),
-                     GLint   WXUNUSED_WITHOUT_GL_EXT_vertex_array(first),
-                     GLsizei WXUNUSED_WITHOUT_GL_EXT_vertex_array(count))
-{
-#ifdef GL_EXT_vertex_array
-    static PFNGLDRAWARRAYSEXTPROC proc = 0;
-
-    if ( !proc )
-    {
-        proc = (PFNGLDRAWARRAYSEXTPROC) wglGetProcAddress("glDrawArraysEXT");
-    }
-
-    if ( proc )
-        (* proc) (mode, first, count);
-#endif
-}
-
-void glEdgeFlagPointerEXT(GLsizei WXUNUSED(stride), GLsizei WXUNUSED(count), const GLboolean *WXUNUSED(pointer))
-{
-}
-
-void glGetPointervEXT(GLenum WXUNUSED(pname), GLvoid* *WXUNUSED(params))
-{
-}
-
-void glIndexPointerEXT(GLenum WXUNUSED(type), GLsizei WXUNUSED(stride), GLsizei WXUNUSED(count), const GLvoid *WXUNUSED(pointer))
-{
-}
-
-void glNormalPointerEXT(GLenum        WXUNUSED_WITHOUT_GL_EXT_vertex_array(type),
-                        GLsizei       WXUNUSED_WITHOUT_GL_EXT_vertex_array(stride),
-                        GLsizei       WXUNUSED_WITHOUT_GL_EXT_vertex_array(count),
-                        const GLvoid *WXUNUSED_WITHOUT_GL_EXT_vertex_array(pointer))
-{
-#ifdef GL_EXT_vertex_array
-  static PFNGLNORMALPOINTEREXTPROC proc = 0;
-
-  if ( !proc )
-  {
-    proc = (PFNGLNORMALPOINTEREXTPROC) wglGetProcAddress("glNormalPointerEXT");
-  }
-
-  if ( proc )
-    (* proc) (type, stride, count, pointer);
-#endif
-}
-
-void glTexCoordPointerEXT(GLint WXUNUSED(size), GLenum WXUNUSED(type), GLsizei WXUNUSED(stride), GLsizei WXUNUSED(count), const GLvoid *WXUNUSED(pointer))
-{
-}
-
-void glVertexPointerEXT(GLint         WXUNUSED_WITHOUT_GL_EXT_vertex_array(size),
-                        GLenum        WXUNUSED_WITHOUT_GL_EXT_vertex_array(type),
-                        GLsizei       WXUNUSED_WITHOUT_GL_EXT_vertex_array(stride),
-                        GLsizei       WXUNUSED_WITHOUT_GL_EXT_vertex_array(count),
-                        const GLvoid *WXUNUSED_WITHOUT_GL_EXT_vertex_array(pointer))
-{
-#ifdef GL_EXT_vertex_array
-  static PFNGLVERTEXPOINTEREXTPROC proc = 0;
-
-  if ( !proc )
-  {
-    proc = (PFNGLVERTEXPOINTEREXTPROC) wglGetProcAddress("glVertexPointerEXT");
-  }
-  if ( proc )
-    (* proc) (size, type, stride, count, pointer);
-#endif
-}
-
-/* EXT_color_subtable */
-void glColorSubtableEXT(GLenum WXUNUSED(target), GLsizei WXUNUSED(start), GLsizei WXUNUSED(count), GLenum WXUNUSED(format), GLenum WXUNUSED(type), const GLvoid *WXUNUSED(table))
-{
-}
-
-/* EXT_color_table */
-void glColorTableEXT(GLenum WXUNUSED(target), GLenum WXUNUSED(internalformat), GLsizei WXUNUSED(width), GLenum WXUNUSED(format), GLenum WXUNUSED(type), const GLvoid *WXUNUSED(table))
-{
-}
-
-void glCopyColorTableEXT(GLenum WXUNUSED(target), GLenum WXUNUSED(internalformat), GLint WXUNUSED(x), GLint WXUNUSED(y), GLsizei WXUNUSED(width))
-{
-}
-
-void glGetColorTableEXT(GLenum WXUNUSED(target), GLenum WXUNUSED(format), GLenum WXUNUSED(type), GLvoid *WXUNUSED(table))
-{
-}
-
-void glGetColorTableParamaterfvEXT(GLenum WXUNUSED(target), GLenum WXUNUSED(pname), GLfloat *WXUNUSED(params))
-{
-}
-
-void glGetColorTavleParameterivEXT(GLenum WXUNUSED(target), GLenum WXUNUSED(pname), GLint *WXUNUSED(params))
-{
-}
-
-/* SGI_compiled_vertex_array */
-void glLockArraysSGI(GLint WXUNUSED(first), GLsizei WXUNUSED(count))
-{
-}
-
-void glUnlockArraysSGI()
-{
-}
-
-
-/* SGI_cull_vertex */
-void glCullParameterdvSGI(GLenum WXUNUSED(pname), GLdouble* WXUNUSED(params))
-{
-}
-
-void glCullParameterfvSGI(GLenum WXUNUSED(pname), GLfloat* WXUNUSED(params))
-{
-}
-
-/* SGI_index_func */
-void glIndexFuncSGI(GLenum WXUNUSED(func), GLclampf WXUNUSED(ref))
-{
-}
-
-/* SGI_index_material */
-void glIndexMaterialSGI(GLenum WXUNUSED(face), GLenum WXUNUSED(mode))
-{
-}
-
-/* WIN_swap_hint */
-void glAddSwapHintRectWin(GLint WXUNUSED(x), GLint WXUNUSED(y), GLsizei WXUNUSED(width), GLsizei WXUNUSED(height))
-{
 }
 
 

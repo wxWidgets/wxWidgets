@@ -3,15 +3,25 @@
 wxGLCanvas is a class for displaying OpenGL graphics. There are
 wrappers for OpenGL on Windows, and GTK+ and Motif.
 
-To use this class, create a wxGLCanvas window, call \helpref{wxGLCanvas::SetCurrent}{wxglcanvassetcurrent} 
+There are two ways to use this class:
+
+For the older (before wx 2.7.x) and simpler method, create a wxGLCanvas window using one of the three
+constructors that implicitly create a rendering context, call \helpref{wxGLCanvas::SetCurrent}{wxglcanvassetcurrent} 
 to direct normal OpenGL commands to the window, and then call \helpref{wxGLCanvas::SwapBuffers}{wxglcanvasswapbuffers} 
 to show the OpenGL buffer on the window.
 
-To set up the attributes for the rendering context (number of bits for the depth buffer,
+For the newer (wx 2.7.x+) method, create a wxGLCanvas window using the constructor that does \emph{not} create an implicit rendering context,
+create an explicit instance of a \helpref{wxGLContext}{wxglcontext} that is initialized with the wxGLCanvas yourself,
+then use either \helpref{wxGLCanvas::SetCurrent}{wxglcanvassetcurrent_rc} with the instance of the \helpref{wxGLContext}{wxglcontext}
+or \helpref{wxGLContext::SetCurrent}{wxglcontextsetcurrent} with the instance of the \helpref{wxGLCanvas}{wxglcanvas}
+to bind the OpenGL state that is represented by the rendering context to the canvas, and then call
+\helpref{wxGLCanvas::SwapBuffers}{wxglcanvasswapbuffers} to swap the buffers of the OpenGL canvas and thus show your current output.
+
+To set up the attributes for the canvas (number of bits for the depth buffer,
 number of bits for the stencil buffer and so on) you should set up the correct values of
 the {\it attribList} parameter. The values that should be set up and their meanings will be described below.
 
-To switch wxGLCanvas support on under Windows, edit setup.h and set
+To switch on wxGLCanvas support on under Windows, edit setup.h and set
 {\tt wxUSE\_GLCANVAS} to $1$. You may also need to have to add
 {\tt opengl32.lib} to the list of libraries your program is linked with. On
 Unix, pass {\tt --with-opengl} to configure to compile using OpenGL or Mesa.
@@ -81,7 +91,24 @@ alpha channel, and accum buffer. Other implementations may support them.
  \param{long}{ style=0}, \param{const wxString\& }{name="GLCanvas"},
  \param{int*}{ attribList = 0}, \param{const wxPalette\&}{ palette = wxNullPalette}}
 
-Constructor.
+\func{void}{wxGLCanvas}{\param{wxWindow* }{parent}, \param{wxWindowID}{ id = wxID_ANY},
+ \param{int*}{ attribList = 0},
+ \param{const wxPoint\&}{ pos = wxDefaultPosition}, \param{const wxSize\&}{ size = wxDefaultSize},
+ \param{long}{ style=0}, \param{const wxString\& }{name="GLCanvas"},
+ \param{const wxPalette\&}{ palette = wxNullPalette}}
+
+Constructors.
+The first three constructors implicitly create an instance of \helpref{wxGLContext}{wxglcontext}.
+The fourth constructur is identical to the first, except for the fact that it does \emph{not}
+create such an implicit rendering context, which means that you have to create an explicit instance
+of \helpref{wxGLContext}{wxglcontext} yourself (highly recommended for future compatibility with wxWidgets
+and the flexibility of your own program!).
+
+Note that if you used one of the first three constructors, \helpref{wxGLCanvas::GetContext}{wxglcanvasgetcontext}
+returns the pointer to the implicitly created instance, and the \helpref{wxGLCanvas::SetCurrent}{wxglcanvassetcurrent}
+method \emph{without} the parameter should be used.
+If however you used the fourth constructor, \helpref{wxGLCanvas::GetContext}{wxglcanvasgetcontext} always returns NULL
+and the \helpref{wxGLCanvas::SetCurrent}{wxglcanvassetcurrent_rc} method \emph{with} the parameter must be used!
 
 \docparam{parent}{Pointer to a parent window.}
 
@@ -121,19 +148,37 @@ Note: palette and WX\_GL\_RGBA are mutually exclusive.}
 
 \func{wxGLContext*}{GetContext}{\void}
 
-Obtains the context that is associated with this canvas.
+Obtains the context that is associated with this canvas if one was implicitly created (by use of one of the first three constructors).
+Always returns NULL if the canvas was constructed with the fourth constructor.
 
 
 \membersection{wxGLCanvas::SetCurrent}\label{wxglcanvassetcurrent}
 
 \func{void}{SetCurrent}{\void}
 
-Sets this canvas as the current recipient of OpenGL calls.
-Each canvas contains an OpenGL device context that has been created during
-the creation of this window. So this call sets the current device context
-as the target device context for OpenGL operations.
+If this canvas was created with one of the first three constructors,
+a call to this method makes the implicit rendering context of this canvas current with this canvas,
+so that subsequent OpenGL calls modify the OpenGL state of the implicit rendering context.
 
-Note that this function may only be called after the window has been shown.
+If this canvas was created with the fourth constructor, this method should not be called
+(use the SetCurrent method below with the parameter instead)!
+
+Note that this function may only be called \emph{after} the window has been shown.
+
+
+\membersection{wxGLCanvas::SetCurrent}\label{wxglcanvassetcurrent_rc}
+
+\func{void}{SetCurrent}{ \param{const wxGLContext&}{ RC} }
+
+If this canvas was created with one of the first three constructors,
+this method should not be called (use the SetCurrent above without the parameter instead)!
+
+If this canvas was created with the fourth constructor, a call to this method
+makes the OpenGL state that is represented by the OpenGL rendering context { \it RC } current with this canvas,
+and if { \it win } is an object of type wxGLCanvas, the statements { \it win.SetCurrent(RC); } and { \it RC.SetCurrent(win); } are equivalent,
+see \helpref{wxGLContext::SetCurrent}{wxglcontextsetcurrent}.
+
+Note that this function may only be called \emph{after} the window has been shown.
 
 
 \membersection{wxGLCanvas::SetColour}\label{wxglcanvassetcolour}
@@ -147,5 +192,5 @@ Sets the current colour for this window, using the wxWidgets colour database to 
 
 \func{void}{SwapBuffers}{\void}
 
-Displays the previous OpenGL commands on the window.
-
+Swaps the double-buffer of this window, making the back-buffer the front-buffer and vice versa,
+so that the output of the previous OpenGL commands is displayed on the window.

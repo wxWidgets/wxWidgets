@@ -60,36 +60,19 @@ class WXDLLEXPORT wxGLCanvas;
 class WXDLLEXPORT wxGLContext: public wxObject
 {
 public:
-    wxGLContext( bool isRGB, wxWindow *win, const wxPalette& palette = wxNullPalette );
-    wxGLContext(
-               bool WXUNUSED(isRGB), wxWindow *win,
-               const wxPalette& WXUNUSED(palette),
-               const wxGLContext *other        /* for sharing display lists */
-    );
+    wxGLContext(wxWindow* win, const wxGLContext* other=NULL /* for sharing display lists */);
     virtual ~wxGLContext();
 
-    void SetCurrent();
-    void SetColour(const wxChar *colour);
-    void SwapBuffers();
-
-    void SetupPixelFormat();
-    void SetupPalette(const wxPalette& palette);
-    wxPalette CreateDefaultPalette();
-
-    inline wxPalette* GetPalette() const { return (wxPalette*) & m_palette; }
-    inline wxWindow* GetWindow() const { return m_window; }
-    inline GtkWidget* GetWidget() const { return m_widget; }
-    inline GLXContext GetContext() const { return m_glContext; }
-
 public:
-   GLXContext       m_glContext;
+    // The win wxGLCanvas needs not necessarily be the same as the wxGLCanvas with which this context was created!
+    void SetCurrent(const wxGLCanvas& win) const;
 
-   GtkWidget       *m_widget;
-   wxPalette        m_palette;
-   wxWindow*        m_window;
 
 private:
-  DECLARE_CLASS(wxGLContext)
+    GLXContext m_glContext;
+
+private:
+    DECLARE_CLASS(wxGLContext)
 };
 
 //---------------------------------------------------------------------------
@@ -99,19 +82,23 @@ private:
 class WXDLLEXPORT wxGLCanvas: public wxWindow
 {
 public:
-   inline wxGLCanvas() {
-      m_glContext = (wxGLContext*) NULL;
-      m_sharedContext = (wxGLContext*) NULL;
-      m_glWidget = (GtkWidget*) NULL;
-      m_vi = (void*) NULL;
-      m_exposed = FALSE;
-   }
+    // This ctor is identical to the next, except for the fact that it
+    // doesn't create an implicit wxGLContext.
+    // The attribList parameter has been moved to avoid overload clashes.
+    wxGLCanvas( wxWindow *parent, wxWindowID id = -1,
+        int *attribList = (int*) NULL,
+        const wxPoint& pos = wxDefaultPosition,
+        const wxSize& size = wxDefaultSize,
+        long style = 0, const wxString& name = wxGLCanvasName,
+        const wxPalette& palette = wxNullPalette );
+
    wxGLCanvas( wxWindow *parent, wxWindowID id = -1,
         const wxPoint& pos = wxDefaultPosition,
         const wxSize& size = wxDefaultSize,
         long style = 0, const wxString& name = wxGLCanvasName,
         int *attribList = (int*) NULL,
         const wxPalette& palette = wxNullPalette );
+
    wxGLCanvas( wxWindow *parent, const wxGLContext *shared,
         wxWindowID id = -1,
         const wxPoint& pos = wxDefaultPosition,
@@ -119,6 +106,7 @@ public:
         long style = 0, const wxString& name = wxGLCanvasName,
         int *attribList = (int*) NULL,
         const wxPalette& palette = wxNullPalette );
+
    wxGLCanvas( wxWindow *parent, const wxGLCanvas *shared,
         wxWindowID id = -1,
         const wxPoint& pos = wxDefaultPosition,
@@ -140,6 +128,7 @@ public:
 
    virtual ~wxGLCanvas();
 
+   void SetCurrent(const wxGLContext& RC) const;
    void SetCurrent();
    void SetColour(const wxChar *colour);
    void SwapBuffers();
@@ -155,6 +144,7 @@ public:
     wxGLContext      *m_glContext,
                      *m_sharedContext;
     wxGLCanvas       *m_sharedContextOf;
+    const bool        m_createImplicitContext;
     void             *m_vi; // actually an XVisualInfo*
     GLXFBConfig      *m_fbc;
     bool              m_canFreeVi;
@@ -173,6 +163,7 @@ public:
     static void QueryGLXVersion();
     static int GetGLXVersion();
     static int m_glxVersion;
+    
 private:
     DECLARE_EVENT_TABLE()
     DECLARE_CLASS(wxGLCanvas)

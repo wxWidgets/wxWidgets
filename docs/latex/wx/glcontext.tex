@@ -1,10 +1,17 @@
 \section{\class{wxGLContext}}\label{wxglcontext}
 
-wxGLContext is a class for sharing OpenGL data resources, such as display lists, with another \helpref{wxGLCanvas}{wxglcanvas}.
+An instance of a wxGLContext represents the state of an OpenGL state machine and the connection between OpenGL and the system.
 
-By sharing data resources, you can prevent code duplication, save memory, and ultimately help optimize your application.
+The OpenGL state includes everything that can be set with the OpenGL API: colors, rendering variables, display lists, texture objects, etc.
+Although it is possible to have multiple rendering contexts share display lists in order to save resources,
+this method is hardly used today any more, because display lists are only a tiny fraction of the overall state.
 
-As an example, let's say you want to draw a ball on two different windows that is identical on each one, but the dimensions of one is slightly different than the other one.  What you would do is create your display lists in the shared context, and then translate each ball on the individual canvas's context.  This way the actual data for the ball is only created once (in the shared context), and you won't have to duplicate your development efforts on the second ball.
+Therefore, one rendering context is usually used with or bound to multiple output windows in turn,
+so that the application has access to the \emph{complete and identical} state while rendering into each window.
+
+Binding (making current) a rendering context with another instance of a wxGLCanvas however works only
+if the other wxGLCanvas was created with the same attributes as the wxGLCanvas from which the wxGLContext
+was initialized. (This applies to sharing display lists among contexts analogously.)
 
 Note that some wxGLContext features are extremely platform-specific - its best to check your native platform's glcanvas header (on windows include/wx/msw/glcanvas.h) to see what features your native platform provides.
 
@@ -22,41 +29,27 @@ Note that some wxGLContext features are extremely platform-specific - its best t
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
+
 \membersection{wxGLContext::wxGLContext}\label{wxglcontextconstr}
 
-\func{void}{wxGLContext}{\param{bool }{isRGB}, \param{wxGLCanvas*}{ win}, \param{const wxPalette\&}{ palette = wxNullPalette}}
+\func{ }{wxGLContext}{ \param{wxGLCanvas*}{ win}, \param{const wxGLContext*}{ other=NULL} }
 
-\func{void}{wxGLContext}{\param{bool }{isRGB}, \param{wxGLCanvas*}{ win}, \param{const wxPalette\&}{ palette = wxNullPalette},
- \param{const wxGLContext*}{ other}}
+Constructor.
 
-\docparam{win}{Canvas to associate this shared context with.}
+\docparam{win}{The canvas that is used to initialize this context. This parameter is needed only temporarily,
+and the caller may do anything with it (e.g. destroy the window) after the constructor returned.
 
-\docparam{other}{Context to share data resources with.}
+It will be possible to bind (make current) this context to any other wxGLCanvas that has been created
+with equivalent attributes as {\it win}.}
 
-\membersection{wxGLContext::GetWindow}\label{wxglcontextgetwindow}
+\docparam{other}{Context to share display lists with or NULL (the default) for no sharing.}
 
-\func{const wxWindow*}{GetWindow}{\void}
-
-Obtains the window that is associated with this context.
 
 \membersection{wxGLContext::SetCurrent}\label{wxglcontextsetcurrent}
 
-\func{void}{SetCurrent}{\void}
+\func{void}{SetCurrent}{\param{const wxGLCanvas&}{ win}}
 
-Sets this context as the current recipient of OpenGL calls.
-Each context contains an OpenGL device context that has been created during
-the creation of this window. So this call sets the current device context
-as the target device context for OpenGL operations.
-
-\membersection{wxGLContext::SetColour}\label{wxglcontextsetcolour}
-
-\func{void}{SetColour}{\param{const char*}{ colour}}
-
-Sets the current colour for this context, using the wxWidgets colour database to find a named colour.
-
-\membersection{wxGLContext::SwapBuffers}\label{wxglcontextswapbuffers}
-
-\func{void}{SwapBuffers}{\void}
-
-Displays the previous OpenGL commands on the associated window.
-
+Makes the OpenGL state that is represented by this rendering context current with the wxGLCanvas {\it win}.
+Note that {\it win} can be a different wxGLCanvas window than the one that was passed to the constructor of this rendering context.
+If { \it RC } is an object of type wxGLContext, the statements { \it RC.SetCurrent(win); } and { \it win.SetCurrent(RC); } are equivalent,
+see \helpref{wxGLCanvas::SetCurrent}{wxglcanvassetcurrent_rc}.

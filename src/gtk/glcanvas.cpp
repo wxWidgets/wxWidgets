@@ -55,40 +55,8 @@ XVisualInfo *g_vi = (XVisualInfo*) NULL;
 
 IMPLEMENT_CLASS(wxGLContext,wxObject)
 
-wxGLContext::wxGLContext( bool WXUNUSED(isRGB), wxWindow *win, const wxPalette& WXUNUSED(palette) )
+wxGLContext::wxGLContext(wxWindow* win, const wxGLContext* other)
 {
-    m_window = win;
-    m_widget = win->m_wxwindow;
-
-    wxGLCanvas *gc = (wxGLCanvas*) win;
-
-    if (wxGLCanvas::GetGLXVersion() >= 13)
-    {
-        // GLX >= 1.3
-        GLXFBConfig *fbc = gc->m_fbc;
-        wxCHECK_RET( fbc, _T("invalid GLXFBConfig for OpenGl") );
-        m_glContext = glXCreateNewContext( GDK_DISPLAY(), fbc[0], GLX_RGBA_TYPE, None, GL_TRUE );
-    }
-    else
-    {
-        // GLX <= 1.2
-        XVisualInfo *vi = (XVisualInfo *) gc->m_vi;
-        wxCHECK_RET( vi, _T("invalid visual for OpenGl") );
-        m_glContext = glXCreateContext( GDK_DISPLAY(), vi, None, GL_TRUE );
-    }
-
-    wxCHECK_RET( m_glContext, _T("Couldn't create OpenGl context") );
-}
-
-wxGLContext::wxGLContext(
-               bool WXUNUSED(isRGB), wxWindow *win,
-               const wxPalette& WXUNUSED(palette),
-               const wxGLContext *other        /* for sharing display lists */
-)
-{
-    m_window = win;
-    m_widget = win->m_wxwindow;
-
     wxGLCanvas *gc = (wxGLCanvas*) win;
 
     if (wxGLCanvas::GetGLXVersion() >= 13)
@@ -133,55 +101,21 @@ wxGLContext::~wxGLContext()
     glXDestroyContext( GDK_DISPLAY(), m_glContext );
 }
 
-void wxGLContext::SwapBuffers()
+void wxGLContext::SetCurrent(const wxGLCanvas& win) const
 {
     if (m_glContext)
     {
-        GdkWindow *window = GTK_PIZZA(m_widget)->bin_window;
-        glXSwapBuffers( GDK_DISPLAY(), GDK_WINDOW_XWINDOW( window ) );
-    }
-}
-
-void wxGLContext::SetCurrent()
-{
-    if (m_glContext)
-    {
-        GdkWindow *window = GTK_PIZZA(m_widget)->bin_window;
+        GdkWindow *window = GTK_PIZZA(win.m_wxwindow)->bin_window;
 
         if (wxGLCanvas::GetGLXVersion() >= 13)
             // GLX >= 1.3
-            glXMakeContextCurrent( GDK_DISPLAY(), GDK_WINDOW_XWINDOW(window),
-                                   GDK_WINDOW_XWINDOW(window), m_glContext );
+            glXMakeContextCurrent( GDK_DISPLAY(), GDK_WINDOW_XWINDOW(window), GDK_WINDOW_XWINDOW(window), m_glContext );
         else
             // GLX <= 1.2
             glXMakeCurrent( GDK_DISPLAY(), GDK_WINDOW_XWINDOW(window), m_glContext );
     }
 }
 
-void wxGLContext::SetColour(const wxChar *colour)
-{
-    wxColour col = wxTheColourDatabase->Find(colour);
-    if (col.Ok())
-    {
-        float r = (float)(col.Red()/256.0);
-        float g = (float)(col.Green()/256.0);
-        float b = (float)(col.Blue()/256.0);
-        glColor3f( r, g, b);
-    }
-}
-
-void wxGLContext::SetupPixelFormat()
-{
-}
-
-void wxGLContext::SetupPalette( const wxPalette& WXUNUSED(palette) )
-{
-}
-
-wxPalette wxGLContext::CreateDefaultPalette()
-{
-    return wxNullPalette;
-}
 
 //-----------------------------------------------------------------------------
 // "realize" from m_wxwindow
@@ -191,13 +125,13 @@ extern "C" {
 static gint
 gtk_glwindow_realized_callback( GtkWidget *WXUNUSED(widget), wxGLCanvas *win )
 {
-    if ( !win->m_glContext )
+    if (!win->m_glContext && win->m_createImplicitContext)
     {
         wxGLContext *share = win->m_sharedContext;
         if ( !share && win->m_sharedContextOf )
             share = win->m_sharedContextOf->GetContext();
 
-        win->m_glContext = new wxGLContext( TRUE, win, wxNullPalette, share );
+        win->m_glContext = new wxGLContext(win, share);
     }
 
     return FALSE;
@@ -212,7 +146,8 @@ extern "C" {
 static gint
 gtk_glwindow_map_callback( GtkWidget * WXUNUSED(widget), wxGLCanvas *win )
 {
-    if (win->m_glContext/* && win->m_exposed*/)
+    // CF: Can the "if" line be removed, and the code unconditionally (always) be run?
+    if (win->m_glContext || !win->m_createImplicitContext)
     {
         wxPaintEvent event( win->GetId() );
         event.SetEventObject( win );
@@ -276,10 +211,21 @@ BEGIN_EVENT_TABLE(wxGLCanvas, wxWindow)
 END_EVENT_TABLE()
 
 wxGLCanvas::wxGLCanvas( wxWindow *parent, wxWindowID id,
+                        int *attribList,
+                        const wxPoint& pos, const wxSize& size,
+                        long style, const wxString& name,
+                        const wxPalette& palette )
+    : m_createImplicitContext(false)
+{
+    Create( parent, NULL, NULL, id, pos, size, style, name, attribList, palette );
+}
+
+wxGLCanvas::wxGLCanvas( wxWindow *parent, wxWindowID id,
                         const wxPoint& pos, const wxSize& size,
                         long style, const wxString& name,
                         int *attribList,
                         const wxPalette& palette )
+    : m_createImplicitContext(true)
 {
     Create( parent, NULL, NULL, id, pos, size, style, name, attribList, palette );
 }
@@ -291,6 +237,7 @@ wxGLCanvas::wxGLCanvas( wxWindow *parent,
                         long style, const wxString& name,
                         int *attribList,
                         const wxPalette& palette )
+    : m_createImplicitContext(true)
 {
     Create( parent, shared, NULL, id, pos, size, style, name, attribList, palette );
 }
@@ -302,6 +249,7 @@ wxGLCanvas::wxGLCanvas( wxWindow *parent,
                         long style, const wxString& name,
                         int *attribList,
                         const wxPalette& palette )
+    : m_createImplicitContext(true)
 {
     Create( parent, NULL, shared, id, pos, size, style, name, attribList, palette );
 }
@@ -404,18 +352,10 @@ bool wxGLCanvas::Create( wxWindow *parent,
 
     gtk_widget_set_double_buffered( m_glWidget, FALSE );
 
-    g_signal_connect (m_wxwindow, "realize",
-                      G_CALLBACK (gtk_glwindow_realized_callback),
-                      this);
-    g_signal_connect (m_wxwindow, "map",
-                      G_CALLBACK (gtk_glwindow_map_callback),
-                      this);
-    g_signal_connect (m_wxwindow, "expose_event",
-                      G_CALLBACK (gtk_glwindow_expose_callback),
-                      this);
-    g_signal_connect (m_widget, "size_allocate",
-                      G_CALLBACK (gtk_glcanvas_size_callback),
-                      this);
+    g_signal_connect(m_wxwindow, "realize",       G_CALLBACK(gtk_glwindow_realized_callback), this);
+    g_signal_connect(m_wxwindow, "map",           G_CALLBACK(gtk_glwindow_map_callback),      this);
+    g_signal_connect(m_wxwindow, "expose_event",  G_CALLBACK(gtk_glwindow_expose_callback),   this);
+    g_signal_connect(m_widget,   "size_allocate", G_CALLBACK(gtk_glcanvas_size_callback),     this);
 
     if (gtk_check_version(2,2,0) != NULL)
     {
@@ -601,29 +541,40 @@ int wxGLCanvas::GetGLXVersion()
 
 void wxGLCanvas::SwapBuffers()
 {
-    if (m_glContext)
-        m_glContext->SwapBuffers();
+    GdkWindow *window = GTK_PIZZA(m_wxwindow)->bin_window;
+    glXSwapBuffers( GDK_DISPLAY(), GDK_WINDOW_XWINDOW( window ) );
 }
 
 void wxGLCanvas::OnSize(wxSizeEvent& WXUNUSED(event))
 {
 }
 
+void wxGLCanvas::SetCurrent(const wxGLContext& RC) const
+{
+    RC.SetCurrent(*this);
+}
+
 void wxGLCanvas::SetCurrent()
 {
     if (m_glContext)
-        m_glContext->SetCurrent();
+        m_glContext->SetCurrent(*this);
 }
 
 void wxGLCanvas::SetColour( const wxChar *colour )
 {
-    if (m_glContext)
-        m_glContext->SetColour( colour );
+    wxColour col = wxTheColourDatabase->Find(colour);
+    if (col.Ok())
+    {
+        float r = (float)(col.Red()/256.0);
+        float g = (float)(col.Green()/256.0);
+        float b = (float)(col.Blue()/256.0);
+        glColor3f( r, g, b);
+    }
 }
 
 void wxGLCanvas::OnInternalIdle()
 {
-    if (m_glContext && m_exposed)
+    if (/*m_glContext &&*/ m_exposed)
     {
         wxPaintEvent event( GetId() );
         event.SetEventObject( this );

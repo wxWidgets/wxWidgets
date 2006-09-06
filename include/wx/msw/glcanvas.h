@@ -53,38 +53,31 @@ class WXDLLIMPEXP_GL wxGLCanvas;     /* forward reference */
 class WXDLLIMPEXP_GL wxGLContext: public wxObject
 {
 public:
-    wxGLContext(bool isRGB, wxGLCanvas *win, const wxPalette& palette = wxNullPalette);
-
-    wxGLContext( bool isRGB, wxGLCanvas *win,
-        const wxPalette& WXUNUSED(palette),
-        const wxGLContext *other /* for sharing display lists */ );
-
+    wxGLContext(wxGLCanvas *win, const wxGLContext* other=NULL /* for sharing display lists */ );
     virtual ~wxGLContext();
-
-
-    void SetCurrent();
-
-    void SetColour(const wxChar *colour);
-
-    void SwapBuffers();
-
-
-    inline wxWindow* GetWindow() const { return m_window; }
-
-    inline WXHDC GetHDC() const { return m_hDC; }
 
     inline HGLRC GetGLRC() const { return m_glContext; }
 
-public:
-    HGLRC            m_glContext;
-    WXHDC            m_hDC;
-    wxWindow*        m_window;
+protected:
+    HGLRC m_glContext;
+
+private:
+    DECLARE_CLASS(wxGLContext)
 };
 
 class WXDLLIMPEXP_GL wxGLCanvas: public wxWindow
 {
-    DECLARE_CLASS(wxGLCanvas)
 public:
+    // This ctor is identical to the next, except for the fact that it
+    // doesn't create an implicit wxGLContext.
+    // The attribList parameter has been moved to avoid overload clashes.
+    wxGLCanvas(wxWindow *parent, wxWindowID id = wxID_ANY,
+        int* attribList = 0,
+        const wxPoint& pos = wxDefaultPosition,
+        const wxSize& size = wxDefaultSize, long style = 0,
+        const wxString& name = wxGLCanvasName,
+        const wxPalette& palette = wxNullPalette);
+
     wxGLCanvas(wxWindow *parent, wxWindowID id = wxID_ANY,
         const wxPoint& pos = wxDefaultPosition,
         const wxSize& size = wxDefaultSize, long style = 0,
@@ -119,6 +112,7 @@ public:
         const wxPoint& pos, const wxSize& size,
         long style, const wxString& name);
 
+    void SetCurrent(const wxGLContext& RC) const;
     void SetCurrent();
 
 #ifdef __WXUNIVERSAL__
@@ -152,7 +146,9 @@ protected:
     wxPalette      m_palette;
     WXHDC          m_hDC;
 
+private:
     DECLARE_EVENT_TABLE()
+    DECLARE_CLASS(wxGLCanvas)
 };
 
 #endif
