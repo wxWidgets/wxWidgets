@@ -1365,9 +1365,7 @@ previously). Argument *mode* can be one of the following values:
                                 growable or not in the flexbile direction.
     ==========================  =================================================
 
-Note that this method does not trigger relayout.
-
-", "");
+Note that this method does not trigger relayout.", "");
 
     DocDeclStr(
         wxFlexSizerGrowMode , GetNonFlexibleGrowMode(),
@@ -1390,6 +1388,12 @@ rows in the sizer.", "");
         "Returns a list of integers representing the widths of each of the
 columns in the sizer.", "");
 
+
+    %property(ColWidths, GetColWidths, doc="See `GetColWidths`");
+    %property(FlexibleDirection, GetFlexibleDirection, SetFlexibleDirection, doc="See `GetFlexibleDirection` and `SetFlexibleDirection`");
+    %property(NonFlexibleGrowMode, GetNonFlexibleGrowMode, SetNonFlexibleGrowMode, doc="See `GetNonFlexibleGrowMode` and `SetNonFlexibleGrowMode`");
+    %property(RowHeights, GetRowHeights, doc="See `GetRowHeights`");
+    
 };
 
 //---------------------------------------------------------------------------

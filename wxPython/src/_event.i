@@ -475,6 +475,13 @@ example, you can use the value returned by an earlier call to
     // all derived classes must implement it because otherwise wxPostEvent()
     // for them wouldn't work (it needs to do a copy of the event)
     virtual wxEvent *Clone() /* =0*/;
+
+    %property(EventObject, GetEventObject, SetEventObject, doc="See `GetEventObject` and `SetEventObject`");
+    %property(EventType, GetEventType, SetEventType, doc="See `GetEventType` and `SetEventType`");
+    %property(Id, GetId, SetId, doc="See `GetId` and `SetId`");
+    %property(Skipped, GetSkipped, doc="See `GetSkipped`");
+    %property(Timestamp, GetTimestamp, SetTimestamp, doc="See `GetTimestamp` and `SetTimestamp`");
+    
 };
 
 
@@ -1539,6 +1546,8 @@ public:
         "Returns the device context the event handler should draw upon.  If
 ``None`` is returned then create a temporary `wx.ClientDC` and use
 that instead.", "");
+
+    %property(DC, GetDC, doc="See `GetDC`"); 
 };
 
 
@@ -1571,6 +1580,8 @@ window which is going to receive focus for the wxEVT_KILL_FOCUS event.
 Warning: the window returned may be None!", "");
 
     void SetWindow(wxWindow *win);
+
+    %property(Window, GetWindow, SetWindow, doc="See `GetWindow` and `SetWindow`");
 };
 
 //---------------------------------------------------------------------------

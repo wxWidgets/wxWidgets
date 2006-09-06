@@ -243,6 +243,8 @@ class FutureCall:
             # if it wasn't restarted, then cleanup
             wx.CallAfter(self.Stop)
 
+    Interval = property(GetInterval)
+    Result = property(GetResult)
 
 
 #----------------------------------------------------------------------------

@@ -373,6 +373,15 @@ style, use GetPath for the others.", "");
 //                                     const wxString &extensionList);
 
 
+    %property(Directory, GetDirectory, SetDirectory, doc="See `GetDirectory` and `SetDirectory`");
+    %property(Filename, GetFilename, SetFilename, doc="See `GetFilename` and `SetFilename`");
+    %property(Filenames, GetFilenames, doc="See `GetFilenames`");
+    %property(FilterIndex, GetFilterIndex, SetFilterIndex, doc="See `GetFilterIndex` and `SetFilterIndex`");
+    %property(Message, GetMessage, SetMessage, doc="See `GetMessage` and `SetMessage`");
+    %property(Path, GetPath, SetPath, doc="See `GetPath` and `SetPath`");
+    %property(Paths, GetPaths, doc="See `GetPaths`");
+    %property(Wildcard, GetWildcard, SetWildcard, doc="See `GetWildcard` and `SetWildcard`");
+    
 };
 
 
@@ -627,6 +636,14 @@ default is 0, 0 (unrestricted range).", "");
         void , SetShowHelp(bool showHelp),
         "Determines whether the Help button will be displayed in the font
 dialog (Windows only).  The default value is false.", "");
+
+    %property(AllowSymbols, GetAllowSymbols, SetAllowSymbols, doc="See `GetAllowSymbols` and `SetAllowSymbols`");
+    %property(ChosenFont, GetChosenFont, SetChosenFont, doc="See `GetChosenFont` and `SetChosenFont`");
+    %property(Colour, GetColour, SetColour, doc="See `GetColour` and `SetColour`");
+    %property(EnableEffects, GetEnableEffects, doc="See `GetEnableEffects`");
+    %property(InitialFont, GetInitialFont, SetInitialFont, doc="See `GetInitialFont` and `SetInitialFont`");
+    %property(ShowHelp, GetShowHelp, SetShowHelp, doc="See `GetShowHelp` and `SetShowHelp`");
+    
 };
 
 
@@ -656,6 +673,8 @@ results with via the `wx.FontData` returned by `GetFontData`.", "");
         wxFontData& , GetFontData(),
         "Returns a reference to the internal `wx.FontData` used by the
 wx.FontDialog.", "");
+
+    %property(FontData, GetFontData, doc="See `GetFontData`");    
 };
 
 
@@ -890,6 +909,11 @@ and replace all events).", "");
     DocDeclStr(
         void , SetReplaceString(const wxString& str),
         "", "");
+    
+    %property(Dialog, GetDialog, doc="See `GetDialog`");
+    %property(FindString, GetFindString, SetFindString, doc="See `GetFindString` and `SetFindString`");
+    %property(Flags, GetFlags, SetFlags, doc="See `GetFlags` and `SetFlags`");
+    %property(ReplaceString, GetReplaceString, SetReplaceString, doc="See `GetReplaceString` and `SetReplaceString`");
 };
 
 
@@ -954,6 +978,9 @@ public:
         void , SetReplaceString(const wxString& str),
         "Set the replacement string (used as initial value by the dialog).", "");
 
+    %property(FindString, GetFindString, SetFindString, doc="See `GetFindString` and `SetFindString`");
+    %property(Flags, GetFlags, SetFlags, doc="See `GetFlags` and `SetFlags`");
+    %property(ReplaceString, GetReplaceString, SetReplaceString, doc="See `GetReplaceString` and `SetReplaceString`");
 };
 
 
@@ -1018,6 +1045,7 @@ non-None.  Use Show to display the dialog.", "");
         void , SetData(wxFindReplaceData *data),
         "Set the FindReplaceData object used by this dialog.", "");
 
+    %property(Data, GetData, SetData, doc="See `GetData` and `SetData`");
 };
 
 //---------------------------------------------------------------------------

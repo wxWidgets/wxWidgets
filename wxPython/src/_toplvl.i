@@ -318,6 +318,11 @@ public:
 
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
+
+    %property(MenuBar, GetMenuBar, SetMenuBar, doc="See `GetMenuBar` and `SetMenuBar`");
+    %property(StatusBar, GetStatusBar, SetStatusBar, doc="See `GetStatusBar` and `SetStatusBar`");
+    %property(StatusBarPane, GetStatusBarPane, SetStatusBarPane, doc="See `GetStatusBarPane` and `SetStatusBarPane`");
+    %property(ToolBar, GetToolBar, SetToolBar, doc="See `GetToolBar` and `SetToolBar`");
 };
 
 //---------------------------------------------------------------------------

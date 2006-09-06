@@ -50,7 +50,19 @@ enum wxStockLabelQueryFlag
 // for wxID_OK):
 wxString wxGetStockLabel(wxWindowID id,
                          long flags = wxSTOCK_WITH_MNEMONIC);
- 
+
+
+enum wxStockHelpStringClient
+{
+    wxSTOCK_MENU        // help string to use for menu items
+};
+
+// Returns an help string for the given stock UI element and for the given "context".
+wxString wxGetStockHelpString(wxWindowID id,
+                              wxStockHelpStringClient client = wxSTOCK_MENU);
+
+
+
 
 MustHaveApp(wxBell);
 void wxBell();

@@ -42,6 +42,13 @@ public:
     const wxString& GetLocation();
     const wxString& GetAnchor();
     wxDateTime GetModificationTime();
+
+    %property(Anchor, GetAnchor, doc="See `GetAnchor`");
+    %property(Location, GetLocation, doc="See `GetLocation`");
+    %property(MimeType, GetMimeType, doc="See `GetMimeType`");
+    %property(ModificationTime, GetModificationTime, doc="See `GetModificationTime`");
+    %property(Stream, GetStream, doc="See `GetStream`");
+    
 };
 
 
@@ -121,6 +128,12 @@ public:
     wxString GetAnchor(const wxString& location);
     wxString GetRightLocation(const wxString& location);
     wxString GetMimeTypeFromExt(const wxString& location);
+    
+    %property(Anchor, GetAnchor, doc="See `GetAnchor`");
+    %property(LeftLocation, GetLeftLocation, doc="See `GetLeftLocation`");
+    %property(MimeTypeFromExt, GetMimeTypeFromExt, doc="See `GetMimeTypeFromExt`");
+    %property(Protocol, GetProtocol, doc="See `GetProtocol`");
+    %property(RightLocation, GetRightLocation, doc="See `GetRightLocation`");
 };
 
 
@@ -158,6 +171,8 @@ public:
             return fname.GetFullPath();
         }
     }
+
+    %property(Path, GetPath, doc="See `GetPath`");
 };
 
 

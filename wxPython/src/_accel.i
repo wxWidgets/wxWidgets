@@ -70,6 +70,12 @@ public:
 //     void SetMenuItem(wxMenuItem *item);
 //     wxMenuItem *GetMenuItem() const;
 
+    %newobject Create;
+    DocDeclStr(
+        static wxAcceleratorEntry *, Create(const wxString& str),
+        "Create accelerator corresponding to the specified string, or None if
+it coulnd't be parsed.", "");
+    
     DocDeclStr(
         int , GetFlags(),
         "Get the AcceleratorEntry's flags.", "");

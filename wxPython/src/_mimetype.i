@@ -86,6 +86,16 @@ public:
     // get the icon info
     const wxString& GetIconFile() const;
     int GetIconIndex() const;
+    
+    %property(Description, GetDescription, doc="See `GetDescription`");
+    %property(Extensions, GetExtensions, doc="See `GetExtensions`");
+    %property(ExtensionsCount, GetExtensionsCount, doc="See `GetExtensionsCount`");
+    %property(IconFile, GetIconFile, doc="See `GetIconFile`");
+    %property(IconIndex, GetIconIndex, doc="See `GetIconIndex`");
+    %property(MimeType, GetMimeType, doc="See `GetMimeType`");
+    %property(OpenCommand, GetOpenCommand, doc="See `GetOpenCommand`");
+    %property(PrintCommand, GetPrintCommand, doc="See `GetPrintCommand`");
+    %property(ShortDesc, GetShortDesc, SetShortDesc, doc="See `GetShortDesc` and `SetShortDesc`");
 };
 
 
@@ -289,6 +299,15 @@ public:
         }
     }
 
+    %property(AllCommands, GetAllCommands, doc="See `GetAllCommands`");
+    %property(Description, GetDescription, doc="See `GetDescription`");
+    %property(Extensions, GetExtensions, doc="See `GetExtensions`");
+    %property(Icon, GetIcon, doc="See `GetIcon`");
+    %property(IconInfo, GetIconInfo, doc="See `GetIconInfo`");
+    %property(MimeType, GetMimeType, doc="See `GetMimeType`");
+    %property(MimeTypes, GetMimeTypes, doc="See `GetMimeTypes`");
+    %property(OpenCommand, GetOpenCommand, doc="See `GetOpenCommand`");
+    %property(PrintCommand, GetPrintCommand, doc="See `GetPrintCommand`");
 };
 
 

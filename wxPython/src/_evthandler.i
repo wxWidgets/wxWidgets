@@ -128,6 +128,9 @@ public:
             return event.Unbind(self, id, id2)              
     }
 
+    %property(EvtHandlerEnabled, GetEvtHandlerEnabled, SetEvtHandlerEnabled, doc="See `GetEvtHandlerEnabled` and `SetEvtHandlerEnabled`");
+    %property(NextHandler, GetNextHandler, SetNextHandler, doc="See `GetNextHandler` and `SetNextHandler`");
+    %property(PreviousHandler, GetPreviousHandler, SetPreviousHandler, doc="See `GetPreviousHandler` and `SetPreviousHandler`");
     
 };
 

@@ -292,6 +292,8 @@ public:
     // Returns the filtered value currently placed in the text control (if present).
     wxString GetTextCtrlValue() const;
 
+    %property(Path, GetPath, SetPath, doc="See `GetPath` and `SetPath`");
+    %property(TextCtrlValue, GetTextCtrlValue, doc="See `GetTextCtrlValue`");
 };
 
 
@@ -356,6 +358,8 @@ public:
 
     wxString GetPath() const { return m_path; }
     void SetPath(const wxString &p) { m_path = p; }
+
+    %property(Path, GetPath, SetPath, doc="See `GetPath` and `SetPath`");
 };
 
 
@@ -413,6 +417,9 @@ public:
     // set/get the max pointsize
     void SetMaxPointSize(unsigned int max);
     unsigned int GetMaxPointSize() const;
+    
+    %property(MaxPointSize, GetMaxPointSize, SetMaxPointSize, doc="See `GetMaxPointSize` and `SetMaxPointSize`");
+    %property(SelectedFont, GetSelectedFont, SetSelectedFont, doc="See `GetSelectedFont` and `SetSelectedFont`");
 };
 
  
@@ -430,6 +437,8 @@ public:
 
     wxFont GetFont() const;
     void SetFont(const wxFont &c);
+    
+    %property(Font, GetFont, SetFont, doc="See `GetFont` and `SetFont`");
 };
 
 //---------------------------------------------------------------------------

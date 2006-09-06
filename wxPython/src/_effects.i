@@ -50,6 +50,12 @@ public:
     // Tile a bitmap
     bool TileBitmap(const wxRect& rect, wxDC& dc, wxBitmap& bitmap);
 
+    %property(DarkShadow, GetDarkShadow, SetDarkShadow, doc="See `GetDarkShadow` and `SetDarkShadow`");
+    %property(FaceColour, GetFaceColour, SetFaceColour, doc="See `GetFaceColour` and `SetFaceColour`");
+    %property(HighlightColour, GetHighlightColour, SetHighlightColour, doc="See `GetHighlightColour` and `SetHighlightColour`");
+    %property(LightShadow, GetLightShadow, SetLightShadow, doc="See `GetLightShadow` and `SetLightShadow`");
+    %property(MediumShadow, GetMediumShadow, SetMediumShadow, doc="See `GetMediumShadow` and `SetMediumShadow`");
+    
 };
 
 

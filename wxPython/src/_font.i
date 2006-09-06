@@ -429,6 +429,8 @@ public:
     // the title for the dialogs (note that default is quite reasonable)
     void SetDialogTitle(const wxString& title);
 
+
+     %property(AltForEncoding, GetAltForEncoding, doc="See `GetAltForEncoding`");
 };
 
 
@@ -803,6 +805,22 @@ then for a font belonging to the same family.", "");
     DocDeclStr(
         static void , SetDefaultEncoding(wxFontEncoding encoding),
         "Sets the default font encoding.", "");
+
+    %property(Encoding, GetEncoding, SetEncoding, doc="See `GetEncoding` and `SetEncoding`");
+    %property(FaceName, GetFaceName, SetFaceName, doc="See `GetFaceName` and `SetFaceName`");
+    %property(Family, GetFamily, SetFamily, doc="See `GetFamily` and `SetFamily`");
+    %property(FamilyString, GetFamilyString, doc="See `GetFamilyString`");
+    %property(NativeFontInfo, GetNativeFontInfo, SetNativeFontInfo, doc="See `GetNativeFontInfo` and `SetNativeFontInfo`");
+    %property(NativeFontInfoDesc, GetNativeFontInfoDesc, doc="See `GetNativeFontInfoDesc`");
+    %property(NativeFontInfoUserDesc, GetNativeFontInfoUserDesc, SetNativeFontInfoUserDesc, doc="See `GetNativeFontInfoUserDesc` and `SetNativeFontInfoUserDesc`");
+    %property(NoAntiAliasing, GetNoAntiAliasing, SetNoAntiAliasing, doc="See `GetNoAntiAliasing` and `SetNoAntiAliasing`");
+    %property(PixelSize, GetPixelSize, SetPixelSize, doc="See `GetPixelSize` and `SetPixelSize`");
+    %property(PointSize, GetPointSize, SetPointSize, doc="See `GetPointSize` and `SetPointSize`");
+    %property(Style, GetStyle, SetStyle, doc="See `GetStyle` and `SetStyle`");
+    %property(StyleString, GetStyleString, doc="See `GetStyleString`");
+    %property(Underlined, GetUnderlined, SetUnderlined, doc="See `GetUnderlined` and `SetUnderlined`");
+    %property(Weight, GetWeight, SetWeight, doc="See `GetWeight` and `SetWeight`");
+    %property(WeightString, GetWeightString, doc="See `GetWeightString`");
     
 };
 

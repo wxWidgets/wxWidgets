@@ -182,6 +182,10 @@ public:
     int GetCount() const;
     %pythoncode { GetNoHistoryFiles = GetCount }
 
+    %property(Count, GetCount, doc="See `GetCount`");
+    %property(HistoryFile, GetHistoryFile, doc="See `GetHistoryFile`");
+    %property(MaxFiles, GetMaxFiles, doc="See `GetMaxFiles`");
+    %property(NoHistoryFiles, GetNoHistoryFiles, doc="See `GetNoHistoryFiles`");
 };
 
 

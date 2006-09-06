@@ -749,6 +749,7 @@ public:
         void , AddFile(const wxString &filename),
         "Adds a file to the list of files represented by this data object.", "");
     
+    %property(Filenames, GetFilenames, doc="See `GetFilenames`");
 };
 
 //---------------------------------------------------------------------------
