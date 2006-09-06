@@ -32,6 +32,10 @@ INCOMPATIBLE CHANGES SINCE 2.6.x
 - SetDefaultItem() method was moved from wxPanel to wxTopLevelWindow
 - wxDialog::OnOK/OnCancel() don't exist any more, use SetAffirmative/EscapeId()
 - wxPathList doesn't derive from (deprecated) wxStringList any more
+- wxGLContext class has no 1:1 coupling to a wxGLCanvas class any more.
+  As a consequence, the class interface changed largely.
+  Code updates, if any are required at all, are easy to accomplish though.
+
 
 
 Deprecated methods since 2.6.x and their replacements
