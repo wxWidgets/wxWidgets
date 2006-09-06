@@ -197,9 +197,6 @@ wxString wxTextInputStream::ReadLine()
         if(c == wxEOT)
             break;
 
-        if ( !m_input )
-            break;
-
         if (EatEOL(c))
             break;
 
