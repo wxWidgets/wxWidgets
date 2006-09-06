@@ -59,6 +59,7 @@ _treeList = [
         'Toolbook',
         'BitmapFromBuffer',
         'RawBitmapAccess',
+        'DragScroller',
         ]),
 
     # managed windows == things with a (optional) caption you can close
@@ -248,6 +249,7 @@ _treeList = [
     ('Miscellaneous', [
         'ColourDB',
         ##'DialogUnits',   # needs more explanations
+        'DragScroller',
         'DrawXXXList',
         'FileHistory',
         'FontEnumerator',

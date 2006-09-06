@@ -216,6 +216,10 @@ to the platform specific pixel buffer inside of a wx.Bitmap object.
 The beginnings of support for RTL languages has been added, thanks to
 a Google SoC project.  
 
+Added wx.lib.dragscroller from Riaan Booysen.  It provides a helper
+class that can used to scroll a wx.ScrolledWindow in response to a
+mouse drag.
+
 
 
 
