@@ -495,6 +495,8 @@ void wxPyApp::_BootstrapApp()
         Py_DECREF(argTuple);
         Py_DECREF(method);
         if (retval == NULL)
+            // Don't PyErr_Print here, let the exception in this case go back
+            // up to the wx.PyApp.__init__ scope.
             goto error;
 
         pyint = PyNumber_Int(retval);
