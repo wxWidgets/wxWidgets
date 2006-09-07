@@ -126,6 +126,10 @@ bool wxWindowDFB::Create(wxWindow *parent,
     if ( parent )
         parent->AddChild(this);
 
+    // set the size to something bogus initially, in case some code tries to
+    // create wxWindowDC before SetSize() is called below:
+    m_rect.width = m_rect.height = 1;
+
     int x, y, w, h;
     x = pos.x, y = pos.y;
     if ( x == -1  ) x = 0;
