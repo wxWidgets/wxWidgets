@@ -37,8 +37,8 @@ workaround.
 Author: Frank Niessink <frank@niessink.com>
 Copyright 2006, Frank Niessink
 License: wxWidgets license
-Version: 0.8
-Date: August 21, 2006
+Version: 0.9
+Date: September 6, 2006
 """
 
 import wx
@@ -150,7 +150,7 @@ class IterableTreeCtrl(wx.TreeCtrl):
 # ---------------------------------------------------------------------------
 
 
-class BasePopupFrame(wx.MiniFrame):
+class BasePopupFrame(wx.Frame):
     """ 
     BasePopupFrame is the base class for platform specific
     versions of the PopupFrame. The PopupFrame is the frame that 
@@ -450,6 +450,9 @@ class BaseComboTreeBox(object):
         item = self.FindClientData(clientData)
         if item:
             self._tree.SelectItem(item)
+            string = self._tree.GetItemText(item)
+            if self._text.GetValue() != string:
+                self._text.SetValue(string)
             return True
         else:
             return False
@@ -718,6 +721,8 @@ class MSWComboTreeBox(NativeComboTreeBox):
         return events
 
     def OnSelectionChangedInTree(self, event):
+        if self.IsBeingDeleted():
+            return
         item = event.GetItem()
         if item:
             selectedValue = self._tree.GetItemText(item)
