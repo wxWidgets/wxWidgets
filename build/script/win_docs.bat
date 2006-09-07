@@ -61,20 +61,26 @@ echo Zipping
 cd %WXWIN%
 del %DAILY%\*.zip
 zip %DAILY%\wx-docs-chm.ZIP docs\htmlhelp\wx.chm
-zip %DAILY%\wx-docs-pdf.ZIP %DAILY%\in\wx.pdf
 zip %DAILY%\wx-docs-hlp.ZIP docs\winhelp\wx.hlp docs\winhelp\wx.cnt
 zip %DAILY%\wx-docs-extra-hlp.ZIP utils/tex2rtf/docs/*.HLP utils/tex2rtf/docs/*.cnt docs/winhelp/*.hlp docs/winhelp/*.cnt -x  docs/winhelp/wx.hlp docs/winhelp/wx.*
 zip %DAILY%\wx-docs-extra-chm.ZIP utils/tex2rtf/docs/*.chm docs/htmlhelp/*.chm 
-cd %DAILY%\in
-zip %DAILY%\wx-docs-extra-pdf.ZIP *.pdf -x wx.pdf
+cd %DAILY%\
+mkdir docs
+mkdir docs\pdf
+del docs\pdf\*.pdf
+move *.pdf docs\pdf
+zip %DAILY%\wx-docs-pdf.ZIP %DAILY%\docs\pdf\wx.pdf
+zip %DAILY%\docs\pdf\wx-docs-extra-pdf.ZIP *.pdf -x wx.pdf
 
 
 echo setting S
 echo yes > net use s: /delete
 net use s: \\biolpc22\bake 
+net use >> c:\temp.log
 
 copy %DAILY%\*.ZIP s:\bkl-cronjob\archives\win
 copy %DAILY%\*.exe s:\bkl-cronjob\archives\win\*.EXE
+dir s: /od >> c:\temp.log
 
 
 
