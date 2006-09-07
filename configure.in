@@ -1689,11 +1689,11 @@ case "${host}" in
                   #else
                               "Innotek6"
                   #endif
-		      );
+                      );
                       exit(0);
                   }
               ],
-	      wx_cv_gccversion=`cat conftestval`,
+              wx_cv_gccversion=`cat conftestval`,
               wx_cv_gccversion="EMX2",
               dnl Compilation error: Assuming standard EMX environment
               wx_cv_gccversion="EMX2"
@@ -4402,7 +4402,13 @@ if test "$ac_cv_func_snprintf" = "yes"; then
                         }
                     ],
                     wx_cv_func_snprintf_pos_params=no,
-                    wx_cv_func_snprintf_pos_params=yes
+                    wx_cv_func_snprintf_pos_params=yes,
+                    dnl be pessimistic when cross-compiling
+                    [
+                        AC_MSG_WARN([Assuming Unix98 printf() is not available,
+define HAVE_UNIX98_PRINTF as 1 in setup.h if it is available.])
+                        wx_cv_func_snprintf_pos_params=no
+                    ]
                 )
             ]
         )
