@@ -42,12 +42,11 @@
 IMPLEMENT_DYNAMIC_CLASS(wxWindowDC, wxDC)
 
 wxWindowDC::wxWindowDC(wxWindow *win)
-    : wxDC(win ? win->GetDfbSurface() : NULL)
 {
-    InitForWin(win);
+    InitForWin(win, NULL);
 }
 
-void wxWindowDC::InitForWin(wxWindow *win)
+void wxWindowDC::InitForWin(wxWindow *win, const wxRect *rect)
 {
     wxCHECK_RET( win, _T("invalid window") );
 
@@ -55,7 +54,6 @@ void wxWindowDC::InitForWin(wxWindow *win)
     //        is not visible and in that case, a) ignore any drawing actions
     //        and b) provide dummy surface that can still be used to get
     //        information (e.g. text extents):
-    wxWindow *w = win;
     for ( wxWindow *w = win; w; w = w->GetParent() )
     {
         // painting on hidden TLW when non-TLW windows are shown is OK,
@@ -67,8 +65,36 @@ void wxWindowDC::InitForWin(wxWindow *win)
                       _T("painting on hidden window not implemented yet") );
     }
 
+    // check if the rectangle covers full window and so is not needed:
+    if ( rect && *rect == wxRect(win->GetSize()) )
+        rect = NULL;
 
+    // obtain the surface used for painting:
+    wxIDirectFBSurfacePtr surface;
+    if ( !rect )
+    {
+        wxCHECK_RET( win->GetSize().x > 0 && win->GetSize().y > 0,
+                     _T("window has invalid size") );
+
+        surface = win->GetDfbSurface();
+    }
+    else
+    {
+        wxCHECK_RET( !rect || !rect->IsEmpty(), _T("invalid rectangle") );
+
+        DFBRectangle dfbrect = { rect->x, rect->y, rect->width, rect->height };
+        surface = win->GetDfbSurface()->GetSubSurface(&dfbrect);
+    }
+
+    if ( !surface )
+        return;
+
+    Init(surface);
     SetFont(win->GetFont());
+
+    // offset coordinates to account for subsurface's origin coordinates:
+    if ( rect )
+        SetDeviceOrigin(rect->x, rect->y);
 }
 
 //-----------------------------------------------------------------------------
@@ -80,18 +106,7 @@ wxClientDCBase::wxClientDCBase(wxWindow *win)
     wxCHECK_RET( win, _T("invalid window") );
 
     wxRect rect = win->GetClientRect();
-    DFBRectangle dfbrect = { rect.x, rect.y, rect.width, rect.height };
-
-    wxIDirectFBSurfacePtr subsurf(
-            win->GetDfbSurface()->GetSubSurface(&dfbrect));
-    if ( !subsurf )
-        return;
-
-    Init(subsurf);
-    InitForWin(win);
-
-    // offset coordinates to account for subsurface's origin coordinates:
-    SetDeviceOrigin(rect.x, rect.y);
+    InitForWin(win, &rect);
 }
 
 //-----------------------------------------------------------------------------
