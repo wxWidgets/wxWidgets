@@ -51,6 +51,23 @@ void wxWindowDC::InitForWin(wxWindow *win)
 {
     wxCHECK_RET( win, _T("invalid window") );
 
+    // FIXME: this should be made to work: we need to detect that the window
+    //        is not visible and in that case, a) ignore any drawing actions
+    //        and b) provide dummy surface that can still be used to get
+    //        information (e.g. text extents):
+    wxWindow *w = win;
+    for ( wxWindow *w = win; w; w = w->GetParent() )
+    {
+        // painting on hidden TLW when non-TLW windows are shown is OK,
+        // DirectFB manages that:
+        if ( w->IsTopLevel() )
+            break;
+
+        wxASSERT_MSG( w->IsShown(),
+                      _T("painting on hidden window not implemented yet") );
+    }
+
+
     SetFont(win->GetFont());
 }
 
@@ -87,6 +104,9 @@ wxClientDC::~wxClientDC()
 {
     // flip to surface so that the changes become visible
     wxIDirectFBSurfacePtr surface(GetDirectFBSurface());
+
+    // FIXME: do this only if the surface was modified (as opposed to e.g.
+    //        used only to obtain text metrics)
     if ( surface )
         surface->Flip(NULL, DSFLIP_NONE);
 }
