@@ -25,6 +25,9 @@
 #endif
 
 #ifndef WX_PRECOMP
+    #ifdef __WXMSW__
+        #include  "wx/msw/wrapwin.h"  // includes windows.h for MessageBox()
+    #endif
     #include "wx/list.h"
     #include "wx/app.h"
     #include "wx/intl.h"
@@ -42,10 +45,6 @@
 #if !defined(__WXMSW__) || defined(__WXMICROWIN__)
   #include  <signal.h>      // for SIGTRAP used by wxTrap()
 #endif  //Win/Unix
-
-#if defined(__WXMSW__)
-  #include  "wx/msw/wrapwin.h"  // includes windows.h for MessageBox()
-#endif
 
 #if wxUSE_FONTMAP
     #include "wx/fontmap.h"

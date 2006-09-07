@@ -29,6 +29,7 @@
 #include "wx/colordlg.h"
 
 #ifndef WX_PRECOMP
+    #include "wx/msw/wrapcdlg.h"
     #include <stdio.h>
     #include "wx/colour.h"
     #include "wx/gdicmn.h"
@@ -39,7 +40,6 @@
 #endif
 
 #include "wx/msw/private.h"
-#include "wx/msw/wrapcdlg.h"
 
 #include <stdlib.h>
 #include <string.h>

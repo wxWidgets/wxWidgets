@@ -27,6 +27,7 @@
 #if wxUSE_OLE && wxUSE_DRAG_AND_DROP
 
 #ifndef WX_PRECOMP
+    #include "wx/msw/wrapwin.h"
     #include "wx/log.h"
 #endif
 
@@ -39,9 +40,6 @@
 
 #ifdef __WIN32__
     #if !defined(__GNUWIN32__) || wxUSE_NORLANDER_HEADERS
-        #if wxCHECK_W32API_VERSION( 1, 0 )
-            #include "wx/msw/wrapwin.h"
-        #endif
         #include <shlobj.h>            // for DROPFILES structure
     #endif
 #else

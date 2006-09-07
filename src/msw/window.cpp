@@ -28,6 +28,8 @@
 
 #ifndef WX_PRECOMP
     #include "wx/msw/wrapwin.h"
+    #include "wx/msw/wrapcctl.h" // include <commctrl.h> "properly"
+    #include "wx/msw/missing.h"
     #include "wx/accel.h"
     #include "wx/menu.h"
     #include "wx/dc.h"
@@ -103,14 +105,9 @@
     #include <windowsx.h>
 #endif
 
-// include <commctrl.h> "properly"
-#include "wx/msw/wrapcctl.h"
-
 #if !defined __WXWINCE__ && !defined NEED_PBT_H
     #include <pbt.h>
 #endif
-
-#include "wx/msw/missing.h"
 
 #if defined(__WXWINCE__)
     #include "wx/msw/wince/missing.h"

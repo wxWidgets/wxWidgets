@@ -18,29 +18,27 @@
 
 #if wxUSE_NOTEBOOK
 
-#include  "wx/notebook.h"
+#include "wx/notebook.h"
 
 #ifndef WX_PRECOMP
-    #include  "wx/string.h"
-    #include  "wx/dc.h"
-    #include  "wx/log.h"
-    #include  "wx/event.h"
-    #include  "wx/app.h"
-    #include  "wx/dcclient.h"
-    #include  "wx/dcmemory.h"
-    #include  "wx/control.h"
+    #include "wx/msw/wrapcctl.h" // include <commctrl.h> "properly"
+    #include "wx/string.h"
+    #include "wx/dc.h"
+    #include "wx/log.h"
+    #include "wx/event.h"
+    #include "wx/app.h"
+    #include "wx/dcclient.h"
+    #include "wx/dcmemory.h"
+    #include "wx/control.h"
 #endif  // WX_PRECOMP
 
-#include  "wx/imaglist.h"
-#include  "wx/sysopt.h"
+#include "wx/imaglist.h"
+#include "wx/sysopt.h"
 
-#include  "wx/msw/private.h"
+#include "wx/msw/private.h"
 
-#include  <windowsx.h>
+#include <windowsx.h>
 #include "wx/msw/winundef.h"
-
-// include <commctrl.h> "properly"
-#include "wx/msw/wrapcctl.h"
 
 #if wxUSE_UXTHEME
     #include "wx/msw/uxtheme.h"

@@ -34,6 +34,8 @@
     #define _WIN32_IE 0x0600
 #endif // !defined(_WIN32_IE)
 
+#include "wx/msw/wrapwin.h"
+
 #include <commctrl.h>
 
 // define things which might be missing from our commctrl.h

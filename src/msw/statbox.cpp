@@ -29,6 +29,7 @@
 #include "wx/statbox.h"
 
 #ifndef WX_PRECOMP
+    #include "wx/msw/missing.h"
     #include "wx/app.h"
     #include "wx/dcclient.h"
     #include "wx/dcmemory.h"
@@ -40,7 +41,6 @@
 
 #include "wx/msw/uxtheme.h"
 #include "wx/msw/private.h"
-#include "wx/msw/missing.h"
 
 // ----------------------------------------------------------------------------
 // wxWin macros

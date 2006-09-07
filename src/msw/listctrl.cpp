@@ -27,6 +27,7 @@
 #if wxUSE_LISTCTRL
 
 #ifndef WX_PRECOMP
+    #include "wx/msw/wrapcctl.h" // include <commctrl.h> "properly"
     #include "wx/app.h"
     #include "wx/intl.h"
     #include "wx/log.h"
@@ -47,9 +48,6 @@
     #include <aygshell.h>
   #endif
 #endif
-
-// include <commctrl.h> "properly"
-#include "wx/msw/wrapcctl.h"
 
 // Currently gcc and watcom don't define NMLVFINDITEM, and DMC only defines
 // it by its old name NM_FINDTIEM.

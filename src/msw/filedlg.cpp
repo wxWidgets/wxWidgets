@@ -29,6 +29,8 @@
 #include "wx/filedlg.h"
 
 #ifndef WX_PRECOMP
+    #include "wx/msw/wrapcdlg.h"
+    #include "wx/msw/missing.h"
     #include "wx/utils.h"
     #include "wx/msgdlg.h"
     #include "wx/filefn.h"
@@ -38,15 +40,11 @@
     #include "wx/math.h"
 #endif
 
-#include "wx/msw/wrapcdlg.h"
-
 #include <stdlib.h>
 #include <string.h>
 
 #include "wx/filename.h"
 #include "wx/tokenzr.h"
-
-#include "wx/msw/missing.h"
 
 // ----------------------------------------------------------------------------
 // constants

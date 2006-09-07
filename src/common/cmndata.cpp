@@ -27,6 +27,9 @@
 #include "wx/cmndata.h"
 
 #ifndef WX_PRECOMP
+    #if defined(__WXMSW__)
+        #include "wx/msw/wrapcdlg.h"
+    #endif // MSW
     #include <stdio.h>
     #include "wx/string.h"
     #include "wx/utils.h"
@@ -43,26 +46,21 @@
 #endif // wxUSE_FONTDLG
 
 #if wxUSE_PRINTING_ARCHITECTURE
-    #include "wx/paper.h"
-#endif // wxUSE_PRINTING_ARCHITECTURE
 
-#if defined(__WXMSW__)
-    #include "wx/msw/wrapcdlg.h"
-#endif // MSW
-
-    #if wxUSE_PRINTING_ARCHITECTURE
+#include "wx/paper.h"
 
 #if defined(__WXMAC__)
     #include "wx/mac/private/print.h"
 #endif
 
-        IMPLEMENT_DYNAMIC_CLASS(wxPrintData, wxObject)
-        IMPLEMENT_DYNAMIC_CLASS(wxPrintDialogData, wxObject)
-        IMPLEMENT_DYNAMIC_CLASS(wxPageSetupDialogData, wxObject)
-    #endif // wxUSE_PRINTING_ARCHITECTURE
+IMPLEMENT_DYNAMIC_CLASS(wxPrintData, wxObject)
+IMPLEMENT_DYNAMIC_CLASS(wxPrintDialogData, wxObject)
+IMPLEMENT_DYNAMIC_CLASS(wxPageSetupDialogData, wxObject)
 
-    IMPLEMENT_DYNAMIC_CLASS(wxFontData, wxObject)
-    IMPLEMENT_DYNAMIC_CLASS(wxColourData, wxObject)
+#endif // wxUSE_PRINTING_ARCHITECTURE
+
+IMPLEMENT_DYNAMIC_CLASS(wxFontData, wxObject)
+IMPLEMENT_DYNAMIC_CLASS(wxColourData, wxObject)
 
 // ============================================================================
 // implementation

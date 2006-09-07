@@ -29,6 +29,7 @@
 #include "wx/checklst.h"
 
 #ifndef WX_PRECOMP
+    #include "wx/msw/wrapwin.h"
     #include "wx/object.h"
     #include "wx/colour.h"
     #include "wx/font.h"
@@ -36,15 +37,12 @@
     #include "wx/window.h"
     #include "wx/listbox.h"
     #include "wx/dcmemory.h"
-
     #include "wx/settings.h"
-
     #include "wx/log.h"
 #endif
 
 #include "wx/ownerdrw.h"
 
-#include "wx/msw/wrapwin.h"
 #include <windowsx.h>
 
 #include "wx/msw/private.h"

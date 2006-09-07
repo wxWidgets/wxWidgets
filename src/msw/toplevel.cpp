@@ -27,6 +27,7 @@
 #include "wx/toplevel.h"
 
 #ifndef WX_PRECOMP
+    #include "wx/msw/missing.h"
     #include "wx/app.h"
     #include "wx/dialog.h"
     #include "wx/string.h"
@@ -50,7 +51,6 @@
     #include "wx/msw/wince/missing.h"
 #endif
 
-#include "wx/msw/missing.h"
 #include "wx/msw/winundef.h"
 
 #include "wx/display.h"

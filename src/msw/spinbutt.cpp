@@ -25,6 +25,7 @@
 #endif
 
 #ifndef WX_PRECOMP
+    #include "wx/msw/wrapcctl.h" // include <commctrl.h> "properly"
     #include "wx/app.h"
 #endif
 
@@ -35,7 +36,6 @@
 IMPLEMENT_DYNAMIC_CLASS(wxSpinEvent, wxNotifyEvent)
 
 #include "wx/msw/private.h"
-#include "wx/msw/wrapcctl.h"
 
 #ifndef UDM_SETRANGE32
     #define UDM_SETRANGE32 (WM_USER+111)

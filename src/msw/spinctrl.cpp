@@ -29,12 +29,12 @@
 #include "wx/spinctrl.h"
 
 #ifndef WX_PRECOMP
+    #include "wx/msw/wrapcctl.h" // include <commctrl.h> "properly"
     #include "wx/event.h"
     #include "wx/textctrl.h"
 #endif
 
 #include "wx/msw/private.h"
-#include "wx/msw/wrapcctl.h"
 
 #if wxUSE_TOOLTIPS
     #include "wx/tooltip.h"

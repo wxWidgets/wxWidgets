@@ -30,13 +30,11 @@
 #include "wx/slider.h"
 
 #ifndef WX_PRECOMP
+    #include "wx/msw/wrapcctl.h" // include <commctrl.h> "properly"
     #include "wx/brush.h"
 #endif
 
 #include "wx/msw/subwin.h"
-
-// include <commctrl.h> "properly"
-#include "wx/msw/wrapcctl.h"
 
 // ----------------------------------------------------------------------------
 // constants

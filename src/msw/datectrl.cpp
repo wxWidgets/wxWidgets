@@ -26,11 +26,11 @@
 #if wxUSE_DATEPICKCTRL
 
 #ifndef WX_PRECOMP
+    #include "wx/msw/wrapwin.h"
+    #include "wx/msw/wrapcctl.h" // include <commctrl.h> "properly"
     #include "wx/app.h"
     #include "wx/intl.h"
     #include "wx/dcclient.h"
-    #include "wx/msw/wrapwin.h"
-    #include "wx/msw/wrapcctl.h"
     #include "wx/msw/private.h"
 #endif
 

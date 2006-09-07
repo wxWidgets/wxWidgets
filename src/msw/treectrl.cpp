@@ -29,6 +29,8 @@
 #include "wx/treectrl.h"
 
 #ifndef WX_PRECOMP
+    #include "wx/msw/wrapcctl.h" // include <commctrl.h> "properly"
+    #include "wx/msw/missing.h"
     #include "wx/dynarray.h"
     #include "wx/log.h"
     #include "wx/app.h"
@@ -36,11 +38,6 @@
 #endif
 
 #include "wx/msw/private.h"
-
-// include <commctrl.h> "properly"
-#include "wx/msw/wrapcctl.h"
-
-#include "wx/msw/missing.h"
 
 // Set this to 1 to be _absolutely_ sure that repainting will work for all
 // comctl32.dll versions

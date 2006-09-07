@@ -29,6 +29,7 @@
 #if wxUSE_PRINTING_ARCHITECTURE && (!defined(__WXUNIVERSAL__) || !wxUSE_POSTSCRIPT_ARCHITECTURE_IN_MSW)
 
 #ifndef WX_PRECOMP
+    #include "wx/msw/wrapcdlg.h"
     #include "wx/app.h"
     #include "wx/dcprint.h"
     #include "wx/cmndata.h"
@@ -39,8 +40,6 @@
 #include "wx/paper.h"
 
 #include <stdlib.h>
-
-#include "wx/msw/wrapcdlg.h"
 
 #ifndef __WIN32__
     #include <print.h>

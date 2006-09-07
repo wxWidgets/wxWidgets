@@ -27,6 +27,7 @@
 #if wxUSE_DRAGIMAGE
 
 #ifndef WX_PRECOMP
+    #include "wx/msw/wrapcctl.h" // include <commctrl.h> "properly"
     #include <stdio.h>
     #include "wx/window.h"
     #include "wx/dcclient.h"
@@ -47,9 +48,6 @@
 #ifdef __WXWINCE__  // for SM_CXCURSOR and SM_CYCURSOR
 #include "wx/msw/wince/missing.h"
 #endif // __WXWINCE__
-
-// include <commctrl.h> "properly"
-#include "wx/msw/wrapcctl.h"
 
 // Wine doesn't have this yet
 #ifndef ListView_CreateDragImage

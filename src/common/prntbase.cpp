@@ -21,6 +21,9 @@
 #include "wx/dcprint.h"
 
 #ifndef WX_PRECOMP
+    #if defined(__WXMSW__)
+        #include "wx/msw/wrapcdlg.h"
+    #endif // MSW
     #include "wx/utils.h"
     #include "wx/dc.h"
     #include "wx/app.h"
@@ -54,7 +57,6 @@
 #endif
 
 #ifdef __WXMSW__
-    #include "wx/msw/wrapcdlg.h"
     #ifndef __WIN32__
         #include <print.h>
     #endif

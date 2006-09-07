@@ -27,6 +27,7 @@
 #include "wx/settings.h"
 
 #ifndef WX_PRECOMP
+    #include "wx/msw/missing.h" // for SM_CXCURSOR, SM_CYCURSOR, SM_TABLETPC
     #include "wx/utils.h"
     #include "wx/gdicmn.h"
     #include "wx/module.h"
@@ -39,9 +40,6 @@
 #endif
 
 #include "wx/fontutil.h"
-
-// for SM_CXCURSOR, SM_CYCURSOR, SM_TABLETPC
-#include "wx/msw/missing.h"
 
 // ----------------------------------------------------------------------------
 // private classes

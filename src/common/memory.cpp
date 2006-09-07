@@ -21,6 +21,9 @@
 #include "wx/memory.h"
 
 #ifndef WX_PRECOMP
+    #ifdef __WXMSW__
+        #include "wx/msw/wrapwin.h"
+    #endif
     #include "wx/utils.h"
     #include "wx/app.h"
     #include "wx/hash.h"
@@ -42,19 +45,6 @@
 
 #include <stdarg.h>
 #include <string.h>
-
-#ifdef __WXMSW__
-#include "wx/msw/wrapwin.h"
-
-#ifdef GetClassInfo
-#undef GetClassInfo
-#endif
-
-#ifdef GetClassName
-#undef GetClassName
-#endif
-
-#endif
 
 #if wxUSE_THREADS && defined(__WXDEBUG__)
 #define USE_THREADSAFE_MEMORY_ALLOCATION 1

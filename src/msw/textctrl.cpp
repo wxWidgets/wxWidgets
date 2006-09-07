@@ -27,6 +27,7 @@
 #if wxUSE_TEXTCTRL && !(defined(__SMARTPHONE__) && defined(__WXWINCE__))
 
 #ifndef WX_PRECOMP
+    #include "wx/msw/missing.h"
     #include "wx/textctrl.h"
     #include "wx/settings.h"
     #include "wx/brush.h"
@@ -70,8 +71,6 @@
 #if !defined(__GNUWIN32_OLD__) || defined(__CYGWIN10__)
     #include <richedit.h>
 #endif
-
-#include "wx/msw/missing.h"
 
 #endif // wxUSE_RICHEDIT
 

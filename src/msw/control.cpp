@@ -29,6 +29,7 @@
 #include "wx/control.h"
 
 #ifndef WX_PRECOMP
+    #include "wx/msw/wrapcctl.h" // include <commctrl.h> "properly"
     #include "wx/event.h"
     #include "wx/app.h"
     #include "wx/dcclient.h"
@@ -46,9 +47,6 @@
 
 #include "wx/msw/private.h"
 #include "wx/msw/uxtheme.h"
-
-// include <commctrl.h> "properly"
-#include "wx/msw/wrapcctl.h"
 
 // ----------------------------------------------------------------------------
 // wxWin macros

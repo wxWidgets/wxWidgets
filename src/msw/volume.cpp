@@ -26,6 +26,7 @@
 #if wxUSE_FSVOLUME
 
 #ifndef WX_PRECOMP
+    #include "wx/msw/missing.h"
     #if wxUSE_GUI
         #include "wx/icon.h"
     #endif
@@ -41,7 +42,6 @@
 
 #include <shellapi.h>
 #include <shlobj.h>
-#include "wx/msw/missing.h"
 
 #if wxUSE_BASE
 

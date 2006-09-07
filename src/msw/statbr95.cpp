@@ -21,6 +21,7 @@
 #include "wx/statusbr.h"
 
 #ifndef WX_PRECOMP
+    #include "wx/msw/wrapcctl.h" // include <commctrl.h> "properly"
     #include "wx/frame.h"
     #include "wx/settings.h"
     #include "wx/dcclient.h"
@@ -30,9 +31,6 @@
 
 #include "wx/msw/private.h"
 #include <windowsx.h>
-
-// include <commctrl.h> "properly"
-#include "wx/msw/wrapcctl.h"
 
 #if wxUSE_UXTHEME
     #include "wx/msw/uxtheme.h"

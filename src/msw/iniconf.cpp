@@ -21,25 +21,20 @@
 #if wxUSE_CONFIG && !wxUSE_UNICODE
 
 #ifndef   WX_PRECOMP
-    #include  "wx/dynarray.h"
-    #include  "wx/string.h"
-    #include  "wx/intl.h"
-    #include  "wx/event.h"
-    #include  "wx/app.h"
-    #include  "wx/utils.h"
-    #include  "wx/log.h"
+    #include "wx/msw/wrapwin.h"
+    #include "wx/dynarray.h"
+    #include "wx/string.h"
+    #include "wx/intl.h"
+    #include "wx/event.h"
+    #include "wx/app.h"
+    #include "wx/utils.h"
+    #include "wx/log.h"
 #endif  //WX_PRECOMP
 
 #include  "wx/config.h"
 #include  "wx/file.h"
 
 #include  "wx/msw/iniconf.h"
-
-// _WINDOWS_ is defined when windows.h is included,
-// __WXMSW__ is defined for MS Windows compilation
-#if       defined(__WXMSW__) && !defined(_WINDOWS_)
-  #include  "wx/msw/wrapwin.h"
-#endif  //windows.h
 
 // ----------------------------------------------------------------------------
 // constants

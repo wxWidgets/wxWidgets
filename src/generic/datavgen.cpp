@@ -21,6 +21,9 @@
 #ifdef wxUSE_GENERICDATAVIEWCTRL
 
 #ifndef WX_PRECOMP
+    #ifdef __WXMSW__
+        #include "wx/msw/wrapwin.h"
+    #endif
     #include "wx/sizer.h"
     #include "wx/log.h"
     #include "wx/dcclient.h"
@@ -32,10 +35,6 @@
 #include "wx/calctrl.h"
 #include "wx/popupwin.h"
 #include "wx/renderer.h"
-
-#ifdef __WXMSW__
-    #include "wx/msw/wrapwin.h"
-#endif
 
 //-----------------------------------------------------------------------------
 // classes

@@ -25,6 +25,7 @@
 #endif
 
 #ifndef WX_PRECOMP
+    #include "wx/msw/wrapcdlg.h"
     #include "wx/image.h"
     #include "wx/window.h"
     #include "wx/dc.h"
@@ -48,7 +49,6 @@
 
 #include <string.h>
 
-#include "wx/msw/wrapcdlg.h"
 #ifndef __WIN32__
     #include <print.h>
 #endif

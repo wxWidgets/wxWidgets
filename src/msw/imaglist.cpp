@@ -25,6 +25,7 @@
 #endif
 
 #ifndef WX_PRECOMP
+    #include "wx/msw/wrapcctl.h" // include <commctrl.h> "properly"
     #include "wx/window.h"
     #include "wx/icon.h"
     #include "wx/dc.h"
@@ -38,9 +39,6 @@
 
 #include "wx/msw/imaglist.h"
 #include "wx/msw/private.h"
-
-// include <commctrl.h> "properly"
-#include "wx/msw/wrapcctl.h"
 
 // ----------------------------------------------------------------------------
 // wxWin macros

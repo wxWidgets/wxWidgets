@@ -27,6 +27,7 @@
 #include "wx/dialog.h"
 
 #ifndef WX_PRECOMP
+    #include "wx/msw/wrapcdlg.h"
     #include "wx/utils.h"
     #include "wx/frame.h"
     #include "wx/app.h"
@@ -40,8 +41,6 @@
 #include "wx/msw/private.h"
 #include "wx/evtloop.h"
 #include "wx/ptr_scpd.h"
-
-#include "wx/msw/wrapcdlg.h"
 
 #if defined(__SMARTPHONE__) && defined(__WXWINCE__)
     #include "wx/msw/wince/resources.h"

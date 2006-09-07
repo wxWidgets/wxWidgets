@@ -1,4 +1,13 @@
-// Copyright 1998, Ben Goetter.  All rights reserved.
+///////////////////////////////////////////////////////////////////////////////
+// Name:        src/msw/wince/net.cpp
+// Purpose:
+// Author:
+// Modified by:
+// Created:
+// RCS-ID:      $Id$
+// Copyright:   Copyright 1998, Ben Goetter.  All rights reserved.
+// Licence:     wxWindows licence
+///////////////////////////////////////////////////////////////////////////////
 
 /*
  patch holes in winsock
@@ -19,7 +28,10 @@
     #pragma hdrstop
 #endif
 
-#include "wx/msw/wrapwin.h"
+#ifndef WX_PRECOMP
+    #include "wx/msw/wrapwin.h"
+#endif
+
 #include <tchar.h>
 #include <winsock.h>
 #include <string.h>
@@ -171,4 +183,3 @@ struct protoent * WINSOCKAPI getprotobynumber(int proto)
   ++pr;
  } return NULL;
 }
-

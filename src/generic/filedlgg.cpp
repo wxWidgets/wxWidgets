@@ -24,6 +24,9 @@
 #endif
 
 #ifndef WX_PRECOMP
+    #ifdef __WXMSW__
+        #include "wx/msw/wrapwin.h"
+    #endif
     #include "wx/hash.h"
     #include "wx/intl.h"
     #include "wx/settings.h"
@@ -67,7 +70,6 @@
 #endif
 
 #ifdef __WINDOWS__
-    #include "wx/msw/wrapwin.h"
     #include "wx/msw/mslu.h"
 #endif
 

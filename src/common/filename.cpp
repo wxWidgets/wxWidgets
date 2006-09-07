@@ -68,6 +68,9 @@
 #endif
 
 #ifndef WX_PRECOMP
+    #ifdef __WXMSW__
+        #include "wx/msw/wrapwin.h" // For GetShort/LongPathName
+    #endif
     #include "wx/dynarray.h"
     #include "wx/intl.h"
     #include "wx/log.h"
@@ -81,12 +84,8 @@
 #include "wx/file.h"
 #include "wx/dynlib.h"
 
-// For GetShort/LongPathName
-#ifdef __WIN32__
-#include "wx/msw/wrapwin.h"
-#if defined(__MINGW32__)
-#include "wx/msw/gccpriv.h"
-#endif
+#if defined(__WIN32__) && defined(__MINGW32__)
+    #include "wx/msw/gccpriv.h"
 #endif
 
 #ifdef __WXWINCE__

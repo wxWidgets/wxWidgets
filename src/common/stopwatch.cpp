@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        common/stopwatch.cpp
+// Name:        src/common/stopwatch.cpp
 // Purpose:     wxStopWatch and other non-GUI stuff from wx/timer.h
 // Author:
 //    Original version by Julian Smart
@@ -31,6 +31,9 @@
 #include "wx/stopwatch.h"
 
 #ifndef WX_PRECOMP
+    #ifdef __WXMSW__
+        #include "wx/msw/wrapwin.h"
+    #endif
     #include "wx/intl.h"
     #include "wx/log.h"
 #endif //WX_PRECOMP
@@ -38,10 +41,6 @@
 // ----------------------------------------------------------------------------
 // System headers
 // ----------------------------------------------------------------------------
-
-#if defined(__WIN32__)
-    #include "wx/msw/wrapwin.h"
-#endif
 
 #if defined(__WIN32__) && !defined(HAVE_FTIME) && !defined(__MWERKS__) && !defined(__WXWINCE__)
     #define HAVE_FTIME
@@ -371,5 +370,3 @@ double wxGetLocalTimeMillis(void)
 }
 
 #endif // wxUSE_LONGLONG/!wxUSE_LONGLONG
-
-

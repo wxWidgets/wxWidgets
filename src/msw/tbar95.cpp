@@ -29,6 +29,7 @@
 #include "wx/toolbar.h"
 
 #ifndef WX_PRECOMP
+    #include "wx/msw/wrapcctl.h" // include <commctrl.h> "properly"
     #include "wx/dynarray.h"
     #include "wx/frame.h"
     #include "wx/log.h"
@@ -48,9 +49,6 @@
 #if wxUSE_UXTHEME
 #include "wx/msw/uxtheme.h"
 #endif
-
-// include <commctrl.h> "properly"
-#include "wx/msw/wrapcctl.h"
 
 // this define controls whether the code for button colours remapping (only
 // useful for 16 or 256 colour images) is active at all, it's always turned off

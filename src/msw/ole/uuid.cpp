@@ -22,10 +22,10 @@
 
 #if wxUSE_OLE && ( wxUSE_DRAG_AND_DROP || (defined(__WXDEBUG__) && wxUSE_DATAOBJ) )
 
-// standard headers
-#if wxCHECK_W32API_VERSION( 1, 0 )
+#ifndef WX_PRECOMP
     #include "wx/msw/wrapwin.h"
 #endif
+
 #include  <rpc.h>                       // UUID related functions
 
 #include  "wx/msw/ole/uuid.h"

@@ -27,6 +27,7 @@
 #include "wx/frame.h"
 
 #ifndef WX_PRECOMP
+    #include "wx/msw/wrapcctl.h" // include <commctrl.h> "properly"
     #include "wx/app.h"
     #include "wx/menu.h"
     #include "wx/utils.h"
@@ -42,9 +43,6 @@
 #endif // WX_PRECOMP
 
 #include "wx/msw/private.h"
-
-// include <commctrl.h> "properly"
-#include "wx/msw/wrapcctl.h"
 
 #if defined(__POCKETPC__) || defined(__SMARTPHONE__)
     #include <ole2.h>

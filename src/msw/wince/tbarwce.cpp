@@ -31,6 +31,7 @@
 #include "wx/toolbar.h"
 
 #ifndef WX_PRECOMP
+    #include "wx/msw/wrapcctl.h" // include <commctrl.h> "properly"
     #include "wx/dynarray.h"
     #include "wx/frame.h"
     #include "wx/log.h"
@@ -44,9 +45,6 @@
 #if !defined(__GNUWIN32__) && !defined(__SALFORDC__)
     #include "malloc.h"
 #endif
-
-// include <commctrl.h> "properly"
-#include "wx/msw/wrapcctl.h"
 
 #include "wx/msw/private.h"
 #include <windows.h>

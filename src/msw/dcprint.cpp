@@ -29,6 +29,7 @@
 #include "wx/dcprint.h"
 
 #ifndef WX_PRECOMP
+    #include "wx/msw/wrapcdlg.h"
     #include "wx/string.h"
     #include "wx/log.h"
     #include "wx/window.h"
@@ -45,7 +46,6 @@
 #include "wx/printdlg.h"
 #include "wx/msw/printdlg.h"
 
-#include "wx/msw/wrapcdlg.h"
 #ifndef __WIN32__
     #include <print.h>
 #endif

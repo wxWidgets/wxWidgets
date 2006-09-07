@@ -25,6 +25,7 @@
 #endif
 
 #ifndef WX_PRECOMP
+    #include "wx/msw/wrapcctl.h"
     #include "wx/dynarray.h"
     #include "wx/frame.h"
     #include "wx/app.h"
@@ -75,8 +76,6 @@
 
 #include <string.h>
 #include <ctype.h>
-
-#include "wx/msw/wrapcctl.h"
 
 // For MB_TASKMODAL
 #ifdef __WXWINCE__

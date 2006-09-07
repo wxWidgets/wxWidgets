@@ -28,6 +28,7 @@
 #include "wx/tooltip.h"
 
 #ifndef WX_PRECOMP
+    #include "wx/msw/wrapcctl.h" // include <commctrl.h> "properly"
     #include "wx/app.h"
     #include "wx/control.h"
     #include "wx/combobox.h"
@@ -35,9 +36,6 @@
 
 #include "wx/tokenzr.h"
 #include "wx/msw/private.h"
-
-// include <commctrl.h> "properly"
-#include "wx/msw/wrapcctl.h"
 
 // VZ: normally, the trick with subclassing the tooltip control and processing
 //     TTM_WINDOWFROMPOINT should work but, somehow, it doesn't. I leave the
@@ -347,7 +345,7 @@ void wxToolTip::Add(WXHWND hWnd)
                     }
                     if ( sz.cx > max )
                         max = sz.cx;
-                    
+
                     token = tokenizer.GetNextToken();
                 }
 

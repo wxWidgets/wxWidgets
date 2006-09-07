@@ -29,6 +29,7 @@
 #include "wx/combobox.h"
 
 #ifndef WX_PRECOMP
+    #include "wx/msw/wrapcctl.h" // include <commctrl.h> "properly"
     #include "wx/settings.h"
     #include "wx/log.h"
     // for wxEVT_COMMAND_TEXT_ENTER
@@ -39,9 +40,6 @@
 
 #include "wx/clipbrd.h"
 #include "wx/msw/private.h"
-
-// include <commctrl.h> "properly"
-#include "wx/msw/wrapcctl.h"
 
 #if wxUSE_TOOLTIPS
     #include "wx/tooltip.h"

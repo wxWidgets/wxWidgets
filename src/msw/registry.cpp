@@ -20,17 +20,16 @@
 #endif
 
 #ifndef WX_PRECOMP
+    #include "wx/msw/wrapwin.h"
     #include "wx/string.h"
-    #include  "wx/intl.h"
-    #include  "wx/log.h"
+    #include "wx/intl.h"
+    #include "wx/log.h"
 #endif
 
-#include  "wx/file.h"
-#include  "wx/wfstream.h"
+#include "wx/file.h"
+#include "wx/wfstream.h"
 
 // Windows headers
-#include  "wx/msw/wrapwin.h"
-
 #ifdef __WXWINCE__
 #include "wx/msw/private.h"
 #include <winbase.h>

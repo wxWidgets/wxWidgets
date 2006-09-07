@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        msw/statline.cpp
+// Name:        src/msw/statline.cpp
 // Purpose:     MSW version of wxStaticLine class
 // Author:      Vadim Zeitlin
 // Created:     28.06.99
@@ -27,8 +27,10 @@
 
 #if wxUSE_STATLINE
 
-#include "wx/msw/private.h"
-#include "wx/msw/missing.h"
+#ifndef WX_PRECOMP
+    #include "wx/msw/private.h"
+    #include "wx/msw/missing.h"
+#endif
 
 // ============================================================================
 // implementation
@@ -127,4 +129,3 @@ WXDWORD wxStaticLine::MSWGetStyle(long style, WXDWORD *exstyle) const
 }
 
 #endif // wxUSE_STATLINE
-

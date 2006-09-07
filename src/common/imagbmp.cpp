@@ -17,6 +17,9 @@
 #if wxUSE_IMAGE
 
 #ifndef WX_PRECOMP
+    #ifdef __WXMSW__
+        #include "wx/msw/wrapwin.h"
+    #endif
     #include "wx/log.h"
     #include "wx/app.h"
     #include "wx/bitmap.h"
@@ -36,10 +39,6 @@
 #ifdef FAR
 #undef FAR
 #endif
-#endif
-
-#ifdef __WXMSW__
-#include "wx/msw/wrapwin.h"
 #endif
 
 //-----------------------------------------------------------------------------

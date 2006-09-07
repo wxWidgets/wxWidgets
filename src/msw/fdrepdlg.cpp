@@ -4,7 +4,7 @@
 // Author:      Markus Greither and Vadim Zeitlin
 // Modified by:
 // Created:     23/03/2001
-// RCS-ID:
+// RCS-ID:      $Id$
 // Copyright:   (c) Markus Greither
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -27,11 +27,11 @@
 #if wxUSE_FINDREPLDLG
 
 #ifndef WX_PRECOMP
+    #include "wx/msw/wrapcdlg.h"
     #include "wx/intl.h"
     #include "wx/log.h"
 #endif
 
-#include "wx/msw/wrapcdlg.h"
 #include "wx/fdrepdlg.h"
 
 // ----------------------------------------------------------------------------
@@ -539,4 +539,3 @@ void wxFindReplaceDialog::DoGetClientSize(int *width, int *height) const
 }
 
 #endif // wxUSE_FINDREPLDLG
-

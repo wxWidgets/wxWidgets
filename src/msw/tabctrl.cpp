@@ -19,14 +19,12 @@
 #if wxUSE_TAB_DIALOG
 
 #ifndef WX_PRECOMP
+    #include "wx/msw/wrapcctl.h" // include <commctrl.h> "properly"
     #include "wx/wx.h"
     #include "wx/app.h"
 #endif
 
 #include "wx/msw/private.h"
-
-// include <commctrl.h> "properly"
-#include "wx/msw/wrapcctl.h"
 
 #include "wx/tabctrl.h"
 #include "wx/msw/imaglist.h"

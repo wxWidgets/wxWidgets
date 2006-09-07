@@ -28,12 +28,11 @@
 #if wxUSE_DISPLAY
 
 #ifndef WX_PRECOMP
+    #include "wx/msw/missing.h"
     #include "wx/dynarray.h"
     #include "wx/app.h"
     #include "wx/frame.h"
 #endif
-
-#include "wx/msw/missing.h"
 
 #include "wx/dynload.h"
 #include "wx/sysopt.h"
@@ -459,7 +458,7 @@ wxRect wxDisplayImplWin32Base::GetClientArea() const
 
 wxString wxDisplayImplWin32Base::GetName() const
 {
-    if ( m_info.m_devName.IsEmpty() )
+    if ( m_info.m_devName.empty() )
         m_info.Initialize();
 
     return m_info.m_devName;
