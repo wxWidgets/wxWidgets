@@ -37,7 +37,7 @@ public:
 
 
 protected:
-    void GtkOnSize( int x, int y, int width, int height );
+    void GtkOnSize();
 
     virtual void DoSetSize(int x, int y,
                            int width, int height,

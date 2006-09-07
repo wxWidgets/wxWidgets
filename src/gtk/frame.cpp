@@ -326,22 +326,14 @@ void wxFrame::DoSetClientSize( int width, int height )
     wxTopLevelWindow::DoSetClientSize( width, height );
 }
 
-void wxFrame::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y),
-                         int width, int height )
+void wxFrame::GtkOnSize()
 {
-    // due to a bug in gtk, x,y are always 0
-    // m_x = x;
-    // m_y = y;
-
     // avoid recursions
     if (m_resizing) return;
     m_resizing = true;
 
     // this shouldn't happen: wxFrame, wxMDIParentFrame and wxMDIChildFrame have m_wxwindow
     wxASSERT_MSG( (m_wxwindow != NULL), wxT("invalid frame") );
-
-    m_width = width;
-    m_height = height;
 
     // space occupied by m_frameToolBar and m_frameMenuBar
     int client_area_x_offset = 0,

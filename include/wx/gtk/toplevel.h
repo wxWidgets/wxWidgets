@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __GTKTOPLEVELH__
-#define __GTKTOPLEVELH__
+#ifndef _WX_GTK_TOPLEVEL_H_
+#define _WX_GTK_TOPLEVEL_H_
 
 //-----------------------------------------------------------------------------
 // wxTopLevelWindowGTK
@@ -82,7 +82,7 @@ public:
     // --------------------------
 
     // GTK callbacks
-    virtual void GtkOnSize( int x, int y, int width, int height );
+    virtual void GtkOnSize();
     virtual void OnInternalIdle();
 
     // do *not* call this to iconize the frame, this is a private function!
@@ -131,4 +131,4 @@ protected:
     bool m_grabbed;
 };
 
-#endif // __GTKTOPLEVELH__
+#endif // _WX_GTK_TOPLEVEL_H_

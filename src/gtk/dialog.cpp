@@ -83,7 +83,7 @@ bool wxDialog::Show( bool show )
            much ugly flicker nor from within the size_allocate
            handler, because GTK 1.1.X forbids that. */
 
-        GtkOnSize( m_x, m_y, m_width, m_height );
+        GtkOnSize();
     }
 
     bool ret = wxWindow::Show( show );

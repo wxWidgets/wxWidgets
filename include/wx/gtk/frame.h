@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __GTKFRAMEH__
-#define __GTKFRAMEH__
+#ifndef _WX_GTK_FRAME_H_
+#define _WX_GTK_FRAME_H_
 
 //-----------------------------------------------------------------------------
 // classes
@@ -75,7 +75,7 @@ public:
     // --------------------------
 
     // GTK callbacks
-    virtual void GtkOnSize( int x, int y, int width, int height );
+    virtual void GtkOnSize();
     virtual void OnInternalIdle();
 
     bool          m_menuBarDetached;
@@ -108,4 +108,4 @@ public:
     DECLARE_DYNAMIC_CLASS(wxFrame)
 };
 
-#endif // __GTKFRAMEH__
+#endif // _WX_GTK_FRAME_H_

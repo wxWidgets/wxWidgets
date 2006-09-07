@@ -126,9 +126,9 @@ bool wxMDIParentFrame::Create(wxWindow *parent,
     return true;
 }
 
-void wxMDIParentFrame::GtkOnSize( int x, int y, int width, int height )
+void wxMDIParentFrame::GtkOnSize()
 {
-    wxFrame::GtkOnSize( x, y, width, height );
+    wxFrame::GtkOnSize();
 
     wxMDIChildFrame *child_frame = GetActiveChild();
     if (!child_frame) return;

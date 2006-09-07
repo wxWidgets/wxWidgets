@@ -58,7 +58,7 @@ public:
     wxMDIClientWindow  *m_clientWindow;
     bool                m_justInserted;
 
-    virtual void GtkOnSize( int x, int y, int width, int height );
+    virtual void GtkOnSize();
     virtual void OnInternalIdle();
 
 protected:

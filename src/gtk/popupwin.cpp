@@ -301,17 +301,10 @@ void wxPopupWindow::DoSetSize( int x, int y, int width, int height, int sizeFlag
     m_resizing = false;
 }
 
-void wxPopupWindow::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y), int width, int height )
+void wxPopupWindow::GtkOnSize()
 {
-    // due to a bug in gtk, x,y are always 0
-    // m_x = x;
-    // m_y = y;
-
-    if ((m_height == height) && (m_width == width) && (m_sizeSet)) return;
+    if (m_sizeSet) return;
     if (!m_wxwindow) return;
-
-    m_width = width;
-    m_height = height;
 
     /* FIXME: is this a hack? */
     /* Since for some reason GTK will revert to using maximum size ever set
@@ -342,7 +335,7 @@ void wxPopupWindow::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y), int width, int 
 void wxPopupWindow::OnInternalIdle()
 {
     if (!m_sizeSet && GTK_WIDGET_REALIZED(m_wxwindow))
-        GtkOnSize( m_x, m_y, m_width, m_height );
+        GtkOnSize();
 
     wxWindow::OnInternalIdle();
 }
@@ -356,7 +349,7 @@ bool wxPopupWindow::Show( bool show )
            much ugly flicker nor from within the size_allocate
            handler, because GTK 1.1.X forbids that. */
 
-        GtkOnSize( m_x, m_y, m_width, m_height );
+        GtkOnSize();
     }
 
     bool ret = wxWindow::Show( show );

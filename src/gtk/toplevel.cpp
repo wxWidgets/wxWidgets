@@ -800,7 +800,7 @@ bool wxTopLevelWindowGTK::Show( bool show )
            much ugly flicker or from within the size_allocate
            handler, because GTK 1.1.X forbids that. */
 
-        GtkOnSize( m_x, m_y, m_width, m_height );
+        GtkOnSize();
     }
 
     // This seems no longer to be needed and the call
@@ -937,21 +937,13 @@ void wxTopLevelWindowGTK::DoSetClientSize( int width, int height )
               width + m_miniEdge*2, height  + m_miniEdge*2 + m_miniTitle, 0);
 }
 
-void wxTopLevelWindowGTK::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y),
-                                     int width, int height )
+void wxTopLevelWindowGTK::GtkOnSize()
 {
-    // due to a bug in gtk, x,y are always 0
-    // m_x = x;
-    // m_y = y;
-
     // avoid recursions
     if (m_resizing) return;
     m_resizing = true;
 
     if ( m_wxwindow == NULL ) return;
-
-    m_width = width;
-    m_height = height;
 
     /* wxMDIChildFrame derives from wxFrame but it _is_ a wxWindow as it uses
        wxWindow::Create to create it's GTK equivalent. m_mainWidget is only
@@ -1054,7 +1046,7 @@ void wxTopLevelWindowGTK::OnInternalIdle()
 {
     if (!m_sizeSet && GTK_WIDGET_REALIZED(m_wxwindow))
     {
-        GtkOnSize( m_x, m_y, m_width, m_height );
+        GtkOnSize();
 
         // we'll come back later
         if (g_isIdle)
