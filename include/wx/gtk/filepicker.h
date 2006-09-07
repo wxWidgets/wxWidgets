@@ -40,7 +40,17 @@
     {                                                                         \
         m_dialog->Destroy();                                                  \
         return wxButton::Destroy();                                           \
-    }
+    }                                                                         \
+                                                                              \
+    /* even if wx derive from wxGenericFileButton, i.e. from wxButton, our */ \
+    /* native GTK+ widget does not derive from GtkButton thus *all* uses   */ \
+    /* GTK_BUTTON(m_widget) macro done by wxButton must be bypassed to     */ \
+    /* avoid bunch of GTK+ warnings like:                                  */ \
+    /*      invalid cast from `GtkFileChooserButton' to  `GtkButton'       */ \
+    /* so, override wxButton::GTKGetWindow and return NULL as GTK+ doesn't */ \
+    /* give us access to the internal GdkWindow of a GtkFileChooserButton  */ \
+    virtual GdkWindow *GTKGetWindow(wxArrayGdkWindows& windows) const         \
+        { return NULL; }
 
 
 //-----------------------------------------------------------------------------
