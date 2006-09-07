@@ -289,10 +289,7 @@ wxRect wxStatusBarUniv::DoGetFieldRect(int n) const
 
 wxCoord wxStatusBarUniv::GetHeight() const
 {
-    wxClientDC dc(wxConstCast(this, wxStatusBarUniv));
-    dc.SetFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT));
-
-    return dc.GetCharHeight() + 2*GetBorderY();
+    return GetCharHeight() + 2*GetBorderY();
 }
 
 wxSize wxStatusBarUniv::DoGetBestSize() const
