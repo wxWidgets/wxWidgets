@@ -5,7 +5,7 @@ if [ "$VERSION" = "" ]; then
     . scripts/build-environ.cfg
 fi 
 
-echo "$WX_TEMP_DIR"
+echo "temp dir is $WX_TEMP_DIR"
 
 START_DIR="$PWD"
 SCRIPTDIR=${START_DIR}/scripts
@@ -32,6 +32,7 @@ else
 fi
 
 if [ ! -d $WX_SRC_DIR ]; then
+  cd $WX_TEMP_DIR
   cvs -d:pserver:anoncvs:anoncvs@cvs.wxwidgets.org:/pack/cvsroots/wxwidgets login
   echo "Grabbing wx CVS with tag $BUILD_TAG"
   cvs -d:pserver:anoncvs@cvs.wxwidgets.org:/pack/cvsroots/wxwidgets checkout -r $BUILD_TAG wxWidgets
@@ -47,6 +48,10 @@ fi
 
 #re-bake the bakefiles
 if [ $rebake = "yes" ]; then
+  if [ ! -d $WX_SRC_DIR/build/bakefiles ]; then
+     mkdir $WX_SRC_DIR/build/bakefiles
+  fi
+  
   cd $WX_SRC_DIR/build/bakefiles
   # always rebuild the bakefiles to avoid conflicts with cvs
   ## better to not use unix2dos on the wxWidgets tree so we don't get the conflicts
@@ -72,7 +77,8 @@ export SCRIPTDIR=${SCRIPTDIR}
 rm -rf $APPDIR/deliver/*
 rm -rf $START_DIR/$DIST_DIR/*
 
-tar czf $START_DIR/$DIST_DIR/wxWidgets-snapshot-$BUILD_VERSION.tar.gz `basename $APPDIR`
+
+tar czf $START_DIR/$DIST_DIR/wxWidgets-snapshot-$BUILD_VERSION.tar.gz $WX_TEMP_DIR
 
 #export DESTDIR=$STAGING_DIR
 cp $SCRIPTDIR/create_archives.sh $APPDIR/distrib/scripts
