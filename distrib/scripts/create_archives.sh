@@ -151,7 +151,7 @@ dospinport(){
     echo "Creating wx$portname-$VERSION.tar.gz..."
     tar czf $APPDIR/deliver/wx$portname-$VERSION.tar.gz wx$portname-$VERSION
     echo "Creating wx$portname-$VERSION.tar.bz2..."
-    tar ch wxWidgets-$VERSION | bzip2 -f9 > $APPDIR/deliver/wx$portname-$VERSION.tar.bz2
+    tar ch wx$portname-$VERSION | bzip2 -f9 > $APPDIR/deliver/wx$portname-$VERSION.tar.bz2
     popd
     rm -rf /tmp/wx$port
     rm ${portfiles}
