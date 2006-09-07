@@ -1021,6 +1021,10 @@ void wxTopLevelWindowGTK::GtkOnSize()
         int client_y = m_miniEdge + m_miniTitle;
         int client_w = m_width - 2*m_miniEdge;
         int client_h = m_height - 2*m_miniEdge - m_miniTitle;
+        if (client_w < 0)
+            client_w = 0;
+        if (client_h < 0)
+            client_h = 0;
 
         gtk_pizza_set_size( GTK_PIZZA(m_mainWidget),
                               m_wxwindow,

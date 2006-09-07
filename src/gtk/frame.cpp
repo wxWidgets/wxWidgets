@@ -384,6 +384,8 @@ void wxFrame::GtkOnSize()
             int xx = m_miniEdge;
             int yy = m_miniEdge + m_miniTitle;
             int ww = m_width  - 2*m_miniEdge;
+            if (ww < 0)
+                ww = 0;
             int hh = m_menuBarHeight;
             if (m_menuBarDetached) hh = wxPLACE_HOLDER;
             m_frameMenuBar->m_x = xx;
@@ -423,6 +425,8 @@ void wxFrame::GtkOnSize()
                 ww = m_toolBarDetached ? wxPLACE_HOLDER
                                        : m_frameToolBar->m_width;
                 hh = m_height - 2*m_miniEdge;
+                if (hh < 0)
+                    hh = 0;
 
                 client_area_x_offset += ww;
             }
@@ -445,6 +449,10 @@ void wxFrame::GtkOnSize()
         int client_y = client_area_y_offset + m_miniEdge + m_miniTitle;
         int client_w = m_width - client_area_x_offset - 2*m_miniEdge;
         int client_h = m_height - client_area_y_offset- 2*m_miniEdge - m_miniTitle;
+        if (client_w < 0)
+            client_w = 0;
+        if (client_h < 0)
+            client_h = 0;
         gtk_pizza_set_size( GTK_PIZZA(m_mainWidget),
                               m_wxwindow,
                               client_x, client_y, client_w, client_h );
@@ -461,6 +469,8 @@ void wxFrame::GtkOnSize()
         int xx = 0 + m_miniEdge;
         int yy = m_height - wxSTATUS_HEIGHT - m_miniEdge - client_area_y_offset;
         int ww = m_width - 2*m_miniEdge;
+        if (ww < 0)
+            ww = 0;
         int hh = wxSTATUS_HEIGHT;
         m_frameStatusBar->m_x = xx;
         m_frameStatusBar->m_y = yy;
