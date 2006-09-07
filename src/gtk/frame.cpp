@@ -469,12 +469,6 @@ void wxFrame::GtkOnSize()
         gtk_pizza_set_size( GTK_PIZZA(m_wxwindow),
                             m_frameStatusBar->m_widget,
                             xx, yy, ww, hh );
-        if (GTK_WIDGET_DRAWABLE (m_frameStatusBar->m_widget))
-        {
-            gtk_widget_queue_draw (m_frameStatusBar->m_widget);
-            // FIXME: Do we really want to force an immediate redraw?
-            gdk_window_process_updates (m_frameStatusBar->m_widget->window, TRUE);
-        }
     }
 #endif // wxUSE_STATUSBAR
 

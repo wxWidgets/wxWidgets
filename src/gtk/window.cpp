@@ -2787,8 +2787,6 @@ void wxWindowGTK::DoSetSize( int x, int y, int width, int height, int sizeFlags 
        // don't take the x,y values, they're wrong because toolbar sets them
        GtkWidget  *widget = GTK_WIDGET(m_widget);
        gtk_widget_set_size_request (widget, m_width, m_height);
-       if (GTK_WIDGET_VISIBLE (widget))
-            gtk_widget_queue_resize (widget);
     }
     else
 #endif

@@ -327,9 +327,6 @@ gtk_pizza_set_size (GtkPizza   *pizza,
 
             gtk_widget_set_size_request (widget, width, height);
 
-            if (GTK_WIDGET_VISIBLE (widget) && GTK_WIDGET_VISIBLE (pizza))
-                gtk_widget_queue_resize (widget);
-
             return;
         }
     }
