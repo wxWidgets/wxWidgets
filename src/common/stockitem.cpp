@@ -169,7 +169,7 @@ wxString wxGetStockLabel(wxWindowID id, long flags)
 
     #undef STOCKITEM
 
-    if(flags & wxSTOCK_WITH_MNEMONIC)
+    if ( !(flags & wxSTOCK_WITH_MNEMONIC) )
     {
         stockLabel = wxStripMenuCodes( stockLabel );
     }
