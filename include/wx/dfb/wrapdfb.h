@@ -299,7 +299,16 @@ struct wxIDirectFBEventBuffer : public wxDfbWrapper<IDirectFBEventBuffer>
 
     bool WaitForEventWithTimeout(unsigned secs, unsigned millisecs)
     {
-        return Check(m_ptr->WaitForEventWithTimeout(m_ptr, secs, millisecs));
+        DFBResult r = m_ptr->WaitForEventWithTimeout(m_ptr, secs, millisecs);
+
+        // DFB_TIMEOUT is not an error in this function:
+        if ( r == DFB_TIMEOUT )
+        {
+            m_lastResult = DFB_TIMEOUT;
+            return true;
+        }
+
+        return Check(r);
     }
 
     bool GetEvent(wxDFBEvent& event)
