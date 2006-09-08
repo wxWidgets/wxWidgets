@@ -646,11 +646,10 @@ void wxWindowDFB::Thaw()
 
 void wxWindowDFB::PaintWindow(const wxRect& rect, bool eraseBackground)
 {
-    if ( IsFrozen() )
-        return; // don't paint anything if the window is frozen
+    wxCHECK_RET( !IsFrozen() && IsShown(), _T("shouldn't be called") );
 
     wxLogTrace(TRACE_PAINT,
-               _T("%p ('%s'): paiting region [x=%i,y=%i,w=%i,h=%i]"),
+               _T("%p ('%s'): painting region [x=%i,y=%i,w=%i,h=%i]"),
                this, GetName().c_str(),
                rect.x, rect.y, rect.width, rect.height);
 
@@ -693,6 +692,9 @@ void wxWindowDFB::PaintWindow(const wxRect& rect, bool eraseBackground)
           i != children.end(); ++i )
     {
         wxWindow *child = *i;
+
+        if ( child->IsFrozen() || !child->IsShown() )
+            continue; // don't paint anything if the window is frozen or hidden
 
         // compute child's area to repaint
         wxRect childrect(child->GetRect());

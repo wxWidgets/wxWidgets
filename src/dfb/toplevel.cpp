@@ -50,7 +50,30 @@ struct wxDfbPaintRequest
     bool   m_eraseBackground;
 };
 
-WX_DEFINE_ARRAY_PTR(wxDfbPaintRequest*, wxDfbQueuedPaintRequests);
+WX_DEFINE_ARRAY_PTR(wxDfbPaintRequest*, wxDfbQueuedPaintRequestsList);
+
+// Queue of paint requests
+class wxDfbQueuedPaintRequests
+{
+public:
+    ~wxDfbQueuedPaintRequests() { Clear(); }
+
+    // Adds paint request to the queue
+    void Add(const wxRect& rect, bool eraseBack)
+        { m_queue.push_back(new wxDfbPaintRequest(rect, eraseBack)); }
+
+    // Is the queue empty?
+    bool IsEmpty() const { return m_queue.empty(); }
+
+    // Empties the queue
+    void Clear() { WX_CLEAR_ARRAY(m_queue); }
+
+    // Gets requests in the queue
+    const wxDfbQueuedPaintRequestsList& GetRequests() const { return m_queue; }
+
+private:
+    wxDfbQueuedPaintRequestsList m_queue;
+};
 
 // ============================================================================
 // wxTopLevelWindowDFB
@@ -159,7 +182,6 @@ wxTopLevelWindowDFB::~wxTopLevelWindowDFB()
         wxTheApp->ExitMainLoop();
     }
 
-    WX_CLEAR_ARRAY(*m_toPaint);
     wxDELETE(m_toPaint);
 
     // remove the TLW from DFBWindowID->wxTLW map:
@@ -335,18 +357,28 @@ wxIDirectFBSurfacePtr wxTopLevelWindowDFB::ObtainDfbSurface() const
 
 void wxTopLevelWindowDFB::HandleQueuedPaintRequests()
 {
-    wxDfbQueuedPaintRequests& toPaint = *m_toPaint;
-    if ( toPaint.empty() )
+    if ( m_toPaint->IsEmpty() )
         return; // nothing to do
+
+    if ( IsFrozen() || !IsShown() )
+    {
+        // nothing to do if the window is frozen or hidden; clear the queue
+        // and return (note that it's OK to clear the queue even if the window
+        // is frozen, because Thaw() calls Refresh()):
+        m_toPaint->Clear();
+        return;
+    }
+
+    const wxDfbQueuedPaintRequestsList& requests = m_toPaint->GetRequests();
 
     // process queued paint requests:
     wxRect winRect(wxPoint(0, 0), GetSize());
     wxRect paintedRect;
 
-    size_t cnt = toPaint.size();
+    size_t cnt = requests.size();
     for ( size_t i = 0; i < cnt; ++i )
     {
-        const wxDfbPaintRequest& request = *toPaint[i];
+        const wxDfbPaintRequest& request = *requests[i];
 
         wxRect clipped(request.m_rect);
 
@@ -368,7 +400,7 @@ void wxTopLevelWindowDFB::HandleQueuedPaintRequests()
             paintedRect.Union(clipped);
     }
 
-    WX_CLEAR_ARRAY(toPaint);
+    m_toPaint->Clear();
 
     if ( paintedRect.IsEmpty() )
         return; // no painting occurred, no need to flip
@@ -383,8 +415,8 @@ void wxTopLevelWindowDFB::HandleQueuedPaintRequests()
 
 void wxTopLevelWindowDFB::DoRefreshRect(const wxRect& rect, bool eraseBack)
 {
-    // defer paiting until idle time or until Update() is called:
-    m_toPaint->push_back(new wxDfbPaintRequest(rect, eraseBack));
+    // defer painting until idle time or until Update() is called:
+    m_toPaint->Add(rect, eraseBack);
 }
 
 void wxTopLevelWindowDFB::Update()
