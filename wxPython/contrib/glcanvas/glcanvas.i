@@ -46,7 +46,7 @@ MustHaveApp(wxGLContext);
 class wxGLContext : public wxObject {
 public:
 #ifndef __WXMAC__  
-    wxGLContext(wxWindow *win, const wxGLContext* other = NULL);
+    wxGLContext(wxGLCanvas *win, const wxGLContext* other = NULL);
 #else
     %extend {
         wxGLContext(bool isRGB, wxGLCanvas *win,
