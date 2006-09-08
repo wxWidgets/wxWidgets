@@ -8,6 +8,7 @@ config.sub
 configure.in
 setup.h.in
 install-sh
+Makefile.in
 mkinstalldirs
 wx-config.in
 wx-config-inplace.in
@@ -82,6 +83,7 @@ samples/console/testdata.fc
 samples/console/*.cpp
 samples/console/*.h
 samples/console/makefile*
+samples/console/Makefile*
 samples/console/*.rc
 samples/console/*.def
 samples/console/*.xpm
