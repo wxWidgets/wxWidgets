@@ -122,8 +122,12 @@
 #endif
 
 
+#ifndef WS_EX_LAYOUTRTL
+#define WS_EX_LAYOUTRTL 0x00400000
+#endif
+
 #ifndef WS_EX_LAYERED
-#define WS_EX_LAYERED 0x80000
+#define WS_EX_LAYERED 0x00080000
 #endif
 
 #ifndef LWA_ALPHA
