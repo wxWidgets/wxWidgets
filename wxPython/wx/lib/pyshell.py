@@ -216,7 +216,7 @@ class PyShellWindow(stc.StyledTextCtrl, InteractiveInterpreter):
 
 
     def OnKey(self, evt):
-        key = evt.KeyCode()
+        key = evt.GetKeyCode()
         if key == wx.WXK_RETURN:
             pos = self.GetCurrentPos()
             lastPos = self.GetTextLength()

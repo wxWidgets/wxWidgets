@@ -347,14 +347,14 @@ class GenButton(wx.PyControl):
 
 
     def OnKeyDown(self, event):
-        if self.hasFocus and event.KeyCode() == ord(" "):
+        if self.hasFocus and event.GetKeyCode() == ord(" "):
             self.up = False
             self.Refresh()
         event.Skip()
 
 
     def OnKeyUp(self, event):
-        if self.hasFocus and event.KeyCode() == ord(" "):
+        if self.hasFocus and event.GetKeyCode() == ord(" "):
             self.up = True
             self.Notify()
             self.Refresh()
@@ -551,7 +551,7 @@ class __ToggleMixin:
         event.Skip()
 
     def OnKeyUp(self, event):
-        if self.hasFocus and event.KeyCode() == ord(" "):
+        if self.hasFocus and event.GetKeyCode() == ord(" "):
             self.up = not self.up
             self.Notify()
             self.Refresh()

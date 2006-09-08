@@ -771,7 +771,7 @@ class Calendar( wx.PyControl ):
             event.Skip()
             return
         
-        key_code = event.KeyCode()
+        key_code = event.GetKeyCode()
         
         if key_code == wx.WXK_TAB:
             forward = not event.ShiftDown()

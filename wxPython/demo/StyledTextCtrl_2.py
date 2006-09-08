@@ -185,7 +185,7 @@ class PythonSTC(stc.StyledTextCtrl):
     def OnKeyPressed(self, event):
         if self.CallTipActive():
             self.CallTipCancel()
-        key = event.KeyCode()
+        key = event.GetKeyCode()
 
         if key == 32 and event.ControlDown():
             pos = self.GetCurrentPos()

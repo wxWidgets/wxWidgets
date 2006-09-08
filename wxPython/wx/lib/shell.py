@@ -109,7 +109,7 @@ class PyShellInput(wx.Panel):
     def OnChar(self, event):
         """called on CHARevent.  executes input on newline"""
         # print "On Char:", event.__dict__.keys()
-        if event.KeyCode() !=wx.WXK_RETURN:
+        if event.GetKeyCode() !=wx.WXK_RETURN:
             # not of our business
             event.Skip()
             return

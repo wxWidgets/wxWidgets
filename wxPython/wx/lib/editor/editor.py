@@ -942,7 +942,7 @@ class Editor(wx.ScrolledWindow):
         self.AdjustScrollbars()
 
     def OnChar(self, event):
-        key = event.KeyCode()
+        key = event.GetKeyCode()
         filters = [self.AltKey,
                    self.MoveSpecialControlKey,
                    self.ControlKey,

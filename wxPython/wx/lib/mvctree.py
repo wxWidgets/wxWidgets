@@ -404,9 +404,9 @@ class FileEditor(Editor):
 
 
     def _key(self, evt):
-        if evt.KeyCode() == wx.WXK_RETURN:
+        if evt.GetKeyCode() == wx.WXK_RETURN:
             self.EndEdit(True)
-        elif evt.KeyCode() == wx.WXK_ESCAPE:
+        elif evt.GetKeyCode() == wx.WXK_ESCAPE:
             self.EndEdit(False)
         else:
             evt.Skip()

@@ -105,7 +105,7 @@ class TestPanel(wx.Panel):
         self.ie.Navigate(url)
 
     def OnLocationKey(self, evt):
-        if evt.KeyCode() == wx.WXK_RETURN:
+        if evt.GetKeyCode() == wx.WXK_RETURN:
             URL = self.location.GetValue()
             self.location.Append(URL)
             self.ie.Navigate(URL)

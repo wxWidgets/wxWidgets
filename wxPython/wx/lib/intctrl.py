@@ -109,7 +109,7 @@ class IntValidator( wx.PyValidator ):
         selected.  Leading zeros are removed if introduced by selection,
         and are prevented from being inserted.
         """
-        key = event.KeyCode()
+        key = event.GetKeyCode()
         ctrl = event.GetEventObject()
 
 

@@ -417,7 +417,7 @@ Platform: %s""" % \
         # commands/responses.
         if not self.CanEdit():
             return
-        key = event.KeyCode()
+        key = event.GetKeyCode()
         currpos = self.GetCurrentPos()
         stoppos = self.promptPosEnd
         # Return (Enter) needs to be ignored in this handler.
@@ -452,7 +452,7 @@ Platform: %s""" % \
     def OnKeyDown(self, event):
         """Key down event handler."""
 
-        key = event.KeyCode()
+        key = event.GetKeyCode()
         # If the auto-complete window is up let it do its thing.
         if self.AutoCompActive():
             event.Skip()

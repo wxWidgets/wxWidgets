@@ -318,7 +318,7 @@ class wxVTKRenderWindow(wxVTKRenderWindowBase):
 
 
     def OnChar(self, event):
-        key = event.KeyCode()
+        key = event.GetKeyCode()
         if (key == ord('r')) or (key == ord('R')):
             self.Reset()
         elif (key == ord('w')) or (key == ord('W')):

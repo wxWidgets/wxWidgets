@@ -20,7 +20,7 @@ class NewEnterHandlingGrid(gridlib.Grid):
 
 
     def OnKeyDown(self, evt):
-        if evt.KeyCode() != wx.WXK_RETURN:
+        if evt.GetKeyCode() != wx.WXK_RETURN:
             evt.Skip()
             return
 

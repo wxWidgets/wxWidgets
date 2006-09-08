@@ -643,7 +643,7 @@ class Editor:
         Only receives an event if OnKeyDown calls event.Skip() for the
         corresponding event."""
 
-        key = event.KeyCode()
+        key = event.GetKeyCode()
         if key in self.autoCompleteKeys:
             # Usually the dot (period) key activates auto completion.
             if self.window.AutoCompActive(): 
@@ -671,7 +671,7 @@ class Editor:
     def OnKeyDown(self, event):
         """Key down event handler."""
 
-        key = event.KeyCode()
+        key = event.GetKeyCode()
         # If the auto-complete window is up let it do its thing.
         if self.window.AutoCompActive():
             event.Skip()
