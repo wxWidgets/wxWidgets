@@ -46,9 +46,7 @@ MustHaveApp(wxGLContext);
 class wxGLContext : public wxObject {
 public:
 #ifndef __WXMAC__  
-    wxGLContext(bool isRGB, wxGLCanvas *win,
-                const wxPalette& palette = wxNullPalette,
-                const wxGLContext* other = NULL);
+    wxGLContext(wxWindow *win, const wxGLContext* other = NULL);
 #else
     %extend {
         wxGLContext(bool isRGB, wxGLCanvas *win,
@@ -62,18 +60,7 @@ public:
 #endif
     ~wxGLContext();
 
-    void SetCurrent();
-    void SetColour(const wxString& colour);
-    void SwapBuffers();
-
-#ifdef __WXGTK__
-    void SetupPixelFormat();
-    void SetupPalette(const wxPalette& palette);
-    wxPalette CreateDefaultPalette();
-    wxPalette* GetPalette();
-#endif
-
-    wxWindow* GetWindow();
+    void SetCurrent(const wxGLCanvas& win);
 };
 
 //---------------------------------------------------------------------------
@@ -143,7 +130,7 @@ public:
                     const wxPalette& palette = wxNullPalette ));
 
 
-    void SetCurrent();
+    void SetCurrent(const wxGLContext& RC);
     void SetColour(const wxString& colour);
     void SwapBuffers();
 
