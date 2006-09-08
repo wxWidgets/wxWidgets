@@ -715,7 +715,19 @@ PyObject* __wxPySetDictionary(PyObject* /* self */, PyObject* args)
     _AddInfoString("wx-assertions-off");
 #endif
     _AddInfoString(wxPy_SWIG_VERSION);    
-    
+#ifdef __WXMAC__
+    #if wxMAC_USE_CORE_GRAPHICS
+        _AddInfoString("mac-cg");
+    #else
+        _AddInfoString("mac-qd");
+    #endif
+    #if wxMAC_USE_NATIVE_TOOLBAR
+        _AddInfoString("mac-native-tb");
+    #else
+        _AddInfoString("mac-no-native-tb");
+    #endif
+#endif
+        
 #undef _AddInfoString
 
     PyObject* PlatInfoTuple = PyList_AsTuple(PlatInfo);
