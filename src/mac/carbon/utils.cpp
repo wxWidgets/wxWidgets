@@ -826,6 +826,11 @@ void wxMacControl::Init()
 
 void wxMacControl::Dispose()
 {
+    wxASSERT_MSG( IsValidControlHandle(m_controlRef) , wxT("Invalid Control Handle (maybe already released) in Dispose") );
+
+    CFIndex count = CFGetRetainCount( m_controlRef ) ;
+    wxASSERT_MSG( count == 1 , wxT("Reference Count of native control was not 1 in Dispose") );
+
     ::DisposeControl( m_controlRef );
     m_controlRef = NULL;
 }
