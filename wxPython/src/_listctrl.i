@@ -176,6 +176,10 @@ public:
 
     %pythonAppend Destroy "args[0].thisown = 0"
     %extend { void Destroy() { delete self; } }
+
+    %property(BackgroundColour, GetBackgroundColour, SetBackgroundColour, doc="See `GetBackgroundColour` and `SetBackgroundColour`");
+    %property(Font, GetFont, SetFont, doc="See `GetFont` and `SetFont`");
+    %property(TextColour, GetTextColour, SetTextColour, doc="See `GetTextColour` and `SetTextColour`");
 };
 
 
@@ -245,6 +249,19 @@ public:
     int             m_format;   // left, right, centre
     int             m_width;    // width of column
 
+    %property(Align, GetAlign, SetAlign, doc="See `GetAlign` and `SetAlign`");
+    %property(Attributes, GetAttributes, doc="See `GetAttributes`");
+    %property(BackgroundColour, GetBackgroundColour, SetBackgroundColour, doc="See `GetBackgroundColour` and `SetBackgroundColour`");
+    %property(Column, GetColumn, SetColumn, doc="See `GetColumn` and `SetColumn`");
+    %property(Data, GetData, SetData, doc="See `GetData` and `SetData`");
+    %property(Font, GetFont, SetFont, doc="See `GetFont` and `SetFont`");
+    %property(Id, GetId, SetId, doc="See `GetId` and `SetId`");
+    %property(Image, GetImage, SetImage, doc="See `GetImage` and `SetImage`");
+    %property(Mask, GetMask, SetMask, doc="See `GetMask` and `SetMask`");
+    %property(State, GetState, SetState, doc="See `GetState` and `SetState`");
+    %property(Text, GetText, SetText, doc="See `GetText` and `SetText`");
+    %property(TextColour, GetTextColour, SetTextColour, doc="See `GetTextColour` and `SetTextColour`");
+    %property(Width, GetWidth, SetWidth, doc="See `GetWidth` and `SetWidth`");
 };
 
 
@@ -285,6 +302,20 @@ public:
     // was label editing canceled? (for wxEVT_COMMAND_LIST_END_LABEL_EDIT only)
     bool IsEditCancelled() const;
     void SetEditCanceled(bool editCancelled);
+
+    %property(CacheFrom, GetCacheFrom, doc="See `GetCacheFrom`");
+    %property(CacheTo, GetCacheTo, doc="See `GetCacheTo`");
+    %property(Column, GetColumn, doc="See `GetColumn`");
+    %property(Data, GetData, doc="See `GetData`");
+    %property(Image, GetImage, doc="See `GetImage`");
+    %property(Index, GetIndex, doc="See `GetIndex`");
+    %property(Item, GetItem, doc="See `GetItem`");
+    %property(KeyCode, GetKeyCode, doc="See `GetKeyCode`");
+    %property(Label, GetLabel, doc="See `GetLabel`");
+    %property(Mask, GetMask, doc="See `GetMask`");
+    %property(Point, GetPoint, doc="See `GetPoint`");
+    %property(Text, GetText, doc="See `GetText`");
+    
 };
 
 /* List control event types */
@@ -814,6 +845,18 @@ any.", "",
 
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
+
+    %property(ColumnCount, GetColumnCount, doc="See `GetColumnCount`");
+    %property(CountPerPage, GetCountPerPage, doc="See `GetCountPerPage`");
+    %property(EditControl, GetEditControl, doc="See `GetEditControl`");
+    %property(FocusedItem, GetFocusedItem, doc="See `GetFocusedItem`");
+    %property(ImageList, GetImageList, SetImageList, doc="See `GetImageList` and `SetImageList`");
+    %property(ItemCount, GetItemCount, SetItemCount, doc="See `GetItemCount` and `SetItemCount`");
+    %property(MainWindow, GetMainWindow, doc="See `GetMainWindow`");
+    %property(SelectedItemCount, GetSelectedItemCount, doc="See `GetSelectedItemCount`");
+    %property(TextColour, GetTextColour, SetTextColour, doc="See `GetTextColour` and `SetTextColour`");
+    %property(TopItem, GetTopItem, doc="See `GetTopItem`");
+    %property(ViewRect, GetViewRect, doc="See `GetViewRect`");
 };
 
 
@@ -866,6 +909,8 @@ public:
 
     void SetColumnImage(int col, int image);
     void ClearColumnImage(int col);
+
+    %property(FocusedItem, GetFocusedItem, doc="See `GetFocusedItem`");
 };
 
 

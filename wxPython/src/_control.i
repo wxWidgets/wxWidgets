@@ -288,7 +288,12 @@ slightly more natural for controls which support multiple selection.", "");
             for i in items:
                 self.Append(i)        
     }
-    %property(Items, GetItems, SetItems);
+    
+    %property(Count, GetCount, doc="See `GetCount`");
+    %property(Items, GetItems, SetItems, doc="See `GetItems` and `SetItems`");
+    %property(Selection, GetSelection, SetSelection, doc="See `GetSelection` and `SetSelection`");
+    %property(StringSelection, GetStringSelection, SetStringSelection, doc="See `GetStringSelection` and `SetStringSelection`");
+    %property(Strings, GetStrings, doc="See `GetStrings`");
     
 };
 

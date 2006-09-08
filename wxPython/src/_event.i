@@ -1327,7 +1327,8 @@ Note that in Unicode build, the returned value is meaningful only if
 the user entered a character that can be represented in current
 locale's default charset. You can obtain the corresponding Unicode
 character using `GetUnicodeKey`.", "");
-    %pythoncode { KeyCode = GetKeyCode }
+    
+//    %pythoncode { KeyCode = GetKeyCode }  this will be hidden by the property
 
 
     %extend {
@@ -1408,6 +1409,15 @@ public:
 
     wxUint32      m_rawCode;
     wxUint32      m_rawFlags;
+
+    %property(KeyCode, GetKeyCode, doc="See `GetKeyCode`");
+    %property(Modifiers, GetModifiers, doc="See `GetModifiers`");
+    %property(Position, GetPosition, doc="See `GetPosition`");
+    %property(RawKeyCode, GetRawKeyCode, doc="See `GetRawKeyCode`");
+    %property(RawKeyFlags, GetRawKeyFlags, doc="See `GetRawKeyFlags`");
+    %property(UnicodeKey, GetUnicodeKey, SetUnicodeKey, doc="See `GetUnicodeKey` and `SetUnicodeKey`");
+    %property(X, GetX, doc="See `GetX`");
+    %property(Y, GetY, doc="See `GetY`");
 };
 
 //---------------------------------------------------------------------------
@@ -1811,8 +1821,6 @@ code wishes to force the application to exit, and so this function
 must be called to check this.", "");
 
     %property(LoggingOff, GetLoggingOff, SetLoggingOff, doc="See `GetLoggingOff` and `SetLoggingOff`");
-    %property(Veto, GetVeto, doc="See `GetVeto`");
-    
 };
 
 

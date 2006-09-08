@@ -1245,6 +1245,11 @@ define extra space between all children.", "");
                 cols = (nitems + rows - 1) / rows
             return (rows, cols)
     }
+    
+    %property(Cols, GetCols, SetCols, doc="See `GetCols` and `SetCols`");
+    %property(HGap, GetHGap, SetHGap, doc="See `GetHGap` and `SetHGap`");
+    %property(Rows, GetRows, SetRows, doc="See `GetRows` and `SetRows`");
+    %property(VGap, GetVGap, SetVGap, doc="See `GetVGap` and `SetVGap`");
 };
 
 //---------------------------------------------------------------------------

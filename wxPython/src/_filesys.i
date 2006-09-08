@@ -38,6 +38,8 @@ public:
     ~wxFSFile();
 
     wxInputStream *GetStream();
+    void DetachStream();
+    
     const wxString& GetMimeType();
     const wxString& GetLocation();
     const wxString& GetAnchor();
@@ -157,6 +159,10 @@ public:
     %disownarg(wxFileSystemHandler *handler);
     static void AddHandler(wxFileSystemHandler *handler);
     %cleardisown(wxFileSystemHandler *handler);
+
+    // Removes FS handler
+    %newobject RemoveHandler;
+    static wxFileSystemHandler* RemoveHandler(wxFileSystemHandler *handler);
 
     static void CleanUpHandlers();
 

@@ -596,6 +596,8 @@ public:
     wxFileSystem& GetFileSystem();
 
     void OnLinkClicked(size_t n, const wxHtmlLinkInfo& link);        
+
+    %property(FileSystem, GetFileSystem, doc="See `GetFileSystem`");
 };
 
 

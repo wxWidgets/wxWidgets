@@ -200,6 +200,9 @@ public:
     wxLog *GetOldLog() const;
     bool IsPassingMessages() const;
     void PassMessages(bool bDoPass);
+    
+    %property(Frame, GetFrame, doc="See `GetFrame`");
+    %property(OldLog, GetOldLog, doc="See `GetOldLog`");
 };
 
 
@@ -211,6 +214,8 @@ public:
     void PassMessages(bool bDoPass);
     bool IsPassingMessages();
     wxLog *GetOldLog();
+
+    %property(OldLog, GetOldLog, doc="See `GetOldLog`");    
 };
 
 // log everything to a buffer
@@ -220,11 +225,13 @@ public:
     wxLogBuffer();
 
     // get the string contents with all messages logged
-    const wxString& GetBuffer() const { return m_str; }
+    const wxString& GetBuffer() const;
 
     // show the buffer contents to the user in the best possible way (this uses
     // wxMessageOutputMessageBox) and clear it
     virtual void Flush();
+
+    %property(Buffer, GetBuffer, doc="See `GetBuffer`");    
 };
 
 

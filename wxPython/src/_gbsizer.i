@@ -393,6 +393,10 @@ is successful and after the next Layout() the item will be resized.
         void , SetGBSizer(wxGridBagSizer* sizer),
         "Set the sizer this item is a member of.", "");   
     
+    %property(EndPos, GetEndPos, doc="See `GetEndPos`");
+    %property(GBSizer, GetGBSizer, SetGBSizer, doc="See `GetGBSizer` and `SetGBSizer`");
+    %property(Pos, GetPos, SetPos, doc="See `GetPos` and `SetPos`");
+    %property(Span, GetSpan, SetSpan, doc="See `GetSpan` and `SetSpan`");
 };
 
 
@@ -599,7 +603,6 @@ for intersection, for example it may be the item we are checking the
 position of.", "",
         CheckForIntersectionPos);
     
-
 };
 
 

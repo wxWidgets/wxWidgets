@@ -71,6 +71,12 @@ public:
 
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
+
+    %property(BezelFace, GetBezelFace, SetBezelFace, doc="See `GetBezelFace` and `SetBezelFace`");
+    %property(Range, GetRange, SetRange, doc="See `GetRange` and `SetRange`");
+    %property(ShadowWidth, GetShadowWidth, SetShadowWidth, doc="See `GetShadowWidth` and `SetShadowWidth`");
+    %property(Value, GetValue, SetValue, doc="See `GetValue` and `SetValue`");
+   
 };
 
 //---------------------------------------------------------------------------

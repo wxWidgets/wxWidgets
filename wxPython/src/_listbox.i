@@ -165,6 +165,8 @@ public:
 
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
+    
+    %property(Selections, GetSelections, doc="See `GetSelections`");
 };
 
 

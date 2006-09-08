@@ -119,6 +119,10 @@ appropriately.", "");
         void , SetOrigin(Origin origin),
         "", "");
         
+    %property(Link, GetLink, SetLink, doc="See `GetLink` and `SetLink`");
+    %property(Origin, GetOrigin, SetOrigin, doc="See `GetOrigin` and `SetOrigin`");
+    %property(Position, GetPosition, SetPosition, doc="See `GetPosition` and `SetPosition`");
+    %property(Target, GetTarget, SetTarget, doc="See `GetTarget` and `SetTarget`");
 };
 
 //---------------------------------------------------------------------------

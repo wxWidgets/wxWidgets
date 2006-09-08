@@ -66,6 +66,8 @@ public:
         void, GetSize(int index, int& OUTPUT, int& OUTPUT),
         "GetSize(index) -> (width,height)");
         
+    %property(ImageCount, GetImageCount, doc="See `GetImageCount`");
+    %property(Size, GetSize, doc="See `GetSize`");
 };
 
 //---------------------------------------------------------------------------

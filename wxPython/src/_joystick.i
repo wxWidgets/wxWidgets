@@ -158,6 +158,38 @@ public:
     bool ReleaseCapture();
 
     %pythoncode { def __nonzero__(self): return self.IsOk() }
+
+    %property(ButtonState, GetButtonState, doc="See `GetButtonState`");
+    %property(ManufacturerId, GetManufacturerId, doc="See `GetManufacturerId`");
+    %property(MaxAxes, GetMaxAxes, doc="See `GetMaxAxes`");
+    %property(MaxButtons, GetMaxButtons, doc="See `GetMaxButtons`");
+    %property(MovementThreshold, GetMovementThreshold, SetMovementThreshold, doc="See `GetMovementThreshold` and `SetMovementThreshold`");
+    %property(NumberAxes, GetNumberAxes, doc="See `GetNumberAxes`");
+    %property(NumberButtons, GetNumberButtons, doc="See `GetNumberButtons`");
+    %property(NumberJoysticks, GetNumberJoysticks, doc="See `GetNumberJoysticks`");
+    %property(POVCTSPosition, GetPOVCTSPosition, doc="See `GetPOVCTSPosition`");
+    %property(POVPosition, GetPOVPosition, doc="See `GetPOVPosition`");
+    %property(PollingMax, GetPollingMax, doc="See `GetPollingMax`");
+    %property(PollingMin, GetPollingMin, doc="See `GetPollingMin`");
+    %property(Position, GetPosition, doc="See `GetPosition`");
+    %property(ProductId, GetProductId, doc="See `GetProductId`");
+    %property(ProductName, GetProductName, doc="See `GetProductName`");
+    %property(RudderMax, GetRudderMax, doc="See `GetRudderMax`");
+    %property(RudderMin, GetRudderMin, doc="See `GetRudderMin`");
+    %property(RudderPosition, GetRudderPosition, doc="See `GetRudderPosition`");
+    %property(UMax, GetUMax, doc="See `GetUMax`");
+    %property(UMin, GetUMin, doc="See `GetUMin`");
+    %property(UPosition, GetUPosition, doc="See `GetUPosition`");
+    %property(VMax, GetVMax, doc="See `GetVMax`");
+    %property(VMin, GetVMin, doc="See `GetVMin`");
+    %property(VPosition, GetVPosition, doc="See `GetVPosition`");
+    %property(XMax, GetXMax, doc="See `GetXMax`");
+    %property(XMin, GetXMin, doc="See `GetXMin`");
+    %property(YMax, GetYMax, doc="See `GetYMax`");
+    %property(YMin, GetYMin, doc="See `GetYMin`");
+    %property(ZMax, GetZMax, doc="See `GetZMax`");
+    %property(ZMin, GetZMin, doc="See `GetZMin`");
+    %property(ZPosition, GetZPosition, doc="See `GetZPosition`");
 };
 
 
@@ -214,6 +246,12 @@ public:
         m_buttonState = property(GetButtonState, SetButtonState)
         m_joyStick = property(GetJoystick, SetJoystick)
     }
+    
+    %property(ButtonChange, GetButtonChange, SetButtonChange, doc="See `GetButtonChange` and `SetButtonChange`");
+    %property(ButtonState, GetButtonState, SetButtonState, doc="See `GetButtonState` and `SetButtonState`");
+    %property(Joystick, GetJoystick, SetJoystick, doc="See `GetJoystick` and `SetJoystick`");
+    %property(Position, GetPosition, SetPosition, doc="See `GetPosition` and `SetPosition`");
+    %property(ZPosition, GetZPosition, SetZPosition, doc="See `GetZPosition` and `SetZPosition`");
 };
 
 

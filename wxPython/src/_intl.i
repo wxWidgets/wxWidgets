@@ -466,6 +466,13 @@ public:
     // Returns the current short name for the locale
     const wxString& GetName() const;
 
+    
+    %property(CanonicalName, GetCanonicalName, doc="See `GetCanonicalName`");
+    %property(Language, GetLanguage, doc="See `GetLanguage`");
+    %property(Locale, GetLocale, doc="See `GetLocale`");
+    %property(Name, GetName, doc="See `GetName`");
+    %property(String, GetString, doc="See `GetString`");
+    %property(SysName, GetSysName, doc="See `GetSysName`");
 };
 
 //---------------------------------------------------------------------------

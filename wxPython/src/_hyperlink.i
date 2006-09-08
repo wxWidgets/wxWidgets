@@ -81,6 +81,11 @@ public:
     void SetVisited(bool visited = true);
     bool GetVisited() const;
 
+    %property(HoverColour, GetHoverColour, SetHoverColour, doc="See `GetHoverColour` and `SetHoverColour`");
+    %property(NormalColour, GetNormalColour, SetNormalColour, doc="See `GetNormalColour` and `SetNormalColour`");
+    %property(URL, GetURL, SetURL, doc="See `GetURL` and `SetURL`");
+    %property(Visited, GetVisited, SetVisited, doc="See `GetVisited` and `SetVisited`");
+    %property(VisitedColour, GetVisitedColour, SetVisitedColour, doc="See `GetVisitedColour` and `SetVisitedColour`");
 };
 
 
@@ -101,6 +106,8 @@ public:
     // that the user clicked on.
     wxString GetURL() const;
     void SetURL(const wxString &url);
+
+    %property(URL, GetURL, SetURL, doc="See `GetURL` and `SetURL`");
 };
 
 

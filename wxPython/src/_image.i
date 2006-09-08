@@ -54,6 +54,11 @@ public:
     void SetExtension(const wxString& extension);
     void SetType(long type);
     void SetMimeType(const wxString& mimetype);
+
+    %property(Extension, GetExtension, SetExtension, doc="See `GetExtension` and `SetExtension`");
+    %property(MimeType, GetMimeType, SetMimeType, doc="See `GetMimeType` and `SetMimeType`");
+    %property(Name, GetName, SetName, doc="See `GetName` and `SetName`");
+    %property(Type, GetType, SetType, doc="See `GetType` and `SetType`");
 };
 
 
@@ -983,6 +988,17 @@ range -1.0..1.0 where -1.0 is -360 degrees and 1.0 is 360 degrees", "");
     
 
     %pythoncode { def __nonzero__(self): return self.Ok() }
+    
+    %property(AlphaBuffer, GetAlphaBuffer, SetAlphaBuffer, doc="See `GetAlphaBuffer` and `SetAlphaBuffer`");
+    %property(AlphaData, GetAlphaData, SetAlphaData, doc="See `GetAlphaData` and `SetAlphaData`");
+    %property(Data, GetData, SetData, doc="See `GetData` and `SetData`");
+    %property(DataBuffer, GetDataBuffer, SetDataBuffer, doc="See `GetDataBuffer` and `SetDataBuffer`");
+    %property(Height, GetHeight, doc="See `GetHeight`");
+    %property(MaskBlue, GetMaskBlue, doc="See `GetMaskBlue`");
+    %property(MaskGreen, GetMaskGreen, doc="See `GetMaskGreen`");
+    %property(MaskRed, GetMaskRed, doc="See `GetMaskRed`");
+    %property(Size, GetSize, doc="See `GetSize`");
+    %property(Width, GetWidth, doc="See `GetWidth`");
 };
 
 

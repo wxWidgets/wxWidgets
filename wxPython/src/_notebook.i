@@ -374,6 +374,7 @@ public:
                 const wxString& name = wxPyEmptyString);
 
     wxListView* GetListView();
+    %property(ListView, GetListView, doc="See `GetListView`");
 };
 
 
