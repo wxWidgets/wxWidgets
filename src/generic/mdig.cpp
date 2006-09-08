@@ -817,3 +817,4 @@ IMPLEMENT_DYNAMIC_CLASS(wxMDIClientWindow, wxGenericMDIClientWindow)
 #endif // wxUSE_GENERIC_MDI_AS_NATIVE
 
 #endif // wxUSE_MDI
+
