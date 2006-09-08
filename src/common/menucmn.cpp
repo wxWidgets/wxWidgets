@@ -184,7 +184,6 @@ wxAcceleratorEntry::ParseAccel(const wxString& text, int *flagsOut, int *keyOut)
     int posTab = label.Find(wxT('\t'));
     if ( posTab == wxNOT_FOUND )
     {
-        wxLogDebug(wxT("Invalid menu label: no accelerators"));
         return false;
     }
 
