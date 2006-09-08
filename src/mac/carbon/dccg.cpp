@@ -1479,7 +1479,7 @@ void  wxDC::DoDrawRoundedRectangle(wxCoord x, wxCoord y,
     }
     wxMacCGContext* mctx = ((wxMacCGContext*) m_graphicContext) ;
     CGContextRef ctx = mctx->GetNativeContext() ;
-    AddRoundedRectToPath( ctx  , CGRectMake( xx , yy , ww , hh ) , 16 ,16  ) ;
+    AddRoundedRectToPath( ctx  , CGRectMake( xx , yy , ww , hh ) , radius , radius );
     CGContextDrawPath( ctx , mctx->GetDrawingMode() ) ;
 }
 
