@@ -1123,6 +1123,9 @@ class Icon(GDIObject):
         return _gdi_.Icon_CopyFromBitmap(*args, **kwargs)
 
     def __nonzero__(self): return self.Ok() 
+    Depth = property(GetDepth,SetDepth,doc="See `GetDepth` and `SetDepth`") 
+    Height = property(GetHeight,SetHeight,doc="See `GetHeight` and `SetHeight`") 
+    Width = property(GetWidth,SetWidth,doc="See `GetWidth` and `SetWidth`") 
 _gdi_.Icon_swigregister(Icon)
 
 def EmptyIcon(*args, **kwargs):
@@ -1175,6 +1178,8 @@ class IconLocation(object):
         """GetIndex(self) -> int"""
         return _gdi_.IconLocation_GetIndex(*args, **kwargs)
 
+    FileName = property(GetFileName,SetFileName,doc="See `GetFileName` and `SetFileName`") 
+    Index = property(GetIndex,SetIndex,doc="See `GetIndex` and `SetIndex`") 
 _gdi_.IconLocation_swigregister(IconLocation)
 
 class IconBundle(object):
@@ -1198,6 +1203,7 @@ class IconBundle(object):
         """GetIcon(self, Size size) -> Icon"""
         return _gdi_.IconBundle_GetIcon(*args, **kwargs)
 
+    Icon = property(GetIcon,doc="See `GetIcon`") 
 _gdi_.IconBundle_swigregister(IconBundle)
 
 def IconBundleFromFile(*args, **kwargs):
@@ -1767,6 +1773,7 @@ class FontMapper(object):
         """SetDialogTitle(self, String title)"""
         return _gdi_.FontMapper_SetDialogTitle(*args, **kwargs)
 
+    AltForEncoding = property(GetAltForEncoding,doc="See `GetAltForEncoding`") 
 _gdi_.FontMapper_swigregister(FontMapper)
 
 def FontMapper_Get(*args):
@@ -2127,6 +2134,21 @@ class Font(GDIObject):
         return _gdi_.Font_SetDefaultEncoding(*args, **kwargs)
 
     SetDefaultEncoding = staticmethod(SetDefaultEncoding)
+    Encoding = property(GetEncoding,SetEncoding,doc="See `GetEncoding` and `SetEncoding`") 
+    FaceName = property(GetFaceName,SetFaceName,doc="See `GetFaceName` and `SetFaceName`") 
+    Family = property(GetFamily,SetFamily,doc="See `GetFamily` and `SetFamily`") 
+    FamilyString = property(GetFamilyString,doc="See `GetFamilyString`") 
+    NativeFontInfo = property(GetNativeFontInfo,SetNativeFontInfo,doc="See `GetNativeFontInfo` and `SetNativeFontInfo`") 
+    NativeFontInfoDesc = property(GetNativeFontInfoDesc,doc="See `GetNativeFontInfoDesc`") 
+    NativeFontInfoUserDesc = property(GetNativeFontInfoUserDesc,SetNativeFontInfoUserDesc,doc="See `GetNativeFontInfoUserDesc` and `SetNativeFontInfoUserDesc`") 
+    NoAntiAliasing = property(GetNoAntiAliasing,SetNoAntiAliasing,doc="See `GetNoAntiAliasing` and `SetNoAntiAliasing`") 
+    PixelSize = property(GetPixelSize,SetPixelSize,doc="See `GetPixelSize` and `SetPixelSize`") 
+    PointSize = property(GetPointSize,SetPointSize,doc="See `GetPointSize` and `SetPointSize`") 
+    Style = property(GetStyle,SetStyle,doc="See `GetStyle` and `SetStyle`") 
+    StyleString = property(GetStyleString,doc="See `GetStyleString`") 
+    Underlined = property(GetUnderlined,SetUnderlined,doc="See `GetUnderlined` and `SetUnderlined`") 
+    Weight = property(GetWeight,SetWeight,doc="See `GetWeight` and `SetWeight`") 
+    WeightString = property(GetWeightString,doc="See `GetWeightString`") 
 _gdi_.Font_swigregister(Font)
 
 def FontFromNativeInfo(*args, **kwargs):
@@ -2292,6 +2314,9 @@ def FontEnumerator_IsValidFacename(*args, **kwargs):
 
 #---------------------------------------------------------------------------
 
+Layout_Default = _gdi_.Layout_Default
+Layout_LeftToRight = _gdi_.Layout_LeftToRight
+Layout_RightToLeft = _gdi_.Layout_RightToLeft
 LANGUAGE_DEFAULT = _gdi_.LANGUAGE_DEFAULT
 LANGUAGE_UNKNOWN = _gdi_.LANGUAGE_UNKNOWN
 LANGUAGE_ABKHAZIAN = _gdi_.LANGUAGE_ABKHAZIAN
@@ -2646,6 +2671,12 @@ class Locale(object):
         """GetName(self) -> String"""
         return _gdi_.Locale_GetName(*args, **kwargs)
 
+    CanonicalName = property(GetCanonicalName,doc="See `GetCanonicalName`") 
+    Language = property(GetLanguage,doc="See `GetLanguage`") 
+    Locale = property(GetLocale,doc="See `GetLocale`") 
+    Name = property(GetName,doc="See `GetName`") 
+    String = property(GetString,doc="See `GetString`") 
+    SysName = property(GetSysName,doc="See `GetSysName`") 
 _gdi_.Locale_swigregister(Locale)
 
 def Locale_GetSystemLanguage(*args):
@@ -4769,6 +4800,8 @@ class ImageList(_core.Object):
         """GetSize(index) -> (width,height)"""
         return _gdi_.ImageList_GetSize(*args, **kwargs)
 
+    ImageCount = property(GetImageCount,doc="See `GetImageCount`") 
+    Size = property(GetSize,doc="See `GetSize`") 
 _gdi_.ImageList_swigregister(ImageList)
 
 #---------------------------------------------------------------------------
@@ -5175,6 +5208,11 @@ class Effects(_core.Object):
         """TileBitmap(self, Rect rect, DC dc, Bitmap bitmap) -> bool"""
         return _gdi_.Effects_TileBitmap(*args, **kwargs)
 
+    DarkShadow = property(GetDarkShadow,SetDarkShadow,doc="See `GetDarkShadow` and `SetDarkShadow`") 
+    FaceColour = property(GetFaceColour,SetFaceColour,doc="See `GetFaceColour` and `SetFaceColour`") 
+    HighlightColour = property(GetHighlightColour,SetHighlightColour,doc="See `GetHighlightColour` and `SetHighlightColour`") 
+    LightShadow = property(GetLightShadow,SetLightShadow,doc="See `GetLightShadow` and `SetLightShadow`") 
+    MediumShadow = property(GetMediumShadow,SetMediumShadow,doc="See `GetMediumShadow` and `SetMediumShadow`") 
 _gdi_.Effects_swigregister(Effects)
 
 #---------------------------------------------------------------------------

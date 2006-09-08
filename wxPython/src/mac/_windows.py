@@ -591,6 +591,10 @@ class Frame(TopLevelWindow):
         return _windows_.Frame_GetClassDefaultAttributes(*args, **kwargs)
 
     GetClassDefaultAttributes = staticmethod(GetClassDefaultAttributes)
+    MenuBar = property(GetMenuBar,SetMenuBar,doc="See `GetMenuBar` and `SetMenuBar`") 
+    StatusBar = property(GetStatusBar,SetStatusBar,doc="See `GetStatusBar` and `SetStatusBar`") 
+    StatusBarPane = property(GetStatusBarPane,SetStatusBarPane,doc="See `GetStatusBarPane` and `SetStatusBarPane`") 
+    ToolBar = property(GetToolBar,SetToolBar,doc="See `GetToolBar` and `SetToolBar`") 
 _windows_.Frame_swigregister(Frame)
 
 def PreFrame(*args, **kwargs):
@@ -905,6 +909,17 @@ class StatusBar(_core.Window):
         return _windows_.StatusBar_GetClassDefaultAttributes(*args, **kwargs)
 
     GetClassDefaultAttributes = staticmethod(GetClassDefaultAttributes)
+    def GetFields(self):
+        """Return a list of field values in the status bar. """
+        return [self.GetStatusText(i) for i in range(self.GetFieldsCount())]
+        
+    def SetFields(self, items):
+        """Set the values of the statusbar fields from a list of strings. """
+        self.SetFieldsCount(len(items))
+        for i in range(len(items)):
+            self.SetStatusText(items[i], i)
+
+    Fields = property(GetFields,SetFields) 
 _windows_.StatusBar_swigregister(StatusBar)
 
 def PreStatusBar(*args, **kwargs):
@@ -1752,11 +1767,19 @@ class VScrolledWindow(Panel):
         return _windows_.VScrolledWindow_RefreshLines(*args, **kwargs)
 
     def HitTestXY(*args, **kwargs):
-        """HitTestXY(self, int x, int y) -> int"""
+        """
+        HitTestXY(self, int x, int y) -> int
+
+        Test where the given (in client coords) point lies
+        """
         return _windows_.VScrolledWindow_HitTestXY(*args, **kwargs)
 
     def HitTest(*args, **kwargs):
-        """HitTest(self, Point pt) -> int"""
+        """
+        HitTest(self, Point pt) -> int
+
+        Test where the given (in client coords) point lies
+        """
         return _windows_.VScrolledWindow_HitTest(*args, **kwargs)
 
     def RefreshAll(*args, **kwargs):
@@ -1960,6 +1983,7 @@ class HtmlListBox(VListBox):
         """OnLinkClicked(self, size_t n, wxHtmlLinkInfo link)"""
         return _windows_.HtmlListBox_OnLinkClicked(*args, **kwargs)
 
+    FileSystem = property(GetFileSystem,doc="See `GetFileSystem`") 
 _windows_.HtmlListBox_swigregister(HtmlListBox)
 
 def PreHtmlListBox(*args, **kwargs):
@@ -2377,6 +2401,14 @@ class FileDialog(Dialog):
         """
         return _windows_.FileDialog_GetPaths(*args, **kwargs)
 
+    Directory = property(GetDirectory,SetDirectory,doc="See `GetDirectory` and `SetDirectory`") 
+    Filename = property(GetFilename,SetFilename,doc="See `GetFilename` and `SetFilename`") 
+    Filenames = property(GetFilenames,doc="See `GetFilenames`") 
+    FilterIndex = property(GetFilterIndex,SetFilterIndex,doc="See `GetFilterIndex` and `SetFilterIndex`") 
+    Message = property(GetMessage,SetMessage,doc="See `GetMessage` and `SetMessage`") 
+    Path = property(GetPath,SetPath,doc="See `GetPath` and `SetPath`") 
+    Paths = property(GetPaths,doc="See `GetPaths`") 
+    Wildcard = property(GetWildcard,SetWildcard,doc="See `GetWildcard` and `SetWildcard`") 
 _windows_.FileDialog_swigregister(FileDialog)
 
 CHOICEDLG_STYLE = _windows_.CHOICEDLG_STYLE
@@ -2670,6 +2702,12 @@ class FontData(_core.Object):
         """
         return _windows_.FontData_SetShowHelp(*args, **kwargs)
 
+    AllowSymbols = property(GetAllowSymbols,SetAllowSymbols,doc="See `GetAllowSymbols` and `SetAllowSymbols`") 
+    ChosenFont = property(GetChosenFont,SetChosenFont,doc="See `GetChosenFont` and `SetChosenFont`") 
+    Colour = property(GetColour,SetColour,doc="See `GetColour` and `SetColour`") 
+    EnableEffects = property(GetEnableEffects,doc="See `GetEnableEffects`") 
+    InitialFont = property(GetInitialFont,SetInitialFont,doc="See `GetInitialFont` and `SetInitialFont`") 
+    ShowHelp = property(GetShowHelp,SetShowHelp,doc="See `GetShowHelp` and `SetShowHelp`") 
 _windows_.FontData_swigregister(FontData)
 
 class FontDialog(Dialog):
@@ -2702,6 +2740,7 @@ class FontDialog(Dialog):
         """
         return _windows_.FontDialog_GetFontData(*args, **kwargs)
 
+    FontData = property(GetFontData,doc="See `GetFontData`") 
 _windows_.FontDialog_swigregister(FontDialog)
 
 
@@ -2859,6 +2898,10 @@ class FindDialogEvent(_core.CommandEvent):
         """SetReplaceString(self, String str)"""
         return _windows_.FindDialogEvent_SetReplaceString(*args, **kwargs)
 
+    Dialog = property(GetDialog,doc="See `GetDialog`") 
+    FindString = property(GetFindString,SetFindString,doc="See `GetFindString` and `SetFindString`") 
+    Flags = property(GetFlags,SetFlags,doc="See `GetFlags` and `SetFlags`") 
+    ReplaceString = property(GetReplaceString,SetReplaceString,doc="See `GetReplaceString` and `SetReplaceString`") 
 _windows_.FindDialogEvent_swigregister(FindDialogEvent)
 
 class FindReplaceData(_core.Object):
@@ -2931,6 +2974,9 @@ class FindReplaceData(_core.Object):
         """
         return _windows_.FindReplaceData_SetReplaceString(*args, **kwargs)
 
+    FindString = property(GetFindString,SetFindString,doc="See `GetFindString` and `SetFindString`") 
+    Flags = property(GetFlags,SetFlags,doc="See `GetFlags` and `SetFlags`") 
+    ReplaceString = property(GetReplaceString,SetReplaceString,doc="See `GetReplaceString` and `SetReplaceString`") 
 _windows_.FindReplaceData_swigregister(FindReplaceData)
 
 class FindReplaceDialog(Dialog):
@@ -2981,6 +3027,7 @@ class FindReplaceDialog(Dialog):
         """
         return _windows_.FindReplaceDialog_SetData(*args, **kwargs)
 
+    Data = property(GetData,SetData,doc="See `GetData` and `SetData`") 
 _windows_.FindReplaceDialog_swigregister(FindReplaceDialog)
 
 def PreFindReplaceDialog(*args, **kwargs):

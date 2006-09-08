@@ -2910,6 +2910,7 @@ class wxPyDockArt :  public wxDefaultDockArt
     DEC_PYCALLBACK__INTCOLOUR(SetColour);
 
     virtual void DrawSash(wxDC& dc,
+                          wxWindow* window,
                           int orientation,
                           const wxRect& rect)
     {
@@ -2917,18 +2918,20 @@ class wxPyDockArt :  public wxDefaultDockArt
         wxPyBlock_t blocked = wxPyBeginBlockThreads();
         if ((found = wxPyCBH_findCallback(m_myInst, "DrawSash"))) {
             PyObject* odc = wxPyMake_wxObject(&dc, false);
+            PyObject* owin = wxPyMake_wxObject(window, false);
             PyObject* orect = wxPyConstructObject((void*)&rect, wxT("wxRect"), 0);
-            wxPyCBH_callCallback(m_myInst, Py_BuildValue("(OiO)",
-                                                         odc, orientation, orect));
+            wxPyCBH_callCallback(m_myInst, Py_BuildValue("(OOiO)",
+                                                         odc, owin, orientation, orect));
             Py_DECREF(odc);
             Py_DECREF(orect);
         }
         wxPyEndBlockThreads(blocked);
         if (! found)
-            wxDefaultDockArt::DrawSash(dc, orientation, rect);
+            wxDefaultDockArt::DrawSash(dc, window, orientation, rect);
     }
 
     virtual void DrawBackground(wxDC& dc,
+                          wxWindow* window,
                           int orientation,
                           const wxRect& rect)
     {
@@ -2936,18 +2939,20 @@ class wxPyDockArt :  public wxDefaultDockArt
         wxPyBlock_t blocked = wxPyBeginBlockThreads();
         if ((found = wxPyCBH_findCallback(m_myInst, "DrawBackground"))) {
             PyObject* odc = wxPyMake_wxObject(&dc, false);
+            PyObject* owin = wxPyMake_wxObject(window, false);
             PyObject* orect = wxPyConstructObject((void*)&rect, wxT("wxRect"), 0);
-            wxPyCBH_callCallback(m_myInst, Py_BuildValue("(OiO)",
-                                                         odc, orientation, orect));
+            wxPyCBH_callCallback(m_myInst, Py_BuildValue("(OOiO)",
+                                                         odc, owin, orientation, orect));
             Py_DECREF(odc);
             Py_DECREF(orect);
         }
         wxPyEndBlockThreads(blocked);
         if (! found)
-            wxDefaultDockArt::DrawBackground(dc, orientation, rect);
+            wxDefaultDockArt::DrawBackground(dc, window, orientation, rect);
     }
 
     virtual void DrawCaption(wxDC& dc,
+                          wxWindow* window,
                           const wxString& text,
                           const wxRect& rect,
                           wxPaneInfo& pane)
@@ -2956,11 +2961,12 @@ class wxPyDockArt :  public wxDefaultDockArt
         wxPyBlock_t blocked = wxPyBeginBlockThreads();
         if ((found = wxPyCBH_findCallback(m_myInst, "DrawCaption"))) {
             PyObject* odc = wxPyMake_wxObject(&dc, false);
+            PyObject* owin = wxPyMake_wxObject(window, false);
             PyObject* otext = wx2PyString(text);
             PyObject* orect = wxPyConstructObject((void*)&rect, wxT("wxRect"), 0);
             PyObject* opane = wxPyConstructObject((void*)&pane, wxT("wxPaneInfo"), 0);
-            wxPyCBH_callCallback(m_myInst, Py_BuildValue("(OOOO)",
-                                                         odc, otext, orect, opane));
+            wxPyCBH_callCallback(m_myInst, Py_BuildValue("(OOOOO)",
+                                                         odc, owin, otext, orect, opane));
             Py_DECREF(odc);
             Py_DECREF(otext);
             Py_DECREF(orect);
@@ -2968,10 +2974,11 @@ class wxPyDockArt :  public wxDefaultDockArt
        }
         wxPyEndBlockThreads(blocked);
         if (! found)
-            wxDefaultDockArt::DrawCaption(dc, text, rect, pane);
+            wxDefaultDockArt::DrawCaption(dc, window, text, rect, pane);
     }
 
     virtual void DrawGripper(wxDC& dc,
+                          wxWindow* window,
                           const wxRect& rect,
                           wxPaneInfo& pane)
     {
@@ -2979,19 +2986,21 @@ class wxPyDockArt :  public wxDefaultDockArt
         wxPyBlock_t blocked = wxPyBeginBlockThreads();
         if ((found = wxPyCBH_findCallback(m_myInst, "DrawGripper"))) {
             PyObject* odc = wxPyMake_wxObject(&dc, false);
+            PyObject* owin = wxPyMake_wxObject(window, false);
             PyObject* orect = wxPyConstructObject((void*)&rect, wxT("wxRect"), 0);
             PyObject* opane = wxPyConstructObject((void*)&pane, wxT("wxPaneInfo"), 0);
-            wxPyCBH_callCallback(m_myInst, Py_BuildValue("(OOO)", odc, orect, opane));
+            wxPyCBH_callCallback(m_myInst, Py_BuildValue("(OOOO)", odc, owin, orect, opane));
             Py_DECREF(odc);
             Py_DECREF(orect);
             Py_DECREF(opane);
         }
         wxPyEndBlockThreads(blocked);
         if (! found)
-            wxDefaultDockArt::DrawGripper(dc, rect, pane);
+            wxDefaultDockArt::DrawGripper(dc, window, rect, pane);
     }
 
     virtual void DrawBorder(wxDC& dc,
+                          wxWindow* window,
                           const wxRect& rect,
                           wxPaneInfo& pane)
     {
@@ -2999,6 +3008,7 @@ class wxPyDockArt :  public wxDefaultDockArt
         wxPyBlock_t blocked = wxPyBeginBlockThreads();
         if ((found = wxPyCBH_findCallback(m_myInst, "DrawBorder"))) {
             PyObject* odc = wxPyMake_wxObject(&dc, false);
+            PyObject* owin = wxPyMake_wxObject(window, false);
             PyObject* orect = wxPyConstructObject((void*)&rect, wxT("wxRect"), 0);
             PyObject* opane = wxPyConstructObject((void*)&pane, wxT("wxPaneInfo"), 0);
             wxPyCBH_callCallback(m_myInst, Py_BuildValue("(OOO)", odc, orect, opane));
@@ -3008,10 +3018,11 @@ class wxPyDockArt :  public wxDefaultDockArt
        }
         wxPyEndBlockThreads(blocked);
         if (! found)
-            wxDefaultDockArt::DrawBorder(dc, rect, pane);
+            wxDefaultDockArt::DrawBorder(dc, window, rect, pane);
     }
 
     virtual void DrawPaneButton(wxDC& dc,
+                          wxWindow* window,
                           int button,
                           int button_state,
                           const wxRect& rect,
@@ -3021,10 +3032,11 @@ class wxPyDockArt :  public wxDefaultDockArt
         wxPyBlock_t blocked = wxPyBeginBlockThreads();
         if ((found = wxPyCBH_findCallback(m_myInst, "DrawPaneButton"))) {
             PyObject* odc = wxPyMake_wxObject(&dc, false);
+            PyObject* owin = wxPyMake_wxObject(window, false);
             PyObject* orect = wxPyConstructObject((void*)&rect, wxT("wxRect"), 0);
             PyObject* opane = wxPyConstructObject((void*)&pane, wxT("wxPaneInfo"), 0);
-            wxPyCBH_callCallback(m_myInst, Py_BuildValue("(OiIOO)",
-                                                         odc, button, button_state,
+            wxPyCBH_callCallback(m_myInst, Py_BuildValue("(OOiIOO)",
+                                                         odc, owin, button, button_state,
                                                          orect, opane));
             Py_DECREF(odc);
             Py_DECREF(orect);
@@ -3032,7 +3044,7 @@ class wxPyDockArt :  public wxDefaultDockArt
         }
         wxPyEndBlockThreads(blocked);
         if (! found)
-            wxDefaultDockArt::DrawPaneButton(dc, button, button_state, rect, pane);
+            wxDefaultDockArt::DrawPaneButton(dc, window, button, button_state, rect, pane);
     }
 
     PYPRIVATE;
@@ -10052,24 +10064,28 @@ SWIGINTERN PyObject *_wrap_DockArt_DrawSash(PyObject *SWIGUNUSEDPARM(self), PyOb
   PyObject *resultobj = 0;
   wxDockArt *arg1 = (wxDockArt *) 0 ;
   wxDC *arg2 = 0 ;
-  int arg3 ;
-  wxRect *arg4 = 0 ;
+  wxWindow *arg3 = (wxWindow *) 0 ;
+  int arg4 ;
+  wxRect *arg5 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   void *argp2 = 0 ;
   int res2 = 0 ;
-  int val3 ;
-  int ecode3 = 0 ;
-  wxRect temp4 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  int val4 ;
+  int ecode4 = 0 ;
+  wxRect temp5 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
   PyObject * obj3 = 0 ;
+  PyObject * obj4 = 0 ;
   char *  kwnames[] = {
-    (char *) "self",(char *) "dc",(char *) "orientation",(char *) "rect", NULL 
+    (char *) "self",(char *) "dc",(char *) "window",(char *) "orientation",(char *) "rect", NULL 
   };
   
-  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOO:DockArt_DrawSash",kwnames,&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOOO:DockArt_DrawSash",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxDockArt, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "DockArt_DrawSash" "', expected argument " "1"" of type '" "wxDockArt *""'"); 
@@ -10083,18 +10099,23 @@ SWIGINTERN PyObject *_wrap_DockArt_DrawSash(PyObject *SWIGUNUSEDPARM(self), PyOb
     SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "DockArt_DrawSash" "', expected argument " "2"" of type '" "wxDC &""'"); 
   }
   arg2 = reinterpret_cast< wxDC * >(argp2);
-  ecode3 = SWIG_AsVal_int(obj2, &val3);
-  if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "DockArt_DrawSash" "', expected argument " "3"" of type '" "int""'");
+  res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p_wxWindow, 0 |  0 );
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "DockArt_DrawSash" "', expected argument " "3"" of type '" "wxWindow *""'"); 
+  }
+  arg3 = reinterpret_cast< wxWindow * >(argp3);
+  ecode4 = SWIG_AsVal_int(obj3, &val4);
+  if (!SWIG_IsOK(ecode4)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "DockArt_DrawSash" "', expected argument " "4"" of type '" "int""'");
   } 
-  arg3 = static_cast< int >(val3);
+  arg4 = static_cast< int >(val4);
   {
-    arg4 = &temp4;
-    if ( ! wxRect_helper(obj3, &arg4)) SWIG_fail;
+    arg5 = &temp5;
+    if ( ! wxRect_helper(obj4, &arg5)) SWIG_fail;
   }
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    (arg1)->DrawSash(*arg2,arg3,(wxRect const &)*arg4);
+    (arg1)->DrawSash(*arg2,arg3,arg4,(wxRect const &)*arg5);
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
@@ -10109,24 +10130,28 @@ SWIGINTERN PyObject *_wrap_DockArt_DrawBackground(PyObject *SWIGUNUSEDPARM(self)
   PyObject *resultobj = 0;
   wxDockArt *arg1 = (wxDockArt *) 0 ;
   wxDC *arg2 = 0 ;
-  int arg3 ;
-  wxRect *arg4 = 0 ;
+  wxWindow *arg3 = (wxWindow *) 0 ;
+  int arg4 ;
+  wxRect *arg5 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   void *argp2 = 0 ;
   int res2 = 0 ;
-  int val3 ;
-  int ecode3 = 0 ;
-  wxRect temp4 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  int val4 ;
+  int ecode4 = 0 ;
+  wxRect temp5 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
   PyObject * obj3 = 0 ;
+  PyObject * obj4 = 0 ;
   char *  kwnames[] = {
-    (char *) "self",(char *) "dc",(char *) "orientation",(char *) "rect", NULL 
+    (char *) "self",(char *) "dc",(char *) "window",(char *) "orientation",(char *) "rect", NULL 
   };
   
-  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOO:DockArt_DrawBackground",kwnames,&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOOO:DockArt_DrawBackground",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxDockArt, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "DockArt_DrawBackground" "', expected argument " "1"" of type '" "wxDockArt *""'"); 
@@ -10140,18 +10165,23 @@ SWIGINTERN PyObject *_wrap_DockArt_DrawBackground(PyObject *SWIGUNUSEDPARM(self)
     SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "DockArt_DrawBackground" "', expected argument " "2"" of type '" "wxDC &""'"); 
   }
   arg2 = reinterpret_cast< wxDC * >(argp2);
-  ecode3 = SWIG_AsVal_int(obj2, &val3);
-  if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "DockArt_DrawBackground" "', expected argument " "3"" of type '" "int""'");
+  res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p_wxWindow, 0 |  0 );
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "DockArt_DrawBackground" "', expected argument " "3"" of type '" "wxWindow *""'"); 
+  }
+  arg3 = reinterpret_cast< wxWindow * >(argp3);
+  ecode4 = SWIG_AsVal_int(obj3, &val4);
+  if (!SWIG_IsOK(ecode4)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "DockArt_DrawBackground" "', expected argument " "4"" of type '" "int""'");
   } 
-  arg3 = static_cast< int >(val3);
+  arg4 = static_cast< int >(val4);
   {
-    arg4 = &temp4;
-    if ( ! wxRect_helper(obj3, &arg4)) SWIG_fail;
+    arg5 = &temp5;
+    if ( ! wxRect_helper(obj4, &arg5)) SWIG_fail;
   }
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    (arg1)->DrawBackground(*arg2,arg3,(wxRect const &)*arg4);
+    (arg1)->DrawBackground(*arg2,arg3,arg4,(wxRect const &)*arg5);
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
@@ -10166,27 +10196,31 @@ SWIGINTERN PyObject *_wrap_DockArt_DrawCaption(PyObject *SWIGUNUSEDPARM(self), P
   PyObject *resultobj = 0;
   wxDockArt *arg1 = (wxDockArt *) 0 ;
   wxDC *arg2 = 0 ;
-  wxString *arg3 = 0 ;
-  wxRect *arg4 = 0 ;
-  wxPaneInfo *arg5 = 0 ;
+  wxWindow *arg3 = (wxWindow *) 0 ;
+  wxString *arg4 = 0 ;
+  wxRect *arg5 = 0 ;
+  wxPaneInfo *arg6 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   void *argp2 = 0 ;
   int res2 = 0 ;
-  bool temp3 = false ;
-  wxRect temp4 ;
-  void *argp5 = 0 ;
-  int res5 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  bool temp4 = false ;
+  wxRect temp5 ;
+  void *argp6 = 0 ;
+  int res6 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
   PyObject * obj3 = 0 ;
   PyObject * obj4 = 0 ;
+  PyObject * obj5 = 0 ;
   char *  kwnames[] = {
-    (char *) "self",(char *) "dc",(char *) "text",(char *) "rect",(char *) "pane", NULL 
+    (char *) "self",(char *) "dc",(char *) "window",(char *) "text",(char *) "rect",(char *) "pane", NULL 
   };
   
-  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOOO:DockArt_DrawCaption",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4)) SWIG_fail;
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOOOO:DockArt_DrawCaption",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxDockArt, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "DockArt_DrawCaption" "', expected argument " "1"" of type '" "wxDockArt *""'"); 
@@ -10200,39 +10234,44 @@ SWIGINTERN PyObject *_wrap_DockArt_DrawCaption(PyObject *SWIGUNUSEDPARM(self), P
     SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "DockArt_DrawCaption" "', expected argument " "2"" of type '" "wxDC &""'"); 
   }
   arg2 = reinterpret_cast< wxDC * >(argp2);
+  res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p_wxWindow, 0 |  0 );
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "DockArt_DrawCaption" "', expected argument " "3"" of type '" "wxWindow *""'"); 
+  }
+  arg3 = reinterpret_cast< wxWindow * >(argp3);
   {
-    arg3 = wxString_in_helper(obj2);
-    if (arg3 == NULL) SWIG_fail;
-    temp3 = true;
+    arg4 = wxString_in_helper(obj3);
+    if (arg4 == NULL) SWIG_fail;
+    temp4 = true;
   }
   {
-    arg4 = &temp4;
-    if ( ! wxRect_helper(obj3, &arg4)) SWIG_fail;
+    arg5 = &temp5;
+    if ( ! wxRect_helper(obj4, &arg5)) SWIG_fail;
   }
-  res5 = SWIG_ConvertPtr(obj4, &argp5, SWIGTYPE_p_wxPaneInfo,  0 );
-  if (!SWIG_IsOK(res5)) {
-    SWIG_exception_fail(SWIG_ArgError(res5), "in method '" "DockArt_DrawCaption" "', expected argument " "5"" of type '" "wxPaneInfo &""'"); 
+  res6 = SWIG_ConvertPtr(obj5, &argp6, SWIGTYPE_p_wxPaneInfo,  0 );
+  if (!SWIG_IsOK(res6)) {
+    SWIG_exception_fail(SWIG_ArgError(res6), "in method '" "DockArt_DrawCaption" "', expected argument " "6"" of type '" "wxPaneInfo &""'"); 
   }
-  if (!argp5) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "DockArt_DrawCaption" "', expected argument " "5"" of type '" "wxPaneInfo &""'"); 
+  if (!argp6) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "DockArt_DrawCaption" "', expected argument " "6"" of type '" "wxPaneInfo &""'"); 
   }
-  arg5 = reinterpret_cast< wxPaneInfo * >(argp5);
+  arg6 = reinterpret_cast< wxPaneInfo * >(argp6);
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    (arg1)->DrawCaption(*arg2,(wxString const &)*arg3,(wxRect const &)*arg4,*arg5);
+    (arg1)->DrawCaption(*arg2,arg3,(wxString const &)*arg4,(wxRect const &)*arg5,*arg6);
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
   resultobj = SWIG_Py_Void();
   {
-    if (temp3)
-    delete arg3;
+    if (temp4)
+    delete arg4;
   }
   return resultobj;
 fail:
   {
-    if (temp3)
-    delete arg3;
+    if (temp4)
+    delete arg4;
   }
   return NULL;
 }
@@ -10242,24 +10281,28 @@ SWIGINTERN PyObject *_wrap_DockArt_DrawGripper(PyObject *SWIGUNUSEDPARM(self), P
   PyObject *resultobj = 0;
   wxDockArt *arg1 = (wxDockArt *) 0 ;
   wxDC *arg2 = 0 ;
-  wxRect *arg3 = 0 ;
-  wxPaneInfo *arg4 = 0 ;
+  wxWindow *arg3 = (wxWindow *) 0 ;
+  wxRect *arg4 = 0 ;
+  wxPaneInfo *arg5 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   void *argp2 = 0 ;
   int res2 = 0 ;
-  wxRect temp3 ;
-  void *argp4 = 0 ;
-  int res4 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  wxRect temp4 ;
+  void *argp5 = 0 ;
+  int res5 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
   PyObject * obj3 = 0 ;
+  PyObject * obj4 = 0 ;
   char *  kwnames[] = {
-    (char *) "self",(char *) "dc",(char *) "rect",(char *) "pane", NULL 
+    (char *) "self",(char *) "dc",(char *) "window",(char *) "rect",(char *) "pane", NULL 
   };
   
-  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOO:DockArt_DrawGripper",kwnames,&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOOO:DockArt_DrawGripper",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxDockArt, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "DockArt_DrawGripper" "', expected argument " "1"" of type '" "wxDockArt *""'"); 
@@ -10273,21 +10316,26 @@ SWIGINTERN PyObject *_wrap_DockArt_DrawGripper(PyObject *SWIGUNUSEDPARM(self), P
     SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "DockArt_DrawGripper" "', expected argument " "2"" of type '" "wxDC &""'"); 
   }
   arg2 = reinterpret_cast< wxDC * >(argp2);
+  res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p_wxWindow, 0 |  0 );
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "DockArt_DrawGripper" "', expected argument " "3"" of type '" "wxWindow *""'"); 
+  }
+  arg3 = reinterpret_cast< wxWindow * >(argp3);
   {
-    arg3 = &temp3;
-    if ( ! wxRect_helper(obj2, &arg3)) SWIG_fail;
+    arg4 = &temp4;
+    if ( ! wxRect_helper(obj3, &arg4)) SWIG_fail;
   }
-  res4 = SWIG_ConvertPtr(obj3, &argp4, SWIGTYPE_p_wxPaneInfo,  0 );
-  if (!SWIG_IsOK(res4)) {
-    SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "DockArt_DrawGripper" "', expected argument " "4"" of type '" "wxPaneInfo &""'"); 
+  res5 = SWIG_ConvertPtr(obj4, &argp5, SWIGTYPE_p_wxPaneInfo,  0 );
+  if (!SWIG_IsOK(res5)) {
+    SWIG_exception_fail(SWIG_ArgError(res5), "in method '" "DockArt_DrawGripper" "', expected argument " "5"" of type '" "wxPaneInfo &""'"); 
   }
-  if (!argp4) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "DockArt_DrawGripper" "', expected argument " "4"" of type '" "wxPaneInfo &""'"); 
+  if (!argp5) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "DockArt_DrawGripper" "', expected argument " "5"" of type '" "wxPaneInfo &""'"); 
   }
-  arg4 = reinterpret_cast< wxPaneInfo * >(argp4);
+  arg5 = reinterpret_cast< wxPaneInfo * >(argp5);
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    (arg1)->DrawGripper(*arg2,(wxRect const &)*arg3,*arg4);
+    (arg1)->DrawGripper(*arg2,arg3,(wxRect const &)*arg4,*arg5);
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
@@ -10302,24 +10350,28 @@ SWIGINTERN PyObject *_wrap_DockArt_DrawBorder(PyObject *SWIGUNUSEDPARM(self), Py
   PyObject *resultobj = 0;
   wxDockArt *arg1 = (wxDockArt *) 0 ;
   wxDC *arg2 = 0 ;
-  wxRect *arg3 = 0 ;
-  wxPaneInfo *arg4 = 0 ;
+  wxWindow *arg3 = (wxWindow *) 0 ;
+  wxRect *arg4 = 0 ;
+  wxPaneInfo *arg5 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   void *argp2 = 0 ;
   int res2 = 0 ;
-  wxRect temp3 ;
-  void *argp4 = 0 ;
-  int res4 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  wxRect temp4 ;
+  void *argp5 = 0 ;
+  int res5 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
   PyObject * obj3 = 0 ;
+  PyObject * obj4 = 0 ;
   char *  kwnames[] = {
-    (char *) "self",(char *) "dc",(char *) "rect",(char *) "pane", NULL 
+    (char *) "self",(char *) "dc",(char *) "window",(char *) "rect",(char *) "pane", NULL 
   };
   
-  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOO:DockArt_DrawBorder",kwnames,&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOOO:DockArt_DrawBorder",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxDockArt, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "DockArt_DrawBorder" "', expected argument " "1"" of type '" "wxDockArt *""'"); 
@@ -10333,21 +10385,26 @@ SWIGINTERN PyObject *_wrap_DockArt_DrawBorder(PyObject *SWIGUNUSEDPARM(self), Py
     SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "DockArt_DrawBorder" "', expected argument " "2"" of type '" "wxDC &""'"); 
   }
   arg2 = reinterpret_cast< wxDC * >(argp2);
+  res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p_wxWindow, 0 |  0 );
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "DockArt_DrawBorder" "', expected argument " "3"" of type '" "wxWindow *""'"); 
+  }
+  arg3 = reinterpret_cast< wxWindow * >(argp3);
   {
-    arg3 = &temp3;
-    if ( ! wxRect_helper(obj2, &arg3)) SWIG_fail;
+    arg4 = &temp4;
+    if ( ! wxRect_helper(obj3, &arg4)) SWIG_fail;
   }
-  res4 = SWIG_ConvertPtr(obj3, &argp4, SWIGTYPE_p_wxPaneInfo,  0 );
-  if (!SWIG_IsOK(res4)) {
-    SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "DockArt_DrawBorder" "', expected argument " "4"" of type '" "wxPaneInfo &""'"); 
+  res5 = SWIG_ConvertPtr(obj4, &argp5, SWIGTYPE_p_wxPaneInfo,  0 );
+  if (!SWIG_IsOK(res5)) {
+    SWIG_exception_fail(SWIG_ArgError(res5), "in method '" "DockArt_DrawBorder" "', expected argument " "5"" of type '" "wxPaneInfo &""'"); 
   }
-  if (!argp4) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "DockArt_DrawBorder" "', expected argument " "4"" of type '" "wxPaneInfo &""'"); 
+  if (!argp5) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "DockArt_DrawBorder" "', expected argument " "5"" of type '" "wxPaneInfo &""'"); 
   }
-  arg4 = reinterpret_cast< wxPaneInfo * >(argp4);
+  arg5 = reinterpret_cast< wxPaneInfo * >(argp5);
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    (arg1)->DrawBorder(*arg2,(wxRect const &)*arg3,*arg4);
+    (arg1)->DrawBorder(*arg2,arg3,(wxRect const &)*arg4,*arg5);
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
@@ -10362,32 +10419,36 @@ SWIGINTERN PyObject *_wrap_DockArt_DrawPaneButton(PyObject *SWIGUNUSEDPARM(self)
   PyObject *resultobj = 0;
   wxDockArt *arg1 = (wxDockArt *) 0 ;
   wxDC *arg2 = 0 ;
-  int arg3 ;
+  wxWindow *arg3 = (wxWindow *) 0 ;
   int arg4 ;
-  wxRect *arg5 = 0 ;
-  wxPaneInfo *arg6 = 0 ;
+  int arg5 ;
+  wxRect *arg6 = 0 ;
+  wxPaneInfo *arg7 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   void *argp2 = 0 ;
   int res2 = 0 ;
-  int val3 ;
-  int ecode3 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
   int val4 ;
   int ecode4 = 0 ;
-  wxRect temp5 ;
-  void *argp6 = 0 ;
-  int res6 = 0 ;
+  int val5 ;
+  int ecode5 = 0 ;
+  wxRect temp6 ;
+  void *argp7 = 0 ;
+  int res7 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
   PyObject * obj3 = 0 ;
   PyObject * obj4 = 0 ;
   PyObject * obj5 = 0 ;
+  PyObject * obj6 = 0 ;
   char *  kwnames[] = {
-    (char *) "self",(char *) "dc",(char *) "button",(char *) "button_state",(char *) "rect",(char *) "pane", NULL 
+    (char *) "self",(char *) "dc",(char *) "window",(char *) "button",(char *) "button_state",(char *) "rect",(char *) "pane", NULL 
   };
   
-  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOOOO:DockArt_DrawPaneButton",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5)) SWIG_fail;
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOOOOO:DockArt_DrawPaneButton",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxDockArt, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "DockArt_DrawPaneButton" "', expected argument " "1"" of type '" "wxDockArt *""'"); 
@@ -10401,31 +10462,36 @@ SWIGINTERN PyObject *_wrap_DockArt_DrawPaneButton(PyObject *SWIGUNUSEDPARM(self)
     SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "DockArt_DrawPaneButton" "', expected argument " "2"" of type '" "wxDC &""'"); 
   }
   arg2 = reinterpret_cast< wxDC * >(argp2);
-  ecode3 = SWIG_AsVal_int(obj2, &val3);
-  if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "DockArt_DrawPaneButton" "', expected argument " "3"" of type '" "int""'");
-  } 
-  arg3 = static_cast< int >(val3);
+  res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p_wxWindow, 0 |  0 );
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "DockArt_DrawPaneButton" "', expected argument " "3"" of type '" "wxWindow *""'"); 
+  }
+  arg3 = reinterpret_cast< wxWindow * >(argp3);
   ecode4 = SWIG_AsVal_int(obj3, &val4);
   if (!SWIG_IsOK(ecode4)) {
     SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "DockArt_DrawPaneButton" "', expected argument " "4"" of type '" "int""'");
   } 
   arg4 = static_cast< int >(val4);
+  ecode5 = SWIG_AsVal_int(obj4, &val5);
+  if (!SWIG_IsOK(ecode5)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "DockArt_DrawPaneButton" "', expected argument " "5"" of type '" "int""'");
+  } 
+  arg5 = static_cast< int >(val5);
   {
-    arg5 = &temp5;
-    if ( ! wxRect_helper(obj4, &arg5)) SWIG_fail;
+    arg6 = &temp6;
+    if ( ! wxRect_helper(obj5, &arg6)) SWIG_fail;
   }
-  res6 = SWIG_ConvertPtr(obj5, &argp6, SWIGTYPE_p_wxPaneInfo,  0 );
-  if (!SWIG_IsOK(res6)) {
-    SWIG_exception_fail(SWIG_ArgError(res6), "in method '" "DockArt_DrawPaneButton" "', expected argument " "6"" of type '" "wxPaneInfo &""'"); 
+  res7 = SWIG_ConvertPtr(obj6, &argp7, SWIGTYPE_p_wxPaneInfo,  0 );
+  if (!SWIG_IsOK(res7)) {
+    SWIG_exception_fail(SWIG_ArgError(res7), "in method '" "DockArt_DrawPaneButton" "', expected argument " "7"" of type '" "wxPaneInfo &""'"); 
   }
-  if (!argp6) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "DockArt_DrawPaneButton" "', expected argument " "6"" of type '" "wxPaneInfo &""'"); 
+  if (!argp7) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "DockArt_DrawPaneButton" "', expected argument " "7"" of type '" "wxPaneInfo &""'"); 
   }
-  arg6 = reinterpret_cast< wxPaneInfo * >(argp6);
+  arg7 = reinterpret_cast< wxPaneInfo * >(argp7);
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    (arg1)->DrawPaneButton(*arg2,arg3,arg4,(wxRect const &)*arg5,*arg6);
+    (arg1)->DrawPaneButton(*arg2,arg3,arg4,arg5,(wxRect const &)*arg6,*arg7);
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }

@@ -70,22 +70,6 @@ class GLContext(_core.Object):
         _glcanvas.GLContext_swiginit(self,_glcanvas.new_GLContext(*args, **kwargs))
     __swig_destroy__ = _glcanvas.delete_GLContext
     __del__ = lambda self : None;
-    def SetCurrent(*args, **kwargs):
-        """SetCurrent(self)"""
-        return _glcanvas.GLContext_SetCurrent(*args, **kwargs)
-
-    def SetColour(*args, **kwargs):
-        """SetColour(self, String colour)"""
-        return _glcanvas.GLContext_SetColour(*args, **kwargs)
-
-    def SwapBuffers(*args, **kwargs):
-        """SwapBuffers(self)"""
-        return _glcanvas.GLContext_SwapBuffers(*args, **kwargs)
-
-    def GetWindow(*args, **kwargs):
-        """GetWindow(self) -> Window"""
-        return _glcanvas.GLContext_GetWindow(*args, **kwargs)
-
 _glcanvas.GLContext_swigregister(GLContext)
 cvar = _glcanvas.cvar
 GLCanvasNameStr = cvar.GLCanvasNameStr
