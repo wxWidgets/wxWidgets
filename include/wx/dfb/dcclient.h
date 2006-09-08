@@ -26,7 +26,9 @@ public:
     wxWindowDC(wxWindow *win);
 
 protected:
-    void InitForWin(wxWindow *win);
+    // initializes the DC for painting on given window; if rect!=NULL, then
+    // for painting only on the given region of the window
+    void InitForWin(wxWindow *win, const wxRect *rect);
 
     DECLARE_DYNAMIC_CLASS(wxWindowDC)
     DECLARE_NO_COPY_CLASS(wxWindowDC)
