@@ -106,7 +106,12 @@ public:
         m_control = NULL;
         if ( m_controlHandle )
         {
-            DisposeControl( m_controlHandle );
+            if ( !IsControl() )
+                DisposeControl( m_controlHandle );
+            else
+            {
+                // the embedded control is not under the responsibility of the tool
+            }
             m_controlHandle = NULL ;
         }
 
@@ -407,7 +412,13 @@ void wxToolBarTool::SetPosition( const wxPoint& position )
     }
     else if ( IsControl() )
     {
-        GetControl()->Move( position );
+        // embedded native controls are moved by the OS
+#if wxMAC_USE_NATIVE_TOOLBAR
+        if ( ((wxToolBar*)GetToolBar())->MacWantsNativeToolbar() == false )
+#endif
+        {
+            GetControl()->Move( position );
+        }
     }
     else
     {
@@ -728,7 +739,8 @@ static const EventTypeSpec kToolbarEvents[] =
 static OSStatus ToolbarDelegateHandler( EventHandlerCallRef inCallRef, EventRef inEvent, void* inUserData )
 {
 	OSStatus result = eventNotHandledErr;
-    wxToolBar* toolbar = (wxToolBar*) inUserData ;
+    // Not yet needed
+    // wxToolBar* toolbar = (wxToolBar*) inUserData ;
 	CFMutableArrayRef	array;
 
 	switch ( GetEventKind( inEvent ) )
@@ -1444,6 +1456,9 @@ bool wxToolBar::DoInsertTool(size_t WXUNUSED(pos), wxToolBarToolBase *toolBase)
 	            wxASSERT( tool->GetControl() != NULL );
                 HIToolbarItemRef    item;
                 HIViewRef viewRef = (HIViewRef) tool->GetControl()->GetHandle() ;
+                // as this control now is part of both the wxToolBar children and the native toolbar, we have to increase the
+                // reference count to make sure we are not dealing with zombie controls after the native toolbar has released its views
+                CFRetain( viewRef ) ;
                 CFDataRef data = CFDataCreate( kCFAllocatorDefault , (UInt8*) &viewRef , sizeof(viewRef) ) ;
                  err = HIToolbarCreateItemWithIdentifier((HIToolbarRef) m_macHIToolbarRef,kControlToolbarItemClassID,
                    data , &item ) ;
