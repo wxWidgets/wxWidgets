@@ -60,7 +60,9 @@ public:
 #endif
     ~wxGLContext();
 
+#ifndef __WXMAC__  
     void SetCurrent(const wxGLCanvas& win);
+#endif
 };
 
 //---------------------------------------------------------------------------
@@ -129,8 +131,11 @@ public:
                     int *attribList = NULL,
                     const wxPalette& palette = wxNullPalette ));
 
-
+#ifdef __WXMAC__
+    void SetCurrent();
+#else
     void SetCurrent(const wxGLContext& RC);
+#endif
     void SetColour(const wxString& colour);
     void SwapBuffers();
 
