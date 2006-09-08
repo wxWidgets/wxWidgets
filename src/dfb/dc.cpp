@@ -30,6 +30,11 @@
 
 #include "wx/dfb/private.h"
 
+// these values are used to initialize newly created DC
+#define DEFAULT_FONT      (*wxNORMAL_FONT)
+#define DEFAULT_PEN       (*wxBLACK_PEN)
+#define DEFAULT_BRUSH     (*wxWHITE_BRUSH)
+
 // ===========================================================================
 // implementation
 // ===========================================================================
@@ -63,9 +68,9 @@ void wxDC::Init(const wxIDirectFBSurfacePtr& surface)
     m_mm_to_pix_y = (double)wxGetDisplaySize().GetHeight() /
                     (double)wxGetDisplaySizeMM().GetHeight();
 
-    SetFont(*wxNORMAL_FONT);
-    SetPen(*wxBLACK_PEN);
-    SetBrush(*wxWHITE_BRUSH);
+    SetFont(DEFAULT_FONT);
+    SetPen(DEFAULT_PEN);
+    SetBrush(DEFAULT_BRUSH);
 }
 
 
@@ -317,16 +322,14 @@ void wxDC::DoDrawRotatedText(const wxString& text,
 
 void wxDC::SetPen(const wxPen& pen)
 {
-    if ( !pen.Ok() ) return;
-    m_pen = pen;
+    m_pen = pen.Ok() ? pen : DEFAULT_PEN;
 
     SelectColour(m_pen.GetColour());
 }
 
 void wxDC::SetBrush(const wxBrush& brush)
 {
-    if ( !brush.Ok() ) return;
-    m_brush = brush;
+    m_brush = brush.Ok() ? brush : DEFAULT_BRUSH;
 }
 
 void wxDC::SelectColour(const wxColour& clr)
@@ -348,13 +351,12 @@ void wxDC::SetFont(const wxFont& font)
 {
     wxCHECK_RET( Ok(), wxT("invalid dc") );
 
-    if ( !font.Ok() )
+    wxFont f(font.Ok() ? font : DEFAULT_FONT);
+
+    if ( !m_surface->SetFont(f.GetDirectFBFont()) )
         return;
 
-    if ( !m_surface->SetFont(font.GetDirectFBFont()) )
-        return;
-
-    m_font = font;
+    m_font = f;
 }
 
 void wxDC::SetBackground(const wxBrush& brush)
