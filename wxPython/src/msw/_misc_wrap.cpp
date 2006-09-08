@@ -4789,44 +4789,81 @@ fail:
 SWIGINTERN PyObject *_wrap_GetStockLabel(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   int arg1 ;
-  bool arg2 = (bool) true ;
-  wxString arg3 = (wxString) wxPyEmptyString ;
+  long arg2 = (long) wxSTOCK_WITH_MNEMONIC ;
   wxString result;
   int val1 ;
   int ecode1 = 0 ;
-  bool val2 ;
+  long val2 ;
   int ecode2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
-  PyObject * obj2 = 0 ;
   char *  kwnames[] = {
-    (char *) "id",(char *) "withCodes",(char *) "accelerator", NULL 
+    (char *) "id",(char *) "flags", NULL 
   };
   
-  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|OO:GetStockLabel",kwnames,&obj0,&obj1,&obj2)) SWIG_fail;
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|O:GetStockLabel",kwnames,&obj0,&obj1)) SWIG_fail;
   ecode1 = SWIG_AsVal_int(obj0, &val1);
   if (!SWIG_IsOK(ecode1)) {
     SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "GetStockLabel" "', expected argument " "1"" of type '" "int""'");
   } 
   arg1 = static_cast< int >(val1);
   if (obj1) {
-    ecode2 = SWIG_AsVal_bool(obj1, &val2);
+    ecode2 = SWIG_AsVal_long(obj1, &val2);
     if (!SWIG_IsOK(ecode2)) {
-      SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "GetStockLabel" "', expected argument " "2"" of type '" "bool""'");
+      SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "GetStockLabel" "', expected argument " "2"" of type '" "long""'");
     } 
-    arg2 = static_cast< bool >(val2);
-  }
-  if (obj2) {
-    {
-      wxString* sptr = wxString_in_helper(obj2);
-      if (sptr == NULL) SWIG_fail;
-      arg3 = *sptr;
-      delete sptr;
-    }
+    arg2 = static_cast< long >(val2);
   }
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    result = wxGetStockLabel(arg1,arg2,arg3);
+    result = wxGetStockLabel(arg1,arg2);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  {
+#if wxUSE_UNICODE
+    resultobj = PyUnicode_FromWideChar((&result)->c_str(), (&result)->Len());
+#else
+    resultobj = PyString_FromStringAndSize((&result)->c_str(), (&result)->Len());
+#endif
+  }
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_GetStockHelpString(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  int arg1 ;
+  wxStockHelpStringClient arg2 = (wxStockHelpStringClient) wxSTOCK_MENU ;
+  wxString result;
+  int val1 ;
+  int ecode1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "id",(char *) "client", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|O:GetStockHelpString",kwnames,&obj0,&obj1)) SWIG_fail;
+  ecode1 = SWIG_AsVal_int(obj0, &val1);
+  if (!SWIG_IsOK(ecode1)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "GetStockHelpString" "', expected argument " "1"" of type '" "int""'");
+  } 
+  arg1 = static_cast< int >(val1);
+  if (obj1) {
+    ecode2 = SWIG_AsVal_int(obj1, &val2);
+    if (!SWIG_IsOK(ecode2)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "GetStockHelpString" "', expected argument " "2"" of type '" "wxStockHelpStringClient""'");
+    } 
+    arg2 = static_cast< wxStockHelpStringClient >(val2);
+  }
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = wxGetStockHelpString(arg1,arg2);
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
@@ -37287,6 +37324,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"IsStockID", (PyCFunction) _wrap_IsStockID, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"IsStockLabel", (PyCFunction) _wrap_IsStockLabel, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"GetStockLabel", (PyCFunction) _wrap_GetStockLabel, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"GetStockHelpString", (PyCFunction) _wrap_GetStockHelpString, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Bell", (PyCFunction)_wrap_Bell, METH_NOARGS, NULL},
 	 { (char *)"EndBusyCursor", (PyCFunction)_wrap_EndBusyCursor, METH_NOARGS, NULL},
 	 { (char *)"GetElapsedTime", (PyCFunction) _wrap_GetElapsedTime, METH_VARARGS | METH_KEYWORDS, NULL},
@@ -40054,6 +40092,10 @@ SWIGEXPORT void SWIG_init(void) {
   SWIG_addvarlink(SWIG_globals(),(char*)"FileSelectorPromptStr",FileSelectorPromptStr_get, FileSelectorPromptStr_set);
   SWIG_addvarlink(SWIG_globals(),(char*)"FileSelectorDefaultWildcardStr",FileSelectorDefaultWildcardStr_get, FileSelectorDefaultWildcardStr_set);
   SWIG_addvarlink(SWIG_globals(),(char*)"DirSelectorPromptStr",DirSelectorPromptStr_get, DirSelectorPromptStr_set);
+  SWIG_Python_SetConstant(d, "STOCK_NOFLAGS",SWIG_From_int(static_cast< int >(wxSTOCK_NOFLAGS)));
+  SWIG_Python_SetConstant(d, "STOCK_WITH_MNEMONIC",SWIG_From_int(static_cast< int >(wxSTOCK_WITH_MNEMONIC)));
+  SWIG_Python_SetConstant(d, "STOCK_WITH_ACCELERATOR",SWIG_From_int(static_cast< int >(wxSTOCK_WITH_ACCELERATOR)));
+  SWIG_Python_SetConstant(d, "STOCK_MENU",SWIG_From_int(static_cast< int >(wxSTOCK_MENU)));
   SWIG_Python_SetConstant(d, "SHUTDOWN_POWEROFF",SWIG_From_int(static_cast< int >(wxSHUTDOWN_POWEROFF)));
   SWIG_Python_SetConstant(d, "SHUTDOWN_REBOOT",SWIG_From_int(static_cast< int >(wxSHUTDOWN_REBOOT)));
   SWIG_Python_SetConstant(d, "OS_UNKNOWN",SWIG_From_int(static_cast< int >(wxOS_UNKNOWN)));

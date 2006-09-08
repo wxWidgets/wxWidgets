@@ -295,10 +295,18 @@ def IsStockID(*args, **kwargs):
 def IsStockLabel(*args, **kwargs):
   """IsStockLabel(int id, String label) -> bool"""
   return _misc_.IsStockLabel(*args, **kwargs)
+STOCK_NOFLAGS = _misc_.STOCK_NOFLAGS
+STOCK_WITH_MNEMONIC = _misc_.STOCK_WITH_MNEMONIC
+STOCK_WITH_ACCELERATOR = _misc_.STOCK_WITH_ACCELERATOR
 
 def GetStockLabel(*args, **kwargs):
-  """GetStockLabel(int id, bool withCodes=True, String accelerator=EmptyString) -> String"""
+  """GetStockLabel(int id, long flags=STOCK_WITH_MNEMONIC) -> String"""
   return _misc_.GetStockLabel(*args, **kwargs)
+STOCK_MENU = _misc_.STOCK_MENU
+
+def GetStockHelpString(*args, **kwargs):
+  """GetStockHelpString(int id, int client=STOCK_MENU) -> String"""
+  return _misc_.GetStockHelpString(*args, **kwargs)
 
 def Bell(*args):
   """Bell()"""
@@ -1001,6 +1009,10 @@ class FileHistory(_core.Object):
         return _misc_.FileHistory_GetCount(*args, **kwargs)
 
     GetNoHistoryFiles = GetCount 
+    Count = property(GetCount,doc="See `GetCount`") 
+    HistoryFile = property(GetHistoryFile,doc="See `GetHistoryFile`") 
+    MaxFiles = property(GetMaxFiles,doc="See `GetMaxFiles`") 
+    NoHistoryFiles = property(GetNoHistoryFiles,doc="See `GetNoHistoryFiles`") 
 _misc_.FileHistory_swigregister(FileHistory)
 
 class SingleInstanceChecker(object):
@@ -1656,6 +1668,8 @@ class LogWindow(Log):
         """PassMessages(self, bool bDoPass)"""
         return _misc_.LogWindow_PassMessages(*args, **kwargs)
 
+    Frame = property(GetFrame,doc="See `GetFrame`") 
+    OldLog = property(GetOldLog,doc="See `GetOldLog`") 
 _misc_.LogWindow_swigregister(LogWindow)
 
 class LogChain(Log):
@@ -1681,6 +1695,7 @@ class LogChain(Log):
         """GetOldLog(self) -> Log"""
         return _misc_.LogChain_GetOldLog(*args, **kwargs)
 
+    OldLog = property(GetOldLog,doc="See `GetOldLog`") 
 _misc_.LogChain_swigregister(LogChain)
 
 class LogBuffer(Log):
@@ -1694,6 +1709,7 @@ class LogBuffer(Log):
         """GetBuffer(self) -> String"""
         return _misc_.LogBuffer_GetBuffer(*args, **kwargs)
 
+    Buffer = property(GetBuffer,doc="See `GetBuffer`") 
 _misc_.LogBuffer_swigregister(LogBuffer)
 
 
@@ -2126,6 +2142,37 @@ class Joystick(object):
         return _misc_.Joystick_ReleaseCapture(*args, **kwargs)
 
     def __nonzero__(self): return self.IsOk() 
+    ButtonState = property(GetButtonState,doc="See `GetButtonState`") 
+    ManufacturerId = property(GetManufacturerId,doc="See `GetManufacturerId`") 
+    MaxAxes = property(GetMaxAxes,doc="See `GetMaxAxes`") 
+    MaxButtons = property(GetMaxButtons,doc="See `GetMaxButtons`") 
+    MovementThreshold = property(GetMovementThreshold,SetMovementThreshold,doc="See `GetMovementThreshold` and `SetMovementThreshold`") 
+    NumberAxes = property(GetNumberAxes,doc="See `GetNumberAxes`") 
+    NumberButtons = property(GetNumberButtons,doc="See `GetNumberButtons`") 
+    NumberJoysticks = property(GetNumberJoysticks,doc="See `GetNumberJoysticks`") 
+    POVCTSPosition = property(GetPOVCTSPosition,doc="See `GetPOVCTSPosition`") 
+    POVPosition = property(GetPOVPosition,doc="See `GetPOVPosition`") 
+    PollingMax = property(GetPollingMax,doc="See `GetPollingMax`") 
+    PollingMin = property(GetPollingMin,doc="See `GetPollingMin`") 
+    Position = property(GetPosition,doc="See `GetPosition`") 
+    ProductId = property(GetProductId,doc="See `GetProductId`") 
+    ProductName = property(GetProductName,doc="See `GetProductName`") 
+    RudderMax = property(GetRudderMax,doc="See `GetRudderMax`") 
+    RudderMin = property(GetRudderMin,doc="See `GetRudderMin`") 
+    RudderPosition = property(GetRudderPosition,doc="See `GetRudderPosition`") 
+    UMax = property(GetUMax,doc="See `GetUMax`") 
+    UMin = property(GetUMin,doc="See `GetUMin`") 
+    UPosition = property(GetUPosition,doc="See `GetUPosition`") 
+    VMax = property(GetVMax,doc="See `GetVMax`") 
+    VMin = property(GetVMin,doc="See `GetVMin`") 
+    VPosition = property(GetVPosition,doc="See `GetVPosition`") 
+    XMax = property(GetXMax,doc="See `GetXMax`") 
+    XMin = property(GetXMin,doc="See `GetXMin`") 
+    YMax = property(GetYMax,doc="See `GetYMax`") 
+    YMin = property(GetYMin,doc="See `GetYMin`") 
+    ZMax = property(GetZMax,doc="See `GetZMax`") 
+    ZMin = property(GetZMin,doc="See `GetZMin`") 
+    ZPosition = property(GetZPosition,doc="See `GetZPosition`") 
 _misc_.Joystick_swigregister(Joystick)
 
 wxEVT_JOY_BUTTON_DOWN = _misc_.wxEVT_JOY_BUTTON_DOWN
@@ -2212,6 +2259,11 @@ class JoystickEvent(_core.Event):
     m_buttonState = property(GetButtonState, SetButtonState)
     m_joyStick = property(GetJoystick, SetJoystick)
 
+    ButtonChange = property(GetButtonChange,SetButtonChange,doc="See `GetButtonChange` and `SetButtonChange`") 
+    ButtonState = property(GetButtonState,SetButtonState,doc="See `GetButtonState` and `SetButtonState`") 
+    Joystick = property(GetJoystick,SetJoystick,doc="See `GetJoystick` and `SetJoystick`") 
+    Position = property(GetPosition,SetPosition,doc="See `GetPosition` and `SetPosition`") 
+    ZPosition = property(GetZPosition,SetZPosition,doc="See `GetZPosition` and `SetZPosition`") 
 _misc_.JoystickEvent_swigregister(JoystickEvent)
 
 EVT_JOY_BUTTON_DOWN = wx.PyEventBinder( wxEVT_JOY_BUTTON_DOWN )
@@ -2344,6 +2396,15 @@ class FileTypeInfo(object):
         """GetIconIndex(self) -> int"""
         return _misc_.FileTypeInfo_GetIconIndex(*args, **kwargs)
 
+    Description = property(GetDescription,doc="See `GetDescription`") 
+    Extensions = property(GetExtensions,doc="See `GetExtensions`") 
+    ExtensionsCount = property(GetExtensionsCount,doc="See `GetExtensionsCount`") 
+    IconFile = property(GetIconFile,doc="See `GetIconFile`") 
+    IconIndex = property(GetIconIndex,doc="See `GetIconIndex`") 
+    MimeType = property(GetMimeType,doc="See `GetMimeType`") 
+    OpenCommand = property(GetOpenCommand,doc="See `GetOpenCommand`") 
+    PrintCommand = property(GetPrintCommand,doc="See `GetPrintCommand`") 
+    ShortDesc = property(GetShortDesc,SetShortDesc,doc="See `GetShortDesc` and `SetShortDesc`") 
 _misc_.FileTypeInfo_swigregister(FileTypeInfo)
 
 def FileTypeInfoSequence(*args, **kwargs):
@@ -2418,6 +2479,15 @@ class FileType(object):
         return _misc_.FileType_ExpandCommand(*args, **kwargs)
 
     ExpandCommand = staticmethod(ExpandCommand)
+    AllCommands = property(GetAllCommands,doc="See `GetAllCommands`") 
+    Description = property(GetDescription,doc="See `GetDescription`") 
+    Extensions = property(GetExtensions,doc="See `GetExtensions`") 
+    Icon = property(GetIcon,doc="See `GetIcon`") 
+    IconInfo = property(GetIconInfo,doc="See `GetIconInfo`") 
+    MimeType = property(GetMimeType,doc="See `GetMimeType`") 
+    MimeTypes = property(GetMimeTypes,doc="See `GetMimeTypes`") 
+    OpenCommand = property(GetOpenCommand,doc="See `GetOpenCommand`") 
+    PrintCommand = property(GetPrintCommand,doc="See `GetPrintCommand`") 
 _misc_.FileType_swigregister(FileType)
 
 def FileType_ExpandCommand(*args, **kwargs):
@@ -5022,6 +5092,7 @@ class FileDataObject(DataObjectSimple):
         """
         return _misc_.FileDataObject_AddFile(*args, **kwargs)
 
+    Filenames = property(GetFilenames,doc="See `GetFilenames`") 
 _misc_.FileDataObject_swigregister(FileDataObject)
 
 class CustomDataObject(DataObjectSimple):

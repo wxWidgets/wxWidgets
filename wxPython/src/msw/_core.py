@@ -205,6 +205,7 @@ ID_HELP_INDEX = _core_.ID_HELP_INDEX
 ID_HELP_SEARCH = _core_.ID_HELP_SEARCH
 ID_CLOSE_ALL = _core_.ID_CLOSE_ALL
 ID_PREFERENCES = _core_.ID_PREFERENCES
+ID_EDIT = _core_.ID_EDIT
 ID_CUT = _core_.ID_CUT
 ID_COPY = _core_.ID_COPY
 ID_PASTE = _core_.ID_PASTE
@@ -224,6 +225,7 @@ ID_VIEW_SORTDATE = _core_.ID_VIEW_SORTDATE
 ID_VIEW_SORTNAME = _core_.ID_VIEW_SORTNAME
 ID_VIEW_SORTSIZE = _core_.ID_VIEW_SORTSIZE
 ID_VIEW_SORTTYPE = _core_.ID_VIEW_SORTTYPE
+ID_FILE = _core_.ID_FILE
 ID_FILE1 = _core_.ID_FILE1
 ID_FILE2 = _core_.ID_FILE2
 ID_FILE3 = _core_.ID_FILE3
@@ -1713,6 +1715,10 @@ class FSFile(Object):
         """GetStream(self) -> InputStream"""
         return _core_.FSFile_GetStream(*args, **kwargs)
 
+    def DetachStream(*args, **kwargs):
+        """DetachStream(self)"""
+        return _core_.FSFile_DetachStream(*args, **kwargs)
+
     def GetMimeType(*args, **kwargs):
         """GetMimeType(self) -> String"""
         return _core_.FSFile_GetMimeType(*args, **kwargs)
@@ -1729,6 +1735,11 @@ class FSFile(Object):
         """GetModificationTime(self) -> DateTime"""
         return _core_.FSFile_GetModificationTime(*args, **kwargs)
 
+    Anchor = property(GetAnchor,doc="See `GetAnchor`") 
+    Location = property(GetLocation,doc="See `GetLocation`") 
+    MimeType = property(GetMimeType,doc="See `GetMimeType`") 
+    ModificationTime = property(GetModificationTime,doc="See `GetModificationTime`") 
+    Stream = property(GetStream,doc="See `GetStream`") 
 _core_.FSFile_swigregister(FSFile)
 
 class CPPFileSystemHandler(object):
@@ -1789,6 +1800,11 @@ class FileSystemHandler(CPPFileSystemHandler):
         """GetMimeTypeFromExt(self, String location) -> String"""
         return _core_.FileSystemHandler_GetMimeTypeFromExt(*args, **kwargs)
 
+    Anchor = property(GetAnchor,doc="See `GetAnchor`") 
+    LeftLocation = property(GetLeftLocation,doc="See `GetLeftLocation`") 
+    MimeTypeFromExt = property(GetMimeTypeFromExt,doc="See `GetMimeTypeFromExt`") 
+    Protocol = property(GetProtocol,doc="See `GetProtocol`") 
+    RightLocation = property(GetRightLocation,doc="See `GetRightLocation`") 
 _core_.FileSystemHandler_swigregister(FileSystemHandler)
 
 class FileSystem(Object):
@@ -1825,6 +1841,11 @@ class FileSystem(Object):
         return _core_.FileSystem_AddHandler(*args, **kwargs)
 
     AddHandler = staticmethod(AddHandler)
+    def RemoveHandler(*args, **kwargs):
+        """RemoveHandler(CPPFileSystemHandler handler) -> CPPFileSystemHandler"""
+        return _core_.FileSystem_RemoveHandler(*args, **kwargs)
+
+    RemoveHandler = staticmethod(RemoveHandler)
     def CleanUpHandlers(*args, **kwargs):
         """CleanUpHandlers()"""
         return _core_.FileSystem_CleanUpHandlers(*args, **kwargs)
@@ -1840,11 +1861,16 @@ class FileSystem(Object):
         return _core_.FileSystem_URLToFileName(*args, **kwargs)
 
     URLToFileName = staticmethod(URLToFileName)
+    Path = property(GetPath,doc="See `GetPath`") 
 _core_.FileSystem_swigregister(FileSystem)
 
 def FileSystem_AddHandler(*args, **kwargs):
   """FileSystem_AddHandler(CPPFileSystemHandler handler)"""
   return _core_.FileSystem_AddHandler(*args, **kwargs)
+
+def FileSystem_RemoveHandler(*args, **kwargs):
+  """FileSystem_RemoveHandler(CPPFileSystemHandler handler) -> CPPFileSystemHandler"""
+  return _core_.FileSystem_RemoveHandler(*args, **kwargs)
 
 def FileSystem_CleanUpHandlers(*args):
   """FileSystem_CleanUpHandlers()"""
@@ -2018,6 +2044,10 @@ class ImageHandler(Object):
         """SetMimeType(self, String mimetype)"""
         return _core_.ImageHandler_SetMimeType(*args, **kwargs)
 
+    Extension = property(GetExtension,SetExtension,doc="See `GetExtension` and `SetExtension`") 
+    MimeType = property(GetMimeType,SetMimeType,doc="See `GetMimeType` and `SetMimeType`") 
+    Name = property(GetName,SetName,doc="See `GetName` and `SetName`") 
+    Type = property(GetType,SetType,doc="See `GetType` and `SetType`") 
 _core_.ImageHandler_swigregister(ImageHandler)
 
 class PyImageHandler(ImageHandler):
@@ -2915,6 +2945,16 @@ class Image(Object):
 
     HSVtoRGB = staticmethod(HSVtoRGB)
     def __nonzero__(self): return self.Ok() 
+    AlphaBuffer = property(GetAlphaBuffer,SetAlphaBuffer,doc="See `GetAlphaBuffer` and `SetAlphaBuffer`") 
+    AlphaData = property(GetAlphaData,SetAlphaData,doc="See `GetAlphaData` and `SetAlphaData`") 
+    Data = property(GetData,SetData,doc="See `GetData` and `SetData`") 
+    DataBuffer = property(GetDataBuffer,SetDataBuffer,doc="See `GetDataBuffer` and `SetDataBuffer`") 
+    Height = property(GetHeight,doc="See `GetHeight`") 
+    MaskBlue = property(GetMaskBlue,doc="See `GetMaskBlue`") 
+    MaskGreen = property(GetMaskGreen,doc="See `GetMaskGreen`") 
+    MaskRed = property(GetMaskRed,doc="See `GetMaskRed`") 
+    Size = property(GetSize,doc="See `GetSize`") 
+    Width = property(GetWidth,doc="See `GetWidth`") 
 _core_.Image_swigregister(Image)
 
 def ImageFromMime(*args, **kwargs):
@@ -3401,6 +3441,9 @@ class EvtHandler(Object):
             id  = source.GetId()
         return event.Unbind(self, id, id2)              
 
+    EvtHandlerEnabled = property(GetEvtHandlerEnabled,SetEvtHandlerEnabled,doc="See `GetEvtHandlerEnabled` and `SetEvtHandlerEnabled`") 
+    NextHandler = property(GetNextHandler,SetNextHandler,doc="See `GetNextHandler` and `SetNextHandler`") 
+    PreviousHandler = property(GetPreviousHandler,SetPreviousHandler,doc="See `GetPreviousHandler` and `SetPreviousHandler`") 
 _core_.EvtHandler_swigregister(EvtHandler)
 
 #---------------------------------------------------------------------------
@@ -3922,6 +3965,11 @@ class Event(Object):
         """Clone(self) -> Event"""
         return _core_.Event_Clone(*args, **kwargs)
 
+    EventObject = property(GetEventObject,SetEventObject,doc="See `GetEventObject` and `SetEventObject`") 
+    EventType = property(GetEventType,SetEventType,doc="See `GetEventType` and `SetEventType`") 
+    Id = property(GetId,SetId,doc="See `GetId` and `SetId`") 
+    Skipped = property(GetSkipped,doc="See `GetSkipped`") 
+    Timestamp = property(GetTimestamp,SetTimestamp,doc="See `GetTimestamp` and `SetTimestamp`") 
 _core_.Event_swigregister(Event)
 
 #---------------------------------------------------------------------------
@@ -4879,7 +4927,6 @@ class KeyEvent(Event):
         """
         return _core_.KeyEvent_GetKeyCode(*args, **kwargs)
 
-    KeyCode = GetKeyCode 
     def GetUnicodeKey(*args, **kwargs):
         """
         GetUnicodeKey(self) -> int
@@ -4964,6 +5011,14 @@ class KeyEvent(Event):
     m_scanCode = property(_core_.KeyEvent_m_scanCode_get, _core_.KeyEvent_m_scanCode_set)
     m_rawCode = property(_core_.KeyEvent_m_rawCode_get, _core_.KeyEvent_m_rawCode_set)
     m_rawFlags = property(_core_.KeyEvent_m_rawFlags_get, _core_.KeyEvent_m_rawFlags_set)
+    KeyCode = property(GetKeyCode,doc="See `GetKeyCode`") 
+    Modifiers = property(GetModifiers,doc="See `GetModifiers`") 
+    Position = property(GetPosition,doc="See `GetPosition`") 
+    RawKeyCode = property(GetRawKeyCode,doc="See `GetRawKeyCode`") 
+    RawKeyFlags = property(GetRawKeyFlags,doc="See `GetRawKeyFlags`") 
+    UnicodeKey = property(GetUnicodeKey,SetUnicodeKey,doc="See `GetUnicodeKey` and `SetUnicodeKey`") 
+    X = property(GetX,doc="See `GetX`") 
+    Y = property(GetY,doc="See `GetY`") 
 _core_.KeyEvent_swigregister(KeyEvent)
 
 #---------------------------------------------------------------------------
@@ -5128,6 +5183,7 @@ class EraseEvent(Event):
         """
         return _core_.EraseEvent_GetDC(*args, **kwargs)
 
+    DC = property(GetDC,doc="See `GetDC`") 
 _core_.EraseEvent_swigregister(EraseEvent)
 
 #---------------------------------------------------------------------------
@@ -5168,6 +5224,7 @@ class FocusEvent(Event):
         """SetWindow(self, Window win)"""
         return _core_.FocusEvent_SetWindow(*args, **kwargs)
 
+    Window = property(GetWindow,SetWindow,doc="See `GetWindow` and `SetWindow`") 
 _core_.FocusEvent_swigregister(FocusEvent)
 
 #---------------------------------------------------------------------------
@@ -5397,7 +5454,6 @@ class CloseEvent(Event):
         return _core_.CloseEvent_CanVeto(*args, **kwargs)
 
     LoggingOff = property(GetLoggingOff,SetLoggingOff,doc="See `GetLoggingOff` and `SetLoggingOff`") 
-    Veto = property(GetVeto,doc="See `GetVeto`") 
 _core_.CloseEvent_swigregister(CloseEvent)
 
 #---------------------------------------------------------------------------
@@ -6683,6 +6739,14 @@ class PyApp(EvtHandler):
         """
         return _core_.PyApp_Exit(*args, **kwargs)
 
+    def GetLayoutDirection(*args, **kwargs):
+        """
+        GetLayoutDirection(self) -> wxLayoutDirection
+
+        Return the layout direction for the current locale.
+        """
+        return _core_.PyApp_GetLayoutDirection(*args, **kwargs)
+
     def ExitMainLoop(*args, **kwargs):
         """
         ExitMainLoop(self)
@@ -7501,6 +7565,16 @@ class AcceleratorEntry(object):
         """
         return _core_.AcceleratorEntry_Set(*args, **kwargs)
 
+    def Create(*args, **kwargs):
+        """
+        Create(String str) -> AcceleratorEntry
+
+        Create accelerator corresponding to the specified string, or None if
+        it coulnd't be parsed.
+        """
+        return _core_.AcceleratorEntry_Create(*args, **kwargs)
+
+    Create = staticmethod(Create)
     def GetFlags(*args, **kwargs):
         """
         GetFlags(self) -> int
@@ -7525,10 +7599,42 @@ class AcceleratorEntry(object):
         """
         return _core_.AcceleratorEntry_GetCommand(*args, **kwargs)
 
+    def IsOk(*args, **kwargs):
+        """IsOk(self) -> bool"""
+        return _core_.AcceleratorEntry_IsOk(*args, **kwargs)
+
+    def ToString(*args, **kwargs):
+        """
+        ToString(self) -> String
+
+        Returns a string representation for the this accelerator.  The string
+        is formatted using the <flags>-<keycode> format where <flags> maybe a
+        hyphen-separed list of "shift|alt|ctrl"
+
+        """
+        return _core_.AcceleratorEntry_ToString(*args, **kwargs)
+
+    def FromString(*args, **kwargs):
+        """
+        FromString(self, String str) -> bool
+
+        Returns true if the given string correctly initialized this object.
+        """
+        return _core_.AcceleratorEntry_FromString(*args, **kwargs)
+
     Command = property(GetCommand,doc="See `GetCommand`") 
     Flags = property(GetFlags,doc="See `GetFlags`") 
     KeyCode = property(GetKeyCode,doc="See `GetKeyCode`") 
 _core_.AcceleratorEntry_swigregister(AcceleratorEntry)
+
+def AcceleratorEntry_Create(*args, **kwargs):
+  """
+    AcceleratorEntry_Create(String str) -> AcceleratorEntry
+
+    Create accelerator corresponding to the specified string, or None if
+    it coulnd't be parsed.
+    """
+  return _core_.AcceleratorEntry_Create(*args, **kwargs)
 
 class AcceleratorTable(Object):
     """
@@ -7766,6 +7872,32 @@ class Window(EvtHandler):
         return _core_.Window_PrevControlId(*args, **kwargs)
 
     PrevControlId = staticmethod(PrevControlId)
+    def GetLayoutDirection(*args, **kwargs):
+        """
+        GetLayoutDirection(self) -> wxLayoutDirection
+
+        Get the layout direction (LTR or RTL) for this window.  Returns
+        ``wx.Layout_Default`` if layout direction is not supported.
+        """
+        return _core_.Window_GetLayoutDirection(*args, **kwargs)
+
+    def SetLayoutDirection(*args, **kwargs):
+        """
+        SetLayoutDirection(self, wxLayoutDirection dir)
+
+        Set the layout direction (LTR or RTL) for this window.
+        """
+        return _core_.Window_SetLayoutDirection(*args, **kwargs)
+
+    def AdjustForLayoutDirection(*args, **kwargs):
+        """
+        AdjustForLayoutDirection(self, int x, int width, int widthTotal) -> int
+
+        Mirror coordinates for RTL layout if this window uses it and if the
+        mirroring is not done automatically like Win32.
+        """
+        return _core_.Window_AdjustForLayoutDirection(*args, **kwargs)
+
     def SetSize(*args, **kwargs):
         """
         SetSize(self, Size size)
@@ -9780,11 +9912,9 @@ class Window(EvtHandler):
     ExtraStyle = property(GetExtraStyle,SetExtraStyle,doc="See `GetExtraStyle` and `SetExtraStyle`") 
     Font = property(GetFont,SetFont,doc="See `GetFont` and `SetFont`") 
     ForegroundColour = property(GetForegroundColour,SetForegroundColour,doc="See `GetForegroundColour` and `SetForegroundColour`") 
-    FullTextExtent = property(GetFullTextExtent,doc="See `GetFullTextExtent`") 
     GrandParent = property(GetGrandParent,doc="See `GetGrandParent`") 
     Handle = property(GetHandle,doc="See `GetHandle`") 
     HelpText = property(GetHelpText,SetHelpText,doc="See `GetHelpText` and `SetHelpText`") 
-    HelpTextAtPoint = property(GetHelpTextAtPoint,doc="See `GetHelpTextAtPoint`") 
     Id = property(GetId,SetId,doc="See `GetId` and `SetId`") 
     Label = property(GetLabel,SetLabel,doc="See `GetLabel` and `SetLabel`") 
     MaxHeight = property(GetMaxHeight,doc="See `GetMaxHeight`") 
@@ -9799,12 +9929,8 @@ class Window(EvtHandler):
     Rect = property(GetRect,SetRect,doc="See `GetRect` and `SetRect`") 
     ScreenPosition = property(GetScreenPosition,doc="See `GetScreenPosition`") 
     ScreenRect = property(GetScreenRect,doc="See `GetScreenRect`") 
-    ScrollPos = property(GetScrollPos,SetScrollPos,doc="See `GetScrollPos` and `SetScrollPos`") 
-    ScrollRange = property(GetScrollRange,doc="See `GetScrollRange`") 
-    ScrollThumb = property(GetScrollThumb,doc="See `GetScrollThumb`") 
     Size = property(GetSize,SetSize,doc="See `GetSize` and `SetSize`") 
     Sizer = property(GetSizer,SetSizer,doc="See `GetSizer` and `SetSizer`") 
-    TextExtent = property(GetTextExtent,doc="See `GetTextExtent`") 
     ThemeEnabled = property(GetThemeEnabled,SetThemeEnabled,doc="See `GetThemeEnabled` and `SetThemeEnabled`") 
     ToolTip = property(GetToolTip,SetToolTip,doc="See `GetToolTip` and `SetToolTip`") 
     UpdateClientRect = property(GetUpdateClientRect,doc="See `GetUpdateClientRect`") 
@@ -9814,6 +9940,9 @@ class Window(EvtHandler):
     WindowStyle = property(GetWindowStyle,SetWindowStyle,doc="See `GetWindowStyle` and `SetWindowStyle`") 
     WindowStyleFlag = property(GetWindowStyleFlag,SetWindowStyleFlag,doc="See `GetWindowStyleFlag` and `SetWindowStyleFlag`") 
     WindowVariant = property(GetWindowVariant,SetWindowVariant,doc="See `GetWindowVariant` and `SetWindowVariant`") 
+    Shown = property(IsShown,Show,doc="See `IsShown` and `Show`") 
+    Enabled = property(IsEnabled,Enable,doc="See `IsEnabled` and `Enable`") 
+    TopLevel = property(IsTopLevel,doc="See `IsTopLevel`") 
 _core_.Window_swigregister(Window)
 
 def PreWindow(*args, **kwargs):
@@ -10042,7 +10171,10 @@ class Menu(EvtHandler):
         self._setOORInfo(self)
 
     def Append(*args, **kwargs):
-        """Append(self, int id, String text, String help=EmptyString, int kind=ITEM_NORMAL) -> MenuItem"""
+        """
+        Append(self, int id, String text=EmptyString, String help=EmptyString, 
+            int kind=ITEM_NORMAL) -> MenuItem
+        """
         return _core_.Menu_Append(*args, **kwargs)
 
     def AppendSeparator(*args, **kwargs):
@@ -10083,7 +10215,7 @@ class Menu(EvtHandler):
 
     def Insert(*args, **kwargs):
         """
-        Insert(self, size_t pos, int id, String text, String help=EmptyString, 
+        Insert(self, size_t pos, int id, String text=EmptyString, String help=EmptyString, 
             int kind=ITEM_NORMAL) -> MenuItem
         """
         return _core_.Menu_Insert(*args, **kwargs)
@@ -10105,7 +10237,10 @@ class Menu(EvtHandler):
         return _core_.Menu_InsertMenu(*args, **kwargs)
 
     def Prepend(*args, **kwargs):
-        """Prepend(self, int id, String text, String help=EmptyString, int kind=ITEM_NORMAL) -> MenuItem"""
+        """
+        Prepend(self, int id, String text=EmptyString, String help=EmptyString, 
+            int kind=ITEM_NORMAL) -> MenuItem
+        """
         return _core_.Menu_Prepend(*args, **kwargs)
 
     def PrependSeparator(*args, **kwargs):
@@ -10406,6 +10541,19 @@ class MenuBar(Window):
         return _core_.MenuBar_GetAutoWindowMenu(*args, **kwargs)
 
     GetAutoWindowMenu = staticmethod(GetAutoWindowMenu)
+    def GetMenus(self):
+        """Return a list of (menu, label) items for the menus in the MenuBar. """
+        return [(self.GetMenu(i), self.GetLabelTop(i)) 
+                for i in range(self.GetMenuCount())]
+        
+    def SetMenus(self, items):
+        """Clear and add new menus to the MenuBar from a list of (menu, label) items. """
+        for i in range(self.GetMenuCount()-1, -1, -1):
+            self.Remove(i)
+        for m, l in items:
+            self.Append(m, l)
+
+    Menus = property(GetMenus,SetMenus) 
 _core_.MenuBar_swigregister(MenuBar)
 
 def MenuBar_SetAutoWindowMenu(*args, **kwargs):
@@ -10900,6 +11048,21 @@ class ItemContainer(object):
         """
         return _core_.ItemContainer_Select(*args, **kwargs)
 
+    def GetItems(self):
+        """Return a list of the strings in the control"""
+        return [self.GetString(i) for i in xrange(self.GetCount())]
+        
+    def SetItems(self, items):
+        """Clear and set the strings in the control from a list"""
+        self.Clear()
+        for i in items:
+            self.Append(i)        
+
+    Count = property(GetCount,doc="See `GetCount`") 
+    Items = property(GetItems,SetItems,doc="See `GetItems` and `SetItems`") 
+    Selection = property(GetSelection,SetSelection,doc="See `GetSelection` and `SetSelection`") 
+    StringSelection = property(GetStringSelection,SetStringSelection,doc="See `GetStringSelection` and `SetStringSelection`") 
+    Strings = property(GetStrings,doc="See `GetStrings`") 
 _core_.ItemContainer_swigregister(ItemContainer)
 
 #---------------------------------------------------------------------------
@@ -11357,6 +11520,57 @@ class Sizer(Object):
     def _SetItemMinSize(*args, **kwargs):
         """_SetItemMinSize(self, PyObject item, Size size)"""
         return _core_.Sizer__SetItemMinSize(*args, **kwargs)
+
+    def _ReplaceWin(*args, **kwargs):
+        """_ReplaceWin(self, Window oldwin, Window newwin, bool recursive=False) -> bool"""
+        return _core_.Sizer__ReplaceWin(*args, **kwargs)
+
+    def _ReplaceSizer(*args, **kwargs):
+        """_ReplaceSizer(self, Sizer oldsz, Sizer newsz, bool recursive=False) -> bool"""
+        return _core_.Sizer__ReplaceSizer(*args, **kwargs)
+
+    def _ReplaceItem(*args, **kwargs):
+        """_ReplaceItem(self, size_t index, SizerItem newitem) -> bool"""
+        return _core_.Sizer__ReplaceItem(*args, **kwargs)
+
+    def Replace(self, olditem, item, recursive=False):
+        """
+        Detaches the given ``olditem`` from the sizer and replaces it with
+        ``item`` which can be a window, sizer, or `wx.SizerItem`.  The
+        detached child is destroyed only if it is not a window, (because
+        windows are owned by their parent, not the sizer.)  The
+        ``recursive`` parameter can be used to search for the given
+        element recursivly in subsizers.
+
+        This method does not cause any layout or resizing to take place,
+        call `Layout` to do so.
+
+        Returns ``True`` if the child item was found and removed.
+        """
+        if isinstance(olditem, wx.Window):
+            return self._ReplaceWin(olditem, item, recursive)
+        elif isinstnace(olditem, wx.Sizer):
+            return self._ReplaceSizer(olditem, item, recursive)
+        elif isinstnace(olditem, int):
+            return self._ReplaceItem(olditem, item)
+        else:
+            raise TypeError("Expected Window, Sizer, or integer for first parameter.")
+
+    def SetContainingWindow(*args, **kwargs):
+        """
+        SetContainingWindow(self, Window window)
+
+        Set (or unset) the window this sizer is used in.
+        """
+        return _core_.Sizer_SetContainingWindow(*args, **kwargs)
+
+    def GetContainingWindow(*args, **kwargs):
+        """
+        GetContainingWindow(self) -> Window
+
+        Get the window this sizer is used in.
+        """
+        return _core_.Sizer_GetContainingWindow(*args, **kwargs)
 
     def SetItemMinSize(self, item, *args):
         """
@@ -11907,6 +12121,10 @@ class GridSizer(Sizer):
             cols = (nitems + rows - 1) / rows
         return (rows, cols)
 
+    Cols = property(GetCols,SetCols,doc="See `GetCols` and `SetCols`") 
+    HGap = property(GetHGap,SetHGap,doc="See `GetHGap` and `SetHGap`") 
+    Rows = property(GetRows,SetRows,doc="See `GetRows` and `SetRows`") 
+    VGap = property(GetVGap,SetVGap,doc="See `GetVGap` and `SetVGap`") 
 _core_.GridSizer_swigregister(GridSizer)
 
 #---------------------------------------------------------------------------
@@ -12039,8 +12257,6 @@ class FlexGridSizer(GridSizer):
             ==========================  =================================================
 
         Note that this method does not trigger relayout.
-
-
         """
         return _core_.FlexGridSizer_SetNonFlexibleGrowMode(*args, **kwargs)
 
@@ -12073,6 +12289,10 @@ class FlexGridSizer(GridSizer):
         """
         return _core_.FlexGridSizer_GetColWidths(*args, **kwargs)
 
+    ColWidths = property(GetColWidths,doc="See `GetColWidths`") 
+    FlexibleDirection = property(GetFlexibleDirection,SetFlexibleDirection,doc="See `GetFlexibleDirection` and `SetFlexibleDirection`") 
+    NonFlexibleGrowMode = property(GetNonFlexibleGrowMode,SetNonFlexibleGrowMode,doc="See `GetNonFlexibleGrowMode` and `SetNonFlexibleGrowMode`") 
+    RowHeights = property(GetRowHeights,doc="See `GetRowHeights`") 
 _core_.FlexGridSizer_swigregister(FlexGridSizer)
 
 class StdDialogButtonSizer(BoxSizer):
@@ -12409,6 +12629,10 @@ class GBSizerItem(SizerItem):
         """
         return _core_.GBSizerItem_SetGBSizer(*args, **kwargs)
 
+    EndPos = property(GetEndPos,doc="See `GetEndPos`") 
+    GBSizer = property(GetGBSizer,SetGBSizer,doc="See `GetGBSizer` and `SetGBSizer`") 
+    Pos = property(GetPos,SetPos,doc="See `GetPos` and `SetPos`") 
+    Span = property(GetSpan,SetSpan,doc="See `GetSpan` and `SetSpan`") 
 _core_.GBSizerItem_swigregister(GBSizerItem)
 DefaultSpan = cvar.DefaultSpan
 
@@ -12820,6 +13044,14 @@ class IndividualLayoutConstraint(Object):
         """
         return _core_.IndividualLayoutConstraint_GetEdge(*args, **kwargs)
 
+    Done = property(GetDone,SetDone,doc="See `GetDone` and `SetDone`") 
+    Margin = property(GetMargin,SetMargin,doc="See `GetMargin` and `SetMargin`") 
+    MyEdge = property(GetMyEdge,doc="See `GetMyEdge`") 
+    OtherEdge = property(GetOtherEdge,doc="See `GetOtherEdge`") 
+    OtherWindow = property(GetOtherWindow,doc="See `GetOtherWindow`") 
+    Percent = property(GetPercent,doc="See `GetPercent`") 
+    Relationship = property(GetRelationship,SetRelationship,doc="See `GetRelationship` and `SetRelationship`") 
+    Value = property(GetValue,SetValue,doc="See `GetValue` and `SetValue`") 
 _core_.IndividualLayoutConstraint_swigregister(IndividualLayoutConstraint)
 
 class LayoutConstraints(Object):
@@ -13124,6 +13356,8 @@ class FutureCall:
             # if it wasn't restarted, then cleanup
             wx.CallAfter(self.Stop)
 
+    Interval = property(GetInterval)
+    Result = property(GetResult)
 
 
 #----------------------------------------------------------------------------

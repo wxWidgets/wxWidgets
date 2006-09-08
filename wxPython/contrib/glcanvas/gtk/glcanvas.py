@@ -63,44 +63,13 @@ class GLContext(_core.Object):
     thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
     __repr__ = _swig_repr
     def __init__(self, *args, **kwargs): 
-        """
-        __init__(self, bool isRGB, GLCanvas win, Palette palette=wxNullPalette, 
-            GLContext other=None) -> GLContext
-        """
+        """__init__(self, GLCanvas win, GLContext other=None) -> GLContext"""
         _glcanvas.GLContext_swiginit(self,_glcanvas.new_GLContext(*args, **kwargs))
     __swig_destroy__ = _glcanvas.delete_GLContext
     __del__ = lambda self : None;
     def SetCurrent(*args, **kwargs):
-        """SetCurrent(self)"""
+        """SetCurrent(self, GLCanvas win)"""
         return _glcanvas.GLContext_SetCurrent(*args, **kwargs)
-
-    def SetColour(*args, **kwargs):
-        """SetColour(self, String colour)"""
-        return _glcanvas.GLContext_SetColour(*args, **kwargs)
-
-    def SwapBuffers(*args, **kwargs):
-        """SwapBuffers(self)"""
-        return _glcanvas.GLContext_SwapBuffers(*args, **kwargs)
-
-    def SetupPixelFormat(*args, **kwargs):
-        """SetupPixelFormat(self)"""
-        return _glcanvas.GLContext_SetupPixelFormat(*args, **kwargs)
-
-    def SetupPalette(*args, **kwargs):
-        """SetupPalette(self, Palette palette)"""
-        return _glcanvas.GLContext_SetupPalette(*args, **kwargs)
-
-    def CreateDefaultPalette(*args, **kwargs):
-        """CreateDefaultPalette(self) -> Palette"""
-        return _glcanvas.GLContext_CreateDefaultPalette(*args, **kwargs)
-
-    def GetPalette(*args, **kwargs):
-        """GetPalette(self) -> Palette"""
-        return _glcanvas.GLContext_GetPalette(*args, **kwargs)
-
-    def GetWindow(*args, **kwargs):
-        """GetWindow(self) -> Window"""
-        return _glcanvas.GLContext_GetWindow(*args, **kwargs)
 
 _glcanvas.GLContext_swigregister(GLContext)
 cvar = _glcanvas.cvar
@@ -136,7 +105,7 @@ class GLCanvas(_core.Window):
         self._setOORInfo(self)
 
     def SetCurrent(*args, **kwargs):
-        """SetCurrent(self)"""
+        """SetCurrent(self, GLContext RC)"""
         return _glcanvas.GLCanvas_SetCurrent(*args, **kwargs)
 
     def SetColour(*args, **kwargs):

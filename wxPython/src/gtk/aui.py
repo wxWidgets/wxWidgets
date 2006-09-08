@@ -1346,27 +1346,30 @@ class DockArt(object):
         return _aui.DockArt_SetColor(*args, **kwargs)
 
     def DrawSash(*args, **kwargs):
-        """DrawSash(self, DC dc, int orientation, Rect rect)"""
+        """DrawSash(self, DC dc, Window window, int orientation, Rect rect)"""
         return _aui.DockArt_DrawSash(*args, **kwargs)
 
     def DrawBackground(*args, **kwargs):
-        """DrawBackground(self, DC dc, int orientation, Rect rect)"""
+        """DrawBackground(self, DC dc, Window window, int orientation, Rect rect)"""
         return _aui.DockArt_DrawBackground(*args, **kwargs)
 
     def DrawCaption(*args, **kwargs):
-        """DrawCaption(self, DC dc, String text, Rect rect, PaneInfo pane)"""
+        """DrawCaption(self, DC dc, Window window, String text, Rect rect, PaneInfo pane)"""
         return _aui.DockArt_DrawCaption(*args, **kwargs)
 
     def DrawGripper(*args, **kwargs):
-        """DrawGripper(self, DC dc, Rect rect, PaneInfo pane)"""
+        """DrawGripper(self, DC dc, Window window, Rect rect, PaneInfo pane)"""
         return _aui.DockArt_DrawGripper(*args, **kwargs)
 
     def DrawBorder(*args, **kwargs):
-        """DrawBorder(self, DC dc, Rect rect, PaneInfo pane)"""
+        """DrawBorder(self, DC dc, Window window, Rect rect, PaneInfo pane)"""
         return _aui.DockArt_DrawBorder(*args, **kwargs)
 
     def DrawPaneButton(*args, **kwargs):
-        """DrawPaneButton(self, DC dc, int button, int button_state, Rect rect, PaneInfo pane)"""
+        """
+        DrawPaneButton(self, DC dc, Window window, int button, int button_state, 
+            Rect rect, PaneInfo pane)
+        """
         return _aui.DockArt_DrawPaneButton(*args, **kwargs)
 
 _aui.DockArt_swigregister(DockArt)

@@ -948,6 +948,10 @@ class Gauge(_core.Control):
         return _controls_.Gauge_GetClassDefaultAttributes(*args, **kwargs)
 
     GetClassDefaultAttributes = staticmethod(GetClassDefaultAttributes)
+    BezelFace = property(GetBezelFace,SetBezelFace,doc="See `GetBezelFace` and `SetBezelFace`") 
+    Range = property(GetRange,SetRange,doc="See `GetRange` and `SetRange`") 
+    ShadowWidth = property(GetShadowWidth,SetShadowWidth,doc="See `GetShadowWidth` and `SetShadowWidth`") 
+    Value = property(GetValue,SetValue,doc="See `GetValue` and `SetValue`") 
 _controls_.Gauge_swigregister(Gauge)
 GaugeNameStr = cvar.GaugeNameStr
 
@@ -1405,6 +1409,7 @@ class ListBox(_core.ControlWithItems):
         return _controls_.ListBox_GetClassDefaultAttributes(*args, **kwargs)
 
     GetClassDefaultAttributes = staticmethod(GetClassDefaultAttributes)
+    Selections = property(GetSelections,doc="See `GetSelections`") 
 _controls_.ListBox_swigregister(ListBox)
 ListBoxNameStr = cvar.ListBoxNameStr
 
@@ -3173,6 +3178,7 @@ class Listbook(BookCtrlBase):
         """GetListView(self) -> ListView"""
         return _controls_.Listbook_GetListView(*args, **kwargs)
 
+    ListView = property(GetListView,doc="See `GetListView`") 
 _controls_.Listbook_swigregister(Listbook)
 
 def PreListbook(*args, **kwargs):
@@ -4047,6 +4053,9 @@ class ListItemAttr(object):
         args[0].thisown = 0
         return val
 
+    BackgroundColour = property(GetBackgroundColour,SetBackgroundColour,doc="See `GetBackgroundColour` and `SetBackgroundColour`") 
+    Font = property(GetFont,SetFont,doc="See `GetFont` and `SetFont`") 
+    TextColour = property(GetTextColour,SetTextColour,doc="See `GetTextColour` and `SetTextColour`") 
 _controls_.ListItemAttr_swigregister(ListItemAttr)
 ListCtrlNameStr = cvar.ListCtrlNameStr
 
@@ -4187,6 +4196,19 @@ class ListItem(_core.Object):
     m_data = property(_controls_.ListItem_m_data_get, _controls_.ListItem_m_data_set)
     m_format = property(_controls_.ListItem_m_format_get, _controls_.ListItem_m_format_set)
     m_width = property(_controls_.ListItem_m_width_get, _controls_.ListItem_m_width_set)
+    Align = property(GetAlign,SetAlign,doc="See `GetAlign` and `SetAlign`") 
+    Attributes = property(GetAttributes,doc="See `GetAttributes`") 
+    BackgroundColour = property(GetBackgroundColour,SetBackgroundColour,doc="See `GetBackgroundColour` and `SetBackgroundColour`") 
+    Column = property(GetColumn,SetColumn,doc="See `GetColumn` and `SetColumn`") 
+    Data = property(GetData,SetData,doc="See `GetData` and `SetData`") 
+    Font = property(GetFont,SetFont,doc="See `GetFont` and `SetFont`") 
+    Id = property(GetId,SetId,doc="See `GetId` and `SetId`") 
+    Image = property(GetImage,SetImage,doc="See `GetImage` and `SetImage`") 
+    Mask = property(GetMask,SetMask,doc="See `GetMask` and `SetMask`") 
+    State = property(GetState,SetState,doc="See `GetState` and `SetState`") 
+    Text = property(GetText,SetText,doc="See `GetText` and `SetText`") 
+    TextColour = property(GetTextColour,SetTextColour,doc="See `GetTextColour` and `SetTextColour`") 
+    Width = property(GetWidth,SetWidth,doc="See `GetWidth` and `SetWidth`") 
 _controls_.ListItem_swigregister(ListItem)
 
 #---------------------------------------------------------------------------
@@ -4262,6 +4284,18 @@ class ListEvent(_core.NotifyEvent):
         """SetEditCanceled(self, bool editCancelled)"""
         return _controls_.ListEvent_SetEditCanceled(*args, **kwargs)
 
+    CacheFrom = property(GetCacheFrom,doc="See `GetCacheFrom`") 
+    CacheTo = property(GetCacheTo,doc="See `GetCacheTo`") 
+    Column = property(GetColumn,doc="See `GetColumn`") 
+    Data = property(GetData,doc="See `GetData`") 
+    Image = property(GetImage,doc="See `GetImage`") 
+    Index = property(GetIndex,doc="See `GetIndex`") 
+    Item = property(GetItem,doc="See `GetItem`") 
+    KeyCode = property(GetKeyCode,doc="See `GetKeyCode`") 
+    Label = property(GetLabel,doc="See `GetLabel`") 
+    Mask = property(GetMask,doc="See `GetMask`") 
+    Point = property(GetPoint,doc="See `GetPoint`") 
+    Text = property(GetText,doc="See `GetText`") 
 _controls_.ListEvent_swigregister(ListEvent)
 
 wxEVT_COMMAND_LIST_BEGIN_DRAG = _controls_.wxEVT_COMMAND_LIST_BEGIN_DRAG
@@ -4707,6 +4741,17 @@ class ListCtrl(_core.Control):
         return _controls_.ListCtrl_GetClassDefaultAttributes(*args, **kwargs)
 
     GetClassDefaultAttributes = staticmethod(GetClassDefaultAttributes)
+    ColumnCount = property(GetColumnCount,doc="See `GetColumnCount`") 
+    CountPerPage = property(GetCountPerPage,doc="See `GetCountPerPage`") 
+    EditControl = property(GetEditControl,doc="See `GetEditControl`") 
+    FocusedItem = property(GetFocusedItem,doc="See `GetFocusedItem`") 
+    ImageList = property(GetImageList,SetImageList,doc="See `GetImageList` and `SetImageList`") 
+    ItemCount = property(GetItemCount,SetItemCount,doc="See `GetItemCount` and `SetItemCount`") 
+    MainWindow = property(GetMainWindow,doc="See `GetMainWindow`") 
+    SelectedItemCount = property(GetSelectedItemCount,doc="See `GetSelectedItemCount`") 
+    TextColour = property(GetTextColour,SetTextColour,doc="See `GetTextColour` and `SetTextColour`") 
+    TopItem = property(GetTopItem,doc="See `GetTopItem`") 
+    ViewRect = property(GetViewRect,doc="See `GetViewRect`") 
 _controls_.ListCtrl_swigregister(ListCtrl)
 
 def PreListCtrl(*args, **kwargs):
@@ -4788,6 +4833,7 @@ class ListView(ListCtrl):
         """ClearColumnImage(self, int col)"""
         return _controls_.ListView_ClearColumnImage(*args, **kwargs)
 
+    FocusedItem = property(GetFocusedItem,doc="See `GetFocusedItem`") 
 _controls_.ListView_swigregister(ListView)
 
 def PreListView(*args, **kwargs):
@@ -5531,6 +5577,15 @@ class GenericDirCtrl(_core.Control):
         """ReCreateTree(self)"""
         return _controls_.GenericDirCtrl_ReCreateTree(*args, **kwargs)
 
+    DefaultPath = property(GetDefaultPath,SetDefaultPath,doc="See `GetDefaultPath` and `SetDefaultPath`") 
+    FilePath = property(GetFilePath,doc="See `GetFilePath`") 
+    Filter = property(GetFilter,SetFilter,doc="See `GetFilter` and `SetFilter`") 
+    FilterIndex = property(GetFilterIndex,SetFilterIndex,doc="See `GetFilterIndex` and `SetFilterIndex`") 
+    FilterListCtrl = property(GetFilterListCtrl,doc="See `GetFilterListCtrl`") 
+    Path = property(GetPath,SetPath,doc="See `GetPath` and `SetPath`") 
+    RootId = property(GetRootId,doc="See `GetRootId`") 
+    ShowHidden = property(GetShowHidden,ShowHidden,doc="See `GetShowHidden` and `ShowHidden`") 
+    TreeCtrl = property(GetTreeCtrl,doc="See `GetTreeCtrl`") 
 _controls_.GenericDirCtrl_swigregister(GenericDirCtrl)
 DirDialogDefaultFolderStr = cvar.DirDialogDefaultFolderStr
 
@@ -5852,6 +5907,10 @@ class HelpEvent(_core.CommandEvent):
         """SetOrigin(self, int origin)"""
         return _controls_.HelpEvent_SetOrigin(*args, **kwargs)
 
+    Link = property(GetLink,SetLink,doc="See `GetLink` and `SetLink`") 
+    Origin = property(GetOrigin,SetOrigin,doc="See `GetOrigin` and `SetOrigin`") 
+    Position = property(GetPosition,SetPosition,doc="See `GetPosition` and `SetPosition`") 
+    Target = property(GetTarget,SetTarget,doc="See `GetTarget` and `SetTarget`") 
 _controls_.HelpEvent_swigregister(HelpEvent)
 
 class ContextHelp(_core.Object):
@@ -6363,6 +6422,11 @@ class HyperlinkCtrl(_core.Control):
         """GetVisited(self) -> bool"""
         return _controls_.HyperlinkCtrl_GetVisited(*args, **kwargs)
 
+    HoverColour = property(GetHoverColour,SetHoverColour,doc="See `GetHoverColour` and `SetHoverColour`") 
+    NormalColour = property(GetNormalColour,SetNormalColour,doc="See `GetNormalColour` and `SetNormalColour`") 
+    URL = property(GetURL,SetURL,doc="See `GetURL` and `SetURL`") 
+    Visited = property(GetVisited,SetVisited,doc="See `GetVisited` and `SetVisited`") 
+    VisitedColour = property(GetVisitedColour,SetVisitedColour,doc="See `GetVisitedColour` and `SetVisitedColour`") 
 _controls_.HyperlinkCtrl_swigregister(HyperlinkCtrl)
 HyperlinkCtrlNameStr = cvar.HyperlinkCtrlNameStr
 
@@ -6399,6 +6463,7 @@ class HyperlinkEvent(_core.CommandEvent):
         """SetURL(self, String url)"""
         return _controls_.HyperlinkEvent_SetURL(*args, **kwargs)
 
+    URL = property(GetURL,SetURL,doc="See `GetURL` and `SetURL`") 
 _controls_.HyperlinkEvent_swigregister(HyperlinkEvent)
 
 EVT_HYPERLINK = wx.PyEventBinder( wxEVT_COMMAND_HYPERLINK, 1 )
@@ -6673,6 +6738,8 @@ class FilePickerCtrl(PickerBase):
         """GetTextCtrlValue(self) -> String"""
         return _controls_.FilePickerCtrl_GetTextCtrlValue(*args, **kwargs)
 
+    Path = property(GetPath,SetPath,doc="See `GetPath` and `SetPath`") 
+    TextCtrlValue = property(GetTextCtrlValue,doc="See `GetTextCtrlValue`") 
 _controls_.FilePickerCtrl_swigregister(FilePickerCtrl)
 FilePickerCtrlNameStr = cvar.FilePickerCtrlNameStr
 FileSelectorPromptStr = cvar.FileSelectorPromptStr
@@ -6755,6 +6822,7 @@ class FileDirPickerEvent(_core.CommandEvent):
         """SetPath(self, String p)"""
         return _controls_.FileDirPickerEvent_SetPath(*args, **kwargs)
 
+    Path = property(GetPath,SetPath,doc="See `GetPath` and `SetPath`") 
 _controls_.FileDirPickerEvent_swigregister(FileDirPickerEvent)
 
 #---------------------------------------------------------------------------
@@ -6802,6 +6870,8 @@ class FontPickerCtrl(PickerBase):
         """GetMaxPointSize(self) -> unsigned int"""
         return _controls_.FontPickerCtrl_GetMaxPointSize(*args, **kwargs)
 
+    MaxPointSize = property(GetMaxPointSize,SetMaxPointSize,doc="See `GetMaxPointSize` and `SetMaxPointSize`") 
+    SelectedFont = property(GetSelectedFont,SetSelectedFont,doc="See `GetSelectedFont` and `SetSelectedFont`") 
 _controls_.FontPickerCtrl_swigregister(FontPickerCtrl)
 FontPickerCtrlNameStr = cvar.FontPickerCtrlNameStr
 
@@ -6828,6 +6898,7 @@ class FontPickerEvent(_core.CommandEvent):
         """SetFont(self, Font c)"""
         return _controls_.FontPickerEvent_SetFont(*args, **kwargs)
 
+    Font = property(GetFont,SetFont,doc="See `GetFont` and `SetFont`") 
 _controls_.FontPickerEvent_swigregister(FontPickerEvent)
 
 
