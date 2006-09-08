@@ -94,6 +94,7 @@ public:
     virtual wxSize GetPPI() const;
     virtual int GetDepth() const;
 
+// protected:
     // implementation
     // --------------
 
@@ -114,9 +115,10 @@ public:
     PangoLayout *m_layout;
     PangoFontDescription *m_fontdesc;
 
-protected:
     void SetUpDC();
     void Destroy();
+    
+protected:
     virtual void ComputeScaleAndOrigin();
 
     GdkWindow *GetWindow() { return m_window; }
