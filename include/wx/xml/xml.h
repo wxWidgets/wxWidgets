@@ -115,7 +115,7 @@ public:
     wxXmlNode(wxXmlNodeType type, const wxString& name,
               const wxString& content = wxEmptyString);
     virtual void AddChild(wxXmlNode *child);
-    virtual void InsertChild(wxXmlNode *child, wxXmlNode *before_node);
+    virtual bool InsertChild(wxXmlNode *child, wxXmlNode *before_node);
     virtual bool RemoveChild(wxXmlNode *child);
     virtual void AddProperty(const wxString& name, const wxString& value);
     virtual bool DeleteProperty(const wxString& name);

@@ -213,9 +213,12 @@ Returns \true if this node has a property named {\it propName}.
 
 \membersection{wxXmlNode::InsertChild}\label{wxxmlnodeinsertchild}
 
-\func{void}{InsertChild}{\param{wxXmlNode* }{child}, \param{wxXmlNode* }{before\_node}}
+\func{bool}{InsertChild}{\param{wxXmlNode* }{child}, \param{wxXmlNode* }{before\_node}}
 
 Inserts the {\it child} node after {\it before\_node} in the children list.
+If {\it before\_node} is \NULL, then {\it child} is prepended to the list of children and
+becomes the first child of this node.
+Returns \true if {\it before\_node} has been found and the {\it child} node has been inserted.
 
 \membersection{wxXmlNode::RemoveChild}\label{wxxmlnoderemovechild}
 

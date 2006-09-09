@@ -178,21 +178,40 @@ void wxXmlNode::AddChild(wxXmlNode *child)
     child->m_parent = this;
 }
 
-void wxXmlNode::InsertChild(wxXmlNode *child, wxXmlNode *before_node)
+bool wxXmlNode::InsertChild(wxXmlNode *child, wxXmlNode *before_node)
 {
-    wxASSERT_MSG(before_node->GetParent() == this, wxT("wxXmlNode::InsertChild - the node has incorrect parent"));
+    wxCHECK_MSG(before_node == NULL || before_node->GetParent() == this, false,
+                 wxT("wxXmlNode::InsertChild - the node has incorrect parent"));
+    wxCHECK_MSG(child, false, wxT("Cannot insert a NULL pointer!"));
 
     if (m_children == before_node)
        m_children = child;
+    else if (m_children == NULL)
+    {
+        if (before_node != NULL)
+            return false;       // we have no children so we don't need to search
+        m_children = child;
+    }
+    else if (before_node == NULL)
+    {
+        // prepend child
+        child->m_parent = this;
+        child->m_next = m_children;
+        m_children = child;
+        return true;
+    }
     else
     {
         wxXmlNode *ch = m_children;
-        while (ch->m_next != before_node) ch = ch->m_next;
+        while (ch && ch->m_next != before_node) ch = ch->m_next;
+        if (!ch)
+            return false;       // before_node not found
         ch->m_next = child;
     }
 
     child->m_parent = this;
     child->m_next = before_node;
+    return true;
 }
 
 bool wxXmlNode::RemoveChild(wxXmlNode *child)
