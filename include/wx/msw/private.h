@@ -536,7 +536,9 @@ private:
         {
             m_modeOld = ::SetMapMode(hdc, mm);
             if ( !m_modeOld )
+            {
                 wxLogLastError(_T("SelectClipRgn"));
+            }
         }
 
         ~HDCMapModeChanger()
@@ -565,13 +567,17 @@ public:
     {
         m_hGlobal = ::GlobalAlloc(flags, size);
         if ( !m_hGlobal )
+        {
             wxLogLastError(_T("GlobalAlloc"));
+        }
     }
 
     ~GlobalPtr()
     {
         if ( m_hGlobal && ::GlobalFree(m_hGlobal) )
+        {
             wxLogLastError(_T("GlobalFree"));
+        }
     }
 
     // implicit conversion
