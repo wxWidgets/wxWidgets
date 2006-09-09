@@ -31,7 +31,7 @@ class TestPanel(wx.Panel):
             dc.SetPen(wx.Pen(penclr))
             dc.SetBrush(wx.Brush(brushclr))
             rect.SetPosition(pos)
-            dc.DrawRectangleRect(rect)
+            dc.DrawRoundedRectangleRect(rect, 8)
             
         
 #----------------------------------------------------------------------

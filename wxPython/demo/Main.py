@@ -60,7 +60,7 @@ _treeList = [
         'BitmapFromBuffer',
         'RawBitmapAccess',
         'DragScroller',
-        'AlphaDrawing',
+##        'AlphaDrawing',
         ]),
 
     # managed windows == things with a (optional) caption you can close
@@ -233,7 +233,7 @@ _treeList = [
 
     # Images
     ('Using Images', [
-        'AlphaDrawing',
+##        'AlphaDrawing',
         'ArtProvider',
         'BitmapFromBuffer',
         'Cursor',
@@ -249,7 +249,7 @@ _treeList = [
 
     # Other stuff
     ('Miscellaneous', [
-        'AlphaDrawing',
+##        'AlphaDrawing',
         'ColourDB',
         ##'DialogUnits',   # needs more explanations
         'DragScroller',
