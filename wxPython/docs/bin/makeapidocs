@@ -2,6 +2,8 @@
 
 #----------------------------------------------------------------------
 
+set -o xtrace
+
 if [ ! -d wxPython ]; then  # TODO: make this test more robust
     echo "Please run this script from the root wxPython directory."
     exit 1
@@ -40,6 +42,9 @@ export PTYHONPATH=$PWD
 #    --docformat epytext \
 #    --debug \
 #    --inheritance grouped \
+#    --inheritance none \
+
+python docs/bin/BuildAPIHelpBook.py wxpyapi docs/api
 
 
 # TODO: 
