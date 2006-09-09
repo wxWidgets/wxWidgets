@@ -58,9 +58,6 @@ struct _GtkPizza
 
     GdkWindow *bin_window;
 
-    gint scroll_x;
-    gint scroll_y;
-
     gboolean external_expose;
 };
 

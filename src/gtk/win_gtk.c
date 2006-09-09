@@ -197,9 +197,6 @@ gtk_pizza_init (GtkPizza *pizza)
     pizza->xoffset = 0;
     pizza->yoffset = 0;
 
-    pizza->scroll_x = 0;
-    pizza->scroll_y = 0;
-
     pizza->external_expose = FALSE;
 }
 
