@@ -56,20 +56,26 @@ wxCompareFamilies (const void *a, const void *b)
   return g_utf8_collate (a_name, b_name);
 }
 
-// I admit I don't yet understand encodings with Pango
 bool wxFontEnumerator::EnumerateFacenames(wxFontEncoding encoding,
                                           bool fixedWidthOnly)
 {
+    if ( encoding != wxFONTENCODING_SYSTEM && encoding != wxFONTENCODING_UTF8 )
+    {
+        // Pango supports only UTF-8 encoding (and system means any, so we
+        // accept it too)
+        return false;
+    }
+
 #if defined(__WXGTK20__) || !defined(HAVE_PANGO_FONT_FAMILY_IS_MONOSPACE)
     if ( fixedWidthOnly
 #if defined(__WXGTK24__)
         && (gtk_check_version(2,4,0) != NULL)
 #endif
        )
-{
+    {
         OnFacename( wxT("monospace") );
     }
-    else
+    else // !fixedWidthOnly
 #endif // __WXGTK20__ || !HAVE_PANGO_FONT_FAMILY_IS_MONOSPACE
     {
         PangoFontFamily **families = NULL;
@@ -104,14 +110,37 @@ bool wxFontEnumerator::EnumerateFacenames(wxFontEncoding encoding,
     return true;
 }
 
-bool wxFontEnumerator::EnumerateEncodings(const wxString& family)
+bool wxFontEnumerator::EnumerateEncodings(const wxString& facename)
 {
-    return false;
+    // name of UTF-8 encoding: no need to use wxFontMapper for it as it's
+    // unlikely to change
+    const wxString utf8(_T("UTF-8"));
+
+
+    // all fonts are in UTF-8 only when using Pango
+    if ( !facename.empty() )
+    {
+        OnFontEncoding(facename, utf8);
+        return true;
+    }
+
+    // so enumerating all facenames supporting this encoding is the same as
+    // enumerating all facenames
+    const wxArrayString facenames(GetFacenames(wxFONTENCODING_UTF8));
+    const size_t count = facenames.size();
+    if ( !count )
+        return false;
+
+    for ( size_t n = 0; n < count; n++ )
+    {
+        OnFontEncoding(facenames[n], utf8);
+    }
+
+    return true;
 }
 
 
-#else
-  // Pango
+#else // !wxUSE_PANGO
 
 #ifdef __VMS__ // Xlib.h for VMS is not (yet) compatible with C++
                // The resulting warnings are switched off here
