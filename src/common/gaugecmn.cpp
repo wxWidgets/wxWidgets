@@ -66,12 +66,15 @@ bool wxGaugeBase::Create(wxWindow *parent,
 
     SetRange(range);
     SetValue(0);
+#if wxGAUGE_EMULATE_INDETERMINATE_MODE
+    m_nDirection = wxRIGHT;
+#endif
 
     return true;
 }
 
 // ----------------------------------------------------------------------------
-// wxGauge range/position
+// wxGauge determinate mode range/position
 // ----------------------------------------------------------------------------
 
 void wxGaugeBase::SetRange(int range)
@@ -92,6 +95,39 @@ void wxGaugeBase::SetValue(int pos)
 int wxGaugeBase::GetValue() const
 {
     return m_gaugePos;
+}
+
+// ----------------------------------------------------------------------------
+// wxGauge indeterminate mode
+// ----------------------------------------------------------------------------
+
+void wxGaugeBase::Pulse()
+{
+#if wxGAUGE_EMULATE_INDETERMINATE_MODE
+    // simulate indeterminate mode
+    int curr = GetValue(), max = GetRange();
+
+    if (m_nDirection == wxRIGHT)
+    {
+        if (curr < max)
+            SetValue(curr + 1);
+        else
+        {
+            SetValue(max - 1);
+            m_nDirection = wxLEFT;
+        }
+    }
+    else
+    {
+        if (curr > 0)
+            SetValue(curr - 1);
+        else
+        {
+            SetValue(1);
+            m_nDirection = wxRIGHT;
+        }
+    }
+#endif
 }
 
 // ----------------------------------------------------------------------------

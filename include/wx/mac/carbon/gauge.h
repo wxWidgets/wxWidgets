@@ -45,6 +45,9 @@ class WXDLLEXPORT wxGauge: public wxGaugeBase
     virtual void SetRange(int range);
     virtual void SetValue(int pos);
     virtual int  GetValue() const ;
+
+    void Pulse();
+
  protected:
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxGauge)
 };

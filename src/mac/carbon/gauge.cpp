@@ -95,5 +95,13 @@ int wxGauge::GetValue() const
     return m_gaugePos ;
 }
 
+void wxGauge::Pulse()
+{
+    if ( m_peer && m_peer->Ok() )
+    {
+        // need to use the animate() method of NSProgressIndicator Class here
+    }
+}
+
 #endif // wxUSE_GAUGE
 

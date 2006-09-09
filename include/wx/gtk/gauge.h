@@ -43,12 +43,18 @@ public:
 
     void SetShadowWidth( int WXUNUSED(w) ) { }
     void SetBezelFace( int WXUNUSED(w) ) { }
-    void SetRange( int r );
-    void SetValue( int pos );
     int GetShadowWidth() const { return 0; };
     int GetBezelFace() const { return 0; };
+
+    // determinate mode API
+    void SetRange( int r );
+    void SetValue( int pos );
+
     int GetRange() const;
     int GetValue() const;
+
+    // indeterminate mode API
+    virtual void Pulse();
 
     bool IsVertical() const { return HasFlag(wxGA_VERTICAL); }
     

@@ -52,6 +52,8 @@ class WXDLLEXPORT wxGauge: public wxGaugeBase
   int GetRange() const ;
   int GetValue() const ;
 
+  void Pulse();
+
   virtual void Command(wxCommandEvent& WXUNUSED(event)) {} ;
 
  protected:

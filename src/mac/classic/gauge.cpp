@@ -72,6 +72,11 @@ void wxGauge::SetValue(int pos)
        ::SetControl32BitValue( (ControlHandle) m_macControl , m_gaugePos ) ;
 }
 
+void wxGauge::Pulse()
+{
+    // need to use the animate() method of NSProgressIndicator Class here
+}
+
 int wxGauge::GetShadowWidth() const
 {
     return 0;

@@ -13,6 +13,7 @@
 #define __PROGDLGH_G__
 
 #include "wx/defs.h"
+#include "wx/progdlg.h"
 
 #if wxUSE_PROGRESSDLG
 
@@ -52,6 +53,11 @@ public:
        @returns true if ABORT button has not been pressed
    */
    virtual bool Update(int value, const wxString& newmsg = wxEmptyString, bool *skip = NULL);
+
+    /* Switches the dialog to use a gauge in indeterminate mode and calls
+       wxGauge::Pulse() to show to the user a bit of progress */
+    virtual bool UpdatePulse(const wxString& newmsg = wxEmptyString, bool *skip = NULL);
+
     // Must provide overload to avoid hiding it (and warnings about it)
     virtual void Update() { wxDialog::Update(); }
 
@@ -81,6 +87,9 @@ private:
    // create the label with given text and another one to show the time nearby
    // as the next windows in the sizer, returns the created control
    wxStaticText *CreateLabel(const wxString& text, wxSizer *sizer);
+
+    // updates the label message
+   void UpdateMessage(const wxString &newmsg);
 
    // shortcuts for enabling buttons
    void EnableClose();

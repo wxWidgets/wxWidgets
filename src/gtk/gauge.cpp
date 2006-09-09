@@ -49,6 +49,9 @@ bool wxGauge::Create( wxWindow *parent,
                                           GTK_PROGRESS_BOTTOM_TO_TOP );
     }
 
+    // when using the gauge in indeterminate mode, we need this:
+    gtk_progress_bar_set_pulse_step(GTK_PROGRESS_BAR (m_widget), 0.05);
+
     m_parent->DoAddChild( this );
 
     PostCreation(size);
@@ -103,6 +106,11 @@ int wxGauge::GetRange() const
 int wxGauge::GetValue() const
 {
     return m_gaugePos;
+}
+
+void wxGauge::Pulse()
+{
+    gtk_progress_bar_pulse(GTK_PROGRESS_BAR (m_widget));
 }
 
 wxVisualAttributes wxGauge::GetDefaultAttributes() const
