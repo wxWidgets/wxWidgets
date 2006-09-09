@@ -650,9 +650,7 @@ def main():
     SYSDIR     = %(SYSDIR)s
     """ % vars()
 
-    if PYTHONVER >= "2.4":
-        IF22 = r"InstallDir := InstallDir + 'Lib\site-packages';"
-    elif PYTHONVER >= "2.2":
+    if PYTHONVER >= "2.2":
         IF22 = r"InstallDir := InstallDir + '\Lib\site-packages';"
     else:
         IF22 = ""
