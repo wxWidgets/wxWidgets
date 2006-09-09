@@ -3064,6 +3064,8 @@ class Notebook(BookCtrlBase):
         return _controls_.Notebook_GetClassDefaultAttributes(*args, **kwargs)
 
     GetClassDefaultAttributes = staticmethod(GetClassDefaultAttributes)
+    RowCount = property(GetRowCount,doc="See `GetRowCount`") 
+    ThemeBackgroundColour = property(GetThemeBackgroundColour,doc="See `GetThemeBackgroundColour`") 
 _controls_.Notebook_swigregister(Notebook)
 
 def PreNotebook(*args, **kwargs):

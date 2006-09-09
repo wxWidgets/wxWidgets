@@ -4691,6 +4691,14 @@ class MouseEvent(Event):
     m_wheelRotation = property(_core_.MouseEvent_m_wheelRotation_get, _core_.MouseEvent_m_wheelRotation_set)
     m_wheelDelta = property(_core_.MouseEvent_m_wheelDelta_get, _core_.MouseEvent_m_wheelDelta_set)
     m_linesPerAction = property(_core_.MouseEvent_m_linesPerAction_get, _core_.MouseEvent_m_linesPerAction_set)
+    Button = property(GetButton,doc="See `GetButton`") 
+    LinesPerAction = property(GetLinesPerAction,doc="See `GetLinesPerAction`") 
+    LogicalPosition = property(GetLogicalPosition,doc="See `GetLogicalPosition`") 
+    Position = property(GetPosition,doc="See `GetPosition`") 
+    WheelDelta = property(GetWheelDelta,doc="See `GetWheelDelta`") 
+    WheelRotation = property(GetWheelRotation,doc="See `GetWheelRotation`") 
+    X = property(GetX,doc="See `GetX`") 
+    Y = property(GetY,doc="See `GetY`") 
 _core_.MouseEvent_swigregister(MouseEvent)
 
 #---------------------------------------------------------------------------
@@ -5106,6 +5114,8 @@ class MoveEvent(Event):
     m_pos =  property(GetPosition, SetPosition)
     m_rect = property(GetRect, SetRect)
 
+    Position = property(GetPosition,SetPosition,doc="See `GetPosition` and `SetPosition`") 
+    Rect = property(GetRect,SetRect,doc="See `GetRect` and `SetRect`") 
 _core_.MoveEvent_swigregister(MoveEvent)
 
 #---------------------------------------------------------------------------
@@ -5356,6 +5366,8 @@ class MenuEvent(Event):
         """
         return _core_.MenuEvent_GetMenu(*args, **kwargs)
 
+    Menu = property(GetMenu,doc="See `GetMenu`") 
+    MenuId = property(GetMenuId,doc="See `GetMenuId`") 
 _core_.MenuEvent_swigregister(MenuEvent)
 
 #---------------------------------------------------------------------------
@@ -5964,6 +5976,7 @@ class MouseCaptureChangedEvent(Event):
         """
         return _core_.MouseCaptureChangedEvent_GetCapturedWindow(*args, **kwargs)
 
+    CapturedWindow = property(GetCapturedWindow,doc="See `GetCapturedWindow`") 
 _core_.MouseCaptureChangedEvent_swigregister(MouseCaptureChangedEvent)
 
 #---------------------------------------------------------------------------
@@ -6193,6 +6206,8 @@ class NavigationKeyEvent(Event):
     IsForward = _core_.NavigationKeyEvent_IsForward
     WinChange = _core_.NavigationKeyEvent_WinChange
     FromTab = _core_.NavigationKeyEvent_FromTab
+    CurrentFocus = property(GetCurrentFocus,SetCurrentFocus,doc="See `GetCurrentFocus` and `SetCurrentFocus`") 
+    Direction = property(GetDirection,SetDirection,doc="See `GetDirection` and `SetDirection`") 
 _core_.NavigationKeyEvent_swigregister(NavigationKeyEvent)
 
 #---------------------------------------------------------------------------
@@ -10401,6 +10416,15 @@ class Menu(EvtHandler):
         """GetParent(self) -> Menu"""
         return _core_.Menu_GetParent(*args, **kwargs)
 
+    EventHandler = property(GetEventHandler,SetEventHandler,doc="See `GetEventHandler` and `SetEventHandler`") 
+    HelpString = property(GetHelpString,SetHelpString,doc="See `GetHelpString` and `SetHelpString`") 
+    InvokingWindow = property(GetInvokingWindow,SetInvokingWindow,doc="See `GetInvokingWindow` and `SetInvokingWindow`") 
+    MenuBar = property(GetMenuBar,doc="See `GetMenuBar`") 
+    MenuItemCount = property(GetMenuItemCount,doc="See `GetMenuItemCount`") 
+    MenuItems = property(GetMenuItems,doc="See `GetMenuItems`") 
+    Parent = property(GetParent,SetParent,doc="See `GetParent` and `SetParent`") 
+    Style = property(GetStyle,doc="See `GetStyle`") 
+    Title = property(GetTitle,SetTitle,doc="See `GetTitle` and `SetTitle`") 
 _core_.Menu_swigregister(Menu)
 DefaultValidator = cvar.DefaultValidator
 
@@ -10541,7 +10565,10 @@ class MenuBar(Window):
         for m, l in items:
             self.Append(m, l)
 
-    Menus = property(GetMenus,SetMenus) 
+    Frame = property(GetFrame,doc="See `GetFrame`") 
+    Menu = property(GetMenu,doc="See `GetMenu`") 
+    MenuCount = property(GetMenuCount,doc="See `GetMenuCount`") 
+    Menus = property(GetMenus,SetMenus,doc="See `GetMenus` and `SetMenus`") 
 _core_.MenuBar_swigregister(MenuBar)
 
 def MenuBar_SetAutoWindowMenu(*args, **kwargs):
@@ -10737,6 +10764,20 @@ class MenuItem(Object):
         """ResetOwnerDrawn(self)"""
         return _core_.MenuItem_ResetOwnerDrawn(*args, **kwargs)
 
+    Accel = property(GetAccel,SetAccel,doc="See `GetAccel` and `SetAccel`") 
+    BackgroundColour = property(GetBackgroundColour,SetBackgroundColour,doc="See `GetBackgroundColour` and `SetBackgroundColour`") 
+    Bitmap = property(GetBitmap,SetBitmap,doc="See `GetBitmap` and `SetBitmap`") 
+    DisabledBitmap = property(GetDisabledBitmap,SetDisabledBitmap,doc="See `GetDisabledBitmap` and `SetDisabledBitmap`") 
+    Font = property(GetFont,SetFont,doc="See `GetFont` and `SetFont`") 
+    Help = property(GetHelp,SetHelp,doc="See `GetHelp` and `SetHelp`") 
+    Id = property(GetId,SetId,doc="See `GetId` and `SetId`") 
+    Kind = property(GetKind,SetKind,doc="See `GetKind` and `SetKind`") 
+    Label = property(GetLabel,doc="See `GetLabel`") 
+    MarginWidth = property(GetMarginWidth,SetMarginWidth,doc="See `GetMarginWidth` and `SetMarginWidth`") 
+    Menu = property(GetMenu,SetMenu,doc="See `GetMenu` and `SetMenu`") 
+    SubMenu = property(GetSubMenu,SetSubMenu,doc="See `GetSubMenu` and `SetSubMenu`") 
+    Text = property(GetText,SetText,doc="See `GetText` and `SetText`") 
+    TextColour = property(GetTextColour,SetTextColour,doc="See `GetTextColour` and `SetTextColour`") 
 _core_.MenuItem_swigregister(MenuItem)
 
 def MenuItem_GetLabelFromText(*args, **kwargs):

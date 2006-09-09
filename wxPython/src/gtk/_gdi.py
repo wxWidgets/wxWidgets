@@ -1667,6 +1667,13 @@ class NativeFontInfo(object):
         """ToUserString(self) -> String"""
         return _gdi_.NativeFontInfo_ToUserString(*args, **kwargs)
 
+    Encoding = property(GetEncoding,SetEncoding,doc="See `GetEncoding` and `SetEncoding`") 
+    FaceName = property(GetFaceName,SetFaceName,doc="See `GetFaceName` and `SetFaceName`") 
+    Family = property(GetFamily,SetFamily,doc="See `GetFamily` and `SetFamily`") 
+    PointSize = property(GetPointSize,SetPointSize,doc="See `GetPointSize` and `SetPointSize`") 
+    Style = property(GetStyle,SetStyle,doc="See `GetStyle` and `SetStyle`") 
+    Underlined = property(GetUnderlined,SetUnderlined,doc="See `GetUnderlined` and `SetUnderlined`") 
+    Weight = property(GetWeight,SetWeight,doc="See `GetWeight` and `SetWeight`") 
 _gdi_.NativeFontInfo_swigregister(NativeFontInfo)
 
 class NativeEncodingInfo(object):

@@ -2485,6 +2485,7 @@ class MultiChoiceDialog(Dialog):
         """
         return _windows_.MultiChoiceDialog_GetSelections(*args, **kwargs)
 
+    Selections = property(GetSelections,SetSelections,doc="See `GetSelections` and `SetSelections`") 
 _windows_.MultiChoiceDialog_swigregister(MultiChoiceDialog)
 
 class SingleChoiceDialog(Dialog):
@@ -2595,6 +2596,7 @@ class NumberEntryDialog(Dialog):
         """GetValue(self) -> long"""
         return _windows_.NumberEntryDialog_GetValue(*args, **kwargs)
 
+    Value = property(GetValue,doc="See `GetValue`") 
 _windows_.NumberEntryDialog_swigregister(NumberEntryDialog)
 
 class FontData(_core.Object):
@@ -3143,10 +3145,6 @@ class MDIParentFrame(Frame):
         """GetClientWindow(self) -> MDIClientWindow"""
         return _windows_.MDIParentFrame_GetClientWindow(*args, **kwargs)
 
-    def GetToolBar(*args, **kwargs):
-        """GetToolBar(self) -> Window"""
-        return _windows_.MDIParentFrame_GetToolBar(*args, **kwargs)
-
     def GetWindowMenu(*args, **kwargs):
         """GetWindowMenu(self) -> Menu"""
         return _windows_.MDIParentFrame_GetWindowMenu(*args, **kwargs)
@@ -3159,6 +3157,8 @@ class MDIParentFrame(Frame):
         """Tile(self, int orient=HORIZONTAL)"""
         return _windows_.MDIParentFrame_Tile(*args, **kwargs)
 
+    ActiveChild = property(GetActiveChild,doc="See `GetActiveChild`") 
+    ClientWindow = property(GetClientWindow,doc="See `GetClientWindow`") 
 _windows_.MDIParentFrame_swigregister(MDIParentFrame)
 
 def PreMDIParentFrame(*args, **kwargs):
