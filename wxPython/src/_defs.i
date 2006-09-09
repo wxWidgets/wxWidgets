@@ -692,15 +692,6 @@ enum {
    
     wxID_HIGHEST,
 
-    wxPD_AUTO_HIDE,
-    wxPD_APP_MODAL,
-    wxPD_CAN_ABORT,
-    wxPD_ELAPSED_TIME,
-    wxPD_ESTIMATED_TIME,
-    wxPD_REMAINING_TIME,
-    wxPD_SMOOTH,
-    wxPD_CAN_SKIP,
-
     wxMENU_TEAROFF,
     wxMB_DOCKABLE,
     wxNO_FULL_REPAINT_ON_RESIZE,

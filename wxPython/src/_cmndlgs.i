@@ -729,6 +729,17 @@ public:
 
 //---------------------------------------------------------------------------
 
+enum {
+    wxPD_AUTO_HIDE,
+    wxPD_APP_MODAL,
+    wxPD_CAN_ABORT,
+    wxPD_ELAPSED_TIME,
+    wxPD_ESTIMATED_TIME,
+    wxPD_REMAINING_TIME,
+    wxPD_SMOOTH,
+    wxPD_CAN_SKIP
+};
+
 
 DocStr(wxProgressDialog,
 "A dialog that shows a short message and a progress bar. Optionally, it
@@ -794,7 +805,8 @@ parent window only.", "");
     // only if style is set.  This is so the API doesn't change for existing
     // users...
     DocDeclAStr(
-        virtual bool , Update(int value, const wxString& newmsg = wxPyEmptyString,
+        virtual bool , Update(int value,
+                              const wxString& newmsg = wxPyEmptyString,
                               bool *OUTPUT),
         "Update(self, int value, String newmsg) --> (continue, skip)",
         "Updates the dialog, setting the progress bar to the new value and, if
@@ -809,6 +821,16 @@ If the ``continue`` return value is ``false``, the application can either
 immediately destroy the dialog or ask the user for confirmation, and if the
 abort is not confirmed the dialog may be resumed with `Resume` function.
 ", "");
+
+
+    DocDeclAStr(
+        virtual bool , UpdatePulse(const wxString& newmsg = wxPyEmptyString,
+                                   bool *OUTPUT),
+        "UpdatePulse(self, String newmsg) --> (continue, skip)",
+        "Just like `Update` but switches the dialog to use a gauge in
+interminante mode and calls `wx.Gauge.Pulse` to show the user a bit of
+progress.", "");
+    
 
     DocDeclStr(
         void , Resume(),

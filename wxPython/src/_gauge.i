@@ -59,6 +59,9 @@ public:
     virtual void SetValue(int pos);
     virtual int GetValue() const;
 
+    // indeterminate mode API
+    virtual void Pulse();
+
     // simple accessors
     bool IsVertical() const;
 
