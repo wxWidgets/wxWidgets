@@ -565,22 +565,32 @@ DECLARE_LOG_FUNCTION2(SysError, long, lErrCode);
     // string identifiers
     DECLARE_LOG_FUNCTION2(Trace, wxTraceMask, mask);
 #else   //!debug || !wxUSE_LOG
-    // these functions do nothing in release builds
+    // these functions do nothing in release builds, but don't define them as
+    // nothing as it could result in different code structure in debug and
+    // release and this could result in trouble when these macros are used
+    // inside if/else
+    //
+    // note that making wxVLogDebug/Trace() themselves (empty inline) functions
+    // is a bad idea as some compilers are stupid enough to not inline even
+    // empty functions if their parameters are complicated enough, but by
+    // defining them as an empty inline function we ensure that even dumbest
+    // compilers optimise them away
+    inline void wxLogNop() { }
 
-    #define wxVLogDebug(fmt, valist)
-    #define wxVLogTrace(mask, fmt, valist)
+    #define wxVLogDebug(fmt, valist) wxLogNop()
+    #define wxVLogTrace(mask, fmt, valist) wxLogNop()
 
     #ifdef HAVE_VARIADIC_MACROS
-    // unlike the inline functions below, this completely removes the
-    // wxLogXXX calls from the object file:
-    #define wxLogDebug(fmt, ...)
-    #define wxLogTrace(mask, fmt, ...)
+        // unlike the inline functions below, this completely removes the
+        // wxLogXXX calls from the object file:
+        #define wxLogDebug(fmt, ...) wxLogNop()
+        #define wxLogTrace(mask, fmt, ...) wxLogNop()
     #else // !HAVE_VARIADIC_MACROS
-    // note that leaving out "fmt" in the vararg functions provokes a warning
-    // from SGI CC: "the last argument of the varargs function is unnamed"
-    inline void wxLogDebug(const wxChar *fmt, ...) { wxUnusedVar(fmt); }
-    inline void wxLogTrace(wxTraceMask, const wxChar *fmt, ...) { wxUnusedVar(fmt); }
-    inline void wxLogTrace(const wxChar *, const wxChar *fmt, ...) { wxUnusedVar(fmt); }
+        // note that leaving out "fmt" in the vararg functions provokes a warning
+        // from SGI CC: "the last argument of the varargs function is unnamed"
+        inline void wxLogDebug(const wxChar *fmt, ...) { wxUnusedVar(fmt); }
+        inline void wxLogTrace(wxTraceMask, const wxChar *fmt, ...) { wxUnusedVar(fmt); }
+        inline void wxLogTrace(const wxChar *, const wxChar *fmt, ...) { wxUnusedVar(fmt); }
     #endif // HAVE_VARIADIC_MACROS/!HAVE_VARIADIC_MACROS
 #endif // debug/!debug
 
@@ -612,8 +622,8 @@ wxSafeShowMessage(const wxString& title, const wxString& text);
     #define wxLogLastError(api) wxLogApiError(api, wxSysErrorCode())
 
 #else   //!debug
-    #define wxLogApiError(api, err)
-    #define wxLogLastError(api)
+    #define wxLogApiError(api, err) wxLogNop()
+    #define wxLogLastError(api) wxLogNop()
 #endif  //debug/!debug
 
 // wxCocoa has additiional trace masks
