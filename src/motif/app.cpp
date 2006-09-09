@@ -25,7 +25,7 @@
     #include "wx/log.h"
     #include "wx/utils.h"
     #include "wx/memory.h"
-    #include "wx/module.h"
+    #include "wx/font.h"
 #endif
 
 #include "wx/evtloop.h"
