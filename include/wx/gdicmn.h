@@ -307,6 +307,8 @@ public:
 
     wxPoint operator+(const wxSize& s) const { return wxPoint(x + s.GetWidth(), y + s.GetHeight()); }
     wxPoint operator-(const wxSize& s) const { return wxPoint(x - s.GetWidth(), y - s.GetHeight()); }
+
+    wxPoint operator-() const { return wxPoint(-x, -y); }
 };
 
 // ---------------------------------------------------------------------------
