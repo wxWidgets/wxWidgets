@@ -53,7 +53,7 @@ public:
 #endif // __WXDEBUG__
 
     guint m_idleTag;
-    void RemoveIdleTag();
+    void RemoveIdleSource();
 
     // Used by the the wxGLApp and wxGLCanvas class for GL-based X visual
     // selection.

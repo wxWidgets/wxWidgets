@@ -135,7 +135,7 @@ bool wxApp::Yield(bool onlyIfNeeded)
 
     // We need to remove idle callbacks or the loop will
     // never finish.
-    wxTheApp->RemoveIdleTag();
+    RemoveIdleSource();
 
 #if wxUSE_LOG
     // disable log flushing from here because a call to wxYield() shouldn't
@@ -194,6 +194,13 @@ event_emission_hook(GSignalInvocationHint*, guint, const GValue*, gpointer)
     return false;
 }
 
+static inline void wxAddEmissionHook()
+{
+    // add emission hook for "event" signal, to re-install idle handler when needed
+    guint sig_id = g_signal_lookup("event", GTK_TYPE_WIDGET);
+    g_signal_add_emission_hook(sig_id, 0, event_emission_hook, NULL, NULL);
+}
+
 static gint wxapp_idle_callback( gpointer WXUNUSED(data) )
 {
     if (!wxTheApp)
@@ -233,11 +240,7 @@ static gint wxapp_idle_callback( gpointer WXUNUSED(data) )
     gdk_threads_leave();
 
     if (!moreIdles)
-    {
-        // add emission hook for "event" signal, to re-install idle handler when needed
-        guint sig_id = g_signal_lookup("event", GTK_TYPE_WIDGET);
-        g_signal_add_emission_hook(sig_id, 0, event_emission_hook, NULL, NULL);
-    }
+        wxAddEmissionHook();
 
     // Return FALSE if no more idle events are to be sent
     return moreIdles;
@@ -600,15 +603,16 @@ void wxApp::OnAssertFailure(const wxChar *file,
 
 #endif // __WXDEBUG__
 
-void wxApp::RemoveIdleTag()
+void wxApp::RemoveIdleSource()
 {
 #if wxUSE_THREADS
     wxMutexLocker lock(gs_idleTagsMutex);
 #endif
-    if (!g_isIdle)
+    if (m_idleTag != 0)
     {
-        g_source_remove( wxTheApp->m_idleTag );
-        wxTheApp->m_idleTag = 0;
+        g_source_remove(m_idleTag);
+        m_idleTag = 0;
         g_isIdle = true;
+        wxAddEmissionHook();
     }
 }

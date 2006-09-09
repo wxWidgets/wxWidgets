@@ -101,7 +101,7 @@ bool wxEventLoop::Pending() const
     {
         // We need to remove idle callbacks or gtk_events_pending will
         // never return false.
-        wxTheApp->RemoveIdleTag();
+        wxTheApp->RemoveIdleSource();
     }
 
     return gtk_events_pending();
