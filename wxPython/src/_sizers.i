@@ -789,14 +789,55 @@ the item to be found.", "");
                 item = (item, )
             self.Add(*item)
 
+    def AddSpacer(self, *args, **kw):
+        """AddSpacer(int size) --> SizerItem
+
+        Add a spacer that is (size,size) pixels.
+        """
+        if args and type(args[0]) == int:
+            return self.Add( (args[0],args[0] ), 0)
+        else: %# otherwise stay compatible with old AddSpacer
+            return self.Add(*args, **kw)
+    def PrependSpacer(self, *args, **kw):
+        """PrependSpacer(int size) --> SizerItem
+
+        Prepend a spacer that is (size, size) pixels."""
+        if args and type(args[0]) == int:
+            return self.Prepend( (args[0],args[0] ), 0)
+        else: %# otherwise stay compatible with old PrependSpacer
+            return self.Prepend(*args, **kw)
+    def InsertSpacer(self, index, *args, **kw):
+        """InsertSpacer(int index, int size) --> SizerItem
+
+        Insert a spacer at position index that is (size, size) pixels."""
+        if args and type(args[0]) == int:
+            return self.Insert( index, (args[0],args[0] ), 0)
+        else: %# otherwise stay compatible with old InsertSpacer
+            return self.Insert(index, *args, **kw)
+
+                   
+    def AddStretchSpacer(self, prop=1):
+        """AddStretchSpacer(int prop=1) --> SizerItem
+
+        Add a stretchable spacer."""
+        return self.Add((0,0), prop)
+    def PrependStretchSpacer(self, prop=1):
+        """PrependStretchSpacer(int prop=1) --> SizerItem
+
+        Prepend a stretchable spacer."""
+        return self.Prepend((0,0), prop)
+    def InsertStretchSpacer(self, index, prop=1):
+        """InsertStretchSpacer(int index, int prop=1) --> SizerItem
+
+        Insert a stretchable spacer."""
+        return self.Insert(index, (0,0), prop)
+
+            
     %# for backwards compatibility only, please do not use in new code
     def AddWindow(self, *args, **kw):
         """Compatibility alias for `Add`."""
         return self.Add(*args, **kw)
     def AddSizer(self, *args, **kw):
-        """Compatibility alias for `Add`."""
-        return self.Add(*args, **kw)
-    def AddSpacer(self, *args, **kw):
         """Compatibility alias for `Add`."""
         return self.Add(*args, **kw)
 
@@ -806,17 +847,11 @@ the item to be found.", "");
     def PrependSizer(self, *args, **kw):
         """Compatibility alias for `Prepend`."""
         return self.Prepend(*args, **kw)
-    def PrependSpacer(self, *args, **kw):
-        """Compatibility alias for `Prepend`."""
-        return self.Prepend(*args, **kw)
 
     def InsertWindow(self, *args, **kw):
         """Compatibility alias for `Insert`."""
         return self.Insert(*args, **kw)
     def InsertSizer(self, *args, **kw):
-        """Compatibility alias for `Insert`."""
-        return self.Insert(*args, **kw)
-    def InsertSpacer(self, *args, **kw):
         """Compatibility alias for `Insert`."""
         return self.Insert(*args, **kw)
 
