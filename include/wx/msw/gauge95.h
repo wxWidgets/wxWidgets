@@ -51,11 +51,15 @@ public:
     virtual bool SetForegroundColour(const wxColour& col);
     virtual bool SetBackgroundColour(const wxColour& col);
 
-    virtual WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const;
+
+    void SetIndeterminateMode();
+    void SetDeterminateMode();
+    void Pulse();
 
 protected:
     virtual wxSize DoGetBestSize() const;
 
+    WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const;
 
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxGauge95)
 };
