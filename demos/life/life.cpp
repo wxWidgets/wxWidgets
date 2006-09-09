@@ -194,14 +194,14 @@ LifeFrame::LifeFrame() :
     wxMenu *menuGame = new wxMenu(wxMENU_TEAROFF);
     wxMenu *menuHelp = new wxMenu(wxMENU_TEAROFF);
 
-    menuFile->Append(wxID_NEW, wxGetStockLabel(wxID_NEW), _("Start a new game"));
+    menuFile->Append(wxID_NEW, wxEmptyString, _("Start a new game"));
 #if wxUSE_FILEDLG
-    menuFile->Append(wxID_OPEN, wxGetStockLabel(wxID_OPEN), _("Open an existing Life pattern"));
+    menuFile->Append(wxID_OPEN, wxEmptyString, _("Open an existing Life pattern"));
 #endif
     menuFile->Append(ID_SAMPLES, _("&Sample game..."), _("Select a sample configuration"));
 #if ! (defined(__SMARTPHONE__) || defined(__POCKETPC__))
     menuFile->AppendSeparator();
-    menuFile->Append(wxID_EXIT, wxGetStockLabel(wxID_EXIT, true, _T("Alt-X")), _("Quit this program"));
+    menuFile->Append(wxID_EXIT);
 
     menuView->Append(ID_SHOWNAV, _("Navigation &toolbox"), _("Show or hide toolbox"), wxITEM_CHECK);
     menuView->Check(ID_SHOWNAV, true);
@@ -215,13 +215,13 @@ LifeFrame::LifeFrame() :
     menuView->Append(ID_EAST, _("&East"), _("Find easternmost cell"));
     menuView->Append(ID_WEST, _("&West"), _("Find westernmost cell"));
     menuView->AppendSeparator();
-    menuView->Append(wxID_ZOOM_IN, wxGetStockLabel(wxID_ZOOM_IN, true, _T("Ctrl-I")), _("Zoom in"));
-    menuView->Append(wxID_ZOOM_OUT, wxGetStockLabel(wxID_ZOOM_OUT, true, _T("Ctrl-O")), _("Zoom out"));
+    menuView->Append(wxID_ZOOM_IN, wxEmptyString, _("Zoom in"));
+    menuView->Append(wxID_ZOOM_OUT, wxEmptyString, _("Zoom out"));
     menuView->Append(ID_INFO, _("&Description\tCtrl-D"), _("View pattern description"));
 
     menuGame->Append(ID_START, _("&Start\tCtrl-S"), _("Start"));
     menuGame->Append(ID_STEP, _("&Next\tCtrl-N"), _("Single step"));
-    menuGame->Append(wxID_STOP, wxGetStockLabel(wxID_STOP, true, _T("Ctrl-T")), _("Stop"));
+    menuGame->Append(wxID_STOP, wxEmptyString, _("Stop"));
     menuGame->Enable(wxID_STOP, false);
     menuGame->AppendSeparator();
     menuGame->Append(ID_TOPSPEED, _("T&op speed!"), _("Go as fast as possible"));
@@ -250,20 +250,20 @@ LifeFrame::LifeFrame() :
     toolBar->SetMargins(5, 5);
     toolBar->SetToolBitmapSize(wxSize(16, 16));
 
-    ADD_TOOL(wxID_NEW, tbBitmaps[0], wxGetStockLabel(wxID_NEW, false), _("Start a new game"));
+    ADD_TOOL(wxID_NEW, tbBitmaps[0], wxGetStockLabel(wxID_NEW, wxSTOCK_NOFLAGS), _("Start a new game"));
 #ifndef __POCKETPC__
 #if wxUSE_FILEDLG
-    ADD_TOOL(wxID_OPEN, tbBitmaps[1], wxGetStockLabel(wxID_OPEN, false), _("Open an existing Life pattern"));
+    ADD_TOOL(wxID_OPEN, tbBitmaps[1], wxGetStockLabel(wxID_OPEN, wxSTOCK_NOFLAGS), _("Open an existing Life pattern"));
 #endif // wxUSE_FILEDLG
 
     toolBar->AddSeparator();
-    ADD_TOOL(wxID_ZOOM_IN, tbBitmaps[2], wxGetStockLabel(wxID_ZOOM_IN, false), _("Zoom in"));
-    ADD_TOOL(wxID_ZOOM_OUT, tbBitmaps[3], wxGetStockLabel(wxID_ZOOM_OUT, false), _("Zoom out"));
+    ADD_TOOL(wxID_ZOOM_IN, tbBitmaps[2], wxGetStockLabel(wxID_ZOOM_IN, wxSTOCK_NOFLAGS), _("Zoom in"));
+    ADD_TOOL(wxID_ZOOM_OUT, tbBitmaps[3], wxGetStockLabel(wxID_ZOOM_OUT, wxSTOCK_NOFLAGS), _("Zoom out"));
     ADD_TOOL(ID_INFO, tbBitmaps[4], _("Description"), _("Show description"));
     toolBar->AddSeparator();
 #endif // __POCKETPC__
     ADD_TOOL(ID_START, tbBitmaps[5], _("Start"), _("Start"));
-    ADD_TOOL(wxID_STOP, tbBitmaps[6], wxGetStockLabel(wxID_STOP, false), _("Stop"));
+    ADD_TOOL(wxID_STOP, tbBitmaps[6], wxSTOCK_NOFLAGS, _("Stop"));
 
     toolBar->Realize();
     toolBar->EnableTool(wxID_STOP, false);    // must be after Realize() !
