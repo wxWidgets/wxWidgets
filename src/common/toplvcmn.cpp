@@ -350,12 +350,18 @@ void wxTopLevelWindowBase::DoLayout()
             // for whatever reasons, wxGTK wants to have a small offset - it
             // probably looks better with it?
 #ifdef __WXGTK__
-            static const int ofs = 1;
+            const int ofs = 1;
+            clientW -= 2 * ofs;
+            clientH -= 2 * ofs;
+            if (clientW < 0)
+                clientW = 0;
+            if (clientH < 0)
+                clientH = 0;
 #else
-            static const int ofs = 0;
+            const int ofs = 0;
 #endif
 
-            child->SetSize(ofs, ofs, clientW - 2*ofs, clientH - 2*ofs);
+            child->SetSize(ofs, ofs, clientW, clientH);
         }
     }
 }

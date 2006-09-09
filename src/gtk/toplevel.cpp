@@ -915,18 +915,16 @@ void wxTopLevelWindowGTK::DoGetClientSize( int *width, int *height ) const
 
     if (height)
     {
-        *height = m_height;
-    
-        // mini edge
-        *height -= m_miniEdge*2 + m_miniTitle;
+        *height = m_height - 2 * m_miniEdge + m_miniTitle;
+        if (*height < 0)
+            *height = 0;
     }
     if (width)
     {
-        *width = m_width;
-    
-        *width -= m_miniEdge*2;
+        *width = m_width - 2 * m_miniEdge;
+        if (*width < 0)
+            *width = 0;
     }
-    
 }
 
 void wxTopLevelWindowGTK::DoSetClientSize( int width, int height )

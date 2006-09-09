@@ -3020,6 +3020,10 @@ void wxWindowGTK::DoGetClientSize( int *width, int *height ) const
 
         w -= dw;
         h -= dh;
+        if (w < 0)
+            w = 0;
+        if (h < 0)
+            h = 0;
     }
 
     if (width) *width = w;

@@ -276,6 +276,8 @@ void wxFrame::DoGetClientSize( int *width, int *height ) const
             }
         }
 #endif // wxUSE_TOOLBAR
+        if (*height < 0)
+            *height = 0;
     }
 }
 

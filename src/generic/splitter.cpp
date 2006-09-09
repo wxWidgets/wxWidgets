@@ -681,17 +681,25 @@ void wxSplitterWindow::SizeWindows()
         {
             w1 = size1;
             w2 = w - 2*border - sash - w1;
-            h1 =
+            if (w2 < 0)
+                w2 = 0;
             h2 = h - 2*border;
+            if (h2 < 0)
+                h2 = 0;
+            h1 = h2;
             x2 = size2;
             y2 = border;
         }
         else // horz splitter
         {
-            w1 =
             w2 = w - 2*border;
+            if (w2 < 0)
+                w2 = 0;
+            w1 = w2;
             h1 = size1;
             h2 = h - 2*border - sash - h1;
+            if (h2 < 0)
+                h2 = 0;
             x2 = border;
             y2 = size2;
         }

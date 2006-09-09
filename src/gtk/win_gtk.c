@@ -547,6 +547,10 @@ gtk_pizza_size_allocate (GtkWidget     *widget,
     y = allocation->y + border;
     w = allocation->width - border*2;
     h = allocation->height - border*2;
+    if (w < 0)
+        w = 0;
+    if (h < 0)
+        h = 0;
 
     if (GTK_WIDGET_REALIZED (widget))
     {
