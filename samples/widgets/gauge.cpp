@@ -115,7 +115,8 @@ protected:
 
     // the checkboxes for styles
     wxCheckBox *m_chkVert,
-               *m_chkSmooth;
+               *m_chkSmooth,
+               *m_chkIndeterminate;
 
     // the gauge itself and the sizer it is in
     wxGauge *m_gauge;
@@ -178,7 +179,8 @@ GaugeWidgetsPage::GaugeWidgetsPage(WidgetsBookCtrl *book,
     m_timer = (wxTimer *)NULL;
 
     m_chkVert =
-    m_chkSmooth = (wxCheckBox *)NULL;
+    m_chkSmooth =
+    m_chkIndeterminate = (wxCheckBox *)NULL;
 
     m_gauge = (wxGauge *)NULL;
     m_sizerGauge = (wxSizer *)NULL;
@@ -195,6 +197,7 @@ void GaugeWidgetsPage::CreateContent()
 
     m_chkVert = CreateCheckBoxAndAddToSizer(sizerLeft, _T("&Vertical"));
     m_chkSmooth = CreateCheckBoxAndAddToSizer(sizerLeft, _T("&Smooth"));
+    m_chkIndeterminate = CreateCheckBoxAndAddToSizer(sizerLeft, _T("&Indeterminate"));
 
     sizerLeft->Add(5, 5, 0, wxGROW | wxALL, 5); // spacer
 
@@ -266,6 +269,7 @@ void GaugeWidgetsPage::Reset()
 {
     m_chkVert->SetValue(false);
     m_chkSmooth->SetValue(false);
+    m_chkIndeterminate->SetValue(false);
 }
 
 void GaugeWidgetsPage::CreateGauge()
@@ -293,6 +297,10 @@ void GaugeWidgetsPage::CreateGauge()
                           wxDefaultPosition, wxDefaultSize,
                           flags);
     m_gauge->SetValue(val);
+    
+    if ( m_chkIndeterminate->GetValue() ){
+        m_gauge->Pulse();
+    }
 
     if ( flags & wxGA_VERTICAL )
         m_sizerGauge->Add(m_gauge, 0, wxGROW | wxALL, 5);
@@ -348,6 +356,7 @@ void GaugeWidgetsPage::OnButtonSetRange(wxCommandEvent& WXUNUSED(event))
 
     m_range = val;
     m_gauge->SetRange(val);
+    m_chkIndeterminate->SetValue(0);
 }
 
 void GaugeWidgetsPage::OnButtonSetValue(wxCommandEvent& WXUNUSED(event))
@@ -357,6 +366,7 @@ void GaugeWidgetsPage::OnButtonSetValue(wxCommandEvent& WXUNUSED(event))
         return;
 
     m_gauge->SetValue(val);
+    m_chkIndeterminate->SetValue(0);
 }
 
 void GaugeWidgetsPage::OnUpdateUIValueButton(wxUpdateUIEvent& event)
