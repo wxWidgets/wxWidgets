@@ -265,7 +265,7 @@ bool wxDisplayImplX11::ChangeMode(const wxVideoMode& mode)
 
 #else // !HAVE_X11_EXTENSIONS_XF86VMODE_H
 
-wxArrayVideoModes wxDisplayImplX11::GetModes(const wxVideoMode& mode) const
+wxArrayVideoModes wxDisplayImplX11::GetModes(const wxVideoMode& modeMatch) const
 {
     int count_return;
     int* depths = XListDepths((Display*)wxGetDisplay(), 0, &count_return);
@@ -274,7 +274,11 @@ wxArrayVideoModes wxDisplayImplX11::GetModes(const wxVideoMode& mode) const
     {
         for ( int x = 0; x < count_return; ++x )
         {
-            modes.Add(wxVideoMode(m_rect.GetWidth(), m_rect.GetHeight(), depths[x]));
+            wxVideoMode mode(m_rect.GetWidth(), m_rect.GetHeight(), depths[x]);
+            if ( mode.Matches(modeMatch) )
+            {
+                modes.Add(modeMatch);
+            }
         }
 
         XFree(depths);
@@ -288,7 +292,7 @@ wxVideoMode wxDisplayImplX11::GetCurrentMode() const
     return wxVideoMode();
 }
 
-bool wxDisplayImplX11::ChangeMode(const wxVideoMode& mode)
+bool wxDisplayImplX11::ChangeMode(const wxVideoMode& WXUNUSED(mode))
 {
     // Not implemented
     return false;
