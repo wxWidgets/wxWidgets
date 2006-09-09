@@ -25,10 +25,9 @@
 #endif
 
 #ifndef WX_PRECOMP
-    #include "wx/list.h"
     #include "wx/app.h"
+    #include "wx/window.h"
     #include "wx/bitmap.h"
-    #include "wx/intl.h"
     #include "wx/log.h"
     #include "wx/msgdlg.h"
     #include "wx/confbase.h"
@@ -40,6 +39,7 @@
 #include "wx/evtloop.h"
 #include "wx/msgout.h"
 #include "wx/thread.h"
+#include "wx/vidmode.h"
 #include "wx/ptr_scpd.h"
 
 #if defined(__WXMSW__)
@@ -155,6 +155,21 @@ void wxAppBase::CleanUp()
         ((wxEvtHandler&) wxDefaultValidator).ClearEventLocker();
     #endif // wxUSE_VALIDATORS
 #endif // wxUSE_THREADS
+}
+
+// ----------------------------------------------------------------------------
+
+wxWindow* wxAppBase::GetTopWindow() const
+{
+    wxWindow* window = m_topWindow;
+    if (window == NULL && wxTopLevelWindows.GetCount() > 0)
+        window = wxTopLevelWindows.GetFirst()->GetData();
+    return window;
+}
+
+wxVideoMode wxAppBase::GetDisplayMode() const
+{
+    return wxVideoMode();
 }
 
 #if wxUSE_CMDLINE_PARSER

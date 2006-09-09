@@ -20,6 +20,8 @@
     #pragma hdrstop
 #endif
 
+#include "wx/wxchar.h"
+
 #define _ISOC9X_SOURCE 1 // to get vsscanf()
 #define _BSD_SOURCE    1 // to still get strdup()
 
@@ -35,11 +37,11 @@
 #endif
 
 #ifndef WX_PRECOMP
-    #include "wx/wxchar.h"
     #include "wx/string.h"
     #include "wx/hash.h"
+    #include "wx/utils.h"     // for wxMin and wxMax
+    #include "wx/log.h"
 #endif
-  #include "wx/utils.h"     // for wxMin and wxMax
 
 #if defined(__WIN32__) && defined(wxNEED_WX_CTYPE_H)
   #include <windef.h>

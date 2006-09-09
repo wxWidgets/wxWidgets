@@ -20,17 +20,16 @@
 
 #ifndef WX_PRECOMP
     #include "wx/log.h"
-    #include "wx/app.h"
     #include "wx/hash.h"
     #include "wx/utils.h"
-    #include "wx/bitmap.h"
     #include "wx/math.h"
     #include "wx/module.h"
+    #include "wx/palette.h"
+    #include "wx/intl.h"
 #endif
 
 #include "wx/filefn.h"
 #include "wx/wfstream.h"
-#include "wx/intl.h"
 
 #if wxUSE_XPM
     #include "wx/xpmdecod.h"

@@ -18,16 +18,9 @@
 // ----------------------------------------------------------------------------
 
 #include "wx/event.h"       // for the base class
-
-#if wxUSE_GUI
-    #include "wx/window.h"  // for wxTopLevelWindows
-
-    #include "wx/vidmode.h"
-#endif // wxUSE_GUI
-
 #include "wx/build.h"
 #include "wx/init.h"        // we must declare wxEntry()
-#include "wx/intl.h"
+#include "wx/intl.h"        // for wxLayoutDirection
 
 class WXDLLIMPEXP_BASE wxAppConsole;
 class WXDLLIMPEXP_BASE wxAppTraits;
@@ -37,6 +30,7 @@ class WXDLLIMPEXP_BASE wxMessageOutput;
 
 #if wxUSE_GUI
     class WXDLLEXPORT wxEventLoop;
+    struct WXDLLIMPEXP_CORE wxVideoMode;
 #endif
 
 // ----------------------------------------------------------------------------
@@ -447,15 +441,7 @@ public:
         // return the "main" top level window (if it hadn't been set previously
         // with SetTopWindow(), will return just some top level window and, if
         // there are none, will return NULL)
-    virtual wxWindow *GetTopWindow() const
-    {
-        if (m_topWindow)
-            return m_topWindow;
-        else if (wxTopLevelWindows.GetCount() > 0)
-            return wxTopLevelWindows.GetFirst()->GetData();
-        else
-            return (wxWindow *)NULL;
-    }
+    virtual wxWindow *GetTopWindow() const;
 
         // control the exit behaviour: by default, the program will exit the
         // main loop (and so, usually, terminate) when the last top-level
@@ -473,7 +459,7 @@ public:
 
         // Get display mode that is used use. This is only used in framebuffer
         // wxWin ports (such as wxMGL or wxDFB).
-    virtual wxVideoMode GetDisplayMode() const { return wxVideoMode(); }
+    virtual wxVideoMode GetDisplayMode() const;
         // Set display mode to use. This is only used in framebuffer wxWin
         // ports (such as wxMGL or wxDFB). This method should be called from
         // wxApp::OnInitGui
@@ -607,7 +593,7 @@ protected:
 //
 // the cast is safe as in GUI build we only use wxApp, not wxAppConsole, and in
 // console mode it does nothing at all
-#define wxTheApp ((wxApp *)wxApp::GetInstance())
+#define wxTheApp wx_static_cast(wxApp*, wxApp::GetInstance())
 
 // ----------------------------------------------------------------------------
 // global functions
@@ -674,7 +660,7 @@ public:
     wxAppInitializer                                                        \
         wxTheAppInitializer((wxAppInitializerFunction) wxCreateApp);        \
     DECLARE_APP(appname)                                                    \
-    appname& wxGetApp() { return *(appname *)wxTheApp; }
+    appname& wxGetApp() { return *wx_static_cast(appname*, wxApp::GetInstance()); }
 
 // Same as IMPLEMENT_APP() normally but doesn't include themes support in
 // wxUniversal builds

@@ -18,6 +18,7 @@
     #include "wx/icon.h"
     #include "wx/math.h"
     #include "wx/image.h"
+    #include "wx/colour.h"
 #endif
 
 #include "wx/rawbmp.h"

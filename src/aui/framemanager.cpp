@@ -30,6 +30,7 @@
 #include "wx/aui/floatpane.h"
 
 #ifndef WX_PRECOMP
+    #include "wx/panel.h"
     #include "wx/settings.h"
     #include "wx/app.h"
     #include "wx/dcclient.h"

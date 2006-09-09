@@ -16,6 +16,7 @@
     #include "wx/app.h"
     #include "wx/utils.h"
     #include "wx/image.h"
+    #include "wx/colour.h"
 #endif // WX_PRECOMP
 
 #include "wx/gtk/private.h" //for idle stuff

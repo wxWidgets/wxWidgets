@@ -16,6 +16,8 @@
 
 #if wxUSE_IMAGE
 
+#include "wx/imagbmp.h"
+
 #ifndef WX_PRECOMP
     #ifdef __WXMSW__
         #include "wx/msw/wrapwin.h"
@@ -23,13 +25,12 @@
     #include "wx/log.h"
     #include "wx/app.h"
     #include "wx/bitmap.h"
-    #include "wx/module.h"
+    #include "wx/palette.h"
+    #include "wx/intl.h"
 #endif
 
-#include "wx/imagbmp.h"
 #include "wx/filefn.h"
 #include "wx/wfstream.h"
-#include "wx/intl.h"
 #include "wx/quantize.h"
 
 // For memcpy
