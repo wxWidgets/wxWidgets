@@ -51,6 +51,7 @@ wxX11:
 
 wxMSW:
 - Drag and drop now works inside wxStaticBox.
+- Implemented wxComboBox::SetEditable()
 
 
 2.6.3
