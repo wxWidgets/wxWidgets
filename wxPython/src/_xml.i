@@ -89,7 +89,7 @@ public:
                                   const wxString& content = wxPyEmptyString));
 
     void AddChild(wxXmlNode *child);
-    void InsertChild(wxXmlNode *child, wxXmlNode *before_node);
+    bool InsertChild(wxXmlNode *child, wxXmlNode *before_node);
     bool RemoveChild(wxXmlNode *child);
     void AddProperty(wxXmlProperty *prop);
     %Rename(AddPropertyName,  void,  AddProperty(const wxString& name, const wxString& value));
@@ -160,6 +160,7 @@ public:
     wxString GetFileEncoding() const;
 
     // Write-access methods:
+    wxXmlNode *DetachRoot();
     void SetRoot(wxXmlNode *node);
     void SetVersion(const wxString& version);
     void SetFileEncoding(const wxString& encoding);
