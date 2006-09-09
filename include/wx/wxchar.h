@@ -1,11 +1,11 @@
 /*
  * Name:        wx/wxchar.h
  * Purpose:     Declarations common to wx char/wchar_t usage (wide chars)
- * Author:      Joel Farley, Ove Kåven
+ * Author:      Joel Farley, Ove Kï¿½en
  * Modified by: Vadim Zeitlin, Robert Roebling, Ron Lee
  * Created:     1998/06/12
  * RCS-ID:      $Id$
- * Copyright:   (c) 1998-2002 Joel Farley, Ove Kåven, Robert Roebling, Ron Lee
+ * Copyright:   (c) 1998-2002 Joel Farley, Ove Kï¿½en, Robert Roebling, Ron Lee
  * Licence:     wxWindows licence
  */
 
@@ -926,6 +926,17 @@ WXDLLIMPEXP_BASE bool wxOKlibc(); /* for internal use */
                 #define wxVsnprintf_    wx_fixed_vsnprintf
             #else
                 #define wxVsnprintf_    vsnprintf
+            #endif
+        #endif
+    #else
+        // the only exception on Windows is VC++ 8.0; it provides a new family
+        // of printf() functions with positional parameter support which should
+        // behave mostly identic to our wxVsnprintf() implementation
+        #if defined(__VISUALC__) && __VISUALC__ >= 1400
+            #if wxUSE_UNICODE
+                #define wxVsnprintf_    _vsprintf_p
+            #else
+                #define wxVsnprintf_    _vswprintf_p
             #endif
         #endif
     #endif

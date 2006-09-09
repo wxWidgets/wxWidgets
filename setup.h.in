@@ -1059,7 +1059,14 @@
 /* Define this if you have wprintf() and related functions */
 #undef HAVE_WPRINTF
 
-/* Define this if you have wprintf() and related functions */
+/* Define this if you have swprintf() */
+#undef HAVE_SWPRINTF
+
+/* Define if you have a _broken_ swprintf() declaration in the header,
+ * without a 'size_t max' parameter as second argument */
+#undef HAVE_BROKEN_SWPRINTF_DECL
+
+/* Define this if you have vswprintf() and related functions */
 #undef HAVE_VSWPRINTF
 
 /* Define this if you have _vsnwprintf */

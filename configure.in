@@ -4419,8 +4419,40 @@ define HAVE_UNIX98_PRINTF as 1 in setup.h if it is available.])
     fi
 fi
 
-
 if test "$wxUSE_UNICODE" = yes; then
+
+    dnl our wxVsnprintf() implementation needs to use the system swprintf() in Unicode
+    dnl builds so let's check if swprintf() is declared as C99 imposes:
+    dnl     int swprintf(wchar_t *s, size_t n, const wchar_t *format, ...);
+    dnl or rather as:
+    dnl     int swprintf(wchar_t *s, const wchar_t *format, ...);
+    AC_CHECK_FUNCS(swprintf)
+
+    if test "$ac_cv_func_swprintf" = "yes"; then
+        AC_CACHE_CHECK([if swprintf declaration is broken], wx_cv_func_broken_swprintf_decl,
+            [
+                AC_TRY_COMPILE(
+                    [
+                        #include <stdio.h>
+                        #include <stdarg.h>
+                        #include <wchar.h>
+                    ],
+                    [
+                        wchar_t *buf;
+                        const wchar_t *fmt = L"test";
+                        swprintf(buf, 10u, fmt);
+                    ],
+                    wx_cv_func_broken_swprintf_decl=no,
+                    wx_cv_func_broken_swprintf_decl=yes
+                )
+            ]
+        )
+
+        if test "$wx_cv_func_broken_swprintf_decl" = "yes"; then
+            AC_DEFINE(HAVE_BROKEN_SWPRINTF_DECL)
+        fi
+    fi
+
     dnl also look if we have wide char IO functions
     AC_CHECK_FUNCS(wputc wputchar putws fputws wprintf vswprintf)
 
