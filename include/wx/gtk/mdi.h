@@ -64,8 +64,6 @@ public:
 protected:
     void Init();
 
-    virtual void DoGetClientSize(int *width, int *height) const;
-
 private:
     friend class wxMDIChildFrame;
 

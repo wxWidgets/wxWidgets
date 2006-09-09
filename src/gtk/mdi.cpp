@@ -241,11 +241,6 @@ void wxMDIParentFrame::OnInternalIdle()
     }
 }
 
-void wxMDIParentFrame::DoGetClientSize(int *width, int *height ) const
-{
-    wxFrame::DoGetClientSize( width, height );
-}
-
 wxMDIChildFrame *wxMDIParentFrame::GetActiveChild() const
 {
     if (!m_clientWindow) return (wxMDIChildFrame*) NULL;
