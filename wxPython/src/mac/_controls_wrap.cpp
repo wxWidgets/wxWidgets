@@ -7146,6 +7146,33 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_Gauge_Pulse(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxGauge *arg1 = (wxGauge *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxGauge, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Gauge_Pulse" "', expected argument " "1"" of type '" "wxGauge *""'"); 
+  }
+  arg1 = reinterpret_cast< wxGauge * >(argp1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    (arg1)->Pulse();
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_Gauge_IsVertical(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   wxGauge *arg1 = (wxGauge *) 0 ;
@@ -45176,6 +45203,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Gauge_GetRange", (PyCFunction)_wrap_Gauge_GetRange, METH_O, NULL},
 	 { (char *)"Gauge_SetValue", (PyCFunction) _wrap_Gauge_SetValue, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Gauge_GetValue", (PyCFunction)_wrap_Gauge_GetValue, METH_O, NULL},
+	 { (char *)"Gauge_Pulse", (PyCFunction)_wrap_Gauge_Pulse, METH_O, NULL},
 	 { (char *)"Gauge_IsVertical", (PyCFunction)_wrap_Gauge_IsVertical, METH_O, NULL},
 	 { (char *)"Gauge_SetShadowWidth", (PyCFunction) _wrap_Gauge_SetShadowWidth, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Gauge_GetShadowWidth", (PyCFunction)_wrap_Gauge_GetShadowWidth, METH_O, NULL},

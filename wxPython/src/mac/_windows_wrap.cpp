@@ -19435,6 +19435,67 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_ProgressDialog_UpdatePulse(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxProgressDialog *arg1 = (wxProgressDialog *) 0 ;
+  wxString const &arg2_defvalue = wxPyEmptyString ;
+  wxString *arg2 = (wxString *) &arg2_defvalue ;
+  bool *arg3 = (bool *) 0 ;
+  bool result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  bool temp2 = false ;
+  bool temp3 ;
+  int res3 = SWIG_TMPOBJ ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "newmsg", NULL 
+  };
+  
+  arg3 = &temp3;
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|O:ProgressDialog_UpdatePulse",kwnames,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxProgressDialog, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ProgressDialog_UpdatePulse" "', expected argument " "1"" of type '" "wxProgressDialog *""'"); 
+  }
+  arg1 = reinterpret_cast< wxProgressDialog * >(argp1);
+  if (obj1) {
+    {
+      arg2 = wxString_in_helper(obj1);
+      if (arg2 == NULL) SWIG_fail;
+      temp2 = true;
+    }
+  }
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = (bool)(arg1)->UpdatePulse((wxString const &)*arg2,arg3);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  {
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+  }
+  if (SWIG_IsTmpObj(res3)) {
+    resultobj = SWIG_Python_AppendOutput(resultobj, SWIG_From_bool((*arg3)));
+  } else {
+    int new_flags = SWIG_IsNewObj(res3) ? (SWIG_POINTER_OWN |  0 ) :  0 ;
+    resultobj = SWIG_Python_AppendOutput(resultobj, SWIG_NewPointerObj((void*)(arg3), SWIGTYPE_p_bool, new_flags));
+  }
+  {
+    if (temp2)
+    delete arg2;
+  }
+  return resultobj;
+fail:
+  {
+    if (temp2)
+    delete arg2;
+  }
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_ProgressDialog_Resume(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   wxProgressDialog *arg1 = (wxProgressDialog *) 0 ;
@@ -31171,6 +31232,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"MessageDialog_swiginit", MessageDialog_swiginit, METH_VARARGS, NULL},
 	 { (char *)"new_ProgressDialog", (PyCFunction) _wrap_new_ProgressDialog, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"ProgressDialog_Update", (PyCFunction) _wrap_ProgressDialog_Update, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"ProgressDialog_UpdatePulse", (PyCFunction) _wrap_ProgressDialog_UpdatePulse, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"ProgressDialog_Resume", (PyCFunction)_wrap_ProgressDialog_Resume, METH_O, NULL},
 	 { (char *)"ProgressDialog_swigregister", ProgressDialog_swigregister, METH_VARARGS, NULL},
 	 { (char *)"ProgressDialog_swiginit", ProgressDialog_swiginit, METH_VARARGS, NULL},
@@ -33870,6 +33932,14 @@ SWIGEXPORT void SWIG_init(void) {
   SWIG_Python_SetConstant(d, "CHOICEDLG_STYLE",SWIG_From_int(static_cast< int >(wxCHOICEDLG_STYLE)));
   SWIG_Python_SetConstant(d, "TextEntryDialogStyle",SWIG_From_int(static_cast< int >(wxTextEntryDialogStyle)));
   SWIG_addvarlink(SWIG_globals(),(char*)"GetPasswordFromUserPromptStr",GetPasswordFromUserPromptStr_get, GetPasswordFromUserPromptStr_set);
+  SWIG_Python_SetConstant(d, "PD_AUTO_HIDE",SWIG_From_int(static_cast< int >(wxPD_AUTO_HIDE)));
+  SWIG_Python_SetConstant(d, "PD_APP_MODAL",SWIG_From_int(static_cast< int >(wxPD_APP_MODAL)));
+  SWIG_Python_SetConstant(d, "PD_CAN_ABORT",SWIG_From_int(static_cast< int >(wxPD_CAN_ABORT)));
+  SWIG_Python_SetConstant(d, "PD_ELAPSED_TIME",SWIG_From_int(static_cast< int >(wxPD_ELAPSED_TIME)));
+  SWIG_Python_SetConstant(d, "PD_ESTIMATED_TIME",SWIG_From_int(static_cast< int >(wxPD_ESTIMATED_TIME)));
+  SWIG_Python_SetConstant(d, "PD_REMAINING_TIME",SWIG_From_int(static_cast< int >(wxPD_REMAINING_TIME)));
+  SWIG_Python_SetConstant(d, "PD_SMOOTH",SWIG_From_int(static_cast< int >(wxPD_SMOOTH)));
+  SWIG_Python_SetConstant(d, "PD_CAN_SKIP",SWIG_From_int(static_cast< int >(wxPD_CAN_SKIP)));
   SWIG_Python_SetConstant(d, "FR_DOWN",SWIG_From_int(static_cast< int >(wxFR_DOWN)));
   SWIG_Python_SetConstant(d, "FR_WHOLEWORD",SWIG_From_int(static_cast< int >(wxFR_WHOLEWORD)));
   SWIG_Python_SetConstant(d, "FR_MATCHCASE",SWIG_From_int(static_cast< int >(wxFR_MATCHCASE)));

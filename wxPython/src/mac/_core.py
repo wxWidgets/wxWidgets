@@ -277,14 +277,6 @@ ID_ZOOM_OUT = _core_.ID_ZOOM_OUT
 ID_UNDELETE = _core_.ID_UNDELETE
 ID_REVERT_TO_SAVED = _core_.ID_REVERT_TO_SAVED
 ID_HIGHEST = _core_.ID_HIGHEST
-PD_AUTO_HIDE = _core_.PD_AUTO_HIDE
-PD_APP_MODAL = _core_.PD_APP_MODAL
-PD_CAN_ABORT = _core_.PD_CAN_ABORT
-PD_ELAPSED_TIME = _core_.PD_ELAPSED_TIME
-PD_ESTIMATED_TIME = _core_.PD_ESTIMATED_TIME
-PD_REMAINING_TIME = _core_.PD_REMAINING_TIME
-PD_SMOOTH = _core_.PD_SMOOTH
-PD_CAN_SKIP = _core_.PD_CAN_SKIP
 MENU_TEAROFF = _core_.MENU_TEAROFF
 MB_DOCKABLE = _core_.MB_DOCKABLE
 NO_FULL_REPAINT_ON_RESIZE = _core_.NO_FULL_REPAINT_ON_RESIZE
@@ -11619,14 +11611,55 @@ class Sizer(Object):
                 item = (item, )
             self.Add(*item)
 
+    def AddSpacer(self, *args, **kw):
+        """AddSpacer(int size) --> SizerItem
+
+        Add a spacer that is (size,size) pixels.
+        """
+        if args and type(args[0]) == int:
+            return self.Add( (args[0],args[0] ), 0)
+        else: # otherwise stay compatible with old AddSpacer
+            return self.Add(*args, **kw)
+    def PrependSpacer(self, *args, **kw):
+        """PrependSpacer(int size) --> SizerItem
+
+        Prepend a spacer that is (size, size) pixels."""
+        if args and type(args[0]) == int:
+            return self.Prepend( (args[0],args[0] ), 0)
+        else: # otherwise stay compatible with old PrependSpacer
+            return self.Prepend(*args, **kw)
+    def InsertSpacer(self, index, *args, **kw):
+        """InsertSpacer(int index, int size) --> SizerItem
+
+        Insert a spacer at position index that is (size, size) pixels."""
+        if args and type(args[0]) == int:
+            return self.Insert( index, (args[0],args[0] ), 0)
+        else: # otherwise stay compatible with old InsertSpacer
+            return self.Insert(index, *args, **kw)
+
+                   
+    def AddStretchSpacer(self, prop=1):
+        """AddStretchSpacer(int prop=1) --> SizerItem
+
+        Add a stretchable spacer."""
+        return self.Add((0,0), prop)
+    def PrependStretchSpacer(self, prop=1):
+        """PrependStretchSpacer(int prop=1) --> SizerItem
+
+        Prepend a stretchable spacer."""
+        return self.Prepend((0,0), prop)
+    def InsertStretchSpacer(self, index, prop=1):
+        """InsertStretchSpacer(int index, int prop=1) --> SizerItem
+
+        Insert a stretchable spacer."""
+        return self.Insert(index, (0,0), prop)
+
+            
     # for backwards compatibility only, please do not use in new code
     def AddWindow(self, *args, **kw):
         """Compatibility alias for `Add`."""
         return self.Add(*args, **kw)
     def AddSizer(self, *args, **kw):
-        """Compatibility alias for `Add`."""
-        return self.Add(*args, **kw)
-    def AddSpacer(self, *args, **kw):
         """Compatibility alias for `Add`."""
         return self.Add(*args, **kw)
 
@@ -11636,17 +11669,11 @@ class Sizer(Object):
     def PrependSizer(self, *args, **kw):
         """Compatibility alias for `Prepend`."""
         return self.Prepend(*args, **kw)
-    def PrependSpacer(self, *args, **kw):
-        """Compatibility alias for `Prepend`."""
-        return self.Prepend(*args, **kw)
 
     def InsertWindow(self, *args, **kw):
         """Compatibility alias for `Insert`."""
         return self.Insert(*args, **kw)
     def InsertSizer(self, *args, **kw):
-        """Compatibility alias for `Insert`."""
-        return self.Insert(*args, **kw)
-    def InsertSpacer(self, *args, **kw):
         """Compatibility alias for `Insert`."""
         return self.Insert(*args, **kw)
 

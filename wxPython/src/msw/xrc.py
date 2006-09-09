@@ -335,7 +335,7 @@ class XmlNode(object):
         return _xrc.XmlNode_AddChild(*args, **kwargs)
 
     def InsertChild(*args, **kwargs):
-        """InsertChild(self, XmlNode child, XmlNode before_node)"""
+        """InsertChild(self, XmlNode child, XmlNode before_node) -> bool"""
         return _xrc.XmlNode_InsertChild(*args, **kwargs)
 
     def RemoveChild(*args, **kwargs):
@@ -465,6 +465,10 @@ class XmlDocument(_core.Object):
     def GetFileEncoding(*args, **kwargs):
         """GetFileEncoding(self) -> String"""
         return _xrc.XmlDocument_GetFileEncoding(*args, **kwargs)
+
+    def DetachRoot(*args, **kwargs):
+        """DetachRoot(self) -> XmlNode"""
+        return _xrc.XmlDocument_DetachRoot(*args, **kwargs)
 
     def SetRoot(*args, **kwargs):
         """SetRoot(self, XmlNode node)"""

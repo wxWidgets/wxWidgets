@@ -56954,14 +56954,6 @@ SWIGEXPORT void SWIG_init(void) {
   SWIG_Python_SetConstant(d, "ID_UNDELETE",SWIG_From_int(static_cast< int >(wxID_UNDELETE)));
   SWIG_Python_SetConstant(d, "ID_REVERT_TO_SAVED",SWIG_From_int(static_cast< int >(wxID_REVERT_TO_SAVED)));
   SWIG_Python_SetConstant(d, "ID_HIGHEST",SWIG_From_int(static_cast< int >(wxID_HIGHEST)));
-  SWIG_Python_SetConstant(d, "PD_AUTO_HIDE",SWIG_From_int(static_cast< int >(wxPD_AUTO_HIDE)));
-  SWIG_Python_SetConstant(d, "PD_APP_MODAL",SWIG_From_int(static_cast< int >(wxPD_APP_MODAL)));
-  SWIG_Python_SetConstant(d, "PD_CAN_ABORT",SWIG_From_int(static_cast< int >(wxPD_CAN_ABORT)));
-  SWIG_Python_SetConstant(d, "PD_ELAPSED_TIME",SWIG_From_int(static_cast< int >(wxPD_ELAPSED_TIME)));
-  SWIG_Python_SetConstant(d, "PD_ESTIMATED_TIME",SWIG_From_int(static_cast< int >(wxPD_ESTIMATED_TIME)));
-  SWIG_Python_SetConstant(d, "PD_REMAINING_TIME",SWIG_From_int(static_cast< int >(wxPD_REMAINING_TIME)));
-  SWIG_Python_SetConstant(d, "PD_SMOOTH",SWIG_From_int(static_cast< int >(wxPD_SMOOTH)));
-  SWIG_Python_SetConstant(d, "PD_CAN_SKIP",SWIG_From_int(static_cast< int >(wxPD_CAN_SKIP)));
   SWIG_Python_SetConstant(d, "MENU_TEAROFF",SWIG_From_int(static_cast< int >(wxMENU_TEAROFF)));
   SWIG_Python_SetConstant(d, "MB_DOCKABLE",SWIG_From_int(static_cast< int >(wxMB_DOCKABLE)));
   SWIG_Python_SetConstant(d, "NO_FULL_REPAINT_ON_RESIZE",SWIG_From_int(static_cast< int >(wxNO_FULL_REPAINT_ON_RESIZE)));

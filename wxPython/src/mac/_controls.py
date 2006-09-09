@@ -904,6 +904,10 @@ class Gauge(_core.Control):
         """GetValue(self) -> int"""
         return _controls_.Gauge_GetValue(*args, **kwargs)
 
+    def Pulse(*args, **kwargs):
+        """Pulse(self)"""
+        return _controls_.Gauge_Pulse(*args, **kwargs)
+
     def IsVertical(*args, **kwargs):
         """IsVertical(self) -> bool"""
         return _controls_.Gauge_IsVertical(*args, **kwargs)

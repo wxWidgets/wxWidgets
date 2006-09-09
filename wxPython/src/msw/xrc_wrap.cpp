@@ -5339,6 +5339,7 @@ SWIGINTERN PyObject *_wrap_XmlNode_InsertChild(PyObject *SWIGUNUSEDPARM(self), P
   wxXmlNode *arg1 = (wxXmlNode *) 0 ;
   wxXmlNode *arg2 = (wxXmlNode *) 0 ;
   wxXmlNode *arg3 = (wxXmlNode *) 0 ;
+  bool result;
   void *argp1 = 0 ;
   int res1 = 0 ;
   void *argp2 = 0 ;
@@ -5370,11 +5371,13 @@ SWIGINTERN PyObject *_wrap_XmlNode_InsertChild(PyObject *SWIGUNUSEDPARM(self), P
   arg3 = reinterpret_cast< wxXmlNode * >(argp3);
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    (arg1)->InsertChild(arg2,arg3);
+    result = (bool)(arg1)->InsertChild(arg2,arg3);
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
-  resultobj = SWIG_Py_Void();
+  {
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+  }
   return resultobj;
 fail:
   return NULL;
@@ -6704,6 +6707,34 @@ SWIGINTERN PyObject *_wrap_XmlDocument_GetFileEncoding(PyObject *SWIGUNUSEDPARM(
     resultobj = PyString_FromStringAndSize((&result)->c_str(), (&result)->Len());
 #endif
   }
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_XmlDocument_DetachRoot(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxXmlDocument *arg1 = (wxXmlDocument *) 0 ;
+  wxXmlNode *result = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxXmlDocument, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "XmlDocument_DetachRoot" "', expected argument " "1"" of type '" "wxXmlDocument *""'"); 
+  }
+  arg1 = reinterpret_cast< wxXmlDocument * >(argp1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = (wxXmlNode *)(arg1)->DetachRoot();
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_wxXmlNode, 0 |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -8554,6 +8585,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"XmlDocument_GetRoot", (PyCFunction)_wrap_XmlDocument_GetRoot, METH_O, NULL},
 	 { (char *)"XmlDocument_GetVersion", (PyCFunction)_wrap_XmlDocument_GetVersion, METH_O, NULL},
 	 { (char *)"XmlDocument_GetFileEncoding", (PyCFunction)_wrap_XmlDocument_GetFileEncoding, METH_O, NULL},
+	 { (char *)"XmlDocument_DetachRoot", (PyCFunction)_wrap_XmlDocument_DetachRoot, METH_O, NULL},
 	 { (char *)"XmlDocument_SetRoot", (PyCFunction) _wrap_XmlDocument_SetRoot, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"XmlDocument_SetVersion", (PyCFunction) _wrap_XmlDocument_SetVersion, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"XmlDocument_SetFileEncoding", (PyCFunction) _wrap_XmlDocument_SetFileEncoding, METH_VARARGS | METH_KEYWORDS, NULL},
