@@ -12,7 +12,9 @@
 \section{\class{wxProgressDialog}}\label{wxprogressdialog}
 
 This class represents a dialog that shows a short message and a
-progress bar. Optionally, it can display an ABORT button.
+progress bar. Optionally, it can display ABORT and SKIP buttons,
+the elapsed, remaining and estimated time for the end of the progress.
+
 
 \wxheading{Derived from}
 
@@ -24,6 +26,30 @@ progress bar. Optionally, it can display an ABORT button.
 \wxheading{Include files}
 
 <wx/progdlg.h>
+
+
+\wxheading{Window styles}
+
+\twocolwidtha{7cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{\windowstyle{wxPD\_APP\_MODAL}}{Make the progress dialog modal. If this flag is
+not given, it is only "locally" modal - that is the input to the parent
+window is disabled, but not to the other ones.}
+\twocolitem{\windowstyle{wxPD\_AUTO\_HIDE}}{Causes the progress dialog to disappear
+from screen as soon as the maximum value of the progress meter has been
+reached.}
+\twocolitem{\windowstyle{wxPD\_SMOOTH}}{Causes smooth progress of the gauge control.}
+\twocolitem{\windowstyle{wxPD\_CAN\_ABORT}}{This flag tells the dialog that it should have a
+"Cancel" button which the user may press. If this happens, the next call to
+\helpref{Update()}{wxprogressdialogupdate} will return false.}
+\twocolitem{\windowstyle{wxPD\_CAN\_SKIP}}{This flag tells the dialog that it should have a
+"Skip" button which the user may press. If this happens, the next call to
+\helpref{Update()}{wxprogressdialogupdate} will return true in its skip parameter.}
+\twocolitem{\windowstyle{wxPD\_ELAPSED\_TIME}}{This flag tells the dialog that it should show elapsed time (since creating the dialog).}
+\twocolitem{\windowstyle{wxPD\_ESTIMATED\_TIME}}{This flag tells the dialog that it should show estimated time.}
+\twocolitem{\windowstyle{wxPD\_REMAINING\_TIME}}{This flag tells the dialog that it should show remaining time.}
+\end{twocollist}%
+
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
@@ -49,31 +75,7 @@ window only.
 
 \docparam{parent}{Parent window.}
 
-\docparam{style}{The dialog style. This is the combination of the following
-bitmask constants defined in wx/defs.h:
-
-\twocolwidtha{7cm}
-\begin{twocollist}\itemsep=0pt
-\twocolitem{{\bf wxPD\_APP\_MODAL}}{Make the progress dialog modal. If this flag is
-not given, it is only "locally" modal - that is the input to the parent
-window is disabled, but not to the other ones.}
-\twocolitem{{\bf wxPD\_AUTO\_HIDE}}{Causes the progress dialog to disappear
-from screen as soon as the maximum value of the progress meter has been
-reached.}
-\twocolitem{{\bf wxPD\_SMOOTH}}{Causes smooth progress of the gauge control.}
-\twocolitem{{\bf wxPD\_CAN\_ABORT}}{This flag tells the dialog that it should have a
-"Cancel" button which the user may press. If this happens, the next call to
-\helpref{Update()}{wxprogressdialogupdate} will return false.}
-\twocolitem{{\bf wxPD\_CAN\_SKIP}}{This flag tells the dialog that it should have a
-"Skip" button which the user may press. If this happens, the next call to
-\helpref{Update()}{wxprogressdialogupdate} will return true in its skip parameter.}
-\twocolitem{{\bf wxPD\_ELAPSED\_TIME}}{This flag tells the dialog that it should show elapsed time (since creating the dialog).}
-\twocolitem{{\bf wxPD\_ESTIMATED\_TIME}}{This flag tells the dialog that it should show estimated time.}
-\twocolitem{{\bf wxPD\_REMAINING\_TIME}}{This flag tells the dialog that it should show remaining time.}
-%\twocolitem{{\bf wxPD\_SMOOTH}}{This flag tells the dialog that it should use
-%smooth gauge (has effect only under 32bit Windows).}
-\end{twocollist}%
-}
+\docparam{style}{The dialog style. See \helpref{wxProgressDialog}{wxprogressdialog}.}
 
 \membersection{wxProgressDialog::\destruct{wxProgressDialog}}\label{wxprogressdialogdtor}
 
@@ -96,10 +98,10 @@ ABORT.
   \param{bool *}{skip = NULL}}
 
 Updates the dialog, setting the progress bar to the new value and, if
-given changes the message above it. Returns true unless the Cancel button
+given changes the message above it. Returns \true unless the Cancel button
 has been pressed.
 
-If false is returned, the application can either immediately destroy the dialog
+If \false is returned, the application can either immediately destroy the dialog
 or ask the user for the confirmation and if the abort is not confirmed the
 dialog may be resumed with \helpref{Resume}{wxprogressdialogresume} function.
 
@@ -111,4 +113,16 @@ it is equal to the maximum.}
 \docparam{newmsg}{The new messages for the progress dialog text, if it is
 empty (which is the default) the message is not changed.}
 \docparam{skip}{If "Skip" button was pressed since last
-\helpref{Update}{wxprogressdialogupdate} call the skip is true.}
+\helpref{Update}{wxprogressdialogupdate} call, this is set to true.}
+
+
+\membersection{wxProgressDialog::UpdatePulse}\label{wxprogressdialogupdatepulse}
+
+\func{virtual bool}{UpdatePulse}{
+  \param{const wxString\& }{newmsg = ""},\rtfsp
+  \param{bool *}{skip = NULL}}
+
+Just like \helpref{Update}{wxprogressdialogupdate} but makes
+the gauge control run in indeterminate mode (see \helpref{wxGauge}{wxgauge} documentation),
+sets the remaining and the estimated time labels (if present) to {\tt Unknown} and moves
+the progress bar a bit to indicate that some progress was done.
