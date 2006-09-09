@@ -335,9 +335,7 @@ inline RECT wxGetWindowRect(HWND hwnd)
     RECT rect;
 
     if ( !::GetWindowRect(hwnd, &rect) )
-    {
         wxLogLastError(_T("GetWindowRect"));
-    }
 
     return rect;
 }
@@ -347,9 +345,7 @@ inline RECT wxGetClientRect(HWND hwnd)
     RECT rect;
 
     if ( !::GetClientRect(hwnd, &rect) )
-    {
         wxLogLastError(_T("GetClientRect"));
-    }
 
     return rect;
 }
@@ -505,9 +501,7 @@ public:
         : m_hdc(hdc)
     {
         if ( !::SelectClipRgn(hdc, hrgn) )
-        {
             wxLogLastError(_T("SelectClipRgn"));
-        }
     }
 
     ~HDCClipper()
@@ -536,9 +530,7 @@ private:
         {
             m_modeOld = ::SetMapMode(hdc, mm);
             if ( !m_modeOld )
-            {
                 wxLogLastError(_T("SelectClipRgn"));
-            }
         }
 
         ~HDCMapModeChanger()
@@ -567,17 +559,13 @@ public:
     {
         m_hGlobal = ::GlobalAlloc(flags, size);
         if ( !m_hGlobal )
-        {
             wxLogLastError(_T("GlobalAlloc"));
-        }
     }
 
     ~GlobalPtr()
     {
         if ( m_hGlobal && ::GlobalFree(m_hGlobal) )
-        {
             wxLogLastError(_T("GlobalFree"));
-        }
     }
 
     // implicit conversion
@@ -599,9 +587,7 @@ public:
     {
         m_ptr = GlobalLock(hGlobal);
         if ( !m_ptr )
-        {
             wxLogLastError(_T("GlobalLock"));
-        }
     }
 
     ~GlobalPtrLock()
