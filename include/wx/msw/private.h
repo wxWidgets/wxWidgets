@@ -505,7 +505,9 @@ public:
         : m_hdc(hdc)
     {
         if ( !::SelectClipRgn(hdc, hrgn) )
+        {
             wxLogLastError(_T("SelectClipRgn"));
+        }
     }
 
     ~HDCClipper()
