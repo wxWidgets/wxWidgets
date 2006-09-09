@@ -440,6 +440,8 @@ If an item is selected then its index will appear in the list.", "");
             return wxArrayInt2PyList_helper(self->GetSelections());
         }
     }
+
+    %property(Selections, GetSelections, SetSelections, doc="See `GetSelections` and `SetSelections`");
 };
 
 
@@ -558,6 +560,9 @@ public:
         "Constructor.  Use ShowModal method to show the dialog.", "");
 
     long GetValue();
+
+    %property(Value, GetValue, doc="See `GetValue`");
+   
 };
 
 //---------------------------------------------------------------------------

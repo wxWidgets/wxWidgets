@@ -278,6 +278,14 @@ public:
     // hopefully be understood by the user)
     bool FromUserString(const wxString& s);
     wxString ToUserString() const;
+    
+    %property(Encoding, GetEncoding, SetEncoding, doc="See `GetEncoding` and `SetEncoding`");
+    %property(FaceName, GetFaceName, SetFaceName, doc="See `GetFaceName` and `SetFaceName`");
+    %property(Family, GetFamily, SetFamily, doc="See `GetFamily` and `SetFamily`");
+    %property(PointSize, GetPointSize, SetPointSize, doc="See `GetPointSize` and `SetPointSize`");
+    %property(Style, GetStyle, SetStyle, doc="See `GetStyle` and `SetStyle`");
+    %property(Underlined, GetUnderlined, SetUnderlined, doc="See `GetUnderlined` and `SetUnderlined`");
+    %property(Weight, GetWeight, SetWeight, doc="See `GetWeight` and `SetWeight`");
 };
 
 

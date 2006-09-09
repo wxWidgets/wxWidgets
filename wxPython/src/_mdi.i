@@ -65,7 +65,7 @@ public:
     void Cascade();
     wxMDIChildFrame* GetActiveChild();
     wxMDIClientWindow* GetClientWindow();
-    wxWindow* GetToolBar();
+//    wxWindow* GetToolBar();
 
     // TODO:  This isn't handled by the standard event-table system...
     //wxMDIClientWindow* OnCreateClient();
@@ -77,6 +77,11 @@ public:
     void SetToolBar(wxToolBar* toolbar);
 #endif
     void Tile(wxOrientation orient = wxHORIZONTAL);
+
+    %property(ActiveChild, GetActiveChild, doc="See `GetActiveChild`");
+    %property(ClientWindow, GetClientWindow, doc="See `GetClientWindow`");
+//    %property(ToolBar, GetToolBar, doc="See `GetToolBar`");
+    
 };
 
 //---------------------------------------------------------------------------

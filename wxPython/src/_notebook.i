@@ -272,6 +272,9 @@ public:
 
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
+
+    %property(RowCount, GetRowCount, doc="See `GetRowCount`");
+    %property(ThemeBackgroundColour, GetThemeBackgroundColour, doc="See `GetThemeBackgroundColour`");
 };
 
 

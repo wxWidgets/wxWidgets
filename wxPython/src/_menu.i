@@ -214,6 +214,17 @@ public:
     // set/get the parent of this menu
     void SetParent(wxMenu *parent);
     wxMenu *GetParent() const;
+
+    %property(EventHandler, GetEventHandler, SetEventHandler, doc="See `GetEventHandler` and `SetEventHandler`");
+    %property(HelpString, GetHelpString, SetHelpString, doc="See `GetHelpString` and `SetHelpString`");
+    %property(InvokingWindow, GetInvokingWindow, SetInvokingWindow, doc="See `GetInvokingWindow` and `SetInvokingWindow`");
+    %property(MenuBar, GetMenuBar, doc="See `GetMenuBar`");
+    %property(MenuItemCount, GetMenuItemCount, doc="See `GetMenuItemCount`");
+    %property(MenuItems, GetMenuItems, doc="See `GetMenuItems`");
+    %property(Parent, GetParent, SetParent, doc="See `GetParent` and `SetParent`");
+    %property(Style, GetStyle, doc="See `GetStyle`");
+    %property(Title, GetTitle, SetTitle, doc="See `GetTitle` and `SetTitle`");
+    
 };
 
 //---------------------------------------------------------------------------
@@ -335,8 +346,11 @@ public:
             for m, l in items:
                 self.Append(m, l)
     }
-    %property(Menus, GetMenus, SetMenus);
     
+    %property(Frame, GetFrame, doc="See `GetFrame`");
+    %property(Menu, GetMenu, doc="See `GetMenu`");
+    %property(MenuCount, GetMenuCount, doc="See `GetMenuCount`");
+    %property(Menus, GetMenus, SetMenus, doc="See `GetMenus` and `SetMenus`");
 };
 
 //---------------------------------------------------------------------------
@@ -452,6 +466,22 @@ public:
         void ResetOwnerDrawn() {}
     }
 #endif
+
+    %property(Accel, GetAccel, SetAccel, doc="See `GetAccel` and `SetAccel`");
+    %property(BackgroundColour, GetBackgroundColour, SetBackgroundColour, doc="See `GetBackgroundColour` and `SetBackgroundColour`");
+    %property(Bitmap, GetBitmap, SetBitmap, doc="See `GetBitmap` and `SetBitmap`");
+    %property(DisabledBitmap, GetDisabledBitmap, SetDisabledBitmap, doc="See `GetDisabledBitmap` and `SetDisabledBitmap`");
+    %property(Font, GetFont, SetFont, doc="See `GetFont` and `SetFont`");
+    %property(Help, GetHelp, SetHelp, doc="See `GetHelp` and `SetHelp`");
+    %property(Id, GetId, SetId, doc="See `GetId` and `SetId`");
+    %property(Kind, GetKind, SetKind, doc="See `GetKind` and `SetKind`");
+    %property(Label, GetLabel, doc="See `GetLabel`");
+    %property(MarginWidth, GetMarginWidth, SetMarginWidth, doc="See `GetMarginWidth` and `SetMarginWidth`");
+    %property(Menu, GetMenu, SetMenu, doc="See `GetMenu` and `SetMenu`");
+    %property(SubMenu, GetSubMenu, SetSubMenu, doc="See `GetSubMenu` and `SetSubMenu`");
+    %property(Text, GetText, SetText, doc="See `GetText` and `SetText`");
+    %property(TextColour, GetTextColour, SetTextColour, doc="See `GetTextColour` and `SetTextColour`");
+    
 };
 
 //---------------------------------------------------------------------------

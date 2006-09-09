@@ -1104,6 +1104,15 @@ public:
     int           m_wheelRotation;
     int           m_wheelDelta;
     int           m_linesPerAction;
+
+    %property(Button, GetButton, doc="See `GetButton`");
+    %property(LinesPerAction, GetLinesPerAction, doc="See `GetLinesPerAction`");
+    %property(LogicalPosition, GetLogicalPosition, doc="See `GetLogicalPosition`");
+    %property(Position, GetPosition, doc="See `GetPosition`");
+    %property(WheelDelta, GetWheelDelta, doc="See `GetWheelDelta`");
+    %property(WheelRotation, GetWheelRotation, doc="See `GetWheelRotation`");
+    %property(X, GetX, doc="See `GetX`");
+    %property(Y, GetY, doc="See `GetY`");
 };
 
 //---------------------------------------------------------------------------
@@ -1495,6 +1504,10 @@ public:
         m_pos =  property(GetPosition, SetPosition)
         m_rect = property(GetRect, SetRect)
     }
+
+    %property(Position, GetPosition, SetPosition, doc="See `GetPosition` and `SetPosition`");
+    %property(Rect, GetRect, SetRect, doc="See `GetRect` and `SetRect`");
+    
 };
 
 //---------------------------------------------------------------------------
@@ -1740,6 +1753,8 @@ be used with the OPEN and CLOSE events.", "");
         "Returns the menu which is being opened or closed. This method should
 only be used with the OPEN and CLOSE events.", "");
 
+    %property(Menu, GetMenu, doc="See `GetMenu`");
+    %property(MenuId, GetMenuId, doc="See `GetMenuId`");
 };
 
 //---------------------------------------------------------------------------
@@ -2180,6 +2195,7 @@ public:
         "Returns the window that gained the capture, or ``None`` if it was a
 non-wxWidgets window.", "");
 
+    %property(CapturedWindow, GetCapturedWindow, doc="See `GetCapturedWindow`");
 };
 
 //---------------------------------------------------------------------------
@@ -2346,6 +2362,10 @@ This is required for proper navogation over radio buttons.", "");
         WinChange,
         FromTab
     };
+
+    %property(CurrentFocus, GetCurrentFocus, SetCurrentFocus, doc="See `GetCurrentFocus` and `SetCurrentFocus`");
+    %property(Direction, GetDirection, SetDirection, doc="See `GetDirection` and `SetDirection`");
+    
 };
 
 //---------------------------------------------------------------------------
