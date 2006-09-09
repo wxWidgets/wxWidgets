@@ -68,18 +68,19 @@ bool wxControlContainer::AcceptsFocus() const
         while ( node )
         {
             wxWindow *child = node->GetData();
-
-            if ( child->AcceptsFocus() )
-            {
-                return true;
-            }
+            node = node->GetNext();
 
 #ifdef __WXMAC__
             wxScrollBar *sb = wxDynamicCast( child , wxScrollBar ) ;
             if ( sb == NULL || !m_winParent->MacIsWindowScrollbar( sb ) )
                 hasRealChildren = true ;
+            if ( sb && m_winParent->MacIsWindowScrollbar( sb ) )
+                continue;
 #endif
-            node = node->GetNext();
+            if ( child->AcceptsFocus() )
+            {
+                return true;
+            }
         }
 
 #ifdef __WXMAC__
@@ -637,7 +638,14 @@ bool wxSetFocusToChild(wxWindow *win, wxWindow **childLastFocused)
     while ( node )
     {
         wxWindow *child = node->GetData();
+        node = node->GetNext();
 
+#ifdef __WXMAC__
+        wxScrollBar *sb = wxDynamicCast( child , wxScrollBar ) ;
+        if ( sb && child->GetParent()->MacIsWindowScrollbar( sb ) )
+            continue;
+#endif
+        
         if ( child->AcceptsFocusFromKeyboard() && !child->IsTopLevel() )
         {
 #ifdef __WXMSW__
@@ -660,8 +668,6 @@ bool wxSetFocusToChild(wxWindow *win, wxWindow **childLastFocused)
             child->SetFocusFromKbd();
             return true;
         }
-
-        node = node->GetNext();
     }
 
     return false;
