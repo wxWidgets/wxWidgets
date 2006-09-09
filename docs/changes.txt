@@ -64,6 +64,10 @@ All (GUI):
 - Support for right-to-left text layout (Diaa Sami during Google Summer of Code)
 - Added wxID_PAGE_SETUP standard id
 
+wxMSW:
+
+- Implemented wxComboBox::SetEditable()
+
 wxMac:
 
 - Add parameter to the --enable-universal_binary configure option for the path

@@ -592,11 +592,13 @@ bool wxComboBox::IsEditable() const
     return !HasFlag(wxCB_READONLY);
 }
 
-void wxComboBox::SetEditable(bool WXUNUSED(editable))
+void wxComboBox::SetEditable(bool editable)
 {
-  // Can't implement in MSW?
-//  HWND hWnd = GetHwnd();
-//  SendMessage(hWnd, EM_SETREADONLY, (WPARAM)!editable, (LPARAM)0L);
+    HWND hWnd = (HWND)GetEditHWND();
+    if ( !::SendMessage(hWnd, EM_SETREADONLY, !editable, 0) )
+    {
+        wxLogLastError(_T("SendMessage(EM_SETREADONLY)"));
+    }
 }
 
 void wxComboBox::SetInsertionPoint(long pos)
@@ -604,7 +606,6 @@ void wxComboBox::SetInsertionPoint(long pos)
     if ( GetWindowStyle() & wxCB_READONLY )
         return;
 
-#ifdef __WIN32__
     HWND hWnd = GetHwnd();
     ::SendMessage(hWnd, CB_SETEDITSEL, 0, MAKELPARAM(pos, pos));
     HWND hEditWnd = (HWND) GetEditHWND();
@@ -615,7 +616,6 @@ void wxComboBox::SetInsertionPoint(long pos)
         // Why is this necessary? (Copied from wxTextCtrl::SetInsertionPoint)
         SendMessage(hEditWnd, EM_REPLACESEL, 0, (LPARAM) wxEmptyString);
     }
-#endif // __WIN32__
 }
 
 void wxComboBox::SetInsertionPointEnd()
