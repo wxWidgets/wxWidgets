@@ -197,7 +197,11 @@ bool WXDLLEXPORT wxOKlibc()
 //     result in an endless recursion and thus in a stack overflow
 #if wxUSE_UNICODE
 
-    #if defined(__WXWINCE__) || ( defined(__VISUALC__) && __VISUALC__ <= 1200 )
+    #if defined(__WINDOWS__)
+        // all compilers under Windows should have swprintf()
+        #define HAVE_SWPRINTF
+    #endif
+    #if defined(__WXWINCE__) || ( defined(__VISUALC__) && __VISUALC__ <= 1200 ) || defined(__GNUWIN32__)
         #define HAVE_BROKEN_SWPRINTF_DECL
     #endif
 
