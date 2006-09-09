@@ -446,11 +446,27 @@ void wxScrolledWindow::AdjustScrollbars()
     int w, h;
     int vw, vh;
 
-    m_targetWindow->GetClientSize( &w, &h );
     m_targetWindow->GetVirtualSize( &vw, &vh );
-    
+
+    m_targetWindow->GetClientSize(&w, NULL);
     DoAdjustScrollbars(m_hAdjust, m_xScrollPixelsPerLine, w, vw, &m_xScrollLinesPerPage);
+    m_targetWindow->GetClientSize(NULL, &h);
     DoAdjustScrollbars(m_vAdjust, m_yScrollPixelsPerLine, h, vh, &m_yScrollLinesPerPage);
+    const int w_old = w;
+    m_targetWindow->GetClientSize(&w, NULL);
+    if (w != w_old)
+    {
+        // It is necessary to repeat the calculations in this case to avoid an
+        // observed infinite series of size events, involving alternating
+        // changes in visibility of the scrollbars.
+        // At this point, GTK+ has already queued a resize, which will cause
+        // AdjustScrollbars() to be called again. If the scrollbar visibility
+        // is not correct before then, yet another resize will occur, possibly
+        // leading to an unending series if the sizes are just right.
+        DoAdjustScrollbars(m_hAdjust, m_xScrollPixelsPerLine, w, vw, &m_xScrollLinesPerPage);
+        m_targetWindow->GetClientSize(NULL, &h);
+        DoAdjustScrollbars(m_vAdjust, m_yScrollPixelsPerLine, h, vh, &m_yScrollLinesPerPage);
+    }
 }
 
 void wxScrolledWindow::DoAdjustScrollbars(GtkAdjustment* adj,
