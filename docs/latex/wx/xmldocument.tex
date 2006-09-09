@@ -92,6 +92,17 @@ Copy constructor.
 
 Virtual destructor. Frees the document root node.
 
+
+\membersection{wxXmlDocument::DetachRoot}\label{wxxmldocumentdetachroot}
+
+\func{wxXmlNode*}{DetachRoot}{\void}
+
+Detaches the document root node and returns it. The document root node will be set to \NULL
+and thus \helpref{IsOk}{wxxmldocumentisok} will return \false after calling this function.
+
+Note that the caller is reponsible for deleting the returned node in order to avoid memory leaks.
+
+
 \membersection{wxXmlDocument::GetEncoding}\label{wxxmldocumentgetencoding}
 
 \constfunc{wxString}{GetEncoding}{\void}
@@ -173,6 +184,8 @@ Sets the enconding of the file which will be used to save the document.
 \func{void}{SetRoot}{\param{wxXmlNode* }{node}}
 
 Sets the root node of this document. Deletes previous root node.
+Use \helpref{DetachRoot}{wxxmlnodedetachroot} and then SetRoot if you want to
+replace the root node without deleting the old document tree.
 
 \membersection{wxXmlDocument::SetVersion}\label{wxxmldocumentsetversion}
 

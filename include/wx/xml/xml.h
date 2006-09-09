@@ -208,6 +208,7 @@ public:
     wxString GetFileEncoding() const { return m_fileEncoding; }
 
     // Write-access methods:
+    wxXmlNode *DetachRoot() { wxXmlNode *old=m_root; m_root=NULL; return old; }
     void SetRoot(wxXmlNode *node) { wxDELETE(m_root); m_root = node; }
     void SetVersion(const wxString& version) { m_version = version; }
     void SetFileEncoding(const wxString& encoding) { m_fileEncoding = encoding; }
