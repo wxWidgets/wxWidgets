@@ -3,7 +3,7 @@
 % -----------------------------------------------------------------------------
 \section{\class{wxCountingOutputStream}}\label{wxcountingoutputstream}
 
-wxCountingOutputStream is a specialized output stream which does not write any data anyway,
+wxCountingOutputStream is a specialized output stream which does not write any data anywhere,
 instead it counts how many bytes would get written if this were a normal stream. This
 can sometimes be useful or required if some data gets serialized to a stream or compressed
 by using stream compression and thus the final size of the stream cannot be known other
