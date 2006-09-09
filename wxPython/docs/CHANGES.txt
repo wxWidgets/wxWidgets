@@ -220,6 +220,16 @@ Added wx.lib.dragscroller from Riaan Booysen.  It provides a helper
 class that can used to scroll a wx.ScrolledWindow in response to a
 mouse drag.
 
+Applied patch 1551409: Adds support for indeterminate mode gauges.
+
+wxMac: I've turned on the compile option for using the native toolbar
+on the Mac now that it supports hosting of controls.  If the toolbar
+is managed by the frame via either CreateToolBar() or SetToolBar()
+then the native toolbar will be used.  Additional toolbars, or
+toolbars that are not children of the frame, managed by sizers or
+what-not will still use the emulated toolbar because of platform
+restrictions in how/where the toolbar can be used.
+
 
 
 
