@@ -13,8 +13,6 @@ __revision__ = "$Revision$"[11:-2]
 
 import wx
 import os
-print "PID:", os.getpid()
-raw_input("...")
 
 class App(wx.App):
     """PyShell standalone application."""
