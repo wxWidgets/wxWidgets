@@ -215,8 +215,8 @@ public:
     // returns true if the grandchildren need to be clipped to the children's content area
     // (e.g., splitter windows)
     virtual bool        MacClipGrandChildren() const { return false ; }
-    bool                MacIsWindowScrollbar( const wxScrollBar* sb )
-    { return (m_hScrollBar == sb || m_vScrollBar == sb) ; }
+    bool                MacIsWindowScrollbar( const wxWindow* sb )
+    { return ((wxWindow*)m_hScrollBar == sb || (wxWindow*)m_vScrollBar == sb) ; }
 
     virtual void        MacInstallEventHandler(WXWidget native) ;
     void                MacPostControlCreate(const wxPoint& pos, const wxSize& size) ;

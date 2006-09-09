@@ -71,11 +71,9 @@ bool wxControlContainer::AcceptsFocus() const
             node = node->GetNext();
 
 #ifdef __WXMAC__
-            wxScrollBar *sb = wxDynamicCast( child , wxScrollBar ) ;
-            if ( sb == NULL || !m_winParent->MacIsWindowScrollbar( sb ) )
-                hasRealChildren = true ;
-            if ( sb && m_winParent->MacIsWindowScrollbar( sb ) )
+            if ( m_winParent->MacIsWindowScrollbar( child ) )
                 continue;
+            hasRealChildren = true ;
 #endif
             if ( child->AcceptsFocus() )
             {
@@ -641,8 +639,7 @@ bool wxSetFocusToChild(wxWindow *win, wxWindow **childLastFocused)
         node = node->GetNext();
 
 #ifdef __WXMAC__
-        wxScrollBar *sb = wxDynamicCast( child , wxScrollBar ) ;
-        if ( sb && child->GetParent()->MacIsWindowScrollbar( sb ) )
+        if ( child->GetParent()->MacIsWindowScrollbar( child ) )
             continue;
 #endif
         
