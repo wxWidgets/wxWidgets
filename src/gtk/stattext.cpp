@@ -72,6 +72,15 @@ bool wxStaticText::Create(wxWindow *parent,
       justify = GTK_JUSTIFY_RIGHT;
     else // wxALIGN_LEFT is 0
       justify = GTK_JUSTIFY_LEFT;
+      
+    if (GetLayoutDirection() == wxLayout_RightToLeft)
+    {  
+         if (justify == GTK_JUSTIFY_RIGHT)
+            justify = GTK_JUSTIFY_LEFT;
+         if (justify == GTK_JUSTIFY_LEFT)
+            justify = GTK_JUSTIFY_RIGHT;
+    }
+    
     gtk_label_set_justify(GTK_LABEL(m_widget), justify);
 
     // GTK_JUSTIFY_LEFT is 0, RIGHT 1 and CENTER 2

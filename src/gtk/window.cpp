@@ -2115,7 +2115,7 @@ gtk_window_realized_callback( GtkWidget *m_widget, wxWindow *win )
 
 static
 void gtk_window_size_callback( GtkWidget *WXUNUSED(widget),
-                               GtkAllocation *WXUNUSED(alloc),
+                               GtkAllocation *alloc,
                                wxWindow *win )
 {
     if (g_isIdle)
@@ -2126,6 +2126,8 @@ void gtk_window_size_callback( GtkWidget *WXUNUSED(widget),
     win->GetClientSize( &client_width, &client_height );
     if ((client_width == win->m_oldClientWidth) && (client_height == win->m_oldClientHeight))
         return;
+
+    GTK_PIZZA(win->m_wxwindow)->m_width = alloc->width;
 
     win->m_oldClientWidth = client_width;
     win->m_oldClientHeight = client_height;
@@ -2732,7 +2734,9 @@ bool wxWindowGTK::Destroy()
 
 void wxWindowGTK::DoMoveWindow(int x, int y, int width, int height)
 {
+    // inform the parent to perform the move
     gtk_pizza_set_size( GTK_PIZZA(m_parent->m_wxwindow), m_widget, x, y, width, height );
+    
 }
 
 void wxWindowGTK::DoSetSize( int x, int y, int width, int height, int sizeFlags )
@@ -3479,7 +3483,16 @@ void wxWindowGTK::SetLayoutDirection(wxLayoutDirection dir)
     GTKSetLayout(m_widget, dir);
     
     if (m_wxwindow)
-        GTKSetLayout(m_widget, dir);
+        GTKSetLayout(m_wxwindow, dir);
+}
+
+wxCoord
+wxWindowGTK::AdjustForLayoutDirection(wxCoord x,
+                                      wxCoord WXUNUSED(width),
+                                      wxCoord WXUNUSED(widthTotal)) const
+{
+    // We now mirrors the coordinates of RTL windows in GtkPizza
+    return x;
 }
 
 void wxWindowGTK::DoMoveInTabOrder(wxWindow *win, MoveKind move)

@@ -189,13 +189,12 @@ gtk_pizza_init (GtkPizza *pizza)
 
     pizza->children = NULL;
 
-    pizza->m_width = 20;
-    pizza->m_height = 20;
-
     pizza->bin_window = NULL;
 
     pizza->m_xoffset = 0;
     pizza->m_yoffset = 0;
+    
+    pizza->m_width = -1;
 
     pizza->external_expose = FALSE;
 }
@@ -208,22 +207,6 @@ gtk_pizza_new ()
     pizza = g_object_new (gtk_pizza_get_type (), NULL);
 
     return GTK_WIDGET (pizza);
-}
-
-gint       gtk_pizza_get_width       (GtkPizza          *pizza)
-{
-    g_return_val_if_fail ( (pizza != NULL), -1 );
-    g_return_val_if_fail ( (GTK_IS_PIZZA (pizza)), -1 );
-
-    return pizza->m_width;
-}
-
-gint       gtk_pizza_get_height      (GtkPizza          *pizza)
-{
-    g_return_val_if_fail ( (pizza != NULL), -1 );
-    g_return_val_if_fail ( (GTK_IS_PIZZA (pizza)), -1 );
-
-    return pizza->m_height;
 }
 
 gint       gtk_pizza_get_xoffset     (GtkPizza          *pizza)
@@ -311,6 +294,12 @@ gtk_pizza_put (GtkPizza   *pizza,
     g_return_if_fail (GTK_IS_PIZZA (pizza));
     g_return_if_fail (widget != NULL);
 
+    if (gtk_widget_get_direction( GTK_WIDGET(pizza) ) == GTK_TEXT_DIR_RTL)
+    {
+        // reverse horizontal placement
+        x = pizza->m_width - x - width;
+    }
+
     child_info = g_new (GtkPizzaChild, 1);
 
     child_info->widget = widget;
@@ -319,6 +308,9 @@ gtk_pizza_put (GtkPizza   *pizza,
     child_info->width = width;
     child_info->height = height;
 
+    if (GTK_IS_PIZZA(widget))
+        GTK_PIZZA(widget)->m_width = width;
+                
     pizza->children = g_list_append (pizza->children, child_info);
 
     if (GTK_WIDGET_REALIZED (pizza))
@@ -362,15 +354,25 @@ gtk_pizza_set_size (GtkPizza   *pizza,
 
         if (child->widget == widget)
         {
-            if ((child->x == x) &&
+            gint new_x = x;
+            if (gtk_widget_get_direction( GTK_WIDGET(pizza) ) == GTK_TEXT_DIR_RTL)
+            {
+                // reverse horizontal placement
+                new_x = pizza->m_width - new_x - width;
+            }
+
+            if ((child->x == new_x) &&
                 (child->y == y) &&
                 (child->width == width) &&
                 (child->height == height)) return;
 
-            child->x = x;
+            child->x = new_x;
             child->y = y;
             child->width = width;
             child->height = height;
+            
+            if (GTK_IS_PIZZA(widget))
+                GTK_PIZZA(widget)->m_width = width;
 
             gtk_widget_set_size_request (widget, width, height);
 

@@ -50,11 +50,10 @@ struct _GtkPizza
     GList *children;
     GtkMyShadowType shadow_type;
 
-    guint m_width;
-    guint m_height;
-
     guint m_xoffset;
     guint m_yoffset;
+    
+    gint  m_width;
 
     GdkWindow *bin_window;
 
@@ -77,10 +76,6 @@ GtkWidget* gtk_pizza_new             (void);
 
 /* accessors */
 
-WXDLLIMPEXP_CORE
-gint       gtk_pizza_get_width       (GtkPizza          *pizza); 
-WXDLLIMPEXP_CORE
-gint       gtk_pizza_get_height      (GtkPizza          *pizza); 
 WXDLLIMPEXP_CORE
 gint       gtk_pizza_get_xoffset     (GtkPizza          *pizza); 
 WXDLLIMPEXP_CORE
