@@ -2244,6 +2244,20 @@ void wxDbTable::ClearMemberVar(UWORD colNumber, bool setToNull)
             pDt->second = 0;
             pDt->fraction = 0;
             break;
+        case SQL_C_DATE:
+            DATE_STRUCT *pDtd;
+            pDtd = (DATE_STRUCT *) colDefs[colNumber].PtrDataObj;
+            pDtd->year = 0;
+            pDtd->month = 0;
+            pDtd->day = 0;
+            break;
+        case SQL_C_TIME:
+            TIME_STRUCT *pDtt;
+            pDtt = (TIME_STRUCT *) colDefs[colNumber].PtrDataObj;
+            pDtt->hour = 0;
+            pDtt->minute = 0;
+            pDtt->second = 0;
+            break;
     }
 
     if (setToNull)
