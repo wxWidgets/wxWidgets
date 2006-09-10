@@ -2668,7 +2668,7 @@ void wxWindowGTK::PostCreation()
                           this);
     }
 #ifdef GTK_IS_FILE_CHOOSER_BUTTON
-    else if (GTK_IS_FILE_CHOOSER_BUTTON(m_widget))
+    else if (!gtk_check_version(2,6,0) && GTK_IS_FILE_CHOOSER_BUTTON(m_widget))
     {
         // If we connect to the "size_request" signal of a GtkFileChooserButton
         // then that control won't be sized properly when placed inside sizers
@@ -2690,7 +2690,7 @@ void wxWindowGTK::PostCreation()
     InheritAttributes();
 
     m_hasVMT = true;
-    
+
     SetLayoutDirection(wxLayout_Default);
 
     // unless the window was created initially hidden (i.e. Hide() had been
@@ -3397,7 +3397,7 @@ bool wxWindowGTK::Reparent( wxWindowBase *newParentBase )
 
     /* reverse: prevent GTK from deleting the widget arbitrarily */
     gtk_widget_unref( m_widget );
-    
+
     SetLayoutDirection(wxLayout_Default);
 
     return true;
