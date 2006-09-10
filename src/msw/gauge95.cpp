@@ -29,6 +29,8 @@
 #include "wx/gauge.h"
 
 #ifndef WX_PRECOMP
+    #include "wx/app.h"
+
     #include "wx/msw/wrapcctl.h" // include <commctrl.h> "properly"
 #endif
 
