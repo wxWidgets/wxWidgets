@@ -27,6 +27,9 @@ values are the ASCII character codes, plus the following:
     WXK_SPACE   = 32
     WXK_DELETE  = 127
 
+    // These are by design not compatible with unicode characters.
+    // If you want to get a unicode character from a key event use
+    // wxKeyEvent::GetUnicodeKey instead.
     WXK_START   = 300
     WXK_LBUTTON
     WXK_RBUTTON
@@ -34,12 +37,11 @@ values are the ASCII character codes, plus the following:
     WXK_MBUTTON
     WXK_CLEAR
     WXK_SHIFT
+    WXK_ALT
     WXK_CONTROL
     WXK_MENU
     WXK_PAUSE
     WXK_CAPITAL
-    WXK_PAGEUP
-    WXK_PAGEDOWN
     WXK_END
     WXK_HOME
     WXK_LEFT
