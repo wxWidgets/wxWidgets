@@ -87,8 +87,9 @@ void wxClientDisplayRect(int *x, int *y, int *width, int *height)
 // surface manipulation helpers
 //-----------------------------------------------------------------------------
 
-wxIDirectFBSurfacePtr wxDfbCloneSurface(const wxIDirectFBSurfacePtr& s,
-                                        wxDfbCloneSurfaceMode mode)
+wxIDirectFBSurfacePtr wxDfbCreateCompatibleSurface(
+                                    const wxIDirectFBSurfacePtr& s,
+                                    const wxSize& size)
 {
     if ( !s )
         return NULL;
@@ -97,8 +98,9 @@ wxIDirectFBSurfacePtr wxDfbCloneSurface(const wxIDirectFBSurfacePtr& s,
     desc.flags = (DFBSurfaceDescriptionFlags)(
             DSDESC_CAPS | DSDESC_WIDTH | DSDESC_HEIGHT | DSDESC_PIXELFORMAT);
     s->GetCapabilities(&desc.caps);
-    s->GetSize(&desc.width, &desc.height);
     s->GetPixelFormat(&desc.pixelformat);
+    desc.width = size.x;
+    desc.height = size.y;
 
     wxIDirectFBSurfacePtr snew(wxIDirectFB::Get()->CreateSurface(&desc));
     if ( !snew )
@@ -113,6 +115,23 @@ wxIDirectFBSurfacePtr wxDfbCloneSurface(const wxIDirectFBSurfacePtr& s,
                 return NULL;
         }
     }
+
+    return snew;
+}
+
+wxIDirectFBSurfacePtr wxDfbCloneSurface(const wxIDirectFBSurfacePtr& s,
+                                        wxDfbCloneSurfaceMode mode)
+{
+    if ( !s )
+        return NULL;
+
+    wxSize size;
+    if ( !s->GetSize(&size.x, &size.y) )
+        return NULL;
+
+    wxIDirectFBSurfacePtr snew(wxDfbCreateCompatibleSurface(s, size));
+    if ( !snew )
+        return NULL;
 
     if ( mode == wxDfbCloneSurface_CopyPixels )
     {

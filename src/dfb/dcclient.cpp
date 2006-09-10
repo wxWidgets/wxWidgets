@@ -50,28 +50,24 @@ void wxWindowDC::InitForWin(wxWindow *win, const wxRect *rect)
 {
     wxCHECK_RET( win, _T("invalid window") );
 
-    // FIXME: this should be made to work: we need to detect that the window
-    //        is not visible and in that case, a) ignore any drawing actions
-    //        and b) provide dummy surface that can still be used to get
-    //        information (e.g. text extents):
-    for ( wxWindow *w = win; w; w = w->GetParent() )
-    {
-        // painting on hidden TLW when non-TLW windows are shown is OK,
-        // DirectFB manages that:
-        if ( w->IsTopLevel() )
-            break;
-
-        wxASSERT_MSG( w->IsShown(),
-                      _T("painting on hidden window not implemented yet") );
-    }
-
     // check if the rectangle covers full window and so is not needed:
     if ( rect && *rect == wxRect(win->GetSize()) )
         rect = NULL;
 
     // obtain the surface used for painting:
     wxIDirectFBSurfacePtr surface;
-    if ( !rect )
+
+    if ( !win->IsVisible() )
+    {
+        // we're painting on invisible window: the changes won't have any
+        // effect, as the window will be repainted anyhow when it is shown, but
+        // we still need a valid DC so that e.g. text extents can be measured,
+        // so let's create a dummy surface that has the same format as the real
+        // one would have and let the code paint on it:
+        wxSize size(rect ? rect->GetSize() : win->GetSize());
+        surface = wxDfbCreateCompatibleSurface(win->GetDfbSurface(), size);
+    }
+    else if ( !rect )
     {
         wxCHECK_RET( win->GetSize().x > 0 && win->GetSize().y > 0,
                      _T("window has invalid size") );

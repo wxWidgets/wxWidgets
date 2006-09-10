@@ -42,6 +42,14 @@ enum wxDfbCloneSurfaceMode
 };
 
 /**
+    Creates surface that is compatible with given @a surface (i.e. has same
+    capabilities, pixel format etc.) and has given @a size.
+ */
+wxIDirectFBSurfacePtr wxDfbCreateCompatibleSurface(
+                                    const wxIDirectFBSurfacePtr& surface,
+                                    const wxSize& size);
+
+/**
     Creates a new surface by cloning existing one. Depending on @a mode,
     either makes exact copy (wxDfbCloneSurface_CopyPixels) or only creates a
     new surface with the same size and attributes (wxDfbCloneSurface_NoPixels).
