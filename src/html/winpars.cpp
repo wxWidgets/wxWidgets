@@ -116,13 +116,24 @@ static void wxBuildFontSizes(int *sizes, int size)
     // using a fixed factor (1.2, from CSS2) is a bad idea as explained at
     // http://www.w3.org/TR/CSS21/fonts.html#font-size-props but this is by far
     // simplest thing to do so still do it like this for now
-    sizes[0] = int(size * 0.69);
+    sizes[0] = int(size * 0.75); // exception to 1.2 rule, otherwise too small
     sizes[1] = int(size * 0.83);
     sizes[2] = size;
     sizes[3] = int(size * 1.2);
     sizes[4] = int(size * 1.44);
     sizes[5] = int(size * 1.73);
     sizes[6] = int(size * 2);
+}
+
+static int wxGetDefaultHTMLFontSize()
+{
+    // base the default font size on the size of the default system font but
+    // also ensure that we have a font of reasonable size, otherwise small HTML
+    // fonts are unreadable
+    int size = wxNORMAL_FONT->GetPointSize();
+    if ( size < 10 )
+        size = 10;
+    return size;
 }
 
 void wxHtmlWinParser::SetFonts(const wxString& normal_face,
@@ -133,7 +144,7 @@ void wxHtmlWinParser::SetFonts(const wxString& normal_face,
     if ( !sizes )
     {
         if ( !default_sizes[0] )
-            wxBuildFontSizes(default_sizes, wxNORMAL_FONT->GetPointSize());
+            wxBuildFontSizes(default_sizes, wxGetDefaultHTMLFontSize());
 
         sizes = default_sizes;
     }
@@ -168,7 +179,7 @@ void wxHtmlWinParser::SetStandardFonts(int size,
                                        const wxString& fixed_face)
 {
     if (size == -1)
-        size = wxNORMAL_FONT->GetPointSize();
+        size = wxGetDefaultHTMLFontSize();
 
     int f_sizes[7];
     wxBuildFontSizes(f_sizes, size);
