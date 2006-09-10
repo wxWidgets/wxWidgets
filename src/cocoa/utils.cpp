@@ -54,13 +54,12 @@ void wxClientDisplayRect(int *x,int *y,int *width,int *height)
         *height=768;
 }
 
-wxToolkitInfo& wxGUIAppTraits::GetToolkitInfo()
+wxPortId wxGUIAppTraits::GetToolkitVersion(int *verMaj, int *verMin) const
 {
-    static wxToolkitInfo info;
-    info.shortName = _T("cocoa");
-    info.name = _T("wxCocoa");
-    // TODO: Finish this
-    return info;
+    // We suppose that toolkit version is the same as OS version under Mac
+    wxGetOsVersion(verMaj, verMin);
+
+    return wxPORT_COCOA;
 }
 
 wxWindow* wxFindWindowAtPoint(const wxPoint& pt)
