@@ -65,7 +65,8 @@ private:
     unsigned char  m_cBlue;
     unsigned char  m_cGreen;
 
-    virtual void InitWith( unsigned char cRed, unsigned char cGreen, unsigned char cBlue);
+    virtual void
+    InitRGBA(unsigned char r, unsigned char g, unsigned char b, unsigned char a);
 
 public:
     WXCOLORREF                      m_vPixel ;

@@ -172,7 +172,8 @@ wxObjectRefData *wxColour::CloneRefData(const wxObjectRefData *data) const
     return new wxColourRefData(*(wxColourRefData *)data);
 }
 
-void wxColour::InitWith( unsigned char red, unsigned char green, unsigned char blue )
+void wxColour::InitRGBA(unsigned char red, unsigned char green, unsigned char blue,
+                        unsigned char WXUNUSED(alpha))
 {
     AllocExclusive();
 

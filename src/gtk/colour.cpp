@@ -112,7 +112,8 @@ bool wxColour::operator == ( const wxColour& col ) const
            refData->m_blue == that_refData->m_blue;
 }
 
-void wxColour::InitWith( unsigned char red, unsigned char green, unsigned char blue )
+void wxColour::InitRGBA(unsigned char red, unsigned char green, unsigned char blue,
+                        unsigned char WXUNUSED(alpha))
 {
     UnRef();
 

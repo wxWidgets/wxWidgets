@@ -48,8 +48,10 @@ public:
 #endif
 
 protected:
+    virtual void
+    InitRGBA(unsigned char r, unsigned char g, unsigned char b, unsigned char a);
+
     virtual bool FromString(const wxChar *str);
-    virtual void InitWith( unsigned char red, unsigned char green, unsigned char blue );
 
 private:
     DECLARE_DYNAMIC_CLASS(wxColour)

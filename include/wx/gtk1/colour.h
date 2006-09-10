@@ -65,7 +65,8 @@ protected:
     virtual wxObjectRefData *CreateRefData() const;
     virtual wxObjectRefData *CloneRefData(const wxObjectRefData *data) const;
 
-    virtual void InitWith( unsigned char red, unsigned char green, unsigned char blue );
+    virtual void
+    InitRGBA(unsigned char r, unsigned char g, unsigned char b, unsigned char a);
 
 private:
     DECLARE_DYNAMIC_CLASS(wxColour)

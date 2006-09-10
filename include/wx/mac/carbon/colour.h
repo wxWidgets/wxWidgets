@@ -55,12 +55,8 @@ protected :
     // Helper function
     void Init();
 
-    void InitWith( unsigned char red, unsigned char green, unsigned char blue ) 
-    {
-        InitWith( red, green, blue , wxALPHA_OPAQUE ) ;
-    }
-
-    void InitWith( unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha );
+    virtual void
+    InitRGBA(unsigned char r, unsigned char g, unsigned char b, unsigned char a);
 
 private:
     bool          m_isInit;
@@ -72,7 +68,7 @@ private:
 public:
     WXCOLORREF m_pixel ;
     void FromRGBColor( const WXCOLORREF* color ) ;
-    
+
 
 private:
     DECLARE_DYNAMIC_CLASS(wxColour)

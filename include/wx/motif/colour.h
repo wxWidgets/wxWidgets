@@ -62,7 +62,8 @@ protected:
     // Helper function
     void Init();
 
-    virtual void InitWith( unsigned char red, unsigned char green, unsigned char blue );
+    virtual void
+    InitRGBA(unsigned char r, unsigned char g, unsigned char b, unsigned char a);
 
 private:
     bool          m_isInit;

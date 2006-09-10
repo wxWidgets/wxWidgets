@@ -21,8 +21,8 @@
 // Set() is a virtual function and thus cannot be called by wxColourBase
 // constructors
 #define DEFINE_STD_WXCOLOUR_CONSTRUCTORS                                      \
-    wxColour( unsigned char red, unsigned char green, unsigned char blue,     \
-              unsigned char alpha = wxALPHA_OPAQUE )                          \
+    wxColour( ChannelType red, ChannelType green, ChannelType blue,           \
+              ChannelType alpha = wxALPHA_OPAQUE )                            \
         { Set(red, green, blue, alpha); }                                     \
     wxColour( unsigned long colRGB ) { Set(colRGB); }                         \
     wxColour(const wxString &colourName) { Set(colourName); }                 \
@@ -47,19 +47,10 @@ const unsigned char wxALPHA_OPAQUE = 0xff;
 
 class WXDLLEXPORT wxColourBase : public wxGDIObject
 {
-protected:
-
-    virtual void InitWith(unsigned char red, unsigned char green, unsigned char blue) = 0;
-
-    // this will be overridden in alpha supporting classes
-    virtual void InitWith(unsigned char red, unsigned char green, unsigned char blue, unsigned char WXUNUSED(alpha)) 
-    {
-        InitWith( red, green, blue ) ;
-    }
-
-    virtual bool FromString(const wxChar *);
-
 public:
+    // type of a single colour component
+    typedef unsigned char ChannelType;
+
     wxColourBase() {}
     virtual ~wxColourBase() {}
 
@@ -67,23 +58,26 @@ public:
     // Set() functions
     // ---------------
 
-    void Set(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha = wxALPHA_OPAQUE)
-        { InitWith(red,green,blue, alpha); }
+    void Set(ChannelType red,
+             ChannelType green,
+             ChannelType blue,
+             ChannelType alpha = wxALPHA_OPAQUE)
+        { InitRGBA(red,green,blue, alpha); }
 
     // implemented in colourcmn.cpp
     bool Set(const wxChar *str)
         { return FromString(str); }
 
     bool Set(const wxString &str)
-        { return Set((const wxChar *)str); }
+        { return FromString(str); }
 
     void Set(unsigned long colRGB)
     {
         // we don't need to know sizeof(long) here because we assume that the three
         // least significant bytes contain the R, G and B values
-        Set((unsigned char)colRGB,
-            (unsigned char)(colRGB >> 8),
-            (unsigned char)(colRGB >> 16));
+        Set((ChannelType)colRGB,
+            (ChannelType)(colRGB >> 8),
+            (ChannelType)(colRGB >> 16));
     }
 
 
@@ -93,10 +87,10 @@ public:
 
     virtual bool Ok() const = 0;
 
-    virtual unsigned char Red() const = 0;
-    virtual unsigned char Green() const = 0;
-    virtual unsigned char Blue() const = 0;
-    virtual unsigned char Alpha() const
+    virtual ChannelType Red() const = 0;
+    virtual ChannelType Green() const = 0;
+    virtual ChannelType Blue() const = 0;
+    virtual ChannelType Alpha() const
         { return wxALPHA_OPAQUE ; }
 
     // implemented in colourcmn.cpp
@@ -111,35 +105,40 @@ public:
     wxDEPRECATED( static wxColour CreateByName(const wxString& name) );
     wxDEPRECATED( void InitFromName(const wxString& col) );
 #endif
+
+protected:
+    virtual void
+    InitRGBA(ChannelType r, ChannelType g, ChannelType b, ChannelType a) = 0;
+
+    virtual bool FromString(const wxChar *s);
 };
 
 
 
 #if defined(__WXPALMOS__)
-#include "wx/generic/colour.h"
+    #include "wx/generic/colour.h"
 #elif defined(__WXMSW__)
-#include "wx/msw/colour.h"
+    #include "wx/msw/colour.h"
 #elif defined(__WXMOTIF__)
-#include "wx/motif/colour.h"
+    #include "wx/motif/colour.h"
 #elif defined(__WXGTK20__)
-#include "wx/gtk/colour.h"
+    #include "wx/gtk/colour.h"
 #elif defined(__WXGTK__)
-#include "wx/gtk1/colour.h"
+    #include "wx/gtk1/colour.h"
 #elif defined(__WXMGL__)
-#include "wx/generic/colour.h"
+    #include "wx/generic/colour.h"
 #elif defined(__WXDFB__)
-#include "wx/generic/colour.h"
+    #include "wx/generic/colour.h"
 #elif defined(__WXX11__)
-#include "wx/x11/colour.h"
+    #include "wx/x11/colour.h"
 #elif defined(__WXMAC__)
-#include "wx/mac/colour.h"
+    #include "wx/mac/colour.h"
 #elif defined(__WXCOCOA__)
-#include "wx/cocoa/colour.h"
+    #include "wx/cocoa/colour.h"
 #elif defined(__WXPM__)
-#include "wx/os2/colour.h"
+    #include "wx/os2/colour.h"
 #endif
 
 #define wxColor wxColour
 
-#endif
-    // _WX_COLOUR_H_BASE_
+#endif // _WX_COLOUR_H_BASE_

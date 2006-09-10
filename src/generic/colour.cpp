@@ -59,7 +59,9 @@ wxColour::~wxColour()
 {
 }
 
-void wxColour::InitWith(unsigned char r, unsigned char g, unsigned char b,
+void wxColour::InitRGBA(unsigned char r,
+                        unsigned char g,
+                        unsigned char b,
                         unsigned char a)
 {
     m_red = r;

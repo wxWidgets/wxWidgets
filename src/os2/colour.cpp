@@ -57,9 +57,10 @@ wxColour::~wxColour()
 {
 } // end of wxColour::~wxColour
 
-void wxColour::InitWith( unsigned char cRed,
+void wxColour::InitRGBA( unsigned char cRed,
                          unsigned char cGreen,
-                         unsigned char cBlue )
+                         unsigned char cBlue,
+                         unsigned char WXUNUSED(calpha) )
 {
     m_cRed    = cRed;
     m_cGreen  = cGreen;
