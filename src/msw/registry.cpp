@@ -146,12 +146,10 @@ wxRegKey::StdKey wxRegKey::ExtractKeyName(wxString& strKey)
 {
   wxString strRoot = strKey.BeforeFirst(REG_SEPARATOR);
 
-  HKEY hRootKey = 0;
   size_t ui;
   for ( ui = 0; ui < nStdKeys; ui++ ) {
     if ( strRoot.CmpNoCase(aStdKeys[ui].szName) == 0 ||
          strRoot.CmpNoCase(aStdKeys[ui].szShortName) == 0 ) {
-      hRootKey = aStdKeys[ui].hkey;
       break;
     }
   }
@@ -159,7 +157,7 @@ wxRegKey::StdKey wxRegKey::ExtractKeyName(wxString& strKey)
   if ( ui == nStdKeys ) {
     wxFAIL_MSG(wxT("invalid key prefix in wxRegKey::ExtractKeyName."));
 
-    hRootKey = HKEY_CLASSES_ROOT;
+    ui = HKCR;
   }
   else {
     strKey = strKey.After(REG_SEPARATOR);
@@ -167,13 +165,13 @@ wxRegKey::StdKey wxRegKey::ExtractKeyName(wxString& strKey)
       strKey.Truncate(strKey.Len() - 1);
   }
 
-  return (wxRegKey::StdKey)(int)hRootKey;
+  return (StdKey)ui;
 }
 
 wxRegKey::StdKey wxRegKey::GetStdKeyFromHkey(WXHKEY hkey)
 {
   for ( size_t ui = 0; ui < nStdKeys; ui++ ) {
-    if ( (int) aStdKeys[ui].hkey == (int) hkey )
+    if ( aStdKeys[ui].hkey == (HKEY)hkey )
       return (StdKey)ui;
   }
 
