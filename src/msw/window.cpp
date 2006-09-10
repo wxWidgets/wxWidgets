@@ -1701,6 +1701,13 @@ void wxWindowMSW::DoGetPosition(int *x, int *y) const
         // children, not for the dialogs/frames
         if ( !IsTopLevel() )
         {
+            if ( wxTheApp->GetLayoutDirection() == wxLayout_RightToLeft )
+            {
+                // In RTL mode, we want the logical left x-coordinate, 
+                // which would be the physical right x-coordinate.
+                point.x = rect.right;
+            }
+
             // Since we now have the absolute screen coords, if there's a
             // parent we must subtract its top left corner
             if ( parent )
