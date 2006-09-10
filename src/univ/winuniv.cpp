@@ -391,33 +391,35 @@ void wxWindow::DoDraw(wxControlRenderer * WXUNUSED(renderer))
 {
 }
 
-void wxWindow::Refresh(bool eraseBackground, const wxRect *rectClient)
+void wxWindow::Refresh(bool eraseBackground, const wxRect *rect)
 {
-    wxRect rectWin;
-    wxPoint pt = GetClientAreaOrigin();
+    wxRect rectClient; // the same rectangle in client coordinates
+    wxPoint origin = GetClientAreaOrigin();
 
     wxSize size = GetClientSize();
 
-    if ( rectClient )
+    if ( rect )
     {
-        rectWin = *rectClient;
+        // the rectangle passed as argument is in client coordinates
+        rectClient = *rect;
 
         // don't refresh anything beyond the client area (scrollbars for
         // example)
-        if ( rectWin.GetRight() > size.x )
-            rectWin.SetRight(size.x);
-        if ( rectWin.GetBottom() > size.y )
-            rectWin.SetBottom(size.y);
+        if ( rectClient.GetRight() > size.x )
+            rectClient.SetRight(size.x);
+        if ( rectClient.GetBottom() > size.y )
+            rectClient.SetBottom(size.y);
 
-        rectWin.Offset(pt);
     }
     else // refresh the entire client area
     {
-        rectWin.x = pt.x;
-        rectWin.y = pt.y;
-        rectWin.width = size.x;
-        rectWin.height = size.y;
+        // x,y is already set to 0 by default
+        rectClient.SetSize(size);
     }
+
+    // convert refresh rectangle to window coordinates:
+    wxRect rectWin(rectClient);
+    rectWin.Offset(origin);
 
     // debugging helper
 #ifdef WXDEBUG_REFRESH
@@ -440,16 +442,30 @@ void wxWindow::Refresh(bool eraseBackground, const wxRect *rectClient)
     wxWindowNative::Refresh(eraseBackground, &rectWin);
 
     // Refresh all sub controls if any.
-    wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
-    while ( node )
+    wxWindowList& children = GetChildren();
+    for ( wxWindowList::iterator i = children.begin(); i != children.end(); ++i )
     {
-        wxWindow *win = node->GetData();
-        // Only refresh sub controls when it is visible
-        // and when it is in the update region.
-        if(!win->IsKindOf(CLASSINFO(wxTopLevelWindow)) && win->IsShown() && wxRegion(rectWin).Contains(win->GetRect()) != wxOutRegion)
-            win->Refresh(eraseBackground, &rectWin);
+        wxWindow *child = *i;
+        // only refresh subcontrols if they are visible:
+        if ( child->IsTopLevel() || !child->IsShown() || child->IsFrozen() )
+            continue;
 
-        node = node->GetNext();
+        // ...and when the subcontrols are in the update region:
+        wxRect childrect(child->GetRect());
+        childrect.Intersect(rectClient);
+        if ( childrect.IsEmpty() )
+            continue;
+
+        // refresh the subcontrol now:
+        childrect.Offset(-child->GetPosition());
+        // NB: We must call wxWindowNative version because we need to refresh
+        //     the entire control, not just its client area, and this is why we
+        //     don't account for child client area origin here neither. Also
+        //     note that we don't pass eraseBackground to the child, but use
+        //     true instead: this is because we can't be sure that
+        //     eraseBackground=false is safe for children as well and not only
+        //     for the parent.
+        child->wxWindowNative::Refresh(eraseBackground, &childrect);
     }
 }
 
