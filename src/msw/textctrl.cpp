@@ -2564,11 +2564,23 @@ bool wxTextCtrl::SetStyle(long start, long end, const wxTextAttr& style)
         }
     }
 
-    if (pf.dwMask != 0)
+#if wxUSE_RICHEDIT2
+    if ( m_verRichEdit > 1 )
+    {
+        if ( wxTheApp->GetLayoutDirection() == wxLayout_RightToLeft )
+        {
+            // Use RTL paragraphs in RTL mode to get proper layout
+            pf.dwMask |= PFM_RTLPARA;
+            pf.wEffects |= PFE_RTLPARA;
+        }
+    }
+#endif // wxUSE_RICHEDIT2
+
+    if ( pf.dwMask )
     {
         // do format the selection
         bool ok = ::SendMessage(GetHwnd(), EM_SETPARAFORMAT,
-            0, (LPARAM) &pf) != 0;
+                                0, (LPARAM) &pf) != 0;
         if ( !ok )
         {
             wxLogDebug(_T("SendMessage(EM_SETPARAFORMAT, 0) failed"));
