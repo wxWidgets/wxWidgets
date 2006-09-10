@@ -10,40 +10,23 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-// ============================================================================
-// declarations
-// ============================================================================
-
-// ----------------------------------------------------------------------------
-// headers
-// ----------------------------------------------------------------------------
-
 #include "wx/frame.h"
 
 #ifndef WX_PRECOMP
-    #include "wx/app.h"
-    #include "wx/dcclient.h"
     #include "wx/menu.h"
-    #include "wx/dialog.h"
-    #include "wx/control.h"
     #include "wx/toolbar.h"
     #include "wx/statusbr.h"
 #endif // WX_PRECOMP
 
-#include <glib.h>
 #include "wx/gtk/private.h"
-
-#include <gdk/gdkkeysyms.h>
-#include <gdk/gdkx.h>
-
 #include "wx/gtk/win_gtk.h"
 
 // ----------------------------------------------------------------------------
 // constants
 // ----------------------------------------------------------------------------
 
-const int wxSTATUS_HEIGHT  = 25;
-const int wxPLACE_HOLDER   = 0;
+static const int wxSTATUS_HEIGHT  = 25;
+static const int wxPLACE_HOLDER   = 0;
 
 // ----------------------------------------------------------------------------
 // event tables
@@ -252,33 +235,39 @@ void wxFrame::DoGetClientSize( int *width, int *height ) const
         if (m_frameStatusBar && m_frameStatusBar->IsShown())
             (*height) -= wxSTATUS_HEIGHT;
 #endif // wxUSE_STATUSBAR
+    }
 
 #if wxUSE_TOOLBAR
-        // tool bar
-        if (m_frameToolBar && m_frameToolBar->IsShown())
+    // tool bar
+    if (m_frameToolBar && m_frameToolBar->IsShown())
+    {
+        if (m_toolBarDetached)
         {
-            if (m_toolBarDetached)
-            {
+            if (height != NULL)
                 *height -= wxPLACE_HOLDER;
+        }
+        else
+        {
+            int x, y;
+            m_frameToolBar->GetSize( &x, &y );
+            if ( m_frameToolBar->GetWindowStyle() & wxTB_VERTICAL )
+            {
+                if (width != NULL)
+                    *width -= x;
             }
             else
             {
-                int x, y;
-                m_frameToolBar->GetSize( &x, &y );
-                if ( m_frameToolBar->GetWindowStyle() & wxTB_VERTICAL )
-                {
-                    *width -= x;
-                }
-                else
-                {
+                if (height != NULL)
                     *height -= y;
-                }
             }
         }
-#endif // wxUSE_TOOLBAR
-        if (*height < 0)
-            *height = 0;
     }
+#endif // wxUSE_TOOLBAR
+
+    if (width != NULL && *width < 0)
+        *width = 0;
+    if (height != NULL && *height < 0)
+        *height = 0;
 }
 
 void wxFrame::DoSetClientSize( int width, int height )
