@@ -81,8 +81,7 @@ enum
     INTERNAT_TEST,
     INTERNAT_TEST_1,
     INTERNAT_TEST_2,
-    INTERNAT_TEST_3,
-    INTERNAT_OPEN
+    INTERNAT_TEST_3
 };
 
 // language data
@@ -144,7 +143,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(wxID_EXIT, MyFrame::OnQuit)
     EVT_MENU(wxID_ABOUT, MyFrame::OnAbout)
     EVT_MENU(INTERNAT_TEST, MyFrame::OnPlay)
-    EVT_MENU(INTERNAT_OPEN, MyFrame::OnOpen)
+    EVT_MENU(wxID_OPEN, MyFrame::OnOpen)
     EVT_MENU(INTERNAT_TEST_1, MyFrame::OnTest1)
     EVT_MENU(INTERNAT_TEST_2, MyFrame::OnTest2)
     EVT_MENU(INTERNAT_TEST_3, MyFrame::OnTest3)
@@ -227,7 +226,7 @@ bool MyApp::OnInit()
     file_menu->Append(wxID_EXIT, _("E&xit"));
 
     wxMenu *test_menu = new wxMenu;
-    test_menu->Append(INTERNAT_OPEN, _("&Open bogus file"));
+    test_menu->Append(wxID_OPEN, _("&Open bogus file"));
     test_menu->Append(INTERNAT_TEST, _("&Play a game"));
     test_menu->AppendSeparator();
     test_menu->Append(INTERNAT_TEST_1, _("&1 _() (gettext)"));
