@@ -23,7 +23,10 @@
 // ----------------------------------------------------------------------------
 
 #define wxHL_CONTEXTMENU        0x0001
-#define wxHL_DEFAULT_STYLE      wxHL_CONTEXTMENU|wxNO_BORDER
+#define wxHL_ALIGN_LEFT         0x0002
+#define wxHL_ALIGN_RIGHT        0x0004
+#define wxHL_ALIGN_CENTRE       0x0008
+#define wxHL_DEFAULT_STYLE      (wxHL_CONTEXTMENU|wxNO_BORDER|wxHL_ALIGN_CENTRE)
 
 extern WXDLLIMPEXP_DATA_ADV(const wxChar) wxHyperlinkCtrlNameStr[];
 
@@ -96,6 +99,12 @@ protected:
     // Renders the hyperlink.
     void OnPaint(wxPaintEvent& event);
 
+    // Returns the wxRect of the label of this hyperlink.
+    // This is different from the clientsize's rectangle when
+    // clientsize != bestsize and this rectangle is influenced
+    // by the alignment of the label (wxHL_ALIGN_*).
+    wxRect GetLabelRect() const;
+
     // If the click originates inside the bounding box of the label,
     // a flag is set so that an event will be fired when the left
     // button is released.
@@ -108,13 +117,16 @@ protected:
 
     // Changes the cursor to a hand, if the mouse is inside the label's
     // bounding box.
-    void OnEnterWindow(wxMouseEvent& event);
+    void OnMotion(wxMouseEvent& event);
 
     // Changes the cursor back to the default, if necessary.
     void OnLeaveWindow(wxMouseEvent& event);
 
     // handles "Copy URL" menuitem
     void OnPopUpCopy(wxCommandEvent& event);
+
+    // Refreshes the control to update label's position if necessary
+    void OnSize(wxSizeEvent& event);
 
 
     // overridden base class virtuals

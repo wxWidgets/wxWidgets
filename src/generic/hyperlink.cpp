@@ -62,8 +62,9 @@ BEGIN_EVENT_TABLE(wxHyperlinkCtrl, wxControl)
     EVT_LEFT_DOWN(wxHyperlinkCtrl::OnLeftDown)
     EVT_LEFT_UP(wxHyperlinkCtrl::OnLeftUp)
     EVT_RIGHT_UP(wxHyperlinkCtrl::OnRightUp)
-    EVT_ENTER_WINDOW(wxHyperlinkCtrl::OnEnterWindow)
+    EVT_MOTION(wxHyperlinkCtrl::OnMotion)
     EVT_LEAVE_WINDOW(wxHyperlinkCtrl::OnLeaveWindow)
+    EVT_SIZE(wxHyperlinkCtrl::OnSize)
 
     // for the context menu
     EVT_MENU(wxHYPERLINKCTRL_POPUP_COPY_ID, wxHyperlinkCtrl::OnPopUpCopy)
@@ -75,6 +76,14 @@ bool wxHyperlinkCtrl::Create(wxWindow *parent, wxWindowID id,
 {
     wxASSERT_MSG(!url.empty() || !label.empty(),
                  wxT("Both URL and label are empty ?"));
+
+#ifdef __WXDEBUG__
+    int alignment = (int)((style & wxHL_ALIGN_LEFT) != 0) +
+                    (int)((style & wxHL_ALIGN_CENTRE) != 0) +
+                    (int)((style & wxHL_ALIGN_RIGHT) != 0);
+    wxASSERT_MSG(alignment == 1, 
+        wxT("Specify exactly one align flag!")); 
+#endif
 
     if (!wxControl::Create(parent, id, pos, size, style, wxDefaultValidator, name))
         return false;
@@ -89,9 +98,6 @@ bool wxHyperlinkCtrl::Create(wxWindow *parent, wxWindowID id,
         SetLabel(url);
     else
         SetLabel(label);
-
-    // by default the cursor to use in this window is wxCURSOR_HAND
-    SetCursor(wxCursor(wxCURSOR_HAND));
 
     m_rollover = false;
     m_clicking = false;
@@ -159,6 +165,24 @@ void wxHyperlinkCtrl::DoContextMenu(const wxPoint &pos)
     delete menuPopUp;
 }
 
+wxRect wxHyperlinkCtrl::GetLabelRect() const
+{
+    // our best size is always the size of the label without borders
+    wxSize c(GetClientSize()), b(GetBestSize());
+    wxPoint offset;
+
+    // the label is always centered vertically
+    offset.y = (c.GetHeight()-b.GetHeight())/2;
+
+    if (HasFlag(wxHL_ALIGN_CENTRE))
+        offset.x = (c.GetWidth()-b.GetWidth())/2;
+    else if (HasFlag(wxHL_ALIGN_RIGHT))
+        offset.x = c.GetWidth()-b.GetWidth();
+    else if (HasFlag(wxHL_ALIGN_LEFT))
+        offset.x = 0;
+    return wxRect(offset, b);
+}
+
 
 
 // ----------------------------------------------------------------------------
@@ -171,17 +195,21 @@ void wxHyperlinkCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
     dc.SetFont(GetFont());
     dc.SetTextForeground(GetForegroundColour());
     dc.SetTextBackground(GetBackgroundColour());
-    dc.DrawText(GetLabel(), 0, 0);
+
+    dc.DrawText(GetLabel(), GetLabelRect().GetTopLeft());
 }
 
-void wxHyperlinkCtrl::OnLeftDown(wxMouseEvent& WXUNUSED(event))
+void wxHyperlinkCtrl::OnLeftDown(wxMouseEvent& event)
 {
-    m_clicking = true;
+    // the left click must start from the hyperlink rect
+    m_clicking = GetLabelRect().Inside(event.GetPosition());
 }
 
-void wxHyperlinkCtrl::OnLeftUp(wxMouseEvent& WXUNUSED(event))
+void wxHyperlinkCtrl::OnLeftUp(wxMouseEvent& event)
 {
-    if (!m_clicking) return;
+    // the click must be started and ended in the hyperlink rect
+    if (!m_clicking || !GetLabelRect().Inside(event.GetPosition())) 
+        return;
 
     SetForegroundColour(m_visitedColour);
     m_visited = true;
@@ -197,20 +225,40 @@ void wxHyperlinkCtrl::OnLeftUp(wxMouseEvent& WXUNUSED(event))
 void wxHyperlinkCtrl::OnRightUp(wxMouseEvent& event)
 {
     if( GetWindowStyle() & wxHL_CONTEXTMENU )
-        DoContextMenu(wxPoint(event.m_x, event.m_y));
+        if ( GetLabelRect().Inside(event.GetPosition()) )
+            DoContextMenu(wxPoint(event.m_x, event.m_y));
 }
 
-void wxHyperlinkCtrl::OnEnterWindow(wxMouseEvent& WXUNUSED(event))
+void wxHyperlinkCtrl::OnMotion(wxMouseEvent& event)
 {
-    SetForegroundColour(m_hoverColour);
-    m_rollover = true;
-    Refresh();
+    wxRect textrc = GetLabelRect();
+
+    if (textrc.Inside(event.GetPosition()))
+    {
+        SetCursor(wxCursor(wxCURSOR_HAND));
+        SetForegroundColour(m_hoverColour);
+        m_rollover = true;
+        Refresh();
+    }
+    else if (m_rollover)
+    {
+        SetCursor(*wxSTANDARD_CURSOR);
+        SetForegroundColour(!m_visited ? m_normalColour : m_visitedColour);
+        m_rollover = false;
+        Refresh();
+    }
 }
 
-void wxHyperlinkCtrl::OnLeaveWindow(wxMouseEvent& WXUNUSED(event))
+void wxHyperlinkCtrl::OnLeaveWindow(wxMouseEvent& WXUNUSED(event) )
 {
+    // NB: when the label rect and the client size rect have the same
+    //     height this function is indispensable to remove the "rollover"
+    //     effect as the OnMotion() event handler could not be called
+    //     in that case moving the mouse out of the label vertically...
+
     if (m_rollover)
     {
+        SetCursor(*wxSTANDARD_CURSOR);
         SetForegroundColour(!m_visited ? m_normalColour : m_visitedColour);
         m_rollover = false;
         Refresh();
@@ -227,6 +275,13 @@ void wxHyperlinkCtrl::OnPopUpCopy( wxCommandEvent& WXUNUSED(event) )
     wxTheClipboard->SetData( data );
     wxTheClipboard->Close();
 #endif // wxUSE_CLIPBOARD
+}
+
+void wxHyperlinkCtrl::OnSize(wxSizeEvent& WXUNUSED(event))
+{
+    // update the position of the label in the screen respecting
+    // the selected align flag
+    Refresh();
 }
 
 #endif // wxUSE_HYPERLINKCTRL

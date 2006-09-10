@@ -61,6 +61,15 @@ enum
     HyperlinkPage_Ctrl
 };
 
+// alignment radiobox indices
+enum
+{
+    Align_Left,
+    Align_Centre,
+    Align_Right,
+    Align_Max
+};
+
 // ----------------------------------------------------------------------------
 // CheckBoxWidgetsPage
 // ----------------------------------------------------------------------------
@@ -83,19 +92,21 @@ protected:
     void OnButtonSetURL(wxCommandEvent& event);
 
     void OnButtonReset(wxCommandEvent& event);
+    void OnAlignment(wxCommandEvent& event);
 
     // reset the control parameters
     void Reset();
 
     // (re)create the hyperctrl
     void CreateHyperlink();
+    void CreateHyperlinkLong(long);
 
     // the controls
     // ------------
 
     // the checkbox itself and the sizer it is in
     wxHyperlinkCtrl *m_hyperlink;
-    wxSizer *m_sizerHyperlink;
+    wxHyperlinkCtrl *m_hyperlinkLong;
 
     wxTextCtrl *m_label;
     wxTextCtrl *m_url;
@@ -105,6 +116,8 @@ protected:
 
     // the text entries for command parameters
     wxTextCtrl *m_textLabel;
+
+    wxRadioBox *m_radioAlignMode;
 
 private:
     DECLARE_EVENT_TABLE()
@@ -119,6 +132,8 @@ BEGIN_EVENT_TABLE(HyperlinkWidgetsPage, WidgetsPage)
     EVT_BUTTON(HyperlinkPage_Reset, HyperlinkWidgetsPage::OnButtonReset)
     EVT_BUTTON(HyperlinkPage_SetLabel, HyperlinkWidgetsPage::OnButtonSetLabel)
     EVT_BUTTON(HyperlinkPage_SetURL, HyperlinkWidgetsPage::OnButtonSetURL)
+
+    EVT_RADIOBOX(wxID_ANY, HyperlinkWidgetsPage::OnAlignment)
 END_EVENT_TABLE()
 
 // ============================================================================
@@ -150,8 +165,27 @@ void HyperlinkWidgetsPage::CreateContent()
     sizerLeft->Add( CreateSizerWithTextAndButton( HyperlinkPage_SetURL , wxT("Set &URL"), wxID_ANY, &m_url ),
                     0, wxALL | wxALIGN_RIGHT , 5 );
 
+    static const wxString alignments[] =
+    {
+        _T("&left"),
+        _T("&centre"),
+        _T("&right")
+    };
+    wxCOMPILE_TIME_ASSERT( WXSIZEOF(alignments) == Align_Max,
+                           AlignMismatch );
+
+    m_radioAlignMode = new wxRadioBox(this, wxID_ANY, _T("alignment"),
+                                      wxDefaultPosition, wxDefaultSize,
+                                      WXSIZEOF(alignments), alignments);
+    m_radioAlignMode->SetSelection(1);  // start with "centre" selected since
+                                        // wxHL_DEFAULT_STYLE contains wxHL_ALIGN_CENTRE
+    sizerLeft->Add(m_radioAlignMode, 0, wxALL|wxGROW, 5);
+
+
+
     // right pane
-    wxSizer *sizerRight = new wxBoxSizer(wxHORIZONTAL);
+    wxSizer *szHyperlinkLong = new wxBoxSizer(wxVERTICAL);
+    wxSizer *szHyperlink = new wxBoxSizer(wxHORIZONTAL);
 
     m_visit = new wxStaticText(this, wxID_ANY, wxT("Visit "));
 
@@ -162,17 +196,28 @@ void HyperlinkWidgetsPage::CreateContent()
 
     m_fun = new wxStaticText(this, wxID_ANY, wxT(" for fun!"));
 
-    sizerRight->Add(0, 0, 1, wxCENTRE);
-    sizerRight->Add(m_visit, 0, wxCENTRE);
-    sizerRight->Add(m_hyperlink, 0, wxCENTRE);
-    sizerRight->Add(m_fun, 0, wxCENTRE);
-    sizerRight->Add(0, 0, 1, wxCENTRE);
-    sizerRight->SetMinSize(150, 0);
-    m_sizerHyperlink = sizerRight; // save it to modify it later
+    szHyperlink->Add(0, 0, 1, wxCENTRE);
+    szHyperlink->Add(m_visit, 0, wxCENTRE);
+    szHyperlink->Add(m_hyperlink, 0, wxCENTRE);
+    szHyperlink->Add(m_fun, 0, wxCENTRE);
+    szHyperlink->Add(0, 0, 1, wxCENTRE);
+    szHyperlink->SetMinSize(150, 0);
+
+    m_hyperlinkLong = new wxHyperlinkCtrl(this,
+                                          wxID_ANY,
+                                          wxT("This is a long hyperlink"),
+                                          wxT("www.wxwidgets.org"));
+
+    szHyperlinkLong->Add(0, 0, 1, wxCENTRE);
+    szHyperlinkLong->Add(szHyperlink, 0, wxCENTRE|wxGROW);
+    szHyperlinkLong->Add(0, 0, 1, wxCENTRE);
+    szHyperlinkLong->Add(m_hyperlinkLong, 0, wxGROW);
+    szHyperlinkLong->Add(0, 0, 1, wxCENTRE);
+
 
     // the 3 panes panes compose the window
     sizerTop->Add(sizerLeft, 0, (wxALL & ~wxLEFT), 10);
-    sizerTop->Add(sizerRight, 1, wxGROW | (wxALL & ~wxRIGHT), 10);
+    sizerTop->Add(szHyperlinkLong, 1, wxGROW | (wxALL & ~wxRIGHT), 10);
 
     // final initializations
     Reset();
@@ -193,25 +238,42 @@ void HyperlinkWidgetsPage::CreateHyperlink()
     const wxString label = m_hyperlink->GetLabel();
     const wxString url = m_hyperlink->GetURL();
 
-    size_t count = m_sizerHyperlink->GetChildren().GetCount();
-    for ( size_t n = 0; n < count; n++ )
-    {
-        m_sizerHyperlink->Remove(0);
-    }
+    wxHyperlinkCtrl *hyp = new wxHyperlinkCtrl(this,
+                                               HyperlinkPage_Ctrl,
+                                               label,
+                                               url);
 
+    // update sizer's child window
+    GetSizer()->Replace(m_hyperlink, hyp, true);
+
+    // update our pointer
     delete m_hyperlink;
+    m_hyperlink = hyp;
 
-    m_hyperlink = new wxHyperlinkCtrl(this,
-                                      HyperlinkPage_Ctrl,
-                                      label,
-                                      url);
+    // relayout the sizer
+    GetSizer()->Layout();
+}
 
-    m_sizerHyperlink->Add(0, 0, 1, wxCENTRE);
-    m_sizerHyperlink->Add(m_visit, 0, wxCENTRE);
-    m_sizerHyperlink->Add(m_hyperlink, 0, wxCENTRE);
-    m_sizerHyperlink->Add(m_fun, 0, wxCENTRE);
-    m_sizerHyperlink->Add(0, 0, 1, wxCENTRE);
-    m_sizerHyperlink->Layout();
+void HyperlinkWidgetsPage::CreateHyperlinkLong(long style)
+{
+    style = (wxHL_DEFAULT_STYLE & ~wxHL_ALIGN_CENTRE)|style;
+    wxHyperlinkCtrl *hyp = new wxHyperlinkCtrl(this,
+                                               wxID_ANY,
+                                               wxT("This is a long hyperlink"),
+                                               wxT("www.wxwidgets.org"),
+                                               wxDefaultPosition,
+                                               wxDefaultSize,
+                                               style);
+
+    // update sizer's child window
+    GetSizer()->Replace(m_hyperlinkLong, hyp, true);
+
+    // update our pointer
+    delete m_hyperlinkLong;
+    m_hyperlinkLong = hyp;
+
+    // relayout the sizer
+    GetSizer()->Layout();
 }
 
 // ----------------------------------------------------------------------------
@@ -235,6 +297,32 @@ void HyperlinkWidgetsPage::OnButtonSetURL(wxCommandEvent& WXUNUSED(event))
 {
     m_hyperlink->SetURL(m_url->GetValue());
     CreateHyperlink();
+}
+
+void HyperlinkWidgetsPage::OnAlignment(wxCommandEvent& WXUNUSED(event))
+{
+    long addstyle;
+    switch ( m_radioAlignMode->GetSelection() )
+    {
+        default:
+        case Align_Max:
+            wxFAIL_MSG( _T("unknown alignment") );
+            // fall through
+
+        case Align_Left:
+            addstyle = wxHL_ALIGN_LEFT;
+            break;
+
+        case Align_Centre:
+            addstyle = wxHL_ALIGN_CENTRE;
+            break;
+
+        case Align_Right:
+            addstyle = wxHL_ALIGN_RIGHT;
+            break;
+    }
+
+    CreateHyperlinkLong(addstyle);
 }
 
 #endif // wxUSE_HYPERLINKCTRL
