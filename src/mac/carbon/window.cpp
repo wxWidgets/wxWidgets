@@ -201,7 +201,6 @@ static pascal OSStatus wxMacWindowControlEventHandler( EventHandlerCallRef handl
                 RgnHandle updateRgn = NULL ;
                 RgnHandle allocatedRgn = NULL ;
                 wxRegion visRegion = thisWindow->MacGetVisibleRegion() ;
-                Rect controlBounds ;
 
                 if ( cEvent.GetParameter<RgnHandle>(kEventParamRgnHandle, &updateRgn) != noErr )
                 {
