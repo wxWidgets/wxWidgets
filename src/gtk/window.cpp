@@ -1330,8 +1330,8 @@ wxWindowGTK *FindWindowForMouseEvent(wxWindowGTK *win, wxCoord& x, wxCoord& y)
     if (win->m_wxwindow)
     {
         GtkPizza *pizza = GTK_PIZZA(win->m_wxwindow);
-        xx += pizza->xoffset;
-        yy += pizza->yoffset;
+        xx += gtk_pizza_get_xoffset( pizza );
+        yy += gtk_pizza_get_yoffset( pizza );
     }
 
     wxWindowList::compatibility_iterator node = win->GetChildren().GetFirst();
@@ -2290,8 +2290,8 @@ static void wxInsertChildInWindow( wxWindowGTK* parent, wxWindowGTK* child )
     /* the window might have been scrolled already, do we
        have to adapt the position */
     GtkPizza *pizza = GTK_PIZZA(parent->m_wxwindow);
-    child->m_x += pizza->xoffset;
-    child->m_y += pizza->yoffset;
+    child->m_x += gtk_pizza_get_xoffset( pizza );
+    child->m_y += gtk_pizza_get_yoffset( pizza );
 
     gtk_pizza_put( GTK_PIZZA(parent->m_wxwindow),
                      GTK_WIDGET(child->m_widget),
@@ -2803,13 +2803,13 @@ void wxWindowGTK::DoSetSize( int x, int y, int width, int height, int sizeFlags 
         GtkPizza *pizza = GTK_PIZZA(m_parent->m_wxwindow);
         if ((sizeFlags & wxSIZE_ALLOW_MINUS_ONE) == 0)
         {
-            if (x != -1) m_x = x + pizza->xoffset;
-            if (y != -1) m_y = y + pizza->yoffset;
+            if (x != -1) m_x = x + gtk_pizza_get_xoffset( pizza );
+            if (y != -1) m_y = y + gtk_pizza_get_yoffset( pizza );
         }
         else
         {
-            m_x = x + pizza->xoffset;
-            m_y = y + pizza->yoffset;
+            m_x = x + gtk_pizza_get_xoffset( pizza );
+            m_y = y + gtk_pizza_get_yoffset( pizza );
         }
 
         int left_border = 0;
@@ -3039,8 +3039,8 @@ void wxWindowGTK::DoGetPosition( int *x, int *y ) const
     if (m_parent && m_parent->m_wxwindow)
     {
         GtkPizza *pizza = GTK_PIZZA(m_parent->m_wxwindow);
-        dx = pizza->xoffset;
-        dy = pizza->yoffset;
+        dx = gtk_pizza_get_xoffset( pizza );
+        dy = gtk_pizza_get_yoffset( pizza );
     }
 
     if (x) (*x) = m_x - dx;

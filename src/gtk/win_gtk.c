@@ -189,13 +189,13 @@ gtk_pizza_init (GtkPizza *pizza)
 
     pizza->children = NULL;
 
-    pizza->width = 20;
-    pizza->height = 20;
+    pizza->m_width = 20;
+    pizza->m_height = 20;
 
     pizza->bin_window = NULL;
 
-    pizza->xoffset = 0;
-    pizza->yoffset = 0;
+    pizza->m_xoffset = 0;
+    pizza->m_yoffset = 0;
 
     pizza->external_expose = FALSE;
 }
@@ -208,6 +208,56 @@ gtk_pizza_new ()
     pizza = g_object_new (gtk_pizza_get_type (), NULL);
 
     return GTK_WIDGET (pizza);
+}
+
+gint       gtk_pizza_get_width       (GtkPizza          *pizza)
+{
+    g_return_val_if_fail ( (pizza != NULL), -1 );
+    g_return_val_if_fail ( (GTK_IS_PIZZA (pizza)), -1 );
+
+    return pizza->m_width;
+}
+
+gint       gtk_pizza_get_height      (GtkPizza          *pizza)
+{
+    g_return_val_if_fail ( (pizza != NULL), -1 );
+    g_return_val_if_fail ( (GTK_IS_PIZZA (pizza)), -1 );
+
+    return pizza->m_height;
+}
+
+gint       gtk_pizza_get_xoffset     (GtkPizza          *pizza)
+{
+    g_return_val_if_fail ( (pizza != NULL), -1 );
+    g_return_val_if_fail ( (GTK_IS_PIZZA (pizza)), -1 );
+
+    return pizza->m_xoffset;
+}
+
+gint       gtk_pizza_get_yoffset     (GtkPizza          *pizza)
+{
+    g_return_val_if_fail ( (pizza != NULL), -1 );
+    g_return_val_if_fail ( (GTK_IS_PIZZA (pizza)), -1 );
+
+    return pizza->m_yoffset;
+}
+
+void       gtk_pizza_set_xoffset     (GtkPizza          *pizza, gint xoffset)
+{
+    g_return_if_fail (pizza != NULL);
+    g_return_if_fail (GTK_IS_PIZZA (pizza));
+
+    pizza->m_xoffset = xoffset;
+    // do something
+}
+
+void       gtk_pizza_set_yoffset     (GtkPizza          *pizza, gint yoffset)
+{
+    g_return_if_fail (pizza != NULL);
+    g_return_if_fail (GTK_IS_PIZZA (pizza));
+
+    pizza->m_xoffset = yoffset;
+    // do something
 }
 
 static void
@@ -685,8 +735,8 @@ gtk_pizza_allocate_child (GtkPizza      *pizza,
     GtkAllocation allocation;
     GtkRequisition requisition;
 
-    allocation.x = child->x - pizza->xoffset;
-    allocation.y = child->y - pizza->yoffset;
+    allocation.x = child->x - pizza->m_xoffset;
+    allocation.y = child->y - pizza->m_yoffset;
     gtk_widget_get_child_requisition (child->widget, &requisition);
     allocation.width = requisition.width;
     allocation.height = requisition.height;
@@ -744,8 +794,8 @@ gtk_pizza_adjust_allocations (GtkPizza *pizza,
 void
 gtk_pizza_scroll (GtkPizza *pizza, gint dx, gint dy)
 {
-    pizza->xoffset += dx;
-    pizza->yoffset += dy;
+    pizza->m_xoffset += dx;
+    pizza->m_yoffset += dy;
 
     gtk_pizza_adjust_allocations (pizza, -dx, -dy);
 
