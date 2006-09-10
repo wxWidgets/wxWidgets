@@ -40,7 +40,7 @@
 #endif
 
 // used as title for several dialog boxes
-static const wxChar SAMPLE_TITLE[] = "wxWidgets Font Sample";
+static const wxChar SAMPLE_TITLE[] = _T("wxWidgets Font Sample");
 
 // ----------------------------------------------------------------------------
 // private classes
