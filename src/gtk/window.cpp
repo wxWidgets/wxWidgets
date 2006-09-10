@@ -3477,6 +3477,9 @@ void wxWindowGTK::SetLayoutDirection(wxLayoutDirection dir)
         return;
 
     GTKSetLayout(m_widget, dir);
+    
+    if (m_wxwindow)
+        GTKSetLayout(m_widget, dir);
 }
 
 void wxWindowGTK::DoMoveInTabOrder(wxWindow *win, MoveKind move)
