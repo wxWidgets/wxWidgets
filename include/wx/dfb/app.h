@@ -13,6 +13,8 @@
 
 #include "wx/dfb/dfbptr.h"
 
+#include "wx/vidmode.h"
+
 wxDFB_DECLARE_INTERFACE(IDirectFB);
 
 //-----------------------------------------------------------------------------
