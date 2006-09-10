@@ -120,6 +120,9 @@ bool wxStaticBox::Create(wxWindow *parent,
     if ( !MSWCreateControl(wxT("BUTTON"), label, pos, size) )
         return false;
 
+    // Always use LTR layout. Otherwise, the label would be mirrored.
+    SetLayoutDirection(wxLayout_LeftToRight);
+
 #ifndef __WXWINCE__
     if (!wxSystemOptions::IsFalse(wxT("msw.staticbox.optimized-paint")))
         Connect(wxEVT_PAINT, wxPaintEventHandler(wxStaticBox::OnPaint));
@@ -151,7 +154,15 @@ WXDWORD wxStaticBox::MSWGetStyle(long style, WXDWORD *exstyle) const
             *exstyle = 0;
     }
 
-    return styleWin | BS_GROUPBOX;
+    styleWin |= BS_GROUPBOX;
+
+    if ( wxTheApp->GetLayoutDirection() == wxLayout_RightToLeft )
+    {
+        // Make sure label is on the right
+        styleWin |= BS_RIGHT;
+    }
+
+    return styleWin;
 }
 
 wxSize wxStaticBox::DoGetBestSize() const
@@ -364,7 +375,7 @@ void wxStaticBox::PaintBackground(wxDC& dc, const RECT& rc)
     ::FillRect(GetHdcOf(dc), &rc, hbr);
 }
 
-void wxStaticBox::PaintForeground(wxDC& dc, const RECT& WXUNUSED(rc))
+void wxStaticBox::PaintForeground(wxDC& dc, const RECT& rc)
 {
     MSWDefWindowProc(WM_PAINT, (WPARAM)GetHdcOf(dc), 0);
 
@@ -406,27 +417,53 @@ void wxStaticBox::PaintForeground(wxDC& dc, const RECT& WXUNUSED(rc))
 
         // FIXME: value of x is hardcoded as this is what it is on my system,
         //        no idea if it's true everywhere
-        // TODO: RTL?
-        const int x = 9;
-        const int y = dc.GetCharHeight();
+
+        const bool rtl = wxTheApp->GetLayoutDirection() == wxLayout_RightToLeft;
+        if ( rtl )
+            ::SetTextAlign(hdc, TA_RTLREADING | TA_RIGHT);
+
+        // Get dimensions of the label
         const wxString label = GetLabel();
+        int width, height;
+        dc.GetTextExtent(wxStripMenuCodes(label, wxStrip_Mnemonics), &width, &height);
+
+        int x;
+        int y = height;
 
         // first we need to correctly paint the background of the label
         // as Windows ignores the brush offset when doing it
-        RECT rc = { x, 0, GetSize().x, y };
-        ::DrawText(hdc, label, label.length(), &rc,
-                   DT_SINGLELINE | DT_VCENTER | DT_CALCRECT);
+        RECT dimensions = {0, 0, 0, y};
+        if ( !rtl )
+        {
+            x = 9;
+            dimensions.left = x;
+            dimensions.right = x + width;
+        }
+        else
+        {
+            x = rc.right - 7;
+            dimensions.left = x - width;
+            dimensions.right = x;
+        }
 
         // need to adjust the rectangle to cover all the label background
-        rc.left -= 2;
-        rc.right += 2;
-        rc.bottom += 2;
-        PaintBackground(dc, rc);
+        dimensions.left -= 2;
+        dimensions.right += 2;
+        dimensions.bottom += 2;
+        PaintBackground(dc, dimensions);
 
         // now draw the text
-        RECT rc2 = { x, 0, GetSize().x, y };
-        ::DrawText(hdc, label, label.length(), &rc2,
-                   DT_SINGLELINE | DT_VCENTER);
+        if ( !rtl )
+        {
+            ::DrawText(hdc, label, label.length(), &dimensions,
+                       DT_SINGLELINE | DT_VCENTER);
+        }
+        else // RTL
+        {
+            RECT rc2 = { x, 0, x - width, y };
+            ::DrawText(hdc, label, label.length(), &rc2,
+                       DT_SINGLELINE | DT_VCENTER | DT_RTLREADING);
+        }
     }
 }
 
