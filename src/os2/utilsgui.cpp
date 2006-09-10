@@ -28,6 +28,7 @@
     #include "wx/utils.h"
     #include "wx/app.h"
     #include "wx/cursor.h"
+    #include "wx/font.h"
     #include "wx/timer.h"
 #endif //WX_PRECOMP
 
