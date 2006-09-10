@@ -479,6 +479,10 @@ public:
     virtual bool IsShown() const { return m_isShown; }
     virtual bool IsEnabled() const { return m_isEnabled; }
 
+    // returns true if the window is visible, i.e. IsShown() returns true
+    // if called on it and all its parents up to the first TLW
+    virtual bool IsVisible() const;
+
         // get/set window style (setting style won't update the window and so
         // is only useful for internal usage)
     virtual void SetWindowStyleFlag( long style ) { m_windowStyle = style; }

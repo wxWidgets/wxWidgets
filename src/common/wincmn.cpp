@@ -744,6 +744,12 @@ bool wxWindowBase::Enable(bool enable)
         return false;
     }
 }
+
+bool wxWindowBase::IsVisible() const
+{
+    return IsShown() && (GetParent() == NULL || GetParent()->IsVisible());
+}
+
 // ----------------------------------------------------------------------------
 // RTTI
 // ----------------------------------------------------------------------------
