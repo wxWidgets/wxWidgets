@@ -115,6 +115,9 @@ public:
 
     virtual void SetLayoutDirection(wxLayoutDirection dir);
     virtual wxLayoutDirection GetLayoutDirection() const;
+    virtual wxCoord AdjustForLayoutDirection(wxCoord x,
+                                             wxCoord width,
+                                             wxCoord widthTotal) const;
 
     // currently wxGTK2-only
     void SetDoubleBuffered(bool on);
