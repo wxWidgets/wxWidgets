@@ -57,8 +57,10 @@ public:
     MyFrame(wxLocale& m_locale);
 
 public:
-    void OnQuit(wxCommandEvent& event);
+    void OnTestLocaleAvail(wxCommandEvent& event);
     void OnAbout(wxCommandEvent& event);
+    void OnQuit(wxCommandEvent& event);
+
     void OnPlay(wxCommandEvent& event);
     void OnOpen(wxCommandEvent& event);
     void OnTest1(wxCommandEvent& event);
@@ -77,8 +79,8 @@ public:
 // ID for the menu commands
 enum
 {
-    INTERNAT_TEXT = wxID_HIGHEST + 1,
-    INTERNAT_TEST,
+    INTERNAT_TEST = wxID_HIGHEST + 1,
+    INTERNAT_PLAY,
     INTERNAT_TEST_1,
     INTERNAT_TEST_2,
     INTERNAT_TEST_3
@@ -140,9 +142,11 @@ wxCOMPILE_TIME_ASSERT( WXSIZEOF(langNames) == WXSIZEOF(langIds),
 // ----------------------------------------------------------------------------
 
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
-    EVT_MENU(wxID_EXIT, MyFrame::OnQuit)
+    EVT_MENU(INTERNAT_TEST, MyFrame::OnTestLocaleAvail)
     EVT_MENU(wxID_ABOUT, MyFrame::OnAbout)
-    EVT_MENU(INTERNAT_TEST, MyFrame::OnPlay)
+    EVT_MENU(wxID_EXIT, MyFrame::OnQuit)
+
+    EVT_MENU(INTERNAT_PLAY, MyFrame::OnPlay)
     EVT_MENU(wxID_OPEN, MyFrame::OnOpen)
     EVT_MENU(INTERNAT_TEST_1, MyFrame::OnTest1)
     EVT_MENU(INTERNAT_TEST_2, MyFrame::OnTest2)
@@ -221,13 +225,15 @@ bool MyApp::OnInit()
 
     // Make a menubar
     wxMenu *file_menu = new wxMenu;
+    file_menu->Append(INTERNAT_TEST, _("&Test locale availability...\tCtrl-T"));
+    file_menu->AppendSeparator();
     file_menu->Append(wxID_ABOUT, _("&About..."));
     file_menu->AppendSeparator();
     file_menu->Append(wxID_EXIT, _("E&xit"));
 
     wxMenu *test_menu = new wxMenu;
     test_menu->Append(wxID_OPEN, _("&Open bogus file"));
-    test_menu->Append(INTERNAT_TEST, _("&Play a game"));
+    test_menu->Append(INTERNAT_PLAY, _("&Play a game"));
     test_menu->AppendSeparator();
     test_menu->Append(INTERNAT_TEST_1, _("&1 _() (gettext)"));
     test_menu->Append(INTERNAT_TEST_2, _("&2 _N() (ngettext)"));
@@ -339,7 +345,34 @@ void MyFrame::OnPlay(wxCommandEvent& WXUNUSED(event))
     wxMessageBox(str, _("Result"), wxOK | wxICON_INFORMATION);
 }
 
-void MyFrame::OnOpen(wxCommandEvent&)
+void MyFrame::OnTestLocaleAvail(wxCommandEvent& WXUNUSED(event))
+{
+    static wxString s_locale;
+    wxString locale = wxGetTextFromUser
+                      (
+                        _("Enter the locale to test"),
+                        wxGetTextFromUserPromptStr,
+                        s_locale,
+                        this
+                      );
+    if ( locale.empty() )
+        return;
+
+    s_locale = locale;
+    const wxLanguageInfo * const info = wxLocale::FindLanguageInfo(s_locale);
+    if ( !info )
+    {
+        wxLogError(_("Locale \"%s\" is unknown."), s_locale.c_str());
+        return;
+    }
+
+    if ( wxLocale::IsAvailable(info->Language) )
+        wxLogMessage(_("Locale \"%s\" is available."), s_locale.c_str());
+    else
+        wxLogWarning(_("Locale \"%s\" is not available."), s_locale.c_str());
+}
+
+void MyFrame::OnOpen(wxCommandEvent& WXUNUSED(event))
 {
     // open a bogus file -- the error message should be also translated if
     // you've got wxstd.mo somewhere in the search path

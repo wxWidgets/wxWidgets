@@ -418,6 +418,24 @@ translate the messages using the message catalogs for this locale.
 Returns true on success or false if the given locale couldn't be set.
 
 
+\membersection{wxLocale::IsAvailable}\label{wxlocaleisavailable}
+
+\func{static bool}{IsAvailable}{\param{int }{lang}}
+
+Check whether the operating system and/or C run time environment supports
+this locale. For example in Windows 2000 and Windows XP, support for many
+locales is not installed by default. Returns \true if the locale is
+supported.
+
+The argument \arg{lang} is the wxLanguage identifier. To obtain this for a
+given a two letter ISO language code, use 
+\helpref{FindLanguageInfo}{wxlocalefindlanguageinfo} to obtain its
+wxLanguageInfo structure. See \helpref{AddLanguage}{wxlocaleaddlanguage} for
+the wxLanguageInfo description.
+
+\newsince{2.7.1}. Currently only implemented under Windows.
+
+
 \membersection{wxLocale::IsLoaded}\label{wxlocaleisloaded}
 
 \constfunc{bool}{IsLoaded}{\param{const char* }{domain}}

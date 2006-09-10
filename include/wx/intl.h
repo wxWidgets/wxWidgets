@@ -466,6 +466,9 @@ public:
     bool AddCatalog(const wxChar *szDomain,
                     wxLanguage msgIdLanguage, const wxChar *msgIdCharset);
 
+    // check if the given locale is provided by OS and C run time
+    static bool IsAvailable(int lang);
+
     // check if the given catalog is loaded
     bool IsLoaded(const wxChar *szDomain) const;
 

@@ -2711,6 +2711,31 @@ wxMsgCatalog *wxLocale::FindCatalog(const wxChar *szDomain) const
     return NULL;
 }
 
+// check if the given locale is provided by OS and C run time
+/* static */
+bool wxLocale::IsAvailable(int lang)
+{
+    const wxLanguageInfo *info = wxLocale::GetLanguageInfo(lang);
+    wxCHECK_MSG( info, false, _T("invalid language") );
+
+#ifdef __WIN32__
+    if ( !info->WinLang )
+        return false;
+
+    if ( !::IsValidLocale
+            (
+                MAKELCID(MAKELANGID(info->WinLang, info->WinSublang),
+                         SORT_DEFAULT),
+                LCID_INSTALLED
+            ) )
+      return false;
+#else // !__WIN32__
+    // TODO: test if setlocale(info->CanonicalName) works under other OS?
+#endif // __WIN32__/!__WIN32__
+
+    return true;
+}
+
 // check if the given catalog is loaded
 bool wxLocale::IsLoaded(const wxChar *szDomain) const
 {
