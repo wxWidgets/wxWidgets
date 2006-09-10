@@ -50,6 +50,8 @@ public:
     virtual void Command(wxCommandEvent& event);
     virtual bool HasTransparentBackground() { return true; }
 
+    virtual WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const;
+
 protected:
     virtual wxSize DoGetBestSize() const;
 

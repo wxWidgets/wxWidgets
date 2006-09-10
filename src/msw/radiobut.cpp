@@ -314,4 +314,14 @@ wxSize wxRadioButton::DoGetBestSize() const
     return best;
 }
 
+WXDWORD wxRadioButton::MSWGetStyle(long style, WXDWORD *exstyle) const
+{
+    WXDWORD styleMSW = wxControl::MSWGetStyle(style, exstyle);
+
+    if ( style & wxRB_GROUP )
+        styleMSW |= WS_GROUP;
+
+    return styleMSW;
+}
+
 #endif // wxUSE_RADIOBTN
