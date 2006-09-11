@@ -71,12 +71,12 @@ static wxVideoMode GetCurrentVideoMode()
 {
     wxVideoMode m;
 
-    wxIDirectFBSurfacePtr surface(wxDfbGetPrimarySurface());
+    wxIDirectFBSurfacePtr surface(wxIDirectFB::Get()->GetPrimarySurface());
     if ( !surface )
         return m; // invalid
 
     surface->GetSize(&m.w, &m.h);
-    m.bpp = wxDfbGetSurfaceDepth(surface);
+    m.bpp = surface->GetDepth();
 
     return m;
 }

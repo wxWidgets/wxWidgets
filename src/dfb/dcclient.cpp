@@ -65,7 +65,7 @@ void wxWindowDC::InitForWin(wxWindow *win, const wxRect *rect)
         // so let's create a dummy surface that has the same format as the real
         // one would have and let the code paint on it:
         wxSize size(rect ? rect->GetSize() : win->GetSize());
-        surface = wxDfbCreateCompatibleSurface(win->GetDfbSurface(), size);
+        surface = win->GetDfbSurface()->CreateCompatible(size);
     }
     else if ( !rect )
     {

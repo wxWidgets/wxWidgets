@@ -158,8 +158,9 @@ public:
 
     wxBitmapRefData(const wxBitmapRefData& data)
     {
-        m_surface = wxDfbCloneSurface(data.m_surface,
-                                      wxDfbCloneSurface_NoPixels);
+        if ( data.m_surface )
+            m_surface = data.m_surface->Clone();
+
         m_mask = data.m_mask ? new wxMask(*data.m_mask) : NULL;
 #if wxUSE_PALETTE
         m_palette = data.m_palette ? new wxPalette(*data.m_palette) : NULL;
@@ -294,7 +295,7 @@ int wxBitmap::GetDepth() const
 {
     wxCHECK_MSG( Ok(), -1, wxT("invalid bitmap") );
 
-    return wxDfbGetSurfaceDepth(M_BITMAP->m_surface);
+    return M_BITMAP->m_surface->GetDepth();
 }
 
 wxMask *wxBitmap::GetMask() const

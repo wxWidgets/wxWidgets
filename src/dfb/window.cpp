@@ -370,7 +370,7 @@ void wxWindowDFB::WarpPointer(int x, int y)
     if ( x >= w ) x = w-1;
     if ( y >= h ) y = h-1;
 
-    wxIDirectFBDisplayLayerPtr layer(wxDfbGetDisplayLayer());
+    wxIDirectFBDisplayLayerPtr layer(wxIDirectFB::Get()->GetDisplayLayer());
     wxCHECK_RET( layer, _T("no display layer") );
 
     layer->WarpCursor(x, y);

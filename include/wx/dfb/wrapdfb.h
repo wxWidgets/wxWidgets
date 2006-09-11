@@ -266,10 +266,33 @@ struct wxIDirectFBSurface : public wxDfbWrapper<IDirectFBSurface>
     bool Blit(const wxIDirectFBSurfacePtr& source,
               const DFBRectangle *source_rect,
               int x, int y)
-    {
-        return Check(
-                m_ptr->Blit(m_ptr, source->GetRaw(), source_rect, x, y));
-    }
+        { return Blit(source->GetRaw(), source_rect, x, y); }
+
+    bool Blit(IDirectFBSurface *source,
+              const DFBRectangle *source_rect,
+              int x, int y)
+        { return Check(m_ptr->Blit(m_ptr, source, source_rect, x, y)); }
+
+
+    /// Returns bit depth used by the surface or -1 on error
+    int GetDepth();
+
+    /**
+        Creates a new surface by cloning this one. New surface will have same
+        capabilities, pixel format and pixel data as the existing one.
+
+        @see CreateCompatible
+     */
+    wxIDirectFBSurfacePtr Clone();
+
+    /**
+        Creates a surface compatible with this one, i.e. surface with the same
+        capabilities and pixel format, but with different and size.
+
+        @param size Size of the surface to create. If wxDefaultSize, use the
+                    size of this surface.
+     */
+    wxIDirectFBSurfacePtr CreateCompatible(const wxSize& size = wxDefaultSize);
 };
 
 
@@ -446,7 +469,8 @@ struct wxIDirectFB : public wxDfbWrapper<IDirectFB>
             return NULL;
     }
 
-    wxIDirectFBDisplayLayerPtr GetDisplayLayer(DFBDisplayLayerID id)
+    wxIDirectFBDisplayLayerPtr
+    GetDisplayLayer(DFBDisplayLayerID id = DLID_PRIMARY)
     {
         IDirectFBDisplayLayer *l;
         if ( Check(m_ptr->GetDisplayLayer(m_ptr, id, &l)) )
@@ -454,6 +478,9 @@ struct wxIDirectFB : public wxDfbWrapper<IDirectFB>
         else
             return NULL;
     }
+
+    /// Returns primary surface
+    wxIDirectFBSurfacePtr GetPrimarySurface();
 
 private:
     wxIDirectFB(IDirectFB *ptr) { Init(ptr); }

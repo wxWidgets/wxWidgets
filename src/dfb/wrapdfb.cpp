@@ -95,3 +95,74 @@ void wxIDirectFB::CleanUp()
 {
     ms_ptr.Reset();
 }
+
+wxIDirectFBSurfacePtr wxIDirectFB::GetPrimarySurface()
+{
+    wxIDirectFBDisplayLayerPtr layer(GetDisplayLayer());
+    return layer ? layer->GetSurface() : NULL;
+}
+
+//-----------------------------------------------------------------------------
+// wxIDirectFBSurface
+//-----------------------------------------------------------------------------
+
+int wxIDirectFBSurface::GetDepth()
+{
+    DFBSurfacePixelFormat format = DSPF_UNKNOWN;
+
+    if ( !GetPixelFormat(&format) )
+        return -1;
+
+    return DFB_BITS_PER_PIXEL(format);
+}
+
+wxIDirectFBSurfacePtr wxIDirectFBSurface::CreateCompatible(const wxSize& sz)
+{
+    wxSize size(sz);
+    if ( size == wxDefaultSize )
+    {
+        if ( !GetSize(&size.x, &size.y) )
+            return NULL;
+    }
+
+    wxCHECK_MSG( size.x > 0 && size.y > 0, NULL, _T("invalid size") );
+
+    DFBSurfaceDescription desc;
+    desc.flags = (DFBSurfaceDescriptionFlags)(
+            DSDESC_CAPS | DSDESC_WIDTH | DSDESC_HEIGHT | DSDESC_PIXELFORMAT);
+    GetCapabilities(&desc.caps);
+    GetPixelFormat(&desc.pixelformat);
+    desc.width = size.x;
+    desc.height = size.y;
+
+    wxIDirectFBSurfacePtr snew(wxIDirectFB::Get()->CreateSurface(&desc));
+    if ( !snew )
+        return NULL;
+
+    if ( desc.pixelformat == DSPF_LUT8 )
+    {
+        wxIDirectFBPalettePtr pal(GetPalette());
+        if ( pal )
+        {
+            if ( !snew->SetPalette(pal) )
+                return NULL;
+        }
+    }
+
+    return snew;
+}
+
+wxIDirectFBSurfacePtr wxIDirectFBSurface::Clone()
+{
+    wxIDirectFBSurfacePtr snew(CreateCompatible());
+    if ( !snew )
+        return NULL;
+
+    if ( !snew->SetBlittingFlags(DSBLIT_NOFX) )
+        return NULL;
+
+    if ( !snew->Blit(GetRaw(), NULL, 0, 0) )
+        return NULL;
+
+    return snew;
+}

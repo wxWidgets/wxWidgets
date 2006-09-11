@@ -122,7 +122,7 @@ bool wxTopLevelWindowDFB::Create(wxWindow *parent,
         pos.y = 0;
 
     // create DirectFB window:
-    wxIDirectFBDisplayLayerPtr layer = wxDfbGetDisplayLayer();
+    wxIDirectFBDisplayLayerPtr layer(wxIDirectFB::Get()->GetDisplayLayer());
     wxCHECK_MSG( layer, false, _T("no display layer") );
 
     DFBWindowDescription desc;

@@ -29,44 +29,6 @@
 #endif
 
 //-----------------------------------------------------------------------------
-// surface manipulation helpers
-//-----------------------------------------------------------------------------
-
-/// Mode of wxDfbCloneSurface() call
-enum wxDfbCloneSurfaceMode
-{
-    /// Don't copy surface pixels, just clone surface size and attributes
-    wxDfbCloneSurface_NoPixels = 0,
-    /// Make exact copy, including the pixels
-    wxDfbCloneSurface_CopyPixels
-};
-
-/**
-    Creates surface that is compatible with given @a surface (i.e. has same
-    capabilities, pixel format etc.) and has given @a size.
- */
-wxIDirectFBSurfacePtr wxDfbCreateCompatibleSurface(
-                                    const wxIDirectFBSurfacePtr& surface,
-                                    const wxSize& size);
-
-/**
-    Creates a new surface by cloning existing one. Depending on @a mode,
-    either makes exact copy (wxDfbCloneSurface_CopyPixels) or only creates a
-    new surface with the same size and attributes (wxDfbCloneSurface_NoPixels).
- */
-wxIDirectFBSurfacePtr wxDfbCloneSurface(const wxIDirectFBSurfacePtr& s,
-                                        wxDfbCloneSurfaceMode mode);
-
-/// Returns bit depth used by the surface
-int wxDfbGetSurfaceDepth(const wxIDirectFBSurfacePtr& s);
-
-/// Returns interface to the primary display layer:
-wxIDirectFBDisplayLayerPtr wxDfbGetDisplayLayer();
-
-/// Returns interface to the primary surface:
-wxIDirectFBSurfacePtr wxDfbGetPrimarySurface();
-
-//-----------------------------------------------------------------------------
 // misc helpers
 //-----------------------------------------------------------------------------
 

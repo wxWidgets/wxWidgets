@@ -130,7 +130,7 @@ void wxDC::DestroyClippingRegion()
 
 int wxDC::GetDepth() const
 {
-    return wxDfbGetSurfaceDepth(m_surface);
+    return m_surface->GetDepth();
 }
 
 // ---------------------------------------------------------------------------
