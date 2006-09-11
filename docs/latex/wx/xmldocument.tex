@@ -18,7 +18,7 @@ A simple example of using XML classes is:
 
 \begin{verbatim}
 wxXmlDocument doc;
-if (!doc.Load(wxT("myfile.xml"))
+if (!doc.Load(wxT("myfile.xml")))
     return false;
 
 // start processing the XML file
@@ -51,6 +51,23 @@ while (child) {
 }
 \end{verbatim}
 
+{\bf Note:} if you want to preserve the original formatting of the loaded file including whitespaces
+and indentation, you need to turn off whitespace-only textnode removal and automatic indentation:
+
+\begin{verbatim}
+wxXmlDocument doc;
+doc.Load(wxT("myfile.xml"), wxT("UTF-8"), wxXMLDOC_KEEP_WHITESPACE_NODES);
+doc.Save(wxT("myfile2.xml"), wxXML_NO_INDENTATION);       // myfile2.xml will be indentic to myfile.xml
+\end{verbatim}
+
+Using default parameters, you will get a reformatted document which in general is different from
+the original loaded content:
+
+\begin{verbatim}
+wxXmlDocument doc;
+doc.Load(wxT("myfile.xml"));
+doc.Save(wxT("myfile2.xml"));       // myfile2.xml != myfile.xml
+\end{verbatim}
 
 
 \wxheading{Derived from}
@@ -74,11 +91,11 @@ while (child) {
 \func{}{wxXmlDocument}{\void}
 
 
-\func{}{wxXmlDocument}{\param{const wxString\& }{filename}, \param{const wxString\& }{encoding = wxT("UTF-8")}}
+\func{}{wxXmlDocument}{\param{const wxString\& }{filename}, \param{const wxString\& }{encoding = wxT("UTF-8")}, \param{int }{flags = wxXMLDOC_NONE}}
 
 Loads the given {\it filename} using the given encoding. See \helpref{Load()}{wxxmldocumentload}.
 
-\func{}{wxXmlDocument}{\param{wxInputStream\& }{stream}, \param{const wxString\& }{encoding = wxT("UTF-8")}}
+\func{}{wxXmlDocument}{\param{wxInputStream\& }{stream}, \param{const wxString\& }{encoding = wxT("UTF-8")}, \param{int }{flags = wxXMLDOC_NONE}}
 
 Loads the XML document from given stream using the given encoding. See \helpref{Load()}{wxxmldocumentload}.
 
@@ -149,23 +166,36 @@ Returns \true if the document has been loaded successfully.
 
 \membersection{wxXmlDocument::Load}\label{wxxmldocumentload}
 
-\func{bool}{Load}{\param{const wxString\& }{filename}, \param{const wxString\& }{encoding = wxT("UTF-8")}}
+\func{bool}{Load}{\param{const wxString\& }{filename}, \param{const wxString\& }{encoding = wxT("UTF-8")}, \param{int }{flags = wxXMLDOC_NONE}}
 
-Parses {\it filename} as an xml document and loads data. Returns \true on success, \false otherwise.
+Parses {\it filename} as an xml document and loads its data.
 
-\func{bool}{Load}{\param{wxInputStream\& }{stream}, \param{const wxString\& }{encoding = wxT("UTF-8")}}
+If {\tt flags} does not contain {\tt wxXMLDOC_KEEP_WHITESPACE_NODES}, then, while loading, all nodes of
+type {\tt wxXML_TEXT_NODE} (see \helpref{wxXmlNode}{wxxmlnode}) are automatically skipped if they
+contain whitespaces only.
+The removal of these nodes makes the load process slightly faster and requires less memory however
+makes impossible to recreate exactly the loaded text with a \helpref{Save}{wxxmldocumentsave} call later.
+Read the initial description of this class for more info.
+
+Returns \true on success, \false otherwise.
+
+\func{bool}{Load}{\param{wxInputStream\& }{stream}, \param{const wxString\& }{encoding = wxT("UTF-8")}, \param{int }{flags = wxXMLDOC_NONE}}
 
 Like above but takes the data from given input stream.
 
 \membersection{wxXmlDocument::Save}\label{wxxmldocumentsave}
 
-\constfunc{bool}{Save}{\param{const wxString\& }{filename}}
+\constfunc{bool}{Save}{\param{const wxString\& }{filename}, \param{int }{indentstep = 1}}
 
 Saves XML tree creating a file named with given string.
 
-\constfunc{bool}{Save}{\param{wxOutputStream\& }{stream}}
+If {\tt indentstep} is greater than or equal to zero, then, while saving, an automatic indentation
+is added with steps composed by {\tt indentstep} spaces.
+If {\tt indentstep} is {\tt wxXML_NO_INDENTATION}, then, automatic indentation is turned off.
 
-Saves XML tree in the given output stream.
+\constfunc{bool}{Save}{\param{wxOutputStream\& }{stream}, \param{int }{indentstep = 1}}
+
+Saves XML tree in the given output stream. See other overload for a description of {\tt indentstep}.
 
 \membersection{wxXmlDocument::SetEncoding}\label{wxxmldocumentsetencoding}
 

@@ -125,6 +125,9 @@ public:
     wxString GetName() const { return m_name; }
     wxString GetContent() const { return m_content; }
 
+    bool IsWhitespaceOnly() const;
+    int GetDepth(wxXmlNode *grandparent = NULL) const;
+
     // Gets node content from wxXML_ENTITY_NODE
     // The problem is, <tag>content<tag> is represented as
     // wxXML_ENTITY_NODE name="tag", content=""
@@ -165,8 +168,15 @@ private:
 
 
 
+// special indentation value for wxXmlDocument::Save
+#define wxXML_NO_INDENTATION           (-1)
 
-
+// flags for wxXmlDocument::Load
+enum wxXmlDocumentLoadFlag
+{
+    wxXMLDOC_NONE = 0,
+    wxXMLDOC_KEEP_WHITESPACE_NODES = 1
+};
 
 
 // This class holds XML data/document as parsed by XML parser.
@@ -187,13 +197,13 @@ public:
     // Parses .xml file and loads data. Returns TRUE on success, FALSE
     // otherwise.
     virtual bool Load(const wxString& filename,
-              const wxString& encoding = wxT("UTF-8"));
+                      const wxString& encoding = wxT("UTF-8"), int flags = wxXMLDOC_NONE);
     virtual bool Load(wxInputStream& stream,
-              const wxString& encoding = wxT("UTF-8"));
+                      const wxString& encoding = wxT("UTF-8"), int flags = wxXMLDOC_NONE);
     
     // Saves document as .xml file.
-    virtual bool Save(const wxString& filename) const;
-    virtual bool Save(wxOutputStream& stream) const;
+    virtual bool Save(const wxString& filename, int indentstep = 1) const;
+    virtual bool Save(wxOutputStream& stream, int indentstep = 1) const;
 
     bool IsOk() const { return m_root != NULL; }
 

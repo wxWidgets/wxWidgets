@@ -39,6 +39,9 @@ WX_CHECK_BUILD_OPTIONS("wxXML")
 IMPLEMENT_CLASS(wxXmlDocument, wxObject)
 
 
+// a private utility used by wxXML
+static bool wxIsWhiteOnly(const wxChar *buf);
+
 
 //-----------------------------------------------------------------------------
 //  wxXmlNode
@@ -309,6 +312,28 @@ wxString wxXmlNode::GetNodeContent() const
     return wxEmptyString;
 }
 
+int wxXmlNode::GetDepth(wxXmlNode *grandparent) const
+{
+    const wxXmlNode *n = this;
+    int ret = -1;
+
+    do
+    {
+        ret++;
+        n = n->GetParent();
+        if (n == grandparent)
+            return ret;
+
+    } while (n);
+
+    return wxNOT_FOUND;
+}
+
+bool wxXmlNode::IsWhitespaceOnly() const
+{
+    return wxIsWhiteOnly(m_content);
+}
+
 
 
 //-----------------------------------------------------------------------------
@@ -364,20 +389,20 @@ void wxXmlDocument::DoCopy(const wxXmlDocument& doc)
     m_root = new wxXmlNode(*doc.m_root);
 }
 
-bool wxXmlDocument::Load(const wxString& filename, const wxString& encoding)
+bool wxXmlDocument::Load(const wxString& filename, const wxString& encoding, int flags)
 {
     wxFileInputStream stream(filename);
     if (!stream.Ok())
         return false;
-    return Load(stream, encoding);
+    return Load(stream, encoding, flags);
 }
 
-bool wxXmlDocument::Save(const wxString& filename) const
+bool wxXmlDocument::Save(const wxString& filename, int indentstep) const
 {
     wxFileOutputStream stream(filename);
     if (!stream.Ok())
         return false;
-    return Save(stream);
+    return Save(stream, indentstep);
 }
 
 
@@ -385,11 +410,6 @@ bool wxXmlDocument::Save(const wxString& filename) const
 //-----------------------------------------------------------------------------
 //  wxXmlDocument loading routines
 //-----------------------------------------------------------------------------
-
-/*
-    FIXME:
-       - process all elements, including CDATA
- */
 
 // converts Expat-produced string in UTF-8 into wxString using the specified
 // conv or keep in UTF-8 if conv is NULL
@@ -417,6 +437,16 @@ static wxString CharToString(wxMBConv *conv,
 #endif // wxUSE_UNICODE/!wxUSE_UNICODE
 }
 
+// returns true if the given string contains only whitespaces
+bool wxIsWhiteOnly(const wxChar *buf)
+{
+    for (const wxChar *c = buf; *c != wxT('\0'); c++)
+        if (*c != wxT(' ') && *c != wxT('\t') && *c != wxT('\n') && *c != wxT('\r'))
+            return false;
+    return true;
+}
+
+
 struct wxXmlParsingContext
 {
     wxMBConv  *conv;
@@ -426,6 +456,7 @@ struct wxXmlParsingContext
     wxString   encoding;
     wxString   version;
 	bool	bLastCdata;
+    bool       removeWhiteOnlyNodes;
 };
 
 extern "C" {
@@ -462,42 +493,32 @@ extern "C" {
 static void TextHnd(void *userData, const char *s, int len)
 {
     wxXmlParsingContext *ctx = (wxXmlParsingContext*)userData;
-    char *buf = new char[len + 1];
-
-    buf[len] = '\0';
-    memcpy(buf, s, (size_t)len);
+    wxString str = CharToString(ctx->conv, s, len);
 
     if (ctx->lastAsText)
     {
 		if ( ctx->bLastCdata )
 		{
 			ctx->lastAsText->SetContent(ctx->lastAsText->GetContent() +
-                                    CharToString(NULL, buf));
+                                        CharToString(NULL, s, len));
 		}
 		else
 		{
-			ctx->lastAsText->SetContent(ctx->lastAsText->GetContent() +
-                                    CharToString(ctx->conv, buf));
+            ctx->lastAsText->SetContent(ctx->lastAsText->GetContent() + str);
 		}
     }
     else
     {
-        bool whiteOnly = true;
-        for (char *c = buf; *c != '\0'; c++)
-            if (*c != ' ' && *c != '\t' && *c != '\n' && *c != '\r')
-            {
-                whiteOnly = false;
-                break;
-            }
+        bool whiteOnly = false;
+        if (ctx->removeWhiteOnlyNodes)
+            whiteOnly = wxIsWhiteOnly(str);
+
         if (!whiteOnly)
         {
-            ctx->lastAsText = new wxXmlNode(wxXML_TEXT_NODE, wxT("text"),
-                                            CharToString(ctx->conv, buf));
+            ctx->lastAsText = new wxXmlNode(wxXML_TEXT_NODE, wxT("text"), str);
             ctx->node->AddChild(ctx->lastAsText);
         }
     }
-
-    delete[] buf;
 }
 }
 
@@ -593,7 +614,7 @@ static int UnknownEncodingHnd(void * WXUNUSED(encodingHandlerData),
 }
 }
 
-bool wxXmlDocument::Load(wxInputStream& stream, const wxString& encoding)
+bool wxXmlDocument::Load(wxInputStream& stream, const wxString& encoding, int flags)
 {
 #if wxUSE_UNICODE
     (void)encoding;
@@ -614,6 +635,7 @@ bool wxXmlDocument::Load(wxInputStream& stream, const wxString& encoding)
     if ( encoding != wxT("UTF-8") && encoding != wxT("utf-8") )
         ctx.conv = new wxCSConv(encoding);
 #endif
+    ctx.removeWhiteOnlyNodes = (flags & wxXMLDOC_KEEP_WHITESPACE_NODES) == 0;
 	ctx.bLastCdata = false;
 
     XML_SetUserData(parser, (void*)&ctx);
@@ -755,7 +777,7 @@ inline static void OutputIndentation(wxOutputStream& stream, int indent)
 }
 
 static void OutputNode(wxOutputStream& stream, wxXmlNode *node, int indent,
-                       wxMBConv *convMem, wxMBConv *convFile)
+                       wxMBConv *convMem, wxMBConv *convFile, int indentstep)
 {
     wxXmlNode *n, *prev;
     wxXmlProperty *prop;
@@ -793,13 +815,13 @@ static void OutputNode(wxOutputStream& stream, wxXmlNode *node, int indent,
                 n = node->GetChildren();
                 while (n)
                 {
-                    if (n && n->GetType() != wxXML_TEXT_NODE)
-                        OutputIndentation(stream, indent + 1);
-                    OutputNode(stream, n, indent + 1, convMem, convFile);
+                    if (indentstep >= 0 && n && n->GetType() != wxXML_TEXT_NODE)
+                        OutputIndentation(stream, indent + indentstep);
+                    OutputNode(stream, n, indent + indentstep, convMem, convFile, indentstep);
                     prev = n;
                     n = n->GetNext();
                 }
-                if (prev && prev->GetType() != wxXML_TEXT_NODE)
+                if (indentstep >= 0 && prev && prev->GetType() != wxXML_TEXT_NODE)
                     OutputIndentation(stream, indent);
                 OutputString(stream, wxT("</"));
                 OutputString(stream, node->GetName());
@@ -820,7 +842,7 @@ static void OutputNode(wxOutputStream& stream, wxXmlNode *node, int indent,
     }
 }
 
-bool wxXmlDocument::Save(wxOutputStream& stream) const
+bool wxXmlDocument::Save(wxOutputStream& stream, int indentstep) const
 {
     if ( !IsOk() )
         return false;
@@ -844,7 +866,7 @@ bool wxXmlDocument::Save(wxOutputStream& stream) const
              GetVersion().c_str(), GetFileEncoding().c_str());
     OutputString(stream, s);
 
-    OutputNode(stream, GetRoot(), 0, convMem, convFile);
+    OutputNode(stream, GetRoot(), 0, convMem, convFile, indentstep);
     OutputString(stream, wxT("\n"));
 
     if ( convFile )

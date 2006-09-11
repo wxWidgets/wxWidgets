@@ -124,7 +124,7 @@ Removes the first properties which has the given {\it name} from the list of pro
 
 \membersection{wxXmlNode::GetChildren}\label{wxxmlnodegetchildren}
 
-\constfunc{wxXmlNode*}{GetChildren}{\param{void}{}}
+\constfunc{wxXmlNode*}{GetChildren}{\void}
 
 Returns the first child of this node.
 To get a pointer to the second child of this node (if it does exist), use the
@@ -137,6 +137,17 @@ To get a pointer to the second child of this node (if it does exist), use the
 Returns the content of this node. Can be an empty string.
 Be aware that for nodes of type \texttt{wxXML\_ELEMENT\_NODE} (the most used node type) the
 content is an empty string. See \helpref{GetNodeContent()}{wxxmlnodegetnodecontent} for more details.
+
+
+\membersection{wxXmlNode::GetDepth}\label{wxxmlnodegetdepth}
+
+\constfunc{int}{GetDepth}{\param{wxXmlNode* }{grandparent = NULL}}
+
+Returns the number of nodes which separe this node from {\tt grandparent}.
+
+This function searches only the parents of this node until it finds {\tt grandparent}
+or the \NULL node (which is the parent of non-linked nodes or the parent of a
+\helpref{wxXmlDocument}{wxxmldocument}'s root node).
 
 
 \membersection{wxXmlNode::GetNodeContent}\label{wxxmlnodegetnodecontent}
@@ -219,6 +230,14 @@ Inserts the {\it child} node after {\it before\_node} in the children list.
 If {\it before\_node} is \NULL, then {\it child} is prepended to the list of children and
 becomes the first child of this node.
 Returns \true if {\it before\_node} has been found and the {\it child} node has been inserted.
+
+\membersection{wxXmlNode::IsWhitespaceOnly}\label{wxxmlnodecontainsiswhitespaceonly}
+
+\constfunc{bool}{IsWhitespaceOnly}{\void}
+
+Returns \true if the content of this node is a string containing only whitespaces (spaces,
+tabs, new lines, etc). Note that this function is locale-independent since the parsing of XML
+documents must always produce the exact same tree regardless of the locale it runs under.
 
 \membersection{wxXmlNode::RemoveChild}\label{wxxmlnoderemovechild}
 
