@@ -1146,12 +1146,12 @@ wxRect wxWindowBase::GetUpdateClientRect() const
     return rectUpdate;
 }
 
-bool wxWindowBase::IsExposed(int x, int y) const
+bool wxWindowBase::DoIsExposed(int x, int y) const
 {
     return m_updateRegion.Contains(x, y) != wxOutRegion;
 }
 
-bool wxWindowBase::IsExposed(int x, int y, int w, int h) const
+bool wxWindowBase::DoIsExposed(int x, int y, int w, int h) const
 {
     return m_updateRegion.Contains(x, y, w, h) != wxOutRegion;
 }

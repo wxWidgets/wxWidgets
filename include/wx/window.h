@@ -728,13 +728,17 @@ public:
 
         // these functions verify whether the given point/rectangle belongs to
         // (or at least intersects with) the update region
-    virtual bool IsExposed( int x, int y ) const;
-    virtual bool IsExposed( int x, int y, int w, int h ) const;
+    virtual bool DoIsExposed( int x, int y ) const;
+    virtual bool DoIsExposed( int x, int y, int w, int h ) const;
 
+    bool IsExposed( int x, int y ) const
+        { return DoIsExposed(x, y); }
+    bool IsExposed( int x, int y, int w, int h ) const
+    { return DoIsExposed(x, y, w, h); }
     bool IsExposed( const wxPoint& pt ) const
-        { return IsExposed(pt.x, pt.y); }
+        { return DoIsExposed(pt.x, pt.y); }
     bool IsExposed( const wxRect& rect ) const
-        { return IsExposed(rect.x, rect.y, rect.width, rect.height); }
+        { return DoIsExposed(rect.x, rect.y, rect.width, rect.height); }
 
     // colours, fonts and cursors
     // --------------------------

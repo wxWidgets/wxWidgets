@@ -3783,13 +3783,13 @@ void wxWindowGTK::GtkUpdate()
     }
 }
 
-bool wxWindowGTK::IsExposed( int x, int y ) const
+bool wxWindowGTK::DoIsExposed( int x, int y ) const
 {
     return m_updateRegion.Contains(x, y) != wxOutRegion;
 }
 
 
-bool wxWindowGTK::IsExposed( int x, int y, int w, int h ) const
+bool wxWindowGTK::DoIsExposed( int x, int y, int w, int h ) const
 {
     if (GetLayoutDirection() == wxLayout_RightToLeft)
         return m_updateRegion.Contains(x-w, y, w, h) != wxOutRegion;
