@@ -19,14 +19,17 @@ MAKE_CONST_WXSTRING(HyperlinkCtrlNameStr);
 
 enum {
     wxHL_CONTEXTMENU,
-    wxHL_DEFAULT_STYLE
+    wxHL_ALIGN_LEFT,
+    wxHL_ALIGN_RIGHT,
+    wxHL_ALIGN_CENTRE,
+    wxHL_DEFAULT_STYLE,
 };
 
 //---------------------------------------------------------------------------
 %newgroup
 
-MustHaveApp(wxHyperlinkCtrl);
 
+MustHaveApp(wxHyperlinkCtrl);
 
 DocStr( wxHyperlinkCtrl,
 "A static text control that emulates a hyperlink. The link is displayed
@@ -45,7 +48,7 @@ public:
     %pythonAppend wxHyperlinkCtrl      "self._setOORInfo(self)"
     %pythonAppend wxHyperlinkCtrl()    ""
 
-    
+
     // Constructor.
     wxHyperlinkCtrl(wxWindow *parent,
                     wxWindowID id,

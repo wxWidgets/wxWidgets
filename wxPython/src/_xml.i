@@ -100,6 +100,16 @@ public:
     wxString GetName() const;
     wxString GetContent() const;
 
+    bool IsWhitespaceOnly() const;
+    int GetDepth(wxXmlNode *grandparent = NULL) const;
+
+    // Gets node content from wxXML_ENTITY_NODE
+    // The problem is, <tag>content<tag> is represented as
+    // wxXML_ENTITY_NODE name="tag", content=""
+    //    |-- wxXML_TEXT_NODE or
+    //        wxXML_CDATA_SECTION_NODE name="" content="content"
+    wxString GetNodeContent() const;
+
     wxXmlNode *GetParent() const;
     wxXmlNode *GetNext() const;
     wxXmlNode *GetChildren() const;
@@ -122,6 +132,20 @@ public:
 
 
 
+// special indentation value for wxXmlDocument::Save
+enum {
+    wxXML_NO_INDENTATION
+};
+
+// flags for wxXmlDocument::Load
+enum wxXmlDocumentLoadFlag
+{
+    wxXMLDOC_NONE = 0,
+    wxXMLDOC_KEEP_WHITESPACE_NODES = 1
+};
+
+
+
 // This class holds XML data/document as parsed by XML parser.
 class wxXmlDocument : public wxObject
 {
@@ -138,13 +162,15 @@ public:
     // Parses .xml file and loads data. Returns True on success, False
     // otherwise.
     bool Load(const wxString& filename,
-              const wxString& encoding = wxPyUTF8String);
+              const wxString& encoding = wxPyUTF8String,
+              int flags = wxXMLDOC_NONE);
     %Rename(LoadFromStream, bool,  Load(wxInputStream& stream,
-                                   const wxString& encoding = wxPyUTF8String));
+                                        const wxString& encoding = wxPyUTF8String,
+                                        int flags = wxXMLDOC_NONE));
 
     // Saves document as .xml file.
-    bool Save(const wxString& filename) const;
-    %Rename(SaveToStream, bool,  Save(wxOutputStream& stream) const);
+    bool Save(const wxString& filename, int indentstep=1) const;
+    %Rename(SaveToStream, bool,  Save(wxOutputStream& stream, int indentstep=1) const);
 
     bool IsOk() const;
 

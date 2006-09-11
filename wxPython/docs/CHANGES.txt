@@ -230,6 +230,10 @@ toolbars that are not children of the frame, managed by sizers or
 what-not will still use the emulated toolbar because of platform
 restrictions in how/where the toolbar can be used.
 
+Added wx.Window.IsVisible.
+
+
+
 
 
 

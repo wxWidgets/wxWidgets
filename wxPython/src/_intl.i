@@ -426,6 +426,9 @@ public:
     // Returns 'True' if it was successfully loaded
     bool AddCatalog(const wxString& szDomain);
 
+    // check if the given locale is provided by OS and C run time
+    static bool IsAvailable(int lang);
+    
     // check if the given catalog is loaded
     bool IsLoaded(const wxString& szDomain) const;
 

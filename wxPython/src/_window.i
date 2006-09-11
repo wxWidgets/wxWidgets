@@ -770,6 +770,12 @@ window had already been in the specified state.", "");
         bool , IsEnabled() const,
         "Returns true if the window is enabled for input, false otherwise.", "");
 
+    DocDeclStr(
+        virtual bool , IsVisible() const,
+        "Returns ``True`` if the window is physically visible on the screen,
+i.e. it is shown and all its parents up to the toplevel window are
+shown as well.", "");
+    
     
 
 
