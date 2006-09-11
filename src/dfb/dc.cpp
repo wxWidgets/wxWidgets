@@ -96,7 +96,7 @@ void wxDC::DoSetClippingRegion(wxCoord cx, wxCoord cy, wxCoord cw, wxCoord ch)
     r.x1 = XLOG2DEV(cx);
     r.y1 = YLOG2DEV(cy);
     r.x2 = r.x1 + XLOG2DEVREL(cw) - 1;
-    r.y2 = r.y1 + XLOG2DEVREL(ch) - 1;
+    r.y2 = r.y1 + YLOG2DEVREL(ch) - 1;
 
     if ( !m_surface->SetClip(&r) )
         return;
@@ -289,7 +289,7 @@ void wxDC::DoDrawText(const wxString& text, wxCoord x, wxCoord y)
     wxCHECK_RET( Ok(), wxT("invalid dc") );
 
     wxCoord xx = XLOG2DEV(x);
-    wxCoord yy = XLOG2DEV(y);
+    wxCoord yy = YLOG2DEV(y);
 
     // update the bounding box
     wxCoord w, h;
