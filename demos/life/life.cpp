@@ -263,7 +263,7 @@ LifeFrame::LifeFrame() :
     toolBar->AddSeparator();
 #endif // __POCKETPC__
     ADD_TOOL(ID_START, tbBitmaps[5], _("Start"), _("Start"));
-    ADD_TOOL(wxID_STOP, tbBitmaps[6], wxSTOCK_NOFLAGS, _("Stop"));
+    ADD_TOOL(wxID_STOP, tbBitmaps[6], _("Stop"), _("Stop"));
 
     toolBar->Realize();
     toolBar->EnableTool(wxID_STOP, false);    // must be after Realize() !
