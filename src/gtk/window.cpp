@@ -1284,7 +1284,12 @@ template<typename T> void InitMouseEvent(wxWindowGTK *win,
     event.m_y = (wxCoord)gdk_event->y - pt.y;
     
     if ((win->m_wxwindow) && (win->GetLayoutDirection() == wxLayout_RightToLeft))
-        event.m_x = GTK_PIZZA(win->m_wxwindow)->m_width - event.m_x;
+    {
+        // origin in the upper right corner
+        int virtual_width = win->GetVirtualSize().x;
+        int window_width = gtk_pizza_get_rtl_offset( GTK_PIZZA(win->m_wxwindow) );
+        event.m_x = wxMax( virtual_width, window_width ) - event.m_x;
+    }
 
     event.SetEventObject( win );
     event.SetId( win->GetId() );

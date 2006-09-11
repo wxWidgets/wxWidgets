@@ -216,6 +216,10 @@ wxRendererGTK::DrawTreeItemButton(wxWindow* win,
     else
         state = GTK_STATE_NORMAL;
 
+    int x_diff = 0;
+    if (win->GetLayoutDirection() == wxLayout_RightToLeft)
+        x_diff = rect.width;
+        
     // VZ: I don't know how to get the size of the expander so as to centre it
     //     in the given rectangle, +2/3 below is just what looks good here...
     gtk_paint_expander
@@ -226,7 +230,7 @@ wxRendererGTK::DrawTreeItemButton(wxWindow* win,
         NULL,
         tree,
         "treeview",
-        dc.LogicalToDeviceX(rect.x) + 2,
+        dc.LogicalToDeviceX(rect.x) + 2 - x_diff,
         dc.LogicalToDeviceY(rect.y) + 3,
         flags & wxCONTROL_EXPANDED ? GTK_EXPANDER_EXPANDED
                                    : GTK_EXPANDER_COLLAPSED

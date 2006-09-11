@@ -87,6 +87,9 @@ void       gtk_pizza_set_yoffset     (GtkPizza          *pizza, gint yoffset);
 
 
 WXDLLIMPEXP_CORE
+gint       gtk_pizza_get_rtl_offset  (GtkPizza          *pizza); 
+
+WXDLLIMPEXP_CORE
 void       gtk_pizza_set_shadow_type (GtkPizza          *pizza,
                                       GtkMyShadowType    type);
 

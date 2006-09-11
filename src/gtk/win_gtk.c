@@ -243,6 +243,21 @@ void       gtk_pizza_set_yoffset     (GtkPizza          *pizza, gint yoffset)
     // do something
 }
 
+gint       gtk_pizza_get_rtl_offset  (GtkPizza          *pizza)
+{
+    gint width;
+
+    g_return_val_if_fail ( (pizza != NULL), 0 );
+    g_return_val_if_fail ( (GTK_IS_PIZZA (pizza)), 0 );
+    
+    if (!pizza->bin_window) return 0;
+    
+    gdk_window_get_geometry( pizza->bin_window, NULL, NULL, &width, NULL, NULL );
+    
+    return width;
+}
+
+
 static void
 gtk_pizza_scroll_set_adjustments (GtkPizza     *pizza,
                                     GtkAdjustment  *hadj,
