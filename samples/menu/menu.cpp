@@ -360,8 +360,6 @@ bool MyApp::OnInit()
 // MyFrame
 // ----------------------------------------------------------------------------
 
-#include <wx/gtk/private.h>
-
 // Define my frame constructor
 MyFrame::MyFrame()
        : wxFrame((wxFrame *)NULL, wxID_ANY, _T("wxWidgets menu sample"))
