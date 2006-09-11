@@ -323,6 +323,15 @@ wxWindowDC::wxWindowDC( wxWindow *window )
        standard (as e.g. wxStatusBar) */
 
     m_owner = window;
+    
+    if (m_owner && m_owner->m_wxwindow && (m_owner->GetLayoutDirection() == wxLayout_RightToLeft))
+    {
+        m_signX = -1;
+        gint width;
+        gdk_window_get_geometry( GTK_PIZZA(m_owner->m_wxwindow)->bin_window,
+                                 NULL, NULL, &width, NULL, NULL );
+        m_deviceOriginX = width;;
+    }
 }
 
 wxWindowDC::~wxWindowDC()
@@ -1039,7 +1048,10 @@ void wxWindowDC::DoDrawBitmap( const wxBitmap &bitmap,
 
     int w = bitmap.GetWidth();
     int h = bitmap.GetHeight();
-
+    
+    if (m_owner && m_owner->GetLayoutDirection() == wxLayout_RightToLeft)
+        xx -= w;
+        
     CalcBoundingBox( x, y );
     CalcBoundingBox( x + w, y + h );
 
@@ -1451,7 +1463,10 @@ void wxWindowDC::DoDrawText( const wxString &text, wxCoord x, wxCoord y )
          }
 
          // Draw layout.
-         gdk_draw_layout( m_window, m_textGC, x, y, m_layout );
+         if (m_owner && m_owner->GetLayoutDirection() == wxLayout_RightToLeft)
+             gdk_draw_layout( m_window, m_textGC, x-w, y, m_layout );
+         else
+             gdk_draw_layout( m_window, m_textGC, x, y, m_layout );
 
          // reset unscaled size
          pango_font_description_set_size( m_fontdesc, oldSize );
@@ -1468,8 +1483,12 @@ void wxWindowDC::DoDrawText( const wxString &text, wxCoord x, wxCoord y )
             gdk_draw_rectangle(m_window, m_textGC, TRUE, x, y, w, h);
             gdk_gc_set_foreground(m_textGC, m_textForegroundColour.GetColor());
         }
+        
         // Draw layout.
-        gdk_draw_layout( m_window, m_textGC, x, y, m_layout );
+        if (m_owner && m_owner->GetLayoutDirection() == wxLayout_RightToLeft)
+            gdk_draw_layout( m_window, m_textGC, x-w, y, m_layout );
+        else
+            gdk_draw_layout( m_window, m_textGC, x, y, m_layout );
     }
 
     if (underlined)
@@ -2195,6 +2214,25 @@ void wxWindowDC::Destroy()
     m_textGC = (GdkGC*) NULL;
     if (m_bgGC) wxFreePoolGC( m_bgGC );
     m_bgGC = (GdkGC*) NULL;
+}
+
+void wxWindowDC::SetDeviceOrigin( wxCoord x, wxCoord y )
+{
+    m_deviceOriginX = x;
+    m_deviceOriginY = y;
+    
+    ComputeScaleAndOrigin();
+}
+
+void wxWindowDC::SetAxisOrientation( bool xLeftRight, bool yBottomUp )
+{
+    m_signX = (xLeftRight ?  1 : -1);
+    m_signY = (yBottomUp  ? -1 :  1);
+    
+    if (m_owner && m_owner->m_wxwindow && (m_owner->GetLayoutDirection() == wxLayout_RightToLeft))
+        m_signX = -m_signX;        
+        
+    ComputeScaleAndOrigin();
 }
 
 void wxWindowDC::ComputeScaleAndOrigin()

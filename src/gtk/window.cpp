@@ -486,6 +486,7 @@ gtk_window_expose_callback( GtkWidget *widget,
     GtkPizza *pizza = GTK_PIZZA( widget );
     if (gdk_event->window != pizza->bin_window) return FALSE;
 
+
 #if 0
     if (win->GetName())
     {
@@ -514,7 +515,6 @@ gtk_window_expose_callback( GtkWidget *widget,
     win->GetUpdateRegion() = wxRegion( gdk_event->region );
 
     win->GtkSendPaintEvents();
-
 
     // Let parent window draw window-less widgets
     (* GTK_WIDGET_CLASS (pizza_parent_class)->expose_event) (widget, gdk_event);
@@ -1282,6 +1282,9 @@ template<typename T> void InitMouseEvent(wxWindowGTK *win,
     wxPoint pt = win->GetClientAreaOrigin();
     event.m_x = (wxCoord)gdk_event->x - pt.x;
     event.m_y = (wxCoord)gdk_event->y - pt.y;
+    
+    if ((win->m_wxwindow) && (win->GetLayoutDirection() == wxLayout_RightToLeft))
+        event.m_x = GTK_PIZZA(win->m_wxwindow)->m_width - event.m_x;
 
     event.SetEventObject( win );
     event.SetId( win->GetId() );
@@ -2127,6 +2130,17 @@ void gtk_window_size_callback( GtkWidget *WXUNUSED(widget),
     if ((client_width == win->m_oldClientWidth) && (client_height == win->m_oldClientHeight))
         return;
 
+#if 0
+        wxPrintf( wxT("size_allocate ") );
+        if (win->GetClassInfo() && win->GetClassInfo()->GetClassName())
+            wxPrintf( win->GetClassInfo()->GetClassName() );
+        wxPrintf( wxT(" %d %d %d %d\n"),
+                alloc->x,
+                alloc->y,
+                alloc->width,
+                alloc->height );
+#endif
+                
     GTK_PIZZA(win->m_wxwindow)->m_width = alloc->width;
 
     win->m_oldClientWidth = client_width;
@@ -2595,7 +2609,8 @@ void wxWindowGTK::PostCreation()
             g_signal_connect (m_wxwindow, "expose_event",
                               G_CALLBACK (gtk_window_expose_callback), this);
 
-            gtk_widget_set_redraw_on_allocate( GTK_WIDGET(m_wxwindow), HasFlag( wxFULL_REPAINT_ON_RESIZE ) );
+            if (GetLayoutDirection() == wxLayout_LeftToRight)
+                gtk_widget_set_redraw_on_allocate( GTK_WIDGET(m_wxwindow), HasFlag( wxFULL_REPAINT_ON_RESIZE ) );
         }
 
         // Create input method handler
@@ -3727,6 +3742,8 @@ void wxWindowGTK::Refresh( bool eraseBackground, const wxRect *rect )
         {
             p = NULL;
         }
+        
+        p = NULL;
 
         gdk_window_invalidate_rect( GTK_PIZZA(m_wxwindow)->bin_window, p, TRUE );
     }
@@ -3761,6 +3778,20 @@ void wxWindowGTK::GtkUpdate()
     }
 }
 
+bool wxWindowGTK::IsExposed( int x, int y ) const
+{
+    return m_updateRegion.Contains(x, y) != wxOutRegion;
+}
+
+
+bool wxWindowGTK::IsExposed( int x, int y, int w, int h ) const
+{
+    if (GetLayoutDirection() == wxLayout_RightToLeft)
+        return m_updateRegion.Contains(x-w, y, w, h) != wxOutRegion;
+    else
+        return m_updateRegion.Contains(x, y, w, h) != wxOutRegion;
+}
+
 void wxWindowGTK::GtkSendPaintEvents()
 {
     if (!m_wxwindow)
@@ -3772,6 +3803,34 @@ void wxWindowGTK::GtkSendPaintEvents()
     // Clip to paint region in wxClientDC
     m_clipPaintRegion = true;
 
+    wxRegion maybe_rtl_region = m_updateRegion;
+    
+#if 0
+    if (GetLayoutDirection() == wxLayout_RightToLeft)
+    {
+        maybe_rtl_region.Clear();
+        
+        gint width;
+        gdk_window_get_geometry( GTK_PIZZA(m_wxwindow)->bin_window,
+                                 NULL, NULL, &width, NULL, NULL );
+        
+        wxRegionIterator upd( m_updateRegion );
+        while (upd)
+        {
+            wxRect rect;
+            rect.x = upd.GetX();
+            rect.y = upd.GetY();
+            rect.width = upd.GetWidth();
+            rect.height = upd.GetHeight();
+            
+            rect.x = width - rect.x - rect.width;
+            maybe_rtl_region.Union( rect );
+            
+            ++upd;
+        }
+    }
+#endif
+    
     // widget to draw on
     GtkPizza *pizza = GTK_PIZZA (m_wxwindow);
 
@@ -3807,8 +3866,9 @@ void wxWindowGTK::GtkSendPaintEvents()
         }
     }
     else
-
     {
+        m_updateRegion = maybe_rtl_region;
+    
         wxWindowDC dc( (wxWindow*)this );
         dc.SetClippingRegion( m_updateRegion );
 
@@ -3818,6 +3878,8 @@ void wxWindowGTK::GtkSendPaintEvents()
         GetEventHandler()->ProcessEvent(erase_event);
     }
 
+    m_updateRegion = maybe_rtl_region;
+        
     wxNcPaintEvent nc_paint_event( GetId() );
     nc_paint_event.SetEventObject( this );
     GetEventHandler()->ProcessEvent( nc_paint_event );

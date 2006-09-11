@@ -72,6 +72,7 @@ protected:
     virtual void DoSetClippingRegion( wxCoord x, wxCoord y, wxCoord width, wxCoord height );
     virtual void DoSetClippingRegionAsRegion( const wxRegion &region );
 
+
 public:
     virtual wxCoord GetCharWidth() const;
     virtual wxCoord GetCharHeight() const;
@@ -93,6 +94,10 @@ public:
     // Resolution in pixels per logical inch
     virtual wxSize GetPPI() const;
     virtual int GetDepth() const;
+
+    // overrriden here for RTL
+    virtual void SetDeviceOrigin( wxCoord x, wxCoord y );
+    virtual void SetAxisOrientation( bool xLeftRight, bool yBottomUp );
 
 // protected:
     // implementation

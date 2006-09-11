@@ -35,11 +35,6 @@
 #include <gtk/gtk.h>
 #include "wx/gtk/win_gtk.h"
 
-// RR: After a correction to the orientation of the sash
-//     this doesn't seem to be required anymore and it
-//     seems to confuse some themes so USE_ERASE_RECT=0
-#define USE_ERASE_RECT 0
-
 // ----------------------------------------------------------------------------
 // wxRendererGTK: our wxRendererNative implementation
 // ----------------------------------------------------------------------------
@@ -296,9 +291,6 @@ wxRendererGTK::DrawSplitterSash(wxWindow *win,
     const bool isVert = orient == wxVERTICAL;
 
     GdkRectangle rect;
-#if USE_ERASE_RECT
-    GdkRectangle erase_rect;
-#endif
 
     if ( isVert )
     {
@@ -308,13 +300,6 @@ wxRendererGTK::DrawSplitterSash(wxWindow *win,
         rect.y = 0;
         rect.width = full_size;
         rect.height = h;
-
-#if USE_ERASE_RECT
-        erase_rect.x = position;
-        erase_rect.y = 0;
-        erase_rect.width = full_size;
-        erase_rect.height = h;
-#endif
     }
     else // horz
     {
@@ -324,33 +309,11 @@ wxRendererGTK::DrawSplitterSash(wxWindow *win,
         rect.y = position;
         rect.height = full_size;
         rect.width = w;
-
-#if USE_ERASE_RECT
-        erase_rect.y = position;
-        erase_rect.x = 0;
-        erase_rect.height = full_size;
-        erase_rect.width = w;
-#endif
     }
-
-#if USE_ERASE_RECT
-    // we must erase everything first, otherwise the garbage
-    // from the old sash is left when dragging it
-    gtk_paint_flat_box
-    (
-        win->m_wxwindow->style,
-        GTK_PIZZA(win->m_wxwindow)->bin_window,
-        GTK_STATE_NORMAL,
-        GTK_SHADOW_NONE,
-        NULL,
-        win->m_wxwindow,
-        (char *)"viewportbin", // const_cast
-        erase_rect.x,
-        erase_rect.y,
-        erase_rect.width,
-        erase_rect.height
-    );
-#endif
+    
+    int x_diff = 0;
+    if (win->GetLayoutDirection() == wxLayout_RightToLeft)
+        x_diff = rect.width;
 
     gtk_paint_handle
     (
@@ -361,8 +324,8 @@ wxRendererGTK::DrawSplitterSash(wxWindow *win,
         NULL /* no clipping */,
         win->m_wxwindow,
         "paned",
-        rect.x,
-        rect.y,
+        dc.LogicalToDeviceX(rect.x) - x_diff,
+        dc.LogicalToDeviceY(rect.y),
         rect.width,
         rect.height,
         isVert ? GTK_ORIENTATION_VERTICAL : GTK_ORIENTATION_HORIZONTAL

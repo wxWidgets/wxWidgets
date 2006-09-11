@@ -2242,7 +2242,12 @@ void wxGenericTreeCtrl::PaintItem(wxGenericTreeItem *item, wxDC& dc)
 
     if ( image != NO_IMAGE )
     {
-        dc.SetClippingRegion( item->GetX(), item->GetY(), image_w-2, total_h );
+#ifdef __WXGTK__
+        if (GetLayoutDirection() == wxLayout_RightToLeft)
+            dc.SetClippingRegion( item->GetX()+image_w-2, item->GetY(), image_w-2, total_h );
+        else
+#endif
+            dc.SetClippingRegion( item->GetX(), item->GetY(), image_w-2, total_h );
         m_imageListNormal->Draw( image, dc,
                                  item->GetX(),
                                  item->GetY() +((total_h > image_h)?((total_h-image_h)/2):0),

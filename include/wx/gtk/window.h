@@ -119,6 +119,9 @@ public:
                                              wxCoord width,
                                              wxCoord widthTotal) const;
 
+    virtual bool IsExposed( int x, int y ) const;
+    virtual bool IsExposed( int x, int y, int w, int h ) const;
+
     // currently wxGTK2-only
     void SetDoubleBuffered(bool on);
 
