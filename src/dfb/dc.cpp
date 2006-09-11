@@ -201,7 +201,12 @@ void wxDC::DoDrawPoint(wxCoord x, wxCoord y)
 {
     wxCHECK_RET( Ok(), wxT("invalid dc") );
 
-    wxFAIL_MSG( _T("DrawPoint not implemented") );
+    // NB: DirectFB API doesn't provide a function for drawing points, so
+    //     implement it as 1px long line. This is inefficient, but then, so is
+    //     using DrawPoint() for drawing more than a few points.
+    DoDrawLine(x, y, x, y);
+
+    // FIXME_DFB: implement special cases for common formats (RGB24,RGBA/RGB32)
 }
 
 void wxDC::DoDrawPolygon(int n, wxPoint points[], wxCoord xoffset, wxCoord yoffset,int WXUNUSED(fillStyle))
