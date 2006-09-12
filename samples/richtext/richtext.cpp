@@ -267,7 +267,7 @@ bool MyApp::OnInit()
 #endif
 
     // create the main application window
-    MyFrame *frame = new MyFrame(_T("wxRichTextCtrl Sample"), wxID_ANY, wxDefaultPosition, wxSize(600, 500));
+    MyFrame *frame = new MyFrame(_T("wxRichTextCtrl Sample"), wxID_ANY, wxDefaultPosition, wxSize(700, 600));
 
     // and show it (the frames, unlike simple controls, are not shown when
     // created initially)
@@ -519,7 +519,7 @@ MyFrame::MyFrame(const wxString& title, wxWindowID id, const wxPoint& pos,
     }
     else
     {
-        splitter->SplitVertically(m_richTextCtrl, styleListBox, 400);
+        splitter->SplitVertically(m_richTextCtrl, styleListBox, 500);
     }
 
     splitter->UpdateSize();
