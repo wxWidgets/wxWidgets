@@ -131,7 +131,7 @@ class App(wx.PyApp):
         wx.PyApp.__init__(self)
 
         # make sure we can create a GUI
-        if not self.DisplayAvailable():
+        if not self.IsDisplayAvailable():
             
             if wx.Platform == "__WXMAC__":
                 msg = """This program needs access to the screen.
