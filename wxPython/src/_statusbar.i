@@ -110,7 +110,13 @@ public:
             for i in range(len(items)):
                 self.SetStatusText(items[i], i)
     }
-    %property(Fields, GetFields, SetFields);
+    
+    %property(BorderX, GetBorderX, doc="See `GetBorderX`");
+    %property(BorderY, GetBorderY, doc="See `GetBorderY`");
+    %property(FieldRect, GetFieldRect, doc="See `GetFieldRect`");
+    %property(Fields, GetFields, SetFields, doc="See `GetFields` and `SetFields`");
+    %property(FieldsCount, GetFieldsCount, SetFieldsCount, doc="See `GetFieldsCount` and `SetFieldsCount`");
+    %property(StatusText, GetStatusText, SetStatusText, doc="See `GetStatusText` and `SetStatusText`");
 };
 
 

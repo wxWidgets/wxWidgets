@@ -471,6 +471,8 @@ public:
 
     void SetBitmap(const wxBitmap& bitmap);
     wxBitmap& GetBitmap();
+
+    %property(Bitmap, GetBitmap, SetBitmap, doc="See `GetBitmap` and `SetBitmap`");
 };
 
 
@@ -492,6 +494,10 @@ public:
     long GetSplashStyle() const;
     wxSplashScreenWindow* GetSplashWindow() const;
     int GetTimeout() const;
+
+    %property(SplashStyle, GetSplashStyle, doc="See `GetSplashStyle`");
+    %property(SplashWindow, GetSplashWindow, doc="See `GetSplashWindow`");
+    %property(Timeout, GetTimeout, doc="See `GetTimeout`");
 };
 
 

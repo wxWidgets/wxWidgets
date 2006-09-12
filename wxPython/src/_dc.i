@@ -1561,6 +1561,8 @@ output. Default is 720ppi.", "");
     DocDeclStr(
         static int , GetResolution(),
         "Return resolution used in PostScript output.", "");
+
+    %property(PrintData, GetPrintData, SetPrintData, doc="See `GetPrintData` and `SetPrintData`");
 };
 
 //---------------------------------------------------------------------------

@@ -720,6 +720,9 @@ the scrollbar.", "");
 
     void SetOrientation(int orient);
     void SetPosition(int pos);
+    
+    %property(Orientation, GetOrientation, SetOrientation, doc="See `GetOrientation` and `SetOrientation`");
+    %property(Position, GetPosition, SetPosition, doc="See `GetPosition` and `SetPosition`");
 };
 
 
@@ -768,6 +771,9 @@ need to query the window itself for the current position in that case.", "");
 
     void SetOrientation(int orient);
     void SetPosition(int pos);
+
+    %property(Orientation, GetOrientation, SetOrientation, doc="See `GetOrientation` and `SetOrientation`");
+    %property(Position, GetPosition, SetPosition, doc="See `GetPosition` and `SetPosition`");
 };
 
 //---------------------------------------------------------------------------
@@ -1155,6 +1161,9 @@ public:
         bool , HasCursor() const,
         "Returns true if the cursor specified by this event is a valid cursor.", "");
 
+    %property(Cursor, GetCursor, SetCursor, doc="See `GetCursor` and `SetCursor`");
+    %property(X, GetX, doc="See `GetX`");
+    %property(Y, GetY, doc="See `GetY`");
 };
 
 //---------------------------------------------------------------------------
@@ -1472,9 +1481,11 @@ event.", "");
         }
     }
 
-public:
     wxSize m_size;
     wxRect m_rect;
+    
+    %property(Rect, GetRect, SetRect, doc="See `GetRect` and `SetRect`");
+    %property(Size, GetSize, SetSize, doc="See `GetSize` and `SetSize`");
 };
 
 
@@ -1853,6 +1864,7 @@ public:
     void SetShow(bool show);
     bool GetShow() const;
 
+    %property(Show, GetShow, SetShow, doc="See `GetShow` and `SetShow`");
 };
 
 
@@ -2257,6 +2269,7 @@ public:
     void SetChangedWindow(wxWindow* win);
     wxWindow* GetChangedWindow();
 
+    %property(ChangedWindow, GetChangedWindow, SetChangedWindow, doc="See `GetChangedWindow` and `SetChangedWindow`");
 };
 
 //---------------------------------------------------------------------------
@@ -2280,6 +2293,8 @@ public:
         "App should set this if it changes the palette.", "");
 
     bool GetPaletteRealized() const;
+
+    %property(PaletteRealized, GetPaletteRealized, SetPaletteRealized, doc="See `GetPaletteRealized` and `SetPaletteRealized`");    
 };
 
 //---------------------------------------------------------------------------

@@ -36,6 +36,8 @@ public:
     bool Ok();
 
     %pythoncode { def __nonzero__(self): return self.Ok() }
+
+    %property(ColoursCount, GetColoursCount, doc="See `GetColoursCount`");
 };
 
 

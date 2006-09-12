@@ -130,6 +130,14 @@ public:
     // return True if any input is available on the child process stdout/err
     bool IsInputAvailable() const;
     bool IsErrorAvailable() const;
+
+    %property(ErrorStream, GetErrorStream, doc="See `GetErrorStream`");
+    %property(InputStream, GetInputStream, doc="See `GetInputStream`");
+    %property(OutputStream, GetOutputStream, doc="See `GetOutputStream`");
+
+    %property(InputOpened, IsInputOpened);
+    %property(InputAvailable, IsInputAvailable);
+    %property(ErrorAvailable, IsErrorAvailable);
 };
 
 //---------------------------------------------------------------------------
@@ -141,6 +149,9 @@ public:
     int GetPid();
     int GetExitCode();
     int m_pid, m_exitcode;
+    
+    %property(ExitCode, GetExitCode, doc="See `GetExitCode`");
+    %property(Pid, GetPid, doc="See `GetPid`");
 };
 
 

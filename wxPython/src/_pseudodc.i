@@ -578,4 +578,8 @@ a logical operation. wx.INVERT is commonly used for drawing rubber
 bands or moving outlines, since drawing twice reverts to the original
 colour.
 ", "");
+
+    
+    %property(IdBounds, GetIdBounds, SetIdBounds, doc="See `GetIdBounds` and `SetIdBounds`");
+    %property(Len, GetLen, doc="See `GetLen`");
 };

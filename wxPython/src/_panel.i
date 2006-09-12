@@ -197,6 +197,11 @@ public:
     
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
+    
+    %property(ScaleX, GetScaleX, doc="See `GetScaleX`");
+    %property(ScaleY, GetScaleY, doc="See `GetScaleY`");
+    %property(TargetWindow, GetTargetWindow, SetTargetWindow, doc="See `GetTargetWindow` and `SetTargetWindow`");
+    %property(ViewStart, GetViewStart, doc="See `GetViewStart`");
 };
 
     

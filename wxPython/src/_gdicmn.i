@@ -708,6 +708,22 @@ usually, but not necessarily, the larger one.", "");
     __safe_for_unpickling__ = True
     def __reduce__(self):                return (wx.Rect, self.Get())
     }
+
+    
+    %property(Bottom, GetBottom, SetBottom, doc="See `GetBottom` and `SetBottom`");
+    %property(BottomRight, GetBottomRight, SetBottomRight, doc="See `GetBottomRight` and `SetBottomRight`");
+    %property(Height, GetHeight, SetHeight, doc="See `GetHeight` and `SetHeight`");
+    %property(Left, GetLeft, SetLeft, doc="See `GetLeft` and `SetLeft`");
+    %property(Position, GetPosition, SetPosition, doc="See `GetPosition` and `SetPosition`");
+    %property(Right, GetRight, SetRight, doc="See `GetRight` and `SetRight`");
+    %property(Size, GetSize, SetSize, doc="See `GetSize` and `SetSize`");
+    %property(Top, GetTop, SetTop, doc="See `GetTop` and `SetTop`");
+    %property(TopLeft, GetTopLeft, SetTopLeft, doc="See `GetTopLeft` and `SetTopLeft`");
+    %property(Width, GetWidth, SetWidth, doc="See `GetWidth` and `SetWidth`");
+    %property(X, GetX, SetX, doc="See `GetX` and `SetX`");
+    %property(Y, GetY, SetY, doc="See `GetY` and `SetY`");
+
+    %property(Empty, IsEmpty, doc="See `IsEmpty`");
 };
 
 
@@ -857,6 +873,12 @@ public:
     __safe_for_unpickling__ = True
     def __reduce__(self):                return (wx.Point2D, self.Get())
     }
+
+    %property(Floor, GetFloor, doc="See `GetFloor`");
+    %property(Rounded, GetRounded, doc="See `GetRounded`");
+    %property(VectorAngle, GetVectorAngle, SetVectorAngle, doc="See `GetVectorAngle` and `SetVectorAngle`");
+    %property(VectorLength, GetVectorLength, SetVectorLength, doc="See `GetVectorLength` and `SetVectorLength`");
+    
 };
 
 

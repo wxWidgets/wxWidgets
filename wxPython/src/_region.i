@@ -96,6 +96,9 @@ public:
     %Rename(UnionBitmapColour, bool, Union(const wxBitmap& bmp,
                                            const wxColour& transColour,
                                            int   tolerance = 0));
+
+    
+    %property(Box, GetBox, doc="See `GetBox`");
 };
 
 
@@ -126,6 +129,14 @@ public:
             return self->operator bool();
         }
     };
+
+    %property(H, GetH, doc="See `GetH`");
+    %property(Height, GetHeight, doc="See `GetHeight`");
+    %property(Rect, GetRect, doc="See `GetRect`");
+    %property(W, GetW, doc="See `GetW`");
+    %property(Width, GetWidth, doc="See `GetWidth`");
+    %property(X, GetX, doc="See `GetX`");
+    %property(Y, GetY, doc="See `GetY`");
 };
 
 

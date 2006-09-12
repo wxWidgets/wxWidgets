@@ -154,6 +154,19 @@ public:
     void SetPrinterTranslation(long x, long y);
 #endif
 
+    %property(Bin, GetBin, SetBin, doc="See `GetBin` and `SetBin`");
+    %property(Collate, GetCollate, SetCollate, doc="See `GetCollate` and `SetCollate`");
+    %property(Colour, GetColour, SetColour, doc="See `GetColour` and `SetColour`");
+    %property(Duplex, GetDuplex, SetDuplex, doc="See `GetDuplex` and `SetDuplex`");
+    %property(Filename, GetFilename, SetFilename, doc="See `GetFilename` and `SetFilename`");
+    %property(NoCopies, GetNoCopies, SetNoCopies, doc="See `GetNoCopies` and `SetNoCopies`");
+    %property(Orientation, GetOrientation, SetOrientation, doc="See `GetOrientation` and `SetOrientation`");
+    %property(PaperId, GetPaperId, SetPaperId, doc="See `GetPaperId` and `SetPaperId`");
+    %property(PaperSize, GetPaperSize, SetPaperSize, doc="See `GetPaperSize` and `SetPaperSize`");
+    %property(PrintMode, GetPrintMode, SetPrintMode, doc="See `GetPrintMode` and `SetPrintMode`");
+    %property(PrinterName, GetPrinterName, SetPrinterName, doc="See `GetPrinterName` and `SetPrinterName`");
+    %property(PrivData, GetPrivData, SetPrivData, doc="See `GetPrivData` and `SetPrivData`");
+    %property(Quality, GetQuality, SetQuality, doc="See `GetQuality` and `SetQuality`");   
 };
 
 //---------------------------------------------------------------------------
@@ -209,6 +222,24 @@ public:
     void CalculatePaperSizeFromId();
 
     %pythoncode { def __nonzero__(self): return self.Ok() }
+
+    %property(DefaultInfo, GetDefaultInfo, SetDefaultInfo, doc="See `GetDefaultInfo` and `SetDefaultInfo`");
+    %property(DefaultMinMargins, GetDefaultMinMargins, SetDefaultMinMargins, doc="See `GetDefaultMinMargins` and `SetDefaultMinMargins`");
+
+//     %property(EnableHelp, GetEnableHelp, doc="See `GetEnableHelp`");
+//     %property(EnableMargins, GetEnableMargins, doc="See `GetEnableMargins`");
+//     %property(EnableOrientation, GetEnableOrientation, doc="See `GetEnableOrientation`");
+//     %property(EnablePaper, GetEnablePaper, doc="See `GetEnablePaper`");
+//     %property(EnablePrinter, GetEnablePrinter, doc="See `GetEnablePrinter`");
+
+    %property(MarginBottomRight, GetMarginBottomRight, SetMarginBottomRight, doc="See `GetMarginBottomRight` and `SetMarginBottomRight`");
+    %property(MarginTopLeft, GetMarginTopLeft, SetMarginTopLeft, doc="See `GetMarginTopLeft` and `SetMarginTopLeft`");
+    %property(MinMarginBottomRight, GetMinMarginBottomRight, SetMinMarginBottomRight, doc="See `GetMinMarginBottomRight` and `SetMinMarginBottomRight`");
+    %property(MinMarginTopLeft, GetMinMarginTopLeft, SetMinMarginTopLeft, doc="See `GetMinMarginTopLeft` and `SetMinMarginTopLeft`");
+    %property(PaperId, GetPaperId, SetPaperId, doc="See `GetPaperId` and `SetPaperId`");
+    %property(PaperSize, GetPaperSize, SetPaperSize, doc="See `GetPaperSize` and `SetPaperSize`");
+    %property(PrintData, GetPrintData, SetPrintData, doc="See `GetPrintData` and `SetPrintData`");
+    
 };
 
 
@@ -230,6 +261,10 @@ public:
     int ShowModal();
 
     %pythoncode { def Destroy(self): pass }
+
+    %property(PageSetupData, GetPageSetupData, doc="See `GetPageSetupData`");
+    %property(PageSetupDialogData, GetPageSetupDialogData, doc="See `GetPageSetupDialogData`");
+    
 };
 
 //---------------------------------------------------------------------------
@@ -286,6 +321,21 @@ public:
     void SetPrintData(const wxPrintData& printData);
 
     %pythoncode { def __nonzero__(self): return self.Ok() }
+    
+    %property(AllPages, GetAllPages, SetAllPages, doc="See `GetAllPages` and `SetAllPages`");
+    %property(Collate, GetCollate, SetCollate, doc="See `GetCollate` and `SetCollate`");
+//     %property(EnableHelp, GetEnableHelp, doc="See `GetEnableHelp`");
+//     %property(EnablePageNumbers, GetEnablePageNumbers, doc="See `GetEnablePageNumbers`");
+//     %property(EnablePrintToFile, GetEnablePrintToFile, doc="See `GetEnablePrintToFile`");
+//     %property(EnableSelection, GetEnableSelection, doc="See `GetEnableSelection`");
+    %property(FromPage, GetFromPage, SetFromPage, doc="See `GetFromPage` and `SetFromPage`");
+    %property(MaxPage, GetMaxPage, SetMaxPage, doc="See `GetMaxPage` and `SetMaxPage`");
+    %property(MinPage, GetMinPage, SetMinPage, doc="See `GetMinPage` and `SetMinPage`");
+    %property(NoCopies, GetNoCopies, SetNoCopies, doc="See `GetNoCopies` and `SetNoCopies`");
+    %property(PrintData, GetPrintData, SetPrintData, doc="See `GetPrintData` and `SetPrintData`");
+    %property(PrintToFile, GetPrintToFile, SetPrintToFile, doc="See `GetPrintToFile` and `SetPrintToFile`");
+    %property(Selection, GetSelection, SetSelection, doc="See `GetSelection` and `SetSelection`");
+    %property(ToPage, GetToPage, SetToPage, doc="See `GetToPage` and `SetToPage`");
 };
 
 
@@ -314,6 +364,10 @@ public:
     virtual wxDC *GetPrintDC();
 
     %pythoncode { def Destroy(self): pass }
+    
+    %property(PrintDC, GetPrintDC, doc="See `GetPrintDC`");
+    %property(PrintData, GetPrintData, doc="See `GetPrintData`");
+    %property(PrintDialogData, GetPrintDialogData, doc="See `GetPrintDialogData`");
 };
 
 
@@ -348,6 +402,8 @@ public:
     bool GetAbort();
     static wxPrinterError GetLastError();
 
+    %property(Abort, GetAbort, doc="See `GetAbort`");
+    %property(PrintDialogData, GetPrintDialogData, doc="See `GetPrintDialogData`");
 };
 
 
@@ -476,6 +532,14 @@ public:
     %MAKE_BASE_FUNC(Printout, OnEndPrinting);
     %MAKE_BASE_FUNC(Printout, OnPreparePrinting);
     %MAKE_BASE_FUNC(Printout, GetPageInfo);
+
+    
+    %property(DC, GetDC, SetDC, doc="See `GetDC` and `SetDC`");
+    %property(PPIPrinter, GetPPIPrinter, SetPPIPrinter, doc="See `GetPPIPrinter` and `SetPPIPrinter`");
+    %property(PPIScreen, GetPPIScreen, SetPPIScreen, doc="See `GetPPIScreen` and `SetPPIScreen`");
+    %property(PageSizeMM, GetPageSizeMM, SetPageSizeMM, doc="See `GetPageSizeMM` and `SetPageSizeMM`");
+    %property(PageSizePixels, GetPageSizePixels, SetPageSizePixels, doc="See `GetPageSizePixels` and `SetPageSizePixels`");
+    %property(Title, GetTitle, doc="See `GetTitle`");
 };
 
 //---------------------------------------------------------------------------
@@ -518,6 +582,8 @@ public:
     void CreateCanvas();
 
     wxPreviewControlBar* GetControlBar() const;
+
+    %property(ControlBar, GetControlBar, doc="See `GetControlBar`");
 };
 
 
@@ -566,6 +632,9 @@ public:
     void OnFirst();
     void OnLast();
     void OnGoto();
+
+    %property(PrintPreview, GetPrintPreview, doc="See `GetPrintPreview`");
+    %property(ZoomControl, GetZoomControl, SetZoomControl, doc="See `GetZoomControl` and `SetZoomControl`");    
 };
 
 
@@ -630,6 +699,16 @@ public:
     virtual void DetermineScaling();
 
     %pythoncode { def __nonzero__(self): return self.Ok() }
+    
+    %property(Canvas, GetCanvas, SetCanvas, doc="See `GetCanvas` and `SetCanvas`");
+    %property(CurrentPage, GetCurrentPage, SetCurrentPage, doc="See `GetCurrentPage` and `SetCurrentPage`");
+    %property(Frame, GetFrame, SetFrame, doc="See `GetFrame` and `SetFrame`");
+    %property(MaxPage, GetMaxPage, doc="See `GetMaxPage`");
+    %property(MinPage, GetMinPage, doc="See `GetMinPage`");
+    %property(PrintDialogData, GetPrintDialogData, doc="See `GetPrintDialogData`");
+    %property(Printout, GetPrintout, SetPrintout, doc="See `GetPrintout` and `SetPrintout`");
+    %property(PrintoutForPrinting, GetPrintoutForPrinting, doc="See `GetPrintoutForPrinting`");
+    %property(Zoom, GetZoom, SetZoom, doc="See `GetZoom` and `SetZoom`");
 };
 
 

@@ -37,6 +37,8 @@ public:
             delete self;
         }
     }
+
+    %property(ClassName, GetClassName, doc="See `GetClassName`");
 };
 
 

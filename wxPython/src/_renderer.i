@@ -274,7 +274,10 @@ renderer.  Returns the previous renderer used with Set or None.", "");
         virtual wxRendererVersion , GetVersion() const,
         "Returns the version of the renderer.  Will be used for ensuring
 compatibility of dynamically loaded renderers.", "");
+
     
+    %property(SplitterParams, GetSplitterParams, doc="See `GetSplitterParams`");
+    %property(Version, GetVersion, doc="See `GetVersion`");
 };
 
 

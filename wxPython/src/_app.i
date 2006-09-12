@@ -297,7 +297,7 @@ it wasn't found at all.  Raises an exception on non-Windows platforms.", "");
 #endif
 
     %extend {
-        DocStr(DisplayAvailable,
+        DocStr(IsDisplayAvailable,
                "Tests if it is possible to create a GUI in the current environment.
 This will mean different things on the different platforms.
 
@@ -312,10 +312,24 @@ This will mean different things on the different platforms.
 
    * On MS Windows...
 ", "");
-        static bool DisplayAvailable() {
+        static bool IsDisplayAvailable() {
             return wxPyTestDisplayAvailable();
         }
     }
+
+    
+    %property(AppName, GetAppName, SetAppName, doc="See `GetAppName` and `SetAppName`");
+    %property(AssertMode, GetAssertMode, SetAssertMode, doc="See `GetAssertMode` and `SetAssertMode`");
+    %property(ClassName, GetClassName, SetClassName, doc="See `GetClassName` and `SetClassName`");
+    %property(ExitOnFrameDelete, GetExitOnFrameDelete, SetExitOnFrameDelete, doc="See `GetExitOnFrameDelete` and `SetExitOnFrameDelete`");
+    %property(LayoutDirection, GetLayoutDirection, doc="See `GetLayoutDirection`");
+    %property(PrintMode, GetPrintMode, SetPrintMode, doc="See `GetPrintMode` and `SetPrintMode`");
+    %property(TopWindow, GetTopWindow, SetTopWindow, doc="See `GetTopWindow` and `SetTopWindow`");
+    %property(Traits, GetTraits, doc="See `GetTraits`");
+    %property(UseBestVisual, GetUseBestVisual, SetUseBestVisual, doc="See `GetUseBestVisual` and `SetUseBestVisual`");
+    %property(VendorName, GetVendorName, SetVendorName, doc="See `GetVendorName` and `SetVendorName`");
+
+    %property(Active, IsActive);
 };
 
 

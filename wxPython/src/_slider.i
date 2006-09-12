@@ -104,6 +104,16 @@ public:
 
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
+    
+    %property(LineSize, GetLineSize, SetLineSize, doc="See `GetLineSize` and `SetLineSize`");
+    %property(Max, GetMax, SetMax, doc="See `GetMax` and `SetMax`");
+    %property(Min, GetMin, SetMin, doc="See `GetMin` and `SetMin`");
+    %property(PageSize, GetPageSize, SetPageSize, doc="See `GetPageSize` and `SetPageSize`");
+    %property(SelEnd, GetSelEnd, doc="See `GetSelEnd`");
+    %property(SelStart, GetSelStart, doc="See `GetSelStart`");
+    %property(ThumbLength, GetThumbLength, SetThumbLength, doc="See `GetThumbLength` and `SetThumbLength`");
+    %property(TickFreq, GetTickFreq, SetTickFreq, doc="See `GetTickFreq` and `SetTickFreq`");
+    %property(Value, GetValue, SetValue, doc="See `GetValue` and `SetValue`");
 };
 
 //---------------------------------------------------------------------------

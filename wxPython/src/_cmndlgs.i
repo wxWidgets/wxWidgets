@@ -488,6 +488,9 @@ public:
     DocDeclStr(
         void , SetSelection(int sel),
         "Set the current selected item to sel", "");
+
+    %property(Selection, GetSelection, SetSelection, doc="See `GetSelection` and `SetSelection`");
+    %property(StringSelection, GetStringSelection, doc="See `GetStringSelection`");
 };
 
 

@@ -364,7 +364,19 @@ the window may be unsplit even if minimum size is non-zero.", "");
 
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
+    
+    %property(BorderSize, GetBorderSize, SetBorderSize, doc="See `GetBorderSize` and `SetBorderSize`");
+    %property(MinimumPaneSize, GetMinimumPaneSize, SetMinimumPaneSize, doc="See `GetMinimumPaneSize` and `SetMinimumPaneSize`");
+    %property(NeedUpdating, GetNeedUpdating, SetNeedUpdating, doc="See `GetNeedUpdating` and `SetNeedUpdating`");
+    %property(SashGravity, GetSashGravity, SetSashGravity, doc="See `GetSashGravity` and `SetSashGravity`");
+    %property(SashPosition, GetSashPosition, SetSashPosition, doc="See `GetSashPosition` and `SetSashPosition`");
+    %property(SashSize, GetSashSize, SetSashSize, doc="See `GetSashSize` and `SetSashSize`");
+    %property(SplitMode, GetSplitMode, SetSplitMode, doc="See `GetSplitMode` and `SetSplitMode`");
+    %property(Window1, GetWindow1, doc="See `GetWindow1`");
+    %property(Window2, GetWindow2, doc="See `GetWindow2`");
 };
+
+
 
 
 
@@ -409,6 +421,10 @@ EVT_SPLITTER_DCLICK event.", "");
         "Returns the y coordinate of the double-click point in a
 EVT_SPLITTER_DCLICK event.", "");
     
+    %property(SashPosition, GetSashPosition, SetSashPosition, doc="See `GetSashPosition` and `SetSashPosition`");
+    %property(WindowBeingRemoved, GetWindowBeingRemoved, doc="See `GetWindowBeingRemoved`");
+    %property(X, GetX, doc="See `GetX`");
+    %property(Y, GetY, doc="See `GetY`");
 };
 
 

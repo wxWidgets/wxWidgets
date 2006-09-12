@@ -399,6 +399,22 @@ public:
     // -----------------
 
     bool IsOk() const;
+
+    %property(ArchName, GetArchName, doc="See `GetArchName`");
+    %property(Architecture, GetArchitecture, SetArchitecture, doc="See `GetArchitecture` and `SetArchitecture`");
+    %property(Endianness, GetEndianness, SetEndianness, doc="See `GetEndianness` and `SetEndianness`");
+    %property(EndiannessName, GetEndiannessName, doc="See `GetEndiannessName`");
+    %property(OSMajorVersion, GetOSMajorVersion, doc="See `GetOSMajorVersion`");
+    %property(OSMinorVersion, GetOSMinorVersion, doc="See `GetOSMinorVersion`");
+    %property(OperatingSystemFamilyName, GetOperatingSystemFamilyName, doc="See `GetOperatingSystemFamilyName`");
+    %property(OperatingSystemId, GetOperatingSystemId, SetOperatingSystemId, doc="See `GetOperatingSystemId` and `SetOperatingSystemId`");
+    %property(OperatingSystemIdName, GetOperatingSystemIdName, doc="See `GetOperatingSystemIdName`");
+    %property(PortId, GetPortId, SetPortId, doc="See `GetPortId` and `SetPortId`");
+    %property(PortIdName, GetPortIdName, doc="See `GetPortIdName`");
+    %property(PortIdShortName, GetPortIdShortName, doc="See `GetPortIdShortName`");
+    %property(ToolkitMajorVersion, GetToolkitMajorVersion, doc="See `GetToolkitMajorVersion`");
+    %property(ToolkitMinorVersion, GetToolkitMinorVersion, doc="See `GetToolkitMinorVersion`");
+    
 };
 
 

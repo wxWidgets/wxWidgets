@@ -119,6 +119,16 @@ etc).", "");
         wxControl *, GetPickerCtrl(),
         "", "");
 
+
+    %property(InternalMargin, GetInternalMargin, SetInternalMargin, doc="See `GetInternalMargin` and `SetInternalMargin`");
+    %property(PickerCtrl, GetPickerCtrl, doc="See `GetPickerCtrl`");
+    %property(PickerCtrlProportion, GetPickerCtrlProportion, SetPickerCtrlProportion, doc="See `GetPickerCtrlProportion` and `SetPickerCtrlProportion`");
+    %property(TextCtrl, GetTextCtrl, doc="See `GetTextCtrl`");
+    %property(TextCtrlProportion, GetTextCtrlProportion, SetTextCtrlProportion, doc="See `GetTextCtrlProportion` and `SetTextCtrlProportion`");
+
+    %property(TextCtrlGrowable, IsTextCtrlGrowable, SetTextCtrlGrowable, doc="See `IsTextCtrlGrowable` and `SetTextCtrlGrowable`");
+    %property(PickerCtrlGrowable, IsPickerCtrlGrowable, SetPickerCtrlGrowable, doc="See `IsPickerCtrlGrowable` and `SetPickerCtrlGrowable`");
+    
 };
 
 //---------------------------------------------------------------------------

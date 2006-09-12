@@ -532,6 +532,11 @@ public:
     // the distance between two rows
     int GetRowStride() const { return m_stride; }
 
+    %property(Height, GetHeight, doc="See `GetHeight`");
+    %property(Origin, GetOrigin, doc="See `GetOrigin`");
+    %property(RowStride, GetRowStride, doc="See `GetRowStride`");
+    %property(Size, GetSize, doc="See `GetSize`");
+    %property(Width, GetWidth, doc="See `GetWidth`");
 };
 
 

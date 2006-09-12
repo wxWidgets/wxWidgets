@@ -283,6 +283,20 @@ isn't any.", "");
             self->SetUserData(data);
         }
     }
+
+    %property(Border, GetBorder, SetBorder, doc="See `GetBorder` and `SetBorder`");
+    %property(Flag, GetFlag, SetFlag, doc="See `GetFlag` and `SetFlag`");
+    %property(MinSize, GetMinSize, doc="See `GetMinSize`");
+    %property(MinSizeWithBorder, GetMinSizeWithBorder, doc="See `GetMinSizeWithBorder`");
+    %property(Position, GetPosition, doc="See `GetPosition`");
+    %property(Proportion, GetProportion, SetProportion, doc="See `GetProportion` and `SetProportion`");
+    %property(Ratio, GetRatio, SetRatio, doc="See `GetRatio` and `SetRatio`");
+    %property(Rect, GetRect, doc="See `GetRect`");
+    %property(Size, GetSize, doc="See `GetSize`");
+    %property(Sizer, GetSizer, SetSizer, doc="See `GetSizer` and `SetSizer`");
+    %property(Spacer, GetSpacer, SetSpacer, doc="See `GetSpacer` and `SetSpacer`");
+    %property(UserData, GetUserData, SetUserData, doc="See `GetUserData` and `SetUserData`");
+    %property(Window, GetWindow, SetWindow, doc="See `GetWindow` and `SetWindow`");
 };
 
 
@@ -1052,6 +1066,11 @@ the item.", "");
         void , ShowItems(bool show),
         "Recursively call `wx.SizerItem.Show` on all sizer items.", "");
 
+    %property(Children, GetChildren, doc="See `GetChildren`");
+    %property(ContainingWindow, GetContainingWindow, SetContainingWindow, doc="See `GetContainingWindow` and `SetContainingWindow`");
+    %property(MinSize, GetMinSize, SetMinSize, doc="See `GetMinSize` and `SetMinSize`");
+    %property(Position, GetPosition, doc="See `GetPosition`");
+    %property(Size, GetSize, doc="See `GetSize`");
 };
 
 
@@ -1194,6 +1213,7 @@ public:
         wxStaticBox *, GetStaticBox(),
         "Returns the static box associated with this sizer.", "");
 
+    %property(StaticBox, GetStaticBox, doc="See `GetStaticBox`");
 };
 
 //---------------------------------------------------------------------------
@@ -1473,6 +1493,12 @@ specifc manner.", "");
     wxButton* GetNegativeButton() const;
     wxButton* GetCancelButton() const;
     wxButton* GetHelpButton() const;
+
+    %property(AffirmativeButton, GetAffirmativeButton, SetAffirmativeButton, doc="See `GetAffirmativeButton` and `SetAffirmativeButton`");
+    %property(ApplyButton, GetApplyButton, doc="See `GetApplyButton`");
+    %property(CancelButton, GetCancelButton, SetCancelButton, doc="See `GetCancelButton` and `SetCancelButton`");
+    %property(HelpButton, GetHelpButton, doc="See `GetHelpButton`");
+    %property(NegativeButton, GetNegativeButton, SetNegativeButton, doc="See `GetNegativeButton` and `SetNegativeButton`");
 };
 
 

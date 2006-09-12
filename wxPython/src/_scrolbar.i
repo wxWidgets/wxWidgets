@@ -61,6 +61,11 @@ public:
 
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
+
+    %property(PageSize, GetPageSize, doc="See `GetPageSize`");
+    %property(Range, GetRange, doc="See `GetRange`");
+    %property(ThumbPosition, GetThumbPosition, SetThumbPosition, doc="See `GetThumbPosition` and `SetThumbPosition`");
+    %property(ThumbSize, GetThumbSize, doc="See `GetThumbSize`");
 };
 
 //---------------------------------------------------------------------------

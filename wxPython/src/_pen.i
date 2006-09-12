@@ -111,6 +111,14 @@ public:
         bool __ne__(const wxPen* other) { return other ? (*self != *other) : true;  }
     }
     %pythoncode { def __nonzero__(self): return self.Ok() }
+
+    %property(Cap, GetCap, SetCap, doc="See `GetCap` and `SetCap`");
+    %property(Colour, GetColour, SetColour, doc="See `GetColour` and `SetColour`");
+    %property(DashCount, GetDashCount, doc="See `GetDashCount`");
+    %property(Dashes, GetDashes, SetDashes, doc="See `GetDashes` and `SetDashes`");
+    %property(Join, GetJoin, SetJoin, doc="See `GetJoin` and `SetJoin`");
+    %property(Style, GetStyle, SetStyle, doc="See `GetStyle` and `SetStyle`");
+    %property(Width, GetWidth, SetWidth, doc="See `GetWidth` and `SetWidth`");
 };
 
 
