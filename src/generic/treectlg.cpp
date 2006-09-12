@@ -2585,6 +2585,14 @@ void wxGenericTreeCtrl::OnChar( wxKeyEvent &event )
                         event.CmdDown(),
                         is_multiple, extended_select, unselect_others);
 
+    if (GetLayoutDirection() == wxLayout_RightToLeft)
+    {
+        if (event.GetKeyCode() == WXK_RIGHT)
+            event.m_keyCode = WXK_LEFT;
+        else if (event.GetKeyCode() == WXK_LEFT)
+            event.m_keyCode = WXK_RIGHT;
+    }
+
     // + : Expand
     // - : Collaspe
     // * : Expand all/Collapse all

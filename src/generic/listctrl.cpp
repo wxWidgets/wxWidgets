@@ -3264,6 +3264,14 @@ void wxListMainWindow::OnChar( wxKeyEvent &event )
     const int pageSize = GetCountPerPage();
     wxCHECK_RET( pageSize, _T("should have non zero page size") );
 
+    if (GetLayoutDirection() == wxLayout_RightToLeft)
+    {
+        if (event.GetKeyCode() == WXK_RIGHT)
+            event.m_keyCode = WXK_LEFT;
+        else if (event.GetKeyCode() == WXK_LEFT)
+            event.m_keyCode = WXK_RIGHT;
+    }
+
     switch ( event.GetKeyCode() )
     {
         case WXK_UP:
