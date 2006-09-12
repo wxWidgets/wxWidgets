@@ -303,8 +303,8 @@ public:
     bool HasParagraphSpacingAfter() const { return HasFlag(wxTEXT_ATTR_PARA_SPACING_AFTER); }
     bool HasParagraphSpacingBefore() const { return HasFlag(wxTEXT_ATTR_PARA_SPACING_BEFORE); }
     bool HasLineSpacing() const { return HasFlag(wxTEXT_ATTR_LINE_SPACING); }
-    bool HasCharacterStyleName() const { return HasFlag(wxTEXT_ATTR_CHARACTER_STYLE_NAME); }
-    bool HasParagraphStyleName() const { return HasFlag(wxTEXT_ATTR_PARAGRAPH_STYLE_NAME); }
+    bool HasCharacterStyleName() const { return HasFlag(wxTEXT_ATTR_CHARACTER_STYLE_NAME) || !m_characterStyleName.IsEmpty(); }
+    bool HasParagraphStyleName() const { return HasFlag(wxTEXT_ATTR_PARAGRAPH_STYLE_NAME) || !m_paragraphStyleName.IsEmpty(); }
     bool HasBulletStyle() const { return HasFlag(wxTEXT_ATTR_BULLET_STYLE); }
     bool HasBulletNumber() const { return HasFlag(wxTEXT_ATTR_BULLET_NUMBER); }
     bool HasBulletSymbol() const { return HasFlag(wxTEXT_ATTR_BULLET_SYMBOL); }
@@ -399,14 +399,14 @@ public:
 
     void SetFlags(long flags) { m_flags = flags; }
 
-    void SetCharacterStyleName(const wxString& name) { m_characterStyleName = name; }
-    void SetParagraphStyleName(const wxString& name) { m_paragraphStyleName = name; }
-    void SetParagraphSpacingAfter(int spacing) { m_paragraphSpacingAfter = spacing; }
-    void SetParagraphSpacingBefore(int spacing) { m_paragraphSpacingBefore = spacing; }
-    void SetLineSpacing(int spacing) { m_lineSpacing = spacing; }
-    void SetBulletStyle(int style) { m_bulletStyle = style; }
-    void SetBulletNumber(int n) { m_bulletNumber = n; }
-    void SetBulletSymbol(wxChar symbol) { m_bulletSymbol = symbol; }
+    void SetCharacterStyleName(const wxString& name) { m_characterStyleName = name; m_flags |= wxTEXT_ATTR_CHARACTER_STYLE_NAME; }
+    void SetParagraphStyleName(const wxString& name) { m_paragraphStyleName = name; m_flags |= wxTEXT_ATTR_PARAGRAPH_STYLE_NAME; }
+    void SetParagraphSpacingAfter(int spacing) { m_paragraphSpacingAfter = spacing; m_flags |= wxTEXT_ATTR_PARA_SPACING_AFTER; }
+    void SetParagraphSpacingBefore(int spacing) { m_paragraphSpacingBefore = spacing; m_flags |= wxTEXT_ATTR_PARA_SPACING_BEFORE; }
+    void SetLineSpacing(int spacing) { m_lineSpacing = spacing; m_flags |= wxTEXT_ATTR_LINE_SPACING; }
+    void SetBulletStyle(int style) { m_bulletStyle = style; m_flags |= wxTEXT_ATTR_BULLET_STYLE; }
+    void SetBulletNumber(int n) { m_bulletNumber = n; m_flags |= wxTEXT_ATTR_BULLET_NUMBER; }
+    void SetBulletSymbol(wxChar symbol) { m_bulletSymbol = symbol; m_flags |= wxTEXT_ATTR_BULLET_NUMBER; }
 
     const wxColour& GetTextColour() const { return m_colText; }
     const wxColour& GetBackgroundColour() const { return m_colBack; }
@@ -449,8 +449,8 @@ public:
     bool HasParagraphSpacingAfter() const { return (m_flags & wxTEXT_ATTR_PARA_SPACING_AFTER) != 0; }
     bool HasParagraphSpacingBefore() const { return (m_flags & wxTEXT_ATTR_PARA_SPACING_BEFORE) != 0; }
     bool HasLineSpacing() const { return (m_flags & wxTEXT_ATTR_LINE_SPACING) != 0; }
-    bool HasCharacterStyleName() const { return (m_flags & wxTEXT_ATTR_CHARACTER_STYLE_NAME) != 0; }
-    bool HasParagraphStyleName() const { return (m_flags & wxTEXT_ATTR_PARAGRAPH_STYLE_NAME) != 0; }
+    bool HasCharacterStyleName() const { return (m_flags & wxTEXT_ATTR_CHARACTER_STYLE_NAME) != 0 || !m_characterStyleName.IsEmpty(); }
+    bool HasParagraphStyleName() const { return (m_flags & wxTEXT_ATTR_PARAGRAPH_STYLE_NAME) != 0 || !m_paragraphStyleName.IsEmpty(); }
     bool HasBulletStyle() const { return (m_flags & wxTEXT_ATTR_BULLET_STYLE) != 0; }
     bool HasBulletNumber() const { return (m_flags & wxTEXT_ATTR_BULLET_NUMBER) != 0; }
     bool HasBulletSymbol() const { return (m_flags & wxTEXT_ATTR_BULLET_SYMBOL) != 0; }

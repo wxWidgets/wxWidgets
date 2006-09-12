@@ -20,7 +20,7 @@
 #include "wx/caret.h"
 
 #if wxCHECK_VERSION(2,7,0)
-#define wxRICHTEXT_DERIVES_FROM_TEXTCTRLBASE 0
+#define wxRICHTEXT_DERIVES_FROM_TEXTCTRLBASE 1
 #else
 #define wxRICHTEXT_DERIVES_FROM_TEXTCTRLBASE 0
 #endif
@@ -28,6 +28,8 @@
 #if wxRICHTEXT_DERIVES_FROM_TEXTCTRLBASE
 #include "wx/textctrl.h"
 #endif
+
+class WXDLLIMPEXP_RICHTEXT wxRichTextStyleDefinition;
 
 /*!
  * Styles and flags
@@ -508,6 +510,9 @@ public:
     /// Apply alignment to the selection
     virtual bool ApplyAlignmentToSelection(wxTextAttrAlignment alignment);
 
+    /// Apply a named style to the selection
+    virtual void ApplyStyle(wxRichTextStyleDefinition* def);
+
     /// Set style sheet, if any.
     void SetStyleSheet(wxRichTextStyleSheet* styleSheet) { GetBuffer().SetStyleSheet(styleSheet); }
     wxRichTextStyleSheet* GetStyleSheet() const { return GetBuffer().GetStyleSheet(); }
@@ -630,6 +635,11 @@ public:
     void SetCaretPosition(long position, bool showAtLineStart = false) ;
     long GetCaretPosition() const { return m_caretPosition; }
 
+    /// The adjusted caret position is the character position adjusted to take
+    /// into account whether we're at the start of a paragraph, in which case
+    /// style information should be taken from the next position, not current one.
+    long GetAdjustedCaretPosition(long caretPos) const;
+
     /// Move caret one visual step forward: this may mean setting a flag
     /// and keeping the same position if we're going from the end of one line
     /// to the start of the next, which may be the exact same caret position.
@@ -673,6 +683,27 @@ public:
     /// Returns the first visible position in the current view
     long GetFirstVisiblePosition() const;
 
+    /// Returns the caret position since the default formatting was changed. As
+    /// soon as this position changes, we no longer reflect the default style
+    /// in the UI. A value of -2 means that we should only reflect the style of the
+    /// content under the caret.
+    long GetCaretPositionForDefaultStyle() const { return m_caretPositionForDefaultStyle; }
+
+    /// Set the caret position for the default style that the user is selecting.
+    void SetCaretPositionForDefaultStyle(long pos) { m_caretPositionForDefaultStyle = pos; }
+
+    /// Should the UI reflect the default style chosen by the user, rather than the style under
+    /// the caret?
+    bool IsDefaultStyleShowing() const { return m_caretPositionForDefaultStyle != -2; }
+
+    /// Convenience function that tells the control to start reflecting the default
+    /// style, since the user is changing it.
+    void SetAndShowDefaultStyle(const wxRichTextAttr& attr)
+    {
+        SetDefaultStyle(attr);
+        SetCaretPositionForDefaultStyle(GetCaretPosition());
+    }
+
 #if wxRICHTEXT_DERIVES_FROM_TEXTCTRLBASE
      WX_FORWARD_TO_SCROLL_HELPER()
 #endif
@@ -702,6 +733,11 @@ private:
     /// Caret position (1 less than the character position, so -1 is the
     /// first caret position).
     long                    m_caretPosition;
+
+    /// Caret position when the default formatting has been changed. As
+    /// soon as this position changes, we no longer reflect the default style
+    /// in the UI.
+    long                    m_caretPositionForDefaultStyle;
 
     /// Selection range in character positions. -2, -2 means no selection.
     wxRichTextRange         m_selectionRange;

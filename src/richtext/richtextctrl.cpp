@@ -19,6 +19,7 @@
 #if wxUSE_RICHTEXT
 
 #include "wx/richtext/richtextctrl.h"
+#include "wx/richtext/richtextstyles.h"
 
 #ifndef WX_PRECOMP
     #include "wx/settings.h"
@@ -186,6 +187,7 @@ void wxRichTextCtrl::Init()
     m_fullLayoutTime = 0;
     m_fullLayoutSavedPosition = 0;
     m_delayedLayoutThreshold = wxRICHTEXT_DEFAULT_DELAYED_LAYOUT_THRESHOLD;
+    m_caretPositionForDefaultStyle = -2;
 }
 
 /// Call Freeze to prevent refresh
@@ -212,6 +214,7 @@ void wxRichTextCtrl::Clear()
     m_buffer.Reset();
     m_buffer.SetDirty(true);
     m_caretPosition = -1;
+    m_caretPositionForDefaultStyle = -2;
     m_caretAtLineStart = false;
     m_selectionRange.SetRange(-2, -2);
 
@@ -1428,6 +1431,15 @@ void wxRichTextCtrl::OnIdle(wxIdleEvent& event)
         ShowPosition(m_fullLayoutSavedPosition);
         Refresh(false);
     }
+
+    if (m_caretPositionForDefaultStyle != -2)
+    {
+        // If the caret position has changed, no longer reflect the default style
+        // in the UI.
+        if (GetCaretPosition() != m_caretPositionForDefaultStyle)
+            m_caretPositionForDefaultStyle = -2;
+    }
+
     event.Skip();
 }
 
@@ -1968,6 +1980,7 @@ void wxRichTextCtrl::MarkDirty()
 
 void wxRichTextCtrl::DiscardEdits()
 {
+    m_caretPositionForDefaultStyle = -2;
     m_buffer.Modify(false);
     m_buffer.GetCommandProcessor()->ClearCommands();
 }
@@ -2420,9 +2433,12 @@ bool wxRichTextCtrl::IsSelectionBold() const
         // to see what the effect would be if we started typing.
         wxRichTextAttr attr;
         attr.SetFlags(wxTEXT_ATTR_FONT_WEIGHT);
-        if (GetStyle(GetCaretPosition()+1, attr))
+
+        long pos = GetAdjustedCaretPosition(GetCaretPosition());
+        if (GetStyle(pos, attr))
         {
-            wxRichTextApplyStyle(attr, GetDefaultStyleEx());
+            if (IsDefaultStyleShowing())
+                wxRichTextApplyStyle(attr, GetDefaultStyleEx());
             return attr.GetFontWeight() == wxBOLD;
         }
     }
@@ -2447,9 +2463,12 @@ bool wxRichTextCtrl::IsSelectionItalics() const
         // to see what the effect would be if we started typing.
         wxRichTextAttr attr;
         attr.SetFlags(wxTEXT_ATTR_FONT_ITALIC);
-        if (GetStyle(GetCaretPosition()+1, attr))
+
+        long pos = GetAdjustedCaretPosition(GetCaretPosition());
+        if (GetStyle(pos, attr))
         {
-            wxRichTextApplyStyle(attr, GetDefaultStyleEx());
+            if (IsDefaultStyleShowing())
+                wxRichTextApplyStyle(attr, GetDefaultStyleEx());
             return attr.GetFontStyle() == wxITALIC;
         }
     }
@@ -2474,9 +2493,12 @@ bool wxRichTextCtrl::IsSelectionUnderlined() const
         // to see what the effect would be if we started typing.
         wxRichTextAttr attr;
         attr.SetFlags(wxTEXT_ATTR_FONT_UNDERLINE);
-        if (GetStyle(GetCaretPosition()+1, attr))
+
+        long pos = GetAdjustedCaretPosition(GetCaretPosition());
+        if (GetStyle(pos, attr))
         {
-            wxRichTextApplyStyle(attr, GetDefaultStyleEx());
+            if (IsDefaultStyleShowing())
+                wxRichTextApplyStyle(attr, GetDefaultStyleEx());
             return attr.GetFontUnderlined();
         }
     }
@@ -2493,7 +2515,7 @@ bool wxRichTextCtrl::ApplyBoldToSelection()
     if (HasSelection())
         return SetStyle(GetSelectionRange(), attr);
     else
-        SetDefaultStyle(attr);
+        SetAndShowDefaultStyle(attr);
     return true;
 }
 
@@ -2507,7 +2529,7 @@ bool wxRichTextCtrl::ApplyItalicToSelection()
     if (HasSelection())
         return SetStyle(GetSelectionRange(), attr);
     else
-        SetDefaultStyle(attr);
+        SetAndShowDefaultStyle(attr);
     return true;
 }
 
@@ -2521,7 +2543,7 @@ bool wxRichTextCtrl::ApplyUnderlineToSelection()
     if (HasSelection())
         return SetStyle(GetSelectionRange(), attr);
     else
-        SetDefaultStyle(attr);
+        SetAndShowDefaultStyle(attr);
     return true;
 }
 
@@ -2562,13 +2584,35 @@ bool wxRichTextCtrl::ApplyAlignmentToSelection(wxTextAttrAlignment alignment)
     return true;
 }
 
+/// Apply a named style to the selection
+void wxRichTextCtrl::ApplyStyle(wxRichTextStyleDefinition* def)
+{
+    // Flags are defined within each definition, so only certain
+    // attributes are applied.
+    wxRichTextAttr attr(def->GetStyle());
+
+    // Make sure the attr has the style name
+    if (def->IsKindOf(CLASSINFO(wxRichTextParagraphStyleDefinition)))
+        attr.SetParagraphStyleName(def->GetName());
+    else
+        attr.SetCharacterStyleName(def->GetName());
+
+    if (HasSelection())
+        SetStyle(GetSelectionRange(), attr);
+    else
+        SetAndShowDefaultStyle(attr);
+}
+
 /// Sets the default style to the style under the cursor
 bool wxRichTextCtrl::SetDefaultStyleToCursorStyle()
 {
     wxTextAttrEx attr;
     attr.SetFlags(wxTEXT_ATTR_CHARACTER);
 
-    if (GetStyle(GetCaretPosition(), attr))
+    // If at the start of a paragraph, use the next position.
+    long pos = GetAdjustedCaretPosition(GetCaretPosition());
+
+    if (GetStyle(pos, attr))
     {
         SetDefaultStyle(attr);
         return true;
@@ -2585,6 +2629,18 @@ long wxRichTextCtrl::GetFirstVisiblePosition() const
         return line->GetAbsoluteRange().GetStart();
     else
         return 0;
+}
+
+/// The adjusted caret position is the character position adjusted to take
+/// into account whether we're at the start of a paragraph, in which case
+/// style information should be taken from the next position, not current one.
+long wxRichTextCtrl::GetAdjustedCaretPosition(long caretPos) const
+{
+    wxRichTextParagraph* para = GetBuffer().GetParagraphAtPosition(caretPos+1);
+
+    if (para && (caretPos+1 == para->GetRange().GetStart()))
+        caretPos ++;
+    return caretPos;
 }
 
 #endif
