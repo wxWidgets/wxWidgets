@@ -404,13 +404,9 @@ gtk_window_own_expose_callback( GtkWidget *widget,
                                 GdkEventExpose *gdk_event,
                                 wxWindowGTK *win )
 {
-    if (gdk_event->count > 0) return FALSE;
-
-    draw_frame( widget, win );
-
-    (* GTK_WIDGET_CLASS (pizza_parent_class)->expose_event) (widget, gdk_event);
-
-    return TRUE;
+    if (gdk_event->count == 0)
+        draw_frame(widget, win);
+    return false;
 }
 }
 
