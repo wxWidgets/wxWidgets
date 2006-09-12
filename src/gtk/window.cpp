@@ -1286,10 +1286,7 @@ template<typename T> void InitMouseEvent(wxWindowGTK *win,
     if ((win->m_wxwindow) && (win->GetLayoutDirection() == wxLayout_RightToLeft))
     {
         // origin in the upper right corner
-        int virtual_width = win->GetVirtualSize().x;
         int window_width = gtk_pizza_get_rtl_offset( GTK_PIZZA(win->m_wxwindow) );
-        //wxPrintf( wxT("event.m_x %d virtual_width %d window_width %d m_xoffset %d\n"), 
-        //              event.m_x, virtual_width, window_width, GTK_PIZZA(win->m_wxwindow)->m_xoffset );
         event.m_x = window_width - event.m_x;
     }
 
