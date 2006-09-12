@@ -177,7 +177,7 @@ protected:
                                          : m_targetWindow->GetClientSize();
     }
 
-    void GetTargetSize(int *w, int *h)
+    void GetTargetSize(int *w, int *h) const
     {
         wxSize size = GetTargetSize();
         if ( w )
