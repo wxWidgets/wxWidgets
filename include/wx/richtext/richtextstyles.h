@@ -2,9 +2,9 @@
 // Name:        richtextstyles.h
 // Purpose:     Style management for wxRichTextCtrl
 // Author:      Julian Smart
-// Modified by: 
+// Modified by:
 // Created:     2005-09-30
-// RCS-ID:      
+// RCS-ID:
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -22,6 +22,10 @@
 
 #if wxUSE_HTML
 #include "wx/htmllbox.h"
+#endif
+
+#if wxUSE_COMBOCTRL
+#include "wx/combo.h"
 #endif
 
 /*!
@@ -188,9 +192,22 @@ class WXDLLIMPEXP_RICHTEXT wxRichTextStyleListBox: public wxHtmlListBox
     DECLARE_EVENT_TABLE()
 
 public:
+    wxRichTextStyleListBox()
+    {
+        Init();
+    }
     wxRichTextStyleListBox(wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition,
         const wxSize& size = wxDefaultSize, long style = 0);
     virtual ~wxRichTextStyleListBox();
+
+    void Init()
+    {
+        m_styleSheet = NULL;
+        m_richTextCtrl = NULL;
+    }
+
+    bool Create(wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition,
+        const wxSize& size = wxDefaultSize, long style = 0);
 
     /// Creates a suitable HTML fragment for a definition
     wxString CreateHTML(wxRichTextStyleDefinition* def) const;
@@ -203,11 +220,20 @@ public:
     void SetRichTextCtrl(wxRichTextCtrl* ctrl) { m_richTextCtrl = ctrl; }
     wxRichTextCtrl* GetRichTextCtrl() const { return m_richTextCtrl; }
 
-    // Get style for index
+    /// Get style for index
     wxRichTextStyleDefinition* GetStyle(size_t i) const ;
+
+    /// Get index for style name
+    int GetIndexForStyle(const wxString& name) const ;
+
+    /// Set selection for string, returning the index.
+    int SetStyleSelection(const wxString& name);
 
     /// Updates the list
     void UpdateStyles();
+
+    /// Do selection
+    void DoSelection(int i);
 
     /// React to selection
     void OnSelect(wxCommandEvent& event);
@@ -215,13 +241,20 @@ public:
     /// Left click
     void OnLeftDown(wxMouseEvent& event);
 
+    /// Auto-select from style under caret in idle time
+    void OnIdle(wxIdleEvent& event);
+
 #if 0
     virtual wxColour GetSelectedTextColour(const wxColour& colFg) const;
     virtual wxColour GetSelectedTextBgColour(const wxColour& colBg) const;
 #endif
 
-    // Convert units in tends of a millimetre to device units
+    /// Convert units in tends of a millimetre to device units
     int ConvertTenthsMMToPixels(wxDC& dc, int units) const;
+
+    /// Can we set the selection based on the editor caret position?
+    /// Need to override this if being used in a combobox popup
+    virtual bool CanAutoSetSelection() { return true; }
 
 protected:
     /// Returns the HTML for this item
@@ -232,7 +265,117 @@ private:
     wxRichTextStyleSheet*   m_styleSheet;
     wxRichTextCtrl*         m_richTextCtrl;
 };
+
+#if wxUSE_COMBOCTRL
+
+/*!
+ * Style drop-down for a wxComboCtrl
+ */
+
+class wxRichTextStyleComboPopup : public wxRichTextStyleListBox, public wxComboPopup
+{
+public:
+    virtual void Init()
+    {
+        m_itemHere = -1; // hot item in list
+        m_value = -1;
+    }
+
+    virtual bool Create( wxWindow* parent )
+    {
+        return wxRichTextStyleListBox::Create(parent, wxID_ANY,
+                                  wxPoint(0,0), wxDefaultSize,
+                                  wxSIMPLE_BORDER);
+    }
+
+    virtual wxWindow *GetControl() { return this; }
+
+    virtual void SetStringValue( const wxString& s );
+
+    virtual wxString GetStringValue() const;
+
+    /// Can we set the selection based on the editor caret position?
+    // virtual bool CanAutoSetSelection() { return ((m_combo == NULL) || !m_combo->IsPopupShown()); }
+    virtual bool CanAutoSetSelection() { return false; }
+
+    //
+    // Popup event handlers
+    //
+
+    // Mouse hot-tracking
+    void OnMouseMove(wxMouseEvent& event);
+
+    // On mouse left, set the value and close the popup
+    void OnMouseClick(wxMouseEvent& WXUNUSED(event));
+
+protected:
+
+    int             m_itemHere; // hot item in popup
+    int             m_value;
+
+private:
+    DECLARE_EVENT_TABLE()
+};
+
+/*!
+ * wxRichTextStyleComboCtrl
+ * A combo for applying styles.
+ */
+
+class WXDLLIMPEXP_RICHTEXT wxRichTextStyleComboCtrl: public wxComboCtrl
+{
+    DECLARE_CLASS(wxRichTextStyleComboCtrl)
+    DECLARE_EVENT_TABLE()
+
+public:
+    wxRichTextStyleComboCtrl()
+    {
+        Init();
+    }
+
+    wxRichTextStyleComboCtrl(wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition,
+        const wxSize& size = wxDefaultSize, long style = wxCB_READONLY)
+    {
+        Init();
+        Create(parent, id, pos, size, style);
+    }
+
+    virtual ~wxRichTextStyleComboCtrl() {}
+
+    void Init()
+    {
+        m_stylePopup = NULL;
+    }
+
+    bool Create(wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition,
+        const wxSize& size = wxDefaultSize, long style = 0);
+
+    /// Updates the list
+    void UpdateStyles() { m_stylePopup->UpdateStyles(); }
+
+    /// Associates the control with a style manager
+    void SetStyleSheet(wxRichTextStyleSheet* styleSheet) { m_stylePopup->SetStyleSheet(styleSheet); }
+    wxRichTextStyleSheet* GetStyleSheet() const { return m_stylePopup->GetStyleSheet(); }
+
+    /// Associates the control with a wxRichTextCtrl
+    void SetRichTextCtrl(wxRichTextCtrl* ctrl) { m_stylePopup->SetRichTextCtrl(ctrl); }
+    wxRichTextCtrl* GetRichTextCtrl() const { return m_stylePopup->GetRichTextCtrl(); }
+
+    /// Gets the style popup
+    wxRichTextStyleComboPopup* GetStylePopup() const { return m_stylePopup; }
+
+    /// Auto-select from style under caret in idle time
+    void OnIdle(wxIdleEvent& event);
+
+protected:
+    wxRichTextStyleComboPopup*  m_stylePopup;
+};
+
 #endif
+    // wxUSE_COMBOCTRL
+
+#endif
+    // wxUSE_HTML
 
 #endif
     // wxUSE_RICHTEXT

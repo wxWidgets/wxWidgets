@@ -490,6 +490,9 @@ MyFrame::MyFrame(const wxString& title, wxWindowID id, const wxPoint& pos,
     toolBar->AddSeparator();
     toolBar->AddTool(ID_FORMAT_FONT, wxBitmap(font_xpm), wxNullBitmap, false, -1, -1, (wxObject *) NULL, _("Font"));
 
+    wxRichTextStyleComboCtrl* combo = new wxRichTextStyleComboCtrl(toolBar, wxID_ANY, wxDefaultPosition, wxSize(200, -1));
+    toolBar->AddControl(combo);
+
     toolBar->Realize();
 
     wxSplitterWindow* splitter = new wxSplitterWindow(this, wxID_ANY, wxDefaultPosition, GetClientSize(), wxSP_NO_XP_THEME|wxSP_3D|wxSP_LIVE_UPDATE);
@@ -502,6 +505,10 @@ MyFrame::MyFrame(const wxString& title, wxWindowID id, const wxPoint& pos,
     wxFont font(12, wxROMAN, wxNORMAL, wxNORMAL);
 
     m_richTextCtrl->SetFont(font);
+
+    combo->SetStyleSheet(wxGetApp().GetStyleSheet());
+    combo->SetRichTextCtrl(m_richTextCtrl);
+    combo->UpdateStyles();
 
     wxRichTextStyleListBox* styleListBox = new wxRichTextStyleListBox(splitter, wxID_ANY);
 

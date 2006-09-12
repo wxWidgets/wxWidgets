@@ -100,13 +100,20 @@ IMPLEMENT_CLASS(wxRichTextStyleListBox, wxHtmlListBox)
 BEGIN_EVENT_TABLE(wxRichTextStyleListBox, wxHtmlListBox)
     EVT_LISTBOX(wxID_ANY, wxRichTextStyleListBox::OnSelect)
     EVT_LEFT_DOWN(wxRichTextStyleListBox::OnLeftDown)
+    EVT_IDLE(wxRichTextStyleListBox::OnIdle)
 END_EVENT_TABLE()
 
 wxRichTextStyleListBox::wxRichTextStyleListBox(wxWindow* parent, wxWindowID id, const wxPoint& pos,
-    const wxSize& size, long style): wxHtmlListBox(parent, id, pos, size, style)
+    const wxSize& size, long style)
 {
-    m_styleSheet = NULL;
-    m_richTextCtrl = NULL;
+    Init();
+    Create(parent, id, pos, size, style);
+}
+
+bool wxRichTextStyleListBox::Create(wxWindow* parent, wxWindowID id, const wxPoint& pos,
+        const wxSize& size, long style)
+{
+    return wxHtmlListBox::Create(parent, id, pos, size, style);
 }
 
 wxRichTextStyleListBox::~wxRichTextStyleListBox()
@@ -162,6 +169,37 @@ void wxRichTextStyleListBox::UpdateStyles()
         SetItemCount(GetStyleSheet()->GetParagraphStyleCount()+GetStyleSheet()->GetCharacterStyleCount());
         Refresh();
     }
+}
+
+// Get index for style name
+int wxRichTextStyleListBox::GetIndexForStyle(const wxString& name) const
+{
+    if (GetStyleSheet())
+    {
+        int i;
+        for (i = 0; i < (int) GetStyleSheet()->GetParagraphStyleCount(); i++)
+        {
+            wxRichTextParagraphStyleDefinition* def = GetStyleSheet()->GetParagraphStyle(i);
+            if (def->GetName() == name)
+                return i;
+        }
+        for (i = 0; i < (int) GetStyleSheet()->GetCharacterStyleCount(); i++)
+        {
+            wxRichTextCharacterStyleDefinition* def = GetStyleSheet()->GetCharacterStyle(i);
+            if (def->GetName() == name)
+                return i + (int) GetStyleSheet()->GetParagraphStyleCount();
+        }
+    }
+    return -1;
+}
+
+/// Set selection for string
+int wxRichTextStyleListBox::SetStyleSelection(const wxString& name)
+{
+    int i = GetIndexForStyle(name);
+    if (i > -1)
+        SetSelection(i);
+    return i;
 }
 
 // Convert a colour to a 6-digit hex string
@@ -269,24 +307,62 @@ void wxRichTextStyleListBox::OnLeftDown(wxMouseEvent& event)
     wxVListBox::OnLeftDown(event);
 
     int item = HitTest(event.GetPosition());
+    if (item != wxNOT_FOUND)
+        DoSelection(item);
+}
 
+/// Auto-select from style under caret in idle time
+void wxRichTextStyleListBox::OnIdle(wxIdleEvent& event)
+{
+    if (CanAutoSetSelection() && GetRichTextCtrl())
+    {
+        wxRichTextParagraph* para = GetRichTextCtrl()->GetBuffer().GetParagraphAtPosition(GetRichTextCtrl()->GetCaretPosition());
+        wxRichTextObject* obj = GetRichTextCtrl()->GetBuffer().GetLeafObjectAtPosition(GetRichTextCtrl()->GetCaretPosition());
+
+        wxString styleName;
+
+        // Take into account current default style just chosen by user
+        if (GetRichTextCtrl()->IsDefaultStyleShowing())
+        {
+            if (!GetRichTextCtrl()->GetDefaultStyleEx().GetCharacterStyleName().IsEmpty())
+                styleName = GetRichTextCtrl()->GetDefaultStyleEx().GetCharacterStyleName();
+            else if (!GetRichTextCtrl()->GetDefaultStyleEx().GetParagraphStyleName().IsEmpty())
+                styleName = GetRichTextCtrl()->GetDefaultStyleEx().GetParagraphStyleName();
+        }
+        else if (obj && !obj->GetAttributes().GetCharacterStyleName().IsEmpty())
+        {
+            styleName = obj->GetAttributes().GetCharacterStyleName();
+        }
+        else if (para && !para->GetAttributes().GetParagraphStyleName().IsEmpty())
+        {
+            styleName = para->GetAttributes().GetParagraphStyleName();
+        }
+
+        int sel = GetSelection();
+        if (!styleName.IsEmpty())
+        {
+            // Don't do the selection if it's already set
+            if (sel == GetIndexForStyle(styleName))
+                return;
+
+            SetStyleSelection(styleName);
+        }
+        else if (sel != -1)
+            SetSelection(-1);
+    }
+    event.Skip();
+}
+
+/// Do selection
+void wxRichTextStyleListBox::DoSelection(int item)
+{
     if ( item != wxNOT_FOUND )
     {
         wxRichTextStyleDefinition* def = GetStyle(item);
         if (def && GetRichTextCtrl())
         {
-            wxRichTextRange range(m_richTextCtrl->GetInsertionPoint(), m_richTextCtrl->GetInsertionPoint());
-
-            // Flags are defined within each definition, so only certain
-            // attributes are applied.
-            wxRichTextAttr attr(def->GetStyle());
-
-            if (m_richTextCtrl->HasSelection())
-                m_richTextCtrl->SetStyle(m_richTextCtrl->GetSelectionRange(), attr);
-            else
-                m_richTextCtrl->SetDefaultStyle(attr);
-
-            m_richTextCtrl->SetFocus();
+            GetRichTextCtrl()->ApplyStyle(def);
+            GetRichTextCtrl()->SetFocus();
         }
     }
 }
@@ -302,6 +378,150 @@ wxColour wxRichTextStyleListBox::GetSelectedTextBgColour(const wxColour& colBg) 
     return *wxWHITE;
 }
 #endif
+
+#if wxUSE_COMBOCTRL
+
+/*!
+ * Style drop-down for a wxComboCtrl
+ */
+
+
+BEGIN_EVENT_TABLE(wxRichTextStyleComboPopup, wxRichTextStyleListBox)
+    EVT_MOTION(wxRichTextStyleComboPopup::OnMouseMove)
+    EVT_LEFT_DOWN(wxRichTextStyleComboPopup::OnMouseClick)
+END_EVENT_TABLE()
+
+void wxRichTextStyleComboPopup::SetStringValue( const wxString& s )
+{
+    m_value = SetStyleSelection(s);
+}
+
+wxString wxRichTextStyleComboPopup::GetStringValue() const
+{
+    int sel = m_value;
+    if (sel > -1)
+    {
+        wxRichTextStyleDefinition* def = GetStyle(sel);
+        if (def)
+            return def->GetName();
+    }
+    return wxEmptyString;
+}
+
+//
+// Popup event handlers
+//
+
+// Mouse hot-tracking
+void wxRichTextStyleComboPopup::OnMouseMove(wxMouseEvent& event)
+{
+    // Move selection to cursor if it is inside the popup
+
+    int itemHere = wxRichTextStyleListBox::HitTest(event.GetPosition());
+    if ( itemHere >= 0 )
+    {
+        wxRichTextStyleListBox::SetSelection(itemHere);
+        m_itemHere = itemHere;
+    }
+    event.Skip();
+}
+
+// On mouse left, set the value and close the popup
+void wxRichTextStyleComboPopup::OnMouseClick(wxMouseEvent& WXUNUSED(event))
+{
+    if (m_itemHere >= 0)
+        m_value = m_itemHere;
+
+    // Ordering is important, so we don't dismiss this popup accidentally
+    // by setting the focus elsewhere e.g. in DoSelection
+    Dismiss();
+
+    if (m_itemHere >= 0)
+        wxRichTextStyleListBox::DoSelection(m_itemHere);
+}
+
+/*!
+ * wxRichTextStyleComboCtrl
+ * A combo for applying styles.
+ */
+
+IMPLEMENT_CLASS(wxRichTextStyleComboCtrl, wxComboCtrl)
+
+BEGIN_EVENT_TABLE(wxRichTextStyleComboCtrl, wxComboCtrl)
+    EVT_IDLE(wxRichTextStyleComboCtrl::OnIdle)
+END_EVENT_TABLE()
+
+bool wxRichTextStyleComboCtrl::Create(wxWindow* parent, wxWindowID id, const wxPoint& pos,
+        const wxSize& size, long style)
+{
+    if (!wxComboCtrl::Create(parent, id, wxEmptyString, pos, size, style))
+        return false;
+
+    SetPopupMaxHeight(400);
+
+    m_stylePopup = new wxRichTextStyleComboPopup;
+
+    SetPopupControl(m_stylePopup);
+
+    return true;
+}
+
+/// Auto-select from style under caret in idle time
+
+// TODO: must be able to show italic, bold, combinations
+// in style box. Do we have a concept of automatic, temporary
+// styles that are added whenever we wish to show a style
+// that doesn't exist already? E.g. "Bold, Italic, Underline".
+// Word seems to generate these things on the fly.
+// If there's a named style already, it uses e.g. Heading1 + Bold, Italic
+// If you unembolden text in a style that has bold, it uses the
+// term "Not bold".
+// TODO: order styles alphabetically. This means indexes can change,
+// so need a different way to specify selections, i.e. by name.
+
+void wxRichTextStyleComboCtrl::OnIdle(wxIdleEvent& event)
+{
+    if (GetRichTextCtrl() && !IsPopupShown())
+    {
+        wxRichTextParagraph* para = GetRichTextCtrl()->GetBuffer().GetParagraphAtPosition(GetRichTextCtrl()->GetCaretPosition());
+        wxRichTextObject* obj = GetRichTextCtrl()->GetBuffer().GetLeafObjectAtPosition(GetRichTextCtrl()->GetCaretPosition());
+
+        wxString styleName;
+
+        // Take into account current default style just chosen by user
+        if (GetRichTextCtrl()->IsDefaultStyleShowing())
+        {
+            if (!GetRichTextCtrl()->GetDefaultStyleEx().GetCharacterStyleName().IsEmpty())
+                styleName = GetRichTextCtrl()->GetDefaultStyleEx().GetCharacterStyleName();
+            else if (!GetRichTextCtrl()->GetDefaultStyleEx().GetParagraphStyleName().IsEmpty())
+                styleName = GetRichTextCtrl()->GetDefaultStyleEx().GetParagraphStyleName();
+        }
+        else if (obj && !obj->GetAttributes().GetCharacterStyleName().IsEmpty())
+        {
+            styleName = obj->GetAttributes().GetCharacterStyleName();
+        }
+        else if (para && !para->GetAttributes().GetParagraphStyleName().IsEmpty())
+        {
+            styleName = para->GetAttributes().GetParagraphStyleName();
+        }
+
+        wxString currentValue = GetValue();
+        if (!styleName.IsEmpty())
+        {
+            // Don't do the selection if it's already set
+            if (currentValue == styleName)
+                return;
+
+            SetValue(styleName);
+        }
+        else if (!currentValue.IsEmpty())
+            SetValue(wxEmptyString);
+    }
+    event.Skip();
+}
+
+#endif
+    // wxUSE_COMBOCTRL
 
 #endif
     // wxUSE_HTML
