@@ -196,7 +196,7 @@ wx.BitmapFromBufferRGBA factory functions.  They enable loading of an
 image or bitmap directly from a Python object that implements the
 buffer interface, such as strings, arrays, etc.
 
-Added wx.App.DisplayAvailable() which can be used to determine if a
+Added wx.App.IsDisplayAvailable() which can be used to determine if a
 GUI can be created in the current environment.  (Still need an
 implementation for wxMSW...)
 
@@ -232,7 +232,22 @@ restrictions in how/where the toolbar can be used.
 
 Added wx.Window.IsVisible.
 
+Added Python properties for many of the getter/setter methods of wx
+classes.  In order for the names to be predicatble for somebody
+already familiar with wxPython the property names are simply the name
+of the getter with the "Get" dropped.  For example, wx.Window has a
+property named "Size" that maps to GetSize and SetSize.  So far there
+is only one known name conflict using this naming convention, and that
+is wx.KeyEvent.KeyCode, however since KeyCode was formerly a
+compatibility alias for GetKeyCode (and has been for a long time) it
+was decided to just switch it to a property.  If you want to use the
+method then change your calls to event.KeyCode() to
+event.GetKeyCode(), otherwise you can use it as a property just by
+dropping the parentheses.
 
+Updated the C++ code for wx.gizmos.TreeListCtrl from the wxCode
+project.  This has resulted in some minor API changes, most of which
+were handled in the wrapper code.  
 
 
 

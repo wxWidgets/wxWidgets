@@ -684,7 +684,8 @@ if BUILD_GIZMOS:
     location = 'contrib/gizmos'
 
     swig_sources = run_swig(['gizmos.i'], location, GENDIR, PKGDIR,
-                            USE_SWIG, swig_force, swig_args, swig_deps)
+                            USE_SWIG, swig_force, swig_args, swig_deps +
+                            [ '%s/_treelist.i' % location])
 
     ext = Extension('_gizmos',
                     [ '%s/treelistctrl.cpp' % opj(location, 'wxCode/src') ] + swig_sources,
