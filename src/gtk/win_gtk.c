@@ -64,8 +64,7 @@ static void  gtk_pizza_scroll_set_adjustments (GtkPizza      *pizza,
                                                GtkAdjustment *hadj,
                                                GtkAdjustment *vadj);
 
-/* static */
-GtkContainerClass *pizza_parent_class = NULL;
+static GtkWidgetClass* pizza_parent_class;
 
 GtkType
 gtk_pizza_get_type ()
@@ -195,8 +194,6 @@ gtk_pizza_init (GtkPizza *pizza)
     pizza->m_yoffset = 0;
     
     pizza->m_width = -1;
-
-    pizza->external_expose = FALSE;
 }
 
 GtkWidget*
@@ -283,16 +280,6 @@ gtk_pizza_set_shadow_type (GtkPizza        *pizza,
             gtk_widget_queue_draw (GTK_WIDGET (pizza));
         }
     }
-}
-
-void
-gtk_pizza_set_external (GtkPizza  *pizza,
-                        gboolean   expose)
-{
-    g_return_if_fail (pizza != NULL);
-    g_return_if_fail (GTK_IS_PIZZA (pizza));
-
-    pizza->external_expose = expose;
 }
 
 void
@@ -544,8 +531,8 @@ gtk_pizza_unrealize (GtkWidget *widget)
     gdk_window_destroy (pizza->bin_window);
     pizza->bin_window = NULL;
 
-    if (GTK_WIDGET_CLASS (pizza_parent_class)->unrealize)
-       (* GTK_WIDGET_CLASS (pizza_parent_class)->unrealize) (widget);
+    if (pizza_parent_class->unrealize)
+        pizza_parent_class->unrealize(widget);
 }
 
 static void
@@ -642,16 +629,12 @@ gtk_pizza_expose (GtkWidget      *widget,
     g_return_val_if_fail (GTK_IS_PIZZA (widget), FALSE);
     g_return_val_if_fail (event != NULL, FALSE);
 
-    pizza = GTK_PIZZA (widget);
+    pizza = (GtkPizza*)widget;
 
     if (event->window != pizza->bin_window)
         return FALSE;
 
-    /* We handle all expose events in window.cpp now. */
-    if (pizza->external_expose)
-        return FALSE;
-
-    (* GTK_WIDGET_CLASS (pizza_parent_class)->expose_event) (widget, event);
+    pizza_parent_class->expose_event(widget, event);
 
     return FALSE;
 }
@@ -665,7 +648,7 @@ gtk_pizza_style_set(GtkWidget *widget, GtkStyle  *previous_style)
         gtk_style_set_background(widget->style, GTK_PIZZA(widget)->bin_window, GTK_STATE_NORMAL );
     }
 
-    (* GTK_WIDGET_CLASS (pizza_parent_class)->style_set) (widget, previous_style);
+    pizza_parent_class->style_set(widget, previous_style);
 }
 
 static void

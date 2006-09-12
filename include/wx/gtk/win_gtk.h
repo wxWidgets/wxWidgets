@@ -56,8 +56,6 @@ struct _GtkPizza
     gint  m_width;
 
     GdkWindow *bin_window;
-
-    gboolean external_expose;
 };
 
 struct _GtkPizzaClass
@@ -92,10 +90,6 @@ gint       gtk_pizza_get_rtl_offset  (GtkPizza          *pizza);
 WXDLLIMPEXP_CORE
 void       gtk_pizza_set_shadow_type (GtkPizza          *pizza,
                                       GtkMyShadowType    type);
-
-WXDLLIMPEXP_CORE
-void       gtk_pizza_set_external    (GtkPizza          *pizza,
-                                      gboolean           expose);
 
 WXDLLIMPEXP_CORE
 void       gtk_pizza_scroll          (GtkPizza          *pizza,

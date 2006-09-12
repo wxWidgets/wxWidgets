@@ -78,8 +78,6 @@
     #undef HAVE_XIM
 #endif
 
-extern GtkContainerClass *pizza_parent_class;
-
 //-----------------------------------------------------------------------------
 // documentation on internals
 //-----------------------------------------------------------------------------
@@ -513,8 +511,6 @@ gtk_window_expose_callback( GtkWidget *widget,
     win->GtkSendPaintEvents();
 
     // Let parent window draw window-less widgets
-    (* GTK_WIDGET_CLASS (pizza_parent_class)->expose_event) (widget, gdk_event);
-
     return FALSE;
 }
 }
@@ -2603,8 +2599,6 @@ void wxWindowGTK::PostCreation()
         if (!m_noExpose)
         {
             // these get reported to wxWidgets -> wxPaintEvent
-
-            gtk_pizza_set_external( GTK_PIZZA(m_wxwindow), TRUE );
 
             g_signal_connect (m_wxwindow, "expose_event",
                               G_CALLBACK (gtk_window_expose_callback), this);
