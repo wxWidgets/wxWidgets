@@ -3066,6 +3066,28 @@ void wxWindowGTK::DoGetPosition( int *x, int *y ) const
         dy = gtk_pizza_get_yoffset( pizza );
     }
 
+    if (m_x == -1 && m_y == -1)
+    {
+        GdkWindow *source = (GdkWindow *) NULL;
+        if (m_wxwindow)
+            source = GTK_PIZZA(m_wxwindow)->bin_window;
+        else
+            source = m_widget->window;
+
+        if (source)
+        {
+            int org_x = 0;
+            int org_y = 0;
+            gdk_window_get_origin( source, &org_x, &org_y );
+
+            if (GetParent())
+                GetParent()->ScreenToClient(&org_x, &org_y);
+
+            ((wxWindowGTK*) this)->m_x = org_x;
+            ((wxWindowGTK*) this)->m_y = org_y;
+	}
+    }
+
     if (x) (*x) = m_x - dx;
     if (y) (*y) = m_y - dy;
 }
