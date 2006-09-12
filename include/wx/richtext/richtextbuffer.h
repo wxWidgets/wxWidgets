@@ -276,14 +276,14 @@ public:
     void operator= (const wxTextAttr& attr);
 
     // setters
-    void SetCharacterStyleName(const wxString& name) { m_characterStyleName = name; }
-    void SetParagraphStyleName(const wxString& name) { m_paragraphStyleName = name; }
-    void SetParagraphSpacingAfter(int spacing) { m_paragraphSpacingAfter = spacing; }
-    void SetParagraphSpacingBefore(int spacing) { m_paragraphSpacingBefore = spacing; }
-    void SetLineSpacing(int spacing) { m_lineSpacing = spacing; }
-    void SetBulletStyle(int style) { m_bulletStyle = style; }
-    void SetBulletNumber(int n) { m_bulletNumber = n; }
-    void SetBulletSymbol(wxChar symbol) { m_bulletSymbol = symbol; }
+    void SetCharacterStyleName(const wxString& name) { m_characterStyleName = name; SetFlags(GetFlags() | wxTEXT_ATTR_CHARACTER_STYLE_NAME); }
+    void SetParagraphStyleName(const wxString& name) { m_paragraphStyleName = name; SetFlags(GetFlags() | wxTEXT_ATTR_PARAGRAPH_STYLE_NAME); }
+    void SetParagraphSpacingAfter(int spacing) { m_paragraphSpacingAfter = spacing; SetFlags(GetFlags() | wxTEXT_ATTR_PARA_SPACING_AFTER); }
+    void SetParagraphSpacingBefore(int spacing) { m_paragraphSpacingBefore = spacing; SetFlags(GetFlags() | wxTEXT_ATTR_PARA_SPACING_BEFORE); }
+    void SetLineSpacing(int spacing) { m_lineSpacing = spacing; SetFlags(GetFlags() | wxTEXT_ATTR_LINE_SPACING); }
+    void SetBulletStyle(int style) { m_bulletStyle = style; SetFlags(GetFlags() | wxTEXT_ATTR_BULLET_STYLE); }
+    void SetBulletNumber(int n) { m_bulletNumber = n; SetFlags(GetFlags() | wxTEXT_ATTR_BULLET_NUMBER); }
+    void SetBulletSymbol(wxChar symbol) { m_bulletSymbol = symbol; SetFlags(GetFlags() | wxTEXT_ATTR_BULLET_SYMBOL); }
 
     const wxString& GetCharacterStyleName() const { return m_characterStyleName; }
     const wxString& GetParagraphStyleName() const { return m_paragraphStyleName; }
