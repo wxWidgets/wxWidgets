@@ -55,8 +55,6 @@ WX_FORWARD_TO_INPUT_CONSUMER(wxControl)
 void wxControl::Init()
 {
     m_indexAccel = -1;
-
-    m_inputHandler = (wxInputHandler *)NULL;
 }
 
 bool wxControl::Create(wxWindow *parent,
