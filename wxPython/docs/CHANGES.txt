@@ -247,7 +247,7 @@ dropping the parentheses.
 
 Updated the C++ code for wx.gizmos.TreeListCtrl from the wxCode
 project.  This has resulted in some minor API changes, most of which
-were handled in the wrapper code.  
+were worked around in the wrapper code.  
 
 
 
