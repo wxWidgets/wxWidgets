@@ -92,11 +92,16 @@ void wxDC::DoSetClippingRegion(wxCoord cx, wxCoord cy, wxCoord cw, wxCoord ch)
 {
     wxCHECK_RET( Ok(), wxT("invalid dc") );
 
+    wxSize size(GetSize());
+
+    // NB: We intersect the clipping rectangle with surface's area here because
+    //     DirectFB will return an error if you try to set clipping rectangle
+    //     that is partially outside of the surface.
     DFBRegion r;
-    r.x1 = XLOG2DEV(cx);
-    r.y1 = YLOG2DEV(cy);
-    r.x2 = r.x1 + XLOG2DEVREL(cw) - 1;
-    r.y2 = r.y1 + YLOG2DEVREL(ch) - 1;
+    r.x1 = wxMax(0, XLOG2DEV(cx));
+    r.y1 = wxMax(0, YLOG2DEV(cy));
+    r.x2 = wxMin(r.x1 + XLOG2DEVREL(cw), size.x) - 1;
+    r.y2 = wxMin(r.y1 + YLOG2DEVREL(ch), size.y) - 1;
 
     if ( !m_surface->SetClip(&r) )
         return;
