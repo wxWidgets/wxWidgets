@@ -88,7 +88,7 @@ class WXDLLIMPEXP_RICHTEXT wxRichTextStyleDefinition;
 
 class WXDLLIMPEXP_RICHTEXT wxRichTextCtrl:
 #if wxRICHTEXT_DERIVES_FROM_TEXTCTRLBASE
- public wxTextCtrlBase, wxScrollHelper
+ public wxTextCtrlBase, public wxScrollHelper
 #else
  public wxScrolledWindow
 #endif
