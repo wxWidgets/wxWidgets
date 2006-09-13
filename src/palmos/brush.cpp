@@ -29,6 +29,7 @@
     #include "wx/utils.h"
     #include "wx/app.h"
     #include "wx/brush.h"
+    #include "wx/colour.h"
 #endif // WX_PRECOMP
 
 // ----------------------------------------------------------------------------
@@ -108,18 +109,18 @@ WXHANDLE wxBrush::GetResourceHandle() const
 // wxBrush setters
 // ----------------------------------------------------------------------------
 
-void wxBrush::SetColour(const wxColour& col)
+void wxBrush::SetColour(const wxColour& WXUNUSED(col))
 {
 }
 
-void wxBrush::SetColour(unsigned char r, unsigned char g, unsigned char b)
+void wxBrush::SetColour(unsigned char WXUNUSED(r), unsigned char WXUNUSED(g), unsigned char WXUNUSED(b))
 {
 }
 
-void wxBrush::SetStyle(int style)
+void wxBrush::SetStyle(int WXUNUSED(style))
 {
 }
 
-void wxBrush::SetStipple(const wxBitmap& stipple)
+void wxBrush::SetStipple(const wxBitmap& WXUNUSED(stipple))
 {
 }
