@@ -46,7 +46,8 @@ public:
     virtual void DrawHeaderButton(wxWindow *win,
                                   wxDC& dc,
                                   const wxRect& rect,
-                                  int flags = 0);
+                                  int flags = 0,
+                                  wxHeaderButtonParams* params = NULL);
 
     // draw the expanded/collapsed icon for a tree control item
     virtual void DrawTreeItemButton(wxWindow *win,
@@ -183,7 +184,8 @@ void
 wxRendererGTK::DrawHeaderButton(wxWindow *win,
                                 wxDC& dc,
                                 const wxRect& rect,
-                                int flags)
+                                int flags,
+                                wxHeaderButtonParams* params)
 {
 
     GtkWidget *button = GetButtonWidget();
@@ -201,6 +203,8 @@ wxRendererGTK::DrawHeaderButton(wxWindow *win,
         "button",
         dc.LogicalToDeviceX(rect.x), rect.y, rect.width, rect.height
     );
+
+    DrawHeaderButtonContents(win, dc, rect, flags, params);
 }
 
 // draw a ">" or "v" button

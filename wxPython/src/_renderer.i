@@ -34,8 +34,10 @@ enum
     wxCONTROL_CHECKED    = 0x00000040,  // (check/radio button) is checked
     wxCONTROL_CHECKABLE  = 0x00000080,  // (menu) item can be checked
     wxCONTROL_UNDETERMINED = wxCONTROL_CHECKABLE, // (check) undetermined state
+    wxCONTROL_UPICON     = 0x00000100,  // header button has an up arrow icon
+    wxCONTROL_DOWNICON   = 0x00000200,  // header button has a down arrow icon
 
-    wxCONTROL_FLAGS_MASK = 0x000000ff,
+    wxCONTROL_FLAGS_MASK = 0x000002ff,
 
     // this is a pseudo flag not used directly by wxRenderer but rather by some
     // controls internally
@@ -73,6 +75,29 @@ struct wxSplitterRenderParams
 
 
 
+DocStr(wxHeaderButtonParams,
+"Extra (optional) parameters for `wx.RendererNative.DrawHeaderButton`", "");
+
+struct wxHeaderButtonParams
+{
+    wxHeaderButtonParams();
+    ~wxHeaderButtonParams();
+    
+    // So wxColour_helper will be used when assigning to the colour items in the struct
+    %typemap(in) wxColour* (wxColour temp) {
+        $1 = &temp;
+        if ( ! wxColour_helper($input, &$1)) SWIG_fail;
+    }
+    wxColour    m_arrowColour;
+    wxColour    m_selectionColour;
+    wxString    m_labelText;
+    wxFont      m_labelFont;
+    wxColour    m_labelColour;
+    wxBitmap    m_labelBitmap;
+    int         m_labelAlignment;
+};
+
+
 
 DocStr(wxRendererVersion,
 "This simple struct represents the `wx.RendererNative` interface
@@ -102,11 +127,12 @@ struct wxRendererVersion
 
 
 DocStr(wxRendererNative,
-"One of the design principles of wxWidgets is to use the native widgets
-on every platform in order to be as close to the native look and feel
-on every platform.  However there are still cases when some generic
-widgets are needed for various reasons, but it can sometimes take a
-lot of messy work to make them conform to the native LnF.
+"One of the design principles of wxWidgets is to use the native
+widgets on every platform in order to be as close as possible to
+the native look and feel on every platform.  However there are
+still cases when some generic widgets are needed for various
+reasons, but it can sometimes take a lot of messy work to make
+them conform to the native LnF.
 
 The wx.RendererNative class is a collection of functions that have
 platform-specific implementations for drawing certain parts of
@@ -128,12 +154,27 @@ public:
         virtual void , DrawHeaderButton(wxWindow *win,
                                         wxDC& dc,
                                         const wxRect& rect,
-                                        int flags = 0),
+                                        int flags = 0,
+                                        wxHeaderButtonParams* params=NULL),
         "Draw the header control button (such as what is used by `wx.ListCtrl`
 in report mode.)", "");
     
 
-   
+    DocDeclStr(
+        virtual void , DrawHeaderButtonContents(wxWindow *win,
+                                                wxDC& dc,
+                                                const wxRect& rect,
+                                                int flags = 0,
+                                                wxHeaderButtonParams* params=NULL),
+        "Draw the contents of a header control button, (label, sort
+arrows, etc.)  Normally this is only called by `DrawHeaderButton`.", "");
+
+    DocDeclStr(
+        virtual int , GetHeaderButtonHeight(wxWindow *win),
+        "Returns the default height of a header button, either a fixed platform
+height if available, or a generic height based on the window's font.", "");    
+
+
     DocDeclStr(
         virtual void , DrawTreeItemButton(wxWindow *win,
                                           wxDC& dc,

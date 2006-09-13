@@ -55,8 +55,10 @@ enum
     wxCONTROL_CHECKED    = 0x00000040,  // (check/radio button) is checked
     wxCONTROL_CHECKABLE  = 0x00000080,  // (menu) item can be checked
     wxCONTROL_UNDETERMINED = wxCONTROL_CHECKABLE, // (check) undetermined state
+    wxCONTROL_UPICON     = 0x00000100,  // header button has an up arrow icon
+    wxCONTROL_DOWNICON   = 0x00000200,  // header button has a down arrow icon
 
-    wxCONTROL_FLAGS_MASK = 0x000000ff,
+    wxCONTROL_FLAGS_MASK = 0x000002ff,
 
     // this is a pseudo flag not used directly by wxRenderer but rather by some
     // controls internally
@@ -85,6 +87,24 @@ struct WXDLLEXPORT wxSplitterRenderParams
     // true if the splitter changes its appearance when the mouse is over it
     const bool isHotSensitive;
 };
+
+
+// extra optional parameters for DrawHeaderButton
+struct WXDLLEXPORT wxHeaderButtonParams
+{
+    wxHeaderButtonParams()
+        : m_labelAlignment(wxALIGN_LEFT)
+    { }
+    
+    wxColour    m_arrowColour;
+    wxColour    m_selectionColour;
+    wxString    m_labelText;
+    wxFont      m_labelFont;
+    wxColour    m_labelColour;
+    wxBitmap    m_labelBitmap;
+    int         m_labelAlignment;
+};
+
 
 // wxRendererNative interface version
 struct WXDLLEXPORT wxRendererVersion
@@ -131,7 +151,22 @@ public:
     virtual void DrawHeaderButton(wxWindow *win,
                                   wxDC& dc,
                                   const wxRect& rect,
-                                  int flags = 0) = 0;
+                                  int flags = 0,
+                                  wxHeaderButtonParams* params=NULL) = 0;
+
+
+    // Draw the contents of a header control button (label, sort arrows, etc.)
+    // Normally only called by DrawHeaderButton.
+    virtual void DrawHeaderButtonContents(wxWindow *win,
+                                          wxDC& dc,
+                                          const wxRect& rect,
+                                          int flags = 0,
+                                          wxHeaderButtonParams* params=NULL) = 0;
+
+    // Returns the default height of a header button, either a fixed platform
+    // height if available, or a generic height based on the window's font.
+    virtual int GetHeaderButtonHeight(wxWindow *win) = 0;
+
 
     // draw the expanded/collapsed icon for a tree control item
     virtual void DrawTreeItemButton(wxWindow *win,
@@ -264,8 +299,21 @@ public:
     virtual void DrawHeaderButton(wxWindow *win,
                                   wxDC& dc,
                                   const wxRect& rect,
-                                  int flags = 0)
-        { m_rendererNative.DrawHeaderButton(win, dc, rect, flags); }
+                                  int flags = 0,
+                                  wxHeaderButtonParams* params = NULL)
+        { m_rendererNative.DrawHeaderButton(win, dc, rect, flags, params); }
+
+    
+    virtual void DrawHeaderButtonContents(wxWindow *win,
+                                          wxDC& dc,
+                                          const wxRect& rect,
+                                          int flags = 0,
+                                          wxHeaderButtonParams* params = NULL)
+        { m_rendererNative.DrawHeaderButtonContents(win, dc, rect, flags, params); }
+
+    
+    virtual int GetHeaderButtonHeight(wxWindow *win)
+        { return m_rendererNative.GetHeaderButtonHeight(win); }
 
     virtual void DrawTreeItemButton(wxWindow *win,
                                     wxDC& dc,

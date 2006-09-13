@@ -68,6 +68,12 @@
     #define HIS_NORMAL          1
     #define HIS_HOT             2
     #define HIS_PRESSED         3
+
+    #define TMT_HEIGHT          2417
+
+    #define HP_HEADERSORTARROW  4
+    #define HSAS_SORTEDUP       1
+    #define HSAS_SORTEDDOWN     2
 #endif
 
 #if defined(__WXWINCE__) && !defined(DFCS_FLAT)
@@ -113,9 +119,12 @@ public:
     static wxRendererNative& Get();
 
     virtual void DrawHeaderButton(wxWindow *win,
-                                    wxDC& dc,
-                                    const wxRect& rect,
-                                    int flags = 0);
+                                  wxDC& dc,
+                                  const wxRect& rect,
+                                  int flags = 0,
+                                  wxHeaderButtonParams* params = NULL);
+    virtual int GetHeaderButtonHeight(wxWindow *win);
+    
     virtual void DrawTreeItemButton(wxWindow *win,
                                     wxDC& dc,
                                     const wxRect& rect,
@@ -276,12 +285,13 @@ void
 wxRendererXP::DrawHeaderButton(wxWindow *win,
                                wxDC& dc,
                                const wxRect& rect,
-                               int flags)
+                               int flags,
+                               wxHeaderButtonParams* params)
 {
     wxUxThemeHandle hTheme(win, L"HEADER");
     if ( !hTheme )
     {
-        m_rendererNative.DrawHeaderButton(win, dc, rect, flags);
+        m_rendererNative.DrawHeaderButton(win, dc, rect, flags, params);
         return;
     }
 
@@ -304,7 +314,40 @@ wxRendererXP::DrawHeaderButton(wxWindow *win,
                                 &r,
                                 NULL
                             );
+
+    // NOTE: Using the theme to draw HP_HEADERSORTARROW doesn't do anything.
+    // Why?  If this can be fixed then draw the sort arrows using the theme
+    // and then clear those flags before calling DrawHeaderButtonContents.
+    
+    // Add any extras that are specified in flags and params
+    DrawHeaderButtonContents(win, dc, rect, flags, params);
 }
+
+
+int
+wxRendererXP::GetHeaderButtonHeight(wxWindow *win)
+{
+    wxUxThemeHandle hTheme(win, L"HEADER");
+    if ( !hTheme )
+    {
+        return m_rendererNative.GetHeaderButtonHeight(win);
+    }
+    
+    HRESULT hr;
+    int value = -1;
+    
+    hr = wxUxThemeEngine::Get()->GetThemeMetric( hTheme,
+                                                 NULL,
+                                                 HP_HEADERITEM,
+                                                 HIS_NORMAL,
+                                                 TMT_HEIGHT,
+                                                 &value );
+    if ( hr == S_OK )
+        return value;
+    else
+        return 20;
+}
+
 
 void
 wxRendererXP::DrawTreeItemButton(wxWindow *win,

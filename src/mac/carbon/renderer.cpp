@@ -36,8 +36,11 @@ public:
     virtual void DrawHeaderButton( wxWindow *win,
         wxDC& dc,
         const wxRect& rect,
-        int flags = 0 );
+        int flags = 0,
+        wxHeaderButtonParams* params = NULL );
 
+    virtual int GetHeaderButtonHeight(wxWindow *win);
+    
     // draw the expanded/collapsed icon for a tree control item
     virtual void DrawTreeItemButton( wxWindow *win,
         wxDC& dc,
@@ -125,14 +128,11 @@ wxRendererNative& wxRendererNative::GetDefault()
 void wxRendererMac::DrawHeaderButton( wxWindow *win,
     wxDC& dc,
     const wxRect& rect,
-    int flags )
+    int flags,
+    wxHeaderButtonParams* params )
 {
-    int major, minor;
-
-    wxGetOsVersion( &major, &minor );
-
-    const wxCoord x = dc.XLOG2DEV(rect.x - 1);
-    const wxCoord y = dc.YLOG2DEV(rect.y - 1);
+    const wxCoord x = dc.XLOG2DEV(rect.x /*- 1*/);
+    const wxCoord y = dc.YLOG2DEV(rect.y /*- 1*/);
     const wxCoord w = dc.XLOG2DEVREL(rect.width);
     const wxCoord h = dc.YLOG2DEVREL(rect.height);
 
@@ -179,11 +179,28 @@ void wxRendererMac::DrawHeaderButton( wxWindow *win,
 
             memset( &drawInfo, 0, sizeof(drawInfo) );
             drawInfo.version = 0;
-            drawInfo.state = (flags & wxCONTROL_DISABLED) ? kThemeStateInactive : kThemeStateActive;
             drawInfo.kind = kThemeListHeaderButton;
-            drawInfo.value = 0;
+            drawInfo.state = (flags & wxCONTROL_DISABLED) ? kThemeStateInactive : kThemeStateActive;
+            drawInfo.value = (flags & wxCONTROL_SELECTED) ? kThemeButtonOn : kThemeButtonOff;
             drawInfo.adornment = kThemeAdornmentNone;
+
+            // The down arrow is drawn automatically, change it to an up arrow if needed.
+            if ( flags & wxCONTROL_UPICON )
+                drawInfo.adornment = kThemeAdornmentHeaderButtonSortUp;
+                
             HIThemeDrawButton( &headerRect, &drawInfo, cgContext, kHIThemeOrientationNormal, &labelRect );
+
+            // If we don't want any arrows we need to draw over the one already there
+            if ( (flags & wxCONTROL_SELECTED) && !(flags & (wxCONTROL_UPICON|wxCONTROL_DOWNICON)) )
+            {
+                // clip to the header rectangle
+                CGContextSaveGState( cgContext );
+                CGContextClipToRect( cgContext, headerRect );
+                // but draw bigger than that so the arrow will get clipped off
+                headerRect.size.width += 25;
+                HIThemeDrawButton( &headerRect, &drawInfo, cgContext, kHIThemeOrientationNormal, &labelRect );
+                CGContextRestoreGState( cgContext );
+            }                
         }
 
 #if wxMAC_USE_CORE_GRAPHICS
@@ -191,7 +208,33 @@ void wxRendererMac::DrawHeaderButton( wxWindow *win,
         QDEndCGContext( (CGrafPtr) dc.m_macPort, &cgContext );
 #endif
     }
+
+    // Reserve room for the arrows before writing the label, and turn off the
+    // flags we've already handled
+    wxRect newRect(rect);
+    if ( (flags & wxCONTROL_SELECTED) && (flags & (wxCONTROL_UPICON|wxCONTROL_DOWNICON)) )
+    {
+        newRect.width -= 12;
+    }
+    flags &= ~(wxCONTROL_SELECTED | wxCONTROL_UPICON | wxCONTROL_DOWNICON);
+
+    DrawHeaderButtonContents(win, dc, newRect, flags, params);
 }
+
+
+int wxRendererMac::GetHeaderButtonHeight(wxWindow* WXUNUSED(win))
+{
+    SInt32		standardHeight;
+    OSStatus		errStatus;
+
+    errStatus = GetThemeMetric( kThemeMetricListHeaderHeight, &standardHeight );
+    if (errStatus == noErr)
+    {
+        return standardHeight;
+    }
+    return -1;
+}
+
 
 void wxRendererMac::DrawTreeItemButton( wxWindow *win,
     wxDC& dc,
