@@ -16,12 +16,13 @@
     #include <stdio.h>
     #include "wx/pen.h"
     #include "wx/brush.h"
-    #include "wx/fontutil.h"
     #include "wx/gdicmn.h"
     #include "wx/window.h"
     #include "wx/settings.h"
     #include "wx/module.h"
 #endif
+
+#include "wx/fontutil.h"
 
 #include "wx/os2/private.h"
 
@@ -206,7 +207,7 @@ wxColour wxSystemSettingsNative::GetColour(
 // fonts
 // ----------------------------------------------------------------------------
 
-wxFont wxCreateFontFromStockObject(int index)
+wxFont wxCreateFontFromStockObject(int WXUNUSED(index))
 {
     wxFont font;
 
