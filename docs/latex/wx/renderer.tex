@@ -75,6 +75,9 @@ enum
     wxCONTROL_CHECKED    = 0x00000040,  // (check/radio button) is checked
     wxCONTROL_CHECKABLE  = 0x00000080,  // (menu) item can be checked
     wxCONTROL_UNDETERMINED = wxCONTROL_CHECKABLE  // (check) undetermined state
+    wxCONTROL_UPICON     = 0x00000100,  // header button has an up arrow icon
+    wxCONTROL_DOWNICON   = 0x00000200,  // header button has a down arrow icon
+
 };
 \end{verbatim}
 
@@ -131,7 +134,7 @@ rectangle of a drop down button which arrow matches the size you need.
 
 \membersection{wxRendererNative::DrawHeaderButton}\label{wxrenderernativedrawheaderbutton}
 
-\func{void}{DrawHeaderButton}{\param{wxWindow* }{win}, \param{wxDC\& }{dc}, \param{const wxRect\& }{rect}, \param{int }{flags = 0}}
+\func{void}{DrawHeaderButton}{\param{wxWindow* }{win}, \param{wxDC\& }{dc}, \param{const wxRect\& }{rect}, \param{int }{flags = 0}, \param{wxHeaderButtonParams* }{params = NULL}}
 
 Draw the header control button (used by \helpref{wxListCtrl}{wxlistctrl}).
 
@@ -195,6 +198,14 @@ method may be different from the return value of \helpref{Get}{wxrenderernativeg
 Return the generic implementation of the renderer. Under some platforms, this
 is the default renderer implementation, others have platform-specific default
 renderer which can be retrieved by calling \helpref{GetDefault}{wxrenderernativegetdefault}.
+
+
+\membersection{wxRendererNative::GetHeaderButtonHeight}\label{wxrenderernativegetheaderbuttonheight}
+
+\func{int}{GetHeaderButtonHeight}{\param{const wxWindow* }{win}}
+
+Returns the height of a header button, either a fixed platform height if available, or a 
+generic height based on the window's font.
 
 
 \membersection{wxRendererNative::GetSplitterParams}\label{wxrenderernativegetsplitterparams}
