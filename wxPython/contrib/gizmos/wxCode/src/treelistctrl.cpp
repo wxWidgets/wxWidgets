@@ -1112,7 +1112,7 @@ void wxTreeListHeaderWindow::DoDrawRect( wxDC *dc, int x, int y, int w, int h )
     dc->DrawRectangle( x, y+h, w+1, 1 );          // bottom (outer)
 
 #if defined( __WXMAC__  )
-    wxPen pen( wxColour( 0x88 , 0x88 , 0x88 ), 1, wxSOLID );
+    pen = wxPen( wxColour( 0x88 , 0x88 , 0x88 ), 1, wxSOLID );
 #endif
     dc->SetPen( pen );
     dc->DrawLine( x+w-m_corner, y, x+w-1, y+h );  // right (inner)
