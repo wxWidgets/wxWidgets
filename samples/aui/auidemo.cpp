@@ -813,7 +813,7 @@ MyFrame::MyFrame(wxWindow* parent,
                   CenterPane());
 
     m_mgr.AddPane(CreateNotebook(), wxPaneInfo().Name(wxT("notebook_content")).
-                  CenterPane());
+                  CenterPane().PaneBorder(false));
 
     // add the toolbars to the manager
 
@@ -1207,7 +1207,7 @@ wxHtmlWindow* MyFrame::CreateHTMLCtrl()
 wxAuiMultiNotebook* MyFrame::CreateNotebook()
 {
    wxAuiMultiNotebook* ctrl = new wxAuiMultiNotebook( this, wxID_ANY,
-                                    wxDefaultPosition, wxSize(400,300) );
+                                    wxDefaultPosition, wxSize(400,300), wxNO_BORDER );
                                     
    wxPanel *panel = new wxPanel( ctrl, wxID_ANY );
    wxFlexGridSizer *flex = new wxFlexGridSizer( 2 );
@@ -1216,7 +1216,7 @@ wxAuiMultiNotebook* MyFrame::CreateNotebook()
    flex->AddGrowableCol( 1 );
    flex->Add( 5,5 );   flex->Add( 5,5 );
    flex->Add( new wxStaticText( panel, -1, wxT("wxTextCtrl:") ), 0, wxALL|wxALIGN_CENTRE, 5 );
-   flex->Add( new wxTextCtrl( panel, -1, wxT(""), wxDefaultPosition, wxSize(100,-1) ), 
+   flex->Add( new wxTextCtrl( panel, -1, wxT(""), wxDefaultPosition, wxSize(100,-1)), 
                 1, wxALL|wxALIGN_CENTRE, 5 );
    flex->Add( new wxStaticText( panel, -1, wxT("wxSpinCtrl:") ), 0, wxALL|wxALIGN_CENTRE, 5 );
    flex->Add( new wxSpinCtrl( panel, -1, wxT("5"), wxDefaultPosition, wxSize(100,-1), 
@@ -1226,10 +1226,10 @@ wxAuiMultiNotebook* MyFrame::CreateNotebook()
    ctrl->AddPage( panel, wxT("wxPanel") );
    
    ctrl->AddPage( new wxTextCtrl( ctrl, wxID_ANY, wxT("Some text"),
-                wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE) , wxT("wxTextCtrl I") );
+                wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE|wxNO_BORDER) , wxT("wxTextCtrl I") );
                 
    ctrl->AddPage( new wxTextCtrl( ctrl, wxID_ANY, wxT("Some more text"),
-                wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE) , wxT("wxTextCtrl II") );
+                wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE|wxNO_BORDER) , wxT("wxTextCtrl II") );
    
    return ctrl;
 }
