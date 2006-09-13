@@ -81,6 +81,21 @@ directions but if \arg{dir} includes only \texttt{wxVERTICAL} or only
 the other component of its position remains unchanged.
 
 
+\membersection{wxRect::Contains}\label{wxrectcontains}
+
+\constfunc{bool}{Contains}{\param{int }{x}, \param{int }{y}}
+
+\constfunc{bool}{Contains}{\param{const wxPoint\& }{pt}}
+
+Returns {\tt true} if the given point is inside the rectangle (or on its
+boundary) and {\tt false} otherwise.
+
+\constfunc{bool}{Contains}{\param{const wxRect\& }{rect}}
+
+Returns \true if the given rectangle is completely inside this rectangle
+(or touches its boundary) and \false otherwise.
+
+
 \membersection{wxRect::Deflate}\label{wxrectdeflate}
 
 \func{void}{Deflate}{\param{wxCoord }{dx}, \param{wxCoord }{dy}}
@@ -233,20 +248,6 @@ means:
 
 \helpref{Deflate}{wxrectdeflate}
 
-
-\membersection{wxRect::Inside}\label{wxrectinside}
-
-\constfunc{bool}{Inside}{\param{int }{x}, \param{int }{y}}
-
-\constfunc{bool}{Inside}{\param{const wxPoint\& }{pt}}
-
-Returns {\tt true} if the given point is inside the rectangle (or on its
-boundary) and {\tt false} otherwise.
-
-\constfunc{bool}{Inside}{\param{const wxRect\& }{rect}}
-
-Returns \true if the given rectangle is completely inside this rectangle
-(or touches its boundary) and \false otherwise.
 
 \membersection{wxRect::Intersects}\label{wxrectintersects}
 
