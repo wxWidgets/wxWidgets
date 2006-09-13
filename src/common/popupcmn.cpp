@@ -373,7 +373,7 @@ void wxPopupTransientWindow::OnIdle(wxIdleEvent& event)
         wxPoint pos = ScreenToClient(wxGetMousePosition());
         wxRect rect(GetSize());
 
-        if ( rect.Inside(pos) )
+        if ( rect.Contains(pos) )
         {
             if ( m_child->HasCapture() )
             {

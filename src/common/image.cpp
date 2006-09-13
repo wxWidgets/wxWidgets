@@ -999,8 +999,8 @@ void wxImage::SetRGB( const wxRect& rect_, unsigned char r, unsigned char g, uns
     }
     else
     {
-        wxCHECK_RET( imageRect.Inside(rect.GetTopLeft()) &&
-                     imageRect.Inside(rect.GetBottomRight()),
+        wxCHECK_RET( imageRect.Contains(rect.GetTopLeft()) &&
+                     imageRect.Contains(rect.GetBottomRight()),
                      wxT("invalid bounding rectangle") );
     }
 

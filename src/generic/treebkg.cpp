@@ -743,7 +743,7 @@ int wxTreebook::HitTest(wxPoint const & pt, long * flags) const
     const wxPoint treePt = tree->ScreenToClient(ClientToScreen(pt));
 
     // is it over the tree?
-    if ( wxRect(tree->GetSize()).Inside(treePt) )
+    if ( wxRect(tree->GetSize()).Contains(treePt) )
     {
         int flagsTree;
         wxTreeItemId id = tree->HitTest(treePt, flagsTree);
@@ -769,7 +769,7 @@ int wxTreebook::HitTest(wxPoint const & pt, long * flags) const
     }
     else // not over the tree
     {
-        if ( flags && GetPageRect().Inside( pt ) )
+        if ( flags && GetPageRect().Contains( pt ) )
             *flags |= wxBK_HITTEST_ONPAGE;
     }
 

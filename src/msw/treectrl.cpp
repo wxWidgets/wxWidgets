@@ -2056,7 +2056,7 @@ WXLRESULT wxTreeCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lPara
         GetBoundingRect(event.m_item, ItemRect, false);
         // If the point is inside the bounding rectangle, use it as the click position.
         // This should be the case for WM_CONTEXTMENU as the result of a right-click
-        if (ItemRect.Inside(MenuPoint))
+        if (ItemRect.Contains(MenuPoint))
         {
             event.m_pointDrag = MenuPoint;
         }

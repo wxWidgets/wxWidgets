@@ -210,8 +210,8 @@ void wxTopLevelWindowBase::DoCentre(int dir)
         // parent frame under Mac but could happen elsewhere too if the frame
         // was hidden/moved away for some reason), don't use it as otherwise
         // this window wouldn't be visible at all
-        if ( !rectDisplay.Inside(rectParent.GetTopLeft()) &&
-                !rectParent.Inside(rectParent.GetBottomRight()) )
+        if ( !rectDisplay.Contains(rectParent.GetTopLeft()) &&
+                !rectParent.Contains(rectParent.GetBottomRight()) )
         {
             // this is enough to make IsEmpty() test below pass
             rectParent.width = 0;
@@ -235,9 +235,9 @@ void wxTopLevelWindowBase::DoCentre(int dir)
     // we don't want to place the window off screen if Centre() is called as
     // this is (almost?) never wanted and it would be very difficult to prevent
     // it from happening from the user code if we didn't check for it here
-    if ( rectDisplay.Inside(rect.GetTopLeft()) )
+    if ( rectDisplay.Contains(rect.GetTopLeft()) )
     {
-        if ( !rectDisplay.Inside(rect.GetBottomRight()) )
+        if ( !rectDisplay.Contains(rect.GetBottomRight()) )
         {
             // check if we can move the window so that the bottom right corner
             // is visible without hiding the top left one

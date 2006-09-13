@@ -329,9 +329,9 @@ wxScrollArrows::Arrow wxSpinButton::HitTest(const wxPoint& pt) const
     wxRect rectArrow1, rectArrow2;
     CalcArrowRects(&rectArrow1, &rectArrow2);
 
-    if ( rectArrow1.Inside(pt) )
+    if ( rectArrow1.Contains(pt) )
         return wxScrollArrows::Arrow_First;
-    else if ( rectArrow2.Inside(pt) )
+    else if ( rectArrow2.Contains(pt) )
         return wxScrollArrows::Arrow_Second;
     else
         return wxScrollArrows::Arrow_None;

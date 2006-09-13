@@ -3707,7 +3707,7 @@ int wxWin32Renderer::HitTestFrame(const wxRect& rect, const wxPoint& pt, int fla
 {
     wxRect client = GetFrameClientArea(rect, flags);
 
-    if ( client.Inside(pt) )
+    if ( client.Contains(pt) )
         return wxHT_TOPLEVEL_CLIENT_AREA;
 
     if ( flags & wxTOPLEVEL_TITLEBAR )
@@ -3716,7 +3716,7 @@ int wxWin32Renderer::HitTestFrame(const wxRect& rect, const wxPoint& pt, int fla
 
         if ( flags & wxTOPLEVEL_ICON )
         {
-            if ( wxRect(client.GetPosition(), GetFrameIconSize()).Inside(pt) )
+            if ( wxRect(client.GetPosition(), GetFrameIconSize()).Contains(pt) )
                 return wxHT_TOPLEVEL_ICON;
         }
 
@@ -3726,31 +3726,31 @@ int wxWin32Renderer::HitTestFrame(const wxRect& rect, const wxPoint& pt, int fla
 
         if ( flags & wxTOPLEVEL_BUTTON_CLOSE )
         {
-            if ( btnRect.Inside(pt) )
+            if ( btnRect.Contains(pt) )
                 return wxHT_TOPLEVEL_BUTTON_CLOSE;
             btnRect.x -= FRAME_BUTTON_WIDTH + 2;
         }
         if ( flags & wxTOPLEVEL_BUTTON_MAXIMIZE )
         {
-            if ( btnRect.Inside(pt) )
+            if ( btnRect.Contains(pt) )
                 return wxHT_TOPLEVEL_BUTTON_MAXIMIZE;
             btnRect.x -= FRAME_BUTTON_WIDTH;
         }
         if ( flags & wxTOPLEVEL_BUTTON_RESTORE )
         {
-            if ( btnRect.Inside(pt) )
+            if ( btnRect.Contains(pt) )
                 return wxHT_TOPLEVEL_BUTTON_RESTORE;
             btnRect.x -= FRAME_BUTTON_WIDTH;
         }
         if ( flags & wxTOPLEVEL_BUTTON_ICONIZE )
         {
-            if ( btnRect.Inside(pt) )
+            if ( btnRect.Contains(pt) )
                 return wxHT_TOPLEVEL_BUTTON_ICONIZE;
             btnRect.x -= FRAME_BUTTON_WIDTH;
         }
         if ( flags & wxTOPLEVEL_BUTTON_HELP )
         {
-            if ( btnRect.Inside(pt) )
+            if ( btnRect.Contains(pt) )
                 return wxHT_TOPLEVEL_BUTTON_HELP;
             btnRect.x -= FRAME_BUTTON_WIDTH;
         }

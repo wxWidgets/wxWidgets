@@ -1825,7 +1825,7 @@ void wxComboCtrlBase::OnPopupDismiss()
 
     // If cursor not on dropdown button, then clear its state
     // (technically not required by all ports, but do it for all just in case)
-    if ( !m_btnArea.Inside(ScreenToClient(::wxGetMousePosition())) )
+    if ( !m_btnArea.Contains(ScreenToClient(::wxGetMousePosition())) )
         m_btnState = 0;
 
     // Return parent's tab traversal flag.

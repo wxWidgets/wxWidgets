@@ -588,7 +588,7 @@ int wxNotebook::HitTest(const wxPoint& pt, long *flags) const
         *flags = wxBK_HITTEST_NOWHERE;
 
     // first check that it is in this window at all
-    if ( !GetClientRect().Inside(pt) )
+    if ( !GetClientRect().Contains(pt) )
     {
         return -1;
     }
@@ -626,7 +626,7 @@ int wxNotebook::HitTest(const wxPoint& pt, long *flags) const
     {
         GetTabSize(n, &rectTabs.width, &rectTabs.height);
 
-        if ( rectTabs.Inside(pt) )
+        if ( rectTabs.Contains(pt) )
         {
             if ( flags )
             {

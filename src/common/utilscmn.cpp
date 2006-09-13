@@ -1077,7 +1077,7 @@ wxWindow* wxFindWindowAtPoint(wxWindow* win, const wxPoint& pt)
     }
 
     wxRect rect(pos, sz);
-    if (rect.Inside(pt))
+    if (rect.Contains(pt))
         return win;
 
     return NULL;

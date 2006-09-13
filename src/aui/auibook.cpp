@@ -500,7 +500,7 @@ void wxAuiTabContainer::Render(wxDC* raw_dc)
 // true if a tab was hit, otherwise false
 bool wxAuiTabContainer::TabHitTest(int x, int y, wxWindow** hit) const
 {
-    if (!m_rect.Inside(x,y))
+    if (!m_rect.Contains(x,y))
         return false;
 
     size_t i, page_count = m_pages.GetCount();
@@ -508,7 +508,7 @@ bool wxAuiTabContainer::TabHitTest(int x, int y, wxWindow** hit) const
     for (i = 0; i < page_count; ++i)
     {
         wxAuiNotebookPage& page = m_pages.Item(i);
-        if (page.rect.Inside(x,y))
+        if (page.rect.Contains(x,y))
         {
             *hit = page.window;
             return true;
@@ -523,7 +523,7 @@ bool wxAuiTabContainer::TabHitTest(int x, int y, wxWindow** hit) const
 bool wxAuiTabContainer::ButtonHitTest(int x, int y,
                                       wxAuiTabContainerButton** hit) const
 {
-    if (!m_rect.Inside(x,y))
+    if (!m_rect.Contains(x,y))
         return false;
 
     size_t i, button_count = m_buttons.GetCount();
@@ -531,7 +531,7 @@ bool wxAuiTabContainer::ButtonHitTest(int x, int y,
     for (i = 0; i < button_count; ++i)
     {
         wxAuiTabContainerButton& button = m_buttons.Item(i);
-        if (button.rect.Inside(x,y))
+        if (button.rect.Contains(x,y))
         {
             *hit = &button;
             return true;
@@ -1455,7 +1455,7 @@ wxAuiTabCtrl* wxAuiMultiNotebook::GetTabCtrlFromPoint(const wxPoint& pt)
             continue;
 
         wxTabFrame* tabframe = (wxTabFrame*)all_panes.Item(i).window;
-        if (tabframe->m_tab_rect.Inside(pt))
+        if (tabframe->m_tab_rect.Contains(pt))
             return tabframe->m_tabs;
     }
 

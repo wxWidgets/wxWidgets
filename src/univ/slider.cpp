@@ -832,7 +832,7 @@ wxScrollThumb::Shaft wxSlider::HitTest(const wxPoint& pt) const
     CalcThumbRect(&rectShaft, &rectThumb, NULL);
 
     // check for possible shaft or thumb hit
-    if (!rectShaft.Inside(pt) && !rectThumb.Inside(pt))
+    if (!rectShaft.Contains(pt) && !rectThumb.Contains(pt))
     {
         return wxScrollThumb::Shaft_None;
     }

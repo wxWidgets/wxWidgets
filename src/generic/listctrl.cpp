@@ -961,7 +961,7 @@ bool wxListItemData::IsHit( int x, int y ) const
 {
     wxCHECK_MSG( m_rect, false, _T("can't be called in this mode") );
 
-    return wxRect(GetX(), GetY(), GetWidth(), GetHeight()).Inside(x, y);
+    return wxRect(GetX(), GetY(), GetWidth(), GetHeight()).Contains(x, y);
 }
 
 int wxListItemData::GetX() const
@@ -2381,7 +2381,7 @@ long wxListMainWindow::HitTestLine(size_t line, int x, int y) const
 
     wxListLineData *ld = GetLine(line);
 
-    if ( ld->HasImage() && GetLineIconRect(line).Inside(x, y) )
+    if ( ld->HasImage() && GetLineIconRect(line).Contains(x, y) )
         return wxLIST_HITTEST_ONITEMICON;
 
     // VS: Testing for "ld->HasText() || InReportView()" instead of
@@ -2392,7 +2392,7 @@ long wxListMainWindow::HitTestLine(size_t line, int x, int y) const
         wxRect rect = InReportView() ? GetLineRect(line)
                                      : GetLineLabelRect(line);
 
-        if ( rect.Inside(x, y) )
+        if ( rect.Contains(x, y) )
             return wxLIST_HITTEST_ONITEMLABEL;
     }
 

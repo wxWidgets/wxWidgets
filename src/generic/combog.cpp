@@ -280,7 +280,7 @@ void wxGenericComboControl::OnPaintEvent( wxPaintEvent& WXUNUSED(event) )
 
 void wxGenericComboControl::OnMouseEvent( wxMouseEvent& event )
 {
-    bool isOnButtonArea = m_btnArea.Inside(event.m_x,event.m_y);
+    bool isOnButtonArea = m_btnArea.Contains(event.m_x,event.m_y);
     int handlerFlags = isOnButtonArea ? wxCC_MF_ON_BUTTON : 0;
 
     // Preprocessing fabricates double-clicks and prevents

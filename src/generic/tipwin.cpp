@@ -362,7 +362,7 @@ void wxTipWindowView::OnMouseMove(wxMouseEvent& event)
     const wxRect& rectBound = m_parent->m_rectBound;
 
     if ( rectBound.width &&
-            !rectBound.Inside(ClientToScreen(event.GetPosition())) )
+            !rectBound.Contains(ClientToScreen(event.GetPosition())) )
     {
         // mouse left the bounding rect, disappear
         m_parent->Close();

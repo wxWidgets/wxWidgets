@@ -183,7 +183,7 @@ wxRect& wxRect::Inflate(wxCoord dx, wxCoord dy)
     return *this;
 }
 
-bool wxRect::Inside(int cx, int cy) const
+bool wxRect::Contains(int cx, int cy) const
 {
     return ( (cx >= x) && (cy >= y)
           && ((cy - y) < height)
@@ -191,9 +191,9 @@ bool wxRect::Inside(int cx, int cy) const
           );
 }
 
-bool wxRect::Inside(const wxRect& rect) const
+bool wxRect::Contains(const wxRect& rect) const
 {
-    return Inside(rect.GetTopLeft()) && Inside(rect.GetBottomRight());
+    return Contains(rect.GetTopLeft()) && Contains(rect.GetBottomRight());
 }
 
 wxRect& wxRect::Intersect(const wxRect& rect)

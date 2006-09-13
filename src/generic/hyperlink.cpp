@@ -202,13 +202,13 @@ void wxHyperlinkCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
 void wxHyperlinkCtrl::OnLeftDown(wxMouseEvent& event)
 {
     // the left click must start from the hyperlink rect
-    m_clicking = GetLabelRect().Inside(event.GetPosition());
+    m_clicking = GetLabelRect().Contains(event.GetPosition());
 }
 
 void wxHyperlinkCtrl::OnLeftUp(wxMouseEvent& event)
 {
     // the click must be started and ended in the hyperlink rect
-    if (!m_clicking || !GetLabelRect().Inside(event.GetPosition())) 
+    if (!m_clicking || !GetLabelRect().Contains(event.GetPosition())) 
         return;
 
     SetForegroundColour(m_visitedColour);
@@ -225,7 +225,7 @@ void wxHyperlinkCtrl::OnLeftUp(wxMouseEvent& event)
 void wxHyperlinkCtrl::OnRightUp(wxMouseEvent& event)
 {
     if( GetWindowStyle() & wxHL_CONTEXTMENU )
-        if ( GetLabelRect().Inside(event.GetPosition()) )
+        if ( GetLabelRect().Contains(event.GetPosition()) )
             DoContextMenu(wxPoint(event.m_x, event.m_y));
 }
 
@@ -233,7 +233,7 @@ void wxHyperlinkCtrl::OnMotion(wxMouseEvent& event)
 {
     wxRect textrc = GetLabelRect();
 
-    if (textrc.Inside(event.GetPosition()))
+    if (textrc.Contains(event.GetPosition()))
     {
         SetCursor(wxCursor(wxCURSOR_HAND));
         SetForegroundColour(m_hoverColour);

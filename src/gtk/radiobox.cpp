@@ -688,7 +688,7 @@ int wxRadioBox::GetItemFromPoint(const wxPoint& point) const
     for ( wxRadioBoxButtonsInfoList::compatibility_iterator
             node = m_buttonsInfo.GetFirst(); node; node = node->GetNext(), n++ )
     {
-        if ( m_buttonsInfo[n]->rect.Inside(pt) )
+        if ( m_buttonsInfo[n]->rect.Contains(pt) )
             return n;
     }
 

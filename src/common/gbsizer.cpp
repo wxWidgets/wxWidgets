@@ -409,7 +409,7 @@ wxGBSizerItem* wxGridBagSizer::FindItemAtPoint(const wxPoint& pt)
         wxGBSizerItem* item = (wxGBSizerItem*)node->GetData();
         wxRect rect(item->GetPosition(), item->GetSize());
         rect.Inflate(m_hgap, m_vgap);
-        if ( rect.Inside(pt) )
+        if ( rect.Contains(pt) )
             return item;
         node = node->GetNext();
     }

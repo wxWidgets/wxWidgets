@@ -1093,7 +1093,7 @@ bool wxTreeCtrl::IsVisible (
     vWxRectContainer.SetTop(vRectContainer.yTop);
     vWxRectContainer.SetRight(vRectContainer.xRight);
     vWxRectContainer.SetBottom(vRectContainer.yBottom);
-    return (vWxRectContainer.Inside(wxPoint(vWxRectRecord.x, vWxRectRecord.y)));
+    return (vWxRectContainer.Contains(wxPoint(vWxRectRecord.x, vWxRectRecord.y)));
 } // end of wxTreeCtrl::IsVisible
 
 bool wxTreeCtrl::ItemHasChildren (

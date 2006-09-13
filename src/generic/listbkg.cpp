@@ -173,7 +173,7 @@ int wxListbook::HitTest(const wxPoint& pt, long *flags) const
     const wxPoint listPt = list->ScreenToClient(ClientToScreen(pt));
 
     // is the point inside list control?
-    if ( wxRect(list->GetSize()).Inside(listPt) )
+    if ( wxRect(list->GetSize()).Contains(listPt) )
     {
         int flagsList;
         pagePos = list->HitTest(listPt, flagsList);
@@ -193,7 +193,7 @@ int wxListbook::HitTest(const wxPoint& pt, long *flags) const
     }
     else // not over list control at all
     {
-        if ( flags && GetPageRect().Inside(pt) )
+        if ( flags && GetPageRect().Contains(pt) )
             *flags |= wxBK_HITTEST_ONPAGE;
     }
 

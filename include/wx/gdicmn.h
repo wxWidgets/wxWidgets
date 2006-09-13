@@ -417,10 +417,17 @@ public:
     bool operator!=(const wxRect& rect) const { return !(*this == rect); }
 
     // return true if the point is (not strcitly) inside the rect
-    bool Inside(int x, int y) const;
-    bool Inside(const wxPoint& pt) const { return Inside(pt.x, pt.y); }
+    bool Contains(int x, int y) const;
+    bool Contains(const wxPoint& pt) const { return Contains(pt.x, pt.y); }
     // return true if the rectangle is (not strcitly) inside the rect
-    bool Inside(const wxRect& rect) const;
+    bool Contains(const wxRect& rect) const;
+
+#if WXWIN_COMPATIBILITY_2_6
+    // use Contains() instead
+    wxDEPRECATED( bool Inside(int x, int y) const );
+    wxDEPRECATED( bool Inside(const wxPoint& pt) const );
+    wxDEPRECATED( bool Inside(const wxRect& rect) const );
+#endif // WXWIN_COMPATIBILITY_2_6
 
     // return true if the rectangles have a non empty intersection
     bool Intersects(const wxRect& rect) const;
@@ -452,6 +459,13 @@ public:
 public:
     int x, y, width, height;
 };
+
+#if WXWIN_COMPATIBILITY_2_6
+inline bool wxRect::Inside(int x, int y) const { return Contains(x, y); }
+inline bool wxRect::Inside(const wxPoint& pt) const { return Contains(pt); }
+inline bool wxRect::Inside(const wxRect& rect) const { return Contains(rect); }
+#endif // WXWIN_COMPATIBILITY_2_6
+
 
 // ---------------------------------------------------------------------------
 // Management of pens, brushes and fonts

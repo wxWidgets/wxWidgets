@@ -804,7 +804,7 @@ int wxNotebook::HitTest(const wxPoint& pt, long *flags) const
             wxPoint pos = GetPosition();
             rect.x -= pos.x;
             rect.y -= pos.y;
-            if ( rect.Inside( pt ) )
+            if ( rect.Contains( pt ) )
                 *flags |= wxBK_HITTEST_ONPAGE;
         }
     }

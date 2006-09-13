@@ -321,7 +321,7 @@ int wxToolbook::HitTest(const wxPoint& pt, long *flags) const
     const wxPoint tbarPt = tbar->ScreenToClient(ClientToScreen(pt));
 
     // is the point over the toolbar?
-    if ( wxRect(tbar->GetSize()).Inside(tbarPt) )
+    if ( wxRect(tbar->GetSize()).Contains(tbarPt) )
     {
         const wxToolBarToolBase * const
             tool = tbar->FindToolForPosition(tbarPt.x, tbarPt.y);
@@ -335,7 +335,7 @@ int wxToolbook::HitTest(const wxPoint& pt, long *flags) const
     }
     else // not over the toolbar
     {
-        if ( flags && GetPageRect().Inside(pt) )
+        if ( flags && GetPageRect().Contains(pt) )
             *flags |= wxBK_HITTEST_ONPAGE;
     }
 

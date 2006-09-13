@@ -697,7 +697,7 @@ void wxWindowDFB::PaintWindow(const wxRect& rect)
     wxRect clientRect(GetClientRect());
 
     // only send wxNcPaintEvent if drawing at least part of nonclient area:
-    if ( !clientRect.Inside(rect) )
+    if ( !clientRect.Contains(rect) )
     {
         wxNcPaintEvent eventNc(GetId());
         eventNc.SetEventObject(this);

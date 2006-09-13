@@ -2168,7 +2168,7 @@ long wxListCtrl::FindItem (
     vLibRect.SetTop(vRect.yTop);
     vLibRect.SetRight(vRect.xRight);
     vLibRect.SetBottom(vRect.yBottom);
-    if (vLibRect.Inside(rPoint))
+    if (vLibRect.Contains(rPoint))
         return pRecord->m_ulItemId;
 
     for (i = lStart + 1; i < vCnrInfo.cRecords; i++)
@@ -2188,7 +2188,7 @@ long wxListCtrl::FindItem (
         vLibRect.SetTop(vRect.yTop);
         vLibRect.SetRight(vRect.xRight);
         vLibRect.SetBottom(vRect.yBottom);
-        if (vLibRect.Inside(rPoint))
+        if (vLibRect.Contains(rPoint))
             return pRecord->m_ulItemId;
     }
     return -1L;
