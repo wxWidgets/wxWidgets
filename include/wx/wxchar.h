@@ -934,9 +934,9 @@ WXDLLIMPEXP_BASE bool wxOKlibc(); /* for internal use */
         // behave mostly identic to our wxVsnprintf() implementation
         #if defined(__VISUALC__) && __VISUALC__ >= 1400
             #if wxUSE_UNICODE
-                #define wxVsnprintf_    _vsprintf_p
-            #else
                 #define wxVsnprintf_    _vswprintf_p
+            #else
+                #define wxVsnprintf_    _vsprintf_p
             #endif
         #endif
     #endif
