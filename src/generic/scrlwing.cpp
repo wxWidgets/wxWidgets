@@ -844,6 +844,15 @@ void wxScrollHelper::GetScrollPixelsPerUnit (int *x_unit, int *y_unit) const
         *y_unit = m_yScrollPixelsPerLine;
 }
 
+
+int wxScrollHelper::GetScrollLines( int orient ) const
+{
+    if ( orient == wxHORIZONTAL )
+        return m_xScrollLines;
+    else
+        return m_yScrollLines;
+}
+
 int wxScrollHelper::GetScrollPageSize(int orient) const
 {
     if ( orient == wxHORIZONTAL )
@@ -881,7 +890,7 @@ void wxScrollHelper::Scroll( int x_pos, int y_pos )
 
         // Calculate page size i.e. number of scroll units you get on the
         // current client window
-        int noPagePositions = (int) ( (w/(double)m_xScrollPixelsPerLine) + 0.5 );
+        int noPagePositions = w/m_xScrollPixelsPerLine;
         if (noPagePositions < 1) noPagePositions = 1;
 
         // Correct position if greater than extent of canvas minus
@@ -889,7 +898,8 @@ void wxScrollHelper::Scroll( int x_pos, int y_pos )
         m_xScrollPosition = wxMin( m_xScrollLines-noPagePositions, m_xScrollPosition );
         m_xScrollPosition = wxMax( 0, m_xScrollPosition );
 
-        if (old_x != m_xScrollPosition) {
+        if (old_x != m_xScrollPosition)
+        {
             m_win->SetScrollPos( wxHORIZONTAL, m_xScrollPosition );
             m_targetWindow->ScrollWindow( (old_x-m_xScrollPosition)*m_xScrollPixelsPerLine, 0,
                                           GetScrollRect() );
@@ -902,7 +912,7 @@ void wxScrollHelper::Scroll( int x_pos, int y_pos )
 
         // Calculate page size i.e. number of scroll units you get on the
         // current client window
-        int noPagePositions = (int) ( (h/(double)m_yScrollPixelsPerLine) + 0.5 );
+        int noPagePositions = h/m_yScrollPixelsPerLine;
         if (noPagePositions < 1) noPagePositions = 1;
 
         // Correct position if greater than extent of canvas minus
@@ -910,7 +920,8 @@ void wxScrollHelper::Scroll( int x_pos, int y_pos )
         m_yScrollPosition = wxMin( m_yScrollLines-noPagePositions, m_yScrollPosition );
         m_yScrollPosition = wxMax( 0, m_yScrollPosition );
 
-        if (old_y != m_yScrollPosition) {
+        if (old_y != m_yScrollPosition)
+        {
             m_win->SetScrollPos( wxVERTICAL, m_yScrollPosition );
             m_targetWindow->ScrollWindow( 0, (old_y-m_yScrollPosition)*m_yScrollPixelsPerLine,
                                           GetScrollRect() );

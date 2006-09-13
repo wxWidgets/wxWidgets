@@ -26,6 +26,7 @@
 #endif
 
 #include "wx/fontutil.h"
+#include "wx/scrolwin.h"
 
 #include "wx/gtk/win_gtk.h"
 #include "wx/gtk/private.h"
@@ -326,11 +327,40 @@ wxWindowDC::wxWindowDC( wxWindow *window )
     
     if (m_owner && m_owner->m_wxwindow && (m_owner->GetLayoutDirection() == wxLayout_RightToLeft))
     {
+        // reverse sense
         m_signX = -1;
-        gint width;
-        gdk_window_get_geometry( GTK_PIZZA(m_owner->m_wxwindow)->bin_window,
-                                 NULL, NULL, &width, NULL, NULL );
-        m_deviceOriginX = width;;
+        
+        // origin in the upper right corner
+        wxScrolledWindow *sw = wxDynamicCast( m_owner, wxScrolledWindow );
+        if (sw)
+        {
+            // We cannot use just the virtual size here, because
+            // the virtual size may be less than the visible area
+            // due to rounding errors of the scroll steps. If the
+            // horizontal scroll step is 10 pixels and the virtual
+            // area is 97 pixels, we should be able to see or scroll
+            // to 100 pixels, so the origin is at -100, not -97.
+            if (sw->GetScrollLines(wxHORIZONTAL) == 0)
+            {
+                int client_width = m_owner->GetClientSize().x;
+                m_deviceOriginX = client_width;
+            }
+            else
+            {
+                int scroll_step = 0;
+                sw->GetScrollPixelsPerUnit( &scroll_step, NULL );
+                int client_width = m_owner->GetClientSize().x;
+                int virtual_size = sw->GetVirtualSize().x;
+                int steps = (virtual_size + scroll_step - 1) / scroll_step;
+                int width = steps * scroll_step + (client_width % scroll_step);
+                m_deviceOriginX = width;
+            }
+        }
+        else
+        {
+            int client_width = m_owner->GetClientSize().x;
+            m_deviceOriginX = client_width;
+        }
     }
 }
 
