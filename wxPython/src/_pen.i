@@ -98,11 +98,13 @@ public:
     
 #ifndef __WXMAC__
     int GetDashCount() const;
+    %property(DashCount, GetDashCount, doc="See `GetDashCount`");
 #endif
     
 #ifdef __WXMSW__
     wxBitmap* GetStipple();
     void SetStipple(wxBitmap& stipple);
+    %property(Stipple, GetStipple, SetStipple, doc="See `GetStipple` and `SetStipple`");
 #endif
 
     
@@ -114,7 +116,6 @@ public:
 
     %property(Cap, GetCap, SetCap, doc="See `GetCap` and `SetCap`");
     %property(Colour, GetColour, SetColour, doc="See `GetColour` and `SetColour`");
-    %property(DashCount, GetDashCount, doc="See `GetDashCount`");
     %property(Dashes, GetDashes, SetDashes, doc="See `GetDashes` and `SetDashes`");
     %property(Join, GetJoin, SetJoin, doc="See `GetJoin` and `SetJoin`");
     %property(Style, GetStyle, SetStyle, doc="See `GetStyle` and `SetStyle`");
