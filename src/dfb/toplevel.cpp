@@ -441,7 +441,11 @@ void wxTopLevelWindowDFB::HandleQueuedPaintRequests()
 
 void wxTopLevelWindowDFB::DoRefreshRect(const wxRect& rect)
 {
-    wxASSERT_MSG( rect.width > 0 && rect.height > 0, _T("invalid rect") );
+    // don't overlap outside of the window (NB: 'rect' is in window coords):
+    wxRect r(rect);
+    r.Intersect(wxRect(GetSize()));
+    if ( r.IsEmpty() )
+        return;
 
     wxLogTrace(TRACE_PAINT,
                _T("%p ('%s'): [TLW] refresh rect [%i,%i,%i,%i]"),
