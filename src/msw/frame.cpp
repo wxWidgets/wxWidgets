@@ -50,6 +50,8 @@
     #include "wx/msw/winundef.h"
 #endif
 
+#include "wx/generic/statusbr.h"
+
 #ifdef __WXUNIVERSAL__
     #include "wx/univ/theme.h"
     #include "wx/univ/colschem.h"
