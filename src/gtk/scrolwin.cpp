@@ -88,36 +88,29 @@ void wxScrollHelperNative::DoAdjustScrollbar(GtkRange* range,
                                              int *lines,
                                              int *linesPerPage)
 {
+    int upper;
+    int page_size;
     if (pixelsPerLine > 0 && winSize > 0 && winSize < virtSize)
     {
-        int upper = (virtSize + pixelsPerLine - 1) / pixelsPerLine;
-        int page_size = winSize / pixelsPerLine;
-        
+        upper = (virtSize + pixelsPerLine - 1) / pixelsPerLine;
+        page_size = winSize / pixelsPerLine;
         *lines = upper;
         *linesPerPage = page_size;
-
-        GtkAdjustment* adj = range->adjustment;
-        adj->step_increment = 1;
-        adj->page_increment =
-        adj->page_size = page_size;
-        gtk_range_set_range(range, 0, upper);
     }
     else
     {
         // GtkRange won't allow upper == lower, so for disabled state use [0,1]
         //   with a page size of 1. This will also clamp position to 0.
-        int upper = 1;
-        int page_size = 1;
-
+        upper = 1;
+        page_size = 1;
         *lines = 0;
         *linesPerPage = 0;
-
-        GtkAdjustment* adj = range->adjustment;
-        adj->step_increment = 1;
-        adj->page_increment =
-        adj->page_size = page_size;
-        gtk_range_set_range(range, 0, upper);
     }
+    GtkAdjustment* adj = range->adjustment;
+    adj->step_increment = 1;
+    adj->page_increment =
+    adj->page_size = page_size;
+    gtk_range_set_range(range, 0, upper);
 }
 
 void wxScrollHelperNative::AdjustScrollbars()
