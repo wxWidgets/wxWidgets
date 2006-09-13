@@ -12,6 +12,10 @@
 #ifndef _WX_GENERIC_STATUSBR_H_
 #define _WX_GENERIC_STATUSBR_H_
 
+#include "wx/defs.h"
+
+#if wxUSE_STATUSBAR
+
 #include "wx/pen.h"
 #include "wx/arrstr.h"
 
@@ -96,6 +100,8 @@ private:
     DECLARE_EVENT_TABLE()
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxStatusBarGeneric)
 };
+
+#endif // wxUSE_STATUSBAR
 
 #endif
     // _WX_GENERIC_STATUSBR_H_
