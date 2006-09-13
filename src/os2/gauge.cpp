@@ -27,7 +27,7 @@ extern void  wxAssociateWinWithHandle( HWND         hWnd
                                       ,wxWindowOS2* pWin
                                      );
 
-IMPLEMENT_DYNAMIC_CLASS(wxGauge, wxControl)
+IMPLEMENT_DYNAMIC_CLASS(wxGauge, wxGaugeBase)
 
 MRESULT EXPENTRY wxGaugeWndProc( HWND hWnd,
                                  UINT uMessage,
