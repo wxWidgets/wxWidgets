@@ -83,6 +83,7 @@ public:
     virtual void Update();
     virtual void Freeze();
     virtual void Thaw();
+    virtual bool IsFrozen() const { return m_frozenness > 0; }
 
     virtual void SetWindowStyleFlag(long style);
     virtual void SetExtraStyle(long exStyle);
@@ -459,9 +460,6 @@ protected:
 
     virtual void DoCaptureMouse();
     virtual void DoReleaseMouse();
-
-    // has the window been frozen by Freeze()?
-    bool IsFrozen() const { return m_frozenness > 0; }
 
     // this simply moves/resizes the given HWND which is supposed to be our
     // sibling (this is useful for controls which are composite at MSW level

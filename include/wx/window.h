@@ -719,6 +719,9 @@ public:
         // thaw the window: redraw it after it had been frozen
     virtual void Thaw() { }
 
+        // return true if window had been frozen and not unthawed yet
+    virtual bool IsFrozen() const { return false; }
+
         // adjust DC for drawing on this window
     virtual void PrepareDC( wxDC & WXUNUSED(dc) ) { }
 

@@ -75,7 +75,7 @@ public:
     virtual void Clear();
     virtual void Freeze();
     virtual void Thaw();
-    bool IsFrozen() const { return m_frozenness > 0; }
+    virtual bool IsFrozen() const { return m_frozenness > 0; }
 
     virtual bool SetCursor(const wxCursor &cursor);
     virtual bool SetFont(const wxFont &font) { m_font = font; return true; }
