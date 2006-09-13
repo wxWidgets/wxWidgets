@@ -123,7 +123,14 @@ protected:
     // total width of the columns
     int m_total_col_width;
 
+#if wxCHECK_VERSION_FULL(2, 7, 0, 1)
+    // which col header is currently highlighted with mouse-over
+    int m_hotTrackCol;
 
+    int XToCol(int x);
+    void RefreshColLabel(int col);
+#endif
+    
 public:
     wxTreeListHeaderWindow();
 
@@ -1056,6 +1063,7 @@ void wxTreeListHeaderWindow::Init()
     m_isDragging = false;
     m_dirty = false;
     m_total_col_width = 0;
+    m_hotTrackCol = -1;
 }
 
 wxTreeListHeaderWindow::wxTreeListHeaderWindow()
@@ -1148,13 +1156,55 @@ void wxTreeListHeaderWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
 
     PrepareDC( dc );
     AdjustDC( dc );
-    dc.SetFont( GetFont() );
+
+    int x = HEADER_OFFSET_X;
 
     // width and height of the entire header window
     int w, h;
     GetClientSize( &w, &h );
     m_owner->CalcUnscrolledPosition(w, 0, &w, NULL);
     dc.SetBackgroundMode(wxTRANSPARENT);
+
+#if wxCHECK_VERSION_FULL(2, 7, 0, 1)
+    int numColumns = GetColumnCount();
+    for ( int i = 0; i < numColumns && x < w; i++ )
+    {
+        if (!IsColumnShown (i)) continue; // do next column if not shown
+
+        wxHeaderButtonParams params;
+
+        // TODO: columnInfo should have label colours...
+        params.m_labelColour = wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOWTEXT );
+        params.m_labelFont = GetFont();
+
+        wxTreeListColumnInfo& column = GetColumn(i);
+        int wCol = column.GetWidth();
+        int flags = 0;
+        wxRect rect(x, 0, wCol, h);
+        x += wCol;
+
+        if ( i == m_hotTrackCol)
+            flags |= wxCONTROL_CURRENT;
+        
+        params.m_labelText = column.GetText();
+        params.m_labelAlignment = column.GetAlignment();
+
+        int image = column.GetImage();
+        wxImageList* imageList = m_owner->GetImageList();
+        if ((image != -1) && imageList) 
+            params.m_labelBitmap = imageList->GetBitmap(image);
+                
+        wxRendererNative::Get().DrawHeaderButton(this, dc, rect, flags, &params);
+    }
+
+    if (x < w) {
+        wxRect rect(x, 0, w-x, h);
+        wxRendererNative::Get().DrawHeaderButton(this, dc, rect);
+    }
+    
+#else  // not 2.7.0.1+
+    
+    dc.SetFont( GetFont() );
 
     // do *not* use the listctrl colour for headers - one day we will have a
     // function to set it separately
@@ -1165,12 +1215,10 @@ void wxTreeListHeaderWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
     dc.SetTextForeground (wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOWTEXT ));
 #endif
 
-    int x = HEADER_OFFSET_X;
-
     int numColumns = GetColumnCount();
     for ( int i = 0; i < numColumns && x < w; i++ )
     {
-        if (!IsColumnShown (i)) continue; // do next colume if not shown
+        if (!IsColumnShown (i)) continue; // do next column if not shown
 
         wxTreeListColumnInfo& column = GetColumn(i);
         int wCol = column.GetWidth();
@@ -1241,7 +1289,7 @@ void wxTreeListHeaderWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
         wxRendererNative::GetDefault().DrawHeaderButton (this, dc, rect);
 #endif
     }
-
+#endif // 2.7.0.1
 }
 
 void wxTreeListHeaderWindow::DrawCurrent()
@@ -1270,12 +1318,78 @@ void wxTreeListHeaderWindow::DrawCurrent()
     dc.SetBrush (wxNullBrush);
 }
 
+#if wxCHECK_VERSION_FULL(2, 7, 0, 1)
+int wxTreeListHeaderWindow::XToCol(int x)
+{
+    int colLeft = 0;
+    int numColumns = GetColumnCount();
+    for ( int col = 0; col < numColumns; col++ )
+    {
+        if (!IsColumnShown(col)) continue; 
+        wxTreeListColumnInfo& column = GetColumn(col);
+
+        if ( x < (colLeft + column.GetWidth()) )
+             return col;
+        
+        colLeft += column.GetWidth();
+    }
+    return -1;
+}
+
+
+void wxTreeListHeaderWindow::RefreshColLabel(int col)
+{
+    if ( col > GetColumnCount() )
+        return;
+    
+    int x = 0;
+    int width = 0;
+    int idx = 0;
+    do {
+        if (!IsColumnShown(idx)) continue; 
+        wxTreeListColumnInfo& column = GetColumn(idx);
+        x += width;
+        width = column.GetWidth();
+    } while (++idx <= col);
+    
+    m_owner->CalcScrolledPosition(x, 0, &x, NULL);
+    RefreshRect(wxRect(x, 0, width, GetSize().GetHeight()));   
+}
+#endif
+
+        
 void wxTreeListHeaderWindow::OnMouse (wxMouseEvent &event) {
 
     // we want to work with logical coords
     int x;
     m_owner->CalcUnscrolledPosition(event.GetX(), 0, &x, NULL);
     int y = event.GetY();
+
+#if wxCHECK_VERSION_FULL(2, 7, 0, 1)
+    if ( event.Moving() )
+    {
+        int col = XToCol(x);
+        if ( col != m_hotTrackCol )
+        {
+            // Refresh the col header so it will be painted with hot tracking
+            // (if supported by the native renderer.)
+            RefreshColLabel(col);
+
+            // Also refresh the old hot header
+            if ( m_hotTrackCol >= 0 )
+                RefreshColLabel(m_hotTrackCol);
+
+            m_hotTrackCol = col;
+        }
+    }
+
+    if ( event.Leaving() && m_hotTrackCol >= 0 )
+    {
+        // Leaving the window so clear any hot tracking indicator that may be present
+        RefreshColLabel(m_hotTrackCol);
+        m_hotTrackCol = -1;
+    }
+#endif
 
     if (m_isDragging) {
 
@@ -4165,12 +4279,15 @@ bool wxTreeListCtrl::Create(wxWindow *parent, wxWindowID id,
 void wxTreeListCtrl::CalculateAndSetHeaderHeight()
 {
     if (m_header_win) {
-
+        int h;
+#if wxCHECK_VERSION_FULL(2, 7, 0, 1)
+        h = wxRendererNative::Get().GetHeaderButtonHeight(m_header_win);
+#else
         // we use 'g' to get the descent, too
-        int w, h, d;
+        int w, d;
         m_header_win->GetTextExtent(_T("Hg"), &w, &h, &d);
         h += d + 2 * HEADER_OFFSET_Y + EXTRA_HEIGHT;
-
+#endif
         // only update if changed
         if (h != m_headerHeight) {
             m_headerHeight = h;
