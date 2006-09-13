@@ -41,13 +41,10 @@ static wxDfbWindowsMap gs_dfbWindowsMap;
 
 struct wxDfbPaintRequest
 {
-    wxDfbPaintRequest(const wxRect& rect, bool eraseBackground)
-        : m_rect(rect), m_eraseBackground(eraseBackground) {}
-    wxDfbPaintRequest(const wxDfbPaintRequest& r)
-        : m_rect(r.m_rect), m_eraseBackground(r.m_eraseBackground) {}
+    wxDfbPaintRequest(const wxRect& rect) : m_rect(rect) {}
+    wxDfbPaintRequest(const wxDfbPaintRequest& r) : m_rect(r.m_rect) {}
 
     wxRect m_rect;
-    bool   m_eraseBackground;
 };
 
 WX_DEFINE_ARRAY_PTR(wxDfbPaintRequest*, wxDfbQueuedPaintRequestsList);
@@ -59,8 +56,8 @@ public:
     ~wxDfbQueuedPaintRequests() { Clear(); }
 
     // Adds paint request to the queue
-    void Add(const wxRect& rect, bool eraseBack)
-        { m_queue.push_back(new wxDfbPaintRequest(rect, eraseBack)); }
+    void Add(const wxRect& rect)
+        { m_queue.push_back(new wxDfbPaintRequest(rect)); }
 
     // Is the queue empty?
     bool IsEmpty() const { return m_queue.empty(); }
@@ -91,6 +88,7 @@ void wxTopLevelWindowDFB::Init()
     m_sizeSet = false;
     m_opacity = 255;
     m_toPaint = new wxDfbQueuedPaintRequests;
+    m_isPainting = false;
 }
 
 bool wxTopLevelWindowDFB::Create(wxWindow *parent,
@@ -148,7 +146,8 @@ bool wxTopLevelWindowDFB::Create(wxWindow *parent,
     if ( !m_dfbwin->SetOpacity(wxALPHA_TRANSPARENT) )
         return false;
 
-    wxWindow::Create(NULL, id, pos, size, style, name);
+    if ( !wxWindow::Create(NULL, id, pos, size, style, name) )
+        return false;
 
     SetParent(parent);
     if ( parent )
@@ -217,7 +216,8 @@ void wxTopLevelWindowDFB::DoMoveWindow(int x, int y, int width, int height)
     {
         m_dfbwin->Resize(width, height);
         // we must repaint the window after it changed size:
-        Refresh();
+        if ( IsShown() )
+            DoRefreshWindow();
     }
 }
 
@@ -375,23 +375,30 @@ void wxTopLevelWindowDFB::HandleQueuedPaintRequests()
     wxRect winRect(wxPoint(0, 0), GetSize());
     wxRect paintedRect;
 
+    // important note: all DCs created from now until m_isPainting is reset to
+    // false will not update the front buffer as this flag indicates that we'll
+    // blit the entire back buffer to front soon
+    m_isPainting = true;
+
     size_t cnt = requests.size();
+    wxLogTrace(TRACE_PAINT, _T("%p ('%s'): processing %i paint requests"),
+               this, GetName().c_str(), cnt);
+
     for ( size_t i = 0; i < cnt; ++i )
     {
         const wxDfbPaintRequest& request = *requests[i];
 
         wxRect clipped(request.m_rect);
-
-        wxLogTrace(TRACE_PAINT,
-                   _T("%p ('%s'): processing paint request [x=%i,y=%i,w=%i,h=%i]"),
-                   this, GetName().c_str(),
-                   clipped.x, clipped.y, clipped.width, clipped.height);
-
         clipped.Intersect(winRect);
         if ( clipped.IsEmpty() )
             continue; // nothing to refresh
 
-        PaintWindow(clipped, request.m_eraseBackground);
+        wxLogTrace(TRACE_PAINT,
+                   _T("%p ('%s'): processing paint request [%i,%i,%i,%i]"),
+                   this, GetName().c_str(),
+                   clipped.x, clipped.y, clipped.GetRight(), clipped.GetBottom());
+
+        PaintWindow(clipped);
 
         // remember rectangle covering all repainted areas:
         if ( paintedRect.IsEmpty() )
@@ -400,23 +407,49 @@ void wxTopLevelWindowDFB::HandleQueuedPaintRequests()
             paintedRect.Union(clipped);
     }
 
+    m_isPainting = false;
+
     m_toPaint->Clear();
 
     if ( paintedRect.IsEmpty() )
         return; // no painting occurred, no need to flip
 
-    // flip the surface to make the changes visible:
+    // Flip the surface to make the changes visible. Note that the rectangle we
+    // flip is *superset* of the union of repainted rectangles (created as
+    // "rectangles union" by wxRect::Union) and so some parts of the back
+    // buffer that we didn't touch in this HandleQueuedPaintRequests call will
+    // be copied to the front buffer as well. This is safe/correct thing to do
+    // *only* because wx always use wxIDirectFBSurface::FlipToFront() and so
+    // the back and front buffers contain the same data.
+    //
+    // Note that we do _not_ split m_toPaint into disjoint rectangles and
+    // do FlipToFront() for each of them, because that could result in visible
+    // updating of the screen; instead, we prefer to flip everything at once.
+
     DFBRegion r = {paintedRect.GetLeft(), paintedRect.GetTop(),
                    paintedRect.GetRight(), paintedRect.GetBottom()};
     DFBRegion *rptr = (winRect == paintedRect) ? NULL : &r;
 
-    GetDfbSurface()->Flip(rptr, DSFLIP_NONE);
+    GetDfbSurface()->FlipToFront(rptr);
+
+    wxLogTrace(TRACE_PAINT,
+               _T("%p ('%s'): flipped surface: [%i,%i,%i,%i]"),
+               this, GetName().c_str(),
+               paintedRect.x, paintedRect.y,
+               paintedRect.GetRight(), paintedRect.GetBottom());
 }
 
-void wxTopLevelWindowDFB::DoRefreshRect(const wxRect& rect, bool eraseBack)
+void wxTopLevelWindowDFB::DoRefreshRect(const wxRect& rect)
 {
+    wxASSERT_MSG( rect.width > 0 && rect.height > 0, _T("invalid rect") );
+
+    wxLogTrace(TRACE_PAINT,
+               _T("%p ('%s'): [TLW] refresh rect [%i,%i,%i,%i]"),
+               this, GetName().c_str(),
+               rect.x, rect.y, rect.GetRight(), rect.GetBottom());
+
     // defer painting until idle time or until Update() is called:
-    m_toPaint->Add(rect, eraseBack);
+    m_toPaint->Add(rect);
 }
 
 void wxTopLevelWindowDFB::Update()

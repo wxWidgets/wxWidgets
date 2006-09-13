@@ -77,6 +77,10 @@ public:
 
     wxIDirectFBWindowPtr GetDirectFBWindow() const { return m_dfbwin; }
 
+    // Returns true if some invalidated area of the TLW is currently being
+    // painted
+    bool IsPainting() const { return m_isPainting; }
+
 protected:
     // common part of all ctors
     void Init();
@@ -88,7 +92,7 @@ protected:
     virtual void DoGetSize(int *width, int *height) const;
     virtual void DoMoveWindow(int x, int y, int width, int height);
 
-    virtual void DoRefreshRect(const wxRect& rect, bool eraseBack = true);
+    virtual void DoRefreshRect(const wxRect& rect);
 
 private:
     // do queued painting in idle time
@@ -119,7 +123,10 @@ protected:
     wxIDirectFBWindowPtr m_dfbwin;
 
 private:
+    // invalidated areas of the TLW that need repainting
     wxDfbQueuedPaintRequests *m_toPaint;
+    // are we currently painting some area of this TLW?
+    bool m_isPainting;
 
     friend class wxEventLoop; // for HandleDFBWindowEvent
 };

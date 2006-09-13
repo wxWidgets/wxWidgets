@@ -231,10 +231,11 @@ struct wxIDirectFBSurface : public wxDfbWrapper<IDirectFBSurface>
                                          (DFBSurfaceTextFlags)flags));
     }
 
-    bool Flip(const DFBRegion *region, int flags)
-    {
-        return Check(m_ptr->Flip(m_ptr, region, (DFBSurfaceFlipFlags)flags));
-    }
+    /**
+        Updates the front buffer from the back buffer. If @a region is not
+        NULL, only given rectangle is updated.
+     */
+    bool FlipToFront(const DFBRegion *region = NULL);
 
     wxIDirectFBSurfacePtr GetSubSurface(const DFBRectangle *rect)
     {
@@ -293,6 +294,10 @@ struct wxIDirectFBSurface : public wxDfbWrapper<IDirectFBSurface>
                     size of this surface.
      */
     wxIDirectFBSurfacePtr CreateCompatible(const wxSize& size = wxDefaultSize);
+
+private:
+    // this is private because we want user code to use FlipToFront()
+    bool Flip(const DFBRegion *region, int flags);
 };
 
 

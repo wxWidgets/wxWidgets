@@ -31,6 +31,8 @@
 
 #include "wx/dfb/private.h"
 
+#define TRACE_PAINT  _T("paint")
+
 // ===========================================================================
 // implementation
 // ===========================================================================
@@ -48,13 +50,12 @@ wxWindowDC::wxWindowDC(wxWindow *win)
 
 void wxWindowDC::InitForWin(wxWindow *win, const wxRect *rect)
 {
+    m_win = win;
+
     wxCHECK_RET( win, _T("invalid window") );
 
-    // check if the rectangle covers full window and so is not needed:
-    if ( rect && *rect == wxRect(win->GetSize()) )
-        rect = NULL;
-
     // obtain the surface used for painting:
+    wxPoint origin;
     wxIDirectFBSurfacePtr surface;
 
     if ( !win->IsVisible() )
@@ -64,21 +65,37 @@ void wxWindowDC::InitForWin(wxWindow *win, const wxRect *rect)
         // we still need a valid DC so that e.g. text extents can be measured,
         // so let's create a dummy surface that has the same format as the real
         // one would have and let the code paint on it:
+        wxLogTrace(TRACE_PAINT, _T("%p ('%s'): creating dummy DC surface"),
+                   win, win->GetName().c_str());
         wxSize size(rect ? rect->GetSize() : win->GetSize());
         surface = win->GetDfbSurface()->CreateCompatible(size);
     }
-    else if ( !rect )
-    {
-        wxCHECK_RET( win->GetSize().x > 0 && win->GetSize().y > 0,
-                     _T("window has invalid size") );
-
-        surface = win->GetDfbSurface();
-    }
     else
     {
-        wxCHECK_RET( !rect || !rect->IsEmpty(), _T("invalid rectangle") );
+        wxRect rectOrig(rect ? *rect : wxRect(win->GetSize()));
 
-        DFBRectangle dfbrect = { rect->x, rect->y, rect->width, rect->height };
+        // compute painting rectangle after clipping if we're in PaintWindow
+        // code, otherwise paint on the entire window:
+        wxRect r(rectOrig);
+        if ( win->GetTLW()->IsPainting() )
+            r.Intersect(win->GetUpdateRegion().AsRect());
+
+        wxCHECK_RET( !r.IsEmpty(), _T("invalid painting rectangle") );
+
+        // if the DC was clipped thanks to rectPaint, we must adjust the origin
+        // accordingly; but we do *not* adjust for 'rect', because
+        // rect.GetPosition() has coordinates (0,0) in the DC:
+        origin.x = rectOrig.x - r.x;
+        origin.y = rectOrig.y - r.y;
+
+        wxLogTrace(TRACE_PAINT,
+                   _T("%p ('%s'): creating DC for area [%i,%i,%i,%i], clipped to [%i,%i,%i,%i], origin [%i,%i]"),
+                   win, win->GetName().c_str(),
+                   rectOrig.x, rectOrig.y, rectOrig.GetRight(), rectOrig.GetBottom(),
+                   r.x, r.y, r.GetRight(), r.GetBottom(),
+                   origin.x, origin.y);
+
+        DFBRectangle dfbrect = { r.x, r.y, r.width, r.height };
         surface = win->GetDfbSurface()->GetSubSurface(&dfbrect);
     }
 
@@ -89,20 +106,31 @@ void wxWindowDC::InitForWin(wxWindow *win, const wxRect *rect)
     SetFont(win->GetFont());
 
     // offset coordinates to account for subsurface's origin coordinates:
-    if ( rect )
-        SetDeviceOrigin(rect->x, rect->y);
+    SetDeviceOrigin(origin.x, origin.y);
 }
 
-//-----------------------------------------------------------------------------
-// base class for wxClientDC and wxPaintDC
-//-----------------------------------------------------------------------------
-
-wxClientDCBase::wxClientDCBase(wxWindow *win)
+wxWindowDC::~wxWindowDC()
 {
-    wxCHECK_RET( win, _T("invalid window") );
+    wxIDirectFBSurfacePtr surface(GetDirectFBSurface());
+    if ( !surface || !m_win )
+        return;
 
-    wxRect rect = win->GetClientRect();
-    InitForWin(win, &rect);
+    // painting on hidden window has no effect on TLW's surface, don't
+    // waste time flipping the dummy surface:
+    if ( !m_win->IsVisible() )
+        return;
+
+    // if no painting was done on the DC, we don't have to flip the surface:
+    if ( !m_isBBoxValid )
+        return;
+
+    if ( !m_win->GetTLW()->IsPainting() )
+    {
+        // FIXME: flip only modified parts of the surface
+        surface->FlipToFront();
+    }
+    // else: don't flip the surface, wxTLW will do it when it finishes
+    //       painting of its invalidated areas
 }
 
 //-----------------------------------------------------------------------------
@@ -111,15 +139,12 @@ wxClientDCBase::wxClientDCBase(wxWindow *win)
 
 IMPLEMENT_DYNAMIC_CLASS(wxClientDC, wxWindowDC)
 
-wxClientDC::~wxClientDC()
+wxClientDC::wxClientDC(wxWindow *win)
 {
-    // flip to surface so that the changes become visible
-    wxIDirectFBSurfacePtr surface(GetDirectFBSurface());
+    wxCHECK_RET( win, _T("invalid window") );
 
-    // FIXME: do this only if the surface was modified (as opposed to e.g.
-    //        used only to obtain text metrics)
-    if ( surface )
-        surface->Flip(NULL, DSFLIP_NONE);
+    wxRect rect = win->GetClientRect();
+    InitForWin(win, &rect);
 }
 
 //-----------------------------------------------------------------------------
@@ -127,12 +152,3 @@ wxClientDC::~wxClientDC()
 //-----------------------------------------------------------------------------
 
 IMPLEMENT_DYNAMIC_CLASS(wxPaintDC, wxWindowDC)
-
-#warning "wxPaintDC ctor must respect m_updateRegion"
-
-wxPaintDC::~wxPaintDC()
-{
-    // NB: do *not* flip the surface: wxPaintDC is used with EVT_PAINT and the
-    //     surface will be flipped for the entire TLW once all children are
-    //     repainted
-}

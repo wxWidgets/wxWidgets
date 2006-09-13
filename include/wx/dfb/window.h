@@ -140,11 +140,12 @@ protected:
     void InvalidateDfbSurface();
 
     // called by parent to render (part of) the window
-    void PaintWindow(const wxRect& rect, bool eraseBackground);
+    void PaintWindow(const wxRect& rect);
 
-    // implementation of Refresh()
-    void DoRefreshWindow(bool eraseBack = true);
-    virtual void DoRefreshRect(const wxRect& rect, bool eraseBack = true);
+    // refreshes the entire window (including non-client areas)
+    void DoRefreshWindow();
+    // refreshes given rectangle of the window (in window, _not_ client coords)
+    virtual void DoRefreshRect(const wxRect& rect);
 
     // DirectFB events handling
     void HandleKeyEvent(const wxDFBWindowEvent& event_);
@@ -176,6 +177,5 @@ private:
     DECLARE_NO_COPY_CLASS(wxWindowDFB)
     DECLARE_EVENT_TABLE()
 };
-
 
 #endif // _WX_DFB_WINDOW_H_

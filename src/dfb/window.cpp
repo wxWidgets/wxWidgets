@@ -590,34 +590,56 @@ void wxWindowDFB::Clear()
     dc.Clear();
 }
 
-void wxWindowDFB::Refresh(bool eraseBack, const wxRect *rect)
+void wxWindowDFB::Refresh(bool WXUNUSED(eraseBack), const wxRect *rect)
 {
     if ( !IsShown() || IsFrozen() )
         return;
 
+    // NB[1]: We intentionally ignore the eraseBack argument here. This is
+    //        because of the way wxDFB's painting is implemented: the refresh
+    //        request is probagated up to wxTLW, which is then painted in
+    //        top-down order. This means that this window's area is first
+    //        painted by its parent and this window is then painted over it, so
+    //        it's not safe to not paint this window's background even if
+    //        eraseBack=false.
+    // NB[2]: wxWindow::Refresh() takes the rectangle in client coords, but
+    //        wxUniv translates it to window coords before passing it to
+    //        wxWindowDFB::Refresh(), so we can directly pass the rect to
+    //        DoRefreshRect (which takes window, not client, coords) here.
     if ( rect )
-        DoRefreshRect(*rect, eraseBack);
+        DoRefreshRect(*rect);
     else
-        DoRefreshWindow(eraseBack);
+        DoRefreshWindow();
 }
 
-void wxWindowDFB::DoRefreshWindow(bool eraseBack)
+void wxWindowDFB::DoRefreshWindow()
 {
-    DoRefreshRect(wxRect(wxPoint(0, 0), GetSize()), eraseBack);
+    // NB: DoRefreshRect() takes window coords, not client, so this is correct
+    DoRefreshRect(wxRect(GetSize()));
 }
 
-void wxWindowDFB::DoRefreshRect(const wxRect& rect, bool eraseBack)
+void wxWindowDFB::DoRefreshRect(const wxRect& rect)
 {
     wxWindow *parent = GetParent();
     wxCHECK_RET( parent, _T("no parent") );
 
+    // don't overlap outside of the window (NB: 'rect' is in window coords):
+    wxRect r(rect);
+    r.Intersect(wxRect(GetSize()));
+    if ( r.IsEmpty() )
+        return;
+
+    wxLogTrace(TRACE_PAINT,
+               _T("%p ('%s'): refresh rect [%i,%i,%i,%i]"),
+               this, GetName().c_str(),
+               rect.x, rect.y, rect.GetRight(), rect.GetBottom());
+
     // convert the refresh rectangle to parent's coordinates and
     // recursively refresh the parent:
-    wxRect r(rect);
     r.Offset(GetPosition());
     r.Offset(parent->GetClientAreaOrigin());
 
-    parent->DoRefreshRect(r, eraseBack);
+    parent->DoRefreshRect(r);
 }
 
 void wxWindowDFB::Update()
@@ -640,23 +662,20 @@ void wxWindowDFB::Thaw()
     if ( --m_frozenness == 0 )
     {
         if ( IsShown() )
-            Refresh();
+            DoRefreshWindow();
     }
 }
 
-void wxWindowDFB::PaintWindow(const wxRect& rect, bool eraseBackground)
+void wxWindowDFB::PaintWindow(const wxRect& rect)
 {
     wxCHECK_RET( !IsFrozen() && IsShown(), _T("shouldn't be called") );
 
     wxLogTrace(TRACE_PAINT,
-               _T("%p ('%s'): painting region [x=%i,y=%i,w=%i,h=%i]"),
+               _T("%p ('%s'): painting region [%i,%i,%i,%i]"),
                this, GetName().c_str(),
-               rect.x, rect.y, rect.width, rect.height);
+               rect.x, rect.y, rect.GetRight(), rect.GetBottom());
 
     m_updateRegion = rect;
-
-    // FIXME_DFB: don't waste time rendering the area if it's fully covered
-    //            by some children, go directly to rendering the children
 
 #if wxUSE_CARET
     // must hide caret temporarily, otherwise we'd get rendering artifacts
@@ -665,27 +684,52 @@ void wxWindowDFB::PaintWindow(const wxRect& rect, bool eraseBackground)
         caret->Hide();
 #endif // wxUSE_CARET
 
-    if ( eraseBackground )
+    // FIXME_DFB: don't waste time rendering the area if it's fully covered
+    //            by some children, go directly to rendering the children
+
+    // NB: unconditionally send wxEraseEvent, because our implementation of
+    //     wxWindow::Refresh() ignores the eraseBack argument
+    wxWindowDC dc((wxWindow*)this);
+    wxEraseEvent eventEr(m_windowId, &dc);
+    eventEr.SetEventObject(this);
+    GetEventHandler()->ProcessEvent(eventEr);
+
+    wxRect clientRect(GetClientRect());
+
+    // only send wxNcPaintEvent if drawing at least part of nonclient area:
+    if ( !clientRect.Inside(rect) )
     {
-        wxWindowDC dc((wxWindow*)this);
-        wxEraseEvent eventEr(m_windowId, &dc);
-        eventEr.SetEventObject(this);
-        GetEventHandler()->ProcessEvent(eventEr);
+        wxNcPaintEvent eventNc(GetId());
+        eventNc.SetEventObject(this);
+        GetEventHandler()->ProcessEvent(eventNc);
+    }
+    else
+    {
+        wxLogTrace(TRACE_PAINT, _T("%p ('%s'): not sending wxNcPaintEvent"),
+                   this, GetName().c_str());
     }
 
-    wxNcPaintEvent eventNc(GetId());
-    eventNc.SetEventObject(this);
-    GetEventHandler()->ProcessEvent(eventNc);
-
-    wxPaintEvent eventPt(GetId());
-    eventPt.SetEventObject(this);
-    GetEventHandler()->ProcessEvent(eventPt);
+    // only send wxPaintEvent if drawing at least part of client area:
+    if ( rect.Intersects(clientRect) )
+    {
+        wxPaintEvent eventPt(GetId());
+        eventPt.SetEventObject(this);
+        GetEventHandler()->ProcessEvent(eventPt);
+    }
+    else
+    {
+        wxLogTrace(TRACE_PAINT, _T("%p ('%s'): not sending wxPaintEvent"),
+                   this, GetName().c_str());
+    }
 
 #if wxUSE_CARET
     if ( caret )
         caret->Show();
 #endif // wxUSE_CARET
 
+    m_updateRegion.Clear();
+
+    // paint the children:
     wxPoint origin = GetClientAreaOrigin();
     wxWindowList& children = GetChildren();
     for ( wxWindowList::iterator i = children.begin();
@@ -704,13 +748,10 @@ void wxWindowDFB::PaintWindow(const wxRect& rect, bool eraseBackground)
             continue;
 
         // and repaint it:
-        wxPoint childpos(child->GetPosition());
-        childrect.Offset(-childpos.x, -childpos.y);
-        childrect.Offset(-origin.x, -origin.y);
-        child->PaintWindow(childrect, eraseBackground);
+        childrect.Offset(-child->GetPosition());
+        childrect.Offset(-origin);
+        child->PaintWindow(childrect);
     }
-
-    m_updateRegion.Clear();
 }
 
 

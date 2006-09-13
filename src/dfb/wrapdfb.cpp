@@ -166,3 +166,17 @@ wxIDirectFBSurfacePtr wxIDirectFBSurface::Clone()
 
     return snew;
 }
+
+bool wxIDirectFBSurface::Flip(const DFBRegion *region, int flags)
+{
+    return Check(m_ptr->Flip(m_ptr, region, (DFBSurfaceFlipFlags)flags));
+}
+
+bool wxIDirectFBSurface::FlipToFront(const DFBRegion *region)
+{
+    // Blit to the front buffer instead of exchanging front and back ones.
+    // Always doing this ensures that back and front buffer have same content
+    // and so painting to the back buffer will never lose any previous
+    // drawings:
+    return Flip(region, DSFLIP_BLIT);
+}

@@ -151,6 +151,10 @@ void wxDC::Clear()
 
     wxColour clr = m_backgroundBrush.GetColour();
     m_surface->Clear(clr.Red(), clr.Green(), clr.Blue(), clr.Alpha());
+
+    wxSize size(GetSize());
+    CalcBoundingBox(XDEV2LOG(0), YDEV2LOG(0));
+    CalcBoundingBox(XDEV2LOG(size.x), YDEV2LOG(size.y));
 }
 
 extern bool wxDoFloodFill(wxDC *dc, wxCoord x, wxCoord y,
