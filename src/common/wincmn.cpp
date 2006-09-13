@@ -200,6 +200,8 @@ wxWindowBase::wxWindowBase()
 
     m_virtualSize = wxDefaultSize;
 
+    m_scrollHelper = (wxScrollHelper *) NULL;
+
     m_minVirtualWidth =
     m_maxVirtualWidth = wxDefaultCoord;
     m_minVirtualHeight =

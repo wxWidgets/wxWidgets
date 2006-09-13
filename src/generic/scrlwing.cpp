@@ -311,6 +311,8 @@ wxScrollHelper::wxScrollHelper(wxWindow *win)
     m_handler = NULL;
 
     m_win = win;
+    
+    m_win->SetScrollHelper( this );
 
     // by default, the associated window is also the target window
     DoSetTargetWindow(win);

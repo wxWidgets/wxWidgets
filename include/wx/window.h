@@ -65,6 +65,7 @@ class WXDLLEXPORT wxSizer;
 class WXDLLEXPORT wxToolTip;
 class WXDLLEXPORT wxWindowBase;
 class WXDLLEXPORT wxWindow;
+class WXDLLEXPORT wxScrollHelper;
 
 #if wxUSE_ACCESSIBILITY
 class WXDLLEXPORT wxAccessible;
@@ -342,6 +343,9 @@ public:
         if ( h )
             *h = s.y;
     }
+
+    void SetScrollHelper( wxScrollHelper *sh )   { m_scrollHelper = sh; }
+    wxScrollHelper *GetScrollHelper()            { return m_scrollHelper; }
 
         // reset the cached best size value so it will be recalculated the
         // next time it is needed.
@@ -1241,6 +1245,8 @@ protected:
 
     // Virtual size (scrolling)
     wxSize                m_virtualSize;
+
+    wxScrollHelper       *m_scrollHelper;
 
     int                   m_minVirtualWidth;    // VirtualSizeHints
     int                   m_minVirtualHeight;
