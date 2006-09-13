@@ -3138,10 +3138,22 @@ void wxListMainWindow::MoveToItem(size_t item)
     }
     else // !report
     {
-        if (rect.x-view_x < 5)
-            Scroll( (rect.x - 5) / SCROLL_UNIT_X, -1 );
-        if (rect.x + rect.width - 5 > view_x + client_w)
-            Scroll( (rect.x + rect.width - client_w + SCROLL_UNIT_X) / SCROLL_UNIT_X, -1 );
+        if (GetLayoutDirection() == wxLayout_RightToLeft)
+        {
+#if 0
+            wxPrintf( wxT("rect %d %d   %d %d   view_x %d\n"), rect.x, rect.y, rect.width, rect.height, view_x );
+            int virtual_width = GetVirtualSize().x;
+            view_x = virtual_width - view_x - client_w;
+            wxPrintf( wxT("virtual_width %d view_x = %d client_w = %d\n"), virtual_width, view_x, client_w );
+#endif
+        }
+        else
+        {
+            if (rect.x-view_x < 5)
+                Scroll( (rect.x - 5) / SCROLL_UNIT_X, -1 );
+            if (rect.x + rect.width - 5 > view_x + client_w)
+                Scroll( (rect.x + rect.width - client_w + SCROLL_UNIT_X) / SCROLL_UNIT_X, -1 );
+        }
     }
 }
 

@@ -2137,7 +2137,7 @@ void gtk_window_size_callback( GtkWidget *WXUNUSED(widget),
                 alloc->height );
 #endif
                 
-    GTK_PIZZA(win->m_wxwindow)->m_width = alloc->width;
+    GTK_PIZZA(win->m_wxwindow)->m_width = win->GetClientSize().x;
 
     win->m_oldClientWidth = client_width;
     win->m_oldClientHeight = client_height;
@@ -2465,7 +2465,7 @@ bool wxWindowGTK::Create( wxWindow *parent,
 
 #ifndef __WXUNIVERSAL__
     GtkPizza *pizza = GTK_PIZZA(m_wxwindow);
-
+    
     if (HasFlag(wxRAISED_BORDER))
     {
         gtk_pizza_set_shadow_type( pizza, GTK_MYSHADOW_OUT );
@@ -2752,10 +2752,6 @@ void wxWindowGTK::DoSetSize( int x, int y, int width, int height, int sizeFlags 
 {
     wxASSERT_MSG( (m_widget != NULL), wxT("invalid window") );
     wxASSERT_MSG( (m_parent != NULL), wxT("wxWindowGTK::SetSize requires parent.\n") );
-
-/*
-    printf( "DoSetSize: name %s, x,y,w,h: %d,%d,%d,%d \n", GetName().c_str(), x,y,width,height );
-*/
 
     if (m_resizing) return; /* I don't like recursions */
     m_resizing = true;
@@ -3107,7 +3103,15 @@ void wxWindowGTK::DoClientToScreen( int *x, int *y ) const
         }
     }
 
-    if (x) *x += org_x;
+
+    if (x)
+    {
+        if (GetLayoutDirection() == wxLayout_RightToLeft)
+            *x = (GetClientSize().x - *x) + org_x;
+        else 
+            *x += org_x;
+    }
+    
     if (y) *y += org_y;
 }
 
@@ -3136,7 +3140,13 @@ void wxWindowGTK::DoScreenToClient( int *x, int *y ) const
         }
     }
 
-    if (x) *x -= org_x;
+    if (x)
+    {
+        if (GetLayoutDirection() == wxLayout_RightToLeft)
+            *x = (GetClientSize().x - *x) - org_x;
+        else 
+            *x -= org_x;
+    }
     if (y) *y -= org_y;
 }
 
@@ -3752,6 +3762,8 @@ void wxWindowGTK::Refresh( bool eraseBackground, const wxRect *rect )
             gdk_rect.y = rect->y;
             gdk_rect.width = rect->width;
             gdk_rect.height = rect->height;
+            if (GetLayoutDirection() == wxLayout_RightToLeft)
+                gdk_rect.x = GetClientSize().x - gdk_rect.x - gdk_rect.width;
             p = &gdk_rect;
         }
         else // invalidate everything
@@ -3759,8 +3771,6 @@ void wxWindowGTK::Refresh( bool eraseBackground, const wxRect *rect )
             p = NULL;
         }
         
-        p = NULL;
-
         gdk_window_invalidate_rect( GTK_PIZZA(m_wxwindow)->bin_window, p, TRUE );
     }
 }

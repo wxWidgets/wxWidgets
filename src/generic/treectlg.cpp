@@ -2242,12 +2242,7 @@ void wxGenericTreeCtrl::PaintItem(wxGenericTreeItem *item, wxDC& dc)
 
     if ( image != NO_IMAGE )
     {
-#ifdef __WXGTK__
-        if (GetLayoutDirection() == wxLayout_RightToLeft)
-            dc.SetClippingRegion( item->GetX()+image_w-2, item->GetY(), image_w-2, total_h );
-        else
-#endif
-            dc.SetClippingRegion( item->GetX(), item->GetY(), image_w-2, total_h );
+        dc.SetClippingRegion( item->GetX(), item->GetY(), image_w-2, total_h );
         m_imageListNormal->Draw( image, dc,
                                  item->GetX(),
                                  item->GetY() +((total_h > image_h)?((total_h-image_h)/2):0),
@@ -2392,6 +2387,7 @@ void wxGenericTreeCtrl::PaintLevel( wxGenericTreeItem *item, wxDC &dc, int level
                 int yy = y_mid - image_h/2;
 
                 wxDCClipper clip(dc, xx, yy, image_w, image_h);
+                wxPrintf( wxT("hi\n") );
                 m_imageListButtons->Draw(image, dc, xx, yy,
                                          wxIMAGELIST_DRAW_TRANSPARENT);
             }

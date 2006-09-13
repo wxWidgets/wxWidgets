@@ -331,8 +331,24 @@ wxWindowDC::wxWindowDC( wxWindow *window )
         m_signX = -1;
         
         // origin in the upper right corner
-        wxScrolledWindow *sw = wxDynamicCast( m_owner, wxScrolledWindow );
-        if (sw)
+        
+        int scroll_lines = 0;
+        int scroll_step = 0;
+        
+        // Are we using scrolling?    
+        wxScrollHelper *sh = (wxScrollHelper*) m_owner->GetScrollHelper();
+        if (sh)
+        {
+            scroll_lines = sh->GetScrollLines(wxHORIZONTAL);
+            sh->GetScrollPixelsPerUnit( &scroll_step, NULL );
+        } 
+        
+        if (scroll_lines == 0)
+        {
+            int client_width = m_owner->GetClientSize().x;
+            m_deviceOriginX = client_width;
+        }
+        else
         {
             // We cannot use just the virtual size here, because
             // the virtual size may be less than the visible area
@@ -340,26 +356,11 @@ wxWindowDC::wxWindowDC( wxWindow *window )
             // horizontal scroll step is 10 pixels and the virtual
             // area is 97 pixels, we should be able to see or scroll
             // to 100 pixels, so the origin is at -100, not -97.
-            if (sw->GetScrollLines(wxHORIZONTAL) == 0)
-            {
-                int client_width = m_owner->GetClientSize().x;
-                m_deviceOriginX = client_width;
-            }
-            else
-            {
-                int scroll_step = 0;
-                sw->GetScrollPixelsPerUnit( &scroll_step, NULL );
-                int client_width = m_owner->GetClientSize().x;
-                int virtual_size = sw->GetVirtualSize().x;
-                int steps = (virtual_size + scroll_step - 1) / scroll_step;
-                int width = steps * scroll_step + (client_width % scroll_step);
-                m_deviceOriginX = width;
-            }
-        }
-        else
-        {
-            int client_width = m_owner->GetClientSize().x;
-            m_deviceOriginX = client_width;
+            int client_width = sh->GetTargetWindow()->GetClientSize().x;
+            int virtual_size = m_owner->GetVirtualSize().x;
+            int steps = (virtual_size + scroll_step - 1) / scroll_step;
+            int width = steps * scroll_step + (client_width % scroll_step);
+            m_deviceOriginX = width;
         }
     }
 }
@@ -2150,6 +2151,11 @@ void wxWindowDC::DoSetClippingRegion( wxCoord x, wxCoord y, wxCoord width, wxCoo
     rect.y = YLOG2DEV(y);
     rect.width = XLOG2DEVREL(width);
     rect.height = YLOG2DEVREL(height);
+
+    if (m_owner && m_owner->m_wxwindow && (m_owner->GetLayoutDirection() == wxLayout_RightToLeft))
+    {
+        rect.x -= rect.width;
+    }
 
     if (!m_currentClippingRegion.IsNull())
         m_currentClippingRegion.Intersect( rect );
