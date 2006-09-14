@@ -27,6 +27,10 @@ See the example application in {\tt samples/docview}.
 
 \membersection{wxDocParentFrame::wxDocParentFrame}\label{wxdocparentframector}
 
+\func{}{wxDocParentFrame}{\void}
+
+Default constructor.
+
 \func{}{wxDocParentFrame}{\param{wxDocManager*}{ manager}, \param{wxFrame *}{parent}, \param{wxWindowID}{ id},
  \param{const wxString\& }{title}, \param{const wxPoint\&}{ pos = wxDefaultPosition},
  \param{const wxSize\&}{ size = wxDefaultSize},
@@ -39,6 +43,15 @@ Constructor.
 \func{}{\destruct{wxDocParentFrame}}{\void}
 
 Destructor.
+
+\membersection{wxDocParentFrame::Create}\label{wxdocparentframecreate}
+
+\func{bool}{Create}{\param{wxDocManager*}{ manager}, \param{wxFrame *}{parent}, \param{wxWindowID}{ id},
+ \param{const wxString\& }{title}, \param{const wxPoint\&}{ pos = wxDefaultPosition},
+ \param{const wxSize\&}{ size = wxDefaultSize},
+ \param{long}{ style = wxDEFAULT\_FRAME\_STYLE}, \param{const wxString\& }{name = "frame"}}
+
+Used in two-step construction.
 
 \membersection{wxDocParentFrame::OnCloseWindow}\label{wxdocparentframeonclosewindow}
 

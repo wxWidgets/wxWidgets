@@ -1923,6 +1923,11 @@ BEGIN_EVENT_TABLE(wxDocParentFrame, wxFrame)
     EVT_CLOSE(wxDocParentFrame::OnCloseWindow)
 END_EVENT_TABLE()
 
+wxDocParentFrame::wxDocParentFrame()
+{
+    m_docManager = NULL;
+}
+
 wxDocParentFrame::wxDocParentFrame(wxDocManager *manager,
                                    wxFrame *frame,
                                    wxWindowID id,
@@ -1934,6 +1939,19 @@ wxDocParentFrame::wxDocParentFrame(wxDocManager *manager,
                 : wxFrame(frame, id, title, pos, size, style, name)
 {
     m_docManager = manager;
+}
+
+bool wxDocParentFrame::Create(wxDocManager *manager,
+                              wxFrame *frame,
+                              wxWindowID id,
+                              const wxString& title,
+                              const wxPoint& pos,
+                              const wxSize& size,
+                              long style,
+                              const wxString& name)
+{
+    m_docManager = manager;
+    return base_type::Create(frame, id, title, pos, size, style, name);
 }
 
 void wxDocParentFrame::OnExit(wxCommandEvent& WXUNUSED(event))

@@ -17,7 +17,6 @@
 #if wxUSE_DOC_VIEW_ARCHITECTURE
 
 #include "wx/list.h"
-#include "wx/cmndata.h"
 #include "wx/string.h"
 #include "wx/frame.h"
 
@@ -499,14 +498,24 @@ private:
 class WXDLLEXPORT wxDocParentFrame : public wxFrame
 {
 public:
+    wxDocParentFrame();
     wxDocParentFrame(wxDocManager *manager,
                      wxFrame *frame,
                      wxWindowID id,
                      const wxString& title,
                      const wxPoint& pos = wxDefaultPosition,
                      const wxSize& size = wxDefaultSize,
-                     long type = wxDEFAULT_FRAME_STYLE,
-                     const wxString& name = wxT("frame"));
+                     long style = wxDEFAULT_FRAME_STYLE,
+                     const wxString& name = wxFrameNameStr);
+
+    bool Create(wxDocManager *manager,
+                wxFrame *frame,
+                wxWindowID id,
+                const wxString& title,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                long style = wxDEFAULT_FRAME_STYLE,
+                const wxString& name = wxFrameNameStr);
 
     // Extend event processing to search the document manager's event table
     virtual bool ProcessEvent(wxEvent& event);
@@ -521,6 +530,7 @@ protected:
     wxDocManager *m_docManager;
 
 private:
+    typedef wxFrame base_type;
     DECLARE_CLASS(wxDocParentFrame)
     DECLARE_EVENT_TABLE()
     DECLARE_NO_COPY_CLASS(wxDocParentFrame)
