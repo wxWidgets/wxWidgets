@@ -644,15 +644,20 @@ bottom, otherwise it is moved to the left or top respectively.", "",
     }
 
     
-    DocStr( Inside, "Return True if the point is (not strcitly) inside the rect.", "");
-    %Rename(InsideXY, bool, Inside(int x, int y) const);
-    bool Inside(const wxPoint& pt) const;
+    DocStr( Contains, "Return True if the point is inside the rect.", "");
+    %Rename(ContainsXY, bool, Contains(int x, int y) const);
+    bool Contains(const wxPoint& pt) const;
 
     DocDeclStrName(
-        bool, Inside(const wxRect& rect) const,
+        bool, Contains(const wxRect& rect) const,
         "Returns ``True`` if the given rectangle is completely inside this
 rectangle or touches its boundary.", "",
-        InsideRect);
+        ContainsRect);
+    %pythoncode {
+        Inside = wx._deprecated(Contains, "Use `Contains` instead.")
+        InsideXY = wx._deprecated(ContainsXY, "Use `ContainsXY` instead.")
+        InsideRect = wx._deprecated(ContainsRect, "Use `ContainsRect` instead.")
+    }
     
     DocDeclStr(    
         bool, Intersects(const wxRect& rect) const,
