@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        app.h
+// Name:        wx/mgl/app.h
 // Purpose:
 // Author:      Vaclav Slavik
 // Id:          $Id$
@@ -12,6 +12,7 @@
 
 #include "wx/frame.h"
 #include "wx/icon.h"
+#include "wx/vidmode.h"
 
 //-----------------------------------------------------------------------------
 // classes
@@ -40,7 +41,7 @@ public:
     // override base class (pure) virtuals
     virtual bool Initialize(int& argc, wxChar **argv);
     virtual void CleanUp();
-    
+
     virtual void Exit();
     virtual void WakeUpIdle();
     virtual bool Yield(bool onlyIfNeeded = FALSE);
@@ -56,4 +57,3 @@ private:
 };
 
 #endif // __WX_APP_H__
-
