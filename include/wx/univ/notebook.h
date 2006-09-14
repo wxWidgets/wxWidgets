@@ -111,6 +111,12 @@ public:
                                long numArg = 0l,
                                const wxString& strArg = wxEmptyString);
 
+    static wxInputHandler *GetStdInputHandler(wxInputHandler *handlerDef);
+    virtual wxInputHandler *DoGetStdInputHandler(wxInputHandler *handlerDef)
+    {
+        return GetStdInputHandler(handlerDef);
+    }
+
     // refresh the currently selected tab
     void RefreshCurrent();
 
@@ -240,29 +246,6 @@ protected:
     wxSize m_sizePad;
 
     DECLARE_DYNAMIC_CLASS(wxNotebook)
-};
-
-// ----------------------------------------------------------------------------
-// wxStdNotebookInputHandler: translates SPACE and ENTER keys and the left mouse
-// click into button press/release actions
-// ----------------------------------------------------------------------------
-
-class WXDLLEXPORT wxStdNotebookInputHandler : public wxStdInputHandler
-{
-public:
-    wxStdNotebookInputHandler(wxInputHandler *inphand);
-
-    virtual bool HandleKey(wxInputConsumer *consumer,
-                           const wxKeyEvent& event,
-                           bool pressed);
-    virtual bool HandleMouse(wxInputConsumer *consumer,
-                             const wxMouseEvent& event);
-    virtual bool HandleMouseMove(wxInputConsumer *consumer, const wxMouseEvent& event);
-    virtual bool HandleFocus(wxInputConsumer *consumer, const wxFocusEvent& event);
-    virtual bool HandleActivation(wxInputConsumer *consumer, bool activated);
-
-protected:
-    void HandleFocusChange(wxInputConsumer *consumer);
 };
 
 #endif // _WX_UNIV_NOTEBOOK_H_

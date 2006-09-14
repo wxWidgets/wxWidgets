@@ -355,6 +355,14 @@ bool wxSpinButton::PerformAction(const wxControlAction& action,
     return true;
 }
 
+/* static */
+wxInputHandler *wxSpinButton::GetStdInputHandler(wxInputHandler *handlerDef)
+{
+    static wxStdSpinButtonInputHandler s_handler(handlerDef);
+
+    return &s_handler;
+}
+
 // ----------------------------------------------------------------------------
 // wxStdSpinButtonInputHandler
 // ----------------------------------------------------------------------------

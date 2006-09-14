@@ -35,6 +35,29 @@
 #include "wx/cshelp.h"
 #include "wx/evtloop.h"
 
+// ----------------------------------------------------------------------------
+// wxStdTLWInputHandler: handles focus, resizing and titlebar buttons clicks
+// ----------------------------------------------------------------------------
+
+class WXDLLEXPORT wxStdTLWInputHandler : public wxStdInputHandler
+{
+public:
+    wxStdTLWInputHandler(wxInputHandler *inphand);
+
+    virtual bool HandleMouse(wxInputConsumer *consumer,
+                             const wxMouseEvent& event);
+    virtual bool HandleMouseMove(wxInputConsumer *consumer, const wxMouseEvent& event);
+    virtual bool HandleActivation(wxInputConsumer *consumer, bool activated);
+
+private:
+    // the window (button) which has capture or NULL and the last hittest result
+    wxTopLevelWindow *m_winCapture;
+    long              m_winHitTest;
+    long              m_winPressed;
+    bool              m_borderCursorOn;
+    wxCursor          m_origCursor;
+};
+
 
 // ----------------------------------------------------------------------------
 // event tables
@@ -780,13 +803,21 @@ void wxTopLevelWindow::OnSystemMenu(wxCommandEvent& event)
         event.Skip();
 }
 
+/* static */
+wxInputHandler *
+wxTopLevelWindow::GetStdInputHandler(wxInputHandler *handlerDef)
+{
+    static wxStdTLWInputHandler s_handler(handlerDef);
+
+    return &s_handler;
+}
 
 // ============================================================================
-// wxStdFrameInputHandler: handles focus, resizing and titlebar buttons clicks
+// wxStdTLWInputHandler: handles focus, resizing and titlebar buttons clicks
 // ============================================================================
 
-wxStdFrameInputHandler::wxStdFrameInputHandler(wxInputHandler *inphand)
-            : wxStdInputHandler(inphand)
+wxStdTLWInputHandler::wxStdTLWInputHandler(wxInputHandler *inphand)
+                    : wxStdInputHandler(inphand)
 {
     m_winCapture = NULL;
     m_winHitTest = 0;
@@ -794,8 +825,8 @@ wxStdFrameInputHandler::wxStdFrameInputHandler(wxInputHandler *inphand)
     m_borderCursorOn = false;
 }
 
-bool wxStdFrameInputHandler::HandleMouse(wxInputConsumer *consumer,
-                                         const wxMouseEvent& event)
+bool wxStdTLWInputHandler::HandleMouse(wxInputConsumer *consumer,
+                                       const wxMouseEvent& event)
 {
     // the button has 2 states: pressed and normal with the following
     // transitions between them:
@@ -855,8 +886,8 @@ bool wxStdFrameInputHandler::HandleMouse(wxInputConsumer *consumer,
     return wxStdInputHandler::HandleMouse(consumer, event);
 }
 
-bool wxStdFrameInputHandler::HandleMouseMove(wxInputConsumer *consumer,
-                                             const wxMouseEvent& event)
+bool wxStdTLWInputHandler::HandleMouseMove(wxInputConsumer *consumer,
+                                           const wxMouseEvent& event)
 {
     if ( event.GetEventObject() == m_winCapture )
     {
@@ -906,8 +937,8 @@ bool wxStdFrameInputHandler::HandleMouseMove(wxInputConsumer *consumer,
     return wxStdInputHandler::HandleMouseMove(consumer, event);
 }
 
-bool wxStdFrameInputHandler::HandleActivation(wxInputConsumer *consumer,
-                                              bool activated)
+bool wxStdTLWInputHandler::HandleActivation(wxInputConsumer *consumer,
+                                            bool activated)
 {
     if ( m_borderCursorOn )
     {

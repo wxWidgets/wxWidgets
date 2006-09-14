@@ -44,6 +44,19 @@
 #include "wx/univ/inphand.h"
 #include "wx/univ/theme.h"
 
+// ----------------------------------------------------------------------------
+// wxStdComboBoxInputHandler: allows the user to open/close the combo from kbd
+// ----------------------------------------------------------------------------
+
+class WXDLLEXPORT wxStdComboBoxInputHandler : public wxStdInputHandler
+{
+public:
+    wxStdComboBoxInputHandler(wxInputHandler *inphand);
+
+    virtual bool HandleKey(wxInputConsumer *consumer,
+                           const wxKeyEvent& event,
+                           bool pressed);
+};
 
 // ----------------------------------------------------------------------------
 // wxComboListBox is a listbox modified to be used as a popup window in a
@@ -530,5 +543,12 @@ bool wxStdComboBoxInputHandler::HandleKey(wxInputConsumer *consumer,
     return wxStdInputHandler::HandleKey(consumer, event, pressed);
 }
 
+/* static */
+wxInputHandler *wxComboBox::GetStdInputHandler(wxInputHandler *handlerDef)
+{
+    static wxStdComboBoxInputHandler s_handler(handlerDef);
+
+    return &s_handler;
+}
 
 #endif // wxUSE_COMBOBOX

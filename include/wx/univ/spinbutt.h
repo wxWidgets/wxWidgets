@@ -62,6 +62,12 @@ public:
                                long numArg = 0,
                                const wxString& strArg = wxEmptyString);
 
+    static wxInputHandler *GetStdInputHandler(wxInputHandler *handlerDef);
+    virtual wxInputHandler *DoGetStdInputHandler(wxInputHandler *handlerDef)
+    {
+        return GetStdInputHandler(handlerDef);
+    }
+
 protected:
     virtual wxSize DoGetBestClientSize() const;
     virtual void DoDraw(wxControlRenderer *renderer);

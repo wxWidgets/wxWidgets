@@ -136,6 +136,12 @@ public:
                                const wxString& strArg = wxEmptyString);
     */
 
+    static wxInputHandler *GetStdInputHandler(wxInputHandler *handlerDef);
+    virtual wxInputHandler *DoGetStdInputHandler(wxInputHandler *handlerDef)
+    {
+        return GetStdInputHandler(handlerDef);
+    }
+
 protected:
     virtual int DoAppend(const wxString& item);
     virtual int DoInsert(const wxString& item, unsigned int pos);
@@ -157,21 +163,5 @@ private:
     //DECLARE_EVENT_TABLE()
     DECLARE_DYNAMIC_CLASS(wxComboBox)
 };
-
-
-// ----------------------------------------------------------------------------
-// wxStdComboBoxInputHandler: allows the user to open/close the combo from kbd
-// ----------------------------------------------------------------------------
-
-class WXDLLEXPORT wxStdComboBoxInputHandler : public wxStdInputHandler
-{
-public:
-    wxStdComboBoxInputHandler(wxInputHandler *inphand);
-
-    virtual bool HandleKey(wxInputConsumer *consumer,
-                           const wxKeyEvent& event,
-                           bool pressed);
-};
-
 
 #endif // _WX_UNIV_COMBOBOX_H_

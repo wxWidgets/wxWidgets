@@ -62,6 +62,7 @@
 
 #include "wx/univ/scrtimer.h"
 #include "wx/univ/renderer.h"
+#include "wx/univ/inpcons.h"
 #include "wx/univ/inphand.h"
 #include "wx/univ/colschem.h"
 #include "wx/univ/theme.h"
@@ -553,34 +554,31 @@ private:
 class wxWin32InputHandler : public wxInputHandler
 {
 public:
-    wxWin32InputHandler(wxWin32Renderer *renderer);
+    wxWin32InputHandler() { }
 
     virtual bool HandleKey(wxInputConsumer *control,
                            const wxKeyEvent& event,
                            bool pressed);
     virtual bool HandleMouse(wxInputConsumer *control,
                              const wxMouseEvent& event);
-
-protected:
-    wxWin32Renderer *m_renderer;
 };
 
 #if wxUSE_SCROLLBAR
 class wxWin32ScrollBarInputHandler : public wxStdScrollBarInputHandler
 {
 public:
-    wxWin32ScrollBarInputHandler(wxWin32Renderer *renderer,
+    wxWin32ScrollBarInputHandler(wxRenderer *renderer,
                                  wxInputHandler *handler);
 
-    virtual bool HandleMouse(wxInputConsumer *control, const wxMouseEvent& event);
-    virtual bool HandleMouseMove(wxInputConsumer *control, const wxMouseEvent& event);
+    virtual bool HandleMouse(wxInputConsumer *control,
+                             const wxMouseEvent& event);
+    virtual bool HandleMouseMove(wxInputConsumer *control,
+                                 const wxMouseEvent& event);
 
     virtual bool OnScrollTimer(wxScrollBar *scrollbar,
                                const wxControlAction& action);
 
 protected:
-    virtual bool IsAllowedButton(int button) { return button == 1; }
-
     virtual void Highlight(wxScrollBar * WXUNUSED(scrollbar),
                            bool WXUNUSED(doIt))
     {
@@ -600,11 +598,11 @@ protected:
 #endif // wxUSE_SCROLLBAR
 
 #if wxUSE_CHECKBOX
-class wxWin32CheckboxInputHandler : public wxStdCheckboxInputHandler
+class wxWin32CheckboxInputHandler : public wxStdInputHandler
 {
 public:
     wxWin32CheckboxInputHandler(wxInputHandler *handler)
-        : wxStdCheckboxInputHandler(handler) { }
+        : wxStdInputHandler(handler) { }
 
     virtual bool HandleKey(wxInputConsumer *control,
                            const wxKeyEvent& event,
@@ -613,11 +611,11 @@ public:
 #endif // wxUSE_CHECKBOX
 
 #if wxUSE_TEXTCTRL
-class wxWin32TextCtrlInputHandler : public wxStdTextCtrlInputHandler
+class wxWin32TextCtrlInputHandler : public wxStdInputHandler
 {
 public:
     wxWin32TextCtrlInputHandler(wxInputHandler *handler)
-        : wxStdTextCtrlInputHandler(handler) { }
+        : wxStdInputHandler(handler) { }
 
     virtual bool HandleKey(wxInputConsumer *control,
                            const wxKeyEvent& event,
@@ -650,7 +648,7 @@ private:
 
 class wxWin32SystemMenuEvtHandler;
 
-class wxWin32FrameInputHandler : public wxStdFrameInputHandler
+class wxWin32FrameInputHandler : public wxStdInputHandler
 {
 public:
     wxWin32FrameInputHandler(wxInputHandler *handler);
@@ -707,13 +705,11 @@ public:
 
     virtual wxRenderer *GetRenderer();
     virtual wxArtProvider *GetArtProvider();
-    virtual wxInputHandler *GetInputHandler(const wxString& control);
+    virtual wxInputHandler *GetInputHandler(const wxString& control,
+                                            wxInputConsumer *consumer);
     virtual wxColourScheme *GetColourScheme();
 
 private:
-    // get the default input handler
-    wxInputHandler *GetDefaultInputHandler();
-
     wxWin32Renderer *m_renderer;
 
     wxWin32ArtProvider *m_artProvider;
@@ -722,8 +718,6 @@ private:
     // (these arrays are synchronized)
     wxSortedArrayString m_handlerNames;
     wxArrayHandlers m_handlers;
-
-    wxWin32InputHandler *m_handlerDefault;
 
     wxWin32ColourScheme *m_scheme;
 
@@ -1275,21 +1269,11 @@ wxWin32Theme::wxWin32Theme()
 {
     m_scheme = NULL;
     m_renderer = NULL;
-    m_handlerDefault = NULL;
     m_artProvider = NULL;
 }
 
 wxWin32Theme::~wxWin32Theme()
 {
-    size_t count = m_handlers.GetCount();
-    for ( size_t n = 0; n < count; n++ )
-    {
-        if ( m_handlers[n] != m_handlerDefault )
-            delete m_handlers[n];
-    }
-
-    delete m_handlerDefault;
-
     delete m_renderer;
     delete m_scheme;
     wxArtProvider::RemoveProvider(m_artProvider);
@@ -1315,79 +1299,63 @@ wxArtProvider *wxWin32Theme::GetArtProvider()
     return m_artProvider;
 }
 
-wxInputHandler *wxWin32Theme::GetDefaultInputHandler()
-{
-    if ( !m_handlerDefault )
-    {
-        m_handlerDefault = new wxWin32InputHandler(m_renderer);
-    }
-
-    return m_handlerDefault;
-}
-
-wxInputHandler *wxWin32Theme::GetInputHandler(const wxString& control)
+wxInputHandler *
+wxWin32Theme::GetInputHandler(const wxString& control,
+                              wxInputConsumer *consumer)
 {
     wxInputHandler *handler = NULL;
     int n = m_handlerNames.Index(control);
     if ( n == wxNOT_FOUND )
     {
+        static wxWin32InputHandler s_handlerDef;
+
+        wxInputHandler * const
+          handlerStd = consumer->DoGetStdInputHandler(&s_handlerDef);
+
         // create a new handler
-        if ( control == wxINP_HANDLER_SCROLLBAR )
+        if ( control == wxINP_HANDLER_TOPLEVEL )
         {
-#if wxUSE_SCROLLBAR
-            handler = new wxWin32ScrollBarInputHandler(m_renderer,
-                                                       GetDefaultInputHandler());
-#endif // wxUSE_SCROLLBAR
+            static wxWin32FrameInputHandler s_handler(handlerStd);
+
+            handler = &s_handler;
         }
-#if wxUSE_BUTTON
-        else if ( control == wxINP_HANDLER_BUTTON )
-            handler = new wxStdButtonInputHandler(GetDefaultInputHandler());
-#endif // wxUSE_BUTTON
 #if wxUSE_CHECKBOX
         else if ( control == wxINP_HANDLER_CHECKBOX )
-            handler = new wxWin32CheckboxInputHandler(GetDefaultInputHandler());
+        {
+            static wxWin32CheckboxInputHandler s_handler(handlerStd);
+
+            handler = &s_handler;
+        }
 #endif // wxUSE_CHECKBOX
-#if wxUSE_COMBOBOX
-        else if ( control == wxINP_HANDLER_COMBOBOX )
-            handler = new wxStdComboBoxInputHandler(GetDefaultInputHandler());
-#endif // wxUSE_COMBOBOX
-#if wxUSE_LISTBOX
-        else if ( control == wxINP_HANDLER_LISTBOX )
-            handler = new wxStdListboxInputHandler(GetDefaultInputHandler());
-#endif // wxUSE_LISTBOX
-#if wxUSE_CHECKLISTBOX
-        else if ( control == wxINP_HANDLER_CHECKLISTBOX )
-            handler = new wxStdCheckListboxInputHandler(GetDefaultInputHandler());
-#endif // wxUSE_CHECKLISTBOX
-#if wxUSE_TEXTCTRL
-        else if ( control == wxINP_HANDLER_TEXTCTRL )
-            handler = new wxWin32TextCtrlInputHandler(GetDefaultInputHandler());
-#endif // wxUSE_TEXTCTRL
-#if wxUSE_SLIDER
-        else if ( control == wxINP_HANDLER_SLIDER )
-            handler = new wxStdSliderButtonInputHandler(GetDefaultInputHandler());
-#endif // wxUSE_SLIDER
-#if wxUSE_SPINBTN
-        else if ( control == wxINP_HANDLER_SPINBTN )
-            handler = new wxStdSpinButtonInputHandler(GetDefaultInputHandler());
-#endif // wxUSE_SPINBTN
-#if wxUSE_NOTEBOOK
-        else if ( control == wxINP_HANDLER_NOTEBOOK )
-            handler = new wxStdNotebookInputHandler(GetDefaultInputHandler());
-#endif // wxUSE_NOTEBOOK
+#if wxUSE_SCROLLBAR
+        else if ( control == wxINP_HANDLER_SCROLLBAR )
+        {
+            static wxWin32ScrollBarInputHandler
+                s_handler(GetRenderer(), handlerStd);
+
+            handler = &s_handler;
+        }
+#endif // wxUSE_SCROLLBAR
 #if wxUSE_STATUSBAR
         else if ( control == wxINP_HANDLER_STATUSBAR )
-            handler = new wxWin32StatusBarInputHandler(GetDefaultInputHandler());
-#endif // wxUSE_STATUSBAR
-#if wxUSE_TOOLBAR
-        else if ( control == wxINP_HANDLER_TOOLBAR )
-            handler = new wxStdToolbarInputHandler(GetDefaultInputHandler());
-#endif // wxUSE_TOOLBAR
-        else if ( control == wxINP_HANDLER_TOPLEVEL )
-            handler = new wxWin32FrameInputHandler(GetDefaultInputHandler());
+        {
+            static wxWin32StatusBarInputHandler s_handler(handlerStd);
 
-        if(!handler)
-            handler = GetDefaultInputHandler();
+            handler = &s_handler;
+        }
+#endif // wxUSE_STATUSBAR
+#if wxUSE_TEXTCTRL
+        else if ( control == wxINP_HANDLER_TEXTCTRL )
+        {
+            static wxWin32TextCtrlInputHandler s_handler(handlerStd);
+
+            handler = &s_handler;
+        }
+#endif // wxUSE_TEXTCTRL
+        else // no special handler for this control
+        {
+            handler = handlerStd;
+        }
 
         n = m_handlerNames.Add(control);
         m_handlers.Insert(handler, n);
@@ -4425,7 +4393,7 @@ void wxWin32Renderer::AdjustSize(wxSize *size, const wxWindow *window)
         // skip border width adjustments, they don't make sense for us
         return;
     }
-#endif // wxUSE_SCROLLBAR/!wxUSE_SCROLLBAR
+#endif // wxUSE_SCROLLBAR
 
 #if wxUSE_BMPBUTTON
     if ( wxDynamicCast(window, wxBitmapButton) )
@@ -4486,11 +4454,6 @@ void wxWin32Renderer::AdjustSize(wxSize *size, const wxWindow *window)
 // wxWin32InputHandler
 // ----------------------------------------------------------------------------
 
-wxWin32InputHandler::wxWin32InputHandler(wxWin32Renderer *renderer)
-{
-    m_renderer = renderer;
-}
-
 bool wxWin32InputHandler::HandleKey(wxInputConsumer * WXUNUSED(control),
                                     const wxKeyEvent& WXUNUSED(event),
                                     bool WXUNUSED(pressed))
@@ -4506,8 +4469,8 @@ bool wxWin32InputHandler::HandleMouse(wxInputConsumer *control,
     {
         wxWindow *win = control->GetInputWindow();
 
-        if (( wxWindow::FindFocus() != control->GetInputWindow() ) &&
-            ( win->AcceptsFocus() ) )
+        if ( (wxWindow::FindFocus() != control->GetInputWindow()) &&
+             win->AcceptsFocus() )
         {
             win->SetFocus();
 
@@ -4525,8 +4488,7 @@ bool wxWin32InputHandler::HandleMouse(wxInputConsumer *control,
 // ----------------------------------------------------------------------------
 
 wxWin32ScrollBarInputHandler::
-wxWin32ScrollBarInputHandler(wxWin32Renderer *renderer,
-                             wxInputHandler *handler)
+wxWin32ScrollBarInputHandler(wxRenderer *renderer, wxInputHandler *handler)
         : wxStdScrollBarInputHandler(renderer, handler)
 {
     m_scrollPaused = false;
@@ -4699,7 +4661,7 @@ bool wxWin32ScrollBarInputHandler::HandleMouseMove(wxInputConsumer *control,
         }
     }
 
-    return wxStdScrollBarInputHandler::HandleMouseMove(control, event);
+    return wxStdInputHandler::HandleMouseMove(control, event);
 }
 
 #endif // wxUSE_SCROLLBAR
@@ -4786,7 +4748,7 @@ bool wxWin32TextCtrlInputHandler::HandleKey(wxInputConsumer *control,
         }
     }
 
-    return wxStdTextCtrlInputHandler::HandleKey(control, event, pressed);
+    return wxStdInputHandler::HandleKey(control, event, pressed);
 }
 
 #endif // wxUSE_TEXTCTRL
@@ -4913,8 +4875,8 @@ private:
 #endif
 };
 
-wxWin32SystemMenuEvtHandler::wxWin32SystemMenuEvtHandler(
-                                wxWin32FrameInputHandler *handler)
+wxWin32SystemMenuEvtHandler::
+wxWin32SystemMenuEvtHandler(wxWin32FrameInputHandler *handler)
 {
     m_inputHnd = handler;
     m_wnd = NULL;
@@ -4994,7 +4956,7 @@ void wxWin32SystemMenuEvtHandler::OnClose(wxCloseEvent &event)
 
 
 wxWin32FrameInputHandler::wxWin32FrameInputHandler(wxInputHandler *handler)
-        : wxStdFrameInputHandler(handler)
+                        : wxStdInputHandler(handler)
 {
     m_menuHandler = new wxWin32SystemMenuEvtHandler(this);
 }
@@ -5040,7 +5002,7 @@ bool wxWin32FrameInputHandler::HandleMouse(wxInputConsumer *consumer,
         }
     }
 
-    return wxStdFrameInputHandler::HandleMouse(consumer, event);
+    return wxStdInputHandler::HandleMouse(consumer, event);
 }
 
 #if wxUSE_MENUS
@@ -5095,5 +5057,5 @@ bool wxWin32FrameInputHandler::HandleActivation(wxInputConsumer *consumer,
         }
     }
 
-    return wxStdFrameInputHandler::HandleActivation(consumer, activated);
+    return wxStdInputHandler::HandleActivation(consumer, activated);
 }

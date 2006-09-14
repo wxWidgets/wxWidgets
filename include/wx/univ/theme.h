@@ -18,10 +18,11 @@
 // wxTheme
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxRenderer;
-class WXDLLEXPORT wxColourScheme;
-class WXDLLEXPORT wxInputHandler;
 class WXDLLEXPORT wxArtProvider;
+class WXDLLEXPORT wxColourScheme;
+class WXDLLEXPORT wxInputConsumer;
+class WXDLLEXPORT wxInputHandler;
+class WXDLLEXPORT wxRenderer;
 struct WXDLLEXPORT wxThemeInfo;
 
 class WXDLLEXPORT wxTheme
@@ -52,8 +53,9 @@ public:
     // get the art provider to be used together with this theme
     virtual wxArtProvider *GetArtProvider() = 0;
 
-    // get the input handler of the given type
-    virtual wxInputHandler *GetInputHandler(const wxString& handlerType) = 0;
+    // get the input handler of the given type, forward to the standard one
+    virtual wxInputHandler *GetInputHandler(const wxString& handlerType,
+                                            wxInputConsumer *consumer) = 0;
 
     // get the colour scheme for the control with this name
     virtual wxColourScheme *GetColourScheme() = 0;

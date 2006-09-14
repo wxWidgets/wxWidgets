@@ -57,6 +57,7 @@
 #endif // wxUSE_TOGGLEBTN
 
 #include "wx/univ/renderer.h"
+#include "wx/univ/inpcons.h"
 #include "wx/univ/inphand.h"
 #include "wx/univ/colschem.h"
 #include "wx/univ/theme.h"
@@ -524,17 +525,15 @@ private:
 class wxGTKInputHandler : public wxInputHandler
 {
 public:
-    wxGTKInputHandler(wxGTKRenderer *renderer);
+    wxGTKInputHandler() { }
 
     virtual bool HandleKey(wxInputConsumer *control,
                            const wxKeyEvent& event,
                            bool pressed);
     virtual bool HandleMouse(wxInputConsumer *control,
                              const wxMouseEvent& event);
-    virtual bool HandleMouseMove(wxInputConsumer *control, const wxMouseEvent& event);
-
-protected:
-    wxGTKRenderer *m_renderer;
+    virtual bool HandleMouseMove(wxInputConsumer *control,
+                                 const wxMouseEvent& event);
 };
 
 #if wxUSE_SCROLLBAR
@@ -564,7 +563,8 @@ protected:
         wxStdScrollBarInputHandler::Press(scrollbar, doIt);
     }
 
-    virtual bool IsAllowedButton(int WXUNUSED(button)) { return true; }
+    // any button can be used to drag the scrollbar under GTK+
+    virtual bool IsAllowedButton(int WXUNUSED(button)) const { return true; }
 
     bool IsArrow() const
     {
@@ -577,11 +577,11 @@ protected:
 
 #if wxUSE_CHECKBOX
 
-class wxGTKCheckboxInputHandler : public wxStdCheckboxInputHandler
+class wxGTKCheckboxInputHandler : public wxStdInputHandler
 {
 public:
     wxGTKCheckboxInputHandler(wxInputHandler *handler)
-        : wxStdCheckboxInputHandler(handler) { }
+        : wxStdInputHandler(handler) { }
 
     virtual bool HandleKey(wxInputConsumer *control,
                            const wxKeyEvent& event,
@@ -592,11 +592,11 @@ public:
 
 #if wxUSE_TEXTCTRL
 
-class wxGTKTextCtrlInputHandler : public wxStdTextCtrlInputHandler
+class wxGTKTextCtrlInputHandler : public wxStdInputHandler
 {
 public:
     wxGTKTextCtrlInputHandler(wxInputHandler *handler)
-        : wxStdTextCtrlInputHandler(handler) { }
+        : wxStdInputHandler(handler) { }
 
     virtual bool HandleKey(wxInputConsumer *control,
                            const wxKeyEvent& event,
@@ -642,13 +642,11 @@ public:
 
     virtual wxRenderer *GetRenderer();
     virtual wxArtProvider *GetArtProvider();
-    virtual wxInputHandler *GetInputHandler(const wxString& control);
+    virtual wxInputHandler *GetInputHandler(const wxString& control,
+                                            wxInputConsumer *consumer);
     virtual wxColourScheme *GetColourScheme();
 
 private:
-    // get the default input handler
-    wxInputHandler *GetDefaultInputHandler();
-
     wxGTKRenderer *m_renderer;
 
     wxGTKArtProvider *m_artProvider;
@@ -727,75 +725,50 @@ wxColourScheme *wxGTKTheme::GetColourScheme()
     return m_scheme;
 }
 
-wxInputHandler *wxGTKTheme::GetDefaultInputHandler()
-{
-    if ( !m_handlerDefault )
-    {
-        m_handlerDefault = new wxGTKInputHandler(m_renderer);
-    }
-
-    return m_handlerDefault;
-}
-
-wxInputHandler *wxGTKTheme::GetInputHandler(const wxString& control)
+wxInputHandler *wxGTKTheme::GetInputHandler(const wxString& control,
+                                            wxInputConsumer *consumer)
 {
     wxInputHandler *handler = NULL;
     int n = m_handlerNames.Index(control);
     if ( n == wxNOT_FOUND )
     {
+        static wxGTKInputHandler s_handlerDef;
+
+        wxInputHandler * const
+          handlerStd = consumer->DoGetStdInputHandler(&s_handlerDef);
+
         // create a new handler
+#if wxUSE_CHECKBOX
+        if ( control == wxINP_HANDLER_CHECKBOX )
+        {
+            static wxGTKCheckboxInputHandler s_handler(handlerStd);
+
+            handler = &s_handler;
+        }
+        else
+#endif // wxUSE_CHECKBOX
+#if wxUSE_SCROLLBAR
         if ( control == wxINP_HANDLER_SCROLLBAR )
         {
-#if wxUSE_SCROLLBAR
-            handler = new wxGTKScrollBarInputHandler(m_renderer,
-                                                     GetDefaultInputHandler());
-#endif // wxUSE_SCROLLBAR
-        }
-#if wxUSE_BUTTON
-        else if ( control == wxINP_HANDLER_BUTTON )
-            handler = new wxStdButtonInputHandler(GetDefaultInputHandler());
-#endif // wxUSE_CHECKBOX
-#if wxUSE_CHECKBOX
-        else if ( control == wxINP_HANDLER_CHECKBOX )
-            handler = new wxGTKCheckboxInputHandler(GetDefaultInputHandler());
-#endif // wxUSE_CHECKBOX
-#if wxUSE_COMBOBOX
-        else if ( control == wxINP_HANDLER_COMBOBOX )
-            handler = new wxStdComboBoxInputHandler(GetDefaultInputHandler());
-#endif // wxUSE_COMBOBOX
-#if wxUSE_LISTBOX
-        else if ( control == wxINP_HANDLER_LISTBOX )
-            handler = new wxStdListboxInputHandler(GetDefaultInputHandler());
-#endif // wxUSE_LISTBOX
-#if wxUSE_CHECKLISTBOX
-        else if ( control == wxINP_HANDLER_CHECKLISTBOX )
-            handler = new wxStdCheckListboxInputHandler(GetDefaultInputHandler());
-#endif // wxUSE_CHECKLISTBOX
-#if wxUSE_TEXTCTRL
-        else if ( control == wxINP_HANDLER_TEXTCTRL )
-            handler = new wxGTKTextCtrlInputHandler(GetDefaultInputHandler());
-#endif // wxUSE_TEXTCTRL
-#if wxUSE_SLIDER
-        else if ( control == wxINP_HANDLER_SLIDER )
-            handler = new wxStdSliderButtonInputHandler(GetDefaultInputHandler());
-#endif // wxUSE_SLIDER
-#if wxUSE_SPINBTN
-        else if ( control == wxINP_HANDLER_SPINBTN )
-            handler = new wxStdSpinButtonInputHandler(GetDefaultInputHandler());
-#endif // wxUSE_SPINBTN
-#if wxUSE_NOTEBOOK
-        else if ( control == wxINP_HANDLER_NOTEBOOK )
-            handler = new wxStdNotebookInputHandler(GetDefaultInputHandler());
-#endif // wxUSE_NOTEBOOK
-#if wxUSE_TOOLBAR
-        else if ( control == wxINP_HANDLER_TOOLBAR )
-            handler = new wxStdToolbarInputHandler(GetDefaultInputHandler());
-#endif // wxUSE_TOOLBAR
-        else if ( control == wxINP_HANDLER_TOPLEVEL )
-            handler = new wxStdFrameInputHandler(GetDefaultInputHandler());
+            static wxGTKScrollBarInputHandler s_handler(m_renderer, handlerStd);
 
-        if(!handler)
-            handler = GetDefaultInputHandler();
+            handler = &s_handler;
+        }
+        else
+#endif // wxUSE_SCROLLBAR
+#if wxUSE_TEXTCTRL
+        if ( control == wxINP_HANDLER_TEXTCTRL )
+        {
+            static wxGTKTextCtrlInputHandler s_handler(handlerStd);
+
+            handler = &s_handler;
+        }
+        else
+#endif // wxUSE_TEXTCTRL
+        {
+            // no special handler for this control
+            handler = handlerStd;
+        }
 
         n = m_handlerNames.Add(control);
         m_handlers.Insert(handler, n);
@@ -3331,11 +3304,6 @@ wxBitmap wxGTKArtProvider::CreateBitmap(const wxArtID& id,
 // wxGTKInputHandler
 // ----------------------------------------------------------------------------
 
-wxGTKInputHandler::wxGTKInputHandler(wxGTKRenderer *renderer)
-{
-    m_renderer = renderer;
-}
-
 bool wxGTKInputHandler::HandleKey(wxInputConsumer * WXUNUSED(control),
                                   const wxKeyEvent& WXUNUSED(event),
                                   bool WXUNUSED(pressed))
@@ -3495,7 +3463,7 @@ bool wxGTKTextCtrlInputHandler::HandleKey(wxInputConsumer *control,
         }
     }
 
-    return wxStdTextCtrlInputHandler::HandleKey(control, event, pressed);
+    return wxStdInputHandler::HandleKey(control, event, pressed);
 }
 
 #endif // wxUSE_TEXTCTRL

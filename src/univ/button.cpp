@@ -40,6 +40,34 @@
 #include "wx/stockitem.h"
 
 // ----------------------------------------------------------------------------
+// wxStdButtonInputHandler: translates SPACE and ENTER keys and the left mouse
+// click into button press/release actions
+// ----------------------------------------------------------------------------
+
+class WXDLLEXPORT wxStdButtonInputHandler : public wxStdInputHandler
+{
+public:
+    wxStdButtonInputHandler(wxInputHandler *inphand);
+
+    virtual bool HandleKey(wxInputConsumer *consumer,
+                           const wxKeyEvent& event,
+                           bool pressed);
+    virtual bool HandleMouse(wxInputConsumer *consumer,
+                             const wxMouseEvent& event);
+    virtual bool HandleMouseMove(wxInputConsumer *consumer,
+                                 const wxMouseEvent& event);
+    virtual bool HandleFocus(wxInputConsumer *consumer,
+                             const wxFocusEvent& event);
+    virtual bool HandleActivation(wxInputConsumer *consumer, bool activated);
+
+private:
+    // the window (button) which has capture or NULL and the flag telling if
+    // the mouse is inside the button which captured it or not
+    wxWindow *m_winCapture;
+    bool      m_winHasMouse;
+};
+
+// ----------------------------------------------------------------------------
 // constants
 // ----------------------------------------------------------------------------
 
@@ -270,6 +298,14 @@ bool wxButton::PerformAction(const wxControlAction& action,
         return wxControl::PerformAction(action, numArg, strArg);
 
     return true;
+}
+
+/* static */
+wxInputHandler *wxButton::GetStdInputHandler(wxInputHandler *handlerDef)
+{
+    static wxStdButtonInputHandler s_handlerBtn(handlerDef);
+
+    return &s_handlerBtn;
 }
 
 // ----------------------------------------------------------------------------

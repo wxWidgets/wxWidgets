@@ -28,11 +28,6 @@
 // wxCheckBox
 // ----------------------------------------------------------------------------
 
-// X11 headers may define this
-#ifdef Status
-#undef Status
-#endif
-
 class WXDLLEXPORT wxCheckBox : public wxCheckBoxBase
 {
 public:
@@ -102,6 +97,11 @@ public:
                                const wxString& strArg = wxEmptyString);
 
     virtual bool CanBeHighlighted() const { return true; }
+    virtual wxInputHandler *CreateStdInputHandler(wxInputHandler *handlerDef);
+    virtual wxInputHandler *DoGetStdInputHandler(wxInputHandler *handlerDef)
+    {
+        return CreateStdInputHandler(handlerDef);
+    }
 
 protected:
     virtual void DoSet3StateValue(wxCheckBoxState WXUNUSED(state));
@@ -145,22 +145,6 @@ private:
     bool m_isPressed;
 
     DECLARE_DYNAMIC_CLASS(wxCheckBox)
-};
-
-// ----------------------------------------------------------------------------
-// wxStdCheckboxInputHandler: handles the mouse events for the check and radio
-// boxes (handling the keyboard input is simple, but its handling differs a
-// lot between GTK and MSW, so a new class should be derived for this)
-// ----------------------------------------------------------------------------
-
-class WXDLLEXPORT wxStdCheckboxInputHandler : public wxStdButtonInputHandler
-{
-public:
-    wxStdCheckboxInputHandler(wxInputHandler *inphand);
-
-    // we have to override this one as wxStdButtonInputHandler version works
-    // only with the buttons
-    virtual bool HandleActivation(wxInputConsumer *consumer, bool activated);
 };
 
 #endif // _WX_UNIV_CHECKBOX_H_

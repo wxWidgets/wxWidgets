@@ -224,6 +224,12 @@ public:
                                long numArg = -1,
                                const wxString& strArg = wxEmptyString);
 
+    static wxInputHandler *GetStdInputHandler(wxInputHandler *handlerDef);
+    virtual wxInputHandler *DoGetStdInputHandler(wxInputHandler *handlerDef)
+    {
+        return GetStdInputHandler(handlerDef);
+    }
+
     // override these methods to handle the caret
     virtual bool SetFont(const wxFont &font);
     virtual bool Enable(bool enable = true);
@@ -520,33 +526,6 @@ private:
     DECLARE_DYNAMIC_CLASS(wxTextCtrl)
 
     friend class wxWrappedLineData;
-};
-
-// ----------------------------------------------------------------------------
-// wxStdTextCtrlInputHandler: this control handles only the mouse/kbd actions
-// common to Win32 and GTK, platform-specific things are implemented elsewhere
-// ----------------------------------------------------------------------------
-
-class WXDLLEXPORT wxStdTextCtrlInputHandler : public wxStdInputHandler
-{
-public:
-    wxStdTextCtrlInputHandler(wxInputHandler *inphand);
-
-    virtual bool HandleKey(wxInputConsumer *consumer,
-                           const wxKeyEvent& event,
-                           bool pressed);
-    virtual bool HandleMouse(wxInputConsumer *consumer,
-                             const wxMouseEvent& event);
-    virtual bool HandleMouseMove(wxInputConsumer *consumer,
-                                 const wxMouseEvent& event);
-    virtual bool HandleFocus(wxInputConsumer *consumer, const wxFocusEvent& event);
-
-protected:
-    // get the position of the mouse click
-    static wxTextPos HitTest(const wxTextCtrl *text, const wxPoint& pos);
-
-    // capture data
-    wxTextCtrl *m_winCapture;
 };
 
 #endif // _WX_UNIV_TEXTCTRL_H_

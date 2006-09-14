@@ -39,6 +39,22 @@
 #include "wx/univ/inphand.h"
 #include "wx/univ/colschem.h"
 
+// ----------------------------------------------------------------------------
+// wxStdCheckboxInputHandler: handles the mouse events for the check and radio
+// boxes (handling the keyboard input is simple, but its handling differs a
+// lot between GTK and MSW, so a new class should be derived for this)
+// ----------------------------------------------------------------------------
+
+class WXDLLEXPORT wxStdCheckboxInputHandler : public wxStdInputHandler
+{
+public:
+    wxStdCheckboxInputHandler(wxInputHandler *inphand);
+
+    // we have to override this one as wxStdButtonInputHandler version works
+    // only with the buttons
+    virtual bool HandleActivation(wxInputConsumer *consumer, bool activated);
+};
+
 // ============================================================================
 // implementation
 // ============================================================================
@@ -323,12 +339,20 @@ bool wxCheckBox::PerformAction(const wxControlAction& action,
     return true;
 }
 
+/* static */
+wxInputHandler *wxCheckBox::CreateStdInputHandler(wxInputHandler *handlerDef)
+{
+    static wxStdCheckboxInputHandler s_handler(handlerDef);
+
+    return &s_handler;
+}
+
 // ----------------------------------------------------------------------------
 // wxStdCheckboxInputHandler
 // ----------------------------------------------------------------------------
 
-wxStdCheckboxInputHandler::wxStdCheckboxInputHandler(wxInputHandler *inphand)
-                         : wxStdButtonInputHandler(inphand)
+wxStdCheckboxInputHandler::wxStdCheckboxInputHandler(wxInputHandler *def)
+                         : wxStdInputHandler(wxButton::GetStdInputHandler(def))
 {
 }
 

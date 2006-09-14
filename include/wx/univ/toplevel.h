@@ -131,6 +131,12 @@ public:
                                long numArg = -1,
                                const wxString& strArg = wxEmptyString);
 
+    static wxInputHandler *GetStdInputHandler(wxInputHandler *handlerDef);
+    virtual wxInputHandler *DoGetStdInputHandler(wxInputHandler *handlerDef)
+    {
+        return GetStdInputHandler(handlerDef);
+    }
+
     // move/resize the frame interactively, i.e. let the user do it
     virtual void InteractiveMove(int flags = wxINTERACTIVE_MOVE);
 
@@ -172,29 +178,6 @@ protected:
     DECLARE_DYNAMIC_CLASS(wxTopLevelWindow)
     DECLARE_EVENT_TABLE()
     WX_DECLARE_INPUT_CONSUMER()
-};
-
-// ----------------------------------------------------------------------------
-// wxStdFrameInputHandler: handles focus, resizing and titlebar buttons clicks
-// ----------------------------------------------------------------------------
-
-class WXDLLEXPORT wxStdFrameInputHandler : public wxStdInputHandler
-{
-public:
-    wxStdFrameInputHandler(wxInputHandler *inphand);
-
-    virtual bool HandleMouse(wxInputConsumer *consumer,
-                             const wxMouseEvent& event);
-    virtual bool HandleMouseMove(wxInputConsumer *consumer, const wxMouseEvent& event);
-    virtual bool HandleActivation(wxInputConsumer *consumer, bool activated);
-
-private:
-    // the window (button) which has capture or NULL and the last hittest result
-    wxTopLevelWindow *m_winCapture;
-    long              m_winHitTest;
-    long              m_winPressed;
-    bool              m_borderCursorOn;
-    wxCursor          m_origCursor;
 };
 
 #endif // __WX_UNIV_TOPLEVEL_H__

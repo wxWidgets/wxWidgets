@@ -96,8 +96,13 @@ public:
                                long numArg = 0,
                                const wxString& strArg = wxEmptyString);
 
-    // The scrollbars around a normal window should not
-    // receive the focus.
+    static wxInputHandler *GetStdInputHandler(wxInputHandler *handlerDef);
+    virtual wxInputHandler *DoGetStdInputHandler(wxInputHandler *handlerDef)
+    {
+        return GetStdInputHandler(handlerDef);
+    }
+
+    // scrollbars around a normal window should not receive the focus
     virtual bool AcceptsFocus() const;
 
     // wxScrollBar sub elements state (combination of wxCONTROL_XXX)
@@ -165,8 +170,7 @@ private:
 };
 
 // ----------------------------------------------------------------------------
-// common scrollbar input handler: it manages clicks on the standard scrollbar
-// elements (line arrows, bar, thumb)
+// Standard scrollbar input handler which can be used as a base class
 // ----------------------------------------------------------------------------
 
 class WXDLLEXPORT wxStdScrollBarInputHandler : public wxStdInputHandler
@@ -193,12 +197,10 @@ public:
                                const wxControlAction& action);
 
 protected:
-    // the methods which must be overridden in the derived class
-
     // return true if the mouse button can be used to activate scrollbar, false
-    // if not (only left mouse button can do it under Windows, any button under
-    // GTK+)
-    virtual bool IsAllowedButton(int button) = 0;
+    // if not (any button under GTK+ unlike left button only which is default)
+    virtual bool IsAllowedButton(int button) const
+        { return button == wxMOUSE_BTN_LEFT; }
 
     // set or clear the specified flag on the scrollbar element corresponding
     // to m_htLast
@@ -221,6 +223,7 @@ protected:
 
     // generate a "thumb move" action for this mouse event
     void HandleThumbMove(wxScrollBar *scrollbar, const wxMouseEvent& event);
+
 
     // the window (scrollbar) which has capture or NULL and the flag telling if
     // the mouse is inside the element which captured it or not

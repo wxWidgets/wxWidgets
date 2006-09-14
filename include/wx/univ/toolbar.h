@@ -32,7 +32,7 @@ class WXDLLEXPORT wxToolBarTool;
 // ----------------------------------------------------------------------------
 
 class WXDLLEXPORT wxToolBar : public wxToolBarBase
-{    
+{
 public:
     // construction/destruction
     wxToolBar() { Init(); }
@@ -54,7 +54,7 @@ public:
                  const wxSize& size = wxDefaultSize,
                  long style = 0,
                  const wxString& name = wxToolBarNameStr );
-                 
+
     virtual ~wxToolBar();
 
     virtual bool Realize();
@@ -72,6 +72,12 @@ public:
     virtual bool PerformAction(const wxControlAction& action,
                                long numArg = -1,
                                const wxString& strArg = wxEmptyString);
+    static wxInputHandler *GetStdInputHandler(wxInputHandler *handlerDef);
+    virtual wxInputHandler *DoGetStdInputHandler(wxInputHandler *handlerDef)
+    {
+        return GetStdInputHandler(handlerDef);
+    }
+
 protected:
     // common part of all ctors
     void Init();
@@ -109,7 +115,7 @@ protected:
     // (re)calculate the tool positions, should only be called if it is
     // necessary to do it, i.e. m_needsLayout == true
     void DoLayout();
-    
+
     // get the rect limits depending on the orientation: top/bottom for a
     // vertical toolbar, left/right for a horizontal one
     void GetRectLimits(const wxRect& rect, wxCoord *start, wxCoord *end) const;
@@ -127,31 +133,6 @@ private:
 
 private:
     DECLARE_DYNAMIC_CLASS(wxToolBar)
-};
-
-// ----------------------------------------------------------------------------
-// wxStdToolbarInputHandler: translates SPACE and ENTER keys and the left mouse
-// click into button press/release actions
-// ----------------------------------------------------------------------------
-
-class WXDLLEXPORT wxStdToolbarInputHandler : public wxStdInputHandler
-{
-public:
-    wxStdToolbarInputHandler(wxInputHandler *inphand);
-
-    virtual bool HandleKey(wxInputConsumer *consumer,
-                           const wxKeyEvent& event,
-                           bool pressed);
-    virtual bool HandleMouse(wxInputConsumer *consumer,
-                             const wxMouseEvent& event);
-    virtual bool HandleMouseMove(wxInputConsumer *consumer, const wxMouseEvent& event);
-    virtual bool HandleFocus(wxInputConsumer *consumer, const wxFocusEvent& event);
-    virtual bool HandleActivation(wxInputConsumer *consumer, bool activated);
-    
-private:
-    wxWindow            *m_winCapture;
-    wxToolBarToolBase   *m_toolCapture;
-    wxToolBarToolBase   *m_toolLast;
 };
 
 #endif // _WX_UNIV_TOOLBAR_H_

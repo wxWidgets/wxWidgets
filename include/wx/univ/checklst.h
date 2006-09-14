@@ -78,6 +78,12 @@ public:
                                long numArg = -1l,
                                const wxString& strArg = wxEmptyString);
 
+    static wxInputHandler *GetStdInputHandler(wxInputHandler *handlerDef);
+    virtual wxInputHandler *DoGetStdInputHandler(wxInputHandler *handlerDef)
+    {
+        return GetStdInputHandler(handlerDef);
+    }
+
     // override all methods which add/delete items to update m_checks array as
     // well
     virtual void Delete(unsigned int n);
@@ -103,22 +109,6 @@ private:
     wxArrayInt m_checks;
 
     DECLARE_DYNAMIC_CLASS(wxCheckListBox)
-};
-
-// ----------------------------------------------------------------------------
-// wxStdCheckListBoxInputHandler
-// ----------------------------------------------------------------------------
-
-class WXDLLEXPORT wxStdCheckListboxInputHandler : public wxStdListboxInputHandler
-{
-public:
-    wxStdCheckListboxInputHandler(wxInputHandler *inphand);
-
-    virtual bool HandleKey(wxInputConsumer *consumer,
-                           const wxKeyEvent& event,
-                           bool pressed);
-    virtual bool HandleMouse(wxInputConsumer *consumer,
-                             const wxMouseEvent& event);
 };
 
 #endif // _WX_UNIV_CHECKLST_H_

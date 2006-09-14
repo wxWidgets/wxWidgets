@@ -37,6 +37,22 @@
 #include "wx/univ/inphand.h"
 #include "wx/univ/theme.h"
 
+// ----------------------------------------------------------------------------
+// wxStdCheckListBoxInputHandler
+// ----------------------------------------------------------------------------
+
+class WXDLLEXPORT wxStdCheckListboxInputHandler : public wxStdInputHandler
+{
+public:
+    wxStdCheckListboxInputHandler(wxInputHandler *inphand);
+
+    virtual bool HandleKey(wxInputConsumer *consumer,
+                           const wxKeyEvent& event,
+                           bool pressed);
+    virtual bool HandleMouse(wxInputConsumer *consumer,
+                             const wxMouseEvent& event);
+};
+
 // ============================================================================
 // implementation of wxCheckListBox
 // ============================================================================
@@ -226,13 +242,21 @@ bool wxCheckListBox::PerformAction(const wxControlAction& action,
     return true;
 }
 
+/* static */
+wxInputHandler *wxCheckListBox::GetStdInputHandler(wxInputHandler *handlerDef)
+{
+    static wxStdCheckListboxInputHandler s_handler(handlerDef);
+
+    return &s_handler;
+}
+
 // ----------------------------------------------------------------------------
 // wxStdCheckListboxInputHandler
 // ----------------------------------------------------------------------------
 
 wxStdCheckListboxInputHandler::
 wxStdCheckListboxInputHandler(wxInputHandler *inphand)
-    : wxStdListboxInputHandler(inphand)
+    : wxStdInputHandler(wxListBox::GetStdInputHandler(inphand))
 {
 }
 
@@ -243,7 +267,7 @@ bool wxStdCheckListboxInputHandler::HandleKey(wxInputConsumer *consumer,
     if ( pressed && (event.GetKeyCode() == WXK_SPACE) )
         consumer->PerformAction(wxACTION_CHECKLISTBOX_TOGGLE);
 
-    return wxStdListboxInputHandler::HandleKey(consumer, event, pressed);
+    return wxStdInputHandler::HandleKey(consumer, event, pressed);
 }
 
 bool wxStdCheckListboxInputHandler::HandleMouse(wxInputConsumer *consumer,
@@ -273,7 +297,7 @@ bool wxStdCheckListboxInputHandler::HandleMouse(wxInputConsumer *consumer,
         }
     }
 
-    return wxStdListboxInputHandler::HandleMouse(consumer, event);
+    return wxStdInputHandler::HandleMouse(consumer, event);
 }
 
 #endif // wxUSE_CHECKLISTBOX

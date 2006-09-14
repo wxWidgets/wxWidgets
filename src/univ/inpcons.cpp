@@ -55,9 +55,15 @@ void wxInputConsumer::OnActivate(wxActivateEvent& event)
 // input processing
 // ----------------------------------------------------------------------------
 
+wxInputHandler *
+wxInputConsumer::DoGetStdInputHandler(wxInputHandler * WXUNUSED(handlerDef))
+{
+    return NULL;
+}
+
 void wxInputConsumer::CreateInputHandler(const wxString& inphandler)
 {
-    m_inputHandler = wxTheme::Get()->GetInputHandler(inphandler);
+    m_inputHandler = wxTheme::Get()->GetInputHandler(inphandler, this);
 }
 
 void wxInputConsumer::OnKeyDown(wxKeyEvent& event)

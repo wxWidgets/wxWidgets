@@ -61,6 +61,31 @@
 #include "wx/univ/theme.h"
 
 // ----------------------------------------------------------------------------
+// wxStdSliderInputHandler: default slider input handling
+// ----------------------------------------------------------------------------
+
+class WXDLLEXPORT wxStdSliderInputHandler : public wxStdInputHandler
+{
+public:
+    // default ctor
+    wxStdSliderInputHandler(wxInputHandler *inphand)
+        : wxStdInputHandler(inphand)
+    {
+    }
+
+    // base class methods
+    virtual bool HandleKey(wxInputConsumer *consumer,
+                           const wxKeyEvent& event,
+                           bool pressed);
+    virtual bool HandleMouse(wxInputConsumer *consumer,
+                             const wxMouseEvent& event);
+    virtual bool HandleMouseMove(wxInputConsumer *consumer,
+                                 const wxMouseEvent& event);
+
+    virtual bool HandleFocus(wxInputConsumer *consumer, const wxFocusEvent& event);
+};
+
+// ----------------------------------------------------------------------------
 // constants
 // ----------------------------------------------------------------------------
 
@@ -821,6 +846,14 @@ bool wxSlider::PerformAction(const wxControlAction& action,
     return true;
 }
 
+/* static */
+wxInputHandler *wxSlider::GetStdInputHandler(wxInputHandler *handlerDef)
+{
+    static wxStdSliderInputHandler s_handler(handlerDef);
+
+    return &s_handler;
+}
+
 // ----------------------------------------------------------------------------
 // wxSlider implementation of wxControlWithThumb interface
 // ----------------------------------------------------------------------------
@@ -977,10 +1010,10 @@ bool wxSlider::OnPageScroll(int pageInc)
 }
 
 // ----------------------------------------------------------------------------
-// wxStdSliderButtonInputHandler
+// wxStdSliderInputHandler
 // ----------------------------------------------------------------------------
 
-bool wxStdSliderButtonInputHandler::HandleKey(wxInputConsumer *consumer,
+bool wxStdSliderInputHandler::HandleKey(wxInputConsumer *consumer,
                                               const wxKeyEvent& event,
                                               bool pressed)
 {
@@ -1029,7 +1062,7 @@ bool wxStdSliderButtonInputHandler::HandleKey(wxInputConsumer *consumer,
     return wxStdInputHandler::HandleKey(consumer, event, pressed);
 }
 
-bool wxStdSliderButtonInputHandler::HandleMouse(wxInputConsumer *consumer,
+bool wxStdSliderInputHandler::HandleMouse(wxInputConsumer *consumer,
                                                 const wxMouseEvent& event)
 {
     wxSlider *slider = wxStaticCast(consumer->GetInputWindow(), wxSlider);
@@ -1043,7 +1076,7 @@ bool wxStdSliderButtonInputHandler::HandleMouse(wxInputConsumer *consumer,
     return wxStdInputHandler::HandleMouse(consumer, event);
 }
 
-bool wxStdSliderButtonInputHandler::HandleMouseMove(wxInputConsumer *consumer,
+bool wxStdSliderInputHandler::HandleMouseMove(wxInputConsumer *consumer,
                                                     const wxMouseEvent& event)
 {
     wxSlider *slider = wxStaticCast(consumer->GetInputWindow(), wxSlider);
@@ -1058,10 +1091,10 @@ bool wxStdSliderButtonInputHandler::HandleMouseMove(wxInputConsumer *consumer,
 }
 
 bool
-wxStdSliderButtonInputHandler::HandleFocus(wxInputConsumer * WXUNUSED(consumer),
+wxStdSliderInputHandler::HandleFocus(wxInputConsumer * WXUNUSED(consumer),
                                            const wxFocusEvent& WXUNUSED(event))
 {
-    // slider's appearance changes when it gets/loses focus
+    // slider appearance changes when it gets/loses focus
     return true;
 }
 

@@ -166,6 +166,33 @@
 #endif // WXDEBUG_TEXT_REPLACE
 
 // ----------------------------------------------------------------------------
+// wxStdTextCtrlInputHandler: this control handles only the mouse/kbd actions
+// common to Win32 and GTK, platform-specific things are implemented elsewhere
+// ----------------------------------------------------------------------------
+
+class WXDLLEXPORT wxStdTextCtrlInputHandler : public wxStdInputHandler
+{
+public:
+    wxStdTextCtrlInputHandler(wxInputHandler *inphand);
+
+    virtual bool HandleKey(wxInputConsumer *consumer,
+                           const wxKeyEvent& event,
+                           bool pressed);
+    virtual bool HandleMouse(wxInputConsumer *consumer,
+                             const wxMouseEvent& event);
+    virtual bool HandleMouseMove(wxInputConsumer *consumer,
+                                 const wxMouseEvent& event);
+    virtual bool HandleFocus(wxInputConsumer *consumer, const wxFocusEvent& event);
+
+protected:
+    // get the position of the mouse click
+    static wxTextPos HitTest(const wxTextCtrl *text, const wxPoint& pos);
+
+    // capture data
+    wxTextCtrl *m_winCapture;
+};
+
+// ----------------------------------------------------------------------------
 // private functions
 // ----------------------------------------------------------------------------
 
@@ -4720,6 +4747,14 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
 #endif // __WXDEBUG__
 
     event.Skip();
+}
+
+/* static */
+wxInputHandler *wxTextCtrl::GetStdInputHandler(wxInputHandler *handlerDef)
+{
+    static wxStdTextCtrlInputHandler s_handler(handlerDef);
+
+    return &s_handler;
 }
 
 // ----------------------------------------------------------------------------

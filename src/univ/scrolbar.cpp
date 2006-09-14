@@ -589,6 +589,15 @@ bool wxScrollBar::ScrollPages(int nPages)
     return true;
 }
 
+/* static */
+wxInputHandler *wxScrollBar::GetStdInputHandler(wxInputHandler *handlerDef)
+{
+    static wxStdScrollBarInputHandler
+        s_handler(wxTheme::Get()->GetRenderer(), handlerDef);
+
+    return &s_handler;
+}
+
 // ============================================================================
 // scroll bar input handler
 // ============================================================================
@@ -737,7 +746,7 @@ bool wxStdScrollBarInputHandler::HandleMouse(wxInputConsumer *consumer,
 {
     // is this a click event from an acceptable button?
     int btn = event.GetButton();
-    if ( (btn != -1) && IsAllowedButton(btn) )
+    if ( btn == wxMOUSE_BTN_LEFT )
     {
         // determine which part of the window mouse is in
         wxScrollBar *scrollbar = wxStaticCast(consumer->GetInputWindow(), wxScrollBar);

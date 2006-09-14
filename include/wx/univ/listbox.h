@@ -183,6 +183,12 @@ public:
                                long numArg = 0l,
                                const wxString& strArg = wxEmptyString);
 
+    static wxInputHandler *GetStdInputHandler(wxInputHandler *handlerDef);
+    virtual wxInputHandler *DoGetStdInputHandler(wxInputHandler *handlerDef)
+    {
+        return GetStdInputHandler(handlerDef);
+    }
+
     // idle processing
     virtual void OnInternalIdle();
 
@@ -289,62 +295,6 @@ private:
 
     DECLARE_EVENT_TABLE()
     DECLARE_DYNAMIC_CLASS(wxListBox)
-};
-
-// ----------------------------------------------------------------------------
-// wxStdListboxInputHandler: handles mouse and kbd in a single or multi
-// selection listbox
-// ----------------------------------------------------------------------------
-
-class WXDLLEXPORT wxStdListboxInputHandler : public wxStdInputHandler
-{
-public:
-    // if pressing the mouse button in a multiselection listbox should toggle
-    // the item under mouse immediately, then specify true as the second
-    // parameter (this is the standard behaviour, under GTK the item is toggled
-    // only when the mouse is released in the multi selection listbox)
-    wxStdListboxInputHandler(wxInputHandler *inphand,
-                             bool toggleOnPressAlways = true);
-
-    // base class methods
-    virtual bool HandleKey(wxInputConsumer *consumer,
-                           const wxKeyEvent& event,
-                           bool pressed);
-    virtual bool HandleMouse(wxInputConsumer *consumer,
-                             const wxMouseEvent& event);
-    virtual bool HandleMouseMove(wxInputConsumer *consumer,
-                                 const wxMouseEvent& event);
-
-protected:
-    // return the item under mouse, 0 if the mouse is above the listbox or
-    // GetCount() if it is below it
-    int HitTest(const wxListBox *listbox, const wxMouseEvent& event);
-
-    // parts of HitTest(): first finds the pseudo (because not in range) index
-    // of the item and the second one adjusts it if necessary - that is if the
-    // third one returns false
-    int HitTestUnsafe(const wxListBox *listbox, const wxMouseEvent& event);
-    int FixItemIndex(const wxListBox *listbox, int item);
-    bool IsValidIndex(const wxListBox *listbox, int item);
-
-    // init m_btnCapture and m_actionMouse
-    wxControlAction SetupCapture(wxListBox *lbox,
-                                 const wxMouseEvent& event,
-                                 int item);
-
-    wxRenderer *m_renderer;
-
-    // the button which initiated the mouse capture (currently 0 or 1)
-    int m_btnCapture;
-
-    // the action to perform when the mouse moves while we capture it
-    wxControlAction m_actionMouse;
-
-    // the ctor parameter toggleOnPressAlways (see comments near it)
-    bool m_toggleOnPressAlways;
-
-    // do we track the mouse outside the window when it is captured?
-    bool m_trackMouseOutside;
 };
 
 #endif // _WX_UNIV_LISTBOX_H_

@@ -41,10 +41,6 @@
     #include "wx/textctrl.h"
     #include "wx/toolbar.h"
 
-    #ifdef __WXMSW__
-        // for COLOR_* constants
-        #include "wx/msw/private.h"
-    #endif
     #include "wx/menu.h"
     #include "wx/settings.h"
     #include "wx/toplevel.h"
@@ -56,6 +52,7 @@
 
 #include "wx/univ/scrtimer.h"
 #include "wx/univ/renderer.h"
+#include "wx/univ/inpcons.h"
 #include "wx/univ/inphand.h"
 #include "wx/univ/colschem.h"
 #include "wx/univ/theme.h"
@@ -152,8 +149,10 @@ public:
 
     virtual wxRenderer *GetRenderer();
     virtual wxArtProvider *GetArtProvider();
-    virtual wxInputHandler *GetInputHandler(const wxString& control);
+    virtual wxInputHandler *GetInputHandler(const wxString& control,
+                                            wxInputConsumer *consumer);
     virtual wxColourScheme *GetColourScheme();
+
 private:
     bool GetOrCreateTheme()
     {
@@ -161,7 +160,7 @@ private:
             m_win32Theme = wxTheme::Create( wxT("win32") );
         return m_win32Theme != NULL;
     }
-private:
+
     wxTheme *m_win32Theme;
     wxMetalRenderer *m_renderer;
 
@@ -208,11 +207,12 @@ wxArtProvider *wxMetalTheme::GetArtProvider()
     return m_win32Theme->GetArtProvider();
 }
 
-wxInputHandler *wxMetalTheme::GetInputHandler(const wxString& control)
+wxInputHandler *wxMetalTheme::GetInputHandler(const wxString& control,
+                                              wxInputConsumer *consumer)
 {
     if ( !GetOrCreateTheme() )
         return 0;
-    return m_win32Theme->GetInputHandler(control);
+    return m_win32Theme->GetInputHandler(control, consumer);
 }
 
 wxColourScheme *wxMetalTheme::GetColourScheme()
@@ -227,7 +227,7 @@ wxColourScheme *wxMetalTheme::GetColourScheme()
 // ----------------------------------------------------------------------------
 
 wxMetalRenderer::wxMetalRenderer(wxRenderer *renderer, wxColourScheme *scheme)
-    : wxDelegateRenderer(renderer)
+               : wxDelegateRenderer(renderer)
 {
     // init colours and pens
     m_penBlack = wxPen(wxSCHEME_COLOUR(scheme, SHADOW_DARK), 0, wxSOLID);
