@@ -29,6 +29,10 @@ class WXDLLEXPORT wxDC;
 class WXDLLEXPORT wxWindow;
 
 #include "wx/gdicmn.h" // for wxPoint
+#include "wx/colour.h"
+#include "wx/font.h"
+#include "wx/bitmap.h"
+#include "wx/string.h"
 
 // some platforms have their own renderers, others use the generic one
 #if defined(__WXMSW__) || defined(__WXMAC__) || defined(__WXGTK__)
@@ -95,7 +99,7 @@ struct WXDLLEXPORT wxHeaderButtonParams
     wxHeaderButtonParams()
         : m_labelAlignment(wxALIGN_LEFT)
     { }
-    
+
     wxColour    m_arrowColour;
     wxColour    m_selectionColour;
     wxString    m_labelText;
@@ -224,7 +228,7 @@ public:
     // draw rectangle indicating that an item in e.g. a list control
     // has been selected or focused
     //
-    // flags may use 
+    // flags may use
     // wxCONTROL_SELECTED (item is selected, e.g. draw background)
     // wxCONTROL_CURRENT (item is the current item, e.g. dotted border)
     // wxCONTROL_FOCUSED (the whole control has focus, e.g. blue background vs. grey otherwise)
@@ -303,7 +307,7 @@ public:
                                   wxHeaderButtonParams* params = NULL)
         { m_rendererNative.DrawHeaderButton(win, dc, rect, flags, params); }
 
-    
+
     virtual void DrawHeaderButtonContents(wxWindow *win,
                                           wxDC& dc,
                                           const wxRect& rect,
@@ -311,7 +315,7 @@ public:
                                           wxHeaderButtonParams* params = NULL)
         { m_rendererNative.DrawHeaderButtonContents(win, dc, rect, flags, params); }
 
-    
+
     virtual int GetHeaderButtonHeight(wxWindow *win)
         { return m_rendererNative.GetHeaderButtonHeight(win); }
 
