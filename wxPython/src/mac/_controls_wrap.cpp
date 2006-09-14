@@ -48902,6 +48902,9 @@ SWIGEXPORT void SWIG_init(void) {
   SWIG_Python_SetConstant(d, "DP_ALLOWNONE",SWIG_From_int(static_cast< int >(wxDP_ALLOWNONE)));
   SWIG_addvarlink(SWIG_globals(),(char*)"HyperlinkCtrlNameStr",HyperlinkCtrlNameStr_get, HyperlinkCtrlNameStr_set);
   SWIG_Python_SetConstant(d, "HL_CONTEXTMENU",SWIG_From_int(static_cast< int >(wxHL_CONTEXTMENU)));
+  SWIG_Python_SetConstant(d, "HL_ALIGN_LEFT",SWIG_From_int(static_cast< int >(wxHL_ALIGN_LEFT)));
+  SWIG_Python_SetConstant(d, "HL_ALIGN_RIGHT",SWIG_From_int(static_cast< int >(wxHL_ALIGN_RIGHT)));
+  SWIG_Python_SetConstant(d, "HL_ALIGN_CENTRE",SWIG_From_int(static_cast< int >(wxHL_ALIGN_CENTRE)));
   SWIG_Python_SetConstant(d, "HL_DEFAULT_STYLE",SWIG_From_int(static_cast< int >(wxHL_DEFAULT_STYLE)));
   PyDict_SetItemString(d, "wxEVT_COMMAND_HYPERLINK", PyInt_FromLong(wxEVT_COMMAND_HYPERLINK));
   SWIG_Python_SetConstant(d, "PB_USE_TEXTCTRL",SWIG_From_int(static_cast< int >(wxPB_USE_TEXTCTRL)));

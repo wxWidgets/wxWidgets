@@ -2060,6 +2060,10 @@ class ScrollBar(_core.Control):
         return _controls_.ScrollBar_GetClassDefaultAttributes(*args, **kwargs)
 
     GetClassDefaultAttributes = staticmethod(GetClassDefaultAttributes)
+    PageSize = property(GetPageSize,doc="See `GetPageSize`") 
+    Range = property(GetRange,doc="See `GetRange`") 
+    ThumbPosition = property(GetThumbPosition,SetThumbPosition,doc="See `GetThumbPosition` and `SetThumbPosition`") 
+    ThumbSize = property(GetThumbSize,doc="See `GetThumbSize`") 
 _controls_.ScrollBar_swigregister(ScrollBar)
 ScrollBarNameStr = cvar.ScrollBarNameStr
 
@@ -2162,6 +2166,9 @@ class SpinButton(_core.Control):
         return _controls_.SpinButton_GetClassDefaultAttributes(*args, **kwargs)
 
     GetClassDefaultAttributes = staticmethod(GetClassDefaultAttributes)
+    Max = property(GetMax,SetMax,doc="See `GetMax` and `SetMax`") 
+    Min = property(GetMin,SetMin,doc="See `GetMin` and `SetMin`") 
+    Value = property(GetValue,SetValue,doc="See `GetValue` and `SetValue`") 
 _controls_.SpinButton_swigregister(SpinButton)
 SPIN_BUTTON_NAME = cvar.SPIN_BUTTON_NAME
 SpinCtrlNameStr = cvar.SpinCtrlNameStr
@@ -2257,6 +2264,9 @@ class SpinCtrl(_core.Control):
         return _controls_.SpinCtrl_GetClassDefaultAttributes(*args, **kwargs)
 
     GetClassDefaultAttributes = staticmethod(GetClassDefaultAttributes)
+    Max = property(GetMax,doc="See `GetMax`") 
+    Min = property(GetMin,doc="See `GetMin`") 
+    Value = property(GetValue,SetValue,doc="See `GetValue` and `SetValue`") 
 _controls_.SpinCtrl_swigregister(SpinCtrl)
 
 def PreSpinCtrl(*args, **kwargs):
@@ -2296,6 +2306,7 @@ class SpinEvent(_core.NotifyEvent):
         """SetPosition(self, int pos)"""
         return _controls_.SpinEvent_SetPosition(*args, **kwargs)
 
+    Position = property(GetPosition,SetPosition,doc="See `GetPosition` and `SetPosition`") 
 _controls_.SpinEvent_swigregister(SpinEvent)
 
 wxEVT_COMMAND_SPINCTRL_UPDATED = _controls_.wxEVT_COMMAND_SPINCTRL_UPDATED
@@ -2430,6 +2441,11 @@ class RadioBox(_core.Control):
         return _controls_.RadioBox_GetClassDefaultAttributes(*args, **kwargs)
 
     GetClassDefaultAttributes = staticmethod(GetClassDefaultAttributes)
+    ColumnCount = property(GetColumnCount,doc="See `GetColumnCount`") 
+    Count = property(GetCount,doc="See `GetCount`") 
+    RowCount = property(GetRowCount,doc="See `GetRowCount`") 
+    Selection = property(GetSelection,SetSelection,doc="See `GetSelection` and `SetSelection`") 
+    StringSelection = property(GetStringSelection,SetStringSelection,doc="See `GetStringSelection` and `SetStringSelection`") 
 _controls_.RadioBox_swigregister(RadioBox)
 RadioBoxNameStr = cvar.RadioBoxNameStr
 RadioButtonNameStr = cvar.RadioButtonNameStr
@@ -2507,6 +2523,7 @@ class RadioButton(_core.Control):
         return _controls_.RadioButton_GetClassDefaultAttributes(*args, **kwargs)
 
     GetClassDefaultAttributes = staticmethod(GetClassDefaultAttributes)
+    Value = property(GetValue,SetValue,doc="See `GetValue` and `SetValue`") 
 _controls_.RadioButton_swigregister(RadioButton)
 
 def PreRadioButton(*args, **kwargs):
@@ -2673,6 +2690,15 @@ class Slider(_core.Control):
         return _controls_.Slider_GetClassDefaultAttributes(*args, **kwargs)
 
     GetClassDefaultAttributes = staticmethod(GetClassDefaultAttributes)
+    LineSize = property(GetLineSize,SetLineSize,doc="See `GetLineSize` and `SetLineSize`") 
+    Max = property(GetMax,SetMax,doc="See `GetMax` and `SetMax`") 
+    Min = property(GetMin,SetMin,doc="See `GetMin` and `SetMin`") 
+    PageSize = property(GetPageSize,SetPageSize,doc="See `GetPageSize` and `SetPageSize`") 
+    SelEnd = property(GetSelEnd,doc="See `GetSelEnd`") 
+    SelStart = property(GetSelStart,doc="See `GetSelStart`") 
+    ThumbLength = property(GetThumbLength,SetThumbLength,doc="See `GetThumbLength` and `SetThumbLength`") 
+    TickFreq = property(GetTickFreq,SetTickFreq,doc="See `GetTickFreq` and `SetTickFreq`") 
+    Value = property(GetValue,SetValue,doc="See `GetValue` and `SetValue`") 
 _controls_.Slider_swigregister(Slider)
 SliderNameStr = cvar.SliderNameStr
 
@@ -6325,6 +6351,9 @@ def PreDatePickerCtrl(*args, **kwargs):
     return val
 
 HL_CONTEXTMENU = _controls_.HL_CONTEXTMENU
+HL_ALIGN_LEFT = _controls_.HL_ALIGN_LEFT
+HL_ALIGN_RIGHT = _controls_.HL_ALIGN_RIGHT
+HL_ALIGN_CENTRE = _controls_.HL_ALIGN_CENTRE
 HL_DEFAULT_STYLE = _controls_.HL_DEFAULT_STYLE
 #---------------------------------------------------------------------------
 
@@ -6576,6 +6605,13 @@ class PickerBase(_core.Control):
         """GetPickerCtrl(self) -> Control"""
         return _controls_.PickerBase_GetPickerCtrl(*args, **kwargs)
 
+    InternalMargin = property(GetInternalMargin,SetInternalMargin,doc="See `GetInternalMargin` and `SetInternalMargin`") 
+    PickerCtrl = property(GetPickerCtrl,doc="See `GetPickerCtrl`") 
+    PickerCtrlProportion = property(GetPickerCtrlProportion,SetPickerCtrlProportion,doc="See `GetPickerCtrlProportion` and `SetPickerCtrlProportion`") 
+    TextCtrl = property(GetTextCtrl,doc="See `GetTextCtrl`") 
+    TextCtrlProportion = property(GetTextCtrlProportion,SetTextCtrlProportion,doc="See `GetTextCtrlProportion` and `SetTextCtrlProportion`") 
+    TextCtrlGrowable = property(IsTextCtrlGrowable,SetTextCtrlGrowable,doc="See `IsTextCtrlGrowable` and `SetTextCtrlGrowable`") 
+    PickerCtrlGrowable = property(IsPickerCtrlGrowable,SetPickerCtrlGrowable,doc="See `IsPickerCtrlGrowable` and `SetPickerCtrlGrowable`") 
 _controls_.PickerBase_swigregister(PickerBase)
 
 #---------------------------------------------------------------------------

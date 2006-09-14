@@ -5668,6 +5668,111 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_XmlNode_IsWhitespaceOnly(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxXmlNode *arg1 = (wxXmlNode *) 0 ;
+  bool result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxXmlNode, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "XmlNode_IsWhitespaceOnly" "', expected argument " "1"" of type '" "wxXmlNode const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxXmlNode * >(argp1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = (bool)((wxXmlNode const *)arg1)->IsWhitespaceOnly();
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  {
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+  }
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_XmlNode_GetDepth(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxXmlNode *arg1 = (wxXmlNode *) 0 ;
+  wxXmlNode *arg2 = (wxXmlNode *) NULL ;
+  int result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "grandparent", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|O:XmlNode_GetDepth",kwnames,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxXmlNode, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "XmlNode_GetDepth" "', expected argument " "1"" of type '" "wxXmlNode const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxXmlNode * >(argp1);
+  if (obj1) {
+    res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_wxXmlNode, 0 |  0 );
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "XmlNode_GetDepth" "', expected argument " "2"" of type '" "wxXmlNode *""'"); 
+    }
+    arg2 = reinterpret_cast< wxXmlNode * >(argp2);
+  }
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = (int)((wxXmlNode const *)arg1)->GetDepth(arg2);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_From_int(static_cast< int >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_XmlNode_GetNodeContent(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxXmlNode *arg1 = (wxXmlNode *) 0 ;
+  wxString result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxXmlNode, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "XmlNode_GetNodeContent" "', expected argument " "1"" of type '" "wxXmlNode const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxXmlNode * >(argp1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = ((wxXmlNode const *)arg1)->GetNodeContent();
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  {
+#if wxUSE_UNICODE
+    resultobj = PyUnicode_FromWideChar((&result)->c_str(), (&result)->Len());
+#else
+    resultobj = PyString_FromStringAndSize((&result)->c_str(), (&result)->Len());
+#endif
+  }
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_XmlNode_GetParent(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   wxXmlNode *arg1 = (wxXmlNode *) 0 ;
@@ -6359,19 +6464,23 @@ SWIGINTERN PyObject *_wrap_XmlDocument_Load(PyObject *SWIGUNUSEDPARM(self), PyOb
   wxString *arg2 = 0 ;
   wxString const &arg3_defvalue = wxPyUTF8String ;
   wxString *arg3 = (wxString *) &arg3_defvalue ;
+  int arg4 = (int) wxXMLDOC_NONE ;
   bool result;
   void *argp1 = 0 ;
   int res1 = 0 ;
   bool temp2 = false ;
   bool temp3 = false ;
+  int val4 ;
+  int ecode4 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
   char *  kwnames[] = {
-    (char *) "self",(char *) "filename",(char *) "encoding", NULL 
+    (char *) "self",(char *) "filename",(char *) "encoding",(char *) "flags", NULL 
   };
   
-  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|O:XmlDocument_Load",kwnames,&obj0,&obj1,&obj2)) SWIG_fail;
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|OO:XmlDocument_Load",kwnames,&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxXmlDocument, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "XmlDocument_Load" "', expected argument " "1"" of type '" "wxXmlDocument *""'"); 
@@ -6389,9 +6498,16 @@ SWIGINTERN PyObject *_wrap_XmlDocument_Load(PyObject *SWIGUNUSEDPARM(self), PyOb
       temp3 = true;
     }
   }
+  if (obj3) {
+    ecode4 = SWIG_AsVal_int(obj3, &val4);
+    if (!SWIG_IsOK(ecode4)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "XmlDocument_Load" "', expected argument " "4"" of type '" "int""'");
+    } 
+    arg4 = static_cast< int >(val4);
+  }
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    result = (bool)(arg1)->Load((wxString const &)*arg2,(wxString const &)*arg3);
+    result = (bool)(arg1)->Load((wxString const &)*arg2,(wxString const &)*arg3,arg4);
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
@@ -6426,20 +6542,24 @@ SWIGINTERN PyObject *_wrap_XmlDocument_LoadFromStream(PyObject *SWIGUNUSEDPARM(s
   wxInputStream *arg2 = 0 ;
   wxString const &arg3_defvalue = wxPyUTF8String ;
   wxString *arg3 = (wxString *) &arg3_defvalue ;
+  int arg4 = (int) wxXMLDOC_NONE ;
   bool result;
   void *argp1 = 0 ;
   int res1 = 0 ;
   wxPyInputStream *temp2 ;
   bool created2 ;
   bool temp3 = false ;
+  int val4 ;
+  int ecode4 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
   char *  kwnames[] = {
-    (char *) "self",(char *) "stream",(char *) "encoding", NULL 
+    (char *) "self",(char *) "stream",(char *) "encoding",(char *) "flags", NULL 
   };
   
-  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|O:XmlDocument_LoadFromStream",kwnames,&obj0,&obj1,&obj2)) SWIG_fail;
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|OO:XmlDocument_LoadFromStream",kwnames,&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxXmlDocument, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "XmlDocument_LoadFromStream" "', expected argument " "1"" of type '" "wxXmlDocument *""'"); 
@@ -6466,9 +6586,16 @@ SWIGINTERN PyObject *_wrap_XmlDocument_LoadFromStream(PyObject *SWIGUNUSEDPARM(s
       temp3 = true;
     }
   }
+  if (obj3) {
+    ecode4 = SWIG_AsVal_int(obj3, &val4);
+    if (!SWIG_IsOK(ecode4)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "XmlDocument_LoadFromStream" "', expected argument " "4"" of type '" "int""'");
+    } 
+    arg4 = static_cast< int >(val4);
+  }
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    result = (bool)(arg1)->Load(*arg2,(wxString const &)*arg3);
+    result = (bool)(arg1)->Load(*arg2,(wxString const &)*arg3,arg4);
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
@@ -6499,17 +6626,21 @@ SWIGINTERN PyObject *_wrap_XmlDocument_Save(PyObject *SWIGUNUSEDPARM(self), PyOb
   PyObject *resultobj = 0;
   wxXmlDocument *arg1 = (wxXmlDocument *) 0 ;
   wxString *arg2 = 0 ;
+  int arg3 = (int) 1 ;
   bool result;
   void *argp1 = 0 ;
   int res1 = 0 ;
   bool temp2 = false ;
+  int val3 ;
+  int ecode3 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
   char *  kwnames[] = {
-    (char *) "self",(char *) "filename", NULL 
+    (char *) "self",(char *) "filename",(char *) "indentstep", NULL 
   };
   
-  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:XmlDocument_Save",kwnames,&obj0,&obj1)) SWIG_fail;
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|O:XmlDocument_Save",kwnames,&obj0,&obj1,&obj2)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxXmlDocument, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "XmlDocument_Save" "', expected argument " "1"" of type '" "wxXmlDocument const *""'"); 
@@ -6520,9 +6651,16 @@ SWIGINTERN PyObject *_wrap_XmlDocument_Save(PyObject *SWIGUNUSEDPARM(self), PyOb
     if (arg2 == NULL) SWIG_fail;
     temp2 = true;
   }
+  if (obj2) {
+    ecode3 = SWIG_AsVal_int(obj2, &val3);
+    if (!SWIG_IsOK(ecode3)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "XmlDocument_Save" "', expected argument " "3"" of type '" "int""'");
+    } 
+    arg3 = static_cast< int >(val3);
+  }
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    result = (bool)((wxXmlDocument const *)arg1)->Save((wxString const &)*arg2);
+    result = (bool)((wxXmlDocument const *)arg1)->Save((wxString const &)*arg2,arg3);
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
@@ -6547,18 +6685,22 @@ SWIGINTERN PyObject *_wrap_XmlDocument_SaveToStream(PyObject *SWIGUNUSEDPARM(sel
   PyObject *resultobj = 0;
   wxXmlDocument *arg1 = (wxXmlDocument *) 0 ;
   wxOutputStream *arg2 = 0 ;
+  int arg3 = (int) 1 ;
   bool result;
   void *argp1 = 0 ;
   int res1 = 0 ;
   void *argp2 = 0 ;
   int res2 = 0 ;
+  int val3 ;
+  int ecode3 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
   char *  kwnames[] = {
-    (char *) "self",(char *) "stream", NULL 
+    (char *) "self",(char *) "stream",(char *) "indentstep", NULL 
   };
   
-  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:XmlDocument_SaveToStream",kwnames,&obj0,&obj1)) SWIG_fail;
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|O:XmlDocument_SaveToStream",kwnames,&obj0,&obj1,&obj2)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxXmlDocument, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "XmlDocument_SaveToStream" "', expected argument " "1"" of type '" "wxXmlDocument const *""'"); 
@@ -6572,9 +6714,16 @@ SWIGINTERN PyObject *_wrap_XmlDocument_SaveToStream(PyObject *SWIGUNUSEDPARM(sel
     SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "XmlDocument_SaveToStream" "', expected argument " "2"" of type '" "wxOutputStream &""'"); 
   }
   arg2 = reinterpret_cast< wxOutputStream * >(argp2);
+  if (obj2) {
+    ecode3 = SWIG_AsVal_int(obj2, &val3);
+    if (!SWIG_IsOK(ecode3)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "XmlDocument_SaveToStream" "', expected argument " "3"" of type '" "int""'");
+    } 
+    arg3 = static_cast< int >(val3);
+  }
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    result = (bool)((wxXmlDocument const *)arg1)->Save(*arg2);
+    result = (bool)((wxXmlDocument const *)arg1)->Save(*arg2,arg3);
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
@@ -8558,6 +8707,9 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"XmlNode_GetType", (PyCFunction)_wrap_XmlNode_GetType, METH_O, NULL},
 	 { (char *)"XmlNode_GetName", (PyCFunction)_wrap_XmlNode_GetName, METH_O, NULL},
 	 { (char *)"XmlNode_GetContent", (PyCFunction)_wrap_XmlNode_GetContent, METH_O, NULL},
+	 { (char *)"XmlNode_IsWhitespaceOnly", (PyCFunction)_wrap_XmlNode_IsWhitespaceOnly, METH_O, NULL},
+	 { (char *)"XmlNode_GetDepth", (PyCFunction) _wrap_XmlNode_GetDepth, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"XmlNode_GetNodeContent", (PyCFunction)_wrap_XmlNode_GetNodeContent, METH_O, NULL},
 	 { (char *)"XmlNode_GetParent", (PyCFunction)_wrap_XmlNode_GetParent, METH_O, NULL},
 	 { (char *)"XmlNode_GetNext", (PyCFunction)_wrap_XmlNode_GetNext, METH_O, NULL},
 	 { (char *)"XmlNode_GetChildren", (PyCFunction)_wrap_XmlNode_GetChildren, METH_O, NULL},
@@ -9843,6 +9995,9 @@ SWIGEXPORT void SWIG_init(void) {
   SWIG_Python_SetConstant(d, "XML_DOCUMENT_FRAG_NODE",SWIG_From_int(static_cast< int >(wxXML_DOCUMENT_FRAG_NODE)));
   SWIG_Python_SetConstant(d, "XML_NOTATION_NODE",SWIG_From_int(static_cast< int >(wxXML_NOTATION_NODE)));
   SWIG_Python_SetConstant(d, "XML_HTML_DOCUMENT_NODE",SWIG_From_int(static_cast< int >(wxXML_HTML_DOCUMENT_NODE)));
+  SWIG_Python_SetConstant(d, "XML_NO_INDENTATION",SWIG_From_int(static_cast< int >(wxXML_NO_INDENTATION)));
+  SWIG_Python_SetConstant(d, "XMLDOC_NONE",SWIG_From_int(static_cast< int >(wxXMLDOC_NONE)));
+  SWIG_Python_SetConstant(d, "XMLDOC_KEEP_WHITESPACE_NODES",SWIG_From_int(static_cast< int >(wxXMLDOC_KEEP_WHITESPACE_NODES)));
   
   
   wxXmlInitResourceModule();

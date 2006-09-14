@@ -366,6 +366,18 @@ class XmlNode(object):
         """GetContent(self) -> String"""
         return _xrc.XmlNode_GetContent(*args, **kwargs)
 
+    def IsWhitespaceOnly(*args, **kwargs):
+        """IsWhitespaceOnly(self) -> bool"""
+        return _xrc.XmlNode_IsWhitespaceOnly(*args, **kwargs)
+
+    def GetDepth(*args, **kwargs):
+        """GetDepth(self, XmlNode grandparent=None) -> int"""
+        return _xrc.XmlNode_GetDepth(*args, **kwargs)
+
+    def GetNodeContent(*args, **kwargs):
+        """GetNodeContent(self) -> String"""
+        return _xrc.XmlNode_GetNodeContent(*args, **kwargs)
+
     def GetParent(*args, **kwargs):
         """GetParent(self) -> XmlNode"""
         return _xrc.XmlNode_GetParent(*args, **kwargs)
@@ -425,6 +437,9 @@ def XmlNodeEasy(*args, **kwargs):
     val = _xrc.new_XmlNodeEasy(*args, **kwargs)
     return val
 
+XML_NO_INDENTATION = _xrc.XML_NO_INDENTATION
+XMLDOC_NONE = _xrc.XMLDOC_NONE
+XMLDOC_KEEP_WHITESPACE_NODES = _xrc.XMLDOC_KEEP_WHITESPACE_NODES
 class XmlDocument(_core.Object):
     """Proxy of C++ XmlDocument class"""
     thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -435,19 +450,19 @@ class XmlDocument(_core.Object):
     __swig_destroy__ = _xrc.delete_XmlDocument
     __del__ = lambda self : None;
     def Load(*args, **kwargs):
-        """Load(self, String filename, String encoding=UTF8String) -> bool"""
+        """Load(self, String filename, String encoding=UTF8String, int flags=XMLDOC_NONE) -> bool"""
         return _xrc.XmlDocument_Load(*args, **kwargs)
 
     def LoadFromStream(*args, **kwargs):
-        """LoadFromStream(self, InputStream stream, String encoding=UTF8String) -> bool"""
+        """LoadFromStream(self, InputStream stream, String encoding=UTF8String, int flags=XMLDOC_NONE) -> bool"""
         return _xrc.XmlDocument_LoadFromStream(*args, **kwargs)
 
     def Save(*args, **kwargs):
-        """Save(self, String filename) -> bool"""
+        """Save(self, String filename, int indentstep=1) -> bool"""
         return _xrc.XmlDocument_Save(*args, **kwargs)
 
     def SaveToStream(*args, **kwargs):
-        """SaveToStream(self, OutputStream stream) -> bool"""
+        """SaveToStream(self, OutputStream stream, int indentstep=1) -> bool"""
         return _xrc.XmlDocument_SaveToStream(*args, **kwargs)
 
     def IsOk(*args, **kwargs):

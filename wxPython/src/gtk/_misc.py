@@ -1186,6 +1186,20 @@ class PlatformInformation(object):
         """IsOk(self) -> bool"""
         return _misc_.PlatformInformation_IsOk(*args, **kwargs)
 
+    ArchName = property(GetArchName,doc="See `GetArchName`") 
+    Architecture = property(GetArchitecture,SetArchitecture,doc="See `GetArchitecture` and `SetArchitecture`") 
+    Endianness = property(GetEndianness,SetEndianness,doc="See `GetEndianness` and `SetEndianness`") 
+    EndiannessName = property(GetEndiannessName,doc="See `GetEndiannessName`") 
+    OSMajorVersion = property(GetOSMajorVersion,doc="See `GetOSMajorVersion`") 
+    OSMinorVersion = property(GetOSMinorVersion,doc="See `GetOSMinorVersion`") 
+    OperatingSystemFamilyName = property(GetOperatingSystemFamilyName,doc="See `GetOperatingSystemFamilyName`") 
+    OperatingSystemId = property(GetOperatingSystemId,SetOperatingSystemId,doc="See `GetOperatingSystemId` and `SetOperatingSystemId`") 
+    OperatingSystemIdName = property(GetOperatingSystemIdName,doc="See `GetOperatingSystemIdName`") 
+    PortId = property(GetPortId,SetPortId,doc="See `GetPortId` and `SetPortId`") 
+    PortIdName = property(GetPortIdName,doc="See `GetPortIdName`") 
+    PortIdShortName = property(GetPortIdShortName,doc="See `GetPortIdShortName`") 
+    ToolkitMajorVersion = property(GetToolkitMajorVersion,doc="See `GetToolkitMajorVersion`") 
+    ToolkitMinorVersion = property(GetToolkitMinorVersion,doc="See `GetToolkitMinorVersion`") 
 _misc_.PlatformInformation_swigregister(PlatformInformation)
 
 
@@ -1906,6 +1920,12 @@ class Process(_core.EvtHandler):
         """IsErrorAvailable(self) -> bool"""
         return _misc_.Process_IsErrorAvailable(*args, **kwargs)
 
+    ErrorStream = property(GetErrorStream,doc="See `GetErrorStream`") 
+    InputStream = property(GetInputStream,doc="See `GetInputStream`") 
+    OutputStream = property(GetOutputStream,doc="See `GetOutputStream`") 
+    InputOpened = property(IsInputOpened) 
+    InputAvailable = property(IsInputAvailable) 
+    ErrorAvailable = property(IsErrorAvailable) 
 _misc_.Process_swigregister(Process)
 
 def Process_Kill(*args, **kwargs):
@@ -1937,6 +1957,8 @@ class ProcessEvent(_core.Event):
 
     m_pid = property(_misc_.ProcessEvent_m_pid_get, _misc_.ProcessEvent_m_pid_set)
     m_exitcode = property(_misc_.ProcessEvent_m_exitcode_get, _misc_.ProcessEvent_m_exitcode_set)
+    ExitCode = property(GetExitCode,doc="See `GetExitCode`") 
+    Pid = property(GetPid,doc="See `GetPid`") 
 _misc_.ProcessEvent_swigregister(ProcessEvent)
 
 wxEVT_END_PROCESS = _misc_.wxEVT_END_PROCESS

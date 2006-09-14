@@ -270,6 +270,10 @@ class ScrolledWindow(Panel):
         return _windows_.ScrolledWindow_GetClassDefaultAttributes(*args, **kwargs)
 
     GetClassDefaultAttributes = staticmethod(GetClassDefaultAttributes)
+    ScaleX = property(GetScaleX,doc="See `GetScaleX`") 
+    ScaleY = property(GetScaleY,doc="See `GetScaleY`") 
+    TargetWindow = property(GetTargetWindow,SetTargetWindow,doc="See `GetTargetWindow` and `SetTargetWindow`") 
+    ViewStart = property(GetViewStart,doc="See `GetViewStart`") 
 _windows_.ScrolledWindow_swigregister(ScrolledWindow)
 
 def PreScrolledWindow(*args, **kwargs):
@@ -785,6 +789,7 @@ class SplashScreenWindow(_core.Window):
         """GetBitmap(self) -> Bitmap"""
         return _windows_.SplashScreenWindow_GetBitmap(*args, **kwargs)
 
+    Bitmap = property(GetBitmap,SetBitmap,doc="See `GetBitmap` and `SetBitmap`") 
 _windows_.SplashScreenWindow_swigregister(SplashScreenWindow)
 
 class SplashScreen(Frame):
@@ -812,6 +817,9 @@ class SplashScreen(Frame):
         """GetTimeout(self) -> int"""
         return _windows_.SplashScreen_GetTimeout(*args, **kwargs)
 
+    SplashStyle = property(GetSplashStyle,doc="See `GetSplashStyle`") 
+    SplashWindow = property(GetSplashWindow,doc="See `GetSplashWindow`") 
+    Timeout = property(GetTimeout,doc="See `GetTimeout`") 
 _windows_.SplashScreen_swigregister(SplashScreen)
 
 #---------------------------------------------------------------------------
@@ -911,7 +919,12 @@ class StatusBar(_core.Window):
         for i in range(len(items)):
             self.SetStatusText(items[i], i)
 
-    Fields = property(GetFields,SetFields) 
+    BorderX = property(GetBorderX,doc="See `GetBorderX`") 
+    BorderY = property(GetBorderY,doc="See `GetBorderY`") 
+    FieldRect = property(GetFieldRect,doc="See `GetFieldRect`") 
+    Fields = property(GetFields,SetFields,doc="See `GetFields` and `SetFields`") 
+    FieldsCount = property(GetFieldsCount,SetFieldsCount,doc="See `GetFieldsCount` and `SetFieldsCount`") 
+    StatusText = property(GetStatusText,SetStatusText,doc="See `GetStatusText` and `SetStatusText`") 
 _windows_.StatusBar_swigregister(StatusBar)
 
 def PreStatusBar(*args, **kwargs):
@@ -1235,6 +1248,15 @@ class SplitterWindow(_core.Window):
         return _windows_.SplitterWindow_GetClassDefaultAttributes(*args, **kwargs)
 
     GetClassDefaultAttributes = staticmethod(GetClassDefaultAttributes)
+    BorderSize = property(GetBorderSize,SetBorderSize,doc="See `GetBorderSize` and `SetBorderSize`") 
+    MinimumPaneSize = property(GetMinimumPaneSize,SetMinimumPaneSize,doc="See `GetMinimumPaneSize` and `SetMinimumPaneSize`") 
+    NeedUpdating = property(GetNeedUpdating,SetNeedUpdating,doc="See `GetNeedUpdating` and `SetNeedUpdating`") 
+    SashGravity = property(GetSashGravity,SetSashGravity,doc="See `GetSashGravity` and `SetSashGravity`") 
+    SashPosition = property(GetSashPosition,SetSashPosition,doc="See `GetSashPosition` and `SetSashPosition`") 
+    SashSize = property(GetSashSize,SetSashSize,doc="See `GetSashSize` and `SetSashSize`") 
+    SplitMode = property(GetSplitMode,SetSplitMode,doc="See `GetSplitMode` and `SetSplitMode`") 
+    Window1 = property(GetWindow1,doc="See `GetWindow1`") 
+    Window2 = property(GetWindow2,doc="See `GetWindow2`") 
 _windows_.SplitterWindow_swigregister(SplitterWindow)
 SplitterNameStr = cvar.SplitterNameStr
 
@@ -1324,6 +1346,10 @@ class SplitterEvent(_core.NotifyEvent):
         """
         return _windows_.SplitterEvent_GetY(*args, **kwargs)
 
+    SashPosition = property(GetSashPosition,SetSashPosition,doc="See `GetSashPosition` and `SetSashPosition`") 
+    WindowBeingRemoved = property(GetWindowBeingRemoved,doc="See `GetWindowBeingRemoved`") 
+    X = property(GetX,doc="See `GetX`") 
+    Y = property(GetY,doc="See `GetY`") 
 _windows_.SplitterEvent_swigregister(SplitterEvent)
 
 wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGED = _windows_.wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGED
@@ -1448,6 +1474,12 @@ class SashWindow(_core.Window):
         """SizeWindows(self)"""
         return _windows_.SashWindow_SizeWindows(*args, **kwargs)
 
+    DefaultBorderSize = property(GetDefaultBorderSize,SetDefaultBorderSize,doc="See `GetDefaultBorderSize` and `SetDefaultBorderSize`") 
+    ExtraBorderSize = property(GetExtraBorderSize,SetExtraBorderSize,doc="See `GetExtraBorderSize` and `SetExtraBorderSize`") 
+    MaximumSizeX = property(GetMaximumSizeX,SetMaximumSizeX,doc="See `GetMaximumSizeX` and `SetMaximumSizeX`") 
+    MaximumSizeY = property(GetMaximumSizeY,SetMaximumSizeY,doc="See `GetMaximumSizeY` and `SetMaximumSizeY`") 
+    MinimumSizeX = property(GetMinimumSizeX,SetMinimumSizeX,doc="See `GetMinimumSizeX` and `SetMinimumSizeX`") 
+    MinimumSizeY = property(GetMinimumSizeY,SetMinimumSizeY,doc="See `GetMinimumSizeY` and `SetMinimumSizeY`") 
 _windows_.SashWindow_swigregister(SashWindow)
 SashNameStr = cvar.SashNameStr
 SashLayoutNameStr = cvar.SashLayoutNameStr
@@ -1490,6 +1522,9 @@ class SashEvent(_core.CommandEvent):
         """GetDragStatus(self) -> int"""
         return _windows_.SashEvent_GetDragStatus(*args, **kwargs)
 
+    DragRect = property(GetDragRect,SetDragRect,doc="See `GetDragRect` and `SetDragRect`") 
+    DragStatus = property(GetDragStatus,SetDragStatus,doc="See `GetDragStatus` and `SetDragStatus`") 
+    Edge = property(GetEdge,SetEdge,doc="See `GetEdge` and `SetEdge`") 
 _windows_.SashEvent_swigregister(SashEvent)
 
 wxEVT_SASH_DRAGGED = _windows_.wxEVT_SASH_DRAGGED
@@ -1558,6 +1593,11 @@ class QueryLayoutInfoEvent(_core.Event):
         """GetAlignment(self) -> int"""
         return _windows_.QueryLayoutInfoEvent_GetAlignment(*args, **kwargs)
 
+    Alignment = property(GetAlignment,SetAlignment,doc="See `GetAlignment` and `SetAlignment`") 
+    Flags = property(GetFlags,SetFlags,doc="See `GetFlags` and `SetFlags`") 
+    Orientation = property(GetOrientation,SetOrientation,doc="See `GetOrientation` and `SetOrientation`") 
+    RequestedLength = property(GetRequestedLength,SetRequestedLength,doc="See `GetRequestedLength` and `SetRequestedLength`") 
+    Size = property(GetSize,SetSize,doc="See `GetSize` and `SetSize`") 
 _windows_.QueryLayoutInfoEvent_swigregister(QueryLayoutInfoEvent)
 
 class CalculateLayoutEvent(_core.Event):
@@ -1631,6 +1671,8 @@ class SashLayoutWindow(SashWindow):
         """SetOrientation(self, int orientation)"""
         return _windows_.SashLayoutWindow_SetOrientation(*args, **kwargs)
 
+    Alignment = property(GetAlignment,SetAlignment,doc="See `GetAlignment` and `SetAlignment`") 
+    Orientation = property(GetOrientation,SetOrientation,doc="See `GetOrientation` and `SetOrientation`") 
 _windows_.SashLayoutWindow_swigregister(SashLayoutWindow)
 
 def PreSashLayoutWindow(*args, **kwargs):
@@ -2519,6 +2561,8 @@ class SingleChoiceDialog(Dialog):
         """
         return _windows_.SingleChoiceDialog_SetSelection(*args, **kwargs)
 
+    Selection = property(GetSelection,SetSelection,doc="See `GetSelection` and `SetSelection`") 
+    StringSelection = property(GetStringSelection,doc="See `GetStringSelection`") 
 _windows_.SingleChoiceDialog_swigregister(SingleChoiceDialog)
 
 TextEntryDialogStyle = _windows_.TextEntryDialogStyle
@@ -3889,6 +3933,19 @@ class PrintData(_core.Object):
         """SetPrivData(self, PyObject data)"""
         return _windows_.PrintData_SetPrivData(*args, **kwargs)
 
+    Bin = property(GetBin,SetBin,doc="See `GetBin` and `SetBin`") 
+    Collate = property(GetCollate,SetCollate,doc="See `GetCollate` and `SetCollate`") 
+    Colour = property(GetColour,SetColour,doc="See `GetColour` and `SetColour`") 
+    Duplex = property(GetDuplex,SetDuplex,doc="See `GetDuplex` and `SetDuplex`") 
+    Filename = property(GetFilename,SetFilename,doc="See `GetFilename` and `SetFilename`") 
+    NoCopies = property(GetNoCopies,SetNoCopies,doc="See `GetNoCopies` and `SetNoCopies`") 
+    Orientation = property(GetOrientation,SetOrientation,doc="See `GetOrientation` and `SetOrientation`") 
+    PaperId = property(GetPaperId,SetPaperId,doc="See `GetPaperId` and `SetPaperId`") 
+    PaperSize = property(GetPaperSize,SetPaperSize,doc="See `GetPaperSize` and `SetPaperSize`") 
+    PrintMode = property(GetPrintMode,SetPrintMode,doc="See `GetPrintMode` and `SetPrintMode`") 
+    PrinterName = property(GetPrinterName,SetPrinterName,doc="See `GetPrinterName` and `SetPrinterName`") 
+    PrivData = property(GetPrivData,SetPrivData,doc="See `GetPrivData` and `SetPrivData`") 
+    Quality = property(GetQuality,SetQuality,doc="See `GetQuality` and `SetQuality`") 
 _windows_.PrintData_swigregister(PrintData)
 PrintoutTitleStr = cvar.PrintoutTitleStr
 PreviewCanvasNameStr = cvar.PreviewCanvasNameStr
@@ -4031,6 +4088,15 @@ class PageSetupDialogData(_core.Object):
         return _windows_.PageSetupDialogData_CalculatePaperSizeFromId(*args, **kwargs)
 
     def __nonzero__(self): return self.Ok() 
+    DefaultInfo = property(GetDefaultInfo,SetDefaultInfo,doc="See `GetDefaultInfo` and `SetDefaultInfo`") 
+    DefaultMinMargins = property(GetDefaultMinMargins,SetDefaultMinMargins,doc="See `GetDefaultMinMargins` and `SetDefaultMinMargins`") 
+    MarginBottomRight = property(GetMarginBottomRight,SetMarginBottomRight,doc="See `GetMarginBottomRight` and `SetMarginBottomRight`") 
+    MarginTopLeft = property(GetMarginTopLeft,SetMarginTopLeft,doc="See `GetMarginTopLeft` and `SetMarginTopLeft`") 
+    MinMarginBottomRight = property(GetMinMarginBottomRight,SetMinMarginBottomRight,doc="See `GetMinMarginBottomRight` and `SetMinMarginBottomRight`") 
+    MinMarginTopLeft = property(GetMinMarginTopLeft,SetMinMarginTopLeft,doc="See `GetMinMarginTopLeft` and `SetMinMarginTopLeft`") 
+    PaperId = property(GetPaperId,SetPaperId,doc="See `GetPaperId` and `SetPaperId`") 
+    PaperSize = property(GetPaperSize,SetPaperSize,doc="See `GetPaperSize` and `SetPaperSize`") 
+    PrintData = property(GetPrintData,SetPrintData,doc="See `GetPrintData` and `SetPrintData`") 
 _windows_.PageSetupDialogData_swigregister(PageSetupDialogData)
 
 class PageSetupDialog(_core.Object):
@@ -4055,6 +4121,8 @@ class PageSetupDialog(_core.Object):
         return _windows_.PageSetupDialog_ShowModal(*args, **kwargs)
 
     def Destroy(self): pass 
+    PageSetupData = property(GetPageSetupData,doc="See `GetPageSetupData`") 
+    PageSetupDialogData = property(GetPageSetupDialogData,doc="See `GetPageSetupDialogData`") 
 _windows_.PageSetupDialog_swigregister(PageSetupDialog)
 
 class PrintDialogData(_core.Object):
@@ -4187,6 +4255,16 @@ class PrintDialogData(_core.Object):
         return _windows_.PrintDialogData_SetPrintData(*args, **kwargs)
 
     def __nonzero__(self): return self.Ok() 
+    AllPages = property(GetAllPages,SetAllPages,doc="See `GetAllPages` and `SetAllPages`") 
+    Collate = property(GetCollate,SetCollate,doc="See `GetCollate` and `SetCollate`") 
+    FromPage = property(GetFromPage,SetFromPage,doc="See `GetFromPage` and `SetFromPage`") 
+    MaxPage = property(GetMaxPage,SetMaxPage,doc="See `GetMaxPage` and `SetMaxPage`") 
+    MinPage = property(GetMinPage,SetMinPage,doc="See `GetMinPage` and `SetMinPage`") 
+    NoCopies = property(GetNoCopies,SetNoCopies,doc="See `GetNoCopies` and `SetNoCopies`") 
+    PrintData = property(GetPrintData,SetPrintData,doc="See `GetPrintData` and `SetPrintData`") 
+    PrintToFile = property(GetPrintToFile,SetPrintToFile,doc="See `GetPrintToFile` and `SetPrintToFile`") 
+    Selection = property(GetSelection,SetSelection,doc="See `GetSelection` and `SetSelection`") 
+    ToPage = property(GetToPage,SetToPage,doc="See `GetToPage` and `SetToPage`") 
 _windows_.PrintDialogData_swigregister(PrintDialogData)
 
 class PrintDialog(_core.Object):
@@ -4215,6 +4293,9 @@ class PrintDialog(_core.Object):
         return _windows_.PrintDialog_GetPrintDC(*args, **kwargs)
 
     def Destroy(self): pass 
+    PrintDC = property(GetPrintDC,doc="See `GetPrintDC`") 
+    PrintData = property(GetPrintData,doc="See `GetPrintData`") 
+    PrintDialogData = property(GetPrintDialogData,doc="See `GetPrintDialogData`") 
 _windows_.PrintDialog_swigregister(PrintDialog)
 
 PRINTER_NO_ERROR = _windows_.PRINTER_NO_ERROR
@@ -4262,6 +4343,8 @@ class Printer(_core.Object):
         return _windows_.Printer_GetLastError(*args, **kwargs)
 
     GetLastError = staticmethod(GetLastError)
+    Abort = property(GetAbort,doc="See `GetAbort`") 
+    PrintDialogData = property(GetPrintDialogData,doc="See `GetPrintDialogData`") 
 _windows_.Printer_swigregister(Printer)
 
 def Printer_GetLastError(*args):
@@ -4393,6 +4476,12 @@ class Printout(_core.Object):
     base_GetPageInfo = wx._deprecated(base_GetPageInfo,
                                    "Please use Printout.GetPageInfo instead.")
 
+    DC = property(GetDC,SetDC,doc="See `GetDC` and `SetDC`") 
+    PPIPrinter = property(GetPPIPrinter,SetPPIPrinter,doc="See `GetPPIPrinter` and `SetPPIPrinter`") 
+    PPIScreen = property(GetPPIScreen,SetPPIScreen,doc="See `GetPPIScreen` and `SetPPIScreen`") 
+    PageSizeMM = property(GetPageSizeMM,SetPageSizeMM,doc="See `GetPageSizeMM` and `SetPageSizeMM`") 
+    PageSizePixels = property(GetPageSizePixels,SetPageSizePixels,doc="See `GetPageSizePixels` and `SetPageSizePixels`") 
+    Title = property(GetTitle,doc="See `GetTitle`") 
 _windows_.Printout_swigregister(Printout)
 
 class PreviewCanvas(ScrolledWindow):
@@ -4439,6 +4528,7 @@ class PreviewFrame(Frame):
         """GetControlBar(self) -> PreviewControlBar"""
         return _windows_.PreviewFrame_GetControlBar(*args, **kwargs)
 
+    ControlBar = property(GetControlBar,doc="See `GetControlBar`") 
 _windows_.PreviewFrame_swigregister(PreviewFrame)
 
 PREVIEW_PRINT = _windows_.PREVIEW_PRINT
@@ -4502,6 +4592,8 @@ class PreviewControlBar(Panel):
         """OnGoto(self)"""
         return _windows_.PreviewControlBar_OnGoto(*args, **kwargs)
 
+    PrintPreview = property(GetPrintPreview,doc="See `GetPrintPreview`") 
+    ZoomControl = property(GetZoomControl,SetZoomControl,doc="See `GetZoomControl` and `SetZoomControl`") 
 _windows_.PreviewControlBar_swigregister(PreviewControlBar)
 
 class PrintPreview(_core.Object):
@@ -4605,6 +4697,15 @@ class PrintPreview(_core.Object):
         return _windows_.PrintPreview_DetermineScaling(*args, **kwargs)
 
     def __nonzero__(self): return self.Ok() 
+    Canvas = property(GetCanvas,SetCanvas,doc="See `GetCanvas` and `SetCanvas`") 
+    CurrentPage = property(GetCurrentPage,SetCurrentPage,doc="See `GetCurrentPage` and `SetCurrentPage`") 
+    Frame = property(GetFrame,SetFrame,doc="See `GetFrame` and `SetFrame`") 
+    MaxPage = property(GetMaxPage,doc="See `GetMaxPage`") 
+    MinPage = property(GetMinPage,doc="See `GetMinPage`") 
+    PrintDialogData = property(GetPrintDialogData,doc="See `GetPrintDialogData`") 
+    Printout = property(GetPrintout,SetPrintout,doc="See `GetPrintout` and `SetPrintout`") 
+    PrintoutForPrinting = property(GetPrintoutForPrinting,doc="See `GetPrintoutForPrinting`") 
+    Zoom = property(GetZoom,SetZoom,doc="See `GetZoom` and `SetZoom`") 
 _windows_.PrintPreview_swigregister(PrintPreview)
 
 class PyPrintPreview(PrintPreview):

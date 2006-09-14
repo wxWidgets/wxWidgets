@@ -2805,13 +2805,9 @@ namespace swig {
 #include <wx/treectrl.h>
 #include <wx/imaglist.h>
 
-#include "wx/treelistctrl.h"
-#include "wx/wxPython/pytree.h"
-
 
  static const wxString wxPyDynamicSashNameStr(wxT("dynamicSashWindow")); 
  static const wxString wxPyEditableListBoxNameStr(wxT("editableListBox")); 
- static const wxString wxPyTreeListCtrlNameStr(wxT("treelistctrl")); 
  static const wxString wxPyStaticPictureNameStr(wxStaticPictureNameStr); 
  static const wxString wxPyEmptyString(wxEmptyString); 
 
@@ -2921,6 +2917,27 @@ SWIG_AsVal_bool (PyObject *obj, bool *val)
 }
 
 
+#include "wx/treelistctrl.h"
+#include "wx/wxPython/pytree.h"
+
+
+ static const wxString wxPyTreeListCtrlNameStr(wxT("treelistctrl")); 
+
+SWIGINTERNINLINE PyObject* 
+SWIG_From_unsigned_SS_long  (unsigned long value)
+{
+  return (value > LONG_MAX) ?
+    PyLong_FromUnsignedLong(value) : PyInt_FromLong(static_cast< long >(value)); 
+}
+
+
+SWIGINTERNINLINE PyObject *
+SWIG_From_size_t  (size_t value)
+{    
+  return SWIG_From_unsigned_SS_long  (static_cast< unsigned long >(value));
+}
+
+
 SWIGINTERN int 
 SWIG_AsVal_unsigned_SS_long (PyObject* obj, unsigned long* val)
 {
@@ -2943,21 +2960,6 @@ SWIG_AsVal_size_t (PyObject * obj, size_t *val)
   return res;
 }
 
-
-SWIGINTERNINLINE PyObject* 
-SWIG_From_unsigned_SS_long  (unsigned long value)
-{
-  return (value > LONG_MAX) ?
-    PyLong_FromUnsignedLong(value) : PyInt_FromLong(static_cast< long >(value)); 
-}
-
-
-SWIGINTERNINLINE PyObject *
-SWIG_From_size_t  (size_t value)
-{    
-  return SWIG_From_unsigned_SS_long  (static_cast< unsigned long >(value));
-}
-
  // C++ version of Python aware control
 class wxPyTreeListCtrl : public wxTreeListCtrl {
     DECLARE_ABSTRACT_CLASS(wxPyTreeListCtrl);
@@ -2971,8 +2973,8 @@ public:
                      const wxString& name) :
         wxTreeListCtrl(parent, id, pos, size, style, validator, name) {}
 
-    int OnCompareItems(const wxTreeItemId& item1,
-                       const wxTreeItemId& item2) {
+    virtual int OnCompareItems(const wxTreeItemId& item1,
+                               const wxTreeItemId& item2) {
         int rval = 0;
         bool found;
         wxPyBlock_t blocked = wxPyBeginBlockThreads();
@@ -2988,6 +2990,27 @@ public:
             rval = wxTreeListCtrl::OnCompareItems(item1, item2);
         return rval;
     }
+
+    virtual wxString  OnGetItemText( wxTreeItemData* item, long column ) const {
+        wxString rval;
+        bool found;
+        wxPyBlock_t blocked = wxPyBeginBlockThreads();
+        if ((found = wxPyCBH_findCallback(m_myInst, "OnGetItemText"))) {
+            PyObject* ro;
+            PyObject* itemo = wxPyConstructObject((void*)&item, wxT("wxTreeItemId"), 0);
+            ro = wxPyCBH_callCallbackObj(m_myInst, Py_BuildValue("(Oi)", itemo, column));
+            Py_DECREF(itemo);
+            if (ro) {
+                rval = Py2wxString(ro);
+                Py_DECREF(ro);
+            }
+        }
+        wxPyEndBlockThreads(blocked);
+        if (! found)
+            rval = wxTreeListCtrl::OnGetItemText(item, column);
+        return rval;
+    }
+
     PYPRIVATE;
 };
 
@@ -3098,6 +3121,25 @@ SWIGINTERN PyObject *wxPyTreeListCtrl_GetNextChild(wxPyTreeListCtrl *self,wxTree
             wxPyEndBlockThreads(blocked);
             return tup;
         }
+SWIGINTERN PyObject *wxPyTreeListCtrl_GetLastChild(wxPyTreeListCtrl *self,wxTreeItemId const &item){
+            void* cookie = 0;
+            wxTreeItemId* ritem = new wxTreeItemId(self->GetLastChild(item, cookie));
+            wxPyBlock_t blocked = wxPyBeginBlockThreads();
+            PyObject* tup = PyTuple_New(2);
+            PyTuple_SET_ITEM(tup, 0, wxPyConstructObject(ritem, wxT("wxTreeItemId"), true));
+            PyTuple_SET_ITEM(tup, 1, wxPyMakeSwigPtr(cookie, wxT("void")));
+            wxPyEndBlockThreads(blocked);
+            return tup;
+        }
+SWIGINTERN PyObject *wxPyTreeListCtrl_GetPrevChild(wxPyTreeListCtrl *self,wxTreeItemId const &item,void *cookie){
+            wxTreeItemId* ritem = new wxTreeItemId(self->GetPrevChild(item, cookie));
+            wxPyBlock_t blocked = wxPyBeginBlockThreads();
+            PyObject* tup = PyTuple_New(2);
+            PyTuple_SET_ITEM(tup, 0, wxPyConstructObject(ritem, wxT("wxTreeItemId"), true));
+            PyTuple_SET_ITEM(tup, 1, wxPyMakeSwigPtr(cookie, wxT("void")));
+            wxPyEndBlockThreads(blocked);
+            return tup;
+        }
 SWIGINTERN PyObject *wxPyTreeListCtrl_GetBoundingRect(wxPyTreeListCtrl *self,wxTreeItemId const &item,bool textOnly=false){
             wxRect rect;
             if (self->GetBoundingRect(item, rect, textOnly)) {
@@ -3110,6 +3152,10 @@ SWIGINTERN PyObject *wxPyTreeListCtrl_GetBoundingRect(wxPyTreeListCtrl *self,wxT
             else {
                 RETURN_NONE();
             }
+        }
+SWIGINTERN void wxPyTreeListCtrl_EditLabel(wxPyTreeListCtrl *self,wxTreeItemId const &item,int column=-1){
+            if (column < 0) column = self->GetMainColumn();
+            self->EditLabel(item, column);
         }
 
 #include <float.h>
@@ -3188,26 +3234,6 @@ SWIGINTERN PyObject *EditableListBoxNameStr_get(void) {
     pyobj = PyUnicode_FromWideChar((&wxPyEditableListBoxNameStr)->c_str(), (&wxPyEditableListBoxNameStr)->Len());
 #else
     pyobj = PyString_FromStringAndSize((&wxPyEditableListBoxNameStr)->c_str(), (&wxPyEditableListBoxNameStr)->Len());
-#endif
-  }
-  return pyobj;
-}
-
-
-SWIGINTERN int TreeListCtrlNameStr_set(PyObject *) {
-  SWIG_Error(SWIG_AttributeError,"Variable TreeListCtrlNameStr is read-only.");
-  return 1;
-}
-
-
-SWIGINTERN PyObject *TreeListCtrlNameStr_get(void) {
-  PyObject *pyobj = 0;
-  
-  {
-#if wxUSE_UNICODE
-    pyobj = PyUnicode_FromWideChar((&wxPyTreeListCtrlNameStr)->c_str(), (&wxPyTreeListCtrlNameStr)->Len());
-#else
-    pyobj = PyString_FromStringAndSize((&wxPyTreeListCtrlNameStr)->c_str(), (&wxPyTreeListCtrlNameStr)->Len());
 #endif
   }
   return pyobj;
@@ -5070,34 +5096,58 @@ SWIGINTERN PyObject *LEDNumberCtrl_swiginit(PyObject *SWIGUNUSEDPARM(self), PyOb
   return SWIG_Python_InitShadowInstance(args);
 }
 
+SWIGINTERN int TreeListCtrlNameStr_set(PyObject *) {
+  SWIG_Error(SWIG_AttributeError,"Variable TreeListCtrlNameStr is read-only.");
+  return 1;
+}
+
+
+SWIGINTERN PyObject *TreeListCtrlNameStr_get(void) {
+  PyObject *pyobj = 0;
+  
+  {
+#if wxUSE_UNICODE
+    pyobj = PyUnicode_FromWideChar((&wxPyTreeListCtrlNameStr)->c_str(), (&wxPyTreeListCtrlNameStr)->Len());
+#else
+    pyobj = PyString_FromStringAndSize((&wxPyTreeListCtrlNameStr)->c_str(), (&wxPyTreeListCtrlNameStr)->Len());
+#endif
+  }
+  return pyobj;
+}
+
+
 SWIGINTERN PyObject *_wrap_new_TreeListColumnInfo(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   wxString const &arg1_defvalue = wxPyEmptyString ;
   wxString *arg1 = (wxString *) &arg1_defvalue ;
-  int arg2 = (int) -1 ;
-  size_t arg3 = (size_t) 100 ;
-  bool arg4 = (bool) true ;
-  wxTreeListColumnAlign arg5 = (wxTreeListColumnAlign) wxTL_ALIGN_LEFT ;
+  int arg2 = (int) DEFAULT_COL_WIDTH ;
+  int arg3 = (int) wxALIGN_LEFT ;
+  int arg4 = (int) -1 ;
+  bool arg5 = (bool) true ;
+  bool arg6 = (bool) false ;
   wxTreeListColumnInfo *result = 0 ;
   bool temp1 = false ;
   int val2 ;
   int ecode2 = 0 ;
-  size_t val3 ;
+  int val3 ;
   int ecode3 = 0 ;
-  bool val4 ;
+  int val4 ;
   int ecode4 = 0 ;
-  int val5 ;
+  bool val5 ;
   int ecode5 = 0 ;
+  bool val6 ;
+  int ecode6 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
   PyObject * obj3 = 0 ;
   PyObject * obj4 = 0 ;
+  PyObject * obj5 = 0 ;
   char *  kwnames[] = {
-    (char *) "text",(char *) "image",(char *) "width",(char *) "shown",(char *) "alignment", NULL 
+    (char *) "text",(char *) "width",(char *) "flag",(char *) "image",(char *) "shown",(char *) "edit", NULL 
   };
   
-  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"|OOOOO:new_TreeListColumnInfo",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4)) SWIG_fail;
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"|OOOOOO:new_TreeListColumnInfo",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5)) SWIG_fail;
   if (obj0) {
     {
       arg1 = wxString_in_helper(obj0);
@@ -5113,29 +5163,36 @@ SWIGINTERN PyObject *_wrap_new_TreeListColumnInfo(PyObject *SWIGUNUSEDPARM(self)
     arg2 = static_cast< int >(val2);
   }
   if (obj2) {
-    ecode3 = SWIG_AsVal_size_t(obj2, &val3);
+    ecode3 = SWIG_AsVal_int(obj2, &val3);
     if (!SWIG_IsOK(ecode3)) {
-      SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "new_TreeListColumnInfo" "', expected argument " "3"" of type '" "size_t""'");
+      SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "new_TreeListColumnInfo" "', expected argument " "3"" of type '" "int""'");
     } 
-    arg3 = static_cast< size_t >(val3);
+    arg3 = static_cast< int >(val3);
   }
   if (obj3) {
-    ecode4 = SWIG_AsVal_bool(obj3, &val4);
+    ecode4 = SWIG_AsVal_int(obj3, &val4);
     if (!SWIG_IsOK(ecode4)) {
-      SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "new_TreeListColumnInfo" "', expected argument " "4"" of type '" "bool""'");
+      SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "new_TreeListColumnInfo" "', expected argument " "4"" of type '" "int""'");
     } 
-    arg4 = static_cast< bool >(val4);
+    arg4 = static_cast< int >(val4);
   }
   if (obj4) {
-    ecode5 = SWIG_AsVal_int(obj4, &val5);
+    ecode5 = SWIG_AsVal_bool(obj4, &val5);
     if (!SWIG_IsOK(ecode5)) {
-      SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "new_TreeListColumnInfo" "', expected argument " "5"" of type '" "wxTreeListColumnAlign""'");
+      SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "new_TreeListColumnInfo" "', expected argument " "5"" of type '" "bool""'");
     } 
-    arg5 = static_cast< wxTreeListColumnAlign >(val5);
+    arg5 = static_cast< bool >(val5);
+  }
+  if (obj5) {
+    ecode6 = SWIG_AsVal_bool(obj5, &val6);
+    if (!SWIG_IsOK(ecode6)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode6), "in method '" "new_TreeListColumnInfo" "', expected argument " "6"" of type '" "bool""'");
+    } 
+    arg6 = static_cast< bool >(val6);
   }
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    result = (wxTreeListColumnInfo *)new wxTreeListColumnInfo((wxString const &)*arg1,arg2,arg3,arg4,arg5);
+    result = (wxTreeListColumnInfo *)new wxTreeListColumnInfo((wxString const &)*arg1,arg2,arg3,arg4,arg5,arg6);
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
@@ -5182,40 +5239,10 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_TreeListColumnInfo_GetShown(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  wxTreeListColumnInfo *arg1 = (wxTreeListColumnInfo *) 0 ;
-  bool result;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject *swig_obj[1] ;
-  
-  if (!args) SWIG_fail;
-  swig_obj[0] = args;
-  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxTreeListColumnInfo, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "TreeListColumnInfo_GetShown" "', expected argument " "1"" of type '" "wxTreeListColumnInfo const *""'"); 
-  }
-  arg1 = reinterpret_cast< wxTreeListColumnInfo * >(argp1);
-  {
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    result = (bool)((wxTreeListColumnInfo const *)arg1)->GetShown();
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) SWIG_fail;
-  }
-  {
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
-  }
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
 SWIGINTERN PyObject *_wrap_TreeListColumnInfo_GetAlignment(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   wxTreeListColumnInfo *arg1 = (wxTreeListColumnInfo *) 0 ;
-  wxTreeListColumnAlign result;
+  int result;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject *swig_obj[1] ;
@@ -5229,7 +5256,7 @@ SWIGINTERN PyObject *_wrap_TreeListColumnInfo_GetAlignment(PyObject *SWIGUNUSEDP
   arg1 = reinterpret_cast< wxTreeListColumnInfo * >(argp1);
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    result = (wxTreeListColumnAlign)((wxTreeListColumnInfo const *)arg1)->GetAlignment();
+    result = (int)((wxTreeListColumnInfo const *)arg1)->GetAlignment();
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
@@ -5358,38 +5385,60 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_TreeListColumnInfo_SetShown(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+SWIGINTERN PyObject *_wrap_TreeListColumnInfo_IsEditable(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   wxTreeListColumnInfo *arg1 = (wxTreeListColumnInfo *) 0 ;
-  bool arg2 ;
+  bool result;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  bool val2 ;
-  int ecode2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  char *  kwnames[] = {
-    (char *) "self",(char *) "shown", NULL 
-  };
+  PyObject *swig_obj[1] ;
   
-  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:TreeListColumnInfo_SetShown",kwnames,&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxTreeListColumnInfo, 0 |  0 );
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxTreeListColumnInfo, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "TreeListColumnInfo_SetShown" "', expected argument " "1"" of type '" "wxTreeListColumnInfo *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "TreeListColumnInfo_IsEditable" "', expected argument " "1"" of type '" "wxTreeListColumnInfo const *""'"); 
   }
   arg1 = reinterpret_cast< wxTreeListColumnInfo * >(argp1);
-  ecode2 = SWIG_AsVal_bool(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "TreeListColumnInfo_SetShown" "', expected argument " "2"" of type '" "bool""'");
-  } 
-  arg2 = static_cast< bool >(val2);
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    (arg1)->SetShown(arg2);
+    result = (bool)((wxTreeListColumnInfo const *)arg1)->IsEditable();
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
-  resultobj = SWIG_Py_Void();
+  {
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+  }
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_TreeListColumnInfo_IsShown(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxTreeListColumnInfo *arg1 = (wxTreeListColumnInfo *) 0 ;
+  bool result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxTreeListColumnInfo, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "TreeListColumnInfo_IsShown" "', expected argument " "1"" of type '" "wxTreeListColumnInfo const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxTreeListColumnInfo * >(argp1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = (bool)((wxTreeListColumnInfo const *)arg1)->IsShown();
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  {
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+  }
   return resultobj;
 fail:
   return NULL;
@@ -5399,7 +5448,7 @@ fail:
 SWIGINTERN PyObject *_wrap_TreeListColumnInfo_SetAlignment(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   wxTreeListColumnInfo *arg1 = (wxTreeListColumnInfo *) 0 ;
-  wxTreeListColumnAlign arg2 ;
+  int arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   int val2 ;
@@ -5418,9 +5467,9 @@ SWIGINTERN PyObject *_wrap_TreeListColumnInfo_SetAlignment(PyObject *SWIGUNUSEDP
   arg1 = reinterpret_cast< wxTreeListColumnInfo * >(argp1);
   ecode2 = SWIG_AsVal_int(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "TreeListColumnInfo_SetAlignment" "', expected argument " "2"" of type '" "wxTreeListColumnAlign""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "TreeListColumnInfo_SetAlignment" "', expected argument " "2"" of type '" "int""'");
   } 
-  arg2 = static_cast< wxTreeListColumnAlign >(val2);
+  arg2 = static_cast< int >(val2);
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
     (arg1)->SetAlignment(arg2);
@@ -5583,6 +5632,82 @@ SWIGINTERN PyObject *_wrap_TreeListColumnInfo_SetWidth(PyObject *SWIGUNUSEDPARM(
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
     (arg1)->SetWidth(arg2);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_TreeListColumnInfo_SetEditable(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxTreeListColumnInfo *arg1 = (wxTreeListColumnInfo *) 0 ;
+  bool arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  bool val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "edit", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:TreeListColumnInfo_SetEditable",kwnames,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxTreeListColumnInfo, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "TreeListColumnInfo_SetEditable" "', expected argument " "1"" of type '" "wxTreeListColumnInfo *""'"); 
+  }
+  arg1 = reinterpret_cast< wxTreeListColumnInfo * >(argp1);
+  ecode2 = SWIG_AsVal_bool(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "TreeListColumnInfo_SetEditable" "', expected argument " "2"" of type '" "bool""'");
+  } 
+  arg2 = static_cast< bool >(val2);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    (arg1)->SetEditable(arg2);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_TreeListColumnInfo_SetShown(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxTreeListColumnInfo *arg1 = (wxTreeListColumnInfo *) 0 ;
+  bool arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  bool val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "shown", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:TreeListColumnInfo_SetShown",kwnames,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxTreeListColumnInfo, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "TreeListColumnInfo_SetShown" "', expected argument " "1"" of type '" "wxTreeListColumnInfo *""'"); 
+  }
+  arg1 = reinterpret_cast< wxTreeListColumnInfo * >(argp1);
+  ecode2 = SWIG_AsVal_bool(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "TreeListColumnInfo_SetShown" "', expected argument " "2"" of type '" "bool""'");
+  } 
+  arg2 = static_cast< bool >(val2);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    (arg1)->SetShown(arg2);
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
@@ -6358,16 +6483,36 @@ SWIGINTERN PyObject *_wrap_TreeListCtrl_AddColumn(PyObject *SWIGUNUSEDPARM(self)
   PyObject *resultobj = 0;
   wxPyTreeListCtrl *arg1 = (wxPyTreeListCtrl *) 0 ;
   wxString *arg2 = 0 ;
+  int arg3 = (int) DEFAULT_COL_WIDTH ;
+  int arg4 = (int) wxALIGN_LEFT ;
+  int arg5 = (int) -1 ;
+  bool arg6 = (bool) true ;
+  bool arg7 = (bool) false ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   bool temp2 = false ;
+  int val3 ;
+  int ecode3 = 0 ;
+  int val4 ;
+  int ecode4 = 0 ;
+  int val5 ;
+  int ecode5 = 0 ;
+  bool val6 ;
+  int ecode6 = 0 ;
+  bool val7 ;
+  int ecode7 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  PyObject * obj4 = 0 ;
+  PyObject * obj5 = 0 ;
+  PyObject * obj6 = 0 ;
   char *  kwnames[] = {
-    (char *) "self",(char *) "text", NULL 
+    (char *) "self",(char *) "text",(char *) "width",(char *) "flag",(char *) "image",(char *) "shown",(char *) "edit", NULL 
   };
   
-  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:TreeListCtrl_AddColumn",kwnames,&obj0,&obj1)) SWIG_fail;
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|OOOOO:TreeListCtrl_AddColumn",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxPyTreeListCtrl, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "TreeListCtrl_AddColumn" "', expected argument " "1"" of type '" "wxPyTreeListCtrl *""'"); 
@@ -6378,9 +6523,44 @@ SWIGINTERN PyObject *_wrap_TreeListCtrl_AddColumn(PyObject *SWIGUNUSEDPARM(self)
     if (arg2 == NULL) SWIG_fail;
     temp2 = true;
   }
+  if (obj2) {
+    ecode3 = SWIG_AsVal_int(obj2, &val3);
+    if (!SWIG_IsOK(ecode3)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "TreeListCtrl_AddColumn" "', expected argument " "3"" of type '" "int""'");
+    } 
+    arg3 = static_cast< int >(val3);
+  }
+  if (obj3) {
+    ecode4 = SWIG_AsVal_int(obj3, &val4);
+    if (!SWIG_IsOK(ecode4)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "TreeListCtrl_AddColumn" "', expected argument " "4"" of type '" "int""'");
+    } 
+    arg4 = static_cast< int >(val4);
+  }
+  if (obj4) {
+    ecode5 = SWIG_AsVal_int(obj4, &val5);
+    if (!SWIG_IsOK(ecode5)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "TreeListCtrl_AddColumn" "', expected argument " "5"" of type '" "int""'");
+    } 
+    arg5 = static_cast< int >(val5);
+  }
+  if (obj5) {
+    ecode6 = SWIG_AsVal_bool(obj5, &val6);
+    if (!SWIG_IsOK(ecode6)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode6), "in method '" "TreeListCtrl_AddColumn" "', expected argument " "6"" of type '" "bool""'");
+    } 
+    arg6 = static_cast< bool >(val6);
+  }
+  if (obj6) {
+    ecode7 = SWIG_AsVal_bool(obj6, &val7);
+    if (!SWIG_IsOK(ecode7)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode7), "in method '" "TreeListCtrl_AddColumn" "', expected argument " "7"" of type '" "bool""'");
+    } 
+    arg7 = static_cast< bool >(val7);
+  }
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    (arg1)->AddColumn((wxString const &)*arg2);
+    (arg1)->AddColumn((wxString const &)*arg2,arg3,arg4,arg5,arg6,arg7);
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
@@ -6443,39 +6623,94 @@ fail:
 SWIGINTERN PyObject *_wrap_TreeListCtrl_InsertColumn(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   wxPyTreeListCtrl *arg1 = (wxPyTreeListCtrl *) 0 ;
-  size_t arg2 ;
+  int arg2 ;
   wxString *arg3 = 0 ;
+  int arg4 = (int) DEFAULT_COL_WIDTH ;
+  int arg5 = (int) wxALIGN_LEFT ;
+  int arg6 = (int) -1 ;
+  bool arg7 = (bool) true ;
+  bool arg8 = (bool) false ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  size_t val2 ;
+  int val2 ;
   int ecode2 = 0 ;
   bool temp3 = false ;
+  int val4 ;
+  int ecode4 = 0 ;
+  int val5 ;
+  int ecode5 = 0 ;
+  int val6 ;
+  int ecode6 = 0 ;
+  bool val7 ;
+  int ecode7 = 0 ;
+  bool val8 ;
+  int ecode8 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  PyObject * obj4 = 0 ;
+  PyObject * obj5 = 0 ;
+  PyObject * obj6 = 0 ;
+  PyObject * obj7 = 0 ;
   char *  kwnames[] = {
-    (char *) "self",(char *) "before",(char *) "text", NULL 
+    (char *) "self",(char *) "before",(char *) "text",(char *) "width",(char *) "flag",(char *) "image",(char *) "shown",(char *) "edit", NULL 
   };
   
-  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:TreeListCtrl_InsertColumn",kwnames,&obj0,&obj1,&obj2)) SWIG_fail;
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO|OOOOO:TreeListCtrl_InsertColumn",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6,&obj7)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxPyTreeListCtrl, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "TreeListCtrl_InsertColumn" "', expected argument " "1"" of type '" "wxPyTreeListCtrl *""'"); 
   }
   arg1 = reinterpret_cast< wxPyTreeListCtrl * >(argp1);
-  ecode2 = SWIG_AsVal_size_t(obj1, &val2);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "TreeListCtrl_InsertColumn" "', expected argument " "2"" of type '" "size_t""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "TreeListCtrl_InsertColumn" "', expected argument " "2"" of type '" "int""'");
   } 
-  arg2 = static_cast< size_t >(val2);
+  arg2 = static_cast< int >(val2);
   {
     arg3 = wxString_in_helper(obj2);
     if (arg3 == NULL) SWIG_fail;
     temp3 = true;
   }
+  if (obj3) {
+    ecode4 = SWIG_AsVal_int(obj3, &val4);
+    if (!SWIG_IsOK(ecode4)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "TreeListCtrl_InsertColumn" "', expected argument " "4"" of type '" "int""'");
+    } 
+    arg4 = static_cast< int >(val4);
+  }
+  if (obj4) {
+    ecode5 = SWIG_AsVal_int(obj4, &val5);
+    if (!SWIG_IsOK(ecode5)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "TreeListCtrl_InsertColumn" "', expected argument " "5"" of type '" "int""'");
+    } 
+    arg5 = static_cast< int >(val5);
+  }
+  if (obj5) {
+    ecode6 = SWIG_AsVal_int(obj5, &val6);
+    if (!SWIG_IsOK(ecode6)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode6), "in method '" "TreeListCtrl_InsertColumn" "', expected argument " "6"" of type '" "int""'");
+    } 
+    arg6 = static_cast< int >(val6);
+  }
+  if (obj6) {
+    ecode7 = SWIG_AsVal_bool(obj6, &val7);
+    if (!SWIG_IsOK(ecode7)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode7), "in method '" "TreeListCtrl_InsertColumn" "', expected argument " "7"" of type '" "bool""'");
+    } 
+    arg7 = static_cast< bool >(val7);
+  }
+  if (obj7) {
+    ecode8 = SWIG_AsVal_bool(obj7, &val8);
+    if (!SWIG_IsOK(ecode8)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode8), "in method '" "TreeListCtrl_InsertColumn" "', expected argument " "8"" of type '" "bool""'");
+    } 
+    arg8 = static_cast< bool >(val8);
+  }
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    (arg1)->InsertColumn(arg2,(wxString const &)*arg3);
+    (arg1)->InsertColumn(arg2,(wxString const &)*arg3,arg4,arg5,arg6,arg7,arg8);
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
@@ -6610,92 +6845,6 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_TreeListCtrl_SetColumnWidth(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
-  PyObject *resultobj = 0;
-  wxPyTreeListCtrl *arg1 = (wxPyTreeListCtrl *) 0 ;
-  size_t arg2 ;
-  size_t arg3 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  size_t val2 ;
-  int ecode2 = 0 ;
-  size_t val3 ;
-  int ecode3 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  PyObject * obj2 = 0 ;
-  char *  kwnames[] = {
-    (char *) "self",(char *) "column",(char *) "width", NULL 
-  };
-  
-  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:TreeListCtrl_SetColumnWidth",kwnames,&obj0,&obj1,&obj2)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxPyTreeListCtrl, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "TreeListCtrl_SetColumnWidth" "', expected argument " "1"" of type '" "wxPyTreeListCtrl *""'"); 
-  }
-  arg1 = reinterpret_cast< wxPyTreeListCtrl * >(argp1);
-  ecode2 = SWIG_AsVal_size_t(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "TreeListCtrl_SetColumnWidth" "', expected argument " "2"" of type '" "size_t""'");
-  } 
-  arg2 = static_cast< size_t >(val2);
-  ecode3 = SWIG_AsVal_size_t(obj2, &val3);
-  if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "TreeListCtrl_SetColumnWidth" "', expected argument " "3"" of type '" "size_t""'");
-  } 
-  arg3 = static_cast< size_t >(val3);
-  {
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    (arg1)->SetColumnWidth(arg2,arg3);
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) SWIG_fail;
-  }
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_TreeListCtrl_GetColumnWidth(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
-  PyObject *resultobj = 0;
-  wxPyTreeListCtrl *arg1 = (wxPyTreeListCtrl *) 0 ;
-  size_t arg2 ;
-  int result;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  size_t val2 ;
-  int ecode2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  char *  kwnames[] = {
-    (char *) "self",(char *) "column", NULL 
-  };
-  
-  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:TreeListCtrl_GetColumnWidth",kwnames,&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxPyTreeListCtrl, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "TreeListCtrl_GetColumnWidth" "', expected argument " "1"" of type '" "wxPyTreeListCtrl const *""'"); 
-  }
-  arg1 = reinterpret_cast< wxPyTreeListCtrl * >(argp1);
-  ecode2 = SWIG_AsVal_size_t(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "TreeListCtrl_GetColumnWidth" "', expected argument " "2"" of type '" "size_t""'");
-  } 
-  arg2 = static_cast< size_t >(val2);
-  {
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    result = (int)((wxPyTreeListCtrl const *)arg1)->GetColumnWidth(arg2);
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) SWIG_fail;
-  }
-  resultobj = SWIG_From_int(static_cast< int >(result));
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
 SWIGINTERN PyObject *_wrap_TreeListCtrl_SetMainColumn(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   wxPyTreeListCtrl *arg1 = (wxPyTreeListCtrl *) 0 ;
@@ -6762,14 +6911,106 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_TreeListCtrl_SetColumn(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxPyTreeListCtrl *arg1 = (wxPyTreeListCtrl *) 0 ;
+  int arg2 ;
+  wxTreeListColumnInfo *arg3 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "column",(char *) "colInfo", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:TreeListCtrl_SetColumn",kwnames,&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxPyTreeListCtrl, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "TreeListCtrl_SetColumn" "', expected argument " "1"" of type '" "wxPyTreeListCtrl *""'"); 
+  }
+  arg1 = reinterpret_cast< wxPyTreeListCtrl * >(argp1);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "TreeListCtrl_SetColumn" "', expected argument " "2"" of type '" "int""'");
+  } 
+  arg2 = static_cast< int >(val2);
+  res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_wxTreeListColumnInfo,  0  | 0);
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "TreeListCtrl_SetColumn" "', expected argument " "3"" of type '" "wxTreeListColumnInfo const &""'"); 
+  }
+  if (!argp3) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "TreeListCtrl_SetColumn" "', expected argument " "3"" of type '" "wxTreeListColumnInfo const &""'"); 
+  }
+  arg3 = reinterpret_cast< wxTreeListColumnInfo * >(argp3);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    (arg1)->SetColumn(arg2,(wxTreeListColumnInfo const &)*arg3);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_TreeListCtrl_GetColumn(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxPyTreeListCtrl *arg1 = (wxPyTreeListCtrl *) 0 ;
+  int arg2 ;
+  wxTreeListColumnInfo *result = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "column", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:TreeListCtrl_GetColumn",kwnames,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxPyTreeListCtrl, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "TreeListCtrl_GetColumn" "', expected argument " "1"" of type '" "wxPyTreeListCtrl *""'"); 
+  }
+  arg1 = reinterpret_cast< wxPyTreeListCtrl * >(argp1);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "TreeListCtrl_GetColumn" "', expected argument " "2"" of type '" "int""'");
+  } 
+  arg2 = static_cast< int >(val2);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    {
+      wxTreeListColumnInfo &_result_ref = (arg1)->GetColumn(arg2);
+      result = (wxTreeListColumnInfo *) &_result_ref;
+    }
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_wxTreeListColumnInfo, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_TreeListCtrl_SetColumnText(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   wxPyTreeListCtrl *arg1 = (wxPyTreeListCtrl *) 0 ;
-  size_t arg2 ;
+  int arg2 ;
   wxString *arg3 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  size_t val2 ;
+  int val2 ;
   int ecode2 = 0 ;
   bool temp3 = false ;
   PyObject * obj0 = 0 ;
@@ -6785,11 +7026,11 @@ SWIGINTERN PyObject *_wrap_TreeListCtrl_SetColumnText(PyObject *SWIGUNUSEDPARM(s
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "TreeListCtrl_SetColumnText" "', expected argument " "1"" of type '" "wxPyTreeListCtrl *""'"); 
   }
   arg1 = reinterpret_cast< wxPyTreeListCtrl * >(argp1);
-  ecode2 = SWIG_AsVal_size_t(obj1, &val2);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "TreeListCtrl_SetColumnText" "', expected argument " "2"" of type '" "size_t""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "TreeListCtrl_SetColumnText" "', expected argument " "2"" of type '" "int""'");
   } 
-  arg2 = static_cast< size_t >(val2);
+  arg2 = static_cast< int >(val2);
   {
     arg3 = wxString_in_helper(obj2);
     if (arg3 == NULL) SWIG_fail;
@@ -6819,11 +7060,11 @@ fail:
 SWIGINTERN PyObject *_wrap_TreeListCtrl_GetColumnText(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   wxPyTreeListCtrl *arg1 = (wxPyTreeListCtrl *) 0 ;
-  size_t arg2 ;
+  int arg2 ;
   wxString result;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  size_t val2 ;
+  int val2 ;
   int ecode2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
@@ -6837,11 +7078,11 @@ SWIGINTERN PyObject *_wrap_TreeListCtrl_GetColumnText(PyObject *SWIGUNUSEDPARM(s
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "TreeListCtrl_GetColumnText" "', expected argument " "1"" of type '" "wxPyTreeListCtrl const *""'"); 
   }
   arg1 = reinterpret_cast< wxPyTreeListCtrl * >(argp1);
-  ecode2 = SWIG_AsVal_size_t(obj1, &val2);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "TreeListCtrl_GetColumnText" "', expected argument " "2"" of type '" "size_t""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "TreeListCtrl_GetColumnText" "', expected argument " "2"" of type '" "int""'");
   } 
-  arg2 = static_cast< size_t >(val2);
+  arg2 = static_cast< int >(val2);
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
     result = ((wxPyTreeListCtrl const *)arg1)->GetColumnText(arg2);
@@ -6861,46 +7102,43 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_TreeListCtrl_SetColumn(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+SWIGINTERN PyObject *_wrap_TreeListCtrl_SetColumnWidth(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   wxPyTreeListCtrl *arg1 = (wxPyTreeListCtrl *) 0 ;
-  size_t arg2 ;
-  wxTreeListColumnInfo *arg3 = 0 ;
+  int arg2 ;
+  int arg3 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  size_t val2 ;
+  int val2 ;
   int ecode2 = 0 ;
-  void *argp3 = 0 ;
-  int res3 = 0 ;
+  int val3 ;
+  int ecode3 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
   char *  kwnames[] = {
-    (char *) "self",(char *) "column",(char *) "info", NULL 
+    (char *) "self",(char *) "column",(char *) "width", NULL 
   };
   
-  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:TreeListCtrl_SetColumn",kwnames,&obj0,&obj1,&obj2)) SWIG_fail;
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:TreeListCtrl_SetColumnWidth",kwnames,&obj0,&obj1,&obj2)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxPyTreeListCtrl, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "TreeListCtrl_SetColumn" "', expected argument " "1"" of type '" "wxPyTreeListCtrl *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "TreeListCtrl_SetColumnWidth" "', expected argument " "1"" of type '" "wxPyTreeListCtrl *""'"); 
   }
   arg1 = reinterpret_cast< wxPyTreeListCtrl * >(argp1);
-  ecode2 = SWIG_AsVal_size_t(obj1, &val2);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "TreeListCtrl_SetColumn" "', expected argument " "2"" of type '" "size_t""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "TreeListCtrl_SetColumnWidth" "', expected argument " "2"" of type '" "int""'");
   } 
-  arg2 = static_cast< size_t >(val2);
-  res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_wxTreeListColumnInfo,  0  | 0);
-  if (!SWIG_IsOK(res3)) {
-    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "TreeListCtrl_SetColumn" "', expected argument " "3"" of type '" "wxTreeListColumnInfo const &""'"); 
-  }
-  if (!argp3) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "TreeListCtrl_SetColumn" "', expected argument " "3"" of type '" "wxTreeListColumnInfo const &""'"); 
-  }
-  arg3 = reinterpret_cast< wxTreeListColumnInfo * >(argp3);
+  arg2 = static_cast< int >(val2);
+  ecode3 = SWIG_AsVal_int(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "TreeListCtrl_SetColumnWidth" "', expected argument " "3"" of type '" "int""'");
+  } 
+  arg3 = static_cast< int >(val3);
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    (arg1)->SetColumn(arg2,(wxTreeListColumnInfo const &)*arg3);
+    (arg1)->SetColumnWidth(arg2,arg3);
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
@@ -6911,14 +7149,14 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_TreeListCtrl_GetColumn(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+SWIGINTERN PyObject *_wrap_TreeListCtrl_GetColumnWidth(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   wxPyTreeListCtrl *arg1 = (wxPyTreeListCtrl *) 0 ;
-  size_t arg2 ;
-  wxTreeListColumnInfo *result = 0 ;
+  int arg2 ;
+  int result;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  size_t val2 ;
+  int val2 ;
   int ecode2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
@@ -6926,27 +7164,24 @@ SWIGINTERN PyObject *_wrap_TreeListCtrl_GetColumn(PyObject *SWIGUNUSEDPARM(self)
     (char *) "self",(char *) "column", NULL 
   };
   
-  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:TreeListCtrl_GetColumn",kwnames,&obj0,&obj1)) SWIG_fail;
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:TreeListCtrl_GetColumnWidth",kwnames,&obj0,&obj1)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxPyTreeListCtrl, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "TreeListCtrl_GetColumn" "', expected argument " "1"" of type '" "wxPyTreeListCtrl *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "TreeListCtrl_GetColumnWidth" "', expected argument " "1"" of type '" "wxPyTreeListCtrl const *""'"); 
   }
   arg1 = reinterpret_cast< wxPyTreeListCtrl * >(argp1);
-  ecode2 = SWIG_AsVal_size_t(obj1, &val2);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "TreeListCtrl_GetColumn" "', expected argument " "2"" of type '" "size_t""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "TreeListCtrl_GetColumnWidth" "', expected argument " "2"" of type '" "int""'");
   } 
-  arg2 = static_cast< size_t >(val2);
+  arg2 = static_cast< int >(val2);
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    {
-      wxTreeListColumnInfo &_result_ref = (arg1)->GetColumn(arg2);
-      result = (wxTreeListColumnInfo *) &_result_ref;
-    }
+    result = (int)((wxPyTreeListCtrl const *)arg1)->GetColumnWidth(arg2);
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_wxTreeListColumnInfo, 0 |  0 );
+  resultobj = SWIG_From_int(static_cast< int >(result));
   return resultobj;
 fail:
   return NULL;
@@ -6956,11 +7191,11 @@ fail:
 SWIGINTERN PyObject *_wrap_TreeListCtrl_SetColumnAlignment(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   wxPyTreeListCtrl *arg1 = (wxPyTreeListCtrl *) 0 ;
-  size_t arg2 ;
-  wxTreeListColumnAlign arg3 ;
+  int arg2 ;
+  int arg3 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  size_t val2 ;
+  int val2 ;
   int ecode2 = 0 ;
   int val3 ;
   int ecode3 = 0 ;
@@ -6968,7 +7203,7 @@ SWIGINTERN PyObject *_wrap_TreeListCtrl_SetColumnAlignment(PyObject *SWIGUNUSEDP
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
   char *  kwnames[] = {
-    (char *) "self",(char *) "column",(char *) "align", NULL 
+    (char *) "self",(char *) "column",(char *) "flag", NULL 
   };
   
   if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:TreeListCtrl_SetColumnAlignment",kwnames,&obj0,&obj1,&obj2)) SWIG_fail;
@@ -6977,16 +7212,16 @@ SWIGINTERN PyObject *_wrap_TreeListCtrl_SetColumnAlignment(PyObject *SWIGUNUSEDP
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "TreeListCtrl_SetColumnAlignment" "', expected argument " "1"" of type '" "wxPyTreeListCtrl *""'"); 
   }
   arg1 = reinterpret_cast< wxPyTreeListCtrl * >(argp1);
-  ecode2 = SWIG_AsVal_size_t(obj1, &val2);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "TreeListCtrl_SetColumnAlignment" "', expected argument " "2"" of type '" "size_t""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "TreeListCtrl_SetColumnAlignment" "', expected argument " "2"" of type '" "int""'");
   } 
-  arg2 = static_cast< size_t >(val2);
+  arg2 = static_cast< int >(val2);
   ecode3 = SWIG_AsVal_int(obj2, &val3);
   if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "TreeListCtrl_SetColumnAlignment" "', expected argument " "3"" of type '" "wxTreeListColumnAlign""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "TreeListCtrl_SetColumnAlignment" "', expected argument " "3"" of type '" "int""'");
   } 
-  arg3 = static_cast< wxTreeListColumnAlign >(val3);
+  arg3 = static_cast< int >(val3);
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
     (arg1)->SetColumnAlignment(arg2,arg3);
@@ -7003,11 +7238,11 @@ fail:
 SWIGINTERN PyObject *_wrap_TreeListCtrl_GetColumnAlignment(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   wxPyTreeListCtrl *arg1 = (wxPyTreeListCtrl *) 0 ;
-  size_t arg2 ;
-  wxTreeListColumnAlign result;
+  int arg2 ;
+  int result;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  size_t val2 ;
+  int val2 ;
   int ecode2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
@@ -7021,14 +7256,14 @@ SWIGINTERN PyObject *_wrap_TreeListCtrl_GetColumnAlignment(PyObject *SWIGUNUSEDP
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "TreeListCtrl_GetColumnAlignment" "', expected argument " "1"" of type '" "wxPyTreeListCtrl const *""'"); 
   }
   arg1 = reinterpret_cast< wxPyTreeListCtrl * >(argp1);
-  ecode2 = SWIG_AsVal_size_t(obj1, &val2);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "TreeListCtrl_GetColumnAlignment" "', expected argument " "2"" of type '" "size_t""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "TreeListCtrl_GetColumnAlignment" "', expected argument " "2"" of type '" "int""'");
   } 
-  arg2 = static_cast< size_t >(val2);
+  arg2 = static_cast< int >(val2);
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    result = (wxTreeListColumnAlign)((wxPyTreeListCtrl const *)arg1)->GetColumnAlignment(arg2);
+    result = (int)((wxPyTreeListCtrl const *)arg1)->GetColumnAlignment(arg2);
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
@@ -7042,11 +7277,11 @@ fail:
 SWIGINTERN PyObject *_wrap_TreeListCtrl_SetColumnImage(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   wxPyTreeListCtrl *arg1 = (wxPyTreeListCtrl *) 0 ;
-  size_t arg2 ;
+  int arg2 ;
   int arg3 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  size_t val2 ;
+  int val2 ;
   int ecode2 = 0 ;
   int val3 ;
   int ecode3 = 0 ;
@@ -7063,11 +7298,11 @@ SWIGINTERN PyObject *_wrap_TreeListCtrl_SetColumnImage(PyObject *SWIGUNUSEDPARM(
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "TreeListCtrl_SetColumnImage" "', expected argument " "1"" of type '" "wxPyTreeListCtrl *""'"); 
   }
   arg1 = reinterpret_cast< wxPyTreeListCtrl * >(argp1);
-  ecode2 = SWIG_AsVal_size_t(obj1, &val2);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "TreeListCtrl_SetColumnImage" "', expected argument " "2"" of type '" "size_t""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "TreeListCtrl_SetColumnImage" "', expected argument " "2"" of type '" "int""'");
   } 
-  arg2 = static_cast< size_t >(val2);
+  arg2 = static_cast< int >(val2);
   ecode3 = SWIG_AsVal_int(obj2, &val3);
   if (!SWIG_IsOK(ecode3)) {
     SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "TreeListCtrl_SetColumnImage" "', expected argument " "3"" of type '" "int""'");
@@ -7089,11 +7324,11 @@ fail:
 SWIGINTERN PyObject *_wrap_TreeListCtrl_GetColumnImage(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   wxPyTreeListCtrl *arg1 = (wxPyTreeListCtrl *) 0 ;
-  size_t arg2 ;
+  int arg2 ;
   int result;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  size_t val2 ;
+  int val2 ;
   int ecode2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
@@ -7107,11 +7342,11 @@ SWIGINTERN PyObject *_wrap_TreeListCtrl_GetColumnImage(PyObject *SWIGUNUSEDPARM(
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "TreeListCtrl_GetColumnImage" "', expected argument " "1"" of type '" "wxPyTreeListCtrl const *""'"); 
   }
   arg1 = reinterpret_cast< wxPyTreeListCtrl * >(argp1);
-  ecode2 = SWIG_AsVal_size_t(obj1, &val2);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "TreeListCtrl_GetColumnImage" "', expected argument " "2"" of type '" "size_t""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "TreeListCtrl_GetColumnImage" "', expected argument " "2"" of type '" "int""'");
   } 
-  arg2 = static_cast< size_t >(val2);
+  arg2 = static_cast< int >(val2);
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
     result = (int)((wxPyTreeListCtrl const *)arg1)->GetColumnImage(arg2);
@@ -7125,14 +7360,14 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_TreeListCtrl_ShowColumn(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+SWIGINTERN PyObject *_wrap_TreeListCtrl_SetColumnShown(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   wxPyTreeListCtrl *arg1 = (wxPyTreeListCtrl *) 0 ;
-  size_t arg2 ;
-  bool arg3 ;
+  int arg2 ;
+  bool arg3 = (bool) true ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  size_t val2 ;
+  int val2 ;
   int ecode2 = 0 ;
   bool val3 ;
   int ecode3 = 0 ;
@@ -7143,25 +7378,27 @@ SWIGINTERN PyObject *_wrap_TreeListCtrl_ShowColumn(PyObject *SWIGUNUSEDPARM(self
     (char *) "self",(char *) "column",(char *) "shown", NULL 
   };
   
-  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:TreeListCtrl_ShowColumn",kwnames,&obj0,&obj1,&obj2)) SWIG_fail;
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|O:TreeListCtrl_SetColumnShown",kwnames,&obj0,&obj1,&obj2)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxPyTreeListCtrl, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "TreeListCtrl_ShowColumn" "', expected argument " "1"" of type '" "wxPyTreeListCtrl *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "TreeListCtrl_SetColumnShown" "', expected argument " "1"" of type '" "wxPyTreeListCtrl *""'"); 
   }
   arg1 = reinterpret_cast< wxPyTreeListCtrl * >(argp1);
-  ecode2 = SWIG_AsVal_size_t(obj1, &val2);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "TreeListCtrl_ShowColumn" "', expected argument " "2"" of type '" "size_t""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "TreeListCtrl_SetColumnShown" "', expected argument " "2"" of type '" "int""'");
   } 
-  arg2 = static_cast< size_t >(val2);
-  ecode3 = SWIG_AsVal_bool(obj2, &val3);
-  if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "TreeListCtrl_ShowColumn" "', expected argument " "3"" of type '" "bool""'");
-  } 
-  arg3 = static_cast< bool >(val3);
+  arg2 = static_cast< int >(val2);
+  if (obj2) {
+    ecode3 = SWIG_AsVal_bool(obj2, &val3);
+    if (!SWIG_IsOK(ecode3)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "TreeListCtrl_SetColumnShown" "', expected argument " "3"" of type '" "bool""'");
+    } 
+    arg3 = static_cast< bool >(val3);
+  }
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    (arg1)->ShowColumn(arg2,arg3);
+    (arg1)->SetColumnShown(arg2,arg3);
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
@@ -7175,11 +7412,11 @@ fail:
 SWIGINTERN PyObject *_wrap_TreeListCtrl_IsColumnShown(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   wxPyTreeListCtrl *arg1 = (wxPyTreeListCtrl *) 0 ;
-  size_t arg2 ;
+  int arg2 ;
   bool result;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  size_t val2 ;
+  int val2 ;
   int ecode2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
@@ -7193,14 +7430,104 @@ SWIGINTERN PyObject *_wrap_TreeListCtrl_IsColumnShown(PyObject *SWIGUNUSEDPARM(s
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "TreeListCtrl_IsColumnShown" "', expected argument " "1"" of type '" "wxPyTreeListCtrl const *""'"); 
   }
   arg1 = reinterpret_cast< wxPyTreeListCtrl * >(argp1);
-  ecode2 = SWIG_AsVal_size_t(obj1, &val2);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "TreeListCtrl_IsColumnShown" "', expected argument " "2"" of type '" "size_t""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "TreeListCtrl_IsColumnShown" "', expected argument " "2"" of type '" "int""'");
   } 
-  arg2 = static_cast< size_t >(val2);
+  arg2 = static_cast< int >(val2);
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
     result = (bool)((wxPyTreeListCtrl const *)arg1)->IsColumnShown(arg2);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  {
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+  }
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_TreeListCtrl_SetColumnEditable(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxPyTreeListCtrl *arg1 = (wxPyTreeListCtrl *) 0 ;
+  int arg2 ;
+  bool arg3 = (bool) true ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  bool val3 ;
+  int ecode3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "column",(char *) "edit", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|O:TreeListCtrl_SetColumnEditable",kwnames,&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxPyTreeListCtrl, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "TreeListCtrl_SetColumnEditable" "', expected argument " "1"" of type '" "wxPyTreeListCtrl *""'"); 
+  }
+  arg1 = reinterpret_cast< wxPyTreeListCtrl * >(argp1);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "TreeListCtrl_SetColumnEditable" "', expected argument " "2"" of type '" "int""'");
+  } 
+  arg2 = static_cast< int >(val2);
+  if (obj2) {
+    ecode3 = SWIG_AsVal_bool(obj2, &val3);
+    if (!SWIG_IsOK(ecode3)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "TreeListCtrl_SetColumnEditable" "', expected argument " "3"" of type '" "bool""'");
+    } 
+    arg3 = static_cast< bool >(val3);
+  }
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    (arg1)->SetColumnEditable(arg2,arg3);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_TreeListCtrl_IsColumnEditable(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxPyTreeListCtrl *arg1 = (wxPyTreeListCtrl *) 0 ;
+  int arg2 ;
+  bool result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "column", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:TreeListCtrl_IsColumnEditable",kwnames,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxPyTreeListCtrl, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "TreeListCtrl_IsColumnEditable" "', expected argument " "1"" of type '" "wxPyTreeListCtrl const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxPyTreeListCtrl * >(argp1);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "TreeListCtrl_IsColumnEditable" "', expected argument " "2"" of type '" "int""'");
+  } 
+  arg2 = static_cast< int >(val2);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = (bool)((wxPyTreeListCtrl const *)arg1)->IsColumnEditable(arg2);
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
@@ -7652,6 +7979,176 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_TreeListCtrl_GetItemBold(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxPyTreeListCtrl *arg1 = (wxPyTreeListCtrl *) 0 ;
+  wxTreeItemId *arg2 = 0 ;
+  bool result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "item", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:TreeListCtrl_GetItemBold",kwnames,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxPyTreeListCtrl, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "TreeListCtrl_GetItemBold" "', expected argument " "1"" of type '" "wxPyTreeListCtrl const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxPyTreeListCtrl * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_wxTreeItemId,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "TreeListCtrl_GetItemBold" "', expected argument " "2"" of type '" "wxTreeItemId const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "TreeListCtrl_GetItemBold" "', expected argument " "2"" of type '" "wxTreeItemId const &""'"); 
+  }
+  arg2 = reinterpret_cast< wxTreeItemId * >(argp2);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = (bool)((wxPyTreeListCtrl const *)arg1)->GetItemBold((wxTreeItemId const &)*arg2);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  {
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+  }
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_TreeListCtrl_GetItemTextColour(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxPyTreeListCtrl *arg1 = (wxPyTreeListCtrl *) 0 ;
+  wxTreeItemId *arg2 = 0 ;
+  wxColour result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "item", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:TreeListCtrl_GetItemTextColour",kwnames,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxPyTreeListCtrl, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "TreeListCtrl_GetItemTextColour" "', expected argument " "1"" of type '" "wxPyTreeListCtrl const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxPyTreeListCtrl * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_wxTreeItemId,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "TreeListCtrl_GetItemTextColour" "', expected argument " "2"" of type '" "wxTreeItemId const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "TreeListCtrl_GetItemTextColour" "', expected argument " "2"" of type '" "wxTreeItemId const &""'"); 
+  }
+  arg2 = reinterpret_cast< wxTreeItemId * >(argp2);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = ((wxPyTreeListCtrl const *)arg1)->GetItemTextColour((wxTreeItemId const &)*arg2);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_NewPointerObj((new wxColour(static_cast< const wxColour& >(result))), SWIGTYPE_p_wxColour, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_TreeListCtrl_GetItemBackgroundColour(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxPyTreeListCtrl *arg1 = (wxPyTreeListCtrl *) 0 ;
+  wxTreeItemId *arg2 = 0 ;
+  wxColour result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "item", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:TreeListCtrl_GetItemBackgroundColour",kwnames,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxPyTreeListCtrl, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "TreeListCtrl_GetItemBackgroundColour" "', expected argument " "1"" of type '" "wxPyTreeListCtrl const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxPyTreeListCtrl * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_wxTreeItemId,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "TreeListCtrl_GetItemBackgroundColour" "', expected argument " "2"" of type '" "wxTreeItemId const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "TreeListCtrl_GetItemBackgroundColour" "', expected argument " "2"" of type '" "wxTreeItemId const &""'"); 
+  }
+  arg2 = reinterpret_cast< wxTreeItemId * >(argp2);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = ((wxPyTreeListCtrl const *)arg1)->GetItemBackgroundColour((wxTreeItemId const &)*arg2);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_NewPointerObj((new wxColour(static_cast< const wxColour& >(result))), SWIGTYPE_p_wxColour, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_TreeListCtrl_GetItemFont(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxPyTreeListCtrl *arg1 = (wxPyTreeListCtrl *) 0 ;
+  wxTreeItemId *arg2 = 0 ;
+  wxFont result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "item", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:TreeListCtrl_GetItemFont",kwnames,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxPyTreeListCtrl, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "TreeListCtrl_GetItemFont" "', expected argument " "1"" of type '" "wxPyTreeListCtrl const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxPyTreeListCtrl * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_wxTreeItemId,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "TreeListCtrl_GetItemFont" "', expected argument " "2"" of type '" "wxTreeItemId const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "TreeListCtrl_GetItemFont" "', expected argument " "2"" of type '" "wxTreeItemId const &""'"); 
+  }
+  arg2 = reinterpret_cast< wxTreeItemId * >(argp2);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = ((wxPyTreeListCtrl const *)arg1)->GetItemFont((wxTreeItemId const &)*arg2);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_NewPointerObj((new wxFont(static_cast< const wxFont& >(result))), SWIGTYPE_p_wxFont, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_TreeListCtrl_SetItemHasChildren(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   wxPyTreeListCtrl *arg1 = (wxPyTreeListCtrl *) 0 ;
@@ -7905,176 +8402,6 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_TreeListCtrl_GetItemBold(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
-  PyObject *resultobj = 0;
-  wxPyTreeListCtrl *arg1 = (wxPyTreeListCtrl *) 0 ;
-  wxTreeItemId *arg2 = 0 ;
-  bool result;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  char *  kwnames[] = {
-    (char *) "self",(char *) "item", NULL 
-  };
-  
-  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:TreeListCtrl_GetItemBold",kwnames,&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxPyTreeListCtrl, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "TreeListCtrl_GetItemBold" "', expected argument " "1"" of type '" "wxPyTreeListCtrl const *""'"); 
-  }
-  arg1 = reinterpret_cast< wxPyTreeListCtrl * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_wxTreeItemId,  0  | 0);
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "TreeListCtrl_GetItemBold" "', expected argument " "2"" of type '" "wxTreeItemId const &""'"); 
-  }
-  if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "TreeListCtrl_GetItemBold" "', expected argument " "2"" of type '" "wxTreeItemId const &""'"); 
-  }
-  arg2 = reinterpret_cast< wxTreeItemId * >(argp2);
-  {
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    result = (bool)((wxPyTreeListCtrl const *)arg1)->GetItemBold((wxTreeItemId const &)*arg2);
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) SWIG_fail;
-  }
-  {
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
-  }
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_TreeListCtrl_GetItemTextColour(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
-  PyObject *resultobj = 0;
-  wxPyTreeListCtrl *arg1 = (wxPyTreeListCtrl *) 0 ;
-  wxTreeItemId *arg2 = 0 ;
-  wxColour result;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  char *  kwnames[] = {
-    (char *) "self",(char *) "item", NULL 
-  };
-  
-  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:TreeListCtrl_GetItemTextColour",kwnames,&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxPyTreeListCtrl, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "TreeListCtrl_GetItemTextColour" "', expected argument " "1"" of type '" "wxPyTreeListCtrl const *""'"); 
-  }
-  arg1 = reinterpret_cast< wxPyTreeListCtrl * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_wxTreeItemId,  0  | 0);
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "TreeListCtrl_GetItemTextColour" "', expected argument " "2"" of type '" "wxTreeItemId const &""'"); 
-  }
-  if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "TreeListCtrl_GetItemTextColour" "', expected argument " "2"" of type '" "wxTreeItemId const &""'"); 
-  }
-  arg2 = reinterpret_cast< wxTreeItemId * >(argp2);
-  {
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    result = ((wxPyTreeListCtrl const *)arg1)->GetItemTextColour((wxTreeItemId const &)*arg2);
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) SWIG_fail;
-  }
-  resultobj = SWIG_NewPointerObj((new wxColour(static_cast< const wxColour& >(result))), SWIGTYPE_p_wxColour, SWIG_POINTER_OWN |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_TreeListCtrl_GetItemBackgroundColour(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
-  PyObject *resultobj = 0;
-  wxPyTreeListCtrl *arg1 = (wxPyTreeListCtrl *) 0 ;
-  wxTreeItemId *arg2 = 0 ;
-  wxColour result;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  char *  kwnames[] = {
-    (char *) "self",(char *) "item", NULL 
-  };
-  
-  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:TreeListCtrl_GetItemBackgroundColour",kwnames,&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxPyTreeListCtrl, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "TreeListCtrl_GetItemBackgroundColour" "', expected argument " "1"" of type '" "wxPyTreeListCtrl const *""'"); 
-  }
-  arg1 = reinterpret_cast< wxPyTreeListCtrl * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_wxTreeItemId,  0  | 0);
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "TreeListCtrl_GetItemBackgroundColour" "', expected argument " "2"" of type '" "wxTreeItemId const &""'"); 
-  }
-  if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "TreeListCtrl_GetItemBackgroundColour" "', expected argument " "2"" of type '" "wxTreeItemId const &""'"); 
-  }
-  arg2 = reinterpret_cast< wxTreeItemId * >(argp2);
-  {
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    result = ((wxPyTreeListCtrl const *)arg1)->GetItemBackgroundColour((wxTreeItemId const &)*arg2);
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) SWIG_fail;
-  }
-  resultobj = SWIG_NewPointerObj((new wxColour(static_cast< const wxColour& >(result))), SWIGTYPE_p_wxColour, SWIG_POINTER_OWN |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_TreeListCtrl_GetItemFont(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
-  PyObject *resultobj = 0;
-  wxPyTreeListCtrl *arg1 = (wxPyTreeListCtrl *) 0 ;
-  wxTreeItemId *arg2 = 0 ;
-  wxFont result;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  char *  kwnames[] = {
-    (char *) "self",(char *) "item", NULL 
-  };
-  
-  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:TreeListCtrl_GetItemFont",kwnames,&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxPyTreeListCtrl, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "TreeListCtrl_GetItemFont" "', expected argument " "1"" of type '" "wxPyTreeListCtrl const *""'"); 
-  }
-  arg1 = reinterpret_cast< wxPyTreeListCtrl * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_wxTreeItemId,  0  | 0);
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "TreeListCtrl_GetItemFont" "', expected argument " "2"" of type '" "wxTreeItemId const &""'"); 
-  }
-  if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "TreeListCtrl_GetItemFont" "', expected argument " "2"" of type '" "wxTreeItemId const &""'"); 
-  }
-  arg2 = reinterpret_cast< wxTreeItemId * >(argp2);
-  {
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    result = ((wxPyTreeListCtrl const *)arg1)->GetItemFont((wxTreeItemId const &)*arg2);
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) SWIG_fail;
-  }
-  resultobj = SWIG_NewPointerObj((new wxFont(static_cast< const wxFont& >(result))), SWIGTYPE_p_wxFont, SWIG_POINTER_OWN |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
 SWIGINTERN PyObject *_wrap_TreeListCtrl_IsVisible(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   wxPyTreeListCtrl *arg1 = (wxPyTreeListCtrl *) 0 ;
@@ -8119,7 +8446,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_TreeListCtrl_ItemHasChildren(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+SWIGINTERN PyObject *_wrap_TreeListCtrl_HasChildren(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   wxPyTreeListCtrl *arg1 = (wxPyTreeListCtrl *) 0 ;
   wxTreeItemId *arg2 = 0 ;
@@ -8134,23 +8461,23 @@ SWIGINTERN PyObject *_wrap_TreeListCtrl_ItemHasChildren(PyObject *SWIGUNUSEDPARM
     (char *) "self",(char *) "item", NULL 
   };
   
-  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:TreeListCtrl_ItemHasChildren",kwnames,&obj0,&obj1)) SWIG_fail;
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:TreeListCtrl_HasChildren",kwnames,&obj0,&obj1)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxPyTreeListCtrl, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "TreeListCtrl_ItemHasChildren" "', expected argument " "1"" of type '" "wxPyTreeListCtrl const *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "TreeListCtrl_HasChildren" "', expected argument " "1"" of type '" "wxPyTreeListCtrl const *""'"); 
   }
   arg1 = reinterpret_cast< wxPyTreeListCtrl * >(argp1);
   res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_wxTreeItemId,  0  | 0);
   if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "TreeListCtrl_ItemHasChildren" "', expected argument " "2"" of type '" "wxTreeItemId const &""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "TreeListCtrl_HasChildren" "', expected argument " "2"" of type '" "wxTreeItemId const &""'"); 
   }
   if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "TreeListCtrl_ItemHasChildren" "', expected argument " "2"" of type '" "wxTreeItemId const &""'"); 
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "TreeListCtrl_HasChildren" "', expected argument " "2"" of type '" "wxTreeItemId const &""'"); 
   }
   arg2 = reinterpret_cast< wxTreeItemId * >(argp2);
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    result = (bool)((wxPyTreeListCtrl const *)arg1)->ItemHasChildren((wxTreeItemId const &)*arg2);
+    result = (bool)((wxPyTreeListCtrl const *)arg1)->HasChildren((wxTreeItemId const &)*arg2);
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
@@ -8569,7 +8896,7 @@ SWIGINTERN PyObject *_wrap_TreeListCtrl_GetLastChild(PyObject *SWIGUNUSEDPARM(se
   PyObject *resultobj = 0;
   wxPyTreeListCtrl *arg1 = (wxPyTreeListCtrl *) 0 ;
   wxTreeItemId *arg2 = 0 ;
-  wxTreeItemId result;
+  PyObject *result = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   void *argp2 = 0 ;
@@ -8583,7 +8910,7 @@ SWIGINTERN PyObject *_wrap_TreeListCtrl_GetLastChild(PyObject *SWIGUNUSEDPARM(se
   if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:TreeListCtrl_GetLastChild",kwnames,&obj0,&obj1)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxPyTreeListCtrl, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "TreeListCtrl_GetLastChild" "', expected argument " "1"" of type '" "wxPyTreeListCtrl const *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "TreeListCtrl_GetLastChild" "', expected argument " "1"" of type '" "wxPyTreeListCtrl *""'"); 
   }
   arg1 = reinterpret_cast< wxPyTreeListCtrl * >(argp1);
   res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_wxTreeItemId,  0  | 0);
@@ -8596,11 +8923,60 @@ SWIGINTERN PyObject *_wrap_TreeListCtrl_GetLastChild(PyObject *SWIGUNUSEDPARM(se
   arg2 = reinterpret_cast< wxTreeItemId * >(argp2);
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    result = ((wxPyTreeListCtrl const *)arg1)->GetLastChild((wxTreeItemId const &)*arg2);
+    result = (PyObject *)wxPyTreeListCtrl_GetLastChild(arg1,(wxTreeItemId const &)*arg2);
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
-  resultobj = SWIG_NewPointerObj((new wxTreeItemId(static_cast< const wxTreeItemId& >(result))), SWIGTYPE_p_wxTreeItemId, SWIG_POINTER_OWN |  0 );
+  resultobj = result;
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_TreeListCtrl_GetPrevChild(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxPyTreeListCtrl *arg1 = (wxPyTreeListCtrl *) 0 ;
+  wxTreeItemId *arg2 = 0 ;
+  void *arg3 = (void *) 0 ;
+  PyObject *result = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  int res3 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "item",(char *) "cookie", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:TreeListCtrl_GetPrevChild",kwnames,&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxPyTreeListCtrl, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "TreeListCtrl_GetPrevChild" "', expected argument " "1"" of type '" "wxPyTreeListCtrl *""'"); 
+  }
+  arg1 = reinterpret_cast< wxPyTreeListCtrl * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_wxTreeItemId,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "TreeListCtrl_GetPrevChild" "', expected argument " "2"" of type '" "wxTreeItemId const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "TreeListCtrl_GetPrevChild" "', expected argument " "2"" of type '" "wxTreeItemId const &""'"); 
+  }
+  arg2 = reinterpret_cast< wxTreeItemId * >(argp2);
+  res3 = SWIG_ConvertPtr(obj2,SWIG_as_voidptrptr(&arg3), 0, 0);
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "TreeListCtrl_GetPrevChild" "', expected argument " "3"" of type '" "void *""'"); 
+  }
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = (PyObject *)wxPyTreeListCtrl_GetPrevChild(arg1,(wxTreeItemId const &)*arg2,arg3);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = result;
   return resultobj;
 fail:
   return NULL;
@@ -8691,118 +9067,6 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_TreeListCtrl_GetFirstVisibleItem(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  wxPyTreeListCtrl *arg1 = (wxPyTreeListCtrl *) 0 ;
-  wxTreeItemId result;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject *swig_obj[1] ;
-  
-  if (!args) SWIG_fail;
-  swig_obj[0] = args;
-  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxPyTreeListCtrl, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "TreeListCtrl_GetFirstVisibleItem" "', expected argument " "1"" of type '" "wxPyTreeListCtrl const *""'"); 
-  }
-  arg1 = reinterpret_cast< wxPyTreeListCtrl * >(argp1);
-  {
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    result = ((wxPyTreeListCtrl const *)arg1)->GetFirstVisibleItem();
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) SWIG_fail;
-  }
-  resultobj = SWIG_NewPointerObj((new wxTreeItemId(static_cast< const wxTreeItemId& >(result))), SWIGTYPE_p_wxTreeItemId, SWIG_POINTER_OWN |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_TreeListCtrl_GetNextVisible(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
-  PyObject *resultobj = 0;
-  wxPyTreeListCtrl *arg1 = (wxPyTreeListCtrl *) 0 ;
-  wxTreeItemId *arg2 = 0 ;
-  wxTreeItemId result;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  char *  kwnames[] = {
-    (char *) "self",(char *) "item", NULL 
-  };
-  
-  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:TreeListCtrl_GetNextVisible",kwnames,&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxPyTreeListCtrl, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "TreeListCtrl_GetNextVisible" "', expected argument " "1"" of type '" "wxPyTreeListCtrl const *""'"); 
-  }
-  arg1 = reinterpret_cast< wxPyTreeListCtrl * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_wxTreeItemId,  0  | 0);
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "TreeListCtrl_GetNextVisible" "', expected argument " "2"" of type '" "wxTreeItemId const &""'"); 
-  }
-  if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "TreeListCtrl_GetNextVisible" "', expected argument " "2"" of type '" "wxTreeItemId const &""'"); 
-  }
-  arg2 = reinterpret_cast< wxTreeItemId * >(argp2);
-  {
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    result = ((wxPyTreeListCtrl const *)arg1)->GetNextVisible((wxTreeItemId const &)*arg2);
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) SWIG_fail;
-  }
-  resultobj = SWIG_NewPointerObj((new wxTreeItemId(static_cast< const wxTreeItemId& >(result))), SWIGTYPE_p_wxTreeItemId, SWIG_POINTER_OWN |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_TreeListCtrl_GetPrevVisible(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
-  PyObject *resultobj = 0;
-  wxPyTreeListCtrl *arg1 = (wxPyTreeListCtrl *) 0 ;
-  wxTreeItemId *arg2 = 0 ;
-  wxTreeItemId result;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  char *  kwnames[] = {
-    (char *) "self",(char *) "item", NULL 
-  };
-  
-  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:TreeListCtrl_GetPrevVisible",kwnames,&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxPyTreeListCtrl, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "TreeListCtrl_GetPrevVisible" "', expected argument " "1"" of type '" "wxPyTreeListCtrl const *""'"); 
-  }
-  arg1 = reinterpret_cast< wxPyTreeListCtrl * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_wxTreeItemId,  0  | 0);
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "TreeListCtrl_GetPrevVisible" "', expected argument " "2"" of type '" "wxTreeItemId const &""'"); 
-  }
-  if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "TreeListCtrl_GetPrevVisible" "', expected argument " "2"" of type '" "wxTreeItemId const &""'"); 
-  }
-  arg2 = reinterpret_cast< wxTreeItemId * >(argp2);
-  {
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    result = ((wxPyTreeListCtrl const *)arg1)->GetPrevVisible((wxTreeItemId const &)*arg2);
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) SWIG_fail;
-  }
-  resultobj = SWIG_NewPointerObj((new wxTreeItemId(static_cast< const wxTreeItemId& >(result))), SWIGTYPE_p_wxTreeItemId, SWIG_POINTER_OWN |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
 SWIGINTERN PyObject *_wrap_TreeListCtrl_GetNext(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   wxPyTreeListCtrl *arg1 = (wxPyTreeListCtrl *) 0 ;
@@ -8835,6 +9099,307 @@ SWIGINTERN PyObject *_wrap_TreeListCtrl_GetNext(PyObject *SWIGUNUSEDPARM(self), 
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
     result = ((wxPyTreeListCtrl const *)arg1)->GetNext((wxTreeItemId const &)*arg2);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_NewPointerObj((new wxTreeItemId(static_cast< const wxTreeItemId& >(result))), SWIGTYPE_p_wxTreeItemId, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_TreeListCtrl_GetPrev(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxPyTreeListCtrl *arg1 = (wxPyTreeListCtrl *) 0 ;
+  wxTreeItemId *arg2 = 0 ;
+  wxTreeItemId result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "item", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:TreeListCtrl_GetPrev",kwnames,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxPyTreeListCtrl, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "TreeListCtrl_GetPrev" "', expected argument " "1"" of type '" "wxPyTreeListCtrl const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxPyTreeListCtrl * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_wxTreeItemId,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "TreeListCtrl_GetPrev" "', expected argument " "2"" of type '" "wxTreeItemId const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "TreeListCtrl_GetPrev" "', expected argument " "2"" of type '" "wxTreeItemId const &""'"); 
+  }
+  arg2 = reinterpret_cast< wxTreeItemId * >(argp2);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = ((wxPyTreeListCtrl const *)arg1)->GetPrev((wxTreeItemId const &)*arg2);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_NewPointerObj((new wxTreeItemId(static_cast< const wxTreeItemId& >(result))), SWIGTYPE_p_wxTreeItemId, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_TreeListCtrl_GetFirstExpandedItem(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxPyTreeListCtrl *arg1 = (wxPyTreeListCtrl *) 0 ;
+  wxTreeItemId result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxPyTreeListCtrl, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "TreeListCtrl_GetFirstExpandedItem" "', expected argument " "1"" of type '" "wxPyTreeListCtrl const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxPyTreeListCtrl * >(argp1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = ((wxPyTreeListCtrl const *)arg1)->GetFirstExpandedItem();
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_NewPointerObj((new wxTreeItemId(static_cast< const wxTreeItemId& >(result))), SWIGTYPE_p_wxTreeItemId, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_TreeListCtrl_GetNextExpanded(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxPyTreeListCtrl *arg1 = (wxPyTreeListCtrl *) 0 ;
+  wxTreeItemId *arg2 = 0 ;
+  wxTreeItemId result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "item", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:TreeListCtrl_GetNextExpanded",kwnames,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxPyTreeListCtrl, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "TreeListCtrl_GetNextExpanded" "', expected argument " "1"" of type '" "wxPyTreeListCtrl const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxPyTreeListCtrl * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_wxTreeItemId,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "TreeListCtrl_GetNextExpanded" "', expected argument " "2"" of type '" "wxTreeItemId const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "TreeListCtrl_GetNextExpanded" "', expected argument " "2"" of type '" "wxTreeItemId const &""'"); 
+  }
+  arg2 = reinterpret_cast< wxTreeItemId * >(argp2);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = ((wxPyTreeListCtrl const *)arg1)->GetNextExpanded((wxTreeItemId const &)*arg2);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_NewPointerObj((new wxTreeItemId(static_cast< const wxTreeItemId& >(result))), SWIGTYPE_p_wxTreeItemId, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_TreeListCtrl_GetPrevExpanded(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxPyTreeListCtrl *arg1 = (wxPyTreeListCtrl *) 0 ;
+  wxTreeItemId *arg2 = 0 ;
+  wxTreeItemId result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "item", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:TreeListCtrl_GetPrevExpanded",kwnames,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxPyTreeListCtrl, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "TreeListCtrl_GetPrevExpanded" "', expected argument " "1"" of type '" "wxPyTreeListCtrl const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxPyTreeListCtrl * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_wxTreeItemId,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "TreeListCtrl_GetPrevExpanded" "', expected argument " "2"" of type '" "wxTreeItemId const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "TreeListCtrl_GetPrevExpanded" "', expected argument " "2"" of type '" "wxTreeItemId const &""'"); 
+  }
+  arg2 = reinterpret_cast< wxTreeItemId * >(argp2);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = ((wxPyTreeListCtrl const *)arg1)->GetPrevExpanded((wxTreeItemId const &)*arg2);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_NewPointerObj((new wxTreeItemId(static_cast< const wxTreeItemId& >(result))), SWIGTYPE_p_wxTreeItemId, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_TreeListCtrl_GetFirstVisibleItem(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxPyTreeListCtrl *arg1 = (wxPyTreeListCtrl *) 0 ;
+  bool arg2 = (bool) false ;
+  wxTreeItemId result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  bool val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "fullRow", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|O:TreeListCtrl_GetFirstVisibleItem",kwnames,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxPyTreeListCtrl, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "TreeListCtrl_GetFirstVisibleItem" "', expected argument " "1"" of type '" "wxPyTreeListCtrl const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxPyTreeListCtrl * >(argp1);
+  if (obj1) {
+    ecode2 = SWIG_AsVal_bool(obj1, &val2);
+    if (!SWIG_IsOK(ecode2)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "TreeListCtrl_GetFirstVisibleItem" "', expected argument " "2"" of type '" "bool""'");
+    } 
+    arg2 = static_cast< bool >(val2);
+  }
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = ((wxPyTreeListCtrl const *)arg1)->GetFirstVisibleItem(arg2);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_NewPointerObj((new wxTreeItemId(static_cast< const wxTreeItemId& >(result))), SWIGTYPE_p_wxTreeItemId, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_TreeListCtrl_GetNextVisible(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxPyTreeListCtrl *arg1 = (wxPyTreeListCtrl *) 0 ;
+  wxTreeItemId *arg2 = 0 ;
+  bool arg3 = (bool) false ;
+  wxTreeItemId result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  bool val3 ;
+  int ecode3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "item",(char *) "fullRow", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|O:TreeListCtrl_GetNextVisible",kwnames,&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxPyTreeListCtrl, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "TreeListCtrl_GetNextVisible" "', expected argument " "1"" of type '" "wxPyTreeListCtrl const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxPyTreeListCtrl * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_wxTreeItemId,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "TreeListCtrl_GetNextVisible" "', expected argument " "2"" of type '" "wxTreeItemId const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "TreeListCtrl_GetNextVisible" "', expected argument " "2"" of type '" "wxTreeItemId const &""'"); 
+  }
+  arg2 = reinterpret_cast< wxTreeItemId * >(argp2);
+  if (obj2) {
+    ecode3 = SWIG_AsVal_bool(obj2, &val3);
+    if (!SWIG_IsOK(ecode3)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "TreeListCtrl_GetNextVisible" "', expected argument " "3"" of type '" "bool""'");
+    } 
+    arg3 = static_cast< bool >(val3);
+  }
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = ((wxPyTreeListCtrl const *)arg1)->GetNextVisible((wxTreeItemId const &)*arg2,arg3);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_NewPointerObj((new wxTreeItemId(static_cast< const wxTreeItemId& >(result))), SWIGTYPE_p_wxTreeItemId, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_TreeListCtrl_GetPrevVisible(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxPyTreeListCtrl *arg1 = (wxPyTreeListCtrl *) 0 ;
+  wxTreeItemId *arg2 = 0 ;
+  bool arg3 = (bool) false ;
+  wxTreeItemId result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  bool val3 ;
+  int ecode3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "item",(char *) "fullRow", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|O:TreeListCtrl_GetPrevVisible",kwnames,&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxPyTreeListCtrl, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "TreeListCtrl_GetPrevVisible" "', expected argument " "1"" of type '" "wxPyTreeListCtrl const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxPyTreeListCtrl * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_wxTreeItemId,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "TreeListCtrl_GetPrevVisible" "', expected argument " "2"" of type '" "wxTreeItemId const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "TreeListCtrl_GetPrevVisible" "', expected argument " "2"" of type '" "wxTreeItemId const &""'"); 
+  }
+  arg2 = reinterpret_cast< wxTreeItemId * >(argp2);
+  if (obj2) {
+    ecode3 = SWIG_AsVal_bool(obj2, &val3);
+    if (!SWIG_IsOK(ecode3)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "TreeListCtrl_GetPrevVisible" "', expected argument " "3"" of type '" "bool""'");
+    } 
+    arg3 = static_cast< bool >(val3);
+  }
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = ((wxPyTreeListCtrl const *)arg1)->GetPrevVisible((wxTreeItemId const &)*arg2,arg3);
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
@@ -9381,7 +9946,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_TreeListCtrl_DeleteAllItems(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_TreeListCtrl_DeleteRoot(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   wxPyTreeListCtrl *arg1 = (wxPyTreeListCtrl *) 0 ;
   void *argp1 = 0 ;
@@ -9392,12 +9957,12 @@ SWIGINTERN PyObject *_wrap_TreeListCtrl_DeleteAllItems(PyObject *SWIGUNUSEDPARM(
   swig_obj[0] = args;
   res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxPyTreeListCtrl, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "TreeListCtrl_DeleteAllItems" "', expected argument " "1"" of type '" "wxPyTreeListCtrl *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "TreeListCtrl_DeleteRoot" "', expected argument " "1"" of type '" "wxPyTreeListCtrl *""'"); 
   }
   arg1 = reinterpret_cast< wxPyTreeListCtrl * >(argp1);
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    (arg1)->DeleteAllItems();
+    (arg1)->DeleteRoot();
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
@@ -9671,14 +10236,15 @@ SWIGINTERN PyObject *_wrap_TreeListCtrl_SelectItem(PyObject *SWIGUNUSEDPARM(self
   PyObject *resultobj = 0;
   wxPyTreeListCtrl *arg1 = (wxPyTreeListCtrl *) 0 ;
   wxTreeItemId *arg2 = 0 ;
-  bool arg3 = (bool) true ;
-  bool arg4 = (bool) false ;
+  wxTreeItemId const &arg3_defvalue = (wxTreeItemId *) NULL ;
+  wxTreeItemId *arg3 = (wxTreeItemId *) &arg3_defvalue ;
+  bool arg4 = (bool) true ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   void *argp2 = 0 ;
   int res2 = 0 ;
-  bool val3 ;
-  int ecode3 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
   bool val4 ;
   int ecode4 = 0 ;
   PyObject * obj0 = 0 ;
@@ -9686,7 +10252,7 @@ SWIGINTERN PyObject *_wrap_TreeListCtrl_SelectItem(PyObject *SWIGUNUSEDPARM(self
   PyObject * obj2 = 0 ;
   PyObject * obj3 = 0 ;
   char *  kwnames[] = {
-    (char *) "self",(char *) "item",(char *) "unselect_others",(char *) "extended_select", NULL 
+    (char *) "self",(char *) "item",(char *) "last",(char *) "unselect_others", NULL 
   };
   
   if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|OO:TreeListCtrl_SelectItem",kwnames,&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
@@ -9704,11 +10270,14 @@ SWIGINTERN PyObject *_wrap_TreeListCtrl_SelectItem(PyObject *SWIGUNUSEDPARM(self
   }
   arg2 = reinterpret_cast< wxTreeItemId * >(argp2);
   if (obj2) {
-    ecode3 = SWIG_AsVal_bool(obj2, &val3);
-    if (!SWIG_IsOK(ecode3)) {
-      SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "TreeListCtrl_SelectItem" "', expected argument " "3"" of type '" "bool""'");
-    } 
-    arg3 = static_cast< bool >(val3);
+    res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_wxTreeItemId,  0  | 0);
+    if (!SWIG_IsOK(res3)) {
+      SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "TreeListCtrl_SelectItem" "', expected argument " "3"" of type '" "wxTreeItemId const &""'"); 
+    }
+    if (!argp3) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "TreeListCtrl_SelectItem" "', expected argument " "3"" of type '" "wxTreeItemId const &""'"); 
+    }
+    arg3 = reinterpret_cast< wxTreeItemId * >(argp3);
   }
   if (obj3) {
     ecode4 = SWIG_AsVal_bool(obj3, &val4);
@@ -9719,7 +10288,7 @@ SWIGINTERN PyObject *_wrap_TreeListCtrl_SelectItem(PyObject *SWIGUNUSEDPARM(self
   }
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    (arg1)->SelectItem((wxTreeItemId const &)*arg2,arg3,arg4);
+    (arg1)->SelectItem((wxTreeItemId const &)*arg2,(wxTreeItemId const &)*arg3,arg4);
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
@@ -9730,36 +10299,23 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_TreeListCtrl_SelectAll(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+SWIGINTERN PyObject *_wrap_TreeListCtrl_SelectAll(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   wxPyTreeListCtrl *arg1 = (wxPyTreeListCtrl *) 0 ;
-  bool arg2 = (bool) false ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  bool val2 ;
-  int ecode2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  char *  kwnames[] = {
-    (char *) "self",(char *) "extended_select", NULL 
-  };
+  PyObject *swig_obj[1] ;
   
-  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|O:TreeListCtrl_SelectAll",kwnames,&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxPyTreeListCtrl, 0 |  0 );
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxPyTreeListCtrl, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "TreeListCtrl_SelectAll" "', expected argument " "1"" of type '" "wxPyTreeListCtrl *""'"); 
   }
   arg1 = reinterpret_cast< wxPyTreeListCtrl * >(argp1);
-  if (obj1) {
-    ecode2 = SWIG_AsVal_bool(obj1, &val2);
-    if (!SWIG_IsOK(ecode2)) {
-      SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "TreeListCtrl_SelectAll" "', expected argument " "2"" of type '" "bool""'");
-    } 
-    arg2 = static_cast< bool >(val2);
-  }
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    (arg1)->SelectAll(arg2);
+    (arg1)->SelectAll();
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
@@ -9966,17 +10522,21 @@ SWIGINTERN PyObject *_wrap_TreeListCtrl_EditLabel(PyObject *SWIGUNUSEDPARM(self)
   PyObject *resultobj = 0;
   wxPyTreeListCtrl *arg1 = (wxPyTreeListCtrl *) 0 ;
   wxTreeItemId *arg2 = 0 ;
+  int arg3 = (int) -1 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   void *argp2 = 0 ;
   int res2 = 0 ;
+  int val3 ;
+  int ecode3 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
   char *  kwnames[] = {
-    (char *) "self",(char *) "item", NULL 
+    (char *) "self",(char *) "item",(char *) "column", NULL 
   };
   
-  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:TreeListCtrl_EditLabel",kwnames,&obj0,&obj1)) SWIG_fail;
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|O:TreeListCtrl_EditLabel",kwnames,&obj0,&obj1,&obj2)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxPyTreeListCtrl, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "TreeListCtrl_EditLabel" "', expected argument " "1"" of type '" "wxPyTreeListCtrl *""'"); 
@@ -9990,50 +10550,16 @@ SWIGINTERN PyObject *_wrap_TreeListCtrl_EditLabel(PyObject *SWIGUNUSEDPARM(self)
     SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "TreeListCtrl_EditLabel" "', expected argument " "2"" of type '" "wxTreeItemId const &""'"); 
   }
   arg2 = reinterpret_cast< wxTreeItemId * >(argp2);
+  if (obj2) {
+    ecode3 = SWIG_AsVal_int(obj2, &val3);
+    if (!SWIG_IsOK(ecode3)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "TreeListCtrl_EditLabel" "', expected argument " "3"" of type '" "int""'");
+    } 
+    arg3 = static_cast< int >(val3);
+  }
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    (arg1)->EditLabel((wxTreeItemId const &)*arg2);
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) SWIG_fail;
-  }
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_TreeListCtrl_Edit(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
-  PyObject *resultobj = 0;
-  wxPyTreeListCtrl *arg1 = (wxPyTreeListCtrl *) 0 ;
-  wxTreeItemId *arg2 = 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  char *  kwnames[] = {
-    (char *) "self",(char *) "item", NULL 
-  };
-  
-  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:TreeListCtrl_Edit",kwnames,&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxPyTreeListCtrl, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "TreeListCtrl_Edit" "', expected argument " "1"" of type '" "wxPyTreeListCtrl *""'"); 
-  }
-  arg1 = reinterpret_cast< wxPyTreeListCtrl * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_wxTreeItemId,  0  | 0);
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "TreeListCtrl_Edit" "', expected argument " "2"" of type '" "wxTreeItemId const &""'"); 
-  }
-  if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "TreeListCtrl_Edit" "', expected argument " "2"" of type '" "wxTreeItemId const &""'"); 
-  }
-  arg2 = reinterpret_cast< wxTreeItemId * >(argp2);
-  {
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    (arg1)->Edit((wxTreeItemId const &)*arg2);
+    wxPyTreeListCtrl_EditLabel(arg1,(wxTreeItemId const &)*arg2,arg3);
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
@@ -10150,6 +10676,50 @@ fail:
     if (temp3)
     delete arg3;
   }
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_TreeListCtrl_SetDragItem(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxPyTreeListCtrl *arg1 = (wxPyTreeListCtrl *) 0 ;
+  wxTreeItemId const &arg2_defvalue = (wxTreeItemId *) NULL ;
+  wxTreeItemId *arg2 = (wxTreeItemId *) &arg2_defvalue ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "item", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|O:TreeListCtrl_SetDragItem",kwnames,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxPyTreeListCtrl, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "TreeListCtrl_SetDragItem" "', expected argument " "1"" of type '" "wxPyTreeListCtrl *""'"); 
+  }
+  arg1 = reinterpret_cast< wxPyTreeListCtrl * >(argp1);
+  if (obj1) {
+    res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_wxTreeItemId,  0  | 0);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "TreeListCtrl_SetDragItem" "', expected argument " "2"" of type '" "wxTreeItemId const &""'"); 
+    }
+    if (!argp2) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "TreeListCtrl_SetDragItem" "', expected argument " "2"" of type '" "wxTreeItemId const &""'"); 
+    }
+    arg2 = reinterpret_cast< wxTreeItemId * >(argp2);
+  }
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    (arg1)->SetDragItem((wxTreeItemId const &)*arg2);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
   return NULL;
 }
 
@@ -10902,18 +11472,20 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"LEDNumberCtrl_swiginit", LEDNumberCtrl_swiginit, METH_VARARGS, NULL},
 	 { (char *)"new_TreeListColumnInfo", (PyCFunction) _wrap_new_TreeListColumnInfo, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"delete_TreeListColumnInfo", (PyCFunction)_wrap_delete_TreeListColumnInfo, METH_O, NULL},
-	 { (char *)"TreeListColumnInfo_GetShown", (PyCFunction)_wrap_TreeListColumnInfo_GetShown, METH_O, NULL},
 	 { (char *)"TreeListColumnInfo_GetAlignment", (PyCFunction)_wrap_TreeListColumnInfo_GetAlignment, METH_O, NULL},
 	 { (char *)"TreeListColumnInfo_GetText", (PyCFunction)_wrap_TreeListColumnInfo_GetText, METH_O, NULL},
 	 { (char *)"TreeListColumnInfo_GetImage", (PyCFunction)_wrap_TreeListColumnInfo_GetImage, METH_O, NULL},
 	 { (char *)"TreeListColumnInfo_GetSelectedImage", (PyCFunction)_wrap_TreeListColumnInfo_GetSelectedImage, METH_O, NULL},
 	 { (char *)"TreeListColumnInfo_GetWidth", (PyCFunction)_wrap_TreeListColumnInfo_GetWidth, METH_O, NULL},
-	 { (char *)"TreeListColumnInfo_SetShown", (PyCFunction) _wrap_TreeListColumnInfo_SetShown, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"TreeListColumnInfo_IsEditable", (PyCFunction)_wrap_TreeListColumnInfo_IsEditable, METH_O, NULL},
+	 { (char *)"TreeListColumnInfo_IsShown", (PyCFunction)_wrap_TreeListColumnInfo_IsShown, METH_O, NULL},
 	 { (char *)"TreeListColumnInfo_SetAlignment", (PyCFunction) _wrap_TreeListColumnInfo_SetAlignment, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"TreeListColumnInfo_SetText", (PyCFunction) _wrap_TreeListColumnInfo_SetText, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"TreeListColumnInfo_SetImage", (PyCFunction) _wrap_TreeListColumnInfo_SetImage, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"TreeListColumnInfo_SetSelectedImage", (PyCFunction) _wrap_TreeListColumnInfo_SetSelectedImage, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"TreeListColumnInfo_SetWidth", (PyCFunction) _wrap_TreeListColumnInfo_SetWidth, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"TreeListColumnInfo_SetEditable", (PyCFunction) _wrap_TreeListColumnInfo_SetEditable, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"TreeListColumnInfo_SetShown", (PyCFunction) _wrap_TreeListColumnInfo_SetShown, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"TreeListColumnInfo_swigregister", TreeListColumnInfo_swigregister, METH_VARARGS, NULL},
 	 { (char *)"TreeListColumnInfo_swiginit", TreeListColumnInfo_swiginit, METH_VARARGS, NULL},
 	 { (char *)"new_TreeListCtrl", (PyCFunction) _wrap_new_TreeListCtrl, METH_VARARGS | METH_KEYWORDS, NULL},
@@ -10940,20 +11512,22 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"TreeListCtrl_InsertColumnInfo", (PyCFunction) _wrap_TreeListCtrl_InsertColumnInfo, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"TreeListCtrl_RemoveColumn", (PyCFunction) _wrap_TreeListCtrl_RemoveColumn, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"TreeListCtrl_GetColumnCount", (PyCFunction)_wrap_TreeListCtrl_GetColumnCount, METH_O, NULL},
-	 { (char *)"TreeListCtrl_SetColumnWidth", (PyCFunction) _wrap_TreeListCtrl_SetColumnWidth, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"TreeListCtrl_GetColumnWidth", (PyCFunction) _wrap_TreeListCtrl_GetColumnWidth, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"TreeListCtrl_SetMainColumn", (PyCFunction) _wrap_TreeListCtrl_SetMainColumn, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"TreeListCtrl_GetMainColumn", (PyCFunction)_wrap_TreeListCtrl_GetMainColumn, METH_O, NULL},
-	 { (char *)"TreeListCtrl_SetColumnText", (PyCFunction) _wrap_TreeListCtrl_SetColumnText, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"TreeListCtrl_GetColumnText", (PyCFunction) _wrap_TreeListCtrl_GetColumnText, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"TreeListCtrl_SetColumn", (PyCFunction) _wrap_TreeListCtrl_SetColumn, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"TreeListCtrl_GetColumn", (PyCFunction) _wrap_TreeListCtrl_GetColumn, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"TreeListCtrl_SetColumnText", (PyCFunction) _wrap_TreeListCtrl_SetColumnText, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"TreeListCtrl_GetColumnText", (PyCFunction) _wrap_TreeListCtrl_GetColumnText, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"TreeListCtrl_SetColumnWidth", (PyCFunction) _wrap_TreeListCtrl_SetColumnWidth, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"TreeListCtrl_GetColumnWidth", (PyCFunction) _wrap_TreeListCtrl_GetColumnWidth, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"TreeListCtrl_SetColumnAlignment", (PyCFunction) _wrap_TreeListCtrl_SetColumnAlignment, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"TreeListCtrl_GetColumnAlignment", (PyCFunction) _wrap_TreeListCtrl_GetColumnAlignment, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"TreeListCtrl_SetColumnImage", (PyCFunction) _wrap_TreeListCtrl_SetColumnImage, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"TreeListCtrl_GetColumnImage", (PyCFunction) _wrap_TreeListCtrl_GetColumnImage, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"TreeListCtrl_ShowColumn", (PyCFunction) _wrap_TreeListCtrl_ShowColumn, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"TreeListCtrl_SetColumnShown", (PyCFunction) _wrap_TreeListCtrl_SetColumnShown, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"TreeListCtrl_IsColumnShown", (PyCFunction) _wrap_TreeListCtrl_IsColumnShown, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"TreeListCtrl_SetColumnEditable", (PyCFunction) _wrap_TreeListCtrl_SetColumnEditable, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"TreeListCtrl_IsColumnEditable", (PyCFunction) _wrap_TreeListCtrl_IsColumnEditable, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"TreeListCtrl_GetItemText", (PyCFunction) _wrap_TreeListCtrl_GetItemText, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"TreeListCtrl_GetItemImage", (PyCFunction) _wrap_TreeListCtrl_GetItemImage, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"TreeListCtrl_SetItemText", (PyCFunction) _wrap_TreeListCtrl_SetItemText, METH_VARARGS | METH_KEYWORDS, NULL},
@@ -10962,17 +11536,17 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"TreeListCtrl_SetItemData", (PyCFunction) _wrap_TreeListCtrl_SetItemData, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"TreeListCtrl_GetItemPyData", (PyCFunction) _wrap_TreeListCtrl_GetItemPyData, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"TreeListCtrl_SetItemPyData", (PyCFunction) _wrap_TreeListCtrl_SetItemPyData, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"TreeListCtrl_GetItemBold", (PyCFunction) _wrap_TreeListCtrl_GetItemBold, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"TreeListCtrl_GetItemTextColour", (PyCFunction) _wrap_TreeListCtrl_GetItemTextColour, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"TreeListCtrl_GetItemBackgroundColour", (PyCFunction) _wrap_TreeListCtrl_GetItemBackgroundColour, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"TreeListCtrl_GetItemFont", (PyCFunction) _wrap_TreeListCtrl_GetItemFont, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"TreeListCtrl_SetItemHasChildren", (PyCFunction) _wrap_TreeListCtrl_SetItemHasChildren, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"TreeListCtrl_SetItemBold", (PyCFunction) _wrap_TreeListCtrl_SetItemBold, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"TreeListCtrl_SetItemTextColour", (PyCFunction) _wrap_TreeListCtrl_SetItemTextColour, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"TreeListCtrl_SetItemBackgroundColour", (PyCFunction) _wrap_TreeListCtrl_SetItemBackgroundColour, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"TreeListCtrl_SetItemFont", (PyCFunction) _wrap_TreeListCtrl_SetItemFont, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"TreeListCtrl_GetItemBold", (PyCFunction) _wrap_TreeListCtrl_GetItemBold, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"TreeListCtrl_GetItemTextColour", (PyCFunction) _wrap_TreeListCtrl_GetItemTextColour, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"TreeListCtrl_GetItemBackgroundColour", (PyCFunction) _wrap_TreeListCtrl_GetItemBackgroundColour, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"TreeListCtrl_GetItemFont", (PyCFunction) _wrap_TreeListCtrl_GetItemFont, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"TreeListCtrl_IsVisible", (PyCFunction) _wrap_TreeListCtrl_IsVisible, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"TreeListCtrl_ItemHasChildren", (PyCFunction) _wrap_TreeListCtrl_ItemHasChildren, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"TreeListCtrl_HasChildren", (PyCFunction) _wrap_TreeListCtrl_HasChildren, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"TreeListCtrl_IsExpanded", (PyCFunction) _wrap_TreeListCtrl_IsExpanded, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"TreeListCtrl_IsSelected", (PyCFunction) _wrap_TreeListCtrl_IsSelected, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"TreeListCtrl_IsBold", (PyCFunction) _wrap_TreeListCtrl_IsBold, METH_VARARGS | METH_KEYWORDS, NULL},
@@ -10984,12 +11558,17 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"TreeListCtrl_GetFirstChild", (PyCFunction) _wrap_TreeListCtrl_GetFirstChild, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"TreeListCtrl_GetNextChild", (PyCFunction) _wrap_TreeListCtrl_GetNextChild, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"TreeListCtrl_GetLastChild", (PyCFunction) _wrap_TreeListCtrl_GetLastChild, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"TreeListCtrl_GetPrevChild", (PyCFunction) _wrap_TreeListCtrl_GetPrevChild, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"TreeListCtrl_GetNextSibling", (PyCFunction) _wrap_TreeListCtrl_GetNextSibling, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"TreeListCtrl_GetPrevSibling", (PyCFunction) _wrap_TreeListCtrl_GetPrevSibling, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"TreeListCtrl_GetFirstVisibleItem", (PyCFunction)_wrap_TreeListCtrl_GetFirstVisibleItem, METH_O, NULL},
+	 { (char *)"TreeListCtrl_GetNext", (PyCFunction) _wrap_TreeListCtrl_GetNext, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"TreeListCtrl_GetPrev", (PyCFunction) _wrap_TreeListCtrl_GetPrev, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"TreeListCtrl_GetFirstExpandedItem", (PyCFunction)_wrap_TreeListCtrl_GetFirstExpandedItem, METH_O, NULL},
+	 { (char *)"TreeListCtrl_GetNextExpanded", (PyCFunction) _wrap_TreeListCtrl_GetNextExpanded, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"TreeListCtrl_GetPrevExpanded", (PyCFunction) _wrap_TreeListCtrl_GetPrevExpanded, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"TreeListCtrl_GetFirstVisibleItem", (PyCFunction) _wrap_TreeListCtrl_GetFirstVisibleItem, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"TreeListCtrl_GetNextVisible", (PyCFunction) _wrap_TreeListCtrl_GetNextVisible, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"TreeListCtrl_GetPrevVisible", (PyCFunction) _wrap_TreeListCtrl_GetPrevVisible, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"TreeListCtrl_GetNext", (PyCFunction) _wrap_TreeListCtrl_GetNext, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"TreeListCtrl_AddRoot", (PyCFunction) _wrap_TreeListCtrl_AddRoot, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"TreeListCtrl_PrependItem", (PyCFunction) _wrap_TreeListCtrl_PrependItem, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"TreeListCtrl_InsertItem", (PyCFunction) _wrap_TreeListCtrl_InsertItem, METH_VARARGS | METH_KEYWORDS, NULL},
@@ -10997,7 +11576,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"TreeListCtrl_AppendItem", (PyCFunction) _wrap_TreeListCtrl_AppendItem, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"TreeListCtrl_Delete", (PyCFunction) _wrap_TreeListCtrl_Delete, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"TreeListCtrl_DeleteChildren", (PyCFunction) _wrap_TreeListCtrl_DeleteChildren, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"TreeListCtrl_DeleteAllItems", (PyCFunction)_wrap_TreeListCtrl_DeleteAllItems, METH_O, NULL},
+	 { (char *)"TreeListCtrl_DeleteRoot", (PyCFunction)_wrap_TreeListCtrl_DeleteRoot, METH_O, NULL},
 	 { (char *)"TreeListCtrl_Expand", (PyCFunction) _wrap_TreeListCtrl_Expand, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"TreeListCtrl_ExpandAll", (PyCFunction) _wrap_TreeListCtrl_ExpandAll, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"TreeListCtrl_Collapse", (PyCFunction) _wrap_TreeListCtrl_Collapse, METH_VARARGS | METH_KEYWORDS, NULL},
@@ -11006,15 +11585,15 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"TreeListCtrl_Unselect", (PyCFunction)_wrap_TreeListCtrl_Unselect, METH_O, NULL},
 	 { (char *)"TreeListCtrl_UnselectAll", (PyCFunction)_wrap_TreeListCtrl_UnselectAll, METH_O, NULL},
 	 { (char *)"TreeListCtrl_SelectItem", (PyCFunction) _wrap_TreeListCtrl_SelectItem, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"TreeListCtrl_SelectAll", (PyCFunction) _wrap_TreeListCtrl_SelectAll, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"TreeListCtrl_SelectAll", (PyCFunction)_wrap_TreeListCtrl_SelectAll, METH_O, NULL},
 	 { (char *)"TreeListCtrl_EnsureVisible", (PyCFunction) _wrap_TreeListCtrl_EnsureVisible, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"TreeListCtrl_ScrollTo", (PyCFunction) _wrap_TreeListCtrl_ScrollTo, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"TreeListCtrl_HitTest", (PyCFunction) _wrap_TreeListCtrl_HitTest, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"TreeListCtrl_GetBoundingRect", (PyCFunction) _wrap_TreeListCtrl_GetBoundingRect, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"TreeListCtrl_EditLabel", (PyCFunction) _wrap_TreeListCtrl_EditLabel, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"TreeListCtrl_Edit", (PyCFunction) _wrap_TreeListCtrl_Edit, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"TreeListCtrl_SortChildren", (PyCFunction) _wrap_TreeListCtrl_SortChildren, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"TreeListCtrl_FindItem", (PyCFunction) _wrap_TreeListCtrl_FindItem, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"TreeListCtrl_SetDragItem", (PyCFunction) _wrap_TreeListCtrl_SetDragItem, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"TreeListCtrl_GetHeaderWindow", (PyCFunction)_wrap_TreeListCtrl_GetHeaderWindow, METH_O, NULL},
 	 { (char *)"TreeListCtrl_GetMainWindow", (PyCFunction)_wrap_TreeListCtrl_GetMainWindow, METH_O, NULL},
 	 { (char *)"TreeListCtrl_swigregister", TreeListCtrl_swigregister, METH_VARARGS, NULL},
@@ -14164,7 +14743,6 @@ SWIGEXPORT void SWIG_init(void) {
   PyDict_SetItemString(d,(char*)"cvar", SWIG_globals());
   SWIG_addvarlink(SWIG_globals(),(char*)"DynamicSashNameStr",DynamicSashNameStr_get, DynamicSashNameStr_set);
   SWIG_addvarlink(SWIG_globals(),(char*)"EditableListBoxNameStr",EditableListBoxNameStr_get, EditableListBoxNameStr_set);
-  SWIG_addvarlink(SWIG_globals(),(char*)"TreeListCtrlNameStr",TreeListCtrlNameStr_get, TreeListCtrlNameStr_set);
   SWIG_addvarlink(SWIG_globals(),(char*)"StaticPictureNameStr",StaticPictureNameStr_get, StaticPictureNameStr_set);
   SWIG_Python_SetConstant(d, "DS_MANAGE_SCROLLBARS",SWIG_From_int(static_cast< int >(wxDS_MANAGE_SCROLLBARS)));
   SWIG_Python_SetConstant(d, "DS_DRAG_CORNER",SWIG_From_int(static_cast< int >(wxDS_DRAG_CORNER)));
@@ -14178,24 +14756,27 @@ SWIGEXPORT void SWIG_init(void) {
   SWIG_Python_SetConstant(d, "LED_ALIGN_CENTER",SWIG_From_int(static_cast< int >(wxLED_ALIGN_CENTER)));
   SWIG_Python_SetConstant(d, "LED_ALIGN_MASK",SWIG_From_int(static_cast< int >(wxLED_ALIGN_MASK)));
   SWIG_Python_SetConstant(d, "LED_DRAW_FADED",SWIG_From_int(static_cast< int >(wxLED_DRAW_FADED)));
-  SWIG_Python_SetConstant(d, "TL_ALIGN_LEFT",SWIG_From_int(static_cast< int >(wxTL_ALIGN_LEFT)));
-  SWIG_Python_SetConstant(d, "TL_ALIGN_RIGHT",SWIG_From_int(static_cast< int >(wxTL_ALIGN_RIGHT)));
-  SWIG_Python_SetConstant(d, "TL_ALIGN_CENTER",SWIG_From_int(static_cast< int >(wxTL_ALIGN_CENTER)));
+  SWIG_addvarlink(SWIG_globals(),(char*)"TreeListCtrlNameStr",TreeListCtrlNameStr_get, TreeListCtrlNameStr_set);
+  SWIG_Python_SetConstant(d, "DEFAULT_COL_WIDTH",SWIG_From_int(static_cast< int >(DEFAULT_COL_WIDTH)));
+  SWIG_Python_SetConstant(d, "TL_MODE_NAV_FULLTREE",SWIG_From_int(static_cast< int >(wxTL_MODE_NAV_FULLTREE)));
+  SWIG_Python_SetConstant(d, "TL_MODE_NAV_EXPANDED",SWIG_From_int(static_cast< int >(wxTL_MODE_NAV_EXPANDED)));
+  SWIG_Python_SetConstant(d, "TL_MODE_NAV_VISIBLE",SWIG_From_int(static_cast< int >(wxTL_MODE_NAV_VISIBLE)));
+  SWIG_Python_SetConstant(d, "TL_MODE_NAV_LEVEL",SWIG_From_int(static_cast< int >(wxTL_MODE_NAV_LEVEL)));
+  SWIG_Python_SetConstant(d, "TL_MODE_FIND_EXACT",SWIG_From_int(static_cast< int >(wxTL_MODE_FIND_EXACT)));
+  SWIG_Python_SetConstant(d, "TL_MODE_FIND_PARTIAL",SWIG_From_int(static_cast< int >(wxTL_MODE_FIND_PARTIAL)));
+  SWIG_Python_SetConstant(d, "TL_MODE_FIND_NOCASE",SWIG_From_int(static_cast< int >(wxTL_MODE_FIND_NOCASE)));
   SWIG_Python_SetConstant(d, "TREE_HITTEST_ONITEMCOLUMN",SWIG_From_int(static_cast< int >(wxTREE_HITTEST_ONITEMCOLUMN)));
-  SWIG_Python_SetConstant(d, "TL_SEARCH_VISIBLE",SWIG_From_int(static_cast< int >(wxTL_SEARCH_VISIBLE)));
-  SWIG_Python_SetConstant(d, "TL_SEARCH_LEVEL",SWIG_From_int(static_cast< int >(wxTL_SEARCH_LEVEL)));
-  SWIG_Python_SetConstant(d, "TL_SEARCH_FULL",SWIG_From_int(static_cast< int >(wxTL_SEARCH_FULL)));
-  SWIG_Python_SetConstant(d, "TL_SEARCH_PARTIAL",SWIG_From_int(static_cast< int >(wxTL_SEARCH_PARTIAL)));
-  SWIG_Python_SetConstant(d, "TL_SEARCH_NOCASE",SWIG_From_int(static_cast< int >(wxTL_SEARCH_NOCASE)));
-  SWIG_Python_SetConstant(d, "TR_DONT_ADJUST_MAC",SWIG_From_int(static_cast< int >(wxTR_DONT_ADJUST_MAC)));
+  SWIG_Python_SetConstant(d, "TR_COLUMN_LINES",SWIG_From_int(static_cast< int >(wxTR_COLUMN_LINES)));
+  SWIG_Python_SetConstant(d, "TR_VIRTUAL",SWIG_From_int(static_cast< int >(wxTR_VIRTUAL)));
+  
+  wxPyPtrTypeMap_Add("wxTreeListCtrl", "wxPyTreeListCtrl");
+  
   SWIG_Python_SetConstant(d, "SCALE_HORIZONTAL",SWIG_From_int(static_cast< int >(wxSCALE_HORIZONTAL)));
   SWIG_Python_SetConstant(d, "SCALE_VERTICAL",SWIG_From_int(static_cast< int >(wxSCALE_VERTICAL)));
   SWIG_Python_SetConstant(d, "SCALE_UNIFORM",SWIG_From_int(static_cast< int >(wxSCALE_UNIFORM)));
   SWIG_Python_SetConstant(d, "SCALE_CUSTOM",SWIG_From_int(static_cast< int >(wxSCALE_CUSTOM)));
   
-  
   wxPyPtrTypeMap_Add("wxTreeCompanionWindow", "wxPyTreeCompanionWindow");
-  wxPyPtrTypeMap_Add("wxTreeListCtrl", "wxPyTreeListCtrl");
   
 }
 

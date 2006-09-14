@@ -296,6 +296,7 @@ class Palette(GDIObject):
         return _gdi_.Palette_Ok(*args, **kwargs)
 
     def __nonzero__(self): return self.Ok() 
+    ColoursCount = property(GetColoursCount,doc="See `GetColoursCount`") 
 _gdi_.Palette_swigregister(Palette)
 
 #---------------------------------------------------------------------------
@@ -375,6 +376,7 @@ class Pen(GDIObject):
         """GetDashCount(self) -> int"""
         return _gdi_.Pen_GetDashCount(*args, **kwargs)
 
+    DashCount = property(GetDashCount,doc="See `GetDashCount`") 
     def GetStipple(*args, **kwargs):
         """GetStipple(self) -> Bitmap"""
         return _gdi_.Pen_GetStipple(*args, **kwargs)
@@ -383,6 +385,7 @@ class Pen(GDIObject):
         """SetStipple(self, Bitmap stipple)"""
         return _gdi_.Pen_SetStipple(*args, **kwargs)
 
+    Stipple = property(GetStipple,SetStipple,doc="See `GetStipple` and `SetStipple`") 
     def __eq__(*args, **kwargs):
         """__eq__(self, Pen other) -> bool"""
         return _gdi_.Pen___eq__(*args, **kwargs)
@@ -392,6 +395,12 @@ class Pen(GDIObject):
         return _gdi_.Pen___ne__(*args, **kwargs)
 
     def __nonzero__(self): return self.Ok() 
+    Cap = property(GetCap,SetCap,doc="See `GetCap` and `SetCap`") 
+    Colour = property(GetColour,SetColour,doc="See `GetColour` and `SetColour`") 
+    Dashes = property(GetDashes,SetDashes,doc="See `GetDashes` and `SetDashes`") 
+    Join = property(GetJoin,SetJoin,doc="See `GetJoin` and `SetJoin`") 
+    Style = property(GetStyle,SetStyle,doc="See `GetStyle` and `SetStyle`") 
+    Width = property(GetWidth,SetWidth,doc="See `GetWidth` and `SetWidth`") 
 _gdi_.Pen_swigregister(Pen)
 
 #---------------------------------------------------------------------------
@@ -837,6 +846,11 @@ class PixelDataBase(object):
         """GetRowStride(self) -> int"""
         return _gdi_.PixelDataBase_GetRowStride(*args, **kwargs)
 
+    Height = property(GetHeight,doc="See `GetHeight`") 
+    Origin = property(GetOrigin,doc="See `GetOrigin`") 
+    RowStride = property(GetRowStride,doc="See `GetRowStride`") 
+    Size = property(GetSize,doc="See `GetSize`") 
+    Width = property(GetWidth,doc="See `GetWidth`") 
 _gdi_.PixelDataBase_swigregister(PixelDataBase)
 
 class NativePixelData(PixelDataBase):
@@ -1454,6 +1468,7 @@ class Region(GDIObject):
         """UnionBitmapColour(self, Bitmap bmp, Colour transColour, int tolerance=0) -> bool"""
         return _gdi_.Region_UnionBitmapColour(*args, **kwargs)
 
+    Box = property(GetBox,doc="See `GetBox`") 
 _gdi_.Region_swigregister(Region)
 
 def RegionFromBitmap(*args, **kwargs):
@@ -1524,6 +1539,13 @@ class RegionIterator(_core.Object):
         """__nonzero__(self) -> bool"""
         return _gdi_.RegionIterator___nonzero__(*args, **kwargs)
 
+    H = property(GetH,doc="See `GetH`") 
+    Height = property(GetHeight,doc="See `GetHeight`") 
+    Rect = property(GetRect,doc="See `GetRect`") 
+    W = property(GetW,doc="See `GetW`") 
+    Width = property(GetWidth,doc="See `GetWidth`") 
+    X = property(GetX,doc="See `GetX`") 
+    Y = property(GetY,doc="See `GetY`") 
 _gdi_.RegionIterator_swigregister(RegionIterator)
 
 #---------------------------------------------------------------------------
@@ -2734,6 +2756,11 @@ class Locale(object):
         """AddCatalog(self, String szDomain) -> bool"""
         return _gdi_.Locale_AddCatalog(*args, **kwargs)
 
+    def IsAvailable(*args, **kwargs):
+        """IsAvailable(int lang) -> bool"""
+        return _gdi_.Locale_IsAvailable(*args, **kwargs)
+
+    IsAvailable = staticmethod(IsAvailable)
     def IsLoaded(*args, **kwargs):
         """IsLoaded(self, String szDomain) -> bool"""
         return _gdi_.Locale_IsLoaded(*args, **kwargs)
@@ -2789,6 +2816,10 @@ def Locale_GetSystemEncodingName(*args):
 def Locale_AddCatalogLookupPathPrefix(*args, **kwargs):
   """Locale_AddCatalogLookupPathPrefix(String prefix)"""
   return _gdi_.Locale_AddCatalogLookupPathPrefix(*args, **kwargs)
+
+def Locale_IsAvailable(*args, **kwargs):
+  """Locale_IsAvailable(int lang) -> bool"""
+  return _gdi_.Locale_IsAvailable(*args, **kwargs)
 
 def Locale_GetLanguageInfo(*args, **kwargs):
   """Locale_GetLanguageInfo(int lang) -> LanguageInfo"""
@@ -4756,6 +4787,7 @@ class PostScriptDC(DC):
         return _gdi_.PostScriptDC_GetResolution(*args, **kwargs)
 
     GetResolution = staticmethod(GetResolution)
+    PrintData = property(GetPrintData,SetPrintData,doc="See `GetPrintData` and `SetPrintData`") 
 _gdi_.PostScriptDC_swigregister(PostScriptDC)
 
 def PostScriptDC_SetResolution(*args, **kwargs):
@@ -5371,6 +5403,31 @@ class SplitterRenderParams(object):
     isHotSensitive = property(_gdi_.SplitterRenderParams_isHotSensitive_get)
 _gdi_.SplitterRenderParams_swigregister(SplitterRenderParams)
 
+class HeaderButtonParams(object):
+    """Extra (optional) parameters for `wx.RendererNative.DrawHeaderButton`"""
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
+        """
+        __init__(self) -> HeaderButtonParams
+
+        Extra (optional) parameters for `wx.RendererNative.DrawHeaderButton`
+        """
+        _gdi_.HeaderButtonParams_swiginit(self,_gdi_.new_HeaderButtonParams(*args, **kwargs))
+    __swig_destroy__ = _gdi_.delete_HeaderButtonParams
+    __del__ = lambda self : None;
+    m_arrowColour = property(_gdi_.HeaderButtonParams_m_arrowColour_get, _gdi_.HeaderButtonParams_m_arrowColour_set)
+    m_selectionColour = property(_gdi_.HeaderButtonParams_m_selectionColour_get, _gdi_.HeaderButtonParams_m_selectionColour_set)
+    m_labelText = property(_gdi_.HeaderButtonParams_m_labelText_get, _gdi_.HeaderButtonParams_m_labelText_set)
+    m_labelFont = property(_gdi_.HeaderButtonParams_m_labelFont_get, _gdi_.HeaderButtonParams_m_labelFont_set)
+    m_labelColour = property(_gdi_.HeaderButtonParams_m_labelColour_get, _gdi_.HeaderButtonParams_m_labelColour_set)
+    m_labelBitmap = property(_gdi_.HeaderButtonParams_m_labelBitmap_get, _gdi_.HeaderButtonParams_m_labelBitmap_set)
+    m_labelAlignment = property(_gdi_.HeaderButtonParams_m_labelAlignment_get, _gdi_.HeaderButtonParams_m_labelAlignment_set)
+_gdi_.HeaderButtonParams_swigregister(HeaderButtonParams)
+
+HDR_SORT_ICON_NONE = _gdi_.HDR_SORT_ICON_NONE
+HDR_SORT_ICON_UP = _gdi_.HDR_SORT_ICON_UP
+HDR_SORT_ICON_DOWN = _gdi_.HDR_SORT_ICON_DOWN
 class RendererVersion(object):
     """
     This simple struct represents the `wx.RendererNative` interface
@@ -5407,11 +5464,12 @@ def RendererVersion_IsCompatible(*args, **kwargs):
 
 class RendererNative(object):
     """
-    One of the design principles of wxWidgets is to use the native widgets
-    on every platform in order to be as close to the native look and feel
-    on every platform.  However there are still cases when some generic
-    widgets are needed for various reasons, but it can sometimes take a
-    lot of messy work to make them conform to the native LnF.
+    One of the design principles of wxWidgets is to use the native
+    widgets on every platform in order to be as close as possible to
+    the native look and feel on every platform.  However there are
+    still cases when some generic widgets are needed for various
+    reasons, but it can sometimes take a lot of messy work to make
+    them conform to the native LnF.
 
     The wx.RendererNative class is a collection of functions that have
     platform-specific implementations for drawing certain parts of
@@ -5429,12 +5487,32 @@ class RendererNative(object):
     __repr__ = _swig_repr
     def DrawHeaderButton(*args, **kwargs):
         """
-        DrawHeaderButton(self, Window win, DC dc, Rect rect, int flags=0)
+        DrawHeaderButton(self, Window win, DC dc, Rect rect, int flags=0, int sortArrow=HDR_SORT_ICON_NONE, 
+            HeaderButtonParams params=None)
 
         Draw the header control button (such as what is used by `wx.ListCtrl`
         in report mode.)
         """
         return _gdi_.RendererNative_DrawHeaderButton(*args, **kwargs)
+
+    def DrawHeaderButtonContents(*args, **kwargs):
+        """
+        DrawHeaderButtonContents(self, Window win, DC dc, Rect rect, int flags=0, int sortArrow=HDR_SORT_ICON_NONE, 
+            HeaderButtonParams params=None)
+
+        Draw the contents of a header control button, (label, sort
+        arrows, etc.)  Normally this is only called by `DrawHeaderButton`.
+        """
+        return _gdi_.RendererNative_DrawHeaderButtonContents(*args, **kwargs)
+
+    def GetHeaderButtonHeight(*args, **kwargs):
+        """
+        GetHeaderButtonHeight(self, Window win) -> int
+
+        Returns the default height of a header button, either a fixed platform
+        height if available, or a generic height based on the window's font.
+        """
+        return _gdi_.RendererNative_GetHeaderButtonHeight(*args, **kwargs)
 
     def DrawTreeItemButton(*args, **kwargs):
         """
@@ -5586,6 +5664,8 @@ class RendererNative(object):
         """
         return _gdi_.RendererNative_GetVersion(*args, **kwargs)
 
+    SplitterParams = property(GetSplitterParams,doc="See `GetSplitterParams`") 
+    Version = property(GetVersion,doc="See `GetVersion`") 
 _gdi_.RendererNative_swigregister(RendererNative)
 
 def RendererNative_Get(*args):
@@ -6365,6 +6445,8 @@ class PseudoDC(_core.Object):
         """
         return _gdi_.PseudoDC_SetLogicalFunction(*args, **kwargs)
 
+    IdBounds = property(GetIdBounds,SetIdBounds,doc="See `GetIdBounds` and `SetIdBounds`") 
+    Len = property(GetLen,doc="See `GetLen`") 
 _gdi_.PseudoDC_swigregister(PseudoDC)
 
 

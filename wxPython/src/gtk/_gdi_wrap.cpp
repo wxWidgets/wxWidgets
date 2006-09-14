@@ -2520,99 +2520,100 @@ SWIG_Python_MustGetPtr(PyObject *obj, swig_type_info *ty, int argnum, int flags)
 #define SWIGTYPE_p_wxGIFHandler swig_types[54]
 #define SWIGTYPE_p_wxGridBagSizer swig_types[55]
 #define SWIGTYPE_p_wxGridSizer swig_types[56]
-#define SWIGTYPE_p_wxICOHandler swig_types[57]
-#define SWIGTYPE_p_wxIcon swig_types[58]
-#define SWIGTYPE_p_wxIconBundle swig_types[59]
-#define SWIGTYPE_p_wxIconLocation swig_types[60]
-#define SWIGTYPE_p_wxIconizeEvent swig_types[61]
-#define SWIGTYPE_p_wxIdleEvent swig_types[62]
-#define SWIGTYPE_p_wxImage swig_types[63]
-#define SWIGTYPE_p_wxImageHandler swig_types[64]
-#define SWIGTYPE_p_wxImageList swig_types[65]
-#define SWIGTYPE_p_wxIndividualLayoutConstraint swig_types[66]
-#define SWIGTYPE_p_wxInitDialogEvent swig_types[67]
-#define SWIGTYPE_p_wxJPEGHandler swig_types[68]
-#define SWIGTYPE_p_wxKeyEvent swig_types[69]
-#define SWIGTYPE_p_wxLanguageInfo swig_types[70]
-#define SWIGTYPE_p_wxLayoutConstraints swig_types[71]
-#define SWIGTYPE_p_wxLocale swig_types[72]
-#define SWIGTYPE_p_wxMask swig_types[73]
-#define SWIGTYPE_p_wxMaximizeEvent swig_types[74]
-#define SWIGTYPE_p_wxMemoryDC swig_types[75]
-#define SWIGTYPE_p_wxMenu swig_types[76]
-#define SWIGTYPE_p_wxMenuBar swig_types[77]
-#define SWIGTYPE_p_wxMenuEvent swig_types[78]
-#define SWIGTYPE_p_wxMenuItem swig_types[79]
-#define SWIGTYPE_p_wxMetaFile swig_types[80]
-#define SWIGTYPE_p_wxMetaFileDC swig_types[81]
-#define SWIGTYPE_p_wxMirrorDC swig_types[82]
-#define SWIGTYPE_p_wxMouseCaptureChangedEvent swig_types[83]
-#define SWIGTYPE_p_wxMouseCaptureLostEvent swig_types[84]
-#define SWIGTYPE_p_wxMouseEvent swig_types[85]
-#define SWIGTYPE_p_wxMoveEvent swig_types[86]
-#define SWIGTYPE_p_wxNativeEncodingInfo swig_types[87]
-#define SWIGTYPE_p_wxNativeFontInfo swig_types[88]
-#define SWIGTYPE_p_wxNativePixelData swig_types[89]
-#define SWIGTYPE_p_wxNativePixelData_Accessor swig_types[90]
-#define SWIGTYPE_p_wxNavigationKeyEvent swig_types[91]
-#define SWIGTYPE_p_wxNcPaintEvent swig_types[92]
-#define SWIGTYPE_p_wxNotifyEvent swig_types[93]
-#define SWIGTYPE_p_wxObject swig_types[94]
-#define SWIGTYPE_p_wxPCXHandler swig_types[95]
-#define SWIGTYPE_p_wxPNGHandler swig_types[96]
-#define SWIGTYPE_p_wxPNMHandler swig_types[97]
-#define SWIGTYPE_p_wxPaintDC swig_types[98]
-#define SWIGTYPE_p_wxPaintEvent swig_types[99]
-#define SWIGTYPE_p_wxPalette swig_types[100]
-#define SWIGTYPE_p_wxPaletteChangedEvent swig_types[101]
-#define SWIGTYPE_p_wxPaperSize swig_types[102]
-#define SWIGTYPE_p_wxPen swig_types[103]
-#define SWIGTYPE_p_wxPenList swig_types[104]
-#define SWIGTYPE_p_wxPixelDataBase swig_types[105]
-#define SWIGTYPE_p_wxPoint swig_types[106]
-#define SWIGTYPE_p_wxPostScriptDC swig_types[107]
-#define SWIGTYPE_p_wxPrintData swig_types[108]
-#define SWIGTYPE_p_wxPrinterDC swig_types[109]
-#define SWIGTYPE_p_wxPseudoDC swig_types[110]
-#define SWIGTYPE_p_wxPyApp swig_types[111]
-#define SWIGTYPE_p_wxPyCommandEvent swig_types[112]
-#define SWIGTYPE_p_wxPyEvent swig_types[113]
-#define SWIGTYPE_p_wxPyFontEnumerator swig_types[114]
-#define SWIGTYPE_p_wxPyImageHandler swig_types[115]
-#define SWIGTYPE_p_wxPyLocale swig_types[116]
-#define SWIGTYPE_p_wxPySizer swig_types[117]
-#define SWIGTYPE_p_wxPyValidator swig_types[118]
-#define SWIGTYPE_p_wxQueryNewPaletteEvent swig_types[119]
-#define SWIGTYPE_p_wxRect swig_types[120]
-#define SWIGTYPE_p_wxRegion swig_types[121]
-#define SWIGTYPE_p_wxRegionIterator swig_types[122]
-#define SWIGTYPE_p_wxRendererNative swig_types[123]
-#define SWIGTYPE_p_wxRendererVersion swig_types[124]
-#define SWIGTYPE_p_wxScreenDC swig_types[125]
-#define SWIGTYPE_p_wxScrollEvent swig_types[126]
-#define SWIGTYPE_p_wxScrollWinEvent swig_types[127]
-#define SWIGTYPE_p_wxSetCursorEvent swig_types[128]
-#define SWIGTYPE_p_wxShowEvent swig_types[129]
-#define SWIGTYPE_p_wxSize swig_types[130]
-#define SWIGTYPE_p_wxSizeEvent swig_types[131]
-#define SWIGTYPE_p_wxSizer swig_types[132]
-#define SWIGTYPE_p_wxSizerItem swig_types[133]
-#define SWIGTYPE_p_wxSplitterRenderParams swig_types[134]
-#define SWIGTYPE_p_wxStaticBoxSizer swig_types[135]
-#define SWIGTYPE_p_wxStdDialogButtonSizer swig_types[136]
-#define SWIGTYPE_p_wxStockGDI swig_types[137]
-#define SWIGTYPE_p_wxString swig_types[138]
-#define SWIGTYPE_p_wxSysColourChangedEvent swig_types[139]
-#define SWIGTYPE_p_wxTIFFHandler swig_types[140]
-#define SWIGTYPE_p_wxUpdateUIEvent swig_types[141]
-#define SWIGTYPE_p_wxValidator swig_types[142]
-#define SWIGTYPE_p_wxWindow swig_types[143]
-#define SWIGTYPE_p_wxWindowCreateEvent swig_types[144]
-#define SWIGTYPE_p_wxWindowDC swig_types[145]
-#define SWIGTYPE_p_wxWindowDestroyEvent swig_types[146]
-#define SWIGTYPE_p_wxXPMHandler swig_types[147]
-static swig_type_info *swig_types[149];
-static swig_module_info swig_module = {swig_types, 148, 0, 0, 0, 0};
+#define SWIGTYPE_p_wxHeaderButtonParams swig_types[57]
+#define SWIGTYPE_p_wxICOHandler swig_types[58]
+#define SWIGTYPE_p_wxIcon swig_types[59]
+#define SWIGTYPE_p_wxIconBundle swig_types[60]
+#define SWIGTYPE_p_wxIconLocation swig_types[61]
+#define SWIGTYPE_p_wxIconizeEvent swig_types[62]
+#define SWIGTYPE_p_wxIdleEvent swig_types[63]
+#define SWIGTYPE_p_wxImage swig_types[64]
+#define SWIGTYPE_p_wxImageHandler swig_types[65]
+#define SWIGTYPE_p_wxImageList swig_types[66]
+#define SWIGTYPE_p_wxIndividualLayoutConstraint swig_types[67]
+#define SWIGTYPE_p_wxInitDialogEvent swig_types[68]
+#define SWIGTYPE_p_wxJPEGHandler swig_types[69]
+#define SWIGTYPE_p_wxKeyEvent swig_types[70]
+#define SWIGTYPE_p_wxLanguageInfo swig_types[71]
+#define SWIGTYPE_p_wxLayoutConstraints swig_types[72]
+#define SWIGTYPE_p_wxLocale swig_types[73]
+#define SWIGTYPE_p_wxMask swig_types[74]
+#define SWIGTYPE_p_wxMaximizeEvent swig_types[75]
+#define SWIGTYPE_p_wxMemoryDC swig_types[76]
+#define SWIGTYPE_p_wxMenu swig_types[77]
+#define SWIGTYPE_p_wxMenuBar swig_types[78]
+#define SWIGTYPE_p_wxMenuEvent swig_types[79]
+#define SWIGTYPE_p_wxMenuItem swig_types[80]
+#define SWIGTYPE_p_wxMetaFile swig_types[81]
+#define SWIGTYPE_p_wxMetaFileDC swig_types[82]
+#define SWIGTYPE_p_wxMirrorDC swig_types[83]
+#define SWIGTYPE_p_wxMouseCaptureChangedEvent swig_types[84]
+#define SWIGTYPE_p_wxMouseCaptureLostEvent swig_types[85]
+#define SWIGTYPE_p_wxMouseEvent swig_types[86]
+#define SWIGTYPE_p_wxMoveEvent swig_types[87]
+#define SWIGTYPE_p_wxNativeEncodingInfo swig_types[88]
+#define SWIGTYPE_p_wxNativeFontInfo swig_types[89]
+#define SWIGTYPE_p_wxNativePixelData swig_types[90]
+#define SWIGTYPE_p_wxNativePixelData_Accessor swig_types[91]
+#define SWIGTYPE_p_wxNavigationKeyEvent swig_types[92]
+#define SWIGTYPE_p_wxNcPaintEvent swig_types[93]
+#define SWIGTYPE_p_wxNotifyEvent swig_types[94]
+#define SWIGTYPE_p_wxObject swig_types[95]
+#define SWIGTYPE_p_wxPCXHandler swig_types[96]
+#define SWIGTYPE_p_wxPNGHandler swig_types[97]
+#define SWIGTYPE_p_wxPNMHandler swig_types[98]
+#define SWIGTYPE_p_wxPaintDC swig_types[99]
+#define SWIGTYPE_p_wxPaintEvent swig_types[100]
+#define SWIGTYPE_p_wxPalette swig_types[101]
+#define SWIGTYPE_p_wxPaletteChangedEvent swig_types[102]
+#define SWIGTYPE_p_wxPaperSize swig_types[103]
+#define SWIGTYPE_p_wxPen swig_types[104]
+#define SWIGTYPE_p_wxPenList swig_types[105]
+#define SWIGTYPE_p_wxPixelDataBase swig_types[106]
+#define SWIGTYPE_p_wxPoint swig_types[107]
+#define SWIGTYPE_p_wxPostScriptDC swig_types[108]
+#define SWIGTYPE_p_wxPrintData swig_types[109]
+#define SWIGTYPE_p_wxPrinterDC swig_types[110]
+#define SWIGTYPE_p_wxPseudoDC swig_types[111]
+#define SWIGTYPE_p_wxPyApp swig_types[112]
+#define SWIGTYPE_p_wxPyCommandEvent swig_types[113]
+#define SWIGTYPE_p_wxPyEvent swig_types[114]
+#define SWIGTYPE_p_wxPyFontEnumerator swig_types[115]
+#define SWIGTYPE_p_wxPyImageHandler swig_types[116]
+#define SWIGTYPE_p_wxPyLocale swig_types[117]
+#define SWIGTYPE_p_wxPySizer swig_types[118]
+#define SWIGTYPE_p_wxPyValidator swig_types[119]
+#define SWIGTYPE_p_wxQueryNewPaletteEvent swig_types[120]
+#define SWIGTYPE_p_wxRect swig_types[121]
+#define SWIGTYPE_p_wxRegion swig_types[122]
+#define SWIGTYPE_p_wxRegionIterator swig_types[123]
+#define SWIGTYPE_p_wxRendererNative swig_types[124]
+#define SWIGTYPE_p_wxRendererVersion swig_types[125]
+#define SWIGTYPE_p_wxScreenDC swig_types[126]
+#define SWIGTYPE_p_wxScrollEvent swig_types[127]
+#define SWIGTYPE_p_wxScrollWinEvent swig_types[128]
+#define SWIGTYPE_p_wxSetCursorEvent swig_types[129]
+#define SWIGTYPE_p_wxShowEvent swig_types[130]
+#define SWIGTYPE_p_wxSize swig_types[131]
+#define SWIGTYPE_p_wxSizeEvent swig_types[132]
+#define SWIGTYPE_p_wxSizer swig_types[133]
+#define SWIGTYPE_p_wxSizerItem swig_types[134]
+#define SWIGTYPE_p_wxSplitterRenderParams swig_types[135]
+#define SWIGTYPE_p_wxStaticBoxSizer swig_types[136]
+#define SWIGTYPE_p_wxStdDialogButtonSizer swig_types[137]
+#define SWIGTYPE_p_wxStockGDI swig_types[138]
+#define SWIGTYPE_p_wxString swig_types[139]
+#define SWIGTYPE_p_wxSysColourChangedEvent swig_types[140]
+#define SWIGTYPE_p_wxTIFFHandler swig_types[141]
+#define SWIGTYPE_p_wxUpdateUIEvent swig_types[142]
+#define SWIGTYPE_p_wxValidator swig_types[143]
+#define SWIGTYPE_p_wxWindow swig_types[144]
+#define SWIGTYPE_p_wxWindowCreateEvent swig_types[145]
+#define SWIGTYPE_p_wxWindowDC swig_types[146]
+#define SWIGTYPE_p_wxWindowDestroyEvent swig_types[147]
+#define SWIGTYPE_p_wxXPMHandler swig_types[148]
+static swig_type_info *swig_types[150];
+static swig_module_info swig_module = {swig_types, 149, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -15874,6 +15875,38 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_Locale_IsAvailable(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  int arg1 ;
+  bool result;
+  int val1 ;
+  int ecode1 = 0 ;
+  PyObject * obj0 = 0 ;
+  char *  kwnames[] = {
+    (char *) "lang", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:Locale_IsAvailable",kwnames,&obj0)) SWIG_fail;
+  ecode1 = SWIG_AsVal_int(obj0, &val1);
+  if (!SWIG_IsOK(ecode1)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "Locale_IsAvailable" "', expected argument " "1"" of type '" "int""'");
+  } 
+  arg1 = static_cast< int >(val1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = (bool)wxLocale::IsAvailable(arg1);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  {
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+  }
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_Locale_IsLoaded(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   wxLocale *arg1 = (wxLocale *) 0 ;
@@ -26421,6 +26454,441 @@ SWIGINTERN PyObject *SplitterRenderParams_swiginit(PyObject *SWIGUNUSEDPARM(self
   return SWIG_Python_InitShadowInstance(args);
 }
 
+SWIGINTERN PyObject *_wrap_new_HeaderButtonParams(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxHeaderButtonParams *result = 0 ;
+  
+  if (!SWIG_Python_UnpackTuple(args,"new_HeaderButtonParams",0,0,0)) SWIG_fail;
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = (wxHeaderButtonParams *)new wxHeaderButtonParams();
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_wxHeaderButtonParams, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_delete_HeaderButtonParams(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxHeaderButtonParams *arg1 = (wxHeaderButtonParams *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxHeaderButtonParams, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_HeaderButtonParams" "', expected argument " "1"" of type '" "wxHeaderButtonParams *""'"); 
+  }
+  arg1 = reinterpret_cast< wxHeaderButtonParams * >(argp1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    delete arg1;
+    
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_HeaderButtonParams_m_arrowColour_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxHeaderButtonParams *arg1 = (wxHeaderButtonParams *) 0 ;
+  wxColour *arg2 = (wxColour *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  wxColour temp2 ;
+  PyObject *swig_obj[2] ;
+  
+  if (!SWIG_Python_UnpackTuple(args,"HeaderButtonParams_m_arrowColour_set",2,2,swig_obj)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxHeaderButtonParams, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "HeaderButtonParams_m_arrowColour_set" "', expected argument " "1"" of type '" "wxHeaderButtonParams *""'"); 
+  }
+  arg1 = reinterpret_cast< wxHeaderButtonParams * >(argp1);
+  {
+    arg2 = &temp2;
+    if ( ! wxColour_helper(swig_obj[1], &arg2)) SWIG_fail;
+  }
+  if (arg1) (arg1)->m_arrowColour = *arg2;
+  
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_HeaderButtonParams_m_arrowColour_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxHeaderButtonParams *arg1 = (wxHeaderButtonParams *) 0 ;
+  wxColour *result = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxHeaderButtonParams, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "HeaderButtonParams_m_arrowColour_get" "', expected argument " "1"" of type '" "wxHeaderButtonParams *""'"); 
+  }
+  arg1 = reinterpret_cast< wxHeaderButtonParams * >(argp1);
+  result = (wxColour *)& ((arg1)->m_arrowColour);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_wxColour, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_HeaderButtonParams_m_selectionColour_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxHeaderButtonParams *arg1 = (wxHeaderButtonParams *) 0 ;
+  wxColour *arg2 = (wxColour *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  wxColour temp2 ;
+  PyObject *swig_obj[2] ;
+  
+  if (!SWIG_Python_UnpackTuple(args,"HeaderButtonParams_m_selectionColour_set",2,2,swig_obj)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxHeaderButtonParams, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "HeaderButtonParams_m_selectionColour_set" "', expected argument " "1"" of type '" "wxHeaderButtonParams *""'"); 
+  }
+  arg1 = reinterpret_cast< wxHeaderButtonParams * >(argp1);
+  {
+    arg2 = &temp2;
+    if ( ! wxColour_helper(swig_obj[1], &arg2)) SWIG_fail;
+  }
+  if (arg1) (arg1)->m_selectionColour = *arg2;
+  
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_HeaderButtonParams_m_selectionColour_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxHeaderButtonParams *arg1 = (wxHeaderButtonParams *) 0 ;
+  wxColour *result = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxHeaderButtonParams, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "HeaderButtonParams_m_selectionColour_get" "', expected argument " "1"" of type '" "wxHeaderButtonParams *""'"); 
+  }
+  arg1 = reinterpret_cast< wxHeaderButtonParams * >(argp1);
+  result = (wxColour *)& ((arg1)->m_selectionColour);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_wxColour, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_HeaderButtonParams_m_labelText_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxHeaderButtonParams *arg1 = (wxHeaderButtonParams *) 0 ;
+  wxString *arg2 = (wxString *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  bool temp2 = false ;
+  PyObject *swig_obj[2] ;
+  
+  if (!SWIG_Python_UnpackTuple(args,"HeaderButtonParams_m_labelText_set",2,2,swig_obj)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxHeaderButtonParams, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "HeaderButtonParams_m_labelText_set" "', expected argument " "1"" of type '" "wxHeaderButtonParams *""'"); 
+  }
+  arg1 = reinterpret_cast< wxHeaderButtonParams * >(argp1);
+  {
+    arg2 = wxString_in_helper(swig_obj[1]);
+    if (arg2 == NULL) SWIG_fail;
+    temp2 = true;
+  }
+  if (arg1) (arg1)->m_labelText = *arg2;
+  
+  resultobj = SWIG_Py_Void();
+  {
+    if (temp2)
+    delete arg2;
+  }
+  return resultobj;
+fail:
+  {
+    if (temp2)
+    delete arg2;
+  }
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_HeaderButtonParams_m_labelText_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxHeaderButtonParams *arg1 = (wxHeaderButtonParams *) 0 ;
+  wxString *result = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxHeaderButtonParams, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "HeaderButtonParams_m_labelText_get" "', expected argument " "1"" of type '" "wxHeaderButtonParams *""'"); 
+  }
+  arg1 = reinterpret_cast< wxHeaderButtonParams * >(argp1);
+  result = (wxString *)& ((arg1)->m_labelText);
+  {
+#if wxUSE_UNICODE
+    resultobj = PyUnicode_FromWideChar(result->c_str(), result->Len());
+#else
+    resultobj = PyString_FromStringAndSize(result->c_str(), result->Len());
+#endif
+  }
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_HeaderButtonParams_m_labelFont_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxHeaderButtonParams *arg1 = (wxHeaderButtonParams *) 0 ;
+  wxFont *arg2 = (wxFont *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject *swig_obj[2] ;
+  
+  if (!SWIG_Python_UnpackTuple(args,"HeaderButtonParams_m_labelFont_set",2,2,swig_obj)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxHeaderButtonParams, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "HeaderButtonParams_m_labelFont_set" "', expected argument " "1"" of type '" "wxHeaderButtonParams *""'"); 
+  }
+  arg1 = reinterpret_cast< wxHeaderButtonParams * >(argp1);
+  res2 = SWIG_ConvertPtr(swig_obj[1], &argp2,SWIGTYPE_p_wxFont, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "HeaderButtonParams_m_labelFont_set" "', expected argument " "2"" of type '" "wxFont *""'"); 
+  }
+  arg2 = reinterpret_cast< wxFont * >(argp2);
+  if (arg1) (arg1)->m_labelFont = *arg2;
+  
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_HeaderButtonParams_m_labelFont_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxHeaderButtonParams *arg1 = (wxHeaderButtonParams *) 0 ;
+  wxFont *result = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxHeaderButtonParams, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "HeaderButtonParams_m_labelFont_get" "', expected argument " "1"" of type '" "wxHeaderButtonParams *""'"); 
+  }
+  arg1 = reinterpret_cast< wxHeaderButtonParams * >(argp1);
+  result = (wxFont *)& ((arg1)->m_labelFont);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_wxFont, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_HeaderButtonParams_m_labelColour_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxHeaderButtonParams *arg1 = (wxHeaderButtonParams *) 0 ;
+  wxColour *arg2 = (wxColour *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  wxColour temp2 ;
+  PyObject *swig_obj[2] ;
+  
+  if (!SWIG_Python_UnpackTuple(args,"HeaderButtonParams_m_labelColour_set",2,2,swig_obj)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxHeaderButtonParams, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "HeaderButtonParams_m_labelColour_set" "', expected argument " "1"" of type '" "wxHeaderButtonParams *""'"); 
+  }
+  arg1 = reinterpret_cast< wxHeaderButtonParams * >(argp1);
+  {
+    arg2 = &temp2;
+    if ( ! wxColour_helper(swig_obj[1], &arg2)) SWIG_fail;
+  }
+  if (arg1) (arg1)->m_labelColour = *arg2;
+  
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_HeaderButtonParams_m_labelColour_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxHeaderButtonParams *arg1 = (wxHeaderButtonParams *) 0 ;
+  wxColour *result = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxHeaderButtonParams, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "HeaderButtonParams_m_labelColour_get" "', expected argument " "1"" of type '" "wxHeaderButtonParams *""'"); 
+  }
+  arg1 = reinterpret_cast< wxHeaderButtonParams * >(argp1);
+  result = (wxColour *)& ((arg1)->m_labelColour);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_wxColour, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_HeaderButtonParams_m_labelBitmap_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxHeaderButtonParams *arg1 = (wxHeaderButtonParams *) 0 ;
+  wxBitmap *arg2 = (wxBitmap *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject *swig_obj[2] ;
+  
+  if (!SWIG_Python_UnpackTuple(args,"HeaderButtonParams_m_labelBitmap_set",2,2,swig_obj)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxHeaderButtonParams, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "HeaderButtonParams_m_labelBitmap_set" "', expected argument " "1"" of type '" "wxHeaderButtonParams *""'"); 
+  }
+  arg1 = reinterpret_cast< wxHeaderButtonParams * >(argp1);
+  res2 = SWIG_ConvertPtr(swig_obj[1], &argp2,SWIGTYPE_p_wxBitmap, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "HeaderButtonParams_m_labelBitmap_set" "', expected argument " "2"" of type '" "wxBitmap *""'"); 
+  }
+  arg2 = reinterpret_cast< wxBitmap * >(argp2);
+  if (arg1) (arg1)->m_labelBitmap = *arg2;
+  
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_HeaderButtonParams_m_labelBitmap_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxHeaderButtonParams *arg1 = (wxHeaderButtonParams *) 0 ;
+  wxBitmap *result = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxHeaderButtonParams, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "HeaderButtonParams_m_labelBitmap_get" "', expected argument " "1"" of type '" "wxHeaderButtonParams *""'"); 
+  }
+  arg1 = reinterpret_cast< wxHeaderButtonParams * >(argp1);
+  result = (wxBitmap *)& ((arg1)->m_labelBitmap);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_wxBitmap, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_HeaderButtonParams_m_labelAlignment_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxHeaderButtonParams *arg1 = (wxHeaderButtonParams *) 0 ;
+  int arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  PyObject *swig_obj[2] ;
+  
+  if (!SWIG_Python_UnpackTuple(args,"HeaderButtonParams_m_labelAlignment_set",2,2,swig_obj)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxHeaderButtonParams, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "HeaderButtonParams_m_labelAlignment_set" "', expected argument " "1"" of type '" "wxHeaderButtonParams *""'"); 
+  }
+  arg1 = reinterpret_cast< wxHeaderButtonParams * >(argp1);
+  ecode2 = SWIG_AsVal_int(swig_obj[1], &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "HeaderButtonParams_m_labelAlignment_set" "', expected argument " "2"" of type '" "int""'");
+  } 
+  arg2 = static_cast< int >(val2);
+  if (arg1) (arg1)->m_labelAlignment = arg2;
+  
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_HeaderButtonParams_m_labelAlignment_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxHeaderButtonParams *arg1 = (wxHeaderButtonParams *) 0 ;
+  int result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxHeaderButtonParams, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "HeaderButtonParams_m_labelAlignment_get" "', expected argument " "1"" of type '" "wxHeaderButtonParams *""'"); 
+  }
+  arg1 = reinterpret_cast< wxHeaderButtonParams * >(argp1);
+  result = (int) ((arg1)->m_labelAlignment);
+  resultobj = SWIG_From_int(static_cast< int >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *HeaderButtonParams_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *obj;
+  if (!SWIG_Python_UnpackTuple(args,(char*)"swigregister", 1, 1,&obj)) return NULL;
+  SWIG_TypeNewClientData(SWIGTYPE_p_wxHeaderButtonParams, SWIG_NewClientData(obj));
+  return SWIG_Py_Void();
+}
+
+SWIGINTERN PyObject *HeaderButtonParams_swiginit(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  return SWIG_Python_InitShadowInstance(args);
+}
+
 SWIGINTERN PyObject *_wrap_new_RendererVersion(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   int arg1 ;
@@ -26587,6 +27055,8 @@ SWIGINTERN PyObject *_wrap_RendererNative_DrawHeaderButton(PyObject *SWIGUNUSEDP
   wxDC *arg3 = 0 ;
   wxRect *arg4 = 0 ;
   int arg5 = (int) 0 ;
+  wxHeaderSortIconType arg6 = (wxHeaderSortIconType) wxHDR_SORT_ICON_NONE ;
+  wxHeaderButtonParams *arg7 = (wxHeaderButtonParams *) NULL ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   void *argp2 = 0 ;
@@ -26596,16 +27066,22 @@ SWIGINTERN PyObject *_wrap_RendererNative_DrawHeaderButton(PyObject *SWIGUNUSEDP
   wxRect temp4 ;
   int val5 ;
   int ecode5 = 0 ;
+  int val6 ;
+  int ecode6 = 0 ;
+  void *argp7 = 0 ;
+  int res7 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
   PyObject * obj3 = 0 ;
   PyObject * obj4 = 0 ;
+  PyObject * obj5 = 0 ;
+  PyObject * obj6 = 0 ;
   char *  kwnames[] = {
-    (char *) "self",(char *) "win",(char *) "dc",(char *) "rect",(char *) "flags", NULL 
+    (char *) "self",(char *) "win",(char *) "dc",(char *) "rect",(char *) "flags",(char *) "sortArrow",(char *) "params", NULL 
   };
   
-  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOO|O:RendererNative_DrawHeaderButton",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4)) SWIG_fail;
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOO|OOO:RendererNative_DrawHeaderButton",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxRendererNative, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "RendererNative_DrawHeaderButton" "', expected argument " "1"" of type '" "wxRendererNative *""'"); 
@@ -26635,13 +27111,156 @@ SWIGINTERN PyObject *_wrap_RendererNative_DrawHeaderButton(PyObject *SWIGUNUSEDP
     } 
     arg5 = static_cast< int >(val5);
   }
+  if (obj5) {
+    ecode6 = SWIG_AsVal_int(obj5, &val6);
+    if (!SWIG_IsOK(ecode6)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode6), "in method '" "RendererNative_DrawHeaderButton" "', expected argument " "6"" of type '" "wxHeaderSortIconType""'");
+    } 
+    arg6 = static_cast< wxHeaderSortIconType >(val6);
+  }
+  if (obj6) {
+    res7 = SWIG_ConvertPtr(obj6, &argp7,SWIGTYPE_p_wxHeaderButtonParams, 0 |  0 );
+    if (!SWIG_IsOK(res7)) {
+      SWIG_exception_fail(SWIG_ArgError(res7), "in method '" "RendererNative_DrawHeaderButton" "', expected argument " "7"" of type '" "wxHeaderButtonParams *""'"); 
+    }
+    arg7 = reinterpret_cast< wxHeaderButtonParams * >(argp7);
+  }
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    (arg1)->DrawHeaderButton(arg2,*arg3,(wxRect const &)*arg4,arg5);
+    (arg1)->DrawHeaderButton(arg2,*arg3,(wxRect const &)*arg4,arg5,arg6,arg7);
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
   resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_RendererNative_DrawHeaderButtonContents(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxRendererNative *arg1 = (wxRendererNative *) 0 ;
+  wxWindow *arg2 = (wxWindow *) 0 ;
+  wxDC *arg3 = 0 ;
+  wxRect *arg4 = 0 ;
+  int arg5 = (int) 0 ;
+  wxHeaderSortIconType arg6 = (wxHeaderSortIconType) wxHDR_SORT_ICON_NONE ;
+  wxHeaderButtonParams *arg7 = (wxHeaderButtonParams *) NULL ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  wxRect temp4 ;
+  int val5 ;
+  int ecode5 = 0 ;
+  int val6 ;
+  int ecode6 = 0 ;
+  void *argp7 = 0 ;
+  int res7 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  PyObject * obj4 = 0 ;
+  PyObject * obj5 = 0 ;
+  PyObject * obj6 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "win",(char *) "dc",(char *) "rect",(char *) "flags",(char *) "sortArrow",(char *) "params", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOO|OOO:RendererNative_DrawHeaderButtonContents",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxRendererNative, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "RendererNative_DrawHeaderButtonContents" "', expected argument " "1"" of type '" "wxRendererNative *""'"); 
+  }
+  arg1 = reinterpret_cast< wxRendererNative * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_wxWindow, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "RendererNative_DrawHeaderButtonContents" "', expected argument " "2"" of type '" "wxWindow *""'"); 
+  }
+  arg2 = reinterpret_cast< wxWindow * >(argp2);
+  res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_wxDC,  0 );
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "RendererNative_DrawHeaderButtonContents" "', expected argument " "3"" of type '" "wxDC &""'"); 
+  }
+  if (!argp3) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "RendererNative_DrawHeaderButtonContents" "', expected argument " "3"" of type '" "wxDC &""'"); 
+  }
+  arg3 = reinterpret_cast< wxDC * >(argp3);
+  {
+    arg4 = &temp4;
+    if ( ! wxRect_helper(obj3, &arg4)) SWIG_fail;
+  }
+  if (obj4) {
+    ecode5 = SWIG_AsVal_int(obj4, &val5);
+    if (!SWIG_IsOK(ecode5)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "RendererNative_DrawHeaderButtonContents" "', expected argument " "5"" of type '" "int""'");
+    } 
+    arg5 = static_cast< int >(val5);
+  }
+  if (obj5) {
+    ecode6 = SWIG_AsVal_int(obj5, &val6);
+    if (!SWIG_IsOK(ecode6)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode6), "in method '" "RendererNative_DrawHeaderButtonContents" "', expected argument " "6"" of type '" "wxHeaderSortIconType""'");
+    } 
+    arg6 = static_cast< wxHeaderSortIconType >(val6);
+  }
+  if (obj6) {
+    res7 = SWIG_ConvertPtr(obj6, &argp7,SWIGTYPE_p_wxHeaderButtonParams, 0 |  0 );
+    if (!SWIG_IsOK(res7)) {
+      SWIG_exception_fail(SWIG_ArgError(res7), "in method '" "RendererNative_DrawHeaderButtonContents" "', expected argument " "7"" of type '" "wxHeaderButtonParams *""'"); 
+    }
+    arg7 = reinterpret_cast< wxHeaderButtonParams * >(argp7);
+  }
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    (arg1)->DrawHeaderButtonContents(arg2,*arg3,(wxRect const &)*arg4,arg5,arg6,arg7);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_RendererNative_GetHeaderButtonHeight(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxRendererNative *arg1 = (wxRendererNative *) 0 ;
+  wxWindow *arg2 = (wxWindow *) 0 ;
+  int result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "win", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:RendererNative_GetHeaderButtonHeight",kwnames,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxRendererNative, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "RendererNative_GetHeaderButtonHeight" "', expected argument " "1"" of type '" "wxRendererNative *""'"); 
+  }
+  arg1 = reinterpret_cast< wxRendererNative * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_wxWindow, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "RendererNative_GetHeaderButtonHeight" "', expected argument " "2"" of type '" "wxWindow *""'"); 
+  }
+  arg2 = reinterpret_cast< wxWindow * >(argp2);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = (int)(arg1)->GetHeaderButtonHeight(arg2);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_From_int(static_cast< int >(result));
   return resultobj;
 fail:
   return NULL;
@@ -30883,6 +31502,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Locale_GetCanonicalName", (PyCFunction)_wrap_Locale_GetCanonicalName, METH_O, NULL},
 	 { (char *)"Locale_AddCatalogLookupPathPrefix", (PyCFunction) _wrap_Locale_AddCatalogLookupPathPrefix, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Locale_AddCatalog", (PyCFunction) _wrap_Locale_AddCatalog, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"Locale_IsAvailable", (PyCFunction) _wrap_Locale_IsAvailable, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Locale_IsLoaded", (PyCFunction) _wrap_Locale_IsLoaded, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Locale_GetLanguageInfo", (PyCFunction) _wrap_Locale_GetLanguageInfo, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Locale_GetLanguageName", (PyCFunction) _wrap_Locale_GetLanguageName, METH_VARARGS | METH_KEYWORDS, NULL},
@@ -31162,6 +31782,24 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"SplitterRenderParams_isHotSensitive_get", (PyCFunction)_wrap_SplitterRenderParams_isHotSensitive_get, METH_O, NULL},
 	 { (char *)"SplitterRenderParams_swigregister", SplitterRenderParams_swigregister, METH_VARARGS, NULL},
 	 { (char *)"SplitterRenderParams_swiginit", SplitterRenderParams_swiginit, METH_VARARGS, NULL},
+	 { (char *)"new_HeaderButtonParams", (PyCFunction)_wrap_new_HeaderButtonParams, METH_NOARGS, NULL},
+	 { (char *)"delete_HeaderButtonParams", (PyCFunction)_wrap_delete_HeaderButtonParams, METH_O, NULL},
+	 { (char *)"HeaderButtonParams_m_arrowColour_set", _wrap_HeaderButtonParams_m_arrowColour_set, METH_VARARGS, NULL},
+	 { (char *)"HeaderButtonParams_m_arrowColour_get", (PyCFunction)_wrap_HeaderButtonParams_m_arrowColour_get, METH_O, NULL},
+	 { (char *)"HeaderButtonParams_m_selectionColour_set", _wrap_HeaderButtonParams_m_selectionColour_set, METH_VARARGS, NULL},
+	 { (char *)"HeaderButtonParams_m_selectionColour_get", (PyCFunction)_wrap_HeaderButtonParams_m_selectionColour_get, METH_O, NULL},
+	 { (char *)"HeaderButtonParams_m_labelText_set", _wrap_HeaderButtonParams_m_labelText_set, METH_VARARGS, NULL},
+	 { (char *)"HeaderButtonParams_m_labelText_get", (PyCFunction)_wrap_HeaderButtonParams_m_labelText_get, METH_O, NULL},
+	 { (char *)"HeaderButtonParams_m_labelFont_set", _wrap_HeaderButtonParams_m_labelFont_set, METH_VARARGS, NULL},
+	 { (char *)"HeaderButtonParams_m_labelFont_get", (PyCFunction)_wrap_HeaderButtonParams_m_labelFont_get, METH_O, NULL},
+	 { (char *)"HeaderButtonParams_m_labelColour_set", _wrap_HeaderButtonParams_m_labelColour_set, METH_VARARGS, NULL},
+	 { (char *)"HeaderButtonParams_m_labelColour_get", (PyCFunction)_wrap_HeaderButtonParams_m_labelColour_get, METH_O, NULL},
+	 { (char *)"HeaderButtonParams_m_labelBitmap_set", _wrap_HeaderButtonParams_m_labelBitmap_set, METH_VARARGS, NULL},
+	 { (char *)"HeaderButtonParams_m_labelBitmap_get", (PyCFunction)_wrap_HeaderButtonParams_m_labelBitmap_get, METH_O, NULL},
+	 { (char *)"HeaderButtonParams_m_labelAlignment_set", _wrap_HeaderButtonParams_m_labelAlignment_set, METH_VARARGS, NULL},
+	 { (char *)"HeaderButtonParams_m_labelAlignment_get", (PyCFunction)_wrap_HeaderButtonParams_m_labelAlignment_get, METH_O, NULL},
+	 { (char *)"HeaderButtonParams_swigregister", HeaderButtonParams_swigregister, METH_VARARGS, NULL},
+	 { (char *)"HeaderButtonParams_swiginit", HeaderButtonParams_swiginit, METH_VARARGS, NULL},
 	 { (char *)"new_RendererVersion", (PyCFunction) _wrap_new_RendererVersion, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"delete_RendererVersion", (PyCFunction)_wrap_delete_RendererVersion, METH_O, NULL},
 	 { (char *)"RendererVersion_IsCompatible", (PyCFunction) _wrap_RendererVersion_IsCompatible, METH_VARARGS | METH_KEYWORDS, NULL},
@@ -31170,6 +31808,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"RendererVersion_swigregister", RendererVersion_swigregister, METH_VARARGS, NULL},
 	 { (char *)"RendererVersion_swiginit", RendererVersion_swiginit, METH_VARARGS, NULL},
 	 { (char *)"RendererNative_DrawHeaderButton", (PyCFunction) _wrap_RendererNative_DrawHeaderButton, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"RendererNative_DrawHeaderButtonContents", (PyCFunction) _wrap_RendererNative_DrawHeaderButtonContents, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"RendererNative_GetHeaderButtonHeight", (PyCFunction) _wrap_RendererNative_GetHeaderButtonHeight, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"RendererNative_DrawTreeItemButton", (PyCFunction) _wrap_RendererNative_DrawTreeItemButton, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"RendererNative_DrawSplitterBorder", (PyCFunction) _wrap_RendererNative_DrawSplitterBorder, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"RendererNative_DrawSplitterSash", (PyCFunction) _wrap_RendererNative_DrawSplitterSash, METH_VARARGS | METH_KEYWORDS, NULL},
@@ -31701,6 +32341,7 @@ static swig_type_info _swigt__p_wxFontList = {"_p_wxFontList", "wxFontList *", 0
 static swig_type_info _swigt__p_wxFontMapper = {"_p_wxFontMapper", "wxFontMapper *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_wxGDIObjListBase = {"_p_wxGDIObjListBase", "wxGDIObjListBase *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_wxGDIObject = {"_p_wxGDIObject", "wxGDIObject *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_wxHeaderButtonParams = {"_p_wxHeaderButtonParams", "wxHeaderButtonParams *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_wxIcon = {"_p_wxIcon", "wxIcon *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_wxIconBundle = {"_p_wxIconBundle", "wxIconBundle *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_wxIconLocation = {"_p_wxIconLocation", "wxIconLocation *", 0, 0, (void*)0, 0};
@@ -31878,6 +32519,7 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_wxGIFHandler,
   &_swigt__p_wxGridBagSizer,
   &_swigt__p_wxGridSizer,
+  &_swigt__p_wxHeaderButtonParams,
   &_swigt__p_wxICOHandler,
   &_swigt__p_wxIcon,
   &_swigt__p_wxIconBundle,
@@ -32001,6 +32643,7 @@ static swig_cast_info _swigc__p_wxFontList[] = {  {&_swigt__p_wxFontList, 0, 0, 
 static swig_cast_info _swigc__p_wxFontMapper[] = {  {&_swigt__p_wxFontMapper, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxGDIObjListBase[] = {  {&_swigt__p_wxGDIObjListBase, 0, 0, 0},  {&_swigt__p_wxBrushList, _p_wxBrushListTo_p_wxGDIObjListBase, 0, 0},  {&_swigt__p_wxFontList, _p_wxFontListTo_p_wxGDIObjListBase, 0, 0},  {&_swigt__p_wxPenList, _p_wxPenListTo_p_wxGDIObjListBase, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxGDIObject[] = {  {&_swigt__p_wxIcon, _p_wxIconTo_p_wxGDIObject, 0, 0},  {&_swigt__p_wxPen, _p_wxPenTo_p_wxGDIObject, 0, 0},  {&_swigt__p_wxFont, _p_wxFontTo_p_wxGDIObject, 0, 0},  {&_swigt__p_wxPalette, _p_wxPaletteTo_p_wxGDIObject, 0, 0},  {&_swigt__p_wxGDIObject, 0, 0, 0},  {&_swigt__p_wxCursor, _p_wxCursorTo_p_wxGDIObject, 0, 0},  {&_swigt__p_wxBitmap, _p_wxBitmapTo_p_wxGDIObject, 0, 0},  {&_swigt__p_wxRegion, _p_wxRegionTo_p_wxGDIObject, 0, 0},  {&_swigt__p_wxBrush, _p_wxBrushTo_p_wxGDIObject, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_wxHeaderButtonParams[] = {  {&_swigt__p_wxHeaderButtonParams, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxIcon[] = {  {&_swigt__p_wxIcon, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxIconBundle[] = {  {&_swigt__p_wxIconBundle, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxIconLocation[] = {  {&_swigt__p_wxIconLocation, 0, 0, 0},{0, 0, 0, 0}};
@@ -32178,6 +32821,7 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_wxGIFHandler,
   _swigc__p_wxGridBagSizer,
   _swigc__p_wxGridSizer,
+  _swigc__p_wxHeaderButtonParams,
   _swigc__p_wxICOHandler,
   _swigc__p_wxIcon,
   _swigc__p_wxIconBundle,
@@ -33222,6 +33866,9 @@ SWIGEXPORT void SWIG_init(void) {
   SWIG_Python_SetConstant(d, "CONTROL_UNDETERMINED",SWIG_From_int(static_cast< int >(wxCONTROL_UNDETERMINED)));
   SWIG_Python_SetConstant(d, "CONTROL_FLAGS_MASK",SWIG_From_int(static_cast< int >(wxCONTROL_FLAGS_MASK)));
   SWIG_Python_SetConstant(d, "CONTROL_DIRTY",SWIG_From_int(static_cast< int >(wxCONTROL_DIRTY)));
+  SWIG_Python_SetConstant(d, "HDR_SORT_ICON_NONE",SWIG_From_int(static_cast< int >(wxHDR_SORT_ICON_NONE)));
+  SWIG_Python_SetConstant(d, "HDR_SORT_ICON_UP",SWIG_From_int(static_cast< int >(wxHDR_SORT_ICON_UP)));
+  SWIG_Python_SetConstant(d, "HDR_SORT_ICON_DOWN",SWIG_From_int(static_cast< int >(wxHDR_SORT_ICON_DOWN)));
   SWIG_Python_SetConstant(d, "RendererVersion_Current_Version",SWIG_From_int(static_cast< int >(wxRendererVersion::Current_Version)));
   SWIG_Python_SetConstant(d, "RendererVersion_Current_Age",SWIG_From_int(static_cast< int >(wxRendererVersion::Current_Age)));
   

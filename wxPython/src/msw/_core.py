@@ -706,6 +706,7 @@ class Object(object):
         args[0].thisown = 0
         return val
 
+    ClassName = property(GetClassName,doc="See `GetClassName`") 
 _core_.Object_swigregister(Object)
 _wxPySetDictionary = _core_._wxPySetDictionary
 cvar = _core_.cvar
@@ -1320,30 +1321,34 @@ class Rect(object):
         """
         return _core_.Rect___ne__(*args, **kwargs)
 
-    def InsideXY(*args, **kwargs):
+    def ContainsXY(*args, **kwargs):
         """
-        InsideXY(self, int x, int y) -> bool
+        ContainsXY(self, int x, int y) -> bool
 
-        Return True if the point is (not strcitly) inside the rect.
+        Return True if the point is inside the rect.
         """
-        return _core_.Rect_InsideXY(*args, **kwargs)
+        return _core_.Rect_ContainsXY(*args, **kwargs)
 
-    def Inside(*args, **kwargs):
+    def Contains(*args, **kwargs):
         """
-        Inside(self, Point pt) -> bool
+        Contains(self, Point pt) -> bool
 
-        Return True if the point is (not strcitly) inside the rect.
+        Return True if the point is inside the rect.
         """
-        return _core_.Rect_Inside(*args, **kwargs)
+        return _core_.Rect_Contains(*args, **kwargs)
 
-    def InsideRect(*args, **kwargs):
+    def ContainsRect(*args, **kwargs):
         """
-        InsideRect(self, Rect rect) -> bool
+        ContainsRect(self, Rect rect) -> bool
 
         Returns ``True`` if the given rectangle is completely inside this
         rectangle or touches its boundary.
         """
-        return _core_.Rect_InsideRect(*args, **kwargs)
+        return _core_.Rect_ContainsRect(*args, **kwargs)
+
+    Inside = wx._deprecated(Contains, "Use `Contains` instead.")
+    InsideXY = wx._deprecated(ContainsXY, "Use `ContainsXY` instead.")
+    InsideRect = wx._deprecated(ContainsRect, "Use `ContainsRect` instead.")
 
     def Intersects(*args, **kwargs):
         """
@@ -1398,6 +1403,19 @@ class Rect(object):
     __safe_for_unpickling__ = True
     def __reduce__(self):                return (wx.Rect, self.Get())
 
+    Bottom = property(GetBottom,SetBottom,doc="See `GetBottom` and `SetBottom`") 
+    BottomRight = property(GetBottomRight,SetBottomRight,doc="See `GetBottomRight` and `SetBottomRight`") 
+    Height = property(GetHeight,SetHeight,doc="See `GetHeight` and `SetHeight`") 
+    Left = property(GetLeft,SetLeft,doc="See `GetLeft` and `SetLeft`") 
+    Position = property(GetPosition,SetPosition,doc="See `GetPosition` and `SetPosition`") 
+    Right = property(GetRight,SetRight,doc="See `GetRight` and `SetRight`") 
+    Size = property(GetSize,SetSize,doc="See `GetSize` and `SetSize`") 
+    Top = property(GetTop,SetTop,doc="See `GetTop` and `SetTop`") 
+    TopLeft = property(GetTopLeft,SetTopLeft,doc="See `GetTopLeft` and `SetTopLeft`") 
+    Width = property(GetWidth,SetWidth,doc="See `GetWidth` and `SetWidth`") 
+    X = property(GetX,SetX,doc="See `GetX` and `SetX`") 
+    Y = property(GetY,SetY,doc="See `GetY` and `SetY`") 
+    Empty = property(IsEmpty,doc="See `IsEmpty`") 
 _core_.Rect_swigregister(Rect)
 
 def RectPP(*args, **kwargs):
@@ -1572,6 +1590,10 @@ class Point2D(object):
     __safe_for_unpickling__ = True
     def __reduce__(self):                return (wx.Point2D, self.Get())
 
+    Floor = property(GetFloor,doc="See `GetFloor`") 
+    Rounded = property(GetRounded,doc="See `GetRounded`") 
+    VectorAngle = property(GetVectorAngle,SetVectorAngle,doc="See `GetVectorAngle` and `SetVectorAngle`") 
+    VectorLength = property(GetVectorLength,SetVectorLength,doc="See `GetVectorLength` and `SetVectorLength`") 
 _core_.Point2D_swigregister(Point2D)
 
 def Point2DCopy(*args, **kwargs):
@@ -4230,6 +4252,8 @@ class ScrollEvent(CommandEvent):
         """SetPosition(self, int pos)"""
         return _core_.ScrollEvent_SetPosition(*args, **kwargs)
 
+    Orientation = property(GetOrientation,SetOrientation,doc="See `GetOrientation` and `SetOrientation`") 
+    Position = property(GetPosition,SetPosition,doc="See `GetPosition` and `SetPosition`") 
 _core_.ScrollEvent_swigregister(ScrollEvent)
 
 #---------------------------------------------------------------------------
@@ -4276,6 +4300,8 @@ class ScrollWinEvent(Event):
         """SetPosition(self, int pos)"""
         return _core_.ScrollWinEvent_SetPosition(*args, **kwargs)
 
+    Orientation = property(GetOrientation,SetOrientation,doc="See `GetOrientation` and `SetOrientation`") 
+    Position = property(GetPosition,SetPosition,doc="See `GetPosition` and `SetPosition`") 
 _core_.ScrollWinEvent_swigregister(ScrollWinEvent)
 
 #---------------------------------------------------------------------------
@@ -4760,6 +4786,9 @@ class SetCursorEvent(Event):
         """
         return _core_.SetCursorEvent_HasCursor(*args, **kwargs)
 
+    Cursor = property(GetCursor,SetCursor,doc="See `GetCursor` and `SetCursor`") 
+    X = property(GetX,doc="See `GetX`") 
+    Y = property(GetY,doc="See `GetY`") 
 _core_.SetCursorEvent_swigregister(SetCursorEvent)
 
 #---------------------------------------------------------------------------
@@ -5073,6 +5102,8 @@ class SizeEvent(Event):
 
     m_size = property(_core_.SizeEvent_m_size_get, _core_.SizeEvent_m_size_set)
     m_rect = property(_core_.SizeEvent_m_rect_get, _core_.SizeEvent_m_rect_set)
+    Rect = property(GetRect,SetRect,doc="See `GetRect` and `SetRect`") 
+    Size = property(GetSize,SetSize,doc="See `GetSize` and `SetSize`") 
 _core_.SizeEvent_swigregister(SizeEvent)
 
 #---------------------------------------------------------------------------
@@ -5233,9 +5264,14 @@ _core_.FocusEvent_swigregister(FocusEvent)
 
 class ChildFocusEvent(CommandEvent):
     """
-    wx.ChildFocusEvent notifies the parent that a child has received the
-    focus.  Unlike `wx.FocusEvent` it is propagated up the window
-    heirarchy.
+    A child focus event is sent to a (parent-)window when one of its child
+    windows gains focus, so that the window could restore the focus back
+    to its corresponding child if it loses it now and regains later.
+
+    Notice that child window is the direct child of the window receiving
+    the event, and so may not be the actual widget recieving focus if it
+    is further down the containment heirarchy.  Use `wx.Window.FindFocus`
+    to get the widget that is actually receiving focus.
     """
     thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
     __repr__ = _swig_repr
@@ -5250,7 +5286,8 @@ class ChildFocusEvent(CommandEvent):
         """
         GetWindow(self) -> Window
 
-        The window which has just received the focus.
+        The window, or (grand)parent of the window which has just received the
+        focus.
         """
         return _core_.ChildFocusEvent_GetWindow(*args, **kwargs)
 
@@ -5481,6 +5518,7 @@ class ShowEvent(Event):
         """GetShow(self) -> bool"""
         return _core_.ShowEvent_GetShow(*args, **kwargs)
 
+    Show = property(GetShow,SetShow,doc="See `GetShow` and `SetShow`") 
 _core_.ShowEvent_swigregister(ShowEvent)
 
 #---------------------------------------------------------------------------
@@ -6067,6 +6105,7 @@ class PaletteChangedEvent(Event):
         """GetChangedWindow(self) -> Window"""
         return _core_.PaletteChangedEvent_GetChangedWindow(*args, **kwargs)
 
+    ChangedWindow = property(GetChangedWindow,SetChangedWindow,doc="See `GetChangedWindow` and `SetChangedWindow`") 
 _core_.PaletteChangedEvent_swigregister(PaletteChangedEvent)
 
 #---------------------------------------------------------------------------
@@ -6099,6 +6138,7 @@ class QueryNewPaletteEvent(Event):
         """GetPaletteRealized(self) -> bool"""
         return _core_.QueryNewPaletteEvent_GetPaletteRealized(*args, **kwargs)
 
+    PaletteRealized = property(GetPaletteRealized,SetPaletteRealized,doc="See `GetPaletteRealized` and `SetPaletteRealized`") 
 _core_.QueryNewPaletteEvent_swigregister(QueryNewPaletteEvent)
 
 #---------------------------------------------------------------------------
@@ -6954,9 +6994,9 @@ class PyApp(EvtHandler):
         return _core_.PyApp_GetComCtl32Version(*args, **kwargs)
 
     GetComCtl32Version = staticmethod(GetComCtl32Version)
-    def DisplayAvailable(*args, **kwargs):
+    def IsDisplayAvailable(*args, **kwargs):
         """
-        DisplayAvailable() -> bool
+        IsDisplayAvailable() -> bool
 
         Tests if it is possible to create a GUI in the current environment.
         This will mean different things on the different platforms.
@@ -6973,9 +7013,20 @@ class PyApp(EvtHandler):
            * On MS Windows...
 
         """
-        return _core_.PyApp_DisplayAvailable(*args, **kwargs)
+        return _core_.PyApp_IsDisplayAvailable(*args, **kwargs)
 
-    DisplayAvailable = staticmethod(DisplayAvailable)
+    IsDisplayAvailable = staticmethod(IsDisplayAvailable)
+    AppName = property(GetAppName,SetAppName,doc="See `GetAppName` and `SetAppName`") 
+    AssertMode = property(GetAssertMode,SetAssertMode,doc="See `GetAssertMode` and `SetAssertMode`") 
+    ClassName = property(GetClassName,SetClassName,doc="See `GetClassName` and `SetClassName`") 
+    ExitOnFrameDelete = property(GetExitOnFrameDelete,SetExitOnFrameDelete,doc="See `GetExitOnFrameDelete` and `SetExitOnFrameDelete`") 
+    LayoutDirection = property(GetLayoutDirection,doc="See `GetLayoutDirection`") 
+    PrintMode = property(GetPrintMode,SetPrintMode,doc="See `GetPrintMode` and `SetPrintMode`") 
+    TopWindow = property(GetTopWindow,SetTopWindow,doc="See `GetTopWindow` and `SetTopWindow`") 
+    Traits = property(GetTraits,doc="See `GetTraits`") 
+    UseBestVisual = property(GetUseBestVisual,SetUseBestVisual,doc="See `GetUseBestVisual` and `SetUseBestVisual`") 
+    VendorName = property(GetVendorName,SetVendorName,doc="See `GetVendorName` and `SetVendorName`") 
+    Active = property(IsActive) 
 _core_.PyApp_swigregister(PyApp)
 
 def PyApp_IsMainLoopRunning(*args):
@@ -7036,9 +7087,9 @@ def PyApp_GetComCtl32Version(*args):
     """
   return _core_.PyApp_GetComCtl32Version(*args)
 
-def PyApp_DisplayAvailable(*args):
+def PyApp_IsDisplayAvailable(*args):
   """
-    PyApp_DisplayAvailable() -> bool
+    PyApp_IsDisplayAvailable() -> bool
 
     Tests if it is possible to create a GUI in the current environment.
     This will mean different things on the different platforms.
@@ -7055,7 +7106,7 @@ def PyApp_DisplayAvailable(*args):
        * On MS Windows...
 
     """
-  return _core_.PyApp_DisplayAvailable(*args)
+  return _core_.PyApp_IsDisplayAvailable(*args)
 
 #---------------------------------------------------------------------------
 
@@ -7288,7 +7339,7 @@ class App(wx.PyApp):
         wx.PyApp.__init__(self)
 
         # make sure we can create a GUI
-        if not self.DisplayAvailable():
+        if not self.IsDisplayAvailable():
             
             if wx.Platform == "__WXMAC__":
                 msg = """This program needs access to the screen.
@@ -8456,6 +8507,16 @@ class Window(EvtHandler):
         """
         return _core_.Window_IsEnabled(*args, **kwargs)
 
+    def IsShownOnScreen(*args, **kwargs):
+        """
+        IsShownOnScreen(self) -> bool
+
+        Returns ``True`` if the window is physically visible on the screen,
+        i.e. it is shown and all its parents up to the toplevel window are
+        shown as well.
+        """
+        return _core_.Window_IsShownOnScreen(*args, **kwargs)
+
     def SetWindowStyleFlag(*args, **kwargs):
         """
         SetWindowStyleFlag(self, long style)
@@ -9057,6 +9118,16 @@ class Window(EvtHandler):
         mandatory directive.
         """
         return _core_.Window_Freeze(*args, **kwargs)
+
+    def IsFrozen(*args, **kwargs):
+        """
+        IsFrozen(self) -> bool
+
+        Returns ``True`` if the window has been frozen and not thawed yet.
+
+        :see: `Freeze` and `Thaw`
+        """
+        return _core_.Window_IsFrozen(*args, **kwargs)
 
     def Thaw(*args, **kwargs):
         """
@@ -11415,6 +11486,19 @@ class SizerItem(Object):
         """
         return _core_.SizerItem_SetUserData(*args, **kwargs)
 
+    Border = property(GetBorder,SetBorder,doc="See `GetBorder` and `SetBorder`") 
+    Flag = property(GetFlag,SetFlag,doc="See `GetFlag` and `SetFlag`") 
+    MinSize = property(GetMinSize,doc="See `GetMinSize`") 
+    MinSizeWithBorder = property(GetMinSizeWithBorder,doc="See `GetMinSizeWithBorder`") 
+    Position = property(GetPosition,doc="See `GetPosition`") 
+    Proportion = property(GetProportion,SetProportion,doc="See `GetProportion` and `SetProportion`") 
+    Ratio = property(GetRatio,SetRatio,doc="See `GetRatio` and `SetRatio`") 
+    Rect = property(GetRect,doc="See `GetRect`") 
+    Size = property(GetSize,doc="See `GetSize`") 
+    Sizer = property(GetSizer,SetSizer,doc="See `GetSizer` and `SetSizer`") 
+    Spacer = property(GetSpacer,SetSpacer,doc="See `GetSpacer` and `SetSpacer`") 
+    UserData = property(GetUserData,SetUserData,doc="See `GetUserData` and `SetUserData`") 
+    Window = property(GetWindow,SetWindow,doc="See `GetWindow` and `SetWindow`") 
 _core_.SizerItem_swigregister(SizerItem)
 
 def SizerItemWindow(*args, **kwargs):
@@ -11937,6 +12021,11 @@ class Sizer(Object):
         """
         return _core_.Sizer_ShowItems(*args, **kwargs)
 
+    Children = property(GetChildren,doc="See `GetChildren`") 
+    ContainingWindow = property(GetContainingWindow,SetContainingWindow,doc="See `GetContainingWindow` and `SetContainingWindow`") 
+    MinSize = property(GetMinSize,SetMinSize,doc="See `GetMinSize` and `SetMinSize`") 
+    Position = property(GetPosition,doc="See `GetPosition`") 
+    Size = property(GetSize,doc="See `GetSize`") 
 _core_.Sizer_swigregister(Sizer)
 
 class PySizer(Sizer):
@@ -12071,6 +12160,7 @@ class StaticBoxSizer(BoxSizer):
         """
         return _core_.StaticBoxSizer_GetStaticBox(*args, **kwargs)
 
+    StaticBox = property(GetStaticBox,doc="See `GetStaticBox`") 
 _core_.StaticBoxSizer_swigregister(StaticBoxSizer)
 
 #---------------------------------------------------------------------------
@@ -12428,6 +12518,11 @@ class StdDialogButtonSizer(BoxSizer):
         """GetHelpButton(self) -> wxButton"""
         return _core_.StdDialogButtonSizer_GetHelpButton(*args, **kwargs)
 
+    AffirmativeButton = property(GetAffirmativeButton,SetAffirmativeButton,doc="See `GetAffirmativeButton` and `SetAffirmativeButton`") 
+    ApplyButton = property(GetApplyButton,doc="See `GetApplyButton`") 
+    CancelButton = property(GetCancelButton,SetCancelButton,doc="See `GetCancelButton` and `SetCancelButton`") 
+    HelpButton = property(GetHelpButton,doc="See `GetHelpButton`") 
+    NegativeButton = property(GetNegativeButton,SetNegativeButton,doc="See `GetNegativeButton` and `SetNegativeButton`") 
 _core_.StdDialogButtonSizer_swigregister(StdDialogButtonSizer)
 
 #---------------------------------------------------------------------------

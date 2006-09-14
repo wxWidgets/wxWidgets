@@ -3788,7 +3788,7 @@ SWIGINTERN wxPyApp *new_wxPyApp(){
             return wxPythonApp;
         }
 SWIGINTERN int wxPyApp_GetComCtl32Version(){ wxPyRaiseNotImplemented(); return 0; }
-SWIGINTERN bool wxPyApp_DisplayAvailable(){
+SWIGINTERN bool wxPyApp_IsDisplayAvailable(){
             return wxPyTestDisplayAvailable();
         }
 
@@ -7491,7 +7491,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_Rect_InsideXY(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+SWIGINTERN PyObject *_wrap_Rect_ContainsXY(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   wxRect *arg1 = (wxRect *) 0 ;
   int arg2 ;
@@ -7510,25 +7510,25 @@ SWIGINTERN PyObject *_wrap_Rect_InsideXY(PyObject *SWIGUNUSEDPARM(self), PyObjec
     (char *) "self",(char *) "x",(char *) "y", NULL 
   };
   
-  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:Rect_InsideXY",kwnames,&obj0,&obj1,&obj2)) SWIG_fail;
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:Rect_ContainsXY",kwnames,&obj0,&obj1,&obj2)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxRect, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Rect_InsideXY" "', expected argument " "1"" of type '" "wxRect const *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Rect_ContainsXY" "', expected argument " "1"" of type '" "wxRect const *""'"); 
   }
   arg1 = reinterpret_cast< wxRect * >(argp1);
   ecode2 = SWIG_AsVal_int(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Rect_InsideXY" "', expected argument " "2"" of type '" "int""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Rect_ContainsXY" "', expected argument " "2"" of type '" "int""'");
   } 
   arg2 = static_cast< int >(val2);
   ecode3 = SWIG_AsVal_int(obj2, &val3);
   if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "Rect_InsideXY" "', expected argument " "3"" of type '" "int""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "Rect_ContainsXY" "', expected argument " "3"" of type '" "int""'");
   } 
   arg3 = static_cast< int >(val3);
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    result = (bool)((wxRect const *)arg1)->Inside(arg2,arg3);
+    result = (bool)((wxRect const *)arg1)->Contains(arg2,arg3);
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
@@ -7541,7 +7541,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_Rect_Inside(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+SWIGINTERN PyObject *_wrap_Rect_Contains(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   wxRect *arg1 = (wxRect *) 0 ;
   wxPoint *arg2 = 0 ;
@@ -7555,10 +7555,10 @@ SWIGINTERN PyObject *_wrap_Rect_Inside(PyObject *SWIGUNUSEDPARM(self), PyObject 
     (char *) "self",(char *) "pt", NULL 
   };
   
-  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:Rect_Inside",kwnames,&obj0,&obj1)) SWIG_fail;
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:Rect_Contains",kwnames,&obj0,&obj1)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxRect, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Rect_Inside" "', expected argument " "1"" of type '" "wxRect const *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Rect_Contains" "', expected argument " "1"" of type '" "wxRect const *""'"); 
   }
   arg1 = reinterpret_cast< wxRect * >(argp1);
   {
@@ -7567,7 +7567,7 @@ SWIGINTERN PyObject *_wrap_Rect_Inside(PyObject *SWIGUNUSEDPARM(self), PyObject 
   }
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    result = (bool)((wxRect const *)arg1)->Inside((wxPoint const &)*arg2);
+    result = (bool)((wxRect const *)arg1)->Contains((wxPoint const &)*arg2);
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
@@ -7580,7 +7580,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_Rect_InsideRect(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+SWIGINTERN PyObject *_wrap_Rect_ContainsRect(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   wxRect *arg1 = (wxRect *) 0 ;
   wxRect *arg2 = 0 ;
@@ -7594,10 +7594,10 @@ SWIGINTERN PyObject *_wrap_Rect_InsideRect(PyObject *SWIGUNUSEDPARM(self), PyObj
     (char *) "self",(char *) "rect", NULL 
   };
   
-  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:Rect_InsideRect",kwnames,&obj0,&obj1)) SWIG_fail;
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:Rect_ContainsRect",kwnames,&obj0,&obj1)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxRect, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Rect_InsideRect" "', expected argument " "1"" of type '" "wxRect const *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Rect_ContainsRect" "', expected argument " "1"" of type '" "wxRect const *""'"); 
   }
   arg1 = reinterpret_cast< wxRect * >(argp1);
   {
@@ -7606,7 +7606,7 @@ SWIGINTERN PyObject *_wrap_Rect_InsideRect(PyObject *SWIGUNUSEDPARM(self), PyObj
   }
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    result = (bool)((wxRect const *)arg1)->Inside((wxRect const &)*arg2);
+    result = (bool)((wxRect const *)arg1)->Contains((wxRect const &)*arg2);
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
@@ -28628,14 +28628,14 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_PyApp_DisplayAvailable(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_PyApp_IsDisplayAvailable(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   bool result;
   
-  if (!SWIG_Python_UnpackTuple(args,"PyApp_DisplayAvailable",0,0,0)) SWIG_fail;
+  if (!SWIG_Python_UnpackTuple(args,"PyApp_IsDisplayAvailable",0,0,0)) SWIG_fail;
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    result = (bool)wxPyApp_DisplayAvailable();
+    result = (bool)wxPyApp_IsDisplayAvailable();
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
@@ -33006,6 +33006,36 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_Window_IsShownOnScreen(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxWindow *arg1 = (wxWindow *) 0 ;
+  bool result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxWindow, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Window_IsShownOnScreen" "', expected argument " "1"" of type '" "wxWindow const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxWindow * >(argp1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = (bool)((wxWindow const *)arg1)->IsShownOnScreen();
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  {
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+  }
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_Window_SetWindowStyleFlag(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   wxWindow *arg1 = (wxWindow *) 0 ;
@@ -35027,6 +35057,36 @@ SWIGINTERN PyObject *_wrap_Window_Freeze(PyObject *SWIGUNUSEDPARM(self), PyObjec
     if (PyErr_Occurred()) SWIG_fail;
   }
   resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Window_IsFrozen(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxWindow *arg1 = (wxWindow *) 0 ;
+  bool result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxWindow, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Window_IsFrozen" "', expected argument " "1"" of type '" "wxWindow const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxWindow * >(argp1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = (bool)((wxWindow const *)arg1)->IsFrozen();
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  {
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+  }
   return resultobj;
 fail:
   return NULL;
@@ -53767,9 +53827,9 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Rect___iadd__", (PyCFunction) _wrap_Rect___iadd__, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Rect___eq__", (PyCFunction) _wrap_Rect___eq__, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Rect___ne__", (PyCFunction) _wrap_Rect___ne__, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"Rect_InsideXY", (PyCFunction) _wrap_Rect_InsideXY, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"Rect_Inside", (PyCFunction) _wrap_Rect_Inside, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"Rect_InsideRect", (PyCFunction) _wrap_Rect_InsideRect, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"Rect_ContainsXY", (PyCFunction) _wrap_Rect_ContainsXY, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"Rect_Contains", (PyCFunction) _wrap_Rect_Contains, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"Rect_ContainsRect", (PyCFunction) _wrap_Rect_ContainsRect, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Rect_Intersects", (PyCFunction) _wrap_Rect_Intersects, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Rect_CenterIn", (PyCFunction) _wrap_Rect_CenterIn, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Rect_x_set", _wrap_Rect_x_set, METH_VARARGS, NULL},
@@ -54465,7 +54525,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"PyApp_SetMacHelpMenuTitleName", (PyCFunction) _wrap_PyApp_SetMacHelpMenuTitleName, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"PyApp__BootstrapApp", (PyCFunction)_wrap_PyApp__BootstrapApp, METH_O, NULL},
 	 { (char *)"PyApp_GetComCtl32Version", (PyCFunction)_wrap_PyApp_GetComCtl32Version, METH_NOARGS, NULL},
-	 { (char *)"PyApp_DisplayAvailable", (PyCFunction)_wrap_PyApp_DisplayAvailable, METH_NOARGS, NULL},
+	 { (char *)"PyApp_IsDisplayAvailable", (PyCFunction)_wrap_PyApp_IsDisplayAvailable, METH_NOARGS, NULL},
 	 { (char *)"PyApp_swigregister", PyApp_swigregister, METH_VARARGS, NULL},
 	 { (char *)"PyApp_swiginit", PyApp_swiginit, METH_VARARGS, NULL},
 	 { (char *)"Exit", (PyCFunction)_wrap_Exit, METH_NOARGS, NULL},
@@ -54599,6 +54659,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Window_Disable", (PyCFunction)_wrap_Window_Disable, METH_O, NULL},
 	 { (char *)"Window_IsShown", (PyCFunction)_wrap_Window_IsShown, METH_O, NULL},
 	 { (char *)"Window_IsEnabled", (PyCFunction)_wrap_Window_IsEnabled, METH_O, NULL},
+	 { (char *)"Window_IsShownOnScreen", (PyCFunction)_wrap_Window_IsShownOnScreen, METH_O, NULL},
 	 { (char *)"Window_SetWindowStyleFlag", (PyCFunction) _wrap_Window_SetWindowStyleFlag, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Window_GetWindowStyleFlag", (PyCFunction)_wrap_Window_GetWindowStyleFlag, METH_O, NULL},
 	 { (char *)"Window_HasFlag", (PyCFunction) _wrap_Window_HasFlag, METH_VARARGS | METH_KEYWORDS, NULL},
@@ -54657,6 +54718,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Window_Update", (PyCFunction)_wrap_Window_Update, METH_O, NULL},
 	 { (char *)"Window_ClearBackground", (PyCFunction)_wrap_Window_ClearBackground, METH_O, NULL},
 	 { (char *)"Window_Freeze", (PyCFunction)_wrap_Window_Freeze, METH_O, NULL},
+	 { (char *)"Window_IsFrozen", (PyCFunction)_wrap_Window_IsFrozen, METH_O, NULL},
 	 { (char *)"Window_Thaw", (PyCFunction)_wrap_Window_Thaw, METH_O, NULL},
 	 { (char *)"Window_PrepareDC", (PyCFunction) _wrap_Window_PrepareDC, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Window_GetUpdateRegion", (PyCFunction)_wrap_Window_GetUpdateRegion, METH_O, NULL},

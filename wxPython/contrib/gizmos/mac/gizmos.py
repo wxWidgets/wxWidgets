@@ -76,7 +76,6 @@ _gizmos.DynamicSashSplitEvent_swigregister(DynamicSashSplitEvent)
 cvar = _gizmos.cvar
 DynamicSashNameStr = cvar.DynamicSashNameStr
 EditableListBoxNameStr = cvar.EditableListBoxNameStr
-TreeListCtrlNameStr = cvar.TreeListCtrlNameStr
 StaticPictureNameStr = cvar.StaticPictureNameStr
 
 class DynamicSashUnifyEvent(_core.CommandEvent):
@@ -331,33 +330,50 @@ def PreLEDNumberCtrl(*args, **kwargs):
     val = _gizmos.new_PreLEDNumberCtrl(*args, **kwargs)
     return val
 
-TL_ALIGN_LEFT = _gizmos.TL_ALIGN_LEFT
-TL_ALIGN_RIGHT = _gizmos.TL_ALIGN_RIGHT
-TL_ALIGN_CENTER = _gizmos.TL_ALIGN_CENTER
+#---------------------------------------------------------------------------
+
+DEFAULT_COL_WIDTH = _gizmos.DEFAULT_COL_WIDTH
+TL_MODE_NAV_FULLTREE = _gizmos.TL_MODE_NAV_FULLTREE
+TL_MODE_NAV_EXPANDED = _gizmos.TL_MODE_NAV_EXPANDED
+TL_MODE_NAV_VISIBLE = _gizmos.TL_MODE_NAV_VISIBLE
+TL_MODE_NAV_LEVEL = _gizmos.TL_MODE_NAV_LEVEL
+TL_MODE_FIND_EXACT = _gizmos.TL_MODE_FIND_EXACT
+TL_MODE_FIND_PARTIAL = _gizmos.TL_MODE_FIND_PARTIAL
+TL_MODE_FIND_NOCASE = _gizmos.TL_MODE_FIND_NOCASE
 TREE_HITTEST_ONITEMCOLUMN = _gizmos.TREE_HITTEST_ONITEMCOLUMN
-TL_SEARCH_VISIBLE = _gizmos.TL_SEARCH_VISIBLE
-TL_SEARCH_LEVEL = _gizmos.TL_SEARCH_LEVEL
-TL_SEARCH_FULL = _gizmos.TL_SEARCH_FULL
-TL_SEARCH_PARTIAL = _gizmos.TL_SEARCH_PARTIAL
-TL_SEARCH_NOCASE = _gizmos.TL_SEARCH_NOCASE
-TR_DONT_ADJUST_MAC = _gizmos.TR_DONT_ADJUST_MAC
-wx.TR_DONT_ADJUST_MAC = TR_DONT_ADJUST_MAC 
+wx.TREE_HITTEST_ONITEMCOLUMN = TREE_HITTEST_ONITEMCOLUMN 
+TR_COLUMN_LINES = _gizmos.TR_COLUMN_LINES
+TR_VIRTUAL = _gizmos.TR_VIRTUAL
+wx.TR_COLUMN_LINES = TR_COLUMN_LINES
+wxTR_VIRTUAL = TR_VIRTUAL    
+
+#// Compatibility aliases for old names/values
+TL_ALIGN_LEFT   = wx.ALIGN_LEFT
+TL_ALIGN_RIGHT  = wx.ALIGN_RIGHT
+TL_ALIGN_CENTER = wx.ALIGN_CENTER
+
+TL_SEARCH_VISIBLE = TL_MODE_NAV_VISIBLE
+TL_SEARCH_LEVEL   = TL_MODE_NAV_LEVEL
+TL_SEARCH_FULL    = TL_MODE_FIND_EXACT
+TL_SEARCH_PARTIAL = TL_MODE_FIND_PARTIAL
+TL_SEARCH_NOCASE  = TL_MODE_FIND_NOCASE
+
+TR_DONT_ADJUST_MAC = 0
+wx.TR_DONT_ADJUST_MAC = TR_DONT_ADJUST_MAC
+
 class TreeListColumnInfo(_core.Object):
     """Proxy of C++ TreeListColumnInfo class"""
     thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
     __repr__ = _swig_repr
     def __init__(self, *args, **kwargs): 
         """
-        __init__(self, String text=EmptyString, int image=-1, size_t width=100, 
-            bool shown=True, int alignment=TL_ALIGN_LEFT) -> TreeListColumnInfo
+        __init__(self, String text=EmptyString, int width=DEFAULT_COL_WIDTH, 
+            int flag=ALIGN_LEFT, int image=-1, bool shown=True, 
+            bool edit=False) -> TreeListColumnInfo
         """
         _gizmos.TreeListColumnInfo_swiginit(self,_gizmos.new_TreeListColumnInfo(*args, **kwargs))
     __swig_destroy__ = _gizmos.delete_TreeListColumnInfo
     __del__ = lambda self : None;
-    def GetShown(*args, **kwargs):
-        """GetShown(self) -> bool"""
-        return _gizmos.TreeListColumnInfo_GetShown(*args, **kwargs)
-
     def GetAlignment(*args, **kwargs):
         """GetAlignment(self) -> int"""
         return _gizmos.TreeListColumnInfo_GetAlignment(*args, **kwargs)
@@ -378,9 +394,13 @@ class TreeListColumnInfo(_core.Object):
         """GetWidth(self) -> size_t"""
         return _gizmos.TreeListColumnInfo_GetWidth(*args, **kwargs)
 
-    def SetShown(*args, **kwargs):
-        """SetShown(self, bool shown)"""
-        return _gizmos.TreeListColumnInfo_SetShown(*args, **kwargs)
+    def IsEditable(*args, **kwargs):
+        """IsEditable(self) -> bool"""
+        return _gizmos.TreeListColumnInfo_IsEditable(*args, **kwargs)
+
+    def IsShown(*args, **kwargs):
+        """IsShown(self) -> bool"""
+        return _gizmos.TreeListColumnInfo_IsShown(*args, **kwargs)
 
     def SetAlignment(*args, **kwargs):
         """SetAlignment(self, int alignment)"""
@@ -402,7 +422,16 @@ class TreeListColumnInfo(_core.Object):
         """SetWidth(self, size_t with)"""
         return _gizmos.TreeListColumnInfo_SetWidth(*args, **kwargs)
 
+    def SetEditable(*args, **kwargs):
+        """SetEditable(self, bool edit)"""
+        return _gizmos.TreeListColumnInfo_SetEditable(*args, **kwargs)
+
+    def SetShown(*args, **kwargs):
+        """SetShown(self, bool shown)"""
+        return _gizmos.TreeListColumnInfo_SetShown(*args, **kwargs)
+
 _gizmos.TreeListColumnInfo_swigregister(TreeListColumnInfo)
+TreeListCtrlNameStr = cvar.TreeListCtrlNameStr
 
 class TreeListCtrl(_core.Control):
     """Proxy of C++ TreeListCtrl class"""
@@ -490,7 +519,10 @@ class TreeListCtrl(_core.Control):
         return _gizmos.TreeListCtrl_AssignButtonsImageList(*args, **kwargs)
 
     def AddColumn(*args, **kwargs):
-        """AddColumn(self, String text)"""
+        """
+        AddColumn(self, String text, int width=DEFAULT_COL_WIDTH, int flag=ALIGN_LEFT, 
+            int image=-1, bool shown=True, bool edit=False)
+        """
         return _gizmos.TreeListCtrl_AddColumn(*args, **kwargs)
 
     def AddColumnInfo(*args, **kwargs):
@@ -498,7 +530,11 @@ class TreeListCtrl(_core.Control):
         return _gizmos.TreeListCtrl_AddColumnInfo(*args, **kwargs)
 
     def InsertColumn(*args, **kwargs):
-        """InsertColumn(self, size_t before, String text)"""
+        """
+        InsertColumn(self, int before, String text, int width=DEFAULT_COL_WIDTH, 
+            int flag=ALIGN_LEFT, int image=-1, bool shown=True, 
+            bool edit=False)
+        """
         return _gizmos.TreeListCtrl_InsertColumn(*args, **kwargs)
 
     def InsertColumnInfo(*args, **kwargs):
@@ -513,14 +549,6 @@ class TreeListCtrl(_core.Control):
         """GetColumnCount(self) -> size_t"""
         return _gizmos.TreeListCtrl_GetColumnCount(*args, **kwargs)
 
-    def SetColumnWidth(*args, **kwargs):
-        """SetColumnWidth(self, size_t column, size_t width)"""
-        return _gizmos.TreeListCtrl_SetColumnWidth(*args, **kwargs)
-
-    def GetColumnWidth(*args, **kwargs):
-        """GetColumnWidth(self, size_t column) -> int"""
-        return _gizmos.TreeListCtrl_GetColumnWidth(*args, **kwargs)
-
     def SetMainColumn(*args, **kwargs):
         """SetMainColumn(self, size_t column)"""
         return _gizmos.TreeListCtrl_SetMainColumn(*args, **kwargs)
@@ -529,45 +557,62 @@ class TreeListCtrl(_core.Control):
         """GetMainColumn(self) -> size_t"""
         return _gizmos.TreeListCtrl_GetMainColumn(*args, **kwargs)
 
-    def SetColumnText(*args, **kwargs):
-        """SetColumnText(self, size_t column, String text)"""
-        return _gizmos.TreeListCtrl_SetColumnText(*args, **kwargs)
-
-    def GetColumnText(*args, **kwargs):
-        """GetColumnText(self, size_t column) -> String"""
-        return _gizmos.TreeListCtrl_GetColumnText(*args, **kwargs)
-
     def SetColumn(*args, **kwargs):
-        """SetColumn(self, size_t column, TreeListColumnInfo info)"""
+        """SetColumn(self, int column, TreeListColumnInfo colInfo)"""
         return _gizmos.TreeListCtrl_SetColumn(*args, **kwargs)
 
     def GetColumn(*args, **kwargs):
-        """GetColumn(self, size_t column) -> TreeListColumnInfo"""
+        """GetColumn(self, int column) -> TreeListColumnInfo"""
         return _gizmos.TreeListCtrl_GetColumn(*args, **kwargs)
 
+    def SetColumnText(*args, **kwargs):
+        """SetColumnText(self, int column, String text)"""
+        return _gizmos.TreeListCtrl_SetColumnText(*args, **kwargs)
+
+    def GetColumnText(*args, **kwargs):
+        """GetColumnText(self, int column) -> String"""
+        return _gizmos.TreeListCtrl_GetColumnText(*args, **kwargs)
+
+    def SetColumnWidth(*args, **kwargs):
+        """SetColumnWidth(self, int column, int width)"""
+        return _gizmos.TreeListCtrl_SetColumnWidth(*args, **kwargs)
+
+    def GetColumnWidth(*args, **kwargs):
+        """GetColumnWidth(self, int column) -> int"""
+        return _gizmos.TreeListCtrl_GetColumnWidth(*args, **kwargs)
+
     def SetColumnAlignment(*args, **kwargs):
-        """SetColumnAlignment(self, size_t column, int align)"""
+        """SetColumnAlignment(self, int column, int flag)"""
         return _gizmos.TreeListCtrl_SetColumnAlignment(*args, **kwargs)
 
     def GetColumnAlignment(*args, **kwargs):
-        """GetColumnAlignment(self, size_t column) -> int"""
+        """GetColumnAlignment(self, int column) -> int"""
         return _gizmos.TreeListCtrl_GetColumnAlignment(*args, **kwargs)
 
     def SetColumnImage(*args, **kwargs):
-        """SetColumnImage(self, size_t column, int image)"""
+        """SetColumnImage(self, int column, int image)"""
         return _gizmos.TreeListCtrl_SetColumnImage(*args, **kwargs)
 
     def GetColumnImage(*args, **kwargs):
-        """GetColumnImage(self, size_t column) -> int"""
+        """GetColumnImage(self, int column) -> int"""
         return _gizmos.TreeListCtrl_GetColumnImage(*args, **kwargs)
 
-    def ShowColumn(*args, **kwargs):
-        """ShowColumn(self, size_t column, bool shown)"""
-        return _gizmos.TreeListCtrl_ShowColumn(*args, **kwargs)
+    def SetColumnShown(*args, **kwargs):
+        """SetColumnShown(self, int column, bool shown=True)"""
+        return _gizmos.TreeListCtrl_SetColumnShown(*args, **kwargs)
 
     def IsColumnShown(*args, **kwargs):
-        """IsColumnShown(self, size_t column) -> bool"""
+        """IsColumnShown(self, int column) -> bool"""
         return _gizmos.TreeListCtrl_IsColumnShown(*args, **kwargs)
+
+    ShowColumn = SetColumnShown 
+    def SetColumnEditable(*args, **kwargs):
+        """SetColumnEditable(self, int column, bool edit=True)"""
+        return _gizmos.TreeListCtrl_SetColumnEditable(*args, **kwargs)
+
+    def IsColumnEditable(*args, **kwargs):
+        """IsColumnEditable(self, int column) -> bool"""
+        return _gizmos.TreeListCtrl_IsColumnEditable(*args, **kwargs)
 
     def GetItemText(*args, **kwargs):
         """GetItemText(self, TreeItemId item, int column=-1) -> String"""
@@ -603,6 +648,22 @@ class TreeListCtrl(_core.Control):
 
     GetPyData = GetItemPyData 
     SetPyData = SetItemPyData 
+    def GetItemBold(*args, **kwargs):
+        """GetItemBold(self, TreeItemId item) -> bool"""
+        return _gizmos.TreeListCtrl_GetItemBold(*args, **kwargs)
+
+    def GetItemTextColour(*args, **kwargs):
+        """GetItemTextColour(self, TreeItemId item) -> Colour"""
+        return _gizmos.TreeListCtrl_GetItemTextColour(*args, **kwargs)
+
+    def GetItemBackgroundColour(*args, **kwargs):
+        """GetItemBackgroundColour(self, TreeItemId item) -> Colour"""
+        return _gizmos.TreeListCtrl_GetItemBackgroundColour(*args, **kwargs)
+
+    def GetItemFont(*args, **kwargs):
+        """GetItemFont(self, TreeItemId item) -> Font"""
+        return _gizmos.TreeListCtrl_GetItemFont(*args, **kwargs)
+
     def SetItemHasChildren(*args, **kwargs):
         """SetItemHasChildren(self, TreeItemId item, bool has=True)"""
         return _gizmos.TreeListCtrl_SetItemHasChildren(*args, **kwargs)
@@ -623,30 +684,15 @@ class TreeListCtrl(_core.Control):
         """SetItemFont(self, TreeItemId item, Font font)"""
         return _gizmos.TreeListCtrl_SetItemFont(*args, **kwargs)
 
-    def GetItemBold(*args, **kwargs):
-        """GetItemBold(self, TreeItemId item) -> bool"""
-        return _gizmos.TreeListCtrl_GetItemBold(*args, **kwargs)
-
-    def GetItemTextColour(*args, **kwargs):
-        """GetItemTextColour(self, TreeItemId item) -> Colour"""
-        return _gizmos.TreeListCtrl_GetItemTextColour(*args, **kwargs)
-
-    def GetItemBackgroundColour(*args, **kwargs):
-        """GetItemBackgroundColour(self, TreeItemId item) -> Colour"""
-        return _gizmos.TreeListCtrl_GetItemBackgroundColour(*args, **kwargs)
-
-    def GetItemFont(*args, **kwargs):
-        """GetItemFont(self, TreeItemId item) -> Font"""
-        return _gizmos.TreeListCtrl_GetItemFont(*args, **kwargs)
-
     def IsVisible(*args, **kwargs):
         """IsVisible(self, TreeItemId item) -> bool"""
         return _gizmos.TreeListCtrl_IsVisible(*args, **kwargs)
 
-    def ItemHasChildren(*args, **kwargs):
-        """ItemHasChildren(self, TreeItemId item) -> bool"""
-        return _gizmos.TreeListCtrl_ItemHasChildren(*args, **kwargs)
+    def HasChildren(*args, **kwargs):
+        """HasChildren(self, TreeItemId item) -> bool"""
+        return _gizmos.TreeListCtrl_HasChildren(*args, **kwargs)
 
+    ItemHasChildren = HasChildren 
     def IsExpanded(*args, **kwargs):
         """IsExpanded(self, TreeItemId item) -> bool"""
         return _gizmos.TreeListCtrl_IsExpanded(*args, **kwargs)
@@ -688,8 +734,12 @@ class TreeListCtrl(_core.Control):
         return _gizmos.TreeListCtrl_GetNextChild(*args, **kwargs)
 
     def GetLastChild(*args, **kwargs):
-        """GetLastChild(self, TreeItemId item) -> TreeItemId"""
+        """GetLastChild(self, TreeItemId item) -> PyObject"""
         return _gizmos.TreeListCtrl_GetLastChild(*args, **kwargs)
+
+    def GetPrevChild(*args, **kwargs):
+        """GetPrevChild(self, TreeItemId item, void cookie) -> PyObject"""
+        return _gizmos.TreeListCtrl_GetPrevChild(*args, **kwargs)
 
     def GetNextSibling(*args, **kwargs):
         """GetNextSibling(self, TreeItemId item) -> TreeItemId"""
@@ -699,21 +749,37 @@ class TreeListCtrl(_core.Control):
         """GetPrevSibling(self, TreeItemId item) -> TreeItemId"""
         return _gizmos.TreeListCtrl_GetPrevSibling(*args, **kwargs)
 
-    def GetFirstVisibleItem(*args, **kwargs):
-        """GetFirstVisibleItem(self) -> TreeItemId"""
-        return _gizmos.TreeListCtrl_GetFirstVisibleItem(*args, **kwargs)
-
-    def GetNextVisible(*args, **kwargs):
-        """GetNextVisible(self, TreeItemId item) -> TreeItemId"""
-        return _gizmos.TreeListCtrl_GetNextVisible(*args, **kwargs)
-
-    def GetPrevVisible(*args, **kwargs):
-        """GetPrevVisible(self, TreeItemId item) -> TreeItemId"""
-        return _gizmos.TreeListCtrl_GetPrevVisible(*args, **kwargs)
-
     def GetNext(*args, **kwargs):
         """GetNext(self, TreeItemId item) -> TreeItemId"""
         return _gizmos.TreeListCtrl_GetNext(*args, **kwargs)
+
+    def GetPrev(*args, **kwargs):
+        """GetPrev(self, TreeItemId item) -> TreeItemId"""
+        return _gizmos.TreeListCtrl_GetPrev(*args, **kwargs)
+
+    def GetFirstExpandedItem(*args, **kwargs):
+        """GetFirstExpandedItem(self) -> TreeItemId"""
+        return _gizmos.TreeListCtrl_GetFirstExpandedItem(*args, **kwargs)
+
+    def GetNextExpanded(*args, **kwargs):
+        """GetNextExpanded(self, TreeItemId item) -> TreeItemId"""
+        return _gizmos.TreeListCtrl_GetNextExpanded(*args, **kwargs)
+
+    def GetPrevExpanded(*args, **kwargs):
+        """GetPrevExpanded(self, TreeItemId item) -> TreeItemId"""
+        return _gizmos.TreeListCtrl_GetPrevExpanded(*args, **kwargs)
+
+    def GetFirstVisibleItem(*args, **kwargs):
+        """GetFirstVisibleItem(self, bool fullRow=False) -> TreeItemId"""
+        return _gizmos.TreeListCtrl_GetFirstVisibleItem(*args, **kwargs)
+
+    def GetNextVisible(*args, **kwargs):
+        """GetNextVisible(self, TreeItemId item, bool fullRow=False) -> TreeItemId"""
+        return _gizmos.TreeListCtrl_GetNextVisible(*args, **kwargs)
+
+    def GetPrevVisible(*args, **kwargs):
+        """GetPrevVisible(self, TreeItemId item, bool fullRow=False) -> TreeItemId"""
+        return _gizmos.TreeListCtrl_GetPrevVisible(*args, **kwargs)
 
     def AddRoot(*args, **kwargs):
         """AddRoot(self, String text, int image=-1, int selectedImage=-1, TreeItemData data=None) -> TreeItemId"""
@@ -755,10 +821,11 @@ class TreeListCtrl(_core.Control):
         """DeleteChildren(self, TreeItemId item)"""
         return _gizmos.TreeListCtrl_DeleteChildren(*args, **kwargs)
 
-    def DeleteAllItems(*args, **kwargs):
-        """DeleteAllItems(self)"""
-        return _gizmos.TreeListCtrl_DeleteAllItems(*args, **kwargs)
+    def DeleteRoot(*args, **kwargs):
+        """DeleteRoot(self)"""
+        return _gizmos.TreeListCtrl_DeleteRoot(*args, **kwargs)
 
+    DeleteAllItems = DeleteRoot 
     def Expand(*args, **kwargs):
         """Expand(self, TreeItemId item)"""
         return _gizmos.TreeListCtrl_Expand(*args, **kwargs)
@@ -788,11 +855,14 @@ class TreeListCtrl(_core.Control):
         return _gizmos.TreeListCtrl_UnselectAll(*args, **kwargs)
 
     def SelectItem(*args, **kwargs):
-        """SelectItem(self, TreeItemId item, bool unselect_others=True, bool extended_select=False)"""
+        """
+        SelectItem(self, TreeItemId item, TreeItemId last=(wxTreeItemId *) NULL, 
+            bool unselect_others=True)
+        """
         return _gizmos.TreeListCtrl_SelectItem(*args, **kwargs)
 
     def SelectAll(*args, **kwargs):
-        """SelectAll(self, bool extended_select=False)"""
+        """SelectAll(self)"""
         return _gizmos.TreeListCtrl_SelectAll(*args, **kwargs)
 
     def EnsureVisible(*args, **kwargs):
@@ -812,13 +882,10 @@ class TreeListCtrl(_core.Control):
         return _gizmos.TreeListCtrl_GetBoundingRect(*args, **kwargs)
 
     def EditLabel(*args, **kwargs):
-        """EditLabel(self, TreeItemId item)"""
+        """EditLabel(self, TreeItemId item, int column=-1)"""
         return _gizmos.TreeListCtrl_EditLabel(*args, **kwargs)
 
-    def Edit(*args, **kwargs):
-        """Edit(self, TreeItemId item)"""
-        return _gizmos.TreeListCtrl_Edit(*args, **kwargs)
-
+    Edit = EditLabel 
     def SortChildren(*args, **kwargs):
         """SortChildren(self, TreeItemId item)"""
         return _gizmos.TreeListCtrl_SortChildren(*args, **kwargs)
@@ -826,6 +893,10 @@ class TreeListCtrl(_core.Control):
     def FindItem(*args, **kwargs):
         """FindItem(self, TreeItemId item, String str, int flags=0) -> TreeItemId"""
         return _gizmos.TreeListCtrl_FindItem(*args, **kwargs)
+
+    def SetDragItem(*args, **kwargs):
+        """SetDragItem(self, TreeItemId item=(wxTreeItemId *) NULL)"""
+        return _gizmos.TreeListCtrl_SetDragItem(*args, **kwargs)
 
     def GetHeaderWindow(*args, **kwargs):
         """GetHeaderWindow(self) -> Window"""
