@@ -61,6 +61,7 @@ _treeList = [
         'RawBitmapAccess',
         'DragScroller',
 ##        'AlphaDrawing',
+        'DelayedResult',
         ]),
 
     # managed windows == things with a (optional) caption you can close
@@ -215,6 +216,7 @@ _treeList = [
 
     # ditto
     ('Process and Events', [
+        'DelayedResult',
         'EventManager',
         'KeyEvents',
         'Process',
@@ -1143,8 +1145,11 @@ class wxPythonDemo(wx.Frame):
         icon = images.getWXPdemoIcon()
         self.SetIcon(icon)
 
-        self.tbicon = DemoTaskBarIcon(self)
-
+        try:
+            self.tbicon = DemoTaskBarIcon(self)
+        except:
+            self.tbicon = None
+            
         wx.CallAfter(self.ShowTip)
 
         self.otherWin = None
@@ -1627,7 +1632,8 @@ class wxPythonDemo(wx.Frame):
         self.demoPage = None
         self.codePage = None
         self.mainmenu = None
-        self.tbicon.Destroy()
+        if self.tbicon is not None:
+            self.tbicon.Destroy()
         self.Destroy()
 
 
