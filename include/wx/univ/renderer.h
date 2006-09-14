@@ -889,8 +889,9 @@ public:
                                   wxDC& dc,
                                   const wxRect& rect,
                                   int flags = 0,
+                                  wxHeaderSortIconType sortArrow = wxHDR_SORT_ICON_NONE,
                                   wxHeaderButtonParams* params=NULL)
-        { m_renderer->DrawHeaderButton(win, dc, rect, flags, params); }
+        { m_renderer->DrawHeaderButton(win, dc, rect, flags, sortArrow, params); }
     virtual void DrawTreeItemButton(wxWindow *win,
                                     wxDC& dc,
                                     const wxRect& rect,

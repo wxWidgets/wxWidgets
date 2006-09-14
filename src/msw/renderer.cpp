@@ -122,6 +122,7 @@ public:
                                   wxDC& dc,
                                   const wxRect& rect,
                                   int flags = 0,
+                                  wxHeaderSortIconType sortArrow = wxHDR_SORT_ICON_NONE,
                                   wxHeaderButtonParams* params = NULL);
     virtual int GetHeaderButtonHeight(wxWindow *win);
     
@@ -286,12 +287,13 @@ wxRendererXP::DrawHeaderButton(wxWindow *win,
                                wxDC& dc,
                                const wxRect& rect,
                                int flags,
+                               wxHeaderSortIconType sortArrow,
                                wxHeaderButtonParams* params)
 {
     wxUxThemeHandle hTheme(win, L"HEADER");
     if ( !hTheme )
     {
-        m_rendererNative.DrawHeaderButton(win, dc, rect, flags, params);
+        m_rendererNative.DrawHeaderButton(win, dc, rect, flags, sortArrow, params);
         return;
     }
 
@@ -320,7 +322,7 @@ wxRendererXP::DrawHeaderButton(wxWindow *win,
     // and then clear those flags before calling DrawHeaderButtonContents.
     
     // Add any extras that are specified in flags and params
-    DrawHeaderButtonContents(win, dc, rect, flags, params);
+    DrawHeaderButtonContents(win, dc, rect, flags, sortArrow, params);
 }
 
 

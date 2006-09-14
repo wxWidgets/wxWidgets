@@ -37,6 +37,7 @@ public:
         wxDC& dc,
         const wxRect& rect,
         int flags = 0,
+        wxHeaderSortIconType sortArrow = wxHDR_SORT_ICON_NONE,
         wxHeaderButtonParams* params = NULL );
 
     virtual int GetHeaderButtonHeight(wxWindow *win);
@@ -129,6 +130,7 @@ void wxRendererMac::DrawHeaderButton( wxWindow *win,
     wxDC& dc,
     const wxRect& rect,
     int flags,
+    wxHeaderSortIconType sortArrow,
     wxHeaderButtonParams* params )
 {
     const wxCoord x = dc.XLOG2DEV(rect.x /*- 1*/);
@@ -185,13 +187,13 @@ void wxRendererMac::DrawHeaderButton( wxWindow *win,
             drawInfo.adornment = kThemeAdornmentNone;
 
             // The down arrow is drawn automatically, change it to an up arrow if needed.
-            if ( flags & wxCONTROL_UPICON )
+            if ( sortArrow == wxHDR_SORT_ICON_UP )
                 drawInfo.adornment = kThemeAdornmentHeaderButtonSortUp;
                 
             HIThemeDrawButton( &headerRect, &drawInfo, cgContext, kHIThemeOrientationNormal, &labelRect );
 
             // If we don't want any arrows we need to draw over the one already there
-            if ( (flags & wxCONTROL_SELECTED) && !(flags & (wxCONTROL_UPICON|wxCONTROL_DOWNICON)) )
+            if ( (flags & wxCONTROL_SELECTED) && (sortArrow == wxHDR_SORT_ICON_NONE) )
             {
                 // clip to the header rectangle
                 CGContextSaveGState( cgContext );
@@ -212,13 +214,14 @@ void wxRendererMac::DrawHeaderButton( wxWindow *win,
     // Reserve room for the arrows before writing the label, and turn off the
     // flags we've already handled
     wxRect newRect(rect);
-    if ( (flags & wxCONTROL_SELECTED) && (flags & (wxCONTROL_UPICON|wxCONTROL_DOWNICON)) )
+    if ( (flags & wxCONTROL_SELECTED) && (sortArrow != wxHDR_SORT_ICON_NONE) )
     {
         newRect.width -= 12;
+        sortArrow = wxHDR_SORT_ICON_NONE;
     }
-    flags &= ~(wxCONTROL_SELECTED | wxCONTROL_UPICON | wxCONTROL_DOWNICON);
+    flags &= ~wxCONTROL_SELECTED;
 
-    DrawHeaderButtonContents(win, dc, newRect, flags, params);
+    DrawHeaderButtonContents(win, dc, newRect, flags, sortArrow, params);
 }
 
 

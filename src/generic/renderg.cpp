@@ -50,12 +50,14 @@ public:
                                   wxDC& dc,
                                   const wxRect& rect,
                                   int flags = 0,
+                                  wxHBSortIconType sortArrow = wxHB_SORT_ICON_NONE,
                                   wxHeaderButtonParams* params = NULL);
 
     virtual void DrawHeaderButtonContents(wxWindow *win,
                                           wxDC& dc,
                                           const wxRect& rect,
                                           int flags = 0,
+                                          wxHBSortIconType sortArrow = wxHB_SORT_ICON_NONE,
                                           wxHeaderButtonParams* params = NULL);
 
     virtual int GetHeaderButtonHeight(wxWindow *win);
@@ -207,6 +209,7 @@ wxRendererGeneric::DrawHeaderButton(wxWindow* win,
                                     wxDC& dc,
                                     const wxRect& rect,
                                     int flags,
+                                    wxHeaderSortIconType sortArrow,
                                     wxHeaderButtonParams* params)
 {
     const int CORNER = 1;
@@ -236,14 +239,16 @@ wxRendererGeneric::DrawHeaderButton(wxWindow* win,
     dc.DrawLine( x, y+h-1, x+1, y+h-1 );
     dc.DrawLine( x+w-1, y, x+w-1, y+1 );
 
-    DrawHeaderButtonContents(win, dc, rect, flags, params);
+    DrawHeaderButtonContents(win, dc, rect, flags, sortArrow, params);
 }
+
 
 void
 wxRendererGeneric::DrawHeaderButtonContents(wxWindow *win,
                                             wxDC& dc,
                                             const wxRect& rect,
                                             int flags,
+                                            wxHeaderSortIconType sortArrow,
                                             wxHeaderButtonParams* params)
 {
     // Mark this item as selected.  For the generic version we'll just draw an
@@ -264,7 +269,7 @@ wxRendererGeneric::DrawHeaderButtonContents(wxWindow *win,
 
     // Draw an up or down arrow
     int arrowSpace = 0;
-    if (flags & (wxCONTROL_UPICON | wxCONTROL_DOWNICON) )
+    if (sortArrow != wxHDR_SORT_ICON_NONE )
     {
         wxRect ar = rect;
 
@@ -276,7 +281,7 @@ wxRendererGeneric::DrawHeaderButtonContents(wxWindow *win,
         arrowSpace = 3*ar.width/2; // space to preserve when drawing the label
         
         wxPoint triPt[3];
-        if ( flags & wxCONTROL_UPICON )
+        if ( sortArrow & wxHDR_SORT_ICON_UP )
         {
             triPt[0].x = ar.width / 2;
             triPt[0].y = 0;

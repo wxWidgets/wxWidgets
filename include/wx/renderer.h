@@ -59,10 +59,8 @@ enum
     wxCONTROL_CHECKED    = 0x00000040,  // (check/radio button) is checked
     wxCONTROL_CHECKABLE  = 0x00000080,  // (menu) item can be checked
     wxCONTROL_UNDETERMINED = wxCONTROL_CHECKABLE, // (check) undetermined state
-    wxCONTROL_UPICON     = 0x00000100,  // header button has an up arrow icon
-    wxCONTROL_DOWNICON   = 0x00000200,  // header button has a down arrow icon
 
-    wxCONTROL_FLAGS_MASK = 0x000002ff,
+    wxCONTROL_FLAGS_MASK = 0x000000ff,
 
     // this is a pseudo flag not used directly by wxRenderer but rather by some
     // controls internally
@@ -107,6 +105,12 @@ struct WXDLLEXPORT wxHeaderButtonParams
     wxColour    m_labelColour;
     wxBitmap    m_labelBitmap;
     int         m_labelAlignment;
+};
+
+enum wxHeaderSortIconType {
+    wxHDR_SORT_ICON_NONE,        // Header button has no sort arrow
+    wxHDR_SORT_ICON_UP,          // Header button an an up sort arrow icon
+    wxHDR_SORT_ICON_DOWN         // Header button an a down sort arrow icon
 };
 
 
@@ -156,6 +160,7 @@ public:
                                   wxDC& dc,
                                   const wxRect& rect,
                                   int flags = 0,
+                                  wxHeaderSortIconType sortArrow = wxHDR_SORT_ICON_NONE,
                                   wxHeaderButtonParams* params=NULL) = 0;
 
 
@@ -165,6 +170,7 @@ public:
                                           wxDC& dc,
                                           const wxRect& rect,
                                           int flags = 0,
+                                          wxHeaderSortIconType sortArrow = wxHDR_SORT_ICON_NONE,
                                           wxHeaderButtonParams* params=NULL) = 0;
 
     // Returns the default height of a header button, either a fixed platform
@@ -304,17 +310,17 @@ public:
                                   wxDC& dc,
                                   const wxRect& rect,
                                   int flags = 0,
+                                  wxHeaderSortIconType sortArrow = wxHDR_SORT_ICON_NONE,
                                   wxHeaderButtonParams* params = NULL)
-        { m_rendererNative.DrawHeaderButton(win, dc, rect, flags, params); }
-
+        { m_rendererNative.DrawHeaderButton(win, dc, rect, flags, sortArrow, params); }
 
     virtual void DrawHeaderButtonContents(wxWindow *win,
                                           wxDC& dc,
                                           const wxRect& rect,
                                           int flags = 0,
+                                          wxHeaderSortIconType sortArrow = wxHDR_SORT_ICON_NONE,
                                           wxHeaderButtonParams* params = NULL)
-        { m_rendererNative.DrawHeaderButtonContents(win, dc, rect, flags, params); }
-
+        { m_rendererNative.DrawHeaderButtonContents(win, dc, rect, flags, sortArrow, params); }
 
     virtual int GetHeaderButtonHeight(wxWindow *win)
         { return m_rendererNative.GetHeaderButtonHeight(win); }

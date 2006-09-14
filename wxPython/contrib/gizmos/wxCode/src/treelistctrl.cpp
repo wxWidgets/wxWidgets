@@ -1194,7 +1194,8 @@ void wxTreeListHeaderWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
         if ((image != -1) && imageList) 
             params.m_labelBitmap = imageList->GetBitmap(image);
                 
-        wxRendererNative::Get().DrawHeaderButton(this, dc, rect, flags, &params);
+        wxRendererNative::Get().DrawHeaderButton(this, dc, rect, flags,
+                                                 wxHDR_SORT_ICON_NONE, &params);
     }
 
     if (x < w) {

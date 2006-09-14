@@ -19,7 +19,7 @@ However not all controls exist under all (or even any) platforms and in this
 case wxWidgets provides a default, generic, implementation of them written in
 wxWidgets itself.
 
-These controls don't have the native appearance if only the standard
+These controls don't have the native appearance if only the tandard
 line drawing and other graphics primitives are used, because the native
 appearance is different under different platforms while the lines are always
 drawn in the same way.
@@ -75,9 +75,6 @@ enum
     wxCONTROL_CHECKED    = 0x00000040,  // (check/radio button) is checked
     wxCONTROL_CHECKABLE  = 0x00000080,  // (menu) item can be checked
     wxCONTROL_UNDETERMINED = wxCONTROL_CHECKABLE  // (check) undetermined state
-    wxCONTROL_UPICON     = 0x00000100,  // header button has an up arrow icon
-    wxCONTROL_DOWNICON   = 0x00000200,  // header button has a down arrow icon
-
 };
 \end{verbatim}
 
@@ -134,9 +131,16 @@ rectangle of a drop down button which arrow matches the size you need.
 
 \membersection{wxRendererNative::DrawHeaderButton}\label{wxrenderernativedrawheaderbutton}
 
-\func{void}{DrawHeaderButton}{\param{wxWindow* }{win}, \param{wxDC\& }{dc}, \param{const wxRect\& }{rect}, \param{int }{flags = 0}, \param{wxHeaderButtonParams* }{params = NULL}}
+\func{void}{DrawHeaderButton}{\param{wxWindow* }{win}, \param{wxDC\& }{dc}, \param{const wxRect\& }{rect}, \param{int }{flags = 0}, \param{wxHeaderSortIconType }{sortArrow = wxHDR\_SORT\_ICON\_NONE}, \param{wxHeaderButtonParams* }{params = NULL}}
 
-Draw the header control button (used by \helpref{wxListCtrl}{wxlistctrl}).
+Draw the header control button (used, for example, by
+\helpref{wxListCtrl}{wxlistctrl}).  Depending on platforms the
+\arg{flags} parameter may support the \texttt{wxCONTROL\_SELECTED}
+\texttt{wxCONTROL\_DISABLED} and \texttt{wxCONTROL\_CURRENT} bits.
+The \arg{sortArrow} parameter can be one of
+\texttt{wxHDR\_SORT\_ICON\_NONE}, \texttt{wxHDR\_SORT\_ICON\_UP}, or 
+\texttt{wxHDR\_SORT\_ICON\_DOWN}.  Additional values controlling the
+drawing of a text or bitmap label can be passed in \arg{params}.
 
 
 \membersection{wxRendererNative::DrawPushButton}\label{wxrenderernativedrawpushbutton}

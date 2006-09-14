@@ -34,10 +34,8 @@ enum
     wxCONTROL_CHECKED    = 0x00000040,  // (check/radio button) is checked
     wxCONTROL_CHECKABLE  = 0x00000080,  // (menu) item can be checked
     wxCONTROL_UNDETERMINED = wxCONTROL_CHECKABLE, // (check) undetermined state
-    wxCONTROL_UPICON     = 0x00000100,  // header button has an up arrow icon
-    wxCONTROL_DOWNICON   = 0x00000200,  // header button has a down arrow icon
 
-    wxCONTROL_FLAGS_MASK = 0x000002ff,
+    wxCONTROL_FLAGS_MASK = 0x000000ff,
 
     // this is a pseudo flag not used directly by wxRenderer but rather by some
     // controls internally
@@ -97,6 +95,11 @@ struct wxHeaderButtonParams
     int         m_labelAlignment;
 };
 
+enum wxHeaderSortIconType {
+    wxHDR_SORT_ICON_NONE,        // Header button has no sort arrow
+    wxHDR_SORT_ICON_UP,          // Header button an an up sort arrow icon
+    wxHDR_SORT_ICON_DOWN         // Header button an a down sort arrow icon
+};
 
 
 DocStr(wxRendererVersion,
@@ -155,6 +158,7 @@ public:
                                         wxDC& dc,
                                         const wxRect& rect,
                                         int flags = 0,
+                                        wxHeaderSortIconType sortArrow = wxHDR_SORT_ICON_NONE,
                                         wxHeaderButtonParams* params=NULL),
         "Draw the header control button (such as what is used by `wx.ListCtrl`
 in report mode.)", "");
@@ -165,6 +169,7 @@ in report mode.)", "");
                                                 wxDC& dc,
                                                 const wxRect& rect,
                                                 int flags = 0,
+                                                wxHeaderSortIconType sortArrow = wxHDR_SORT_ICON_NONE,
                                                 wxHeaderButtonParams* params=NULL),
         "Draw the contents of a header control button, (label, sort
 arrows, etc.)  Normally this is only called by `DrawHeaderButton`.", "");

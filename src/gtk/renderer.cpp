@@ -47,6 +47,7 @@ public:
                                   wxDC& dc,
                                   const wxRect& rect,
                                   int flags = 0,
+                                  wxHeaderSortIconType sortArrow = wxHDR_SORT_ICON_NONE,
                                   wxHeaderButtonParams* params = NULL);
 
     // draw the expanded/collapsed icon for a tree control item
@@ -185,6 +186,7 @@ wxRendererGTK::DrawHeaderButton(wxWindow *win,
                                 wxDC& dc,
                                 const wxRect& rect,
                                 int flags,
+                                wxHeaderSortIconType sortArrow,
                                 wxHeaderButtonParams* params)
 {
 
@@ -208,7 +210,7 @@ wxRendererGTK::DrawHeaderButton(wxWindow *win,
         dc.LogicalToDeviceX(rect.x) - x_diff, rect.y, rect.width, rect.height
     );
 
-    DrawHeaderButtonContents(win, dc, rect, flags, params);
+    DrawHeaderButtonContents(win, dc, rect, flags, sortArrow, params);
 }
 
 // draw a ">" or "v" button
