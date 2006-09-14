@@ -741,7 +741,7 @@ bool wxPrintfConvSpec::LoadArg(wxPrintfArg *p, va_list &argptr)
             break;
 
         case wxPAT_CHAR:
-            p->pad_char = va_arg(argptr, int);  // char is promoted to int when passed through '...'
+            p->pad_char = (char)va_arg(argptr, int);  // char is promoted to int when passed through '...'
             break;
         case wxPAT_WCHAR:
             p->pad_wchar = (wchar_t)va_arg(argptr, int);  // char is promoted to int when passed through '...'
