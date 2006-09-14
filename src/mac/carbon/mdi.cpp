@@ -374,7 +374,7 @@ bool wxMDIChildFrame::Create(wxMDIParentFrame *parent,
 
     wxModelessWindows.Append(this);
 
-    return false;
+    return true;
 }
 
 wxMDIChildFrame::~wxMDIChildFrame()
