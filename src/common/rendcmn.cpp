@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        common/rendcmn.cpp
+// Name:        src/common/rendcmn.cpp
 // Purpose:     wxRendererNative common functions
 // Author:      Vadim Zeitlin
 // Modified by:
@@ -206,4 +206,3 @@ wxRendererNative *wxRendererNative::Load(const wxString& name)
 }
 
 #endif // wxUSE_DYNLIB_CLASS
-
