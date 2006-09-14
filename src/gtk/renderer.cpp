@@ -190,6 +190,10 @@ wxRendererGTK::DrawHeaderButton(wxWindow *win,
 
     GtkWidget *button = GetButtonWidget();
 
+    int x_diff = 0;
+    if (win->GetLayoutDirection() == wxLayout_RightToLeft)
+        x_diff = rect.width;
+        
     gtk_paint_box
     (
         button->style,
@@ -201,7 +205,7 @@ wxRendererGTK::DrawHeaderButton(wxWindow *win,
         NULL,
         button,
         "button",
-        dc.LogicalToDeviceX(rect.x), rect.y, rect.width, rect.height
+        dc.LogicalToDeviceX(rect.x) - x_diff, rect.y, rect.width, rect.height
     );
 
     DrawHeaderButtonContents(win, dc, rect, flags, params);

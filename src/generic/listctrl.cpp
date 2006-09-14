@@ -1698,11 +1698,27 @@ void wxListHeaderWindow::AdjustDC(wxDC& dc)
     int xpix;
     m_owner->GetScrollPixelsPerUnit( &xpix, NULL );
 
-    int x;
-    m_owner->GetViewStart( &x, NULL );
+    int view_start;
+    m_owner->GetViewStart( &view_start, NULL );
+
+    if (GetLayoutDirection() == wxLayout_RightToLeft)
+    {
+        // FIXME: we need a better way for RTL scrolling..
+        int scroll_lines = m_owner->GetScrollLines( wxHORIZONTAL );
+        if (scroll_lines)
+        {
+            int client_size = m_owner->GetClientSize().x;
+            view_start = scroll_lines - (client_size / xpix) - view_start;
+            view_start = -view_start;
+        } 
+    }
+
+    int org_x = 0;
+    int org_y = 0;
+    dc.GetDeviceOrigin( &org_x, &org_y );
 
     // account for the horz scrollbar offset
-    dc.SetDeviceOrigin( -x * xpix, 0 );
+    dc.SetDeviceOrigin( org_x - (view_start * xpix), org_y );
 }
 
 void wxListHeaderWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
@@ -2629,9 +2645,9 @@ void wxListMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
         GetVisibleLinesRange(&visibleFrom, &visibleTo);
 
         wxRect rectLine;
-        wxCoord xOrig, yOrig;
-        CalcUnscrolledPosition(0, 0, &xOrig, &yOrig);
-
+        int xOrig = dc.LogicalToDeviceX( 0 );
+        int yOrig = dc.LogicalToDeviceY( 0 );
+        
         // tell the caller cache to cache the data
         if ( IsVirtual() )
         {
@@ -2647,7 +2663,8 @@ void wxListMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
         {
             rectLine = GetLineRect(line);
 
-            if ( !IsExposed(rectLine.x - xOrig, rectLine.y - yOrig,
+
+            if ( !IsExposed(rectLine.x + xOrig, rectLine.y + yOrig,
                             rectLine.width, rectLine.height) )
             {
                 // don't redraw unaffected lines to avoid flicker
