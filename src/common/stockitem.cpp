@@ -171,20 +171,16 @@ wxString wxGetStockLabel(wxWindowID id, long flags)
 
     if ( !(flags & wxSTOCK_WITH_MNEMONIC) )
     {
-        stockLabel = wxStripMenuCodes( stockLabel );
+        stockLabel = wxStripMenuCodes(stockLabel);
     }
 
 #if wxUSE_ACCEL
-
-    if (!stockLabel.empty() && (flags & wxSTOCK_WITH_ACCELERATOR))
+    if ( !stockLabel.empty() && (flags & wxSTOCK_WITH_ACCELERATOR) )
     {
-        stockLabel += _T("\t");
-
         wxAcceleratorEntry accel = wxGetStockAccelerator(id);
         if (accel.IsOk())
-            stockLabel += accel.ToString();
+            stockLabel << _T('\t') << accel.ToString();
     }
-
 #endif // wxUSE_ACCEL
 
     return stockLabel;
