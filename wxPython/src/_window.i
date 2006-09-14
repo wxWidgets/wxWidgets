@@ -733,6 +733,10 @@ sizer, interior children, or other means)", "");
     
 
 
+//     void SetScrollHelper( wxScrollHelper *sh );
+//     wxScrollHelper *GetScrollHelper();
+    
+
     // window state
     // ------------
 
@@ -771,7 +775,7 @@ window had already been in the specified state.", "");
         "Returns true if the window is enabled for input, false otherwise.", "");
 
     DocDeclStr(
-        virtual bool , IsVisible() const,
+        virtual bool , IsShownOnScreen() const,
         "Returns ``True`` if the window is physically visible on the screen,
 i.e. it is shown and all its parents up to the toplevel window are
 shown as well.", "");
@@ -1292,8 +1296,16 @@ it is a good idea to use it before inserting large amount of text into
 a wxTextCtrl under wxGTK) but is not implemented on all platforms nor
 for all controls so it is mostly just a hint to wxWindows and not a
 mandatory directive.", "");
+
+    
+    DocDeclStr(
+        virtual bool , IsFrozen() const,
+        "Returns ``True`` if the window has been frozen and not thawed yet.
+
+:see: `Freeze` and `Thaw`", "");
     
 
+    
     DocDeclStr(
         virtual void , Thaw(),
         "Reenables window updating after a previous call to Freeze.  Calls to
