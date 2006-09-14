@@ -532,6 +532,7 @@ bool wxGenericDirCtrl::Create(wxWindow *parent,
         return false;
 
     SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE));
+    SetForegroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT));
 
     Init();
 
