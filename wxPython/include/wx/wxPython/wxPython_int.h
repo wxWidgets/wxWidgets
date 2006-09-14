@@ -1273,9 +1273,9 @@ extern wxPyApp *wxPythonApp;
                 Py_DECREF(ro);                                                  \
             }                                                                   \
         }                                                                       \
+        wxPyEndBlockThreads(blocked);                                           \
         if (! found)                                                            \
             rval = PCLASS::CBNAME(a);                                           \
-        wxPyEndBlockThreads(blocked);                                           \
         return rval;                                                            \
     }                                                                           \
 
