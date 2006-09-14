@@ -63,6 +63,7 @@ class WXDLLIMPEXP_CORE wxBitmap: public wxBitmapBase
 {
 public:
     wxBitmap() {}
+    wxBitmap(const wxIDirectFBSurfacePtr& surface) { Create(surface); }
     wxBitmap(int width, int height, int depth = -1);
     wxBitmap(const char bits[], int width, int height, int depth = 1);
     wxBitmap(const wxString &filename, wxBitmapType type = wxBITMAP_TYPE_RESOURCE);
@@ -76,6 +77,7 @@ public:
     bool operator==(const wxBitmap& bmp) const;
     bool operator!=(const wxBitmap& bmp) const { return !(*this == bmp); }
 
+    bool Create(const wxIDirectFBSurfacePtr& surface);
     bool Create(int width, int height, int depth = -1);
 
     virtual int GetHeight() const;

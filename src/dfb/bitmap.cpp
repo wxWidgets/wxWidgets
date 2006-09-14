@@ -196,6 +196,17 @@ wxBitmap::wxBitmap(int width, int height, int depth)
     Create(width, height, depth);
 }
 
+bool wxBitmap::Create(const wxIDirectFBSurfacePtr& surface)
+{
+    UnRef();
+
+    wxCHECK_MSG( surface, false, _T("invalid surface") );
+
+    m_refData = new wxBitmapRefData();
+    M_BITMAP->m_surface = surface;
+    return true;
+}
+
 bool wxBitmap::Create(int width, int height, int depth)
 {
     UnRef();
@@ -209,14 +220,7 @@ bool wxBitmap::Create(int width, int height, int depth)
     desc.width = width;
     desc.height = height;
 
-    wxIDirectFBSurfacePtr surface(wxIDirectFB::Get()->CreateSurface(&desc));
-    if ( !surface )
-        return false;
-
-    m_refData = new wxBitmapRefData();
-    M_BITMAP->m_surface = surface;
-
-    return true;
+    return Create(wxIDirectFB::Get()->CreateSurface(&desc));
 }
 
 #warning "FIXME: move this to common code"
@@ -328,6 +332,10 @@ wxBitmap wxBitmap::GetSubBitmap(const wxRect& rect) const
                  wxNullBitmap,
                  wxT("invalid bitmap or bitmap region") );
 
+    // NB: DirectFB subsurfaces share the same pixels buffer, so we must
+    //     clone the obtained subsurface
+    DFBRectangle r = { rect.x, rect.y, rect.width, rect.height };
+    return wxBitmap(M_BITMAP->m_surface->GetSubSurface(&r)->Clone());
 }
 
 #warning "to common code"
