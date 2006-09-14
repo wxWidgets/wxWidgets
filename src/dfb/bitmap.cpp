@@ -212,6 +212,7 @@ bool wxBitmap::Create(int width, int height, int depth)
     UnRef();
 
     wxCHECK_MSG( width > 0 && height > 0, false, wxT("invalid bitmap size") );
+    wxCHECK_MSG( depth == -1, false, wxT("only default depth supported now") );
 
     DFBSurfaceDescription desc;
     desc.flags = (DFBSurfaceDescriptionFlags)(
@@ -264,6 +265,8 @@ wxBitmap::wxBitmap(const wxString &filename, wxBitmapType type)
 wxBitmap::wxBitmap(const char bits[], int width, int height, int depth)
 {
     wxCHECK_RET( depth == 1, wxT("can only create mono bitmap from XBM data") );
+
+    wxFAIL_MSG( _T("not implemented") );
 }
 
 bool wxBitmap::Ok() const
