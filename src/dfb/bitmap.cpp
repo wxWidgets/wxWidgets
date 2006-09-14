@@ -49,6 +49,27 @@ static wxColour wxQuantizeColour(const wxColour& clr, const wxBitmap& bmp)
 #endif
 }
 
+// Creates a surface that will use wxImage's pixel data (RGB only)
+static wxIDirectFBSurfacePtr CreateSurfaceForImage(const wxImage& image)
+{
+    wxCHECK_MSG( image.Ok(), NULL, _T("invalid image") );
+    // FIXME_DFB: implement alpha handling by merging alpha buffer with RGB
+    //            into a temporary RGBA surface
+    wxCHECK_MSG( !image.HasAlpha(), NULL, _T("alpha channel not supported") );
+
+    DFBSurfaceDescription desc;
+    desc.flags = (DFBSurfaceDescriptionFlags)
+        (DSDESC_CAPS | DSDESC_WIDTH | DSDESC_HEIGHT | DSDESC_PIXELFORMAT |
+         DSDESC_PREALLOCATED);
+    desc.caps = DSCAPS_NONE;
+    desc.width = image.GetWidth();
+    desc.height = image.GetHeight();
+    desc.pixelformat = DSPF_RGB24;
+    desc.preallocated[0].data = image.GetData();
+    desc.preallocated[0].pitch = 3 * desc.width;
+
+    return wxIDirectFB::Get()->CreateSurface(&desc);
+}
 
 //-----------------------------------------------------------------------------
 // wxMask
@@ -247,13 +268,41 @@ bool wxBitmap::CreateFromXpm(const char **bits)
 wxBitmap::wxBitmap(const wxImage& image, int depth)
 {
     wxCHECK_RET( image.Ok(), wxT("invalid image") );
+
+    // create surface in screen's format:
+    if ( !Create(image.GetWidth(), image.GetHeight(), depth) )
+        return;
+
+    // then copy the image to it:
+    wxIDirectFBSurfacePtr src(CreateSurfaceForImage(image));
+    wxIDirectFBSurfacePtr dst = M_BITMAP->m_surface;
+
+    if ( !dst->SetBlittingFlags(DSBLIT_NOFX) )
+        return;
+    if ( !dst->Blit(src->GetRaw(), NULL, 0, 0) )
+        return;
+
+    // FIXME: implement mask creation from image's mask (or alpha channel?)
+    wxASSERT_MSG( !image.HasMask(), _T("image masks are ignored for now") );
 }
 
 wxImage wxBitmap::ConvertToImage() const
 {
     wxCHECK_MSG( Ok(), wxNullImage, wxT("invalid bitmap") );
 
-    return wxNullImage; // FIXME
+    wxImage img(GetWidth(), GetHeight());
+    wxIDirectFBSurfacePtr dst(CreateSurfaceForImage(img));
+    wxIDirectFBSurfacePtr src = M_BITMAP->m_surface;
+
+    if ( !dst->SetBlittingFlags(DSBLIT_NOFX) )
+        return wxNullImage;
+    if ( !dst->Blit(src->GetRaw(), NULL, 0, 0) )
+        return wxNullImage;
+
+    // FIXME: implement mask setting in the image
+    wxASSERT_MSG( GetMask() == NULL, _T("bitmap masks are ignored for now") );
+
+    return img;
 }
 #endif // wxUSE_IMAGE
 
