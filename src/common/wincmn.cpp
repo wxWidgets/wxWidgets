@@ -747,9 +747,10 @@ bool wxWindowBase::Enable(bool enable)
     }
 }
 
-bool wxWindowBase::IsVisible() const
+bool wxWindowBase::IsShownOnScreen() const
 {
-    return IsShown() && (GetParent() == NULL || GetParent()->IsVisible());
+    return IsShown() &&
+           (GetParent() == NULL || GetParent()->IsShownOnScreen());
 }
 
 // ----------------------------------------------------------------------------

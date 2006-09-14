@@ -1560,7 +1560,19 @@ Returns {\tt true} if the window is shown, {\tt false} if it has been hidden.
 
 \wxheading{See also}
 
-\helpref{wxWindow::IsVisible}{wxwindowisvisible}
+\helpref{wxWindow::IsShownOnScreen}{wxwindowisshownonscreen}
+
+
+\membersection{wxWindow::IsShownOnScreen}\label{wxwindowisshownonscreen}
+
+\constfunc{virtual bool}{IsShownOnScreen}{\void}
+
+Returns {\tt true} if the window is physically visible on the screen, i.e. it
+is shown and all its parents up to the toplevel window are shown as well.
+
+\wxheading{See also}
+
+\helpref{wxWindow::IsShown}{wxwindowisshown}
 
 
 \membersection{wxWindow::IsTopLevel}\label{wxwindowistoplevel}
@@ -1570,18 +1582,6 @@ Returns {\tt true} if the window is shown, {\tt false} if it has been hidden.
 Returns {\tt true} if the given window is a top-level one. Currently all frames and
 dialogs are considered to be top-level windows (even if they have a parent
 window).
-
-
-\membersection{wxWindow::IsVisible}\label{wxwindowisvisible}
-
-\constfunc{virtual bool}{IsVisible}{\void}
-
-Returns {\tt true} if the window is physically visible on the screen, i.e. it
-is shown and all its parents up to the toplevel window are shown as well.
-
-\wxheading{See also}
-
-\helpref{wxWindow::IsShown}{wxwindowisshown}
 
 
 \membersection{wxWindow::Layout}\label{wxwindowlayout}

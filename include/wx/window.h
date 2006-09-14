@@ -485,7 +485,7 @@ public:
 
     // returns true if the window is visible, i.e. IsShown() returns true
     // if called on it and all its parents up to the first TLW
-    virtual bool IsVisible() const;
+    virtual bool IsShownOnScreen() const;
 
         // get/set window style (setting style won't update the window and so
         // is only useful for internal usage)

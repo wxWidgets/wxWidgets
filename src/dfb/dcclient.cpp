@@ -58,7 +58,7 @@ void wxWindowDC::InitForWin(wxWindow *win, const wxRect *rect)
     wxPoint origin;
     wxIDirectFBSurfacePtr surface;
 
-    if ( !win->IsVisible() )
+    if ( !win->IsShownOnScreen() )
     {
         // we're painting on invisible window: the changes won't have any
         // effect, as the window will be repainted anyhow when it is shown, but
@@ -117,7 +117,7 @@ wxWindowDC::~wxWindowDC()
 
     // painting on hidden window has no effect on TLW's surface, don't
     // waste time flipping the dummy surface:
-    if ( !m_win->IsVisible() )
+    if ( !m_win->IsShownOnScreen() )
         return;
 
     // if no painting was done on the DC, we don't have to flip the surface:
