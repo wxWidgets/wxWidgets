@@ -1199,7 +1199,7 @@ bool wxWindowMac::SetBackgroundColour(const wxColour& col )
     wxBrush brush ;
     wxColour newCol(GetBackgroundColour());
 
-    if ( newCol == wxSystemSettings::GetColour( wxSYS_COLOUR_APPWORKSPACE ) )
+    if ( newCol == wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW ) )
         brush.MacSetTheme( kThemeBrushDocumentWindowBackground ) ;
     else if ( newCol == wxSystemSettings::GetColour( wxSYS_COLOUR_3DFACE ) )
         brush.MacSetTheme( kThemeBrushDialogBackgroundActive ) ;

@@ -39,12 +39,14 @@ wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
 
     switch ( index )
     {
+        case wxSYS_COLOUR_WINDOW:
+            resultColor = *wxWHITE ;
+            break ;
         case wxSYS_COLOUR_SCROLLBAR :
         case wxSYS_COLOUR_BACKGROUND:
         case wxSYS_COLOUR_ACTIVECAPTION:
         case wxSYS_COLOUR_INACTIVECAPTION:
         case wxSYS_COLOUR_MENU:
-        case wxSYS_COLOUR_WINDOW:
         case wxSYS_COLOUR_WINDOWFRAME:
         case wxSYS_COLOUR_ACTIVEBORDER:
         case wxSYS_COLOUR_INACTIVEBORDER:
@@ -116,8 +118,10 @@ wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
             break ;
 
         case wxSYS_COLOUR_INFOBK :
-        case wxSYS_COLOUR_APPWORKSPACE:
             resultColor = *wxWHITE ;
+            break ;
+        case wxSYS_COLOUR_APPWORKSPACE:
+            resultColor =  wxColor( 0x80, 0x80, 0x80 ); ;
             break ;
 
         case wxSYS_COLOUR_HOTLIGHT:
