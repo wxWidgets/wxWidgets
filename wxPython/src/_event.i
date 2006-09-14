@@ -1622,9 +1622,14 @@ Warning: the window returned may be None!", "");
 %newgroup;
 
 DocStr(wxChildFocusEvent,
-"wx.ChildFocusEvent notifies the parent that a child has received the
-focus.  Unlike `wx.FocusEvent` it is propagated up the window
-heirarchy.", "");
+"A child focus event is sent to a (parent-)window when one of its child
+windows gains focus, so that the window could restore the focus back
+to its corresponding child if it loses it now and regains later.
+
+Notice that child window is the direct child of the window receiving
+the event, and so may not be the actual widget recieving focus if it
+is further down the containment heirarchy.  Use `wx.Window.FindFocus`
+to get the widget that is actually receiving focus.", "");
 
 
 class wxChildFocusEvent : public wxCommandEvent
@@ -1636,7 +1641,8 @@ public:
 
     DocDeclStr(
         wxWindow *, GetWindow() const,
-        "The window which has just received the focus.", "");
+        "The window, or (grand)parent of the window which has just received the
+focus.", "");
 
     %property(Window, GetWindow, doc="See `GetWindow`");
 };
