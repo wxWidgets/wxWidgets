@@ -469,19 +469,22 @@ void wxBitmap::SetPalette(const wxPalette& palette)
 void wxBitmap::SetHeight(int height)
 {
     AllocExclusive();
-#warning "todo"
+
+    wxFAIL_MSG( _T("SetHeight not implemented") );
 }
 
 void wxBitmap::SetWidth(int width)
 {
     AllocExclusive();
-#warning "todo"
+
+    wxFAIL_MSG( _T("SetWidth not implemented") );
 }
 
 void wxBitmap::SetDepth(int depth)
 {
     AllocExclusive();
-#warning "todo"
+
+    wxFAIL_MSG( _T("SetDepth not implemented") );
 }
 
 wxIDirectFBSurfacePtr wxBitmap::GetDirectFBSurface() const
