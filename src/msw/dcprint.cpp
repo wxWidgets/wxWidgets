@@ -56,6 +56,12 @@
     #define GDI_ERROR ((int)-1)
 #endif
 
+#if defined(__WXUNIVERSAL__) || wxUSE_POSTSCRIPT_ARCHITECTURE_IN_MSW
+    #define wxUSE_PS_PRINTING 1
+#else
+    #define wxUSE_PS_PRINTING 0
+#endif
+
 // ----------------------------------------------------------------------------
 // wxWin macros
 // ----------------------------------------------------------------------------
@@ -215,6 +221,8 @@ void wxPrinterDC::EndPage()
         ::EndPage((HDC) m_hDC);
 }
 
+#if !wxUSE_PS_PRINTING
+
 // Returns default device and port names
 static bool wxGetDefaultDeviceName(wxString& deviceName, wxString& portName)
 {
@@ -273,66 +281,46 @@ static bool wxGetDefaultDeviceName(wxString& deviceName, wxString& portName)
     return ( !deviceName.empty() );
 }
 
+#endif // !wxUSE_PS_PRINTING
+
 // Gets an HDC for the specified printer configuration
 WXHDC WXDLLEXPORT wxGetPrinterDC(const wxPrintData& printDataConst)
 {
-#if defined(__WXUNIVERSAL__) && (!defined(__WXMSW__) || wxUSE_POSTSCRIPT_ARCHITECTURE_IN_MSW)
-
-#if 0
-    wxPostScriptPrintNativeData *data =
-        (wxPostScriptPrintNativeData *) printDataConst.GetNativeData();
-    // FIXME: how further ???
-#else
+#if wxUSE_PS_PRINTING
+    // TODO
+    wxUnusedVar(printDataConst);
     return 0;
-#endif
-
-#else // Postscript vs. native Windows
-
+#else // native Windows printing
     wxWindowsPrintNativeData *data =
         (wxWindowsPrintNativeData *) printDataConst.GetNativeData();
 
     data->TransferFrom( printDataConst );
 
-    wxChar* driverName = (wxChar*) NULL;
-
-    wxString devNameStr = printDataConst.GetPrinterName();
-    wxChar* portName = (wxChar*) NULL; // Obsolete in WIN32
-
-    const wxChar* deviceName;
-    if ( !devNameStr )
-        deviceName = (wxChar*) NULL;
-    else
-        deviceName = devNameStr.c_str();
-
-    LPDEVMODE lpDevMode = (LPDEVMODE) NULL;
-
-    HGLOBAL hDevMode = (HGLOBAL)(DWORD) data->GetDevMode();
-
-    if ( hDevMode )
-        lpDevMode = (DEVMODE*) GlobalLock(hDevMode);
-
-    if ( !devNameStr )
+    wxString deviceName = printDataConst.GetPrinterName();
+    if ( deviceName.empty() )
     {
         // Retrieve the default device name
         wxString portName;
-        if ( !wxGetDefaultDeviceName(devNameStr, portName) )
+        if ( !wxGetDefaultDeviceName(deviceName, portName) )
         {
             return 0; // Could not get default device name
         }
-        deviceName = devNameStr.c_str();
     }
 
-#ifdef __WIN32__
-    HDC hDC = CreateDC(driverName, deviceName, portName, (DEVMODE *) lpDevMode);
-#else
-    HDC hDC = CreateDC(driverName, deviceName, portName, (LPSTR) lpDevMode);
-#endif
 
-    if (hDevMode && lpDevMode)
-        GlobalUnlock(hDevMode);
+    HGLOBAL hDevMode = (HGLOBAL)(DWORD) data->GetDevMode();
+
+    DEVMODE *lpDevMode = hDevMode ? (DEVMODE *)::GlobalLock(hDevMode) : NULL;
+
+    HDC hDC = ::CreateDC(NULL, deviceName, NULL, lpDevMode);
+    if ( !hDC )
+        wxLogLastError(_T("CreateDC(printer)"));
+
+    if ( lpDevMode )
+        ::GlobalUnlock(hDevMode);
 
     return (WXHDC) hDC;
-#endif
+#endif // PostScript/Windows printing
 }
 
 // ----------------------------------------------------------------------------
