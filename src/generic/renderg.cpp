@@ -50,14 +50,14 @@ public:
                                   wxDC& dc,
                                   const wxRect& rect,
                                   int flags = 0,
-                                  wxHBSortIconType sortArrow = wxHB_SORT_ICON_NONE,
+                                  wxHeaderSortIconType sortArrow = wxHDR_SORT_ICON_NONE,
                                   wxHeaderButtonParams* params = NULL);
 
     virtual void DrawHeaderButtonContents(wxWindow *win,
                                           wxDC& dc,
                                           const wxRect& rect,
                                           int flags = 0,
-                                          wxHBSortIconType sortArrow = wxHB_SORT_ICON_NONE,
+                                          wxHeaderSortIconType sortArrow = wxHDR_SORT_ICON_NONE,
                                           wxHeaderButtonParams* params = NULL);
 
     virtual int GetHeaderButtonHeight(wxWindow *win);
