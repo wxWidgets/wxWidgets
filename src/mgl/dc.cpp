@@ -1433,17 +1433,19 @@ bool wxDC::DoBlit(wxCoord xdest, wxCoord ydest,
     /* scale/translate size and position */
     wxCoord xx = XLOG2DEV(xdest);
     wxCoord yy = YLOG2DEV(ydest);
-    wxCoord ww = XLOG2DEVREL(width);
-    wxCoord hh = YLOG2DEVREL(height);
 
     if ( source->m_isMemDC )
     {
         wxMemoryDC *memDC = (wxMemoryDC*) source;
-        DoDrawSubBitmap(memDC->GetSelectedObject(), xsrc, ysrc, ww, hh,
+        DoDrawSubBitmap(memDC->GetSelectedObject(),
+                        xsrc, ysrc, width, height,
                         xdest, ydest, rop, useMask);
     }
     else
     {
+        wxCoord ww = XLOG2DEVREL(width);
+        wxCoord hh = YLOG2DEVREL(height);
+
         m_MGLDC->makeCurrent(); // will go away with MGL6.0
         m_MGLDC->bitBlt(*source->GetMGLDC(),
                         xsrc, ysrc, xsrc + ww, ysrc + hh,
