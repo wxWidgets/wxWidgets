@@ -888,8 +888,9 @@ public:
     virtual void DrawHeaderButton(wxWindow *win,
                                   wxDC& dc,
                                   const wxRect& rect,
-                                  int flags = 0)
-        { m_renderer->DrawHeaderButton(win, dc, rect, flags); }
+                                  int flags = 0,
+                                  wxHeaderButtonParams* params=NULL)
+        { m_renderer->DrawHeaderButton(win, dc, rect, flags, params); }
     virtual void DrawTreeItemButton(wxWindow *win,
                                     wxDC& dc,
                                     const wxRect& rect,
