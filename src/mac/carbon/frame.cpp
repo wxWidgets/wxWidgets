@@ -46,20 +46,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxFrame, wxTopLevelWindow)
 
 void wxFrame::Init()
 {
-    m_frameMenuBar = NULL;
-    m_frameStatusBar = NULL;
     m_winLastFocused = NULL;
-
-#if wxUSE_TOOLBAR
-    m_frameToolBar = NULL;
-#endif
-
-#if wxUSE_TOOLTIPS
-    // NB: is this used anywhere?
-    m_hwndToolTip = NULL;
-#endif
-
-    m_iconized = false;
 }
 
 bool wxFrame::Create(wxWindow *parent,

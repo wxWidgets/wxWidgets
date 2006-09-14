@@ -82,13 +82,6 @@ public:
                                            const wxString& name = wxStatusLineNameStr);
 #endif // wxUSE_STATUSBAR
 
-    // tooltip management
-#if wxUSE_TOOLTIPS
-    wxMacToolTip* GetToolTipCtrl() const { return m_hwndToolTip; }
-    void SetToolTipCtrl(wxMacToolTip *tt) { m_hwndToolTip = tt; }
-    wxMacToolTip* m_hwndToolTip ;
-#endif // tooltips
-
     // called by wxWindow whenever it gets focus
     void SetLastFocus(wxWindow *win) { m_winLastFocused = win; }
     wxWindow *GetLastFocus() const { return m_winLastFocused; }
