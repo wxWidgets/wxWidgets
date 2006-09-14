@@ -201,7 +201,15 @@ bool WXDLLEXPORT wxOKlibc()
         // all compilers under Windows should have swprintf()
         #define HAVE_SWPRINTF
     #endif
-    #if defined(__WXWINCE__) || ( defined(__VISUALC__) && __VISUALC__ <= 1200 ) || defined(__GNUWIN32__)
+
+    // NB: MSVC 6 has only non-standard swprintf() declaration and while MSVC 7
+    //     and 7.1 do have the standard one, it's completely broken unless
+    //     /Zc:wchar_t is used while the other one works so use it instead, and
+    //     only VC8 has a working standard-compliant swprintf()
+    #if defined(__WXWINCE__) || \
+        (defined(__VISUALC__) && __VISUALC__ < 1400) || \
+        defined(__GNUWIN32__) || \
+        defined(__BORLANDC__)
         #define HAVE_BROKEN_SWPRINTF_DECL
     #endif
 
@@ -394,7 +402,7 @@ bool wxPrintfConvSpec::Parse(const wxChar *format)
 #define CHECK_PREC \
         if (in_prec && !prec_dot) \
         { \
-            m_szFlags[flagofs++] = '.'; \
+            m_szFlags[flagofs++] = wxT('.'); \
             prec_dot = true; \
         }
 
@@ -534,7 +542,7 @@ bool wxPrintfConvSpec::Parse(const wxChar *format)
             case wxT('X'):
                 CHECK_PREC
                 m_szFlags[flagofs++] = ch;
-                m_szFlags[flagofs] = '\0';
+                m_szFlags[flagofs] = wxT('\0');
                 if (ilen == 0)
                     m_type = wxPAT_INT;
                 else if (ilen == -1)
@@ -562,7 +570,7 @@ bool wxPrintfConvSpec::Parse(const wxChar *format)
             case wxT('G'):
                 CHECK_PREC
                 m_szFlags[flagofs++] = ch;
-                m_szFlags[flagofs] = '\0';
+                m_szFlags[flagofs] = wxT('\0');
                 if (ilen == 2)
                     m_type = wxPAT_LONGDOUBLE;
                 else
@@ -672,6 +680,10 @@ void wxPrintfConvSpec::ReplaceAsteriskWith(int width)
     // replace * with the actual integer given as width
     int maxlen = (m_szFlags + wxMAX_SVNPRINTF_FLAGBUFFER_LEN - pwidth) / sizeof(wxChar);
     int offset = system_sprintf(pwidth, maxlen, wxT("%d"), abs(width));
+
+#ifdef HAVE_BROKEN_SWPRINTF_DECL
+    wxUnusedVar(maxlen);        // avoid dummy warnings
+#endif
 
     // restore after the expanded * what was following it
     wxStrcpy(pwidth+offset, temp);
@@ -953,6 +965,10 @@ int wxPrintfConvSpec::Process(wxChar *buf, size_t lenMax, wxPrintfArg *p)
         default:
             return -1;
     }
+
+#ifdef HAVE_BROKEN_SWPRINTF_DECL
+    wxUnusedVar(lenScratch);    // avoid dummy warnings
+#endif
 
     // if we used system's sprintf() then we now need to append the s_szScratch
     // buffer to the given one...
