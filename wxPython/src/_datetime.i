@@ -1063,6 +1063,13 @@ public:
      def __str__(self):
          return self.Format().encode(wx.GetDefaultPyEncoding())
      }
+
+    %property(Days, GetDays, doc="See `GetDays`");
+    %property(Hours, GetHours, doc="See `GetHours`");
+    %property(Milliseconds, GetMilliseconds, doc="See `GetMilliseconds`");
+    %property(Minutes, GetMinutes, doc="See `GetMinutes`");
+    %property(Seconds, GetSeconds, doc="See `GetSeconds`");
+    %property(Weeks, GetWeeks, doc="See `GetWeeks`");
 };
 
 

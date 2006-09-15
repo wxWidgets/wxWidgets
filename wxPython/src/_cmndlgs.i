@@ -524,6 +524,8 @@ or the original value if the user has pressed Cancel.", "");
     DocDeclStr(
         void , SetValue(const wxString& value),
         "Sets the default text value.", "");
+    
+    %property(Value, GetValue, SetValue, doc="See `GetValue` and `SetValue`");
 };
 
 //---------------------------------------------------------------------------

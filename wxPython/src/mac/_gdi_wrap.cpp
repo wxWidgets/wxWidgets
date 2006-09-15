@@ -33767,9 +33767,6 @@ SWIGEXPORT void SWIG_init(void) {
   
   wxPyPtrTypeMap_Add("wxFontEnumerator", "wxPyFontEnumerator");
   
-  SWIG_Python_SetConstant(d, "Layout_Default",SWIG_From_int(static_cast< int >(wxLayout_Default)));
-  SWIG_Python_SetConstant(d, "Layout_LeftToRight",SWIG_From_int(static_cast< int >(wxLayout_LeftToRight)));
-  SWIG_Python_SetConstant(d, "Layout_RightToLeft",SWIG_From_int(static_cast< int >(wxLayout_RightToLeft)));
   SWIG_Python_SetConstant(d, "LANGUAGE_DEFAULT",SWIG_From_int(static_cast< int >(wxLANGUAGE_DEFAULT)));
   SWIG_Python_SetConstant(d, "LANGUAGE_UNKNOWN",SWIG_From_int(static_cast< int >(wxLANGUAGE_UNKNOWN)));
   SWIG_Python_SetConstant(d, "LANGUAGE_ABKHAZIAN",SWIG_From_int(static_cast< int >(wxLANGUAGE_ABKHAZIAN)));

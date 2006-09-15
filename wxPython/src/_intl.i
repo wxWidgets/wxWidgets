@@ -22,14 +22,6 @@
 //---------------------------------------------------------------------------
 %newgroup
 
-enum wxLayoutDirection
-{
-    wxLayout_Default,
-    wxLayout_LeftToRight,
-    wxLayout_RightToLeft
-};
-
-
 enum wxLanguage
 {
     // user's default/preffered language as got from OS:

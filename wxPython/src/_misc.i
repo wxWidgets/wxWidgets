@@ -38,6 +38,9 @@ public:
 
     static void Enable(bool flag);
     static void SetDelay(long milliseconds);
+
+    %property(Tip, GetTip, SetTip, doc="See `GetTip` and `SetTip`");
+    %property(Window, GetWindow, doc="See `GetWindow`");
 };
 #endif
 

@@ -791,6 +791,8 @@ class ToolTip(_core.Object):
         return _misc_.ToolTip_SetDelay(*args, **kwargs)
 
     SetDelay = staticmethod(SetDelay)
+    Tip = property(GetTip,SetTip,doc="See `GetTip` and `SetTip`") 
+    Window = property(GetWindow,doc="See `GetWindow`") 
 _misc_.ToolTip_swigregister(ToolTip)
 
 def ToolTip_Enable(*args, **kwargs):
@@ -1227,6 +1229,8 @@ class TipProvider(object):
         """PreprocessTip(self, String tip) -> String"""
         return _misc_.TipProvider_PreprocessTip(*args, **kwargs)
 
+    CurrentTip = property(GetCurrentTip,doc="See `GetCurrentTip`") 
+    Tip = property(GetTip,doc="See `GetTip`") 
 _misc_.TipProvider_swigregister(TipProvider)
 
 class PyTipProvider(TipProvider):
@@ -1312,6 +1316,9 @@ class Timer(_core.EvtHandler):
         """NO-OP: Timers must be destroyed by normal reference counting"""
         pass
 
+    Id = property(GetId,doc="See `GetId`") 
+    Interval = property(GetInterval,doc="See `GetInterval`") 
+    Owner = property(GetOwner,SetOwner,doc="See `GetOwner` and `SetOwner`") 
 _misc_.Timer_swigregister(Timer)
 
 # For backwards compatibility with 2.4
@@ -1339,6 +1346,7 @@ class TimerEvent(_core.Event):
         """GetInterval(self) -> int"""
         return _misc_.TimerEvent_GetInterval(*args, **kwargs)
 
+    Interval = property(GetInterval,doc="See `GetInterval`") 
 _misc_.TimerEvent_swigregister(TimerEvent)
 
 class TimerRunner(object):
@@ -4325,6 +4333,12 @@ class TimeSpan(object):
     def __str__(self):
         return self.Format().encode(wx.GetDefaultPyEncoding())
 
+    Days = property(GetDays,doc="See `GetDays`") 
+    Hours = property(GetHours,doc="See `GetHours`") 
+    Milliseconds = property(GetMilliseconds,doc="See `GetMilliseconds`") 
+    Minutes = property(GetMinutes,doc="See `GetMinutes`") 
+    Seconds = property(GetSeconds,doc="See `GetSeconds`") 
+    Weeks = property(GetWeeks,doc="See `GetWeeks`") 
 _misc_.TimeSpan_swigregister(TimeSpan)
 
 def TimeSpan_Milliseconds(*args, **kwargs):
@@ -4982,6 +4996,8 @@ class TextDataObject(DataObjectSimple):
         """
         return _misc_.TextDataObject_SetText(*args, **kwargs)
 
+    Text = property(GetText,SetText,doc="See `GetText` and `SetText`") 
+    TextLength = property(GetTextLength,doc="See `GetTextLength`") 
 _misc_.TextDataObject_swigregister(TextDataObject)
 
 class PyTextDataObject(TextDataObject):

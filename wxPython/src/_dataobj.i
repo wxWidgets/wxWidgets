@@ -585,6 +585,8 @@ text into the member variable. If you want to process the text on the
 fly you may wish to override this function (via
 `wx.PyTextDataObject`.)", "");
     
+    %property(Text, GetText, SetText, doc="See `GetText` and `SetText`");
+    %property(TextLength, GetTextLength, doc="See `GetTextLength`");
 };
 
 

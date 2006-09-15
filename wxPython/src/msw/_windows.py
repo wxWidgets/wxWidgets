@@ -471,6 +471,10 @@ class TopLevelWindow(_core.Window):
         """
         return _windows_.TopLevelWindow_GetTmpDefaultItem(*args, **kwargs)
 
+    DefaultItem = property(GetDefaultItem,SetDefaultItem,doc="See `GetDefaultItem` and `SetDefaultItem`") 
+    Icon = property(GetIcon,SetIcon,doc="See `GetIcon` and `SetIcon`") 
+    Title = property(GetTitle,SetTitle,doc="See `GetTitle` and `SetTitle`") 
+    TmpDefaultItem = property(GetTmpDefaultItem,SetTmpDefaultItem,doc="See `GetTmpDefaultItem` and `SetTmpDefaultItem`") 
 _windows_.TopLevelWindow_swigregister(TopLevelWindow)
 cvar = _windows_.cvar
 FrameNameStr = cvar.FrameNameStr
@@ -2606,6 +2610,7 @@ class TextEntryDialog(Dialog):
         """
         return _windows_.TextEntryDialog_SetValue(*args, **kwargs)
 
+    Value = property(GetValue,SetValue,doc="See `GetValue` and `SetValue`") 
 _windows_.TextEntryDialog_swigregister(TextEntryDialog)
 
 class PasswordEntryDialog(TextEntryDialog):

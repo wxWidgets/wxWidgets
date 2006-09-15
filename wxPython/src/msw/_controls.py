@@ -1662,6 +1662,15 @@ class TextAttr(object):
         return _controls_.TextAttr_Combine(*args, **kwargs)
 
     Combine = staticmethod(Combine)
+    Alignment = property(GetAlignment,SetAlignment,doc="See `GetAlignment` and `SetAlignment`") 
+    BackgroundColour = property(GetBackgroundColour,SetBackgroundColour,doc="See `GetBackgroundColour` and `SetBackgroundColour`") 
+    Flags = property(GetFlags,SetFlags,doc="See `GetFlags` and `SetFlags`") 
+    Font = property(GetFont,SetFont,doc="See `GetFont` and `SetFont`") 
+    LeftIndent = property(GetLeftIndent,SetLeftIndent,doc="See `GetLeftIndent` and `SetLeftIndent`") 
+    LeftSubIndent = property(GetLeftSubIndent,doc="See `GetLeftSubIndent`") 
+    RightIndent = property(GetRightIndent,SetRightIndent,doc="See `GetRightIndent` and `SetRightIndent`") 
+    Tabs = property(GetTabs,SetTabs,doc="See `GetTabs` and `SetTabs`") 
+    TextColour = property(GetTextColour,SetTextColour,doc="See `GetTextColour` and `SetTextColour`") 
 _controls_.TextAttr_swigregister(TextAttr)
 TextCtrlNameStr = cvar.TextCtrlNameStr
 
@@ -1946,6 +1955,13 @@ class TextCtrl(_core.Control):
         return _controls_.TextCtrl_GetClassDefaultAttributes(*args, **kwargs)
 
     GetClassDefaultAttributes = staticmethod(GetClassDefaultAttributes)
+    DefaultStyle = property(GetDefaultStyle,SetDefaultStyle,doc="See `GetDefaultStyle` and `SetDefaultStyle`") 
+    InsertionPoint = property(GetInsertionPoint,SetInsertionPoint,doc="See `GetInsertionPoint` and `SetInsertionPoint`") 
+    LastPosition = property(GetLastPosition,doc="See `GetLastPosition`") 
+    NumberOfLines = property(GetNumberOfLines,doc="See `GetNumberOfLines`") 
+    Selection = property(GetSelection,SetSelection,doc="See `GetSelection` and `SetSelection`") 
+    StringSelection = property(GetStringSelection,doc="See `GetStringSelection`") 
+    Value = property(GetValue,SetValue,doc="See `GetValue` and `SetValue`") 
 _controls_.TextCtrl_swigregister(TextCtrl)
 
 def PreTextCtrl(*args, **kwargs):
@@ -1993,6 +2009,9 @@ class TextUrlEvent(_core.CommandEvent):
         """GetURLEnd(self) -> long"""
         return _controls_.TextUrlEvent_GetURLEnd(*args, **kwargs)
 
+    MouseEvent = property(GetMouseEvent,doc="See `GetMouseEvent`") 
+    URLEnd = property(GetURLEnd,doc="See `GetURLEnd`") 
+    URLStart = property(GetURLStart,doc="See `GetURLStart`") 
 _controls_.TextUrlEvent_swigregister(TextUrlEvent)
 
 EVT_TEXT        = wx.PyEventBinder( wxEVT_COMMAND_TEXT_UPDATED, 1)
@@ -2786,6 +2805,7 @@ class ToggleButton(_core.Control):
         return _controls_.ToggleButton_GetClassDefaultAttributes(*args, **kwargs)
 
     GetClassDefaultAttributes = staticmethod(GetClassDefaultAttributes)
+    Value = property(GetValue,SetValue,doc="See `GetValue` and `SetValue`") 
 _controls_.ToggleButton_swigregister(ToggleButton)
 ToggleButtonNameStr = cvar.ToggleButtonNameStr
 
@@ -3343,6 +3363,7 @@ class Treebook(BookCtrlBase):
         """GetTreeCtrl(self) -> TreeCtrl"""
         return _controls_.Treebook_GetTreeCtrl(*args, **kwargs)
 
+    TreeCtrl = property(GetTreeCtrl,doc="See `GetTreeCtrl`") 
 _controls_.Treebook_swigregister(Treebook)
 
 def PreTreebook(*args, **kwargs):
@@ -3401,6 +3422,7 @@ class Toolbook(BookCtrlBase):
         """Realize(self)"""
         return _controls_.Toolbook_Realize(*args, **kwargs)
 
+    ToolBar = property(GetToolBar,doc="See `GetToolBar`") 
 _controls_.Toolbook_swigregister(Toolbook)
 
 def PreToolbook(*args, **kwargs):
@@ -3568,6 +3590,18 @@ class ToolBarToolBase(_core.Object):
     SetBitmap1 = SetNormalBitmap
     SetBitmap2 = SetDisabledBitmap
 
+    Bitmap = property(GetBitmap,doc="See `GetBitmap`") 
+    ClientData = property(GetClientData,SetClientData,doc="See `GetClientData` and `SetClientData`") 
+    Control = property(GetControl,doc="See `GetControl`") 
+    DisabledBitmap = property(GetDisabledBitmap,SetDisabledBitmap,doc="See `GetDisabledBitmap` and `SetDisabledBitmap`") 
+    Id = property(GetId,doc="See `GetId`") 
+    Kind = property(GetKind,doc="See `GetKind`") 
+    Label = property(GetLabel,SetLabel,doc="See `GetLabel` and `SetLabel`") 
+    LongHelp = property(GetLongHelp,SetLongHelp,doc="See `GetLongHelp` and `SetLongHelp`") 
+    NormalBitmap = property(GetNormalBitmap,SetNormalBitmap,doc="See `GetNormalBitmap` and `SetNormalBitmap`") 
+    ShortHelp = property(GetShortHelp,SetShortHelp,doc="See `GetShortHelp` and `SetShortHelp`") 
+    Style = property(GetStyle,doc="See `GetStyle`") 
+    ToolBar = property(GetToolBar,doc="See `GetToolBar`") 
 _controls_.ToolBarToolBase_swigregister(ToolBarToolBase)
 
 class ToolBarBase(_core.Control):
@@ -3889,6 +3923,15 @@ class ToolBarBase(_core.Control):
         """GetToolsCount(self) -> size_t"""
         return _controls_.ToolBarBase_GetToolsCount(*args, **kwargs)
 
+    Margins = property(GetMargins,SetMargins,doc="See `GetMargins` and `SetMargins`") 
+    MaxCols = property(GetMaxCols,doc="See `GetMaxCols`") 
+    MaxRows = property(GetMaxRows,doc="See `GetMaxRows`") 
+    ToolBitmapSize = property(GetToolBitmapSize,SetToolBitmapSize,doc="See `GetToolBitmapSize` and `SetToolBitmapSize`") 
+    ToolMargins = property(GetToolMargins,doc="See `GetToolMargins`") 
+    ToolPacking = property(GetToolPacking,SetToolPacking,doc="See `GetToolPacking` and `SetToolPacking`") 
+    ToolSeparation = property(GetToolSeparation,SetToolSeparation,doc="See `GetToolSeparation` and `SetToolSeparation`") 
+    ToolSize = property(GetToolSize,doc="See `GetToolSize`") 
+    ToolsCount = property(GetToolsCount,doc="See `GetToolsCount`") 
 _controls_.ToolBarBase_swigregister(ToolBarBase)
 
 class ToolBar(ToolBarBase):
@@ -4972,6 +5015,8 @@ class TreeItemData(object):
         args[0].thisown = 0
         return val
 
+    Data = property(GetData,SetData,doc="See `GetData` and `SetData`") 
+    Id = property(GetId,SetId,doc="See `GetId` and `SetId`") 
 _controls_.TreeItemData_swigregister(TreeItemData)
 
 #---------------------------------------------------------------------------
@@ -5089,6 +5134,14 @@ class TreeEvent(_core.NotifyEvent):
         """GetToolTip(self) -> String"""
         return _controls_.TreeEvent_GetToolTip(*args, **kwargs)
 
+    Item = property(GetItem,SetItem,doc="See `GetItem` and `SetItem`") 
+    KeyCode = property(GetKeyCode,doc="See `GetKeyCode`") 
+    KeyEvent = property(GetKeyEvent,SetKeyEvent,doc="See `GetKeyEvent` and `SetKeyEvent`") 
+    Label = property(GetLabel,SetLabel,doc="See `GetLabel` and `SetLabel`") 
+    OldItem = property(GetOldItem,SetOldItem,doc="See `GetOldItem` and `SetOldItem`") 
+    Point = property(GetPoint,SetPoint,doc="See `GetPoint` and `SetPoint`") 
+    ToolTip = property(GetToolTip,SetToolTip,doc="See `GetToolTip` and `SetToolTip`") 
+    EditCancelled = property(IsEditCancelled,SetEditCanceled,doc="See `IsEditCancelled` and `SetEditCanceled`") 
 _controls_.TreeEvent_swigregister(TreeEvent)
 
 #---------------------------------------------------------------------------
@@ -5469,6 +5522,17 @@ class TreeCtrl(_core.Control):
         """GetQuickBestSize(self) -> bool"""
         return _controls_.TreeCtrl_GetQuickBestSize(*args, **kwargs)
 
+    Count = property(GetCount,doc="See `GetCount`") 
+    EditControl = property(GetEditControl,doc="See `GetEditControl`") 
+    FirstVisibleItem = property(GetFirstVisibleItem,doc="See `GetFirstVisibleItem`") 
+    ImageList = property(GetImageList,SetImageList,doc="See `GetImageList` and `SetImageList`") 
+    Indent = property(GetIndent,SetIndent,doc="See `GetIndent` and `SetIndent`") 
+    QuickBestSize = property(GetQuickBestSize,SetQuickBestSize,doc="See `GetQuickBestSize` and `SetQuickBestSize`") 
+    RootItem = property(GetRootItem,doc="See `GetRootItem`") 
+    Selection = property(GetSelection,doc="See `GetSelection`") 
+    Selections = property(GetSelections,doc="See `GetSelections`") 
+    Spacing = property(GetSpacing,SetSpacing,doc="See `GetSpacing` and `SetSpacing`") 
+    StateImageList = property(GetStateImageList,SetStateImageList,doc="See `GetStateImageList` and `SetStateImageList`") 
 _controls_.TreeCtrl_swigregister(TreeCtrl)
 
 def PreTreeCtrl(*args, **kwargs):

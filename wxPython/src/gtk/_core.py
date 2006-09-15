@@ -678,6 +678,9 @@ MOD_ALL = _core_.MOD_ALL
 UPDATE_UI_NONE = _core_.UPDATE_UI_NONE
 UPDATE_UI_RECURSE = _core_.UPDATE_UI_RECURSE
 UPDATE_UI_FROMIDLE = _core_.UPDATE_UI_FROMIDLE
+Layout_Default = _core_.Layout_Default
+Layout_LeftToRight = _core_.Layout_LeftToRight
+Layout_RightToLeft = _core_.Layout_RightToLeft
 #---------------------------------------------------------------------------
 
 class Object(object):
@@ -6788,7 +6791,7 @@ class PyApp(EvtHandler):
 
     def GetLayoutDirection(*args, **kwargs):
         """
-        GetLayoutDirection(self) -> wxLayoutDirection
+        GetLayoutDirection(self) -> int
 
         Return the layout direction for the current locale.
         """
@@ -7932,7 +7935,7 @@ class Window(EvtHandler):
     PrevControlId = staticmethod(PrevControlId)
     def GetLayoutDirection(*args, **kwargs):
         """
-        GetLayoutDirection(self) -> wxLayoutDirection
+        GetLayoutDirection(self) -> int
 
         Get the layout direction (LTR or RTL) for this window.  Returns
         ``wx.Layout_Default`` if layout direction is not supported.
@@ -7941,7 +7944,7 @@ class Window(EvtHandler):
 
     def SetLayoutDirection(*args, **kwargs):
         """
-        SetLayoutDirection(self, wxLayoutDirection dir)
+        SetLayoutDirection(self, int dir)
 
         Set the layout direction (LTR or RTL) for this window.
         """
@@ -9991,6 +9994,7 @@ class Window(EvtHandler):
     HelpText = property(GetHelpText,SetHelpText,doc="See `GetHelpText` and `SetHelpText`") 
     Id = property(GetId,SetId,doc="See `GetId` and `SetId`") 
     Label = property(GetLabel,SetLabel,doc="See `GetLabel` and `SetLabel`") 
+    LayoutDirection = property(GetLayoutDirection,SetLayoutDirection,doc="See `GetLayoutDirection` and `SetLayoutDirection`") 
     MaxHeight = property(GetMaxHeight,doc="See `GetMaxHeight`") 
     MaxSize = property(GetMaxSize,SetMaxSize,doc="See `GetMaxSize` and `SetMaxSize`") 
     MaxWidth = property(GetMaxWidth,doc="See `GetMaxWidth`") 

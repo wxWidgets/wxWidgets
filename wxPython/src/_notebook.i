@@ -555,6 +555,7 @@ public:
     // the tree control we use for showing the pages index tree
     wxPyTreeCtrl* GetTreeCtrl() const;
 
+    %property(TreeCtrl, GetTreeCtrl, doc="See `GetTreeCtrl`");
 };
 
 
@@ -614,6 +615,8 @@ public:
     // Not part of the wxBookctrl API, but must be called in OnIdle or
     // by application to realize the toolbar and select the initial page.
     void Realize();
+
+    %property(ToolBar, GetToolBar, doc="See `GetToolBar`");
 };
 
 

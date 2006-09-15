@@ -134,6 +134,9 @@ public:
 
     %pythonAppend Destroy "args[0].thisown = 0"
     %extend { void Destroy() { delete self; } }
+
+    %property(Data, GetData, SetData, doc="See `GetData` and `SetData`");
+    %property(Id, GetId, SetId, doc="See `GetId` and `SetId`");
 };
 
 
@@ -272,6 +275,15 @@ public:
         // Set the tooltip for the item (for EVT_TREE_ITEM_GETTOOLTIP events)
     void SetToolTip(const wxString& toolTip);
     wxString GetToolTip();
+
+    %property(Item, GetItem, SetItem, doc="See `GetItem` and `SetItem`");
+    %property(KeyCode, GetKeyCode, doc="See `GetKeyCode`");
+    %property(KeyEvent, GetKeyEvent, SetKeyEvent, doc="See `GetKeyEvent` and `SetKeyEvent`");
+    %property(Label, GetLabel, SetLabel, doc="See `GetLabel` and `SetLabel`");
+    %property(OldItem, GetOldItem, SetOldItem, doc="See `GetOldItem` and `SetOldItem`");
+    %property(Point, GetPoint, SetPoint, doc="See `GetPoint` and `SetPoint`");
+    %property(ToolTip, GetToolTip, SetToolTip, doc="See `GetToolTip` and `SetToolTip`");
+    %property(EditCancelled, IsEditCancelled, SetEditCanceled, doc="See `IsEditCancelled` and `SetEditCanceled`");
 };
 
 //---------------------------------------------------------------------------
@@ -755,6 +767,17 @@ value is set to a bitmask of wxTREE_HITTEST_xxx constants.
     void SetQuickBestSize(bool q);
     bool GetQuickBestSize() const;
 
+    %property(Count, GetCount, doc="See `GetCount`");
+    %property(EditControl, GetEditControl, doc="See `GetEditControl`");
+    %property(FirstVisibleItem, GetFirstVisibleItem, doc="See `GetFirstVisibleItem`");
+    %property(ImageList, GetImageList, SetImageList, doc="See `GetImageList` and `SetImageList`");
+    %property(Indent, GetIndent, SetIndent, doc="See `GetIndent` and `SetIndent`");
+    %property(QuickBestSize, GetQuickBestSize, SetQuickBestSize, doc="See `GetQuickBestSize` and `SetQuickBestSize`");
+    %property(RootItem, GetRootItem, doc="See `GetRootItem`");
+    %property(Selection, GetSelection, doc="See `GetSelection`");
+    %property(Selections, GetSelections, doc="See `GetSelections`");
+    %property(Spacing, GetSpacing, SetSpacing, doc="See `GetSpacing` and `SetSpacing`");
+    %property(StateImageList, GetStateImageList, SetStateImageList, doc="See `GetStateImageList` and `SetStateImageList`");
 };
 
 

@@ -104,6 +104,10 @@ public:
             """NO-OP: Timers must be destroyed by normal reference counting"""
             pass
     }
+
+    %property(Id, GetId, doc="See `GetId`");
+    %property(Interval, GetInterval, doc="See `GetInterval`");
+    %property(Owner, GetOwner, SetOwner, doc="See `GetOwner` and `SetOwner`");
 };
 
 
@@ -130,6 +134,8 @@ class wxTimerEvent : public wxEvent
 public:
     wxTimerEvent(int timerid = 0, int interval = 0);
     int GetInterval() const;
+
+    %property(Interval, GetInterval, doc="See `GetInterval`");
 };
 
 

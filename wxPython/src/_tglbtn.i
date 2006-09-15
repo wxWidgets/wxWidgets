@@ -83,6 +83,8 @@ public:
 
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
+
+    %property(Value, GetValue, SetValue, doc="See `GetValue` and `SetValue`");
 };
 
 //---------------------------------------------------------------------------

@@ -2091,6 +2091,7 @@ opaque.", "");
     %property(HelpText, GetHelpText, SetHelpText, doc="See `GetHelpText` and `SetHelpText`");
     %property(Id, GetId, SetId, doc="See `GetId` and `SetId`");
     %property(Label, GetLabel, SetLabel, doc="See `GetLabel` and `SetLabel`");
+    %property(LayoutDirection, GetLayoutDirection, SetLayoutDirection, doc="See `GetLayoutDirection` and `SetLayoutDirection`");
     %property(MaxHeight, GetMaxHeight, doc="See `GetMaxHeight`");
     %property(MaxSize, GetMaxSize, SetMaxSize, doc="See `GetMaxSize` and `SetMaxSize`");
     %property(MaxWidth, GetMaxWidth, doc="See `GetMaxWidth`");

@@ -1210,6 +1210,14 @@ enum wxUpdateUI
 };
 
 
+enum wxLayoutDirection
+{
+    wxLayout_Default,
+    wxLayout_LeftToRight,
+    wxLayout_RightToLeft
+};
+
+
 
 //---------------------------------------------------------------------------
 

@@ -177,6 +177,16 @@ public:
     static wxTextAttr Combine(const wxTextAttr& attr,
                               const wxTextAttr& attrDef,
                               const wxTextCtrl *text);
+
+    %property(Alignment, GetAlignment, SetAlignment, doc="See `GetAlignment` and `SetAlignment`");
+    %property(BackgroundColour, GetBackgroundColour, SetBackgroundColour, doc="See `GetBackgroundColour` and `SetBackgroundColour`");
+    %property(Flags, GetFlags, SetFlags, doc="See `GetFlags` and `SetFlags`");
+    %property(Font, GetFont, SetFont, doc="See `GetFont` and `SetFont`");
+    %property(LeftIndent, GetLeftIndent, SetLeftIndent, doc="See `GetLeftIndent` and `SetLeftIndent`");
+    %property(LeftSubIndent, GetLeftSubIndent, doc="See `GetLeftSubIndent`");
+    %property(RightIndent, GetRightIndent, SetRightIndent, doc="See `GetRightIndent` and `SetRightIndent`");
+    %property(Tabs, GetTabs, SetTabs, doc="See `GetTabs` and `SetTabs`");
+    %property(TextColour, GetTextColour, SetTextColour, doc="See `GetTextColour` and `SetTextColour`");
 };
 
 //---------------------------------------------------------------------------
@@ -350,6 +360,14 @@ the client area origin nor scrolling. ", "",
 
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
+
+    %property(DefaultStyle, GetDefaultStyle, SetDefaultStyle, doc="See `GetDefaultStyle` and `SetDefaultStyle`");
+    %property(InsertionPoint, GetInsertionPoint, SetInsertionPoint, doc="See `GetInsertionPoint` and `SetInsertionPoint`");
+    %property(LastPosition, GetLastPosition, doc="See `GetLastPosition`");
+    %property(NumberOfLines, GetNumberOfLines, doc="See `GetNumberOfLines`");
+    %property(Selection, GetSelection, SetSelection, doc="See `GetSelection` and `SetSelection`");
+    %property(StringSelection, GetStringSelection, doc="See `GetStringSelection`");
+    %property(Value, GetValue, SetValue, doc="See `GetValue` and `SetValue`");
 };
 
 //---------------------------------------------------------------------------
@@ -375,6 +393,10 @@ public:
 
     // get the end of the URL
     long GetURLEnd() const;
+    
+    %property(MouseEvent, GetMouseEvent, doc="See `GetMouseEvent`");
+    %property(URLEnd, GetURLEnd, doc="See `GetURLEnd`");
+    %property(URLStart, GetURLStart, doc="See `GetURLStart`");
 };
 
 

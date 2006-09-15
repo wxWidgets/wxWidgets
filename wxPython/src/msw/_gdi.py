@@ -2431,9 +2431,6 @@ def FontEnumerator_IsValidFacename(*args, **kwargs):
 
 #---------------------------------------------------------------------------
 
-Layout_Default = _gdi_.Layout_Default
-Layout_LeftToRight = _gdi_.Layout_LeftToRight
-Layout_RightToLeft = _gdi_.Layout_RightToLeft
 LANGUAGE_DEFAULT = _gdi_.LANGUAGE_DEFAULT
 LANGUAGE_UNKNOWN = _gdi_.LANGUAGE_UNKNOWN
 LANGUAGE_ABKHAZIAN = _gdi_.LANGUAGE_ABKHAZIAN
