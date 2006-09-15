@@ -361,14 +361,14 @@ WXHBRUSH wxControl::DoMSWControlColor(WXHDC pDC, wxColour colBg, WXHWND hWnd)
         wxBrush *brush = wxTheBrushList->FindOrCreateBrush(colBg, wxSOLID);
 
         hbr = (WXHBRUSH)brush->GetResourceHandle();
-
-        // if we use custom background, we should set foreground ourselves too
-        if ( !m_hasFgCol )
-        {
-            ::SetTextColor(hdc, ::GetSysColor(COLOR_WINDOWTEXT));
-        }
-        //else: already set above
     }
+
+    // if we use custom background, we should set foreground ourselves too
+    if ( hbr && !m_hasFgCol )
+    {
+        ::SetTextColor(hdc, ::GetSysColor(COLOR_WINDOWTEXT));
+    }
+    //else: already set above
 
     return hbr;
 }
