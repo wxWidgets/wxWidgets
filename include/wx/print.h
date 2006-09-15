@@ -12,6 +12,10 @@
 #ifndef _WX_PRINT_H_BASE_
 #define _WX_PRINT_H_BASE_
 
+#include "wx/defs.h"
+
+#if wxUSE_PRINTING_ARCHITECTURE
+
 #if defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
 
 #include "wx/msw/printwin.h"
@@ -30,6 +34,6 @@
 
 #endif
 
-
+#endif // wxUSE_PRINTING_ARCHITECTURE
 #endif
     // _WX_PRINT_H_BASE_
