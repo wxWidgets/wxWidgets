@@ -28555,22 +28555,25 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
             CFLAGS="$wx_cv_cflags_gtk $CFLAGS"
             LIBS="$LIBS $wx_cv_libs_gtk"
 
-                                                            echo "$as_me:$LINENO: checking if gtk_icon_size_lookup is missing" >&5
-echo $ECHO_N "checking if gtk_icon_size_lookup is missing... $ECHO_C" >&6
-            cat >conftest.$ac_ext <<_ACEOF
+                                                            echo "$as_me:$LINENO: checking whether gtk_icon_size_lookup is declared" >&5
+echo $ECHO_N "checking whether gtk_icon_size_lookup is declared... $ECHO_C" >&6
+if test "${ac_cv_have_decl_gtk_icon_size_lookup+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  cat >conftest.$ac_ext <<_ACEOF
 /* confdefs.h.  */
 _ACEOF
 cat confdefs.h >>conftest.$ac_ext
 cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
-
-                            #include <gtk/gtk.h>
+#include <gtk/gtk.h>
 
 int
 main ()
 {
-
-                            void *f = gtk_icon_size_lookup;
+#ifndef gtk_icon_size_lookup
+  char *p = (char *) gtk_icon_size_lookup;
+#endif
 
   ;
   return 0;
@@ -28598,24 +28601,36 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   ac_status=$?
   echo "$as_me:$LINENO: \$? = $ac_status" >&5
   (exit $ac_status); }; }; then
-
-                            echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6
-
+  ac_cv_have_decl_gtk_icon_size_lookup=yes
 else
   echo "$as_me: failed program was:" >&5
 sed 's/^/| /' conftest.$ac_ext >&5
 
+ac_cv_have_decl_gtk_icon_size_lookup=no
+fi
+rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
+fi
+echo "$as_me:$LINENO: result: $ac_cv_have_decl_gtk_icon_size_lookup" >&5
+echo "${ECHO_T}$ac_cv_have_decl_gtk_icon_size_lookup" >&6
+if test $ac_cv_have_decl_gtk_icon_size_lookup = yes; then
 
-                            cat >>confdefs.h <<\_ACEOF
+cat >>confdefs.h <<_ACEOF
+#define HAVE_DECL_GTK_ICON_SIZE_LOOKUP 1
+_ACEOF
+
+
+else
+  cat >>confdefs.h <<_ACEOF
+#define HAVE_DECL_GTK_ICON_SIZE_LOOKUP 0
+_ACEOF
+
+cat >>confdefs.h <<\_ACEOF
 #define NEED_GTK_ICON_SIZE_LOOKUP 1
 _ACEOF
 
-                            echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6
-
 fi
-rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
+
+
 
                         echo "$as_me:$LINENO: checking if GTK+ is version >= 2.6" >&5
 echo $ECHO_N "checking if GTK+ is version >= 2.6... $ECHO_C" >&6

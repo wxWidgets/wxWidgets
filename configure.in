@@ -3012,20 +3012,9 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
             dnl that have shipped with some versions of Sun's JDS. Not using
             dnl AC_CHECK_FUNCS here since it only checks the function exists
             dnl in the lib (not the header).
-            AC_MSG_CHECKING([if gtk_icon_size_lookup is missing])
-            AC_TRY_COMPILE([
-                            #include <gtk/gtk.h>
-                           ],
-                           [
-                            void *f = gtk_icon_size_lookup;
-                           ],
-                           [
-                            AC_MSG_RESULT([no])
-                           ],
-                           [
-                            AC_DEFINE(NEED_GTK_ICON_SIZE_LOOKUP)
-                            AC_MSG_RESULT([yes])
-                           ])
+            AC_CHECK_DECLS([gtk_icon_size_lookup], [],
+                           [AC_DEFINE(NEED_GTK_ICON_SIZE_LOOKUP)],
+                           [#include <gtk/gtk.h>])
 
             dnl test if we have at least GTK+ 2.6:
             AC_MSG_CHECKING([if GTK+ is version >= 2.6])
