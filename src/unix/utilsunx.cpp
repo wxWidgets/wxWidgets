@@ -960,8 +960,31 @@ wxMemorySize wxGetFreeMemory()
         char buf[1024];
         if ( fgets(buf, WXSIZEOF(buf), fp) && fgets(buf, WXSIZEOF(buf), fp) )
         {
-            long memTotal, memUsed;
-            sscanf(buf, "Mem: %ld %ld %ld", &memTotal, &memUsed, &memFree);
+            // /proc/meminfo changed its format in kernel 2.6
+            if ( wxPlatformInfo().CheckOSVersion(2, 6) )
+            {
+                unsigned long cached, buffers;
+                sscanf(buf, "MemFree: %ld", &memFree);
+
+                fgets(buf, WXSIZEOF(buf), fp);
+                sscanf(buf, "Buffers: %lu", &buffers);
+
+                fgets(buf, WXSIZEOF(buf), fp);
+                sscanf(buf, "Cached: %lu", &cached);
+
+                // add to "MemFree" also the "Buffers" and "Cached" values as
+                // free(1) does as otherwise the value never makes sense: for
+                // kernel 2.6 it's always almost 0
+                memFree += buffers + cached;
+
+                // values here are always expressed in kB and we want bytes
+                memFree *= 1024;
+            }
+            else // Linux 2.4 (or < 2.6, anyhow)
+            {
+                long memTotal, memUsed;
+                sscanf(buf, "Mem: %ld %ld %ld", &memTotal, &memUsed, &memFree);
+            }
         }
 
         fclose(fp);
