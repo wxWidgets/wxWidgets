@@ -354,6 +354,16 @@ public:
 
     bool IsEmpty() const { return (width <= 0) || (height <= 0); }
 
+    int GetLeft()   const { return x; }
+    int GetTop()    const { return y; }
+    int GetBottom() const { return y + height - 1; }
+    int GetRight()  const { return x + width - 1; }
+
+    void SetLeft(int left) { x = left; }
+    void SetRight(int right) { width = right - x + 1; }
+    void SetTop(int top) { y = top; }
+    void SetBottom(int bottom) { height = bottom - y + 1; }
+
     wxPoint GetTopLeft() const { return GetPosition(); }
     wxPoint GetLeftTop() const { return GetTopLeft(); }
     void SetTopLeft(const wxPoint &p) { SetPosition(p); }
@@ -364,15 +374,15 @@ public:
     void SetBottomRight(const wxPoint &p) { SetRight(p.x); SetBottom(p.y); }
     void SetRightBottom(const wxPoint &p) { SetBottomRight(p); }
 
-    int GetLeft()   const { return x; }
-    int GetTop()    const { return y; }
-    int GetBottom() const { return y + height - 1; }
-    int GetRight()  const { return x + width - 1; }
+    wxPoint GetTopRight() const { return wxPoint(GetRight(), GetTop()); }
+    wxPoint GetRightTop() const { return GetTopRight(); }
+    void SetTopRight(const wxPoint &p) { SetRight(p.x); SetTop(p.y); }
+    void SetRightTop(const wxPoint &p) { SetTopLeft(p); }
 
-    void SetLeft(int left) { x = left; }
-    void SetRight(int right) { width = right - x + 1; }
-    void SetTop(int top) { y = top; }
-    void SetBottom(int bottom) { height = bottom - y + 1; }
+    wxPoint GetBottomLeft() const { return wxPoint(GetLeft(), GetBottom()); }
+    wxPoint GetLeftBottom() const { return GetBottomLeft(); }
+    void SetBottomLeft(const wxPoint &p) { SetLeft(p.x); SetBottom(p.y); }
+    void SetLeftBottom(const wxPoint &p) { SetBottomLeft(p); }
 
     // operations with rect
     wxRect& Inflate(wxCoord dx, wxCoord dy);
