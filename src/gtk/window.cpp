@@ -338,14 +338,6 @@ static void draw_frame( GtkWidget *widget, wxWindowGTK *win )
     if (!win->m_hasVMT)
         return;
 
-    int dw = 0;
-    int dh = 0;
-
-    if (win->m_hasScrolling)
-    {
-        GetScrollbarWidth(widget, dw, dh);
-    }
-
     int dx = 0;
     int dy = 0;
     if (GTK_WIDGET_NO_WINDOW (widget))
@@ -354,6 +346,27 @@ static void draw_frame( GtkWidget *widget, wxWindowGTK *win )
         dy += widget->allocation.y;
     }
 
+    int x = dx;
+    int y = dy;
+    
+    int dw = 0;
+    int dh = 0;
+    if (win->m_hasScrolling)
+    {
+        GetScrollbarWidth(widget, dw, dh);
+        
+        if (win->GetLayoutDirection() == wxLayout_RightToLeft)
+        {
+            // This is actually wrong for old GTK+ version
+            // which do not display the scrollbar on the
+            // left side in RTL
+            x += dw;
+        }
+    }
+
+    int w = widget->allocation.width-dw;
+    int h = widget->allocation.height-dh;
+
     if (win->HasFlag(wxRAISED_BORDER))
     {
         gtk_paint_shadow (widget->style,
@@ -361,8 +374,7 @@ static void draw_frame( GtkWidget *widget, wxWindowGTK *win )
                           GTK_STATE_NORMAL,
                           GTK_SHADOW_OUT,
                           NULL, NULL, NULL, // FIXME: No clipping?
-                          dx, dy,
-                          widget->allocation.width-dw, widget->allocation.height-dh );
+                          x, y, w, h );
         return;
     }
 
@@ -373,8 +385,7 @@ static void draw_frame( GtkWidget *widget, wxWindowGTK *win )
                           GTK_STATE_NORMAL,
                           GTK_SHADOW_IN,
                           NULL, NULL, NULL, // FIXME: No clipping?
-                          dx, dy,
-                          widget->allocation.width-dw, widget->allocation.height-dh );
+                          x, y, w, h );
         return;
     }
 
@@ -383,9 +394,7 @@ static void draw_frame( GtkWidget *widget, wxWindowGTK *win )
         GdkGC *gc;
         gc = gdk_gc_new( widget->window );
         gdk_gc_set_foreground( gc, &widget->style->black );
-        gdk_draw_rectangle( widget->window, gc, FALSE,
-                         dx, dy,
-                         widget->allocation.width-dw-1, widget->allocation.height-dh-1 );
+        gdk_draw_rectangle( widget->window, gc, FALSE, x, y, w-1, h-1 );
         g_object_unref (gc);
         return;
     }
@@ -2460,6 +2469,8 @@ bool wxWindowGTK::Create( wxWindow *parent,
 
     m_scrollBar[ScrollDir_Horz] = GTK_RANGE(scrolledWindow->hscrollbar);
     m_scrollBar[ScrollDir_Vert] = GTK_RANGE(scrolledWindow->vscrollbar);
+    if (GetLayoutDirection() == wxLayout_RightToLeft)
+        gtk_range_set_inverted( m_scrollBar[ScrollDir_Horz], TRUE );
 
     m_wxwindow = gtk_pizza_new();
 
@@ -3764,6 +3775,7 @@ void wxWindowGTK::Refresh( bool eraseBackground, const wxRect *rect )
             gdk_rect.height = rect->height;
             if (GetLayoutDirection() == wxLayout_RightToLeft)
                 gdk_rect.x = GetClientSize().x - gdk_rect.x - gdk_rect.width;
+
             p = &gdk_rect;
         }
         else // invalidate everything
@@ -3829,8 +3841,6 @@ void wxWindowGTK::GtkSendPaintEvents()
     // Clip to paint region in wxClientDC
     m_clipPaintRegion = true;
 
-    wxRegion maybe_rtl_region = m_updateRegion;
-    
 #if 0
     if (GetLayoutDirection() == wxLayout_RightToLeft)
     {
@@ -3893,8 +3903,6 @@ void wxWindowGTK::GtkSendPaintEvents()
     }
     else
     {
-        m_updateRegion = maybe_rtl_region;
-    
         wxWindowDC dc( (wxWindow*)this );
         dc.SetClippingRegion( m_updateRegion );
 
@@ -3904,8 +3912,6 @@ void wxWindowGTK::GtkSendPaintEvents()
         GetEventHandler()->ProcessEvent(erase_event);
     }
 
-    m_updateRegion = maybe_rtl_region;
-        
     wxNcPaintEvent nc_paint_event( GetId() );
     nc_paint_event.SetEventObject( this );
     GetEventHandler()->ProcessEvent( nc_paint_event );
@@ -4290,8 +4296,8 @@ void wxWindowGTK::SetScrollPos(int orient, int pos, bool WXUNUSED(refresh))
             pos = max;
         if (pos < 0)
             pos = 0;
-        m_scrollPos[dir] =
-        adj->value = pos;
+        m_scrollPos[dir] = adj->value = pos;
+        
         // If a "value_changed" signal emission is not already in progress
         if (!m_blockValueChanged[dir])
         {
@@ -4344,7 +4350,9 @@ wxEventType wxWindowGTK::GetScrollEventType(GtkRange* range)
 
     const int barIndex = range == m_scrollBar[1];
     GtkAdjustment* adj = range->adjustment;
+    
     const int value = int(adj->value + 0.5);
+    
     // save previous position
     const double oldPos = m_scrollPos[barIndex];
     // update current position
@@ -4390,7 +4398,10 @@ void wxWindowGTK::ScrollWindow( int dx, int dy, const wxRect* WXUNUSED(rect) )
 
     m_clipPaintRegion = true;
 
-    gtk_pizza_scroll( GTK_PIZZA(m_wxwindow), -dx, -dy );
+    if (GetLayoutDirection() == wxLayout_RightToLeft)
+        gtk_pizza_scroll( GTK_PIZZA(m_wxwindow), dx, -dy );
+    else
+        gtk_pizza_scroll( GTK_PIZZA(m_wxwindow), -dx, -dy );
 
     m_clipPaintRegion = false;
 }

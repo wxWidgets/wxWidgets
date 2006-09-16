@@ -329,39 +329,9 @@ wxWindowDC::wxWindowDC( wxWindow *window )
     {
         // reverse sense
         m_signX = -1;
-        
+
         // origin in the upper right corner
-        
-        int scroll_lines = 0;
-        int scroll_step = 0;
-        
-        // Are we using scrolling?    
-        wxScrollHelper *sh = (wxScrollHelper*) m_owner->GetScrollHelper();
-        if (sh)
-        {
-            scroll_lines = sh->GetScrollLines(wxHORIZONTAL);
-            sh->GetScrollPixelsPerUnit( &scroll_step, NULL );
-        } 
-        
-        if (scroll_lines == 0)
-        {
-            int client_width = m_owner->GetClientSize().x;
-            m_deviceOriginX = client_width;
-        }
-        else
-        {
-            // We cannot use just the virtual size here, because
-            // the virtual size may be less than the visible area
-            // due to rounding errors of the scroll steps. If the
-            // horizontal scroll step is 10 pixels and the virtual
-            // area is 97 pixels, we should be able to see or scroll
-            // to 100 pixels, so the origin is at -100, not -97.
-            int client_width = sh->GetTargetWindow()->GetClientSize().x;
-            int virtual_size = m_owner->GetVirtualSize().x;
-            int steps = (virtual_size + scroll_step - 1) / scroll_step;
-            int width = steps * scroll_step + (client_width % scroll_step);
-            m_deviceOriginX = width;
-        }
+        m_deviceOriginX = m_owner->GetClientSize().x;
     }
 }
 

@@ -815,8 +815,17 @@ void wxScrollHelper::AdjustScrollbars()
 void wxScrollHelper::DoPrepareDC(wxDC& dc)
 {
     wxPoint pt = dc.GetDeviceOrigin();
-    dc.SetDeviceOrigin( pt.x - m_xScrollPosition * m_xScrollPixelsPerLine,
-                        pt.y - m_yScrollPosition * m_yScrollPixelsPerLine );
+#ifdef __WXGTK__
+    // It may actually be correct to always query
+    // the m_sign from the DC here, but I leve the
+    // #ifdef GTK for now.
+    if (m_win->GetLayoutDirection() == wxLayout_RightToLeft)
+        dc.SetDeviceOrigin( pt.x + m_xScrollPosition * m_xScrollPixelsPerLine,
+                            pt.y - m_yScrollPosition * m_yScrollPixelsPerLine );
+    else
+#endif
+        dc.SetDeviceOrigin( pt.x - m_xScrollPosition * m_xScrollPixelsPerLine,
+                            pt.y - m_yScrollPosition * m_yScrollPixelsPerLine );
     dc.SetUserScale( m_scaleX, m_scaleY );
 }
 
@@ -949,33 +958,7 @@ void wxScrollHelper::GetViewStart (int *x, int *y) const
 void wxScrollHelper::DoCalcScrolledPosition(int x, int y, int *xx, int *yy) const
 {
     if ( xx )
-    {
-        if ((m_xScrollLines == 0) || (m_xScrollPixelsPerLine == 0))
-        {
-            // nothing to do
-            *xx = x;
-        }
-        else
-        {
-#ifdef __WXGTK__
-            if (m_win->GetLayoutDirection() == wxLayout_RightToLeft)
-            {
-                int w = 0, h = 0;
-                GetTargetSize(&w, &h);
-
-                // Calculate page size i.e. number of scroll units you get on the
-                // current client window
-                int noPagePositions = w/m_xScrollPixelsPerLine;
-                if (noPagePositions < 1) noPagePositions = 1;
-                *xx = x - ((m_xScrollLines - noPagePositions - m_xScrollPosition) * m_xScrollPixelsPerLine);
-            }
-            else
-#endif
-            {
-                *xx = x - m_xScrollPosition * m_xScrollPixelsPerLine;
-            }
-        }
-    }
+        *xx = x - m_xScrollPosition * m_xScrollPixelsPerLine;
     if ( yy )
         *yy = y - m_yScrollPosition * m_yScrollPixelsPerLine;
 }
@@ -983,33 +966,7 @@ void wxScrollHelper::DoCalcScrolledPosition(int x, int y, int *xx, int *yy) cons
 void wxScrollHelper::DoCalcUnscrolledPosition(int x, int y, int *xx, int *yy) const
 {
     if ( xx )
-    {
-        if ((m_xScrollLines == 0) || (m_xScrollPixelsPerLine == 0))
-        {
-            // nothing to do
-            *xx = x;
-        }
-        else
-        {
-#ifdef __WXGTK__
-            if (m_win->GetLayoutDirection() == wxLayout_RightToLeft)
-            {
-                int w = 0, h = 0;
-                GetTargetSize(&w, &h);
-
-                // Calculate page size i.e. number of scroll units you get on the
-                // current client window
-                int noPagePositions = w/m_xScrollPixelsPerLine;
-                if (noPagePositions < 1) noPagePositions = 1;
-                *xx = x + ((m_xScrollLines - noPagePositions - m_xScrollPosition) * m_xScrollPixelsPerLine);
-            }
-            else
-#endif
-            {
-                *xx = x + m_xScrollPosition * m_xScrollPixelsPerLine;
-            }
-        }
-    }
+        *xx = x + m_xScrollPosition * m_xScrollPixelsPerLine;
     if ( yy )
         *yy = y + m_yScrollPosition * m_yScrollPixelsPerLine;
 }

@@ -1701,24 +1701,23 @@ void wxListHeaderWindow::AdjustDC(wxDC& dc)
     int view_start;
     m_owner->GetViewStart( &view_start, NULL );
 
-    if (GetLayoutDirection() == wxLayout_RightToLeft)
-    {
-        // FIXME: we need a better way for RTL scrolling..
-        int scroll_lines = m_owner->GetScrollLines( wxHORIZONTAL );
-        if (scroll_lines)
-        {
-            int client_size = m_owner->GetClientSize().x;
-            view_start = scroll_lines - (client_size / xpix) - view_start;
-            view_start = -view_start;
-        } 
-    }
 
     int org_x = 0;
     int org_y = 0;
     dc.GetDeviceOrigin( &org_x, &org_y );
 
     // account for the horz scrollbar offset
-    dc.SetDeviceOrigin( org_x - (view_start * xpix), org_y );
+#ifdef __WXGTK__
+    if (GetLayoutDirection() == wxLayout_RightToLeft)
+    {
+        // Maybe we just have to check for m_signX
+        // in the DC, but I leave the #ifdef __WXGTK__
+        // for now
+        dc.SetDeviceOrigin( org_x + (view_start * xpix), org_y );
+    }
+    else
+#endif
+        dc.SetDeviceOrigin( org_x - (view_start * xpix), org_y );
 }
 
 void wxListHeaderWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
@@ -3155,22 +3154,10 @@ void wxListMainWindow::MoveToItem(size_t item)
     }
     else // !report
     {
-        if (GetLayoutDirection() == wxLayout_RightToLeft)
-        {
-#if 0
-            wxPrintf( wxT("rect %d %d   %d %d   view_x %d\n"), rect.x, rect.y, rect.width, rect.height, view_x );
-            int virtual_width = GetVirtualSize().x;
-            view_x = virtual_width - view_x - client_w;
-            wxPrintf( wxT("virtual_width %d view_x = %d client_w = %d\n"), virtual_width, view_x, client_w );
-#endif
-        }
-        else
-        {
-            if (rect.x-view_x < 5)
-                Scroll( (rect.x - 5) / SCROLL_UNIT_X, -1 );
-            if (rect.x + rect.width - 5 > view_x + client_w)
-                Scroll( (rect.x + rect.width - client_w + SCROLL_UNIT_X) / SCROLL_UNIT_X, -1 );
-        }
+        if (rect.x-view_x < 5)
+            Scroll( (rect.x - 5) / SCROLL_UNIT_X, -1 );
+        if (rect.x + rect.width - 5 > view_x + client_w)
+            Scroll( (rect.x + rect.width - client_w + SCROLL_UNIT_X) / SCROLL_UNIT_X, -1 );
     }
 }
 
