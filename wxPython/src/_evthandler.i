@@ -22,6 +22,7 @@ public:
     // turn off this typemap
     %typemap(out) wxEvtHandler*;    
 
+    %pythonAppend wxEvtHandler         "self._setOORInfo(self)"
     wxEvtHandler();
 
     // Turn it back on again

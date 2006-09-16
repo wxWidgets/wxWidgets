@@ -1035,42 +1035,48 @@ its own event handler.", "");
     DocDeclStr(
         void , SetEventHandler( wxEvtHandler *handler ),
         "Sets the event handler for this window.  An event handler is an object
-that is capable of processing the events sent to a window. By default,
-the window is its own event handler, but an application may wish to
-substitute another, for example to allow central implementation of
-event-handling for a variety of different window classes.
+that is capable of processing the events sent to a window.  (In other
+words, is able to dispatch the events to handler function.)  By
+default, the window is its own event handler, but an application may
+wish to substitute another, for example to allow central
+implementation of event-handling for a variety of different window
+classes.
 
 It is usually better to use `wx.Window.PushEventHandler` since this sets
 up a chain of event handlers, where an event not handled by one event
-handler is handed to the next one in the chain.", "");
+handler is handed off to the next one in the chain.", "");
     
 
     DocDeclStr(
         void , PushEventHandler( wxEvtHandler *handler ),
         "Pushes this event handler onto the event handler stack for the window.
 An event handler is an object that is capable of processing the events
-sent to a window. By default, the window is its own event handler, but
-an application may wish to substitute another, for example to allow
-central implementation of event-handling for a variety of different
-window classes.
+sent to a window.  (In other words, is able to dispatch the events to
+handler function.)  By default, the window is its own event handler,
+but an application may wish to substitute another, for example to
+allow central implementation of event-handling for a variety of
+different window classes.
 
 wx.Window.PushEventHandler allows an application to set up a chain of
 event handlers, where an event not handled by one event handler is
-handed to the next one in the chain. Use `wx.Window.PopEventHandler` to
-remove the event handler.", "");
+handed to the next one in the chain.  Use `wx.Window.PopEventHandler`
+to remove the event handler.  Ownership of the handler is *not* given
+to the window, so you should be sure to pop the handler before the
+window is destroyed and either let PopEventHandler destroy it, or call
+its Destroy method yourself.", "");
 
     
     DocDeclStr(
         wxEvtHandler *, PopEventHandler( bool deleteHandler = false ),
         "Removes and returns the top-most event handler on the event handler
 stack.  If deleteHandler is True then the wx.EvtHandler object will be
-destroyed after it is popped.", "");
+destroyed after it is popped, and ``None`` will be returned instead.", "");
     
 
     DocDeclStr(
         bool , RemoveEventHandler(wxEvtHandler *handler),
         "Find the given handler in the event handler chain and remove (but not
-delete) it from the event handler chain, return True if it was found
+delete) it from the event handler chain, returns True if it was found
 and False otherwise (this also results in an assert failure so this
 function should only be called when the handler is supposed to be
 there.)", "");
