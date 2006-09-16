@@ -1884,6 +1884,11 @@ class VScrolledWindow(Panel):
         """GetLinesHeight(self, size_t lineMin, size_t lineMax) -> int"""
         return _windows_.VScrolledWindow_GetLinesHeight(*args, **kwargs)
 
+    FirstVisibleLine = property(GetFirstVisibleLine,doc="See `GetFirstVisibleLine`") 
+    LastVisibleLine = property(GetLastVisibleLine,doc="See `GetLastVisibleLine`") 
+    LineCount = property(GetLineCount,SetLineCount,doc="See `GetLineCount` and `SetLineCount`") 
+    VisibleBegin = property(GetVisibleBegin,doc="See `GetVisibleBegin`") 
+    VisibleEnd = property(GetVisibleEnd,doc="See `GetVisibleEnd`") 
 _windows_.VScrolledWindow_swigregister(VScrolledWindow)
 
 def PreVScrolledWindow(*args, **kwargs):
@@ -2006,6 +2011,12 @@ class VListBox(VScrolledWindow):
         """OnDrawBackground(self, DC dc, Rect rect, size_t n)"""
         return _windows_.VListBox_OnDrawBackground(*args, **kwargs)
 
+    FirstSelected = property(GetFirstSelected,doc="See `GetFirstSelected`") 
+    ItemCount = property(GetItemCount,SetItemCount,doc="See `GetItemCount` and `SetItemCount`") 
+    Margins = property(GetMargins,SetMargins,doc="See `GetMargins` and `SetMargins`") 
+    SelectedCount = property(GetSelectedCount,doc="See `GetSelectedCount`") 
+    Selection = property(GetSelection,SetSelection,doc="See `GetSelection` and `SetSelection`") 
+    SelectionBackground = property(GetSelectionBackground,SetSelectionBackground,doc="See `GetSelectionBackground` and `SetSelectionBackground`") 
 _windows_.VListBox_swigregister(VListBox)
 VListBoxNameStr = cvar.VListBoxNameStr
 
@@ -2877,7 +2888,7 @@ class ProgressDialog(Frame):
         unless the Cancel button has been pressed, and ``skip`` is ``False``
         unless the Skip button (if any) has been pressed.
 
-        If the ``continue`` return value is ``false``, the application can either
+        If the ``continue`` return value is ``False``, the application can either
         immediately destroy the dialog or ask the user for confirmation, and if the
         abort is not confirmed the dialog may be resumed with `Resume` function.
 

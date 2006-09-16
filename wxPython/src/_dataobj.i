@@ -837,6 +837,7 @@ public:
         void , SetURL(const wxString& url),
         "Set the URL.", "");
     
+    %property(URL, GetURL, SetURL, doc="See `GetURL` and `SetURL`");
 };
 
 //---------------------------------------------------------------------------

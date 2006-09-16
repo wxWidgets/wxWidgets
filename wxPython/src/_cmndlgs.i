@@ -827,7 +827,7 @@ boolean values, ``(continue, skip)`` where ``continue`` is ``True``
 unless the Cancel button has been pressed, and ``skip`` is ``False``
 unless the Skip button (if any) has been pressed.
 
-If the ``continue`` return value is ``false``, the application can either
+If the ``continue`` return value is ``False``, the application can either
 immediately destroy the dialog or ask the user for confirmation, and if the
 abort is not confirmed the dialog may be resumed with `Resume` function.
 ", "");

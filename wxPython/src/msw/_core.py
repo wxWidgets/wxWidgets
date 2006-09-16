@@ -5876,6 +5876,10 @@ class UpdateUIEvent(CommandEvent):
         return _core_.UpdateUIEvent_GetMode(*args, **kwargs)
 
     GetMode = staticmethod(GetMode)
+    Checked = property(GetChecked,Check,doc="See `GetChecked`") 
+    Enabled = property(GetEnabled,Enable,doc="See `GetEnabled`") 
+    Shown = property(GetShown,Show,doc="See `GetShown`") 
+    Text = property(GetText,SetText,doc="See `GetText` and `SetText`") 
 _core_.UpdateUIEvent_swigregister(UpdateUIEvent)
 
 def UpdateUIEvent_SetUpdateInterval(*args, **kwargs):
@@ -6280,6 +6284,7 @@ class WindowCreateEvent(CommandEvent):
         """
         return _core_.WindowCreateEvent_GetWindow(*args, **kwargs)
 
+    Window = property(GetWindow,doc="See `GetWindow`") 
 _core_.WindowCreateEvent_swigregister(WindowCreateEvent)
 
 class WindowDestroyEvent(CommandEvent):
@@ -6319,6 +6324,7 @@ class WindowDestroyEvent(CommandEvent):
         """
         return _core_.WindowDestroyEvent_GetWindow(*args, **kwargs)
 
+    Window = property(GetWindow,doc="See `GetWindow`") 
 _core_.WindowDestroyEvent_swigregister(WindowDestroyEvent)
 
 #---------------------------------------------------------------------------
@@ -10222,6 +10228,7 @@ class Validator(EvtHandler):
         return _core_.Validator_SetBellOnError(*args, **kwargs)
 
     SetBellOnError = staticmethod(SetBellOnError)
+    Window = property(GetWindow,SetWindow,doc="See `GetWindow` and `SetWindow`") 
 _core_.Validator_swigregister(Validator)
 
 def Validator_IsSilent(*args):

@@ -63,6 +63,7 @@ public:
     static bool IsSilent();
     static void SetBellOnError(int doIt = true);
 
+    %property(Window, GetWindow, SetWindow, doc="See `GetWindow` and `SetWindow`");
 };
 
 

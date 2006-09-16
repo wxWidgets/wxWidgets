@@ -2164,6 +2164,10 @@ The mode may be one of the following values:
 all windows, or only to those which specify that they will process the
 events.", "");
 
+    %property(Checked, GetChecked, Check, doc="See `GetChecked`");
+    %property(Enabled, GetEnabled, Enable, doc="See `GetEnabled`");
+    %property(Shown, GetShown, Show, doc="See `GetShown`");
+    %property(Text, GetText, SetText, doc="See `GetText` and `SetText`");
 };
 
 //---------------------------------------------------------------------------
@@ -2406,6 +2410,7 @@ public:
         wxWindow *, GetWindow() const,
         "Returns the window that this event refers to.", "");
 
+    %property(Window, GetWindow, doc="See `GetWindow`");
 };
 
 
@@ -2427,6 +2432,8 @@ public:
     DocDeclStr(
         wxWindow *, GetWindow() const,
         "Returns the window that this event refers to.", "");
+
+    %property(Window, GetWindow, doc="See `GetWindow`");
 };
 
 

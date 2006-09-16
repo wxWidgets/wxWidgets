@@ -220,6 +220,12 @@ public:
     // get the total height of the lines between lineMin (inclusive) and
     // lineMax (exclusive)
     wxCoord GetLinesHeight(size_t lineMin, size_t lineMax) const;
+
+    %property(FirstVisibleLine, GetFirstVisibleLine, doc="See `GetFirstVisibleLine`");
+    %property(LastVisibleLine, GetLastVisibleLine, doc="See `GetLastVisibleLine`");
+    %property(LineCount, GetLineCount, SetLineCount, doc="See `GetLineCount` and `SetLineCount`");
+    %property(VisibleBegin, GetVisibleBegin, doc="See `GetVisibleBegin`");
+    %property(VisibleEnd, GetVisibleEnd, doc="See `GetVisibleEnd`");
 };
 
 
@@ -465,6 +471,13 @@ public:
 
     virtual void OnDrawSeparator(wxDC& dc, wxRect& rect, size_t n) const;
     virtual void OnDrawBackground(wxDC& dc, const wxRect& rect, size_t n) const;
+
+    %property(FirstSelected, GetFirstSelected, doc="See `GetFirstSelected`");
+    %property(ItemCount, GetItemCount, SetItemCount, doc="See `GetItemCount` and `SetItemCount`");
+    %property(Margins, GetMargins, SetMargins, doc="See `GetMargins` and `SetMargins`");
+    %property(SelectedCount, GetSelectedCount, doc="See `GetSelectedCount`");
+    %property(Selection, GetSelection, SetSelection, doc="See `GetSelection` and `SetSelection`");
+    %property(SelectionBackground, GetSelectionBackground, SetSelectionBackground, doc="See `GetSelectionBackground` and `SetSelectionBackground`");
 };
 
 

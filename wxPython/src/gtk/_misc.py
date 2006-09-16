@@ -5216,6 +5216,7 @@ class URLDataObject(DataObject):
         """
         return _misc_.URLDataObject_SetURL(*args, **kwargs)
 
+    URL = property(GetURL,SetURL,doc="See `GetURL` and `SetURL`") 
 _misc_.URLDataObject_swigregister(URLDataObject)
 
 class MetafileDataObject(DataObjectSimple):
@@ -5777,6 +5778,9 @@ class VideoMode(object):
     h = property(_misc_.VideoMode_h_get, _misc_.VideoMode_h_set)
     bpp = property(_misc_.VideoMode_bpp_get, _misc_.VideoMode_bpp_set)
     refresh = property(_misc_.VideoMode_refresh_get, _misc_.VideoMode_refresh_set)
+    Depth = property(GetDepth,doc="See `GetDepth`") 
+    Height = property(GetHeight,doc="See `GetHeight`") 
+    Width = property(GetWidth,doc="See `GetWidth`") 
 _misc_.VideoMode_swigregister(VideoMode)
 
 class Display(object):

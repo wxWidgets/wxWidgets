@@ -72,6 +72,10 @@ means unspecified/known", "");
 
     // refresh frequency in Hz, 0 means unspecified/unknown
     int refresh;
+
+    %property(Depth, GetDepth, doc="See `GetDepth`");
+    %property(Height, GetHeight, doc="See `GetHeight`");
+    %property(Width, GetWidth, doc="See `GetWidth`");
 };
 
 
