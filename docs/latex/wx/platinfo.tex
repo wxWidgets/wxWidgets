@@ -142,6 +142,32 @@ Initializes the object using given values.
 
 
 
+\membersection{wxPlatformInfo::CheckOSVersion}\label{wxplatforminfocheckosversion}
+
+\constfunc{bool}{CheckOSVersion}{\param{int major}, \param{int minor}}
+
+Returns \true if the OS version is at least \texttt{major.minor}.
+
+\wxheading{See also}
+
+\helpref{GetOSMajorVersion}{wxplatforminfogetosmajorversion},
+\helpref{GetOSMinorVersion}{wxplatforminfogetosminorversion},
+\helpref{CheckToolkitVersion}{wxplatforminfochecktoolkitversion}
+
+
+\membersection{wxPlatformInfo::CheckToolkitVersion}\label{wxplatforminfochecktoolkitversion}
+
+\constfunc{bool}{CheckToolkitVersion}{\param{int major}, \param{int minor}}
+
+Returns \true if the toolkit version is at least \texttt{major.minor}.
+
+\wxheading{See also}
+
+\helpref{GetToolkitMajorVersion}{wxplatforminfogettoolkitmajorversion},
+\helpref{GetToolkitMinorVersion}{wxplatforminfogettoolkitminorversion},
+\helpref{CheckOSVersion}{wxplatforminfocheckosversion}
+
+
 
 \membersection{wxPlatformInfo::GetArch}\label{wxplatforminfogetarch}
 
@@ -204,12 +230,18 @@ Returns the name for the endianness of this wxPlatformInfo instance.
 
 Returns the major version of the OS associated with this wxPlatformInfo instance.
 
+\wxheading{See also}
+
+\helpref{CheckOSVersion}{wxplatforminfocheckosversion}
+
+
 \membersection{wxPlatformInfo::GetOSMinorVersion}\label{wxplatforminfogetosminorversion}
 
 \constfunc{int}{GetOSMinorVersion}{\void}
 
 Returns the minor version of the OS associated with this wxPlatformInfo instance.
 
+\helpref{CheckOSVersion}{wxplatforminfocheckosversion}
 
 
 
@@ -311,12 +343,21 @@ Returns the short name of the wxWidgets port ID associated with this wxPlatformI
 Returns the major version of the toolkit associated with this wxPlatformInfo instance.
 Note that if {GetPortId}{wxplatforminfogetportid} returns wxPORT\_BASE, then this value is zero (unless externally modified with SetToolkitVersion); that is, no native toolkit is in use.
 
+\wxheading{See also}
+
+\helpref{CheckToolkitVersion}{wxplatforminfochecktoolkitversion}
+
+
 \membersection{wxPlatformInfo::GetToolkitMinorVersion}\label{wxplatforminfogettoolkitminorversion}
 
 \constfunc{int}{GetToolkitMinorVersion}{\void}
 
 Returns the minor version of the toolkit associated with this wxPlatformInfo instance.
 Note that if {GetPortId}{wxplatforminfogetportid} returns wxPORT\_BASE, then this value is zero (unless externally modified with SetToolkitVersion); that is, no native toolkit is in use.
+
+\wxheading{See also}
+
+\helpref{CheckToolkitVersion}{wxplatforminfochecktoolkitversion}
 
 
 

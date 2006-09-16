@@ -159,10 +159,27 @@ public:
     int GetOSMinorVersion() const
         { return m_osVersionMinor; }
 
+    // return true if the OS version >= major.minor
+    bool CheckOSVersion(int major, int minor) const
+    {
+        return DoCheckVersion(GetOSMajorVersion(),
+                              GetOSMinorVersion(),
+                              major,
+                              minor);
+    }
+
     int GetToolkitMajorVersion() const
         { return m_tkVersionMajor; }
     int GetToolkitMinorVersion() const
         { return m_tkVersionMinor; }
+
+    bool CheckToolkitVersion(int major, int minor) const
+    {
+        return DoCheckVersion(GetToolkitMajorVersion(),
+                              GetToolkitMinorVersion(),
+                              major,
+                              minor);
+    }
 
     bool IsUsingUniversalWidgets() const
         { return m_usingUniversal; }
@@ -202,13 +219,13 @@ public:
         { m_tkVersionMajor=major; m_tkVersionMinor=minor; }
 
     void SetOperatingSystemId(wxOperatingSystemId n)
-        { m_os=n; }
+        { m_os = n; }
     void SetPortId(wxPortId n)
-        { m_port=n; }
+        { m_port = n; }
     void SetArchitecture(wxArchitecture n)
-        { m_arch=n; }
+        { m_arch = n; }
     void SetEndianness(wxEndianness n)
-        { m_endian=n; }
+        { m_endian = n; }
 
     // miscellaneous
     // -----------------
@@ -224,12 +241,18 @@ public:
 
 
 protected:
+    static bool DoCheckVersion(int majorCur, int minorCur, int major, int minor)
+    {
+        return majorCur > major || (majorCur == major && minorCur >= minor);
+    }
+
     // OS stuff
     // -----------------
 
     // Version of the OS; valid if m_os != wxOS_UNKNOWN
     // (-1 means not initialized yet).
-    int m_osVersionMajor, m_osVersionMinor;
+    int m_osVersionMajor,
+        m_osVersionMinor;
 
     // Operating system ID.
     wxOperatingSystemId m_os;
