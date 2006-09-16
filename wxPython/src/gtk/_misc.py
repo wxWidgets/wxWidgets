@@ -1108,6 +1108,10 @@ class PlatformInformation(object):
         """GetOSMinorVersion(self) -> int"""
         return _misc_.PlatformInformation_GetOSMinorVersion(*args, **kwargs)
 
+    def CheckOSVersion(*args, **kwargs):
+        """CheckOSVersion(self, int major, int minor) -> bool"""
+        return _misc_.PlatformInformation_CheckOSVersion(*args, **kwargs)
+
     def GetToolkitMajorVersion(*args, **kwargs):
         """GetToolkitMajorVersion(self) -> int"""
         return _misc_.PlatformInformation_GetToolkitMajorVersion(*args, **kwargs)
@@ -1115,6 +1119,10 @@ class PlatformInformation(object):
     def GetToolkitMinorVersion(*args, **kwargs):
         """GetToolkitMinorVersion(self) -> int"""
         return _misc_.PlatformInformation_GetToolkitMinorVersion(*args, **kwargs)
+
+    def CheckToolkitVersion(*args, **kwargs):
+        """CheckToolkitVersion(self, int major, int minor) -> bool"""
+        return _misc_.PlatformInformation_CheckToolkitVersion(*args, **kwargs)
 
     def IsUsingUniversalWidgets(*args, **kwargs):
         """IsUsingUniversalWidgets(self) -> bool"""

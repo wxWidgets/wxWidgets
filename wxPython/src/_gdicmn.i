@@ -516,10 +516,19 @@ public:
     wxPoint GetBottomRight() const;
     void SetBottomRight(const wxPoint &p);
 
+    wxPoint GetTopRight() const;
+    void SetTopRight(const wxPoint &p);
+    wxPoint GetBottomLeft() const;
+    void SetBottomLeft(const wxPoint &p);
+    
 //    wxPoint GetLeftTop() const;
 //    void SetLeftTop(const wxPoint &p);
 //    wxPoint GetRightBottom() const;
 //    void SetRightBottom(const wxPoint &p);
+//    wxPoint GetRightTop() const;
+//    void SetRightTop(const wxPoint &p);
+//    wxPoint GetLeftBottom() const;
+//    void SetLeftBottom(const wxPoint &p);
 
     int GetLeft()   const;
     int GetTop()    const;
@@ -717,6 +726,7 @@ usually, but not necessarily, the larger one.", "");
     
     %property(Bottom, GetBottom, SetBottom, doc="See `GetBottom` and `SetBottom`");
     %property(BottomRight, GetBottomRight, SetBottomRight, doc="See `GetBottomRight` and `SetBottomRight`");
+    %property(BottomLeft, GetBottomLeft, SetBottomLeft, doc="See `GetBottomLeft` and `SetBottomLeft`");
     %property(Height, GetHeight, SetHeight, doc="See `GetHeight` and `SetHeight`");
     %property(Left, GetLeft, SetLeft, doc="See `GetLeft` and `SetLeft`");
     %property(Position, GetPosition, SetPosition, doc="See `GetPosition` and `SetPosition`");
@@ -724,6 +734,7 @@ usually, but not necessarily, the larger one.", "");
     %property(Size, GetSize, SetSize, doc="See `GetSize` and `SetSize`");
     %property(Top, GetTop, SetTop, doc="See `GetTop` and `SetTop`");
     %property(TopLeft, GetTopLeft, SetTopLeft, doc="See `GetTopLeft` and `SetTopLeft`");
+    %property(TopRight, GetTopRight, SetTopRight, doc="See `GetTopRight` and `SetTopRight`");
     %property(Width, GetWidth, SetWidth, doc="See `GetWidth` and `SetWidth`");
     %property(X, GetX, SetX, doc="See `GetX` and `SetX`");
     %property(Y, GetY, SetY, doc="See `GetY` and `SetY`");

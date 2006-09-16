@@ -1184,6 +1184,22 @@ class Rect(object):
         """SetBottomRight(self, Point p)"""
         return _core_.Rect_SetBottomRight(*args, **kwargs)
 
+    def GetTopRight(*args, **kwargs):
+        """GetTopRight(self) -> Point"""
+        return _core_.Rect_GetTopRight(*args, **kwargs)
+
+    def SetTopRight(*args, **kwargs):
+        """SetTopRight(self, Point p)"""
+        return _core_.Rect_SetTopRight(*args, **kwargs)
+
+    def GetBottomLeft(*args, **kwargs):
+        """GetBottomLeft(self) -> Point"""
+        return _core_.Rect_GetBottomLeft(*args, **kwargs)
+
+    def SetBottomLeft(*args, **kwargs):
+        """SetBottomLeft(self, Point p)"""
+        return _core_.Rect_SetBottomLeft(*args, **kwargs)
+
     def GetLeft(*args, **kwargs):
         """GetLeft(self) -> int"""
         return _core_.Rect_GetLeft(*args, **kwargs)
@@ -1408,6 +1424,7 @@ class Rect(object):
 
     Bottom = property(GetBottom,SetBottom,doc="See `GetBottom` and `SetBottom`") 
     BottomRight = property(GetBottomRight,SetBottomRight,doc="See `GetBottomRight` and `SetBottomRight`") 
+    BottomLeft = property(GetBottomLeft,SetBottomLeft,doc="See `GetBottomLeft` and `SetBottomLeft`") 
     Height = property(GetHeight,SetHeight,doc="See `GetHeight` and `SetHeight`") 
     Left = property(GetLeft,SetLeft,doc="See `GetLeft` and `SetLeft`") 
     Position = property(GetPosition,SetPosition,doc="See `GetPosition` and `SetPosition`") 
@@ -1415,6 +1432,7 @@ class Rect(object):
     Size = property(GetSize,SetSize,doc="See `GetSize` and `SetSize`") 
     Top = property(GetTop,SetTop,doc="See `GetTop` and `SetTop`") 
     TopLeft = property(GetTopLeft,SetTopLeft,doc="See `GetTopLeft` and `SetTopLeft`") 
+    TopRight = property(GetTopRight,SetTopRight,doc="See `GetTopRight` and `SetTopRight`") 
     Width = property(GetWidth,SetWidth,doc="See `GetWidth` and `SetWidth`") 
     X = property(GetX,SetX,doc="See `GetX` and `SetX`") 
     Y = property(GetY,SetY,doc="See `GetY` and `SetY`") 

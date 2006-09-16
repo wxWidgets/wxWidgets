@@ -366,9 +366,13 @@ public:
     int GetOSMajorVersion() const;
     int GetOSMinorVersion() const;
 
+    bool CheckOSVersion(int major, int minor) const;
+        
     int GetToolkitMajorVersion() const;
     int GetToolkitMinorVersion() const;
 
+    bool CheckToolkitVersion(int major, int minor) const;
+    
     bool IsUsingUniversalWidgets() const;
 
     wxOperatingSystemId GetOperatingSystemId() const;
