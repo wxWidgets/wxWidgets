@@ -16,62 +16,49 @@ not even possible to Abort.
 """
 
 import wx
-from wx.lib.delayedresult import startWorker
+import wx.lib.delayedresult as delayedresult
 
-class FrameSimpleDelayedGlade(wx.Frame):
+
+class FrameSimpleDelayedBase(wx.Frame):
     def __init__(self, *args, **kwds):
-        # begin wxGlade: FrameSimpleDelayed.__init__
-        kwds["style"] = wx.DEFAULT_FRAME_STYLE
         wx.Frame.__init__(self, *args, **kwds)
-        self.checkboxUseDelayed = wx.CheckBox(self, -1, "Use delayedresult")
-        self.buttonGet = wx.Button(self, -1, "Get")
-        self.buttonAbort = wx.Button(self, -1, "Abort")
-        self.slider = wx.Slider(self, -1, 0, 0, 10, size=(100,-1), style=wx.SL_HORIZONTAL|wx.SL_AUTOTICKS)
-        self.textCtrlResult = wx.TextCtrl(self, -1, "", style=wx.TE_READONLY)
+        pnl = wx.Panel(self)
+        self.checkboxUseDelayed = wx.CheckBox(pnl, -1, "Using delayedresult")
+        self.buttonGet = wx.Button(pnl, -1, "Get")
+        self.buttonAbort = wx.Button(pnl, -1, "Abort")
+        self.slider = wx.Slider(pnl, -1, 0, 0, 10, size=(100,-1),
+                                style=wx.SL_HORIZONTAL|wx.SL_AUTOTICKS)
+        self.textCtrlResult = wx.TextCtrl(pnl, -1, "", style=wx.TE_READONLY)
 
-        self.__set_properties()
-        self.__do_layout()
-
-        self.Bind(wx.EVT_BUTTON, self.handleGet, self.buttonGet)
-        self.Bind(wx.EVT_BUTTON, self.handleAbort, self.buttonAbort)
-        # end wxGlade
-
-    def __set_properties(self):
-        # begin wxGlade: FrameSimpleDelayed.__set_properties
-        self.SetTitle("Simple Examle of Delayed Result")
         self.checkboxUseDelayed.SetValue(1)
         self.checkboxUseDelayed.Enable(False)
         self.buttonAbort.Enable(False)
-        # end wxGlade
 
-    def __do_layout(self):
-        # begin wxGlade: FrameSimpleDelayed.__do_layout
-        sizerFrame = wx.BoxSizer(wx.VERTICAL)
-        sizerGetResult = wx.BoxSizer(wx.HORIZONTAL)
-        sizerUseDelayed = wx.BoxSizer(wx.HORIZONTAL)
-        sizerUseDelayed.Add(self.checkboxUseDelayed, 0, wx.LEFT|wx.ALIGN_CENTER_VERTICAL|wx.ADJUST_MINSIZE, 5)
-        sizerFrame.Add(sizerUseDelayed, 1, wx.EXPAND, 0)
-        sizerGetResult.Add(self.buttonGet, 0, wx.ADJUST_MINSIZE, 0)
-        sizerGetResult.Add(self.buttonAbort, 0, wx.ADJUST_MINSIZE, 0)
-        sizerGetResult.Add(self.slider, 0, wx.ADJUST_MINSIZE, 0)
-        sizerGetResult.Add(self.textCtrlResult, 0, wx.ADJUST_MINSIZE, 0)
-        sizerFrame.Add(sizerGetResult, 1, wx.ALL|wx.EXPAND, 5)
-        self.SetAutoLayout(True)
-        self.SetSizer(sizerFrame)
-        sizerFrame.Fit(self)
-        sizerFrame.SetSizeHints(self)
-        self.Layout()
-        # end wxGlade
+        vsizer = wx.BoxSizer(wx.VERTICAL)
+        hsizer = wx.BoxSizer(wx.HORIZONTAL)
+        vsizer.Add(self.checkboxUseDelayed, 0, wx.ALL, 10)
+        hsizer.Add(self.buttonGet, 0, wx.ALL, 5)
+        hsizer.Add(self.buttonAbort, 0, wx.ALL, 5)
+        hsizer.Add(self.slider, 0, wx.ALL, 5)
+        hsizer.Add(self.textCtrlResult, 0, wx.ALL, 5)
+        vsizer.Add(hsizer, 0, wx.ALL, 5)
+        pnl.SetSizer(vsizer)
+        vsizer.SetSizeHints(self)
+        
+        self.Bind(wx.EVT_BUTTON, self.handleGet, self.buttonGet)
+        self.Bind(wx.EVT_BUTTON, self.handleAbort, self.buttonAbort)
 
 
-class FrameSimpleDelayed(FrameSimpleDelayedGlade):
+
+
+class FrameSimpleDelayed(FrameSimpleDelayedBase):
     """This demos simplistic use of delayedresult module."""
     
     def __init__(self, *args, **kwargs):
+        FrameSimpleDelayedBase.__init__(self, *args, **kwargs)
         self.jobID = 1
-        FrameSimpleDelayedGlade.__init__(self, *args, **kwargs)
         self.Bind(wx.EVT_CLOSE, self.handleClose)
-    
+
     def setLog(self, log):
         self.log = log
 
@@ -81,26 +68,29 @@ class FrameSimpleDelayed(FrameSimpleDelayedGlade):
         your app would exit so this would not happen."""
         if self.buttonAbort.IsEnabled():
             self.Hide()
-            import time
-            time.sleep(5)
-        self.Destroy()
+            wx.FutureCall(5000, self.Destroy)
+        else:
+            self.Destroy()
             
     def handleGet(self, event): 
         """Compute result in separate thread, doesn't affect GUI response."""
         self.buttonGet.Enable(False)
         self.buttonAbort.Enable(True)
 
-        self.log( "Starting job %s in producer thread: GUI remains responsive" % self.jobID )
-        startWorker(self.__handleResult, self.__resultCreator, 
-                    wargs=(self.jobID,), jobID=self.jobID)
+        self.log( "Starting job %s in producer thread: GUI remains responsive"
+                  % self.jobID )
+        delayedresult.startWorker(self._resultConsumer, self._resultProducer, 
+                                  wargs=(self.jobID,), jobID=self.jobID)
+
                         
-    def __resultCreator(self, jobID):
+    def _resultProducer(self, jobID):
         """Pretend to be a complex worker function or something that takes 
         long time to run due to network access etc. GUI will freeze if this 
         method is not called in separate thread."""
         import time
         time.sleep(5)
         return jobID
+
 
     def handleAbort(self, event): 
         """Abort actually just means 'ignore the result when it gets to 
@@ -110,8 +100,9 @@ class FrameSimpleDelayed(FrameSimpleDelayedGlade):
         self.buttonGet.Enable(True)
         self.buttonAbort.Enable(False)
         self.jobID += 1
+
         
-    def __handleResult(self, delayedResult):
+    def _resultConsumer(self, delayedResult):
         # See if we still want the result for last job started
         jobID = delayedResult.getJobID()
         if jobID != self.jobID:
@@ -136,29 +127,30 @@ class FrameSimpleDelayed(FrameSimpleDelayedGlade):
         self.jobID += 1
 
 
-class FrameSimpleDirect(FrameSimpleDelayedGlade):
+class FrameSimpleDirect(FrameSimpleDelayedBase):
     """This does not use delayedresult so the GUI will freeze while
     the GET is taking place."""
     
     def __init__(self, *args, **kwargs):
         self.jobID = 1
-        FrameSimpleDelayedGlade.__init__(self, *args, **kwargs)
+        FrameSimpleDelayedBase.__init__(self, *args, **kwargs)
         self.checkboxUseDelayed.SetValue(False)
                 
     def setLog(self, log):
         self.log = log
         
     def handleGet(self, event): 
-        """Use delayedresult, this will compute
-        result in separate thread, and won't affect GUI response. """
+        """Use delayedresult, this will compute result in separate
+        thread, and will affect GUI response because a thread is not
+        used."""
         self.buttonGet.Enable(False)
         self.buttonAbort.Enable(True)
 
         self.log( "Doing job %s without delayedresult (same as GUI thread): GUI hangs (for a while)" % self.jobID )
-        result = self.__resultCreator(self.jobID)
-        self.__handleResult( result )
+        result = self._resultProducer(self.jobID)
+        self._resultConsumer( result )
 
-    def __resultCreator(self, jobID):
+    def _resultProducer(self, jobID):
         """Pretend to be a complex worker function or something that takes 
         long time to run due to network access etc. GUI will freeze if this 
         method is not called in separate thread."""
@@ -170,7 +162,7 @@ class FrameSimpleDirect(FrameSimpleDelayedGlade):
         """can never be called"""
         pass
         
-    def __handleResult(self, result):
+    def _resultConsumer(self, result):
         # output result
         self.log( "Got result for job %s: %s" % (self.jobID, result) )
         self.textCtrlResult.SetValue(str(result))
