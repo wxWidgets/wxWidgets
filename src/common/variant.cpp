@@ -2108,6 +2108,6 @@ bool wxVariant::Convert(wxDateTime* value) const
     // Fallback to string conversion
     wxString val;
     return Convert(&val) &&
-                (value->ParseDateTime(val) || value->ParseDate(val));
+                (value->ParseDateTime(val) || value->ParseDate(val) || value->ParseTime(val));
 }
 #endif // wxUSE_DATETIME
