@@ -293,6 +293,12 @@ public:
         return m_absIndent;
     }
 
+    // Returns area covered by the text field.
+    const wxRect& GetTextRect() const
+    {
+        return m_tcArea;
+    }
+
     //
     // Utilies needed by the popups or native implementations
     //
@@ -370,9 +376,7 @@ protected:
     //bool HandleButtonMouseEvent( wxMouseEvent& event, bool isInside );
     bool HandleButtonMouseEvent( wxMouseEvent& event, int flags );
 
-    // Conversion to double-clicks and some basic filtering
     // returns true if event was consumed or filtered (event type is also set to 0 in this case)
-    //bool PreprocessMouseEvent( wxMouseEvent& event, bool isOnButtonArea );
     bool PreprocessMouseEvent( wxMouseEvent& event, int flags );
 
     //
@@ -452,9 +456,6 @@ protected:
     // this is for the control in popup
     wxEvtHandler*           m_popupExtraHandler;
 
-    // needed for "instant" double-click handling
-    wxLongLong              m_timeLastMouseUp;
-
     // used to prevent immediate re-popupping incase closed popup
     // by clicking on the combo control (needed because of inconsistent
     // transient implementation across platforms).
@@ -517,9 +518,6 @@ protected:
 
     // is the popup window currenty shown?
     bool                    m_isPopupShown;
-
-    // Set to 1 on mouse down, 0 on mouse up. Used to eliminate down-less mouse ups.
-    bool                    m_downReceived;
 
 private:
     void Init();

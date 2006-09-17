@@ -646,7 +646,6 @@ void wxComboCtrlBase::Init()
     m_extRight = 0;
     m_absIndent = -1;
     m_iFlags = 0;
-    m_downReceived = false;
     m_timeCanAcceptClick = 0;
 }
 
@@ -1346,11 +1345,9 @@ bool wxComboCtrlBase::HandleButtonMouseEvent( wxMouseEvent& event,
     return true;
 }
 
-// Conversion to double-clicks and some basic filtering
 // returns true if event was consumed or filtered
-//bool wxComboCtrlBase::PreprocessMouseEvent( wxMouseEvent& event, bool isOnButtonArea )
 bool wxComboCtrlBase::PreprocessMouseEvent( wxMouseEvent& event,
-                                               int flags )
+                                            int WXUNUSED(flags) )
 {
     wxLongLong t = ::wxGetLocalTimeMillis();
     int evtType = event.GetEventType();
@@ -1363,48 +1360,6 @@ bool wxComboCtrlBase::PreprocessMouseEvent( wxMouseEvent& event,
         return true;
     }
 #endif
-
-    //
-    // Generate our own double-clicks
-    // (to allow on-focus dc-event on double-clicks instead of triple-clicks)
-    if ( (m_windowStyle & wxCC_SPECIAL_DCLICK) &&
-         !m_isPopupShown &&
-         //!(handlerFlags & wxCC_MF_ON_BUTTON) )
-         !(flags & wxCC_MF_ON_BUTTON) )
-    {
-        if ( evtType == wxEVT_LEFT_DOWN )
-        {
-            // Set value to avoid up-events without corresponding downs
-            m_downReceived = true;
-        }
-        else if ( evtType == wxEVT_LEFT_DCLICK )
-        {
-            // We'll make our own double-clicks
-            //evtType = 0;
-            event.SetEventType(0);
-            return true;
-        }
-        else if ( evtType == wxEVT_LEFT_UP )
-        {
-            if ( m_downReceived || m_timeLastMouseUp == 1 )
-            {
-                wxLongLong timeFromLastUp = (t-m_timeLastMouseUp);
-
-                if ( timeFromLastUp < DOUBLE_CLICK_CONVERSION_TRESHOLD )
-                {
-                    //type = wxEVT_LEFT_DCLICK;
-                    event.SetEventType(wxEVT_LEFT_DCLICK);
-                    m_timeLastMouseUp = 1;
-                }
-                else
-                {
-                    m_timeLastMouseUp = t;
-                }
-
-                //m_downReceived = false;
-            }
-        }
-    }
 
     // Filter out clicks on button immediately after popup dismiss (Windows like behaviour)
     if ( evtType == wxEVT_LEFT_DOWN && t < m_timeCanAcceptClick )
@@ -1511,12 +1466,6 @@ void wxComboCtrlBase::OnFocusEvent( wxFocusEvent& event )
 {
     if ( event.GetEventType() == wxEVT_SET_FOCUS )
     {
-        // First click is the first part of double-click
-        // Some platforms don't generate down-less mouse up-event
-        // (Windows does, GTK+2 doesn't), so that's why we have
-        // to do this.
-        m_timeLastMouseUp = ::wxGetLocalTimeMillis();
-
         if ( m_text && m_text != ::wxWindow::FindFocus() )
             m_text->SetFocus();
     }
