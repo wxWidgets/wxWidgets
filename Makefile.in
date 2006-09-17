@@ -3338,6 +3338,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS =  \
 	monodll_imagxpm.o \
 	monodll_layout.o \
 	monodll_lboxcmn.o \
+	monodll_listctrlcmn.o \
 	monodll_matrix.o \
 	monodll_menucmn.o \
 	monodll_nbkbase.o \
@@ -3502,6 +3503,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS =  \
 	monodll_imagxpm.o \
 	monodll_layout.o \
 	monodll_lboxcmn.o \
+	monodll_listctrlcmn.o \
 	monodll_matrix.o \
 	monodll_menucmn.o \
 	monodll_nbkbase.o \
@@ -4066,6 +4068,7 @@ COND_TOOLKIT_MAC___GUI_SRC_OBJECTS =  \
 	monodll_icon.o \
 	monodll_imaglist.o \
 	monodll_listbox.o \
+	monodll_listctrl_mac.o \
 	monodll_mdi.o \
 	monodll_menu.o \
 	monodll_menuitem.o \
@@ -5037,6 +5040,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_1 =  \
 	monolib_imagxpm.o \
 	monolib_layout.o \
 	monolib_lboxcmn.o \
+	monolib_listctrlcmn.o \
 	monolib_matrix.o \
 	monolib_menucmn.o \
 	monolib_nbkbase.o \
@@ -5201,6 +5205,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_1 =  \
 	monolib_imagxpm.o \
 	monolib_layout.o \
 	monolib_lboxcmn.o \
+	monolib_listctrlcmn.o \
 	monolib_matrix.o \
 	monolib_menucmn.o \
 	monolib_nbkbase.o \
@@ -5766,6 +5771,7 @@ COND_TOOLKIT_MAC___GUI_SRC_OBJECTS_1 =  \
 	monolib_icon.o \
 	monolib_imaglist.o \
 	monolib_listbox.o \
+	monolib_listctrl_mac.o \
 	monolib_mdi.o \
 	monolib_menu.o \
 	monolib_menuitem.o \
@@ -6955,6 +6961,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_2 =  \
 	coredll_imagxpm.o \
 	coredll_layout.o \
 	coredll_lboxcmn.o \
+	coredll_listctrlcmn.o \
 	coredll_matrix.o \
 	coredll_menucmn.o \
 	coredll_nbkbase.o \
@@ -7119,6 +7126,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_2 =  \
 	coredll_imagxpm.o \
 	coredll_layout.o \
 	coredll_lboxcmn.o \
+	coredll_listctrlcmn.o \
 	coredll_matrix.o \
 	coredll_menucmn.o \
 	coredll_nbkbase.o \
@@ -7684,6 +7692,7 @@ COND_TOOLKIT_MAC___GUI_SRC_OBJECTS_2 =  \
 	coredll_icon.o \
 	coredll_imaglist.o \
 	coredll_listbox.o \
+	coredll_listctrl_mac.o \
 	coredll_mdi.o \
 	coredll_menu.o \
 	coredll_menuitem.o \
@@ -8351,6 +8360,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_3 =  \
 	corelib_imagxpm.o \
 	corelib_layout.o \
 	corelib_lboxcmn.o \
+	corelib_listctrlcmn.o \
 	corelib_matrix.o \
 	corelib_menucmn.o \
 	corelib_nbkbase.o \
@@ -8515,6 +8525,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_3 =  \
 	corelib_imagxpm.o \
 	corelib_layout.o \
 	corelib_lboxcmn.o \
+	corelib_listctrlcmn.o \
 	corelib_matrix.o \
 	corelib_menucmn.o \
 	corelib_nbkbase.o \
@@ -9080,6 +9091,7 @@ COND_TOOLKIT_MAC___GUI_SRC_OBJECTS_3 =  \
 	corelib_icon.o \
 	corelib_imaglist.o \
 	corelib_listbox.o \
+	corelib_listctrl_mac.o \
 	corelib_mdi.o \
 	corelib_menu.o \
 	corelib_menuitem.o \
@@ -12066,6 +12078,9 @@ monodll_aga.o: $(srcdir)/src/mac/carbon/aga.cpp $(MONODLL_ODEP)
 
 monodll_dccg.o: $(srcdir)/src/mac/carbon/dccg.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/mac/carbon/dccg.cpp
+
+monodll_listctrl_mac.o: $(srcdir)/src/mac/carbon/listctrl_mac.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/mac/carbon/listctrl_mac.cpp
 
 monodll_notebmac.o: $(srcdir)/src/mac/carbon/notebmac.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/mac/carbon/notebmac.cpp
@@ -15310,6 +15325,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@monodll_lboxcmn.o: $(srcdir)/src/common/lboxcmn.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/lboxcmn.cpp
 
+@COND_USE_GUI_1@monodll_listctrlcmn.o: $(srcdir)/src/common/listctrlcmn.cpp $(MONODLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/listctrlcmn.cpp
+
 @COND_USE_GUI_1@monodll_matrix.o: $(srcdir)/src/common/matrix.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/matrix.cpp
 
@@ -15996,6 +16014,9 @@ monolib_aga.o: $(srcdir)/src/mac/carbon/aga.cpp $(MONOLIB_ODEP)
 
 monolib_dccg.o: $(srcdir)/src/mac/carbon/dccg.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/mac/carbon/dccg.cpp
+
+monolib_listctrl_mac.o: $(srcdir)/src/mac/carbon/listctrl_mac.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/mac/carbon/listctrl_mac.cpp
 
 monolib_notebmac.o: $(srcdir)/src/mac/carbon/notebmac.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/mac/carbon/notebmac.cpp
@@ -19240,6 +19261,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@monolib_lboxcmn.o: $(srcdir)/src/common/lboxcmn.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/lboxcmn.cpp
 
+@COND_USE_GUI_1@monolib_listctrlcmn.o: $(srcdir)/src/common/listctrlcmn.cpp $(MONOLIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/listctrlcmn.cpp
+
 @COND_USE_GUI_1@monolib_matrix.o: $(srcdir)/src/common/matrix.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/matrix.cpp
 
@@ -20898,6 +20922,9 @@ coredll_aga.o: $(srcdir)/src/mac/carbon/aga.cpp $(COREDLL_ODEP)
 
 coredll_dccg.o: $(srcdir)/src/mac/carbon/dccg.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/mac/carbon/dccg.cpp
+
+coredll_listctrl_mac.o: $(srcdir)/src/mac/carbon/listctrl_mac.cpp $(COREDLL_ODEP)
+	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/mac/carbon/listctrl_mac.cpp
 
 coredll_notebmac.o: $(srcdir)/src/mac/carbon/notebmac.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/mac/carbon/notebmac.cpp
@@ -23518,6 +23545,9 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@coredll_lboxcmn.o: $(srcdir)/src/common/lboxcmn.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/lboxcmn.cpp
 
+@COND_USE_GUI_1@coredll_listctrlcmn.o: $(srcdir)/src/common/listctrlcmn.cpp $(COREDLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/listctrlcmn.cpp
+
 @COND_USE_GUI_1@coredll_matrix.o: $(srcdir)/src/common/matrix.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/matrix.cpp
 
@@ -23763,6 +23793,9 @@ corelib_aga.o: $(srcdir)/src/mac/carbon/aga.cpp $(CORELIB_ODEP)
 
 corelib_dccg.o: $(srcdir)/src/mac/carbon/dccg.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/mac/carbon/dccg.cpp
+
+corelib_listctrl_mac.o: $(srcdir)/src/mac/carbon/listctrl_mac.cpp $(CORELIB_ODEP)
+	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/mac/carbon/listctrl_mac.cpp
 
 corelib_notebmac.o: $(srcdir)/src/mac/carbon/notebmac.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/mac/carbon/notebmac.cpp
@@ -26382,6 +26415,9 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 
 @COND_USE_GUI_1@corelib_lboxcmn.o: $(srcdir)/src/common/lboxcmn.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/lboxcmn.cpp
+
+@COND_USE_GUI_1@corelib_listctrlcmn.o: $(srcdir)/src/common/listctrlcmn.cpp $(CORELIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/listctrlcmn.cpp
 
 @COND_USE_GUI_1@corelib_matrix.o: $(srcdir)/src/common/matrix.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/matrix.cpp

@@ -132,7 +132,7 @@ COND_TOOLKIT_MAC___MACOSX_RESOURCES_p_1 = $(REZ) -d __DARWIN__ -t APPL -d \
 
 ### Targets: ###
 
-all: internat$(EXEEXT) $(__internat_bundle___depname) bg cs de fr ka pl ru sv ja ja_JP.EUC-JP
+all: internat$(EXEEXT) $(__internat_bundle___depname) ar bg cs de fr ka pl ru sv ja ja_JP.EUC-JP
 
 install: all
 
@@ -177,6 +177,18 @@ internat.app/Contents/PkgInfo: internat$(EXEEXT) $(top_srcdir)/src/mac/carbon/In
 	cp -f $(top_srcdir)/src/mac/carbon/wxmac.icns internat.app/Contents/Resources/wxmac.icns
 
 @COND_PLATFORM_MACOSX_1@internat_bundle: $(____internat_BUNDLE_TGT_REF_DEP)
+
+ar: 
+	@mkdir -p ./ar
+	@for f in internat.po internat.mo; do \
+	if test ! -f ./ar/$$f -a ! -d ./ar/$$f ; \
+	then x=yep ; \
+	else x=`find $(srcdir)/ar/$$f -newer ./ar/$$f -print` ; \
+	fi; \
+	case "$$x" in ?*) \
+	cp -pRf $(srcdir)/ar/$$f ./ar ;; \
+	esac; \
+	done
 
 bg: 
 	@mkdir -p ./bg
@@ -308,4 +320,4 @@ internat_internat_rc.o: $(srcdir)/internat.rc
 # Include dependency info, if present:
 @IF_GNU_MAKE@-include .deps/*.d
 
-.PHONY: all install uninstall clean distclean internat_bundle bg cs de fr ka pl ru sv ja ja_JP.EUC-JP
+.PHONY: all install uninstall clean distclean internat_bundle ar bg cs de fr ka pl ru sv ja ja_JP.EUC-JP

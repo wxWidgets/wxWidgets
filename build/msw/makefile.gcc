@@ -1414,6 +1414,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_imagxpm.o \
 	$(OBJS)\monodll_layout.o \
 	$(OBJS)\monodll_lboxcmn.o \
+	$(OBJS)\monodll_listctrlcmn.o \
 	$(OBJS)\monodll_matrix.o \
 	$(OBJS)\monodll_menucmn.o \
 	$(OBJS)\monodll_nbkbase.o \
@@ -1628,6 +1629,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_imagxpm.o \
 	$(OBJS)\monodll_layout.o \
 	$(OBJS)\monodll_lboxcmn.o \
+	$(OBJS)\monodll_listctrlcmn.o \
 	$(OBJS)\monodll_matrix.o \
 	$(OBJS)\monodll_menucmn.o \
 	$(OBJS)\monodll_nbkbase.o \
@@ -1993,6 +1995,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_imagxpm.o \
 	$(OBJS)\monolib_layout.o \
 	$(OBJS)\monolib_lboxcmn.o \
+	$(OBJS)\monolib_listctrlcmn.o \
 	$(OBJS)\monolib_matrix.o \
 	$(OBJS)\monolib_menucmn.o \
 	$(OBJS)\monolib_nbkbase.o \
@@ -2207,6 +2210,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_imagxpm.o \
 	$(OBJS)\monolib_layout.o \
 	$(OBJS)\monolib_lboxcmn.o \
+	$(OBJS)\monolib_listctrlcmn.o \
 	$(OBJS)\monolib_matrix.o \
 	$(OBJS)\monolib_menucmn.o \
 	$(OBJS)\monolib_nbkbase.o \
@@ -2499,6 +2503,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_imagxpm.o \
 	$(OBJS)\coredll_layout.o \
 	$(OBJS)\coredll_lboxcmn.o \
+	$(OBJS)\coredll_listctrlcmn.o \
 	$(OBJS)\coredll_matrix.o \
 	$(OBJS)\coredll_menucmn.o \
 	$(OBJS)\coredll_nbkbase.o \
@@ -2713,6 +2718,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_imagxpm.o \
 	$(OBJS)\coredll_layout.o \
 	$(OBJS)\coredll_lboxcmn.o \
+	$(OBJS)\coredll_listctrlcmn.o \
 	$(OBJS)\coredll_matrix.o \
 	$(OBJS)\coredll_menucmn.o \
 	$(OBJS)\coredll_nbkbase.o \
@@ -2934,6 +2940,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_imagxpm.o \
 	$(OBJS)\corelib_layout.o \
 	$(OBJS)\corelib_lboxcmn.o \
+	$(OBJS)\corelib_listctrlcmn.o \
 	$(OBJS)\corelib_matrix.o \
 	$(OBJS)\corelib_menucmn.o \
 	$(OBJS)\corelib_nbkbase.o \
@@ -3148,6 +3155,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_imagxpm.o \
 	$(OBJS)\corelib_layout.o \
 	$(OBJS)\corelib_lboxcmn.o \
+	$(OBJS)\corelib_listctrlcmn.o \
 	$(OBJS)\corelib_matrix.o \
 	$(OBJS)\corelib_menucmn.o \
 	$(OBJS)\corelib_nbkbase.o \
@@ -6025,6 +6033,11 @@ $(OBJS)\monodll_lboxcmn.o: ../../src/common/lboxcmn.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\monodll_listctrlcmn.o: ../../src/common/listctrlcmn.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\monodll_matrix.o: ../../src/common/matrix.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -7993,6 +8006,11 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\monolib_lboxcmn.o: ../../src/common/lboxcmn.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\monolib_listctrlcmn.o: ../../src/common/listctrlcmn.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 endif
 
@@ -9999,6 +10017,11 @@ $(OBJS)\coredll_lboxcmn.o: ../../src/common/lboxcmn.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\coredll_listctrlcmn.o: ../../src/common/listctrlcmn.cpp
+	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\coredll_matrix.o: ../../src/common/matrix.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -11318,6 +11341,11 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\corelib_lboxcmn.o: ../../src/common/lboxcmn.cpp
+	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\corelib_listctrlcmn.o: ../../src/common/listctrlcmn.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
 endif
 

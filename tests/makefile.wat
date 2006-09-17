@@ -112,22 +112,22 @@ __DEBUGINFO = -d0
 !ifeq DEBUG_INFO 1
 __DEBUGINFO = -d2
 !endif
-__DEBUGINFO_1 =
+__DEBUGINFO_2 =
 !ifeq BUILD debug
 !ifeq DEBUG_INFO default
-__DEBUGINFO_1 = debug all
+__DEBUGINFO_2 = debug all
 !endif
 !endif
 !ifeq BUILD release
 !ifeq DEBUG_INFO default
-__DEBUGINFO_1 = 
+__DEBUGINFO_2 = 
 !endif
 !endif
 !ifeq DEBUG_INFO 0
-__DEBUGINFO_1 = 
+__DEBUGINFO_2 = 
 !endif
 !ifeq DEBUG_INFO 1
-__DEBUGINFO_1 = debug all
+__DEBUGINFO_2 = debug all
 !endif
 __OPTIMIZEFLAG =
 !ifeq BUILD debug
@@ -164,16 +164,6 @@ __EXCEPTIONSFLAG =
 !ifeq USE_EXCEPTIONS 1
 __EXCEPTIONSFLAG = -xs
 !endif
-__WXLIB_BASE_p =
-!ifeq MONOLITHIC 0
-__WXLIB_BASE_p = &
-	wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).lib
-!endif
-__WXLIB_MONO_p =
-!ifeq MONOLITHIC 1
-__WXLIB_MONO_p = &
-	wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).lib
-!endif
 __WXUNIV_DEFINE_p =
 !ifeq WXUNIV 1
 __WXUNIV_DEFINE_p = -d__WXUNIVERSAL__
@@ -206,6 +196,16 @@ __UNICODE_DEFINE_p = -d_UNICODE
 __DLLFLAG_p =
 !ifeq SHARED 1
 __DLLFLAG_p = -dWXUSINGDLL
+!endif
+__WXLIB_BASE_p =
+!ifeq MONOLITHIC 0
+__WXLIB_BASE_p = &
+	wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).lib
+!endif
+__WXLIB_MONO_p =
+!ifeq MONOLITHIC 1
+__WXLIB_MONO_p = &
+	wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).lib
 !endif
 
 ### Variables: ###
@@ -275,6 +275,16 @@ TEST_GUI_OBJECTS =  &
 	$(OBJS)\test_gui_rect.obj &
 	$(OBJS)\test_gui_size.obj &
 	$(OBJS)\test_gui_point.obj
+PRINTFBENCH_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) &
+	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
+	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) &
+	$(__UNICODE_DEFINE_p) -i=$(SETUPHDIR) -i=.\..\include -wx -wcd=549 -wcd=656 &
+	-wcd=657 -wcd=667 -i=. $(__DLLFLAG_p) -dwxUSE_GUI=0 $(CPPUNIT_CFLAGS) &
+	/fh=$(OBJS)\testprec_printfbench.pch $(__RTTIFLAG) $(__EXCEPTIONSFLAG) &
+	$(CPPFLAGS) $(CXXFLAGS)
+PRINTFBENCH_OBJECTS =  &
+	$(OBJS)\printfbench_dummy.obj &
+	$(OBJS)\printfbench_printfbench.obj
 
 
 all : $(OBJS)
@@ -283,7 +293,7 @@ $(OBJS) :
 
 ### Targets: ###
 
-all : .SYMBOLIC $(OBJS)\test.exe $(__test_gui___depname) data
+all : .SYMBOLIC $(OBJS)\test.exe $(__test_gui___depname) data $(OBJS)\printfbench.exe
 
 clean : .SYMBOLIC 
 	-if exist $(OBJS)\*.obj del $(OBJS)\*.obj
@@ -293,13 +303,14 @@ clean : .SYMBOLIC
 	-if exist $(OBJS)\*.pch del $(OBJS)\*.pch
 	-if exist $(OBJS)\test.exe del $(OBJS)\test.exe
 	-if exist $(OBJS)\test_gui.exe del $(OBJS)\test_gui.exe
+	-if exist $(OBJS)\printfbench.exe del $(OBJS)\printfbench.exe
 
 $(OBJS)\test.exe :  $(TEST_OBJECTS)
 	@%create $(OBJS)\test.lbc
 	@%append $(OBJS)\test.lbc option quiet
 	@%append $(OBJS)\test.lbc name $^@
 	@%append $(OBJS)\test.lbc option caseexact
-	@%append $(OBJS)\test.lbc $(LDFLAGS) $(__DEBUGINFO_1)  libpath $(LIBDIRNAME) system nt ref 'main_' $(CPPUNIT_LIBS)
+	@%append $(OBJS)\test.lbc $(LDFLAGS) $(__DEBUGINFO_2)  libpath $(LIBDIRNAME) system nt ref 'main_' $(CPPUNIT_LIBS)
 	@for %i in ($(TEST_OBJECTS)) do @%append $(OBJS)\test.lbc file %i
 	@for %i in ( $(__WXLIB_NET_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE)  kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib) do @%append $(OBJS)\test.lbc library %i
 	@%append $(OBJS)\test.lbc
@@ -312,7 +323,7 @@ $(OBJS)\test_gui.exe :  $(TEST_GUI_OBJECTS) $(OBJS)\test_gui_sample.res
 	@%append $(OBJS)\test_gui.lbc option quiet
 	@%append $(OBJS)\test_gui.lbc name $^@
 	@%append $(OBJS)\test_gui.lbc option caseexact
-	@%append $(OBJS)\test_gui.lbc $(LDFLAGS) $(__DEBUGINFO_1)  libpath $(LIBDIRNAME) $(CPPUNIT_LIBS) system nt ref 'main_'
+	@%append $(OBJS)\test_gui.lbc $(LDFLAGS) $(__DEBUGINFO_2)  libpath $(LIBDIRNAME) $(CPPUNIT_LIBS) system nt ref 'main_'
 	@for %i in ($(TEST_GUI_OBJECTS)) do @%append $(OBJS)\test_gui.lbc file %i
 	@for %i in ( $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE)  kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib) do @%append $(OBJS)\test_gui.lbc library %i
 	@%append $(OBJS)\test_gui.lbc option resource=$(OBJS)\test_gui_sample.res
@@ -323,6 +334,18 @@ $(OBJS)\test_gui.exe :  $(TEST_GUI_OBJECTS) $(OBJS)\test_gui_sample.res
 data : .SYMBOLIC 
 	if not exist $(OBJS) mkdir $(OBJS)
 	for %f in (testdata.fc) do if not exist $(OBJS)\%f copy .\%f $(OBJS)
+
+$(OBJS)\printfbench.exe :  $(PRINTFBENCH_OBJECTS)
+	@%create $(OBJS)\printfbench.lbc
+	@%append $(OBJS)\printfbench.lbc option quiet
+	@%append $(OBJS)\printfbench.lbc name $^@
+	@%append $(OBJS)\printfbench.lbc option caseexact
+	@%append $(OBJS)\printfbench.lbc $(LDFLAGS) $(__DEBUGINFO_2)  libpath $(LIBDIRNAME) system nt ref 'main_' $(CPPUNIT_LIBS)
+	@for %i in ($(PRINTFBENCH_OBJECTS)) do @%append $(OBJS)\printfbench.lbc file %i
+	@for %i in ( $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE)  kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib) do @%append $(OBJS)\printfbench.lbc library %i
+	@%append $(OBJS)\printfbench.lbc
+	@for %i in () do @%append $(OBJS)\printfbench.lbc option stack=%i
+	wlink @$(OBJS)\printfbench.lbc
 
 $(OBJS)\test_dummy.obj :  .AUTODEPEND .\dummy.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_CXXFLAGS) $<
@@ -455,4 +478,10 @@ $(OBJS)\test_gui_size.obj :  .AUTODEPEND .\geometry\size.cpp
 
 $(OBJS)\test_gui_point.obj :  .AUTODEPEND .\geometry\point.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
+
+$(OBJS)\printfbench_dummy.obj :  .AUTODEPEND .\dummy.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(PRINTFBENCH_CXXFLAGS) $<
+
+$(OBJS)\printfbench_printfbench.obj :  .AUTODEPEND .\benchmarks\printfbench.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(PRINTFBENCH_CXXFLAGS) $<
 

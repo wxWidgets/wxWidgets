@@ -199,7 +199,7 @@ $(OBJS):
 
 ### Targets: ###
 
-all: $(OBJS)\internat.exe bg cs de fr ka pl ru sv ja ja_JP.EUC-JP
+all: $(OBJS)\internat.exe ar bg cs de fr ka pl ru sv ja ja_JP.EUC-JP
 
 clean: 
 	-if exist $(OBJS)\*.obj del $(OBJS)\*.obj
@@ -216,6 +216,10 @@ $(OBJS)\internat.exe: $(INTERNAT_OBJECTS)  $(OBJS)\internat_internat.res
 	ilink32 -Tpe -q $(LDFLAGS) -L$(BCCDIR)\lib -L$(BCCDIR)\lib\psdk $(__DEBUGINFO)  -L$(LIBDIRNAME) -aa @&&|
 	c0w32.obj $(INTERNAT_OBJECTS),$@,, $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) ole2w32.lib oleacc.lib odbc32.lib import32.lib cw32$(__THREADSFLAG_5)$(__RUNTIME_LIBS_8).lib,, $(OBJS)\internat_internat.res
 |
+
+ar: 
+	if not exist $(OBJS)\ar mkdir $(OBJS)\ar
+	for %f in (internat.po internat.mo) do if not exist $(OBJS)\ar\%f copy .\ar\%f $(OBJS)\ar
 
 bg: 
 	if not exist $(OBJS)\bg mkdir $(OBJS)\bg

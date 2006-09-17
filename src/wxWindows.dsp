@@ -683,6 +683,10 @@ SOURCE=.\common\list.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\common\listctrlcmn.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\common\log.cpp
 # End Source File
 # Begin Source File

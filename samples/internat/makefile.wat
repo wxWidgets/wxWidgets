@@ -223,7 +223,7 @@ $(OBJS) :
 
 ### Targets: ###
 
-all : .SYMBOLIC $(OBJS)\internat.exe bg cs de fr ka pl ru sv ja ja_JP.EUC-JP
+all : .SYMBOLIC $(OBJS)\internat.exe ar bg cs de fr ka pl ru sv ja ja_JP.EUC-JP
 
 clean : .SYMBOLIC 
 	-if exist $(OBJS)\*.obj del $(OBJS)\*.obj
@@ -244,6 +244,10 @@ $(OBJS)\internat.exe :  $(INTERNAT_OBJECTS) $(OBJS)\internat_internat.res
 	@%append $(OBJS)\internat.lbc option resource=$(OBJS)\internat_internat.res
 	@for %i in () do @%append $(OBJS)\internat.lbc option stack=%i
 	wlink @$(OBJS)\internat.lbc
+
+ar : .SYMBOLIC 
+	if not exist $(OBJS)\ar mkdir $(OBJS)\ar
+	for %f in (internat.po internat.mo) do if not exist $(OBJS)\ar\%f copy .\ar\%f $(OBJS)\ar
 
 bg : .SYMBOLIC 
 	if not exist $(OBJS)\bg mkdir $(OBJS)\bg

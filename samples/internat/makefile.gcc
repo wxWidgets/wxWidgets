@@ -200,7 +200,7 @@ $(OBJS):
 
 ### Targets: ###
 
-all: $(OBJS)\internat.exe bg cs de fr ka pl ru sv ja ja_JP.EUC-JP
+all: $(OBJS)\internat.exe ar bg cs de fr ka pl ru sv ja ja_JP.EUC-JP
 
 clean: 
 	-if exist $(OBJS)\*.o del $(OBJS)\*.o
@@ -209,6 +209,10 @@ clean:
 
 $(OBJS)\internat.exe: $(INTERNAT_OBJECTS) $(OBJS)\internat_internat_rc.o
 	$(CXX) -o $@ $(INTERNAT_OBJECTS) $(LDFLAGS) $(__DEBUGINFO) $(__THREADSFLAG) -L$(LIBDIRNAME) -Wl,--subsystem,windows -mwindows  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  -lwxzlib$(WXDEBUGFLAG)  -lwxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG) -lwxexpat$(WXDEBUGFLAG) $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lwsock32 -lodbc32
+
+ar: 
+	if not exist $(OBJS)\ar mkdir $(OBJS)\ar
+	for %%f in (internat.po internat.mo) do if not exist $(OBJS)\ar\%%f copy .\ar\%%f $(OBJS)\ar
 
 bg: 
 	if not exist $(OBJS)\bg mkdir $(OBJS)\bg
@@ -256,7 +260,7 @@ $(OBJS)\internat_internat.o: ./internat.cpp
 $(OBJS)\internat_internat_rc.o: ./internat.rc
 	windres --use-temp-file -i$< -o$@   --define __WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__EXCEPTIONS_DEFINE_p_1) $(__RTTI_DEFINE_p_1) $(__THREAD_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) $(__MSLU_DEFINE_p_1) --include-dir $(SETUPHDIR) --include-dir ./../../include --include-dir . $(__DLLFLAG_p_1) --include-dir ./../../samples --define NOPCH
 
-.PHONY: all clean bg cs de fr ka pl ru sv ja ja_JP.EUC-JP
+.PHONY: all clean ar bg cs de fr ka pl ru sv ja ja_JP.EUC-JP
 
 
 # Dependencies tracking:
