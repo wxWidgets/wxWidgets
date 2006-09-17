@@ -21,6 +21,9 @@ typically replaces \helpref{wxClientDC}{wxclientdc}, if you want to use it in
 your \texttt{OnPaint()} handler, you should look at
 \helpref{wxBufferedPaintDC}{wxbufferedpaintdc}.
 
+Please note that GTK+ 2.0 as well as OS X provide double buffering themselves
+natively so this class should normally not be used there.
+
 \wxheading{Derived from}
 
 \helpref{wxMemoryDC}{wxmemorydc}\\
