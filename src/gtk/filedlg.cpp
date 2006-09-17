@@ -113,7 +113,11 @@ static void gtk_filedialog_update_preview_callback(GtkFileChooser *chooser,
 {
 #if GTK_CHECK_VERSION(2,4,0)
     GtkWidget *preview = GTK_WIDGET(user_data);
-    wxGtkString filename(gtk_file_chooser_get_preview_filename(chooser));
+
+    gchar *str = gtk_file_chooser_get_preview_filename(chooser);
+    wxGtkString filename(str);
+    if (str) g_free(str);
+
     if ( !filename )
         return;
 
@@ -305,7 +309,13 @@ void wxFileDialog::DoSetSize(int x, int y, int width, int height, int sizeFlags 
 wxString wxFileDialog::GetPath() const
 {
     if (!gtk_check_version(2,4,0))
-        return wxConvFileName->cMB2WX(gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(m_widget)));
+    {
+        gchar *str = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(m_widget));
+        wxString ret = wxConvFileName->cMB2WX(str);
+        if (str) g_free(str);
+
+        return ret;
+    }
     else
         return wxGenericFileDialog::GetPath();
 }
@@ -390,8 +400,13 @@ void wxFileDialog::SetDirectory(const wxString& dir)
 wxString wxFileDialog::GetDirectory() const
 {
     if (!gtk_check_version(2,4,0))
-        return wxConvFileName->cMB2WX(
-            gtk_file_chooser_get_current_folder( GTK_FILE_CHOOSER(m_widget) ) );
+    {
+        gchar *str = gtk_file_chooser_get_current_folder( GTK_FILE_CHOOSER(m_widget) );
+        wxString ret = wxConvFileName->cMB2WX(str);
+        if (str) g_free(str);
+
+        return ret;
+    }
     else
         return wxGenericFileDialog::GetDirectory();
 }
@@ -412,8 +427,7 @@ void wxFileDialog::SetFilename(const wxString& name)
 wxString wxFileDialog::GetFilename() const
 {
     if (!gtk_check_version(2,4,0))
-        return wxFileName(
-            wxConvFileName->cMB2WX(gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(m_widget))) ).GetFullName();
+        return wxFileName(GetPath()).GetFullName();
     else
         return wxGenericFileDialog::GetFilename();
 }

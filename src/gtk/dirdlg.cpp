@@ -212,7 +212,13 @@ void wxDirDialog::SetPath(const wxString& dir)
 wxString wxDirDialog::GetPath() const
 {
     if (!gtk_check_version(2,4,0))
-        return wxConvFileName->cMB2WX( gtk_file_chooser_get_filename( GTK_FILE_CHOOSER(m_widget) ) );
+    {
+        gchar *str = gtk_file_chooser_get_filename( GTK_FILE_CHOOSER(m_widget) );
+        wxString ret = wxConvFileName->cMB2WX(str);
+        if (str) g_free(str);
+
+        return ret;
+    }
     else
         return wxGenericDirDialog::GetPath();
 }
