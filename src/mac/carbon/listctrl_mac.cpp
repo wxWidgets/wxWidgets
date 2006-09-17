@@ -1558,7 +1558,7 @@ OSStatus wxMacListCtrlItem::GetSetData( wxMacDataItemBrowserControl *owner ,
                 }
                 
                 int imgIndex = item->GetImage();
-                if (imgIndex != -1){
+                if ( (item->GetMask() & wxLIST_MASK_IMAGE) ){
                     wxListCtrl* list = wxDynamicCast( owner->GetPeer() , wxListCtrl );
                     wxImageList* imageList = list->GetImageList(wxIMAGE_LIST_SMALL);
                     if (imageList && imageList->GetImageCount() > 0){
