@@ -704,6 +704,15 @@ void wxFrame::PositionToolBar()
                           ,vTHeight
                          );
     }
+    else if (pToolBar->GetWindowStyleFlag() & wxTB_BOTTOM )
+    {
+        vWidth = (wxCoord)(vRect.xRight - vRect.xLeft);
+        pToolBar->SetSize( vRect.xLeft - vFRect.xLeft
+                          ,vRect.yBottom - vTHeight      // assuming the vRect contains the client coordinates
+                          ,vWidth
+                          ,vHeight
+                         );
+    }
     else
     {
         wxCoord                     vSwidth = 0;

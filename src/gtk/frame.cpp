@@ -421,6 +421,19 @@ void wxFrame::GtkOnSize()
 
                 client_area_x_offset += ww;
             }
+            else if( m_frameToolBar->GetWindowStyle() & wxTB_BOTTOM )
+            {
+                xx = m_miniEdge;
+                yy = GetClientSize().y;
+#if wxUSE_MENUS_NATIVE
+                yy += m_menuBarHeight;
+#endif // wxUSE_MENU_NATIVE
+                m_frameToolBar->m_x = xx;
+                m_frameToolBar->m_y = yy;
+                ww = m_width - 2*m_miniEdge;
+                hh = m_toolBarDetached ? wxPLACE_HOLDER
+                                       : m_frameToolBar->m_height;
+            }
             else
             {
                 ww = m_width - 2*m_miniEdge;

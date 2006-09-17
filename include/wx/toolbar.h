@@ -52,7 +52,10 @@ enum
     wxTB_HORZ_TEXT   = wxTB_HORZ_LAYOUT | wxTB_TEXT,
 
     // don't show the toolbar short help tooltips
-    wxTB_NO_TOOLTIPS = 0x1000
+    wxTB_NO_TOOLTIPS = 0x1000,
+
+    // lay out toolbar at the bottom of the window
+    wxTB_BOTTOM       = 0x2000
 };
 
 #if wxUSE_TOOLBAR

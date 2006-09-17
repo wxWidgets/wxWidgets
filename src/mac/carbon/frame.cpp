@@ -366,6 +366,12 @@ void wxFrame::PositionToolBar()
             // have the original client size.
             GetToolBar()->SetSize(tx , ty , tw, ch , wxSIZE_NO_ADJUSTMENTS );
         }
+        else if (GetToolBar->GetWindowStyleFlag() & wxTB_BOTTOM)
+        {
+            tx = 0;
+            ty = statusY - th;
+                        GetToolBar->SetSize(tx, ty, cw, th, wxSIZE_NO_ADJUSTMENTS );
+        }
         else
         {
 #if !wxMAC_USE_NATIVE_TOOLBAR

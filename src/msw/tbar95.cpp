@@ -402,6 +402,9 @@ WXDWORD wxToolBar::MSWGetStyle(long style, WXDWORD *exstyle) const
     if ( style & wxTB_VERTICAL )
         msStyle |= CCS_VERT;
 
+    if( style & wxTB_BOTTOM )
+        msStyle |= CCS_BOTTOM;
+
     return msStyle;
 }
 
