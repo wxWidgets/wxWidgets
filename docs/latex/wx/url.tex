@@ -1,13 +1,16 @@
 \section{\class{wxURL}}\label{wxurl}
 
-Parses URLs.
+wxURL is a specialization of \helpref{wxURI}{wxuri} for parsing URLs.
+Please look at \helpref{wxURI}{wxuri} documentation for more info about the functions
+you can use to retrieve the various parts of the URL (scheme, server, port, etc).
 
 Supports standard assignment operators, copy constructors,
 and comparison operators.
 
 \wxheading{Derived from}
 
-\helpref{wxURI}{wxuri}
+\helpref{wxURI}{wxuri}\\
+\helpref{wxObject}{wxobject}
 
 \wxheading{Include files}
 
@@ -25,13 +28,16 @@ and comparison operators.
 
 \membersection{wxURL::wxURL}\label{wxurlctor}
 
-\func{}{wxURL}{\param{const wxString\&}{ url}}
+\func{}{wxURL}{\param{const wxString\&}{ url = wxEmptyString}}
 
 Constructs a URL object from the string.  The URL must be valid according
 to RFC 1738.  In particular, file URLs must be of the format
-'file://hostname/path/to/file'.  It is valid to leave out the hostname
-but slashes must remain in place-- i.e. a file URL without a hostname must
-contain three consecutive slashes.
+{\tt file://hostname/path/to/file} otherwise \helpref{GetError}{wxurlgeterror}
+will return a value different from {\tt wxURL_NOERR}.
+
+It is valid to leave out the hostname but slashes must remain in place - 
+i.e. a file URL without a hostname must contain three consecutive slashes 
+(e.g. {\tt file:///somepath/myfile}).
 
 \wxheading{Parameters}
 
@@ -108,6 +114,18 @@ Returns the initialized stream. You will have to delete it yourself.
 
 \helpref{wxInputStream}{wxinputstream}
 
+
+%
+% IsOk
+%
+\membersection{wxURL::IsOk}\label{wxurlgetisok}
+
+\constfunc{bool}{IsOk}{\void}
+
+Returns \true if this object is correctly initialized, i.e. if 
+\helpref{GetError}{wxurlgeterror} returns {\tt wxURL_NOERR}.
+
+
 %
 % SetDefaultProxy
 %
@@ -139,3 +157,13 @@ Sets the proxy to use for this URL.
 
 \helpref{wxURL::SetDefaultProxy}{wxurlsetdefaultproxy}
 
+
+%
+% SetURL
+%
+\membersection{wxURL::SetURL}\label{wxurlseturl}
+
+\func{wxURLError}{SetURL}{\param{const wxString\&}{ url}}
+
+Initializes this object with the given URL and returns {\tt wxURL_NOERR}
+if it's valid (see \helpref{GetError}{wxurlgeterror} for more info).
