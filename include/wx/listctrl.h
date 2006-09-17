@@ -27,11 +27,12 @@ extern WXDLLEXPORT_DATA(const wxChar) wxListCtrlNameStr[];
 // ----------------------------------------------------------------------------
 // include the wxListCtrl class declaration
 // ----------------------------------------------------------------------------
+#include "wx/generic/listctrl.h"    
 
 #if defined(__WIN32__) && !defined(__WXUNIVERSAL__)
     #include "wx/msw/listctrl.h"
-#else
-    #include "wx/generic/listctrl.h"
+#elif defined(__WXMAC__)
+    #include "wx/mac/carbon/listctrl.h"
 #endif
 
 // ----------------------------------------------------------------------------

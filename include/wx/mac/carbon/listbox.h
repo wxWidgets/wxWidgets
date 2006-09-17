@@ -21,32 +21,8 @@
 // forward decl for GetSelections()
 class wxArrayInt;
 
-// exposed for subclasses like wxCheckListBox
-
-class wxMacListControl
-{
-public:
-    virtual void            MacDelete( unsigned int n ) = 0;
-    virtual void            MacInsert( unsigned int n, const wxString& item ) = 0;
-    virtual void            MacInsert( unsigned int n, const wxArrayString& items ) = 0;
-    // returns index of newly created line
-    virtual int             MacAppend( const wxString& item ) = 0;
-    virtual void            MacSetString( unsigned int n, const wxString& item ) = 0;
-    virtual void            MacClear() = 0;
-    virtual void            MacDeselectAll() = 0;
-    virtual void            MacSetSelection( unsigned int n, bool select ) = 0;
-    virtual int             MacGetSelection() const = 0;
-    virtual int             MacGetSelections( wxArrayInt& aSelections ) const = 0;
-    virtual bool            MacIsSelected( unsigned int n ) const = 0;
-    virtual void            MacScrollTo( unsigned int n ) = 0;
-    virtual wxString        MacGetString( unsigned int n) const = 0;
-    virtual unsigned int    MacGetCount() const = 0;
-
-    virtual void            MacSetClientData( unsigned int n, void * data) = 0;
-    virtual void *          MacGetClientData( unsigned int) const = 0;
-
-    virtual ~wxMacListControl() { }
-};
+// forward decl for wxMacListControl data type.
+class wxMacListControl;
 
 // List box item
 

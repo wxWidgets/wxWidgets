@@ -1274,7 +1274,6 @@ pascal OSStatus wxMacDataBrowserControl::DataBrowserGetSetItemDataProc(
     Boolean changeValue )
 {
     OSStatus err = errDataBrowserPropertyNotSupported;
-
     wxMacDataBrowserControl* ctl = dynamic_cast<wxMacDataBrowserControl*>( wxMacControl::GetReferenceFromNativeControl( browser ) );
     if ( ctl != 0 )
     {
@@ -1358,6 +1357,17 @@ OSStatus wxMacDataBrowserControl::AddColumn( DataBrowserListViewColumnDesc *colu
         DataBrowserTableViewColumnIndex position )
 {
     return AddDataBrowserListViewColumn( m_controlRef, columnDesc, position );
+}
+
+OSStatus wxMacDataBrowserControl::GetColumnIDFromIndex( DataBrowserTableViewColumnIndex position, DataBrowserTableViewColumnID* id ){
+    return GetDataBrowserTableViewColumnProperty( m_controlRef, position, id ); 
+}
+
+OSStatus wxMacDataBrowserControl::RemoveColumn( DataBrowserTableViewColumnIndex position )
+{
+    DataBrowserTableViewColumnID id; 
+    GetColumnIDFromIndex( position, &id );
+    return RemoveDataBrowserTableViewColumn( m_controlRef, id );
 }
 
 OSStatus wxMacDataBrowserControl::AutoSizeColumns()
@@ -1579,25 +1589,103 @@ OSStatus wxMacDataBrowserControl::SetDisclosureColumn( DataBrowserPropertyID pro
 
 wxMacDataItem::wxMacDataItem()
 {
+    m_data = NULL;
+    m_order = 0;
+    m_colId = kTextColumnId; // for compat with existing wx*ListBox impls.
 }
 
 wxMacDataItem::~wxMacDataItem()
 {
 }
 
-bool wxMacDataItem::IsLessThan(wxMacDataItemBrowserControl *owner ,
-    const wxMacDataItem*,
-    DataBrowserPropertyID property) const
+void wxMacDataItem::SetOrder( SInt32 order )
 {
-    return false;
+    m_order = order;
 }
 
-OSStatus wxMacDataItem::GetSetData(wxMacDataItemBrowserControl *owner ,
+SInt32 wxMacDataItem::GetOrder() const
+{
+    return m_order;
+}
+
+void wxMacDataItem::SetData( void* data)
+{
+    m_data = data;
+}
+
+void* wxMacDataItem::GetData() const
+{
+    return m_data;
+}
+
+short wxMacDataItem::GetColumn()
+{
+    return m_colId;
+}
+
+void wxMacDataItem::SetColumn( short col )
+{
+    m_colId = col;
+} 
+
+void wxMacDataItem::SetLabel( const wxString& str)
+{
+    m_label = str;
+    m_cfLabel.Assign( str , wxLocale::GetSystemEncoding());
+}
+
+const wxString& wxMacDataItem::GetLabel() const
+{
+    return m_label;
+}
+
+bool wxMacDataItem::IsLessThan(wxMacDataItemBrowserControl *owner ,
+    const wxMacDataItem* rhs,
+    DataBrowserPropertyID sortProperty) const
+{
+    const wxMacDataItem* otherItem = dynamic_cast<const wxMacDataItem*>(rhs);
+    bool retval = false;
+    
+    if ( sortProperty == m_colId ){
+        retval = m_label.CmpNoCase( otherItem->m_label) < 0;
+    }
+    
+    else if ( sortProperty == kNumericOrderColumnId )
+        retval = m_order < otherItem->m_order;
+
+    return retval;
+}
+
+OSStatus wxMacDataItem::GetSetData( wxMacDataItemBrowserControl *owner ,
     DataBrowserPropertyID property,
     DataBrowserItemDataRef itemData,
     bool changeValue )
 {
-    return errDataBrowserPropertyNotSupported;
+    OSStatus err = errDataBrowserPropertyNotSupported;
+    if ( !changeValue )
+    {
+        if ( property == m_colId ){
+            err = ::SetDataBrowserItemDataText( itemData, m_cfLabel );
+            err = noErr;
+        }
+        else if ( property == kNumericOrderColumnId ){
+            err = ::SetDataBrowserItemDataValue( itemData, m_order );
+            err = noErr;
+        }
+        else{
+        }
+    }
+    else
+    {
+        switch (property)
+        {
+            // no editable props here
+            default:
+                break;
+        }
+    }
+
+    return err;
 }
 
 void wxMacDataItem::Notification(wxMacDataItemBrowserControl *owner ,
@@ -1611,6 +1699,13 @@ wxMacDataItemBrowserControl::wxMacDataItemBrowserControl( wxWindow* peer , const
     wxMacDataBrowserControl( peer, pos, size, style )
 {
     m_suppressSelection = false;
+    m_sortOrder = SortOrder_None;
+    m_clientDataItemsType = wxClientData_None;
+}
+
+wxMacDataItem* wxMacDataItemBrowserControl::CreateItem()
+{
+    return new wxMacDataItem();
 }
 
 wxMacDataItemBrowserSelectionSuppressor::wxMacDataItemBrowserSelectionSuppressor(wxMacDataItemBrowserControl *browser)
@@ -1676,8 +1771,10 @@ OSStatus wxMacDataItemBrowserControl::GetSetItemData(
             // right now default behaviour on these
             break;
         default :
-            if ( item != NULL )
+            
+            if ( item != NULL ){
                 err = item->GetSetData( this, property , itemData , changeValue );
+            }
             break;
 
     }
@@ -1709,6 +1806,13 @@ unsigned int wxMacDataItemBrowserControl::GetItemCount(const wxMacDataItem* cont
     verify_noerr( wxMacDataBrowserControl::GetItemCount( (DataBrowserItemID)container,
         recurse, state, &numItems ) );
     return numItems;
+}
+
+unsigned int wxMacDataItemBrowserControl::GetSelectedItemCount( const wxMacDataItem* container, 
+        bool recurse ) const
+{
+    return GetItemCount( container, recurse, kDataBrowserItemIsSelected );
+
 }
 
 void wxMacDataItemBrowserControl::GetItems(const wxMacDataItem* container,
@@ -1763,6 +1867,68 @@ void wxMacDataItemBrowserControl::UpdateItems(const wxMacDataItem *container,
     verify_noerr( wxMacDataBrowserControl::UpdateItems((DataBrowserItemID)container, noItems,
         items, kDataBrowserItemNoProperty /* notSorted */, property ) );
     delete [] items;
+}
+
+void wxMacDataItemBrowserControl::InsertColumn(int colId, DataBrowserPropertyType colType,
+                                            const wxString& title, SInt16 just, int minWidth, int maxWidth)
+{
+    DataBrowserListViewColumnDesc columnDesc;
+    columnDesc.headerBtnDesc.titleOffset = 0;
+    columnDesc.headerBtnDesc.version = kDataBrowserListViewLatestHeaderDesc;
+
+    columnDesc.headerBtnDesc.btnFontStyle.flags =
+        kControlUseFontMask | kControlUseJustMask;
+
+    columnDesc.headerBtnDesc.btnContentInfo.contentType = kControlContentTextOnly; 
+    columnDesc.headerBtnDesc.btnFontStyle.just = just;
+    columnDesc.headerBtnDesc.btnFontStyle.font = kControlFontViewSystemFont;
+    columnDesc.headerBtnDesc.btnFontStyle.style = normal;
+    
+    // TODO: Why is m_font not defined when we enter wxLC_LIST mode, but is
+    // defined for other modes?
+    wxFontEncoding enc;
+    if ( m_font.Ok() )
+        enc = m_font.GetEncoding();
+    else
+        enc = wxLocale::GetSystemEncoding();
+    wxMacCFStringHolder cfTitle;
+    cfTitle.Assign( title, enc );
+    columnDesc.headerBtnDesc.titleString = cfTitle; 
+    
+    int colMinWidth = 0;
+    if (minWidth != -1)
+        colMinWidth = minWidth;
+    columnDesc.headerBtnDesc.minimumWidth = colMinWidth;
+    
+    int colMaxWidth = 500;
+    if (maxWidth != -1)
+        colMaxWidth = maxWidth;
+    columnDesc.headerBtnDesc.maximumWidth = colMaxWidth;
+
+    columnDesc.propertyDesc.propertyID = (kMinColumnId + colId);
+    columnDesc.propertyDesc.propertyType = colType;
+    columnDesc.propertyDesc.propertyFlags = kDataBrowserListViewDefaultColumnFlags | kDataBrowserListViewNoGapForIconInHeaderButton; 
+#if MAC_OS_X_VERSION_MAX_ALLOWED > MAC_OS_X_VERSION_10_2
+    columnDesc.propertyDesc.propertyFlags |= kDataBrowserListViewTypeSelectColumn;
+#endif
+
+    verify_noerr( AddColumn( &columnDesc, kDataBrowserListViewAppendColumn ) );
+}
+
+void wxMacDataItemBrowserControl::SetColumnWidth(int colId, int width)
+{
+    DataBrowserPropertyID id;
+    GetColumnIDFromIndex(colId, &id);
+    verify_noerr( wxMacDataBrowserControl::SetColumnWidth(id, width));
+}
+
+int wxMacDataItemBrowserControl::GetColumnWidth(int colId)
+{
+    DataBrowserPropertyID id;
+    GetColumnIDFromIndex(colId, &id);
+    UInt16 result;
+    verify_noerr( wxMacDataBrowserControl::GetColumnWidth(id, &result));
+    return result;
 }
 
 void wxMacDataItemBrowserControl::AddItem(wxMacDataItem *container, wxMacDataItem *item)
@@ -1843,6 +2009,213 @@ void wxMacDataItemBrowserControl::RevealItem( wxMacDataItem* item, DataBrowserRe
 void wxMacDataItemBrowserControl::GetSelectionAnchor( wxMacDataItemPtr* first , wxMacDataItemPtr* last) const
 {
     verify_noerr(wxMacDataBrowserControl::GetSelectionAnchor( (DataBrowserItemID*) first, (DataBrowserItemID*) last) );
+}
+
+wxClientDataType wxMacDataItemBrowserControl::GetClientDataType() const
+{
+     return m_clientDataItemsType;
+}
+void wxMacDataItemBrowserControl::SetClientDataType(wxClientDataType clientDataItemsType)
+{
+    m_clientDataItemsType = clientDataItemsType;
+}
+
+unsigned int wxMacDataItemBrowserControl::MacGetCount() const
+{
+    return GetItemCount(wxMacDataBrowserRootContainer,false,kDataBrowserItemAnyState);
+}
+
+void wxMacDataItemBrowserControl::MacDelete( unsigned int n )
+{
+    wxMacDataItem* item = (wxMacDataItem*)GetItemFromLine( n );
+    RemoveItem( wxMacDataBrowserRootContainer, item );
+}
+
+void wxMacDataItemBrowserControl::MacInsert( unsigned int n, const wxString& text, int column )
+{
+    wxMacDataItem* newItem = CreateItem();
+    newItem->SetLabel( text );
+    if ( column != -1 )
+        newItem->SetColumn( kMinColumnId + column );
+
+    if ( m_sortOrder == SortOrder_None )
+    {
+        // increase the order of the lines to be shifted
+        unsigned int lines = MacGetCount();
+        for ( unsigned int i = n; i < lines; ++i)
+        {
+            wxMacDataItem* iter = (wxMacDataItem*) GetItemFromLine(i);
+            iter->SetOrder( iter->GetOrder() + 1 );
+        }
+
+        SInt32 frontLineOrder = 0;
+        if ( n > 0 )
+        {
+            wxMacDataItem* iter = (wxMacDataItem*) GetItemFromLine(n-1);
+            frontLineOrder = iter->GetOrder();
+        }
+        newItem->SetOrder( frontLineOrder + 1 );
+    }
+
+    AddItem( wxMacDataBrowserRootContainer, newItem );
+}
+
+void wxMacDataItemBrowserControl::MacInsert( unsigned int n, const wxArrayString& items, int column )
+{
+    size_t itemsCount = items.GetCount();
+    if ( itemsCount == 0 )
+        return;
+
+    SInt32 frontLineOrder = 0;
+
+    if ( m_sortOrder == SortOrder_None )
+    {
+        // increase the order of the lines to be shifted
+        unsigned int lines = MacGetCount();
+        for ( unsigned int i = n; i < lines; ++i)
+        {
+            wxMacDataItem* iter = (wxMacDataItem*) GetItemFromLine(i);
+            iter->SetOrder( iter->GetOrder() + itemsCount );
+        }
+        if ( n > 0 )
+        {
+            wxMacDataItem* iter = (wxMacDataItem*) GetItemFromLine(n-1);
+            frontLineOrder = iter->GetOrder();
+        }
+    }
+
+    wxArrayMacDataItemPtr ids;
+    ids.SetCount( itemsCount );
+
+    for ( unsigned int i = 0; i < itemsCount; ++i )
+    {
+        wxMacDataItem* item = CreateItem();
+        item->SetLabel( items[i]);
+        if ( column != -1 )
+            item->SetColumn( kMinColumnId + column );
+        
+        if ( m_sortOrder == SortOrder_None )
+            item->SetOrder( frontLineOrder + 1 + i );
+
+        ids[i] = item;
+    }
+
+    AddItems( wxMacDataBrowserRootContainer, ids );
+}
+
+int wxMacDataItemBrowserControl::MacAppend( const wxString& text)
+{
+    wxMacDataItem* item = CreateItem();
+    item->SetLabel( text );
+    if ( m_sortOrder == SortOrder_None )
+    {
+        unsigned int lines = MacGetCount();
+        if ( lines == 0 )
+            item->SetOrder( 1 );
+        else
+        {
+            wxMacDataItem* frontItem = (wxMacDataItem*) GetItemFromLine(lines-1);
+            item->SetOrder( frontItem->GetOrder() + 1 );
+        }
+    }
+    AddItem( wxMacDataBrowserRootContainer, item );
+
+    return GetLineFromItem(item);
+}
+
+void wxMacDataItemBrowserControl::MacClear()
+{
+    wxMacDataItemBrowserSelectionSuppressor suppressor(this);
+    RemoveAllItems(wxMacDataBrowserRootContainer);
+}
+
+void wxMacDataItemBrowserControl::MacDeselectAll()
+{
+    wxMacDataItemBrowserSelectionSuppressor suppressor(this);
+    SetSelectedAllItems( kDataBrowserItemsRemove );
+}
+
+void wxMacDataItemBrowserControl::MacSetSelection( unsigned int n, bool select, bool multi )
+{
+    wxMacDataItem* item = (wxMacDataItem*) GetItemFromLine(n);
+    wxMacDataItemBrowserSelectionSuppressor suppressor(this);
+
+    if ( IsItemSelected( item ) != select )
+    {
+        if ( select )
+            SetSelectedItem( item, multi ? kDataBrowserItemsAdd : kDataBrowserItemsAssign );
+        else
+            SetSelectedItem( item, kDataBrowserItemsRemove );
+    }
+
+    MacScrollTo( n );
+}
+
+bool wxMacDataItemBrowserControl::MacIsSelected( unsigned int n ) const
+{
+    wxMacDataItem* item = (wxMacDataItem*) GetItemFromLine(n);
+    return IsItemSelected( item );
+}
+
+int wxMacDataItemBrowserControl::MacGetSelection() const
+{
+    wxMacDataItemPtr first, last;
+    GetSelectionAnchor( &first, &last );
+
+    if ( first != NULL )
+    {
+        return GetLineFromItem( first );
+    }
+
+    return -1;
+}
+
+int wxMacDataItemBrowserControl::MacGetSelections( wxArrayInt& aSelections ) const
+{
+    aSelections.Empty();
+    wxArrayMacDataItemPtr selectedItems;
+    GetItems( wxMacDataBrowserRootContainer, false , kDataBrowserItemIsSelected, selectedItems);
+
+    int count = selectedItems.GetCount();
+
+    for ( int i = 0; i < count; ++i)
+    {
+        aSelections.Add(GetLineFromItem(selectedItems[i]));
+    }
+
+    return count;
+}
+
+void wxMacDataItemBrowserControl::MacSetString( unsigned int n, const wxString& text )
+{
+    // as we don't store the strings we only have to issue a redraw
+    wxMacDataItem* item = (wxMacDataItem*) GetItemFromLine( n);
+    item->SetLabel( text );
+    UpdateItem( wxMacDataBrowserRootContainer, item , kTextColumnId );
+}
+
+wxString wxMacDataItemBrowserControl::MacGetString( unsigned int n ) const
+{
+    wxMacDataItem * item = (wxMacDataItem*) GetItemFromLine( n );
+    return item->GetLabel();
+}
+
+void wxMacDataItemBrowserControl::MacSetClientData( unsigned int n, void * data)
+{
+    wxMacDataItem* item = (wxMacDataItem*) GetItemFromLine( n);
+    item->SetData( data );
+    // not displayed, therefore no Update infos to DataBrowser
+}
+
+void * wxMacDataItemBrowserControl::MacGetClientData( unsigned int n) const
+{
+    wxMacDataItem * item = (wxMacDataItem*) GetItemFromLine( n );
+    return item->GetData();
+}
+
+void wxMacDataItemBrowserControl::MacScrollTo( unsigned int n )
+{
+    RevealItem( GetItemFromLine( n) , kDataBrowserRevealWithoutSelecting );
 }
 
 

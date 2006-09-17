@@ -175,7 +175,7 @@ void wxListBox::DoSetSelection(int n, bool select)
     if ( n == wxNOT_FOUND )
         GetPeer()->MacDeselectAll();
     else
-        GetPeer()->MacSetSelection( n, select );
+        GetPeer()->MacSetSelection( n, select, HasMultipleSelection() );
 }
 
 bool wxListBox::IsSelected(int n) const
@@ -440,111 +440,13 @@ int wxListBox::DoListHitTest(const wxPoint& inpoint) const
 // data browser based implementation
 // ============================================================================
 
-const short kTextColumnId = 1024;
-const short kNumericOrderColumnId = 1025;
-
 wxMacListBoxItem::wxMacListBoxItem()
+        :wxMacDataItem()
 {
-    m_data = NULL;
-    m_order = 0;
 }
 
 wxMacListBoxItem::~wxMacListBoxItem()
 {
-}
-
-void wxMacListBoxItem::SetOrder( SInt32 order )
-{
-    m_order = order;
-}
-
-SInt32 wxMacListBoxItem::GetOrder() const
-{
-    return m_order;
-}
-
-void wxMacListBoxItem::SetData( void* data)
-{
-    m_data = data;
-}
-
-void* wxMacListBoxItem::GetData() const
-{
-    return m_data;
-}
-
-void wxMacListBoxItem::SetLabel( const wxString& str)
-{
-    m_label = str;
-    m_cfLabel.Assign( str , wxLocale::GetSystemEncoding());
-}
-
-const wxString& wxMacListBoxItem::GetLabel() const
-{
-    return m_label;
-}
-
-bool wxMacListBoxItem::IsLessThan(wxMacDataItemBrowserControl *owner ,
-    const wxMacDataItem* rhs,
-    DataBrowserPropertyID sortProperty) const
-{
-    const wxMacListBoxItem* otherItem = dynamic_cast<const wxMacListBoxItem*>(rhs);
-    bool retval = false;
-    switch (sortProperty)
-    {
-        case kTextColumnId:
-            retval = m_label.CmpNoCase( otherItem->m_label) < 0;
-            break;
-
-        case kNumericOrderColumnId:
-            retval = m_order < otherItem->m_order;
-            break;
-
-        default:
-            break;
-    };
-
-    return retval;
-}
-
-OSStatus wxMacListBoxItem::GetSetData( wxMacDataItemBrowserControl *owner ,
-    DataBrowserPropertyID property,
-    DataBrowserItemDataRef itemData,
-    bool changeValue )
-{
-    OSStatus err = errDataBrowserPropertyNotSupported;
-    wxListBox *list = wxDynamicCast( owner->GetPeer() , wxListBox );
-    wxCHECK_MSG( list != NULL , errDataBrowserPropertyNotSupported , wxT("Listbox expected"));
-
-    if ( !changeValue )
-    {
-        switch (property)
-        {
-            case kTextColumnId:
-                err = ::SetDataBrowserItemDataText( itemData, m_cfLabel );
-                err = noErr;
-                break;
-
-            case kNumericOrderColumnId:
-                err = ::SetDataBrowserItemDataValue( itemData, m_order );
-                err = noErr;
-                break;
-
-            default:
-                break;
-        }
-    }
-    else
-    {
-        switch (property)
-        {
-            // no editable props here
-            default:
-                break;
-        }
-    }
-
-    return err;
 }
 
 void wxMacListBoxItem::Notification(wxMacDataItemBrowserControl *owner ,
@@ -608,12 +510,13 @@ void wxMacListBoxItem::Notification(wxMacDataItemBrowserControl *owner ,
     }
 }
 
-wxMacDataBrowserListControl::wxMacDataBrowserListControl( wxListBox *peer, const wxPoint& pos, const wxSize& size, long style)
+wxMacDataBrowserListControl::wxMacDataBrowserListControl( wxWindow *peer, const wxPoint& pos, const wxSize& size, long style)
     : wxMacDataItemBrowserControl( peer, pos, size, style )
 {
     OSStatus err = noErr;
     m_clientDataItemsType = wxClientData_None;
-    m_stringSorted = style & wxLB_SORT;
+    if ( style & wxLB_SORT )
+        m_sortOrder = SortOrder_Text_Ascending;
 
     DataBrowserSelectionFlags  options = kDataBrowserDragSelect;
     if ( style & wxLB_MULTIPLE )
@@ -668,7 +571,7 @@ wxMacDataBrowserListControl::wxMacDataBrowserListControl( wxListBox *peer, const
     verify_noerr( AddColumn( &columnDesc, kDataBrowserListViewAppendColumn ) );
 
     SetDataBrowserSortProperty( m_controlRef , kTextColumnId);
-    if ( m_stringSorted )
+    if ( m_sortOrder == SortOrder_Text_Ascending )
     {
         SetDataBrowserSortProperty( m_controlRef , kTextColumnId);
         SetDataBrowserSortOrder( m_controlRef , kDataBrowserOrderIncreasing);
@@ -694,217 +597,9 @@ wxMacDataBrowserListControl::~wxMacDataBrowserListControl()
 {
 }
 
-
-wxMacListBoxItem* wxMacDataBrowserListControl::CreateItem()
+wxWindow * wxMacDataBrowserListControl::GetPeer() const
 {
-    return new wxMacListBoxItem();
-}
-
-wxListBox * wxMacDataBrowserListControl::GetPeer() const
-{
-    return wxDynamicCast( wxMacControl::GetPeer() , wxListBox );
-}
-
-wxClientDataType wxMacDataBrowserListControl::GetClientDataType() const
-{
-     return m_clientDataItemsType;
-}
-void wxMacDataBrowserListControl::SetClientDataType(wxClientDataType clientDataItemsType)
-{
-    m_clientDataItemsType = clientDataItemsType;
-}
-
-unsigned int wxMacDataBrowserListControl::MacGetCount() const
-{
-    return GetItemCount(wxMacDataBrowserRootContainer,false,kDataBrowserItemAnyState);
-}
-
-void wxMacDataBrowserListControl::MacDelete( unsigned int n )
-{
-    wxMacListBoxItem* item = (wxMacListBoxItem*)GetItemFromLine( n );
-    RemoveItem( wxMacDataBrowserRootContainer, item );
-}
-
-void wxMacDataBrowserListControl::MacInsert( unsigned int n, const wxString& text)
-{
-    wxMacListBoxItem* newItem = CreateItem();
-    newItem->SetLabel( text );
-
-    if ( !m_stringSorted )
-    {
-        // increase the order of the lines to be shifted
-        unsigned int lines = MacGetCount();
-        for ( unsigned int i = n; i < lines; ++i)
-        {
-            wxMacListBoxItem* iter = (wxMacListBoxItem*) GetItemFromLine(i);
-            iter->SetOrder( iter->GetOrder() + 1 );
-        }
-
-        SInt32 frontLineOrder = 0;
-        if ( n > 0 )
-        {
-            wxMacListBoxItem* iter = (wxMacListBoxItem*) GetItemFromLine(n-1);
-            frontLineOrder = iter->GetOrder();
-        }
-        newItem->SetOrder( frontLineOrder + 1 );
-    }
-
-    AddItem( wxMacDataBrowserRootContainer, newItem );
-}
-
-void wxMacDataBrowserListControl::MacInsert( unsigned int n, const wxArrayString& items)
-{
-    size_t itemsCount = items.GetCount();
-    if ( itemsCount == 0 )
-        return;
-
-    SInt32 frontLineOrder = 0;
-
-    if ( !m_stringSorted )
-    {
-        // increase the order of the lines to be shifted
-        unsigned int lines = MacGetCount();
-        for ( unsigned int i = n; i < lines; ++i)
-        {
-            wxMacListBoxItem* iter = (wxMacListBoxItem*) GetItemFromLine(i);
-            iter->SetOrder( iter->GetOrder() + itemsCount );
-        }
-        if ( n > 0 )
-        {
-            wxMacListBoxItem* iter = (wxMacListBoxItem*) GetItemFromLine(n-1);
-            frontLineOrder = iter->GetOrder();
-        }
-    }
-
-    wxArrayMacDataItemPtr ids;
-    ids.SetCount( itemsCount );
-
-    for ( unsigned int i = 0; i < itemsCount; ++i )
-    {
-        wxMacListBoxItem* item = CreateItem();
-        item->SetLabel( items[i]);
-        if ( !m_stringSorted )
-            item->SetOrder( frontLineOrder + 1 + i );
-
-        ids[i] = item;
-    }
-
-    AddItems( wxMacDataBrowserRootContainer, ids );
-}
-
-int wxMacDataBrowserListControl::MacAppend( const wxString& text)
-{
-    wxMacListBoxItem* item = CreateItem();
-    item->SetLabel( text );
-    if ( !m_stringSorted )
-    {
-        unsigned int lines = MacGetCount();
-        if ( lines == 0 )
-            item->SetOrder( 1 );
-        else
-        {
-            wxMacListBoxItem* frontItem = (wxMacListBoxItem*) GetItemFromLine(lines-1);
-            item->SetOrder( frontItem->GetOrder() + 1 );
-        }
-    }
-    AddItem( wxMacDataBrowserRootContainer, item );
-
-    return GetLineFromItem(item);
-}
-
-void wxMacDataBrowserListControl::MacClear()
-{
-    wxMacDataItemBrowserSelectionSuppressor suppressor(this);
-    RemoveAllItems(wxMacDataBrowserRootContainer);
-}
-
-void wxMacDataBrowserListControl::MacDeselectAll()
-{
-    wxMacDataItemBrowserSelectionSuppressor suppressor(this);
-    SetSelectedAllItems( kDataBrowserItemsRemove );
-}
-
-void wxMacDataBrowserListControl::MacSetSelection( unsigned int n, bool select )
-{
-    wxMacListBoxItem* item = (wxMacListBoxItem*) GetItemFromLine(n);
-    wxMacDataItemBrowserSelectionSuppressor suppressor(this);
-
-    if ( IsItemSelected( item ) != select )
-    {
-        if ( select )
-            SetSelectedItem( item, GetPeer()->HasMultipleSelection() ? kDataBrowserItemsAdd : kDataBrowserItemsAssign );
-        else
-            SetSelectedItem( item, kDataBrowserItemsRemove );
-    }
-
-    MacScrollTo( n );
-}
-
-bool wxMacDataBrowserListControl::MacIsSelected( unsigned int n ) const
-{
-    wxMacListBoxItem* item = (wxMacListBoxItem*) GetItemFromLine(n);
-    return IsItemSelected( item );
-}
-
-int wxMacDataBrowserListControl::MacGetSelection() const
-{
-    wxMacDataItemPtr first, last;
-    GetSelectionAnchor( &first, &last );
-
-    if ( first != NULL )
-    {
-        return GetLineFromItem( first );
-    }
-
-    return -1;
-}
-
-int wxMacDataBrowserListControl::MacGetSelections( wxArrayInt& aSelections ) const
-{
-    aSelections.Empty();
-    wxArrayMacDataItemPtr selectedItems;
-    GetItems( wxMacDataBrowserRootContainer, false , kDataBrowserItemIsSelected, selectedItems);
-
-    int count = selectedItems.GetCount();
-
-    for ( int i = 0; i < count; ++i)
-    {
-        aSelections.Add(GetLineFromItem(selectedItems[i]));
-    }
-
-    return count;
-}
-
-void wxMacDataBrowserListControl::MacSetString( unsigned int n, const wxString& text )
-{
-    // as we don't store the strings we only have to issue a redraw
-    wxMacListBoxItem* item = (wxMacListBoxItem*) GetItemFromLine( n);
-    item->SetLabel( text );
-    UpdateItem( wxMacDataBrowserRootContainer, item , kTextColumnId );
-}
-
-wxString wxMacDataBrowserListControl::MacGetString( unsigned int n ) const
-{
-    wxMacListBoxItem * item = (wxMacListBoxItem*) GetItemFromLine( n );
-    return item->GetLabel();
-}
-
-void wxMacDataBrowserListControl::MacSetClientData( unsigned int n, void * data)
-{
-    wxMacListBoxItem* item = (wxMacListBoxItem*) GetItemFromLine( n);
-    item->SetData( data );
-    // not displayed, therefore no Update infos to DataBrowser
-}
-
-void * wxMacDataBrowserListControl::MacGetClientData( unsigned int n) const
-{
-    wxMacListBoxItem * item = (wxMacListBoxItem*) GetItemFromLine( n );
-    return item->GetData();
-}
-
-void wxMacDataBrowserListControl::MacScrollTo( unsigned int n )
-{
-    RevealItem( GetItemFromLine( n) , kDataBrowserRevealWithoutSelecting );
+    return wxDynamicCast( wxMacControl::GetPeer() , wxWindow );
 }
 
 #if 0

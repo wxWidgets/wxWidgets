@@ -606,6 +606,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/common/imagxpm.cpp
     src/common/layout.cpp
     src/common/lboxcmn.cpp
+    src/common/listctrlcmn.cpp
     src/common/matrix.cpp
     src/common/menucmn.cpp
     src/common/nbkbase.cpp
@@ -2072,6 +2073,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/mac/carbon/icon.cpp
     src/mac/carbon/imaglist.cpp
     src/mac/carbon/listbox.cpp
+    src/mac/carbon/listctrl_mac.cpp
     src/mac/carbon/mdi.cpp
     src/mac/carbon/menu.cpp
     src/mac/carbon/menuitem.cpp

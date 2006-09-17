@@ -31,6 +31,13 @@
 class WXDLLEXPORT wxDropTarget;
 #endif
 
+// ----------------------------------------------------------------------------
+// constants
+// ----------------------------------------------------------------------------
+
+extern WXDLLEXPORT_DATA(const wxChar) wxGenericListCtrlNameStr[];
+
+
 //-----------------------------------------------------------------------------
 // classes
 //-----------------------------------------------------------------------------
@@ -38,8 +45,10 @@ class WXDLLEXPORT wxDropTarget;
 class WXDLLEXPORT wxListItem;
 class WXDLLEXPORT wxListEvent;
 
-#if !defined(__WXMSW__) || defined(__WXUNIVERSAL__)
+#if (!defined(__WXMSW__) || defined(__WXUNIVERSAL__))
+#ifndef __WXMAC__
 class WXDLLEXPORT wxListCtrl;
+#endif
 #define wxImageListType wxImageList
 #else
 #define wxImageListType wxGenericImageList
@@ -51,7 +60,6 @@ class WXDLLEXPORT wxListCtrl;
 
 class WXDLLEXPORT wxListHeaderData;
 class WXDLLEXPORT wxListItemData;
-class WXDLLEXPORT wxListLineData;
 
 class WXDLLEXPORT wxListHeaderWindow;
 class WXDLLEXPORT wxListMainWindow;
@@ -66,6 +74,7 @@ class WXDLLEXPORT wxListTextCtrl;
 class WXDLLEXPORT wxGenericListCtrl: public wxControl
 {
 public:
+
     wxGenericListCtrl();
     wxGenericListCtrl( wxWindow *parent,
                 wxWindowID winid = wxID_ANY,
@@ -73,7 +82,7 @@ public:
                 const wxSize &size = wxDefaultSize,
                 long style = wxLC_ICON,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString &name = wxListCtrlNameStr)
+                const wxString &name = wxGenericListCtrlNameStr)
     {
         Create(parent, winid, pos, size, style, validator, name);
     }
@@ -85,7 +94,7 @@ public:
                  const wxSize &size = wxDefaultSize,
                  long style = wxLC_ICON,
                  const wxValidator& validator = wxDefaultValidator,
-                 const wxString &name = wxListCtrlNameStr);
+                 const wxString &name = wxGenericListCtrlNameStr);
 
     bool GetColumn( int col, wxListItem& item ) const;
     bool SetColumn( int col, wxListItem& item );
@@ -273,7 +282,7 @@ private:
     DECLARE_DYNAMIC_CLASS(wxGenericListCtrl)
 };
 
-#if !defined(__WXMSW__) || defined(__WXUNIVERSAL__)
+#if (!defined(__WXMSW__) || defined(__WXUNIVERSAL__)) && !defined(__WXMAC__)
 /*
  * wxListCtrl has to be a real class or we have problems with
  * the run-time information.
@@ -295,6 +304,7 @@ public:
     : wxGenericListCtrl(parent, winid, pos, size, style, validator, name)
     {
     }
+    
 };
 #endif // !__WXMSW__ || __WXUNIVERSAL__
 

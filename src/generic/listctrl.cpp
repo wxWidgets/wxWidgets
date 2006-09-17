@@ -26,16 +26,14 @@
 // under Win32 we always use the native version and also may use the generic
 // one, however some things should be done only if we use only the generic
 // version
-#if defined(__WIN32__) && !defined(__WXUNIVERSAL__)
+#if (defined(__WIN32__) && !defined(__WXUNIVERSAL__)) || defined(__WXMAC__)
     #define HAVE_NATIVE_LISTCTRL
 #endif
 
 // if we have the native control, wx/listctrl.h declares it and not this one
-#ifdef HAVE_NATIVE_LISTCTRL
-    #include "wx/generic/listctrl.h"
-#else // !HAVE_NATIVE_LISTCTRL
-    #include "wx/listctrl.h"
+#include "wx/listctrl.h"
 
+#ifndef HAVE_NATIVE_LISTCTRL
     // if we have a native version, its implementation file does all this
     IMPLEMENT_DYNAMIC_CLASS(wxListItem, wxObject)
     IMPLEMENT_DYNAMIC_CLASS(wxListView, wxListCtrl)
@@ -65,35 +63,6 @@
 // be removed, as well as the #else case below.
 #define _USE_VISATTR 0
 
-
-// ----------------------------------------------------------------------------
-// events
-// ----------------------------------------------------------------------------
-
-DEFINE_EVENT_TYPE(wxEVT_COMMAND_LIST_BEGIN_DRAG)
-DEFINE_EVENT_TYPE(wxEVT_COMMAND_LIST_BEGIN_RDRAG)
-DEFINE_EVENT_TYPE(wxEVT_COMMAND_LIST_BEGIN_LABEL_EDIT)
-DEFINE_EVENT_TYPE(wxEVT_COMMAND_LIST_END_LABEL_EDIT)
-DEFINE_EVENT_TYPE(wxEVT_COMMAND_LIST_DELETE_ITEM)
-DEFINE_EVENT_TYPE(wxEVT_COMMAND_LIST_DELETE_ALL_ITEMS)
-#if WXWIN_COMPATIBILITY_2_4
-DEFINE_EVENT_TYPE(wxEVT_COMMAND_LIST_GET_INFO)
-DEFINE_EVENT_TYPE(wxEVT_COMMAND_LIST_SET_INFO)
-#endif
-DEFINE_EVENT_TYPE(wxEVT_COMMAND_LIST_ITEM_SELECTED)
-DEFINE_EVENT_TYPE(wxEVT_COMMAND_LIST_ITEM_DESELECTED)
-DEFINE_EVENT_TYPE(wxEVT_COMMAND_LIST_KEY_DOWN)
-DEFINE_EVENT_TYPE(wxEVT_COMMAND_LIST_INSERT_ITEM)
-DEFINE_EVENT_TYPE(wxEVT_COMMAND_LIST_COL_CLICK)
-DEFINE_EVENT_TYPE(wxEVT_COMMAND_LIST_COL_RIGHT_CLICK)
-DEFINE_EVENT_TYPE(wxEVT_COMMAND_LIST_COL_BEGIN_DRAG)
-DEFINE_EVENT_TYPE(wxEVT_COMMAND_LIST_COL_DRAGGING)
-DEFINE_EVENT_TYPE(wxEVT_COMMAND_LIST_COL_END_DRAG)
-DEFINE_EVENT_TYPE(wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK)
-DEFINE_EVENT_TYPE(wxEVT_COMMAND_LIST_ITEM_MIDDLE_CLICK)
-DEFINE_EVENT_TYPE(wxEVT_COMMAND_LIST_ITEM_ACTIVATED)
-DEFINE_EVENT_TYPE(wxEVT_COMMAND_LIST_ITEM_FOCUSED)
-DEFINE_EVENT_TYPE(wxEVT_COMMAND_LIST_CACHE_HINT)
 
 // ----------------------------------------------------------------------------
 // constants
