@@ -2387,7 +2387,6 @@ void wxGenericTreeCtrl::PaintLevel( wxGenericTreeItem *item, wxDC &dc, int level
                 int yy = y_mid - image_h/2;
 
                 wxDCClipper clip(dc, xx, yy, image_w, image_h);
-                wxPrintf( wxT("hi\n") );
                 m_imageListButtons->Draw(image, dc, xx, yy,
                                          wxIMAGELIST_DRAW_TRANSPARENT);
             }
