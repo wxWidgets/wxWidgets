@@ -1079,7 +1079,7 @@ if is_monolithic; then
     # We still need the core lib deps for a static build though
     if is_static; then
         link_deps="${libdir}/libwx_@TOOLCHAIN_NAME@.a" 
-        wx_libs="$wx_libs $link_deps $ldlibs_core @LIBS@"
+        wx_libs="$wx_libs $link_deps $ldlibs_core $ldlibs_base"
     else
         wx_libs="$wx_libs -lwx_@TOOLCHAIN_NAME@"
     fi
