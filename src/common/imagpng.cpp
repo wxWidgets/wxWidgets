@@ -37,6 +37,7 @@
 #include "wx/filefn.h"
 #include "wx/wfstream.h"
 #include "wx/intl.h"
+#include "wx/palette.h"
 
 // For memcpy
 #include <string.h>
@@ -580,6 +581,29 @@ wxPNGHandler::LoadFile(wxImage *image,
 
     png_read_image( png_ptr, lines );
     png_read_end( png_ptr, info_ptr );
+
+#if wxUSE_PALETTE
+    if (color_type == PNG_COLOR_TYPE_PALETTE)
+    {
+        const size_t ncolors = info_ptr->num_palette;
+        unsigned char* r = new unsigned char[ncolors];
+        unsigned char* g = new unsigned char[ncolors];
+        unsigned char* b = new unsigned char[ncolors];
+
+        for (size_t j = 0; j < ncolors; j++)
+        {
+            r[j] = info_ptr->palette[j].red;
+            g[j] = info_ptr->palette[j].green;
+            b[j] = info_ptr->palette[j].blue;
+        }
+
+        image->SetPalette(wxPalette(ncolors, r, g, b));
+        delete[] r;
+        delete[] g;
+        delete[] b;
+    }
+#endif // wxUSE_PALETTE
+
     png_destroy_read_struct( &png_ptr, &info_ptr, (png_infopp) NULL );
 
     // loaded successfully, now init wxImage with this data
