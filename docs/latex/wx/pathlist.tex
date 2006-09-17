@@ -19,7 +19,7 @@ to extract the filename from the path.
 
 \wxheading{See also}
 
-\helpref{wxArrayString}{wxarraystring}
+\helpref{wxArrayString}{wxarraystring}, \helpref{wxStandardPaths}{wxstandardpaths}, \helpref{wxFileName}{wxfilename}
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
@@ -50,10 +50,15 @@ example.
 
 \func{void}{Add}{\param{const wxArrayString\& }{arr}}
 
-The first form adds the given directory (the filename if present is removed)
-to the path list, if the path is not already in the list.
-
+The first form adds the given directory to the path list, if the path is not already in the list.
 The second form just calls the first form on all elements of the given array.
+
+The {\it path} is always considered a directory but no existence checks will be done on it
+(because if it doesn't exist, it could be created later and thus result a valid path when
+\helpref{FindValidPath}{wxpathlistfindvalidpath} is called).
+
+{\bf Note:} if the given path is relative, it won't be made absolute before adding it
+(this is why \helpref{FindValidPath}{wxpathlistfindvalidpath} may return relative paths).
 
 
 \membersection{wxPathList::EnsureFileAccessible}\label{wxpathlistensurefileaccessible}
@@ -69,7 +74,7 @@ filename and adding the path to the list if not already there.
 
 \constfunc{wxString}{FindAbsoluteValidPath}{\param{const wxString\& }{file}}
 
-Searches for a full path for an existing file by appending {\it file} to
+Searches for a full (i.e. absolute) path for an existing file by appending {\it file} to
 successive members of the path list.  If the file wasn't found, an empty
 string is returned.
 
@@ -78,7 +83,13 @@ string is returned.
 
 \constfunc{wxString}{FindValidPath}{\param{const wxString\& }{file}}
 
-Searches for a full path for an existing file by appending {\it file} to
-successive members of the path list.  If the file wasn't found, an empty string
-is returned. This path may be relative to the current working directory.
+Searches for a path for an existing file by appending {\it file} to
+successive members of the path list.
+If the file wasn't found, an empty string is returned.
 
+The returned path may be relative to the current working directory.
+
+The given string must be a file name, eventually with a path prefix (if the path
+prefix is absolute, only its name will be searched); i.e. it must not end with
+a directory separator (see \helpref{wxFileName::GetPathSeparator}{wxfilenamegetpathseparator})
+otherwise an assertion will fail.

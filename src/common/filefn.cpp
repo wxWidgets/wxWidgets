@@ -146,11 +146,15 @@ WXDLLEXPORT int wxOpen( const wxChar *pathname, int flags, mode_t mode )
 // wxPathList
 // ----------------------------------------------------------------------------
 
-void wxPathList::Add (const wxString& path)
+void wxPathList::Add(const wxString& path)
 {
-    // add only the path part of the given string (not the filename, in case it's present)
+    // add a path separator to force wxFileName to interpret it always as a directory
+    // (i.e. if we are called with '/home/user' we want to consider it a folder and
+    // not, as wxFileName would consider, a filename).
     wxFileName fn(path + wxFileName::GetPathSeparator());
-    fn.Normalize();     // add only normalized paths
+
+    // add only normalized relative/absolute paths
+    fn.Normalize(wxPATH_NORM_DOTS|wxPATH_NORM_TILDE|wxPATH_NORM_LONG|wxPATH_NORM_ENV_VARS);
 
     wxString toadd = fn.GetPath();
     if (Index(toadd) == wxNOT_FOUND)
@@ -211,12 +215,17 @@ bool wxPathList::Member (const wxString& path) const
 
 wxString wxPathList::FindValidPath (const wxString& file) const
 {
+    // normalize the given string as it could be a path + a filename
+    // and not only a filename
     wxFileName fn(file);
     wxString strend;
 
-    fn.Normalize();
+    // NB: normalize without making absolute !
+    fn.Normalize(wxPATH_NORM_DOTS|wxPATH_NORM_TILDE|wxPATH_NORM_LONG|wxPATH_NORM_ENV_VARS);
+
+    wxASSERT_MSG(!fn.IsDir(), wxT("Cannot search for directories; only for files"));
     if (fn.IsAbsolute())
-        strend = fn.GetFullName();
+        strend = fn.GetFullName();      // search for the file name and ignore the path part
     else
         strend = fn.GetFullPath();
 
