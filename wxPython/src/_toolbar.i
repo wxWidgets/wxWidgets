@@ -44,6 +44,7 @@ enum {
     wxTB_HORZ_LAYOUT,
     wxTB_HORZ_TEXT,
     wxTB_NO_TOOLTIPS,
+    wxTB_BOTTOM
 };
 
 

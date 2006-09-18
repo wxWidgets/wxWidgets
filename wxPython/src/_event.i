@@ -678,8 +678,8 @@ Events
     EVT_SCROLL_PAGEDOWN         page down events
     EVT_SCROLL_THUMBTRACK       thumbtrack events (frequent events sent
                                 as the user drags the 'thumb')
-    EVT_SCROLL_THUMBRELEASE     thumb release events.
-    EVT_SCROLL_ENDSCROLL        End of scrolling
+    EVT_SCROLL_THUMBRELEASE     thumb release events
+    EVT_SCROLL_CHANGED          End of scrolling
     =======================     ==========================================
 
 Note
@@ -687,17 +687,17 @@ Note
     The EVT_SCROLL_THUMBRELEASE event is only emitted when actually
     dragging the thumb using the mouse and releasing it (This
     EVT_SCROLL_THUMBRELEASE event is also followed by an
-    EVT_SCROLL_ENDSCROLL event).
+    EVT_SCROLL_CHANGED event).
 
-    The EVT_SCROLL_ENDSCROLL event also occurs when using the keyboard
+    The EVT_SCROLL_CHANGED event also occurs when using the keyboard
     to change the thumb position, and when clicking next to the thumb
     (In all these cases the EVT_SCROLL_THUMBRELEASE event does not
     happen).
 
-    In short, the EVT_SCROLL_ENDSCROLL event is triggered when
+    In short, the EVT_SCROLL_CHANGED event is triggered when
     scrolling/ moving has finished. The only exception (unfortunately)
     is that changing the thumb position using the mousewheel does give
-    a EVT_SCROLL_THUMBRELEASE event but NOT an EVT_SCROLL_ENDSCROLL
+    a EVT_SCROLL_THUMBRELEASE event but NOT an EVT_SCROLL_CHANGED
     event.
 ");
 
@@ -745,8 +745,8 @@ Events
     EVT_SCROLLWIN_PAGEDOWN         page down events
     EVT_SCROLLWIN_THUMBTRACK       thumbtrack events (frequent events sent
                                    as the user drags the 'thumb')
-    EVT_SCROLLWIN_THUMBRELEASE     thumb release events.
-    EVT_SCROLLWIN_ENDSCROLL        End of scrolling
+    EVT_SCROLLWIN_THUMBRELEASE     thumb release events
+    EVT_SCROLLWIN_CHANGED          End of scrolling
     ==========================     ==========================================
 
 :see: `wx.ScrollEvent`

@@ -1287,10 +1287,14 @@ on it, everything is in fact first drawn on an in-memory buffer (a
 `wx.Bitmap`) and then copied to the screen only once, when this object
 is destroyed.
 
-It can be used in the same way as any other device
-context. wx.BufferedDC itself typically replaces `wx.ClientDC`, if you
-want to use it in your EVT_PAINT handler, you should look at
+It can be used in the same way as any other device context.
+wx.BufferedDC itself typically replaces `wx.ClientDC`, if you want to
+use it in your EVT_PAINT handler, you should look at
 `wx.BufferedPaintDC`.
+
+Please note that GTK+ 2.0 and OS X provide double buffering themselves
+natively so using this class on those platforms will normally result
+in an unneeded level of buffering.
 ", "");
 
 class wxBufferedDC : public wxMemoryDC

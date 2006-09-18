@@ -3107,10 +3107,10 @@ SWIGINTERN bool wxPyListCtrl_SortItems(wxPyListCtrl *self,PyObject *func){
         }
 SWIGINTERN wxWindow *wxPyListCtrl_GetMainWindow(wxPyListCtrl *self){
         
-
-
-            return (wxWindow*)self->m_mainWin;
+            return self;
         
+
+
         }
 
 #include <wx/treectrl.h>
@@ -48725,6 +48725,7 @@ SWIGEXPORT void SWIG_init(void) {
   SWIG_Python_SetConstant(d, "TB_HORZ_LAYOUT",SWIG_From_int(static_cast< int >(wxTB_HORZ_LAYOUT)));
   SWIG_Python_SetConstant(d, "TB_HORZ_TEXT",SWIG_From_int(static_cast< int >(wxTB_HORZ_TEXT)));
   SWIG_Python_SetConstant(d, "TB_NO_TOOLTIPS",SWIG_From_int(static_cast< int >(wxTB_NO_TOOLTIPS)));
+  SWIG_Python_SetConstant(d, "TB_BOTTOM",SWIG_From_int(static_cast< int >(wxTB_BOTTOM)));
   SWIG_addvarlink(SWIG_globals(),(char*)"ListCtrlNameStr",ListCtrlNameStr_get, ListCtrlNameStr_set);
   SWIG_Python_SetConstant(d, "LC_VRULES",SWIG_From_int(static_cast< int >(wxLC_VRULES)));
   SWIG_Python_SetConstant(d, "LC_HRULES",SWIG_From_int(static_cast< int >(wxLC_HRULES)));

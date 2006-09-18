@@ -3464,6 +3464,7 @@ TB_NOALIGN = _controls_.TB_NOALIGN
 TB_HORZ_LAYOUT = _controls_.TB_HORZ_LAYOUT
 TB_HORZ_TEXT = _controls_.TB_HORZ_TEXT
 TB_NO_TOOLTIPS = _controls_.TB_NO_TOOLTIPS
+TB_BOTTOM = _controls_.TB_BOTTOM
 class ToolBarToolBase(_core.Object):
     """Proxy of C++ ToolBarToolBase class"""
     thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')

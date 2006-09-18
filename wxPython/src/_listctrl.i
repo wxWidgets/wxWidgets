@@ -835,7 +835,7 @@ any.", "",
 
     %extend {
         wxWindow* GetMainWindow() {
-        #ifdef __WXMSW__
+        #if defined(__WXMSW__) || defined(__WXMAC__)
             return self;
         #else
             return (wxWindow*)self->m_mainWin;
