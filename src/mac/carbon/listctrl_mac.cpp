@@ -1234,7 +1234,7 @@ void wxMacListCtrlItem::Notification(wxMacDataItemBrowserControl *owner ,
     DataBrowserItemDataRef itemData ) const
 {
 
-    wxMacDataBrowserListControl *lb = dynamic_cast<wxMacDataBrowserListControl*>(owner);
+    wxMacDataBrowserListCtrlControl *lb = dynamic_cast<wxMacDataBrowserListCtrlControl*>(owner);
 
     // we want to depend on as little as possible to make sure tear-down of controls is safe
     if ( message == kDataBrowserItemRemoved)
@@ -1248,35 +1248,31 @@ void wxMacListCtrlItem::Notification(wxMacDataItemBrowserControl *owner ,
         return;
     }
 
-    // TO STEFAN: I'm getting a couple different problems here and I'd appreciate
-    // if you could take a look at them.
+    // CS : couldn't reproduce this problem, what are the steps to test ?
     // 1) wxDynamicCast fails during shutdown. This doesn't suprise me, but 
     //    you have similar listbox code, so I'm wondering why this case is different.
+
+    // CS: these two should be fixed now
     // 2) owner->GetLineFromItem( this ) always asserts.
     // 3) the !lb->IsSelectionSuppressed code also fails with EXC_BAD_ACCESS
-    
-    // To be honest, I think there are casting issues here, but I don't work enough
-    // in C++ that these things are clear to me, so I'm hoping another pair of eyes
-    // would help. ;-) 
-    // In any case, I set trigger to false so that these events are not sent.
     
     // during shutdown, this may fail.
     wxListCtrl *list = wxDynamicCast( owner->GetPeer() , wxListCtrl );
     if ( list ){
         bool trigger = false;
             
-        wxCommandEvent event( wxEVT_COMMAND_LIST_ITEM_SELECTED, list->GetId() );
+        wxListEvent event( wxEVT_COMMAND_LIST_ITEM_SELECTED, list->GetId() );
         bool isSingle = list->GetWindowStyle() | wxLC_SINGLE_SEL;
         switch (message)
         {
             case kDataBrowserItemDeselected:
                 event.SetEventType(wxEVT_COMMAND_LIST_ITEM_DESELECTED);
-                //if ( !isSingle )
-                //    trigger = !lb->IsSelectionSuppressed();
+                if ( !isSingle )
+                    trigger = !lb->IsSelectionSuppressed();
                 break;
 
             case kDataBrowserItemSelected:
-                //trigger = !lb->IsSelectionSuppressed();
+                trigger = !lb->IsSelectionSuppressed();
                 break;
 
             case kDataBrowserItemDoubleClicked:
@@ -1291,17 +1287,13 @@ void wxMacListCtrlItem::Notification(wxMacDataItemBrowserControl *owner ,
         if ( trigger )
         {
             event.SetEventObject( list );
-            //if ( list->HasClientObjectData() )
-            //    event.SetClientObject( (wxClientData*) m_data );
-            //else if ( list->HasClientUntypedData() )
-            //    event.SetClientData( m_data );
-            event.SetString( m_label );
-            event.SetInt( owner->GetLineFromItem( this ) );
-            event.SetExtraLong( !isSingle ? message == kDataBrowserItemSelected : true );
-            wxPostEvent( list->GetEventHandler(), event );
-
+            event.m_itemIndex = owner->GetLineFromItem( this ) ;
+            if ( !list->IsVirtual() )
+            {
+                lb->MacGetColumnInfo(event.m_itemIndex,0,event.m_item);
+            }
             // direct notification is not always having the listbox GetSelection() having in synch with event
-            // list->GetEventHandler()->ProcessEvent(event);
+            wxPostEvent( list->GetEventHandler(), event );
         }
     }
 
@@ -1417,7 +1409,9 @@ void wxMacDataBrowserListCtrlControl::UpdateState(wxMacDataItem* dataItem, wxLis
 void wxMacDataBrowserListCtrlControl::MacGetColumnInfo( unsigned int row, unsigned int column, wxListItem& item )
 { 
     wxMacDataItem* dataItem = GetItemFromLine(row);
-    if (item){
+    // CS should this guard against dataItem = 0 ? , as item is not a pointer if (item) is not appropriate
+    //if (item) 
+    {
         wxMacListCtrlItem* listItem = dynamic_cast<wxMacListCtrlItem*>(dataItem);
         wxListItem* oldItem = listItem->GetColumnInfo( column );
         
