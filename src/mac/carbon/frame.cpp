@@ -344,15 +344,19 @@ void wxFrame::PositionToolBar()
     int cw, ch;
 
     GetSize( &cw , &ch ) ;
-
-    int statusX, statusY;
-    GetStatusBar()->GetClientSize(&statusX, &statusY);
             
+    int statusX = 0 ;
+    int statusY = 0 ;
+
+#if wxUSE_STATUSBAR
     if (GetStatusBar() && GetStatusBar()->IsShown())
     {
+        GetStatusBar()->GetClientSize(&statusX, &statusY);
         ch -= statusY;
     }
+#endif
 
+#if wxUSE_TOOLBAR
     if (GetToolBar())
     {
         int tx, ty, tw, th;
@@ -383,6 +387,7 @@ void wxFrame::PositionToolBar()
 #endif
         }
     }
+#endif
 }
 
 void wxFrame::PositionBars()
