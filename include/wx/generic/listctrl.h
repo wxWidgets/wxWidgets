@@ -31,7 +31,6 @@ class WXDLLEXPORT wxDropTarget;
 // constants
 // ----------------------------------------------------------------------------
 
-extern WXDLLEXPORT_DATA(const wxChar) wxGenericListCtrlNameStr[];
 
 //-----------------------------------------------------------------------------
 // internal classes
@@ -61,7 +60,7 @@ public:
                 const wxSize &size = wxDefaultSize,
                 long style = wxLC_ICON,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString &name = wxGenericListCtrlNameStr)
+                const wxString &name = wxListCtrlNameStr)
     {
         Create(parent, winid, pos, size, style, validator, name);
     }
@@ -73,7 +72,7 @@ public:
                  const wxSize &size = wxDefaultSize,
                  long style = wxLC_ICON,
                  const wxValidator& validator = wxDefaultValidator,
-                 const wxString &name = wxGenericListCtrlNameStr);
+                 const wxString &name = wxListCtrlNameStr);
 
     bool GetColumn( int col, wxListItem& item ) const;
     bool SetColumn( int col, wxListItem& item );
