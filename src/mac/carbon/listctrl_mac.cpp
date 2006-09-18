@@ -626,6 +626,12 @@ int wxListCtrl::GetItemCount() const
     return m_count;
 }
 
+void wxListCtrl::SetItemSpacing( int spacing, bool isSmall )
+{
+    if (m_genericImpl)
+        m_genericImpl->SetItemSpacing(spacing, isSmall);
+}
+
 wxSize wxListCtrl::GetItemSpacing() const
 {
     if (m_genericImpl)

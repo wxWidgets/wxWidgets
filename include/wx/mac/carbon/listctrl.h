@@ -137,6 +137,7 @@ class WXDLLEXPORT wxListCtrl: public wxControl
   // Gets the number of columns in the list control
   int GetColumnCount() const;
 
+  void SetItemSpacing( int spacing, bool isSmall = false );
   wxSize GetItemSpacing() const;
 
   // Gets the number of selected items in the list control
@@ -153,6 +154,9 @@ class WXDLLEXPORT wxListCtrl: public wxControl
   // Gets the index of the topmost visible item when in
   // list or report view
   long GetTopItem() const ;
+
+  // are we in report mode?
+  bool InReportView() const { return HasFlag(wxLC_REPORT); }
 
   bool IsVirtual() const { return HasFlag(wxLC_VIRTUAL); }
 
