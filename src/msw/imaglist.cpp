@@ -37,7 +37,7 @@
     #include <stdio.h>
 #endif
 
-#include "wx/msw/imaglist.h"
+#include "wx/imaglist.h"
 #include "wx/msw/private.h"
 
 // ----------------------------------------------------------------------------
