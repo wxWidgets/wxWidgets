@@ -18,7 +18,7 @@
 
 #ifndef __WXPALMOS__
 
-#include "wx/generic/imaglist.h"
+#include "wx/imaglist.h"
 
 #ifndef WX_PRECOMP
     #include "wx/dc.h"
@@ -32,7 +32,7 @@
 
 IMPLEMENT_DYNAMIC_CLASS(wxGenericImageList, wxObject)
 
-#if !defined(__WXMSW__) || defined(__WXUNIVERSAL__)
+#if !HAVE_NATIVE_IMAGELIST
 /*
  * wxImageList has to be a real class or we have problems with
  * the run-time information.

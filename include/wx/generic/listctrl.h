@@ -13,18 +13,14 @@
 
 #include "wx/defs.h"
 #include "wx/object.h"
-#ifdef __WXMAC__
 #include "wx/imaglist.h"
-#else
-#include "wx/generic/imaglist.h"
-#endif
 
 #include "wx/control.h"
 #include "wx/timer.h"
 #include "wx/dcclient.h"
 #include "wx/scrolwin.h"
 #include "wx/settings.h"
-#include "wx/listbase.h"
+#include "wx/listctrl.h"
 #include "wx/textctrl.h"
 
 #if wxUSE_DRAG_AND_DROP
@@ -36,23 +32,6 @@ class WXDLLEXPORT wxDropTarget;
 // ----------------------------------------------------------------------------
 
 extern WXDLLEXPORT_DATA(const wxChar) wxGenericListCtrlNameStr[];
-
-
-//-----------------------------------------------------------------------------
-// classes
-//-----------------------------------------------------------------------------
-
-class WXDLLEXPORT wxListItem;
-class WXDLLEXPORT wxListEvent;
-
-#if (!defined(__WXMSW__) || defined(__WXUNIVERSAL__))
-#ifndef __WXMAC__
-class WXDLLEXPORT wxListCtrl;
-#endif
-#define wxImageListType wxImageList
-#else
-#define wxImageListType wxGenericImageList
-#endif
 
 //-----------------------------------------------------------------------------
 // internal classes
@@ -136,9 +115,9 @@ public:
     void SetWindowStyleFlag( long style );
     void RecreateWindow() {}
     long GetNextItem( long item, int geometry = wxLIST_NEXT_ALL, int state = wxLIST_STATE_DONTCARE ) const;
-    wxImageListType *GetImageList( int which ) const;
-    void SetImageList( wxImageListType *imageList, int which );
-    void AssignImageList( wxImageListType *imageList, int which );
+    wxImageList *GetImageList( int which ) const;
+    void SetImageList( wxImageList *imageList, int which );
+    void AssignImageList( wxImageList *imageList, int which );
     bool Arrange( int flag = wxLIST_ALIGN_DEFAULT ); // always wxLIST_ALIGN_LEFT in wxGLC
 
     void ClearAll();
@@ -230,9 +209,9 @@ public:
     // implementation
     // --------------
 
-    wxImageListType         *m_imageListNormal;
-    wxImageListType         *m_imageListSmall;
-    wxImageListType         *m_imageListState;  // what's that ?
+    wxImageList         *m_imageListNormal;
+    wxImageList         *m_imageListSmall;
+    wxImageList         *m_imageListState;  // what's that ?
     bool                 m_ownsImageListNormal,
                          m_ownsImageListSmall,
                          m_ownsImageListState;
