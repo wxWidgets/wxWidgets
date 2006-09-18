@@ -2132,65 +2132,6 @@ SOURCE=..\..\src\msw\icon.cpp
 # Begin Source File
 
 SOURCE=..\..\src\msw\imaglist.cpp
-
-!IF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Debug"
-
-
-!ENDIF
-
 # End Source File
 # Begin Source File
 
@@ -6875,6 +6816,69 @@ SOURCE=..\..\src\univ\statusbr.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\univ\stdrend.cpp
+
+!IF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Debug"
+
+# PROP Exclude_From_Build 1
+
+!ENDIF
+
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\univ\textctrl.cpp
 
 !IF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
@@ -8458,6 +8462,10 @@ SOURCE=..\..\include\wx\univ\stattext.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\univ\statusbr.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\univ\stdrend.h
 # End Source File
 # Begin Source File
 

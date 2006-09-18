@@ -224,6 +224,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_gdiobj.obj &
 	$(OBJS)\monodll_gsockmsw.obj &
 	$(OBJS)\monodll_icon.obj &
+	$(OBJS)\monodll_imaglist.obj &
 	$(OBJS)\monodll_minifram.obj &
 	$(OBJS)\monodll_dataobj.obj &
 	$(OBJS)\monodll_dropsrc.obj &
@@ -264,7 +265,6 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_filedlg.obj &
 	$(OBJS)\monodll_frame.obj &
 	$(OBJS)\monodll_gauge95.obj &
-	$(OBJS)\monodll_imaglist.obj &
 	$(OBJS)\monodll_iniconf.obj &
 	$(OBJS)\monodll_listbox.obj &
 	$(OBJS)\monodll_listctrl.obj &
@@ -438,6 +438,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_gdiobj.obj &
 	$(OBJS)\monodll_gsockmsw.obj &
 	$(OBJS)\monodll_icon.obj &
+	$(OBJS)\monodll_imaglist.obj &
 	$(OBJS)\monodll_minifram.obj &
 	$(OBJS)\monodll_dataobj.obj &
 	$(OBJS)\monodll_dropsrc.obj &
@@ -502,6 +503,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_statline.obj &
 	$(OBJS)\monodll_stattext.obj &
 	$(OBJS)\monodll_statusbr.obj &
+	$(OBJS)\monodll_stdrend.obj &
 	$(OBJS)\monodll_textctrl.obj &
 	$(OBJS)\monodll_tglbtn.obj &
 	$(OBJS)\monodll_theme.obj &
@@ -809,6 +811,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_gdiobj.obj &
 	$(OBJS)\monolib_gsockmsw.obj &
 	$(OBJS)\monolib_icon.obj &
+	$(OBJS)\monolib_imaglist.obj &
 	$(OBJS)\monolib_minifram.obj &
 	$(OBJS)\monolib_dataobj.obj &
 	$(OBJS)\monolib_dropsrc.obj &
@@ -849,7 +852,6 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_filedlg.obj &
 	$(OBJS)\monolib_frame.obj &
 	$(OBJS)\monolib_gauge95.obj &
-	$(OBJS)\monolib_imaglist.obj &
 	$(OBJS)\monolib_iniconf.obj &
 	$(OBJS)\monolib_listbox.obj &
 	$(OBJS)\monolib_listctrl.obj &
@@ -1023,6 +1025,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_gdiobj.obj &
 	$(OBJS)\monolib_gsockmsw.obj &
 	$(OBJS)\monolib_icon.obj &
+	$(OBJS)\monolib_imaglist.obj &
 	$(OBJS)\monolib_minifram.obj &
 	$(OBJS)\monolib_dataobj.obj &
 	$(OBJS)\monolib_dropsrc.obj &
@@ -1087,6 +1090,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_statline.obj &
 	$(OBJS)\monolib_stattext.obj &
 	$(OBJS)\monolib_statusbr.obj &
+	$(OBJS)\monolib_stdrend.obj &
 	$(OBJS)\monolib_textctrl.obj &
 	$(OBJS)\monolib_tglbtn.obj &
 	$(OBJS)\monolib_theme.obj &
@@ -1324,6 +1328,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_gdiobj.obj &
 	$(OBJS)\coredll_gsockmsw.obj &
 	$(OBJS)\coredll_icon.obj &
+	$(OBJS)\coredll_imaglist.obj &
 	$(OBJS)\coredll_minifram.obj &
 	$(OBJS)\coredll_dataobj.obj &
 	$(OBJS)\coredll_dropsrc.obj &
@@ -1364,7 +1369,6 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_filedlg.obj &
 	$(OBJS)\coredll_frame.obj &
 	$(OBJS)\coredll_gauge95.obj &
-	$(OBJS)\coredll_imaglist.obj &
 	$(OBJS)\coredll_iniconf.obj &
 	$(OBJS)\coredll_listbox.obj &
 	$(OBJS)\coredll_listctrl.obj &
@@ -1538,6 +1542,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_gdiobj.obj &
 	$(OBJS)\coredll_gsockmsw.obj &
 	$(OBJS)\coredll_icon.obj &
+	$(OBJS)\coredll_imaglist.obj &
 	$(OBJS)\coredll_minifram.obj &
 	$(OBJS)\coredll_dataobj.obj &
 	$(OBJS)\coredll_dropsrc.obj &
@@ -1602,6 +1607,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_statline.obj &
 	$(OBJS)\coredll_stattext.obj &
 	$(OBJS)\coredll_statusbr.obj &
+	$(OBJS)\coredll_stdrend.obj &
 	$(OBJS)\coredll_textctrl.obj &
 	$(OBJS)\coredll_tglbtn.obj &
 	$(OBJS)\coredll_theme.obj &
@@ -1763,6 +1769,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_gdiobj.obj &
 	$(OBJS)\corelib_gsockmsw.obj &
 	$(OBJS)\corelib_icon.obj &
+	$(OBJS)\corelib_imaglist.obj &
 	$(OBJS)\corelib_minifram.obj &
 	$(OBJS)\corelib_dataobj.obj &
 	$(OBJS)\corelib_dropsrc.obj &
@@ -1803,7 +1810,6 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_filedlg.obj &
 	$(OBJS)\corelib_frame.obj &
 	$(OBJS)\corelib_gauge95.obj &
-	$(OBJS)\corelib_imaglist.obj &
 	$(OBJS)\corelib_iniconf.obj &
 	$(OBJS)\corelib_listbox.obj &
 	$(OBJS)\corelib_listctrl.obj &
@@ -1977,6 +1983,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_gdiobj.obj &
 	$(OBJS)\corelib_gsockmsw.obj &
 	$(OBJS)\corelib_icon.obj &
+	$(OBJS)\corelib_imaglist.obj &
 	$(OBJS)\corelib_minifram.obj &
 	$(OBJS)\corelib_dataobj.obj &
 	$(OBJS)\corelib_dropsrc.obj &
@@ -2041,6 +2048,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_statline.obj &
 	$(OBJS)\corelib_stattext.obj &
 	$(OBJS)\corelib_statusbr.obj &
+	$(OBJS)\corelib_stdrend.obj &
 	$(OBJS)\corelib_textctrl.obj &
 	$(OBJS)\corelib_tglbtn.obj &
 	$(OBJS)\corelib_theme.obj &
@@ -5049,6 +5057,9 @@ $(OBJS)\monodll_scrthumb.obj :  .AUTODEPEND ..\..\src\univ\scrthumb.cpp
 $(OBJS)\monodll_slider.obj :  .AUTODEPEND ..\..\src\univ\slider.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
+$(OBJS)\monodll_stdrend.obj :  .AUTODEPEND ..\..\src\univ\stdrend.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
 $(OBJS)\monodll_theme.obj :  .AUTODEPEND ..\..\src\univ\theme.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
@@ -5487,6 +5498,18 @@ $(OBJS)\monodll_icon.obj :  .AUTODEPEND ..\..\src\msw\icon.cpp
 !endif
 
 !ifeq USE_GUI 1
+$(OBJS)\monodll_imaglist.obj :  .AUTODEPEND ..\..\src\msw\imaglist.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+!ifeq WXUNIV 1
+$(OBJS)\monodll_imaglist.obj :  .AUTODEPEND ..\..\src\generic\imaglist.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+!endif
+!endif
+
+!ifeq USE_GUI 1
 $(OBJS)\monodll_minifram.obj :  .AUTODEPEND ..\..\src\msw\minifram.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
@@ -5728,20 +5751,6 @@ $(OBJS)\monodll_dialog.obj :  .AUTODEPEND ..\..\src\msw\dialog.cpp
 !ifeq USE_GUI 1
 !ifeq WXUNIV 1
 $(OBJS)\monodll_dialog.obj :  .AUTODEPEND ..\..\src\univ\dialog.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 0
-$(OBJS)\monodll_imaglist.obj :  .AUTODEPEND ..\..\src\msw\imaglist.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 1
-$(OBJS)\monodll_imaglist.obj :  .AUTODEPEND ..\..\src\generic\imaglist.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 !endif
@@ -7026,6 +7035,9 @@ $(OBJS)\monolib_scrthumb.obj :  .AUTODEPEND ..\..\src\univ\scrthumb.cpp
 $(OBJS)\monolib_slider.obj :  .AUTODEPEND ..\..\src\univ\slider.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
+$(OBJS)\monolib_stdrend.obj :  .AUTODEPEND ..\..\src\univ\stdrend.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
 $(OBJS)\monolib_theme.obj :  .AUTODEPEND ..\..\src\univ\theme.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
@@ -7464,6 +7476,18 @@ $(OBJS)\monolib_icon.obj :  .AUTODEPEND ..\..\src\msw\icon.cpp
 !endif
 
 !ifeq USE_GUI 1
+$(OBJS)\monolib_imaglist.obj :  .AUTODEPEND ..\..\src\msw\imaglist.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+!ifeq WXUNIV 1
+$(OBJS)\monolib_imaglist.obj :  .AUTODEPEND ..\..\src\generic\imaglist.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+!endif
+!endif
+
+!ifeq USE_GUI 1
 $(OBJS)\monolib_minifram.obj :  .AUTODEPEND ..\..\src\msw\minifram.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
@@ -7705,20 +7729,6 @@ $(OBJS)\monolib_dialog.obj :  .AUTODEPEND ..\..\src\msw\dialog.cpp
 !ifeq USE_GUI 1
 !ifeq WXUNIV 1
 $(OBJS)\monolib_dialog.obj :  .AUTODEPEND ..\..\src\univ\dialog.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 0
-$(OBJS)\monolib_imaglist.obj :  .AUTODEPEND ..\..\src\msw\imaglist.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 1
-$(OBJS)\monolib_imaglist.obj :  .AUTODEPEND ..\..\src\generic\imaglist.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 !endif
@@ -9324,6 +9334,9 @@ $(OBJS)\coredll_scrthumb.obj :  .AUTODEPEND ..\..\src\univ\scrthumb.cpp
 $(OBJS)\coredll_slider.obj :  .AUTODEPEND ..\..\src\univ\slider.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
+$(OBJS)\coredll_stdrend.obj :  .AUTODEPEND ..\..\src\univ\stdrend.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+
 $(OBJS)\coredll_theme.obj :  .AUTODEPEND ..\..\src\univ\theme.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
@@ -9468,6 +9481,18 @@ $(OBJS)\coredll_gsockmsw.obj :  .AUTODEPEND ..\..\src\msw\gsockmsw.cpp
 !ifeq USE_GUI 1
 $(OBJS)\coredll_icon.obj :  .AUTODEPEND ..\..\src\msw\icon.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\coredll_imaglist.obj :  .AUTODEPEND ..\..\src\msw\imaglist.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+!ifeq WXUNIV 1
+$(OBJS)\coredll_imaglist.obj :  .AUTODEPEND ..\..\src\generic\imaglist.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+!endif
 !endif
 
 !ifeq USE_GUI 1
@@ -9712,20 +9737,6 @@ $(OBJS)\coredll_dialog.obj :  .AUTODEPEND ..\..\src\msw\dialog.cpp
 !ifeq USE_GUI 1
 !ifeq WXUNIV 1
 $(OBJS)\coredll_dialog.obj :  .AUTODEPEND ..\..\src\univ\dialog.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 0
-$(OBJS)\coredll_imaglist.obj :  .AUTODEPEND ..\..\src\msw\imaglist.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 1
-$(OBJS)\coredll_imaglist.obj :  .AUTODEPEND ..\..\src\generic\imaglist.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 !endif
@@ -10652,6 +10663,9 @@ $(OBJS)\corelib_scrthumb.obj :  .AUTODEPEND ..\..\src\univ\scrthumb.cpp
 $(OBJS)\corelib_slider.obj :  .AUTODEPEND ..\..\src\univ\slider.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
+$(OBJS)\corelib_stdrend.obj :  .AUTODEPEND ..\..\src\univ\stdrend.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+
 $(OBJS)\corelib_theme.obj :  .AUTODEPEND ..\..\src\univ\theme.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
@@ -10796,6 +10810,18 @@ $(OBJS)\corelib_gsockmsw.obj :  .AUTODEPEND ..\..\src\msw\gsockmsw.cpp
 !ifeq USE_GUI 1
 $(OBJS)\corelib_icon.obj :  .AUTODEPEND ..\..\src\msw\icon.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\corelib_imaglist.obj :  .AUTODEPEND ..\..\src\msw\imaglist.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+!ifeq WXUNIV 1
+$(OBJS)\corelib_imaglist.obj :  .AUTODEPEND ..\..\src\generic\imaglist.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+!endif
 !endif
 
 !ifeq USE_GUI 1
@@ -11040,20 +11066,6 @@ $(OBJS)\corelib_dialog.obj :  .AUTODEPEND ..\..\src\msw\dialog.cpp
 !ifeq USE_GUI 1
 !ifeq WXUNIV 1
 $(OBJS)\corelib_dialog.obj :  .AUTODEPEND ..\..\src\univ\dialog.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 0
-$(OBJS)\corelib_imaglist.obj :  .AUTODEPEND ..\..\src\msw\imaglist.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 1
-$(OBJS)\corelib_imaglist.obj :  .AUTODEPEND ..\..\src\generic\imaglist.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 !endif
