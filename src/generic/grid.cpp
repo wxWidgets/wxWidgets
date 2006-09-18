@@ -3736,7 +3736,8 @@ void wxGridRowLabelWindow::OnPaint( wxPaintEvent& WXUNUSED(event) )
 
     int x, y;
     m_owner->CalcUnscrolledPosition( 0, 0, &x, &y );
-    dc.SetDeviceOrigin( 0, -y );
+    wxPoint pt = dc.GetDeviceOrigin();
+    dc.SetDeviceOrigin( pt.x, pt.y-y );
 
     wxArrayInt rows = m_owner->CalcRowLabelsExposed( GetUpdateRegion() );
     m_owner->DrawRowLabels( dc, rows );
@@ -3806,7 +3807,11 @@ void wxGridColLabelWindow::OnPaint( wxPaintEvent& WXUNUSED(event) )
 
     int x, y;
     m_owner->CalcUnscrolledPosition( 0, 0, &x, &y );
-    dc.SetDeviceOrigin( -x, 0 );
+    wxPoint pt = dc.GetDeviceOrigin();
+    if (GetLayoutDirection() == wxLayout_RightToLeft)
+        dc.SetDeviceOrigin( pt.x+x, pt.y );
+    else
+        dc.SetDeviceOrigin( pt.x-x, pt.y );
 
     wxArrayInt cols = m_owner->CalcColLabelsExposed( GetUpdateRegion() );
     m_owner->DrawColLabels( dc, cols );
