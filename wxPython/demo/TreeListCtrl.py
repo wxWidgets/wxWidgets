@@ -14,7 +14,8 @@ class TestPanel(wx.Panel):
 
         self.tree = gizmos.TreeListCtrl(self, -1, style =
                                         wx.TR_DEFAULT_STYLE
-                                        #wx.TR_TWIST_BUTTONS
+                                        #| wx.TR_HAS_BUTTONS
+                                        #| wx.TR_TWIST_BUTTONS
                                         #| wx.TR_ROW_LINES
                                         #| wx.TR_COLUMN_LINES
                                         #| wx.TR_NO_LINES 
