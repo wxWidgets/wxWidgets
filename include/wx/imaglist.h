@@ -39,13 +39,14 @@ enum {
 #define wxIMAGELIST_DRAW_SELECTED       0x0004
 #define wxIMAGELIST_DRAW_FOCUSED        0x0008
 
+#if !defined(__WXMSW__) || defined(__WXUNIVERSAL__)
+    #include "wx/generic/imaglist.h"
+#endif
 
 #if defined(__WIN32__) && !defined(__WXUNIVERSAL__)
     #include "wx/msw/imaglist.h"
 #elif defined(__WXMAC_CARBON__)
     #include "wx/mac/imaglist.h"
-#else
-    #include "wx/generic/imaglist.h"
 #endif
 
 #endif
