@@ -27,7 +27,8 @@
  */
 
 // Flag values for Set/GetImageList
-enum {
+enum
+{
     wxIMAGE_LIST_NORMAL, // Normal icons
     wxIMAGE_LIST_SMALL,  // Small icons
     wxIMAGE_LIST_STATE   // State icons: unimplemented (see WIN32 documentation)
@@ -39,15 +40,16 @@ enum {
 #define wxIMAGELIST_DRAW_SELECTED       0x0004
 #define wxIMAGELIST_DRAW_FOCUSED        0x0008
 
-#if !defined(__WXMSW__) || defined(__WXUNIVERSAL__)
-    #include "wx/generic/imaglist.h"
+#if defined(__WXMSW__) || defined(__WXMAC_CARBON__)
+    #define wxHAS_NATIVE_IMAGELIST
 #endif
 
-#if defined(__WIN32__) && !defined(__WXUNIVERSAL__)
+#if !defined(wxHAS_NATIVE_IMAGELIST)
+    #include "wx/generic/imaglist.h"
+#elif defined(__WXMSW__)
     #include "wx/msw/imaglist.h"
 #elif defined(__WXMAC_CARBON__)
     #include "wx/mac/imaglist.h"
 #endif
 
-#endif
-    // _WX_IMAGLIST_H_BASE_
+#endif // _WX_IMAGLIST_H_BASE_

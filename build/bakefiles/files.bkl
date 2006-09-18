@@ -1463,6 +1463,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/msw/gdiobj.cpp
     src/msw/gsockmsw.cpp
     src/msw/icon.cpp
+    src/msw/imaglist.cpp
     src/msw/minifram.cpp
     src/msw/ole/dataobj.cpp
     src/msw/ole/dropsrc.cpp
@@ -1520,7 +1521,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/msw/filedlg.cpp
     src/msw/frame.cpp
     src/msw/gauge95.cpp
-    src/msw/imaglist.cpp
     src/msw/iniconf.cpp
     src/msw/listbox.cpp
     src/msw/listctrl.cpp

@@ -14,7 +14,7 @@
     #pragma hdrstop
 #endif
 
-#if wxUSE_IMAGLIST
+#if wxUSE_IMAGLIST && !defined(wxHAS_NATIVE_IMAGELIST)
 
 #ifndef __WXPALMOS__
 
@@ -31,15 +31,7 @@
 //-----------------------------------------------------------------------------
 
 IMPLEMENT_DYNAMIC_CLASS(wxGenericImageList, wxObject)
-
-#if !HAVE_NATIVE_IMAGELIST
-/*
- * wxImageList has to be a real class or we have problems with
- * the run-time information.
- */
-
 IMPLEMENT_DYNAMIC_CLASS(wxImageList, wxGenericImageList)
-#endif
 
 wxGenericImageList::wxGenericImageList( int width, int height, bool mask, int initialCount )
 {
