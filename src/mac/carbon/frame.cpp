@@ -345,11 +345,11 @@ void wxFrame::PositionToolBar()
 
     GetSize( &cw , &ch ) ;
 
+    int statusX, statusY;
+    GetStatusBar()->GetClientSize(&statusX, &statusY);
+            
     if (GetStatusBar() && GetStatusBar()->IsShown())
     {
-        int statusX, statusY;
-
-        GetStatusBar()->GetClientSize(&statusX, &statusY);
         ch -= statusY;
     }
 
@@ -366,11 +366,14 @@ void wxFrame::PositionToolBar()
             // have the original client size.
             GetToolBar()->SetSize(tx , ty , tw, ch , wxSIZE_NO_ADJUSTMENTS );
         }
-        else if (GetToolBar->GetWindowStyleFlag() & wxTB_BOTTOM)
+        else if (GetToolBar()->GetWindowStyleFlag() & wxTB_BOTTOM)
         {
+            //FIXME: this positions the tool bar almost correctly, but still it doesn't work right yet,
+            //as 1) the space for the 'old' top toolbar is still taken up, and 2) the toolbar
+            //doesn't extend it's width to the width of the frame.
             tx = 0;
-            ty = statusY - th;
-                        GetToolBar->SetSize(tx, ty, cw, th, wxSIZE_NO_ADJUSTMENTS );
+            ty = ch - (th + statusY);
+            GetToolBar()->SetSize(tx, ty, cw, th, wxSIZE_NO_ADJUSTMENTS );
         }
         else
         {
