@@ -450,7 +450,6 @@ label:
 
 				if (t->tm_isdst < 0)
 					continue;
-				continue;
 				if (diff < 0) {
 					sign = "-";
 					diff = -diff;
