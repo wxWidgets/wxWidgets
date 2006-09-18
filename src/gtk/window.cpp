@@ -3824,9 +3824,11 @@ bool wxWindowGTK::DoIsExposed( int x, int y ) const
 
 bool wxWindowGTK::DoIsExposed( int x, int y, int w, int h ) const
 {
+#if 0
     if (GetLayoutDirection() == wxLayout_RightToLeft)
         return m_updateRegion.Contains(x-w, y, w, h) != wxOutRegion;
     else
+#endif
         return m_updateRegion.Contains(x, y, w, h) != wxOutRegion;
 }
 
@@ -3841,16 +3843,18 @@ void wxWindowGTK::GtkSendPaintEvents()
     // Clip to paint region in wxClientDC
     m_clipPaintRegion = true;
 
-#if 0
+    m_nativeUpdateRegion = m_updateRegion;
+
     if (GetLayoutDirection() == wxLayout_RightToLeft)
     {
-        maybe_rtl_region.Clear();
+        // Transform m_updateRegion under RTL
+        m_updateRegion.Clear();
         
         gint width;
         gdk_window_get_geometry( GTK_PIZZA(m_wxwindow)->bin_window,
                                  NULL, NULL, &width, NULL, NULL );
         
-        wxRegionIterator upd( m_updateRegion );
+        wxRegionIterator upd( m_nativeUpdateRegion );
         while (upd)
         {
             wxRect rect;
@@ -3860,12 +3864,11 @@ void wxWindowGTK::GtkSendPaintEvents()
             rect.height = upd.GetHeight();
             
             rect.x = width - rect.x - rect.width;
-            maybe_rtl_region.Union( rect );
+            m_updateRegion.Union( rect );
             
             ++upd;
         }
     }
-#endif
     
     // widget to draw on
     GtkPizza *pizza = GTK_PIZZA (m_wxwindow);
@@ -3879,7 +3882,7 @@ void wxWindowGTK::GtkSendPaintEvents()
 
         if (GTK_WIDGET_MAPPED(parent->m_widget))
         {
-            wxRegionIterator upd( m_updateRegion );
+            wxRegionIterator upd( m_nativeUpdateRegion );
             while (upd)
             {
                 GdkRectangle rect;
@@ -3923,6 +3926,7 @@ void wxWindowGTK::GtkSendPaintEvents()
     m_clipPaintRegion = false;
 
     m_updateRegion.Clear();
+    m_nativeUpdateRegion.Clear();
 }
 
 void wxWindowGTK::SetDoubleBuffered( bool on )

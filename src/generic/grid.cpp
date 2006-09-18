@@ -6826,6 +6826,14 @@ void wxGrid::OnKeyDown( wxKeyEvent& event )
 
     if ( !parent->GetEventHandler()->ProcessEvent( keyEvt ) )
     {
+        if (GetLayoutDirection() == wxLayout_RightToLeft)
+        {
+            if (event.GetKeyCode() == WXK_RIGHT)
+                event.m_keyCode = WXK_LEFT;
+            else if (event.GetKeyCode() == WXK_LEFT)
+                event.m_keyCode = WXK_RIGHT;
+        }
+    
         // try local handlers
         switch ( event.GetKeyCode() )
         {
@@ -7505,6 +7513,12 @@ void wxGrid::DrawCellHighlight( wxDC& dc, const wxGridCellAttr *attr )
         rect.y += penWidth / 2;
         rect.width -= penWidth - 1;
         rect.height -= penWidth - 1;
+
+#ifdef __WXGTK__
+        // FIXME: why is the rect drawn off-by-one?
+        if ((penWidth == 2) && (GetLayoutDirection() == wxLayout_RightToLeft))
+            rect.x -= 1;
+#endif
 
         // Now draw the rectangle
         // use the cellHighlightColour if the cell is inside a selection, this

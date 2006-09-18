@@ -2332,7 +2332,7 @@ wxPaintDC::wxPaintDC( wxWindow *win )
         return;
 
     wxSize sz = win->GetSize();
-    m_paintClippingRegion = win->GetUpdateRegion();
+    m_paintClippingRegion = win->m_nativeUpdateRegion;
     wxLimitRegionToSize(m_paintClippingRegion, sz);
 
     GdkRegion *region = m_paintClippingRegion.GetRegion();
