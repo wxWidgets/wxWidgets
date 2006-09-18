@@ -49,6 +49,8 @@ wxMemoryDC::wxMemoryDC(wxDC *WXUNUSED(dc))
 
 void wxMemoryDC::SelectObject(const wxBitmap& bitmap)
 {
+    m_bmp = bitmap;
+
     if ( !bitmap.Ok() )
     {
         // select the bitmap out of the DC

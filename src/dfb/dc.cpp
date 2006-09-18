@@ -391,7 +391,10 @@ void wxDC::SetLogicalFunction(int function)
 {
     wxCHECK_RET( Ok(), wxT("invalid dc") );
 
-    wxFAIL_MSG( _T("SetLogicalFunction not implemented") );
+    // NB: we could also support XOR, but for blitting only (via DSBLIT_XOR);
+    //     and possibly others via SetSrc/DstBlendFunction()
+    wxASSERT_MSG( function == wxCOPY,
+                  _T("only wxCOPY logical function supported") );
 
     m_logicalFunction = function;
 }
@@ -651,17 +654,21 @@ bool wxDC::DoBlit(wxCoord xdest, wxCoord ydest,
                   int rop, bool useMask,
                   wxCoord xsrcMask, wxCoord ysrcMask)
 {
-#warning "FIXME"
-    return false; 
-#if 0
-    wxCHECK_MSG( Ok(), false, wxT("invalid dc") );
-    wxCHECK_MSG( source, false, wxT("invalid source dc") );
+    wxCHECK_MSG( Ok(), false, _T("invalid dc") );
+    wxCHECK_MSG( source, false, _T("invalid source dc") );
+
+    // NB: we could also support XOR here (via DSBLIT_XOR)
+    //     and possibly others via SetSrc/DstBlendFunction()
+    wxCHECK_MSG( rop == wxCOPY, false, _T("only wxCOPY function supported") );
 
     // transform the source DC coords to the device ones
     xsrc = source->LogicalToDeviceX(xsrc);
     ysrc = source->LogicalToDeviceY(ysrc);
 
-    /* FIXME_MGL: use the mask origin when drawing transparently */
+    // FIXME_DFB: use the mask origin when drawing transparently
+    wxASSERT_MSG( xsrcMask == -1 && ysrcMask == -1,
+                  _T("non-default source mask offset not implemented") );
+#if 0
     if (xsrcMask == -1 && ysrcMask == -1)
     {
         xsrcMask = xsrc; ysrcMask = ysrc;
@@ -671,32 +678,27 @@ bool wxDC::DoBlit(wxCoord xdest, wxCoord ydest,
         xsrcMask = source->LogicalToDeviceX(xsrcMask);
         ysrcMask = source->LogicalToDeviceY(ysrcMask);
     }
+#endif
 
-    CalcBoundingBox(xdest, ydest);
-    CalcBoundingBox(xdest + width, ydest + height);
-
-    /* scale/translate size and position */
-    wxCoord xx = XLOG2DEV(xdest);
-    wxCoord yy = YLOG2DEV(ydest);
-    wxCoord ww = XLOG2DEVREL(width);
-    wxCoord hh = YLOG2DEVREL(height);
-
-    if ( source->m_isMemDC )
+    wxMemoryDC *sourceAsMemDC = wxDynamicCast(source, wxMemoryDC);
+    if ( sourceAsMemDC )
     {
-        wxMemoryDC *memDC = (wxMemoryDC*) source;
-        DoDrawSubBitmap(memDC->GetSelectedObject(), xsrc, ysrc, ww, hh,
-                        xdest, ydest, rop, useMask);
+        DoDrawSubBitmap(sourceAsMemDC->GetSelectedObject(),
+                        xsrc, ysrc,
+                        width, height,
+                        xdest, ydest,
+                        rop,
+                        useMask);
     }
     else
     {
-        m_MGLDC->makeCurrent(); // will go away with MGL6.0
-        m_MGLDC->bitBlt(*source->GetMGLDC(),
-                        xsrc, ysrc, xsrc + ww, ysrc + hh,
-                        xx, yy, LogicalFunctionToMGLRop(rop));
+        return DoBlitFromSurface(source->GetDirectFBSurface(),
+                                 xsrc, ysrc,
+                                 width, height,
+                                 xdest, ydest);
     }
 
     return true;
-#endif
 }
 
 void wxDC::DoDrawBitmap(const wxBitmap &bmp, wxCoord x, wxCoord y, bool useMask)
@@ -704,10 +706,10 @@ void wxDC::DoDrawBitmap(const wxBitmap &bmp, wxCoord x, wxCoord y, bool useMask)
     wxCHECK_RET( Ok(), wxT("invalid dc") );
     wxCHECK_RET( bmp.Ok(), wxT("invalid bitmap") );
 
-    wxCoord w = bmp.GetWidth();
-    wxCoord h = bmp.GetHeight();
-
-    DoDrawSubBitmap(bmp, 0, 0, w, h, x, y, m_logicalFunction, useMask);
+    DoDrawSubBitmap(bmp,
+                    0, 0, bmp.GetWidth(), bmp.GetHeight(),
+                    x, y,
+                    m_logicalFunction, useMask);
 }
 
 void wxDC::DoDrawIcon(const wxIcon& icon, wxCoord x, wxCoord y)
@@ -720,94 +722,65 @@ void wxDC::DoDrawSubBitmap(const wxBitmap &bmp,
                            wxCoord x, wxCoord y, wxCoord w, wxCoord h,
                            wxCoord destx, wxCoord desty, int rop, bool useMask)
 {
-#if 0
     wxCHECK_RET( Ok(), wxT("invalid dc") );
     wxCHECK_RET( bmp.Ok(), wxT("invalid bitmap") );
 
-    CalcBoundingBox(x, y);
-    CalcBoundingBox(x + w, y + h);
-
-    wxCoord dx = XLOG2DEV(destx);
-    wxCoord dy = YLOG2DEV(desty);
-    wxCoord dw = XLOG2DEVREL(w);
-    wxCoord dh = YLOG2DEVREL(h);
-
-    m_MGLDC->makeCurrent(); // will go away with MGL6.0
-
-    bool useStretching = ((w != dw) || (h != dh));
-    bool putSection = (w != bmp.GetWidth() || h != bmp.GetHeight());
-    MGL_writeModeType mglRop = (MGL_writeModeType)LogicalFunctionToMGLRop(rop);
+    // NB: we could also support XOR here (via DSBLIT_XOR)
+    //     and possibly others via SetSrc/DstBlendFunction()
+    wxCHECK_RET( rop == wxCOPY, _T("only wxCOPY function supported") );
 
     if ( bmp.GetDepth() == 1 )
     {
         // Mono bitmaps are handled in special way -- all 1s are drawn in
         // foreground colours, all 0s in background colour.
-
-        ((wxBitmap&)bmp).SetMonoPalette(m_textForegroundColour, m_textBackgroundColour);
+        wxFAIL_MSG( _T("drawing mono bitmaps not implemented") );
+        return;
     }
 
     if ( useMask && bmp.GetMask() )
     {
-        // Since MGL does not support masks directly (in MGL, mask is handled
-        // in same way as in wxImage, i.e. there is one "key" color), we
-        // simulate masked bitblt in 6 steps (same as in MSW):
-        //
-        // 1. Create a temporary bitmap and copy the destination area into it.
-        // 2. Copy the source area into the temporary bitmap using the
-        //    specified logical function.
-        // 3. Set the masked area in the temporary bitmap to BLACK by ANDing
-        //    the mask bitmap with the temp bitmap with the foreground colour
-        //    set to WHITE and the bg colour set to BLACK.
-        // 4. Set the unmasked area in the destination area to BLACK by
-        //    ANDing the mask bitmap with the destination area with the
-        //    foreground colour set to BLACK and the background colour set
-        //    to WHITE.
-        // 5. OR the temporary bitmap with the destination area.
-        // 6. Delete the temporary bitmap.
-        //
-        // This sequence of operations ensures that the source's transparent
-        // area need not be black, and logical functions are supported.
-
-        wxBitmap *mask = bmp.GetMask()->GetBitmap();
-
-        MGLMemoryDC *temp;
-
-        if ( GetDepth() <= 8 )
-        {
-            temp = new MGLMemoryDC(dw, dh, GetDepth(), NULL);
-            wxDC tempdc;
-            tempdc.SetMGLDC(temp, false);
-            tempdc.SetPalette(m_palette);
-        }
-        else
-        {
-            pixel_format_t pf;
-            m_MGLDC->getPixelFormat(pf);
-            temp = new MGLMemoryDC(dw, dh, GetDepth(), &pf);
-        }
-
-        wxCHECK_RET( temp->isValid(), wxT("cannot create temporary dc") );
-
-        temp->bitBlt(*m_MGLDC, dx, dy, dx + dw, dy + dh, 0, 0, MGL_REPLACE_MODE);
-
-        DoBitBlt(bmp, temp, x, y, w, h, 0, 0, dw, dh, mglRop,
-                 useStretching, putSection);
-
-        mask->SetMonoPalette(wxColour(0,0,0), wxColour(255,255,255));
-        DoBitBlt(*mask, temp, x, y, w, h, 0, 0, dw, dh, MGL_R2_MASKSRC,
-                 useStretching, putSection);
-        DoBitBlt(*mask, m_MGLDC, x, y, w, h, dx, dy, dw, dh, MGL_R2_MASKNOTSRC,
-                 useStretching, putSection);
-
-        m_MGLDC->bitBlt(*temp, 0, 0, dw, dh, dx, dy, MGL_OR_MODE);
-
-        delete temp;
+        // FIXME_DFB: see MGL sources for a way to do it, but it's not directly
+        //            applicable because DirectFB doesn't implement ROPs; OTOH,
+        //            it has blitting modes that can be useful; finally, see
+        //            DFB's SetSrcBlendFunction() and SetSrcColorKey()
+        wxFAIL_MSG( _T("drawing bitmaps with masks not implemented") );
+        return;
     }
 
+    DoBlitFromSurface(bmp.GetDirectFBSurface(),
+                      x, y,
+                      w, h,
+                      destx, desty);
+}
+
+bool wxDC::DoBlitFromSurface(const wxIDirectFBSurfacePtr& src,
+                             wxCoord srcx, wxCoord srcy,
+                             wxCoord w, wxCoord h,
+                             wxCoord dstx, wxCoord dsty)
+{
+    CalcBoundingBox(dstx, dsty);
+    CalcBoundingBox(dstx + w, dsty + h);
+
+    DFBRectangle srcRect = { srcx, srcy, w, h };
+    DFBRectangle dstRect = { XLOG2DEV(dstx), YLOG2DEV(dsty),
+                             XLOG2DEVREL(w), YLOG2DEVREL(h) };
+
+    wxIDirectFBSurfacePtr dst(m_surface);
+
+    // FIXME: this will have to be different in useMask case, see above
+    if ( !dst->SetBlittingFlags(DSBLIT_NOFX) )
+        return false;
+
+    if ( srcRect.w != dstRect.w || srcRect.h != dstRect.h )
+    {
+        // the bitmap is drawn stretched:
+        dst->StretchBlit(src, &srcRect, &dstRect);
+    }
     else
     {
-        DoBitBlt(bmp, m_MGLDC, x, y, w, h, dx, dy, dw, dh, mglRop,
-                 useStretching, putSection);
+        // no stretching, size is preserved:
+        dst->Blit(src, &srcRect, dstRect.x, dstRect.y);
     }
-#endif
+
+    return true;
 }

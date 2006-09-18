@@ -274,6 +274,14 @@ struct wxIDirectFBSurface : public wxDfbWrapper<IDirectFBSurface>
               int x, int y)
         { return Check(m_ptr->Blit(m_ptr, source, source_rect, x, y)); }
 
+    bool StretchBlit(const wxIDirectFBSurfacePtr& source,
+              const DFBRectangle *source_rect,
+              const DFBRectangle *dest_rect)
+    {
+        return Check(m_ptr->StretchBlit(m_ptr, source->GetRaw(),
+                                        source_rect, dest_rect));
+    }
+
 
     /// Returns bit depth used by the surface or -1 on error
     int GetDepth();

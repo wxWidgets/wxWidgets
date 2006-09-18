@@ -203,6 +203,10 @@ private:
     void DoDrawSubBitmap(const wxBitmap &bmp,
                          wxCoord x, wxCoord y, wxCoord w, wxCoord h,
                          wxCoord destx, wxCoord desty, int rop, bool useMask);
+    bool DoBlitFromSurface(const wxIDirectFBSurfacePtr& src,
+                           wxCoord srcx, wxCoord srcy,
+                           wxCoord w, wxCoord h,
+                           wxCoord dstx, wxCoord dsty);
 
     // selects colour into surface's state
     void SelectColour(const wxColour& clr);

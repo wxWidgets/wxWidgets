@@ -22,6 +22,13 @@ public:
 
     virtual void SelectObject(const wxBitmap& bitmap);
 
+    // implementation from now on:
+
+    wxBitmap GetSelectedObject() const { return m_bmp; }
+
+private:
+    wxBitmap m_bmp;
+
     DECLARE_DYNAMIC_CLASS(wxMemoryDC)
 };
 
