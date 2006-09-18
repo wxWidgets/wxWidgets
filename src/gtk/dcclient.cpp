@@ -838,7 +838,36 @@ void wxWindowDC::DoDrawRectangle( wxCoord x, wxCoord y, wxCoord width, wxCoord h
         }
 
         if (m_pen.GetStyle() != wxTRANSPARENT)
-            gdk_draw_rectangle( m_window, m_penGC, FALSE, xx, yy, ww-1, hh-1 );
+        {
+#if 1
+            if ((m_pen.GetWidth() == 2) && (m_pen.GetCap() == wxCAP_ROUND) &&
+                (m_pen.GetJoin() == wxJOIN_ROUND) && (m_pen.GetStyle() == wxSOLID))
+            {
+                // Use 2 1-line rects instead
+                gdk_gc_set_line_attributes( m_penGC, 1, GDK_LINE_SOLID, GDK_CAP_ROUND, GDK_JOIN_ROUND );
+
+                if (m_signX == -1)
+                {
+                    // Different for RTL
+                    gdk_draw_rectangle( m_window, m_penGC, FALSE, xx+1, yy, ww-2, hh-2 );
+                    gdk_draw_rectangle( m_window, m_penGC, FALSE, xx, yy-1, ww, hh );
+                }
+                else
+                {
+                    gdk_draw_rectangle( m_window, m_penGC, FALSE, xx, yy, ww-2, hh-2 );
+                    gdk_draw_rectangle( m_window, m_penGC, FALSE, xx-1, yy-1, ww, hh );
+                }
+                
+                // reset
+                gdk_gc_set_line_attributes( m_penGC, 2, GDK_LINE_SOLID, GDK_CAP_ROUND, GDK_JOIN_ROUND );
+            }
+            else
+#endif
+            {
+                // Just use X11 for other cases
+                gdk_draw_rectangle( m_window, m_penGC, FALSE, xx, yy, ww-1, hh-1 );
+            }
+        }
     }
 
     CalcBoundingBox( x, y );
