@@ -61,7 +61,7 @@
 #endif // wxUSE_TOGGLEBTN
 
 #include "wx/univ/scrtimer.h"
-#include "wx/univ/renderer.h"
+#include "wx/univ/stdrend.h"
 #include "wx/univ/inpcons.h"
 #include "wx/univ/inphand.h"
 #include "wx/univ/colschem.h"
@@ -92,36 +92,10 @@ static const wxCoord SLIDER_MARGIN = 6; // margin around slider
 static const wxCoord SLIDER_THUMB_LENGTH = 18;
 static const wxCoord SLIDER_TICK_LENGTH = 6;
 
-enum IndicatorType
-{
-    IndicatorType_Check,
-    IndicatorType_Radio,
-    IndicatorType_Menu,
-    IndicatorType_Max
-};
-
-enum IndicatorState
-{
-    IndicatorState_Normal,
-    IndicatorState_Pressed, // this one is for check/radioboxes
-    IndicatorState_Selected = IndicatorState_Pressed, // for menus
-    IndicatorState_Disabled,
-    IndicatorState_SelectedDisabled,    // only for the menus
-    IndicatorState_Max
-};
-
-enum IndicatorStatus
-{
-    IndicatorStatus_Checked,
-    IndicatorStatus_Unchecked,
-    IndicatorStatus_Undeterminated,
-    IndicatorStatus_Max
-};
-
 // wxWin32Renderer: draw the GUI elements in Win32 style
 // ----------------------------------------------------------------------------
 
-class wxWin32Renderer : public wxRenderer
+class wxWin32Renderer : public wxStdRenderer
 {
 public:
     // constants
@@ -157,12 +131,7 @@ public:
     // ctor
     wxWin32Renderer(const wxColourScheme *scheme);
 
-    // implement the base class pure virtuals
-    virtual void DrawBackground(wxDC& dc,
-                                const wxColour& col,
-                                const wxRect& rect,
-                                int flags = 0,
-                                wxWindow *window = NULL);
+    // reimplement the renderer methods which are different for this theme
     virtual void DrawLabel(wxDC& dc,
                            const wxString& label,
                            const wxRect& rect,
@@ -178,30 +147,10 @@ public:
                                  int alignment = wxALIGN_LEFT | wxALIGN_TOP,
                                  int indexAccel = -1,
                                  wxRect *rectBounds = NULL);
-    virtual void DrawBorder(wxDC& dc,
-                            wxBorder border,
-                            const wxRect& rect,
-                            int flags = 0,
-                            wxRect *rectIn = (wxRect *)NULL);
-    virtual void DrawHorizontalLine(wxDC& dc,
-                                    wxCoord y, wxCoord x1, wxCoord x2);
-    virtual void DrawVerticalLine(wxDC& dc,
-                                  wxCoord x, wxCoord y1, wxCoord y2);
-    virtual void DrawFrame(wxDC& dc,
-                           const wxString& label,
-                           const wxRect& rect,
-                           int flags = 0,
-                           int alignment = wxALIGN_LEFT,
-                           int indexAccel = -1);
-    virtual void DrawTextBorder(wxDC& dc,
-                                wxBorder border,
-                                const wxRect& rect,
-                                int flags = 0,
-                                wxRect *rectIn = (wxRect *)NULL);
     virtual void DrawButtonBorder(wxDC& dc,
                                   const wxRect& rect,
                                   int flags = 0,
-                                  wxRect *rectIn = (wxRect *)NULL);
+                                  wxRect *rectIn = NULL);
     virtual void DrawArrow(wxDC& dc,
                            wxDirection dir,
                            const wxRect& rect,
@@ -221,29 +170,12 @@ public:
                                     int flags = 0);
     virtual void DrawScrollCorner(wxDC& dc,
                                   const wxRect& rect);
-    virtual void DrawItem(wxDC& dc,
-                          const wxString& label,
-                          const wxRect& rect,
-                          int flags = 0);
     virtual void DrawCheckItem(wxDC& dc,
                                const wxString& label,
                                const wxBitmap& bitmap,
                                const wxRect& rect,
                                int flags = 0);
-    virtual void DrawCheckButton(wxDC& dc,
-                                 const wxString& label,
-                                 const wxBitmap& bitmap,
-                                 const wxRect& rect,
-                                 int flags = 0,
-                                 wxAlignment align = wxALIGN_LEFT,
-                                 int indexAccel = -1);
-    virtual void DrawRadioButton(wxDC& dc,
-                                 const wxString& label,
-                                 const wxBitmap& bitmap,
-                                 const wxRect& rect,
-                                 int flags = 0,
-                                 wxAlignment align = wxALIGN_LEFT,
-                                 int indexAccel = -1);
+
 #if wxUSE_TOOLBAR
     virtual void DrawToolBarButton(wxDC& dc,
                                    const wxString& label,
@@ -253,13 +185,7 @@ public:
                                    long style = 0,
                                    int tbarStyle = 0);
 #endif // wxUSE_TOOLBAR
-    virtual void DrawTextLine(wxDC& dc,
-                              const wxString& text,
-                              const wxRect& rect,
-                              int selStart = -1,
-                              int selEnd = -1,
-                              int flags = 0);
-    virtual void DrawLineWrapMark(wxDC& dc, const wxRect& rect);
+
     virtual void DrawTab(wxDC& dc,
                          const wxRect& rect,
                          wxDirection dir,
@@ -356,23 +282,10 @@ public:
                                  wxBitmap *bmpDisabled);
 
     virtual void AdjustSize(wxSize *size, const wxWindow *window);
-    virtual wxRect GetBorderDimensions(wxBorder border) const;
     virtual bool AreScrollbarsInsideBorder() const;
 
     virtual wxSize GetScrollbarArrowSize() const
         { return m_sizeScrollbarArrow; }
-
-#if wxUSE_SCROLLBAR
-    virtual wxRect GetScrollbarRect(const wxScrollBar *scrollbar,
-                                    wxScrollBar::Element elem,
-                                    int thumbPos = -1) const;
-    virtual wxCoord GetScrollbarSize(const wxScrollBar *scrollbar);
-    virtual wxHitTest HitTestScrollbar(const wxScrollBar *scrollbar,
-                                       const wxPoint& pt) const;
-    virtual wxCoord ScrollbarToPixel(const wxScrollBar *scrollbar,
-                                     int thumbPos = -1);
-    virtual int PixelToScrollbar(const wxScrollBar *scrollbar, wxCoord coord);
-#endif // wxUSE_SCROLLBAR
 
     virtual wxCoord GetListboxItemHeight(wxCoord fontHeight)
         { return fontHeight + 2; }
@@ -425,52 +338,14 @@ public:
 #endif // wxUSE_STATUSBAR
 
 protected:
-    // helper of DrawLabel() and DrawCheckOrRadioButton()
-    void DoDrawLabel(wxDC& dc,
-                     const wxString& label,
-                     const wxRect& rect,
-                     int flags = 0,
-                     int alignment = wxALIGN_LEFT | wxALIGN_TOP,
-                     int indexAccel = -1,
-                     wxRect *rectBounds = NULL,
-                     const wxPoint& focusOffset
-                        = wxPoint(FOCUS_RECT_OFFSET_X, FOCUS_RECT_OFFSET_Y));
+    virtual void DrawFrameWithLabel(wxDC& dc,
+                                    const wxString& label,
+                                    const wxRect& rectFrame,
+                                    const wxRect& rectText,
+                                    int flags,
+                                    int alignment,
+                                    int indexAccel);
 
-    // common part of DrawLabel() and DrawItem()
-    void DrawFocusRect(wxDC& dc, const wxRect& rect);
-
-    // DrawLabel() and DrawButtonLabel() helper
-    void DrawLabelShadow(wxDC& dc,
-                         const wxString& label,
-                         const wxRect& rect,
-                         int alignment,
-                         int indexAccel);
-
-    // DrawButtonBorder() helper
-    void DoDrawBackground(wxDC& dc,
-                          const wxColour& col,
-                          const wxRect& rect,
-                          wxWindow *window = NULL );
-
-    // DrawBorder() helpers: all of them shift and clip the DC after drawing
-    // the border
-
-    // just draw a rectangle with the given pen
-    void DrawRect(wxDC& dc, wxRect *rect, const wxPen& pen);
-
-    // draw the lower left part of rectangle
-    void DrawHalfRect(wxDC& dc, wxRect *rect, const wxPen& pen);
-
-    // draw the rectange using the first brush for the left and top sides and
-    // the second one for the bottom and right ones
-    void DrawShadedRect(wxDC& dc, wxRect *rect,
-                        const wxPen& pen1, const wxPen& pen2);
-
-    // draw the normal 3D border
-    void DrawRaisedBorder(wxDC& dc, wxRect *rect);
-
-    // draw the sunken 3D border
-    void DrawSunkenBorder(wxDC& dc, wxRect *rect);
 
     // draw the border used for scrollbar arrows
     void DrawArrowBorder(wxDC& dc, wxRect *rect, bool isPressed = false);
@@ -484,7 +359,7 @@ protected:
                          wxArrowDirection arrowDir,
                          wxArrowStyle arrowStyle);
 
-    // DrawCheckButton/DrawRadioButton helper
+    // DrawCheckButton helper
     void DrawCheckOrRadioButton(wxDC& dc,
                                 const wxString& label,
                                 const wxBitmap& bitmap,
@@ -515,19 +390,8 @@ protected:
         { return GetIndicator(IndicatorType_Radio, flags); }
 
 private:
-    const wxColourScheme *m_scheme;
-
     // the sizing parameters (TODO make them changeable)
     wxSize m_sizeScrollbarArrow;
-
-    // GDI objects we use for drawing
-    wxColour m_colDarkGrey,
-             m_colHighlight;
-
-    wxPen m_penBlack,
-          m_penDarkGrey,
-          m_penLightGrey,
-          m_penHighlight;
 
     wxFont m_titlebarFont;
 
@@ -536,8 +400,14 @@ private:
 
     // the bitmaps returned by GetIndicator()
     wxBitmap m_bmpIndicators[IndicatorType_Max]
-                            [IndicatorState_Max]
+                            [IndicatorState_MaxMenu]
                             [IndicatorStatus_Max];
+
+    // standard defaults for m_bmpCheckBitmaps and m_bmpIndicators
+    static const char **ms_xpmChecked[IndicatorStatus_Max];
+    static const char **ms_xpmIndicators[IndicatorType_Max]
+                                        [IndicatorState_MaxMenu]
+                                        [IndicatorStatus_Max];
 
     // titlebar icons:
     wxBitmap m_bmpFrameButtons[FrameButton_Max];
@@ -1206,8 +1076,9 @@ static const char *pressed_unchecked_radio_xpm[] = {
 "    hhhh    "
 };
 
-static const char **
-    xpmIndicators[IndicatorType_Max][IndicatorState_Max][IndicatorStatus_Max] =
+const char **wxWin32Renderer::ms_xpmIndicators[IndicatorType_Max]
+                                              [IndicatorState_MaxMenu]
+                                              [IndicatorStatus_Max] =
 {
     // checkboxes first
     {
@@ -1249,7 +1120,7 @@ static const char **
     }
 };
 
-static const char **xpmChecked[IndicatorStatus_Max] =
+const char **wxWin32Renderer::ms_xpmChecked[IndicatorStatus_Max] =
 {
     checked_item_xpm,
     unchecked_item_xpm
@@ -1539,21 +1410,10 @@ wxColour wxWin32ColourScheme::Get(wxWin32ColourScheme::StdColour col) const
 // ----------------------------------------------------------------------------
 
 wxWin32Renderer::wxWin32Renderer(const wxColourScheme *scheme)
+               : wxStdRenderer(scheme)
 {
     // init data
-    m_scheme = scheme;
     m_sizeScrollbarArrow = wxSize(16, 16);
-
-    // init colours and pens
-    m_penBlack = wxPen(wxSCHEME_COLOUR(scheme, SHADOW_DARK), 0, wxSOLID);
-
-    m_colDarkGrey = wxSCHEME_COLOUR(scheme, SHADOW_OUT);
-    m_penDarkGrey = wxPen(m_colDarkGrey, 0, wxSOLID);
-
-    m_penLightGrey = wxPen(wxSCHEME_COLOUR(scheme, SHADOW_IN), 0, wxSOLID);
-
-    m_colHighlight = wxSCHEME_COLOUR(scheme, SHADOW_HIGHLIGHT);
-    m_penHighlight = wxPen(m_colHighlight, 0, wxSOLID);
 
     m_titlebarFont = wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT);
     m_titlebarFont.SetWeight(wxFONTWEIGHT_BOLD);
@@ -1736,440 +1596,14 @@ wxWin32Renderer::wxWin32Renderer(const wxColourScheme *scheme)
     m_bmpFrameButtons[FrameButton_Help] = wxBitmap(frame_button_help_xpm);
 }
 
-// ----------------------------------------------------------------------------
-// border stuff
-// ----------------------------------------------------------------------------
-
-/*
-   The raised border in Win32 looks like this:
-
-   IIIIIIIIIIIIIIIIIIIIIIB
-   I                    GB
-   I                    GB  I = white       (HILIGHT)
-   I                    GB  H = light grey  (LIGHT)
-   I                    GB  G = dark grey   (SHADOI)
-   I                    GB  B = black       (DKSHADOI)
-   I                    GB  I = hIghlight (COLOR_3DHILIGHT)
-   I                    GB
-   IGGGGGGGGGGGGGGGGGGGGGB
-   BBBBBBBBBBBBBBBBBBBBBBB
-
-   The sunken border looks like this:
-
-   GGGGGGGGGGGGGGGGGGGGGGI
-   GBBBBBBBBBBBBBBBBBBBBHI
-   GB                   HI
-   GB                   HI
-   GB                   HI
-   GB                   HI
-   GB                   HI
-   GB                   HI
-   GHHHHHHHHHHHHHHHHHHHHHI
-   IIIIIIIIIIIIIIIIIIIIIII
-
-   The static border (used for the controls which don't get focus) is like
-   this:
-
-   GGGGGGGGGGGGGGGGGGGGGGW
-   G                     W
-   G                     W
-   G                     W
-   G                     W
-   G                     W
-   G                     W
-   G                     W
-   WWWWWWWWWWWWWWWWWWWWWWW
-
-   The most complicated is the double border:
-
-   HHHHHHHHHHHHHHHHHHHHHHB
-   HWWWWWWWWWWWWWWWWWWWWGB
-   HWHHHHHHHHHHHHHHHHHHHGB
-   HWH                 HGB
-   HWH                 HGB
-   HWH                 HGB
-   HWH                 HGB
-   HWHHHHHHHHHHHHHHHHHHHGB
-   HGGGGGGGGGGGGGGGGGGGGGB
-   BBBBBBBBBBBBBBBBBBBBBBB
-
-   And the simple border is, well, simple:
-
-   BBBBBBBBBBBBBBBBBBBBBBB
-   B                     B
-   B                     B
-   B                     B
-   B                     B
-   B                     B
-   B                     B
-   B                     B
-   B                     B
-   BBBBBBBBBBBBBBBBBBBBBBB
-*/
-
-void wxWin32Renderer::DrawRect(wxDC& dc, wxRect *rect, const wxPen& pen)
-{
-    // draw
-    dc.SetPen(pen);
-    dc.SetBrush(*wxTRANSPARENT_BRUSH);
-    dc.DrawRectangle(*rect);
-
-    // adjust the rect
-    rect->Inflate(-1);
-}
-
-void wxWin32Renderer::DrawHalfRect(wxDC& dc, wxRect *rect, const wxPen& pen)
-{
-    // draw the bottom and right sides
-    dc.SetPen(pen);
-    dc.DrawLine(rect->GetLeft(), rect->GetBottom(),
-                rect->GetRight() + 1, rect->GetBottom());
-    dc.DrawLine(rect->GetRight(), rect->GetTop(),
-                rect->GetRight(), rect->GetBottom());
-
-    // adjust the rect
-    rect->Inflate(-1);
-}
-
-void wxWin32Renderer::DrawShadedRect(wxDC& dc, wxRect *rect,
-                                     const wxPen& pen1, const wxPen& pen2)
-{
-    // draw the rectangle
-    dc.SetPen(pen1);
-    dc.DrawLine(rect->GetLeft(), rect->GetTop(),
-                rect->GetLeft(), rect->GetBottom());
-    dc.DrawLine(rect->GetLeft() + 1, rect->GetTop(),
-                rect->GetRight(), rect->GetTop());
-    dc.SetPen(pen2);
-    dc.DrawLine(rect->GetRight(), rect->GetTop(),
-                rect->GetRight(), rect->GetBottom());
-    dc.DrawLine(rect->GetLeft(), rect->GetBottom(),
-                rect->GetRight() + 1, rect->GetBottom());
-
-    // adjust the rect
-    rect->Inflate(-1);
-}
-
-void wxWin32Renderer::DrawRaisedBorder(wxDC& dc, wxRect *rect)
-{
-    DrawShadedRect(dc, rect, m_penHighlight, m_penBlack);
-    DrawShadedRect(dc, rect, m_penLightGrey, m_penDarkGrey);
-}
-
-void wxWin32Renderer::DrawSunkenBorder(wxDC& dc, wxRect *rect)
-{
-    DrawShadedRect(dc, rect, m_penDarkGrey, m_penHighlight);
-    DrawShadedRect(dc, rect, m_penBlack, m_penLightGrey);
-}
-
-void wxWin32Renderer::DrawArrowBorder(wxDC& dc, wxRect *rect, bool isPressed)
-{
-    if ( isPressed )
-    {
-        DrawRect(dc, rect, m_penDarkGrey);
-
-        // the arrow is usually drawn inside border of width 2 and is offset by
-        // another pixel in both directions when it's pressed - as the border
-        // in this case is more narrow as well, we have to adjust rect like
-        // this:
-        rect->Inflate(-1);
-        rect->x++;
-        rect->y++;
-    }
-    else
-    {
-        DrawShadedRect(dc, rect, m_penLightGrey, m_penBlack);
-        DrawShadedRect(dc, rect, m_penHighlight, m_penDarkGrey);
-    }
-}
-
-void wxWin32Renderer::DrawBorder(wxDC& dc,
-                                 wxBorder border,
-                                 const wxRect& rectTotal,
-                                 int WXUNUSED(flags),
-                                 wxRect *rectIn)
-{
-    int i;
-
-    wxRect rect = rectTotal;
-
-    switch ( border )
-    {
-        case wxBORDER_SUNKEN:
-            for ( i = 0; i < BORDER_THICKNESS / 2; i++ )
-            {
-                DrawSunkenBorder(dc, &rect);
-            }
-            break;
-
-        case wxBORDER_STATIC:
-            DrawShadedRect(dc, &rect, m_penDarkGrey, m_penHighlight);
-            break;
-
-        case wxBORDER_RAISED:
-            for ( i = 0; i < BORDER_THICKNESS / 2; i++ )
-            {
-                DrawRaisedBorder(dc, &rect);
-            }
-            break;
-
-        case wxBORDER_DOUBLE:
-            DrawArrowBorder(dc, &rect);
-            DrawRect(dc, &rect, m_penLightGrey);
-            break;
-
-        case wxBORDER_SIMPLE:
-            for ( i = 0; i < BORDER_THICKNESS / 2; i++ )
-            {
-                DrawRect(dc, &rect, m_penBlack);
-            }
-            break;
-
-        default:
-            wxFAIL_MSG(_T("unknown border type"));
-            // fall through
-
-        case wxBORDER_DEFAULT:
-        case wxBORDER_NONE:
-            break;
-    }
-
-    if ( rectIn )
-        *rectIn = rect;
-}
-
-wxRect wxWin32Renderer::GetBorderDimensions(wxBorder border) const
-{
-    wxCoord width;
-    switch ( border )
-    {
-        case wxBORDER_RAISED:
-        case wxBORDER_SUNKEN:
-            width = BORDER_THICKNESS;
-            break;
-
-        case wxBORDER_SIMPLE:
-        case wxBORDER_STATIC:
-            width = 1;
-            break;
-
-        case wxBORDER_DOUBLE:
-            width = 3;
-            break;
-
-        default:
-        {
-            // char *crash = NULL;
-            // *crash = 0;
-            wxFAIL_MSG(_T("unknown border type"));
-            // fall through
-        }
-
-        case wxBORDER_DEFAULT:
-        case wxBORDER_NONE:
-            width = 0;
-            break;
-    }
-
-    wxRect rect;
-    rect.x =
-    rect.y =
-    rect.width =
-    rect.height = width;
-
-    return rect;
-}
-
 bool wxWin32Renderer::AreScrollbarsInsideBorder() const
 {
     return true;
 }
 
 // ----------------------------------------------------------------------------
-// borders
-// ----------------------------------------------------------------------------
-
-void wxWin32Renderer::DrawTextBorder(wxDC& dc,
-                                     wxBorder border,
-                                     const wxRect& rect,
-                                     int flags,
-                                     wxRect *rectIn)
-{
-    // text controls are not special under windows
-    DrawBorder(dc, border, rect, flags, rectIn);
-}
-
-void wxWin32Renderer::DrawButtonBorder(wxDC& dc,
-                                       const wxRect& rectTotal,
-                                       int flags,
-                                       wxRect *rectIn)
-{
-    wxRect rect = rectTotal;
-
-    if ( flags & wxCONTROL_PRESSED )
-    {
-        // button pressed: draw a double border around it
-        DrawRect(dc, &rect, m_penBlack);
-        DrawRect(dc, &rect, m_penDarkGrey);
-    }
-    else
-    {
-        // button not pressed
-
-        if ( flags & (wxCONTROL_FOCUSED | wxCONTROL_ISDEFAULT) )
-        {
-            // button either default or focused (or both): add an extra border around it
-            DrawRect(dc, &rect, m_penBlack);
-        }
-
-        // now draw a normal button
-        DrawShadedRect(dc, &rect, m_penHighlight, m_penBlack);
-        DrawHalfRect(dc, &rect, m_penDarkGrey);
-    }
-
-    if ( rectIn )
-    {
-        *rectIn = rect;
-    }
-}
-
-// ----------------------------------------------------------------------------
-// lines and frame
-// ----------------------------------------------------------------------------
-
-void wxWin32Renderer::DrawHorizontalLine(wxDC& dc,
-                                         wxCoord y, wxCoord x1, wxCoord x2)
-{
-    dc.SetPen(m_penDarkGrey);
-    dc.DrawLine(x1, y, x2 + 1, y);
-    dc.SetPen(m_penHighlight);
-    y++;
-    dc.DrawLine(x1, y, x2 + 1, y);
-}
-
-void wxWin32Renderer::DrawVerticalLine(wxDC& dc,
-                                       wxCoord x, wxCoord y1, wxCoord y2)
-{
-    dc.SetPen(m_penDarkGrey);
-    dc.DrawLine(x, y1, x, y2 + 1);
-    dc.SetPen(m_penHighlight);
-    x++;
-    dc.DrawLine(x, y1, x, y2 + 1);
-}
-
-void wxWin32Renderer::DrawFrame(wxDC& dc,
-                                const wxString& label,
-                                const wxRect& rect,
-                                int flags,
-                                int alignment,
-                                int indexAccel)
-{
-    wxCoord height = 0; // of the label
-    wxRect rectFrame = rect;
-    if ( !label.empty() )
-    {
-        // the text should touch the top border of the rect, so the frame
-        // itself should be lower
-        dc.GetTextExtent(label, NULL, &height);
-        rectFrame.y += height / 2;
-        rectFrame.height -= height / 2;
-
-        // we have to draw each part of the frame individually as we can't
-        // erase the background beyond the label as it might contain some
-        // pixmap already, so drawing everything and then overwriting part of
-        // the frame with label doesn't work
-
-        // TODO: the +5 and space insertion should be customizable
-
-        wxRect rectText;
-        rectText.x = rectFrame.x + 5;
-        rectText.y = rect.y;
-        rectText.width = rectFrame.width - 7; // +2 border width
-        rectText.height = height;
-
-        wxString label2;
-        label2 << _T(' ') << label << _T(' ');
-        if ( indexAccel != -1 )
-        {
-            // adjust it as we prepended a space
-            indexAccel++;
-        }
-
-        wxRect rectLabel;
-        DrawLabel(dc, label2, rectText, flags, alignment, indexAccel, &rectLabel);
-
-        StandardDrawFrame(dc, rectFrame, rectLabel);
-    }
-    else
-    {
-        // just draw the complete frame
-        DrawShadedRect(dc, &rectFrame, m_penDarkGrey, m_penHighlight);
-        DrawShadedRect(dc, &rectFrame, m_penHighlight, m_penDarkGrey);
-    }
-}
-
-// ----------------------------------------------------------------------------
 // label
 // ----------------------------------------------------------------------------
-
-void wxWin32Renderer::DrawFocusRect(wxDC& dc, const wxRect& rect)
-{
-    // VZ: this doesn't work under Windows, the dotted pen has dots of 3
-    //     pixels each while we really need dots here... PS_ALTERNATE might
-    //     work, but it is for NT 5 only
-#if 0
-    DrawRect(dc, &rect, wxPen(*wxBLACK, 0, wxDOT));
-#else
-    // draw the pixels manually: note that to behave in the same manner as
-    // DrawRect(), we must exclude the bottom and right borders from the
-    // rectangle
-    wxCoord x1 = rect.GetLeft(),
-            y1 = rect.GetTop(),
-            x2 = rect.GetRight(),
-            y2 = rect.GetBottom();
-
-    dc.SetPen(wxPen(*wxBLACK, 0, wxSOLID));
-
-    // this seems to be closer than what Windows does than wxINVERT although
-    // I'm still not sure if it's correct
-    dc.SetLogicalFunction(wxAND_REVERSE);
-
-    wxCoord z;
-    for ( z = x1 + 1; z < x2; z += 2 )
-        dc.DrawPoint(z, rect.GetTop());
-
-    wxCoord shift = z == x2 ? 0 : 1;
-    for ( z = y1 + shift; z < y2; z += 2 )
-        dc.DrawPoint(x2, z);
-
-    shift = z == y2 ? 0 : 1;
-    for ( z = x2 - shift; z > x1; z -= 2 )
-        dc.DrawPoint(z, y2);
-
-    shift = z == x1 ? 0 : 1;
-    for ( z = y2 - shift; z > y1; z -= 2 )
-        dc.DrawPoint(x1, z);
-
-    dc.SetLogicalFunction(wxCOPY);
-#endif // 0/1
-}
-
-void wxWin32Renderer::DrawLabelShadow(wxDC& dc,
-                                      const wxString& label,
-                                      const wxRect& rect,
-                                      int alignment,
-                                      int indexAccel)
-{
-    // draw shadow of the text
-    dc.SetTextForeground(m_colHighlight);
-    wxRect rectShadow = rect;
-    rectShadow.x++;
-    rectShadow.y++;
-    dc.DrawLabel(label, rectShadow, alignment, indexAccel);
-
-    // make the text grey
-    dc.SetTextForeground(m_colDarkGrey);
-}
 
 void wxWin32Renderer::DrawLabel(wxDC& dc,
                                 const wxString& label,
@@ -2178,18 +1612,6 @@ void wxWin32Renderer::DrawLabel(wxDC& dc,
                                 int alignment,
                                 int indexAccel,
                                 wxRect *rectBounds)
-{
-    DoDrawLabel(dc, label, rect, flags, alignment, indexAccel, rectBounds);
-}
-
-void wxWin32Renderer::DoDrawLabel(wxDC& dc,
-                                  const wxString& label,
-                                  const wxRect& rect,
-                                  int flags,
-                                  int alignment,
-                                  int indexAccel,
-                                  wxRect *rectBounds,
-                                  const wxPoint& focusOffset)
 {
     // the underscores are not drawn for focused controls in wxMSW
     if ( flags & wxCONTROL_FOCUSED )
@@ -2205,35 +1627,34 @@ void wxWin32Renderer::DoDrawLabel(wxDC& dc,
         if ( flags & wxCONTROL_SELECTED )
         {
             // just make the label text greyed out
-            dc.SetTextForeground(m_colDarkGrey);
-        }
-        else // draw normal disabled label
-        {
-            DrawLabelShadow(dc, label, rect, alignment, indexAccel);
+            dc.SetTextForeground(m_penDarkGrey.GetColour());
+
+            flags &= ~wxCONTROL_DISABLED;
         }
     }
 
-    wxRect rectLabel;
-    dc.DrawLabel(label, wxNullBitmap, rect, alignment, indexAccel, &rectLabel);
+    wxStdRenderer::DrawLabel(dc, label, rect, flags, alignment,
+                             indexAccel, rectBounds);
+}
 
-    if ( flags & wxCONTROL_DISABLED )
+void wxWin32Renderer::DrawFrameWithLabel(wxDC& dc,
+                                         const wxString& label,
+                                         const wxRect& rectFrame,
+                                         const wxRect& rectText,
+                                         int flags,
+                                         int alignment,
+                                         int indexAccel)
+{
+    wxString label2;
+    label2 << _T(' ') << label << _T(' ');
+    if ( indexAccel != -1 )
     {
-        // restore the fg colour
-        dc.SetTextForeground(*wxBLACK);
+        // adjust it as we prepended a space
+        indexAccel++;
     }
 
-    if ( flags & wxCONTROL_FOCUSED )
-    {
-        if ( focusOffset.x || focusOffset.y )
-        {
-            rectLabel.Inflate(focusOffset.x, focusOffset.y);
-        }
-
-        DrawFocusRect(dc, rectLabel);
-    }
-
-    if ( rectBounds )
-        *rectBounds = rectLabel;
+    wxStdRenderer::DrawFrameWithLabel(dc, label2, rectFrame, rectText,
+                                      flags, alignment, indexAccel);
 }
 
 void wxWin32Renderer::DrawButtonLabel(wxDC& dc,
@@ -2251,77 +1672,44 @@ void wxWin32Renderer::DrawButtonLabel(wxDC& dc,
         indexAccel = -1;
     }
 
-    wxRect rectLabel = rect;
-    if ( !label.empty() )
+    wxStdRenderer::DrawButtonLabel(dc, label, image, rect, flags, alignment,
+                                   indexAccel, rectBounds);
+}
+
+void wxWin32Renderer::DrawButtonBorder(wxDC& dc,
+                                       const wxRect& rectTotal,
+                                       int flags,
+                                       wxRect *rectIn)
+{
+    wxRect rect = rectTotal;
+
+    wxPen penOut(*wxBLACK);
+    if ( flags & wxCONTROL_PRESSED )
     {
-        // shift the label if a button is pressed
-        if ( flags & wxCONTROL_PRESSED )
+        // button pressed: draw a double border around it
+        DrawRect(dc, &rect, penOut);
+        DrawRect(dc, &rect, m_penDarkGrey);
+    }
+    else // button not pressed
+    {
+        if ( flags & (wxCONTROL_FOCUSED | wxCONTROL_ISDEFAULT) )
         {
-            rectLabel.x++;
-            rectLabel.y++;
+            // button either default or focused (or both): add an extra border
+            // around it
+            DrawRect(dc, &rect, penOut);
         }
 
-        if ( flags & wxCONTROL_DISABLED )
-        {
-            DrawLabelShadow(dc, label, rectLabel, alignment, indexAccel);
-        }
-
-        // leave enough space for the focus rectangle
-        if ( flags & wxCONTROL_FOCUSED )
-        {
-            rectLabel.Inflate(-2);
-        }
+        // now draw a normal button border
+        DrawRaisedBorder(dc, &rect);
     }
 
-    dc.DrawLabel(label, image, rectLabel, alignment, indexAccel, rectBounds);
-
-    if ( !label.empty() && (flags & wxCONTROL_FOCUSED) )
-    {
-        if ( flags & wxCONTROL_PRESSED )
-        {
-            // the focus rectangle is never pressed, so undo the shift done
-            // above
-            rectLabel.x--;
-            rectLabel.y--;
-            rectLabel.width--;
-            rectLabel.height--;
-        }
-
-        DrawFocusRect(dc, rectLabel);
-    }
+    if ( rectIn )
+        *rectIn = rect;
 }
 
 // ----------------------------------------------------------------------------
 // (check)listbox items
 // ----------------------------------------------------------------------------
-
-void wxWin32Renderer::DrawItem(wxDC& dc,
-                               const wxString& label,
-                               const wxRect& rect,
-                               int flags)
-{
-    wxDCTextColourChanger colChanger(dc);
-
-    if ( flags & wxCONTROL_SELECTED )
-    {
-        colChanger.Set(wxSCHEME_COLOUR(m_scheme, HIGHLIGHT_TEXT));
-
-        wxColour colBg = wxSCHEME_COLOUR(m_scheme, HIGHLIGHT);
-        dc.SetBrush(wxBrush(colBg, wxSOLID));
-        dc.SetPen(wxPen(colBg, 0, wxSOLID));
-        dc.DrawRectangle(rect);
-    }
-
-    wxRect rectText = rect;
-    rectText.x += 2;
-    rectText.width -= 2;
-    dc.DrawLabel(label, wxNullBitmap, rectText);
-
-    if ( flags & wxCONTROL_FOCUSED )
-    {
-        DrawFocusRect(dc, rect);
-    }
-}
 
 void wxWin32Renderer::DrawCheckItem(wxDC& dc,
                                     const wxString& label,
@@ -2342,7 +1730,7 @@ void wxWin32Renderer::DrawCheckItem(wxDC& dc,
 
         if ( !m_bmpCheckBitmaps[i].Ok() )
         {
-            m_bmpCheckBitmaps[i] = wxBitmap(xpmChecked[i]);
+            m_bmpCheckBitmaps[i] = wxBitmap(ms_xpmChecked[i]);
         }
 
         bmp = m_bmpCheckBitmaps[i];
@@ -2366,26 +1754,13 @@ void wxWin32Renderer::DrawCheckItem(wxDC& dc,
 wxBitmap wxWin32Renderer::GetIndicator(IndicatorType indType, int flags)
 {
     IndicatorState indState;
-    if ( flags & wxCONTROL_SELECTED )
-        indState = flags & wxCONTROL_DISABLED ? IndicatorState_SelectedDisabled
-                                              : IndicatorState_Selected;
-    else if ( flags & wxCONTROL_DISABLED )
-        indState = IndicatorState_Disabled;
-    else if ( flags & wxCONTROL_PRESSED )
-        indState = IndicatorState_Pressed;
-    else
-        indState = IndicatorState_Normal;
-
-    IndicatorStatus indStatus = flags & wxCONTROL_CHECKED
-                                    ? IndicatorStatus_Checked
-                                    : ( flags & wxCONTROL_UNDETERMINED
-                                          ? IndicatorStatus_Undeterminated
-                                          : IndicatorStatus_Unchecked );
+    IndicatorStatus indStatus;
+    GetIndicatorsFromFlags(flags, indState, indStatus);
 
     wxBitmap bmp = m_bmpIndicators[indType][indState][indStatus];
     if ( !bmp.Ok() )
     {
-        const char **xpm = xpmIndicators[indType][indState][indStatus];
+        const char **xpm = ms_xpmIndicators[indType][indState][indStatus];
         if ( xpm )
         {
             // create and cache it
@@ -2395,94 +1770,6 @@ wxBitmap wxWin32Renderer::GetIndicator(IndicatorType indType, int flags)
     }
 
     return bmp;
-}
-
-void wxWin32Renderer::DrawCheckOrRadioButton(wxDC& dc,
-                                             const wxString& label,
-                                             const wxBitmap& bitmap,
-                                             const wxRect& rect,
-                                             int flags,
-                                             wxAlignment align,
-                                             int indexAccel,
-                                             wxCoord focusOffsetY)
-{
-    // calculate the position of the bitmap and of the label
-    wxCoord heightBmp = bitmap.GetHeight();
-    wxCoord xBmp,
-            yBmp = rect.y + (rect.height - heightBmp) / 2;
-
-    wxRect rectLabel;
-    dc.GetMultiLineTextExtent(label, NULL, &rectLabel.height);
-    rectLabel.y = rect.y + (rect.height - rectLabel.height) / 2;
-
-    // align label vertically with the bitmap - looks nicer like this
-    rectLabel.y -= (rectLabel.height - heightBmp) % 2;
-
-    // calc horz position
-    if ( align == wxALIGN_RIGHT )
-    {
-        xBmp = rect.GetRight() - bitmap.GetWidth();
-        rectLabel.x = rect.x + 3;
-        rectLabel.SetRight(xBmp);
-    }
-    else // normal (checkbox to the left of the text) case
-    {
-        xBmp = rect.x;
-        rectLabel.x = xBmp + bitmap.GetWidth() + 5;
-        rectLabel.SetRight(rect.GetRight());
-    }
-
-    dc.DrawBitmap(bitmap, xBmp, yBmp, true /* use mask */);
-
-    DoDrawLabel(
-                dc, label, rectLabel,
-                flags,
-                wxALIGN_LEFT | wxALIGN_TOP,
-                indexAccel,
-                NULL,         // we don't need bounding rect
-                // use custom vert focus rect offset
-                wxPoint(FOCUS_RECT_OFFSET_X, focusOffsetY)
-               );
-}
-
-void wxWin32Renderer::DrawRadioButton(wxDC& dc,
-                                      const wxString& label,
-                                      const wxBitmap& bitmap,
-                                      const wxRect& rect,
-                                      int flags,
-                                      wxAlignment align,
-                                      int indexAccel)
-{
-    wxBitmap bmp;
-    if ( bitmap.Ok() )
-        bmp = bitmap;
-    else
-        bmp = GetRadioBitmap(flags);
-
-    DrawCheckOrRadioButton(dc, label,
-                           bmp,
-                           rect, flags, align, indexAccel,
-                           FOCUS_RECT_OFFSET_Y); // default focus rect offset
-}
-
-void wxWin32Renderer::DrawCheckButton(wxDC& dc,
-                                      const wxString& label,
-                                      const wxBitmap& bitmap,
-                                      const wxRect& rect,
-                                      int flags,
-                                      wxAlignment align,
-                                      int indexAccel)
-{
-    wxBitmap bmp;
-    if ( bitmap.Ok() )
-        bmp = bitmap;
-    else
-        bmp = GetCheckBitmap(flags);
-
-    DrawCheckOrRadioButton(dc, label,
-                           bmp,
-                           rect, flags, align, indexAccel,
-                           0); // no focus rect offset for checkboxes
 }
 
 #if wxUSE_TOOLBAR
@@ -2548,28 +1835,6 @@ void wxWin32Renderer::DrawToolBarButton(wxDC& dc,
     // don't draw wxTOOL_STYLE_CONTROL
 }
 #endif // wxUSE_TOOLBAR
-
-// ----------------------------------------------------------------------------
-// text control
-// ----------------------------------------------------------------------------
-
-void wxWin32Renderer::DrawTextLine(wxDC& dc,
-                                   const wxString& text,
-                                   const wxRect& rect,
-                                   int selStart,
-                                   int selEnd,
-                                   int flags)
-{
-    // nothing special to do here
-    StandardDrawTextLine(dc, text, rect, selStart, selEnd, flags);
-}
-
-void
-wxWin32Renderer::DrawLineWrapMark(wxDC& WXUNUSED(dc),
-                                  const wxRect& WXUNUSED(rect))
-{
-    // we don't draw them
-}
 
 // ----------------------------------------------------------------------------
 // notebook
@@ -3178,9 +2443,9 @@ void wxWin32Renderer::DrawMenuBarItem(wxDC& dc,
     {
         colChanger.Set(wxSCHEME_COLOUR(m_scheme, HIGHLIGHT_TEXT));
 
-        wxColour colBg = wxSCHEME_COLOUR(m_scheme, HIGHLIGHT);
-        dc.SetBrush(wxBrush(colBg, wxSOLID));
-        dc.SetPen(wxPen(colBg, 0, wxSOLID));
+        const wxColour colBg = wxSCHEME_COLOUR(m_scheme, HIGHLIGHT);
+        dc.SetBrush(colBg);
+        dc.SetPen(colBg);
         dc.DrawRectangle(rect);
     }
 
@@ -3213,9 +2478,9 @@ void wxWin32Renderer::DrawMenuItem(wxDC& dc,
     {
         colChanger.Set(wxSCHEME_COLOUR(m_scheme, HIGHLIGHT_TEXT));
 
-        wxColour colBg = wxSCHEME_COLOUR(m_scheme, HIGHLIGHT);
-        dc.SetBrush(wxBrush(colBg, wxSOLID));
-        dc.SetPen(wxPen(colBg, 0, wxSOLID));
+        const wxColour colBg = wxSCHEME_COLOUR(m_scheme, HIGHLIGHT);
+        dc.SetBrush(colBg);
+        dc.SetPen(colBg);
         dc.DrawRectangle(rect);
     }
 
@@ -3512,34 +2777,28 @@ void wxWin32Renderer::GetComboBitmaps(wxBitmap *bmpNormal,
 }
 
 // ----------------------------------------------------------------------------
-// background
-// ----------------------------------------------------------------------------
-
-void wxWin32Renderer::DoDrawBackground(wxDC& dc,
-                                       const wxColour& col,
-                                       const wxRect& rect,
-                                       wxWindow * WXUNUSED(window))
-{
-    wxBrush brush(col, wxSOLID);
-    dc.SetBrush(brush);
-    dc.SetPen(*wxTRANSPARENT_PEN);
-    dc.DrawRectangle(rect);
-}
-
-void wxWin32Renderer::DrawBackground(wxDC& dc,
-                                     const wxColour& col,
-                                     const wxRect& rect,
-                                     int WXUNUSED(flags),
-                                     wxWindow *window)
-{
-    // just fill it with the given or default bg colour
-    wxColour colBg = col.Ok() ? col : wxSCHEME_COLOUR(m_scheme, CONTROL);
-    DoDrawBackground(dc, colBg, rect, window );
-}
-
-// ----------------------------------------------------------------------------
 // scrollbar
 // ----------------------------------------------------------------------------
+
+void wxWin32Renderer::DrawArrowBorder(wxDC& dc, wxRect *rect, bool isPressed)
+{
+    if ( isPressed )
+    {
+        DrawRect(dc, rect, m_penDarkGrey);
+
+        // the arrow is usually drawn inside border of width 2 and is offset by
+        // another pixel in both directions when it's pressed - as the border
+        // in this case is more narrow as well, we have to adjust rect like
+        // this:
+        rect->Inflate(-1);
+        rect->x++;
+        rect->y++;
+    }
+    else // !pressed
+    {
+        DrawAntiSunkenBorder(dc, rect);
+    }
+}
 
 void wxWin32Renderer::DrawArrow(wxDC& dc,
                                 wxDirection dir,
@@ -3600,7 +2859,7 @@ void wxWin32Renderer::DrawArrowButton(wxDC& dc,
                                       wxArrowStyle arrowStyle)
 {
     wxRect rect = rectAll;
-    DoDrawBackground(dc, wxSCHEME_COLOUR(m_scheme, CONTROL), rect);
+    DrawBackground(dc, wxSCHEME_COLOUR(m_scheme, CONTROL), rect);
     DrawArrowBorder(dc, &rect, arrowStyle == Arrow_Pressed);
     DrawArrow(dc, rect, arrowDir, arrowStyle);
 }
@@ -3624,48 +2883,13 @@ void wxWin32Renderer::DrawScrollbarShaft(wxDC& dc,
     wxColourScheme::StdColour col = flags & wxCONTROL_PRESSED
                                     ? wxColourScheme::SCROLLBAR_PRESSED
                                     : wxColourScheme::SCROLLBAR;
-    DoDrawBackground(dc, m_scheme->Get(col), rectBar);
+    DrawBackground(dc, m_scheme->Get(col), rectBar);
 }
 
 void wxWin32Renderer::DrawScrollCorner(wxDC& dc, const wxRect& rect)
 {
-    DoDrawBackground(dc, wxSCHEME_COLOUR(m_scheme, CONTROL), rect);
+    DrawBackground(dc, wxSCHEME_COLOUR(m_scheme, CONTROL), rect);
 }
-
-#if wxUSE_SCROLLBAR
-
-wxRect wxWin32Renderer::GetScrollbarRect(const wxScrollBar *scrollbar,
-                                         wxScrollBar::Element elem,
-                                         int thumbPos) const
-{
-    return StandardGetScrollbarRect(scrollbar, elem,
-                                    thumbPos, m_sizeScrollbarArrow);
-}
-
-wxCoord wxWin32Renderer::GetScrollbarSize(const wxScrollBar *scrollbar)
-{
-    return StandardScrollBarSize(scrollbar, m_sizeScrollbarArrow);
-}
-
-wxHitTest wxWin32Renderer::HitTestScrollbar(const wxScrollBar *scrollbar,
-                                            const wxPoint& pt) const
-{
-    return StandardHitTestScrollbar(scrollbar, pt, m_sizeScrollbarArrow);
-}
-
-wxCoord wxWin32Renderer::ScrollbarToPixel(const wxScrollBar *scrollbar,
-                                          int thumbPos)
-{
-    return StandardScrollbarToPixel(scrollbar, thumbPos, m_sizeScrollbarArrow);
-}
-
-int wxWin32Renderer::PixelToScrollbar(const wxScrollBar *scrollbar,
-                                      wxCoord coord)
-{
-    return StandardPixelToScrollbar(scrollbar, coord, m_sizeScrollbarArrow);
-}
-
-#endif // wxUSE_SCROLLBAR
 
 // ----------------------------------------------------------------------------
 // top level windows
