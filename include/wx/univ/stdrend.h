@@ -12,6 +12,7 @@
 #define _WX_UNIV_STDREND_H_
 
 #include "wx/univ/renderer.h"
+#include "wx/pen.h"
 
 class WXDLLEXPORT wxColourScheme;
 
@@ -238,4 +239,3 @@ protected:
 };
 
 #endif // _WX_UNIV_STDREND_H_
-
