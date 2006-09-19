@@ -909,7 +909,7 @@ public :
                         DataBrowserPropertyID property) const;
 
     void            InsertColumn(int colId, DataBrowserPropertyType colType,
-                            const wxString& title, SInt16 just = teFlushDefault, int minWidth = -1, int maxWidth = -1);
+                            const wxString& title, SInt16 just = teFlushDefault, int defaultWidth = -1);
                             
     int             GetColumnWidth(int colId);
     void            SetColumnWidth(int colId, int width);
@@ -986,6 +986,8 @@ public :
 
     virtual wxClientDataType GetClientDataType() const;
     virtual void            SetClientDataType(wxClientDataType clientDataItemsType);
+    virtual ListSortOrder   GetSortOrder() const;
+    virtual void            SetSortOrder(const ListSortOrder sort);
 
     
 

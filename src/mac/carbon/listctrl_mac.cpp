@@ -1085,8 +1085,9 @@ long wxListCtrl::InsertColumn(long col, wxListItem& item)
         return m_genericImpl->InsertColumn(col, item);
     
     if (m_dbImpl){
-        if ( !(item.GetMask() & wxLIST_MASK_WIDTH) ) //item.GetWidth() == 0)
-            item.SetWidth(300);
+        if ( !(item.GetMask() & wxLIST_MASK_WIDTH) ) 
+            item.SetWidth(150);
+        
         DataBrowserPropertyType type = kDataBrowserTextType;
         wxImageList* imageList = GetImageList(wxIMAGE_LIST_SMALL);
         if (imageList && imageList->GetImageCount() > 0){
@@ -1105,7 +1106,17 @@ long wxListCtrl::InsertColumn(long col, wxListItem& item)
             else if (item.GetAlign() == wxLIST_FORMAT_RIGHT)
                 just = teFlushRight;
         }
-        m_dbImpl->InsertColumn(col, type, item.GetText(), just, -1, item.GetWidth());
+        m_dbImpl->InsertColumn(col, type, item.GetText(), just, item.GetWidth());
+        
+        if (GetWindowStyleFlag() & wxLC_EDIT_LABELS)
+        {
+            DataBrowserTableViewColumnID id;
+            m_dbImpl->GetColumnIDFromIndex(col, &id);
+            DataBrowserPropertyFlags flags;
+            verify_noerr(m_dbImpl->GetPropertyFlags(id, &flags));
+            flags |= kDataBrowserPropertyIsEditable;
+            verify_noerr(m_dbImpl->SetPropertyFlags(id, flags));
+        }
     }
     
     return col;
@@ -1259,15 +1270,6 @@ void wxMacListCtrlItem::Notification(wxMacDataItemBrowserControl *owner ,
         return;
     }
 
-    // CS : couldn't reproduce this problem, what are the steps to test ?
-    // 1) wxDynamicCast fails during shutdown. This doesn't suprise me, but 
-    //    you have similar listbox code, so I'm wondering why this case is different.
-
-    // CS: these two should be fixed now
-    // 2) owner->GetLineFromItem( this ) always asserts.
-    // 3) the !lb->IsSelectionSuppressed code also fails with EXC_BAD_ACCESS
-    
-    // during shutdown, this may fail.
     wxListCtrl *list = wxDynamicCast( owner->GetPeer() , wxListCtrl );
     if ( list ){
         bool trigger = false;
@@ -1329,31 +1331,6 @@ wxMacDataBrowserListCtrlControl::wxMacDataBrowserListCtrlControl( wxWindow *peer
     err = SetSelectionFlags( options );
     verify_noerr( err );
 
-    // create the numeric order column
-    DataBrowserListViewColumnDesc columnDesc;
-    columnDesc.headerBtnDesc.titleOffset = 0;
-    columnDesc.headerBtnDesc.version = kDataBrowserListViewLatestHeaderDesc;
-
-    columnDesc.headerBtnDesc.btnFontStyle.flags =
-        kControlUseFontMask | kControlUseJustMask;
-
-    columnDesc.headerBtnDesc.btnContentInfo.contentType = kControlNoContent;
-    columnDesc.headerBtnDesc.btnFontStyle.just = teFlushDefault;
-    columnDesc.headerBtnDesc.btnFontStyle.font = kControlFontViewSystemFont;
-    columnDesc.headerBtnDesc.btnFontStyle.style = normal;
-    columnDesc.headerBtnDesc.titleString = NULL;
-
-    columnDesc.headerBtnDesc.minimumWidth = 0;
-    columnDesc.headerBtnDesc.maximumWidth = 0;
-    columnDesc.propertyDesc.propertyID = kNumericOrderColumnId;
-    columnDesc.propertyDesc.propertyType = kDataBrowserPropertyRelevanceRankPart;
-    columnDesc.propertyDesc.propertyFlags = kDataBrowserTableViewSelectionColumn;
-#if MAC_OS_X_VERSION_MAX_ALLOWED > MAC_OS_X_VERSION_10_2
-    columnDesc.propertyDesc.propertyFlags |= kDataBrowserListViewTypeSelectColumn;
-#endif
-
-    verify_noerr( AddColumn( &columnDesc, kDataBrowserListViewAppendColumn ) );
-    
     if ( style & wxLC_LIST ){
         InsertColumn(0, kDataBrowserIconAndTextType, wxEmptyString, -1, -1);
         verify_noerr( AutoSizeColumns() );
@@ -1376,7 +1353,7 @@ wxMacDataBrowserListCtrlControl::wxMacDataBrowserListCtrlControl( wxWindow *peer
     else
     {
         m_sortOrder = SortOrder_None;
-        SetDataBrowserSortProperty( m_controlRef , kNumericOrderColumnId);
+        SetDataBrowserSortProperty( m_controlRef , kMinColumnId);
         SetDataBrowserSortOrder( m_controlRef , kDataBrowserOrderIncreasing);
     }
 
@@ -1546,6 +1523,7 @@ OSStatus wxMacListCtrlItem::GetSetData( wxMacDataItemBrowserControl *owner ,
     DataBrowserItemDataRef itemData,
     bool changeValue )
 {
+        
     OSStatus err = errDataBrowserPropertyNotSupported;
     if ( !changeValue )
     {

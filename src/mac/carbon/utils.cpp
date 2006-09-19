@@ -1646,11 +1646,11 @@ bool wxMacDataItem::IsLessThan(wxMacDataItemBrowserControl *owner ,
     const wxMacDataItem* otherItem = dynamic_cast<const wxMacDataItem*>(rhs);
     bool retval = false;
     
-    if ( sortProperty == m_colId ){
+    if ( sortProperty == m_colId && owner->GetSortOrder() != SortOrder_None){
         retval = m_label.CmpNoCase( otherItem->m_label) < 0;
     }
     
-    else if ( sortProperty == kNumericOrderColumnId )
+    else if ( owner->GetSortOrder() == SortOrder_None || sortProperty == kNumericOrderColumnId )
         retval = m_order < otherItem->m_order;
 
     return retval;
@@ -1701,6 +1701,16 @@ wxMacDataItemBrowserControl::wxMacDataItemBrowserControl( wxWindow* peer , const
     m_suppressSelection = false;
     m_sortOrder = SortOrder_None;
     m_clientDataItemsType = wxClientData_None;
+}
+
+ListSortOrder wxMacDataItemBrowserControl::GetSortOrder() const 
+{
+    return m_sortOrder;
+}
+
+void wxMacDataItemBrowserControl::SetSortOrder(const ListSortOrder sort)
+{
+    m_sortOrder = sort;
 }
 
 wxMacDataItem* wxMacDataItemBrowserControl::CreateItem()
@@ -1870,7 +1880,7 @@ void wxMacDataItemBrowserControl::UpdateItems(const wxMacDataItem *container,
 }
 
 void wxMacDataItemBrowserControl::InsertColumn(int colId, DataBrowserPropertyType colType,
-                                            const wxString& title, SInt16 just, int minWidth, int maxWidth)
+                                            const wxString& title, SInt16 just, int defaultWidth)
 {
     DataBrowserListViewColumnDesc columnDesc;
     columnDesc.headerBtnDesc.titleOffset = 0;
@@ -1894,16 +1904,9 @@ void wxMacDataItemBrowserControl::InsertColumn(int colId, DataBrowserPropertyTyp
     wxMacCFStringHolder cfTitle;
     cfTitle.Assign( title, enc );
     columnDesc.headerBtnDesc.titleString = cfTitle; 
-    
-    int colMinWidth = 0;
-    if (minWidth != -1)
-        colMinWidth = minWidth;
-    columnDesc.headerBtnDesc.minimumWidth = colMinWidth;
-    
-    int colMaxWidth = 500;
-    if (maxWidth != -1)
-        colMaxWidth = maxWidth;
-    columnDesc.headerBtnDesc.maximumWidth = colMaxWidth;
+
+    columnDesc.headerBtnDesc.minimumWidth = 0;
+    columnDesc.headerBtnDesc.maximumWidth = 30000;
 
     columnDesc.propertyDesc.propertyID = (kMinColumnId + colId);
     columnDesc.propertyDesc.propertyType = colType;
@@ -1913,6 +1916,11 @@ void wxMacDataItemBrowserControl::InsertColumn(int colId, DataBrowserPropertyTyp
 #endif
 
     verify_noerr( AddColumn( &columnDesc, kDataBrowserListViewAppendColumn ) );
+
+    if (defaultWidth > 0){
+        SetColumnWidth(colId, defaultWidth);
+    }
+
 }
 
 void wxMacDataItemBrowserControl::SetColumnWidth(int colId, int width)
