@@ -158,8 +158,10 @@ public:
     virtual void Remove(long from, long to);
 
     // load/save the controls contents from/to the file
-    virtual bool LoadFile(const wxString& file, int type = wxRICHTEXT_TYPE_ANY);
-    virtual bool SaveFile(const wxString& file = wxEmptyString, int type = wxRICHTEXT_TYPE_ANY);
+    virtual bool LoadFile(const wxString& file) { return LoadFile(file, wxRICHTEXT_TYPE_ANY); }
+    virtual bool LoadFile(const wxString& file, int type);
+    virtual bool SaveFile(const wxString& file = wxEmptyString) { return SaveFile(file, wxRICHTEXT_TYPE_ANY); }
+    virtual bool SaveFile(const wxString& file, int type);
 
     // sets/clears the dirty flag
     virtual void MarkDirty();
@@ -180,9 +182,9 @@ public:
     virtual bool SetStyle(long start, long end, const wxTextAttr& style);
     virtual bool SetStyle(long start, long end, const wxTextAttrEx& style);
     virtual bool SetStyle(const wxRichTextRange& range, const wxRichTextAttr& style);
-    virtual bool GetStyle(long position, wxTextAttr& style) const;
-    virtual bool GetStyle(long position, wxTextAttrEx& style) const;
-    virtual bool GetStyle(long position, wxRichTextAttr& style) const;
+    virtual bool GetStyle(long position, wxTextAttr& style);
+    virtual bool GetStyle(long position, wxTextAttrEx& style);
+    virtual bool GetStyle(long position, wxRichTextAttr& style);
     virtual bool SetDefaultStyle(const wxTextAttrEx& style);
     virtual bool SetDefaultStyle(const wxTextAttr& style);
 
@@ -495,16 +497,16 @@ public:
     }
 
     /// Is all of the selection bold?
-    virtual bool IsSelectionBold() const;
+    virtual bool IsSelectionBold();
 
     /// Is all of the selection italics?
-    virtual bool IsSelectionItalics() const;
+    virtual bool IsSelectionItalics();
 
     /// Is all of the selection underlined?
-    virtual bool IsSelectionUnderlined() const;
+    virtual bool IsSelectionUnderlined();
 
     /// Is all of the selection aligned according to the specified flag?
-    virtual bool IsSelectionAligned(wxTextAttrAlignment alignment) const;
+    virtual bool IsSelectionAligned(wxTextAttrAlignment alignment);
 
     /// Apply bold to the selection
     virtual bool ApplyBoldToSelection();

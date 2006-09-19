@@ -917,8 +917,8 @@ public:
     virtual bool SetStyle(const wxRichTextRange& range, const wxTextAttrEx& style, bool withUndo = true);
 
     /// Get the text attributes for this position.
-    virtual bool GetStyle(long position, wxTextAttrEx& style) const;
-    virtual bool GetStyle(long position, wxRichTextAttr& style) const;
+    virtual bool GetStyle(long position, wxTextAttrEx& style);
+    virtual bool GetStyle(long position, wxRichTextAttr& style);
 
     /// Test if this whole range has character attributes of the specified kind. If any
     /// of the attributes are different within the range, the test fails. You

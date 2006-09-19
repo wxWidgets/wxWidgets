@@ -322,7 +322,9 @@ public:
 
     // load/save the controls contents from/to the file
     virtual bool LoadFile(const wxString& file);
+    virtual bool LoadFile(const wxString& file, int WXUNUSED(fileType)) { return LoadFile(file); }
     virtual bool SaveFile(const wxString& file = wxEmptyString);
+    virtual bool SaveFile(const wxString& file, int WXUNUSED(fileType)) { return SaveFile(file); }
 
     // sets/clears the dirty flag
     virtual void MarkDirty() = 0;

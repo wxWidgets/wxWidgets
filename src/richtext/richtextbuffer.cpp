@@ -1633,7 +1633,7 @@ bool wxRichTextParagraphLayoutBox::SetStyle(const wxRichTextRange& range, const 
 }
 
 /// Get the text attributes for this position.
-bool wxRichTextParagraphLayoutBox::GetStyle(long position, wxTextAttrEx& style) const
+bool wxRichTextParagraphLayoutBox::GetStyle(long position, wxTextAttrEx& style)
 {
     wxRichTextObject* obj wxDUMMY_INITIALIZE(NULL);
 
@@ -1652,7 +1652,7 @@ bool wxRichTextParagraphLayoutBox::GetStyle(long position, wxTextAttrEx& style) 
 }
 
 /// Get the text attributes for this position.
-bool wxRichTextParagraphLayoutBox::GetStyle(long position, wxRichTextAttr& style) const
+bool wxRichTextParagraphLayoutBox::GetStyle(long position, wxRichTextAttr& style)
 {
     wxRichTextObject* obj wxDUMMY_INITIALIZE(NULL);
 

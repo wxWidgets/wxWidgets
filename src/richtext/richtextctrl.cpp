@@ -2244,7 +2244,7 @@ const wxTextAttr& wxRichTextCtrl::GetDefaultStyle() const
     return GetBuffer().GetDefaultStyle();
 }
 
-bool wxRichTextCtrl::GetStyle(long position, wxTextAttr& style) const
+bool wxRichTextCtrl::GetStyle(long position, wxTextAttr& style)
 {
     wxTextAttrEx attr;
     if (GetBuffer().GetStyle(position, attr))
@@ -2256,12 +2256,12 @@ bool wxRichTextCtrl::GetStyle(long position, wxTextAttr& style) const
         return false;
 }
 
-bool wxRichTextCtrl::GetStyle(long position, wxTextAttrEx& style) const
+bool wxRichTextCtrl::GetStyle(long position, wxTextAttrEx& style)
 {
     return GetBuffer().GetStyle(position, style);
 }
 
-bool wxRichTextCtrl::GetStyle(long position, wxRichTextAttr& style) const
+bool wxRichTextCtrl::GetStyle(long position, wxRichTextAttr& style)
 {
     return GetBuffer().GetStyle(position, style);
 }
@@ -2419,7 +2419,7 @@ bool wxRichTextCtrl::LayoutContent(bool onlyVisibleRect)
 }
 
 /// Is all of the selection bold?
-bool wxRichTextCtrl::IsSelectionBold() const
+bool wxRichTextCtrl::IsSelectionBold()
 {
     if (HasSelection())
     {
@@ -2449,7 +2449,7 @@ bool wxRichTextCtrl::IsSelectionBold() const
 }
 
 /// Is all of the selection italics?
-bool wxRichTextCtrl::IsSelectionItalics() const
+bool wxRichTextCtrl::IsSelectionItalics()
 {
     if (HasSelection())
     {
@@ -2479,7 +2479,7 @@ bool wxRichTextCtrl::IsSelectionItalics() const
 }
 
 /// Is all of the selection underlined?
-bool wxRichTextCtrl::IsSelectionUnderlined() const
+bool wxRichTextCtrl::IsSelectionUnderlined()
 {
     if (HasSelection())
     {
@@ -2551,7 +2551,7 @@ bool wxRichTextCtrl::ApplyUnderlineToSelection()
 }
 
 /// Is all of the selection aligned according to the specified flag?
-bool wxRichTextCtrl::IsSelectionAligned(wxTextAttrAlignment alignment) const
+bool wxRichTextCtrl::IsSelectionAligned(wxTextAttrAlignment alignment)
 {
     if (HasSelection())
     {

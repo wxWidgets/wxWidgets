@@ -83,6 +83,7 @@ public:
 
     // load the controls contents from the file
     virtual bool LoadFile(const wxString& file);
+    virtual bool LoadFile(const wxString& file, int WXUNUSED(fileType)) { return LoadFile(file); }
 
     // sets/clears the dirty flag
     virtual void MarkDirty();
