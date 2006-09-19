@@ -214,7 +214,11 @@ void wxTopLevelWindowDFB::DoMoveWindow(int x, int y, int width, int height)
     wxSize cursize = GetSize();
     if ( cursize.x != width || cursize.y != height )
     {
+        // changing window's size changes its surface:
+        InvalidateDfbSurface();
+
         m_dfbwin->Resize(width, height);
+
         // we must repaint the window after it changed size:
         if ( IsShown() )
             DoRefreshWindow();

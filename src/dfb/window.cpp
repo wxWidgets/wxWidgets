@@ -173,6 +173,14 @@ wxIDirectFBSurfacePtr wxWindowDFB::GetDfbSurface()
 void wxWindowDFB::InvalidateDfbSurface()
 {
     m_surface = NULL;
+
+    // surfaces of the children are subsurfaces of this window's surface,
+    // so they must be invalidated as well:
+    wxWindowList& children = GetChildren();
+    for ( wxWindowList::iterator i = children.begin(); i != children.end(); ++i )
+    {
+        (*i)->InvalidateDfbSurface();
+    }
 }
 
 // ---------------------------------------------------------------------------
