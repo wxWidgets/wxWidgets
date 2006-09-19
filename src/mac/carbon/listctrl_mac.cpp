@@ -1024,6 +1024,11 @@ long wxListCtrl::InsertItem(wxListItem& info)
         return m_genericImpl->InsertItem(info);
         
     if (m_dbImpl){
+        int count = GetItemCount();
+
+        if (info.m_itemId > count)
+            info.m_itemId = count;
+    
         m_dbImpl->MacInsertItem(info.m_itemId, &info );
         wxListEvent event( wxEVT_COMMAND_LIST_INSERT_ITEM, GetId() );
         event.SetEventObject( this );
