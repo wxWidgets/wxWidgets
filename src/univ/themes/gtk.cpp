@@ -588,8 +588,6 @@ private:
     wxSortedArrayString m_handlerNames;
     wxArrayHandlers m_handlers;
 
-    wxGTKInputHandler *m_handlerDefault;
-
     wxGTKColourScheme *m_scheme;
 
     WX_DECLARE_THEME(gtk)
@@ -609,20 +607,11 @@ wxGTKTheme::wxGTKTheme()
 {
     m_scheme = NULL;
     m_renderer = NULL;
-    m_handlerDefault = NULL;
     m_artProvider = NULL;
 }
 
 wxGTKTheme::~wxGTKTheme()
 {
-    size_t count = m_handlers.GetCount();
-    for ( size_t n = 0; n < count; n++ )
-    {
-        if ( m_handlers[n] != m_handlerDefault )
-            delete m_handlers[n];
-    }
-
-    delete m_handlerDefault;
     delete m_renderer;
     delete m_scheme;
     wxArtProvider::RemoveProvider(m_artProvider);
