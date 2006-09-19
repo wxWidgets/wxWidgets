@@ -598,6 +598,21 @@ typedef pid_t GPid;
 #undef VA_LIST_IS_ARRAY
 
 /*
+ * Define if the compiler supports variadic macros
+ */
+#define HAVE_VARIADIC_MACROS 1
+
+#if defined(__NAMESPACE_STD) && !defined(__NAMESPACE_STD_ONLY)
+/*
+ * Define if your compiler has std::wstring
+ */
+#deffine HAVE_STD_WSTRING 1
+/*
+ * Define if your compiler has compliant std::string::compare
+ */
+#define HAVE_STD_STRING_COMPARE 1
+#else
+/*
  * Define if your compiler has std::wstring
  */
 /* #unfine HAVE_STD_WSTRING */
@@ -605,6 +620,8 @@ typedef pid_t GPid;
  * Define if your compiler has compliant std::string::compare
  */
 #undef HAVE_STD_STRING_COMPARE
+#endif
+
 /*
  * Define if your compiler has <hash_map>
  */
@@ -1132,6 +1149,14 @@ typedef pid_t GPid;
 /* Define this if you have wprintf() and related functions */
 #define HAVE_WPRINTF 1
 
+
+/* Define this if you have swprintf() */
+#define HAVE_SWPRINTF 1
+
+/* Define if you have a _broken_ swprintf() declaration in the header,
+ * without a 'size_t max' parameter as second argument */
+#undef HAVE_BROKEN_SWPRINTF_DECL
+
 /* Define this if you have vswprintf() and related functions */
 #define HAVE_VSWPRINTF 1
 
@@ -1171,6 +1196,13 @@ typedef pid_t GPid;
 #define wxUSE_XPM_IN_MSW wxUSE_XPM
 
 #define wxUSE_POSTSCRIPT_ARCHITECTURE_IN_MSW 1
+
+/* Define if the system headers declare the type boolean (which will conflict
+ * with the jpeg headers unless HAVE_BOOLEAN is defined).  */
+#undef HAVE_BOOLEAN
+
+/* Define if the header pbt.h is missing.  */
+#undef NEED_PBT_H
 
 #endif /* __WIN32__ */
 

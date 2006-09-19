@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 18 August 2006                                                      *
+# Date : 19 September 2006                                                   *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -51,12 +51,14 @@ OBJECTS = \
 		choicbkg.obj,\
 		choicdgg.obj,\
 		colrdlgg.obj,\
+		clrpickerg.obj,\
 		datectlg.obj,\
 		dcpsg.obj,\
 		dirctrlg.obj,\
 		dirdlgg.obj,\
 		fdrepdlg.obj,\
 		fontdlgg.obj,\
+		fontpickerg.obj,\
 		grid.obj,\
 		gridctrl.obj,\
 		gridsel.obj,\
@@ -68,6 +70,7 @@ OBJECTS = \
 		logg.obj,\
 		msgdlgg.obj,\
 		numdlgg.obj,\
+		odcombo.obj,\
 		panelg.obj,\
 		printps.obj,\
 		prntdlgg.obj,\
@@ -85,7 +88,9 @@ OBJECTS = \
 		toolbkg.obj,\
 		treebkg.obj,\
 		treectlg.obj,\
-		wizard.obj
+		wizard.obj,\
+		hyperlink.obj,\
+		filepickerg.obj
 
 SOURCES = \
 		accel.cpp,\
@@ -95,6 +100,7 @@ SOURCES = \
 		choicbkg.cpp,\
 		choicdgg.cpp,\
 		colrdlgg.cpp,\
+		clrpickerg.cpp,\
 		datectlg.cpp,\
 		dcpsg.cpp,\
 		dirctrlg.cpp,\
@@ -102,11 +108,11 @@ SOURCES = \
 		filedlgg.cpp,\
 		fdrepdlg.cpp,\
 		fontdlgg.cpp,\
+		fontpickerg.cpp,\
 		grid.cpp,\
 		gridctrl.cpp,\
 		gridsel.cpp,\
 		helpext.cpp,\
-		icon.cpp,\
 		imaglist.cpp,\
 		laywin.cpp,\
 		listbkg.cpp,\
@@ -115,6 +121,7 @@ SOURCES = \
 		msgdlgg.cpp,\
 		notebook.cpp,\
 		numdlgg.cpp,\
+		odcombo.cpp,\
 		paletteg.cpp,\
 		panelg.cpp,\
 		printps.cpp,\
@@ -145,7 +152,10 @@ SOURCES = \
 		splash.cpp,\
 		timer.cpp,\
 		vlbox.cpp,\
-		vscroll.cpp
+		hyperlink.cpp,\
+		filepickerg.cpp,\
+		vscroll.cpp,\
+		icon.cpp
 
 .ifdef __WXMOTIF__
 OBJECTS0=,statusbr.obj,statline.obj,notebook.obj,spinctlg.obj
@@ -155,7 +165,8 @@ OBJECTS0=,accel.obj,filedlgg.obj,dragimgg.obj,fdrepdlg.obj,htmllbox.obj,\
 	listbkg.obj,mdig.obj,spinctlg.obj,splash.obj,timer.obj,\
 	vlbox.obj,vscroll.obj,combog.obj,icon.obj
 .else
-OBJECTS0=,accel.obj,statusbr.obj,filedlgg.obj,paletteg.obj,icon.obj
+OBJECTS0=,accel.obj,statusbr.obj,filedlgg.obj,paletteg.obj,vlbox.obj,\
+	vscroll.obj,combog.obj,icon.obj
 .endif
 .endif
 
@@ -182,6 +193,7 @@ busyinfo.obj : busyinfo.cpp
 calctrl.obj : calctrl.cpp
 caret.obj : caret.cpp
 choicdgg.obj : choicdgg.cpp
+clrpickerg.obj : clrpickerg.cpp
 colrdlgg.obj : colrdlgg.cpp
 datectlg.obj : datectlg.cpp
 dcpsg.obj : dcpsg.cpp
@@ -202,6 +214,7 @@ logg.obj : logg.cpp
 msgdlgg.obj : msgdlgg.cpp
 notebook.obj : notebook.cpp
 numdlgg.obj : numdlgg.cpp
+odcombo.obj : odcombo.cpp
 paletteg.obj : paletteg.cpp
 panelg.obj : panelg.cpp
 printps.obj : printps.cpp
@@ -239,3 +252,6 @@ choicbkg.obj : choicbkg.cpp
 toolbkg.obj : toolbkg.cpp
 treebkg.obj : treebkg.cpp
 combog.obj : combog.cpp
+fontpickerg.obj : fontpickerg.cpp
+hyperlink.obj : hyperlink.cpp
+filepickerg.obj : filepickerg.cpp

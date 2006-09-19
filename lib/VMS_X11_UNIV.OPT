@@ -3,6 +3,7 @@ sys$library:libjpeg.olb/lib
 sys$library:libpng.olb/lib
 sys$library:libz.olb/lib
 sys$library:tiff.olb/lib
+sys$library:expat.olb/lib
 X11:libxpm.olb/lib
 sys$share:iodbc.exe/share
 sys$share:vms_jackets.exe/share

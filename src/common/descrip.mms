@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 18 August 2006                                                      *
+# Date : 19 September 2006                                                   *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -106,6 +106,7 @@ OBJECTS1=fs_inet.obj,\
 		fs_zip.obj,\
 		ftp.obj,\
 		gaugecmn.obj,\
+		gbsizer.obj,\
 		gdicmn.obj,\
 		gifdecod.obj,\
 		hash.obj,\
@@ -188,7 +189,11 @@ OBJECTS2=tbarbase.obj,\
 		wincmn.obj,\
 		xpmdecod.obj,\
 		zipstrm.obj,\
-		zstream.obj
+		zstream.obj,\
+		clrpickercmn.obj,\
+		filepickercmn.obj,\
+		fontpickercmn.obj,\
+		pickerbase.obj
 
 OBJECTS_MOTIF=radiocmn.obj
 
@@ -254,6 +259,7 @@ SOURCES = \
 		fs_zip.cpp,\
 		ftp.cpp,\
 		gaugecmn.cpp,\
+		gbsizer.cpp,\
 		gdicmn.cpp,\
 		gifdecod.cpp,\
 		hash.cpp,\
@@ -335,6 +341,10 @@ SOURCES = \
 		xpmdecod.cpp,\
 		zipstrm.cpp,\
 		zstream.cpp,\
+		clrpickercmn.cpp,\
+		filepickercmn.cpp,\
+		fontpickercmn.cpp,\
+		pickerbase.cpp,\
 		accesscmn.cpp,\
 		dndcmn.cpp,\
 		dpycmn.cpp,\
@@ -366,9 +376,11 @@ all : $(SOURCES)
 	library [--.lib]libwx_motif.olb $(OBJECTS_MOTIF)
 .else
 .ifdef __WXGTK__
+	$(MMS)$(MMSQUALIFIERS) $(OBJECTS_X11)
 	library [--.lib]libwx_gtk.olb $(OBJECTS)
 	library [--.lib]libwx_gtk.olb $(OBJECTS1)
 	library [--.lib]libwx_gtk.olb $(OBJECTS2)
+	library [--.lib]libwx_gtk.olb $(OBJECTS_X11)
 .else
 .ifdef __WXGTK2__
 	library [--.lib]libwx_gtk2.olb $(OBJECTS)
@@ -440,6 +452,7 @@ fs_inet.obj : fs_inet.cpp
 fs_zip.obj : fs_zip.cpp
 ftp.obj : ftp.cpp
 gaugecmn.obj : gaugecmn.cpp
+gbsizer.obj : gbsizer.cpp
 gdicmn.obj : gdicmn.cpp
 gifdecod.obj : gifdecod.cpp
 hash.obj : hash.cpp
@@ -541,3 +554,7 @@ xtixml.obj : xtixml.cpp
 uri.obj : uri.cpp
 dpycmn.obj : dpycmn.cpp
 combocmn.obj : combocmn.cpp
+clrpickercmn.obj : clrpickercmn.cpp
+filepickercmn.obj : filepickercmn.cpp
+fontpickercmn.obj : fontpickercmn.cpp
+pickerbase.obj : pickerbase.cpp

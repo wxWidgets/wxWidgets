@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 15 June 2006                                                        *
+# Date : 19 September 2006                                                   *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -87,6 +87,8 @@ gtk : [.include.wx]setup.h
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1)
 	set default [-.richedit]
 #	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1)
+	set default [-.xrc]
+	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1)
 	set default [--]
 
 gtk2 : [.include.wx]setup.h
