@@ -214,6 +214,7 @@ public:
 
     void operator =(const wxRichTextRange& range) { m_start = range.m_start; m_end = range.m_end; }
     bool operator ==(const wxRichTextRange& range) const { return (m_start == range.m_start && m_end == range.m_end); }
+    bool operator !=(const wxRichTextRange& range) const { return (m_start != range.m_start && m_end != range.m_end); }
     wxRichTextRange operator -(const wxRichTextRange& range) const { return wxRichTextRange(m_start - range.m_start, m_end - range.m_end); }
     wxRichTextRange operator +(const wxRichTextRange& range) const { return wxRichTextRange(m_start + range.m_start, m_end + range.m_end); }
 
@@ -245,6 +246,12 @@ public:
 
     /// Swaps the start and end
     void Swap() { long tmp = m_start; m_start = m_end; m_end = tmp; }
+
+    /// Convert to internal form: (n, n) is the range of a single character.
+    wxRichTextRange ToInternal() const { return wxRichTextRange(m_start, m_end-1); }
+
+    /// Convert from internal to public API form: (n, n+1) is the range of a single character.
+    wxRichTextRange FromInternal() const { return wxRichTextRange(m_start, m_end+1); }
 
 protected:
     long m_start;

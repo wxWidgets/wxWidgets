@@ -259,7 +259,7 @@ void wxRichTextCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
             SetupScrollbars();
         }
 
-        GetBuffer().Draw(dc, GetBuffer().GetRange(), GetSelectionRange(), drawingArea, 0 /* descent */, 0 /* flags */);
+        GetBuffer().Draw(dc, GetBuffer().GetRange(), GetInternalSelectionRange(), drawingArea, 0 /* descent */, 0 /* flags */);
     }
 
     if (GetCaret())
@@ -1597,7 +1597,7 @@ wxRichTextRange wxRichTextCtrl::AddImage(const wxImage& image)
 
 void wxRichTextCtrl::SelectAll()
 {
-    SetSelection(0, GetLastPosition());
+    SetSelection(0, GetLastPosition()+1);
     m_selectionAnchor = -1;
 }
 
@@ -1693,7 +1693,8 @@ wxString wxRichTextCtrl::GetValue() const
 
 wxString wxRichTextCtrl::GetRange(long from, long to) const
 {
-    return GetBuffer().GetTextForRange(wxRichTextRange(from, to));
+    // Public API for range is different from internals
+    return GetBuffer().GetTextForRange(wxRichTextRange(from, to-1));
 }
 
 void wxRichTextCtrl::SetValue(const wxString& value)
@@ -1907,6 +1908,8 @@ void wxRichTextCtrl::GetSelection(long* from, long* to) const
 {
     *from = m_selectionRange.GetStart();
     *to = m_selectionRange.GetEnd();
+    if ((*to) != -1 && (*to) != -2)
+        (*to) ++;
 }
 
 bool wxRichTextCtrl::IsEditable() const
@@ -1925,7 +1928,7 @@ void wxRichTextCtrl::SetSelection(long from, long to)
     if ( (from == -1) && (to == -1) )
     {
         from = 0;
-        to = GetLastPosition();
+        to = GetLastPosition()+1;
     }
 
     DoSetSelection(from, to);
@@ -1934,7 +1937,7 @@ void wxRichTextCtrl::SetSelection(long from, long to)
 void wxRichTextCtrl::DoSetSelection(long from, long to, bool WXUNUSED(scrollCaret))
 {
     m_selectionAnchor = from;
-    m_selectionRange.SetRange(from, to);
+    m_selectionRange.SetRange(from, to-1);
     Refresh(false);
     PositionCaret();
 }
@@ -2208,17 +2211,17 @@ void wxRichTextCtrl::OnContextMenu(wxContextMenuEvent& WXUNUSED(event))
 
 bool wxRichTextCtrl::SetStyle(long start, long end, const wxTextAttrEx& style)
 {
-    return GetBuffer().SetStyle(wxRichTextRange(start, end), style);
+    return GetBuffer().SetStyle(wxRichTextRange(start, end-1), style);
 }
 
 bool wxRichTextCtrl::SetStyle(long start, long end, const wxTextAttr& style)
 {
-    return GetBuffer().SetStyle(wxRichTextRange(start, end), wxTextAttrEx(style));
+    return GetBuffer().SetStyle(wxRichTextRange(start, end-1), wxTextAttrEx(style));
 }
 
 bool wxRichTextCtrl::SetStyle(const wxRichTextRange& range, const wxRichTextAttr& style)
 {
-    return GetBuffer().SetStyle(range, style);
+    return GetBuffer().SetStyle(range.ToInternal(), style);
 }
 
 bool wxRichTextCtrl::SetDefaultStyle(const wxTextAttrEx& style)
@@ -2421,7 +2424,7 @@ bool wxRichTextCtrl::IsSelectionBold() const
     if (HasSelection())
     {
         wxRichTextAttr attr;
-        wxRichTextRange range = GetSelectionRange();
+        wxRichTextRange range = GetInternalSelectionRange();
         attr.SetFlags(wxTEXT_ATTR_FONT_WEIGHT);
         attr.SetFontWeight(wxBOLD);
 
@@ -2450,7 +2453,7 @@ bool wxRichTextCtrl::IsSelectionItalics() const
 {
     if (HasSelection())
     {
-        wxRichTextRange range = GetSelectionRange();
+        wxRichTextRange range = GetInternalSelectionRange();
         wxRichTextAttr attr;
         attr.SetFlags(wxTEXT_ATTR_FONT_ITALIC);
         attr.SetFontStyle(wxITALIC);
@@ -2480,7 +2483,7 @@ bool wxRichTextCtrl::IsSelectionUnderlined() const
 {
     if (HasSelection())
     {
-        wxRichTextRange range = GetSelectionRange();
+        wxRichTextRange range = GetInternalSelectionRange();
         wxRichTextAttr attr;
         attr.SetFlags(wxTEXT_ATTR_FONT_UNDERLINE);
         attr.SetFontUnderlined(true);
@@ -2552,7 +2555,7 @@ bool wxRichTextCtrl::IsSelectionAligned(wxTextAttrAlignment alignment) const
 {
     if (HasSelection())
     {
-        wxRichTextRange range = GetSelectionRange();
+        wxRichTextRange range = GetInternalSelectionRange();
         wxRichTextAttr attr;
         attr.SetAlignment(alignment);
 
@@ -2579,7 +2582,7 @@ bool wxRichTextCtrl::ApplyAlignmentToSelection(wxTextAttrAlignment alignment)
     {
         wxRichTextParagraph* para = GetBuffer().GetParagraphAtPosition(GetCaretPosition()+1);
         if (para)
-            return SetStyle(para->GetRange(), attr);
+            return SetStyle(para->GetRange().FromInternal(), attr);
     }
     return true;
 }
@@ -2641,6 +2644,28 @@ long wxRichTextCtrl::GetAdjustedCaretPosition(long caretPos) const
     if (para && (caretPos+1 == para->GetRange().GetStart()))
         caretPos ++;
     return caretPos;
+}
+
+/// Get/set the selection range in character positions. -1, -1 means no selection.
+/// The range is in API convention, i.e. a single character selection is denoted
+/// by (n, n+1)
+wxRichTextRange wxRichTextCtrl::GetSelectionRange() const
+{
+    wxRichTextRange range = GetInternalSelectionRange();
+    if (range != wxRichTextRange(-2,-2) && range != wxRichTextRange(-1,-1))
+        range.SetEnd(range.GetEnd() + 1);
+    return range;
+}
+
+void wxRichTextCtrl::SetSelectionRange(const wxRichTextRange& range)
+{
+    wxRichTextRange range1(range);
+    if (range1 != wxRichTextRange(-2,-2) && range1 != wxRichTextRange(-1,-1) )
+        range1.SetEnd(range1.GetEnd() - 1);
+
+    wxASSERT( range1.GetStart() > range1.GetEnd() );
+    
+    SetInternalSelectionRange(range1);
 }
 
 #endif

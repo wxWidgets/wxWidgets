@@ -380,8 +380,16 @@ public:
     virtual void SelectNone();
 
     /// Get/set the selection range in character positions. -1, -1 means no selection.
-    const wxRichTextRange& GetSelectionRange() const { return m_selectionRange; }
-    void SetSelectionRange(const wxRichTextRange& range) { m_selectionRange = range; }
+    /// The range is in API convention, i.e. a single character selection is denoted
+    /// by (n, n+1)
+    wxRichTextRange GetSelectionRange() const;
+    void SetSelectionRange(const wxRichTextRange& range);
+
+    /// Get/set the selection range in character positions. -1, -1 means no selection.
+    /// The range is in internal format, i.e. a single character selection is denoted
+    /// by (n, n)
+    const wxRichTextRange& GetInternalSelectionRange() const { return m_selectionRange; }
+    void SetInternalSelectionRange(const wxRichTextRange& range) { m_selectionRange = range; }
 
     /// Add a new paragraph of text to the end of the buffer
     virtual wxRichTextRange AddParagraph(const wxString& text);
