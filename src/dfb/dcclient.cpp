@@ -38,6 +38,46 @@
 // ===========================================================================
 
 //-----------------------------------------------------------------------------
+// helpers
+//-----------------------------------------------------------------------------
+
+// Returns subrect of the window that is not outside of its parent's
+// boundaries ("hidden behind its borders"), recursively:
+static wxRect GetUncoveredWindowArea(wxWindow *win)
+{
+    wxRect r(win->GetRect());
+
+    if ( win->IsTopLevel() )
+        return r;
+
+    wxWindow *parent = win->GetParent();
+    if ( !parent )
+        return r;
+
+    // intersect with parent's uncovered area, after offsetting it into win's
+    // coordinates; this will remove parts of 'r' that are outside of the
+    // parent's area:
+    wxRect rp(GetUncoveredWindowArea(parent));
+    rp.Offset(-win->GetPosition());
+    rp.Offset(-parent->GetClientAreaOrigin());
+    r.Intersect(rp);
+
+    return r;
+}
+
+// creates a dummy surface that has the same format as the real window's
+// surface, but is not visible and so can be painted on even if the window
+// is hidden
+static
+wxIDirectFBSurfacePtr CreateDummySurface(wxWindow *win, const wxRect *rect)
+{
+    wxLogTrace(TRACE_PAINT, _T("%p ('%s'): creating dummy DC surface"),
+               win, win->GetName().c_str());
+    wxSize size(rect ? rect->GetSize() : win->GetSize());
+    return win->GetDfbSurface()->CreateCompatible(size);
+}
+
+//-----------------------------------------------------------------------------
 // wxWindowDC
 //-----------------------------------------------------------------------------
 
@@ -50,8 +90,6 @@ wxWindowDC::wxWindowDC(wxWindow *win)
 
 void wxWindowDC::InitForWin(wxWindow *win, const wxRect *rect)
 {
-    m_win = win;
-
     wxCHECK_RET( win, _T("invalid window") );
 
     // obtain the surface used for painting:
@@ -65,10 +103,11 @@ void wxWindowDC::InitForWin(wxWindow *win, const wxRect *rect)
         // we still need a valid DC so that e.g. text extents can be measured,
         // so let's create a dummy surface that has the same format as the real
         // one would have and let the code paint on it:
-        wxLogTrace(TRACE_PAINT, _T("%p ('%s'): creating dummy DC surface"),
-                   win, win->GetName().c_str());
-        wxSize size(rect ? rect->GetSize() : win->GetSize());
-        surface = win->GetDfbSurface()->CreateCompatible(size);
+        surface = CreateDummySurface(win, rect);
+
+        // painting on hidden window has no effect on TLW's surface, don't
+        // waste time flipping the dummy surface:
+        m_shouldFlip = false;
     }
     else
     {
@@ -77,10 +116,43 @@ void wxWindowDC::InitForWin(wxWindow *win, const wxRect *rect)
         // compute painting rectangle after clipping if we're in PaintWindow
         // code, otherwise paint on the entire window:
         wxRect r(rectOrig);
-        if ( win->GetTLW()->IsPainting() )
-            r.Intersect(win->GetUpdateRegion().AsRect());
 
-        wxCHECK_RET( !r.IsEmpty(), _T("invalid painting rectangle") );
+        const wxRegion& updateRegion = win->GetUpdateRegion();
+        if ( win->GetTLW()->IsPainting() && !updateRegion.IsEmpty() )
+        {
+            r.Intersect(updateRegion.AsRect());
+            // parent TLW will flip the entire surface when painting is done
+            m_shouldFlip = false;
+
+            wxCHECK_RET( !r.IsEmpty(), _T("invalid painting rectangle") );
+        }
+        else
+        {
+            // One of two things happened:
+            // (1) the TLW is not being painted by PaintWindow() now; or
+            // (2) we're drawing on some window other than the one that is
+            //     currently painted on by PaintWindow()
+            // In either case, we need to flip the surface when we're done
+            // painting and we don't have to use updateRegion for clipping.
+            // OTOH, if the window is (partially) hidden by being
+            // out of its parent's area, we must clip the surface accordingly.
+            r.Intersect(GetUncoveredWindowArea(win));
+            if ( r.IsEmpty() )
+            {
+                // the window is fully hidden, we can't paint on it, so create
+                // a dummy surface as above
+                surface = CreateDummySurface(win, &rectOrig);
+                m_shouldFlip = false;
+            }
+            else
+            {
+                DFBRectangle dfbrect = { r.x, r.y, r.width, r.height };
+                surface = win->GetDfbSurface()->GetSubSurface(&dfbrect);
+
+                // paint the results immediately
+                m_shouldFlip = true;
+            }
+        }
 
         // if the DC was clipped thanks to rectPaint, we must adjust the origin
         // accordingly; but we do *not* adjust for 'rect', because
@@ -94,9 +166,6 @@ void wxWindowDC::InitForWin(wxWindow *win, const wxRect *rect)
                    rectOrig.x, rectOrig.y, rectOrig.GetRight(), rectOrig.GetBottom(),
                    r.x, r.y, r.GetRight(), r.GetBottom(),
                    origin.x, origin.y);
-
-        DFBRectangle dfbrect = { r.x, r.y, r.width, r.height };
-        surface = win->GetDfbSurface()->GetSubSurface(&dfbrect);
     }
 
     if ( !surface )
@@ -112,19 +181,14 @@ void wxWindowDC::InitForWin(wxWindow *win, const wxRect *rect)
 wxWindowDC::~wxWindowDC()
 {
     wxIDirectFBSurfacePtr surface(GetDirectFBSurface());
-    if ( !surface || !m_win )
-        return;
-
-    // painting on hidden window has no effect on TLW's surface, don't
-    // waste time flipping the dummy surface:
-    if ( !m_win->IsShownOnScreen() )
+    if ( !surface )
         return;
 
     // if no painting was done on the DC, we don't have to flip the surface:
     if ( !m_isBBoxValid )
         return;
 
-    if ( !m_win->GetTLW()->IsPainting() )
+    if ( m_shouldFlip )
     {
         // FIXME: flip only modified parts of the surface
         surface->FlipToFront();

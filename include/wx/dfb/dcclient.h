@@ -22,7 +22,7 @@ class WXDLLIMPEXP_CORE wxWindow;
 class WXDLLIMPEXP_CORE wxWindowDC : public wxDC
 {
 public:
-    wxWindowDC() : m_win(NULL) {}
+    wxWindowDC() : m_shouldFlip(false) {}
     wxWindowDC(wxWindow *win);
     virtual ~wxWindowDC();
 
@@ -32,7 +32,7 @@ protected:
     void InitForWin(wxWindow *win, const wxRect *rect);
 
 private:
-    wxWindow *m_win; // the window the DC paints on
+    bool m_shouldFlip; // flip the surface when done?
 
     DECLARE_DYNAMIC_CLASS(wxWindowDC)
     DECLARE_NO_COPY_CLASS(wxWindowDC)
