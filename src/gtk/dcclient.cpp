@@ -582,8 +582,11 @@ void wxWindowDC::DoDrawArc( wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2,
         {
             gdk_draw_arc( m_window, m_penGC, FALSE, xxc-r, yyc-r, 2*r,2*r, alpha1, alpha2 );
 
-            gdk_draw_line( m_window, m_penGC, xx1, yy1, xxc, yyc );
-            gdk_draw_line( m_window, m_penGC, xxc, yyc, xx2, yy2 );
+            if ((m_brush.GetStyle() != wxTRANSPARENT) && (alpha2 - alpha1 != 360*64))
+            {
+                gdk_draw_line( m_window, m_penGC, xx1, yy1, xxc, yyc );
+                gdk_draw_line( m_window, m_penGC, xxc, yyc, xx2, yy2 );
+            }
         }
     }
 
