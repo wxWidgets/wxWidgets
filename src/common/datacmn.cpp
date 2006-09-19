@@ -60,6 +60,7 @@ extern WXDLLEXPORT_DATA(const wxChar) wxStatusLineNameStr[] = wxT("status_line")
 extern WXDLLEXPORT_DATA(const wxChar) wxTextCtrlNameStr[] = wxT("text");
 extern WXDLLEXPORT_DATA(const wxChar) wxTreeCtrlNameStr[] = wxT("treeCtrl");
 extern WXDLLEXPORT_DATA(const wxChar) wxToolBarNameStr[] = wxT("toolbar");
+extern WXDLLEXPORT_DATA(const wxChar) wxGridNameStr[] = wxT("grid");
 
 // Default messages
 extern WXDLLEXPORT_DATA(const wxChar) wxMessageBoxCaptionStr[] = wxT("Message");

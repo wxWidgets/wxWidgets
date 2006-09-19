@@ -28,6 +28,8 @@
 // constants
 // ----------------------------------------------------------------------------
 
+extern WXDLLEXPORT_DATA(const wxChar) wxGridNameStr[];
+
 // Default parameters for wxGrid
 //
 #define WXGRID_DEFAULT_NUMBER_ROWS            10
@@ -1077,14 +1079,14 @@ public:
             const wxPoint& pos = wxDefaultPosition,
             const wxSize& size = wxDefaultSize,
             long style = wxWANTS_CHARS,
-            const wxString& name = wxPanelNameStr );
+            const wxString& name = wxGridNameStr );
 
     bool Create( wxWindow *parent,
             wxWindowID id,
             const wxPoint& pos = wxDefaultPosition,
             const wxSize& size = wxDefaultSize,
             long style = wxWANTS_CHARS,
-            const wxString& name = wxPanelNameStr );
+            const wxString& name = wxGridNameStr );
 
     virtual ~wxGrid();
 
