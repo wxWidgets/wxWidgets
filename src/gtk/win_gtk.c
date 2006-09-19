@@ -84,6 +84,7 @@ gtk_pizza_get_type ()
             sizeof (GtkPizza),
             16,             /* n_preallocs */
             (GInstanceInitFunc) gtk_pizza_init,
+            NULL
         };
         pizza_type = g_type_register_static (GTK_TYPE_CONTAINER, "GtkPizza", &pizza_info, (GTypeFlags)0);
     }

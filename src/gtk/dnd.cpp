@@ -655,7 +655,7 @@ source_drag_data_get  (GtkWidget          *WXUNUSED(widget),
 
 extern "C" {
 static void source_drag_data_delete( GtkWidget *WXUNUSED(widget),
-                                     GdkDragContext *context,
+                                     GdkDragContext *WXUNUSED(context),
                                      wxDropSource *WXUNUSED(drop_source) )
 {
     if (g_isIdle)

@@ -56,7 +56,8 @@ gtk_tree_entry_get_type ()
             NULL,           /* class_data */
             sizeof (GtkTreeEntry),
             16,             /* n_preallocs */
-            (GInstanceInitFunc) gtk_tree_entry_init /*instance_init*/
+            (GInstanceInitFunc) gtk_tree_entry_init, /*instance_init*/
+            NULL            /* value_table */
         };
         tree_entry_type = g_type_register_static (G_TYPE_OBJECT, "GtkTreeEntry",
                                                   &tree_entry_info,

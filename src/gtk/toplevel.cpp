@@ -202,7 +202,9 @@ static gboolean gtk_frame_focus_out_callback( GtkWidget *widget,
 //-----------------------------------------------------------------------------
 
 extern "C" {
-static gboolean gtk_frame_focus_callback( GtkWidget *widget, GtkDirectionType WXUNUSED(d), wxWindow *WXUNUSED(win) )
+static gboolean gtk_frame_focus_callback( GtkWidget *WXUNUSED(widget),
+                                          GtkDirectionType WXUNUSED(d),
+                                          wxWindow *WXUNUSED(win) )
 {
     if (g_isIdle)
         wxapp_install_idle_handler();
