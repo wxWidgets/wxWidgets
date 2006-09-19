@@ -7519,12 +7519,6 @@ void wxGrid::DrawCellHighlight( wxDC& dc, const wxGridCellAttr *attr )
         rect.width -= penWidth - 1;
         rect.height -= penWidth - 1;
 
-#ifdef __WXGTK__
-        // FIXME: why is the rect drawn off-by-one?
-        if ((penWidth == 2) && (GetLayoutDirection() == wxLayout_RightToLeft))
-            rect.x -= 1;
-#endif
-
         // Now draw the rectangle
         // use the cellHighlightColour if the cell is inside a selection, this
         // will ensure the cell is always visible.
@@ -7758,7 +7752,12 @@ void wxGrid::DrawAllGridLines( wxDC& dc, const wxRegion & WXUNUSED(reg) )
     {
         i = GetColAt( colPos );
 
-        int colRight = GetColRight(i) - 1;
+        int colRight = GetColRight(i);
+#ifdef __WXGTK__
+        if (GetLayoutDirection() != wxLayout_RightToLeft)
+#endif
+            colRight--;
+
         if ( colRight > right )
         {
             break;
