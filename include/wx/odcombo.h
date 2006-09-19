@@ -44,7 +44,14 @@ enum
 {
     // when set, we are painting the selected item in control,
     // not in the popup
-    wxODCB_PAINTING_CONTROL         = 0x0001
+    wxODCB_PAINTING_CONTROL         = 0x0001,
+
+
+    // when set, we are painting an item which should have
+    // focus rectangle painted in the background. Text colour
+    // and clipping region are then appropriately set in
+    // the default OnDrawBackground implementation.
+    wxODCB_PAINTING_SELECTED        = 0x0002
 };
 
 

@@ -107,7 +107,13 @@ void wxVListBoxComboPopup::PaintComboControl( wxDC& dc, const wxRect& rect )
 {
     if ( !(m_combo->GetWindowStyle() & wxODCB_STD_CONTROL_PAINT) )
     {
-        OnDrawBg(dc,rect,m_value,wxODCB_PAINTING_CONTROL);
+        int flags = wxODCB_PAINTING_CONTROL;
+
+        if ( m_combo->ShouldDrawFocus() )
+            flags |= wxODCB_PAINTING_SELECTED;
+
+        OnDrawBg(dc, rect, m_value, flags);
+
         if ( m_value >= 0 )
         {
             OnDrawItem(dc,rect,m_value,wxODCB_PAINTING_CONTROL);
@@ -164,6 +170,9 @@ void wxVListBoxComboPopup::OnDrawBg( wxDC& dc,
 
     wxASSERT_MSG( combo->IsKindOf(CLASSINFO(wxOwnerDrawnComboBox)),
                   wxT("you must subclass wxVListBoxComboPopup for drawing and measuring methods") );
+
+    if ( IsCurrent((size_t)item) && !(flags & wxODCB_PAINTING_CONTROL) )
+        flags |= wxODCB_PAINTING_SELECTED;
 
     combo->OnDrawBackground(dc,rect,item,flags);
 }
@@ -1053,23 +1062,25 @@ wxCoord wxOwnerDrawnComboBox::OnMeasureItemWidth( size_t WXUNUSED(item) ) const
     return -1;
 }
 
-void wxOwnerDrawnComboBox::OnDrawBackground(wxDC& dc, const wxRect& rect, int item, int flags) const
+void wxOwnerDrawnComboBox::OnDrawBackground(wxDC& dc,
+                                            const wxRect& rect,
+                                            int WXUNUSED(item),
+                                            int flags) const
 {
-    // we need to render selected and current items differently
-    if ( GetVListBoxComboPopup()->IsCurrent((size_t)item) ||
-         (flags & wxODCB_PAINTING_CONTROL) )
+    // We need only to explicitly draw background for items
+    // that should have selected background. Also, call PrepareBackground
+    // always when painting the control so that clipping is done properly.
+
+    if ( (flags & wxODCB_PAINTING_SELECTED) ||
+         ((flags & wxODCB_PAINTING_CONTROL) && HasFlag(wxCB_READONLY)) )
     {
         int bgFlags = wxCONTROL_SELECTED;
 
-        if ( (flags & wxODCB_PAINTING_CONTROL) != wxODCB_PAINTING_CONTROL )
-        {
+        if ( !(flags & wxODCB_PAINTING_CONTROL) )
             bgFlags |= wxCONTROL_ISSUBMENU;
-            PrepareBackground(dc, rect, bgFlags);
-        }
-        else if ( HasFlag(wxCB_READONLY) )
-            PrepareBackground(dc, rect, bgFlags);
+
+        PrepareBackground(dc, rect, bgFlags);
     }
-    //else: do nothing for the normal items
 }
 
 #endif // wxUSE_ODCOMBOBOX
