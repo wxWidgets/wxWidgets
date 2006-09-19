@@ -863,6 +863,9 @@ void MyCanvas::DrawCircles(wxDC& dc)
         y = 100,
         r = 20;
 
+    dc.SetPen( *wxRED_PEN );
+    dc.SetBrush( *wxGREEN_BRUSH );
+
     dc.DrawText(_T("Some circles"), 0, y);
     dc.DrawCircle(x, y, r);
     dc.DrawCircle(x + 2*r, y, r);
@@ -885,6 +888,36 @@ void MyCanvas::DrawCircles(wxDC& dc)
     dc.DrawEllipticArc(x + r, y, 2*r, r, 90, 180);
     dc.DrawEllipticArc(x + 3*r, y, 2*r, r, 180, 270);
     dc.DrawEllipticArc(x + 5*r, y, 2*r, r, 270, 360);
+    
+    // same as above, just transparent brush
+    
+    dc.SetPen( *wxRED_PEN );
+    dc.SetBrush( *wxTRANSPARENT_BRUSH );
+
+    y += 2*r;
+    dc.DrawText(_T("Some circles"), 0, y);
+    dc.DrawCircle(x, y, r);
+    dc.DrawCircle(x + 2*r, y, r);
+    dc.DrawCircle(x + 4*r, y, r);
+
+    y += 2*r;
+    dc.DrawText(_T("And ellipses"), 0, y);
+    dc.DrawEllipse(x - r, y, 2*r, r);
+    dc.DrawEllipse(x + r, y, 2*r, r);
+    dc.DrawEllipse(x + 3*r, y, 2*r, r);
+
+    y += 2*r;
+    dc.DrawText(_T("And arcs"), 0, y);
+    dc.DrawArc(x - r, y, x + r, y, x, y);
+    dc.DrawArc(x + 4*r, y, x + 2*r, y, x + 3*r, y);
+    dc.DrawArc(x + 5*r, y, x + 5*r, y, x + 6*r, y);
+
+    y += 2*r;
+    dc.DrawEllipticArc(x - r, y, 2*r, r, 0, 90);
+    dc.DrawEllipticArc(x + r, y, 2*r, r, 90, 180);
+    dc.DrawEllipticArc(x + 3*r, y, 2*r, r, 180, 270);
+    dc.DrawEllipticArc(x + 5*r, y, 2*r, r, 270, 360);
+    
 }
 
 void MyCanvas::DrawSplines(wxDC& dc)
