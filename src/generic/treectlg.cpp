@@ -1891,8 +1891,15 @@ void wxGenericTreeCtrl::SelectItem(const wxTreeItemId& itemId, bool select)
         wxGenericTreeItem *item = (wxGenericTreeItem*) itemId.m_pItem;
         wxCHECK_RET( item, wxT("SelectItem(): invalid tree item") );
 
+        wxTreeEvent event(wxEVT_COMMAND_TREE_SEL_CHANGING, this, item);
+        if ( GetEventHandler()->ProcessEvent( event ) && !event.IsAllowed() )
+            return;
+
         item->SetHilight(false);
         RefreshLine(item);
+        
+        event.SetEventType(wxEVT_COMMAND_TREE_SEL_CHANGED);
+        GetEventHandler()->ProcessEvent( event );
     }
 }
 
