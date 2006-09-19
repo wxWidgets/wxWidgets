@@ -43,16 +43,12 @@ MAKEARGS = -DCC="$(CC)" -DCXX="$(CXX)" -DCFLAGS="$(CFLAGS)" \
 
 ### Targets: ###
 
-all: configtool emulator helpview tex2rtf helpgen
+all: emulator helpview tex2rtf helpgen
 
 clean: 
 	-if exist .\*.obj del .\*.obj
 	-if exist .\*.res del .\*.res
 	-if exist .\*.csm del .\*.csm
-	@echo cd configtool\src >configtool.bat
-	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) clean >>configtool.bat
-	call configtool.bat
-	@del configtool.bat
 	@echo cd emulator\src >emulator.bat
 	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) clean >>emulator.bat
 	call emulator.bat
@@ -69,12 +65,6 @@ clean:
 	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) clean >>helpgen.bat
 	call helpgen.bat
 	@del helpgen.bat
-
-configtool: 
-	@echo cd configtool\src >configtool.bat
-	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) all >>configtool.bat
-	call configtool.bat
-	@del configtool.bat
 
 emulator: 
 	@echo cd emulator\src >emulator.bat

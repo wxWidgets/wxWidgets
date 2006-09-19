@@ -20,7 +20,7 @@ DESTDIR =
 
 ### Targets: ###
 
-all: configtool emulator helpview tex2rtf helpgen
+all: emulator helpview tex2rtf helpgen
 
 install: all install_tex2rtf install_helpgen
 
@@ -31,7 +31,6 @@ install-strip: install install-strip_tex2rtf install-strip_helpgen
 clean: 
 	rm -rf ./.deps ./.pch
 	rm -f ./*.o
-	(cd configtool/src && $(MAKE) clean)
 	(cd emulator/src && $(MAKE) clean)
 	(cd helpview/src && $(MAKE) clean)
 	(cd tex2rtf/src && $(MAKE) clean)
@@ -39,9 +38,6 @@ clean:
 
 distclean: clean
 	rm -f config.cache config.log config.status bk-deps bk-make-pch shared-ld-sh Makefile
-
-configtool: 
-	(cd configtool/src && $(MAKE) all)
 
 emulator: 
 	(cd emulator/src && $(MAKE) all)
@@ -71,4 +67,4 @@ install-strip_helpgen:
 # Include dependency info, if present:
 @IF_GNU_MAKE@-include .deps/*.d
 
-.PHONY: all install uninstall clean distclean configtool emulator helpview tex2rtf install_tex2rtf install-strip_tex2rtf helpgen install_helpgen install-strip_helpgen
+.PHONY: all install uninstall clean distclean emulator helpview tex2rtf install_tex2rtf install-strip_tex2rtf helpgen install_helpgen install-strip_helpgen

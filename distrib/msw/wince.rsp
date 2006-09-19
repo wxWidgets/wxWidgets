@@ -405,9 +405,6 @@ contrib/build/svg/svg.vcw
 contrib/samples/svg/svgtest.vcp
 contrib/samples/svg/svgtest.vcw
 
-utils/configtool/src/configtool.vcp
-utils/configtool/src/configtool.vcw
-
 tests/*.vcp
 tests/*.vcw
 

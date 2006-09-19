@@ -301,8 +301,6 @@ contrib/samples/foldbar/extended/extended.dsp
 
 contrib/samples/foldbar/foldpanelbar/foldtest.dsp
 
-utils/configtool/src/configtool.dsp
-
 utils/hhp2cached/hhp2cached.dsp
 
 tests/*.dsp

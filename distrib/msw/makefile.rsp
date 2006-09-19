@@ -117,8 +117,6 @@ utils/emulator/Makefile.in
 utils/emulator/src/Makefile.in
 utils/helpview/Makefile.in
 utils/helpview/src/Makefile.in
-utils/configtool/Makefile.in
-utils/configtool/src/Makefile.in
 utils/wxrc/Makefile.in
 
 contrib/Makefile.in

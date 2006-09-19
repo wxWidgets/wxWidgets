@@ -135,7 +135,6 @@ samples/xrc/makefile.dm?
 samples/widgets/makefile.dm?
 samples/wizard/makefile.dm?
 tests/makefile.dm?
-utils/configtool/src/makefile.dm?
 utils/emulator/src/makefile.dm?
 utils/HelpGen/src/makefile.dm?
 utils/helpview/src/makefile.dm?

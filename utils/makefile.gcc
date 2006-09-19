@@ -33,19 +33,15 @@ MAKEARGS = CC="$(CC)" CXX="$(CXX)" CFLAGS="$(CFLAGS)" CXXFLAGS="$(CXXFLAGS)" \
 
 ### Targets: ###
 
-all: configtool emulator helpview tex2rtf helpgen
+all: emulator helpview tex2rtf helpgen
 
 clean: 
 	-if exist .\*.o del .\*.o
 	-if exist .\*.d del .\*.d
-	$(MAKE) -C configtool\src -f makefile.gcc $(MAKEARGS) clean
 	$(MAKE) -C emulator\src -f makefile.gcc $(MAKEARGS) clean
 	$(MAKE) -C helpview\src -f makefile.gcc $(MAKEARGS) clean
 	$(MAKE) -C tex2rtf\src -f makefile.gcc $(MAKEARGS) clean
 	$(MAKE) -C HelpGen -f makefile.gcc $(MAKEARGS) clean
-
-configtool: 
-	$(MAKE) -C configtool\src -f makefile.gcc $(MAKEARGS) all
 
 emulator: 
 	$(MAKE) -C emulator\src -f makefile.gcc $(MAKEARGS) all
@@ -59,7 +55,7 @@ tex2rtf:
 helpgen: 
 	$(MAKE) -C HelpGen -f makefile.gcc $(MAKEARGS) all
 
-.PHONY: all clean configtool emulator helpview tex2rtf helpgen
+.PHONY: all clean emulator helpview tex2rtf helpgen
 
 
 # Dependencies tracking:

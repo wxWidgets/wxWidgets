@@ -610,21 +610,6 @@ UTILS_DIST: ALL_GUI_DIST
 	$(CP_P) $(UTILSDIR)/tex2rtf/src/*.cpp $(DISTDIR)/utils/tex2rtf/src
 	-$(CP_P) $(UTILSDIR)/tex2rtf/src/tex2rtf.* $(DISTDIR)/utils/tex2rtf/src
 
-	mkdir $(DISTDIR)/utils/configtool
-	mkdir $(DISTDIR)/utils/configtool/configs
-	mkdir $(DISTDIR)/utils/configtool/docs
-	mkdir $(DISTDIR)/utils/configtool/src
-	mkdir $(DISTDIR)/utils/configtool/src/bitmaps
-	mkdir $(DISTDIR)/utils/configtool/scripts
-	$(CP_P) $(UTILSDIR)/configtool/*.in $(DISTDIR)/utils/configtool
-	$(CP_P) $(UTILSDIR)/configtool/configs/*.wxs $(DISTDIR)/utils/configtool/configs
-	$(CP_P) $(UTILSDIR)/configtool/docs/*.txt $(DISTDIR)/utils/configtool/docs
-	$(CP_P) $(UTILSDIR)/configtool/src/*.h $(DISTDIR)/utils/configtool/src
-	$(CP_P) $(UTILSDIR)/configtool/src/*.in $(DISTDIR)/utils/configtool/src
-	$(CP_P) $(UTILSDIR)/configtool/src/*.cpp $(DISTDIR)/utils/configtool/src
-	$(CP_P) $(UTILSDIR)/configtool/src/bitmaps/*.xpm $(DISTDIR)/utils/configtool/src/bitmaps
-	$(CP_P) $(UTILSDIR)/configtool/scripts/????* $(DISTDIR)/utils/configtool/scripts
-
 	mkdir $(DISTDIR)/utils/emulator
 	mkdir $(DISTDIR)/utils/emulator/src
 	mkdir $(DISTDIR)/utils/emulator/docs

@@ -7,11 +7,6 @@
         <dependency-of>all</dependency-of>
     </template>
 
-    <subproject id="configtool" template="sub">
-        <dir>configtool/src</dir>
-        <installable>no</installable>
-    </subproject>
-    
     <subproject id="emulator" template="sub">
         <dir>emulator/src</dir>
         <installable>no</installable>

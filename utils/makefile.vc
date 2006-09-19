@@ -34,15 +34,12 @@ MAKEARGS = CC="$(CC)" CXX="$(CXX)" CFLAGS="$(CFLAGS)" CXXFLAGS="$(CXXFLAGS)" \
 
 ### Targets: ###
 
-all: sub_configtool sub_emulator sub_helpview sub_tex2rtf sub_helpgen
+all: sub_emulator sub_helpview sub_tex2rtf sub_helpgen
 
 clean: 
 	-if exist .\*.obj del .\*.obj
 	-if exist .\*.res del .\*.res
 	-if exist .\*.pch del .\*.pch
-	cd configtool\src
-	$(MAKE) -f makefile.vc $(MAKEARGS) clean
-	cd $(MAKEDIR)
 	cd emulator\src
 	$(MAKE) -f makefile.vc $(MAKEARGS) clean
 	cd $(MAKEDIR)
@@ -54,11 +51,6 @@ clean:
 	cd $(MAKEDIR)
 	cd HelpGen
 	$(MAKE) -f makefile.vc $(MAKEARGS) clean
-	cd $(MAKEDIR)
-
-sub_configtool: 
-	cd configtool\src
-	$(MAKE) -f makefile.vc $(MAKEARGS) all
 	cd $(MAKEDIR)
 
 sub_emulator: 
