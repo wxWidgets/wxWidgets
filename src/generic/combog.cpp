@@ -86,29 +86,29 @@
 
 
 // ----------------------------------------------------------------------------
-// wxGenericComboControl
+// wxGenericComboCtrl
 // ----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(wxGenericComboControl, wxComboCtrlBase)
-    EVT_PAINT(wxGenericComboControl::OnPaintEvent)
-    EVT_MOUSE_EVENTS(wxGenericComboControl::OnMouseEvent)
+BEGIN_EVENT_TABLE(wxGenericComboCtrl, wxComboCtrlBase)
+    EVT_PAINT(wxGenericComboCtrl::OnPaintEvent)
+    EVT_MOUSE_EVENTS(wxGenericComboCtrl::OnMouseEvent)
 END_EVENT_TABLE()
 
 
-IMPLEMENT_DYNAMIC_CLASS(wxGenericComboControl, wxComboCtrlBase)
+IMPLEMENT_DYNAMIC_CLASS(wxGenericComboCtrl, wxComboCtrlBase)
 
-void wxGenericComboControl::Init()
+void wxGenericComboCtrl::Init()
 {
 }
 
-bool wxGenericComboControl::Create(wxWindow *parent,
-                                   wxWindowID id,
-                                   const wxString& value,
-                                   const wxPoint& pos,
-                                   const wxSize& size,
-                                   long style,
-                                   const wxValidator& validator,
-                                   const wxString& name)
+bool wxGenericComboCtrl::Create(wxWindow *parent,
+                                wxWindowID id,
+                                const wxString& value,
+                                const wxPoint& pos,
+                                const wxSize& size,
+                                long style,
+                                const wxValidator& validator,
+                                const wxString& name)
 {
 
     // Set border
@@ -120,12 +120,12 @@ bool wxGenericComboControl::Create(wxWindow *parent,
         border = wxBORDER_SIMPLE;
 #elif defined(__WXMSW__)
         // For XP, have 1-width custom border, for older version use sunken
-        if ( wxUxThemeEngine::GetIfActive() )
+        /*if ( wxUxThemeEngine::GetIfActive() )
         {
             border = wxBORDER_NONE;
             m_widthCustomBorder = 1;
         }
-        else
+        else*/
             border = wxBORDER_SUNKEN;
 #elif defined(__WXGTK__)
         border = wxBORDER_NONE;
@@ -172,11 +172,11 @@ bool wxGenericComboControl::Create(wxWindow *parent,
     return true;
 }
 
-wxGenericComboControl::~wxGenericComboControl()
+wxGenericComboCtrl::~wxGenericComboCtrl()
 {
 }
 
-void wxGenericComboControl::OnResize()
+void wxGenericComboCtrl::OnResize()
 {
 
     // Recalculates button and textctrl areas
@@ -198,7 +198,7 @@ void wxGenericComboControl::OnResize()
     PositionTextCtrl( TEXTCTRLXADJUST, TEXTCTRLYADJUST );
 }
 
-void wxGenericComboControl::OnPaintEvent( wxPaintEvent& WXUNUSED(event) )
+void wxGenericComboCtrl::OnPaintEvent( wxPaintEvent& WXUNUSED(event) )
 {
     wxSize sz = GetClientSize();
     wxBufferedPaintDC dc(this,GetBufferBitmap(sz));
@@ -278,7 +278,7 @@ void wxGenericComboControl::OnPaintEvent( wxPaintEvent& WXUNUSED(event) )
     }
 }
 
-void wxGenericComboControl::OnMouseEvent( wxMouseEvent& event )
+void wxGenericComboCtrl::OnMouseEvent( wxMouseEvent& event )
 {
     bool isOnButtonArea = m_btnArea.Contains(event.m_x,event.m_y);
     int handlerFlags = isOnButtonArea ? wxCC_MF_ON_BUTTON : 0;
@@ -321,7 +321,7 @@ void wxGenericComboControl::OnMouseEvent( wxMouseEvent& event )
 
 }
 
-bool wxGenericComboControl::IsKeyPopupToggle(const wxKeyEvent& event) const
+bool wxGenericComboCtrl::IsKeyPopupToggle(const wxKeyEvent& event) const
 {
     int keycode = event.GetKeyCode();
     bool isPopupShown = IsPopupShown();
@@ -345,9 +345,9 @@ bool wxGenericComboControl::IsKeyPopupToggle(const wxKeyEvent& event) const
 
 #ifdef __WXUNIVERSAL__
 
-bool wxGenericComboControl::PerformAction(const wxControlAction& action,
-                                          long numArg,
-                                          const wxString& strArg)
+bool wxGenericComboCtrl::PerformAction(const wxControlAction& action,
+                                       long numArg,
+                                       const wxString& strArg)
 {
     bool processed = false;
     if ( action == wxACTION_COMBOBOX_POPUP )
@@ -383,7 +383,7 @@ bool wxGenericComboControl::PerformAction(const wxControlAction& action,
 // If native wxComboCtrl was not defined, then prepare a simple
 // front-end so that wxRTTI works as expected.
 #ifndef _WX_COMBOCONTROL_H_
-IMPLEMENT_DYNAMIC_CLASS(wxComboCtrl, wxGenericComboControl)
+IMPLEMENT_DYNAMIC_CLASS(wxComboCtrl, wxGenericComboCtrl)
 #endif
 
 #endif // !wxCOMBOCONTROL_FULLY_FEATURED

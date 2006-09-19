@@ -627,7 +627,7 @@ MyFrame::MyFrame(const wxString& title)
 
 
     wxComboCtrl* cc;
-    wxGenericComboControl* gcc;
+    wxGenericComboCtrl* gcc;
     wxOwnerDrawnComboBox* odc;
 
     // Create common strings array
@@ -745,9 +745,9 @@ MyFrame::MyFrame(const wxString& title)
     // Tree Ctrl wxComboCtrl
     //
 
-    // Note that we test that wxGenericComboControl works
-    gcc = new wxGenericComboControl(panel,wxID_ANY,wxEmptyString,
-                                    wxDefaultPosition, wxDefaultSize);
+    // Note that we test that wxGenericComboCtrl works
+    gcc = new wxGenericComboCtrl(panel,wxID_ANY,wxEmptyString,
+                                 wxDefaultPosition, wxDefaultSize);
 
     // Set popup interface right away, otherwise some of the calls
     // below may fail
