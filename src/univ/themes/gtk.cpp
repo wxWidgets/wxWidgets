@@ -137,6 +137,7 @@ public:
     virtual void DrawLineWrapMark(wxDC& dc, const wxRect& rect);
 #endif // wxUSE_TEXTCTRL
 
+#if wxUSE_NOTEBOOK
     virtual void DrawTab(wxDC& dc,
                          const wxRect& rect,
                          wxDirection dir,
@@ -144,6 +145,7 @@ public:
                          const wxBitmap& bitmap = wxNullBitmap,
                          int flags = 0,
                          int indexAccel = -1);
+#endif // wxUSE_NOTEBOOK
 
 #if wxUSE_SLIDER
     virtual void DrawSliderShaft(wxDC& dc,
@@ -269,8 +271,10 @@ public:
                                      wxCoord *extraSpaceBeyond) const;
 #endif // wxUSE_TEXTCTRL
 
+#if wxUSE_NOTEBOOK
     virtual wxSize GetTabIndent() const { return wxSize(2, 2); }
     virtual wxSize GetTabPadding() const { return wxSize(6, 6); }
+#endif // wxUSE_NOTEBOOK
 
 #if wxUSE_SLIDER
     virtual wxCoord GetSliderDim() const { return 15; }
@@ -1373,6 +1377,8 @@ void wxGTKRenderer::DrawLineWrapMark(wxDC& dc, const wxRect& rect)
 // notebook
 // ----------------------------------------------------------------------------
 
+#if wxUSE_NOTEBOOK
+
 void wxGTKRenderer::DrawTab(wxDC& dc,
                             const wxRect& rectOrig,
                             wxDirection dir,
@@ -1569,11 +1575,13 @@ void wxGTKRenderer::DrawTab(wxDC& dc,
     }
 }
 
-#if wxUSE_SLIDER
+#endif // wxUSE_NOTEBOOK
 
 // ----------------------------------------------------------------------------
 // slider
 // ----------------------------------------------------------------------------
+
+#if wxUSE_SLIDER
 
 wxSize wxGTKRenderer::GetSliderThumbSize(const wxRect& rect,
                                          int lenThumb,

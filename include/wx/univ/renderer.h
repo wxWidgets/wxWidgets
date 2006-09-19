@@ -818,8 +818,10 @@ public:
         { return m_renderer->GetTextClientArea(text, rect, extraSpaceBeyond); }
 #endif // wxUSE_TEXTCTRL
 
+#if wxUSE_NOTEBOOK
     virtual wxSize GetTabIndent() const { return m_renderer->GetTabIndent(); }
     virtual wxSize GetTabPadding() const { return m_renderer->GetTabPadding(); }
+#endif // wxUSE_NOTEBOOK
 
 #if wxUSE_SLIDER
     virtual wxCoord GetSliderDim() const

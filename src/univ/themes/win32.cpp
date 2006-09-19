@@ -186,6 +186,7 @@ public:
                                    int tbarStyle = 0);
 #endif // wxUSE_TOOLBAR
 
+#if wxUSE_NOTEBOOK
     virtual void DrawTab(wxDC& dc,
                          const wxRect& rect,
                          wxDirection dir,
@@ -193,6 +194,7 @@ public:
                          const wxBitmap& bitmap = wxNullBitmap,
                          int flags = 0,
                          int indexAccel = -1);
+#endif // wxUSE_NOTEBOOK
 
 #if wxUSE_SLIDER
     virtual void DrawSliderShaft(wxDC& dc,
@@ -309,8 +311,10 @@ public:
                                      wxCoord *extraSpaceBeyond) const;
 #endif // wxUSE_TEXTCTRL
 
+#if wxUSE_NOTEBOOK
     virtual wxSize GetTabIndent() const { return wxSize(2, 2); }
     virtual wxSize GetTabPadding() const { return wxSize(6, 5); }
+#endif // wxUSE_NOTEBOOK
 
 #if wxUSE_SLIDER
 
@@ -1840,6 +1844,8 @@ void wxWin32Renderer::DrawToolBarButton(wxDC& dc,
 // notebook
 // ----------------------------------------------------------------------------
 
+#if wxUSE_NOTEBOOK
+
 void wxWin32Renderer::DrawTab(wxDC& dc,
                               const wxRect& rectOrig,
                               wxDirection dir,
@@ -2021,6 +2027,8 @@ void wxWin32Renderer::DrawTab(wxDC& dc,
     #undef SELECT_FOR_VERTICAL
     #undef REVERSE_FOR_VERTICAL
 }
+
+#endif // wxUSE_NOTEBOOK
 
 #if wxUSE_SLIDER
 
