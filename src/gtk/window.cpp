@@ -3019,9 +3019,7 @@ void wxWindowGTK::DoGetClientSize( int *width, int *height ) const
         int dh = 0;
 
         if (m_hasScrolling)
-        {
             GetScrollbarWidth(m_widget, dw, dh);
-        }
 
 #ifndef __WXUNIVERSAL__
         if (HasFlag(wxRAISED_BORDER) || HasFlag(wxSUNKEN_BORDER))

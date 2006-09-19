@@ -118,7 +118,8 @@ void wxScrollHelperNative::AdjustScrollbars()
     int w, h;
     int vw, vh;
 
-    m_targetWindow->m_hasScrolling = m_xScrollPixelsPerLine != 0 || m_yScrollPixelsPerLine != 0;
+    // this flag indicates which window has the scrollbars
+    m_win->m_hasScrolling = m_xScrollPixelsPerLine != 0 || m_yScrollPixelsPerLine != 0;
 
     m_targetWindow->GetVirtualSize( &vw, &vh );
 
