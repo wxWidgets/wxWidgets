@@ -96,35 +96,28 @@ void wxWindowDC::InitForWin(wxWindow *win, const wxRect *rect)
     wxPoint origin;
     wxIDirectFBSurfacePtr surface;
 
+    wxRect rectOrig(rect ? *rect : wxRect(win->GetSize()));
+    wxRect r;
+
     if ( !win->IsShownOnScreen() )
     {
-        // we're painting on invisible window: the changes won't have any
-        // effect, as the window will be repainted anyhow when it is shown, but
-        // we still need a valid DC so that e.g. text extents can be measured,
-        // so let's create a dummy surface that has the same format as the real
-        // one would have and let the code paint on it:
-        surface = CreateDummySurface(win, rect);
-
-        // painting on hidden window has no effect on TLW's surface, don't
-        // waste time flipping the dummy surface:
-        m_shouldFlip = false;
+        // leave 'r' rectangle empty to indicate the window is not visible,
+        // see below (below "create the surface:") for how is this case handled
     }
     else
     {
-        wxRect rectOrig(rect ? *rect : wxRect(win->GetSize()));
-
         // compute painting rectangle after clipping if we're in PaintWindow
         // code, otherwise paint on the entire window:
-        wxRect r(rectOrig);
+        r = rectOrig;
 
         const wxRegion& updateRegion = win->GetUpdateRegion();
         if ( win->GetTLW()->IsPainting() && !updateRegion.IsEmpty() )
         {
             r.Intersect(updateRegion.AsRect());
+            wxCHECK_RET( !r.IsEmpty(), _T("invalid painting rectangle") );
+
             // parent TLW will flip the entire surface when painting is done
             m_shouldFlip = false;
-
-            wxCHECK_RET( !r.IsEmpty(), _T("invalid painting rectangle") );
         }
         else
         {
@@ -137,39 +130,47 @@ void wxWindowDC::InitForWin(wxWindow *win, const wxRect *rect)
             // OTOH, if the window is (partially) hidden by being
             // out of its parent's area, we must clip the surface accordingly.
             r.Intersect(GetUncoveredWindowArea(win));
-            if ( r.IsEmpty() )
-            {
-                // the window is fully hidden, we can't paint on it, so create
-                // a dummy surface as above
-                surface = CreateDummySurface(win, &rectOrig);
-                m_shouldFlip = false;
-            }
-            else
-            {
-                DFBRectangle dfbrect = { r.x, r.y, r.width, r.height };
-                surface = win->GetDfbSurface()->GetSubSurface(&dfbrect);
-
-                // paint the results immediately
-                m_shouldFlip = true;
-            }
+            m_shouldFlip = true; // paint the results immediately
         }
+    }
 
-        // if the DC was clipped thanks to rectPaint, we must adjust the origin
-        // accordingly; but we do *not* adjust for 'rect', because
+    // create the surface:
+    if ( r.IsEmpty() )
+    {
+        // we're painting on invisible window: the changes won't have any
+        // effect, as the window will be repainted anyhow when it is shown,
+        // but we still need a valid DC so that e.g. text extents can be
+        // measured, so let's create a dummy surface that has the same
+        // format as the real one would have and let the code paint on it:
+        surface = CreateDummySurface(win, rect);
+
+        // painting on hidden window has no effect on TLW's surface, don't
+        // waste time flipping the dummy surface:
+        m_shouldFlip = false;
+    }
+    else
+    {
+        DFBRectangle dfbrect = { r.x, r.y, r.width, r.height };
+        surface = win->GetDfbSurface()->GetSubSurface(&dfbrect);
+
+        // if the DC was clipped thanks to rectPaint, we must adjust the
+        // origin accordingly; but we do *not* adjust for 'rect', because
         // rect.GetPosition() has coordinates (0,0) in the DC:
         origin.x = rectOrig.x - r.x;
         origin.y = rectOrig.y - r.y;
 
-        wxLogTrace(TRACE_PAINT,
-                   _T("%p ('%s'): creating DC for area [%i,%i,%i,%i], clipped to [%i,%i,%i,%i], origin [%i,%i]"),
-                   win, win->GetName().c_str(),
-                   rectOrig.x, rectOrig.y, rectOrig.GetRight(), rectOrig.GetBottom(),
-                   r.x, r.y, r.GetRight(), r.GetBottom(),
-                   origin.x, origin.y);
+        // m_shouldFlip was set in the "if" block above this one
     }
 
     if ( !surface )
         return;
+
+    wxLogTrace(TRACE_PAINT,
+               _T("%p ('%s'): creating DC for area [%i,%i,%i,%i], clipped to [%i,%i,%i,%i], origin [%i,%i]"),
+               win, win->GetName().c_str(),
+               rectOrig.x, rectOrig.y, rectOrig.GetRight(), rectOrig.GetBottom(),
+               r.x, r.y, r.GetRight(), r.GetBottom(),
+               origin.x, origin.y);
 
     Init(surface);
     SetFont(win->GetFont());
