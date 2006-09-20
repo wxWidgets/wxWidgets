@@ -29,6 +29,16 @@
 #include "wx/univ/stdrend.h"
 #include "wx/univ/colschem.h"
 
+// ----------------------------------------------------------------------------
+// constants
+// ----------------------------------------------------------------------------
+
+static const int FRAME_BORDER_THICKNESS            = 3;
+static const int RESIZEABLE_FRAME_BORDER_THICKNESS = 4;
+static const int FRAME_TITLEBAR_HEIGHT             = 18;
+static const int FRAME_BUTTON_WIDTH                = 16;
+static const int FRAME_BUTTON_HEIGHT               = 14;
+
 // ============================================================================
 // wxStdRenderer implementation
 // ============================================================================
@@ -44,6 +54,9 @@ wxStdRenderer::wxStdRenderer(const wxColourScheme *scheme)
     m_penDarkGrey = wxPen(wxSCHEME_COLOUR(scheme, SHADOW_OUT));
     m_penLightGrey = wxPen(wxSCHEME_COLOUR(scheme, SHADOW_IN));
     m_penHighlight = wxPen(wxSCHEME_COLOUR(scheme, SHADOW_HIGHLIGHT));
+
+    m_titlebarFont = wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT);
+    m_titlebarFont.SetWeight(wxFONTWEIGHT_BOLD);
 }
 
 // ----------------------------------------------------------------------------
@@ -1094,3 +1107,378 @@ void wxStdRenderer::DrawStatusField(wxDC& dc,
 }
 
 #endif // wxUSE_STATUSBAR
+
+// ----------------------------------------------------------------------------
+// top level windows
+// ----------------------------------------------------------------------------
+
+int wxStdRenderer::HitTestFrame(const wxRect& rect, const wxPoint& pt, int flags) const
+{
+    wxRect client = GetFrameClientArea(rect, flags);
+
+    if ( client.Contains(pt) )
+        return wxHT_TOPLEVEL_CLIENT_AREA;
+
+    if ( flags & wxTOPLEVEL_TITLEBAR )
+    {
+        wxRect client = GetFrameClientArea(rect, flags & ~wxTOPLEVEL_TITLEBAR);
+
+        if ( flags & wxTOPLEVEL_ICON )
+        {
+            if ( wxRect(client.GetPosition(), GetFrameIconSize()).Contains(pt) )
+                return wxHT_TOPLEVEL_ICON;
+        }
+
+        wxRect btnRect(client.GetRight() - 2 - FRAME_BUTTON_WIDTH,
+                       client.GetTop() + (FRAME_TITLEBAR_HEIGHT-FRAME_BUTTON_HEIGHT)/2,
+                       FRAME_BUTTON_WIDTH, FRAME_BUTTON_HEIGHT);
+
+        if ( flags & wxTOPLEVEL_BUTTON_CLOSE )
+        {
+            if ( btnRect.Contains(pt) )
+                return wxHT_TOPLEVEL_BUTTON_CLOSE;
+            btnRect.x -= FRAME_BUTTON_WIDTH + 2;
+        }
+        if ( flags & wxTOPLEVEL_BUTTON_MAXIMIZE )
+        {
+            if ( btnRect.Contains(pt) )
+                return wxHT_TOPLEVEL_BUTTON_MAXIMIZE;
+            btnRect.x -= FRAME_BUTTON_WIDTH;
+        }
+        if ( flags & wxTOPLEVEL_BUTTON_RESTORE )
+        {
+            if ( btnRect.Contains(pt) )
+                return wxHT_TOPLEVEL_BUTTON_RESTORE;
+            btnRect.x -= FRAME_BUTTON_WIDTH;
+        }
+        if ( flags & wxTOPLEVEL_BUTTON_ICONIZE )
+        {
+            if ( btnRect.Contains(pt) )
+                return wxHT_TOPLEVEL_BUTTON_ICONIZE;
+            btnRect.x -= FRAME_BUTTON_WIDTH;
+        }
+        if ( flags & wxTOPLEVEL_BUTTON_HELP )
+        {
+            if ( btnRect.Contains(pt) )
+                return wxHT_TOPLEVEL_BUTTON_HELP;
+            btnRect.x -= FRAME_BUTTON_WIDTH;
+        }
+
+        if ( pt.y >= client.y && pt.y < client.y + FRAME_TITLEBAR_HEIGHT )
+            return wxHT_TOPLEVEL_TITLEBAR;
+    }
+
+    if ( (flags & wxTOPLEVEL_BORDER) && !(flags & wxTOPLEVEL_MAXIMIZED) )
+    {
+        // we are certainly at one of borders, let's decide which one:
+
+        int border = 0;
+        // dirty trick, relies on the way wxHT_TOPLEVEL_XXX are defined!
+        if ( pt.x < client.x )
+            border |= wxHT_TOPLEVEL_BORDER_W;
+        else if ( pt.x >= client.width + client.x )
+            border |= wxHT_TOPLEVEL_BORDER_E;
+        if ( pt.y < client.y )
+            border |= wxHT_TOPLEVEL_BORDER_N;
+        else if ( pt.y >= client.height + client.y )
+            border |= wxHT_TOPLEVEL_BORDER_S;
+        return border;
+    }
+
+    return wxHT_NOWHERE;
+}
+
+void wxStdRenderer::DrawFrameTitleBar(wxDC& dc,
+                                      const wxRect& rect,
+                                      const wxString& title,
+                                      const wxIcon& icon,
+                                      int flags,
+                                      int specialButton,
+                                      int specialButtonFlags)
+{
+    if ( (flags & wxTOPLEVEL_BORDER) && !(flags & wxTOPLEVEL_MAXIMIZED) )
+    {
+        DrawFrameBorder(dc, rect, flags);
+    }
+    if ( flags & wxTOPLEVEL_TITLEBAR )
+    {
+        DrawFrameBackground(dc, rect, flags);
+        if ( flags & wxTOPLEVEL_ICON )
+            DrawFrameIcon(dc, rect, icon, flags);
+        DrawFrameTitle(dc, rect, title, flags);
+
+        wxRect client = GetFrameClientArea(rect, flags & ~wxTOPLEVEL_TITLEBAR);
+        wxCoord x,y;
+        x = client.GetRight() - 2 - FRAME_BUTTON_WIDTH;
+        y = client.GetTop() + (FRAME_TITLEBAR_HEIGHT-FRAME_BUTTON_HEIGHT)/2;
+
+        if ( flags & wxTOPLEVEL_BUTTON_CLOSE )
+        {
+            DrawFrameButton(dc, x, y, wxTOPLEVEL_BUTTON_CLOSE,
+                            (specialButton == wxTOPLEVEL_BUTTON_CLOSE) ?
+                            specialButtonFlags : 0);
+            x -= FRAME_BUTTON_WIDTH + 2;
+        }
+        if ( flags & wxTOPLEVEL_BUTTON_MAXIMIZE )
+        {
+            DrawFrameButton(dc, x, y, wxTOPLEVEL_BUTTON_MAXIMIZE,
+                            (specialButton == wxTOPLEVEL_BUTTON_MAXIMIZE) ?
+                            specialButtonFlags : 0);
+            x -= FRAME_BUTTON_WIDTH;
+        }
+        if ( flags & wxTOPLEVEL_BUTTON_RESTORE )
+        {
+            DrawFrameButton(dc, x, y, wxTOPLEVEL_BUTTON_RESTORE,
+                            (specialButton == wxTOPLEVEL_BUTTON_RESTORE) ?
+                            specialButtonFlags : 0);
+            x -= FRAME_BUTTON_WIDTH;
+        }
+        if ( flags & wxTOPLEVEL_BUTTON_ICONIZE )
+        {
+            DrawFrameButton(dc, x, y, wxTOPLEVEL_BUTTON_ICONIZE,
+                            (specialButton == wxTOPLEVEL_BUTTON_ICONIZE) ?
+                            specialButtonFlags : 0);
+            x -= FRAME_BUTTON_WIDTH;
+        }
+        if ( flags & wxTOPLEVEL_BUTTON_HELP )
+        {
+            DrawFrameButton(dc, x, y, wxTOPLEVEL_BUTTON_HELP,
+                            (specialButton == wxTOPLEVEL_BUTTON_HELP) ?
+                            specialButtonFlags : 0);
+        }
+    }
+}
+
+void wxStdRenderer::DrawFrameBorder(wxDC& dc, const wxRect& rect, int flags)
+{
+    if ( !(flags & wxTOPLEVEL_BORDER) )
+        return;
+
+    wxRect r(rect);
+
+    DrawShadedRect(dc, &r, m_penLightGrey, m_penBlack);
+    DrawShadedRect(dc, &r, m_penHighlight, m_penDarkGrey);
+    DrawShadedRect(dc, &r, m_penLightGrey, m_penLightGrey);
+    if ( flags & wxTOPLEVEL_RESIZEABLE )
+        DrawShadedRect(dc, &r, m_penLightGrey, m_penLightGrey);
+}
+
+void wxStdRenderer::DrawFrameBackground(wxDC& dc, const wxRect& rect, int flags)
+{
+    if ( !(flags & wxTOPLEVEL_TITLEBAR) )
+        return;
+
+    wxColour col = m_scheme->Get(flags & wxTOPLEVEL_ACTIVE
+                                    ? wxColourScheme::TITLEBAR_ACTIVE
+                                    : wxColourScheme::TITLEBAR);
+
+    wxRect r = GetFrameClientArea(rect, flags & ~wxTOPLEVEL_TITLEBAR);
+    r.height = FRAME_TITLEBAR_HEIGHT;
+
+    DrawBackground(dc, col, r);
+}
+
+void wxStdRenderer::DrawFrameTitle(wxDC& dc,
+                                   const wxRect& rect,
+                                   const wxString& title,
+                                   int flags)
+{
+    wxColour col = m_scheme->Get(flags & wxTOPLEVEL_ACTIVE
+                                    ? wxColourScheme::TITLEBAR_ACTIVE_TEXT
+                                    : wxColourScheme::TITLEBAR_TEXT);
+    dc.SetTextForeground(col);
+
+    wxRect r = GetFrameClientArea(rect, flags & ~wxTOPLEVEL_TITLEBAR);
+    r.height = FRAME_TITLEBAR_HEIGHT;
+    if ( flags & wxTOPLEVEL_ICON )
+    {
+        r.x += FRAME_TITLEBAR_HEIGHT;
+        r.width -= FRAME_TITLEBAR_HEIGHT + 2;
+    }
+    else
+    {
+        r.x += 1;
+        r.width -= 3;
+    }
+
+    if ( flags & wxTOPLEVEL_BUTTON_CLOSE )
+        r.width -= FRAME_BUTTON_WIDTH + 2;
+    if ( flags & wxTOPLEVEL_BUTTON_MAXIMIZE )
+        r.width -= FRAME_BUTTON_WIDTH;
+    if ( flags & wxTOPLEVEL_BUTTON_RESTORE )
+        r.width -= FRAME_BUTTON_WIDTH;
+    if ( flags & wxTOPLEVEL_BUTTON_ICONIZE )
+        r.width -= FRAME_BUTTON_WIDTH;
+    if ( flags & wxTOPLEVEL_BUTTON_HELP )
+        r.width -= FRAME_BUTTON_WIDTH;
+
+    dc.SetFont(m_titlebarFont);
+
+    wxString s;
+    wxCoord textW;
+    dc.GetTextExtent(title, &textW, NULL);
+    if ( textW > r.width )
+    {
+        // text is too big, let's shorten it and add "..." after it:
+        size_t len = title.length();
+        wxCoord WSoFar, letterW;
+
+        dc.GetTextExtent(wxT("..."), &WSoFar, NULL);
+        if ( WSoFar > r.width )
+        {
+            // not enough space to draw anything
+            return;
+        }
+
+        s.Alloc(len);
+        for (size_t i = 0; i < len; i++)
+        {
+            dc.GetTextExtent(title[i], &letterW, NULL);
+            if ( letterW + WSoFar > r.width )
+                break;
+            WSoFar += letterW;
+            s << title[i];
+        }
+        s << wxT("...");
+    }
+    else // no need to truncate the title
+    {
+        s = title;
+    }
+
+    dc.DrawLabel(s, wxNullBitmap, r, wxALIGN_LEFT | wxALIGN_CENTRE_VERTICAL);
+}
+
+void wxStdRenderer::DrawFrameIcon(wxDC& dc,
+                                  const wxRect& rect,
+                                  const wxIcon& icon,
+                                  int flags)
+{
+    if ( icon.Ok() )
+    {
+        wxRect r = GetFrameClientArea(rect, flags & ~wxTOPLEVEL_TITLEBAR);
+        dc.DrawIcon(icon, r.x, r.y);
+    }
+}
+
+void wxStdRenderer::DrawFrameButton(wxDC& dc,
+                                    wxCoord x, wxCoord y,
+                                    int button,
+                                    int flags)
+{
+    FrameButtonType idx;
+    switch (button)
+    {
+        case wxTOPLEVEL_BUTTON_CLOSE:    idx = FrameButton_Close; break;
+        case wxTOPLEVEL_BUTTON_MAXIMIZE: idx = FrameButton_Maximize; break;
+        case wxTOPLEVEL_BUTTON_ICONIZE:  idx = FrameButton_Minimize; break;
+        case wxTOPLEVEL_BUTTON_RESTORE:  idx = FrameButton_Restore; break;
+        case wxTOPLEVEL_BUTTON_HELP:     idx = FrameButton_Help; break;
+        default:
+            wxFAIL_MSG(wxT("incorrect button specification"));
+            return;
+    }
+
+    wxBitmap bmp = GetFrameButtonBitmap(idx);
+    if ( !bmp.Ok() )
+        return;
+
+    wxRect r(x, y, FRAME_BUTTON_WIDTH, FRAME_BUTTON_HEIGHT);
+    if ( flags & wxCONTROL_PRESSED )
+    {
+        DrawSunkenBorder(dc, &r);
+
+        r.x++;
+        r.y++;
+    }
+    else
+    {
+        DrawRaisedBorder(dc, &r);
+    }
+
+    DrawBackground(dc, wxSCHEME_COLOUR(m_scheme, CONTROL), r);
+
+    dc.DrawBitmap(bmp, r.x, r.y, true);
+}
+
+
+wxRect wxStdRenderer::GetFrameClientArea(const wxRect& rect, int flags) const
+{
+    wxRect r(rect);
+
+    if ( (flags & wxTOPLEVEL_BORDER) && !(flags & wxTOPLEVEL_MAXIMIZED) )
+    {
+        int border = flags & wxTOPLEVEL_RESIZEABLE
+                        ? RESIZEABLE_FRAME_BORDER_THICKNESS
+                        : FRAME_BORDER_THICKNESS;
+        r.Inflate(-border);
+    }
+
+    if ( flags & wxTOPLEVEL_TITLEBAR )
+    {
+        r.y += FRAME_TITLEBAR_HEIGHT;
+        r.height -= FRAME_TITLEBAR_HEIGHT;
+    }
+
+    return r;
+}
+
+wxSize
+wxStdRenderer::GetFrameTotalSize(const wxSize& clientSize, int flags) const
+{
+    wxSize s(clientSize);
+
+    if ( (flags & wxTOPLEVEL_BORDER) && !(flags & wxTOPLEVEL_MAXIMIZED) )
+    {
+        int border = flags & wxTOPLEVEL_RESIZEABLE
+                        ? RESIZEABLE_FRAME_BORDER_THICKNESS
+                        : FRAME_BORDER_THICKNESS;
+        s.x += 2*border;
+        s.y += 2*border;
+    }
+
+    if ( flags & wxTOPLEVEL_TITLEBAR )
+        s.y += FRAME_TITLEBAR_HEIGHT;
+
+    return s;
+}
+
+wxSize wxStdRenderer::GetFrameMinSize(int flags) const
+{
+    wxSize s;
+
+    if ( (flags & wxTOPLEVEL_BORDER) && !(flags & wxTOPLEVEL_MAXIMIZED) )
+    {
+        int border = (flags & wxTOPLEVEL_RESIZEABLE) ?
+                        RESIZEABLE_FRAME_BORDER_THICKNESS :
+                        FRAME_BORDER_THICKNESS;
+        s.x += 2*border;
+        s.y += 2*border;
+    }
+
+    if ( flags & wxTOPLEVEL_TITLEBAR )
+    {
+        s.y += FRAME_TITLEBAR_HEIGHT;
+
+        if ( flags & wxTOPLEVEL_ICON )
+            s.x += FRAME_TITLEBAR_HEIGHT + 2;
+        if ( flags & wxTOPLEVEL_BUTTON_CLOSE )
+            s.x += FRAME_BUTTON_WIDTH + 2;
+        if ( flags & wxTOPLEVEL_BUTTON_MAXIMIZE )
+            s.x += FRAME_BUTTON_WIDTH;
+        if ( flags & wxTOPLEVEL_BUTTON_RESTORE )
+            s.x += FRAME_BUTTON_WIDTH;
+        if ( flags & wxTOPLEVEL_BUTTON_ICONIZE )
+            s.x += FRAME_BUTTON_WIDTH;
+        if ( flags & wxTOPLEVEL_BUTTON_HELP )
+            s.x += FRAME_BUTTON_WIDTH;
+    }
+
+    return s;
+}
+
+wxSize wxStdRenderer::GetFrameIconSize() const
+{
+    return wxSize(16, 16);
+}
+

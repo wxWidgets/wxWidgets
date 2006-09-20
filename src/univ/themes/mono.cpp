@@ -276,6 +276,8 @@ protected:
     virtual wxBitmap GetRadioBitmap(int flags)
         { return GetIndicator(IndicatorType_Radio, flags); }
 
+    virtual wxBitmap GetFrameButtonBitmap(FrameButtonType type);
+
 private:
     // the bitmaps returned by GetIndicator()
     wxBitmap m_bmpIndicators[IndicatorType_MaxCtrl]
@@ -290,6 +292,9 @@ private:
     wxBitmap m_bmpArrows[Arrow_Max];
 
     static const char **ms_xpmArrows[Arrow_Max];
+
+    // the close bitmap for the frame for GetFrameButtonBitmap()
+    wxBitmap m_bmpFrameClose;
 
     // pen used for foreground drawing
     wxPen m_penFg;
@@ -790,7 +795,7 @@ void wxMonoRenderer::DrawButtonLabel(wxDC& dc,
 }
 
 // ----------------------------------------------------------------------------
-// check/radion buttons
+// bitmaps
 // ----------------------------------------------------------------------------
 
 wxBitmap wxMonoRenderer::GetIndicator(IndicatorType indType, int flags)
@@ -811,6 +816,38 @@ wxBitmap wxMonoRenderer::GetIndicator(IndicatorType indType, int flags)
     }
 
     return bmp;
+}
+
+wxBitmap wxMonoRenderer::GetFrameButtonBitmap(FrameButtonType type)
+{
+    if ( type == FrameButton_Close )
+    {
+        if ( !m_bmpFrameClose.Ok() )
+        {
+            static const char *xpmFrameClose[] = {
+            /* columns rows colors chars-per-pixel */
+            "8 8 2 1",
+            "  c white",
+            "X c black",
+            /* pixels */
+            "        ",
+            " XX  XX ",
+            "  X  X  ",
+            "   XX   ",
+            "   XX   ",
+            "  X  X  ",
+            " XX  XX ",
+            "        ",
+            };
+
+            m_bmpFrameClose = wxBitmap(xpmFrameClose);
+        }
+
+        return m_bmpFrameClose;
+    }
+
+    // we don't show any other buttons than close
+    return wxNullBitmap;
 }
 
 // ----------------------------------------------------------------------------

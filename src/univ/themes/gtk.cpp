@@ -186,39 +186,6 @@ public:
                                    const wxMenuGeometryInfo& geomInfo);
 #endif // wxUSE_MENUS
 
-    virtual void DrawFrameTitleBar(wxDC& dc,
-                                   const wxRect& rect,
-                                   const wxString& title,
-                                   const wxIcon& icon,
-                                   int flags,
-                                   int specialButton = 0,
-                                   int specialButtonFlag = 0);
-    virtual void DrawFrameBorder(wxDC& dc,
-                                 const wxRect& rect,
-                                 int flags);
-    virtual void DrawFrameBackground(wxDC& dc,
-                                     const wxRect& rect,
-                                     int flags);
-    virtual void DrawFrameTitle(wxDC& dc,
-                                const wxRect& rect,
-                                const wxString& title,
-                                int flags);
-    virtual void DrawFrameIcon(wxDC& dc,
-                               const wxRect& rect,
-                               const wxIcon& icon,
-                               int flags);
-    virtual void DrawFrameButton(wxDC& dc,
-                                 wxCoord x, wxCoord y,
-                                 int button,
-                                 int flags = 0);
-
-    // titlebars
-    virtual wxRect GetFrameClientArea(const wxRect& rect, int flags) const;
-    virtual wxSize GetFrameTotalSize(const wxSize& clientSize, int flags) const;
-    virtual wxSize GetFrameMinSize(int flags) const;
-    virtual wxSize GetFrameIconSize() const;
-    virtual int HitTestFrame(const wxRect& rect, const wxPoint& pt, int flags) const;
-
     virtual void GetComboBitmaps(wxBitmap *bmpNormal,
                                  wxBitmap *bmpFocus,
                                  wxBitmap *bmpPressed,
@@ -392,6 +359,11 @@ protected:
 
     // initialize the combo bitmaps
     void InitComboBitmaps();
+
+    virtual wxBitmap GetFrameButtonBitmap(FrameButtonType WXUNUSED(type))
+    {
+        return wxNullBitmap;
+    }
 
 private:
     const wxColourScheme *m_scheme;
@@ -2344,87 +2316,6 @@ void wxGTKRenderer::AdjustSize(wxSize *size, const wxWindow *window)
         wxStdRenderer::AdjustSize(size, window);
     }
 }
-
-// ----------------------------------------------------------------------------
-// top level windows
-// ----------------------------------------------------------------------------
-
-void wxGTKRenderer::DrawFrameTitleBar(wxDC& WXUNUSED(dc),
-                                      const wxRect& WXUNUSED(rect),
-                                      const wxString& WXUNUSED(title),
-                                      const wxIcon& WXUNUSED(icon),
-                                      int WXUNUSED(flags),
-                                      int WXUNUSED(specialButton),
-                                      int WXUNUSED(specialButtonFlag))
-{
-}
-
-void wxGTKRenderer::DrawFrameBorder(wxDC& WXUNUSED(dc),
-                                    const wxRect& WXUNUSED(rect),
-                                    int WXUNUSED(flags))
-{
-}
-
-void wxGTKRenderer::DrawFrameBackground(wxDC& WXUNUSED(dc),
-                                        const wxRect& WXUNUSED(rect),
-                                        int WXUNUSED(flags))
-{
-}
-
-void wxGTKRenderer::DrawFrameTitle(wxDC& WXUNUSED(dc),
-                                   const wxRect& WXUNUSED(rect),
-                                   const wxString& WXUNUSED(title),
-                                   int WXUNUSED(flags))
-{
-}
-
-void wxGTKRenderer::DrawFrameIcon(wxDC& WXUNUSED(dc),
-                                  const wxRect& WXUNUSED(rect),
-                                  const wxIcon& WXUNUSED(icon),
-                                  int WXUNUSED(flags))
-{
-}
-
-void wxGTKRenderer::DrawFrameButton(wxDC& WXUNUSED(dc),
-                                    wxCoord WXUNUSED(x),
-                                    wxCoord WXUNUSED(y),
-                                    int WXUNUSED(button),
-                                    int WXUNUSED(flags))
-{
-}
-
-wxRect
-wxGTKRenderer::GetFrameClientArea(const wxRect& rect,
-                                  int WXUNUSED(flags)) const
-{
-    return rect;
-}
-
-wxSize
-wxGTKRenderer::GetFrameTotalSize(const wxSize& clientSize,
-                                 int WXUNUSED(flags)) const
-{
-    return clientSize;
-}
-
-wxSize wxGTKRenderer::GetFrameMinSize(int WXUNUSED(flags)) const
-{
-    return wxSize(0,0);
-}
-
-wxSize wxGTKRenderer::GetFrameIconSize() const
-{
-    return wxSize(wxDefaultCoord, wxDefaultCoord);
-}
-
-int
-wxGTKRenderer::HitTestFrame(const wxRect& WXUNUSED(rect),
-                            const wxPoint& WXUNUSED(pt),
-                            int WXUNUSED(flags)) const
-{
-    return wxHT_TOPLEVEL_CLIENT_AREA;
-}
-
 
 // ----------------------------------------------------------------------------
 // standard icons

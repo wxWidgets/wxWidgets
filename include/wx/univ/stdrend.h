@@ -162,6 +162,44 @@ public:
 
     virtual wxCoord GetCheckItemMargin() const { return 0; }
 
+
+    virtual void DrawFrameTitleBar(wxDC& dc,
+                                   const wxRect& rect,
+                                   const wxString& title,
+                                   const wxIcon& icon,
+                                   int flags,
+                                   int specialButton = 0,
+                                   int specialButtonFlag = 0);
+    virtual void DrawFrameBorder(wxDC& dc,
+                                 const wxRect& rect,
+                                 int flags);
+    virtual void DrawFrameBackground(wxDC& dc,
+                                     const wxRect& rect,
+                                     int flags);
+    virtual void DrawFrameTitle(wxDC& dc,
+                                const wxRect& rect,
+                                const wxString& title,
+                                int flags);
+    virtual void DrawFrameIcon(wxDC& dc,
+                               const wxRect& rect,
+                               const wxIcon& icon,
+                               int flags);
+    virtual void DrawFrameButton(wxDC& dc,
+                                 wxCoord x, wxCoord y,
+                                 int button,
+                                 int flags = 0);
+
+    virtual wxRect GetFrameClientArea(const wxRect& rect, int flags) const;
+
+    virtual wxSize GetFrameTotalSize(const wxSize& clientSize, int flags) const;
+
+    virtual wxSize GetFrameMinSize(int flags) const;
+
+    virtual wxSize GetFrameIconSize() const;
+
+    virtual int HitTestFrame(const wxRect& rect,
+                             const wxPoint& pt,
+                             int flags = 0) const;
 protected:
     // various constants
     enum ArrowDirection
@@ -181,6 +219,16 @@ protected:
         Arrow_Inverted,
         Arrow_InvertedDisabled,
         Arrow_StateMax
+    };
+
+    enum FrameButtonType
+    {
+        FrameButton_Close,
+        FrameButton_Minimize,
+        FrameButton_Maximize,
+        FrameButton_Restore,
+        FrameButton_Help,
+        FrameButton_Max
     };
 
     enum IndicatorType
@@ -279,6 +327,9 @@ protected:
     virtual wxBitmap GetRadioBitmap(int flags) = 0;
     virtual wxBitmap GetCheckBitmap(int flags) = 0;
 
+    // return the frame icon bitmap
+    virtual wxBitmap GetFrameButtonBitmap(FrameButtonType type) = 0;
+
 #if wxUSE_TEXTCTRL
     // return the width of the border around the text area in the text control
     virtual int GetTextBorderWidth(const wxTextCtrl *text) const;
@@ -299,6 +350,8 @@ protected:
           m_penDarkGrey,
           m_penLightGrey,
           m_penHighlight;
+
+    wxFont m_titlebarFont;
 
     // the colours we use, they never change currently so we don't have to ever
     // update m_penXXX objects above
