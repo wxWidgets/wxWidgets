@@ -267,6 +267,20 @@ void wxSpinCtrl::OnSetFocus(wxFocusEvent& event)
     event.Skip();
 }
 
+void wxSpinCtrl::NormalizeValue()
+{
+    int value = GetValue();
+    SetValue( value );
+    if (value != m_oldValue)
+    {
+        wxCommandEvent event( wxEVT_COMMAND_SPINCTRL_UPDATED, GetId() );
+        event.SetEventObject( this );
+        event.SetInt( value );
+        GetEventHandler()->ProcessEvent( event );
+        m_oldValue = value;
+    }
+}
+
 // ----------------------------------------------------------------------------
 // construction
 // ----------------------------------------------------------------------------
@@ -354,6 +368,8 @@ bool wxSpinCtrl::Create(wxWindow *parent,
 
     SetRange(min, max);
     SetValue(initial);
+    
+    m_oldValue = initial;
 
     // subclass the text ctrl to be able to intercept some events
     wxSetWindowUserData(GetBuddyHwnd(), this);
@@ -530,14 +546,18 @@ void wxSpinCtrl::OnSpinChange(wxSpinEvent& eventSpin)
 {
     wxCommandEvent event(wxEVT_COMMAND_SPINCTRL_UPDATED, GetId());
     event.SetEventObject(this);
-    event.SetInt(eventSpin.GetPosition());
-
-    (void)GetEventHandler()->ProcessEvent(event);
+    int value = eventSpin.GetPosition();
+    event.SetInt( value );
+    
+    if (value != m_oldValue)
+        (void)GetEventHandler()->ProcessEvent(event);
 
     if ( eventSpin.GetSkipped() )
     {
         event.Skip();
     }
+    
+    m_oldValue = value;
 }
 
 // ----------------------------------------------------------------------------

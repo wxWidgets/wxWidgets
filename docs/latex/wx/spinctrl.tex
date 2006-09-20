@@ -43,6 +43,12 @@ the corresponding events will not be generated under all platforms. Finally, if
 the user modifies the text in the edit part of the spin control directly, the
 {\tt EVT\_TEXT} is generated, like for the \helpref{wxTextCtrl}{wxtextctrl}.
 
+When the use enters text into the text area, the text is not
+validated until the control loses focus (e.g. by using the TAB
+key). The value is then adjusted to the range and a 
+\helpref{wxSpinEvent}{wxspinevent} sent then if the value
+is different from the last value sent.
+
 \wxheading{See also}
 
 \helpref{Event handling overview}{eventhandlingoverview},

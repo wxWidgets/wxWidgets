@@ -256,6 +256,11 @@ void wxSpinButton::SetValue(int val)
     }
 }
 
+void wxSpinButton::NormalizeValue()
+{ 
+    SetValue( GetValue() );
+}
+
 void wxSpinButton::SetRange(int minVal, int maxVal)
 {
     const bool hadRange = m_min < m_max;

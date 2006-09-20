@@ -104,6 +104,9 @@ protected:
     void OnSetFocus(wxFocusEvent& event);
     void OnKillFocus(wxFocusEvent& event);
 
+    int m_oldValue;
+    virtual void NormalizeValue();
+   
     // the data for the "buddy" text ctrl
     WXHWND     m_hwndBuddy;
     WXFARPROC  m_wndProcBuddy;

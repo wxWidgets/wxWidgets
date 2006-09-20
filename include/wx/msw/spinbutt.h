@@ -61,7 +61,7 @@ protected:
    virtual wxSize DoGetBestSize() const;
 
    // ensure that the control displays a value in the current range
-   void NormalizeValue() { SetValue(GetValue()); }
+   virtual void NormalizeValue();
 
 private:
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxSpinButton)
