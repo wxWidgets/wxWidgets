@@ -556,6 +556,7 @@ bool wxListBox::Create( wxWindow *parent, wxWindowID id,
     gtk_container_add (GTK_CONTAINER (m_widget), GTK_WIDGET(m_treeview) );
 
     gtk_widget_show( GTK_WIDGET(m_treeview) );
+    m_focusWidget = GTK_WIDGET(m_treeview);
 
     wxListBox::DoInsertItems(wxArrayString(n, choices), 0); // insert initial items
 
