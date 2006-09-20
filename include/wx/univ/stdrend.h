@@ -104,6 +104,13 @@ public:
                                  wxAlignment align = wxALIGN_LEFT,
                                  int indexAccel = -1);
 
+    virtual void DrawScrollbarArrow(wxDC& dc,
+                                    wxDirection dir,
+                                    const wxRect& rect,
+                                    int flags = 0);
+    virtual void DrawScrollCorner(wxDC& dc,
+                                  const wxRect& rect);
+
 #if wxUSE_TEXTCTRL
     virtual void DrawTextLine(wxDC& dc,
                               const wxString& text,
@@ -142,6 +149,25 @@ public:
 
 protected:
     // various constants
+    enum ArrowDirection
+    {
+        Arrow_Left,
+        Arrow_Right,
+        Arrow_Up,
+        Arrow_Down,
+        Arrow_Max
+    };
+
+    enum ArrowStyle
+    {
+        Arrow_Normal,
+        Arrow_Disabled,
+        Arrow_Pressed,
+        Arrow_Inverted,
+        Arrow_InvertedDisabled,
+        Arrow_StateMax
+    };
+
     enum IndicatorType
     {
         IndicatorType_Check,
@@ -176,6 +202,10 @@ protected:
     static void GetIndicatorsFromFlags(int flags,
                                        IndicatorState& state,
                                        IndicatorStatus& status);
+
+    // translate wxDirection to ArrowDirection
+    static ArrowDirection GetArrowDirection(wxDirection dir);
+
 
     // fill the rectangle with a brush of given colour (must be valid)
     void DrawSolidRect(wxDC& dc, const wxColour& col, const wxRect& rect);

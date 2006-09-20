@@ -98,26 +98,6 @@ static const wxCoord SLIDER_TICK_LENGTH = 6;
 class wxWin32Renderer : public wxStdRenderer
 {
 public:
-    // constants
-    enum wxArrowDirection
-    {
-        Arrow_Left,
-        Arrow_Right,
-        Arrow_Up,
-        Arrow_Down,
-        Arrow_Max
-    };
-
-    enum wxArrowStyle
-    {
-        Arrow_Normal,
-        Arrow_Disabled,
-        Arrow_Pressed,
-        Arrow_Inverted,
-        Arrow_InvertedDisabled,
-        Arrow_StateMax
-    };
-
     enum wxFrameButtonType
     {
         FrameButton_Close,
@@ -151,15 +131,11 @@ public:
                                   const wxRect& rect,
                                   int flags = 0,
                                   wxRect *rectIn = NULL);
+
     virtual void DrawArrow(wxDC& dc,
                            wxDirection dir,
                            const wxRect& rect,
                            int flags = 0);
-    virtual void DrawScrollbarArrow(wxDC& dc,
-                                    wxDirection dir,
-                                    const wxRect& rect,
-                                    int flags = 0)
-        { DrawArrow(dc, dir, rect, flags); }
     virtual void DrawScrollbarThumb(wxDC& dc,
                                     wxOrientation orient,
                                     const wxRect& rect,
@@ -168,8 +144,6 @@ public:
                                     wxOrientation orient,
                                     const wxRect& rect,
                                     int flags = 0);
-    virtual void DrawScrollCorner(wxDC& dc,
-                                  const wxRect& rect);
 
 #if wxUSE_TOOLBAR
     virtual void DrawToolBarButton(wxDC& dc,
@@ -357,12 +331,12 @@ protected:
 
     // public DrawArrow()s helper
     void DrawArrow(wxDC& dc, const wxRect& rect,
-                   wxArrowDirection arrowDir, wxArrowStyle arrowStyle);
+                   ArrowDirection arrowDir, ArrowStyle arrowStyle);
 
     // DrawArrowButton is used by DrawScrollbar and DrawComboButton
     void DrawArrowButton(wxDC& dc, const wxRect& rect,
-                         wxArrowDirection arrowDir,
-                         wxArrowStyle arrowStyle);
+                         ArrowDirection arrowDir,
+                         ArrowStyle arrowStyle);
 
     // draw a normal or transposed line (useful for using the same code fo both
     // horizontal and vertical widgets)
@@ -1744,7 +1718,7 @@ wxBitmap wxWin32Renderer::GetIndicator(IndicatorType indType, int flags)
     IndicatorStatus indStatus;
     GetIndicatorsFromFlags(flags, indState, indStatus);
 
-    wxBitmap bmp = m_bmpIndicators[indType][indState][indStatus];
+    wxBitmap& bmp = m_bmpIndicators[indType][indState][indStatus];
     if ( !bmp.Ok() )
     {
         const char **xpm = ms_xpmIndicators[indType][indState][indStatus];
@@ -1752,7 +1726,6 @@ wxBitmap wxWin32Renderer::GetIndicator(IndicatorType indType, int flags)
         {
             // create and cache it
             bmp = wxBitmap(xpm);
-            m_bmpIndicators[indType][indState][indStatus] = bmp;
         }
     }
 
@@ -2512,7 +2485,7 @@ void wxWin32Renderer::DrawMenuItem(wxDC& dc,
         rect.x = geometryInfo.GetSize().x - MENU_RIGHT_MARGIN;
         rect.width = MENU_RIGHT_MARGIN;
 
-        wxArrowStyle arrowStyle;
+        ArrowStyle arrowStyle;
         if ( flags & wxCONTROL_DISABLED )
             arrowStyle = flags & wxCONTROL_SELECTED ? Arrow_InvertedDisabled
                                                     : Arrow_Disabled;
@@ -2800,21 +2773,7 @@ void wxWin32Renderer::DrawArrow(wxDC& dc,
                                 const wxRect& rect,
                                 int flags)
 {
-    // get the bitmap for this arrow
-    wxArrowDirection arrowDir;
-    switch ( dir )
-    {
-        case wxLEFT:    arrowDir = Arrow_Left; break;
-        case wxRIGHT:   arrowDir = Arrow_Right; break;
-        case wxUP:      arrowDir = Arrow_Up; break;
-        case wxDOWN:    arrowDir = Arrow_Down; break;
-
-        default:
-            wxFAIL_MSG(_T("unknown arrow direction"));
-            return;
-    }
-
-    wxArrowStyle arrowStyle;
+    ArrowStyle arrowStyle;
     if ( flags & wxCONTROL_PRESSED )
     {
         // can't be pressed and disabled
@@ -2825,13 +2784,13 @@ void wxWin32Renderer::DrawArrow(wxDC& dc,
         arrowStyle = flags & wxCONTROL_DISABLED ? Arrow_Disabled : Arrow_Normal;
     }
 
-    DrawArrowButton(dc, rect, arrowDir, arrowStyle);
+    DrawArrowButton(dc, rect, GetArrowDirection(dir), arrowStyle);
 }
 
 void wxWin32Renderer::DrawArrow(wxDC& dc,
                                 const wxRect& rect,
-                                wxArrowDirection arrowDir,
-                                wxArrowStyle arrowStyle)
+                                ArrowDirection arrowDir,
+                                ArrowStyle arrowStyle)
 {
     const wxBitmap& bmp = m_bmpArrows[arrowStyle][arrowDir];
 
@@ -2850,8 +2809,8 @@ void wxWin32Renderer::DrawArrow(wxDC& dc,
 
 void wxWin32Renderer::DrawArrowButton(wxDC& dc,
                                       const wxRect& rectAll,
-                                      wxArrowDirection arrowDir,
-                                      wxArrowStyle arrowStyle)
+                                      ArrowDirection arrowDir,
+                                      ArrowStyle arrowStyle)
 {
     wxRect rect = rectAll;
     DrawBackground(dc, wxSCHEME_COLOUR(m_scheme, CONTROL), rect);
@@ -2879,11 +2838,6 @@ void wxWin32Renderer::DrawScrollbarShaft(wxDC& dc,
                                     ? wxColourScheme::SCROLLBAR_PRESSED
                                     : wxColourScheme::SCROLLBAR;
     DrawBackground(dc, m_scheme->Get(col), rectBar);
-}
-
-void wxWin32Renderer::DrawScrollCorner(wxDC& dc, const wxRect& rect)
-{
-    DrawBackground(dc, wxSCHEME_COLOUR(m_scheme, CONTROL), rect);
 }
 
 // ----------------------------------------------------------------------------

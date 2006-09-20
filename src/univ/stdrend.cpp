@@ -90,6 +90,55 @@ void wxStdRenderer::DrawShadedRect(wxDC& dc, wxRect *rect,
 }
 
 // ----------------------------------------------------------------------------
+// translate various flags into corresponding renderer constants
+// ----------------------------------------------------------------------------
+
+/* static */
+void wxStdRenderer::GetIndicatorsFromFlags(int flags,
+                                           IndicatorState& state,
+                                           IndicatorStatus& status)
+{
+    if ( flags & wxCONTROL_SELECTED )
+        state = flags & wxCONTROL_DISABLED ? IndicatorState_SelectedDisabled
+                                           : IndicatorState_Selected;
+    else if ( flags & wxCONTROL_DISABLED )
+        state = IndicatorState_Disabled;
+    else if ( flags & wxCONTROL_PRESSED )
+        state = IndicatorState_Pressed;
+    else
+        state = IndicatorState_Normal;
+
+    status = flags & wxCONTROL_CHECKED ? IndicatorStatus_Checked
+                                       : flags & wxCONTROL_UNDETERMINED
+                                            ? IndicatorStatus_Undetermined
+                                            : IndicatorStatus_Unchecked;
+}
+
+/* static */
+wxStdRenderer::ArrowDirection wxStdRenderer::GetArrowDirection(wxDirection dir)
+{
+    switch ( dir )
+    {
+        case wxLEFT:
+            return Arrow_Left;
+
+        case wxRIGHT:
+            return Arrow_Right;
+
+        case wxUP:
+            return Arrow_Up;
+
+        case wxDOWN:
+            return Arrow_Down;
+
+        default:
+            wxFAIL_MSG(_T("unknown arrow direction"));
+    }
+
+    return Arrow_Max;
+}
+
+// ----------------------------------------------------------------------------
 // background
 // ----------------------------------------------------------------------------
 
@@ -560,27 +609,6 @@ void wxStdRenderer::DrawCheckItem(wxDC& dc,
 // check and radio bitmaps
 // ----------------------------------------------------------------------------
 
-/* static */
-void wxStdRenderer::GetIndicatorsFromFlags(int flags,
-                                           IndicatorState& state,
-                                           IndicatorStatus& status)
-{
-    if ( flags & wxCONTROL_SELECTED )
-        state = flags & wxCONTROL_DISABLED ? IndicatorState_SelectedDisabled
-                                           : IndicatorState_Selected;
-    else if ( flags & wxCONTROL_DISABLED )
-        state = IndicatorState_Disabled;
-    else if ( flags & wxCONTROL_PRESSED )
-        state = IndicatorState_Pressed;
-    else
-        state = IndicatorState_Normal;
-
-    status = flags & wxCONTROL_CHECKED ? IndicatorStatus_Checked
-                                       : flags & wxCONTROL_UNDETERMINED
-                                            ? IndicatorStatus_Undetermined
-                                            : IndicatorStatus_Unchecked;
-}
-
 void wxStdRenderer::DrawCheckButton(wxDC& dc,
                                     const wxString& label,
                                     const wxBitmap& bitmap,
@@ -737,6 +765,23 @@ wxRect wxStdRenderer::GetTextClientArea(const wxTextCtrl *text,
 }
 
 #endif // wxUSE_TEXTCTRL
+
+// ----------------------------------------------------------------------------
+// scrollbars drawing
+// ----------------------------------------------------------------------------
+
+void wxStdRenderer::DrawScrollbarArrow(wxDC& dc,
+                                       wxDirection dir,
+                                       const wxRect& rect,
+                                       int flags)
+{
+    DrawArrow(dc, dir, rect, flags);
+}
+
+void wxStdRenderer::DrawScrollCorner(wxDC& dc, const wxRect& rect)
+{
+    DrawSolidRect(dc, wxSCHEME_COLOUR(m_scheme, CONTROL), rect);
+}
 
 // ----------------------------------------------------------------------------
 // scrollbars geometry
