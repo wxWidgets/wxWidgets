@@ -155,13 +155,6 @@ public:
                                    const wxMenuGeometryInfo& geomInfo);
 #endif // wxUSE_MENUS
 
-#if wxUSE_STATUSBAR
-    virtual void DrawStatusField(wxDC& dc,
-                                 const wxRect& rect,
-                                 const wxString& label,
-                                 int flags = 0, int style = 0);
-#endif // wxUSE_STATUSBAR
-
     virtual void DrawFrameTitleBar(wxDC& dc,
                                    const wxRect& rect,
                                    const wxString& title,
@@ -204,20 +197,18 @@ public:
 
     virtual wxRect GetBorderDimensions(wxBorder border) const;
 
-    virtual bool AreScrollbarsInsideBorder() const;
-
 #if wxUSE_SCROLLBAR
     virtual wxSize GetScrollbarArrowSize() const { return GetStdBmpSize(); }
 #endif // wxUSE_SCROLLBAR
 
-    virtual wxCoord GetListboxItemHeight(wxCoord fontHeight);
-
     virtual wxSize GetCheckBitmapSize() const { return GetStdBmpSize(); }
     virtual wxSize GetRadioBitmapSize() const { return GetStdBmpSize(); }
 
+#if wxUSE_TOOLBAR
     virtual wxSize GetToolBarButtonSize(wxCoord *separator) const;
 
     virtual wxSize GetToolBarMargin() const;
+#endif // wxUSE_TOOLBAR
 
 #if wxUSE_NOTEBOOK
     virtual wxSize GetTabIndent() const;
@@ -248,10 +239,6 @@ public:
     virtual wxMenuGeometryInfo *GetMenuGeometry(wxWindow *win,
                                                 const wxMenu& menu) const;
 #endif // wxUSE_MENUS
-
-#if wxUSE_STATUSBAR
-    virtual wxSize GetStatusBarBorders(wxCoord *borderBetweenFields) const;
-#endif // wxUSE_STATUSBAR
 
     virtual wxRect GetFrameClientArea(const wxRect& rect, int flags) const;
 
@@ -681,6 +668,41 @@ wxMonoRenderer::wxMonoRenderer(const wxColourScheme *scheme)
 // borders
 // ----------------------------------------------------------------------------
 
+wxRect wxMonoRenderer::GetBorderDimensions(wxBorder border) const
+{
+    wxCoord width;
+    switch ( border )
+    {
+        case wxBORDER_SIMPLE:
+        case wxBORDER_STATIC:
+        case wxBORDER_RAISED:
+        case wxBORDER_SUNKEN:
+            width = 1;
+            break;
+
+        case wxBORDER_DOUBLE:
+            width = 2;
+            break;
+
+        default:
+            wxFAIL_MSG(_T("unknown border type"));
+            // fall through
+
+        case wxBORDER_DEFAULT:
+        case wxBORDER_NONE:
+            width = 0;
+            break;
+    }
+
+    wxRect rect;
+    rect.x =
+    rect.y =
+    rect.width =
+    rect.height = width;
+
+    return rect;
+}
+
 void wxMonoRenderer::DrawBorder(wxDC& dc,
                                 wxBorder border,
                                 const wxRect& rectTotal,
@@ -808,6 +830,20 @@ void wxMonoRenderer::DrawToolBarButton(wxDC& dc,
     wxFAIL_MSG(_T("TODO"));
 }
 
+wxSize wxMonoRenderer::GetToolBarButtonSize(wxCoord *separator) const
+{
+    wxFAIL_MSG(_T("TODO"));
+
+    return wxSize();
+}
+
+wxSize wxMonoRenderer::GetToolBarMargin() const
+{
+    wxFAIL_MSG(_T("TODO"));
+
+    return wxSize();
+}
+
 #endif // wxUSE_TOOLBAR
 
 // ----------------------------------------------------------------------------
@@ -827,6 +863,20 @@ void wxMonoRenderer::DrawTab(wxDC& dc,
     wxFAIL_MSG(_T("TODO"));
 }
 
+wxSize wxMonoRenderer::GetTabIndent() const
+{
+    wxFAIL_MSG(_T("TODO"));
+
+    return wxSize();
+}
+
+wxSize wxMonoRenderer::GetTabPadding() const
+{
+    wxFAIL_MSG(_T("TODO"));
+
+    return wxSize();
+}
+
 #endif // wxUSE_NOTEBOOK
 
 // ----------------------------------------------------------------------------
@@ -844,6 +894,141 @@ void wxMonoRenderer::GetComboBitmaps(wxBitmap *bmpNormal,
 }
 
 #endif // wxUSE_COMBOBOX
+
+// ----------------------------------------------------------------------------
+// menus
+// ----------------------------------------------------------------------------
+
+#if wxUSE_MENUS
+
+void wxMonoRenderer::DrawMenuBarItem(wxDC& dc,
+                                     const wxRect& rect,
+                                     const wxString& label,
+                                     int flags,
+                                     int indexAccel)
+{
+    wxFAIL_MSG(_T("TODO"));
+}
+
+void wxMonoRenderer::DrawMenuItem(wxDC& dc,
+                                  wxCoord y,
+                                  const wxMenuGeometryInfo& geometryInfo,
+                                  const wxString& label,
+                                  const wxString& accel,
+                                  const wxBitmap& bitmap,
+                                  int flags,
+                                  int indexAccel)
+{
+    wxFAIL_MSG(_T("TODO"));
+}
+
+void wxMonoRenderer::DrawMenuSeparator(wxDC& dc,
+                                       wxCoord y,
+                                       const wxMenuGeometryInfo& geomInfo)
+{
+    wxFAIL_MSG(_T("TODO"));
+}
+
+wxSize wxMonoRenderer::GetMenuBarItemSize(const wxSize& sizeText) const
+{
+    wxFAIL_MSG(_T("TODO"));
+
+    return wxSize();
+}
+
+wxMenuGeometryInfo *wxMonoRenderer::GetMenuGeometry(wxWindow *win,
+                                                    const wxMenu& menu) const
+{
+    wxFAIL_MSG(_T("TODO"));
+
+    return NULL;
+}
+
+#endif // wxUSE_MENUS
+
+// ----------------------------------------------------------------------------
+// slider
+// ----------------------------------------------------------------------------
+
+#if wxUSE_SLIDER
+
+void wxMonoRenderer::DrawSliderShaft(wxDC& dc,
+                                     const wxRect& rect,
+                                     int lenThumb,
+                                     wxOrientation orient,
+                                     int flags,
+                                     long style,
+                                     wxRect *rectShaft)
+{
+    wxFAIL_MSG(_T("TODO"));
+}
+
+
+void wxMonoRenderer::DrawSliderThumb(wxDC& dc,
+                                     const wxRect& rect,
+                                     wxOrientation orient,
+                                     int flags,
+                                     long style)
+{
+    wxFAIL_MSG(_T("TODO"));
+}
+
+void wxMonoRenderer::DrawSliderTicks(wxDC& dc,
+                                     const wxRect& rect,
+                                     int lenThumb,
+                                     wxOrientation orient,
+                                     int start,
+                                     int end,
+                                     int step,
+                                     int flags,
+                                     long style)
+{
+    wxFAIL_MSG(_T("TODO"));
+}
+
+wxCoord wxMonoRenderer::GetSliderDim() const
+{
+    wxFAIL_MSG(_T("TODO"));
+
+    return 0;
+}
+
+wxCoord wxMonoRenderer::GetSliderTickLen() const
+{
+    wxFAIL_MSG(_T("TODO"));
+
+    return 0;
+}
+
+
+wxRect wxMonoRenderer::GetSliderShaftRect(const wxRect& rect,
+                                          int lenThumb,
+                                          wxOrientation orient,
+                                          long style) const
+{
+    wxFAIL_MSG(_T("TODO"));
+
+    return wxRect();
+}
+
+wxSize wxMonoRenderer::GetSliderThumbSize(const wxRect& rect,
+                                          int lenThumb,
+                                          wxOrientation orient) const
+{
+    wxFAIL_MSG(_T("TODO"));
+
+    return wxSize();
+}
+
+#endif // wxUSE_SLIDER
+
+wxSize wxMonoRenderer::GetProgressBarStep() const
+{
+    wxFAIL_MSG(_T("TODO"));
+
+    return wxSize();
+}
+
 
 // ----------------------------------------------------------------------------
 // scrollbar
