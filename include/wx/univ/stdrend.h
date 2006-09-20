@@ -132,6 +132,10 @@ public:
 
     virtual bool AreScrollbarsInsideBorder() const;
 
+    virtual void AdjustSize(wxSize *size, const wxWindow *window);
+
+    virtual wxCoord GetListboxItemHeight(wxCoord fontHeight);
+
 #if wxUSE_SCROLLBAR
     virtual wxRect GetScrollbarRect(const wxScrollBar *scrollbar,
                                     wxScrollBar::Element elem,
@@ -146,6 +150,17 @@ public:
                                      int thumbPos = -1);
     virtual int PixelToScrollbar(const wxScrollBar *scrollbar, wxCoord coord);
 #endif // wxUSE_SCROLLBAR
+
+#if wxUSE_STATUSBAR
+    virtual void DrawStatusField(wxDC& dc,
+                                 const wxRect& rect,
+                                 const wxString& label,
+                                 int flags = 0, int style = 0);
+
+    virtual wxSize GetStatusBarBorders(wxCoord *borderBetweenFields) const;
+#endif // wxUSE_STATUSBAR
+
+    virtual wxCoord GetCheckItemMargin() const { return 0; }
 
 protected:
     // various constants

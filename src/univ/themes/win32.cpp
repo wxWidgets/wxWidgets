@@ -258,8 +258,6 @@ public:
     virtual wxSize GetScrollbarArrowSize() const
         { return m_sizeScrollbarArrow; }
 
-    virtual wxCoord GetListboxItemHeight(wxCoord fontHeight)
-        { return fontHeight + 2; }
     virtual wxSize GetCheckBitmapSize() const
         { return wxSize(13, 13); }
     virtual wxSize GetRadioBitmapSize() const
@@ -305,10 +303,6 @@ public:
     virtual wxMenuGeometryInfo *GetMenuGeometry(wxWindow *win,
                                                 const wxMenu& menu) const;
 #endif // wxUSE_MENUS
-
-#if wxUSE_STATUSBAR
-    virtual wxSize GetStatusBarBorders(wxCoord *borderBetweenFields) const;
-#endif // wxUSE_STATUSBAR
 
 protected:
     // overridden wxStdRenderer methods
@@ -2615,25 +2609,15 @@ wxMenuGeometryInfo *wxWin32Renderer::GetMenuGeometry(wxWindow *win,
 // status bar
 // ----------------------------------------------------------------------------
 
-static const wxCoord STATBAR_BORDER_X = 2;
-static const wxCoord STATBAR_BORDER_Y = 2;
-
-wxSize wxWin32Renderer::GetStatusBarBorders(wxCoord *borderBetweenFields) const
-{
-    if ( borderBetweenFields )
-        *borderBetweenFields = 2;
-
-    return wxSize(STATBAR_BORDER_X, STATBAR_BORDER_Y);
-}
-
 void wxWin32Renderer::DrawStatusField(wxDC& dc,
                                       const wxRect& rect,
                                       const wxString& label,
-                                      int flags, int style /*=0*/)
+                                      int flags,
+                                      int style)
 {
     wxRect rectIn;
 
-    if ( flags & wxCONTROL_ISDEFAULT )
+    if ( flags & wxCONTROL_SIZEGRIP )
     {
         // draw the size grip: it is a normal rect except that in the lower
         // right corner we have several bands which may be used for dragging
@@ -2688,19 +2672,12 @@ void wxWin32Renderer::DrawStatusField(wxDC& dc,
         rectIn.Deflate(1);
 
         rectIn.width -= STATUSBAR_GRIP_SIZE;
-    }
-    else // normal pane
-    {
-        if (style == wxSB_RAISED)
-            DrawBorder(dc, wxBORDER_RAISED, rect, flags, &rectIn);
-        else if (style != wxSB_FLAT)
-            DrawBorder(dc, wxBORDER_STATIC, rect, flags, &rectIn);
+
+        // this will prevent the standard version from drawing any borders
+        style = wxSB_FLAT;
     }
 
-    rectIn.Deflate(STATBAR_BORDER_X, STATBAR_BORDER_Y);
-
-    wxDCClipper clipper(dc, rectIn);
-    DrawLabel(dc, label, rectIn, flags, wxALIGN_LEFT | wxALIGN_CENTRE_VERTICAL);
+    DrawStatusField(dc, rect, label, flags, style);
 }
 
 #endif // wxUSE_STATUSBAR
@@ -3599,10 +3576,7 @@ void wxWin32Renderer::AdjustSize(wxSize *size, const wxWindow *window)
     }
 #endif // wxUSE_BUTTON || wxUSE_TOGGLEBTN
 
-    // take into account the border width
-    wxRect rectBorder = GetBorderDimensions(window->GetBorder());
-    size->x += rectBorder.x + rectBorder.width;
-    size->y += rectBorder.y + rectBorder.height;
+    wxStdRenderer::AdjustSize(size, window);
 }
 
 // ============================================================================

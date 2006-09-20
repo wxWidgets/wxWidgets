@@ -441,9 +441,22 @@ wxRect wxStdRenderer::GetBorderDimensions(wxBorder border) const
     return rect;
 }
 
+void wxStdRenderer::AdjustSize(wxSize *size, const wxWindow *window)
+{
+    // take into account the border width
+    wxRect rectBorder = GetBorderDimensions(window->GetBorder());
+    size->x += rectBorder.x + rectBorder.width;
+    size->y += rectBorder.y + rectBorder.height;
+}
+
 bool wxStdRenderer::AreScrollbarsInsideBorder() const
 {
     return false;
+}
+
+wxCoord wxStdRenderer::GetListboxItemHeight(wxCoord fontHeight)
+{
+    return fontHeight + 2;
 }
 
 void wxStdRenderer::DrawTextBorder(wxDC& dc,
@@ -1047,3 +1060,37 @@ int wxStdRenderer::PixelToScrollbar(const wxScrollBar *scrollbar, wxCoord coord)
 
 #endif // wxUSE_SCROLLBAR
 
+// ----------------------------------------------------------------------------
+// status bar
+// ----------------------------------------------------------------------------
+
+#if wxUSE_STATUSBAR
+
+wxSize wxStdRenderer::GetStatusBarBorders(wxCoord *borderBetweenFields) const
+{
+    if ( borderBetweenFields )
+        *borderBetweenFields = 2;
+
+    return wxSize(2, 2);
+}
+
+void wxStdRenderer::DrawStatusField(wxDC& dc,
+                                    const wxRect& rect,
+                                    const wxString& label,
+                                    int flags,
+                                    int style)
+{
+    wxRect rectIn;
+
+    if ( style == wxSB_RAISED )
+        DrawBorder(dc, wxBORDER_RAISED, rect, flags, &rectIn);
+    else if ( style != wxSB_FLAT )
+        DrawBorder(dc, wxBORDER_STATIC, rect, flags, &rectIn);
+
+    rectIn.Deflate(GetStatusBarBorders(NULL));
+
+    wxDCClipper clipper(dc, rectIn);
+    DrawLabel(dc, label, rectIn, flags, wxALIGN_LEFT | wxALIGN_CENTRE_VERTICAL);
+}
+
+#endif // wxUSE_STATUSBAR

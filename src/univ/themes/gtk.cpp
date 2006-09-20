@@ -115,8 +115,6 @@ public:
                                     wxOrientation orient,
                                     const wxRect& rect,
                                     int flags = 0);
-    virtual void DrawScrollCorner(wxDC& dc,
-                                  const wxRect& rect);
 
 #if wxUSE_TOOLBAR
     virtual void DrawToolBarButton(wxDC& dc,
@@ -188,13 +186,6 @@ public:
                                    const wxMenuGeometryInfo& geomInfo);
 #endif // wxUSE_MENUS
 
-#if wxUSE_STATUSBAR
-    virtual void DrawStatusField(wxDC& dc,
-                                 const wxRect& rect,
-                                 const wxString& label,
-                                 int flags = 0, int style = 0);
-#endif // wxUSE_STATUSBAR
-
     virtual void DrawFrameTitleBar(wxDC& dc,
                                    const wxRect& rect,
                                    const wxString& title,
@@ -244,8 +235,6 @@ public:
                                     int thumbPos = -1) const;
 #endif // wxUSE_SCROLLBAR
 
-    virtual wxCoord GetListboxItemHeight(wxCoord fontHeight)
-        { return fontHeight + 2; }
     virtual wxSize GetCheckBitmapSize() const
         { return wxSize(10, 10); }
     virtual wxSize GetRadioBitmapSize() const
@@ -288,10 +277,6 @@ public:
     virtual wxMenuGeometryInfo *GetMenuGeometry(wxWindow *win,
                                                 const wxMenu& menu) const;
 #endif // wxUSE_MENUS
-
-#if wxUSE_STATUSBAR
-    virtual wxSize GetStatusBarBorders(wxCoord *borderBetweenFields) const;
-#endif // wxUSE_STATUSBAR
 
     // helpers for "wxBitmap wxColourScheme::Get()"
     void DrawCheckBitmap(wxDC& dc, const wxRect& rect);
@@ -1895,27 +1880,6 @@ wxMenuGeometryInfo *wxGTKRenderer::GetMenuGeometry(wxWindow *win,
 
 #endif // wxUSE_MENUS
 
-#if wxUSE_STATUSBAR
-
-// ----------------------------------------------------------------------------
-// status bar
-// ----------------------------------------------------------------------------
-
-wxSize
-wxGTKRenderer::GetStatusBarBorders(wxCoord * WXUNUSED(borderBetweenFields)) const
-{
-    return wxSize(0,0);
-}
-
-void wxGTKRenderer::DrawStatusField(wxDC& WXUNUSED(dc),
-                                    const wxRect& WXUNUSED(rect),
-                                    const wxString& WXUNUSED(label),
-                                    int WXUNUSED(flags), int WXUNUSED(style))
-{
-}
-
-#endif // wxUSE_STATUSBAR
-
 // ----------------------------------------------------------------------------
 // combobox
 // ----------------------------------------------------------------------------
@@ -2309,11 +2273,6 @@ void wxGTKRenderer::DrawScrollbarShaft(wxDC& dc,
     DrawSolidRect(dc, wxSCHEME_COLOUR(m_scheme, SCROLLBAR), rectBar);
 }
 
-void wxGTKRenderer::DrawScrollCorner(wxDC& dc, const wxRect& rect)
-{
-    DrawSolidRect(dc, wxSCHEME_COLOUR(m_scheme, CONTROL), rect);
-}
-
 #if wxUSE_SCROLLBAR
 wxRect wxGTKRenderer::GetScrollbarRect(const wxScrollBar *scrollbar,
                                        wxScrollBar::Element elem,
@@ -2382,9 +2341,7 @@ void wxGTKRenderer::AdjustSize(wxSize *size, const wxWindow *window)
 #endif // wxUSE_SCROLLBAR
     {
         // take into account the border width
-        wxRect rectBorder = GetBorderDimensions(window->GetBorder());
-        size->x += rectBorder.x + rectBorder.width;
-        size->y += rectBorder.y + rectBorder.height;
+        wxStdRenderer::AdjustSize(size, window);
     }
 }
 
