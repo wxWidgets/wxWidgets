@@ -1457,8 +1457,46 @@ void wxWindowDC::DoDrawText( const wxString &text, wxCoord x, wxCoord y )
     const wxCharBuffer data = wxGTK_CONV( text );
     if ( !data )
         return;
-    const size_t datalen = strlen(data);
-    pango_layout_set_text( m_layout, data, datalen);
+    size_t datalen = strlen(data);
+
+    // TODO: as soon as Pango provides a function to check at runtime its
+    //       version, we can use it to disable the underline hack for
+    //       Pango >= 1.16 as the "underline of leading/trailing spaces"
+    //       has been fixed there
+    bool needshack = underlined;
+    char *hackstring = NULL;
+
+    if (needshack)
+    {
+        // a PangoLayout which has leading/trailing spaces with underlined font
+        // is not correctly drawn by this pango version: Pango won't underline the spaces.
+        // This can be a problem; e.g. wxHTML rendering of underlined text relies on
+        // this behaviour. To workaround this problem, we use a special hack here
+        // suggested by pango maintainer Behdad Esfahbod: we prepend and append two
+        // empty space characters and give them a dummy colour attribute.
+        // This will force Pango to underline the leading/trailing spaces, too.
+
+        // need to realloc the string to prepend & append our special characters
+        hackstring = (char*)malloc((datalen+7)*sizeof(char));
+
+        // copy the leading U+200C ZERO WIDTH NON-JOINER encoded in UTF8 format
+        strcpy(hackstring, "\342\200\214");
+
+        // copy the user string
+        memcpy(&hackstring[3], data, datalen);
+
+        // copy the trailing U+200C ZERO WIDTH NON-JOINER encoded in UTF8 format
+        strcpy(&hackstring[datalen+3], "\342\200\214");
+
+        // the special characters that we added require 6 additional bytes:
+        datalen += 6;
+
+        pango_layout_set_text(m_layout, hackstring, datalen);
+    }
+    else
+    {
+        pango_layout_set_text(m_layout, data, datalen);
+    }
 
     if (underlined)
     {
@@ -1467,6 +1505,22 @@ void wxWindowDC::DoDrawText( const wxString &text, wxCoord x, wxCoord y )
         a->start_index = 0;
         a->end_index = datalen;
         pango_attr_list_insert(attrs, a);
+
+        if (needshack)
+        {
+            // dummy colour for the leading space
+            a = pango_attr_foreground_new (0x0057, 0x52A9, 0xD614);
+            a->start_index = 0;
+            a->end_index = 1;
+            pango_attr_list_insert(attrs, a);
+
+            // dummy colour for the trailing space
+            a = pango_attr_foreground_new (0x0057, 0x52A9, 0xD614);
+            a->start_index = datalen - 1;
+            a->end_index = datalen;
+            pango_attr_list_insert(attrs, a);
+        }
+
         pango_layout_set_attributes(m_layout, attrs);
         pango_attr_list_unref(attrs);
     }
@@ -1537,6 +1591,9 @@ void wxWindowDC::DoDrawText( const wxString &text, wxCoord x, wxCoord y )
     height = wxCoord(height / m_scaleY);
     CalcBoundingBox (x + width, y + height);
     CalcBoundingBox (x, y);
+
+    if (hackstring)
+        free(hackstring);
 }
 
 
