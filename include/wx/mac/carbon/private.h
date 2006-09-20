@@ -793,12 +793,12 @@ protected :
 class wxMacDataItemBrowserControl;
 class wxMacListBoxItem;
 
-const short kTextColumnId = 1024;
-const short kNumericOrderColumnId = 1025;
+const DataBrowserPropertyID kTextColumnId = 1024;
+const DataBrowserPropertyID kNumericOrderColumnId = 1025;
 
 // for multi-column controls, we will use this + the column ID to identify the 
 // column. We don't use kTextColumnId there, and ideally the two should merge.
-const short kMinColumnId = 1050;
+const DataBrowserPropertyID kMinColumnId = 1050;
 
 // base API for high-level databrowser operations
 
@@ -908,8 +908,8 @@ public :
     void            UpdateItems(const wxMacDataItem *container, wxArrayMacDataItemPtr &items,
                         DataBrowserPropertyID property) const;
 
-    void            InsertColumn(int colId, DataBrowserPropertyType colType,
-                            const wxString& title, SInt16 just = teFlushDefault, int defaultWidth = -1);
+    void            InsertColumn(int colId, DataBrowserPropertyType colType, DataBrowserPropertyFlags flags ,
+                            const wxString& title, SInt16 just = teFlushDefault, int minWidth = -1, int maxWidth = -1);
                             
     int             GetColumnWidth(int colId);
     void            SetColumnWidth(int colId, int width);
