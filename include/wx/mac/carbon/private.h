@@ -908,8 +908,8 @@ public :
     void            UpdateItems(const wxMacDataItem *container, wxArrayMacDataItemPtr &items,
                         DataBrowserPropertyID property) const;
 
-    void            InsertColumn(int colId, DataBrowserPropertyType colType, DataBrowserPropertyFlags flags ,
-                            const wxString& title, SInt16 just = teFlushDefault, int minWidth = -1, int maxWidth = -1);
+    void            InsertColumn(int colId, DataBrowserPropertyType colType,
+                            const wxString& title, SInt16 just = teFlushDefault, int defaultWidth = -1);
                             
     int             GetColumnWidth(int colId);
     void            SetColumnWidth(int colId, int width);
