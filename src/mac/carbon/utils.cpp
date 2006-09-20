@@ -1880,7 +1880,7 @@ void wxMacDataItemBrowserControl::UpdateItems(const wxMacDataItem *container,
 }
 
 void wxMacDataItemBrowserControl::InsertColumn(int colId, DataBrowserPropertyType colType, DataBrowserPropertyFlags flags ,
-                                            const wxString& title, SInt16 just, int minWidth, int maxWidth)
+                                            const wxString& title, SInt16 just, int defaultWidth)
 {
     DataBrowserListViewColumnDesc columnDesc;
     columnDesc.headerBtnDesc.titleOffset = 0;
