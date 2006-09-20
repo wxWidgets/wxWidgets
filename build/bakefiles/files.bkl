@@ -703,7 +703,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/generic/filepickerg.h
     wx/generic/fontdlgg.h
     wx/generic/fontpickerg.h
-    wx/generic/imaglist.h
     wx/generic/logg.h
     wx/generic/msgdlgg.h
     wx/generic/numdlgg.h
@@ -857,6 +856,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 
 <set var="XWIN_LOWLEVEL_SRC" hints="files">
     src/generic/caret.cpp
+    src/generic/imaglist.cpp
     src/unix/dialup.cpp
     src/unix/fontenum.cpp
     src/unix/fontutil.cpp
@@ -865,6 +865,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 </set>
 <set var="XWIN_LOWLEVEL_HDR" hints="files">
     wx/generic/caret.h
+    wx/generic/imaglist.h
     wx/unix/fontutil.h
     wx/unix/utilsx11.h
 </set>
@@ -1723,6 +1724,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/caret.cpp
     src/generic/colour.cpp
     src/generic/icon.cpp
+    src/generic/imaglist.cpp
     src/generic/timer.cpp
     src/mgl/app.cpp
     src/mgl/bitmap.cpp
@@ -1751,6 +1753,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/generic/caret.h
     wx/generic/colour.h
     wx/generic/icon.h
+    wx/generic/imaglist.h
     wx/generic/timer.h
     wx/mgl/app.h
     wx/mgl/bitmap.h
@@ -1801,6 +1804,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/caret.cpp
     src/generic/colour.cpp
     src/generic/icon.cpp
+    src/generic/imaglist.cpp
     src/generic/timer.cpp
 </set>
 <set var="DFB_LOWLEVEL_HDR" hints="files">
@@ -1826,6 +1830,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/generic/caret.h
     wx/generic/colour.h
     wx/generic/icon.h
+    wx/generic/imaglist.h
     wx/generic/timer.h
 </set>
 
@@ -1835,6 +1840,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <!-- ====================================================================== -->
 
 <set var="OS2_LOWLEVEL_SRC" hints="files">
+    <!-- wxUniv builds not supported under OS/2 -->
 </set>
 <set var="OS2_LOWLEVEL_HDR" hints="files">
 </set>
@@ -2501,7 +2507,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/fdrepdlg.cpp
     src/generic/filedlgg.cpp
     src/generic/fontdlgg.cpp
-    src/generic/imaglist.cpp
     src/generic/listctrl.cpp
     src/generic/mdig.cpp
     src/generic/msgdlgg.cpp
