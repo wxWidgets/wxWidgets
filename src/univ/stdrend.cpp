@@ -304,6 +304,12 @@ void wxStdRenderer::DrawAntiSunkenBorder(wxDC& dc, wxRect *rect)
     DrawShadedRect(dc, rect, m_penHighlight, m_penDarkGrey);
 }
 
+void wxStdRenderer::DrawFrameBorder(wxDC& dc, wxRect *rect)
+{
+    DrawShadedRect(dc, rect, m_penDarkGrey, m_penHighlight);
+    DrawShadedRect(dc, rect, m_penHighlight, m_penDarkGrey);
+}
+
 void wxStdRenderer::DrawBorder(wxDC& dc,
                                wxBorder border,
                                const wxRect& rectTotal,
@@ -493,9 +499,7 @@ void wxStdRenderer::DrawFrame(wxDC& dc,
     }
     else // no label
     {
-        // just draw the complete frame
-        DrawShadedRect(dc, &rectFrame, m_penDarkGrey, m_penHighlight);
-        DrawShadedRect(dc, &rectFrame, m_penHighlight, m_penDarkGrey);
+        DrawFrameBorder(dc, &rectFrame);
     }
 }
 
@@ -525,6 +529,31 @@ void wxStdRenderer::DrawItem(wxDC& dc,
     {
         DrawFocusRect(dc, rect);
     }
+}
+
+void wxStdRenderer::DrawCheckItemBitmap(wxDC& dc,
+                                        const wxBitmap& bitmap,
+                                        const wxRect& rect,
+                                        int flags)
+{
+    DrawCheckButton(dc, wxEmptyString, bitmap, rect, flags);
+}
+
+void wxStdRenderer::DrawCheckItem(wxDC& dc,
+                                  const wxString& label,
+                                  const wxBitmap& bitmap,
+                                  const wxRect& rect,
+                                  int flags)
+{
+    wxRect rectBitmap = rect;
+    rectBitmap.width = GetCheckBitmapSize().x;
+    DrawCheckItemBitmap(dc, bitmap, rectBitmap, flags);
+
+    wxRect rectLabel = rect;
+    wxCoord shift = rectBitmap.width + 2*GetCheckItemMargin();
+    rectLabel.x += shift;
+    rectLabel.width -= shift;
+    DrawItem(dc, label, rectLabel, flags);
 }
 
 // ----------------------------------------------------------------------------
@@ -679,6 +708,32 @@ void wxStdRenderer::DrawLineWrapMark(wxDC& WXUNUSED(dc),
                                      const wxRect& WXUNUSED(rect))
 {
     // nothing by default
+}
+
+int wxStdRenderer::GetTextBorderWidth(const wxTextCtrl * WXUNUSED(text)) const
+{
+    return 1;
+}
+
+wxRect
+wxStdRenderer::GetTextTotalArea(const wxTextCtrl *text, const wxRect& rect) const
+{
+    wxRect rectTotal = rect;
+    rectTotal.Inflate(GetTextBorderWidth(text));
+    return rectTotal;
+}
+
+wxRect wxStdRenderer::GetTextClientArea(const wxTextCtrl *text,
+                                        const wxRect& rect,
+                                        wxCoord *extraSpaceBeyond) const
+{
+    wxRect rectText = rect;
+    rectText.Deflate(GetTextBorderWidth(text));
+
+    if ( extraSpaceBeyond )
+        *extraSpaceBeyond = 0;
+
+    return rectText;
 }
 
 #endif // wxUSE_TEXTCTRL

@@ -117,11 +117,6 @@ public:
                                     int flags = 0);
     virtual void DrawScrollCorner(wxDC& dc,
                                   const wxRect& rect);
-    virtual void DrawCheckItem(wxDC& dc,
-                               const wxString& label,
-                               const wxBitmap& bitmap,
-                               const wxRect& rect,
-                               int flags = 0);
 
 #if wxUSE_TOOLBAR
     virtual void DrawToolBarButton(wxDC& dc,
@@ -264,8 +259,6 @@ public:
         { return wxSize(6, 6); }
 
 #if wxUSE_TEXTCTRL
-    virtual wxRect GetTextTotalArea(const wxTextCtrl *text,
-                                    const wxRect& rect) const;
     virtual wxRect GetTextClientArea(const wxTextCtrl *text,
                                      const wxRect& rect,
                                      wxCoord *extraSpaceBeyond) const;
@@ -306,6 +299,7 @@ public:
     void DrawUndeterminedBitmap(wxDC& dc, const wxRect& rect, bool isPressed);
 
 protected:
+    // overridden wxStdRenderer methods
     virtual void DrawSunkenBorder(wxDC& dc, wxRect *rect);
 
     virtual void DrawFrameWithLabel(wxDC& dc,
@@ -315,6 +309,11 @@ protected:
                                     int flags,
                                     int alignment,
                                     int indexAccel);
+
+    virtual void DrawCheckItemBitmap(wxDC& dc,
+                                     const wxBitmap& bitmap,
+                                     const wxRect& rect,
+                                     int flags);
 
     // get the colour to use for background
     wxColour GetBackgroundColour(int flags) const
@@ -395,15 +394,6 @@ protected:
 
     // draw the radio button bitmap for the given state
     void DrawRadioBitmap(wxDC& dc, const wxRect& rect, int flags);
-
-    // draw check/radio - the bitmap must be a valid one by now
-    void DoDrawCheckOrRadioBitmap(wxDC& dc,
-                                  const wxString& label,
-                                  const wxBitmap& bitmap,
-                                  const wxRect& rectTotal,
-                                  int flags,
-                                  wxAlignment align,
-                                  int indexAccel);
 
     // common part of DrawMenuItem() and DrawMenuBarItem()
     void DoDrawMenuItem(wxDC& dc,
@@ -995,32 +985,17 @@ void wxGTKRenderer::DrawFrameWithLabel(wxDC& dc,
 }
 
 // ----------------------------------------------------------------------------
-// label
-// ----------------------------------------------------------------------------
-
-void wxGTKRenderer::DrawCheckItem(wxDC& dc,
-                                  const wxString& label,
-                                  const wxBitmap& bitmap,
-                                  const wxRect& rect,
-                                  int flags)
-{
-    wxRect rectBitmap = rect;
-    rectBitmap.x -= 1;
-    rectBitmap.width = GetCheckBitmapSize().x;
-
-    // never draw the focus rect around the check indicators here
-    DrawCheckButton(dc, wxEmptyString, bitmap, rectBitmap, flags & ~wxCONTROL_FOCUSED);
-
-    wxRect rectLabel = rect;
-    wxCoord shift = rectBitmap.width + 2*GetCheckItemMargin();
-    rectLabel.x += shift;
-    rectLabel.width -= shift;
-    DrawItem(dc, label, rectLabel, flags);
-}
-
-// ----------------------------------------------------------------------------
 // check/radion buttons
 // ----------------------------------------------------------------------------
+
+void wxGTKRenderer::DrawCheckItemBitmap(wxDC& dc,
+                                        const wxBitmap& bitmap,
+                                        const wxRect& rect,
+                                        int flags)
+{
+    // never draw the focus rect around the check indicators here
+    DrawCheckButton(dc, wxEmptyString, bitmap, rect, flags & ~wxCONTROL_FOCUSED);
+}
 
 void wxGTKRenderer::DrawUndeterminedBitmap(wxDC& dc,
                                            const wxRect& rectTotal,
@@ -1306,20 +1281,12 @@ void wxGTKRenderer::DrawToolBarButton(wxDC& dc,
 
 #if wxUSE_TEXTCTRL
 
-wxRect wxGTKRenderer::GetTextTotalArea(const wxTextCtrl * WXUNUSED(text),
-                                       const wxRect& rect) const
-{
-    wxRect rectTotal = rect;
-    rectTotal.Inflate(2*BORDER_THICKNESS);
-    return rectTotal;
-}
-
 wxRect wxGTKRenderer::GetTextClientArea(const wxTextCtrl *text,
                                         const wxRect& rect,
                                         wxCoord *extraSpaceBeyond) const
 {
-    wxRect rectText = rect;
-    rectText.Deflate(2*BORDER_THICKNESS);
+    wxRect
+      rectText = wxStdRenderer::GetTextClientArea(text, rect, extraSpaceBeyond);
 
     if ( text->WrapLines() )
     {
@@ -1334,8 +1301,6 @@ wxRect wxGTKRenderer::GetTextClientArea(const wxTextCtrl *text,
 
     return rectText;
 }
-
-#endif // wxUSE_TEXTCTRL
 
 void wxGTKRenderer::DrawLineWrapMark(wxDC& dc, const wxRect& rect)
 {
@@ -1361,6 +1326,8 @@ void wxGTKRenderer::DrawLineWrapMark(wxDC& dc, const wxRect& rect)
         dc.SetTextForeground(colFgOld);
     }
 }
+
+#endif // wxUSE_TEXTCTRL
 
 // ----------------------------------------------------------------------------
 // notebook

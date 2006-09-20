@@ -83,6 +83,11 @@ public:
                           const wxString& label,
                           const wxRect& rect,
                           int flags = 0);
+    virtual void DrawCheckItem(wxDC& dc,
+                               const wxString& label,
+                               const wxBitmap& bitmap,
+                               const wxRect& rect,
+                               int flags = 0);
 
     virtual void DrawCheckButton(wxDC& dc,
                                  const wxString& label,
@@ -108,6 +113,12 @@ public:
                               int flags = 0);
 
     virtual void DrawLineWrapMark(wxDC& dc, const wxRect& rect);
+
+    virtual wxRect GetTextTotalArea(const wxTextCtrl *text,
+                                    const wxRect& rect) const;
+    virtual wxRect GetTextClientArea(const wxTextCtrl *text,
+                                     const wxRect& rect,
+                                     wxCoord *extraSpaceBeyond) const;
 #endif // wxUSE_TEXTCTRL
 
     virtual wxRect GetBorderDimensions(wxBorder border) const;
@@ -135,7 +146,8 @@ protected:
     {
         IndicatorType_Check,
         IndicatorType_Radio,
-        IndicatorType_Menu,
+        IndicatorType_MaxCtrl,
+        IndicatorType_Menu = IndicatorType_MaxCtrl,
         IndicatorType_Max
     };
 
@@ -184,6 +196,7 @@ protected:
     virtual void DrawRaisedBorder(wxDC& dc, wxRect *rect);
     virtual void DrawSunkenBorder(wxDC& dc, wxRect *rect);
     virtual void DrawAntiSunkenBorder(wxDC& dc, wxRect *rect);
+    virtual void DrawFrameBorder(wxDC& dc, wxRect *rect);
 
 
     // draw the frame with non-empty label inside the given rectText
@@ -201,6 +214,13 @@ protected:
                                const wxRect& rectLabel);
 
 
+    // draw the bitmap for a check item (which is by default the same as check
+    // box one but may be different)
+    virtual void DrawCheckItemBitmap(wxDC& dc,
+                                     const wxBitmap& bitmap,
+                                     const wxRect& rect,
+                                     int flags);
+
     // common routine for drawing check and radio buttons
     void DrawCheckOrRadioButton(wxDC& dc,
                                 const wxString& label,
@@ -214,6 +234,10 @@ protected:
     virtual wxBitmap GetRadioBitmap(int flags) = 0;
     virtual wxBitmap GetCheckBitmap(int flags) = 0;
 
+#if wxUSE_TEXTCTRL
+    // return the width of the border around the text area in the text control
+    virtual int GetTextBorderWidth(const wxTextCtrl *text) const;
+#endif // wxUSE_TEXTCTRL
 
     // return the starting and ending positions, in pixels, of the thumb of a
     // scrollbar with the given logical position, thumb size and range and the

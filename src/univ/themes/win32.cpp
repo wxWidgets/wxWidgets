@@ -170,11 +170,6 @@ public:
                                     int flags = 0);
     virtual void DrawScrollCorner(wxDC& dc,
                                   const wxRect& rect);
-    virtual void DrawCheckItem(wxDC& dc,
-                               const wxString& label,
-                               const wxBitmap& bitmap,
-                               const wxRect& rect,
-                               int flags = 0);
 
 #if wxUSE_TOOLBAR
     virtual void DrawToolBarButton(wxDC& dc,
@@ -342,6 +337,7 @@ public:
 #endif // wxUSE_STATUSBAR
 
 protected:
+    // overridden wxStdRenderer methods
     virtual void DrawFrameWithLabel(wxDC& dc,
                                     const wxString& label,
                                     const wxRect& rectFrame,
@@ -349,6 +345,11 @@ protected:
                                     int flags,
                                     int alignment,
                                     int indexAccel);
+
+    virtual void DrawCheckItemBitmap(wxDC& dc,
+                                     const wxBitmap& bitmap,
+                                     const wxRect& rect,
+                                     int flags);
 
 
     // draw the border used for scrollbar arrows
@@ -362,16 +363,6 @@ protected:
     void DrawArrowButton(wxDC& dc, const wxRect& rect,
                          wxArrowDirection arrowDir,
                          wxArrowStyle arrowStyle);
-
-    // DrawCheckButton helper
-    void DrawCheckOrRadioButton(wxDC& dc,
-                                const wxString& label,
-                                const wxBitmap& bitmap,
-                                const wxRect& rect,
-                                int flags,
-                                wxAlignment align,
-                                int indexAccel,
-                                wxCoord focusOffsetY);
 
     // draw a normal or transposed line (useful for using the same code fo both
     // horizontal and vertical widgets)
@@ -388,9 +379,9 @@ protected:
 
     // get the standard check/radio button bitmap
     wxBitmap GetIndicator(IndicatorType indType, int flags);
-    wxBitmap GetCheckBitmap(int flags)
+    virtual wxBitmap GetCheckBitmap(int flags)
         { return GetIndicator(IndicatorType_Check, flags); }
-    wxBitmap GetRadioBitmap(int flags)
+    virtual wxBitmap GetRadioBitmap(int flags)
         { return GetIndicator(IndicatorType_Radio, flags); }
 
 private:
@@ -399,7 +390,7 @@ private:
 
     wxFont m_titlebarFont;
 
-    // the checked and unchecked bitmaps for DrawCheckItem()
+    // the checked and unchecked bitmaps for DrawCheckItemBitmap()
     wxBitmap m_bmpCheckBitmaps[IndicatorStatus_Max];
 
     // the bitmaps returned by GetIndicator()
@@ -1715,11 +1706,10 @@ void wxWin32Renderer::DrawButtonBorder(wxDC& dc,
 // (check)listbox items
 // ----------------------------------------------------------------------------
 
-void wxWin32Renderer::DrawCheckItem(wxDC& dc,
-                                    const wxString& label,
-                                    const wxBitmap& bitmap,
-                                    const wxRect& rect,
-                                    int flags)
+void wxWin32Renderer::DrawCheckItemBitmap(wxDC& dc,
+                                          const wxBitmap& bitmap,
+                                          const wxRect& rect,
+                                          int flags)
 {
     wxBitmap bmp;
     if ( bitmap.Ok() )
@@ -1742,13 +1732,6 @@ void wxWin32Renderer::DrawCheckItem(wxDC& dc,
 
     dc.DrawBitmap(bmp, rect.x, rect.y + (rect.height - bmp.GetHeight()) / 2 - 1,
                   true /* use mask */);
-
-    wxRect rectLabel = rect;
-    int bmpWidth = bmp.GetWidth();
-    rectLabel.x += bmpWidth;
-    rectLabel.width -= bmpWidth;
-
-    DrawItem(dc, label, rectLabel, flags);
 }
 
 // ----------------------------------------------------------------------------
@@ -1775,6 +1758,10 @@ wxBitmap wxWin32Renderer::GetIndicator(IndicatorType indType, int flags)
 
     return bmp;
 }
+
+// ----------------------------------------------------------------------------
+// toolbar stuff
+// ----------------------------------------------------------------------------
 
 #if wxUSE_TOOLBAR
 void wxWin32Renderer::DrawToolBarButton(wxDC& dc,
@@ -3564,28 +3551,20 @@ wxBitmap wxWin32ArtProvider::CreateBitmap(const wxArtID& id,
 // text control geometry
 // ----------------------------------------------------------------------------
 
-static inline int GetTextBorderWidth()
-{
-    return 1;
-}
-
 wxRect
-wxWin32Renderer::GetTextTotalArea(const wxTextCtrl * WXUNUSED(text),
+wxWin32Renderer::GetTextTotalArea(const wxTextCtrl *text,
                                   const wxRect& rect) const
 {
-    wxRect rectTotal = rect;
+    wxRect rectTotal = wxStdRenderer::GetTextTotalArea(text, rect);
 
-    wxCoord widthBorder = GetTextBorderWidth();
-    rectTotal.Inflate(widthBorder);
-
-    // this is what Windows does
+    // this is strange but it's what Windows does
     rectTotal.height++;
 
     return rectTotal;
 }
 
 wxRect
-wxWin32Renderer::GetTextClientArea(const wxTextCtrl * WXUNUSED(text),
+wxWin32Renderer::GetTextClientArea(const wxTextCtrl *text,
                                    const wxRect& rect,
                                    wxCoord *extraSpaceBeyond) const
 {
@@ -3595,13 +3574,7 @@ wxWin32Renderer::GetTextClientArea(const wxTextCtrl * WXUNUSED(text),
     if ( rectText.height > 0 )
         rectText.height--;
 
-    wxCoord widthBorder = GetTextBorderWidth();
-    rectText.Inflate(-widthBorder);
-
-    if ( extraSpaceBeyond )
-        *extraSpaceBeyond = 0;
-
-    return rectText;
+    return wxStdRenderer::GetTextClientArea(text, rect, extraSpaceBeyond);
 }
 
 #endif // wxUSE_TEXTCTRL
