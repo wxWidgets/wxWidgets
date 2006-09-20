@@ -1276,6 +1276,13 @@ void wxMacListCtrlItem::Notification(wxMacDataItemBrowserControl *owner ,
             
         wxListEvent event( wxEVT_COMMAND_LIST_ITEM_SELECTED, list->GetId() );
         bool isSingle = list->GetWindowStyle() | wxLC_SINGLE_SEL;
+        event.SetEventObject( list );
+        event.m_itemIndex = owner->GetLineFromItem( this ) ;
+        if ( !list->IsVirtual() )
+        {
+            lb->MacGetColumnInfo(event.m_itemIndex,0,event.m_item);
+        }
+        
         switch (message)
         {
             case kDataBrowserItemDeselected:
@@ -1293,18 +1300,25 @@ void wxMacListCtrlItem::Notification(wxMacDataItemBrowserControl *owner ,
                 trigger = true;
                 break;
 
+            case kDataBrowserEditStarted :
+                // TODO : how to veto ?
+                event.SetEventType( wxEVT_COMMAND_LIST_BEGIN_LABEL_EDIT ) ;
+                trigger = true ;
+                break ;
+                
+            case kDataBrowserEditStopped :
+                // TODO probably trigger only upon the value store callback, because
+                // here IIRC we cannot veto
+                event.SetEventType( wxEVT_COMMAND_LIST_END_LABEL_EDIT ) ;
+                trigger = true ;
+                break ;
+
             default:
                 break;
         }
 
         if ( trigger )
         {
-            event.SetEventObject( list );
-            event.m_itemIndex = owner->GetLineFromItem( this ) ;
-            if ( !list->IsVirtual() )
-            {
-                lb->MacGetColumnInfo(event.m_itemIndex,0,event.m_item);
-            }
             // direct notification is not always having the listbox GetSelection() having in synch with event
             wxPostEvent( list->GetEventHandler(), event );
         }
@@ -1525,41 +1539,65 @@ OSStatus wxMacListCtrlItem::GetSetData( wxMacDataItemBrowserControl *owner ,
 {
         
     OSStatus err = errDataBrowserPropertyNotSupported;
+    wxListCtrl* list = wxDynamicCast( owner->GetPeer() , wxListCtrl );
     if ( !changeValue )
     {
-        if ( property >= kMinColumnId ){
-            short listColumn = property - kMinColumnId;
-            
-            if (HasColumnInfo(listColumn)){
-                wxListItem* item = GetColumnInfo(listColumn);
-                wxMacCFStringHolder cfStr;
-                
-                if (item->GetText()){
-                    cfStr.Assign( item->GetText(), wxLocale::GetSystemEncoding() );
-                    err = ::SetDataBrowserItemDataText( itemData, cfStr );
-                    err = noErr;
+        switch (property)
+        {
+            case kDataBrowserItemIsEditableProperty :
+                if ( list && list->HasFlag( wxLC_EDIT_LABELS ) )
+                {
+                    verify_noerr(SetDataBrowserItemDataBooleanValue( itemData, true ));
+                    err = noErr ;
                 }
-                
-                int imgIndex = item->GetImage();
-                if ( (item->GetMask() & wxLIST_MASK_IMAGE) ){
-                    wxListCtrl* list = wxDynamicCast( owner->GetPeer() , wxListCtrl );
-                    wxImageList* imageList = list->GetImageList(wxIMAGE_LIST_SMALL);
-                    if (imageList && imageList->GetImageCount() > 0){
-                        wxBitmap bmp = imageList->GetBitmap(imgIndex);
-                        IconRef icon = bmp.GetBitmapData()->GetIconRef();
-                        ::SetDataBrowserItemDataIcon(itemData, icon);
+                break ;
+            default :
+                if ( property >= kMinColumnId ){
+                    short listColumn = property - kMinColumnId;
+                    
+                    if (HasColumnInfo(listColumn)){
+                        wxListItem* item = GetColumnInfo(listColumn);
+                        wxMacCFStringHolder cfStr;
+                        
+                        if (item->GetText()){
+                            cfStr.Assign( item->GetText(), wxLocale::GetSystemEncoding() );
+                            err = ::SetDataBrowserItemDataText( itemData, cfStr );
+                            err = noErr;
+                        }
+                        
+                        int imgIndex = item->GetImage();
+                        if ( (item->GetMask() & wxLIST_MASK_IMAGE) ){
+                            wxImageList* imageList = list->GetImageList(wxIMAGE_LIST_SMALL);
+                            if (imageList && imageList->GetImageCount() > 0){
+                                wxBitmap bmp = imageList->GetBitmap(imgIndex);
+                                IconRef icon = bmp.GetBitmapData()->GetIconRef();
+                                ::SetDataBrowserItemDataIcon(itemData, icon);
+                            }
+                        }
+                        
                     }
                 }
-                
-            }
+                break ;
         }
     }
     else
     {
         switch (property)
         {
-            // no editable props here
-            default:
+             default:
+                if ( property >= kMinColumnId ){
+                    short listColumn = property - kMinColumnId;
+                    
+                    if (HasColumnInfo(listColumn)){
+                        // TODO probably send the 'end edit' from here, as we
+                        // can then deal with the veto
+                        CFStringRef sr ;
+                        verify_noerr( GetDataBrowserItemDataText( itemData , &sr ) ) ;
+                        wxMacCFStringHolder cfStr(sr) ;;
+                        list->SetItem( owner->GetLineFromItem(this) , listColumn, cfStr.AsString() ) ;
+                        err = noErr ;                        
+                    }
+                }
                 break;
         }
     }
