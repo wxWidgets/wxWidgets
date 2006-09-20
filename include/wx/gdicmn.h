@@ -386,6 +386,7 @@ public:
 
     // operations with rect
     wxRect& Inflate(wxCoord dx, wxCoord dy);
+    wxRect& Inflate(const wxSize& d) { return Inflate(d.x, d.y); }
     wxRect& Inflate(wxCoord d) { return Inflate(d, d); }
     wxRect Inflate(wxCoord dx, wxCoord dy) const
     {
@@ -395,6 +396,7 @@ public:
     }
 
     wxRect& Deflate(wxCoord dx, wxCoord dy) { return Inflate(-dx, -dy); }
+    wxRect& Deflate(const wxSize& d) { return Inflate(-d.x, -d.y); }
     wxRect& Deflate(wxCoord d) { return Inflate(-d); }
     wxRect Deflate(wxCoord dx, wxCoord dy) const
     {
