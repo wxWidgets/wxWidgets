@@ -1383,22 +1383,23 @@ void wxStdRenderer::DrawFrameButton(wxDC& dc,
     if ( !bmp.Ok() )
         return;
 
-    wxRect r(x, y, FRAME_BUTTON_WIDTH, FRAME_BUTTON_HEIGHT);
+    wxRect rectBtn(x, y, FRAME_BUTTON_WIDTH, FRAME_BUTTON_HEIGHT);
     if ( flags & wxCONTROL_PRESSED )
     {
-        DrawSunkenBorder(dc, &r);
+        DrawSunkenBorder(dc, &rectBtn);
 
-        r.x++;
-        r.y++;
+        rectBtn.x++;
+        rectBtn.y++;
     }
     else
     {
-        DrawRaisedBorder(dc, &r);
+        DrawRaisedBorder(dc, &rectBtn);
     }
 
-    DrawBackground(dc, wxSCHEME_COLOUR(m_scheme, CONTROL), r);
+    DrawBackground(dc, wxSCHEME_COLOUR(m_scheme, CONTROL), rectBtn);
 
-    dc.DrawBitmap(bmp, r.x, r.y, true);
+    wxRect rectBmp(0, 0, bmp.GetWidth(), bmp.GetHeight());
+    dc.DrawBitmap(bmp, rectBmp.CentreIn(rectBtn).GetPosition(), true);
 }
 
 
