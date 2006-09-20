@@ -583,9 +583,9 @@ wxColour wxMonoColourScheme::Get(wxMonoColourScheme::StdColour col) const
         case SCROLLBAR:
         case SCROLLBAR_PRESSED:
         case GAUGE:
-        case HIGHLIGHT:
         case TITLEBAR:
         case TITLEBAR_ACTIVE:
+        case HIGHLIGHT_TEXT:
         case DESKTOP:
             return GetBg();
 
@@ -601,9 +601,9 @@ wxColour wxMonoColourScheme::Get(wxMonoColourScheme::StdColour col) const
         case CONTROL_TEXT:
         case CONTROL_TEXT_DISABLED:
         case CONTROL_TEXT_DISABLED_SHADOW:
-        case HIGHLIGHT_TEXT:
         case TITLEBAR_TEXT:
         case TITLEBAR_ACTIVE_TEXT:
+        case HIGHLIGHT:
             return GetFg();
 
     }
