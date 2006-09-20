@@ -27,7 +27,7 @@
 //#include "wx/msw/dib.h"
 #include "wx/os2/tabctrl.h"
 #include "wx/os2/private.h"
-#include "wx/generic/imaglist.h"
+#include "wx/imaglist.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxTabCtrl, wxControl)
 

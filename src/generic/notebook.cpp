@@ -35,7 +35,7 @@
     #include  "wx/settings.h"
 #endif
 
-#include  "wx/generic/imaglist.h"
+#include  "wx/imaglist.h"
 #include  "wx/generic/tabg.h"
 
 // ----------------------------------------------------------------------------
