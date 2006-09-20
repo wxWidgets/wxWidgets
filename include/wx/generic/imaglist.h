@@ -57,7 +57,8 @@ private:
     DECLARE_DYNAMIC_CLASS(wxGenericImageList)
 };
 
-#if !defined(__WXMSW__) && !defined(__WXMAC__)
+#ifndef wxHAS_NATIVE_IMAGELIST
+
 /*
  * wxImageList has to be a real class or we have problems with
  * the run-time information.
@@ -75,7 +76,7 @@ public:
     {
     }
 };
-#endif // !HAVE_NATIVE_IMAGELIST
+#endif // !wxHAS_NATIVE_IMAGELIST
 
 #endif  // __IMAGELISTH_G__
 
