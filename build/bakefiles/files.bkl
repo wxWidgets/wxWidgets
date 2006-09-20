@@ -2490,6 +2490,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <set var="UNIV_THEMES_SRC" hints="files">
     src/univ/themes/gtk.cpp
     src/univ/themes/metal.cpp
+    src/univ/themes/mono.cpp
     src/univ/themes/win32.cpp
 </set>
 
