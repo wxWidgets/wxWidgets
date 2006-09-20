@@ -289,7 +289,9 @@ protected:
     virtual void DrawRaisedBorder(wxDC& dc, wxRect *rect);
     virtual void DrawSunkenBorder(wxDC& dc, wxRect *rect);
     virtual void DrawAntiSunkenBorder(wxDC& dc, wxRect *rect);
-    virtual void DrawFrameBorder(wxDC& dc, wxRect *rect);
+    virtual void DrawBoxBorder(wxDC& dc, wxRect *rect);
+    virtual void DrawStaticBorder(wxDC& dc, wxRect *rect);
+    virtual void DrawExtraBorder(wxDC& dc, wxRect *rect);
 
 
     // draw the frame with non-empty label inside the given rectText

@@ -366,10 +366,20 @@ void wxStdRenderer::DrawAntiSunkenBorder(wxDC& dc, wxRect *rect)
     DrawShadedRect(dc, rect, m_penHighlight, m_penDarkGrey);
 }
 
-void wxStdRenderer::DrawFrameBorder(wxDC& dc, wxRect *rect)
+void wxStdRenderer::DrawBoxBorder(wxDC& dc, wxRect *rect)
 {
     DrawShadedRect(dc, rect, m_penDarkGrey, m_penHighlight);
     DrawShadedRect(dc, rect, m_penHighlight, m_penDarkGrey);
+}
+
+void wxStdRenderer::DrawStaticBorder(wxDC& dc, wxRect *rect)
+{
+    DrawShadedRect(dc, rect, m_penDarkGrey, m_penHighlight);
+}
+
+void wxStdRenderer::DrawExtraBorder(wxDC& dc, wxRect *rect)
+{
+    DrawRect(dc, rect, m_penLightGrey);
 }
 
 void wxStdRenderer::DrawBorder(wxDC& dc,
@@ -388,11 +398,11 @@ void wxStdRenderer::DrawBorder(wxDC& dc,
 
         case wxBORDER_DOUBLE:
             DrawAntiSunkenBorder(dc, &rect);
-            DrawRect(dc, &rect, m_penLightGrey);
+            DrawExtraBorder(dc, &rect);
             break;
 
         case wxBORDER_STATIC:
-            DrawShadedRect(dc, &rect, m_penDarkGrey, m_penHighlight);
+            DrawStaticBorder(dc, &rect);
             break;
 
         case wxBORDER_RAISED:
@@ -574,7 +584,7 @@ void wxStdRenderer::DrawFrame(wxDC& dc,
     }
     else // no label
     {
-        DrawFrameBorder(dc, &rectFrame);
+        DrawBoxBorder(dc, &rectFrame);
     }
 }
 
@@ -1256,11 +1266,10 @@ void wxStdRenderer::DrawFrameBorder(wxDC& dc, const wxRect& rect, int flags)
 
     wxRect r(rect);
 
-    DrawShadedRect(dc, &r, m_penLightGrey, m_penBlack);
-    DrawShadedRect(dc, &r, m_penHighlight, m_penDarkGrey);
-    DrawShadedRect(dc, &r, m_penLightGrey, m_penLightGrey);
+    DrawAntiSunkenBorder(dc, &r);
+    DrawExtraBorder(dc, &r);
     if ( flags & wxTOPLEVEL_RESIZEABLE )
-        DrawShadedRect(dc, &r, m_penLightGrey, m_penLightGrey);
+        DrawExtraBorder(dc, &r);
 }
 
 void wxStdRenderer::DrawFrameBackground(wxDC& dc, const wxRect& rect, int flags)
@@ -1388,8 +1397,7 @@ void wxStdRenderer::DrawFrameButton(wxDC& dc,
     {
         DrawSunkenBorder(dc, &rectBtn);
 
-        rectBtn.x++;
-        rectBtn.y++;
+        rectBtn.Offset(1, 1);
     }
     else
     {

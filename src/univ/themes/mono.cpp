@@ -58,12 +58,6 @@ public:
                                  int indexAccel = -1,
                                  wxRect *rectBounds = NULL);
 
-    virtual void DrawBorder(wxDC& dc,
-                            wxBorder border,
-                            const wxRect& rect,
-                            int flags = 0,
-                            wxRect *rectIn = NULL);
-
     virtual void DrawButtonBorder(wxDC& dc,
                                   const wxRect& rect,
                                   int flags = 0,
@@ -220,8 +214,12 @@ protected:
         { DrawSimpleBorder(dc, rect); }
     virtual void DrawAntiSunkenBorder(wxDC& dc, wxRect *rect)
         { DrawSimpleBorder(dc, rect); }
-    virtual void DrawFrameBorder(wxDC& dc, wxRect *rect)
+    virtual void DrawBoxBorder(wxDC& dc, wxRect *rect)
         { DrawSimpleBorder(dc, rect); }
+    virtual void DrawStaticBorder(wxDC& dc, wxRect *rect)
+        { DrawSimpleBorder(dc, rect); }
+    virtual void DrawExtraBorder(wxDC& WXUNUSED(dc), wxRect * WXUNUSED(rect))
+        { /* no extra borders for us */ }
 
     // all our XPMs are of this size
     static wxSize GetStdBmpSize() { return wxSize(8, 8); }
@@ -662,40 +660,6 @@ wxRect wxMonoRenderer::GetBorderDimensions(wxBorder border) const
     rect.height = width;
 
     return rect;
-}
-
-void wxMonoRenderer::DrawBorder(wxDC& dc,
-                                wxBorder border,
-                                const wxRect& rectTotal,
-                                int WXUNUSED(flags),
-                                wxRect *rectIn)
-{
-    wxRect rect = rectTotal;
-
-    switch ( border )
-    {
-        case wxBORDER_DOUBLE:
-            DrawSimpleBorder(dc, &rect);
-            // fall through
-
-        case wxBORDER_SUNKEN:
-        case wxBORDER_STATIC:
-        case wxBORDER_RAISED:
-        case wxBORDER_SIMPLE:
-            DrawSimpleBorder(dc, &rect);
-            break;
-
-        default:
-            wxFAIL_MSG(_T("unknown border type"));
-            // fall through
-
-        case wxBORDER_DEFAULT:
-        case wxBORDER_NONE:
-            break;
-    }
-
-    if ( rectIn )
-        *rectIn = rect;
 }
 
 void wxMonoRenderer::DrawButtonBorder(wxDC& dc,
