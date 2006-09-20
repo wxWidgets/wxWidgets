@@ -129,11 +129,7 @@ void wxStatusBarUniv::DoDraw(wxControlRenderer *renderer)
                  GetParent()->HasFlag(wxRESIZE_BORDER) &&
                  parentTLW && !parentTLW->IsMaximized() )
             {
-                // NB: we use wxCONTROL_ISDEFAULT for this because it doesn't
-                //     have any meaning for the status bar otherwise anyhow
-                //     (it's still ugly, of course, but there are too few flags
-                //     to squander them for things like this)
-                flags |= wxCONTROL_ISDEFAULT;
+                flags |= wxCONTROL_SIZEGRIP;
             }
 
             int style;
