@@ -1578,7 +1578,6 @@ inline bool operator!=(const wxString& s, wxChar c) { return !s.IsSameAs(c); }
 
 #include "wx/iosfwrap.h"
 
-WXDLLIMPEXP_BASE wxSTD istream& operator>>(wxSTD istream&, wxString&);
 WXDLLIMPEXP_BASE wxSTD ostream& operator<<(wxSTD ostream&, const wxString&);
 
 #endif  // wxSTD_STRING_COMPATIBILITY

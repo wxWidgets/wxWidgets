@@ -86,43 +86,7 @@ extern const wxChar WXDLLIMPEXP_BASE *wxEmptyString = &g_strEmpty.dummy;
 
 #if wxUSE_STD_IOSTREAM
 
-// MS Visual C++ version 5.0 provides the new STL headers as well as the old
-// iostream ones.
-//
-// ATTN: you can _not_ use both of these in the same program!
-
 #include <iostream>
-
-wxSTD istream& operator>>(wxSTD istream& is, wxString& WXUNUSED(str))
-{
-#if 0
-  int w = is.width(0);
-  if ( is.ipfx(0) ) {
-    streambuf *sb = is.rdbuf();
-    str.erase();
-    while ( true ) {
-      int ch = sb->sbumpc ();
-      if ( ch == EOF ) {
-        is.setstate(ios::eofbit);
-        break;
-      }
-      else if ( isspace(ch) ) {
-        sb->sungetc();
-        break;
-      }
-
-      str += ch;
-      if ( --w == 1 )
-        break;
-    }
-  }
-
-  is.isfx();
-  if ( str.length() == 0 )
-    is.setstate(ios::failbit);
-#endif
-  return is;
-}
 
 wxSTD ostream& operator<<(wxSTD ostream& os, const wxString& str)
 {
