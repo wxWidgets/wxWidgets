@@ -2677,7 +2677,7 @@ void wxWin32Renderer::DrawStatusField(wxDC& dc,
         style = wxSB_FLAT;
     }
 
-    DrawStatusField(dc, rect, label, flags, style);
+    wxStdRenderer::DrawStatusField(dc, rect, label, flags, style);
 }
 
 #endif // wxUSE_STATUSBAR
