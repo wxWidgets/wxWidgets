@@ -155,38 +155,6 @@ public:
                                    const wxMenuGeometryInfo& geomInfo);
 #endif // wxUSE_MENUS
 
-    virtual void DrawFrameTitleBar(wxDC& dc,
-                                   const wxRect& rect,
-                                   const wxString& title,
-                                   const wxIcon& icon,
-                                   int flags,
-                                   int specialButton = 0,
-                                   int specialButtonFlags = 0);
-
-    virtual void DrawFrameBorder(wxDC& dc,
-                                 const wxRect& rect,
-                                 int flags);
-
-    virtual void DrawFrameBackground(wxDC& dc,
-                                     const wxRect& rect,
-                                     int flags);
-
-    virtual void DrawFrameTitle(wxDC& dc,
-                                const wxRect& rect,
-                                const wxString& title,
-                                int flags);
-
-    virtual void DrawFrameIcon(wxDC& dc,
-                               const wxRect& rect,
-                               const wxIcon& icon,
-                               int flags);
-
-    virtual void DrawFrameButton(wxDC& dc,
-                                 wxCoord x, wxCoord y,
-                                 int button,
-                                 int flags = 0);
-
-
 #if wxUSE_COMBOBOX
     virtual void GetComboBitmaps(wxBitmap *bmpNormal,
                                  wxBitmap *bmpFocus,
@@ -239,18 +207,6 @@ public:
     virtual wxMenuGeometryInfo *GetMenuGeometry(wxWindow *win,
                                                 const wxMenu& menu) const;
 #endif // wxUSE_MENUS
-
-    virtual wxRect GetFrameClientArea(const wxRect& rect, int flags) const;
-
-    virtual wxSize GetFrameTotalSize(const wxSize& clientSize, int flags) const;
-
-    virtual wxSize GetFrameMinSize(int flags) const;
-
-    virtual wxSize GetFrameIconSize() const;
-
-    virtual int HitTestFrame(const wxRect& rect,
-                             const wxPoint& pt,
-                             int flags = 0) const;
 
 protected:
     // override base class border drawing routines: we always draw just a
@@ -1108,82 +1064,6 @@ void wxMonoRenderer::DrawScrollbarShaft(wxDC& dc,
 // ----------------------------------------------------------------------------
 // top level windows
 // ----------------------------------------------------------------------------
-
-void wxMonoRenderer::DrawFrameTitleBar(wxDC& WXUNUSED(dc),
-                                      const wxRect& WXUNUSED(rect),
-                                      const wxString& WXUNUSED(title),
-                                      const wxIcon& WXUNUSED(icon),
-                                      int WXUNUSED(flags),
-                                      int WXUNUSED(specialButton),
-                                      int WXUNUSED(specialButtonFlag))
-{
-}
-
-void wxMonoRenderer::DrawFrameBorder(wxDC& WXUNUSED(dc),
-                                    const wxRect& WXUNUSED(rect),
-                                    int WXUNUSED(flags))
-{
-}
-
-void wxMonoRenderer::DrawFrameBackground(wxDC& WXUNUSED(dc),
-                                        const wxRect& WXUNUSED(rect),
-                                        int WXUNUSED(flags))
-{
-}
-
-void wxMonoRenderer::DrawFrameTitle(wxDC& WXUNUSED(dc),
-                                   const wxRect& WXUNUSED(rect),
-                                   const wxString& WXUNUSED(title),
-                                   int WXUNUSED(flags))
-{
-}
-
-void wxMonoRenderer::DrawFrameIcon(wxDC& WXUNUSED(dc),
-                                  const wxRect& WXUNUSED(rect),
-                                  const wxIcon& WXUNUSED(icon),
-                                  int WXUNUSED(flags))
-{
-}
-
-void wxMonoRenderer::DrawFrameButton(wxDC& WXUNUSED(dc),
-                                    wxCoord WXUNUSED(x),
-                                    wxCoord WXUNUSED(y),
-                                    int WXUNUSED(button),
-                                    int WXUNUSED(flags))
-{
-}
-
-wxRect
-wxMonoRenderer::GetFrameClientArea(const wxRect& rect,
-                                  int WXUNUSED(flags)) const
-{
-    return rect;
-}
-
-wxSize
-wxMonoRenderer::GetFrameTotalSize(const wxSize& clientSize,
-                                 int WXUNUSED(flags)) const
-{
-    return clientSize;
-}
-
-wxSize wxMonoRenderer::GetFrameMinSize(int WXUNUSED(flags)) const
-{
-    return wxSize(0,0);
-}
-
-wxSize wxMonoRenderer::GetFrameIconSize() const
-{
-    return wxSize(wxDefaultCoord, wxDefaultCoord);
-}
-
-int
-wxMonoRenderer::HitTestFrame(const wxRect& WXUNUSED(rect),
-                            const wxPoint& WXUNUSED(pt),
-                            int WXUNUSED(flags)) const
-{
-    return wxHT_TOPLEVEL_CLIENT_AREA;
-}
 
 
 // ----------------------------------------------------------------------------
