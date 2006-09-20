@@ -455,7 +455,8 @@ void wxStaticBox::PaintForeground(wxDC& dc, const RECT& rc)
         // now draw the text
         if ( !rtl )
         {
-            ::DrawText(hdc, label, label.length(), &dimensions,
+            RECT rc2 = { x, 0, x + width, y };
+            ::DrawText(hdc, label, label.length(), &rc2,
                        DT_SINGLELINE | DT_VCENTER);
         }
         else // RTL
