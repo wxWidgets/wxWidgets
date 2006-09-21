@@ -414,12 +414,14 @@ public:
     virtual wxSize GetRadioBitmapSize() const = 0;
     virtual wxCoord GetCheckItemMargin() const = 0;
 
+#if wxUSE_TOOLBAR
     // get the standard size of a toolbar button and also return the size of
     // a toolbar separator in the provided pointer
     virtual wxSize GetToolBarButtonSize(wxCoord *separator) const = 0;
 
     // get the margins between/around the toolbar buttons
     virtual wxSize GetToolBarMargin() const = 0;
+#endif // wxUSE_TOOLBAR
 
 #if wxUSE_TEXTCTRL
     // convert between text rectangle and client rectangle for text controls:
@@ -803,10 +805,12 @@ public:
     virtual wxCoord GetCheckItemMargin() const
         { return m_renderer->GetCheckItemMargin(); }
 
+#if wxUSE_TOOLBAR
     virtual wxSize GetToolBarButtonSize(wxCoord *separator) const
         { return m_renderer->GetToolBarButtonSize(separator); }
     virtual wxSize GetToolBarMargin() const
         { return m_renderer->GetToolBarMargin(); }
+#endif // wxUSE_TOOLBAR
 
 #if wxUSE_TEXTCTRL
     virtual wxRect GetTextTotalArea(const wxTextCtrl *text,

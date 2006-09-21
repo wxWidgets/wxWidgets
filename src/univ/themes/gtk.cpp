@@ -209,10 +209,12 @@ public:
     virtual wxCoord GetCheckItemMargin() const
         { return 2; }
 
+#if wxUSE_TOOLBAR
     virtual wxSize GetToolBarButtonSize(wxCoord *separator) const
         { if ( separator ) *separator = 5; return wxSize(16, 15); }
     virtual wxSize GetToolBarMargin() const
         { return wxSize(6, 6); }
+#endif // wxUSE_TOOLBAR
 
 #if wxUSE_TEXTCTRL
     virtual wxRect GetTextClientArea(const wxTextCtrl *text,
