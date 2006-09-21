@@ -1269,6 +1269,12 @@ void wxMacListCtrlItem::Notification(wxMacDataItemBrowserControl *owner ,
         delete this;
         return;
     }
+    else if ( message == kDataBrowserItemAdded )
+    {
+        // we don't issue events on adding, the item is not really stored in the list yet, so we
+        // avoid asserts by gettting out now
+        return  ;
+    }
 
     wxListCtrl *list = wxDynamicCast( owner->GetPeer() , wxListCtrl );
     if ( list ){
