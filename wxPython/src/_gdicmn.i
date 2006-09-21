@@ -549,6 +549,7 @@ public:
         bottom = property(GetBottom, SetBottom)
     }
 
+
     DocDeclStr(
         wxRect&, Inflate(wxCoord dx, wxCoord dy),
         "Increases the size of the rectangle.
@@ -591,11 +592,20 @@ that means:
 :see: `Deflate`
 ");
 
+    // There are also these versions...
+    //wxRect& Inflate(const wxSize& d);
+    //wxRect& Inflate(wxCoord d);
+
+    
     DocDeclStr(
         wxRect&, Deflate(wxCoord dx, wxCoord dy),
         "Decrease the rectangle size. This method is the opposite of `Inflate`
 in that Deflate(a,b) is equivalent to Inflate(-a,-b).  Please refer to
 `Inflate` for a full description.", "");
+
+    // There are also these versions...
+    //wxRect& Deflate(const wxSize& d) { return Inflate(-d.x, -d.y); }
+    //wxRect& Deflate(wxCoord d) { return Inflate(-d); }
 
     DocDeclStrName(
         void, Offset(wxCoord dx, wxCoord dy),
