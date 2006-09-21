@@ -25,6 +25,10 @@
 
 #ifndef WX_PRECOMP
     #include "wx/settings.h"
+    #include "wx/brush.h"
+    #include "wx/dc.h"
+    #include "wx/statusbr.h"
+    #include "wx/toplevel.h"
 #endif //WX_PRECOMP
 
 #include "wx/univ/stdrend.h"

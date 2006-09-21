@@ -25,6 +25,7 @@
 #endif
 
 #ifndef WX_PRECOMP
+    #include "wx/dc.h"
 #endif // WX_PRECOMP
 
 #include "wx/artprov.h"
@@ -1040,4 +1041,3 @@ wxBitmap wxMonoArtProvider::CreateBitmap(const wxArtID& WXUNUSED(id),
 {
     return wxNullBitmap;
 }
-
