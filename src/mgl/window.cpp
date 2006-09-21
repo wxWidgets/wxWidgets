@@ -704,6 +704,11 @@ void wxWindowMGL::SetFocus()
         gs_activeFrame->GetEventHandler()->ProcessEvent(event);
     }
 
+    // notify the parent keeping track of focus for the kbd navigation
+    // purposes that we got it
+    wxChildFocusEvent eventFocus((wxWindow*)this);
+    GetEventHandler()->ProcessEvent(eventFocus);
+
     wxFocusEvent event(wxEVT_SET_FOCUS, GetId());
     event.SetEventObject(this);
     event.SetWindow((wxWindow*)oldFocusedWindow);
