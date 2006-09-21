@@ -3365,7 +3365,6 @@ SWIGINTERN PyObject *_wrap_XmlResource_AddHandler(PyObject *SWIGUNUSEDPARM(self)
   wxPyXmlResourceHandler *arg2 = (wxPyXmlResourceHandler *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  void *argp2 = 0 ;
   int res2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
@@ -3379,11 +3378,10 @@ SWIGINTERN PyObject *_wrap_XmlResource_AddHandler(PyObject *SWIGUNUSEDPARM(self)
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "XmlResource_AddHandler" "', expected argument " "1"" of type '" "wxXmlResource *""'"); 
   }
   arg1 = reinterpret_cast< wxXmlResource * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_wxPyXmlResourceHandler, 0 |  0 );
+  res2 = SWIG_ConvertPtr(obj1, SWIG_as_voidptrptr(&arg2), SWIGTYPE_p_wxPyXmlResourceHandler, SWIG_POINTER_DISOWN |  0 );
   if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "XmlResource_AddHandler" "', expected argument " "2"" of type '" "wxPyXmlResourceHandler *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "XmlResource_AddHandler" "', expected argument " "2"" of type '" "wxPyXmlResourceHandler *""'");
   }
-  arg2 = reinterpret_cast< wxPyXmlResourceHandler * >(argp2);
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
     (arg1)->AddHandler(arg2);
@@ -3403,7 +3401,6 @@ SWIGINTERN PyObject *_wrap_XmlResource_InsertHandler(PyObject *SWIGUNUSEDPARM(se
   wxPyXmlResourceHandler *arg2 = (wxPyXmlResourceHandler *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  void *argp2 = 0 ;
   int res2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
@@ -3417,11 +3414,10 @@ SWIGINTERN PyObject *_wrap_XmlResource_InsertHandler(PyObject *SWIGUNUSEDPARM(se
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "XmlResource_InsertHandler" "', expected argument " "1"" of type '" "wxXmlResource *""'"); 
   }
   arg1 = reinterpret_cast< wxXmlResource * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_wxPyXmlResourceHandler, 0 |  0 );
+  res2 = SWIG_ConvertPtr(obj1, SWIG_as_voidptrptr(&arg2), SWIGTYPE_p_wxPyXmlResourceHandler, SWIG_POINTER_DISOWN |  0 );
   if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "XmlResource_InsertHandler" "', expected argument " "2"" of type '" "wxPyXmlResourceHandler *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "XmlResource_InsertHandler" "', expected argument " "2"" of type '" "wxPyXmlResourceHandler *""'");
   }
-  arg2 = reinterpret_cast< wxPyXmlResourceHandler * >(argp2);
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
     (arg1)->InsertHandler(arg2);
@@ -7047,6 +7043,34 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_delete_XmlResourceHandler(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxPyXmlResourceHandler *arg1 = (wxPyXmlResourceHandler *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxPyXmlResourceHandler, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_XmlResourceHandler" "', expected argument " "1"" of type '" "wxPyXmlResourceHandler *""'"); 
+  }
+  arg1 = reinterpret_cast< wxPyXmlResourceHandler * >(argp1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    delete arg1;
+    
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_XmlResourceHandler__setCallbackInfo(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   wxPyXmlResourceHandler *arg1 = (wxPyXmlResourceHandler *) 0 ;
@@ -8744,6 +8768,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"XmlDocument_swigregister", XmlDocument_swigregister, METH_VARARGS, NULL},
 	 { (char *)"XmlDocument_swiginit", XmlDocument_swiginit, METH_VARARGS, NULL},
 	 { (char *)"new_XmlResourceHandler", (PyCFunction)_wrap_new_XmlResourceHandler, METH_NOARGS, NULL},
+	 { (char *)"delete_XmlResourceHandler", (PyCFunction)_wrap_delete_XmlResourceHandler, METH_O, NULL},
 	 { (char *)"XmlResourceHandler__setCallbackInfo", (PyCFunction) _wrap_XmlResourceHandler__setCallbackInfo, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"XmlResourceHandler_CreateResource", (PyCFunction) _wrap_XmlResourceHandler_CreateResource, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"XmlResourceHandler_SetParentResource", (PyCFunction) _wrap_XmlResourceHandler_SetParentResource, METH_VARARGS | METH_KEYWORDS, NULL},

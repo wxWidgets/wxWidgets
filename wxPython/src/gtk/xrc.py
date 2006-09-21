@@ -520,6 +520,8 @@ class XmlResourceHandler(_core.Object):
         _xrc.XmlResourceHandler_swiginit(self,_xrc.new_XmlResourceHandler(*args, **kwargs))
         self._setCallbackInfo(self, XmlResourceHandler)
 
+    __swig_destroy__ = _xrc.delete_XmlResourceHandler
+    __del__ = lambda self : None;
     def _setCallbackInfo(*args, **kwargs):
         """_setCallbackInfo(self, PyObject self, PyObject _class)"""
         return _xrc.XmlResourceHandler__setCallbackInfo(*args, **kwargs)
