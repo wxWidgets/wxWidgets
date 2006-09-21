@@ -102,6 +102,9 @@ public:
     // Initialize handlers for all supported controls/windows. 
     void InitAllHandlers();
 
+
+    %disownarg( wxPyXmlResourceHandler *handler );
+    
     // Initialize only specific handler (or custom handler). Convention says
     // that handler name is equal to control's name plus 'XmlHandler', e.g.
     // wxTextCtrlXmlHandler, wxHtmlWindowXmlHandler. XML resource compiler
@@ -112,6 +115,9 @@ public:
     // Add a new handler at the begining of the handler list
     void InsertHandler(wxPyXmlResourceHandler *handler);
 
+    %cleardisown( wxPyXmlResourceHandler *handler );
+
+    
     // Removes all handlers
     void ClearHandlers();
 

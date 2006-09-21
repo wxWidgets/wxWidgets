@@ -142,7 +142,7 @@ class wxPyXmlResourceHandler : public wxObject {
 public:
     %pythonAppend wxPyXmlResourceHandler "self._setCallbackInfo(self, XmlResourceHandler)"
     wxPyXmlResourceHandler() : wxXmlResourceHandler() {}
-    //~wxPyXmlResourceHandler();
+    ~wxPyXmlResourceHandler();
 
     void _setCallbackInfo(PyObject* self, PyObject* _class);
 
