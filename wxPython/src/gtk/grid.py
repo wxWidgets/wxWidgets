@@ -1109,7 +1109,7 @@ class Grid(_windows.ScrolledWindow):
         """
         __init__(self, Window parent, int id=-1, Point pos=DefaultPosition, 
             Size size=DefaultSize, long style=WANTS_CHARS, 
-            String name=PanelNameStr) -> Grid
+            String name=wxPyGridNameStr) -> Grid
         """
         _grid.Grid_swiginit(self,_grid.new_Grid(*args, **kwargs))
         self._setOORInfo(self)
@@ -1118,7 +1118,7 @@ class Grid(_windows.ScrolledWindow):
         """
         Create(self, Window parent, int id=-1, Point pos=DefaultPosition, 
             Size size=DefaultSize, long style=WANTS_CHARS, 
-            String name=PanelNameStr) -> bool
+            String name=wxPyGridNameStr) -> bool
         """
         return _grid.Grid_Create(*args, **kwargs)
 

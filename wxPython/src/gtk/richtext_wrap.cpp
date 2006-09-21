@@ -7259,7 +7259,7 @@ SWIGINTERN PyObject *_wrap_RichTextCtrl_GetStyle(PyObject *SWIGUNUSEDPARM(self),
   if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:RichTextCtrl_GetStyle",kwnames,&obj0,&obj1,&obj2)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxRichTextCtrl, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "RichTextCtrl_GetStyle" "', expected argument " "1"" of type '" "wxRichTextCtrl const *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "RichTextCtrl_GetStyle" "', expected argument " "1"" of type '" "wxRichTextCtrl *""'"); 
   }
   arg1 = reinterpret_cast< wxRichTextCtrl * >(argp1);
   ecode2 = SWIG_AsVal_long(obj1, &val2);
@@ -7277,7 +7277,7 @@ SWIGINTERN PyObject *_wrap_RichTextCtrl_GetStyle(PyObject *SWIGUNUSEDPARM(self),
   arg3 = reinterpret_cast< wxRichTextAttr * >(argp3);
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    result = (bool)((wxRichTextCtrl const *)arg1)->GetStyle(arg2,*arg3);
+    result = (bool)(arg1)->GetStyle(arg2,*arg3);
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
@@ -9740,7 +9740,7 @@ fail:
 SWIGINTERN PyObject *_wrap_RichTextCtrl_GetSelectionRange(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   wxRichTextCtrl *arg1 = (wxRichTextCtrl *) 0 ;
-  wxRichTextRange *result = 0 ;
+  wxRichTextRange result;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject *swig_obj[1] ;
@@ -9754,14 +9754,11 @@ SWIGINTERN PyObject *_wrap_RichTextCtrl_GetSelectionRange(PyObject *SWIGUNUSEDPA
   arg1 = reinterpret_cast< wxRichTextCtrl * >(argp1);
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    {
-      wxRichTextRange const &_result_ref = ((wxRichTextCtrl const *)arg1)->GetSelectionRange();
-      result = (wxRichTextRange *) &_result_ref;
-    }
+    result = ((wxRichTextCtrl const *)arg1)->GetSelectionRange();
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_wxRichTextRange, 0 |  0 );
+  resultobj = SWIG_NewPointerObj((new wxRichTextRange(static_cast< const wxRichTextRange& >(result))), SWIGTYPE_p_wxRichTextRange, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -9794,6 +9791,73 @@ SWIGINTERN PyObject *_wrap_RichTextCtrl_SetSelectionRange(PyObject *SWIGUNUSEDPA
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
     (arg1)->SetSelectionRange((wxRichTextRange const &)*arg2);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_RichTextCtrl_GetInternalSelectionRange(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxRichTextCtrl *arg1 = (wxRichTextCtrl *) 0 ;
+  wxRichTextRange *result = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxRichTextCtrl, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "RichTextCtrl_GetInternalSelectionRange" "', expected argument " "1"" of type '" "wxRichTextCtrl const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxRichTextCtrl * >(argp1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    {
+      wxRichTextRange const &_result_ref = ((wxRichTextCtrl const *)arg1)->GetInternalSelectionRange();
+      result = (wxRichTextRange *) &_result_ref;
+    }
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_wxRichTextRange, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_RichTextCtrl_SetInternalSelectionRange(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxRichTextCtrl *arg1 = (wxRichTextCtrl *) 0 ;
+  wxRichTextRange *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  wxRichTextRange temp2 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "range", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:RichTextCtrl_SetInternalSelectionRange",kwnames,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxRichTextCtrl, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "RichTextCtrl_SetInternalSelectionRange" "', expected argument " "1"" of type '" "wxRichTextCtrl *""'"); 
+  }
+  arg1 = reinterpret_cast< wxRichTextCtrl * >(argp1);
+  {
+    arg2 = &temp2;
+    if ( ! wxRichTextRange_helper(obj1, &arg2)) SWIG_fail;
+  }
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    (arg1)->SetInternalSelectionRange((wxRichTextRange const &)*arg2);
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
@@ -11020,12 +11084,12 @@ SWIGINTERN PyObject *_wrap_RichTextCtrl_IsSelectionBold(PyObject *SWIGUNUSEDPARM
   swig_obj[0] = args;
   res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxRichTextCtrl, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "RichTextCtrl_IsSelectionBold" "', expected argument " "1"" of type '" "wxRichTextCtrl const *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "RichTextCtrl_IsSelectionBold" "', expected argument " "1"" of type '" "wxRichTextCtrl *""'"); 
   }
   arg1 = reinterpret_cast< wxRichTextCtrl * >(argp1);
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    result = (bool)((wxRichTextCtrl const *)arg1)->IsSelectionBold();
+    result = (bool)(arg1)->IsSelectionBold();
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
@@ -11050,12 +11114,12 @@ SWIGINTERN PyObject *_wrap_RichTextCtrl_IsSelectionItalics(PyObject *SWIGUNUSEDP
   swig_obj[0] = args;
   res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxRichTextCtrl, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "RichTextCtrl_IsSelectionItalics" "', expected argument " "1"" of type '" "wxRichTextCtrl const *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "RichTextCtrl_IsSelectionItalics" "', expected argument " "1"" of type '" "wxRichTextCtrl *""'"); 
   }
   arg1 = reinterpret_cast< wxRichTextCtrl * >(argp1);
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    result = (bool)((wxRichTextCtrl const *)arg1)->IsSelectionItalics();
+    result = (bool)(arg1)->IsSelectionItalics();
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
@@ -11080,12 +11144,12 @@ SWIGINTERN PyObject *_wrap_RichTextCtrl_IsSelectionUnderlined(PyObject *SWIGUNUS
   swig_obj[0] = args;
   res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxRichTextCtrl, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "RichTextCtrl_IsSelectionUnderlined" "', expected argument " "1"" of type '" "wxRichTextCtrl const *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "RichTextCtrl_IsSelectionUnderlined" "', expected argument " "1"" of type '" "wxRichTextCtrl *""'"); 
   }
   arg1 = reinterpret_cast< wxRichTextCtrl * >(argp1);
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    result = (bool)((wxRichTextCtrl const *)arg1)->IsSelectionUnderlined();
+    result = (bool)(arg1)->IsSelectionUnderlined();
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
@@ -11116,7 +11180,7 @@ SWIGINTERN PyObject *_wrap_RichTextCtrl_IsSelectionAligned(PyObject *SWIGUNUSEDP
   if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:RichTextCtrl_IsSelectionAligned",kwnames,&obj0,&obj1)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxRichTextCtrl, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "RichTextCtrl_IsSelectionAligned" "', expected argument " "1"" of type '" "wxRichTextCtrl const *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "RichTextCtrl_IsSelectionAligned" "', expected argument " "1"" of type '" "wxRichTextCtrl *""'"); 
   }
   arg1 = reinterpret_cast< wxRichTextCtrl * >(argp1);
   ecode2 = SWIG_AsVal_int(obj1, &val2);
@@ -11126,7 +11190,7 @@ SWIGINTERN PyObject *_wrap_RichTextCtrl_IsSelectionAligned(PyObject *SWIGUNUSEDP
   arg2 = static_cast< wxTextAttrAlignment >(val2);
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    result = (bool)((wxRichTextCtrl const *)arg1)->IsSelectionAligned(arg2);
+    result = (bool)(arg1)->IsSelectionAligned(arg2);
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
@@ -11724,6 +11788,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"RichTextCtrl_SelectNone", (PyCFunction)_wrap_RichTextCtrl_SelectNone, METH_O, NULL},
 	 { (char *)"RichTextCtrl_GetSelectionRange", (PyCFunction)_wrap_RichTextCtrl_GetSelectionRange, METH_O, NULL},
 	 { (char *)"RichTextCtrl_SetSelectionRange", (PyCFunction) _wrap_RichTextCtrl_SetSelectionRange, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"RichTextCtrl_GetInternalSelectionRange", (PyCFunction)_wrap_RichTextCtrl_GetInternalSelectionRange, METH_O, NULL},
+	 { (char *)"RichTextCtrl_SetInternalSelectionRange", (PyCFunction) _wrap_RichTextCtrl_SetInternalSelectionRange, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"RichTextCtrl_AddParagraph", (PyCFunction) _wrap_RichTextCtrl_AddParagraph, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"RichTextCtrl_AddImage", (PyCFunction) _wrap_RichTextCtrl_AddImage, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"RichTextCtrl_LayoutContent", (PyCFunction) _wrap_RichTextCtrl_LayoutContent, METH_VARARGS | METH_KEYWORDS, NULL},

@@ -2761,7 +2761,7 @@ namespace swig {
 
 
  static const wxString wxPyEmptyString(wxEmptyString); 
- static const wxString wxPyPanelNameStr(wxPanelNameStr); 
+ static const wxString wxPyGridNameStr(wxGridNameStr); 
  static const wxString wxPyDefaultDateTimeFormat(wxDefaultDateTimeFormat); 
 
 
@@ -10218,7 +10218,7 @@ SWIGINTERN PyObject *_wrap_new_Grid(PyObject *SWIGUNUSEDPARM(self), PyObject *ar
   wxSize const &arg4_defvalue = wxDefaultSize ;
   wxSize *arg4 = (wxSize *) &arg4_defvalue ;
   long arg5 = (long) wxWANTS_CHARS ;
-  wxString const &arg6_defvalue = wxPyPanelNameStr ;
+  wxString const &arg6_defvalue = wxPyGridNameStr ;
   wxString *arg6 = (wxString *) &arg6_defvalue ;
   wxGrid *result = 0 ;
   void *argp1 = 0 ;
@@ -10330,7 +10330,7 @@ SWIGINTERN PyObject *_wrap_Grid_Create(PyObject *SWIGUNUSEDPARM(self), PyObject 
   wxSize const &arg5_defvalue = wxDefaultSize ;
   wxSize *arg5 = (wxSize *) &arg5_defvalue ;
   long arg6 = (long) wxWANTS_CHARS ;
-  wxString const &arg7_defvalue = wxPyPanelNameStr ;
+  wxString const &arg7_defvalue = wxPyGridNameStr ;
   wxString *arg7 = (wxString *) &arg7_defvalue ;
   bool result;
   void *argp1 = 0 ;

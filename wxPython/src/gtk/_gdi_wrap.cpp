@@ -33853,9 +33853,11 @@ SWIGEXPORT void SWIG_init(void) {
   SWIG_Python_SetConstant(d, "CONTROL_DISABLED",SWIG_From_int(static_cast< int >(wxCONTROL_DISABLED)));
   SWIG_Python_SetConstant(d, "CONTROL_FOCUSED",SWIG_From_int(static_cast< int >(wxCONTROL_FOCUSED)));
   SWIG_Python_SetConstant(d, "CONTROL_PRESSED",SWIG_From_int(static_cast< int >(wxCONTROL_PRESSED)));
+  SWIG_Python_SetConstant(d, "CONTROL_SPECIAL",SWIG_From_int(static_cast< int >(wxCONTROL_SPECIAL)));
   SWIG_Python_SetConstant(d, "CONTROL_ISDEFAULT",SWIG_From_int(static_cast< int >(wxCONTROL_ISDEFAULT)));
   SWIG_Python_SetConstant(d, "CONTROL_ISSUBMENU",SWIG_From_int(static_cast< int >(wxCONTROL_ISSUBMENU)));
   SWIG_Python_SetConstant(d, "CONTROL_EXPANDED",SWIG_From_int(static_cast< int >(wxCONTROL_EXPANDED)));
+  SWIG_Python_SetConstant(d, "CONTROL_SIZEGRIP",SWIG_From_int(static_cast< int >(wxCONTROL_SIZEGRIP)));
   SWIG_Python_SetConstant(d, "CONTROL_CURRENT",SWIG_From_int(static_cast< int >(wxCONTROL_CURRENT)));
   SWIG_Python_SetConstant(d, "CONTROL_SELECTED",SWIG_From_int(static_cast< int >(wxCONTROL_SELECTED)));
   SWIG_Python_SetConstant(d, "CONTROL_CHECKED",SWIG_From_int(static_cast< int >(wxCONTROL_CHECKED)));

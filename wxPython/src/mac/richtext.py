@@ -1135,6 +1135,14 @@ class RichTextCtrl(_windows.ScrolledWindow):
         """SetSelectionRange(self, RichTextRange range)"""
         return _richtext.RichTextCtrl_SetSelectionRange(*args, **kwargs)
 
+    def GetInternalSelectionRange(*args, **kwargs):
+        """GetInternalSelectionRange(self) -> RichTextRange"""
+        return _richtext.RichTextCtrl_GetInternalSelectionRange(*args, **kwargs)
+
+    def SetInternalSelectionRange(*args, **kwargs):
+        """SetInternalSelectionRange(self, RichTextRange range)"""
+        return _richtext.RichTextCtrl_SetInternalSelectionRange(*args, **kwargs)
+
     def AddParagraph(*args, **kwargs):
         """AddParagraph(self, String text) -> RichTextRange"""
         return _richtext.RichTextCtrl_AddParagraph(*args, **kwargs)
