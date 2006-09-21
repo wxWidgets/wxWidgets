@@ -606,7 +606,7 @@ def get_batch_files():
 runtime_template = 'Source: "%s"; DestDir: "{code:GetPythonDir}"; CopyMode: alwaysskipifsameorolder; Flags: uninsneveruninstall; Components: core'
 
 def get_runtime_dlls(PYVER):
-    if PYVER == "py24":
+    if PYVER >= "py24":
         source = [ r"distrib\msw\msvcr71.dll",
                    r"distrib\msw\msvcp71.dll" ]
     else:
