@@ -205,7 +205,7 @@ class TestListCtrlPanel(wx.Panel, listmix.ColumnSorterMixin):
         self.log.WriteText("x, y = %s\n" % str((x, y)))
         item, flags = self.list.HitTest((x, y))
 
-        if flags & wx.LIST_HITTEST_ONITEM:
+        if item != wx.NOT_FOUND and flags & wx.LIST_HITTEST_ONITEM:
             self.list.Select(item)
 
         event.Skip()
@@ -353,6 +353,9 @@ class TestListCtrlPanel(wx.Panel, listmix.ColumnSorterMixin):
 
 
 #---------------------------------------------------------------------------
+
+# for testing the new native control on wxMac
+#wx.SystemOptions.SetOptionInt("mac.listctrl.always_use_generic", 0)
 
 def runTest(frame, nb, log):
     win = TestListCtrlPanel(nb, log)

@@ -446,7 +446,9 @@ IMP_PYCALLBACK_INT_LONGLONG(wxPyListCtrl, wxListCtrl, OnGetItemColumnImage);
 
 
 
-
+// NOTE: The following option is set in _settings.i
+//     # Until the new native control for wxMac is up to par, still use the generic one.
+//     SystemOptions.SetOptionInt("mac.listctrl.always_use_generic", 1)
 
 MustHaveApp(wxPyListCtrl);
 
