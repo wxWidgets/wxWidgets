@@ -606,7 +606,7 @@ text control.", "");
         "Set the style for the text in ``range`` to ``style``", "");
 
     DocDeclStr(
-        virtual bool , GetStyle(long position, wxRichTextAttr& style) const,
+        virtual bool , GetStyle(long position, wxRichTextAttr& style),
         "Retrieve the style used at the given position.  Copies the style
 values at ``position`` into the ``style`` parameter returns ``True``
 if successful.  Returns ``False`` otherwise.", "");
@@ -1054,12 +1054,24 @@ flag.", "");
 
     /// Get/set the selection range in character positions. -1, -1 means no selection.
     DocDeclStr(
-        const wxRichTextRange& , GetSelectionRange() const,
+        wxRichTextRange , GetSelectionRange() const,
         "", "");
 
     DocDeclStr(
         void , SetSelectionRange(const wxRichTextRange& range),
         "", "");
+
+    /// Get/set the selection range in character positions. -1, -1 means no selection.
+    /// The range is in internal format, i.e. a single character selection is denoted
+    /// by (n, n)
+    DocDeclStr(
+        const wxRichTextRange& , GetInternalSelectionRange() const,
+        "", "");
+    
+    DocDeclStr(
+        void , SetInternalSelectionRange(const wxRichTextRange& range),
+        "", "");
+    
 
 
     /// Add a new paragraph of text to the end of the buffer
@@ -1252,25 +1264,25 @@ flag.", "");
 
     /// Is all of the selection bold?
     DocDeclStr(
-        virtual bool , IsSelectionBold() const,
+        virtual bool , IsSelectionBold(),
         "", "");
 
 
     /// Is all of the selection italics?
     DocDeclStr(
-        virtual bool , IsSelectionItalics() const,
+        virtual bool , IsSelectionItalics(),
         "", "");
 
 
     /// Is all of the selection underlined?
     DocDeclStr(
-        virtual bool , IsSelectionUnderlined() const,
+        virtual bool , IsSelectionUnderlined(),
         "", "");
 
 
     /// Is all of the selection aligned according to the specified flag?
     DocDeclStr(
-        virtual bool , IsSelectionAligned(wxTextAttrAlignment alignment) const,
+        virtual bool , IsSelectionAligned(wxTextAttrAlignment alignment),
         "", "");
 
 
