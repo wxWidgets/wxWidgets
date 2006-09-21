@@ -323,11 +323,7 @@ void wxPyApp::MacReopenApp()
 
 /*static*/
 bool wxPyApp::GetMacSupportPCMenuShortcuts() {
-#ifdef __WXMAC__
-    return s_macSupportPCMenuShortcuts;
-#else
     return 0;
-#endif
 }
 
 /*static*/
@@ -367,10 +363,7 @@ wxString wxPyApp::GetMacHelpMenuTitleName() {
 }
 
 /*static*/
-void wxPyApp::SetMacSupportPCMenuShortcuts(bool val) {
-#ifdef __WXMAC__
-    s_macSupportPCMenuShortcuts = val;
-#endif
+void wxPyApp::SetMacSupportPCMenuShortcuts(bool) {
 }
 
 /*static*/

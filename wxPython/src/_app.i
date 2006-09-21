@@ -267,13 +267,13 @@ systems where more than one is available, (Sun, SGI, XFree86 4, etc.)", "");
         "Get the current OnAssert behaviour setting.", "");
 
 
-    static bool GetMacSupportPCMenuShortcuts();
+    static bool GetMacSupportPCMenuShortcuts();  // TODO, deprecate this
     static long GetMacAboutMenuItemId();
     static long GetMacPreferencesMenuItemId();
     static long GetMacExitMenuItemId();
     static wxString GetMacHelpMenuTitleName();
 
-    static void SetMacSupportPCMenuShortcuts(bool val);
+    static void SetMacSupportPCMenuShortcuts(bool val);  // TODO, deprecate this
     static void SetMacAboutMenuItemId(long val);
     static void SetMacPreferencesMenuItemId(long val);
     static void SetMacExitMenuItemId(long val);
