@@ -26,9 +26,11 @@ enum
     wxCONTROL_DISABLED   = 0x00000001,  // control is disabled
     wxCONTROL_FOCUSED    = 0x00000002,  // currently has keyboard focus
     wxCONTROL_PRESSED    = 0x00000004,  // (button) is pressed
-    wxCONTROL_ISDEFAULT  = 0x00000008,  // only applies to the buttons
-    wxCONTROL_ISSUBMENU  = wxCONTROL_ISDEFAULT, // only for menu items
-    wxCONTROL_EXPANDED   = wxCONTROL_ISDEFAULT, // only for the tree items
+    wxCONTROL_SPECIAL    = 0x00000008,  // control-specific bit:
+    wxCONTROL_ISDEFAULT  = wxCONTROL_SPECIAL, // only for the buttons
+    wxCONTROL_ISSUBMENU  = wxCONTROL_SPECIAL, // only for the menu items
+    wxCONTROL_EXPANDED   = wxCONTROL_SPECIAL, // only for the tree items
+    wxCONTROL_SIZEGRIP   = wxCONTROL_SPECIAL, // only for the status bar panes
     wxCONTROL_CURRENT    = 0x00000010,  // mouse is currently over the control
     wxCONTROL_SELECTED   = 0x00000020,  // selected item in e.g. listbox
     wxCONTROL_CHECKED    = 0x00000040,  // (check/radio button) is checked
