@@ -683,14 +683,18 @@ void wxWindowDFB::PaintWindow(const wxRect& rect)
                this, GetName().c_str(),
                rect.x, rect.y, rect.GetRight(), rect.GetBottom());
 
-    m_updateRegion = rect;
-
 #if wxUSE_CARET
+    // FIXME: we're doing this before setting m_updateRegion because wxDFB
+    //        clips all DCs for this window to it, but this results in flicker,
+    //        it should be fixed by using overlays for the caret
+
     // must hide caret temporarily, otherwise we'd get rendering artifacts
     wxCaret *caret = GetCaret();
     if ( caret )
         caret->Hide();
 #endif // wxUSE_CARET
+
+    m_updateRegion = rect;
 
     // FIXME_DFB: don't waste time rendering the area if it's fully covered
     //            by some children, go directly to rendering the children
@@ -730,12 +734,14 @@ void wxWindowDFB::PaintWindow(const wxRect& rect)
                    this, GetName().c_str());
     }
 
+    m_updateRegion.Clear();
+
 #if wxUSE_CARET
+    // FIXME: this should be ideally done before m_updateRegion.Clear() or not
+    //        at all, see the comment where the caret is hidden
     if ( caret )
         caret->Show();
 #endif // wxUSE_CARET
-
-    m_updateRegion.Clear();
 
     // paint the children:
     wxPoint origin = GetClientAreaOrigin();
