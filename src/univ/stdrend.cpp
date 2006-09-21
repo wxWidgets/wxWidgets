@@ -24,6 +24,7 @@
 #endif
 
 #ifndef WX_PRECOMP
+    #include "wx/settings.h"
 #endif //WX_PRECOMP
 
 #include "wx/univ/stdrend.h"
@@ -1490,4 +1491,3 @@ wxSize wxStdRenderer::GetFrameIconSize() const
 {
     return wxSize(16, 16);
 }
-
