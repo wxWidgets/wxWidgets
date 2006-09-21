@@ -227,12 +227,20 @@ class DelayedResult:
         return self.__result
 
 
+class AbortedException(Exception):
+    """Raise this in your worker function so that the sender knows 
+    not to send a result to handler."""
+    pass
+    
+
 class Producer(threading.Thread):
     """
     Represent the worker thread that produces delayed results. 
     It causes the given function to run in a separate thread, 
     and a sender to be used to send the return value of the function.
     As with any threading.Thread, instantiate and call start().
+    Note that if the workerFn raises AbortedException, the result is not 
+    sent and the thread terminates gracefully.
     """
     
     def __init__(self, sender, workerFn, args=(), kwargs={}, 
@@ -250,6 +258,8 @@ class Producer(threading.Thread):
         def wrapper():
             try: 
                 result = workerFn(*args, **kwargs)
+            except AbortedException:
+                pass
             except Exception, exc:
                 extraInfo = self._extraInfo(exc)
                 sender.sendException(exc, extraInfo)
@@ -266,6 +276,33 @@ class Producer(threading.Thread):
         extra information when an exception is being sent instead of a 
         result. """
         return None
+
+
+class AbortEvent:
+    """
+    Convenience class that represents a kind of threading.Event that
+    raises AbortedException when called (see the __call__ method, everything
+    else is just to make it look like threading.Event).
+    """
+    
+    def __init__(self):
+        self.__ev = threading.Event()
+
+    def __call__(self, timeout=None):
+        """See if event has been set (wait at most timeout if given).  If so, 
+        raise AbortedException. Otherwise return None. Allows you to do
+        'while not event():' which will always succeed unless the event 
+        has been set (then AbortedException will cause while to exit)."""
+        if timeout:
+            self.__ev.wait(timeout)
+        if self.__ev.isSet():
+            raise AbortedException()
+        return None
+    
+    def __getattr__(self, name):
+        """This allows us to be a kind of threading.Event."""
+        if name in ('set','clear','wait','isSet'):
+            return getattr(self.__ev, name)
 
 
 def startWorker(
@@ -373,4 +410,3 @@ class PreProcessChain:
         handler = self.__chain[0]
         handler( chainTrav )
         
-

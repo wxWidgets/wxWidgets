@@ -56,7 +56,8 @@ class FrameSimpleDelayed(FrameSimpleDelayedBase):
     
     def __init__(self, *args, **kwargs):
         FrameSimpleDelayedBase.__init__(self, *args, **kwargs)
-        self.jobID = 1
+        self.jobID = 0
+        self.abortEvent = delayedresult.AbortEvent()
         self.Bind(wx.EVT_CLOSE, self.handleClose)
 
     def setLog(self, log):
@@ -67,54 +68,50 @@ class FrameSimpleDelayed(FrameSimpleDelayedBase):
         app, so worker thread continues and sends result to dead frame; normally
         your app would exit so this would not happen."""
         if self.buttonAbort.IsEnabled():
-            self.Hide()
-            wx.FutureCall(5000, self.Destroy)
-        else:
-            self.Destroy()
+            self.log( "Exiting: Aborting job %s" % self.jobID )
+            self.abortEvent.set()
+        self.Destroy()
             
     def handleGet(self, event): 
         """Compute result in separate thread, doesn't affect GUI response."""
         self.buttonGet.Enable(False)
         self.buttonAbort.Enable(True)
-
+        self.abortEvent.clear()
+        self.jobID += 1
+        
         self.log( "Starting job %s in producer thread: GUI remains responsive"
                   % self.jobID )
         delayedresult.startWorker(self._resultConsumer, self._resultProducer, 
-                                  wargs=(self.jobID,), jobID=self.jobID)
+                                  wargs=(self.jobID,self.abortEvent), jobID=self.jobID)
 
                         
-    def _resultProducer(self, jobID):
+    def _resultProducer(self, jobID, abortEvent):
         """Pretend to be a complex worker function or something that takes 
         long time to run due to network access etc. GUI will freeze if this 
         method is not called in separate thread."""
         import time
-        time.sleep(5)
+        count = 0
+        while not abortEvent() and count < 50:
+            time.sleep(0.1)
+            count += 1
         return jobID
 
 
     def handleAbort(self, event): 
-        """Abort actually just means 'ignore the result when it gets to 
-        handler, it is no longer relevant'. We just increase the job ID, 
-        this will let handler know that the result has been cancelled."""
+        """Abort the result computation."""
         self.log( "Aborting result for job %s" % self.jobID )
         self.buttonGet.Enable(True)
         self.buttonAbort.Enable(False)
-        self.jobID += 1
+        self.abortEvent.set()
 
         
     def _resultConsumer(self, delayedResult):
-        # See if we still want the result for last job started
         jobID = delayedResult.getJobID()
-        if jobID != self.jobID:
-            self.log( "Got obsolete result for job %s, ignored" % jobID )
-            return
-
-        # we do, get result:
+        assert jobID == self.jobID
         try:
             result = delayedResult.get()
         except Exception, exc:
             self.log( "Result for job %s raised exception: %s" % (jobID, exc) )
-            self.jobID += 1
             return
         
         # output result
@@ -124,7 +121,6 @@ class FrameSimpleDelayed(FrameSimpleDelayedBase):
         # get ready for next job:
         self.buttonGet.Enable(True)
         self.buttonAbort.Enable(False)
-        self.jobID += 1
 
 
 class FrameSimpleDirect(FrameSimpleDelayedBase):
