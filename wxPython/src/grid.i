@@ -36,7 +36,7 @@
 
 
 MAKE_CONST_WXSTRING_NOSWIG(EmptyString);
-MAKE_CONST_WXSTRING_NOSWIG(PanelNameStr);
+MAKE_CONST_WXSTRING_NOSWIG(GridNameStr);
 MAKE_CONST_WXSTRING_NOSWIG(DefaultDateTimeFormat);
 
 //---------------------------------------------------------------------------
@@ -1613,7 +1613,7 @@ public:
             const wxPoint& pos = wxDefaultPosition,
             const wxSize& size = wxDefaultSize,
             long style = wxWANTS_CHARS,
-            const wxString& name = wxPyPanelNameStr);
+            const wxString& name = wxPyGridNameStr);
 
     %RenameCtor(PreGrid,  wxGrid());
 
@@ -1627,7 +1627,7 @@ public:
                  const wxPoint& pos = wxDefaultPosition,
                  const wxSize& size = wxDefaultSize,
                  long style = wxWANTS_CHARS,
-                 const wxString& name = wxPyPanelNameStr );
+                 const wxString& name = wxPyGridNameStr );
 
     // Override the global renamer to leave these as they are, for backwards
     // compatibility
