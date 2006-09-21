@@ -94,7 +94,7 @@ import  wx
 
 # Needs Numeric or numarray or NumPy
 try:
-    import numpy as _Numeric
+    import numpy.oldnumeric as _Numeric
 except:
     try:
         import numarray as _Numeric  #if numarray is used it is renamed Numeric
