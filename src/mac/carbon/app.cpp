@@ -94,13 +94,9 @@ const short kMacMinHeap = (29 * 1024) ;
 const short kwxMacMenuBarResource = 1 ;
 const short kwxMacAppleMenuId = 1 ;
 
-WXHRGN    wxApp::s_macCursorRgn = NULL;
 wxWindow* wxApp::s_captureWindow = NULL ;
-int       wxApp::s_lastMouseDown = 0 ;
-long      wxApp::sm_lastMessageTime = 0;
 long      wxApp::s_lastModifiers = 0 ;
 
-bool      wxApp::s_macSupportPCMenuShortcuts = true ;
 long      wxApp::s_macAboutMenuItemId = wxID_ABOUT ;
 long      wxApp::s_macPreferencesMenuItemId = wxID_PREFERENCES ;
 long      wxApp::s_macExitMenuItemId = wxID_EXIT ;
@@ -814,8 +810,6 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
 
 #endif
 
-    s_macCursorRgn = ::NewRgn() ;
-
     // Mac OS X passes a process serial number command line argument when
     // the application is launched from the Finder. This argument must be
     // removed from the command line arguments before being handled by the
@@ -937,8 +931,6 @@ void wxApp::CleanUp()
 #endif
 
     UMACleanupToolbox() ;
-    if (s_macCursorRgn)
-        ::DisposeRgn((RgnHandle)s_macCursorRgn);
 
     if (!sm_isEmbedded)
         RemoveEventHandler( (EventHandlerRef)(wxTheApp->m_macEventHandler) );

@@ -60,7 +60,6 @@ class WXDLLEXPORT wxApp: public wxAppBase
     void                  MacDoOneEvent() ;
 
 protected:
-    bool                  m_showOnInit;
     int                   m_printMode; // wxPRINT_WINDOWS, wxPRINT_POSTSCRIPT
 
 public:
@@ -77,10 +76,7 @@ public:
     { m_macCurrentEvent = event ; m_macCurrentEventHandlerCallRef = handler ; }
 
 public:
-    static long           sm_lastMessageTime;
     static wxWindow*      s_captureWindow ;
-    static int            s_lastMouseDown ; // 0 = none , 1 = left , 2 = right
-    static WXHRGN         s_macCursorRgn ;
     static long           s_lastModifiers ;
 
     int                   m_nCmdShow;
@@ -96,26 +92,10 @@ private:
 #endif
 
 public:
-    static bool           s_macSupportPCMenuShortcuts ;
     static long           s_macAboutMenuItemId ;
     static long           s_macPreferencesMenuItemId ;
     static long           s_macExitMenuItemId ;
     static wxString       s_macHelpMenuTitleName ;
-
-    static bool           s_macHasAppearance ;
-    static long           s_macAppearanceVersion ;
-    static bool           s_macHasNavigation ;
-    static bool           s_macNavigationVersion ;
-    static bool           s_macHasWindowManager ;
-    static long           s_macWindowManagerVersion ;
-    static bool           s_macHasMenuManager ;
-    static long           s_macMenuManagerVersion ;
-    static bool           s_macHasDialogManager ;
-    static long           s_macDialogManagerVersion ;
-    
-    WXHRGN                m_macCursorRgn ;
-    WXHRGN                m_macSleepRgn ;
-    WXHRGN                m_macHelpRgn ;
 
     WXEVENTREF            MacGetCurrentEvent() { return m_macCurrentEvent ; }
     void                  MacHandleOneEvent( WXEVENTREF ev ) ;
