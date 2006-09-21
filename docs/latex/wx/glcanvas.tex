@@ -12,7 +12,7 @@ to show the OpenGL buffer on the window.
 
 For the newer (wx 2.7.x+) method, create a wxGLCanvas window using the constructor that does \emph{not} create an implicit rendering context,
 create an explicit instance of a \helpref{wxGLContext}{wxglcontext} that is initialized with the wxGLCanvas yourself,
-then use either \helpref{wxGLCanvas::SetCurrent}{wxglcanvassetcurrent_rc} with the instance of the \helpref{wxGLContext}{wxglcontext}
+then use either \helpref{wxGLCanvas::SetCurrent}{wxglcanvassetcurrentrc} with the instance of the \helpref{wxGLContext}{wxglcontext}
 or \helpref{wxGLContext::SetCurrent}{wxglcontextsetcurrent} with the instance of the \helpref{wxGLCanvas}{wxglcanvas}
 to bind the OpenGL state that is represented by the rendering context to the canvas, and then call
 \helpref{wxGLCanvas::SwapBuffers}{wxglcanvasswapbuffers} to swap the buffers of the OpenGL canvas and thus show your current output.
@@ -91,7 +91,7 @@ alpha channel, and accum buffer. Other implementations may support them.
  \param{long}{ style=0}, \param{const wxString\& }{name="GLCanvas"},
  \param{int*}{ attribList = 0}, \param{const wxPalette\&}{ palette = wxNullPalette}}
 
-\func{void}{wxGLCanvas}{\param{wxWindow* }{parent}, \param{wxWindowID}{ id = wxID_ANY},
+\func{void}{wxGLCanvas}{\param{wxWindow* }{parent}, \param{wxWindowID}{ id = wxID\_ANY},
  \param{int*}{ attribList = 0},
  \param{const wxPoint\&}{ pos = wxDefaultPosition}, \param{const wxSize\&}{ size = wxDefaultSize},
  \param{long}{ style=0}, \param{const wxString\& }{name="GLCanvas"},
@@ -108,7 +108,7 @@ Note that if you used one of the first three constructors, \helpref{wxGLCanvas::
 returns the pointer to the implicitly created instance, and the \helpref{wxGLCanvas::SetCurrent}{wxglcanvassetcurrent}
 method \emph{without} the parameter should be used.
 If however you used the fourth constructor, \helpref{wxGLCanvas::GetContext}{wxglcanvasgetcontext} always returns NULL
-and the \helpref{wxGLCanvas::SetCurrent}{wxglcanvassetcurrent_rc} method \emph{with} the parameter must be used!
+and the \helpref{wxGLCanvas::SetCurrent}{wxglcanvassetcurrentrc} method \emph{with} the parameter must be used!
 
 \docparam{parent}{Pointer to a parent window.}
 
@@ -166,7 +166,7 @@ If this canvas was created with the fourth constructor, this method should not b
 Note that this function may only be called \emph{after} the window has been shown.
 
 
-\membersection{wxGLCanvas::SetCurrent}\label{wxglcanvassetcurrent_rc}
+\membersection{wxGLCanvas::SetCurrent}\label{wxglcanvassetcurrentrc}
 
 \func{void}{SetCurrent}{ \param{const wxGLContext&}{ RC} }
 

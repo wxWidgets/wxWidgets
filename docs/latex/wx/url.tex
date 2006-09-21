@@ -33,7 +33,7 @@ and comparison operators.
 Constructs a URL object from the string.  The URL must be valid according
 to RFC 1738.  In particular, file URLs must be of the format
 {\tt file://hostname/path/to/file} otherwise \helpref{GetError}{wxurlgeterror}
-will return a value different from {\tt wxURL_NOERR}.
+will return a value different from {\tt wxURL\_NOERR}.
 
 It is valid to leave out the hostname but slashes must remain in place - 
 i.e. a file URL without a hostname must contain three consecutive slashes 
@@ -123,7 +123,7 @@ Returns the initialized stream. You will have to delete it yourself.
 \constfunc{bool}{IsOk}{\void}
 
 Returns \true if this object is correctly initialized, i.e. if 
-\helpref{GetError}{wxurlgeterror} returns {\tt wxURL_NOERR}.
+\helpref{GetError}{wxurlgeterror} returns {\tt wxURL\_NOERR}.
 
 
 %
@@ -165,5 +165,5 @@ Sets the proxy to use for this URL.
 
 \func{wxURLError}{SetURL}{\param{const wxString\&}{ url}}
 
-Initializes this object with the given URL and returns {\tt wxURL_NOERR}
+Initializes this object with the given URL and returns {\tt wxURL\_NOERR}
 if it's valid (see \helpref{GetError}{wxurlgeterror} for more info).

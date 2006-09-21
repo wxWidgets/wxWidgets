@@ -124,8 +124,8 @@ enum wxFrameManagerOption
 
 \func{}{wxFrameManager}{\param{wxWindow* }{managed\_wnd = NULL}, \param{unsigned int }{flags = wxAUI\_MGR\_DEFAULT}}
 
-Constructor. {\it frame} specifies the wxFrame which should be managed.
-{\it flags}  specifies options which allow the frame management behavior
+Constructor. \arg{frame} specifies the wxFrame which should be managed.
+\arg{flags}  specifies options which allow the frame management behavior
 to be modified.
 
 \membersection{wxFrameManager::\destruct{wxFrameManager}}\label{wxframemanagerdtor}
@@ -201,7 +201,7 @@ Returns the frame currently being managed by wxFrameManager.
 
 \func{wxPaneInfo\&}{GetPane}{\param{wxWindow* }{window}}
 
-{\it GetPane]} is used to lookup a wxPaneInfo object
+{\it GetPanel} is used to lookup a wxPaneInfo object
 either by window pointer or by pane name, which acts as a unique id for
 a window pane. The returned wxPaneInfo object may then be modified to
 change a pane's look, state or position. After one or more
@@ -240,10 +240,10 @@ returned wxPaneInfo's IsOk() method will return false.
 This method is used to insert either a previously unmanaged pane window
 into the frame manager, or to insert a currently managed pane somewhere 
 else. {\it InsertPane} will push all panes, rows, or docks aside and
-insert the window into the position specified by insert_location. 
-Because insert_location can specify either a pane, dock row, or dock
-layer, the insert_level parameter is used to disambiguate this. The
-parameter insert_level can take a value of wxAUI\_INSERT\_PANE, wxAUI\_INSERT\_ROW 
+insert the window into the position specified by \arg{insert\_location}. 
+Because \arg{insert\_location} can specify either a pane, dock row, or dock
+layer, the \arg{insert\_level} parameter is used to disambiguate this. The
+parameter \arg{insert\_level} can take a value of wxAUI\_INSERT\_PANE, wxAUI\_INSERT\_ROW 
 or wxAUI\_INSERT\_DOCK.
 
 \membersection{wxFrameManager::LayoutAddDock}\label{wxframemanagerlayoutadddock}
@@ -320,7 +320,7 @@ interface will return to the state it was when the perspective was saved.
 \func{void}{SetArtProvider}{\param{wxDockArt* }{art\_provider}}
 
 Instructs wxFrameManager to use art provider specified by parameter
-{\it art_provider} for all drawing calls. This allows plugable
+\arg{art\_provider} for all drawing calls. This allows plugable
 look-and-feel features. The previous art provider object, if any,
 will be deleted by wxFrameManager.
 
@@ -328,7 +328,7 @@ will be deleted by wxFrameManager.
 
 \func{void}{SetFlags}{\param{unsigned int }{flags}}
 
-This method is used to specify wxFrameManager's settings flags. {\it flags}
+This method is used to specify wxFrameManager's settings flags. \arg{flags}
 specifies options which allow the frame management behavior to be modified.
 
 \membersection{wxFrameManager::SetManagedWindow}\label{wxframemanagersetmanagedwindow}
