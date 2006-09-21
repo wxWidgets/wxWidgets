@@ -259,7 +259,8 @@ void wxDC::DoDrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
     {
         SelectColour(m_brush.GetColour());
         m_surface->FillRectangle(xx, yy, ww, hh);
-        // restore pen's colour
+        // restore pen's colour, because other drawing functions expect the
+        // colour to be set to the pen:
         SelectColour(m_pen.GetColour());
     }
 
@@ -309,16 +310,22 @@ void wxDC::DoDrawText(const wxString& text, wxCoord x, wxCoord y)
     // if background mode is solid, DrawText must paint text's background:
     if ( m_backgroundMode == wxSOLID )
     {
-        wxCHECK_RET( m_backgroundBrush.Ok(), wxT("invalid background brush") );
+        wxCHECK_RET( m_textBackgroundColour.Ok(),
+                     wxT("invalid background color") );
 
-        SelectColour(m_backgroundBrush.GetColour());
+        SelectColour(m_textBackgroundColour);
         m_surface->FillRectangle(xx, yy, XLOG2DEVREL(w), YLOG2DEVREL(h));
-        // restore pen's colour
-        SelectColour(m_pen.GetColour());
     }
 
     // finally draw the text itself:
+    wxCHECK_RET( m_textForegroundColour.Ok(),
+                 wxT("invalid foreground color") );
+    SelectColour(m_textForegroundColour);
     m_surface->DrawString(wxSTR_TO_DFB(text), -1, xx, yy, DSTF_LEFT | DSTF_TOP);
+
+    // restore pen's colour, because other drawing functions expect the colour
+    // to be set to the pen:
+    SelectColour(m_pen.GetColour());
 }
 
 void wxDC::DoDrawRotatedText(const wxString& text,
