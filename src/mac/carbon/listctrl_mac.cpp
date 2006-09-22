@@ -382,10 +382,21 @@ bool wxListCtrl::SetColumnWidth(int col, int width)
     //       to the entire window width; investigate why
     //       this is.
     
-    //if (m_dbImpl){
-    //    m_dbImpl->SetColumnWidth(col+1, width);
-    //    return true;
-    //}
+    if (m_dbImpl){
+        int mywidth = width;
+        if (width == wxLIST_AUTOSIZE || width == wxLIST_AUTOSIZE_USEHEADER)
+            mywidth = 150;
+            
+        if (col == -1){
+            for (int column = 0; column < GetColumnCount(); column++){
+                m_dbImpl->SetColumnWidth(col, mywidth);
+            }
+        }
+        else{
+            m_dbImpl->SetColumnWidth(col, mywidth);
+        }
+        return true;
+    }
     
     return false;
 }
@@ -927,9 +938,10 @@ void wxListCtrl::ClearAll()
         return;
     }
     
-    DeleteAllItems();
-    if ( m_colCount > 0 )
+    if (m_dbImpl){
+        DeleteAllItems();
         DeleteAllColumns();
+    }
 }
 
 wxTextCtrl* wxListCtrl::EditLabel(long item, wxClassInfo* textControlClass)
@@ -937,6 +949,10 @@ wxTextCtrl* wxListCtrl::EditLabel(long item, wxClassInfo* textControlClass)
     if (m_genericImpl)
         return m_genericImpl->EditLabel(item, textControlClass);
         
+    if (m_dbImpl){
+        wxMacDataItem* id = m_dbImpl->GetItemFromLine(item);
+        verify_noerr( SetDataBrowserEditItem(m_dbImpl->GetControlRef(), (DataBrowserItemID)id, kMinColumnId) );
+    }
     return NULL;
 }
 
@@ -945,10 +961,11 @@ bool wxListCtrl::EndEditLabel(bool cancel)
 {
     // TODO: generic impl. doesn't have this method - is it needed for us?
     if (m_genericImpl)
-        return false; // m_genericImpl->EndEditLabel(cancel);
+        return true; // m_genericImpl->EndEditLabel(cancel);
         
-    bool b = true;
-    return b;
+    if (m_dbImpl)
+        verify_noerr( SetDataBrowserEditItem(m_dbImpl->GetControlRef(), kDataBrowserNoItem, kMinColumnId) );
+    return true;
 }
 
 // Ensures this item is visible
@@ -1282,6 +1299,7 @@ void wxMacListCtrlItem::Notification(wxMacDataItemBrowserControl *owner ,
             
         wxListEvent event( wxEVT_COMMAND_LIST_ITEM_SELECTED, list->GetId() );
         bool isSingle = list->GetWindowStyle() | wxLC_SINGLE_SEL;
+        
         event.SetEventObject( list );
         event.m_itemIndex = owner->GetLineFromItem( this ) ;
         if ( !list->IsVirtual() )
@@ -1345,7 +1363,7 @@ wxMacDataBrowserListCtrlControl::wxMacDataBrowserListCtrlControl( wxWindow *peer
     }
     else
     {
-        options |= kDataBrowserAlwaysExtendSelection | kDataBrowserCmdTogglesSelection;
+        options |= kDataBrowserCmdTogglesSelection;
     }
 
     err = SetSelectionFlags( options );
@@ -1354,8 +1372,10 @@ wxMacDataBrowserListCtrlControl::wxMacDataBrowserListCtrlControl( wxWindow *peer
     if ( style & wxLC_LIST ){
         InsertColumn(0, kDataBrowserIconAndTextType, wxEmptyString, -1, -1);
         verify_noerr( AutoSizeColumns() );
-        verify_noerr( SetHeaderButtonHeight( 0 ) );
     }
+    
+    if ( style & wxLC_LIST || style & wxLC_NO_HEADER )
+        verify_noerr( SetHeaderButtonHeight( 0 ) );
 
     SetDataBrowserSortProperty( m_controlRef , kMinColumnId );
     if ( style & wxLC_SORT_ASCENDING )
@@ -1375,6 +1395,12 @@ wxMacDataBrowserListCtrlControl::wxMacDataBrowserListCtrlControl( wxWindow *peer
         m_sortOrder = SortOrder_None;
         SetDataBrowserSortProperty( m_controlRef , kMinColumnId);
         SetDataBrowserSortOrder( m_controlRef , kDataBrowserOrderIncreasing);
+    }
+    
+    if ( style & wxLC_VRULES ){
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_4
+        verify_noerr( DataBrowserChangeAttributes(m_controlRef, kDataBrowserAttributeListViewDrawColumnDividers, kDataBrowserAttributeNone) );
+#endif
     }
 
     verify_noerr( AutoSizeColumns() );
