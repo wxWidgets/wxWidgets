@@ -219,9 +219,6 @@ public:
     virtual bool Write(wxSTD ostream& str) const;
 #endif
     virtual bool Write(wxString& str) const;
-#if wxUSE_STD_IOSTREAM
-    virtual bool Read(wxSTD istream& str);
-#endif
     virtual bool Read(wxString& str);
     virtual wxString GetType() const { return wxT("stringlist"); };
 
@@ -781,14 +778,6 @@ bool wxVariantDataString::Write(wxString& str) const
     str = m_value;
     return true;
 }
-
-#if wxUSE_STD_IOSTREAM
-bool wxVariantDataString::Read(wxSTD istream& str)
-{
-    str >> m_value;
-    return true;
-}
-#endif
 
 #if wxUSE_STREAMS
 bool wxVariantDataString::Write(wxOutputStream& str) const
