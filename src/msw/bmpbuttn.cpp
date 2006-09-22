@@ -379,8 +379,7 @@ bool wxBitmapButton::MSWOnDraw(WXDRAWITEMSTRUCT *item)
         }
 
         // draw the bitmap
-        wxDC dst;
-        dst.SetHDC((WXHDC) hDC, false);
+        wxDCTemp dst((WXHDC)hDC);
         dst.DrawBitmap(*bitmap, x1, y1, true);
 
         return true;
