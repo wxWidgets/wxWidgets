@@ -152,6 +152,10 @@ static inline double DegToRad(double deg) { return (deg * M_PI) / 180.0; }
 // state we were called with, the other one after changing to HI Graphics orientation
 // (this one is used for getting back clippings etc)
 
+//-----------------------------------------------------------------------------
+// wxGraphicPath implementation
+//-----------------------------------------------------------------------------
+
 wxMacCGPath::wxMacCGPath()
 {
     m_path = CGPathCreateMutable() ;
@@ -200,16 +204,34 @@ CGPathRef wxMacCGPath::GetPath() const
     return m_path ;
 }
 
+void wxMacCGPath::AddArcToPoint( wxCoord x1, wxCoord y1 , wxCoord x2, wxCoord y2, wxCoord r ) 
+{
+    CGPathAddArcToPoint( m_path, NULL , x1, y1, x2, y2, r); 
+}
+
+void wxMacCGPath::AddArc( wxCoord x, wxCoord y, wxCoord r, double startAngle, double endAngle, bool clockwise ) 
+{
+    CGPathAddArc( m_path, NULL , x, y, r, startAngle, endAngle, clockwise); 
+}
+
+//-----------------------------------------------------------------------------
+// wxGraphicContext implementation
+//-----------------------------------------------------------------------------
+
 wxMacCGContext::wxMacCGContext( CGrafPtr port )
 {
     m_qdPort = port ;
     m_cgContext = NULL ;
+    m_mode = kCGPathFill;
+    m_macATSUIStyle = NULL ;
 }
 
 wxMacCGContext::wxMacCGContext( CGContextRef cgcontext )
 {
     m_qdPort = NULL ;
     m_cgContext = cgcontext ;
+    m_mode = kCGPathFill;
+    m_macATSUIStyle = NULL ;
     CGContextSaveGState( m_cgContext ) ;
     CGContextSaveGState( m_cgContext ) ;
 }
@@ -218,6 +240,8 @@ wxMacCGContext::wxMacCGContext()
 {
     m_qdPort = NULL ;
     m_cgContext = NULL ;
+    m_mode = kCGPathFill;
+    m_macATSUIStyle = NULL ;
 }
 
 wxMacCGContext::~wxMacCGContext()
@@ -325,6 +349,50 @@ void wxMacCGContext::SetNativeContext( CGContextRef cg )
     if ( cg )
         CGContextSaveGState( cg ) ;
     m_cgContext = cg ;
+}
+
+void wxMacCGContext::Translate( wxCoord dx , wxCoord dy ) 
+{
+    CGContextTranslateCTM( m_cgContext, dx, dy );
+}
+
+void wxMacCGContext::Scale( wxCoord xScale , wxCoord yScale )
+{
+    CGContextScaleCTM( m_cgContext , xScale , yScale ) ;
+}
+
+void wxMacCGContext::DrawBitmap( const wxBitmap &bmp, wxCoord x, wxCoord y, wxCoord w, wxCoord h ) 
+{
+    CGImageRef image = (CGImageRef)( bmp.CGImageCreate() ) ;
+    HIRect r = CGRectMake( x , y , w , h ) ;
+    HIViewDrawCGImage( m_cgContext , &r , image ) ;
+    CGImageRelease( image ) ;
+}
+
+void wxMacCGContext::DrawIcon( const wxIcon &icon, wxCoord x, wxCoord y, wxCoord w, wxCoord h ) 
+{
+    CGRect r = CGRectMake( 00 , 00 , w , h ) ;
+    CGContextSaveGState( m_cgContext );
+    CGContextTranslateCTM( m_cgContext, x , y + h );
+    CGContextScaleCTM( m_cgContext, 1, -1 );
+    PlotIconRefInContext( m_cgContext , &r , kAlignNone , kTransformNone ,
+        NULL , kPlotIconRefNormalFlags , MAC_WXHICON( icon.GetHICON() ) ) ;
+    CGContextRestoreGState( m_cgContext ) ;
+}
+
+void wxMacCGContext::PushState()
+{
+    CGContextSaveGState( m_cgContext );
+}
+
+void wxMacCGContext::PopState() 
+{
+    CGContextRestoreGState( m_cgContext );
+}
+
+void wxMacCGContext::SetTextColor( const wxColour &col ) 
+{
+    m_textForegroundColor = col ;
 }
 
 #pragma mark -
@@ -769,42 +837,293 @@ void wxMacCGContext::SetBrush( const wxBrush &brush )
     }
 }
 
-void AddEllipticArcToPath(CGContextRef c, CGPoint center, CGFloat a, CGFloat b, CGFloat fromDegree , CGFloat toDegree )
+void wxMacCGContext::DrawText( const wxString &str, wxCoord x, wxCoord y, double angle ) 
 {
-    CGContextSaveGState(c);
-    CGContextTranslateCTM(c, center.x, center.y);
-    CGContextScaleCTM(c, a, b);
-    CGContextMoveToPoint(c, 1, 0);
-    CGContextAddArc(c, 0, 0, 1, DegToRad(fromDegree), DegToRad(toDegree), 0);
-    CGContextClosePath(c);
-    CGContextRestoreGState(c);
-}
+    OSStatus status = noErr ;
+    ATSUTextLayout atsuLayout ;
+    UniCharCount chars = str.length() ;
+    UniChar* ubuf = NULL ;
 
-void AddRoundedRectToPath(CGContextRef c, CGRect rect, CGFloat ovalWidth,
-      CGFloat ovalHeight)
-{
-    CGFloat fw, fh;
-    if (ovalWidth == 0 || ovalHeight == 0)
+#if SIZEOF_WCHAR_T == 4
+    wxMBConvUTF16 converter ;
+#if wxUSE_UNICODE
+    size_t unicharlen = converter.WC2MB( NULL , str.wc_str() , 0 ) ;
+    ubuf = (UniChar*) malloc( unicharlen + 2 ) ;
+    converter.WC2MB( (char*) ubuf , str.wc_str(), unicharlen + 2 ) ;
+#else
+    const wxWCharBuffer wchar = str.wc_str( wxConvLocal ) ;
+    size_t unicharlen = converter.WC2MB( NULL , wchar.data() , 0 ) ;
+    ubuf = (UniChar*) malloc( unicharlen + 2 ) ;
+    converter.WC2MB( (char*) ubuf , wchar.data() , unicharlen + 2 ) ;
+#endif
+    chars = unicharlen / 2 ;
+#else
+#if wxUSE_UNICODE
+    ubuf = (UniChar*) str.wc_str() ;
+#else
+    wxWCharBuffer wchar = str.wc_str( wxConvLocal ) ;
+    chars = wxWcslen( wchar.data() ) ;
+    ubuf = (UniChar*) wchar.data() ;
+#endif
+#endif
+
+    status = ::ATSUCreateTextLayoutWithTextPtr( (UniCharArrayPtr) ubuf , 0 , chars , chars , 1 ,
+        &chars , (ATSUStyle*) &m_macATSUIStyle , &atsuLayout ) ;
+
+    wxASSERT_MSG( status == noErr , wxT("couldn't create the layout of the rotated text") );
+
+    status = ::ATSUSetTransientFontMatching( atsuLayout , true ) ;
+    wxASSERT_MSG( status == noErr , wxT("couldn't setup transient font matching") );
+
+    int iAngle = int( angle );
+    if ( abs(iAngle) > 0 )
     {
-        CGContextAddRect(c, rect);
-        return;
+        Fixed atsuAngle = IntToFixed( iAngle ) ;
+        ATSUAttributeTag atsuTags[] =
+        {
+            kATSULineRotationTag ,
+        } ;
+        ByteCount atsuSizes[sizeof(atsuTags) / sizeof(ATSUAttributeTag)] =
+        {
+            sizeof( Fixed ) ,
+        } ;
+        ATSUAttributeValuePtr    atsuValues[sizeof(atsuTags) / sizeof(ATSUAttributeTag)] =
+        {
+            &atsuAngle ,
+        } ;
+        status = ::ATSUSetLayoutControls(atsuLayout , sizeof(atsuTags) / sizeof(ATSUAttributeTag),
+            atsuTags, atsuSizes, atsuValues ) ;
     }
 
-    CGContextSaveGState(c);
-    CGContextTranslateCTM(c, CGRectGetMinX(rect), CGRectGetMinY(rect));
-    CGContextScaleCTM(c, ovalWidth, ovalHeight);
+    {
+        ATSUAttributeTag atsuTags[] =
+        {
+            kATSUCGContextTag ,
+        } ;
+        ByteCount atsuSizes[sizeof(atsuTags) / sizeof(ATSUAttributeTag)] =
+        {
+            sizeof( CGContextRef ) ,
+        } ;
+        ATSUAttributeValuePtr    atsuValues[sizeof(atsuTags) / sizeof(ATSUAttributeTag)] =
+        {
+            &m_cgContext ,
+        } ;
+        status = ::ATSUSetLayoutControls(atsuLayout , sizeof(atsuTags) / sizeof(ATSUAttributeTag),
+            atsuTags, atsuSizes, atsuValues ) ;
+    }
 
-    fw = CGRectGetWidth(rect) / ovalWidth;
-    fh = CGRectGetHeight(rect) / ovalHeight;
+    ATSUTextMeasurement textBefore, textAfter ;
+    ATSUTextMeasurement ascent, descent ;
 
-    CGContextMoveToPoint(c, fw, fh / 2);
-    CGContextAddArcToPoint(c, fw, fh, fw / 2, fh, 1);
-    CGContextAddArcToPoint(c, 0, fh, 0, fh / 2, 1);
-    CGContextAddArcToPoint(c, 0, 0, fw / 2, 0, 1);
-    CGContextAddArcToPoint(c, fw, 0, fw, fh / 2, 1);
-    CGContextClosePath(c);
-    CGContextRestoreGState(c);
+    status = ::ATSUGetUnjustifiedBounds( atsuLayout, kATSUFromTextBeginning, kATSUToTextEnd,
+        &textBefore , &textAfter, &ascent , &descent );
+
+    wxASSERT_MSG( status == noErr , wxT("couldn't measure the rotated text") );
+
+    Rect rect ;
+/*
+    // TODO
+    if ( m_backgroundMode == wxSOLID )
+    {
+        wxGraphicPath* path = m_graphicContext->CreatePath() ;
+        path->MoveToPoint( drawX , drawY ) ;
+        path->AddLineToPoint(
+            (int) (drawX + sin(angle / RAD2DEG) * FixedToInt(ascent + descent)) ,
+            (int) (drawY + cos(angle / RAD2DEG) * FixedToInt(ascent + descent)) ) ;
+        path->AddLineToPoint(
+            (int) (drawX + sin(angle / RAD2DEG) * FixedToInt(ascent + descent ) + cos(angle / RAD2DEG) * FixedToInt(textAfter)) ,
+            (int) (drawY + cos(angle / RAD2DEG) * FixedToInt(ascent + descent) - sin(angle / RAD2DEG) * FixedToInt(textAfter)) ) ;
+        path->AddLineToPoint(
+            (int) (drawX + cos(angle / RAD2DEG) * FixedToInt(textAfter)) ,
+            (int) (drawY - sin(angle / RAD2DEG) * FixedToInt(textAfter)) ) ;
+
+        m_graphicContext->FillPath( path , m_textBackgroundColour ) ;
+        delete path ;
+    }
+*/
+    x += (int)(sin(angle / RAD2DEG) * FixedToInt(ascent));
+    y += (int)(cos(angle / RAD2DEG) * FixedToInt(ascent));
+
+    status = ::ATSUMeasureTextImage( atsuLayout, kATSUFromTextBeginning, kATSUToTextEnd,
+        IntToFixed(x) , IntToFixed(y) , &rect );
+    wxASSERT_MSG( status == noErr , wxT("couldn't measure the rotated text") );
+
+    CGContextSaveGState(m_cgContext);
+    CGContextTranslateCTM(m_cgContext, x, y);
+    CGContextScaleCTM(m_cgContext, 1, -1);
+    status = ::ATSUDrawText( atsuLayout, kATSUFromTextBeginning, kATSUToTextEnd,
+        IntToFixed(0) , IntToFixed(0) );
+
+    wxASSERT_MSG( status == noErr , wxT("couldn't draw the rotated text") );
+
+    CGContextRestoreGState(m_cgContext) ;
+
+    ::ATSUDisposeTextLayout(atsuLayout);
+
+#if SIZEOF_WCHAR_T == 4
+    free( ubuf ) ;
+#endif
 }
+    
+void wxMacCGContext::GetTextExtent( const wxString &str, wxCoord *width, wxCoord *height,
+                            wxCoord *descent, wxCoord *externalLeading ) const
+{
+    wxCHECK_RET( m_macATSUIStyle != NULL, wxT("wxDC(cg)::DoGetTextExtent - no valid font set") ) ;
+
+    OSStatus status = noErr ;
+    
+    ATSUTextLayout atsuLayout ;
+    UniCharCount chars = str.length() ;
+    UniChar* ubuf = NULL ;
+
+#if SIZEOF_WCHAR_T == 4
+    wxMBConvUTF16 converter ;
+#if wxUSE_UNICODE
+    size_t unicharlen = converter.WC2MB( NULL , str.wc_str() , 0 ) ;
+    ubuf = (UniChar*) malloc( unicharlen + 2 ) ;
+    converter.WC2MB( (char*) ubuf , str.wc_str(), unicharlen + 2 ) ;
+#else
+    const wxWCharBuffer wchar = str.wc_str( wxConvLocal ) ;
+    size_t unicharlen = converter.WC2MB( NULL , wchar.data() , 0 ) ;
+    ubuf = (UniChar*) malloc( unicharlen + 2 ) ;
+    converter.WC2MB( (char*) ubuf , wchar.data() , unicharlen + 2 ) ;
+#endif
+    chars = unicharlen / 2 ;
+#else
+#if wxUSE_UNICODE
+    ubuf = (UniChar*) str.wc_str() ;
+#else
+    wxWCharBuffer wchar = str.wc_str( wxConvLocal ) ;
+    chars = wxWcslen( wchar.data() ) ;
+    ubuf = (UniChar*) wchar.data() ;
+#endif
+#endif
+
+    status = ::ATSUCreateTextLayoutWithTextPtr( (UniCharArrayPtr) ubuf , 0 , chars , chars , 1 ,
+        &chars , (ATSUStyle*) &m_macATSUIStyle , &atsuLayout ) ;
+
+    wxASSERT_MSG( status == noErr , wxT("couldn't create the layout of the text") );
+
+    ATSUTextMeasurement textBefore, textAfter ;
+    ATSUTextMeasurement textAscent, textDescent ;
+
+    status = ::ATSUGetUnjustifiedBounds( atsuLayout, kATSUFromTextBeginning, kATSUToTextEnd,
+        &textBefore , &textAfter, &textAscent , &textDescent );
+
+    if ( height )
+        *height = FixedToInt(textAscent + textDescent) ;
+    if ( descent )
+        *descent = FixedToInt(textDescent) ;
+    if ( externalLeading )
+        *externalLeading = 0 ;
+    if ( width )
+        *width = FixedToInt(textAfter - textBefore) ;
+
+    ::ATSUDisposeTextLayout(atsuLayout);
+}
+
+void wxMacCGContext::GetPartialTextExtents(const wxString& text, wxArrayInt& widths) const 
+{
+    widths.Empty();
+    widths.Add(0, text.length());
+
+    if (text.empty())
+        return ;
+
+    ATSUTextLayout atsuLayout ;
+    UniCharCount chars = text.length() ;
+    UniChar* ubuf = NULL ;
+
+#if SIZEOF_WCHAR_T == 4
+    wxMBConvUTF16 converter ;
+#if wxUSE_UNICODE
+    size_t unicharlen = converter.WC2MB( NULL , text.wc_str() , 0 ) ;
+    ubuf = (UniChar*) malloc( unicharlen + 2 ) ;
+    converter.WC2MB( (char*) ubuf , text.wc_str(), unicharlen + 2 ) ;
+#else
+    const wxWCharBuffer wchar = text.wc_str( wxConvLocal ) ;
+    size_t unicharlen = converter.WC2MB( NULL , wchar.data() , 0 ) ;
+    ubuf = (UniChar*) malloc( unicharlen + 2 ) ;
+    converter.WC2MB( (char*) ubuf , wchar.data() , unicharlen + 2 ) ;
+#endif
+    chars = unicharlen / 2 ;
+#else
+#if wxUSE_UNICODE
+    ubuf = (UniChar*) text.wc_str() ;
+#else
+    wxWCharBuffer wchar = text.wc_str( wxConvLocal ) ;
+    chars = wxWcslen( wchar.data() ) ;
+    ubuf = (UniChar*) wchar.data() ;
+#endif
+#endif
+
+    OSStatus status;
+    status = ::ATSUCreateTextLayoutWithTextPtr( (UniCharArrayPtr) ubuf , 0 , chars , chars , 1 ,
+        &chars , (ATSUStyle*) &m_macATSUIStyle , &atsuLayout ) ;
+
+    for ( int pos = 0; pos < (int)chars; pos ++ )
+    {
+        unsigned long actualNumberOfBounds = 0;
+        ATSTrapezoid glyphBounds;
+
+        // We get a single bound, since the text should only require one. If it requires more, there is an issue
+        OSStatus result;
+        result = ATSUGetGlyphBounds( atsuLayout, 0, 0, kATSUFromTextBeginning, pos + 1,
+            kATSUseDeviceOrigins, 1, &glyphBounds, &actualNumberOfBounds );
+        if (result != noErr || actualNumberOfBounds != 1 )
+            return ;
+
+        widths[pos] = FixedToInt( glyphBounds.upperRight.x - glyphBounds.upperLeft.x );
+        //unsigned char uch = s[i];
+    }
+
+    ::ATSUDisposeTextLayout(atsuLayout);
+}
+
+void wxMacCGContext::SetFont( const wxFont &font ) 
+{
+    if ( m_macATSUIStyle )
+    {
+        ::ATSUDisposeStyle((ATSUStyle)m_macATSUIStyle);
+        m_macATSUIStyle = NULL ;
+    }
+
+    if ( font.Ok() )
+    {
+        OSStatus status ;
+
+        status = ATSUCreateAndCopyStyle( (ATSUStyle) font.MacGetATSUStyle() , (ATSUStyle*) &m_macATSUIStyle ) ;
+
+        wxASSERT_MSG( status == noErr, wxT("couldn't create ATSU style") ) ;
+
+        // we need the scale here ...
+
+        Fixed atsuSize = IntToFixed( int( /*m_scaleY*/ 1 * font.MacGetFontSize()) ) ;
+        RGBColor atsuColor = MAC_WXCOLORREF( m_textForegroundColor.GetPixel() ) ;
+        ATSUAttributeTag atsuTags[] =
+        {
+                kATSUSizeTag ,
+                kATSUColorTag ,
+        } ;
+        ByteCount atsuSizes[sizeof(atsuTags) / sizeof(ATSUAttributeTag)] =
+        {
+                sizeof( Fixed ) ,
+                sizeof( RGBColor ) ,
+        } ;
+        ATSUAttributeValuePtr atsuValues[sizeof(atsuTags) / sizeof(ATSUAttributeTag)] =
+        {
+                &atsuSize ,
+                &atsuColor ,
+        } ;
+
+        status = ::ATSUSetAttributes(
+            (ATSUStyle)m_macATSUIStyle, sizeof(atsuTags) / sizeof(ATSUAttributeTag) ,
+            atsuTags, atsuSizes, atsuValues);
+
+        wxASSERT_MSG( status == noErr , wxT("couldn't modify ATSU style") ) ;
+    }
+}
+
 
 #pragma mark -
 
@@ -861,11 +1180,7 @@ void wxDC::DoDrawBitmap( const wxBitmap &bmp, wxCoord x, wxCoord y, bool useMask
     wxCoord ww = XLOG2DEVREL(w);
     wxCoord hh = YLOG2DEVREL(h);
 
-    CGContextRef cg = ((wxMacCGContext*)(m_graphicContext))->GetNativeContext() ;
-    CGImageRef image = (CGImageRef)( bmp.CGImageCreate() ) ;
-    HIRect r = CGRectMake( xx , yy , ww , hh ) ;
-    HIViewDrawCGImage( cg , &r , image ) ;
-    CGImageRelease( image ) ;
+    m_graphicContext->DrawBitmap( bmp, xx , yy , ww , hh ) ;
 }
 
 void wxDC::DoDrawIcon( const wxIcon &icon, wxCoord x, wxCoord y )
@@ -880,14 +1195,7 @@ void wxDC::DoDrawIcon( const wxIcon &icon, wxCoord x, wxCoord y )
     wxCoord ww = XLOG2DEVREL(w);
     wxCoord hh = YLOG2DEVREL(h);
 
-    CGContextRef cg = ((wxMacCGContext*)(m_graphicContext))->GetNativeContext() ;
-    CGRect r = CGRectMake( 00 , 00 , ww , hh ) ;
-    CGContextSaveGState( cg );
-    CGContextTranslateCTM( cg, xx , yy + hh );
-    CGContextScaleCTM( cg, 1, -1 );
-    PlotIconRefInContext( cg , &r , kAlignNone , kTransformNone ,
-        NULL , kPlotIconRefNormalFlags , MAC_WXHICON( icon.GetHICON() ) ) ;
-    CGContextRestoreGState( cg ) ;
+    m_graphicContext->DrawIcon( icon , xx, yy, ww, hh ) ;
 }
 
 void wxDC::DoSetClippingRegion( wxCoord x, wxCoord y, wxCoord width, wxCoord height )
@@ -1012,7 +1320,7 @@ void wxDC::SetTextForeground( const wxColour &col )
     if ( col != m_textForegroundColour )
     {
         m_textForegroundColour = col;
-        MacInstallFont() ;
+        m_graphicContext->SetTextColor( col ) ;
     }
 }
 
@@ -1137,7 +1445,8 @@ void wxDC::SetBackgroundMode( int mode )
 void wxDC::SetFont( const wxFont &font )
 {
     m_font = font;
-    MacInstallFont() ;
+    if ( m_graphicContext )
+        m_graphicContext->SetFont( font ) ;
 }
 
 void wxDC::SetPen( const wxPen &pen )
@@ -1156,12 +1465,11 @@ void wxDC::SetPen( const wxPen &pen )
         {
             // we have to compensate for moved device origins etc. otherwise patterned pens are standing still
             // eg when using a wxScrollWindow and scrolling around
-            CGContextRef cgContext = ((wxMacCGContext*)(m_graphicContext))->GetNativeContext() ;
             int origX = XLOG2DEVMAC( 0 ) ;
             int origY = YLOG2DEVMAC( 0 ) ;
-            CGContextTranslateCTM( cgContext, origX, origY );
+            m_graphicContext->Translate( origX , origY ) ;
             m_graphicContext->SetPen( m_pen ) ;
-            CGContextTranslateCTM( cgContext, -origX, -origY );
+            m_graphicContext->Translate( -origX , -origY ) ;
         }
     }
 }
@@ -1182,12 +1490,11 @@ void wxDC::SetBrush( const wxBrush &brush )
         {
             // we have to compensate for moved device origins etc. otherwise patterned brushes are standing still
             // eg when using a wxScrollWindow and scrolling around
-            CGContextRef cgContext = ((wxMacCGContext*)(m_graphicContext))->GetNativeContext() ;
             int origX = XLOG2DEVMAC(0) ;
             int origY = YLOG2DEVMAC(0) ;
-            CGContextTranslateCTM( cgContext, origX, origY );
+            m_graphicContext->Translate( origX , origY ) ;
             m_graphicContext->SetBrush( m_brush ) ;
-            CGContextTranslateCTM( cgContext, -origX, -origY );
+            m_graphicContext->Translate( -origX , -origY ) ;
         }
     }
 }
@@ -1339,18 +1646,19 @@ void wxDC::DoDrawArc( wxCoord x1, wxCoord y1,
     }
 
     bool fill = m_brush.GetStyle() != wxTRANSPARENT ;
-    wxMacCGContext* mctx = ((wxMacCGContext*) m_graphicContext) ;
-    CGContextRef ctx = mctx->GetNativeContext() ;
-    CGContextSaveGState( ctx ) ;
-    CGContextTranslateCTM( ctx, xxc , yyc );
-    CGContextScaleCTM( ctx , 1 , -1 ) ;
+    
+    wxGraphicPath* path = m_graphicContext->CreatePath() ;
+    m_graphicContext->PushState() ;
+    m_graphicContext->Translate( xxc, yyc ) ;
+    m_graphicContext->Scale( 1, -1 ) ;
     if ( fill )
-        CGContextMoveToPoint( ctx , 0 , 0 ) ;
-    CGContextAddArc( ctx, 0, 0 , rad , DegToRad(sa), DegToRad(ea), 0 );
+        path->MoveToPoint( 0, 0 ) ;
+    path->AddArc( 0, 0, rad , DegToRad(sa) , DegToRad(ea), false ) ;
     if ( fill )
-        CGContextAddLineToPoint( ctx , 0 , 0 ) ;
-    CGContextRestoreGState( ctx ) ;
-    CGContextDrawPath( ctx , mctx->GetDrawingMode() ) ;
+        path->AddLineToPoint( 0, 0 ) ;
+    m_graphicContext->DrawPath( path ) ;
+    m_graphicContext->PopState() ;
+    delete path ;
 }
 
 void wxDC::DoDrawEllipticArc( wxCoord x, wxCoord y, wxCoord w, wxCoord h,
@@ -1380,19 +1688,18 @@ void wxDC::DoDrawEllipticArc( wxCoord x, wxCoord y, wxCoord w, wxCoord h,
 
     bool fill = m_brush.GetStyle() != wxTRANSPARENT ;
 
-    wxMacCGContext* mctx = ((wxMacCGContext*) m_graphicContext) ;
-    CGContextRef ctx = mctx->GetNativeContext() ;
-
-    CGContextSaveGState( ctx ) ;
-    CGContextTranslateCTM( ctx, xx + ww / 2, yy + hh / 2 );
-    CGContextScaleCTM( ctx , 1 * ww / 2 , -1 * hh / 2 ) ;
+    wxGraphicPath* path = m_graphicContext->CreatePath() ;
+    m_graphicContext->PushState() ;
+    m_graphicContext->Translate( xx + ww / 2, yy + hh / 2 ) ;
+    m_graphicContext->Scale( 1 * ww / 2 , -1 * hh / 2 ) ;
     if ( fill )
-        CGContextMoveToPoint( ctx , 0 , 0 ) ;
-    CGContextAddArc( ctx, 0, 0, 1, DegToRad( sa ), DegToRad( ea ), 0 );
+        path->MoveToPoint( 0, 0 ) ;
+    path->AddArc( 0, 0, 1 , DegToRad(sa) , DegToRad(ea), false ) ;
     if ( fill )
-        CGContextAddLineToPoint( ctx , 0 , 0 ) ;
-    CGContextRestoreGState( ctx ) ;
-    CGContextDrawPath( ctx , mctx->GetDrawingMode() ) ;
+        path->AddLineToPoint( 0, 0 ) ;
+    m_graphicContext->DrawPath( path ) ;
+    m_graphicContext->PopState() ;
+    delete path ;
 }
 
 void wxDC::DoDrawPoint( wxCoord x, wxCoord y )
@@ -1589,10 +1896,29 @@ void wxDC::DoDrawRoundedRectangle(wxCoord x, wxCoord y,
         yy = yy - hh;
     }
 
-    wxMacCGContext* mctx = ((wxMacCGContext*) m_graphicContext) ;
-    CGContextRef ctx = mctx->GetNativeContext() ;
-    AddRoundedRectToPath( ctx , CGRectMake( xx , yy , ww , hh ) , radius , radius ) ;
-    CGContextDrawPath( ctx , mctx->GetDrawingMode() ) ;
+    wxGraphicPath* path = m_graphicContext->CreatePath() ;
+    if ( radius == 0)
+    {
+        path->AddRectangle( xx , yy , ww , hh ) ;
+        m_graphicContext->DrawPath( path ) ;
+    }
+    else
+    {
+        m_graphicContext->PushState() ;
+        m_graphicContext->Translate( xx , yy ) ;
+        m_graphicContext->Scale( radius , radius ) ;
+        double fw = ww / radius ;
+        double fh = hh / radius;
+        path->MoveToPoint(fw, fh / 2);
+        path->AddArcToPoint(fw, fh, fw / 2, fh, 1);
+        path->AddArcToPoint(0, fh, 0, fh / 2, 1);
+        path->AddArcToPoint(0, 0, fw / 2, 0, 1);
+        path->AddArcToPoint(fw, 0, fw, fh / 2, 1);
+        path->CloseSubpath();
+        m_graphicContext->DrawPath( path ) ;
+        m_graphicContext->PopState() ;
+    }
+    delete path ;
 }
 
 void wxDC::DoDrawEllipse(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
@@ -1622,15 +1948,15 @@ void wxDC::DoDrawEllipse(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
         hh = -hh;
         yy = yy - hh;
     }
-
-    wxMacCGContext* mctx = ((wxMacCGContext*) m_graphicContext) ;
-    CGContextRef ctx = mctx->GetNativeContext() ;
-    CGContextSaveGState( ctx ) ;
-    CGContextTranslateCTM( ctx, xx + ww / 2, yy + hh / 2 );
-    CGContextScaleCTM( ctx , ww / 2 , hh / 2 ) ;
-    CGContextAddArc( ctx, 0, 0, 1, 0 , 2 * M_PI , 0 );
-    CGContextRestoreGState( ctx ) ;
-    CGContextDrawPath( ctx , mctx->GetDrawingMode() ) ;
+    
+    wxGraphicPath* path = m_graphicContext->CreatePath() ;
+    m_graphicContext->PushState() ;
+    m_graphicContext->Translate(xx + ww / 2, yy + hh / 2);
+    m_graphicContext->Scale(ww / 2 , hh / 2);
+    path->AddArc( 0, 0, 1, 0 , 2 * M_PI , false ) ;
+    m_graphicContext->DrawPath( path ) ;
+    m_graphicContext->PopState() ;
+    delete path ;
 }
 
 bool wxDC::CanDrawBitmap() const
@@ -1684,6 +2010,7 @@ bool wxDC::DoBlit(
                 if ( xxsrc >= 0 && yysrc >= 0 )
                 {
                     wxRect subrect( xxsrc, yysrc, wwsrc , hhsrc ) ;
+                    // TODO we perhaps could add a DrawSubBitmap call to dc for performance reasons
                     blit = blit.GetSubBitmap( subrect ) ;
                 }
                 else
@@ -1701,21 +2028,13 @@ bool wxDC::DoBlit(
 
         if ( blit.Ok() )
         {
-            CGContextRef cg = ((wxMacCGContext*)(m_graphicContext))->GetNativeContext() ;
-            CGImageRef image = (CGImageRef)( blit.CGImageCreate() ) ;
-            HIRect r = CGRectMake( xxdest , yydest , wwdest , hhdest ) ;
-            HIViewDrawCGImage( cg , &r , image ) ;
-            CGImageRelease( image ) ;
+            m_graphicContext->DrawBitmap( blit, xxdest , yydest , wwdest , hhdest ) ;
         }
     }
     else
     {
-#if 0
-        CGContextRef cg = (wxMacCGContext*)(source->GetGraphicContext())->GetNativeContext() ;
-        void *data = CGBitmapContextGetData( cg ) ;
-#endif
-
-        return false ; // wxFAIL_MSG( wxT("Blitting is only supported from bitmap contexts") ) ;
+        wxFAIL_MSG( wxT("Blitting is only supported from bitmap contexts") ) ;
+        return false ; 
     }
 
     return true;
@@ -1725,143 +2044,17 @@ void wxDC::DoDrawRotatedText(const wxString& str, wxCoord x, wxCoord y,
                               double angle)
 {
     wxCHECK_RET( Ok(), wxT("wxDC(cg)::DoDrawRotatedText - invalid DC") );
-    wxCHECK_RET( m_macATSUIStyle != NULL, wxT("wxDC(cg)::DoDrawRotatedText - no valid font set") );
+//    wxCHECK_RET( m_macATSUIStyle != NULL, wxT("wxDC(cg)::DoDrawRotatedText - no valid font set") );
 
     if ( str.length() == 0 )
         return ;
     if ( m_logicalFunction != wxCOPY )
         return ;
 
-    OSStatus status = noErr ;
-    ATSUTextLayout atsuLayout ;
-    UniCharCount chars = str.length() ;
-    UniChar* ubuf = NULL ;
-
-#if SIZEOF_WCHAR_T == 4
-    wxMBConvUTF16 converter ;
-#if wxUSE_UNICODE
-    size_t unicharlen = converter.WC2MB( NULL , str.wc_str() , 0 ) ;
-    ubuf = (UniChar*) malloc( unicharlen + 2 ) ;
-    converter.WC2MB( (char*) ubuf , str.wc_str(), unicharlen + 2 ) ;
-#else
-    const wxWCharBuffer wchar = str.wc_str( wxConvLocal ) ;
-    size_t unicharlen = converter.WC2MB( NULL , wchar.data() , 0 ) ;
-    ubuf = (UniChar*) malloc( unicharlen + 2 ) ;
-    converter.WC2MB( (char*) ubuf , wchar.data() , unicharlen + 2 ) ;
-#endif
-    chars = unicharlen / 2 ;
-#else
-#if wxUSE_UNICODE
-    ubuf = (UniChar*) str.wc_str() ;
-#else
-    wxWCharBuffer wchar = str.wc_str( wxConvLocal ) ;
-    chars = wxWcslen( wchar.data() ) ;
-    ubuf = (UniChar*) wchar.data() ;
-#endif
-#endif
-
     int drawX = XLOG2DEVMAC(x) ;
     int drawY = YLOG2DEVMAC(y) ;
 
-    status = ::ATSUCreateTextLayoutWithTextPtr( (UniCharArrayPtr) ubuf , 0 , chars , chars , 1 ,
-        &chars , (ATSUStyle*) &m_macATSUIStyle , &atsuLayout ) ;
-
-    wxASSERT_MSG( status == noErr , wxT("couldn't create the layout of the rotated text") );
-
-    status = ::ATSUSetTransientFontMatching( atsuLayout , true ) ;
-    wxASSERT_MSG( status == noErr , wxT("couldn't setup transient font matching") );
-
-    int iAngle = int( angle );
-    if ( abs(iAngle) > 0 )
-    {
-        Fixed atsuAngle = IntToFixed( iAngle ) ;
-        ATSUAttributeTag atsuTags[] =
-        {
-            kATSULineRotationTag ,
-        } ;
-        ByteCount atsuSizes[sizeof(atsuTags) / sizeof(ATSUAttributeTag)] =
-        {
-            sizeof( Fixed ) ,
-        } ;
-        ATSUAttributeValuePtr    atsuValues[sizeof(atsuTags) / sizeof(ATSUAttributeTag)] =
-        {
-            &atsuAngle ,
-        } ;
-        status = ::ATSUSetLayoutControls(atsuLayout , sizeof(atsuTags) / sizeof(ATSUAttributeTag),
-            atsuTags, atsuSizes, atsuValues ) ;
-    }
-
-    {
-        CGContextRef cgContext = ((wxMacCGContext*)(m_graphicContext))->GetNativeContext() ;
-        ATSUAttributeTag atsuTags[] =
-        {
-            kATSUCGContextTag ,
-        } ;
-        ByteCount atsuSizes[sizeof(atsuTags) / sizeof(ATSUAttributeTag)] =
-        {
-            sizeof( CGContextRef ) ,
-        } ;
-        ATSUAttributeValuePtr    atsuValues[sizeof(atsuTags) / sizeof(ATSUAttributeTag)] =
-        {
-            &cgContext ,
-        } ;
-        status = ::ATSUSetLayoutControls(atsuLayout , sizeof(atsuTags) / sizeof(ATSUAttributeTag),
-            atsuTags, atsuSizes, atsuValues ) ;
-    }
-
-    ATSUTextMeasurement textBefore, textAfter ;
-    ATSUTextMeasurement ascent, descent ;
-
-    status = ::ATSUGetUnjustifiedBounds( atsuLayout, kATSUFromTextBeginning, kATSUToTextEnd,
-        &textBefore , &textAfter, &ascent , &descent );
-
-    wxASSERT_MSG( status == noErr , wxT("couldn't measure the rotated text") );
-
-    Rect rect ;
-
-    if ( m_backgroundMode == wxSOLID )
-    {
-        wxGraphicPath* path = m_graphicContext->CreatePath() ;
-        path->MoveToPoint( drawX , drawY ) ;
-        path->AddLineToPoint(
-            (int) (drawX + sin(angle / RAD2DEG) * FixedToInt(ascent + descent)) ,
-            (int) (drawY + cos(angle / RAD2DEG) * FixedToInt(ascent + descent)) ) ;
-        path->AddLineToPoint(
-            (int) (drawX + sin(angle / RAD2DEG) * FixedToInt(ascent + descent ) + cos(angle / RAD2DEG) * FixedToInt(textAfter)) ,
-            (int) (drawY + cos(angle / RAD2DEG) * FixedToInt(ascent + descent) - sin(angle / RAD2DEG) * FixedToInt(textAfter)) ) ;
-        path->AddLineToPoint(
-            (int) (drawX + cos(angle / RAD2DEG) * FixedToInt(textAfter)) ,
-            (int) (drawY - sin(angle / RAD2DEG) * FixedToInt(textAfter)) ) ;
-
-        m_graphicContext->FillPath( path , m_textBackgroundColour ) ;
-        delete path ;
-    }
-
-    drawX += (int)(sin(angle / RAD2DEG) * FixedToInt(ascent));
-    drawY += (int)(cos(angle / RAD2DEG) * FixedToInt(ascent));
-
-    status = ::ATSUMeasureTextImage( atsuLayout, kATSUFromTextBeginning, kATSUToTextEnd,
-        IntToFixed(drawX) , IntToFixed(drawY) , &rect );
-    wxASSERT_MSG( status == noErr , wxT("couldn't measure the rotated text") );
-
-    CGContextSaveGState(((wxMacCGContext*)(m_graphicContext))->GetNativeContext());
-    CGContextTranslateCTM(((wxMacCGContext*)(m_graphicContext))->GetNativeContext(), drawX, drawY);
-    CGContextScaleCTM(((wxMacCGContext*)(m_graphicContext))->GetNativeContext(), 1, -1);
-    status = ::ATSUDrawText( atsuLayout, kATSUFromTextBeginning, kATSUToTextEnd,
-        IntToFixed(0) , IntToFixed(0) );
-
-    wxASSERT_MSG( status == noErr , wxT("couldn't draw the rotated text") );
-
-    CGContextRestoreGState( ((wxMacCGContext*)(m_graphicContext))->GetNativeContext() ) ;
-
-    CalcBoundingBox(XDEV2LOG(rect.left), YDEV2LOG(rect.top) );
-    CalcBoundingBox(XDEV2LOG(rect.right), YDEV2LOG(rect.bottom) );
-
-    ::ATSUDisposeTextLayout(atsuLayout);
-
-#if SIZEOF_WCHAR_T == 4
-    free( ubuf ) ;
-#endif
+    m_graphicContext->DrawText( str, drawX ,drawY , angle ) ;
 }
 
 void wxDC::DoDrawText(const wxString& strtext, wxCoord x, wxCoord y)
@@ -1887,75 +2080,25 @@ void wxDC::DoGetTextExtent( const wxString &str, wxCoord *width, wxCoord *height
     wxFont formerFont = m_font ;
     if ( theFont )
     {
-        // work around the const-ness
-        *((wxFont*)(&m_font)) = *theFont ;
-        MacInstallFont() ;
+        m_graphicContext->SetFont( *theFont ) ;
     }
 
-    if ( str.empty() )
-        return ;
-
-    wxCHECK_RET( m_macATSUIStyle != NULL, wxT("wxDC(cg)::DoGetTextExtent - no valid font set") ) ;
-
-    OSStatus status = noErr ;
-    ATSUTextLayout atsuLayout ;
-    UniCharCount chars = str.length() ;
-    UniChar* ubuf = NULL ;
-
-#if SIZEOF_WCHAR_T == 4
-    wxMBConvUTF16 converter ;
-#if wxUSE_UNICODE
-    size_t unicharlen = converter.WC2MB( NULL , str.wc_str() , 0 ) ;
-    ubuf = (UniChar*) malloc( unicharlen + 2 ) ;
-    converter.WC2MB( (char*) ubuf , str.wc_str(), unicharlen + 2 ) ;
-#else
-    const wxWCharBuffer wchar = str.wc_str( wxConvLocal ) ;
-    size_t unicharlen = converter.WC2MB( NULL , wchar.data() , 0 ) ;
-    ubuf = (UniChar*) malloc( unicharlen + 2 ) ;
-    converter.WC2MB( (char*) ubuf , wchar.data() , unicharlen + 2 ) ;
-#endif
-    chars = unicharlen / 2 ;
-#else
-#if wxUSE_UNICODE
-    ubuf = (UniChar*) str.wc_str() ;
-#else
-    wxWCharBuffer wchar = str.wc_str( wxConvLocal ) ;
-    chars = wxWcslen( wchar.data() ) ;
-    ubuf = (UniChar*) wchar.data() ;
-#endif
-#endif
-
-    status = ::ATSUCreateTextLayoutWithTextPtr( (UniCharArrayPtr) ubuf , 0 , chars , chars , 1 ,
-        &chars , (ATSUStyle*) &m_macATSUIStyle , &atsuLayout ) ;
-
-    wxASSERT_MSG( status == noErr , wxT("couldn't create the layout of the text") );
-
-    ATSUTextMeasurement textBefore, textAfter ;
-    ATSUTextMeasurement textAscent, textDescent ;
-
-    status = ::ATSUGetUnjustifiedBounds( atsuLayout, kATSUFromTextBeginning, kATSUToTextEnd,
-        &textBefore , &textAfter, &textAscent , &textDescent );
+    wxCoord h , d , e , w ;
+    
+    m_graphicContext->GetTextExtent( str, &w, &h, &d, &e ) ;
 
     if ( height )
-        *height = YDEV2LOGREL( FixedToInt(textAscent + textDescent) ) ;
+        *height = YDEV2LOGREL( h ) ;
     if ( descent )
-        *descent =YDEV2LOGREL( FixedToInt(textDescent) );
+        *descent =YDEV2LOGREL( d);
     if ( externalLeading )
-        *externalLeading = 0 ;
+        *externalLeading = YDEV2LOGREL( e);
     if ( width )
-        *width = XDEV2LOGREL( FixedToInt(textAfter - textBefore) ) ;
-
-    ::ATSUDisposeTextLayout(atsuLayout);
-
-#if SIZEOF_WCHAR_T == 4
-    free( ubuf ) ;
-#endif
+        *width = XDEV2LOGREL( w ) ;
 
     if ( theFont )
     {
-        // work around the constness
-        *((wxFont*)(&m_font)) = formerFont ;
-        MacInstallFont() ;
+        m_graphicContext->SetFont( m_font ) ;
     }
 }
 
@@ -1963,60 +2106,10 @@ bool wxDC::DoGetPartialTextExtents(const wxString& text, wxArrayInt& widths) con
 {
     wxCHECK_MSG( Ok(), false, wxT("wxDC(cg)::DoGetPartialTextExtents - invalid DC") );
 
-    widths.Empty();
-    widths.Add(0, text.length());
+    m_graphicContext->GetPartialTextExtents( text, widths ) ;
+    for ( size_t i = 0 ; i < widths.GetCount() ; ++i )
+        widths[i] = XDEV2LOGREL( widths[i] );
 
-    if (text.empty())
-        return false;
-
-    ATSUTextLayout atsuLayout ;
-    UniCharCount chars = text.length() ;
-    UniChar* ubuf = NULL ;
-
-#if SIZEOF_WCHAR_T == 4
-    wxMBConvUTF16 converter ;
-#if wxUSE_UNICODE
-    size_t unicharlen = converter.WC2MB( NULL , text.wc_str() , 0 ) ;
-    ubuf = (UniChar*) malloc( unicharlen + 2 ) ;
-    converter.WC2MB( (char*) ubuf , text.wc_str(), unicharlen + 2 ) ;
-#else
-    const wxWCharBuffer wchar = text.wc_str( wxConvLocal ) ;
-    size_t unicharlen = converter.WC2MB( NULL , wchar.data() , 0 ) ;
-    ubuf = (UniChar*) malloc( unicharlen + 2 ) ;
-    converter.WC2MB( (char*) ubuf , wchar.data() , unicharlen + 2 ) ;
-#endif
-    chars = unicharlen / 2 ;
-#else
-#if wxUSE_UNICODE
-    ubuf = (UniChar*) text.wc_str() ;
-#else
-    wxWCharBuffer wchar = text.wc_str( wxConvLocal ) ;
-    chars = wxWcslen( wchar.data() ) ;
-    ubuf = (UniChar*) wchar.data() ;
-#endif
-#endif
-
-    OSStatus status;
-    status = ::ATSUCreateTextLayoutWithTextPtr( (UniCharArrayPtr) ubuf , 0 , chars , chars , 1 ,
-        &chars , (ATSUStyle*) &m_macATSUIStyle , &atsuLayout ) ;
-
-    for ( int pos = 0; pos < (int)chars; pos ++ )
-    {
-        unsigned long actualNumberOfBounds = 0;
-        ATSTrapezoid glyphBounds;
-
-        // We get a single bound, since the text should only require one. If it requires more, there is an issue
-        OSStatus result;
-        result = ATSUGetGlyphBounds( atsuLayout, 0, 0, kATSUFromTextBeginning, pos + 1,
-            kATSUseDeviceOrigins, 1, &glyphBounds, &actualNumberOfBounds );
-        if (result != noErr || actualNumberOfBounds != 1 )
-            return false;
-
-        widths[pos] = XDEV2LOGREL(FixedToInt( glyphBounds.upperRight.x - glyphBounds.upperLeft.x ));
-        //unsigned char uch = s[i];
-    }
-
-    ::ATSUDisposeTextLayout(atsuLayout);
     return true;
 }
 
@@ -2111,50 +2204,6 @@ void wxDC::Clear(void)
                 wxFAIL_MSG( wxT("unknown brush kind") ) ;
                 break ;
         }
-    }
-}
-
-void wxDC::MacInstallFont() const
-{
-    wxCHECK_RET( Ok(), wxT("wxDC(cg)::MacInstallFont - invalid DC") );
-
-    if ( m_macATSUIStyle )
-    {
-        ::ATSUDisposeStyle((ATSUStyle)m_macATSUIStyle);
-        m_macATSUIStyle = NULL ;
-    }
-
-    if ( m_font.Ok() )
-    {
-        OSStatus status ;
-
-        status = ATSUCreateAndCopyStyle( (ATSUStyle) m_font.MacGetATSUStyle() , (ATSUStyle*) &m_macATSUIStyle ) ;
-
-        wxASSERT_MSG( status == noErr, wxT("couldn't create ATSU style") ) ;
-
-        Fixed atsuSize = IntToFixed( int(m_scaleY * m_font.MacGetFontSize()) ) ;
-        RGBColor atsuColor = MAC_WXCOLORREF( m_textForegroundColour.GetPixel() ) ;
-        ATSUAttributeTag atsuTags[] =
-        {
-                kATSUSizeTag ,
-                kATSUColorTag ,
-        } ;
-        ByteCount atsuSizes[sizeof(atsuTags) / sizeof(ATSUAttributeTag)] =
-        {
-                sizeof( Fixed ) ,
-                sizeof( RGBColor ) ,
-        } ;
-        ATSUAttributeValuePtr atsuValues[sizeof(atsuTags) / sizeof(ATSUAttributeTag)] =
-        {
-                &atsuSize ,
-                &atsuColor ,
-        } ;
-
-        status = ::ATSUSetAttributes(
-            (ATSUStyle)m_macATSUIStyle, sizeof(atsuTags) / sizeof(ATSUAttributeTag) ,
-            atsuTags, atsuSizes, atsuValues);
-
-        wxASSERT_MSG( status == noErr , wxT("couldn't modify ATSU style") ) ;
     }
 }
 
