@@ -52,7 +52,7 @@ public :
     virtual void AddCircle( wxCoord x, wxCoord y, wxCoord r ) = 0;
     
     // draws a an arc to two tangents connecting (current) to (x1,y1) and (x1,y1) to (x2,y2), also a straight line from (current) to (x1,y1)
-    virtual void AddArcToPoint( wxCoord x1, wxCoord y1 , wxCoord x2, wxCoord y1, wxCoord r ) = 0 ;
+    virtual void AddArcToPoint( wxCoord x1, wxCoord y1 , wxCoord x2, wxCoord y2, wxCoord r ) = 0 ;
 
     virtual void AddArc( wxCoord x, wxCoord y, wxCoord r, double startAngle, double endAngle, bool clockwise ) = 0 ;
 
