@@ -32,6 +32,7 @@ class WXDLLEXPORT wxWindowDC: public wxDC
   wxWindowDC(wxWindow *win);
 
   virtual ~wxWindowDC(void);
+  wxWindow *GetWindow() const { return m_window; }
   protected :
     virtual void DoGetSize( int *width, int *height ) const;
     wxWindow     *m_window;
