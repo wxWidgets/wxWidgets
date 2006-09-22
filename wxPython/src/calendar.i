@@ -103,6 +103,12 @@ public:
     wxColour GetBorderColour() const;
     wxFont GetFont() const;
     wxCalendarDateBorder GetBorder() const;
+
+    %property(BackgroundColour, GetBackgroundColour, SetBackgroundColour, doc="See `GetBackgroundColour` and `SetBackgroundColour`");
+    %property(Border, GetBorder, SetBorder, doc="See `GetBorder` and `SetBorder`");
+    %property(BorderColour, GetBorderColour, SetBorderColour, doc="See `GetBorderColour` and `SetBorderColour`");
+    %property(Font, GetFont, SetFont, doc="See `GetFont` and `SetFont`");
+    %property(TextColour, GetTextColour, SetTextColour, doc="See `GetTextColour` and `SetTextColour`");
 };
 
 //---------------------------------------------------------------------------
@@ -126,6 +132,8 @@ public:
         """returns datetime.date object"""
         return _wxdate2pydate(self.GetDate())
     }
+
+    %property(WeekDay, GetWeekDay, SetWeekDay, doc="See `GetWeekDay` and `SetWeekDay`");
 };
 
 
@@ -449,6 +457,18 @@ The result codes are:
         """returns datetime.date object"""
         return _wxdate2pydate(self.GetUpperDateLimit())
     }
+
+    %property(Date, GetDate, SetDate, doc="See `GetDate` and `SetDate`");
+    %property(HeaderColourBg, GetHeaderColourBg, doc="See `GetHeaderColourBg`");
+    %property(HeaderColourFg, GetHeaderColourFg, doc="See `GetHeaderColourFg`");
+    %property(HighlightColourBg, GetHighlightColourBg, doc="See `GetHighlightColourBg`");
+    %property(HighlightColourFg, GetHighlightColourFg, doc="See `GetHighlightColourFg`");
+    %property(HolidayColourBg, GetHolidayColourBg, doc="See `GetHolidayColourBg`");
+    %property(HolidayColourFg, GetHolidayColourFg, doc="See `GetHolidayColourFg`");
+    %property(LowerDateLimit, GetLowerDateLimit, SetLowerDateLimit, doc="See `GetLowerDateLimit` and `SetLowerDateLimit`");
+    %property(MonthControl, GetMonthControl, doc="See `GetMonthControl`");
+    %property(UpperDateLimit, GetUpperDateLimit, SetUpperDateLimit, doc="See `GetUpperDateLimit` and `SetUpperDateLimit`");
+    %property(YearControl, GetYearControl, doc="See `GetYearControl`");
 };
 
 %pythoncode {

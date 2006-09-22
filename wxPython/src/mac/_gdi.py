@@ -3646,7 +3646,7 @@ class DC(_core.Object):
         GetMultiLineTextExtent(wxString string, Font font=None) ->
            (width, height, lineHeight)
 
-        Get the width, height, decent and leading of the text using the
+        Get the width, height, and line height of the text using the
         current or specified font. Works for single as well as multi-line
         strings.
         """

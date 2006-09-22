@@ -1170,6 +1170,10 @@ class FrameManager(_core.EvtHandler):
     GetFrame = wx._deprecated(GetManagedWindow,
                               "GetFrame is deprecated, use `GetManagedWindow` instead.")
 
+    AllPanes = property(GetAllPanes,doc="See `GetAllPanes`") 
+    ArtProvider = property(GetArtProvider,SetArtProvider,doc="See `GetArtProvider` and `SetArtProvider`") 
+    Flags = property(GetFlags,SetFlags,doc="See `GetFlags` and `SetFlags`") 
+    ManagedWindow = property(GetManagedWindow,SetManagedWindow,doc="See `GetManagedWindow` and `SetManagedWindow`") 
 _aui.FrameManager_swigregister(FrameManager)
 
 class FrameManagerEvent(_core.Event):
@@ -1228,6 +1232,9 @@ class FrameManagerEvent(_core.Event):
     veto_flag = property(_aui.FrameManagerEvent_veto_flag_get, _aui.FrameManagerEvent_veto_flag_set)
     canveto_flag = property(_aui.FrameManagerEvent_canveto_flag_get, _aui.FrameManagerEvent_canveto_flag_set)
     dc = property(_aui.FrameManagerEvent_dc_get, _aui.FrameManagerEvent_dc_set)
+    Button = property(GetButton,SetButton,doc="See `GetButton` and `SetButton`") 
+    DC = property(GetDC,SetDC,doc="See `GetDC` and `SetDC`") 
+    Pane = property(GetPane,SetPane,doc="See `GetPane` and `SetPane`") 
 _aui.FrameManagerEvent_swigregister(FrameManagerEvent)
 
 class DockInfo(object):
@@ -1439,6 +1446,8 @@ class AuiNotebookEvent(_core.NotifyEvent):
 
     old_selection = property(_aui.AuiNotebookEvent_old_selection_get, _aui.AuiNotebookEvent_old_selection_set)
     selection = property(_aui.AuiNotebookEvent_selection_get, _aui.AuiNotebookEvent_selection_set)
+    OldSelection = property(GetOldSelection,SetOldSelection,doc="See `GetOldSelection` and `SetOldSelection`") 
+    Selection = property(GetSelection,SetSelection,doc="See `GetSelection` and `SetSelection`") 
 _aui.AuiNotebookEvent_swigregister(AuiNotebookEvent)
 
 class AuiNotebookPage(object):
@@ -1552,6 +1561,9 @@ class AuiTabContainer(object):
         """AddButton(self, int id, Bitmap bmp)"""
         return _aui.AuiTabContainer_AddButton(*args, **kwargs)
 
+    ActivePage = property(GetActivePage,SetActivePage,doc="See `GetActivePage` and `SetActivePage`") 
+    PageCount = property(GetPageCount,doc="See `GetPageCount`") 
+    Pages = property(GetPages,doc="See `GetPages`") 
 _aui.AuiTabContainer_swigregister(AuiTabContainer)
 
 class AuiTabCtrl(_core.Control,AuiTabContainer):
@@ -1628,6 +1640,8 @@ class AuiMultiNotebook(_core.Control):
         """GetPage(self, size_t page_idx) -> Window"""
         return _aui.AuiMultiNotebook_GetPage(*args, **kwargs)
 
+    PageCount = property(GetPageCount,doc="See `GetPageCount`") 
+    Selection = property(GetSelection,SetSelection,doc="See `GetSelection` and `SetSelection`") 
 _aui.AuiMultiNotebook_swigregister(AuiMultiNotebook)
 
 def PreAuiMultiNotebook(*args, **kwargs):

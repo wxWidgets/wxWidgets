@@ -251,7 +251,7 @@ The following example shows a simple implementation that utilizes
 //---------------------------------------------------------------------------
 
 %{
-// A wxDocArt lcass that knows how to forward virtuals to Python methods  
+// A wxDocArt class that knows how to forward virtuals to Python methods  
 class wxPyDockArt :  public wxDefaultDockArt
 {
     wxPyDockArt() : wxDefaultDockArt() {}
@@ -428,6 +428,43 @@ class wxPyDockArt :  public wxDefaultDockArt
 };
 
 
+//---------------------------------------------------------------------------
+
+%extend wxAuiMultiNotebook {
+    %property(PageCount, GetPageCount, doc="See `GetPageCount`");
+    %property(Selection, GetSelection, SetSelection, doc="See `GetSelection` and `SetSelection`");
+}
+
+
+%extend wxAuiNotebookEvent {
+    %property(OldSelection, GetOldSelection, SetOldSelection, doc="See `GetOldSelection` and `SetOldSelection`");
+    %property(Selection, GetSelection, SetSelection, doc="See `GetSelection` and `SetSelection`");
+}
+
+
+%extend wxAuiTabContainer {
+    %property(ActivePage, GetActivePage, SetActivePage, doc="See `GetActivePage` and `SetActivePage`");
+    %property(PageCount, GetPageCount, doc="See `GetPageCount`");
+    %property(Pages, GetPages, doc="See `GetPages`");
+}
+
+
+%extend wxFrameManager {
+    %property(AllPanes, GetAllPanes, doc="See `GetAllPanes`");
+    %property(ArtProvider, GetArtProvider, SetArtProvider, doc="See `GetArtProvider` and `SetArtProvider`");
+    %property(Flags, GetFlags, SetFlags, doc="See `GetFlags` and `SetFlags`");
+    %property(ManagedWindow, GetManagedWindow, SetManagedWindow, doc="See `GetManagedWindow` and `SetManagedWindow`");
+}
+
+
+%extend wxFrameManagerEvent {
+    %property(Button, GetButton, SetButton, doc="See `GetButton` and `SetButton`");
+    %property(DC, GetDC, SetDC, doc="See `GetDC` and `SetDC`");
+    %property(Pane, GetPane, SetPane, doc="See `GetPane` and `SetPane`");
+}
+
+
+//---------------------------------------------------------------------------
 
 #undef wxUSE_AUI
 #undef WXDLLIMPEXP_AUI

@@ -2897,7 +2897,7 @@ SWIG_From_size_t  (size_t value)
 }
 
 
-// A wxDocArt lcass that knows how to forward virtuals to Python methods  
+// A wxDocArt class that knows how to forward virtuals to Python methods  
 class wxPyDockArt :  public wxDefaultDockArt
 {
     wxPyDockArt() : wxDefaultDockArt() {}

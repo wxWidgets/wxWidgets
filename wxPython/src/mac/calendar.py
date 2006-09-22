@@ -161,6 +161,11 @@ class CalendarDateAttr(object):
         """GetBorder(self) -> int"""
         return _calendar.CalendarDateAttr_GetBorder(*args, **kwargs)
 
+    BackgroundColour = property(GetBackgroundColour,SetBackgroundColour,doc="See `GetBackgroundColour` and `SetBackgroundColour`") 
+    Border = property(GetBorder,SetBorder,doc="See `GetBorder` and `SetBorder`") 
+    BorderColour = property(GetBorderColour,SetBorderColour,doc="See `GetBorderColour` and `SetBorderColour`") 
+    Font = property(GetFont,SetFont,doc="See `GetFont` and `SetFont`") 
+    TextColour = property(GetTextColour,SetTextColour,doc="See `GetTextColour` and `SetTextColour`") 
 _calendar.CalendarDateAttr_swigregister(CalendarDateAttr)
 
 class CalendarEvent(_core.DateEvent):
@@ -186,6 +191,7 @@ class CalendarEvent(_core.DateEvent):
         """returns datetime.date object"""
         return _wxdate2pydate(self.GetDate())
 
+    WeekDay = property(GetWeekDay,SetWeekDay,doc="See `GetWeekDay` and `SetWeekDay`") 
 _calendar.CalendarEvent_swigregister(CalendarEvent)
 
 wxEVT_CALENDAR_DOUBLECLICKED = _calendar.wxEVT_CALENDAR_DOUBLECLICKED
@@ -525,6 +531,17 @@ class CalendarCtrl(_core.Control):
         """returns datetime.date object"""
         return _wxdate2pydate(self.GetUpperDateLimit())
 
+    Date = property(GetDate,SetDate,doc="See `GetDate` and `SetDate`") 
+    HeaderColourBg = property(GetHeaderColourBg,doc="See `GetHeaderColourBg`") 
+    HeaderColourFg = property(GetHeaderColourFg,doc="See `GetHeaderColourFg`") 
+    HighlightColourBg = property(GetHighlightColourBg,doc="See `GetHighlightColourBg`") 
+    HighlightColourFg = property(GetHighlightColourFg,doc="See `GetHighlightColourFg`") 
+    HolidayColourBg = property(GetHolidayColourBg,doc="See `GetHolidayColourBg`") 
+    HolidayColourFg = property(GetHolidayColourFg,doc="See `GetHolidayColourFg`") 
+    LowerDateLimit = property(GetLowerDateLimit,SetLowerDateLimit,doc="See `GetLowerDateLimit` and `SetLowerDateLimit`") 
+    MonthControl = property(GetMonthControl,doc="See `GetMonthControl`") 
+    UpperDateLimit = property(GetUpperDateLimit,SetUpperDateLimit,doc="See `GetUpperDateLimit` and `SetUpperDateLimit`") 
+    YearControl = property(GetYearControl,doc="See `GetYearControl`") 
 _calendar.CalendarCtrl_swigregister(CalendarCtrl)
 cvar = _calendar.cvar
 CalendarNameStr = cvar.CalendarNameStr
