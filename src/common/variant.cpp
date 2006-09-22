@@ -219,6 +219,9 @@ public:
     virtual bool Write(wxSTD ostream& str) const;
 #endif
     virtual bool Write(wxString& str) const;
+#if wxUSE_STD_IOSTREAM
+    virtual bool Read(wxSTD istream& str);
+#endif
     virtual bool Read(wxString& str);
     virtual wxString GetType() const { return wxT("stringlist"); };
 
@@ -735,7 +738,7 @@ public:
     virtual bool Read(wxString& str);
     virtual bool Write(wxString& str) const;
 #if wxUSE_STD_IOSTREAM
-    virtual bool Read(wxSTD istream& str);
+    virtual bool Read(wxSTD istream& WXUNUSED(str)) { return false; };
 #endif
 #if wxUSE_STREAMS
     virtual bool Read(wxInputStream& str);
