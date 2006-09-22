@@ -600,13 +600,13 @@ typedef pid_t GPid;
 /*
  * Define if the compiler supports variadic macros
  */
-#define HAVE_VARIADIC_MACROS 1
+#undef HAVE_VARIADIC_MACROS
 
 #if defined(__NAMESPACE_STD) && !defined(__NAMESPACE_STD_ONLY)
 /*
  * Define if your compiler has std::wstring
  */
-#deffine HAVE_STD_WSTRING 1
+#define HAVE_STD_WSTRING 1
 /*
  * Define if your compiler has compliant std::string::compare
  */

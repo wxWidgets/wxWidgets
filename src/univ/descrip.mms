@@ -1,8 +1,8 @@
 #*****************************************************************************
 #                                                                            *
 # Make file for VMS                                                          *
-# Author : J.Jansen (joukj@hrem.stm.tudelft.nl)                              *
-# Date : 14 March 2002                                                       *
+# Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
+# Date : 22 September 2006                                                   *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -47,6 +47,7 @@ OBJECTS = \
 		statline.obj,\
 		stattext.obj,\
 		statusbr.obj,\
+		stdrend.obj,\
 		textctrl.obj,\
 		theme.obj,\
 		toolbar.obj,\
@@ -87,6 +88,7 @@ SOURCES =\
 		statline.cpp \
 		stattext.cpp \
 		statusbr.cpp \
+		stdrend.cpp,\
 		textctrl.cpp \
 		theme.cpp \
 		toolbar.cpp \
@@ -130,6 +132,7 @@ statbox.obj : statbox.cpp
 statline.obj : statline.cpp
 stattext.obj : stattext.cpp
 statusbr.obj : statusbr.cpp
+stdrend.obj : stdrend.cpp
 textctrl.obj : textctrl.cpp
 theme.obj : theme.cpp
 toolbar.obj : toolbar.cpp

@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 19 September 2006                                                   *
+# Date : 20 September 2006                                                   *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -193,7 +193,8 @@ OBJECTS2=tbarbase.obj,\
 		clrpickercmn.obj,\
 		filepickercmn.obj,\
 		fontpickercmn.obj,\
-		pickerbase.obj
+		pickerbase.obj,\
+		listctrlcmn.obj
 
 OBJECTS_MOTIF=radiocmn.obj
 
@@ -285,6 +286,7 @@ SOURCES = \
 		layout.cpp,\
 		lboxcmn.cpp,\
 		list.cpp,\
+		listctrlcmn.cpp,\
 		log.cpp,\
 		longlong.cpp,\
 		memory.cpp,\
@@ -558,3 +560,4 @@ clrpickercmn.obj : clrpickercmn.cpp
 filepickercmn.obj : filepickercmn.cpp
 fontpickercmn.obj : fontpickercmn.cpp
 pickerbase.obj : pickerbase.cpp
+listctrlcmn.obj : listctrlcmn.cpp
