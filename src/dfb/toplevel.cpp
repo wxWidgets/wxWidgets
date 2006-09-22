@@ -280,10 +280,21 @@ bool wxTopLevelWindowDFB::Show(bool show)
         GetEventHandler()->ProcessEvent(event);
     }
 
-    // FIXME_DFB: do this at all?
-    if ( show && AcceptsFocus() )
-        SetFocus();
-        // FIXME_DFB -- don't do this for popup windows?
+    if ( show )
+    {
+        wxWindow *focused = wxWindow::FindFocus();
+        if ( focused && focused->GetTLW() == this )
+        {
+            SetDfbFocus();
+        }
+        else if ( AcceptsFocus() )
+        {
+            // FIXME: we should probably always call SetDfbFocus instead
+            // and call SetFocus() from wxActivateEvent/DWET_GOTFOCUS
+            // handler
+            SetFocus();
+        }
+    }
 
     return true;
 }
@@ -468,6 +479,15 @@ void wxTopLevelWindowDFB::Update()
 // ---------------------------------------------------------------------------
 // events handling
 // ---------------------------------------------------------------------------
+
+void wxTopLevelWindowDFB::SetDfbFocus()
+{
+    wxCHECK_RET( IsShown(), _T("cannot set focus to hidden window") );
+    wxASSERT_MSG( FindFocus() && FindFocus()->GetTLW() == this,
+                  _T("setting DirectFB focus to unexpected window") );
+
+    GetDirectFBWindow()->RequestFocus();
+}
 
 /* static */
 void wxTopLevelWindowDFB::HandleDFBWindowEvent(const wxDFBWindowEvent& event_)

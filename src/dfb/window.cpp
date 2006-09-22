@@ -104,7 +104,7 @@ wxWindowDFB::~wxWindowDFB()
 #endif
 
     if ( gs_focusedWindow == this )
-        KillFocus();
+        DFBKillFocus();
 
     DestroyChildren();
 }
@@ -189,26 +189,29 @@ void wxWindowDFB::InvalidateDfbSurface()
 
 void wxWindowDFB::SetFocus()
 {
-    if ( gs_focusedWindow == this ) return;
+    if ( gs_focusedWindow == this )
+        return; // nothing to do, focused already
 
     wxWindowDFB *oldFocusedWindow = gs_focusedWindow;
 
     if ( gs_focusedWindow )
     {
         gs_toBeFocusedWindow = (wxWindow*)this;
-        gs_focusedWindow->KillFocus();
+        gs_focusedWindow->DFBKillFocus();
         gs_toBeFocusedWindow = NULL;
     }
 
-#warning "FIXME: implement in terms of DWET_{GOT,LOST}FOCUS"
-
-    wxIDirectFBWindowPtr dfbwin(m_tlw->GetDirectFBWindow());
-#warning "FIXME: RequestFocus() may only be called on visible TLW"
-    if ( !dfbwin->RequestFocus() )
-        return;
-
     gs_focusedWindow = this;
 
+    if ( IsShownOnScreen() )
+    {
+        m_tlw->SetDfbFocus();
+    }
+    // else: do nothing, because DirectFB windows cannot have focus if they
+    //       are hidden; when the TLW becomes visible, it will set the focus
+    //       to use from wxTLW::Show()
+
+    #warning "FIXME: implement in terms of DWET_{GOT,LOST}FOCUS"
     #warning "FIXME: keep this or not? not, think multiapp core"
 #if 0
     wxWindowDFB *active = wxGetTopLevelParent((wxWindow*)this);
@@ -228,6 +231,11 @@ void wxWindowDFB::SetFocus()
     }
 #endif
 
+    // notify the parent keeping track of focus for the kbd navigation
+    // purposes that we got it
+    wxChildFocusEvent eventFocus((wxWindow*)this);
+    GetEventHandler()->ProcessEvent(eventFocus);
+
     wxFocusEvent event(wxEVT_SET_FOCUS, GetId());
     event.SetEventObject(this);
     event.SetWindow((wxWindow*)oldFocusedWindow);
@@ -241,12 +249,15 @@ void wxWindowDFB::SetFocus()
 #endif // wxUSE_CARET
 }
 
-void wxWindowDFB::KillFocus()
+void wxWindowDFB::DFBKillFocus()
 {
-    if ( gs_focusedWindow != this ) return;
+    wxCHECK_RET( gs_focusedWindow == this,
+                 _T("killing focus on window that doesn't have it") );
+
     gs_focusedWindow = NULL;
 
-    if ( m_isBeingDeleted ) return;
+    if ( m_isBeingDeleted )
+        return; // don't send any events from dtor
 
 #if wxUSE_CARET
     // caret needs to be informed about focus change

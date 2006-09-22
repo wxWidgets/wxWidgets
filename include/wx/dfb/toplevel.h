@@ -94,6 +94,11 @@ protected:
 
     virtual void DoRefreshRect(const wxRect& rect);
 
+    // sets DirectFB keyboard focus to this toplevel window (note that DFB
+    // focus is different from wx: only shown TLWs can have it and not any
+    // wxWindows as in wx
+    void SetDfbFocus();
+
 private:
     // do queued painting in idle time
     void HandleQueuedPaintRequests();
@@ -129,6 +134,7 @@ private:
     bool m_isPainting;
 
     friend class wxEventLoop; // for HandleDFBWindowEvent
+    friend class wxWindowDFB; // for SetDfbFocus
 };
 
 #endif // _WX_DFB_TOPLEVEL_H_

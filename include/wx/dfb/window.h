@@ -154,7 +154,7 @@ private:
     // common part of all ctors
     void Init();
     // counterpart to SetFocus
-    void KillFocus();
+    void DFBKillFocus();
 
 protected:
     // toplevel window (i.e. DirectFB window) this window belongs to
