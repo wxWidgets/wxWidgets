@@ -10384,12 +10384,12 @@ void wxGrid::AutoSizeColOrRow( int colOrRow, bool setAsMin, bool column )
 
     if ( column )
     {
-        dc.GetTextExtent( GetColLabelValue(col), &w, &h );
+        dc.GetMultiLineTextExtent( GetColLabelValue(col), &w, &h );
         if ( GetColLabelTextOrientation() == wxVERTICAL )
             w = h;
     }
     else
-        dc.GetTextExtent( GetRowLabelValue(row), &w, &h );
+        dc.GetMultiLineTextExtent( GetRowLabelValue(row), &w, &h );
 
     extent = column ? w : h;
     if ( extent > extentMax )
