@@ -48,8 +48,13 @@ public :
     virtual void AddQuadCurveToPoint( wxCoord cx1, wxCoord cy1, wxCoord x1, wxCoord y1 ) = 0;
 
     virtual void AddRectangle( wxCoord x, wxCoord y, wxCoord w, wxCoord h ) = 0;
-
+    
     virtual void AddCircle( wxCoord x, wxCoord y, wxCoord r ) = 0;
+    
+    // draws a an arc to two tangents connecting (current) to (x1,y1) and (x1,y1) to (x2,y2), also a straight line from (current) to (x1,y1)
+    virtual void AddArcToPoint( wxCoord x1, wxCoord y1 , wxCoord x2, wxCoord y1, wxCoord r ) = 0 ;
+
+    virtual void AddArc( wxCoord x, wxCoord y, wxCoord r, double startAngle, double endAngle, bool clockwise ) = 0 ;
 
     virtual void CloseSubpath() = 0;
 };
@@ -59,7 +64,21 @@ class WXDLLEXPORT wxGraphicContext
 public:
     virtual ~wxGraphicContext() {}
 
+    virtual wxGraphicPath * CreatePath() = 0;
+        
+    virtual void PushState() = 0 ;
+    
+    virtual void PopState() = 0 ;
+
     virtual void Clip( const wxRegion &region ) = 0;
+
+    virtual void SetPen( const wxPen &pen ) = 0;
+
+    virtual void SetBrush( const wxBrush &brush ) = 0;
+    
+    virtual void SetFont( const wxFont &font ) = 0 ;
+    
+    virtual void SetTextColor( const wxColour &col ) = 0 ;
 
     virtual void StrokePath( const wxGraphicPath *path ) = 0;
 
@@ -67,11 +86,20 @@ public:
 
     virtual void FillPath( const wxGraphicPath *path, const wxColor &fillColor, int fillStyle = wxWINDING_RULE ) = 0;
 
-    virtual void SetPen( const wxPen &pen ) = 0;
-
-    virtual void SetBrush( const wxBrush &brush ) = 0;
-
-    virtual wxGraphicPath * CreatePath() = 0;
+    virtual void DrawBitmap( const wxBitmap &bmp, wxCoord x, wxCoord y, wxCoord w, wxCoord h ) = 0 ;
+    
+    virtual void DrawIcon( const wxIcon &icon, wxCoord x, wxCoord y, wxCoord w, wxCoord h ) = 0 ;
+    
+    virtual void DrawText( const wxString &str, wxCoord x, wxCoord y, double angle ) = 0 ;
+    
+    virtual void GetTextExtent( const wxString &text, wxCoord *width, wxCoord *height,
+                            wxCoord *descent, wxCoord *externalLeading ) const  = 0 ;
+    
+    virtual void GetPartialTextExtents(const wxString& text, wxArrayInt& widths) const = 0 ;
+    
+    virtual void Translate( wxCoord dx , wxCoord dy ) = 0 ;
+    
+    virtual void Scale( wxCoord xScale , wxCoord yScale ) = 0 ;
 };
 
 class WXDLLEXPORT wxDC: public wxDCBase
