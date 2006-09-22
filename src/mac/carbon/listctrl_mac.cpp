@@ -205,6 +205,46 @@ void wxListCtrl::Init()
     m_dbImpl = NULL;
 }
 
+class wxGenericListCtrlHook : public wxGenericListCtrl
+{
+public:
+    wxGenericListCtrlHook(wxListCtrl* parent,
+                          wxWindowID id,
+                          const wxPoint& pos,
+                          const wxSize& size,
+                          long style,
+                          const wxValidator& validator,
+                          const wxString& name)
+        : wxGenericListCtrl(parent, id, pos, size, style, validator, name), 
+          m_nativeListCtrl(parent)
+    {
+    }
+
+    virtual wxListItemAttr * OnGetItemAttr(long item) const
+    {
+        return m_nativeListCtrl->OnGetItemAttr(item);
+    }
+
+    virtual int OnGetItemImage(long item) const
+    {
+        return m_nativeListCtrl->OnGetItemImage(item);
+    }
+
+    virtual int OnGetItemColumnImage(long item, long column) const
+    {
+        return m_nativeListCtrl->OnGetItemColumnImage(item, column);
+    }
+
+    virtual wxString OnGetItemText(long item, long column) const
+    {
+        return m_nativeListCtrl->OnGetItemText(item, column);
+    }
+
+protected:
+    wxListCtrl* m_nativeListCtrl;
+
+};
+
 bool wxListCtrl::Create(wxWindow *parent,
                         wxWindowID id,
                         const wxPoint& pos,
@@ -217,15 +257,16 @@ bool wxListCtrl::Create(wxWindow *parent,
     // for now, we'll always use the generic list control for ICON and LIST views,
     // because they dynamically change the number of columns on resize.
     // Also, allow the user to set it to use the list ctrl as well.
+    // Also, use generic list control in VIRTUAL mode.
     if ( (wxSystemOptions::HasOption( wxMAC_ALWAYS_USE_GENERIC_LISTCTRL ) 
             && (wxSystemOptions::GetOptionInt( wxMAC_ALWAYS_USE_GENERIC_LISTCTRL ) == 1)) ||
-            (style & wxLC_ICON) || (style & wxLC_SMALL_ICON) || (style & wxLC_LIST))
+            (style & wxLC_ICON) || (style & wxLC_SMALL_ICON) || (style & wxLC_LIST) || (style & wxLC_VIRTUAL))
     {
         m_macIsUserPane = true;
     
         if ( !wxWindow::Create(parent, id, pos, size, style, name) )
             return false;
-        m_genericImpl = new wxGenericListCtrl(this, id, pos, size, style, validator, name);
+        m_genericImpl = new wxGenericListCtrlHook(this, id, pos, size, style, validator, name);
         return true;
     }
     
