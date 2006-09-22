@@ -1080,6 +1080,10 @@ public :
     void AddRectangle( wxCoord x, wxCoord y, wxCoord w, wxCoord h );
     void AddCircle( wxCoord x, wxCoord y , wxCoord r );
 
+    // draws a an arc to two tangents connecting (current) to (x1,y1) and (x1,y1) to (x2,y2)
+    virtual void AddArcToPoint( wxCoord x1, wxCoord y1 , wxCoord x2, wxCoord y2, wxCoord r ) ;
+    virtual void AddArc( wxCoord x, wxCoord y, wxCoord r, double startAngle, double endAngle, bool clockwise ) ;
+
     // closes the current subpath
     void CloseSubpath();
 
@@ -1109,12 +1113,32 @@ public:
     CGContextRef GetNativeContext();
     void SetNativeContext( CGContextRef cg );
     CGPathDrawingMode GetDrawingMode() const { return m_mode; }
+
+    virtual void Translate( wxCoord dx , wxCoord dy );    
+    virtual void Scale( wxCoord xScale , wxCoord yScale );    
+    virtual void DrawBitmap( const wxBitmap &bmp, wxCoord x, wxCoord y, wxCoord w, wxCoord h );
+    virtual void DrawIcon( const wxIcon &icon, wxCoord x, wxCoord y, wxCoord w, wxCoord h );
+    virtual void PushState();    
+    virtual void PopState();
+    
+    virtual void DrawText( const wxString &str, wxCoord x, wxCoord y, double angle ) ;
+    
+    virtual void GetTextExtent( const wxString &str, wxCoord *width, wxCoord *height,
+                            wxCoord *descent, wxCoord *externalLeading ) const ;
+                            
+    virtual void GetPartialTextExtents(const wxString& text, wxArrayInt& widths) const ;
+    
+    virtual void SetFont( const wxFont &font ) ;
+
+    virtual void SetTextColor( const wxColour &col ) ;    
 private:
     CGContextRef m_cgContext;
     CGrafPtr m_qdPort;
     CGPathDrawingMode m_mode;
+    ATSUStyle m_macATSUIStyle ;
     wxPen m_pen;
     wxBrush m_brush;
+    wxColor m_textForegroundColor ;
 };
 
 #endif // wxMAC_USE_CORE_GRAPHICS
