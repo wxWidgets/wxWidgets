@@ -449,6 +449,8 @@ void  wxSpinCtrl::SetValue(int val)
         // current value in the control, so do it manually
         ::SetWindowText(GetBuddyHwnd(), wxString::Format(_T("%d"), val));
     }
+    
+    m_oldValue = GetValue();
 }
 
 int wxSpinCtrl::GetValue() const
