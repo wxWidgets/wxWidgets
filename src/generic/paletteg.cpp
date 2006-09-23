@@ -80,9 +80,17 @@ bool wxPalette::operator != (const wxPalette& palette) const
     return m_refData != palette.m_refData;
 }
 
-bool wxPalette::Ok(void) const
+bool wxPalette::Ok() const
 {
     return (m_refData != NULL);
+}
+
+int wxPalette::GetColoursCount() const
+{
+    if (m_refData)
+        return M_PALETTEDATA->m_count;
+    
+    return 0;    
 }
 
 bool wxPalette::Create(int n,

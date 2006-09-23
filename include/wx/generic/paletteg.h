@@ -29,10 +29,7 @@ class WXDLLIMPEXP_CORE wxPalette;
 
 class WXDLLIMPEXP_CORE wxPalette: public wxPaletteBase
 {
-  DECLARE_DYNAMIC_CLASS(wxPalette)
-
-  public:
-
+public:
     wxPalette();
     wxPalette( int n, const unsigned char *red, const unsigned char *green, const unsigned char *blue );
     virtual ~wxPalette();
@@ -44,7 +41,10 @@ class WXDLLIMPEXP_CORE wxPalette: public wxPaletteBase
     int GetPixel( unsigned char red, unsigned char green, unsigned char blue ) const;
     bool GetRGB( int pixel, unsigned char *red, unsigned char *green, unsigned char *blue ) const;
 
-    // no data
+    virtual int GetColoursCount() const:
+
+private:
+    DECLARE_DYNAMIC_CLASS(wxPalette)
 };
 
 #endif // __WX_PALETTEG_H__
