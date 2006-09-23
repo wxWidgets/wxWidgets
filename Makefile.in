@@ -1260,9 +1260,9 @@ XRCDLL_CXXFLAGS = $(__xrcdll_PCH_INC) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	-DWXMAKINGDLL_XRC $(PIC_FLAG) $(CPPFLAGS) $(CXXFLAGS)
 XRCDLL_OBJECTS =  \
 	$(__xrcdll___win32rc) \
-	xrcdll_xh_bmpbt.o \
 	xrcdll_xh_bmp.o \
 	xrcdll_xh_bmpcbox.o \
+	xrcdll_xh_bmpbt.o \
 	xrcdll_xh_bttn.o \
 	xrcdll_xh_cald.o \
 	xrcdll_xh_chckb.o \
@@ -1318,9 +1318,9 @@ XRCLIB_CXXFLAGS = $(__xrclib_PCH_INC) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	$(__INC_TIFF_p) $(__INC_JPEG_p) $(__INC_PNG_p) $(__INC_ZLIB_p) \
 	$(__INC_ODBC_p) $(__INC_REGEX_p) $(__INC_EXPAT_p) $(CPPFLAGS) $(CXXFLAGS)
 XRCLIB_OBJECTS =  \
-	xrclib_xh_bmpbt.o \
 	xrclib_xh_bmp.o \
 	xrclib_xh_bmpcbox.o \
+	xrclib_xh_bmpbt.o \
 	xrclib_xh_bttn.o \
 	xrclib_xh_cald.o \
 	xrclib_xh_chckb.o \
@@ -2188,7 +2188,6 @@ COND_TOOLKIT_MOTIF_GUI_HDR =  \
 	wx/generic/dirdlgg.h \
 	wx/generic/fdrepdlg.h \
 	wx/generic/fontdlgg.h \
-	wx/generic/imaglist.h \
 	wx/generic/listctrl.h \
 	wx/generic/notebook.h \
 	wx/generic/prntdlgg.h \
@@ -2592,12 +2591,10 @@ COND_TOOLKIT_MAC_ADVANCED_PLATFORM_HDR =  \
 @COND_TOOLKIT_MSW@ADVANCED_PLATFORM_NATIVE_HDR = wx/msw/datectrl.h
 @COND_TOOLKIT_WINCE@ADVANCED_PLATFORM_NATIVE_HDR = wx/msw/datectrl.h
 COND_WXUNIV_0_ADVANCED_HDR =  \
-	wx/bmpcbox.h \
 	wx/calctrl.h \
 	wx/dataview.h \
 	wx/dateevt.h \
 	wx/dcbuffer.h \
-	wx/generic/bmpcbox.h \
 	wx/generic/calctrl.h \
 	wx/generic/datectrl.h \
 	wx/generic/dataview.h \
@@ -2629,12 +2626,10 @@ COND_WXUNIV_0_ADVANCED_HDR =  \
 	$(ADVANCED_PLATFORM_NATIVE_HDR)
 @COND_WXUNIV_0@ADVANCED_HDR = $(COND_WXUNIV_0_ADVANCED_HDR)
 COND_WXUNIV_1_ADVANCED_HDR =  \
-	wx/bmpcbox.h \
 	wx/calctrl.h \
 	wx/dataview.h \
 	wx/dateevt.h \
 	wx/dcbuffer.h \
-	wx/generic/bmpcbox.h \
 	wx/generic/calctrl.h \
 	wx/generic/datectrl.h \
 	wx/generic/dataview.h \
@@ -2932,7 +2927,6 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/xrc/xh_all.h \
 	wx/xrc/xh_bmpbt.h \
 	wx/xrc/xh_bmp.h \
-	wx/xrc/xh_bmpcbox.h \
 	wx/xrc/xh_bttn.h \
 	wx/xrc/xh_cald.h \
 	wx/xrc/xh_chckb.h \
@@ -3229,9 +3223,9 @@ COND_USE_GUI_1___MONOLIB_GUI_SRC_OBJECTS =  \
 	monodll_debugrpt.o \
 	monodll_dbgrptg.o \
 	monodll_dbgrid.o \
-	monodll_xh_bmpbt.o \
 	monodll_xh_bmp.o \
 	monodll_xh_bmpcbox.o \
+	monodll_xh_bmpbt.o \
 	monodll_xh_bttn.o \
 	monodll_xh_cald.o \
 	monodll_xh_chckb.o \
@@ -3956,7 +3950,6 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION____GUI_SRC_OBJECTS =  \
 	monodll_dirdlgg.o \
 	monodll_fdrepdlg.o \
 	monodll_filedlgg.o \
-	monodll_imaglist.o \
 	monodll_listctrl.o \
 	monodll_msgdlgg.o \
 	monodll_prntdlgg.o \
@@ -4001,7 +3994,6 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___GUI_SRC_OBJECTS =  \
 	monodll_dirdlgg.o \
 	monodll_fdrepdlg.o \
 	monodll_filedlgg.o \
-	monodll_imaglist.o \
 	monodll_listctrl.o \
 	monodll_msgdlgg.o \
 	monodll_prntdlgg.o \
@@ -4192,7 +4184,6 @@ COND_TOOLKIT_MOTIF___GUI_SRC_OBJECTS =  \
 	monodll_dirdlgg.o \
 	monodll_fdrepdlg.o \
 	monodll_fontdlgg.o \
-	monodll_imaglist.o \
 	monodll_listctrl.o \
 	monodll_notebook.o \
 	monodll_prntdlgg.o \
@@ -4687,7 +4678,6 @@ COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_1 =  \
 @COND_TOOLKIT_X11@__LOWLEVEL_SRC_OBJECTS_1 = $(COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_1)
 COND_WXUNIV_0___ADVANCED_SRC_OBJECTS =  \
 	monodll_datavcmn.o \
-	monodll_bmpcboxg.o \
 	monodll_calctrl.o \
 	monodll_datavgen.o \
 	monodll_datectlg.o \
@@ -4708,7 +4698,6 @@ COND_WXUNIV_0___ADVANCED_SRC_OBJECTS =  \
 @COND_WXUNIV_0@__ADVANCED_SRC_OBJECTS = $(COND_WXUNIV_0___ADVANCED_SRC_OBJECTS)
 COND_WXUNIV_1___ADVANCED_SRC_OBJECTS =  \
 	monodll_datavcmn.o \
-	monodll_bmpcboxg.o \
 	monodll_calctrl.o \
 	monodll_datavgen.o \
 	monodll_datectlg.o \
@@ -4949,9 +4938,9 @@ COND_USE_GUI_1___MONOLIB_GUI_SRC_OBJECTS_1 =  \
 	monolib_debugrpt.o \
 	monolib_dbgrptg.o \
 	monolib_dbgrid.o \
-	monolib_xh_bmpbt.o \
 	monolib_xh_bmp.o \
 	monolib_xh_bmpcbox.o \
+	monolib_xh_bmpbt.o \
 	monolib_xh_bttn.o \
 	monolib_xh_cald.o \
 	monolib_xh_chckb.o \
@@ -5677,7 +5666,6 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION____GUI_SRC_OBJECTS_1 =  \
 	monolib_dirdlgg.o \
 	monolib_fdrepdlg.o \
 	monolib_filedlgg.o \
-	monolib_imaglist.o \
 	monolib_listctrl.o \
 	monolib_msgdlgg.o \
 	monolib_prntdlgg.o \
@@ -5722,7 +5710,6 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___GUI_SRC_OBJECTS_1 =  \
 	monolib_dirdlgg.o \
 	monolib_fdrepdlg.o \
 	monolib_filedlgg.o \
-	monolib_imaglist.o \
 	monolib_listctrl.o \
 	monolib_msgdlgg.o \
 	monolib_prntdlgg.o \
@@ -5913,7 +5900,6 @@ COND_TOOLKIT_MOTIF___GUI_SRC_OBJECTS_1 =  \
 	monolib_dirdlgg.o \
 	monolib_fdrepdlg.o \
 	monolib_fontdlgg.o \
-	monolib_imaglist.o \
 	monolib_listctrl.o \
 	monolib_notebook.o \
 	monolib_prntdlgg.o \
@@ -6409,7 +6395,6 @@ COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_3 =  \
 @COND_TOOLKIT_X11@__LOWLEVEL_SRC_OBJECTS_3 = $(COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_3)
 COND_WXUNIV_0___ADVANCED_SRC_OBJECTS_1 =  \
 	monolib_datavcmn.o \
-	monolib_bmpcboxg.o \
 	monolib_calctrl.o \
 	monolib_datavgen.o \
 	monolib_datectlg.o \
@@ -6430,7 +6415,6 @@ COND_WXUNIV_0___ADVANCED_SRC_OBJECTS_1 =  \
 @COND_WXUNIV_0@__ADVANCED_SRC_OBJECTS_1 = $(COND_WXUNIV_0___ADVANCED_SRC_OBJECTS_1)
 COND_WXUNIV_1___ADVANCED_SRC_OBJECTS_1 =  \
 	monolib_datavcmn.o \
-	monolib_bmpcboxg.o \
 	monolib_calctrl.o \
 	monolib_datavgen.o \
 	monolib_datectlg.o \
@@ -7615,7 +7599,6 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION____GUI_SRC_OBJECTS_2 =  \
 	coredll_dirdlgg.o \
 	coredll_fdrepdlg.o \
 	coredll_filedlgg.o \
-	coredll_imaglist.o \
 	coredll_listctrl.o \
 	coredll_msgdlgg.o \
 	coredll_prntdlgg.o \
@@ -7660,7 +7643,6 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___GUI_SRC_OBJECTS_2 =  \
 	coredll_dirdlgg.o \
 	coredll_fdrepdlg.o \
 	coredll_filedlgg.o \
-	coredll_imaglist.o \
 	coredll_listctrl.o \
 	coredll_msgdlgg.o \
 	coredll_prntdlgg.o \
@@ -7851,7 +7833,6 @@ COND_TOOLKIT_MOTIF___GUI_SRC_OBJECTS_2 =  \
 	coredll_dirdlgg.o \
 	coredll_fdrepdlg.o \
 	coredll_fontdlgg.o \
-	coredll_imaglist.o \
 	coredll_listctrl.o \
 	coredll_notebook.o \
 	coredll_prntdlgg.o \
@@ -9029,7 +9010,6 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION____GUI_SRC_OBJECTS_3 =  \
 	corelib_dirdlgg.o \
 	corelib_fdrepdlg.o \
 	corelib_filedlgg.o \
-	corelib_imaglist.o \
 	corelib_listctrl.o \
 	corelib_msgdlgg.o \
 	corelib_prntdlgg.o \
@@ -9074,7 +9054,6 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___GUI_SRC_OBJECTS_3 =  \
 	corelib_dirdlgg.o \
 	corelib_fdrepdlg.o \
 	corelib_filedlgg.o \
-	corelib_imaglist.o \
 	corelib_listctrl.o \
 	corelib_msgdlgg.o \
 	corelib_prntdlgg.o \
@@ -9265,7 +9244,6 @@ COND_TOOLKIT_MOTIF___GUI_SRC_OBJECTS_3 =  \
 	corelib_dirdlgg.o \
 	corelib_fdrepdlg.o \
 	corelib_fontdlgg.o \
-	corelib_imaglist.o \
 	corelib_listctrl.o \
 	corelib_notebook.o \
 	corelib_prntdlgg.o \
@@ -9807,7 +9785,6 @@ COND_USE_SOSYMLINKS_1___advdll___so_symlinks_inst_cmd = rm -f \
 @COND_PLATFORM_WIN32_1@__advdll___win32rc = advdll_version_rc.o
 COND_WXUNIV_0___ADVANCED_SRC_OBJECTS_2 =  \
 	advdll_datavcmn.o \
-	advdll_bmpcboxg.o \
 	advdll_calctrl.o \
 	advdll_datavgen.o \
 	advdll_datectlg.o \
@@ -9828,7 +9805,6 @@ COND_WXUNIV_0___ADVANCED_SRC_OBJECTS_2 =  \
 @COND_WXUNIV_0@__ADVANCED_SRC_OBJECTS_2 = $(COND_WXUNIV_0___ADVANCED_SRC_OBJECTS_2)
 COND_WXUNIV_1___ADVANCED_SRC_OBJECTS_2 =  \
 	advdll_datavcmn.o \
-	advdll_bmpcboxg.o \
 	advdll_calctrl.o \
 	advdll_datavgen.o \
 	advdll_datectlg.o \
@@ -9864,7 +9840,6 @@ COND_MONOLITHIC_0_SHARED_0_USE_GUI_1___advlib___depname = \
 @COND_USE_PCH_1@	= .pch/wxprec_advlib/wx/wxprec.h.gch
 COND_WXUNIV_0___ADVANCED_SRC_OBJECTS_3 =  \
 	advlib_datavcmn.o \
-	advlib_bmpcboxg.o \
 	advlib_calctrl.o \
 	advlib_datavgen.o \
 	advlib_datectlg.o \
@@ -9885,7 +9860,6 @@ COND_WXUNIV_0___ADVANCED_SRC_OBJECTS_3 =  \
 @COND_WXUNIV_0@__ADVANCED_SRC_OBJECTS_3 = $(COND_WXUNIV_0___ADVANCED_SRC_OBJECTS_3)
 COND_WXUNIV_1___ADVANCED_SRC_OBJECTS_3 =  \
 	advlib_datavcmn.o \
-	advlib_bmpcboxg.o \
 	advlib_calctrl.o \
 	advlib_datavgen.o \
 	advlib_datectlg.o \
@@ -12372,14 +12346,14 @@ monodll_dbgrptg.o: $(srcdir)/src/generic/dbgrptg.cpp $(MONODLL_ODEP)
 monodll_dbgrid.o: $(srcdir)/src/common/dbgrid.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/dbgrid.cpp
 
-monodll_xh_bmpbt.o: $(srcdir)/src/xrc/xh_bmpbt.cpp $(MONODLL_ODEP)
-	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/xrc/xh_bmpbt.cpp
-
 monodll_xh_bmp.o: $(srcdir)/src/xrc/xh_bmp.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/xrc/xh_bmp.cpp
 
 monodll_xh_bmpcbox.o: $(srcdir)/src/xrc/xh_bmpcbox.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/xrc/xh_bmpcbox.cpp
+
+monodll_xh_bmpbt.o: $(srcdir)/src/xrc/xh_bmpbt.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/xrc/xh_bmpbt.cpp
 
 monodll_xh_bttn.o: $(srcdir)/src/xrc/xh_bttn.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/xrc/xh_bttn.cpp
@@ -15591,9 +15565,6 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@monodll_datavcmn.o: $(srcdir)/src/common/datavcmn.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/datavcmn.cpp
 
-@COND_USE_GUI_1@monodll_bmpcboxg.o: $(srcdir)/src/generic/bmpcboxg.cpp $(MONODLL_ODEP)
-@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/bmpcboxg.cpp
-
 @COND_USE_GUI_1@monodll_calctrl.o: $(srcdir)/src/generic/calctrl.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/calctrl.cpp
 
@@ -16326,14 +16297,14 @@ monolib_dbgrptg.o: $(srcdir)/src/generic/dbgrptg.cpp $(MONOLIB_ODEP)
 monolib_dbgrid.o: $(srcdir)/src/common/dbgrid.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/dbgrid.cpp
 
-monolib_xh_bmpbt.o: $(srcdir)/src/xrc/xh_bmpbt.cpp $(MONOLIB_ODEP)
-	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_bmpbt.cpp
-
 monolib_xh_bmp.o: $(srcdir)/src/xrc/xh_bmp.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_bmp.cpp
 
 monolib_xh_bmpcbox.o: $(srcdir)/src/xrc/xh_bmpcbox.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_bmpcbox.cpp
+
+monolib_xh_bmpbt.o: $(srcdir)/src/xrc/xh_bmpbt.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_bmpbt.cpp
 
 monolib_xh_bttn.o: $(srcdir)/src/xrc/xh_bttn.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_bttn.cpp
@@ -19544,9 +19515,6 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_USE_GUI_1@monolib_datavcmn.o: $(srcdir)/src/common/datavcmn.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/datavcmn.cpp
-
-@COND_USE_GUI_1@monolib_bmpcboxg.o: $(srcdir)/src/generic/bmpcboxg.cpp $(MONOLIB_ODEP)
-@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/bmpcboxg.cpp
 
 @COND_USE_GUI_1@monolib_calctrl.o: $(srcdir)/src/generic/calctrl.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/calctrl.cpp
@@ -26733,9 +26701,6 @@ advdll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(ADVDLL_ODEP)
 advdll_datavcmn.o: $(srcdir)/src/common/datavcmn.cpp $(ADVDLL_ODEP)
 	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/common/datavcmn.cpp
 
-advdll_bmpcboxg.o: $(srcdir)/src/generic/bmpcboxg.cpp $(ADVDLL_ODEP)
-	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/generic/bmpcboxg.cpp
-
 advdll_calctrl.o: $(srcdir)/src/generic/calctrl.cpp $(ADVDLL_ODEP)
 	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/generic/calctrl.cpp
 
@@ -26900,9 +26865,6 @@ advlib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(ADVLIB_ODEP)
 
 advlib_datavcmn.o: $(srcdir)/src/common/datavcmn.cpp $(ADVLIB_ODEP)
 	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/common/datavcmn.cpp
-
-advlib_bmpcboxg.o: $(srcdir)/src/generic/bmpcboxg.cpp $(ADVLIB_ODEP)
-	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/generic/bmpcboxg.cpp
 
 advlib_calctrl.o: $(srcdir)/src/generic/calctrl.cpp $(ADVLIB_ODEP)
 	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/generic/calctrl.cpp
@@ -27354,14 +27316,14 @@ xmllib_xtixml.o: $(srcdir)/src/common/xtixml.cpp $(XMLLIB_ODEP)
 xrcdll_version_rc.o: $(srcdir)/src/msw/version.rc $(XRCDLL_ODEP)
 	$(WINDRES) -i$< -o$@   --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_58)  $(__EXCEPTIONS_DEFINE_p_57) $(__RTTI_DEFINE_p_57) $(__THREAD_DEFINE_p_57)   --define WXDLLNAME=$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_xrc$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG) $(__RCDEFDIR_p) --include-dir $(top_srcdir)/include
 
-xrcdll_xh_bmpbt.o: $(srcdir)/src/xrc/xh_bmpbt.cpp $(XRCDLL_ODEP)
-	$(CXXC) -c -o $@ $(XRCDLL_CXXFLAGS) $(srcdir)/src/xrc/xh_bmpbt.cpp
-
 xrcdll_xh_bmp.o: $(srcdir)/src/xrc/xh_bmp.cpp $(XRCDLL_ODEP)
 	$(CXXC) -c -o $@ $(XRCDLL_CXXFLAGS) $(srcdir)/src/xrc/xh_bmp.cpp
 
 xrcdll_xh_bmpcbox.o: $(srcdir)/src/xrc/xh_bmpcbox.cpp $(XRCDLL_ODEP)
 	$(CXXC) -c -o $@ $(XRCDLL_CXXFLAGS) $(srcdir)/src/xrc/xh_bmpcbox.cpp
+
+xrcdll_xh_bmpbt.o: $(srcdir)/src/xrc/xh_bmpbt.cpp $(XRCDLL_ODEP)
+	$(CXXC) -c -o $@ $(XRCDLL_CXXFLAGS) $(srcdir)/src/xrc/xh_bmpbt.cpp
 
 xrcdll_xh_bttn.o: $(srcdir)/src/xrc/xh_bttn.cpp $(XRCDLL_ODEP)
 	$(CXXC) -c -o $@ $(XRCDLL_CXXFLAGS) $(srcdir)/src/xrc/xh_bttn.cpp
@@ -27510,14 +27472,14 @@ xrcdll_xmlres.o: $(srcdir)/src/xrc/xmlres.cpp $(XRCDLL_ODEP)
 xrcdll_xmlrsall.o: $(srcdir)/src/xrc/xmlrsall.cpp $(XRCDLL_ODEP)
 	$(CXXC) -c -o $@ $(XRCDLL_CXXFLAGS) $(srcdir)/src/xrc/xmlrsall.cpp
 
-xrclib_xh_bmpbt.o: $(srcdir)/src/xrc/xh_bmpbt.cpp $(XRCLIB_ODEP)
-	$(CXXC) -c -o $@ $(XRCLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_bmpbt.cpp
-
 xrclib_xh_bmp.o: $(srcdir)/src/xrc/xh_bmp.cpp $(XRCLIB_ODEP)
 	$(CXXC) -c -o $@ $(XRCLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_bmp.cpp
 
 xrclib_xh_bmpcbox.o: $(srcdir)/src/xrc/xh_bmpcbox.cpp $(XRCLIB_ODEP)
 	$(CXXC) -c -o $@ $(XRCLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_bmpcbox.cpp
+
+xrclib_xh_bmpbt.o: $(srcdir)/src/xrc/xh_bmpbt.cpp $(XRCLIB_ODEP)
+	$(CXXC) -c -o $@ $(XRCLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_bmpbt.cpp
 
 xrclib_xh_bttn.o: $(srcdir)/src/xrc/xh_bttn.cpp $(XRCLIB_ODEP)
 	$(CXXC) -c -o $@ $(XRCLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_bttn.cpp
