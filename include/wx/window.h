@@ -1342,6 +1342,10 @@ protected:
     // from both DoSetSize() and DoSetClientSize() and would usually just
     // reposition this window except for composite controls which will want to
     // arrange themselves inside the given rectangle
+    //
+    // Important note: the coordinates passed to this method are in parent's
+    // *window* coordinates and not parent's client coordinates (as the values
+    // passed to DoSetSize and returned by DoGetPosition are)!
     virtual void DoMoveWindow(int x, int y, int width, int height) = 0;
 
     // centre the window in the specified direction on parent, note that
