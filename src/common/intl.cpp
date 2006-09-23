@@ -1025,13 +1025,18 @@ wxString GetMsgCatalogSubdirs(const wxChar *prefix, const wxChar *lang)
     wxString searchPath;
     searchPath << prefix << wxFILE_SEP_PATH << lang;
 
-    // under Unix, the message catalogs are supposed to go into LC_MESSAGES
-    // subdirectory so look there too
-#ifdef __UNIX__
+    // Under Unix, the message catalogs are supposed to go into LC_MESSAGES
+    // subdirectory so look there too. Note that we do it on all platforms
+    // and not just Unix, because it doesn't cost much to look into one more
+    // directory and doing it this way has two important benefits:
+    // a) we don't break compatibility with wx-2.6 and older by stopping to
+    //    look in a directory where the catalogs used to be and thus silently
+    //    breaking apps after they are recompiled against the latest wx
+    // b) it makes it possible to package app's support files in the same
+    //    way on all target platforms
     const wxString searchPathOrig(searchPath);
     searchPath << wxFILE_SEP_PATH << wxT("LC_MESSAGES")
                << wxPATH_SEP << searchPathOrig;
-#endif // __UNIX__
 
     return searchPath;
 }
