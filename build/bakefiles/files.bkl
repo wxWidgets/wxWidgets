@@ -2860,8 +2860,9 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <!-- ====================================================================== -->
 
 <set var="XRC_SRC" hints="files">
-    src/xrc/xh_bmpbt.cpp
     src/xrc/xh_bmp.cpp
+    src/xrc/xh_bmpcbox.cpp
+    src/xrc/xh_bmpbt.cpp
     src/xrc/xh_bttn.cpp
     src/xrc/xh_cald.cpp
     src/xrc/xh_chckb.cpp
