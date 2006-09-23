@@ -41,7 +41,7 @@ public:
     int GetPixel( unsigned char red, unsigned char green, unsigned char blue ) const;
     bool GetRGB( int pixel, unsigned char *red, unsigned char *green, unsigned char *blue ) const;
 
-    virtual int GetColoursCount() const:
+    virtual int GetColoursCount() const;
 
 private:
     DECLARE_DYNAMIC_CLASS(wxPalette)
