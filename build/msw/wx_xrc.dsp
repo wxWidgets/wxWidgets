@@ -970,6 +970,10 @@ SOURCE=..\..\include\wx\xrc\xh_bmpbt.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\xrc\xh_bmpcbox.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\xrc\xh_bttn.h
 # End Source File
 # Begin Source File
@@ -1171,6 +1175,10 @@ SOURCE=..\..\src\xrc\xh_bmp.cpp
 # Begin Source File
 
 SOURCE=..\..\src\xrc\xh_bmpbt.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\xrc\xh_bmpcbox.cpp
 # End Source File
 # Begin Source File
 

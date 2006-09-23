@@ -4405,69 +4405,6 @@ SOURCE=..\..\src\generic\fontpickerg.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\generic\imaglist.cpp
-
-!IF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Debug"
-
-# PROP Exclude_From_Build 1
-
-!ENDIF
-
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\src\generic\listbkg.cpp
 # End Source File
 # Begin Source File
@@ -5935,6 +5872,69 @@ SOURCE=..\..\src\univ\menu.cpp
 # Begin Source File
 
 SOURCE=..\..\src\univ\themes\metal.cpp
+
+!IF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Debug"
+
+# PROP Exclude_From_Build 1
+
+!ENDIF
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\univ\themes\mono.cpp
 
 !IF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
 
@@ -8149,6 +8149,10 @@ SOURCE=..\..\include\wx\generic\accel.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\generic\bmpcbox.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\generic\busyinfo.h
 # End Source File
 # Begin Source File
@@ -8234,10 +8238,6 @@ SOURCE=..\..\include\wx\generic\gridsel.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\generic\helpext.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\generic\imaglist.h
 # End Source File
 # Begin Source File
 
@@ -8582,6 +8582,10 @@ SOURCE=..\..\include\wx\bitmap.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\bmpbuttn.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\bmpcbox.h
 # End Source File
 # Begin Source File
 
@@ -9306,6 +9310,10 @@ SOURCE=..\..\include\wx\xrc\xh_bmp.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\xrc\xh_bmpbt.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\xrc\xh_bmpcbox.h
 # End Source File
 # Begin Source File
 

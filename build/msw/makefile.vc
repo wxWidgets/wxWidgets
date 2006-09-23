@@ -983,8 +983,9 @@ XRCDLL_CXXFLAGS = /M$(__RUNTIME_LIBS_384)$(__DEBUGRUNTIME) /DWIN32 \
 XRCDLL_OBJECTS =  \
 	$(OBJS)\xrcdll_dummy.obj \
 	$(OBJS)\xrcdll_version.res \
-	$(OBJS)\xrcdll_xh_bmpbt.obj \
 	$(OBJS)\xrcdll_xh_bmp.obj \
+	$(OBJS)\xrcdll_xh_bmpcbox.obj \
+	$(OBJS)\xrcdll_xh_bmpbt.obj \
 	$(OBJS)\xrcdll_xh_bttn.obj \
 	$(OBJS)\xrcdll_xh_cald.obj \
 	$(OBJS)\xrcdll_xh_chckb.obj \
@@ -1046,8 +1047,9 @@ XRCLIB_CXXFLAGS = /M$(__RUNTIME_LIBS_397)$(__DEBUGRUNTIME) /DWIN32 \
 	/Fp"$(OBJS)\wxprec_xrclib.pch" $(CPPFLAGS) $(CXXFLAGS)
 XRCLIB_OBJECTS =  \
 	$(OBJS)\xrclib_dummy.obj \
-	$(OBJS)\xrclib_xh_bmpbt.obj \
 	$(OBJS)\xrclib_xh_bmp.obj \
+	$(OBJS)\xrclib_xh_bmpcbox.obj \
+	$(OBJS)\xrclib_xh_bmpbt.obj \
 	$(OBJS)\xrclib_xh_bttn.obj \
 	$(OBJS)\xrclib_xh_cald.obj \
 	$(OBJS)\xrclib_xh_chckb.obj \
@@ -1356,8 +1358,9 @@ ____MONOLIB_GUI_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_debugrpt.obj \
 	$(OBJS)\monodll_dbgrptg.obj \
 	$(OBJS)\monodll_dbgrid.obj \
-	$(OBJS)\monodll_xh_bmpbt.obj \
 	$(OBJS)\monodll_xh_bmp.obj \
+	$(OBJS)\monodll_xh_bmpcbox.obj \
+	$(OBJS)\monodll_xh_bmpbt.obj \
 	$(OBJS)\monodll_xh_bttn.obj \
 	$(OBJS)\monodll_xh_cald.obj \
 	$(OBJS)\monodll_xh_chckb.obj \
@@ -1687,7 +1690,6 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_fdrepdlg.obj \
 	$(OBJS)\monodll_filedlgg.obj \
 	$(OBJS)\monodll_fontdlgg.obj \
-	$(OBJS)\monodll_imaglist.obj \
 	$(OBJS)\monodll_listctrl.obj \
 	$(OBJS)\monodll_mdig.obj \
 	$(OBJS)\monodll_msgdlgg.obj \
@@ -1731,6 +1733,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_winuniv.obj \
 	$(OBJS)\monodll_gtk.obj \
 	$(OBJS)\monodll_metal.obj \
+	$(OBJS)\monodll_mono.obj \
 	$(OBJS)\monodll_win32.obj \
 	$(OBJS)\monodll_accesscmn.obj \
 	$(OBJS)\monodll_appcmn.obj \
@@ -1848,6 +1851,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 !if "$(WXUNIV)" == "0"
 ____ADVANCED_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_datavcmn.obj \
+	$(OBJS)\monodll_bmpcboxg.obj \
 	$(OBJS)\monodll_calctrl.obj \
 	$(OBJS)\monodll_datavgen.obj \
 	$(OBJS)\monodll_datectlg.obj \
@@ -1872,6 +1876,7 @@ ____ADVANCED_SRC_FILENAMES_OBJECTS =  \
 !if "$(WXUNIV)" == "1"
 ____ADVANCED_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_datavcmn.obj \
+	$(OBJS)\monodll_bmpcboxg.obj \
 	$(OBJS)\monodll_calctrl.obj \
 	$(OBJS)\monodll_datavgen.obj \
 	$(OBJS)\monodll_datectlg.obj \
@@ -1939,8 +1944,9 @@ ____MONOLIB_GUI_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_debugrpt.obj \
 	$(OBJS)\monolib_dbgrptg.obj \
 	$(OBJS)\monolib_dbgrid.obj \
-	$(OBJS)\monolib_xh_bmpbt.obj \
 	$(OBJS)\monolib_xh_bmp.obj \
+	$(OBJS)\monolib_xh_bmpcbox.obj \
+	$(OBJS)\monolib_xh_bmpbt.obj \
 	$(OBJS)\monolib_xh_bttn.obj \
 	$(OBJS)\monolib_xh_cald.obj \
 	$(OBJS)\monolib_xh_chckb.obj \
@@ -2270,7 +2276,6 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_fdrepdlg.obj \
 	$(OBJS)\monolib_filedlgg.obj \
 	$(OBJS)\monolib_fontdlgg.obj \
-	$(OBJS)\monolib_imaglist.obj \
 	$(OBJS)\monolib_listctrl.obj \
 	$(OBJS)\monolib_mdig.obj \
 	$(OBJS)\monolib_msgdlgg.obj \
@@ -2314,6 +2319,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_winuniv.obj \
 	$(OBJS)\monolib_gtk.obj \
 	$(OBJS)\monolib_metal.obj \
+	$(OBJS)\monolib_mono.obj \
 	$(OBJS)\monolib_win32.obj \
 	$(OBJS)\monolib_accesscmn.obj \
 	$(OBJS)\monolib_appcmn.obj \
@@ -2431,6 +2437,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 !if "$(WXUNIV)" == "0"
 ____ADVANCED_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_datavcmn.obj \
+	$(OBJS)\monolib_bmpcboxg.obj \
 	$(OBJS)\monolib_calctrl.obj \
 	$(OBJS)\monolib_datavgen.obj \
 	$(OBJS)\monolib_datectlg.obj \
@@ -2455,6 +2462,7 @@ ____ADVANCED_SRC_FILENAMES_1_OBJECTS =  \
 !if "$(WXUNIV)" == "1"
 ____ADVANCED_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_datavcmn.obj \
+	$(OBJS)\monolib_bmpcboxg.obj \
 	$(OBJS)\monolib_calctrl.obj \
 	$(OBJS)\monolib_datavgen.obj \
 	$(OBJS)\monolib_datectlg.obj \
@@ -2794,7 +2802,6 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_fdrepdlg.obj \
 	$(OBJS)\coredll_filedlgg.obj \
 	$(OBJS)\coredll_fontdlgg.obj \
-	$(OBJS)\coredll_imaglist.obj \
 	$(OBJS)\coredll_listctrl.obj \
 	$(OBJS)\coredll_mdig.obj \
 	$(OBJS)\coredll_msgdlgg.obj \
@@ -2838,6 +2845,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_winuniv.obj \
 	$(OBJS)\coredll_gtk.obj \
 	$(OBJS)\coredll_metal.obj \
+	$(OBJS)\coredll_mono.obj \
 	$(OBJS)\coredll_win32.obj \
 	$(OBJS)\coredll_accesscmn.obj \
 	$(OBJS)\coredll_appcmn.obj \
@@ -3231,7 +3239,6 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_fdrepdlg.obj \
 	$(OBJS)\corelib_filedlgg.obj \
 	$(OBJS)\corelib_fontdlgg.obj \
-	$(OBJS)\corelib_imaglist.obj \
 	$(OBJS)\corelib_listctrl.obj \
 	$(OBJS)\corelib_mdig.obj \
 	$(OBJS)\corelib_msgdlgg.obj \
@@ -3275,6 +3282,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_winuniv.obj \
 	$(OBJS)\corelib_gtk.obj \
 	$(OBJS)\corelib_metal.obj \
+	$(OBJS)\corelib_mono.obj \
 	$(OBJS)\corelib_win32.obj \
 	$(OBJS)\corelib_accesscmn.obj \
 	$(OBJS)\corelib_appcmn.obj \
@@ -3402,6 +3410,7 @@ __RUNTIME_LIBS_195 = $(__THREADSFLAG)
 !if "$(WXUNIV)" == "0"
 ____ADVANCED_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\advdll_datavcmn.obj \
+	$(OBJS)\advdll_bmpcboxg.obj \
 	$(OBJS)\advdll_calctrl.obj \
 	$(OBJS)\advdll_datavgen.obj \
 	$(OBJS)\advdll_datectlg.obj \
@@ -3426,6 +3435,7 @@ ____ADVANCED_SRC_FILENAMES_2_OBJECTS =  \
 !if "$(WXUNIV)" == "1"
 ____ADVANCED_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\advdll_datavcmn.obj \
+	$(OBJS)\advdll_bmpcboxg.obj \
 	$(OBJS)\advdll_calctrl.obj \
 	$(OBJS)\advdll_datavgen.obj \
 	$(OBJS)\advdll_datectlg.obj \
@@ -3459,6 +3469,7 @@ __RUNTIME_LIBS_208 = $(__THREADSFLAG)
 !if "$(WXUNIV)" == "0"
 ____ADVANCED_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\advlib_datavcmn.obj \
+	$(OBJS)\advlib_bmpcboxg.obj \
 	$(OBJS)\advlib_calctrl.obj \
 	$(OBJS)\advlib_datavgen.obj \
 	$(OBJS)\advlib_datectlg.obj \
@@ -3483,6 +3494,7 @@ ____ADVANCED_SRC_FILENAMES_3_OBJECTS =  \
 !if "$(WXUNIV)" == "1"
 ____ADVANCED_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\advlib_datavcmn.obj \
+	$(OBJS)\advlib_bmpcboxg.obj \
 	$(OBJS)\advlib_calctrl.obj \
 	$(OBJS)\advlib_datavgen.obj \
 	$(OBJS)\advlib_datectlg.obj \
@@ -5074,6 +5086,9 @@ $(OBJS)\monodll_gtk.obj: ..\..\src\univ\themes\gtk.cpp
 $(OBJS)\monodll_metal.obj: ..\..\src\univ\themes\metal.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) $**
 
+$(OBJS)\monodll_mono.obj: ..\..\src\univ\themes\mono.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) $**
+
 $(OBJS)\monodll_win32.obj: ..\..\src\univ\themes\win32.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) $**
 
@@ -5179,10 +5194,13 @@ $(OBJS)\monodll_dbgrptg.obj: ..\..\src\generic\dbgrptg.cpp
 $(OBJS)\monodll_dbgrid.obj: ..\..\src\common\dbgrid.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) $**
 
-$(OBJS)\monodll_xh_bmpbt.obj: ..\..\src\xrc\xh_bmpbt.cpp
+$(OBJS)\monodll_xh_bmp.obj: ..\..\src\xrc\xh_bmp.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) $**
 
-$(OBJS)\monodll_xh_bmp.obj: ..\..\src\xrc\xh_bmp.cpp
+$(OBJS)\monodll_xh_bmpcbox.obj: ..\..\src\xrc\xh_bmpcbox.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) $**
+
+$(OBJS)\monodll_xh_bmpbt.obj: ..\..\src\xrc\xh_bmpbt.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) $**
 
 $(OBJS)\monodll_xh_bttn.obj: ..\..\src\xrc\xh_bttn.cpp
@@ -5495,11 +5513,6 @@ $(OBJS)\monodll_icon.obj: ..\..\src\msw\icon.cpp
 
 !if "$(USE_GUI)" == "1"
 $(OBJS)\monodll_imaglist.obj: ..\..\src\msw\imaglist.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) $**
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
-$(OBJS)\monodll_imaglist.obj: ..\..\src\generic\imaglist.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) $**
 !endif
 
@@ -6439,6 +6452,11 @@ $(OBJS)\monodll_datavcmn.obj: ..\..\src\common\datavcmn.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
+$(OBJS)\monodll_bmpcboxg.obj: ..\..\src\generic\bmpcboxg.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) $**
+!endif
+
+!if "$(USE_GUI)" == "1"
 $(OBJS)\monodll_calctrl.obj: ..\..\src\generic\calctrl.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) $**
 !endif
@@ -6950,6 +6968,9 @@ $(OBJS)\monolib_gtk.obj: ..\..\src\univ\themes\gtk.cpp
 $(OBJS)\monolib_metal.obj: ..\..\src\univ\themes\metal.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) $**
 
+$(OBJS)\monolib_mono.obj: ..\..\src\univ\themes\mono.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) $**
+
 $(OBJS)\monolib_win32.obj: ..\..\src\univ\themes\win32.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) $**
 
@@ -7055,10 +7076,13 @@ $(OBJS)\monolib_dbgrptg.obj: ..\..\src\generic\dbgrptg.cpp
 $(OBJS)\monolib_dbgrid.obj: ..\..\src\common\dbgrid.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) $**
 
-$(OBJS)\monolib_xh_bmpbt.obj: ..\..\src\xrc\xh_bmpbt.cpp
+$(OBJS)\monolib_xh_bmp.obj: ..\..\src\xrc\xh_bmp.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) $**
 
-$(OBJS)\monolib_xh_bmp.obj: ..\..\src\xrc\xh_bmp.cpp
+$(OBJS)\monolib_xh_bmpcbox.obj: ..\..\src\xrc\xh_bmpcbox.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) $**
+
+$(OBJS)\monolib_xh_bmpbt.obj: ..\..\src\xrc\xh_bmpbt.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) $**
 
 $(OBJS)\monolib_xh_bttn.obj: ..\..\src\xrc\xh_bttn.cpp
@@ -7371,11 +7395,6 @@ $(OBJS)\monolib_icon.obj: ..\..\src\msw\icon.cpp
 
 !if "$(USE_GUI)" == "1"
 $(OBJS)\monolib_imaglist.obj: ..\..\src\msw\imaglist.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) $**
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
-$(OBJS)\monolib_imaglist.obj: ..\..\src\generic\imaglist.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) $**
 !endif
 
@@ -8315,6 +8334,11 @@ $(OBJS)\monolib_datavcmn.obj: ..\..\src\common\datavcmn.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
+$(OBJS)\monolib_bmpcboxg.obj: ..\..\src\generic\bmpcboxg.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) $**
+!endif
+
+!if "$(USE_GUI)" == "1"
 $(OBJS)\monolib_calctrl.obj: ..\..\src\generic\calctrl.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) $**
 !endif
@@ -9147,6 +9171,9 @@ $(OBJS)\coredll_gtk.obj: ..\..\src\univ\themes\gtk.cpp
 $(OBJS)\coredll_metal.obj: ..\..\src\univ\themes\metal.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) $**
 
+$(OBJS)\coredll_mono.obj: ..\..\src\univ\themes\mono.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) $**
+
 $(OBJS)\coredll_win32.obj: ..\..\src\univ\themes\win32.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) $**
 
@@ -9277,11 +9304,6 @@ $(OBJS)\coredll_icon.obj: ..\..\src\msw\icon.cpp
 
 !if "$(USE_GUI)" == "1"
 $(OBJS)\coredll_imaglist.obj: ..\..\src\msw\imaglist.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) $**
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
-$(OBJS)\coredll_imaglist.obj: ..\..\src\generic\imaglist.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) $**
 !endif
 
@@ -10374,6 +10396,9 @@ $(OBJS)\corelib_gtk.obj: ..\..\src\univ\themes\gtk.cpp
 $(OBJS)\corelib_metal.obj: ..\..\src\univ\themes\metal.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) $**
 
+$(OBJS)\corelib_mono.obj: ..\..\src\univ\themes\mono.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) $**
+
 $(OBJS)\corelib_win32.obj: ..\..\src\univ\themes\win32.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) $**
 
@@ -10504,11 +10529,6 @@ $(OBJS)\corelib_icon.obj: ..\..\src\msw\icon.cpp
 
 !if "$(USE_GUI)" == "1"
 $(OBJS)\corelib_imaglist.obj: ..\..\src\msw\imaglist.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) $**
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
-$(OBJS)\corelib_imaglist.obj: ..\..\src\generic\imaglist.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) $**
 !endif
 
@@ -11454,6 +11474,9 @@ $(OBJS)\advdll_datectrl.obj: ..\..\src\msw\datectrl.cpp
 $(OBJS)\advdll_datavcmn.obj: ..\..\src\common\datavcmn.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(ADVDLL_CXXFLAGS) $**
 
+$(OBJS)\advdll_bmpcboxg.obj: ..\..\src\generic\bmpcboxg.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(ADVDLL_CXXFLAGS) $**
+
 $(OBJS)\advdll_calctrl.obj: ..\..\src\generic\calctrl.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(ADVDLL_CXXFLAGS) $**
 
@@ -11518,6 +11541,9 @@ $(OBJS)\advlib_datectrl.obj: ..\..\src\msw\datectrl.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(ADVLIB_CXXFLAGS) $**
 
 $(OBJS)\advlib_datavcmn.obj: ..\..\src\common\datavcmn.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(ADVLIB_CXXFLAGS) $**
+
+$(OBJS)\advlib_bmpcboxg.obj: ..\..\src\generic\bmpcboxg.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(ADVLIB_CXXFLAGS) $**
 
 $(OBJS)\advlib_calctrl.obj: ..\..\src\generic\calctrl.cpp
@@ -11847,10 +11873,13 @@ $(OBJS)\xrcdll_dummy.obj: ..\..\src\common\dummy.cpp
 $(OBJS)\xrcdll_version.res: ..\..\src\msw\version.rc
 	rc /fo$@  /d WIN32 $(____DEBUGRUNTIME_4) $(__NO_VC_CRTDBG_p_63)  /d __WXMSW__ $(__WXUNIV_DEFINE_p_58) $(__DEBUG_DEFINE_p_57) $(__EXCEPTIONS_DEFINE_p_57) $(__RTTI_DEFINE_p_57) $(__THREAD_DEFINE_p_57) $(__UNICODE_DEFINE_p_58) $(__MSLU_DEFINE_p_57) /i $(SETUPHDIR) /i ..\..\include /d WXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_xrc_vc$(VENDORTAG) $**
 
-$(OBJS)\xrcdll_xh_bmpbt.obj: ..\..\src\xrc\xh_bmpbt.cpp
+$(OBJS)\xrcdll_xh_bmp.obj: ..\..\src\xrc\xh_bmp.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(XRCDLL_CXXFLAGS) $**
 
-$(OBJS)\xrcdll_xh_bmp.obj: ..\..\src\xrc\xh_bmp.cpp
+$(OBJS)\xrcdll_xh_bmpcbox.obj: ..\..\src\xrc\xh_bmpcbox.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(XRCDLL_CXXFLAGS) $**
+
+$(OBJS)\xrcdll_xh_bmpbt.obj: ..\..\src\xrc\xh_bmpbt.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(XRCDLL_CXXFLAGS) $**
 
 $(OBJS)\xrcdll_xh_bttn.obj: ..\..\src\xrc\xh_bttn.cpp
@@ -12003,10 +12032,13 @@ $(OBJS)\xrcdll_xmlrsall.obj: ..\..\src\xrc\xmlrsall.cpp
 $(OBJS)\xrclib_dummy.obj: ..\..\src\common\dummy.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(XRCLIB_CXXFLAGS) /Ycwx/wxprec.h $**
 
-$(OBJS)\xrclib_xh_bmpbt.obj: ..\..\src\xrc\xh_bmpbt.cpp
+$(OBJS)\xrclib_xh_bmp.obj: ..\..\src\xrc\xh_bmp.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(XRCLIB_CXXFLAGS) $**
 
-$(OBJS)\xrclib_xh_bmp.obj: ..\..\src\xrc\xh_bmp.cpp
+$(OBJS)\xrclib_xh_bmpcbox.obj: ..\..\src\xrc\xh_bmpcbox.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(XRCLIB_CXXFLAGS) $**
+
+$(OBJS)\xrclib_xh_bmpbt.obj: ..\..\src\xrc\xh_bmpbt.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(XRCLIB_CXXFLAGS) $**
 
 $(OBJS)\xrclib_xh_bttn.obj: ..\..\src\xrc\xh_bttn.cpp

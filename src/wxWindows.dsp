@@ -959,6 +959,10 @@ SOURCE=.\common\zstream.cpp
 # PROP Default_Filter ""
 # Begin Source File
 
+SOURCE=.\generic\bmpcboxg.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\generic\busyinfo.cpp
 # End Source File
 # Begin Source File
@@ -1803,6 +1807,10 @@ SOURCE=.\xrc\xh_bmpbt.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\xrc\xh_bmpcbox.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\xrc\xh_bttn.cpp
 # End Source File
 # Begin Source File
@@ -2172,6 +2180,10 @@ SOURCE=..\include\wx\bitmap.h
 # Begin Source File
 
 SOURCE=..\include\wx\bmpbuttn.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\bmpcbox.h
 # End Source File
 # Begin Source File
 
@@ -3335,6 +3347,10 @@ SOURCE=..\include\wx\xrc\xh_bmpbt.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\include\wx\xrc\xh_bmpcbox.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\include\wx\xrc\xh_bttn.h
 # End Source File
 # Begin Source File
@@ -4035,6 +4051,10 @@ SOURCE=..\include\wx\generic\accel.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\include\wx\generic\bmpcbox.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\include\wx\generic\busyinfo.h
 # End Source File
 # Begin Source File
@@ -4124,10 +4144,6 @@ SOURCE=..\include\wx\generic\gridsel.h
 # Begin Source File
 
 SOURCE=..\include\wx\generic\helpext.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\include\wx\generic\imaglist.h
 # End Source File
 # Begin Source File
 

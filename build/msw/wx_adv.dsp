@@ -612,6 +612,10 @@ SOURCE=..\..\src\msw\version.rc
 # PROP Default_Filter ""
 # Begin Source File
 
+SOURCE=..\..\src\generic\bmpcboxg.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\generic\calctrl.cpp
 # End Source File
 # Begin Source File
@@ -1121,6 +1125,10 @@ SOURCE=..\..\include\wx\msw\taskbar.h
 # PROP Default_Filter ""
 # Begin Source File
 
+SOURCE=..\..\include\wx\generic\bmpcbox.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\generic\calctrl.h
 # End Source File
 # Begin Source File
@@ -1171,6 +1179,10 @@ SOURCE=..\..\include\wx\generic\wizard.h
 # Begin Group "Common Headers"
 
 # PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=..\..\include\wx\bmpcbox.h
+# End Source File
 # Begin Source File
 
 SOURCE=..\..\include\wx\calctrl.h

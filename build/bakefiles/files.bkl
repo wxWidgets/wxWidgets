@@ -2601,6 +2601,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 
 <set var="ADVANCED_CMN_SRC" hints="files">
     src/common/datavcmn.cpp
+    src/generic/bmpcboxg.cpp
     src/generic/calctrl.cpp
     src/generic/datavgen.cpp
     src/generic/datectlg.cpp
@@ -2619,10 +2620,12 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 </set>
 
 <set var="ADVANCED_CMN_HDR" hints="files">
+    wx/bmpcbox.h
     wx/calctrl.h
     wx/dataview.h
     wx/dateevt.h
     wx/dcbuffer.h
+    wx/generic/bmpcbox.h
     wx/generic/calctrl.h
     wx/generic/datectrl.h
     wx/generic/dataview.h
@@ -2917,6 +2920,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/xrc/xh_all.h
     wx/xrc/xh_bmpbt.h
     wx/xrc/xh_bmp.h
+    wx/xrc/xh_bmpcbox.h
     wx/xrc/xh_bttn.h
     wx/xrc/xh_cald.h
     wx/xrc/xh_chckb.h

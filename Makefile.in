@@ -2591,10 +2591,12 @@ COND_TOOLKIT_MAC_ADVANCED_PLATFORM_HDR =  \
 @COND_TOOLKIT_MSW@ADVANCED_PLATFORM_NATIVE_HDR = wx/msw/datectrl.h
 @COND_TOOLKIT_WINCE@ADVANCED_PLATFORM_NATIVE_HDR = wx/msw/datectrl.h
 COND_WXUNIV_0_ADVANCED_HDR =  \
+	wx/bmpcbox.h \
 	wx/calctrl.h \
 	wx/dataview.h \
 	wx/dateevt.h \
 	wx/dcbuffer.h \
+	wx/generic/bmpcbox.h \
 	wx/generic/calctrl.h \
 	wx/generic/datectrl.h \
 	wx/generic/dataview.h \
@@ -2626,10 +2628,12 @@ COND_WXUNIV_0_ADVANCED_HDR =  \
 	$(ADVANCED_PLATFORM_NATIVE_HDR)
 @COND_WXUNIV_0@ADVANCED_HDR = $(COND_WXUNIV_0_ADVANCED_HDR)
 COND_WXUNIV_1_ADVANCED_HDR =  \
+	wx/bmpcbox.h \
 	wx/calctrl.h \
 	wx/dataview.h \
 	wx/dateevt.h \
 	wx/dcbuffer.h \
+	wx/generic/bmpcbox.h \
 	wx/generic/calctrl.h \
 	wx/generic/datectrl.h \
 	wx/generic/dataview.h \
@@ -2927,6 +2931,7 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/xrc/xh_all.h \
 	wx/xrc/xh_bmpbt.h \
 	wx/xrc/xh_bmp.h \
+	wx/xrc/xh_bmpcbox.h \
 	wx/xrc/xh_bttn.h \
 	wx/xrc/xh_cald.h \
 	wx/xrc/xh_chckb.h \
@@ -4678,6 +4683,7 @@ COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_1 =  \
 @COND_TOOLKIT_X11@__LOWLEVEL_SRC_OBJECTS_1 = $(COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_1)
 COND_WXUNIV_0___ADVANCED_SRC_OBJECTS =  \
 	monodll_datavcmn.o \
+	monodll_bmpcboxg.o \
 	monodll_calctrl.o \
 	monodll_datavgen.o \
 	monodll_datectlg.o \
@@ -4698,6 +4704,7 @@ COND_WXUNIV_0___ADVANCED_SRC_OBJECTS =  \
 @COND_WXUNIV_0@__ADVANCED_SRC_OBJECTS = $(COND_WXUNIV_0___ADVANCED_SRC_OBJECTS)
 COND_WXUNIV_1___ADVANCED_SRC_OBJECTS =  \
 	monodll_datavcmn.o \
+	monodll_bmpcboxg.o \
 	monodll_calctrl.o \
 	monodll_datavgen.o \
 	monodll_datectlg.o \
@@ -6395,6 +6402,7 @@ COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_3 =  \
 @COND_TOOLKIT_X11@__LOWLEVEL_SRC_OBJECTS_3 = $(COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_3)
 COND_WXUNIV_0___ADVANCED_SRC_OBJECTS_1 =  \
 	monolib_datavcmn.o \
+	monolib_bmpcboxg.o \
 	monolib_calctrl.o \
 	monolib_datavgen.o \
 	monolib_datectlg.o \
@@ -6415,6 +6423,7 @@ COND_WXUNIV_0___ADVANCED_SRC_OBJECTS_1 =  \
 @COND_WXUNIV_0@__ADVANCED_SRC_OBJECTS_1 = $(COND_WXUNIV_0___ADVANCED_SRC_OBJECTS_1)
 COND_WXUNIV_1___ADVANCED_SRC_OBJECTS_1 =  \
 	monolib_datavcmn.o \
+	monolib_bmpcboxg.o \
 	monolib_calctrl.o \
 	monolib_datavgen.o \
 	monolib_datectlg.o \
@@ -9785,6 +9794,7 @@ COND_USE_SOSYMLINKS_1___advdll___so_symlinks_inst_cmd = rm -f \
 @COND_PLATFORM_WIN32_1@__advdll___win32rc = advdll_version_rc.o
 COND_WXUNIV_0___ADVANCED_SRC_OBJECTS_2 =  \
 	advdll_datavcmn.o \
+	advdll_bmpcboxg.o \
 	advdll_calctrl.o \
 	advdll_datavgen.o \
 	advdll_datectlg.o \
@@ -9805,6 +9815,7 @@ COND_WXUNIV_0___ADVANCED_SRC_OBJECTS_2 =  \
 @COND_WXUNIV_0@__ADVANCED_SRC_OBJECTS_2 = $(COND_WXUNIV_0___ADVANCED_SRC_OBJECTS_2)
 COND_WXUNIV_1___ADVANCED_SRC_OBJECTS_2 =  \
 	advdll_datavcmn.o \
+	advdll_bmpcboxg.o \
 	advdll_calctrl.o \
 	advdll_datavgen.o \
 	advdll_datectlg.o \
@@ -9840,6 +9851,7 @@ COND_MONOLITHIC_0_SHARED_0_USE_GUI_1___advlib___depname = \
 @COND_USE_PCH_1@	= .pch/wxprec_advlib/wx/wxprec.h.gch
 COND_WXUNIV_0___ADVANCED_SRC_OBJECTS_3 =  \
 	advlib_datavcmn.o \
+	advlib_bmpcboxg.o \
 	advlib_calctrl.o \
 	advlib_datavgen.o \
 	advlib_datectlg.o \
@@ -9860,6 +9872,7 @@ COND_WXUNIV_0___ADVANCED_SRC_OBJECTS_3 =  \
 @COND_WXUNIV_0@__ADVANCED_SRC_OBJECTS_3 = $(COND_WXUNIV_0___ADVANCED_SRC_OBJECTS_3)
 COND_WXUNIV_1___ADVANCED_SRC_OBJECTS_3 =  \
 	advlib_datavcmn.o \
+	advlib_bmpcboxg.o \
 	advlib_calctrl.o \
 	advlib_datavgen.o \
 	advlib_datectlg.o \
@@ -15565,6 +15578,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@monodll_datavcmn.o: $(srcdir)/src/common/datavcmn.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/datavcmn.cpp
 
+@COND_USE_GUI_1@monodll_bmpcboxg.o: $(srcdir)/src/generic/bmpcboxg.cpp $(MONODLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/bmpcboxg.cpp
+
 @COND_USE_GUI_1@monodll_calctrl.o: $(srcdir)/src/generic/calctrl.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/calctrl.cpp
 
@@ -19515,6 +19531,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_USE_GUI_1@monolib_datavcmn.o: $(srcdir)/src/common/datavcmn.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/datavcmn.cpp
+
+@COND_USE_GUI_1@monolib_bmpcboxg.o: $(srcdir)/src/generic/bmpcboxg.cpp $(MONOLIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/bmpcboxg.cpp
 
 @COND_USE_GUI_1@monolib_calctrl.o: $(srcdir)/src/generic/calctrl.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/calctrl.cpp
@@ -26701,6 +26720,9 @@ advdll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(ADVDLL_ODEP)
 advdll_datavcmn.o: $(srcdir)/src/common/datavcmn.cpp $(ADVDLL_ODEP)
 	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/common/datavcmn.cpp
 
+advdll_bmpcboxg.o: $(srcdir)/src/generic/bmpcboxg.cpp $(ADVDLL_ODEP)
+	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/generic/bmpcboxg.cpp
+
 advdll_calctrl.o: $(srcdir)/src/generic/calctrl.cpp $(ADVDLL_ODEP)
 	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/generic/calctrl.cpp
 
@@ -26865,6 +26887,9 @@ advlib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(ADVLIB_ODEP)
 
 advlib_datavcmn.o: $(srcdir)/src/common/datavcmn.cpp $(ADVLIB_ODEP)
 	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/common/datavcmn.cpp
+
+advlib_bmpcboxg.o: $(srcdir)/src/generic/bmpcboxg.cpp $(ADVLIB_ODEP)
+	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/generic/bmpcboxg.cpp
 
 advlib_calctrl.o: $(srcdir)/src/generic/calctrl.cpp $(ADVLIB_ODEP)
 	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/generic/calctrl.cpp
