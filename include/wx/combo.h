@@ -199,6 +199,10 @@ public:
     // (ie. wxComboPopup::SetStringValue doesn't get called).
     void SetText(const wxString& value);
 
+    // This method sets value and also optionally sends EVT_TEXT
+    // (needed by combo popups)
+    void SetValueWithEvent(const wxString& value, bool withEvent = true);
+
     //
     // Popup customization methods
     //
@@ -521,6 +525,8 @@ protected:
 
 private:
     void Init();
+
+    wxByte                  m_ignoreEvtText;  // Number of next EVT_TEXTs to ignore
 
     DECLARE_EVENT_TABLE()
 

@@ -210,7 +210,7 @@ void wxVListBoxComboPopup::DismissWithEvent()
     m_value = selection;
 
     if ( valStr != m_combo->GetValue() )
-        m_combo->SetValue(valStr);
+        m_combo->SetValueWithEvent(valStr);
 
     SendComboBoxEvent(selection);
 }
