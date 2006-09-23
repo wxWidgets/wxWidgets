@@ -724,6 +724,8 @@ wxSize wxVListBoxComboPopup::GetAdjustedSize( int minWidth, int prefHeight, int 
 {
     int height = 250;
 
+    maxHeight -= 2;  // Must take borders into account
+
     if ( m_strings.GetCount() )
     {
         if ( prefHeight > 0 )
@@ -743,8 +745,7 @@ wxSize wxVListBoxComboPopup::GetAdjustedSize( int minWidth, int prefHeight, int 
             // NB: Calculations that take variable height into account
             //     are unnecessary.
             int fih = GetLineHeight(0);
-            int shown = height/fih;
-            height = shown * fih;
+            height -= height % fih;
         }
     }
     else

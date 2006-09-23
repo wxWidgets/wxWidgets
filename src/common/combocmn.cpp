@@ -53,7 +53,7 @@
 
 #define BMP_BUTTON_MARGIN                       4
 
-#define DEFAULT_POPUP_HEIGHT                    200
+#define DEFAULT_POPUP_HEIGHT                    400
 
 #define DEFAULT_TEXT_INDENT                     3
 
