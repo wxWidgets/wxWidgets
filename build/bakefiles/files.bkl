@@ -945,7 +945,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/dirdlgg.cpp
     src/generic/fdrepdlg.cpp
     src/generic/filedlgg.cpp
-    src/generic/imaglist.cpp
     src/generic/listctrl.cpp
     src/generic/msgdlgg.cpp
     src/generic/prntdlgg.cpp
@@ -1122,7 +1121,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/dirdlgg.cpp
     src/generic/fdrepdlg.cpp
     src/generic/filedlgg.cpp
-    src/generic/imaglist.cpp
     src/generic/listctrl.cpp
     src/generic/msgdlgg.cpp
     src/generic/prntdlgg.cpp
@@ -1285,7 +1283,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/dirdlgg.cpp
     src/generic/fdrepdlg.cpp
     src/generic/fontdlgg.cpp
-    src/generic/imaglist.cpp
     src/generic/listctrl.cpp
     src/generic/notebook.cpp
     src/generic/prntdlgg.cpp
@@ -1298,7 +1295,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/generic/dirdlgg.h
     wx/generic/fdrepdlg.h
     wx/generic/fontdlgg.h
-    wx/generic/imaglist.h
     wx/generic/listctrl.h
     wx/generic/notebook.h
     wx/generic/prntdlgg.h
