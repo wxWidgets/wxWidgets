@@ -2607,7 +2607,7 @@ class ArtProvider(object):
     their own wx.ArtProvider class and easily replace standard art with
     his/her own version. It is easy thing to do: all that is needed is
     to derive a class from wx.ArtProvider, override it's CreateBitmap
-    method and register the provider with wx.ArtProvider.PushProvider::
+    method and register the provider with `wx.ArtProvider.Push`::
 
         class MyArtProvider(wx.ArtProvider):
             def __init__(self):
@@ -2631,7 +2631,7 @@ class ArtProvider(object):
         their own wx.ArtProvider class and easily replace standard art with
         his/her own version. It is easy thing to do: all that is needed is
         to derive a class from wx.ArtProvider, override it's CreateBitmap
-        method and register the provider with wx.ArtProvider.PushProvider::
+        method and register the provider with `wx.ArtProvider.Push`::
 
             class MyArtProvider(wx.ArtProvider):
                 def __init__(self):
@@ -2651,45 +2651,49 @@ class ArtProvider(object):
         """_setCallbackInfo(self, PyObject self, PyObject _class)"""
         return _misc_.ArtProvider__setCallbackInfo(*args, **kwargs)
 
-    def PushProvider(*args, **kwargs):
+    def Push(*args, **kwargs):
         """
-        PushProvider(ArtProvider provider)
+        Push(ArtProvider provider)
 
         Add new provider to the top of providers stack.
         """
-        return _misc_.ArtProvider_PushProvider(*args, **kwargs)
+        return _misc_.ArtProvider_Push(*args, **kwargs)
 
-    PushProvider = staticmethod(PushProvider)
-    def InsertProvider(*args, **kwargs):
+    Push = staticmethod(Push)
+    PushProvider = wx._deprecated(Push, "See `Push`") 
+    def Insert(*args, **kwargs):
         """
-        InsertProvider(ArtProvider provider)
+        Insert(ArtProvider provider)
 
         Add new provider to the bottom of providers stack.
         """
-        return _misc_.ArtProvider_InsertProvider(*args, **kwargs)
+        return _misc_.ArtProvider_Insert(*args, **kwargs)
 
-    InsertProvider = staticmethod(InsertProvider)
-    def PopProvider(*args, **kwargs):
+    Insert = staticmethod(Insert)
+    InsertProvider = wx._deprecated(Insert, "See `Insert`") 
+    def Pop(*args, **kwargs):
         """
-        PopProvider() -> bool
+        Pop() -> bool
 
         Remove latest added provider and delete it.
         """
-        return _misc_.ArtProvider_PopProvider(*args, **kwargs)
+        return _misc_.ArtProvider_Pop(*args, **kwargs)
 
-    PopProvider = staticmethod(PopProvider)
-    def RemoveProvider(*args, **kwargs):
+    Pop = staticmethod(Pop)
+    PopProvider = wx._deprecated(Pop, "See `Pop`") 
+    def Delete(*args, **kwargs):
         """
-        RemoveProvider(ArtProvider provider) -> bool
+        Delete(ArtProvider provider) -> bool
 
         Remove provider. The provider must have been added previously!  The
         provider is _not_ deleted.
         """
-        val = _misc_.ArtProvider_RemoveProvider(*args, **kwargs)
+        val = _misc_.ArtProvider_Delete(*args, **kwargs)
         args[1].thisown = 1
         return val
 
-    RemoveProvider = staticmethod(RemoveProvider)
+    Delete = staticmethod(Delete)
+    RemoveProvider = wx._deprecated(Delete, "See `Delete`") 
     def GetBitmap(*args, **kwargs):
         """
         GetBitmap(String id, String client=ART_OTHER, Size size=DefaultSize) -> Bitmap
@@ -2784,38 +2788,38 @@ ART_QUIT = cvar.ART_QUIT
 ART_FIND = cvar.ART_FIND
 ART_FIND_AND_REPLACE = cvar.ART_FIND_AND_REPLACE
 
-def ArtProvider_PushProvider(*args, **kwargs):
+def ArtProvider_Push(*args, **kwargs):
   """
-    ArtProvider_PushProvider(ArtProvider provider)
+    ArtProvider_Push(ArtProvider provider)
 
     Add new provider to the top of providers stack.
     """
-  return _misc_.ArtProvider_PushProvider(*args, **kwargs)
+  return _misc_.ArtProvider_Push(*args, **kwargs)
 
-def ArtProvider_InsertProvider(*args, **kwargs):
+def ArtProvider_Insert(*args, **kwargs):
   """
-    ArtProvider_InsertProvider(ArtProvider provider)
+    ArtProvider_Insert(ArtProvider provider)
 
     Add new provider to the bottom of providers stack.
     """
-  return _misc_.ArtProvider_InsertProvider(*args, **kwargs)
+  return _misc_.ArtProvider_Insert(*args, **kwargs)
 
-def ArtProvider_PopProvider(*args):
+def ArtProvider_Pop(*args):
   """
-    ArtProvider_PopProvider() -> bool
+    ArtProvider_Pop() -> bool
 
     Remove latest added provider and delete it.
     """
-  return _misc_.ArtProvider_PopProvider(*args)
+  return _misc_.ArtProvider_Pop(*args)
 
-def ArtProvider_RemoveProvider(*args, **kwargs):
+def ArtProvider_Delete(*args, **kwargs):
   """
-    ArtProvider_RemoveProvider(ArtProvider provider) -> bool
+    ArtProvider_Delete(ArtProvider provider) -> bool
 
     Remove provider. The provider must have been added previously!  The
     provider is _not_ deleted.
     """
-  val = _misc_.ArtProvider_RemoveProvider(*args, **kwargs)
+  val = _misc_.ArtProvider_Delete(*args, **kwargs)
   args[1].thisown = 1
   return val
 

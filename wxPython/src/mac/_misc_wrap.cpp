@@ -20428,7 +20428,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_ArtProvider_PushProvider(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+SWIGINTERN PyObject *_wrap_ArtProvider_Push(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   wxPyArtProvider *arg1 = (wxPyArtProvider *) 0 ;
   int res1 = 0 ;
@@ -20437,14 +20437,14 @@ SWIGINTERN PyObject *_wrap_ArtProvider_PushProvider(PyObject *SWIGUNUSEDPARM(sel
     (char *) "provider", NULL 
   };
   
-  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:ArtProvider_PushProvider",kwnames,&obj0)) SWIG_fail;
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:ArtProvider_Push",kwnames,&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, SWIG_as_voidptrptr(&arg1), SWIGTYPE_p_wxPyArtProvider, SWIG_POINTER_DISOWN |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ArtProvider_PushProvider" "', expected argument " "1"" of type '" "wxPyArtProvider *""'");
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ArtProvider_Push" "', expected argument " "1"" of type '" "wxPyArtProvider *""'");
   }
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    wxPyArtProvider::PushProvider(arg1);
+    wxPyArtProvider::Push(arg1);
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
@@ -20455,7 +20455,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_ArtProvider_InsertProvider(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+SWIGINTERN PyObject *_wrap_ArtProvider_Insert(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   wxPyArtProvider *arg1 = (wxPyArtProvider *) 0 ;
   int res1 = 0 ;
@@ -20464,14 +20464,14 @@ SWIGINTERN PyObject *_wrap_ArtProvider_InsertProvider(PyObject *SWIGUNUSEDPARM(s
     (char *) "provider", NULL 
   };
   
-  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:ArtProvider_InsertProvider",kwnames,&obj0)) SWIG_fail;
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:ArtProvider_Insert",kwnames,&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, SWIG_as_voidptrptr(&arg1), SWIGTYPE_p_wxPyArtProvider, SWIG_POINTER_DISOWN |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ArtProvider_InsertProvider" "', expected argument " "1"" of type '" "wxPyArtProvider *""'");
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ArtProvider_Insert" "', expected argument " "1"" of type '" "wxPyArtProvider *""'");
   }
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    wxPyArtProvider::InsertProvider(arg1);
+    wxPyArtProvider::Insert(arg1);
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
@@ -20482,14 +20482,14 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_ArtProvider_PopProvider(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_ArtProvider_Pop(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   bool result;
   
-  if (!SWIG_Python_UnpackTuple(args,"ArtProvider_PopProvider",0,0,0)) SWIG_fail;
+  if (!SWIG_Python_UnpackTuple(args,"ArtProvider_Pop",0,0,0)) SWIG_fail;
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    result = (bool)wxPyArtProvider::PopProvider();
+    result = (bool)wxPyArtProvider::Pop();
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
@@ -20502,7 +20502,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_ArtProvider_RemoveProvider(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+SWIGINTERN PyObject *_wrap_ArtProvider_Delete(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   wxPyArtProvider *arg1 = (wxPyArtProvider *) 0 ;
   bool result;
@@ -20513,15 +20513,15 @@ SWIGINTERN PyObject *_wrap_ArtProvider_RemoveProvider(PyObject *SWIGUNUSEDPARM(s
     (char *) "provider", NULL 
   };
   
-  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:ArtProvider_RemoveProvider",kwnames,&obj0)) SWIG_fail;
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:ArtProvider_Delete",kwnames,&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxPyArtProvider, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ArtProvider_RemoveProvider" "', expected argument " "1"" of type '" "wxPyArtProvider *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ArtProvider_Delete" "', expected argument " "1"" of type '" "wxPyArtProvider *""'"); 
   }
   arg1 = reinterpret_cast< wxPyArtProvider * >(argp1);
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    result = (bool)wxPyArtProvider::RemoveProvider(arg1);
+    result = (bool)wxPyArtProvider::Delete(arg1);
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
@@ -37887,10 +37887,10 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"new_ArtProvider", (PyCFunction)_wrap_new_ArtProvider, METH_NOARGS, NULL},
 	 { (char *)"delete_ArtProvider", (PyCFunction)_wrap_delete_ArtProvider, METH_O, NULL},
 	 { (char *)"ArtProvider__setCallbackInfo", (PyCFunction) _wrap_ArtProvider__setCallbackInfo, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"ArtProvider_PushProvider", (PyCFunction) _wrap_ArtProvider_PushProvider, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"ArtProvider_InsertProvider", (PyCFunction) _wrap_ArtProvider_InsertProvider, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"ArtProvider_PopProvider", (PyCFunction)_wrap_ArtProvider_PopProvider, METH_NOARGS, NULL},
-	 { (char *)"ArtProvider_RemoveProvider", (PyCFunction) _wrap_ArtProvider_RemoveProvider, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"ArtProvider_Push", (PyCFunction) _wrap_ArtProvider_Push, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"ArtProvider_Insert", (PyCFunction) _wrap_ArtProvider_Insert, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"ArtProvider_Pop", (PyCFunction)_wrap_ArtProvider_Pop, METH_NOARGS, NULL},
+	 { (char *)"ArtProvider_Delete", (PyCFunction) _wrap_ArtProvider_Delete, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"ArtProvider_GetBitmap", (PyCFunction) _wrap_ArtProvider_GetBitmap, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"ArtProvider_GetIcon", (PyCFunction) _wrap_ArtProvider_GetIcon, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"ArtProvider_GetSizeHint", (PyCFunction) _wrap_ArtProvider_GetSizeHint, METH_VARARGS | METH_KEYWORDS, NULL},
