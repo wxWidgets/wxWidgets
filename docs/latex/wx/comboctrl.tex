@@ -238,6 +238,19 @@ Copies the selected text to the clipboard.
 Copies the selected text to the clipboard and removes the selection.
 
 
+\membersection{wxComboCtrl::DoSetPopupControl}\label{wxcomboctrldosetpopupcontrol}
+
+\func{void}{DoSetPopupControl}{\param{wxComboPopup* }{popup}}
+
+This member function is not normally called in application code.
+Instead, it can be implemented in a derived class to return
+default wxComboPopup, incase {\tt popup} is NULL.
+
+\textbf{Note:} If you have implemented OnButtonClick to do
+something else than show the popup, then DoSetPopupControl
+must always return NULL.
+
+
 \membersection{wxComboCtrl::GetBitmapDisabled}\label{wxcomboctrlgetbitmapdisabled}
 
 \constfunc{const wxBitmap\&}{GetBitmapDisabled}{\void}
@@ -383,6 +396,14 @@ Get the text control which is part of the combo control.
 Returns actual indentation in pixels.
 
 
+\membersection{wxComboCtrl::GetTextRect}\label{wxcomboctrlgettextrect}
+
+\constfunc{const wxRect\&}{GetTextRect}{\void}
+
+Returns area covered by the text field (includes everything except
+borders and the dropdown button).
+
+
 \membersection{wxComboCtrl::GetValue}\label{wxcomboctrlgetvalue}
 
 \constfunc{wxString}{GetValue}{\void}
@@ -413,6 +434,11 @@ Implement in a derived class to define what happens on
 dropdown button click.
 
 Default action is to show the popup.
+
+\textbf{Note:} If you implement this to do something else than
+show the popup, you must then also implement
+\helpref{DoSetPopupControl}{wxcomboctrldosetpopupcontrol} to always
+return NULL.
 
 
 \membersection{wxComboCtrl::Paste}\label{wxcomboctrlpaste}
@@ -615,6 +641,14 @@ Sets the text for the combo control text field.
 {\bf NB:} For a combo control with {\tt wxCB\_READONLY} style the
 string must be accepted by the popup (for instance, exist in the dropdown
 list), otherwise the call to SetValue() is ignored
+
+
+\membersection{wxComboCtrl::SetValueWithEvent}\label{wxcomboctrlsetvaluewithevent}
+
+\func{void}{SetValueWithEvent}{\param{const wxString\& }{value}, \param{bool }{withEvent = true}}
+
+Same as SetValue, but also sends wxCommandEvent of type wxEVT\_COMMAND\_TEXT\_UPDATED
+if {\tt withEvent} is \true.
 
 
 \membersection{wxComboCtrl::ShowPopup}\label{wxcomboctrlshowpopup}

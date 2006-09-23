@@ -140,6 +140,20 @@ should call or replace this function. See
 for further details.
 
 
+\membersection{wxOwnerDrawnComboBox::GetWidestItem}\label{wxownerdrawncomboboxgetwidestitem}
+
+\constfunc{int}{GetWidestItem}{\void}
+
+Returns index to the widest item in the list.
+
+
+\membersection{wxOwnerDrawnComboBox::GetWidestItemWidth}\label{wxownerdrawncomboboxgetwidestitemwidth}
+
+\constfunc{int}{GetWidestItemWidth}{\void}
+
+Returns width of the widest item in the list.
+
+
 \membersection{wxOwnerDrawnComboBox::OnDrawBackground}\label{wxownerdrawncomboboxondrawbackground}
 
 \constfunc{void}{OnDrawBackground}{\param{wxDC\& }{dc}, \param{const wxRect\& }{rect}, \param{int }{item}, \param{int }{flags}}
@@ -179,6 +193,8 @@ region is set to this rectangle before calling this function)}
 \twocolitem{{\tt wxODCB\_PAINTING\_CONTROL}}{Combo control is being
 painted, instead of a list item. Argument item may be wxNOT\_FOUND in this
 case.}
+\twocolitem{{\tt wxODCB\_PAINTING\_SELECTED}}{An item with selection
+background is being painted. DC text colour should already be correct.}
 \end{twocollist}
 
 
