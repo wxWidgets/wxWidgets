@@ -460,10 +460,21 @@ void wxWindowDFB::DoGetClientSize(int *x, int *y) const
 
 void wxWindowDFB::DoMoveWindow(int x, int y, int width, int height)
 {
+    // NB: [x,y] arguments are in (parent's) window coordinates, while
+    //     m_rect.{x,y} are in (parent's) client coordinates. That's why we
+    //     offset by parentOrigin in some places below
+
+    wxPoint parentOrigin(0, 0);
+    AdjustForParentClientOrigin(parentOrigin.x, parentOrigin.y);
+
     wxRect oldpos(m_rect);
+    oldpos.Offset(parentOrigin);
+
     wxRect newpos(x, y, width, height);
 
+    // input [x,y] is in window coords, but we store client coords in m_rect:
     m_rect = newpos;
+    m_rect.Offset(-parentOrigin);
 
     // window's position+size changed and so did the subsurface that covers it
     InvalidateDfbSurface();
@@ -472,9 +483,6 @@ void wxWindowDFB::DoMoveWindow(int x, int y, int width, int height)
     {
         // queue both former and new position of the window for repainting:
         wxWindow *parent = GetParent();
-        wxPoint origin(parent->GetClientAreaOrigin());
-        oldpos.Offset(origin);
-        newpos.Offset(origin);
         parent->RefreshRect(oldpos);
         parent->RefreshRect(newpos);
     }
@@ -507,8 +515,6 @@ void wxWindowDFB::DoSetSize(int x, int y, int width, int height, int sizeFlags)
     {
         return;
     }
-
-    AdjustForParentClientOrigin(x, y, sizeFlags);
 
     wxSize size(-1, -1);
     if ( width == -1 )
@@ -557,6 +563,7 @@ void wxWindowDFB::DoSetSize(int x, int y, int width, int height, int sizeFlags)
     if ( m_rect.x != x || m_rect.y != y ||
          m_rect.width != width || m_rect.height != height )
     {
+        AdjustForParentClientOrigin(x, y, sizeFlags);
         DoMoveWindow(x, y, width, height);
 
         wxSize newSize(width, height);
