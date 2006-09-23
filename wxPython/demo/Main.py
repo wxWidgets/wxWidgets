@@ -62,6 +62,7 @@ _treeList = [
         'DragScroller',
 ##        'AlphaDrawing',
         'DelayedResult',
+        'ExpandoTextCtrl',
         ]),
 
     # managed windows == things with a (optional) caption you can close
@@ -170,6 +171,7 @@ _treeList = [
         'DatePickerCtrl',
         'DynamicSashWindow',
         'EditableListBox',
+        'ExpandoTextCtrl',
         'FancyText',
         'FileBrowseButton',
         'FloatBar',  
