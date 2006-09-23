@@ -112,20 +112,27 @@ typedef wxString wxArtID;
 class WXDLLEXPORT wxArtProvider : public wxObject
 {
 public:
+    // Dtor removes the provider from providers stack if it's still on it
+    virtual ~wxArtProvider();
+
+
     // Add new provider to the top of providers stack (i.e. the provider will
-    // be querier first of all).
-    static void PushProvider(wxArtProvider *provider);
+    // be queried first of all).
+    static void Push(wxArtProvider *provider);
 
     // Add new provider to the bottom of providers stack (i.e. the provider
     // will be queried as the last one).
-    static void InsertProvider(wxArtProvider *provider);
+    static void Insert(wxArtProvider *provider);
 
     // Remove latest added provider and delete it.
-    static bool PopProvider();
+    static bool Pop();
 
-    // Remove provider. The provider must have been added previously!
-    // The provider is _not_ deleted.
-    static bool RemoveProvider(wxArtProvider *provider);
+    // Remove provider from providers stack but don't delete it.
+    static bool Remove(wxArtProvider *provider);
+
+    // Delete the given provider and remove it from the providers stack.
+    static bool Delete(wxArtProvider *provider);
+
 
     // Query the providers for bitmap with given ID and return it. Return
     // wxNullBitmap if no provider provides it.
@@ -142,6 +149,18 @@ public:
     // Get the size hint of an icon from a specific wxArtClient, queries 
     // the topmost provider if platform_dependent = false
     static wxSize GetSizeHint(const wxArtClient& client, bool platform_dependent = false);
+
+#if WXWIN_COMPATIBILITY_2_6
+    // use the corresponding methods without redundant "Provider" suffix
+    wxDEPRECATED( static void PushProvider(wxArtProvider *provider) );
+    wxDEPRECATED( static void InsertProvider(wxArtProvider *provider) );
+    wxDEPRECATED( static bool PopProvider() );
+
+    // use Delete() if this is what you really need, or just delete the
+    // provider pointer, do not use Remove() as it does not delete the pointer
+    // unlike RemoveProvider() which does
+    wxDEPRECATED( static bool RemoveProvider(wxArtProvider *provider) );
+#endif // WXWIN_COMPATIBILITY_2_6
 
 protected:
     friend class wxArtProviderModule;

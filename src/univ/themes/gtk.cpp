@@ -563,7 +563,7 @@ wxGTKTheme::~wxGTKTheme()
 {
     delete m_renderer;
     delete m_scheme;
-    wxArtProvider::RemoveProvider(m_artProvider);
+    delete m_artProvider;
 }
 
 wxRenderer *wxGTKTheme::GetRenderer()

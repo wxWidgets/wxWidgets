@@ -74,7 +74,7 @@ protected:
 
 /*static*/ void wxArtProvider::InitStdProvider()
 {
-    wxArtProvider::PushProvider(new wxDefaultArtProvider);
+    wxArtProvider::Push(new wxDefaultArtProvider);
 }
 
 #if !defined(__WXGTK20__) || defined(__WXUNIVERSAL__)

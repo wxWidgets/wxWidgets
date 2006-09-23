@@ -511,7 +511,7 @@ wxMonoTheme::~wxMonoTheme()
 {
     delete m_renderer;
     delete m_scheme;
-    wxArtProvider::RemoveProvider(m_artProvider);
+    delete m_artProvider;
 }
 
 wxRenderer *wxMonoTheme::GetRenderer()

@@ -216,7 +216,7 @@ void MyFrame::OnBrowser(wxCommandEvent& WXUNUSED(event))
 void MyFrame::OnPlugProvider(wxCommandEvent& event)
 {
     if ( event.IsChecked() )
-        wxArtProvider::PushProvider(new MyArtProvider);
+        wxArtProvider::Push(new MyArtProvider);
     else
-        wxArtProvider::PopProvider();
+        wxArtProvider::Pop();
 }

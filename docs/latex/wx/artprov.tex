@@ -13,7 +13,7 @@ replace standard art with their own version. All
 that is needed is to derive a class from wxArtProvider, override its
 \helpref{CreateBitmap}{wxartprovidercreatebitmap} method and register the
 provider with
-\helpref{wxArtProvider::PushProvider}{wxartproviderpushprovider}:
+\helpref{wxArtProvider::Push}{wxartproviderpush}:
 
 \begin{verbatim}
   class MyProvider : public wxArtProvider
@@ -25,7 +25,7 @@ provider with
     { ... }
   };
   ...
-  wxArtProvider::PushProvider(new MyProvider);
+  wxArtProvider::Push(new MyProvider);
 \end{verbatim}
 
 There's another way of taking advantage of this class: you can use it in your code and use
@@ -33,6 +33,7 @@ platform native icons as provided by \helpref{wxArtProvider::GetBitmap}{wxartpro
 \helpref{wxArtProvider::GetIcon}{wxartprovidergeticon} (NB: this is not yet really
 possible as of wxWidgets 2.3.3, the set of wxArtProvider bitmaps is too
 small). 
+
 
 \membersection{Identifying art resources}\label{artprovideridentifying}
 
@@ -74,8 +75,8 @@ constants in the \helpref{artprov}{sampleartprovider} sample):
 \item wxART\_MISSING\_IMAGE      
 \end{itemize}
 
-Additionally, any string recognized by custom art providers registered using
-\helpref{PushProvider}{wxartproviderpushprovider} may be used.
+Additionally, any string recognized by custom art providers registered using 
+\helpref{Push}{wxartproviderpush} may be used.
 
 \wxheading{GTK+ Note}
 
@@ -87,6 +88,7 @@ by GTK+ follow the
 \urlref{freedesktop.org Icon Themes specification}{http://freedesktop.org/Standards/icon-theme-spec}. Note that themes are not guaranteed to contain all
 icons, so wxArtProvider may return {\tt wxNullBitmap} or {\tt wxNullIcon}.
 Default theme is typically installed in {\tt /usr/share/icons/hicolor}.
+
 
 \membersection{Clients}\label{artproviderclients}
 
@@ -125,6 +127,15 @@ See the \helpref{artprov}{sampleartprovider} sample for an example of wxArtProvi
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
+
+\membersection{wxArtProvider::\destruct{wxArtProvider}}\label{wxartproviderdtor}
+
+\func{}{\destruct{wxArtProvider}}{\void}
+
+The destructor automatically removes the provider from the provider stack used
+by \helpref{GetBitmap}{wxartprovidergetbitmap}.
+
+
 \membersection{wxArtProvider::CreateBitmap}\label{wxartprovidercreatebitmap}
 
 \func{wxBitmap}{CreateBitmap}{\param{const wxArtID\& }{id}, \param{const wxArtClient\& }{client}, \param{const wxSize\& }{size}}
@@ -151,6 +162,14 @@ This is {\bf not} part of wxArtProvider's public API, use
 \helpref{wxArtProvider::GetIcon}{wxartprovidergeticon}
 to query wxArtProvider for a resource.
 
+
+\membersection{wxArtProvider::Delete}\label{wxartproviderdelete}
+
+\func{static bool}{Delete}{\param{wxArtProvider* }{provider}}
+
+Delete the given \arg{provider}.
+
+
 \membersection{wxArtProvider::GetBitmap}\label{wxartprovidergetbitmap}
 
 \func{static wxBitmap}{GetBitmap}{\param{const wxArtID\& }{id}, \param{const wxArtClient\& }{client = wxART\_OTHER}, \param{const wxSize\& }{size = wxDefaultSize}}
@@ -169,6 +188,7 @@ Query registered providers for bitmap with given ID.
 
 The bitmap if one of registered providers recognizes the ID or wxNullBitmap otherwise.
 
+
 \membersection{wxArtProvider::GetIcon}\label{wxartprovidergeticon}
 
 \func{static wxIcon}{GetIcon}{\param{const wxArtID\& }{id}, \param{const wxArtClient\& }{client = wxART\_OTHER}, \param{const wxSize\& }{size = wxDefaultSize}}
@@ -183,38 +203,42 @@ Returns a suitable size hint for the given {\it wxArtClient}. If
 otherwise return the size from the topmost wxArtProvider. {\it wxDefaultSize} may be 
 returned if the client doesn't have a specified size, like wxART\_OTHER for example.
 
-\membersection{wxArtProvider::InsertProvider}\label{wxartproviderinsertprovider}
 
-\func{static void}{InsertProvider}{\param{wxArtProvider* }{provider}}
+\membersection{wxArtProvider::Insert}\label{wxartproviderinsert}
+
+\func{static void}{Insert}{\param{wxArtProvider* }{provider}}
 
 Register new art provider and add it to the bottom of providers stack (i.e.
 it will be queried as the last one).
 
 \wxheading{See also}
 
-\helpref{PushProvider}{wxartproviderpushprovider}
+\helpref{Push}{wxartproviderpush}
 
-\membersection{wxArtProvider::PopProvider}\label{wxartproviderctor}
 
-\func{static bool}{PopProvider}{\void}
+\membersection{wxArtProvider::Pop}\label{wxartproviderctor}
+
+\func{static bool}{Pop}{\void}
 
 Remove latest added provider and delete it.
 
-\membersection{wxArtProvider::PushProvider}\label{wxartproviderpushprovider}
 
-\func{static void}{PushProvider}{\param{wxArtProvider* }{provider}}
+\membersection{wxArtProvider::Push}\label{wxartproviderpush}
+
+\func{static void}{Push}{\param{wxArtProvider* }{provider}}
 
 Register new art provider and add it to the top of providers stack (i.e. it
 will be queried as the first provider).
 
 \wxheading{See also}
 
-\helpref{InsertProvider}{wxartproviderinsertprovider}
+\helpref{Insert}{wxartproviderinsert}
 
-\membersection{wxArtProvider::RemoveProvider}\label{wxartproviderremoveprovider}
 
-\func{static bool}{RemoveProvider}{\param{wxArtProvider* }{provider}}
+\membersection{wxArtProvider::Remove}\label{wxartproviderremove}
 
-Remove a provider from the stack. The provider must have been added previously
-and is {\it not} deleted.
+\func{static bool}{Remove}{\param{wxArtProvider* }{provider}}
+
+Remove a provider from the stack if it is on it. The provider is {\emph not} 
+deleted, unlike when using \helpref{Delete()}{wxartproviderdelete}.
 

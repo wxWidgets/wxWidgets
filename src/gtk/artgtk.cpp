@@ -54,7 +54,7 @@ protected:
 
 /*static*/ void wxArtProvider::InitNativeProvider()
 {
-    wxArtProvider::PushProvider(new wxGTK2ArtProvider);
+    wxArtProvider::Push(new wxGTK2ArtProvider);
 }
 
 // ----------------------------------------------------------------------------

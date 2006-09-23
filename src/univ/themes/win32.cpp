@@ -1069,7 +1069,7 @@ wxWin32Theme::~wxWin32Theme()
 {
     delete m_renderer;
     delete m_scheme;
-    wxArtProvider::RemoveProvider(m_artProvider);
+    delete m_artProvider;
 }
 
 wxRenderer *wxWin32Theme::GetRenderer()

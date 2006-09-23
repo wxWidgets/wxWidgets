@@ -137,7 +137,7 @@ wxThemeInfo::wxThemeInfo(Constructor c,
         // has one
         wxArtProvider *art = ms_theme->GetArtProvider();
         if ( art )
-            wxArtProvider::PushProvider(art);
+            wxArtProvider::Push(art);
     }
 
     return themeOld;
