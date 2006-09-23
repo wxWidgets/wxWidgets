@@ -1017,9 +1017,10 @@ wxMsgCatalogFile::~wxMsgCatalogFile()
     delete [] m_pData;
 }
 
-// return the directory to search for message catalogs under the given prefix
+// return the directories to search for message catalogs under the given
+// prefix, separated by wxPATH_SEP
 static
-wxString GetMsgCatalogSubdir(const wxChar *prefix, const wxChar *lang)
+wxString GetMsgCatalogSubdirs(const wxChar *prefix, const wxChar *lang)
 {
     wxString searchPath;
     searchPath << prefix << wxFILE_SEP_PATH << lang;
@@ -1045,7 +1046,7 @@ static wxString GetFullSearchPath(const wxChar *lang)
            count = gs_searchPrefixes.size();
     for ( n = 0; n < count; n++ )
     {
-        paths.Add(GetMsgCatalogSubdir(gs_searchPrefixes[n], lang));
+        paths.Add(GetMsgCatalogSubdirs(gs_searchPrefixes[n], lang));
     }
 
 
@@ -1065,7 +1066,7 @@ static wxString GetFullSearchPath(const wxChar *lang)
     const wxChar *pszLcPath = wxGetenv(wxT("LC_PATH"));
     if ( pszLcPath )
     {
-        const wxString lcp = GetMsgCatalogSubdir(pszLcPath, lang);
+        const wxString lcp = GetMsgCatalogSubdirs(pszLcPath, lang);
         if ( paths.Index(lcp) == wxNOT_FOUND )
             paths.Add(lcp);
     }
@@ -1074,7 +1075,7 @@ static wxString GetFullSearchPath(const wxChar *lang)
     wxString wxp = wxGetInstallPrefix();
     if ( !wxp.empty() )
     {
-        wxp = GetMsgCatalogSubdir(wxp + _T("/share/locale"), lang);
+        wxp = GetMsgCatalogSubdirs(wxp + _T("/share/locale"), lang);
         if ( paths.Index(wxp) == wxNOT_FOUND )
             paths.Add(wxp);
     }
