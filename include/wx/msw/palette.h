@@ -30,26 +30,30 @@ protected:
 
 class WXDLLEXPORT wxPalette: public wxPaletteBase
 {
-  DECLARE_DYNAMIC_CLASS(wxPalette)
-
 public:
-  wxPalette(void);
+    wxPalette();
+    wxPalette(int n, const unsigned char *red, const unsigned char *green, const unsigned char *blue);
+    virtual ~wxPalette(void);
+    bool Create(int n, const unsigned char *red, const unsigned char *green, const unsigned char *blue);
+    
+    int GetPixel(unsigned char red, unsigned char green, unsigned char blue) const;
+    bool GetRGB(int pixel, unsigned char *red, unsigned char *green, unsigned char *blue) const;
 
-  wxPalette(int n, const unsigned char *red, const unsigned char *green, const unsigned char *blue);
-  virtual ~wxPalette(void);
-  bool Create(int n, const unsigned char *red, const unsigned char *green, const unsigned char *blue);
-  int GetPixel(unsigned char red, unsigned char green, unsigned char blue) const;
-  bool GetRGB(int pixel, unsigned char *red, unsigned char *green, unsigned char *blue) const;
+    virtual int GetColoursCount() const;
 
-  virtual bool Ok(void) const { return (m_refData != NULL) ; }
+    virtual bool Ok(void) const { return (m_refData != NULL) ; }
 
-  inline bool operator == (const wxPalette& palette) const { return m_refData == palette.m_refData; }
-  inline bool operator != (const wxPalette& palette) const { return m_refData != palette.m_refData; }
+    inline bool operator == (const wxPalette& palette) const { return m_refData == palette.m_refData; }
+    inline bool operator != (const wxPalette& palette) const { return m_refData != palette.m_refData; }
 
-  virtual bool FreeResource(bool force = false);
+    virtual bool FreeResource(bool force = false);
 
-  inline WXHPALETTE GetHPALETTE(void) const { return (M_PALETTEDATA ? M_PALETTEDATA->m_hPalette : 0); }
-  void SetHPALETTE(WXHPALETTE pal);
+    // implemetation
+    inline WXHPALETTE GetHPALETTE(void) const { return (M_PALETTEDATA ? M_PALETTEDATA->m_hPalette : 0); }
+    void SetHPALETTE(WXHPALETTE pal);
+  
+private:
+    DECLARE_DYNAMIC_CLASS(wxPalette)
 };
 
 #endif

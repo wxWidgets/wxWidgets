@@ -26,7 +26,7 @@ public:
     virtual ~wxPaletteBase() { }
 
     virtual bool Ok() const = 0;
-    virtual int GetColoursCount() const { wxFAIL_MSG( _T("not implemented") ); return 0; };
+    virtual int GetColoursCount() const { wxFAIL_MSG( _T("not implemented") ); return 0; }
 };
 
 #if defined(__WXPALMOS__)

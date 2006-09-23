@@ -43,13 +43,13 @@ wxPaletteRefData::~wxPaletteRefData(void)
         ::DeleteObject((HPALETTE) m_hPalette);
 }
 
-wxPalette::wxPalette(void)
+wxPalette::wxPalette()
 {
 }
 
 wxPalette::wxPalette(int n, const unsigned char *red, const unsigned char *green, const unsigned char *blue)
 {
-  Create(n, red, green, blue);
+    Create(n, red, green, blue);
 }
 
 wxPalette::~wxPalette(void)
@@ -61,9 +61,20 @@ bool wxPalette::FreeResource(bool WXUNUSED(force))
 {
     if ( M_PALETTEDATA && M_PALETTEDATA->m_hPalette)
     {
-      DeleteObject((HPALETTE)M_PALETTEDATA->m_hPalette);
+        DeleteObject((HPALETTE)M_PALETTEDATA->m_hPalette);
     }
+    
     return true;
+}
+
+int wxPalette::GetColoursCount() const
+{
+    if ( M_PALETTEDATA && M_PALETTEDATA->m_hPalette)
+    {
+        return ::GetPaletteEntries((HPALETTE) M_PALETTEDATA->m_hPalette, 0, 0, NULL );
+    }
+    
+    return 0;
 }
 
 bool wxPalette::Create(int n, const unsigned char *red, const unsigned char *green, const unsigned char *blue)
