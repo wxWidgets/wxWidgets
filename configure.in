@@ -510,6 +510,7 @@ if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_ACCEL=no
   DEFAULT_wxUSE_BUTTON=no
   DEFAULT_wxUSE_BMPBUTTON=no
+  DEFAULT_wxUSE_BITMAPCOMBOBOX=no
   DEFAULT_wxUSE_CALCTRL=no
   DEFAULT_wxUSE_CARET=no
   DEFAULT_wxUSE_CHECKBOX=no
@@ -722,6 +723,7 @@ else
   DEFAULT_wxUSE_ACCEL=yes
   DEFAULT_wxUSE_BUTTON=yes
   DEFAULT_wxUSE_BMPBUTTON=yes
+  DEFAULT_wxUSE_BITMAPCOMBOBOX=yes
   DEFAULT_wxUSE_CALCTRL=yes
   DEFAULT_wxUSE_CARET=yes
   DEFAULT_wxUSE_CHECKBOX=yes
@@ -1141,6 +1143,7 @@ fi
 WX_ARG_ENABLE(accel,       [  --enable-accel          use accelerators], wxUSE_ACCEL)
 WX_ARG_ENABLE(button,      [  --enable-button         use wxButton class], wxUSE_BUTTON)
 WX_ARG_ENABLE(bmpbutton,   [  --enable-bmpbutton      use wxBitmapButton class], wxUSE_BMPBUTTON)
+WX_ARG_ENABLE(bmpcombobox, [  --enable-bmpcombobox    use wxBitmapComboBox class], wxUSE_BITMAPCOMBOBOX)
 WX_ARG_ENABLE(calendar,    [  --enable-calendar       use wxCalendarCtrl class], wxUSE_CALCTRL)
 WX_ARG_ENABLE(caret,       [  --enable-caret          use wxCaret class], wxUSE_CARET)
 WX_ARG_ENABLE(checkbox,    [  --enable-checkbox       use wxCheckBox class], wxUSE_CHECKBOX)
@@ -6536,6 +6539,11 @@ fi
 
 if test "$wxUSE_HYPERLINKCTRL" = "yes"; then
   AC_DEFINE(wxUSE_HYPERLINKCTRL)
+  USES_CONTROLS=1
+fi
+
+if test "$wxUSE_BITMAPCOMBOBOX" = "yes"; then
+  AC_DEFINE(wxUSE_BITMAPCOMBOBOX)
   USES_CONTROLS=1
 fi
 

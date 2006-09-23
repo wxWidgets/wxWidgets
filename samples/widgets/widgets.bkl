@@ -5,6 +5,7 @@
 
     <exe id="widgets" template="wx_sample" template_append="wx_append">
         <sources>
+            bmpcombobox.cpp
             button.cpp
             checkbox.cpp
             combobox.cpp

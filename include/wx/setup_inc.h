@@ -710,8 +710,16 @@
 //
 // Default is 1.
 //
-// Recommended setting: 1 but can be safely set to 0
+// Recommended setting: 1 but can be safely set to 0, except where it is
+//                      needed as a base class for generic wxBitmapComboBox.
 #define wxUSE_ODCOMBOBOX 1
+
+// wxBitmapComboBox is a combobox that can have images in front of text items.
+//
+// Default is 1.
+//
+// Recommended setting: 1 but can be safely set to 0
+#define wxUSE_BITMAPCOMBOBOX 1
 
 // ----------------------------------------------------------------------------
 // Miscellaneous GUI stuff

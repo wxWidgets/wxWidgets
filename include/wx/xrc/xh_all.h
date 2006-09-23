@@ -63,5 +63,6 @@
 #include "wx/xrc/xh_fontpicker.h"
 #include "wx/xrc/xh_dirpicker.h"
 #include "wx/xrc/xh_hyperlink.h"
+#include "wx/xrc/xh_bmpcbox.h"
 
 #endif // _WX_XH_ALL_H_

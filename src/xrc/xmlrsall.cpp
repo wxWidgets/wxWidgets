@@ -80,6 +80,9 @@ void wxXmlResource::InitAllHandlers()
 #if wxUSE_ODCOMBOBOX
     AddHandler(new wxOwnerDrawnComboBoxXmlHandler);
 #endif
+#if wxUSE_BITMAPCOMBOBOX
+    AddHandler(new wxBitmapComboBoxXmlHandler);
+#endif
 #if wxUSE_NOTEBOOK
     AddHandler(new wxNotebookXmlHandler);
 #endif

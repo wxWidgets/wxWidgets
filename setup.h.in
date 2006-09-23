@@ -356,6 +356,8 @@
 
 #define wxUSE_ODCOMBOBOX 0
 
+#define wxUSE_BITMAPCOMBOBOX 0
+
 
 #define wxUSE_ACCEL 0
 

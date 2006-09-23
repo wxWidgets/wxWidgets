@@ -406,6 +406,31 @@
                                     </content>
                                 </object>
                             </object>
+                            <object class="sizeritem">
+                                <flag>wxALIGN_TOP|wxALIGN_CENTRE_HORIZONTAL|wxALL</flag>
+                                <border>5</border>
+                                <object class="wxBitmapComboBox">
+                                    <size>200,-1</size>
+                                    <style>wxCB_READONLY</style>
+                                    <selection>2</selection>
+                                    <object class="ownerdrawnitem">
+										<text>This is a</text>
+										<bitmap>basicdlg.xpm</bitmap>
+									 </object>
+                                    <object class="ownerdrawnitem">
+										<text>read-only</text>
+										<bitmap>derivdlg.xpm</bitmap>
+									 </object>
+                                    <object class="ownerdrawnitem">
+										<text>wxBitmapComboBox</text>
+										<bitmap>uncenter.xpm</bitmap>
+									 </object>
+                                    <object class="ownerdrawnitem">
+										<text>control</text>
+										<bitmap>custclas.xpm</bitmap>
+									</object>
+                                </object>
+                            </object>
                         </object>
                     </object>
                 </object>
