@@ -15,12 +15,7 @@
 
 #define wxGENERIC_BITMAPCOMBOBOX     1
 
-#if !wxUSE_ODCOMBOBOX
-    #error "Generic wxBitmapComboBox depends on wxOwnerDrawnComboBox"
-#endif
-
 #include "wx/odcombo.h"
-
 
 // ----------------------------------------------------------------------------
 // wxBitmapComboBox: a wxComboBox that allows images to be shown
@@ -172,6 +167,4 @@ private:
     DECLARE_DYNAMIC_CLASS(wxBitmapComboBox)
 };
 
-
-#endif
-    // _WX_GENERIC_BMPCBOX_H_
+#endif // _WX_GENERIC_BMPCBOX_H_

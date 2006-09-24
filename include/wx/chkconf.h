@@ -316,6 +316,14 @@
 #   endif
 #endif /* !defined(wxUSE_ACCEL) */
 
+#ifndef wxUSE_BITMAPCOMBOBOX
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_BITMAPCOMBOBOX must be defined."
+#   else
+#       define wxUSE_BITMAPCOMBOBOX 0
+#   endif
+#endif /* !defined(wxUSE_BITMAPCOMBOBOX) */
+
 #ifndef wxUSE_BMPBUTTON
 #   ifdef wxABORT_ON_CONFIG_ERROR
 #       error "wxUSE_BMPBUTTON must be defined."
@@ -1201,6 +1209,15 @@
 #       endif
 #   endif
 #endif /* wxUSE_CHOICEBOOK */
+
+#if !wxUSE_ODCOMBOBOX
+#   if wxUSE_BITMAPCOMBOBOX
+#       error "wxBitmapComboBox requires wxOwnerDrawnComboBox"
+#   else
+#       undef wxUSE_BITMAPCOMBOBOX
+#       define wxUSE_BITMAPCOMBOBOX 0
+#   endif
+#endif /* !wxUSE_ODCOMBOBOX */
 
 /* don't attempt to use native status bar on the platforms not having it */
 #ifndef wxUSE_NATIVE_STATUSBAR

@@ -26,7 +26,6 @@ extern WXDLLIMPEXP_DATA_ADV(const wxChar) wxBitmapComboBoxNameStr[];
 class WXDLLIMPEXP_ADV wxBitmapComboBoxBase
 {
 public:
-
     // ctors and such
     wxBitmapComboBoxBase() { }
 
@@ -40,20 +39,11 @@ public:
 
     // Returns size of the image used in list
     virtual wxSize GetBitmapSize() const = 0;
-
-protected:
-
-private:
 };
 
 
-#if defined(__WXUNIVERSAL__)
-    #include "wx/generic/bmpcbox.h"
-#else
-    #include "wx/generic/bmpcbox.h"
-#endif
+#include "wx/generic/bmpcbox.h"
 
 #endif // wxUSE_BITMAPCOMBOBOX
 
-#endif
-    // _WX_BMPCBOX_H_BASE_
+#endif // _WX_BMPCBOX_H_BASE_
