@@ -1405,9 +1405,9 @@ void wxTextCtrl::DoSetSelection(long from, long to, bool scrollCaret)
 // Working with files
 // ----------------------------------------------------------------------------
 
-bool wxTextCtrl::LoadFile(const wxString& file)
+bool wxTextCtrl::DoLoadFile(const wxString& file, int fileType)
 {
-    if ( wxTextCtrlBase::LoadFile(file) )
+    if ( wxTextCtrlBase::DoLoadFile(file, fileType) )
     {
         // update the size limit if needed
         AdjustSpaceLimit();

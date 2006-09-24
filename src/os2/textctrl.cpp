@@ -680,10 +680,11 @@ void wxTextCtrl::SetSelection(
 } // end of wxTextCtrl::SetSelection
 
 bool wxTextCtrl::LoadFile(
-  const wxString&                   rsFile
+  const wxString&                   rsFile,
+  int                               fileType
 )
 {
-    if ( wxTextCtrlBase::LoadFile(rsFile) )
+    if ( wxTextCtrlBase::DoLoadFile(rsFile, fileType) )
     {
         //
         // Update the size limit if needed
@@ -692,7 +693,7 @@ bool wxTextCtrl::LoadFile(
         return true;
     }
     return false;
-} // end of wxTextCtrl::LoadFile
+} // end of wxTextCtrl::DoLoadFile
 
 bool wxTextCtrl::IsModified() const
 {

@@ -1275,16 +1275,6 @@ void wxTextCtrl::SetSelection(long from, long to)
     }
 }
 
-bool wxTextCtrl::LoadFile(const wxString& file)
-{
-    if ( wxTextCtrlBase::LoadFile(file) )
-    {
-        return true;
-    }
-
-    return false;
-}
-
 void wxTextCtrl::WriteText(const wxString& str)
 {
     wxString st = str ;

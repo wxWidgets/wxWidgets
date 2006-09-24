@@ -72,7 +72,7 @@ public:
                         ,long lTo
                        );
 
-    virtual bool LoadFile(const wxString& rsFile);
+    virtual bool DoLoadFile(const wxString& rsFile, int fileType);
 
     virtual void MarkDirty();
     virtual void DiscardEdits(void);

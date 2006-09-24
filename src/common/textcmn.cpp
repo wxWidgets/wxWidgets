@@ -196,7 +196,7 @@ const wxTextAttr& wxTextCtrlBase::GetDefaultStyle() const
 // file IO functions
 // ----------------------------------------------------------------------------
 
-bool wxTextCtrlBase::LoadFile(const wxString& filename)
+bool wxTextCtrlBase::DoLoadFile(const wxString& filename, int WXUNUSED(fileType))
 {
 #if wxUSE_FFILE
     wxFFile file(filename);
@@ -221,7 +221,7 @@ bool wxTextCtrlBase::LoadFile(const wxString& filename)
     return false;
 }
 
-bool wxTextCtrlBase::SaveFile(const wxString& filename)
+bool wxTextCtrlBase::SaveFile(const wxString& filename, int fileType)
 {
     wxString filenameToUse = filename.empty() ? m_filename : filename;
     if ( filenameToUse.empty() )
@@ -232,15 +232,20 @@ bool wxTextCtrlBase::SaveFile(const wxString& filename)
         return false;
     }
 
+    return DoSaveFile(filenameToUse, fileType);
+}
+
+bool wxTextCtrlBase::DoSaveFile(const wxString& filename, int WXUNUSED(fileType))
+{
 #if wxUSE_FFILE
-    wxFFile file(filenameToUse, _T("w"));
+    wxFFile file(filename, _T("w"));
     if ( file.IsOpened() && file.Write(GetValue()) )
     {
+        // if it worked, save for future calls
+        m_filename = filename;
+        
         // it's not modified any longer
         DiscardEdits();
-
-        // if it worked, save for future calls
-        m_filename = filenameToUse;
 
         return true;
     }

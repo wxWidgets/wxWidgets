@@ -56,21 +56,27 @@ Major changes in 2.7 release
 
 All:
 
-- Added wxDir::FindFirst() (Francesco Montorsi)
-- Added wxPlatformInfo class (Francesco Montorsi)
-- Added wxLocale::IsAvailable() (Creighton)
+- Added wxDir::FindFirst() (Francesco Montorsi).
+- Added wxPlatformInfo class (Francesco Montorsi).
+- Added wxLocale::IsAvailable() (Creighton).
 
 All (GUI):
 
-- Support for right-to-left text layout
-  (started by Diaa Sami during Google Summer of Code, with a lot of help from
-   Tim Kosse and others)
-- Added wxID_PAGE_SETUP standard id
-- Added wxSize::IncBy() and DecBy() methods
+- Support for right-to-left text layout (started by Diaa Sami during Google Summer of
+  Code, with a lot of help from Tim Kosse and others).
+- Added wxID_PAGE_SETUP standard id.
+- Added wxSize::IncBy() and DecBy() methods.
+- Added file type parameter to wxTextCtrl::LoadFile, wxTextCtrl::SaveFile for
+  consistency with wxRichTextCtrl.
+- wxRichTextCtrl: fixed range out-by-one bug to be consistent with wxTextCtrl API,
+  fixed some attribute bugs and added wxRichTextStyleComboCtrl.
 
 wxMSW:
 
-- Implemented wxComboBox::SetEditable()
+- Implemented wxComboBox::SetEditable().
+- Fixed a bug whereby static controls didn't use the correct text colour if the
+  parent's background colour had been set (most noticeable when switching to a
+  high-contrast theme).
 
 wxMac:
 
@@ -79,8 +85,8 @@ wxMac:
 
 wxGTK:
 
-- Automatically use stock items for the menu items with standard ids
-- Setting cursor now works for all controls
+- Automatically use stock items for menu items with standard ids.
+- Setting cursor now works for all controls.
 
 
 2.7.0
@@ -131,14 +137,14 @@ All:
   Previously, only the buffer would be returned, even if more data was requested.
 - Added wxPowerEvent (currently MSW-only).
 - Make wx-config compatible with Bourne shells.
-- Fixed wxDb::Open(wxDbConnectInf) when using connection string (Hellwolf Misty)
-- Fixed crash in wxDb::Open() in Unicode build (Massimiliano Marretta)
-- Fixed wxTimeSpan::Format() for negative time spans
-- Optionally count repeating wxLog messages instead of logging all (Lauri Nurmi)
+- Fixed wxDb::Open(wxDbConnectInf) when using connection string (Hellwolf Misty).
+- Fixed crash in wxDb::Open() in Unicode build (Massimiliano Marretta).
+- Fixed wxTimeSpan::Format() for negative time spans.
+- Optionally count repeating wxLog messages instead of logging all (Lauri Nurmi).
 
 All (GUI):
 
-- New AUI (Advanced User Interface) library for docking windows and much more
+- New AUI (Advanced User Interface) library for docking windows and much more.
 - Added wxComboCtrl and wxOwnerDrawnComboBox (Jaakko Salli).
 - Added wxTreebook (uses a wxTreeCtrl to control pages).
 - Added wxColour/Dir/File/Font/PickerCtrls (Francesco Montorsi).
@@ -213,8 +219,8 @@ All (GUI):
 - wxNB_HITTEST_* flags renamed to wxBK_HITTEST_* to serve all book controls.
 - Added wxTopLevelWindow::SetTransparent and CanSetTransparent, with
   implementations (so far) for wxMSW and wxMac.
-- Allow customizing individual grid lines appearance (Søren Lassen)
-- Fixed middle click events generation in generic wxTreeCtrl (Olly Betts)
+- Allow customizing individual grid lines appearance (Søren Lassen).
+- Fixed middle click events generation in generic wxTreeCtrl (Olly Betts).
 - Added wxEVT_MOUSE_CAPTURE_LOST event that must be handled by all windows
   that CaptureMouse() is called on.
 
@@ -225,7 +231,7 @@ wxMSW:
 - Switching page of a hidden notebook doesn't lose focus (Jamie Gadd).
 - Removed wxImageList *GetImageList(int) const.
 - Fixed MDI context menu problem.
-- Removed __WIN95__ define
+- Removed __WIN95__ define.
 - Create msw/rcdefs.h in setup.h's directory, which can be included by
   resource files. It containts platform/compiler specific defines (such as
   target cpu) which can be used in #ifs in .rc files.

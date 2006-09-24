@@ -652,13 +652,15 @@ otherwise.
 
 \membersection{wxTextCtrl::LoadFile}\label{wxtextctrlloadfile}
 
-\func{bool}{LoadFile}{\param{const wxString\& }{ filename}}
+\func{bool}{LoadFile}{\param{const wxString\& }{ filename}, \param{int }{fileType = wxTEXT\_TYPE\_ANY}}
 
 Loads and displays the named file, if it exists.
 
 \wxheading{Parameters}
 
 \docparam{filename}{The filename of the file to load.}
+
+\docparam{fileType}{The type of file to load. This is currently ignored in wxTextCtrl.}
 
 \wxheading{Return value}
 
@@ -804,13 +806,15 @@ the character at the last position with the given text.
 
 \membersection{wxTextCtrl::SaveFile}\label{wxtextctrlsavefile}
 
-\func{bool}{SaveFile}{\param{const wxString\& }{ filename}}
+\func{bool}{SaveFile}{\param{const wxString\& }{ filename}, \param{int }{fileType = wxTEXT\_TYPE\_ANY}}
 
 Saves the contents of the control in a text file.
 
 \wxheading{Parameters}
 
 \docparam{filename}{The name of the file in which to save the text.}
+
+\docparam{fileType}{The type of file to save. This is currently ignored in wxTextCtrl.}
 
 \wxheading{Return value}
 

@@ -66,9 +66,8 @@ public:
     virtual void Replace(long from, long to, const wxString& value);
     virtual void Remove(long from, long to);
 
-    // load the controls contents from the file
-    virtual bool LoadFile(const wxString& file);
-    virtual bool LoadFile(const wxString& file, int WXUNUSED(fileType)) { return LoadFile(file); }
+    // load the control's contents from the file
+    virtual bool DoLoadFile(const wxString& file, int fileType);
 
     // clears the dirty flag
     virtual void MarkDirty();

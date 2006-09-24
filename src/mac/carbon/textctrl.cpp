@@ -705,11 +705,6 @@ void wxTextCtrl::SetSelection(long from, long to)
     GetPeer()->SetSelection( from , to ) ;
 }
 
-bool wxTextCtrl::LoadFile(const wxString& file)
-{
-    return wxTextCtrlBase::LoadFile( file );
-}
-
 void wxTextCtrl::WriteText(const wxString& str)
 {
     // TODO: this MPRemoting will be moved into a remoting peer proxy for any command

@@ -157,11 +157,14 @@ public:
     virtual void Replace(long from, long to, const wxString& value);
     virtual void Remove(long from, long to);
 
+#if !wxRICHTEXT_DERIVES_FROM_TEXTCTRLBASE
+    bool LoadFile(const wxString& file, int fileType = wxRICHTEXT_TYPE_ANY);
+    bool SaveFile(const wxString& file = wxEmptyString, int fileType = wxRICHTEXT_TYPE_ANY);
+#endif
+
     // load/save the controls contents from/to the file
-    virtual bool LoadFile(const wxString& file) { return LoadFile(file, wxRICHTEXT_TYPE_ANY); }
-    virtual bool LoadFile(const wxString& file, int type);
-    virtual bool SaveFile(const wxString& file = wxEmptyString) { return SaveFile(file, wxRICHTEXT_TYPE_ANY); }
-    virtual bool SaveFile(const wxString& file, int type);
+    virtual bool DoLoadFile(const wxString& file, int fileType);
+    virtual bool DoSaveFile(const wxString& file = wxEmptyString, int fileType = wxRICHTEXT_TYPE_ANY);
 
     // sets/clears the dirty flag
     virtual void MarkDirty();
@@ -735,8 +738,10 @@ private:
     /// Text buffer
     wxRichTextBuffer        m_buffer;
 
+#if !wxRICHTEXT_DERIVES_FROM_TEXTCTRLBASE
     /// Filename
     wxString                m_filename;
+#endif
 
     wxMenu*                 m_contextMenu;
 

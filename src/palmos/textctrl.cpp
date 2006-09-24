@@ -390,7 +390,7 @@ void wxTextCtrl::DoSetSelection(long from, long to, bool scrollCaret)
 // Working with files
 // ----------------------------------------------------------------------------
 
-bool wxTextCtrl::LoadFile(const wxString& file)
+bool wxTextCtrl::DoLoadFile(const wxString& file, int fileType)
 {
     return false;
 }

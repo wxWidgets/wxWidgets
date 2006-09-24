@@ -129,6 +129,12 @@ const wxTextCoord wxInvalidTextCoord    = -2;
 #endif
 
 // ----------------------------------------------------------------------------
+// wxTextCtrl file types
+// ----------------------------------------------------------------------------
+
+#define wxTEXT_TYPE_ANY     0
+
+// ----------------------------------------------------------------------------
 // wxTextCtrl::HitTest return values
 // ----------------------------------------------------------------------------
 
@@ -320,11 +326,13 @@ public:
     virtual void Replace(long from, long to, const wxString& value) = 0;
     virtual void Remove(long from, long to) = 0;
 
-    // load/save the controls contents from/to the file
-    virtual bool LoadFile(const wxString& file);
-    virtual bool LoadFile(const wxString& file, int WXUNUSED(fileType)) { return LoadFile(file); }
-    virtual bool SaveFile(const wxString& file = wxEmptyString);
-    virtual bool SaveFile(const wxString& file, int WXUNUSED(fileType)) { return SaveFile(file); }
+    // load/save the control's contents from/to a file
+    bool LoadFile(const wxString& file, int fileType = wxTEXT_TYPE_ANY) { return DoLoadFile(file, fileType); }
+    bool SaveFile(const wxString& file = wxEmptyString, int fileType = wxTEXT_TYPE_ANY);
+
+    // implementation for loading/saving
+    virtual bool DoLoadFile(const wxString& file, int fileType);
+    virtual bool DoSaveFile(const wxString& file, int fileType);
 
     // sets/clears the dirty flag
     virtual void MarkDirty() = 0;

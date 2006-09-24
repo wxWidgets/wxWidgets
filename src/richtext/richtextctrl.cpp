@@ -1525,9 +1525,30 @@ bool wxRichTextCtrl::RecreateBuffer(const wxSize& size)
 // file IO functions
 // ----------------------------------------------------------------------------
 
-bool wxRichTextCtrl::LoadFile(const wxString& filename, int type)
+#if !wxRICHTEXT_DERIVES_FROM_TEXTCTRLBASE
+bool wxRichTextCtrl::LoadFile(const wxString& filename, int fileType)
 {
-    bool success = GetBuffer().LoadFile(filename, type);
+    return DoLoadFile(filename, fileType);    
+}
+
+bool wxRichTextCtrl::SaveFile(const wxString& filename, int fileType)
+{
+    wxString filenameToUse = filename.empty() ? m_filename : filename;
+    if ( filenameToUse.empty() )
+    {
+        // what kind of message to give? is it an error or a program bug?
+        wxLogDebug(wxT("Can't save textctrl to file without filename."));
+
+        return false;
+    }
+
+    return DoSaveFile(filenameToUse, fileType);
+}
+#endif
+
+bool wxRichTextCtrl::DoLoadFile(const wxString& filename, int fileType)
+{
+    bool success = GetBuffer().LoadFile(filename, fileType);
     if (success)
         m_filename = filename;
 
@@ -1549,25 +1570,15 @@ bool wxRichTextCtrl::LoadFile(const wxString& filename, int type)
     }
 }
 
-bool wxRichTextCtrl::SaveFile(const wxString& filename, int type)
+bool wxRichTextCtrl::DoSaveFile(const wxString& filename, int fileType)
 {
-    wxString filenameToUse = filename.empty() ? m_filename : filename;
-    if ( filenameToUse.empty() )
+    if (GetBuffer().SaveFile(filename, fileType))
     {
-        // what kind of message to give? is it an error or a program bug?
-        wxLogDebug(wxT("Can't save textctrl to file without filename."));
-
-        return false;
-    }
-
-    if (GetBuffer().SaveFile(filenameToUse, type))
-    {
-        m_filename = filenameToUse;
+        m_filename = filename;
 
         DiscardEdits();
 
         return true;
-
     }
 
     wxLogError(_("The text couldn't be saved."));
