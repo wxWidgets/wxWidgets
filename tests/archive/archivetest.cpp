@@ -1330,12 +1330,13 @@ ArchiveTestSuite *ArchiveTestSuite::makeSuite()
         factory = wxDynamicCast(pObj, wxArchiveClassFactory);
 
         if (factory) {
-            wxString descr = _T("CorruptionTestCase (") + m_name + _T(")");
+            string descr(m_name.mb_str());
+            descr = "CorruptionTestCase (" + descr + ")";
 
             if (options)
-                descr += _T(" (PipeIn)");
+                descr += " (PipeIn)";
 
-            addTest(new CorruptionTestCase(descr.c_str(), factory, options));
+            addTest(new CorruptionTestCase(descr, factory, options));
         }
     }
 
@@ -1389,7 +1390,7 @@ string ArchiveTestSuite::Description(const wxString& type,
 
     descr << optstr;
 
-    return (const char*)descr.mb_str();
+    return string(descr.mb_str());
 }
 
 
