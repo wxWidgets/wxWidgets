@@ -66,6 +66,171 @@ static HTREEITEM GetItemFromPoint(HWND hwndTV, int x, int y)
     return (HTREEITEM)TreeView_HitTest(hwndTV, &tvht);
 }
 
+// wrappers for TreeView_GetItem/TreeView_SetItem
+static bool IsItemSelected(HWND hwndTV, HTREEITEM hItem)
+{
+
+    TV_ITEM tvi;
+    tvi.mask = TVIF_STATE | TVIF_HANDLE;
+    tvi.stateMask = TVIS_SELECTED;
+    tvi.hItem = hItem;
+
+    if ( !TreeView_GetItem(hwndTV, &tvi) )
+    {
+        wxLogLastError(wxT("TreeView_GetItem"));
+    }
+
+    return (tvi.state & TVIS_SELECTED) != 0;
+}
+
+static bool SelectItem(HWND hwndTV, HTREEITEM hItem, bool select = true)
+{
+    TV_ITEM tvi;
+    tvi.mask = TVIF_STATE | TVIF_HANDLE;
+    tvi.stateMask = TVIS_SELECTED;
+    tvi.state = select ? TVIS_SELECTED : 0;
+    tvi.hItem = hItem;
+
+    if ( TreeView_SetItem(hwndTV, &tvi) == -1 )
+    {
+        wxLogLastError(wxT("TreeView_SetItem"));
+        return false;
+    }
+
+    return true;
+}
+
+static inline void UnselectItem(HWND hwndTV, HTREEITEM htItem)
+{
+    SelectItem(hwndTV, htItem, false);
+}
+
+static inline void ToggleItemSelection(HWND hwndTV, HTREEITEM htItem)
+{
+    SelectItem(hwndTV, htItem, !IsItemSelected(hwndTV, htItem));
+}
+
+// helper function which selects all items in a range and, optionally,
+// unselects all others
+static void SelectRange(HWND hwndTV,
+                        HTREEITEM htFirst,
+                        HTREEITEM htLast,
+                        bool unselectOthers = true)
+{
+    // find the first (or last) item and select it
+    bool cont = true;
+    HTREEITEM htItem = (HTREEITEM)TreeView_GetRoot(hwndTV);
+    while ( htItem && cont )
+    {
+        if ( (htItem == htFirst) || (htItem == htLast) )
+        {
+            if ( !IsItemSelected(hwndTV, htItem) )
+            {
+                SelectItem(hwndTV, htItem);
+            }
+
+            cont = false;
+        }
+        else
+        {
+            if ( unselectOthers && IsItemSelected(hwndTV, htItem) )
+            {
+                UnselectItem(hwndTV, htItem);
+            }
+        }
+
+        htItem = (HTREEITEM)TreeView_GetNextVisible(hwndTV, htItem);
+    }
+
+    // select the items in range
+    cont = htFirst != htLast;
+    while ( htItem && cont )
+    {
+        if ( !IsItemSelected(hwndTV, htItem) )
+        {
+            SelectItem(hwndTV, htItem);
+        }
+
+        cont = (htItem != htFirst) && (htItem != htLast);
+
+        htItem = (HTREEITEM)TreeView_GetNextVisible(hwndTV, htItem);
+    }
+
+    // unselect the rest
+    if ( unselectOthers )
+    {
+        while ( htItem )
+        {
+            if ( IsItemSelected(hwndTV, htItem) )
+            {
+                UnselectItem(hwndTV, htItem);
+            }
+
+            htItem = (HTREEITEM)TreeView_GetNextVisible(hwndTV, htItem);
+        }
+    }
+
+    // seems to be necessary - otherwise the just selected items don't always
+    // appear as selected
+    UpdateWindow(hwndTV);
+}
+
+// helper function which tricks the standard control into changing the focused
+// item without changing anything else (if someone knows why Microsoft doesn't
+// allow to do it by just setting TVIS_FOCUSED flag, please tell me!)
+static void SetFocus(HWND hwndTV, HTREEITEM htItem)
+{
+    // the current focus
+    HTREEITEM htFocus = (HTREEITEM)TreeView_GetSelection(hwndTV);
+
+    if ( htItem )
+    {
+        // set the focus
+        if ( htItem != htFocus )
+        {
+            // remember the selection state of the item
+            bool wasSelected = IsItemSelected(hwndTV, htItem);
+
+            if ( htFocus && IsItemSelected(hwndTV, htFocus) )
+            {
+                // prevent the tree from unselecting the old focus which it
+                // would do by default (TreeView_SelectItem unselects the
+                // focused item)
+                TreeView_SelectItem(hwndTV, 0);
+                SelectItem(hwndTV, htFocus);
+            }
+
+            TreeView_SelectItem(hwndTV, htItem);
+
+            if ( !wasSelected )
+            {
+                // need to clear the selection which TreeView_SelectItem() gave
+                // us
+                UnselectItem(hwndTV, htItem);
+            }
+            //else: was selected, still selected - ok
+        }
+        //else: nothing to do, focus already there
+    }
+    else
+    {
+        if ( htFocus )
+        {
+            bool wasFocusSelected = IsItemSelected(hwndTV, htFocus);
+
+            // just clear the focus
+            TreeView_SelectItem(hwndTV, 0);
+
+            if ( wasFocusSelected )
+            {
+                // restore the selection state
+                SelectItem(hwndTV, htFocus);
+            }
+        }
+        //else: nothing to do, no focus already
+    }
+}
+
 // ----------------------------------------------------------------------------
 // private classes
 // ----------------------------------------------------------------------------
@@ -1557,7 +1722,7 @@ void wxTreeCtrl::UnselectAll()
 
         m_htSelStart.Unset();
     }
-    else // single selection
+    else
     {
         // just remove the selection
         Unselect();
@@ -1570,7 +1735,7 @@ void wxTreeCtrl::SelectItem(const wxTreeItemId& item, bool select)
     {
         ::SelectItem(GetHwnd(), HITEM(item), select);
     }
-    else // single selection
+    else
     {
         wxASSERT_MSG( select,
                       _T("SelectItem(false) works only for multiselect") );
