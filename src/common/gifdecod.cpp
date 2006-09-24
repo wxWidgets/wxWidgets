@@ -40,6 +40,7 @@ GIFImage::GIFImage()
     delay = -1;
     p = (unsigned char *) NULL;
     pal = (unsigned char *) NULL;
+    ncolours = 0;
     next = (GIFImage *) NULL;
     prev = (GIFImage *) NULL;
 }
@@ -121,7 +122,7 @@ bool wxGIFDecoder::ConvertToImage(wxImage *image) const
     /* set transparent colour mask */
     if (transparent != -1)
     {
-        for (i = 0; i < 256; i++)
+        for (i = 0; i < GetNcolours(); i++)
         {
             if ((pal[3 * i + 0] == 255) &&
                 (pal[3 * i + 1] == 0) &&
@@ -152,7 +153,7 @@ bool wxGIFDecoder::ConvertToImage(wxImage *image) const
         b[i] = pal[3*i + 2];
     }
 
-    image->SetPalette(wxPalette(256, r, g, b));
+    image->SetPalette(wxPalette(GetNcolours(), r, g, b));
 #endif // wxUSE_PALETTE
 
     /* copy image data */
@@ -176,6 +177,7 @@ bool wxGIFDecoder::ConvertToImage(wxImage *image) const
 int wxGIFDecoder::GetFrameIndex() const         { return m_image; }
 unsigned char* wxGIFDecoder::GetData() const    { return (m_pimage->p); }
 unsigned char* wxGIFDecoder::GetPalette() const { return (m_pimage->pal); }
+unsigned int wxGIFDecoder::GetNcolours() const  { return (m_pimage->ncolours); }
 unsigned int wxGIFDecoder::GetWidth() const     { return (m_pimage->w); }
 unsigned int wxGIFDecoder::GetHeight() const    { return (m_pimage->h); }
 unsigned int wxGIFDecoder::GetTop() const       { return (m_pimage->top); }
@@ -651,7 +653,7 @@ bool wxGIFDecoder::CanRead()
 //
 int wxGIFDecoder::ReadGIF()
 {
-    unsigned int ncolors;
+    unsigned int  global_ncolors = 0;
     int           bits, interl, transparent, disposal, i;
     long          size;
     long          delay;
@@ -700,8 +702,8 @@ int wxGIFDecoder::ReadGIF()
     {
         m_background = buf[5];
 
-        ncolors = 2 << (buf[4] & 0x07);
-        size_t numBytes = 3 * ncolors;
+        global_ncolors = 2 << (buf[4] & 0x07);
+        size_t numBytes = 3 * global_ncolors;
         m_f->Read(pal, numBytes);
         if (m_f->LastRead() != numBytes)
         {
@@ -847,9 +849,10 @@ int wxGIFDecoder::ReadGIF()
             /* load local color map if available, else use global map */
             if ((buf[8] & 0x80) == 0x80)
             {
-                ncolors = 2 << (buf[8] & 0x07);
-                size_t numBytes = 3 * ncolors;
+                unsigned int local_ncolors = 2 << (buf[8] & 0x07);
+                size_t numBytes = 3 * local_ncolors;
                 m_f->Read(pimg->pal, numBytes);
+                pimg->ncolours = local_ncolors;
                 if (m_f->LastRead() != numBytes)
                 {
                     Destroy();
@@ -859,6 +862,7 @@ int wxGIFDecoder::ReadGIF()
             else
             {
                 memcpy(pimg->pal, pal, 768);
+                pimg->ncolours = global_ncolors;
             }
 
             /* get initial code size from first byte in raster data */
@@ -928,9 +932,9 @@ int wxGIFDecoder::ReadGIF()
             /* local color map */
             if ((buf[8] & 0x80) == 0x80)
             {
-                ncolors = 2 << (buf[8] & 0x07);
+                unsigned int local_ncolors = 2 << (buf[8] & 0x07);
                 wxFileOffset pos = m_f->TellI();
-                wxFileOffset numBytes = 3 * ncolors;
+                wxFileOffset numBytes = 3 * local_ncolors;
                 m_f->SeekI(numBytes, wxFromCurrent);
                 if (m_f->TellI() != (pos + numBytes))
                 {

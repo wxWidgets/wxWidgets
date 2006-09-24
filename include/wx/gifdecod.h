@@ -72,6 +72,7 @@ public:
     long delay;                     /* delay in ms (-1 = unused) */
     unsigned char *p;               /* bitmap */
     unsigned char *pal;             /* palette */
+    unsigned int ncolours;          /* number of colours */
     GIFImage *next;                 /* next image */
     GIFImage *prev;                 /* prev image */
 
@@ -114,6 +115,7 @@ public:
     int GetFrameIndex() const;
     unsigned char* GetData() const;
     unsigned char* GetPalette() const;
+    unsigned int GetNcolours() const;
     unsigned int GetWidth() const;
     unsigned int GetHeight() const;
     unsigned int GetLeft() const;
