@@ -79,6 +79,9 @@ public:
     bool IsSeekable() const { return (m_options & PipeIn) == 0; }
     void SetData(TestOutputStream& out);
 
+    void Chop(size_t size) { m_size = size; }
+    char& operator [](size_t pos) { return m_data[pos]; }
+
 private:
     wxFileOffset OnSysSeek(wxFileOffset pos, wxSeekMode mode);
     wxFileOffset OnSysTell() const;
