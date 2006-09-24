@@ -1395,10 +1395,12 @@ wxTreeItemId wxGenericTreeCtrl::FindItem(const wxTreeItemId& idParent,
         }
 
         // and try all the items (stop when we get to the one we started from)
-        while ( id != idParent && !GetItemText(id).Lower().StartsWith(prefix) )
+        while (id.IsOk() && id != idParent && !GetItemText(id).Lower().StartsWith(prefix) )
         {
             id = GetNext(id);
         }
+        // If we haven't found the item, id.IsOk() will be false, as per
+        // documentation
     }
 
     return id;
@@ -1890,14 +1892,14 @@ void wxGenericTreeCtrl::SelectItem(const wxTreeItemId& itemId, bool select)
     {
         wxGenericTreeItem *item = (wxGenericTreeItem*) itemId.m_pItem;
         wxCHECK_RET( item, wxT("SelectItem(): invalid tree item") );
-
+        
         wxTreeEvent event(wxEVT_COMMAND_TREE_SEL_CHANGING, this, item);
         if ( GetEventHandler()->ProcessEvent( event ) && !event.IsAllowed() )
             return;
 
         item->SetHilight(false);
         RefreshLine(item);
-        
+
         event.SetEventType(wxEVT_COMMAND_TREE_SEL_CHANGED);
         GetEventHandler()->ProcessEvent( event );
     }
