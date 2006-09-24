@@ -127,6 +127,8 @@ private:
                              size_t depth,
                              size_t folder);
 
+    void LogEvent(const wxChar *name, const wxTreeEvent& event);
+
     int          m_imageSize;               // current size of images
     bool         m_reverseSort;             // flag for OnCompareItems
     wxTreeItemId m_lastItem,                // for OnEnsureVisible()

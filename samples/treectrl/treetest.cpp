@@ -890,17 +890,22 @@ void MyTreeCtrl::DoToggleIcon(const wxTreeItemId& item)
     SetItemImage(item, image, wxTreeItemIcon_Selected);
 }
 
+void MyTreeCtrl::LogEvent(const wxChar *name, const wxTreeEvent& event)
+{
+    wxTreeItemId item = event.GetItem();
+    wxString text;
+    if ( item.IsOk() )
+        text << _T('"') << GetItemText(item).c_str() << _T('"');
+    else
+        text = _T("invalid item");
+    wxLogMessage(wxT("%s(%s)"), name, text.c_str());
+}
 
 // avoid repetition
 #define TREE_EVENT_HANDLER(name)                                 \
 void MyTreeCtrl::name(wxTreeEvent& event)                        \
 {                                                                \
-    wxLogMessage( wxT("%s from:"), wxT(#name) );                 \
-    wxTreeItemId item = event.GetItem();                         \
-    if (item.IsOk())                                             \
-        wxLogMessage( GetItemText(item) );                       \
-    else                                                         \
-        wxLogMessage(wxT("invalid item"));                       \
+    LogEvent(_T(#name), event);                                  \
     SetLastItem(wxTreeItemId());                                 \
     event.Skip();                                                \
 }
