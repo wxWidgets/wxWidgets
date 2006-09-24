@@ -475,10 +475,7 @@ bool wxTextCtrl::Create( wxWindow *parent,
 
     if ( m_windowStyle & wxTE_MULTILINE )
     {
-        wxASSERT_MSG(
-            !(m_windowStyle & wxTE_PROCESS_ENTER),
-            wxT("wxTE_PROCESS_ENTER style is ignored for multiline text controls (they always process it)") );
-
+        // always turn on this style for multi-line controls
         m_windowStyle |= wxTE_PROCESS_ENTER;
         style |= wxTE_PROCESS_ENTER ;
     }
