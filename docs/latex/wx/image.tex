@@ -243,6 +243,43 @@ returns true if the current image handlers can read this file
 
 \pythonnote{In wxPython this static method is named {\tt wxImage\_AddHandler}.}
 
+
+\membersection{wxImage::Blur}\label{wximageblur}
+
+\func{wxImage}{Blur}{\param{int}{ blurRadius}}
+
+Blurs the image in both horizontal and vertical directions by the specified pixel {\it blurRadius}.
+
+\wxheading{See also}
+
+\helpref{BlurHorizontal}{wximagehorzblur}
+\helpref{BlurVertical}{wximagevertblur}
+
+
+\membersection{wxImage::BlurHorizontal}\label{wximagehorzblur}
+
+\func{wxImage}{BlurHorizontal}{\param{int}{ blurRadius}}
+
+Blurs the image in the horizontal direction only.
+
+\wxheading{See also}
+
+\helpref{Blur}{wximageblur}
+\helpref{BlurVertical}{wximagevertblur}
+
+
+\membersection{wxImage::BlurVertical}\label{wximagevertblur}
+
+\func{wxImage}{BlurVertical}{\param{int}{ blurRadius}}
+
+Blurs the image in the vertical direction only.
+
+\wxheading{See also}
+
+\helpref{Blur}{wximageblur}
+\helpref{BlurHorizontal}{wximagehorzblur}
+
+
 \membersection{wxImage::CleanUpHandlers}\label{wximagecleanuphandlers}
 
 \func{static void}{CleanUpHandlers}{\void}
@@ -855,7 +892,7 @@ Returns true if image data is present.
 
 \func{}{RGBValue}{\param{unsigned char }{r = 0}, \param{unsigned char }{g = 0}, \param{unsigned char }{b = 0}}
 
-Constructor for RGBValue, an object that contains values for red, green and blud which
+Constructor for RGBValue, an object that contains values for red, green and blue which
 represent the value of a color. It is used by \helpref{wxImage::HSVtoRGB}{wximagehsvtorgb}
 and \helpref{wxImage::RGBtoHSV}{wximagergbtohsv}, which
 converts between HSV color space and RGB color space.
@@ -906,10 +943,12 @@ Replaces the colour specified by {\it r1,g1,b1} by the colour {\it r2,g2,b2}.
 
 \membersection{wxImage::Rescale}\label{wximagerescale}
 
-\func{wxImage \&}{Rescale}{\param{int}{ width}, \param{int}{ height}}
+\func{wxImage \&}{Rescale}{\param{int}{ width}, \param{int}{ height}, \param{int}{ quality = wxIMAGE\_QUALITY\_NORMAL}}
 
 Changes the size of the image in-place by scaling it: after a call to this function,
 the image will have the given width and height.
+
+For a description of the {\it quality} parameter, see the \helpref{Scale}{wximagescale} function.
 
 Returns the (modified) image itself.
 
@@ -1050,7 +1089,7 @@ mimetype to the named file}
 
 \membersection{wxImage::Scale}\label{wximagescale}
 
-\constfunc{wxImage}{Scale}{\param{int}{ width}, \param{int}{ height}}
+\constfunc{wxImage}{Scale}{\param{int}{ width}, \param{int}{ height}, \param{int}{ quality = wxIMAGE\_QUALITY\_NORMAL}}
 
 Returns a scaled version of the image. This is also useful for
 scaling bitmaps in general as the only other way to scale bitmaps
@@ -1058,6 +1097,20 @@ is to blit a wxMemoryDC into another wxMemoryDC.
 
 It may be mentioned that the GTK port uses this function internally
 to scale bitmaps when using mapping modes in wxDC.
+
+\docparam{quality}{Determines what method to use for resampling the image.  Can be one of the following:
+
+\twocolwidtha{5cm}%
+\begin{twocollist}
+\twocolitem{{\bf wxIMAGE\_QUALITY\_NORMAL}}{Uses the normal default scaling method of pixel replication}
+\twocolitem{{\bf wxIMAGE\_QUALITY\_HIGH}}{Uses bicubic and box averaging resampling methods for upsampling and downsampling respectively}
+\end{twocollist}}
+
+It should be noted that although using wxIMAGE\_QUALITY\_HIGH produces much nicer
+looking results it is a slower method.  Downsampling will use the box averaging method
+which seems to operate very fast.  If you are upsampling larger images using
+this method you will most likely notice that it is a bit slower and in extreme cases
+it will be quite substantially slower as the bicubic algorithm has to process a lot of data.
 
 Example:
 

@@ -43,6 +43,13 @@ enum
     wxIMAGE_RESOLUTION_CM = 2
 };
 
+// Constants for wxImage::Scale() for determining the level of quality
+enum
+{
+    wxIMAGE_QUALITY_NORMAL = 0,
+    wxIMAGE_QUALITY_HIGH = 1
+};
+
 // alpha channel values: fully transparent, default threshold separating
 // transparent pixels from opaque for a few functions dealing with alpha and
 // fully opaque
@@ -216,12 +223,21 @@ public:
     void Paste( const wxImage &image, int x, int y );
 
     // return the new image with size width*height
-    wxImage Scale( int width, int height ) const;
+    wxImage Scale( int width, int height, int quality = wxIMAGE_QUALITY_NORMAL ) const;
+
+    // box averager and bicubic filters for up/down sampling
+    wxImage ResampleBox(int width, int height) const;
+    wxImage ResampleBicubic(int width, int height) const;
+
+    // blur the image according to the specified pixel radius
+    wxImage Blur(int radius);
+    wxImage BlurHorizontal(int radius);
+    wxImage BlurVertical(int radius);
 
     wxImage ShrinkBy( int xFactor , int yFactor ) const ;
 
     // rescales the image in place
-    wxImage& Rescale( int width, int height ) { return *this = Scale(width, height); }
+    wxImage& Rescale( int width, int height, int quality = wxIMAGE_QUALITY_NORMAL ) { return *this = Scale(width, height, quality); }
 
     // resizes the image in place
     wxImage& Resize( const wxSize& size, const wxPoint& pos,

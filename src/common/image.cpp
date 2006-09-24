@@ -414,7 +414,7 @@ wxImage wxImage::ShrinkBy( int xFactor , int yFactor ) const
     return image;
 }
 
-wxImage wxImage::Scale( int width, int height ) const
+wxImage wxImage::Scale( int width, int height, int quality ) const
 {
     wxImage image;
 
@@ -429,64 +429,86 @@ wxImage wxImage::Scale( int width, int height ) const
     wxCHECK_MSG( (old_height > 0) && (old_width > 0), image,
                  wxT("invalid old image size") );
 
-    if ( old_width % width == 0 && old_width >= width &&
-        old_height % height == 0 && old_height >= height )
+    // If the image's new width and height are the same as the original, no need to waste time or CPU cycles
+    if(old_width == width && old_height == height)
+        return *this;
+
+    // Scale the image (...or more appropriately, resample the image) using either the high-quality or normal method as specified
+    if(quality == wxIMAGE_QUALITY_HIGH)
     {
-        return ShrinkBy( old_width / width , old_height / height ) ;
-    }
-    image.Create( width, height, false );
-
-    unsigned char *data = image.GetData();
-
-    wxCHECK_MSG( data, image, wxT("unable to create image") );
-
-    unsigned char *source_data = M_IMGDATA->m_data;
-    unsigned char *target_data = data;
-    unsigned char *source_alpha = 0 ;
-    unsigned char *target_alpha = 0 ;
-
-    if (M_IMGDATA->m_hasMask)
-    {
-        image.SetMaskColour( M_IMGDATA->m_maskRed,
-                             M_IMGDATA->m_maskGreen,
-                             M_IMGDATA->m_maskBlue );
-    }
-    else
-    {
-        source_alpha = M_IMGDATA->m_alpha ;
-        if ( source_alpha )
+        // We need to check whether we are downsampling or upsampling the image
+        if(width < old_width && height < old_height)
         {
-            image.SetAlpha() ;
-            target_alpha = image.GetAlpha() ;
+            // Downsample the image using the box averaging method for best results
+            image = ResampleBox(width, height);
+        }
+        else
+        {
+            // For upsampling or other random/wierd image dimensions we'll use a bicubic b-spline scaling method
+            image = ResampleBicubic(width, height);
         }
     }
-
-    long x_delta = (old_width<<16) / width;
-    long y_delta = (old_height<<16) / height;
-
-    unsigned char* dest_pixel = target_data;
-
-    long y = 0;
-    for ( long j = 0; j < height; j++ )
+    else    // Default scaling method == simple pixel replication
+    {
+        if ( old_width % width == 0 && old_width >= width &&
+            old_height % height == 0 && old_height >= height )
         {
-        unsigned char* src_line = &source_data[(y>>16)*old_width*3];
-        unsigned char* src_alpha_line = source_alpha ? &source_alpha[(y>>16)*old_width] : 0 ;
+            return ShrinkBy( old_width / width , old_height / height ) ;
+        }
+        image.Create( width, height, false );
 
-        long x = 0;
-        for ( long i = 0; i < width; i++ )
+        unsigned char *data = image.GetData();
+
+        wxCHECK_MSG( data, image, wxT("unable to create image") );
+
+        unsigned char *source_data = M_IMGDATA->m_data;
+        unsigned char *target_data = data;
+        unsigned char *source_alpha = 0 ;
+        unsigned char *target_alpha = 0 ;
+
+        if (M_IMGDATA->m_hasMask)
         {
-             unsigned char* src_pixel = &src_line[(x>>16)*3];
-             unsigned char* src_alpha_pixel = source_alpha ? &src_alpha_line[(x>>16)] : 0 ;
-             dest_pixel[0] = src_pixel[0];
-             dest_pixel[1] = src_pixel[1];
-             dest_pixel[2] = src_pixel[2];
-             dest_pixel += 3;
-             if ( source_alpha )
-                *(target_alpha++) = *src_alpha_pixel ;
-             x += x_delta;
+            image.SetMaskColour( M_IMGDATA->m_maskRed,
+                                M_IMGDATA->m_maskGreen,
+                                M_IMGDATA->m_maskBlue );
+        }
+        else
+        {
+            source_alpha = M_IMGDATA->m_alpha ;
+            if ( source_alpha )
+            {
+                image.SetAlpha() ;
+                target_alpha = image.GetAlpha() ;
+            }
         }
 
-        y += y_delta;
+        long x_delta = (old_width<<16) / width;
+        long y_delta = (old_height<<16) / height;
+
+        unsigned char* dest_pixel = target_data;
+
+        long y = 0;
+        for ( long j = 0; j < height; j++ )
+        {
+            unsigned char* src_line = &source_data[(y>>16)*old_width*3];
+            unsigned char* src_alpha_line = source_alpha ? &source_alpha[(y>>16)*old_width] : 0 ;
+
+            long x = 0;
+            for ( long i = 0; i < width; i++ )
+            {
+                unsigned char* src_pixel = &src_line[(x>>16)*3];
+                unsigned char* src_alpha_pixel = source_alpha ? &src_alpha_line[(x>>16)] : 0 ;
+                dest_pixel[0] = src_pixel[0];
+                dest_pixel[1] = src_pixel[1];
+                dest_pixel[2] = src_pixel[2];
+                dest_pixel += 3;
+                if ( source_alpha )
+                    *(target_alpha++) = *src_alpha_pixel ;
+                x += x_delta;
+            }
+
+            y += y_delta;
+        }
     }
 
     // In case this is a cursor, make sure the hotspot is scaled accordingly:
@@ -498,6 +520,393 @@ wxImage wxImage::Scale( int width, int height ) const
                 (GetOptionInt(wxIMAGE_OPTION_CUR_HOTSPOT_Y)*height)/old_height);
 
     return image;
+}
+
+wxImage wxImage::ResampleBox(int width, int height) const
+{
+    // This function implements a simple pre-blur/box averaging method for downsampling that gives reasonably smooth results
+    // To scale the image down we will need to gather a grid of pixels of the size of the scale factor in each direction
+    // and then do an averaging of the pixels.
+
+    wxImage ret_image(width, height, false);
+
+    double scale_factor_x = double(M_IMGDATA->m_width) / width;
+    double scale_factor_y = double(M_IMGDATA->m_height) / height;
+
+    // If we want good-looking results we need to pre-blur the image a bit first
+    wxImage src_image(*this);
+    src_image = src_image.BlurHorizontal(scale_factor_x / 2);
+    src_image = src_image.BlurVertical(scale_factor_y / 2);
+
+    unsigned char* src_data = src_image.GetData();
+    unsigned char* src_alpha = src_image.GetAlpha();
+    unsigned char* dst_data = ret_image.GetData();
+    unsigned char* dst_alpha = NULL;
+
+    if(src_alpha)
+    {
+        ret_image.SetAlpha();
+        dst_alpha = ret_image.GetAlpha();
+    }
+
+    int x, y, i, j;
+    int averaged_pixels, src_pixel_index, src_x, src_y;
+    double sum_r, sum_g, sum_b, sum_a;
+
+    for(y = 0; y < height; y++)         // Destination image - Y direction
+    {
+        // Source pixel in the Y direction
+        src_y = y * scale_factor_y;
+
+        for(x = 0; x < width; x++)      // Destination image - X direction
+        {
+            // Source pixel in the X direction
+            src_x = x * scale_factor_x;
+
+            // Box of pixels to average
+            averaged_pixels = 0;
+            sum_r = sum_g = sum_b = sum_a = 0.0;
+
+            for(j = src_y - scale_factor_y / 2 + 1; j <= int(src_y + scale_factor_y / 2); j++)          // Y direction
+            {
+                // We don't care to average pixels that don't exist (edges)
+                if(j < 0 || j > M_IMGDATA->m_height)
+                    continue;
+
+                for(i = src_x - scale_factor_x / 2 + 1; i <= int(src_x + scale_factor_x / 2); i++)      // X direction
+                {
+                    // Don't average edge pixels
+                    if(i < 0 || i > M_IMGDATA->m_width)
+                        continue;
+
+                    // Calculate the actual index in our source pixels
+                    src_pixel_index = src_y * M_IMGDATA->m_width + src_x;
+
+                    sum_r += src_data[src_pixel_index * 3 + 0];
+                    sum_g += src_data[src_pixel_index * 3 + 1];
+                    sum_b += src_data[src_pixel_index * 3 + 2];
+                    if(src_alpha)
+                        sum_a += src_alpha[src_pixel_index];
+
+                    averaged_pixels++;
+                }
+            }
+
+            // Calculate the average from the sum and number of averaged pixels
+            dst_data[0] = int(sum_r / averaged_pixels);
+            dst_data[1] = int(sum_g / averaged_pixels);
+            dst_data[2] = int(sum_b / averaged_pixels);
+            dst_data += 3;
+            if(src_alpha)
+                *dst_alpha++ = sum_a / averaged_pixels;
+        }
+    }
+
+    return ret_image;
+}
+
+// The following two local functions are for the B-spline weighting of the bicubic sampling algorithm
+static inline double spline_cube(double value)
+{
+    return value <= 0.0 ? 0.0 : value * value * value;
+}
+
+static inline double spline_weight(double value)
+{
+    return (spline_cube(value + 2) - 4 * spline_cube(value + 1) + 6 * spline_cube(value) - 4 * spline_cube(value - 1)) / 6;
+}
+
+// This is the bicubic resampling algorithm
+wxImage wxImage::ResampleBicubic(int width, int height) const
+{
+    // This function implements a Bicubic B-Spline algorithm for resampling.  This method is certainly a little slower than wxImage's default
+    // pixel replication method, however for most reasonably sized images not being upsampled too much on a fairly average CPU this
+    // difference is hardly noticeable and the results are far more pleasing to look at.
+    //
+    // This particular bicubic algorithm does pixel weighting according to a B-Spline that basically implements a Gaussian bell-like
+    // weighting kernel. Because of this method the results may appear a bit blurry when upsampling by large factors.  This is basically
+    // because a slight gaussian blur is being performed to get the smooth look of the upsampled image.
+
+    // Edge pixels: 3-4 possible solutions
+    // - (Wrap/tile) Wrap the image, take the color value from the opposite side of the image.
+    // - (Mirror)    Duplicate edge pixels, so that pixel at coordinate (2, n), where n is nonpositive, will have the value of (2, 1).
+    // - (Ignore)    Simply ignore the edge pixels and apply the kernel only to pixels which do have all neighbours.
+    // - (Clamp)     Choose the nearest pixel along the border. This takes the border pixels and extends them out to infinity.
+    //
+    // NOTE: below the y_offset and x_offset variables are being set for edge pixels using the "Mirror" method mentioned above
+
+    wxImage ret_image;
+
+    ret_image.Create(width, height, false);
+
+    unsigned char* src_data = M_IMGDATA->m_data;
+    unsigned char* src_alpha = M_IMGDATA->m_alpha;
+    unsigned char* dst_data = ret_image.GetData();
+    unsigned char* dst_alpha = NULL;
+
+    if(src_alpha)
+    {
+        ret_image.SetAlpha();
+        dst_alpha = ret_image.GetAlpha();
+    }
+
+    int k, i;
+    double srcpixx, srcpixy, dx, dy;
+    int dstx, dsty;
+    double sum_r = 0, sum_g = 0, sum_b = 0, sum_a = 0;  // Sums for each color channel
+    int x_offset = 0, y_offset = 0;
+    double pixel_weight;
+    long src_pixel_index;
+
+    for(dsty = 0; dsty < height; dsty++)
+    {
+        // We need to calculate the source pixel to interpolate from - Y-axis
+        srcpixy = double(dsty) * M_IMGDATA->m_height / height;
+        dy = srcpixy - (int)srcpixy;
+
+        for(dstx = 0; dstx < width; dstx++)
+        {
+            // X-axis of pixel to interpolate from
+            srcpixx = double(dstx) * M_IMGDATA->m_width / width;
+            dx = srcpixx - (int)srcpixx;
+
+            // Clear all the RGBA sum values
+            sum_r = sum_g = sum_b = sum_a = 0;
+
+            // Here we actually determine the RGBA values for the destination pixel
+            for(k = -1; k <= 2; k++)
+            {
+                // Y offset
+                y_offset = srcpixy + double(k) < 0.0 ? 0 : (srcpixy + double(k) >= M_IMGDATA->m_height ? M_IMGDATA->m_height - 1 : srcpixy + k);
+
+                // Loop across the X axis
+                for(i = -1; i <= 2; i++)
+                {
+                    // X offset
+                    x_offset = srcpixx + double(i) < 0.0 ? 0 : (srcpixx + double(i) >= M_IMGDATA->m_width ? M_IMGDATA->m_width - 1 : srcpixx + i);
+
+                    // Calculate the exact position where the source data should be pulled from based on the x_offset and y_offset
+                    src_pixel_index = (y_offset * M_IMGDATA->m_width) + x_offset;
+
+                    // Calculate the weight for the specified pixel according to the bicubic b-spline kernel we're using for interpolation
+                    pixel_weight = spline_weight(double(i) - dx) * spline_weight(double(k) - dy);
+
+                    // Create a sum of all velues for each color channel adjusted for the pixel's calculated weight
+                    sum_r += double(src_data[src_pixel_index * 3 + 0]) * pixel_weight;
+                    sum_g += double(src_data[src_pixel_index * 3 + 1]) * pixel_weight;
+                    sum_b += double(src_data[src_pixel_index * 3 + 2]) * pixel_weight;
+                    if(src_alpha)
+                        sum_a += double(src_alpha[src_pixel_index]) * pixel_weight;
+                }
+            }
+
+            // Put the data into the destination image.  The summed values are of double data type and are rounded here for accuracy
+            dst_data[0] = int(sum_r + 0.5);
+            dst_data[1] = int(sum_g + 0.5);
+            dst_data[2] = int(sum_b + 0.5);
+            dst_data += 3;
+
+            if(src_alpha)
+                *dst_alpha++  = sum_a;
+        }
+    }
+
+    return ret_image;
+}
+
+// Blur in the horizontal direction
+wxImage wxImage::BlurHorizontal(int blurRadius)
+{
+    wxImage ret_image;
+    ret_image.Create(M_IMGDATA->m_width, M_IMGDATA->m_height, false);
+
+    unsigned char* src_data = M_IMGDATA->m_data;
+    unsigned char* dst_data = ret_image.GetData();
+    unsigned char* src_alpha = M_IMGDATA->m_alpha;
+    unsigned char* dst_alpha = NULL;
+
+    // Check for a mask or alpha
+    if(M_IMGDATA->m_hasMask)
+        ret_image.SetMaskColour(M_IMGDATA->m_maskRed, M_IMGDATA->m_maskGreen, M_IMGDATA->m_maskBlue);
+    else
+        if(src_alpha)
+        {
+            ret_image.SetAlpha();
+            dst_alpha = ret_image.GetAlpha();
+        }
+
+    // Variables used in the blurring algorithm
+    int x, y;
+    int kernel_x;
+    long sum_r, sum_g, sum_b, sum_a;
+    long pixel_idx;
+
+    // Horizontal blurring algorithm - average all pixels in the specified blur radius in the X or horizontal direction
+    for(y = 0; y < M_IMGDATA->m_height; y++)
+    {
+        sum_r = sum_g = sum_b = sum_a = 0;
+
+        // Calculate the average of all pixels in the blur radius for the first pixel of the row
+        for(kernel_x = -blurRadius; kernel_x <= blurRadius; kernel_x++)
+        {
+            // To deal with the pixels at the start of a row so it's not grabbing GOK values from memory at negative indices of the image's data or grabbing from the previous row
+            if(kernel_x < 0)
+                pixel_idx = y * M_IMGDATA->m_width;
+            else
+                pixel_idx = kernel_x + y * M_IMGDATA->m_width;
+
+            sum_r += src_data[pixel_idx * 3 + 0];
+            sum_g += src_data[pixel_idx * 3 + 1];
+            sum_b += src_data[pixel_idx * 3 + 2];
+            sum_a += src_alpha ? src_alpha[pixel_idx] : 0;
+        }
+        dst_data[y * M_IMGDATA->m_width * 3 + 0] = sum_r / (blurRadius * 2 + 1);
+        dst_data[y * M_IMGDATA->m_width * 3 + 1] = sum_g / (blurRadius * 2 + 1);
+        dst_data[y * M_IMGDATA->m_width * 3 + 2] = sum_b / (blurRadius * 2 + 1);
+        if(src_alpha)
+            dst_alpha[y * M_IMGDATA->m_width] = sum_a / (blurRadius * 2 + 1);
+
+        // Now average the values of the rest of the pixels by just moving the blur radius box along the row
+        for(x = 1; x < M_IMGDATA->m_width; x++)
+        {
+            // Take care of edge pixels on the left edge by essentially duplicating the edge pixel
+            if(x - blurRadius - 1 < 0)
+                pixel_idx = y * M_IMGDATA->m_width;
+            else
+                pixel_idx = (x - blurRadius - 1) + y * M_IMGDATA->m_width;
+
+            // Subtract the value of the pixel at the left side of the blur radius box
+            sum_r -= src_data[pixel_idx * 3 + 0];
+            sum_g -= src_data[pixel_idx * 3 + 1];
+            sum_b -= src_data[pixel_idx * 3 + 2];
+            sum_a -= src_alpha ? src_alpha[pixel_idx] : 0;
+
+            // Take care of edge pixels on the right edge
+            if(x + blurRadius > M_IMGDATA->m_width - 1)
+                pixel_idx = M_IMGDATA->m_width - 1 + y * M_IMGDATA->m_width;
+            else
+                pixel_idx = x + blurRadius + y * M_IMGDATA->m_width;
+
+            // Add the value of the pixel being added to the end of our box
+            sum_r += src_data[pixel_idx * 3 + 0];
+            sum_g += src_data[pixel_idx * 3 + 1];
+            sum_b += src_data[pixel_idx * 3 + 2];
+            sum_a += src_alpha ? src_alpha[pixel_idx] : 0;
+
+            // Save off the averaged data
+            dst_data[x * 3 + y * M_IMGDATA->m_width * 3 + 0] = sum_r / (blurRadius * 2 + 1);
+            dst_data[x * 3 + y * M_IMGDATA->m_width * 3 + 1] = sum_g / (blurRadius * 2 + 1);
+            dst_data[x * 3 + y * M_IMGDATA->m_width * 3 + 2] = sum_b / (blurRadius * 2 + 1);
+            if(src_alpha)
+                dst_alpha[x + y * M_IMGDATA->m_width] = sum_a / (blurRadius * 2 + 1);
+        }
+    }
+
+    return ret_image;
+}
+
+// Blur in the vertical direction
+wxImage wxImage::BlurVertical(int blurRadius)
+{
+    wxImage ret_image;
+    ret_image.Create(M_IMGDATA->m_width, M_IMGDATA->m_height, false);
+
+    unsigned char* src_data = M_IMGDATA->m_data;
+    unsigned char* dst_data = ret_image.GetData();
+    unsigned char* src_alpha = M_IMGDATA->m_alpha;
+    unsigned char* dst_alpha = NULL;
+
+    // Check for a mask or alpha
+    if(M_IMGDATA->m_hasMask)
+        ret_image.SetMaskColour(M_IMGDATA->m_maskRed, M_IMGDATA->m_maskGreen, M_IMGDATA->m_maskBlue);
+    else
+        if(src_alpha)
+        {
+            ret_image.SetAlpha();
+            dst_alpha = ret_image.GetAlpha();
+        }
+
+    // Variables used in the blurring algorithm
+    int x, y;
+    int kernel_y;
+    long sum_r, sum_g, sum_b, sum_a;
+    long pixel_idx;
+
+    // Vertical blurring algorithm - same as horizontal but switched the opposite direction
+    for(x = 0; x < M_IMGDATA->m_width; x++)
+    {
+        sum_r = sum_g = sum_b = sum_a = 0;
+
+        // Calculate the average of all pixels in our blur radius box for the first pixel of the column
+        for(kernel_y = -blurRadius; kernel_y <= blurRadius; kernel_y++)
+        {
+            // To deal with the pixels at the start of a column so it's not grabbing GOK values from memory at negative indices of the image's data or grabbing from the previous column
+            if(kernel_y < 0)
+                pixel_idx = x;
+            else
+                pixel_idx = x + kernel_y * M_IMGDATA->m_width;
+
+            sum_r += src_data[pixel_idx * 3 + 0];
+            sum_g += src_data[pixel_idx * 3 + 1];
+            sum_b += src_data[pixel_idx * 3 + 2];
+            sum_a += src_alpha ? src_alpha[pixel_idx] : 0;
+        }
+        dst_data[x * 3 + 0] = sum_r / (blurRadius * 2 + 1);
+        dst_data[x * 3 + 1] = sum_g / (blurRadius * 2 + 1);
+        dst_data[x * 3 + 2] = sum_b / (blurRadius * 2 + 1);
+        if(src_alpha)
+            dst_alpha[x] = sum_a / (blurRadius * 2 + 1);
+
+        // Now average the values of the rest of the pixels by just moving the box along the column from top to bottom
+        for(y = 1; y < M_IMGDATA->m_height; y++)
+        {
+            // Take care of pixels that would be beyond the top edge by duplicating the top edge pixel for the column
+            if(y - blurRadius - 1 < 0)
+                pixel_idx = x;
+            else
+                pixel_idx = x + (y - blurRadius - 1) * M_IMGDATA->m_width;
+
+            // Subtract the value of the pixel at the top of our blur radius box
+            sum_r -= src_data[pixel_idx * 3 + 0];
+            sum_g -= src_data[pixel_idx * 3 + 1];
+            sum_b -= src_data[pixel_idx * 3 + 2];
+            sum_a -= src_alpha ? src_alpha[pixel_idx] : 0;
+
+            // Take care of the pixels that would be beyond the bottom edge of the image similar to the top edge
+            if(y + blurRadius > M_IMGDATA->m_height - 1)
+                pixel_idx = x + (M_IMGDATA->m_height - 1) * M_IMGDATA->m_width;
+            else
+                pixel_idx = x + (blurRadius + y) * M_IMGDATA->m_width;
+
+            // Add the value of the pixel being added to the end of our box
+            sum_r += src_data[pixel_idx * 3 + 0];
+            sum_g += src_data[pixel_idx * 3 + 1];
+            sum_b += src_data[pixel_idx * 3 + 2];
+            sum_a += src_alpha ? src_alpha[pixel_idx] : 0;
+
+            // Save off the averaged data
+            dst_data[(x + y * M_IMGDATA->m_width) * 3 + 0] = sum_r / (blurRadius * 2 + 1);
+            dst_data[(x + y * M_IMGDATA->m_width) * 3 + 1] = sum_g / (blurRadius * 2 + 1);
+            dst_data[(x + y * M_IMGDATA->m_width) * 3 + 2] = sum_b / (blurRadius * 2 + 1);
+            if(src_alpha)
+                dst_alpha[x + y * M_IMGDATA->m_width] = sum_a / (blurRadius * 2 + 1);
+        }
+    }
+
+    return ret_image;
+}
+
+// The new blur function
+wxImage wxImage::Blur(int blurRadius)
+{
+    wxImage ret_image;
+    ret_image.Create(M_IMGDATA->m_width, M_IMGDATA->m_height, false);
+
+    // Blur the image in each direction
+    ret_image = BlurHorizontal(blurRadius);
+    ret_image = ret_image.BlurVertical(blurRadius);
+
+    return ret_image;
 }
 
 wxImage wxImage::Rotate90( bool clockwise ) const
