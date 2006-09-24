@@ -143,11 +143,11 @@ bool wxRegion::Union(const wxRect& rect)
 {
     AllocExclusive();
 
-    if ( M_REGION->m_rect.Inside(rect) )
+    if ( M_REGION->m_rect.Contains(rect) )
     {
         return true;
     }
-    else if ( rect.Inside(M_REGION->m_rect) )
+    else if ( rect.Contains(M_REGION->m_rect) )
     {
         M_REGION->m_rect = rect;
         return true;
@@ -182,7 +182,7 @@ bool wxRegion::Subtract(const wxRect& rect)
 {
     wxCHECK_MSG( Ok(), false, _T("invalid region") );
 
-    if ( rect.Inside(M_REGION->m_rect) )
+    if ( rect.Contains(M_REGION->m_rect) )
     {
         // subtracted rectangle contains this one, so the result is empty
         // rectangle
@@ -228,7 +228,7 @@ wxRegionContain wxRegion::Contains(wxCoord x, wxCoord y) const
 {
     wxCHECK_MSG( Ok(), wxOutRegion, _T("invalid region") );
 
-    if (M_REGION->m_rect.Inside(x, y))
+    if (M_REGION->m_rect.Contains(x, y))
         return wxInRegion;
     else
         return wxOutRegion;
@@ -239,7 +239,7 @@ wxRegionContain wxRegion::Contains(const wxRect& rect) const
     wxCHECK_MSG( Ok(), wxOutRegion, _T("invalid region") );
 
     // 1) is the rectangle entirely covered by the region?
-    if (M_REGION->m_rect.Inside(rect))
+    if (M_REGION->m_rect.Contains(rect))
         return wxInRegion;
 
     // 2) is the rectangle completely outside the region?
