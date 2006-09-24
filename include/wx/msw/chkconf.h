@@ -219,6 +219,18 @@
 #    endif
 #endif /* !defined(wxUSE_DIALUP_MANAGER) */
 
+/* check settings consistency for MSW-specific ones */
+#if !wxUSE_VARIANT
+#   if wxUSE_OLE_AUTOMATION
+#       ifdef wxABORT_ON_CONFIG_ERROR
+#           error "wxAutomationObject requires wxVariant"
+#       else
+#           undef wxUSE_OLE_AUTOMATION
+#           define wxUSE_OLE_AUTOMATION 0
+#       endif
+#   endif
+#endif /* wxUSE_VARIANT */
+
 #if !wxUSE_DYNAMIC_LOADER
 #    if wxUSE_MS_HTML_HELP
 #        ifdef wxABORT_ON_CONFIG_ERROR
@@ -272,6 +284,15 @@
 #       else
 #           undef wxUSE_DATAOBJ
 #           define wxUSE_DATAOBJ 0
+#       endif
+#   endif
+
+#   if wxUSE_OLE_AUTOMATION
+#       ifdef wxABORT_ON_CONFIG_ERROR
+#           error "wxAutomationObject requires wxUSE_OLE"
+#       else
+#           undef wxUSE_OLE_AUTOMATION
+#           define wxUSE_OLE_AUTOMATION 0
 #       endif
 #   endif
 #endif /* wxUSE_OLE */

@@ -483,6 +483,15 @@
 // This code is experimental and subject to change.
 #define wxUSE_URL_NATIVE 0
 
+// Support for wxVariant class used in several places throughout the library,
+// notably in wxDataViewCtrl API.
+//
+// Default is 1.
+//
+// Recommended setting: 1 unless you want to reduce the library size as much as
+// possible in which case setting this to 0 can gain up to 100KB.
+#define wxUSE_VARIANT 1
+
 // Support for regular expression matching via wxRegEx class: enable this to
 // use POSIX regular expressions in your code. You need to compile regex
 // library from src/regex to use it under Windows.
@@ -714,8 +723,16 @@
 //
 // Default is 1.
 //
-// Recommended setting: 1 but can be safely set to 0
+// Recommended setting: 1 but can be safely set to 0, except where it is
+//                      needed as a base class for generic wxBitmapComboBox.
 #define wxUSE_ODCOMBOBOX 1
+
+// wxBitmapComboBox is a combobox that can have images in front of text items.
+//
+// Default is 1.
+//
+// Recommended setting: 1 but can be safely set to 0
+#define wxUSE_BITMAPCOMBOBOX 1
 
 // ----------------------------------------------------------------------------
 // Miscellaneous GUI stuff

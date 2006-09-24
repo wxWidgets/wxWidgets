@@ -483,6 +483,15 @@
 // This code is experimental and subject to change.
 #define wxUSE_URL_NATIVE 0
 
+// Support for wxVariant class used in several places throughout the library,
+// notably in wxDataViewCtrl API.
+//
+// Default is 1.
+//
+// Recommended setting: 1 unless you want to reduce the library size as much as
+// possible in which case setting this to 0 can gain up to 100KB.
+#define wxUSE_VARIANT 1
+
 // Support for regular expression matching via wxRegEx class: enable this to
 // use POSIX regular expressions in your code. You need to compile regex
 // library from src/regex to use it under Windows.
@@ -1169,6 +1178,14 @@
 //
 // Recommended setting: 1
 #define wxUSE_OLE           1
+
+// Set this to 1 to enable wxAutomationObject class.
+//
+// Default is 1.
+//
+// Recommended setting: 1 if you need to control other applications via OLE
+// Automation, can be safely set to 0 otherwise
+#define wxUSE_OLE_AUTOMATION 1
 
 // wxDC cacheing implementation
 #define wxUSE_DC_CACHEING 1

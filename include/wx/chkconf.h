@@ -288,6 +288,14 @@
 #   endif
 #endif /* !defined(wxUSE_URL) */
 
+#ifndef wxUSE_VARIANT
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_VARIANT must be defined."
+#   else
+#       define wxUSE_VARIANT 0
+#   endif
+#endif /* wxUSE_VARIANT */
+
 /*
    all these tests are for GUI only
 
@@ -1726,5 +1734,25 @@
 #       define wxUSE_SOCKETS 0
 #   endif
 #endif /* wxUSE_SOCKETS */
+
+#if !wxUSE_VARIANT
+#   if wxUSE_DATAVIEWCTRL
+#       ifdef wxABORT_ON_CONFIG_ERROR
+#           error "wxDataViewCtrl requires wxVariant"
+#       else
+#           undef wxUSE_DATAVIEWCTRL
+#           define wxUSE_DATAVIEWCTRL 0
+#       endif
+#   endif
+
+#   if wxUSE_ODBC
+#       ifdef wxABORT_ON_CONFIG_ERROR
+#           error "wxUSE_ODBC requires wxVariant"
+#       else
+#           undef wxUSE_ODBC
+#           define wxUSE_ODBC 0
+#       endif
+#   endif
+#endif /* wxUSE_VARIANT */
 
 #endif /* wxUSE_GUI */

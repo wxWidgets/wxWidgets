@@ -228,11 +228,13 @@ private:
     OLECHAR *m_wzBuf;     // actual string
 };
 
+#if wxUSE_VARIANT
 // Convert variants
 class WXDLLIMPEXP_BASE wxVariant;
 
 WXDLLEXPORT bool wxConvertVariantToOle(const wxVariant& variant, VARIANTARG& oleVariant);
 WXDLLEXPORT bool wxConvertOleToVariant(const VARIANTARG& oleVariant, wxVariant& variant);
+#endif // wxUSE_VARIANT
 
 // Convert string to Unicode
 WXDLLEXPORT BSTR wxConvertStringToOle(const wxString& str);

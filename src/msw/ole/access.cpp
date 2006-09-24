@@ -65,6 +65,7 @@ int wxConvertToWindowsSelFlag(wxAccSelectionFlags sel);
 // Convert from Windows selection flag
 wxAccSelectionFlags wxConvertFromWindowsSelFlag(int sel);
 
+#if wxUSE_VARIANT
 // ----------------------------------------------------------------------------
 // wxIEnumVARIANT interface implementation
 // ----------------------------------------------------------------------------
@@ -176,6 +177,7 @@ STDMETHODIMP wxIEnumVARIANT::Clone(IEnumVARIANT **ppenum)
     return S_OK;
 }
 
+#endif // wxUSE_VARIANT
 
 // ----------------------------------------------------------------------------
 // wxIAccessible implementation of IAccessible interface
@@ -1471,6 +1473,7 @@ STDMETHODIMP wxIAccessible::get_accFocus ( VARIANT* pVarID)
 
 STDMETHODIMP wxIAccessible::get_accSelection ( VARIANT * pVarChildren)
 {
+#if wxUSE_VARIANT
     wxLogTrace(wxT("access"), wxT("get_accSelection"));
     wxASSERT (m_pAccessible != NULL);
     if (!m_pAccessible)
@@ -1528,6 +1531,9 @@ STDMETHODIMP wxIAccessible::get_accSelection ( VARIANT * pVarChildren)
             return S_OK;
         }
     }
+#else
+    wxUnusedVar(pVarChildren);
+#endif // wxUSE_VARIANT
 
     return E_NOTIMPL;
 }

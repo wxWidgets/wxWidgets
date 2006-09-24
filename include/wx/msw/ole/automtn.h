@@ -12,6 +12,10 @@
 #ifndef _WX_AUTOMTN_H_
 #define _WX_AUTOMTN_H_
 
+#include "wx/defs.h"
+
+#if wxUSE_OLE_AUTOMATION
+
 #include "wx/object.h"
 #include "wx/variant.h"
 
@@ -92,6 +96,6 @@ public:
     DECLARE_NO_COPY_CLASS(wxAutomationObject)
 };
 
+#endif // wxUSE_OLE_AUTOMATION
 
-#endif
-    // _WX_AUTOMTN_H_
+#endif // _WX_AUTOMTN_H_

@@ -271,6 +271,8 @@
 
 #define wxUSE_URL_NATIVE 0
 
+#define wxUSE_VARIANT 0
+
 #define wxUSE_REGEX       0
 
 #define wxUSE_SYSTEM_OPTIONS 0
@@ -450,8 +452,6 @@
 #define wxUSE_IPC         0
 
 #define wxUSE_HELP        0
-
-#define wxUSE_MS_HTML_HELP 0
 
 
 #define wxUSE_WXHTML_HELP 0

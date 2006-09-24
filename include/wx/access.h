@@ -324,6 +324,7 @@ public:
     virtual wxAccStatus GetFocus(int* WXUNUSED(childId), wxAccessible** WXUNUSED(child))
          { return wxACC_NOT_IMPLEMENTED; }
 
+#if wxUSE_VARIANT
         // Gets a variant representing the selected children
         // of this object.
         // Acceptable values:
@@ -334,6 +335,7 @@ public:
         // - a "void*" pointer to a wxAccessible child object
     virtual wxAccStatus GetSelections(wxVariant* WXUNUSED(selections))
          { return wxACC_NOT_IMPLEMENTED; }
+#endif // wxUSE_VARIANT
 
 // Accessors
 

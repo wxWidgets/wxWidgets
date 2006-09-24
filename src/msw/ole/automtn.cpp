@@ -16,9 +16,13 @@
     #pragma hdrstop
 #endif
 
-// Watcom C++ gives a linker error if this is compiled in.
 // With Borland C++, all samples crash if this is compiled in.
-#if wxUSE_OLE && !(defined(__BORLANDC__) && (__BORLANDC__ < 0x520)) && !defined(__CYGWIN10__)
+#if (defined(__BORLANDC__) && (__BORLANDC__ < 0x520)) || defined(__CYGWIN10__)
+    #undef wxUSE_OLE_AUTOMATION
+    #define wxUSE_OLE_AUTOMATION 0
+#endif
+
+#if wxUSE_OLE_AUTOMATION
 
 #ifndef WX_PRECOMP
     #include "wx/log.h"
@@ -932,4 +936,4 @@ void ShowException(LPOLESTR szMember, HRESULT hr, EXCEPINFO *pexcep, unsigned in
 
 #endif
 
-#endif // wxUSE_OLE && !(defined(__BORLANDC__) && (__BORLANDC__ < 0x520)) && !defined(__CYGWIN10__)
+#endif // wxUSE_OLE_AUTOMATION

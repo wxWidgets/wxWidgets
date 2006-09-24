@@ -476,6 +476,7 @@ if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_PROTOCOL_FTP=no
   DEFAULT_wxUSE_PROTOCOL_FILE=no
   DEFAULT_wxUSE_URL=no
+  DEFAULT_wxUSE_VARIANT=no
 
   DEFAULT_wxUSE_COMMONDLGS=no
   DEFAULT_wxUSE_CHOICEDLG=no
@@ -689,6 +690,7 @@ else
   DEFAULT_wxUSE_PROTOCOL_FTP=yes
   DEFAULT_wxUSE_PROTOCOL_FILE=yes
   DEFAULT_wxUSE_URL=yes
+  DEFAULT_wxUSE_VARIANT=yes
 
   DEFAULT_wxUSE_COMMONDLGS=yes
   DEFAULT_wxUSE_CHOICEDLG=yes
@@ -970,6 +972,7 @@ WX_ARG_ENABLE(printfposparam,[  --enable-printfposparam use wxVsnprintf() which 
 WX_ARG_ENABLE(zipstream,     [  --enable-zipstream      use wxZip streams], wxUSE_ZIPSTREAM)
 
 WX_ARG_ENABLE(url,           [  --enable-url            use wxURL class], wxUSE_URL)
+WX_ARG_ENABLE(variant,       [  --enable-variant        use wxVariant class], wxUSE_VARIANT)
 WX_ARG_ENABLE(protocol,      [  --enable-protocol       use wxProtocol class], wxUSE_PROTOCOL)
 WX_ARG_ENABLE(protocol_http, [  --enable-protocol-http  HTTP support in wxProtocol], wxUSE_PROTOCOL_HTTP)
 WX_ARG_ENABLE(protocol_ftp,  [  --enable-protocol-ftp   FTP support in wxProtocol], wxUSE_PROTOCOL_FTP)
@@ -6144,6 +6147,10 @@ if test "$wxUSE_URL" = "yes"; then
     if test "$wxUSE_URL" = "yes"; then
         AC_DEFINE(wxUSE_URL)
     fi
+fi
+
+if test "$wxUSE_VARIANT" = "yes"; then
+    AC_DEFINE(wxUSE_VARIANT)
 fi
 
 if test "$wxUSE_FS_INET" = "yes"; then

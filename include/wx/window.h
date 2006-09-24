@@ -1586,6 +1586,7 @@ public:
         // If this object has the focus, child should be 'this'.
     virtual wxAccStatus GetFocus(int* childId, wxAccessible** child);
 
+#if wxUSE_VARIANT
         // Gets a variant representing the selected children
         // of this object.
         // Acceptable values:
@@ -1595,6 +1596,7 @@ public:
         //   or 0 if this object is selected (GetType() == wxT("long")
         // - a "void*" pointer to a wxAccessible child object
     virtual wxAccStatus GetSelections(wxVariant* selections);
+#endif // wxUSE_VARIANT
 };
 
 #endif // wxUSE_ACCESSIBILITY
