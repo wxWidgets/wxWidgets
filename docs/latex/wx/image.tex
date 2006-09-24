@@ -248,7 +248,9 @@ returns true if the current image handlers can read this file
 
 \func{wxImage}{Blur}{\param{int}{ blurRadius}}
 
-Blurs the image in both horizontal and vertical directions by the specified pixel {\it blurRadius}.
+Blurs the image in both horizontal and vertical directions by the specified pixel
+{\it blurRadius}. This should not be used when using a single mask colour
+for transparency.
 
 \wxheading{See also}
 
@@ -260,8 +262,8 @@ Blurs the image in both horizontal and vertical directions by the specified pixe
 
 \func{wxImage}{BlurHorizontal}{\param{int}{ blurRadius}}
 
-Blurs the image in the horizontal direction only.
-
+Blurs the image in the horizontal direction only. This should not be used
+when using a single mask colour for transparency.
 \wxheading{See also}
 
 \helpref{Blur}{wximageblur}
@@ -272,7 +274,8 @@ Blurs the image in the horizontal direction only.
 
 \func{wxImage}{BlurVertical}{\param{int}{ blurRadius}}
 
-Blurs the image in the vertical direction only.
+Blurs the image in the vertical direction only. This should not be used
+when using a single mask colour for transparency.
 
 \wxheading{See also}
 
