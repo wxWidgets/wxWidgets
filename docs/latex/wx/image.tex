@@ -1110,7 +1110,13 @@ It should be noted that although using wxIMAGE\_QUALITY\_HIGH produces much nice
 looking results it is a slower method.  Downsampling will use the box averaging method
 which seems to operate very fast.  If you are upsampling larger images using
 this method you will most likely notice that it is a bit slower and in extreme cases
-it will be quite substantially slower as the bicubic algorithm has to process a lot of data.
+it will be quite substantially slower as the bicubic algorithm has to process a lot of
+data.
+
+It should also be noted that the high quality scaling may not work as expected
+when using a single mask colour for transparency, as the scaling will blur the
+image and will therefore remove the mask partially. Using the alpha channel
+will work.
 
 Example:
 
