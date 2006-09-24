@@ -579,9 +579,9 @@ used as a mask colour. Returns {\tt true} if the image currently has a mask.
 \constfunc{const wxPalette\&}{GetPalette}{\void}
 
 Returns the palette associated with the image. Currently the palette is only
-used when converting to wxBitmap under Windows.
-
-Eventually wxImage handlers will set the palette if one exists in the image file.
+used when converting to wxBitmap under Windows. Some of the wxImage handlers
+have been modified to set the palette if one exists in the image file (usually
+256 or less colour images in GIF or PNG format).
 
 
 \membersection{wxImage::GetRed}\label{wximagegetred}

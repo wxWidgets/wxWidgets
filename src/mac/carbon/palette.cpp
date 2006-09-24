@@ -107,5 +107,14 @@ bool wxPalette::GetRGB(int index, unsigned char *red, unsigned char *green, unsi
     return true;
 }
 
+int wxPalette::GetColoursCount() const
+{
+    if (m_refData)
+        return M_PALETTEDATA->m_count;
+    
+    return 0;    
+}
+
+
 #endif
 // wxUSE_PALETTE

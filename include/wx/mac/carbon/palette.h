@@ -34,26 +34,25 @@ protected:
 
 class WXDLLEXPORT wxPalette: public wxPaletteBase
 {
-  DECLARE_DYNAMIC_CLASS(wxPalette)
-
 public:
-  wxPalette();
+    wxPalette();
 
-  wxPalette(int n, const unsigned char *red, const unsigned char *green, const unsigned char *blue);
-  virtual ~wxPalette();
-  bool Create(int n, const unsigned char *red, const unsigned char *green, const unsigned char *blue);
-  int GetPixel(unsigned char red, unsigned char green, unsigned char blue) const;
-  bool GetRGB(int pixel, unsigned char *red, unsigned char *green, unsigned char *blue) const;
+    wxPalette(int n, const unsigned char *red, const unsigned char *green, const unsigned char *blue);
+    virtual ~wxPalette();
+    bool Create(int n, const unsigned char *red, const unsigned char *green, const unsigned char *blue);
+    
+    int GetPixel(unsigned char red, unsigned char green, unsigned char blue) const;
+    bool GetRGB(int pixel, unsigned char *red, unsigned char *green, unsigned char *blue) const;
 
-  virtual bool Ok() const { return (m_refData != NULL) ; }
+    virtual bool Ok() const { return (m_refData != NULL) ; }
 
-  inline bool operator == (const wxPalette& palette) const { return m_refData == palette.m_refData; }
-  inline bool operator != (const wxPalette& palette) const { return m_refData != palette.m_refData; }
+    inline bool operator == (const wxPalette& palette) const { return m_refData == palette.m_refData; }
+    inline bool operator != (const wxPalette& palette) const { return m_refData != palette.m_refData; }
 
-/* TODO: implementation
-  inline WXHPALETTE GetHPALETTE() const { return (M_PALETTEDATA ? M_PALETTEDATA->m_hPalette : 0); }
-  void SetHPALETTE(WXHPALETTE pal);
-*/
+    virtual int GetColoursCount() const;
+    
+private:
+    DECLARE_DYNAMIC_CLASS(wxPalette)
 };
 
 #endif
