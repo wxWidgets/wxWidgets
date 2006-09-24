@@ -1910,9 +1910,9 @@ void wxMacDataItemBrowserControl::InsertColumn(int colId, DataBrowserPropertyTyp
 
     columnDesc.propertyDesc.propertyID = (kMinColumnId + colId);
     columnDesc.propertyDesc.propertyType = colType;
-    columnDesc.propertyDesc.propertyFlags = kDataBrowserListViewDefaultColumnFlags | kDataBrowserListViewNoGapForIconInHeaderButton; 
-#if MAC_OS_X_VERSION_MAX_ALLOWED > MAC_OS_X_VERSION_10_2
-    columnDesc.propertyDesc.propertyFlags |= kDataBrowserListViewTypeSelectColumn;
+    columnDesc.propertyDesc.propertyFlags = kDataBrowserListViewDefaultColumnFlags | kDataBrowserListViewTypeSelectColumn;; 
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_4
+    columnDesc.propertyDesc.propertyFlags = kDataBrowserListViewNoGapForIconInHeaderButton;
 #endif
 
     verify_noerr( AddColumn( &columnDesc, kDataBrowserListViewAppendColumn ) );
