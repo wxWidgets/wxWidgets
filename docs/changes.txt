@@ -62,8 +62,11 @@ All:
 
 All (GUI):
 
-- Support for right-to-left text layout (Diaa Sami during Google Summer of Code)
+- Support for right-to-left text layout
+  (started by Diaa Sami during Google Summer of Code, with a lot of help from
+   Tim Kosse and others)
 - Added wxID_PAGE_SETUP standard id
+- Added wxSize::IncBy() and DecBy() methods
 
 wxMSW:
 

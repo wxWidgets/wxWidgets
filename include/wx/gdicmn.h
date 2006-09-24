@@ -229,6 +229,15 @@ public:
     void DecTo(const wxSize& sz)
         { if ( sz.x < x ) x = sz.x; if ( sz.y < y ) y = sz.y; }
 
+    void IncBy(int dx, int dy) { x += dx; y += dy; }
+    void IncBy(const wxSize& sz) { IncBy(sz.x, sz.y); }
+    void IncBy(int d) { IncBy(d, d); }
+
+    void DecBy(int dx, int dy) { IncBy(-dx, -dy); }
+    void DecBy(const wxSize& sz) { DecBy(sz.x, sz.y); }
+    void DecBy(int d) { DecBy(d, d); }
+
+
     void Scale(float xscale, float yscale)
         { x = (int)(x*xscale); y = (int)(y*yscale); }
 

@@ -47,6 +47,27 @@ Creates a size object.
 
 
 
+\membersection{wxSize::DecBy}\label{wxsizedecby}
+
+\func{void}{DecBy}{\param{const wxSize\& }{size}}
+
+\func{void}{DecBy}{\param{int }{dx}, \param{int }{dy}}
+
+\func{void}{DecBy}{\param{int }{d}}
+
+Decreases the size in x- and y- directions
+
+\begin{enumerate}
+    \item By \arg{size.x} and \arg{size.y} for the first overload
+    \item By \arg{dx} and \arg{dy} for the second one
+    \item By \arg{d} and \arg{d} for the third one
+\end{enumerate}
+
+\wxheading{See also}
+
+\helpref{IncBy}{wxsizeincby}
+
+
 \membersection{wxSize::DecTo}\label{wxsizedecto}
 
 \func{void}{DecTo}{\param{const wxSize\& }{size}}
@@ -84,6 +105,26 @@ Gets the width member.
 
 Gets the height member.
 
+
+\membersection{wxSize::IncBy}\label{wxsizeincby}
+
+\func{void}{IncBy}{\param{const wxSize\& }{size}}
+
+\func{void}{IncBy}{\param{int }{dx}, \param{int }{dy}}
+
+\func{void}{IncBy}{\param{int }{d}}
+
+Increases the size in x- and y- directions
+
+\begin{enumerate}
+    \item By \arg{size.x} and \arg{size.y} for the first overload
+    \item By \arg{dx} and \arg{dy} for the second one
+    \item By \arg{d} and \arg{d} for the third one
+\end{enumerate}
+
+\wxheading{See also}
+
+\helpref{DecBy}{wxsizedecby}
 
 
 \membersection{wxSize::IncTo}\label{wxsizeincto}
