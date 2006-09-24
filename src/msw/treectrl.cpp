@@ -52,14 +52,6 @@
 // get HTREEITEM from wxTreeItemId
 #define HITEM(item)     ((HTREEITEM)(((item).m_pItem)))
 
-// the native control doesn't support multiple selections under MSW and we
-// have 2 ways to emulate them: either using TVS_CHECKBOXES style and let
-// checkboxes be the selection status (checked == selected) or by really
-// emulating everything, i.e. intercepting mouse and key events &c. The first
-// approach is much easier but doesn't work with comctl32.dll < 4.71 and also
-// looks quite ugly.
-#define wxUSE_CHECKBOXES_IN_MULTI_SEL_TREE 0
-
 // ----------------------------------------------------------------------------
 // private functions
 // ----------------------------------------------------------------------------
@@ -73,175 +65,6 @@ static HTREEITEM GetItemFromPoint(HWND hwndTV, int x, int y)
 
     return (HTREEITEM)TreeView_HitTest(hwndTV, &tvht);
 }
-
-#if !wxUSE_CHECKBOXES_IN_MULTI_SEL_TREE
-
-// wrappers for TreeView_GetItem/TreeView_SetItem
-static bool IsItemSelected(HWND hwndTV, HTREEITEM hItem)
-{
-
-    TV_ITEM tvi;
-    tvi.mask = TVIF_STATE | TVIF_HANDLE;
-    tvi.stateMask = TVIS_SELECTED;
-    tvi.hItem = hItem;
-
-    if ( !TreeView_GetItem(hwndTV, &tvi) )
-    {
-        wxLogLastError(wxT("TreeView_GetItem"));
-    }
-
-    return (tvi.state & TVIS_SELECTED) != 0;
-}
-
-static bool SelectItem(HWND hwndTV, HTREEITEM hItem, bool select = true)
-{
-    TV_ITEM tvi;
-    tvi.mask = TVIF_STATE | TVIF_HANDLE;
-    tvi.stateMask = TVIS_SELECTED;
-    tvi.state = select ? TVIS_SELECTED : 0;
-    tvi.hItem = hItem;
-
-    if ( TreeView_SetItem(hwndTV, &tvi) == -1 )
-    {
-        wxLogLastError(wxT("TreeView_SetItem"));
-        return false;
-    }
-
-    return true;
-}
-
-static inline void UnselectItem(HWND hwndTV, HTREEITEM htItem)
-{
-    SelectItem(hwndTV, htItem, false);
-}
-
-static inline void ToggleItemSelection(HWND hwndTV, HTREEITEM htItem)
-{
-    SelectItem(hwndTV, htItem, !IsItemSelected(hwndTV, htItem));
-}
-
-// helper function which selects all items in a range and, optionally,
-// unselects all others
-static void SelectRange(HWND hwndTV,
-                        HTREEITEM htFirst,
-                        HTREEITEM htLast,
-                        bool unselectOthers = true)
-{
-    // find the first (or last) item and select it
-    bool cont = true;
-    HTREEITEM htItem = (HTREEITEM)TreeView_GetRoot(hwndTV);
-    while ( htItem && cont )
-    {
-        if ( (htItem == htFirst) || (htItem == htLast) )
-        {
-            if ( !IsItemSelected(hwndTV, htItem) )
-            {
-                SelectItem(hwndTV, htItem);
-            }
-
-            cont = false;
-        }
-        else
-        {
-            if ( unselectOthers && IsItemSelected(hwndTV, htItem) )
-            {
-                UnselectItem(hwndTV, htItem);
-            }
-        }
-
-        htItem = (HTREEITEM)TreeView_GetNextVisible(hwndTV, htItem);
-    }
-
-    // select the items in range
-    cont = htFirst != htLast;
-    while ( htItem && cont )
-    {
-        if ( !IsItemSelected(hwndTV, htItem) )
-        {
-            SelectItem(hwndTV, htItem);
-        }
-
-        cont = (htItem != htFirst) && (htItem != htLast);
-
-        htItem = (HTREEITEM)TreeView_GetNextVisible(hwndTV, htItem);
-    }
-
-    // unselect the rest
-    if ( unselectOthers )
-    {
-        while ( htItem )
-        {
-            if ( IsItemSelected(hwndTV, htItem) )
-            {
-                UnselectItem(hwndTV, htItem);
-            }
-
-            htItem = (HTREEITEM)TreeView_GetNextVisible(hwndTV, htItem);
-        }
-    }
-
-    // seems to be necessary - otherwise the just selected items don't always
-    // appear as selected
-    UpdateWindow(hwndTV);
-}
-
-// helper function which tricks the standard control into changing the focused
-// item without changing anything else (if someone knows why Microsoft doesn't
-// allow to do it by just setting TVIS_FOCUSED flag, please tell me!)
-static void SetFocus(HWND hwndTV, HTREEITEM htItem)
-{
-    // the current focus
-    HTREEITEM htFocus = (HTREEITEM)TreeView_GetSelection(hwndTV);
-
-    if ( htItem )
-    {
-        // set the focus
-        if ( htItem != htFocus )
-        {
-            // remember the selection state of the item
-            bool wasSelected = IsItemSelected(hwndTV, htItem);
-
-            if ( htFocus && IsItemSelected(hwndTV, htFocus) )
-            {
-                // prevent the tree from unselecting the old focus which it
-                // would do by default (TreeView_SelectItem unselects the
-                // focused item)
-                TreeView_SelectItem(hwndTV, 0);
-                SelectItem(hwndTV, htFocus);
-            }
-
-            TreeView_SelectItem(hwndTV, htItem);
-
-            if ( !wasSelected )
-            {
-                // need to clear the selection which TreeView_SelectItem() gave
-                // us
-                UnselectItem(hwndTV, htItem);
-            }
-            //else: was selected, still selected - ok
-        }
-        //else: nothing to do, focus already there
-    }
-    else
-    {
-        if ( htFocus )
-        {
-            bool wasFocusSelected = IsItemSelected(hwndTV, htFocus);
-
-            // just clear the focus
-            TreeView_SelectItem(hwndTV, 0);
-
-            if ( wasFocusSelected )
-            {
-                // restore the selection state
-                SelectItem(hwndTV, htFocus);
-            }
-        }
-        //else: nothing to do, no focus already
-    }
-}
-
-#endif // wxUSE_CHECKBOXES_IN_MULTI_SEL_TREE
 
 // ----------------------------------------------------------------------------
 // private classes
@@ -456,11 +279,7 @@ public:
             return true;
         }
 
-#if wxUSE_CHECKBOXES_IN_MULTI_SEL_TREE
-        if ( tree->IsItemChecked(item) )
-#else
         if ( ::IsItemSelected(GetHwndOf(tree), HITEM(item)) )
-#endif
         {
             m_selections.Add(item);
         }
@@ -695,20 +514,6 @@ bool wxTreeCtrl::Create(wxWindow *parent,
         if ( wxApp::GetComCtl32Version() >= 471 )
             wstyle |= TVS_FULLROWSELECT;
     }
-
-    // using TVS_CHECKBOXES for emulation of a multiselection tree control
-    // doesn't work without the new enough headers
-#if wxUSE_CHECKBOXES_IN_MULTI_SEL_TREE && \
-    !defined( __GNUWIN32_OLD__ ) && \
-    !defined( __BORLANDC__ ) && \
-    !defined( __WATCOMC__ ) && \
-    (!defined(__VISUALC__) || (__VISUALC__ > 1010))
-
-    // we emulate the multiple selection tree controls by using checkboxes: set
-    // up the image list we need for this if we do have multiple selections
-    if ( m_windowStyle & wxTR_MULTIPLE )
-        wstyle |= TVS_CHECKBOXES;
-#endif // wxUSE_CHECKBOXES_IN_MULTI_SEL_TREE
 
 #if !defined(__WXWINCE__) && defined(TVS_INFOTIP)
     // Need so that TVN_GETINFOTIP messages will be sent
@@ -1747,16 +1552,12 @@ void wxTreeCtrl::UnselectAll()
         size_t count = GetSelections(selections);
         for ( size_t n = 0; n < count; n++ )
         {
-#if wxUSE_CHECKBOXES_IN_MULTI_SEL_TREE
-            SetItemCheck(HITEM(selections[n]), false);
-#else // !wxUSE_CHECKBOXES_IN_MULTI_SEL_TREE
             ::UnselectItem(GetHwnd(), HITEM(selections[n]));
-#endif // wxUSE_CHECKBOXES_IN_MULTI_SEL_TREE/!wxUSE_CHECKBOXES_IN_MULTI_SEL_TREE
         }
 
         m_htSelStart.Unset();
     }
-    else
+    else // single selection
     {
         // just remove the selection
         Unselect();
@@ -1767,14 +1568,9 @@ void wxTreeCtrl::SelectItem(const wxTreeItemId& item, bool select)
 {
     if ( m_windowStyle & wxTR_MULTIPLE )
     {
-#if wxUSE_CHECKBOXES_IN_MULTI_SEL_TREE
-        // selecting the item means checking it
-        SetItemCheck(item, select);
-#else // !wxUSE_CHECKBOXES_IN_MULTI_SEL_TREE
         ::SelectItem(GetHwnd(), HITEM(item), select);
-#endif // wxUSE_CHECKBOXES_IN_MULTI_SEL_TREE/!wxUSE_CHECKBOXES_IN_MULTI_SEL_TREE
     }
-    else
+    else // single selection
     {
         wxASSERT_MSG( select,
                       _T("SelectItem(false) works only for multiselect") );
@@ -2104,7 +1900,6 @@ WXLRESULT wxTreeCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lPara
                 ::SetFocus(GetHwnd(), htItem);
                 break;
 
-#if !wxUSE_CHECKBOXES_IN_MULTI_SEL_TREE
             case WM_LBUTTONDOWN:
                 if ( htItem && isMultiple && (tvht.flags & TVHT_ONITEM) != 0 )
                 {
@@ -2185,7 +1980,6 @@ WXLRESULT wxTreeCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lPara
                     }
                 }
                 break;
-#endif // wxUSE_CHECKBOXES_IN_MULTI_SEL_TREE
 
             case WM_MOUSEMOVE:
 #ifndef __WXWINCE__
@@ -2281,7 +2075,6 @@ WXLRESULT wxTreeCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lPara
                 break;
         }
     }
-#if !wxUSE_CHECKBOXES_IN_MULTI_SEL_TREE
     else if ( (nMsg == WM_SETFOCUS || nMsg == WM_KILLFOCUS) && isMultiple )
     {
         // the tree control greys out the selected item when it loses focus and
@@ -2381,7 +2174,6 @@ WXLRESULT wxTreeCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lPara
                 }
         }
     }
-#endif // !wxUSE_CHECKBOXES_IN_MULTI_SEL_TREE
     else if ( nMsg == WM_COMMAND )
     {
         // if we receive a EN_KILLFOCUS command from the in-place edit control
