@@ -1,0 +1,182 @@
+\section{\class{wxBitmapComboBox}}\label{wxbitmapcombobox}
+
+A combobox that displays bitmap in front of the list items.
+It currently only allows using bitmaps of one size, and resizes itself
+so that a bitmap can be shown next to the text field.
+
+\wxheading{Derived from}
+
+\helpref{wxComboBox}{wxcombobox}\\
+\helpref{wxControlWithItems}{wxcontrolwithitems}\\
+\helpref{wxControl}{wxcontrol}\\
+\helpref{wxWindow}{wxwindow}\\
+\helpref{wxEvtHandler}{wxevthandler}\\
+\helpref{wxObject}{wxobject}
+
+\wxheading{Remarks}
+
+While wxBitmapComboBox contains the \helpref{wxComboBox}{wxcombobox}
+API, but it might not actually be derived from that class. In fact,
+if the platform does not have a native implementation, wxBitmapComboBox
+will inherit from \helpref{wxOwnerDrawnComboBox}{wxownerdrawncombobox}.
+You can determine if the implementation is generic by checking whether
+wxGENERIC\_BITMAPCOMBOBOX is defined.
+
+\wxheading{Include files}
+
+<wx/bmpcbox.h>
+
+\wxheading{Window styles}
+
+\begin{twocollist}\itemsep=0pt
+\twocolitem{\windowstyle{wxCB\_READONLY}}{Creates a combobox without a text
+editor. On some platforms the control may appear very different when this
+style is used.}
+\twocolitem{\windowstyle{wxCB\_SORT}}{Sorts the entries in the list alphabetically.}
+\twocolitem{\windowstyle{wxTE\_PROCESS\_ENTER}}{The control will generate
+the event wxEVT\_COMMAND\_TEXT\_ENTER (otherwise pressing Enter key
+is either processed internally by the control or used for navigation between
+dialog controls). Windows only.}
+\end{twocollist}
+
+See also \helpref{window styles overview}{windowstyles}.
+
+\wxheading{Event handling}
+
+\twocolwidtha{7cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{{\bf EVT\_COMBOBOX(id, func)}}{Process a wxEVT\_COMMAND\_COMBOBOX\_SELECTED event,
+when an item on the list is selected.}
+\twocolitem{{\bf EVT\_TEXT(id, func)}}{Process a wxEVT\_COMMAND\_TEXT\_UPDATED event,
+when the combobox text changes.}
+\twocolitem{{\bf EVT\_TEXT\_ENTER(id, func)}}{Process a wxEVT\_COMMAND\_TEXT\_ENTER event,
+when <RETURN> is pressed in the combobox.}
+\end{twocollist}
+
+\wxheading{See also}
+
+\helpref{wxComboBox}{wxcombobox}, \helpref{wxChoice}{wxchoice}, \helpref{wxOwnerDrawnComboBox}{wxownerdrawncombobox},
+\rtfsp\helpref{wxCommandEvent}{wxcommandevent}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+
+\membersection{wxBitmapComboBox::wxBitmapComboBox}\label{wxbitmapcomboboxctor}
+
+\func{}{wxBitmapComboBox}{\void}
+
+Default constructor.
+
+\func{}{wxBitmapComboBox}{\param{wxWindow*}{ parent}, \param{wxWindowID}{ id},\rtfsp
+\param{const wxString\& }{value = ``"}, \param{const wxPoint\&}{ pos = wxDefaultPosition}, \param{const wxSize\&}{ size = wxDefaultSize},\rtfsp
+\param{int}{ n = 0}, \param{const wxString }{choices[] = NULL},\rtfsp
+\param{long}{ style = 0}, \param{const wxValidator\& }{validator = wxDefaultValidator}, \param{const wxString\& }{name = ``comboBox"}}
+
+\func{}{wxBitmapComboBox}{\param{wxWindow*}{ parent}, \param{wxWindowID}{ id},\rtfsp
+\param{const wxString\& }{value}, \param{const wxPoint\&}{ pos}, \param{const wxSize\&}{ size},\rtfsp
+\param{const wxArrayString\& }{choices},\rtfsp
+\param{long}{ style = 0}, \param{const wxValidator\& }{validator = wxDefaultValidator}, \param{const wxString\& }{name = ``comboBox"}}
+
+Constructor, creating and showing a combobox.
+
+\wxheading{Parameters}
+
+\docparam{parent}{Parent window. Must not be NULL.}
+
+\docparam{id}{Window identifier. A value of -1 indicates a default value.}
+
+\docparam{value}{Initial selection string. An empty string indicates no selection.}
+
+\docparam{pos}{Window position.}
+
+\docparam{size}{Window size. If the default size (-1, -1) is specified then the window is sized
+appropriately.}
+
+\docparam{n}{Number of strings with which to initialise the control.}
+
+\docparam{choices}{An array of strings with which to initialise the control.}
+
+\docparam{style}{Window style. See \helpref{wxBitmapComboBox}{wxbitmapcombobox}.}
+
+\docparam{validator}{Window validator.}
+
+\docparam{name}{Window name.}
+
+\wxheading{See also}
+
+\helpref{wxBitmapComboBox::Create}{wxbitmapcomboboxcreate}, \helpref{wxValidator}{wxvalidator}
+
+
+\membersection{wxBitmapComboBox::\destruct{wxBitmapComboBox}}\label{wxbitmapcomboboxdtor}
+
+\func{}{\destruct{wxBitmapComboBox}}{\void}
+
+Destructor, destroying the combobox.
+
+
+\membersection{wxBitmapComboBox::Create}\label{wxbitmapcomboboxcreate}
+
+\func{bool}{Create}{\param{wxWindow*}{ parent}, \param{wxWindowID}{ id},\rtfsp
+\param{const wxString\& }{value = ``"}, \param{const wxPoint\&}{ pos = wxDefaultPosition}, \param{const wxSize\&}{ size = wxDefaultSize},\rtfsp
+\param{int}{ n}, \param{const wxString }{choices[]},\rtfsp
+\param{long}{ style = 0}, \param{const wxValidator\& }{validator = wxDefaultValidator}, \param{const wxString\& }{name = ``comboBox"}}
+
+\func{bool}{Create}{\param{wxWindow*}{ parent}, \param{wxWindowID}{ id},\rtfsp
+\param{const wxString\& }{value}, \param{const wxPoint\&}{ pos}, \param{const wxSize\&}{ size},\rtfsp
+\param{const wxArrayString\& }{choices},\rtfsp
+\param{long}{ style = 0}, \param{const wxValidator\& }{validator = wxDefaultValidator}, \param{const wxString\& }{name = ``comboBox"}}
+
+Creates the combobox for two-step construction. Derived classes
+should call or replace this function. See \helpref{wxBitmapComboBox::wxBitmapComboBox}{wxbitmapcomboboxctor}\rtfsp
+for further details.
+
+
+\membersection{wxBitmapComboBox::Append}\label{wxbitmapcomboboxappend}
+
+\func{int}{Append}{\param{const wxString\& }{ item}, \param{const wxBitmap\& }{bitmap = wxNullBitmap}}
+
+Adds the item to the end of the combo box.
+
+\func{int}{Append}{\param{const wxString\& }{ item}, \param{const wxBitmap\& }{bitmap}, \param{void *}{clientData}}
+
+\func{int}{Append}{\param{const wxString\& }{ item}, \param{const wxBitmap\& }{bitmap}, \param{wxClientData *}{clientData}}
+
+Adds the item to the end of the combo box, associating the given, typed or
+untyped, client data pointer with the item.
+
+
+\membersection{wxBitmapComboBox::GetBitmapSize}\label{wxbitmapcomboboxgetbitmapsize}
+
+\constfunc{wxSize}{GetBitmapSize}{\void}
+
+Returns size of bitmaps used in the list.
+
+
+\membersection{wxBitmapComboBox::GetItemBitmap}\label{wxbitmapcomboboxgetitembitmap}
+
+\constfunc{wxBitmap}{GetItemBitmap}{\param{unsigned int }{n}}
+
+Returns the bitmap of the item with the given index.
+
+
+\membersection{wxBitmapComboBox::Insert}\label{wxbitmapcomboboxinsert}
+
+\func{int}{Insert}{\param{const wxString\& }{ item}, \param{const wxBitmap\& }{bitmap}, \param{unsigned int }{pos}}
+
+Inserts the item into the list before pos.
+Not valid for {\tt wxCB\_SORT} style, use Append instead.
+
+\func{int}{Insert}{\param{const wxString\& }{ item}, \param{const wxBitmap\& }{bitmap}, \param{unsigned int }{pos}, \param{void *}{clientData}}
+
+\func{int}{Insert}{\param{const wxString\& }{ item}, \param{const wxBitmap\& }{bitmap}, \param{unsigned int }{pos}, \param{wxClientData *}{clientData}}
+
+Inserts the item into the list before pos, associating the given, typed or
+untyped, client data pointer with the item.
+Not valid for {\tt wxCB\_SORT} style, use Append instead.
+
+
+\membersection{wxBitmapComboBox::SetItemBitmap}\label{wxbitmapcomboboxsetitembitmap}
+
+\func{void}{SetItemBitmap}{\param{unsigned int }{n}, \param{const wxBitmap\& }{bitmap}}
+
+Sets the bitmap for the given item.
