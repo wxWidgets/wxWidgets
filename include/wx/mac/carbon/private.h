@@ -671,7 +671,7 @@ public :
 
     OSStatus AddColumn( DataBrowserListViewColumnDesc *columnDesc,
         DataBrowserTableViewColumnIndex position );
-        
+
     OSStatus RemoveColumn( DataBrowserTableViewColumnIndex position );
 
     OSStatus AutoSizeColumns();
@@ -796,7 +796,7 @@ class wxMacListBoxItem;
 const DataBrowserPropertyID kTextColumnId = 1024;
 const DataBrowserPropertyID kNumericOrderColumnId = 1025;
 
-// for multi-column controls, we will use this + the column ID to identify the 
+// for multi-column controls, we will use this + the column ID to identify the
 // column. We don't use kTextColumnId there, and ideally the two should merge.
 const DataBrowserPropertyID kMinColumnId = 1050;
 
@@ -825,7 +825,7 @@ public:
     virtual void *          MacGetClientData( unsigned int) const = 0;
 
     virtual ~wxMacListControl() { }
-}; 
+};
 
 // base class for databrowser items
 
@@ -852,26 +852,26 @@ public :
     virtual void Notification(wxMacDataItemBrowserControl *owner ,
         DataBrowserItemNotification message,
         DataBrowserItemDataRef itemData ) const;
-        
+
     void SetLabel( const wxString& str);
-    const wxString& GetLabel() const; 
+    const wxString& GetLabel() const;
 
     void SetOrder( SInt32 order );
     SInt32 GetOrder() const;
 
     void SetData( void* data);
     void* GetData() const;
-    
+
     void SetColumn( short col );
-    short GetColumn(); 
-    
+    short GetColumn();
+
 protected :
     wxString    m_label;
     wxMacCFStringHolder m_cfLabel;
     void *      m_data;
     SInt32      m_order;
-    short       m_colId;
-    
+    DataBrowserPropertyID m_colId;
+
 };
 
 enum ListSortOrder {
@@ -897,7 +897,7 @@ public :
     unsigned int    GetItemCount(const wxMacDataItem* container, bool recurse , DataBrowserItemState state) const;
     void            GetItems(const wxMacDataItem* container, bool recurse ,
                         DataBrowserItemState state, wxArrayMacDataItemPtr &items ) const;
-                        
+
     unsigned int    GetSelectedItemCount( const wxMacDataItem* container, bool recurse ) const;
 
     unsigned int    GetLineFromItem(const wxMacDataItem *item) const;
@@ -910,7 +910,7 @@ public :
 
     void            InsertColumn(int colId, DataBrowserPropertyType colType,
                             const wxString& title, SInt16 just = teFlushDefault, int defaultWidth = -1);
-                            
+
     int             GetColumnWidth(int colId);
     void            SetColumnWidth(int colId, int width);
 
@@ -951,8 +951,8 @@ public :
 
     bool            IsSelectionSuppressed() const { return m_suppressSelection; }
     bool            SuppressSelection( bool suppress );
-    
-    
+
+
     // wxMacListControl Methods
     // add and remove
 
@@ -989,7 +989,7 @@ public :
     virtual ListSortOrder   GetSortOrder() const;
     virtual void            SetSortOrder(const ListSortOrder sort);
 
-    
+
 
 protected:
 
@@ -1114,23 +1114,23 @@ public:
     void SetNativeContext( CGContextRef cg );
     CGPathDrawingMode GetDrawingMode() const { return m_mode; }
 
-    virtual void Translate( wxCoord dx , wxCoord dy );    
-    virtual void Scale( wxCoord xScale , wxCoord yScale );    
+    virtual void Translate( wxCoord dx , wxCoord dy );
+    virtual void Scale( wxCoord xScale , wxCoord yScale );
     virtual void DrawBitmap( const wxBitmap &bmp, wxCoord x, wxCoord y, wxCoord w, wxCoord h );
     virtual void DrawIcon( const wxIcon &icon, wxCoord x, wxCoord y, wxCoord w, wxCoord h );
-    virtual void PushState();    
+    virtual void PushState();
     virtual void PopState();
-    
+
     virtual void DrawText( const wxString &str, wxCoord x, wxCoord y, double angle ) ;
-    
+
     virtual void GetTextExtent( const wxString &str, wxCoord *width, wxCoord *height,
                             wxCoord *descent, wxCoord *externalLeading ) const ;
-                            
+
     virtual void GetPartialTextExtents(const wxString& text, wxArrayInt& widths) const ;
-    
+
     virtual void SetFont( const wxFont &font ) ;
 
-    virtual void SetTextColor( const wxColour &col ) ;    
+    virtual void SetTextColor( const wxColour &col ) ;
 private:
     CGContextRef m_cgContext;
     CGrafPtr m_qdPort;
