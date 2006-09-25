@@ -294,14 +294,23 @@ struct wxIDirectFBSurface : public wxDfbWrapper<IDirectFBSurface>
      */
     wxIDirectFBSurfacePtr Clone();
 
+    /// Flags for CreateCompatible()
+    enum CreateCompatibleFlags
+    {
+        /// Don't create double-buffered surface
+        CreateCompatible_NoBackBuffer = 1
+    };
+
     /**
         Creates a surface compatible with this one, i.e. surface with the same
         capabilities and pixel format, but with different and size.
 
-        @param size Size of the surface to create. If wxDefaultSize, use the
-                    size of this surface.
+        @param size  Size of the surface to create. If wxDefaultSize, use the
+                     size of this surface.
+        @param flags Or-combination of CreateCompatibleFlags values
      */
-    wxIDirectFBSurfacePtr CreateCompatible(const wxSize& size = wxDefaultSize);
+    wxIDirectFBSurfacePtr CreateCompatible(const wxSize& size = wxDefaultSize,
+                                           int flags = 0);
 
 private:
     // this is private because we want user code to use FlipToFront()

@@ -74,7 +74,11 @@ wxIDirectFBSurfacePtr CreateDummySurface(wxWindow *win, const wxRect *rect)
     wxLogTrace(TRACE_PAINT, _T("%p ('%s'): creating dummy DC surface"),
                win, win->GetName().c_str());
     wxSize size(rect ? rect->GetSize() : win->GetSize());
-    return win->GetDfbSurface()->CreateCompatible(size);
+    return win->GetDfbSurface()->CreateCompatible
+           (
+             size,
+             wxIDirectFBSurface::CreateCompatible_NoBackBuffer
+           );
 }
 
 //-----------------------------------------------------------------------------
@@ -191,8 +195,14 @@ wxWindowDC::~wxWindowDC()
 
     if ( m_shouldFlip )
     {
-        // FIXME: flip only modified parts of the surface
-        surface->FlipToFront();
+        DFBSurfaceCapabilities caps = DSCAPS_NONE;
+        surface->GetCapabilities(&caps);
+        if ( caps & DSCAPS_DOUBLE )
+        {
+            // FIXME: flip only modified parts of the surface
+            surface->FlipToFront();
+        }
+        // else: the surface is not double-buffered and so cannot be flipped
     }
     // else: don't flip the surface, wxTLW will do it when it finishes
     //       painting of its invalidated areas

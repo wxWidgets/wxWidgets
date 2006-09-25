@@ -116,7 +116,8 @@ int wxIDirectFBSurface::GetDepth()
     return DFB_BITS_PER_PIXEL(format);
 }
 
-wxIDirectFBSurfacePtr wxIDirectFBSurface::CreateCompatible(const wxSize& sz)
+wxIDirectFBSurfacePtr
+wxIDirectFBSurface::CreateCompatible(const wxSize& sz, int flags)
 {
     wxSize size(sz);
     if ( size == wxDefaultSize )
@@ -134,6 +135,17 @@ wxIDirectFBSurfacePtr wxIDirectFBSurface::CreateCompatible(const wxSize& sz)
     GetPixelFormat(&desc.pixelformat);
     desc.width = size.x;
     desc.height = size.y;
+
+    // filter out caps that don't make sense for a new compatible surface:
+    int caps = desc.caps;
+    caps &= ~DSCAPS_PRIMARY;
+    caps &= ~DSCAPS_SUBSURFACE;
+    if ( flags & CreateCompatible_NoBackBuffer )
+    {
+        caps &= ~DSCAPS_DOUBLE;
+        caps &= ~DSCAPS_TRIPLE;
+    }
+    desc.caps = (DFBSurfaceCapabilities)caps;
 
     wxIDirectFBSurfacePtr snew(wxIDirectFB::Get()->CreateSurface(&desc));
     if ( !snew )
