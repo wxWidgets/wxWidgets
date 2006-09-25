@@ -18,7 +18,6 @@ typedef struct _NSRect NSRect;
 
 class WXDLLEXPORT wxRegion : public wxRegionGeneric
 {
-    DECLARE_DYNAMIC_CLASS(wxRegion);
 public:
     wxRegion(wxCoord x, wxCoord y, wxCoord w, wxCoord h)
     :   wxRegionGeneric(x,y,w,h)
@@ -48,27 +47,8 @@ public:
     wxRegion(const NSRect& rect);
     wxRegion(const NSRect *rects, int count);
 
-    // Use the non-transparent pixels of a wxBitmap for the region to combine
-    // with this region.  First version takes transparency from bitmap's mask,
-    // second lets the user specify the colour to be treated as transparent
-    // along with an optional tolerance value.
-    // NOTE: implemented in common/rgncmn.cpp
-    bool Union(const wxBitmap& bmp);
-    bool Union(const wxBitmap& bmp,
-               const wxColour& transColour, int tolerance = 0);
-    /* And because of function hiding: */
-    bool Union(long x, long y, long width, long height)
-    {   return wxRegionGeneric::Union(x,y,width,height); }
-    bool Union(const wxRect& rect)
-    {   return wxRegionGeneric::Union(rect); }
-    bool Union(const wxRegion& region)
-    {   return wxRegionGeneric::Union(region); }
-
-    // Convert the region to a B&W bitmap with the black pixels being inside
-    // the region.
-    // NOTE: implemented in common/rgncmn.cpp
-    wxBitmap ConvertToBitmap() const;
-
+private:
+    DECLARE_DYNAMIC_CLASS(wxRegion);
 };
 
 class WXDLLEXPORT wxRegionIterator : public wxRegionIteratorGeneric

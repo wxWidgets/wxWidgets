@@ -9,6 +9,10 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+// ============================================================================
+// declarations
+// ============================================================================
+
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
@@ -24,8 +28,36 @@
     #include "wx/image.h"
 #endif //WX_PRECOMP
 
+// ============================================================================
+// wxRegionBase implementation
+// ============================================================================
 
-wxBitmap wxRegion::ConvertToBitmap() const
+// ----------------------------------------------------------------------------
+// region comparision
+// ----------------------------------------------------------------------------
+
+bool wxRegionBase::IsEqual(const wxRegion& region) const
+{
+    if ( m_refData == region.m_refData )
+    {
+        // regions are identical, hence equal
+        return true;
+    }
+
+    if ( !m_refData || !region.m_refData )
+    {
+        // one, but not both, of the regions is invalid
+        return false;
+    }
+
+    return DoIsEqual(region);
+}
+
+// ----------------------------------------------------------------------------
+// region to/from bitmap conversions
+// ----------------------------------------------------------------------------
+
+wxBitmap wxRegionBase::ConvertToBitmap() const
 {
     wxRect box = GetBox();
     wxBitmap bmp(box.GetRight(), box.GetBottom());
@@ -33,17 +65,16 @@ wxBitmap wxRegion::ConvertToBitmap() const
     dc.SelectObject(bmp);
     dc.SetBackground(*wxBLACK_BRUSH);
     dc.Clear();
-    dc.SetClippingRegion(*this);
+    dc.SetClippingRegion(*wx_static_cast(const wxRegion *, this));
     dc.SetBackground(*wxWHITE_BRUSH);
     dc.Clear();
     dc.SelectObject(wxNullBitmap);
     return bmp;
 }
 
-//---------------------------------------------------------------------------
-
 #if wxUSE_IMAGE
-static bool DoRegionUnion(wxRegion& region,
+
+static bool DoRegionUnion(wxRegionBase& region,
                           const wxImage& image,
                           unsigned char loR,
                           unsigned char loG,
@@ -95,9 +126,8 @@ static bool DoRegionUnion(wxRegion& region,
 }
 
 
-bool wxRegion::Union(const wxBitmap& bmp)
+bool wxRegionBase::Union(const wxBitmap& bmp)
 {
-#if (!defined(__WXMSW__) || wxUSE_WXDIB)
     if (bmp.GetMask())
     {
         wxImage image = bmp.ConvertToImage();
@@ -109,42 +139,21 @@ bool wxRegion::Union(const wxBitmap& bmp)
                              0);
     }
     else
-#endif
     {
         return Union(0, 0, bmp.GetWidth(), bmp.GetHeight());
     }
 }
 
-bool wxRegion::Union(const wxBitmap& bmp,
-                     const wxColour& transColour,
-                     int   tolerance)
+bool wxRegionBase::Union(const wxBitmap& bmp,
+                         const wxColour& transColour,
+                         int   tolerance)
 {
-#if (!defined(__WXMSW__) || wxUSE_WXDIB)
     wxImage image = bmp.ConvertToImage();
     return DoRegionUnion(*this, image,
                          transColour.Red(),
                          transColour.Green(),
                          transColour.Blue(),
                          tolerance);
-#else
-    return false;
-#endif
 }
 
-#else
-
-bool wxRegion::Union(const wxBitmap& WXUNUSED(bmp))
-{
-    // No wxImage support
-    return false;
-}
-
-bool wxRegion::Union(const wxBitmap& WXUNUSED(bmp),
-                     const wxColour& WXUNUSED(transColour),
-                     int   WXUNUSED(tolerance))
-{
-    // No wxImage support
-    return false;
-}
-
-#endif
+#endif // wxUSE_IMAGE

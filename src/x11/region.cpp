@@ -129,13 +129,8 @@ wxObjectRefData *wxRegion::CloneRefData(const wxObjectRefData *data) const
 // wxRegion comparison
 // ----------------------------------------------------------------------------
 
-bool wxRegion::operator==( const wxRegion& region ) const
+bool wxRegion::DoIsEqual(const wxRegion& region) const
 {
-    if (m_refData == region.m_refData) return true;
-
-    if (!m_refData || !region.m_refData) return false;
-
-    // compare the regions themselves, not the pointers to ref data!
     return XEqualRegion( M_REGIONDATA->m_region,
                          M_REGIONDATA_OF(region)->m_region ) == True;
 }
@@ -149,45 +144,38 @@ void wxRegion::Clear()
     UnRef();
 }
 
-bool wxRegion::Union( wxCoord x, wxCoord y, wxCoord width, wxCoord height )
+bool wxRegion::DoUnionWithRect(const wxRect& r)
 {
     // work around for XUnionRectWithRegion() bug: taking a union with an empty
     // rect results in an empty region (at least XFree 3.3.6 and 4.0 have this
     // problem)
-    if ( !width || !height )
+    if ( r.IsEmpty() )
         return true;
 
     XRectangle rect;
-    rect.x = (short)x;
-    rect.y = (short)y;
-    rect.width = (unsigned short)width;
-    rect.height = (unsigned short)height;
+    rect.x = (short)r.x;
+    rect.y = (short)r.y;
+    rect.width = (unsigned short)r.width;
+    rect.height = (unsigned short)r.height;
 
     if (!m_refData)
     {
         m_refData = new wxRegionRefData();
         M_REGIONDATA->m_region = XCreateRegion();
-        XUnionRectWithRegion( &rect, M_REGIONDATA->m_region, M_REGIONDATA->m_region );
     }
     else
     {
         AllocExclusive();
-
-        XUnionRectWithRegion( &rect, M_REGIONDATA->m_region, M_REGIONDATA->m_region );
     }
+
+    XUnionRectWithRegion( &rect, M_REGIONDATA->m_region, M_REGIONDATA->m_region );
 
     return true;
 }
 
-bool wxRegion::Union( const wxRect& rect )
+bool wxRegion::DoUnionWithRegion( const wxRegion& region )
 {
-    return Union( rect.x, rect.y, rect.width, rect.height );
-}
-
-bool wxRegion::Union( const wxRegion& region )
-{
-    if (region.IsNull())
-        return false;
+    wxCHECK_MSG( region.Ok(), false, _T("invalid region") );
 
     if (!m_refData)
     {
@@ -206,24 +194,9 @@ bool wxRegion::Union( const wxRegion& region )
     return true;
 }
 
-bool wxRegion::Intersect( wxCoord x, wxCoord y, wxCoord width, wxCoord height )
+bool wxRegion::DoIntersect( const wxRegion& region )
 {
-    wxRegion reg( x, y, width, height );
-
-    return Intersect( reg );
-}
-
-bool wxRegion::Intersect( const wxRect& rect )
-{
-    wxRegion reg( rect );
-
-    return Intersect( reg );
-}
-
-bool wxRegion::Intersect( const wxRegion& region )
-{
-    if (region.IsNull())
-        return false;
+    wxCHECK_MSG( region.Ok(), false, _T("invalid region") );
 
     if (!m_refData)
     {
@@ -245,22 +218,9 @@ bool wxRegion::Intersect( const wxRegion& region )
     return true;
 }
 
-bool wxRegion::Subtract( wxCoord x, wxCoord y, wxCoord width, wxCoord height )
+bool wxRegion::DoSubtract( const wxRegion& region )
 {
-    wxRegion reg( x, y, width, height );
-    return Subtract( reg );
-}
-
-bool wxRegion::Subtract( const wxRect& rect )
-{
-    wxRegion reg( rect );
-    return Subtract( reg );
-}
-
-bool wxRegion::Subtract( const wxRegion& region )
-{
-    if (region.IsNull())
-        return false;
+    wxCHECK_MSG( region.Ok(), false, _T("invalid region") );
 
     if (!m_refData)
     {
@@ -279,22 +239,9 @@ bool wxRegion::Subtract( const wxRegion& region )
     return true;
 }
 
-bool wxRegion::Xor( wxCoord x, wxCoord y, wxCoord width, wxCoord height )
+bool wxRegion::DoXor( const wxRegion& region )
 {
-    wxRegion reg( x, y, width, height );
-    return Xor( reg );
-}
-
-bool wxRegion::Xor( const wxRect& rect )
-{
-    wxRegion reg( rect );
-    return Xor( reg );
-}
-
-bool wxRegion::Xor( const wxRegion& region )
-{
-    if (region.IsNull())
-        return false;
+    wxCHECK_MSG( region.Ok(), false, _T("invalid region") );
 
     if (!m_refData)
     {
@@ -317,7 +264,7 @@ bool wxRegion::Xor( const wxRegion& region )
 // wxRegion tests
 // ----------------------------------------------------------------------------
 
-void wxRegion::GetBox( wxCoord &x, wxCoord &y, wxCoord &w, wxCoord &h ) const
+bool wxRegion::DoGetBox( wxCoord &x, wxCoord &y, wxCoord &w, wxCoord &h ) const
 {
     if (m_refData)
     {
@@ -327,6 +274,8 @@ void wxRegion::GetBox( wxCoord &x, wxCoord &y, wxCoord &w, wxCoord &h ) const
         y = rect.y;
         w = rect.width;
         h = rect.height;
+
+        return true;
     }
     else
     {
@@ -334,17 +283,12 @@ void wxRegion::GetBox( wxCoord &x, wxCoord &y, wxCoord &w, wxCoord &h ) const
         y = 0;
         w = -1;
         h = -1;
+
+        return false;
     }
 }
 
-wxRect wxRegion::GetBox() const
-{
-    wxCoord x, y, w, h;
-    GetBox( x, y, w, h );
-    return wxRect( x, y, w, h );
-}
-
-bool wxRegion::Offset( wxCoord x, wxCoord y )
+bool wxRegion::DoOffset( wxCoord x, wxCoord y )
 {
     if (!m_refData)
         return false;
@@ -356,7 +300,7 @@ bool wxRegion::Offset( wxCoord x, wxCoord y )
     return true;
 }
 
-bool wxRegion::Empty() const
+bool wxRegion::IsEmpty() const
 {
     if (!m_refData)
         return true;
@@ -364,7 +308,7 @@ bool wxRegion::Empty() const
     return XEmptyRegion( M_REGIONDATA->m_region ) == True;
 }
 
-wxRegionContain wxRegion::Contains( wxCoord x, wxCoord y ) const
+wxRegionContain wxRegion::DoContainsPoint( wxCoord x, wxCoord y ) const
 {
     if (!m_refData)
         return wxOutRegion;
@@ -375,12 +319,12 @@ wxRegionContain wxRegion::Contains( wxCoord x, wxCoord y ) const
         return wxOutRegion;
 }
 
-wxRegionContain wxRegion::Contains( wxCoord x, wxCoord y, wxCoord w, wxCoord h ) const
+wxRegionContain wxRegion::DoContainsRect(const wxRect& r) const
 {
     if (!m_refData)
         return wxOutRegion;
 
-    int res = XRectInRegion( M_REGIONDATA->m_region, x, y, w, h );
+    int res = XRectInRegion(M_REGIONDATA->m_region, r.x, r.y, r.width, r.height);
     switch (res)
     {
         case RectangleIn:   return wxInRegion;
@@ -388,16 +332,6 @@ wxRegionContain wxRegion::Contains( wxCoord x, wxCoord y, wxCoord w, wxCoord h )
         case RectanglePart: return wxPartRegion;
     }
     return wxOutRegion;
-}
-
-wxRegionContain wxRegion::Contains(const wxPoint& pt) const
-{
-    return Contains( pt.x, pt.y );
-}
-
-wxRegionContain wxRegion::Contains(const wxRect& rect) const
-{
-    return Contains( rect.x, rect.y, rect.width, rect.height );
 }
 
 WXRegion *wxRegion::GetX11Region() const

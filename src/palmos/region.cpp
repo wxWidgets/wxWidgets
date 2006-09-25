@@ -92,26 +92,13 @@ void wxRegion::Clear()
 {
 }
 
-bool wxRegion::Offset(wxCoord x, wxCoord y)
+bool wxRegion::DoOffset(wxCoord x, wxCoord y)
 {
     return false;
 }
 
 // combine another region with this one
-bool wxRegion::Combine(const wxRegion& rgn, wxRegionOp op)
-{
-    return false;
-}
-
-// Combine rectangle (x, y, w, h) with this.
-bool wxRegion::Combine(wxCoord x, wxCoord y,
-                       wxCoord width, wxCoord height,
-                       wxRegionOp op)
-{
-    return false;
-}
-
-bool wxRegion::Combine(const wxRect& rect, wxRegionOp op)
+bool wxRegion::DoCombine(const wxRegion& rgn, wxRegionOp op)
 {
     return false;
 }
@@ -121,19 +108,20 @@ bool wxRegion::Combine(const wxRect& rect, wxRegionOp op)
 // ----------------------------------------------------------------------------
 
 // Outer bounds of region
-void wxRegion::GetBox(wxCoord& x, wxCoord& y, wxCoord&w, wxCoord &h) const
+bool wxRegion::DoGetBox(wxCoord& x, wxCoord& y, wxCoord&w, wxCoord &h) const
 {
-}
-
-wxRect wxRegion::GetBox() const
-{
-    return wxRect(0, 0, 0, 0);
+    return false;
 }
 
 // Is region empty?
-bool wxRegion::Empty() const
+bool wxRegion::IsEmpty() const
 {
     return true;
+}
+
+bool wxRegion::DoIsEqual(const wxRegion& region) const
+{
+    return false;
 }
 
 // ----------------------------------------------------------------------------
@@ -141,26 +129,13 @@ bool wxRegion::Empty() const
 // ----------------------------------------------------------------------------
 
 // Does the region contain the point (x,y)?
-wxRegionContain wxRegion::Contains(wxCoord x, wxCoord y) const
-{
-    return wxOutRegion;
-}
-
-// Does the region contain the point pt?
-wxRegionContain wxRegion::Contains(const wxPoint& pt) const
-{
-    return wxOutRegion;
-}
-
-// Does the region contain the rectangle (x, y, w, h)?
-wxRegionContain wxRegion::Contains(wxCoord x, wxCoord y,
-                                   wxCoord w, wxCoord h) const
+wxRegionContain wxRegion::DoContainsPoint(wxCoord x, wxCoord y) const
 {
     return wxOutRegion;
 }
 
 // Does the region contain the rectangle rect
-wxRegionContain wxRegion::Contains(const wxRect& rect) const
+wxRegionContain wxRegion::DoContainsRect(const wxRect& rect) const
 {
     return wxOutRegion;
 }

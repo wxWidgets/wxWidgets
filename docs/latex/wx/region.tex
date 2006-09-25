@@ -18,6 +18,7 @@ reference counting, so copying and assignment operations are fast.
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
+
 \membersection{wxRegion::wxRegion}\label{wxregionctor}
 
 \func{}{wxRegion}{\void}
@@ -52,10 +53,11 @@ provided array. {\it fillStyle} parameter may have values
 
 \func{}{wxRegion}{\param{const wxBitmap\&}{ bmp},
                   \param{const wxColour\&}{ transColour},
-		  \param{int}{ tolerance = 0}}
+                  \param{int}{ tolerance = 0}}
 
 Constructs a region using the non-transparent pixels of a bitmap.  See
 \helpref{Union}{wxregionunion} for more details.
+
 
 
 \membersection{wxRegion::\destruct{wxRegion}}\label{wxregiondtor}
@@ -64,11 +66,13 @@ Constructs a region using the non-transparent pixels of a bitmap.  See
 
 Destructor.
 
+
 \membersection{wxRegion::Clear}\label{wxregionclear}
 
 \func{void}{Clear}{\void}
 
 Clears the current region.
+
 
 \membersection{wxRegion::Contains}\label{wxregioncontains}
 
@@ -95,12 +99,14 @@ The return value is one of wxOutRegion, wxPartRegion and wxInRegion.
 On Windows, only wxOutRegion and wxInRegion are returned; a value wxInRegion then indicates that
 all or some part of the region is contained in this region.
 
+
 \membersection{wxRegion::ConvertToBitmap}\label{wxregionconverttobitmap}
 
 \constfunc{wxBitmap}{ConvertToBitmap}{}
 
 Convert the region to a black and white bitmap with the white pixels
 being inside the region.
+
 
 \membersection{wxRegion::GetBox}\label{wxregiongetbox}
 
@@ -111,6 +117,7 @@ Returns the outer bounds of the region.
 \constfunc{wxRect}{GetBox}{\void}
 
 Returns the outer bounds of the region.
+
 
 \membersection{wxRegion::Intersect}\label{wxregionintersect}
 
@@ -135,11 +142,22 @@ Finds the intersection of this region and another region.
 Creates the intersection of the two regions, that is, the parts which are in both regions. The result
 is stored in this region.
 
+
 \membersection{wxRegion::IsEmpty}\label{wxregionisempty}
 
 \constfunc{bool}{IsEmpty}{\void}
 
 Returns {\tt true} if the region is empty, {\tt false} otherwise.
+
+
+\membersection{wxRegion::IsEqual}\label{wxregionisequal}
+
+\constfunc{bool}{IsEqual}{\param{const wxRegion\& }{region}}
+
+Returns {\tt true} if the region is equal to, i.e. covers the same area as,
+another one. Note that if both this region and \arg{region} are invalid, they
+are considered to be equal.
+
 
 \membersection{wxRegion::Subtract}\label{wxregionsubtract}
 
@@ -160,9 +178,12 @@ Subtracts a region from this region.
 This operation combines the parts of 'this' region that are not part of the second region.
 The result is stored in this region.
 
+
 \membersection{wxRegion::Offset}\label{wxregionoffset}
 
 \func{bool}{Offset}{\param{wxCoord}{ x}, \param{wxCoord}{ y}}
+
+\func{bool}{Offset}{\param{const wxPoint\& }{ pt}}
 
 Moves the region by the specified offsets in horizontal and vertical
 directions.
@@ -170,6 +191,7 @@ directions.
 \wxheading{Return value}
 
 {\tt true} if successful, {\tt false} otherwise (the region is unchanged then).
+
 
 \membersection{wxRegion::Union}\label{wxregionunion}
 
@@ -193,7 +215,7 @@ have a mask, solid rectangle of bitmap's dimensions is used.
 
 \func{bool}{Union}{\param{const wxBitmap\&}{ bmp},
                   \param{const wxColour\&}{ transColour},
-		  \param{int}{ tolerance = 0}}
+                  \param{int}{ tolerance = 0}}
 
 Finds the union of this region and the non-transparent pixels of a
 bitmap. Colour to be treated as transparent is specified in the
@@ -208,6 +230,7 @@ optional colour tolerance value.
 
 This operation creates a region that combines all of this region and the second region.
 The result is stored in this region.
+
 
 \membersection{wxRegion::Xor}\label{wxregionxor}
 
@@ -231,6 +254,7 @@ Finds the Xor of this region and another region.
 
 This operation creates a region that combines all of this region and the second region, except
 for any overlapping areas. The result is stored in this region.
+
 
 \membersection{wxRegion::operator $=$}\label{wxregionassign}
 
@@ -262,6 +286,7 @@ See \helpref{wxPaintEvent}{wxpaintevent} for an example of use.
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
+
 \membersection{wxRegionIterator::wxRegionIterator}\label{wxregioniteratorctor}
 
 \func{}{wxRegionIterator}{\void}
@@ -272,11 +297,13 @@ Default constructor.
 
 Creates an iterator object given a region.
 
+
 \membersection{wxRegionIterator::GetX}\label{wxregioniteratorgetx}
 
 \constfunc{wxCoord}{GetX}{\void}
 
 Returns the x value for the current region.
+
 
 \membersection{wxRegionIterator::GetY}\label{wxregioniteratorgety}
 
@@ -284,11 +311,13 @@ Returns the x value for the current region.
 
 Returns the y value for the current region.
 
+
 \membersection{wxRegionIterator::GetW}\label{wxregioniteratorgetw}
 
 \constfunc{wxCoord}{GetW}{\void}
 
 An alias for GetWidth.
+
 
 \membersection{wxRegionIterator::GetHeight}\label{wxregioniteratorgetheight}
 
@@ -296,11 +325,13 @@ An alias for GetWidth.
 
 Returns the height value for the current region.
 
+
 \membersection{wxRegionIterator::GetH}\label{wxregioniteratorgeth}
 
 \constfunc{wxCoord}{GetH}{\void}
 
 An alias for GetHeight.
+
 
 \membersection{wxRegionIterator::GetRect}\label{wxregioniteratorgetrect}
 
@@ -308,17 +339,20 @@ An alias for GetHeight.
 
 Returns the current rectangle.
 
+
 \membersection{wxRegionIterator::GetWidth}\label{wxregioniteratorgetwidth}
 
 \constfunc{wxCoord}{GetWidth}{\void}
 
 Returns the width value for the current region.
 
+
 \membersection{wxRegionIterator::HaveRects}\label{wxregioniteratorhaverects}
 
 \constfunc{bool}{HaveRects}{\void}
 
 Returns {\tt true} if there are still some rectangles; otherwise returns {\tt false}.
+
 
 \membersection{wxRegionIterator::Reset}\label{wxregioniteratorreset}
 
@@ -330,6 +364,7 @@ Resets the iterator to the beginning of the rectangles.
 
 Resets the iterator to the given region.
 
+
 \membersection{wxRegionIterator::operator $++$}\label{wxregioniteratorinc}
 
 \func{void}{operator $++$}{\void}
@@ -337,6 +372,7 @@ Resets the iterator to the given region.
 Increment operator. Increments the iterator to the next region.
 
 \pythonnote{A wxPython alias for this operator is called {\tt Next}.}
+
 
 \membersection{wxRegionIterator::operator bool}\label{wxregioniteratorbool}
 

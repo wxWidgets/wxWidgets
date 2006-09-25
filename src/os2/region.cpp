@@ -246,7 +246,7 @@ wxObjectRefData *wxRegion::CloneData(const wxObjectRefData *data) const
 //# Modify region
 //-----------------------------------------------------------------------------
 
-bool wxRegion::Offset( wxCoord x, wxCoord y )
+bool wxRegion::DoOffset( wxCoord x, wxCoord y )
 {
     if ( !x && !y )
     {
@@ -276,23 +276,9 @@ void wxRegion::Clear()
 } // end of wxRegion::Clear
 
 //
-// Combine rectangle (x, y, w, h) with this.
-//
-bool wxRegion::Combine(
-  wxCoord                           x
-, wxCoord                           y
-, wxCoord                           vWidth
-, wxCoord                           vHeight
-, wxRegionOp                        eOp
-)
-{
-    return Combine(wxRegion(x, y, vWidth, vHeight), eOp);
-} // end of wxRegion::Combine
-
-//
 // Union region with this.
 //
-bool wxRegion::Combine( const wxRegion& rRegion, wxRegionOp eOp )
+bool wxRegion::DoCombine( const wxRegion& rRegion, wxRegionOp eOp )
 {
     //
     // We can't use the API functions if we don't have a valid region handle
@@ -357,27 +343,19 @@ bool wxRegion::Combine( const wxRegion& rRegion, wxRegionOp eOp )
     return true;
 } // end of wxRegion::Combine
 
-bool wxRegion::Combine(
-  const wxRect&                     rRect
-, wxRegionOp                        eOp
-)
-{
-    return Combine( rRect.GetLeft()
-                   ,rRect.GetTop()
-                   ,rRect.GetWidth()
-                   ,rRect.GetHeight()
-                   ,eOp
-                  );
-} // end of wxRegion::Combine
-
 //-----------------------------------------------------------------------------
 //# Information on region
 //-----------------------------------------------------------------------------
 
+bool wxRegion::DoIsEqual(const wxRegion& region) const
+{
+    return false;
+}
+
 //
 // Outer bounds of region
 //
-void wxRegion::GetBox(
+bool wxRegion::DoGetBox(
   wxCoord&                          x
 , wxCoord&                          y
 , wxCoord&                          vWidth
@@ -397,24 +375,19 @@ void wxRegion::GetBox(
         y       = vRect.yBottom;
         vWidth  = vRect.xRight - vRect.xLeft;
         vHeight = vRect.yTop - vRect.yBottom;
+        return true;
     }
     else
     {
         x = y = vWidth = vHeight = 0L;
+        return false;
     }
 } // end of wxRegion::GetBox
-
-wxRect wxRegion::GetBox() const
-{
-    wxCoord x, y, w, h;
-    GetBox(x, y, w, h);
-    return wxRect(x, y, w, h);
-}
 
 //
 // Is region empty?
 //
-bool wxRegion::Empty() const
+bool wxRegion::IsEmpty() const
 {
     wxCoord x;
     wxCoord y;
@@ -430,7 +403,7 @@ bool wxRegion::Empty() const
            ,vHeight
           );
     return ((vWidth == 0) && (vHeight == 0));
-} // end of wxRegion::Empty
+} // end of wxRegion::IsEmpty
 
 //-----------------------------------------------------------------------------
 // Tests
@@ -438,7 +411,7 @@ bool wxRegion::Empty() const
 //
 // Does the region contain the point pt?
 //
-wxRegionContain wxRegion::Contains( const wxPoint& rPoint ) const
+wxRegionContain wxRegion::DoContainsPoint( const wxPoint& rPoint ) const
 {
     POINTL                          vPoint = { rPoint.x, rPoint.y };
 
@@ -448,7 +421,7 @@ wxRegionContain wxRegion::Contains( const wxPoint& rPoint ) const
     LONG lInside = ::GpiPtInRegion( ((wxRegionRefData*)m_refData)->m_hPS,
                                     M_REGION,
                                     &vPoint
-				  );
+                                  );
     if (lInside == PRGN_INSIDE)
         return wxInRegion;
     else
@@ -458,23 +431,20 @@ wxRegionContain wxRegion::Contains( const wxPoint& rPoint ) const
 //
 // Does the region contain the rectangle (x, y, w, h)?
 //
-wxRegionContain wxRegion::Contains( wxCoord x,
-				    wxCoord y,
-				    wxCoord vWidth,
-				    wxCoord vHeight ) const
+wxRegionContain wxRegion::DoContainsRect(const wxRect& rect) const
 {
     if (!m_refData)
         return wxOutRegion;
 
     RECTL   vRect;
-    vRect.xLeft   = x;
-    vRect.xRight  = x + vWidth;
-    vRect.yTop    = y + vHeight;
-    vRect.yBottom = y;
+    vRect.xLeft   = r.x;
+    vRect.xRight  = r.x + r.width;
+    vRect.yTop    = r.y + r.height;
+    vRect.yBottom = r.y;
 
     LONG lInside = ::GpiRectInRegion( ((wxRegionRefData*)m_refData)->m_hPS,
                                       M_REGION,
-                                      &vRect    
+                                      &vRect
                                     );
     switch (lInside)
     {

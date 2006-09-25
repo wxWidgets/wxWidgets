@@ -1,46 +1,24 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        region.h
+// Name:        wx/x11/region.h
 // Purpose:     wxRegion class
 // Author:      Julian Smart
 // Modified by:
 // Created:     17/09/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart, Robert Roebling
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_REGION_H_
 #define _WX_REGION_H_
 
 #include "wx/list.h"
-#include "wx/gdiobj.h"
-#include "wx/gdicmn.h"
-
-//-----------------------------------------------------------------------------
-// classes
-//-----------------------------------------------------------------------------
-
-class WXDLLIMPEXP_CORE wxRegion;
-
-//-----------------------------------------------------------------------------
-// constants
-//-----------------------------------------------------------------------------
-
-// So far, for internal use only
-enum wxRegionOp
-{
-   wxRGN_AND,          // Creates the intersection of the two combined regions.
-   wxRGN_COPY,         // Creates a copy of the region identified by hrgnSrc1.
-   wxRGN_DIFF,         // Combines the parts of hrgnSrc1 that are not part of hrgnSrc2.
-   wxRGN_OR,           // Creates the union of two combined regions.
-   wxRGN_XOR           // Creates the union of two combined regions except for any overlapping areas.
-};
 
 // ----------------------------------------------------------------------------
 // wxRegion
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxRegion : public wxGDIObject
+class WXDLLIMPEXP_CORE wxRegion : public wxRegionBase
 {
 public:
     wxRegion() { }
@@ -75,55 +53,9 @@ public:
 
     virtual ~wxRegion();
 
-    bool Ok() const { return m_refData != NULL; }
-
-    bool operator == ( const wxRegion& region ) const;
-    bool operator != ( const wxRegion& region ) const { return !(*this == region); }
-
-    void Clear();
-
-    bool Offset( wxCoord x, wxCoord y );
-
-    bool Union( wxCoord x, wxCoord y, wxCoord width, wxCoord height );
-    bool Union( const wxRect& rect );
-    bool Union( const wxRegion& region );
-
-    bool Intersect( wxCoord x, wxCoord y, wxCoord width, wxCoord height );
-    bool Intersect( const wxRect& rect );
-    bool Intersect( const wxRegion& region );
-
-    bool Subtract( wxCoord x, wxCoord y, wxCoord width, wxCoord height );
-    bool Subtract( const wxRect& rect );
-    bool Subtract( const wxRegion& region );
-
-    bool Xor( wxCoord x, wxCoord y, wxCoord width, wxCoord height );
-    bool Xor( const wxRect& rect );
-    bool Xor( const wxRegion& region );
-
-    void GetBox( wxCoord& x, wxCoord& y, wxCoord&w, wxCoord &h ) const;
-    wxRect GetBox() const ;
-
-    bool Empty() const;
-    bool IsEmpty() const { return Empty(); }
-
-    wxRegionContain Contains( wxCoord x, wxCoord y ) const;
-    wxRegionContain Contains( wxCoord x, wxCoord y, wxCoord w, wxCoord h ) const;
-    wxRegionContain Contains(const wxPoint& pt) const;
-    wxRegionContain Contains(const wxRect& rect) const;
-
-    // Convert the region to a B&W bitmap with the white pixels being inside
-    // the region.
-    wxBitmap ConvertToBitmap() const;
-
-    // Use the non-transparent pixels of a wxBitmap for the region to combine
-    // with this region.  First version takes transparency from bitmap's mask,
-    // second lets the user specify the colour to be treated as transparent
-    // along with an optional tolerance value.
-    // NOTE: implemented in common/rgncmn.cpp
-    bool Union(const wxBitmap& bmp);
-    bool Union(const wxBitmap& bmp,
-               const wxColour& transColour, int tolerance = 0);
-
+    // wxRegionBase methods
+    virtual void Clear();
+    virtual bool IsEmpty() const;
 
 public:
     WXRegion *GetX11Region() const;
@@ -132,6 +64,19 @@ protected:
     // ref counting code
     virtual wxObjectRefData *CreateRefData() const;
     virtual wxObjectRefData *CloneRefData(const wxObjectRefData *data) const;
+
+    // wxRegionBase pure virtuals
+    virtual bool DoIsEqual(const wxRegion& region) const;
+    virtual bool DoGetBox(wxCoord& x, wxCoord& y, wxCoord& w, wxCoord& h) const;
+    virtual wxRegionContain DoContainsPoint(wxCoord x, wxCoord y) const;
+    virtual wxRegionContain DoContainsRect(const wxRect& rect) const;
+
+    virtual bool DoOffset(wxCoord x, wxCoord y);
+    virtual bool DoUnionWithRect(const wxRect& rect);
+    virtual bool DoUnionWithRegion(const wxRegion& region);
+    virtual bool DoIntersect(const wxRegion& region);
+    virtual bool DoSubtract(const wxRegion& region);
+    virtual bool DoXor(const wxRegion& region);
 
     // common part of ctors for a rectangle region
     void InitRect(wxCoord x, wxCoord y, wxCoord w, wxCoord h);

@@ -80,42 +80,30 @@ wxRegion::~wxRegion()
     // m_refData unrefed in ~wxObject
 }
 
-bool wxRegion::operator==(const wxRegion& region) const
-{
-    if ( m_refData == region.m_refData )
-        return true;
-
-    if ( !Ok() )
-    {
-        // only equal if both are invalid, otherwise different
-        return !region.Ok();
-    }
-
-    return M_REGION->m_rect == M_REGION_OF(region)->m_rect;
-}
-
 //-----------------------------------------------------------------------------
 // Information about the region
 //-----------------------------------------------------------------------------
 
-void wxRegion::GetBox(wxCoord& x, wxCoord& y, wxCoord&w, wxCoord &h) const
+bool wxRegion::DoIsEqual(const wxRegion& region) const
 {
-    wxRect r = GetBox();
+    return M_REGION->m_rect == M_REGION_OF(region)->m_rect;
+}
+
+bool wxRegion::DoGetBox(wxCoord& x, wxCoord& y, wxCoord&w, wxCoord &h) const
+{
+    if ( !m_refData )
+        return false;
+
+    const wxRect& r = M_REGION->m_rect;
     x = r.GetX();
     y = r.GetY();
     w = r.GetWidth();
     h = r.GetHeight();
+
+    return true;
 }
 
-wxRect wxRegion::GetBox() const
-{
-    if (m_refData)
-        return M_REGION->m_rect;
-    else
-        return wxRect();
-}
-
-bool wxRegion::Empty() const
+bool wxRegion::IsEmpty() const
 {
     if (!m_refData)
         return true;
@@ -132,14 +120,14 @@ void wxRegion::Clear()
     UnRef();
 }
 
-bool wxRegion::Offset(wxCoord x, wxCoord y)
+bool wxRegion::DoOffset(wxCoord x, wxCoord y)
 {
     AllocExclusive();
     M_REGION->m_rect.Offset(x, y);
     return true;
 }
 
-bool wxRegion::Union(const wxRect& rect)
+bool wxRegion::DoUnionWithRect(const wxRect& rect)
 {
     AllocExclusive();
 
@@ -159,28 +147,27 @@ bool wxRegion::Union(const wxRect& rect)
     }
 }
 
-bool wxRegion::Union(const wxRegion& region)
+bool wxRegion::DoUnionWithRegion(const wxRegion& region)
 {
     wxCHECK_MSG( region.Ok(), false, _T("invalid region") );
-    return Union(M_REGION_OF(region)->m_rect);
+    return DoUnionWithRect(M_REGION_OF(region)->m_rect);
 }
 
-bool wxRegion::Intersect(const wxRect& rect)
+bool wxRegion::DoIntersect(const wxRegion& region)
 {
+    wxCHECK_MSG( region.Ok(), false, _T("invalid region") );
+
     AllocExclusive();
-    M_REGION->m_rect.Intersect(rect);
+    M_REGION->m_rect.Intersect(M_REGION_OF(region)->m_rect);
     return true;
 }
 
-bool wxRegion::Intersect(const wxRegion& region)
+bool wxRegion::DoSubtract(const wxRegion& region)
 {
     wxCHECK_MSG( region.Ok(), false, _T("invalid region") );
-    return Intersect(M_REGION_OF(region)->m_rect);
-}
-
-bool wxRegion::Subtract(const wxRect& rect)
-{
     wxCHECK_MSG( Ok(), false, _T("invalid region") );
+
+    const wxRect& rect = M_REGION_OF(region)->m_rect;
 
     if ( rect.Contains(M_REGION->m_rect) )
     {
@@ -201,22 +188,11 @@ bool wxRegion::Subtract(const wxRect& rect)
     }
 }
 
-bool wxRegion::Subtract(const wxRegion& region)
+bool wxRegion::DoXor(const wxRegion& region)
 {
     wxCHECK_MSG( region.Ok(), false, _T("invalid region") );
-    return Subtract(M_REGION_OF(region)->m_rect);
-}
-
-bool wxRegion::Xor(const wxRect& rect)
-{
     wxFAIL_MSG( _T("Xor not implemented") );
     return false;
-}
-
-bool wxRegion::Xor(const wxRegion& region)
-{
-    wxCHECK_MSG( region.Ok(), false, _T("invalid region") );
-    return Xor(M_REGION_OF(region)->m_rect);
 }
 
 
@@ -224,7 +200,7 @@ bool wxRegion::Xor(const wxRegion& region)
 // Tests
 //-----------------------------------------------------------------------------
 
-wxRegionContain wxRegion::Contains(wxCoord x, wxCoord y) const
+wxRegionContain wxRegion::DoContainsPoint(wxCoord x, wxCoord y) const
 {
     wxCHECK_MSG( Ok(), wxOutRegion, _T("invalid region") );
 
@@ -234,7 +210,7 @@ wxRegionContain wxRegion::Contains(wxCoord x, wxCoord y) const
         return wxOutRegion;
 }
 
-wxRegionContain wxRegion::Contains(const wxRect& rect) const
+wxRegionContain wxRegion::DoContainsRect(const wxRect& rect) const
 {
     wxCHECK_MSG( Ok(), wxOutRegion, _T("invalid region") );
 

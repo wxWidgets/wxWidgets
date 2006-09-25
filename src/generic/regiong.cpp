@@ -286,100 +286,72 @@ wxObjectRefData *wxRegionGeneric::CloneRefData(const wxObjectRefData *data) cons
     return new wxRegionRefData(*(wxRegionRefData *)data);
 }
 
-bool wxRegionGeneric::operator== (const wxRegionGeneric& region) const
+bool wxRegionGeneric::DoIsEqual(const wxRegion& region) const
 {
-    wxASSERT(m_refData && region.m_refData);
     return REGION::XEqualRegion(M_REGIONDATA,M_REGIONDATA_OF(region));
 }
 
-wxRect wxRegionGeneric::GetBox() const
+bool wxRegionGeneric::DoGetBox(wxCoord& x, wxCoord& y, wxCoord&w, wxCoord &h) const
 {
-    wxASSERT(m_refData);
-    wxRect rect;
-    REGION::XClipBox(M_REGIONDATA,&rect);
-    return rect;
-}
+    if ( !m_refData )
+        return false;
 
-void wxRegionGeneric::GetBox(wxCoord& x, wxCoord& y, wxCoord&w, wxCoord &h) const
-{
-    wxASSERT(m_refData);
     wxRect rect;
     REGION::XClipBox(M_REGIONDATA,&rect);
     x = rect.x;
     y = rect.y;
     w = rect.width;
     h = rect.height;
+    return true;
 }
 
 // ----------------------------------------------------------------------------
 // wxRegionGeneric operations
 // ----------------------------------------------------------------------------
 
-bool wxRegionGeneric::Union(const wxRect& rect)
-/* XUnionRectWithRegion */
+bool wxRegionGeneric::DoUnionWithRect(const wxRect& rect)
 {
-    if (!rect.width || !rect.height)
-        return false;
+    if ( rect.IsEmpty() )
+    {
+        // nothing to do
+        return true;
+    }
 
     AllocExclusive();
     REGION region(rect);
     return REGION::XUnionRegion(&region,M_REGIONDATA,M_REGIONDATA);
 }
 
-bool wxRegionGeneric::Union(const wxRegionGeneric& region)
+bool wxRegionGeneric::DoUnionWithRegion(const wxRegionGeneric& region)
 {
     AllocExclusive();
     return REGION::XUnionRegion(M_REGIONDATA_OF(region),M_REGIONDATA,M_REGIONDATA);
 }
 
-bool wxRegionGeneric::Intersect(const wxRect& rect)
-{
-    if (!rect.width || !rect.height)
-        return false;
-    AllocExclusive();
-    REGION region(rect);
-
-    return REGION::XIntersectRegion(&region,M_REGIONDATA,M_REGIONDATA);
-}
-
-bool wxRegionGeneric::Intersect(const wxRegionGeneric& region)
+bool wxRegionGeneric::DoIntersect(const wxRegionGeneric& region)
 {
     AllocExclusive();
     return REGION::XIntersectRegion(M_REGIONDATA_OF(region),M_REGIONDATA,M_REGIONDATA);
 }
 
-bool wxRegionGeneric::Subtract(const wxRect& rect)
+bool wxRegionGeneric::DoSubtract(const wxRegionGeneric& region)
 {
-    if (!rect.width || !rect.height)
-        return false;
-    AllocExclusive();
-    REGION region(rect);
+    if ( region.IsEmpty() )
+    {
+        // nothing to do
+        return true;
+    }
 
-    return REGION::XSubtractRegion(&region,M_REGIONDATA,M_REGIONDATA);
-}
-
-bool wxRegionGeneric::Subtract(const wxRegionGeneric& region)
-{
     return REGION::XSubtractRegion(M_REGIONDATA_OF(region),M_REGIONDATA,M_REGIONDATA);
 }
 
-bool wxRegionGeneric::Xor(const wxRect& rect)
-{
-    if (!rect.width || !rect.height)
-        return false;
-    AllocExclusive();
-    REGION region(rect);
-
-    return REGION::XXorRegion(&region,M_REGIONDATA,M_REGIONDATA);
-}
-
-bool wxRegionGeneric::Xor(const wxRegionGeneric& region)
+bool wxRegionGeneric::DoXor(const wxRegionGeneric& region)
 {
     AllocExclusive();
     return REGION::XXorRegion(M_REGIONDATA_OF(region),M_REGIONDATA,M_REGIONDATA);
 }
 
-bool wxRegionGeneric::Offset(wxCoord x, wxCoord y)
+bool wxRegionGeneric::DoOffset(wxCoord x, wxCoord y)
 {
     AllocExclusive();
     return REGION::XOffsetRegion(M_REGIONDATA, x, y);
@@ -389,35 +361,21 @@ bool wxRegionGeneric::Offset(wxCoord x, wxCoord y)
 // wxRegionGeneric comparison
 // ----------------------------------------------------------------------------
 
-bool wxRegionGeneric::Empty() const
+bool wxRegionGeneric::IsEmpty() const
 {
     wxASSERT(m_refData);
     return REGION::XEmptyRegion(M_REGIONDATA);
 }
 
 // Does the region contain the point (x,y)?
-wxRegionContain wxRegionGeneric::Contains(long x, long y) const
+wxRegionContain wxRegionGeneric::DoContainsPoint(long x, long y) const
 {
     wxASSERT(m_refData);
-    return REGION::XPointInRegion(M_REGIONDATA,x,y)?wxInRegion:wxOutRegion;
-}
-
-// Does the region contain the point pt?
-wxRegionContain wxRegionGeneric::Contains(const wxPoint& pt) const
-{
-    wxASSERT(m_refData);
-    return REGION::XPointInRegion(M_REGIONDATA,pt.x,pt.y)?wxInRegion:wxOutRegion;
-}
-
-// Does the region contain the rectangle (x, y, w, h)?
-wxRegionContain wxRegionGeneric::Contains(long x, long y, long w, long h) const
-{
-    wxASSERT(m_refData);
-    return REGION::XRectInRegion(M_REGIONDATA,x,y,w,h);
+    return REGION::XPointInRegion(M_REGIONDATA,x,y) ? wxInRegion : wxOutRegion;
 }
 
 // Does the region contain the rectangle rect?
-wxRegionContain wxRegionGeneric::Contains(const wxRect& rect) const
+wxRegionContain wxRegionGeneric::DoContainsRect(const wxRect& rect) const
 {
     wxASSERT(m_refData);
     return REGION::XRectInRegion(M_REGIONDATA,rect.x,rect.y,rect.width,rect.height);

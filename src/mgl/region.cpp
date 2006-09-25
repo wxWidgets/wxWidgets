@@ -127,8 +127,15 @@ void wxRegion::Clear()
 // Information on region
 //-----------------------------------------------------------------------------
 
+bool wxRegion::DoIsEqual(const wxRegion& region) const
+{
+    wxFAIL_MSG( _T("not implemented") );
+
+    return false;
+}
+
 // Outer bounds of region
-void wxRegion::GetBox(wxCoord& x, wxCoord& y, wxCoord&w, wxCoord &h) const
+bool wxRegion::DoGetBox(wxCoord& x, wxCoord& y, wxCoord&w, wxCoord &h) const
 {
     if (m_refData)
     {
@@ -138,22 +145,18 @@ void wxRegion::GetBox(wxCoord& x, wxCoord& y, wxCoord&w, wxCoord &h) const
         y = rect.top;
         w = rect.right - rect.left;
         h = rect.bottom - rect.top;
+
+        return true;
     }
     else
     {
         x = y = w = h = 0;
+        return false;
     }
 }
 
-wxRect wxRegion::GetBox() const
-{
-    wxCoord x, y, w, h;
-    GetBox(x, y, w, h);
-    return wxRect(x, y, w, h);
-}
-
 // Is region empty?
-bool wxRegion::Empty() const
+bool wxRegion::IsEmpty() const
 {
     if (!m_refData)
         return true;
@@ -165,7 +168,7 @@ bool wxRegion::Empty() const
 // Modifications
 //-----------------------------------------------------------------------------
 
-bool wxRegion::Offset(wxCoord x, wxCoord y)
+bool wxRegion::DoOffset(wxCoord x, wxCoord y)
 {
     AllocExclusive();
     M_REGION.offset(x, y);
@@ -173,63 +176,35 @@ bool wxRegion::Offset(wxCoord x, wxCoord y)
 }
 
 // Union rectangle or region with this.
-bool wxRegion::Union(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
+bool wxRegion::DoUnionWithRect(const wxRect& r)
 {
     AllocExclusive();
-    M_REGION += MGLRect(x, y, x + width, y + height);
+    M_REGION += MGLRect(r.x, r.y, r.GetRight() + 1, r.GetHeight() + 1);
     return true;
 }
 
-bool wxRegion::Union(const wxRegion& region)
+bool wxRegion::DoUnionWithRegion(const wxRegion& region)
 {
     AllocExclusive();
     M_REGION += M_REGION_OF(region);
     return true;
 }
 
-// Intersect rectangle or region with this.
-bool wxRegion::Intersect(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
-{
-    AllocExclusive();
-    M_REGION &= MGLRect(x, y, x + width, y + height);
-    return true;
-}
-
-bool wxRegion::Intersect(const wxRegion& region)
+bool wxRegion::DoIntersect(const wxRegion& region)
 {
     AllocExclusive();
     M_REGION &= M_REGION_OF(region);
     return true;
 }
 
-// Subtract rectangle or region from this:
-// Combines the parts of 'this' that are not part of the second region.
-bool wxRegion::Subtract(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
-{
-    AllocExclusive();
-    M_REGION -= MGLRect(x, y, x + width, y + height);
-    return true;
-}
-
-bool wxRegion::Subtract(const wxRegion& region)
+bool wxRegion::DoSubtract(const wxRegion& region)
 {
     AllocExclusive();
     M_REGION -= M_REGION_OF(region);
     return true;
 }
 
-// XOR: the union of two combined regions except for any overlapping areas.
-bool wxRegion::Xor(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
-{
-    AllocExclusive();
-    MGLRect rect(x, y, x + width, y + height);
-    MGLRegion rg1 = M_REGION + rect,
-              rg2 = M_REGION & rect;
-    M_REGION = rg1 - rg2;
-    return true;
-}
-
-bool wxRegion::Xor(const wxRegion& region)
+bool wxRegion::DoXor(const wxRegion& region)
 {
     AllocExclusive();
     MGLRegion rg1 = M_REGION + M_REGION_OF(region),
@@ -244,7 +219,7 @@ bool wxRegion::Xor(const wxRegion& region)
 //-----------------------------------------------------------------------------
 
 // Does the region contain the point (x,y)?
-wxRegionContain wxRegion::Contains(wxCoord x, wxCoord y) const
+wxRegionContain wxRegion::DoContainsPoint(wxCoord x, wxCoord y) const
 {
     if (!m_refData)
         return wxOutRegion;
@@ -255,39 +230,28 @@ wxRegionContain wxRegion::Contains(wxCoord x, wxCoord y) const
         return wxOutRegion;
 }
 
-// Does the region contain the point pt?
-wxRegionContain wxRegion::Contains(const wxPoint& pt) const
-{
-    return Contains(pt.x, pt.y);
-}
-
 // Does the region contain the rectangle (x, y, w, h)?
-wxRegionContain wxRegion::Contains(wxCoord x, wxCoord y, wxCoord w, wxCoord h) const
+wxRegionContain wxRegion::DoContainsRect(const wxRect& r) const
 {
     if (!m_refData)
         return wxOutRegion;
 
-    MGLRect rect(x, y, x + w, y + h);
+    MGLRect rect(r.x, r.y, r.GetRight() + 1, r.GetBottom() + 1);
     MGLRegion rg;
 
     // 1) is the rectangle entirely covered by the region?
     rg = MGLRegion(rect) - M_REGION;
-    if (rg.isEmpty()) return wxInRegion;
+    if (rg.isEmpty())
+        return wxInRegion;
 
     // 2) is the rectangle completely outside the region?
     rg = M_REGION & rect; // intersection
-    if (rg.isEmpty()) return wxOutRegion;
+    if (rg.isEmpty())
+        return wxOutRegion;
 
     // 3) neither case happened => it is partially covered:
     return wxPartRegion;
 }
-
-// Does the region contain the rectangle rect
-wxRegionContain wxRegion::Contains(const wxRect& rect) const
-{
-    return Contains(rect.x, rect.y, rect.width, rect.height);
-}
-
 
 ///////////////////////////////////////////////////////////////////////////////
 //                               wxRegionIterator                                 //

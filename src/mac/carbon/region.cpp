@@ -142,7 +142,7 @@ void wxRegion::Clear()
 }
 
 // Move the region
-bool wxRegion::Offset(wxCoord x, wxCoord y)
+bool wxRegion::DoOffset(wxCoord x, wxCoord y)
 {
     wxCHECK_MSG( M_REGION, false, _T("invalid wxRegion") );
 
@@ -156,58 +156,10 @@ bool wxRegion::Offset(wxCoord x, wxCoord y)
 }
 
 
-//! Combine rectangle (x, y, w, h) with this.
-bool wxRegion::Combine(long x, long y, long width, long height, wxRegionOp op)
-{
-    // Don't change shared data
-    if (!m_refData)
-    {
-        m_refData = new wxRegionRefData();
-    }
-    else if (m_refData->GetRefCount() > 1)
-    {
-        wxRegionRefData* ref = (wxRegionRefData*)m_refData;
-        UnRef();
-        m_refData = new wxRegionRefData( *ref );
-    }
-
-    RgnHandle rgn = NewRgn() ;
-    SetRectRgn( rgn , x , y, x + width, y + height ) ;
-
-    switch (op)
-    {
-        case wxRGN_AND:
-            SectRgn( M_REGION , rgn , M_REGION ) ;
-            break ;
-
-        case wxRGN_OR:
-            UnionRgn( M_REGION , rgn , M_REGION ) ;
-            break ;
-
-        case wxRGN_XOR:
-             XorRgn( M_REGION , rgn , M_REGION ) ;
-            break ;
-
-        case wxRGN_DIFF:
-            DiffRgn( M_REGION , rgn , M_REGION ) ;
-            break ;
-
-        case wxRGN_COPY:
-        default:
-            CopyRgn( rgn , M_REGION ) ;
-            break ;
-    }
-
-    DisposeRgn( rgn ) ;
-
-    return true;
-}
-
 //! Union /e region with this.
-bool wxRegion::Combine(const wxRegion& region, wxRegionOp op)
+bool wxRegion::DoCombine(const wxRegion& region, wxRegionOp op)
 {
-    if (region.Empty())
-        return false;
+    wxCHECK_MSG( region.Ok(), false, _T("invalid wxRegion") );
 
     // Don't change shared data
     if (!m_refData)
@@ -248,17 +200,19 @@ bool wxRegion::Combine(const wxRegion& region, wxRegionOp op)
     return true;
 }
 
-bool wxRegion::Combine(const wxRect& rect, wxRegionOp op)
-{
-    return Combine(rect.GetLeft(), rect.GetTop(), rect.GetWidth(), rect.GetHeight(), op);
-}
-
 //-----------------------------------------------------------------------------
 //# Information on region
 //-----------------------------------------------------------------------------
 
+bool wxRegion::DoIsEqual(const wxRegion& region) const
+{
+    wxFAIL_MSG( _T("not implemented") );
+
+    return false;
+}
+
 // Outer bounds of region
-void wxRegion::GetBox(wxCoord& x, wxCoord& y, wxCoord& w, wxCoord& h) const
+bool wxRegion::DoGetBox(wxCoord& x, wxCoord& y, wxCoord& w, wxCoord& h) const
 {
     if (m_refData)
     {
@@ -268,23 +222,19 @@ void wxRegion::GetBox(wxCoord& x, wxCoord& y, wxCoord& w, wxCoord& h) const
         y = box.top ;
         w = box.right - box.left ;
         h = box.bottom - box.top ;
+
+        return true;
     }
     else
     {
         x = y = w = h = 0;
+
+        return false;
     }
 }
 
-wxRect wxRegion::GetBox() const
-{
-    wxCoord x, y, w, h;
-    GetBox(x, y, w, h);
-
-    return wxRect(x, y, w, h);
-}
-
 // Is region empty?
-bool wxRegion::Empty() const
+bool wxRegion::IsEmpty() const
 {
     if ( m_refData )
         return EmptyRgn( M_REGION ) ;
@@ -301,26 +251,13 @@ const WXHRGN wxRegion::GetWXHRGN() const
 //# Tests
 //-----------------------------------------------------------------------------
 
-// Does the region contain the point (x,y)?
-wxRegionContain wxRegion::Contains(long x, long y) const
-{
-    if (!m_refData)
-        return wxOutRegion;
-
-    // TODO. Return wxInRegion if within region.
-//    if (0)
-//        return wxInRegion;
-
-    return wxOutRegion;
-}
-
 // Does the region contain the point?
-wxRegionContain wxRegion::Contains(const wxPoint& pt) const
+wxRegionContain wxRegion::DoContainsPoint(wxCoord x, wxCoord y) const
 {
     if (!m_refData)
         return wxOutRegion;
 
-    Point p = { pt.y , pt.x } ;
+    Point p = { y , x } ;
     if (PtInRgn( p , M_REGION ) )
         return wxInRegion;
 
@@ -328,32 +265,16 @@ wxRegionContain wxRegion::Contains(const wxPoint& pt) const
 }
 
 // Does the region contain the rectangle (x, y, w, h)?
-wxRegionContain wxRegion::Contains(long x, long y, long w, long h) const
+wxRegionContain wxRegion::DoContainsRect(const wxRect& r) const
 {
     if (!m_refData)
         return wxOutRegion;
 
-    Rect rect = { y , x , y + h , x + w } ;
+    Rect rect = { r.y , r.x , r.y + r.h , r.x + r.w } ;
     if (RectInRgn( &rect , M_REGION ) )
         return wxInRegion;
     else
         return wxOutRegion;
-}
-
-// Does the region contain the rectangle rect
-wxRegionContain wxRegion::Contains(const wxRect& rect) const
-{
-    if (!m_refData)
-        return wxOutRegion;
-
-    long x, y, w, h;
-
-    x = rect.x;
-    y = rect.y;
-    w = rect.GetWidth();
-    h = rect.GetHeight();
-
-    return Contains(x, y, w, h);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -479,7 +400,7 @@ void wxRegionIterator::Reset(const wxRegion& region)
         m_rects = NULL;
     }
 
-    if (m_region.Empty())
+    if (m_region.IsEmpty())
     {
         m_numRects = 0;
     }
