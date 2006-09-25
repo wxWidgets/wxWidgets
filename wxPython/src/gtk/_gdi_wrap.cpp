@@ -10528,6 +10528,50 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_Region_IsEqual(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxRegion *arg1 = (wxRegion *) 0 ;
+  wxRegion *arg2 = 0 ;
+  bool result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "region", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:Region_IsEqual",kwnames,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxRegion, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Region_IsEqual" "', expected argument " "1"" of type '" "wxRegion const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxRegion * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_wxRegion,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Region_IsEqual" "', expected argument " "2"" of type '" "wxRegion const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Region_IsEqual" "', expected argument " "2"" of type '" "wxRegion const &""'"); 
+  }
+  arg2 = reinterpret_cast< wxRegion * >(argp2);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = (bool)((wxRegion const *)arg1)->IsEqual((wxRegion const &)*arg2);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  {
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+  }
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_Region_Union(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   wxRegion *arg1 = (wxRegion *) 0 ;
@@ -31344,6 +31388,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Region_IntersectRect", (PyCFunction) _wrap_Region_IntersectRect, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Region_IntersectRegion", (PyCFunction) _wrap_Region_IntersectRegion, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Region_IsEmpty", (PyCFunction)_wrap_Region_IsEmpty, METH_O, NULL},
+	 { (char *)"Region_IsEqual", (PyCFunction) _wrap_Region_IsEqual, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Region_Union", (PyCFunction) _wrap_Region_Union, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Region_UnionRect", (PyCFunction) _wrap_Region_UnionRect, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Region_UnionRegion", (PyCFunction) _wrap_Region_UnionRegion, METH_VARARGS | METH_KEYWORDS, NULL},

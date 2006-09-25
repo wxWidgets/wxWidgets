@@ -1420,6 +1420,10 @@ class Region(GDIObject):
         """IsEmpty(self) -> bool"""
         return _gdi_.Region_IsEmpty(*args, **kwargs)
 
+    def IsEqual(*args, **kwargs):
+        """IsEqual(self, Region region) -> bool"""
+        return _gdi_.Region_IsEqual(*args, **kwargs)
+
     def Union(*args, **kwargs):
         """Union(self, int x, int y, int width, int height) -> bool"""
         return _gdi_.Region_Union(*args, **kwargs)

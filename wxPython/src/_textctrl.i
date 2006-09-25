@@ -110,7 +110,9 @@ enum wxTextCtrlHitTestResult
 
 enum {
     wxOutOfRangeTextCoord,
-    wxInvalidTextCoord
+    wxInvalidTextCoord,
+
+    wxTEXT_TYPE_ANY
 };
 
 //---------------------------------------------------------------------------
@@ -253,8 +255,8 @@ public:
     virtual void Remove(long from, long to);
 
     // load/save the controls contents from/to the file
-    virtual bool LoadFile(const wxString& file);
-    virtual bool SaveFile(const wxString& file = wxPyEmptyString);
+    virtual bool LoadFile(const wxString& file, int fileType = wxTEXT_TYPE_ANY);
+    virtual bool SaveFile(const wxString& file = wxPyEmptyString, int fileType = wxTEXT_TYPE_ANY);
 
     // sets/clears the dirty flag
     virtual void MarkDirty();

@@ -1525,6 +1525,7 @@ TE_HT_BELOW = _controls_.TE_HT_BELOW
 TE_HT_BEYOND = _controls_.TE_HT_BEYOND
 OutOfRangeTextCoord = _controls_.OutOfRangeTextCoord
 InvalidTextCoord = _controls_.InvalidTextCoord
+TEXT_TYPE_ANY = _controls_.TEXT_TYPE_ANY
 class TextAttr(object):
     """Proxy of C++ TextAttr class"""
     thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -1763,11 +1764,11 @@ class TextCtrl(_core.Control):
         return _controls_.TextCtrl_Remove(*args, **kwargs)
 
     def LoadFile(*args, **kwargs):
-        """LoadFile(self, String file) -> bool"""
+        """LoadFile(self, String file, int fileType=TEXT_TYPE_ANY) -> bool"""
         return _controls_.TextCtrl_LoadFile(*args, **kwargs)
 
     def SaveFile(*args, **kwargs):
-        """SaveFile(self, String file=EmptyString) -> bool"""
+        """SaveFile(self, String file=EmptyString, int fileType=TEXT_TYPE_ANY) -> bool"""
         return _controls_.TextCtrl_SaveFile(*args, **kwargs)
 
     def MarkDirty(*args, **kwargs):

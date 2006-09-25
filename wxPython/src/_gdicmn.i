@@ -176,6 +176,21 @@ than the corresponding dimensions of the size.", "");
         "Decrements this object so that both of its dimensions are not greater
 than the corresponding dimensions of the size.", "");
 
+
+    DocDeclStr(
+        void , IncBy(int dx, int dy),
+        "", "");
+    
+
+    DocDeclStr(
+        void , DecBy(int dx, int dy),
+        "", "");
+    
+// TODO: handle these overloads too?    
+//     void IncBy(const wxSize& sz);
+//     void IncBy(int d);
+//     void DecBy(const wxSize& sz);
+//     void DecBy(int d);
     
     DocDeclStr(
         void , Scale(float xscale, float yscale),

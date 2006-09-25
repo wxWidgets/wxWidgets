@@ -252,6 +252,13 @@ Added wx.lib.delayedresult from Oliver Schoenborn.
 Added wx.lib.expando, a multi-line textctrl that exands as more lines
 are needed.
 
+wx.Image.Scale and Rescale methods now take an extra parameter
+specifying type of method to use for resampling the image.  It
+defaults to the current behavior of just replicating pixels, if
+wx.IMAGE_QUALITY_HIGH is passed then it uses bicubic and box averaging
+resampling methods for upsampling and downsampling respectively.
+
+
 
 
 

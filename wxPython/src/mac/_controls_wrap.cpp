@@ -12397,17 +12397,21 @@ SWIGINTERN PyObject *_wrap_TextCtrl_LoadFile(PyObject *SWIGUNUSEDPARM(self), PyO
   PyObject *resultobj = 0;
   wxTextCtrl *arg1 = (wxTextCtrl *) 0 ;
   wxString *arg2 = 0 ;
+  int arg3 = (int) wxTEXT_TYPE_ANY ;
   bool result;
   void *argp1 = 0 ;
   int res1 = 0 ;
   bool temp2 = false ;
+  int val3 ;
+  int ecode3 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
   char *  kwnames[] = {
-    (char *) "self",(char *) "file", NULL 
+    (char *) "self",(char *) "file",(char *) "fileType", NULL 
   };
   
-  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:TextCtrl_LoadFile",kwnames,&obj0,&obj1)) SWIG_fail;
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|O:TextCtrl_LoadFile",kwnames,&obj0,&obj1,&obj2)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxTextCtrl, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "TextCtrl_LoadFile" "', expected argument " "1"" of type '" "wxTextCtrl *""'"); 
@@ -12418,9 +12422,16 @@ SWIGINTERN PyObject *_wrap_TextCtrl_LoadFile(PyObject *SWIGUNUSEDPARM(self), PyO
     if (arg2 == NULL) SWIG_fail;
     temp2 = true;
   }
+  if (obj2) {
+    ecode3 = SWIG_AsVal_int(obj2, &val3);
+    if (!SWIG_IsOK(ecode3)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "TextCtrl_LoadFile" "', expected argument " "3"" of type '" "int""'");
+    } 
+    arg3 = static_cast< int >(val3);
+  }
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    result = (bool)(arg1)->LoadFile((wxString const &)*arg2);
+    result = (bool)(arg1)->LoadFile((wxString const &)*arg2,arg3);
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
@@ -12446,17 +12457,21 @@ SWIGINTERN PyObject *_wrap_TextCtrl_SaveFile(PyObject *SWIGUNUSEDPARM(self), PyO
   wxTextCtrl *arg1 = (wxTextCtrl *) 0 ;
   wxString const &arg2_defvalue = wxPyEmptyString ;
   wxString *arg2 = (wxString *) &arg2_defvalue ;
+  int arg3 = (int) wxTEXT_TYPE_ANY ;
   bool result;
   void *argp1 = 0 ;
   int res1 = 0 ;
   bool temp2 = false ;
+  int val3 ;
+  int ecode3 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
   char *  kwnames[] = {
-    (char *) "self",(char *) "file", NULL 
+    (char *) "self",(char *) "file",(char *) "fileType", NULL 
   };
   
-  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|O:TextCtrl_SaveFile",kwnames,&obj0,&obj1)) SWIG_fail;
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|OO:TextCtrl_SaveFile",kwnames,&obj0,&obj1,&obj2)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxTextCtrl, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "TextCtrl_SaveFile" "', expected argument " "1"" of type '" "wxTextCtrl *""'"); 
@@ -12469,9 +12484,16 @@ SWIGINTERN PyObject *_wrap_TextCtrl_SaveFile(PyObject *SWIGUNUSEDPARM(self), PyO
       temp2 = true;
     }
   }
+  if (obj2) {
+    ecode3 = SWIG_AsVal_int(obj2, &val3);
+    if (!SWIG_IsOK(ecode3)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "TextCtrl_SaveFile" "', expected argument " "3"" of type '" "int""'");
+    } 
+    arg3 = static_cast< int >(val3);
+  }
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    result = (bool)(arg1)->SaveFile((wxString const &)*arg2);
+    result = (bool)(arg1)->SaveFile((wxString const &)*arg2,arg3);
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
@@ -48632,6 +48654,7 @@ SWIGEXPORT void SWIG_init(void) {
   SWIG_Python_SetConstant(d, "TE_HT_BEYOND",SWIG_From_int(static_cast< int >(wxTE_HT_BEYOND)));
   SWIG_Python_SetConstant(d, "OutOfRangeTextCoord",SWIG_From_int(static_cast< int >(wxOutOfRangeTextCoord)));
   SWIG_Python_SetConstant(d, "InvalidTextCoord",SWIG_From_int(static_cast< int >(wxInvalidTextCoord)));
+  SWIG_Python_SetConstant(d, "TEXT_TYPE_ANY",SWIG_From_int(static_cast< int >(wxTEXT_TYPE_ANY)));
   PyDict_SetItemString(d, "wxEVT_COMMAND_TEXT_UPDATED", PyInt_FromLong(wxEVT_COMMAND_TEXT_UPDATED));
   PyDict_SetItemString(d, "wxEVT_COMMAND_TEXT_ENTER", PyInt_FromLong(wxEVT_COMMAND_TEXT_ENTER));
   PyDict_SetItemString(d, "wxEVT_COMMAND_TEXT_URL", PyInt_FromLong(wxEVT_COMMAND_TEXT_URL));

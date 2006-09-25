@@ -4866,6 +4866,100 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_Size_IncBy(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxSize *arg1 = (wxSize *) 0 ;
+  int arg2 ;
+  int arg3 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  int val3 ;
+  int ecode3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "dx",(char *) "dy", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:Size_IncBy",kwnames,&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxSize, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Size_IncBy" "', expected argument " "1"" of type '" "wxSize *""'"); 
+  }
+  arg1 = reinterpret_cast< wxSize * >(argp1);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Size_IncBy" "', expected argument " "2"" of type '" "int""'");
+  } 
+  arg2 = static_cast< int >(val2);
+  ecode3 = SWIG_AsVal_int(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "Size_IncBy" "', expected argument " "3"" of type '" "int""'");
+  } 
+  arg3 = static_cast< int >(val3);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    (arg1)->IncBy(arg2,arg3);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Size_DecBy(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxSize *arg1 = (wxSize *) 0 ;
+  int arg2 ;
+  int arg3 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  int val3 ;
+  int ecode3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "dx",(char *) "dy", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:Size_DecBy",kwnames,&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxSize, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Size_DecBy" "', expected argument " "1"" of type '" "wxSize *""'"); 
+  }
+  arg1 = reinterpret_cast< wxSize * >(argp1);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Size_DecBy" "', expected argument " "2"" of type '" "int""'");
+  } 
+  arg2 = static_cast< int >(val2);
+  ecode3 = SWIG_AsVal_int(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "Size_DecBy" "', expected argument " "3"" of type '" "int""'");
+  } 
+  arg3 = static_cast< int >(val3);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    (arg1)->DecBy(arg2,arg3);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_Size_Scale(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   wxSize *arg1 = (wxSize *) 0 ;
@@ -13778,6 +13872,7 @@ SWIGINTERN PyObject *_wrap_Image_Scale(PyObject *SWIGUNUSEDPARM(self), PyObject 
   wxImage *arg1 = (wxImage *) 0 ;
   int arg2 ;
   int arg3 ;
+  int arg4 = (int) wxIMAGE_QUALITY_NORMAL ;
   SwigValueWrapper<wxImage > result;
   void *argp1 = 0 ;
   int res1 = 0 ;
@@ -13785,14 +13880,17 @@ SWIGINTERN PyObject *_wrap_Image_Scale(PyObject *SWIGUNUSEDPARM(self), PyObject 
   int ecode2 = 0 ;
   int val3 ;
   int ecode3 = 0 ;
+  int val4 ;
+  int ecode4 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
   char *  kwnames[] = {
-    (char *) "self",(char *) "width",(char *) "height", NULL 
+    (char *) "self",(char *) "width",(char *) "height",(char *) "quality", NULL 
   };
   
-  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:Image_Scale",kwnames,&obj0,&obj1,&obj2)) SWIG_fail;
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO|O:Image_Scale",kwnames,&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxImage, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Image_Scale" "', expected argument " "1"" of type '" "wxImage *""'"); 
@@ -13808,9 +13906,229 @@ SWIGINTERN PyObject *_wrap_Image_Scale(PyObject *SWIGUNUSEDPARM(self), PyObject 
     SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "Image_Scale" "', expected argument " "3"" of type '" "int""'");
   } 
   arg3 = static_cast< int >(val3);
+  if (obj3) {
+    ecode4 = SWIG_AsVal_int(obj3, &val4);
+    if (!SWIG_IsOK(ecode4)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "Image_Scale" "', expected argument " "4"" of type '" "int""'");
+    } 
+    arg4 = static_cast< int >(val4);
+  }
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    result = (arg1)->Scale(arg2,arg3);
+    result = (arg1)->Scale(arg2,arg3,arg4);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_NewPointerObj((new wxImage(static_cast< const wxImage& >(result))), SWIGTYPE_p_wxImage, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Image_ResampleBox(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxImage *arg1 = (wxImage *) 0 ;
+  int arg2 ;
+  int arg3 ;
+  SwigValueWrapper<wxImage > result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  int val3 ;
+  int ecode3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "width",(char *) "height", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:Image_ResampleBox",kwnames,&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxImage, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Image_ResampleBox" "', expected argument " "1"" of type '" "wxImage const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxImage * >(argp1);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Image_ResampleBox" "', expected argument " "2"" of type '" "int""'");
+  } 
+  arg2 = static_cast< int >(val2);
+  ecode3 = SWIG_AsVal_int(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "Image_ResampleBox" "', expected argument " "3"" of type '" "int""'");
+  } 
+  arg3 = static_cast< int >(val3);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = ((wxImage const *)arg1)->ResampleBox(arg2,arg3);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_NewPointerObj((new wxImage(static_cast< const wxImage& >(result))), SWIGTYPE_p_wxImage, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Image_ResampleBicubic(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxImage *arg1 = (wxImage *) 0 ;
+  int arg2 ;
+  int arg3 ;
+  SwigValueWrapper<wxImage > result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  int val3 ;
+  int ecode3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "width",(char *) "height", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:Image_ResampleBicubic",kwnames,&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxImage, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Image_ResampleBicubic" "', expected argument " "1"" of type '" "wxImage const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxImage * >(argp1);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Image_ResampleBicubic" "', expected argument " "2"" of type '" "int""'");
+  } 
+  arg2 = static_cast< int >(val2);
+  ecode3 = SWIG_AsVal_int(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "Image_ResampleBicubic" "', expected argument " "3"" of type '" "int""'");
+  } 
+  arg3 = static_cast< int >(val3);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = ((wxImage const *)arg1)->ResampleBicubic(arg2,arg3);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_NewPointerObj((new wxImage(static_cast< const wxImage& >(result))), SWIGTYPE_p_wxImage, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Image_Blur(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxImage *arg1 = (wxImage *) 0 ;
+  int arg2 ;
+  SwigValueWrapper<wxImage > result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "radius", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:Image_Blur",kwnames,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxImage, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Image_Blur" "', expected argument " "1"" of type '" "wxImage *""'"); 
+  }
+  arg1 = reinterpret_cast< wxImage * >(argp1);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Image_Blur" "', expected argument " "2"" of type '" "int""'");
+  } 
+  arg2 = static_cast< int >(val2);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = (arg1)->Blur(arg2);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_NewPointerObj((new wxImage(static_cast< const wxImage& >(result))), SWIGTYPE_p_wxImage, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Image_BlurHorizontal(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxImage *arg1 = (wxImage *) 0 ;
+  int arg2 ;
+  SwigValueWrapper<wxImage > result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "radius", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:Image_BlurHorizontal",kwnames,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxImage, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Image_BlurHorizontal" "', expected argument " "1"" of type '" "wxImage *""'"); 
+  }
+  arg1 = reinterpret_cast< wxImage * >(argp1);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Image_BlurHorizontal" "', expected argument " "2"" of type '" "int""'");
+  } 
+  arg2 = static_cast< int >(val2);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = (arg1)->BlurHorizontal(arg2);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_NewPointerObj((new wxImage(static_cast< const wxImage& >(result))), SWIGTYPE_p_wxImage, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Image_BlurVertical(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxImage *arg1 = (wxImage *) 0 ;
+  int arg2 ;
+  SwigValueWrapper<wxImage > result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "radius", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:Image_BlurVertical",kwnames,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxImage, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Image_BlurVertical" "', expected argument " "1"" of type '" "wxImage *""'"); 
+  }
+  arg1 = reinterpret_cast< wxImage * >(argp1);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Image_BlurVertical" "', expected argument " "2"" of type '" "int""'");
+  } 
+  arg2 = static_cast< int >(val2);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = (arg1)->BlurVertical(arg2);
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
@@ -13874,6 +14192,7 @@ SWIGINTERN PyObject *_wrap_Image_Rescale(PyObject *SWIGUNUSEDPARM(self), PyObjec
   wxImage *arg1 = (wxImage *) 0 ;
   int arg2 ;
   int arg3 ;
+  int arg4 = (int) wxIMAGE_QUALITY_NORMAL ;
   wxImage *result = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
@@ -13881,14 +14200,17 @@ SWIGINTERN PyObject *_wrap_Image_Rescale(PyObject *SWIGUNUSEDPARM(self), PyObjec
   int ecode2 = 0 ;
   int val3 ;
   int ecode3 = 0 ;
+  int val4 ;
+  int ecode4 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
   char *  kwnames[] = {
-    (char *) "self",(char *) "width",(char *) "height", NULL 
+    (char *) "self",(char *) "width",(char *) "height",(char *) "quality", NULL 
   };
   
-  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:Image_Rescale",kwnames,&obj0,&obj1,&obj2)) SWIG_fail;
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO|O:Image_Rescale",kwnames,&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxImage, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Image_Rescale" "', expected argument " "1"" of type '" "wxImage *""'"); 
@@ -13904,10 +14226,17 @@ SWIGINTERN PyObject *_wrap_Image_Rescale(PyObject *SWIGUNUSEDPARM(self), PyObjec
     SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "Image_Rescale" "', expected argument " "3"" of type '" "int""'");
   } 
   arg3 = static_cast< int >(val3);
+  if (obj3) {
+    ecode4 = SWIG_AsVal_int(obj3, &val4);
+    if (!SWIG_IsOK(ecode4)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "Image_Rescale" "', expected argument " "4"" of type '" "int""'");
+    } 
+    arg4 = static_cast< int >(val4);
+  }
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
     {
-      wxImage &_result_ref = (arg1)->Rescale(arg2,arg3);
+      wxImage &_result_ref = (arg1)->Rescale(arg2,arg3,arg4);
       result = (wxImage *) &_result_ref;
     }
     wxPyEndAllowThreads(__tstate);
@@ -53865,6 +54194,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Size___sub__", (PyCFunction) _wrap_Size___sub__, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Size_IncTo", (PyCFunction) _wrap_Size_IncTo, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Size_DecTo", (PyCFunction) _wrap_Size_DecTo, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"Size_IncBy", (PyCFunction) _wrap_Size_IncBy, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"Size_DecBy", (PyCFunction) _wrap_Size_DecBy, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Size_Scale", (PyCFunction) _wrap_Size_Scale, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Size_Set", (PyCFunction) _wrap_Size_Set, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Size_SetWidth", (PyCFunction) _wrap_Size_SetWidth, METH_VARARGS | METH_KEYWORDS, NULL},
@@ -54134,6 +54465,11 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Image_Create", (PyCFunction) _wrap_Image_Create, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Image_Destroy", (PyCFunction)_wrap_Image_Destroy, METH_O, NULL},
 	 { (char *)"Image_Scale", (PyCFunction) _wrap_Image_Scale, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"Image_ResampleBox", (PyCFunction) _wrap_Image_ResampleBox, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"Image_ResampleBicubic", (PyCFunction) _wrap_Image_ResampleBicubic, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"Image_Blur", (PyCFunction) _wrap_Image_Blur, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"Image_BlurHorizontal", (PyCFunction) _wrap_Image_BlurHorizontal, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"Image_BlurVertical", (PyCFunction) _wrap_Image_BlurVertical, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Image_ShrinkBy", (PyCFunction) _wrap_Image_ShrinkBy, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Image_Rescale", (PyCFunction) _wrap_Image_Rescale, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Image_Resize", (PyCFunction) _wrap_Image_Resize, METH_VARARGS | METH_KEYWORDS, NULL},
@@ -57579,6 +57915,8 @@ SWIGEXPORT void SWIG_init(void) {
   SWIG_Python_SetConstant(d, "IMAGE_ALPHA_TRANSPARENT",SWIG_From_int(static_cast< int >(wxIMAGE_ALPHA_TRANSPARENT)));
   SWIG_Python_SetConstant(d, "IMAGE_ALPHA_THRESHOLD",SWIG_From_int(static_cast< int >(wxIMAGE_ALPHA_THRESHOLD)));
   SWIG_Python_SetConstant(d, "IMAGE_ALPHA_OPAQUE",SWIG_From_int(static_cast< int >(wxIMAGE_ALPHA_OPAQUE)));
+  SWIG_Python_SetConstant(d, "IMAGE_QUALITY_NORMAL",SWIG_From_int(static_cast< int >(wxIMAGE_QUALITY_NORMAL)));
+  SWIG_Python_SetConstant(d, "IMAGE_QUALITY_HIGH",SWIG_From_int(static_cast< int >(wxIMAGE_QUALITY_HIGH)));
   SWIG_addvarlink(SWIG_globals(),(char*)"NullImage",NullImage_get, NullImage_set);
   SWIG_addvarlink(SWIG_globals(),(char*)"IMAGE_OPTION_FILENAME",IMAGE_OPTION_FILENAME_get, IMAGE_OPTION_FILENAME_set);
   SWIG_addvarlink(SWIG_globals(),(char*)"IMAGE_OPTION_BMP_FORMAT",IMAGE_OPTION_BMP_FORMAT_get, IMAGE_OPTION_BMP_FORMAT_set);

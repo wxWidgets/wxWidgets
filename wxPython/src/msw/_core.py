@@ -841,6 +841,14 @@ class Size(object):
         """
         return _core_.Size_DecTo(*args, **kwargs)
 
+    def IncBy(*args, **kwargs):
+        """IncBy(self, int dx, int dy)"""
+        return _core_.Size_IncBy(*args, **kwargs)
+
+    def DecBy(*args, **kwargs):
+        """DecBy(self, int dx, int dy)"""
+        return _core_.Size_DecBy(*args, **kwargs)
+
     def Scale(*args, **kwargs):
         """
         Scale(self, float xscale, float yscale)
@@ -2028,6 +2036,8 @@ def MemoryFSHandler_RemoveFile(*args, **kwargs):
 IMAGE_ALPHA_TRANSPARENT = _core_.IMAGE_ALPHA_TRANSPARENT
 IMAGE_ALPHA_THRESHOLD = _core_.IMAGE_ALPHA_THRESHOLD
 IMAGE_ALPHA_OPAQUE = _core_.IMAGE_ALPHA_OPAQUE
+IMAGE_QUALITY_NORMAL = _core_.IMAGE_QUALITY_NORMAL
+IMAGE_QUALITY_HIGH = _core_.IMAGE_QUALITY_HIGH
 #---------------------------------------------------------------------------
 
 class ImageHandler(Object):
@@ -2312,13 +2322,55 @@ class Image(Object):
 
     def Scale(*args, **kwargs):
         """
-        Scale(self, int width, int height) -> Image
+        Scale(self, int width, int height, int quality=IMAGE_QUALITY_NORMAL) -> Image
 
         Returns a scaled version of the image. This is also useful for scaling
         bitmaps in general as the only other way to scale bitmaps is to blit a
-        `wx.MemoryDC` into another `wx.MemoryDC`.
+        `wx.MemoryDC` into another `wx.MemoryDC`.  The ``quality`` parameter
+        specifies what method to use for resampling the image.  It can be
+        either wx.IMAGE_QUALITY_NORMAL, which uses the normal default scaling
+        method of pixel replication, or wx.IMAGE_QUALITY_HIGH which uses
+        bicubic and box averaging resampling methods for upsampling and
+        downsampling respectively.
         """
         return _core_.Image_Scale(*args, **kwargs)
+
+    def ResampleBox(*args, **kwargs):
+        """ResampleBox(self, int width, int height) -> Image"""
+        return _core_.Image_ResampleBox(*args, **kwargs)
+
+    def ResampleBicubic(*args, **kwargs):
+        """ResampleBicubic(self, int width, int height) -> Image"""
+        return _core_.Image_ResampleBicubic(*args, **kwargs)
+
+    def Blur(*args, **kwargs):
+        """
+        Blur(self, int radius) -> Image
+
+        Blurs the image in both horizontal and vertical directions by the
+        specified pixel ``radius``. This should not be used when using a
+        single mask colour for transparency.
+        """
+        return _core_.Image_Blur(*args, **kwargs)
+
+    def BlurHorizontal(*args, **kwargs):
+        """
+        BlurHorizontal(self, int radius) -> Image
+
+        Blurs the image in the horizontal direction only. This should not be
+        used when using a single mask colour for transparency.
+
+        """
+        return _core_.Image_BlurHorizontal(*args, **kwargs)
+
+    def BlurVertical(*args, **kwargs):
+        """
+        BlurVertical(self, int radius) -> Image
+
+        Blurs the image in the vertical direction only. This should not be
+        used when using a single mask colour for transparency.
+        """
+        return _core_.Image_BlurVertical(*args, **kwargs)
 
     def ShrinkBy(*args, **kwargs):
         """
@@ -2330,7 +2382,7 @@ class Image(Object):
 
     def Rescale(*args, **kwargs):
         """
-        Rescale(self, int width, int height) -> Image
+        Rescale(self, int width, int height, int quality=IMAGE_QUALITY_NORMAL) -> Image
 
         Changes the size of the image in-place by scaling it: after a call to
         this function, the image will have the given width and height.

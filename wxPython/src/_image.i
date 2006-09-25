@@ -28,6 +28,13 @@ enum {
 };
 
 
+// Constants for wxImage::Scale() for determining the level of quality
+enum
+{
+    wxIMAGE_QUALITY_NORMAL = 0,
+    wxIMAGE_QUALITY_HIGH = 1
+};
+
 //---------------------------------------------------------------------------
 %newgroup
 
@@ -399,19 +406,60 @@ initialized to black. Otherwise, the image data will be uninitialized.", "");
     
 
     DocDeclStr(
-        wxImage , Scale( int width, int height ),
+        wxImage , Scale( int width, int height, int quality = wxIMAGE_QUALITY_NORMAL ),
         "Returns a scaled version of the image. This is also useful for scaling
 bitmaps in general as the only other way to scale bitmaps is to blit a
-`wx.MemoryDC` into another `wx.MemoryDC`.", "
+`wx.MemoryDC` into another `wx.MemoryDC`.  The ``quality`` parameter
+specifies what method to use for resampling the image.  It can be
+either wx.IMAGE_QUALITY_NORMAL, which uses the normal default scaling
+method of pixel replication, or wx.IMAGE_QUALITY_HIGH which uses
+bicubic and box averaging resampling methods for upsampling and
+downsampling respectively.", "
+
+It should be noted that although using wx.IMAGE_QUALITY_HIGH produces
+much nicer looking results it is a slower method.  Downsampling will
+use the box averaging method which seems to operate very fast.  If you
+are upsampling larger images using this method you will most likely
+notice that it is a bit slower and in extreme cases it will be quite
+substantially slower as the bicubic algorithm has to process a lot of
+data.
+
+It should also be noted that the high quality scaling may not work as
+expected when using a single mask colour for transparency, as the
+scaling will blur the image and will therefore remove the mask
+partially. Using the alpha channel will work.
 
 :see: `Rescale`");
+
+    
+    wxImage ResampleBox(int width, int height) const;
+    wxImage ResampleBicubic(int width, int height) const;
+
+    DocDeclStr(
+        wxImage , Blur(int radius),
+        "Blurs the image in both horizontal and vertical directions by the
+specified pixel ``radius``. This should not be used when using a
+single mask colour for transparency.", "");
+    
+    DocDeclStr(
+        wxImage , BlurHorizontal(int radius),
+        "Blurs the image in the horizontal direction only. This should not be
+used when using a single mask colour for transparency.
+", "");
+    
+    DocDeclStr(
+        wxImage , BlurVertical(int radius),
+        "Blurs the image in the vertical direction only. This should not be
+used when using a single mask colour for transparency.", "");
+    
+
     
     DocDeclStr(
         wxImage , ShrinkBy( int xFactor , int yFactor ) const ,
         "Return a version of the image scaled smaller by the given factors.", "");
     
     DocDeclStr(
-        wxImage& , Rescale(int width, int height),
+        wxImage& , Rescale(int width, int height, int quality = wxIMAGE_QUALITY_NORMAL),
         "Changes the size of the image in-place by scaling it: after a call to
 this function, the image will have the given width and height.
 
