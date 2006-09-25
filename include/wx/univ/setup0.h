@@ -486,6 +486,15 @@
 // Define this to use wxURL class.
 #define wxUSE_URL 1
 
+// Support for wxVariant class used in several places throughout the library,
+// notably in wxDataViewCtrl API.
+//
+// Default is 1.
+//
+// Recommended setting: 1 unless you want to reduce the library size as much as
+// possible in which case setting this to 0 can gain up to 100KB.
+#define wxUSE_VARIANT 1
+
 // Support for regular expression matching via wxRegEx class: enable this to
 // use POSIX regular expressions in your code. You need to compile regex
 // library from src/regex to use it under Windows.
