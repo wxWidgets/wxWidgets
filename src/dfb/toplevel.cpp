@@ -15,7 +15,6 @@
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
-    #include "wx/dynarray.h"
 #endif // WX_PRECOMP
 
 #include "wx/hashmap.h"
@@ -39,16 +38,6 @@ static wxDfbWindowsMap gs_dfbWindowsMap;
 // helpers
 // ============================================================================
 
-struct wxDfbPaintRequest
-{
-    wxDfbPaintRequest(const wxRect& rect) : m_rect(rect) {}
-    wxDfbPaintRequest(const wxDfbPaintRequest& r) : m_rect(r.m_rect) {}
-
-    wxRect m_rect;
-};
-
-WX_DEFINE_ARRAY_PTR(wxDfbPaintRequest*, wxDfbQueuedPaintRequestsList);
-
 // Queue of paint requests
 class wxDfbQueuedPaintRequests
 {
@@ -57,19 +46,35 @@ public:
 
     // Adds paint request to the queue
     void Add(const wxRect& rect)
-        { m_queue.push_back(new wxDfbPaintRequest(rect)); }
+    {
+        // We use a simple implementation here for now: all refresh requests
+        // are merged together into single rectangle that is superset of
+        // all the requested rectangles. This wastes some blitting and painting
+        // time, but OTOH, EVT_PAINT handler is called only once per window.
+        m_invalidated.Union(rect);
+    }
 
     // Is the queue empty?
-    bool IsEmpty() const { return m_queue.empty(); }
+    bool IsEmpty() const { return m_invalidated.IsEmpty(); }
 
     // Empties the queue
-    void Clear() { WX_CLEAR_ARRAY(m_queue); }
+    void Clear() { m_invalidated = wxRect(); }
 
-    // Gets requests in the queue
-    const wxDfbQueuedPaintRequestsList& GetRequests() const { return m_queue; }
+    // Gets the next request in the queue, returns true if there was one,
+    // false if the queue was empty
+    bool GetNext(wxRect& rect)
+    {
+        if ( m_invalidated.IsEmpty() )
+            return false;
+
+        rect = m_invalidated;
+        Clear(); // there's only one item in the queue
+        return true;
+    }
 
 private:
-    wxDfbQueuedPaintRequestsList m_queue;
+    // currently invalidated region
+    wxRect m_invalidated;
 };
 
 // ============================================================================
@@ -384,8 +389,6 @@ void wxTopLevelWindowDFB::HandleQueuedPaintRequests()
         return;
     }
 
-    const wxDfbQueuedPaintRequestsList& requests = m_toPaint->GetRequests();
-
     // process queued paint requests:
     wxRect winRect(wxPoint(0, 0), GetSize());
     wxRect paintedRect;
@@ -395,15 +398,17 @@ void wxTopLevelWindowDFB::HandleQueuedPaintRequests()
     // blit the entire back buffer to front soon
     m_isPainting = true;
 
-    size_t cnt = requests.size();
-    wxLogTrace(TRACE_PAINT, _T("%p ('%s'): processing %i paint requests"),
-               this, GetName().c_str(), cnt);
+#ifdef __WXDEBUG__
+    int requestsCount = 0;
+#endif
 
-    for ( size_t i = 0; i < cnt; ++i )
+    wxRect request;
+    while ( m_toPaint->GetNext(request) )
     {
-        const wxDfbPaintRequest& request = *requests[i];
-
-        wxRect clipped(request.m_rect);
+#ifdef __WXDEBUG__
+        requestsCount++;
+#endif
+        wxRect clipped(request);
         clipped.Intersect(winRect);
         if ( clipped.IsEmpty() )
             continue; // nothing to refresh
@@ -448,8 +453,9 @@ void wxTopLevelWindowDFB::HandleQueuedPaintRequests()
     GetDfbSurface()->FlipToFront(rptr);
 
     wxLogTrace(TRACE_PAINT,
-               _T("%p ('%s'): flipped surface: [%i,%i,%i,%i]"),
+               _T("%p ('%s'): processed %i paint requests, flipped surface: [%i,%i,%i,%i]"),
                this, GetName().c_str(),
+               requestsCount,
                paintedRect.x, paintedRect.y,
                paintedRect.GetRight(), paintedRect.GetBottom());
 }
