@@ -322,19 +322,19 @@ bool wxRegionGeneric::DoUnionWithRect(const wxRect& rect)
     return REGION::XUnionRegion(&region,M_REGIONDATA,M_REGIONDATA);
 }
 
-bool wxRegionGeneric::DoUnionWithRegion(const wxRegionGeneric& region)
+bool wxRegionGeneric::DoUnionWithRegion(const wxRegion& region)
 {
     AllocExclusive();
     return REGION::XUnionRegion(M_REGIONDATA_OF(region),M_REGIONDATA,M_REGIONDATA);
 }
 
-bool wxRegionGeneric::DoIntersect(const wxRegionGeneric& region)
+bool wxRegionGeneric::DoIntersect(const wxRegion& region)
 {
     AllocExclusive();
     return REGION::XIntersectRegion(M_REGIONDATA_OF(region),M_REGIONDATA,M_REGIONDATA);
 }
 
-bool wxRegionGeneric::DoSubtract(const wxRegionGeneric& region)
+bool wxRegionGeneric::DoSubtract(const wxRegion& region)
 {
     if ( region.IsEmpty() )
     {
@@ -345,7 +345,7 @@ bool wxRegionGeneric::DoSubtract(const wxRegionGeneric& region)
     return REGION::XSubtractRegion(M_REGIONDATA_OF(region),M_REGIONDATA,M_REGIONDATA);
 }
 
-bool wxRegionGeneric::DoXor(const wxRegionGeneric& region)
+bool wxRegionGeneric::DoXor(const wxRegion& region)
 {
     AllocExclusive();
     return REGION::XXorRegion(M_REGIONDATA_OF(region),M_REGIONDATA,M_REGIONDATA);
@@ -368,7 +368,7 @@ bool wxRegionGeneric::IsEmpty() const
 }
 
 // Does the region contain the point (x,y)?
-wxRegionContain wxRegionGeneric::DoContainsPoint(long x, long y) const
+wxRegionContain wxRegionGeneric::DoContainsPoint(wxCoord x, wxCoord y) const
 {
     wxASSERT(m_refData);
     return REGION::XPointInRegion(M_REGIONDATA,x,y) ? wxInRegion : wxOutRegion;
