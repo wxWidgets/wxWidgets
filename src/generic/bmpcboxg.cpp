@@ -66,7 +66,7 @@ const wxChar wxBitmapComboBoxNameStr[] = wxT("bitmapComboBox");
 
 
 BEGIN_EVENT_TABLE(wxBitmapComboBox, wxOwnerDrawnComboBox)
-    EVT_SIZE(wxBitmapComboBox::OnResize)
+    EVT_SIZE(wxBitmapComboBox::OnSize)
 END_EVENT_TABLE()
 
 
@@ -326,7 +326,7 @@ void wxBitmapComboBox::DetermineIndent()
     SetCustomPaintWidth(indent);
 }
 
-void wxBitmapComboBox::OnResize(wxSizeEvent& event)
+void wxBitmapComboBox::OnSize(wxSizeEvent& event)
 {
     // Prevent infinite looping
     if ( !m_inResize )

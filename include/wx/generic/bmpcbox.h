@@ -138,7 +138,7 @@ protected:
     virtual wxSize DoGetBestSize() const;
 
     // Event handlers
-    void OnResize(wxSizeEvent& event);
+    void OnSize(wxSizeEvent& event);
 
     // Recalculates amount of empty space needed in front of
     // text in control itself.
