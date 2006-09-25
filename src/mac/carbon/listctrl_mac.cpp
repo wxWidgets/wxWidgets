@@ -124,27 +124,27 @@ class wxMacListCtrlItem : public wxMacListBoxItem
 {
 public:
     wxMacListCtrlItem();
-    
+
     virtual void Notification(wxMacDataItemBrowserControl *owner ,
         DataBrowserItemNotification message,
         DataBrowserItemDataRef itemData ) const;
-        
+
     virtual void SetColumnInfo( unsigned int column, wxListItem* item );
     virtual wxListItem* GetColumnInfo( unsigned int column );
     virtual bool HasColumnInfo( unsigned int column );
-    
+
     virtual void SetColumnTextValue( unsigned int column, const wxString& text );
-    virtual const wxString& GetColumnTextValue( unsigned int column ); 
-        
+    virtual const wxString& GetColumnTextValue( unsigned int column );
+
     virtual int GetColumnImageValue( unsigned int column );
     virtual void SetColumnImageValue( unsigned int column, int imageIndex );
-    
+
     virtual OSStatus GetSetData( wxMacDataItemBrowserControl *owner ,
     DataBrowserPropertyID property,
     DataBrowserItemDataRef itemData,
     bool changeValue );
 
-        
+
     virtual ~wxMacListCtrlItem();
 protected:
     wxListItemList m_rowItems;
@@ -160,18 +160,18 @@ public:
     // create a list item (can be a subclass of wxMacListBoxItem)
 
     virtual wxMacListCtrlItem* CreateItem();
-    
+
     virtual void MacInsertItem( unsigned int n, wxListItem* item );
     virtual void MacSetColumnInfo( unsigned int row, unsigned int column, wxListItem* item );
     virtual void MacGetColumnInfo( unsigned int row, unsigned int column, wxListItem& item );
     virtual void UpdateState(wxMacDataItem* dataItem, wxListItem* item);
-    
+
 protected:
     wxClientDataType m_clientDataItemsType;
 
 };
 
-// TODO: This gives errors, find out why. 
+// TODO: This gives errors, find out why.
 //BEGIN_EVENT_TABLE(wxListCtrl, wxControl)
 //    EVT_PAINT(wxListCtrl::OnPaint)
 //END_EVENT_TABLE()
@@ -194,7 +194,7 @@ void wxListCtrl::Init()
     m_imageListNormal = NULL;
     m_imageListSmall = NULL;
     m_imageListState = NULL;
-    
+
     // keep track of if we created our own image lists, or if they were assigned
     // to us.
     m_ownsImageListNormal = m_ownsImageListSmall = m_ownsImageListState = false;
@@ -215,7 +215,7 @@ public:
                           long style,
                           const wxValidator& validator,
                           const wxString& name)
-        : wxGenericListCtrl(parent, id, pos, size, style, validator, name), 
+        : wxGenericListCtrl(parent, id, pos, size, style, validator, name),
           m_nativeListCtrl(parent)
     {
     }
@@ -258,22 +258,22 @@ bool wxListCtrl::Create(wxWindow *parent,
     // because they dynamically change the number of columns on resize.
     // Also, allow the user to set it to use the list ctrl as well.
     // Also, use generic list control in VIRTUAL mode.
-    if ( (wxSystemOptions::HasOption( wxMAC_ALWAYS_USE_GENERIC_LISTCTRL ) 
+    if ( (wxSystemOptions::HasOption( wxMAC_ALWAYS_USE_GENERIC_LISTCTRL )
             && (wxSystemOptions::GetOptionInt( wxMAC_ALWAYS_USE_GENERIC_LISTCTRL ) == 1)) ||
             (style & wxLC_ICON) || (style & wxLC_SMALL_ICON) || (style & wxLC_LIST) || (style & wxLC_VIRTUAL))
     {
         m_macIsUserPane = true;
-    
+
         if ( !wxWindow::Create(parent, id, pos, size, style, name) )
             return false;
         m_genericImpl = new wxGenericListCtrlHook(this, id, pos, size, style, validator, name);
         return true;
     }
-    
+
     else
     {
          m_macIsUserPane = false;
-        
+
         if ( !wxWindow::Create(parent, id, pos, size, style, name) )
             return false;
         m_dbImpl = new wxMacDataBrowserListCtrlControl( this, pos, size, style );
@@ -281,12 +281,12 @@ bool wxListCtrl::Create(wxWindow *parent,
 
         MacPostControlCreate( pos, size );
     }
-    
+
     return true;
 }
 
 wxListCtrl::~wxListCtrl()
-{        
+{
     if (m_ownsImageListNormal)
         delete m_imageListNormal;
     if (m_ownsImageListSmall)
@@ -330,7 +330,8 @@ void wxListCtrl::SetWindowStyleFlag(long flag)
     {
         m_windowStyle = flag;
 
-        if (m_genericImpl){
+        if (m_genericImpl)
+        {
             m_genericImpl->SetWindowStyleFlag(flag);
         }
 
@@ -338,9 +339,10 @@ void wxListCtrl::SetWindowStyleFlag(long flag)
     }
 }
 
-void wxListCtrl::DoSetSize( int x, int y, int width, int height, int sizeFlags ){
+void wxListCtrl::DoSetSize( int x, int y, int width, int height, int sizeFlags )
+{
     wxControl::DoSetSize(x, y, width, height, sizeFlags);
-            
+
     if (m_genericImpl)
         m_genericImpl->SetSize(x, y, width, height, sizeFlags);
 }
@@ -356,7 +358,7 @@ bool wxListCtrl::GetColumn(int col, wxListItem& item) const
         return m_genericImpl->GetColumn(col, item);
 
     bool success = true;
-    
+
     if ( item.m_mask & wxLIST_MASK_TEXT )
     {
     }
@@ -382,7 +384,7 @@ bool wxListCtrl::SetColumn(int col, wxListItem& item)
 {
     if (m_genericImpl)
         return m_genericImpl->SetColumn(col, item);
-        
+
     return false;
 }
 
@@ -390,8 +392,9 @@ int wxListCtrl::GetColumnCount() const
 {
     if (m_genericImpl)
         return m_genericImpl->GetColumnCount();
-        
-    if (m_dbImpl){
+
+    if (m_dbImpl)
+    {
         UInt32 count;
         m_dbImpl->GetColumnCount(&count);
         return count;
@@ -405,8 +408,9 @@ int wxListCtrl::GetColumnWidth(int col) const
 {
     if (m_genericImpl)
         return m_genericImpl->GetColumnWidth(col);
-        
-    if (m_dbImpl){
+
+    if (m_dbImpl)
+    {
         return m_dbImpl->GetColumnWidth(col);
     }
 
@@ -418,18 +422,21 @@ bool wxListCtrl::SetColumnWidth(int col, int width)
 {
     if (m_genericImpl)
         return m_genericImpl->SetColumnWidth(col, width);
-        
+
     // TODO: This is setting the width of the first column
     //       to the entire window width; investigate why
     //       this is.
-    
-    if (m_dbImpl){
+
+    if (m_dbImpl)
+    {
         int mywidth = width;
         if (width == wxLIST_AUTOSIZE || width == wxLIST_AUTOSIZE_USEHEADER)
             mywidth = 150;
-            
-        if (col == -1){
-            for (int column = 0; column < GetColumnCount(); column++){
+
+        if (col == -1)
+        {
+            for (int column = 0; column < GetColumnCount(); column++)
+            {
                 m_dbImpl->SetColumnWidth(col, mywidth);
             }
         }
@@ -438,7 +445,7 @@ bool wxListCtrl::SetColumnWidth(int col, int width)
         }
         return true;
     }
-    
+
     return false;
 }
 
@@ -450,10 +457,11 @@ int wxListCtrl::GetCountPerPage() const
 {
     if (m_genericImpl)
         return m_genericImpl->GetCountPerPage();
-        
-    if (m_dbImpl){
+
+    if (m_dbImpl)
+    {
     }
-        
+
     return 1;
 }
 
@@ -462,7 +470,7 @@ wxTextCtrl* wxListCtrl::GetEditControl() const
 {
     if (m_genericImpl)
         return m_genericImpl->GetEditControl();
-        
+
     return NULL;
 }
 
@@ -471,7 +479,7 @@ bool wxListCtrl::GetItem(wxListItem& info) const
 {
     if (m_genericImpl)
         return m_genericImpl->GetItem(info);
-        
+
     if (m_dbImpl)
         m_dbImpl->MacGetColumnInfo(info.m_itemId, info.m_col, info);
     bool success = true;
@@ -514,7 +522,7 @@ int wxListCtrl::GetItemState(long item, long stateMask) const
 {
     if (m_genericImpl)
         return m_genericImpl->GetItemState(item, stateMask);
-        
+
     wxListItem info;
 
     info.m_mask = wxLIST_MASK_STATE;
@@ -568,7 +576,7 @@ wxString wxListCtrl::GetItemText(long item) const
 {
     if (m_genericImpl)
         return m_genericImpl->GetItemText(item);
-        
+
     wxListItem info;
 
     info.m_mask = wxLIST_MASK_TEXT;
@@ -584,7 +592,7 @@ void wxListCtrl::SetItemText(long item, const wxString& str)
 {
     if (m_genericImpl)
         return m_genericImpl->SetItemText(item, str);
-        
+
     wxListItem info;
 
     info.m_mask = wxLIST_MASK_TEXT;
@@ -615,7 +623,7 @@ bool wxListCtrl::SetItemData(long item, long data)
 {
     if (m_genericImpl)
         return m_genericImpl->SetItemData(item, data);
-        
+
     wxListItem info;
 
     info.m_mask = wxLIST_MASK_DATA;
@@ -629,10 +637,10 @@ wxRect wxListCtrl::GetViewRect() const
 {
     wxASSERT_MSG( !HasFlag(wxLC_REPORT | wxLC_LIST),
                     _T("wxListCtrl::GetViewRect() only works in icon mode") );
-                    
+
     if (m_genericImpl)
         return m_genericImpl->GetViewRect();
-        
+
     wxRect rect;
     return rect;
 }
@@ -643,7 +651,7 @@ bool wxListCtrl::GetItemRect(long item, wxRect& rect, int code) const
     if (m_genericImpl)
         return m_genericImpl->GetItemRect(item, rect, code);
 
-    return true; 
+    return true;
 }
 
 // Gets the item position
@@ -674,7 +682,7 @@ int wxListCtrl::GetItemCount() const
 
     if (m_dbImpl)
         return m_dbImpl->MacGetCount();
-    
+
     return m_count;
 }
 
@@ -694,10 +702,11 @@ wxSize wxListCtrl::GetItemSpacing() const
 
 void wxListCtrl::SetItemTextColour( long item, const wxColour &col )
 {
-    if (m_genericImpl){
+    if (m_genericImpl)
+    {
         m_genericImpl->SetItemTextColour(item, col);
     }
-    
+
     wxListItem info;
     info.m_itemId = item;
     info.SetTextColour( col );
@@ -708,8 +717,9 @@ wxColour wxListCtrl::GetItemTextColour( long item ) const
 {
     if (m_genericImpl)
         return m_genericImpl->GetItemTextColour(item);
-        
-    if (m_dbImpl){
+
+    if (m_dbImpl)
+    {
         wxListItem info;
         if (GetItem(info))
             return info.GetTextColour();
@@ -719,11 +729,12 @@ wxColour wxListCtrl::GetItemTextColour( long item ) const
 
 void wxListCtrl::SetItemBackgroundColour( long item, const wxColour &col )
 {
-    if (m_genericImpl){
+    if (m_genericImpl)
+    {
         m_genericImpl->SetItemBackgroundColour(item, col);
         return;
     }
-    
+
     wxListItem info;
     info.m_itemId = item;
     info.SetBackgroundColour( col );
@@ -734,8 +745,9 @@ wxColour wxListCtrl::GetItemBackgroundColour( long item ) const
 {
     if (m_genericImpl)
         return m_genericImpl->GetItemBackgroundColour(item);
-        
-    if (m_dbImpl){
+
+    if (m_dbImpl)
+    {
         wxListItem info;
         if (GetItem(info))
             return info.GetBackgroundColour();
@@ -745,7 +757,8 @@ wxColour wxListCtrl::GetItemBackgroundColour( long item ) const
 
 void wxListCtrl::SetItemFont( long item, const wxFont &f )
 {
-    if (m_genericImpl){
+    if (m_genericImpl)
+    {
         m_genericImpl->SetItemFont(item, f);
         return;
     }
@@ -760,8 +773,9 @@ wxFont wxListCtrl::GetItemFont( long item ) const
 {
     if (m_genericImpl)
         return m_genericImpl->GetItemFont(item);
-        
-    if (m_dbImpl){
+
+    if (m_dbImpl)
+    {
         wxListItem info;
         if (GetItem(info))
             return info.GetFont();
@@ -791,16 +805,19 @@ wxColour wxListCtrl::GetTextColour() const
     // TODO: we need owner drawn list items to customize text color.
     if (m_dbImpl)
         return *wxBLACK;
+
+    return wxNullColour;
 }
 
 // Sets the text colour of the listview
 void wxListCtrl::SetTextColour(const wxColour& col)
 {
-    if (m_genericImpl){
+    if (m_genericImpl)
+    {
         m_genericImpl->SetTextColour(col);
         return;
     }
-    
+
     // TODO: if we add owner-drawn item support for DataBrowser,
     // consider supporting this property
 }
@@ -811,7 +828,7 @@ long wxListCtrl::GetTopItem() const
 {
     if (m_genericImpl)
         return m_genericImpl->GetTopItem();
-        
+
     return 0;
 }
 
@@ -854,12 +871,12 @@ wxImageList *wxListCtrl::GetImageList(int which) const
 
 void wxListCtrl::SetImageList(wxImageList *imageList, int which)
 {
-    if (m_genericImpl){
+    if (m_genericImpl)
+    {
         m_genericImpl->SetImageList(imageList, which);
         return;
     }
 
-    int flags = 0;
     if ( which == wxIMAGE_LIST_NORMAL )
     {
         if (m_ownsImageListNormal) delete m_imageListNormal;
@@ -882,7 +899,8 @@ void wxListCtrl::SetImageList(wxImageList *imageList, int which)
 
 void wxListCtrl::AssignImageList(wxImageList *imageList, int which)
 {
-    if (m_genericImpl){
+    if (m_genericImpl)
+    {
         m_genericImpl->AssignImageList(imageList, which);
         return;
     }
@@ -913,14 +931,15 @@ bool wxListCtrl::DeleteItem(long item)
 {
     if (m_genericImpl)
         return m_genericImpl->DeleteItem(item);
-        
-    if (m_dbImpl){
+
+    if (m_dbImpl)
+    {
         m_dbImpl->MacDelete(item);
         wxListEvent event( wxEVT_COMMAND_LIST_DELETE_ITEM, GetId() );
         event.SetEventObject( this );
         event.m_itemIndex = item;
-        GetEventHandler()->ProcessEvent( event );   
-    
+        GetEventHandler()->ProcessEvent( event );
+
     }
     return true;
 }
@@ -930,12 +949,13 @@ bool wxListCtrl::DeleteAllItems()
 {
     if (m_genericImpl)
         return m_genericImpl->DeleteAllItems();
-        
-    if (m_dbImpl){
+
+    if (m_dbImpl)
+    {
         m_dbImpl->MacClear();
         wxListEvent event( wxEVT_COMMAND_LIST_DELETE_ALL_ITEMS, GetId() );
         event.SetEventObject( this );
-        GetEventHandler()->ProcessEvent( event );   
+        GetEventHandler()->ProcessEvent( event );
     }
     return true;
 }
@@ -945,15 +965,17 @@ bool wxListCtrl::DeleteAllColumns()
 {
     if (m_genericImpl)
         return m_genericImpl->DeleteAllColumns();
-        
-    if (m_dbImpl){
+
+    if (m_dbImpl)
+    {
         UInt32 cols;
         m_dbImpl->GetColumnCount(&cols);
-        for (UInt32 col = 0; col < cols; col++){
-                DeleteColumn(col);
-        } 
+        for (UInt32 col = 0; col < cols; col++)
+        {
+            DeleteColumn(col);
+        }
     }
-        
+
     return true;
 }
 
@@ -962,24 +984,27 @@ bool wxListCtrl::DeleteColumn(int col)
 {
     if (m_genericImpl)
         return m_genericImpl->DeleteColumn(col);
-        
-    if (m_dbImpl){
+
+    if (m_dbImpl)
+    {
         OSStatus err = m_dbImpl->RemoveColumn(col);
         return err == noErr;
     }
-    
+
     return true;
 }
 
 // Clears items, and columns if there are any.
 void wxListCtrl::ClearAll()
 {
-    if (m_genericImpl){
+    if (m_genericImpl)
+    {
         m_genericImpl->ClearAll();
         return;
     }
-    
-    if (m_dbImpl){
+
+    if (m_dbImpl)
+    {
         DeleteAllItems();
         DeleteAllColumns();
     }
@@ -989,8 +1014,9 @@ wxTextCtrl* wxListCtrl::EditLabel(long item, wxClassInfo* textControlClass)
 {
     if (m_genericImpl)
         return m_genericImpl->EditLabel(item, textControlClass);
-        
-    if (m_dbImpl){
+
+    if (m_dbImpl)
+    {
         wxMacDataItem* id = m_dbImpl->GetItemFromLine(item);
         verify_noerr( SetDataBrowserEditItem(m_dbImpl->GetControlRef(), (DataBrowserItemID)id, kMinColumnId) );
     }
@@ -1003,7 +1029,7 @@ bool wxListCtrl::EndEditLabel(bool cancel)
     // TODO: generic impl. doesn't have this method - is it needed for us?
     if (m_genericImpl)
         return true; // m_genericImpl->EndEditLabel(cancel);
-        
+
     if (m_dbImpl)
         verify_noerr( SetDataBrowserEditItem(m_dbImpl->GetControlRef(), kDataBrowserNoItem, kMinColumnId) );
     return true;
@@ -1014,11 +1040,14 @@ bool wxListCtrl::EnsureVisible(long item)
 {
     if (m_genericImpl)
         return m_genericImpl->EnsureVisible(item);
-        
-    if (m_dbImpl){
+
+    if (m_dbImpl)
+    {
         wxMacDataItem* dataItem = m_dbImpl->GetItemFromLine(item);
         m_dbImpl->RevealItem(dataItem, kDataBrowserRevealWithoutSelecting);
     }
+
+    return false;
 }
 
 // Find an item whose label matches this string, starting from the item after 'start'
@@ -1037,7 +1066,7 @@ long wxListCtrl::FindItem(long start, long data)
 {
     if (m_genericImpl)
         return m_genericImpl->FindItem(start, data);
-        
+
     long  idx = start + 1;
     long count = GetItemCount();
 
@@ -1080,18 +1109,19 @@ long wxListCtrl::InsertItem(wxListItem& info)
 
     if (m_genericImpl)
         return m_genericImpl->InsertItem(info);
-        
-    if (m_dbImpl){
+
+    if (m_dbImpl)
+    {
         int count = GetItemCount();
 
         if (info.m_itemId > count)
             info.m_itemId = count;
-    
+
         m_dbImpl->MacInsertItem(info.m_itemId, &info );
         wxListEvent event( wxEVT_COMMAND_LIST_INSERT_ITEM, GetId() );
         event.SetEventObject( this );
         event.m_itemIndex = info.m_itemId;
-        GetEventHandler()->ProcessEvent( event );   
+        GetEventHandler()->ProcessEvent( event );
     }
 
     return info.m_itemId;
@@ -1114,7 +1144,7 @@ long wxListCtrl::InsertItem(long index, int imageIndex)
 {
     if (m_genericImpl)
         return m_genericImpl->InsertItem(index, imageIndex);
-        
+
     wxListItem info;
     info.m_image = imageIndex;
     info.m_mask = wxLIST_MASK_IMAGE;
@@ -1127,7 +1157,7 @@ long wxListCtrl::InsertItem(long index, const wxString& label, int imageIndex)
 {
     if (m_genericImpl)
         return m_genericImpl->InsertItem(index, label, imageIndex);
-        
+
     wxListItem info;
     info.m_image = imageIndex;
     info.m_text = label;
@@ -1141,22 +1171,25 @@ long wxListCtrl::InsertColumn(long col, wxListItem& item)
 {
     if (m_genericImpl)
         return m_genericImpl->InsertColumn(col, item);
-    
-    if (m_dbImpl){
-        if ( !(item.GetMask() & wxLIST_MASK_WIDTH) ) 
+
+    if (m_dbImpl)
+    {
+        if ( !(item.GetMask() & wxLIST_MASK_WIDTH) )
             item.SetWidth(150);
-        
+
         DataBrowserPropertyType type = kDataBrowserTextType;
         wxImageList* imageList = GetImageList(wxIMAGE_LIST_SMALL);
-        if (imageList && imageList->GetImageCount() > 0){
+        if (imageList && imageList->GetImageCount() > 0)
+        {
             wxBitmap bmp = imageList->GetBitmap(0);
             if (bmp.Ok())
                 type = kDataBrowserIconAndTextType;
         }
-        
+
         fprintf(stderr, "Flush is %d\n", item.GetAlign());
         SInt16 just = teFlushDefault;
-        if (item.GetMask() & wxLIST_MASK_FORMAT){
+        if (item.GetMask() & wxLIST_MASK_FORMAT)
+        {
             if (item.GetAlign() == wxLIST_FORMAT_LEFT)
                 just = teFlushLeft;
             else if (item.GetAlign() == wxLIST_FORMAT_CENTER)
@@ -1165,7 +1198,7 @@ long wxListCtrl::InsertColumn(long col, wxListItem& item)
                 just = teFlushRight;
         }
         m_dbImpl->InsertColumn(col, type, item.GetText(), just, item.GetWidth());
-        
+
         if (GetWindowStyleFlag() & wxLC_EDIT_LABELS)
         {
             DataBrowserTableViewColumnID id;
@@ -1176,7 +1209,7 @@ long wxListCtrl::InsertColumn(long col, wxListItem& item)
             verify_noerr(m_dbImpl->SetPropertyFlags(id, flags));
         }
     }
-    
+
     return col;
 }
 
@@ -1207,8 +1240,9 @@ bool wxListCtrl::ScrollList(int dx, int dy)
 {
     if (m_genericImpl)
         return m_genericImpl->ScrollList(dx, dy);
-        
-    if (m_dbImpl){
+
+    if (m_dbImpl)
+    {
         m_dbImpl->SetScrollPosition(dx, dy);
     }
     return true;
@@ -1219,7 +1253,7 @@ bool wxListCtrl::SortItems(wxListCtrlCompare fn, long data)
 {
     if (m_genericImpl)
         return m_genericImpl->SortItems(fn, data);
-        
+
     return true;
 }
 
@@ -1265,21 +1299,23 @@ void wxListCtrl::SetItemCount(long count)
 {
     wxASSERT_MSG( IsVirtual(), _T("this is for virtual controls only") );
 
-    if (m_genericImpl){
+    if (m_genericImpl)
+    {
         m_genericImpl->SetItemCount(count);
         return;
     }
-    
+
     m_count = count;
 }
 
 void wxListCtrl::RefreshItem(long item)
 {
-    if (m_genericImpl){
+    if (m_genericImpl)
+    {
         m_genericImpl->RefreshItem(item);
         return;
     }
-    
+
     wxRect rect;
     GetItemRect(item, rect);
     RefreshRect(rect);
@@ -1287,7 +1323,8 @@ void wxListCtrl::RefreshItem(long item)
 
 void wxListCtrl::RefreshItems(long itemFrom, long itemTo)
 {
-    if (m_genericImpl){
+    if (m_genericImpl)
+    {
         m_genericImpl->RefreshItems(itemFrom, itemTo);
         return;
     }
@@ -1303,7 +1340,7 @@ void wxListCtrl::RefreshItems(long itemFrom, long itemTo)
 }
 
 
-// wxMac internal data structures 
+// wxMac internal data structures
 
 wxMacListCtrlItem::~wxMacListCtrlItem()
 {
@@ -1335,19 +1372,20 @@ void wxMacListCtrlItem::Notification(wxMacDataItemBrowserControl *owner ,
     }
 
     wxListCtrl *list = wxDynamicCast( owner->GetPeer() , wxListCtrl );
-    if ( list ){
+    if ( list )
+    {
         bool trigger = false;
-            
+
         wxListEvent event( wxEVT_COMMAND_LIST_ITEM_SELECTED, list->GetId() );
         bool isSingle = list->GetWindowStyle() | wxLC_SINGLE_SEL;
-        
+
         event.SetEventObject( list );
         event.m_itemIndex = owner->GetLineFromItem( this ) ;
         if ( !list->IsVirtual() )
         {
             lb->MacGetColumnInfo(event.m_itemIndex,0,event.m_item);
         }
-        
+
         switch (message)
         {
             case kDataBrowserItemDeselected:
@@ -1370,7 +1408,7 @@ void wxMacListCtrlItem::Notification(wxMacDataItemBrowserControl *owner ,
                 event.SetEventType( wxEVT_COMMAND_LIST_BEGIN_LABEL_EDIT ) ;
                 trigger = true ;
                 break ;
-                
+
             case kDataBrowserEditStopped :
                 // TODO probably trigger only upon the value store callback, because
                 // here IIRC we cannot veto
@@ -1410,11 +1448,12 @@ wxMacDataBrowserListCtrlControl::wxMacDataBrowserListCtrlControl( wxWindow *peer
     err = SetSelectionFlags( options );
     verify_noerr( err );
 
-    if ( style & wxLC_LIST ){
+    if ( style & wxLC_LIST )
+    {
         InsertColumn(0, kDataBrowserIconAndTextType, wxEmptyString, -1, -1);
         verify_noerr( AutoSizeColumns() );
     }
-    
+
     if ( style & wxLC_LIST || style & wxLC_NO_HEADER )
         verify_noerr( SetHeaderButtonHeight( 0 ) );
 
@@ -1437,8 +1476,9 @@ wxMacDataBrowserListCtrlControl::wxMacDataBrowserListCtrlControl( wxWindow *peer
         SetDataBrowserSortProperty( m_controlRef , kMinColumnId);
         SetDataBrowserSortOrder( m_controlRef , kDataBrowserOrderIncreasing);
     }
-    
-    if ( style & wxLC_VRULES ){
+
+    if ( style & wxLC_VRULES )
+    {
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_4
         verify_noerr( DataBrowserChangeAttributes(m_controlRef, kDataBrowserAttributeListViewDrawColumnDividers, kDataBrowserAttributeNone) );
 #endif
@@ -1454,42 +1494,43 @@ wxMacDataBrowserListCtrlControl::~wxMacDataBrowserListCtrlControl()
 }
 
 void wxMacDataBrowserListCtrlControl::MacSetColumnInfo( unsigned int row, unsigned int column, wxListItem* item )
-{ 
+{
     wxMacDataItem* dataItem = GetItemFromLine(row);
-    if (item){
+    if (item)
+    {
         wxMacListCtrlItem* listItem = dynamic_cast<wxMacListCtrlItem*>(dataItem);
         listItem->SetColumnInfo( column, item );
         UpdateState(dataItem, item);
     }
 }
 
-// apply changes that need to happen immediately, rather than when the 
+// apply changes that need to happen immediately, rather than when the
 // databrowser control fires a callback.
 void wxMacDataBrowserListCtrlControl::UpdateState(wxMacDataItem* dataItem, wxListItem* listItem)
 {
     bool isSelected = IsItemSelected( dataItem );
     bool isSelectedState = (listItem->GetState() == wxLIST_STATE_SELECTED);
 
-    // toggle the selection state if wxListInfo state and actual state don't match.    
-    if ( isSelected != isSelectedState ){
+    // toggle the selection state if wxListInfo state and actual state don't match.
+    if ( isSelected != isSelectedState )
+    {
         DataBrowserSetOption options = kDataBrowserItemsAdd;
         if (!isSelectedState)
             options = kDataBrowserItemsRemove;
-        fprintf(stderr, "state = %d, db options = %d\n", isSelectedState, options);
         SetSelectedItem(dataItem, options);
     }
     // TODO: Set column width if item width > than current column width
 }
 
 void wxMacDataBrowserListCtrlControl::MacGetColumnInfo( unsigned int row, unsigned int column, wxListItem& item )
-{ 
+{
     wxMacDataItem* dataItem = GetItemFromLine(row);
     // CS should this guard against dataItem = 0 ? , as item is not a pointer if (item) is not appropriate
-    //if (item) 
+    //if (item)
     {
         wxMacListCtrlItem* listItem = dynamic_cast<wxMacListCtrlItem*>(dataItem);
         wxListItem* oldItem = listItem->GetColumnInfo( column );
-        
+
         long mask = item.GetMask();
         if ( !mask )
             // by default, get everything for backwards compatibility
@@ -1510,7 +1551,7 @@ void wxMacDataBrowserListCtrlControl::MacGetColumnInfo( unsigned int row, unsign
 
         item.SetTextColour(oldItem->GetTextColour());
         item.SetBackgroundColour(oldItem->GetBackgroundColour());
-        item.SetFont(oldItem->GetFont());   
+        item.SetFont(oldItem->GetFont());
     }
 }
 
@@ -1551,7 +1592,7 @@ const wxString& wxMacListCtrlItem::GetColumnTextValue( unsigned int column )
 void wxMacListCtrlItem::SetColumnTextValue( unsigned int column, const wxString& text )
 {
     GetColumnInfo(column)->SetText(text);
-    
+
     // for compatibility with superclass APIs
     if ( column == 0 )
         SetLabel(text);
@@ -1573,7 +1614,8 @@ bool wxMacListCtrlItem::HasColumnInfo( unsigned int column )
 void wxMacListCtrlItem::SetColumnInfo( unsigned int column, wxListItem* item )
 {
 
-    if ( column >= m_rowItems.GetCount() ){
+    if ( column >= m_rowItems.GetCount() )
+    {
         wxListItem* listItem = new wxListItem(*item);
         //listItem->SetAlign(item->GetAlign());
         //listItem->SetBackgroundColour(item->GetBackgroundColour());
@@ -1583,8 +1625,8 @@ void wxMacListCtrlItem::SetColumnInfo( unsigned int column, wxListItem* item )
         //listItem->SetId(GetOrder());
         //listItem->SetImage(item->GetImage());
         //listItem->SetMask(item->GetMask());
-        
-        //listItem->SetText(item->GetText());      
+
+        //listItem->SetText(item->GetText());
         m_rowItems.Append( listItem );
     }
     else{
@@ -1610,7 +1652,7 @@ OSStatus wxMacListCtrlItem::GetSetData( wxMacDataItemBrowserControl *owner ,
     DataBrowserItemDataRef itemData,
     bool changeValue )
 {
-        
+
     OSStatus err = errDataBrowserPropertyNotSupported;
     wxListCtrl* list = wxDynamicCast( owner->GetPeer() , wxListCtrl );
     if ( !changeValue )
@@ -1625,29 +1667,34 @@ OSStatus wxMacListCtrlItem::GetSetData( wxMacDataItemBrowserControl *owner ,
                 }
                 break ;
             default :
-                if ( property >= kMinColumnId ){
+                if ( property >= kMinColumnId )
+                {
                     short listColumn = property - kMinColumnId;
-                    
-                    if (HasColumnInfo(listColumn)){
+
+                    if (HasColumnInfo(listColumn))
+                    {
                         wxListItem* item = GetColumnInfo(listColumn);
                         wxMacCFStringHolder cfStr;
-                        
-                        if (item->GetText()){
+
+                        if (item->GetText())
+                        {
                             cfStr.Assign( item->GetText(), wxLocale::GetSystemEncoding() );
                             err = ::SetDataBrowserItemDataText( itemData, cfStr );
                             err = noErr;
                         }
-                        
+
                         int imgIndex = item->GetImage();
-                        if ( (item->GetMask() & wxLIST_MASK_IMAGE) ){
+                        if ( (item->GetMask() & wxLIST_MASK_IMAGE) )
+                        {
                             wxImageList* imageList = list->GetImageList(wxIMAGE_LIST_SMALL);
-                            if (imageList && imageList->GetImageCount() > 0){
+                            if (imageList && imageList->GetImageCount() > 0)
+                            {
                                 wxBitmap bmp = imageList->GetBitmap(imgIndex);
                                 IconRef icon = bmp.GetBitmapData()->GetIconRef();
                                 ::SetDataBrowserItemDataIcon(itemData, icon);
                             }
                         }
-                        
+
                     }
                 }
                 break ;
@@ -1658,27 +1705,29 @@ OSStatus wxMacListCtrlItem::GetSetData( wxMacDataItemBrowserControl *owner ,
         switch (property)
         {
              default:
-                if ( property >= kMinColumnId ){
+                if ( property >= kMinColumnId )
+                {
                     short listColumn = property - kMinColumnId;
-                    
-                    if (HasColumnInfo(listColumn)){
+
+                    if (HasColumnInfo(listColumn))
+                    {
                         // TODO probably send the 'end edit' from here, as we
                         // can then deal with the veto
                         CFStringRef sr ;
                         verify_noerr( GetDataBrowserItemDataText( itemData , &sr ) ) ;
                         wxMacCFStringHolder cfStr(sr) ;;
                         list->SetItem( owner->GetLineFromItem(this) , listColumn, cfStr.AsString() ) ;
-                        err = noErr ;                        
+                        err = noErr ;
                     }
                 }
                 break;
         }
     }
-    
+
     // don't duplicate the numeric order column handling
-    if (err == errDataBrowserPropertyNotSupported) 
+    if (err == errDataBrowserPropertyNotSupported)
         err = wxMacDataItem::GetSetData(owner, property, itemData, changeValue);
-        
+
     return err;
 }
 
