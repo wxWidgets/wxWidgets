@@ -347,7 +347,7 @@ bool wxRegion::DoCombine( const wxRegion& rRegion, wxRegionOp eOp )
 //# Information on region
 //-----------------------------------------------------------------------------
 
-bool wxRegion::DoIsEqual(const wxRegion& region) const
+bool wxRegion::DoIsEqual(const wxRegion& WXUNUSED(region)) const
 {
     return false;
 }
@@ -411,9 +411,9 @@ bool wxRegion::IsEmpty() const
 //
 // Does the region contain the point pt?
 //
-wxRegionContain wxRegion::DoContainsPoint( const wxPoint& rPoint ) const
+wxRegionContain wxRegion::DoContainsPoint( wxCoord x, wxCoord y ) const
 {
-    POINTL                          vPoint = { rPoint.x, rPoint.y };
+    POINTL vPoint = { x, y };
 
     if (!m_refData)
         return wxOutRegion;
@@ -437,10 +437,10 @@ wxRegionContain wxRegion::DoContainsRect(const wxRect& rect) const
         return wxOutRegion;
 
     RECTL   vRect;
-    vRect.xLeft   = r.x;
-    vRect.xRight  = r.x + r.width;
-    vRect.yTop    = r.y + r.height;
-    vRect.yBottom = r.y;
+    vRect.xLeft   = rect.x;
+    vRect.xRight  = rect.x + rect.width;
+    vRect.yTop    = rect.y + rect.height;
+    vRect.yBottom = rect.y;
 
     LONG lInside = ::GpiRectInRegion( ((wxRegionRefData*)m_refData)->m_hPS,
                                       M_REGION,
@@ -453,6 +453,7 @@ wxRegionContain wxRegion::DoContainsRect(const wxRect& rect) const
         case RRGN_ERROR     :
         default             :   return wxOutRegion;
     }
+
 } // end of wxRegion::Contains
 
 //
