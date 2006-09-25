@@ -28,6 +28,7 @@ lcport=gtk
 unicode=0
 tarname=wxPython-src
 srpmonly=0
+skipclean=0
 
 #----------------------------------------------------------------------
 # Check parameters

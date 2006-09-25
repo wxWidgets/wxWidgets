@@ -49,8 +49,8 @@ def getTasks(config_env):
     # on the nature of the build machines configurations...) is a separate
     # task.
     
-    jaguarTask = Task( Job("whopper.23", "distrib/all/build-osx",
-                           [config.OSX_HOST_jaguar, "2.3", "ansi"], env=config_env) )
+##     jaguarTask = Task( Job("whopper.23", "distrib/all/build-osx",
+##                            [config.OSX_HOST_jaguar, "2.3", "ansi"], env=config_env) )
     
     pantherTask = Task( [ Job("bigmac.23", 
                               "distrib/all/build-osx",
@@ -73,21 +73,22 @@ def getTasks(config_env):
 
     
     beastTask1 = Task(
-        [ Job("beast.23",     "distrib/all/build-windows", ["2.3"], env=config_env),
-          Job("co-rh9.23",    "distrib/all/build-rpm", ["beast", "co-rh9",   "rh9",   "2.3"], env=config_env),
+        [ #Job("beast.23",     "distrib/all/build-windows", ["2.3"], env=config_env),
+#          Job("co-rh9.23",    "distrib/all/build-rpm", ["beast", "co-rh9",   "rh9",   "2.3"], env=config_env),
           Job("beast.24",     "distrib/all/build-windows", ["2.4"], env=config_env),
-          Job("co-rh9.24",    "distrib/all/build-rpm", ["beast", "co-rh9",   "rh9",   "2.4"], env=config_env),
+#          Job("co-rh9.24",    "distrib/all/build-rpm", ["beast", "co-rh9",   "rh9",   "2.4"], env=config_env),
           Job("beast.25",     "distrib/all/build-windows", ["2.5"], env=config_env),
+          Job("co-mdk2006.24","distrib/all/build-rpm", ["beast", "co-mdk2006", "mdk2006", "2.4"], env=config_env),
           ])
     
     beastTask2 = Task(
-        [ Job("co-fc2.23",    "distrib/all/build-rpm", ["beast", "co-fc2",     "fc2",     "2.3"], env=config_env),
+        [ #Job("co-fc2.23",    "distrib/all/build-rpm", ["beast", "co-fc2",     "fc2",     "2.3"], env=config_env),
           Job("co-fc4.24",    "distrib/all/build-rpm", ["beast", "co-fc4",     "fc4",     "2.4"], env=config_env),
           Job("co-mdk102.24", "distrib/all/build-rpm", ["beast", "co-mdk102",  "mdk102",  "2.4"], env=config_env),
-          Job("co-mdk2006.24","distrib/all/build-rpm", ["beast", "co-mdk2006", "mdk2006", "2.4"], env=config_env),
+#          Job("co-mdk2006.24","distrib/all/build-rpm", ["beast", "co-mdk2006", "mdk2006", "2.4"], env=config_env),
           ])
 
-    buildTasks = [ jaguarTask,
+    buildTasks = [ #jaguarTask,
                    pantherTask,
                    tigerTask,
                    beastTask1,

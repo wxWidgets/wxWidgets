@@ -26,7 +26,7 @@ if [ $KIND = daily ]; then
 	echo "Copying to the starship at $destdir..."
 	ssh $UPLOAD_HOST "mkdir -p $destdir"
 	scp -p $STAGING_DIR/* $UPLOAD_HOST:/$destdir
-	ssh $UPLOAD_HOST "cd $destdir && ls -al"
+	#ssh $UPLOAD_HOST "cd $destdir && ls -al"
 
 
         # TODO: something to remove old builds from starship, keeping 
