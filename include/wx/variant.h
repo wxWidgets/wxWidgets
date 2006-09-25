@@ -13,6 +13,9 @@
 #define _WX_VARIANT_H_
 
 #include "wx/defs.h"
+
+#if wxUSE_VARIANT
+
 #include "wx/object.h"
 #include "wx/string.h"
 #include "wx/arrstr.h"
@@ -278,5 +281,6 @@ protected:
 
 extern wxVariant WXDLLIMPEXP_BASE wxNullVariant;
 
-#endif
-    // _WX_VARIANT_H_
+#endif // wxUSE_VARIANT
+
+#endif // _WX_VARIANT_H_

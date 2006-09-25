@@ -18,6 +18,8 @@
 
 #include "wx/variant.h"
 
+#if wxUSE_VARIANT
+
 #ifndef WX_PRECOMP
     #include "wx/string.h"
     #include "wx/math.h"
@@ -2103,3 +2105,5 @@ bool wxVariant::Convert(wxDateTime* value) const
                 (value->ParseDateTime(val) || value->ParseDate(val) || value->ParseTime(val));
 }
 #endif // wxUSE_DATETIME
+
+#endif // wxUSE_VARIANT
