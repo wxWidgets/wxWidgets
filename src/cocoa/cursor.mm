@@ -212,8 +212,9 @@ NSCursor* wxGetStockCursor( short sIndex )
         //do the rest of those bits and alphas :)
         for (int shift = 0; shift < 32; ++shift)
         {
-            data[i] |= ( !!( (pCursor->mask[i] & (1 << (shift >> 1) )) ) ) << shift;
-            data[i] |= ( !( (pCursor->bits[i] & (1 << (shift >> 1) )) ) ) << ++shift;
+            const int bit = 1 << (shift >> 1);
+            data[i] |= ( !!( (pCursor->mask[i] & bit) ) ) << shift;
+            data[i] |= ( !( (pCursor->bits[i] & bit) ) ) << ++shift;
         }
     }
 
