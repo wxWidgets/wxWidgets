@@ -809,11 +809,11 @@ wxImage wxImage::BlurHorizontal(int blurRadius)
         }
 
         dst = dst_data + y * M_IMGDATA->m_width*3;
-        dst[0] = sum_r / blurArea;
-        dst[1] = sum_g / blurArea;
-        dst[2] = sum_b / blurArea;
+        dst[0] = (unsigned char)(sum_r / blurArea);
+        dst[1] = (unsigned char)(sum_g / blurArea);
+        dst[2] = (unsigned char)(sum_b / blurArea);
         if ( src_alpha )
-            dst_alpha[y * M_IMGDATA->m_width] = sum_a / blurArea;
+            dst_alpha[y * M_IMGDATA->m_width] = (unsigned char)(sum_a / blurArea);
 
         // Now average the values of the rest of the pixels by just moving the
         // blur radius box along the row
@@ -851,11 +851,11 @@ wxImage wxImage::BlurHorizontal(int blurRadius)
 
             // Save off the averaged data
             dst = dst_data + x*3 + y*M_IMGDATA->m_width;
-            dst[0] = sum_r / blurArea;
-            dst[1] = sum_g / blurArea;
-            dst[2] = sum_b / blurArea;
+            dst[0] = (unsigned char)(sum_r / blurArea);
+            dst[1] = (unsigned char)(sum_g / blurArea);
+            dst[2] = (unsigned char)(sum_b / blurArea);
             if ( src_alpha )
-                dst_alpha[x + y * M_IMGDATA->m_width] = sum_a / blurArea;
+                dst_alpha[x + y * M_IMGDATA->m_width] = (unsigned char)(sum_a / blurArea);
         }
     }
 
@@ -927,11 +927,11 @@ wxImage wxImage::BlurVertical(int blurRadius)
         }
 
         dst = dst_data + x*3;
-        dst[0] = sum_r / blurArea;
-        dst[1] = sum_g / blurArea;
-        dst[2] = sum_b / blurArea;
+        dst[0] = (unsigned char)(sum_r / blurArea);
+        dst[1] = (unsigned char)(sum_g / blurArea);
+        dst[2] = (unsigned char)(sum_b / blurArea);
         if ( src_alpha )
-            dst_alpha[x] = sum_a / blurArea;
+            dst_alpha[x] = (unsigned char)(sum_a / blurArea);
 
         // Now average the values of the rest of the pixels by just moving the
         // box along the column from top to bottom
@@ -969,11 +969,11 @@ wxImage wxImage::BlurVertical(int blurRadius)
 
             // Save off the averaged data
             dst = dst_data + (x + y * M_IMGDATA->m_width) * 3;
-            dst[0] = sum_r / blurArea;
-            dst[1] = sum_g / blurArea;
-            dst[2] = sum_b / blurArea;
+            dst[0] = (unsigned char)(sum_r / blurArea);
+            dst[1] = (unsigned char)(sum_g / blurArea);
+            dst[2] = (unsigned char)(sum_b / blurArea);
             if ( src_alpha )
-                dst_alpha[x + y * M_IMGDATA->m_width] = sum_a / blurArea;
+                dst_alpha[x + y * M_IMGDATA->m_width] = (unsigned char)(sum_a / blurArea);
         }
     }
 
