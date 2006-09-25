@@ -270,7 +270,7 @@ wxRegionContain wxRegion::DoContainsRect(const wxRect& r) const
     if (!m_refData)
         return wxOutRegion;
 
-    Rect rect = { r.y , r.x , r.y + r.h , r.x + r.w } ;
+    Rect rect = { r.y , r.x , r.y + r.height , r.x + r.width } ;
     if (RectInRgn( &rect , M_REGION ) )
         return wxInRegion;
     else
