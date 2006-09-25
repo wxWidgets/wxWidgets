@@ -39,10 +39,12 @@ class TestPanel(wx.Panel):
         t3 = wx.TextCtrl(self, -1,
                         "Here is a looooooooooooooong line of text set in the control.\n\n"
                         "The quick brown fox jumped over the lazy dog...",
-                       size=(200, 100), style=wx.TE_MULTILINE)
+                       size=(200, 100), style=wx.TE_MULTILINE|wx.TE_PROCESS_ENTER)
 
         t3.SetInsertionPoint(0)
         self.Bind(wx.EVT_TEXT, self.EvtText, t3)
+        self.Bind(wx.EVT_TEXT_ENTER, self.EvtTextEnter, t3)
+        
         b = wx.Button(self, -1, "Test Replace")
         self.Bind(wx.EVT_BUTTON, self.OnTestReplace, b)
         b2 = wx.Button(self, -1, "Test GetSelection")
@@ -92,6 +94,9 @@ class TestPanel(wx.Panel):
     def EvtText(self, event):
         self.log.WriteText('EvtText: %s\n' % event.GetString())
 
+    def EvtTextEnter(self, event):
+        self.log.WriteText('EvtTextEnter\n')
+        event.Skip()
 
     def EvtChar(self, event):
         self.log.WriteText('EvtChar: %d\n' % event.GetKeyCode())
