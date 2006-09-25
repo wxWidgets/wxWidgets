@@ -18,6 +18,7 @@
 #include "wx/generic/listctrl.h"
 
 class wxMacDataBrowserListCtrlControl;
+class wxMacListControl;
 
 // type of compare function for wxListCtrl sort operation
 typedef int (*wxListCtrlCompare)(long item1, long item2, long sortData);
