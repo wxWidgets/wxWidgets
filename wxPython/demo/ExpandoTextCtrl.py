@@ -96,8 +96,8 @@ class TestPanel(wx.Panel):
 
 
     def OnButton(self, evt):
-        win = TestFrame(self)
-        win.Show(True)
+        self.win = TestFrame(self)
+        self.win.Show(True)
 
   
 #----------------------------------------------------------------------
