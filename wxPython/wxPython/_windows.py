@@ -294,6 +294,9 @@ wxPyPrintPreview = wx._windows.PyPrintPreview
 wxPyPreviewFrame = wx._windows.PyPreviewFrame
 wxPyPreviewControlBar = wx._windows.PyPreviewControlBar
 
+wxFRAME_EX_CONTEXTHELP = wx._windows.FRAME_EX_CONTEXTHELP
+wxDIALOG_EX_CONTEXTHELP = wx._windows.DIALOG_EX_CONTEXTHELP
+
 
 d = globals()
 for k, v in wx._windows.__dict__.iteritems():
