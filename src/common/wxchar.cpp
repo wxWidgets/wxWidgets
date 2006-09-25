@@ -196,7 +196,6 @@ bool WXDLLEXPORT wxOKlibc()
 //     implemented later in this file using wxVsnprintf() and that would
 //     result in an endless recursion and thus in a stack overflow
 #if wxUSE_UNICODE
-
     #if defined(__WINDOWS__)
         // all compilers under Windows should have swprintf()
         #define HAVE_SWPRINTF
@@ -213,17 +212,16 @@ bool WXDLLEXPORT wxOKlibc()
         #define HAVE_BROKEN_SWPRINTF_DECL
     #endif
 
-
-    // problem: on some systems swprintf takes the 'max' argument while on others
-    //          it doesn't
+    // problem: on some systems swprintf takes the 'max' argument while on
+    // others it doesn't
     #if defined(HAVE_BROKEN_SWPRINTF_DECL)
-
-        // like when using sprintf(), since 'max' is not used, wxVsnprintf() should
-        // always ensure that 'buff' is big enough for all common needs
+        // like when using sprintf(), since 'max' is not used, wxVsnprintf()
+        // should always ensure that 'buff' is big enough for all common needs
         #define system_sprintf(buff, max, flags, data)      \
             ::swprintf(buff, flags, data)
-    #else
 
+        #define SYSTEM_SPRINTF_IS_UNSAFE
+    #else
         #if !defined(HAVE_SWPRINTF)
             #error wxVsnprintf() needs a system swprintf() implementation!
         #endif
@@ -231,24 +229,24 @@ bool WXDLLEXPORT wxOKlibc()
         #define system_sprintf(buff, max, flags, data)      \
             ::swprintf(buff, max, flags, data)
     #endif
-
-#else
-
-    #if defined(HAVE_SNPRINTF)
-
+#else // !wxUSE_UNICODE
+    #if defined(__VISUALC__) || \
+            (defined(__BORLANDC__) && __BORLANDC__ >= 0x540)
+        #define system_sprintf(buff, max, flags, data)      \
+            ::_snprintf(buff, max, flags, data)
+    #elif defined(HAVE_SNPRINTF)
         #define system_sprintf(buff, max, flags, data)      \
             ::snprintf(buff, max, flags, data)
-
-    #else       // NB: at least sprintf() should *always* be available
-
-        // since 'max' is not used in this case, wxVsnprintf() should always ensure
-        // that 'buff' is big enough for all common needs
+    #else       // NB: at least sprintf() should always be available
+        // since 'max' is not used in this case, wxVsnprintf() should always
+        // ensure that 'buff' is big enough for all common needs
         // (see wxMAX_SVNPRINTF_FLAGBUFFER_LEN and wxMAX_SVNPRINTF_SCRATCHBUFFER_LEN)
         #define system_sprintf(buff, max, flags, data)      \
             ::sprintf(buff, flags, data)
 
+        #define SYSTEM_SPRINTF_IS_UNSAFE
     #endif
-#endif
+#endif // wxUSE_UNICODE/!wxUSE_UNICODE
 
 
 
@@ -678,12 +676,11 @@ void wxPrintfConvSpec::ReplaceAsteriskWith(int width)
     }
 
     // replace * with the actual integer given as width
-    int maxlen = (m_szFlags + wxMAX_SVNPRINTF_FLAGBUFFER_LEN - pwidth) / sizeof(wxChar);
-    int offset = system_sprintf(pwidth, maxlen, wxT("%d"), abs(width));
-
-#ifdef HAVE_BROKEN_SWPRINTF_DECL
-    wxUnusedVar(maxlen);        // avoid dummy warnings
+#ifndef SYSTEM_SPRINTF_IS_UNSAFE
+    int maxlen = (m_szFlags + wxMAX_SVNPRINTF_FLAGBUFFER_LEN - pwidth) /
+                        sizeof(wxChar);
 #endif
+    int offset = system_sprintf(pwidth, maxlen, wxT("%d"), abs(width));
 
     // restore after the expanded * what was following it
     wxStrcpy(pwidth+offset, temp);
