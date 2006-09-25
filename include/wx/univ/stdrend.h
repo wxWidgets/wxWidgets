@@ -332,6 +332,14 @@ protected:
     // return the frame icon bitmap
     virtual wxBitmap GetFrameButtonBitmap(FrameButtonType type) = 0;
 
+    // get the width of either normal or resizeable frame border depending on
+    // whether flags contains wxTOPLEVEL_RESIZEABLE bit
+    //
+    // notice that these methods only make sense with standard border drawing
+    // code which uses the borders of the same width on all sides, this is why
+    // they are only present here and not in wxRenderer itself
+    virtual int GetFrameBorderWidth(int flags) const;
+
 #if wxUSE_TEXTCTRL
     // return the width of the border around the text area in the text control
     virtual int GetTextBorderWidth(const wxTextCtrl *text) const;

@@ -232,6 +232,7 @@ protected:
         { return GetIndicator(IndicatorType_Radio, flags); }
 
     virtual wxBitmap GetFrameButtonBitmap(FrameButtonType type);
+    virtual int GetFrameBorderWidth(int flags) const;
 
 private:
     // the bitmaps returned by GetIndicator()
@@ -1030,6 +1031,11 @@ void wxMonoRenderer::DrawScrollbarShaft(wxDC& dc,
 // top level windows
 // ----------------------------------------------------------------------------
 
+int wxMonoRenderer::GetFrameBorderWidth(int WXUNUSED(flags)) const
+{
+    // all our borders are simple
+    return 1;
+}
 
 // ----------------------------------------------------------------------------
 // wxMonoArtProvider

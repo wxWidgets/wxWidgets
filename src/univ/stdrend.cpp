@@ -38,8 +38,6 @@
 // constants
 // ----------------------------------------------------------------------------
 
-static const int FRAME_BORDER_THICKNESS            = 3;
-static const int RESIZEABLE_FRAME_BORDER_THICKNESS = 4;
 static const int FRAME_TITLEBAR_HEIGHT             = 18;
 static const int FRAME_BUTTON_WIDTH                = 16;
 static const int FRAME_BUTTON_HEIGHT               = 14;
@@ -1415,6 +1413,11 @@ void wxStdRenderer::DrawFrameButton(wxDC& dc,
     dc.DrawBitmap(bmp, rectBmp.CentreIn(rectBtn).GetPosition(), true);
 }
 
+int wxStdRenderer::GetFrameBorderWidth(int flags) const
+{
+    return flags & wxTOPLEVEL_RESIZEABLE ? 4 : 3;
+}
+
 
 wxRect wxStdRenderer::GetFrameClientArea(const wxRect& rect, int flags) const
 {
@@ -1422,10 +1425,7 @@ wxRect wxStdRenderer::GetFrameClientArea(const wxRect& rect, int flags) const
 
     if ( (flags & wxTOPLEVEL_BORDER) && !(flags & wxTOPLEVEL_MAXIMIZED) )
     {
-        int border = flags & wxTOPLEVEL_RESIZEABLE
-                        ? RESIZEABLE_FRAME_BORDER_THICKNESS
-                        : FRAME_BORDER_THICKNESS;
-        r.Inflate(-border);
+        r.Inflate(-GetFrameBorderWidth(flags));
     }
 
     if ( flags & wxTOPLEVEL_TITLEBAR )
@@ -1444,11 +1444,7 @@ wxStdRenderer::GetFrameTotalSize(const wxSize& clientSize, int flags) const
 
     if ( (flags & wxTOPLEVEL_BORDER) && !(flags & wxTOPLEVEL_MAXIMIZED) )
     {
-        int border = flags & wxTOPLEVEL_RESIZEABLE
-                        ? RESIZEABLE_FRAME_BORDER_THICKNESS
-                        : FRAME_BORDER_THICKNESS;
-        s.x += 2*border;
-        s.y += 2*border;
+        s.IncBy(2*GetFrameBorderWidth(flags));
     }
 
     if ( flags & wxTOPLEVEL_TITLEBAR )
@@ -1463,11 +1459,7 @@ wxSize wxStdRenderer::GetFrameMinSize(int flags) const
 
     if ( (flags & wxTOPLEVEL_BORDER) && !(flags & wxTOPLEVEL_MAXIMIZED) )
     {
-        int border = (flags & wxTOPLEVEL_RESIZEABLE) ?
-                        RESIZEABLE_FRAME_BORDER_THICKNESS :
-                        FRAME_BORDER_THICKNESS;
-        s.x += 2*border;
-        s.y += 2*border;
+        s.IncBy(2*GetFrameBorderWidth(flags));
     }
 
     if ( flags & wxTOPLEVEL_TITLEBAR )
