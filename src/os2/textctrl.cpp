@@ -679,7 +679,7 @@ void wxTextCtrl::SetSelection(
         ::WinSendMsg(hWnd, EM_SETSEL, MPFROM2SHORT((USHORT)lFromChar, (USHORT)lToChar), (MPARAM)0);
 } // end of wxTextCtrl::SetSelection
 
-bool wxTextCtrl::LoadFile(
+bool wxTextCtrl::DoLoadFile(
   const wxString&                   rsFile,
   int                               fileType
 )
