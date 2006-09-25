@@ -88,6 +88,10 @@ wxGTK:
 - Automatically use stock items for menu items with standard ids.
 - Setting cursor now works for all controls.
 
+wxUniv:
+
+- Added wxTLW::UseNativeDecorations() and UseNativeDecorationsByDefault()
+
 
 2.7.0
 -----

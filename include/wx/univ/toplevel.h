@@ -115,6 +115,18 @@ public:
                 long style = wxDEFAULT_FRAME_STYLE,
                 const wxString& name = wxFrameNameStr);
 
+    // wxUniv-specific methods: do [not] use native decorations for this (or
+    // all) window(s)
+    //
+    // notice that this has no effect if the system doesn't support any native
+    // decorations anyhow and that by default native decorations are used
+    //
+    // if UseNativeDecorations() is used, it must be called before Create()
+    static UseNativeDecorationsByDefault(bool native = true);
+    void UseNativeDecorations(bool native = true);
+    bool IsUsingNativeDecorations() const;
+
+
     // implement base class pure virtuals
     virtual bool ShowFullScreen(bool show, long style = wxFULLSCREEN_ALL);
     virtual wxPoint GetClientAreaOrigin() const;
@@ -166,8 +178,11 @@ protected:
     static int ms_drawDecorations;
     // true if wxTLW can be iconized
     static int ms_canIconize;
+
+    // true if we're using native decorations
+    bool m_usingNativeDecorations;
     // true for currently active frame
-    bool m_isActive:1;
+    bool m_isActive;
     // version of icon for titlebar (16x16)
     wxIcon m_titlebarIcon;
     // saved window style in fullscreen mdoe

@@ -152,6 +152,21 @@ Returns \true if the window is iconized.
 Returns \true if the window is maximized.
 
 
+\membersection{wxTopLevelWindow::IsUsingNativeDecorations}{wxtoplevelwindowisusingnativedecorations}
+
+\constfunc{bool}{IsUsingNativeDecorations}{\void}
+
+\bftt{This method is specific to wxUniversal port}
+
+Returns \true if this window is using native decorations, \false if we draw
+them ourselves.
+
+\wxheading{See also}
+
+\helpref{UseNativeDecorations}{wxtoplevelwindowusenativedecorations},\\
+\helpref{UseNativeDecorationsByDefault}{wxtoplevelwindowusenativedecorationsbydefault}
+
+
 \membersection{wxTopLevelWindow::Maximize}\label{wxtoplevelwindowmaximize}
 
 \func{void}{Maximize}{\param{bool }{maximize}}
@@ -354,3 +369,46 @@ Note that showing a window full screen also actually
 \wxheading{See also}
 
 \helpref{wxTopLevelWindow::IsFullScreen}{wxtoplevelwindowisfullscreen}
+
+
+\membersection{wxTopLevelWindow::UseNativeDecorations}\label{wxtoplevelwindowusenativedecorations}
+
+\func{void}{UseNativeDecorations}{\param{bool }{native = \true}}
+
+\bftt{This method is specific to wxUniversal port}
+
+Use native or custom-drawn decorations for this window only. Notice that to
+have any effect this method must be called before really creating the window,
+i.e. two step creation must be used:
+\begin{verbatim}
+    MyFrame *frame = new MyFrame;           // use default ctor
+    frame->UseNativeDecorations(false);     // change from default "true"
+    frame->Create(parent, title, ...);      // really create the frame
+\end{verbatim}
+
+\wxheading{See also}
+
+\helpref{UseNativeDecorationsByDefault}{wxtoplevelwindowusenativedecorationsbydefault},\\
+\helpref{IsUsingNativeDecorations}{wxtoplevelwindowisusingnativedecorations}
+
+
+\membersection{wxTopLevelWindow::UseNativeDecorationsByDefault}\label{wxtoplevelwindowusenativedecorationsbydefault}
+
+\func{void}{UseNativeDecorationsByDefault}{\param{bool }{native = \true}}
+
+\bftt{This method is specific to wxUniversal port}
+
+Top level windows in wxUniversal port can use either system-provided window
+decorations (i.e. title bar and various icons, buttons and menus in it) or draw
+the decorations themselves. By default the system decorations are used if they
+are available, but this method can be called with \arg{native} set to \false to
+change this for all windows created after this point.
+
+Also note that if \texttt{WXDECOR} environment variable is set, then custom
+decorations are used by default and so it may make sense to call this method
+with default argument if the application can't use custom decorations at all
+for some reason.
+
+\wxheading{See also}
+
+\helpref{UseNativeDecorations}{wxtoplevelwindowusenativedecorations}

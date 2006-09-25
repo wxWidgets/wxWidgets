@@ -80,6 +80,15 @@ int wxTopLevelWindow::ms_canIconize = -1;
 
 void wxTopLevelWindow::Init()
 {
+    // once-only ms_drawDecorations initialization
+    if ( ms_drawDecorations == -1 )
+    {
+        ms_drawDecorations =
+            !wxSystemSettings::HasFeature(wxSYS_CAN_DRAW_FRAME_DECORATIONS) ||
+            wxGetEnv(wxT("WXDECOR"), NULL);
+    }
+
+    m_usingNativeDecorations = ms_drawDecorations == 0;
     m_isActive = false;
     m_windowStyle = 0;
     m_pressedButton = 0;
@@ -97,21 +106,7 @@ bool wxTopLevelWindow::Create(wxWindow *parent,
     long styleOrig = 0,
          exstyleOrig = 0;
 
-    if ( ms_drawDecorations == -1 )
-    {
-        ms_drawDecorations =
-            !wxSystemSettings::HasFeature(wxSYS_CAN_DRAW_FRAME_DECORATIONS)
-            || wxGetEnv(wxT("WXDECOR"), NULL);
-        // FIXME -- wxUniv should provide a way to force non-native decorations!
-        //          $WXDECOR is just a hack in absence of better wxUniv solution
-    }
-
-    if ( ms_canIconize == -1 )
-    {
-        ms_canIconize = wxSystemSettings::HasFeature(wxSYS_CAN_ICONIZE_FRAME);
-    }
-
-    if ( ms_drawDecorations )
+    if ( !m_usingNativeDecorations )
     {
         CreateInputHandler(wxINP_HANDLER_TOPLEVEL);
 
@@ -120,7 +115,7 @@ bool wxTopLevelWindow::Create(wxWindow *parent,
         style &= ~(wxCAPTION | wxMINIMIZE_BOX | wxMAXIMIZE_BOX |
                    wxSYSTEM_MENU | wxRESIZE_BORDER | wxFRAME_TOOL_WINDOW |
                    wxRESIZE_BORDER);
-        style |= wxSIMPLE_BORDER;
+        style |= wxBORDER_NONE;
         SetExtraStyle(exstyleOrig & ~wxWS_EX_CONTEXTHELP);
     }
 
@@ -128,7 +123,7 @@ bool wxTopLevelWindow::Create(wxWindow *parent,
                                          size, style, name) )
         return false;
 
-    if ( ms_drawDecorations )
+    if ( !m_usingNativeDecorations )
     {
         m_windowStyle = styleOrig;
         m_exStyle = exstyleOrig;
@@ -141,7 +136,7 @@ bool wxTopLevelWindow::ShowFullScreen(bool show, long style)
 {
     if ( show == IsFullScreen() ) return false;
 
-    if ( ms_drawDecorations )
+    if ( !m_usingNativeDecorations )
     {
         if ( show )
         {
@@ -160,12 +155,34 @@ bool wxTopLevelWindow::ShowFullScreen(bool show, long style)
     return wxTopLevelWindowNative::ShowFullScreen(show, style);
 }
 
+/* static */ wxTopLevelWindow::UseNativeDecorationsByDefault(bool native)
+{
+    ms_drawDecorations = !native;
+}
+
+void wxTopLevelWindow::UseNativeDecorations(bool native)
+{
+    wxASSERT_MSG( !m_windowStyle, _T("must be called before Create()") );
+
+    m_usingNativeDecorations = native;
+}
+
+bool wxTopLevelWindow::IsUsingNativeDecorations() const
+{
+    return m_usingNativeDecorations;
+}
+
 long wxTopLevelWindow::GetDecorationsStyle() const
 {
     long style = 0;
 
     if ( m_windowStyle & wxCAPTION )
     {
+        if ( ms_canIconize == -1 )
+        {
+            ms_canIconize = wxSystemSettings::HasFeature(wxSYS_CAN_ICONIZE_FRAME);
+        }
+
         style |= wxTOPLEVEL_TITLEBAR | wxTOPLEVEL_BUTTON_CLOSE;
         if ( (m_windowStyle & wxMINIMIZE_BOX) && ms_canIconize )
             style |= wxTOPLEVEL_BUTTON_ICONIZE;
@@ -209,7 +226,7 @@ void wxTopLevelWindow::RefreshTitleBar()
 
 wxPoint wxTopLevelWindow::GetClientAreaOrigin() const
 {
-    if ( ms_drawDecorations )
+    if ( !m_usingNativeDecorations )
     {
         int w, h;
         wxTopLevelWindowNative::DoGetClientSize(&w, &h);
@@ -227,7 +244,7 @@ wxPoint wxTopLevelWindow::GetClientAreaOrigin() const
 
 void wxTopLevelWindow::DoGetClientSize(int *width, int *height) const
 {
-    if ( ms_drawDecorations )
+    if ( !m_usingNativeDecorations )
     {
         int w, h;
         wxTopLevelWindowNative::DoGetClientSize(&w, &h);
@@ -246,7 +263,7 @@ void wxTopLevelWindow::DoGetClientSize(int *width, int *height) const
 
 void wxTopLevelWindow::DoSetClientSize(int width, int height)
 {
-    if ( ms_drawDecorations )
+    if ( !m_usingNativeDecorations )
     {
         wxSize size = m_renderer->GetFrameTotalSize(wxSize(width, height),
                                                GetDecorationsStyle());
@@ -258,9 +275,11 @@ void wxTopLevelWindow::DoSetClientSize(int width, int height)
 
 void wxTopLevelWindow::OnNcPaint(wxNcPaintEvent& event)
 {
-    if ( !ms_drawDecorations || !m_renderer )
+    if ( m_usingNativeDecorations || !m_renderer )
+    {
         event.Skip();
-    else
+    }
+    else // we're drawing the decorations ourselves
     {
         // get the window rect
         wxRect rect(GetSize());
@@ -285,7 +304,7 @@ long wxTopLevelWindow::HitTest(const wxPoint& pt) const
 
 int wxTopLevelWindow::GetMinWidth() const
 {
-    if ( ms_drawDecorations )
+    if ( !m_usingNativeDecorations )
     {
         return wxMax(wxTopLevelWindowNative::GetMinWidth(),
                      m_renderer->GetFrameMinSize(GetDecorationsStyle()).x);
@@ -296,7 +315,7 @@ int wxTopLevelWindow::GetMinWidth() const
 
 int wxTopLevelWindow::GetMinHeight() const
 {
-    if ( ms_drawDecorations )
+    if ( !m_usingNativeDecorations )
     {
         return wxMax(wxTopLevelWindowNative::GetMinHeight(),
                      m_renderer->GetFrameMinSize(GetDecorationsStyle()).y);
@@ -313,7 +332,7 @@ void wxTopLevelWindow::SetIcons(const wxIconBundle& icons)
 {
     wxTopLevelWindowNative::SetIcons(icons);
 
-    if ( ms_drawDecorations && m_renderer )
+    if ( !m_usingNativeDecorations && m_renderer )
     {
         wxSize size = m_renderer->GetFrameIconSize();
         const wxIcon& icon = icons.GetIcon( size );
