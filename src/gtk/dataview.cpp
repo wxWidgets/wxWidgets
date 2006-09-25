@@ -783,12 +783,26 @@ bool wxGtkDataViewListModelNotifier::RowPrepended()
 
 bool wxGtkDataViewListModelNotifier::RowInserted( size_t before )
 {
-    return false;
+    GtkTreeIter iter;
+    iter.stamp = m_gtk_store->stamp;
+    iter.user_data = (gpointer) before;
+
+    GtkTreePath *path = gtk_tree_path_new ();
+    gtk_tree_path_append_index (path, (gint) before);
+    gtk_tree_model_row_inserted (GTK_TREE_MODEL (m_gtk_store), path, &iter);
+    gtk_tree_path_free (path);
+
+    return true;
 }
 
 bool wxGtkDataViewListModelNotifier::RowDeleted( size_t row )
 {
-    return false;
+    GtkTreePath *path = gtk_tree_path_new ();
+    gtk_tree_path_append_index (path, (gint) row);
+    gtk_tree_model_row_deleted (GTK_TREE_MODEL (m_gtk_store), path);
+    gtk_tree_path_free (path);
+
+    return true;
 }
 
 bool wxGtkDataViewListModelNotifier::RowChanged( size_t row )

@@ -24,7 +24,7 @@
 
 #if defined(__WXGTK20__)
     // for testing
-    #define wxUSE_GENERICDATAVIEWCTRL 1
+//    #define wxUSE_GENERICDATAVIEWCTRL 1
 #elif defined(__WXMAC__)
     #define wxUSE_GENERICDATAVIEWCTRL 1
 #else
@@ -168,7 +168,7 @@ public:
     // set value, call ValueChanged() afterwards!
     virtual bool SetValue( wxVariant &variant, size_t col, size_t row );
 
-    // delegated notifiers
+    // called from user
     virtual bool RowAppended();
     virtual bool RowPrepended();
     virtual bool RowInserted( size_t before );
@@ -178,7 +178,15 @@ public:
     virtual bool RowsReordered( size_t *new_order );
     virtual bool Cleared();
 
+    // called if child's notifiers are called
+    bool ChildRowAppended();
+    bool ChildRowPrepended();
+    bool ChildRowInserted( size_t before );
+    bool ChildRowDeleted( size_t row );
+    bool ChildRowChanged( size_t row );
     bool ChildValueChanged( size_t col, size_t row );
+    bool ChildRowsReordered( size_t *new_order );
+    bool ChildCleared();
 
     virtual void Resort();
 

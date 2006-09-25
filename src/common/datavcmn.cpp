@@ -216,17 +216,31 @@ class wxDataViewSortedListModelNotifier: public wxDataViewListModelNotifier
 {
 public:
     wxDataViewSortedListModelNotifier( wxDataViewSortedListModel *model )
-    { m_model = model; }
+        { m_model = model; }
 
-    virtual bool RowAppended() { return true; }
-    virtual bool RowPrepended()  { return true; }
-    virtual bool RowInserted( size_t WXUNUSED(before) )  { return true; }
-    virtual bool RowDeleted( size_t WXUNUSED(row) ) { return true; }
-    virtual bool RowChanged( size_t WXUNUSED(row) ) { return true; }
+    virtual bool RowAppended()
+        { return m_model->ChildRowAppended(); }
+        
+    virtual bool RowPrepended()
+        { return m_model->ChildRowPrepended(); }
+        
+    virtual bool RowInserted( size_t before )
+        { return m_model->ChildRowInserted( before ); }
+        
+    virtual bool RowDeleted( size_t row )
+        { return m_model->ChildRowDeleted( row ); }
+        
+    virtual bool RowChanged( size_t row )
+        { return m_model->ChildRowChanged( row ); }
+        
     virtual bool ValueChanged( size_t col, size_t row )
-         { return m_model->ChildValueChanged( col, row); }
-    virtual bool RowsReordered( size_t *WXUNUSED(new_order) ) { return true; }
-    virtual bool Cleared() { return true; }
+        { return m_model->ChildValueChanged( col, row); }
+        
+    virtual bool RowsReordered( size_t *new_order )
+        { return m_model->ChildRowsReordered( new_order ); }  
+        
+    virtual bool Cleared()
+        { return m_model->ChildCleared(); }
 
     wxDataViewSortedListModel *m_model;
 };
@@ -332,6 +346,152 @@ static void Dump( wxDataViewListModel *model, size_t col )
 }
 #endif
 
+bool wxDataViewSortedListModel::ChildRowAppended()
+{
+    // no need to fix up array
+    
+    size_t len = m_array.GetCount();
+    
+    size_t pos = m_array.Add( len );
+    
+    if (pos == 0)
+        return wxDataViewListModel::RowPrepended();
+    
+    if (pos == len)
+        return wxDataViewListModel::RowAppended();
+        
+    return wxDataViewListModel::RowInserted( pos );
+}
+
+bool wxDataViewSortedListModel::ChildRowPrepended()
+{
+    // fix up array
+    size_t i;
+    size_t len = m_array.GetCount();
+    for (i = 0; i < len; i++)
+    {
+        size_t value = m_array[i];
+        m_array[i] = value+1;
+    }
+    
+    size_t pos = m_array.Add( 0 );
+    
+    if (pos == 0)
+        return wxDataViewListModel::RowPrepended();
+    
+    if (pos == len)
+        return wxDataViewListModel::RowAppended();
+        
+    return wxDataViewListModel::RowInserted( pos );
+}
+
+bool wxDataViewSortedListModel::ChildRowInserted( size_t before )
+{
+    // fix up array
+    size_t i;
+    size_t len = m_array.GetCount();
+    for (i = 0; i < len; i++)
+    {
+        size_t value = m_array[i];
+        if (value >= before)
+           m_array[i] = value+1;
+    }
+    
+    size_t pos = m_array.Add( before );
+    
+    if (pos == 0)
+        return wxDataViewListModel::RowPrepended();
+    
+    if (pos == len)
+        return wxDataViewListModel::RowAppended();
+        
+    return wxDataViewListModel::RowInserted( pos );
+}
+
+bool wxDataViewSortedListModel::ChildRowDeleted( size_t row )
+{
+    size_t i;
+    size_t len = m_array.GetCount();
+    int pos = -1;
+    for (i = 0; i < len; i++)
+    {
+        size_t value = m_array[i];
+        if (value == row)
+        {
+            // delete later
+            pos = (int) i;
+        }
+        else
+        {
+            // Fix up array
+            if (value > row)
+                m_array[i] = value-1;
+        }
+    }
+    
+    if (pos == -1)
+        return false; // we should probably assert
+
+    // remove        
+    m_array.RemoveAt( (size_t) pos );
+
+    return wxDataViewListModel::RowDeleted( (size_t) pos);
+}
+
+bool wxDataViewSortedListModel::ChildRowChanged( size_t row )
+{
+    size_t i;
+    size_t len = m_array.GetCount();
+
+    // Remove and readd sorted. Find out at which
+    // position it was and where it ended.
+    size_t start_pos = 0,end_pos = 0;
+    for (i = 0; i < len; i++)
+        if (m_array[i] == row)
+        {
+            start_pos = i;
+            break;
+        }
+    m_array.RemoveAt( start_pos );
+    m_array.Add( row );
+
+    for (i = 0; i < len; i++)
+        if (m_array[i] == row)
+        {
+            end_pos = i;
+            break;
+        }
+
+    if (end_pos == start_pos)
+        return wxDataViewListModel::RowChanged( start_pos );
+
+    // Create an array where order[old] -> new_pos, so that
+    // if nothing changed order[0] -> 0 etc.
+    size_t *order = new size_t[ len ];
+    // Fill up initial values.
+    for (i = 0; i < len; i++)
+        order[i] = i;
+
+    if (start_pos < end_pos)
+    {
+        for (i = start_pos; i < end_pos; i++)
+            order[i] = order[i+1];
+        order[end_pos] = start_pos;
+    }
+    else
+    {
+        for (i = end_pos; i > start_pos; i--)
+            order[i] = order[i-1];
+        order[start_pos] = end_pos;
+    }
+
+    wxDataViewListModel::RowsReordered( order );
+
+    delete [] order;
+
+    return true;
+}
+
 bool wxDataViewSortedListModel::ChildValueChanged( size_t col, size_t row )
 {
     size_t i;
@@ -386,6 +546,19 @@ bool wxDataViewSortedListModel::ChildValueChanged( size_t col, size_t row )
     return true;
 }
 
+bool wxDataViewSortedListModel::ChildRowsReordered( size_t *new_order )
+{
+    // Nothing needs to be done. If the sort criteria
+    // of this list don't change, the order of the
+    // items of the child list isn't relevant.
+    return true;
+}
+
+bool wxDataViewSortedListModel::ChildCleared()
+{
+    return wxDataViewListModel::Cleared();
+}
+
 size_t wxDataViewSortedListModel::GetNumberOfRows()
 {
     return m_array.GetCount();
@@ -412,7 +585,8 @@ bool wxDataViewSortedListModel::SetValue( wxVariant &variant, size_t col, size_t
     size_t child_row = m_array[row];
     bool ret = m_child->SetValue( variant, col, child_row );
 
-    // Resort in ::ChildValueChanged() which gets reported back.
+    // Do nothing here as the change in the
+    // child model will be reported back.
 
     return ret;
 }
@@ -422,7 +596,8 @@ bool wxDataViewSortedListModel::RowAppended()
     // you can only append
     bool ret = m_child->RowAppended();
 
-    // report RowInsrted
+    // Do nothing here as the change in the
+    // child model will be reported back.
 
     return ret;
 }
@@ -432,7 +607,8 @@ bool wxDataViewSortedListModel::RowPrepended()
     // you can only append
     bool ret = m_child->RowAppended();
 
-    // report RowInsrted
+    // Do nothing here as the change in the
+    // child model will be reported back.
 
     return ret;
 }
@@ -442,7 +618,8 @@ bool wxDataViewSortedListModel::RowInserted( size_t WXUNUSED(before) )
     // you can only append
     bool ret = m_child->RowAppended();
 
-    // report different RowInsrted
+    // Do nothing here as the change in the
+    // child model will be reported back.
 
     return ret;
 }
@@ -492,8 +669,9 @@ bool wxDataViewSortedListModel::Cleared()
 {
     bool ret = m_child->Cleared();
 
-    wxDataViewListModel::Cleared();
-
+    // Do nothing here as the change in the
+    // child model will be reported back.
+    
     return ret;
 }
 

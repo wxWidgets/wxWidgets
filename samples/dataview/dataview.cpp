@@ -218,6 +218,30 @@ public:
 
     }
 
+    void AppendRow( const wxString &text )
+    {
+        m_list.Add( text );
+        RowAppended();
+    }
+
+    void PrependRow( const wxString &text )
+    {
+        m_list.Insert( text, 0 );
+        RowPrepended();
+    }
+
+    void InsertRowAt1( const wxString &text )
+    {
+        m_list.Insert( text, 1 );
+        RowInserted( 1 );
+    }
+
+    void DeleteRow( size_t index )
+    {
+        m_list.RemoveAt( index );
+        RowDeleted( index );
+    }
+
     wxArrayString m_list;
 };
 
@@ -292,6 +316,8 @@ public:
 private:
     wxDataViewCtrl* dataview_left;
     wxDataViewCtrl* dataview_right;
+
+    MyUnsortedTextModel *m_unsorted_model;
 
     DECLARE_EVENT_TABLE()
 };
@@ -412,6 +438,9 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event) )
 
 BEGIN_EVENT_TABLE(MySortingFrame,wxFrame)
     EVT_BUTTON( ID_APPEND_ROW_LEFT, MySortingFrame::OnAppendRowLeft )
+    EVT_BUTTON( ID_PREPEND_ROW_LEFT, MySortingFrame::OnPrependRowLeft )
+    EVT_BUTTON( ID_INSERT_ROW_LEFT, MySortingFrame::OnInsertRowLeft )
+    EVT_BUTTON( ID_DELETE_ROW_LEFT, MySortingFrame::OnDeleteRowLeft )
 END_EVENT_TABLE()
 
 MySortingFrame::MySortingFrame(wxFrame *frame, wxChar *title, int x, int y, int w, int h):
@@ -439,8 +468,8 @@ MySortingFrame::MySortingFrame(wxFrame *frame, wxChar *title, int x, int y, int 
     // Left wxDataViewCtrl
     dataview_left = new wxDataViewCtrl( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxDV_MULTIPLE );
 
-    MyUnsortedTextModel *model = new MyUnsortedTextModel;
-    dataview_left->AssociateModel( model );
+    m_unsorted_model = new MyUnsortedTextModel;
+    dataview_left->AssociateModel( m_unsorted_model );
     wxDataViewTextCell *text_cell = new wxDataViewTextCell( wxT("string"), wxDATAVIEW_CELL_EDITABLE );
     wxDataViewColumn *column = new wxDataViewColumn( wxT("editable"), text_cell, 0 );
     dataview_left->AppendColumn( column );
@@ -449,7 +478,7 @@ MySortingFrame::MySortingFrame(wxFrame *frame, wxChar *title, int x, int y, int 
     // Right wxDataViewCtrl using the sorting model
     dataview_right = new wxDataViewCtrl( this, wxID_ANY );
     wxDataViewSortedListModel *sorted_model =
-        new wxDataViewSortedListModel( model );
+        new wxDataViewSortedListModel( m_unsorted_model );
     dataview_right->AssociateModel( sorted_model );
     text_cell = new wxDataViewTextCell( wxT("string"), wxDATAVIEW_CELL_EDITABLE );
     column = new wxDataViewColumn( wxT("editable"), text_cell, 0 );
@@ -504,18 +533,40 @@ void MySortingFrame::OnAbout(wxCommandEvent& WXUNUSED(event) )
 
 void MySortingFrame::OnAppendRowLeft(wxCommandEvent& WXUNUSED(event))
 {
+    wxTextEntryDialog dialog( this, wxT("Enter text to append") );
+    if (dialog.ShowModal() == wxID_OK)
+    {
+        wxString value = dialog.GetValue();
+        if (!value.empty())
+            m_unsorted_model->AppendRow( value );
+    }
 }
 
 void MySortingFrame::OnPrependRowLeft(wxCommandEvent& WXUNUSED(event))
 {
+    wxTextEntryDialog dialog( this, wxT("Enter text to prepend") );
+    if (dialog.ShowModal() == wxID_OK)
+    {
+        wxString value = dialog.GetValue();
+        if (!value.empty())
+            m_unsorted_model->PrependRow( value );
+    }
 }
 
 void MySortingFrame::OnInsertRowLeft(wxCommandEvent& WXUNUSED(event))
 {
+    wxTextEntryDialog dialog( this, wxT("Enter text to insert at #2") );
+    if (dialog.ShowModal() == wxID_OK)
+    {
+        wxString value = dialog.GetValue();
+        if (!value.empty())
+            m_unsorted_model->InsertRowAt1( value );
+    }
 }
 
 void MySortingFrame::OnDeleteRowLeft(wxCommandEvent& WXUNUSED(event))
 {
+    m_unsorted_model->DeleteRow( 1 );
 }
 
 void MySortingFrame::OnEditRowLeft(wxCommandEvent& WXUNUSED(event))
