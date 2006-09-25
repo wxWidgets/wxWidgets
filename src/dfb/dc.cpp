@@ -78,21 +78,14 @@ void wxDC::Init(const wxIDirectFBSurfacePtr& surface)
 // clipping
 // ---------------------------------------------------------------------------
 
-
-#define DO_SET_CLIPPING_BOX(rg)                      \
-{                                                    \
-    wxRect rect = rg.GetBox();                       \
-    m_clipX1 = (wxCoord) XDEV2LOG(rect.GetLeft());   \
-    m_clipY1 = (wxCoord) YDEV2LOG(rect.GetTop());    \
-    m_clipX2 = (wxCoord) XDEV2LOG(rect.GetRight());  \
-    m_clipY2 = (wxCoord) YDEV2LOG(rect.GetBottom()); \
-}
-
 void wxDC::DoSetClippingRegion(wxCoord cx, wxCoord cy, wxCoord cw, wxCoord ch)
 {
     wxCHECK_RET( Ok(), wxT("invalid dc") );
 
     wxSize size(GetSize());
+
+    wxASSERT_MSG( !m_clipping,
+                  _T("narrowing clipping region not implemented yet") );
 
     // NB: We intersect the clipping rectangle with surface's area here because
     //     DirectFB will return an error if you try to set clipping rectangle
@@ -115,8 +108,7 @@ void wxDC::DoSetClippingRegion(wxCoord cx, wxCoord cy, wxCoord cw, wxCoord ch)
 
 void wxDC::DoSetClippingRegionAsRegion(const wxRegion& region)
 {
-    // NB: this can be done because wxDFB only supports
-    //     rectangular regions
+    // NB: this can be done because wxDFB only supports rectangular regions
     SetClippingRegion(region.AsRect());
 }
 
