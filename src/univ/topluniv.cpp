@@ -155,7 +155,8 @@ bool wxTopLevelWindow::ShowFullScreen(bool show, long style)
     return wxTopLevelWindowNative::ShowFullScreen(show, style);
 }
 
-/* static */ wxTopLevelWindow::UseNativeDecorationsByDefault(bool native)
+/* static */
+void wxTopLevelWindow::UseNativeDecorationsByDefault(bool native)
 {
     ms_drawDecorations = !native;
 }

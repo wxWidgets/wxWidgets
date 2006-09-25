@@ -122,7 +122,7 @@ public:
     // decorations anyhow and that by default native decorations are used
     //
     // if UseNativeDecorations() is used, it must be called before Create()
-    static UseNativeDecorationsByDefault(bool native = true);
+    static void UseNativeDecorationsByDefault(bool native = true);
     void UseNativeDecorations(bool native = true);
     bool IsUsingNativeDecorations() const;
 
