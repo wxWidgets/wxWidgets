@@ -4365,7 +4365,7 @@ void wxWindowMSW::OnPaint(wxPaintEvent& event)
 
 bool wxWindowMSW::HandleEraseBkgnd(WXHDC hdc)
 {
-    wxDCTemp dc(hdc);
+    wxDCTemp dc(hdc, GetClientSize());
 
     dc.SetHDC(hdc);
     dc.SetWindow((wxWindow *)this);

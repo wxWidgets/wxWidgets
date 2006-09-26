@@ -297,7 +297,11 @@ protected:
 class WXDLLEXPORT wxDCTemp : public wxDC
 {
 public:
-    wxDCTemp(WXHDC hdc) : wxDC(hdc)
+    // construct a temporary DC with the specified HDC and size (it should be
+    // specified whenever we know it for this HDC)
+    wxDCTemp(WXHDC hdc, const wxSize& size = wxDefaultSize)
+        : wxDC(hdc),
+          m_size(size)
     {
     }
 
@@ -310,15 +314,20 @@ public:
 protected:
     virtual void DoGetSize(int *w, int *h) const
     {
-        wxFAIL_MSG( _T("no way to retrieve the size of generic DC") );
+        wxASSERT_MSG( m_size.IsFullySpecified(),
+                      _T("size of this DC hadn't been set and is unknown") );
 
         if ( w )
-            *w = 0;
+            *w = m_size.x;
         if ( h )
-            *h = 0;
+            *h = m_size.y;
     }
 
 private:
+    // size of this DC must be explicitly set by SetSize() as we have no way to
+    // find it ourselves
+    const wxSize m_size;
+
     DECLARE_NO_COPY_CLASS(wxDCTemp)
 };
 
