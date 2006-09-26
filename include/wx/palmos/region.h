@@ -21,6 +21,8 @@ public:
     wxRegion(const wxRect& rect);
     wxRegion(WXHRGN hRegion); // Hangs on to this region
     wxRegion(size_t n, const wxPoint *points, int fillStyle = wxODDEVEN_RULE );
+
+#if wxUSE_IMAGE
     wxRegion( const wxBitmap& bmp)
     {
         Union(bmp);
@@ -30,6 +32,7 @@ public:
     {
         Union(bmp, transColour, tolerance);
     }
+#endif
 
     virtual ~wxRegion();
 
