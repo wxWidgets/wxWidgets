@@ -1628,6 +1628,23 @@ void wxVariant::operator= (void* value)
     }
 }
 
+bool wxVariant::operator== (wxObject* value) const
+{
+    return (value == ((wxVariantDataWxObjectPtr*)GetData())->GetValue());
+}
+
+bool wxVariant::operator!= (wxObject* value) const
+{
+    return (!((*this) == (void*) value));
+}
+
+void wxVariant::operator= (wxObject* value)
+{
+    if (m_data)
+        delete m_data;
+    m_data = new wxVariantDataWxObjectPtr(value);
+}
+
 #if wxUSE_DATETIME
 bool wxVariant::operator== (const wxDateTime& value) const
 {

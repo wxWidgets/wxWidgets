@@ -168,7 +168,11 @@ public:
     void operator= (const wxList& value) ;
     bool operator== (void* value) const;
     bool operator!= (void* value) const;
-    void operator= (void* value) ;
+    void operator= (void* value);
+    bool operator== (wxObject* value) const;
+    bool operator!= (wxObject* value) const;
+    void operator= (wxObject* value);
+    
 
     // Treat a list variant as an array
     wxVariant operator[] (size_t idx) const;
