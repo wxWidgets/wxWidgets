@@ -36,9 +36,9 @@
 // 5) IsMovieDone(), MoviesTask() //2nd param is minimum wait time to allocate to quicktime
 //
 // File:
-// 1) Obtain FSSpec
-// 2) Call OpenMovieFile
-// 3) Call NewMovieFromFile
+// 1) Path as CFString
+// 2) Call QTNewDataReferenceFromFullPathCFString
+// 3) Call NewMovieFromDataRef
 // 4) Call CloseMovieFile
 // 4) PlayMovie();
 // 5) IsMovieDone(), MoviesTask() //2nd param is minimum wait time to allocate to quicktime
@@ -386,73 +386,20 @@ bool wxSound::DoPlay(unsigned flags) const
                 return false;
 
             OSErr err = noErr ;
-//NB:  RN: Stefan - I think the 10.3 path functions are broken if kQTNativeDefaultPathStyle is
-//going to trigger a warning every time it is used - where its _supposed to be used_!!
-//(kQTNativePathStyle is negative but the function argument is unsigned!)
-//../src/mac/carbon/sound.cpp: In member function `virtual bool
-//   wxSound::DoPlay(unsigned int) const':
-//../src/mac/carbon/sound.cpp:387: warning: passing negative value `
-//   kQTNativeDefaultPathStyle' for argument passing 2 of `OSErr
-//   QTNewDataReferenceFromFullPathCFString(const __CFString*, long unsigned int,
-//   long unsigned int, char***, OSType*)'
-//../src/mac/carbon/sound.cpp:387: warning: argument of negative value `
-//   kQTNativeDefaultPathStyle' to `long unsigned int'
-#if defined( __WXMAC__ ) && TARGET_API_MAC_OSX && ( MAC_OS_X_VERSION_MAX_ALLOWED > MAC_OS_X_VERSION_10_2 )
-            if ( UMAGetSystemVersion() >= 0x1030 )
+
+            Handle dataRef = NULL;
+            OSType dataRefType;
+
+            err = QTNewDataReferenceFromFullPathCFString(wxMacCFStringHolder(m_sndname,wxLocale::GetSystemEncoding()),
+                (UInt32)kQTNativeDefaultPathStyle, 0, &dataRef, &dataRefType);
+
+            wxASSERT(err == noErr);
+
+            if (NULL != dataRef || err != noErr)
             {
-                Handle dataRef = NULL;
-                OSType dataRefType;
-
-                err = QTNewDataReferenceFromFullPathCFString(wxMacCFStringHolder(m_sndname,wxLocale::GetSystemEncoding()),
-                    //FIXME: Why does this have to be casted?
-                    (unsigned int)kQTNativeDefaultPathStyle,
-                    //FIXME: End
-                    0, &dataRef, &dataRefType);
-
+                err = NewMovieFromDataRef( &movie, newMovieDontAskUnresolvedDataRefs , NULL, dataRef, dataRefType );
                 wxASSERT(err == noErr);
-
-                if (NULL != dataRef || err != noErr)
-                {
-                    err = NewMovieFromDataRef( &movie, newMovieDontAskUnresolvedDataRefs , NULL, dataRef, dataRefType );
-                    wxASSERT(err == noErr);
-                    DisposeHandle(dataRef);
-                }
-            }
-            else
-#endif
-            {
-                short movieResFile;
-                FSSpec sfFile;
-#ifdef __WXMAC__
-                wxMacFilename2FSSpec( m_sndname , &sfFile ) ;
-#else
-                int nError;
-                if ((nError = NativePathNameToFSSpec ((char*) m_sndname.c_str(), &sfFile, 0)) != noErr)
-                {
-/*
-                    wxLogSysError(wxString::Format(wxT("File:%s does not exist\nError:%i"),
-                                    m_sndname.c_str(), nError));
-*/
-                    return false;
-                }
-#endif
-                if (OpenMovieFile (&sfFile, &movieResFile, fsRdPerm) != noErr)
-                {
-                    wxLogSysError(wxT("Quicktime couldn't open the file"));
-                    return false;
-                }
-                short movieResID = 0;
-                Str255 movieName;
-
-                err = NewMovieFromFile (
-                &movie,
-                movieResFile,
-                &movieResID,
-                movieName,
-                newMovieActive,
-                NULL); //wasChanged
-
-                CloseMovieFile (movieResFile);
+                DisposeHandle(dataRef);
             }
 
             if (err != noErr)
