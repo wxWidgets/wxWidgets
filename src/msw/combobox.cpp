@@ -263,6 +263,9 @@ bool wxComboBox::MSWProcessEditMsg(WXUINT msg, WXWPARAM wParam, WXLPARAM lParam)
             // when Enter is pressed
             if ( wParam == VK_RETURN )
             {
+                if (SendMessage(GetHwnd(), CB_GETDROPPEDSTATE, 0, 0))
+                    return false;
+            
                 wxCommandEvent event(wxEVT_COMMAND_TEXT_ENTER, m_windowId);
 
                 const int sel = GetSelection();
