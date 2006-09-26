@@ -86,7 +86,7 @@ public:
         { return GetNextSelected(-1); }
 
     // return true if the item is selected
-    bool IsSelected(long index)
+    bool IsSelected(long index) const
         { return GetItemState(index, wxLIST_STATE_SELECTED) != 0; }
 
     // columns
