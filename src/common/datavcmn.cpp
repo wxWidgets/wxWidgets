@@ -220,25 +220,25 @@ public:
 
     virtual bool RowAppended()
         { return m_model->ChildRowAppended(); }
-        
+
     virtual bool RowPrepended()
         { return m_model->ChildRowPrepended(); }
-        
+
     virtual bool RowInserted( size_t before )
         { return m_model->ChildRowInserted( before ); }
-        
+
     virtual bool RowDeleted( size_t row )
         { return m_model->ChildRowDeleted( row ); }
-        
+
     virtual bool RowChanged( size_t row )
         { return m_model->ChildRowChanged( row ); }
-        
+
     virtual bool ValueChanged( size_t col, size_t row )
         { return m_model->ChildValueChanged( col, row); }
-        
+
     virtual bool RowsReordered( size_t *new_order )
-        { return m_model->ChildRowsReordered( new_order ); }  
-        
+        { return m_model->ChildRowsReordered( new_order ); }
+
     virtual bool Cleared()
         { return m_model->ChildCleared(); }
 
@@ -349,17 +349,17 @@ static void Dump( wxDataViewListModel *model, size_t col )
 bool wxDataViewSortedListModel::ChildRowAppended()
 {
     // no need to fix up array
-    
+
     size_t len = m_array.GetCount();
-    
+
     size_t pos = m_array.Add( len );
-    
+
     if (pos == 0)
         return wxDataViewListModel::RowPrepended();
-    
+
     if (pos == len)
         return wxDataViewListModel::RowAppended();
-        
+
     return wxDataViewListModel::RowInserted( pos );
 }
 
@@ -373,15 +373,15 @@ bool wxDataViewSortedListModel::ChildRowPrepended()
         size_t value = m_array[i];
         m_array[i] = value+1;
     }
-    
+
     size_t pos = m_array.Add( 0 );
-    
+
     if (pos == 0)
         return wxDataViewListModel::RowPrepended();
-    
+
     if (pos == len)
         return wxDataViewListModel::RowAppended();
-        
+
     return wxDataViewListModel::RowInserted( pos );
 }
 
@@ -396,15 +396,15 @@ bool wxDataViewSortedListModel::ChildRowInserted( size_t before )
         if (value >= before)
            m_array[i] = value+1;
     }
-    
+
     size_t pos = m_array.Add( before );
-    
+
     if (pos == 0)
         return wxDataViewListModel::RowPrepended();
-    
+
     if (pos == len)
         return wxDataViewListModel::RowAppended();
-        
+
     return wxDataViewListModel::RowInserted( pos );
 }
 
@@ -428,11 +428,11 @@ bool wxDataViewSortedListModel::ChildRowDeleted( size_t row )
                 m_array[i] = value-1;
         }
     }
-    
+
     if (pos == -1)
         return false; // we should probably assert
 
-    // remove        
+    // remove
     m_array.RemoveAt( (size_t) pos );
 
     return wxDataViewListModel::RowDeleted( (size_t) pos);
@@ -546,7 +546,7 @@ bool wxDataViewSortedListModel::ChildValueChanged( size_t col, size_t row )
     return true;
 }
 
-bool wxDataViewSortedListModel::ChildRowsReordered( size_t *new_order )
+bool wxDataViewSortedListModel::ChildRowsReordered( size_t *WXUNUSED(new_order) )
 {
     // Nothing needs to be done. If the sort criteria
     // of this list don't change, the order of the
@@ -671,7 +671,7 @@ bool wxDataViewSortedListModel::Cleared()
 
     // Do nothing here as the change in the
     // child model will be reported back.
-    
+
     return ret;
 }
 
