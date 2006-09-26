@@ -697,9 +697,10 @@
  */
 #define wxUSE_X_RESOURCES 0
 /*
- * Use OLE (MSW only)
+ * Use OLE and OLE Automation (MSW only)
  */
 #define wxUSE_OLE 0
+#define wxUSE_OLE_AUTOMATION 0
 
 /* for compatibility */
 #define wxUSE_WX_RESOURCES wxUSE_RESOURCES
