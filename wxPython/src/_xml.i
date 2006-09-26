@@ -59,6 +59,10 @@ public:
     void SetName(const wxString& name);
     void SetValue(const wxString& value);
     void SetNext(wxXmlProperty *next);
+
+    %property(Name, GetName, SetName, doc="See `GetName` and `SetName`");
+    %property(Next, GetNext, SetNext, doc="See `GetNext` and `SetNext`");
+    %property(Value, GetValue, SetValue, doc="See `GetValue` and `SetValue`");
 };
 
 
@@ -128,6 +132,14 @@ public:
     void SetChildren(wxXmlNode *child);
 
     void SetProperties(wxXmlProperty *prop);
+
+    %property(Children, GetChildren, SetChildren, doc="See `GetChildren` and `SetChildren`");
+    %property(Content, GetContent, SetContent, doc="See `GetContent` and `SetContent`");
+    %property(Name, GetName, SetName, doc="See `GetName` and `SetName`");
+    %property(Next, GetNext, SetNext, doc="See `GetNext` and `SetNext`");
+    %property(Parent, GetParent, SetParent, doc="See `GetParent` and `SetParent`");
+    %property(Properties, GetProperties, SetProperties, doc="See `GetProperties` and `SetProperties`");
+    %property(Type, GetType, SetType, doc="See `GetType` and `SetType`");
 };
 
 
@@ -210,6 +222,10 @@ public:
 //         %#endif
 //         }
 //     }
+
+    %property(FileEncoding, GetFileEncoding, SetFileEncoding, doc="See `GetFileEncoding` and `SetFileEncoding`");
+    %property(Root, GetRoot, SetRoot, doc="See `GetRoot` and `SetRoot`");
+    %property(Version, GetVersion, SetVersion, doc="See `GetVersion` and `SetVersion`");
 };
 
 //---------------------------------------------------------------------------

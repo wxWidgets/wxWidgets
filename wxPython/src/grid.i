@@ -678,6 +678,9 @@ public:
     void SetWidth(int width);
     int GetPrecision() const;
     void SetPrecision(int precision);
+
+    %property(Precision, GetPrecision, SetPrecision, doc="See `GetPrecision` and `SetPrecision`");
+    %property(Width, GetWidth, SetWidth, doc="See `GetWidth` and `SetWidth`");
 };
 
 
@@ -718,7 +721,7 @@ public:
 // wxGridCellEditor is an ABC, and several derived classes are available.
 // Classes implemented in Python should be derived from wxPyGridCellEditor.
 
-class  wxGridCellEditor : public wxGridCellWorker
+class wxGridCellEditor : public wxGridCellWorker
 {
 public:
     bool IsCreated();
@@ -747,6 +750,8 @@ public:
     %pythonAppend Destroy "args[0].thisown = 0"
     virtual void Destroy();
 
+    %property(CellAttr, GetCellAttr, SetCellAttr, doc="See `GetCellAttr` and `SetCellAttr`");
+    %property(Control, GetControl, SetControl, doc="See `GetControl` and `SetControl`");
 };
 
 
@@ -910,6 +915,8 @@ public:
     %pythonAppend wxGridCellTextEditor  "self._setOORInfo(self)"
     wxGridCellTextEditor();
     virtual wxString GetValue();
+
+    %property(Value, GetValue, doc="See `GetValue`");
 };
 
 
@@ -918,7 +925,6 @@ class wxGridCellNumberEditor : public wxGridCellTextEditor
 public:
     %pythonAppend wxGridCellNumberEditor  "self._setOORInfo(self)"
     wxGridCellNumberEditor(int min = -1, int max = -1);
-    virtual wxString GetValue();
 };
 
 
@@ -927,7 +933,6 @@ class wxGridCellFloatEditor : public wxGridCellTextEditor
 public:
     %pythonAppend wxGridCellFloatEditor  "self._setOORInfo(self)"
     wxGridCellFloatEditor(int width = -1, int precision = -1);
-    virtual wxString GetValue();
 };
 
 
@@ -936,7 +941,6 @@ class wxGridCellBoolEditor : public wxGridCellEditor
 public:
     %pythonAppend wxGridCellBoolEditor  "self._setOORInfo(self)"
     wxGridCellBoolEditor();
-    virtual wxString GetValue();
 };
 
 class wxGridCellChoiceEditor : public wxGridCellEditor
@@ -946,7 +950,6 @@ public:
     wxGridCellChoiceEditor(int choices = 0,
                            const wxString* choices_array = NULL,
                            bool allowOthers = false);
-    virtual wxString GetValue();
 };
 
 
@@ -955,7 +958,6 @@ class wxGridCellEnumEditor : public wxGridCellChoiceEditor
 public:
     %pythonAppend wxGridCellEnumEditor  "self._setOORInfo(self)"
     wxGridCellEnumEditor( const wxString& choices = wxPyEmptyString );
-    virtual wxString GetValue();
 };
 
 
@@ -964,7 +966,6 @@ class wxGridCellAutoWrapStringEditor : public wxGridCellTextEditor
 public:
     %pythonAppend wxGridCellAutoWrapStringEditor  "self._setOORInfo(self)"
     wxGridCellAutoWrapStringEditor();
-    virtual wxString GetValue();
 };
 
 
@@ -1049,6 +1050,14 @@ public:
     bool IsReadOnly() const;
     wxAttrKind GetKind();
     void SetDefAttr(wxGridCellAttr* defAttr);
+    
+    %property(Alignment, GetAlignment, SetAlignment, doc="See `GetAlignment` and `SetAlignment`");
+    %property(BackgroundColour, GetBackgroundColour, SetBackgroundColour, doc="See `GetBackgroundColour` and `SetBackgroundColour`");
+    %property(Font, GetFont, SetFont, doc="See `GetFont` and `SetFont`");
+    %property(Kind, GetKind, SetKind, doc="See `GetKind` and `SetKind`");
+    %property(Overflow, GetOverflow, SetOverflow, doc="See `GetOverflow` and `SetOverflow`");
+    %property(Size, GetSize, SetSize, doc="See `GetSize` and `SetSize`");
+    %property(TextColour, GetTextColour, SetTextColour, doc="See `GetTextColour` and `SetTextColour`");
 };
 
 //---------------------------------------------------------------------------
@@ -1183,6 +1192,10 @@ public:
     virtual void SetRowAttr(wxGridCellAttr *attr, int row);
     virtual void SetColAttr(wxGridCellAttr *attr, int col);
 
+    %property(AttrProvider, GetAttrProvider, SetAttrProvider, doc="See `GetAttrProvider` and `SetAttrProvider`");
+    %property(NumberCols, GetNumberCols, doc="See `GetNumberCols`");
+    %property(NumberRows, GetNumberRows, doc="See `GetNumberRows`");
+    %property(View, GetView, SetView, doc="See `GetView` and `SetView`");
 };
 
 
@@ -1418,6 +1431,11 @@ public:
     int  GetCommandInt();
     void SetCommandInt2( int comInt2 );
     int  GetCommandInt2();
+
+    %property(CommandInt, GetCommandInt, SetCommandInt, doc="See `GetCommandInt` and `SetCommandInt`");
+    %property(CommandInt2, GetCommandInt2, SetCommandInt2, doc="See `GetCommandInt2` and `SetCommandInt2`");
+    %property(Id, GetId, SetId, doc="See `GetId` and `SetId`");
+    %property(TableObject, GetTableObject, SetTableObject, doc="See `GetTableObject` and `SetTableObject`");
 };
 
 
@@ -1580,6 +1598,8 @@ public:
         else: raise IndexError
     }
 
+    %property(Col, GetCol, SetCol, doc="See `GetCol` and `SetCol`");
+    %property(Row, GetRow, SetRow, doc="See `GetRow` and `SetRow`");
 };
 
 
@@ -1888,7 +1908,7 @@ public:
 
     DocDeclA(
         void, GetCellAlignment( int row, int col, int *OUTPUT, int *OUTPUT ),
-        "GetCellAlignment() -> (horiz, vert)");
+        "GetCellAlignment(int row, int col) -> (horiz, vert)");
 
     bool     GetDefaultCellOverflow();
     bool     GetCellOverflow( int row, int col );
@@ -2056,6 +2076,55 @@ public:
 
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
+
+    %property(BatchCount, GetBatchCount, doc="See `GetBatchCount`");
+    %property(CellHighlightColour, GetCellHighlightColour, SetCellHighlightColour, doc="See `GetCellHighlightColour` and `SetCellHighlightColour`");
+    %property(CellHighlightPenWidth, GetCellHighlightPenWidth, SetCellHighlightPenWidth, doc="See `GetCellHighlightPenWidth` and `SetCellHighlightPenWidth`");
+    %property(CellHighlightROPenWidth, GetCellHighlightROPenWidth, SetCellHighlightROPenWidth, doc="See `GetCellHighlightROPenWidth` and `SetCellHighlightROPenWidth`");
+    %property(CellSize, GetCellSize, SetCellSize, doc="See `GetCellSize` and `SetCellSize`");
+    %property(ColLabelAlignment, GetColLabelAlignment, SetColLabelAlignment, doc="See `GetColLabelAlignment` and `SetColLabelAlignment`");
+    %property(ColLabelSize, GetColLabelSize, SetColLabelSize, doc="See `GetColLabelSize` and `SetColLabelSize`");
+    %property(ColLabelTextOrientation, GetColLabelTextOrientation, SetColLabelTextOrientation, doc="See `GetColLabelTextOrientation` and `SetColLabelTextOrientation`");
+    %property(ColMinimalAcceptableWidth, GetColMinimalAcceptableWidth, SetColMinimalAcceptableWidth, doc="See `GetColMinimalAcceptableWidth` and `SetColMinimalAcceptableWidth`");
+    %property(DefaultCellAlignment, GetDefaultCellAlignment, SetDefaultCellAlignment, doc="See `GetDefaultCellAlignment` and `SetDefaultCellAlignment`");
+    %property(DefaultCellBackgroundColour, GetDefaultCellBackgroundColour, SetDefaultCellBackgroundColour, doc="See `GetDefaultCellBackgroundColour` and `SetDefaultCellBackgroundColour`");
+    %property(DefaultCellFont, GetDefaultCellFont, SetDefaultCellFont, doc="See `GetDefaultCellFont` and `SetDefaultCellFont`");
+    %property(DefaultCellOverflow, GetDefaultCellOverflow, SetDefaultCellOverflow, doc="See `GetDefaultCellOverflow` and `SetDefaultCellOverflow`");
+    %property(DefaultCellTextColour, GetDefaultCellTextColour, SetDefaultCellTextColour, doc="See `GetDefaultCellTextColour` and `SetDefaultCellTextColour`");
+    %property(DefaultColLabelSize, GetDefaultColLabelSize, doc="See `GetDefaultColLabelSize`");
+    %property(DefaultColSize, GetDefaultColSize, SetDefaultColSize, doc="See `GetDefaultColSize` and `SetDefaultColSize`");
+    %property(DefaultEditor, GetDefaultEditor, SetDefaultEditor, doc="See `GetDefaultEditor` and `SetDefaultEditor`");
+    %property(DefaultGridLinePen, GetDefaultGridLinePen, doc="See `GetDefaultGridLinePen`");
+    %property(DefaultRenderer, GetDefaultRenderer, SetDefaultRenderer, doc="See `GetDefaultRenderer` and `SetDefaultRenderer`");
+    %property(DefaultRowLabelSize, GetDefaultRowLabelSize, doc="See `GetDefaultRowLabelSize`");
+    %property(DefaultRowSize, GetDefaultRowSize, SetDefaultRowSize, doc="See `GetDefaultRowSize` and `SetDefaultRowSize`");
+    %property(GridColLabelWindow, GetGridColLabelWindow, doc="See `GetGridColLabelWindow`");
+    %property(GridCornerLabelWindow, GetGridCornerLabelWindow, doc="See `GetGridCornerLabelWindow`");
+    %property(GridCursorCol, GetGridCursorCol, doc="See `GetGridCursorCol`");
+    %property(GridCursorRow, GetGridCursorRow, doc="See `GetGridCursorRow`");
+    %property(GridLineColour, GetGridLineColour, SetGridLineColour, doc="See `GetGridLineColour` and `SetGridLineColour`");
+    %property(GridRowLabelWindow, GetGridRowLabelWindow, doc="See `GetGridRowLabelWindow`");
+    %property(GridWindow, GetGridWindow, doc="See `GetGridWindow`");
+    %property(LabelBackgroundColour, GetLabelBackgroundColour, SetLabelBackgroundColour, doc="See `GetLabelBackgroundColour` and `SetLabelBackgroundColour`");
+    %property(LabelFont, GetLabelFont, SetLabelFont, doc="See `GetLabelFont` and `SetLabelFont`");
+    %property(LabelTextColour, GetLabelTextColour, SetLabelTextColour, doc="See `GetLabelTextColour` and `SetLabelTextColour`");
+    %property(NumberCols, GetNumberCols, doc="See `GetNumberCols`");
+    %property(NumberRows, GetNumberRows, doc="See `GetNumberRows`");
+    %property(RowLabelAlignment, GetRowLabelAlignment, SetRowLabelAlignment, doc="See `GetRowLabelAlignment` and `SetRowLabelAlignment`");
+    %property(RowLabelSize, GetRowLabelSize, SetRowLabelSize, doc="See `GetRowLabelSize` and `SetRowLabelSize`");
+    %property(RowMinimalAcceptableHeight, GetRowMinimalAcceptableHeight, SetRowMinimalAcceptableHeight, doc="See `GetRowMinimalAcceptableHeight` and `SetRowMinimalAcceptableHeight`");
+    %property(ScrollLineX, GetScrollLineX, SetScrollLineX, doc="See `GetScrollLineX` and `SetScrollLineX`");
+    %property(ScrollLineY, GetScrollLineY, SetScrollLineY, doc="See `GetScrollLineY` and `SetScrollLineY`");
+    %property(SelectedCells, GetSelectedCells, doc="See `GetSelectedCells`");
+    %property(SelectedCols, GetSelectedCols, doc="See `GetSelectedCols`");
+    %property(SelectedRows, GetSelectedRows, doc="See `GetSelectedRows`");
+    %property(SelectionBackground, GetSelectionBackground, SetSelectionBackground, doc="See `GetSelectionBackground` and `SetSelectionBackground`");
+    %property(SelectionBlockBottomRight, GetSelectionBlockBottomRight, doc="See `GetSelectionBlockBottomRight`");
+    %property(SelectionBlockTopLeft, GetSelectionBlockTopLeft, doc="See `GetSelectionBlockTopLeft`");
+    %property(SelectionForeground, GetSelectionForeground, SetSelectionForeground, doc="See `GetSelectionForeground` and `SetSelectionForeground`");
+    %property(SelectionMode, GetSelectionMode, SetSelectionMode, doc="See `GetSelectionMode` and `SetSelectionMode`");
+    %property(Table, GetTable, SetTable, doc="See `GetTable` and `SetTable`");
+    
 };
 
 
@@ -2081,6 +2150,10 @@ public:
     bool        ShiftDown();
     bool        AltDown();
     bool        CmdDown();
+
+    %property(Col, GetCol, doc="See `GetCol`");
+    %property(Position, GetPosition, doc="See `GetPosition`");
+    %property(Row, GetRow, doc="See `GetRow`");
 };
 
 
@@ -2098,6 +2171,9 @@ public:
     bool        ShiftDown();
     bool        AltDown();
     bool        CmdDown();
+
+    %property(Position, GetPosition, doc="See `GetPosition`");
+    %property(RowOrCol, GetRowOrCol, doc="See `GetRowOrCol`");
 };
 
 
@@ -2123,6 +2199,13 @@ public:
     bool        ShiftDown();
     bool        AltDown();
     bool        CmdDown();
+
+    %property(BottomRightCoords, GetBottomRightCoords, doc="See `GetBottomRightCoords`");
+    %property(BottomRow, GetBottomRow, doc="See `GetBottomRow`");
+    %property(LeftCol, GetLeftCol, doc="See `GetLeftCol`");
+    %property(RightCol, GetRightCol, doc="See `GetRightCol`");
+    %property(TopLeftCoords, GetTopLeftCoords, doc="See `GetTopLeftCoords`");
+    %property(TopRow, GetTopRow, doc="See `GetTopRow`");
 };
 
 
@@ -2137,6 +2220,10 @@ public:
     void SetRow(int row);
     void SetCol(int col);
     void SetControl(wxControl* ctrl);
+
+    %property(Col, GetCol, SetCol, doc="See `GetCol` and `SetCol`");
+    %property(Control, GetControl, SetControl, doc="See `GetControl` and `SetControl`");
+    %property(Row, GetRow, SetRow, doc="See `GetRow` and `SetRow`");
 };
 
 

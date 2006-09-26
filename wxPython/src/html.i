@@ -117,6 +117,11 @@ public:
 
     void SetEvent(const wxMouseEvent *e);
     void SetHtmlCell(const wxHtmlCell * e);
+
+    %property(Event, GetEvent, SetEvent, doc="See `GetEvent` and `SetEvent`");
+    %property(Href, GetHref, doc="See `GetHref`");
+    %property(HtmlCell, GetHtmlCell, SetHtmlCell, doc="See `GetHtmlCell` and `SetHtmlCell`");
+    %property(Target, GetTarget, doc="See `GetTarget`");
 };
 
 //---------------------------------------------------------------------------
@@ -138,6 +143,12 @@ public:
     int GetBeginPos();
     int GetEndPos1();
     int GetEndPos2();
+    
+    %property(AllParams, GetAllParams, doc="See `GetAllParams`");
+    %property(BeginPos, GetBeginPos, doc="See `GetBeginPos`");
+    %property(EndPos1, GetEndPos1, doc="See `GetEndPos1`");
+    %property(EndPos2, GetEndPos2, doc="See `GetEndPos2`");
+    %property(Name, GetName, doc="See `GetName`");
 };
 
 //---------------------------------------------------------------------------
@@ -169,6 +180,9 @@ public:
     // Returns HTML source inside the element (i.e. between the starting
     // and ending tag)
     wxString GetInnerSource(const wxHtmlTag& tag);
+
+    %property(FS, GetFS, SetFS, doc="See `GetFS` and `SetFS`");
+    %property(Source, GetSource, doc="See `GetSource`");
 };
 
 
@@ -234,6 +248,21 @@ public:
     wxFont* CreateCurrentFont();
     wxHtmlLinkInfo GetLink();
 
+    %property(ActualColor, GetActualColor, SetActualColor, doc="See `GetActualColor` and `SetActualColor`");
+    %property(ActualColour, GetActualColour, SetActualColour, doc="See `GetActualColour` and `SetActualColour`");
+    %property(Align, GetAlign, SetAlign, doc="See `GetAlign` and `SetAlign`");
+    %property(CharHeight, GetCharHeight, doc="See `GetCharHeight`");
+    %property(CharWidth, GetCharWidth, doc="See `GetCharWidth`");
+    %property(Container, GetContainer, SetContainer, doc="See `GetContainer` and `SetContainer`");
+    %property(DC, GetDC, SetDC, doc="See `GetDC` and `SetDC`");
+    %property(FontBold, GetFontBold, SetFontBold, doc="See `GetFontBold` and `SetFontBold`");
+    %property(FontFixed, GetFontFixed, SetFontFixed, doc="See `GetFontFixed` and `SetFontFixed`");
+    %property(FontItalic, GetFontItalic, SetFontItalic, doc="See `GetFontItalic` and `SetFontItalic`");
+    %property(FontSize, GetFontSize, SetFontSize, doc="See `GetFontSize` and `SetFontSize`");
+    %property(FontUnderlined, GetFontUnderlined, SetFontUnderlined, doc="See `GetFontUnderlined` and `SetFontUnderlined`");
+    %property(Link, GetLink, SetLink, doc="See `GetLink` and `SetLink`");
+    %property(LinkColor, GetLinkColor, SetLinkColor, doc="See `GetLinkColor` and `SetLinkColor`");
+    %property(WindowInterface, GetWindowInterface, doc="See `GetWindowInterface`");
 };
 
 
@@ -272,6 +301,8 @@ public:
     void SetParser(wxHtmlParser *parser);
     wxHtmlParser* GetParser();
     void ParseInner(const wxHtmlTag& tag);
+
+    %property(Parser, GetParser, SetParser, doc="See `GetParser` and `SetParser`");
 };
 
 
@@ -311,6 +342,8 @@ public:
     void SetParser(wxHtmlParser *parser);
     wxHtmlWinParser* GetParser();
     void ParseInner(const wxHtmlTag& tag);
+
+    %property(Parser, GetParser, SetParser, doc="See `GetParser` and `SetParser`");
 };
 
 
@@ -418,6 +451,12 @@ public:
 
     const bool IsEmpty() const;
 
+    %property(FromCell, GetFromCell, doc="See `GetFromCell`");
+    %property(FromPos, GetFromPos, doc="See `GetFromPos`");
+    %property(FromPrivPos, GetFromPrivPos, SetFromPrivPos, doc="See `GetFromPrivPos` and `SetFromPrivPos`");
+    %property(ToCell, GetToCell, doc="See `GetToCell`");
+    %property(ToPos, GetToPos, doc="See `GetToPos`");
+    %property(ToPrivPos, GetToPrivPos, SetToPrivPos, doc="See `GetToPrivPos` and `SetToPrivPos`");
 };
 
 
@@ -445,6 +484,10 @@ public:
     const wxColour& GetFgColour() const;
     void SetBgColour(const wxColour& c);
     const wxColour& GetBgColour() const;
+
+    %property(BgColour, GetBgColour, SetBgColour, doc="See `GetBgColour` and `SetBgColour`");
+    %property(FgColour, GetFgColour, SetFgColour, doc="See `GetFgColour` and `SetFgColour`");
+    %property(SelectionState, GetSelectionState, SetSelectionState, doc="See `GetSelectionState` and `SetSelectionState`");
 };
 
 
@@ -456,14 +499,15 @@ class wxHtmlRenderingStyle
 public:
     virtual wxColour GetSelectedTextColour(const wxColour& clr) = 0;
     virtual wxColour GetSelectedTextBgColour(const wxColour& clr) = 0;
+
+    %property(SelectedTextBgColour, GetSelectedTextBgColour, doc="See `GetSelectedTextBgColour`");
+    %property(SelectedTextColour, GetSelectedTextColour, doc="See `GetSelectedTextColour`");
 };
 
 // Standard style:
 class wxDefaultHtmlRenderingStyle : public wxHtmlRenderingStyle
 {
 public:
-    virtual wxColour GetSelectedTextColour(const wxColour& clr);
-    virtual wxColour GetSelectedTextBgColour(const wxColour& clr);
 };
 
 
@@ -484,6 +528,10 @@ public:
     wxHtmlRenderingStyle& GetStyle();
 
     wxHtmlRenderingState& GetState();
+
+    %property(Selection, GetSelection, SetSelection, doc="See `GetSelection` and `SetSelection`");
+    %property(State, GetState, doc="See `GetState`");
+    %property(Style, GetStyle, SetStyle, doc="See `GetStyle` and `SetStyle`");
 };
 
 //---------------------------------------------------------------------------
@@ -602,6 +650,24 @@ public:
     // Converts the cell into text representation. If sel != NULL then
     // only part of the cell inside the selection is converted.
     wxString ConvertToText(wxHtmlSelection *sel) const;
+
+    %property(Cursor, GetCursor, doc="See `GetCursor`");
+    %property(Depth, GetDepth, doc="See `GetDepth`");
+    %property(Descent, GetDescent, doc="See `GetDescent`");
+    %property(FirstChild, GetFirstChild, doc="See `GetFirstChild`");
+    %property(FirstTerminal, GetFirstTerminal, doc="See `GetFirstTerminal`");
+    %property(Height, GetHeight, doc="See `GetHeight`");
+    %property(Id, GetId, SetId, doc="See `GetId` and `SetId`");
+    %property(LastTerminal, GetLastTerminal, doc="See `GetLastTerminal`");
+    %property(Link, GetLink, SetLink, doc="See `GetLink` and `SetLink`");
+    %property(MaxTotalWidth, GetMaxTotalWidth, doc="See `GetMaxTotalWidth`");
+    %property(MouseCursor, GetMouseCursor, doc="See `GetMouseCursor`");
+    %property(Next, GetNext, SetNext, doc="See `GetNext` and `SetNext`");
+    %property(Parent, GetParent, SetParent, doc="See `GetParent` and `SetParent`");
+    %property(PosX, GetPosX, doc="See `GetPosX`");
+    %property(PosY, GetPosY, doc="See `GetPosY`");
+    %property(RootCell, GetRootCell, doc="See `GetRootCell`");
+    %property(Width, GetWidth, doc="See `GetWidth`");
 };
 
 
@@ -639,6 +705,13 @@ public:
     void SetBorder(const wxColour& clr1, const wxColour& clr2);
     wxHtmlCell* GetFirstChild();
     %pragma(python) addtoclass = "GetFirstCell = GetFirstChild"
+
+    %property(AlignHor, GetAlignHor, SetAlignHor, doc="See `GetAlignHor` and `SetAlignHor`");
+    %property(AlignVer, GetAlignVer, SetAlignVer, doc="See `GetAlignVer` and `SetAlignVer`");
+    %property(BackgroundColour, GetBackgroundColour, SetBackgroundColour, doc="See `GetBackgroundColour` and `SetBackgroundColour`");
+    %property(FirstChild, GetFirstChild, doc="See `GetFirstChild`");
+    %property(Indent, GetIndent, SetIndent, doc="See `GetIndent` and `SetIndent`");
+    %property(IndentUnits, GetIndentUnits, doc="See `GetIndentUnits`");
 };
 
 
@@ -809,6 +882,9 @@ public:
         Returns mouse cursor of given @a type.
      */
 //    virtual wxCursor GetHTMLCursor(HTMLCursor type) const = 0;
+
+    %property(HTMLBackgroundColour, GetHTMLBackgroundColour, SetHTMLBackgroundColour, doc="See `GetHTMLBackgroundColour` and `SetHTMLBackgroundColour`");
+    %property(HTMLWindow, GetHTMLWindow, doc="See `GetHTMLWindow`");
 };
 
 
@@ -1100,6 +1176,12 @@ public:
 //     virtual void SetHTMLStatusText(const wxString& text);
 //     virtual wxCursor GetHTMLCursor(HTMLCursor type) const;
     
+    %property(InternalRepresentation, GetInternalRepresentation, doc="See `GetInternalRepresentation`");
+    %property(OpenedAnchor, GetOpenedAnchor, doc="See `GetOpenedAnchor`");
+    %property(OpenedPage, GetOpenedPage, doc="See `GetOpenedPage`");
+    %property(OpenedPageTitle, GetOpenedPageTitle, doc="See `GetOpenedPageTitle`");
+    %property(Parser, GetParser, doc="See `GetParser`");
+    %property(RelatedFrame, GetRelatedFrame, doc="See `GetRelatedFrame`");
 };
 
 
@@ -1144,6 +1226,8 @@ public:
     int GetTotalHeight();
                 // returns total height of the html document
                 // (compare Render's return value with this)
+
+    %property(TotalHeight, GetTotalHeight, doc="See `GetTotalHeight`");
 };
 
 
@@ -1234,6 +1318,8 @@ public:
     wxPrintData *GetPrintData() {return m_PrintData;}
     wxPageSetupDialogData *GetPageSetupData() {return m_PageSetupData;}
 
+    %property(PageSetupData, GetPageSetupData, doc="See `GetPageSetupData`");
+    %property(PrintData, GetPrintData, doc="See `GetPrintData`");
 };
 
 
@@ -1261,6 +1347,14 @@ public:
     void SetStart(const wxString& start);
 
     wxString GetFullPath(const wxString &page) const;
+
+    %property(BasePath, GetBasePath, SetBasePath, doc="See `GetBasePath` and `SetBasePath`");
+    %property(BookFile, GetBookFile, doc="See `GetBookFile`");
+    %property(ContentsEnd, GetContentsEnd, doc="See `GetContentsEnd`");
+    %property(ContentsStart, GetContentsStart, doc="See `GetContentsStart`");
+    %property(FullPath, GetFullPath, doc="See `GetFullPath`");
+    %property(Start, GetStart, SetStart, doc="See `GetStart` and `SetStart`");
+    %property(Title, GetTitle, SetTitle, doc="See `GetTitle` and `SetTitle`");
 };
 
 //---------------------------------------------------------------------------
@@ -1289,6 +1383,10 @@ public:
     int GetCurIndex();
     int GetMaxIndex();
     const wxString& GetName();
+
+    %property(CurIndex, GetCurIndex, doc="See `GetCurIndex`");
+    %property(MaxIndex, GetMaxIndex, doc="See `GetMaxIndex`");
+    %property(Name, GetName, doc="See `GetName`");
 };
 
 //---------------------------------------------------------------------------
@@ -1311,6 +1409,7 @@ public:
     // TODO: this one needs fixed...
     const wxHtmlBookRecArray& GetBookRecArray();
 
+    %property(BookRecArray, GetBookRecArray, doc="See `GetBookRecArray`");
 };
 
 //---------------------------------------------------------------------------
@@ -1461,6 +1560,13 @@ public:
     // Gets the tree control
     wxPyTreeCtrl *GetTreeCtrl() const;
 
+    %property(CfgData, GetCfgData, doc="See `GetCfgData`");
+    %property(Controller, GetController, SetController, doc="See `GetController` and `SetController`");
+    %property(Data, GetData, doc="See `GetData`");
+    %property(HtmlWindow, GetHtmlWindow, doc="See `GetHtmlWindow`");
+    %property(SplitterWindow, GetSplitterWindow, doc="See `GetSplitterWindow`");
+    %property(ToolBar, GetToolBar, doc="See `GetToolBar`");
+    %property(TreeCtrl, GetTreeCtrl, doc="See `GetTreeCtrl`");
 };
 
 
@@ -1472,6 +1578,8 @@ public:
 
     void SetURL(const wxString& url);
     const wxString& GetURL() const;
+
+    %property(URL, GetURL, SetURL, doc="See `GetURL` and `SetURL`");
 };
 
 
@@ -1533,6 +1641,10 @@ public:
         def WriteCustomization(self, config, rootpath=""):
             return self.GetHelpWindow().WriteCustomization(config, rootpath)
      %}
+
+    %property(Controller, GetController, SetController, doc="See `GetController` and `SetController`");
+    %property(Data, GetData, doc="See `GetData`");
+    %property(HelpWindow, GetHelpWindow, doc="See `GetHelpWindow`");
 };
 
 
@@ -1578,6 +1690,9 @@ public:
     // Override to add custom buttons to the toolbar
 //    virtual void AddToolbarButtons(wxToolBar* WXUNUSED(toolBar), int WXUNUSED(style)) {};
 
+    %property(Controller, GetController, SetController, doc="See `GetController` and `SetController`");
+    %property(Data, GetData, doc="See `GetData`");
+    %property(HelpWindow, GetHelpWindow, doc="See `GetHelpWindow`");
 };
 
 
@@ -1647,6 +1762,7 @@ public:
     /// Get the window that can optionally be used for the help window's parent.
     virtual wxWindow* GetParentWindow() const;
 
+    %property(ParentWindow, GetParentWindow, SetParentWindow, doc="See `GetParentWindow` and `SetParentWindow`");
 };
 
 
@@ -1682,6 +1798,10 @@ public:
 
     void MakeModalIfNeeded();
     wxWindow* FindTopLevelWindow();
+
+    %property(Dialog, GetDialog, doc="See `GetDialog`");
+    %property(Frame, GetFrame, doc="See `GetFrame`");
+    %property(HelpWindow, GetHelpWindow, SetHelpWindow, doc="See `GetHelpWindow` and `SetHelpWindow`");
 };
 
 

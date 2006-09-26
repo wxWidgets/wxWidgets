@@ -209,6 +209,10 @@ public:
     // Get/Set the domain to be passed to the translation functions, defaults to NULL.
     wxString GetDomain() const;
     void SetDomain(const wxString& domain);
+    
+    %property(Domain, GetDomain, SetDomain, doc="See `GetDomain` and `SetDomain`");
+    %property(Flags, GetFlags, SetFlags, doc="See `GetFlags` and `SetFlags`");
+    %property(Version, GetVersion, doc="See `GetVersion`");
 };
 
 //----------------------------------------------------------------------

@@ -136,6 +136,7 @@ class GLCanvas(_core.Window):
         """GetPalette(self) -> Palette"""
         return _glcanvas.GLCanvas_GetPalette(*args, **kwargs)
 
+    Context = property(GetContext,doc="See `GetContext`") 
 _glcanvas.GLCanvas_swigregister(GLCanvas)
 
 def GLCanvasWithContext(*args, **kwargs):

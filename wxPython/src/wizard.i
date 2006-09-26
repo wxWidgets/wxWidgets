@@ -70,9 +70,12 @@ public:
     // False otherwise and for EVT_WIZARD_PAGE_CHANGED return True if we came
     // from the previous page and False if we returned from the next one
     // (this function doesn't make sense for CANCEL events)
-    bool GetDirection() const { return m_direction; }
+    bool GetDirection() const;
 
-    wxWizardPage*   GetPage() const { return m_page; }
+    wxWizardPage*   GetPage() const;
+
+    %property(Direction, GetDirection, doc="See `GetDirection`");
+    %property(Page, GetPage, doc="See `GetPage`");
 };
 
 
@@ -118,6 +121,10 @@ public:
     // dynamically or to do something even more fancy. It's ok to return
     // wxNullBitmap from here - the default one will be used then.
     virtual wxBitmap GetBitmap() const;
+
+    %property(Bitmap, GetBitmap, doc="See `GetBitmap`");
+    %property(Next, GetNext, doc="See `GetNext`");
+    %property(Prev, GetPrev, doc="See `GetPrev`");
 };
 
 
@@ -410,6 +417,10 @@ public:
 
     bool HasNextPage(wxWizardPage* page);
     bool HasPrevPage(wxWizardPage* page);
+    
+    %property(CurrentPage, GetCurrentPage, doc="See `GetCurrentPage`");
+    %property(PageAreaSizer, GetPageAreaSizer, doc="See `GetPageAreaSizer`");
+    %property(PageSize, GetPageSize, SetPageSize, doc="See `GetPageSize` and `SetPageSize`");
 };
 
 

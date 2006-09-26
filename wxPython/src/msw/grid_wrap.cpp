@@ -5504,40 +5504,6 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_GridCellBoolEditor_GetValue(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  wxGridCellBoolEditor *arg1 = (wxGridCellBoolEditor *) 0 ;
-  wxString result;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject *swig_obj[1] ;
-  
-  if (!args) SWIG_fail;
-  swig_obj[0] = args;
-  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxGridCellBoolEditor, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "GridCellBoolEditor_GetValue" "', expected argument " "1"" of type '" "wxGridCellBoolEditor *""'"); 
-  }
-  arg1 = reinterpret_cast< wxGridCellBoolEditor * >(argp1);
-  {
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    result = (arg1)->GetValue();
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) SWIG_fail;
-  }
-  {
-#if wxUSE_UNICODE
-    resultobj = PyUnicode_FromWideChar((&result)->c_str(), (&result)->Len());
-#else
-    resultobj = PyString_FromStringAndSize((&result)->c_str(), (&result)->Len());
-#endif
-  }
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
 SWIGINTERN PyObject *GridCellBoolEditor_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
   if (!SWIG_Python_UnpackTuple(args,(char*)"swigregister", 1, 1,&obj)) return NULL;
@@ -5593,40 +5559,6 @@ fail:
   {
     if (arg2) delete [] arg2;
   }
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_GridCellChoiceEditor_GetValue(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  wxGridCellChoiceEditor *arg1 = (wxGridCellChoiceEditor *) 0 ;
-  wxString result;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject *swig_obj[1] ;
-  
-  if (!args) SWIG_fail;
-  swig_obj[0] = args;
-  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxGridCellChoiceEditor, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "GridCellChoiceEditor_GetValue" "', expected argument " "1"" of type '" "wxGridCellChoiceEditor *""'"); 
-  }
-  arg1 = reinterpret_cast< wxGridCellChoiceEditor * >(argp1);
-  {
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    result = (arg1)->GetValue();
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) SWIG_fail;
-  }
-  {
-#if wxUSE_UNICODE
-    resultobj = PyUnicode_FromWideChar((&result)->c_str(), (&result)->Len());
-#else
-    resultobj = PyString_FromStringAndSize((&result)->c_str(), (&result)->Len());
-#endif
-  }
-  return resultobj;
-fail:
   return NULL;
 }
 
@@ -20439,11 +20371,9 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"GridCellFloatEditor_swigregister", GridCellFloatEditor_swigregister, METH_VARARGS, NULL},
 	 { (char *)"GridCellFloatEditor_swiginit", GridCellFloatEditor_swiginit, METH_VARARGS, NULL},
 	 { (char *)"new_GridCellBoolEditor", (PyCFunction)_wrap_new_GridCellBoolEditor, METH_NOARGS, NULL},
-	 { (char *)"GridCellBoolEditor_GetValue", (PyCFunction)_wrap_GridCellBoolEditor_GetValue, METH_O, NULL},
 	 { (char *)"GridCellBoolEditor_swigregister", GridCellBoolEditor_swigregister, METH_VARARGS, NULL},
 	 { (char *)"GridCellBoolEditor_swiginit", GridCellBoolEditor_swiginit, METH_VARARGS, NULL},
 	 { (char *)"new_GridCellChoiceEditor", (PyCFunction) _wrap_new_GridCellChoiceEditor, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"GridCellChoiceEditor_GetValue", (PyCFunction)_wrap_GridCellChoiceEditor_GetValue, METH_O, NULL},
 	 { (char *)"GridCellChoiceEditor_swigregister", GridCellChoiceEditor_swigregister, METH_VARARGS, NULL},
 	 { (char *)"GridCellChoiceEditor_swiginit", GridCellChoiceEditor_swiginit, METH_VARARGS, NULL},
 	 { (char *)"new_GridCellEnumEditor", (PyCFunction) _wrap_new_GridCellEnumEditor, METH_VARARGS | METH_KEYWORDS, NULL},

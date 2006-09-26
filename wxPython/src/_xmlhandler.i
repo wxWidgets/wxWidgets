@@ -258,6 +258,16 @@ public:
 
     // helper
     wxFileSystem& GetCurFileSystem();
+
+    %property(Class, GetClass, doc="See `GetClass`");
+    %property(CurFileSystem, GetCurFileSystem, doc="See `GetCurFileSystem`");
+    %property(ID, GetID, doc="See `GetID`");
+    %property(Instance, GetInstance, doc="See `GetInstance`");
+    %property(Name, GetName, doc="See `GetName`");
+    %property(Node, GetNode, doc="See `GetNode`");
+    %property(Parent, GetParent, doc="See `GetParent`");
+    %property(ParentAsWindow, GetParentAsWindow, doc="See `GetParentAsWindow`");
+    %property(Resource, GetResource, doc="See `GetResource`");
 };
 
 

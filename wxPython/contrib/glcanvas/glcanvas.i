@@ -147,6 +147,8 @@ public:
     wxPalette CreateDefaultPalette();
     wxPalette* GetPalette();
 #endif
+
+    %property(Context, GetContext, doc="See `GetContext`");
 };
 
 

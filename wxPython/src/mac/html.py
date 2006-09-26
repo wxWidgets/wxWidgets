@@ -121,6 +121,10 @@ class HtmlLinkInfo(_core.Object):
         """SetHtmlCell(self, HtmlCell e)"""
         return _html.HtmlLinkInfo_SetHtmlCell(*args, **kwargs)
 
+    Event = property(GetEvent,SetEvent,doc="See `GetEvent` and `SetEvent`") 
+    Href = property(GetHref,doc="See `GetHref`") 
+    HtmlCell = property(GetHtmlCell,SetHtmlCell,doc="See `GetHtmlCell` and `SetHtmlCell`") 
+    Target = property(GetTarget,doc="See `GetTarget`") 
 _html.HtmlLinkInfo_swigregister(HtmlLinkInfo)
 cvar = _html.cvar
 HtmlWindowNameStr = cvar.HtmlWindowNameStr
@@ -164,6 +168,11 @@ class HtmlTag(_core.Object):
         """GetEndPos2(self) -> int"""
         return _html.HtmlTag_GetEndPos2(*args, **kwargs)
 
+    AllParams = property(GetAllParams,doc="See `GetAllParams`") 
+    BeginPos = property(GetBeginPos,doc="See `GetBeginPos`") 
+    EndPos1 = property(GetEndPos1,doc="See `GetEndPos1`") 
+    EndPos2 = property(GetEndPos2,doc="See `GetEndPos2`") 
+    Name = property(GetName,doc="See `GetName`") 
 _html.HtmlTag_swigregister(HtmlTag)
 
 class HtmlParser(_core.Object):
@@ -219,6 +228,8 @@ class HtmlParser(_core.Object):
         """GetInnerSource(self, HtmlTag tag) -> String"""
         return _html.HtmlParser_GetInnerSource(*args, **kwargs)
 
+    FS = property(GetFS,SetFS,doc="See `GetFS` and `SetFS`") 
+    Source = property(GetSource,doc="See `GetSource`") 
 _html.HtmlParser_swigregister(HtmlParser)
 
 class HtmlWinParser(HtmlParser):
@@ -356,6 +367,21 @@ class HtmlWinParser(HtmlParser):
         """GetLink(self) -> HtmlLinkInfo"""
         return _html.HtmlWinParser_GetLink(*args, **kwargs)
 
+    ActualColor = property(GetActualColor,SetActualColor,doc="See `GetActualColor` and `SetActualColor`") 
+    ActualColour = property(GetActualColour,SetActualColour,doc="See `GetActualColour` and `SetActualColour`") 
+    Align = property(GetAlign,SetAlign,doc="See `GetAlign` and `SetAlign`") 
+    CharHeight = property(GetCharHeight,doc="See `GetCharHeight`") 
+    CharWidth = property(GetCharWidth,doc="See `GetCharWidth`") 
+    Container = property(GetContainer,SetContainer,doc="See `GetContainer` and `SetContainer`") 
+    DC = property(GetDC,SetDC,doc="See `GetDC` and `SetDC`") 
+    FontBold = property(GetFontBold,SetFontBold,doc="See `GetFontBold` and `SetFontBold`") 
+    FontFixed = property(GetFontFixed,SetFontFixed,doc="See `GetFontFixed` and `SetFontFixed`") 
+    FontItalic = property(GetFontItalic,SetFontItalic,doc="See `GetFontItalic` and `SetFontItalic`") 
+    FontSize = property(GetFontSize,SetFontSize,doc="See `GetFontSize` and `SetFontSize`") 
+    FontUnderlined = property(GetFontUnderlined,SetFontUnderlined,doc="See `GetFontUnderlined` and `SetFontUnderlined`") 
+    Link = property(GetLink,SetLink,doc="See `GetLink` and `SetLink`") 
+    LinkColor = property(GetLinkColor,SetLinkColor,doc="See `GetLinkColor` and `SetLinkColor`") 
+    WindowInterface = property(GetWindowInterface,doc="See `GetWindowInterface`") 
 _html.HtmlWinParser_swigregister(HtmlWinParser)
 
 class HtmlTagHandler(_core.Object):
@@ -383,6 +409,7 @@ class HtmlTagHandler(_core.Object):
         """ParseInner(self, HtmlTag tag)"""
         return _html.HtmlTagHandler_ParseInner(*args, **kwargs)
 
+    Parser = property(GetParser,SetParser,doc="See `GetParser` and `SetParser`") 
 _html.HtmlTagHandler_swigregister(HtmlTagHandler)
 
 class HtmlWinTagHandler(HtmlTagHandler):
@@ -410,6 +437,7 @@ class HtmlWinTagHandler(HtmlTagHandler):
         """ParseInner(self, HtmlTag tag)"""
         return _html.HtmlWinTagHandler_ParseInner(*args, **kwargs)
 
+    Parser = property(GetParser,SetParser,doc="See `GetParser` and `SetParser`") 
 _html.HtmlWinTagHandler_swigregister(HtmlWinTagHandler)
 
 
@@ -475,6 +503,12 @@ class HtmlSelection(object):
         """IsEmpty(self) -> bool"""
         return _html.HtmlSelection_IsEmpty(*args, **kwargs)
 
+    FromCell = property(GetFromCell,doc="See `GetFromCell`") 
+    FromPos = property(GetFromPos,doc="See `GetFromPos`") 
+    FromPrivPos = property(GetFromPrivPos,SetFromPrivPos,doc="See `GetFromPrivPos` and `SetFromPrivPos`") 
+    ToCell = property(GetToCell,doc="See `GetToCell`") 
+    ToPos = property(GetToPos,doc="See `GetToPos`") 
+    ToPrivPos = property(GetToPrivPos,SetToPrivPos,doc="See `GetToPrivPos` and `SetToPrivPos`") 
 _html.HtmlSelection_swigregister(HtmlSelection)
 
 HTML_SEL_OUT = _html.HTML_SEL_OUT
@@ -513,6 +547,9 @@ class HtmlRenderingState(object):
         """GetBgColour(self) -> Colour"""
         return _html.HtmlRenderingState_GetBgColour(*args, **kwargs)
 
+    BgColour = property(GetBgColour,SetBgColour,doc="See `GetBgColour` and `SetBgColour`") 
+    FgColour = property(GetFgColour,SetFgColour,doc="See `GetFgColour` and `SetFgColour`") 
+    SelectionState = property(GetSelectionState,SetSelectionState,doc="See `GetSelectionState` and `SetSelectionState`") 
 _html.HtmlRenderingState_swigregister(HtmlRenderingState)
 
 class HtmlRenderingStyle(object):
@@ -528,6 +565,8 @@ class HtmlRenderingStyle(object):
         """GetSelectedTextBgColour(self, Colour clr) -> Colour"""
         return _html.HtmlRenderingStyle_GetSelectedTextBgColour(*args, **kwargs)
 
+    SelectedTextBgColour = property(GetSelectedTextBgColour,doc="See `GetSelectedTextBgColour`") 
+    SelectedTextColour = property(GetSelectedTextColour,doc="See `GetSelectedTextColour`") 
 _html.HtmlRenderingStyle_swigregister(HtmlRenderingStyle)
 
 class DefaultHtmlRenderingStyle(HtmlRenderingStyle):
@@ -566,6 +605,9 @@ class HtmlRenderingInfo(object):
         """GetState(self) -> HtmlRenderingState"""
         return _html.HtmlRenderingInfo_GetState(*args, **kwargs)
 
+    Selection = property(GetSelection,SetSelection,doc="See `GetSelection` and `SetSelection`") 
+    State = property(GetState,doc="See `GetState`") 
+    Style = property(GetStyle,SetStyle,doc="See `GetStyle` and `SetStyle`") 
 _html.HtmlRenderingInfo_swigregister(HtmlRenderingInfo)
 
 #---------------------------------------------------------------------------
@@ -723,6 +765,23 @@ class HtmlCell(_core.Object):
         """ConvertToText(self, HtmlSelection sel) -> String"""
         return _html.HtmlCell_ConvertToText(*args, **kwargs)
 
+    Cursor = property(GetCursor,doc="See `GetCursor`") 
+    Depth = property(GetDepth,doc="See `GetDepth`") 
+    Descent = property(GetDescent,doc="See `GetDescent`") 
+    FirstChild = property(GetFirstChild,doc="See `GetFirstChild`") 
+    FirstTerminal = property(GetFirstTerminal,doc="See `GetFirstTerminal`") 
+    Height = property(GetHeight,doc="See `GetHeight`") 
+    Id = property(GetId,SetId,doc="See `GetId` and `SetId`") 
+    LastTerminal = property(GetLastTerminal,doc="See `GetLastTerminal`") 
+    Link = property(GetLink,SetLink,doc="See `GetLink` and `SetLink`") 
+    MaxTotalWidth = property(GetMaxTotalWidth,doc="See `GetMaxTotalWidth`") 
+    MouseCursor = property(GetMouseCursor,doc="See `GetMouseCursor`") 
+    Next = property(GetNext,SetNext,doc="See `GetNext` and `SetNext`") 
+    Parent = property(GetParent,SetParent,doc="See `GetParent` and `SetParent`") 
+    PosX = property(GetPosX,doc="See `GetPosX`") 
+    PosY = property(GetPosY,doc="See `GetPosY`") 
+    RootCell = property(GetRootCell,doc="See `GetRootCell`") 
+    Width = property(GetWidth,doc="See `GetWidth`") 
 _html.HtmlCell_swigregister(HtmlCell)
 
 class HtmlWordCell(HtmlCell):
@@ -817,6 +876,12 @@ class HtmlContainerCell(HtmlCell):
         """GetFirstChild(self) -> HtmlCell"""
         return _html.HtmlContainerCell_GetFirstChild(*args, **kwargs)
 
+    AlignHor = property(GetAlignHor,SetAlignHor,doc="See `GetAlignHor` and `SetAlignHor`") 
+    AlignVer = property(GetAlignVer,SetAlignVer,doc="See `GetAlignVer` and `SetAlignVer`") 
+    BackgroundColour = property(GetBackgroundColour,SetBackgroundColour,doc="See `GetBackgroundColour` and `SetBackgroundColour`") 
+    FirstChild = property(GetFirstChild,doc="See `GetFirstChild`") 
+    Indent = property(GetIndent,SetIndent,doc="See `GetIndent` and `SetIndent`") 
+    IndentUnits = property(GetIndentUnits,doc="See `GetIndentUnits`") 
 _html.HtmlContainerCell_swigregister(HtmlContainerCell)
 
 class HtmlColourCell(HtmlCell):
@@ -901,6 +966,8 @@ class HtmlWindowInterface(object):
     HTMLCursor_Default = _html.HtmlWindowInterface_HTMLCursor_Default
     HTMLCursor_Link = _html.HtmlWindowInterface_HTMLCursor_Link
     HTMLCursor_Text = _html.HtmlWindowInterface_HTMLCursor_Text
+    HTMLBackgroundColour = property(GetHTMLBackgroundColour,SetHTMLBackgroundColour,doc="See `GetHTMLBackgroundColour` and `SetHTMLBackgroundColour`") 
+    HTMLWindow = property(GetHTMLWindow,doc="See `GetHTMLWindow`") 
 _html.HtmlWindowInterface_swigregister(HtmlWindowInterface)
 
 #---------------------------------------------------------------------------
@@ -1121,6 +1188,12 @@ class HtmlWindow(_windows.ScrolledWindow):
         return _html.HtmlWindow_GetDefaultHTMLCursor(*args, **kwargs)
 
     GetDefaultHTMLCursor = staticmethod(GetDefaultHTMLCursor)
+    InternalRepresentation = property(GetInternalRepresentation,doc="See `GetInternalRepresentation`") 
+    OpenedAnchor = property(GetOpenedAnchor,doc="See `GetOpenedAnchor`") 
+    OpenedPage = property(GetOpenedPage,doc="See `GetOpenedPage`") 
+    OpenedPageTitle = property(GetOpenedPageTitle,doc="See `GetOpenedPageTitle`") 
+    Parser = property(GetParser,doc="See `GetParser`") 
+    RelatedFrame = property(GetRelatedFrame,doc="See `GetRelatedFrame`") 
 _html.HtmlWindow_swigregister(HtmlWindow)
 
 def PreHtmlWindow(*args, **kwargs):
@@ -1195,6 +1268,7 @@ class HtmlDCRenderer(_core.Object):
         """GetTotalHeight(self) -> int"""
         return _html.HtmlDCRenderer_GetTotalHeight(*args, **kwargs)
 
+    TotalHeight = property(GetTotalHeight,doc="See `GetTotalHeight`") 
 _html.HtmlDCRenderer_swigregister(HtmlDCRenderer)
 
 PAGE_ODD = _html.PAGE_ODD
@@ -1311,6 +1385,8 @@ class HtmlEasyPrinting(_core.Object):
         """GetPageSetupData(self) -> PageSetupDialogData"""
         return _html.HtmlEasyPrinting_GetPageSetupData(*args, **kwargs)
 
+    PageSetupData = property(GetPageSetupData,doc="See `GetPageSetupData`") 
+    PrintData = property(GetPrintData,doc="See `GetPrintData`") 
 _html.HtmlEasyPrinting_swigregister(HtmlEasyPrinting)
 
 #---------------------------------------------------------------------------
@@ -1366,6 +1442,13 @@ class HtmlBookRecord(object):
         """GetFullPath(self, String page) -> String"""
         return _html.HtmlBookRecord_GetFullPath(*args, **kwargs)
 
+    BasePath = property(GetBasePath,SetBasePath,doc="See `GetBasePath` and `SetBasePath`") 
+    BookFile = property(GetBookFile,doc="See `GetBookFile`") 
+    ContentsEnd = property(GetContentsEnd,doc="See `GetContentsEnd`") 
+    ContentsStart = property(GetContentsStart,doc="See `GetContentsStart`") 
+    FullPath = property(GetFullPath,doc="See `GetFullPath`") 
+    Start = property(GetStart,SetStart,doc="See `GetStart` and `SetStart`") 
+    Title = property(GetTitle,SetTitle,doc="See `GetTitle` and `SetTitle`") 
 _html.HtmlBookRecord_swigregister(HtmlBookRecord)
 
 class HtmlSearchStatus(object):
@@ -1393,6 +1476,9 @@ class HtmlSearchStatus(object):
         """GetName(self) -> String"""
         return _html.HtmlSearchStatus_GetName(*args, **kwargs)
 
+    CurIndex = property(GetCurIndex,doc="See `GetCurIndex`") 
+    MaxIndex = property(GetMaxIndex,doc="See `GetMaxIndex`") 
+    Name = property(GetName,doc="See `GetName`") 
 _html.HtmlSearchStatus_swigregister(HtmlSearchStatus)
 
 class HtmlHelpData(object):
@@ -1424,6 +1510,7 @@ class HtmlHelpData(object):
         """GetBookRecArray(self) -> wxHtmlBookRecArray"""
         return _html.HtmlHelpData_GetBookRecArray(*args, **kwargs)
 
+    BookRecArray = property(GetBookRecArray,doc="See `GetBookRecArray`") 
 _html.HtmlHelpData_swigregister(HtmlHelpData)
 
 HF_TOOLBAR = _html.HF_TOOLBAR
@@ -1562,6 +1649,13 @@ class HtmlHelpWindow(_core.Window):
         """GetTreeCtrl(self) -> wxPyTreeCtrl"""
         return _html.HtmlHelpWindow_GetTreeCtrl(*args, **kwargs)
 
+    CfgData = property(GetCfgData,doc="See `GetCfgData`") 
+    Controller = property(GetController,SetController,doc="See `GetController` and `SetController`") 
+    Data = property(GetData,doc="See `GetData`") 
+    HtmlWindow = property(GetHtmlWindow,doc="See `GetHtmlWindow`") 
+    SplitterWindow = property(GetSplitterWindow,doc="See `GetSplitterWindow`") 
+    ToolBar = property(GetToolBar,doc="See `GetToolBar`") 
+    TreeCtrl = property(GetTreeCtrl,doc="See `GetTreeCtrl`") 
 _html.HtmlHelpWindow_swigregister(HtmlHelpWindow)
 
 def PreHtmlHelpWindow(*args, **kwargs):
@@ -1585,6 +1679,7 @@ class HtmlWindowEvent(_core.NotifyEvent):
         """GetURL(self) -> String"""
         return _html.HtmlWindowEvent_GetURL(*args, **kwargs)
 
+    URL = property(GetURL,SetURL,doc="See `GetURL` and `SetURL`") 
 _html.HtmlWindowEvent_swigregister(HtmlWindowEvent)
 
 class HtmlHelpFrame(_windows.Frame):
@@ -1647,6 +1742,9 @@ class HtmlHelpFrame(_windows.Frame):
     def WriteCustomization(self, config, rootpath=""):
         return self.GetHelpWindow().WriteCustomization(config, rootpath)
 
+    Controller = property(GetController,SetController,doc="See `GetController` and `SetController`") 
+    Data = property(GetData,doc="See `GetData`") 
+    HelpWindow = property(GetHelpWindow,doc="See `GetHelpWindow`") 
 _html.HtmlHelpFrame_swigregister(HtmlHelpFrame)
 
 def PreHtmlHelpFrame(*args, **kwargs):
@@ -1691,6 +1789,9 @@ class HtmlHelpDialog(_windows.Dialog):
         """SetTitleFormat(self, String format)"""
         return _html.HtmlHelpDialog_SetTitleFormat(*args, **kwargs)
 
+    Controller = property(GetController,SetController,doc="See `GetController` and `SetController`") 
+    Data = property(GetData,doc="See `GetData`") 
+    HelpWindow = property(GetHelpWindow,doc="See `GetHelpWindow`") 
 _html.HtmlHelpDialog_swigregister(HtmlHelpDialog)
 
 def PreHtmlHelpDialog(*args, **kwargs):
@@ -1773,6 +1874,7 @@ class HelpControllerBase(_core.Object):
         """GetParentWindow(self) -> Window"""
         return _html.HelpControllerBase_GetParentWindow(*args, **kwargs)
 
+    ParentWindow = property(GetParentWindow,SetParentWindow,doc="See `GetParentWindow` and `SetParentWindow`") 
 _html.HelpControllerBase_swigregister(HelpControllerBase)
 
 class HtmlHelpController(HelpControllerBase):
@@ -1852,6 +1954,9 @@ class HtmlHelpController(HelpControllerBase):
         """FindTopLevelWindow(self) -> Window"""
         return _html.HtmlHelpController_FindTopLevelWindow(*args, **kwargs)
 
+    Dialog = property(GetDialog,doc="See `GetDialog`") 
+    Frame = property(GetFrame,doc="See `GetFrame`") 
+    HelpWindow = property(GetHelpWindow,SetHelpWindow,doc="See `GetHelpWindow` and `SetHelpWindow`") 
 _html.HtmlHelpController_swigregister(HtmlHelpController)
 
 class HtmlModalHelp(object):

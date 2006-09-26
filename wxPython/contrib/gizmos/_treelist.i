@@ -118,6 +118,13 @@ public:
     void SetEditable (bool edit);
     void SetShown(bool shown);
 
+    %property(Alignment, GetAlignment, SetAlignment, doc="See `GetAlignment` and `SetAlignment`");
+    %property(Image, GetImage, SetImage, doc="See `GetImage` and `SetImage`");
+    %property(SelectedImage, GetSelectedImage, SetSelectedImage, doc="See `GetSelectedImage` and `SetSelectedImage`");
+    %property(Text, GetText, SetText, doc="See `GetText` and `SetText`");
+    %property(Width, GetWidth, SetWidth, doc="See `GetWidth` and `SetWidth`");
+    %property(Editable, IsEditable, SetEditable);
+    %property(Shown, IsShown, SetShown);
 };
 
 
@@ -678,6 +685,20 @@ public:
     wxWindow* GetHeaderWindow() const;
     wxScrolledWindow* GetMainWindow() const;
 
+    %property(ButtonsImageList, GetButtonsImageList, SetButtonsImageList, doc="See `GetButtonsImageList` and `SetButtonsImageList`");
+    %property(ColumnCount, GetColumnCount, doc="See `GetColumnCount`");
+    %property(Count, GetCount, doc="See `GetCount`");
+    %property(HeaderWindow, GetHeaderWindow, doc="See `GetHeaderWindow`");
+    %property(ImageList, GetImageList, SetImageList, doc="See `GetImageList` and `SetImageList`");
+    %property(Indent, GetIndent, SetIndent, doc="See `GetIndent` and `SetIndent`");
+    %property(LineSpacing, GetLineSpacing, SetLineSpacing, doc="See `GetLineSpacing` and `SetLineSpacing`");
+    %property(MainColumn, GetMainColumn, SetMainColumn, doc="See `GetMainColumn` and `SetMainColumn`");
+    %property(MainWindow, GetMainWindow, doc="See `GetMainWindow`");
+    %property(Next, GetNext, doc="See `GetNext`");
+    %property(RootItem, GetRootItem, doc="See `GetRootItem`");
+    %property(Selection, GetSelection, doc="See `GetSelection`");
+    %property(Selections, GetSelections, doc="See `GetSelections`");
+    %property(StateImageList, GetStateImageList, SetStateImageList, doc="See `GetStateImageList` and `SetStateImageList`");
 };
 
 //----------------------------------------------------------------------

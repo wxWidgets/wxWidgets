@@ -175,6 +175,11 @@ class MediaCtrl(_core.Control):
         """GetDownloadTotal(self) -> wxFileOffset"""
         return _media.MediaCtrl_GetDownloadTotal(*args, **kwargs)
 
+    DownloadProgress = property(GetDownloadProgress,doc="See `GetDownloadProgress`") 
+    DownloadTotal = property(GetDownloadTotal,doc="See `GetDownloadTotal`") 
+    PlaybackRate = property(GetPlaybackRate,SetPlaybackRate,doc="See `GetPlaybackRate` and `SetPlaybackRate`") 
+    State = property(GetState,doc="See `GetState`") 
+    Volume = property(GetVolume,SetVolume,doc="See `GetVolume` and `SetVolume`") 
 _media.MediaCtrl_swigregister(MediaCtrl)
 MediaCtrlNameStr = cvar.MediaCtrlNameStr
 

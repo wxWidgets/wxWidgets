@@ -149,6 +149,17 @@ public:
 
     wxBitmap& GetBackingStore();
 
+    %property(Animation, GetAnimation, SetAnimation, doc="See `GetAnimation` and `SetAnimation`");
+    %property(BackingStore, GetBackingStore, doc="See `GetBackingStore`");
+    %property(CurrentFrame, GetCurrentFrame, SetCurrentFrame, doc="See `GetCurrentFrame` and `SetCurrentFrame`");
+    %property(CustomBackgroundColour, GetCustomBackgroundColour, SetCustomBackgroundColour, doc="See `GetCustomBackgroundColour` and `SetCustomBackgroundColour`");
+    %property(DestroyAnimation, GetDestroyAnimation, SetDestroyAnimation, doc="See `GetDestroyAnimation` and `SetDestroyAnimation`");
+    %property(DisposalMethod, GetDisposalMethod, doc="See `GetDisposalMethod`");
+    %property(FrameCount, GetFrameCount, doc="See `GetFrameCount`");
+    %property(LogicalScreenSize, GetLogicalScreenSize, doc="See `GetLogicalScreenSize`");
+    %property(Looped, GetLooped, SetLooped, doc="See `GetLooped` and `SetLooped`");
+    %property(Position, GetPosition, SetPosition, doc="See `GetPosition` and `SetPosition`");
+    %property(Window, GetWindow, SetWindow, doc="See `GetWindow` and `SetWindow`");
 };
 
 
@@ -187,6 +198,10 @@ public:
     virtual bool IsValid() const;
 
     virtual bool LoadFile(const wxString& filename);
+
+    %property(DisposalMethod, GetDisposalMethod, doc="See `GetDisposalMethod`");
+    %property(FrameCount, GetFrameCount, doc="See `GetFrameCount`");
+    %property(LogicalScreenSize, GetLogicalScreenSize, doc="See `GetLogicalScreenSize`");
 };
 
 
@@ -317,6 +332,9 @@ public:
     const wxString& GetFilename() const;
     void SetFilename(const wxString& filename);
     
+    %property(Animation, GetAnimation, doc="See `GetAnimation`");
+    %property(Filename, GetFilename, SetFilename, doc="See `GetFilename` and `SetFilename`");
+    %property(Player, GetPlayer, doc="See `GetPlayer`");
 };
 
 //---------------------------------------------------------------------------

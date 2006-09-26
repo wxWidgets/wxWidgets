@@ -206,6 +206,14 @@ public:
     wxBitmapButton* GetUpButton();
     wxBitmapButton* GetDownButton();
     wxBitmapButton* GetEditButton();
+
+    %property(DelButton, GetDelButton, doc="See `GetDelButton`");
+    %property(DownButton, GetDownButton, doc="See `GetDownButton`");
+    %property(EditButton, GetEditButton, doc="See `GetEditButton`");
+    %property(ListCtrl, GetListCtrl, doc="See `GetListCtrl`");
+    %property(NewButton, GetNewButton, doc="See `GetNewButton`");
+    %property(Strings, GetStrings, SetStrings, doc="See `GetStrings` and `SetStrings`");
+    %property(UpButton, GetUpButton, doc="See `GetUpButton`");
 };
 
 
@@ -255,6 +263,9 @@ public:
     // events happen such as node expansion
     void SetCompanionWindow(wxWindow* companion);
     wxWindow* GetCompanionWindow() const;
+
+    %property(CompanionWindow, GetCompanionWindow, SetCompanionWindow, doc="See `GetCompanionWindow` and `SetCompanionWindow`");
+    %property(ScrolledWindow, GetScrolledWindow, doc="See `GetScrolledWindow`");
 };
 
 
@@ -315,6 +326,8 @@ public:
 
     wxRemotelyScrolledTreeCtrl* GetTreeCtrl() const;
     void SetTreeCtrl(wxRemotelyScrolledTreeCtrl* treeCtrl);
+
+    %property(TreeCtrl, GetTreeCtrl, SetTreeCtrl, doc="See `GetTreeCtrl` and `SetTreeCtrl`");
 };
 
 
@@ -409,6 +422,9 @@ public:
     void SetDrawFaded(bool DrawFaded, bool Redraw = true);
     void SetValue(const wxString &Value, bool Redraw = true);
 
+    %property(Alignment, GetAlignment, SetAlignment, doc="See `GetAlignment` and `SetAlignment`");
+    %property(DrawFaded, GetDrawFaded, SetDrawFaded, doc="See `GetDrawFaded` and `SetDrawFaded`");
+    %property(Value, GetValue, SetValue, doc="See `GetValue` and `SetValue`");
 };
 
 
@@ -465,6 +481,10 @@ public:
     void SetCustomScale( float sx, float sy );
     void GetCustomScale( float* OUTPUT, float* OUTPUT ) const;
 
+    %property(Alignment, GetAlignment, SetAlignment, doc="See `GetAlignment` and `SetAlignment`");
+    %property(Bitmap, GetBitmap, SetBitmap, doc="See `GetBitmap` and `SetBitmap`");
+    %property(Icon, GetIcon, SetIcon, doc="See `GetIcon` and `SetIcon`");
+    %property(Scale, GetScale, SetScale, doc="See `GetScale` and `SetScale`");
 };
 
 

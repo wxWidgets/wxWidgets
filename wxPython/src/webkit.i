@@ -158,6 +158,10 @@ public:
     void SetPageSource(wxString& source, const wxString& baseUrl = wxPyEmptyString);
     wxString GetPageURL();
     wxString GetPageTitle();
+
+    %property(PageSource, GetPageSource, SetPageSource, doc="See `GetPageSource` and `SetPageSource`");
+    %property(PageTitle, GetPageTitle, doc="See `GetPageTitle`");
+    %property(PageURL, GetPageURL, doc="See `GetPageURL`");    
 };
 
 
@@ -186,6 +190,9 @@ public:
     void SetState(const int state);
     wxString GetURL();
     void SetURL(const wxString& url);
+
+    %property(State, GetState, SetState, doc="See `GetState` and `SetState`");
+    %property(URL, GetURL, SetURL, doc="See `GetURL` and `SetURL`");
 };
 
 

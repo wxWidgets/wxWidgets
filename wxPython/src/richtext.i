@@ -283,6 +283,10 @@ empty range.", "");
     __safe_for_unpickling__ = True
     def __reduce__(self):                return (RichTextRange, self.Get())
     }
+
+    %property(End, GetEnd, SetEnd, doc="See `GetEnd` and `SetEnd`");
+    %property(Length, GetLength, doc="See `GetLength`");
+    %property(Start, GetStart, SetStart, doc="See `GetStart` and `SetStart`");
 };
 
 
@@ -429,6 +433,31 @@ public:
 //     static wxRichTextAttr Combine(const wxRichTextAttr& attr,
 //                               const wxRichTextAttr& attrDef,
 //                               const wxTextCtrlBase *text);
+
+    
+    %property(Alignment, GetAlignment, SetAlignment, doc="See `GetAlignment` and `SetAlignment`");
+    %property(BackgroundColour, GetBackgroundColour, SetBackgroundColour, doc="See `GetBackgroundColour` and `SetBackgroundColour`");
+    %property(BulletNumber, GetBulletNumber, SetBulletNumber, doc="See `GetBulletNumber` and `SetBulletNumber`");
+    %property(BulletStyle, GetBulletStyle, SetBulletStyle, doc="See `GetBulletStyle` and `SetBulletStyle`");
+    %property(BulletSymbol, GetBulletSymbol, SetBulletSymbol, doc="See `GetBulletSymbol` and `SetBulletSymbol`");
+    %property(CharacterStyleName, GetCharacterStyleName, SetCharacterStyleName, doc="See `GetCharacterStyleName` and `SetCharacterStyleName`");
+    %property(Flags, GetFlags, SetFlags, doc="See `GetFlags` and `SetFlags`");
+    %property(Font, GetFont, SetFont, doc="See `GetFont` and `SetFont`");
+    %property(FontAttributes, GetFontAttributes, doc="See `GetFontAttributes`");
+    %property(FontFaceName, GetFontFaceName, SetFontFaceName, doc="See `GetFontFaceName` and `SetFontFaceName`");
+    %property(FontSize, GetFontSize, SetFontSize, doc="See `GetFontSize` and `SetFontSize`");
+    %property(FontStyle, GetFontStyle, SetFontStyle, doc="See `GetFontStyle` and `SetFontStyle`");
+    %property(FontUnderlined, GetFontUnderlined, SetFontUnderlined, doc="See `GetFontUnderlined` and `SetFontUnderlined`");
+    %property(FontWeight, GetFontWeight, SetFontWeight, doc="See `GetFontWeight` and `SetFontWeight`");
+    %property(LeftIndent, GetLeftIndent, SetLeftIndent, doc="See `GetLeftIndent` and `SetLeftIndent`");
+    %property(LeftSubIndent, GetLeftSubIndent, doc="See `GetLeftSubIndent`");
+    %property(LineSpacing, GetLineSpacing, SetLineSpacing, doc="See `GetLineSpacing` and `SetLineSpacing`");
+    %property(ParagraphSpacingAfter, GetParagraphSpacingAfter, SetParagraphSpacingAfter, doc="See `GetParagraphSpacingAfter` and `SetParagraphSpacingAfter`");
+    %property(ParagraphSpacingBefore, GetParagraphSpacingBefore, SetParagraphSpacingBefore, doc="See `GetParagraphSpacingBefore` and `SetParagraphSpacingBefore`");
+    %property(ParagraphStyleName, GetParagraphStyleName, SetParagraphStyleName, doc="See `GetParagraphStyleName` and `SetParagraphStyleName`");
+    %property(RightIndent, GetRightIndent, SetRightIndent, doc="See `GetRightIndent` and `SetRightIndent`");
+    %property(Tabs, GetTabs, SetTabs, doc="See `GetTabs` and `SetTabs`");
+    %property(TextColour, GetTextColour, SetTextColour, doc="See `GetTextColour` and `SetTextColour`");
 };
 
 
@@ -1320,6 +1349,19 @@ flag.", "");
         "", "");
 
 
+    %property(Buffer, GetBuffer, doc="See `GetBuffer`");
+    %property(DefaultStyle, GetDefaultStyle, SetDefaultStyle, doc="See `GetDefaultStyle` and `SetDefaultStyle`");
+    %property(DelayedLayoutThreshold, GetDelayedLayoutThreshold, SetDelayedLayoutThreshold, doc="See `GetDelayedLayoutThreshold` and `SetDelayedLayoutThreshold`");
+    %property(Filename, GetFilename, SetFilename, doc="See `GetFilename` and `SetFilename`");
+    %property(InsertionPoint, GetInsertionPoint, SetInsertionPoint, doc="See `GetInsertionPoint` and `SetInsertionPoint`");
+    %property(InternalSelectionRange, GetInternalSelectionRange, SetInternalSelectionRange, doc="See `GetInternalSelectionRange` and `SetInternalSelectionRange`");
+    %property(LastPosition, GetLastPosition, doc="See `GetLastPosition`");
+    %property(NumberOfLines, GetNumberOfLines, doc="See `GetNumberOfLines`");
+    %property(Selection, GetSelection, SetSelection, doc="See `GetSelection` and `SetSelection`");
+    %property(SelectionRange, GetSelectionRange, SetSelectionRange, doc="See `GetSelectionRange` and `SetSelectionRange`");
+    %property(StringSelection, GetStringSelection, doc="See `GetStringSelection`");
+    %property(StyleSheet, GetStyleSheet, SetStyleSheet, doc="See `GetStyleSheet` and `SetStyleSheet`");
+    %property(Value, GetValue, SetValue, doc="See `GetValue` and `SetValue`");
 
 // Implementation
 // TODO: Which of these should be exposed to Python?
@@ -1453,6 +1495,9 @@ public:
 
     int GetFlags() const;
     void SetFlags(int flags);
+
+    %property(Flags, GetFlags, SetFlags, doc="See `GetFlags` and `SetFlags`");
+    %property(Index, GetIndex, SetIndex, doc="See `GetIndex` and `SetIndex`");
 };
 
 //----------------------------------------------------------------------

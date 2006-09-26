@@ -90,6 +90,8 @@ class WizardEvent(_core.NotifyEvent):
         """GetPage(self) -> WizardPage"""
         return _wizard.WizardEvent_GetPage(*args, **kwargs)
 
+    Direction = property(GetDirection,doc="See `GetDirection`") 
+    Page = property(GetPage,doc="See `GetPage`") 
 _wizard.WizardEvent_swigregister(WizardEvent)
 
 class WizardPage(_windows.Panel):
@@ -113,6 +115,9 @@ class WizardPage(_windows.Panel):
         """GetBitmap(self) -> Bitmap"""
         return _wizard.WizardPage_GetBitmap(*args, **kwargs)
 
+    Bitmap = property(GetBitmap,doc="See `GetBitmap`") 
+    Next = property(GetNext,doc="See `GetNext`") 
+    Prev = property(GetPrev,doc="See `GetPrev`") 
 _wizard.WizardPage_swigregister(WizardPage)
 
 class PyWizardPage(WizardPage):
@@ -399,6 +404,9 @@ class Wizard(_windows.Dialog):
         """HasPrevPage(self, WizardPage page) -> bool"""
         return _wizard.Wizard_HasPrevPage(*args, **kwargs)
 
+    CurrentPage = property(GetCurrentPage,doc="See `GetCurrentPage`") 
+    PageAreaSizer = property(GetPageAreaSizer,doc="See `GetPageAreaSizer`") 
+    PageSize = property(GetPageSize,SetPageSize,doc="See `GetPageSize` and `SetPageSize`") 
 _wizard.Wizard_swigregister(Wizard)
 
 def PreWizard(*args, **kwargs):

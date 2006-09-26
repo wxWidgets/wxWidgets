@@ -233,6 +233,17 @@ class AnimationPlayer(_core.Object):
         """GetBackingStore(self) -> Bitmap"""
         return _animate.AnimationPlayer_GetBackingStore(*args, **kwargs)
 
+    Animation = property(GetAnimation,SetAnimation,doc="See `GetAnimation` and `SetAnimation`") 
+    BackingStore = property(GetBackingStore,doc="See `GetBackingStore`") 
+    CurrentFrame = property(GetCurrentFrame,SetCurrentFrame,doc="See `GetCurrentFrame` and `SetCurrentFrame`") 
+    CustomBackgroundColour = property(GetCustomBackgroundColour,SetCustomBackgroundColour,doc="See `GetCustomBackgroundColour` and `SetCustomBackgroundColour`") 
+    DestroyAnimation = property(GetDestroyAnimation,SetDestroyAnimation,doc="See `GetDestroyAnimation` and `SetDestroyAnimation`") 
+    DisposalMethod = property(GetDisposalMethod,doc="See `GetDisposalMethod`") 
+    FrameCount = property(GetFrameCount,doc="See `GetFrameCount`") 
+    LogicalScreenSize = property(GetLogicalScreenSize,doc="See `GetLogicalScreenSize`") 
+    Looped = property(GetLooped,SetLooped,doc="See `GetLooped` and `SetLooped`") 
+    Position = property(GetPosition,SetPosition,doc="See `GetPosition` and `SetPosition`") 
+    Window = property(GetWindow,SetWindow,doc="See `GetWindow` and `SetWindow`") 
 _animate.AnimationPlayer_swigregister(AnimationPlayer)
 cvar = _animate.cvar
 AnimationControlNameStr = cvar.AnimationControlNameStr
@@ -284,6 +295,9 @@ class AnimationBase(_core.Object):
         """LoadFile(self, String filename) -> bool"""
         return _animate.AnimationBase_LoadFile(*args, **kwargs)
 
+    DisposalMethod = property(GetDisposalMethod,doc="See `GetDisposalMethod`") 
+    FrameCount = property(GetFrameCount,doc="See `GetFrameCount`") 
+    LogicalScreenSize = property(GetLogicalScreenSize,doc="See `GetLogicalScreenSize`") 
 _animate.AnimationBase_swigregister(AnimationBase)
 
 class GIFAnimation(AnimationBase):
@@ -357,6 +371,9 @@ class GIFAnimationCtrl(_core.Control):
         """SetFilename(self, String filename)"""
         return _animate.GIFAnimationCtrl_SetFilename(*args, **kwargs)
 
+    Animation = property(GetAnimation,doc="See `GetAnimation`") 
+    Filename = property(GetFilename,SetFilename,doc="See `GetFilename` and `SetFilename`") 
+    Player = property(GetPlayer,doc="See `GetPlayer`") 
 _animate.GIFAnimationCtrl_swigregister(GIFAnimationCtrl)
 
 def PreGIFAnimationCtrl(*args, **kwargs):

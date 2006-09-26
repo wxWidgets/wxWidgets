@@ -211,6 +211,9 @@ class XmlResource(_core.Object):
         """SetDomain(self, String domain)"""
         return _xrc.XmlResource_SetDomain(*args, **kwargs)
 
+    Domain = property(GetDomain,SetDomain,doc="See `GetDomain` and `SetDomain`") 
+    Flags = property(GetFlags,SetFlags,doc="See `GetFlags` and `SetFlags`") 
+    Version = property(GetVersion,doc="See `GetVersion`") 
 _xrc.XmlResource_swigregister(XmlResource)
 cvar = _xrc.cvar
 UTF8String = cvar.UTF8String
@@ -315,6 +318,9 @@ class XmlProperty(object):
         """SetNext(self, XmlProperty next)"""
         return _xrc.XmlProperty_SetNext(*args, **kwargs)
 
+    Name = property(GetName,SetName,doc="See `GetName` and `SetName`") 
+    Next = property(GetNext,SetNext,doc="See `GetNext` and `SetNext`") 
+    Value = property(GetValue,SetValue,doc="See `GetValue` and `SetValue`") 
 _xrc.XmlProperty_swigregister(XmlProperty)
 
 class XmlNode(object):
@@ -430,6 +436,13 @@ class XmlNode(object):
         """SetProperties(self, XmlProperty prop)"""
         return _xrc.XmlNode_SetProperties(*args, **kwargs)
 
+    Children = property(GetChildren,SetChildren,doc="See `GetChildren` and `SetChildren`") 
+    Content = property(GetContent,SetContent,doc="See `GetContent` and `SetContent`") 
+    Name = property(GetName,SetName,doc="See `GetName` and `SetName`") 
+    Next = property(GetNext,SetNext,doc="See `GetNext` and `SetNext`") 
+    Parent = property(GetParent,SetParent,doc="See `GetParent` and `SetParent`") 
+    Properties = property(GetProperties,SetProperties,doc="See `GetProperties` and `SetProperties`") 
+    Type = property(GetType,SetType,doc="See `GetType` and `SetType`") 
 _xrc.XmlNode_swigregister(XmlNode)
 
 def XmlNodeEasy(*args, **kwargs):
@@ -497,6 +510,9 @@ class XmlDocument(_core.Object):
         """SetFileEncoding(self, String encoding)"""
         return _xrc.XmlDocument_SetFileEncoding(*args, **kwargs)
 
+    FileEncoding = property(GetFileEncoding,SetFileEncoding,doc="See `GetFileEncoding` and `SetFileEncoding`") 
+    Root = property(GetRoot,SetRoot,doc="See `GetRoot` and `SetRoot`") 
+    Version = property(GetVersion,SetVersion,doc="See `GetVersion` and `SetVersion`") 
 _xrc.XmlDocument_swigregister(XmlDocument)
 
 def XmlDocumentFromStream(*args, **kwargs):
@@ -664,6 +680,15 @@ class XmlResourceHandler(_core.Object):
         """GetCurFileSystem(self) -> FileSystem"""
         return _xrc.XmlResourceHandler_GetCurFileSystem(*args, **kwargs)
 
+    Class = property(GetClass,doc="See `GetClass`") 
+    CurFileSystem = property(GetCurFileSystem,doc="See `GetCurFileSystem`") 
+    ID = property(GetID,doc="See `GetID`") 
+    Instance = property(GetInstance,doc="See `GetInstance`") 
+    Name = property(GetName,doc="See `GetName`") 
+    Node = property(GetNode,doc="See `GetNode`") 
+    Parent = property(GetParent,doc="See `GetParent`") 
+    ParentAsWindow = property(GetParentAsWindow,doc="See `GetParentAsWindow`") 
+    Resource = property(GetResource,doc="See `GetResource`") 
 _xrc.XmlResourceHandler_swigregister(XmlResourceHandler)
 
 #----------------------------------------------------------------------------

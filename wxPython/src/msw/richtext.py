@@ -247,6 +247,9 @@ class RichTextRange(object):
     __safe_for_unpickling__ = True
     def __reduce__(self):                return (RichTextRange, self.Get())
 
+    End = property(GetEnd,SetEnd,doc="See `GetEnd` and `SetEnd`") 
+    Length = property(GetLength,doc="See `GetLength`") 
+    Start = property(GetStart,SetStart,doc="See `GetStart` and `SetStart`") 
 _richtext.RichTextRange_swigregister(RichTextRange)
 
 class RichTextAttr(object):
@@ -542,6 +545,29 @@ class RichTextAttr(object):
         """IsDefault(self) -> bool"""
         return _richtext.RichTextAttr_IsDefault(*args, **kwargs)
 
+    Alignment = property(GetAlignment,SetAlignment,doc="See `GetAlignment` and `SetAlignment`") 
+    BackgroundColour = property(GetBackgroundColour,SetBackgroundColour,doc="See `GetBackgroundColour` and `SetBackgroundColour`") 
+    BulletNumber = property(GetBulletNumber,SetBulletNumber,doc="See `GetBulletNumber` and `SetBulletNumber`") 
+    BulletStyle = property(GetBulletStyle,SetBulletStyle,doc="See `GetBulletStyle` and `SetBulletStyle`") 
+    BulletSymbol = property(GetBulletSymbol,SetBulletSymbol,doc="See `GetBulletSymbol` and `SetBulletSymbol`") 
+    CharacterStyleName = property(GetCharacterStyleName,SetCharacterStyleName,doc="See `GetCharacterStyleName` and `SetCharacterStyleName`") 
+    Flags = property(GetFlags,SetFlags,doc="See `GetFlags` and `SetFlags`") 
+    Font = property(GetFont,SetFont,doc="See `GetFont` and `SetFont`") 
+    FontAttributes = property(GetFontAttributes,doc="See `GetFontAttributes`") 
+    FontFaceName = property(GetFontFaceName,SetFontFaceName,doc="See `GetFontFaceName` and `SetFontFaceName`") 
+    FontSize = property(GetFontSize,SetFontSize,doc="See `GetFontSize` and `SetFontSize`") 
+    FontStyle = property(GetFontStyle,SetFontStyle,doc="See `GetFontStyle` and `SetFontStyle`") 
+    FontUnderlined = property(GetFontUnderlined,SetFontUnderlined,doc="See `GetFontUnderlined` and `SetFontUnderlined`") 
+    FontWeight = property(GetFontWeight,SetFontWeight,doc="See `GetFontWeight` and `SetFontWeight`") 
+    LeftIndent = property(GetLeftIndent,SetLeftIndent,doc="See `GetLeftIndent` and `SetLeftIndent`") 
+    LeftSubIndent = property(GetLeftSubIndent,doc="See `GetLeftSubIndent`") 
+    LineSpacing = property(GetLineSpacing,SetLineSpacing,doc="See `GetLineSpacing` and `SetLineSpacing`") 
+    ParagraphSpacingAfter = property(GetParagraphSpacingAfter,SetParagraphSpacingAfter,doc="See `GetParagraphSpacingAfter` and `SetParagraphSpacingAfter`") 
+    ParagraphSpacingBefore = property(GetParagraphSpacingBefore,SetParagraphSpacingBefore,doc="See `GetParagraphSpacingBefore` and `SetParagraphSpacingBefore`") 
+    ParagraphStyleName = property(GetParagraphStyleName,SetParagraphStyleName,doc="See `GetParagraphStyleName` and `SetParagraphStyleName`") 
+    RightIndent = property(GetRightIndent,SetRightIndent,doc="See `GetRightIndent` and `SetRightIndent`") 
+    Tabs = property(GetTabs,SetTabs,doc="See `GetTabs` and `SetTabs`") 
+    TextColour = property(GetTextColour,SetTextColour,doc="See `GetTextColour` and `SetTextColour`") 
 _richtext.RichTextAttr_swigregister(RichTextAttr)
 cvar = _richtext.cvar
 RICHTEXT_ALL = cvar.RICHTEXT_ALL
@@ -1291,6 +1317,19 @@ class RichTextCtrl(_windows.ScrolledWindow):
         """GetStyleSheet(self) -> wxRichTextStyleSheet"""
         return _richtext.RichTextCtrl_GetStyleSheet(*args, **kwargs)
 
+    Buffer = property(GetBuffer,doc="See `GetBuffer`") 
+    DefaultStyle = property(GetDefaultStyle,SetDefaultStyle,doc="See `GetDefaultStyle` and `SetDefaultStyle`") 
+    DelayedLayoutThreshold = property(GetDelayedLayoutThreshold,SetDelayedLayoutThreshold,doc="See `GetDelayedLayoutThreshold` and `SetDelayedLayoutThreshold`") 
+    Filename = property(GetFilename,SetFilename,doc="See `GetFilename` and `SetFilename`") 
+    InsertionPoint = property(GetInsertionPoint,SetInsertionPoint,doc="See `GetInsertionPoint` and `SetInsertionPoint`") 
+    InternalSelectionRange = property(GetInternalSelectionRange,SetInternalSelectionRange,doc="See `GetInternalSelectionRange` and `SetInternalSelectionRange`") 
+    LastPosition = property(GetLastPosition,doc="See `GetLastPosition`") 
+    NumberOfLines = property(GetNumberOfLines,doc="See `GetNumberOfLines`") 
+    Selection = property(GetSelection,SetSelection,doc="See `GetSelection` and `SetSelection`") 
+    SelectionRange = property(GetSelectionRange,SetSelectionRange,doc="See `GetSelectionRange` and `SetSelectionRange`") 
+    StringSelection = property(GetStringSelection,doc="See `GetStringSelection`") 
+    StyleSheet = property(GetStyleSheet,SetStyleSheet,doc="See `GetStyleSheet` and `SetStyleSheet`") 
+    Value = property(GetValue,SetValue,doc="See `GetValue` and `SetValue`") 
 _richtext.RichTextCtrl_swigregister(RichTextCtrl)
 
 def PreRichTextCtrl(*args, **kwargs):
@@ -1336,6 +1375,8 @@ class RichTextEvent(_core.NotifyEvent):
         """SetFlags(self, int flags)"""
         return _richtext.RichTextEvent_SetFlags(*args, **kwargs)
 
+    Flags = property(GetFlags,SetFlags,doc="See `GetFlags` and `SetFlags`") 
+    Index = property(GetIndex,SetIndex,doc="See `GetIndex` and `SetIndex`") 
 _richtext.RichTextEvent_swigregister(RichTextEvent)
 
 

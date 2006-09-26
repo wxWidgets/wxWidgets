@@ -240,6 +240,11 @@ public:
     wxFileOffset GetDownloadProgress(); // DirectShow only
     wxFileOffset GetDownloadTotal();    // DirectShow only
     
+    %property(DownloadProgress, GetDownloadProgress, doc="See `GetDownloadProgress`");
+    %property(DownloadTotal, GetDownloadTotal, doc="See `GetDownloadTotal`");
+    %property(PlaybackRate, GetPlaybackRate, SetPlaybackRate, doc="See `GetPlaybackRate` and `SetPlaybackRate`");
+    %property(State, GetState, doc="See `GetState`");
+    %property(Volume, GetVolume, SetVolume, doc="See `GetVolume` and `SetVolume`");
 };
 
 

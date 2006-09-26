@@ -175,6 +175,13 @@ class EditableListBox(_windows.Panel):
         """GetEditButton(self) -> BitmapButton"""
         return _gizmos.EditableListBox_GetEditButton(*args, **kwargs)
 
+    DelButton = property(GetDelButton,doc="See `GetDelButton`") 
+    DownButton = property(GetDownButton,doc="See `GetDownButton`") 
+    EditButton = property(GetEditButton,doc="See `GetEditButton`") 
+    ListCtrl = property(GetListCtrl,doc="See `GetListCtrl`") 
+    NewButton = property(GetNewButton,doc="See `GetNewButton`") 
+    Strings = property(GetStrings,SetStrings,doc="See `GetStrings` and `SetStrings`") 
+    UpButton = property(GetUpButton,doc="See `GetUpButton`") 
 _gizmos.EditableListBox_swigregister(EditableListBox)
 
 class RemotelyScrolledTreeCtrl(_controls.TreeCtrl):
@@ -213,6 +220,8 @@ class RemotelyScrolledTreeCtrl(_controls.TreeCtrl):
         """GetCompanionWindow(self) -> Window"""
         return _gizmos.RemotelyScrolledTreeCtrl_GetCompanionWindow(*args, **kwargs)
 
+    CompanionWindow = property(GetCompanionWindow,SetCompanionWindow,doc="See `GetCompanionWindow` and `SetCompanionWindow`") 
+    ScrolledWindow = property(GetScrolledWindow,doc="See `GetScrolledWindow`") 
 _gizmos.RemotelyScrolledTreeCtrl_swigregister(RemotelyScrolledTreeCtrl)
 
 class TreeCompanionWindow(_core.Window):
@@ -239,6 +248,7 @@ class TreeCompanionWindow(_core.Window):
         """SetTreeCtrl(self, RemotelyScrolledTreeCtrl treeCtrl)"""
         return _gizmos.TreeCompanionWindow_SetTreeCtrl(*args, **kwargs)
 
+    TreeCtrl = property(GetTreeCtrl,SetTreeCtrl,doc="See `GetTreeCtrl` and `SetTreeCtrl`") 
 _gizmos.TreeCompanionWindow_swigregister(TreeCompanionWindow)
 
 class ThinSplitterWindow(_windows.SplitterWindow):
@@ -323,6 +333,9 @@ class LEDNumberCtrl(_core.Control):
         """SetValue(self, String Value, bool Redraw=True)"""
         return _gizmos.LEDNumberCtrl_SetValue(*args, **kwargs)
 
+    Alignment = property(GetAlignment,SetAlignment,doc="See `GetAlignment` and `SetAlignment`") 
+    DrawFaded = property(GetDrawFaded,SetDrawFaded,doc="See `GetDrawFaded` and `SetDrawFaded`") 
+    Value = property(GetValue,SetValue,doc="See `GetValue` and `SetValue`") 
 _gizmos.LEDNumberCtrl_swigregister(LEDNumberCtrl)
 
 def PreLEDNumberCtrl(*args, **kwargs):
@@ -430,6 +443,13 @@ class TreeListColumnInfo(_core.Object):
         """SetShown(self, bool shown)"""
         return _gizmos.TreeListColumnInfo_SetShown(*args, **kwargs)
 
+    Alignment = property(GetAlignment,SetAlignment,doc="See `GetAlignment` and `SetAlignment`") 
+    Image = property(GetImage,SetImage,doc="See `GetImage` and `SetImage`") 
+    SelectedImage = property(GetSelectedImage,SetSelectedImage,doc="See `GetSelectedImage` and `SetSelectedImage`") 
+    Text = property(GetText,SetText,doc="See `GetText` and `SetText`") 
+    Width = property(GetWidth,SetWidth,doc="See `GetWidth` and `SetWidth`") 
+    Editable = property(IsEditable,SetEditable) 
+    Shown = property(IsShown,SetShown) 
 _gizmos.TreeListColumnInfo_swigregister(TreeListColumnInfo)
 TreeListCtrlNameStr = cvar.TreeListCtrlNameStr
 
@@ -906,6 +926,20 @@ class TreeListCtrl(_core.Control):
         """GetMainWindow(self) -> ScrolledWindow"""
         return _gizmos.TreeListCtrl_GetMainWindow(*args, **kwargs)
 
+    ButtonsImageList = property(GetButtonsImageList,SetButtonsImageList,doc="See `GetButtonsImageList` and `SetButtonsImageList`") 
+    ColumnCount = property(GetColumnCount,doc="See `GetColumnCount`") 
+    Count = property(GetCount,doc="See `GetCount`") 
+    HeaderWindow = property(GetHeaderWindow,doc="See `GetHeaderWindow`") 
+    ImageList = property(GetImageList,SetImageList,doc="See `GetImageList` and `SetImageList`") 
+    Indent = property(GetIndent,SetIndent,doc="See `GetIndent` and `SetIndent`") 
+    LineSpacing = property(GetLineSpacing,SetLineSpacing,doc="See `GetLineSpacing` and `SetLineSpacing`") 
+    MainColumn = property(GetMainColumn,SetMainColumn,doc="See `GetMainColumn` and `SetMainColumn`") 
+    MainWindow = property(GetMainWindow,doc="See `GetMainWindow`") 
+    Next = property(GetNext,doc="See `GetNext`") 
+    RootItem = property(GetRootItem,doc="See `GetRootItem`") 
+    Selection = property(GetSelection,doc="See `GetSelection`") 
+    Selections = property(GetSelections,doc="See `GetSelections`") 
+    StateImageList = property(GetStateImageList,SetStateImageList,doc="See `GetStateImageList` and `SetStateImageList`") 
 _gizmos.TreeListCtrl_swigregister(TreeListCtrl)
 
 def PreTreeListCtrl(*args, **kwargs):
@@ -982,6 +1016,10 @@ class StaticPicture(_core.Control):
         """GetCustomScale(self, float OUTPUT, float OUTPUT)"""
         return _gizmos.StaticPicture_GetCustomScale(*args, **kwargs)
 
+    Alignment = property(GetAlignment,SetAlignment,doc="See `GetAlignment` and `SetAlignment`") 
+    Bitmap = property(GetBitmap,SetBitmap,doc="See `GetBitmap` and `SetBitmap`") 
+    Icon = property(GetIcon,SetIcon,doc="See `GetIcon` and `SetIcon`") 
+    Scale = property(GetScale,SetScale,doc="See `GetScale` and `SetScale`") 
 _gizmos.StaticPicture_swigregister(StaticPicture)
 
 def PreStaticPicture(*args, **kwargs):

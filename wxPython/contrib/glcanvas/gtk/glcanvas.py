@@ -120,6 +120,7 @@ class GLCanvas(_core.Window):
         """GetContext(self) -> GLContext"""
         return _glcanvas.GLCanvas_GetContext(*args, **kwargs)
 
+    Context = property(GetContext,doc="See `GetContext`") 
 _glcanvas.GLCanvas_swigregister(GLCanvas)
 
 def GLCanvasWithContext(*args, **kwargs):

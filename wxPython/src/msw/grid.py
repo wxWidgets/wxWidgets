@@ -184,6 +184,8 @@ class GridCellFloatRenderer(GridCellStringRenderer):
         """SetPrecision(self, int precision)"""
         return _grid.GridCellFloatRenderer_SetPrecision(*args, **kwargs)
 
+    Precision = property(GetPrecision,SetPrecision,doc="See `GetPrecision` and `SetPrecision`") 
+    Width = property(GetWidth,SetWidth,doc="See `GetWidth` and `SetWidth`") 
 _grid.GridCellFloatRenderer_swigregister(GridCellFloatRenderer)
 
 class GridCellBoolRenderer(GridCellRenderer):
@@ -309,6 +311,8 @@ class GridCellEditor(GridCellWorker):
         args[0].thisown = 0
         return val
 
+    CellAttr = property(GetCellAttr,SetCellAttr,doc="See `GetCellAttr` and `SetCellAttr`") 
+    Control = property(GetControl,SetControl,doc="See `GetControl` and `SetControl`") 
 _grid.GridCellEditor_swigregister(GridCellEditor)
 
 class PyGridCellEditor(GridCellEditor):
@@ -388,6 +392,7 @@ class GridCellTextEditor(GridCellEditor):
         """GetValue(self) -> String"""
         return _grid.GridCellTextEditor_GetValue(*args, **kwargs)
 
+    Value = property(GetValue,doc="See `GetValue`") 
 _grid.GridCellTextEditor_swigregister(GridCellTextEditor)
 
 class GridCellNumberEditor(GridCellTextEditor):
@@ -421,10 +426,6 @@ class GridCellBoolEditor(GridCellEditor):
         _grid.GridCellBoolEditor_swiginit(self,_grid.new_GridCellBoolEditor(*args, **kwargs))
         self._setOORInfo(self)
 
-    def GetValue(*args, **kwargs):
-        """GetValue(self) -> String"""
-        return _grid.GridCellBoolEditor_GetValue(*args, **kwargs)
-
 _grid.GridCellBoolEditor_swigregister(GridCellBoolEditor)
 
 class GridCellChoiceEditor(GridCellEditor):
@@ -435,10 +436,6 @@ class GridCellChoiceEditor(GridCellEditor):
         """__init__(self, int choices=0, bool allowOthers=False) -> GridCellChoiceEditor"""
         _grid.GridCellChoiceEditor_swiginit(self,_grid.new_GridCellChoiceEditor(*args, **kwargs))
         self._setOORInfo(self)
-
-    def GetValue(*args, **kwargs):
-        """GetValue(self) -> String"""
-        return _grid.GridCellChoiceEditor_GetValue(*args, **kwargs)
 
 _grid.GridCellChoiceEditor_swigregister(GridCellChoiceEditor)
 
@@ -617,6 +614,13 @@ class GridCellAttr(object):
         """SetDefAttr(self, GridCellAttr defAttr)"""
         return _grid.GridCellAttr_SetDefAttr(*args, **kwargs)
 
+    Alignment = property(GetAlignment,SetAlignment,doc="See `GetAlignment` and `SetAlignment`") 
+    BackgroundColour = property(GetBackgroundColour,SetBackgroundColour,doc="See `GetBackgroundColour` and `SetBackgroundColour`") 
+    Font = property(GetFont,SetFont,doc="See `GetFont` and `SetFont`") 
+    Kind = property(GetKind,SetKind,doc="See `GetKind` and `SetKind`") 
+    Overflow = property(GetOverflow,SetOverflow,doc="See `GetOverflow` and `SetOverflow`") 
+    Size = property(GetSize,SetSize,doc="See `GetSize` and `SetSize`") 
+    TextColour = property(GetTextColour,SetTextColour,doc="See `GetTextColour` and `SetTextColour`") 
 _grid.GridCellAttr_swigregister(GridCellAttr)
 
 class GridCellAttrProvider(object):
@@ -856,6 +860,10 @@ class GridTableBase(_core.Object):
         """SetColAttr(self, GridCellAttr attr, int col)"""
         return _grid.GridTableBase_SetColAttr(*args, **kwargs)
 
+    AttrProvider = property(GetAttrProvider,SetAttrProvider,doc="See `GetAttrProvider` and `SetAttrProvider`") 
+    NumberCols = property(GetNumberCols,doc="See `GetNumberCols`") 
+    NumberRows = property(GetNumberRows,doc="See `GetNumberRows`") 
+    View = property(GetView,SetView,doc="See `GetView` and `SetView`") 
 _grid.GridTableBase_swigregister(GridTableBase)
 
 class PyGridTableBase(GridTableBase):
@@ -1038,6 +1046,10 @@ class GridTableMessage(object):
         """GetCommandInt2(self) -> int"""
         return _grid.GridTableMessage_GetCommandInt2(*args, **kwargs)
 
+    CommandInt = property(GetCommandInt,SetCommandInt,doc="See `GetCommandInt` and `SetCommandInt`") 
+    CommandInt2 = property(GetCommandInt2,SetCommandInt2,doc="See `GetCommandInt2` and `SetCommandInt2`") 
+    Id = property(GetId,SetId,doc="See `GetId` and `SetId`") 
+    TableObject = property(GetTableObject,SetTableObject,doc="See `GetTableObject` and `SetTableObject`") 
 _grid.GridTableMessage_swigregister(GridTableMessage)
 
 class GridCellCoords(object):
@@ -1099,6 +1111,8 @@ class GridCellCoords(object):
         elif index == 1: self.SetCol(val)
         else: raise IndexError
 
+    Col = property(GetCol,SetCol,doc="See `GetCol` and `SetCol`") 
+    Row = property(GetRow,SetRow,doc="See `GetRow` and `SetRow`") 
 _grid.GridCellCoords_swigregister(GridCellCoords)
 
 class Grid(_windows.ScrolledWindow):
@@ -1625,7 +1639,7 @@ class Grid(_windows.ScrolledWindow):
         return _grid.Grid_GetDefaultCellAlignment(*args, **kwargs)
 
     def GetCellAlignment(*args, **kwargs):
-        """GetCellAlignment() -> (horiz, vert)"""
+        """GetCellAlignment(int row, int col) -> (horiz, vert)"""
         return _grid.Grid_GetCellAlignment(*args, **kwargs)
 
     def GetDefaultCellOverflow(*args, **kwargs):
@@ -1977,6 +1991,53 @@ class Grid(_windows.ScrolledWindow):
         return _grid.Grid_GetClassDefaultAttributes(*args, **kwargs)
 
     GetClassDefaultAttributes = staticmethod(GetClassDefaultAttributes)
+    BatchCount = property(GetBatchCount,doc="See `GetBatchCount`") 
+    CellHighlightColour = property(GetCellHighlightColour,SetCellHighlightColour,doc="See `GetCellHighlightColour` and `SetCellHighlightColour`") 
+    CellHighlightPenWidth = property(GetCellHighlightPenWidth,SetCellHighlightPenWidth,doc="See `GetCellHighlightPenWidth` and `SetCellHighlightPenWidth`") 
+    CellHighlightROPenWidth = property(GetCellHighlightROPenWidth,SetCellHighlightROPenWidth,doc="See `GetCellHighlightROPenWidth` and `SetCellHighlightROPenWidth`") 
+    CellSize = property(GetCellSize,SetCellSize,doc="See `GetCellSize` and `SetCellSize`") 
+    ColLabelAlignment = property(GetColLabelAlignment,SetColLabelAlignment,doc="See `GetColLabelAlignment` and `SetColLabelAlignment`") 
+    ColLabelSize = property(GetColLabelSize,SetColLabelSize,doc="See `GetColLabelSize` and `SetColLabelSize`") 
+    ColLabelTextOrientation = property(GetColLabelTextOrientation,SetColLabelTextOrientation,doc="See `GetColLabelTextOrientation` and `SetColLabelTextOrientation`") 
+    ColMinimalAcceptableWidth = property(GetColMinimalAcceptableWidth,SetColMinimalAcceptableWidth,doc="See `GetColMinimalAcceptableWidth` and `SetColMinimalAcceptableWidth`") 
+    DefaultCellAlignment = property(GetDefaultCellAlignment,SetDefaultCellAlignment,doc="See `GetDefaultCellAlignment` and `SetDefaultCellAlignment`") 
+    DefaultCellBackgroundColour = property(GetDefaultCellBackgroundColour,SetDefaultCellBackgroundColour,doc="See `GetDefaultCellBackgroundColour` and `SetDefaultCellBackgroundColour`") 
+    DefaultCellFont = property(GetDefaultCellFont,SetDefaultCellFont,doc="See `GetDefaultCellFont` and `SetDefaultCellFont`") 
+    DefaultCellOverflow = property(GetDefaultCellOverflow,SetDefaultCellOverflow,doc="See `GetDefaultCellOverflow` and `SetDefaultCellOverflow`") 
+    DefaultCellTextColour = property(GetDefaultCellTextColour,SetDefaultCellTextColour,doc="See `GetDefaultCellTextColour` and `SetDefaultCellTextColour`") 
+    DefaultColLabelSize = property(GetDefaultColLabelSize,doc="See `GetDefaultColLabelSize`") 
+    DefaultColSize = property(GetDefaultColSize,SetDefaultColSize,doc="See `GetDefaultColSize` and `SetDefaultColSize`") 
+    DefaultEditor = property(GetDefaultEditor,SetDefaultEditor,doc="See `GetDefaultEditor` and `SetDefaultEditor`") 
+    DefaultGridLinePen = property(GetDefaultGridLinePen,doc="See `GetDefaultGridLinePen`") 
+    DefaultRenderer = property(GetDefaultRenderer,SetDefaultRenderer,doc="See `GetDefaultRenderer` and `SetDefaultRenderer`") 
+    DefaultRowLabelSize = property(GetDefaultRowLabelSize,doc="See `GetDefaultRowLabelSize`") 
+    DefaultRowSize = property(GetDefaultRowSize,SetDefaultRowSize,doc="See `GetDefaultRowSize` and `SetDefaultRowSize`") 
+    GridColLabelWindow = property(GetGridColLabelWindow,doc="See `GetGridColLabelWindow`") 
+    GridCornerLabelWindow = property(GetGridCornerLabelWindow,doc="See `GetGridCornerLabelWindow`") 
+    GridCursorCol = property(GetGridCursorCol,doc="See `GetGridCursorCol`") 
+    GridCursorRow = property(GetGridCursorRow,doc="See `GetGridCursorRow`") 
+    GridLineColour = property(GetGridLineColour,SetGridLineColour,doc="See `GetGridLineColour` and `SetGridLineColour`") 
+    GridRowLabelWindow = property(GetGridRowLabelWindow,doc="See `GetGridRowLabelWindow`") 
+    GridWindow = property(GetGridWindow,doc="See `GetGridWindow`") 
+    LabelBackgroundColour = property(GetLabelBackgroundColour,SetLabelBackgroundColour,doc="See `GetLabelBackgroundColour` and `SetLabelBackgroundColour`") 
+    LabelFont = property(GetLabelFont,SetLabelFont,doc="See `GetLabelFont` and `SetLabelFont`") 
+    LabelTextColour = property(GetLabelTextColour,SetLabelTextColour,doc="See `GetLabelTextColour` and `SetLabelTextColour`") 
+    NumberCols = property(GetNumberCols,doc="See `GetNumberCols`") 
+    NumberRows = property(GetNumberRows,doc="See `GetNumberRows`") 
+    RowLabelAlignment = property(GetRowLabelAlignment,SetRowLabelAlignment,doc="See `GetRowLabelAlignment` and `SetRowLabelAlignment`") 
+    RowLabelSize = property(GetRowLabelSize,SetRowLabelSize,doc="See `GetRowLabelSize` and `SetRowLabelSize`") 
+    RowMinimalAcceptableHeight = property(GetRowMinimalAcceptableHeight,SetRowMinimalAcceptableHeight,doc="See `GetRowMinimalAcceptableHeight` and `SetRowMinimalAcceptableHeight`") 
+    ScrollLineX = property(GetScrollLineX,SetScrollLineX,doc="See `GetScrollLineX` and `SetScrollLineX`") 
+    ScrollLineY = property(GetScrollLineY,SetScrollLineY,doc="See `GetScrollLineY` and `SetScrollLineY`") 
+    SelectedCells = property(GetSelectedCells,doc="See `GetSelectedCells`") 
+    SelectedCols = property(GetSelectedCols,doc="See `GetSelectedCols`") 
+    SelectedRows = property(GetSelectedRows,doc="See `GetSelectedRows`") 
+    SelectionBackground = property(GetSelectionBackground,SetSelectionBackground,doc="See `GetSelectionBackground` and `SetSelectionBackground`") 
+    SelectionBlockBottomRight = property(GetSelectionBlockBottomRight,doc="See `GetSelectionBlockBottomRight`") 
+    SelectionBlockTopLeft = property(GetSelectionBlockTopLeft,doc="See `GetSelectionBlockTopLeft`") 
+    SelectionForeground = property(GetSelectionForeground,SetSelectionForeground,doc="See `GetSelectionForeground` and `SetSelectionForeground`") 
+    SelectionMode = property(GetSelectionMode,SetSelectionMode,doc="See `GetSelectionMode` and `SetSelectionMode`") 
+    Table = property(GetTable,SetTable,doc="See `GetTable` and `SetTable`") 
 _grid.Grid_swigregister(Grid)
 
 def PreGrid(*args, **kwargs):
@@ -2049,6 +2110,9 @@ class GridEvent(_core.NotifyEvent):
         """CmdDown(self) -> bool"""
         return _grid.GridEvent_CmdDown(*args, **kwargs)
 
+    Col = property(GetCol,doc="See `GetCol`") 
+    Position = property(GetPosition,doc="See `GetPosition`") 
+    Row = property(GetRow,doc="See `GetRow`") 
 _grid.GridEvent_swigregister(GridEvent)
 
 class GridSizeEvent(_core.NotifyEvent):
@@ -2090,6 +2154,8 @@ class GridSizeEvent(_core.NotifyEvent):
         """CmdDown(self) -> bool"""
         return _grid.GridSizeEvent_CmdDown(*args, **kwargs)
 
+    Position = property(GetPosition,doc="See `GetPosition`") 
+    RowOrCol = property(GetRowOrCol,doc="See `GetRowOrCol`") 
 _grid.GridSizeEvent_swigregister(GridSizeEvent)
 
 class GridRangeSelectEvent(_core.NotifyEvent):
@@ -2152,6 +2218,12 @@ class GridRangeSelectEvent(_core.NotifyEvent):
         """CmdDown(self) -> bool"""
         return _grid.GridRangeSelectEvent_CmdDown(*args, **kwargs)
 
+    BottomRightCoords = property(GetBottomRightCoords,doc="See `GetBottomRightCoords`") 
+    BottomRow = property(GetBottomRow,doc="See `GetBottomRow`") 
+    LeftCol = property(GetLeftCol,doc="See `GetLeftCol`") 
+    RightCol = property(GetRightCol,doc="See `GetRightCol`") 
+    TopLeftCoords = property(GetTopLeftCoords,doc="See `GetTopLeftCoords`") 
+    TopRow = property(GetTopRow,doc="See `GetTopRow`") 
 _grid.GridRangeSelectEvent_swigregister(GridRangeSelectEvent)
 
 class GridEditorCreatedEvent(_core.CommandEvent):
@@ -2188,6 +2260,9 @@ class GridEditorCreatedEvent(_core.CommandEvent):
         """SetControl(self, Control ctrl)"""
         return _grid.GridEditorCreatedEvent_SetControl(*args, **kwargs)
 
+    Col = property(GetCol,SetCol,doc="See `GetCol` and `SetCol`") 
+    Control = property(GetControl,SetControl,doc="See `GetControl` and `SetControl`") 
+    Row = property(GetRow,SetRow,doc="See `GetRow` and `SetRow`") 
 _grid.GridEditorCreatedEvent_swigregister(GridEditorCreatedEvent)
 
 wxEVT_GRID_CELL_LEFT_CLICK = _grid.wxEVT_GRID_CELL_LEFT_CLICK
