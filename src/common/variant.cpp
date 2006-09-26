@@ -1894,7 +1894,7 @@ void* wxVariant::GetVoidPtr() const
     return (void*) ((wxVariantDataVoidPtr*) m_data)->GetValue();
 }
 
-wxObject* wxVariant::GetWxObjectPtr()
+wxObject* wxVariant::GetWxObjectPtr() const
 {
     wxASSERT(wxIsKindOf(m_data, wxVariantDataWxObjectPtr));
     return (wxObject*) ((wxVariantDataWxObjectPtr*) m_data)->GetValue();

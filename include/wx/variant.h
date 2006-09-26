@@ -224,8 +224,8 @@ public:
 #if WXWIN_COMPATIBILITY_2_4
     wxDEPRECATED( wxStringList& GetStringList() const );
 #endif
-    void* GetVoidPtr() const ;
-    wxObject* GetWxObjectPtr()  ;
+    void* GetVoidPtr() const;
+    wxObject* GetWxObjectPtr() const;
 #if wxUSE_DATETIME
     wxDateTime GetDateTime() const ;
 #endif // wxUSE_DATETIME
