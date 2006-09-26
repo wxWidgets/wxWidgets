@@ -68,9 +68,9 @@ cd %DAILY%\
 mkdir docs
 mkdir docs\pdf
 del docs\pdf\*.pdf
-move *.pdf docs\pdf
-zip %DAILY%\wx-docs-pdf.ZIP %DAILY%\docs\pdf\wx.pdf
-zip %DAILY%\docs\pdf\wx-docs-extra-pdf.ZIP *.pdf -x wx.pdf
+move in\*.pdf docs\pdf
+zip wx-docs-pdf.ZIP docs\pdf\wx.pdf
+zip wx-docs-extra-pdf.ZIP docs\pdf\*.pdf -x docs\pdf\wx.pdf
 
 
 echo setting S
