@@ -26,6 +26,8 @@
     #include "../sample.xpm"
 #endif
 
+#include "null.xpm"
+
 #include "wx/dataview.h"
 
 // -------------------------------------
@@ -191,6 +193,8 @@ public:
         m_list.Add( wxT("list") );
         m_list.Add( wxT("of") );
         m_list.Add( wxT("words.") );
+        
+        m_bitmap = wxBitmap( null_xpm );
     }
 
     virtual size_t GetNumberOfRows() { return m_list.GetCount(); }
@@ -201,6 +205,11 @@ public:
         if (col == 0)
         {
             variant = m_list[row];
+            return;
+        }
+        if (col == 2)
+        {
+            variant = &m_bitmap;
             return;
         }
         wxString tmp;
@@ -243,6 +252,7 @@ public:
     }
 
     wxArrayString m_list;
+    wxBitmap m_bitmap;
 };
 
 // -------------------------------------
@@ -474,6 +484,7 @@ MySortingFrame::MySortingFrame(wxFrame *frame, wxChar *title, int x, int y, int 
     wxDataViewColumn *column = new wxDataViewColumn( wxT("editable"), text_cell, 0 );
     dataview_left->AppendColumn( column );
     dataview_left->AppendTextColumn( wxT("second"), 1 );
+    dataview_left->AppendColumn( new wxDataViewColumn( wxT("icon"), new wxDataViewBitmapCell, 2 ) );
 
     // Right wxDataViewCtrl using the sorting model
     dataview_right = new wxDataViewCtrl( this, wxID_ANY );
@@ -498,7 +509,7 @@ MySortingFrame::MySortingFrame(wxFrame *frame, wxChar *title, int x, int y, int 
     left_sizer->Add( new wxButton( this, ID_APPEND_ROW_LEFT, wxT("Append") ), 0, wxALL, 5 );
     left_sizer->Add( new wxButton( this, ID_PREPEND_ROW_LEFT, wxT("Prepend") ), 0, wxALL, 5 );
     left_sizer->Add( new wxButton( this, ID_INSERT_ROW_LEFT, wxT("Insert") ), 0, wxALL, 5 );
-    left_sizer->Add( new wxButton( this, ID_DELETE_ROW_LEFT, wxT("Delete") ), 0, wxALL, 5 );
+    left_sizer->Add( new wxButton( this, ID_DELETE_ROW_LEFT, wxT("Delete second") ), 0, wxALL, 5 );
     left_sizer->Add( new wxButton( this, ID_EDIT_ROW_LEFT, wxT("Edit") ), 0, wxALL, 5 );
     button_sizer->Add( left_sizer );
     button_sizer->Add( 10, 10, 2 );
@@ -506,7 +517,7 @@ MySortingFrame::MySortingFrame(wxFrame *frame, wxChar *title, int x, int y, int 
     right_sizer->Add( new wxButton( this, ID_APPEND_ROW_RIGHT, wxT("Append") ), 0, wxALL, 5 );
     right_sizer->Add( new wxButton( this, ID_PREPEND_ROW_RIGHT, wxT("Prepend") ), 0, wxALL, 5 );
     right_sizer->Add( new wxButton( this, ID_INSERT_ROW_RIGHT, wxT("Insert") ), 0, wxALL, 5 );
-    right_sizer->Add( new wxButton( this, ID_DELETE_ROW_RIGHT, wxT("Delete") ), 0, wxALL, 5 );
+    right_sizer->Add( new wxButton( this, ID_DELETE_ROW_RIGHT, wxT("Delete second") ), 0, wxALL, 5 );
     right_sizer->Add( new wxButton( this, ID_EDIT_ROW_RIGHT, wxT("Edit") ), 0, wxALL, 5 );
     button_sizer->Add( right_sizer );
     button_sizer->Add( 10, 10, 1 );
@@ -555,7 +566,7 @@ void MySortingFrame::OnPrependRowLeft(wxCommandEvent& WXUNUSED(event))
 
 void MySortingFrame::OnInsertRowLeft(wxCommandEvent& WXUNUSED(event))
 {
-    wxTextEntryDialog dialog( this, wxT("Enter text to insert at #2") );
+    wxTextEntryDialog dialog( this, wxT("Enter text to insert before second") );
     if (dialog.ShowModal() == wxID_OK)
     {
         wxString value = dialog.GetValue();

@@ -59,6 +59,23 @@ protected:
 };
     
 // --------------------------------------------------------- 
+// wxDataViewBitmapCell
+// --------------------------------------------------------- 
+
+class wxDataViewBitmapCell: public wxDataViewCell
+{
+public:
+    wxDataViewBitmapCell( const wxString &varianttype = wxT("wxBitmap"), 
+                        wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT );
+
+    bool SetValue( const wxVariant &value );
+    bool GetValue( wxVariant &value );
+    
+protected:
+    DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewBitmapCell)
+};
+    
+// --------------------------------------------------------- 
 // wxDataViewToggleCell
 // --------------------------------------------------------- 
 

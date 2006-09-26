@@ -919,7 +919,7 @@ static void wxGtkTextRendererEditedCallback( GtkCellRendererText *renderer,
     model->ValueChanged( model_col, model_row );
 }
 
-IMPLEMENT_ABSTRACT_CLASS(wxDataViewTextCell, wxDataViewCell)
+IMPLEMENT_CLASS(wxDataViewTextCell, wxDataViewCell)
 
 wxDataViewTextCell::wxDataViewTextCell( const wxString &varianttype, wxDataViewCellMode mode ) :
     wxDataViewCell( varianttype, mode )
@@ -964,6 +964,48 @@ bool wxDataViewTextCell::GetValue( wxVariant &value )
     return true;
 }
 
+// --------------------------------------------------------- 
+// wxDataViewBitmapCell
+// --------------------------------------------------------- 
+
+IMPLEMENT_CLASS(wxDataViewBitmapCell, wxDataViewCell)
+
+wxDataViewBitmapCell::wxDataViewBitmapCell( const wxString &varianttype, wxDataViewCellMode mode ) :
+    wxDataViewCell( varianttype, mode )
+{
+    m_renderer = (void*) gtk_cell_renderer_pixbuf_new();
+}
+
+bool wxDataViewBitmapCell::SetValue( const wxVariant &value )
+{
+    if (value.GetType() == wxT("wxBitmap"))
+    {
+        // We could also use the type safe wxGetVariantCast here
+        const wxBitmap *bitmap = (const wxBitmap*) value.GetWxObjectPtr();
+        if (!bitmap) 
+            return false;
+        
+        // This may create a Pixbuf representation in the
+        // wxBitmap object (and it will stay there)
+        GdkPixbuf *pixbuf = bitmap->GetPixbuf();
+        
+        GValue gvalue = { 0, };
+        g_value_init( &gvalue, G_TYPE_OBJECT );
+        g_value_set_object( &gvalue, pixbuf );
+        g_object_set_property( G_OBJECT(m_renderer), "pixbuf", &gvalue );
+        g_value_unset( &gvalue );
+        
+        return true;
+    }
+    
+    return false;
+}
+
+bool wxDataViewBitmapCell::GetValue( wxVariant &value )
+{
+    return false;
+}
+    
 // ---------------------------------------------------------
 // wxDataViewToggleCell
 // ---------------------------------------------------------
@@ -1003,7 +1045,7 @@ static void wxGtkToggleRendererToggledCallback( GtkCellRendererToggle *renderer,
     model->ValueChanged( model_col, model_row );
 }
 
-IMPLEMENT_ABSTRACT_CLASS(wxDataViewToggleCell, wxDataViewCell)
+IMPLEMENT_CLASS(wxDataViewToggleCell, wxDataViewCell)
 
 wxDataViewToggleCell::wxDataViewToggleCell( const wxString &varianttype,
                         wxDataViewCellMode mode ) :
@@ -1088,7 +1130,7 @@ public:
 // wxDataViewCustomCell
 // ---------------------------------------------------------
 
-IMPLEMENT_ABSTRACT_CLASS(wxDataViewCustomCell, wxDataViewCell)
+IMPLEMENT_CLASS(wxDataViewCustomCell, wxDataViewCell)
 
 wxDataViewCustomCell::wxDataViewCustomCell( const wxString &varianttype,
                           wxDataViewCellMode mode, bool no_init ) :
@@ -1145,7 +1187,7 @@ wxDC *wxDataViewCustomCell::GetDC()
 // wxDataViewProgressCell
 // ---------------------------------------------------------
 
-IMPLEMENT_ABSTRACT_CLASS(wxDataViewProgressCell, wxDataViewCustomCell)
+IMPLEMENT_CLASS(wxDataViewProgressCell, wxDataViewCustomCell)
 
 wxDataViewProgressCell::wxDataViewProgressCell( const wxString &label,
     const wxString &varianttype, wxDataViewCellMode mode ) :
@@ -1271,7 +1313,7 @@ void wxDataViewDateCellPopupTransient::OnCalendar( wxCalendarEvent &event )
     DismissAndNotify();
 }
 
-IMPLEMENT_ABSTRACT_CLASS(wxDataViewDateCell, wxDataViewCustomCell)
+IMPLEMENT_CLASS(wxDataViewDateCell, wxDataViewCustomCell)
 
 wxDataViewDateCell::wxDataViewDateCell( const wxString &varianttype,
                         wxDataViewCellMode mode ) :
@@ -1350,12 +1392,14 @@ static void wxGtkTreeCellDataFunc( GtkTreeViewColumn *column,
     list_store->model->GetValue( value, cell->GetOwner()->GetModelColumn(), model_row );
 
     if (value.GetType() != cell->GetVariantType())
-        wxLogError( wxT("Wrong type\n") );
+        wxLogError( wxT("Wrong type, required: %s but: %s"), 
+                    value.GetType().c_str(), 
+                    cell->GetVariantType().c_str() );
 
     cell->SetValue( value );
 }
 
-IMPLEMENT_ABSTRACT_CLASS(wxDataViewColumn, wxDataViewColumnBase)
+IMPLEMENT_CLASS(wxDataViewColumn, wxDataViewColumnBase)
 
 wxDataViewColumn::wxDataViewColumn( const wxString &title, wxDataViewCell *cell, size_t model_column,
     int fixed_width, wxDataViewColumnSizing sizing, int flags ) :
