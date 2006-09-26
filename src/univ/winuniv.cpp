@@ -720,8 +720,6 @@ void wxWindow::DoGetClientSize(int *width, int *height) const
     if ( m_renderer )
         rectBorder = m_renderer->GetBorderDimensions(GetBorder());
 
-    bool inside = m_renderer->AreScrollbarsInsideBorder();
-
     if ( width )
     {
 #if wxUSE_SCROLLBAR
@@ -730,17 +728,8 @@ void wxWindow::DoGetClientSize(int *width, int *height) const
             w -= m_scrollbarVert->GetSize().x;
 #endif // wxUSE_SCROLLBAR
 
-        // if we don't have scrollbar or if it is outside the border (and not
-        // blended into it), take account of the right border as well
-        if (
-#if wxUSE_SCROLLBAR
-             !m_scrollbarVert ||
-#endif // wxUSE_SCROLLBAR
-             inside )
-            w -= rectBorder.width;
-
-        // and always account for the left border
-        *width = w - rectBorder.x;
+        // account for the left and right borders
+        *width = w - rectBorder.x - rectBorder.width;
 
         // we shouldn't return invalid width
         if ( *width < 0 )
@@ -754,14 +743,7 @@ void wxWindow::DoGetClientSize(int *width, int *height) const
             h -= m_scrollbarHorz->GetSize().y;
 #endif // wxUSE_SCROLLBAR
 
-        if (
-#if wxUSE_SCROLLBAR
-            !m_scrollbarHorz ||
-#endif // wxUSE_SCROLLBAR
-            inside )
-            h -= rectBorder.height;
-
-        *height = h - rectBorder.y;
+        *height = h - rectBorder.y - rectBorder.height;
 
         // we shouldn't return invalid height
         if ( *height < 0 )
@@ -779,29 +761,18 @@ void wxWindow::DoSetClientSize(int width, int height)
     // and the scrollbars (as they may be offset into the border, use the
     // scrollbar position, not size - this supposes that PositionScrollbars()
     // had been called before)
-    bool inside = m_renderer->AreScrollbarsInsideBorder();
     wxSize size = GetSize();
 #if wxUSE_SCROLLBAR
     if ( m_scrollbarVert )
         width += size.x - m_scrollbarVert->GetPosition().x;
 #endif // wxUSE_SCROLLBAR
-    if (
-#if wxUSE_SCROLLBAR
-        !m_scrollbarVert ||
-#endif // wxUSE_SCROLLBAR
-        inside )
-        width += rectBorder.width;
+    width += rectBorder.width;
 
 #if wxUSE_SCROLLBAR
     if ( m_scrollbarHorz )
         height += size.y - m_scrollbarHorz->GetPosition().y;
 #endif // wxUSE_SCROLLBAR
-    if (
-#if wxUSE_SCROLLBAR
-        !m_scrollbarHorz ||
-#endif // wxUSE_SCROLLBAR
-        inside )
-        height += rectBorder.height;
+    height += rectBorder.height;
 
     wxWindowNative::DoSetClientSize(width, height);
 }
