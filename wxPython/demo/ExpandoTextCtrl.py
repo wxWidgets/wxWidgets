@@ -5,8 +5,9 @@ from wx.lib.expando import ExpandoTextCtrl, EVT_ETC_LAYOUT_NEEDED
 #----------------------------------------------------------------------
 
 class TestFrame(wx.Frame):
-    def __init__(self, parent):
+    def __init__(self, parent, log):
         wx.Frame.__init__(self, parent, title="Test ExpandoTextCtrl")
+        self.log = log
         self.pnl = p = wx.Panel(self)
         self.eom = ExpandoTextCtrl(p, size=(250,-1),
                                    value="This control will expand as you type")
@@ -28,14 +29,28 @@ class TestFrame(wx.Frame):
         self.Bind(wx.EVT_BUTTON, self.OnWriteText, btn)
         vBtnSizer.Add(btn, 0, wx.ALL|wx.EXPAND, 5)
 
-        for x in range(5):
+        btn = wx.Button(p, -1, "Append Text")
+        self.Bind(wx.EVT_BUTTON, self.OnAppendText, btn)
+        vBtnSizer.Add(btn, 0, wx.ALL|wx.EXPAND, 5)
+
+        btn = wx.Button(p, -1, "Set Value")
+        self.Bind(wx.EVT_BUTTON, self.OnSetValue, btn)
+        vBtnSizer.Add(btn, 0, wx.ALL|wx.EXPAND, 5)
+
+        btn = wx.Button(p, -1, "Get Value")
+        self.Bind(wx.EVT_BUTTON, self.OnGetValue, btn)
+        vBtnSizer.Add(btn, 0, wx.ALL|wx.EXPAND, 5)
+
+        for x in range(3):
             btn = wx.Button(p, -1, " ")
             vBtnSizer.Add(btn, 0, wx.ALL|wx.EXPAND, 5)
+            self.Bind(wx.EVT_BUTTON, self.OnOtherBtn, btn)
 
         hBtnSizer = wx.BoxSizer(wx.HORIZONTAL)
         for x in range(3):
             btn = wx.Button(p, -1, " ")
             hBtnSizer.Add(btn, 0, wx.ALL, 5)
+            self.Bind(wx.EVT_BUTTON, self.OnOtherBtn, btn)
 
         sizer = wx.BoxSizer(wx.HORIZONTAL)
         col1 = wx.BoxSizer(wx.VERTICAL)
@@ -61,6 +76,7 @@ class TestFrame(wx.Frame):
         # just resize the frame to fit the new needs of the sizer.
         self.Fit()
 
+
     def OnSetMaxHeight(self, evt):
         mh = self.eom.GetMaxHeight()
         dlg = wx.NumberEntryDialog(self, "", "Enter new max height:",
@@ -83,7 +99,21 @@ class TestFrame(wx.Frame):
                            "been a real emergency you would have seen the "
                            "quick brown fox jump over the lazy dog.\n")
     
+    def OnAppendText(self, evt):
+        self.eom.AppendText("\nAppended text.")
 
+    def OnSetValue(self, evt):
+        self.eom.SetValue("A new value.")
+
+    def OnGetValue(self, evt):
+        self.log.write("-----------------\n" + self.eom.GetValue())
+
+    def OnOtherBtn(self, evt):
+        # just for testing...
+        #print self.eom.numLines,
+        self.eom._adjustCtrl()
+        #print self.eom.numLines
+        
 #----------------------------------------------------------------------
 
 class TestPanel(wx.Panel):
@@ -96,7 +126,7 @@ class TestPanel(wx.Panel):
 
 
     def OnButton(self, evt):
-        self.win = TestFrame(self)
+        self.win = TestFrame(self, self.log)
         self.win.Show(True)
 
   

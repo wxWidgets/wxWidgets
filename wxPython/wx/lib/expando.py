@@ -90,7 +90,21 @@ class ExpandoTextCtrl(wx.TextCtrl):
         wx.TextCtrl.SetFont(self, font)
         self.numLines = -1
         self._adjustCtrl()
-        
+
+    def WriteText(self, text):
+        # work around a bug of a lack of a EVT_TEXT when calling
+        # WriteText on wxMac
+        wx.TextCtrl.WriteText(self, text)
+        self._adjustCtrl()
+
+    def AppendText(self, text):
+        # Instead of using wx.TextCtrl.AppendText append and set the
+        # insertion point ourselves.  This works around a bug on wxMSW
+        # where it scrolls the old text out of view, and since there
+        # is no scrollbar there is no way to get back to it.
+        self.SetValue(self.GetValue() + text)
+        self.SetInsertionPointEnd()
+
 
     def OnTextChanged(self, evt):
         # check if any adjustments are needed on every text update
