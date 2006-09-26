@@ -469,13 +469,7 @@ wxImage wxImage::Scale( int width, int height, int quality ) const
         unsigned char *source_alpha = 0 ;
         unsigned char *target_alpha = 0 ;
 
-        if (M_IMGDATA->m_hasMask)
-        {
-            image.SetMaskColour( M_IMGDATA->m_maskRed,
-                                M_IMGDATA->m_maskGreen,
-                                M_IMGDATA->m_maskBlue );
-        }
-        else
+        if ( !M_IMGDATA->m_hasMask )
         {
             source_alpha = M_IMGDATA->m_alpha ;
             if ( source_alpha )
@@ -512,6 +506,14 @@ wxImage wxImage::Scale( int width, int height, int quality ) const
 
             y += y_delta;
         }
+    }
+
+    // If the original image has a mask, apply the mask to the new image
+	if (M_IMGDATA->m_hasMask)
+    {
+        image.SetMaskColour( M_IMGDATA->m_maskRed,
+                            M_IMGDATA->m_maskGreen,
+                            M_IMGDATA->m_maskBlue );
     }
 
     // In case this is a cursor, make sure the hotspot is scaled accordingly:
