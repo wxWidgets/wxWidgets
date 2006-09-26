@@ -193,7 +193,7 @@ protected:
 
 #define wxHAS_REGION_COMBINE
 
-class wxRegionWithCombine : public wxRegionBase
+class WXDLLEXPORT wxRegionWithCombine : public wxRegionBase
 {
 public:
     // these methods are not part of public API as they're not implemented on
