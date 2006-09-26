@@ -368,8 +368,6 @@ protected:
     }
 
 private:
-    const wxColourScheme *m_scheme;
-
     // data
     wxSize m_sizeScrollbarArrow;
 
