@@ -1743,7 +1743,8 @@ void wxRichTextCtrl::WriteText(const wxString& value)
 
 void wxRichTextCtrl::DoWriteText(const wxString& value, bool WXUNUSED(selectionOnly))
 {
-    GetBuffer().InsertTextWithUndo(m_caretPosition+1, value, this);
+    wxString valueDos = wxTextFile::Translate(value, wxTextFileType_Unix);
+    GetBuffer().InsertTextWithUndo(m_caretPosition+1, valueDos, this);
 }
 
 void wxRichTextCtrl::AppendText(const wxString& text)
