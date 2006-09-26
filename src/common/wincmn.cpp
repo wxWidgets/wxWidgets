@@ -292,6 +292,18 @@ wxWindowBase::~wxWindowBase()
 
     wxASSERT_MSG( GetChildren().GetCount() == 0, wxT("children not destroyed") );
 
+    // reset the top-level parent's default item if it is this widget
+    if ( m_parent )
+    {
+        wxTopLevelWindow *tlw = wxDynamicCast(wxGetTopLevelParent((wxWindow*)this),
+                                              wxTopLevelWindow);
+        
+        if ( tlw && tlw->GetDefaultItem() == this )
+            tlw->SetDefaultItem(NULL);
+        if ( tlw && tlw->GetTmpDefaultItem() == this )
+            tlw->SetTmpDefaultItem(NULL);
+    }
+
     // reset the dangling pointer our parent window may keep to us
     if ( m_parent )
     {
