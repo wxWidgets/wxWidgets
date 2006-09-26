@@ -523,16 +523,19 @@ public:
 
 class wxGridCellRenderer : public wxGridCellWorker
 {
+public:
     virtual void Draw(wxGrid& grid,
                       wxGridCellAttr& attr,
                       wxDC& dc,
                       const wxRect& rect,
                       int row, int col,
                       bool isSelected);
+    
     virtual wxSize GetBestSize(wxGrid& grid,
                                wxGridCellAttr& attr,
                                wxDC& dc,
                                int row, int col);
+    
     virtual wxGridCellRenderer *Clone() const;
 };
 
