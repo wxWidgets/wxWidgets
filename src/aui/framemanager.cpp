@@ -2341,7 +2341,7 @@ bool wxFrameManager::DoDrop(wxDockInfoArray& docks,
         int new_layer = wxMax( wxMax( GetMaxLayer(docks, wxAUI_DOCK_BOTTOM),
                                       GetMaxLayer(docks, wxAUI_DOCK_LEFT)),
                                       GetMaxLayer(docks, wxAUI_DOCK_RIGHT)) + 1;
-    
+
         drop.Dock().Bottom().
              Layer(new_layer).
              Row(0).
@@ -2356,7 +2356,7 @@ bool wxFrameManager::DoDrop(wxDockInfoArray& docks,
     {
         if (!part || !part->dock)
             return false;
-            
+
         // calculate the offset from where the dock begins
         // to the point where the user dropped the pane
         int dock_drop_offset = 0;
@@ -2384,12 +2384,12 @@ bool wxFrameManager::DoDrop(wxDockInfoArray& docks,
                 {
                     drop.Float();
                 }
-                
+
                 m_skipping = false;
-                
+
                 return ProcessDockResult(target, drop);
             }
-            
+
             drop.Position(pt.x - GetDockPixelOffset(drop) - offset.x);
 
             return ProcessDockResult(target, drop);
@@ -2398,7 +2398,7 @@ bool wxFrameManager::DoDrop(wxDockInfoArray& docks,
         {
             m_skipping = false;
         }
-        
+
         if (!m_skipping)
         {
             m_last_rect = part->dock->rect;
@@ -2949,6 +2949,8 @@ void wxFrameManager::OnFloatingPaneMoving(wxWindow* wnd, wxDirection dir)
         pos = wnd->ClientToScreen( pos );
         pt.y = pos.y;
     }
+#else
+    wxUnusedVar(dir);
 #endif
 
     wxPoint client_pt = m_frame->ScreenToClient(pt);
@@ -3050,6 +3052,8 @@ void wxFrameManager::OnFloatingPaneMoved(wxWindow* wnd, wxDirection dir)
         pos = wnd->ClientToScreen( pos );
         pt.y = pos.y;
     }
+#else
+    wxUnusedVar(dir);
 #endif
 
     wxPoint client_pt = m_frame->ScreenToClient(pt);
