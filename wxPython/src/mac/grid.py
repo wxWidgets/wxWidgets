@@ -111,6 +111,21 @@ class GridCellRenderer(GridCellWorker):
     thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
     def __init__(self): raise AttributeError, "No constructor defined"
     __repr__ = _swig_repr
+    def Draw(*args, **kwargs):
+        """
+        Draw(self, Grid grid, GridCellAttr attr, DC dc, Rect rect, int row, 
+            int col, bool isSelected)
+        """
+        return _grid.GridCellRenderer_Draw(*args, **kwargs)
+
+    def GetBestSize(*args, **kwargs):
+        """GetBestSize(self, Grid grid, GridCellAttr attr, DC dc, int row, int col) -> Size"""
+        return _grid.GridCellRenderer_GetBestSize(*args, **kwargs)
+
+    def Clone(*args, **kwargs):
+        """Clone(self) -> GridCellRenderer"""
+        return _grid.GridCellRenderer_Clone(*args, **kwargs)
+
 _grid.GridCellRenderer_swigregister(GridCellRenderer)
 
 class PyGridCellRenderer(GridCellRenderer):
