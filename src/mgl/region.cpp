@@ -127,7 +127,7 @@ void wxRegion::Clear()
 // Information on region
 //-----------------------------------------------------------------------------
 
-bool wxRegion::DoIsEqual(const wxRegion& region) const
+bool wxRegion::DoIsEqual(const wxRegion& WXUNUSED(region)) const
 {
     wxFAIL_MSG( _T("not implemented") );
 
