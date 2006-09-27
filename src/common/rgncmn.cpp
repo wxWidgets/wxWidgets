@@ -38,13 +38,13 @@
 
 bool wxRegionBase::IsEqual(const wxRegion& region) const
 {
-    if ( m_refData == region.m_refData )
+    if ( m_refData == region.GetRefData() )
     {
         // regions are identical, hence equal
         return true;
     }
 
-    if ( !m_refData || !region.m_refData )
+    if ( !m_refData || !region.GetRefData() )
     {
         // one, but not both, of the regions is invalid
         return false;
