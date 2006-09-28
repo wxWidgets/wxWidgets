@@ -1248,7 +1248,8 @@ void CorruptionTestCase::ExtractArchive(wxInputStream& in)
         while (arc->IsOk())
             arc->Read(buf, sizeof(buf));
 
-        entry = auto_ptr<wxArchiveEntry>(arc->GetNextEntry());
+        auto_ptr<wxArchiveEntry> next(arc->GetNextEntry());
+        entry = next;
     }
 }
 
