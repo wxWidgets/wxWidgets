@@ -34,7 +34,7 @@ extern WXDLLIMPEXP_CORE const wxChar wxGaugeNameStr[];
 // wxGaugeBox
 //-----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxGauge: public wxControl
+class WXDLLIMPEXP_CORE wxGauge: public wxGaugeBase
 {
 public:
     wxGauge() { Init(); }
