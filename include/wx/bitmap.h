@@ -24,9 +24,40 @@
 
 class WXDLLEXPORT wxBitmap;
 class WXDLLEXPORT wxBitmapHandler;
+class WXDLLEXPORT wxIcon;
 class WXDLLEXPORT wxImage;
 class WXDLLEXPORT wxMask;
 class WXDLLEXPORT wxPalette;
+
+// ----------------------------------------------------------------------------
+// wxMask represents the transparent area of the bitmap
+// ----------------------------------------------------------------------------
+
+class WXDLLEXPORT wxMaskBase : public wxObject
+{
+public:
+    // create the mask from bitmap pixels of the given colour
+    bool Create(const wxBitmap& bitmap, const wxColour& colour);
+
+#if wxUSE_PALETTE
+    // create the mask from bitmap pixels with the given palette index
+    bool Create(const wxBitmap& bitmap, int paletteIndex);
+#endif // wxUSE_PALETTE
+
+    // create the mask from the given mono bitmap
+    bool Create(const wxBitmap& bitmap);
+
+protected:
+    // this function is called from Create() to free the existing mask data
+    virtual void FreeData() = 0;
+
+    // these functions must be overridden to implement the corresponding public
+    // Create() methods, they shouldn't call FreeData() as it's already called
+    // by the public wrappers
+    virtual bool InitFromColour(const wxBitmap& bitmap,
+                                const wxColour& colour) = 0;
+    virtual bool InitFromMonoBitmap(const wxBitmap& bitmap) = 0;
+};
 
 #if defined(__WXMGL__) || \
     defined(__WXDFB__) || \
@@ -156,6 +187,15 @@ public:
 
     static void CleanUpHandlers();
 
+    // this method is only used by the generic implementation of wxMask
+    // currently but could be useful elsewhere in the future: it can be
+    // overridden to quantize the colour to correspond to bitmap colour depth
+    // if necessary; default implementation simply returns the colour as is
+    virtual wxColour QuantizeColour(const wxColour& colour) const
+    {
+        return colour;
+    }
+
 protected:
     static wxList sm_handlers;
 
@@ -186,6 +226,17 @@ protected:
     #include "wx/cocoa/bitmap.h"
 #elif defined(__WXPM__)
     #include "wx/os2/bitmap.h"
+#endif
+
+// we must include generic mask.h after wxBitmap definition
+#if defined(__WXMGL__) || defined(__WXDFB__)
+    #define wxUSE_GENERIC_MASK 1
+#else
+    #define wxUSE_GENERIC_MASK 0
+#endif
+
+#if wxUSE_GENERIC_MASK
+    #include "wx/generic/mask.h"
 #endif
 
 #endif // _WX_BITMAP_H_BASE_

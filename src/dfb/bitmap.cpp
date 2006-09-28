@@ -33,22 +33,6 @@
 // helpers
 //-----------------------------------------------------------------------------
 
-// Convert wxColour into it's quantized value in lower-precision
-// pixel format (needed for masking by colour).
-static wxColour wxQuantizeColour(const wxColour& clr, const wxBitmap& bmp)
-{
-#if 0
-    pixel_format_t *pf = bmp.GetMGLbitmap_t()->pf;
-
-    if ( pf->redAdjust == 0 && pf->greenAdjust == 0 && pf->blueAdjust == 0 )
-        return clr;
-    else
-        return wxColour((unsigned char)((clr.Red() >> pf->redAdjust) << pf->redAdjust),
-                        (unsigned char)((clr.Green() >> pf->greenAdjust) << pf->greenAdjust),
-                        (unsigned char)((clr.Blue() >> pf->blueAdjust) << pf->blueAdjust));
-#endif
-}
-
 // Creates a surface that will use wxImage's pixel data (RGB only)
 static wxIDirectFBSurfacePtr CreateSurfaceForImage(const wxImage& image)
 {
@@ -70,97 +54,6 @@ static wxIDirectFBSurfacePtr CreateSurfaceForImage(const wxImage& image)
 
     return wxIDirectFB::Get()->CreateSurface(&desc);
 }
-
-//-----------------------------------------------------------------------------
-// wxMask
-//-----------------------------------------------------------------------------
-
-IMPLEMENT_DYNAMIC_CLASS(wxMask, wxObject)
-
-wxMask::wxMask() : m_bitmap(NULL)
-{
-}
-
-wxMask::wxMask(const wxBitmap& bitmap)
-    : m_bitmap(NULL)
-{
-    Create(bitmap);
-}
-
-wxMask::wxMask(const wxBitmap& bitmap, const wxColour& colour)
-    : m_bitmap(NULL)
-{
-    Create(bitmap, colour);
-}
-
-#if wxUSE_PALETTE
-wxMask::wxMask(const wxBitmap& bitmap, int paletteIndex)
-    : m_bitmap(NULL)
-{
-    Create(bitmap, paletteIndex);
-}
-#endif // wxUSE_PALETTE
-
-wxMask::wxMask(const wxMask& mask)
-{
-    m_bitmap = mask.m_bitmap ? new wxBitmap(*mask.m_bitmap) : NULL;
-}
-
-wxMask::~wxMask()
-{
-    delete m_bitmap;
-}
-
-#warning "move this to common code"
-bool wxMask::Create(const wxBitmap& bitmap, const wxColour& colour)
-{
-    delete m_bitmap;
-    m_bitmap = NULL;
-
-    wxColour clr(wxQuantizeColour(colour, bitmap));
-
-    wxImage imgSrc(bitmap.ConvertToImage());
-    imgSrc.SetMask(false);
-    wxImage image(imgSrc.ConvertToMono(clr.Red(), clr.Green(), clr.Blue()));
-    if ( !image.Ok() )
-        return false;
-
-    m_bitmap = new wxBitmap(image, 1);
-
-    return m_bitmap->Ok();
-}
-
-#if wxUSE_PALETTE
-bool wxMask::Create(const wxBitmap& bitmap, int paletteIndex)
-{
-    unsigned char r,g,b;
-    wxPalette *pal = bitmap.GetPalette();
-
-    wxCHECK_MSG( pal, false, wxT("Cannot create mask from bitmap without palette") );
-
-    pal->GetRGB(paletteIndex, &r, &g, &b);
-
-    return Create(bitmap, wxColour(r, g, b));
-}
-#endif // wxUSE_PALETTE
-
-bool wxMask::Create(const wxBitmap& bitmap)
-{
-    delete m_bitmap;
-    m_bitmap = NULL;
-
-    wxCHECK_MSG( bitmap.Ok(), false, wxT("Invalid bitmap") );
-    wxCHECK_MSG( bitmap.GetDepth() == 1, false, wxT("Cannot create mask from colour bitmap") );
-
-    m_bitmap = new wxBitmap(bitmap);
-    return true;
-}
-
-const wxBitmap& wxMask::GetBitmap() const
-{
-    return m_bitmap ? *m_bitmap : wxNullBitmap;
-}
-
 
 //-----------------------------------------------------------------------------
 // wxBitmapRefData

@@ -16,38 +16,6 @@
 wxDFB_DECLARE_INTERFACE(IDirectFBSurface);
 
 //-----------------------------------------------------------------------------
-// wxMask
-//-----------------------------------------------------------------------------
-
-#warning "FIXME: move wxMask to common code"
-class WXDLLIMPEXP_CORE wxMask: public wxObject
-{
-public:
-    wxMask();
-    wxMask(const wxBitmap& bitmap);
-    wxMask(const wxBitmap& bitmap, const wxColour& colour);
-#if wxUSE_PALETTE
-    wxMask(const wxBitmap& bitmap, int paletteIndex);
-#endif
-    wxMask(const wxMask& mask);
-    ~wxMask();
-
-    bool Create(const wxBitmap& bitmap);
-    bool Create(const wxBitmap& bitmap, const wxColour& colour);
-#if wxUSE_PALETTE
-    bool Create(const wxBitmap& bitmap, int paletteIndex);
-#endif
-
-    // implementation
-    const wxBitmap& GetBitmap() const;
-
-private:
-    wxBitmap *m_bitmap;
-
-    DECLARE_DYNAMIC_CLASS(wxMask)
-};
-
-//-----------------------------------------------------------------------------
 // wxBitmap
 //-----------------------------------------------------------------------------
 

@@ -125,3 +125,38 @@ IMPLEMENT_DYNAMIC_CLASS(wxBitmapBaseModule, wxModule)
 
 #endif // wxUSE_BITMAP_BASE
 
+// ----------------------------------------------------------------------------
+// wxMaskBase
+// ----------------------------------------------------------------------------
+
+bool wxMaskBase::Create(const wxBitmap& bitmap, const wxColour& colour)
+{
+    FreeData();
+
+    return InitFromColour(bitmap, colour);
+}
+
+#if wxUSE_PALETTE
+
+bool wxMaskBase::Create(const wxBitmap& bitmap, int paletteIndex)
+{
+    wxPalette *pal = bitmap.GetPalette();
+
+    wxCHECK_MSG( pal, false,
+                 wxT("Cannot create mask from palette index of a bitmap without palette") );
+
+    unsigned char r,g,b;
+    pal->GetRGB(paletteIndex, &r, &g, &b);
+
+    return Create(bitmap, wxColour(r, g, b));
+}
+
+#endif // wxUSE_PALETTE
+
+bool wxMaskBase::Create(const wxBitmap& bitmap)
+{
+    FreeData();
+
+    return InitFromMonoBitmap(bitmap);
+}
+

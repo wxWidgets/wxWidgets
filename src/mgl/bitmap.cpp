@@ -51,103 +51,6 @@ static pixel_format_t gs_pixel_format_wxImage =
     {0xFF,0x00,0, 0xFF,0x08,0, 0xFF,0x10,0, 0x00,0x00,0}; // RGB 24bpp for wxImage
 
 //-----------------------------------------------------------------------------
-// helpers
-//-----------------------------------------------------------------------------
-
-// Convert wxColour into it's quantized value in lower-precision
-// pixel format (needed for masking by colour).
-static wxColour wxQuantizeColour(const wxColour& clr, const wxBitmap& bmp)
-{
-    pixel_format_t *pf = bmp.GetMGLbitmap_t()->pf;
-
-    if ( pf->redAdjust == 0 && pf->greenAdjust == 0 && pf->blueAdjust == 0 )
-        return clr;
-    else
-        return wxColour((unsigned char)((clr.Red() >> pf->redAdjust) << pf->redAdjust),
-                        (unsigned char)((clr.Green() >> pf->greenAdjust) << pf->greenAdjust),
-                        (unsigned char)((clr.Blue() >> pf->blueAdjust) << pf->blueAdjust));
-}
-
-
-
-//-----------------------------------------------------------------------------
-// wxMask
-//-----------------------------------------------------------------------------
-
-IMPLEMENT_DYNAMIC_CLASS(wxMask,wxObject)
-
-wxMask::wxMask()
-{
-    m_bitmap = NULL;
-}
-
-wxMask::wxMask(const wxBitmap& bitmap, const wxColour& colour)
-{
-    m_bitmap = NULL;
-    Create(bitmap, colour);
-}
-
-wxMask::wxMask(const wxBitmap& bitmap, int paletteIndex)
-{
-    m_bitmap = NULL;
-    Create(bitmap, paletteIndex);
-}
-
-wxMask::wxMask(const wxBitmap& bitmap)
-{
-    m_bitmap = NULL;
-    Create(bitmap);
-}
-
-wxMask::~wxMask()
-{
-    delete m_bitmap;
-}
-
-bool wxMask::Create(const wxBitmap& bitmap, const wxColour& colour)
-{
-    delete m_bitmap;
-    m_bitmap = NULL;
-
-    wxColour clr(wxQuantizeColour(colour, bitmap));
-
-    wxImage imgSrc(bitmap.ConvertToImage());
-    imgSrc.SetMask(false);
-    wxImage image(imgSrc.ConvertToMono(clr.Red(), clr.Green(), clr.Blue()));
-    if ( !image.Ok() )
-        return false;
-
-    m_bitmap = new wxBitmap(image, 1);
-
-    return m_bitmap->Ok();
-}
-
-bool wxMask::Create(const wxBitmap& bitmap, int paletteIndex)
-{
-    unsigned char r,g,b;
-    wxPalette *pal = bitmap.GetPalette();
-
-    wxCHECK_MSG( pal, false, wxT("Cannot create mask from bitmap without palette") );
-
-    pal->GetRGB(paletteIndex, &r, &g, &b);
-
-    return Create(bitmap, wxColour(r, g, b));
-}
-
-bool wxMask::Create(const wxBitmap& bitmap)
-{
-    delete m_bitmap;
-    m_bitmap = NULL;
-
-    wxCHECK_MSG( bitmap.Ok(), false, wxT("Invalid bitmap") );
-    wxCHECK_MSG( bitmap.GetDepth() == 1, false, wxT("Cannot create mask from colour bitmap") );
-
-    m_bitmap = new wxBitmap(bitmap);
-    return true;
-}
-
-
-//-----------------------------------------------------------------------------
 // wxBitmap
 //-----------------------------------------------------------------------------
 
@@ -456,7 +359,7 @@ wxBitmap wxBitmap::GetSubBitmap(const wxRect& rect) const
 
     if ( GetMask() )
     {
-        wxBitmap submask = GetMask()->GetBitmap()->GetSubBitmap(rect);
+        wxBitmap submask = GetMask()->GetBitmap().GetSubBitmap(rect);
         ret.SetMask(new wxMask(submask));
     }
 
@@ -630,6 +533,19 @@ bitmap_t *wxBitmap::GetMGLbitmap_t() const
     return M_BMPDATA->m_bitmap;
 }
 
+// Convert wxColour into it's quantized value in lower-precision
+// pixel format (needed for masking by colour).
+wxColour wxBitmap::QuantizeColour(const wxColour& clr)
+{
+    pixel_format_t *pf = GetMGLbitmap_t()->pf;
+
+    if ( pf->redAdjust == 0 && pf->greenAdjust == 0 && pf->blueAdjust == 0 )
+        return clr;
+    else
+        return wxColour((unsigned char)((clr.Red() >> pf->redAdjust) << pf->redAdjust),
+                        (unsigned char)((clr.Green() >> pf->greenAdjust) << pf->greenAdjust),
+                        (unsigned char)((clr.Blue() >> pf->blueAdjust) << pf->blueAdjust));
+}
 
 
 //-----------------------------------------------------------------------------

@@ -1721,6 +1721,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/colour.cpp
     src/generic/icon.cpp
     src/generic/imaglist.cpp
+    src/generic/mask.cpp
     src/generic/timer.cpp
     src/mgl/app.cpp
     src/mgl/bitmap.cpp
@@ -1750,6 +1751,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/generic/colour.h
     wx/generic/icon.h
     wx/generic/imaglist.h
+    wx/generic/mask.h
     wx/generic/timer.h
     wx/mgl/app.h
     wx/mgl/bitmap.h
@@ -1782,6 +1784,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/colour.cpp
     src/generic/icon.cpp
     src/generic/imaglist.cpp
+    src/generic/mask.cpp
     src/generic/timer.cpp
     src/dfb/app.cpp
     src/dfb/bitmap.cpp
@@ -1808,6 +1811,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/generic/colour.h
     wx/generic/icon.h
     wx/generic/imaglist.h
+    wx/generic/mask.h
     wx/generic/timer.h
     wx/dfb/app.h
     wx/dfb/bitmap.h

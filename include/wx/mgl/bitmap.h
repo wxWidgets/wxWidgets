@@ -9,51 +9,15 @@
 #ifndef __WX_BITMAP_H__
 #define __WX_BITMAP_H__
 
-#include "wx/defs.h"
-#include "wx/object.h"
-#include "wx/string.h"
-#include "wx/palette.h"
-#include "wx/gdiobj.h"
-
-
 //-----------------------------------------------------------------------------
 // classes
 //-----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxMask;
-class WXDLLEXPORT wxBitmap;
-class WXDLLEXPORT wxImage;
 class WXDLLEXPORT wxDC;
 class WXDLLEXPORT wxMemoryDC;
 
 class MGLDevCtx;
 struct bitmap_t;
-
-//-----------------------------------------------------------------------------
-// wxMask
-//-----------------------------------------------------------------------------
-
-class WXDLLEXPORT wxMask: public wxObject
-{
-public:
-    wxMask();
-    wxMask(const wxBitmap& bitmap, const wxColour& colour);
-    wxMask(const wxBitmap& bitmap, int paletteIndex);
-    wxMask(const wxBitmap& bitmap);
-    virtual ~wxMask();
-
-    bool Create(const wxBitmap& bitmap, const wxColour& colour);
-    bool Create(const wxBitmap& bitmap, int paletteIndex);
-    bool Create(const wxBitmap& bitmap);
-
-    // implementation
-    wxBitmap *m_bitmap;
-
-    wxBitmap *GetBitmap() const { return m_bitmap; }
-
-private:
-    DECLARE_DYNAMIC_CLASS(wxMask)
-};
 
 //-----------------------------------------------------------------------------
 // wxBitmap
@@ -110,6 +74,8 @@ public:
     virtual void SetHeight(int height);
     virtual void SetWidth(int width);
     virtual void SetDepth(int depth);
+
+    virtual wxColour QuantizeColour(const wxColour& colour) const;
 
     // get underlying native representation:
     bitmap_t *GetMGLbitmap_t() const;

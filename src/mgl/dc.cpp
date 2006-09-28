@@ -1547,7 +1547,7 @@ void wxDC::DoDrawSubBitmap(const wxBitmap &bmp,
         // This sequence of operations ensures that the source's transparent
         // area need not be black, and logical functions are supported.
 
-        wxBitmap *mask = bmp.GetMask()->GetBitmap();
+        wxBitmap mask = bmp.GetMask()->GetBitmap();
 
         MGLMemoryDC *temp;
 
@@ -1572,10 +1572,10 @@ void wxDC::DoDrawSubBitmap(const wxBitmap &bmp,
         DoBitBlt(bmp, temp, x, y, w, h, 0, 0, dw, dh, mglRop,
                  useStretching, putSection);
 
-        mask->SetMonoPalette(wxColour(0,0,0), wxColour(255,255,255));
-        DoBitBlt(*mask, temp, x, y, w, h, 0, 0, dw, dh, MGL_R2_MASKSRC,
+        mask.SetMonoPalette(wxColour(0,0,0), wxColour(255,255,255));
+        DoBitBlt(mask, temp, x, y, w, h, 0, 0, dw, dh, MGL_R2_MASKSRC,
                  useStretching, putSection);
-        DoBitBlt(*mask, m_MGLDC, x, y, w, h, dx, dy, dw, dh, MGL_R2_MASKNOTSRC,
+        DoBitBlt(mask, m_MGLDC, x, y, w, h, dx, dy, dw, dh, MGL_R2_MASKNOTSRC,
                  useStretching, putSection);
 
         m_MGLDC->bitBlt(*temp, 0, 0, dw, dh, dx, dy, MGL_OR_MODE);
