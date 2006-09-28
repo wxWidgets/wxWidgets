@@ -88,14 +88,13 @@ void wxEffects::DrawSunkenEdge(wxDC& dc, const wxRect& rect, int WXUNUSED(border
 
 bool wxEffects::TileBitmap(const wxRect& rect, wxDC& dc, const wxBitmap& bitmap)
 {
-    static bool hiColour = (wxDisplayDepth() >= 16) ;
-
     int w = bitmap.GetWidth();
     int h = bitmap.GetHeight();
 
     wxMemoryDC dcMem;
 
 #if wxUSE_PALETTE
+    static bool hiColour = (wxDisplayDepth() >= 16) ;
     if (bitmap.GetPalette() && !hiColour)
     {
         dc.SetPalette(* bitmap.GetPalette());
