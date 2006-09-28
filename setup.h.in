@@ -508,6 +508,15 @@
 
 #define wxUSE_PALETTE       0
 
+
+#define wxUSE_ALL_THEMES    0
+
+#define wxUSE_THEME_GTK     0
+#define wxUSE_THEME_METAL   0
+#define wxUSE_THEME_MONO    0
+#define wxUSE_THEME_WIN32   0
+
+
 /* --- end common options --- */
 
 /* for some features we don't have dedicated configure switches, so just choose
@@ -1138,7 +1147,6 @@
 
 /* define this when wxDC::Blit() respects SetDeviceOrigin() in wxGTK */
 #undef wxHAS_WORKING_GTK_DC_BLIT
-
 
 #endif /* __WX_SETUP_H__ */
 
