@@ -59,6 +59,7 @@ All:
 - Added wxDir::FindFirst() (Francesco Montorsi).
 - Added wxPlatformInfo class (Francesco Montorsi).
 - Added wxLocale::IsAvailable() (Creighton).
+- Added Malay translations (Mahrazi Mohd Kamal)
 
 All (GUI):
 
