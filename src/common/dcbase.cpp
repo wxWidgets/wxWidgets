@@ -776,7 +776,7 @@ void wxDCBase::DoGradientFillLinear(const wxRect& rect,
     SetPen(oldPen);
 }
 
-void wxDCBase::GradientFillConcentric(const wxRect& rect,
+void wxDCBase::DoGradientFillConcentric(const wxRect& rect,
                                       const wxColour& initialColour,
                                       const wxColour& destColour,
                                       const wxPoint& circleCenter)

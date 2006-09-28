@@ -168,7 +168,8 @@ public:
     void GradientFillConcentric(const wxRect& rect,
                                 const wxColour& initialColour,
                                 const wxColour& destColour,
-                                const wxPoint& circleCenter);
+                                const wxPoint& circleCenter)
+        { DoGradientFillConcentric(rect, initialColour, destColour, circleCenter); }
 
     // fill the area specified by rect with a linear gradient
     void GradientFillLinear(const wxRect& rect,
@@ -657,6 +658,11 @@ protected:
                                       const wxColour& initialColour,
                                       const wxColour& destColour,
                                       wxDirection nDirection = wxEAST);
+
+    virtual void DoGradientFillConcentric(const wxRect& rect,
+                                        const wxColour& initialColour,
+                                        const wxColour& destColour,
+                                        const wxPoint& circleCenter);
 
     virtual bool DoGetPixel(wxCoord x, wxCoord y, wxColour *col) const = 0;
 
