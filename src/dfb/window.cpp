@@ -862,6 +862,7 @@ static long GetTranslatedKeyCode(DFBInputDeviceKeyIdentifier key_id)
         KEY(DIKI_CONTROL_R,         WXK_CONTROL);
         KEY(DIKI_ALT_L,             WXK_ALT);
         KEY(DIKI_ALT_R,             WXK_ALT);
+        KEY(DIKI_ALT_GR,            0);
         KEY(DIKI_META_L,            0);
         KEY(DIKI_META_R,            0);
         KEY(DIKI_SUPER_L,           0);
