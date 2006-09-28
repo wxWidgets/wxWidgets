@@ -1826,7 +1826,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/dfb/evtloop.h
     wx/dfb/font.h
     wx/dfb/pen.h
-    wx/dfb/popupwin.h
     wx/dfb/private.h
     wx/dfb/region.h
     wx/dfb/toplevel.h
