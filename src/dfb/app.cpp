@@ -50,9 +50,6 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
     if ( !wxIDirectFB::Get() )
         return false;
 
-    #warning "FIXME: theme override is temporary"
-    wxTheme::Set(wxTheme::Create(_T("gtk")));
-
     return true;
 }
 
