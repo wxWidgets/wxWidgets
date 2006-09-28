@@ -1174,19 +1174,22 @@
 #    endif
 #endif /* wxUSE_BMPBUTTON */
 
-#if wxUSE_NOTEBOOK || wxUSE_LISTBOOK || wxUSE_CHOICEBOOK
-#   if defined(wxUSE_BOOKCTRL) && !wxUSE_BOOKCTRL
-#       ifdef wxABORT_ON_CONFIG_ERROR
-#           error "wxUSE_BOOKCTRL must be set."
-#       else
-#           undef wxUSE_BOOKCTRL
-#       endif
+/*
+   wxUSE_BOOKCTRL should be only used if any of the controls deriving from it
+   are used
+ */
+#ifdef wxUSE_BOOKCTRL
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_BOOKCTRL is defined automatically, don't define it"
+#   else
+#       undef wxUSE_BOOKCTRL
 #   endif
+#endif
 
-#   ifndef wxUSE_BOOKCTRL
-#       define wxUSE_BOOKCTRL 1
-#   endif
-#endif /* wxUSE_NOTEBOOK */
+#define wxUSE_BOOKCTRL (wxUSE_NOTEBOOK || \
+                        wxUSE_LISTBOOK || \
+                        wxUSE_CHOICEBOOK || \
+                        wxUSE_TREEBOOK)
 
 #if wxUSE_LISTBOOK
 #   if !wxUSE_LISTCTRL
