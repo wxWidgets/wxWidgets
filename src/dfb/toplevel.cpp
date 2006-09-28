@@ -527,6 +527,10 @@ void wxTopLevelWindowDFB::HandleDFBWindowEvent(const wxDFBWindowEvent& event_)
             wxFAIL_MSG( _T("invalid event type") );
             break;
         }
+
+        default:
+            // we're not interested in them here
+            break;
     }
 
     if ( !recipient )
