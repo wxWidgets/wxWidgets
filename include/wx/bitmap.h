@@ -35,8 +35,14 @@ class WXDLLEXPORT wxPalette;
     defined(__WXCOCOA__) || \
     defined(__WXMOTIF__) || \
     defined(__WXX11__)
+    #define wxUSE_BITMAP_BASE 1
+#else
+    #define wxUSE_BITMAP_BASE 0
+#endif
+
 // Only used by some ports
 // FIXME -- make all ports (but MSW which uses wxGDIImage) use these base classes
+#if wxUSE_BITMAP_BASE
 
 // ----------------------------------------------------------------------------
 // wxBitmapHandler: class which knows how to create/load/save bitmaps in
@@ -155,31 +161,31 @@ protected:
 
     DECLARE_ABSTRACT_CLASS(wxBitmapBase)
 };
-#endif
+
+#endif // wxUSE_BITMAP_BASE
 
 #if defined(__WXPALMOS__)
-#include "wx/palmos/bitmap.h"
+    #include "wx/palmos/bitmap.h"
 #elif defined(__WXMSW__)
-#include "wx/msw/bitmap.h"
+    #include "wx/msw/bitmap.h"
 #elif defined(__WXMOTIF__)
-#include "wx/x11/bitmap.h"
+    #include "wx/x11/bitmap.h"
 #elif defined(__WXGTK20__)
-#include "wx/gtk/bitmap.h"
+    #include "wx/gtk/bitmap.h"
 #elif defined(__WXGTK__)
-#include "wx/gtk1/bitmap.h"
+    #include "wx/gtk1/bitmap.h"
 #elif defined(__WXX11__)
-#include "wx/x11/bitmap.h"
+    #include "wx/x11/bitmap.h"
 #elif defined(__WXMGL__)
-#include "wx/mgl/bitmap.h"
+    #include "wx/mgl/bitmap.h"
 #elif defined(__WXDFB__)
-#include "wx/dfb/bitmap.h"
+    #include "wx/dfb/bitmap.h"
 #elif defined(__WXMAC__)
-#include "wx/mac/bitmap.h"
+    #include "wx/mac/bitmap.h"
 #elif defined(__WXCOCOA__)
-#include "wx/cocoa/bitmap.h"
+    #include "wx/cocoa/bitmap.h"
 #elif defined(__WXPM__)
-#include "wx/os2/bitmap.h"
+    #include "wx/os2/bitmap.h"
 #endif
 
-#endif
-    // _WX_BITMAP_H_BASE_
+#endif // _WX_BITMAP_H_BASE_
