@@ -56,7 +56,7 @@
     #define GDI_ERROR ((int)-1)
 #endif
 
-#if defined(__WXUNIVERSAL__) || wxUSE_POSTSCRIPT_ARCHITECTURE_IN_MSW
+#if defined(__WXUNIVERSAL__) && wxUSE_POSTSCRIPT_ARCHITECTURE_IN_MSW
     #define wxUSE_PS_PRINTING 1
 #else
     #define wxUSE_PS_PRINTING 0
