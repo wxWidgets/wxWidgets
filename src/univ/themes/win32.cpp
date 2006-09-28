@@ -24,6 +24,8 @@
     #pragma hdrstop
 #endif
 
+#if wxUSE_ALL_THEMES || wxUSE_THEME_WIN32
+
 #ifndef WX_PRECOMP
     #include "wx/timer.h"
     #include "wx/intl.h"
@@ -3772,3 +3774,5 @@ bool wxWin32FrameInputHandler::HandleActivation(wxInputConsumer *consumer,
 
     return wxStdInputHandler::HandleActivation(consumer, activated);
 }
+
+#endif // wxUSE_ALL_THEMES || wxUSE_THEME_WIN32

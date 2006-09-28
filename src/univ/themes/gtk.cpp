@@ -24,6 +24,8 @@
     #pragma hdrstop
 #endif
 
+#if wxUSE_ALL_THEMES || wxUSE_THEME_GTK
+
 #ifndef WX_PRECOMP
     #include "wx/intl.h"
     #include "wx/log.h"
@@ -2771,3 +2773,5 @@ bool wxGTKTextCtrlInputHandler::HandleKey(wxInputConsumer *control,
 }
 
 #endif // wxUSE_TEXTCTRL
+
+#endif // wxUSE_ALL_THEMES || wxUSE_THEME_GTK

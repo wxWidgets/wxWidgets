@@ -864,6 +864,10 @@ WX_ARG_WITH(gnomevfs,      [  --with-gnomevfs         use GNOME VFS for associat
 WX_ARG_WITH(hildon,        [  --with-hildon           use Hildon framework for Nokia 770], wxUSE_LIBHILDON)
 WX_ARG_WITH(opengl,        [  --with-opengl           use OpenGL (or Mesa)], wxUSE_OPENGL)
 
+if test "$wxUSE_UNIVERSAL" = "yes"; then
+    AC_ARG_WITH(themes,        [  --with-themes=all|list  use only the specified comma-separated list of wxUniversal themes], [wxUNIV_THEMES="$withval"])
+fi
+
 fi
 dnl for GUI only
 
@@ -7337,6 +7341,17 @@ done
 
 if test "x$wxUSE_UNIVERSAL" = "xyes" ; then
     WXUNIV=1
+
+    case "$wxUNIV_THEMES" in
+        ''|all)
+            AC_DEFINE(wxUSE_ALL_THEMES)
+            ;;
+
+        *)
+            for t in `echo $wxUNIV_THEMES | tr , ' ' | tr a-z A-Z`; do
+                AC_DEFINE_UNQUOTED(wxUSE_THEME_$t)
+            done
+    esac
 else
     WXUNIV=0
 fi

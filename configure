@@ -1162,6 +1162,7 @@ Optional Packages:
   --with-gnomevfs         use GNOME VFS for associating MIME types
   --with-hildon           use Hildon framework for Nokia 770
   --with-opengl           use OpenGL (or Mesa)
+  --with-themes=all|list  use only the specified comma-separated list of wxUniversal themes
   --with-dmalloc          use dmalloc library (http://dmalloc.com/)
   --with-regex            enable support for wxRegEx class
   --with-zlib             use zlib for LZW compression
@@ -3459,6 +3460,15 @@ echo "${ECHO_T}yes" >&6
 echo "${ECHO_T}no" >&6
           fi
 
+
+if test "$wxUSE_UNIVERSAL" = "yes"; then
+
+# Check whether --with-themes or --without-themes was given.
+if test "${with_themes+set}" = set; then
+  withval="$with_themes"
+  wxUNIV_THEMES="$withval"
+fi;
+fi
 
 fi
 
@@ -46420,6 +46430,23 @@ done
 
 if test "x$wxUSE_UNIVERSAL" = "xyes" ; then
     WXUNIV=1
+
+    case "$wxUNIV_THEMES" in
+        ''|all)
+            cat >>confdefs.h <<\_ACEOF
+#define wxUSE_ALL_THEMES 1
+_ACEOF
+
+            ;;
+
+        *)
+            for t in `echo $wxUNIV_THEMES | tr , ' ' | tr a-z A-Z`; do
+                cat >>confdefs.h <<_ACEOF
+#define wxUSE_THEME_$t 1
+_ACEOF
+
+            done
+    esac
 else
     WXUNIV=0
 fi

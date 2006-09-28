@@ -24,6 +24,8 @@
     #pragma hdrstop
 #endif
 
+#if wxUSE_ALL_THEMES || wxUSE_THEME_METAL
+
 #ifndef WX_PRECOMP
     #include "wx/timer.h"
     #include "wx/intl.h"
@@ -591,3 +593,5 @@ void wxMetalRenderer::DrawMetal(wxDC &dc, const wxRect &rect )
        dc.DrawRectangle( rect.x, y, rect.width, 1 );
     }
 }
+
+#endif // wxUSE_ALL_THEMES || wxUSE_THEME_METAL

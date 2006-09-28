@@ -1778,6 +1778,11 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <!-- ====================================================================== -->
 
 <set var="DFB_LOWLEVEL_SRC" hints="files">
+    src/generic/caret.cpp
+    src/generic/colour.cpp
+    src/generic/icon.cpp
+    src/generic/imaglist.cpp
+    src/generic/timer.cpp
     src/dfb/app.cpp
     src/dfb/bitmap.cpp
     src/dfb/brush.cpp
@@ -1797,13 +1802,13 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/dfb/utils.cpp
     src/dfb/window.cpp
     src/dfb/wrapdfb.cpp
-    src/generic/caret.cpp
-    src/generic/colour.cpp
-    src/generic/icon.cpp
-    src/generic/imaglist.cpp
-    src/generic/timer.cpp
 </set>
 <set var="DFB_LOWLEVEL_HDR" hints="files">
+    wx/generic/caret.h
+    wx/generic/colour.h
+    wx/generic/icon.h
+    wx/generic/imaglist.h
+    wx/generic/timer.h
     wx/dfb/app.h
     wx/dfb/bitmap.h
     wx/dfb/brush.h
@@ -1823,11 +1828,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/dfb/toplevel.h
     wx/dfb/window.h
     wx/dfb/wrapdfb.h
-    wx/generic/caret.h
-    wx/generic/colour.h
-    wx/generic/icon.h
-    wx/generic/imaglist.h
-    wx/generic/timer.h
 </set>
 
 
@@ -2559,6 +2559,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/univ/button.h
     wx/univ/checkbox.h
     wx/univ/checklst.h
+    wx/univ/chkconf.h
     wx/univ/choice.h
     wx/univ/colschem.h
     wx/univ/combobox.h

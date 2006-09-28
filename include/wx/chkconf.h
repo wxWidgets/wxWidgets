@@ -35,6 +35,10 @@
 #  include "wx/x11/chkconf.h"
 #endif
 
+#ifdef __WXUNIVERSAL__
+#   include "wx/univ/chkconf.h"
+#endif
+
 /*
    this global setting determines what should we do if the setting FOO
    requires BAR and BAR is not set: we can either silently unset FOO as well
@@ -1233,60 +1237,6 @@
 #       define wxUSE_NATIVE_STATUSBAR 0
 #   endif
 #endif
-
-/* wxUniv-specific dependencies */
-#if defined(__WXUNIVERSAL__)
-#   if (wxUSE_COMBOBOX || wxUSE_MENUS) && !wxUSE_POPUPWIN
-#       ifdef wxABORT_ON_CONFIG_ERROR
-#           error "wxUSE_POPUPWIN must be defined to use comboboxes/menus"
-#       else
-#           undef wxUSE_POPUPWIN
-#           define wxUSE_POPUPWIN 1
-#       endif
-#   endif
-
-#   if wxUSE_COMBOBOX
-#      if !wxUSE_LISTBOX
-#           ifdef wxABORT_ON_CONFIG_ERROR
-#               error "wxComboBox requires wxListBox in wxUniversal"
-#           else
-#               undef wxUSE_LISTBOX
-#               define wxUSE_LISTBOX 1
-#           endif
-#      endif
-#   endif /* wxUSE_COMBOBOX */
-
-#   if wxUSE_RADIOBTN
-#      if !wxUSE_CHECKBOX
-#           ifdef wxABORT_ON_CONFIG_ERROR
-#               error "wxUSE_RADIOBTN requires wxUSE_CHECKBOX in wxUniversal"
-#           else
-#               undef wxUSE_CHECKBOX
-#               define wxUSE_CHECKBOX 1
-#           endif
-#      endif
-#   endif /* wxUSE_RADIOBTN */
-
-#   if wxUSE_TEXTCTRL
-#       if !wxUSE_CARET
-#           ifdef wxABORT_ON_CONFIG_ERROR
-#               error "wxTextCtrl requires wxCaret in wxUniversal"
-#           else
-#               undef wxUSE_CARET
-#               define wxUSE_CARET 1
-#           endif
-#       endif /* wxUSE_CARET */
-
-#       if !wxUSE_SCROLLBAR
-#           ifdef wxABORT_ON_CONFIG_ERROR
-#               error "wxTextCtrl requires wxScrollBar in wxUniversal"
-#           else
-#               undef wxUSE_SCROLLBAR
-#               define wxUSE_SCROLLBAR 1
-#           endif
-#       endif /* wxUSE_SCROLLBAR */
-#   endif /* wxUSE_TEXTCTRL */
-#endif /* __WXUNIVERSAL__ */
 
 /* wxGTK-specific dependencies */
 #ifdef __WXGTK__

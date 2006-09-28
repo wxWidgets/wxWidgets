@@ -24,6 +24,8 @@
     #pragma hdrstop
 #endif
 
+#if wxUSE_ALL_THEMES || wxUSE_THEME_MONO
+
 #ifndef WX_PRECOMP
     #include "wx/dc.h"
 #endif // WX_PRECOMP
@@ -1047,3 +1049,5 @@ wxBitmap wxMonoArtProvider::CreateBitmap(const wxArtID& WXUNUSED(id),
 {
     return wxNullBitmap;
 }
+
+#endif // wxUSE_ALL_THEMES || wxUSE_THEME_MONO

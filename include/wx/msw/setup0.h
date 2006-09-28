@@ -1129,6 +1129,22 @@
 // Set to 1 to compile in wxPalette class
 #define wxUSE_PALETTE       1
 
+// ----------------------------------------------------------------------------
+// wxUniversal-only options
+// ----------------------------------------------------------------------------
+
+// Set to 1 to enable compilation of all themes, this is the default
+#define wxUSE_ALL_THEMES    1
+
+// Set to 1 to enable the compilation of individual theme if wxUSE_ALL_THEMES
+// is unset, if it is set these options are not used; notice that metal theme
+// uses Win32 one
+#define wxUSE_THEME_GTK     0
+#define wxUSE_THEME_METAL   0
+#define wxUSE_THEME_MONO    0
+#define wxUSE_THEME_WIN32   0
+
+
 /* --- end common options --- */
 
 // ----------------------------------------------------------------------------
