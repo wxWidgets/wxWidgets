@@ -44,6 +44,7 @@ private:
         CPPUNIT_TEST( CaseChanges );
         CPPUNIT_TEST( Compare );
         CPPUNIT_TEST( CompareNoCase );
+        CPPUNIT_TEST( Contains );
         CPPUNIT_TEST( ToLong );
         CPPUNIT_TEST( ToULong );
         CPPUNIT_TEST( ToDouble );
@@ -61,6 +62,7 @@ private:
     void CaseChanges();
     void Compare();
     void CompareNoCase();
+    void Contains();
     void ToLong();
     void ToULong();
     void ToDouble();
@@ -410,9 +412,35 @@ void StringTestCase::CompareNoCase()
     CPPUNIT_CNCNEQ_ASSERT( s1, neq3 );
 }
 
+void StringTestCase::Contains()
+{
+    static const struct ContainsData
+    {
+        const wxChar *hay;
+        const wxChar *needle;
+        bool contains;
+    } containsData[] =
+    {
+        { _T(""),       _T(""),         true  },
+        { _T(""),       _T("foo"),      false },
+        { _T("foo"),    _T(""),         true  },
+        { _T("foo"),    _T("f"),        true  },
+        { _T("foo"),    _T("o"),        true  },
+        { _T("foo"),    _T("oo"),       true  },
+        { _T("foo"),    _T("ooo"),      false },
+        { _T("foo"),    _T("oooo"),     false },
+        { _T("foo"),    _T("fooo"),     false },
+    };
+
+    for ( size_t n = 0; n < WXSIZEOF(containsData); n++ )
+    {
+        const ContainsData& cd = containsData[n];
+        CPPUNIT_ASSERT_EQUAL( cd.contains, wxString(cd.hay).Contains(cd.needle) );
+    }
+}
+
 void StringTestCase::ToLong()
 {
-    long l;
     static const struct ToLongData
     {
         const wxChar *str;
@@ -428,8 +456,8 @@ void StringTestCase::ToLong()
         { _T("--1"), 0, false },
     };
 
-    size_t n;
-    for ( n = 0; n < WXSIZEOF(longData); n++ )
+    long l;
+    for ( size_t n = 0; n < WXSIZEOF(longData); n++ )
     {
         const ToLongData& ld = longData[n];
         CPPUNIT_ASSERT_EQUAL( ld.ok, wxString(ld.str).ToLong(&l) );
