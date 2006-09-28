@@ -862,7 +862,11 @@ static long GetTranslatedKeyCode(DFBInputDeviceKeyIdentifier key_id)
         KEY(DIKI_CONTROL_R,         WXK_CONTROL);
         KEY(DIKI_ALT_L,             WXK_ALT);
         KEY(DIKI_ALT_R,             WXK_ALT);
-        KEY(DIKI_ALT_GR,            0);
+        // this key was removed in 0.9.25 but include it for previous versions
+        // just to avoid gcc warnings about unhandled enum value in switch
+#if !wxCHECK_DFB_VERSION(0, 9, 24)
+        KEY(DIKI_ALTGR,             0);
+#endif
         KEY(DIKI_META_L,            0);
         KEY(DIKI_META_R,            0);
         KEY(DIKI_SUPER_L,           0);
