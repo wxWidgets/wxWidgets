@@ -434,36 +434,47 @@ void wxStringBase::swap(wxStringBase& str)
 
 size_t wxStringBase::find(const wxStringBase& str, size_t nStart) const
 {
+    // deal with the special case of empty string first
+    const size_t nLen = length();
+    const size_t nLenOther = str.length();
+
+    if ( !nLenOther )
+    {
+        // empty string is a substring of anything
+        return 0;
+    }
+
+    if ( !nLen )
+    {
+        // the other string is non empty so can't be our substring
+        return npos;
+    }
+
     wxASSERT( str.GetStringData()->IsValid() );
-    wxASSERT( nStart <= length() );
+    wxASSERT( nStart <= nLen );
 
-    //anchor
+    const wxChar * const other = str.c_str();
+
+    // anchor
     const wxChar* p = (const wxChar*)wxTmemchr(c_str() + nStart,
-                                               str.c_str()[0],
-                                               length() - nStart);
+                                               *other,
+                                               nLen - nStart);
 
-    if(!p)
+    if ( !p )
         return npos;
 
-    while(p - c_str() + str.length() <= length() &&
-          wxTmemcmp(p, str.c_str(), str.length()) )
+    while ( p - c_str() + nLenOther <= nLen && wxTmemcmp(p, other, nLenOther) )
     {
-        //Previosly passed as the first argument to wxTmemchr,
-        //but C/C++ standard does not specify evaluation order
-        //of arguments to functions -
-        //http://embedded.com/showArticle.jhtml?articleID=9900607
-        ++p;
+        p++;
 
-        //anchor again
-        p = (const wxChar*)wxTmemchr(p,
-                                     str.c_str()[0],
-                                     length() - (p - c_str()));
+        // anchor again
+        p = (const wxChar*)wxTmemchr(p, *other, nLen - (p - c_str()));
 
-        if(!p)
+        if ( !p )
             return npos;
     }
 
-    return (p - c_str() + str.length() <= length()) ? p - c_str() : npos;
+    return p - c_str() + nLenOther <= nLen ? p - c_str() : npos;
 }
 
 size_t wxStringBase::find(const wxChar* sz, size_t nStart, size_t n) const
