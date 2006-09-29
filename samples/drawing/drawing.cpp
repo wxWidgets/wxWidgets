@@ -34,6 +34,18 @@
 #include "wx/image.h"
 #include "wx/artprov.h"
 
+#define wxTEST_GRAPHICS 0
+
+#if wxTEST_GRAPHICS
+#include "wx/graphics.h"
+#if wxUSE_GRAPHICS_CONTEXT == 0
+#error wxUSE_GRAPHICS_CONTEXT must be defined to 1 for testing
+#endif
+#else
+#undef wxUSE_GRAPHICS_CONTEXT
+#define wxUSE_GRAPHICS_CONTEXT 0
+#endif
+
 // ----------------------------------------------------------------------------
 // ressources
 // ----------------------------------------------------------------------------
@@ -61,6 +73,9 @@ enum ScreenToShow
     Show_Regions,
     Show_Circles,
     Show_Splines,
+#if wxUSE_GRAPHICS_CONTEXT
+    Show_Alpha,
+#endif
     Show_Gradient,
     Show_Max
 };
@@ -114,6 +129,9 @@ public:
     void OnQuit(wxCommandEvent& event);
     void OnAbout(wxCommandEvent& event);
     void OnClip(wxCommandEvent& event);
+#if wxUSE_GRAPHICS_CONTEXT
+    void OnGraphicContext(wxCommandEvent& event);
+#endif
     void OnShow(wxCommandEvent &event);
     void OnOption(wxCommandEvent &event);
 
@@ -154,6 +172,9 @@ public:
 
     // set or remove the clipping region
     void Clip(bool clip) { m_clip = clip; Refresh(); }
+#if wxUSE_GRAPHICS_CONTEXT
+    void UseGraphicContext(bool use) { m_useContext = use; Refresh(); }
+#endif
 
 protected:
     void DrawTestLines( int x, int y, int width, wxDC &dc );
@@ -162,6 +183,9 @@ protected:
     void DrawText(wxDC& dc);
     void DrawImages(wxDC& dc);
     void DrawWithLogicalOps(wxDC& dc);
+#if wxUSE_GRAPHICS_CONTEXT
+    void DrawAlpha(wxDC& dc);
+#endif
     void DrawRegions(wxDC& dc);
     void DrawCircles(wxDC& dc);
     void DrawSplines(wxDC& dc);
@@ -177,6 +201,9 @@ private:
     wxBitmap     m_smile_bmp;
     wxIcon       m_std_icon;
     bool         m_clip;
+#if wxUSE_GRAPHICS_CONTEXT
+    bool         m_useContext ;
+#endif
 
     DECLARE_EVENT_TABLE()
 };
@@ -203,10 +230,16 @@ enum
     File_ShowRegions,
     File_ShowCircles,
     File_ShowSplines,
+#if wxUSE_GRAPHICS_CONTEXT
+    File_ShowAlpha,
+#endif
     File_ShowGradients,
     MenuShow_Last = File_ShowGradients,
 
     File_Clip,
+#if wxUSE_GRAPHICS_CONTEXT
+    File_GraphicContext,
+#endif
 
     MenuOption_First,
 
@@ -384,6 +417,9 @@ MyCanvas::MyCanvas(MyFrame *parent)
     m_smile_bmp = wxBitmap(smile_xpm);
     m_std_icon = wxArtProvider::GetIcon(wxART_INFORMATION);
     m_clip = false;
+#if wxUSE_GRAPHICS_CONTEXT
+    m_useContext = false;
+#endif
 }
 
 void MyCanvas::DrawTestBrushes(wxDC& dc)
@@ -857,6 +893,41 @@ void MyCanvas::DrawWithLogicalOps(wxDC& dc)
     }
 }
 
+#if wxUSE_GRAPHICS_CONTEXT
+void MyCanvas::DrawAlpha(wxDC& dc)
+{
+    wxDouble margin = 20 ;
+    wxDouble width = 180 ;
+    wxDouble radius = 30 ;
+    
+    dc.SetPen( wxPen( wxColour( 128, 0, 0, 255 ),12, wxSOLID));
+    dc.SetBrush( wxBrush( wxColour( 255, 0, 0, 255),wxSOLID));
+    
+    wxRect r(margin,margin+width*0.66,width,width) ;
+    
+    dc.DrawRoundedRectangle( r.x, r.y, r.width, r.width, radius ) ;
+    
+    dc.SetPen( wxPen( wxColour( 0, 0, 128, 255 ),12, wxSOLID));
+    dc.SetBrush( wxBrush( wxColour( 0, 0, 255, 255),wxSOLID));
+    
+    r.Offset( width * 0.8 , - width * 0.66 ) ;
+    
+    dc.DrawRoundedRectangle( r.x, r.y, r.width, r.width, radius ) ;
+    
+    dc.SetPen( wxPen( wxColour( 128, 128, 0, 255 ),12, wxSOLID));
+    dc.SetBrush( wxBrush( wxColour( 192, 192, 0, 255),wxSOLID));
+
+    r.Offset( width * 0.8 , width *0.5 ) ;
+    
+    dc.DrawRoundedRectangle( r.x, r.y, r.width, r.width, radius ) ;
+    
+    dc.SetPen( *wxTRANSPARENT_PEN ) ;
+    dc.SetBrush( wxBrush( wxColour(255,255,128,128) ) );
+    dc.DrawRoundedRectangle( 0 , margin + width / 2 , width * 3 , 100 , radius) ;
+}
+
+#endif
+
 void MyCanvas::DrawCircles(wxDC& dc)
 {
     int x = 100,
@@ -1095,7 +1166,15 @@ void MyCanvas::DrawRegionsHelper(wxDC& dc, wxCoord x, bool firstTime)
 
 void MyCanvas::OnPaint(wxPaintEvent &WXUNUSED(event))
 {
-    wxPaintDC dc(this);
+    wxPaintDC pdc(this);
+
+#if wxUSE_GRAPHICS_CONTEXT
+     wxGCDC gdc( pdc ) ;
+    wxDC &dc = m_useContext ? (wxDC&) gdc : (wxDC&) pdc ;
+#else
+    wxDC &dc = pdc ;
+#endif
+
     PrepareDC(dc);
 
     m_owner->PrepareDC(dc);
@@ -1172,6 +1251,12 @@ void MyCanvas::OnPaint(wxPaintEvent &WXUNUSED(event))
         case Show_Ops:
             DrawWithLogicalOps(dc);
             break;
+        
+#if wxUSE_GRAPHICS_CONTEXT
+        case Show_Alpha:
+            DrawAlpha(dc);
+            break;
+#endif
 
         case Show_Gradient:
             DrawGradients(dc);
@@ -1211,6 +1296,9 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU      (File_Quit,     MyFrame::OnQuit)
     EVT_MENU      (File_About,    MyFrame::OnAbout)
     EVT_MENU      (File_Clip,     MyFrame::OnClip)
+#if wxUSE_GRAPHICS_CONTEXT
+    EVT_MENU      (File_GraphicContext, MyFrame::OnGraphicContext)
+#endif
 
     EVT_MENU_RANGE(MenuShow_First,   MenuShow_Last,   MyFrame::OnShow)
 
@@ -1235,10 +1323,16 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     menuFile->Append(File_ShowOps, _T("&ROP screen\tF7"));
     menuFile->Append(File_ShowRegions, _T("Re&gions screen\tF8"));
     menuFile->Append(File_ShowCircles, _T("&Circles screen\tF9"));
+#if wxUSE_GRAPHICS_CONTEXT
+    menuFile->Append(File_ShowAlpha, _T("&Alpha screen\tF10"));
+#endif
     menuFile->Append(File_ShowSplines, _T("&Splines screen\tF11"));
     menuFile->Append(File_ShowGradients, _T("&Gradients screen\tF12"));
     menuFile->AppendSeparator();
     menuFile->AppendCheckItem(File_Clip, _T("&Clip\tCtrl-C"), _T("Clip/unclip drawing"));
+#if wxUSE_GRAPHICS_CONTEXT
+    menuFile->AppendCheckItem(File_GraphicContext, _T("&Use GraphicContext\tCtrl-Y"), _T("Use GraphicContext"));
+#endif
     menuFile->AppendSeparator();
     menuFile->Append(File_About, _T("&About...\tCtrl-A"), _T("Show about dialog"));
     menuFile->AppendSeparator();
@@ -1338,6 +1432,13 @@ void MyFrame::OnClip(wxCommandEvent& event)
 {
     m_canvas->Clip(event.IsChecked());
 }
+
+#if wxUSE_GRAPHICS_CONTEXT
+void MyFrame::OnGraphicContext(wxCommandEvent& event)
+{
+    m_canvas->UseGraphicContext(event.IsChecked());
+}
+#endif
 
 void MyFrame::OnShow(wxCommandEvent& event)
 {
