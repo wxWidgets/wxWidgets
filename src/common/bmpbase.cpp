@@ -15,16 +15,19 @@
     #pragma hdrstop
 #endif
 
+#include "wx/bitmap.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/colour.h"
+#endif // WX_PRECOMP
+
 // ----------------------------------------------------------------------------
 // wxBitmapBase
 // ----------------------------------------------------------------------------
 
-#include "wx/bitmap.h"
-
 #if wxUSE_BITMAP_BASE
 
 #ifndef WX_PRECOMP
-    #include "wx/colour.h"
     #include "wx/log.h"
     #include "wx/utils.h"
     #include "wx/palette.h"
