@@ -128,6 +128,19 @@
 #endif
 
 /*  ---------------------------------------------------------------------------- */
+/*  string manipulation helpers */
+/*  ---------------------------------------------------------------------------- */
+
+/* helper macros to concatenate two tokens together */
+#define wxCONCAT_HELPER(text, line) text ## line
+#define wxCONCAT(text, line)        wxCONCAT_HELPER(text, line)
+
+/* helper macros to convert a token into string literal */
+#define wxSTRINGIZE_HELPER(x)       #x
+#define wxSTRINGIZE(x)              wxSTRINGIZE_HELPER(x)
+
+
+/*  ---------------------------------------------------------------------------- */
 /*  wxWidgets version and compatibility defines */
 /*  ---------------------------------------------------------------------------- */
 
@@ -545,10 +558,6 @@ typedef int wxWindowID;
 
 /*  size of statically declared array */
 #define WXSIZEOF(array)   (sizeof(array)/sizeof(array[0]))
-
-/*  helper macros to concatenate two tokens together */
-#define wxCONCAT_HELPER(text, line) text ## line
-#define wxCONCAT(text, line)        wxCONCAT_HELPER(text, line)
 
 /*  helper macros to be able to define unique/anonymous objects: this works by */
 /*  appending the current line number to the given identifier to reduce the */

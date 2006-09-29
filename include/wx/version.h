@@ -44,7 +44,6 @@
 #endif
 
 /*  helpers for wxVERSION_NUM_XXX */
-#define wxSTRINGIZE(x)  #x
 #define wxMAKE_VERSION_STRING(x, y, z) \
     wxSTRINGIZE(x) wxSTRINGIZE(y) wxSTRINGIZE(z)
 #define wxMAKE_VERSION_DOT_STRING(x, y, z) \
