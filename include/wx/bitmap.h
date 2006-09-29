@@ -21,6 +21,7 @@
 #include "wx/string.h"
 #include "wx/gdiobj.h"
 #include "wx/gdicmn.h"  // for wxBitmapType
+#include "wx/colour.h"
 
 class WXDLLEXPORT wxBitmap;
 class WXDLLEXPORT wxBitmapHandler;
