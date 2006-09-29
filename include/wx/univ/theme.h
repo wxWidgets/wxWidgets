@@ -133,9 +133,13 @@ struct WXDLLEXPORT wxThemeInfo
 // ----------------------------------------------------------------------------
 
 #if wxUSE_ALL_THEMES
+    #undef  wxUSE_THEME_WIN32
     #define wxUSE_THEME_WIN32  1
+    #undef  wxUSE_THEME_GTK
     #define wxUSE_THEME_GTK    1
+    #undef  wxUSE_THEME_MONO
     #define wxUSE_THEME_MONO   1
+    #undef  wxUSE_THEME_METAL
     #define wxUSE_THEME_METAL  1
 #endif // wxUSE_ALL_THEMES
 
