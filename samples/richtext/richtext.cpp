@@ -139,6 +139,8 @@ public:
 
     void OnViewHTML(wxCommandEvent& event);
 
+    void OnSwitchStyleSheets(wxCommandEvent& event);
+
     // Forward command events to the current rich text control, if any
     bool ProcessEvent(wxEvent& event);
 
@@ -179,7 +181,12 @@ enum
     ID_FORMAT_LINE_SPACING_DOUBLE,
     ID_FORMAT_LINE_SPACING_SINGLE,
 
-    ID_VIEW_HTML
+    ID_VIEW_HTML,
+    ID_SWITCH_STYLE_SHEETS,
+
+    ID_RICHTEXT_CTRL,
+    ID_RICHTEXT_STYLE_LIST,
+    ID_RICHTEXT_STYLE_COMBO
 };
 
 // ----------------------------------------------------------------------------
@@ -225,6 +232,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(ID_FORMAT_PARAGRAPH_SPACING_LESS,  MyFrame::OnParagraphSpacingLess)
 
     EVT_MENU(ID_VIEW_HTML, MyFrame::OnViewHTML)
+    EVT_MENU(ID_SWITCH_STYLE_SHEETS, MyFrame::OnSwitchStyleSheets)
 END_EVENT_TABLE()
 
 // Create a new application object: this macro will allow wxWidgets to create
@@ -442,6 +450,8 @@ MyFrame::MyFrame(const wxString& title, wxWindowID id, const wxPoint& pos,
     formatMenu->Append(ID_FORMAT_LINE_SPACING_DOUBLE, _("Double Line Spacing"));
     formatMenu->AppendSeparator();
     formatMenu->Append(ID_FORMAT_FONT, _("&Font..."));
+    formatMenu->AppendSeparator();
+    formatMenu->Append(ID_SWITCH_STYLE_SHEETS, _("&Switch Style Sheets"));
 
     // now append the freshly created menu to the menu bar...
     wxMenuBar *menuBar = new wxMenuBar();
@@ -490,7 +500,7 @@ MyFrame::MyFrame(const wxString& title, wxWindowID id, const wxPoint& pos,
     toolBar->AddSeparator();
     toolBar->AddTool(ID_FORMAT_FONT, wxBitmap(font_xpm), wxNullBitmap, false, -1, -1, (wxObject *) NULL, _("Font"));
 
-    wxRichTextStyleComboCtrl* combo = new wxRichTextStyleComboCtrl(toolBar, wxID_ANY, wxDefaultPosition, wxSize(200, -1));
+    wxRichTextStyleComboCtrl* combo = new wxRichTextStyleComboCtrl(toolBar, ID_RICHTEXT_STYLE_COMBO, wxDefaultPosition, wxSize(200, -1));
     toolBar->AddControl(combo);
 
     toolBar->Realize();
@@ -501,16 +511,18 @@ MyFrame::MyFrame(const wxString& title, wxWindowID id, const wxPoint& pos,
     wxFont boldFont = wxFont(12, wxROMAN, wxNORMAL, wxBOLD);
     wxFont italicFont = wxFont(12, wxROMAN, wxITALIC, wxNORMAL);
 
-    m_richTextCtrl = new wxRichTextCtrl(splitter, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize(200, 200), wxVSCROLL|wxHSCROLL|wxNO_BORDER|wxWANTS_CHARS);
+    m_richTextCtrl = new wxRichTextCtrl(splitter, ID_RICHTEXT_CTRL, wxEmptyString, wxDefaultPosition, wxSize(200, 200), wxVSCROLL|wxHSCROLL|wxNO_BORDER|wxWANTS_CHARS);
     wxFont font(12, wxROMAN, wxNORMAL, wxNORMAL);
 
     m_richTextCtrl->SetFont(font);
+
+    m_richTextCtrl->SetStyleSheet(wxGetApp().GetStyleSheet());
 
     combo->SetStyleSheet(wxGetApp().GetStyleSheet());
     combo->SetRichTextCtrl(m_richTextCtrl);
     combo->UpdateStyles();
 
-    wxRichTextStyleListBox* styleListBox = new wxRichTextStyleListBox(splitter, wxID_ANY);
+    wxRichTextStyleListBox* styleListBox = new wxRichTextStyleListBox(splitter, ID_RICHTEXT_STYLE_LIST);
 
     wxSize display = wxGetDisplaySize();
     if ( is_pda && ( display.GetWidth() < display.GetHeight() ) )
@@ -1072,4 +1084,59 @@ void MyFrame::OnViewHTML(wxCommandEvent& WXUNUSED(event))
     boxSizer->Fit(& dialog);
 
     dialog.ShowModal();
+}
+
+// Demonstrates how you can change the style sheets and have the changes
+// reflected in the control content without wiping out character formatting.
+
+void MyFrame::OnSwitchStyleSheets(wxCommandEvent& WXUNUSED(event))
+{
+    static wxRichTextStyleSheet* gs_AlternateStyleSheet = NULL;
+
+    wxRichTextCtrl* ctrl = (wxRichTextCtrl*) FindWindow(ID_RICHTEXT_CTRL);
+    wxRichTextStyleListBox* styleList = (wxRichTextStyleListBox*) FindWindow(ID_RICHTEXT_STYLE_LIST);
+    wxRichTextStyleComboCtrl* styleCombo = (wxRichTextStyleComboCtrl*) FindWindow(ID_RICHTEXT_STYLE_COMBO);
+
+    wxRichTextStyleSheet* sheet = ctrl->GetStyleSheet();
+
+    // One-time creation of an alternate style sheet
+    if (!gs_AlternateStyleSheet)
+    {
+        gs_AlternateStyleSheet = new wxRichTextStyleSheet(*sheet);
+
+        // Make some modifications
+        for (int i = 0; i < (int) gs_AlternateStyleSheet->GetParagraphStyleCount(); i++)
+        {
+            wxRichTextParagraphStyleDefinition* def = gs_AlternateStyleSheet->GetParagraphStyle(i);
+
+            if (def->GetStyle().HasTextColour())
+                def->GetStyle().SetTextColour(*wxBLUE);
+
+            if (def->GetStyle().HasAlignment())
+            {
+                if (def->GetStyle().GetAlignment() == wxTEXT_ALIGNMENT_CENTRE)
+                    def->GetStyle().SetAlignment(wxTEXT_ALIGNMENT_RIGHT);
+                else if (def->GetStyle().GetAlignment() == wxTEXT_ALIGNMENT_LEFT)
+                    def->GetStyle().SetAlignment(wxTEXT_ALIGNMENT_CENTRE);
+            }
+            if (def->GetStyle().HasLeftIndent())
+            {
+                def->GetStyle().SetLeftIndent(def->GetStyle().GetLeftIndent() * 2);
+            }
+        }
+    }
+
+    // Switch sheets
+    wxRichTextStyleSheet* tmp = gs_AlternateStyleSheet;
+    gs_AlternateStyleSheet = sheet;
+    sheet = tmp;
+
+    ctrl->SetStyleSheet(sheet);
+    ctrl->ApplyStyleSheet(sheet); // Makes the control reflect the new style definitions
+
+    styleList->SetStyleSheet(sheet);
+    styleList->UpdateStyles();
+
+    styleCombo->SetStyleSheet(sheet);
+    styleCombo->UpdateStyles();
 }

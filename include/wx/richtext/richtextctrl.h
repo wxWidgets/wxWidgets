@@ -188,6 +188,12 @@ public:
     virtual bool GetStyle(long position, wxTextAttr& style);
     virtual bool GetStyle(long position, wxTextAttrEx& style);
     virtual bool GetStyle(long position, wxRichTextAttr& style);
+
+    /// Get the content (uncombined) attributes for this position.
+    virtual bool GetUncombinedStyle(long position, wxTextAttr& style);
+    virtual bool GetUncombinedStyle(long position, wxTextAttrEx& style);
+    virtual bool GetUncombinedStyle(long position, wxRichTextAttr& style);
+
     virtual bool SetDefaultStyle(const wxTextAttrEx& style);
     virtual bool SetDefaultStyle(const wxTextAttr& style);
 
@@ -530,6 +536,9 @@ public:
     void SetStyleSheet(wxRichTextStyleSheet* styleSheet) { GetBuffer().SetStyleSheet(styleSheet); }
     wxRichTextStyleSheet* GetStyleSheet() const { return GetBuffer().GetStyleSheet(); }
 
+    /// Apply the style sheet to the buffer, for example if the styles have changed.
+    bool ApplyStyleSheet(wxRichTextStyleSheet* styleSheet = NULL);
+
 // Command handlers
 
     void Command(wxCommandEvent& event);
@@ -594,8 +603,6 @@ public:
 
     /// Scrolling
     void OnScroll(wxScrollWinEvent& event);
-
-// Implementation
 
     /// Set font, and also default attributes
     virtual bool SetFont(const wxFont& font);
@@ -716,6 +723,8 @@ public:
         SetDefaultStyle(attr);
         SetCaretPositionForDefaultStyle(GetCaretPosition());
     }
+
+// Implementation
 
 #if wxRICHTEXT_DERIVES_FROM_TEXTCTRLBASE
      WX_FORWARD_TO_SCROLL_HELPER()
@@ -845,4 +854,3 @@ typedef void (wxEvtHandler::*wxRichTextEventFunction)(wxRichTextEvent&);
 
 #endif
     // _WX_RICHTEXTCTRL_H_
-

@@ -13,7 +13,7 @@
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-    #pragma hdrstop
+  #pragma hdrstop
 #endif
 
 #if wxUSE_RICHTEXT
@@ -21,8 +21,7 @@
 #include "wx/richtext/richtextstyles.h"
 
 #ifndef WX_PRECOMP
-    #include "wx/dcclient.h"
-    #include "wx/module.h"
+  #include "wx/wx.h"
 #endif
 
 #include "wx/filename.h"
@@ -34,6 +33,38 @@
 IMPLEMENT_CLASS(wxRichTextStyleDefinition, wxObject)
 IMPLEMENT_CLASS(wxRichTextCharacterStyleDefinition, wxRichTextStyleDefinition)
 IMPLEMENT_CLASS(wxRichTextParagraphStyleDefinition, wxRichTextStyleDefinition)
+
+/*!
+ * A definition
+ */
+
+void wxRichTextStyleDefinition::Copy(const wxRichTextStyleDefinition& def)
+{
+    m_name = def.m_name;
+    m_baseStyle = def.m_baseStyle;
+    m_style = def.m_style;
+}
+
+bool wxRichTextStyleDefinition::Eq(const wxRichTextStyleDefinition& def) const
+{
+    return (m_name == def.m_name && m_baseStyle == def.m_baseStyle && m_style == def.m_style);
+}
+
+/*!
+ * Paragraph style definition
+ */
+
+void wxRichTextParagraphStyleDefinition::Copy(const wxRichTextParagraphStyleDefinition& def)
+{
+    wxRichTextStyleDefinition::Copy(def);
+
+    m_nextStyle = def.m_nextStyle;
+}
+
+bool wxRichTextParagraphStyleDefinition::operator ==(const wxRichTextParagraphStyleDefinition& def) const
+{
+    return (Eq(def) && m_nextStyle == def.m_nextStyle);
+}
 
 /*!
  * The style manager
@@ -88,6 +119,48 @@ void wxRichTextStyleSheet::DeleteStyles()
     WX_CLEAR_LIST(wxList, m_characterStyleDefinitions);
     WX_CLEAR_LIST(wxList, m_paragraphStyleDefinitions);
 }
+
+/// Add a definition to the character style list
+bool wxRichTextStyleSheet::AddCharacterStyle(wxRichTextCharacterStyleDefinition* def)
+{
+    def->GetStyle().SetCharacterStyleName(def->GetName());
+    return AddStyle(m_characterStyleDefinitions, def);
+}
+
+/// Add a definition to the paragraph style list
+bool wxRichTextStyleSheet::AddParagraphStyle(wxRichTextParagraphStyleDefinition* def)
+{
+    def->GetStyle().SetParagraphStyleName(def->GetName());
+    return AddStyle(m_paragraphStyleDefinitions, def);
+}
+
+/// Copy
+void wxRichTextStyleSheet::Copy(const wxRichTextStyleSheet& sheet)
+{
+    DeleteStyles();
+
+    wxList::compatibility_iterator node;
+
+    for (node = sheet.m_characterStyleDefinitions.GetFirst(); node; node = node->GetNext())
+    {
+        wxRichTextCharacterStyleDefinition* def = (wxRichTextCharacterStyleDefinition*) node->GetData();
+        AddCharacterStyle(new wxRichTextCharacterStyleDefinition(*def));
+    }
+
+    for (node = sheet.m_paragraphStyleDefinitions.GetFirst(); node; node = node->GetNext())
+    {
+        wxRichTextParagraphStyleDefinition* def = (wxRichTextParagraphStyleDefinition*) node->GetData();
+        AddParagraphStyle(new wxRichTextParagraphStyleDefinition(*def));
+    }
+}
+
+/// Equality
+bool wxRichTextStyleSheet::operator==(const wxRichTextStyleSheet& WXUNUSED(sheet)) const
+{
+    // TODO
+    return false;
+}
+
 
 #if wxUSE_HTML
 /*!
@@ -316,8 +389,10 @@ void wxRichTextStyleListBox::OnIdle(wxIdleEvent& event)
 {
     if (CanAutoSetSelection() && GetRichTextCtrl())
     {
-        wxRichTextParagraph* para = GetRichTextCtrl()->GetBuffer().GetParagraphAtPosition(GetRichTextCtrl()->GetCaretPosition());
-        wxRichTextObject* obj = GetRichTextCtrl()->GetBuffer().GetLeafObjectAtPosition(GetRichTextCtrl()->GetCaretPosition());
+        int adjustedCaretPos = GetRichTextCtrl()->GetAdjustedCaretPosition(GetRichTextCtrl()->GetCaretPosition());
+
+        wxRichTextParagraph* para = GetRichTextCtrl()->GetBuffer().GetParagraphAtPosition(adjustedCaretPos);
+        wxRichTextObject* obj = GetRichTextCtrl()->GetBuffer().GetLeafObjectAtPosition(adjustedCaretPos);
 
         wxString styleName;
 
@@ -483,8 +558,10 @@ void wxRichTextStyleComboCtrl::OnIdle(wxIdleEvent& event)
 {
     if (GetRichTextCtrl() && !IsPopupShown())
     {
-        wxRichTextParagraph* para = GetRichTextCtrl()->GetBuffer().GetParagraphAtPosition(GetRichTextCtrl()->GetCaretPosition());
-        wxRichTextObject* obj = GetRichTextCtrl()->GetBuffer().GetLeafObjectAtPosition(GetRichTextCtrl()->GetCaretPosition());
+        int adjustedCaretPos = GetRichTextCtrl()->GetAdjustedCaretPosition(GetRichTextCtrl()->GetCaretPosition());
+
+        wxRichTextParagraph* para = GetRichTextCtrl()->GetBuffer().GetParagraphAtPosition(adjustedCaretPos);
+        wxRichTextObject* obj = GetRichTextCtrl()->GetBuffer().GetLeafObjectAtPosition(adjustedCaretPos);
 
         wxString styleName;
 

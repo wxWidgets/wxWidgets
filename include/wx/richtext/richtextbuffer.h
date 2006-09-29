@@ -102,6 +102,10 @@
 #include "wx/cmdproc.h"
 #include "wx/txtstrm.h"
 
+// Experimental dynamic styles to avoid user-specific character styles from being
+// overwritten by paragraph styles.
+#define wxRICHTEXT_USE_DYNAMIC_STYLES 1
+
 /*!
  * File types
  */
@@ -160,6 +164,13 @@ class WXDLLIMPEXP_RICHTEXT wxTextAttrEx;
 
 #define wxRICHTEXT_FORMATTED        0x01
 #define wxRICHTEXT_UNFORMATTED      0x02
+
+/*!
+ * Flags for text insertion
+ */
+
+#define wxRICHTEXT_INSERT_NONE                              0x00
+#define wxRICHTEXT_INSERT_WITH_PREVIOUS_PARAGRAPH_STYLE     0x01
 
 /*!
  * Extra formatting flags not in wxTextAttr
@@ -377,6 +388,9 @@ public:
 
     // Assignment from a wxTextAttrEx object.
     void operator= (const wxTextAttrEx& attr);
+
+    // Equality test
+    bool operator== (const wxRichTextAttr& attr) const;
 
     // Making a wxTextAttrEx object.
     operator wxTextAttrEx () const ;
@@ -853,13 +867,13 @@ public:
     virtual void Reset();
 
     /// Convenience function to add a paragraph of text
-    virtual wxRichTextRange AddParagraph(const wxString& text);
+    virtual wxRichTextRange AddParagraph(const wxString& text, wxTextAttrEx* paraStyle = NULL);
 
     /// Convenience function to add an image
-    virtual wxRichTextRange AddImage(const wxImage& image);
+    virtual wxRichTextRange AddImage(const wxImage& image, wxTextAttrEx* paraStyle = NULL);
 
     /// Adds multiple paragraphs, based on newlines.
-    virtual wxRichTextRange AddParagraphs(const wxString& text);
+    virtual wxRichTextRange AddParagraphs(const wxString& text, wxTextAttrEx* paraStyle = NULL);
 
     /// Get the line at the given position. If caretPosition is true, the position is
     /// a caret position, which is normally a smaller number.
@@ -916,9 +930,17 @@ public:
     virtual bool SetStyle(const wxRichTextRange& range, const wxRichTextAttr& style, bool withUndo = true);
     virtual bool SetStyle(const wxRichTextRange& range, const wxTextAttrEx& style, bool withUndo = true);
 
-    /// Get the text attributes for this position.
+    /// Get the conbined text attributes for this position.
     virtual bool GetStyle(long position, wxTextAttrEx& style);
     virtual bool GetStyle(long position, wxRichTextAttr& style);
+
+    /// Get the content (uncombined) attributes for this position.
+    virtual bool GetUncombinedStyle(long position, wxTextAttrEx& style);
+    virtual bool GetUncombinedStyle(long position, wxRichTextAttr& style);
+
+    /// Implementation helper for GetStyle. If combineStyles is true, combine base, paragraph and
+    /// context attributes.
+    virtual bool DoGetStyle(long position, wxTextAttrEx& style, bool combineStyles = true);
 
     /// Test if this whole range has character attributes of the specified kind. If any
     /// of the attributes are different within the range, the test fails. You
@@ -944,6 +966,9 @@ public:
 
     /// Make a copy of the fragment corresponding to the given range, putting it in 'fragment'.
     virtual bool CopyFragment(const wxRichTextRange& range, wxRichTextFragment& fragment);
+
+    /// Apply the style sheet to the buffer, for example if the styles have changed.
+    virtual bool ApplyStyleSheet(wxRichTextStyleSheet* styleSheet);
 
     /// Copy
     void Copy(const wxRichTextParagraphLayoutBox& obj);
@@ -1161,7 +1186,7 @@ public:
 // Implementation
 
     /// Apply paragraph styles such as centering to the wrapped lines
-    virtual void ApplyParagraphStyle(const wxRect& rect);
+    virtual void ApplyParagraphStyle(const wxTextAttrEx& attr, const wxRect& rect);
 
     /// Insert text at the given position
     virtual bool InsertText(long pos, const wxString& text);
@@ -1195,6 +1220,13 @@ public:
 
     /// Clear remaining unused line objects, if any
     bool ClearUnusedLines(int lineCount);
+
+    /// Get combined attributes of the base style, paragraph style and character style. We use this to dynamically
+    /// retrieve the actual style.
+    wxTextAttrEx GetCombinedAttributes(const wxTextAttr& contentStyle) const;
+
+    /// Get combined attributes of the base style and paragraph style.
+    wxTextAttrEx GetCombinedAttributes() const;
 
 protected:
     /// The lines that make up the wrapped paragraph
@@ -1269,7 +1301,7 @@ public:
     /// Clone
     virtual wxRichTextObject* Clone() const { return new wxRichTextPlainText(*this); }
 private:
-    bool DrawTabbedString(wxDC& dc,const wxRect& rect,wxString& str, wxCoord& x, wxCoord& y, bool selected);
+    bool DrawTabbedString(wxDC& dc, const wxTextAttrEx& attr, const wxRect& rect, wxString& str, wxCoord& x, wxCoord& y, bool selected);
 
 protected:
     wxString    m_text;
@@ -1623,13 +1655,13 @@ public:
     virtual wxRichTextObject* Clone() const { return new wxRichTextBuffer(*this); }
 
     /// Submit command to insert the given text
-    bool InsertTextWithUndo(long pos, const wxString& text, wxRichTextCtrl* ctrl);
+    bool InsertTextWithUndo(long pos, const wxString& text, wxRichTextCtrl* ctrl, int flags = 0);
 
     /// Submit command to insert a newline
-    bool InsertNewlineWithUndo(long pos, wxRichTextCtrl* ctrl);
+    bool InsertNewlineWithUndo(long pos, wxRichTextCtrl* ctrl, int flags = 0);
 
     /// Submit command to insert the given image
-    bool InsertImageWithUndo(long pos, const wxRichTextImageBlock& imageBlock, wxRichTextCtrl* ctrl);
+    bool InsertImageWithUndo(long pos, const wxRichTextImageBlock& imageBlock, wxRichTextCtrl* ctrl, int flags = 0);
 
     /// Submit command to delete this range
     bool DeleteRangeWithUndo(const wxRichTextRange& range, long initialCaretPosition, long newCaretPositon, wxRichTextCtrl* ctrl);
@@ -1637,6 +1669,11 @@ public:
     /// Mark modified
     void Modify(bool modify = true) { m_modified = modify; }
     bool IsModified() const { return m_modified; }
+
+    /// Get the style that is appropriate for a new paragraph at this position.
+    /// If the previous paragraph has a paragraph style name, look up the next-paragraph
+    /// style.
+    wxRichTextAttr GetStyleForNewParagraph(long pos, bool caretPosition = false) const;
 
     /// Dumps contents of buffer for debugging purposes
     virtual void Dump();

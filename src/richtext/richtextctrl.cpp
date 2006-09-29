@@ -22,11 +22,8 @@
 #include "wx/richtext/richtextstyles.h"
 
 #ifndef WX_PRECOMP
+    #include "wx/wx.h"
     #include "wx/settings.h"
-    #include "wx/menu.h"
-    #include "wx/intl.h"
-    #include "wx/log.h"
-    #include "wx/stopwatch.h"
 #endif
 
 #include "wx/textfile.h"
@@ -145,9 +142,12 @@ bool wxRichTextCtrl::Create( wxWindow* parent, wxWindowID id, const wxString& va
     attributes.SetBackgroundColour(*wxWHITE);
     attributes.SetAlignment(wxTEXT_ALIGNMENT_LEFT);
     attributes.SetFlags(wxTEXT_ATTR_ALL);
-
-    SetDefaultStyle(attributes);
     SetBasicStyle(attributes);
+
+    // The default attributes will be merged with base attributes, so
+    // can be empty to begin with
+    wxTextAttrEx defaultAttributes;
+    SetDefaultStyle(defaultAttributes);
 
     SetBackgroundColour(*wxWHITE);
     SetBackgroundStyle(wxBG_STYLE_CUSTOM);
@@ -466,7 +466,7 @@ void wxRichTextCtrl::OnChar(wxKeyEvent& event)
 
         DeleteSelectedContent(& newPos);
 
-        GetBuffer().InsertNewlineWithUndo(newPos+1, this);
+        GetBuffer().InsertNewlineWithUndo(newPos+1, this, wxRICHTEXT_INSERT_WITH_PREVIOUS_PARAGRAPH_STYLE);
 
         wxRichTextEvent cmdEvent(
             wxEVT_COMMAND_RICHTEXT_RETURN,
@@ -545,7 +545,7 @@ void wxRichTextCtrl::OnChar(wxKeyEvent& event)
         DeleteSelectedContent(& newPos);
 
         wxString str = (wxChar) event.GetKeyCode();
-        GetBuffer().InsertTextWithUndo(newPos+1, str, this);
+        GetBuffer().InsertTextWithUndo(newPos+1, str, this, wxRICHTEXT_INSERT_WITH_PREVIOUS_PARAGRAPH_STYLE);
 
         EndBatchUndo();
 
@@ -1528,7 +1528,7 @@ bool wxRichTextCtrl::RecreateBuffer(const wxSize& size)
 #if !wxRICHTEXT_DERIVES_FROM_TEXTCTRLBASE
 bool wxRichTextCtrl::LoadFile(const wxString& filename, int fileType)
 {
-    return DoLoadFile(filename, fileType);    
+    return DoLoadFile(filename, fileType);
 }
 
 bool wxRichTextCtrl::SaveFile(const wxString& filename, int fileType)
@@ -1744,6 +1744,7 @@ void wxRichTextCtrl::WriteText(const wxString& value)
 void wxRichTextCtrl::DoWriteText(const wxString& value, bool WXUNUSED(selectionOnly))
 {
     wxString valueDos = wxTextFile::Translate(value, wxTextFileType_Unix);
+
     GetBuffer().InsertTextWithUndo(m_caretPosition+1, valueDos, this);
 }
 
@@ -1811,7 +1812,7 @@ void wxRichTextCtrl::Copy()
 {
     if (CanCopy())
     {
-        wxRichTextRange range = GetSelectionRange();
+        wxRichTextRange range = GetInternalSelectionRange();
         GetBuffer().CopyToClipboard(range);
     }
 }
@@ -1820,7 +1821,7 @@ void wxRichTextCtrl::Cut()
 {
     if (CanCut())
     {
-        wxRichTextRange range = GetSelectionRange();
+        wxRichTextRange range = GetInternalSelectionRange();
         GetBuffer().CopyToClipboard(range);
 
         DeleteSelectedContent();
@@ -2258,7 +2259,7 @@ const wxTextAttr& wxRichTextCtrl::GetDefaultStyle() const
 
 bool wxRichTextCtrl::GetStyle(long position, wxTextAttr& style)
 {
-    wxTextAttrEx attr;
+    wxTextAttrEx attr(style);
     if (GetBuffer().GetStyle(position, attr))
     {
         style = attr;
@@ -2278,6 +2279,30 @@ bool wxRichTextCtrl::GetStyle(long position, wxRichTextAttr& style)
     return GetBuffer().GetStyle(position, style);
 }
 
+/// Get the content (uncombined) attributes for this position.
+
+bool wxRichTextCtrl::GetUncombinedStyle(long position, wxTextAttr& style)
+{
+    wxTextAttrEx attr(style);
+    if (GetBuffer().GetUncombinedStyle(position, attr))
+    {
+        style = attr;
+        return true;
+    }
+    else
+        return false;
+}
+
+bool wxRichTextCtrl::GetUncombinedStyle(long position, wxTextAttrEx& style)
+{
+    return GetBuffer().GetUncombinedStyle(position, style);
+}
+
+bool wxRichTextCtrl::GetUncombinedStyle(long position, wxRichTextAttr& style)
+{
+    return GetBuffer().GetUncombinedStyle(position, style);
+}
+
 /// Set font, and also the buffer attributes
 bool wxRichTextCtrl::SetFont(const wxFont& font)
 {
@@ -2290,7 +2315,15 @@ bool wxRichTextCtrl::SetFont(const wxFont& font)
     wxTextAttrEx attr = GetBuffer().GetAttributes();
     attr.SetFont(font);
     GetBuffer().SetBasicStyle(attr);
+
+#if !wxRICHTEXT_DERIVES_FROM_TEXTCTRLBASE
+    // Don't set the default style, since it will be inherited from
+    // the basic style.
     GetBuffer().SetDefaultStyle(attr);
+#endif
+
+    GetBuffer().Invalidate(wxRICHTEXT_ALL);
+    Refresh(false);
 
     return true;
 }
@@ -2508,8 +2541,8 @@ bool wxRichTextCtrl::IsSelectionUnderlined()
         // to see what the effect would be if we started typing.
         wxRichTextAttr attr;
         attr.SetFlags(wxTEXT_ATTR_FONT_UNDERLINE);
-
         long pos = GetAdjustedCaretPosition(GetCaretPosition());
+
         if (GetStyle(pos, attr))
         {
             if (IsDefaultStyleShowing())
@@ -2618,6 +2651,24 @@ void wxRichTextCtrl::ApplyStyle(wxRichTextStyleDefinition* def)
         SetAndShowDefaultStyle(attr);
 }
 
+/// Apply the style sheet to the buffer, for example if the styles have changed.
+bool wxRichTextCtrl::ApplyStyleSheet(wxRichTextStyleSheet* styleSheet)
+{
+    if (!styleSheet)
+        styleSheet = GetBuffer().GetStyleSheet();
+    if (!styleSheet)
+        return false;
+
+    if (GetBuffer().ApplyStyleSheet(styleSheet))
+    {
+        GetBuffer().Invalidate(wxRICHTEXT_ALL);
+        Refresh(false);
+        return true;
+    }
+    else
+        return false;
+}
+
 /// Sets the default style to the style under the cursor
 bool wxRichTextCtrl::SetDefaultStyleToCursorStyle()
 {
@@ -2627,7 +2678,11 @@ bool wxRichTextCtrl::SetDefaultStyleToCursorStyle()
     // If at the start of a paragraph, use the next position.
     long pos = GetAdjustedCaretPosition(GetCaretPosition());
 
+#if wxRICHTEXT_USE_DYNAMIC_STYLES
+    if (GetUncombinedStyle(pos, attr))
+#else
     if (GetStyle(pos, attr))
+#endif
     {
         SetDefaultStyle(attr);
         return true;
@@ -2676,7 +2731,7 @@ void wxRichTextCtrl::SetSelectionRange(const wxRichTextRange& range)
         range1.SetEnd(range1.GetEnd() - 1);
 
     wxASSERT( range1.GetStart() > range1.GetEnd() );
-    
+
     SetInternalSelectionRange(range1);
 }
 

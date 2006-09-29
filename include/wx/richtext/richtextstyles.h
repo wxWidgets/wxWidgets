@@ -47,10 +47,15 @@ public:
 
 // Constructors
 
+    wxRichTextStyleDefinition(const wxRichTextStyleDefinition& def) { Copy(def); }
     wxRichTextStyleDefinition(const wxString& name = wxEmptyString) { Init(); m_name = name; }
     virtual ~wxRichTextStyleDefinition() {}
 
     void Init() {}
+    void Copy(const wxRichTextStyleDefinition& def);
+    bool Eq(const wxRichTextStyleDefinition& def) const;
+    void operator =(const wxRichTextStyleDefinition& def) { Copy(def); }
+    bool operator ==(const wxRichTextStyleDefinition& def) const { return Eq(def); }
 
     /// The name of the style.
     void SetName(const wxString& name) { m_name = name; }
@@ -82,6 +87,7 @@ public:
 
 // Constructors
 
+    wxRichTextCharacterStyleDefinition(const wxRichTextCharacterStyleDefinition& def): wxRichTextStyleDefinition(def) {}
     wxRichTextCharacterStyleDefinition(const wxString& name = wxEmptyString):
         wxRichTextStyleDefinition(name) {}
     virtual ~wxRichTextCharacterStyleDefinition() {}
@@ -100,6 +106,7 @@ public:
 
 // Constructors
 
+    wxRichTextParagraphStyleDefinition(const wxRichTextParagraphStyleDefinition& def): wxRichTextStyleDefinition(def) { m_nextStyle = def.m_nextStyle; }
     wxRichTextParagraphStyleDefinition(const wxString& name = wxEmptyString):
         wxRichTextStyleDefinition(name) {}
     virtual ~wxRichTextParagraphStyleDefinition() {}
@@ -107,6 +114,10 @@ public:
     /// The next style.
     void SetNextStyle(const wxString& name) { m_nextStyle = name; }
     const wxString& GetNextStyle() const { return m_nextStyle; }
+
+    void Copy(const wxRichTextParagraphStyleDefinition& def);
+    void operator =(const wxRichTextParagraphStyleDefinition& def) { Copy(def); }
+    bool operator ==(const wxRichTextParagraphStyleDefinition& def) const;
 
 protected:
 
@@ -124,29 +135,39 @@ class WXDLLIMPEXP_RICHTEXT wxRichTextStyleSheet: public wxObject
 
 public:
     /// Constructors
+    wxRichTextStyleSheet(const wxRichTextStyleSheet& sheet) { Copy(sheet); }
     wxRichTextStyleSheet() { Init(); }
     virtual ~wxRichTextStyleSheet() { DeleteStyles(); }
 
     /// Initialisation
     void Init();
 
+    /// Copy
+    void Copy(const wxRichTextStyleSheet& sheet);
+
+    /// Assignment
+    void operator=(const wxRichTextStyleSheet& sheet) { Copy(sheet); }
+
+    /// Equality
+    bool operator==(const wxRichTextStyleSheet& sheet) const;
+
     /// Add a definition to the character style list
-    bool AddCharacterStyle(wxRichTextCharacterStyleDefinition* def) { return AddStyle(m_characterStyleDefinitions, def); }
+    bool AddCharacterStyle(wxRichTextCharacterStyleDefinition* def);
 
     /// Add a definition to the paragraph style list
-    bool AddParagraphStyle(wxRichTextParagraphStyleDefinition* def) { return AddStyle(m_paragraphStyleDefinitions, def); }
+    bool AddParagraphStyle(wxRichTextParagraphStyleDefinition* def);
 
     /// Remove a character style
     bool RemoveCharacterStyle(wxRichTextStyleDefinition* def, bool deleteStyle = false) { return RemoveStyle(m_characterStyleDefinitions, def, deleteStyle); }
 
     /// Remove a paragraph style
-    bool RemoveParagraphStyle(wxRichTextStyleDefinition* def, bool deleteStyle = false) { return RemoveStyle(m_characterStyleDefinitions, def, deleteStyle); }
+    bool RemoveParagraphStyle(wxRichTextStyleDefinition* def, bool deleteStyle = false) { return RemoveStyle(m_paragraphStyleDefinitions, def, deleteStyle); }
 
     /// Find a character definition by name
     wxRichTextCharacterStyleDefinition* FindCharacterStyle(const wxString& name) const { return (wxRichTextCharacterStyleDefinition*) FindStyle(m_characterStyleDefinitions, name); }
 
     /// Find a paragraph definition by name
-    wxRichTextParagraphStyleDefinition* FindParagraphStyle(const wxString& name) const { return (wxRichTextParagraphStyleDefinition*) FindStyle(m_characterStyleDefinitions, name); }
+    wxRichTextParagraphStyleDefinition* FindParagraphStyle(const wxString& name) const { return (wxRichTextParagraphStyleDefinition*) FindStyle(m_paragraphStyleDefinitions, name); }
 
     /// Return the number of character styes.
     size_t GetCharacterStyleCount() const { return m_characterStyleDefinitions.GetCount(); }
