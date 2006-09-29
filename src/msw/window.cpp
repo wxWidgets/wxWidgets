@@ -4468,11 +4468,37 @@ WXHBRUSH wxWindowMSW::MSWGetBgBrush(WXHDC hDC, WXHWND hWndToPaint)
     return 0;
 }
 
-bool wxWindowMSW::HandlePrintClient(WXHDC WXUNUSED(hDC))
+bool wxWindowMSW::HandlePrintClient(WXHDC hDC)
 {
-    // TODO: handle wxBG_STYLE_CUSTOM and/or wxBG_STYLE_COLOUR here so when
-    // DrawParentThemeBackground() from uxtheme.dll is called we don't get
-    // the default background e.g. the border when custom drawing buttons
+    // we receive this message when DrawThemeParentBackground() is
+    // called from def window proc of several controls under XP and we
+    // must draw properly themed background here
+    //
+    // note that naively I'd expect filling the client rect with the
+    // brush returned by MSWGetBgBrush() work -- but for some reason it
+    // doesn't and we have to call parents MSWPrintChild() which is
+    // supposed to call DrawThemeBackground() with appropriate params
+    //
+    // also note that in this case lParam == PRF_CLIENT but we're
+    // clearly expected to paint the background and nothing else!
+
+    if ( IsTopLevel() || InheritsBackgroundColour() )
+        return false;
+
+    // sometimes we don't want the parent to handle it at all, instead
+    // return whatever value this window wants
+    if ( !MSWShouldPropagatePrintChild() )
+        return MSWPrintChild(hDC, (wxWindow *)this);
+
+    for ( wxWindow *win = GetParent(); win; win = win->GetParent() )
+    {
+        if ( win->MSWPrintChild(hDC, (wxWindow *)this) )
+            return true;
+
+        if ( win->IsTopLevel() || win->InheritsBackgroundColour() )
+            break;
+    }
+
     return false;
 }
 
