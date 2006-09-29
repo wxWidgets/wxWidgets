@@ -205,6 +205,12 @@ public:
                                                 const wxMenu& menu) const;
 #endif // wxUSE_MENUS
 
+#if wxUSE_STATUSBAR
+    virtual wxCoord GetStatusBarBorderBetweenFields() const;
+
+    virtual wxSize GetStatusBarFieldMargins() const;
+#endif // wxUSE_STATUSBAR
+
 protected:
     // override base class border drawing routines: we always draw just a
     // single simple border
@@ -1028,6 +1034,24 @@ void wxMonoRenderer::DrawScrollbarShaft(wxDC& dc,
 {
     DrawSolidRect(dc, wxMONO_BG_COL, rect);
 }
+
+// ----------------------------------------------------------------------------
+// status bar
+// ----------------------------------------------------------------------------
+
+#if wxUSE_STATUSBAR
+
+wxCoord wxMonoRenderer::GetStatusBarBorderBetweenFields() const
+{
+    return 1;
+}
+
+wxSize wxMonoRenderer::GetStatusBarFieldMargins() const
+{
+    return wxSize(1, 1);
+}
+
+#endif // wxUSE_STATUSBAR
 
 // ----------------------------------------------------------------------------
 // top level windows
