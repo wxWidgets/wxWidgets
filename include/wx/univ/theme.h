@@ -103,6 +103,10 @@ struct WXDLLEXPORT wxThemeInfo
 // without it, an over optimizing linker may discard the object module
 // containing the theme implementation entirely
 #define WX_USE_THEME(themename)                                             \
+    /* this indirection makes it possible to pass macro as the argument */  \
+    WX_USE_THEME_IMPL(themename)
+
+#define WX_USE_THEME_IMPL(themename)                                        \
     extern WXDLLEXPORT_DATA(bool) wxThemeUse##themename;                    \
     static struct wxThemeUserFor##themename                                 \
     {                                                                       \
@@ -124,5 +128,41 @@ struct WXDLLEXPORT wxThemeInfo
     wxThemeInfo classname::ms_info##themename(wxCtorFor##themename,         \
                                               wxT( #themename ), themedesc)
 
-#endif // _WX_UNIV_THEME_H_
+// ----------------------------------------------------------------------------
+// determine default theme
+// ----------------------------------------------------------------------------
 
+#if wxUSE_ALL_THEMES
+    #define wxUSE_THEME_WIN32  1
+    #define wxUSE_THEME_GTK    1
+    #define wxUSE_THEME_MONO   1
+    #define wxUSE_THEME_METAL  1
+#endif // wxUSE_ALL_THEMES
+
+// determine the default theme to use:
+#if defined(__WXGTK__) && wxUSE_THEME_GTK
+    #define wxUNIV_DEFAULT_THEME gtk
+#elif defined(__WXDFB__) && wxUSE_THEME_MONO
+    // use mono theme for DirectFB port because it cannot correctly
+    // render neither win32 nor gtk themes yet:
+    #define wxUNIV_DEFAULT_THEME mono
+#endif
+
+// if no theme was picked, get any theme compiled in (sorted by
+// quality/completeness of the theme):
+#ifndef wxUNIV_DEFAULT_THEME
+    #if wxUSE_THEME_WIN32
+        #define wxUNIV_DEFAULT_THEME win32
+    #elif wxUSE_THEME_GTK
+        #define wxUNIV_DEFAULT_THEME gtk
+    #elif wxUSE_THEME_MONO
+        #define wxUNIV_DEFAULT_THEME mono
+    #endif
+    // If nothing matches, no themes are compiled and the app must provide
+    // some theme itself
+    // (note that wxUSE_THEME_METAL depends on win32 theme, so we don't have to
+    // try it)
+    //
+#endif // !wxUNIV_DEFAULT_THEME
+
+#endif // _WX_UNIV_THEME_H_

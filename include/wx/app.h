@@ -641,9 +641,12 @@ public:
 #ifdef __WXUNIVERSAL__
     #include "wx/univ/theme.h"
 
-    #define IMPLEMENT_WX_THEME_SUPPORT \
-        WX_USE_THEME(win32); \
-        WX_USE_THEME(gtk);
+    #ifdef wxUNIV_DEFAULT_THEME
+        #define IMPLEMENT_WX_THEME_SUPPORT \
+            WX_USE_THEME(wxUNIV_DEFAULT_THEME);
+    #else
+        #define IMPLEMENT_WX_THEME_SUPPORT
+    #endif
 #else
     #define IMPLEMENT_WX_THEME_SUPPORT
 #endif
