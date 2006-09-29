@@ -157,7 +157,11 @@ public:
                                  const wxString& label,
                                  int flags = 0, int style = 0);
 
-    virtual wxSize GetStatusBarBorders(wxCoord *borderBetweenFields) const;
+    virtual wxSize GetStatusBarBorders() const;
+
+    virtual wxCoord GetStatusBarBorderBetweenFields() const;
+
+    virtual wxSize GetStatusBarFieldMargins() const;
 #endif // wxUSE_STATUSBAR
 
     virtual wxCoord GetCheckItemMargin() const { return 0; }

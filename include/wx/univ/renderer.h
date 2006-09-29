@@ -481,8 +481,14 @@ public:
 
 #if wxUSE_STATUSBAR
     // get the borders around the status bar fields (x and y fields of the
-    // return value) and also, optionally, the border between the fields
-    virtual wxSize GetStatusBarBorders(wxCoord *borderBetweenFields) const = 0;
+    // return value)
+    virtual wxSize GetStatusBarBorders() const = 0;
+
+    // get the border between the status bar fields
+    virtual wxCoord GetStatusBarBorderBetweenFields() const = 0;
+
+    // get the mergin between a field and its border
+    virtual wxSize GetStatusBarFieldMargins() const = 0;
 #endif // wxUSE_STATUSBAR
 
     // get client area rectangle of top level window (i.e. subtract
@@ -856,9 +862,14 @@ public:
 #endif // wxUSE_MENUS
 
 #if wxUSE_STATUSBAR
-    virtual wxSize GetStatusBarBorders(wxCoord *borderBetweenFields) const
-        { return m_renderer->GetStatusBarBorders(borderBetweenFields); }
+    virtual wxSize GetStatusBarBorders() const
+        { return m_renderer->GetStatusBarBorders(); }
+    virtual wxCoord GetStatusBarBorderBetweenFields() const
+        { return m_renderer->GetStatusBarBorderBetweenFields(); }
+    virtual wxSize GetStatusBarFieldMargins() const
+        { return m_renderer->GetStatusBarFieldMargins(); }
 #endif // wxUSE_STATUSBAR
+
     virtual wxRect GetFrameClientArea(const wxRect& rect, int flags) const
         { return m_renderer->GetFrameClientArea(rect, flags); }
     virtual wxSize GetFrameTotalSize(const wxSize& clientSize, int flags) const

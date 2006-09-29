@@ -86,7 +86,8 @@ wxRect wxStatusBarUniv::GetTotalFieldRect(wxCoord *borderBetweenFields)
 
     // no, don't do this - the borders are meant to be inside this rect
     // wxSize sizeBorders =
-    m_renderer->GetStatusBarBorders(borderBetweenFields);
+    if ( borderBetweenFields )
+        *borderBetweenFields = m_renderer->GetStatusBarBorderBetweenFields();
     //rect.Deflate(sizeBorders.x, sizeBorders.y);
 
     // recalc the field widths if needed
@@ -311,12 +312,14 @@ void wxStatusBarUniv::SetMinHeight(int WXUNUSED(height))
 
 int wxStatusBarUniv::GetBorderX() const
 {
-    return m_renderer->GetStatusBarBorders(NULL).x;
+    return m_renderer->GetStatusBarBorders().x +
+           m_renderer->GetStatusBarFieldMargins().x;
 }
 
 int wxStatusBarUniv::GetBorderY() const
 {
-    return m_renderer->GetStatusBarBorders(NULL).y;
+    return m_renderer->GetStatusBarBorders().y +
+           m_renderer->GetStatusBarFieldMargins().y;
 }
 
 #endif // wxUSE_STATUSBAR

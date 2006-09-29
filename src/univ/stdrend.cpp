@@ -1092,11 +1092,30 @@ int wxStdRenderer::PixelToScrollbar(const wxScrollBar *scrollbar, wxCoord coord)
 
 #if wxUSE_STATUSBAR
 
-wxSize wxStdRenderer::GetStatusBarBorders(wxCoord *borderBetweenFields) const
+wxSize wxStdRenderer::GetStatusBarBorders() const
 {
-    if ( borderBetweenFields )
-        *borderBetweenFields = 2;
+    // Rendered border may be different depending on field's style, we use
+    // the largest value so that any field certainly fits into the borders
+    // we return:
+    wxRect raised = GetBorderDimensions(wxBORDER_RAISED);
+    wxRect flat = GetBorderDimensions(wxBORDER_STATIC);
+    wxASSERT_MSG( raised.x == raised.width && raised.y == raised.height &&
+                  flat.x == flat.width && flat.y == flat.height,
+                  _T("this code expects uniform borders, you must override GetStatusBarBorders") );
 
+    // take the larger of flat/raised values:
+    wxSize border(wxMax(raised.x, flat.x), wxMax(raised.y, flat.y));
+
+    return border;
+}
+
+wxCoord wxStdRenderer::GetStatusBarBorderBetweenFields() const
+{
+    return 2;
+}
+
+wxSize wxStdRenderer::GetStatusBarFieldMargins() const
+{
     return wxSize(2, 2);
 }
 
@@ -1113,7 +1132,7 @@ void wxStdRenderer::DrawStatusField(wxDC& dc,
     else if ( style != wxSB_FLAT )
         DrawBorder(dc, wxBORDER_STATIC, rect, flags, &rectIn);
 
-    rectIn.Deflate(GetStatusBarBorders(NULL));
+    rectIn.Deflate(GetStatusBarFieldMargins());
 
     wxDCClipper clipper(dc, rectIn);
     DrawLabel(dc, label, rectIn, flags, wxALIGN_LEFT | wxALIGN_CENTRE_VERTICAL);
