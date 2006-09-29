@@ -40761,102 +40761,12 @@ _ACEOF
 fi
 
       fi
-                              echo "$as_me:$LINENO: checking for getservbyname_r" >&5
-echo $ECHO_N "checking for getservbyname_r... $ECHO_C" >&6
+
+echo "$as_me:$LINENO: checking how many arguments getservbyname_r() takes" >&5
+echo $ECHO_N "checking how many arguments getservbyname_r() takes... $ECHO_C" >&6
 if test "${ac_cv_func_which_getservbyname_r+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
 else
-
-echo "$as_me:$LINENO: checking for getservbyname_r" >&5
-echo $ECHO_N "checking for getservbyname_r... $ECHO_C" >&6
-if test "${ac_cv_func_getservbyname_r+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-/* Define getservbyname_r to an innocuous variant, in case <limits.h> declares getservbyname_r.
-   For example, HP-UX 11i <limits.h> declares gettimeofday.  */
-#define getservbyname_r innocuous_getservbyname_r
-
-/* System header to define __stub macros and hopefully few prototypes,
-    which can conflict with char getservbyname_r (); below.
-    Prefer <limits.h> to <assert.h> if __STDC__ is defined, since
-    <limits.h> exists even on freestanding compilers.  */
-
-#ifdef __STDC__
-# include <limits.h>
-#else
-# include <assert.h>
-#endif
-
-#undef getservbyname_r
-
-/* Override any gcc2 internal prototype to avoid an error.  */
-#ifdef __cplusplus
-extern "C"
-{
-#endif
-/* We use char because int might match the return type of a gcc2
-   builtin and then its argument prototype would still apply.  */
-char getservbyname_r ();
-/* The GNU C library defines this for functions which it implements
-    to always fail with ENOSYS.  Some functions are actually named
-    something starting with __ and the normal name is an alias.  */
-#if defined (__stub_getservbyname_r) || defined (__stub___getservbyname_r)
-choke me
-#else
-char (*f) () = getservbyname_r;
-#endif
-#ifdef __cplusplus
-}
-#endif
-
-int
-main ()
-{
-return f != getservbyname_r;
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext conftest$ac_exeext
-if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
-  (eval $ac_link) 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_cxx_werror_flag"			 || test ! -s conftest.err'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; } &&
-	 { ac_try='test -s conftest$ac_exeext'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; }; then
-  ac_cv_func_getservbyname_r=yes
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-ac_cv_func_getservbyname_r=no
-fi
-rm -f conftest.err conftest.$ac_objext \
-      conftest$ac_exeext conftest.$ac_ext
-fi
-echo "$as_me:$LINENO: result: $ac_cv_func_getservbyname_r" >&5
-echo "${ECHO_T}$ac_cv_func_getservbyname_r" >&6
-if test $ac_cv_func_getservbyname_r = yes; then
 
         cat >conftest.$ac_ext <<_ACEOF
 /* confdefs.h.  */
@@ -40864,71 +40774,17 @@ _ACEOF
 cat confdefs.h >>conftest.$ac_ext
 cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
-
-#               include <netdb.h>
-
+#include <netdb.h>
 int
 main ()
 {
 
-
-        char *name;
-        char *proto;
-        struct servent *se;
-        struct servent_data data;
-        (void) getservbyname_r(name, proto, se, &data);
-
-
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext
-if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
-  (eval $ac_compile) 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_cxx_werror_flag"			 || test ! -s conftest.err'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; } &&
-	 { ac_try='test -s conftest.$ac_objext'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; }; then
-  ac_cv_func_which_getservbyname_r=four
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-
-  cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-
-#   include <netdb.h>
-
-int
-main ()
-{
-
-        char *name;
-        char *proto;
-        struct servent *se, *res;
-        char buffer[2048];
-        int buflen = 2048;
-        (void) getservbyname_r(name, proto, se, buffer, buflen, &res)
+                char *name;
+                char *proto;
+                struct servent *se, *res;
+                char buffer[2048];
+                int buflen = 2048;
+                (void) getservbyname_r(name, proto, se, buffer, buflen, &res)
 
   ;
   return 0;
@@ -40961,25 +40817,23 @@ else
 sed 's/^/| /' conftest.$ac_ext >&5
 
 
-  cat >conftest.$ac_ext <<_ACEOF
+                cat >conftest.$ac_ext <<_ACEOF
 /* confdefs.h.  */
 _ACEOF
 cat confdefs.h >>conftest.$ac_ext
 cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
-
-#   include <netdb.h>
-
+#include <netdb.h>
 int
 main ()
 {
 
-        char *name;
-        char *proto;
-        struct servent *se;
-        char buffer[2048];
-        int buflen = 2048;
-        (void) getservbyname_r(name, proto, se, buffer, buflen)
+                        char *name;
+                        char *proto;
+                        struct servent *se;
+                        char buffer[2048];
+                        int buflen = 2048;
+                        (void) getservbyname_r(name, proto, se, buffer, buflen)
 
   ;
   return 0;
@@ -41011,23 +40865,67 @@ else
   echo "$as_me: failed program was:" >&5
 sed 's/^/| /' conftest.$ac_ext >&5
 
-ac_cv_func_which_getservbyname_r=no
-fi
-rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
 
+                        cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+#include <netdb.h>
+int
+main ()
+{
 
+                                char *name;
+                                char *proto;
+                                struct servent *se;
+                                struct servent_data data;
+                                (void) getservbyname_r(name, proto, se, &data);
 
-
-fi
-rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
-
-
-fi
-rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
-
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext
+if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
+  (eval $ac_compile) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+	 { ac_try='test -z "$ac_cxx_werror_flag"			 || test ! -s conftest.err'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+	 { ac_try='test -s conftest.$ac_objext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  ac_cv_func_which_getservbyname_r=four
 else
-  ac_cv_func_which_getservbyname_r=no
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+ac_cv_func_which_getservbyname_r=no
+
 fi
+rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
+
+
+fi
+rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
+
+
+fi
+rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
+
 
 fi
 echo "$as_me:$LINENO: result: $ac_cv_func_which_getservbyname_r" >&5
@@ -41047,7 +40945,6 @@ elif test $ac_cv_func_which_getservbyname_r = four; then
   cat >>confdefs.h <<\_ACEOF
 #define HAVE_FUNC_GETSERVBYNAME_R_4 1
 _ACEOF
-
 
 fi
 

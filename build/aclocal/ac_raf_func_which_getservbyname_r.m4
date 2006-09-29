@@ -19,49 +19,49 @@ dnl @version 2001-08-20
 dnl @license GPLWithACException
 
 AC_DEFUN([AC_raf_FUNC_WHICH_GETSERVBYNAME_R],
-[AC_CACHE_CHECK(for getservbyname_r, ac_cv_func_which_getservbyname_r, [
-AC_CHECK_FUNC(getservbyname_r, [
-        AC_TRY_COMPILE([
-#               include <netdb.h>
-        ],      [
-
-        char *name;
-        char *proto;
-        struct servent *se;
-        struct servent_data data;
-        (void) getservbyname_r(name, proto, se, &data);
-
-                ],ac_cv_func_which_getservbyname_r=four,
-                        [
-  AC_TRY_COMPILE([
-#   include <netdb.h>
-  ], [
-        char *name;
-        char *proto;
-        struct servent *se, *res;
-        char buffer[2048];
-        int buflen = 2048;
-        (void) getservbyname_r(name, proto, se, buffer, buflen, &res)
-  ],ac_cv_func_which_getservbyname_r=six,
-
-  [
-  AC_TRY_COMPILE([
-#   include <netdb.h>
-  ], [
-        char *name;
-        char *proto;
-        struct servent *se;
-        char buffer[2048];
-        int buflen = 2048;
-        (void) getservbyname_r(name, proto, se, buffer, buflen)
-  ],ac_cv_func_which_getservbyname_r=five,ac_cv_func_which_getservbyname_r=no)
-
-  ]
-
-  )
-                        ]
-                )]
-        ,ac_cv_func_which_getservbyname_r=no)])
+[
+AC_CACHE_CHECK(how many arguments getservbyname_r() takes,
+    ac_cv_func_which_getservbyname_r,
+    [
+        AC_TRY_COMPILE([#include <netdb.h>],
+            [
+                char *name;
+                char *proto;
+                struct servent *se, *res;
+                char buffer[2048];
+                int buflen = 2048;
+                (void) getservbyname_r(name, proto, se, buffer, buflen, &res)
+            ],
+            ac_cv_func_which_getservbyname_r=six,
+            [
+                AC_TRY_COMPILE([#include <netdb.h>],
+                    [
+                        char *name;
+                        char *proto;
+                        struct servent *se;
+                        char buffer[2048];
+                        int buflen = 2048;
+                        (void) getservbyname_r(name, proto, se, buffer, buflen)
+                    ],
+                    ac_cv_func_which_getservbyname_r=five,
+                    [
+                        AC_TRY_COMPILE([#include <netdb.h>],
+                            [
+                                char *name;
+                                char *proto;
+                                struct servent *se;
+                                struct servent_data data;
+                                (void) getservbyname_r(name, proto, se, &data);
+                            ],
+                            ac_cv_func_which_getservbyname_r=four,
+                            ac_cv_func_which_getservbyname_r=no
+                        )
+                    ]
+                )
+            ]
+        )
+    ]
+)
 
 if test $ac_cv_func_which_getservbyname_r = six; then
   AC_DEFINE(HAVE_FUNC_GETSERVBYNAME_R_6)
@@ -69,7 +69,6 @@ elif test $ac_cv_func_which_getservbyname_r = five; then
   AC_DEFINE(HAVE_FUNC_GETSERVBYNAME_R_5)
 elif test $ac_cv_func_which_getservbyname_r = four; then
   AC_DEFINE(HAVE_FUNC_GETSERVBYNAME_R_4)
-
 fi
 
 ])
