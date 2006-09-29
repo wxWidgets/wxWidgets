@@ -24,7 +24,9 @@
     #pragma hdrstop
 #endif
 
-#if wxUSE_ALL_THEMES || wxUSE_THEME_METAL
+#include "wx/univ/theme.h"
+
+#if wxUSE_THEME_METAL
 
 #ifndef WX_PRECOMP
     #include "wx/timer.h"
@@ -57,7 +59,6 @@
 #include "wx/univ/inpcons.h"
 #include "wx/univ/inphand.h"
 #include "wx/univ/colschem.h"
-#include "wx/univ/theme.h"
 
 // wxMetalRenderer: draw the GUI elements in Metal style
 // ----------------------------------------------------------------------------
@@ -594,4 +595,4 @@ void wxMetalRenderer::DrawMetal(wxDC &dc, const wxRect &rect )
     }
 }
 
-#endif // wxUSE_ALL_THEMES || wxUSE_THEME_METAL
+#endif // wxUSE_THEME_METAL

@@ -24,7 +24,9 @@
     #pragma hdrstop
 #endif
 
-#if wxUSE_ALL_THEMES || wxUSE_THEME_WIN32
+#include "wx/univ/theme.h"
+
+#if wxUSE_THEME_WIN32
 
 #ifndef WX_PRECOMP
     #include "wx/timer.h"
@@ -67,7 +69,6 @@
 #include "wx/univ/inpcons.h"
 #include "wx/univ/inphand.h"
 #include "wx/univ/colschem.h"
-#include "wx/univ/theme.h"
 
 // ----------------------------------------------------------------------------
 // constants
@@ -3775,4 +3776,4 @@ bool wxWin32FrameInputHandler::HandleActivation(wxInputConsumer *consumer,
     return wxStdInputHandler::HandleActivation(consumer, activated);
 }
 
-#endif // wxUSE_ALL_THEMES || wxUSE_THEME_WIN32
+#endif // wxUSE_THEME_WIN32

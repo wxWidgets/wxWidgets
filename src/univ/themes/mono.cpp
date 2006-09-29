@@ -24,7 +24,9 @@
     #pragma hdrstop
 #endif
 
-#if wxUSE_ALL_THEMES || wxUSE_THEME_MONO
+#include "wx/univ/theme.h"
+
+#if wxUSE_THEME_MONO
 
 #ifndef WX_PRECOMP
     #include "wx/dc.h"
@@ -34,7 +36,6 @@
 #include "wx/univ/stdrend.h"
 #include "wx/univ/inphand.h"
 #include "wx/univ/colschem.h"
-#include "wx/univ/theme.h"
 
 class wxMonoColourScheme;
 
@@ -1074,4 +1075,4 @@ wxBitmap wxMonoArtProvider::CreateBitmap(const wxArtID& WXUNUSED(id),
     return wxNullBitmap;
 }
 
-#endif // wxUSE_ALL_THEMES || wxUSE_THEME_MONO
+#endif // wxUSE_THEME_MONO

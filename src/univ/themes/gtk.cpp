@@ -24,7 +24,9 @@
     #pragma hdrstop
 #endif
 
-#if wxUSE_ALL_THEMES || wxUSE_THEME_GTK
+#include "wx/univ/theme.h"
+
+#if wxUSE_THEME_GTK
 
 #ifndef WX_PRECOMP
     #include "wx/intl.h"
@@ -62,7 +64,6 @@
 #include "wx/univ/inpcons.h"
 #include "wx/univ/inphand.h"
 #include "wx/univ/colschem.h"
-#include "wx/univ/theme.h"
 
 class WXDLLEXPORT wxGTKMenuGeometryInfo;
 
@@ -2774,4 +2775,4 @@ bool wxGTKTextCtrlInputHandler::HandleKey(wxInputConsumer *control,
 
 #endif // wxUSE_TEXTCTRL
 
-#endif // wxUSE_ALL_THEMES || wxUSE_THEME_GTK
+#endif // wxUSE_THEME_GTK
