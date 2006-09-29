@@ -19,11 +19,12 @@
 // wxBitmapBase
 // ----------------------------------------------------------------------------
 
-#if wxUSE_BITMAP_BASE
-
 #include "wx/bitmap.h"
 
+#if wxUSE_BITMAP_BASE
+
 #ifndef WX_PRECOMP
+    #include "wx/colour.h"
     #include "wx/log.h"
     #include "wx/utils.h"
     #include "wx/palette.h"
@@ -159,4 +160,3 @@ bool wxMaskBase::Create(const wxBitmap& bitmap)
 
     return InitFromMonoBitmap(bitmap);
 }
-
