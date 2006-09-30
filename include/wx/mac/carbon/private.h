@@ -986,8 +986,8 @@ public :
 
     virtual wxClientDataType GetClientDataType() const;
     virtual void            SetClientDataType(wxClientDataType clientDataItemsType);
-    virtual ListSortOrder   GetSortOrder() const;
-    virtual void            SetSortOrder(const ListSortOrder sort);
+    //virtual ListSortOrder   GetSortOrder() const;
+    //virtual void            SetSortOrder(const ListSortOrder sort);
 
 
 

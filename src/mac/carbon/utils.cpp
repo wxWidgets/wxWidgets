@@ -1646,11 +1646,11 @@ bool wxMacDataItem::IsLessThan(wxMacDataItemBrowserControl *owner ,
     const wxMacDataItem* otherItem = dynamic_cast<const wxMacDataItem*>(rhs);
     bool retval = false;
     
-    if ( sortProperty == m_colId && owner->GetSortOrder() != SortOrder_None){
+    if ( sortProperty == m_colId ){
         retval = m_label.CmpNoCase( otherItem->m_label) < 0;
     }
     
-    else if ( owner->GetSortOrder() == SortOrder_None || sortProperty == kNumericOrderColumnId )
+    else if ( sortProperty == kNumericOrderColumnId )
         retval = m_order < otherItem->m_order;
 
     return retval;
@@ -1701,16 +1701,6 @@ wxMacDataItemBrowserControl::wxMacDataItemBrowserControl( wxWindow* peer , const
     m_suppressSelection = false;
     m_sortOrder = SortOrder_None;
     m_clientDataItemsType = wxClientData_None;
-}
-
-ListSortOrder wxMacDataItemBrowserControl::GetSortOrder() const 
-{
-    return m_sortOrder;
-}
-
-void wxMacDataItemBrowserControl::SetSortOrder(const ListSortOrder sort)
-{
-    m_sortOrder = sort;
 }
 
 wxMacDataItem* wxMacDataItemBrowserControl::CreateItem()
@@ -1910,9 +1900,9 @@ void wxMacDataItemBrowserControl::InsertColumn(int colId, DataBrowserPropertyTyp
 
     columnDesc.propertyDesc.propertyID = (kMinColumnId + colId);
     columnDesc.propertyDesc.propertyType = colType;
-    columnDesc.propertyDesc.propertyFlags = kDataBrowserListViewDefaultColumnFlags | kDataBrowserListViewTypeSelectColumn;; 
+    columnDesc.propertyDesc.propertyFlags = kDataBrowserListViewDefaultColumnFlags | kDataBrowserListViewTypeSelectColumn; 
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_4
-    columnDesc.propertyDesc.propertyFlags = kDataBrowserListViewNoGapForIconInHeaderButton;
+    columnDesc.propertyDesc.propertyFlags |= kDataBrowserListViewNoGapForIconInHeaderButton;
 #endif
 
     verify_noerr( AddColumn( &columnDesc, kDataBrowserListViewAppendColumn ) );
