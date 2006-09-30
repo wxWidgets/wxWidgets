@@ -245,6 +245,7 @@ the corresponding topic.
 \helpref{wxStringTokenize}{wxstringtokenize}\\
 \helpref{wxStripMenuCodes}{wxstripmenucodes}\\
 \helpref{wxStrlen}{wxstrlen}\\
+\helpref{wxSTRINGIZE}{wxstringize}\\
 \helpref{wxSUPPRESS\_GCC\_PRIVATE\_DTOR\_WARNING}{wxsuppressgccprivatedtorwarning}\\
 \helpref{wxSysErrorCode}{wxsyserrorcode}\\
 \helpref{wxSysErrorMsg}{wxsyserrormsg}\\
@@ -3269,6 +3270,19 @@ Notice that in most cases
 \wxheading{Include files}
 
 <wx/utils.h>
+
+
+\membersection{wxSTRINGIZE}\label{wxstringize}
+
+\func{}{wxSTRINGIZE}{\param{}{x}}
+
+Returns the string representation of the given symbol which can be either a
+literal or a macro (hence the advantage of using this macro instead of the
+standard preprocessor \texttt{\#} operator which doesn't work with macros).
+
+\wxheading{See also}
+
+\helpref{wxCONCAT}{wxconcat}
 
 
 \membersection{wxSUPPRESS\_GCC\_PRIVATE\_DTOR\_WARNING}\label{wxsuppressgccprivatedtorwarning}
