@@ -45,7 +45,7 @@
 // boundaries ("hidden behind its borders"), recursively:
 static wxRect GetUncoveredWindowArea(wxWindow *win)
 {
-    wxRect r(win->GetRect());
+    wxRect r(win->GetSize());
 
     if ( win->IsTopLevel() )
         return r;
