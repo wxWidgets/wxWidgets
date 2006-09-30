@@ -316,9 +316,86 @@ private:
     DECLARE_DYNAMIC_CLASS(wxVariant)
 };
 
-//Since we want type safety wxVariant we need to fetch and dynamic_cast
-//in a seemingly safe way so the compiler can check, so we define
-//a dynamic_cast /wxDynamicCast analogue.
+
+#define DECLARE_VARIANT_OBJECT(classname) \
+classname& operator << ( classname &object, const wxVariant &variant ); \
+wxVariant& operator << ( wxVariant &variant, const classname &object );
+
+#define IMPLEMENT_VARIANT_OBJECT(classname) \
+class classname##VariantData: public wxVariantData \
+{ \
+public:\
+    classname##VariantData() {} \
+    classname##VariantData( const classname &value ) { m_value = value; } \
+\
+    classname &GetValue() { return m_value; } \
+\
+    virtual bool Eq(wxVariantData& data) const; \
+\
+    virtual wxString GetType() const; \
+    virtual wxClassInfo* GetValueClassInfo(); \
+\
+protected:\
+    classname m_value; \
+\
+private: \
+    DECLARE_CLASS(classname##VariantData) \
+};\
+\
+IMPLEMENT_CLASS(classname##VariantData, wxVariantData)\
+\
+bool classname##VariantData::Eq(wxVariantData& data) const \
+{\
+    wxASSERT( wxIsKindOf((&data), classname##VariantData) );\
+\
+    classname##VariantData & otherData = (classname##VariantData &) data;\
+\
+    return (otherData.m_value == m_value);\
+}\
+\
+wxString classname##VariantData::GetType() const\
+{\
+    return m_value.GetClassInfo()->GetClassName();\
+}\
+\
+wxClassInfo* classname##VariantData::GetValueClassInfo()\
+{\
+    return m_value.GetClassInfo();\
+}\
+\
+classname& operator << ( classname &value, const wxVariant &variant )\
+{\
+    wxASSERT( wxIsKindOf( variant.GetData(), classname##VariantData ) );\
+    \
+    classname##VariantData *data = (classname##VariantData*) variant.GetData();\
+    value = data->GetValue();\
+    return value;\
+}\
+\
+wxVariant& operator << ( wxVariant &variant, const classname &value )\
+{\
+    classname##VariantData *data = new classname##VariantData( value );\
+    variant.SetData( data );\
+    return variant;\
+}
+
+#include "wx/colour.h"
+#include "wx/pen.h"
+#include "wx/brush.h"
+#include "wx/image.h"
+#include "wx/icon.h"
+#include "wx/bitmap.h"
+
+DECLARE_VARIANT_OBJECT(wxColour)
+DECLARE_VARIANT_OBJECT(wxPen)
+DECLARE_VARIANT_OBJECT(wxBrush)
+DECLARE_VARIANT_OBJECT(wxImage)
+DECLARE_VARIANT_OBJECT(wxIcon)
+DECLARE_VARIANT_OBJECT(wxBitmap)
+
+// Since we want type safety wxVariant we need to fetch and dynamic_cast
+// in a seemingly safe way so the compiler can check, so we define
+// a dynamic_cast /wxDynamicCast analogue.
 
 #define wxGetVariantCast(var,classname) \
     ((classname*)(var.IsValueKindOf(&classname::ms_classInfo) ?\

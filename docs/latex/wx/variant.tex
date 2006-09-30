@@ -31,10 +31,48 @@ type-safety checks at runtime.
 This class is useful for reducing the programming for certain tasks, such as an editor
 for different data types, or a remote procedure call protocol.
 
-An optional name member is associated with a wxVariant. This might be used, for example, in CORBA
-or OLE automation classes, where named parameters are required.
+An optional name member is associated with a wxVariant. This might be used, for example,
+in CORBA or OLE automation classes, where named parameters are required.
 
-Note that as of wxWidgets 2.7.1, wxVariant is reference counted.
+Note that as of wxWidgets 2.7.1, wxVariant is reference counted. Additionly, the
+conveniance macros {\bf DECLARE\_VARIANT\_OBJECT} and {\bf IMPLEMENT\_VARIANT\_OBJECT}
+were added so that adding (limited) support for conversion to and from wxVariant
+can be very easily implemented without modifiying either the wxVariant or the class
+to be stored by wxVariant. Since assignement operators cannot be declared outside
+the class, the shift left operators are used like this:
+
+\begin{verbatim}
+    // in the header file
+    DECLARE_VARIANT_OBJECT(MyClass)
+    
+    // in the implementation file
+    IMPLMENT_VARIANT_OBJECT(MyClass)
+    
+    // in the user code
+    wxVariant variant;
+    MyClass value;
+    variant << value;
+    
+    // or
+    value << variant;
+\end{verbatim}
+
+For this to work, MyClass must derive from \helpref{wxObject}{wxobject}, implement
+the \helpref{wxWidgets RTTI system}{runtimeclassoverview}
+and support the assignment operator and equality operator for itself. Ideally, it
+should also be reference counted to make copying operations cheap and fast. This
+can be most easily implemented using the reference counting support offered by
+\helpref{wxObject}{wxobject} itself. By default, wxWidgets already implements
+the shift operator conversion for a few of its drawing related classes:
+
+\begin{verbatim}
+IMPLEMENT_VARIANT_OBJECT(wxColour)
+IMPLEMENT_VARIANT_OBJECT(wxPen)
+IMPLEMENT_VARIANT_OBJECT(wxBrush)
+IMPLEMENT_VARIANT_OBJECT(wxImage)
+IMPLEMENT_VARIANT_OBJECT(wxIcon)
+IMPLEMENT_VARIANT_OBJECT(wxBitmap)
+\end{verbatim}
 
 \wxheading{Derived from}
 
