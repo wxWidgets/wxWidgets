@@ -14,7 +14,7 @@
 The {\bf wxVariant} class represents a container for any type.
 A variant's value can be changed at run time, possibly to a different type of value.
 
-As standard, wxVariant can store values of type bool, char, double, long, string,
+As standard, wxVariant can store values of type bool, wxChar, double, long, string,
 string list, time, date, void pointer, list of strings, and list of variants. 
 However, an application can extend wxVariant's capabilities by deriving from the
 class \helpref{wxVariantData}{wxvariantdata} and using the wxVariantData form of
@@ -96,13 +96,13 @@ Default constructor.
 
 Copy constructor.
 
-\func{}{wxVariant}{\param{const char*}{ value}, \param{const wxString\& }{name = ``"}}
+\func{}{wxVariant}{\param{const wxChar*}{ value}, \param{const wxString\& }{name = ``"}}
 
 \func{}{wxVariant}{\param{const wxString\&}{ value}, \param{const wxString\& }{name = ``"}}
 
 Construction from a string value.
 
-\func{}{wxVariant}{\param{char}{ value}, \param{const wxString\& }{name = ``"}}
+\func{}{wxVariant}{\param{wxChar}{ value}, \param{const wxString\& }{name = ``"}}
 
 Construction from a character value.
 
@@ -197,7 +197,7 @@ Deletes the contents of the list.
 
 \constfunc{bool}{Convert}{\param{wxString*}{ value}}
 
-\constfunc{bool}{Convert}{\param{char*}{ value}}
+\constfunc{bool}{Convert}{\param{wxChar*}{ value}}
 
 \constfunc{bool}{Convert}{\param{wxDateTime*}{ value}}
 
@@ -230,7 +230,7 @@ Returns the boolean value.
 
 \membersection{wxVariant::GetChar}\label{wxvariantgetchar}
 
-\constfunc{char}{GetChar}{\void}
+\constfunc{wxChar}{GetChar}{\void}
 
 Returns the character value.
 
@@ -356,9 +356,9 @@ Sets the internal variant data, deleting the existing data if there is any.
 
 \func{void}{operator $=$}{\param{const wxString\& }{value}}
 
-\func{void}{operator $=$}{\param{const char* }{value}}
+\func{void}{operator $=$}{\param{const wxChar* }{value}}
 
-\func{void}{operator $=$}{\param{char }{value}}
+\func{void}{operator $=$}{\param{wxChar }{value}}
 
 \func{void}{operator $=$}{\param{const long }{value}}
 
@@ -390,9 +390,9 @@ Assignment operators.
 
 \constfunc{bool}{operator $==$}{\param{const wxString\& }{value}}
 
-\constfunc{bool}{operator $==$}{\param{const char* }{value}}
+\constfunc{bool}{operator $==$}{\param{const wxChar* }{value}}
 
-\constfunc{bool}{operator $==$}{\param{char }{value}}
+\constfunc{bool}{operator $==$}{\param{wxChar }{value}}
 
 \constfunc{bool}{operator $==$}{\param{const long }{value}}
 
@@ -418,9 +418,9 @@ Equality test operators.
 
 \constfunc{bool}{operator $!=$}{\param{const wxString\& }{value}}
 
-\constfunc{bool}{operator $!=$}{\param{const char* }{value}}
+\constfunc{bool}{operator $!=$}{\param{const wxChar* }{value}}
 
-\constfunc{bool}{operator $!=$}{\param{char }{value}}
+\constfunc{bool}{operator $!=$}{\param{wxChar }{value}}
 
 \constfunc{bool}{operator $!=$}{\param{const long }{value}}
 
@@ -451,11 +451,11 @@ Returns the value at {\it idx} (zero-based).
 Returns a reference to the value at {\it idx} (zero-based). This can be used
 to change the value at this index.
 
-\membersection{wxVariant::operator char}\label{wxvariantchar}
+\membersection{wxVariant::operator wxChar}\label{wxvariantchar}
 
-\constfunc{char}{operator char}{\void}
+\constfunc{char}{operator wxChar}{\void}
 
-Operator for implicit conversion to a char, using \helpref{wxVariant::GetChar}{wxvariantgetchar}.
+Operator for implicit conversion to a wxChar, using \helpref{wxVariant::GetChar}{wxvariantgetchar}.
 
 \membersection{wxVariant::operator double}\label{wxvariantdouble}
 

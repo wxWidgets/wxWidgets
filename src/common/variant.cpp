@@ -733,7 +733,7 @@ wxVariant::wxVariant(wxChar val, const wxString& name)
 
 bool wxVariant::operator== (wxChar value) const
 {
-    char thisValue;
+    wxChar thisValue;
     if (!Convert(&thisValue))
         return false;
     else
@@ -761,7 +761,7 @@ void wxVariant::operator= (wxChar value)
 
 wxChar wxVariant::GetChar() const
 {
-    char value;
+    wxChar value;
     if (Convert(& value))
         return value;
     else
@@ -1987,7 +1987,7 @@ bool wxVariant::Convert(double* value) const
     return true;
 }
 
-bool wxVariant::Convert(char* value) const
+bool wxVariant::Convert(wxChar* value) const
 {
     wxString type(GetType());
     if (type == wxT("char"))

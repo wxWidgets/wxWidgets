@@ -302,7 +302,7 @@ public:
     bool Convert(bool* value) const;
     bool Convert(double* value) const;
     bool Convert(wxString* value) const;
-    bool Convert(char* value) const;
+    bool Convert(wxChar* value) const;
 #if wxUSE_DATETIME
     bool Convert(wxDateTime* value) const;
 #endif // wxUSE_DATETIME
