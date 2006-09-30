@@ -28,6 +28,37 @@
 
 #if wxUSE_GRAPHICS_CONTEXT
 
+//-----------------------------------------------------------------------------
+// constants
+//-----------------------------------------------------------------------------
+
+const double RAD2DEG = 180.0 / M_PI;
+const short kEmulatedMode = -1;
+const short kUnsupportedMode = -2;
+
+//-----------------------------------------------------------------------------
+// Local functions
+//-----------------------------------------------------------------------------
+
+static inline double dmin(double a, double b)
+{
+    return a < b ? a : b;
+}
+static inline double dmax(double a, double b)
+{
+    return a > b ? a : b;
+}
+
+static inline double DegToRad(double deg)
+{
+    return (deg * M_PI) / 180.0;
+}
+static inline double RadToDeg(double deg)
+{
+    return (deg * 180.0) / M_PI;
+}
+
+
 wxPoint2DDouble wxGraphicsPath::GetCurrentPoint()
 {
     wxDouble x,y ;
@@ -87,6 +118,43 @@ void wxGraphicsPath::AddCircle( wxDouble x, wxDouble y, wxDouble r )
     MoveToPoint(x+r,y);
     AddArc( x,y,r,0,2*M_PI,false);
     CloseSubpath();
+}
+
+// draws a an arc to two tangents connecting (current) to (x1,y1) and (x1,y1) to (x2,y2), also a straight line from (current) to (x1,y1)
+void wxGraphicsPath::AddArcToPoint( wxDouble x1, wxDouble y1 , wxDouble x2, wxDouble y2, wxDouble r )
+{   
+    wxPoint2DDouble current = GetCurrentPoint();
+    wxPoint2DDouble p1(x1,y1);
+    wxPoint2DDouble p2(x2,y2);
+
+    wxPoint2DDouble v1 = current - p1 ;
+    v1.Normalize();
+    wxPoint2DDouble v2 = p2 - p1 ;
+    v2.Normalize();
+
+    wxDouble alpha = v1.GetVectorAngle() - v2.GetVectorAngle();
+
+    if ( alpha < 0 )
+        alpha = 360 + alpha ;
+    // TODO obtuse angles
+
+    alpha = DegToRad(alpha);
+
+    wxDouble dist = r / sin(alpha/2) * cos(alpha/2) ;
+    // calculate tangential points
+    wxPoint2DDouble t1 = dist*v1 + p1 ;
+    wxPoint2DDouble t2 = dist*v2 + p1 ;
+
+    wxPoint2DDouble nv1 = v1 ;
+    nv1.SetVectorAngle(v1.GetVectorAngle()-90);
+    wxPoint2DDouble c = t1 + r*nv1;
+
+    wxDouble a1 = v1.GetVectorAngle()+90 ;
+    wxDouble a2 = v2.GetVectorAngle()-90 ;
+
+    AddLineToPoint(t1);
+    AddArc(c.m_x,c.m_y,r,DegToRad(a1),DegToRad(a2),true);
+    AddLineToPoint(p2);
 }
 
 //-----------------------------------------------------------------------------
@@ -209,43 +277,7 @@ void wxGraphicsContext::StrokeLines( size_t n, const wxPoint2DDouble *beginPoint
     delete path;
 }
 
-// draws a an arc to two tangents connecting (current) to (x1,y1) and (x1,y1) to (x2,y2), also a straight line from (current) to (x1,y1)
-void wxGraphicsPath::AddArcToPoint( wxDouble x1, wxDouble y1 , wxDouble x2, wxDouble y2, wxDouble r )
-{   
-    // TODO
-}
-
 IMPLEMENT_ABSTRACT_CLASS(wxGCDC, wxObject)
-
-//-----------------------------------------------------------------------------
-// constants
-//-----------------------------------------------------------------------------
-
-const double RAD2DEG = 180.0 / M_PI;
-const short kEmulatedMode = -1;
-const short kUnsupportedMode = -2;
-
-//-----------------------------------------------------------------------------
-// Local functions
-//-----------------------------------------------------------------------------
-
-static inline double dmin(double a, double b)
-{
-    return a < b ? a : b;
-}
-static inline double dmax(double a, double b)
-{
-    return a > b ? a : b;
-}
-
-static inline double DegToRad(double deg)
-{
-    return (deg * M_PI) / 180.0;
-}
-static inline double RadToDeg(double deg)
-{
-    return (deg * 180.0) / M_PI;
-}
 
 //-----------------------------------------------------------------------------
 // wxDC bridge class
@@ -262,7 +294,8 @@ wxGCDC::wxGCDC(const wxWindowDC& dc)
     Init();
     m_graphicContext = wxGraphicsContext::Create(dc);
     m_ok = true;
-    m_graphicContext->SetFont(dc.GetFont());
+    if ( dc.GetFont().Ok())
+        m_graphicContext->SetFont(dc.GetFont());
 }
 
 void wxGCDC::Init()
@@ -785,7 +818,9 @@ void wxGCDC::DoDrawEllipticArc( wxCoord x, wxCoord y, wxCoord w, wxCoord h,
     m_graphicContext->Scale( factor , 1.0) ;
     if ( fill && (sa!=ea) )
         path->MoveToPoint(0,0);
-    path->AddArc( 0, 0, hh/2 , DegToRad(sa) , DegToRad(ea), sa > ea );
+    // since these angles (ea,sa) are measured counter-clockwise, we invert them to
+    // get clockwise angles
+    path->AddArc( 0, 0, hh/2 , DegToRad(-sa) , DegToRad(-ea), sa > ea );
     if ( fill && (sa!=ea) )
         path->AddLineToPoint(0,0);
     m_graphicContext->DrawPath( path );
