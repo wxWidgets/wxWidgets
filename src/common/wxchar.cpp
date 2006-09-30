@@ -196,7 +196,7 @@ bool WXDLLEXPORT wxOKlibc()
 //     implemented later in this file using wxVsnprintf() and that would
 //     result in an endless recursion and thus in a stack overflow
 #if wxUSE_UNICODE
-    #if defined(__WINDOWS__)
+    #if defined(__WINDOWS__) && !defined(HAVE_SWPRINTF)
         // all compilers under Windows should have swprintf()
         #define HAVE_SWPRINTF
     #endif
@@ -209,7 +209,9 @@ bool WXDLLEXPORT wxOKlibc()
         (defined(__VISUALC__) && __VISUALC__ < 1400) || \
         defined(__GNUWIN32__) || \
         defined(__BORLANDC__)
-        #define HAVE_BROKEN_SWPRINTF_DECL
+        #ifndef HAVE_BROKEN_SWPRINTF_DECL
+            #define HAVE_BROKEN_SWPRINTF_DECL
+        #endif
     #endif
 
     // problem: on some systems swprintf takes the 'max' argument while on
