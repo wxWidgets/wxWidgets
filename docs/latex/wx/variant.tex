@@ -15,13 +15,26 @@ The {\bf wxVariant} class represents a container for any type.
 A variant's value can be changed at run time, possibly to a different type of value.
 
 As standard, wxVariant can store values of type bool, char, double, long, string,
-string list, time, date, void pointer, list of strings, and list of variants. However, an application can extend wxVariant's capabilities by deriving from the class \helpref{wxVariantData}{wxvariantdata} and using the wxVariantData form of the wxVariant constructor or assignment operator to assign this data to a variant. Actual values for user-defined types will need to be accessed via the wxVariantData object, unlike the case for basic data types where convenience functions such as GetLong can be used.
+string list, time, date, void pointer, list of strings, and list of variants. 
+However, an application can extend wxVariant's capabilities by deriving from the
+class \helpref{wxVariantData}{wxvariantdata} and using the wxVariantData form of
+the wxVariant constructor or assignment operator to assign this data to a variant.
+Actual values for user-defined types will need to be accessed via the wxVariantData
+object, unlike the case for basic data types where convenience functions such as
+\helpref{GetLong}{wxvariantgetlong} can be used.
+
+Pointers to any \helpref{wxObject}{helpref} derived class can also easily be stored
+in a wxVariant. wxVariant will then use wxWidgets' built-in RTTI system to set the
+type name (returned by \helpref{GetType}{wxvariantgettype}) and to perform 
+type-safety checks at runtime.
 
 This class is useful for reducing the programming for certain tasks, such as an editor
 for different data types, or a remote procedure call protocol.
 
 An optional name member is associated with a wxVariant. This might be used, for example, in CORBA
 or OLE automation classes, where named parameters are required.
+
+Note that as of wxWidgets 2.7.1, wxVariant is reference counted.
 
 \wxheading{Derived from}
 
@@ -114,12 +127,22 @@ Construction from a odbc timestamp value.  Represented internally by a \helpref{
 
 Destructor.
 
+Note that destructor is protected, so wxVariantData cannot usually
+be deleted. Instead, \helpref{DecRef}{wxvariantdatadecref} should be called.
+
 
 \membersection{wxVariant::Append}\label{wxvariantappend}
 
 \func{void}{Append}{\param{const wxVariant\&}{ value}}
 
 Appends a value to the list.
+
+\membersection{wxVariant::Clear}\label{wxvariantclear}
+
+\func{void}{Clear}{\void}
+
+Makes the variant null by deleting the internal data and
+set the name to {\it wxEmptyString}.
 
 \membersection{wxVariant::ClearList}\label{wxvariantclearlist}
 
@@ -179,7 +202,10 @@ Returns the character value.
 
 \constfunc{wxVariantData*}{GetData}{\void}
 
-Returns a pointer to the internal variant data.
+Returns a pointer to the internal variant data. To take ownership
+of this data, you must call its \helpref{IncRef}{wxvariantdataincref}
+method. When you stop using it, \helpref{DecRef}{wxvariantdatadecref}
+must be likewise called.
 
 \membersection{wxVariant::GetDateTime}\label{wxvariantgetdatetime}
 
@@ -428,6 +454,15 @@ Operator for implicit conversion to a pointer to a \helpref{wxDateTime}{wxdateti
 The {\bf wxVariantData} is used to implement a new type for wxVariant. Derive from wxVariantData,
 and override the pure virtual functions.
 
+wxVariantData is reference counted, but you don't normally have to care about this, as
+wxVariant manages the count automatically. However, incase your application needs to take
+ownership of wxVariantData, be aware that the object is created with reference count of 1,
+and passing it to wxVariant will not increase this. In other words, \helpref{IncRef}{wxvariantdataincref}
+needs to be called only if you both take ownership of wxVariantData and pass it to a wxVariant.
+Also note that the destructor is protected, so you can never explicitly delete a wxVariantData
+instance. Instead, \helpref{DecRef}{wxvariantdatadecref} will delete the object automatically
+when the reference count reaches zero.
+
 \wxheading{Derived from}
 
 \helpref{wxObject}{wxobject}
@@ -448,11 +483,15 @@ and override the pure virtual functions.
 
 Default constructor.
 
-\membersection{wxVariantData::Copy}\label{wxvariantdatacopy}
+\membersection{wxVariantData::DecRef}\label{wxvariantdatadecref}
 
-\func{void}{Copy}{\param{wxVariantData\&}{ data}}
+\func{void}{DecRef}{\void}
 
-Copy the data from `this' object to {\it data}.
+Decreases reference count. If the count reaches zero, the object is
+automatically deleted.
+
+Note that destructor of wxVariantData is protected, so delete
+cannot be used as normal. Instead, DecRef should be called.
 
 \membersection{wxVariantData::Eq}\label{wxvariantdataeq}
 
@@ -472,6 +511,12 @@ Returns the string type of the data.
 
 If the data is a wxObject returns a pointer to the objects wxClassInfo structure, if
 the data isn't a wxObject the method returns NULL.
+
+\membersection{wxVariantData::IncRef}\label{wxvariantdataincref}
+
+\func{void}{IncRef}{\void}
+
+Increases reference count. Note that initially wxVariantData has reference count of 1.
 
 \membersection{wxVariantData::Read}\label{wxvariantdataread}
 

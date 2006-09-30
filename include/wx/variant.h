@@ -36,6 +36,19 @@
  * to allow it to store any type of data.
  * Derive from this to provide custom data handling.
  *
+ * NB: To prevent addition of extra vtbl pointer to wxVariantData,
+ *     we don't multiple-inherit from wxObjectRefData. Instead,
+ *     we simply replicate the wxObject ref-counting scheme.
+ *
+ * NB: When you construct a wxVariantData, it will have refcount
+ *     of one. Refcount will not be further increased when
+ *     it is passed to wxVariant. This simulates old common
+ *     scenario where wxVariant took ownership of wxVariantData
+ *     passed to it.
+ *     If you create wxVariantData for other reasons than passing
+ *     it to wxVariant, technically you are not required to call
+ *     DecRef() before deleting it.
+ *
  * TODO: in order to replace wxPropertyValue, we would need
  * to consider adding constructors that take pointers to C++ variables,
  * or removing that functionality from the wxProperty library.
@@ -47,165 +60,98 @@
 
 class WXDLLIMPEXP_BASE wxVariantData: public wxObject
 {
-DECLARE_ABSTRACT_CLASS(wxVariantData)
+    friend class wxVariant;
 public:
+    wxVariantData()
+        : wxObject(), m_count(1)
+    { }
 
-// Construction & destruction
-    wxVariantData() {}
-
-// Override these to provide common functionality
-    // Copy to data
-    virtual void Copy(wxVariantData& data) = 0;
+    // Override these to provide common functionality
     virtual bool Eq(wxVariantData& data) const = 0;
+    
 #if wxUSE_STD_IOSTREAM
-    virtual bool Write(wxSTD ostream& str) const = 0;
+    virtual bool Write(wxSTD ostream& str) const { return false; }
 #endif
-    virtual bool Write(wxString& str) const = 0;
+    virtual bool Write(wxString& str) const { return false; }
 #if wxUSE_STD_IOSTREAM
-    virtual bool Read(wxSTD istream& str) = 0;
+    virtual bool Read(wxSTD istream& str) { return false; }
 #endif
-    virtual bool Read(wxString& str) = 0;
+    virtual bool Read(wxString& str) { return false; }
     // What type is it? Return a string name.
     virtual wxString GetType() const = 0;
     // If it based on wxObject return the ClassInfo.
     virtual wxClassInfo* GetValueClassInfo() { return NULL; }
+
+    void IncRef() { m_count++; }
+    void DecRef()
+    {
+        if ( --m_count == 0 )
+            delete this;
+    }
+
+    int GetRefCount() const { return m_count; }
+
+protected:
+    // Protected dtor should make some incompatible code
+    // break more louder. That is, they should do data->DecRef()
+    // instead of delete data.
+    virtual ~wxVariantData() { }
+
+private:
+    int     m_count;
+    
+private:
+    DECLARE_ABSTRACT_CLASS(wxVariantData)
 };
 
 /*
  * wxVariant can store any kind of data, but has some basic types
  * built in.
- * NOTE: this eventually should have a reference-counting implementation.
- * PLEASE, if you change it to ref-counting, make sure it doesn't involve bloating
- * this class too much.
  */
 
 class WXDLLIMPEXP_BASE wxVariant: public wxObject
 {
-DECLARE_DYNAMIC_CLASS(wxVariant)
 public:
-
-// Construction & destruction
     wxVariant();
-    wxVariant(double val, const wxString& name = wxEmptyString);
-    wxVariant(long val, const wxString& name = wxEmptyString);
-#ifdef HAVE_BOOL
-    wxVariant(bool val, const wxString& name = wxEmptyString);
-#endif
-    wxVariant(char val, const wxString& name = wxEmptyString);
-    wxVariant(const wxString& val, const wxString& name = wxEmptyString);
-    wxVariant(const wxChar* val, const wxString& name = wxEmptyString); // Necessary or VC++ assumes bool!
-#if WXWIN_COMPATIBILITY_2_4
-    wxDEPRECATED( wxVariant(const wxStringList& val, const wxString& name = wxEmptyString) );
-#endif
-    wxVariant(const wxList& val, const wxString& name = wxEmptyString); // List of variants
-    wxVariant(void* ptr, const wxString& name = wxEmptyString); // void* (general purpose)
-    wxVariant(wxObject* ptr, const wxString& name = wxEmptyString); //wxObject
-    wxVariant(wxVariantData* data, const wxString& name = wxEmptyString); // User-defined data
-#if wxUSE_DATETIME
-    wxVariant(const wxDateTime& val, const wxString& name = wxEmptyString); // Date
-#endif // wxUSE_DATETIME
-    wxVariant(const wxArrayString& val, const wxString& name = wxEmptyString); // String array
-#if wxUSE_ODBC
-    wxVariant(const DATE_STRUCT* valptr, const wxString& name = wxEmptyString); // DateTime
-    wxVariant(const TIME_STRUCT* valptr, const wxString& name = wxEmptyString); // DateTime
-    wxVariant(const TIMESTAMP_STRUCT* valptr, const wxString& name = wxEmptyString); // DateTime
-#endif
-
+    
     wxVariant(const wxVariant& variant);
+    wxVariant(wxVariantData* data, const wxString& name = wxEmptyString);
     virtual ~wxVariant();
 
-// Generic operators
-    // Assignment
+    // generic assignment
     void operator= (const wxVariant& variant);
-
-#if wxUSE_DATETIME
-    bool operator== (const wxDateTime& value) const;
-    bool operator!= (const wxDateTime& value) const;
-    void operator= (const wxDateTime& value) ;
-#endif // wxUSE_DATETIME
-
-    bool operator== (const wxArrayString& value) const;
-    bool operator!= (const wxArrayString& value) const;
-    void operator= (const wxArrayString& value) ;
-#if wxUSE_ODBC
-    void operator= (const DATE_STRUCT* value) ;
-    void operator= (const TIME_STRUCT* value) ;
-    void operator= (const TIMESTAMP_STRUCT* value) ;
-#endif
 
     // Assignment using data, e.g.
     // myVariant = new wxStringVariantData("hello");
     void operator= (wxVariantData* variantData);
+    
     bool operator== (const wxVariant& variant) const;
     bool operator!= (const wxVariant& variant) const;
 
-// Specific operators
-    bool operator== (double value) const;
-    bool operator!= (double value) const;
-    void operator= (double value) ;
-    bool operator== (long value) const;
-    bool operator!= (long value) const;
-    void operator= (long value) ;
-    bool operator== (char value) const;
-    bool operator!= (char value) const;
-    void operator= (char value) ;
-#ifdef HAVE_BOOL
-    bool operator== (bool value) const;
-    bool operator!= (bool value) const;
-    void operator= (bool value) ;
-#endif
-    bool operator== (const wxString& value) const;
-    bool operator!= (const wxString& value) const;
-    void operator= (const wxString& value) ;
-    void operator= (const wxChar* value) ; // Necessary or VC++ assumes bool!
-#if WXWIN_COMPATIBILITY_2_4
-    wxDEPRECATED( bool operator== (const wxStringList& value) const );
-    wxDEPRECATED( bool operator!= (const wxStringList& value) const );
-    wxDEPRECATED( void operator= (const wxStringList& value) );
-#endif
-    bool operator== (const wxList& value) const;
-    bool operator!= (const wxList& value) const;
-    void operator= (const wxList& value) ;
-    bool operator== (void* value) const;
-    bool operator!= (void* value) const;
-    void operator= (void* value);
-    bool operator== (wxObject* value) const;
-    bool operator!= (wxObject* value) const;
-    void operator= (wxObject* value);
-    
-
-    // Treat a list variant as an array
-    wxVariant operator[] (size_t idx) const;
-    wxVariant& operator[] (size_t idx) ;
-
-    // Implicit conversion to a wxString
-    inline operator wxString () const {  return MakeString(); }
-    wxString MakeString() const;
-
-    // Other implicit conversions
-    inline operator double () const {  return GetDouble(); }
-    inline operator char () const {  return GetChar(); }
-    inline operator long () const {  return GetLong(); }
-    inline operator bool () const {  return GetBool(); }
-    inline operator void* () const {  return GetVoidPtr(); }
-    // No implicit conversion to wxObject, as that would really
-    //  confuse people between conversion to our contained data
-    //  and downcasting to see our base type.
-#if wxUSE_DATETIME
-    inline operator wxDateTime () const { return GetDateTime(); }
-#endif // wxUSE_DATETIME
-
-// Accessors
     // Sets/gets name
     inline void SetName(const wxString& name) { m_name = name; }
     inline const wxString& GetName() const { return m_name; }
 
     // Tests whether there is data
-    inline bool IsNull() const { return (m_data == (wxVariantData*) NULL); }
+    bool IsNull() const; 
 
+    // For compatibility with wxWidgets <= 2.6, this doesn't increase
+    // reference count.
     wxVariantData* GetData() const { return m_data; }
     void SetData(wxVariantData* data) ;
 
+    // make a 'clone' of the object
+    void Ref(const wxVariant& clone);
+
+    // destroy a reference
+    void UnRef();
+
+    // Make NULL (i.e. delete the data)
+    void MakeNull();
+    
+    // Delete data and name
+    void Clear();
+    
     // Returns a string representing the type of the variant,
     // e.g. "string", "bool", "stringlist", "list", "double", "long"
     wxString GetType() const;
@@ -213,32 +159,125 @@ public:
     bool IsType(const wxString& type) const;
     bool IsValueKindOf(const wxClassInfo* type) const;
 
-    // Return the number of elements in a list
-    size_t GetCount() const;
-
-// Value accessors
-    double GetReal() const ;
-    inline double GetDouble() const { return GetReal(); };
-    long GetInteger() const ;
-    inline long GetLong() const { return GetInteger(); };
-    char GetChar() const ;
+    // write contents to a string (e.g. for debugging)    
+    wxString MakeString() const;
+    
+    // double
+    wxVariant(double val, const wxString& name = wxEmptyString);
+    bool operator== (double value) const;
+    bool operator!= (double value) const;
+    void operator= (double value) ;
+    inline operator double () const {  return GetDouble(); }
+    inline double GetReal() const { return GetDouble(); }
+    double GetDouble() const;
+    
+    // long
+    wxVariant(long val, const wxString& name = wxEmptyString);
+    wxVariant(int val, const wxString& name = wxEmptyString);
+    wxVariant(short val, const wxString& name = wxEmptyString);
+    bool operator== (long value) const;
+    bool operator!= (long value) const;
+    void operator= (long value) ;
+    inline operator long () const {  return GetLong(); }
+    inline long GetInteger() const { return GetLong(); }
+    long GetLong() const;
+    
+    // bool    
+#ifdef HAVE_BOOL
+    wxVariant(bool val, const wxString& name = wxEmptyString);
+    bool operator== (bool value) const;
+    bool operator!= (bool value) const;
+    void operator= (bool value) ;
+    inline operator bool () const {  return GetBool(); }
     bool GetBool() const ;
-    wxString GetString() const ;
-    wxList& GetList() const ;
-#if WXWIN_COMPATIBILITY_2_4
-    wxDEPRECATED( wxStringList& GetStringList() const );
 #endif
-    void* GetVoidPtr() const;
-    wxObject* GetWxObjectPtr() const;
+
+    // wxDateTime
 #if wxUSE_DATETIME
-    wxDateTime GetDateTime() const ;
-#endif // wxUSE_DATETIME
+    wxVariant(const wxDateTime& val, const wxString& name = wxEmptyString); 
+#if wxUSE_ODBC
+    wxVariant(const DATE_STRUCT* valptr, const wxString& name = wxEmptyString);
+    wxVariant(const TIME_STRUCT* valptr, const wxString& name = wxEmptyString);
+    wxVariant(const TIMESTAMP_STRUCT* valptr, const wxString& name = wxEmptyString);
+#endif
+    bool operator== (const wxDateTime& value) const;
+    bool operator!= (const wxDateTime& value) const;
+    void operator= (const wxDateTime& value) ;
+#if wxUSE_ODBC
+    void operator= (const DATE_STRUCT* value) ;
+    void operator= (const TIME_STRUCT* value) ;
+    void operator= (const TIMESTAMP_STRUCT* value) ;
+#endif
+    inline operator wxDateTime () const { return GetDateTime(); }
+    wxDateTime GetDateTime() const;
+#endif
+
+    // wxString
+    wxVariant(const wxString& val, const wxString& name = wxEmptyString);
+    wxVariant(const wxChar* val, const wxString& name = wxEmptyString); // Necessary or VC++ assumes bool!
+    bool operator== (const wxString& value) const;
+    bool operator!= (const wxString& value) const;
+    void operator= (const wxString& value) ;
+    void operator= (const wxChar* value) ; // Necessary or VC++ assumes bool!
+    inline operator wxString () const {  return MakeString(); }
+    wxString GetString() const;
+
+    // char (wxChar?)
+    wxVariant(char val, const wxString& name = wxEmptyString);
+    bool operator== (char value) const;
+    bool operator!= (char value) const;
+    void operator= (char value) ;
+    inline operator char () const { return GetChar(); }
+    char GetChar() const ;
+    
+    // wxArrayString
+    wxVariant(const wxArrayString& val, const wxString& name = wxEmptyString);
+    bool operator== (const wxArrayString& value) const;
+    bool operator!= (const wxArrayString& value) const;
+    void operator= (const wxArrayString& value);
+    inline operator wxArrayString () const { return GetArrayString(); }
     wxArrayString GetArrayString() const;
 
-// Operations
-    // Make NULL (i.e. delete the data)
-    void MakeNull();
+    // void*
+    wxVariant(void* ptr, const wxString& name = wxEmptyString);
+    bool operator== (void* value) const;
+    bool operator!= (void* value) const;
+    void operator= (void* value);
+    inline operator void* () const {  return GetVoidPtr(); }
+    void* GetVoidPtr() const;
 
+    // wxObject*
+    wxVariant(wxObject* ptr, const wxString& name = wxEmptyString);
+    bool operator== (wxObject* value) const;
+    bool operator!= (wxObject* value) const;
+    void operator= (wxObject* value);
+    wxObject* GetWxObjectPtr() const;
+
+
+#if WXWIN_COMPATIBILITY_2_4
+    wxDEPRECATED( wxVariant(const wxStringList& val, const wxString& name = wxEmptyString) );
+    wxDEPRECATED( bool operator== (const wxStringList& value) const );
+    wxDEPRECATED( bool operator!= (const wxStringList& value) const );
+    wxDEPRECATED( void operator= (const wxStringList& value) );
+    wxDEPRECATED( wxStringList& GetStringList() const );
+#endif
+
+    // ------------------------------
+    // list operations
+    // ------------------------------
+
+    wxVariant(const wxList& val, const wxString& name = wxEmptyString); // List of variants
+    bool operator== (const wxList& value) const;
+    bool operator!= (const wxList& value) const;
+    void operator= (const wxList& value) ;
+    // Treat a list variant as an array
+    wxVariant operator[] (size_t idx) const;
+    wxVariant& operator[] (size_t idx) ;
+    wxList& GetList() const ;
+
+    // Return the number of elements in a list
+    size_t GetCount() const;
+    
     // Make empty list
     void NullList();
 
@@ -257,9 +296,8 @@ public:
     // Clear list
     void ClearList();
 
-// Implementation
 public:
-// Type conversion
+    // Type conversion
     bool Convert(long* value) const;
     bool Convert(bool* value) const;
     bool Convert(double* value) const;
@@ -273,6 +311,9 @@ public:
 protected:
     wxVariantData*  m_data;
     wxString        m_name;
+    
+private:
+    DECLARE_DYNAMIC_CLASS(wxVariant)
 };
 
 //Since we want type safety wxVariant we need to fetch and dynamic_cast
