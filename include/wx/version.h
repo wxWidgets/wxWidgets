@@ -14,6 +14,8 @@
 #ifndef _WX_VERSION_H_
 #define _WX_VERSION_H_
 
+#include "wx/defs.h"    /* for wxSTRINGIZE */
+
 /*  the constants below must be changed with each new version */
 /*  ---------------------------------------------------------------------------- */
 
