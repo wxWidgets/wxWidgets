@@ -15,6 +15,7 @@
 #include "wx/list.h"
 #include "wx/control.h"
 #include "wx/scrolwin.h"
+#include "wx/icon.h"
 
 // ---------------------------------------------------------
 // classes
@@ -107,6 +108,30 @@ private:
 
 protected:
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewTextCell)
+};
+
+// ---------------------------------------------------------
+// wxDataViewBitmapCell
+// ---------------------------------------------------------
+
+class WXDLLIMPEXP_ADV wxDataViewBitmapCell: public wxDataViewCustomCell
+{
+public:
+    wxDataViewBitmapCell( const wxString &varianttype = wxT("wxBitmap"),
+                        wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT );
+
+    bool SetValue( const wxVariant &value );
+    bool GetValue( wxVariant &value );
+
+    bool Render( wxRect cell, wxDC *dc, int state );
+    wxSize GetSize();
+
+private:
+    wxIcon m_icon;
+    wxBitmap m_bitmap;
+
+protected:
+    DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewBitmapCell)
 };
 
 // ---------------------------------------------------------

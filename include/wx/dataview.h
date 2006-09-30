@@ -24,7 +24,7 @@
 
 #if defined(__WXGTK20__)
     // for testing
-//    #define wxUSE_GENERICDATAVIEWCTRL 1
+    #define wxUSE_GENERICDATAVIEWCTRL 1
 #elif defined(__WXMAC__)
     #define wxUSE_GENERICDATAVIEWCTRL 1
 #else

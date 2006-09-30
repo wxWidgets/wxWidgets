@@ -25,6 +25,8 @@
 #include "wx/stockitem.h"
 #include "wx/calctrl.h"
 #include "wx/popupwin.h"
+#include "wx/icon.h"
+
 
 #include "wx/gtk/private.h"
 #include "wx/gtk/win_gtk.h"
@@ -980,14 +982,30 @@ bool wxDataViewBitmapCell::SetValue( const wxVariant &value )
 {
     if (value.GetType() == wxT("wxBitmap"))
     {
-        // We could also use the type safe wxGetVariantCast here
-        const wxBitmap *bitmap = (const wxBitmap*) value.GetWxObjectPtr();
-        if (!bitmap) 
-            return false;
+        wxBitmap bitmap;
+        bitmap << value;
         
         // This may create a Pixbuf representation in the
         // wxBitmap object (and it will stay there)
-        GdkPixbuf *pixbuf = bitmap->GetPixbuf();
+        GdkPixbuf *pixbuf = bitmap.GetPixbuf();
+        
+        GValue gvalue = { 0, };
+        g_value_init( &gvalue, G_TYPE_OBJECT );
+        g_value_set_object( &gvalue, pixbuf );
+        g_object_set_property( G_OBJECT(m_renderer), "pixbuf", &gvalue );
+        g_value_unset( &gvalue );
+        
+        return true;
+    }
+    
+    if (value.GetType() == wxT("wxIcon"))
+    {
+        wxIcon bitmap;
+        bitmap << value;
+        
+        // This may create a Pixbuf representation in the
+        // wxBitmap object (and it will stay there)
+        GdkPixbuf *pixbuf = bitmap.GetPixbuf();
         
         GValue gvalue = { 0, };
         g_value_init( &gvalue, G_TYPE_OBJECT );

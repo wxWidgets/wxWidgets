@@ -35,6 +35,7 @@
 #include "wx/calctrl.h"
 #include "wx/popupwin.h"
 #include "wx/renderer.h"
+#include "wx/icon.h"
 
 //-----------------------------------------------------------------------------
 // classes
@@ -298,7 +299,7 @@ wxDataViewCustomCell::wxDataViewCustomCell( const wxString &varianttype,
 // wxDataViewTextCell
 // ---------------------------------------------------------
 
-IMPLEMENT_ABSTRACT_CLASS(wxDataViewTextCell, wxDataViewCustomCell)
+IMPLEMENT_CLASS(wxDataViewTextCell, wxDataViewCustomCell)
 
 wxDataViewTextCell::wxDataViewTextCell( const wxString &varianttype, wxDataViewCellMode mode ) :
     wxDataViewCustomCell( varianttype, mode )
@@ -327,6 +328,52 @@ bool wxDataViewTextCell::Render( wxRect cell, wxDC *dc, int WXUNUSED(state) )
 wxSize wxDataViewTextCell::GetSize()
 {
     return wxSize(80,20);
+}
+
+// ---------------------------------------------------------
+// wxDataViewBitmapCell
+// ---------------------------------------------------------
+
+IMPLEMENT_CLASS(wxDataViewBitmapCell, wxDataViewCustomCell)
+
+wxDataViewBitmapCell::wxDataViewBitmapCell( const wxString &varianttype, wxDataViewCellMode mode ) :
+    wxDataViewCustomCell( varianttype, mode )
+{
+}
+
+bool wxDataViewBitmapCell::SetValue( const wxVariant &value )
+{
+    if (value.GetType() == wxT("wxBitmap"))
+        m_bitmap << value;
+    if (value.GetType() == wxT("wxIcon"))
+        m_icon << value;
+
+    return true;
+}
+
+bool wxDataViewBitmapCell::GetValue( wxVariant& WXUNUSED(value) )
+{
+    return false;
+}
+
+bool wxDataViewBitmapCell::Render( wxRect cell, wxDC *dc, int WXUNUSED(state) )
+{
+    if (m_bitmap.Ok())
+        dc->DrawBitmap( m_bitmap, cell.x, cell.y );
+    else if (m_icon.Ok())
+        dc->DrawIcon( m_icon, cell.x, cell.y );
+
+    return true;
+}
+
+wxSize wxDataViewBitmapCell::GetSize()
+{
+    if (m_bitmap.Ok())
+        return wxSize( m_bitmap.GetWidth(), m_bitmap.GetHeight() );
+    else if (m_icon.Ok())
+        return wxSize( m_icon.GetWidth(), m_icon.GetHeight() );
+
+    return wxSize(16,16);
 }
 
 // ---------------------------------------------------------
