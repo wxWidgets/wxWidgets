@@ -93,7 +93,9 @@ public:
 
 
     // draw the focus rectangle around the label contained in the given rect
-    virtual void DrawFocusRect(wxDC& dc, const wxRect& rect) = 0;
+    //
+    // only wxCONTROL_SELECTED makes sense in flags here
+    virtual void DrawFocusRect(wxDC& dc, const wxRect& rect, int flags = 0) = 0;
 
     // draw the label inside the given rectangle with the specified alignment
     // and optionally emphasize the character with the given index
@@ -536,8 +538,8 @@ public:
                                    const wxRect& rect,
                                    int flags)
         { m_renderer->DrawButtonSurface(dc, col, rect, flags); }
-    virtual void DrawFocusRect(wxDC& dc, const wxRect& rect)
-        { m_renderer->DrawFocusRect(dc, rect); }
+    virtual void DrawFocusRect(wxDC& dc, const wxRect& rect, int flags = 0)
+        { m_renderer->DrawFocusRect(dc, rect, flags); }
     virtual void DrawLabel(wxDC& dc,
                            const wxString& label,
                            const wxRect& rect,

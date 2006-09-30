@@ -62,6 +62,8 @@ public:
                                  int indexAccel = -1,
                                  wxRect *rectBounds = NULL);
 
+    virtual void DrawFocusRect(wxDC& dc, const wxRect& rect, int flags = 0);
+
     virtual void DrawButtonBorder(wxDC& dc,
                                   const wxRect& rect,
                                   int flags = 0,
@@ -697,6 +699,18 @@ wxMonoRenderer::DrawVerticalLine(wxDC& dc, wxCoord x, wxCoord y1, wxCoord y2)
 {
     dc.SetPen(m_penFg);
     dc.DrawLine(x, y1, x, y2 + 1);
+}
+
+void wxMonoRenderer::DrawFocusRect(wxDC& dc, const wxRect& rect, int flags)
+{
+    // no need to draw the focus rect for selected items, it would be invisible
+    // anyhow
+    if ( !(flags & wxCONTROL_SELECTED) )
+    {
+        dc.SetPen(m_penFg);
+        dc.SetBrush(*wxTRANSPARENT_BRUSH);
+        dc.DrawRectangle(rect);
+    }
 }
 
 // ----------------------------------------------------------------------------

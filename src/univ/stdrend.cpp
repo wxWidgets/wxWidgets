@@ -184,7 +184,8 @@ void wxStdRenderer::DrawButtonSurface(wxDC& dc,
 // text
 // ----------------------------------------------------------------------------
 
-void wxStdRenderer::DrawFocusRect(wxDC& dc, const wxRect& rect)
+void
+wxStdRenderer::DrawFocusRect(wxDC& dc, const wxRect& rect, int WXUNUSED(flags))
 {
     // draw the pixels manually because the "dots" in wxPen with wxDOT style
     // may be short traits and not really dots
@@ -615,7 +616,7 @@ void wxStdRenderer::DrawItem(wxDC& dc,
 
     if ( flags & wxCONTROL_FOCUSED )
     {
-        DrawFocusRect(dc, rect);
+        DrawFocusRect(dc, rect, flags);
     }
 }
 
