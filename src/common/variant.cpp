@@ -642,10 +642,10 @@ class WXDLLIMPEXP_BASE wxVariantDataChar: public wxVariantData
 DECLARE_DYNAMIC_CLASS(wxVariantDataChar)
 public:
     wxVariantDataChar() { m_value = 0; }
-    wxVariantDataChar(char value) { m_value = value; }
+    wxVariantDataChar(wxChar value) { m_value = value; }
 
-    inline char GetValue() const { return m_value; }
-    inline void SetValue(char value) { m_value = value; }
+    inline wxChar GetValue() const { return m_value; }
+    inline void SetValue(wxChar value) { m_value = value; }
 
     virtual bool Eq(wxVariantData& data) const;
 #if wxUSE_STD_IOSTREAM
@@ -661,7 +661,7 @@ public:
     virtual wxString GetType() const { return wxT("char"); };
 
 protected:
-    char m_value;
+    wxChar m_value;
 };
 
 IMPLEMENT_DYNAMIC_CLASS(wxVariantDataChar, wxVariantData)
@@ -695,7 +695,7 @@ bool wxVariantDataChar::Write(wxString& str) const
 bool wxVariantDataChar::Read(wxSTD istream& WXUNUSED(str))
 {
     wxFAIL_MSG(wxT("Unimplemented"));
-//    str >> m_value;
+    
     return false;
 }
 #endif
@@ -713,24 +713,25 @@ bool wxVariantDataChar::Read(wxInputStream& str)
 {
     wxTextInputStream s(str);
 
-    m_value = s.Read8();
+    s >> m_value;
+
     return true;
 }
 #endif // wxUSE_STREAMS
 
 bool wxVariantDataChar::Read(wxString& str)
 {
-    m_value = str.ToAscii()[size_t(0)];
+    m_value = str[size_t(0)];
     return true;
 }
 
-wxVariant::wxVariant(char val, const wxString& name)
+wxVariant::wxVariant(wxChar val, const wxString& name)
 {
     m_data = new wxVariantDataChar(val);
     m_name = name;
 }
 
-bool wxVariant::operator== (char value) const
+bool wxVariant::operator== (wxChar value) const
 {
     char thisValue;
     if (!Convert(&thisValue))
@@ -739,12 +740,12 @@ bool wxVariant::operator== (char value) const
         return (value == thisValue);
 }
 
-bool wxVariant::operator!= (char value) const
+bool wxVariant::operator!= (wxChar value) const
 {
     return (!((*this) == value));
 }
 
-void wxVariant::operator= (char value)
+void wxVariant::operator= (wxChar value)
 {
     if (GetType() == wxT("char") &&
         m_data->GetRefCount() == 1)
@@ -758,7 +759,7 @@ void wxVariant::operator= (char value)
     }
 }
 
-char wxVariant::GetChar() const
+wxChar wxVariant::GetChar() const
 {
     char value;
     if (Convert(& value))

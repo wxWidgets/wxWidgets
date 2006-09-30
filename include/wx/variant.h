@@ -222,13 +222,13 @@ public:
     inline operator wxString () const {  return MakeString(); }
     wxString GetString() const;
 
-    // char (wxChar?)
-    wxVariant(char val, const wxString& name = wxEmptyString);
-    bool operator== (char value) const;
-    bool operator!= (char value) const;
-    void operator= (char value) ;
-    inline operator char () const { return GetChar(); }
-    char GetChar() const ;
+    // wxChar
+    wxVariant(wxChar val, const wxString& name = wxEmptyString);
+    bool operator== (wxChar value) const;
+    bool operator!= (wxChar value) const;
+    void operator= (wxChar value) ;
+    inline operator wxChar () const { return GetChar(); }
+    wxChar GetChar() const ;
     
     // wxArrayString
     wxVariant(const wxArrayString& val, const wxString& name = wxEmptyString);
