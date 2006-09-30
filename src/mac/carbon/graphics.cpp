@@ -138,7 +138,8 @@ void wxMacCoreGraphicsPath::AddCircle( wxDouble x, wxDouble y , wxDouble r )
 // adds an arc of a circle centering at (x,y) with radius (r) from startAngle to endAngle
 void wxMacCoreGraphicsPath::AddArc( wxDouble x, wxDouble y, wxDouble r, wxDouble startAngle, wxDouble endAngle, bool clockwise )
 {
-    CGPathAddArc( m_path, NULL , x, y, r, startAngle, endAngle, clockwise); 
+    // inverse direction as we the 'normal' state is a y axis pointing down, ie mirrored to the standard core graphics setup
+    CGPathAddArc( m_path, NULL , x, y, r, startAngle, endAngle, !clockwise); 
 }
 
 void wxMacCoreGraphicsPath::AddArcToPoint( wxDouble x1, wxDouble y1 , wxDouble x2, wxDouble y2, wxDouble r )
