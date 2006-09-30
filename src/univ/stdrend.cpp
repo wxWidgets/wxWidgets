@@ -42,6 +42,9 @@ static const int FRAME_TITLEBAR_HEIGHT             = 18;
 static const int FRAME_BUTTON_WIDTH                = 16;
 static const int FRAME_BUTTON_HEIGHT               = 14;
 
+// the margin between listbox item text and its rectangle
+static const int ITEM_MARGIN = 1;
+
 // ============================================================================
 // wxStdRenderer implementation
 // ============================================================================
@@ -483,7 +486,7 @@ bool wxStdRenderer::AreScrollbarsInsideBorder() const
 
 wxCoord wxStdRenderer::GetListboxItemHeight(wxCoord fontHeight)
 {
-    return fontHeight + 2;
+    return fontHeight + 2*ITEM_MARGIN;
 }
 
 void wxStdRenderer::DrawTextBorder(wxDC& dc,
@@ -609,9 +612,9 @@ void wxStdRenderer::DrawItem(wxDC& dc,
         dc.DrawRectangle(rect);
     }
 
+    // horizontal adjustment is arbitrary
     wxRect rectText = rect;
-    rectText.x += 2;
-    rectText.width -= 2;
+    rectText.Deflate(2, ITEM_MARGIN);
     dc.DrawLabel(label, wxNullBitmap, rectText);
 
     if ( flags & wxCONTROL_FOCUSED )
