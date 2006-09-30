@@ -53,6 +53,12 @@ void wxEventLoop::InitBuffer()
 }
 
 /* static */
+void wxEventLoop::CleanUp()
+{
+    ms_buffer.Reset();
+}
+
+/* static */
 wxIDirectFBEventBufferPtr wxEventLoop::GetDirectFBEventBuffer()
 {
     if ( !ms_buffer )
@@ -124,8 +130,6 @@ void wxEventLoop::OnNextIteration()
     wxTimer::NotifyTimers();
 #endif
 }
-
-#warning "FIXME: cleanup wxEventLoop::ms_buffer before exiting"
 
 
 //-----------------------------------------------------------------------------

@@ -39,11 +39,12 @@ protected:
 
 private:
     static void InitBuffer();
+    static void CleanUp();
+
+    friend class wxApp; // calls CleanUp() and WakeUp()
 
 private:
     static wxIDirectFBEventBufferPtr ms_buffer;
-
-    friend class wxApp; // calls WakeUp()
 
     DECLARE_NO_COPY_CLASS(wxEventLoop)
 };

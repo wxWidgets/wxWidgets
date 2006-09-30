@@ -57,6 +57,7 @@ void wxApp::CleanUp()
 {
     wxAppBase::CleanUp();
 
+    wxEventLoop::CleanUp();
     wxIDirectFB::CleanUp();
 }
 
