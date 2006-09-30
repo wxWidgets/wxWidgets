@@ -1,20 +1,20 @@
-/**
-*  Name:        wx/version.h
-*  Purpose:     wxWidgets version numbers
-*  Author:      Julian Smart
-*  Modified by: Ryan Norton (Converted to C)
-*  Created:     29/01/98
-*  RCS-ID:      $Id$
-*  Copyright:   (c) 1998 Julian Smart
-*  Licence:     wxWindows licence
-*/
+/*
+ *  Name:        wx/version.h
+ *  Purpose:     wxWidgets version numbers
+ *  Author:      Julian Smart
+ *  Modified by: Ryan Norton (Converted to C)
+ *  Created:     29/01/98
+ *  RCS-ID:      $Id$
+ *  Copyright:   (c) 1998 Julian Smart
+ *  Licence:     wxWindows licence
+ */
 
 /* THIS IS A C FILE, DON'T USE C++ FEATURES (IN PARTICULAR COMMENTS) IN IT */
 
 #ifndef _WX_VERSION_H_
 #define _WX_VERSION_H_
 
-#include "wx/defs.h"    /* for wxSTRINGIZE */
+#include "wx/cpp.h"    /* for wxSTRINGIZE */
 
 /*  the constants below must be changed with each new version */
 /*  ---------------------------------------------------------------------------- */

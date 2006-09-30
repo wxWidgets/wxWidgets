@@ -370,6 +370,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/config.h
     wx/convauto.h
     wx/containr.h
+    wx/cpp.h
     wx/datetime.h
     wx/datstrm.h
     wx/dde.h
