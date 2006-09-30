@@ -1525,12 +1525,13 @@ OSStatus wxMacDataBrowserListCtrlControl::GetSetItemData(DataBrowserItemID itemI
 
     OSStatus err = errDataBrowserPropertyNotSupported;
     wxListCtrl* list = wxDynamicCast( GetPeer() , wxListCtrl );
+    wxMacListCtrlItem* lcItem;
 
     if (listColumn >= 0)
     {
         if (!m_isVirtual)
         {
-            wxMacListCtrlItem* lcItem = (wxMacListCtrlItem*) itemID;
+            lcItem = (wxMacListCtrlItem*) itemID;
             if (lcItem->HasColumnInfo(listColumn)){
                 wxListItem* item = lcItem->GetColumnInfo(listColumn);
                 if (item->GetMask() & wxLIST_MASK_TEXT)
@@ -1599,7 +1600,13 @@ OSStatus wxMacDataBrowserListCtrlControl::GetSetItemData(DataBrowserItemID itemI
                     CFStringRef sr ;
                     verify_noerr( GetDataBrowserItemDataText( itemData , &sr ) ) ;
                     wxMacCFStringHolder cfStr(sr) ;;
-                    list->SetItem( (long)itemData , listColumn, cfStr.AsString() ) ;
+                    if (m_isVirtual)
+                        list->SetItem( (long)itemData-1 , listColumn, cfStr.AsString() ) ;
+                    else
+                    {
+                        if (lcItem)
+                            lcItem->SetColumnTextValue( listColumn, cfStr.AsString() );
+                    }
                     err = noErr ;                        
                 }
                 break;
