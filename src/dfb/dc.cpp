@@ -757,6 +757,16 @@ bool wxDC::DoBlitFromSurface(const wxIDirectFBSurfacePtr& src,
                              wxCoord w, wxCoord h,
                              wxCoord dstx, wxCoord dsty)
 {
+    // don't do anything if the source rectangle is outside of source surface,
+    // DirectFB would assert in that case:
+    wxSize srcsize;
+    src->GetSize(&srcsize.x, &srcsize.y);
+    if ( !wxRect(srcx, srcy, w, h).Intersects(wxRect(srcsize)) )
+    {
+        wxLogDebug(_T("Blitting from area outside of the source surface, caller code needs fixing."));
+        return false;
+    }
+
     CalcBoundingBox(dstx, dsty);
     CalcBoundingBox(dstx + w, dsty + h);
 
