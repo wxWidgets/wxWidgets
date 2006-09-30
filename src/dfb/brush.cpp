@@ -43,7 +43,7 @@ public:
 
     void SetStyle(int style)
     {
-        if ( style != wxSOLID && style == wxTRANSPARENT )
+        if ( style != wxSOLID && style != wxTRANSPARENT )
         {
             wxFAIL_MSG( _T("only wxSOLID and wxTRANSPARENT styles are supported") );
             style = wxSOLID;
