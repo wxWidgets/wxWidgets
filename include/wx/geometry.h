@@ -379,6 +379,11 @@ inline void wxPoint2DDouble::SetVectorLength( wxDouble length )
     m_y = (m_y * length / before) ;
 }
 
+inline void wxPoint2DDouble::Normalize()
+{
+    SetVectorLength( 1 );
+}
+
 inline wxDouble wxPoint2DDouble::GetDistance( const wxPoint2DDouble &pt ) const
 {
     return sqrt( GetDistanceSquare( pt ) );
