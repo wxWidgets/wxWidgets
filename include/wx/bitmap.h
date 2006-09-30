@@ -31,6 +31,15 @@ class WXDLLEXPORT wxMask;
 class WXDLLEXPORT wxPalette;
 
 // ----------------------------------------------------------------------------
+// wxVariant support
+// ----------------------------------------------------------------------------
+
+#if wxUSE_VARIANT
+#include "wx/variant.h"
+DECLARE_VARIANT_OBJECT_EXPORTED(wxBitmap,WXDLLEXPORT)
+#endif
+
+// ----------------------------------------------------------------------------
 // wxMask represents the transparent area of the bitmap
 // ----------------------------------------------------------------------------
 

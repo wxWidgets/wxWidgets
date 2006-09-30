@@ -25,6 +25,9 @@
     #include "wx/gdicmn.h"
 #endif
 
+#if wxUSE_VARIANT
+IMPLEMENT_VARIANT_OBJECT_EXPORTED(wxColour,WXDLLEXPORT)
+#endif
 
 // ============================================================================
 // wxString <-> wxColour conversions

@@ -66,6 +66,15 @@ class WXDLLEXPORT wxImage;
 class WXDLLEXPORT wxPalette;
 
 //-----------------------------------------------------------------------------
+// wxVariant support
+//-----------------------------------------------------------------------------
+
+#if wxUSE_VARIANT
+#include "wx/variant.h"
+DECLARE_VARIANT_OBJECT_EXPORTED(wxImage,WXDLLEXPORT)
+#endif
+
+//-----------------------------------------------------------------------------
 // wxImageHandler
 //-----------------------------------------------------------------------------
 

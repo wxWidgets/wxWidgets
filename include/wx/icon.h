@@ -39,5 +39,15 @@
   #include "wx/os2/icon.h"
 #endif
 
+//-----------------------------------------------------------------------------
+// wxVariant support
+//-----------------------------------------------------------------------------
+
+#if wxUSE_VARIANT
+#include "wx/variant.h"
+DECLARE_VARIANT_OBJECT_EXPORTED(wxIcon,WXDLLEXPORT)
+#endif
+
+
 #endif
     // _WX_ICON_H_BASE_

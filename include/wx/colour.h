@@ -16,6 +16,8 @@
 #include "wx/gdiobj.h"
 
 
+class WXDLLEXPORT wxColour;
+
 // the standard wxColour constructors;
 // this macro avoids to repeat these lines across all colour.h files, since
 // Set() is a virtual function and thus cannot be called by wxColourBase
@@ -35,10 +37,17 @@
 #define wxC2S_HTML_SYNTAX       4   // return colour in #rrggbb syntax
 
 
-class WXDLLEXPORT wxColour;
-
 const unsigned char wxALPHA_TRANSPARENT = 0;
 const unsigned char wxALPHA_OPAQUE = 0xff;
+
+// ----------------------------------------------------------------------------
+// wxVariant support
+// ----------------------------------------------------------------------------
+
+#if wxUSE_VARIANT
+#include "wx/variant.h"
+DECLARE_VARIANT_OBJECT_EXPORTED(wxColour,WXDLLEXPORT)
+#endif
 
 //-----------------------------------------------------------------------------
 // wxColourBase: this class has no data members, just some functions to avoid

@@ -51,6 +51,10 @@
     #endif // wxUSE_FILE/wxUSE_FFILE
 #endif // HAS_FILE_STREAMS
 
+#if wxUSE_VARIANT
+IMPLEMENT_VARIANT_OBJECT_EXPORTED(wxImage,WXDLLEXPORT)
+#endif
+
 //-----------------------------------------------------------------------------
 // wxImage
 //-----------------------------------------------------------------------------

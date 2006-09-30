@@ -316,12 +316,23 @@ private:
     DECLARE_DYNAMIC_CLASS(wxVariant)
 };
 
+/* Fake macro parameter value */
+#ifdef EMPTY_PARAMETER_VALUE
+    #undef EMPTY_PARAMETER_VALUE
+#endif
+#define EMPTY_PARAMETER_VALUE 
 
 #define DECLARE_VARIANT_OBJECT(classname) \
-classname& operator << ( classname &object, const wxVariant &variant ); \
-wxVariant& operator << ( wxVariant &variant, const classname &object );
+    DECLARE_VARIANT_OBJECT_EXPORTED(classname,EMPTY_PARAMETER_VALUE)
+    
+#define DECLARE_VARIANT_OBJECT_EXPORTED(classname,expdecl) \
+classname& expdecl operator << ( classname &object, const wxVariant &variant ); \
+wxVariant& expdecl operator << ( wxVariant &variant, const classname &object );
 
 #define IMPLEMENT_VARIANT_OBJECT(classname) \
+    IMPLEMENT_VARIANT_OBJECT_EXPORTED(classname,EMPTY_PARAMETER_VALUE)
+
+#define IMPLEMENT_VARIANT_OBJECT_EXPORTED(classname,expdecl) \
 class classname##VariantData: public wxVariantData \
 { \
 public:\
@@ -363,7 +374,7 @@ wxClassInfo* classname##VariantData::GetValueClassInfo()\
     return m_value.GetClassInfo();\
 }\
 \
-classname& operator << ( classname &value, const wxVariant &variant )\
+classname& expdecl operator << ( classname &value, const wxVariant &variant )\
 {\
     wxASSERT( wxIsKindOf( variant.GetData(), classname##VariantData ) );\
     \
@@ -372,26 +383,12 @@ classname& operator << ( classname &value, const wxVariant &variant )\
     return value;\
 }\
 \
-wxVariant& operator << ( wxVariant &variant, const classname &value )\
+wxVariant& expdecl operator << ( wxVariant &variant, const classname &value )\
 {\
     classname##VariantData *data = new classname##VariantData( value );\
     variant.SetData( data );\
     return variant;\
 }
-
-#include "wx/colour.h"
-#include "wx/pen.h"
-#include "wx/brush.h"
-#include "wx/image.h"
-#include "wx/icon.h"
-#include "wx/bitmap.h"
-
-DECLARE_VARIANT_OBJECT(wxColour)
-DECLARE_VARIANT_OBJECT(wxPen)
-DECLARE_VARIANT_OBJECT(wxBrush)
-DECLARE_VARIANT_OBJECT(wxImage)
-DECLARE_VARIANT_OBJECT(wxIcon)
-DECLARE_VARIANT_OBJECT(wxBitmap)
 
 // Since we want type safety wxVariant we need to fetch and dynamic_cast
 // in a seemingly safe way so the compiler can check, so we define
