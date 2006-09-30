@@ -1700,72 +1700,6 @@ void wxVariant::ClearList()
     }
 }
 
-// Treat a list variant as an array
-wxVariant wxVariant::operator[] (size_t idx) const
-{
-#if WXWIN_COMPATIBILITY_2_4
-    wxASSERT_MSG( (GetType() == wxT("list") || GetType() == wxT("stringlist")), wxT("Invalid type for array operator") );
-#else
-    wxASSERT_MSG( GetType() == wxT("list"), wxT("Invalid type for array operator") );
-#endif
-
-    if (GetType() == wxT("list"))
-    {
-        wxVariantDataList* data = (wxVariantDataList*) m_data;
-        wxASSERT_MSG( (idx < data->GetValue().GetCount()), wxT("Invalid index for array") );
-        return * (wxVariant*) (data->GetValue().Item(idx)->GetData());
-    }
-#if WXWIN_COMPATIBILITY_2_4
-    else if (GetType() == wxT("stringlist"))
-    {
-        wxVariantDataStringList* data = (wxVariantDataStringList*) m_data;
-        wxASSERT_MSG( (idx < data->GetValue().GetCount()), wxT("Invalid index for array") );
-
-        wxString str( (const wxChar*) (data->GetValue().Item(idx)->GetData()) );
-        wxVariant variant( str );
-        return variant;
-    }
-#endif
-    return wxNullVariant;
-}
-
-wxVariant& wxVariant::operator[] (size_t idx)
-{
-    // We can't return a reference to a variant for a string list, since the string
-    // is actually stored as a char*, not a variant.
-
-    wxASSERT_MSG( (GetType() == wxT("list")), wxT("Invalid type for array operator") );
-
-    wxVariantDataList* data = (wxVariantDataList*) m_data;
-    wxASSERT_MSG( (idx < data->GetValue().GetCount()), wxT("Invalid index for array") );
-
-    return * (wxVariant*) (data->GetValue().Item(idx)->GetData());
-}
-
-// Return the number of elements in a list
-size_t wxVariant::GetCount() const
-{
-#if WXWIN_COMPATIBILITY_2_4
-    wxASSERT_MSG( (GetType() == wxT("list") || GetType() == wxT("stringlist")), wxT("Invalid type for GetCount()") );
-#else
-    wxASSERT_MSG( GetType() == wxT("list"), wxT("Invalid type for GetCount()") );
-#endif
-
-    if (GetType() == wxT("list"))
-    {
-        wxVariantDataList* data = (wxVariantDataList*) m_data;
-        return data->GetValue().GetCount();
-    }
-#if WXWIN_COMPATIBILITY_2_4
-    else if (GetType() == wxT("stringlist"))
-    {
-        wxVariantDataStringList* data = (wxVariantDataStringList*) m_data;
-        return data->GetValue().GetCount();
-    }
-#endif
-    return 0;
-}
-
 #if WXWIN_COMPATIBILITY_2_4
 
 // ----------------------------------------------------------------------------
@@ -1916,6 +1850,72 @@ wxStringList& wxVariant::GetStringList() const
 }
 
 #endif
+
+// Treat a list variant as an array
+wxVariant wxVariant::operator[] (size_t idx) const
+{
+#if WXWIN_COMPATIBILITY_2_4
+    wxASSERT_MSG( (GetType() == wxT("list") || GetType() == wxT("stringlist")), wxT("Invalid type for array operator") );
+#else
+    wxASSERT_MSG( GetType() == wxT("list"), wxT("Invalid type for array operator") );
+#endif
+
+    if (GetType() == wxT("list"))
+    {
+        wxVariantDataList* data = (wxVariantDataList*) m_data;
+        wxASSERT_MSG( (idx < data->GetValue().GetCount()), wxT("Invalid index for array") );
+        return * (wxVariant*) (data->GetValue().Item(idx)->GetData());
+    }
+#if WXWIN_COMPATIBILITY_2_4
+    else if (GetType() == wxT("stringlist"))
+    {
+        wxVariantDataStringList* data = (wxVariantDataStringList*) m_data;
+        wxASSERT_MSG( (idx < data->GetValue().GetCount()), wxT("Invalid index for array") );
+
+        wxString str( (const wxChar*) (data->GetValue().Item(idx)->GetData()) );
+        wxVariant variant( str );
+        return variant;
+    }
+#endif
+    return wxNullVariant;
+}
+
+wxVariant& wxVariant::operator[] (size_t idx)
+{
+    // We can't return a reference to a variant for a string list, since the string
+    // is actually stored as a char*, not a variant.
+
+    wxASSERT_MSG( (GetType() == wxT("list")), wxT("Invalid type for array operator") );
+
+    wxVariantDataList* data = (wxVariantDataList*) m_data;
+    wxASSERT_MSG( (idx < data->GetValue().GetCount()), wxT("Invalid index for array") );
+
+    return * (wxVariant*) (data->GetValue().Item(idx)->GetData());
+}
+
+// Return the number of elements in a list
+size_t wxVariant::GetCount() const
+{
+#if WXWIN_COMPATIBILITY_2_4
+    wxASSERT_MSG( (GetType() == wxT("list") || GetType() == wxT("stringlist")), wxT("Invalid type for GetCount()") );
+#else
+    wxASSERT_MSG( GetType() == wxT("list"), wxT("Invalid type for GetCount()") );
+#endif
+
+    if (GetType() == wxT("list"))
+    {
+        wxVariantDataList* data = (wxVariantDataList*) m_data;
+        return data->GetValue().GetCount();
+    }
+#if WXWIN_COMPATIBILITY_2_4
+    else if (GetType() == wxT("stringlist"))
+    {
+        wxVariantDataStringList* data = (wxVariantDataStringList*) m_data;
+        return data->GetValue().GetCount();
+    }
+#endif
+    return 0;
+}
 
 // ----------------------------------------------------------------------------
 // Type conversion
