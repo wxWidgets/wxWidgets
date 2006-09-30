@@ -60,6 +60,7 @@ All:
 - Added wxPlatformInfo class (Francesco Montorsi).
 - Added wxLocale::IsAvailable() (Creighton).
 - Added Malay translations (Mahrazi Mohd Kamal)
+- Added reference counting for wxVariant
 
 All (GUI):
 
@@ -88,6 +89,7 @@ wxGTK:
 
 - Automatically use stock items for menu items with standard ids.
 - Setting cursor now works for all controls.
+- Implemented right-to-left support
 
 wxUniv:
 
