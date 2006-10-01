@@ -2303,6 +2303,10 @@ SOURCE=..\include\wx\convauto.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\include\wx\cpp.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\include\wx\cshelp.h
 # End Source File
 # Begin Source File

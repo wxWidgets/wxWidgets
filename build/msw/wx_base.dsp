@@ -1431,6 +1431,10 @@ SOURCE=..\..\include\wx\convauto.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\cpp.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\datetime.h
 # End Source File
 # Begin Source File

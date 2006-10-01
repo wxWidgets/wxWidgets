@@ -235,6 +235,7 @@ ALL_BASE_HEADERS =  \
 	wx/config.h \
 	wx/convauto.h \
 	wx/containr.h \
+	wx/cpp.h \
 	wx/datetime.h \
 	wx/datstrm.h \
 	wx/dde.h \
@@ -365,6 +366,7 @@ ALL_PORTS_BASE_HEADERS =  \
 	wx/config.h \
 	wx/convauto.h \
 	wx/containr.h \
+	wx/cpp.h \
 	wx/datetime.h \
 	wx/datstrm.h \
 	wx/dde.h \
@@ -1665,8 +1667,8 @@ COND_TOOLKIT_DFB_LOWLEVEL_HDR =  \
 	wx/generic/caret.h \
 	wx/generic/colour.h \
 	wx/generic/icon.h \
-	wx/generic/mask.h \
 	wx/generic/imaglist.h \
+	wx/generic/mask.h \
 	wx/generic/timer.h \
 	wx/dfb/app.h \
 	wx/dfb/bitmap.h \
@@ -1681,7 +1683,6 @@ COND_TOOLKIT_DFB_LOWLEVEL_HDR =  \
 	wx/dfb/evtloop.h \
 	wx/dfb/font.h \
 	wx/dfb/pen.h \
-	wx/dfb/popupwin.h \
 	wx/dfb/private.h \
 	wx/dfb/region.h \
 	wx/dfb/toplevel.h \
@@ -3689,8 +3690,8 @@ COND_TOOLKIT_MGL___LOWLEVEL_SRC_OBJECTS =  \
 	monodll_caret.o \
 	monodll_colour.o \
 	monodll_icon.o \
-	monodll_mask.o \
 	monodll_imaglist.o \
+	monodll_mask.o \
 	monodll_timer.o \
 	monodll_app.o \
 	monodll_bitmap.o \
@@ -4511,8 +4512,8 @@ COND_TOOLKIT_MGL___LOWLEVEL_SRC_OBJECTS_1 =  \
 	monodll_caret.o \
 	monodll_colour.o \
 	monodll_icon.o \
-	monodll_mask.o \
 	monodll_imaglist.o \
+	monodll_mask.o \
 	monodll_timer.o \
 	monodll_app.o \
 	monodll_bitmap.o \
@@ -5411,8 +5412,8 @@ COND_TOOLKIT_MGL___LOWLEVEL_SRC_OBJECTS_2 =  \
 	monolib_caret.o \
 	monolib_colour.o \
 	monolib_icon.o \
-	monolib_mask.o \
 	monolib_imaglist.o \
+	monolib_mask.o \
 	monolib_timer.o \
 	monolib_app.o \
 	monolib_bitmap.o \
@@ -6234,8 +6235,8 @@ COND_TOOLKIT_MGL___LOWLEVEL_SRC_OBJECTS_3 =  \
 	monolib_caret.o \
 	monolib_colour.o \
 	monolib_icon.o \
-	monolib_mask.o \
 	monolib_imaglist.o \
+	monolib_mask.o \
 	monolib_timer.o \
 	monolib_app.o \
 	monolib_bitmap.o \
@@ -7350,8 +7351,8 @@ COND_TOOLKIT_MGL___LOWLEVEL_SRC_OBJECTS_4 =  \
 	coredll_caret.o \
 	coredll_colour.o \
 	coredll_icon.o \
-	coredll_mask.o \
 	coredll_imaglist.o \
+	coredll_mask.o \
 	coredll_timer.o \
 	coredll_app.o \
 	coredll_bitmap.o \
@@ -8173,8 +8174,8 @@ COND_TOOLKIT_MGL___LOWLEVEL_SRC_OBJECTS_5 =  \
 	coredll_caret.o \
 	coredll_colour.o \
 	coredll_icon.o \
-	coredll_mask.o \
 	coredll_imaglist.o \
+	coredll_mask.o \
 	coredll_timer.o \
 	coredll_app.o \
 	coredll_bitmap.o \
@@ -8765,8 +8766,8 @@ COND_TOOLKIT_MGL___LOWLEVEL_SRC_OBJECTS_6 =  \
 	corelib_caret.o \
 	corelib_colour.o \
 	corelib_icon.o \
-	corelib_mask.o \
 	corelib_imaglist.o \
+	corelib_mask.o \
 	corelib_timer.o \
 	corelib_app.o \
 	corelib_bitmap.o \
@@ -9588,8 +9589,8 @@ COND_TOOLKIT_MGL___LOWLEVEL_SRC_OBJECTS_7 =  \
 	corelib_caret.o \
 	corelib_colour.o \
 	corelib_icon.o \
-	corelib_mask.o \
 	corelib_imaglist.o \
+	corelib_mask.o \
 	corelib_timer.o \
 	corelib_app.o \
 	corelib_bitmap.o \

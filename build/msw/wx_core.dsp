@@ -8357,6 +8357,10 @@ SOURCE=..\..\include\wx\univ\checklst.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\univ\chkconf.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\univ\choice.h
 # End Source File
 # Begin Source File
