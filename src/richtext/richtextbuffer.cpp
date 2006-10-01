@@ -33,6 +33,7 @@
 #include "wx/wfstream.h"
 #include "wx/mstream.h"
 #include "wx/sstream.h"
+#include "wx/textfile.h"
 
 #include "wx/richtext/richtextctrl.h"
 #include "wx/richtext/richtextstyles.h"
@@ -491,6 +492,7 @@ void wxRichTextParagraphLayoutBox::Init()
     m_rightMargin = 4;
     m_topMargin = 4;
     m_bottomMargin = 4;
+    m_partialParagraph = false;
 }
 
 /// Draw the item
@@ -659,6 +661,8 @@ bool wxRichTextParagraphLayoutBox::Layout(wxDC& dc, const wxRect& rect, int styl
 void wxRichTextParagraphLayoutBox::Copy(const wxRichTextParagraphLayoutBox& obj)
 {
     wxRichTextBox::Copy(obj);
+
+    m_partialParagraph = obj.m_partialParagraph;
 }
 
 /// Get/set the size for the given range.
@@ -924,21 +928,36 @@ wxRichTextRange wxRichTextParagraphLayoutBox::AddParagraphs(const wxString& text
     wxRichTextParagraph* lastPara = NULL;
 
     wxRichTextRange range(-1, -1);
+
     size_t i = 0;
     size_t len = text.length();
     wxString line;
+    wxRichTextParagraph* para = new wxRichTextParagraph(wxT(""), this, & style);
+    if (paraStyle)
+        para->SetAttributes(*paraStyle);
+
+    AppendChild(para);
+
+    firstPara = para;
+    lastPara = para;
+
     while (i < len)
     {
         wxChar ch = text[i];
         if (ch == wxT('\n') || ch == wxT('\r'))
         {
-            wxRichTextParagraph* para = new wxRichTextParagraph(line, this, & style);
+            wxRichTextPlainText* plainText = (wxRichTextPlainText*) para->GetChildren().GetFirst()->GetData();
+            plainText->SetText(line);
+
+            para = new wxRichTextParagraph(wxT(""), this, & style);
             if (paraStyle)
                 para->SetAttributes(*paraStyle);
 
             AppendChild(para);
-            if (!firstPara)
-                firstPara = para;
+
+            //if (!firstPara)
+            //    firstPara = para;
+
             lastPara = para;
             line = wxEmptyString;
         }
@@ -947,16 +966,14 @@ wxRichTextRange wxRichTextParagraphLayoutBox::AddParagraphs(const wxString& text
 
         i ++;
     }
+
     if (!line.empty())
     {
-        lastPara = new wxRichTextParagraph(line, this, & style);
-        if (paraStyle)
-            lastPara->SetAttributes(*paraStyle);
-
-        //wxLogDebug("Para Face = %s", lastPara->GetAttributes().GetFont().GetFaceName());
-        AppendChild(lastPara);
+        wxRichTextPlainText* plainText = (wxRichTextPlainText*) para->GetChildren().GetFirst()->GetData();
+        plainText->SetText(line);
     }
 
+/*
     if (firstPara)
         range.SetStart(firstPara->GetRange().GetStart());
     else if (lastPara)
@@ -966,11 +983,13 @@ wxRichTextRange wxRichTextParagraphLayoutBox::AddParagraphs(const wxString& text
         range.SetEnd(lastPara->GetRange().GetEnd());
     else if (firstPara)
         range.SetEnd(firstPara->GetRange().GetEnd());
+*/
 
     UpdateRanges();
+
     SetDirty(false);
 
-    return GetRange();
+    return wxRichTextRange(firstPara->GetRange().GetStart(), lastPara->GetRange().GetEnd());
 }
 
 /// Convenience function to add an image
@@ -1009,7 +1028,7 @@ wxRichTextRange wxRichTextParagraphLayoutBox::AddImage(const wxImage& image, wxT
 /// TODO: if fragment is inserted inside styled fragment, must apply that style to
 /// to the data (if it has a default style, anyway).
 
-bool wxRichTextParagraphLayoutBox::InsertFragment(long position, wxRichTextFragment& fragment)
+bool wxRichTextParagraphLayoutBox::InsertFragment(long position, wxRichTextParagraphLayoutBox& fragment)
 {
     SetDirty(true);
 
@@ -1174,7 +1193,7 @@ bool wxRichTextParagraphLayoutBox::InsertFragment(long position, wxRichTextFragm
 
 /// Make a copy of the fragment corresponding to the given range, putting it in 'fragment'.
 /// If there was an incomplete paragraph at the end, partialParagraph is set to true.
-bool wxRichTextParagraphLayoutBox::CopyFragment(const wxRichTextRange& range, wxRichTextFragment& fragment)
+bool wxRichTextParagraphLayoutBox::CopyFragment(const wxRichTextRange& range, wxRichTextParagraphLayoutBox& fragment)
 {
     wxRichTextObjectList::compatibility_iterator i = GetChildren().GetFirst();
     while (i)
@@ -1977,29 +1996,6 @@ bool wxRichTextParagraphLayoutBox::ApplyStyleSheet(wxRichTextStyleSheet* styleSh
     return foundCount != 0;
 }
 
-
-/*!
- * wxRichTextFragment class declaration
- * This is a lind of paragraph layout box used for storing
- * paragraphs for Undo/Redo, for example.
- */
-
-IMPLEMENT_DYNAMIC_CLASS(wxRichTextFragment, wxRichTextParagraphLayoutBox)
-
-/// Initialise
-void wxRichTextFragment::Init()
-{
-    m_partialParagraph = false;
-}
-
-/// Copy
-void wxRichTextFragment::Copy(const wxRichTextFragment& obj)
-{
-    wxRichTextParagraphLayoutBox::Copy(obj);
-
-    m_partialParagraph = obj.m_partialParagraph;
-}
-
 /*!
  * wxRichTextParagraph
  * This object represents a single paragraph (or in a straight text editor, a line).
@@ -2585,8 +2581,6 @@ bool wxRichTextParagraph::FindPosition(wxDC& dc, long index, wxPoint& pt, int* h
         pt = GetPosition();
         if (line)
             pt = pt + line->GetPosition();
-
-        *height = dc.GetCharHeight();
 
         return true;
     }
@@ -3543,6 +3537,49 @@ void wxRichTextBuffer::Reset()
     Invalidate(wxRICHTEXT_ALL);
 }
 
+void wxRichTextBuffer::Copy(const wxRichTextBuffer& obj)
+{
+    wxRichTextParagraphLayoutBox::Copy(obj);
+
+    m_styleSheet = obj.m_styleSheet;
+    m_modified = obj.m_modified;
+    m_batchedCommandDepth = obj.m_batchedCommandDepth;
+    m_batchedCommand = obj.m_batchedCommand;
+    m_suppressUndo = obj.m_suppressUndo;
+}
+
+/// Submit command to insert paragraphs
+bool wxRichTextBuffer::InsertParagraphsWithUndo(long pos, const wxRichTextParagraphLayoutBox& paragraphs, wxRichTextCtrl* ctrl, int flags)
+{
+    wxRichTextAction* action = new wxRichTextAction(NULL, _("Insert Text"), wxRICHTEXT_INSERT, this, ctrl, false);
+
+    wxTextAttrEx* p = NULL;
+    wxTextAttrEx paraAttr;
+    if (flags & wxRICHTEXT_INSERT_WITH_PREVIOUS_PARAGRAPH_STYLE)
+    {
+        paraAttr = GetStyleForNewParagraph(pos);
+        if (!paraAttr.IsDefault())
+            p = & paraAttr;
+    }
+
+#if wxRICHTEXT_USE_DYNAMIC_STYLES
+    wxTextAttrEx attr(GetDefaultStyle());
+#else
+    wxTextAttrEx attr(GetBasicStyle());
+    wxRichTextApplyStyle(attr, GetDefaultStyle());
+#endif
+
+    action->GetNewParagraphs() = paragraphs;
+    action->SetPosition(pos);
+
+    // Set the range we'll need to delete in Undo
+    action->SetRange(wxRichTextRange(pos, pos + paragraphs.GetRange().GetEnd() - 1));
+
+    SubmitAction(action);
+
+    return true;
+}
+
 /// Submit command to insert the given text
 bool wxRichTextBuffer::InsertTextWithUndo(long pos, const wxString& text, wxRichTextCtrl* ctrl, int flags)
 {
@@ -3565,13 +3602,20 @@ bool wxRichTextBuffer::InsertTextWithUndo(long pos, const wxString& text, wxRich
 #endif
 
     action->GetNewParagraphs().AddParagraphs(text, p);
-    if (action->GetNewParagraphs().GetChildCount() == 1 && text.Find(wxT("\n")) == wxNOT_FOUND)
+
+    int length = action->GetNewParagraphs().GetRange().GetLength();
+
+    if (text.length() > 0 && text.Last() != wxT('\n'))
+    {
+        // Don't count the newline when undoing
+        length --;
         action->GetNewParagraphs().SetPartialParagraph(true);
+    }
 
     action->SetPosition(pos);
 
     // Set the range we'll need to delete in Undo
-    action->SetRange(wxRichTextRange(pos, pos + text.length() - 1));
+    action->SetRange(wxRichTextRange(pos, pos + length - 1));
 
     SubmitAction(action);
 
@@ -4062,12 +4106,14 @@ wxRichTextFileHandler *wxRichTextBuffer::FindHandlerFilenameOrType(const wxStrin
 {
     if (imageType != wxRICHTEXT_TYPE_ANY)
         return FindHandler(imageType);
-    else
+    else if (!filename.IsEmpty())
     {
         wxString path, file, ext;
         wxSplitPath(filename, & path, & file, & ext);
         return FindHandler(ext, imageType);
     }
+    else
+        return NULL;
 }
 
 
@@ -4234,12 +4280,41 @@ bool wxRichTextBuffer::CopyToClipboard(const wxRichTextRange& range)
 {
     bool success = false;
 #if wxUSE_CLIPBOARD && wxUSE_DATAOBJ
-    wxString text = GetTextForRange(range);
+
     if (!wxTheClipboard->IsOpened() && wxTheClipboard->Open())
     {
-        success = wxTheClipboard->SetData(new wxTextDataObject(text));
+        wxTheClipboard->Clear();
+
+        // Add composite object
+
+        wxDataObjectComposite* compositeObject = new wxDataObjectComposite();
+
+        {
+            wxString text = GetTextForRange(range);
+
+#ifdef __WXMSW__
+            text = wxTextFile::Translate(text, wxTextFileType_Dos);
+#endif
+
+            compositeObject->Add(new wxTextDataObject(text), false /* not preferred */);
+        }
+
+        // Add rich text buffer data object. This needs the XML handler to be present.
+
+        if (FindHandler(wxRICHTEXT_TYPE_XML))
+        {
+            wxRichTextBuffer* richTextBuf = new wxRichTextBuffer;
+            CopyFragment(range, *richTextBuf);
+
+            compositeObject->Add(new wxRichTextBufferDataObject(richTextBuf), true /* preferred */);
+        }
+
+        if (wxTheClipboard->SetData(compositeObject))
+            success = true;
+
         wxTheClipboard->Close();
     }
+
 #else
     wxUnusedVar(range);
 #endif
@@ -4255,7 +4330,18 @@ bool wxRichTextBuffer::PasteFromClipboard(long position)
     {
         if (wxTheClipboard->Open())
         {
-            if (wxTheClipboard->IsSupported(wxDF_TEXT))
+            if (wxTheClipboard->IsSupported(wxDataFormat(wxRichTextBufferDataObject::GetRichTextBufferFormatId())))
+            {
+                wxRichTextBufferDataObject data;
+                wxTheClipboard->GetData(data);
+                wxRichTextBuffer* richTextBuffer = data.GetRichTextBuffer();
+                if (richTextBuffer)
+                {
+                    InsertParagraphsWithUndo(position+1, *richTextBuffer, GetRichTextCtrl(), wxRICHTEXT_INSERT_WITH_PREVIOUS_PARAGRAPH_STYLE);
+                    delete richTextBuffer;
+                }
+            }
+            else if (wxTheClipboard->IsSupported(wxDF_TEXT) || wxTheClipboard->IsSupported(wxDF_UNICODETEXT))
             {
                 wxTextDataObject data;
                 wxTheClipboard->GetData(data);
@@ -4305,7 +4391,9 @@ bool wxRichTextBuffer::CanPasteFromClipboard() const
 #if wxUSE_CLIPBOARD && wxUSE_DATAOBJ
     if (!wxTheClipboard->IsOpened() && wxTheClipboard->Open())
     {
-        if (wxTheClipboard->IsSupported(wxDF_TEXT) || wxTheClipboard->IsSupported(wxDF_BITMAP))
+        if (wxTheClipboard->IsSupported(wxDF_TEXT) || wxTheClipboard->IsSupported(wxDF_UNICODETEXT) ||
+            wxTheClipboard->IsSupported(wxDataFormat(wxRichTextBufferDataObject::GetRichTextBufferFormatId())) ||
+            wxTheClipboard->IsSupported(wxDF_BITMAP))
         {
             canPaste = true;
         }
@@ -4434,9 +4522,16 @@ bool wxRichTextAction::Do()
             m_buffer->UpdateRanges();
             m_buffer->Invalidate(GetRange());
 
-            long newCaretPosition = GetPosition() + m_newParagraphs.GetRange().GetLength() - 1;
+            long newCaretPosition = GetPosition() + m_newParagraphs.GetRange().GetLength();
+
+            // Character position to caret position
+            newCaretPosition --;
+
+            // Don't take into account the last newline
             if (m_newParagraphs.GetPartialParagraph())
                 newCaretPosition --;
+
+            newCaretPosition = wxMin(newCaretPosition, (m_buffer->GetRange().GetEnd()-1));
 
             UpdateAppearance(newCaretPosition, true /* send update event */);
 
@@ -4533,7 +4628,7 @@ void wxRichTextAction::UpdateAppearance(long caretPosition, bool sendUpdateEvent
 }
 
 /// Replace the buffer paragraphs with the new ones.
-void wxRichTextAction::ApplyParagraphs(const wxRichTextFragment& fragment)
+void wxRichTextAction::ApplyParagraphs(const wxRichTextParagraphLayoutBox& fragment)
 {
     wxRichTextObjectList::compatibility_iterator node = fragment.GetChildren().GetFirst();
     while (node)
@@ -5817,7 +5912,7 @@ bool wxRichTextImageBlock::Load(wxImage& image)
         return false;
 
     // Read in the image.
-#if 1
+#if wxUSE_STREAMS
     wxMemoryInputStream mstream(m_data, m_dataSize);
     bool success = image.LoadFile(mstream, GetImageType());
 #else
@@ -5877,7 +5972,6 @@ bool wxRichTextImageBlock::ReadHex(wxInputStream& stream, int length, int imageT
     return true;
 }
 
-
 // Allocate and read from stream as a block of memory
 unsigned char* wxRichTextImageBlock::ReadBlock(wxInputStream& stream, size_t size)
 {
@@ -5916,6 +6010,124 @@ bool wxRichTextImageBlock::WriteBlock(const wxString& filename, unsigned char* b
 
     return WriteBlock(outStream, block, size);
 }
+
+#if wxUSE_DATAOBJ
+
+/*!
+ * The data object for a wxRichTextBuffer
+ */
+
+const wxChar *wxRichTextBufferDataObject::ms_richTextBufferFormatId = wxT("wxShape");
+
+wxRichTextBufferDataObject::wxRichTextBufferDataObject(wxRichTextBuffer* richTextBuffer)
+{
+    m_richTextBuffer = richTextBuffer;
+
+    // this string should uniquely identify our format, but is otherwise
+    // arbitrary
+    m_formatRichTextBuffer.SetId(GetRichTextBufferFormatId());
+
+    SetFormat(m_formatRichTextBuffer);
+}
+
+wxRichTextBufferDataObject::~wxRichTextBufferDataObject()
+{
+    delete m_richTextBuffer;
+}
+
+// after a call to this function, the richTextBuffer is owned by the caller and it
+// is responsible for deleting it!
+wxRichTextBuffer* wxRichTextBufferDataObject::GetRichTextBuffer()
+{
+    wxRichTextBuffer* richTextBuffer = m_richTextBuffer;
+    m_richTextBuffer = NULL;
+
+    return richTextBuffer;
+}
+
+wxDataFormat wxRichTextBufferDataObject::GetPreferredFormat(Direction WXUNUSED(dir)) const
+{
+    return m_formatRichTextBuffer;
+}
+
+size_t wxRichTextBufferDataObject::GetDataSize() const
+{
+    if (!m_richTextBuffer)
+        return 0;
+
+    wxString bufXML;
+
+    {
+        wxStringOutputStream stream(& bufXML);
+        if (!m_richTextBuffer->SaveFile(stream, wxRICHTEXT_TYPE_XML))
+        {
+            wxLogError(wxT("Could not write the buffer to an XML stream.\nYou may have forgotten to add the XML file handler."));
+            return 0;
+        }
+    }
+
+#if wxUSE_UNICODE
+    wxCharBuffer buffer = bufXML.mb_str(wxConvUTF8);
+    return strlen(buffer) + 1;
+#else
+    return bufXML.Length()+1;
+#endif
+}
+
+bool wxRichTextBufferDataObject::GetDataHere(void *pBuf) const
+{
+    if (!pBuf || !m_richTextBuffer)
+        return false;
+
+    wxString bufXML;
+
+    {
+        wxStringOutputStream stream(& bufXML);
+        if (!m_richTextBuffer->SaveFile(stream, wxRICHTEXT_TYPE_XML))
+        {
+            wxLogError(wxT("Could not write the buffer to an XML stream.\nYou may have forgotten to add the XML file handler."));
+            return 0;
+        }
+    }
+
+#if wxUSE_UNICODE
+    wxCharBuffer buffer = bufXML.mb_str(wxConvUTF8);
+    size_t len = strlen(buffer);
+    memcpy((char*) pBuf, (const char*) buffer, len);
+    ((char*) pBuf)[len] = 0;
+#else
+    size_t len = bufXML.Length();
+    memcpy((char*) pBuf, (const char*) bufXML.c_str(), len);
+    ((char*) pBuf)[len] = 0;
+#endif
+
+    return true;
+}
+
+bool wxRichTextBufferDataObject::SetData(size_t WXUNUSED(len), const void *buf)
+{
+    delete m_richTextBuffer;
+    m_richTextBuffer = NULL;
+
+    wxString bufXML((const char*) buf, wxConvUTF8);
+
+    m_richTextBuffer = new wxRichTextBuffer;
+
+    wxStringInputStream stream(bufXML);
+    if (!m_richTextBuffer->LoadFile(stream, wxRICHTEXT_TYPE_XML))
+    {
+        wxLogError(wxT("Could not read the buffer from an XML stream.\nYou may have forgotten to add the XML file handler."));
+
+        delete m_richTextBuffer;
+        m_richTextBuffer = NULL;
+
+        return false;
+    }
+    return true;
+}
+
+#endif
+    // wxUSE_DATAOBJ
 
 #endif
     // wxUSE_RICHTEXT

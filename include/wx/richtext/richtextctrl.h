@@ -390,6 +390,9 @@ public:
     /// Clear the selection
     virtual void SelectNone();
 
+    /// Select the word at the given character position
+    virtual bool SelectWord(long position);
+
     /// Get/set the selection range in character positions. -1, -1 means no selection.
     /// The range is in API convention, i.e. a single character selection is denoted
     /// by (n, n+1)

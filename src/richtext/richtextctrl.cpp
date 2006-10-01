@@ -329,19 +329,6 @@ void wxRichTextCtrl::OnLeftClick(wxMouseEvent& event)
 
         MoveCaret(position, caretAtLineStart);
         SetDefaultStyleToCursorStyle();
-
-#if 0
-        wxWindow* p = GetParent();
-        while (p && !p->IsKindOf(CLASSINFO(wxFrame)))
-            p = p->GetParent();
-
-        wxFrame* frame = wxDynamicCast(p, wxFrame);
-        if (frame)
-        {
-            wxString msg = wxString::Format(wxT("Found position %ld"), position);
-            frame->SetStatusText(msg, 1);
-        }
-#endif
     }
 
     event.Skip();
@@ -417,6 +404,7 @@ void wxRichTextCtrl::OnRightClick(wxMouseEvent& event)
 /// Left-double-click
 void wxRichTextCtrl::OnLeftDClick(wxMouseEvent& event)
 {
+    SelectWord(GetCaretPosition()+1);
     event.Skip();
 }
 
@@ -1620,6 +1608,60 @@ void wxRichTextCtrl::SelectNone()
     m_selectionAnchor = -2;
 }
 
+static bool wxIsWordDelimiter(const wxString& text)
+{
+    static wxString delimiters = wxT(" ,.:;!?-\"'~£$%^&*()_+-=`¬{}[]@#<>/\\|");
+    return !text.IsEmpty() && delimiters.Find(text) != wxNOT_FOUND;
+}
+
+/// Select the word at the given character position
+bool wxRichTextCtrl::SelectWord(long position)
+{
+    if (position < 0 || position > GetBuffer().GetRange().GetEnd())
+        return false;
+
+    wxRichTextParagraph* para = GetBuffer().GetParagraphAtPosition(position);
+    if (!para)
+        return false;
+
+    long positionStart = position;
+    long positionEnd = position;
+
+    for (positionStart = position; positionStart >= para->GetRange().GetStart(); positionStart --)
+    {
+        wxString text = GetBuffer().GetTextForRange(wxRichTextRange(positionStart, positionStart));
+        if (wxIsWordDelimiter(text))
+        {
+            positionStart ++;
+            break;
+        }
+    }
+    if (positionStart < para->GetRange().GetStart())
+        positionStart = para->GetRange().GetStart();
+
+    for (positionEnd = position; positionEnd < para->GetRange().GetEnd(); positionEnd ++)
+    {
+        wxString text = GetBuffer().GetTextForRange(wxRichTextRange(positionEnd, positionEnd));
+        if (wxIsWordDelimiter(text))
+        {
+            positionEnd --;
+            break;
+        }
+    }
+    if (positionEnd >= para->GetRange().GetEnd())
+        positionEnd = para->GetRange().GetEnd();
+
+    SetSelection(positionStart, positionEnd+1);
+
+    if (positionStart >= 0)
+    {
+        MoveCaret(positionStart-1, true);
+        SetDefaultStyleToCursorStyle();
+    }
+
+    return true;
+}
+
 wxString wxRichTextCtrl::GetStringSelection() const
 {
     long from, to;
@@ -1743,9 +1785,9 @@ void wxRichTextCtrl::WriteText(const wxString& value)
 
 void wxRichTextCtrl::DoWriteText(const wxString& value, bool WXUNUSED(selectionOnly))
 {
-    wxString valueDos = wxTextFile::Translate(value, wxTextFileType_Unix);
+    wxString valueUnix = wxTextFile::Translate(value, wxTextFileType_Unix);
 
-    GetBuffer().InsertTextWithUndo(m_caretPosition+1, valueDos, this);
+    GetBuffer().InsertTextWithUndo(m_caretPosition+1, valueUnix, this);
 }
 
 void wxRichTextCtrl::AppendText(const wxString& text)
@@ -1951,6 +1993,7 @@ void wxRichTextCtrl::DoSetSelection(long from, long to, bool WXUNUSED(scrollCare
 {
     m_selectionAnchor = from;
     m_selectionRange.SetRange(from, to-1);
+
     Refresh(false);
     PositionCaret();
 }
@@ -2598,22 +2641,16 @@ bool wxRichTextCtrl::ApplyUnderlineToSelection()
 /// Is all of the selection aligned according to the specified flag?
 bool wxRichTextCtrl::IsSelectionAligned(wxTextAttrAlignment alignment)
 {
+    wxRichTextRange range;
     if (HasSelection())
-    {
-        wxRichTextRange range = GetInternalSelectionRange();
-        wxRichTextAttr attr;
-        attr.SetAlignment(alignment);
-
-        return HasParagraphAttributes(range, attr);
-    }
+        range = GetInternalSelectionRange();
     else
-    {
-        // If no selection, then we need to get information from the current paragraph.
-        wxRichTextParagraph* para = GetBuffer().GetParagraphAtPosition(GetCaretPosition()+1);
-        if (para)
-            return para->GetAttributes().GetAlignment() == alignment;
-    }
-    return false;
+        range = wxRichTextRange(GetCaretPosition()+1, GetCaretPosition()+1);
+
+    wxRichTextAttr attr;
+    attr.SetAlignment(alignment);
+
+    return HasParagraphAttributes(range, attr);
 }
 
 /// Apply alignment to the selection

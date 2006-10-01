@@ -102,6 +102,10 @@
 #include "wx/cmdproc.h"
 #include "wx/txtstrm.h"
 
+#if wxUSE_DATAOBJ
+#include "wx/dataobj.h"
+#endif
+
 // Experimental dynamic styles to avoid user-specific character styles from being
 // overwritten by paragraph styles.
 #define wxRICHTEXT_USE_DYNAMIC_STYLES 1
@@ -127,7 +131,6 @@ class WXDLLIMPEXP_RICHTEXT wxRichTextCacheObject;
 class WXDLLIMPEXP_RICHTEXT wxRichTextObjectList;
 class WXDLLIMPEXP_RICHTEXT wxRichTextLine;
 class WXDLLIMPEXP_RICHTEXT wxRichTextParagraph;
-class WXDLLIMPEXP_RICHTEXT wxRichTextFragment;
 class WXDLLIMPEXP_RICHTEXT wxRichTextFileHandler;
 class WXDLLIMPEXP_RICHTEXT wxRichTextStyleSheet;
 class WXDLLIMPEXP_RICHTEXT wxTextAttrEx;
@@ -757,6 +760,9 @@ public:
     /// Copy
     void Copy(const wxRichTextCompositeObject& obj);
 
+    /// Assignment
+    void operator= (const wxRichTextCompositeObject& obj) { Copy(obj); }
+
     /// Append a child, returning the position
     size_t AppendChild(wxRichTextObject* child) ;
 
@@ -827,7 +833,7 @@ public:
 // Constructors
 
     wxRichTextParagraphLayoutBox(wxRichTextObject* parent = NULL);
-    wxRichTextParagraphLayoutBox(const wxRichTextParagraphLayoutBox& obj):wxRichTextBox() { Init(); Copy(obj); }
+    wxRichTextParagraphLayoutBox(const wxRichTextParagraphLayoutBox& obj): wxRichTextBox() { Init(); Copy(obj); }
 
 // Overrideables
 
@@ -854,6 +860,10 @@ public:
 
     /// Get the associated control.
     wxRichTextCtrl* GetRichTextCtrl() const { return m_ctrl; }
+
+    /// Get/set whether the last paragraph is partial or complete
+    void SetPartialParagraph(bool partialPara) { m_partialParagraph = partialPara; }
+    bool GetPartialParagraph() const { return m_partialParagraph; }
 
 // Operations
 
@@ -962,16 +972,19 @@ public:
     /// Insert fragment into this box at the given position. If partialParagraph is true,
     /// it is assumed that the last (or only) paragraph is just a piece of data with no paragraph
     /// marker.
-    virtual bool InsertFragment(long position, wxRichTextFragment& fragment);
+    virtual bool InsertFragment(long position, wxRichTextParagraphLayoutBox& fragment);
 
     /// Make a copy of the fragment corresponding to the given range, putting it in 'fragment'.
-    virtual bool CopyFragment(const wxRichTextRange& range, wxRichTextFragment& fragment);
+    virtual bool CopyFragment(const wxRichTextRange& range, wxRichTextParagraphLayoutBox& fragment);
 
     /// Apply the style sheet to the buffer, for example if the styles have changed.
     virtual bool ApplyStyleSheet(wxRichTextStyleSheet* styleSheet);
 
     /// Copy
     void Copy(const wxRichTextParagraphLayoutBox& obj);
+
+    /// Assignment
+    void operator= (const wxRichTextParagraphLayoutBox& obj) { Copy(obj); }
 
     /// Calculate ranges
     virtual void UpdateRanges() { long end; CalculateRange(0, end); }
@@ -1004,47 +1017,10 @@ protected:
     wxTextAttrEx    m_defaultAttributes;
 
     /// The invalidated range that will need full layout
-    wxRichTextRange         m_invalidRange;
-};
-
-/*!
- * wxRichTextFragment class declaration
- * This is a lind of paragraph layout box used for storing
- * paragraphs for Undo/Redo, for example.
- */
-
-class WXDLLIMPEXP_RICHTEXT wxRichTextFragment: public wxRichTextParagraphLayoutBox
-{
-    DECLARE_DYNAMIC_CLASS(wxRichTextFragment)
-public:
-// Constructors
-
-    wxRichTextFragment() { Init(); }
-    wxRichTextFragment(const wxRichTextFragment& obj):wxRichTextParagraphLayoutBox() { Init(); Copy(obj); }
-
-// Accessors
-
-    /// Get/set whether the last paragraph is partial or complete
-    void SetPartialParagraph(bool partialPara) { m_partialParagraph = partialPara; }
-    bool GetPartialParagraph() const { return m_partialParagraph; }
-
-// Overrideables
-
-// Operations
-
-    /// Initialise
-    void Init();
-
-    /// Copy
-    void Copy(const wxRichTextFragment& obj);
-
-    /// Clone
-    virtual wxRichTextObject* Clone() const { return new wxRichTextFragment(*this); }
-
-protected:
+    wxRichTextRange m_invalidRange;
 
     // Is the last paragraph partial or complete?
-    bool        m_partialParagraph;
+    bool            m_partialParagraph;
 };
 
 /*!
@@ -1143,7 +1119,7 @@ public:
     wxRichTextParagraph(wxRichTextObject* parent = NULL, wxTextAttrEx* style = NULL);
     wxRichTextParagraph(const wxString& text, wxRichTextObject* parent = NULL, wxTextAttrEx* style = NULL);
     virtual ~wxRichTextParagraph();
-    wxRichTextParagraph(const wxRichTextParagraph& obj):wxRichTextBox() { Copy(obj); }
+    wxRichTextParagraph(const wxRichTextParagraph& obj): wxRichTextBox() { Copy(obj); }
 
 // Overrideables
 
@@ -1245,7 +1221,7 @@ public:
 // Constructors
 
     wxRichTextPlainText(const wxString& text = wxEmptyString, wxRichTextObject* parent = NULL, wxTextAttrEx* style = NULL);
-    wxRichTextPlainText(const wxRichTextPlainText& obj):wxRichTextObject() { Copy(obj); }
+    wxRichTextPlainText(const wxRichTextPlainText& obj): wxRichTextObject() { Copy(obj); }
 
 // Overrideables
 
@@ -1397,10 +1373,10 @@ class WXDLLIMPEXP_RICHTEXT wxRichTextImage: public wxRichTextObject
 public:
 // Constructors
 
-    wxRichTextImage(wxRichTextObject* parent = NULL):wxRichTextObject(parent) { }
+    wxRichTextImage(wxRichTextObject* parent = NULL): wxRichTextObject(parent) { }
     wxRichTextImage(const wxImage& image, wxRichTextObject* parent = NULL);
     wxRichTextImage(const wxRichTextImageBlock& imageBlock, wxRichTextObject* parent = NULL);
-    wxRichTextImage(const wxRichTextImage& obj):wxRichTextObject() { Copy(obj); }
+    wxRichTextImage(const wxRichTextImage& obj): wxRichTextObject() { Copy(obj); }
 
 // Overrideables
 
@@ -1465,7 +1441,7 @@ public:
 // Constructors
 
     wxRichTextBuffer() { Init(); }
-    wxRichTextBuffer(const wxRichTextBuffer& obj):wxRichTextParagraphLayoutBox() { Init(); Copy(obj); }
+    wxRichTextBuffer(const wxRichTextBuffer& obj): wxRichTextParagraphLayoutBox() { Init(); Copy(obj); }
     virtual ~wxRichTextBuffer() ;
 
 // Accessors
@@ -1501,7 +1477,7 @@ public:
     virtual bool SaveFile(wxOutputStream& stream, int type = wxRICHTEXT_TYPE_ANY);
 
     /// Convenience function to add a paragraph of text
-    virtual wxRichTextRange AddParagraph(const wxString& text) { Modify(); return wxRichTextParagraphLayoutBox::AddParagraph(text); }
+    virtual wxRichTextRange AddParagraph(const wxString& text, wxTextAttrEx* paraStyle = NULL) { Modify(); return wxRichTextParagraphLayoutBox::AddParagraph(text, paraStyle); }
 
     /// Begin collapsing undo/redo commands. Note that this may not work properly
     /// if combining commands that delete or insert content, changing ranges for
@@ -1649,10 +1625,13 @@ public:
 // Implementation
 
     /// Copy
-    void Copy(const wxRichTextBuffer& obj) { wxRichTextBox::Copy(obj); }
+    void Copy(const wxRichTextBuffer& obj);
 
     /// Clone
     virtual wxRichTextObject* Clone() const { return new wxRichTextBuffer(*this); }
+
+    /// Submit command to insert paragraphs
+    bool InsertParagraphsWithUndo(long pos, const wxRichTextParagraphLayoutBox& paragraphs, wxRichTextCtrl* ctrl, int flags = 0);
 
     /// Submit command to insert the given text
     bool InsertTextWithUndo(long pos, const wxString& text, wxRichTextCtrl* ctrl, int flags = 0);
@@ -1807,11 +1786,11 @@ public:
     void UpdateAppearance(long caretPosition, bool sendUpdateEvent = false);
 
     /// Replace the buffer paragraphs with the given fragment.
-    void ApplyParagraphs(const wxRichTextFragment& fragment);
+    void ApplyParagraphs(const wxRichTextParagraphLayoutBox& fragment);
 
     /// Get the fragments
-    wxRichTextFragment& GetNewParagraphs() { return m_newParagraphs; }
-    wxRichTextFragment& GetOldParagraphs() { return m_oldParagraphs; }
+    wxRichTextParagraphLayoutBox& GetNewParagraphs() { return m_newParagraphs; }
+    wxRichTextParagraphLayoutBox& GetOldParagraphs() { return m_oldParagraphs; }
 
     /// Set/get the position used for e.g. insertion
     void SetPosition(long pos) { m_position = pos; }
@@ -1835,10 +1814,10 @@ protected:
     wxRichTextCtrl*                 m_ctrl;
 
     // Stores the new paragraphs
-    wxRichTextFragment              m_newParagraphs;
+    wxRichTextParagraphLayoutBox    m_newParagraphs;
 
     // Stores the old paragraphs
-    wxRichTextFragment              m_oldParagraphs;
+    wxRichTextParagraphLayoutBox    m_oldParagraphs;
 
     // The affected range
     wxRichTextRange                 m_range;
@@ -1946,6 +1925,48 @@ protected:
 #endif
 
 };
+
+#if wxUSE_DATAOBJ
+
+/*!
+ * The data object for a wxRichTextBuffer
+ */
+
+class wxRichTextBufferDataObject: public wxDataObjectSimple
+{
+public:
+    // ctor doesn't copy the pointer, so it shouldn't go away while this object
+    // is alive
+    wxRichTextBufferDataObject(wxRichTextBuffer* richTextBuffer = (wxRichTextBuffer*) NULL);
+    virtual ~wxRichTextBufferDataObject();
+
+    // after a call to this function, the buffer is owned by the caller and it
+    // is responsible for deleting it
+    wxRichTextBuffer* GetRichTextBuffer();
+
+    // Returns the id for the new data format
+    static const wxChar* GetRichTextBufferFormatId() { return ms_richTextBufferFormatId; }
+
+    // base class pure virtuals
+
+    virtual wxDataFormat GetPreferredFormat(Direction dir) const;
+    virtual size_t GetDataSize() const;
+    virtual bool GetDataHere(void *pBuf) const;
+    virtual bool SetData(size_t len, const void *buf);
+
+    // prevent warnings
+
+    virtual size_t GetDataSize(const wxDataFormat&) const { return GetDataSize(); }
+    virtual bool GetDataHere(const wxDataFormat&, void *buf) const { return GetDataHere(buf); }
+    virtual bool SetData(const wxDataFormat&, size_t len, const void *buf) { return SetData(len, buf); }
+
+private:
+    wxDataFormat            m_formatRichTextBuffer;     // our custom format
+    wxRichTextBuffer*       m_richTextBuffer;           // our data
+    static const wxChar*    ms_richTextBufferFormatId;  // our format id
+};
+
+#endif
 
 /*!
  * Utilities

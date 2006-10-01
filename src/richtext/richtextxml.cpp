@@ -30,6 +30,7 @@
 #include "wx/wfstream.h"
 #include "wx/sstream.h"
 #include "wx/txtstrm.h"
+#include "wx/tokenzr.h"
 #include "wx/xml/xml.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxRichTextXMLHandler, wxRichTextFileHandler)
@@ -98,6 +99,9 @@ bool wxRichTextXMLHandler::ImportXML(wxRichTextBuffer* buffer, wxXmlNode* node)
 
     if (name == wxT("paragraphlayout"))
     {
+        wxString partial = node->GetPropVal(wxT("partialparagraph"), wxEmptyString);
+        if (partial == wxT("true"))
+            buffer->SetPartialParagraph(true);
     }
     else if (name == wxT("paragraph"))
     {
@@ -506,6 +510,9 @@ bool wxRichTextXMLHandler::ExportXML(wxOutputStream& stream, wxMBConv* convMem, 
 
         wxString style = CreateStyle(obj.GetAttributes(), isPara);
 
+        if (objectName == wxT("paragraphlayout") && ((wxRichTextParagraphLayoutBox&) obj).GetPartialParagraph())
+            style << wxT(" partialparagraph=\"true\"");
+
         OutputString(stream, style + wxT(">"), convMem, convFile);
 
         wxRichTextCompositeObject& composite = (wxRichTextCompositeObject&) obj;
@@ -529,23 +536,34 @@ bool wxRichTextXMLHandler::ExportXML(wxOutputStream& stream, wxMBConv* convMem, 
 wxString wxRichTextXMLHandler::CreateStyle(const wxTextAttrEx& attr, bool isPara)
 {
     wxString str;
-    if (attr.GetTextColour().Ok())
+    if (attr.HasTextColour() && attr.GetTextColour().Ok())
     {
         str << wxT(" textcolor=\"#") << ColourToHexString(attr.GetTextColour()) << wxT("\"");
     }
-    if (attr.GetBackgroundColour().Ok())
+    if (attr.HasBackgroundColour() && attr.GetBackgroundColour().Ok())
     {
         str << wxT(" bgcolor=\"#") << ColourToHexString(attr.GetBackgroundColour()) << wxT("\"");
     }
 
     if (attr.GetFont().Ok())
     {
-        str << wxT(" fontsize=\"") << attr.GetFont().GetPointSize() << wxT("\"");
-        str << wxT(" fontfamily=\"") << attr.GetFont().GetFamily() << wxT("\"");
-        str << wxT(" fontstyle=\"") << attr.GetFont().GetStyle() << wxT("\"");
-        str << wxT(" fontweight=\"") << attr.GetFont().GetWeight() << wxT("\"");
-        str << wxT(" fontunderlined=\"") << (int) attr.GetFont().GetUnderlined() << wxT("\"");
-        str << wxT(" fontface=\"") << attr.GetFont().GetFaceName() << wxT("\"");
+        if (attr.HasSize())
+            str << wxT(" fontsize=\"") << attr.GetFont().GetPointSize() << wxT("\"");
+
+        //if (attr.HasFamily())
+        //    str << wxT(" fontfamily=\"") << attr.GetFont().GetFamily() << wxT("\"");
+
+        if (attr.HasItalic())
+            str << wxT(" fontstyle=\"") << attr.GetFont().GetStyle() << wxT("\"");
+
+        if (attr.HasWeight())
+            str << wxT(" fontweight=\"") << attr.GetFont().GetWeight() << wxT("\"");
+
+        if (attr.HasUnderlined())
+            str << wxT(" fontunderlined=\"") << (int) attr.GetFont().GetUnderlined() << wxT("\"");
+
+        if (attr.HasFaceName())
+            str << wxT(" fontface=\"") << attr.GetFont().GetFaceName() << wxT("\"");
     }
 
     if (!attr.GetCharacterStyleName().empty())
@@ -553,19 +571,51 @@ wxString wxRichTextXMLHandler::CreateStyle(const wxTextAttrEx& attr, bool isPara
 
     if (isPara)
     {
-        str << wxT(" alignment=\"") << (int) attr.GetAlignment() << wxT("\"");
-        str << wxT(" leftindent=\"") << (int) attr.GetLeftIndent() << wxT("\"");
-        str << wxT(" leftsubindent=\"") << (int) attr.GetLeftSubIndent() << wxT("\"");
-        str << wxT(" rightindent=\"") << (int) attr.GetRightIndent() << wxT("\"");
-        str << wxT(" parspacingafter=\"") << (int) attr.GetParagraphSpacingAfter() << wxT("\"");
-        str << wxT(" parspacingbefore=\"") << (int) attr.GetParagraphSpacingBefore() << wxT("\"");
-        str << wxT(" linespacing=\"") << (int) attr.GetLineSpacing() << wxT("\"");
-        str << wxT(" bulletstyle=\"") << (int) attr.GetBulletStyle() << wxT("\"");
-        str << wxT(" bulletnumber=\"") << (int) attr.GetBulletNumber() << wxT("\"");
-        str << wxT(" bulletsymbol=\"") << wxString(attr.GetBulletSymbol()) << wxT("\"");
+        if (attr.HasAlignment())
+            str << wxT(" alignment=\"") << (int) attr.GetAlignment() << wxT("\"");
+
+        if (attr.HasLeftIndent())
+        {
+            str << wxT(" leftindent=\"") << (int) attr.GetLeftIndent() << wxT("\"");
+            str << wxT(" leftsubindent=\"") << (int) attr.GetLeftSubIndent() << wxT("\"");
+        }
+
+        if (attr.HasRightIndent())
+            str << wxT(" rightindent=\"") << (int) attr.GetRightIndent() << wxT("\"");
+
+        if (attr.HasParagraphSpacingAfter())
+            str << wxT(" parspacingafter=\"") << (int) attr.GetParagraphSpacingAfter() << wxT("\"");
+
+        if (attr.HasParagraphSpacingBefore())
+            str << wxT(" parspacingbefore=\"") << (int) attr.GetParagraphSpacingBefore() << wxT("\"");
+
+        if (attr.HasLineSpacing())
+            str << wxT(" linespacing=\"") << (int) attr.GetLineSpacing() << wxT("\"");
+
+        if (attr.HasBulletStyle())
+            str << wxT(" bulletstyle=\"") << (int) attr.GetBulletStyle() << wxT("\"");
+
+        if (attr.HasBulletNumber())
+            str << wxT(" bulletnumber=\"") << (int) attr.GetBulletNumber() << wxT("\"");
+
+        if (attr.HasBulletSymbol())
+            str << wxT(" bulletsymbol=\"") << wxString(attr.GetBulletSymbol()) << wxT("\"");
 
         if (!attr.GetParagraphStyleName().empty())
             str << wxT(" parstyle=\"") << wxString(attr.GetParagraphStyleName()) << wxT("\"");
+
+        if (attr.HasTabs())
+        {
+            str << wxT(" tabs=\"");
+            size_t i;
+            for (i = 0; i < attr.GetTabs().GetCount(); i++)
+            {
+                if (i > 0)
+                    str << wxT(",");
+                str << attr.GetTabs()[i];
+            }
+            str << wxT("\"");
+        }
     }
 
     return str;
@@ -581,29 +631,52 @@ bool wxRichTextXMLHandler::GetStyle(wxTextAttrEx& attr, wxXmlNode* node, bool is
     int fontStyle = wxNORMAL;
     bool fontUnderlined = false;
 
-    fontFacename = node->GetPropVal(wxT("fontface"), wxEmptyString);
+    int fontFlags = 0;
 
-    wxString value = node->GetPropVal(wxT("fontfamily"), wxEmptyString);
-    if (!value.empty())
-        fontFamily = wxAtoi(value);
+    fontFacename = node->GetPropVal(wxT("fontface"), wxEmptyString);
+    if (!fontFacename.IsEmpty())
+        fontFlags |= wxTEXT_ATTR_FONT_FACE;
+
+    wxString value;
+    //value = node->GetPropVal(wxT("fontfamily"), wxEmptyString);
+    //if (!value.empty())
+    //    fontFamily = wxAtoi(value);
 
     value = node->GetPropVal(wxT("fontstyle"), wxEmptyString);
     if (!value.empty())
+    {
         fontStyle = wxAtoi(value);
+        fontFlags |= wxTEXT_ATTR_FONT_ITALIC;
+    }
 
     value = node->GetPropVal(wxT("fontsize"), wxEmptyString);
     if (!value.empty())
+    {
         fontSize = wxAtoi(value);
+        fontFlags |= wxTEXT_ATTR_FONT_SIZE;
+    }
 
     value = node->GetPropVal(wxT("fontweight"), wxEmptyString);
     if (!value.empty())
+    {
         fontWeight = wxAtoi(value);
+        fontFlags |= wxTEXT_ATTR_FONT_WEIGHT;
+    }
 
     value = node->GetPropVal(wxT("fontunderlined"), wxEmptyString);
     if (!value.empty())
+    {
         fontUnderlined = wxAtoi(value) != 0;
+        fontFlags |= wxTEXT_ATTR_FONT_UNDERLINE;
+    }
 
-    attr.SetFont(* wxTheFontList->FindOrCreateFont(fontSize, fontFamily, fontStyle, fontWeight, fontUnderlined, fontFacename));
+    attr.SetFlags(fontFlags);
+
+    if (attr.HasFlag(wxTEXT_ATTR_FONT))
+        attr.SetFont(* wxTheFontList->FindOrCreateFont(fontSize, fontFamily, fontStyle, fontWeight, fontUnderlined, fontFacename));
+
+    // Restore correct font flags
+    attr.SetFlags(fontFlags);
 
     value = node->GetPropVal(wxT("textcolor"), wxEmptyString);
     if (!value.empty())
@@ -636,13 +709,24 @@ bool wxRichTextXMLHandler::GetStyle(wxTextAttrEx& attr, wxXmlNode* node, bool is
 
         int leftSubIndent = 0;
         int leftIndent = 0;
+        bool hasLeftIndent = false;
+
         value = node->GetPropVal(wxT("leftindent"), wxEmptyString);
         if (!value.empty())
+        {
             leftIndent = wxAtoi(value);
+            hasLeftIndent = true;
+        }
+
         value = node->GetPropVal(wxT("leftsubindent"), wxEmptyString);
         if (!value.empty())
+        {
             leftSubIndent = wxAtoi(value);
-        attr.SetLeftIndent(leftIndent, leftSubIndent);
+            hasLeftIndent = true;
+        }
+
+        if (hasLeftIndent)
+            attr.SetLeftIndent(leftIndent, leftSubIndent);
 
         value = node->GetPropVal(wxT("rightindent"), wxEmptyString);
         if (!value.empty())
@@ -675,6 +759,19 @@ bool wxRichTextXMLHandler::GetStyle(wxTextAttrEx& attr, wxXmlNode* node, bool is
         value = node->GetPropVal(wxT("parstyle"), wxEmptyString);
         if (!value.empty())
             attr.SetParagraphStyleName(value);
+
+        value = node->GetPropVal(wxT("tabs"), wxEmptyString);
+        if (!value.empty())
+        {
+            wxArrayInt tabs;
+            wxStringTokenizer tkz(value, wxT(","));
+            while (tkz.HasMoreTokens())
+            {
+                wxString token = tkz.GetNextToken();
+                tabs.Add(wxAtoi(token));
+            }
+            attr.SetTabs(tabs);
+        }
     }
 
     return true;
