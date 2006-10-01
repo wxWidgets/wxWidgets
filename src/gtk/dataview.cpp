@@ -1420,8 +1420,8 @@ static void wxGtkTreeCellDataFunc( GtkTreeViewColumn *column,
 IMPLEMENT_CLASS(wxDataViewColumn, wxDataViewColumnBase)
 
 wxDataViewColumn::wxDataViewColumn( const wxString &title, wxDataViewCell *cell, size_t model_column,
-    int fixed_width, wxDataViewColumnSizing sizing, int flags ) :
-    wxDataViewColumnBase( title, cell, model_column, flags )
+    int width, int flags ) :
+    wxDataViewColumnBase( title, cell, model_column, width, flags )
 {
     GtkCellRenderer *renderer = (GtkCellRenderer *) cell->GetGtkHandle();
 
@@ -1429,17 +1429,20 @@ wxDataViewColumn::wxDataViewColumn( const wxString &title, wxDataViewCell *cell,
 
     gtk_tree_view_column_set_title( column, wxGTK_CONV(title) );
 
-    if (sizing == wxDATAVIEW_COL_WIDTH_FIXED)
+    if (flags & wxDATAVIEW_COL_RESIZABLE)
+        gtk_tree_view_column_set_resizable( column, true );
+    if (flags & wxDATAVIEW_COL_HIDDEN)
+        gtk_tree_view_column_set_visible( column, false );
+    if (flags & wxDATAVIEW_COL_SORTABLE)
+        gtk_tree_view_column_set_sort_indicator( column, true );
+
+    if (width > 0)
+    {
+        gtk_tree_view_column_set_fixed_width( column, width );
         gtk_tree_view_column_set_sizing( column, GTK_TREE_VIEW_COLUMN_FIXED );
-    else if (sizing == wxDATAVIEW_COL_WIDTH_GROW)
-        gtk_tree_view_column_set_sizing( column, GTK_TREE_VIEW_COLUMN_GROW_ONLY );
-    else
-        gtk_tree_view_column_set_sizing( column, GTK_TREE_VIEW_COLUMN_AUTOSIZE );
+    }
 
-    if (fixed_width > 0)
-        gtk_tree_view_column_set_fixed_width( column, fixed_width );
-
-    gtk_tree_view_column_pack_start( column, renderer, TRUE );
+    gtk_tree_view_column_pack_end( column, renderer, FALSE );
 
     gtk_tree_view_column_set_cell_data_func( column, renderer,
         wxGtkTreeCellDataFunc, (gpointer) cell, NULL );

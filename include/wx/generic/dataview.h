@@ -215,19 +215,15 @@ class WXDLLIMPEXP_ADV wxDataViewColumn: public wxDataViewColumnBase
 {
 public:
     wxDataViewColumn( const wxString &title, wxDataViewCell *cell, size_t model_column, 
-        int fixed_width = 80, wxDataViewColumnSizing sizing = wxDATAVIEW_COL_WIDTH_FIXED, int flags = 0 );
+        int width = 80, int flags = wxDATAVIEW_COL_RESIZABLE );
     virtual ~wxDataViewColumn();
 
     virtual void SetTitle( const wxString &title );
 
     virtual int GetWidth();
 
-    virtual void SetFixedWidth( int width );
-    virtual int GetFixedWidth();
-    
 private:
     int                      m_width;
-    wxDataViewColumnSizing   m_sizing;
     int                      m_fixedWidth;
 
 protected:

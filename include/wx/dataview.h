@@ -253,18 +253,11 @@ enum wxDataViewColumnFlags
     wxDATAVIEW_COL_HIDDEN     = 4
 };
 
-enum wxDataViewColumnSizing
-{
-    wxDATAVIEW_COL_WIDTH_FIXED,
-    wxDATAVIEW_COL_WIDTH_AUTO,
-    wxDATAVIEW_COL_WIDTH_GROW
-};
-
 class WXDLLIMPEXP_ADV wxDataViewColumnBase: public wxObject
 {
 public:
     wxDataViewColumnBase( const wxString &title, wxDataViewCell *cell, size_t model_column,
-        int fixed_width = 80, wxDataViewColumnSizing sizing = wxDATAVIEW_COL_WIDTH_FIXED, int flags = 0 );
+        int width = 80, int flags = wxDATAVIEW_COL_RESIZABLE );
     virtual ~wxDataViewColumnBase();
 
     virtual void SetTitle( const wxString &title );
@@ -278,9 +271,6 @@ public:
     wxDataViewCtrl *GetOwner()              { return m_owner; }
 
     virtual int GetWidth() = 0;
-
-    virtual void SetFixedWidth( int width ) = 0;
-    virtual int GetFixedWidth() = 0;
 
 private:
     wxDataViewCtrl          *m_ctrl;

@@ -696,9 +696,8 @@ IMPLEMENT_ABSTRACT_CLASS(wxDataViewColumnBase, wxObject)
 wxDataViewColumnBase::wxDataViewColumnBase(const wxString& title,
                                            wxDataViewCell *cell,
                                            size_t model_column,
-                                           int WXUNUSED(fixed_width),
-                                           wxDataViewColumnSizing WXUNUSED(sizing),
-                                           int flags )
+                                           int WXUNUSED(width),
+                                           int flags ) 
 {
     m_cell = cell;
     m_model_column = model_column;

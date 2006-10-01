@@ -595,13 +595,12 @@ bool wxDataViewDateCell::Activate( wxRect WXUNUSED(cell), wxDataViewListModel *m
 IMPLEMENT_ABSTRACT_CLASS(wxDataViewColumn, wxDataViewColumnBase)
 
 wxDataViewColumn::wxDataViewColumn( const wxString &title, wxDataViewCell *cell, size_t model_column,
-        int fixed_width, wxDataViewColumnSizing sizing, int flags ) :
-    wxDataViewColumnBase( title, cell, model_column, flags )
+        int width, int flags ) :
+    wxDataViewColumnBase( title, cell, model_column, width, flags )
 {
-    m_sizing = sizing;
-
-    m_width = fixed_width;
-    m_fixedWidth = fixed_width;
+    m_width = width;
+    if (m_width < 0)
+        m_width = 80;
 }
 
 wxDataViewColumn::~wxDataViewColumn()
@@ -617,22 +616,6 @@ void wxDataViewColumn::SetTitle( const wxString &title )
 int wxDataViewColumn::GetWidth()
 {
     return m_width;
-}
-
-void wxDataViewColumn::SetFixedWidth( int width )
-{
-    m_fixedWidth = width;
-
-    if (m_sizing == wxDATAVIEW_COL_WIDTH_FIXED)
-    {
-        m_width = width;
-        // Set dirty
-    }
-}
-
-int wxDataViewColumn::GetFixedWidth()
-{
-    return m_fixedWidth;
 }
 
 //-----------------------------------------------------------------------------
