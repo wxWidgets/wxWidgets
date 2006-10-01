@@ -23,7 +23,7 @@ Actual values for user-defined types will need to be accessed via the wxVariantD
 object, unlike the case for basic data types where convenience functions such as
 \helpref{GetLong}{wxvariantgetlong} can be used.
 
-Pointers to any \helpref{wxObject}{helpref} derived class can also easily be stored
+Pointers to any \helpref{wxObject}{wxobject} derived class can also easily be stored
 in a wxVariant. wxVariant will then use wxWidgets' built-in RTTI system to set the
 type name (returned by \helpref{GetType}{wxvariantgettype}) and to perform 
 type-safety checks at runtime.
@@ -34,10 +34,10 @@ for different data types, or a remote procedure call protocol.
 An optional name member is associated with a wxVariant. This might be used, for example,
 in CORBA or OLE automation classes, where named parameters are required.
 
-Note that as of wxWidgets 2.7.1, wxVariant is reference counted. Additionly, the
+Note that as of wxWidgets 2.7.1, wxVariant is reference counted. Additionally, the
 conveniance macros {\bf DECLARE\_VARIANT\_OBJECT} and {\bf IMPLEMENT\_VARIANT\_OBJECT}
 were added so that adding (limited) support for conversion to and from wxVariant
-can be very easily implemented without modifiying either the wxVariant or the class
+can be very easily implemented without modifiying either wxVariant or the class
 to be stored by wxVariant. Since assignement operators cannot be declared outside
 the class, the shift left operators are used like this:
 
