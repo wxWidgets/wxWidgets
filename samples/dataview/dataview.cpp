@@ -207,9 +207,9 @@ public:
             variant = m_list[row];
             return;
         }
-        if (col == 2)
+        if ((col == 2) || (col == 3))
         {
-            variant = &m_bitmap;
+            variant << m_bitmap;
             return;
         }
         wxString tmp;
@@ -350,7 +350,7 @@ bool MyApp::OnInit(void)
     frame2->Show(true);
 
     SetTopWindow(frame);
-
+    
     return true;
 }
 
@@ -484,16 +484,19 @@ MySortingFrame::MySortingFrame(wxFrame *frame, wxChar *title, int x, int y, int 
     wxDataViewColumn *column = new wxDataViewColumn( wxT("editable"), text_cell, 0 );
     dataview_left->AppendColumn( column );
     dataview_left->AppendTextColumn( wxT("second"), 1 );
-    dataview_left->AppendColumn( new wxDataViewColumn( wxT("icon"), new wxDataViewBitmapCell, 2 ) );
+    dataview_left->AppendColumn( new wxDataViewColumn( wxT("icon"), new wxDataViewBitmapCell, 2, 25 ) );
+    dataview_left->AppendColumn( new wxDataViewColumn( wxT("icon"), new wxDataViewBitmapCell, 3, 25 ) );
 
     // Right wxDataViewCtrl using the sorting model
     dataview_right = new wxDataViewCtrl( this, wxID_ANY );
+    
     wxDataViewSortedListModel *sorted_model =
         new wxDataViewSortedListModel( m_unsorted_model );
     dataview_right->AssociateModel( sorted_model );
     text_cell = new wxDataViewTextCell( wxT("string"), wxDATAVIEW_CELL_EDITABLE );
-    column = new wxDataViewColumn( wxT("editable"), text_cell, 0 );
+    column = new wxDataViewColumn( wxT("editable"), text_cell, 0, -1, wxDATAVIEW_COL_SORTABLE|wxDATAVIEW_COL_RESIZABLE );
     dataview_right->AppendColumn( column );
+    
     dataview_right->AppendTextColumn( wxT("second"), 1 );
 
     // layout dataview controls.
