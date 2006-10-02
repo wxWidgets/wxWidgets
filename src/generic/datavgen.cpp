@@ -130,7 +130,7 @@ private:
 // wxDataViewMainWindow
 //-----------------------------------------------------------------------------
 
-WX_DEFINE_SORTED_ARRAY_SIZE_T( size_t, wxDataViewSelection );
+WX_DEFINE_SORTED_USER_EXPORTED_ARRAY_SIZE_T(size_t, wxDataViewSelection, WXDLLIMPEXP_ADV);
 
 class wxDataViewMainWindow: public wxWindow
 {
