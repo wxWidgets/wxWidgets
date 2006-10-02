@@ -12,10 +12,9 @@ class TestWindow(wx.ScrolledWindow):
         wx.ScrolledWindow.__init__(self, parent, -1)
 
         # Populate our color list
-        self.clrList = wx.lib.colourdb.getColourList()
+        self.clrList = wx.lib.colourdb.getColourInfoList()
 
         # Just for style points, we'll use this as a background image.
-        #self.clrList.sort()
         self.bg_bmp = images.getGridBGBitmap()
 
         # This could also be done by getting the window's default font;
@@ -98,7 +97,6 @@ class TestWindow(wx.ScrolledWindow):
 
 
     def Draw(self, dc, rgn=None, vs=None):
-        dc.BeginDrawing()
         dc.SetTextForeground("BLACK")
         dc.SetPen(wx.Pen("BLACK", 1, wx.SOLID))
         dc.SetFont(self.font)
@@ -119,17 +117,18 @@ class TestWindow(wx.ScrolledWindow):
             stop = numColours
 
         for line in range(max(0,start), min(stop,numColours)):
-            clr = colours[line]
+            clr = colours[line][0]
             y = (line+1) * self.lineHeight + 2
 
             dc.DrawText(clr, self.cellWidth, y)
 
             brush = wx.Brush(clr, wx.SOLID)
             dc.SetBrush(brush)
-            dc.DrawRectangle(12 * self.cellWidth, y,
+            dc.DrawRectangle(10 * self.cellWidth, y,
                              6 * self.cellWidth, self.textHeight)
-
-        dc.EndDrawing()
+            
+            dc.DrawText(str(tuple(colours[line][1:])),
+                        18 * self.cellWidth, y)
 
 
 # On wxGTK there needs to be a panel under wx.ScrolledWindows if they are
