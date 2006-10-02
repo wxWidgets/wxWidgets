@@ -11012,14 +11012,6 @@ class Control(Window):
         """
         return _core_.Control_Command(*args, **kwargs)
 
-    def GetLabel(*args, **kwargs):
-        """
-        GetLabel(self) -> String
-
-        Return a control's text.
-        """
-        return _core_.Control_GetLabel(*args, **kwargs)
-
     def GetClassDefaultAttributes(*args, **kwargs):
         """
         GetClassDefaultAttributes(int variant=WINDOW_VARIANT_NORMAL) -> VisualAttributes
@@ -11039,7 +11031,6 @@ class Control(Window):
 
     GetClassDefaultAttributes = staticmethod(GetClassDefaultAttributes)
     Alignment = property(GetAlignment,doc="See `GetAlignment`") 
-    Label = property(GetLabel,doc="See `GetLabel`") 
     LabelText = property(GetLabelText,doc="See `GetLabelText`") 
 _core_.Control_swigregister(Control)
 ControlNameStr = cvar.ControlNameStr

@@ -5804,7 +5804,7 @@ class Display(object):
     __repr__ = _swig_repr
     def __init__(self, *args, **kwargs): 
         """
-        __init__(self, size_t index=0) -> Display
+        __init__(self, unsigned int index=0) -> Display
 
         Set up a Display instance with the specified display.  The displays
         are numbered from 0 to GetCount() - 1, 0 is always the primary display
@@ -5815,7 +5815,7 @@ class Display(object):
     __del__ = lambda self : None;
     def GetCount(*args, **kwargs):
         """
-        GetCount() -> size_t
+        GetCount() -> unsigned int
 
         Return the number of available displays.
         """
@@ -5949,7 +5949,7 @@ DefaultVideoMode = cvar.DefaultVideoMode
 
 def Display_GetCount(*args):
   """
-    Display_GetCount() -> size_t
+    Display_GetCount() -> unsigned int
 
     Return the number of available displays.
     """

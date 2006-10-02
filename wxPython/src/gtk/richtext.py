@@ -81,6 +81,8 @@ RICHTEXT_HITTEST_AFTER = _richtext.RICHTEXT_HITTEST_AFTER
 RICHTEXT_HITTEST_ON = _richtext.RICHTEXT_HITTEST_ON
 RICHTEXT_FORMATTED = _richtext.RICHTEXT_FORMATTED
 RICHTEXT_UNFORMATTED = _richtext.RICHTEXT_UNFORMATTED
+RICHTEXT_INSERT_NONE = _richtext.RICHTEXT_INSERT_NONE
+RICHTEXT_INSERT_WITH_PREVIOUS_PARAGRAPH_STYLE = _richtext.RICHTEXT_INSERT_WITH_PREVIOUS_PARAGRAPH_STYLE
 TEXT_ATTR_TEXT_COLOUR = _richtext.TEXT_ATTR_TEXT_COLOUR
 TEXT_ATTR_BACKGROUND_COLOUR = _richtext.TEXT_ATTR_BACKGROUND_COLOUR
 TEXT_ATTR_FONT_FACE = _richtext.TEXT_ATTR_FONT_FACE
@@ -761,10 +763,20 @@ class RichTextCtrl(_windows.ScrolledWindow):
         GetStyle(self, long position, RichTextAttr style) -> bool
 
         Retrieve the style used at the given position.  Copies the style
-        values at ``position`` into the ``style`` parameter returns ``True``
+        values at ``position`` into the ``style`` parameter and returns ``True``
         if successful.  Returns ``False`` otherwise.
         """
         return _richtext.RichTextCtrl_GetStyle(*args, **kwargs)
+
+    def GetUncombinedStyle(*args, **kwargs):
+        """
+        GetUncombinedStyle(self, long position, RichTextAttr style) -> bool
+
+        Get the content (uncombined) attributes for this position.  Copies the
+        style values at ``position`` into the ``style`` parameter and returns
+        ``True`` if successful.  Returns ``False`` otherwise.
+        """
+        return _richtext.RichTextCtrl_GetUncombinedStyle(*args, **kwargs)
 
     def SetDefaultStyle(*args, **kwargs):
         """
@@ -1153,6 +1165,10 @@ class RichTextCtrl(_windows.ScrolledWindow):
         """SelectNone(self)"""
         return _richtext.RichTextCtrl_SelectNone(*args, **kwargs)
 
+    def SelectWord(*args, **kwargs):
+        """SelectWord(self, long position) -> bool"""
+        return _richtext.RichTextCtrl_SelectWord(*args, **kwargs)
+
     def GetSelectionRange(*args, **kwargs):
         """GetSelectionRange(self) -> RichTextRange"""
         return _richtext.RichTextCtrl_GetSelectionRange(*args, **kwargs)
@@ -1316,6 +1332,10 @@ class RichTextCtrl(_windows.ScrolledWindow):
     def GetStyleSheet(*args, **kwargs):
         """GetStyleSheet(self) -> wxRichTextStyleSheet"""
         return _richtext.RichTextCtrl_GetStyleSheet(*args, **kwargs)
+
+    def ApplyStyleSheet(*args, **kwargs):
+        """ApplyStyleSheet(self, wxRichTextStyleSheet styleSheet=None) -> bool"""
+        return _richtext.RichTextCtrl_ApplyStyleSheet(*args, **kwargs)
 
     Buffer = property(GetBuffer,doc="See `GetBuffer`") 
     DefaultStyle = property(GetDefaultStyle,SetDefaultStyle,doc="See `GetDefaultStyle` and `SetDefaultStyle`") 

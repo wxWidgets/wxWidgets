@@ -36352,9 +36352,9 @@ SWIGINTERN PyObject *DefaultVideoMode_get(void) {
 
 SWIGINTERN PyObject *_wrap_new_Display(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
-  size_t arg1 = (size_t) 0 ;
+  unsigned int arg1 = (unsigned int) 0 ;
   wxDisplay *result = 0 ;
-  size_t val1 ;
+  unsigned int val1 ;
   int ecode1 = 0 ;
   PyObject * obj0 = 0 ;
   char *  kwnames[] = {
@@ -36363,11 +36363,11 @@ SWIGINTERN PyObject *_wrap_new_Display(PyObject *SWIGUNUSEDPARM(self), PyObject 
   
   if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"|O:new_Display",kwnames,&obj0)) SWIG_fail;
   if (obj0) {
-    ecode1 = SWIG_AsVal_size_t(obj0, &val1);
+    ecode1 = SWIG_AsVal_unsigned_SS_int(obj0, &val1);
     if (!SWIG_IsOK(ecode1)) {
-      SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "new_Display" "', expected argument " "1"" of type '" "size_t""'");
+      SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "new_Display" "', expected argument " "1"" of type '" "unsigned int""'");
     } 
-    arg1 = static_cast< size_t >(val1);
+    arg1 = static_cast< unsigned int >(val1);
   }
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -36412,16 +36412,16 @@ fail:
 
 SWIGINTERN PyObject *_wrap_Display_GetCount(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  size_t result;
+  unsigned int result;
   
   if (!SWIG_Python_UnpackTuple(args,"Display_GetCount",0,0,0)) SWIG_fail;
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    result = (size_t)wxDisplay::GetCount();
+    result = (unsigned int)wxDisplay::GetCount();
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
-  resultobj = SWIG_From_size_t(static_cast< size_t >(result));
+  resultobj = SWIG_From_unsigned_SS_int(static_cast< unsigned int >(result));
   return resultobj;
 fail:
   return NULL;
