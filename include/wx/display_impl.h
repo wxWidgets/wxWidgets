@@ -26,10 +26,10 @@ public:
     // create a new display object
     //
     // it can return a NULL pointer if the display creation failed
-    virtual wxDisplayImpl *CreateDisplay(size_t n) = 0;
+    virtual wxDisplayImpl *CreateDisplay(unsigned n) = 0;
 
     // get the total number of displays
-    virtual size_t GetCount() = 0;
+    virtual unsigned GetCount() = 0;
 
     // return the display for the given point or wxNOT_FOUND
     virtual int GetFromPoint(const wxPoint& pt) = 0;
@@ -61,7 +61,7 @@ public:
     virtual wxString GetName() const = 0;
 
     // return the index of this display
-    size_t GetIndex() const { return m_index; }
+    unsigned GetIndex() const { return m_index; }
 
     // return true if this is the primary monitor (usually one with index 0)
     virtual bool IsPrimary() const { return GetIndex() == 0; }
@@ -80,11 +80,11 @@ public:
 
 protected:
     // create the object providing access to the display with the given index
-    wxDisplayImpl(size_t n) : m_index(n) { }
+    wxDisplayImpl(unsigned n) : m_index(n) { }
 
 
     // the index of this display (0 is always the primary one)
-    const size_t m_index;
+    const unsigned m_index;
 
 
     friend class wxDisplayFactory;
@@ -101,8 +101,8 @@ protected:
 class WXDLLEXPORT wxDisplayFactorySingle : public wxDisplayFactory
 {
 public:
-    virtual wxDisplayImpl *CreateDisplay(size_t n);
-    virtual size_t GetCount() { return 1; }
+    virtual wxDisplayImpl *CreateDisplay(unsigned n);
+    virtual unsigned GetCount() { return 1; }
     virtual int GetFromPoint(const wxPoint& pt);
 };
 

@@ -174,7 +174,7 @@ WX_DEFINE_ARRAY_PTR(wxDisplayInfo *, wxDisplayInfoArray);
 class wxDisplayImplWin32Base : public wxDisplayImpl
 {
 public:
-    wxDisplayImplWin32Base(size_t n, wxDisplayInfo& info)
+    wxDisplayImplWin32Base(unsigned n, wxDisplayInfo& info)
         : wxDisplayImpl(n),
           m_info(info)
     {
@@ -219,7 +219,7 @@ public:
 
     bool IsOk() const { return !m_displays.empty(); }
 
-    virtual size_t GetCount() { return m_displays.size(); }
+    virtual unsigned GetCount() { return unsigned(m_displays.size()); }
     virtual int GetFromPoint(const wxPoint& pt);
     virtual int GetFromWindow(wxWindow *window);
 
@@ -257,7 +257,7 @@ protected:
 class wxDisplayImplMultimon : public wxDisplayImplWin32Base
 {
 public:
-    wxDisplayImplMultimon(size_t n, wxDisplayInfo& info)
+    wxDisplayImplMultimon(unsigned n, wxDisplayInfo& info)
         : wxDisplayImplWin32Base(n, info)
     {
     }
@@ -274,7 +274,7 @@ class wxDisplayFactoryMultimon : public wxDisplayFactoryWin32Base
 public:
     wxDisplayFactoryMultimon();
 
-    virtual wxDisplayImpl *CreateDisplay(size_t n);
+    virtual wxDisplayImpl *CreateDisplay(unsigned n);
 
 private:
     // EnumDisplayMonitors() callback
@@ -324,7 +324,7 @@ struct wxDisplayInfoDirectDraw : wxDisplayInfo
 class wxDisplayImplDirectDraw : public wxDisplayImplWin32Base
 {
 public:
-    wxDisplayImplDirectDraw(size_t n, wxDisplayInfo& info, IDirectDraw2 *pDD2)
+    wxDisplayImplDirectDraw(unsigned n, wxDisplayInfo& info, IDirectDraw2 *pDD2)
         : wxDisplayImplWin32Base(n, info),
           m_pDD2(pDD2)
     {
@@ -351,7 +351,7 @@ public:
     wxDisplayFactoryDirectDraw();
     virtual ~wxDisplayFactoryDirectDraw();
 
-    virtual wxDisplayImpl *CreateDisplay(size_t n);
+    virtual wxDisplayImpl *CreateDisplay(unsigned n);
 
 private:
     // callback used with DirectDrawEnumerateEx()
@@ -647,7 +647,7 @@ void wxDisplayFactoryMultimon::AddDisplay(HMONITOR hMonitor, LPRECT lprcMonitor)
 // wxDisplayFactoryMultimon inherited pure virtuals implementation
 // ----------------------------------------------------------------------------
 
-wxDisplayImpl *wxDisplayFactoryMultimon::CreateDisplay(size_t n)
+wxDisplayImpl *wxDisplayFactoryMultimon::CreateDisplay(unsigned n)
 {
     wxCHECK_MSG( n < m_displays.size(), NULL, _T("invalid display index") );
 
@@ -888,7 +888,7 @@ void wxDisplayFactoryDirectDraw::AddDisplay(const GUID& guid,
 // wxDisplayFactoryDirectDraw inherited pure virtuals implementation
 // ----------------------------------------------------------------------------
 
-wxDisplayImpl *wxDisplayFactoryDirectDraw::CreateDisplay(size_t n)
+wxDisplayImpl *wxDisplayFactoryDirectDraw::CreateDisplay(unsigned n)
 {
     wxCHECK_MSG( n < m_displays.size(), NULL, _T("invalid display index") );
 

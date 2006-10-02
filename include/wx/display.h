@@ -45,7 +45,7 @@ public:
     //
     // the displays are numbered from 0 to GetCount() - 1, 0 is always the
     // primary display and the only one which is always supported
-    wxDisplay(size_t n = 0);
+    wxDisplay(unsigned n = 0);
 
     // dtor is not virtual as this is a concrete class not meant to be derived
     // from
@@ -54,7 +54,7 @@ public:
 
     // return the number of available displays, valid parameters to
     // wxDisplay ctor are from 0 up to this number
-    static size_t GetCount();
+    static unsigned GetCount();
 
     // find the display where the given point lies, return wxNOT_FOUND if
     // it doesn't belong to any display

@@ -71,7 +71,7 @@ public:
 
     operator const XineramaScreenInfo *() const { return m_screens; }
 
-    size_t GetCount() const { return wx_static_cast(size_t, m_num); }
+    unsigned GetCount() const { return wx_static_cast(unsigned, m_num); }
 
 private:
     XineramaScreenInfo *m_screens;
@@ -85,7 +85,7 @@ private:
 class WXDLLEXPORT wxDisplayImplX11 : public wxDisplayImpl
 {
 public:
-    wxDisplayImplX11(size_t n, const XineramaScreenInfo& info)
+    wxDisplayImplX11(unsigned n, const XineramaScreenInfo& info)
         : wxDisplayImpl(n),
           m_rect(info.x_org, info.y_org, info.width, info.height)
     {
@@ -110,8 +110,8 @@ class wxDisplayFactoryX11 : public wxDisplayFactory
 public:
     wxDisplayFactoryX11() { }
 
-    virtual wxDisplayImpl *CreateDisplay(size_t n);
-    virtual size_t GetCount();
+    virtual wxDisplayImpl *CreateDisplay(unsigned n);
+    virtual unsigned GetCount();
     virtual int GetFromPoint(const wxPoint& pt);
 
 protected:
@@ -122,7 +122,7 @@ protected:
 // wxDisplayFactoryX11 implementation
 // ============================================================================
 
-size_t wxDisplayFactoryX11::GetCount()
+unsigned wxDisplayFactoryX11::GetCount()
 {
     return ScreensInfo().GetCount();
 }
@@ -131,8 +131,8 @@ int wxDisplayFactoryX11::GetFromPoint(const wxPoint& p)
 {
     ScreensInfo screens;
 
-    const size_t numscreens(screens.GetCount());
-    for ( size_t i = 0; i < numscreens; ++i )
+    const unsigned numscreens(screens.GetCount());
+    for ( unsigned i = 0; i < numscreens; ++i )
     {
         const XineramaScreenInfo& s = screens[i];
         if ( p.x >= s.x_org && p.x < s.x_org + s.width &&
@@ -145,7 +145,7 @@ int wxDisplayFactoryX11::GetFromPoint(const wxPoint& p)
     return wxNOT_FOUND;
 }
 
-wxDisplayImpl *wxDisplayFactoryX11::CreateDisplay(size_t n)
+wxDisplayImpl *wxDisplayFactoryX11::CreateDisplay(unsigned n)
 {
     ScreensInfo screens;
 

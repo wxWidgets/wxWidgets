@@ -56,7 +56,7 @@
 class wxDisplayImplMacOSX : public wxDisplayImpl
 {
 public:
-    wxDisplayImplMacOSX(size_t n, CGDirectDisplayID id)
+    wxDisplayImplMacOSX(unsigned n, CGDirectDisplayID id)
         : wxDisplayImpl(n),
           m_id(id)
     {
@@ -80,8 +80,8 @@ class wxDisplayFactoryMacOSX : public wxDisplayFactory
 public:
     wxDisplayFactoryMacOSX() {}
 
-    virtual wxDisplayImpl *CreateDisplay(size_t n);
-    virtual size_t GetCount();
+    virtual wxDisplayImpl *CreateDisplay(unsigned n);
+    virtual unsigned GetCount();
     virtual int GetFromPoint(const wxPoint& pt);
 
 protected:
@@ -92,7 +92,7 @@ protected:
 // wxDisplayFactoryMacOSX implementation
 // ============================================================================
 
-size_t wxDisplayFactoryMacOSX::GetCount()
+unsigned wxDisplayFactoryMacOSX::GetCount()
 {
     CGDisplayCount count;
 #ifdef __WXDEBUG__
@@ -140,7 +140,7 @@ int wxDisplayFactoryMacOSX::GetFromPoint(const wxPoint& p)
     return nWhich;
 }
 
-wxDisplayImpl *wxDisplayFactoryMacOSX::CreateDisplay(size_t n)
+wxDisplayImpl *wxDisplayFactoryMacOSX::CreateDisplay(unsigned n)
 {
     CGDisplayCount theCount = GetCount();
     CGDirectDisplayID* theIDs = new CGDirectDisplayID[theCount];
@@ -256,7 +256,7 @@ bool wxDisplayImplMacOSX::ChangeMode( const wxVideoMode& mode )
 class wxDisplayImplMac : public wxDisplayImpl
 {
 public:
-    wxDisplayImplMac(size_t n, GDHandle hndl)
+    wxDisplayImplMac(unsigned n, GDHandle hndl)
         : wxDisplayImpl(n),
           m_hndl(hndl)
     {
@@ -280,8 +280,8 @@ class wxDisplayFactoryMac : public wxDisplayFactory
 public:
     wxDisplayFactoryMac();
 
-    virtual wxDisplayImpl *CreateDisplay(size_t n);
-    virtual size_t GetCount();
+    virtual wxDisplayImpl *CreateDisplay(unsigned n);
+    virtual unsigned GetCount();
     virtual int GetFromPoint(const wxPoint& pt);
 
 protected:
@@ -292,9 +292,9 @@ protected:
 // wxDisplayFactoryMac implementation
 // ============================================================================
 
-size_t wxDisplayFactoryMac::GetCount()
+unsigned wxDisplayFactoryMac::GetCount()
 {
-    size_t num = 0;
+    unsigned num = 0;
     GDHandle hndl = DMGetFirstScreenDevice(true);
     while(hndl)
     {
@@ -306,7 +306,7 @@ size_t wxDisplayFactoryMac::GetCount()
 
 int wxDisplayFactoryMac::GetFromPoint(const wxPoint &p)
 {
-    size_t num = 0;
+    unsigned num = 0;
     GDHandle hndl = DMGetFirstScreenDevice(true);
     while(hndl)
     {
@@ -325,9 +325,9 @@ int wxDisplayFactoryMac::GetFromPoint(const wxPoint &p)
     return wxNOT_FOUND;
 }
 
-wxDisplayImpl *wxDisplayFactoryMac::CreateDisplay(size_t n)
+wxDisplayImpl *wxDisplayFactoryMac::CreateDisplay(unsigned n)
 {
-    size_t nOrig = n;
+    unsigned nOrig = n;
 
     GDHandle hndl = DMGetFirstScreenDevice(true);
     while(hndl)

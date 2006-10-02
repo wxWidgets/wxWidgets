@@ -37,7 +37,7 @@
 class wxDisplayImplMacOSX : public wxDisplayImpl
 {
 public:
-    wxDisplayImplMacOSX(size_t n, CGDirectDisplayID id_)
+    wxDisplayImplMacOSX(unsigned n, CGDirectDisplayID id_)
         : wxDisplayImpl(n),
           m_id(id_)
     {
@@ -61,8 +61,8 @@ class wxDisplayFactoryMacOSX : public wxDisplayFactory
 public:
     wxDisplayFactoryMacOSX() { }
 
-    virtual wxDisplayImpl *CreateDisplay(size_t n);
-    virtual size_t GetCount();
+    virtual wxDisplayImpl *CreateDisplay(unsigned n);
+    virtual unsigned GetCount();
     virtual int GetFromPoint(const wxPoint& pt);
 
 protected:
@@ -73,7 +73,7 @@ protected:
 // wxDisplayFactoryMacOSX implementation
 // ============================================================================
 
-size_t wxDisplayFactoryMacOSX::GetCount()
+unsigned wxDisplayFactoryMacOSX::GetCount()
 {
     CGDisplayCount count;
 #ifdef __WXDEBUG__
@@ -121,7 +121,7 @@ int wxDisplayFactoryMacOSX::GetFromPoint(const wxPoint& p)
     return nWhich;
 }
 
-wxDisplayImpl *wxDisplayFactoryMacOSX::CreateDisplay(size_t n)
+wxDisplayImpl *wxDisplayFactoryMacOSX::CreateDisplay(unsigned n)
 {
     CGDisplayCount theCount = GetCount();
     CGDirectDisplayID* theIDs = new CGDirectDisplayID[theCount];

@@ -118,7 +118,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxDisplayModule, wxModule)
 // ctor/dtor
 // ----------------------------------------------------------------------------
 
-wxDisplay::wxDisplay(size_t n)
+wxDisplay::wxDisplay(unsigned n)
 {
     wxASSERT_MSG( n < GetCount(),
                     wxT("An invalid index was passed to wxDisplay") );
@@ -135,7 +135,7 @@ wxDisplay::~wxDisplay()
 // static functions forwarded to wxDisplayFactory
 // ----------------------------------------------------------------------------
 
-/* static */ size_t wxDisplay::GetCount()
+/* static */ unsigned wxDisplay::GetCount()
 {
     return Factory().GetCount();
 }
@@ -247,7 +247,7 @@ int wxDisplayFactory::GetFromWindow(wxWindow *window)
 // ============================================================================
 
 /* static */
-wxDisplayImpl *wxDisplayFactorySingle::CreateDisplay(size_t n)
+wxDisplayImpl *wxDisplayFactorySingle::CreateDisplay(unsigned n)
 {
     // we recognize the main display only
     return n != 0 ? NULL : new wxDisplayImplSingle;
