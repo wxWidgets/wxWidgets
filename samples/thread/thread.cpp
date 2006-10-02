@@ -173,7 +173,7 @@ public:
     void WriteText(const wxString& text);
 
 public:
-    size_t   m_count;
+    unsigned m_count;
     MyFrame *m_frame;
 };
 
@@ -266,7 +266,7 @@ public:
 
 public:
     MyFrame *m_frame;
-    size_t   m_count;
+    unsigned m_count;
 };
 
 MyWorkerThread::MyWorkerThread(MyFrame *frame)
@@ -494,7 +494,7 @@ MyThread *MyFrame::CreateThread()
 
 void MyFrame::OnStartThreads(wxCommandEvent& WXUNUSED(event) )
 {
-    static long s_num = 10;
+    static long s_num;
 
     s_num = wxGetNumberFromUser(_T("How many threads to start: "), _T(""),
                                 _T("wxThread sample"), s_num, 1, 10000, this);
@@ -505,7 +505,7 @@ void MyFrame::OnStartThreads(wxCommandEvent& WXUNUSED(event) )
         return;
     }
 
-    size_t count = (size_t)s_num, n;
+    unsigned count = unsigned(s_num), n;
 
     wxArrayThread threads;
 
@@ -647,7 +647,7 @@ void MyFrame::OnIdle(wxIdleEvent& event)
         m_nRunning = nRunning;
         m_nCount = nCount;
 
-        wxLogStatus(this, wxT("%u threads total, %u running."), nCount, nRunning);
+        wxLogStatus(this, wxT("%u threads total, %u running."), unsigned(nCount), unsigned(nRunning));
     }
     //else: avoid flicker - don't print anything
 

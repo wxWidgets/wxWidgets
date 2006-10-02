@@ -647,7 +647,7 @@ void LboxTestFrame::OnButtonClearLog(wxCommandEvent& WXUNUSED(event))
 
 void LboxTestFrame::OnButtonAdd(wxCommandEvent& WXUNUSED(event))
 {
-    static size_t s_item = 0;
+    static unsigned s_item = 0;
 
     wxString s = m_textAdd->GetValue();
     if ( !m_textAdd->IsModified() )
@@ -662,7 +662,7 @@ void LboxTestFrame::OnButtonAdd(wxCommandEvent& WXUNUSED(event))
 void LboxTestFrame::OnButtonAddMany(wxCommandEvent& WXUNUSED(event))
 {
     // "many" means 1000 here
-    for ( size_t n = 0; n < 1000; n++ )
+    for ( unsigned n = 0; n < 1000; n++ )
     {
         m_lbox->Append(wxString::Format(_T("item #%u"), n));
     }

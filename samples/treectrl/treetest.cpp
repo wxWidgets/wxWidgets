@@ -477,7 +477,7 @@ void MyFrame::OnDumpSelected(wxCommandEvent& WXUNUSED(event))
     wxArrayTreeItemIds array;
 
     size_t count = m_treeCtrl->GetSelections(array);
-    wxLogMessage(wxT("%u items selected"), count);
+    wxLogMessage(wxT("%u items selected"), unsigned(count));
 
     for ( size_t n = 0; n < count; n++ )
     {
@@ -790,9 +790,9 @@ void MyTreeCtrl::AddItemsRecursively(const wxTreeItemId& idParent,
         {
             // at depth 1 elements won't have any more children
             if ( hasChildren )
-                str.Printf(wxT("%s child %d"), wxT("Folder"), n + 1);
+                str.Printf(wxT("%s child %u"), wxT("Folder"), unsigned(n + 1));
             else
-                str.Printf(wxT("%s child %d.%d"), wxT("File"), folder, n + 1);
+                str.Printf(wxT("%s child %u.%u"), wxT("File"), unsigned(folder), unsigned(n + 1));
 
             // here we pass to AppendItem() normal and selected item images (we
             // suppose that selected image follows the normal one in the enum)
@@ -1288,6 +1288,6 @@ void MyTreeItemData::ShowInfo(wxTreeCtrl *tree)
                  Bool2String(tree->IsSelected(GetId())),
                  Bool2String(tree->IsExpanded(GetId())),
                  Bool2String(tree->IsBold(GetId())),
-                 tree->GetChildrenCount(GetId()),
-                 tree->GetChildrenCount(GetId(), false));
+                 unsigned(tree->GetChildrenCount(GetId())),
+                 unsigned(tree->GetChildrenCount(GetId(), false)));
 }

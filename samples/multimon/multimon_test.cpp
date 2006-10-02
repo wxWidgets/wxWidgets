@@ -36,17 +36,15 @@ bool TestApp::OnInit()
 #if wxUSE_DISPLAY
   else
   {
-    size_t count = wxDisplay::GetCount();
-    wxLogDebug ( _T("I detected %i display(s) on your system"), count );
-    size_t i = 0;
-    while ( i < count )
+    unsigned count = wxDisplay::GetCount();
+    wxLogDebug ( _T("I detected %u display(s) on your system"), count );
+    for (unsigned i = 0; i < count; i++)
     {
         wxDisplay display ( i );
         wxRect r = display.GetGeometry();
-        wxLogDebug ( _T("Display #%i \"%s\" = ( %i, %i, %i, %i ) @ %i bits"),
+        wxLogDebug ( _T("Display #%u \"%s\" = ( %i, %i, %i, %i ) @ %i bits"),
             i, display.GetName().c_str(), r.GetLeft(), r.GetTop(), r.GetWidth(), r.GetHeight(),
             display.GetCurrentMode().GetDepth() );
-        i++;
     }
   }
 #endif

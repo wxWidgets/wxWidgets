@@ -125,7 +125,7 @@ public:
     void OnLboxSelect(wxCommandEvent& event);
     void OnLboxDClick(wxCommandEvent& event)
     {
-        wxLogMessage(_T("Listbox item %ld double clicked."), event.GetInt());
+        wxLogMessage(_T("Listbox item %d double clicked."), event.GetInt());
     }
 
 private:
@@ -386,7 +386,7 @@ void MyFrame::OnSetSelFgCol(wxCommandEvent& event)
 
 void MyFrame::OnLboxSelect(wxCommandEvent& event)
 {
-    wxLogMessage(_T("Listbox selection is now %ld."), event.GetInt());
+    wxLogMessage(_T("Listbox selection is now %d."), event.GetInt());
 
     if ( m_hlbox->HasMultipleSelection() )
     {

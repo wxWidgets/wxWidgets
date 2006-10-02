@@ -97,7 +97,7 @@ public:
 
 protected:
     // number of pushed event handlers
-    size_t m_nPush;
+    unsigned m_nPush;
 
 private:
     // any class wishing to process wxWidgets events must use this macro
@@ -120,7 +120,7 @@ public:
     }
 
 private:
-    size_t m_level;
+    unsigned m_level;
 
     DECLARE_EVENT_TABLE()
 };

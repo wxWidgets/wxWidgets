@@ -527,7 +527,7 @@ void BookWidgetsPage::OnUpdateUIResetButton(wxUpdateUIEvent& event)
 void BookWidgetsPage::OnUpdateUINumPagesText(wxUpdateUIEvent& event)
 {
     if(m_book)
-        event.SetText( wxString::Format(_T("%d"), m_book->GetPageCount()) );
+        event.SetText( wxString::Format(_T("%u"), unsigned(m_book->GetPageCount())) );
 }
 
 void BookWidgetsPage::OnUpdateUICurSelectText(wxUpdateUIEvent& event)

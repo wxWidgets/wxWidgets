@@ -698,7 +698,7 @@ void MyScrolledWindowDumb::OnDraw(wxDC& dc)
         CalcScrolledPosition(0, y, NULL, &yPhys);
 
         dc.DrawText(wxString::Format(_T("Line %u (logical %d, physical %d)"),
-                                     line, y, yPhys), 0, y);
+                                     unsigned(line), y, yPhys), 0, y);
         y += m_hLine;
     }
 }
@@ -727,7 +727,7 @@ void MyScrolledWindowSmart::OnDraw(wxDC& dc)
         CalcScrolledPosition(0, y, NULL, &yPhys);
 
         dc.DrawText(wxString::Format(_T("Line %u (logical %d, physical %d)"),
-                                     line, y, yPhys), 0, y);
+                                     unsigned(line), y, yPhys), 0, y);
         y += m_hLine;
     }
 }

@@ -706,7 +706,7 @@ void MyFrame::OnDeleteAll(wxCommandEvent& WXUNUSED(event))
 {
     wxStopWatch sw;
 
-    size_t itemCount = m_listCtrl->GetItemCount();
+    int itemCount = m_listCtrl->GetItemCount();
 
     m_listCtrl->DeleteAllItems();
 

@@ -1009,7 +1009,7 @@ void MyFrame::OnCreatePerspective(wxCommandEvent& WXUNUSED(event))
     wxTextEntryDialog dlg(this, wxT("Enter a name for the new perspective:"),
                           wxT("wxAUI Test"));
 
-    dlg.SetValue(wxString::Format(wxT("Perspective %d"), m_perspectives.GetCount()+1));
+    dlg.SetValue(wxString::Format(wxT("Perspective %u"), unsigned(m_perspectives.GetCount() + 1)));
     if (dlg.ShowModal() != wxID_OK)
         return;
 
