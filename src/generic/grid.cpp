@@ -18,6 +18,8 @@
 
 #if wxUSE_GRID
 
+#include "wx/grid.h"
+
 #ifndef WX_PRECOMP
     #include "wx/utils.h"
     #include "wx/dcclient.h"
@@ -37,8 +39,9 @@
 #include "wx/tokenzr.h"
 #include "wx/renderer.h"
 
-#include "wx/grid.h"
 #include "wx/generic/gridsel.h"
+
+const wxChar wxGridNameStr[] = wxT("grid");
 
 #if defined(__WXMOTIF__)
     #define WXUNUSED_MOTIF(identifier)  WXUNUSED(identifier)
