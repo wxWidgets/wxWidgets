@@ -1452,6 +1452,8 @@ void wxWindowDC::DoDrawText( const wxString &text, wxCoord x, wxCoord y )
     wxCHECK_RET( m_layout, wxT("no Pango layout") );
     wxCHECK_RET( m_fontdesc, wxT("no Pango font description") );
 
+    gdk_pango_context_set_colormap( m_context, m_cmap );
+
     bool underlined = m_font.Ok() && m_font.GetUnderlined();
 
     const wxCharBuffer data = wxGTK_CONV( text );
