@@ -22,11 +22,11 @@
 #ifndef WX_PRECOMP
     #include "wx/intl.h"
     #include "wx/log.h"
-    #include "wx/app.h"
     #include "wx/utils.h"
     #include "wx/dcmemory.h"
     #include "wx/math.h"
     #include "wx/image.h"
+    #include "wx/icon.h"
 #endif // WX_PRECOMP
 
 #include "wx/prntbase.h"
