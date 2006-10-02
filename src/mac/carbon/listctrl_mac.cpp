@@ -266,7 +266,7 @@ bool wxListCtrl::Create(wxWindow *parent,
     // Also, use generic list control in VIRTUAL mode.
     if ( (wxSystemOptions::HasOption( wxMAC_ALWAYS_USE_GENERIC_LISTCTRL )
             && (wxSystemOptions::GetOptionInt( wxMAC_ALWAYS_USE_GENERIC_LISTCTRL ) == 1)) ||
-            (style & wxLC_ICON) || (style & wxLC_SMALL_ICON) || (style & wxLC_LIST) || (style & wxLC_VIRTUAL)  )
+            (style & wxLC_ICON) || (style & wxLC_SMALL_ICON) || (style & wxLC_LIST) /* || (style & wxLC_VIRTUAL) */ )
     {
         m_macIsUserPane = true;
 
@@ -1495,7 +1495,10 @@ wxMacDataBrowserListCtrlControl::wxMacDataBrowserListCtrlControl( wxWindow *peer
     if ( style & wxLC_LIST || style & wxLC_NO_HEADER )
         verify_noerr( SetHeaderButtonHeight( 0 ) );
 
-    SetSortProperty( kMinColumnId );
+    if ( m_isVirtual )
+        SetSortProperty( kMinColumnId - 1 );
+    else
+        SetSortProperty( kMinColumnId );
     if ( style & wxLC_SORT_ASCENDING )
     {
         m_sortOrder = SortOrder_Text_Ascending;
