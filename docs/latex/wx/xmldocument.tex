@@ -86,6 +86,7 @@ doc.Save(wxT("myfile2.xml"));       // myfile2.xml != myfile.xml
 \latexignore{\rtfignore{\wxheading{Members}}}
 
 
+
 \membersection{wxXmlDocument::wxXmlDocument}\label{wxxmldocumentwxxmldocument}
 
 \func{}{wxXmlDocument}{\void}
@@ -103,11 +104,13 @@ Loads the XML document from given stream using the given encoding. See \helpref{
 
 Copy constructor.
 
+
 \membersection{wxXmlDocument::\destruct{wxXmlDocument}}\label{wxxmldocumentdtor}
 
 \func{}{\destruct{wxXmlDocument}}{\void}
 
 Virtual destructor. Frees the document root node.
+
 
 
 \membersection{wxXmlDocument::DetachRoot}\label{wxxmldocumentdetachroot}
@@ -120,6 +123,7 @@ and thus \helpref{IsOk}{wxxmldocumentisok} will return \false after calling this
 Note that the caller is reponsible for deleting the returned node in order to avoid memory leaks.
 
 
+
 \membersection{wxXmlDocument::GetEncoding}\label{wxxmldocumentgetencoding}
 
 \constfunc{wxString}{GetEncoding}{\void}
@@ -128,6 +132,7 @@ Returns encoding of in-memory representation of the document
 (same as passed to \helpref{Load()}{wxxmldocumentload} or constructor, defaults to UTF-8).
 
 NB: this is meaningless in Unicode build where data are stored as wchar\_t*.
+
 
 
 \membersection{wxXmlDocument::GetFileEncoding}\label{wxxmldocumentgetfileencoding}
@@ -140,11 +145,13 @@ Note: this is the encoding original file was saved in, *not* the
 encoding of in-memory representation!
 
 
+
 \membersection{wxXmlDocument::GetRoot}\label{wxxmldocumentgetroot}
 
 \constfunc{wxXmlNode*}{GetRoot}{\void}
 
 Returns the root node of the document.
+
 
 
 \membersection{wxXmlDocument::GetVersion}\label{wxxmldocumentgetversion}
@@ -157,11 +164,13 @@ If the version property was not explicitely given in the header, this function
 returns an empty string.
 
 
+
 \membersection{wxXmlDocument::IsOk}\label{wxxmldocumentisok}
 
 \constfunc{bool}{IsOk}{\void}
 
 Returns \true if the document has been loaded successfully.
+
 
 
 \membersection{wxXmlDocument::Load}\label{wxxmldocumentload}
@@ -183,6 +192,7 @@ Returns \true on success, \false otherwise.
 
 Like above but takes the data from given input stream.
 
+
 \membersection{wxXmlDocument::Save}\label{wxxmldocumentsave}
 
 \constfunc{bool}{Save}{\param{const wxString\& }{filename}, \param{int }{indentstep = 1}}
@@ -197,11 +207,13 @@ If {\tt indentstep} is {\tt wxXML\_NO\_INDENTATION}, then, automatic indentation
 
 Saves XML tree in the given output stream. See other overload for a description of {\tt indentstep}.
 
+
 \membersection{wxXmlDocument::SetEncoding}\label{wxxmldocumentsetencoding}
 
 \func{void}{SetEncoding}{\param{const wxString\& }{enc}}
 
 Sets the enconding of the document.
+
 
 \membersection{wxXmlDocument::SetFileEncoding}\label{wxxmldocumentsetfileencoding}
 
@@ -209,19 +221,22 @@ Sets the enconding of the document.
 
 Sets the enconding of the file which will be used to save the document.
 
+
 \membersection{wxXmlDocument::SetRoot}\label{wxxmldocumentsetroot}
 
 \func{void}{SetRoot}{\param{wxXmlNode* }{node}}
 
 Sets the root node of this document. Deletes previous root node.
-Use \helpref{DetachRoot}{wxxmlnodedetachroot} and then SetRoot if you want to
-replace the root node without deleting the old document tree.
+Use \helpref{DetachRoot}{wxxmldocumentdetachroot} and then SetRoot if you want
+to replace the root node without deleting the old document tree.
+
 
 \membersection{wxXmlDocument::SetVersion}\label{wxxmldocumentsetversion}
 
 \func{void}{SetVersion}{\param{const wxString\& }{version}}
 
 Sets the version of the XML file which will be used to save the document.
+
 
 \membersection{wxXmlDocument::operator=}\label{wxxmldocumentoperatorassign}
 
