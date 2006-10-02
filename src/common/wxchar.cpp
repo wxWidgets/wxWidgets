@@ -984,7 +984,7 @@ int wxPrintfConvSpec::Process(wxChar *buf, size_t lenMax, wxPrintfArg *p)
         case wxPAT_POINTER:
 #if wxUSE_STRUTILS
             {
-                wxASSERT(lenScratch >= 0 && lenScratch < wxMAX_SVNPRINTF_SCRATCHBUFFER_LEN);
+                wxASSERT( /* lenScratch >= 0 && */ lenScratch < wxMAX_SVNPRINTF_SCRATCHBUFFER_LEN);
                 if (lenMax < lenScratch)
                 {
                     // fill output buffer and then return -1
