@@ -705,18 +705,134 @@ void wxGDIPlusContext::SetRadialGradientBrush( wxDouble xo, wxDouble yo, wxDoubl
     b->SetSurroundColors(colors, &count);
 }
 
+// the built-in conversions functions create non-premultiplied bitmaps, while GDIPlus needs them in the 
+// premultiplied format, therefore in the failing cases we create a new bitmap using the non-premultiplied 
+// bytes as parameter
+
 void wxGDIPlusContext::DrawBitmap( const wxBitmap &bmp, wxDouble x, wxDouble y, wxDouble w, wxDouble h ) 
 {
-    Bitmap* image = Bitmap::FromHBITMAP((HBITMAP)bmp.GetHBITMAP(),(HPALETTE)bmp.GetPalette()->GetHPALETTE());
-    m_context->DrawImage(image,(REAL) x,(REAL) y,(REAL) w,(REAL) h) ;
+    Bitmap* image = NULL;
+    Bitmap* helper = NULL;
+    if ( bmp.GetMask() )
+    { 
+        Bitmap interim((HBITMAP)bmp.GetHBITMAP(),(HPALETTE)bmp.GetPalette()->GetHPALETTE()) ;
+
+        size_t width = interim.GetWidth();
+        size_t height = interim.GetHeight();
+        Rect bounds(0,0,width,height);
+
+        image = new Bitmap(width,height,PixelFormat32bppPARGB) ;
+
+        Bitmap interimMask((HBITMAP)bmp.GetMask()->GetMaskBitmap(),NULL);
+        wxASSERT(interimMask.GetPixelFormat() == PixelFormat1bppIndexed);
+
+        BitmapData dataMask ;
+        interimMask.LockBits(&bounds,ImageLockModeRead, 
+            interimMask.GetPixelFormat(),&dataMask);
+
+
+        BitmapData imageData ;
+        image->LockBits(&bounds,ImageLockModeWrite, PixelFormat32bppPARGB, &imageData);
+
+        BYTE maskPattern = 0 ;
+        BYTE maskByte = 0;
+        size_t maskIndex ;
+
+        for ( size_t y = 0 ; y < height ; ++y)
+        {
+            maskIndex = 0 ;
+            for( size_t x = 0 ; x < width; ++x)
+            {
+                if ( x % 8 == 0)
+                {
+                    maskPattern = 0x80;
+                    maskByte = *((BYTE*)dataMask.Scan0 + dataMask.Stride*y + maskIndex);
+                    maskIndex++;
+                }
+                else
+                    maskPattern = maskPattern >> 1;
+
+                ARGB *dest = (ARGB*)((BYTE*)imageData.Scan0 + imageData.Stride*y + x*4);
+                if ( (maskByte & maskPattern) == 0 )
+                    *dest = 0x00000000;
+                else
+                {
+                    Color c ;
+                    interim.GetPixel(x,y,&c) ;
+                    *dest = (c.GetValue() | Color::AlphaMask);
+                }
+            }
+        }
+
+        image->UnlockBits(&imageData);
+
+        interimMask.UnlockBits(&dataMask);
+        interim.UnlockBits(&dataMask);
+    }
+    else
+    {
+        image = Bitmap::FromHBITMAP((HBITMAP)bmp.GetHBITMAP(),(HPALETTE)bmp.GetPalette()->GetHPALETTE());        
+        if ( GetPixelFormatSize(image->GetPixelFormat()) == 32 )
+        {
+            size_t width = image->GetWidth();
+            size_t height = image->GetHeight();
+            Rect bounds(0,0,width,height);
+            BitmapData data ;
+
+            helper = image ;
+            image = NULL ;
+            helper->LockBits(&bounds, ImageLockModeRead,
+                helper->GetPixelFormat(),&data);
+
+            image = new Bitmap(data.Width, data.Height, data.Stride, 
+                PixelFormat32bppARGB , (BYTE*) data.Scan0);
+
+            helper->UnlockBits(&data);
+        }
+    }
+    if ( image )
+        m_context->DrawImage(image,(REAL) x,(REAL) y,(REAL) w,(REAL) h) ;
     delete image ;
+    delete helper ;
 }
 
 void wxGDIPlusContext::DrawIcon( const wxIcon &icon, wxDouble x, wxDouble y, wxDouble w, wxDouble h ) 
 {
-    Bitmap* image = Bitmap::FromHICON((HICON)icon.GetHICON());
+    HICON hIcon = (HICON)icon.GetHICON();
+    ICONINFO iconInfo ;
+    // IconInfo creates the bitmaps for color and mask, we must dispose of them after use
+    if (!GetIconInfo(hIcon,&iconInfo))
+        return;
+
+    BITMAP iconBmpData ;
+    GetObject(iconInfo.hbmColor,sizeof(BITMAP),&iconBmpData);
+    Bitmap interim(iconInfo.hbmColor,NULL);
+
+    Bitmap* image = NULL ;
+
+    if( GetPixelFormatSize(interim.GetPixelFormat())!= 32 )
+    {
+        image = Bitmap::FromHICON(hIcon);
+    }
+    else
+    {
+        size_t width = interim.GetWidth();
+        size_t height = interim.GetHeight();
+        Rect bounds(0,0,width,height);
+        BitmapData data ;
+
+        interim.LockBits(&bounds, ImageLockModeRead,
+            interim.GetPixelFormat(),&data);
+        image = new Bitmap(data.Width, data.Height, data.Stride, 
+            PixelFormat32bppARGB , (BYTE*) data.Scan0);
+        interim.UnlockBits(&data);
+    }
+
     m_context->DrawImage(image,(REAL) x,(REAL) y,(REAL) w,(REAL) h) ;
+
     delete image ;
+    DeleteObject(iconInfo.hbmColor);
+    DeleteObject(iconInfo.hbmMask);
 }
 
 
