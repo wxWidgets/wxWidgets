@@ -248,6 +248,9 @@ class ListCtrlAutoWidthMixin:
         
         if not self:  # avoid a PyDeadObject error
             return
+
+        if self.GetSize().height < 32:
+            return  # avoid an endless update bug when the height is small.
         
         numCols = self.GetColumnCount()
         if numCols == 0: return # Nothing to resize.
