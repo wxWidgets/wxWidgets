@@ -200,7 +200,7 @@ void SimpleTransientPopup::OnMouse(wxMouseEvent &event)
     rect.SetWidth(1000000);
     wxColour colour(*wxLIGHT_GREY);
 
-    if (rect.Inside(event.GetPosition()))
+    if (rect.Contains(event.GetPosition()))
     {       
         colour = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT);
     wxLogMessage( wxT("0x%lx SimpleTransientPopup::OnMouse pos(%d, %d)"), long(event.GetEventObject()), event.GetX(), event.GetY());

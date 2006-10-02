@@ -468,7 +468,7 @@ DragShape::DragShape(const wxBitmap& bitmap)
 bool DragShape::HitTest(const wxPoint& pt) const
 {
     wxRect rect(GetRect());
-    return rect.Inside(pt.x, pt.y);
+    return rect.Contains(pt.x, pt.y);
 }
 
 bool DragShape::Draw(wxDC& dc, int op)
