@@ -6338,6 +6338,8 @@ if test "$USE_WIN32" = 1 -a \( "$wxUSE_DATAOBJ"       = "yes" \
             LIBS=" -lrpcrt4 -loleaut32 -lole32 -luuid$LIBS"
             if test "$wxUSE_OLE" = "yes" ; then
                 AC_DEFINE(wxUSE_OLE)
+                AC_DEFINE(wxUSE_OLE_AUTOMATION)
+                AC_DEFINE(wxUSE_OLE_ACTIVEX)
                 SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS oleauto"
             fi
         fi
