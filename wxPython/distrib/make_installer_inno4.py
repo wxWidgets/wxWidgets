@@ -38,7 +38,7 @@ ISS_Template = r'''
 AppName = wxPython%(SHORTVER)s-%(CHARTYPE)s-%(PYVER)s
 AppVerName = wxPython %(VERSION)s (%(CHARTYPE)s) for Python %(PYTHONVER)s
 OutputBaseFilename = wxPython%(SHORTVER)s-win32-%(CHARTYPE)s-%(VERSION)s-%(PYVER)s
-AppCopyright = Copyright © 2004 Total Control Software
+AppCopyright = Copyright © 2006 Total Control Software
 DefaultDirName = {code:GetInstallDir|c:\DoNotInstallHere}
 DefaultGroupName = wxPython %(VERSION)s (%(CHARTYPE)s) for Python %(PYTHONVER)s
 AdminPrivilegesRequired = no
@@ -340,7 +340,7 @@ ISS_DocDemo_Template = r'''
 AppName = wxPython%(SHORTVER)s-docs-demos
 AppVerName = wxPython Docs and Demos %(VERSION)s
 OutputBaseFilename = wxPython%(SHORTVER)s-win32-docs-demos-%(VERSION)s
-AppCopyright = Copyright © 2004 Total Control Software
+AppCopyright = Copyright © 2006 Total Control Software
 DefaultDirName = {pf}\wxPython%(SHORTVER)s Docs and Demos
 DefaultGroupName = wxPython%(SHORTVER)s Docs Demos and Tools
 ;AlwaysCreateUninstallIcon = yes
@@ -582,7 +582,7 @@ def build_locale_string(pkgdir):
             if not os.path.isdir(filename):
                 lst.append( locale_template % (filename, pkgdir, dirname) )
 
-    os.path.walk('wx\\i18n', walk_helper, stringlst)
+    os.path.walk('wx\\locale', walk_helper, stringlst)
     return '\n'.join(stringlst)
 
 
