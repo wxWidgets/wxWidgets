@@ -1610,8 +1610,7 @@ void wxRichTextCtrl::SelectNone()
 
 static bool wxIsWordDelimiter(const wxString& text)
 {
-    static wxString delimiters = wxT(" ,.:;!?-\"'~£$%^&*()_+-={}[]@#<>/\\|");
-    return !text.IsEmpty() && delimiters.Find(text) != wxNOT_FOUND;
+    return !text.IsEmpty() && !wxIsalnum(text[0]);
 }
 
 /// Select the word at the given character position
