@@ -1217,15 +1217,18 @@ long wxListCtrl::InsertColumn(long col, wxListItem& item)
         }
         m_dbImpl->InsertColumn(col, type, item.GetText(), just, item.GetWidth());
 
+        // set/remove options based on the wxListCtrl type.
+        DataBrowserTableViewColumnID id;
+        m_dbImpl->GetColumnIDFromIndex(col, &id);
+        DataBrowserPropertyFlags flags;
+        verify_noerr(m_dbImpl->GetPropertyFlags(id, &flags));
         if (GetWindowStyleFlag() & wxLC_EDIT_LABELS)
-        {
-            DataBrowserTableViewColumnID id;
-            m_dbImpl->GetColumnIDFromIndex(col, &id);
-            DataBrowserPropertyFlags flags;
-            verify_noerr(m_dbImpl->GetPropertyFlags(id, &flags));
             flags |= kDataBrowserPropertyIsEditable;
-            verify_noerr(m_dbImpl->SetPropertyFlags(id, flags));
+                
+        if (GetWindowStyleFlag() & wxLC_VIRTUAL){
+            flags &= ~kDataBrowserListViewSortableColumn;
         }
+        verify_noerr(m_dbImpl->SetPropertyFlags(id, flags));
     }
 
     return col;
