@@ -535,7 +535,7 @@ bitmap_t *wxBitmap::GetMGLbitmap_t() const
 
 // Convert wxColour into it's quantized value in lower-precision
 // pixel format (needed for masking by colour).
-wxColour wxBitmap::QuantizeColour(const wxColour& clr)
+wxColour wxBitmap::QuantizeColour(const wxColour& clr) const
 {
     pixel_format_t *pf = GetMGLbitmap_t()->pf;
 
