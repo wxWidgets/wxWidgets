@@ -1203,6 +1203,14 @@
 // Automation, can be safely set to 0 otherwise
 #define wxUSE_OLE_AUTOMATION 1
 
+// Set this to 1 to enable wxActiveXContainer class allowing to embed OLE
+// controls in wx.
+//
+// Default is 1.
+//
+// Recommended setting: 1, required by wxMediaCtrl
+#define wxUSE_ACTIVEX 1
+
 // wxDC cacheing implementation
 #define wxUSE_DC_CACHEING 1
 

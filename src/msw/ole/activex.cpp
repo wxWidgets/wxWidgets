@@ -23,14 +23,12 @@
     #pragma hdrstop
 #endif
 
+#if wxUSE_ACTIVEX
+
 #ifndef WX_PRECOMP
     #include "wx/dcclient.h"
     #include "wx/math.h"
 #endif
-
-// I don't know why members of tagVARIANT aren't found when compiling
-// with Wine
-#ifndef __WINE__
 
 #include "wx/msw/ole/activex.h"
 // autointerfaces that we only use here
@@ -1163,5 +1161,4 @@ void wxActiveXContainer::OnKillFocus(wxFocusEvent& event)
     event.Skip();
 }
 
-#endif
-// __WINE__
+#endif // wxUSE_ACTIVEX

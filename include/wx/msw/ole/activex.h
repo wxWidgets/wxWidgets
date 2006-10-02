@@ -16,31 +16,14 @@
 #ifndef _WX_MSW_OLE_ACTIVEXCONTAINER_H_
 #define _WX_MSW_OLE_ACTIVEXCONTAINER_H_
 
-//---------------------------------------------------------------------------
-//  COM includes
-//---------------------------------------------------------------------------
-#include "wx/msw/ole/oleutils.h" //wxBasicString, IID etc.
-#include "wx/msw/ole/uuid.h" //IID etc..
+#if wxUSE_ACTIVEX
 
 //---------------------------------------------------------------------------
-//  COM compatability definitions
+// wx includes
 //---------------------------------------------------------------------------
-#ifndef STDMETHODCALLTYPE
-#define STDMETHODCALLTYPE __stdcall
-#endif
-#ifndef STDMETHOD
-#define STDMETHOD(funcname)  virtual HRESULT STDMETHODCALLTYPE funcname
-#endif
-#ifndef PURE
-#define PURE = 0
-#endif
-#ifndef __RPC_FAR
-#define __RPC_FAR FAR
-#endif
 
-//---------------------------------------------------------------------------
-//  WX includes
-//---------------------------------------------------------------------------
+#include "wx/msw/ole/oleutils.h" // wxBasicString &c
+#include "wx/msw/ole/uuid.h"
 #include "wx/window.h"
 #include "wx/variant.h"
 
@@ -56,23 +39,27 @@
 
 #include <docobj.h>
 
+#ifndef STDMETHOD
+    #define STDMETHOD(funcname)  virtual HRESULT wxSTDCALL funcname
+#endif
+
 //
 //  These defines are from another ole header - but its not in the
 //  latest sdk.  Also the ifndef DISPID_READYSTATE is here because at
 //  least on my machine with the latest sdk olectl.h defines these 3
 //
 #ifndef DISPID_READYSTATE
-    #define DISPID_READYSTATE                               -525
-    #define DISPID_READYSTATECHANGE                         -609
-    #define DISPID_AMBIENT_TRANSFERPRIORITY                 -728
+    #define DISPID_READYSTATE                               (-525)
+    #define DISPID_READYSTATECHANGE                         (-609)
+    #define DISPID_AMBIENT_TRANSFERPRIORITY                 (-728)
 #endif
 
-#define DISPID_AMBIENT_OFFLINEIFNOTCONNECTED            -5501
-#define DISPID_AMBIENT_SILENT                           -5502
+#define DISPID_AMBIENT_OFFLINEIFNOTCONNECTED            (-5501)
+#define DISPID_AMBIENT_SILENT                           (-5502)
 
 #ifndef DISPID_AMBIENT_CODEPAGE
-#   define DISPID_AMBIENT_CODEPAGE                         -725
-#   define DISPID_AMBIENT_CHARSET                          -727
+    #define DISPID_AMBIENT_CODEPAGE                         (-725)
+    #define DISPID_AMBIENT_CHARSET                          (-727)
 #endif
 
 
@@ -227,5 +214,7 @@ typedef void (wxEvtHandler::*wxActiveXEventFunction)(wxActiveXEvent&);
 #define EVT_ACTIVEX(id, fn) DECLARE_EVENT_TABLE_ENTRY(wxEVT_ACTIVEX, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxActiveXEventFunction) & fn, (wxObject *) NULL ),
 #define wxActiveXEventHandler(func) \
     (wxObjectEventFunction)(wxEventFunction)wxStaticCastEvent(wxActiveXEventFunction, &func)
+
+#endif // wxUSE_ACTIVEX
 
 #endif // _WX_MSW_OLE_ACTIVEXCONTAINER_H_

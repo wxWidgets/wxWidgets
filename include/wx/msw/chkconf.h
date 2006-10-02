@@ -179,6 +179,48 @@
 #   define wxUSE_DATEPICKCTRL_GENERIC 1
 #endif
 
+
+/* check that MSW-specific options are defined too */
+#ifndef wxUSE_ACTIVEX
+#    ifdef wxABORT_ON_CONFIG_ERROR
+#        error "wxUSE_ACTIVEX must be defined."
+#    else
+#        define wxUSE_ACTIVEX 0
+#    endif
+#endif /* !defined(wxUSE_ACTIVEX) */
+
+#ifndef wxUSE_DIALUP_MANAGER
+#    ifdef wxABORT_ON_CONFIG_ERROR
+#        error "wxUSE_DIALUP_MANAGER must be defined."
+#    else
+#        define wxUSE_DIALUP_MANAGER 0
+#    endif
+#endif /* !defined(wxUSE_DIALUP_MANAGER) */
+
+#ifndef wxUSE_MS_HTML_HELP
+#    ifdef wxABORT_ON_CONFIG_ERROR
+#        error "wxUSE_MS_HTML_HELP must be defined."
+#    else
+#        define wxUSE_MS_HTML_HELP 0
+#    endif
+#endif /* !defined(wxUSE_MS_HTML_HELP) */
+
+#ifndef wxUSE_OLE
+#    ifdef wxABORT_ON_CONFIG_ERROR
+#        error "wxUSE_OLE must be defined."
+#    else
+#        define wxUSE_OLE 0
+#    endif
+#endif /* !defined(wxUSE_OLE) */
+
+#ifndef wxUSE_OLE_AUTOMATION
+#    ifdef wxABORT_ON_CONFIG_ERROR
+#        error "wxUSE_OLE_AUTOMATION must be defined."
+#    else
+#        define wxUSE_OLE_AUTOMATION 0
+#    endif
+#endif /* !defined(wxUSE_OLE_AUTOMATION) */
+
 #ifndef wxUSE_UNICODE_MSLU
 #    ifdef wxABORT_ON_CONFIG_ERROR
 #        error "wxUSE_UNICODE_MSLU must be defined."
@@ -203,24 +245,31 @@
 #    endif
 #endif  /* wxUSE_UXTHEME_AUTO */
 
-#ifndef wxUSE_MS_HTML_HELP
-#    ifdef wxABORT_ON_CONFIG_ERROR
-#        error "wxUSE_MS_HTML_HELP must be defined."
-#    else
-#        define wxUSE_MS_HTML_HELP 0
-#    endif
-#endif /* !defined(wxUSE_MS_HTML_HELP) */
 
-#ifndef wxUSE_DIALUP_MANAGER
-#    ifdef wxABORT_ON_CONFIG_ERROR
-#        error "wxUSE_DIALUP_MANAGER must be defined."
-#    else
-#        define wxUSE_DIALUP_MANAGER 0
-#    endif
-#endif /* !defined(wxUSE_DIALUP_MANAGER) */
+/*
+   un/redefine the options which we can't compile (after checking that they're
+   defined
+ */
+#ifdef __WINE__
+    /* apparently it doesn't compile under Wine, remove it/when it does */
+    #if wxUSE_ACTIVEX
+        #undef wxUSE_ACTIVEX
+        #define wxUSE_ACTIVEX 0
+    #endif // wxUSE_ACTIVEX
+#endif // __WINE__
+
 
 /* check settings consistency for MSW-specific ones */
 #if !wxUSE_VARIANT
+#   if wxUSE_ACTIVEX
+#       ifdef wxABORT_ON_CONFIG_ERROR
+#           error "wxActiveXContainer requires wxVariant"
+#       else
+#           undef wxUSE_ACTIVEX
+#           define wxUSE_ACTIVEX 0
+#       endif
+#   endif
+
 #   if wxUSE_OLE_AUTOMATION
 #       ifdef wxABORT_ON_CONFIG_ERROR
 #           error "wxAutomationObject requires wxVariant"
@@ -229,7 +278,7 @@
 #           define wxUSE_OLE_AUTOMATION 0
 #       endif
 #   endif
-#endif /* wxUSE_VARIANT */
+#endif /* !wxUSE_VARIANT */
 
 #if !wxUSE_DYNAMIC_LOADER
 #    if wxUSE_MS_HTML_HELP
@@ -248,7 +297,7 @@
 #            define wxUSE_DIALUP_MANAGER 0
 #        endif
 #    endif
-#endif  /* wxUSE_DYNAMIC_LOADER */
+#endif  /* !wxUSE_DYNAMIC_LOADER */
 
 #if !wxUSE_DYNLIB_CLASS
 #   if wxUSE_UXTHEME
@@ -275,9 +324,18 @@
 #           define wxUSE_INKEDIT 0
 #       endif
 #   endif
-#endif  /* wxUSE_DYNLIB_CLASS */
+#endif  /* !wxUSE_DYNLIB_CLASS */
 
 #if !wxUSE_OLE
+#   if wxUSE_ACTIVEX
+#       ifdef wxABORT_ON_CONFIG_ERROR
+#           error "wxActiveXContainer requires wxUSE_OLE"
+#       else
+#           undef wxUSE_ACTIVEX
+#           define wxUSE_ACTIVEX 0
+#       endif
+#   endif
+
 #   if wxUSE_DATAOBJ
 #       ifdef wxABORT_ON_CONFIG_ERROR
 #           error "wxUSE_DATAOBJ requires wxUSE_OLE"
@@ -295,6 +353,17 @@
 #           define wxUSE_OLE_AUTOMATION 0
 #       endif
 #   endif
-#endif /* wxUSE_OLE */
+#endif /* !wxUSE_OLE */
+
+#if !wxUSE_ACTIVEX
+#   if wxUSE_MEDIACTRL
+#       ifdef wxABORT_ON_CONFIG_ERROR
+#           error "wxMediaCtl requires wxActiveXContainer"
+#       else
+#           undef wxUSE_MEDIACTRL
+#           define wxUSE_MEDIACTRL 0
+#       endif
+#   endif
+#endif /* !wxUSE_ACTIVEX */
 
 #endif /* _WX_MSW_CHKCONF_H_ */

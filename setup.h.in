@@ -710,6 +710,7 @@
  */
 #define wxUSE_OLE 0
 #define wxUSE_OLE_AUTOMATION 0
+#define wxUSE_ACTIVEX 0
 
 /* for compatibility */
 #define wxUSE_WX_RESOURCES wxUSE_RESOURCES
