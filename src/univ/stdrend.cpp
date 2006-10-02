@@ -167,9 +167,20 @@ void wxStdRenderer::DrawBackground(wxDC& dc,
                                    int WXUNUSED(flags),
                                    wxWindow *window)
 {
-    wxColour colBg = col.Ok() ? col
-                              : window ? m_scheme->GetBackground(window)
-                                       : wxSCHEME_COLOUR(m_scheme, CONTROL);
+    wxColour colBg;
+
+    if (col.Ok())
+    {
+        colBg = col;
+    }
+    else if (window)
+    {
+        colBg = m_scheme->GetBackground(window);
+    }
+    else
+    {
+        colBg = wxSCHEME_COLOUR(m_scheme, CONTROL);
+    }
 
     DrawSolidRect(dc, colBg, rect);
 }
