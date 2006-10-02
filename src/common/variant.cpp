@@ -290,7 +290,7 @@ bool wxVariantDataLong::Read(wxString& str)
     return true;
 }
 
-// wxVariant 
+// wxVariant
 
 wxVariant::wxVariant(long val, const wxString& name)
 {
@@ -695,7 +695,7 @@ bool wxVariantDataChar::Write(wxString& str) const
 bool wxVariantDataChar::Read(wxSTD istream& WXUNUSED(str))
 {
     wxFAIL_MSG(wxT("Unimplemented"));
-    
+
     return false;
 }
 #endif
@@ -705,7 +705,8 @@ bool wxVariantDataChar::Write(wxOutputStream& str) const
 {
     wxTextOutputStream s(str);
 
-    s.Write8(m_value);
+    s << m_value;
+
     return true;
 }
 
@@ -854,7 +855,7 @@ bool wxVariantDataString::Read(wxString& str)
 IMPLEMENT_DYNAMIC_CLASS(wxVariantDataString, wxVariantData)
 
 // wxVariant ****
- 
+
 wxVariant::wxVariant(const wxString& val, const wxString& name)
 {
     m_data = new wxVariantDataString(val);
@@ -1840,7 +1841,7 @@ void wxVariant::operator= (const wxStringList& value)
     }
 }
 
-// wxVariant 
+// wxVariant
 
 wxStringList& wxVariant::GetStringList() const
 {

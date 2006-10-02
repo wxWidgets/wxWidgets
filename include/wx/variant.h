@@ -68,15 +68,15 @@ public:
 
     // Override these to provide common functionality
     virtual bool Eq(wxVariantData& data) const = 0;
-    
+
 #if wxUSE_STD_IOSTREAM
-    virtual bool Write(wxSTD ostream& str) const { return false; }
+    virtual bool Write(wxSTD ostream& WXUNUSED(str)) const { return false; }
 #endif
-    virtual bool Write(wxString& str) const { return false; }
+    virtual bool Write(wxString& WXUNUSED(str)) const { return false; }
 #if wxUSE_STD_IOSTREAM
-    virtual bool Read(wxSTD istream& str) { return false; }
+    virtual bool Read(wxSTD istream& WXUNUSED(str)) { return false; }
 #endif
-    virtual bool Read(wxString& str) { return false; }
+    virtual bool Read(wxString& WXUNUSED(str)) { return false; }
     // What type is it? Return a string name.
     virtual wxString GetType() const = 0;
     // If it based on wxObject return the ClassInfo.
@@ -99,7 +99,7 @@ protected:
 
 private:
     int     m_count;
-    
+
 private:
     DECLARE_ABSTRACT_CLASS(wxVariantData)
 };
@@ -113,7 +113,7 @@ class WXDLLIMPEXP_BASE wxVariant: public wxObject
 {
 public:
     wxVariant();
-    
+
     wxVariant(const wxVariant& variant);
     wxVariant(wxVariantData* data, const wxString& name = wxEmptyString);
     virtual ~wxVariant();
@@ -124,7 +124,7 @@ public:
     // Assignment using data, e.g.
     // myVariant = new wxStringVariantData("hello");
     void operator= (wxVariantData* variantData);
-    
+
     bool operator== (const wxVariant& variant) const;
     bool operator!= (const wxVariant& variant) const;
 
@@ -133,7 +133,7 @@ public:
     inline const wxString& GetName() const { return m_name; }
 
     // Tests whether there is data
-    bool IsNull() const; 
+    bool IsNull() const;
 
     // For compatibility with wxWidgets <= 2.6, this doesn't increase
     // reference count.
@@ -148,10 +148,10 @@ public:
 
     // Make NULL (i.e. delete the data)
     void MakeNull();
-    
+
     // Delete data and name
     void Clear();
-    
+
     // Returns a string representing the type of the variant,
     // e.g. "string", "bool", "stringlist", "list", "double", "long"
     wxString GetType() const;
@@ -159,9 +159,9 @@ public:
     bool IsType(const wxString& type) const;
     bool IsValueKindOf(const wxClassInfo* type) const;
 
-    // write contents to a string (e.g. for debugging)    
+    // write contents to a string (e.g. for debugging)
     wxString MakeString() const;
-    
+
     // double
     wxVariant(double val, const wxString& name = wxEmptyString);
     bool operator== (double value) const;
@@ -170,7 +170,7 @@ public:
     inline operator double () const {  return GetDouble(); }
     inline double GetReal() const { return GetDouble(); }
     double GetDouble() const;
-    
+
     // long
     wxVariant(long val, const wxString& name = wxEmptyString);
     wxVariant(int val, const wxString& name = wxEmptyString);
@@ -181,8 +181,8 @@ public:
     inline operator long () const {  return GetLong(); }
     inline long GetInteger() const { return GetLong(); }
     long GetLong() const;
-    
-    // bool    
+
+    // bool
 #ifdef HAVE_BOOL
     wxVariant(bool val, const wxString& name = wxEmptyString);
     bool operator== (bool value) const;
@@ -194,7 +194,7 @@ public:
 
     // wxDateTime
 #if wxUSE_DATETIME
-    wxVariant(const wxDateTime& val, const wxString& name = wxEmptyString); 
+    wxVariant(const wxDateTime& val, const wxString& name = wxEmptyString);
 #if wxUSE_ODBC
     wxVariant(const DATE_STRUCT* valptr, const wxString& name = wxEmptyString);
     wxVariant(const TIME_STRUCT* valptr, const wxString& name = wxEmptyString);
@@ -229,7 +229,7 @@ public:
     void operator= (wxChar value) ;
     inline operator wxChar () const { return GetChar(); }
     wxChar GetChar() const ;
-    
+
     // wxArrayString
     wxVariant(const wxArrayString& val, const wxString& name = wxEmptyString);
     bool operator== (const wxArrayString& value) const;
@@ -277,7 +277,7 @@ public:
 
     // Return the number of elements in a list
     size_t GetCount() const;
-    
+
     // Make empty list
     void NullList();
 
@@ -311,7 +311,7 @@ public:
 protected:
     wxVariantData*  m_data;
     wxString        m_name;
-    
+
 private:
     DECLARE_DYNAMIC_CLASS(wxVariant)
 };
@@ -320,11 +320,11 @@ private:
 #ifdef EMPTY_PARAMETER_VALUE
     #undef EMPTY_PARAMETER_VALUE
 #endif
-#define EMPTY_PARAMETER_VALUE 
+#define EMPTY_PARAMETER_VALUE
 
 #define DECLARE_VARIANT_OBJECT(classname) \
     DECLARE_VARIANT_OBJECT_EXPORTED(classname,EMPTY_PARAMETER_VALUE)
-    
+
 #define DECLARE_VARIANT_OBJECT_EXPORTED(classname,expdecl) \
 classname& expdecl operator << ( classname &object, const wxVariant &variant ); \
 wxVariant& expdecl operator << ( wxVariant &variant, const classname &object );
