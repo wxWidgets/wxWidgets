@@ -72,11 +72,6 @@ __init__ as a plain old wx.Control is not very useful.", "");
         "Get the control alignment (left/right/centre, top/bottom/centre)", "");
     
 
-//     DocDeclStr(
-//         static wxString , GetLabelText(const wxString& label),
-//         "Get the string without mnemonic characters ('&')", "");
-    
-
     DocDeclStr(
         wxString , GetLabelText() const,
         "Get just the text of the label, without mnemonic characters ('&')", "");
@@ -90,14 +85,6 @@ __init__ as a plain old wx.Control is not very useful.", "");
 :see: `wx.CommandEvent`
 ", "");
    
-    DocDeclStr(
-        wxString , GetLabel(),
-        "Return a control's text.", "");
-    
-    DocDeclStr(
-        void , SetLabel(const wxString& label),
-        "Sets the item's text.", "");
-
 
 //     DocDeclStr(
 //         bool , GetAdjustMinSizeFlag(),
@@ -117,7 +104,6 @@ __init__ as a plain old wx.Control is not very useful.", "");
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
 
     %property(Alignment, GetAlignment, doc="See `GetAlignment`");
-    %property(Label, GetLabel, doc="See `GetLabel`");
     %property(LabelText, GetLabelText, doc="See `GetLabelText`");
 
 };
