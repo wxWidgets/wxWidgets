@@ -622,9 +622,9 @@ bool MSWVariantToVariant(VARIANTARG& va, wxVariant& vx)
     case VT_I1:
     case VT_UI1:
         if (byRef)
-            vx = (char) *va.pbVal;
+            vx = (wxChar) *va.pbVal;
         else
-            vx = (char) va.bVal;
+            vx = (wxChar) va.bVal;
         return true;
 
     // 2 byte shorts
@@ -757,9 +757,9 @@ bool VariantToMSWVariant(const wxVariant& vx, VARIANTARG& va)
     case VT_I1:
     case VT_UI1:
         if (byRef)
-            *va.pbVal = (char) vx;
+            *va.pbVal = (wxChar) vx;
         else
-            va.bVal = (char) vx;
+            va.bVal = (wxChar) vx;
         return true;
 
     // 2 byte shorts
