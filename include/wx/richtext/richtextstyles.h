@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        richtextstyles.h
+// Name:        wx/richtext/richtextstyles.h
 // Purpose:     Style management for wxRichTextCtrl
 // Author:      Julian Smart
 // Modified by:
@@ -16,9 +16,11 @@
  * Includes
  */
 
-#include "wx/richtext/richtextbuffer.h"
+#include "wx/defs.h"
 
 #if wxUSE_RICHTEXT
+
+#include "wx/richtext/richtextbuffer.h"
 
 #if wxUSE_HTML
 #include "wx/htmllbox.h"
@@ -47,7 +49,11 @@ public:
 
 // Constructors
 
-    wxRichTextStyleDefinition(const wxRichTextStyleDefinition& def) { Copy(def); }
+    wxRichTextStyleDefinition(const wxRichTextStyleDefinition& def)
+    : wxObject()
+    {
+        Copy(def);
+    }
     wxRichTextStyleDefinition(const wxString& name = wxEmptyString) { Init(); m_name = name; }
     virtual ~wxRichTextStyleDefinition() {}
 
@@ -135,7 +141,11 @@ class WXDLLIMPEXP_RICHTEXT wxRichTextStyleSheet: public wxObject
 
 public:
     /// Constructors
-    wxRichTextStyleSheet(const wxRichTextStyleSheet& sheet) { Copy(sheet); }
+    wxRichTextStyleSheet(const wxRichTextStyleSheet& sheet)
+    : wxObject()
+    {
+        Copy(sheet);
+    }
     wxRichTextStyleSheet() { Init(); }
     virtual ~wxRichTextStyleSheet() { DeleteStyles(); }
 
