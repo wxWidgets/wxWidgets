@@ -326,8 +326,8 @@ private:
     DECLARE_VARIANT_OBJECT_EXPORTED(classname,EMPTY_PARAMETER_VALUE)
 
 #define DECLARE_VARIANT_OBJECT_EXPORTED(classname,expdecl) \
-classname& expdecl operator << ( classname &object, const wxVariant &variant ); \
-wxVariant& expdecl operator << ( wxVariant &variant, const classname &object );
+expdecl classname& operator << ( classname &object, const wxVariant &variant ); \
+expdecl wxVariant& operator << ( wxVariant &variant, const classname &object );
 
 #define IMPLEMENT_VARIANT_OBJECT(classname) \
     IMPLEMENT_VARIANT_OBJECT_EXPORTED(classname,EMPTY_PARAMETER_VALUE)
@@ -374,7 +374,7 @@ wxClassInfo* classname##VariantData::GetValueClassInfo()\
     return m_value.GetClassInfo();\
 }\
 \
-classname& expdecl operator << ( classname &value, const wxVariant &variant )\
+expdecl classname& operator << ( classname &value, const wxVariant &variant )\
 {\
     wxASSERT( wxIsKindOf( variant.GetData(), classname##VariantData ) );\
     \
@@ -383,7 +383,7 @@ classname& expdecl operator << ( classname &value, const wxVariant &variant )\
     return value;\
 }\
 \
-wxVariant& expdecl operator << ( wxVariant &variant, const classname &value )\
+expdecl wxVariant& operator << ( wxVariant &variant, const classname &value )\
 {\
     classname##VariantData *data = new classname##VariantData( value );\
     variant.SetData( data );\
