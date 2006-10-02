@@ -1566,11 +1566,12 @@ wxString wxAMMediaBackend::GetErrorString(HRESULT hrdsv)
 wxAMMediaBackend::wxAMMediaBackend()
                  :m_pAX(NULL),
 #ifdef __WXWINCE__
-                  m_pWMP(NULL)
+                  m_pWMP(NULL),
 #else
                   m_pAM(NULL),
-                  m_pMP(NULL)
+                  m_pMP(NULL),
 #endif
+                  m_bestSize(wxDefaultSize)
 {
 }
 
@@ -1791,6 +1792,7 @@ bool wxAMMediaBackend::DoLoad(const wxString& location)
         return false;
     }
 
+    m_bestSize = wxDefaultSize;
     return true;
 }
 
@@ -1804,10 +1806,6 @@ bool wxAMMediaBackend::DoLoad(const wxString& location)
 //---------------------------------------------------------------------------
 void wxAMMediaBackend::FinishLoad()
 {
-    // Get the original video size
-    GetAM()->get_ImageSourceWidth((long*)&m_bestSize.x);
-    GetAM()->get_ImageSourceHeight((long*)&m_bestSize.y);
-
     NotifyMovieLoaded();
 }
 
@@ -2142,7 +2140,22 @@ void wxAMMediaBackend::DoGetDownloadProgress(wxLongLong* pLoadProgress,
 //---------------------------------------------------------------------------
 wxSize wxAMMediaBackend::GetVideoSize() const
 {
-    return m_bestSize;
+    if (m_bestSize == wxDefaultSize)
+    {
+        wxAMMediaBackend* self = wxConstCast(this, wxAMMediaBackend);
+        long w = 0;
+        long h = 0;
+
+        self->GetAM()->get_ImageSourceWidth(&w);
+        self->GetAM()->get_ImageSourceHeight(&h);
+
+        if (w != 0 && h != 0)
+            self->m_bestSize.Set(w, h);
+        else
+            return wxSize(0,0);
+    }
+
+   return m_bestSize;
 }
 
 //---------------------------------------------------------------------------
