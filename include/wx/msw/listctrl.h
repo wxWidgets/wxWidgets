@@ -12,10 +12,9 @@
 #ifndef _WX_LISTCTRL_H_
 #define _WX_LISTCTRL_H_
 
-#include "wx/control.h"
+#include "wx/textctrl.h"
 
 class WXDLLEXPORT wxImageList;
-class WXDLLIMPEXP_CORE wxTextCtrl;
 
 /*
     The wxListCtrl can show lists of items in four different modes:
