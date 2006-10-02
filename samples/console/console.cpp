@@ -1466,6 +1466,7 @@ wxTestModuleB::wxTestModuleB()
 
 #include "wx/utils.h"
 
+#if TEST_INTERACTIVE
 static void TestDiskInfo()
 {
     wxPuts(_T("*** Testing wxGetDiskSpace() ***"));
@@ -1494,6 +1495,7 @@ static void TestDiskInfo()
         }
     }
 }
+#endif // TEST_INTERACTIVE
 
 static void TestOsInfo()
 {
