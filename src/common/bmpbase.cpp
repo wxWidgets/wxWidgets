@@ -19,6 +19,7 @@
 
 #ifndef WX_PRECOMP
     #include "wx/colour.h"
+    #include "wx/icon.h"
 #endif // WX_PRECOMP
 
 // ----------------------------------------------------------------------------
@@ -40,7 +41,6 @@ IMPLEMENT_VARIANT_OBJECT_EXPORTED(wxIcon,WXDLLEXPORT)
     #include "wx/log.h"
     #include "wx/utils.h"
     #include "wx/palette.h"
-    #include "wx/icon.h"
     #include "wx/image.h"
     #include "wx/module.h"
 #endif // WX_PRECOMP
