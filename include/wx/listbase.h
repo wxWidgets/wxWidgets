@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        wx/listctrl.h
+// Name:        wx/listbase.h
 // Purpose:     wxListCtrl class
 // Author:      Vadim Zeitlin
 // Modified by:
@@ -12,14 +12,9 @@
 #ifndef _WX_LISTBASE_H_BASE_
 #define _WX_LISTBASE_H_BASE_
 
-#include "wx/defs.h"
-
-#if wxUSE_LISTCTRL
-
 #include "wx/colour.h"
 #include "wx/font.h"
 #include "wx/gdicmn.h"
-
 #include "wx/event.h"
 
 // ----------------------------------------------------------------------------
@@ -491,8 +486,6 @@ typedef void (wxEvtHandler::*wxListEventFunction)(wxListEvent&);
 #define EVT_LIST_GET_INFO(id, fn) wx__DECLARE_LISTEVT(GET_INFO, id, fn)
 #define EVT_LIST_SET_INFO(id, fn) wx__DECLARE_LISTEVT(SET_INFO, id, fn)
 #endif
-
-#endif // wxUSE_LISTCTRL
 
 #endif
     // _WX_LISTCTRL_H_BASE_

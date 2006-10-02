@@ -23,34 +23,27 @@
 
 #if wxUSE_LISTCTRL
 
-// under Win32 we always use the native version and also may use the generic
-// one, however some things should be done only if we use only the generic
-// version
-#if (defined(__WIN32__) && !defined(__WXUNIVERSAL__)) || defined(__WXMAC__)
-    #define HAVE_NATIVE_LISTCTRL
-#endif
-
-// if we have the native control, wx/listctrl.h declares it and not this one
 #include "wx/listctrl.h"
 
-#ifndef HAVE_NATIVE_LISTCTRL
+#if (!defined(__WXMSW__) || defined(__WXUNIVERSAL__)) && !defined(__WXMAC__)
     // if we have a native version, its implementation file does all this
     IMPLEMENT_DYNAMIC_CLASS(wxListItem, wxObject)
     IMPLEMENT_DYNAMIC_CLASS(wxListView, wxListCtrl)
     IMPLEMENT_DYNAMIC_CLASS(wxListEvent, wxNotifyEvent)
 
     IMPLEMENT_DYNAMIC_CLASS(wxListCtrl, wxGenericListCtrl)
-#endif // HAVE_NATIVE_LISTCTRL/!HAVE_NATIVE_LISTCTRL
+#endif
 
 #ifndef WX_PRECOMP
+    #include "wx/scrolwin.h"
+    #include "wx/timer.h"
+    #include "wx/settings.h"
     #include "wx/dynarray.h"
-    #include "wx/app.h"
     #include "wx/dcscreen.h"
-    #include "wx/textctrl.h"
-    #include "wx/listbox.h"
     #include "wx/math.h"
 #endif
 
+#include "wx/imaglist.h"
 #include "wx/selstore.h"
 #include "wx/renderer.h"
 

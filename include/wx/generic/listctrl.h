@@ -8,20 +8,12 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __LISTCTRLH_G__
-#define __LISTCTRLH_G__
+#ifndef _WX_GENERIC_LISTCTRL_H_
+#define _WX_GENERIC_LISTCTRL_H_
 
-#include "wx/defs.h"
-#include "wx/object.h"
-#include "wx/imaglist.h"
-
-#include "wx/control.h"
-#include "wx/timer.h"
-#include "wx/dcclient.h"
-#include "wx/scrolwin.h"
-#include "wx/settings.h"
-#include "wx/listctrl.h"
 #include "wx/textctrl.h"
+
+class WXDLLIMPEXP_CORE wxImageList;
 
 #if wxUSE_DRAG_AND_DROP
 class WXDLLEXPORT wxDropTarget;
@@ -36,14 +28,8 @@ class WXDLLEXPORT wxDropTarget;
 // internal classes
 //-----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxListHeaderData;
-class WXDLLEXPORT wxListItemData;
-
 class WXDLLEXPORT wxListHeaderWindow;
 class WXDLLEXPORT wxListMainWindow;
-
-class WXDLLEXPORT wxListRenameTimer;
-class WXDLLEXPORT wxListTextCtrl;
 
 //-----------------------------------------------------------------------------
 // wxListCtrl
@@ -286,4 +272,4 @@ public:
 };
 #endif // !__WXMSW__ || __WXUNIVERSAL__
 
-#endif // __LISTCTRLH_G__
+#endif // _WX_GENERIC_LISTCTRL_H_

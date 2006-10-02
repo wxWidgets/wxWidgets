@@ -12,15 +12,10 @@
 #ifndef _WX_LISTCTRL_H_
 #define _WX_LISTCTRL_H_
 
-#if wxUSE_LISTCTRL
-
 #include "wx/control.h"
-#include "wx/event.h"
-#include "wx/hash.h"
-#include "wx/textctrl.h"
-
 
 class WXDLLEXPORT wxImageList;
+class WXDLLIMPEXP_CORE wxTextCtrl;
 
 /*
     The wxListCtrl can show lists of items in four different modes:
@@ -438,7 +433,5 @@ private:
     DECLARE_EVENT_TABLE()
     DECLARE_NO_COPY_CLASS(wxListCtrl)
 };
-
-#endif // wxUSE_LISTCTRL
 
 #endif // _WX_LISTCTRL_H_

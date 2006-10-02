@@ -26,6 +26,8 @@
 
 #if wxUSE_LISTCTRL
 
+#include "wx/listctrl.h"
+
 #ifndef WX_PRECOMP
     #include "wx/msw/wrapcctl.h" // include <commctrl.h> "properly"
     #include "wx/app.h"
@@ -37,7 +39,6 @@
 #endif
 
 #include "wx/imaglist.h"
-#include "wx/listctrl.h"
 
 #include "wx/msw/private.h"
 

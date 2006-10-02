@@ -12,16 +12,10 @@
 #ifndef _WX_LISTCTRL_H_
 #define _WX_LISTCTRL_H_
 
-#include "wx/control.h"
-#include "wx/event.h"
-#include "wx/imaglist.h"
 #include "wx/generic/listctrl.h"
 
 class wxMacDataBrowserListCtrlControl;
 class wxMacListControl;
-
-// type of compare function for wxListCtrl sort operation
-typedef int (*wxListCtrlCompare)(long item1, long item2, long sortData);
 
 class WXDLLEXPORT wxListCtrl: public wxControl
 {
@@ -342,8 +336,6 @@ protected:
 
   int               m_count; // for virtual lists, store item count
 };
-
-typedef void (wxEvtHandler::*wxListEventFunction)(wxListEvent&);
 
 #endif
     // _WX_LISTCTRL_H_

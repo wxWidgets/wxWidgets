@@ -18,7 +18,12 @@
 
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
+
+#if wxUSE_LISTCTRL
+
 #include "wx/listctrl.h"
+
+const wxChar wxListCtrlNameStr[] = wxT("listCtrl");
 
 // ListCtrl events
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_LIST_BEGIN_DRAG)
@@ -46,3 +51,4 @@ DEFINE_EVENT_TYPE(wxEVT_COMMAND_LIST_ITEM_ACTIVATED)
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_LIST_ITEM_FOCUSED)
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_LIST_CACHE_HINT)
 
+#endif // wxUSE_LISTCTRL

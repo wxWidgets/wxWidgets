@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/msw/listctrl.cpp
+// Name:        src/mac/listctrl_mac.cpp
 // Purpose:     wxListCtrl
 // Author:      Julian Smart
 // Modified by: Agron Selimaj
@@ -26,19 +26,15 @@
 
 #if wxUSE_LISTCTRL
 
+#include "wx/listctrl.h"
+
 #ifndef WX_PRECOMP
-    #include "wx/app.h"
     #include "wx/intl.h"
-    #include "wx/log.h"
-    #include "wx/settings.h"
-    #include "wx/dcclient.h"
-    #include "wx/textctrl.h"
 #endif
 
 #include "wx/mac/uma.h"
 
 #include "wx/imaglist.h"
-#include "wx/listctrl.h"
 #include "wx/sysopt.h"
 
 #define wxMAC_ALWAYS_USE_GENERIC_LISTCTRL wxT("mac.listctrl.always_use_generic")
