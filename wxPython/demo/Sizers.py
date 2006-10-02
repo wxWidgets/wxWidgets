@@ -532,9 +532,9 @@ class TestFrame(wx.Frame):
         self.sizer = sizerFunc(p)
         self.CreateStatusBar()
         self.SetStatusText("Resize this frame to see how the sizers respond...")
-        self.sizer.Fit(p)
 
         p.SetSizer(self.sizer)
+        self.sizer.Fit(p)
         self.Bind(wx.EVT_CLOSE, self.OnCloseWindow)
         self.Fit()
 
