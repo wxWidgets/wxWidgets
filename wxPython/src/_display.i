@@ -100,7 +100,7 @@ class wxDisplay
 {
 public:
     DocCtorStr(
-        wxDisplay(size_t index = 0),
+        wxDisplay(unsigned index = 0),
         "Set up a Display instance with the specified display.  The displays
 are numbered from 0 to GetCount() - 1, 0 is always the primary display
 and the only one which is always supported", "");
@@ -108,7 +108,7 @@ and the only one which is always supported", "");
     ~wxDisplay();
 
     DocDeclStr(
-        static size_t , GetCount(),
+        static unsigned , GetCount(),
         "Return the number of available displays.", "");
 
     DocDeclStr(

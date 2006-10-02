@@ -81,6 +81,10 @@ enum {
 
     wxRICHTEXT_FORMATTED,
     wxRICHTEXT_UNFORMATTED,
+    
+    wxRICHTEXT_INSERT_NONE,
+    wxRICHTEXT_INSERT_WITH_PREVIOUS_PARAGRAPH_STYLE,
+    
 
 
     // TODO:  Rename these to be wxRICHTEXT_* ??
@@ -637,10 +641,16 @@ text control.", "");
     DocDeclStr(
         virtual bool , GetStyle(long position, wxRichTextAttr& style),
         "Retrieve the style used at the given position.  Copies the style
-values at ``position`` into the ``style`` parameter returns ``True``
+values at ``position`` into the ``style`` parameter and returns ``True``
 if successful.  Returns ``False`` otherwise.", "");
 
-
+    DocDeclStr(
+        virtual bool , GetUncombinedStyle(long position, wxRichTextAttr& style),
+        "Get the content (uncombined) attributes for this position.  Copies the
+style values at ``position`` into the ``style`` parameter and returns
+``True`` if successful.  Returns ``False`` otherwise.", "");
+    
+    
     DocDeclStr(
         virtual bool , SetDefaultStyle(const wxRichTextAttr& style),
         "Set the style used by default for the rich text document.", "");
@@ -1080,6 +1090,11 @@ flag.", "");
         virtual void , SelectNone(),
         "", "");
 
+    /// Select the word at the given character position
+    DocDeclStr(
+        virtual bool , SelectWord(long position),
+        "", "");
+    
 
     /// Get/set the selection range in character positions. -1, -1 means no selection.
     DocDeclStr(
@@ -1348,6 +1363,12 @@ flag.", "");
         wxRichTextStyleSheet* , GetStyleSheet() const,
         "", "");
 
+    /// Apply the style sheet to the buffer, for example if the styles have changed.
+    DocDeclStr(
+        bool , ApplyStyleSheet(wxRichTextStyleSheet* styleSheet = NULL),
+        "", "");
+    
+    
 
     %property(Buffer, GetBuffer, doc="See `GetBuffer`");
     %property(DefaultStyle, GetDefaultStyle, SetDefaultStyle, doc="See `GetDefaultStyle` and `SetDefaultStyle`");
