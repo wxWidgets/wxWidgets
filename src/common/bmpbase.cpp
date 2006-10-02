@@ -22,6 +22,15 @@
 #endif // WX_PRECOMP
 
 // ----------------------------------------------------------------------------
+// wxVariant support
+// ----------------------------------------------------------------------------
+
+#if wxUSE_VARIANT
+IMPLEMENT_VARIANT_OBJECT_EXPORTED(wxBitmap,WXDLLEXPORT)
+IMPLEMENT_VARIANT_OBJECT_EXPORTED(wxIcon,WXDLLEXPORT)
+#endif
+
+// ----------------------------------------------------------------------------
 // wxBitmapBase
 // ----------------------------------------------------------------------------
 
@@ -35,12 +44,6 @@
     #include "wx/image.h"
     #include "wx/module.h"
 #endif // WX_PRECOMP
-
-
-#if wxUSE_VARIANT
-IMPLEMENT_VARIANT_OBJECT_EXPORTED(wxBitmap,WXDLLEXPORT)
-IMPLEMENT_VARIANT_OBJECT_EXPORTED(wxIcon,WXDLLEXPORT)
-#endif
 
 
 IMPLEMENT_ABSTRACT_CLASS(wxBitmapBase, wxGDIObject)
