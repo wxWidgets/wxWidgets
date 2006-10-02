@@ -852,6 +852,18 @@ long wxListCtrl::GetNextItem(long item, int geom, int state) const
     if (m_genericImpl)
         return m_genericImpl->GetNextItem(item, geom, state);
 
+    if (m_dbImpl && geom == wxLIST_NEXT_ALL && state == wxLIST_STATE_SELECTED )
+    {
+        long count = m_dbImpl->MacGetCount() ;
+        for ( long line = item + 1 ; line < count; line++ )
+        {
+            wxMacDataItem* id = m_dbImpl->GetItemFromLine(line);
+            if ( m_dbImpl->IsItemSelected(id ) )
+                return line;
+        }
+        return -1;
+    }
+
     return 0;
 }
 
