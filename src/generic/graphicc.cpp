@@ -37,6 +37,8 @@
 
 #include "wx/graphics.h"
 
+#if wxUSE_GRAPHICS_CONTEXT
+
 #include <vector>
 
 using namespace std;
@@ -866,3 +868,5 @@ wxGraphicsContext* wxGraphicsContext::Create( const wxWindowDC& dc )
 {
     return new wxCairoContext(dc);
 }
+
+#endif  // wxUSE_GRAPHICS_CONTEXT
