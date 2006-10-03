@@ -24,7 +24,7 @@
 
 #if defined(__WXGTK20__)
     // for testing
-    #define wxUSE_GENERICDATAVIEWCTRL 1
+    // #define wxUSE_GENERICDATAVIEWCTRL 1
 #elif defined(__WXMAC__)
     #define wxUSE_GENERICDATAVIEWCTRL 1
 #else
@@ -312,6 +312,7 @@ public:
 
     virtual void SetSelection( int row ) = 0; // -1 for unselect
     inline void ClearSelection() { SetSelection( -1 ); }
+    virtual void Unselect( unsigned int row ) = 0;
     virtual void SetSelectionRange( unsigned int from, unsigned int to ) = 0;
     virtual void SetSelections( const wxArrayInt& aSelections) = 0;
     

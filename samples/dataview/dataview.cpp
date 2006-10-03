@@ -294,6 +294,9 @@ enum my_events
     ID_INSERT_ROW_LEFT,
     ID_DELETE_ROW_LEFT,
     ID_EDIT_ROW_LEFT,
+    
+    ID_SELECT,
+    ID_UNSELECT_ALL,
 
     ID_APPEND_ROW_RIGHT,
     ID_PREPEND_ROW_RIGHT,
@@ -327,6 +330,9 @@ public:
     void OnDeleteRowRight(wxCommandEvent& event);
     void OnEditRowRight(wxCommandEvent& event);
 
+    void OnSelect(wxCommandEvent& event);
+    void OnUnselectAll(wxCommandEvent& event);
+    
     void OnSelectedUnsorted(wxDataViewEvent &event);
     void OnSelectedSorted(wxDataViewEvent &event);
 
@@ -461,6 +467,8 @@ BEGIN_EVENT_TABLE(MySortingFrame,wxFrame)
     EVT_BUTTON( ID_PREPEND_ROW_LEFT, MySortingFrame::OnPrependRowLeft )
     EVT_BUTTON( ID_INSERT_ROW_LEFT, MySortingFrame::OnInsertRowLeft )
     EVT_BUTTON( ID_DELETE_ROW_LEFT, MySortingFrame::OnDeleteRowLeft )
+    EVT_BUTTON( ID_SELECT, MySortingFrame::OnSelect )
+    EVT_BUTTON( ID_UNSELECT_ALL, MySortingFrame::OnUnselectAll )
     EVT_DATAVIEW_ROW_SELECTED( ID_SORTED, MySortingFrame::OnSelectedSorted )
     EVT_DATAVIEW_ROW_SELECTED( ID_UNSORTED, MySortingFrame::OnSelectedUnsorted )
 END_EVENT_TABLE()
@@ -528,6 +536,9 @@ MySortingFrame::MySortingFrame(wxFrame *frame, wxChar *title, int x, int y, int 
     left_sizer->Add( new wxButton( this, ID_INSERT_ROW_LEFT, wxT("Insert") ), 0, wxALL, 5 );
     left_sizer->Add( new wxButton( this, ID_DELETE_ROW_LEFT, wxT("Delete second") ), 0, wxALL, 5 );
     left_sizer->Add( new wxButton( this, ID_EDIT_ROW_LEFT, wxT("Edit") ), 0, wxALL, 5 );
+    left_sizer->Add( 5,5 );
+    left_sizer->Add( new wxButton( this, ID_SELECT, wxT("Select third") ), 0, wxALL, 5 );
+    left_sizer->Add( new wxButton( this, ID_UNSELECT_ALL, wxT("Unselect all") ), 0, wxALL, 5 );
     button_sizer->Add( left_sizer );
     button_sizer->Add( 10, 10, 2 );
     wxFlexGridSizer *right_sizer = new wxFlexGridSizer( 2 );
@@ -561,7 +572,11 @@ MySortingFrame::~MySortingFrame()
 
 void MySortingFrame::OnSelectedUnsorted(wxDataViewEvent &event)
 {
-    wxLogMessage( wxT("OnSelected from unsorted list, selected %d"), (int) event.GetRow() );
+    int row = event.GetRow();
+    wxLogMessage( wxT("OnSelected from unsorted list, selected %d"), row );
+    if (row >= 0)
+        wxLogMessage( wxT("wxDataViewCtrl::IsSelected( %d ): %d (as int)"), 
+                    row, (int) dataview_right->IsSelected( row ) );
 }
 
 void MySortingFrame::OnSelectedSorted(wxDataViewEvent &event)
@@ -580,6 +595,16 @@ void MySortingFrame::OnAbout(wxCommandEvent& WXUNUSED(event) )
         _T("About DataView"), wxOK);
 
     dialog.ShowModal();
+}
+
+void MySortingFrame::OnSelect(wxCommandEvent& WXUNUSED(event))
+{
+    dataview_left->SetSelection( 2 );
+}
+
+void MySortingFrame::OnUnselectAll(wxCommandEvent& WXUNUSED(event))
+{
+    dataview_left->ClearSelection();
 }
 
 void MySortingFrame::OnAppendRowLeft(wxCommandEvent& WXUNUSED(event))

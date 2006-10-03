@@ -267,6 +267,7 @@ public:
     virtual void SetSelection( int row ); // -1 for unselect
     virtual void SetSelectionRange( unsigned int from, unsigned int to );
     virtual void SetSelections( const wxArrayInt& aSelections);
+    virtual void Unselect( unsigned int row );
     
     virtual bool IsSelected( unsigned int row ) const;
     virtual int GetSelection() const;

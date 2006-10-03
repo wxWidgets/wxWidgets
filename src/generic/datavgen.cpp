@@ -1809,6 +1809,10 @@ void wxDataViewCtrl::SetSelections( const wxArrayInt& aSelections)
 {
 }
     
+void wxDataViewCtrl::Unselect( unsigned int row )
+{
+}
+
 bool wxDataViewCtrl::IsSelected( unsigned int row ) const
 {
     return false;
