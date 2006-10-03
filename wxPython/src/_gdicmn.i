@@ -687,10 +687,14 @@ bottom, otherwise it is moved to the left or top respectively.", "",
         "Returns ``True`` if the given rectangle is completely inside this
 rectangle or touches its boundary.", "",
         ContainsRect);
+    
     %pythoncode {
-        Inside = wx._deprecated(Contains, "Use `Contains` instead.")
-        InsideXY = wx._deprecated(ContainsXY, "Use `ContainsXY` instead.")
-        InsideRect = wx._deprecated(ContainsRect, "Use `ContainsRect` instead.")
+        %#Inside = wx._deprecated(Contains, "Use `Contains` instead.")
+        %#InsideXY = wx._deprecated(ContainsXY, "Use `ContainsXY` instead.")
+        %#InsideRect = wx._deprecated(ContainsRect, "Use `ContainsRect` instead.")
+        Inside = Contains
+        InsideXY = ContainsXY
+        InsideRect = ContainsRect
     }
     
     DocDeclStr(    
