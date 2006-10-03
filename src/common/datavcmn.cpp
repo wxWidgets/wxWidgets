@@ -804,4 +804,13 @@ wxDataViewColumn* wxDataViewCtrlBase::GetColumn( unsigned int pos )
     return (wxDataViewColumn*) m_cols[ pos ];
 }
 
+// ---------------------------------------------------------
+// wxDataViewEvent
+// ---------------------------------------------------------
+
+IMPLEMENT_DYNAMIC_CLASS(wxDataViewEvent,wxNotifyEvent)
+
+DEFINE_EVENT_TYPE(wxEVT_COMMAND_DATAVIEW_ROW_SELECTED)
+
+
 #endif

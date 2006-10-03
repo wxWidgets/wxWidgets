@@ -299,13 +299,17 @@ enum my_events
     ID_PREPEND_ROW_RIGHT,
     ID_INSERT_ROW_RIGHT,
     ID_DELETE_ROW_RIGHT,
-    ID_EDIT_ROW_RIGHT
+    ID_EDIT_ROW_RIGHT,
+    
+    ID_SORTED,
+    ID_UNSORTED
 };
 
 class MySortingFrame: public wxFrame
 {
 public:
     MySortingFrame(wxFrame *frame, wxChar *title, int x, int y, int w, int h);
+    ~MySortingFrame();
 
 public:
     void OnQuit(wxCommandEvent& event);
@@ -323,9 +327,15 @@ public:
     void OnDeleteRowRight(wxCommandEvent& event);
     void OnEditRowRight(wxCommandEvent& event);
 
+    void OnSelectedUnsorted(wxDataViewEvent &event);
+    void OnSelectedSorted(wxDataViewEvent &event);
+
 private:
     wxDataViewCtrl* dataview_left;
     wxDataViewCtrl* dataview_right;
+    
+    wxLog          *m_logOld;
+    wxTextCtrl     *m_logWindow;
 
     MyUnsortedTextModel *m_unsorted_model;
 
@@ -346,7 +356,7 @@ bool MyApp::OnInit(void)
     MyFrame *frame = new MyFrame(NULL, wxT("wxDataViewCtrl feature test"), 10, 10, 800, 340);
     frame->Show(true);
 
-    MySortingFrame *frame2 = new MySortingFrame(NULL, wxT("wxDataViewCtrl sorting test"), 10, 350, 600, 300);
+    MySortingFrame *frame2 = new MySortingFrame(NULL, wxT("wxDataViewCtrl sorting test"), 10, 150, 600, 500);
     frame2->Show(true);
 
     SetTopWindow(frame);
@@ -451,11 +461,15 @@ BEGIN_EVENT_TABLE(MySortingFrame,wxFrame)
     EVT_BUTTON( ID_PREPEND_ROW_LEFT, MySortingFrame::OnPrependRowLeft )
     EVT_BUTTON( ID_INSERT_ROW_LEFT, MySortingFrame::OnInsertRowLeft )
     EVT_BUTTON( ID_DELETE_ROW_LEFT, MySortingFrame::OnDeleteRowLeft )
+    EVT_DATAVIEW_ROW_SELECTED( ID_SORTED, MySortingFrame::OnSelectedSorted )
+    EVT_DATAVIEW_ROW_SELECTED( ID_UNSORTED, MySortingFrame::OnSelectedUnsorted )
 END_EVENT_TABLE()
 
 MySortingFrame::MySortingFrame(wxFrame *frame, wxChar *title, int x, int y, int w, int h):
   wxFrame(frame, wxID_ANY, title, wxPoint(x, y), wxSize(w, h))
 {
+    m_logOld = NULL;
+    
     SetIcon(wxICON(sample));
 
     wxMenu *file_menu = new wxMenu;
@@ -476,7 +490,7 @@ MySortingFrame::MySortingFrame(wxFrame *frame, wxChar *title, int x, int y, int 
 
 
     // Left wxDataViewCtrl
-    dataview_left = new wxDataViewCtrl( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxDV_MULTIPLE );
+    dataview_left = new wxDataViewCtrl( this, ID_UNSORTED, wxDefaultPosition, wxDefaultSize, wxDV_MULTIPLE );
 
     m_unsorted_model = new MyUnsortedTextModel;
     dataview_left->AssociateModel( m_unsorted_model );
@@ -488,7 +502,7 @@ MySortingFrame::MySortingFrame(wxFrame *frame, wxChar *title, int x, int y, int 
     dataview_left->AppendColumn( new wxDataViewColumn( wxT("icon"), new wxDataViewBitmapCell, 3, 25 ) );
 
     // Right wxDataViewCtrl using the sorting model
-    dataview_right = new wxDataViewCtrl( this, wxID_ANY );
+    dataview_right = new wxDataViewCtrl( this, ID_SORTED );
     
     wxDataViewSortedListModel *sorted_model =
         new wxDataViewSortedListModel( m_unsorted_model );
@@ -528,8 +542,31 @@ MySortingFrame::MySortingFrame(wxFrame *frame, wxChar *title, int x, int y, int 
     wxBoxSizer *main_sizer = new wxBoxSizer( wxVERTICAL );
     main_sizer->Add( top_sizer, 1, wxGROW );
     main_sizer->Add( button_sizer, 0, wxGROW );
+    
+    m_logWindow = new wxTextCtrl(this, wxID_ANY, wxEmptyString,
+                                 wxDefaultPosition, wxDefaultSize,
+                                 wxTE_MULTILINE | wxSUNKEN_BORDER);
+    main_sizer->Add( 20,20 );
+    main_sizer->Add( m_logWindow, 1, wxGROW );
+
+    m_logOld = wxLog::SetActiveTarget(new wxLogTextCtrl(m_logWindow));
 
     SetSizer( main_sizer );
+}
+
+MySortingFrame::~MySortingFrame()
+{
+    delete wxLog::SetActiveTarget(m_logOld);
+}
+
+void MySortingFrame::OnSelectedUnsorted(wxDataViewEvent &event)
+{
+    wxLogMessage( wxT("OnSelected from unsorted list, selected %d"), (int) event.GetRow() );
+}
+
+void MySortingFrame::OnSelectedSorted(wxDataViewEvent &event)
+{
+    wxLogMessage( wxT("OnSelected from sorted list, selected %d"), (int) event.GetRow() );
 }
 
 void MySortingFrame::OnQuit(wxCommandEvent& WXUNUSED(event) )

@@ -1478,6 +1478,41 @@ int wxDataViewColumn::GetFixedWidth()
 }
 
 //-----------------------------------------------------------------------------
+// wxDataViewCtrl signal callbacks
+//-----------------------------------------------------------------------------
+
+static void
+wxdataview_selection_changed_callback( GtkTreeSelection* selection, wxDataViewCtrl *dv )
+{
+    wxDataViewEvent event( wxEVT_COMMAND_DATAVIEW_ROW_SELECTED, dv->GetId() );
+    if (dv->HasFlag(wxDV_MULTIPLE))
+    {
+        GtkTreeModel *model;
+        GList *list = gtk_tree_selection_get_selected_rows( selection, &model );
+        
+        // do something
+        // ...
+        
+        // delete list
+        g_list_foreach( list, (GFunc) gtk_tree_path_free, NULL );
+        g_list_free( list );        
+    }
+    else
+    {
+        GtkTreeModel *model;
+        GtkTreeIter iter;
+        gboolean has_selection = gtk_tree_selection_get_selected( selection, &model, &iter );
+        if (has_selection)
+        {
+            unsigned int row = (wxUIntPtr) iter.user_data;
+            event.SetRow( row );
+        }
+    }
+    event.SetModel( dv->GetModel() );
+    dv->GetEventHandler()->ProcessEvent( event );
+}
+
+//-----------------------------------------------------------------------------
 // wxDataViewCtrl
 //-----------------------------------------------------------------------------
 
@@ -1528,6 +1563,10 @@ bool wxDataViewCtrl::Create(wxWindow *parent, wxWindowID id,
     gtk_widget_show (m_treeview);
 
     m_parent->DoAddChild( this );
+
+    GtkTreeSelection *selection = gtk_tree_view_get_selection( GTK_TREE_VIEW(m_treeview) );
+    g_signal_connect_after (selection, "changed",
+                            G_CALLBACK (wxdataview_selection_changed_callback), this);
 
     PostCreation(size);
 

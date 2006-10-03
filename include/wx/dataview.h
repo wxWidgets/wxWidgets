@@ -327,6 +327,73 @@ protected:
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewCtrlBase)
 };
 
+
+// ----------------------------------------------------------------------------
+// wxDataViewEvent - the event class for the wxDataViewCtrl notifications
+// ----------------------------------------------------------------------------
+
+class WXDLLEXPORT wxDataViewEvent : public wxNotifyEvent
+{
+public:
+    wxDataViewEvent(wxEventType commandType = wxEVT_NULL, int winid = 0)
+        : wxNotifyEvent(commandType, winid),
+        m_col(-1),
+        m_row(-1),
+        m_model(NULL),
+        m_value(wxNullVariant),
+        m_editCancelled(false)
+        { }
+
+    wxDataViewEvent(const wxDataViewEvent& event)
+        : wxNotifyEvent(event),
+        m_col(event.m_col),
+        m_row(event.m_col),
+        m_model(event.m_model),
+        m_value(event.m_value),
+        m_editCancelled(event.m_editCancelled)
+        { }
+
+    int GetColumn() const { return m_col; }
+    void SetColumn( int col ) { m_col = col; }
+    int GetRow() const { return m_row; }
+    void SetRow( int row ) { m_row = row; }
+    wxDataViewModel* GetModel() const { return m_model; }
+    void SetModel( wxDataViewModel *model ) { m_model = model; }
+    const wxVariant &GetValue() const { return m_value; }
+    void SetValue( const wxVariant &value ) { m_value = value; }
+
+    // was label editing canceled? (for wxEVT_COMMAND_DATVIEW_END_LABEL_EDIT only)
+    bool IsEditCancelled() const { return m_editCancelled; }
+    void SetEditCanceled(bool editCancelled) { m_editCancelled = editCancelled; }
+
+    virtual wxEvent *Clone() const { return new wxDataViewEvent(*this); }
+
+protected:
+    int                 m_col;
+    int                 m_row;
+    wxDataViewModel    *m_model;
+    wxVariant           m_value;
+    bool                m_editCancelled;
+
+private:
+    DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxDataViewEvent)
+};
+
+BEGIN_DECLARE_EVENT_TYPES()
+    DECLARE_EVENT_TYPE(wxEVT_COMMAND_DATAVIEW_ROW_SELECTED, -1)
+END_DECLARE_EVENT_TYPES()
+
+typedef void (wxEvtHandler::*wxDataViewEventFunction)(wxDataViewEvent&);
+
+#define wxDataViewEventHandler(func) \
+    (wxObjectEventFunction)(wxEventFunction)wxStaticCastEvent(wxDataViewEventFunction, &func)
+
+#define wx__DECLARE_DATAVIEWEVT(evt, id, fn) \
+    wx__DECLARE_EVT1(wxEVT_COMMAND_DATAVIEW_ ## evt, id, wxDataViewEventHandler(fn))
+
+#define EVT_DATAVIEW_ROW_SELECTED(id, fn) wx__DECLARE_DATAVIEWEVT(ROW_SELECTED, id, fn)
+
+
 #if defined(wxUSE_GENERICDATAVIEWCTRL)
     #include "wx/generic/dataview.h"
 #elif defined(__WXGTK20__)
