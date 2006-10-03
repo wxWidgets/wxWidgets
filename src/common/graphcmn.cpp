@@ -26,6 +26,12 @@
 
 #include "wx/graphics.h"
 
+#ifndef WX_PRECOMP
+    #include "wx/icon.h"
+    #include "wx/bitmap.h"
+    #include "wx/dcmemory.h"
+#endif
+
 #if wxUSE_GRAPHICS_CONTEXT
 
 //-----------------------------------------------------------------------------
