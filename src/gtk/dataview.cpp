@@ -247,7 +247,7 @@ wxgtk_list_store_get_column_type (GtkTreeModel *tree_model,
 
     GType gtype = G_TYPE_INVALID;
 
-    wxString wxtype = list_store->model->GetColType( (size_t) index );
+    wxString wxtype = list_store->model->GetColType( (unsigned int) index );
 
     if (wxtype == wxT("string"))
         gtype = G_TYPE_STRING;
@@ -264,7 +264,7 @@ wxgtk_list_store_get_iter (GtkTreeModel *tree_model,
     g_return_val_if_fail (GTK_IS_WX_LIST_STORE (tree_model), FALSE);
     g_return_val_if_fail (gtk_tree_path_get_depth (path) > 0, FALSE);
 
-    size_t i = (size_t)gtk_tree_path_get_indices (path)[0];
+    unsigned int i = (unsigned int)gtk_tree_path_get_indices (path)[0];
 
     if (i >= list_store->model->GetNumberOfRows())
         return FALSE;
@@ -300,12 +300,12 @@ wxgtk_list_store_get_value (GtkTreeModel *tree_model,
     g_return_if_fail (GTK_IS_WX_LIST_STORE (tree_model) );
 
     wxDataViewListModel *model = list_store->model;
-    wxString mtype = model->GetColType( (size_t) column );
+    wxString mtype = model->GetColType( (unsigned int) column );
     if (mtype == wxT("string"))
     {
         wxVariant variant;
         g_value_init( value, G_TYPE_STRING );
-        model->GetValue( variant, (size_t) column, (size_t) iter->user_data );
+        model->GetValue( variant, (unsigned int) column, (unsigned int) iter->user_data );
         g_value_set_string( value, wxGTK_CONV(variant.GetString()) );
     }
     else
@@ -685,10 +685,10 @@ gtk_wx_cell_renderer_activate(
     wxDataViewListModel *model = cell->GetOwner()->GetOwner()->GetModel();
 
     GtkTreePath *treepath = gtk_tree_path_new_from_string( path );
-    size_t model_row = (size_t)gtk_tree_path_get_indices (treepath)[0];
+    unsigned int model_row = (unsigned int)gtk_tree_path_get_indices (treepath)[0];
     gtk_tree_path_free( treepath );
 
-    size_t model_col = cell->GetOwner()->GetModelColumn();
+    unsigned int model_col = cell->GetOwner()->GetModelColumn();
 
     if (event->type == GDK_BUTTON_PRESS)
     {
@@ -731,11 +731,11 @@ public:
 
     virtual bool RowAppended();
     virtual bool RowPrepended();
-    virtual bool RowInserted( size_t before );
-    virtual bool RowDeleted( size_t row );
-    virtual bool RowChanged( size_t row );
-    virtual bool ValueChanged( size_t col, size_t row );
-    virtual bool RowsReordered( size_t *new_order );
+    virtual bool RowInserted( unsigned int before );
+    virtual bool RowDeleted( unsigned int row );
+    virtual bool RowChanged( unsigned int row );
+    virtual bool ValueChanged( unsigned int col, unsigned int row );
+    virtual bool RowsReordered( unsigned int *new_order );
     virtual bool Cleared();
 
     GtkWxListStore      *m_gtk_store;
@@ -755,7 +755,7 @@ wxGtkDataViewListModelNotifier::wxGtkDataViewListModelNotifier(
 
 bool wxGtkDataViewListModelNotifier::RowAppended()
 {
-    size_t pos = m_wx_model->GetNumberOfRows()-1;
+    unsigned int pos = m_wx_model->GetNumberOfRows()-1;
 
     GtkTreeIter iter;
     iter.stamp = m_gtk_store->stamp;
@@ -783,7 +783,7 @@ bool wxGtkDataViewListModelNotifier::RowPrepended()
     return true;
 }
 
-bool wxGtkDataViewListModelNotifier::RowInserted( size_t before )
+bool wxGtkDataViewListModelNotifier::RowInserted( unsigned int before )
 {
     GtkTreeIter iter;
     iter.stamp = m_gtk_store->stamp;
@@ -797,7 +797,7 @@ bool wxGtkDataViewListModelNotifier::RowInserted( size_t before )
     return true;
 }
 
-bool wxGtkDataViewListModelNotifier::RowDeleted( size_t row )
+bool wxGtkDataViewListModelNotifier::RowDeleted( unsigned int row )
 {
     GtkTreePath *path = gtk_tree_path_new ();
     gtk_tree_path_append_index (path, (gint) row);
@@ -807,7 +807,7 @@ bool wxGtkDataViewListModelNotifier::RowDeleted( size_t row )
     return true;
 }
 
-bool wxGtkDataViewListModelNotifier::RowChanged( size_t row )
+bool wxGtkDataViewListModelNotifier::RowChanged( unsigned int row )
 {
     GtkTreeIter iter;
     iter.stamp = m_gtk_store->stamp;
@@ -819,7 +819,7 @@ bool wxGtkDataViewListModelNotifier::RowChanged( size_t row )
     return true;
 }
 
-bool wxGtkDataViewListModelNotifier::ValueChanged( size_t model_col, size_t model_row )
+bool wxGtkDataViewListModelNotifier::ValueChanged( unsigned int model_col, unsigned int model_row )
 {
     // This adds GTK+'s missing MVC logic for ValueChanged
     wxNode *node = GetOwner()->m_viewingColumns.GetFirst();
@@ -850,9 +850,9 @@ bool wxGtkDataViewListModelNotifier::ValueChanged( size_t model_col, size_t mode
     return true;
 }
 
-bool wxGtkDataViewListModelNotifier::RowsReordered( size_t *new_order )
+bool wxGtkDataViewListModelNotifier::RowsReordered( unsigned int *new_order )
 {
-    // Assume sizeof(size_t)= == sizeof(gint)
+    // Assume sizeof(unsigned int)= == sizeof(gint)
 
     GtkTreePath *path = gtk_tree_path_new ();
     gtk_tree_model_rows_reordered (GTK_TREE_MODEL (m_gtk_store), path, NULL, (gint*)new_order);
@@ -912,10 +912,10 @@ static void wxGtkTextRendererEditedCallback( GtkCellRendererText *renderer,
     wxDataViewListModel *model = cell->GetOwner()->GetOwner()->GetModel();
 
     GtkTreePath *path = gtk_tree_path_new_from_string( arg1 );
-    size_t model_row = (size_t)gtk_tree_path_get_indices (path)[0];
+    unsigned int model_row = (unsigned int)gtk_tree_path_get_indices (path)[0];
     gtk_tree_path_free( path );
 
-    size_t model_col = cell->GetOwner()->GetModelColumn();
+    unsigned int model_col = cell->GetOwner()->GetModelColumn();
 
     model->SetValue( value, model_col, model_row );
     model->ValueChanged( model_col, model_row );
@@ -1054,10 +1054,10 @@ static void wxGtkToggleRendererToggledCallback( GtkCellRendererToggle *renderer,
     wxDataViewListModel *model = cell->GetOwner()->GetOwner()->GetModel();
 
     GtkTreePath *gtk_path = gtk_tree_path_new_from_string( path );
-    size_t model_row = (size_t)gtk_tree_path_get_indices (gtk_path)[0];
+    unsigned int model_row = (unsigned int)gtk_tree_path_get_indices (gtk_path)[0];
     gtk_tree_path_free( gtk_path );
 
-    size_t model_col = cell->GetOwner()->GetModelColumn();
+    unsigned int model_col = cell->GetOwner()->GetModelColumn();
 
     model->SetValue( value, model_col, model_row );
     model->ValueChanged( model_col, model_row );
@@ -1290,7 +1290,7 @@ class wxDataViewDateCellPopupTransient: public wxPopupTransientWindow
 {
 public:
     wxDataViewDateCellPopupTransient( wxWindow* parent, wxDateTime *value,
-        wxDataViewListModel *model, size_t col, size_t row ) :
+        wxDataViewListModel *model, unsigned int col, unsigned int row ) :
         wxPopupTransientWindow( parent, wxBORDER_SIMPLE )
     {
         m_model = model;
@@ -1311,8 +1311,8 @@ public:
 
     wxCalendarCtrl      *m_cal;
     wxDataViewListModel *m_model;
-    size_t               m_col;
-    size_t               m_row;
+    unsigned int               m_col;
+    unsigned int               m_row;
 
 private:
     DECLARE_EVENT_TABLE()
@@ -1364,7 +1364,7 @@ wxSize wxDataViewDateCell::GetSize()
     return wxSize(x,y+d);
 }
 
-bool wxDataViewDateCell::Activate( wxRect cell, wxDataViewListModel *model, size_t col, size_t row )
+bool wxDataViewDateCell::Activate( wxRect cell, wxDataViewListModel *model, unsigned int col, unsigned int row )
 {
     wxVariant variant;
     model->GetValue( variant, col, row );
@@ -1404,7 +1404,7 @@ static void wxGtkTreeCellDataFunc( GtkTreeViewColumn *column,
 
     wxDataViewCell *cell = (wxDataViewCell*) data;
 
-    size_t model_row = (size_t) iter->user_data;
+    unsigned int model_row = (unsigned int) iter->user_data;
 
     wxVariant value;
     list_store->model->GetValue( value, cell->GetOwner()->GetModelColumn(), model_row );
@@ -1419,7 +1419,7 @@ static void wxGtkTreeCellDataFunc( GtkTreeViewColumn *column,
 
 IMPLEMENT_CLASS(wxDataViewColumn, wxDataViewColumnBase)
 
-wxDataViewColumn::wxDataViewColumn( const wxString &title, wxDataViewCell *cell, size_t model_column,
+wxDataViewColumn::wxDataViewColumn( const wxString &title, wxDataViewCell *cell, unsigned int model_column,
     int width, int flags ) :
     wxDataViewColumnBase( title, cell, model_column, width, flags )
 {

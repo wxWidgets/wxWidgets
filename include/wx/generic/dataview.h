@@ -40,27 +40,27 @@ public:
 
     virtual bool Activate( wxRect WXUNUSED(cell),
                            wxDataViewListModel *WXUNUSED(model),
-                           size_t WXUNUSED(col),
-                           size_t WXUNUSED(row) )
+                           unsigned int WXUNUSED(col),
+                           unsigned int WXUNUSED(row) )
                            { return false; }
 
     virtual bool LeftClick( wxPoint WXUNUSED(cursor),
                             wxRect WXUNUSED(cell),
                             wxDataViewListModel *WXUNUSED(model),
-                            size_t WXUNUSED(col),
-                            size_t WXUNUSED(row) )
+                            unsigned int WXUNUSED(col),
+                            unsigned int WXUNUSED(row) )
                             { return false; }
     virtual bool RightClick( wxPoint WXUNUSED(cursor),
                              wxRect WXUNUSED(cell),
                              wxDataViewListModel *WXUNUSED(model),
-                             size_t WXUNUSED(col),
-                             size_t WXUNUSED(row) )
+                             unsigned int WXUNUSED(col),
+                             unsigned int WXUNUSED(row) )
                              { return false; }
     virtual bool StartDrag( wxPoint WXUNUSED(cursor),
                             wxRect WXUNUSED(cell),
                             wxDataViewListModel *WXUNUSED(model),
-                            size_t WXUNUSED(col),
-                            size_t WXUNUSED(row) )
+                            unsigned int WXUNUSED(col),
+                            unsigned int WXUNUSED(row) )
                             { return false; }
 
     // Create DC on request
@@ -148,7 +148,7 @@ public:
     bool GetValue( wxVariant &value );
 
     bool Render( wxRect cell, wxDC *dc, int state );
-    bool Activate( wxRect cell, wxDataViewListModel *model, size_t col, size_t row );
+    bool Activate( wxRect cell, wxDataViewListModel *model, unsigned int col, unsigned int row );
     wxSize GetSize();
 
 private:
@@ -198,7 +198,7 @@ public:
     virtual bool Render( wxRect cell, wxDC *dc, int state );
     virtual wxSize GetSize();
     virtual bool Activate( wxRect cell,
-                           wxDataViewListModel *model, size_t col, size_t row );
+                           wxDataViewListModel *model, unsigned int col, unsigned int row );
 
 private:
     wxDateTime    m_date;
@@ -214,7 +214,7 @@ protected:
 class WXDLLIMPEXP_ADV wxDataViewColumn: public wxDataViewColumnBase
 {
 public:
-    wxDataViewColumn( const wxString &title, wxDataViewCell *cell, size_t model_column, 
+    wxDataViewColumn( const wxString &title, wxDataViewCell *cell, unsigned int model_column, 
         int width = 80, int flags = wxDATAVIEW_COL_RESIZABLE );
     virtual ~wxDataViewColumn();
 

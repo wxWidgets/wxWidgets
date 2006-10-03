@@ -43,7 +43,7 @@ class MyTextModel: public wxDataViewListModel
 public:
     MyTextModel()
     {
-        size_t i;
+        unsigned int i;
         for (i = 0; i < 1000; i++)
             m_list.Add( wxT("Test") );
         for (i = 0; i < 500; i++)
@@ -59,13 +59,13 @@ public:
             }
     }
 
-    virtual size_t GetNumberOfRows()
+    virtual unsigned int GetNumberOfRows()
         { return 1000; }
-    virtual size_t GetNumberOfCols()
+    virtual unsigned int GetNumberOfCols()
         { return 7; }
 
     // as reported by wxVariant
-    virtual wxString GetColType( size_t col )
+    virtual wxString GetColType( unsigned int col )
         {
             if (col == 6)
                 return wxT("datetime");
@@ -79,7 +79,7 @@ public:
             return wxT("string");
         }
 
-    virtual void GetValue( wxVariant &variant, size_t col, size_t row )
+    virtual void GetValue( wxVariant &variant, unsigned int col, unsigned int row )
         {
             if (col == 6)
             {
@@ -108,7 +108,7 @@ public:
                 variant = tmp;
             }
         }
-    virtual bool SetValue( wxVariant &value, size_t col, size_t row )
+    virtual bool SetValue( wxVariant &value, unsigned int col, unsigned int row )
         {
             if (col == 6)
             {
@@ -167,8 +167,8 @@ public:
     }
     bool Activate( wxRect WXUNUSED(rect),
                    wxDataViewListModel *WXUNUSED(model),
-                   size_t WXUNUSED(col),
-                   size_t WXUNUSED(row) )
+                   unsigned int WXUNUSED(col),
+                   unsigned int WXUNUSED(row) )
     {
         return false;
     }
@@ -197,10 +197,10 @@ public:
         m_bitmap = wxBitmap( null_xpm );
     }
 
-    virtual size_t GetNumberOfRows() { return m_list.GetCount(); }
-    virtual size_t GetNumberOfCols() { return 2; }
-    virtual wxString GetColType( size_t WXUNUSED(col) ) { return wxT("string"); }
-    virtual void GetValue( wxVariant &variant, size_t col, size_t row )
+    virtual unsigned int GetNumberOfRows() { return m_list.GetCount(); }
+    virtual unsigned int GetNumberOfCols() { return 2; }
+    virtual wxString GetColType( unsigned int WXUNUSED(col) ) { return wxT("string"); }
+    virtual void GetValue( wxVariant &variant, unsigned int col, unsigned int row )
     {
         if (col == 0)
         {
@@ -216,7 +216,7 @@ public:
         tmp.Printf( wxT("item(%d;%d)"), (int)row, (int)col );
         variant = tmp;
     }
-    virtual bool SetValue( wxVariant &variant, size_t col, size_t row )
+    virtual bool SetValue( wxVariant &variant, unsigned int col, unsigned int row )
     {
         if (col == 0)
         {
@@ -245,7 +245,7 @@ public:
         RowInserted( 1 );
     }
 
-    void DeleteRow( size_t index )
+    void DeleteRow( unsigned int index )
     {
         m_list.RemoveAt( index );
         RowDeleted( index );

@@ -74,11 +74,11 @@ public:
 
     virtual bool RowAppended() = 0;
     virtual bool RowPrepended() = 0;
-    virtual bool RowInserted( size_t before ) = 0;
-    virtual bool RowDeleted( size_t row ) = 0;
-    virtual bool RowChanged( size_t row ) = 0;
-    virtual bool ValueChanged( size_t col, size_t row ) = 0;
-    virtual bool RowsReordered( size_t *new_order ) = 0;
+    virtual bool RowInserted( unsigned int before ) = 0;
+    virtual bool RowDeleted( unsigned int row ) = 0;
+    virtual bool RowChanged( unsigned int row ) = 0;
+    virtual bool ValueChanged( unsigned int col, unsigned int row ) = 0;
+    virtual bool RowsReordered( unsigned int *new_order ) = 0;
     virtual bool Cleared() = 0;
 
     void SetOwner( wxDataViewListModel *owner ) { m_owner = owner; }
@@ -95,14 +95,14 @@ private:
 class WXDLLIMPEXP_ADV wxDataViewViewingColumn: public wxObject
 {
 public:
-    wxDataViewViewingColumn( wxDataViewColumn *view_column, size_t model_column )
+    wxDataViewViewingColumn( wxDataViewColumn *view_column, unsigned int model_column )
     {
         m_viewColumn = view_column;
         m_modelColumn = model_column;
     }
 
     wxDataViewColumn   *m_viewColumn;
-    size_t              m_modelColumn;
+    unsigned int              m_modelColumn;
 };
 
 class WXDLLIMPEXP_ADV wxDataViewListModel: public wxDataViewModel
@@ -111,27 +111,27 @@ public:
     wxDataViewListModel();
     virtual ~wxDataViewListModel();
 
-    virtual size_t GetNumberOfRows() = 0;
-    virtual size_t GetNumberOfCols() = 0;
+    virtual unsigned int GetNumberOfRows() = 0;
+    virtual unsigned int GetNumberOfCols() = 0;
     // return type as reported by wxVariant
-    virtual wxString GetColType( size_t col ) = 0;
+    virtual wxString GetColType( unsigned int col ) = 0;
     // get value into a wxVariant
-    virtual void GetValue( wxVariant &variant, size_t col, size_t row ) = 0;
+    virtual void GetValue( wxVariant &variant, unsigned int col, unsigned int row ) = 0;
     // set value, call ValueChanged() afterwards!
-    virtual bool SetValue( wxVariant &variant, size_t col, size_t row ) = 0;
+    virtual bool SetValue( wxVariant &variant, unsigned int col, unsigned int row ) = 0;
 
     // delegated notifiers
     virtual bool RowAppended();
     virtual bool RowPrepended();
-    virtual bool RowInserted( size_t before );
-    virtual bool RowDeleted( size_t row );
-    virtual bool RowChanged( size_t row );
-    virtual bool ValueChanged( size_t col, size_t row );
-    virtual bool RowsReordered( size_t *new_order );
+    virtual bool RowInserted( unsigned int before );
+    virtual bool RowDeleted( unsigned int row );
+    virtual bool RowChanged( unsigned int row );
+    virtual bool ValueChanged( unsigned int col, unsigned int row );
+    virtual bool RowsReordered( unsigned int *new_order );
     virtual bool Cleared();
 
     // Used internally
-    virtual void AddViewingColumn( wxDataViewColumn *view_column, size_t model_column );
+    virtual void AddViewingColumn( wxDataViewColumn *view_column, unsigned int model_column );
     virtual void RemoveViewingColumn( wxDataViewColumn *column );
 
     virtual void AddNotifier( wxDataViewListModelNotifier *notifier );
@@ -149,9 +149,9 @@ protected:
 // ---------------------------------------------------------
 
 typedef int (wxCALLBACK *wxDataViewListModelCompare)
-    (size_t row1, size_t row2, size_t col, wxDataViewListModel* model );
+    (unsigned int row1, unsigned int row2, unsigned int col, wxDataViewListModel* model );
 
-WX_DEFINE_SORTED_USER_EXPORTED_ARRAY_SIZE_T(size_t, wxDataViewSortedIndexArray, WXDLLIMPEXP_ADV);
+WX_DEFINE_SORTED_USER_EXPORTED_ARRAY_SIZE_T(unsigned int, wxDataViewSortedIndexArray, WXDLLIMPEXP_ADV);
 
 class WXDLLIMPEXP_ADV wxDataViewSortedListModel: public wxDataViewListModel
 {
@@ -159,33 +159,33 @@ public:
     wxDataViewSortedListModel( wxDataViewListModel *child );
     virtual ~wxDataViewSortedListModel();
 
-    virtual size_t GetNumberOfRows();
-    virtual size_t GetNumberOfCols();
+    virtual unsigned int GetNumberOfRows();
+    virtual unsigned int GetNumberOfCols();
     // return type as reported by wxVariant
-    virtual wxString GetColType( size_t col );
+    virtual wxString GetColType( unsigned int col );
     // get value into a wxVariant
-    virtual void GetValue( wxVariant &variant, size_t col, size_t row );
+    virtual void GetValue( wxVariant &variant, unsigned int col, unsigned int row );
     // set value, call ValueChanged() afterwards!
-    virtual bool SetValue( wxVariant &variant, size_t col, size_t row );
+    virtual bool SetValue( wxVariant &variant, unsigned int col, unsigned int row );
 
     // called from user
     virtual bool RowAppended();
     virtual bool RowPrepended();
-    virtual bool RowInserted( size_t before );
-    virtual bool RowDeleted( size_t row );
-    virtual bool RowChanged( size_t row );
-    virtual bool ValueChanged( size_t col, size_t row );
-    virtual bool RowsReordered( size_t *new_order );
+    virtual bool RowInserted( unsigned int before );
+    virtual bool RowDeleted( unsigned int row );
+    virtual bool RowChanged( unsigned int row );
+    virtual bool ValueChanged( unsigned int col, unsigned int row );
+    virtual bool RowsReordered( unsigned int *new_order );
     virtual bool Cleared();
 
     // called if child's notifiers are called
     bool ChildRowAppended();
     bool ChildRowPrepended();
-    bool ChildRowInserted( size_t before );
-    bool ChildRowDeleted( size_t row );
-    bool ChildRowChanged( size_t row );
-    bool ChildValueChanged( size_t col, size_t row );
-    bool ChildRowsReordered( size_t *new_order );
+    bool ChildRowInserted( unsigned int before );
+    bool ChildRowDeleted( unsigned int row );
+    bool ChildRowChanged( unsigned int row );
+    bool ChildValueChanged( unsigned int col, unsigned int row );
+    bool ChildRowsReordered( unsigned int *new_order );
     bool ChildCleared();
 
     virtual void Resort();
@@ -256,7 +256,7 @@ enum wxDataViewColumnFlags
 class WXDLLIMPEXP_ADV wxDataViewColumnBase: public wxObject
 {
 public:
-    wxDataViewColumnBase( const wxString &title, wxDataViewCell *cell, size_t model_column,
+    wxDataViewColumnBase( const wxString &title, wxDataViewCell *cell, unsigned int model_column,
         int width = 80, int flags = wxDATAVIEW_COL_RESIZABLE );
     virtual ~wxDataViewColumnBase();
 
@@ -265,7 +265,7 @@ public:
 
     wxDataViewCell* GetCell()               { return m_cell; }
 
-    size_t GetModelColumn()                 { return m_model_column; }
+    unsigned int GetModelColumn()                 { return m_model_column; }
 
     void SetOwner( wxDataViewCtrl *owner )  { m_owner = owner; }
     wxDataViewCtrl *GetOwner()              { return m_owner; }
@@ -300,15 +300,15 @@ public:
     virtual bool AssociateModel( wxDataViewListModel *model );
     wxDataViewListModel* GetModel();
 
-    virtual bool AppendTextColumn( const wxString &label, size_t model_column );
-    virtual bool AppendToggleColumn( const wxString &label, size_t model_column );
-    virtual bool AppendProgressColumn( const wxString &label, size_t model_column );
-    virtual bool AppendDateColumn( const wxString &label, size_t model_column );
+    virtual bool AppendTextColumn( const wxString &label, unsigned int model_column );
+    virtual bool AppendToggleColumn( const wxString &label, unsigned int model_column );
+    virtual bool AppendProgressColumn( const wxString &label, unsigned int model_column );
+    virtual bool AppendDateColumn( const wxString &label, unsigned int model_column );
     virtual bool AppendColumn( wxDataViewColumn *col );
-    virtual size_t GetNumberOfColumns();
-    virtual bool DeleteColumn( size_t pos );
+    virtual unsigned int GetNumberOfColumns();
+    virtual bool DeleteColumn( unsigned int pos );
     virtual bool ClearColumns();
-    virtual wxDataViewColumn* GetColumn( size_t pos );
+    virtual wxDataViewColumn* GetColumn( unsigned int pos );
 
 private:
     wxDataViewListModel    *m_model;

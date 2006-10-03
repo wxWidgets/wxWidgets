@@ -109,17 +109,17 @@ public:
     virtual wxSize GetSize() = 0;
     
     virtual bool Activate( wxRect cell,
-                           wxDataViewListModel *model, size_t col, size_t row )   
+                           wxDataViewListModel *model, unsigned int col, unsigned int row )   
                            { return false; }
     
     virtual bool LeftClick( wxPoint cursor, wxRect cell, 
-                           wxDataViewListModel *model, size_t col, size_t row )   
+                           wxDataViewListModel *model, unsigned int col, unsigned int row )   
                            { return false; }
     virtual bool RightClick( wxPoint cursor, wxRect cell,
-                           wxDataViewListModel *model, size_t col, size_t row )   
+                           wxDataViewListModel *model, unsigned int col, unsigned int row )   
                            { return false; }
     virtual bool StartDrag( wxPoint cursor, wxRect cell, 
-                           wxDataViewListModel *model, size_t col, size_t row )   
+                           wxDataViewListModel *model, unsigned int col, unsigned int row )   
                            { return false; }
     
     // Create DC on request
@@ -172,7 +172,7 @@ public:
     virtual bool Render( wxRect cell, wxDC *dc, int state );
     virtual wxSize GetSize();
     virtual bool Activate( wxRect cell,
-                           wxDataViewListModel *model, size_t col, size_t row );
+                           wxDataViewListModel *model, unsigned int col, unsigned int row );
     
 private:
     wxDateTime    m_date;
@@ -188,7 +188,7 @@ protected:
 class WXDLLIMPEXP_CORE wxDataViewColumn: public wxDataViewColumnBase
 {
 public:
-    wxDataViewColumn( const wxString &title, wxDataViewCell *cell, size_t model_column,
+    wxDataViewColumn( const wxString &title, wxDataViewCell *cell, unsigned int model_column,
         int width = 80, int flags = wxDATAVIEW_COL_RESIZABLE );
     virtual ~wxDataViewColumn();
 

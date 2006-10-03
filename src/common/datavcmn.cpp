@@ -79,7 +79,7 @@ bool wxDataViewListModel::RowPrepended()
     return ret;
 }
 
-bool wxDataViewListModel::RowInserted( size_t before )
+bool wxDataViewListModel::RowInserted( unsigned int before )
 {
     bool ret = true;
 
@@ -95,7 +95,7 @@ bool wxDataViewListModel::RowInserted( size_t before )
     return ret;
 }
 
-bool wxDataViewListModel::RowDeleted( size_t row )
+bool wxDataViewListModel::RowDeleted( unsigned int row )
 {
     bool ret = true;
 
@@ -111,7 +111,7 @@ bool wxDataViewListModel::RowDeleted( size_t row )
     return ret;
 }
 
-bool wxDataViewListModel::RowChanged( size_t row )
+bool wxDataViewListModel::RowChanged( unsigned int row )
 {
     bool ret = true;
 
@@ -127,7 +127,7 @@ bool wxDataViewListModel::RowChanged( size_t row )
     return ret;
 }
 
-bool wxDataViewListModel::ValueChanged( size_t col, size_t row )
+bool wxDataViewListModel::ValueChanged( unsigned int col, unsigned int row )
 {
     bool ret = true;
 
@@ -143,7 +143,7 @@ bool wxDataViewListModel::ValueChanged( size_t col, size_t row )
     return ret;
 }
 
-bool wxDataViewListModel::RowsReordered( size_t *new_order )
+bool wxDataViewListModel::RowsReordered( unsigned int *new_order )
 {
     bool ret = true;
 
@@ -175,7 +175,7 @@ bool wxDataViewListModel::Cleared()
     return ret;
 }
 
-void wxDataViewListModel::AddViewingColumn( wxDataViewColumn *view_column, size_t model_column )
+void wxDataViewListModel::AddViewingColumn( wxDataViewColumn *view_column, unsigned int model_column )
 {
     m_viewingColumns.Append( new wxDataViewViewingColumn( view_column, model_column ) );
 }
@@ -224,19 +224,19 @@ public:
     virtual bool RowPrepended()
         { return m_model->ChildRowPrepended(); }
 
-    virtual bool RowInserted( size_t before )
+    virtual bool RowInserted( unsigned int before )
         { return m_model->ChildRowInserted( before ); }
 
-    virtual bool RowDeleted( size_t row )
+    virtual bool RowDeleted( unsigned int row )
         { return m_model->ChildRowDeleted( row ); }
 
-    virtual bool RowChanged( size_t row )
+    virtual bool RowChanged( unsigned int row )
         { return m_model->ChildRowChanged( row ); }
 
-    virtual bool ValueChanged( size_t col, size_t row )
+    virtual bool ValueChanged( unsigned int col, unsigned int row )
         { return m_model->ChildValueChanged( col, row); }
 
-    virtual bool RowsReordered( size_t *new_order )
+    virtual bool RowsReordered( unsigned int *new_order )
         { return m_model->ChildRowsReordered( new_order ); }
 
     virtual bool Cleared()
@@ -250,7 +250,7 @@ public:
 // ---------------------------------------------------------
 
 int wxCALLBACK wxDataViewListModelSortedDefaultCompare
-      (size_t row1, size_t row2, size_t col, wxDataViewListModel* model )
+      (unsigned int row1, unsigned int row2, unsigned int col, wxDataViewListModel* model )
 {
     wxVariant value1,value2;
     model->GetValue( value1, col, row1 );
@@ -289,9 +289,9 @@ int wxCALLBACK wxDataViewListModelSortedDefaultCompare
 
 static wxDataViewListModelCompare   s_CmpFunc;
 static wxDataViewListModel         *s_CmpModel;
-static size_t                       s_CmpCol;
+static unsigned int                       s_CmpCol;
 
-int LINKAGEMODE wxDataViewIntermediateCmp( size_t row1, size_t row2 )
+int LINKAGEMODE wxDataViewIntermediateCmp( unsigned int row1, unsigned int row2 )
 {
     return s_CmpFunc( row1, row2, s_CmpCol, s_CmpModel );
 }
@@ -324,17 +324,17 @@ wxDataViewSortedListModel::~wxDataViewSortedListModel()
 void wxDataViewSortedListModel::Resort()
 {
     m_array.Clear();
-    size_t n = m_child->GetNumberOfRows();
-    size_t i;
+    unsigned int n = m_child->GetNumberOfRows();
+    unsigned int i;
     for (i = 0; i < n; i++)
         m_array.Add( i );
 }
 
 #if 0
-static void Dump( wxDataViewListModel *model, size_t col )
+static void Dump( wxDataViewListModel *model, unsigned int col )
 {
-    size_t n = model->GetNumberOfRows();
-    size_t i;
+    unsigned int n = model->GetNumberOfRows();
+    unsigned int i;
     for (i = 0; i < n; i++)
     {
         wxVariant variant;
@@ -350,9 +350,9 @@ bool wxDataViewSortedListModel::ChildRowAppended()
 {
     // no need to fix up array
 
-    size_t len = m_array.GetCount();
+    unsigned int len = m_array.GetCount();
 
-    size_t pos = m_array.Add( len );
+    unsigned int pos = m_array.Add( len );
 
     if (pos == 0)
         return wxDataViewListModel::RowPrepended();
@@ -366,15 +366,15 @@ bool wxDataViewSortedListModel::ChildRowAppended()
 bool wxDataViewSortedListModel::ChildRowPrepended()
 {
     // fix up array
-    size_t i;
-    size_t len = m_array.GetCount();
+    unsigned int i;
+    unsigned int len = m_array.GetCount();
     for (i = 0; i < len; i++)
     {
-        size_t value = m_array[i];
+        unsigned int value = m_array[i];
         m_array[i] = value+1;
     }
 
-    size_t pos = m_array.Add( 0 );
+    unsigned int pos = m_array.Add( 0 );
 
     if (pos == 0)
         return wxDataViewListModel::RowPrepended();
@@ -385,19 +385,19 @@ bool wxDataViewSortedListModel::ChildRowPrepended()
     return wxDataViewListModel::RowInserted( pos );
 }
 
-bool wxDataViewSortedListModel::ChildRowInserted( size_t before )
+bool wxDataViewSortedListModel::ChildRowInserted( unsigned int before )
 {
     // fix up array
-    size_t i;
-    size_t len = m_array.GetCount();
+    unsigned int i;
+    unsigned int len = m_array.GetCount();
     for (i = 0; i < len; i++)
     {
-        size_t value = m_array[i];
+        unsigned int value = m_array[i];
         if (value >= before)
            m_array[i] = value+1;
     }
 
-    size_t pos = m_array.Add( before );
+    unsigned int pos = m_array.Add( before );
 
     if (pos == 0)
         return wxDataViewListModel::RowPrepended();
@@ -408,14 +408,14 @@ bool wxDataViewSortedListModel::ChildRowInserted( size_t before )
     return wxDataViewListModel::RowInserted( pos );
 }
 
-bool wxDataViewSortedListModel::ChildRowDeleted( size_t row )
+bool wxDataViewSortedListModel::ChildRowDeleted( unsigned int row )
 {
-    size_t i;
-    size_t len = m_array.GetCount();
+    unsigned int i;
+    unsigned int len = m_array.GetCount();
     int pos = -1;
     for (i = 0; i < len; i++)
     {
-        size_t value = m_array[i];
+        unsigned int value = m_array[i];
         if (value == row)
         {
             // delete later
@@ -433,19 +433,19 @@ bool wxDataViewSortedListModel::ChildRowDeleted( size_t row )
         return false; // we should probably assert
 
     // remove
-    m_array.RemoveAt( (size_t) pos );
+    m_array.RemoveAt( (unsigned int) pos );
 
-    return wxDataViewListModel::RowDeleted( (size_t) pos);
+    return wxDataViewListModel::RowDeleted( (unsigned int) pos);
 }
 
-bool wxDataViewSortedListModel::ChildRowChanged( size_t row )
+bool wxDataViewSortedListModel::ChildRowChanged( unsigned int row )
 {
-    size_t i;
-    size_t len = m_array.GetCount();
+    unsigned int i;
+    unsigned int len = m_array.GetCount();
 
     // Remove and readd sorted. Find out at which
     // position it was and where it ended.
-    size_t start_pos = 0,end_pos = 0;
+    unsigned int start_pos = 0,end_pos = 0;
     for (i = 0; i < len; i++)
         if (m_array[i] == row)
         {
@@ -467,7 +467,7 @@ bool wxDataViewSortedListModel::ChildRowChanged( size_t row )
 
     // Create an array where order[old] -> new_pos, so that
     // if nothing changed order[0] -> 0 etc.
-    size_t *order = new size_t[ len ];
+    unsigned int *order = new unsigned int[ len ];
     // Fill up initial values.
     for (i = 0; i < len; i++)
         order[i] = i;
@@ -492,14 +492,14 @@ bool wxDataViewSortedListModel::ChildRowChanged( size_t row )
     return true;
 }
 
-bool wxDataViewSortedListModel::ChildValueChanged( size_t col, size_t row )
+bool wxDataViewSortedListModel::ChildValueChanged( unsigned int col, unsigned int row )
 {
-    size_t i;
-    size_t len = m_array.GetCount();
+    unsigned int i;
+    unsigned int len = m_array.GetCount();
 
     // Remove and readd sorted. Find out at which
     // position it was and where it ended.
-    size_t start_pos = 0,end_pos = 0;
+    unsigned int start_pos = 0,end_pos = 0;
     for (i = 0; i < len; i++)
         if (m_array[i] == row)
         {
@@ -521,7 +521,7 @@ bool wxDataViewSortedListModel::ChildValueChanged( size_t col, size_t row )
 
     // Create an array where order[old] -> new_pos, so that
     // if nothing changed order[0] -> 0 etc.
-    size_t *order = new size_t[ len ];
+    unsigned int *order = new unsigned int[ len ];
     // Fill up initial values.
     for (i = 0; i < len; i++)
         order[i] = i;
@@ -546,7 +546,7 @@ bool wxDataViewSortedListModel::ChildValueChanged( size_t col, size_t row )
     return true;
 }
 
-bool wxDataViewSortedListModel::ChildRowsReordered( size_t *WXUNUSED(new_order) )
+bool wxDataViewSortedListModel::ChildRowsReordered( unsigned int *WXUNUSED(new_order) )
 {
     // Nothing needs to be done. If the sort criteria
     // of this list don't change, the order of the
@@ -559,30 +559,30 @@ bool wxDataViewSortedListModel::ChildCleared()
     return wxDataViewListModel::Cleared();
 }
 
-size_t wxDataViewSortedListModel::GetNumberOfRows()
+unsigned int wxDataViewSortedListModel::GetNumberOfRows()
 {
     return m_array.GetCount();
 }
 
-size_t wxDataViewSortedListModel::GetNumberOfCols()
+unsigned int wxDataViewSortedListModel::GetNumberOfCols()
 {
     return m_child->GetNumberOfCols();
 }
 
-wxString wxDataViewSortedListModel::GetColType( size_t col )
+wxString wxDataViewSortedListModel::GetColType( unsigned int col )
 {
     return m_child->GetColType( col );
 }
 
-void wxDataViewSortedListModel::GetValue( wxVariant &variant, size_t col, size_t row )
+void wxDataViewSortedListModel::GetValue( wxVariant &variant, unsigned int col, unsigned int row )
 {
-    size_t child_row = m_array[row];
+    unsigned int child_row = m_array[row];
     m_child->GetValue( variant, col, child_row );
 }
 
-bool wxDataViewSortedListModel::SetValue( wxVariant &variant, size_t col, size_t row )
+bool wxDataViewSortedListModel::SetValue( wxVariant &variant, unsigned int col, unsigned int row )
 {
-    size_t child_row = m_array[row];
+    unsigned int child_row = m_array[row];
     bool ret = m_child->SetValue( variant, col, child_row );
 
     // Do nothing here as the change in the
@@ -613,7 +613,7 @@ bool wxDataViewSortedListModel::RowPrepended()
     return ret;
 }
 
-bool wxDataViewSortedListModel::RowInserted( size_t WXUNUSED(before) )
+bool wxDataViewSortedListModel::RowInserted( unsigned int WXUNUSED(before) )
 {
     // you can only append
     bool ret = m_child->RowAppended();
@@ -624,9 +624,9 @@ bool wxDataViewSortedListModel::RowInserted( size_t WXUNUSED(before) )
     return ret;
 }
 
-bool wxDataViewSortedListModel::RowDeleted( size_t row )
+bool wxDataViewSortedListModel::RowDeleted( unsigned int row )
 {
-    size_t child_row = m_array[row];
+    unsigned int child_row = m_array[row];
 
     bool ret = m_child->RowDeleted( child_row );
 
@@ -636,9 +636,9 @@ bool wxDataViewSortedListModel::RowDeleted( size_t row )
     return ret;
 }
 
-bool wxDataViewSortedListModel::RowChanged( size_t row )
+bool wxDataViewSortedListModel::RowChanged( unsigned int row )
 {
-    size_t child_row = m_array[row];
+    unsigned int child_row = m_array[row];
     bool ret = m_child->RowChanged( child_row );
 
     // Do nothing here as the change in the
@@ -647,9 +647,9 @@ bool wxDataViewSortedListModel::RowChanged( size_t row )
     return ret;
 }
 
-bool wxDataViewSortedListModel::ValueChanged( size_t col, size_t row )
+bool wxDataViewSortedListModel::ValueChanged( unsigned int col, unsigned int row )
 {
-    size_t child_row = m_array[row];
+    unsigned int child_row = m_array[row];
     bool ret = m_child->ValueChanged( col, child_row );
 
     // Do nothing here as the change in the
@@ -658,7 +658,7 @@ bool wxDataViewSortedListModel::ValueChanged( size_t col, size_t row )
     return ret;
 }
 
-bool wxDataViewSortedListModel::RowsReordered( size_t *WXUNUSED(new_order) )
+bool wxDataViewSortedListModel::RowsReordered( unsigned int *WXUNUSED(new_order) )
 {
     // We sort them ourselves.
 
@@ -695,7 +695,7 @@ IMPLEMENT_ABSTRACT_CLASS(wxDataViewColumnBase, wxObject)
 
 wxDataViewColumnBase::wxDataViewColumnBase(const wxString& title,
                                            wxDataViewCell *cell,
-                                           size_t model_column,
+                                           unsigned int model_column,
                                            int WXUNUSED(width),
                                            int flags ) 
 {
@@ -756,22 +756,22 @@ wxDataViewListModel* wxDataViewCtrlBase::GetModel()
     return m_model;
 }
 
-bool wxDataViewCtrlBase::AppendTextColumn( const wxString &label, size_t model_column )
+bool wxDataViewCtrlBase::AppendTextColumn( const wxString &label, unsigned int model_column )
 {
     return AppendColumn( new wxDataViewColumn( label, new wxDataViewTextCell(), model_column ) );
 }
 
-bool wxDataViewCtrlBase::AppendToggleColumn( const wxString &label, size_t model_column )
+bool wxDataViewCtrlBase::AppendToggleColumn( const wxString &label, unsigned int model_column )
 {
     return AppendColumn( new wxDataViewColumn( label, new wxDataViewToggleCell(), model_column, 30 ) );
 }
 
-bool wxDataViewCtrlBase::AppendProgressColumn( const wxString &label, size_t model_column )
+bool wxDataViewCtrlBase::AppendProgressColumn( const wxString &label, unsigned int model_column )
 {
     return AppendColumn( new wxDataViewColumn( label, new wxDataViewProgressCell(), model_column, 70 ) );
 }
 
-bool wxDataViewCtrlBase::AppendDateColumn( const wxString &label, size_t model_column )
+bool wxDataViewCtrlBase::AppendDateColumn( const wxString &label, unsigned int model_column )
 {
     return AppendColumn( new wxDataViewColumn( label, new wxDataViewDateCell(), model_column ) );
 }
@@ -784,12 +784,12 @@ bool wxDataViewCtrlBase::AppendColumn( wxDataViewColumn *col )
     return true;
 }
 
-size_t wxDataViewCtrlBase::GetNumberOfColumns()
+unsigned int wxDataViewCtrlBase::GetNumberOfColumns()
 {
     return m_cols.GetCount();
 }
 
-bool wxDataViewCtrlBase::DeleteColumn( size_t WXUNUSED(pos) )
+bool wxDataViewCtrlBase::DeleteColumn( unsigned int WXUNUSED(pos) )
 {
     return false;
 }
@@ -799,7 +799,7 @@ bool wxDataViewCtrlBase::ClearColumns()
     return false;
 }
 
-wxDataViewColumn* wxDataViewCtrlBase::GetColumn( size_t pos )
+wxDataViewColumn* wxDataViewCtrlBase::GetColumn( unsigned int pos )
 {
     return (wxDataViewColumn*) m_cols[ pos ];
 }
