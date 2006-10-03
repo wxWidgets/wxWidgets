@@ -252,24 +252,24 @@ public:
 };
 
 // ---------------------------------------------------------
-// wxDataViewCell
+// wxDataViewRenderer
 // ---------------------------------------------------------
 
-IMPLEMENT_ABSTRACT_CLASS(wxDataViewCell, wxDataViewCellBase)
+IMPLEMENT_ABSTRACT_CLASS(wxDataViewRenderer, wxDataViewRendererBase)
 
-wxDataViewCell::wxDataViewCell( const wxString &varianttype, wxDataViewCellMode mode ) :
-    wxDataViewCellBase( varianttype, mode )
+wxDataViewRenderer::wxDataViewRenderer( const wxString &varianttype, wxDataViewCellMode mode ) :
+    wxDataViewRendererBase( varianttype, mode )
 {
     m_dc = NULL;
 }
 
-wxDataViewCell::~wxDataViewCell()
+wxDataViewRenderer::~wxDataViewRenderer()
 {
     if (m_dc)
         delete m_dc;
 }
 
-wxDC *wxDataViewCell::GetDC()
+wxDC *wxDataViewRenderer::GetDC()
 {
     if (m_dc == NULL)
     {
@@ -284,64 +284,64 @@ wxDC *wxDataViewCell::GetDC()
 }
 
 // ---------------------------------------------------------
-// wxDataViewCustomCell
+// wxDataViewCustomRenderer
 // ---------------------------------------------------------
 
-IMPLEMENT_ABSTRACT_CLASS(wxDataViewCustomCell, wxDataViewCell)
+IMPLEMENT_ABSTRACT_CLASS(wxDataViewCustomRenderer, wxDataViewRenderer)
 
-wxDataViewCustomCell::wxDataViewCustomCell( const wxString &varianttype,
+wxDataViewCustomRenderer::wxDataViewCustomRenderer( const wxString &varianttype,
                           wxDataViewCellMode mode ) :
-    wxDataViewCell( varianttype, mode )
+    wxDataViewRenderer( varianttype, mode )
 {
 }
 
 // ---------------------------------------------------------
-// wxDataViewTextCell
+// wxDataViewTextRenderer
 // ---------------------------------------------------------
 
-IMPLEMENT_CLASS(wxDataViewTextCell, wxDataViewCustomCell)
+IMPLEMENT_CLASS(wxDataViewTextRenderer, wxDataViewCustomRenderer)
 
-wxDataViewTextCell::wxDataViewTextCell( const wxString &varianttype, wxDataViewCellMode mode ) :
-    wxDataViewCustomCell( varianttype, mode )
+wxDataViewTextRenderer::wxDataViewTextRenderer( const wxString &varianttype, wxDataViewCellMode mode ) :
+    wxDataViewCustomRenderer( varianttype, mode )
 {
 }
 
-bool wxDataViewTextCell::SetValue( const wxVariant &value )
+bool wxDataViewTextRenderer::SetValue( const wxVariant &value )
 {
     m_text = value.GetString();
 
     return true;
 }
 
-bool wxDataViewTextCell::GetValue( wxVariant& WXUNUSED(value) )
+bool wxDataViewTextRenderer::GetValue( wxVariant& WXUNUSED(value) )
 {
     return false;
 }
 
-bool wxDataViewTextCell::Render( wxRect cell, wxDC *dc, int WXUNUSED(state) )
+bool wxDataViewTextRenderer::Render( wxRect cell, wxDC *dc, int WXUNUSED(state) )
 {
     dc->DrawText( m_text, cell.x, cell.y );
 
     return true;
 }
 
-wxSize wxDataViewTextCell::GetSize()
+wxSize wxDataViewTextRenderer::GetSize()
 {
     return wxSize(80,20);
 }
 
 // ---------------------------------------------------------
-// wxDataViewBitmapCell
+// wxDataViewBitmapRenderer
 // ---------------------------------------------------------
 
-IMPLEMENT_CLASS(wxDataViewBitmapCell, wxDataViewCustomCell)
+IMPLEMENT_CLASS(wxDataViewBitmapRenderer, wxDataViewCustomRenderer)
 
-wxDataViewBitmapCell::wxDataViewBitmapCell( const wxString &varianttype, wxDataViewCellMode mode ) :
-    wxDataViewCustomCell( varianttype, mode )
+wxDataViewBitmapRenderer::wxDataViewBitmapRenderer( const wxString &varianttype, wxDataViewCellMode mode ) :
+    wxDataViewCustomRenderer( varianttype, mode )
 {
 }
 
-bool wxDataViewBitmapCell::SetValue( const wxVariant &value )
+bool wxDataViewBitmapRenderer::SetValue( const wxVariant &value )
 {
     if (value.GetType() == wxT("wxBitmap"))
         m_bitmap << value;
@@ -351,12 +351,12 @@ bool wxDataViewBitmapCell::SetValue( const wxVariant &value )
     return true;
 }
 
-bool wxDataViewBitmapCell::GetValue( wxVariant& WXUNUSED(value) )
+bool wxDataViewBitmapRenderer::GetValue( wxVariant& WXUNUSED(value) )
 {
     return false;
 }
 
-bool wxDataViewBitmapCell::Render( wxRect cell, wxDC *dc, int WXUNUSED(state) )
+bool wxDataViewBitmapRenderer::Render( wxRect cell, wxDC *dc, int WXUNUSED(state) )
 {
     if (m_bitmap.Ok())
         dc->DrawBitmap( m_bitmap, cell.x, cell.y );
@@ -366,7 +366,7 @@ bool wxDataViewBitmapCell::Render( wxRect cell, wxDC *dc, int WXUNUSED(state) )
     return true;
 }
 
-wxSize wxDataViewBitmapCell::GetSize()
+wxSize wxDataViewBitmapRenderer::GetSize()
 {
     if (m_bitmap.Ok())
         return wxSize( m_bitmap.GetWidth(), m_bitmap.GetHeight() );
@@ -377,31 +377,31 @@ wxSize wxDataViewBitmapCell::GetSize()
 }
 
 // ---------------------------------------------------------
-// wxDataViewToggleCell
+// wxDataViewToggleRenderer
 // ---------------------------------------------------------
 
-IMPLEMENT_ABSTRACT_CLASS(wxDataViewToggleCell, wxDataViewCustomCell)
+IMPLEMENT_ABSTRACT_CLASS(wxDataViewToggleRenderer, wxDataViewCustomRenderer)
 
-wxDataViewToggleCell::wxDataViewToggleCell( const wxString &varianttype,
+wxDataViewToggleRenderer::wxDataViewToggleRenderer( const wxString &varianttype,
                         wxDataViewCellMode mode ) :
-    wxDataViewCustomCell( varianttype, mode )
+    wxDataViewCustomRenderer( varianttype, mode )
 {
     m_toggle = false;
 }
 
-bool wxDataViewToggleCell::SetValue( const wxVariant &value )
+bool wxDataViewToggleRenderer::SetValue( const wxVariant &value )
 {
     m_toggle = value.GetBool();
 
     return true;
 }
 
-bool wxDataViewToggleCell::GetValue( wxVariant &WXUNUSED(value) )
+bool wxDataViewToggleRenderer::GetValue( wxVariant &WXUNUSED(value) )
 {
     return false;
 }
 
-bool wxDataViewToggleCell::Render( wxRect cell, wxDC *dc, int WXUNUSED(state) )
+bool wxDataViewToggleRenderer::Render( wxRect cell, wxDC *dc, int WXUNUSED(state) )
 {
     // User wxRenderer here
 
@@ -426,7 +426,7 @@ bool wxDataViewToggleCell::Render( wxRect cell, wxDC *dc, int WXUNUSED(state) )
     return true;
 }
 
-bool wxDataViewToggleCell::Activate( wxRect WXUNUSED(cell), wxDataViewListModel *model, unsigned int col, unsigned int row )
+bool wxDataViewToggleRenderer::Activate( wxRect WXUNUSED(cell), wxDataViewListModel *model, unsigned int col, unsigned int row )
 {
     bool value = !m_toggle;
     wxVariant variant = value;
@@ -435,30 +435,30 @@ bool wxDataViewToggleCell::Activate( wxRect WXUNUSED(cell), wxDataViewListModel 
     return true;
 }
 
-wxSize wxDataViewToggleCell::GetSize()
+wxSize wxDataViewToggleRenderer::GetSize()
 {
     return wxSize(20,20);
 }
 
 // ---------------------------------------------------------
-// wxDataViewProgressCell
+// wxDataViewProgressRenderer
 // ---------------------------------------------------------
 
-IMPLEMENT_ABSTRACT_CLASS(wxDataViewProgressCell, wxDataViewCustomCell)
+IMPLEMENT_ABSTRACT_CLASS(wxDataViewProgressRenderer, wxDataViewCustomRenderer)
 
-wxDataViewProgressCell::wxDataViewProgressCell( const wxString &label,
+wxDataViewProgressRenderer::wxDataViewProgressRenderer( const wxString &label,
     const wxString &varianttype, wxDataViewCellMode mode ) :
-    wxDataViewCustomCell( varianttype, mode )
+    wxDataViewCustomRenderer( varianttype, mode )
 {
     m_label = label;
     m_value = 0;
 }
 
-wxDataViewProgressCell::~wxDataViewProgressCell()
+wxDataViewProgressRenderer::~wxDataViewProgressRenderer()
 {
 }
 
-bool wxDataViewProgressCell::SetValue( const wxVariant &value )
+bool wxDataViewProgressRenderer::SetValue( const wxVariant &value )
 {
     m_value = (long) value;
 
@@ -468,7 +468,7 @@ bool wxDataViewProgressCell::SetValue( const wxVariant &value )
     return true;
 }
 
-bool wxDataViewProgressCell::Render( wxRect cell, wxDC *dc, int WXUNUSED(state) )
+bool wxDataViewProgressRenderer::Render( wxRect cell, wxDC *dc, int WXUNUSED(state) )
 {
     double pct = (double)m_value / 100.0;
     wxRect bar = cell;
@@ -484,19 +484,19 @@ bool wxDataViewProgressCell::Render( wxRect cell, wxDC *dc, int WXUNUSED(state) 
     return true;
 }
 
-wxSize wxDataViewProgressCell::GetSize()
+wxSize wxDataViewProgressRenderer::GetSize()
 {
     return wxSize(40,12);
 }
 
 // ---------------------------------------------------------
-// wxDataViewDateCell
+// wxDataViewDateRenderer
 // ---------------------------------------------------------
 
-class wxDataViewDateCellPopupTransient: public wxPopupTransientWindow
+class wxDataViewDateRendererPopupTransient: public wxPopupTransientWindow
 {
 public:
-    wxDataViewDateCellPopupTransient( wxWindow* parent, wxDateTime *value,
+    wxDataViewDateRendererPopupTransient( wxWindow* parent, wxDateTime *value,
         wxDataViewListModel *model, unsigned int col, unsigned int row ) :
         wxPopupTransientWindow( parent, wxBORDER_SIMPLE )
     {
@@ -526,11 +526,11 @@ private:
     DECLARE_EVENT_TABLE()
 };
 
-BEGIN_EVENT_TABLE(wxDataViewDateCellPopupTransient,wxPopupTransientWindow)
-    EVT_CALENDAR( wxID_ANY, wxDataViewDateCellPopupTransient::OnCalendar )
+BEGIN_EVENT_TABLE(wxDataViewDateRendererPopupTransient,wxPopupTransientWindow)
+    EVT_CALENDAR( wxID_ANY, wxDataViewDateRendererPopupTransient::OnCalendar )
 END_EVENT_TABLE()
 
-void wxDataViewDateCellPopupTransient::OnCalendar( wxCalendarEvent &event )
+void wxDataViewDateRendererPopupTransient::OnCalendar( wxCalendarEvent &event )
 {
     wxDateTime date = event.GetDate();
     wxVariant value = date;
@@ -539,22 +539,22 @@ void wxDataViewDateCellPopupTransient::OnCalendar( wxCalendarEvent &event )
     DismissAndNotify();
 }
 
-IMPLEMENT_ABSTRACT_CLASS(wxDataViewDateCell, wxDataViewCustomCell)
+IMPLEMENT_ABSTRACT_CLASS(wxDataViewDateRenderer, wxDataViewCustomRenderer)
 
-wxDataViewDateCell::wxDataViewDateCell( const wxString &varianttype,
+wxDataViewDateRenderer::wxDataViewDateRenderer( const wxString &varianttype,
                         wxDataViewCellMode mode ) :
-    wxDataViewCustomCell( varianttype, mode )
+    wxDataViewCustomRenderer( varianttype, mode )
 {
 }
 
-bool wxDataViewDateCell::SetValue( const wxVariant &value )
+bool wxDataViewDateRenderer::SetValue( const wxVariant &value )
 {
     m_date = value.GetDateTime();
 
     return true;
 }
 
-bool wxDataViewDateCell::Render( wxRect cell, wxDC *dc, int WXUNUSED(state) )
+bool wxDataViewDateRenderer::Render( wxRect cell, wxDC *dc, int WXUNUSED(state) )
 {
     dc->SetFont( GetOwner()->GetOwner()->GetFont() );
     wxString tmp = m_date.FormatDate();
@@ -563,7 +563,7 @@ bool wxDataViewDateCell::Render( wxRect cell, wxDC *dc, int WXUNUSED(state) )
     return true;
 }
 
-wxSize wxDataViewDateCell::GetSize()
+wxSize wxDataViewDateRenderer::GetSize()
 {
     wxDataViewCtrl* view = GetOwner()->GetOwner();
     wxString tmp = m_date.FormatDate();
@@ -572,13 +572,13 @@ wxSize wxDataViewDateCell::GetSize()
     return wxSize(x,y+d);
 }
 
-bool wxDataViewDateCell::Activate( wxRect WXUNUSED(cell), wxDataViewListModel *model, unsigned int col, unsigned int row )
+bool wxDataViewDateRenderer::Activate( wxRect WXUNUSED(cell), wxDataViewListModel *model, unsigned int col, unsigned int row )
 {
     wxVariant variant;
     model->GetValue( variant, col, row );
     wxDateTime value = variant.GetDateTime();
 
-    wxDataViewDateCellPopupTransient *popup = new wxDataViewDateCellPopupTransient(
+    wxDataViewDateRendererPopupTransient *popup = new wxDataViewDateRendererPopupTransient(
         GetOwner()->GetOwner()->GetParent(), &value, model, col, row );
     wxPoint pos = wxGetMousePosition();
     popup->Move( pos );
@@ -594,7 +594,7 @@ bool wxDataViewDateCell::Activate( wxRect WXUNUSED(cell), wxDataViewListModel *m
 
 IMPLEMENT_ABSTRACT_CLASS(wxDataViewColumn, wxDataViewColumnBase)
 
-wxDataViewColumn::wxDataViewColumn( const wxString &title, wxDataViewCell *cell, unsigned int model_column,
+wxDataViewColumn::wxDataViewColumn( const wxString &title, wxDataViewRenderer *cell, unsigned int model_column,
         int width, int flags ) :
     wxDataViewColumnBase( title, cell, model_column, width, flags )
 {
@@ -1115,7 +1115,7 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
     for (i = 0; i < cols; i++)
     {
         wxDataViewColumn *col = GetOwner()->GetColumn( i );
-        wxDataViewCell *cell = col->GetCell();
+        wxDataViewRenderer *cell = col->GetRenderer();
         cell_rect.width = col->GetWidth();
 
         for (item = item_start; item < item_start+item_count; item++)
@@ -1475,7 +1475,7 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
     }
     if (!col)
         return;
-    wxDataViewCell *cell = col->GetCell();
+    wxDataViewRenderer *cell = col->GetRenderer();
 
     unsigned int current = y / m_lineHeight;
 

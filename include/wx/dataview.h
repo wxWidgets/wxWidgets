@@ -24,7 +24,7 @@
 
 #if defined(__WXGTK20__)
     // for testing
-    // #define wxUSE_GENERICDATAVIEWCTRL 1
+    #define wxUSE_GENERICDATAVIEWCTRL 1
 #elif defined(__WXMAC__)
     #define wxUSE_GENERICDATAVIEWCTRL 1
 #else
@@ -43,7 +43,7 @@ class WXDLLIMPEXP_ADV wxDataViewModel;
 class WXDLLIMPEXP_ADV wxDataViewListModel;
 class WXDLLIMPEXP_ADV wxDataViewCtrl;
 class WXDLLIMPEXP_ADV wxDataViewColumn;
-class WXDLLIMPEXP_ADV wxDataViewCell;
+class WXDLLIMPEXP_ADV wxDataViewRenderer;
 
 extern WXDLLIMPEXP_DATA_ADV(const wxChar) wxDataViewCtrlNameStr[];
 
@@ -200,7 +200,7 @@ protected:
 };
 
 // ---------------------------------------------------------
-// wxDataViewCellBase
+// wxDataViewRendererBase
 // ---------------------------------------------------------
 
 enum wxDataViewCellMode
@@ -218,10 +218,10 @@ enum wxDataViewCellRenderState
     wxDATAVIEW_CELL_FOCUSED     = 8
 };
 
-class WXDLLIMPEXP_ADV wxDataViewCellBase: public wxObject
+class WXDLLIMPEXP_ADV wxDataViewRendererBase: public wxObject
 {
 public:
-    wxDataViewCellBase( const wxString &varianttype, wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT );
+    wxDataViewRendererBase( const wxString &varianttype, wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT );
 
     virtual bool SetValue( const wxVariant& WXUNUSED(value) ) { return true; }
     virtual bool GetValue( wxVariant& WXUNUSED(value) )       { return true; }
@@ -239,7 +239,7 @@ protected:
     wxDataViewColumn       *m_owner;
 
 protected:
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewCellBase)
+    DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewRendererBase)
 };
 
 // ---------------------------------------------------------
@@ -256,16 +256,16 @@ enum wxDataViewColumnFlags
 class WXDLLIMPEXP_ADV wxDataViewColumnBase: public wxObject
 {
 public:
-    wxDataViewColumnBase( const wxString &title, wxDataViewCell *cell, unsigned int model_column,
+    wxDataViewColumnBase( const wxString &title, wxDataViewRenderer *renderer, unsigned int model_column,
         int width = 80, int flags = wxDATAVIEW_COL_RESIZABLE );
     virtual ~wxDataViewColumnBase();
 
     virtual void SetTitle( const wxString &title );
     virtual wxString GetTitle();
 
-    wxDataViewCell* GetCell()               { return m_cell; }
+    wxDataViewRenderer* GetRenderer()       { return m_renderer; }
 
-    unsigned int GetModelColumn()                 { return m_model_column; }
+    unsigned int GetModelColumn()           { return m_model_column; }
 
     void SetOwner( wxDataViewCtrl *owner )  { m_owner = owner; }
     wxDataViewCtrl *GetOwner()              { return m_owner; }
@@ -274,7 +274,7 @@ public:
 
 private:
     wxDataViewCtrl          *m_ctrl;
-    wxDataViewCell          *m_cell;
+    wxDataViewRenderer      *m_renderer;
     int                      m_model_column;
     int                      m_flags;
     wxString                 m_title;

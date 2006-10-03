@@ -22,13 +22,13 @@
 class WXDLLIMPEXP_CORE wxDataViewCtrl;
 
 // --------------------------------------------------------- 
-// wxDataViewCell
+// wxDataViewRenderer
 // --------------------------------------------------------- 
 
-class wxDataViewCell: public wxDataViewCellBase
+class wxDataViewRenderer: public wxDataViewRendererBase
 {
 public:
-    wxDataViewCell( const wxString &varianttype, wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT );
+    wxDataViewRenderer( const wxString &varianttype, wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT );
 
     // implementation
     void* GetGtkHandle() { return m_renderer; }
@@ -38,71 +38,71 @@ protected:
     void*   m_renderer;
 
 protected:
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewCell)
+    DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewRenderer)
 };
     
 // --------------------------------------------------------- 
-// wxDataViewTextCell
+// wxDataViewTextRenderer
 // --------------------------------------------------------- 
 
-class wxDataViewTextCell: public wxDataViewCell
+class wxDataViewTextRenderer: public wxDataViewRenderer
 {
 public:
-    wxDataViewTextCell( const wxString &varianttype = wxT("string"), 
+    wxDataViewTextRenderer( const wxString &varianttype = wxT("string"), 
                         wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT );
 
     bool SetValue( const wxVariant &value );
     bool GetValue( wxVariant &value );
     
 protected:
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewTextCell)
+    DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewTextRenderer)
 };
     
 // --------------------------------------------------------- 
-// wxDataViewBitmapCell
+// wxDataViewBitmapRenderer
 // --------------------------------------------------------- 
 
-class wxDataViewBitmapCell: public wxDataViewCell
+class wxDataViewBitmapRenderer: public wxDataViewRenderer
 {
 public:
-    wxDataViewBitmapCell( const wxString &varianttype = wxT("wxBitmap"), 
+    wxDataViewBitmapRenderer( const wxString &varianttype = wxT("wxBitmap"), 
+                              wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT );
+
+    bool SetValue( const wxVariant &value );
+    bool GetValue( wxVariant &value );
+    
+protected:
+    DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewBitmapRenderer)
+};
+    
+// --------------------------------------------------------- 
+// wxDataViewToggleRenderer
+// --------------------------------------------------------- 
+
+class wxDataViewToggleRenderer: public wxDataViewRenderer
+{
+public:
+    wxDataViewToggleRenderer( const wxString &varianttype = wxT("bool"), 
                         wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT );
 
     bool SetValue( const wxVariant &value );
     bool GetValue( wxVariant &value );
     
 protected:
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewBitmapCell)
+    DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewToggleRenderer)
 };
     
 // --------------------------------------------------------- 
-// wxDataViewToggleCell
+// wxDataViewCustomRenderer
 // --------------------------------------------------------- 
 
-class wxDataViewToggleCell: public wxDataViewCell
+class wxDataViewCustomRenderer: public wxDataViewRenderer
 {
 public:
-    wxDataViewToggleCell( const wxString &varianttype = wxT("bool"), 
-                        wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT );
-
-    bool SetValue( const wxVariant &value );
-    bool GetValue( wxVariant &value );
-    
-protected:
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewToggleCell)
-};
-    
-// --------------------------------------------------------- 
-// wxDataViewCustomCell
-// --------------------------------------------------------- 
-
-class wxDataViewCustomCell: public wxDataViewCell
-{
-public:
-    wxDataViewCustomCell( const wxString &varianttype = wxT("string"), 
-                          wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
-                          bool no_init = false );
-    virtual ~wxDataViewCustomCell();
+    wxDataViewCustomRenderer( const wxString &varianttype = wxT("string"), 
+                              wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
+                              bool no_init = false );
+    virtual ~wxDataViewCustomRenderer();
     bool Init();
     
     virtual bool Render( wxRect cell, wxDC *dc, int state ) = 0;
@@ -129,20 +129,20 @@ private:
     wxDC        *m_dc;
     
 protected:
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewCustomCell)
+    DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewCustomRenderer)
 };
     
 // --------------------------------------------------------- 
-// wxDataViewProgressCell
+// wxDataViewProgressRenderer
 // --------------------------------------------------------- 
 
-class wxDataViewProgressCell: public wxDataViewCustomCell
+class wxDataViewProgressRenderer: public wxDataViewCustomRenderer
 {
 public:
-    wxDataViewProgressCell( const wxString &label = wxEmptyString, 
-                            const wxString &varianttype = wxT("long"), 
-                            wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT );
-    virtual ~wxDataViewProgressCell();
+    wxDataViewProgressRenderer( const wxString &label = wxEmptyString, 
+                                const wxString &varianttype = wxT("long"), 
+                                wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT );
+    virtual ~wxDataViewProgressRenderer();
     
     bool SetValue( const wxVariant &value );
     
@@ -154,17 +154,17 @@ private:
     int         m_value;
     
 protected:
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewProgressCell)
+    DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewProgressRenderer)
 };
     
 // --------------------------------------------------------- 
-// wxDataViewDateCell
+// wxDataViewDateRenderer
 // --------------------------------------------------------- 
 
-class wxDataViewDateCell: public wxDataViewCustomCell
+class wxDataViewDateRenderer: public wxDataViewCustomRenderer
 {
 public:
-    wxDataViewDateCell( const wxString &varianttype = wxT("datetime"), 
+    wxDataViewDateRenderer( const wxString &varianttype = wxT("datetime"), 
                         wxDataViewCellMode mode = wxDATAVIEW_CELL_ACTIVATABLE );
     
     bool SetValue( const wxVariant &value );
@@ -178,7 +178,7 @@ private:
     wxDateTime    m_date;
     
 protected:
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewDateCell)
+    DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewDateRenderer)
 };
     
 // --------------------------------------------------------- 
@@ -188,7 +188,7 @@ protected:
 class WXDLLIMPEXP_CORE wxDataViewColumn: public wxDataViewColumnBase
 {
 public:
-    wxDataViewColumn( const wxString &title, wxDataViewCell *cell, unsigned int model_column,
+    wxDataViewColumn( const wxString &title, wxDataViewRenderer *renderer, unsigned int model_column,
         int width = 80, int flags = wxDATAVIEW_COL_RESIZABLE );
     virtual ~wxDataViewColumn();
 

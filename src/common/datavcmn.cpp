@@ -676,12 +676,12 @@ bool wxDataViewSortedListModel::Cleared()
 }
 
 // ---------------------------------------------------------
-// wxDataViewCellBase
+// wxDataViewRendererBase
 // ---------------------------------------------------------
 
-IMPLEMENT_ABSTRACT_CLASS(wxDataViewCellBase, wxObject)
+IMPLEMENT_ABSTRACT_CLASS(wxDataViewRendererBase, wxObject)
 
-wxDataViewCellBase::wxDataViewCellBase( const wxString &varianttype, wxDataViewCellMode mode )
+wxDataViewRendererBase::wxDataViewRendererBase( const wxString &varianttype, wxDataViewCellMode mode )
 {
     m_variantType = varianttype;
     m_mode = mode;
@@ -694,23 +694,23 @@ wxDataViewCellBase::wxDataViewCellBase( const wxString &varianttype, wxDataViewC
 IMPLEMENT_ABSTRACT_CLASS(wxDataViewColumnBase, wxObject)
 
 wxDataViewColumnBase::wxDataViewColumnBase(const wxString& title,
-                                           wxDataViewCell *cell,
+                                           wxDataViewRenderer *renderer,
                                            unsigned int model_column,
                                            int WXUNUSED(width),
                                            int flags ) 
 {
-    m_cell = cell;
+    m_renderer = renderer;
     m_model_column = model_column;
     m_flags = flags;
     m_title = title;
     m_owner = NULL;
-    m_cell->SetOwner( (wxDataViewColumn*) this );
+    m_renderer->SetOwner( (wxDataViewColumn*) this );
 }
 
 wxDataViewColumnBase::~wxDataViewColumnBase()
 {
-    if (m_cell)
-        delete m_cell;
+    if (m_renderer)
+        delete m_renderer;
 
     if (GetOwner())
     {
@@ -758,22 +758,22 @@ wxDataViewListModel* wxDataViewCtrlBase::GetModel()
 
 bool wxDataViewCtrlBase::AppendTextColumn( const wxString &label, unsigned int model_column )
 {
-    return AppendColumn( new wxDataViewColumn( label, new wxDataViewTextCell(), model_column ) );
+    return AppendColumn( new wxDataViewColumn( label, new wxDataViewTextRenderer(), model_column ) );
 }
 
 bool wxDataViewCtrlBase::AppendToggleColumn( const wxString &label, unsigned int model_column )
 {
-    return AppendColumn( new wxDataViewColumn( label, new wxDataViewToggleCell(), model_column, 30 ) );
+    return AppendColumn( new wxDataViewColumn( label, new wxDataViewToggleRenderer(), model_column, 30 ) );
 }
 
 bool wxDataViewCtrlBase::AppendProgressColumn( const wxString &label, unsigned int model_column )
 {
-    return AppendColumn( new wxDataViewColumn( label, new wxDataViewProgressCell(), model_column, 70 ) );
+    return AppendColumn( new wxDataViewColumn( label, new wxDataViewProgressRenderer(), model_column, 70 ) );
 }
 
 bool wxDataViewCtrlBase::AppendDateColumn( const wxString &label, unsigned int model_column )
 {
-    return AppendColumn( new wxDataViewColumn( label, new wxDataViewDateCell(), model_column ) );
+    return AppendColumn( new wxDataViewColumn( label, new wxDataViewDateRenderer(), model_column ) );
 }
 
 bool wxDataViewCtrlBase::AppendColumn( wxDataViewColumn *col )

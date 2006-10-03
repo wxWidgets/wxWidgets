@@ -429,7 +429,7 @@ wxgtk_list_store_iter_parent (GtkTreeModel *tree_model,
 }
 
 //-----------------------------------------------------------------------------
-// define new GTK+ class wxGtkCellRenderer
+// define new GTK+ class wxGtkRendererRenderer
 //-----------------------------------------------------------------------------
 
 extern "C" {
@@ -451,7 +451,7 @@ struct _GtkWxCellRenderer
   GtkCellRenderer parent;
 
   /*< private >*/
-  wxDataViewCustomCell *cell;
+  wxDataViewCustomRenderer *cell;
   guint32 last_click;
 };
 
@@ -569,7 +569,7 @@ gtk_wx_cell_renderer_get_size (GtkCellRenderer *renderer,
                                gint            *height)
 {
     GtkWxCellRenderer *wxrenderer = (GtkWxCellRenderer *) renderer;
-    wxDataViewCustomCell *cell = wxrenderer->cell;
+    wxDataViewCustomRenderer *cell = wxrenderer->cell;
 
     wxSize size = cell->GetSize();
 
@@ -615,7 +615,7 @@ gtk_wx_cell_renderer_render (GtkCellRenderer      *renderer,
 
 {
     GtkWxCellRenderer *wxrenderer = (GtkWxCellRenderer *) renderer;
-    wxDataViewCustomCell *cell = wxrenderer->cell;
+    wxDataViewCustomRenderer *cell = wxrenderer->cell;
 
     GdkRectangle rect;
     gtk_wx_cell_renderer_get_size (renderer, widget, cell_area,
@@ -666,7 +666,7 @@ gtk_wx_cell_renderer_activate(
                         GtkCellRendererState     flags )
 {
     GtkWxCellRenderer *wxrenderer = (GtkWxCellRenderer *) renderer;
-    wxDataViewCustomCell *cell = wxrenderer->cell;
+    wxDataViewCustomRenderer *cell = wxrenderer->cell;
 
     GdkRectangle rect;
     gtk_wx_cell_renderer_get_size (renderer, widget, cell_area,
@@ -879,19 +879,19 @@ bool wxGtkDataViewListModelNotifier::Cleared()
 }
 
 // ---------------------------------------------------------
-// wxDataViewCell
+// wxDataViewRenderer
 // ---------------------------------------------------------
 
-IMPLEMENT_ABSTRACT_CLASS(wxDataViewCell, wxDataViewCellBase)
+IMPLEMENT_ABSTRACT_CLASS(wxDataViewRenderer, wxDataViewRendererBase)
 
-wxDataViewCell::wxDataViewCell( const wxString &varianttype, wxDataViewCellMode mode ) :
-    wxDataViewCellBase( varianttype, mode )
+wxDataViewRenderer::wxDataViewRenderer( const wxString &varianttype, wxDataViewCellMode mode ) :
+    wxDataViewRendererBase( varianttype, mode )
 {
     m_renderer = NULL;
 }
 
 // ---------------------------------------------------------
-// wxDataViewTextCell
+// wxDataViewTextRenderer
 // ---------------------------------------------------------
 
 extern "C" {
@@ -902,7 +902,7 @@ static void wxGtkTextRendererEditedCallback( GtkCellRendererText *renderer,
 static void wxGtkTextRendererEditedCallback( GtkCellRendererText *renderer,
     gchar *arg1, gchar *arg2, gpointer user_data )
 {
-    wxDataViewTextCell *cell = (wxDataViewTextCell*) user_data;
+    wxDataViewTextRenderer *cell = (wxDataViewTextRenderer*) user_data;
 
     wxString tmp = wxGTK_CONV_BACK( arg2 );
     wxVariant value = tmp;
@@ -921,10 +921,10 @@ static void wxGtkTextRendererEditedCallback( GtkCellRendererText *renderer,
     model->ValueChanged( model_col, model_row );
 }
 
-IMPLEMENT_CLASS(wxDataViewTextCell, wxDataViewCell)
+IMPLEMENT_CLASS(wxDataViewTextRenderer, wxDataViewRenderer)
 
-wxDataViewTextCell::wxDataViewTextCell( const wxString &varianttype, wxDataViewCellMode mode ) :
-    wxDataViewCell( varianttype, mode )
+wxDataViewTextRenderer::wxDataViewTextRenderer( const wxString &varianttype, wxDataViewCellMode mode ) :
+    wxDataViewRenderer( varianttype, mode )
 {
     m_renderer = (void*) gtk_cell_renderer_text_new();
 
@@ -940,7 +940,7 @@ wxDataViewTextCell::wxDataViewTextCell( const wxString &varianttype, wxDataViewC
     }
 }
 
-bool wxDataViewTextCell::SetValue( const wxVariant &value )
+bool wxDataViewTextRenderer::SetValue( const wxVariant &value )
 {
     wxString tmp = value;
 
@@ -953,7 +953,7 @@ bool wxDataViewTextCell::SetValue( const wxVariant &value )
     return true;
 }
 
-bool wxDataViewTextCell::GetValue( wxVariant &value )
+bool wxDataViewTextRenderer::GetValue( wxVariant &value )
 {
     GValue gvalue = { 0, };
     g_value_init( &gvalue, G_TYPE_STRING );
@@ -967,18 +967,18 @@ bool wxDataViewTextCell::GetValue( wxVariant &value )
 }
 
 // --------------------------------------------------------- 
-// wxDataViewBitmapCell
+// wxDataViewBitmapRenderer
 // --------------------------------------------------------- 
 
-IMPLEMENT_CLASS(wxDataViewBitmapCell, wxDataViewCell)
+IMPLEMENT_CLASS(wxDataViewBitmapRenderer, wxDataViewRenderer)
 
-wxDataViewBitmapCell::wxDataViewBitmapCell( const wxString &varianttype, wxDataViewCellMode mode ) :
-    wxDataViewCell( varianttype, mode )
+wxDataViewBitmapRenderer::wxDataViewBitmapRenderer( const wxString &varianttype, wxDataViewCellMode mode ) :
+    wxDataViewRenderer( varianttype, mode )
 {
     m_renderer = (void*) gtk_cell_renderer_pixbuf_new();
 }
 
-bool wxDataViewBitmapCell::SetValue( const wxVariant &value )
+bool wxDataViewBitmapRenderer::SetValue( const wxVariant &value )
 {
     if (value.GetType() == wxT("wxBitmap"))
     {
@@ -1019,13 +1019,13 @@ bool wxDataViewBitmapCell::SetValue( const wxVariant &value )
     return false;
 }
 
-bool wxDataViewBitmapCell::GetValue( wxVariant &value )
+bool wxDataViewBitmapRenderer::GetValue( wxVariant &value )
 {
     return false;
 }
     
 // ---------------------------------------------------------
-// wxDataViewToggleCell
+// wxDataViewToggleRenderer
 // ---------------------------------------------------------
 
 extern "C" {
@@ -1036,7 +1036,7 @@ static void wxGtkToggleRendererToggledCallback( GtkCellRendererToggle *renderer,
 static void wxGtkToggleRendererToggledCallback( GtkCellRendererToggle *renderer,
     gchar *path, gpointer user_data )
 {
-    wxDataViewToggleCell *cell = (wxDataViewToggleCell*) user_data;
+    wxDataViewToggleRenderer *cell = (wxDataViewToggleRenderer*) user_data;
 
     // get old value
     GValue gvalue = { 0, };
@@ -1063,11 +1063,11 @@ static void wxGtkToggleRendererToggledCallback( GtkCellRendererToggle *renderer,
     model->ValueChanged( model_col, model_row );
 }
 
-IMPLEMENT_CLASS(wxDataViewToggleCell, wxDataViewCell)
+IMPLEMENT_CLASS(wxDataViewToggleRenderer, wxDataViewRenderer)
 
-wxDataViewToggleCell::wxDataViewToggleCell( const wxString &varianttype,
+wxDataViewToggleRenderer::wxDataViewToggleRenderer( const wxString &varianttype,
                         wxDataViewCellMode mode ) :
-    wxDataViewCell( varianttype, mode )
+    wxDataViewRenderer( varianttype, mode )
 {
     m_renderer = (void*) gtk_cell_renderer_toggle_new();
 
@@ -1093,7 +1093,7 @@ wxDataViewToggleCell::wxDataViewToggleCell( const wxString &varianttype,
     }
 }
 
-bool wxDataViewToggleCell::SetValue( const wxVariant &value )
+bool wxDataViewToggleRenderer::SetValue( const wxVariant &value )
 {
     bool tmp = value;
 
@@ -1106,7 +1106,7 @@ bool wxDataViewToggleCell::SetValue( const wxVariant &value )
     return true;
 }
 
-bool wxDataViewToggleCell::GetValue( wxVariant &value )
+bool wxDataViewToggleRenderer::GetValue( wxVariant &value )
 {
     GValue gvalue = { 0, };
     g_value_init( &gvalue, G_TYPE_BOOLEAN );
@@ -1120,7 +1120,7 @@ bool wxDataViewToggleCell::GetValue( wxVariant &value )
 }
 
 // ---------------------------------------------------------
-// wxDataViewCustomCell
+// wxDataViewCustomRenderer
 // ---------------------------------------------------------
 
 class wxDataViewCtrlDC: public wxWindowDC
@@ -1145,14 +1145,14 @@ public:
 };
 
 // ---------------------------------------------------------
-// wxDataViewCustomCell
+// wxDataViewCustomRenderer
 // ---------------------------------------------------------
 
-IMPLEMENT_CLASS(wxDataViewCustomCell, wxDataViewCell)
+IMPLEMENT_CLASS(wxDataViewCustomRenderer, wxDataViewRenderer)
 
-wxDataViewCustomCell::wxDataViewCustomCell( const wxString &varianttype,
+wxDataViewCustomRenderer::wxDataViewCustomRenderer( const wxString &varianttype,
                           wxDataViewCellMode mode, bool no_init ) :
-    wxDataViewCell( varianttype, mode )
+    wxDataViewRenderer( varianttype, mode )
 {
     m_dc = NULL;
 
@@ -1162,7 +1162,7 @@ wxDataViewCustomCell::wxDataViewCustomCell( const wxString &varianttype,
         Init();
 }
 
-bool wxDataViewCustomCell::Init()
+bool wxDataViewCustomRenderer::Init()
 {
     GtkWxCellRenderer *renderer = (GtkWxCellRenderer *) gtk_wx_cell_renderer_new();
     renderer->cell = this;
@@ -1181,13 +1181,13 @@ bool wxDataViewCustomCell::Init()
     return true;
 }
 
-wxDataViewCustomCell::~wxDataViewCustomCell()
+wxDataViewCustomRenderer::~wxDataViewCustomRenderer()
 {
     if (m_dc)
         delete m_dc;
 }
 
-wxDC *wxDataViewCustomCell::GetDC()
+wxDC *wxDataViewCustomRenderer::GetDC()
 {
     if (m_dc == NULL)
     {
@@ -1202,14 +1202,14 @@ wxDC *wxDataViewCustomCell::GetDC()
 }
 
 // ---------------------------------------------------------
-// wxDataViewProgressCell
+// wxDataViewProgressRenderer
 // ---------------------------------------------------------
 
-IMPLEMENT_CLASS(wxDataViewProgressCell, wxDataViewCustomCell)
+IMPLEMENT_CLASS(wxDataViewProgressRenderer, wxDataViewCustomRenderer)
 
-wxDataViewProgressCell::wxDataViewProgressCell( const wxString &label,
+wxDataViewProgressRenderer::wxDataViewProgressRenderer( const wxString &label,
     const wxString &varianttype, wxDataViewCellMode mode ) :
-    wxDataViewCustomCell( varianttype, mode, true )
+    wxDataViewCustomRenderer( varianttype, mode, true )
 {
     m_label = label;
     m_value = 0;
@@ -1229,15 +1229,15 @@ wxDataViewProgressCell::wxDataViewProgressCell( const wxString &label,
 #endif
     {
         // Use custom cell code
-        wxDataViewCustomCell::Init();
+        wxDataViewCustomRenderer::Init();
     }
 }
 
-wxDataViewProgressCell::~wxDataViewProgressCell()
+wxDataViewProgressRenderer::~wxDataViewProgressRenderer()
 {
 }
 
-bool wxDataViewProgressCell::SetValue( const wxVariant &value )
+bool wxDataViewProgressRenderer::SetValue( const wxVariant &value )
 {
 #ifdef __WXGTK26__
     if (!gtk_check_version(2,6,0))
@@ -1261,7 +1261,7 @@ bool wxDataViewProgressCell::SetValue( const wxVariant &value )
     return true;
 }
 
-bool wxDataViewProgressCell::Render( wxRect cell, wxDC *dc, int state )
+bool wxDataViewProgressRenderer::Render( wxRect cell, wxDC *dc, int state )
 {
     double pct = (double)m_value / 100.0;
     wxRect bar = cell;
@@ -1277,19 +1277,19 @@ bool wxDataViewProgressCell::Render( wxRect cell, wxDC *dc, int state )
     return true;
 }
 
-wxSize wxDataViewProgressCell::GetSize()
+wxSize wxDataViewProgressRenderer::GetSize()
 {
     return wxSize(40,12);
 }
 
 // ---------------------------------------------------------
-// wxDataViewDateCell
+// wxDataViewDateRenderer
 // ---------------------------------------------------------
 
-class wxDataViewDateCellPopupTransient: public wxPopupTransientWindow
+class wxDataViewDateRendererPopupTransient: public wxPopupTransientWindow
 {
 public:
-    wxDataViewDateCellPopupTransient( wxWindow* parent, wxDateTime *value,
+    wxDataViewDateRendererPopupTransient( wxWindow* parent, wxDateTime *value,
         wxDataViewListModel *model, unsigned int col, unsigned int row ) :
         wxPopupTransientWindow( parent, wxBORDER_SIMPLE )
     {
@@ -1318,11 +1318,11 @@ private:
     DECLARE_EVENT_TABLE()
 };
 
-BEGIN_EVENT_TABLE(wxDataViewDateCellPopupTransient,wxPopupTransientWindow)
-    EVT_CALENDAR( -1, wxDataViewDateCellPopupTransient::OnCalendar )
+BEGIN_EVENT_TABLE(wxDataViewDateRendererPopupTransient,wxPopupTransientWindow)
+    EVT_CALENDAR( -1, wxDataViewDateRendererPopupTransient::OnCalendar )
 END_EVENT_TABLE()
 
-void wxDataViewDateCellPopupTransient::OnCalendar( wxCalendarEvent &event )
+void wxDataViewDateRendererPopupTransient::OnCalendar( wxCalendarEvent &event )
 {
     wxDateTime date = event.GetDate();
     wxVariant value = date;
@@ -1331,22 +1331,22 @@ void wxDataViewDateCellPopupTransient::OnCalendar( wxCalendarEvent &event )
     DismissAndNotify();
 }
 
-IMPLEMENT_CLASS(wxDataViewDateCell, wxDataViewCustomCell)
+IMPLEMENT_CLASS(wxDataViewDateRenderer, wxDataViewCustomRenderer)
 
-wxDataViewDateCell::wxDataViewDateCell( const wxString &varianttype,
+wxDataViewDateRenderer::wxDataViewDateRenderer( const wxString &varianttype,
                         wxDataViewCellMode mode ) :
-    wxDataViewCustomCell( varianttype, mode )
+    wxDataViewCustomRenderer( varianttype, mode )
 {
 }
 
-bool wxDataViewDateCell::SetValue( const wxVariant &value )
+bool wxDataViewDateRenderer::SetValue( const wxVariant &value )
 {
     m_date = value.GetDateTime();
 
     return true;
 }
 
-bool wxDataViewDateCell::Render( wxRect cell, wxDC *dc, int state )
+bool wxDataViewDateRenderer::Render( wxRect cell, wxDC *dc, int state )
 {
     dc->SetFont( GetOwner()->GetOwner()->GetFont() );
     wxString tmp = m_date.FormatDate();
@@ -1355,7 +1355,7 @@ bool wxDataViewDateCell::Render( wxRect cell, wxDC *dc, int state )
     return true;
 }
 
-wxSize wxDataViewDateCell::GetSize()
+wxSize wxDataViewDateRenderer::GetSize()
 {
     wxDataViewCtrl* view = GetOwner()->GetOwner();
     wxString tmp = m_date.FormatDate();
@@ -1364,13 +1364,13 @@ wxSize wxDataViewDateCell::GetSize()
     return wxSize(x,y+d);
 }
 
-bool wxDataViewDateCell::Activate( wxRect cell, wxDataViewListModel *model, unsigned int col, unsigned int row )
+bool wxDataViewDateRenderer::Activate( wxRect cell, wxDataViewListModel *model, unsigned int col, unsigned int row )
 {
     wxVariant variant;
     model->GetValue( variant, col, row );
     wxDateTime value = variant.GetDateTime();
 
-    wxDataViewDateCellPopupTransient *popup = new wxDataViewDateCellPopupTransient(
+    wxDataViewDateRendererPopupTransient *popup = new wxDataViewDateRendererPopupTransient(
         GetOwner()->GetOwner()->GetParent(), &value, model, col, row );
     wxPoint pos = wxGetMousePosition();
     popup->Move( pos );
@@ -1402,7 +1402,7 @@ static void wxGtkTreeCellDataFunc( GtkTreeViewColumn *column,
     g_return_if_fail (GTK_IS_WX_LIST_STORE (model));
     GtkWxListStore *list_store = (GtkWxListStore *) model;
 
-    wxDataViewCell *cell = (wxDataViewCell*) data;
+    wxDataViewRenderer *cell = (wxDataViewRenderer*) data;
 
     unsigned int model_row = (unsigned int) iter->user_data;
 
@@ -1419,7 +1419,7 @@ static void wxGtkTreeCellDataFunc( GtkTreeViewColumn *column,
 
 IMPLEMENT_CLASS(wxDataViewColumn, wxDataViewColumnBase)
 
-wxDataViewColumn::wxDataViewColumn( const wxString &title, wxDataViewCell *cell, unsigned int model_column,
+wxDataViewColumn::wxDataViewColumn( const wxString &title, wxDataViewRenderer *cell, unsigned int model_column,
     int width, int flags ) :
     wxDataViewColumnBase( title, cell, model_column, width, flags )
 {

@@ -133,14 +133,14 @@ public:
 };
 
 // -------------------------------------
-// MyCustomCell
+// MyCustomRenderer
 // -------------------------------------
 
-class MyCustomCell: public wxDataViewCustomCell
+class MyCustomRenderer: public wxDataViewCustomRenderer
 {
 public:
-    MyCustomCell() :
-        wxDataViewCustomCell( wxT("string"), wxDATAVIEW_CELL_ACTIVATABLE )
+    MyCustomRenderer() :
+        wxDataViewCustomRenderer( wxT("string"), wxDATAVIEW_CELL_ACTIVATABLE )
     {
         m_colour = wxT("black");
     }
@@ -401,14 +401,14 @@ MyFrame::MyFrame(wxFrame *frame, wxChar *title, int x, int y, int w, int h):
     dataview_left->AppendTextColumn( wxT("first"), 0 );
     dataview_left->AppendTextColumn( wxT("second"), 1 );
 
-    wxDataViewTextCell *text_cell = new wxDataViewTextCell( wxT("string"), wxDATAVIEW_CELL_EDITABLE );
-    wxDataViewColumn *column = new wxDataViewColumn( wxT("editable"), text_cell, 2 );
+    wxDataViewTextRenderer *text_renderer = new wxDataViewTextRenderer( wxT("string"), wxDATAVIEW_CELL_EDITABLE );
+    wxDataViewColumn *column = new wxDataViewColumn( wxT("editable"), text_renderer, 2 );
     dataview_left->AppendColumn( column );
 
     dataview_left->AppendToggleColumn( wxT("fourth"), 3 );
 
-    MyCustomCell *custom_cell = new MyCustomCell;
-    column = new wxDataViewColumn( wxT("custom"), custom_cell, 4 );
+    MyCustomRenderer *custom_renderer = new MyCustomRenderer;
+    column = new wxDataViewColumn( wxT("custom"), custom_renderer, 4 );
     dataview_left->AppendColumn( column );
 
     dataview_left->AppendProgressColumn( wxT("progress"), 5 );
@@ -419,13 +419,13 @@ MyFrame::MyFrame(wxFrame *frame, wxChar *title, int x, int y, int w, int h):
     dataview_right = new wxDataViewCtrl( panel, wxID_ANY );
     dataview_right->AssociateModel( model );
 
-    text_cell = new wxDataViewTextCell( wxT("string"), wxDATAVIEW_CELL_EDITABLE );
-    column = new wxDataViewColumn( wxT("editable"), text_cell, 2 );
+    text_renderer = new wxDataViewTextRenderer( wxT("string"), wxDATAVIEW_CELL_EDITABLE );
+    column = new wxDataViewColumn( wxT("editable"), text_renderer, 2 );
     dataview_right->AppendColumn( column );
     dataview_right->AppendTextColumn( wxT("first"), 0 );
     dataview_right->AppendTextColumn( wxT("second"), 1 );
-    wxDataViewToggleCell *toggle_cell = new wxDataViewToggleCell( wxT("bool"), wxDATAVIEW_CELL_ACTIVATABLE );
-    column = new wxDataViewColumn( wxT("bool"), toggle_cell, 3, 30 );
+    wxDataViewToggleRenderer *toggle_renderer = new wxDataViewToggleRenderer( wxT("bool"), wxDATAVIEW_CELL_ACTIVATABLE );
+    column = new wxDataViewColumn( wxT("bool"), toggle_renderer, 3, 30 );
     dataview_right->AppendColumn( column );
 
     dataview_right->AppendDateColumn( wxT("date"), 6 );
@@ -494,12 +494,12 @@ MySortingFrame::MySortingFrame(wxFrame *frame, wxChar *title, int x, int y, int 
 
     m_unsorted_model = new MyUnsortedTextModel;
     dataview_left->AssociateModel( m_unsorted_model );
-    wxDataViewTextCell *text_cell = new wxDataViewTextCell( wxT("string"), wxDATAVIEW_CELL_EDITABLE );
-    wxDataViewColumn *column = new wxDataViewColumn( wxT("editable"), text_cell, 0 );
+    wxDataViewTextRenderer *text_renderer = new wxDataViewTextRenderer( wxT("string"), wxDATAVIEW_CELL_EDITABLE );
+    wxDataViewColumn *column = new wxDataViewColumn( wxT("editable"), text_renderer, 0 );
     dataview_left->AppendColumn( column );
     dataview_left->AppendTextColumn( wxT("second"), 1 );
-    dataview_left->AppendColumn( new wxDataViewColumn( wxT("icon"), new wxDataViewBitmapCell, 2, 25 ) );
-    dataview_left->AppendColumn( new wxDataViewColumn( wxT("icon"), new wxDataViewBitmapCell, 3, 25 ) );
+    dataview_left->AppendColumn( new wxDataViewColumn( wxT("icon"), new wxDataViewBitmapRenderer, 2, 25 ) );
+    dataview_left->AppendColumn( new wxDataViewColumn( wxT("icon"), new wxDataViewBitmapRenderer, 3, 25 ) );
 
     // Right wxDataViewCtrl using the sorting model
     dataview_right = new wxDataViewCtrl( this, ID_SORTED );
@@ -507,8 +507,8 @@ MySortingFrame::MySortingFrame(wxFrame *frame, wxChar *title, int x, int y, int 
     wxDataViewSortedListModel *sorted_model =
         new wxDataViewSortedListModel( m_unsorted_model );
     dataview_right->AssociateModel( sorted_model );
-    text_cell = new wxDataViewTextCell( wxT("string"), wxDATAVIEW_CELL_EDITABLE );
-    column = new wxDataViewColumn( wxT("editable"), text_cell, 0, -1, wxDATAVIEW_COL_SORTABLE|wxDATAVIEW_COL_RESIZABLE );
+    text_renderer = new wxDataViewTextRenderer( wxT("string"), wxDATAVIEW_CELL_EDITABLE );
+    column = new wxDataViewColumn( wxT("editable"), text_renderer, 0, -1, wxDATAVIEW_COL_SORTABLE|wxDATAVIEW_COL_RESIZABLE );
     dataview_right->AppendColumn( column );
     
     dataview_right->AppendTextColumn( wxT("second"), 1 );
