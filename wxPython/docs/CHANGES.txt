@@ -258,6 +258,8 @@ defaults to the current behavior of just replicating pixels, if
 wx.IMAGE_QUALITY_HIGH is passed then it uses bicubic and box averaging
 resampling methods for upsampling and downsampling respectively.
 
+Added the wx.lib.buttonpanel module, which is a tweaked version of
+Andrea Gavana's FancyButtonPanel module.
 
 
 

@@ -63,6 +63,7 @@ _treeList = [
 ##        'AlphaDrawing',
         'DelayedResult',
         'ExpandoTextCtrl',
+        'ButtonPanel',
         ]),
 
     # managed windows == things with a (optional) caption you can close
@@ -146,6 +147,7 @@ _treeList = [
 
     ('Custom Controls', [
         'AnalogClock',
+        'ButtonPanel',
         'ColourSelect',
         'ComboTreeBox',
         'Editor',

@@ -91,6 +91,11 @@ command_lines = [
     "-a -u -n _rt_undo bmp_source/rt_undo.xpm images.py",
     "-a -u -n _rt_zebra bmp_source/rt_zebra.xpm images.py",
 
+    "-a -u -n _bp_btn1 bmp_source/bp_btn1.png images.py",
+    "-a -u -n _bp_btn2 bmp_source/bp_btn2.png images.py",
+    "-a -u -n _bp_btn3 bmp_source/bp_btn3.png images.py",
+    "-a -u -n _bp_btn4 bmp_source/bp_btn4.png images.py",
+
     "   -u -c bmp_source/001.png throbImages.py",
     "-a -u -c bmp_source/002.png throbImages.py",
     "-a -u -c bmp_source/003.png throbImages.py",
