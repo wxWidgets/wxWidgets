@@ -25,6 +25,7 @@
 #endif // VC++
 
 #ifndef WX_PRECOMP
+    #include "wx/panel.h"
     #include "wx/list.h"
     #include "wx/hash.h"
     #include "wx/gdicmn.h"
