@@ -435,6 +435,7 @@ Source: "samples\ide\activegrid\*.py";            DestDir: "{app}\samples\ide\ac
 Source: "samples\ide\activegrid\tool\*.py";       DestDir: "{app}\samples\ide\activegrid\tool"; 
 Source: "samples\ide\activegrid\tool\data\*.txt"; DestDir: "{app}\samples\ide\activegrid\tool\data"; 
 Source: "samples\ide\activegrid\util\*.py";       DestDir: "{app}\samples\ide\activegrid\util"; 
+Source: "samples\ide\activegrid\model\*.py";      DestDir: "{app}\samples\ide\activegrid\model"; 
 
 Source: "samples\embedded\*.py";            DestDir: "{app}\samples\embedded"; 
 Source: "samples\embedded\*.cpp";           DestDir: "{app}\samples\embedded"; 
@@ -534,10 +535,12 @@ Type: files; Name: "{app}\samples\ide\*.pyc";
 Type: files; Name: "{app}\samples\ide\activegrid\*.pyc";
 Type: files; Name: "{app}\samples\ide\activegrid\tool\*.pyc";
 Type: files; Name: "{app}\samples\ide\activegrid\util\*.pyc";
+Type: files; Name: "{app}\samples\ide\activegrid\model\*.pyc";
 Type: files; Name: "{app}\samples\ide\*.pyo";
 Type: files; Name: "{app}\samples\ide\activegrid\*.pyo";
 Type: files; Name: "{app}\samples\ide\activegrid\tool\*.pyo";
 Type: files; Name: "{app}\samples\ide\activegrid\util\*.pyo";
+Type: files; Name: "{app}\samples\ide\activegrid\model\*.pyo";
 
 Type: files; Name: "{app}\samples\docview\*.pyc";
 Type: files; Name: "{app}\samples\pydocview\*.pyc";

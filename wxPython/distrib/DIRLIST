@@ -67,6 +67,7 @@ wxPython/samples/ide/activegrid
 wxPython/samples/ide/activegrid/tool
 wxPython/samples/ide/activegrid/tool/data
 wxPython/samples/ide/activegrid/util
+wxPython/samples/ide/activegrid/model
 wxPython/samples/doodle
 wxPython/samples/embedded
 wxPython/samples/frogedit
