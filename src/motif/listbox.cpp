@@ -209,33 +209,18 @@ void wxListBox::DoSetFirstItem( int N )
 
 void wxListBox::Delete(unsigned int n)
 {
-    wxSizeKeeper sk( this );
     Widget listBox = (Widget) m_mainWidget;
-
-    bool managed = XtIsManaged(listBox);
-
-    if (managed)
-        XtUnmanageChild (listBox);
 
     XmListDeletePos (listBox, n + 1);
 
-    if (managed)
-        XtManageChild (listBox);
-
-    sk.Restore();
     m_clientDataDict.Delete(n, HasClientObjectData());
     m_noItems --;
 }
 
 int wxListBox::DoAppend(const wxString& item)
 {
-    wxSizeKeeper sk( this );
     Widget listBox = (Widget) m_mainWidget;
 
-    bool managed = XtIsManaged(listBox);
-
-    if (managed)
-        XtUnmanageChild (listBox);
     int n;
     XtVaGetValues (listBox, XmNitemCount, &n, NULL);
     wxXmString text( item );
@@ -246,10 +231,6 @@ int wxListBox::DoAppend(const wxString& item)
     // selection policy!!
     SetSelectionPolicy();
 
-    if (managed)
-        XtManageChild (listBox);
-
-    sk.Restore();
     m_noItems ++;
 
     return GetCount() - 1;
@@ -257,16 +238,11 @@ int wxListBox::DoAppend(const wxString& item)
 
 void wxListBox::DoSetItems(const wxArrayString& items, void** clientData)
 {
-    wxSizeKeeper sk( this );
     Widget listBox = (Widget) m_mainWidget;
 
     if( HasClientObjectData() )
         m_clientDataDict.DestroyData();
 
-    bool managed = XtIsManaged(listBox);
-
-    if (managed)
-        XtUnmanageChild (listBox);
     XmString *text = new XmString[items.GetCount()];
     unsigned int i;
     for (i = 0; i < items.GetCount(); ++i)
@@ -284,11 +260,6 @@ void wxListBox::DoSetItems(const wxArrayString& items, void** clientData)
     // It seems that if the list is cleared, we must re-ask for
     // selection policy!!
     SetSelectionPolicy();
-
-    if (managed)
-        XtManageChild (listBox);
-
-    sk.Restore();
 
     m_noItems = items.GetCount();
 }
@@ -487,13 +458,7 @@ wxString wxListBox::GetString(unsigned int n) const
 
 void wxListBox::DoInsertItems(const wxArrayString& items, unsigned int pos)
 {
-    wxSizeKeeper sk( this );
     Widget listBox = (Widget) m_mainWidget;
-
-    bool managed = XtIsManaged(listBox);
-
-    if (managed)
-        XtUnmanageChild(listBox);
 
     XmString *text = new XmString[items.GetCount()];
     unsigned int i;
@@ -519,11 +484,6 @@ void wxListBox::DoInsertItems(const wxArrayString& items, unsigned int pos)
     // It seems that if the list is cleared, we must re-ask for
     // selection policy!!
     SetSelectionPolicy();
-
-    if (managed)
-        XtManageChild(listBox);
-
-    sk.Restore();
 
     m_noItems += items.GetCount();
 }
