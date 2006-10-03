@@ -936,7 +936,7 @@ void wxMacCoreGraphicsContext::DrawText( const wxString &str, wxDouble x, wxDoub
     DrawText(str, x, y, 0.0);
 }
 
-void wxMacCoreGraphicsContext::DrawText( const wxString &str, wxDouble x, wxDouble y, double angle ) 
+void wxMacCoreGraphicsContext::DrawText( const wxString &str, wxDouble x, wxDouble y, wxDouble angle ) 
 {
     OSStatus status = noErr;
     ATSUTextLayout atsuLayout;
