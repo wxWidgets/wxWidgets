@@ -23,7 +23,7 @@
 class wxColourRefData: public wxObjectRefData
 {
 public:
-    wxColourRefData(guint16 red, guint16 green, guint16 blue)
+    wxColourRefData(guint16 red, guint16 green, guint16 blue, guint16 alpha)
     {
         m_color.red =
         m_red = red;
@@ -31,6 +31,7 @@ public:
         m_green = green;
         m_color.blue =
         m_blue = blue;
+        m_alpha = alpha;
         m_color.pixel = 0;
         m_colormap = NULL;
     }
@@ -49,6 +50,7 @@ public:
     guint16 m_red;
     guint16 m_green;
     guint16 m_blue;
+    guint16 m_alpha;
 
     DECLARE_NO_COPY_CLASS(wxColourRefData)
 };
@@ -90,7 +92,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxColour,wxGDIObject)
 
 wxColour::wxColour(const GdkColor& gdkColor)
 {
-    m_refData = new wxColourRefData(gdkColor.red, gdkColor.green, gdkColor.blue);
+    m_refData = new wxColourRefData(gdkColor.red, gdkColor.green, gdkColor.blue, 0xFFFF /*opaque alpha in 16 bit*/);
 }
 
 wxColour::~wxColour()
@@ -109,18 +111,20 @@ bool wxColour::operator == ( const wxColour& col ) const
     wxColourRefData* that_refData = wx_static_cast(wxColourRefData*, col.m_refData);
     return refData->m_red == that_refData->m_red &&
            refData->m_green == that_refData->m_green &&
-           refData->m_blue == that_refData->m_blue;
+           refData->m_blue == that_refData->m_blue &&
+           refData->m_alpha == that_refData->m_alpha;
 }
 
 void wxColour::InitRGBA(unsigned char red, unsigned char green, unsigned char blue,
-                        unsigned char WXUNUSED(alpha))
+                        unsigned char alpha)
 {
     UnRef();
 
     m_refData = new wxColourRefData(
         (guint16(red) << SHIFT) + red,
         (guint16(green) << SHIFT) + green,
-        (guint16(blue) << SHIFT) + blue);
+        (guint16(blue) << SHIFT) + blue,
+        (guint16(alpha) << SHIFT) + alpha);
 }
 
 unsigned char wxColour::Red() const
@@ -142,6 +146,13 @@ unsigned char wxColour::Blue() const
     wxCHECK_MSG( Ok(), 0, wxT("invalid colour") );
 
     return wxByte(M_COLDATA->m_blue >> SHIFT);
+}
+
+unsigned char wxColour::Alpha() const
+{
+    wxCHECK_MSG( Ok(), 0, wxT("invalid colour") );
+
+    return wxByte(M_COLDATA->m_alpha >> SHIFT);
 }
 
 void wxColour::CalcPixel( GdkColormap *cmap )

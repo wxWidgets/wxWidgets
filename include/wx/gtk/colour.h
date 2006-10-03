@@ -35,6 +35,7 @@ public:
     unsigned char Red() const;
     unsigned char Green() const;
     unsigned char Blue() const;
+    unsigned char Alpha() const;
 
     // Implementation part
     void CalcPixel( GdkColormap *cmap );
