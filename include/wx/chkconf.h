@@ -1027,6 +1027,14 @@
 #           define wxUSE_STREAMS 1
 #       endif
 #   endif
+#   if !wxUSE_FILE && !wxUSE_FFILE
+#       ifdef wxABORT_ON_CONFIG_ERROR
+#           error "wxUSE_FILESYSTEM requires either wxUSE_FILE or wxUSE_FFILE"
+#       else
+#           undef wxUSE_FILESYSTEM
+#           define wxUSE_FILESYSTEM 0
+#       endif
+#   endif
 #endif /* wxUSE_FILESYSTEM */
 
 #if wxUSE_FS_INET
