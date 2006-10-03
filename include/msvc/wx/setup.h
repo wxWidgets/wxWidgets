@@ -55,11 +55,17 @@
             #pragma comment(lib,"wxmsw27ud_core")
             #pragma comment(lib,"wxmsw27ud_html")
             #if wxUSE_DEBUGREPORT
-            #pragma comment(lib,"wxmsw27ud_qa")
+                #pragma comment(lib,"wxmsw27ud_qa")
             #endif
-            #pragma comment(lib,"wxmsw27ud_xrc")
-            #pragma comment(lib,"wxmsw27ud_aui")
-            #pragma comment(lib,"wxmsw27ud_richtext")
+            #if wxUSE_XRC
+                #pragma comment(lib,"wxmsw27ud_xrc")
+            #endif
+            #if wxUSE_AUI
+                #pragma comment(lib,"wxmsw27ud_aui")
+            #endif
+            #if wxUSE_RICHTEXT
+                #pragma comment(lib,"wxmsw27ud_richtext")
+            #endif
             #if wxUSE_MEDIACTRL
                 #pragma comment(lib,"wxmsw27ud_media")
             #endif
@@ -92,11 +98,17 @@
             #pragma comment(lib,"wxmsw27u_core")
             #pragma comment(lib,"wxmsw27u_html")
             #if wxUSE_DEBUGREPORT
-            #pragma comment(lib,"wxmsw27u_qa")
+                #pragma comment(lib,"wxmsw27u_qa")
             #endif
-            #pragma comment(lib,"wxmsw27u_xrc")
-            #pragma comment(lib,"wxmsw27u_aui")
-            #pragma comment(lib,"wxmsw27u_richtext")
+            #if wxUSE_XRC
+                #pragma comment(lib,"wxmsw27u_xrc")
+            #endif
+            #if wxUSE_AUI
+                #pragma comment(lib,"wxmsw27u_aui")
+            #endif
+            #if wxUSE_RICHTEXT
+                #pragma comment(lib,"wxmsw27u_richtext")
+            #endif
             #if wxUSE_MEDIACTRL
                 #pragma comment(lib,"wxmsw27u_media")
             #endif
@@ -145,11 +157,17 @@
             #pragma comment(lib,"wxmsw27d_core")
             #pragma comment(lib,"wxmsw27d_html")
             #if wxUSE_DEBUGREPORT
-            #pragma comment(lib,"wxmsw27d_qa")
+                #pragma comment(lib,"wxmsw27d_qa")
             #endif
-            #pragma comment(lib,"wxmsw27d_xrc")
-            #pragma comment(lib,"wxmsw27d_aui")
-            #pragma comment(lib,"wxmsw27d_richtext")
+            #if wxUSE_XRC
+                #pragma comment(lib,"wxmsw27d_xrc")
+            #endif
+            #if wxUSE_AUI
+                #pragma comment(lib,"wxmsw27d_aui")
+            #endif
+            #if wxUSE_RICHTEXT
+                #pragma comment(lib,"wxmsw27d_richtext")
+            #endif
             #if wxUSE_MEDIACTRL
                 #pragma comment(lib,"wxmsw27d_media")
             #endif
@@ -182,11 +200,17 @@
             #pragma comment(lib,"wxmsw27_core")
             #pragma comment(lib,"wxmsw27_html")
             #if wxUSE_DEBUGREPORT
-            #pragma comment(lib,"wxmsw27_qa")
+                #pragma comment(lib,"wxmsw27_qa")
             #endif
-            #pragma comment(lib,"wxmsw27_xrc")
-            #pragma comment(lib,"wxmsw27_aui")
-            #pragma comment(lib,"wxmsw27_richtext")
+            #if wxUSE_XRC
+                #pragma comment(lib,"wxmsw27_xrc")
+            #endif
+            #if wxUSE_AUI
+                #pragma comment(lib,"wxmsw27_aui")
+            #endif
+            #if wxUSE_RICHTEXT
+                #pragma comment(lib,"wxmsw27_richtext")
+            #endif
             #if wxUSE_MEDIACTRL
                 #pragma comment(lib,"wxmsw27_media")
             #endif
