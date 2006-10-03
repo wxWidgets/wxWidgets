@@ -39,6 +39,7 @@
     #include "wx/timer.h"
     #include "wx/settings.h"
     #include "wx/dynarray.h"
+    #include "wx/dcclient.h"
     #include "wx/dcscreen.h"
     #include "wx/math.h"
 #endif
