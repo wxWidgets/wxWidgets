@@ -109,10 +109,11 @@ initialised with RGB values).", "");
         SetRGB);
 
     DocDeclStrName(
-        void , InitFromName(const wxString& colourName),
+        void , Set(const wxString& colourName),
         "Sets the RGB intensity values using a colour name listed in
 ``wx.TheColourDatabase``.", "",
         SetFromName);
+    
     
     DocDeclStr(
         wxString , GetAsString(long flags = wxC2S_NAME | wxC2S_CSS_SYNTAX) const,
