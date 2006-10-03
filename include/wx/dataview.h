@@ -333,7 +333,7 @@ protected:
 // wxDataViewEvent - the event class for the wxDataViewCtrl notifications
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxDataViewEvent : public wxNotifyEvent
+class WXDLLIMPEXP_ADV wxDataViewEvent : public wxNotifyEvent
 {
 public:
     wxDataViewEvent(wxEventType commandType = wxEVT_NULL, int winid = 0)
