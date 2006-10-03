@@ -2027,6 +2027,8 @@ public:
 #endif
     }
 
+    virtual wxEvent *Clone() const { return new wxGridEvent(*this); }
+
 protected:
     int         m_row;
     int         m_col;
@@ -2038,7 +2040,7 @@ protected:
     bool        m_shift;
     bool        m_alt;
 
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxGridEvent)
+    DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxGridEvent)
 };
 
 class WXDLLIMPEXP_ADV wxGridSizeEvent : public wxNotifyEvent
@@ -2068,6 +2070,8 @@ public:
         return ControlDown();
 #endif
     }
+    
+    virtual wxEvent *Clone() const { return new wxGridSizeEvent(*this); }
 
 protected:
     int         m_rowOrCol;
@@ -2078,7 +2082,7 @@ protected:
     bool        m_shift;
     bool        m_alt;
 
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxGridSizeEvent)
+    DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxGridSizeEvent)
 };
 
 
@@ -2123,6 +2127,8 @@ public:
         return ControlDown();
 #endif
     }
+    
+    virtual wxEvent *Clone() const { return new wxGridRangeSelectEvent(*this); }
 
 protected:
     wxGridCellCoords  m_topLeft;
@@ -2133,7 +2139,7 @@ protected:
     bool              m_shift;
     bool              m_alt;
 
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxGridRangeSelectEvent)
+    DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxGridRangeSelectEvent)
 };
 
 
@@ -2156,14 +2162,15 @@ public:
     void SetRow(int row)                { m_row = row; }
     void SetCol(int col)                { m_col = col; }
     void SetControl(wxControl* ctrl)    { m_ctrl = ctrl; }
+    
+    virtual wxEvent *Clone() const { return new wxGridEditorCreatedEvent(*this); }
 
 private:
     int m_row;
     int m_col;
     wxControl* m_ctrl;
 
-    DECLARE_DYNAMIC_CLASS(wxGridEditorCreatedEvent)
-    DECLARE_NO_COPY_CLASS(wxGridEditorCreatedEvent)
+    DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxGridEditorCreatedEvent)
 };
 
 
