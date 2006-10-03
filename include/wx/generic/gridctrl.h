@@ -12,12 +12,9 @@
 #ifndef _WX_GENERIC_GRIDCTRL_H_
 #define _WX_GENERIC_GRIDCTRL_H_
 
-#if wxUSE_GRID
-
 #include "wx/grid.h"
-#include "wx/string.h"
-#include "wx/arrstr.h"
-#include "wx/datetime.h"
+
+#if wxUSE_GRID
 
 #define wxGRID_VALUE_CHOICEINT    _T("choiceint")
 #define wxGRID_VALUE_DATETIME     _T("datetime")
@@ -155,7 +152,5 @@ private:
 
 };
 
-#endif  // #if wxUSE_GRID
-
-#endif //_WX_GENERIC_GRIDCTRL_H_
-
+#endif  // wxUSE_GRID
+#endif // _WX_GENERIC_GRIDCTRL_H_

@@ -9,20 +9,14 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __WXGRID_H__
-#define __WXGRID_H__
+#ifndef _WX_GENERIC_GRID_H_
+#define _WX_GENERIC_GRID_H_
 
-#include "wx/hashmap.h"
-#include "wx/panel.h"
+#include "wx/defs.h"
+
+#if wxUSE_GRID
+
 #include "wx/scrolwin.h"
-#include "wx/string.h"
-#include "wx/arrstr.h"
-#include "wx/scrolbar.h"
-#include "wx/event.h"
-#include "wx/combobox.h"
-#include "wx/dynarray.h"
-#include "wx/timer.h"
-#include "wx/clntdata.h"
 
 // ----------------------------------------------------------------------------
 // constants
@@ -67,7 +61,6 @@ class WXDLLIMPEXP_ADV wxGridCellAttrProviderData;
 class WXDLLIMPEXP_ADV wxGridColLabelWindow;
 class WXDLLIMPEXP_ADV wxGridCornerLabelWindow;
 class WXDLLIMPEXP_ADV wxGridRowLabelWindow;
-class WXDLLIMPEXP_ADV wxGridTableBase;
 class WXDLLIMPEXP_ADV wxGridWindow;
 class WXDLLIMPEXP_ADV wxGridTypeRegistry;
 class WXDLLIMPEXP_ADV wxGridSelection;
@@ -2274,5 +2267,5 @@ extern const int wxEVT_GRID_CHANGE_SEL_LABEL;
 
 #endif
 
-#endif  // ifndef wxUSE_GRID
-
+#endif // wxUSE_GRID
+#endif // _WX_GENERIC_GRID_H_

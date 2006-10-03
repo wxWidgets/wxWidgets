@@ -17,12 +17,14 @@
 
 #if wxUSE_GRID
 
+#include "wx/generic/gridctrl.h"
+
 #ifndef WX_PRECOMP
     #include "wx/textctrl.h"
     #include "wx/dc.h"
+    #include "wx/combobox.h"
 #endif // WX_PRECOMP
 
-#include "wx/generic/gridctrl.h"
 #include "wx/tokenzr.h"
 
 // ----------------------------------------------------------------------------
