@@ -1485,29 +1485,7 @@ static void
 wxdataview_selection_changed_callback( GtkTreeSelection* selection, wxDataViewCtrl *dv )
 {
     wxDataViewEvent event( wxEVT_COMMAND_DATAVIEW_ROW_SELECTED, dv->GetId() );
-    if (dv->HasFlag(wxDV_MULTIPLE))
-    {
-        GtkTreeModel *model;
-        GList *list = gtk_tree_selection_get_selected_rows( selection, &model );
-        
-        // do something
-        // ...
-        
-        // delete list
-        g_list_foreach( list, (GFunc) gtk_tree_path_free, NULL );
-        g_list_free( list );        
-    }
-    else
-    {
-        GtkTreeModel *model;
-        GtkTreeIter iter;
-        gboolean has_selection = gtk_tree_selection_get_selected( selection, &model, &iter );
-        if (has_selection)
-        {
-            unsigned int row = (wxUIntPtr) iter.user_data;
-            event.SetRow( row );
-        }
-    }
+    event.SetRow( dv->GetSelection() );
     event.SetModel( dv->GetModel() );
     dv->GetEventHandler()->ProcessEvent( event );
 }
@@ -1622,11 +1600,86 @@ bool wxDataViewCtrl::IsSelected( unsigned int row ) const
 
 int wxDataViewCtrl::GetSelection() const
 {
+    GtkTreeSelection *selection = gtk_tree_view_get_selection( GTK_TREE_VIEW(m_treeview) );
+    if (HasFlag(wxDV_MULTIPLE))
+    {
+        GtkTreeModel *model;
+        GList *list = gtk_tree_selection_get_selected_rows( selection, &model );
+        
+        // do something
+        if (list)
+        {
+            // list = g_list_nth( list, 0 );  should be a noop
+            GtkTreePath *path = (GtkTreePath*) list->data;
+            
+            unsigned int row = (unsigned int)gtk_tree_path_get_indices (path)[0];
+        
+            // delete list
+            g_list_foreach( list, (GFunc) gtk_tree_path_free, NULL );
+            g_list_free( list );
+            
+            return (int) row;
+        }
+    }
+    else
+    {
+        
+        GtkTreeModel *model;
+        GtkTreeIter iter;
+        gboolean has_selection = gtk_tree_selection_get_selected( selection, &model, &iter );
+        if (has_selection)
+        {
+            unsigned int row = (wxUIntPtr) iter.user_data;
+            return (int) row;
+        }
+    }
+    
     return -1;
 }
 
 int wxDataViewCtrl::GetSelections(wxArrayInt& aSelections) const
 {
+    aSelections.Clear();
+
+    GtkTreeSelection *selection = gtk_tree_view_get_selection( GTK_TREE_VIEW(m_treeview) );
+    if (HasFlag(wxDV_MULTIPLE))
+    {
+        GtkTreeModel *model;
+        GList *list = gtk_tree_selection_get_selected_rows( selection, &model );
+        
+        int count = 0;
+        while (list)
+        {
+            
+            // list = g_list_nth( list, 0 );  should be a noop
+            GtkTreePath *path = (GtkTreePath*) list->data;
+            
+            unsigned int row = (unsigned int)gtk_tree_path_get_indices (path)[0];
+            
+            aSelections.Add( (int) row );
+        
+            list = g_list_next( list );            
+        }
+        
+        // delete list
+        g_list_foreach( list, (GFunc) gtk_tree_path_free, NULL );
+        g_list_free( list );
+        
+        return count;
+    }
+    else
+    {
+        GtkTreeModel *model;
+        GtkTreeIter iter;
+        gboolean has_selection = gtk_tree_selection_get_selected( selection, &model, &iter );
+        if (has_selection)
+        {
+            unsigned int row = (wxUIntPtr) iter.user_data;
+            aSelections.Add( (int) row );
+            return 1;
+        }
+    }
+    
     return 0;
 }
 
