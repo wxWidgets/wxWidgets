@@ -54,6 +54,9 @@
             #pragma comment(lib,"wxmsw27ud_adv")
             #pragma comment(lib,"wxmsw27ud_core")
             #pragma comment(lib,"wxmsw27ud_html")
+            #if wxUSE_GLCANVAS
+                #pragma comment(lib,"wxmsw27ud_gl")
+            #endif
             #if wxUSE_DEBUGREPORT
                 #pragma comment(lib,"wxmsw27ud_qa")
             #endif
@@ -97,6 +100,9 @@
             #pragma comment(lib,"wxmsw27u_adv")
             #pragma comment(lib,"wxmsw27u_core")
             #pragma comment(lib,"wxmsw27u_html")
+            #if wxUSE_GLCANVAS
+                #pragma comment(lib,"wxmsw27u_gl")
+            #endif
             #if wxUSE_DEBUGREPORT
                 #pragma comment(lib,"wxmsw27u_qa")
             #endif
@@ -156,6 +162,9 @@
             #pragma comment(lib,"wxmsw27d_adv")
             #pragma comment(lib,"wxmsw27d_core")
             #pragma comment(lib,"wxmsw27d_html")
+            #if wxUSE_GLCANVAS
+                #pragma comment(lib,"wxmsw27d_gl")
+            #endif
             #if wxUSE_DEBUGREPORT
                 #pragma comment(lib,"wxmsw27d_qa")
             #endif
@@ -199,6 +208,9 @@
             #pragma comment(lib,"wxmsw27_adv")
             #pragma comment(lib,"wxmsw27_core")
             #pragma comment(lib,"wxmsw27_html")
+            #if wxUSE_GLCANVAS
+                #pragma comment(lib,"wxmsw27_gl")
+            #endif
             #if wxUSE_DEBUGREPORT
                 #pragma comment(lib,"wxmsw27_qa")
             #endif
