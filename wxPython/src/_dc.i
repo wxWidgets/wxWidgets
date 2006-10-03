@@ -1448,6 +1448,23 @@ to some applications.", "");
 //---------------------------------------------------------------------------
 %newgroup
 
+MustHaveApp(wxWindowDC);
+
+DocStr(wxWindowDC,
+       "A wx.WindowDC must be constructed if an application wishes to paint on
+the whole area of a window (client and decorations). This should
+normally be constructed as a temporary stack object; don't store a
+wx.WindowDC object.","");
+class wxWindowDC : public wxDC {
+public:
+    DocCtorStr(
+        wxWindowDC(wxWindow* win),
+        "Constructor. Pass the window on which you wish to paint.","");
+};
+
+//---------------------------------------------------------------------------
+%newgroup
+
 MustHaveApp(wxClientDC);
 
 DocStr(wxClientDC,
@@ -1462,7 +1479,7 @@ To draw on a window from within an EVT_PAINT handler, construct a
 To draw on the whole window including decorations, construct a
 `wx.WindowDC` object (Windows only).
 ", "");
-class wxClientDC : public wxDC {
+class wxClientDC : public wxWindowDC {
 public:
     DocCtorStr(
         wxClientDC(wxWindow* win),
@@ -1489,28 +1506,11 @@ window. Attempts to draw outside this area do not appear.
 To draw on a window from outside EVT_PAINT handlers, construct a
 `wx.ClientDC` object.
 ","");
-class wxPaintDC : public wxDC {
+class wxPaintDC : public wxClientDC {
 public:
     DocCtorStr(
         wxPaintDC(wxWindow* win),
         "Constructor. Pass the window on which you wish to paint.", "");
-};
-
-//---------------------------------------------------------------------------
-%newgroup
-
-MustHaveApp(wxWindowDC);
-
-DocStr(wxWindowDC,
-       "A wx.WindowDC must be constructed if an application wishes to paint on
-the whole area of a window (client and decorations). This should
-normally be constructed as a temporary stack object; don't store a
-wx.WindowDC object.","");
-class wxWindowDC : public wxDC {
-public:
-    DocCtorStr(
-        wxWindowDC(wxWindow* win),
-        "Constructor. Pass the window on which you wish to paint.","");
 };
 
 //---------------------------------------------------------------------------
