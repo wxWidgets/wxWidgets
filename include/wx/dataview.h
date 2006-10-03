@@ -24,7 +24,7 @@
 
 #if defined(__WXGTK20__)
     // for testing
-    #define wxUSE_GENERICDATAVIEWCTRL 1
+    // #define wxUSE_GENERICDATAVIEWCTRL 1
 #elif defined(__WXMAC__)
     #define wxUSE_GENERICDATAVIEWCTRL 1
 #else
@@ -102,7 +102,7 @@ public:
     }
 
     wxDataViewColumn   *m_viewColumn;
-    unsigned int              m_modelColumn;
+    unsigned int        m_modelColumn;
 };
 
 class WXDLLIMPEXP_ADV wxDataViewListModel: public wxDataViewModel
@@ -309,6 +309,15 @@ public:
     virtual bool DeleteColumn( unsigned int pos );
     virtual bool ClearColumns();
     virtual wxDataViewColumn* GetColumn( unsigned int pos );
+
+    virtual void SetSelection( int row ) = 0; // -1 for unselect
+    inline void ClearSelection() { SetSelection( -1 ); }
+    virtual void SetSelectionRange( unsigned int from, unsigned int to ) = 0;
+    virtual void SetSelections( const wxArrayInt& aSelections) = 0;
+    
+    virtual bool IsSelected( unsigned int row ) const = 0;
+    virtual int GetSelection() const = 0;
+    virtual int GetSelections(wxArrayInt& aSelections) const = 0;
 
 private:
     wxDataViewListModel    *m_model;

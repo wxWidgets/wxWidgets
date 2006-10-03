@@ -264,6 +264,14 @@ public:
     virtual bool AssociateModel( wxDataViewListModel *model );
     virtual bool AppendColumn( wxDataViewColumn *col );
 
+    virtual void SetSelection( int row ); // -1 for unselect
+    virtual void SetSelectionRange( unsigned int from, unsigned int to );
+    virtual void SetSelections( const wxArrayInt& aSelections);
+    
+    virtual bool IsSelected( unsigned int row ) const;
+    virtual int GetSelection() const;
+    virtual int GetSelections(wxArrayInt& aSelections) const;
+
 private:
     friend class wxDataViewMainWindow;
     friend class wxDataViewHeaderWindow;

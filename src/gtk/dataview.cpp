@@ -1564,6 +1564,34 @@ bool wxDataViewCtrl::AppendColumn( wxDataViewColumn *col )
     return true;
 }
 
+void wxDataViewCtrl::SetSelection( int row )
+{
+}
+
+void wxDataViewCtrl::SetSelectionRange( unsigned int from, unsigned int to )
+{
+}
+
+void wxDataViewCtrl::SetSelections( const wxArrayInt& aSelections)
+{
+}
+    
+bool wxDataViewCtrl::IsSelected( unsigned int row ) const
+{
+    return false;
+}
+
+int wxDataViewCtrl::GetSelection() const
+{
+    return -1;
+}
+
+int wxDataViewCtrl::GetSelections(wxArrayInt& aSelections) const
+{
+    return 0;
+}
+
+
 #endif
     // !wxUSE_GENERICDATAVIEWCTRL
 
