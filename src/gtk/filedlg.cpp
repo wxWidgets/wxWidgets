@@ -42,7 +42,7 @@ extern "C" {
 static void gtk_filedialog_ok_callback(GtkWidget *widget, wxFileDialog *dialog)
 {
     int style = dialog->GetWindowStyle();
-    gchar* filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(widget));
+    wxGtkString filename(gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(widget)));
 
     // gtk version numbers must be identical with the one in ctor (that calls set_do_overwrite_confirmation)
 #if GTK_CHECK_VERSION(2,7,3)
@@ -69,12 +69,9 @@ static void gtk_filedialog_ok_callback(GtkWidget *widget, wxFileDialog *dialog)
     if (style & wxFD_CHANGE_DIR)
     {
         // Use chdir to not care about filename encodings
-        gchar* folder = g_path_get_dirname(filename);
+        wxGtkString folder(g_path_get_dirname(filename));
         chdir(folder);
-        g_free(folder);
     }
-
-    g_free(filename);
 
     wxCommandEvent event(wxEVT_COMMAND_BUTTON_CLICKED, wxID_OK);
     event.SetEventObject(dialog);
@@ -114,9 +111,7 @@ static void gtk_filedialog_update_preview_callback(GtkFileChooser *chooser,
 #if GTK_CHECK_VERSION(2,4,0)
     GtkWidget *preview = GTK_WIDGET(user_data);
 
-    gchar *str = gtk_file_chooser_get_preview_filename(chooser);
-    wxGtkString filename(str);
-    if (str) g_free(str);
+    wxGtkString filename(gtk_file_chooser_get_preview_filename(chooser));
 
     if ( !filename )
         return;
@@ -310,14 +305,11 @@ wxString wxFileDialog::GetPath() const
 {
     if (!gtk_check_version(2,4,0))
     {
-        gchar *str = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(m_widget));
-        wxString ret = wxConvFileName->cMB2WX(str);
-        if (str) g_free(str);
-
-        return ret;
+        wxGtkString str(gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(m_widget)));
+        return wxConvFileName->cMB2WX(str);
     }
-    else
-        return wxGenericFileDialog::GetPath();
+
+    return wxGenericFileDialog::GetPath();
 }
 
 void wxFileDialog::GetFilenames(wxArrayString& files) const
@@ -401,14 +393,11 @@ wxString wxFileDialog::GetDirectory() const
 {
     if (!gtk_check_version(2,4,0))
     {
-        gchar *str = gtk_file_chooser_get_current_folder( GTK_FILE_CHOOSER(m_widget) );
-        wxString ret = wxConvFileName->cMB2WX(str);
-        if (str) g_free(str);
-
-        return ret;
+        wxGtkString str(gtk_file_chooser_get_current_folder(GTK_FILE_CHOOSER(m_widget)));
+        return wxConvFileName->cMB2WX(str);
     }
-    else
-        return wxGenericFileDialog::GetDirectory();
+
+    return wxGenericFileDialog::GetDirectory();
 }
 
 void wxFileDialog::SetFilename(const wxString& name)

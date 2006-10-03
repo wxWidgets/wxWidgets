@@ -60,10 +60,8 @@ void gtk_fontdialog_ok_callback( GtkWidget *WXUNUSED(widget), wxFontDialog *dial
 
     GtkFontSelectionDialog *fontdlg = GTK_FONT_SELECTION_DIALOG(dialog->m_widget);
 
-    gchar *fontname = gtk_font_selection_dialog_get_font_name(fontdlg);
+    wxGtkString fontname(gtk_font_selection_dialog_get_font_name(fontdlg));
     dialog->SetChosenFont( fontname);
-
-    g_free( fontname );
 
     wxCommandEvent event(wxEVT_COMMAND_BUTTON_CLICKED, wxID_OK);
     event.SetEventObject( dialog );

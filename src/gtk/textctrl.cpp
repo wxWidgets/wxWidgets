@@ -69,10 +69,9 @@ static void wxGtkTextApplyTagsFromAttr(GtkTextBuffer *text_buffer,
 
     if (attr.HasFont())
     {
-        char *font_string;
         PangoFontDescription *font_description = attr.GetFont().GetNativeFontInfo()->description;
-        font_string = pango_font_description_to_string(font_description);
-        g_snprintf(buf, sizeof(buf), "WXFONT %s", font_string);
+        wxGtkString font_string(pango_font_description_to_string(font_description));
+        g_snprintf(buf, sizeof(buf), "WXFONT %s", font_string.c_str());
         tag = gtk_text_tag_table_lookup( gtk_text_buffer_get_tag_table( text_buffer ),
                                          buf );
         if (!tag)
@@ -80,7 +79,6 @@ static void wxGtkTextApplyTagsFromAttr(GtkTextBuffer *text_buffer,
                                               "font-desc", font_description,
                                               NULL );
         gtk_text_buffer_apply_tag (text_buffer, tag, start, end);
-        g_free (font_string);
 
         if (attr.GetFont().GetUnderlined())
         {
@@ -787,13 +785,11 @@ wxString wxTextCtrl::GetValue() const
         gtk_text_buffer_get_start_iter( m_buffer, &start );
         GtkTextIter end;
         gtk_text_buffer_get_end_iter( m_buffer, &end );
-        gchar *text = gtk_text_buffer_get_text( m_buffer, &start, &end, TRUE );
+        wxGtkString text(gtk_text_buffer_get_text(m_buffer, &start, &end, true));
 
         const wxWxCharBuffer buf = wxGTK_CONV_BACK(text);
         if ( buf )
             tmp = buf;
-
-        g_free( text );
     }
     else
     {
@@ -942,22 +938,22 @@ void wxTextCtrl::AppendText( const wxString &text )
 
 wxString wxTextCtrl::GetLineText( long lineNo ) const
 {
+    wxString result;
     if ( IsMultiLine() )
     {
         GtkTextIter line;
         gtk_text_buffer_get_iter_at_line(m_buffer,&line,lineNo);
         GtkTextIter end = line;
         gtk_text_iter_forward_to_line_end(&end);
-        gchar *text = gtk_text_buffer_get_text(m_buffer,&line,&end,TRUE);
-        wxString result(wxGTK_CONV_BACK(text));
-        g_free(text);
-        return result;
+        wxGtkString text(gtk_text_buffer_get_text(m_buffer, &line, &end, true));
+        result = wxGTK_CONV_BACK(text);
     }
     else
     {
-        if (lineNo == 0) return GetValue();
-        return wxEmptyString;
+        if (lineNo == 0)
+            result = GetValue();
     }
+    return result;
 }
 
 void wxTextCtrl::OnDropFiles( wxDropFilesEvent &WXUNUSED(event) )

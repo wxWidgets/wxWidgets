@@ -23,7 +23,7 @@
 #include "wx/mstream.h"
 #include "wx/uri.h"
 
-#include <gdk/gdk.h>
+#include "wx/gtk/private.h"
 
 //-------------------------------------------------------------------------
 // global data
@@ -110,10 +110,8 @@ wxDataFormatId wxDataFormat::GetType() const
 
 wxString wxDataFormat::GetId() const
 {
-    gchar* atom_name = gdk_atom_name( m_format );
-    wxString ret = wxString::FromAscii( atom_name );
-    g_free(atom_name);
-    return ret;
+    wxGtkString atom_name(gdk_atom_name(m_format));
+    return wxString::FromAscii(atom_name);
 }
 
 void wxDataFormat::SetId( NativeFormat format )

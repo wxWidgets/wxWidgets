@@ -29,17 +29,9 @@
     #include "wx/filedlg.h"
 #endif
 
-#include <gtk/gtk.h>
 #include "wx/gtk/private.h"
 
 #include <unistd.h> // chdir
-
-
-//-----------------------------------------------------------------------------
-// idle system
-//-----------------------------------------------------------------------------
-
-extern void wxapp_install_idle_handler();
 
 //-----------------------------------------------------------------------------
 // "clicked" for OK-button
@@ -48,13 +40,12 @@ extern void wxapp_install_idle_handler();
 extern "C" {
 static void gtk_dirdialog_ok_callback(GtkWidget *widget, wxDirDialog *dialog)
 {
-    gchar* filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(widget));
-
     // change to the directory where the user went if asked
     if (dialog->HasFlag(wxDD_CHANGE_DIR))
+    {
+        wxGtkString filename(gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(widget)));
         chdir(filename);
-
-    g_free(filename);
+    }
 
     wxCommandEvent event(wxEVT_COMMAND_BUTTON_CLICKED, wxID_OK);
     event.SetEventObject(dialog);
@@ -213,14 +204,11 @@ wxString wxDirDialog::GetPath() const
 {
     if (!gtk_check_version(2,4,0))
     {
-        gchar *str = gtk_file_chooser_get_filename( GTK_FILE_CHOOSER(m_widget) );
-        wxString ret = wxConvFileName->cMB2WX(str);
-        if (str) g_free(str);
-
-        return ret;
+        wxGtkString str(gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(m_widget)));
+        return wxConvFileName->cMB2WX(str);
     }
-    else
-        return wxGenericDirDialog::GetPath();
+
+    return wxGenericDirDialog::GetPath();
 }
 
 #endif // wxUSE_DIRDLG
