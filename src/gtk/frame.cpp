@@ -416,8 +416,6 @@ void wxFrame::GtkOnSize()
                 ww = m_toolBarDetached ? wxPLACE_HOLDER
                                        : m_frameToolBar->m_width;
                 hh = m_height - 2*m_miniEdge;
-                if (hh < 0)
-                    hh = 0;
 
                 client_area_x_offset += ww;
             }
@@ -443,6 +441,10 @@ void wxFrame::GtkOnSize()
                 client_area_y_offset += hh;
             }
 
+            if (ww < 0)
+                ww = 0;
+            if (hh < 0)
+                hh = 0;
             gtk_pizza_set_size( GTK_PIZZA(m_mainWidget),
                                   m_frameToolBar->m_widget,
                                   xx, yy, ww, hh );
