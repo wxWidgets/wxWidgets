@@ -18,10 +18,6 @@
 // headers
 // ---------------------------------------------------------------------------
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-  #pragma implementation "treelistctrl.h"
-#endif
-
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
@@ -2673,7 +2669,7 @@ void wxTreeListMainWindow::SelectItem (const wxTreeItemId& itemId,
 }
 
 void wxTreeListMainWindow::SelectAll() {
-    wxCHECK_RET (HasFlag(wxTR_MULTIPLE), _T("invalid tree style"));
+    wxCHECK_RET (HasFlag(wxTR_MULTIPLE), _T("invalid tree style, must have wxTR_MULTIPLE style to select all items"));
 
     // send event to user code
     wxTreeEvent event (wxEVT_COMMAND_TREE_SEL_CHANGING, m_owner->GetId());
@@ -2694,6 +2690,7 @@ void wxTreeListMainWindow::SelectAll() {
     wxTreeItemId root = GetRootItem();
     wxTreeListItem *first = (wxTreeListItem *)GetFirstChild (root, cookie).m_pItem;
     wxTreeListItem *last = (wxTreeListItem *)GetLastChild (root, cookie).m_pItem;
+    if (!first || !last) return;
     if (!TagAllChildrenUntilLast (first, last)) {
         TagNextChildren (first, last);
     }
@@ -3793,6 +3790,7 @@ void wxTreeListMainWindow::OnMouse (wxMouseEvent &event) {
 #else
         nevent.SetItem (item); // the item the drag is ended
 #endif
+        nevent.SetPoint (p);
         nevent.Veto(); // dragging must be explicit allowed!
         m_owner->GetEventHandler()->ProcessEvent (nevent);
 
@@ -4618,8 +4616,7 @@ void wxTreeListCtrl::ScrollTo(const wxTreeItemId& item)
 
 wxTreeItemId wxTreeListCtrl::HitTest(const wxPoint& pos, int& flags, int& column)
 {
-    wxPoint p = m_main_win->ScreenToClient (ClientToScreen (pos));
-    return m_main_win->HitTest (p, flags, column);
+    return m_main_win->HitTest (pos, flags, column);
 }
 
 bool wxTreeListCtrl::GetBoundingRect(const wxTreeItemId& item, wxRect& rect,
