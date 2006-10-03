@@ -395,7 +395,7 @@ class MyFrame(wx.Frame):
             #print "new"
             self.OnGameNew(None)
             return
-        key = event.KeyCode();
+        key = event.GetKeyCode();
         #print key
         if key >= ord('A') and key <= ord('Z'):
             key = key + ord('a') - ord('A')
