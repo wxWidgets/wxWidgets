@@ -105,8 +105,8 @@ void wxGraphicsPath::AddQuadCurveToPoint( wxDouble cx, wxDouble cy, wxDouble x, 
     wxPoint2DDouble start = GetCurrentPoint() ;
     wxPoint2DDouble end(x,y);
     wxPoint2DDouble c(cx,cy);
-    c1 = (1/3.0) * start + (2/3.0) * c;
-    c2 = (2/3.0) * c + (1/3.0) * end ;
+    c1 = wxDouble(1/3.0) * start + wxDouble(2/3.0) * c;
+    c2 = wxDouble(2/3.0) * c + wxDouble(1/3.0) * end ;
     AddCurveToPoint(c1.m_x,c1.m_y,c2.m_x,c2.m_y,x,y);
 }
 
