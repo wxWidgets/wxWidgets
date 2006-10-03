@@ -13,17 +13,18 @@
 
 #include "wx/xrc/xmlres.h"
 
-#if wxUSE_DATEPICKCTRL
+#if wxUSE_XRC && wxUSE_DATEPICKCTRL
 
 class WXDLLIMPEXP_XRC wxDateCtrlXmlHandler : public wxXmlResourceHandler
 {
-DECLARE_DYNAMIC_CLASS(wxDateCtrlXmlHandler)
+    DECLARE_DYNAMIC_CLASS(wxDateCtrlXmlHandler)
+
 public:
     wxDateCtrlXmlHandler();
     virtual wxObject *DoCreateResource();
     virtual bool CanHandle(wxXmlNode *node);
 };
 
-#endif // wxUSE_DATEPICKCTRL
+#endif // wxUSE_XRC && wxUSE_DATEPICKCTRL
 
 #endif // _WX_XH_DATECTRL_H_

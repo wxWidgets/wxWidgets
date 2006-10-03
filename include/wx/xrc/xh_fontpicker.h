@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/xrc/xh_clrpicker.cpp
-// Purpose:     XML resource handler for wxColourPickerCtrl
+// Name:        wx/xrc/xh_fontpicker.h
+// Purpose:     XML resource handler for wxFontPickerCtrl
 // Author:      Francesco Montorsi
 // Created:     2006-04-17
 // RCS-ID:      $Id$
@@ -13,17 +13,18 @@
 
 #include "wx/xrc/xmlres.h"
 
-#if wxUSE_FONTPICKERCTRL
+#if wxUSE_XRC && wxUSE_FONTPICKERCTRL
 
 class WXDLLIMPEXP_XRC wxFontPickerCtrlXmlHandler : public wxXmlResourceHandler
 {
-DECLARE_DYNAMIC_CLASS(wxFontPickerCtrlXmlHandler)
+    DECLARE_DYNAMIC_CLASS(wxFontPickerCtrlXmlHandler)
+
 public:
     wxFontPickerCtrlXmlHandler();
     virtual wxObject *DoCreateResource();
     virtual bool CanHandle(wxXmlNode *node);
 };
 
-#endif // wxUSE_FONTPICKERCTRL
+#endif // wxUSE_XRC && wxUSE_FONTPICKERCTRL
 
 #endif // _WX_XH_FONTPICKERCTRL_H_

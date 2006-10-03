@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/xrc/xh_toolb.h
-// Purpose:     XML resource handler for wxBoxSizer
+// Purpose:     XML resource handler for wxToolBar
 // Author:      Vaclav Slavik
 // Created:     2000/08/11
 // RCS-ID:      $Id$
@@ -13,13 +13,14 @@
 
 #include "wx/xrc/xmlres.h"
 
-#if wxUSE_TOOLBAR
+#if wxUSE_XRC && wxUSE_TOOLBAR
 
 class WXDLLEXPORT wxToolBar;
 
 class WXDLLIMPEXP_XRC wxToolBarXmlHandler : public wxXmlResourceHandler
 {
-DECLARE_DYNAMIC_CLASS(wxToolBarXmlHandler)
+    DECLARE_DYNAMIC_CLASS(wxToolBarXmlHandler)
+
 public:
     wxToolBarXmlHandler();
     virtual wxObject *DoCreateResource();
@@ -30,6 +31,6 @@ private:
     wxToolBar *m_toolbar;
 };
 
-#endif
+#endif // wxUSE_XRC && wxUSE_TOOLBAR
 
-#endif // _WX_XH_TOOLBAR_H_
+#endif // _WX_XH_TOOLB_H_

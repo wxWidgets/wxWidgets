@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/xrc/xh_radbt.h
-// Purpose:     XML resource handler for radio buttons
+// Purpose:     XML resource handler for wxRadioButton
 // Author:      Bob Mitchell
 // Created:     2000/03/21
 // RCS-ID:      $Id$
@@ -12,19 +12,19 @@
 #define _WX_XH_RADBT_H_
 
 #include "wx/xrc/xmlres.h"
-#include "wx/defs.h"
 
-#if wxUSE_RADIOBOX
+#if wxUSE_XRC && wxUSE_RADIOBTN
 
 class WXDLLIMPEXP_XRC wxRadioButtonXmlHandler : public wxXmlResourceHandler
 {
-DECLARE_DYNAMIC_CLASS(wxRadioButtonXmlHandler)
+    DECLARE_DYNAMIC_CLASS(wxRadioButtonXmlHandler)
+
 public:
     wxRadioButtonXmlHandler();
     virtual wxObject *DoCreateResource();
     virtual bool CanHandle(wxXmlNode *node);
 };
 
-#endif
+#endif // wxUSE_XRC && wxUSE_RADIOBOX
 
-#endif // _WX_XH_RADIOBUTTON_H_
+#endif // _WX_XH_RADBT_H_

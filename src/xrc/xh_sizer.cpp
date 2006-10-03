@@ -377,6 +377,7 @@ void wxSizerXmlHandler::AddSizerItem(wxSizerItem* sitem)
 //-----------------------------------------------------------------------------
 // wxStdDialogButtonSizerXmlHandler
 //-----------------------------------------------------------------------------
+#if wxUSE_BUTTON
 
 IMPLEMENT_DYNAMIC_CLASS(wxStdDialogButtonSizerXmlHandler, wxXmlResourceHandler)
 
@@ -438,5 +439,6 @@ bool wxStdDialogButtonSizerXmlHandler::CanHandle(wxXmlNode *node)
     return (!m_isInside && IsOfClass(node, wxT("wxStdDialogButtonSizer"))) ||
            (m_isInside && IsOfClass(node, wxT("button")));
 }
+#endif // wxUSE_BUTTON
 
 #endif // wxUSE_XRC

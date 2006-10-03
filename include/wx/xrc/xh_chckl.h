@@ -11,19 +11,19 @@
 #ifndef _WX_XH_CHCKL_H_
 #define _WX_XH_CHCKL_H_
 
-#include "wx/defs.h"
+#include "wx/xrc/xmlres.h"
 
 #if wxUSE_XRC && wxUSE_CHECKLISTBOX
 
-#include "wx/xrc/xmlres.h"
-
 class WXDLLIMPEXP_XRC wxCheckListBoxXmlHandler : public wxXmlResourceHandler
 {
-DECLARE_DYNAMIC_CLASS(wxCheckListBoxXmlHandler)
+    DECLARE_DYNAMIC_CLASS(wxCheckListBoxXmlHandler)
+
 public:
     wxCheckListBoxXmlHandler();
     virtual wxObject *DoCreateResource();
     virtual bool CanHandle(wxXmlNode *node);
+
 private:
     bool m_insideBox;
     wxArrayString strList;

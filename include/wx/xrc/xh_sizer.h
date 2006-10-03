@@ -12,15 +12,18 @@
 #define _WX_XH_SIZER_H_
 
 #include "wx/xrc/xmlres.h"
+
+#if wxUSE_XRC
+
 #include "wx/sizer.h"
 #include "wx/gbsizer.h"
-
 
 class WXDLLEXPORT wxSizer;
 
 class WXDLLIMPEXP_XRC wxSizerXmlHandler : public wxXmlResourceHandler
 {
-DECLARE_DYNAMIC_CLASS(wxSizerXmlHandler)
+    DECLARE_DYNAMIC_CLASS(wxSizerXmlHandler)
+
 public:
     wxSizerXmlHandler();
     virtual wxObject *DoCreateResource();
@@ -51,10 +54,13 @@ private:
     void AddSizerItem(wxSizerItem* sitem);
 };
 
+#if wxUSE_BUTTON
 
 class WXDLLIMPEXP_XRC wxStdDialogButtonSizerXmlHandler
     : public wxXmlResourceHandler
 {
+    DECLARE_DYNAMIC_CLASS(wxStdDialogButtonSizerXmlHandler)
+
 public:
     wxStdDialogButtonSizerXmlHandler();
     virtual wxObject *DoCreateResource();
@@ -63,9 +69,10 @@ public:
 private:
     bool m_isInside;
     wxStdDialogButtonSizer *m_parentSizer;
-
-    DECLARE_DYNAMIC_CLASS(wxStdDialogButtonSizerXmlHandler)
 };
 
+#endif // wxUSE_BUTTON
+
+#endif // wxUSE_XRC
 
 #endif // _WX_XH_SIZER_H_

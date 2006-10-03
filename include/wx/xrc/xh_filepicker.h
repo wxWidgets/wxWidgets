@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/xrc/xh_clrpicker.cpp
-// Purpose:     XML resource handler for wxColourPickerCtrl
+// Name:        wx/xrc/xh_filepicker.h
+// Purpose:     XML resource handler for wxFilePickerCtrl
 // Author:      Francesco Montorsi
 // Created:     2006-04-17
 // RCS-ID:      $Id$
@@ -13,17 +13,18 @@
 
 #include "wx/xrc/xmlres.h"
 
-#if wxUSE_FILEPICKERCTRL
+#if wxUSE_XRC && wxUSE_FILEPICKERCTRL
 
 class WXDLLIMPEXP_XRC wxFilePickerCtrlXmlHandler : public wxXmlResourceHandler
 {
-DECLARE_DYNAMIC_CLASS(wxFilePickerCtrlXmlHandler)
+    DECLARE_DYNAMIC_CLASS(wxFilePickerCtrlXmlHandler)
+
 public:
     wxFilePickerCtrlXmlHandler();
     virtual wxObject *DoCreateResource();
     virtual bool CanHandle(wxXmlNode *node);
 };
 
-#endif // wxUSE_FILEPICKERCTRL
+#endif // wxUSE_XRC && wxUSE_FILEPICKERCTRL
 
 #endif // _WX_XH_FILEPICKERCTRL_H_

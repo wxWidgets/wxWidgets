@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/xrc/xh_grid.h
-// Purpose:     XML resource handler for the grid control
+// Purpose:     XML resource handler for wxGrid
 // Author:      Agron Selimaj
 // Created:     2005/08/11
 // RCS-ID:      $Id$
@@ -17,14 +17,13 @@
 
 class WXDLLIMPEXP_XRC wxGridXmlHandler : public wxXmlResourceHandler
 {
+    DECLARE_DYNAMIC_CLASS(wxGridXmlHandler)
+
 public:
     wxGridXmlHandler();
 
     virtual wxObject *DoCreateResource();
     virtual bool CanHandle(wxXmlNode *node);
-
-private:
-    DECLARE_DYNAMIC_CLASS(wxGridXmlHandler)
 };
 
 #endif // wxUSE_XRC && wxUSE_GRID

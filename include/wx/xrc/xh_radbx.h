@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/xrc/xh_radbx.h
-// Purpose:     XML resource handler for radio box
+// Purpose:     XML resource handler for wxRadioBox
 // Author:      Bob Mitchell
 // Created:     2000/03/21
 // RCS-ID:      $Id$
@@ -13,15 +13,17 @@
 
 #include "wx/xrc/xmlres.h"
 
-#if wxUSE_RADIOBOX
+#if wxUSE_XRC && wxUSE_RADIOBOX
 
 class WXDLLIMPEXP_XRC wxRadioBoxXmlHandler : public wxXmlResourceHandler
 {
-DECLARE_DYNAMIC_CLASS(wxRadioBoxXmlHandler)
+    DECLARE_DYNAMIC_CLASS(wxRadioBoxXmlHandler)
+
 public:
     wxRadioBoxXmlHandler();
     virtual wxObject *DoCreateResource();
     virtual bool CanHandle(wxXmlNode *node);
+
 private:
     bool m_insideBox;
 
@@ -36,6 +38,6 @@ private:
     wxArrayInt    helptextSpecified;
 };
 
-#endif // wxUSE_RADIOBOX
+#endif // wxUSE_XRC && wxUSE_RADIOBOX
 
 #endif // _WX_XH_RADBX_H_

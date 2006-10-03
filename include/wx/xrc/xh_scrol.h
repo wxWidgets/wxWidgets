@@ -12,9 +12,8 @@
 #define _WX_XH_SCROL_H_
 
 #include "wx/xrc/xmlres.h"
-#include "wx/defs.h"
 
-
+#if wxUSE_XRC && wxUSE_SCROLLBAR
 
 class WXDLLIMPEXP_XRC wxScrollBarXmlHandler : public wxXmlResourceHandler
 {
@@ -32,5 +31,6 @@ public:
     virtual bool CanHandle(wxXmlNode *node);
 };
 
+#endif // wxUSE_XRC && wxUSE_SCROLLBAR
 
 #endif // _WX_XH_SCROL_H_

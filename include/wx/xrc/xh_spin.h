@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/xrc/xh_spin.h
-// Purpose:     XML resource handler for wxSpinButton
+// Purpose:     XML resource handler for wxSpinButton and wxSpinCtrl
 // Author:      Bob Mitchell
 // Created:     2000/03/21
 // RCS-ID:      $Id$
@@ -12,9 +12,11 @@
 #define _WX_XH_SPIN_H_
 
 #include "wx/xrc/xmlres.h"
-#include "wx/defs.h"
+
+#if wxUSE_XRC 
 
 #if wxUSE_SPINBTN
+
 class WXDLLIMPEXP_XRC wxSpinButtonXmlHandler : public wxXmlResourceHandler
 {
     DECLARE_DYNAMIC_CLASS(wxSpinButtonXmlHandler)
@@ -30,9 +32,12 @@ public:
     virtual wxObject *DoCreateResource();
     virtual bool CanHandle(wxXmlNode *node);
 };
-#endif
+
+#endif // wxUSE_SPINBTN
+
 
 #if wxUSE_SPINCTRL
+
 class WXDLLIMPEXP_XRC wxSpinCtrlXmlHandler : public wxXmlResourceHandler
 {
     DECLARE_DYNAMIC_CLASS(wxSpinCtrlXmlHandler)
@@ -48,6 +53,9 @@ public:
     virtual wxObject *DoCreateResource();
     virtual bool CanHandle(wxXmlNode *node);
 };
-#endif
+
+#endif // wxUSE_SPINCTRL
+
+#endif // wxUSE_XRC
 
 #endif // _WX_XH_SPIN_H_

@@ -15,7 +15,7 @@
     #pragma hdrstop
 #endif
 
-#if wxUSE_XRC
+#if wxUSE_XRC 
 
 #include "wx/xrc/xh_spin.h"
 

@@ -11,19 +11,19 @@
 #ifndef _WX_XH_CHOIC_H_
 #define _WX_XH_CHOIC_H_
 
-#include "wx/defs.h"
+#include "wx/xrc/xmlres.h"
 
 #if wxUSE_XRC && wxUSE_CHOICE
 
-#include "wx/xrc/xmlres.h"
-
 class WXDLLIMPEXP_XRC wxChoiceXmlHandler : public wxXmlResourceHandler
 {
-DECLARE_DYNAMIC_CLASS(wxChoiceXmlHandler)
+    DECLARE_DYNAMIC_CLASS(wxChoiceXmlHandler)
+
 public:
     wxChoiceXmlHandler();
     virtual wxObject *DoCreateResource();
     virtual bool CanHandle(wxXmlNode *node);
+
 private:
     bool m_insideBox;
     wxArrayString strList;

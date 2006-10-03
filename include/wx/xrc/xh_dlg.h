@@ -13,14 +13,18 @@
 
 #include "wx/xrc/xmlres.h"
 
+#if wxUSE_XRC
+
 class WXDLLIMPEXP_XRC wxDialogXmlHandler : public wxXmlResourceHandler
 {
-DECLARE_DYNAMIC_CLASS(wxDialogXmlHandler)
+    DECLARE_DYNAMIC_CLASS(wxDialogXmlHandler)
+
 public:
     wxDialogXmlHandler();
     virtual wxObject *DoCreateResource();
     virtual bool CanHandle(wxXmlNode *node);
 };
 
+#endif // wxUSE_XRC
 
 #endif // _WX_XH_DLG_H_

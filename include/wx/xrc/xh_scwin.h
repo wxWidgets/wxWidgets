@@ -12,18 +12,19 @@
 #define _WX_XH_SCWIN_H_
 
 #include "wx/xrc/xmlres.h"
-#include "wx/defs.h"
 
-
+#if wxUSE_XRC
 
 class WXDLLIMPEXP_XRC wxScrolledWindowXmlHandler : public wxXmlResourceHandler
 {
-DECLARE_DYNAMIC_CLASS(wxScrolledWindowXmlHandler)
+    DECLARE_DYNAMIC_CLASS(wxScrolledWindowXmlHandler)
+
 public:
     wxScrolledWindowXmlHandler();
     virtual wxObject *DoCreateResource();
     virtual bool CanHandle(wxXmlNode *node);
 };
 
+#endif // wxUSE_XRC
 
 #endif // _WX_XH_SCWIN_H_

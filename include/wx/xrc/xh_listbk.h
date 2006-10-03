@@ -11,13 +11,14 @@
 
 #include "wx/xrc/xmlres.h"
 
-#if wxUSE_LISTBOOK
+#if wxUSE_XRC && wxUSE_LISTBOOK
 
 class WXDLLEXPORT wxListbook;
 
 class WXDLLIMPEXP_XRC wxListbookXmlHandler : public wxXmlResourceHandler
 {
-DECLARE_DYNAMIC_CLASS(wxListbookXmlHandler)
+    DECLARE_DYNAMIC_CLASS(wxListbookXmlHandler)
+
 public:
     wxListbookXmlHandler();
     virtual wxObject *DoCreateResource();
@@ -28,6 +29,6 @@ private:
     wxListbook *m_listbook;
 };
 
-#endif
+#endif // wxUSE_XRC && wxUSE_LISTBOOK
 
 #endif // _WX_XH_LISTBK_H_

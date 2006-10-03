@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/xrc/xh_chckl.cpp
-// Purpose:     XRC resource for wxCheckList
+// Purpose:     XRC resource for wxCheckListBox
 // Author:      Bob Mitchell
 // Created:     2000/03/21
 // RCS-ID:      $Id$

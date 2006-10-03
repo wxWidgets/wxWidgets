@@ -13,19 +13,18 @@
 
 #include "wx/xrc/xmlres.h"
 
-#include "wx/defs.h"
-
-#if wxUSE_HTML
+#if wxUSE_XRC && wxUSE_HTML
 
 class WXDLLIMPEXP_XRC wxHtmlWindowXmlHandler : public wxXmlResourceHandler
 {
-DECLARE_DYNAMIC_CLASS(wxHtmlWindowXmlHandler)
+    DECLARE_DYNAMIC_CLASS(wxHtmlWindowXmlHandler)
+
 public:
     wxHtmlWindowXmlHandler();
     virtual wxObject *DoCreateResource();
     virtual bool CanHandle(wxXmlNode *node);
 };
 
-#endif
+#endif // wxUSE_XRC && wxUSE_HTML
 
-#endif // _WX_XH_SLIDER_H_
+#endif // _WX_XH_HTML_H_

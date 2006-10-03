@@ -13,15 +13,18 @@
 
 #include "wx/xrc/xmlres.h"
 
+#if wxUSE_XRC
 
 class WXDLLIMPEXP_XRC wxUnknownWidgetXmlHandler : public wxXmlResourceHandler
 {
-DECLARE_DYNAMIC_CLASS(wxUnknownWidgetXmlHandler)
+    DECLARE_DYNAMIC_CLASS(wxUnknownWidgetXmlHandler)
+
 public:
     wxUnknownWidgetXmlHandler();
     virtual wxObject *DoCreateResource();
     virtual bool CanHandle(wxXmlNode *node);
 };
 
+#endif // wxUSE_XRC
 
 #endif // _WX_XH_UNKWN_H_

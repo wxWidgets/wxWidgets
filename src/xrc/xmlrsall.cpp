@@ -22,24 +22,46 @@
 
 void wxXmlResource::InitAllHandlers()
 {
+    // these are the handlers, which we always have
+    AddHandler(new wxUnknownWidgetXmlHandler);
     AddHandler(new wxBitmapXmlHandler);
     AddHandler(new wxIconXmlHandler);
-    AddHandler(new wxMenuXmlHandler);
-    AddHandler(new wxMenuBarXmlHandler);
     AddHandler(new wxDialogXmlHandler);
     AddHandler(new wxPanelXmlHandler);
     AddHandler(new wxSizerXmlHandler);
+    AddHandler(new wxFrameXmlHandler);
+    AddHandler(new wxScrolledWindowXmlHandler);
+
+    // these are configurable handlers
+#if wxUSE_MENUS
+    AddHandler(new wxMenuXmlHandler);
+    AddHandler(new wxMenuBarXmlHandler);
+#endif
+#if wxUSE_BUTTON
     AddHandler(new wxStdDialogButtonSizerXmlHandler);
     AddHandler(new wxButtonXmlHandler);
+#endif
+#if wxUSE_BMPBUTTON
     AddHandler(new wxBitmapButtonXmlHandler);
+#endif
+#if wxUSE_STATTEXT
     AddHandler(new wxStaticTextXmlHandler);
+#endif
+#if wxUSE_STATBOX
     AddHandler(new wxStaticBoxXmlHandler);
+#endif
+#if wxUSE_STATBMP
     AddHandler(new wxStaticBitmapXmlHandler);
+#endif
+#if wxUSE_TREECTRL
     AddHandler(new wxTreeCtrlXmlHandler);
+#endif
 #if wxUSE_CALENDARCTRL
     AddHandler(new wxCalendarCtrlXmlHandler);
 #endif
+#if wxUSE_LISTCTRL
     AddHandler(new wxListCtrlXmlHandler);
+#endif
 #if wxUSE_CHECKLISTBOX
     AddHandler(new wxCheckListBoxXmlHandler);
 #endif
@@ -72,6 +94,8 @@ void wxXmlResource::InitAllHandlers()
 #endif
 #if wxUSE_RADIOBOX
     AddHandler(new wxRadioBoxXmlHandler);
+#endif
+#if wxUSE_RADIOBTN
     AddHandler(new wxRadioButtonXmlHandler);
 #endif
 #if wxUSE_COMBOBOX
@@ -95,7 +119,9 @@ void wxXmlResource::InitAllHandlers()
 #if wxUSE_TREEBOOK
     AddHandler(new wxTreebookXmlHandler);
 #endif
+#if wxUSE_TEXTCTRL
     AddHandler(new wxTextCtrlXmlHandler);
+#endif
 #if wxUSE_LISTBOX
     AddHandler(new wxListBoxXmlHandler);
 #endif
@@ -105,13 +131,12 @@ void wxXmlResource::InitAllHandlers()
 #if wxUSE_STATLINE
     AddHandler(new wxStaticLineXmlHandler);
 #endif
-    AddHandler(new wxUnknownWidgetXmlHandler);
 #if wxUSE_DIRDLG
     AddHandler(new wxGenericDirCtrlXmlHandler);
 #endif
-    AddHandler(new wxFrameXmlHandler);
-    AddHandler(new wxScrolledWindowXmlHandler);
+#if wxUSE_SPLITTER
     AddHandler(new wxSplitterWindowXmlHandler);
+#endif
 #if wxUSE_WIZARDDLG
     AddHandler(new wxWizardXmlHandler);
 #endif

@@ -13,20 +13,22 @@
 
 #include "wx/xrc/xmlres.h"
 
-#if wxUSE_COMBOBOX
+#if wxUSE_XRC && wxUSE_COMBOBOX
 
 class WXDLLIMPEXP_XRC wxComboBoxXmlHandler : public wxXmlResourceHandler
 {
-DECLARE_DYNAMIC_CLASS(wxComboBoxXmlHandler)
+    DECLARE_DYNAMIC_CLASS(wxComboBoxXmlHandler)
+
 public:
     wxComboBoxXmlHandler();
     virtual wxObject *DoCreateResource();
     virtual bool CanHandle(wxXmlNode *node);
+
 private:
     bool m_insideBox;
     wxArrayString strList;
 };
 
-#endif
+#endif // wxUSE_XRC && wxUSE_COMBOBOX
 
 #endif // _WX_XH_COMBO_H_

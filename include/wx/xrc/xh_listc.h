@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/xrc/xh_listc.h
-// Purpose:     XML resource handler for wxCalendarCtrl
+// Purpose:     XML resource handler for wxListCtrl
 // Author:      Brian Gavin
 // Created:     2000/09/09
 // RCS-ID:      $Id$
@@ -13,14 +13,18 @@
 
 #include "wx/xrc/xmlres.h"
 
+#if wxUSE_XRC && wxUSE_LISTCTRL
+
 class WXDLLIMPEXP_XRC wxListCtrlXmlHandler : public wxXmlResourceHandler
 {
-DECLARE_DYNAMIC_CLASS(wxListCtrlXmlHandler)
+    DECLARE_DYNAMIC_CLASS(wxListCtrlXmlHandler)
+
 public:
     wxListCtrlXmlHandler();
     virtual wxObject *DoCreateResource();
     virtual bool CanHandle(wxXmlNode *node);
 };
 
+#endif // wxUSE_XRC && wxUSE_LISTCTRL
 
 #endif // _WX_XH_LISTC_H_

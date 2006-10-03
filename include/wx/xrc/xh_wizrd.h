@@ -9,17 +9,19 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_XH_WIZRD_H_
-#define _WX_XH_WIZRDL_H_
+#define _WX_XH_WIZRD_H_
 
 #include "wx/xrc/xmlres.h"
 
-#if wxUSE_WIZARDDLG
+#if wxUSE_XRC && wxUSE_WIZARDDLG
 
-#include "wx/wizard.h"
+class WXDLLEXPORT wxWizard;
+class WXDLLEXPORT wxWizardPageSimple;
 
 class WXDLLIMPEXP_XRC wxWizardXmlHandler : public wxXmlResourceHandler
 {
-DECLARE_DYNAMIC_CLASS(wxWizardXmlHandler)
+    DECLARE_DYNAMIC_CLASS(wxWizardXmlHandler)
+
 public:
     wxWizardXmlHandler();
     virtual wxObject *DoCreateResource();
@@ -30,6 +32,6 @@ private:
     wxWizardPageSimple *m_lastSimplePage;
 };
 
-#endif
+#endif // wxUSE_XRC && wxUSE_WIZARDDLG
 
-#endif // _WX_XH_PANEL_H_
+#endif // _WX_XH_WIZRD_H_

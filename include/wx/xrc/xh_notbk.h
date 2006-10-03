@@ -12,13 +12,14 @@
 
 #include "wx/xrc/xmlres.h"
 
-#if wxUSE_NOTEBOOK
+#if wxUSE_XRC && wxUSE_NOTEBOOK
 
 class WXDLLEXPORT wxNotebook;
 
 class WXDLLIMPEXP_XRC wxNotebookXmlHandler : public wxXmlResourceHandler
 {
-DECLARE_DYNAMIC_CLASS(wxNotebookXmlHandler)
+    DECLARE_DYNAMIC_CLASS(wxNotebookXmlHandler)
+
 public:
     wxNotebookXmlHandler();
     virtual wxObject *DoCreateResource();
@@ -29,6 +30,6 @@ private:
     wxNotebook *m_notebook;
 };
 
-#endif
+#endif // wxUSE_XRC && wxUSE_NOTEBOOK
 
 #endif // _WX_XH_NOTBK_H_

@@ -11,15 +11,14 @@
 #ifndef _WX_XH_CALD_H_
 #define _WX_XH_CALD_H_
 
-#include "wx/defs.h"
+#include "wx/xrc/xmlres.h"
 
 #if wxUSE_XRC && wxUSE_CALENDARCTRL
 
-#include "wx/xrc/xmlres.h"
-
 class WXDLLIMPEXP_XRC wxCalendarCtrlXmlHandler : public wxXmlResourceHandler
 {
-DECLARE_DYNAMIC_CLASS(wxCalendarCtrlXmlHandler)
+    DECLARE_DYNAMIC_CLASS(wxCalendarCtrlXmlHandler)
+
 public:
     wxCalendarCtrlXmlHandler();
     virtual wxObject *DoCreateResource();

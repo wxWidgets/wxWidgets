@@ -9,17 +9,16 @@
 #ifndef _WX_XH_CHOICEBK_H_
 #define _WX_XH_CHOICEBK_H_
 
-#include "wx/defs.h"
+#include "wx/xrc/xmlres.h"
 
 #if wxUSE_XRC && wxUSE_CHOICEBOOK
-
-#include "wx/xrc/xmlres.h"
 
 class WXDLLEXPORT wxChoicebook;
 
 class WXDLLIMPEXP_XRC wxChoicebookXmlHandler : public wxXmlResourceHandler
 {
-DECLARE_DYNAMIC_CLASS(wxChoicebookXmlHandler)
+    DECLARE_DYNAMIC_CLASS(wxChoicebookXmlHandler)
+
 public:
     wxChoicebookXmlHandler();
     virtual wxObject *DoCreateResource();

@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/xrc/hyperlink.cpp
+// Name:        src/xrc/xh_hyperlink.cpp
 // Purpose:     Hyperlink control
 // Author:      David Norris <danorris@gmail.com>
 // Modified by: Ryan Norton, Francesco Montorsi

@@ -11,12 +11,9 @@
 #ifndef _WX_XH_GAUGE_H_
 #define _WX_XH_GAUGE_H_
 
-#include "wx/defs.h"
-
-#if wxUSE_GAUGE
-
 #include "wx/xrc/xmlres.h"
 
+#if wxUSE_XRC && wxUSE_GAUGE
 
 class WXDLLIMPEXP_XRC wxGaugeXmlHandler : public wxXmlResourceHandler
 {
@@ -32,6 +29,6 @@ public:
     virtual bool CanHandle(wxXmlNode *node);
 };
 
-#endif
+#endif // wxUSE_XRC && wxUSE_GAUGE
 
 #endif // _WX_XH_GAUGE_H_

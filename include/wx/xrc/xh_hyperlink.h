@@ -12,15 +12,15 @@
 #ifndef _WX_XH_HYPERLINKH__
 #define _WX_XH_HYPERLINKH__
 
-#include "wx/defs.h"
-
-#if wxUSE_HYPERLINKCTRL
-
-#include "wx/hyperlink.h"
 #include "wx/xrc/xmlres.h"
+
+#if wxUSE_XRC && wxUSE_HYPERLINKCTRL
 
 class WXDLLIMPEXP_XRC wxHyperlinkCtrlXmlHandler : public wxXmlResourceHandler
 {
+    // Register with wxWindows' dynamic class subsystem.
+    DECLARE_DYNAMIC_CLASS(wxHyperlinkCtrlXmlHandler)
+
 public:
     // Constructor.
     wxHyperlinkCtrlXmlHandler();
@@ -30,10 +30,8 @@ public:
 
     // Returns true if we know how to create a control for the given node.
     virtual bool CanHandle(wxXmlNode *node);
-
-    // Register with wxWindows' dynamic class subsystem.
-    DECLARE_DYNAMIC_CLASS(wxHyperlinkCtrlXmlHandler)
 };
 
-#endif // wxUSE_HYPERLINKCTRL
+#endif // wxUSE_XRC && wxUSE_HYPERLINKCTRL
+
 #endif // _WX_XH_HYPERLINKH__

@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/xrc/xh_toolb.cpp
-// Purpose:     XRC resource for wxBoxSizer
+// Purpose:     XRC resource for wxToolBar
 // Author:      Vaclav Slavik
 // Created:     2000/08/11
 // RCS-ID:      $Id$

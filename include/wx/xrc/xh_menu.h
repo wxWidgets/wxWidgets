@@ -13,9 +13,12 @@
 
 #include "wx/xrc/xmlres.h"
 
+#if wxUSE_XRC && wxUSE_MENUS
+
 class WXDLLIMPEXP_XRC wxMenuXmlHandler : public wxXmlResourceHandler
 {
-DECLARE_DYNAMIC_CLASS(wxMenuXmlHandler)
+    DECLARE_DYNAMIC_CLASS(wxMenuXmlHandler)
+
 public:
     wxMenuXmlHandler();
     virtual wxObject *DoCreateResource();
@@ -28,11 +31,13 @@ private:
 class WXDLLIMPEXP_XRC wxMenuBarXmlHandler : public wxXmlResourceHandler
 {
     DECLARE_DYNAMIC_CLASS(wxMenuBarXmlHandler)
-    public:
-        wxMenuBarXmlHandler();
-        virtual wxObject *DoCreateResource();
-        virtual bool CanHandle(wxXmlNode *node);
+
+public:
+    wxMenuBarXmlHandler();
+    virtual wxObject *DoCreateResource();
+    virtual bool CanHandle(wxXmlNode *node);
 };
 
+#endif // wxUSE_XRC && wxUSE_MENUS
 
 #endif // _WX_XH_MENU_H_

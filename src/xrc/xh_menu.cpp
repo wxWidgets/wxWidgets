@@ -15,7 +15,7 @@
     #pragma hdrstop
 #endif
 
-#if wxUSE_XRC
+#if wxUSE_XRC && wxUSE_MENUS
 
 #include "wx/xrc/xh_menu.h"
 
@@ -149,4 +149,4 @@ bool wxMenuBarXmlHandler::CanHandle(wxXmlNode *node)
     return IsOfClass(node, wxT("wxMenuBar"));
 }
 
-#endif // wxUSE_XRC
+#endif // wxUSE_XRC && wxUSE_MENUS

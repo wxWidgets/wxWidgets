@@ -13,14 +13,18 @@
 
 #include "wx/xrc/xmlres.h"
 
+#if wxUSE_XRC && wxUSE_BUTTON
+
 class WXDLLIMPEXP_XRC wxButtonXmlHandler : public wxXmlResourceHandler
 {
-DECLARE_DYNAMIC_CLASS(wxButtonXmlHandler)
+    DECLARE_DYNAMIC_CLASS(wxButtonXmlHandler)
+
 public:
     wxButtonXmlHandler();
     virtual wxObject *DoCreateResource();
     virtual bool CanHandle(wxXmlNode *node);
 };
 
+#endif // wxUSE_XRC && wxUSE_BUTTON
 
 #endif // _WX_XH_BTTN_H_

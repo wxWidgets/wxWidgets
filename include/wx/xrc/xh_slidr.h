@@ -12,9 +12,8 @@
 #define _WX_XH_SLIDR_H_
 
 #include "wx/xrc/xmlres.h"
-#include "wx/defs.h"
 
-#if wxUSE_SLIDER
+#if wxUSE_XRC && wxUSE_SLIDER
 
 class WXDLLIMPEXP_XRC wxSliderXmlHandler : public wxXmlResourceHandler
 {
@@ -32,6 +31,6 @@ public:
     virtual bool CanHandle(wxXmlNode *node);
 };
 
-#endif
+#endif // wxUSE_XRC && wxUSE_SLIDER
 
-#endif // _WX_XH_SLIDER_H_
+#endif // _WX_XH_SLIDR_H_

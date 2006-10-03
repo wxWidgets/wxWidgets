@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/xrc/xh_mdi.cpp
-// Purpose:     XRC resource for dialogs
+// Purpose:     XRC resource for wxMDI
 // Author:      David M. Falkinder & Vaclav Slavik
 // Created:     14/02/2005
 // RCS-ID:      $Id$

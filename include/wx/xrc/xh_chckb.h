@@ -11,15 +11,14 @@
 #ifndef _WX_XH_CHCKB_H_
 #define _WX_XH_CHCKB_H_
 
-#include "wx/defs.h"
+#include "wx/xrc/xmlres.h"
 
 #if wxUSE_XRC && wxUSE_CHECKBOX
 
-#include "wx/xrc/xmlres.h"
-
 class WXDLLIMPEXP_XRC wxCheckBoxXmlHandler : public wxXmlResourceHandler
 {
-DECLARE_DYNAMIC_CLASS(wxCheckBoxXmlHandler)
+    DECLARE_DYNAMIC_CLASS(wxCheckBoxXmlHandler)
+
 public:
     wxCheckBoxXmlHandler();
     virtual wxObject *DoCreateResource();

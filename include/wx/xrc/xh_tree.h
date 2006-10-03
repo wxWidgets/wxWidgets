@@ -13,14 +13,18 @@
 
 #include "wx/xrc/xmlres.h"
 
+#if wxUSE_XRC && wxUSE_TREECTRL
+
 class WXDLLIMPEXP_XRC wxTreeCtrlXmlHandler : public wxXmlResourceHandler
 {
-DECLARE_DYNAMIC_CLASS(wxTreeCtrlXmlHandler)
+    DECLARE_DYNAMIC_CLASS(wxTreeCtrlXmlHandler)
+
 public:
     wxTreeCtrlXmlHandler();
     virtual wxObject *DoCreateResource();
     virtual bool CanHandle(wxXmlNode *node);
 };
 
+#endif // wxUSE_XRC && wxUSE_TREECTRL
 
 #endif // _WX_XH_TREE_H_
