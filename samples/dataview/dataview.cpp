@@ -305,7 +305,8 @@ enum my_events
     ID_EDIT_ROW_RIGHT,
     
     ID_SORTED,
-    ID_UNSORTED
+    ID_UNSORTED,
+    ID_ACTIVATED
 };
 
 class MySortingFrame: public wxFrame
@@ -335,6 +336,7 @@ public:
     
     void OnSelectedUnsorted(wxDataViewEvent &event);
     void OnSelectedSorted(wxDataViewEvent &event);
+    void OnActivatedUnsorted(wxDataViewEvent &event);
 
 private:
     wxDataViewCtrl* dataview_left;
@@ -471,6 +473,7 @@ BEGIN_EVENT_TABLE(MySortingFrame,wxFrame)
     EVT_BUTTON( ID_UNSELECT_ALL, MySortingFrame::OnUnselectAll )
     EVT_DATAVIEW_ROW_SELECTED( ID_SORTED, MySortingFrame::OnSelectedSorted )
     EVT_DATAVIEW_ROW_SELECTED( ID_UNSORTED, MySortingFrame::OnSelectedUnsorted )
+    EVT_DATAVIEW_ROW_ACTIVATED( ID_UNSORTED, MySortingFrame::OnActivatedUnsorted )
 END_EVENT_TABLE()
 
 MySortingFrame::MySortingFrame(wxFrame *frame, wxChar *title, int x, int y, int w, int h):
@@ -582,6 +585,11 @@ void MySortingFrame::OnSelectedUnsorted(wxDataViewEvent &event)
 void MySortingFrame::OnSelectedSorted(wxDataViewEvent &event)
 {
     wxLogMessage( wxT("OnSelected from sorted list, selected %d"), (int) event.GetRow() );
+}
+
+void MySortingFrame::OnActivatedUnsorted(wxDataViewEvent &event)
+{
+    wxLogMessage( wxT("OnActivated from unsorted list, activated %d"), (int) event.GetRow() );
 }
 
 void MySortingFrame::OnQuit(wxCommandEvent& WXUNUSED(event) )

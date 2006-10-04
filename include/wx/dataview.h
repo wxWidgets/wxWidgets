@@ -382,6 +382,7 @@ private:
 
 BEGIN_DECLARE_EVENT_TYPES()
     DECLARE_EVENT_TYPE(wxEVT_COMMAND_DATAVIEW_ROW_SELECTED, -1)
+    DECLARE_EVENT_TYPE(wxEVT_COMMAND_DATAVIEW_ROW_ACTIVATED, -1)
 END_DECLARE_EVENT_TYPES()
 
 typedef void (wxEvtHandler::*wxDataViewEventFunction)(wxDataViewEvent&);
@@ -393,6 +394,7 @@ typedef void (wxEvtHandler::*wxDataViewEventFunction)(wxDataViewEvent&);
     wx__DECLARE_EVT1(wxEVT_COMMAND_DATAVIEW_ ## evt, id, wxDataViewEventHandler(fn))
 
 #define EVT_DATAVIEW_ROW_SELECTED(id, fn) wx__DECLARE_DATAVIEWEVT(ROW_SELECTED, id, fn)
+#define EVT_DATAVIEW_ROW_ACTIVATED(id, fn) wx__DECLARE_DATAVIEWEVT(ROW_ACTIVATED, id, fn)
 
 
 #if defined(wxUSE_GENERICDATAVIEWCTRL)

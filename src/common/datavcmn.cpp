@@ -811,6 +811,7 @@ wxDataViewColumn* wxDataViewCtrlBase::GetColumn( unsigned int pos )
 IMPLEMENT_DYNAMIC_CLASS(wxDataViewEvent,wxNotifyEvent)
 
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_DATAVIEW_ROW_SELECTED)
+DEFINE_EVENT_TYPE(wxEVT_COMMAND_DATAVIEW_ROW_ACTIVATED)
 
 
 #endif

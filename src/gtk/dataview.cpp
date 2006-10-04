@@ -1490,6 +1490,17 @@ wxdataview_selection_changed_callback( GtkTreeSelection* selection, wxDataViewCt
     dv->GetEventHandler()->ProcessEvent( event );
 }
 
+static void
+wxdataview_row_activated_callback( GtkTreeView* treeview, GtkTreePath *path, 
+                                   GtkTreeViewColumn *column, wxDataViewCtrl *dv )
+{
+    wxDataViewEvent event( wxEVT_COMMAND_DATAVIEW_ROW_ACTIVATED, dv->GetId() );
+    unsigned int row = (unsigned int)gtk_tree_path_get_indices (path)[0];
+    event.SetRow( row );
+    event.SetModel( dv->GetModel() );
+    dv->GetEventHandler()->ProcessEvent( event );
+}
+
 //-----------------------------------------------------------------------------
 // wxDataViewCtrl
 //-----------------------------------------------------------------------------
@@ -1545,6 +1556,8 @@ bool wxDataViewCtrl::Create(wxWindow *parent, wxWindowID id,
     GtkTreeSelection *selection = gtk_tree_view_get_selection( GTK_TREE_VIEW(m_treeview) );
     g_signal_connect_after (selection, "changed",
                             G_CALLBACK (wxdataview_selection_changed_callback), this);
+    g_signal_connect_after (m_treeview, "row_activated",
+                            G_CALLBACK (wxdataview_row_activated_callback), this);
 
     PostCreation(size);
 
