@@ -270,7 +270,6 @@ BEGIN_EVENT_TABLE(WidgetsFrame, wxFrame)
 
 #if wxUSE_MENUS
     EVT_WIDGETS_PAGE_CHANGING(wxID_ANY, WidgetsFrame::OnPageChanging)
-    EVT_WIDGETS_PAGE_CHANGED(wxID_ANY, WidgetsFrame::OnPageChanged)
     EVT_MENU_RANGE(Widgets_GoToPage, Widgets_GoToPageLast,
                    WidgetsFrame::OnGoToPage)
 
@@ -571,6 +570,10 @@ void WidgetsFrame::InitBook()
         }
     }
 
+    Connect( wxID_ANY,
+             wxEVT_COMMAND_WIDGETS_PAGE_CHANGED,
+             wxWidgetsbookEventHandler(WidgetsFrame::OnPageChanged) );
+
 #if USE_TREEBOOK
     // for treebook page #0 is empty parent page only so select the first page
     // with some contents
@@ -581,6 +584,11 @@ void WidgetsFrame::InitBook()
 
     wxTreeItemIdValue cookie;
     tree->EnsureVisible(tree->GetFirstChild(tree->GetRootItem(), cookie));
+#else
+    // for other books set selection twice to force connected event handler
+    // to force lazy creation of initial visible content
+    m_book->SetSelection(1);
+    m_book->SetSelection(0);
 #endif // USE_TREEBOOK
 }
 
@@ -625,8 +633,11 @@ void WidgetsFrame::OnButtonClearLog(wxCommandEvent& WXUNUSED(event))
 
 void WidgetsFrame::OnPageChanging(WidgetsBookCtrlEvent& event)
 {
+#if USE_TREEBOOK
+    // don't allow selection of entries without pages (categories)
     if ( !m_book->GetPage(event.GetSelection()) )
         event.Veto();
+#endif
 }
 
 void WidgetsFrame::OnPageChanged(WidgetsBookCtrlEvent& event)
