@@ -1,20 +1,17 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/mac/carbon/dccg.cpp
+// Name:        src/msw/graphics.cpp
 // Purpose:     wxGCDC class
 // Author:      Stefan Csomor
 // Modified by:
-// Created:     01/02/97
+// Created:     2006-09-30
 // RCS-ID:      $Id$
-// Copyright:   (c) Stefan Csomor
+// Copyright:   (c) 2006 Stefan Csomor
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #include "wx/wxprec.h"
 
 #include "wx/dc.h"
-
-// For compilers that support precompilation, includes "wx.h".
-#include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
 #pragma hdrstop
