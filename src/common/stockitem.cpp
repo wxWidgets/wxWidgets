@@ -380,6 +380,9 @@ const char *wxGetStockGtkID(wxWindowID id)
 
 bool wxGetStockGtkAccelerator(const char *id, GdkModifierType *mod, guint *key)
 {
+    if (!id)
+        return false;
+
     GtkStockItem stock_item;
     if (gtk_stock_lookup (id, &stock_item))
     {
