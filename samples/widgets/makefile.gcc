@@ -27,18 +27,19 @@ WIDGETS_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG_2) $(__THREADSFLAG) \
 	-DNOPCH $(__RTTIFLAG_5) $(__EXCEPTIONSFLAG_6) -Wno-ctor-dtor-privacy \
 	$(CPPFLAGS) $(CXXFLAGS)
 WIDGETS_OBJECTS =  \
+	$(OBJS)\widgets_bmpcombobox.o \
 	$(OBJS)\widgets_button.o \
 	$(OBJS)\widgets_checkbox.o \
+	$(OBJS)\widgets_clrpicker.o \
 	$(OBJS)\widgets_combobox.o \
 	$(OBJS)\widgets_datepick.o \
+	$(OBJS)\widgets_dirpicker.o \
+	$(OBJS)\widgets_filepicker.o \
+	$(OBJS)\widgets_fontpicker.o \
 	$(OBJS)\widgets_gauge.o \
 	$(OBJS)\widgets_hyperlnk.o \
 	$(OBJS)\widgets_listbox.o \
 	$(OBJS)\widgets_notebook.o \
-	$(OBJS)\widgets_clrpicker.o \
-	$(OBJS)\widgets_fontpicker.o \
-	$(OBJS)\widgets_filepicker.o \
-	$(OBJS)\widgets_dirpicker.o \
 	$(OBJS)\widgets_odcombobox.o \
 	$(OBJS)\widgets_radiobox.o \
 	$(OBJS)\widgets_slider.o \
@@ -241,16 +242,31 @@ clean:
 $(OBJS)\widgets.exe: $(WIDGETS_OBJECTS) $(OBJS)\widgets_sample_rc.o
 	$(CXX) -o $@ $(WIDGETS_OBJECTS) $(LDFLAGS) $(__DEBUGINFO) $(__THREADSFLAG) -L$(LIBDIRNAME) -Wl,--subsystem,windows -mwindows  $(__WXLIB_XML_p)  $(__WXLIB_ADV_p)  $(__WXLIB_HTML_p)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  -lwxzlib$(WXDEBUGFLAG)  -lwxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG) -lwxexpat$(WXDEBUGFLAG) $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lwsock32 -lodbc32
 
+$(OBJS)\widgets_bmpcombobox.o: ./bmpcombobox.cpp
+	$(CXX) -c -o $@ $(WIDGETS_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\widgets_button.o: ./button.cpp
 	$(CXX) -c -o $@ $(WIDGETS_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\widgets_checkbox.o: ./checkbox.cpp
 	$(CXX) -c -o $@ $(WIDGETS_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\widgets_clrpicker.o: ./clrpicker.cpp
+	$(CXX) -c -o $@ $(WIDGETS_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\widgets_combobox.o: ./combobox.cpp
 	$(CXX) -c -o $@ $(WIDGETS_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\widgets_datepick.o: ./datepick.cpp
+	$(CXX) -c -o $@ $(WIDGETS_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\widgets_dirpicker.o: ./dirpicker.cpp
+	$(CXX) -c -o $@ $(WIDGETS_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\widgets_filepicker.o: ./filepicker.cpp
+	$(CXX) -c -o $@ $(WIDGETS_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\widgets_fontpicker.o: ./fontpicker.cpp
 	$(CXX) -c -o $@ $(WIDGETS_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\widgets_gauge.o: ./gauge.cpp
@@ -263,18 +279,6 @@ $(OBJS)\widgets_listbox.o: ./listbox.cpp
 	$(CXX) -c -o $@ $(WIDGETS_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\widgets_notebook.o: ./notebook.cpp
-	$(CXX) -c -o $@ $(WIDGETS_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\widgets_clrpicker.o: ./clrpicker.cpp
-	$(CXX) -c -o $@ $(WIDGETS_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\widgets_fontpicker.o: ./fontpicker.cpp
-	$(CXX) -c -o $@ $(WIDGETS_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\widgets_filepicker.o: ./filepicker.cpp
-	$(CXX) -c -o $@ $(WIDGETS_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\widgets_dirpicker.o: ./dirpicker.cpp
 	$(CXX) -c -o $@ $(WIDGETS_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\widgets_odcombobox.o: ./odcombobox.cpp

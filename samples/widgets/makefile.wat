@@ -229,18 +229,19 @@ WIDGETS_CXXFLAGS = $(__DEBUGINFO_0) $(__OPTIMIZEFLAG_2) $(__THREADSFLAG_5) &
 	-wcd=656 -wcd=657 -wcd=667 -i=. $(__DLLFLAG_p) -i=.\..\..\samples -dNOPCH &
 	$(__RTTIFLAG_7) $(__EXCEPTIONSFLAG_8) $(CPPFLAGS) $(CXXFLAGS)
 WIDGETS_OBJECTS =  &
+	$(OBJS)\widgets_bmpcombobox.obj &
 	$(OBJS)\widgets_button.obj &
 	$(OBJS)\widgets_checkbox.obj &
+	$(OBJS)\widgets_clrpicker.obj &
 	$(OBJS)\widgets_combobox.obj &
 	$(OBJS)\widgets_datepick.obj &
+	$(OBJS)\widgets_dirpicker.obj &
+	$(OBJS)\widgets_filepicker.obj &
+	$(OBJS)\widgets_fontpicker.obj &
 	$(OBJS)\widgets_gauge.obj &
 	$(OBJS)\widgets_hyperlnk.obj &
 	$(OBJS)\widgets_listbox.obj &
 	$(OBJS)\widgets_notebook.obj &
-	$(OBJS)\widgets_clrpicker.obj &
-	$(OBJS)\widgets_fontpicker.obj &
-	$(OBJS)\widgets_filepicker.obj &
-	$(OBJS)\widgets_dirpicker.obj &
 	$(OBJS)\widgets_odcombobox.obj &
 	$(OBJS)\widgets_radiobox.obj &
 	$(OBJS)\widgets_slider.obj &
@@ -279,16 +280,31 @@ $(OBJS)\widgets.exe :  $(WIDGETS_OBJECTS) $(OBJS)\widgets_sample.res
 	@for %i in () do @%append $(OBJS)\widgets.lbc option stack=%i
 	wlink @$(OBJS)\widgets.lbc
 
+$(OBJS)\widgets_bmpcombobox.obj :  .AUTODEPEND .\bmpcombobox.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(WIDGETS_CXXFLAGS) $<
+
 $(OBJS)\widgets_button.obj :  .AUTODEPEND .\button.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(WIDGETS_CXXFLAGS) $<
 
 $(OBJS)\widgets_checkbox.obj :  .AUTODEPEND .\checkbox.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(WIDGETS_CXXFLAGS) $<
 
+$(OBJS)\widgets_clrpicker.obj :  .AUTODEPEND .\clrpicker.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(WIDGETS_CXXFLAGS) $<
+
 $(OBJS)\widgets_combobox.obj :  .AUTODEPEND .\combobox.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(WIDGETS_CXXFLAGS) $<
 
 $(OBJS)\widgets_datepick.obj :  .AUTODEPEND .\datepick.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(WIDGETS_CXXFLAGS) $<
+
+$(OBJS)\widgets_dirpicker.obj :  .AUTODEPEND .\dirpicker.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(WIDGETS_CXXFLAGS) $<
+
+$(OBJS)\widgets_filepicker.obj :  .AUTODEPEND .\filepicker.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(WIDGETS_CXXFLAGS) $<
+
+$(OBJS)\widgets_fontpicker.obj :  .AUTODEPEND .\fontpicker.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(WIDGETS_CXXFLAGS) $<
 
 $(OBJS)\widgets_gauge.obj :  .AUTODEPEND .\gauge.cpp
@@ -301,18 +317,6 @@ $(OBJS)\widgets_listbox.obj :  .AUTODEPEND .\listbox.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(WIDGETS_CXXFLAGS) $<
 
 $(OBJS)\widgets_notebook.obj :  .AUTODEPEND .\notebook.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(WIDGETS_CXXFLAGS) $<
-
-$(OBJS)\widgets_clrpicker.obj :  .AUTODEPEND .\clrpicker.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(WIDGETS_CXXFLAGS) $<
-
-$(OBJS)\widgets_fontpicker.obj :  .AUTODEPEND .\fontpicker.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(WIDGETS_CXXFLAGS) $<
-
-$(OBJS)\widgets_filepicker.obj :  .AUTODEPEND .\filepicker.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(WIDGETS_CXXFLAGS) $<
-
-$(OBJS)\widgets_dirpicker.obj :  .AUTODEPEND .\dirpicker.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(WIDGETS_CXXFLAGS) $<
 
 $(OBJS)\widgets_odcombobox.obj :  .AUTODEPEND .\odcombobox.cpp

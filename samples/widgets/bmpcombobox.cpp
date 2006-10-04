@@ -54,7 +54,7 @@
 
 #include "widgets.h"
 
-#include "icons/odcombobox.xpm"
+#include "icons/bmpcombobox.xpm"
 
 // Images loaded from file are reduced this width and height, if larger
 #define IMG_SIZE_TRUNC  150
@@ -229,7 +229,7 @@ IMPLEMENT_WIDGETS_PAGE(BitmapComboBoxWidgetsPage, _T("BitmapCombobox"),
 
 BitmapComboBoxWidgetsPage::BitmapComboBoxWidgetsPage(WidgetsBookCtrl *book,
                                              wxImageList *imaglist)
-                  : WidgetsPage(book, imaglist, odcombobox_xpm)
+                  : WidgetsPage(book, imaglist, bmpcombobox_xpm)
 {
     // init everything
     m_chkSort =

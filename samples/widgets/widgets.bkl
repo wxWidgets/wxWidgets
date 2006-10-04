@@ -1,4 +1,5 @@
 <?xml version="1.0" ?>
+<!-- $Id$ -->
 <makefile>
 
     <include file="../../build/bakefiles/common_samples.bkl"/>
@@ -8,16 +9,16 @@
             bmpcombobox.cpp
             button.cpp
             checkbox.cpp
+            clrpicker.cpp
             combobox.cpp
             datepick.cpp
+            dirpicker.cpp
+            filepicker.cpp
+            fontpicker.cpp
             gauge.cpp
             hyperlnk.cpp
             listbox.cpp
             notebook.cpp
-            clrpicker.cpp
-            fontpicker.cpp
-            filepicker.cpp
-            dirpicker.cpp
             odcombobox.cpp
             radiobox.cpp
             slider.cpp

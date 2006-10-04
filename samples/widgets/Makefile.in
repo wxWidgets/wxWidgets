@@ -48,18 +48,19 @@ WIDGETS_CXXFLAGS = -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	-I$(srcdir) $(__DLLFLAG_p) -I$(srcdir)/../../samples $(CPPFLAGS) $(CXXFLAGS)
 WIDGETS_OBJECTS =  \
 	$(__widgets_os2_lib_res) \
+	widgets_bmpcombobox.o \
 	widgets_button.o \
 	widgets_checkbox.o \
+	widgets_clrpicker.o \
 	widgets_combobox.o \
 	widgets_datepick.o \
+	widgets_dirpicker.o \
+	widgets_filepicker.o \
+	widgets_fontpicker.o \
 	widgets_gauge.o \
 	widgets_hyperlnk.o \
 	widgets_listbox.o \
 	widgets_notebook.o \
-	widgets_clrpicker.o \
-	widgets_fontpicker.o \
-	widgets_filepicker.o \
-	widgets_dirpicker.o \
 	widgets_odcombobox.o \
 	widgets_radiobox.o \
 	widgets_slider.o \
@@ -210,17 +211,32 @@ widgets.app/Contents/PkgInfo: widgets$(EXEEXT) $(top_srcdir)/src/mac/carbon/Info
 
 @COND_PLATFORM_MACOSX_1@widgets_bundle: $(____widgets_BUNDLE_TGT_REF_DEP)
 
+widgets_bmpcombobox.o: $(srcdir)/bmpcombobox.cpp
+	$(CXXC) -c -o $@ $(WIDGETS_CXXFLAGS) $(srcdir)/bmpcombobox.cpp
+
 widgets_button.o: $(srcdir)/button.cpp
 	$(CXXC) -c -o $@ $(WIDGETS_CXXFLAGS) $(srcdir)/button.cpp
 
 widgets_checkbox.o: $(srcdir)/checkbox.cpp
 	$(CXXC) -c -o $@ $(WIDGETS_CXXFLAGS) $(srcdir)/checkbox.cpp
 
+widgets_clrpicker.o: $(srcdir)/clrpicker.cpp
+	$(CXXC) -c -o $@ $(WIDGETS_CXXFLAGS) $(srcdir)/clrpicker.cpp
+
 widgets_combobox.o: $(srcdir)/combobox.cpp
 	$(CXXC) -c -o $@ $(WIDGETS_CXXFLAGS) $(srcdir)/combobox.cpp
 
 widgets_datepick.o: $(srcdir)/datepick.cpp
 	$(CXXC) -c -o $@ $(WIDGETS_CXXFLAGS) $(srcdir)/datepick.cpp
+
+widgets_dirpicker.o: $(srcdir)/dirpicker.cpp
+	$(CXXC) -c -o $@ $(WIDGETS_CXXFLAGS) $(srcdir)/dirpicker.cpp
+
+widgets_filepicker.o: $(srcdir)/filepicker.cpp
+	$(CXXC) -c -o $@ $(WIDGETS_CXXFLAGS) $(srcdir)/filepicker.cpp
+
+widgets_fontpicker.o: $(srcdir)/fontpicker.cpp
+	$(CXXC) -c -o $@ $(WIDGETS_CXXFLAGS) $(srcdir)/fontpicker.cpp
 
 widgets_gauge.o: $(srcdir)/gauge.cpp
 	$(CXXC) -c -o $@ $(WIDGETS_CXXFLAGS) $(srcdir)/gauge.cpp
@@ -233,18 +249,6 @@ widgets_listbox.o: $(srcdir)/listbox.cpp
 
 widgets_notebook.o: $(srcdir)/notebook.cpp
 	$(CXXC) -c -o $@ $(WIDGETS_CXXFLAGS) $(srcdir)/notebook.cpp
-
-widgets_clrpicker.o: $(srcdir)/clrpicker.cpp
-	$(CXXC) -c -o $@ $(WIDGETS_CXXFLAGS) $(srcdir)/clrpicker.cpp
-
-widgets_fontpicker.o: $(srcdir)/fontpicker.cpp
-	$(CXXC) -c -o $@ $(WIDGETS_CXXFLAGS) $(srcdir)/fontpicker.cpp
-
-widgets_filepicker.o: $(srcdir)/filepicker.cpp
-	$(CXXC) -c -o $@ $(WIDGETS_CXXFLAGS) $(srcdir)/filepicker.cpp
-
-widgets_dirpicker.o: $(srcdir)/dirpicker.cpp
-	$(CXXC) -c -o $@ $(WIDGETS_CXXFLAGS) $(srcdir)/dirpicker.cpp
 
 widgets_odcombobox.o: $(srcdir)/odcombobox.cpp
 	$(CXXC) -c -o $@ $(WIDGETS_CXXFLAGS) $(srcdir)/odcombobox.cpp

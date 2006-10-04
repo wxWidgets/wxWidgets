@@ -27,18 +27,19 @@ WIDGETS_CXXFLAGS = /M$(__RUNTIME_LIBS_8)$(__DEBUGRUNTIME_3) /DWIN32 \
 	/I.\..\..\samples /DNOPCH $(__RTTIFLAG_9) $(__EXCEPTIONSFLAG_10) $(CPPFLAGS) \
 	$(CXXFLAGS)
 WIDGETS_OBJECTS =  \
+	$(OBJS)\widgets_bmpcombobox.obj \
 	$(OBJS)\widgets_button.obj \
 	$(OBJS)\widgets_checkbox.obj \
+	$(OBJS)\widgets_clrpicker.obj \
 	$(OBJS)\widgets_combobox.obj \
 	$(OBJS)\widgets_datepick.obj \
+	$(OBJS)\widgets_dirpicker.obj \
+	$(OBJS)\widgets_filepicker.obj \
+	$(OBJS)\widgets_fontpicker.obj \
 	$(OBJS)\widgets_gauge.obj \
 	$(OBJS)\widgets_hyperlnk.obj \
 	$(OBJS)\widgets_listbox.obj \
 	$(OBJS)\widgets_notebook.obj \
-	$(OBJS)\widgets_clrpicker.obj \
-	$(OBJS)\widgets_fontpicker.obj \
-	$(OBJS)\widgets_filepicker.obj \
-	$(OBJS)\widgets_dirpicker.obj \
 	$(OBJS)\widgets_odcombobox.obj \
 	$(OBJS)\widgets_radiobox.obj \
 	$(OBJS)\widgets_slider.obj \
@@ -323,16 +324,31 @@ $(OBJS)\widgets.exe: $(WIDGETS_OBJECTS) $(OBJS)\widgets_sample.res
 	$(WIDGETS_OBJECTS)  $(__WXLIB_XML_p)  $(__WXLIB_ADV_p)  $(__WXLIB_HTML_p)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib
 <<
 
+$(OBJS)\widgets_bmpcombobox.obj: .\bmpcombobox.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(WIDGETS_CXXFLAGS) $**
+
 $(OBJS)\widgets_button.obj: .\button.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(WIDGETS_CXXFLAGS) $**
 
 $(OBJS)\widgets_checkbox.obj: .\checkbox.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(WIDGETS_CXXFLAGS) $**
 
+$(OBJS)\widgets_clrpicker.obj: .\clrpicker.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(WIDGETS_CXXFLAGS) $**
+
 $(OBJS)\widgets_combobox.obj: .\combobox.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(WIDGETS_CXXFLAGS) $**
 
 $(OBJS)\widgets_datepick.obj: .\datepick.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(WIDGETS_CXXFLAGS) $**
+
+$(OBJS)\widgets_dirpicker.obj: .\dirpicker.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(WIDGETS_CXXFLAGS) $**
+
+$(OBJS)\widgets_filepicker.obj: .\filepicker.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(WIDGETS_CXXFLAGS) $**
+
+$(OBJS)\widgets_fontpicker.obj: .\fontpicker.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(WIDGETS_CXXFLAGS) $**
 
 $(OBJS)\widgets_gauge.obj: .\gauge.cpp
@@ -345,18 +361,6 @@ $(OBJS)\widgets_listbox.obj: .\listbox.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(WIDGETS_CXXFLAGS) $**
 
 $(OBJS)\widgets_notebook.obj: .\notebook.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(WIDGETS_CXXFLAGS) $**
-
-$(OBJS)\widgets_clrpicker.obj: .\clrpicker.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(WIDGETS_CXXFLAGS) $**
-
-$(OBJS)\widgets_fontpicker.obj: .\fontpicker.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(WIDGETS_CXXFLAGS) $**
-
-$(OBJS)\widgets_filepicker.obj: .\filepicker.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(WIDGETS_CXXFLAGS) $**
-
-$(OBJS)\widgets_dirpicker.obj: .\dirpicker.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(WIDGETS_CXXFLAGS) $**
 
 $(OBJS)\widgets_odcombobox.obj: .\odcombobox.cpp

@@ -637,6 +637,8 @@ void WidgetsFrame::OnPageChanging(WidgetsBookCtrlEvent& event)
     // don't allow selection of entries without pages (categories)
     if ( !m_book->GetPage(event.GetSelection()) )
         event.Veto();
+#else
+    wxUnusedVar(event);
 #endif
 }
 
