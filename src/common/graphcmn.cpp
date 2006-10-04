@@ -34,6 +34,10 @@
 
 #if wxUSE_GRAPHICS_CONTEXT
 
+#if !defined(wxMAC_USE_CORE_GRAPHICS_BLEND_MODES)
+#define wxMAC_USE_CORE_GRAPHICS_BLEND_MODES 0
+#endif
+
 //-----------------------------------------------------------------------------
 // constants
 //-----------------------------------------------------------------------------
