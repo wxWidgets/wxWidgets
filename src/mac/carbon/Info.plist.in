@@ -23,13 +23,13 @@
 	<key>CFBundleShortVersionString</key>
 	<string>VERSION</string>
 	<key>CFBundleGetInfoString</key>
-	<string>EXECUTABLE version VERSION, (c) 2002 wxWindows</string>
+	<string>EXECUTABLE version VERSION, (c) 2002-2006 wxWidgets</string>
 	<key>CFBundleLongVersionString</key>
-	<string>VERSION, (c) 2002 wxWindows</string>
+	<string>VERSION, (c) 2002-2006 wxWidgets</string>
 	<key>NSHumanReadableCopyright</key>
-	<string>Copyright 2002 wxWindows</string>
+	<string>Copyright 2002-2006 wxWidgets</string>
 	<key>LSRequiresCarbon</key>
-        <true/>
+	<true/>
 	<key>CSResourcesFileMapped</key>
 	<true/>
 </dict>
