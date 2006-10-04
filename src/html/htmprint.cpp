@@ -276,7 +276,7 @@ void wxHtmlPrintout::GetPageInfo(int *minPage, int *maxPage, int *selPageFrom, i
 
 bool wxHtmlPrintout::HasPage(int pageNum)
 {
-    return (pageNum >= 1 && pageNum-1 <= (signed)m_PageBreaks.Count());
+    return pageNum > 0 && (unsigned)pageNum < m_PageBreaks.Count();
 }
 
 
