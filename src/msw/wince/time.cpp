@@ -500,18 +500,20 @@ strftime(char * const s, const size_t maxsize, const char *format, const struct 
 extern "C"
 {
 
-size_t wcsftime(wchar_t* const s, const size_t maxsize, const wchar_t *format, const struct tm * const t)
+size_t wcsftime(wchar_t *s,
+                const size_t maxsize,
+                const wchar_t *format,
+                const struct tm *t)
 {
-    char sBuf[256];
-    sBuf[0] = 0;
-    
+    wxCharBuffer sBuf(maxsize/sizeof(wchar_t));
+
     wxString formatStr(format);
     wxCharBuffer bufFormatStr(formatStr.mb_str());
-    
-    size_t sz = strftime(sBuf, maxsize, bufFormatStr, t);
-    
-    wxMB2WC(s, sBuf, strlen(sBuf));
-    
+
+    size_t sz = strftime(sBuf, maxsize/sizeof(wchar_t), bufFormatStr, t);
+
+    wxMB2WC(s, sBuf, maxsize);
+
     return sz;
 }
 
