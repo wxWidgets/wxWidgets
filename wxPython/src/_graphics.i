@@ -230,6 +230,8 @@ public:
     // wxGraphicsContext()         This is also an ABC, use Create to make an instance...
     virtual ~wxGraphicsContext();
     
+    %pythonAppend Create
+        "val.__dc = args[0] # save a ref so the other dc will not be deleted before self";
     static wxGraphicsContext* Create( const wxWindowDC& dc);
 
     // creates a path instance that corresponds to the type of graphics context, ie GDIPlus, cairo, CoreGraphics ...
@@ -437,6 +439,8 @@ public:
 class wxGCDC: public wxDC
 {
 public:
+    %pythonAppend wxGCDC
+        "self.__dc = args[0] # save a ref so the other dc will not be deleted before self";
     wxGCDC(const wxWindowDC& dc);
     //wxGCDC();
     virtual ~wxGCDC();
