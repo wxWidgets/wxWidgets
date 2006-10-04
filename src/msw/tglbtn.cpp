@@ -126,14 +126,18 @@ wxSize wxToggleButton::DoGetBestSize() const
    int hBtn = BUTTON_HEIGHT_FROM_CHAR_HEIGHT(hChar);
 
 #if wxUSE_BUTTON
-   wxSize sz = wxButton::GetDefaultSize();
-   if (wBtn > sz.x)
-       sz.x = wBtn;
-   if (hBtn > sz.y)
-       sz.y = hBtn;
-#else
+   // make all buttons of at least standard size unless wxBU_EXACTFIT is given
+   if ( !HasFlag(wxBU_EXACTFIT) )
+   {
+       const wxSize szMin = wxButton::GetDefaultSize();
+       if ( wBtn < szMin.x )
+           wBtn = szMin.x;
+       if ( hBtn < szMin.y )
+           hBtn = szMin.y;
+   }
+#endif // wxUSE_BUTTON
+
    wxSize sz(wBtn, hBtn);
-#endif
 
    CacheBestSize(sz);
    return sz;

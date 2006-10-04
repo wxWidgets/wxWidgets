@@ -80,6 +80,7 @@ wxMSW:
 - Fixed a bug whereby static controls didn't use the correct text colour if the
   parent's background colour had been set (most noticeable when switching to a
   high-contrast theme).
+- Respect wxBU_EXACTFIT style in wxToggleButton (Alexander Borovsky)
 
 wxMac:
 
