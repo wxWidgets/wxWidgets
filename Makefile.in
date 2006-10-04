@@ -2777,6 +2777,7 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/generic/textdlgg.h \
 	wx/generic/timer.h \
 	wx/generic/treectlg.h \
+	wx/graphics.h \
 	wx/helphtml.h \
 	wx/icon.h \
 	wx/layout.h \
@@ -3339,6 +3340,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS =  \
 	monodll_gdicmn.o \
 	monodll_geometry.o \
 	monodll_gifdecod.o \
+	monodll_graphcmn.o \
 	monodll_helpbase.o \
 	monodll_iconbndl.o \
 	monodll_imagall.o \
@@ -3505,6 +3507,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS =  \
 	monodll_gdicmn.o \
 	monodll_geometry.o \
 	monodll_gifdecod.o \
+	monodll_graphcmn.o \
 	monodll_helpbase.o \
 	monodll_iconbndl.o \
 	monodll_imagall.o \
@@ -3754,6 +3757,7 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS =  \
 	monodll_fontutil.o \
 	monodll_gdiimage.o \
 	monodll_gdiobj.o \
+	monodll_graphics.o \
 	monodll_gsockmsw.o \
 	monodll_icon.o \
 	monodll_imaglist.o \
@@ -3806,6 +3810,7 @@ COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS =  \
 	monodll_fontutil.o \
 	monodll_gdiimage.o \
 	monodll_gdiobj.o \
+	monodll_graphics.o \
 	monodll_gsockmsw.o \
 	monodll_icon.o \
 	monodll_imaglist.o \
@@ -4005,6 +4010,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___GUI_SRC_OBJECTS =  \
 	monodll_dirdlgg.o \
 	monodll_fdrepdlg.o \
 	monodll_filedlgg.o \
+	monodll_graphicc.o \
 	monodll_listctrl.o \
 	monodll_msgdlgg.o \
 	monodll_prntdlgg.o \
@@ -4091,6 +4097,7 @@ COND_TOOLKIT_MAC___GUI_SRC_OBJECTS =  \
 	monodll_frame.o \
 	monodll_gauge.o \
 	monodll_gdiobj.o \
+	monodll_graphics.o \
 	monodll_icon.o \
 	monodll_imaglist.o \
 	monodll_listbox.o \
@@ -4576,6 +4583,7 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_1 =  \
 	monodll_fontutil.o \
 	monodll_gdiimage.o \
 	monodll_gdiobj.o \
+	monodll_graphics.o \
 	monodll_gsockmsw.o \
 	monodll_icon.o \
 	monodll_imaglist.o \
@@ -4628,6 +4636,7 @@ COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS_1 =  \
 	monodll_fontutil.o \
 	monodll_gdiimage.o \
 	monodll_gdiobj.o \
+	monodll_graphics.o \
 	monodll_gsockmsw.o \
 	monodll_icon.o \
 	monodll_imaglist.o \
@@ -5060,6 +5069,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_1 =  \
 	monolib_gdicmn.o \
 	monolib_geometry.o \
 	monolib_gifdecod.o \
+	monolib_graphcmn.o \
 	monolib_helpbase.o \
 	monolib_iconbndl.o \
 	monolib_imagall.o \
@@ -5226,6 +5236,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_1 =  \
 	monolib_gdicmn.o \
 	monolib_geometry.o \
 	monolib_gifdecod.o \
+	monolib_graphcmn.o \
 	monolib_helpbase.o \
 	monolib_iconbndl.o \
 	monolib_imagall.o \
@@ -5476,6 +5487,7 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_2 =  \
 	monolib_fontutil.o \
 	monolib_gdiimage.o \
 	monolib_gdiobj.o \
+	monolib_graphics.o \
 	monolib_gsockmsw.o \
 	monolib_icon.o \
 	monolib_imaglist.o \
@@ -5528,6 +5540,7 @@ COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS_2 =  \
 	monolib_fontutil.o \
 	monolib_gdiimage.o \
 	monolib_gdiobj.o \
+	monolib_graphics.o \
 	monolib_gsockmsw.o \
 	monolib_icon.o \
 	monolib_imaglist.o \
@@ -5727,6 +5740,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___GUI_SRC_OBJECTS_1 =  \
 	monolib_dirdlgg.o \
 	monolib_fdrepdlg.o \
 	monolib_filedlgg.o \
+	monolib_graphicc.o \
 	monolib_listctrl.o \
 	monolib_msgdlgg.o \
 	monolib_prntdlgg.o \
@@ -5813,6 +5827,7 @@ COND_TOOLKIT_MAC___GUI_SRC_OBJECTS_1 =  \
 	monolib_frame.o \
 	monolib_gauge.o \
 	monolib_gdiobj.o \
+	monolib_graphics.o \
 	monolib_icon.o \
 	monolib_imaglist.o \
 	monolib_listbox.o \
@@ -6299,6 +6314,7 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_3 =  \
 	monolib_fontutil.o \
 	monolib_gdiimage.o \
 	monolib_gdiobj.o \
+	monolib_graphics.o \
 	monolib_gsockmsw.o \
 	monolib_icon.o \
 	monolib_imaglist.o \
@@ -6351,6 +6367,7 @@ COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS_3 =  \
 	monolib_fontutil.o \
 	monolib_gdiimage.o \
 	monolib_gdiobj.o \
+	monolib_graphics.o \
 	monolib_gsockmsw.o \
 	monolib_icon.o \
 	monolib_imaglist.o \
@@ -6999,6 +7016,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_2 =  \
 	coredll_gdicmn.o \
 	coredll_geometry.o \
 	coredll_gifdecod.o \
+	coredll_graphcmn.o \
 	coredll_helpbase.o \
 	coredll_iconbndl.o \
 	coredll_imagall.o \
@@ -7165,6 +7183,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_2 =  \
 	coredll_gdicmn.o \
 	coredll_geometry.o \
 	coredll_gifdecod.o \
+	coredll_graphcmn.o \
 	coredll_helpbase.o \
 	coredll_iconbndl.o \
 	coredll_imagall.o \
@@ -7415,6 +7434,7 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_4 =  \
 	coredll_fontutil.o \
 	coredll_gdiimage.o \
 	coredll_gdiobj.o \
+	coredll_graphics.o \
 	coredll_gsockmsw.o \
 	coredll_icon.o \
 	coredll_imaglist.o \
@@ -7467,6 +7487,7 @@ COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS_4 =  \
 	coredll_fontutil.o \
 	coredll_gdiimage.o \
 	coredll_gdiobj.o \
+	coredll_graphics.o \
 	coredll_gsockmsw.o \
 	coredll_icon.o \
 	coredll_imaglist.o \
@@ -7666,6 +7687,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___GUI_SRC_OBJECTS_2 =  \
 	coredll_dirdlgg.o \
 	coredll_fdrepdlg.o \
 	coredll_filedlgg.o \
+	coredll_graphicc.o \
 	coredll_listctrl.o \
 	coredll_msgdlgg.o \
 	coredll_prntdlgg.o \
@@ -7752,6 +7774,7 @@ COND_TOOLKIT_MAC___GUI_SRC_OBJECTS_2 =  \
 	coredll_frame.o \
 	coredll_gauge.o \
 	coredll_gdiobj.o \
+	coredll_graphics.o \
 	coredll_icon.o \
 	coredll_imaglist.o \
 	coredll_listbox.o \
@@ -8238,6 +8261,7 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_5 =  \
 	coredll_fontutil.o \
 	coredll_gdiimage.o \
 	coredll_gdiobj.o \
+	coredll_graphics.o \
 	coredll_gsockmsw.o \
 	coredll_icon.o \
 	coredll_imaglist.o \
@@ -8290,6 +8314,7 @@ COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS_5 =  \
 	coredll_fontutil.o \
 	coredll_gdiimage.o \
 	coredll_gdiobj.o \
+	coredll_graphics.o \
 	coredll_gsockmsw.o \
 	coredll_icon.o \
 	coredll_imaglist.o \
@@ -8414,6 +8439,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_3 =  \
 	corelib_gdicmn.o \
 	corelib_geometry.o \
 	corelib_gifdecod.o \
+	corelib_graphcmn.o \
 	corelib_helpbase.o \
 	corelib_iconbndl.o \
 	corelib_imagall.o \
@@ -8580,6 +8606,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_3 =  \
 	corelib_gdicmn.o \
 	corelib_geometry.o \
 	corelib_gifdecod.o \
+	corelib_graphcmn.o \
 	corelib_helpbase.o \
 	corelib_iconbndl.o \
 	corelib_imagall.o \
@@ -8830,6 +8857,7 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_6 =  \
 	corelib_fontutil.o \
 	corelib_gdiimage.o \
 	corelib_gdiobj.o \
+	corelib_graphics.o \
 	corelib_gsockmsw.o \
 	corelib_icon.o \
 	corelib_imaglist.o \
@@ -8882,6 +8910,7 @@ COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS_6 =  \
 	corelib_fontutil.o \
 	corelib_gdiimage.o \
 	corelib_gdiobj.o \
+	corelib_graphics.o \
 	corelib_gsockmsw.o \
 	corelib_icon.o \
 	corelib_imaglist.o \
@@ -9081,6 +9110,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___GUI_SRC_OBJECTS_3 =  \
 	corelib_dirdlgg.o \
 	corelib_fdrepdlg.o \
 	corelib_filedlgg.o \
+	corelib_graphicc.o \
 	corelib_listctrl.o \
 	corelib_msgdlgg.o \
 	corelib_prntdlgg.o \
@@ -9167,6 +9197,7 @@ COND_TOOLKIT_MAC___GUI_SRC_OBJECTS_3 =  \
 	corelib_frame.o \
 	corelib_gauge.o \
 	corelib_gdiobj.o \
+	corelib_graphics.o \
 	corelib_icon.o \
 	corelib_imaglist.o \
 	corelib_listbox.o \
@@ -9653,6 +9684,7 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_7 =  \
 	corelib_fontutil.o \
 	corelib_gdiimage.o \
 	corelib_gdiobj.o \
+	corelib_graphics.o \
 	corelib_gsockmsw.o \
 	corelib_icon.o \
 	corelib_imaglist.o \
@@ -9705,6 +9737,7 @@ COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS_7 =  \
 	corelib_fontutil.o \
 	corelib_gdiimage.o \
 	corelib_gdiobj.o \
+	corelib_graphics.o \
 	corelib_gsockmsw.o \
 	corelib_icon.o \
 	corelib_imaglist.o \
@@ -12106,6 +12139,9 @@ monodll_urlmsw.o: $(srcdir)/src/msw/urlmsw.cpp $(MONODLL_ODEP)
 monodll_net.o: $(srcdir)/src/msw/wince/net.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/wince/net.cpp
 
+monodll_graphicc.o: $(srcdir)/src/generic/graphicc.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/graphicc.cpp
+
 monodll_artgtk.o: $(srcdir)/src/gtk/artgtk.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/artgtk.cpp
 
@@ -13966,6 +14002,15 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@monodll_gdiobj.o: $(srcdir)/src/mac/carbon/gdiobj.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/mac/carbon/gdiobj.cpp
 
+@COND_TOOLKIT_MSW_USE_GUI_1@monodll_graphics.o: $(srcdir)/src/msw/graphics.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/graphics.cpp
+
+@COND_TOOLKIT_WINCE_USE_GUI_1@monodll_graphics.o: $(srcdir)/src/msw/graphics.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/graphics.cpp
+
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@monodll_graphics.o: $(srcdir)/src/mac/carbon/graphics.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/mac/carbon/graphics.cpp
+
 @COND_TOOLKIT_MSW_USE_GUI_1@monodll_gsockmsw.o: $(srcdir)/src/msw/gsockmsw.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/gsockmsw.cpp
 
@@ -15388,6 +15433,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@monodll_gifdecod.o: $(srcdir)/src/common/gifdecod.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/gifdecod.cpp
 
+@COND_USE_GUI_1@monodll_graphcmn.o: $(srcdir)/src/common/graphcmn.cpp $(MONODLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/graphcmn.cpp
+
 @COND_USE_GUI_1@monodll_helpbase.o: $(srcdir)/src/common/helpbase.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/helpbase.cpp
 
@@ -16065,6 +16113,9 @@ monolib_urlmsw.o: $(srcdir)/src/msw/urlmsw.cpp $(MONOLIB_ODEP)
 
 monolib_net.o: $(srcdir)/src/msw/wince/net.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/wince/net.cpp
+
+monolib_graphicc.o: $(srcdir)/src/generic/graphicc.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/graphicc.cpp
 
 monolib_artgtk.o: $(srcdir)/src/gtk/artgtk.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/artgtk.cpp
@@ -17926,6 +17977,15 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@monolib_gdiobj.o: $(srcdir)/src/mac/carbon/gdiobj.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/mac/carbon/gdiobj.cpp
 
+@COND_TOOLKIT_MSW_USE_GUI_1@monolib_graphics.o: $(srcdir)/src/msw/graphics.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/graphics.cpp
+
+@COND_TOOLKIT_WINCE_USE_GUI_1@monolib_graphics.o: $(srcdir)/src/msw/graphics.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/graphics.cpp
+
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@monolib_graphics.o: $(srcdir)/src/mac/carbon/graphics.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/mac/carbon/graphics.cpp
+
 @COND_TOOLKIT_MSW_USE_GUI_1@monolib_gsockmsw.o: $(srcdir)/src/msw/gsockmsw.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/gsockmsw.cpp
 
@@ -19347,6 +19407,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_USE_GUI_1@monolib_gifdecod.o: $(srcdir)/src/common/gifdecod.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/gifdecod.cpp
+
+@COND_USE_GUI_1@monolib_graphcmn.o: $(srcdir)/src/common/graphcmn.cpp $(MONOLIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/graphcmn.cpp
 
 @COND_USE_GUI_1@monolib_helpbase.o: $(srcdir)/src/common/helpbase.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/helpbase.cpp
@@ -20998,6 +21061,9 @@ coredll_volume.o: $(srcdir)/src/msw/volume.cpp $(COREDLL_ODEP)
 coredll_uma.o: $(srcdir)/src/mac/carbon/uma.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/mac/carbon/uma.cpp
 
+coredll_graphicc.o: $(srcdir)/src/generic/graphicc.cpp $(COREDLL_ODEP)
+	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/graphicc.cpp
+
 coredll_artgtk.o: $(srcdir)/src/gtk/artgtk.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk/artgtk.cpp
 
@@ -22263,6 +22329,15 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@coredll_gdiobj.o: $(srcdir)/src/mac/carbon/gdiobj.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/mac/carbon/gdiobj.cpp
+
+@COND_TOOLKIT_MSW_USE_GUI_1@coredll_graphics.o: $(srcdir)/src/msw/graphics.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/graphics.cpp
+
+@COND_TOOLKIT_WINCE_USE_GUI_1@coredll_graphics.o: $(srcdir)/src/msw/graphics.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/graphics.cpp
+
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@coredll_graphics.o: $(srcdir)/src/mac/carbon/graphics.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/mac/carbon/graphics.cpp
 
 @COND_TOOLKIT_MSW_USE_GUI_1@coredll_gsockmsw.o: $(srcdir)/src/msw/gsockmsw.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/gsockmsw.cpp
@@ -23653,6 +23728,9 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@coredll_gifdecod.o: $(srcdir)/src/common/gifdecod.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/gifdecod.cpp
 
+@COND_USE_GUI_1@coredll_graphcmn.o: $(srcdir)/src/common/graphcmn.cpp $(COREDLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/graphcmn.cpp
+
 @COND_USE_GUI_1@coredll_helpbase.o: $(srcdir)/src/common/helpbase.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/helpbase.cpp
 
@@ -23886,6 +23964,9 @@ corelib_volume.o: $(srcdir)/src/msw/volume.cpp $(CORELIB_ODEP)
 
 corelib_uma.o: $(srcdir)/src/mac/carbon/uma.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/mac/carbon/uma.cpp
+
+corelib_graphicc.o: $(srcdir)/src/generic/graphicc.cpp $(CORELIB_ODEP)
+	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/graphicc.cpp
 
 corelib_artgtk.o: $(srcdir)/src/gtk/artgtk.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk/artgtk.cpp
@@ -25152,6 +25233,15 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@corelib_gdiobj.o: $(srcdir)/src/mac/carbon/gdiobj.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/mac/carbon/gdiobj.cpp
+
+@COND_TOOLKIT_MSW_USE_GUI_1@corelib_graphics.o: $(srcdir)/src/msw/graphics.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/graphics.cpp
+
+@COND_TOOLKIT_WINCE_USE_GUI_1@corelib_graphics.o: $(srcdir)/src/msw/graphics.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/graphics.cpp
+
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@corelib_graphics.o: $(srcdir)/src/mac/carbon/graphics.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/mac/carbon/graphics.cpp
 
 @COND_TOOLKIT_MSW_USE_GUI_1@corelib_gsockmsw.o: $(srcdir)/src/msw/gsockmsw.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/gsockmsw.cpp
@@ -26541,6 +26631,9 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 
 @COND_USE_GUI_1@corelib_gifdecod.o: $(srcdir)/src/common/gifdecod.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/gifdecod.cpp
+
+@COND_USE_GUI_1@corelib_graphcmn.o: $(srcdir)/src/common/graphcmn.cpp $(CORELIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/graphcmn.cpp
 
 @COND_USE_GUI_1@corelib_helpbase.o: $(srcdir)/src/common/helpbase.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/helpbase.cpp

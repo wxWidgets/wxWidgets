@@ -591,6 +591,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/common/gdicmn.cpp
     src/common/geometry.cpp
     src/common/gifdecod.cpp
+    src/common/graphcmn.cpp
     src/common/helpbase.cpp
     src/common/iconbndl.cpp
     src/common/imagall.cpp
@@ -718,6 +719,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/generic/textdlgg.h
     wx/generic/timer.h
     wx/generic/treectlg.h
+    wx/graphics.h
     wx/helphtml.h
     wx/icon.h
     wx/layout.h
@@ -946,6 +948,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/dirdlgg.cpp
     src/generic/fdrepdlg.cpp
     src/generic/filedlgg.cpp
+    src/generic/graphicc.cpp
     src/generic/listctrl.cpp
     src/generic/msgdlgg.cpp
     src/generic/prntdlgg.cpp
@@ -1459,6 +1462,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/msw/fontutil.cpp
     src/msw/gdiimage.cpp
     src/msw/gdiobj.cpp
+    src/msw/graphics.cpp
     src/msw/gsockmsw.cpp
     src/msw/icon.cpp
     src/msw/imaglist.cpp
@@ -2076,6 +2080,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/mac/carbon/frame.cpp
     src/mac/carbon/gauge.cpp
     src/mac/carbon/gdiobj.cpp
+    src/mac/carbon/graphics.cpp
     src/mac/carbon/icon.cpp
     src/mac/carbon/imaglist.cpp
     src/mac/carbon/listbox.cpp

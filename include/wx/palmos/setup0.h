@@ -548,6 +548,15 @@
 // Recommended setting: 1
 #define wxUSE_AUI       1
 
+
+// Enable the new wxGraphicsPath and wxGraphicsContext classes for an advanced
+// 2D drawing API.  (Still somewhat experimental)
+//
+// Default is 0
+//
+// Recommended setting: 1
+#define wxUSE_GRAPHICS_CONTEXT 0
+
 // ----------------------------------------------------------------------------
 // Individual GUI controls
 // ----------------------------------------------------------------------------

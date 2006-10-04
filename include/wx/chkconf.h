@@ -536,6 +536,15 @@
 #   endif
 #endif /* !defined(wxUSE_GAUGE) */
 
+#ifndef wxUSE_GRAPHICS_CONTEXT
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_GRAPHICS_CONTEXT must be defined."
+#   else
+#       define wxUSE_GRAPHICS_CONTEXT 0
+#   endif
+#endif /* !defined(wxUSE_GRAPHICS_CONTEXT) */
+
+
 #ifndef wxUSE_GRID
 #   ifdef wxABORT_ON_CONFIG_ERROR
 #       error "wxUSE_GRID must be defined."
@@ -1245,6 +1254,16 @@
 #       define wxUSE_NATIVE_STATUSBAR 0
 #   endif
 #endif
+
+#if wxUSE_GRAPHICS_CONTEXT && !wxUSE_GEOMETRY
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_GRAPHICS_CONTEXT requires wxUSE_GEOMETRY"
+#   else
+#       undef wxUSE_GRAPHICS_CONTEXT
+#       define wxUSE_GRAPHICS_CONTEXT 0
+#   endif
+#endif /* wxUSE_GRAPHICS_CONTEXT */
+
 
 /* wxGTK-specific dependencies */
 #ifdef __WXGTK__

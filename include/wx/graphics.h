@@ -12,14 +12,6 @@
 #ifndef _WX_GRAPHICS_H_
 #define _WX_GRAPHICS_H_
 
-#if wxMAC_USE_CORE_GRAPHICS
-#undef wxUSE_GRAPHICS_CONTEXT
-#define wxUSE_GRAPHICS_CONTEXT 1
-#endif
-
-#ifndef wxUSE_GRAPHICS_CONTEXT
-#define wxUSE_GRAPHICS_CONTEXT 0
-#endif
 
 #if wxUSE_GRAPHICS_CONTEXT
 

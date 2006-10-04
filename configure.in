@@ -527,6 +527,7 @@ if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_FILEPICKERCTRL=no
   DEFAULT_wxUSE_FONTPICKERCTRL=no
   DEFAULT_wxUSE_GAUGE=no
+  DEFAULT_wxUSE_GRAPHICS_CONTEXT=no
   DEFAULT_wxUSE_GRID=no
   DEFAULT_wxUSE_HYPERLINKCTRL=no
   DEFAULT_wxUSE_DATAVIEWCTRL=no
@@ -742,6 +743,7 @@ else
   DEFAULT_wxUSE_FONTPICKERCTRL=yes
   DEFAULT_wxUSE_GAUGE=yes
   DEFAULT_wxUSE_GRID=yes
+  DEFAULT_wxUSE_GRAPHICS_CONTEXT=no
   DEFAULT_wxUSE_HYPERLINKCTRL=yes
   DEFAULT_wxUSE_DATAVIEWCTRL=no
   DEFAULT_wxUSE_IMAGLIST=yes
@@ -1011,6 +1013,7 @@ WX_ARG_ENABLE(logwin,      [  --enable-logwin         use wxLogWindow], wxUSE_LO
 WX_ARG_ENABLE(logdialog,   [  --enable-logdialog      use wxLogDialog], wxUSE_LOGDIALOG)
 WX_ARG_ENABLE(webkit,      [  --enable-webkit         use wxWebKitCtrl (Mac)], wxUSE_WEBKIT)
 WX_ARG_ENABLE(html,        [  --enable-richtext       use wxRichTextCtrl], wxUSE_RICHTEXT)
+WX_ARG_ENABLE(graphics_ctx, [  --enable-graphics_ctx   use graphics context 2D drawing API], wxUSE_GRAPHICS_CONTEXT)
 
 dnl ---------------------------------------------------------------------------
 dnl PostScript options
@@ -6907,6 +6910,10 @@ if test "$wxUSE_RICHTEXT" = "yes"; then
     AC_DEFINE(wxUSE_RICHTEXT)
     USE_RICHTEXT=1
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS richtext"
+fi
+
+if test "$wxUSE_GRAPHICS_CONTEXT" = "yes"; then
+  AC_DEFINE(wxUSE_GRAPHICS_CONTEXT)
 fi
 
 dnl ---------------------------------------------------------------------------

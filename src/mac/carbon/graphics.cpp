@@ -13,7 +13,7 @@
 
 #include "wx/graphics.h"
 
-#if wxMAC_USE_CORE_GRAPHICS
+#if wxUSE_GRAPHICS_CONTEXT && wxMAC_USE_CORE_GRAPHICS
 
 #ifndef WX_PRECOMP
     #include "wx/log.h"

@@ -630,6 +630,10 @@ SOURCE=..\..\src\common\gifdecod.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\common\graphcmn.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\common\helpbase.cpp
 # End Source File
 # Begin Source File
@@ -2112,6 +2116,10 @@ SOURCE=..\..\src\msw\gdiimage.cpp
 # Begin Source File
 
 SOURCE=..\..\src\msw\gdiobj.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\msw\graphics.cpp
 # End Source File
 # Begin Source File
 
@@ -8870,6 +8878,10 @@ SOURCE=..\..\include\wx\gifdecod.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\glcanvas.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\graphics.h
 # End Source File
 # Begin Source File
 
