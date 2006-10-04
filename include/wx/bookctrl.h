@@ -332,6 +332,7 @@ private:
     #define wxEVT_COMMAND_BOOKCTRL_PAGE_CHANGING   wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING
     #define EVT_BOOKCTRL_PAGE_CHANGED(id, fn)      EVT_NOTEBOOK_PAGE_CHANGED(id, fn)
     #define EVT_BOOKCTRL_PAGE_CHANGING(id, fn)     EVT_NOTEBOOK_PAGE_CHANGING(id, fn)
+    #define wxBookctrlEventHandler(func)           wxNotebookEventHandler(func)
 #else
     // dedicated to Smartphones
     #include "wx/choicebk.h"
@@ -341,6 +342,7 @@ private:
     #define wxEVT_COMMAND_BOOKCTRL_PAGE_CHANGING   wxEVT_COMMAND_CHOICEBOOK_PAGE_CHANGING
     #define EVT_BOOKCTRL_PAGE_CHANGED(id, fn)      EVT_CHOICEBOOK_PAGE_CHANGED(id, fn)
     #define EVT_BOOKCTRL_PAGE_CHANGING(id, fn)     EVT_CHOICEBOOK_PAGE_CHANGING(id, fn)
+    #define wxBookctrlEventHandler(func)           wxChoicebookEventHandler(func)
 #endif
 
 #if WXWIN_COMPATIBILITY_2_6
