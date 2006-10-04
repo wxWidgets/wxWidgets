@@ -134,7 +134,7 @@ public:
 
     virtual int GetColumnImageValue( unsigned int column );
     virtual void SetColumnImageValue( unsigned int column, int imageIndex );
-        
+
     virtual ~wxMacListCtrlItem();
 protected:
     wxListItemList m_rowItems;
@@ -167,7 +167,7 @@ protected:
                         DataBrowserItemID itemID,
                         DataBrowserItemNotification message,
                         DataBrowserItemDataRef itemData);
-                        
+
     virtual Boolean CompareItems(DataBrowserItemID itemOneID,
                         DataBrowserItemID itemTwoID,
                         DataBrowserPropertyID sortProperty);
@@ -177,7 +177,7 @@ protected:
 
 };
 
-// TODO: This gives errors, find out why. 
+// TODO: This gives errors, find out why.
 //BEGIN_EVENT_TABLE(wxListCtrl, wxControl)
 //    EVT_PAINT(wxListCtrl::OnPaint)
 //END_EVENT_TABLE()
@@ -200,7 +200,7 @@ void wxListCtrl::Init()
     m_imageListNormal = NULL;
     m_imageListSmall = NULL;
     m_imageListState = NULL;
-    
+
     // keep track of if we created our own image lists, or if they were assigned
     // to us.
     m_ownsImageListNormal = m_ownsImageListSmall = m_ownsImageListState = false;
@@ -812,7 +812,7 @@ wxColour wxListCtrl::GetTextColour() const
     // TODO: we need owner drawn list items to customize text color.
     if (m_dbImpl)
         return *wxBLACK;
-        
+
     return wxNullColour;
 }
 
@@ -957,7 +957,7 @@ bool wxListCtrl::DeleteItem(long item)
         wxListEvent event( wxEVT_COMMAND_LIST_DELETE_ITEM, GetId() );
         event.SetEventObject( this );
         event.m_itemIndex = item;
-        GetEventHandler()->ProcessEvent( event );   
+        GetEventHandler()->ProcessEvent( event );
 
     }
     return true;
@@ -1224,7 +1224,7 @@ long wxListCtrl::InsertColumn(long col, wxListItem& item)
         verify_noerr(m_dbImpl->GetPropertyFlags(id, &flags));
         if (GetWindowStyleFlag() & wxLC_EDIT_LABELS)
             flags |= kDataBrowserPropertyIsEditable;
-                
+
         if (GetWindowStyleFlag() & wxLC_VIRTUAL){
             flags &= ~kDataBrowserListViewSortableColumn;
         }
@@ -1472,7 +1472,7 @@ wxMacDataBrowserListCtrlControl::wxMacDataBrowserListCtrlControl( wxWindow *peer
     OSStatus err = noErr;
     m_clientDataItemsType = wxClientData_None;
     m_isVirtual = false;
-    
+
     if ( style & wxLC_VIRTUAL )
         m_isVirtual = true;
 
@@ -1576,15 +1576,15 @@ OSStatus wxMacDataBrowserListCtrlControl::GetSetItemData(DataBrowserItemID itemI
                 if ( property >= kMinColumnId )
                 {
                     wxMacCFStringHolder cfStr;
-                    
+
                     if (text){
                         cfStr.Assign( text, wxLocale::GetSystemEncoding() );
                         err = ::SetDataBrowserItemDataText( itemData, cfStr );
                         err = noErr;
                     }
-                    
 
-                        
+
+
                     if ( imgIndex != -1 )
                     {
                         wxImageList* imageList = list->GetImageList(wxIMAGE_LIST_SMALL);
@@ -1594,11 +1594,11 @@ OSStatus wxMacDataBrowserListCtrlControl::GetSetItemData(DataBrowserItemID itemI
                             ::SetDataBrowserItemDataIcon(itemData, icon);
                         }
                     }
-                        
+
                 }
                 break ;
         }
-                
+
     }
     else
     {
@@ -1621,7 +1621,7 @@ OSStatus wxMacDataBrowserListCtrlControl::GetSetItemData(DataBrowserItemID itemI
                         if (lcItem)
                             lcItem->SetColumnTextValue( listColumn, cfStr.AsString() );
                     }
-                    err = noErr ;                        
+                    err = noErr ;
                 }
                 break;
         }
@@ -1650,14 +1650,13 @@ void wxMacDataBrowserListCtrlControl::ItemNotification(DataBrowserItemID itemID,
     if ( list )
     {
         bool trigger = false;
-            
+
         wxListEvent event( wxEVT_COMMAND_LIST_ITEM_SELECTED, list->GetId() );
         bool isSingle = list->GetWindowStyle() | wxLC_SINGLE_SEL;
-        
+
         event.SetEventObject( list );
         if ( !list->IsVirtual() )
         {
-            wxMacDataItem* item = (wxMacDataItem*)itemID;
             DataBrowserTableViewRowIndex result = 0;
             verify_noerr( GetItemRow( itemID, &result ) ) ;
             event.m_itemIndex = result;
@@ -1669,7 +1668,7 @@ void wxMacDataBrowserListCtrlControl::ItemNotification(DataBrowserItemID itemID,
         {
             event.m_itemIndex = (long)itemID;
         }
-        
+
         switch (message)
         {
             case kDataBrowserItemDeselected:
@@ -1692,7 +1691,7 @@ void wxMacDataBrowserListCtrlControl::ItemNotification(DataBrowserItemID itemID,
                 event.SetEventType( wxEVT_COMMAND_LIST_BEGIN_LABEL_EDIT ) ;
                 trigger = true ;
                 break ;
-                
+
             case kDataBrowserEditStopped :
                 // TODO probably trigger only upon the value store callback, because
                 // here IIRC we cannot veto
@@ -1723,10 +1722,10 @@ Boolean wxMacDataBrowserListCtrlControl::CompareItems(DataBrowserItemID itemOneI
     int colId = sortProperty - kMinColumnId;
     long itemNum = 0;
     long otherItemNum = 0;
-    
+
     wxListCtrl* list = wxDynamicCast( GetPeer() , wxListCtrl );
-    
-    // means we need to 
+
+    // means we need to
     if (colId >= 0)
     {
         if (!m_isVirtual)
@@ -1746,12 +1745,12 @@ Boolean wxMacDataBrowserListCtrlControl::CompareItems(DataBrowserItemID itemOneI
             otherItemNum = (long)itemTwoID;
             itemText = list->OnGetItemText( itemNum-1, colId );
             otherItemText = list->OnGetItemText( otherItemNum-1, colId );
-            
+
         }
-        
+
         DataBrowserSortOrder sort;
-        verify_noerr(GetSortOrder(&sort)); 
-        
+        verify_noerr(GetSortOrder(&sort));
+
         if ( sort == kDataBrowserOrderIncreasing )
         {
             retval = itemText.CmpNoCase( otherItemText ) > 0;
@@ -1774,7 +1773,7 @@ wxMacDataBrowserListCtrlControl::~wxMacDataBrowserListCtrlControl()
 }
 
 void wxMacDataBrowserListCtrlControl::MacSetColumnInfo( unsigned int row, unsigned int column, wxListItem* item )
-{ 
+{
     wxMacDataItem* dataItem = GetItemFromLine(row);
     if (item)
     {
@@ -1784,14 +1783,14 @@ void wxMacDataBrowserListCtrlControl::MacSetColumnInfo( unsigned int row, unsign
     }
 }
 
-// apply changes that need to happen immediately, rather than when the 
+// apply changes that need to happen immediately, rather than when the
 // databrowser control fires a callback.
 void wxMacDataBrowserListCtrlControl::UpdateState(wxMacDataItem* dataItem, wxListItem* listItem)
 {
     bool isSelected = IsItemSelected( dataItem );
     bool isSelectedState = (listItem->GetState() == wxLIST_STATE_SELECTED);
 
-    // toggle the selection state if wxListInfo state and actual state don't match.    
+    // toggle the selection state if wxListInfo state and actual state don't match.
     if ( isSelected != isSelectedState )
     {
         DataBrowserSetOption options = kDataBrowserItemsAdd;
@@ -1803,14 +1802,14 @@ void wxMacDataBrowserListCtrlControl::UpdateState(wxMacDataItem* dataItem, wxLis
 }
 
 void wxMacDataBrowserListCtrlControl::MacGetColumnInfo( unsigned int row, unsigned int column, wxListItem& item )
-{ 
+{
     wxMacDataItem* dataItem = GetItemFromLine(row);
     // CS should this guard against dataItem = 0 ? , as item is not a pointer if (item) is not appropriate
-    //if (item) 
+    //if (item)
     {
         wxMacListCtrlItem* listItem = dynamic_cast<wxMacListCtrlItem*>(dataItem);
         wxListItem* oldItem = listItem->GetColumnInfo( column );
-        
+
         long mask = item.GetMask();
         if ( !mask )
             // by default, get everything for backwards compatibility
@@ -1896,7 +1895,7 @@ void wxMacListCtrlItem::SetColumnInfo( unsigned int column, wxListItem* item )
 
     if ( column >= m_rowItems.GetCount() )
     {
-        wxListItem* listItem = new wxListItem(*item);    
+        wxListItem* listItem = new wxListItem(*item);
         m_rowItems.Append( listItem );
     }
     else
