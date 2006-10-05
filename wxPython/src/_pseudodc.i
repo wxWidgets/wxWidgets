@@ -65,6 +65,26 @@ current platform.", "");
         void, TranslateId(int id, wxCoord dx, wxCoord dy),
         "Translate the operations of id by dx,dy.", "");
     DocDeclStr(
+        void, SetIdGreyedOut(int id, bool greyout=true),
+        "Set whether an object is drawn greyed out or not.", "");
+    DocDeclStr(
+        bool, GetIdGreyedOut(int id),
+        "Get whether an object is drawn greyed out or not.", "");
+    KeepGIL(FindObjects);
+    DocDeclStr(
+        PyObject*, FindObjects(wxCoord x, wxCoord y, 
+                               wxCoord radius=1, const wxColor& bg=*wxWHITE),
+        "Returns a list of all the id's that draw a pixel with color
+not equal to bg within radius of (x,y).
+Returns an empty list if nothing is found.  The list is in
+reverse drawing order so list[0] is the top id.","");
+    KeepGIL(FindObjectsByBBox);
+    DocDeclStr(
+        PyObject*, FindObjectsByBBox(wxCoord x, wxCoord y),
+        "Returns a list of all the id's whose bounding boxes include (x,y).
+Returns an empty list if nothing is found.  The list is in
+reverse drawing order so list[0] is the top id.","");
+    DocDeclStr(
         void, DrawIdToDC(int id, wxDC *dc),
         "Draw recorded operations of id to dc.", "");
     DocDeclStr(

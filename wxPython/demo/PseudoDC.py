@@ -5,12 +5,12 @@ import random
 
 #---------------------------------------------------------------------------
 
-W = 1000
-H = 1000
+W = 3000
+H = 3000
 SW = 150
 SH = 150
-SHAPE_COUNT = 100
-MOVING_COUNT = 10
+SHAPE_COUNT = 5000
+hitradius = 5
 
 #---------------------------------------------------------------------------
 
@@ -65,66 +65,59 @@ class MyCanvas(wx.ScrolledWindow):
 
         self.Bind(wx.EVT_PAINT, self.OnPaint)
         self.Bind(wx.EVT_ERASE_BACKGROUND, lambda x:None)
+        self.Bind(wx.EVT_MOUSE_EVENTS, self.OnMouse)
         
-        # use timer to move one of the objects around
-        self.timer = wx.Timer()
-        self.timer.SetOwner(self)
-        self.Bind(wx.EVT_TIMER, self.OnTimer)
-        self.timer.Start(50)
-        self.movingids = random.sample(self.objids, MOVING_COUNT)
-        self.velocitydict = {}
-        for id in self.movingids:
-            vx = random.randint(1,5) * random.choice([-1,1])
-            vy = random.randint(1,5) * random.choice([-1,1])
-            self.velocitydict[id] = (vx,vy)
+        # vars for handling mouse clicks
+        self.dragid = -1
+        self.lastpos = (0,0)
+    
+    def ConvertEventCoords(self, event):
+        xView, yView = self.GetViewStart()
+        xDelta, yDelta = self.GetScrollPixelsPerUnit()
+        return (event.GetX() + (xView * xDelta),
+            event.GetY() + (yView * yDelta))
 
-    def OnTimer(self, event):
-        # get the current position
-        xv, yv = self.GetViewStart()
-        dx, dy = self.GetScrollPixelsPerUnit()
-        x, y   = (xv * dx, yv * dy)
-        w, h   = self.GetClientSizeTuple()
-        clip = wx.Rect(x,y,w,h)
-        refreshed = False
-        for id in self.movingids:
-            r = self.pdc.GetIdBounds(id)
-            # get new object position
-            (vx,vy) = self.velocitydict[id]
-            x = r.x + vx
-            y = r.y + vy
-            # check for bounce
-            if x < 0: 
-                x = -x
-                vx = -vx
-            if x >= W: 
-                x = W - (x - W)
-                vx = -vx
-            if y < 0: 
-                y = -y
-                vy = -vy
-            if y >= H:
-                y = H - (y - H)
-                vy = -vy
-            self.velocitydict[id] = (vx,vy)
-            # get change
-            dx = x - r.x
-            dy = y - r.y
-            # translate the object
-            self.pdc.TranslateId(id, dx, dy)
-            # redraw
-            r.x -= 20
-            if dx < 0:
-                r.x = x
-            r.y -= 20
-            if dy < 0:
-                r.y = y
-            r.width += abs(dx) + 40
-            r.height += abs(dy) + 40
-            if r.Intersects(clip):
-                r.x -= clip.x
-                r.y -= clip.y
-                refreshed = True
+    def OffsetRect(self, r):
+        xView, yView = self.GetViewStart()
+        xDelta, yDelta = self.GetScrollPixelsPerUnit()
+        r.OffsetXY(-(xView*xDelta),-(yView*yDelta))
+
+    def OnMouse(self, event):
+        global hitradius
+        if event.LeftDown():
+            x,y = self.ConvertEventCoords(event)
+            #l = self.pdc.FindObjectsByBBox(x, y)
+            l = self.pdc.FindObjects(x, y, hitradius)
+            for id in l:
+                if not self.pdc.GetIdGreyedOut(id):
+                    self.dragid = id
+                    self.lastpos = (event.GetX(),event.GetY())
+                    break
+        elif event.RightDown():
+            x,y = self.ConvertEventCoords(event)
+            #l = self.pdc.FindObjectsByBBox(x, y)
+            l = self.pdc.FindObjects(x, y, hitradius)
+            if l:
+                self.pdc.SetIdGreyedOut(l[0], not self.pdc.GetIdGreyedOut(l[0]))
+                r = self.pdc.GetIdBounds(l[0])
+                r.Inflate(4,4)
+                self.OffsetRect(r)
                 self.RefreshRect(r, False)
+        elif event.Dragging() or event.LeftUp():
+            if self.dragid != -1:
+                x,y = self.lastpos
+                dx = event.GetX() - x
+                dy = event.GetY() - y
+                r = self.pdc.GetIdBounds(self.dragid)
+                self.pdc.TranslateId(self.dragid, dx, dy)
+                r2 = self.pdc.GetIdBounds(self.dragid)
+                r = r.Union(r2)
+                r.Inflate(4,4)
+                self.OffsetRect(r)
+                self.RefreshRect(r, False)
+                self.lastpos = (event.GetX(),event.GetY())
+            if event.LeftUp():
+                self.dragid = -1
 
     def RandomPen(self):
         c = random.choice(colours)
@@ -150,12 +143,12 @@ class MyCanvas(wx.ScrolledWindow):
         # wx.PaintDC and then blit the bitmap to it when dc is
         # deleted.  
         dc = wx.BufferedPaintDC(self)
+        # use PrepateDC to set position correctly
+        self.PrepareDC(dc)
         # we need to clear the dc BEFORE calling PrepareDC
         bg = wx.Brush(self.GetBackgroundColour())
         dc.SetBackground(bg)
         dc.Clear()
-        # use PrepateDC to set position correctly
-        self.PrepareDC(dc)
         # create a clipping rect from our position and size
         # and the Update Region
         xv, yv = self.GetViewStart()
@@ -179,26 +172,35 @@ class MyCanvas(wx.ScrolledWindow):
             if choice in (0,1):
                 x = random.randint(0, W)
                 y = random.randint(0, H)
-                dc.SetPen(self.RandomPen())
+                pen = self.RandomPen()
+                dc.SetPen(pen)
                 dc.DrawPoint(x,y)
-                dc.SetIdBounds(id,wx.Rect(x,y,1,1))
+                r = wx.Rect(x,y,1,1)
+                r.Inflate(pen.GetWidth(),pen.GetWidth())
+                dc.SetIdBounds(id,r)
             elif choice in (2,3):
                 x1 = random.randint(0, W-SW)
                 y1 = random.randint(0, H-SH)
                 x2 = random.randint(x1, x1+SW)
                 y2 = random.randint(y1, y1+SH)
-                dc.SetPen(self.RandomPen())
+                pen = self.RandomPen()
+                dc.SetPen(pen)
                 dc.DrawLine(x1,y1,x2,y2)
-                dc.SetIdBounds(id,wx.Rect(x1,y1,x2-x1,y2-y1))
+                r = wx.Rect(x1,y1,x2-x1,y2-y1)
+                r.Inflate(pen.GetWidth(),pen.GetWidth())
+                dc.SetIdBounds(id,r)
             elif choice in (4,5):
                 w = random.randint(10, SW)
                 h = random.randint(10, SH)
                 x = random.randint(0, W - w)
                 y = random.randint(0, H - h)
-                dc.SetPen(self.RandomPen())
+                pen = self.RandomPen()
+                dc.SetPen(pen)
                 dc.SetBrush(self.RandomBrush())
                 dc.DrawRectangle(x,y,w,h)
-                dc.SetIdBounds(id,wx.Rect(x,y,w,h))
+                r = wx.Rect(x,y,w,h)
+                r.Inflate(pen.GetWidth(),pen.GetWidth())
+                dc.SetIdBounds(id,r)
                 self.objids.append(id)
             elif choice == 6:
                 Np = 8 # number of characters in text
@@ -210,10 +212,13 @@ class MyCanvas(wx.ScrolledWindow):
                 w,h = self.GetFullTextExtent(word)[0:2]
                 x = random.randint(0, W-w)
                 y = random.randint(0, H-h)
+                dc.SetFont(self.GetFont())
                 dc.SetTextForeground(self.RandomColor())
                 dc.SetTextBackground(self.RandomColor())
                 dc.DrawText(word, x, y)
-                dc.SetIdBounds(id,wx.Rect(x,y,w,h))
+                r = wx.Rect(x,y,w,h)
+                r.Inflate(2,2)
+                dc.SetIdBounds(id, r)
                 self.objids.append(id)
             elif choice == 7:
                 Np = 8 # number of points per polygon
@@ -232,10 +237,13 @@ class MyCanvas(wx.ScrolledWindow):
                     poly.append(wx.Point(x,y))
                 x = random.randint(0, W-SW)
                 y = random.randint(0, H-SH)
-                dc.SetPen(self.RandomPen())
+                pen = self.RandomPen()
+                dc.SetPen(pen)
                 dc.SetBrush(self.RandomBrush())
                 dc.DrawPolygon(poly, x,y)
-                dc.SetIdBounds(id,wx.Rect(minx+x,miny+y,maxx-minx+x,maxy-miny+y))
+                r = wx.Rect(minx+x,miny+y,maxx-minx,maxy-miny)
+                r.Inflate(pen.GetWidth(),pen.GetWidth())
+                dc.SetIdBounds(id,r)
                 self.objids.append(id)
             elif choice == 8:
                 w,h = self.bmp.GetSize()
@@ -246,15 +254,42 @@ class MyCanvas(wx.ScrolledWindow):
                 self.objids.append(id)
         dc.EndDrawing()
 
-    def ShutdownDemo(self):
-        self.timer.Stop()
-        del self.timer
+class ControlPanel(wx.Panel):
+    def __init__(self, parent, id, pos=wx.DefaultPosition,
+            size=wx.DefaultSize, style = wx.TAB_TRAVERSAL):
+        wx.Panel.__init__(self,parent,id,pos,size,style)
+        lbl = wx.StaticText(self, wx.ID_ANY, "Hit Test Radius: ")
+        lbl2 = wx.StaticText(self, wx.ID_ANY, "Left Click to drag, Right Click to enable/disable")
+        sc = wx.SpinCtrl(self, wx.ID_ANY, "5")
+        sc.SetRange(0,100)
+        global hitradius
+        sc.SetValue(hitradius)
+        self.sc = sc
+        sz = wx.BoxSizer(wx.HORIZONTAL)
+        sz.Add(lbl,0,wx.EXPAND)
+        sz.Add(sc,0)
+        sz.Add(lbl2,0,wx.LEFT,5)
+        sz.Add((10,10),1,wx.EXPAND)
+        self.SetSizerAndFit(sz)
+        sc.Bind(wx.EVT_SPINCTRL,self.OnChange)
+        sc.Bind(wx.EVT_TEXT,self.OnChange)
+
+    def OnChange(self, event):
+        global hitradius
+        hitradius = self.sc.GetValue()
+    
 
 #---------------------------------------------------------------------------
 
 def runTest(frame, nb, log):
-    win = MyCanvas(nb, wx.ID_ANY, log)
-    return win
+    pnl = wx.Panel(nb, wx.ID_ANY,size=(200,30))
+    pnl2 = ControlPanel(pnl,wx.ID_ANY)
+    win = MyCanvas(pnl, wx.ID_ANY, log)
+    sz = wx.BoxSizer(wx.VERTICAL)
+    sz.Add(pnl2,0,wx.EXPAND|wx.ALL,5)
+    sz.Add(win,1,wx.EXPAND)
+    pnl.SetSizerAndFit(sz)
+    return pnl
 
 #---------------------------------------------------------------------------
 
