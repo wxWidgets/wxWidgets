@@ -1797,34 +1797,44 @@ bool wxDataViewCtrl::AppendColumn( wxDataViewColumn *col )
     return true;
 }
 
-void wxDataViewCtrl::SetSelection( int row )
+void wxDataViewCtrl::SetSelection( int WXUNUSED(row) )
 {
+    // FIXME - TODO
 }
 
-void wxDataViewCtrl::SetSelectionRange( unsigned int from, unsigned int to )
+void wxDataViewCtrl::SetSelectionRange( unsigned int WXUNUSED(from), unsigned int WXUNUSED(to) )
 {
+    // FIXME - TODO
 }
 
-void wxDataViewCtrl::SetSelections( const wxArrayInt& aSelections)
+void wxDataViewCtrl::SetSelections( const wxArrayInt& WXUNUSED(aSelections) )
 {
-}
-    
-void wxDataViewCtrl::Unselect( unsigned int row )
-{
+    // FIXME - TODO
 }
 
-bool wxDataViewCtrl::IsSelected( unsigned int row ) const
+void wxDataViewCtrl::Unselect( unsigned int WXUNUSED(row) )
 {
+    // FIXME - TODO
+}
+
+bool wxDataViewCtrl::IsSelected( unsigned int WXUNUSED(row) ) const
+{
+    // FIXME - TODO
+
     return false;
 }
 
 int wxDataViewCtrl::GetSelection() const
 {
+    // FIXME - TODO
+
     return -1;
 }
 
-int wxDataViewCtrl::GetSelections(wxArrayInt& aSelections) const
+int wxDataViewCtrl::GetSelections(wxArrayInt& WXUNUSED(aSelections) ) const
 {
+    // FIXME - TODO
+
     return 0;
 }
 
