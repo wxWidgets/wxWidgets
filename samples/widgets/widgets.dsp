@@ -492,6 +492,10 @@ SOURCE=.\datepick.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\dirctrl.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\dirpicker.cpp
 # End Source File
 # Begin Source File

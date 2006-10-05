@@ -12,6 +12,7 @@
             clrpicker.cpp
             combobox.cpp
             datepick.cpp
+            dirctrl.cpp
             dirpicker.cpp
             filepicker.cpp
             fontpicker.cpp

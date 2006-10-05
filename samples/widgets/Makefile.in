@@ -54,6 +54,7 @@ WIDGETS_OBJECTS =  \
 	widgets_clrpicker.o \
 	widgets_combobox.o \
 	widgets_datepick.o \
+	widgets_dirctrl.o \
 	widgets_dirpicker.o \
 	widgets_filepicker.o \
 	widgets_fontpicker.o \
@@ -228,6 +229,9 @@ widgets_combobox.o: $(srcdir)/combobox.cpp
 
 widgets_datepick.o: $(srcdir)/datepick.cpp
 	$(CXXC) -c -o $@ $(WIDGETS_CXXFLAGS) $(srcdir)/datepick.cpp
+
+widgets_dirctrl.o: $(srcdir)/dirctrl.cpp
+	$(CXXC) -c -o $@ $(WIDGETS_CXXFLAGS) $(srcdir)/dirctrl.cpp
 
 widgets_dirpicker.o: $(srcdir)/dirpicker.cpp
 	$(CXXC) -c -o $@ $(WIDGETS_CXXFLAGS) $(srcdir)/dirpicker.cpp

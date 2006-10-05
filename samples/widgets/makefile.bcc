@@ -40,6 +40,7 @@ WIDGETS_OBJECTS =  \
 	$(OBJS)\widgets_clrpicker.obj \
 	$(OBJS)\widgets_combobox.obj \
 	$(OBJS)\widgets_datepick.obj \
+	$(OBJS)\widgets_dirctrl.obj \
 	$(OBJS)\widgets_dirpicker.obj \
 	$(OBJS)\widgets_filepicker.obj \
 	$(OBJS)\widgets_fontpicker.obj \
@@ -265,6 +266,9 @@ $(OBJS)\widgets_combobox.obj: .\combobox.cpp
 	$(CXX) -q -c -P -o$@ $(WIDGETS_CXXFLAGS) $**
 
 $(OBJS)\widgets_datepick.obj: .\datepick.cpp
+	$(CXX) -q -c -P -o$@ $(WIDGETS_CXXFLAGS) $**
+
+$(OBJS)\widgets_dirctrl.obj: .\dirctrl.cpp
 	$(CXX) -q -c -P -o$@ $(WIDGETS_CXXFLAGS) $**
 
 $(OBJS)\widgets_dirpicker.obj: .\dirpicker.cpp

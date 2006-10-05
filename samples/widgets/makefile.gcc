@@ -33,6 +33,7 @@ WIDGETS_OBJECTS =  \
 	$(OBJS)\widgets_clrpicker.o \
 	$(OBJS)\widgets_combobox.o \
 	$(OBJS)\widgets_datepick.o \
+	$(OBJS)\widgets_dirctrl.o \
 	$(OBJS)\widgets_dirpicker.o \
 	$(OBJS)\widgets_filepicker.o \
 	$(OBJS)\widgets_fontpicker.o \
@@ -258,6 +259,9 @@ $(OBJS)\widgets_combobox.o: ./combobox.cpp
 	$(CXX) -c -o $@ $(WIDGETS_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\widgets_datepick.o: ./datepick.cpp
+	$(CXX) -c -o $@ $(WIDGETS_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\widgets_dirctrl.o: ./dirctrl.cpp
 	$(CXX) -c -o $@ $(WIDGETS_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\widgets_dirpicker.o: ./dirpicker.cpp

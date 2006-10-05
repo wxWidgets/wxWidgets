@@ -235,6 +235,7 @@ WIDGETS_OBJECTS =  &
 	$(OBJS)\widgets_clrpicker.obj &
 	$(OBJS)\widgets_combobox.obj &
 	$(OBJS)\widgets_datepick.obj &
+	$(OBJS)\widgets_dirctrl.obj &
 	$(OBJS)\widgets_dirpicker.obj &
 	$(OBJS)\widgets_filepicker.obj &
 	$(OBJS)\widgets_fontpicker.obj &
@@ -296,6 +297,9 @@ $(OBJS)\widgets_combobox.obj :  .AUTODEPEND .\combobox.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(WIDGETS_CXXFLAGS) $<
 
 $(OBJS)\widgets_datepick.obj :  .AUTODEPEND .\datepick.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(WIDGETS_CXXFLAGS) $<
+
+$(OBJS)\widgets_dirctrl.obj :  .AUTODEPEND .\dirctrl.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(WIDGETS_CXXFLAGS) $<
 
 $(OBJS)\widgets_dirpicker.obj :  .AUTODEPEND .\dirpicker.cpp
