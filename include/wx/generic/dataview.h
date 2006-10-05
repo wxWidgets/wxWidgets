@@ -216,6 +216,8 @@ class WXDLLIMPEXP_ADV wxDataViewColumn: public wxDataViewColumnBase
 public:
     wxDataViewColumn( const wxString &title, wxDataViewRenderer *renderer, unsigned int model_column, 
         int width = 80, int flags = wxDATAVIEW_COL_RESIZABLE );
+    wxDataViewColumn( const wxBitmap &bitmap, wxDataViewRenderer *renderer, unsigned int model_column,
+        int width = 80, int flags = wxDATAVIEW_COL_RESIZABLE );
     virtual ~wxDataViewColumn();
 
     virtual void SetTitle( const wxString &title );

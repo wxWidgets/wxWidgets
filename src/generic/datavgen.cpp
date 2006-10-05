@@ -603,6 +603,15 @@ wxDataViewColumn::wxDataViewColumn( const wxString &title, wxDataViewRenderer *c
         m_width = 80;
 }
 
+wxDataViewColumn::wxDataViewColumn( const wxBitmap &bitmap, wxDataViewRenderer *cell, unsigned int model_column,
+        int width, int flags ) :
+    wxDataViewColumnBase( bitmap, cell, model_column, width, flags )
+{
+    m_width = width;
+    if (m_width < 0)
+        m_width = 30;
+}
+
 wxDataViewColumn::~wxDataViewColumn()
 {
 }

@@ -24,7 +24,7 @@
 
 #if defined(__WXGTK20__)
     // for testing
-    // #define wxUSE_GENERICDATAVIEWCTRL 1
+    #define wxUSE_GENERICDATAVIEWCTRL 1
 #elif defined(__WXMAC__)
     #define wxUSE_GENERICDATAVIEWCTRL 1
 #else
@@ -258,10 +258,15 @@ class WXDLLIMPEXP_ADV wxDataViewColumnBase: public wxObject
 public:
     wxDataViewColumnBase( const wxString &title, wxDataViewRenderer *renderer, unsigned int model_column,
         int width = 80, int flags = wxDATAVIEW_COL_RESIZABLE );
+    wxDataViewColumnBase( const wxBitmap &bitmap, wxDataViewRenderer *renderer, unsigned int model_column,
+        int width = 80, int flags = wxDATAVIEW_COL_RESIZABLE );
     virtual ~wxDataViewColumnBase();
 
     virtual void SetTitle( const wxString &title );
     virtual wxString GetTitle();
+
+    virtual void SetBitmap( const wxBitmap &bitmap );
+    virtual const wxBitmap &GetBitmap();
 
     wxDataViewRenderer* GetRenderer()       { return m_renderer; }
 
@@ -278,6 +283,7 @@ private:
     int                      m_model_column;
     int                      m_flags;
     wxString                 m_title;
+    wxBitmap                 m_bitmap;
     wxDataViewCtrl          *m_owner;
 
 protected:
@@ -300,10 +306,18 @@ public:
     virtual bool AssociateModel( wxDataViewListModel *model );
     wxDataViewListModel* GetModel();
 
+    // short cuts
     virtual bool AppendTextColumn( const wxString &label, unsigned int model_column );
     virtual bool AppendToggleColumn( const wxString &label, unsigned int model_column );
     virtual bool AppendProgressColumn( const wxString &label, unsigned int model_column );
     virtual bool AppendDateColumn( const wxString &label, unsigned int model_column );
+    virtual bool AppendBitmapColumn( const wxString &label, unsigned int model_column );
+    virtual bool AppendTextColumn( const wxBitmap &label, unsigned int model_column );
+    virtual bool AppendToggleColumn( const wxBitmap &label, unsigned int model_column );
+    virtual bool AppendProgressColumn( const wxBitmap &label, unsigned int model_column );
+    virtual bool AppendDateColumn( const wxBitmap &label, unsigned int model_column );
+    virtual bool AppendBitmapColumn( const wxBitmap &label, unsigned int model_column );
+    
     virtual bool AppendColumn( wxDataViewColumn *col );
     virtual unsigned int GetNumberOfColumns();
     virtual bool DeleteColumn( unsigned int pos );

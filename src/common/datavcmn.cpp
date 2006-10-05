@@ -707,6 +707,20 @@ wxDataViewColumnBase::wxDataViewColumnBase(const wxString& title,
     m_renderer->SetOwner( (wxDataViewColumn*) this );
 }
 
+wxDataViewColumnBase::wxDataViewColumnBase(const wxBitmap& bitmap,
+                                           wxDataViewRenderer *renderer,
+                                           unsigned int model_column,
+                                           int WXUNUSED(width),
+                                           int flags ) 
+{
+    m_renderer = renderer;
+    m_model_column = model_column;
+    m_flags = flags;
+    m_bitmap = bitmap;
+    m_owner = NULL;
+    m_renderer->SetOwner( (wxDataViewColumn*) this );
+}
+
 wxDataViewColumnBase::~wxDataViewColumnBase()
 {
     if (m_renderer)
@@ -726,6 +740,16 @@ void wxDataViewColumnBase::SetTitle( const wxString &title )
 wxString wxDataViewColumnBase::GetTitle()
 {
     return m_title;
+}
+
+void wxDataViewColumnBase::SetBitmap( const wxBitmap &bitmap )
+{
+    m_bitmap = bitmap;
+}
+
+const wxBitmap &wxDataViewColumnBase::GetBitmap()
+{
+    return m_bitmap;
 }
 
 // ---------------------------------------------------------
@@ -774,6 +798,36 @@ bool wxDataViewCtrlBase::AppendProgressColumn( const wxString &label, unsigned i
 bool wxDataViewCtrlBase::AppendDateColumn( const wxString &label, unsigned int model_column )
 {
     return AppendColumn( new wxDataViewColumn( label, new wxDataViewDateRenderer(), model_column ) );
+}
+
+bool wxDataViewCtrlBase::AppendBitmapColumn( const wxString &label, unsigned int model_column )
+{
+    return AppendColumn( new wxDataViewColumn( label, new wxDataViewBitmapRenderer(), model_column ) );
+}
+
+bool wxDataViewCtrlBase::AppendTextColumn( const wxBitmap &label, unsigned int model_column )
+{
+    return AppendColumn( new wxDataViewColumn( label, new wxDataViewTextRenderer(), model_column ) );
+}
+
+bool wxDataViewCtrlBase::AppendToggleColumn( const wxBitmap &label, unsigned int model_column )
+{
+    return AppendColumn( new wxDataViewColumn( label, new wxDataViewToggleRenderer(), model_column, 30 ) );
+}
+
+bool wxDataViewCtrlBase::AppendProgressColumn( const wxBitmap &label, unsigned int model_column )
+{
+    return AppendColumn( new wxDataViewColumn( label, new wxDataViewProgressRenderer(), model_column, 70 ) );
+}
+
+bool wxDataViewCtrlBase::AppendDateColumn( const wxBitmap &label, unsigned int model_column )
+{
+    return AppendColumn( new wxDataViewColumn( label, new wxDataViewDateRenderer(), model_column ) );
+}
+
+bool wxDataViewCtrlBase::AppendBitmapColumn( const wxBitmap &label, unsigned int model_column )
+{
+    return AppendColumn( new wxDataViewColumn( label, new wxDataViewBitmapRenderer(), model_column ) );
 }
 
 bool wxDataViewCtrlBase::AppendColumn( wxDataViewColumn *col )

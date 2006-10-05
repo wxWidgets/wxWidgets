@@ -1450,6 +1450,36 @@ wxDataViewColumn::wxDataViewColumn( const wxString &title, wxDataViewRenderer *c
     m_column = (void*) column;
 }
 
+wxDataViewColumn::wxDataViewColumn( const wxBitmap &bitmap, wxDataViewRenderer *cell, unsigned int model_column,
+    int width, int flags ) :
+    wxDataViewColumnBase( bitmap, cell, model_column, width, flags )
+{
+    GtkCellRenderer *renderer = (GtkCellRenderer *) cell->GetGtkHandle();
+
+    GtkTreeViewColumn *column = gtk_tree_view_column_new();
+    m_column = (void*) column;
+
+    SetBitmap( bitmap );
+
+    if (flags & wxDATAVIEW_COL_RESIZABLE)
+        gtk_tree_view_column_set_resizable( column, true );
+    if (flags & wxDATAVIEW_COL_HIDDEN)
+        gtk_tree_view_column_set_visible( column, false );
+    if (flags & wxDATAVIEW_COL_SORTABLE)
+        gtk_tree_view_column_set_sort_indicator( column, true );
+
+    if (width > 0)
+    {
+        gtk_tree_view_column_set_fixed_width( column, width );
+        gtk_tree_view_column_set_sizing( column, GTK_TREE_VIEW_COLUMN_FIXED );
+    }
+
+    gtk_tree_view_column_pack_end( column, renderer, FALSE );
+
+    gtk_tree_view_column_set_cell_data_func( column, renderer,
+        wxGtkTreeCellDataFunc, (gpointer) cell, NULL );
+}
+
 wxDataViewColumn::~wxDataViewColumn()
 {
 }
@@ -1460,6 +1490,41 @@ void wxDataViewColumn::SetTitle( const wxString &title )
 
     GtkTreeViewColumn *column = (GtkTreeViewColumn *)m_column;
     gtk_tree_view_column_set_title( column, wxGTK_CONV(title) );
+    
+    gtk_tree_view_column_set_widget( column, NULL );
+}
+
+void wxDataViewColumn::SetBitmap( const wxBitmap &bitmap )
+{
+    wxDataViewColumnBase::SetBitmap( bitmap );
+
+    GtkTreeViewColumn *column = (GtkTreeViewColumn *)m_column;
+    if (bitmap.Ok())
+    {
+        GtkImage *gtk_image = GTK_IMAGE( gtk_image_new() );
+        
+        GdkBitmap *mask = (GdkBitmap *) NULL;
+        if (bitmap.GetMask())
+            mask = bitmap.GetMask()->GetBitmap();
+
+        if (bitmap.HasPixbuf())
+        {
+            gtk_image_set_from_pixbuf(GTK_IMAGE(gtk_image),
+                                      bitmap.GetPixbuf());
+        }
+        else
+        {
+            gtk_image_set_from_pixmap(GTK_IMAGE(gtk_image),
+                                      bitmap.GetPixmap(), mask);
+        }
+        gtk_widget_show( GTK_WIDGET(gtk_image) );
+        
+        gtk_tree_view_column_set_widget( column, GTK_WIDGET(gtk_image) );
+    }
+    else
+    {
+        gtk_tree_view_column_set_widget( column, NULL );
+    }
 }
 
 int wxDataViewColumn::GetWidth()

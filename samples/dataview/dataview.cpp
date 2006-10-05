@@ -509,7 +509,7 @@ MySortingFrame::MySortingFrame(wxFrame *frame, wxChar *title, int x, int y, int 
     wxDataViewColumn *column = new wxDataViewColumn( wxT("editable"), text_renderer, 0 );
     dataview_left->AppendColumn( column );
     dataview_left->AppendTextColumn( wxT("second"), 1 );
-    dataview_left->AppendColumn( new wxDataViewColumn( wxT("icon"), new wxDataViewBitmapRenderer, 2, 25 ) );
+    dataview_left->AppendColumn( new wxDataViewColumn( wxBitmap(null_xpm), new wxDataViewBitmapRenderer, 2, 25 ) );
     dataview_left->AppendColumn( new wxDataViewColumn( wxT("icon"), new wxDataViewBitmapRenderer, 3, 25 ) );
 
     // Right wxDataViewCtrl using the sorting model
