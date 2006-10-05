@@ -19,9 +19,7 @@
     2. more file operations:
         a) chmod()
         b) [acm]time() - get and set
-        c) file permissions with readable accessors for most common bits
-           such as IsReadable() &c
-        d) rename()?
+        c) rename()?
     3. SameFileAs() function to compare inodes under Unix
  */
 
@@ -84,6 +82,7 @@ enum
 
 // error code of wxFileName::GetSize()
 extern wxULongLong wxInvalidSize;
+
 
 
 // ----------------------------------------------------------------------------
@@ -193,7 +192,28 @@ public:
     bool DirExists() const;
     static bool DirExists( const wxString &dir );
 
-        // VZ: also need: IsDirWritable(), IsFileExecutable() &c (TODO)
+        // checks on most common flags for files/directories;
+        // more platform-specific features (like e.g. Unix permissions) are not
+        // available in wxFileName
+
+    bool IsDirWritable() const { return wxIsWritable(GetPath()); }
+    static bool IsDirWritable(const wxString &path) { return wxDirExists(path) && wxIsWritable(path); }
+
+    bool IsDirReadable() const { return wxIsReadable(GetPath()); }
+    static bool IsDirReadable(const wxString &path) { return wxDirExists(path) && wxIsReadable(path); }
+
+    // NOTE: IsDirExecutable() is not present because the meaning of "executable"
+    //       directory is very platform-dependent and also not so useful
+
+    bool IsFileWritable() const { return wxIsWritable(GetFullPath()); }
+    static bool IsFileWritable(const wxString &path) { return wxFileExists(path) && wxIsWritable(path); }
+
+    bool IsFileReadable() const { return wxIsReadable(GetFullPath()); }
+    static bool IsFileReadable(const wxString &path) { return wxFileExists(path) && wxIsReadable(path); }
+
+    bool IsFileExecutable() const { return wxIsExecutable(GetFullPath()); }
+    static bool IsFileExecutable(const wxString &path) { return wxFileExists(path) && wxIsExecutable(path); }
+
 
     // time functions
 #if wxUSE_DATETIME

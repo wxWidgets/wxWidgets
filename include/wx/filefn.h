@@ -472,6 +472,11 @@ inline bool wxPathExists(const wxChar *pszPathName)
 }
 #endif //WXWIN_COMPATIBILITY_2_6
 
+// permissions; these functions work both on files and directories:
+WXDLLIMPEXP_BASE bool wxIsWritable(const wxString &path);
+WXDLLIMPEXP_BASE bool wxIsReadable(const wxString &path);
+WXDLLIMPEXP_BASE bool wxIsExecutable(const wxString &path);
+
 // ----------------------------------------------------------------------------
 // separators in file names
 // ----------------------------------------------------------------------------

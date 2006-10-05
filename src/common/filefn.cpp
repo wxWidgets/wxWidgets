@@ -1759,6 +1759,79 @@ int WXDLLEXPORT wxParseCommonDialogsFilter(const wxString& filterStr,
     return filters.GetCount();
 }
 
+#if defined( __WINDOWS__ )
+bool wxCheckGenericPermission(const wxString &path, DWORD access)
+{
+    // quoting the MSDN: "To obtain a handle to a directory, call the
+    // CreateFile function with the FILE_FLAG_BACKUP_SEMANTICS flag"
+    wxWinVersion ver = wxGetWinVersion();
+    bool isdir = wxDirExists(path);
+    if (isdir && (ver == wxWinVersion_95 || ver == wxWinVersion_98 || ver == wxWinVersion_ME))
+    {
+        // however Win95/98/ME do not support FILE_FLAG_BACKUP_SEMANTICS...
+        if (access == GENERIC_READ)
+        {
+            WIN32_FILE_ATTRIBUTE_DATA data;
+            if (GetFileAttributesEx(path.c_str(), GetFileExInfoStandard, &data) == 0)
+                return false;        // cannot query attributes
+            return (data.dwFileAttributes & FILE_ATTRIBUTE_READONLY) == 0;
+        }
+
+        // FIXME: is it true that directories are always writable & executable on Win9X family ?
+        return true;
+    }
+    else
+    {
+        HANDLE h = CreateFile(path.c_str(), access,
+                              FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE, NULL,
+                              OPEN_EXISTING, isdir ? FILE_FLAG_BACKUP_SEMANTICS : 0, NULL);
+        if (h != INVALID_HANDLE_VALUE)
+            CloseHandle(h);
+
+        return h != INVALID_HANDLE_VALUE;
+    }
+}
+#endif
+
+bool wxIsWritable(const wxString &path)
+{
+#if defined( __UNIX__ )
+    // access() will take in count also symbolic links
+    return access(wxConvFile.cWX2MB(path), W_OK) == 0;
+#elif defined( __WINDOWS__ )
+    return wxCheckGenericPermission(path, GENERIC_WRITE);
+#else
+    // TODO
+    return false;
+#endif
+}
+
+bool wxIsReadable(const wxString &path)
+{
+#if defined( __UNIX__ )
+    // access() will take in count also symbolic links
+    return access(wxConvFile.cWX2MB(path), R_OK) == 0;
+#elif defined( __WINDOWS__ )
+    return wxCheckGenericPermission(path, GENERIC_READ);
+#else
+    // TODO
+    return false;
+#endif
+}
+
+bool wxIsExecutable(const wxString &path)
+{
+#if defined( __UNIX__ )
+    // access() will take in count also symbolic links
+    return access(wxConvFile.cWX2MB(path), X_OK) == 0;
+#elif defined( __WINDOWS__ )
+   return wxCheckGenericPermission(path, GENERIC_EXECUTE);
+#else
+    // TODO
+    return false;
+#endif
+}
+
 
 //------------------------------------------------------------------------
 // wild character routines

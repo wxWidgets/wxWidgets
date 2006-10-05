@@ -93,7 +93,15 @@ class are \helpref{GetVolumeSeparator}{wxfilenamegetvolumeseparator},\rtfsp
 
 \membersection{File name construction}\label{filenameconstruction}
 
-TODO.
+You can initialize a wxFileName instance using one of the following functions:
+
+\helpref{wxFileName constructors}{wxfilenamewxfilename}\\
+\helpref{Assign}{wxfilenameassign}\\
+\helpref{AssignCwd}{wxfilenameassigncwd}\\
+\helpref{AssignDir}{wxfilenameassigndir}\\
+\helpref{AssignHomeDir}{wxfilenameassignhomedir}\\
+\helpref{AssignHomeTempFileName}{wxfilenameassigntempfilename}\\
+\helpref{operator $=$}{wxfilenameoperatorassign}
 
 
 \membersection{File tests}\label{filetests}
@@ -105,7 +113,15 @@ with such name exists and \helpref{DirExists}{wxfilenamedirexists} can be used
 to test for directory existence.
 
 File names should be compared using \helpref{SameAs}{wxfilenamesameas} method
-or \helpref{$==$}{wxfilenameoperatorequal}.
+or \helpref{operator $==$}{wxfilenameoperatorequal}.
+
+For testing basic access modes, you can use:
+
+\helpref{IsDirWritable}{wxfilenameisdirwritable}\\
+\helpref{IsDirReadable}{wxfilenameisdirreadable}\\
+\helpref{IsFileWritable}{wxfilenameisfilewritable}\\
+\helpref{IsFileReadable}{wxfilenameisfilereadable}\\
+\helpref{IsFileExecutable}{wxfilenameisfileexecutable}
 
 
 \membersection{File name components}\label{filenamecomponents}
@@ -617,6 +633,56 @@ Returns {\tt true} if this filename is absolute.
 \func{static bool}{IsCaseSensitive}{\param{wxPathFormat }{format = wxPATH\_NATIVE}}
 
 Returns {\tt true} if the file names of this type are case-sensitive.
+
+
+\membersection{wxFileName::IsDirReadable}\label{wxfilenameisdirreadable}
+
+\constfunc{bool}{IsDirReadable}{\void}
+
+\func{static bool}{IsDirReadable}{\param{const wxString\& }{dir}}
+
+Returns {\tt true} if the directory component of this instance (or given \arg{dir})
+is an existing directory and this process has read permissions on it.
+Read permissions on a directory mean that you can list the directory contents but it
+doesn't imply that you have read permissions on the files contained.
+
+
+\membersection{wxFileName::IsDirWritable}\label{wxfilenameisdirwritable}
+
+\constfunc{bool}{IsDirWritable}{\void}
+
+\func{static bool}{IsDirWritable}{\param{const wxString\& }{dir}}
+
+Returns {\tt true} if the directory component of this instance (or given \arg{dir})
+is an existing directory and this process has write permissions on it.
+Write permissions on a directory mean that you can create new files in the directory.
+
+
+\membersection{wxFileName::IsFileExecutable}\label{wxfilenameisfileexecutable}
+
+\constfunc{bool}{IsFileExecutable}{\void}
+
+\func{static bool}{IsFileExecutable}{\param{const wxString\& }{file}}
+
+Returns {\tt true} if a file with this name exists and if this process has execute permissions on it.
+
+
+\membersection{wxFileName::IsFileReadable}\label{wxfilenameisfilereadable}
+
+\constfunc{bool}{IsFileReadable}{\void}
+
+\func{static bool}{IsFileReadable}{\param{const wxString\& }{file}}
+
+Returns {\tt true} if a file with this name exists and if this process has read permissions on it.
+
+
+\membersection{wxFileName::IsFileWritable}\label{wxfilenameisfilewritable}
+
+\constfunc{bool}{IsFileWritable}{\void}
+
+\func{static bool}{IsFileWritable}{\param{const wxString\& }{file}}
+
+Returns {\tt true} if a file with this name exists and if this process has write permissions on it.
 
 
 \membersection{wxFileName::IsOk}\label{wxfilenameisok}
