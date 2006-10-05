@@ -77,7 +77,7 @@ public:
         return NULL;
     }
     
-    wxGraphicsPath * CreatePath() {}
+    wxGraphicsPath * CreatePath() { return NULL; }
     void PushState() {}
     void PopState() {}
     void Clip( const wxRegion & ) {}
