@@ -96,6 +96,10 @@ command_lines = [
     "-a -u -n _bp_btn3 bmp_source/bp_btn3.png images.py",
     "-a -u -n _bp_btn4 bmp_source/bp_btn4.png images.py",
 
+    "-a -u -n _book_red   bmp_source/book_red.png   images.py",
+    "-a -u -n _book_green bmp_source/book_green.png images.py",
+    "-a -u -n _book_blue  bmp_source/book_blue.png  images.py",
+
     "   -u -c bmp_source/001.png throbImages.py",
     "-a -u -c bmp_source/002.png throbImages.py",
     "-a -u -c bmp_source/003.png throbImages.py",

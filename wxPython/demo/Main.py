@@ -64,6 +64,7 @@ _treeList = [
         'DelayedResult',
         'ExpandoTextCtrl',
         'ButtonPanel',
+        'FlatNotebook',
         ]),
 
     # managed windows == things with a (optional) caption you can close
@@ -151,6 +152,7 @@ _treeList = [
         'ColourSelect',
         'ComboTreeBox',
         'Editor',
+        'FlatNotebook',
         'GenericButtons',
         'GenericDirCtrl',
         'LEDNumberCtrl',

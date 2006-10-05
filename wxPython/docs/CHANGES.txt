@@ -261,6 +261,9 @@ resampling methods for upsampling and downsampling respectively.
 Added the wx.lib.buttonpanel module, which is a tweaked version of
 Andrea Gavana's FancyButtonPanel module.
 
+Added the wx.lib.flatnotebook module, from Andrea Gavana.
+
+
 
 
 
