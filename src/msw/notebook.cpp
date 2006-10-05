@@ -761,6 +761,13 @@ bool wxNotebook::InsertPage(size_t nPage,
         return false;
     }
 
+    // need to update the bg brush when the first page is added
+    // so the first panel gets the correct themed background
+    if ( m_pages.empty() )
+    {
+        UpdateBgBrush();
+    }
+
     // succeeded: save the pointer to the page
     m_pages.Insert(pPage, nPage);
 
