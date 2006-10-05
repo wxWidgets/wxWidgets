@@ -2258,7 +2258,7 @@ bool wxDC::DoBlit(wxCoord xdest, wxCoord ydest,
                                      ds.dsBm.bmBits,
                                      (LPBITMAPINFO)&ds.dsBmih,
                                      DIB_RGB_COLORS,
-                                     SRCCOPY
+                                     dwRop
                                      ) == (int)GDI_ERROR )
                 {
                     // On Win9x this API fails most (all?) of the time, so
