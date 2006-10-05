@@ -28,19 +28,19 @@
 
 // for all others, include the necessary headers
 #ifndef WX_PRECOMP
+    #include "wx/app.h"
+    #include "wx/log.h"
     #include "wx/sizer.h"
     #include "wx/statbox.h"
     #include "wx/radiobox.h"
     #include "wx/checkbox.h"
     #include "wx/button.h"
-    #include "wx/app.h"
 #endif
 
 #include "wx/generic/dirctrlg.h"
 
 #include "wx/wupdlock.h"
 #include "wx/stdpaths.h"
-#include "wx/msgdlg.h"
 
 #include "widgets.h"
 
