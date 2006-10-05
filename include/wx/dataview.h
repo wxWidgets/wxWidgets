@@ -267,6 +267,9 @@ public:
 
     virtual void SetBitmap( const wxBitmap &bitmap );
     virtual const wxBitmap &GetBitmap();
+    
+    virtual void SetAlignment( wxAlignment align ) = 0;
+    virtual void SetSortOrder( bool ascending ) = 0;
 
     wxDataViewRenderer* GetRenderer()       { return m_renderer; }
 

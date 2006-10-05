@@ -612,6 +612,16 @@ wxDataViewColumn::wxDataViewColumn( const wxBitmap &bitmap, wxDataViewRenderer *
         m_width = 30;
 }
 
+void wxDataViewColumn::SetAlignment( wxAlignment WXUNUSED(align) )
+{
+    // TODO
+}
+
+void wxDataViewColumn::SetSortOrder( bool WXUNUSED(ascending) )
+{
+    // TODO
+}
+
 wxDataViewColumn::~wxDataViewColumn()
 {
 }
@@ -619,6 +629,12 @@ wxDataViewColumn::~wxDataViewColumn()
 void wxDataViewColumn::SetTitle( const wxString &title )
 {
     wxDataViewColumnBase::SetTitle( title );
+
+}
+
+void wxDataViewColumn::SetBitmap( const wxBitmap &bitmap )
+{
+    wxDataViewColumnBase::SetBitmap( bitmap );
 
 }
 

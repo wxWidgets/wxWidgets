@@ -1527,6 +1527,29 @@ void wxDataViewColumn::SetBitmap( const wxBitmap &bitmap )
     }
 }
 
+void wxDataViewColumn::SetAlignment( wxAlignment align )
+{
+    GtkTreeViewColumn *column = (GtkTreeViewColumn *)m_column;
+    
+    gfloat xalign = 0.0;
+    if (align == wxALIGN_RIGHT)
+        xalign = 1.0;
+    if (align == wxALIGN_CENTER)
+        xalign = 0.5;
+        
+    gtk_tree_view_column_set_alignment( column, xalign );    
+}
+
+void wxDataViewColumn::SetSortOrder( bool ascending )
+{
+    GtkTreeViewColumn *column = (GtkTreeViewColumn *)m_column;
+    
+    if (ascending)
+        gtk_tree_view_column_set_sort_order( column, GTK_SORT_ASCENDING );
+    else
+        gtk_tree_view_column_set_sort_order( column, GTK_SORT_DESCENDING );
+}
+
 int wxDataViewColumn::GetWidth()
 {
     return gtk_tree_view_column_get_width( (GtkTreeViewColumn *)m_column );

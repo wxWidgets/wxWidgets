@@ -196,7 +196,10 @@ public:
 
     virtual void SetTitle( const wxString &title );
     virtual void SetBitmap( const wxBitmap &bitmap );
-    
+
+    virtual void SetAlignment( wxAlignment align );
+    virtual void SetSortOrder( bool ascending );
+
     virtual int GetWidth();
     
     virtual void SetFixedWidth( int width );
