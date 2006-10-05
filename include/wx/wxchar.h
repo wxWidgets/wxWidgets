@@ -153,7 +153,9 @@
     #endif
 
     #ifdef wxHAVE_MWERKS_UNICODE
-        #define HAVE_WPRINTF
+        #define HAVE_WPRINTF   1
+        #define HAVE_WCSRTOMBS 1
+        #define HAVE_VSWPRINTF 1
     #endif
 #endif /* __MWERKS__ */
 
@@ -366,19 +368,6 @@
     #define  wxVsscanf   _vstscanf
     #define  wxVsprintf  _vstprintf
 
-    /* special case: not all TCHAR-aware compilers have those */
-    #if defined(__VISUALC__) || \
-            (defined(__BORLANDC__) && __BORLANDC__ >= 0x540)
-        /*
-           we can only use the system _vsntprintf() if we don't require the
-           Unix98 positional parameters support as it doesn't have it
-         */
-        #if !wxUSE_PRINTF_POS_PARAMS
-            #define wxVsnprintf_    _vsntprintf
-            #define wxSnprintf_     _sntprintf
-        #endif
-    #endif
-
     /* special case: these functions are missing under Win9x with Unicows so we */
     /* have to implement them ourselves */
     #if wxUSE_UNICODE_MSLU
@@ -446,12 +435,12 @@
         #define wxWcstombs wcstombs
     #endif
 
-    /* 
+    /*
        The system C library on Mac OS X 10.2 and below does not support
        unicode: in other words all wide-character functions such as towupper et
        al. do simply not exist so we need to provide our own in that context,
        except for the wchar_t definition/typedef itself.
-       
+
        We need to do this for both project builder and CodeWarrior as
        the latter uses the system C library in Mach builds for wide character
        support, which as mentioned does not exist on 10.2 and below.
@@ -865,73 +854,40 @@ WXDLLIMPEXP_BASE bool wxOKlibc(); /* for internal use */
 #endif
 
 /*
-   First of all, we always want to define safe snprintf() function to be used
-   instead of sprintf(). Some compilers already have it (or rather vsnprintf()
-   which we really need...), otherwise we implement it using our own printf()
-   code.
+   MinGW MSVCRT has non-standard vswprintf() (for MSVC compatibility
+   presumably) and normally _vsnwprintf() is used instead
 
-   We define function with a trailing underscore here because the real one is a
-   wrapper around it as explained below
+   vswprintf() under (early versions of) OS X is buggy
  */
-#if !defined( wxVsnprintf_ ) && !wxUSE_PRINTF_POS_PARAMS
-    #if wxUSE_UNICODE
-        #ifdef wxHAVE_MWERKS_UNICODE
-            #define HAVE_WCSRTOMBS 1
-            #define HAVE_VSWPRINTF 1
-        #endif /* Metrowerks with Unicode support */
-        #if defined(__WATCOMC__)
-            #define wxVsnprintf_    _vsnwprintf
-            #define wxSnprintf_     _snwprintf
-        #endif /* Watcom */
-        #if defined(HAVE__VSNWPRINTF)
-            #define wxVsnprintf_    _vsnwprintf
-        /* MinGW?MSVCRT has the wrong vswprintf */
-        /* Mac OS X has a somehow buggy vswprintf */
-        #elif defined(HAVE_VSWPRINTF) && !defined(__MINGW32__) && !defined(__DARWIN__)
-            #define wxVsnprintf_    vswprintf
-        #endif
-    #else /* ASCII */
-        /* all versions of CodeWarrior supported by wxWidgets apparently have */
-        /* both snprintf() and vsnprintf() */
-        #if defined(HAVE_SNPRINTF) \
-            || defined(__MWERKS__) || defined(__WATCOMC__)
-            #ifndef HAVE_BROKEN_SNPRINTF_DECL
-                #define wxSnprintf_     snprintf
-            #endif
-        #endif
-        #if defined(HAVE_VSNPRINTF) \
-            || defined(__MWERKS__) || defined(__WATCOMC__)
-            #if defined __cplusplus && defined HAVE_BROKEN_VSNPRINTF_DECL
-                #define wxVsnprintf_    wx_fixed_vsnprintf
-            #else
-                #define wxVsnprintf_    vsnprintf
-            #endif
-        #endif
-    #endif
-#endif /* wxVsnprintf_ not defined yet && !wxUSE_PRINTF_POS_PARAMS */
+#if defined(HAVE_VSWPRINTF) && (defined(__MINGW32__) || defined(__DARWIN__))
+    #undef HAVE_VSWPRINTF
+#endif
 
-#if !defined( wxVsnprintf_ ) && wxUSE_PRINTF_POS_PARAMS
+#if wxUSE_PRINTF_POS_PARAMS
     /*
-        The systems where vsnprintf() supports positionals should define
-        the HAVE_UNIX98_PRINTF symbol.
+        The systems where vsnprintf() supports positional parameters should
+        define the HAVE_UNIX98_PRINTF symbol.
 
         On systems which don't (e.g. Windows) we are forced to use
         our wxVsnprintf() implementation.
     */
     #if defined(HAVE_UNIX98_PRINTF)
         #if wxUSE_UNICODE
-            #define wxVsnprintf_        vswprintf
+            #ifdef HAVE_VSWPRINTF
+                #define wxVsnprintf_        vswprintf
+            #endif
         #else /* ASCII */
-            #if defined __cplusplus && defined HAVE_BROKEN_VSNPRINTF_DECL
+            #ifdef HAVE_BROKEN_VSNPRINTF_DECL
                 #define wxVsnprintf_    wx_fixed_vsnprintf
             #else
                 #define wxVsnprintf_    vsnprintf
             #endif
         #endif
-    #else
-        // the only exception on Windows is VC++ 8.0; it provides a new family
-        // of printf() functions with positional parameter support which should
-        // behave mostly identic to our wxVsnprintf() implementation
+    #else /* !HAVE_UNIX98_PRINTF */
+        /*
+            The only compiler with positional parameters support under Windows
+            is VC++ 8.0 which provides a new xxprintf_p() functions family
+         */
         #if defined(__VISUALC__) && __VISUALC__ >= 1400
             #if wxUSE_UNICODE
                 #define wxVsnprintf_    _vswprintf_p
@@ -939,17 +895,69 @@ WXDLLIMPEXP_BASE bool wxOKlibc(); /* for internal use */
                 #define wxVsnprintf_    _vsprintf_p
             #endif
         #endif
+    #endif /* HAVE_UNIX98_PRINTF/!HAVE_UNIX98_PRINTF */
+#else /* !wxUSE_PRINTF_POS_PARAMS */
+    /*
+       We always want to define safe snprintf() function to be used instead of
+       sprintf(). Some compilers already have it (or rather vsnprintf() which
+       we really need...), otherwise we implement it using our own printf()
+       code.
+
+       We define function with a trailing underscore here because the real one
+       is a wrapper around it as explained below
+     */
+
+    /* first deal with TCHAR-aware compilers which have _vsntprintf */
+    #ifndef wxVsnprintf_
+        #if defined(__VISUALC__) || \
+                (defined(__BORLANDC__) && __BORLANDC__ >= 0x540)
+            #define wxVsnprintf_    _vsntprintf
+            #define wxSnprintf_     _sntprintf
+        #endif
     #endif
-#endif  // !defined( wxVsnprintf_ ) && wxUSE_PRINTF_POS_PARAMS
+
+    /* if this didn't work, define it separately for Unicode and ANSI builds */
+    #ifndef wxVsnprintf_
+        #if wxUSE_UNICODE
+            #if defined(HAVE__VSNWPRINTF)
+                #define wxVsnprintf_    _vsnwprintf
+            #elif defined(HAVE_VSWPRINTF)
+                #define wxVsnprintf_     vswprintf
+            #elif defined(__WATCOMC__)
+                #define wxVsnprintf_    _vsnwprintf
+                #define wxSnprintf_     _snwprintf
+            #endif
+        #else /* ASCII */
+            /*
+               All versions of CodeWarrior supported by wxWidgets apparently
+               have both snprintf() and vsnprintf()
+             */
+            #if defined(HAVE_SNPRINTF) \
+                || defined(__MWERKS__) || defined(__WATCOMC__)
+                #ifndef HAVE_BROKEN_SNPRINTF_DECL
+                    #define wxSnprintf_     snprintf
+                #endif
+            #endif
+            #if defined(HAVE_VSNPRINTF) \
+                || defined(__MWERKS__) || defined(__WATCOMC__)
+                #ifdef HAVE_BROKEN_VSNPRINTF_DECL
+                    #define wxVsnprintf_    wx_fixed_vsnprintf
+                #else
+                    #define wxVsnprintf_    vsnprintf
+                #endif
+            #endif
+        #endif /* Unicode/ASCII */
+    #endif /* wxVsnprintf_ */
+#endif /* wxUSE_PRINTF_POS_PARAMS/!wxUSE_PRINTF_POS_PARAMS */
 
 #ifndef wxSnprintf_
     /* no [v]snprintf(), cook our own */
-    WXDLLIMPEXP_BASE int wxSnprintf_(wxChar *buf, size_t len, const wxChar *format,
-                                ...) ATTRIBUTE_PRINTF_3;
+    WXDLLIMPEXP_BASE int
+    wxSnprintf_(wxChar *buf, size_t len, const wxChar *format, ...) ATTRIBUTE_PRINTF_3;
 #endif
 #ifndef wxVsnprintf_
-    WXDLLIMPEXP_BASE int wxVsnprintf_(wxChar *buf, size_t len, const wxChar *format,
-                                 va_list argptr);
+    WXDLLIMPEXP_BASE int
+    wxVsnprintf_(wxChar *buf, size_t len, const wxChar *format, va_list argptr);
 #endif
 
 /*
