@@ -35,6 +35,13 @@
 #endif
 
 /*
+ * check graphics context option
+ */
+#if wxUSE_GRAPHICS_CONTEXT && !wxMAC_USE_CORE_GRAPHICS
+#   error "wxUSE_GRAPHICS_CONTEXT on wxMac requires wxMAC_USE_CORE_GRAPHICS"
+#endif
+
+/*
  * native (1) or emulated (0) toolbar
  */
 
