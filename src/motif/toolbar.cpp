@@ -379,7 +379,7 @@ bool wxToolBar::Realize()
                 insensBmp = tool->GetDisabledBitmap();
                 if ( bmp.GetMask() || insensBmp.GetMask() )
                 {
-                    int backgroundPixel;
+                    WXPixel backgroundPixel;
                     XtVaGetValues(button, XmNbackground, &backgroundPixel,
                                   NULL);
 
@@ -402,7 +402,7 @@ bool wxToolBar::Realize()
                 // Create a selected/toggled bitmap. If there isn't a 2nd
                 // bitmap, we need to create it (with a darker, selected
                 // background)
-                int backgroundPixel;
+                WXPixel backgroundPixel;
                 if ( tool->CanBeToggled() )
                     XtVaGetValues(button, XmNselectColor, &backgroundPixel,
                                   NULL);

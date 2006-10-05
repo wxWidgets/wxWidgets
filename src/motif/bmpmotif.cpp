@@ -125,7 +125,7 @@ WXPixmap wxBitmapCache::GetPixmapFromCache(WXWidget w)
     while( XmIsGadget( widget ) )
         widget = XtParent( widget );
 
-    Pixel fg, bg;
+    WXPixel fg, bg;
     XtVaGetValues( widget,
                    XmNbackground, &bg,
                    XmNforeground, &fg,

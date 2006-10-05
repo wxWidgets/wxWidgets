@@ -34,14 +34,14 @@
 
 IMPLEMENT_DYNAMIC_CLASS(wxColour, wxObject)
 
+wxCOMPILE_TIME_ASSERT( sizeof(WXPixel) == sizeof(Pixel), PixelSizeIsOk );
+
 // Colour
 
 void wxColour::Init()
 {
     m_isInit = false;
-    m_red =
-    m_blue =
-    m_green = 0;
+    m_red = m_blue = m_green = 0;
     m_pixel = -1;
 }
 
@@ -82,7 +82,7 @@ void wxColour::InitRGBA(unsigned char r, unsigned char g, unsigned char b,
 // TODO: can this handle mono displays? If not, we should have an extra
 // flag to specify whether this should be black or white by default.
 
-int wxColour::AllocColour(WXDisplay* display, bool realloc)
+WXPixel wxColour::AllocColour(WXDisplay* display, bool realloc)
 {
     if ((m_pixel != -1) && !realloc)
         return m_pixel;
@@ -106,7 +106,7 @@ int wxColour::AllocColour(WXDisplay* display, bool realloc)
     }
     else
     {
-        m_pixel = (int) color.pixel;
+        m_pixel = (WXPixel) color.pixel;
         return m_pixel;
     }
 }
@@ -141,14 +141,14 @@ A read-only colour will not change.
   may give better matching.
 -------------------------------------------*/
 
-int wxGetBestMatchingPixel(Display *display, XColor *desiredColor, Colormap cmap)
+WXPixel wxGetBestMatchingPixel(Display *display, XColor *desiredColor, Colormap cmap)
 {
     if (cmap == (Colormap) NULL)
         cmap = (Colormap) wxTheApp->GetMainColormap(display);
 
     int numPixVals = XDisplayCells(display, DefaultScreen (display));
     int mindist = 256 * 256 * 3;
-    int bestpixel = (int) BlackPixel (display, DefaultScreen (display));
+    Pixel bestpixel = BlackPixel (display, DefaultScreen (display));
     int red = desiredColor->red >> 8;
     int green = desiredColor->green >> 8;
     int blue = desiredColor->blue >> 8;

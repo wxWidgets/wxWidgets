@@ -41,8 +41,8 @@ public:
     unsigned char Green() const { return m_green; }
     unsigned char Blue() const { return m_blue; }
 
-    int GetPixel() const { return m_pixel; };
-    void SetPixel(int pixel) { m_pixel = pixel; m_isInit = true; };
+    WXPixel GetPixel() const { return m_pixel; };
+    void SetPixel(WXPixel pixel) { m_pixel = pixel; m_isInit = true; };
 
     inline bool operator == (const wxColour& colour) const { return (m_red == colour.m_red && m_green == colour.m_green && m_blue == colour.m_blue); }
 
@@ -56,7 +56,7 @@ public:
     // TODO: can this handle mono displays? If not, we should have an extra
     // flag to specify whether this should be black or white by default.
 
-    int AllocColour(WXDisplay* display, bool realloc = false);
+    WXPixel AllocColour(WXDisplay* display, bool realloc = false);
 
 protected:
     // Helper function
@@ -72,7 +72,7 @@ private:
     unsigned char m_green;
 
 public:
-    int           m_pixel;
+    WXPixel       m_pixel;
 };
 
 #endif

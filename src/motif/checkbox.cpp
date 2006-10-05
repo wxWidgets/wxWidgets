@@ -155,13 +155,13 @@ void wxCheckBox::ChangeBackgroundColour()
         NULL);
 
     wxColour colour = *wxBLACK;
-    int selectPixel = colour.AllocColour(XtDisplay((Widget)m_mainWidget));
+    WXPixel selectPixel = colour.AllocColour(XtDisplay((Widget)m_mainWidget));
 
     // Better to have the checkbox selection in black, or it's
     // hard to determine what state it is in.
     XtVaSetValues ((Widget) m_mainWidget,
            XmNselectColor, selectPixel,
-        NULL);
+           NULL);
 }
 
 void wxCheckBox::DoSet3StateValue(wxCheckBoxState state)

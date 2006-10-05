@@ -152,7 +152,7 @@ void wxBitmapButton::DoSetBitmap()
         // in the current widget background colour.
         if (m_bmpNormalOriginal.GetMask())
         {
-            int backgroundPixel;
+            WXPixel backgroundPixel;
             XtVaGetValues((Widget) m_mainWidget,
                           XmNbackground, &backgroundPixel,
                           NULL);
@@ -177,7 +177,7 @@ void wxBitmapButton::DoSetBitmap()
         {
             if (m_bmpDisabledOriginal.GetMask())
             {
-                int backgroundPixel;
+                WXPixel backgroundPixel;
                 XtVaGetValues((Widget) m_mainWidget,
                               XmNbackground, &backgroundPixel,
                               NULL);
@@ -202,7 +202,7 @@ void wxBitmapButton::DoSetBitmap()
         {
             if (m_bmpSelectedOriginal.GetMask())
             {
-                int backgroundPixel;
+                WXPixel backgroundPixel;
                 XtVaGetValues((Widget) m_mainWidget,
                               XmNarmColor, &backgroundPixel,
                               NULL);

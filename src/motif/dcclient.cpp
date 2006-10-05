@@ -195,7 +195,7 @@ wxWindowDC::wxWindowDC( wxWindow *window )
             &gcvalues);
     }
 
-    m_backgroundPixel = (int) gcvalues.background;
+    m_backgroundPixel = gcvalues.background;
 
     SetBackground(wxBrush(m_window->GetBackgroundColour(), wxSOLID));
 }
@@ -797,13 +797,13 @@ bool wxWindowDC::DoBlit( wxCoord xdest, wxCoord ydest,
     // foreground colour. [m_textForegroundColour] Background pixels (0)
     // will be painted with backgound colour (m_textBackgroundColour)
     // Using ::SetPen is horribly slow, so avoid doing it
-    int oldBackgroundPixel = -1;
-    int oldForegroundPixel = -1;
+    WXPixel oldBackgroundPixel = -1;
+    WXPixel oldForegroundPixel = -1;
 
     if (m_textBackgroundColour.Ok())
     {
         oldBackgroundPixel = m_backgroundPixel;
-        int pixel = m_textBackgroundColour.AllocColour(m_display);
+        WXPixel pixel = m_textBackgroundColour.AllocColour(m_display);
 
         XSetBackground ((Display*) m_display, (GC) m_gc, pixel);
         if (m_window && m_window->GetBackingPixmap())
@@ -818,7 +818,7 @@ bool wxWindowDC::DoBlit( wxCoord xdest, wxCoord ydest,
             CalculatePixel( m_textForegroundColour,
                             m_textForegroundColour, true);
 
-        int pixel = m_textForegroundColour.GetPixel();
+        WXPixel pixel = m_textForegroundColour.GetPixel();
         if (pixel > -1)
             SetForegroundPixelWithLogicalFunction(pixel);
     }
@@ -1056,7 +1056,7 @@ void wxWindowDC::DoDrawText( const wxString &text, wxCoord x, wxCoord y )
 
         if (!sameColour || !GET_OPTIMIZATION)
         {
-            int pixel = m_textBackgroundColour.AllocColour(m_display);
+            WXPixel pixel = m_textBackgroundColour.AllocColour(m_display);
             m_currentColour = m_textBackgroundColour;
 
             // Set the GC to the required colour
@@ -1089,8 +1089,8 @@ void wxWindowDC::DoDrawText( const wxString &text, wxCoord x, wxCoord y )
 
         if (!sameColour || !GET_OPTIMIZATION)
         {
-            int pixel = CalculatePixel(m_textForegroundColour,
-                                       m_currentColour, false);
+            WXPixel pixel = CalculatePixel(m_textForegroundColour,
+                                           m_currentColour, false);
 
             // Set the GC to the required colour
             if (pixel > -1)
@@ -1161,10 +1161,10 @@ void wxWindowDC::DoDrawRotatedText( const wxString &text, wxCoord x, wxCoord y,
 
     wxCHECK_RET( Ok(), "invalid dc" );
 
-    int oldBackgroundPixel = -1;
-    int oldForegroundPixel = -1;
-    int foregroundPixel = -1;
-    int backgroundPixel = -1;
+    WXPixel oldBackgroundPixel = -1;
+    WXPixel oldForegroundPixel = -1;
+    WXPixel foregroundPixel = -1;
+    WXPixel backgroundPixel = -1;
 
     if (m_textBackgroundColour.Ok())
     {
@@ -1414,7 +1414,7 @@ void wxWindowDC::SetFont( const wxFont &font )
 #endif
 }
 
-void wxWindowDC::SetForegroundPixelWithLogicalFunction(int pixel)
+void wxWindowDC::SetForegroundPixelWithLogicalFunction(WXPixel pixel)
 {
     if (m_logicalFunction == wxXOR)
     {
@@ -1434,12 +1434,12 @@ void wxWindowDC::SetForegroundPixelWithLogicalFunction(int pixel)
     }
 }
 
-int wxWindowDC::CalculatePixel(wxColour& colour, wxColour& curCol,
+WXPixel wxWindowDC::CalculatePixel(wxColour& colour, wxColour& curCol,
                                bool roundToWhite) const
 {
     const unsigned char wp = (unsigned char)255;
 
-    int pixel = -1;
+    WXPixel pixel = -1;
     if(!m_colour) // Mono display
     {
         unsigned char red = colour.Red ();
@@ -1451,16 +1451,16 @@ int wxWindowDC::CalculatePixel(wxColour& colour, wxColour& curCol,
            ((red != 0 || blue != 0 || green != 0) && roundToWhite))
         {
             curCol = *wxWHITE;
-            pixel = (int)WhitePixel((Display*) m_display,
-                                    DefaultScreen((Display*) m_display));
+            pixel = WhitePixel((Display*) m_display,
+                               DefaultScreen((Display*) m_display));
             curCol.SetPixel(pixel);
             colour.SetPixel(pixel);
         }
         else
         {
             curCol = *wxBLACK;
-            pixel = (int)BlackPixel((Display*) m_display,
-                                    DefaultScreen((Display*) m_display));
+            pixel = BlackPixel((Display*) m_display,
+                               DefaultScreen((Display*) m_display));
             curCol.SetPixel(pixel);
             colour.SetPixel(pixel);
         }
@@ -1717,7 +1717,7 @@ void wxWindowDC::SetPen( const wxPen &pen )
     if (!sameColour || !GET_OPTIMIZATION
         || ((m_logicalFunction == wxXOR) || (m_autoSetting & 0x2)))
     {
-        int pixel = -1;
+        WXPixel pixel = -1;
         if (m_pen.GetStyle () == wxTRANSPARENT)
             pixel = m_backgroundPixel;
         else
@@ -1884,7 +1884,7 @@ void wxWindowDC::SetBrush( const wxBrush &brush )
     // must test m_logicalFunction, because it involves background!
     if (!sameColour || !GET_OPTIMIZATION || m_logicalFunction == wxXOR)
     {
-        int pixel = CalculatePixel(m_brush.GetColour(), m_currentColour, true);
+        WXPixel pixel = CalculatePixel(m_brush.GetColour(), m_currentColour, true);
 
         if (pixel > -1)
             SetForegroundPixelWithLogicalFunction(pixel);
@@ -2172,7 +2172,7 @@ static void XCopyRemote(Display *src_display, Display *dest_display,
     static const int CACHE_SIZE = 256;
 
     unsigned int i, j;
-    unsigned long cachesrc[CACHE_SIZE], cachedest[CACHE_SIZE];
+    Pixel cachesrc[CACHE_SIZE], cachedest[CACHE_SIZE];
     int k, cache_pos, all_cache;
 
     if (!cache || !*cache)
@@ -2190,7 +2190,7 @@ static void XCopyRemote(Display *src_display, Display *dest_display,
 
     for (i = 0; i < w; i++)
         for (j = 0; j < h; j++) {
-            unsigned long pixel;
+            Pixel pixel;
             XColor xcol;
 
             pixel = XGetPixel(image, i, j);

@@ -61,7 +61,7 @@ wxScreenDC::wxScreenDC()
         GCForeground | GCBackground | GCGraphicsExposures | GCLineWidth | GCSubwindowMode,
         &gcvalues);
 
-    m_backgroundPixel = (int) gcvalues.background;
+    m_backgroundPixel = gcvalues.background;
     m_ok = true;
 }
 

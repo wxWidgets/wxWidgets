@@ -2767,6 +2767,7 @@ typedef void*           WXFontType; /* either a XmFontList or XmRenderTable */
 typedef void*           WXString;
 
 typedef unsigned long   Atom;  /* this might fail on a few architectures */
+typedef long            WXPixel; /* safety catch in src/motif/colour.cpp */
 
 #endif /*  Motif */
 

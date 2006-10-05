@@ -52,7 +52,7 @@ wxMemoryDC::wxMemoryDC(void)
         GCForeground | GCBackground | GCGraphicsExposures | GCLineWidth | GCSubwindowMode,
         &gcvalues);
 
-    m_backgroundPixel = (int) gcvalues.background;
+    m_backgroundPixel = gcvalues.background;
 
     SetBrush (* wxWHITE_BRUSH);
     SetPen (* wxBLACK_PEN);
@@ -79,7 +79,7 @@ wxMemoryDC::wxMemoryDC( wxDC* dc )
         GCForeground | GCBackground | GCGraphicsExposures | GCLineWidth | GCSubwindowMode,
         &gcvalues);
 
-    m_backgroundPixel = (int) gcvalues.background;
+    m_backgroundPixel = gcvalues.background;
 
     SetBrush (* wxWHITE_BRUSH);
     SetPen (* wxBLACK_PEN);
@@ -112,7 +112,7 @@ void wxMemoryDC::SelectObject( const wxBitmap& bitmap )
             GCForeground | GCBackground | GCGraphicsExposures | GCLineWidth | GCSubwindowMode,
             &gcvalues);
 
-        m_backgroundPixel = (int) gcvalues.background;
+        m_backgroundPixel = gcvalues.background;
         m_ok = true;
 
         SetBrush (* wxWHITE_BRUSH);

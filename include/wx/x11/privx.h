@@ -38,7 +38,7 @@ class WXDLLIMPEXP_CORE wxRegion;
 extern int wxCharCodeXToWX(KeySym keySym);
 extern KeySym wxCharCodeWXToX(int id);
 
-int wxGetBestMatchingPixel(Display *display, XColor *desiredColor, Colormap cmap);
+WXPixel wxGetBestMatchingPixel(Display *display, XColor *desiredColor, Colormap cmap);
 Pixmap XCreateInsensitivePixmap( Display *display, Pixmap pixmap );
 
 extern XColor g_itemColors[];

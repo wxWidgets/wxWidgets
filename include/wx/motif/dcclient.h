@@ -92,11 +92,11 @@ protected:
     // if roundToWhite == true then the colour will be set to white unless
     // it is RGB 0x000000;if roundToWhite == true the colour wull be set to
     // black unless it id RGB 0xffffff
-    int CalculatePixel(wxColour& colour, wxColour& curCol,
-                       bool roundToWhite) const;
+    WXPixel CalculatePixel(wxColour& colour, wxColour& curCol,
+                           bool roundToWhite) const;
     // sets the foreground pixel taking into account the
     // currently selected logical operation
-    void SetForegroundPixelWithLogicalFunction(int pixel);
+    void SetForegroundPixelWithLogicalFunction(WXPixel pixel);
 
     virtual bool DoFloodFill(wxCoord x, wxCoord y, const wxColour& col,
         int style = wxFLOOD_SURFACE);
@@ -153,7 +153,7 @@ protected:
     WXRegion     m_clipRegion;
 
     // Not sure if we'll need all of these
-    int          m_backgroundPixel;
+    WXPixel      m_backgroundPixel;
     wxColour     m_currentColour;
     int          m_currentPenWidth ;
     int          m_currentPenJoin ;

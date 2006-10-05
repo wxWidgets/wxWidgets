@@ -96,7 +96,7 @@ void wxStaticBitmap::DoSetBitmap()
         // in the current widget background colour.
         if (m_messageBitmapOriginal.GetMask())
         {
-            int backgroundPixel;
+            WXPixel backgroundPixel;
             XtVaGetValues( widget, XmNbackground, &backgroundPixel,
                 NULL);
 
