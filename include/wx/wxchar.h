@@ -1,11 +1,11 @@
 /*
  * Name:        wx/wxchar.h
  * Purpose:     Declarations common to wx char/wchar_t usage (wide chars)
- * Author:      Joel Farley, Ove Kï¿½en
+ * Author:      Joel Farley, Ove Kåven
  * Modified by: Vadim Zeitlin, Robert Roebling, Ron Lee
  * Created:     1998/06/12
  * RCS-ID:      $Id$
- * Copyright:   (c) 1998-2002 Joel Farley, Ove Kï¿½en, Robert Roebling, Ron Lee
+ * Copyright:   (c) 1998-2006 wxWidgets dev team
  * Licence:     wxWindows licence
  */
 
