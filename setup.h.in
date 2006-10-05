@@ -294,7 +294,9 @@
 #define wxUSE_AUI       0
 
 
+#ifndef wxUSE_GRAPHICS_CONTEXT
 #define wxUSE_GRAPHICS_CONTEXT 0
+#endif
 
 
 #define wxUSE_CONTROLS     0

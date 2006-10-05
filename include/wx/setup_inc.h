@@ -548,10 +548,16 @@
 // Enable the new wxGraphicsPath and wxGraphicsContext classes for an advanced
 // 2D drawing API.  (Still somewhat experimental)
 //
+// Please note that on Windows you will need to link with gdiplus.lib (use
+// USE_GDIPLUS=1 for makefile builds) and distribute gdiplus.dll with your
+// application if you want it to be runnable on pre-XP systems.
+//
 // Default is 0
 //
 // Recommended setting: 1
+#ifndef wxUSE_GRAPHICS_CONTEXT
 #define wxUSE_GRAPHICS_CONTEXT 0
+#endif
 
 // ----------------------------------------------------------------------------
 // Individual GUI controls
