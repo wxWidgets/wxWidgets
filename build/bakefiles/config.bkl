@@ -266,6 +266,16 @@ Acts according to BUILD by default.
         </description>
     </option>
 
+    <if cond="FORMAT!='autoconf'">
+        <option name="USE_GDIPLUS">
+            <values>0,1</values>
+            <default-value>0</default-value>
+            <description>
+                Link with gdiplus.lib? (Needed for wxGraphicsContext, will also set wxUSE_GRAPHICS_CONTEXT)
+            </description>
+	</option>
+    </if>
+
     <option name="OFFICIAL_BUILD">
         <values>0,1</values>
         <default-value>0</default-value>
@@ -440,6 +450,7 @@ Set the version of your Mingw installation here.
         <set var="USE_EXCEPTIONS">1</set>
         <set var="USE_RTTI">1</set>
         <set var="USE_THREADS">1</set>
+        <if cond="FORMAT!='autoconf'"><set var="USE_GDIPLUS">0</set></if>
         <set var="DEBUG_INFO">$(DEBUG_INFO_DEFAULT)</set>
         <set var="DEBUG_FLAG">default</set>
         <set var="MSLU">0</set>

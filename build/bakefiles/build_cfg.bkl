@@ -43,6 +43,7 @@
                 @echo USE_ODBC=$(USE_ODBC) >>$(BUILD_CFG_FILE)
                 @echo USE_OPENGL=$(USE_OPENGL) >>$(BUILD_CFG_FILE)
                 @echo USE_QA=$(USE_QA) >>$(BUILD_CFG_FILE)
+		@echo USE_GDIPLUS=$(USE_GDIPLUS) >>$(BUILD_CFG_FILE)
                 @echo COMPILER=$(COMPILER) >>$(BUILD_CFG_FILE)
                 @echo CC=$(CC) >>$(BUILD_CFG_FILE)
                 @echo CXX=$(CXX) >>$(BUILD_CFG_FILE)

@@ -282,6 +282,15 @@
         <if cond="MSLU=='1'">unicows</if>
     </set>
 
+    <if cond="FORMAT!='autoconf'">
+        <set var="GDIPLUS_LIB">
+            <if cond="USE_GDIPLUS=='1'">gdiplus</if>
+	</set>
+	<set var="GFXCTX_DEFINE">
+            <if cond="USE_GDIPLUS=='1'">wxUSE_GRAPHICS_CONTEXT=1</if>
+	</set>
+    </if>
+
     <set var="LINK_TARGET_CPU">
         <if cond="TARGET_CPU=='amd64'">/MACHINE:AMD64</if>
         <if cond="TARGET_CPU=='AMD64'">/MACHINE:AMD64</if>
@@ -478,6 +487,7 @@ $(TAB)$(VC_COMPILER) /EP /nologo "$(DOLLAR)(InputPath)" > "$(SETUPHDIR)\wx\msw\r
         <define>$(THREAD_DEFINE)</define>
         <define>$(UNICODE_DEFINE)</define>
         <define>$(MSLU_DEFINE)</define>
+        <if cond="FORMAT!='autoconf'"><define>$(GFXCTX_DEFINE)</define></if>
         <include cond="FORMAT!='autoconf'">$(SETUPHDIR)</include>
         <include cond="FORMAT!='autoconf'">$(TOP_SRCDIR)include</include>
         <lib-path>$(LIBDIRNAME)</lib-path>
@@ -524,6 +534,7 @@ $(TAB)$(VC_COMPILER) /EP /nologo "$(DOLLAR)(InputPath)" > "$(SETUPHDIR)\wx\msw\r
         <!-- system libraries on windows: -->
         <if cond="FORMAT!='autoconf' and PLATFORM_WIN32=='1'">
             <sys-lib>$(UNICOWS_LIB)</sys-lib>
+            <sys-lib>$(GDIPLUS_LIB)</sys-lib>
             <if cond="FORMAT=='borland'">
                 <sys-lib>ole2w32</sys-lib>
             </if>

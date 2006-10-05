@@ -148,6 +148,11 @@ USE_RTTI = 1
 USE_THREADS = 1
 !endif
 
+# Link with gdiplus.lib? (Needed for wxGraphicsContext, will also set wxUSE_GRAPHICS_CONTEXT) [0,1]
+!ifndef USE_GDIPLUS
+USE_GDIPLUS = 0
+!endif
+
 # Is this official build by wxWidgets developers? [0,1]
 !ifndef OFFICIAL_BUILD
 OFFICIAL_BUILD = 0
