@@ -253,12 +253,10 @@ The following example shows a simple implementation that utilizes
 }
 
 %extend wxDockUIPart {
-    wxDockUIPart() {}
     ~wxDockUIPart() {}
 }
 
 %extend wxPaneButton {
-    wxPaneButton() {}
     ~wxPaneButton() {}
 }
 
