@@ -241,9 +241,7 @@ class ButtonInfo:
 # -- ButtonPanel class implementation ----------------------------------
 # This is the main class.
 
-BASE = wx.PyPanel
-
-class ButtonPanel(BASE):
+class ButtonPanel(wx.PyPanel):
 
     def __init__(self, parent, id=wx.ID_ANY, text="", style=BP_DEFAULT_STYLE,
                  alignment=BP_ALIGN_RIGHT, name="buttonPanel"):
@@ -258,7 +256,7 @@ class ButtonPanel(BASE):
         - name: window class name 
         """        
         
-        BASE.__init__(self, parent, id, wx.DefaultPosition, wx.DefaultSize,
+        wx.PyPanel.__init__(self, parent, id, wx.DefaultPosition, wx.DefaultSize,
                           wx.NO_BORDER, name=name)
         self._vButtons = []
 
