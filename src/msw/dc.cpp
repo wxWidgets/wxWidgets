@@ -554,9 +554,9 @@ void wxDC::Clear()
         if (!m_selectedBitmap.Ok())
             return;
 
-        rect.left = 0; rect.top = 0;
-        rect.right = m_selectedBitmap.GetWidth();
-        rect.bottom = m_selectedBitmap.GetHeight();
+        rect.left = -m_deviceOriginX; rect.top = -m_deviceOriginY;
+        rect.right = m_selectedBitmap.GetWidth()-m_deviceOriginX;
+        rect.bottom = m_selectedBitmap.GetHeight()-m_deviceOriginY;
     }
 
 #ifndef __WXWINCE__
