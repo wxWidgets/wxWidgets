@@ -263,6 +263,10 @@ Andrea Gavana's FancyButtonPanel module.
 
 Added the wx.lib.flatnotebook module, from Andrea Gavana.
 
+Renamed wx.FutureCall to wx.CallLater so it is named more like
+wx.CallAfter.  wx.FutureCall is now an empty subclass of wx.CallLater
+for compatibility of older code.
+
 
 
 
