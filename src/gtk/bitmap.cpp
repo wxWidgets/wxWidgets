@@ -373,7 +373,7 @@ wxBitmap wxBitmap::Rescale( int clipx, int clipy, int clipwidth, int clipheight,
 
                 if ( dst )
                 {
-                    if (!pixval)
+                    if (pixval)
                     {
                         char bit=1;
                         char shift = bit << (w % 8);
