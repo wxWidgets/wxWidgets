@@ -180,11 +180,7 @@ def runTest(frame, nb, log):
 
 
 
-overview = """<html><body>
-<h2><center>Say something nice here</center></h2>
-
-</body></html>
-"""
+overview = bp.__doc__
 
 
 
