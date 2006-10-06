@@ -580,6 +580,8 @@ bool wxPrintfConvSpec::Parse(const wxChar *format)
 
             case wxT('p'):
                 m_type = wxPAT_POINTER;
+                m_szFlags[flagofs++] = ch;
+                m_szFlags[flagofs] = '\0';
                 done = true;
                 break;
 
