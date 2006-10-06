@@ -70,10 +70,10 @@ MENU_COLORFUL_TABS = MENU_EDIT_DELETE_ALL + 33
 
 class FlatNotebookDemo(wx.Frame):
 
-    def __init__(self, parent, id=wx.ID_ANY, title="", pos=wx.DefaultPosition, size=(800, 600),
-                 style=wx.DEFAULT_FRAME_STYLE | wx.MAXIMIZE |wx.NO_FULL_REPAINT_ON_RESIZE):
+    def __init__(self, parent, log):
 
-        wx.Frame.__init__(self, parent, id, title, pos, size, style)
+        wx.Frame.__init__(self, parent, title="FlatNotebook Demo", size=(800,600))
+        self.log = log
 
         self._bShowImages = False
         self._bVCStyle = False
@@ -320,7 +320,6 @@ class FlatNotebookDemo(wx.Frame):
 
         self.Thaw()	
 
-        self.Centre() 
         mainSizer.Layout()
         self.SendSizeEvent()
 
@@ -491,8 +490,12 @@ class FlatNotebookDemo(wx.Frame):
 
     def CreatePage(self, caption):
 
-        return wx.TextCtrl(self.book, -1, caption, wx.DefaultPosition, self.book.GetPageBestSize(),
-                           wx.TE_MULTILINE)
+        p = wx.Panel(self.book)
+        wx.StaticText(p, -1, caption, (20,20))
+        wx.TextCtrl(p, -1, "", (20,40), (150,-1))
+        #wx.TextCtrl(p, -1, "", (20,75), (150,-1), style=wx.TE_MULTILINE)
+        return p
+    
 
 
     def OnDeletePage(self, event):
@@ -572,20 +575,17 @@ class FlatNotebookDemo(wx.Frame):
 
 
     def OnPageChanging(self, event):
-
-        print "Page Changing From", event.GetOldSelection(), "To", event.GetSelection()
+        self.log.write("Page Changing From %d To %d" % (event.GetOldSelection(), event.GetSelection()))
         event.Skip()
 
 
     def OnPageChanged(self, event):
-
-        print "Page Changed To", event.GetSelection()
+        self.log.write("Page Changed To %d" % event.GetSelection())
         event.Skip()
 
 
     def OnPageClosing(self, event):
-
-        print "Page Closing, Selection:", event.GetSelection()
+        self.log.write("Page Closing, Selection: %d" % event.GetSelection())
         event.Skip()
 
 
@@ -660,12 +660,12 @@ class TestPanel(wx.Panel):
         self.log = log
         wx.Panel.__init__(self, parent, -1)
 
-        b = wx.Button(self, -1, " Test ButtonPanel ", (50,50))
+        b = wx.Button(self, -1, " Test FlatNotebook ", (50,50))
         self.Bind(wx.EVT_BUTTON, self.OnButton, b)
 
 
     def OnButton(self, evt):
-        self.win = FlatNotebookDemo(self, title="FlatNotebook Demo")
+        self.win = FlatNotebookDemo(self, self.log)
         self.win.Show(True)
 
 #----------------------------------------------------------------------

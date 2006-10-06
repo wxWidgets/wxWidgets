@@ -887,29 +887,24 @@ class FlatNotebookBase(wx.Panel):
 
         self.Bind(wx.EVT_NAVIGATION_KEY, self.OnNavigationKey)
         
-        self._pages._colorBorder = wx.SystemSettings_GetColour(wx.SYS_COLOUR_BTNSHADOW)
+        self._pages._colorBorder = wx.SystemSettings.GetColour(wx.SYS_COLOUR_BTNSHADOW)
 
         self._mainSizer = wx.BoxSizer(wx.VERTICAL)
         self.SetSizer(self._mainSizer)
 
-        self.SetBackgroundColour(wx.SystemSettings_GetColour(wx.SYS_COLOUR_APPWORKSPACE))
+        # The child panels will inherit this bg color, so leave it at the default value
+        #self.SetBackgroundColour(wx.SystemSettings.GetColour(wx.SYS_COLOUR_APPWORKSPACE))
 
         # Add the tab container to the sizer
         self._mainSizer.Insert(0, self._pages, 0, wx.EXPAND)
 
         # Set default page height
         dc = wx.ClientDC(self)
-
-        if "__WXGTK__" in wx.PlatformInfo:
-            # For GTK it seems that we must do this steps in order
-            # for the tabs will get the proper height on initialization
-            # on MSW, preforming these steps yields wierd results
-            normalFont = wx.SystemSettings_GetFont(wx.SYS_DEFAULT_GUI_FONT)
-            boldFont = wx.SystemSettings_GetFont(wx.SYS_DEFAULT_GUI_FONT)
-            boldFont.SetWeight(wx.FONTWEIGHT_BOLD)
-            dc.SetFont(boldFont)
-
-        width, height = dc.GetTextExtent("Tp")
+        font = self.GetFont()
+        font.SetWeight(wx.FONTWEIGHT_BOLD)
+        dc.SetFont(font)
+        height = dc.GetCharHeight()
+        ##print height, font.Ok()
 
         tabHeight = height + FNB_HEIGHT_SPACER         # We use 8 pixels as padding
         self._pages.SetSizeHints(-1, tabHeight)
@@ -1535,17 +1530,17 @@ class PageContainerBase(wx.Panel):
 
         self._pagesInfoVec = []        
 
-        self._colorTo = wx.SystemSettings_GetColour(wx.SYS_COLOUR_ACTIVECAPTION)
+        self._colorTo = wx.SystemSettings.GetColour(wx.SYS_COLOUR_ACTIVECAPTION)
         self._colorFrom = wx.WHITE
         self._activeTabColor = wx.WHITE
-        self._activeTextColor = wx.SystemSettings_GetColour(wx.SYS_COLOUR_BTNTEXT)
-        self._nonActiveTextColor = wx.SystemSettings_GetColour(wx.SYS_COLOUR_BTNSHADOW)
-        self._tabAreaColor = wx.SystemSettings_GetColour(wx.SYS_COLOUR_BTNFACE)
+        self._activeTextColor = wx.SystemSettings.GetColour(wx.SYS_COLOUR_BTNTEXT)
+        self._nonActiveTextColor = wx.SystemSettings.GetColour(wx.SYS_COLOUR_BTNSHADOW)
+        self._tabAreaColor = wx.SystemSettings.GetColour(wx.SYS_COLOUR_BTNFACE)
 
         self._nFrom = 0
         self._isdragging = False
         
-        wx.Panel.__init__(self, parent, id, pos, size, style)
+        wx.Panel.__init__(self, parent, id, pos, size, style|wx.TAB_TRAVERSAL)
 
         self._pDropTarget = FNBDropTarget(self)
         self.SetDropTarget(self._pDropTarget)
@@ -1602,8 +1597,8 @@ class PageContainerBase(wx.Panel):
         # For GTK it seems that we must do this steps in order
         # for the tabs will get the proper height on initialization
         # on MSW, preforming these steps yields wierd results
-        normalFont = wx.SystemSettings_GetFont(wx.SYS_DEFAULT_GUI_FONT)
-        boldFont = wx.SystemSettings_GetFont(wx.SYS_DEFAULT_GUI_FONT)
+        normalFont = wx.SystemSettings.GetFont(wx.SYS_DEFAULT_GUI_FONT)
+        boldFont = wx.SystemSettings.GetFont(wx.SYS_DEFAULT_GUI_FONT)
         boldFont.SetWeight(wx.FONTWEIGHT_BOLD)
         if "__WXGTK__" in wx.PlatformInfo:
             dc.SetFont(boldFont)
@@ -1618,14 +1613,14 @@ class PageContainerBase(wx.Panel):
 
         # Set the maximum client size
         self.SetSizeHints(self.GetButtonsAreaLength(), tabHeight)
-        borderPen = wx.Pen(wx.SystemSettings_GetColour(wx.SYS_COLOUR_BTNSHADOW))
+        borderPen = wx.Pen(wx.SystemSettings.GetColour(wx.SYS_COLOUR_BTNSHADOW))
 
         if style & FNB_VC71:
             backBrush = wx.Brush(wx.Colour(247, 243, 233))
         else:
             backBrush = wx.Brush(self._tabAreaColor)
 
-        noselBrush = wx.Brush(wx.SystemSettings_GetColour(wx.SYS_COLOUR_BTNFACE))
+        noselBrush = wx.Brush(wx.SystemSettings.GetColour(wx.SYS_COLOUR_BTNFACE))
         selBrush = wx.Brush(self._activeTabColor)
 
         size = self.GetSize()
@@ -1685,7 +1680,7 @@ class PageContainerBase(wx.Panel):
             greyLineYVal = self.HasFlag((FNB_BOTTOM and [0] or [size.y - 2])[0])
             whiteLineYVal = self.HasFlag((FNB_BOTTOM and [3] or [size.y - 3])[0])
 
-            pen = wx.Pen(wx.SystemSettings_GetColour(wx.SYS_COLOUR_3DFACE))
+            pen = wx.Pen(wx.SystemSettings.GetColour(wx.SYS_COLOUR_3DFACE))
             dc.SetPen(pen)
 
             # Draw thik grey line between the windows area and
@@ -1877,9 +1872,9 @@ class PageContainerBase(wx.Panel):
         - The Selected tab is colored with gradient color
         """
         
-        borderPen = wx.Pen(wx.SystemSettings_GetColour(wx.SYS_COLOUR_BTNSHADOW))
+        borderPen = wx.Pen(wx.SystemSettings.GetColour(wx.SYS_COLOUR_BTNSHADOW))
         pen = (tabIdx==self.GetSelection() and [wx.Pen(self._colorBorder)] \
-               or [wx.Pen(wx.SystemSettings_GetColour(wx.SYS_COLOUR_3DFACE))])[0]
+               or [wx.Pen(wx.SystemSettings.GetColour(wx.SYS_COLOUR_3DFACE))])[0]
 
         fnb_bottom = self.HasFlag(FNB_BOTTOM)
 
@@ -1915,9 +1910,9 @@ class PageContainerBase(wx.Panel):
         fnb_bottom = self.HasFlag(FNB_BOTTOM)
         
         # Visual studio 7.1 style
-        borderPen = wx.Pen(wx.SystemSettings_GetColour(wx.SYS_COLOUR_BTNSHADOW))
-        dc.SetPen((tabIdx==self.GetSelection() and [wx.Pen(wx.SystemSettings_GetColour(wx.SYS_COLOUR_3DFACE))] or [borderPen])[0])
-        dc.SetBrush((tabIdx==self.GetSelection() and [wx.Brush(wx.SystemSettings_GetColour(wx.SYS_COLOUR_3DFACE))] or \
+        borderPen = wx.Pen(wx.SystemSettings.GetColour(wx.SYS_COLOUR_BTNSHADOW))
+        dc.SetPen((tabIdx==self.GetSelection() and [wx.Pen(wx.SystemSettings.GetColour(wx.SYS_COLOUR_3DFACE))] or [borderPen])[0])
+        dc.SetBrush((tabIdx==self.GetSelection() and [wx.Brush(wx.SystemSettings.GetColour(wx.SYS_COLOUR_3DFACE))] or \
                      [wx.Brush(wx.Colour(247, 243, 233))])[0])
 
         if tabIdx == self.GetSelection():
@@ -1966,7 +1961,7 @@ class PageContainerBase(wx.Panel):
         fnb_bottom = self.HasFlag(FNB_BOTTOM)
         
         # Default style
-        borderPen = wx.Pen(wx.SystemSettings_GetColour(wx.SYS_COLOUR_BTNSHADOW))
+        borderPen = wx.Pen(wx.SystemSettings.GetColour(wx.SYS_COLOUR_BTNSHADOW))
 
         tabPoints = [wx.Point() for ii in xrange(7)]
         tabPoints[0].x = posx
@@ -2677,7 +2672,7 @@ class PageContainerBase(wx.Panel):
         
         for ii in xrange(self._nFrom, -1, -1):
 
-            boldFont = wx.SystemSettings_GetFont(wx.SYS_DEFAULT_GUI_FONT)        
+            boldFont = wx.SystemSettings.GetFont(wx.SYS_DEFAULT_GUI_FONT)        
             boldFont.SetWeight(wx.FONTWEIGHT_BOLD)
             dc.SetFont(boldFont)
 
@@ -3107,7 +3102,7 @@ class PageContainerBase(wx.Panel):
         dc.DrawRectangleRect(clientRect2)
         dc.DrawRectangleRect(clientRect3)
 
-        dc.SetPen(wx.Pen(wx.SystemSettings_GetColour(wx.SYS_COLOUR_BTNSHADOW)))
+        dc.SetPen(wx.Pen(wx.SystemSettings.GetColour(wx.SYS_COLOUR_BTNSHADOW)))
         dc.DrawRectangleRect(clientRect)
 
         if not self.HasFlag(FNB_TABS_BORDER_SIMPLE):
@@ -3257,7 +3252,7 @@ class StyledNotebook(FlatNotebookBase):
         # Custom initialization of the tab area
         if style & FNB_VC8:
             # Initialise the default style colors
-            self.SetNonActiveTabTextColour(wx.SystemSettings_GetColour(wx.SYS_COLOUR_BTNTEXT))
+            self.SetNonActiveTabTextColour(wx.SystemSettings.GetColour(wx.SYS_COLOUR_BTNTEXT))
 
 
     def CreatePageContainer(self):
@@ -3281,8 +3276,8 @@ class StyledTabsContainer(PageContainerBase):
 
         self._factor = 1
 
-        self._colorTo = LightColour(wx.SystemSettings_GetColour(wx.SYS_COLOUR_3DFACE), 0) 
-        self._colorFrom = LightColour(wx.SystemSettings_GetColour(wx.SYS_COLOUR_3DFACE), 60)
+        self._colorTo = LightColour(wx.SystemSettings.GetColour(wx.SYS_COLOUR_3DFACE), 0) 
+        self._colorFrom = LightColour(wx.SystemSettings.GetColour(wx.SYS_COLOUR_3DFACE), 60)
         
         PageContainerBase.__init__(self, parent, id, pos, size, style) 
 
@@ -3300,7 +3295,7 @@ class StyledTabsContainer(PageContainerBase):
 
         # We take the maxmimum font size, this is 
         # achieved by setting the font to be bold
-        font = wx.SystemSettings_GetFont(wx.SYS_DEFAULT_GUI_FONT)
+        font = wx.SystemSettings.GetFont(wx.SYS_DEFAULT_GUI_FONT)
         font.SetWeight(wx.FONTWEIGHT_BOLD)
         dc.SetFont(font)
 
@@ -3358,7 +3353,7 @@ class StyledTabsContainer(PageContainerBase):
         
         for i in xrange(self._nFrom, -1, -1):
         
-            boldFont = wx.SystemSettings_GetFont(wx.SYS_DEFAULT_GUI_FONT)
+            boldFont = wx.SystemSettings.GetFont(wx.SYS_DEFAULT_GUI_FONT)
             boldFont.SetWeight(wx.FONTWEIGHT_BOLD)
             dc.SetFont(boldFont)
 
@@ -3526,8 +3521,8 @@ class StyledTabsContainer(PageContainerBase):
                 return
         
         # Set the font for measuring the tab height
-        normalFont = wx.SystemSettings_GetFont(wx.SYS_DEFAULT_GUI_FONT)
-        boldFont = wx.SystemSettings_GetFont(wx.SYS_DEFAULT_GUI_FONT)
+        normalFont = wx.SystemSettings.GetFont(wx.SYS_DEFAULT_GUI_FONT)
+        boldFont = wx.SystemSettings.GetFont(wx.SYS_DEFAULT_GUI_FONT)
         boldFont.SetWeight(wx.FONTWEIGHT_BOLD)
 
         if "__WXGTK__" in wx.PlatformInfo:
@@ -3542,11 +3537,11 @@ class StyledTabsContainer(PageContainerBase):
 
         # Set the maximum client size
         self.SetSizeHints(self.GetButtonsAreaLength(), tabHeight)
-        borderPen = wx.Pen(wx.SystemSettings_GetColour(wx.SYS_COLOUR_BTNSHADOW))
+        borderPen = wx.Pen(wx.SystemSettings.GetColour(wx.SYS_COLOUR_BTNSHADOW))
 
         # Create brushes
         backBrush = wx.Brush(self._tabAreaColor)
-        noselBrush = wx.Brush(wx.SystemSettings_GetColour(wx.SYS_COLOUR_BTNFACE))
+        noselBrush = wx.Brush(wx.SystemSettings.GetColour(wx.SYS_COLOUR_BTNFACE))
         selBrush = wx.Brush(self._activeTabColor)
         size = self.GetSize()
 
@@ -3804,7 +3799,7 @@ class StyledTabsContainer(PageContainerBase):
         # Draw the polygon
         br = dc.GetBrush()
         dc.SetBrush(wx.Brush((tabIdx == self.GetSelection() and [self._activeTabColor] or [self._colorTo])[0]))
-        dc.SetPen(wx.Pen((tabIdx == self.GetSelection() and [wx.SystemSettings_GetColour(wx.SYS_COLOUR_BTNSHADOW)] or [self._colorBorder])[0]))
+        dc.SetPen(wx.Pen((tabIdx == self.GetSelection() and [wx.SystemSettings.GetColour(wx.SYS_COLOUR_BTNSHADOW)] or [self._colorBorder])[0]))
         dc.DrawPolygon(tabPoints)
 
         # Restore the brush
@@ -3826,7 +3821,7 @@ class StyledTabsContainer(PageContainerBase):
         # but without the bottom (upper line incase of wxBOTTOM)
         if tabIdx == self.GetSelection():
         
-            borderPen = wx.Pen(wx.SystemSettings_GetColour(wx.SYS_COLOUR_BTNSHADOW))
+            borderPen = wx.Pen(wx.SystemSettings.GetColour(wx.SYS_COLOUR_BTNSHADOW))
             brush = wx.TRANSPARENT_BRUSH
             dc.SetPen(borderPen)
             dc.SetBrush(brush)
@@ -3841,7 +3836,7 @@ class StyledTabsContainer(PageContainerBase):
         # Draw a thin line to the right of the non-selected tab
         if tabIdx != self.GetSelection():
         
-            dc.SetPen(wx.Pen(wx.SystemSettings_GetColour(wx.SYS_COLOUR_3DFACE)))
+            dc.SetPen(wx.Pen(wx.SystemSettings.GetColour(wx.SYS_COLOUR_3DFACE)))
             dc.DrawLine(tabPoints[4].x-1, tabPoints[4].y, tabPoints[5].x-1, tabPoints[5].y)
             dc.DrawLine(tabPoints[5].x-1, tabPoints[5].y, tabPoints[6].x-1, tabPoints[6].y)
         
@@ -3908,7 +3903,7 @@ class StyledTabsContainer(PageContainerBase):
             dc.DrawLine(startX, y, endX, y)
 
             # Draw the border using the 'edge' point
-            dc.SetPen(wx.Pen((bSelectedTab and [wx.SystemSettings_GetColour(wx.SYS_COLOUR_BTNSHADOW)] or [self._colorBorder])[0]))
+            dc.SetPen(wx.Pen((bSelectedTab and [wx.SystemSettings.GetColour(wx.SYS_COLOUR_BTNSHADOW)] or [self._colorBorder])[0]))
             
             dc.DrawPoint(startX, y)
             dc.DrawPoint(endX, y)
