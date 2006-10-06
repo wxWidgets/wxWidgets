@@ -2,6 +2,13 @@
 import  wx
 import  images
 
+FRAMETB = True
+TBFLAGS = ( wx.TB_HORIZONTAL
+            | wx.NO_BORDER
+            | wx.TB_FLAT
+            #| wx.TB_TEXT
+            )
+
 #---------------------------------------------------------------------------
 
 class TestToolBar(wx.Frame):
@@ -11,27 +18,37 @@ class TestToolBar(wx.Frame):
         self.timer = None
         self.Bind(wx.EVT_CLOSE, self.OnCloseWindow)
 
-        wx.Window(self, -1).SetBackgroundColour(wx.NamedColour("WHITE"))
+        client = wx.Panel(self)
+        client.SetBackgroundColour(wx.NamedColour("WHITE"))
 
-        # Use the wxFrame internals to create the toolbar and associate it all
-        # in one tidy method call.
-        tb = self.CreateToolBar( wx.TB_HORIZONTAL
-                                 | wx.NO_BORDER
-                                 | wx.TB_FLAT
-                                 #| wx.TB_TEXT
-                                 )
+        if FRAMETB:
+            # Use the wxFrame internals to create the toolbar and
+            # associate it all in one tidy method call.  By using
+            # CreateToolBar or SetToolBar the "client area" of the
+            # frame will be adjusted to exclude the toolbar.
+            tb = self.CreateToolBar( TBFLAGS )
 
-        # Here's a 'simple' toolbar example, and how to bind it using SetToolBar()
-        #tb = wx.ToolBarSimple(self, -1, wx.DefaultPosition, wx.DefaultSize,
-        #               wx.TB_HORIZONTAL | wx.NO_BORDER | wx.TB_FLAT)
-        #self.SetToolBar(tb)
-        # But we're doing it a different way here.
+            # Here's a 'simple' toolbar example, and how to bind it using SetToolBar()
+            #tb = wx.ToolBarSimple(self, -1, wx.DefaultPosition, wx.DefaultSize,
+            #               wx.TB_HORIZONTAL | wx.NO_BORDER | wx.TB_FLAT)
+            #self.SetToolBar(tb)
+            # But we're doing it a different way here.
+
+        else:
+            # The toolbar can also be a child of another widget, and
+            # be managed by a sizer, although there may be some
+            # implications of doing this on some platforms.
+            tb = wx.ToolBar(client, style=TBFLAGS)
+            sizer = wx.BoxSizer(wx.VERTICAL)
+            sizer.Add(tb, 0, wx.EXPAND)
+            client.SetSizer(sizer)
+            
 
         log.write("Default toolbar tool size: %s\n" % tb.GetToolBitmapSize())
 
         self.CreateStatusBar()
 
-        tsize = (16,16)
+        tsize = (24,24)
         new_bmp =  wx.ArtProvider.GetBitmap(wx.ART_NEW, wx.ART_TOOLBAR, tsize)
         open_bmp = wx.ArtProvider.GetBitmap(wx.ART_FILE_OPEN, wx.ART_TOOLBAR, tsize)
         copy_bmp = wx.ArtProvider.GetBitmap(wx.ART_COPY, wx.ART_TOOLBAR, tsize)
@@ -39,12 +56,13 @@ class TestToolBar(wx.Frame):
 
         tb.SetToolBitmapSize(tsize)
         
-        tb.AddSimpleTool(10, new_bmp, "New", "Long help for 'New'")
-        #tb.AddLabelTool(10, "New", new_bmp, shortHelp="New", longHelp="Long help for 'New'")
+        #tb.AddSimpleTool(10, new_bmp, "New", "Long help for 'New'")
+        tb.AddLabelTool(10, "New", new_bmp, shortHelp="New", longHelp="Long help for 'New'")
         self.Bind(wx.EVT_TOOL, self.OnToolClick, id=10)
         self.Bind(wx.EVT_TOOL_RCLICKED, self.OnToolRClick, id=10)
 
-        tb.AddSimpleTool(20, open_bmp, "Open", "Long help for 'Open'")
+        #tb.AddSimpleTool(20, open_bmp, "Open", "Long help for 'Open'")
+        tb.AddLabelTool(20, "Open", open_bmp, shortHelp="Open", longHelp="Long help for 'Open'")
         self.Bind(wx.EVT_TOOL, self.OnToolClick, id=20)
         self.Bind(wx.EVT_TOOL_RCLICKED, self.OnToolRClick, id=20)
 
@@ -59,8 +77,9 @@ class TestToolBar(wx.Frame):
 
         tb.AddSeparator()
 
-        tool = tb.AddCheckTool(50, images.getTog1Bitmap(),
-                               shortHelp="Toggle this")
+        #tool = tb.AddCheckTool(50, images.getTog1Bitmap(), shortHelp="Toggle this")
+        tool = tb.AddCheckLabelTool(50, "Checkable", images.getTog1Bitmap(),
+                                    shortHelp="Toggle this")
         self.Bind(wx.EVT_TOOL, self.OnToolClick, id=50)
 
 ##         tb.AddCheckTool(60, images.getTog1Bitmap(), images.getTog2Bitmap(),
@@ -76,11 +95,11 @@ class TestToolBar(wx.Frame):
 
         tb.AddControl(
             wx.ComboBox(
-                tb, cbID, "", choices=["", "This", "is a", "wxComboBox"],
+                tb, cbID, "", choices=["", "This", "is a", "wx.ComboBox"],
                 size=(150,-1), style=wx.CB_DROPDOWN
                 ))
-                
         self.Bind(wx.EVT_COMBOBOX, self.OnCombo, id=cbID)
+
         tb.AddControl(wx.TextCtrl(tb, -1, "Toolbar controls!!", size=(150, -1)))
 
         # Final thing to do for a toolbar is call the Realize() method. This
@@ -90,7 +109,8 @@ class TestToolBar(wx.Frame):
 
     def OnToolClick(self, event):
         self.log.WriteText("tool %s clicked\n" % event.GetId())
-        tb = self.GetToolBar()
+        #tb = self.GetToolBar()
+        tb = event.GetEventObject()
         tb.EnableTool(10, not tb.GetToolEnabled(10))
 
     def OnToolRClick(self, event):
