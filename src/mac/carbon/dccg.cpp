@@ -2033,7 +2033,7 @@ bool wxDC::DoBlit(
     }
     else
     {
-        wxFAIL_MSG( wxT("Blitting is only supported from bitmap contexts") ) ;
+        wxFAIL_MSG( wxT("Blitting is only supported from bitmap contexts, and only with wxCOPY logical operation.") ) ;
         return false ; 
     }
 
