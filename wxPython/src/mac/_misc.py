@@ -2660,7 +2660,7 @@ class ArtProvider(object):
         return _misc_.ArtProvider_Push(*args, **kwargs)
 
     Push = staticmethod(Push)
-    PushProvider = wx._deprecated(Push, "See `Push`") 
+    PushProvider = Push 
     def Insert(*args, **kwargs):
         """
         Insert(ArtProvider provider)
@@ -2670,7 +2670,7 @@ class ArtProvider(object):
         return _misc_.ArtProvider_Insert(*args, **kwargs)
 
     Insert = staticmethod(Insert)
-    InsertProvider = wx._deprecated(Insert, "See `Insert`") 
+    InsertProvider = Insert 
     def Pop(*args, **kwargs):
         """
         Pop() -> bool
@@ -2680,7 +2680,7 @@ class ArtProvider(object):
         return _misc_.ArtProvider_Pop(*args, **kwargs)
 
     Pop = staticmethod(Pop)
-    PopProvider = wx._deprecated(Pop, "See `Pop`") 
+    PopProvider = Pop 
     def Delete(*args, **kwargs):
         """
         Delete(ArtProvider provider) -> bool
@@ -2693,7 +2693,7 @@ class ArtProvider(object):
         return val
 
     Delete = staticmethod(Delete)
-    RemoveProvider = wx._deprecated(Delete, "See `Delete`") 
+    RemoveProvider = Delete 
     def GetBitmap(*args, **kwargs):
         """
         GetBitmap(String id, String client=ART_OTHER, Size size=DefaultSize) -> Bitmap

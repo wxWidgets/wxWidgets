@@ -254,12 +254,12 @@ public:
     DocDeclStr(
         static void , Push(wxPyArtProvider *provider),
         "Add new provider to the top of providers stack.", "");
-    %pythoncode { PushProvider = wx._deprecated(Push, "See `Push`") }
+    %pythoncode { PushProvider = Push }
     
     DocDeclStr(
         static void , Insert(wxPyArtProvider *provider),
         "Add new provider to the bottom of providers stack.", "");
-    %pythoncode { InsertProvider = wx._deprecated(Insert, "See `Insert`") }
+    %pythoncode { InsertProvider = Insert }
 
     %cleardisown( wxPyArtProvider *provider );
     
@@ -267,14 +267,14 @@ public:
     DocDeclStr(
         static bool , Pop(),
         "Remove latest added provider and delete it.", "");
-    %pythoncode { PopProvider = wx._deprecated(Pop, "See `Pop`") }
+    %pythoncode { PopProvider = Pop }
     
     %pythonAppend Delete "args[1].thisown = 1";
     DocDeclStr(
         static bool , Delete(wxPyArtProvider *provider),
         "Remove provider. The provider must have been added previously!  The
 provider is _not_ deleted.", "");
-    %pythoncode { RemoveProvider = wx._deprecated(Delete, "See `Delete`") }
+    %pythoncode { RemoveProvider = Delete }
 
 
     DocDeclStr(

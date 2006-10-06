@@ -197,17 +197,17 @@ class TestPanel(wx.Panel):
     def OnUseCustom(self, evt):
         if evt.IsChecked():
             self.log.write("Images will now be provided by MyArtProvider\n")
-            wx.ArtProvider_PushProvider( MyArtProvider(self.log) )
+            wx.ArtProvider.Push( MyArtProvider(self.log) )
         else:
             self.log.write("MyArtProvider deactivated\n")
-            wx.ArtProvider_PopProvider()
+            wx.ArtProvider.Pop()
         self.getArt()
 
 
     def getArt(self):
         self.log.write("Getting art for %s:%s\n" % (self.client, self.artid))
 
-        bmp = wx.ArtProvider_GetBitmap(self.artid, self.client, (16,16))
+        bmp = wx.ArtProvider.GetBitmap(self.artid, self.client, (16,16))
 
         if not bmp.Ok():
             bmp = wx.EmptyBitmap(16,16)
@@ -215,7 +215,7 @@ class TestPanel(wx.Panel):
 
         self.bmp16.SetBitmap(bmp)
 
-        bmp = wx.ArtProvider_GetBitmap(self.artid, self.client, (32,32))
+        bmp = wx.ArtProvider.GetBitmap(self.artid, self.client, (32,32))
 
         if not bmp.Ok():
             bmp = wx.EmptyBitmap(32,32)
@@ -223,7 +223,7 @@ class TestPanel(wx.Panel):
 
         self.bmp32.SetBitmap(bmp)
 
-        bmp = wx.ArtProvider_GetBitmap(self.artid, self.client, (48,48))
+        bmp = wx.ArtProvider.GetBitmap(self.artid, self.client, (48,48))
 
         if not bmp.Ok():
             bmp = wx.EmptyBitmap(48,48)
