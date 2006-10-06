@@ -617,10 +617,28 @@ void wxDataViewColumn::SetAlignment( wxAlignment WXUNUSED(align) )
     // TODO
 }
 
+void wxDataViewColumn::SetSortable( bool WXUNUSED(sortable) )
+{
+    // TODO
+}
+
+bool wxDataViewColumn::GetSortable()
+{   
+    // TODO
+    return false;
+}
+
 void wxDataViewColumn::SetSortOrder( bool WXUNUSED(ascending) )
 {
     // TODO
 }
+
+bool wxDataViewColumn::IsSortOrderAscending()
+{
+    // TODO
+    return true;
+}
+
 
 wxDataViewColumn::~wxDataViewColumn()
 {

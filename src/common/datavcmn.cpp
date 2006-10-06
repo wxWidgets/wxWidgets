@@ -287,9 +287,15 @@ int wxCALLBACK wxDataViewListModelSortedDefaultCompare
     return 0;
 }
 
+int wxCALLBACK wxDataViewListModelSortedDefaultCompareDescending
+      (unsigned int row1, unsigned int row2, unsigned int col, wxDataViewListModel* model )
+{
+    return wxDataViewListModelSortedDefaultCompare( row2, row1, col, model );
+}
+
 static wxDataViewListModelCompare   s_CmpFunc;
 static wxDataViewListModel         *s_CmpModel;
-static unsigned int                       s_CmpCol;
+static unsigned int                 s_CmpCol;
 
 int LINKAGEMODE wxDataViewIntermediateCmp( unsigned int row1, unsigned int row2 )
 {
@@ -306,9 +312,8 @@ wxDataViewSortedListModel::wxDataViewSortedListModel( wxDataViewListModel *child
   m_array( wxDataViewIntermediateCmp )
 {
     m_child = child;
-    s_CmpCol = 0;
-    s_CmpModel = child;
-    s_CmpFunc = wxDataViewListModelSortedDefaultCompare;
+    
+    m_ascending = true;
 
     m_notifierOnChild = new wxDataViewSortedListModelNotifier( this );
     m_child->AddNotifier( m_notifierOnChild );
@@ -321,8 +326,21 @@ wxDataViewSortedListModel::~wxDataViewSortedListModel()
     m_child->RemoveNotifier( m_notifierOnChild );
 }
 
+// FIXME
+void wxDataViewSortedListModel::InitStatics()
+{
+    s_CmpCol = 0;
+    s_CmpModel = m_child;
+    if (m_ascending)
+        s_CmpFunc = wxDataViewListModelSortedDefaultCompare;
+    else
+        s_CmpFunc = wxDataViewListModelSortedDefaultCompareDescending;
+}
+
 void wxDataViewSortedListModel::Resort()
 {
+    InitStatics();
+    
     m_array.Clear();
     unsigned int n = m_child->GetNumberOfRows();
     unsigned int i;
@@ -866,6 +884,8 @@ IMPLEMENT_DYNAMIC_CLASS(wxDataViewEvent,wxNotifyEvent)
 
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_DATAVIEW_ROW_SELECTED)
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_DATAVIEW_ROW_ACTIVATED)
+DEFINE_EVENT_TYPE(wxEVT_COMMAND_DATAVIEW_COLUMN_HEADER_CLICK)
+DEFINE_EVENT_TYPE(wxEVT_COMMAND_DATAVIEW_COLUMN_HEADER_RIGHT_CLICK)
 
 
 #endif

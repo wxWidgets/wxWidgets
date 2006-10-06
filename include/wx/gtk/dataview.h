@@ -198,7 +198,11 @@ public:
     virtual void SetBitmap( const wxBitmap &bitmap );
 
     virtual void SetAlignment( wxAlignment align );
+    
+    virtual void SetSortable( bool sortable );
+    virtual bool GetSortable();
     virtual void SetSortOrder( bool ascending );
+    virtual bool IsSortOrderAscending();
 
     virtual int GetWidth();
     
@@ -211,7 +215,12 @@ public:
 private:
     // holds the GTK handle
     void*   m_column;
-
+    
+    // delayed connection to mouse events
+    friend class wxDataViewCtrl;
+    void OnInternalIdle();
+    bool    m_isConnected;  
+    
 protected:
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewColumn)
 };
@@ -257,12 +266,14 @@ public:
     virtual int GetSelection() const;
     virtual int GetSelections(wxArrayInt& aSelections) const;
     
-    
 private:
     friend class wxDataViewCtrlDC;
+    friend class wxDataViewColumn;
     friend class wxGtkDataViewListModelNotifier;
     GtkWidget                   *m_treeview;
     wxDataViewListModelNotifier *m_notifier;
+    
+    virtual void OnInternalIdle();
     
 private:
     DECLARE_DYNAMIC_CLASS(wxDataViewCtrl)

@@ -24,7 +24,7 @@
 
 #if defined(__WXGTK20__)
     // for testing
-    #define wxUSE_GENERICDATAVIEWCTRL 1
+    // #define wxUSE_GENERICDATAVIEWCTRL 1
 #elif defined(__WXMAC__)
     #define wxUSE_GENERICDATAVIEWCTRL 1
 #else
@@ -159,6 +159,9 @@ public:
     wxDataViewSortedListModel( wxDataViewListModel *child );
     virtual ~wxDataViewSortedListModel();
 
+    void SetAscending( bool ascending ) { m_ascending = ascending; }
+    bool GetAscending() { return m_ascending; }
+
     virtual unsigned int GetNumberOfRows();
     virtual unsigned int GetNumberOfCols();
     // return type as reported by wxVariant
@@ -191,9 +194,12 @@ public:
     virtual void Resort();
 
 private:
+    bool                             m_ascending;
     wxDataViewListModel             *m_child;
     wxDataViewSortedIndexArray       m_array;
     wxDataViewListModelNotifier     *m_notifierOnChild;
+    
+    void InitStatics(); // BAD
 
 protected:
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewSortedListModel)
@@ -269,7 +275,11 @@ public:
     virtual const wxBitmap &GetBitmap();
     
     virtual void SetAlignment( wxAlignment align ) = 0;
+    
+    virtual void SetSortable( bool sortable ) = 0;
+    virtual bool GetSortable() = 0;
     virtual void SetSortOrder( bool ascending ) = 0;
+    virtual bool IsSortOrderAscending() = 0;
 
     wxDataViewRenderer* GetRenderer()       { return m_renderer; }
 
@@ -359,7 +369,8 @@ public:
         m_row(-1),
         m_model(NULL),
         m_value(wxNullVariant),
-        m_editCancelled(false)
+        m_editCancelled(false),
+        m_column(NULL)
         { }
 
     wxDataViewEvent(const wxDataViewEvent& event)
@@ -368,7 +379,8 @@ public:
         m_row(event.m_col),
         m_model(event.m_model),
         m_value(event.m_value),
-        m_editCancelled(event.m_editCancelled)
+        m_editCancelled(event.m_editCancelled),
+        m_column(event.m_column)
         { }
 
     int GetColumn() const { return m_col; }
@@ -379,6 +391,10 @@ public:
     void SetModel( wxDataViewModel *model ) { m_model = model; }
     const wxVariant &GetValue() const { return m_value; }
     void SetValue( const wxVariant &value ) { m_value = value; }
+
+    // for wxEVT_DATAVIEW_COLUMN_HEADER_CLICKED only
+    void SetDataViewColumn( wxDataViewColumn *col ) { m_column = col; }
+    wxDataViewColumn *GetDataViewColumn() { return m_column; }
 
     // was label editing canceled? (for wxEVT_COMMAND_DATVIEW_END_LABEL_EDIT only)
     bool IsEditCancelled() const { return m_editCancelled; }
@@ -392,6 +408,7 @@ protected:
     wxDataViewModel    *m_model;
     wxVariant           m_value;
     bool                m_editCancelled;
+    wxDataViewColumn   *m_column;
 
 private:
     DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxDataViewEvent)
@@ -400,6 +417,8 @@ private:
 BEGIN_DECLARE_EVENT_TYPES()
     DECLARE_EVENT_TYPE(wxEVT_COMMAND_DATAVIEW_ROW_SELECTED, -1)
     DECLARE_EVENT_TYPE(wxEVT_COMMAND_DATAVIEW_ROW_ACTIVATED, -1)
+    DECLARE_EVENT_TYPE(wxEVT_COMMAND_DATAVIEW_COLUMN_HEADER_CLICK, -1)
+    DECLARE_EVENT_TYPE(wxEVT_COMMAND_DATAVIEW_COLUMN_HEADER_RIGHT_CLICK, -1)
 END_DECLARE_EVENT_TYPES()
 
 typedef void (wxEvtHandler::*wxDataViewEventFunction)(wxDataViewEvent&);
@@ -412,6 +431,8 @@ typedef void (wxEvtHandler::*wxDataViewEventFunction)(wxDataViewEvent&);
 
 #define EVT_DATAVIEW_ROW_SELECTED(id, fn) wx__DECLARE_DATAVIEWEVT(ROW_SELECTED, id, fn)
 #define EVT_DATAVIEW_ROW_ACTIVATED(id, fn) wx__DECLARE_DATAVIEWEVT(ROW_ACTIVATED, id, fn)
+#define EVT_DATAVIEW_COLUMN_HEADER_CLICK(id, fn) wx__DECLARE_DATAVIEWEVT(COLUMN_HEADER_CLICK, id, fn)
+#define EVT_DATAVIEW_COLUMN_HEADER_RIGHT_CLICKED(id, fn) wx__DECLARE_DATAVIEWEVT(COLUMN_HEADER_RIGHT_CLICK, id, fn)
 
 
 #if defined(wxUSE_GENERICDATAVIEWCTRL)

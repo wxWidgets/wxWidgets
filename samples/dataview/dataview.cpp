@@ -338,6 +338,9 @@ public:
     void OnSelectedSorted(wxDataViewEvent &event);
     void OnActivatedUnsorted(wxDataViewEvent &event);
 
+    void OnHeaderClickSorted(wxDataViewEvent &event);
+    void OnHeaderClickUnsorted(wxDataViewEvent &event);
+
 private:
     wxDataViewCtrl* dataview_left;
     wxDataViewCtrl* dataview_right;
@@ -345,7 +348,8 @@ private:
     wxLog          *m_logOld;
     wxTextCtrl     *m_logWindow;
 
-    MyUnsortedTextModel *m_unsorted_model;
+    MyUnsortedTextModel        *m_unsorted_model;
+    wxDataViewSortedListModel  *m_sorted_model;
 
     DECLARE_EVENT_TABLE()
 };
@@ -474,6 +478,8 @@ BEGIN_EVENT_TABLE(MySortingFrame,wxFrame)
     EVT_DATAVIEW_ROW_SELECTED( ID_SORTED, MySortingFrame::OnSelectedSorted )
     EVT_DATAVIEW_ROW_SELECTED( ID_UNSORTED, MySortingFrame::OnSelectedUnsorted )
     EVT_DATAVIEW_ROW_ACTIVATED( ID_UNSORTED, MySortingFrame::OnActivatedUnsorted )
+    EVT_DATAVIEW_COLUMN_HEADER_CLICK( ID_SORTED, MySortingFrame::OnHeaderClickSorted )
+    EVT_DATAVIEW_COLUMN_HEADER_CLICK( ID_UNSORTED, MySortingFrame::OnHeaderClickUnsorted )
 END_EVENT_TABLE()
 
 MySortingFrame::MySortingFrame(wxFrame *frame, wxChar *title, int x, int y, int w, int h):
@@ -515,9 +521,8 @@ MySortingFrame::MySortingFrame(wxFrame *frame, wxChar *title, int x, int y, int 
     // Right wxDataViewCtrl using the sorting model
     dataview_right = new wxDataViewCtrl( this, ID_SORTED );
     
-    wxDataViewSortedListModel *sorted_model =
-        new wxDataViewSortedListModel( m_unsorted_model );
-    dataview_right->AssociateModel( sorted_model );
+    m_sorted_model = new wxDataViewSortedListModel( m_unsorted_model );
+    dataview_right->AssociateModel( m_sorted_model );
     text_renderer = new wxDataViewTextRenderer( wxT("string"), wxDATAVIEW_CELL_EDITABLE );
     column = new wxDataViewColumn( wxT("editable"), text_renderer, 0, -1, wxDATAVIEW_COL_SORTABLE|wxDATAVIEW_COL_RESIZABLE );
     dataview_right->AppendColumn( column );
@@ -590,6 +595,34 @@ void MySortingFrame::OnSelectedSorted(wxDataViewEvent &event)
 void MySortingFrame::OnActivatedUnsorted(wxDataViewEvent &event)
 {
     wxLogMessage( wxT("OnActivated from unsorted list, activated %d"), (int) event.GetRow() );
+}
+
+void MySortingFrame::OnHeaderClickSorted(wxDataViewEvent &event)
+{
+    wxDataViewColumn *col = event.GetDataViewColumn();
+    wxLogMessage( wxT("OnHeaderClick from sorted list, column %s"), col->GetTitle().c_str() );
+    
+    if (col->GetTitle() == wxT("editable"))
+    {
+        // this is the sorting column
+        if (col->IsSortOrderAscending())
+        {
+            col->SetSortOrder( false );
+            m_sorted_model->SetAscending( false );
+            m_sorted_model->Resort();
+        }
+        else
+        {
+            col->SetSortOrder( true );
+            m_sorted_model->SetAscending( true );
+            m_sorted_model->Resort();
+        }
+    }
+}
+
+void MySortingFrame::OnHeaderClickUnsorted(wxDataViewEvent &event)
+{
+    wxLogMessage( wxT("OnHeaderClick from unsorted list, column %s"), event.GetDataViewColumn()->GetTitle().c_str() );
 }
 
 void MySortingFrame::OnQuit(wxCommandEvent& WXUNUSED(event) )

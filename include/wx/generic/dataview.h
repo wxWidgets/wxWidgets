@@ -224,7 +224,11 @@ public:
     virtual void SetBitmap( const wxBitmap &bitmap );
     
     virtual void SetAlignment( wxAlignment align );
+    
+    virtual void SetSortable( bool sortable );
+    virtual bool GetSortable();
     virtual void SetSortOrder( bool ascending );
+    virtual bool IsSortOrderAscending();
 
     virtual int GetWidth();
 

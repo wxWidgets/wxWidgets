@@ -1384,6 +1384,27 @@ bool wxDataViewDateRenderer::Activate( wxRect cell, wxDataViewListModel *model, 
 // wxDataViewColumn
 // ---------------------------------------------------------
 
+
+static gboolean
+gtk_dataview_header_button_press_callback( GtkWidget *widget,
+                                           GdkEventButton *gdk_event,
+                                           wxDataViewColumn *column )
+{
+    if (gdk_event->type != GDK_BUTTON_PRESS)
+        return TRUE;
+        
+    if (gdk_event->button == 1)
+    {
+        wxDataViewCtrl *dv = column->GetOwner();
+        wxDataViewEvent event( wxEVT_COMMAND_DATAVIEW_COLUMN_HEADER_CLICK, dv->GetId() );
+        event.SetDataViewColumn( column );
+        event.SetModel( dv->GetModel() );
+        dv->GetEventHandler()->ProcessEvent( event );
+    }
+    
+    return TRUE;
+}
+
 extern "C" {
 static void wxGtkTreeCellDataFunc( GtkTreeViewColumn *column,
                             GtkCellRenderer *cell,
@@ -1423,11 +1444,16 @@ wxDataViewColumn::wxDataViewColumn( const wxString &title, wxDataViewRenderer *c
     int width, int flags ) :
     wxDataViewColumnBase( title, cell, model_column, width, flags )
 {
+    m_isConnected = false;
+
     GtkCellRenderer *renderer = (GtkCellRenderer *) cell->GetGtkHandle();
 
     GtkTreeViewColumn *column = gtk_tree_view_column_new();
-
-    gtk_tree_view_column_set_title( column, wxGTK_CONV(title) );
+    m_column = (void*) column;
+    
+    gtk_tree_view_column_set_clickable( column, true );
+    
+    SetTitle( title );
 
     if (flags & wxDATAVIEW_COL_RESIZABLE)
         gtk_tree_view_column_set_resizable( column, true );
@@ -1447,13 +1473,14 @@ wxDataViewColumn::wxDataViewColumn( const wxString &title, wxDataViewRenderer *c
     gtk_tree_view_column_set_cell_data_func( column, renderer,
         wxGtkTreeCellDataFunc, (gpointer) cell, NULL );
 
-    m_column = (void*) column;
 }
 
 wxDataViewColumn::wxDataViewColumn( const wxBitmap &bitmap, wxDataViewRenderer *cell, unsigned int model_column,
     int width, int flags ) :
     wxDataViewColumnBase( bitmap, cell, model_column, width, flags )
 {
+    m_isConnected = false;
+    
     GtkCellRenderer *renderer = (GtkCellRenderer *) cell->GetGtkHandle();
 
     GtkTreeViewColumn *column = gtk_tree_view_column_new();
@@ -1484,13 +1511,41 @@ wxDataViewColumn::~wxDataViewColumn()
 {
 }
 
+void wxDataViewColumn::OnInternalIdle()
+{
+    if (m_isConnected)
+        return;
+        
+    if (GTK_WIDGET_REALIZED(GetOwner()->m_treeview))
+    {
+        GtkTreeViewColumn *column = (GtkTreeViewColumn *)m_column;
+        if (column->button)
+        {
+            g_signal_connect(column->button, "button_press_event",
+                      G_CALLBACK (gtk_dataview_header_button_press_callback), this);
+    
+            m_isConnected = true;
+        }
+    }
+}
+
 void wxDataViewColumn::SetTitle( const wxString &title )
 {
     wxDataViewColumnBase::SetTitle( title );
 
     GtkTreeViewColumn *column = (GtkTreeViewColumn *)m_column;
-    gtk_tree_view_column_set_title( column, wxGTK_CONV(title) );
     
+    if (m_isConnected)
+    {
+        // disconnect before column->button gets recreated
+        g_signal_handlers_disconnect_by_func( column->button, 
+                      (void*) gtk_dataview_header_button_press_callback, this);
+                      
+        m_isConnected = false;
+    }
+
+    gtk_tree_view_column_set_title( column, wxGTK_CONV(title) );
+
     gtk_tree_view_column_set_widget( column, NULL );
 }
 
@@ -1540,6 +1595,18 @@ void wxDataViewColumn::SetAlignment( wxAlignment align )
     gtk_tree_view_column_set_alignment( column, xalign );    
 }
 
+void wxDataViewColumn::SetSortable( bool sortable )
+{
+    GtkTreeViewColumn *column = (GtkTreeViewColumn *)m_column;
+    gtk_tree_view_column_set_sort_indicator( column, sortable );
+}
+
+bool wxDataViewColumn::GetSortable()
+{
+    GtkTreeViewColumn *column = (GtkTreeViewColumn *)m_column;
+    return gtk_tree_view_column_get_sort_indicator( column );
+}
+
 void wxDataViewColumn::SetSortOrder( bool ascending )
 {
     GtkTreeViewColumn *column = (GtkTreeViewColumn *)m_column;
@@ -1548,6 +1615,13 @@ void wxDataViewColumn::SetSortOrder( bool ascending )
         gtk_tree_view_column_set_sort_order( column, GTK_SORT_ASCENDING );
     else
         gtk_tree_view_column_set_sort_order( column, GTK_SORT_DESCENDING );
+}
+
+bool wxDataViewColumn::IsSortOrderAscending()
+{
+    GtkTreeViewColumn *column = (GtkTreeViewColumn *)m_column;
+    
+    return (gtk_tree_view_column_get_sort_order( column ) != GTK_SORT_DESCENDING);
 }
 
 int wxDataViewColumn::GetWidth()
@@ -1650,6 +1724,19 @@ bool wxDataViewCtrl::Create(wxWindow *parent, wxWindowID id,
     PostCreation(size);
 
     return true;
+}
+
+void wxDataViewCtrl::OnInternalIdle()
+{
+    wxWindow::OnInternalIdle();
+    
+    unsigned int cols = GetNumberOfColumns();
+    unsigned int i;
+    for (i = 0; i < cols; i++)
+    {
+        wxDataViewColumn *col = GetColumn( i );
+        col->OnInternalIdle();
+    }
 }
 
 bool wxDataViewCtrl::AssociateModel( wxDataViewListModel *model )
