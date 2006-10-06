@@ -437,33 +437,6 @@ void wxToolBarTool::SetPosition( const wxPoint& position )
 
 void wxToolBarTool::UpdateToggleImage( bool toggle )
 {
-#if wxMAC_USE_NATIVE_TOOLBAR
-
-#if MAC_OS_X_VERSION_MAX_ALLOWED < MAC_OS_X_VERSION_10_4
-#define kHIToolbarItemSelected (1 << 7)
-#endif
-
-    // FIXME: this should be a OSX v10.4 runtime check
-    if (m_toolbarItemRef != NULL)
-    {
-        OptionBits addAttrs, removeAttrs;
-        OSStatus result;
-
-        if (toggle)
-        {
-            addAttrs = kHIToolbarItemSelected;
-            removeAttrs = kHIToolbarItemNoAttributes;
-        }
-        else
-        {
-            addAttrs = kHIToolbarItemNoAttributes;
-            removeAttrs = kHIToolbarItemSelected;
-        }
-
-        result = HIToolbarItemChangeAttributes( m_toolbarItemRef, addAttrs, removeAttrs );
-    }
-#endif
-
 #ifdef __WXMAC_OSX__
     if ( toggle )
     {
@@ -473,14 +446,20 @@ void wxToolBarTool::UpdateToggleImage( bool toggle )
         wxMemoryDC dc;
 
         dc.SelectObject( bmp );
-        dc.SetPen( wxNullPen );
-        dc.SetBackground( *wxWHITE );
+        dc.SetPen( wxPen(*wxBLACK) );
+        dc.SetBrush( wxBrush( *wxLIGHT_GREY ));
         dc.DrawRectangle( 0, 0, w, h );
         dc.DrawBitmap( m_bmpNormal, 0, 0, true );
         dc.SelectObject( wxNullBitmap );
         ControlButtonContentInfo info;
         wxMacCreateBitmapButton( &info, bmp );
         SetControlData( m_controlHandle, 0, kControlIconContentTag, sizeof(info), (Ptr)&info );
+#if wxMAC_USE_NATIVE_TOOLBAR
+        if (m_toolbarItemRef != NULL)
+        {
+            HIToolbarItemSetIconRef( m_toolbarItemRef, info.u.iconRef );
+        }
+#endif
         wxMacReleaseBitmapButton( &info );
     }
     else
@@ -488,6 +467,12 @@ void wxToolBarTool::UpdateToggleImage( bool toggle )
         ControlButtonContentInfo info;
         wxMacCreateBitmapButton( &info, m_bmpNormal );
         SetControlData( m_controlHandle, 0, kControlIconContentTag, sizeof(info), (Ptr)&info );
+#if wxMAC_USE_NATIVE_TOOLBAR
+        if (m_toolbarItemRef != NULL)
+        {
+            HIToolbarItemSetIconRef( m_toolbarItemRef, info.u.iconRef );
+        }
+#endif
         wxMacReleaseBitmapButton( &info );
     }
 
