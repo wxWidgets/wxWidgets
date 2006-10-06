@@ -331,6 +331,11 @@ bool wxToolBar::Create( wxWindow *parent,
     return true;
 }
 
+GdkWindow *wxToolBar::GTKGetWindow(wxArrayGdkWindows& windows) const
+{
+    return GTK_WIDGET(m_toolbar)->window;
+}
+
 void wxToolBar::GtkSetStyle()
 {
     GtkOrientation orient;
