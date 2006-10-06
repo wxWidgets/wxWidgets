@@ -1273,6 +1273,7 @@ _aui.DockInfo_swigregister(DockInfo)
 class DockUIPart(object):
     """Proxy of C++ DockUIPart class"""
     thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    def __init__(self): raise AttributeError, "No constructor defined"
     __repr__ = _swig_repr
     typeCaption = _aui.DockUIPart_typeCaption
     typeGripper = _aui.DockUIPart_typeGripper
@@ -1291,9 +1292,6 @@ class DockUIPart(object):
     cont_sizer = property(_aui.DockUIPart_cont_sizer_get, _aui.DockUIPart_cont_sizer_set)
     sizer_item = property(_aui.DockUIPart_sizer_item_get, _aui.DockUIPart_sizer_item_set)
     rect = property(_aui.DockUIPart_rect_get, _aui.DockUIPart_rect_set)
-    def __init__(self, *args, **kwargs): 
-        """__init__(self) -> DockUIPart"""
-        _aui.DockUIPart_swiginit(self,_aui.new_DockUIPart(*args, **kwargs))
     __swig_destroy__ = _aui.delete_DockUIPart
     __del__ = lambda self : None;
 _aui.DockUIPart_swigregister(DockUIPart)
@@ -1301,11 +1299,9 @@ _aui.DockUIPart_swigregister(DockUIPart)
 class PaneButton(object):
     """Proxy of C++ PaneButton class"""
     thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    def __init__(self): raise AttributeError, "No constructor defined"
     __repr__ = _swig_repr
     button_id = property(_aui.PaneButton_button_id_get, _aui.PaneButton_button_id_set)
-    def __init__(self, *args, **kwargs): 
-        """__init__(self) -> PaneButton"""
-        _aui.PaneButton_swiginit(self,_aui.new_PaneButton(*args, **kwargs))
     __swig_destroy__ = _aui.delete_PaneButton
     __del__ = lambda self : None;
 _aui.PaneButton_swigregister(PaneButton)

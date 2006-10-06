@@ -13482,7 +13482,7 @@ def CallAfter(callable, *args, **kw):
     method calls from non-GUI threads.  Any extra positional or
     keyword args are passed on to the callable when it is called.
 
-    :see: `wx.FutureCall`
+    :see: `wx.CallLater`
     """
     app = wx.GetApp()
     assert app is not None, 'No wx.App created yet'
@@ -13501,7 +13501,7 @@ def CallAfter(callable, *args, **kw):
 #----------------------------------------------------------------------------
 
 
-class FutureCall:
+class CallLater:
     """
     A convenience class for `wx.Timer`, that calls the given callable
     object once after the given amount of milliseconds, passing any
@@ -13512,7 +13512,7 @@ class FutureCall:
     then there is no need to hold a reference to this object.  It will
     hold a reference to itself while the timer is running (the timer
     has a reference to self.Notify) but the cycle will be broken when
-    the timer completes, automatically cleaning up the wx.FutureCall
+    the timer completes, automatically cleaning up the wx.CallLater
     object.
 
     :see: `wx.CallAfter`
@@ -13601,6 +13601,9 @@ class FutureCall:
     Interval = property(GetInterval)
     Result = property(GetResult)
 
+
+class FutureCall(CallLater):
+    """A compatibility alias for `FutureCall`."""
 
 #----------------------------------------------------------------------------
 # Control which items in this module should be documented by epydoc.

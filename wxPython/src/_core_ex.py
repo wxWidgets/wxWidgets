@@ -248,7 +248,7 @@ class CallLater:
 
 
 class FutureCall(CallLater):
-    """A compatibility alias for `FutureCall`."""
+    """A compatibility alias for `CallLater`."""
 
 #----------------------------------------------------------------------------
 # Control which items in this module should be documented by epydoc.

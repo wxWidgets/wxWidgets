@@ -2859,9 +2859,7 @@ SWIG_AsVal_bool (PyObject *obj, bool *val)
 }
 
 SWIGINTERN void delete_wxDockInfo(wxDockInfo *self){}
-SWIGINTERN wxDockUIPart *new_wxDockUIPart(){}
 SWIGINTERN void delete_wxDockUIPart(wxDockUIPart *self){}
-SWIGINTERN wxPaneButton *new_wxPaneButton(){}
 SWIGINTERN void delete_wxPaneButton(wxPaneButton *self){}
 
 SWIGINTERN int 
@@ -9650,24 +9648,6 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_new_DockUIPart(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  wxDockUIPart *result = 0 ;
-  
-  if (!SWIG_Python_UnpackTuple(args,"new_DockUIPart",0,0,0)) SWIG_fail;
-  {
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    result = (wxDockUIPart *)new_wxDockUIPart();
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) SWIG_fail;
-  }
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_wxDockUIPart, SWIG_POINTER_NEW |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
 SWIGINTERN PyObject *_wrap_delete_DockUIPart(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   wxDockUIPart *arg1 = (wxDockUIPart *) 0 ;
@@ -9701,10 +9681,6 @@ SWIGINTERN PyObject *DockUIPart_swigregister(PyObject *SWIGUNUSEDPARM(self), PyO
   if (!SWIG_Python_UnpackTuple(args,(char*)"swigregister", 1, 1,&obj)) return NULL;
   SWIG_TypeNewClientData(SWIGTYPE_p_wxDockUIPart, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
-}
-
-SWIGINTERN PyObject *DockUIPart_swiginit(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  return SWIG_Python_InitShadowInstance(args);
 }
 
 SWIGINTERN PyObject *_wrap_PaneButton_button_id_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
@@ -9760,24 +9736,6 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_new_PaneButton(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  wxPaneButton *result = 0 ;
-  
-  if (!SWIG_Python_UnpackTuple(args,"new_PaneButton",0,0,0)) SWIG_fail;
-  {
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    result = (wxPaneButton *)new_wxPaneButton();
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) SWIG_fail;
-  }
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_wxPaneButton, SWIG_POINTER_NEW |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
 SWIGINTERN PyObject *_wrap_delete_PaneButton(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   wxPaneButton *arg1 = (wxPaneButton *) 0 ;
@@ -9811,10 +9769,6 @@ SWIGINTERN PyObject *PaneButton_swigregister(PyObject *SWIGUNUSEDPARM(self), PyO
   if (!SWIG_Python_UnpackTuple(args,(char*)"swigregister", 1, 1,&obj)) return NULL;
   SWIG_TypeNewClientData(SWIGTYPE_p_wxPaneButton, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
-}
-
-SWIGINTERN PyObject *PaneButton_swiginit(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  return SWIG_Python_InitShadowInstance(args);
 }
 
 SWIGINTERN PyObject *_wrap_delete_DockArt(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
@@ -13443,16 +13397,12 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"DockUIPart_sizer_item_get", (PyCFunction)_wrap_DockUIPart_sizer_item_get, METH_O, NULL},
 	 { (char *)"DockUIPart_rect_set", _wrap_DockUIPart_rect_set, METH_VARARGS, NULL},
 	 { (char *)"DockUIPart_rect_get", (PyCFunction)_wrap_DockUIPart_rect_get, METH_O, NULL},
-	 { (char *)"new_DockUIPart", (PyCFunction)_wrap_new_DockUIPart, METH_NOARGS, NULL},
 	 { (char *)"delete_DockUIPart", (PyCFunction)_wrap_delete_DockUIPart, METH_O, NULL},
 	 { (char *)"DockUIPart_swigregister", DockUIPart_swigregister, METH_VARARGS, NULL},
-	 { (char *)"DockUIPart_swiginit", DockUIPart_swiginit, METH_VARARGS, NULL},
 	 { (char *)"PaneButton_button_id_set", _wrap_PaneButton_button_id_set, METH_VARARGS, NULL},
 	 { (char *)"PaneButton_button_id_get", (PyCFunction)_wrap_PaneButton_button_id_get, METH_O, NULL},
-	 { (char *)"new_PaneButton", (PyCFunction)_wrap_new_PaneButton, METH_NOARGS, NULL},
 	 { (char *)"delete_PaneButton", (PyCFunction)_wrap_delete_PaneButton, METH_O, NULL},
 	 { (char *)"PaneButton_swigregister", PaneButton_swigregister, METH_VARARGS, NULL},
-	 { (char *)"PaneButton_swiginit", PaneButton_swiginit, METH_VARARGS, NULL},
 	 { (char *)"delete_DockArt", (PyCFunction)_wrap_delete_DockArt, METH_O, NULL},
 	 { (char *)"DockArt_GetMetric", (PyCFunction) _wrap_DockArt_GetMetric, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"DockArt_SetMetric", (PyCFunction) _wrap_DockArt_SetMetric, METH_VARARGS | METH_KEYWORDS, NULL},
