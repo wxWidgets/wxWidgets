@@ -4652,7 +4652,27 @@ _gdi_.ScreenDC_swigregister(ScreenDC)
 
 #---------------------------------------------------------------------------
 
-class ClientDC(DC):
+class WindowDC(DC):
+    """
+    A wx.WindowDC must be constructed if an application wishes to paint on
+    the whole area of a window (client and decorations). This should
+    normally be constructed as a temporary stack object; don't store a
+    wx.WindowDC object.
+    """
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
+        """
+        __init__(self, Window win) -> WindowDC
+
+        Constructor. Pass the window on which you wish to paint.
+        """
+        _gdi_.WindowDC_swiginit(self,_gdi_.new_WindowDC(*args, **kwargs))
+_gdi_.WindowDC_swigregister(WindowDC)
+
+#---------------------------------------------------------------------------
+
+class ClientDC(WindowDC):
     """
     A wx.ClientDC must be constructed if an application wishes to paint on
     the client area of a window from outside an EVT_PAINT event. This should
@@ -4679,7 +4699,7 @@ _gdi_.ClientDC_swigregister(ClientDC)
 
 #---------------------------------------------------------------------------
 
-class PaintDC(DC):
+class PaintDC(ClientDC):
     """
     A wx.PaintDC must be constructed if an application wishes to paint on
     the client area of a window from within an EVT_PAINT event
@@ -4706,26 +4726,6 @@ class PaintDC(DC):
         """
         _gdi_.PaintDC_swiginit(self,_gdi_.new_PaintDC(*args, **kwargs))
 _gdi_.PaintDC_swigregister(PaintDC)
-
-#---------------------------------------------------------------------------
-
-class WindowDC(DC):
-    """
-    A wx.WindowDC must be constructed if an application wishes to paint on
-    the whole area of a window (client and decorations). This should
-    normally be constructed as a temporary stack object; don't store a
-    wx.WindowDC object.
-    """
-    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
-    __repr__ = _swig_repr
-    def __init__(self, *args, **kwargs): 
-        """
-        __init__(self, Window win) -> WindowDC
-
-        Constructor. Pass the window on which you wish to paint.
-        """
-        _gdi_.WindowDC_swiginit(self,_gdi_.new_WindowDC(*args, **kwargs))
-_gdi_.WindowDC_swigregister(WindowDC)
 
 #---------------------------------------------------------------------------
 
@@ -4874,6 +4874,265 @@ class PrinterDC(DC):
         """__init__(self, wxPrintData printData) -> PrinterDC"""
         _gdi_.PrinterDC_swiginit(self,_gdi_.new_PrinterDC(*args, **kwargs))
 _gdi_.PrinterDC_swigregister(PrinterDC)
+
+#---------------------------------------------------------------------------
+
+class GraphicsPath(object):
+    """Proxy of C++ GraphicsPath class"""
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    def __init__(self): raise AttributeError, "No constructor defined"
+    __repr__ = _swig_repr
+    __swig_destroy__ = _gdi_.delete_GraphicsPath
+    __del__ = lambda self : None;
+    def MoveToPoint(*args, **kwargs):
+        """
+        MoveToPoint(self, Double x, Double y)
+
+        Begins a new subpath at (x,y)
+        """
+        return _gdi_.GraphicsPath_MoveToPoint(*args, **kwargs)
+
+    def AddLineToPoint(*args, **kwargs):
+        """
+        AddLineToPoint(self, Double x, Double y)
+
+        Adds a straight line from the current point to (x,y) 
+        """
+        return _gdi_.GraphicsPath_AddLineToPoint(*args, **kwargs)
+
+    def AddCurveToPoint(*args, **kwargs):
+        """
+        AddCurveToPoint(self, Double cx1, Double cy1, Double cx2, Double cy2, Double x, 
+            Double y)
+
+        Adds a cubic Bezier curve from the current point, using two control
+        points and an end point
+        """
+        return _gdi_.GraphicsPath_AddCurveToPoint(*args, **kwargs)
+
+    def CloseSubpath(*args, **kwargs):
+        """
+        CloseSubpath(self)
+
+        closes the current sub-path
+        """
+        return _gdi_.GraphicsPath_CloseSubpath(*args, **kwargs)
+
+    def GetCurrentPoint(*args, **kwargs):
+        """
+        GetCurrentPoint(self) -> Point2D
+
+        Gets the last point of the current path, (0,0) if not yet set
+        """
+        return _gdi_.GraphicsPath_GetCurrentPoint(*args, **kwargs)
+
+    def AddArc(*args, **kwargs):
+        """
+        AddArc(self, Double x, Double y, Double r, Double startAngle, Double endAngle, 
+            bool clockwise)
+
+        Adds an arc of a circle centering at (x,y) with radius (r) from
+        startAngle to endAngle
+        """
+        return _gdi_.GraphicsPath_AddArc(*args, **kwargs)
+
+    def AddQuadCurveToPoint(*args, **kwargs):
+        """
+        AddQuadCurveToPoint(self, Double cx, Double cy, Double x, Double y)
+
+        Adds a quadratic Bezier curve from the current point, using a control
+        point and an end point
+        """
+        return _gdi_.GraphicsPath_AddQuadCurveToPoint(*args, **kwargs)
+
+    def AddRectangle(*args, **kwargs):
+        """
+        AddRectangle(self, Double x, Double y, Double w, Double h)
+
+        Appends a rectangle as a new closed subpath
+        """
+        return _gdi_.GraphicsPath_AddRectangle(*args, **kwargs)
+
+    def AddCircle(*args, **kwargs):
+        """
+        AddCircle(self, Double x, Double y, Double r)
+
+        Appends an ellipsis as a new closed subpath fitting the passed rectangle
+        """
+        return _gdi_.GraphicsPath_AddCircle(*args, **kwargs)
+
+    def AddArcToPoint(*args, **kwargs):
+        """
+        AddArcToPoint(self, Double x1, Double y1, Double x2, Double y2, Double r)
+
+        Draws a an arc to two tangents connecting (current) to (x1,y1) and (x1,y1)
+        to (x2,y2), also a straight line from (current) to (x1,y1)
+        """
+        return _gdi_.GraphicsPath_AddArcToPoint(*args, **kwargs)
+
+_gdi_.GraphicsPath_swigregister(GraphicsPath)
+
+class GraphicsContext(object):
+    """Proxy of C++ GraphicsContext class"""
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    def __init__(self): raise AttributeError, "No constructor defined"
+    __repr__ = _swig_repr
+    __swig_destroy__ = _gdi_.delete_GraphicsContext
+    __del__ = lambda self : None;
+    def Create(*args, **kwargs):
+        """Create(WindowDC dc) -> GraphicsContext"""
+        val = _gdi_.GraphicsContext_Create(*args, **kwargs)
+        val.__dc = args[0] # save a ref so the other dc will not be deleted before self
+        return val
+
+    Create = staticmethod(Create)
+    def CreatePath(*args, **kwargs):
+        """CreatePath(self) -> GraphicsPath"""
+        return _gdi_.GraphicsContext_CreatePath(*args, **kwargs)
+
+    def PushState(*args, **kwargs):
+        """PushState(self)"""
+        return _gdi_.GraphicsContext_PushState(*args, **kwargs)
+
+    def PopState(*args, **kwargs):
+        """PopState(self)"""
+        return _gdi_.GraphicsContext_PopState(*args, **kwargs)
+
+    def Clip(*args, **kwargs):
+        """Clip(self, Region region)"""
+        return _gdi_.GraphicsContext_Clip(*args, **kwargs)
+
+    def Translate(*args, **kwargs):
+        """Translate(self, Double dx, Double dy)"""
+        return _gdi_.GraphicsContext_Translate(*args, **kwargs)
+
+    def Scale(*args, **kwargs):
+        """Scale(self, Double xScale, Double yScale)"""
+        return _gdi_.GraphicsContext_Scale(*args, **kwargs)
+
+    def Rotate(*args, **kwargs):
+        """Rotate(self, Double angle)"""
+        return _gdi_.GraphicsContext_Rotate(*args, **kwargs)
+
+    def SetPen(*args, **kwargs):
+        """SetPen(self, Pen pen)"""
+        return _gdi_.GraphicsContext_SetPen(*args, **kwargs)
+
+    def SetBrush(*args, **kwargs):
+        """SetBrush(self, Brush brush)"""
+        return _gdi_.GraphicsContext_SetBrush(*args, **kwargs)
+
+    def SetLinearGradientBrush(*args, **kwargs):
+        """
+        SetLinearGradientBrush(self, Double x1, Double y1, Double x2, Double y2, Colour c1, 
+            Colour c2)
+        """
+        return _gdi_.GraphicsContext_SetLinearGradientBrush(*args, **kwargs)
+
+    def SetRadialGradientBrush(*args, **kwargs):
+        """
+        SetRadialGradientBrush(self, Double xo, Double yo, Double xc, Double yc, Double radius, 
+            Colour oColor, Colour cColor)
+        """
+        return _gdi_.GraphicsContext_SetRadialGradientBrush(*args, **kwargs)
+
+    def SetFont(*args, **kwargs):
+        """SetFont(self, Font font)"""
+        return _gdi_.GraphicsContext_SetFont(*args, **kwargs)
+
+    def SetTextColor(*args, **kwargs):
+        """SetTextColor(self, Colour col)"""
+        return _gdi_.GraphicsContext_SetTextColor(*args, **kwargs)
+
+    def StrokePath(*args, **kwargs):
+        """StrokePath(self, GraphicsPath path)"""
+        return _gdi_.GraphicsContext_StrokePath(*args, **kwargs)
+
+    def FillPath(*args, **kwargs):
+        """FillPath(self, GraphicsPath path, int fillStyle=WINDING_RULE)"""
+        return _gdi_.GraphicsContext_FillPath(*args, **kwargs)
+
+    def DrawPath(*args, **kwargs):
+        """DrawPath(self, GraphicsPath path, int fillStyle=WINDING_RULE)"""
+        return _gdi_.GraphicsContext_DrawPath(*args, **kwargs)
+
+    def DrawText(*args):
+        """
+        DrawText(self, String str, Double x, Double y)
+        DrawText(self, String str, Double x, Double y, Double angle)
+        """
+        return _gdi_.GraphicsContext_DrawText(*args)
+
+    def GetTextExtent(*args, **kwargs):
+        """
+        GetTextExtent(self, String text, Double OUTPUT, Double OUTPUT, Double OUTPUT, 
+            Double OUTPUT)
+        """
+        return _gdi_.GraphicsContext_GetTextExtent(*args, **kwargs)
+
+    def GetPartialTextExtents(*args, **kwargs):
+        """GetPartialTextExtents(self, String text, wxArrayDouble widths)"""
+        return _gdi_.GraphicsContext_GetPartialTextExtents(*args, **kwargs)
+
+    def DrawBitmap(*args, **kwargs):
+        """DrawBitmap(self, Bitmap bmp, Double x, Double y, Double w, Double h)"""
+        return _gdi_.GraphicsContext_DrawBitmap(*args, **kwargs)
+
+    def DrawIcon(*args, **kwargs):
+        """DrawIcon(self, Icon icon, Double x, Double y, Double w, Double h)"""
+        return _gdi_.GraphicsContext_DrawIcon(*args, **kwargs)
+
+    def StrokeLine(*args, **kwargs):
+        """StrokeLine(self, Double x1, Double y1, Double x2, Double y2)"""
+        return _gdi_.GraphicsContext_StrokeLine(*args, **kwargs)
+
+    def StrokeLines(*args):
+        """
+        StrokeLines(self, size_t n, Point2D points)
+        StrokeLines(self, size_t n, Point2D beginPoints, Point2D endPoints)
+        """
+        return _gdi_.GraphicsContext_StrokeLines(*args)
+
+    def DrawLines(*args, **kwargs):
+        """DrawLines(self, size_t n, Point2D points, int fillStyle=WINDING_RULE)"""
+        return _gdi_.GraphicsContext_DrawLines(*args, **kwargs)
+
+    def DrawRectangle(*args, **kwargs):
+        """DrawRectangle(self, Double x, Double y, Double w, Double h)"""
+        return _gdi_.GraphicsContext_DrawRectangle(*args, **kwargs)
+
+    def DrawEllipse(*args, **kwargs):
+        """DrawEllipse(self, Double x, Double y, Double w, Double h)"""
+        return _gdi_.GraphicsContext_DrawEllipse(*args, **kwargs)
+
+    def DrawRoundedRectangle(*args, **kwargs):
+        """DrawRoundedRectangle(self, Double x, Double y, Double w, Double h, Double radius)"""
+        return _gdi_.GraphicsContext_DrawRoundedRectangle(*args, **kwargs)
+
+_gdi_.GraphicsContext_swigregister(GraphicsContext)
+
+def GraphicsContext_Create(*args, **kwargs):
+  """GraphicsContext_Create(WindowDC dc) -> GraphicsContext"""
+  val = _gdi_.GraphicsContext_Create(*args, **kwargs)
+  val.__dc = args[0] # save a ref so the other dc will not be deleted before self
+  return val
+
+class GCDC(DC):
+    """Proxy of C++ GCDC class"""
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
+        """__init__(self, WindowDC dc) -> GCDC"""
+        _gdi_.GCDC_swiginit(self,_gdi_.new_GCDC(*args, **kwargs))
+        self.__dc = args[0] # save a ref so the other dc will not be deleted before self
+
+    __swig_destroy__ = _gdi_.delete_GCDC
+    __del__ = lambda self : None;
+    def GetGraphicContext(*args, **kwargs):
+        """GetGraphicContext(self) -> GraphicsContext"""
+        return _gdi_.GCDC_GetGraphicContext(*args, **kwargs)
+
+_gdi_.GCDC_swigregister(GCDC)
 
 #---------------------------------------------------------------------------
 
@@ -5805,6 +6064,43 @@ class PseudoDC(_core.Object):
         Translate the operations of id by dx,dy.
         """
         return _gdi_.PseudoDC_TranslateId(*args, **kwargs)
+
+    def SetIdGreyedOut(*args, **kwargs):
+        """
+        SetIdGreyedOut(self, int id, bool greyout=True)
+
+        Set whether an object is drawn greyed out or not.
+        """
+        return _gdi_.PseudoDC_SetIdGreyedOut(*args, **kwargs)
+
+    def GetIdGreyedOut(*args, **kwargs):
+        """
+        GetIdGreyedOut(self, int id) -> bool
+
+        Get whether an object is drawn greyed out or not.
+        """
+        return _gdi_.PseudoDC_GetIdGreyedOut(*args, **kwargs)
+
+    def FindObjects(*args, **kwargs):
+        """
+        FindObjects(self, int x, int y, int radius=1, wxColor bg=*wxWHITE) -> PyObject
+
+        Returns a list of all the id's that draw a pixel with color
+        not equal to bg within radius of (x,y).
+        Returns an empty list if nothing is found.  The list is in
+        reverse drawing order so list[0] is the top id.
+        """
+        return _gdi_.PseudoDC_FindObjects(*args, **kwargs)
+
+    def FindObjectsByBBox(*args, **kwargs):
+        """
+        FindObjectsByBBox(self, int x, int y) -> PyObject
+
+        Returns a list of all the id's whose bounding boxes include (x,y).
+        Returns an empty list if nothing is found.  The list is in
+        reverse drawing order so list[0] is the top id.
+        """
+        return _gdi_.PseudoDC_FindObjectsByBBox(*args, **kwargs)
 
     def DrawIdToDC(*args, **kwargs):
         """

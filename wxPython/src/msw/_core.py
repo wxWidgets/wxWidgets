@@ -1373,9 +1373,12 @@ class Rect(object):
         """
         return _core_.Rect_ContainsRect(*args, **kwargs)
 
-    Inside = wx._deprecated(Contains, "Use `Contains` instead.")
-    InsideXY = wx._deprecated(ContainsXY, "Use `ContainsXY` instead.")
-    InsideRect = wx._deprecated(ContainsRect, "Use `ContainsRect` instead.")
+    #Inside = wx._deprecated(Contains, "Use `Contains` instead.")
+    #InsideXY = wx._deprecated(ContainsXY, "Use `ContainsXY` instead.")
+    #InsideRect = wx._deprecated(ContainsRect, "Use `ContainsRect` instead.")
+    Inside = Contains
+    InsideXY = ContainsXY
+    InsideRect = ContainsRect
 
     def Intersects(*args, **kwargs):
         """

@@ -2476,144 +2476,150 @@ SWIG_Python_MustGetPtr(PyObject *obj, swig_type_info *ty, int argnum, int flags)
 #define SWIGTYPE_p_wxActivateEvent swig_types[10]
 #define SWIGTYPE_p_wxAlphaPixelData swig_types[11]
 #define SWIGTYPE_p_wxAlphaPixelData_Accessor swig_types[12]
-#define SWIGTYPE_p_wxBMPHandler swig_types[13]
-#define SWIGTYPE_p_wxBitmap swig_types[14]
-#define SWIGTYPE_p_wxBoxSizer swig_types[15]
-#define SWIGTYPE_p_wxBrush swig_types[16]
-#define SWIGTYPE_p_wxBrushList swig_types[17]
-#define SWIGTYPE_p_wxBufferedDC swig_types[18]
-#define SWIGTYPE_p_wxBufferedPaintDC swig_types[19]
-#define SWIGTYPE_p_wxCURHandler swig_types[20]
-#define SWIGTYPE_p_wxChar swig_types[21]
-#define SWIGTYPE_p_wxChildFocusEvent swig_types[22]
-#define SWIGTYPE_p_wxClientDC swig_types[23]
-#define SWIGTYPE_p_wxClipboardTextEvent swig_types[24]
-#define SWIGTYPE_p_wxCloseEvent swig_types[25]
-#define SWIGTYPE_p_wxColour swig_types[26]
-#define SWIGTYPE_p_wxColourDatabase swig_types[27]
-#define SWIGTYPE_p_wxCommandEvent swig_types[28]
-#define SWIGTYPE_p_wxContextMenuEvent swig_types[29]
-#define SWIGTYPE_p_wxControl swig_types[30]
-#define SWIGTYPE_p_wxControlWithItems swig_types[31]
-#define SWIGTYPE_p_wxCursor swig_types[32]
-#define SWIGTYPE_p_wxDC swig_types[33]
-#define SWIGTYPE_p_wxDash swig_types[34]
-#define SWIGTYPE_p_wxDateEvent swig_types[35]
-#define SWIGTYPE_p_wxDisplayChangedEvent swig_types[36]
-#define SWIGTYPE_p_wxDropFilesEvent swig_types[37]
-#define SWIGTYPE_p_wxDuplexMode swig_types[38]
-#define SWIGTYPE_p_wxEffects swig_types[39]
-#define SWIGTYPE_p_wxEncodingConverter swig_types[40]
-#define SWIGTYPE_p_wxEraseEvent swig_types[41]
-#define SWIGTYPE_p_wxEvent swig_types[42]
-#define SWIGTYPE_p_wxEvtHandler swig_types[43]
-#define SWIGTYPE_p_wxFSFile swig_types[44]
-#define SWIGTYPE_p_wxFileSystem swig_types[45]
-#define SWIGTYPE_p_wxFlexGridSizer swig_types[46]
-#define SWIGTYPE_p_wxFocusEvent swig_types[47]
-#define SWIGTYPE_p_wxFont swig_types[48]
-#define SWIGTYPE_p_wxFontList swig_types[49]
-#define SWIGTYPE_p_wxFontMapper swig_types[50]
-#define SWIGTYPE_p_wxGBSizerItem swig_types[51]
-#define SWIGTYPE_p_wxGDIObjListBase swig_types[52]
-#define SWIGTYPE_p_wxGDIObject swig_types[53]
-#define SWIGTYPE_p_wxGIFHandler swig_types[54]
-#define SWIGTYPE_p_wxGridBagSizer swig_types[55]
-#define SWIGTYPE_p_wxGridSizer swig_types[56]
-#define SWIGTYPE_p_wxHeaderButtonParams swig_types[57]
-#define SWIGTYPE_p_wxICOHandler swig_types[58]
-#define SWIGTYPE_p_wxIcon swig_types[59]
-#define SWIGTYPE_p_wxIconBundle swig_types[60]
-#define SWIGTYPE_p_wxIconLocation swig_types[61]
-#define SWIGTYPE_p_wxIconizeEvent swig_types[62]
-#define SWIGTYPE_p_wxIdleEvent swig_types[63]
-#define SWIGTYPE_p_wxImage swig_types[64]
-#define SWIGTYPE_p_wxImageHandler swig_types[65]
-#define SWIGTYPE_p_wxImageList swig_types[66]
-#define SWIGTYPE_p_wxIndividualLayoutConstraint swig_types[67]
-#define SWIGTYPE_p_wxInitDialogEvent swig_types[68]
-#define SWIGTYPE_p_wxJPEGHandler swig_types[69]
-#define SWIGTYPE_p_wxKeyEvent swig_types[70]
-#define SWIGTYPE_p_wxLanguageInfo swig_types[71]
-#define SWIGTYPE_p_wxLayoutConstraints swig_types[72]
-#define SWIGTYPE_p_wxLocale swig_types[73]
-#define SWIGTYPE_p_wxMask swig_types[74]
-#define SWIGTYPE_p_wxMaximizeEvent swig_types[75]
-#define SWIGTYPE_p_wxMemoryDC swig_types[76]
-#define SWIGTYPE_p_wxMenu swig_types[77]
-#define SWIGTYPE_p_wxMenuBar swig_types[78]
-#define SWIGTYPE_p_wxMenuEvent swig_types[79]
-#define SWIGTYPE_p_wxMenuItem swig_types[80]
-#define SWIGTYPE_p_wxMetaFile swig_types[81]
-#define SWIGTYPE_p_wxMetaFileDC swig_types[82]
-#define SWIGTYPE_p_wxMirrorDC swig_types[83]
-#define SWIGTYPE_p_wxMouseCaptureChangedEvent swig_types[84]
-#define SWIGTYPE_p_wxMouseCaptureLostEvent swig_types[85]
-#define SWIGTYPE_p_wxMouseEvent swig_types[86]
-#define SWIGTYPE_p_wxMoveEvent swig_types[87]
-#define SWIGTYPE_p_wxNativeEncodingInfo swig_types[88]
-#define SWIGTYPE_p_wxNativeFontInfo swig_types[89]
-#define SWIGTYPE_p_wxNativePixelData swig_types[90]
-#define SWIGTYPE_p_wxNativePixelData_Accessor swig_types[91]
-#define SWIGTYPE_p_wxNavigationKeyEvent swig_types[92]
-#define SWIGTYPE_p_wxNcPaintEvent swig_types[93]
-#define SWIGTYPE_p_wxNotifyEvent swig_types[94]
-#define SWIGTYPE_p_wxObject swig_types[95]
-#define SWIGTYPE_p_wxPCXHandler swig_types[96]
-#define SWIGTYPE_p_wxPNGHandler swig_types[97]
-#define SWIGTYPE_p_wxPNMHandler swig_types[98]
-#define SWIGTYPE_p_wxPaintDC swig_types[99]
-#define SWIGTYPE_p_wxPaintEvent swig_types[100]
-#define SWIGTYPE_p_wxPalette swig_types[101]
-#define SWIGTYPE_p_wxPaletteChangedEvent swig_types[102]
-#define SWIGTYPE_p_wxPaperSize swig_types[103]
-#define SWIGTYPE_p_wxPen swig_types[104]
-#define SWIGTYPE_p_wxPenList swig_types[105]
-#define SWIGTYPE_p_wxPixelDataBase swig_types[106]
-#define SWIGTYPE_p_wxPoint swig_types[107]
-#define SWIGTYPE_p_wxPostScriptDC swig_types[108]
-#define SWIGTYPE_p_wxPrintData swig_types[109]
-#define SWIGTYPE_p_wxPrinterDC swig_types[110]
-#define SWIGTYPE_p_wxPseudoDC swig_types[111]
-#define SWIGTYPE_p_wxPyApp swig_types[112]
-#define SWIGTYPE_p_wxPyCommandEvent swig_types[113]
-#define SWIGTYPE_p_wxPyEvent swig_types[114]
-#define SWIGTYPE_p_wxPyFontEnumerator swig_types[115]
-#define SWIGTYPE_p_wxPyImageHandler swig_types[116]
-#define SWIGTYPE_p_wxPyLocale swig_types[117]
-#define SWIGTYPE_p_wxPySizer swig_types[118]
-#define SWIGTYPE_p_wxPyValidator swig_types[119]
-#define SWIGTYPE_p_wxQueryNewPaletteEvent swig_types[120]
-#define SWIGTYPE_p_wxRect swig_types[121]
-#define SWIGTYPE_p_wxRegion swig_types[122]
-#define SWIGTYPE_p_wxRegionIterator swig_types[123]
-#define SWIGTYPE_p_wxRendererNative swig_types[124]
-#define SWIGTYPE_p_wxRendererVersion swig_types[125]
-#define SWIGTYPE_p_wxScreenDC swig_types[126]
-#define SWIGTYPE_p_wxScrollEvent swig_types[127]
-#define SWIGTYPE_p_wxScrollWinEvent swig_types[128]
-#define SWIGTYPE_p_wxSetCursorEvent swig_types[129]
-#define SWIGTYPE_p_wxShowEvent swig_types[130]
-#define SWIGTYPE_p_wxSize swig_types[131]
-#define SWIGTYPE_p_wxSizeEvent swig_types[132]
-#define SWIGTYPE_p_wxSizer swig_types[133]
-#define SWIGTYPE_p_wxSizerItem swig_types[134]
-#define SWIGTYPE_p_wxSplitterRenderParams swig_types[135]
-#define SWIGTYPE_p_wxStaticBoxSizer swig_types[136]
-#define SWIGTYPE_p_wxStdDialogButtonSizer swig_types[137]
-#define SWIGTYPE_p_wxStockGDI swig_types[138]
-#define SWIGTYPE_p_wxString swig_types[139]
-#define SWIGTYPE_p_wxSysColourChangedEvent swig_types[140]
-#define SWIGTYPE_p_wxTIFFHandler swig_types[141]
-#define SWIGTYPE_p_wxUpdateUIEvent swig_types[142]
-#define SWIGTYPE_p_wxValidator swig_types[143]
-#define SWIGTYPE_p_wxWindow swig_types[144]
-#define SWIGTYPE_p_wxWindowCreateEvent swig_types[145]
-#define SWIGTYPE_p_wxWindowDC swig_types[146]
-#define SWIGTYPE_p_wxWindowDestroyEvent swig_types[147]
-#define SWIGTYPE_p_wxXPMHandler swig_types[148]
-static swig_type_info *swig_types[150];
-static swig_module_info swig_module = {swig_types, 149, 0, 0, 0, 0};
+#define SWIGTYPE_p_wxArrayDouble swig_types[13]
+#define SWIGTYPE_p_wxBMPHandler swig_types[14]
+#define SWIGTYPE_p_wxBitmap swig_types[15]
+#define SWIGTYPE_p_wxBoxSizer swig_types[16]
+#define SWIGTYPE_p_wxBrush swig_types[17]
+#define SWIGTYPE_p_wxBrushList swig_types[18]
+#define SWIGTYPE_p_wxBufferedDC swig_types[19]
+#define SWIGTYPE_p_wxBufferedPaintDC swig_types[20]
+#define SWIGTYPE_p_wxCURHandler swig_types[21]
+#define SWIGTYPE_p_wxChar swig_types[22]
+#define SWIGTYPE_p_wxChildFocusEvent swig_types[23]
+#define SWIGTYPE_p_wxClientDC swig_types[24]
+#define SWIGTYPE_p_wxClipboardTextEvent swig_types[25]
+#define SWIGTYPE_p_wxCloseEvent swig_types[26]
+#define SWIGTYPE_p_wxColor swig_types[27]
+#define SWIGTYPE_p_wxColour swig_types[28]
+#define SWIGTYPE_p_wxColourDatabase swig_types[29]
+#define SWIGTYPE_p_wxCommandEvent swig_types[30]
+#define SWIGTYPE_p_wxContextMenuEvent swig_types[31]
+#define SWIGTYPE_p_wxControl swig_types[32]
+#define SWIGTYPE_p_wxControlWithItems swig_types[33]
+#define SWIGTYPE_p_wxCursor swig_types[34]
+#define SWIGTYPE_p_wxDC swig_types[35]
+#define SWIGTYPE_p_wxDash swig_types[36]
+#define SWIGTYPE_p_wxDateEvent swig_types[37]
+#define SWIGTYPE_p_wxDisplayChangedEvent swig_types[38]
+#define SWIGTYPE_p_wxDropFilesEvent swig_types[39]
+#define SWIGTYPE_p_wxDuplexMode swig_types[40]
+#define SWIGTYPE_p_wxEffects swig_types[41]
+#define SWIGTYPE_p_wxEncodingConverter swig_types[42]
+#define SWIGTYPE_p_wxEraseEvent swig_types[43]
+#define SWIGTYPE_p_wxEvent swig_types[44]
+#define SWIGTYPE_p_wxEvtHandler swig_types[45]
+#define SWIGTYPE_p_wxFSFile swig_types[46]
+#define SWIGTYPE_p_wxFileSystem swig_types[47]
+#define SWIGTYPE_p_wxFlexGridSizer swig_types[48]
+#define SWIGTYPE_p_wxFocusEvent swig_types[49]
+#define SWIGTYPE_p_wxFont swig_types[50]
+#define SWIGTYPE_p_wxFontList swig_types[51]
+#define SWIGTYPE_p_wxFontMapper swig_types[52]
+#define SWIGTYPE_p_wxGBSizerItem swig_types[53]
+#define SWIGTYPE_p_wxGCDC swig_types[54]
+#define SWIGTYPE_p_wxGDIObjListBase swig_types[55]
+#define SWIGTYPE_p_wxGDIObject swig_types[56]
+#define SWIGTYPE_p_wxGIFHandler swig_types[57]
+#define SWIGTYPE_p_wxGraphicsContext swig_types[58]
+#define SWIGTYPE_p_wxGraphicsPath swig_types[59]
+#define SWIGTYPE_p_wxGridBagSizer swig_types[60]
+#define SWIGTYPE_p_wxGridSizer swig_types[61]
+#define SWIGTYPE_p_wxHeaderButtonParams swig_types[62]
+#define SWIGTYPE_p_wxICOHandler swig_types[63]
+#define SWIGTYPE_p_wxIcon swig_types[64]
+#define SWIGTYPE_p_wxIconBundle swig_types[65]
+#define SWIGTYPE_p_wxIconLocation swig_types[66]
+#define SWIGTYPE_p_wxIconizeEvent swig_types[67]
+#define SWIGTYPE_p_wxIdleEvent swig_types[68]
+#define SWIGTYPE_p_wxImage swig_types[69]
+#define SWIGTYPE_p_wxImageHandler swig_types[70]
+#define SWIGTYPE_p_wxImageList swig_types[71]
+#define SWIGTYPE_p_wxIndividualLayoutConstraint swig_types[72]
+#define SWIGTYPE_p_wxInitDialogEvent swig_types[73]
+#define SWIGTYPE_p_wxJPEGHandler swig_types[74]
+#define SWIGTYPE_p_wxKeyEvent swig_types[75]
+#define SWIGTYPE_p_wxLanguageInfo swig_types[76]
+#define SWIGTYPE_p_wxLayoutConstraints swig_types[77]
+#define SWIGTYPE_p_wxLocale swig_types[78]
+#define SWIGTYPE_p_wxMask swig_types[79]
+#define SWIGTYPE_p_wxMaximizeEvent swig_types[80]
+#define SWIGTYPE_p_wxMemoryDC swig_types[81]
+#define SWIGTYPE_p_wxMenu swig_types[82]
+#define SWIGTYPE_p_wxMenuBar swig_types[83]
+#define SWIGTYPE_p_wxMenuEvent swig_types[84]
+#define SWIGTYPE_p_wxMenuItem swig_types[85]
+#define SWIGTYPE_p_wxMetaFile swig_types[86]
+#define SWIGTYPE_p_wxMetaFileDC swig_types[87]
+#define SWIGTYPE_p_wxMirrorDC swig_types[88]
+#define SWIGTYPE_p_wxMouseCaptureChangedEvent swig_types[89]
+#define SWIGTYPE_p_wxMouseCaptureLostEvent swig_types[90]
+#define SWIGTYPE_p_wxMouseEvent swig_types[91]
+#define SWIGTYPE_p_wxMoveEvent swig_types[92]
+#define SWIGTYPE_p_wxNativeEncodingInfo swig_types[93]
+#define SWIGTYPE_p_wxNativeFontInfo swig_types[94]
+#define SWIGTYPE_p_wxNativePixelData swig_types[95]
+#define SWIGTYPE_p_wxNativePixelData_Accessor swig_types[96]
+#define SWIGTYPE_p_wxNavigationKeyEvent swig_types[97]
+#define SWIGTYPE_p_wxNcPaintEvent swig_types[98]
+#define SWIGTYPE_p_wxNotifyEvent swig_types[99]
+#define SWIGTYPE_p_wxObject swig_types[100]
+#define SWIGTYPE_p_wxPCXHandler swig_types[101]
+#define SWIGTYPE_p_wxPNGHandler swig_types[102]
+#define SWIGTYPE_p_wxPNMHandler swig_types[103]
+#define SWIGTYPE_p_wxPaintDC swig_types[104]
+#define SWIGTYPE_p_wxPaintEvent swig_types[105]
+#define SWIGTYPE_p_wxPalette swig_types[106]
+#define SWIGTYPE_p_wxPaletteChangedEvent swig_types[107]
+#define SWIGTYPE_p_wxPaperSize swig_types[108]
+#define SWIGTYPE_p_wxPen swig_types[109]
+#define SWIGTYPE_p_wxPenList swig_types[110]
+#define SWIGTYPE_p_wxPixelDataBase swig_types[111]
+#define SWIGTYPE_p_wxPoint swig_types[112]
+#define SWIGTYPE_p_wxPoint2D swig_types[113]
+#define SWIGTYPE_p_wxPostScriptDC swig_types[114]
+#define SWIGTYPE_p_wxPrintData swig_types[115]
+#define SWIGTYPE_p_wxPrinterDC swig_types[116]
+#define SWIGTYPE_p_wxPseudoDC swig_types[117]
+#define SWIGTYPE_p_wxPyApp swig_types[118]
+#define SWIGTYPE_p_wxPyCommandEvent swig_types[119]
+#define SWIGTYPE_p_wxPyEvent swig_types[120]
+#define SWIGTYPE_p_wxPyFontEnumerator swig_types[121]
+#define SWIGTYPE_p_wxPyImageHandler swig_types[122]
+#define SWIGTYPE_p_wxPyLocale swig_types[123]
+#define SWIGTYPE_p_wxPySizer swig_types[124]
+#define SWIGTYPE_p_wxPyValidator swig_types[125]
+#define SWIGTYPE_p_wxQueryNewPaletteEvent swig_types[126]
+#define SWIGTYPE_p_wxRect swig_types[127]
+#define SWIGTYPE_p_wxRegion swig_types[128]
+#define SWIGTYPE_p_wxRegionIterator swig_types[129]
+#define SWIGTYPE_p_wxRendererNative swig_types[130]
+#define SWIGTYPE_p_wxRendererVersion swig_types[131]
+#define SWIGTYPE_p_wxScreenDC swig_types[132]
+#define SWIGTYPE_p_wxScrollEvent swig_types[133]
+#define SWIGTYPE_p_wxScrollWinEvent swig_types[134]
+#define SWIGTYPE_p_wxSetCursorEvent swig_types[135]
+#define SWIGTYPE_p_wxShowEvent swig_types[136]
+#define SWIGTYPE_p_wxSize swig_types[137]
+#define SWIGTYPE_p_wxSizeEvent swig_types[138]
+#define SWIGTYPE_p_wxSizer swig_types[139]
+#define SWIGTYPE_p_wxSizerItem swig_types[140]
+#define SWIGTYPE_p_wxSplitterRenderParams swig_types[141]
+#define SWIGTYPE_p_wxStaticBoxSizer swig_types[142]
+#define SWIGTYPE_p_wxStdDialogButtonSizer swig_types[143]
+#define SWIGTYPE_p_wxStockGDI swig_types[144]
+#define SWIGTYPE_p_wxString swig_types[145]
+#define SWIGTYPE_p_wxSysColourChangedEvent swig_types[146]
+#define SWIGTYPE_p_wxTIFFHandler swig_types[147]
+#define SWIGTYPE_p_wxUpdateUIEvent swig_types[148]
+#define SWIGTYPE_p_wxValidator swig_types[149]
+#define SWIGTYPE_p_wxWindow swig_types[150]
+#define SWIGTYPE_p_wxWindowCreateEvent swig_types[151]
+#define SWIGTYPE_p_wxWindowDC swig_types[152]
+#define SWIGTYPE_p_wxWindowDestroyEvent swig_types[153]
+#define SWIGTYPE_p_wxXPMHandler swig_types[154]
+static swig_type_info *swig_types[156];
+static swig_module_info swig_module = {swig_types, 155, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -3546,6 +3552,122 @@ public:
 };
 
 
+#include <wx/graphics.h>
+
+
+#if !wxUSE_GRAPHICS_CONTEXT
+// C++ stub classes for platforms that don't have wxGraphicsContext yet.
+
+class wxGraphicsPath
+{
+public :
+    wxGraphicsPath() {
+        wxPyBlock_t blocked = wxPyBeginBlockThreads();
+        PyErr_SetString(PyExc_NotImplementedError,
+                        "wxGraphicsPath is not available on this platform.");
+        wxPyEndBlockThreads(blocked);
+    }
+    virtual ~wxGraphicsPath() {}
+    
+    void MoveToPoint( wxDouble, wxDouble ) {}
+    void AddLineToPoint( wxDouble, wxDouble ) {} 
+    void AddCurveToPoint( wxDouble, wxDouble, wxDouble, wxDouble, wxDouble, wxDouble ) {}
+    void CloseSubpath() {}
+    void GetCurrentPoint( wxDouble&, wxDouble&) {}
+    void AddArc( wxDouble, wxDouble, wxDouble, wxDouble, wxDouble, bool ) {}
+
+    void AddQuadCurveToPoint( wxDouble, wxDouble, wxDouble, wxDouble ) {}
+    void AddRectangle( wxDouble, wxDouble, wxDouble, wxDouble ) {}
+    void AddCircle( wxDouble, wxDouble, wxDouble ) {}
+    void AddArcToPoint( wxDouble, wxDouble , wxDouble, wxDouble, wxDouble )  {}
+
+    wxPoint2DDouble GetCurrentPoint() { return wxPoint2DDouble(0,0); }
+    void MoveToPoint( const wxPoint2DDouble& ) {}
+    void AddLineToPoint( const wxPoint2DDouble&) {}
+    void AddCurveToPoint( const wxPoint2DDouble&, const wxPoint2DDouble&, const wxPoint2DDouble&) {}
+    void AddArc( const wxPoint2DDouble&, wxDouble, wxDouble, wxDouble, bool) {}
+};
+
+
+class wxGraphicsContext
+{
+public:
+    wxGraphicsContext() {
+        wxPyBlock_t blocked = wxPyBeginBlockThreads();
+        PyErr_SetString(PyExc_NotImplementedError,
+                        "wxGraphicsContext is not available on this platform.");
+        wxPyEndBlockThreads(blocked);
+    }
+    virtual ~wxGraphicsContext() {}
+    
+    static wxGraphicsContext* Create( const wxWindowDC&) {
+        wxPyBlock_t blocked = wxPyBeginBlockThreads();
+        PyErr_SetString(PyExc_NotImplementedError,
+                        "wxGraphicsPath is not available on this platform.");
+        wxPyEndBlockThreads(blocked);
+        return NULL;
+    }
+    
+    wxGraphicsPath * CreatePath() { return NULL; }
+    void PushState() {}
+    void PopState() {}
+    void Clip( const wxRegion & ) {}
+    void Translate( wxDouble  , wxDouble  ) {}
+    void Scale( wxDouble  , wxDouble  ) {}
+    void Rotate( wxDouble  ) {}
+    void SetPen( const wxPen & ) {}
+    void SetBrush( const wxBrush & ) {}
+    void SetLinearGradientBrush( wxDouble , wxDouble , wxDouble , wxDouble , 
+        const wxColour&, const wxColour&) {}
+    void SetRadialGradientBrush( wxDouble , wxDouble , wxDouble , wxDouble , wxDouble ,
+        const wxColour &, const wxColour &) {}
+    void SetFont( const wxFont & ) {}
+    void SetTextColor( const wxColour & ) {}
+    void StrokePath( const wxGraphicsPath * ) {}
+    void FillPath( const wxGraphicsPath *, int  ) {}
+    void DrawPath( const wxGraphicsPath *, int  ) {}
+    void DrawText( const wxString &, wxDouble , wxDouble  ) {}
+    void DrawText( const wxString &, wxDouble , wxDouble , wxDouble  ) {}
+    void GetTextExtent( const wxString &, wxDouble *, wxDouble *,
+                        wxDouble *, wxDouble * ) const {}
+    void GetPartialTextExtents(const wxString& , wxArrayDouble& ) const {}
+    void DrawBitmap( const wxBitmap &, wxDouble , wxDouble , wxDouble , wxDouble  ) {}
+    void DrawIcon( const wxIcon &, wxDouble , wxDouble , wxDouble , wxDouble  ) {}
+    void StrokeLine( wxDouble , wxDouble , wxDouble , wxDouble ) {}
+    void StrokeLines( size_t , const wxPoint2DDouble *) {}
+    void StrokeLines( size_t , const wxPoint2DDouble *, const wxPoint2DDouble *) {}
+    void DrawLines( size_t , const wxPoint2DDouble *, int  ) {}
+    void DrawRectangle( wxDouble , wxDouble , wxDouble , wxDouble ) {}
+    void DrawEllipse( wxDouble , wxDouble,  wxDouble , wxDouble) {}
+    void DrawRoundedRectangle( wxDouble , wxDouble , wxDouble , wxDouble , wxDouble ) {}
+};
+
+
+class wxGCDC: public wxWindowDC
+{
+public:
+    wxGCDC(const wxWindowDC&) {
+        wxPyBlock_t blocked = wxPyBeginBlockThreads();
+        PyErr_SetString(PyExc_NotImplementedError,
+                        "wxGCDC is not available on this platform.");
+        wxPyEndBlockThreads(blocked);
+     }
+    
+    wxGCDC() {
+        wxPyBlock_t blocked = wxPyBeginBlockThreads();
+        PyErr_SetString(PyExc_NotImplementedError,
+                        "wxGCDC is not available on this platform.");
+        wxPyEndBlockThreads(blocked);
+    }
+    
+    virtual ~wxGCDC() {}
+
+    wxGraphicsContext* GetGraphicContext() { return NULL; }
+};
+
+#endif
+
+
 
 SWIGINTERN void wxColourDatabase_Append(wxColourDatabase *self,wxString const &name,int red,int green,int blue){
             self->AddColour(name, wxColour(red, green, blue));
@@ -4102,7 +4224,7 @@ SWIGINTERN PyObject *_wrap_Colour_SetFromName(PyObject *SWIGUNUSEDPARM(self), Py
   }
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    (arg1)->InitFromName((wxString const &)*arg2);
+    (arg1)->Set((wxString const &)*arg2);
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
@@ -23401,6 +23523,48 @@ SWIGINTERN PyObject *ScreenDC_swiginit(PyObject *SWIGUNUSEDPARM(self), PyObject 
   return SWIG_Python_InitShadowInstance(args);
 }
 
+SWIGINTERN PyObject *_wrap_new_WindowDC(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxWindow *arg1 = (wxWindow *) 0 ;
+  wxWindowDC *result = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  char *  kwnames[] = {
+    (char *) "win", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:new_WindowDC",kwnames,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxWindow, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_WindowDC" "', expected argument " "1"" of type '" "wxWindow *""'"); 
+  }
+  arg1 = reinterpret_cast< wxWindow * >(argp1);
+  {
+    if (!wxPyCheckForApp()) SWIG_fail;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = (wxWindowDC *)new wxWindowDC(arg1);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_wxWindowDC, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *WindowDC_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *obj;
+  if (!SWIG_Python_UnpackTuple(args,(char*)"swigregister", 1, 1,&obj)) return NULL;
+  SWIG_TypeNewClientData(SWIGTYPE_p_wxWindowDC, SWIG_NewClientData(obj));
+  return SWIG_Py_Void();
+}
+
+SWIGINTERN PyObject *WindowDC_swiginit(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  return SWIG_Python_InitShadowInstance(args);
+}
+
 SWIGINTERN PyObject *_wrap_new_ClientDC(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   wxWindow *arg1 = (wxWindow *) 0 ;
@@ -23482,48 +23646,6 @@ SWIGINTERN PyObject *PaintDC_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObje
 }
 
 SWIGINTERN PyObject *PaintDC_swiginit(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  return SWIG_Python_InitShadowInstance(args);
-}
-
-SWIGINTERN PyObject *_wrap_new_WindowDC(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
-  PyObject *resultobj = 0;
-  wxWindow *arg1 = (wxWindow *) 0 ;
-  wxWindowDC *result = 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  char *  kwnames[] = {
-    (char *) "win", NULL 
-  };
-  
-  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:new_WindowDC",kwnames,&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxWindow, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_WindowDC" "', expected argument " "1"" of type '" "wxWindow *""'"); 
-  }
-  arg1 = reinterpret_cast< wxWindow * >(argp1);
-  {
-    if (!wxPyCheckForApp()) SWIG_fail;
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    result = (wxWindowDC *)new wxWindowDC(arg1);
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) SWIG_fail;
-  }
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_wxWindowDC, SWIG_POINTER_NEW |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *WindowDC_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *obj;
-  if (!SWIG_Python_UnpackTuple(args,(char*)"swigregister", 1, 1,&obj)) return NULL;
-  SWIG_TypeNewClientData(SWIGTYPE_p_wxWindowDC, SWIG_NewClientData(obj));
-  return SWIG_Py_Void();
-}
-
-SWIGINTERN PyObject *WindowDC_swiginit(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   return SWIG_Python_InitShadowInstance(args);
 }
 
@@ -23932,6 +24054,2373 @@ SWIGINTERN PyObject *PrinterDC_swigregister(PyObject *SWIGUNUSEDPARM(self), PyOb
 }
 
 SWIGINTERN PyObject *PrinterDC_swiginit(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  return SWIG_Python_InitShadowInstance(args);
+}
+
+SWIGINTERN PyObject *_wrap_delete_GraphicsPath(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxGraphicsPath *arg1 = (wxGraphicsPath *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxGraphicsPath, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_GraphicsPath" "', expected argument " "1"" of type '" "wxGraphicsPath *""'"); 
+  }
+  arg1 = reinterpret_cast< wxGraphicsPath * >(argp1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    delete arg1;
+    
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_GraphicsPath_MoveToPoint(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxGraphicsPath *arg1 = (wxGraphicsPath *) 0 ;
+  wxDouble arg2 ;
+  wxDouble arg3 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  double val2 ;
+  int ecode2 = 0 ;
+  double val3 ;
+  int ecode3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "x",(char *) "y", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:GraphicsPath_MoveToPoint",kwnames,&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxGraphicsPath, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "GraphicsPath_MoveToPoint" "', expected argument " "1"" of type '" "wxGraphicsPath *""'"); 
+  }
+  arg1 = reinterpret_cast< wxGraphicsPath * >(argp1);
+  ecode2 = SWIG_AsVal_double(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "GraphicsPath_MoveToPoint" "', expected argument " "2"" of type '" "wxDouble""'");
+  } 
+  arg2 = static_cast< wxDouble >(val2);
+  ecode3 = SWIG_AsVal_double(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "GraphicsPath_MoveToPoint" "', expected argument " "3"" of type '" "wxDouble""'");
+  } 
+  arg3 = static_cast< wxDouble >(val3);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    (arg1)->MoveToPoint(arg2,arg3);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_GraphicsPath_AddLineToPoint(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxGraphicsPath *arg1 = (wxGraphicsPath *) 0 ;
+  wxDouble arg2 ;
+  wxDouble arg3 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  double val2 ;
+  int ecode2 = 0 ;
+  double val3 ;
+  int ecode3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "x",(char *) "y", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:GraphicsPath_AddLineToPoint",kwnames,&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxGraphicsPath, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "GraphicsPath_AddLineToPoint" "', expected argument " "1"" of type '" "wxGraphicsPath *""'"); 
+  }
+  arg1 = reinterpret_cast< wxGraphicsPath * >(argp1);
+  ecode2 = SWIG_AsVal_double(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "GraphicsPath_AddLineToPoint" "', expected argument " "2"" of type '" "wxDouble""'");
+  } 
+  arg2 = static_cast< wxDouble >(val2);
+  ecode3 = SWIG_AsVal_double(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "GraphicsPath_AddLineToPoint" "', expected argument " "3"" of type '" "wxDouble""'");
+  } 
+  arg3 = static_cast< wxDouble >(val3);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    (arg1)->AddLineToPoint(arg2,arg3);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_GraphicsPath_AddCurveToPoint(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxGraphicsPath *arg1 = (wxGraphicsPath *) 0 ;
+  wxDouble arg2 ;
+  wxDouble arg3 ;
+  wxDouble arg4 ;
+  wxDouble arg5 ;
+  wxDouble arg6 ;
+  wxDouble arg7 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  double val2 ;
+  int ecode2 = 0 ;
+  double val3 ;
+  int ecode3 = 0 ;
+  double val4 ;
+  int ecode4 = 0 ;
+  double val5 ;
+  int ecode5 = 0 ;
+  double val6 ;
+  int ecode6 = 0 ;
+  double val7 ;
+  int ecode7 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  PyObject * obj4 = 0 ;
+  PyObject * obj5 = 0 ;
+  PyObject * obj6 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "cx1",(char *) "cy1",(char *) "cx2",(char *) "cy2",(char *) "x",(char *) "y", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOOOOO:GraphicsPath_AddCurveToPoint",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxGraphicsPath, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "GraphicsPath_AddCurveToPoint" "', expected argument " "1"" of type '" "wxGraphicsPath *""'"); 
+  }
+  arg1 = reinterpret_cast< wxGraphicsPath * >(argp1);
+  ecode2 = SWIG_AsVal_double(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "GraphicsPath_AddCurveToPoint" "', expected argument " "2"" of type '" "wxDouble""'");
+  } 
+  arg2 = static_cast< wxDouble >(val2);
+  ecode3 = SWIG_AsVal_double(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "GraphicsPath_AddCurveToPoint" "', expected argument " "3"" of type '" "wxDouble""'");
+  } 
+  arg3 = static_cast< wxDouble >(val3);
+  ecode4 = SWIG_AsVal_double(obj3, &val4);
+  if (!SWIG_IsOK(ecode4)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "GraphicsPath_AddCurveToPoint" "', expected argument " "4"" of type '" "wxDouble""'");
+  } 
+  arg4 = static_cast< wxDouble >(val4);
+  ecode5 = SWIG_AsVal_double(obj4, &val5);
+  if (!SWIG_IsOK(ecode5)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "GraphicsPath_AddCurveToPoint" "', expected argument " "5"" of type '" "wxDouble""'");
+  } 
+  arg5 = static_cast< wxDouble >(val5);
+  ecode6 = SWIG_AsVal_double(obj5, &val6);
+  if (!SWIG_IsOK(ecode6)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode6), "in method '" "GraphicsPath_AddCurveToPoint" "', expected argument " "6"" of type '" "wxDouble""'");
+  } 
+  arg6 = static_cast< wxDouble >(val6);
+  ecode7 = SWIG_AsVal_double(obj6, &val7);
+  if (!SWIG_IsOK(ecode7)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode7), "in method '" "GraphicsPath_AddCurveToPoint" "', expected argument " "7"" of type '" "wxDouble""'");
+  } 
+  arg7 = static_cast< wxDouble >(val7);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    (arg1)->AddCurveToPoint(arg2,arg3,arg4,arg5,arg6,arg7);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_GraphicsPath_CloseSubpath(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxGraphicsPath *arg1 = (wxGraphicsPath *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxGraphicsPath, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "GraphicsPath_CloseSubpath" "', expected argument " "1"" of type '" "wxGraphicsPath *""'"); 
+  }
+  arg1 = reinterpret_cast< wxGraphicsPath * >(argp1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    (arg1)->CloseSubpath();
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_GraphicsPath_GetCurrentPoint(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxGraphicsPath *arg1 = (wxGraphicsPath *) 0 ;
+  wxPoint2D result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxGraphicsPath, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "GraphicsPath_GetCurrentPoint" "', expected argument " "1"" of type '" "wxGraphicsPath *""'"); 
+  }
+  arg1 = reinterpret_cast< wxGraphicsPath * >(argp1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = (arg1)->GetCurrentPoint();
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_NewPointerObj((new wxPoint2D(static_cast< const wxPoint2D& >(result))), SWIGTYPE_p_wxPoint2D, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_GraphicsPath_AddArc(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxGraphicsPath *arg1 = (wxGraphicsPath *) 0 ;
+  wxDouble arg2 ;
+  wxDouble arg3 ;
+  wxDouble arg4 ;
+  wxDouble arg5 ;
+  wxDouble arg6 ;
+  bool arg7 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  double val2 ;
+  int ecode2 = 0 ;
+  double val3 ;
+  int ecode3 = 0 ;
+  double val4 ;
+  int ecode4 = 0 ;
+  double val5 ;
+  int ecode5 = 0 ;
+  double val6 ;
+  int ecode6 = 0 ;
+  bool val7 ;
+  int ecode7 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  PyObject * obj4 = 0 ;
+  PyObject * obj5 = 0 ;
+  PyObject * obj6 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "x",(char *) "y",(char *) "r",(char *) "startAngle",(char *) "endAngle",(char *) "clockwise", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOOOOO:GraphicsPath_AddArc",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxGraphicsPath, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "GraphicsPath_AddArc" "', expected argument " "1"" of type '" "wxGraphicsPath *""'"); 
+  }
+  arg1 = reinterpret_cast< wxGraphicsPath * >(argp1);
+  ecode2 = SWIG_AsVal_double(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "GraphicsPath_AddArc" "', expected argument " "2"" of type '" "wxDouble""'");
+  } 
+  arg2 = static_cast< wxDouble >(val2);
+  ecode3 = SWIG_AsVal_double(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "GraphicsPath_AddArc" "', expected argument " "3"" of type '" "wxDouble""'");
+  } 
+  arg3 = static_cast< wxDouble >(val3);
+  ecode4 = SWIG_AsVal_double(obj3, &val4);
+  if (!SWIG_IsOK(ecode4)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "GraphicsPath_AddArc" "', expected argument " "4"" of type '" "wxDouble""'");
+  } 
+  arg4 = static_cast< wxDouble >(val4);
+  ecode5 = SWIG_AsVal_double(obj4, &val5);
+  if (!SWIG_IsOK(ecode5)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "GraphicsPath_AddArc" "', expected argument " "5"" of type '" "wxDouble""'");
+  } 
+  arg5 = static_cast< wxDouble >(val5);
+  ecode6 = SWIG_AsVal_double(obj5, &val6);
+  if (!SWIG_IsOK(ecode6)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode6), "in method '" "GraphicsPath_AddArc" "', expected argument " "6"" of type '" "wxDouble""'");
+  } 
+  arg6 = static_cast< wxDouble >(val6);
+  ecode7 = SWIG_AsVal_bool(obj6, &val7);
+  if (!SWIG_IsOK(ecode7)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode7), "in method '" "GraphicsPath_AddArc" "', expected argument " "7"" of type '" "bool""'");
+  } 
+  arg7 = static_cast< bool >(val7);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    (arg1)->AddArc(arg2,arg3,arg4,arg5,arg6,arg7);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_GraphicsPath_AddQuadCurveToPoint(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxGraphicsPath *arg1 = (wxGraphicsPath *) 0 ;
+  wxDouble arg2 ;
+  wxDouble arg3 ;
+  wxDouble arg4 ;
+  wxDouble arg5 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  double val2 ;
+  int ecode2 = 0 ;
+  double val3 ;
+  int ecode3 = 0 ;
+  double val4 ;
+  int ecode4 = 0 ;
+  double val5 ;
+  int ecode5 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  PyObject * obj4 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "cx",(char *) "cy",(char *) "x",(char *) "y", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOOO:GraphicsPath_AddQuadCurveToPoint",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxGraphicsPath, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "GraphicsPath_AddQuadCurveToPoint" "', expected argument " "1"" of type '" "wxGraphicsPath *""'"); 
+  }
+  arg1 = reinterpret_cast< wxGraphicsPath * >(argp1);
+  ecode2 = SWIG_AsVal_double(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "GraphicsPath_AddQuadCurveToPoint" "', expected argument " "2"" of type '" "wxDouble""'");
+  } 
+  arg2 = static_cast< wxDouble >(val2);
+  ecode3 = SWIG_AsVal_double(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "GraphicsPath_AddQuadCurveToPoint" "', expected argument " "3"" of type '" "wxDouble""'");
+  } 
+  arg3 = static_cast< wxDouble >(val3);
+  ecode4 = SWIG_AsVal_double(obj3, &val4);
+  if (!SWIG_IsOK(ecode4)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "GraphicsPath_AddQuadCurveToPoint" "', expected argument " "4"" of type '" "wxDouble""'");
+  } 
+  arg4 = static_cast< wxDouble >(val4);
+  ecode5 = SWIG_AsVal_double(obj4, &val5);
+  if (!SWIG_IsOK(ecode5)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "GraphicsPath_AddQuadCurveToPoint" "', expected argument " "5"" of type '" "wxDouble""'");
+  } 
+  arg5 = static_cast< wxDouble >(val5);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    (arg1)->AddQuadCurveToPoint(arg2,arg3,arg4,arg5);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_GraphicsPath_AddRectangle(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxGraphicsPath *arg1 = (wxGraphicsPath *) 0 ;
+  wxDouble arg2 ;
+  wxDouble arg3 ;
+  wxDouble arg4 ;
+  wxDouble arg5 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  double val2 ;
+  int ecode2 = 0 ;
+  double val3 ;
+  int ecode3 = 0 ;
+  double val4 ;
+  int ecode4 = 0 ;
+  double val5 ;
+  int ecode5 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  PyObject * obj4 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "x",(char *) "y",(char *) "w",(char *) "h", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOOO:GraphicsPath_AddRectangle",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxGraphicsPath, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "GraphicsPath_AddRectangle" "', expected argument " "1"" of type '" "wxGraphicsPath *""'"); 
+  }
+  arg1 = reinterpret_cast< wxGraphicsPath * >(argp1);
+  ecode2 = SWIG_AsVal_double(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "GraphicsPath_AddRectangle" "', expected argument " "2"" of type '" "wxDouble""'");
+  } 
+  arg2 = static_cast< wxDouble >(val2);
+  ecode3 = SWIG_AsVal_double(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "GraphicsPath_AddRectangle" "', expected argument " "3"" of type '" "wxDouble""'");
+  } 
+  arg3 = static_cast< wxDouble >(val3);
+  ecode4 = SWIG_AsVal_double(obj3, &val4);
+  if (!SWIG_IsOK(ecode4)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "GraphicsPath_AddRectangle" "', expected argument " "4"" of type '" "wxDouble""'");
+  } 
+  arg4 = static_cast< wxDouble >(val4);
+  ecode5 = SWIG_AsVal_double(obj4, &val5);
+  if (!SWIG_IsOK(ecode5)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "GraphicsPath_AddRectangle" "', expected argument " "5"" of type '" "wxDouble""'");
+  } 
+  arg5 = static_cast< wxDouble >(val5);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    (arg1)->AddRectangle(arg2,arg3,arg4,arg5);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_GraphicsPath_AddCircle(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxGraphicsPath *arg1 = (wxGraphicsPath *) 0 ;
+  wxDouble arg2 ;
+  wxDouble arg3 ;
+  wxDouble arg4 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  double val2 ;
+  int ecode2 = 0 ;
+  double val3 ;
+  int ecode3 = 0 ;
+  double val4 ;
+  int ecode4 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "x",(char *) "y",(char *) "r", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOO:GraphicsPath_AddCircle",kwnames,&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxGraphicsPath, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "GraphicsPath_AddCircle" "', expected argument " "1"" of type '" "wxGraphicsPath *""'"); 
+  }
+  arg1 = reinterpret_cast< wxGraphicsPath * >(argp1);
+  ecode2 = SWIG_AsVal_double(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "GraphicsPath_AddCircle" "', expected argument " "2"" of type '" "wxDouble""'");
+  } 
+  arg2 = static_cast< wxDouble >(val2);
+  ecode3 = SWIG_AsVal_double(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "GraphicsPath_AddCircle" "', expected argument " "3"" of type '" "wxDouble""'");
+  } 
+  arg3 = static_cast< wxDouble >(val3);
+  ecode4 = SWIG_AsVal_double(obj3, &val4);
+  if (!SWIG_IsOK(ecode4)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "GraphicsPath_AddCircle" "', expected argument " "4"" of type '" "wxDouble""'");
+  } 
+  arg4 = static_cast< wxDouble >(val4);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    (arg1)->AddCircle(arg2,arg3,arg4);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_GraphicsPath_AddArcToPoint(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxGraphicsPath *arg1 = (wxGraphicsPath *) 0 ;
+  wxDouble arg2 ;
+  wxDouble arg3 ;
+  wxDouble arg4 ;
+  wxDouble arg5 ;
+  wxDouble arg6 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  double val2 ;
+  int ecode2 = 0 ;
+  double val3 ;
+  int ecode3 = 0 ;
+  double val4 ;
+  int ecode4 = 0 ;
+  double val5 ;
+  int ecode5 = 0 ;
+  double val6 ;
+  int ecode6 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  PyObject * obj4 = 0 ;
+  PyObject * obj5 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "x1",(char *) "y1",(char *) "x2",(char *) "y2",(char *) "r", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOOOO:GraphicsPath_AddArcToPoint",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxGraphicsPath, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "GraphicsPath_AddArcToPoint" "', expected argument " "1"" of type '" "wxGraphicsPath *""'"); 
+  }
+  arg1 = reinterpret_cast< wxGraphicsPath * >(argp1);
+  ecode2 = SWIG_AsVal_double(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "GraphicsPath_AddArcToPoint" "', expected argument " "2"" of type '" "wxDouble""'");
+  } 
+  arg2 = static_cast< wxDouble >(val2);
+  ecode3 = SWIG_AsVal_double(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "GraphicsPath_AddArcToPoint" "', expected argument " "3"" of type '" "wxDouble""'");
+  } 
+  arg3 = static_cast< wxDouble >(val3);
+  ecode4 = SWIG_AsVal_double(obj3, &val4);
+  if (!SWIG_IsOK(ecode4)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "GraphicsPath_AddArcToPoint" "', expected argument " "4"" of type '" "wxDouble""'");
+  } 
+  arg4 = static_cast< wxDouble >(val4);
+  ecode5 = SWIG_AsVal_double(obj4, &val5);
+  if (!SWIG_IsOK(ecode5)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "GraphicsPath_AddArcToPoint" "', expected argument " "5"" of type '" "wxDouble""'");
+  } 
+  arg5 = static_cast< wxDouble >(val5);
+  ecode6 = SWIG_AsVal_double(obj5, &val6);
+  if (!SWIG_IsOK(ecode6)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode6), "in method '" "GraphicsPath_AddArcToPoint" "', expected argument " "6"" of type '" "wxDouble""'");
+  } 
+  arg6 = static_cast< wxDouble >(val6);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    (arg1)->AddArcToPoint(arg2,arg3,arg4,arg5,arg6);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *GraphicsPath_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *obj;
+  if (!SWIG_Python_UnpackTuple(args,(char*)"swigregister", 1, 1,&obj)) return NULL;
+  SWIG_TypeNewClientData(SWIGTYPE_p_wxGraphicsPath, SWIG_NewClientData(obj));
+  return SWIG_Py_Void();
+}
+
+SWIGINTERN PyObject *_wrap_delete_GraphicsContext(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxGraphicsContext *arg1 = (wxGraphicsContext *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxGraphicsContext, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_GraphicsContext" "', expected argument " "1"" of type '" "wxGraphicsContext *""'"); 
+  }
+  arg1 = reinterpret_cast< wxGraphicsContext * >(argp1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    delete arg1;
+    
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_GraphicsContext_Create(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxWindowDC *arg1 = 0 ;
+  wxGraphicsContext *result = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  char *  kwnames[] = {
+    (char *) "dc", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:GraphicsContext_Create",kwnames,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_wxWindowDC,  0  | 0);
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "GraphicsContext_Create" "', expected argument " "1"" of type '" "wxWindowDC const &""'"); 
+  }
+  if (!argp1) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "GraphicsContext_Create" "', expected argument " "1"" of type '" "wxWindowDC const &""'"); 
+  }
+  arg1 = reinterpret_cast< wxWindowDC * >(argp1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = (wxGraphicsContext *)wxGraphicsContext::Create((wxWindowDC const &)*arg1);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_wxGraphicsContext, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_GraphicsContext_CreatePath(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxGraphicsContext *arg1 = (wxGraphicsContext *) 0 ;
+  wxGraphicsPath *result = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxGraphicsContext, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "GraphicsContext_CreatePath" "', expected argument " "1"" of type '" "wxGraphicsContext *""'"); 
+  }
+  arg1 = reinterpret_cast< wxGraphicsContext * >(argp1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = (wxGraphicsPath *)(arg1)->CreatePath();
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_wxGraphicsPath, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_GraphicsContext_PushState(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxGraphicsContext *arg1 = (wxGraphicsContext *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxGraphicsContext, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "GraphicsContext_PushState" "', expected argument " "1"" of type '" "wxGraphicsContext *""'"); 
+  }
+  arg1 = reinterpret_cast< wxGraphicsContext * >(argp1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    (arg1)->PushState();
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_GraphicsContext_PopState(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxGraphicsContext *arg1 = (wxGraphicsContext *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxGraphicsContext, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "GraphicsContext_PopState" "', expected argument " "1"" of type '" "wxGraphicsContext *""'"); 
+  }
+  arg1 = reinterpret_cast< wxGraphicsContext * >(argp1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    (arg1)->PopState();
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_GraphicsContext_Clip(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxGraphicsContext *arg1 = (wxGraphicsContext *) 0 ;
+  wxRegion *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "region", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:GraphicsContext_Clip",kwnames,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxGraphicsContext, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "GraphicsContext_Clip" "', expected argument " "1"" of type '" "wxGraphicsContext *""'"); 
+  }
+  arg1 = reinterpret_cast< wxGraphicsContext * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_wxRegion,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "GraphicsContext_Clip" "', expected argument " "2"" of type '" "wxRegion const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "GraphicsContext_Clip" "', expected argument " "2"" of type '" "wxRegion const &""'"); 
+  }
+  arg2 = reinterpret_cast< wxRegion * >(argp2);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    (arg1)->Clip((wxRegion const &)*arg2);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_GraphicsContext_Translate(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxGraphicsContext *arg1 = (wxGraphicsContext *) 0 ;
+  wxDouble arg2 ;
+  wxDouble arg3 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  double val2 ;
+  int ecode2 = 0 ;
+  double val3 ;
+  int ecode3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "dx",(char *) "dy", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:GraphicsContext_Translate",kwnames,&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxGraphicsContext, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "GraphicsContext_Translate" "', expected argument " "1"" of type '" "wxGraphicsContext *""'"); 
+  }
+  arg1 = reinterpret_cast< wxGraphicsContext * >(argp1);
+  ecode2 = SWIG_AsVal_double(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "GraphicsContext_Translate" "', expected argument " "2"" of type '" "wxDouble""'");
+  } 
+  arg2 = static_cast< wxDouble >(val2);
+  ecode3 = SWIG_AsVal_double(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "GraphicsContext_Translate" "', expected argument " "3"" of type '" "wxDouble""'");
+  } 
+  arg3 = static_cast< wxDouble >(val3);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    (arg1)->Translate(arg2,arg3);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_GraphicsContext_Scale(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxGraphicsContext *arg1 = (wxGraphicsContext *) 0 ;
+  wxDouble arg2 ;
+  wxDouble arg3 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  double val2 ;
+  int ecode2 = 0 ;
+  double val3 ;
+  int ecode3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "xScale",(char *) "yScale", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:GraphicsContext_Scale",kwnames,&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxGraphicsContext, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "GraphicsContext_Scale" "', expected argument " "1"" of type '" "wxGraphicsContext *""'"); 
+  }
+  arg1 = reinterpret_cast< wxGraphicsContext * >(argp1);
+  ecode2 = SWIG_AsVal_double(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "GraphicsContext_Scale" "', expected argument " "2"" of type '" "wxDouble""'");
+  } 
+  arg2 = static_cast< wxDouble >(val2);
+  ecode3 = SWIG_AsVal_double(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "GraphicsContext_Scale" "', expected argument " "3"" of type '" "wxDouble""'");
+  } 
+  arg3 = static_cast< wxDouble >(val3);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    (arg1)->Scale(arg2,arg3);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_GraphicsContext_Rotate(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxGraphicsContext *arg1 = (wxGraphicsContext *) 0 ;
+  wxDouble arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  double val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "angle", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:GraphicsContext_Rotate",kwnames,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxGraphicsContext, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "GraphicsContext_Rotate" "', expected argument " "1"" of type '" "wxGraphicsContext *""'"); 
+  }
+  arg1 = reinterpret_cast< wxGraphicsContext * >(argp1);
+  ecode2 = SWIG_AsVal_double(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "GraphicsContext_Rotate" "', expected argument " "2"" of type '" "wxDouble""'");
+  } 
+  arg2 = static_cast< wxDouble >(val2);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    (arg1)->Rotate(arg2);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_GraphicsContext_SetPen(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxGraphicsContext *arg1 = (wxGraphicsContext *) 0 ;
+  wxPen *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "pen", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:GraphicsContext_SetPen",kwnames,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxGraphicsContext, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "GraphicsContext_SetPen" "', expected argument " "1"" of type '" "wxGraphicsContext *""'"); 
+  }
+  arg1 = reinterpret_cast< wxGraphicsContext * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_wxPen,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "GraphicsContext_SetPen" "', expected argument " "2"" of type '" "wxPen const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "GraphicsContext_SetPen" "', expected argument " "2"" of type '" "wxPen const &""'"); 
+  }
+  arg2 = reinterpret_cast< wxPen * >(argp2);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    (arg1)->SetPen((wxPen const &)*arg2);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_GraphicsContext_SetBrush(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxGraphicsContext *arg1 = (wxGraphicsContext *) 0 ;
+  wxBrush *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "brush", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:GraphicsContext_SetBrush",kwnames,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxGraphicsContext, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "GraphicsContext_SetBrush" "', expected argument " "1"" of type '" "wxGraphicsContext *""'"); 
+  }
+  arg1 = reinterpret_cast< wxGraphicsContext * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_wxBrush,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "GraphicsContext_SetBrush" "', expected argument " "2"" of type '" "wxBrush const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "GraphicsContext_SetBrush" "', expected argument " "2"" of type '" "wxBrush const &""'"); 
+  }
+  arg2 = reinterpret_cast< wxBrush * >(argp2);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    (arg1)->SetBrush((wxBrush const &)*arg2);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_GraphicsContext_SetLinearGradientBrush(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxGraphicsContext *arg1 = (wxGraphicsContext *) 0 ;
+  wxDouble arg2 ;
+  wxDouble arg3 ;
+  wxDouble arg4 ;
+  wxDouble arg5 ;
+  wxColour *arg6 = 0 ;
+  wxColour *arg7 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  double val2 ;
+  int ecode2 = 0 ;
+  double val3 ;
+  int ecode3 = 0 ;
+  double val4 ;
+  int ecode4 = 0 ;
+  double val5 ;
+  int ecode5 = 0 ;
+  wxColour temp6 ;
+  wxColour temp7 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  PyObject * obj4 = 0 ;
+  PyObject * obj5 = 0 ;
+  PyObject * obj6 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "x1",(char *) "y1",(char *) "x2",(char *) "y2",(char *) "c1",(char *) "c2", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOOOOO:GraphicsContext_SetLinearGradientBrush",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxGraphicsContext, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "GraphicsContext_SetLinearGradientBrush" "', expected argument " "1"" of type '" "wxGraphicsContext *""'"); 
+  }
+  arg1 = reinterpret_cast< wxGraphicsContext * >(argp1);
+  ecode2 = SWIG_AsVal_double(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "GraphicsContext_SetLinearGradientBrush" "', expected argument " "2"" of type '" "wxDouble""'");
+  } 
+  arg2 = static_cast< wxDouble >(val2);
+  ecode3 = SWIG_AsVal_double(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "GraphicsContext_SetLinearGradientBrush" "', expected argument " "3"" of type '" "wxDouble""'");
+  } 
+  arg3 = static_cast< wxDouble >(val3);
+  ecode4 = SWIG_AsVal_double(obj3, &val4);
+  if (!SWIG_IsOK(ecode4)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "GraphicsContext_SetLinearGradientBrush" "', expected argument " "4"" of type '" "wxDouble""'");
+  } 
+  arg4 = static_cast< wxDouble >(val4);
+  ecode5 = SWIG_AsVal_double(obj4, &val5);
+  if (!SWIG_IsOK(ecode5)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "GraphicsContext_SetLinearGradientBrush" "', expected argument " "5"" of type '" "wxDouble""'");
+  } 
+  arg5 = static_cast< wxDouble >(val5);
+  {
+    arg6 = &temp6;
+    if ( ! wxColour_helper(obj5, &arg6)) SWIG_fail;
+  }
+  {
+    arg7 = &temp7;
+    if ( ! wxColour_helper(obj6, &arg7)) SWIG_fail;
+  }
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    (arg1)->SetLinearGradientBrush(arg2,arg3,arg4,arg5,(wxColour const &)*arg6,(wxColour const &)*arg7);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_GraphicsContext_SetRadialGradientBrush(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxGraphicsContext *arg1 = (wxGraphicsContext *) 0 ;
+  wxDouble arg2 ;
+  wxDouble arg3 ;
+  wxDouble arg4 ;
+  wxDouble arg5 ;
+  wxDouble arg6 ;
+  wxColour *arg7 = 0 ;
+  wxColour *arg8 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  double val2 ;
+  int ecode2 = 0 ;
+  double val3 ;
+  int ecode3 = 0 ;
+  double val4 ;
+  int ecode4 = 0 ;
+  double val5 ;
+  int ecode5 = 0 ;
+  double val6 ;
+  int ecode6 = 0 ;
+  wxColour temp7 ;
+  wxColour temp8 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  PyObject * obj4 = 0 ;
+  PyObject * obj5 = 0 ;
+  PyObject * obj6 = 0 ;
+  PyObject * obj7 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "xo",(char *) "yo",(char *) "xc",(char *) "yc",(char *) "radius",(char *) "oColor",(char *) "cColor", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOOOOOO:GraphicsContext_SetRadialGradientBrush",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6,&obj7)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxGraphicsContext, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "GraphicsContext_SetRadialGradientBrush" "', expected argument " "1"" of type '" "wxGraphicsContext *""'"); 
+  }
+  arg1 = reinterpret_cast< wxGraphicsContext * >(argp1);
+  ecode2 = SWIG_AsVal_double(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "GraphicsContext_SetRadialGradientBrush" "', expected argument " "2"" of type '" "wxDouble""'");
+  } 
+  arg2 = static_cast< wxDouble >(val2);
+  ecode3 = SWIG_AsVal_double(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "GraphicsContext_SetRadialGradientBrush" "', expected argument " "3"" of type '" "wxDouble""'");
+  } 
+  arg3 = static_cast< wxDouble >(val3);
+  ecode4 = SWIG_AsVal_double(obj3, &val4);
+  if (!SWIG_IsOK(ecode4)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "GraphicsContext_SetRadialGradientBrush" "', expected argument " "4"" of type '" "wxDouble""'");
+  } 
+  arg4 = static_cast< wxDouble >(val4);
+  ecode5 = SWIG_AsVal_double(obj4, &val5);
+  if (!SWIG_IsOK(ecode5)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "GraphicsContext_SetRadialGradientBrush" "', expected argument " "5"" of type '" "wxDouble""'");
+  } 
+  arg5 = static_cast< wxDouble >(val5);
+  ecode6 = SWIG_AsVal_double(obj5, &val6);
+  if (!SWIG_IsOK(ecode6)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode6), "in method '" "GraphicsContext_SetRadialGradientBrush" "', expected argument " "6"" of type '" "wxDouble""'");
+  } 
+  arg6 = static_cast< wxDouble >(val6);
+  {
+    arg7 = &temp7;
+    if ( ! wxColour_helper(obj6, &arg7)) SWIG_fail;
+  }
+  {
+    arg8 = &temp8;
+    if ( ! wxColour_helper(obj7, &arg8)) SWIG_fail;
+  }
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    (arg1)->SetRadialGradientBrush(arg2,arg3,arg4,arg5,arg6,(wxColour const &)*arg7,(wxColour const &)*arg8);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_GraphicsContext_SetFont(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxGraphicsContext *arg1 = (wxGraphicsContext *) 0 ;
+  wxFont *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "font", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:GraphicsContext_SetFont",kwnames,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxGraphicsContext, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "GraphicsContext_SetFont" "', expected argument " "1"" of type '" "wxGraphicsContext *""'"); 
+  }
+  arg1 = reinterpret_cast< wxGraphicsContext * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_wxFont,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "GraphicsContext_SetFont" "', expected argument " "2"" of type '" "wxFont const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "GraphicsContext_SetFont" "', expected argument " "2"" of type '" "wxFont const &""'"); 
+  }
+  arg2 = reinterpret_cast< wxFont * >(argp2);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    (arg1)->SetFont((wxFont const &)*arg2);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_GraphicsContext_SetTextColor(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxGraphicsContext *arg1 = (wxGraphicsContext *) 0 ;
+  wxColour *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  wxColour temp2 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "col", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:GraphicsContext_SetTextColor",kwnames,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxGraphicsContext, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "GraphicsContext_SetTextColor" "', expected argument " "1"" of type '" "wxGraphicsContext *""'"); 
+  }
+  arg1 = reinterpret_cast< wxGraphicsContext * >(argp1);
+  {
+    arg2 = &temp2;
+    if ( ! wxColour_helper(obj1, &arg2)) SWIG_fail;
+  }
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    (arg1)->SetTextColor((wxColour const &)*arg2);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_GraphicsContext_StrokePath(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxGraphicsContext *arg1 = (wxGraphicsContext *) 0 ;
+  wxGraphicsPath *arg2 = (wxGraphicsPath *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "path", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:GraphicsContext_StrokePath",kwnames,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxGraphicsContext, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "GraphicsContext_StrokePath" "', expected argument " "1"" of type '" "wxGraphicsContext *""'"); 
+  }
+  arg1 = reinterpret_cast< wxGraphicsContext * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_wxGraphicsPath, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "GraphicsContext_StrokePath" "', expected argument " "2"" of type '" "wxGraphicsPath const *""'"); 
+  }
+  arg2 = reinterpret_cast< wxGraphicsPath * >(argp2);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    (arg1)->StrokePath((wxGraphicsPath const *)arg2);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_GraphicsContext_FillPath(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxGraphicsContext *arg1 = (wxGraphicsContext *) 0 ;
+  wxGraphicsPath *arg2 = (wxGraphicsPath *) 0 ;
+  int arg3 = (int) wxWINDING_RULE ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  int val3 ;
+  int ecode3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "path",(char *) "fillStyle", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|O:GraphicsContext_FillPath",kwnames,&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxGraphicsContext, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "GraphicsContext_FillPath" "', expected argument " "1"" of type '" "wxGraphicsContext *""'"); 
+  }
+  arg1 = reinterpret_cast< wxGraphicsContext * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_wxGraphicsPath, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "GraphicsContext_FillPath" "', expected argument " "2"" of type '" "wxGraphicsPath const *""'"); 
+  }
+  arg2 = reinterpret_cast< wxGraphicsPath * >(argp2);
+  if (obj2) {
+    ecode3 = SWIG_AsVal_int(obj2, &val3);
+    if (!SWIG_IsOK(ecode3)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "GraphicsContext_FillPath" "', expected argument " "3"" of type '" "int""'");
+    } 
+    arg3 = static_cast< int >(val3);
+  }
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    (arg1)->FillPath((wxGraphicsPath const *)arg2,arg3);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_GraphicsContext_DrawPath(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxGraphicsContext *arg1 = (wxGraphicsContext *) 0 ;
+  wxGraphicsPath *arg2 = (wxGraphicsPath *) 0 ;
+  int arg3 = (int) wxWINDING_RULE ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  int val3 ;
+  int ecode3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "path",(char *) "fillStyle", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|O:GraphicsContext_DrawPath",kwnames,&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxGraphicsContext, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "GraphicsContext_DrawPath" "', expected argument " "1"" of type '" "wxGraphicsContext *""'"); 
+  }
+  arg1 = reinterpret_cast< wxGraphicsContext * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_wxGraphicsPath, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "GraphicsContext_DrawPath" "', expected argument " "2"" of type '" "wxGraphicsPath const *""'"); 
+  }
+  arg2 = reinterpret_cast< wxGraphicsPath * >(argp2);
+  if (obj2) {
+    ecode3 = SWIG_AsVal_int(obj2, &val3);
+    if (!SWIG_IsOK(ecode3)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "GraphicsContext_DrawPath" "', expected argument " "3"" of type '" "int""'");
+    } 
+    arg3 = static_cast< int >(val3);
+  }
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    (arg1)->DrawPath((wxGraphicsPath const *)arg2,arg3);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_GraphicsContext_DrawText__SWIG_0(PyObject *SWIGUNUSEDPARM(self), int nobjs, PyObject **swig_obj) {
+  PyObject *resultobj = 0;
+  wxGraphicsContext *arg1 = (wxGraphicsContext *) 0 ;
+  wxString *arg2 = 0 ;
+  wxDouble arg3 ;
+  wxDouble arg4 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  bool temp2 = false ;
+  double val3 ;
+  int ecode3 = 0 ;
+  double val4 ;
+  int ecode4 = 0 ;
+  
+  if ((nobjs < 4) || (nobjs > 4)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxGraphicsContext, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "GraphicsContext_DrawText" "', expected argument " "1"" of type '" "wxGraphicsContext *""'"); 
+  }
+  arg1 = reinterpret_cast< wxGraphicsContext * >(argp1);
+  {
+    arg2 = wxString_in_helper(swig_obj[1]);
+    if (arg2 == NULL) SWIG_fail;
+    temp2 = true;
+  }
+  ecode3 = SWIG_AsVal_double(swig_obj[2], &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "GraphicsContext_DrawText" "', expected argument " "3"" of type '" "wxDouble""'");
+  } 
+  arg3 = static_cast< wxDouble >(val3);
+  ecode4 = SWIG_AsVal_double(swig_obj[3], &val4);
+  if (!SWIG_IsOK(ecode4)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "GraphicsContext_DrawText" "', expected argument " "4"" of type '" "wxDouble""'");
+  } 
+  arg4 = static_cast< wxDouble >(val4);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    (arg1)->DrawText((wxString const &)*arg2,arg3,arg4);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  {
+    if (temp2)
+    delete arg2;
+  }
+  return resultobj;
+fail:
+  {
+    if (temp2)
+    delete arg2;
+  }
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_GraphicsContext_DrawText__SWIG_1(PyObject *SWIGUNUSEDPARM(self), int nobjs, PyObject **swig_obj) {
+  PyObject *resultobj = 0;
+  wxGraphicsContext *arg1 = (wxGraphicsContext *) 0 ;
+  wxString *arg2 = 0 ;
+  wxDouble arg3 ;
+  wxDouble arg4 ;
+  wxDouble arg5 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  bool temp2 = false ;
+  double val3 ;
+  int ecode3 = 0 ;
+  double val4 ;
+  int ecode4 = 0 ;
+  double val5 ;
+  int ecode5 = 0 ;
+  
+  if ((nobjs < 5) || (nobjs > 5)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxGraphicsContext, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "GraphicsContext_DrawText" "', expected argument " "1"" of type '" "wxGraphicsContext *""'"); 
+  }
+  arg1 = reinterpret_cast< wxGraphicsContext * >(argp1);
+  {
+    arg2 = wxString_in_helper(swig_obj[1]);
+    if (arg2 == NULL) SWIG_fail;
+    temp2 = true;
+  }
+  ecode3 = SWIG_AsVal_double(swig_obj[2], &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "GraphicsContext_DrawText" "', expected argument " "3"" of type '" "wxDouble""'");
+  } 
+  arg3 = static_cast< wxDouble >(val3);
+  ecode4 = SWIG_AsVal_double(swig_obj[3], &val4);
+  if (!SWIG_IsOK(ecode4)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "GraphicsContext_DrawText" "', expected argument " "4"" of type '" "wxDouble""'");
+  } 
+  arg4 = static_cast< wxDouble >(val4);
+  ecode5 = SWIG_AsVal_double(swig_obj[4], &val5);
+  if (!SWIG_IsOK(ecode5)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "GraphicsContext_DrawText" "', expected argument " "5"" of type '" "wxDouble""'");
+  } 
+  arg5 = static_cast< wxDouble >(val5);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    (arg1)->DrawText((wxString const &)*arg2,arg3,arg4,arg5);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  {
+    if (temp2)
+    delete arg2;
+  }
+  return resultobj;
+fail:
+  {
+    if (temp2)
+    delete arg2;
+  }
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_GraphicsContext_DrawText(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[6];
+  
+  if (!(argc = SWIG_Python_UnpackTuple(args,"GraphicsContext_DrawText",0,5,argv))) SWIG_fail;
+  --argc;
+  if (argc == 4) {
+    return _wrap_GraphicsContext_DrawText__SWIG_0(self, argc, argv);
+  }
+  if (argc == 5) {
+    return _wrap_GraphicsContext_DrawText__SWIG_1(self, argc, argv);
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"No matching function for overloaded 'GraphicsContext_DrawText'");
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_GraphicsContext_GetTextExtent(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxGraphicsContext *arg1 = (wxGraphicsContext *) 0 ;
+  wxString *arg2 = 0 ;
+  wxDouble *arg3 = (wxDouble *) 0 ;
+  wxDouble *arg4 = (wxDouble *) 0 ;
+  wxDouble *arg5 = (wxDouble *) 0 ;
+  wxDouble *arg6 = (wxDouble *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  bool temp2 = false ;
+  wxDouble temp3 ;
+  int res3 = SWIG_TMPOBJ ;
+  wxDouble temp4 ;
+  int res4 = SWIG_TMPOBJ ;
+  wxDouble temp5 ;
+  int res5 = SWIG_TMPOBJ ;
+  wxDouble temp6 ;
+  int res6 = SWIG_TMPOBJ ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "text", NULL 
+  };
+  
+  arg3 = &temp3;
+  arg4 = &temp4;
+  arg5 = &temp5;
+  arg6 = &temp6;
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:GraphicsContext_GetTextExtent",kwnames,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxGraphicsContext, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "GraphicsContext_GetTextExtent" "', expected argument " "1"" of type '" "wxGraphicsContext const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxGraphicsContext * >(argp1);
+  {
+    arg2 = wxString_in_helper(obj1);
+    if (arg2 == NULL) SWIG_fail;
+    temp2 = true;
+  }
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    ((wxGraphicsContext const *)arg1)->GetTextExtent((wxString const &)*arg2,arg3,arg4,arg5,arg6);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  if (SWIG_IsTmpObj(res3)) {
+    resultobj = SWIG_Python_AppendOutput(resultobj, SWIG_From_double((*arg3)));
+  } else {
+    int new_flags = SWIG_IsNewObj(res3) ? (SWIG_POINTER_OWN |  0 ) :  0 ;
+    resultobj = SWIG_Python_AppendOutput(resultobj, SWIG_NewPointerObj((void*)(arg3), SWIGTYPE_p_double, new_flags));
+  }
+  if (SWIG_IsTmpObj(res4)) {
+    resultobj = SWIG_Python_AppendOutput(resultobj, SWIG_From_double((*arg4)));
+  } else {
+    int new_flags = SWIG_IsNewObj(res4) ? (SWIG_POINTER_OWN |  0 ) :  0 ;
+    resultobj = SWIG_Python_AppendOutput(resultobj, SWIG_NewPointerObj((void*)(arg4), SWIGTYPE_p_double, new_flags));
+  }
+  if (SWIG_IsTmpObj(res5)) {
+    resultobj = SWIG_Python_AppendOutput(resultobj, SWIG_From_double((*arg5)));
+  } else {
+    int new_flags = SWIG_IsNewObj(res5) ? (SWIG_POINTER_OWN |  0 ) :  0 ;
+    resultobj = SWIG_Python_AppendOutput(resultobj, SWIG_NewPointerObj((void*)(arg5), SWIGTYPE_p_double, new_flags));
+  }
+  if (SWIG_IsTmpObj(res6)) {
+    resultobj = SWIG_Python_AppendOutput(resultobj, SWIG_From_double((*arg6)));
+  } else {
+    int new_flags = SWIG_IsNewObj(res6) ? (SWIG_POINTER_OWN |  0 ) :  0 ;
+    resultobj = SWIG_Python_AppendOutput(resultobj, SWIG_NewPointerObj((void*)(arg6), SWIGTYPE_p_double, new_flags));
+  }
+  {
+    if (temp2)
+    delete arg2;
+  }
+  return resultobj;
+fail:
+  {
+    if (temp2)
+    delete arg2;
+  }
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_GraphicsContext_GetPartialTextExtents(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxGraphicsContext *arg1 = (wxGraphicsContext *) 0 ;
+  wxString *arg2 = 0 ;
+  wxArrayDouble *arg3 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  bool temp2 = false ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "text",(char *) "widths", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:GraphicsContext_GetPartialTextExtents",kwnames,&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxGraphicsContext, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "GraphicsContext_GetPartialTextExtents" "', expected argument " "1"" of type '" "wxGraphicsContext const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxGraphicsContext * >(argp1);
+  {
+    arg2 = wxString_in_helper(obj1);
+    if (arg2 == NULL) SWIG_fail;
+    temp2 = true;
+  }
+  res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_wxArrayDouble,  0 );
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "GraphicsContext_GetPartialTextExtents" "', expected argument " "3"" of type '" "wxArrayDouble &""'"); 
+  }
+  if (!argp3) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "GraphicsContext_GetPartialTextExtents" "', expected argument " "3"" of type '" "wxArrayDouble &""'"); 
+  }
+  arg3 = reinterpret_cast< wxArrayDouble * >(argp3);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    ((wxGraphicsContext const *)arg1)->GetPartialTextExtents((wxString const &)*arg2,*arg3);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  {
+    if (temp2)
+    delete arg2;
+  }
+  return resultobj;
+fail:
+  {
+    if (temp2)
+    delete arg2;
+  }
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_GraphicsContext_DrawBitmap(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxGraphicsContext *arg1 = (wxGraphicsContext *) 0 ;
+  wxBitmap *arg2 = 0 ;
+  wxDouble arg3 ;
+  wxDouble arg4 ;
+  wxDouble arg5 ;
+  wxDouble arg6 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  double val3 ;
+  int ecode3 = 0 ;
+  double val4 ;
+  int ecode4 = 0 ;
+  double val5 ;
+  int ecode5 = 0 ;
+  double val6 ;
+  int ecode6 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  PyObject * obj4 = 0 ;
+  PyObject * obj5 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "bmp",(char *) "x",(char *) "y",(char *) "w",(char *) "h", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOOOO:GraphicsContext_DrawBitmap",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxGraphicsContext, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "GraphicsContext_DrawBitmap" "', expected argument " "1"" of type '" "wxGraphicsContext *""'"); 
+  }
+  arg1 = reinterpret_cast< wxGraphicsContext * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_wxBitmap,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "GraphicsContext_DrawBitmap" "', expected argument " "2"" of type '" "wxBitmap const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "GraphicsContext_DrawBitmap" "', expected argument " "2"" of type '" "wxBitmap const &""'"); 
+  }
+  arg2 = reinterpret_cast< wxBitmap * >(argp2);
+  ecode3 = SWIG_AsVal_double(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "GraphicsContext_DrawBitmap" "', expected argument " "3"" of type '" "wxDouble""'");
+  } 
+  arg3 = static_cast< wxDouble >(val3);
+  ecode4 = SWIG_AsVal_double(obj3, &val4);
+  if (!SWIG_IsOK(ecode4)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "GraphicsContext_DrawBitmap" "', expected argument " "4"" of type '" "wxDouble""'");
+  } 
+  arg4 = static_cast< wxDouble >(val4);
+  ecode5 = SWIG_AsVal_double(obj4, &val5);
+  if (!SWIG_IsOK(ecode5)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "GraphicsContext_DrawBitmap" "', expected argument " "5"" of type '" "wxDouble""'");
+  } 
+  arg5 = static_cast< wxDouble >(val5);
+  ecode6 = SWIG_AsVal_double(obj5, &val6);
+  if (!SWIG_IsOK(ecode6)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode6), "in method '" "GraphicsContext_DrawBitmap" "', expected argument " "6"" of type '" "wxDouble""'");
+  } 
+  arg6 = static_cast< wxDouble >(val6);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    (arg1)->DrawBitmap((wxBitmap const &)*arg2,arg3,arg4,arg5,arg6);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_GraphicsContext_DrawIcon(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxGraphicsContext *arg1 = (wxGraphicsContext *) 0 ;
+  wxIcon *arg2 = 0 ;
+  wxDouble arg3 ;
+  wxDouble arg4 ;
+  wxDouble arg5 ;
+  wxDouble arg6 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  double val3 ;
+  int ecode3 = 0 ;
+  double val4 ;
+  int ecode4 = 0 ;
+  double val5 ;
+  int ecode5 = 0 ;
+  double val6 ;
+  int ecode6 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  PyObject * obj4 = 0 ;
+  PyObject * obj5 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "icon",(char *) "x",(char *) "y",(char *) "w",(char *) "h", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOOOO:GraphicsContext_DrawIcon",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxGraphicsContext, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "GraphicsContext_DrawIcon" "', expected argument " "1"" of type '" "wxGraphicsContext *""'"); 
+  }
+  arg1 = reinterpret_cast< wxGraphicsContext * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_wxIcon,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "GraphicsContext_DrawIcon" "', expected argument " "2"" of type '" "wxIcon const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "GraphicsContext_DrawIcon" "', expected argument " "2"" of type '" "wxIcon const &""'"); 
+  }
+  arg2 = reinterpret_cast< wxIcon * >(argp2);
+  ecode3 = SWIG_AsVal_double(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "GraphicsContext_DrawIcon" "', expected argument " "3"" of type '" "wxDouble""'");
+  } 
+  arg3 = static_cast< wxDouble >(val3);
+  ecode4 = SWIG_AsVal_double(obj3, &val4);
+  if (!SWIG_IsOK(ecode4)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "GraphicsContext_DrawIcon" "', expected argument " "4"" of type '" "wxDouble""'");
+  } 
+  arg4 = static_cast< wxDouble >(val4);
+  ecode5 = SWIG_AsVal_double(obj4, &val5);
+  if (!SWIG_IsOK(ecode5)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "GraphicsContext_DrawIcon" "', expected argument " "5"" of type '" "wxDouble""'");
+  } 
+  arg5 = static_cast< wxDouble >(val5);
+  ecode6 = SWIG_AsVal_double(obj5, &val6);
+  if (!SWIG_IsOK(ecode6)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode6), "in method '" "GraphicsContext_DrawIcon" "', expected argument " "6"" of type '" "wxDouble""'");
+  } 
+  arg6 = static_cast< wxDouble >(val6);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    (arg1)->DrawIcon((wxIcon const &)*arg2,arg3,arg4,arg5,arg6);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_GraphicsContext_StrokeLine(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxGraphicsContext *arg1 = (wxGraphicsContext *) 0 ;
+  wxDouble arg2 ;
+  wxDouble arg3 ;
+  wxDouble arg4 ;
+  wxDouble arg5 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  double val2 ;
+  int ecode2 = 0 ;
+  double val3 ;
+  int ecode3 = 0 ;
+  double val4 ;
+  int ecode4 = 0 ;
+  double val5 ;
+  int ecode5 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  PyObject * obj4 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "x1",(char *) "y1",(char *) "x2",(char *) "y2", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOOO:GraphicsContext_StrokeLine",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxGraphicsContext, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "GraphicsContext_StrokeLine" "', expected argument " "1"" of type '" "wxGraphicsContext *""'"); 
+  }
+  arg1 = reinterpret_cast< wxGraphicsContext * >(argp1);
+  ecode2 = SWIG_AsVal_double(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "GraphicsContext_StrokeLine" "', expected argument " "2"" of type '" "wxDouble""'");
+  } 
+  arg2 = static_cast< wxDouble >(val2);
+  ecode3 = SWIG_AsVal_double(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "GraphicsContext_StrokeLine" "', expected argument " "3"" of type '" "wxDouble""'");
+  } 
+  arg3 = static_cast< wxDouble >(val3);
+  ecode4 = SWIG_AsVal_double(obj3, &val4);
+  if (!SWIG_IsOK(ecode4)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "GraphicsContext_StrokeLine" "', expected argument " "4"" of type '" "wxDouble""'");
+  } 
+  arg4 = static_cast< wxDouble >(val4);
+  ecode5 = SWIG_AsVal_double(obj4, &val5);
+  if (!SWIG_IsOK(ecode5)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "GraphicsContext_StrokeLine" "', expected argument " "5"" of type '" "wxDouble""'");
+  } 
+  arg5 = static_cast< wxDouble >(val5);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    (arg1)->StrokeLine(arg2,arg3,arg4,arg5);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_GraphicsContext_StrokeLines__SWIG_0(PyObject *SWIGUNUSEDPARM(self), int nobjs, PyObject **swig_obj) {
+  PyObject *resultobj = 0;
+  wxGraphicsContext *arg1 = (wxGraphicsContext *) 0 ;
+  size_t arg2 ;
+  wxPoint2D *arg3 = (wxPoint2D *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  size_t val2 ;
+  int ecode2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  
+  if ((nobjs < 3) || (nobjs > 3)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxGraphicsContext, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "GraphicsContext_StrokeLines" "', expected argument " "1"" of type '" "wxGraphicsContext *""'"); 
+  }
+  arg1 = reinterpret_cast< wxGraphicsContext * >(argp1);
+  ecode2 = SWIG_AsVal_size_t(swig_obj[1], &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "GraphicsContext_StrokeLines" "', expected argument " "2"" of type '" "size_t""'");
+  } 
+  arg2 = static_cast< size_t >(val2);
+  res3 = SWIG_ConvertPtr(swig_obj[2], &argp3,SWIGTYPE_p_wxPoint2D, 0 |  0 );
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "GraphicsContext_StrokeLines" "', expected argument " "3"" of type '" "wxPoint2D const *""'"); 
+  }
+  arg3 = reinterpret_cast< wxPoint2D * >(argp3);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    (arg1)->StrokeLines(arg2,(wxPoint2D const *)arg3);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_GraphicsContext_StrokeLines__SWIG_1(PyObject *SWIGUNUSEDPARM(self), int nobjs, PyObject **swig_obj) {
+  PyObject *resultobj = 0;
+  wxGraphicsContext *arg1 = (wxGraphicsContext *) 0 ;
+  size_t arg2 ;
+  wxPoint2D *arg3 = (wxPoint2D *) 0 ;
+  wxPoint2D *arg4 = (wxPoint2D *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  size_t val2 ;
+  int ecode2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  void *argp4 = 0 ;
+  int res4 = 0 ;
+  
+  if ((nobjs < 4) || (nobjs > 4)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxGraphicsContext, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "GraphicsContext_StrokeLines" "', expected argument " "1"" of type '" "wxGraphicsContext *""'"); 
+  }
+  arg1 = reinterpret_cast< wxGraphicsContext * >(argp1);
+  ecode2 = SWIG_AsVal_size_t(swig_obj[1], &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "GraphicsContext_StrokeLines" "', expected argument " "2"" of type '" "size_t""'");
+  } 
+  arg2 = static_cast< size_t >(val2);
+  res3 = SWIG_ConvertPtr(swig_obj[2], &argp3,SWIGTYPE_p_wxPoint2D, 0 |  0 );
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "GraphicsContext_StrokeLines" "', expected argument " "3"" of type '" "wxPoint2D const *""'"); 
+  }
+  arg3 = reinterpret_cast< wxPoint2D * >(argp3);
+  res4 = SWIG_ConvertPtr(swig_obj[3], &argp4,SWIGTYPE_p_wxPoint2D, 0 |  0 );
+  if (!SWIG_IsOK(res4)) {
+    SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "GraphicsContext_StrokeLines" "', expected argument " "4"" of type '" "wxPoint2D const *""'"); 
+  }
+  arg4 = reinterpret_cast< wxPoint2D * >(argp4);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    (arg1)->StrokeLines(arg2,(wxPoint2D const *)arg3,(wxPoint2D const *)arg4);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_GraphicsContext_StrokeLines(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[5];
+  
+  if (!(argc = SWIG_Python_UnpackTuple(args,"GraphicsContext_StrokeLines",0,4,argv))) SWIG_fail;
+  --argc;
+  if (argc == 3) {
+    return _wrap_GraphicsContext_StrokeLines__SWIG_0(self, argc, argv);
+  }
+  if (argc == 4) {
+    return _wrap_GraphicsContext_StrokeLines__SWIG_1(self, argc, argv);
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"No matching function for overloaded 'GraphicsContext_StrokeLines'");
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_GraphicsContext_DrawLines(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxGraphicsContext *arg1 = (wxGraphicsContext *) 0 ;
+  size_t arg2 ;
+  wxPoint2D *arg3 = (wxPoint2D *) 0 ;
+  int arg4 = (int) wxWINDING_RULE ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  size_t val2 ;
+  int ecode2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  int val4 ;
+  int ecode4 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "n",(char *) "points",(char *) "fillStyle", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO|O:GraphicsContext_DrawLines",kwnames,&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxGraphicsContext, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "GraphicsContext_DrawLines" "', expected argument " "1"" of type '" "wxGraphicsContext *""'"); 
+  }
+  arg1 = reinterpret_cast< wxGraphicsContext * >(argp1);
+  ecode2 = SWIG_AsVal_size_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "GraphicsContext_DrawLines" "', expected argument " "2"" of type '" "size_t""'");
+  } 
+  arg2 = static_cast< size_t >(val2);
+  res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p_wxPoint2D, 0 |  0 );
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "GraphicsContext_DrawLines" "', expected argument " "3"" of type '" "wxPoint2D const *""'"); 
+  }
+  arg3 = reinterpret_cast< wxPoint2D * >(argp3);
+  if (obj3) {
+    ecode4 = SWIG_AsVal_int(obj3, &val4);
+    if (!SWIG_IsOK(ecode4)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "GraphicsContext_DrawLines" "', expected argument " "4"" of type '" "int""'");
+    } 
+    arg4 = static_cast< int >(val4);
+  }
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    (arg1)->DrawLines(arg2,(wxPoint2D const *)arg3,arg4);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_GraphicsContext_DrawRectangle(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxGraphicsContext *arg1 = (wxGraphicsContext *) 0 ;
+  wxDouble arg2 ;
+  wxDouble arg3 ;
+  wxDouble arg4 ;
+  wxDouble arg5 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  double val2 ;
+  int ecode2 = 0 ;
+  double val3 ;
+  int ecode3 = 0 ;
+  double val4 ;
+  int ecode4 = 0 ;
+  double val5 ;
+  int ecode5 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  PyObject * obj4 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "x",(char *) "y",(char *) "w",(char *) "h", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOOO:GraphicsContext_DrawRectangle",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxGraphicsContext, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "GraphicsContext_DrawRectangle" "', expected argument " "1"" of type '" "wxGraphicsContext *""'"); 
+  }
+  arg1 = reinterpret_cast< wxGraphicsContext * >(argp1);
+  ecode2 = SWIG_AsVal_double(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "GraphicsContext_DrawRectangle" "', expected argument " "2"" of type '" "wxDouble""'");
+  } 
+  arg2 = static_cast< wxDouble >(val2);
+  ecode3 = SWIG_AsVal_double(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "GraphicsContext_DrawRectangle" "', expected argument " "3"" of type '" "wxDouble""'");
+  } 
+  arg3 = static_cast< wxDouble >(val3);
+  ecode4 = SWIG_AsVal_double(obj3, &val4);
+  if (!SWIG_IsOK(ecode4)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "GraphicsContext_DrawRectangle" "', expected argument " "4"" of type '" "wxDouble""'");
+  } 
+  arg4 = static_cast< wxDouble >(val4);
+  ecode5 = SWIG_AsVal_double(obj4, &val5);
+  if (!SWIG_IsOK(ecode5)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "GraphicsContext_DrawRectangle" "', expected argument " "5"" of type '" "wxDouble""'");
+  } 
+  arg5 = static_cast< wxDouble >(val5);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    (arg1)->DrawRectangle(arg2,arg3,arg4,arg5);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_GraphicsContext_DrawEllipse(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxGraphicsContext *arg1 = (wxGraphicsContext *) 0 ;
+  wxDouble arg2 ;
+  wxDouble arg3 ;
+  wxDouble arg4 ;
+  wxDouble arg5 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  double val2 ;
+  int ecode2 = 0 ;
+  double val3 ;
+  int ecode3 = 0 ;
+  double val4 ;
+  int ecode4 = 0 ;
+  double val5 ;
+  int ecode5 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  PyObject * obj4 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "x",(char *) "y",(char *) "w",(char *) "h", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOOO:GraphicsContext_DrawEllipse",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxGraphicsContext, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "GraphicsContext_DrawEllipse" "', expected argument " "1"" of type '" "wxGraphicsContext *""'"); 
+  }
+  arg1 = reinterpret_cast< wxGraphicsContext * >(argp1);
+  ecode2 = SWIG_AsVal_double(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "GraphicsContext_DrawEllipse" "', expected argument " "2"" of type '" "wxDouble""'");
+  } 
+  arg2 = static_cast< wxDouble >(val2);
+  ecode3 = SWIG_AsVal_double(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "GraphicsContext_DrawEllipse" "', expected argument " "3"" of type '" "wxDouble""'");
+  } 
+  arg3 = static_cast< wxDouble >(val3);
+  ecode4 = SWIG_AsVal_double(obj3, &val4);
+  if (!SWIG_IsOK(ecode4)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "GraphicsContext_DrawEllipse" "', expected argument " "4"" of type '" "wxDouble""'");
+  } 
+  arg4 = static_cast< wxDouble >(val4);
+  ecode5 = SWIG_AsVal_double(obj4, &val5);
+  if (!SWIG_IsOK(ecode5)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "GraphicsContext_DrawEllipse" "', expected argument " "5"" of type '" "wxDouble""'");
+  } 
+  arg5 = static_cast< wxDouble >(val5);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    (arg1)->DrawEllipse(arg2,arg3,arg4,arg5);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_GraphicsContext_DrawRoundedRectangle(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxGraphicsContext *arg1 = (wxGraphicsContext *) 0 ;
+  wxDouble arg2 ;
+  wxDouble arg3 ;
+  wxDouble arg4 ;
+  wxDouble arg5 ;
+  wxDouble arg6 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  double val2 ;
+  int ecode2 = 0 ;
+  double val3 ;
+  int ecode3 = 0 ;
+  double val4 ;
+  int ecode4 = 0 ;
+  double val5 ;
+  int ecode5 = 0 ;
+  double val6 ;
+  int ecode6 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  PyObject * obj4 = 0 ;
+  PyObject * obj5 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "x",(char *) "y",(char *) "w",(char *) "h",(char *) "radius", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOOOO:GraphicsContext_DrawRoundedRectangle",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxGraphicsContext, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "GraphicsContext_DrawRoundedRectangle" "', expected argument " "1"" of type '" "wxGraphicsContext *""'"); 
+  }
+  arg1 = reinterpret_cast< wxGraphicsContext * >(argp1);
+  ecode2 = SWIG_AsVal_double(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "GraphicsContext_DrawRoundedRectangle" "', expected argument " "2"" of type '" "wxDouble""'");
+  } 
+  arg2 = static_cast< wxDouble >(val2);
+  ecode3 = SWIG_AsVal_double(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "GraphicsContext_DrawRoundedRectangle" "', expected argument " "3"" of type '" "wxDouble""'");
+  } 
+  arg3 = static_cast< wxDouble >(val3);
+  ecode4 = SWIG_AsVal_double(obj3, &val4);
+  if (!SWIG_IsOK(ecode4)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "GraphicsContext_DrawRoundedRectangle" "', expected argument " "4"" of type '" "wxDouble""'");
+  } 
+  arg4 = static_cast< wxDouble >(val4);
+  ecode5 = SWIG_AsVal_double(obj4, &val5);
+  if (!SWIG_IsOK(ecode5)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "GraphicsContext_DrawRoundedRectangle" "', expected argument " "5"" of type '" "wxDouble""'");
+  } 
+  arg5 = static_cast< wxDouble >(val5);
+  ecode6 = SWIG_AsVal_double(obj5, &val6);
+  if (!SWIG_IsOK(ecode6)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode6), "in method '" "GraphicsContext_DrawRoundedRectangle" "', expected argument " "6"" of type '" "wxDouble""'");
+  } 
+  arg6 = static_cast< wxDouble >(val6);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    (arg1)->DrawRoundedRectangle(arg2,arg3,arg4,arg5,arg6);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *GraphicsContext_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *obj;
+  if (!SWIG_Python_UnpackTuple(args,(char*)"swigregister", 1, 1,&obj)) return NULL;
+  SWIG_TypeNewClientData(SWIGTYPE_p_wxGraphicsContext, SWIG_NewClientData(obj));
+  return SWIG_Py_Void();
+}
+
+SWIGINTERN PyObject *_wrap_new_GCDC(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxWindowDC *arg1 = 0 ;
+  wxGCDC *result = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  char *  kwnames[] = {
+    (char *) "dc", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:new_GCDC",kwnames,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_wxWindowDC,  0  | 0);
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_GCDC" "', expected argument " "1"" of type '" "wxWindowDC const &""'"); 
+  }
+  if (!argp1) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_GCDC" "', expected argument " "1"" of type '" "wxWindowDC const &""'"); 
+  }
+  arg1 = reinterpret_cast< wxWindowDC * >(argp1);
+  {
+    if (!wxPyCheckForApp()) SWIG_fail;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = (wxGCDC *)new wxGCDC((wxWindowDC const &)*arg1);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_wxGCDC, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_delete_GCDC(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxGCDC *arg1 = (wxGCDC *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxGCDC, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_GCDC" "', expected argument " "1"" of type '" "wxGCDC *""'"); 
+  }
+  arg1 = reinterpret_cast< wxGCDC * >(argp1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    delete arg1;
+    
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_GCDC_GetGraphicContext(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxGCDC *arg1 = (wxGCDC *) 0 ;
+  wxGraphicsContext *result = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxGCDC, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "GCDC_GetGraphicContext" "', expected argument " "1"" of type '" "wxGCDC *""'"); 
+  }
+  arg1 = reinterpret_cast< wxGCDC * >(argp1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = (wxGraphicsContext *)(arg1)->GetGraphicContext();
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_wxGraphicsContext, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *GCDC_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *obj;
+  if (!SWIG_Python_UnpackTuple(args,(char*)"swigregister", 1, 1,&obj)) return NULL;
+  SWIG_TypeNewClientData(SWIGTYPE_p_wxGCDC, SWIG_NewClientData(obj));
+  return SWIG_Py_Void();
+}
+
+SWIGINTERN PyObject *GCDC_swiginit(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   return SWIG_Python_InitShadowInstance(args);
 }
 
@@ -28369,6 +30858,214 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_PseudoDC_SetIdGreyedOut(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxPseudoDC *arg1 = (wxPseudoDC *) 0 ;
+  int arg2 ;
+  bool arg3 = (bool) true ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  bool val3 ;
+  int ecode3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "id",(char *) "greyout", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|O:PseudoDC_SetIdGreyedOut",kwnames,&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxPseudoDC, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "PseudoDC_SetIdGreyedOut" "', expected argument " "1"" of type '" "wxPseudoDC *""'"); 
+  }
+  arg1 = reinterpret_cast< wxPseudoDC * >(argp1);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "PseudoDC_SetIdGreyedOut" "', expected argument " "2"" of type '" "int""'");
+  } 
+  arg2 = static_cast< int >(val2);
+  if (obj2) {
+    ecode3 = SWIG_AsVal_bool(obj2, &val3);
+    if (!SWIG_IsOK(ecode3)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "PseudoDC_SetIdGreyedOut" "', expected argument " "3"" of type '" "bool""'");
+    } 
+    arg3 = static_cast< bool >(val3);
+  }
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    (arg1)->SetIdGreyedOut(arg2,arg3);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_PseudoDC_GetIdGreyedOut(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxPseudoDC *arg1 = (wxPseudoDC *) 0 ;
+  int arg2 ;
+  bool result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "id", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:PseudoDC_GetIdGreyedOut",kwnames,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxPseudoDC, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "PseudoDC_GetIdGreyedOut" "', expected argument " "1"" of type '" "wxPseudoDC *""'"); 
+  }
+  arg1 = reinterpret_cast< wxPseudoDC * >(argp1);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "PseudoDC_GetIdGreyedOut" "', expected argument " "2"" of type '" "int""'");
+  } 
+  arg2 = static_cast< int >(val2);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = (bool)(arg1)->GetIdGreyedOut(arg2);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  {
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+  }
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_PseudoDC_FindObjects(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxPseudoDC *arg1 = (wxPseudoDC *) 0 ;
+  int arg2 ;
+  int arg3 ;
+  int arg4 = (int) 1 ;
+  wxColor const &arg5_defvalue = *wxWHITE ;
+  wxColor *arg5 = (wxColor *) &arg5_defvalue ;
+  PyObject *result = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  int val3 ;
+  int ecode3 = 0 ;
+  int val4 ;
+  int ecode4 = 0 ;
+  void *argp5 = 0 ;
+  int res5 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  PyObject * obj4 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "x",(char *) "y",(char *) "radius",(char *) "bg", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO|OO:PseudoDC_FindObjects",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxPseudoDC, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "PseudoDC_FindObjects" "', expected argument " "1"" of type '" "wxPseudoDC *""'"); 
+  }
+  arg1 = reinterpret_cast< wxPseudoDC * >(argp1);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "PseudoDC_FindObjects" "', expected argument " "2"" of type '" "int""'");
+  } 
+  arg2 = static_cast< int >(val2);
+  ecode3 = SWIG_AsVal_int(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "PseudoDC_FindObjects" "', expected argument " "3"" of type '" "int""'");
+  } 
+  arg3 = static_cast< int >(val3);
+  if (obj3) {
+    ecode4 = SWIG_AsVal_int(obj3, &val4);
+    if (!SWIG_IsOK(ecode4)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "PseudoDC_FindObjects" "', expected argument " "4"" of type '" "int""'");
+    } 
+    arg4 = static_cast< int >(val4);
+  }
+  if (obj4) {
+    res5 = SWIG_ConvertPtr(obj4, &argp5, SWIGTYPE_p_wxColor,  0  | 0);
+    if (!SWIG_IsOK(res5)) {
+      SWIG_exception_fail(SWIG_ArgError(res5), "in method '" "PseudoDC_FindObjects" "', expected argument " "5"" of type '" "wxColor const &""'"); 
+    }
+    if (!argp5) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "PseudoDC_FindObjects" "', expected argument " "5"" of type '" "wxColor const &""'"); 
+    }
+    arg5 = reinterpret_cast< wxColor * >(argp5);
+  }
+  {
+    result = (PyObject *)(arg1)->FindObjects(arg2,arg3,arg4,(wxColor const &)*arg5);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = result;
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_PseudoDC_FindObjectsByBBox(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxPseudoDC *arg1 = (wxPseudoDC *) 0 ;
+  int arg2 ;
+  int arg3 ;
+  PyObject *result = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  int val3 ;
+  int ecode3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "x",(char *) "y", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:PseudoDC_FindObjectsByBBox",kwnames,&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxPseudoDC, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "PseudoDC_FindObjectsByBBox" "', expected argument " "1"" of type '" "wxPseudoDC *""'"); 
+  }
+  arg1 = reinterpret_cast< wxPseudoDC * >(argp1);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "PseudoDC_FindObjectsByBBox" "', expected argument " "2"" of type '" "int""'");
+  } 
+  arg2 = static_cast< int >(val2);
+  ecode3 = SWIG_AsVal_int(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "PseudoDC_FindObjectsByBBox" "', expected argument " "3"" of type '" "int""'");
+  } 
+  arg3 = static_cast< int >(val3);
+  {
+    result = (PyObject *)(arg1)->FindObjectsByBBox(arg2,arg3);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = result;
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_PseudoDC_DrawIdToDC(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   wxPseudoDC *arg1 = (wxPseudoDC *) 0 ;
@@ -31722,15 +34419,15 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"ScreenDC_EndDrawingOnTop", (PyCFunction)_wrap_ScreenDC_EndDrawingOnTop, METH_O, NULL},
 	 { (char *)"ScreenDC_swigregister", ScreenDC_swigregister, METH_VARARGS, NULL},
 	 { (char *)"ScreenDC_swiginit", ScreenDC_swiginit, METH_VARARGS, NULL},
+	 { (char *)"new_WindowDC", (PyCFunction) _wrap_new_WindowDC, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"WindowDC_swigregister", WindowDC_swigregister, METH_VARARGS, NULL},
+	 { (char *)"WindowDC_swiginit", WindowDC_swiginit, METH_VARARGS, NULL},
 	 { (char *)"new_ClientDC", (PyCFunction) _wrap_new_ClientDC, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"ClientDC_swigregister", ClientDC_swigregister, METH_VARARGS, NULL},
 	 { (char *)"ClientDC_swiginit", ClientDC_swiginit, METH_VARARGS, NULL},
 	 { (char *)"new_PaintDC", (PyCFunction) _wrap_new_PaintDC, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"PaintDC_swigregister", PaintDC_swigregister, METH_VARARGS, NULL},
 	 { (char *)"PaintDC_swiginit", PaintDC_swiginit, METH_VARARGS, NULL},
-	 { (char *)"new_WindowDC", (PyCFunction) _wrap_new_WindowDC, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"WindowDC_swigregister", WindowDC_swigregister, METH_VARARGS, NULL},
-	 { (char *)"WindowDC_swiginit", WindowDC_swiginit, METH_VARARGS, NULL},
 	 { (char *)"new_MirrorDC", (PyCFunction) _wrap_new_MirrorDC, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"MirrorDC_swigregister", MirrorDC_swigregister, METH_VARARGS, NULL},
 	 { (char *)"MirrorDC_swiginit", MirrorDC_swiginit, METH_VARARGS, NULL},
@@ -31750,6 +34447,53 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"new_PrinterDC", (PyCFunction) _wrap_new_PrinterDC, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"PrinterDC_swigregister", PrinterDC_swigregister, METH_VARARGS, NULL},
 	 { (char *)"PrinterDC_swiginit", PrinterDC_swiginit, METH_VARARGS, NULL},
+	 { (char *)"delete_GraphicsPath", (PyCFunction)_wrap_delete_GraphicsPath, METH_O, NULL},
+	 { (char *)"GraphicsPath_MoveToPoint", (PyCFunction) _wrap_GraphicsPath_MoveToPoint, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"GraphicsPath_AddLineToPoint", (PyCFunction) _wrap_GraphicsPath_AddLineToPoint, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"GraphicsPath_AddCurveToPoint", (PyCFunction) _wrap_GraphicsPath_AddCurveToPoint, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"GraphicsPath_CloseSubpath", (PyCFunction)_wrap_GraphicsPath_CloseSubpath, METH_O, NULL},
+	 { (char *)"GraphicsPath_GetCurrentPoint", (PyCFunction)_wrap_GraphicsPath_GetCurrentPoint, METH_O, NULL},
+	 { (char *)"GraphicsPath_AddArc", (PyCFunction) _wrap_GraphicsPath_AddArc, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"GraphicsPath_AddQuadCurveToPoint", (PyCFunction) _wrap_GraphicsPath_AddQuadCurveToPoint, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"GraphicsPath_AddRectangle", (PyCFunction) _wrap_GraphicsPath_AddRectangle, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"GraphicsPath_AddCircle", (PyCFunction) _wrap_GraphicsPath_AddCircle, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"GraphicsPath_AddArcToPoint", (PyCFunction) _wrap_GraphicsPath_AddArcToPoint, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"GraphicsPath_swigregister", GraphicsPath_swigregister, METH_VARARGS, NULL},
+	 { (char *)"delete_GraphicsContext", (PyCFunction)_wrap_delete_GraphicsContext, METH_O, NULL},
+	 { (char *)"GraphicsContext_Create", (PyCFunction) _wrap_GraphicsContext_Create, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"GraphicsContext_CreatePath", (PyCFunction)_wrap_GraphicsContext_CreatePath, METH_O, NULL},
+	 { (char *)"GraphicsContext_PushState", (PyCFunction)_wrap_GraphicsContext_PushState, METH_O, NULL},
+	 { (char *)"GraphicsContext_PopState", (PyCFunction)_wrap_GraphicsContext_PopState, METH_O, NULL},
+	 { (char *)"GraphicsContext_Clip", (PyCFunction) _wrap_GraphicsContext_Clip, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"GraphicsContext_Translate", (PyCFunction) _wrap_GraphicsContext_Translate, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"GraphicsContext_Scale", (PyCFunction) _wrap_GraphicsContext_Scale, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"GraphicsContext_Rotate", (PyCFunction) _wrap_GraphicsContext_Rotate, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"GraphicsContext_SetPen", (PyCFunction) _wrap_GraphicsContext_SetPen, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"GraphicsContext_SetBrush", (PyCFunction) _wrap_GraphicsContext_SetBrush, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"GraphicsContext_SetLinearGradientBrush", (PyCFunction) _wrap_GraphicsContext_SetLinearGradientBrush, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"GraphicsContext_SetRadialGradientBrush", (PyCFunction) _wrap_GraphicsContext_SetRadialGradientBrush, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"GraphicsContext_SetFont", (PyCFunction) _wrap_GraphicsContext_SetFont, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"GraphicsContext_SetTextColor", (PyCFunction) _wrap_GraphicsContext_SetTextColor, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"GraphicsContext_StrokePath", (PyCFunction) _wrap_GraphicsContext_StrokePath, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"GraphicsContext_FillPath", (PyCFunction) _wrap_GraphicsContext_FillPath, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"GraphicsContext_DrawPath", (PyCFunction) _wrap_GraphicsContext_DrawPath, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"GraphicsContext_DrawText", _wrap_GraphicsContext_DrawText, METH_VARARGS, NULL},
+	 { (char *)"GraphicsContext_GetTextExtent", (PyCFunction) _wrap_GraphicsContext_GetTextExtent, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"GraphicsContext_GetPartialTextExtents", (PyCFunction) _wrap_GraphicsContext_GetPartialTextExtents, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"GraphicsContext_DrawBitmap", (PyCFunction) _wrap_GraphicsContext_DrawBitmap, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"GraphicsContext_DrawIcon", (PyCFunction) _wrap_GraphicsContext_DrawIcon, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"GraphicsContext_StrokeLine", (PyCFunction) _wrap_GraphicsContext_StrokeLine, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"GraphicsContext_StrokeLines", _wrap_GraphicsContext_StrokeLines, METH_VARARGS, NULL},
+	 { (char *)"GraphicsContext_DrawLines", (PyCFunction) _wrap_GraphicsContext_DrawLines, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"GraphicsContext_DrawRectangle", (PyCFunction) _wrap_GraphicsContext_DrawRectangle, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"GraphicsContext_DrawEllipse", (PyCFunction) _wrap_GraphicsContext_DrawEllipse, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"GraphicsContext_DrawRoundedRectangle", (PyCFunction) _wrap_GraphicsContext_DrawRoundedRectangle, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"GraphicsContext_swigregister", GraphicsContext_swigregister, METH_VARARGS, NULL},
+	 { (char *)"new_GCDC", (PyCFunction) _wrap_new_GCDC, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"delete_GCDC", (PyCFunction)_wrap_delete_GCDC, METH_O, NULL},
+	 { (char *)"GCDC_GetGraphicContext", (PyCFunction)_wrap_GCDC_GetGraphicContext, METH_O, NULL},
+	 { (char *)"GCDC_swigregister", GCDC_swigregister, METH_VARARGS, NULL},
+	 { (char *)"GCDC_swiginit", GCDC_swiginit, METH_VARARGS, NULL},
 	 { (char *)"new_ImageList", (PyCFunction) _wrap_new_ImageList, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"delete_ImageList", (PyCFunction)_wrap_delete_ImageList, METH_O, NULL},
 	 { (char *)"ImageList_Add", (PyCFunction) _wrap_ImageList_Add, METH_VARARGS | METH_KEYWORDS, NULL},
@@ -31880,6 +34624,10 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"PseudoDC_ClearId", (PyCFunction) _wrap_PseudoDC_ClearId, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"PseudoDC_RemoveId", (PyCFunction) _wrap_PseudoDC_RemoveId, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"PseudoDC_TranslateId", (PyCFunction) _wrap_PseudoDC_TranslateId, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"PseudoDC_SetIdGreyedOut", (PyCFunction) _wrap_PseudoDC_SetIdGreyedOut, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"PseudoDC_GetIdGreyedOut", (PyCFunction) _wrap_PseudoDC_GetIdGreyedOut, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"PseudoDC_FindObjects", (PyCFunction) _wrap_PseudoDC_FindObjects, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"PseudoDC_FindObjectsByBBox", (PyCFunction) _wrap_PseudoDC_FindObjectsByBBox, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"PseudoDC_DrawIdToDC", (PyCFunction) _wrap_PseudoDC_DrawIdToDC, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"PseudoDC_SetIdBounds", (PyCFunction) _wrap_PseudoDC_SetIdBounds, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"PseudoDC_GetIdBounds", (PyCFunction) _wrap_PseudoDC_GetIdBounds, METH_VARARGS | METH_KEYWORDS, NULL},
@@ -31942,11 +34690,20 @@ static PyMethodDef SwigMethods[] = {
 
 /* -------- TYPE CONVERSION AND EQUIVALENCE RULES (BEGIN) -------- */
 
+static void *_p_wxPaintDCTo_p_wxClientDC(void *x) {
+    return (void *)((wxClientDC *)  ((wxPaintDC *) x));
+}
 static void *_p_wxBufferedDCTo_p_wxMemoryDC(void *x) {
     return (void *)((wxMemoryDC *)  ((wxBufferedDC *) x));
 }
 static void *_p_wxBufferedPaintDCTo_p_wxMemoryDC(void *x) {
     return (void *)((wxMemoryDC *) (wxBufferedDC *) ((wxBufferedPaintDC *) x));
+}
+static void *_p_wxClientDCTo_p_wxWindowDC(void *x) {
+    return (void *)((wxWindowDC *)  ((wxClientDC *) x));
+}
+static void *_p_wxPaintDCTo_p_wxWindowDC(void *x) {
+    return (void *)((wxWindowDC *) (wxClientDC *) ((wxPaintDC *) x));
 }
 static void *_p_wxPyLocaleTo_p_wxLocale(void *x) {
     return (void *)((wxLocale *)  ((wxPyLocale *) x));
@@ -31975,6 +34732,9 @@ static void *_p_wxRegionTo_p_wxGDIObject(void *x) {
 static void *_p_wxBrushTo_p_wxGDIObject(void *x) {
     return (void *)((wxGDIObject *)  ((wxBrush *) x));
 }
+static void *_p_wxGCDCTo_p_wxDC(void *x) {
+    return (void *)((wxDC *)  ((wxGCDC *) x));
+}
 static void *_p_wxBufferedDCTo_p_wxDC(void *x) {
     return (void *)((wxDC *) (wxMemoryDC *) ((wxBufferedDC *) x));
 }
@@ -31997,10 +34757,10 @@ static void *_p_wxBufferedPaintDCTo_p_wxDC(void *x) {
     return (void *)((wxDC *) (wxMemoryDC *)(wxBufferedDC *) ((wxBufferedPaintDC *) x));
 }
 static void *_p_wxClientDCTo_p_wxDC(void *x) {
-    return (void *)((wxDC *)  ((wxClientDC *) x));
+    return (void *)((wxDC *) (wxWindowDC *) ((wxClientDC *) x));
 }
 static void *_p_wxPaintDCTo_p_wxDC(void *x) {
-    return (void *)((wxDC *)  ((wxPaintDC *) x));
+    return (void *)((wxDC *) (wxWindowDC *)(wxClientDC *) ((wxPaintDC *) x));
 }
 static void *_p_wxPostScriptDCTo_p_wxDC(void *x) {
     return (void *)((wxDC *)  ((wxPostScriptDC *) x));
@@ -32105,7 +34865,7 @@ static void *_p_wxSetCursorEventTo_p_wxObject(void *x) {
     return (void *)((wxObject *) (wxEvent *) ((wxSetCursorEvent *) x));
 }
 static void *_p_wxClientDCTo_p_wxObject(void *x) {
-    return (void *)((wxObject *) (wxDC *) ((wxClientDC *) x));
+    return (void *)((wxObject *) (wxDC *)(wxWindowDC *) ((wxClientDC *) x));
 }
 static void *_p_wxFSFileTo_p_wxObject(void *x) {
     return (void *)((wxObject *)  ((wxFSFile *) x));
@@ -32219,7 +34979,7 @@ static void *_p_wxBufferedPaintDCTo_p_wxObject(void *x) {
     return (void *)((wxObject *) (wxDC *)(wxMemoryDC *)(wxBufferedDC *) ((wxBufferedPaintDC *) x));
 }
 static void *_p_wxPaintDCTo_p_wxObject(void *x) {
-    return (void *)((wxObject *) (wxDC *) ((wxPaintDC *) x));
+    return (void *)((wxObject *) (wxDC *)(wxWindowDC *)(wxClientDC *) ((wxPaintDC *) x));
 }
 static void *_p_wxPrinterDCTo_p_wxObject(void *x) {
     return (void *)((wxObject *) (wxDC *) ((wxPrinterDC *) x));
@@ -32247,6 +35007,9 @@ static void *_p_wxBufferedDCTo_p_wxObject(void *x) {
 }
 static void *_p_wxImageListTo_p_wxObject(void *x) {
     return (void *)((wxObject *)  ((wxImageList *) x));
+}
+static void *_p_wxGCDCTo_p_wxObject(void *x) {
+    return (void *)((wxObject *) (wxDC *) ((wxGCDC *) x));
 }
 static void *_p_wxCursorTo_p_wxObject(void *x) {
     return (void *)((wxObject *) (wxGDIObject *) ((wxCursor *) x));
@@ -32358,7 +35121,7 @@ static void *_p_wxAlphaPixelDataTo_p_wxPixelDataBase(void *x) {
 }
 static swig_type_info _swigt__p_buffer = {"_p_buffer", "buffer *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_char = {"_p_char", "char *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_double = {"_p_double", "double *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_double = {"_p_double", "double *|wxDouble *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_form_ops_t = {"_p_form_ops_t", "enum form_ops_t *|form_ops_t *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_int = {"_p_int", "int *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_unsigned_char = {"_p_unsigned_char", "unsigned char *|byte *", 0, 0, (void*)0, 0};
@@ -32366,6 +35129,7 @@ static swig_type_info _swigt__p_unsigned_int = {"_p_unsigned_int", "unsigned int
 static swig_type_info _swigt__p_unsigned_long = {"_p_unsigned_long", "unsigned long *|wxUIntPtr *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_wxAlphaPixelData = {"_p_wxAlphaPixelData", "wxAlphaPixelData *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_wxAlphaPixelData_Accessor = {"_p_wxAlphaPixelData_Accessor", "wxAlphaPixelData_Accessor *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_wxArrayDouble = {"_p_wxArrayDouble", "wxArrayDouble *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_wxBitmap = {"_p_wxBitmap", "wxBitmap *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_wxBrush = {"_p_wxBrush", "wxBrush *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_wxBrushList = {"_p_wxBrushList", "wxBrushList *", 0, 0, (void*)0, 0};
@@ -32373,6 +35137,7 @@ static swig_type_info _swigt__p_wxBufferedDC = {"_p_wxBufferedDC", "wxBufferedDC
 static swig_type_info _swigt__p_wxBufferedPaintDC = {"_p_wxBufferedPaintDC", "wxBufferedPaintDC *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_wxChar = {"_p_wxChar", "wxChar *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_wxClientDC = {"_p_wxClientDC", "wxClientDC *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_wxColor = {"_p_wxColor", "wxColor *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_wxColour = {"_p_wxColour", "wxColour *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_wxColourDatabase = {"_p_wxColourDatabase", "wxColourDatabase *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_wxCursor = {"_p_wxCursor", "wxCursor *", 0, 0, (void*)0, 0};
@@ -32384,8 +35149,11 @@ static swig_type_info _swigt__p_wxEncodingConverter = {"_p_wxEncodingConverter",
 static swig_type_info _swigt__p_wxFont = {"_p_wxFont", "wxFont *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_wxFontList = {"_p_wxFontList", "wxFontList *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_wxFontMapper = {"_p_wxFontMapper", "wxFontMapper *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_wxGCDC = {"_p_wxGCDC", "wxGCDC *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_wxGDIObjListBase = {"_p_wxGDIObjListBase", "wxGDIObjListBase *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_wxGDIObject = {"_p_wxGDIObject", "wxGDIObject *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_wxGraphicsContext = {"_p_wxGraphicsContext", "wxGraphicsContext *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_wxGraphicsPath = {"_p_wxGraphicsPath", "wxGraphicsPath *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_wxHeaderButtonParams = {"_p_wxHeaderButtonParams", "wxHeaderButtonParams *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_wxIcon = {"_p_wxIcon", "wxIcon *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_wxIconBundle = {"_p_wxIconBundle", "wxIconBundle *", 0, 0, (void*)0, 0};
@@ -32443,7 +35211,6 @@ static swig_type_info _swigt__p_wxIconizeEvent = {"_p_wxIconizeEvent", 0, 0, 0, 
 static swig_type_info _swigt__p_wxSizeEvent = {"_p_wxSizeEvent", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_wxMoveEvent = {"_p_wxMoveEvent", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_wxActivateEvent = {"_p_wxActivateEvent", 0, 0, 0, 0, 0};
-static swig_type_info _swigt__p_wxANIHandler = {"_p_wxANIHandler", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_wxCURHandler = {"_p_wxCURHandler", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_wxICOHandler = {"_p_wxICOHandler", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_wxBMPHandler = {"_p_wxBMPHandler", 0, 0, 0, 0, 0};
@@ -32452,6 +35219,7 @@ static swig_type_info _swigt__p_wxImageHandler = {"_p_wxImageHandler", 0, 0, 0, 
 static swig_type_info _swigt__p_wxXPMHandler = {"_p_wxXPMHandler", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_wxTIFFHandler = {"_p_wxTIFFHandler", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_wxEvtHandler = {"_p_wxEvtHandler", 0, 0, 0, 0, 0};
+static swig_type_info _swigt__p_wxANIHandler = {"_p_wxANIHandler", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_wxPNGHandler = {"_p_wxPNGHandler", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_wxGIFHandler = {"_p_wxGIFHandler", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_wxPCXHandler = {"_p_wxPCXHandler", 0, 0, 0, 0, 0};
@@ -32487,6 +35255,7 @@ static swig_type_info _swigt__p_wxPen = {"_p_wxPen", "wxPen *", 0, 0, (void*)0, 
 static swig_type_info _swigt__p_wxPenList = {"_p_wxPenList", "wxPenList *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_wxPixelDataBase = {"_p_wxPixelDataBase", "wxPixelDataBase *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_wxPoint = {"_p_wxPoint", "wxPoint *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_wxPoint2D = {"_p_wxPoint2D", "wxPoint2D *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_wxPostScriptDC = {"_p_wxPostScriptDC", "wxPostScriptDC *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_wxPrintData = {"_p_wxPrintData", "wxPrintData *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_wxPrinterDC = {"_p_wxPrinterDC", "wxPrinterDC *", 0, 0, (void*)0, 0};
@@ -32520,6 +35289,7 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_wxActivateEvent,
   &_swigt__p_wxAlphaPixelData,
   &_swigt__p_wxAlphaPixelData_Accessor,
+  &_swigt__p_wxArrayDouble,
   &_swigt__p_wxBMPHandler,
   &_swigt__p_wxBitmap,
   &_swigt__p_wxBoxSizer,
@@ -32533,6 +35303,7 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_wxClientDC,
   &_swigt__p_wxClipboardTextEvent,
   &_swigt__p_wxCloseEvent,
+  &_swigt__p_wxColor,
   &_swigt__p_wxColour,
   &_swigt__p_wxColourDatabase,
   &_swigt__p_wxCommandEvent,
@@ -32559,9 +35330,12 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_wxFontList,
   &_swigt__p_wxFontMapper,
   &_swigt__p_wxGBSizerItem,
+  &_swigt__p_wxGCDC,
   &_swigt__p_wxGDIObjListBase,
   &_swigt__p_wxGDIObject,
   &_swigt__p_wxGIFHandler,
+  &_swigt__p_wxGraphicsContext,
+  &_swigt__p_wxGraphicsPath,
   &_swigt__p_wxGridBagSizer,
   &_swigt__p_wxGridSizer,
   &_swigt__p_wxHeaderButtonParams,
@@ -32615,6 +35389,7 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_wxPenList,
   &_swigt__p_wxPixelDataBase,
   &_swigt__p_wxPoint,
+  &_swigt__p_wxPoint2D,
   &_swigt__p_wxPostScriptDC,
   &_swigt__p_wxPrintData,
   &_swigt__p_wxPrinterDC,
@@ -32668,17 +35443,19 @@ static swig_cast_info _swigc__p_unsigned_int[] = {  {&_swigt__p_unsigned_int, 0,
 static swig_cast_info _swigc__p_unsigned_long[] = {  {&_swigt__p_unsigned_long, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxAlphaPixelData[] = {  {&_swigt__p_wxAlphaPixelData, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxAlphaPixelData_Accessor[] = {  {&_swigt__p_wxAlphaPixelData_Accessor, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_wxArrayDouble[] = {  {&_swigt__p_wxArrayDouble, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxBitmap[] = {  {&_swigt__p_wxBitmap, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxBrush[] = {  {&_swigt__p_wxBrush, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxBrushList[] = {  {&_swigt__p_wxBrushList, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxBufferedDC[] = {  {&_swigt__p_wxBufferedDC, 0, 0, 0},  {&_swigt__p_wxBufferedPaintDC, _p_wxBufferedPaintDCTo_p_wxBufferedDC, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxBufferedPaintDC[] = {  {&_swigt__p_wxBufferedPaintDC, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxChar[] = {  {&_swigt__p_wxChar, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_wxClientDC[] = {  {&_swigt__p_wxClientDC, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_wxClientDC[] = {  {&_swigt__p_wxClientDC, 0, 0, 0},  {&_swigt__p_wxPaintDC, _p_wxPaintDCTo_p_wxClientDC, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_wxColor[] = {  {&_swigt__p_wxColor, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxColour[] = {  {&_swigt__p_wxColour, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxColourDatabase[] = {  {&_swigt__p_wxColourDatabase, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxCursor[] = {  {&_swigt__p_wxCursor, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_wxDC[] = {  {&_swigt__p_wxBufferedDC, _p_wxBufferedDCTo_p_wxDC, 0, 0},  {&_swigt__p_wxScreenDC, _p_wxScreenDCTo_p_wxDC, 0, 0},  {&_swigt__p_wxMirrorDC, _p_wxMirrorDCTo_p_wxDC, 0, 0},  {&_swigt__p_wxMemoryDC, _p_wxMemoryDCTo_p_wxDC, 0, 0},  {&_swigt__p_wxWindowDC, _p_wxWindowDCTo_p_wxDC, 0, 0},  {&_swigt__p_wxDC, 0, 0, 0},  {&_swigt__p_wxMetaFileDC, _p_wxMetaFileDCTo_p_wxDC, 0, 0},  {&_swigt__p_wxBufferedPaintDC, _p_wxBufferedPaintDCTo_p_wxDC, 0, 0},  {&_swigt__p_wxClientDC, _p_wxClientDCTo_p_wxDC, 0, 0},  {&_swigt__p_wxPaintDC, _p_wxPaintDCTo_p_wxDC, 0, 0},  {&_swigt__p_wxPostScriptDC, _p_wxPostScriptDCTo_p_wxDC, 0, 0},  {&_swigt__p_wxPrinterDC, _p_wxPrinterDCTo_p_wxDC, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_wxDC[] = {  {&_swigt__p_wxBufferedDC, _p_wxBufferedDCTo_p_wxDC, 0, 0},  {&_swigt__p_wxScreenDC, _p_wxScreenDCTo_p_wxDC, 0, 0},  {&_swigt__p_wxMirrorDC, _p_wxMirrorDCTo_p_wxDC, 0, 0},  {&_swigt__p_wxMemoryDC, _p_wxMemoryDCTo_p_wxDC, 0, 0},  {&_swigt__p_wxWindowDC, _p_wxWindowDCTo_p_wxDC, 0, 0},  {&_swigt__p_wxDC, 0, 0, 0},  {&_swigt__p_wxMetaFileDC, _p_wxMetaFileDCTo_p_wxDC, 0, 0},  {&_swigt__p_wxBufferedPaintDC, _p_wxBufferedPaintDCTo_p_wxDC, 0, 0},  {&_swigt__p_wxClientDC, _p_wxClientDCTo_p_wxDC, 0, 0},  {&_swigt__p_wxPaintDC, _p_wxPaintDCTo_p_wxDC, 0, 0},  {&_swigt__p_wxPostScriptDC, _p_wxPostScriptDCTo_p_wxDC, 0, 0},  {&_swigt__p_wxPrinterDC, _p_wxPrinterDCTo_p_wxDC, 0, 0},  {&_swigt__p_wxGCDC, _p_wxGCDCTo_p_wxDC, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxDash[] = {  {&_swigt__p_wxDash, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxDuplexMode[] = {  {&_swigt__p_wxDuplexMode, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxEffects[] = {  {&_swigt__p_wxEffects, 0, 0, 0},{0, 0, 0, 0}};
@@ -32686,8 +35463,11 @@ static swig_cast_info _swigc__p_wxEncodingConverter[] = {  {&_swigt__p_wxEncodin
 static swig_cast_info _swigc__p_wxFont[] = {  {&_swigt__p_wxFont, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxFontList[] = {  {&_swigt__p_wxFontList, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxFontMapper[] = {  {&_swigt__p_wxFontMapper, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_wxGCDC[] = {  {&_swigt__p_wxGCDC, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxGDIObjListBase[] = {  {&_swigt__p_wxGDIObjListBase, 0, 0, 0},  {&_swigt__p_wxBrushList, _p_wxBrushListTo_p_wxGDIObjListBase, 0, 0},  {&_swigt__p_wxFontList, _p_wxFontListTo_p_wxGDIObjListBase, 0, 0},  {&_swigt__p_wxPenList, _p_wxPenListTo_p_wxGDIObjListBase, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxGDIObject[] = {  {&_swigt__p_wxIcon, _p_wxIconTo_p_wxGDIObject, 0, 0},  {&_swigt__p_wxPen, _p_wxPenTo_p_wxGDIObject, 0, 0},  {&_swigt__p_wxFont, _p_wxFontTo_p_wxGDIObject, 0, 0},  {&_swigt__p_wxPalette, _p_wxPaletteTo_p_wxGDIObject, 0, 0},  {&_swigt__p_wxGDIObject, 0, 0, 0},  {&_swigt__p_wxCursor, _p_wxCursorTo_p_wxGDIObject, 0, 0},  {&_swigt__p_wxBitmap, _p_wxBitmapTo_p_wxGDIObject, 0, 0},  {&_swigt__p_wxRegion, _p_wxRegionTo_p_wxGDIObject, 0, 0},  {&_swigt__p_wxBrush, _p_wxBrushTo_p_wxGDIObject, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_wxGraphicsContext[] = {  {&_swigt__p_wxGraphicsContext, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_wxGraphicsPath[] = {  {&_swigt__p_wxGraphicsPath, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxHeaderButtonParams[] = {  {&_swigt__p_wxHeaderButtonParams, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxIcon[] = {  {&_swigt__p_wxIcon, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxIconBundle[] = {  {&_swigt__p_wxIconBundle, 0, 0, 0},{0, 0, 0, 0}};
@@ -32744,7 +35524,6 @@ static swig_cast_info _swigc__p_wxIconizeEvent[] = {{&_swigt__p_wxIconizeEvent, 
 static swig_cast_info _swigc__p_wxSizeEvent[] = {{&_swigt__p_wxSizeEvent, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxMoveEvent[] = {{&_swigt__p_wxMoveEvent, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxActivateEvent[] = {{&_swigt__p_wxActivateEvent, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_wxANIHandler[] = {{&_swigt__p_wxANIHandler, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxCURHandler[] = {{&_swigt__p_wxCURHandler, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxICOHandler[] = {{&_swigt__p_wxICOHandler, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxBMPHandler[] = {{&_swigt__p_wxBMPHandler, 0, 0, 0},{0, 0, 0, 0}};
@@ -32753,6 +35532,7 @@ static swig_cast_info _swigc__p_wxImageHandler[] = {{&_swigt__p_wxImageHandler, 
 static swig_cast_info _swigc__p_wxXPMHandler[] = {{&_swigt__p_wxXPMHandler, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxTIFFHandler[] = {{&_swigt__p_wxTIFFHandler, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxEvtHandler[] = {{&_swigt__p_wxEvtHandler, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_wxANIHandler[] = {{&_swigt__p_wxANIHandler, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxPNGHandler[] = {{&_swigt__p_wxPNGHandler, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxGIFHandler[] = {{&_swigt__p_wxGIFHandler, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxPCXHandler[] = {{&_swigt__p_wxPCXHandler, 0, 0, 0},{0, 0, 0, 0}};
@@ -32781,7 +35561,7 @@ static swig_cast_info _swigc__p_wxChildFocusEvent[] = {{&_swigt__p_wxChildFocusE
 static swig_cast_info _swigc__p_wxControlWithItems[] = {{&_swigt__p_wxControlWithItems, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxPyValidator[] = {{&_swigt__p_wxPyValidator, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxValidator[] = {{&_swigt__p_wxValidator, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_wxObject[] = {  {&_swigt__p_wxLayoutConstraints, _p_wxLayoutConstraintsTo_p_wxObject, 0, 0},  {&_swigt__p_wxRegionIterator, _p_wxRegionIteratorTo_p_wxObject, 0, 0},  {&_swigt__p_wxPen, _p_wxPenTo_p_wxObject, 0, 0},  {&_swigt__p_wxSizerItem, _p_wxSizerItemTo_p_wxObject, 0, 0},  {&_swigt__p_wxGBSizerItem, _p_wxGBSizerItemTo_p_wxObject, 0, 0},  {&_swigt__p_wxScrollEvent, _p_wxScrollEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxIndividualLayoutConstraint, _p_wxIndividualLayoutConstraintTo_p_wxObject, 0, 0},  {&_swigt__p_wxStaticBoxSizer, _p_wxStaticBoxSizerTo_p_wxObject, 0, 0},  {&_swigt__p_wxBoxSizer, _p_wxBoxSizerTo_p_wxObject, 0, 0},  {&_swigt__p_wxSizer, _p_wxSizerTo_p_wxObject, 0, 0},  {&_swigt__p_wxGridBagSizer, _p_wxGridBagSizerTo_p_wxObject, 0, 0},  {&_swigt__p_wxUpdateUIEvent, _p_wxUpdateUIEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxMenu, _p_wxMenuTo_p_wxObject, 0, 0},  {&_swigt__p_wxEvent, _p_wxEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxFlexGridSizer, _p_wxFlexGridSizerTo_p_wxObject, 0, 0},  {&_swigt__p_wxGridSizer, _p_wxGridSizerTo_p_wxObject, 0, 0},  {&_swigt__p_wxInitDialogEvent, _p_wxInitDialogEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxMask, _p_wxMaskTo_p_wxObject, 0, 0},  {&_swigt__p_wxPseudoDC, _p_wxPseudoDCTo_p_wxObject, 0, 0},  {&_swigt__p_wxClipboardTextEvent, _p_wxClipboardTextEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxPaintEvent, _p_wxPaintEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxNcPaintEvent, _p_wxNcPaintEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxPaletteChangedEvent, _p_wxPaletteChangedEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxDisplayChangedEvent, _p_wxDisplayChangedEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxMouseCaptureChangedEvent, _p_wxMouseCaptureChangedEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxSysColourChangedEvent, _p_wxSysColourChangedEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxControl, _p_wxControlTo_p_wxObject, 0, 0},  {&_swigt__p_wxFont, _p_wxFontTo_p_wxObject, 0, 0},  {&_swigt__p_wxSetCursorEvent, _p_wxSetCursorEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxClientDC, _p_wxClientDCTo_p_wxObject, 0, 0},  {&_swigt__p_wxFSFile, _p_wxFSFileTo_p_wxObject, 0, 0},  {&_swigt__p_wxMemoryDC, _p_wxMemoryDCTo_p_wxObject, 0, 0},  {&_swigt__p_wxRegion, _p_wxRegionTo_p_wxObject, 0, 0},  {&_swigt__p_wxPySizer, _p_wxPySizerTo_p_wxObject, 0, 0},  {&_swigt__p_wxDC, _p_wxDCTo_p_wxObject, 0, 0},  {&_swigt__p_wxIcon, _p_wxIconTo_p_wxObject, 0, 0},  {&_swigt__p_wxWindowDC, _p_wxWindowDCTo_p_wxObject, 0, 0},  {&_swigt__p_wxGDIObject, _p_wxGDIObjectTo_p_wxObject, 0, 0},  {&_swigt__p_wxEffects, _p_wxEffectsTo_p_wxObject, 0, 0},  {&_swigt__p_wxPyEvent, _p_wxPyEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxNotifyEvent, _p_wxNotifyEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxPostScriptDC, _p_wxPostScriptDCTo_p_wxObject, 0, 0},  {&_swigt__p_wxShowEvent, _p_wxShowEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxMenuItem, _p_wxMenuItemTo_p_wxObject, 0, 0},  {&_swigt__p_wxDateEvent, _p_wxDateEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxIdleEvent, _p_wxIdleEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxWindowCreateEvent, _p_wxWindowCreateEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxQueryNewPaletteEvent, _p_wxQueryNewPaletteEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxMaximizeEvent, _p_wxMaximizeEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxIconizeEvent, _p_wxIconizeEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxSizeEvent, _p_wxSizeEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxMoveEvent, _p_wxMoveEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxActivateEvent, _p_wxActivateEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxANIHandler, _p_wxANIHandlerTo_p_wxObject, 0, 0},  {&_swigt__p_wxCURHandler, _p_wxCURHandlerTo_p_wxObject, 0, 0},  {&_swigt__p_wxICOHandler, _p_wxICOHandlerTo_p_wxObject, 0, 0},  {&_swigt__p_wxBMPHandler, _p_wxBMPHandlerTo_p_wxObject, 0, 0},  {&_swigt__p_wxPyImageHandler, _p_wxPyImageHandlerTo_p_wxObject, 0, 0},  {&_swigt__p_wxImageHandler, _p_wxImageHandlerTo_p_wxObject, 0, 0},  {&_swigt__p_wxXPMHandler, _p_wxXPMHandlerTo_p_wxObject, 0, 0},  {&_swigt__p_wxTIFFHandler, _p_wxTIFFHandlerTo_p_wxObject, 0, 0},  {&_swigt__p_wxEvtHandler, _p_wxEvtHandlerTo_p_wxObject, 0, 0},  {&_swigt__p_wxPNGHandler, _p_wxPNGHandlerTo_p_wxObject, 0, 0},  {&_swigt__p_wxGIFHandler, _p_wxGIFHandlerTo_p_wxObject, 0, 0},  {&_swigt__p_wxPCXHandler, _p_wxPCXHandlerTo_p_wxObject, 0, 0},  {&_swigt__p_wxJPEGHandler, _p_wxJPEGHandlerTo_p_wxObject, 0, 0},  {&_swigt__p_wxPNMHandler, _p_wxPNMHandlerTo_p_wxObject, 0, 0},  {&_swigt__p_wxMouseCaptureLostEvent, _p_wxMouseCaptureLostEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxPaintDC, _p_wxPaintDCTo_p_wxObject, 0, 0},  {&_swigt__p_wxBufferedPaintDC, _p_wxBufferedPaintDCTo_p_wxObject, 0, 0},  {&_swigt__p_wxPrinterDC, _p_wxPrinterDCTo_p_wxObject, 0, 0},  {&_swigt__p_wxScreenDC, _p_wxScreenDCTo_p_wxObject, 0, 0},  {&_swigt__p_wxStdDialogButtonSizer, _p_wxStdDialogButtonSizerTo_p_wxObject, 0, 0},  {&_swigt__p_wxAcceleratorTable, _p_wxAcceleratorTableTo_p_wxObject, 0, 0},  {&_swigt__p_wxImage, _p_wxImageTo_p_wxObject, 0, 0},  {&_swigt__p_wxScrollWinEvent, _p_wxScrollWinEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxBufferedDC, _p_wxBufferedDCTo_p_wxObject, 0, 0},  {&_swigt__p_wxPalette, _p_wxPaletteTo_p_wxObject, 0, 0},  {&_swigt__p_wxImageList, _p_wxImageListTo_p_wxObject, 0, 0},  {&_swigt__p_wxCursor, _p_wxCursorTo_p_wxObject, 0, 0},  {&_swigt__p_wxObject, 0, 0, 0},  {&_swigt__p_wxMirrorDC, _p_wxMirrorDCTo_p_wxObject, 0, 0},  {&_swigt__p_wxEncodingConverter, _p_wxEncodingConverterTo_p_wxObject, 0, 0},  {&_swigt__p_wxWindowDestroyEvent, _p_wxWindowDestroyEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxNavigationKeyEvent, _p_wxNavigationKeyEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxKeyEvent, _p_wxKeyEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxMetaFileDC, _p_wxMetaFileDCTo_p_wxObject, 0, 0},  {&_swigt__p_wxWindow, _p_wxWindowTo_p_wxObject, 0, 0},  {&_swigt__p_wxMenuBar, _p_wxMenuBarTo_p_wxObject, 0, 0},  {&_swigt__p_wxFileSystem, _p_wxFileSystemTo_p_wxObject, 0, 0},  {&_swigt__p_wxBitmap, _p_wxBitmapTo_p_wxObject, 0, 0},  {&_swigt__p_wxContextMenuEvent, _p_wxContextMenuEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxMenuEvent, _p_wxMenuEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxPyApp, _p_wxPyAppTo_p_wxObject, 0, 0},  {&_swigt__p_wxCloseEvent, _p_wxCloseEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxMouseEvent, _p_wxMouseEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxEraseEvent, _p_wxEraseEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxPyCommandEvent, _p_wxPyCommandEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxCommandEvent, _p_wxCommandEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxDropFilesEvent, _p_wxDropFilesEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxFocusEvent, _p_wxFocusEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxChildFocusEvent, _p_wxChildFocusEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxBrush, _p_wxBrushTo_p_wxObject, 0, 0},  {&_swigt__p_wxMetaFile, _p_wxMetaFileTo_p_wxObject, 0, 0},  {&_swigt__p_wxControlWithItems, _p_wxControlWithItemsTo_p_wxObject, 0, 0},  {&_swigt__p_wxColour, _p_wxColourTo_p_wxObject, 0, 0},  {&_swigt__p_wxPyValidator, _p_wxPyValidatorTo_p_wxObject, 0, 0},  {&_swigt__p_wxValidator, _p_wxValidatorTo_p_wxObject, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_wxObject[] = {  {&_swigt__p_wxLayoutConstraints, _p_wxLayoutConstraintsTo_p_wxObject, 0, 0},  {&_swigt__p_wxRegionIterator, _p_wxRegionIteratorTo_p_wxObject, 0, 0},  {&_swigt__p_wxPen, _p_wxPenTo_p_wxObject, 0, 0},  {&_swigt__p_wxSizerItem, _p_wxSizerItemTo_p_wxObject, 0, 0},  {&_swigt__p_wxGBSizerItem, _p_wxGBSizerItemTo_p_wxObject, 0, 0},  {&_swigt__p_wxScrollEvent, _p_wxScrollEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxIndividualLayoutConstraint, _p_wxIndividualLayoutConstraintTo_p_wxObject, 0, 0},  {&_swigt__p_wxStaticBoxSizer, _p_wxStaticBoxSizerTo_p_wxObject, 0, 0},  {&_swigt__p_wxBoxSizer, _p_wxBoxSizerTo_p_wxObject, 0, 0},  {&_swigt__p_wxSizer, _p_wxSizerTo_p_wxObject, 0, 0},  {&_swigt__p_wxGCDC, _p_wxGCDCTo_p_wxObject, 0, 0},  {&_swigt__p_wxGridBagSizer, _p_wxGridBagSizerTo_p_wxObject, 0, 0},  {&_swigt__p_wxUpdateUIEvent, _p_wxUpdateUIEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxMenu, _p_wxMenuTo_p_wxObject, 0, 0},  {&_swigt__p_wxEvent, _p_wxEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxFlexGridSizer, _p_wxFlexGridSizerTo_p_wxObject, 0, 0},  {&_swigt__p_wxGridSizer, _p_wxGridSizerTo_p_wxObject, 0, 0},  {&_swigt__p_wxInitDialogEvent, _p_wxInitDialogEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxMask, _p_wxMaskTo_p_wxObject, 0, 0},  {&_swigt__p_wxPseudoDC, _p_wxPseudoDCTo_p_wxObject, 0, 0},  {&_swigt__p_wxClipboardTextEvent, _p_wxClipboardTextEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxPaintEvent, _p_wxPaintEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxNcPaintEvent, _p_wxNcPaintEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxPaletteChangedEvent, _p_wxPaletteChangedEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxDisplayChangedEvent, _p_wxDisplayChangedEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxMouseCaptureChangedEvent, _p_wxMouseCaptureChangedEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxSysColourChangedEvent, _p_wxSysColourChangedEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxControl, _p_wxControlTo_p_wxObject, 0, 0},  {&_swigt__p_wxFont, _p_wxFontTo_p_wxObject, 0, 0},  {&_swigt__p_wxSetCursorEvent, _p_wxSetCursorEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxClientDC, _p_wxClientDCTo_p_wxObject, 0, 0},  {&_swigt__p_wxFSFile, _p_wxFSFileTo_p_wxObject, 0, 0},  {&_swigt__p_wxMemoryDC, _p_wxMemoryDCTo_p_wxObject, 0, 0},  {&_swigt__p_wxRegion, _p_wxRegionTo_p_wxObject, 0, 0},  {&_swigt__p_wxPySizer, _p_wxPySizerTo_p_wxObject, 0, 0},  {&_swigt__p_wxDC, _p_wxDCTo_p_wxObject, 0, 0},  {&_swigt__p_wxIcon, _p_wxIconTo_p_wxObject, 0, 0},  {&_swigt__p_wxWindowDC, _p_wxWindowDCTo_p_wxObject, 0, 0},  {&_swigt__p_wxGDIObject, _p_wxGDIObjectTo_p_wxObject, 0, 0},  {&_swigt__p_wxEffects, _p_wxEffectsTo_p_wxObject, 0, 0},  {&_swigt__p_wxPyEvent, _p_wxPyEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxNotifyEvent, _p_wxNotifyEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxPostScriptDC, _p_wxPostScriptDCTo_p_wxObject, 0, 0},  {&_swigt__p_wxShowEvent, _p_wxShowEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxMenuItem, _p_wxMenuItemTo_p_wxObject, 0, 0},  {&_swigt__p_wxDateEvent, _p_wxDateEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxIdleEvent, _p_wxIdleEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxWindowCreateEvent, _p_wxWindowCreateEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxQueryNewPaletteEvent, _p_wxQueryNewPaletteEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxMaximizeEvent, _p_wxMaximizeEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxIconizeEvent, _p_wxIconizeEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxSizeEvent, _p_wxSizeEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxMoveEvent, _p_wxMoveEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxActivateEvent, _p_wxActivateEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxCURHandler, _p_wxCURHandlerTo_p_wxObject, 0, 0},  {&_swigt__p_wxICOHandler, _p_wxICOHandlerTo_p_wxObject, 0, 0},  {&_swigt__p_wxBMPHandler, _p_wxBMPHandlerTo_p_wxObject, 0, 0},  {&_swigt__p_wxPyImageHandler, _p_wxPyImageHandlerTo_p_wxObject, 0, 0},  {&_swigt__p_wxImageHandler, _p_wxImageHandlerTo_p_wxObject, 0, 0},  {&_swigt__p_wxXPMHandler, _p_wxXPMHandlerTo_p_wxObject, 0, 0},  {&_swigt__p_wxTIFFHandler, _p_wxTIFFHandlerTo_p_wxObject, 0, 0},  {&_swigt__p_wxEvtHandler, _p_wxEvtHandlerTo_p_wxObject, 0, 0},  {&_swigt__p_wxANIHandler, _p_wxANIHandlerTo_p_wxObject, 0, 0},  {&_swigt__p_wxPNGHandler, _p_wxPNGHandlerTo_p_wxObject, 0, 0},  {&_swigt__p_wxGIFHandler, _p_wxGIFHandlerTo_p_wxObject, 0, 0},  {&_swigt__p_wxPCXHandler, _p_wxPCXHandlerTo_p_wxObject, 0, 0},  {&_swigt__p_wxJPEGHandler, _p_wxJPEGHandlerTo_p_wxObject, 0, 0},  {&_swigt__p_wxPNMHandler, _p_wxPNMHandlerTo_p_wxObject, 0, 0},  {&_swigt__p_wxMouseCaptureLostEvent, _p_wxMouseCaptureLostEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxBufferedPaintDC, _p_wxBufferedPaintDCTo_p_wxObject, 0, 0},  {&_swigt__p_wxPaintDC, _p_wxPaintDCTo_p_wxObject, 0, 0},  {&_swigt__p_wxPrinterDC, _p_wxPrinterDCTo_p_wxObject, 0, 0},  {&_swigt__p_wxScreenDC, _p_wxScreenDCTo_p_wxObject, 0, 0},  {&_swigt__p_wxStdDialogButtonSizer, _p_wxStdDialogButtonSizerTo_p_wxObject, 0, 0},  {&_swigt__p_wxAcceleratorTable, _p_wxAcceleratorTableTo_p_wxObject, 0, 0},  {&_swigt__p_wxImage, _p_wxImageTo_p_wxObject, 0, 0},  {&_swigt__p_wxScrollWinEvent, _p_wxScrollWinEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxBufferedDC, _p_wxBufferedDCTo_p_wxObject, 0, 0},  {&_swigt__p_wxPalette, _p_wxPaletteTo_p_wxObject, 0, 0},  {&_swigt__p_wxImageList, _p_wxImageListTo_p_wxObject, 0, 0},  {&_swigt__p_wxCursor, _p_wxCursorTo_p_wxObject, 0, 0},  {&_swigt__p_wxObject, 0, 0, 0},  {&_swigt__p_wxMirrorDC, _p_wxMirrorDCTo_p_wxObject, 0, 0},  {&_swigt__p_wxEncodingConverter, _p_wxEncodingConverterTo_p_wxObject, 0, 0},  {&_swigt__p_wxWindowDestroyEvent, _p_wxWindowDestroyEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxNavigationKeyEvent, _p_wxNavigationKeyEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxKeyEvent, _p_wxKeyEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxMetaFileDC, _p_wxMetaFileDCTo_p_wxObject, 0, 0},  {&_swigt__p_wxWindow, _p_wxWindowTo_p_wxObject, 0, 0},  {&_swigt__p_wxMenuBar, _p_wxMenuBarTo_p_wxObject, 0, 0},  {&_swigt__p_wxFileSystem, _p_wxFileSystemTo_p_wxObject, 0, 0},  {&_swigt__p_wxBitmap, _p_wxBitmapTo_p_wxObject, 0, 0},  {&_swigt__p_wxContextMenuEvent, _p_wxContextMenuEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxMenuEvent, _p_wxMenuEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxPyApp, _p_wxPyAppTo_p_wxObject, 0, 0},  {&_swigt__p_wxCloseEvent, _p_wxCloseEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxMouseEvent, _p_wxMouseEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxEraseEvent, _p_wxEraseEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxPyCommandEvent, _p_wxPyCommandEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxCommandEvent, _p_wxCommandEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxDropFilesEvent, _p_wxDropFilesEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxFocusEvent, _p_wxFocusEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxChildFocusEvent, _p_wxChildFocusEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxBrush, _p_wxBrushTo_p_wxObject, 0, 0},  {&_swigt__p_wxMetaFile, _p_wxMetaFileTo_p_wxObject, 0, 0},  {&_swigt__p_wxControlWithItems, _p_wxControlWithItemsTo_p_wxObject, 0, 0},  {&_swigt__p_wxColour, _p_wxColourTo_p_wxObject, 0, 0},  {&_swigt__p_wxPyValidator, _p_wxPyValidatorTo_p_wxObject, 0, 0},  {&_swigt__p_wxValidator, _p_wxValidatorTo_p_wxObject, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxPaintDC[] = {  {&_swigt__p_wxPaintDC, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxPalette[] = {  {&_swigt__p_wxPalette, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxPaperSize[] = {  {&_swigt__p_wxPaperSize, 0, 0, 0},{0, 0, 0, 0}};
@@ -32789,6 +35569,7 @@ static swig_cast_info _swigc__p_wxPen[] = {  {&_swigt__p_wxPen, 0, 0, 0},{0, 0, 
 static swig_cast_info _swigc__p_wxPenList[] = {  {&_swigt__p_wxPenList, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxPixelDataBase[] = {  {&_swigt__p_wxPixelDataBase, 0, 0, 0},  {&_swigt__p_wxNativePixelData, _p_wxNativePixelDataTo_p_wxPixelDataBase, 0, 0},  {&_swigt__p_wxAlphaPixelData, _p_wxAlphaPixelDataTo_p_wxPixelDataBase, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxPoint[] = {  {&_swigt__p_wxPoint, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_wxPoint2D[] = {  {&_swigt__p_wxPoint2D, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxPostScriptDC[] = {  {&_swigt__p_wxPostScriptDC, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxPrintData[] = {  {&_swigt__p_wxPrintData, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxPrinterDC[] = {  {&_swigt__p_wxPrinterDC, 0, 0, 0},{0, 0, 0, 0}};
@@ -32806,7 +35587,7 @@ static swig_cast_info _swigc__p_wxSplitterRenderParams[] = {  {&_swigt__p_wxSpli
 static swig_cast_info _swigc__p_wxStockGDI[] = {  {&_swigt__p_wxStockGDI, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxString[] = {  {&_swigt__p_wxString, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxWindow[] = {  {&_swigt__p_wxControl, _p_wxControlTo_p_wxWindow, 0, 0},  {&_swigt__p_wxWindow, 0, 0, 0},  {&_swigt__p_wxControlWithItems, _p_wxControlWithItemsTo_p_wxWindow, 0, 0},  {&_swigt__p_wxMenuBar, _p_wxMenuBarTo_p_wxWindow, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_wxWindowDC[] = {  {&_swigt__p_wxWindowDC, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_wxWindowDC[] = {  {&_swigt__p_wxWindowDC, 0, 0, 0},  {&_swigt__p_wxClientDC, _p_wxClientDCTo_p_wxWindowDC, 0, 0},  {&_swigt__p_wxPaintDC, _p_wxPaintDCTo_p_wxWindowDC, 0, 0},{0, 0, 0, 0}};
 
 static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_buffer,
@@ -32822,6 +35603,7 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_wxActivateEvent,
   _swigc__p_wxAlphaPixelData,
   _swigc__p_wxAlphaPixelData_Accessor,
+  _swigc__p_wxArrayDouble,
   _swigc__p_wxBMPHandler,
   _swigc__p_wxBitmap,
   _swigc__p_wxBoxSizer,
@@ -32835,6 +35617,7 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_wxClientDC,
   _swigc__p_wxClipboardTextEvent,
   _swigc__p_wxCloseEvent,
+  _swigc__p_wxColor,
   _swigc__p_wxColour,
   _swigc__p_wxColourDatabase,
   _swigc__p_wxCommandEvent,
@@ -32861,9 +35644,12 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_wxFontList,
   _swigc__p_wxFontMapper,
   _swigc__p_wxGBSizerItem,
+  _swigc__p_wxGCDC,
   _swigc__p_wxGDIObjListBase,
   _swigc__p_wxGDIObject,
   _swigc__p_wxGIFHandler,
+  _swigc__p_wxGraphicsContext,
+  _swigc__p_wxGraphicsPath,
   _swigc__p_wxGridBagSizer,
   _swigc__p_wxGridSizer,
   _swigc__p_wxHeaderButtonParams,
@@ -32917,6 +35703,7 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_wxPenList,
   _swigc__p_wxPixelDataBase,
   _swigc__p_wxPoint,
+  _swigc__p_wxPoint2D,
   _swigc__p_wxPostScriptDC,
   _swigc__p_wxPrintData,
   _swigc__p_wxPrinterDC,

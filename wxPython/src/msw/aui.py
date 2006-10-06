@@ -1266,6 +1266,8 @@ class DockInfo(object):
     resizable = property(_aui.DockInfo_resizable_get, _aui.DockInfo_resizable_set)
     toolbar = property(_aui.DockInfo_toolbar_get, _aui.DockInfo_toolbar_set)
     fixed = property(_aui.DockInfo_fixed_get, _aui.DockInfo_fixed_set)
+    __swig_destroy__ = _aui.delete_DockInfo
+    __del__ = lambda self : None;
 _aui.DockInfo_swigregister(DockInfo)
 
 class DockUIPart(object):
@@ -1290,6 +1292,8 @@ class DockUIPart(object):
     cont_sizer = property(_aui.DockUIPart_cont_sizer_get, _aui.DockUIPart_cont_sizer_set)
     sizer_item = property(_aui.DockUIPart_sizer_item_get, _aui.DockUIPart_sizer_item_set)
     rect = property(_aui.DockUIPart_rect_get, _aui.DockUIPart_rect_set)
+    __swig_destroy__ = _aui.delete_DockUIPart
+    __del__ = lambda self : None;
 _aui.DockUIPart_swigregister(DockUIPart)
 
 class PaneButton(object):
@@ -1298,6 +1302,8 @@ class PaneButton(object):
     def __init__(self): raise AttributeError, "No constructor defined"
     __repr__ = _swig_repr
     button_id = property(_aui.PaneButton_button_id_get, _aui.PaneButton_button_id_set)
+    __swig_destroy__ = _aui.delete_PaneButton
+    __del__ = lambda self : None;
 _aui.PaneButton_swigregister(PaneButton)
 
 wxEVT_AUI_PANEBUTTON = _aui.wxEVT_AUI_PANEBUTTON
