@@ -23,11 +23,13 @@ of the abstract wxDataViewModel.
 
 \func{}{wxDataViewModel}{\void}
 
+Constructor.
 
 \membersection{wxDataViewModel::\destruct{wxDataViewModel}}\label{wxdataviewmodeldtor}
 
 \func{}{\destruct{wxDataViewModel}}{\void}
 
+Destructor.
 
 \section{\class{wxDataViewListModel}}\label{wxdataviewlistmodel}
 
@@ -67,11 +69,13 @@ mostly used internally.
 
 \func{}{wxDataViewListModel}{\void}
 
+Constructor.
 
 \membersection{wxDataViewListModel::\destruct{wxDataViewListModel}}\label{wxdataviewlistmodeldtor}
 
 \func{}{\destruct{wxDataViewListModel}}{\void}
 
+Destructor.
 
 \membersection{wxDataViewListModel::AddNotifier}\label{wxdataviewlistmodeladdnotifier}
 
@@ -79,7 +83,7 @@ mostly used internally.
 
 Adds {\it notifier} to the internal list of notifers.
 
-See also \helpref{RemoveNotifier}{{wxdataviewlistmodelremovenotifier}.
+See also \helpref{RemoveNotifier}{wxdataviewlistmodelremovenotifier}.
 
 \membersection{wxDataViewListModel::AddViewingColumn}\label{wxdataviewlistmodeladdviewingcolumn}
 
@@ -91,7 +95,7 @@ display a certain column of this model.
 
 \membersection{wxDataViewListModel::Cleared}\label{wxdataviewlistmodelcleared}
 
-\func{bool}{Cleared}{\void}
+\func{bool}{virtual Cleared}{\void}
 
 Call this if all data in your model has been cleared.
 
@@ -131,7 +135,7 @@ is used to store the data.
 
 Removes the notifier from the list of notifiers.
 
-See also \helpref{AddNotifier}{{wxdataviewlistmodeladdnotifier}.
+See also \helpref{AddNotifier}{wxdataviewlistmodeladdnotifier}.
 
 \membersection{wxDataViewListModel::RemoveViewingColumn}\label{wxdataviewlistmodelremoveviewingcolumn}
 
