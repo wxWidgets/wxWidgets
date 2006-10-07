@@ -131,11 +131,11 @@ public:
     virtual bool Cleared();
 
     // Used internally
-    virtual void AddViewingColumn( wxDataViewColumn *view_column, unsigned int model_column );
-    virtual void RemoveViewingColumn( wxDataViewColumn *column );
+    void AddViewingColumn( wxDataViewColumn *view_column, unsigned int model_column );
+    void RemoveViewingColumn( wxDataViewColumn *column );
 
-    virtual void AddNotifier( wxDataViewListModelNotifier *notifier );
-    virtual void RemoveNotifier( wxDataViewListModelNotifier *notifier );
+    void AddNotifier( wxDataViewListModelNotifier *notifier );
+    void RemoveNotifier( wxDataViewListModelNotifier *notifier );
 
     wxList                      m_notifiers;
     wxList                      m_viewingColumns;
@@ -320,16 +320,26 @@ public:
     wxDataViewListModel* GetModel();
 
     // short cuts
-    virtual bool AppendTextColumn( const wxString &label, unsigned int model_column );
-    virtual bool AppendToggleColumn( const wxString &label, unsigned int model_column );
-    virtual bool AppendProgressColumn( const wxString &label, unsigned int model_column );
-    virtual bool AppendDateColumn( const wxString &label, unsigned int model_column );
-    virtual bool AppendBitmapColumn( const wxString &label, unsigned int model_column );
-    virtual bool AppendTextColumn( const wxBitmap &label, unsigned int model_column );
-    virtual bool AppendToggleColumn( const wxBitmap &label, unsigned int model_column );
-    virtual bool AppendProgressColumn( const wxBitmap &label, unsigned int model_column );
-    virtual bool AppendDateColumn( const wxBitmap &label, unsigned int model_column );
-    virtual bool AppendBitmapColumn( const wxBitmap &label, unsigned int model_column );
+    bool AppendTextColumn( const wxString &label, unsigned int model_column, 
+                    wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT, int width = -1 );
+    bool AppendToggleColumn( const wxString &label, unsigned int model_column,
+                    wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT, int width = 30 );
+    bool AppendProgressColumn( const wxString &label, unsigned int model_column, 
+                    wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT, int width = 80 );
+    bool AppendDateColumn( const wxString &label, unsigned int model_column,
+                    wxDataViewCellMode mode = wxDATAVIEW_CELL_ACTIVATABLE, int width = -1 );
+    bool AppendBitmapColumn( const wxString &label, unsigned int model_column,
+                    wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT, int width = -1 );
+    bool AppendTextColumn( const wxBitmap &label, unsigned int model_column,
+                    wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT, int width = -1 );
+    bool AppendToggleColumn( const wxBitmap &label, unsigned int model_column,
+                    wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT, int width = 30 );
+    bool AppendProgressColumn( const wxBitmap &label, unsigned int model_column,
+                    wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT, int width = 80 );
+    bool AppendDateColumn( const wxBitmap &label, unsigned int model_column,
+                    wxDataViewCellMode mode = wxDATAVIEW_CELL_ACTIVATABLE, int width = -1 );
+    bool AppendBitmapColumn( const wxBitmap &label, unsigned int model_column,
+                    wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT, int width = -1 );
     
     virtual bool AppendColumn( wxDataViewColumn *col );
     virtual unsigned int GetNumberOfColumns();
