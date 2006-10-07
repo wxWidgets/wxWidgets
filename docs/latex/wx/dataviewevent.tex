@@ -1,0 +1,92 @@
+
+\section{\class{wxDataViewEvent}}\label{wxdataviewevent}
+
+
+wxDataViewEvent - the event class for the wxDataViewCtrl notifications
+
+
+\wxheading{Derived from}
+
+\helpref{wxNotifyEvent}{wxnotifyevent}
+
+\wxheading{Include files}
+
+<wx/dataview.h>
+
+
+\membersection{wxDataViewEvent::wxDataViewEvent}\label{wxdatavieweventwxdataviewevent}
+
+\func{}{wxDataViewEvent}{\param{wxEventType }{commandType = wxEVT\_NULL}, \param{int }{winid = 0}}
+
+
+\func{}{wxDataViewEvent}{\param{const wxDataViewEvent\& }{event}}
+
+
+\membersection{wxDataViewEvent::Clone}\label{wxdatavieweventclone}
+
+\constfunc{wxEvent*}{Clone}{\void}
+
+
+\membersection{wxDataViewEvent::GetColumn}\label{wxdatavieweventgetcolumn}
+
+\constfunc{int}{GetColumn}{\void}
+
+
+\membersection{wxDataViewEvent::GetDataViewColumn}\label{wxdatavieweventgetdataviewcolumn}
+
+\func{wxDataViewColumn*}{GetDataViewColumn}{\void}
+
+
+\membersection{wxDataViewEvent::GetModel}\label{wxdatavieweventgetmodel}
+
+\constfunc{wxDataViewModel*}{GetModel}{\void}
+
+
+\membersection{wxDataViewEvent::GetRow}\label{wxdatavieweventgetrow}
+
+\constfunc{int}{GetRow}{\void}
+
+
+\membersection{wxDataViewEvent::GetValue}\label{wxdatavieweventgetvalue}
+
+\constfunc{const wxVariant\&}{GetValue}{\void}
+
+
+\membersection{wxDataViewEvent::IsEditCancelled}\label{wxdatavieweventiseditcancelled}
+
+\constfunc{bool}{IsEditCancelled}{\void}
+
+Was cell editing canceled? For wxEVT\_COMMAND\_DATAVIEW\_END\_CELL\_EDIT only.
+
+
+\membersection{wxDataViewEvent::SetColumn}\label{wxdatavieweventsetcolumn}
+
+\func{void}{SetColumn}{\param{int }{col}}
+
+
+\membersection{wxDataViewEvent::SetDataViewColumn}\label{wxdatavieweventsetdataviewcolumn}
+
+\func{void}{SetDataViewColumn}{\param{wxDataViewColumn* }{col}}
+
+For wxEVT\_DATAVIEW\_COLUMN\_HEADER\_CLICKED only.
+
+
+\membersection{wxDataViewEvent::SetEditCanceled}\label{wxdatavieweventseteditcanceled}
+
+\func{void}{SetEditCanceled}{\param{bool }{editCancelled}}
+
+
+\membersection{wxDataViewEvent::SetModel}\label{wxdatavieweventsetmodel}
+
+\func{void}{SetModel}{\param{wxDataViewModel* }{model}}
+
+
+\membersection{wxDataViewEvent::SetRow}\label{wxdatavieweventsetrow}
+
+\func{void}{SetRow}{\param{int }{row}}
+
+
+\membersection{wxDataViewEvent::SetValue}\label{wxdatavieweventsetvalue}
+
+\func{void}{SetValue}{\param{const wxVariant\& }{value}}
+

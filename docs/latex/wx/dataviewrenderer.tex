@@ -1,0 +1,272 @@
+
+\section{\class{wxDataViewRenderer}}\label{wxdataviewrenderer}
+
+
+This class is used by \helpref{wxDataViewCtrl}{wxdataviewctrl} to
+render the individual cells. One instance of a renderer class is
+owned by \helpref{wxDataViewColumn}{wxdataviewcolumn}. There is
+a number of ready-to-use renderers provided:
+\helpref{wxDataViewTextRenderer}{wxdataviewtextrenderer},
+\helpref{wxDataViewToggleRenderer}{wxdataviewtogglerenderer},
+\helpref{wxDataViewProgressRenderer}{wxdataviewprogressrenderer},
+\helpref{wxDataViewBitmapRenderer}{wxdataviewbitmaprenderer},
+\helpref{wxDataViewDateRenderer}{wxdataviewdaterenderer}.
+
+
+Additionally, the user can write own renderers by deriving from
+\helpref{wxDataViewCustomRenderer}{wxdataviewcustomrenderer}.
+
+These flags control the behaviour of the renderer and they
+are used for controlling in what mode the renderer shall
+render its contents:
+
+{\small
+\begin{verbatim}
+enum wxDataViewCellMode
+{
+    wxDATAVIEW_CELL_INERT,
+    wxDATAVIEW_CELL_ACTIVATABLE,
+    wxDATAVIEW_CELL_EDITABLE
+};
+
+enum wxDataViewCellRenderState
+{
+    wxDATAVIEW_CELL_SELECTED    = 1,
+    wxDATAVIEW_CELL_PRELIT      = 2,
+    wxDATAVIEW_CELL_INSENSITIVE = 4,
+    wxDATAVIEW_CELL_FOCUSED     = 8
+};
+\end{verbatim}
+}
+
+
+\wxheading{Derived from}
+
+\helpref{wxObject}{wxobject}
+
+\wxheading{Include files}
+
+<wx/dataview.h>
+
+
+\membersection{wxDataViewRenderer::wxDataViewRenderer}\label{wxdataviewrendererwxdataviewrenderer}
+
+\func{}{wxDataViewRenderer}{\param{const wxString\& }{varianttype}, \param{wxDataViewCellMode }{mode = wxDATAVIEW\_CELL\_INERT}}
+
+Constructor.
+
+\membersection{wxDataViewRenderer::GetMode}\label{wxdataviewrenderergetmode}
+
+\func{virtual wxDataViewCellMode}{GetMode}{\void}
+
+Returns the cell mode.
+
+\membersection{wxDataViewRenderer::GetOwner}\label{wxdataviewrenderergetowner}
+
+\func{virtual wxDataViewColumn*}{GetOwner}{\void}
+
+Returns pointer to the owning \helpref{wxDataViewColumn}{wxdataviewcolumn}.
+
+\membersection{wxDataViewRenderer::GetValue}\label{wxdataviewrenderergetvalue}
+
+\func{virtual bool}{GetValue}{\param{wxVariant\& }{value}}
+
+This methods retrieves the value from the renderer in order to
+transfer the value back to the data model. Returns {\it false}
+on failure.
+
+\membersection{wxDataViewRenderer::GetVariantType}\label{wxdataviewrenderergetvarianttype}
+
+\func{virtual wxString}{GetVariantType}{\void}
+
+Returns a string with the type of the \helpref{wxVariant}{wxvariant}
+supported by this renderer.
+
+\membersection{wxDataViewRenderer::SetOwner}\label{wxdataviewrenderersetowner}
+
+\func{virtual void}{SetOwner}{\param{wxDataViewColumn* }{owner}}
+
+Sets the owning \helpref{wxDataViewColumn}{wxdataviewcolumn}. This
+is usually called from within wxDataViewColumn.
+
+\membersection{wxDataViewRenderer::SetValue}\label{wxdataviewrenderersetvalue}
+
+\func{virtual bool}{SetValue}{\param{const wxVariant\& }{value}}
+
+Set the value of the renderer (and thus its cell) to {\it value}.
+The internal code will then render this cell with this data.
+
+
+\membersection{wxDataViewRenderer::Validate}\label{wxdataviewrenderervalidate}
+
+\func{virtual bool}{Validate}{\param{wxVariant\& }{value}}
+
+To be implemented.
+
+
+\section{\class{wxDataViewTextRenderer}}\label{wxdataviewtextrenderer}
+
+wxDataViewTextRenderer
+
+
+\wxheading{Derived from}
+
+\helpref{wxDataViewRenderer}{wxdataviewrenderer}
+
+\wxheading{Include files}
+
+<wx/dataview.h>
+
+
+\membersection{wxDataViewTextRenderer::wxDataViewTextRenderer}\label{wxdataviewtextrendererwxdataviewtextrenderer}
+
+\func{}{wxDataViewTextRenderer}{\param{const wxString\& }{varianttype = wxT("string")}, \param{wxDataViewCellMode }{mode = wxDATAVIEW\_CELL\_INERT}}
+
+
+
+\section{\class{wxDataViewProgressRenderer}}\label{wxdataviewprogressrenderer}
+
+wxDataViewProgressRenderer
+
+
+\wxheading{Derived from}
+
+\helpref{wxDataViewRenderer}{wxdataviewrenderer}
+
+\wxheading{Include files}
+
+<wx/dataview.h>
+
+
+\membersection{wxDataViewProgressRenderer::wxDataViewProgressRenderer}\label{wxdataviewprogressrendererwxdataviewprogressrenderer}
+
+\func{}{wxDataViewProgressRenderer}{\param{const wxString\& }{label = wxEmptyString}, \param{const wxString\& }{varianttype = wxT("long")}, \param{wxDataViewCellMode }{mode = wxDATAVIEW\_CELL\_INERT}}
+
+
+
+\section{\class{wxDataViewToggleRenderer}}\label{wxdataviewtogglerenderer}
+
+wxDataViewToggleRenderer
+
+\wxheading{Derived from}
+
+\helpref{wxDataViewRenderer}{wxdataviewrenderer}
+
+\wxheading{Include files}
+
+<wx/dataview.h>
+
+
+\membersection{wxDataViewToggleRenderer::wxDataViewToggleRenderer}\label{wxdataviewtogglerendererwxdataviewtogglerenderer}
+
+\func{}{wxDataViewToggleRenderer}{\param{const wxString\& }{varianttype = wxT("bool")}, \param{wxDataViewCellMode }{mode = wxDATAVIEW\_CELL\_INERT}}
+
+
+\section{\class{wxDataViewBitmapRenderer}}\label{wxdataviewbitmaprenderer}
+
+wxDataViewBitmapRenderer
+
+\wxheading{Derived from}
+
+\helpref{wxDataViewRenderer}{wxdataviewrenderer}
+
+\wxheading{Include files}
+
+<wx/dataview.h>
+
+
+\membersection{wxDataViewBitmapRenderer::wxDataViewBitmapRenderer}\label{wxdataviewbitmaprendererwxdataviewbitmaprenderer}
+
+\func{}{wxDataViewBitmapRenderer}{\param{const wxString\& }{varianttype = wxT("wxBitmap")}, \param{wxDataViewCellMode }{mode = wxDATAVIEW\_CELL\_INERT}}
+
+
+\section{\class{wxDataViewDateRenderer}}\label{wxdataviewdaterenderer}
+
+wxDataViewDateRenderer
+
+
+\wxheading{Derived from}
+
+\helpref{wxDataViewRenderer}{wxdataviewrenderer}
+
+\wxheading{Include files}
+
+<wx/dataview.h>
+
+\membersection{wxDataViewDateRenderer::wxDataViewDateRenderer}\label{wxdataviewdaterendererwxdataviewdaterenderer}
+
+\func{}{wxDataViewDateRenderer}{\param{const wxString\& }{varianttype = wxT("datetime")}, \param{wxDataViewCellMode }{mode = wxDATAVIEW\_CELL\_ACTIVATABLE}}
+
+
+\section{\class{wxDataViewCustomRenderer}}\label{wxdataviewcustomrenderer}
+
+wxDataViewCustomRenderer
+
+\wxheading{Derived from}
+
+\helpref{wxDataViewRenderer}{wxdataviewrenderer}
+
+\wxheading{Include files}
+
+<wx/dataview.h>
+
+\membersection{wxDataViewCustomRenderer::wxDataViewCustomRenderer}\label{wxdataviewcustomrendererwxdataviewcustomrenderer}
+
+\func{}{wxDataViewCustomRenderer}{\param{const wxString\& }{varianttype = wxT("string")}, \param{wxDataViewCellMode }{mode = wxDATAVIEW\_CELL\_INERT}, \param{bool }{no\_init = false}}
+
+Constructor.
+
+\membersection{wxDataViewCustomRenderer::\destruct{wxDataViewCustomRenderer}}\label{wxdataviewcustomrendererdtor}
+
+\func{}{\destruct{wxDataViewCustomRenderer}}{\void}
+
+Destructor.
+
+\membersection{wxDataViewCustomRenderer::Activate}\label{wxdataviewcustomrendereractivate}
+
+\func{virtual bool}{Activate}{\param{wxRect }{cell}, \param{wxDataViewListModel* }{model}, \param{unsigned int }{col}, \param{unsigned int }{row}}
+
+Override this to react to double clicks or <ENTER>.
+
+\membersection{wxDataViewCustomRenderer::GetDC}\label{wxdataviewcustomrenderergetdc}
+
+\func{virtual wxDC*}{GetDC}{\void}
+
+Create DC on request. Internal.
+
+
+\membersection{wxDataViewCustomRenderer::GetSize}\label{wxdataviewcustomrenderergetsize}
+
+\func{virtual wxSize}{GetSize}{\void}
+
+Return size required to show content.
+
+
+\membersection{wxDataViewCustomRenderer::LeftClick}\label{wxdataviewcustomrendererleftclick}
+
+\func{virtual bool}{LeftClick}{\param{wxPoint }{cursor}, \param{wxRect }{cell}, \param{wxDataViewListModel* }{model}, \param{unsigned int }{col}, \param{unsigned int }{row}}
+
+Overrride this to react to a left click.
+
+\membersection{wxDataViewCustomRenderer::Render}\label{wxdataviewcustomrendererrender}
+
+\func{virtual bool}{Render}{\param{wxRect }{cell}, \param{wxDC* }{dc}, \param{int }{state}}
+
+Override this to render the cell. Before this is called,
+\helpref{SetValue}{wxdataviewrenderersetvalue} was called
+so that this instance knows what to render.
+
+\membersection{wxDataViewCustomRenderer::RightClick}\label{wxdataviewcustomrendererrightclick}
+
+\func{virtual bool}{RightClick}{\param{wxPoint }{cursor}, \param{wxRect }{cell}, \param{wxDataViewListModel* }{model}, \param{unsigned int }{col}, \param{unsigned int }{row}}
+
+Overrride this to react to a right click.
+
+\membersection{wxDataViewCustomRenderer::StartDrag}\label{wxdataviewcustomrendererstartdrag}
+
+\func{virtual bool}{StartDrag}{\param{wxPoint }{cursor}, \param{wxRect }{cell}, \param{wxDataViewListModel* }{model}, \param{unsigned int }{col}, \param{unsigned int }{row}}
+
+Overrride this to start a drag operation.
+
+
+

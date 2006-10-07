@@ -1,0 +1,138 @@
+
+\section{\class{wxDataViewColumn}}\label{wxdataviewcolumn}
+
+
+This class represents a column in a \helpref{wxDataViewCtrl}{wxdataviewctrl}.
+One wxDataViewColumn is bound to one column in the data model,
+to which the wxDataViewCtrl has been associated. 
+
+An instance of \helpref{wxDataViewRenderer}{wxdataviewrenderer} is used by
+this class to render its data.
+
+\wxheading{Constants}
+
+These flags define behavi
+
+{\small
+\begin{verbatim}
+enum wxDataViewColumnFlags
+{
+    wxDATAVIEW_COL_RESIZABLE  = 1,    // the user can resize the column
+    wxDATAVIEW_COL_SORTABLE   = 2,    // same as SetSortable()
+    wxDATAVIEW_COL_HIDDEN     = 4     // column is hidden
+};
+\end{verbatim}
+}
+
+\wxheading{Derived from}
+
+\helpref{wxObject}{wxobject}
+
+\wxheading{Include files}
+
+<wx/dataview.h>
+
+
+\membersection{wxDataViewColumn::wxDataViewColumn}\label{wxdataviewcolumnwxdataviewcolumn}
+
+\func{}{wxDataViewColumn}{\param{const wxString\& }{title}, \param{wxDataViewRenderer* }{renderer}, \param{unsigned int }{model\_column}, \param{int }{width = 80}, \param{int }{flags = wxDATAVIEW\_COL\_RESIZABLE}}
+
+
+\func{}{wxDataViewColumn}{\param{const wxBitmap\& }{bitmap}, \param{wxDataViewRenderer* }{renderer}, \param{unsigned int }{model\_column}, \param{int }{width = 80}, \param{int }{flags = wxDATAVIEW\_COL\_RESIZABLE}}
+
+Constructors.
+
+
+\membersection{wxDataViewColumn::\destruct{wxDataViewColumn}}\label{wxdataviewcolumndtor}
+
+\func{}{\destruct{wxDataViewColumn}}{\void}
+
+Destructor.
+
+\membersection{wxDataViewColumn::GetBitmap}\label{wxdataviewcolumngetbitmap}
+
+\func{const wxBitmap\&}{GetBitmap}{\void}
+
+Returns the bitmap in the header of the column, if any.
+
+\membersection{wxDataViewColumn::GetModelColumn}\label{wxdataviewcolumngetmodelcolumn}
+
+\func{unsigned int}{GetModelColumn}{\void}
+
+Returns the index of the column of the model, which this
+wxDataViewColumn is displaying.
+
+\membersection{wxDataViewColumn::GetOwner}\label{wxdataviewcolumngetowner}
+
+\func{wxDataViewCtrl*}{GetOwner}{\void}
+
+Returns the owning \helpref{wxDataViewCtrl}{wxdataviewctrl}.
+
+\membersection{wxDataViewColumn::GetRenderer}\label{wxdataviewcolumngetrenderer}
+
+\func{wxDataViewRenderer*}{GetRenderer}{\void}
+
+Returns the renderer of this wxDataViewColumn.
+
+See also \helpref{wxDataViewRenderer}{wxdataviewrenderer}.
+
+\membersection{wxDataViewColumn::GetSortable}\label{wxdataviewcolumngetsortable}
+
+\func{bool}{GetSortable}{\void}
+
+Returns true if the column is sortable.
+
+See \helpref{SetSortable}{wxdataviewcolumnsetsortable}
+
+\membersection{wxDataViewColumn::GetWidth}\label{wxdataviewcolumngetwidth}
+
+\func{int}{GetWidth}{\void}
+
+Returns the width of the column.
+
+\membersection{wxDataViewColumn::IsSortOrderAscending}\label{wxdataviewcolumnissortorderascending}
+
+\func{bool}{IsSortOrderAscending}{\void}
+
+Returns true, if the sort order is ascending.
+
+See also \helpref{SetSortOrder}{wxdataviewcolumnsetsortorder}
+
+\membersection{wxDataViewColumn::SetAlignment}\label{wxdataviewcolumnsetalignment}
+
+\func{void}{SetAlignment}{\param{wxAlignment }{align}}
+
+Set the alignment of the column header.
+
+\membersection{wxDataViewColumn::SetBitmap}\label{wxdataviewcolumnsetbitmap}
+
+\func{void}{SetBitmap}{\param{const wxBitmap\& }{bitmap}}
+
+Set the bitmap of the column header.
+
+\membersection{wxDataViewColumn::SetSortOrder}\label{wxdataviewcolumnsetsortorder}
+
+\func{void}{SetSortOrder}{\param{bool }{ascending}}
+
+Indicate the sort order if the implementation of the
+wxDataViewCtrl supports it, most commonly by showing
+a little arrow. Use this in conjunction with 
+\helpref{wxDataViewSortedListModel::SetAscending}{wxdataviewsortedlistmodelsetascending}
+to sort the actual data.
+
+\membersection{wxDataViewColumn::SetSortable}\label{wxdataviewcolumnsetsortable}
+
+\func{void}{SetSortable}{\param{bool }{sortable}}
+
+Indicate that the column is sortable. This is only to provide a
+visual hint in the column (such as a sort order indicator). It
+will not actually sort the data. Use a 
+\helpref{wxDataViewSortedListModel}{wxdataviewsortedlistmodel}
+to so the sorting.
+
+\membersection{wxDataViewColumn::SetTitle}\label{wxdataviewcolumnsettitle}
+
+\func{void}{SetTitle}{\param{const wxString\& }{title}}
+
+Set the title of the column header to {\it title}.
+
