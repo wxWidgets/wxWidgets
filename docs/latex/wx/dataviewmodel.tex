@@ -39,10 +39,23 @@ to define a table like data model to be displayed by a
 \helpref{wxDataViewCtrl}{wxdataviewctrl}. You need to derive
 from this class to define your own data model.
 
+You need to override \helpref{GetNumberOfRows}{wxdataviewlistmodelgetnumberofrows},
+\helpref{GetNumberOfCols}{wxdataviewlistmodelgetnumberofcols},
+\helpref{GetColType}{wxdataviewlistmodelgetcoltype} and
+\helpref{GetValue}{wxdataviewlistmodelgetvalue} in order to
+define the data model (which acts as an interface between 
+your actual data and the wxDataViewCtrl).
+
+wxDataViewModel and this class (as indeed the entire wxDataViewCtrl
+code) is using \helpref{wxVariant}{wxvariant} to store data and
+its type in a generic way. wxVariant can be extended to contain
+almost any data without changes to the original class.
+
 This class maintains a list of 
 \helpref{wxDataListViewListModelNotifier}{wxdataviewlistmodelnotifier}
 which link this class to the specific implementations on the
-supported platforms so that e.g. calling {\it ValueChanged()}
+supported platforms so that e.g. calling 
+\helpref{ValueChanged}{wxdataviewlistmodelvaluechanged}
 on this model will just call 
 \helpref{wxDataListViewListModelNotifier::ValueChanged}{wxdataviewlistmodelnotifiervaluechanged}
 for each notifier that has been added. This is used both for
@@ -58,7 +71,8 @@ mostly used internally.
 
 \wxheading{Derived from}
 
-\helpref{wxDataViewModel}{wxdataviewmodel}
+\helpref{wxDataViewModel}{wxdataviewmodel}\\
+\helpref{wxObject}{wxobject}
 
 \wxheading{Include files}
 
@@ -210,7 +224,9 @@ to be fixed.
 
 \wxheading{Derived from}
 
-\helpref{wxDataViewListModel}{wxdataviewlistmodel}
+\helpref{wxDataViewListModel}{wxdataviewlistmodel}\\
+\helpref{wxDataViewModel}{wxdataviewmodel}\\
+\helpref{wxObject}{wxobject}
 
 \wxheading{Include files}
 
