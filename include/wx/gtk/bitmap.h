@@ -50,16 +50,15 @@ private:
 class WXDLLIMPEXP_CORE wxBitmap: public wxBitmapBase
 {
 public:
-    wxBitmap();
+    wxBitmap() { }
     wxBitmap( int width, int height, int depth = -1 );
     wxBitmap( const char bits[], int width, int height, int depth = 1 );
-    wxBitmap( const char **bits ) { (void)CreateFromXpm(bits); }
-    wxBitmap( char **bits ) { (void)CreateFromXpm((const char **)bits); }
+    wxBitmap( const char* const* bits ) { CreateFromXpm(bits); }
     wxBitmap( const wxString &filename, wxBitmapType type = wxBITMAP_TYPE_XPM );
     wxBitmap( const wxImage& image, int depth = -1 ) { (void)CreateFromImage(image, depth); }
     virtual ~wxBitmap();
     bool operator == ( const wxBitmap& bmp ) const;
-    bool operator != ( const wxBitmap& bmp ) const;
+    bool operator != ( const wxBitmap& bmp ) const { return !(*this == bmp); }
     bool Ok() const;
 
     bool Create(int width, int height, int depth = -1);
@@ -97,7 +96,7 @@ public:
     void SetWidth( int width );
     void SetDepth( int depth );
     void SetPixmap( GdkPixmap *pixmap );
-    void SetPixbuf(GdkPixbuf *pixbuf);
+    void SetPixbuf(GdkPixbuf* pixbuf, int depth = 0);
 
     GdkPixmap *GetPixmap() const;
     bool HasPixmap() const;
@@ -105,7 +104,7 @@ public:
     GdkPixbuf *GetPixbuf() const;
 
     // Basically, this corresponds to Win32 StretchBlt()
-    wxBitmap Rescale( int clipx, int clipy, int clipwidth, int clipheight, int width, int height );
+    wxBitmap Rescale(int clipx, int clipy, int clipwidth, int clipheight, int width, int height) const;
 
     // raw bitmap access support functions
     void *GetRawData(wxPixelDataBase& data, int bpp);
@@ -115,7 +114,7 @@ public:
     void UseAlpha();
 
 protected:
-    bool CreateFromXpm(const char **bits);
+    bool CreateFromXpm(const char* const* bits);
     bool CreateFromImage(const wxImage& image, int depth);
 
 private:
