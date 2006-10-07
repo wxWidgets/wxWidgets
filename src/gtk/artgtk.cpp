@@ -20,7 +20,7 @@
     #pragma hdrstop
 #endif
 
-#if defined(__WXGTK20__) && !defined(__WXUNIVERSAL__)
+#if !defined(__WXUNIVERSAL__)
 
 #include "wx/artprov.h"
 
@@ -54,7 +54,7 @@ protected:
 
 /*static*/ void wxArtProvider::InitNativeProvider()
 {
-    wxArtProvider::Push(new wxGTK2ArtProvider);
+    Push(new wxGTK2ArtProvider);
 }
 
 // ----------------------------------------------------------------------------
@@ -262,10 +262,9 @@ wxBitmap wxGTK2ArtProvider::CreateBitmap(const wxArtID& id,
     GdkPixbuf *pixbuf = CreateStockIcon(stockid, stocksize);
 
 #ifdef __WXGTK24__
-    if (!gtk_check_version(2,4,0))
+    if (!pixbuf && !gtk_check_version(2,4,0))
     {
-        if (!pixbuf)
-            pixbuf = CreateThemeIcon(stockid, stocksize, size);
+        pixbuf = CreateThemeIcon(stockid, stocksize, size);
     }
 #endif
 
@@ -282,13 +281,9 @@ wxBitmap wxGTK2ArtProvider::CreateBitmap(const wxArtID& id,
         }
     }
 
-    if (!pixbuf)
-        return wxNullBitmap;
-
     wxBitmap bmp;
-    bmp.SetWidth(gdk_pixbuf_get_width(pixbuf));
-    bmp.SetHeight(gdk_pixbuf_get_height(pixbuf));
-    bmp.SetPixbuf(pixbuf);
+    if (pixbuf != NULL)
+        bmp.SetPixbuf(pixbuf);
 
     return bmp;
 }
@@ -315,4 +310,4 @@ public:
 
 IMPLEMENT_DYNAMIC_CLASS(wxArtGtkModule, wxModule)
 
-#endif // defined(__WXGTK20__) && !defined(__WXUNIVERSAL__)
+#endif // !defined(__WXUNIVERSAL__)
