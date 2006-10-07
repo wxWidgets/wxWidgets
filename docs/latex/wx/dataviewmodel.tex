@@ -44,7 +44,27 @@ You need to override \helpref{GetNumberOfRows}{wxdataviewlistmodelgetnumberofrow
 \helpref{GetColType}{wxdataviewlistmodelgetcoltype} and
 \helpref{GetValue}{wxdataviewlistmodelgetvalue} in order to
 define the data model (which acts as an interface between 
-your actual data and the wxDataViewCtrl).
+your actual data and the wxDataViewCtrl). Since you will
+usually also allow the wxDataViewCtrl to change your data
+through its graphical interface, you will also have to override
+\helpref{SetValue}{wxdataviewlistmodelsetvalue} which the
+wxDataViewCtrl will call when a change to some data has been
+commited.
+
+The data that is presented through this data model is expected
+to change at run-time. You need to inform the data model that
+a change happens. Depending on what happened you need to call
+one of the following methods: 
+\helpref{ValueChanged}{wxdataviewlistmodelvaluechanged},
+\helpref{RowChanged}{wxdataviewlistmodelrowchanged},
+\helpref{RowAppended}{wxdataviewlistmodelrowappended},
+\helpref{RowPrepended}{wxdataviewlistmodelrowprepended},
+\helpref{RowInserted}{wxdataviewlistmodelrowinserted},
+\helpref{RowDeleted}{wxdataviewlistmodelrowdeleted},
+\helpref{RowsReordered}{wxdataviewlistmodelrowsreordered} or
+\helpref{RowsCleared}{wxdataviewlistmodelcleared}.
+
+
 
 wxDataViewModel and this class (as indeed the entire wxDataViewCtrl
 code) is using \helpref{wxVariant}{wxvariant} to store data and
