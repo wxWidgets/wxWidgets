@@ -13,7 +13,6 @@
 #define _WX_BITMAP_H_
 
 #include "wx/msw/gdiimage.h"
-#include "wx/gdicmn.h"
 #include "wx/palette.h"
 
 class WXDLLEXPORT wxBitmap;
@@ -232,7 +231,7 @@ protected:
 class WXDLLEXPORT wxBitmapHandler : public wxGDIImageHandler
 {
 public:
-    wxBitmapHandler() { m_type = wxBITMAP_TYPE_INVALID; }
+    wxBitmapHandler() { }
     wxBitmapHandler(const wxString& name, const wxString& ext, long type)
         : wxGDIImageHandler(name, ext, type)
     {
@@ -243,26 +242,15 @@ public:
     virtual bool Create(wxBitmap *bitmap,
                         const void* data,
                         long flags,
-                        int width, int height, int depth = 1)
-    {
-        return Create((wxGDIImage *)bitmap, data, flags, width, height, depth);
-    }
-
+                        int width, int height, int depth = 1);
     virtual bool LoadFile(wxBitmap *bitmap,
                           const wxString& name,
                           long flags,
-                          int desiredWidth, int desiredHeight)
-    {
-        return Load(bitmap, name, flags, desiredWidth, desiredHeight);
-    }
-
+                          int desiredWidth, int desiredHeight);
     virtual bool SaveFile(wxBitmap *bitmap,
                           const wxString& name,
                           int type,
-                          const wxPalette * WXUNUSED(palette) = NULL)
-    {
-        return Save(bitmap, name, type);
-    }
+                          const wxPalette *palette = NULL);
 
     virtual bool Create(wxGDIImage *image,
                         const void* data,
