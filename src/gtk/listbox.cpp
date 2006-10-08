@@ -942,6 +942,7 @@ void wxListBox::DoSetSelection( int n, bool select )
     {
         // ... and not generate any events in the process
         GtkDeselectAll();
+	return;
     }
 
     wxCHECK_RET( IsValid(n), wxT("invalid index in wxListBox::SetSelection") );
