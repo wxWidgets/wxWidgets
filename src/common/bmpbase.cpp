@@ -20,6 +20,7 @@
 #ifndef WX_PRECOMP
     #include "wx/colour.h"
     #include "wx/icon.h"
+    #include "wx/image.h"
 #endif // WX_PRECOMP
 
 // ----------------------------------------------------------------------------
