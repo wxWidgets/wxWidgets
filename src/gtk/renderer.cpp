@@ -240,7 +240,7 @@ wxRendererGTK::DrawTreeItemButton(wxWindow* win,
         NULL,
         tree,
         "treeview",
-        dc.LogicalToDeviceX(rect.x) + 2 - x_diff,
+        dc.LogicalToDeviceX(rect.x) + 6 - x_diff,
         dc.LogicalToDeviceY(rect.y) + 3,
         flags & wxCONTROL_EXPANDED ? GTK_EXPANDER_EXPANDED
                                    : GTK_EXPANDER_COLLAPSED
