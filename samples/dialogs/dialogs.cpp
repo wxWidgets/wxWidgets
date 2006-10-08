@@ -1179,7 +1179,7 @@ static void CommonAboutInfoInit(wxAboutDialogInfo& info)
     info.SetName(_T("Dialogs Sample"));
     info.SetVersion(wxVERSION_NUM_DOT_STRING_T);
     info.SetDescription(_T("This sample shows different wxWidgets dialogs"));
-    info.SetCopyright(_T("© 1998-2006 wxWidgets dev team"));
+    info.SetCopyright(_T("(C) 1998-2006 wxWidgets dev team"));
     info.AddDeveloper(_T("Vadim Zeitlin"));
 }
 
