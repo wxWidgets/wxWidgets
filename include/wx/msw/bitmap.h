@@ -243,15 +243,26 @@ public:
     virtual bool Create(wxBitmap *bitmap,
                         const void* data,
                         long flags,
-                        int width, int height, int depth = 1);
+                        int width, int height, int depth = 1)
+    {
+        return Create((wxGDIImage *)bitmap, data, flags, width, height, depth);
+    }
+
     virtual bool LoadFile(wxBitmap *bitmap,
                           const wxString& name,
                           long flags,
-                          int desiredWidth, int desiredHeight);
+                          int desiredWidth, int desiredHeight)
+    {
+        return Load(bitmap, name, flags, desiredWidth, desiredHeight);
+    }
+
     virtual bool SaveFile(wxBitmap *bitmap,
                           const wxString& name,
                           int type,
-                          const wxPalette *palette = NULL);
+                          const wxPalette * WXUNUSED(palette) = NULL)
+    {
+        return Save(bitmap, name, type);
+    }
 
     virtual bool Create(wxGDIImage *image,
                         const void* data,
