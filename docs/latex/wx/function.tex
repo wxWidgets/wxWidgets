@@ -246,6 +246,7 @@ the corresponding topic.
 \helpref{wxStripMenuCodes}{wxstripmenucodes}\\
 \helpref{wxStrlen}{wxstrlen}\\
 \helpref{wxSTRINGIZE}{wxstringize}\\
+\helpref{wxSTRINGIZE\_T}{wxstringizet}\\
 \helpref{wxSUPPRESS\_GCC\_PRIVATE\_DTOR\_WARNING}{wxsuppressgccprivatedtorwarning}\\
 \helpref{wxSysErrorCode}{wxsyserrorcode}\\
 \helpref{wxSysErrorMsg}{wxsyserrormsg}\\
@@ -3280,9 +3281,21 @@ Returns the string representation of the given symbol which can be either a
 literal or a macro (hence the advantage of using this macro instead of the
 standard preprocessor \texttt{\#} operator which doesn't work with macros).
 
+Notice that this macro always produces a \texttt{char} string, use 
+\helpref{wxSTRINGIZE\_T}{wxstringizet} to build a wide string Unicode build.
+
 \wxheading{See also}
 
 \helpref{wxCONCAT}{wxconcat}
+
+
+\membersection{wxSTRINGIZE\_T}\label{wxstringizet}
+
+\func{}{wxSTRINGIZE\_T}{\param{}{x}}
+
+Returns the string representation of the given symbol as either an ASCII or
+Unicode string, depending on the current build. This is the Unicode-friendly
+equivalent of \helpref{wxSTRINGIZE}{wxstringize}.
 
 
 \membersection{wxSUPPRESS\_GCC\_PRIVATE\_DTOR\_WARNING}\label{wxsuppressgccprivatedtorwarning}

@@ -21,6 +21,9 @@
 #define wxSTRINGIZE_HELPER(x)       #x
 #define wxSTRINGIZE(x)              wxSTRINGIZE_HELPER(x)
 
+/* a Unicode-friendly version of wxSTRINGIZE_T */
+#define wxSTRINGIZE_T(x)            wxAPPLY_T(wxSTRINGIZE(x))
+
 /*
    Helper macros for wxMAKE_UNIQUE_NAME: normally this works by appending the
    current line number to the given identifier to reduce the probability of the
