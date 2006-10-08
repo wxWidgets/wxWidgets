@@ -416,8 +416,8 @@ bool wxRichTextIndentsSpacingPage::TransferDataToWindow()
 
     if (attr->HasLeftIndent())
     {
-        wxString leftIndent(wxString::Format(wxT("%d"), attr->GetLeftIndent() + attr->GetLeftSubIndent()));
-        wxString leftFirstIndent(wxString::Format(wxT("%d"), attr->GetLeftIndent()));
+        wxString leftIndent(wxString::Format(wxT("%ld"), attr->GetLeftIndent() + attr->GetLeftSubIndent()));
+        wxString leftFirstIndent(wxString::Format(wxT("%ld"), attr->GetLeftIndent()));
 
         m_indentLeft->SetValue(leftIndent);
         m_indentLeftFirst->SetValue(leftFirstIndent);
@@ -430,7 +430,7 @@ bool wxRichTextIndentsSpacingPage::TransferDataToWindow()
 
     if (attr->HasRightIndent())
     {
-        wxString rightIndent(wxString::Format(wxT("%d"), attr->GetRightIndent()));
+        wxString rightIndent(wxString::Format(wxT("%ld"), attr->GetRightIndent()));
 
         m_indentRight->SetValue(rightIndent);
     }
