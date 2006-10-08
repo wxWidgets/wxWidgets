@@ -226,7 +226,7 @@ wxRendererMSW::DrawPushButton(wxWindow * WXUNUSED(win),
         wxDCPenChanger pen(dc, *wxBLACK_PEN);
         wxDCBrushChanger brush(dc, *wxTRANSPARENT_BRUSH);
         dc.DrawRectangle(rect);
-        rect.Inflate(1);
+        rect.Deflate(1);
     }
 
     RECT rc;
