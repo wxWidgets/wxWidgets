@@ -22,9 +22,9 @@
 
   The top of the hierarchy is the buffer, a kind of wxRichTextParagraphLayoutBox.
   These boxes will allow flexible placement of text boxes on a page, but
-  for now there will be a single box representing the document,
-  and this box will a wxRichTextParagraphLayoutBox which contains further
-  wxRichTextParagraph objects, each of which can include text and images.
+  for now there is a single box representing the document, and this box is
+  a wxRichTextParagraphLayoutBox which contains further wxRichTextParagraph
+  objects, each of which can include text and images.
 
   Each object maintains a range (start and end position) measured
   from the start of the main parent box.
@@ -33,6 +33,11 @@
   start of the document, and a character in an embedded text box has
   a position relative to that text box. For now, we will not be dealing with
   embedded objects but it's something to bear in mind for later.
+
+  Note that internally, a range (5,5) represents a range of one character.
+  In the public wx[Rich]TextCtrl API, this would be passed to e.g. SetSelection
+  as (5,6). A paragraph with one character might have an internal range of (0, 1)
+  since the end of the paragraph takes up one position.
 
   Layout
   ======
@@ -43,47 +48,6 @@
   width to play with (minus any margins), but can extend indefinitely
   in the vertical direction. The implementation of Layout can then
   cache the calculated size and position within the parent.
-
-  Note that position and size should be calculated separately, because
-  for example inserting a paragraph may result in the following paragraphs
-  moving down, but not changing in size.
-
-  Need to determine how objects specify their position. Absolute coordinates,
-  or relative to last object? May be hard to determine that. So should probably
-  be in absolute coordinates, in which case we'll need a Move virtual function
-  that allows quick movement of all elements without layout.
-
-  Let's work through a simple example of layout. Say we're laying out
-  a document with the buffer as the top box, with a wxRichTextParagraphLayoutBox
-  inside that that consists of wxRichTextParagraph objects.
-
-  We're in a mode whereby changes of window size change the width of the
-  page (useful for text editors, as opposed to word processors). The
-  window width is 600.
-
-  We pass (600, -1) to the top-level Layout (i.e. restrict size in horizontal
-  direction only). The wxRichTextBuffer box doesn't currently have
-  well-defined layout behaviour so we simply assume it has one child
-  that fills its parent (later we can define sizer-like box layout behaviour).
-  So it passes the same dimensions to the child, which is a wxRichTextParagraphLayoutBox.
-  This then looks at each child in turn (wxRichTextParagraph) and determines
-  the size the paragraph will take up, setting the cached size, and
-  splitting the paragraph into lines.
-
-  When the layout for one paragraph returns, the next paragraph is
-  fed the position of the previous, so it can position itself.
-
-  Each time Layout is called, the cached list of lines for each paragraph
-  is recreated, since it can change for example if the parent object width
-  changes.
-
-  Reporting size
-  ==============
-
-  Each object can report its size for a given range. It's important that
-  it can report a partial size, so that wrapping can be implemented,
-  hit test calculations performed, etc. So GetRangeSize must be implemented
-  for each object.
 
  */
 
@@ -167,6 +131,29 @@ class WXDLLIMPEXP_RICHTEXT wxTextAttrEx;
 
 #define wxRICHTEXT_FORMATTED        0x01
 #define wxRICHTEXT_UNFORMATTED      0x02
+
+/*!
+ * Flags for SetStyle
+ */
+
+#define wxRICHTEXT_SETSTYLE_NONE            0x00
+
+// Specifies that this operation should be undoable
+#define wxRICHTEXT_SETSTYLE_WITH_UNDO       0x01
+
+// Specifies that the style should not be applied if the
+// combined style at this point is already the style in question.
+#define wxRICHTEXT_SETSTYLE_OPTIMIZE        0x02
+
+// Specifies that the style should only be applied to paragraphs,
+// and not the content. This allows content styling to be
+// preserved independently from that of e.g. a named paragraph style.
+#define wxRICHTEXT_SETSTYLE_PARAGRAPHS_ONLY 0x04
+
+// Specifies that the style should only be applied to characters,
+// and not the paragraph. This allows content styling to be
+// preserved independently from that of e.g. a named paragraph style.
+#define wxRICHTEXT_SETSTYLE_CHARACTERS_ONLY 0x08
 
 /*!
  * Flags for text insertion
@@ -305,6 +292,7 @@ public:
     void SetBulletStyle(int style) { m_bulletStyle = style; SetFlags(GetFlags() | wxTEXT_ATTR_BULLET_STYLE); }
     void SetBulletNumber(int n) { m_bulletNumber = n; SetFlags(GetFlags() | wxTEXT_ATTR_BULLET_NUMBER); }
     void SetBulletSymbol(wxChar symbol) { m_bulletSymbol = symbol; SetFlags(GetFlags() | wxTEXT_ATTR_BULLET_SYMBOL); }
+    void SetBulletFont(const wxString& bulletFont) { m_bulletFont = bulletFont; }
 
     const wxString& GetCharacterStyleName() const { return m_characterStyleName; }
     const wxString& GetParagraphStyleName() const { return m_paragraphStyleName; }
@@ -314,6 +302,7 @@ public:
     int GetBulletStyle() const { return m_bulletStyle; }
     int GetBulletNumber() const { return m_bulletNumber; }
     wxChar GetBulletSymbol() const { return m_bulletSymbol; }
+    const wxString& GetBulletFont() const { return m_bulletFont; }
 
     bool HasWeight() const { return (GetFlags() & wxTEXT_ATTR_FONT_WEIGHT) != 0; }
     bool HasSize() const { return (GetFlags() & wxTEXT_ATTR_FONT_SIZE) != 0; }
@@ -360,6 +349,7 @@ private:
     int                 m_bulletStyle;
     int                 m_bulletNumber;
     wxChar              m_bulletSymbol;
+    wxString            m_bulletFont;
 
     // Character style
     wxString            m_characterStyleName;
@@ -431,6 +421,7 @@ public:
     void SetBulletStyle(int style) { m_bulletStyle = style; m_flags |= wxTEXT_ATTR_BULLET_STYLE; }
     void SetBulletNumber(int n) { m_bulletNumber = n; m_flags |= wxTEXT_ATTR_BULLET_NUMBER; }
     void SetBulletSymbol(wxChar symbol) { m_bulletSymbol = symbol; m_flags |= wxTEXT_ATTR_BULLET_NUMBER; }
+    void SetBulletFont(const wxString& bulletFont) { m_bulletFont = bulletFont; }
 
     const wxColour& GetTextColour() const { return m_colText; }
     const wxColour& GetBackgroundColour() const { return m_colBack; }
@@ -455,6 +446,7 @@ public:
     int GetBulletStyle() const { return m_bulletStyle; }
     int GetBulletNumber() const { return m_bulletNumber; }
     wxChar GetBulletSymbol() const { return m_bulletSymbol; }
+    const wxString& GetBulletFont() const { return m_bulletFont; }
 
     // accessors
     bool HasTextColour() const { return m_colText.Ok() && HasFlag(wxTEXT_ATTR_TEXT_COLOUR) ; }
@@ -520,6 +512,7 @@ private:
     int                 m_bulletStyle;
     int                 m_bulletNumber;
     wxChar              m_bulletSymbol;
+    wxString            m_bulletFont;
 
     // Character styles
     wxColour            m_colText,
@@ -537,11 +530,11 @@ private:
     wxString            m_paragraphStyleName;
 };
 
-#define wxTEXT_ATTR_CHARACTER (wxTEXT_ATTR_FONT | wxTEXT_ATTR_BACKGROUND_COLOUR | wxTEXT_ATTR_TEXT_COLOUR)
+#define wxTEXT_ATTR_CHARACTER (wxTEXT_ATTR_FONT | wxTEXT_ATTR_BACKGROUND_COLOUR | wxTEXT_ATTR_TEXT_COLOUR | wxTEXT_ATTR_CHARACTER_STYLE_NAME)
 
 #define wxTEXT_ATTR_PARAGRAPH (wxTEXT_ATTR_ALIGNMENT|wxTEXT_ATTR_LEFT_INDENT|wxTEXT_ATTR_RIGHT_INDENT|wxTEXT_ATTR_TABS|\
     wxTEXT_ATTR_PARA_SPACING_BEFORE|wxTEXT_ATTR_PARA_SPACING_AFTER|wxTEXT_ATTR_LINE_SPACING|\
-    wxTEXT_ATTR_BULLET_STYLE|wxTEXT_ATTR_BULLET_NUMBER|wxTEXT_ATTR_BULLET_SYMBOL)
+    wxTEXT_ATTR_BULLET_STYLE|wxTEXT_ATTR_BULLET_NUMBER|wxTEXT_ATTR_BULLET_SYMBOL|wxTEXT_ATTR_PARAGRAPH_STYLE_NAME)
 
 #define wxTEXT_ATTR_ALL (wxTEXT_ATTR_CHARACTER|wxTEXT_ATTR_PARAGRAPH)
 
@@ -937,8 +930,8 @@ public:
     virtual bool PositionToXY(long pos, long* x, long* y) const;
 
     /// Set text attributes: character and/or paragraph styles.
-    virtual bool SetStyle(const wxRichTextRange& range, const wxRichTextAttr& style, bool withUndo = true);
-    virtual bool SetStyle(const wxRichTextRange& range, const wxTextAttrEx& style, bool withUndo = true);
+    virtual bool SetStyle(const wxRichTextRange& range, const wxRichTextAttr& style, int flags = wxRICHTEXT_SETSTYLE_WITH_UNDO);
+    virtual bool SetStyle(const wxRichTextRange& range, const wxTextAttrEx& style, int flags = wxRICHTEXT_SETSTYLE_WITH_UNDO);
 
     /// Get the conbined text attributes for this position.
     virtual bool GetStyle(long position, wxTextAttrEx& style);
@@ -951,6 +944,14 @@ public:
     /// Implementation helper for GetStyle. If combineStyles is true, combine base, paragraph and
     /// context attributes.
     virtual bool DoGetStyle(long position, wxTextAttrEx& style, bool combineStyles = true);
+
+    /// Get the combined style for a range - if any attribute is different within the range,
+    /// that attribute is not present within the flags
+    virtual bool GetStyleForRange(const wxRichTextRange& range, wxTextAttrEx& style);
+
+    /// Combines 'style' with 'currentStyle' for the purpose of summarising the attributes of a range of
+    /// content.
+    bool CollectStyle(wxTextAttrEx& currentStyle, const wxTextAttrEx& style, long& multipleStyleAttributes);
 
     /// Test if this whole range has character attributes of the specified kind. If any
     /// of the attributes are different within the range, the test fails. You
@@ -1199,7 +1200,7 @@ public:
 
     /// Get combined attributes of the base style, paragraph style and character style. We use this to dynamically
     /// retrieve the actual style.
-    wxTextAttrEx GetCombinedAttributes(const wxTextAttr& contentStyle) const;
+    wxTextAttrEx GetCombinedAttributes(const wxTextAttrEx& contentStyle) const;
 
     /// Get combined attributes of the base style and paragraph style.
     wxTextAttrEx GetCombinedAttributes() const;
@@ -1990,10 +1991,20 @@ bool wxTextAttrEqPartial(const wxTextAttrEx& attr1, const wxRichTextAttr& attr2,
 /// Apply one style to another
 bool wxRichTextApplyStyle(wxTextAttrEx& destStyle, const wxTextAttrEx& style);
 bool wxRichTextApplyStyle(wxRichTextAttr& destStyle, const wxTextAttrEx& style);
-bool wxRichTextApplyStyle(wxTextAttrEx& destStyle, const wxRichTextAttr& style);
+bool wxRichTextApplyStyle(wxTextAttrEx& destStyle, const wxRichTextAttr& style, wxRichTextAttr* compareWith = NULL);
+
+/// Compare tabs
+bool wxRichTextTabsEq(const wxArrayInt& tabs1, const wxArrayInt& tabs2);
+
+/// Set the font without changing the font attributes
+void wxSetFontPreservingStyles(wxTextAttr& attr, const wxFont& font);
+
+/// Convert a decimal to Roman numerals
+wxString wxRichTextDecimalToRoman(long n);
 
 #endif
     // wxUSE_RICHTEXT
 
 #endif
     // _WX_RICHTEXTBUFFER_H_
+
