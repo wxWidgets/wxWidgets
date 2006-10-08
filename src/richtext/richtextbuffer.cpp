@@ -1759,8 +1759,6 @@ bool wxRichTextParagraphLayoutBox::DoGetStyle(long position, wxTextAttrEx& style
 #endif
             return true;
         }
-        else
-            return false;
     }
     else
     {
@@ -1780,8 +1778,6 @@ bool wxRichTextParagraphLayoutBox::DoGetStyle(long position, wxTextAttrEx& style
 #endif
             return true;
         }
-        else
-            return false;
     }
     return false;
 }
