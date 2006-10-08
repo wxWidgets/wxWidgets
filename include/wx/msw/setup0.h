@@ -1038,6 +1038,16 @@
 #define wxUSE_HELP        1
                                 // 0 for no help facility
 
+// Should we use MS HTML help for wxHelpController? If disabled, neither
+// wxCHMHelpController nor wxBestHelpController are available.
+//
+// Default is 1
+//
+// Recommended setting: 1, only set to 0 if you have trouble compiling
+// wxCHMHelpController (could be a problem with really ancient compilers)
+#define wxUSE_MS_HTML_HELP 1
+
+
 // Use wxHTML-based help controller?
 #define wxUSE_WXHTML_HELP 1
 
@@ -1191,15 +1201,6 @@
 #ifndef wxUSE_UNICODE_MSLU
     #define wxUSE_UNICODE_MSLU 0
 #endif
-
-// Should we use MS HTML help for wxHelpController? If disabled, neither
-// wxCHMHelpController nor wxBestHelpController are available.
-//
-// Default is 1
-//
-// Recommended setting: 1, only set to 0 if you have trouble compiling
-// wxCHMHelpController (could be a problem with really ancient compilers)
-#define wxUSE_MS_HTML_HELP 1
 
 // Set this to 1 if you want to use wxWidgets and MFC in the same program. This
 // will override some other settings (see below)
