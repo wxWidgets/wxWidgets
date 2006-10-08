@@ -69,6 +69,7 @@ All (GUI):
 - Added wxAboutBox() function for displaying the standard about dialog
 - Added wxID_PAGE_SETUP standard id.
 - Added wxSize::IncBy() and DecBy() methods.
+- Added wxTextCtrl::IsEmpty()
 - Added file type parameter to wxTextCtrl::LoadFile, wxTextCtrl::SaveFile for
   consistency with wxRichTextCtrl.
 - wxRichTextCtrl: fixed range out-by-one bug to be consistent with wxTextCtrl API,

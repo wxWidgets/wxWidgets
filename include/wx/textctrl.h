@@ -300,6 +300,8 @@ public:
     virtual wxString GetValue() const = 0;
     virtual void SetValue(const wxString& value) = 0;
 
+    virtual bool IsEmpty() const { return GetValue().empty(); }
+
     virtual void ChangeValue(const wxString &value) = 0;
 
     virtual wxString GetRange(long from, long to) const;

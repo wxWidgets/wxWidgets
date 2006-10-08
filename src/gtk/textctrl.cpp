@@ -821,6 +821,14 @@ wxFontEncoding wxTextCtrl::GetTextEncoding() const
     return enc;
 }
 
+bool wxTextCtrl::IsEmpty() const
+{
+    if ( IsMultiLine() )
+        return gtk_text_buffer_get_char_count(m_buffer) != 0;
+
+    return wxTextCtrlBase::IsEmpty();
+}
+
 void wxTextCtrl::DoSetValue( const wxString &value, int flags )
 {
     wxCHECK_RET( m_text != NULL, wxT("invalid text ctrl") );

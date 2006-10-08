@@ -662,6 +662,15 @@ void wxTextCtrl::SetWindowStyleFlag(long style)
 // set/get the controls text
 // ----------------------------------------------------------------------------
 
+bool wxTextCtrl::IsEmpty() const
+{
+    // this is an optimization for multiline controls containing a lot of text
+    if ( IsMultiLine() && GetNumberOfLines() != 1 )
+        return false;
+
+    return wxTextCtrlBase::IsEmpty();
+}
+
 wxString wxTextCtrl::GetValue() const
 {
     // range 0..-1 is special for GetRange() and means to retrieve all text

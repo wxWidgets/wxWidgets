@@ -45,8 +45,9 @@ public:
     // ----------------------------------
 
     virtual wxString GetValue() const;
+    virtual bool IsEmpty() const;
     virtual void SetValue(const wxString& value) { DoSetValue(value, SetValue_SendEvent); }
-    virtual void ChangeValue(const wxString &value) { DoSetValue(value); }
+    virtual void ChangeValue(const wxString& value) { DoSetValue(value); }
 
     virtual wxString GetRange(long from, long to) const;
 
