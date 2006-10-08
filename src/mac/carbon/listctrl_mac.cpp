@@ -149,7 +149,7 @@ public:
 
     // create a list item (can be a subclass of wxMacListBoxItem)
 
-    virtual wxMacListCtrlItem* CreateItem();
+    virtual wxMacDataItem* CreateItem();
 
     virtual void MacInsertItem( unsigned int n, wxListItem* item );
     virtual void MacSetColumnInfo( unsigned int row, unsigned int column, wxListItem* item );
@@ -1840,7 +1840,7 @@ void wxMacDataBrowserListCtrlControl::MacInsertItem( unsigned int n, wxListItem*
     MacSetColumnInfo(n, 0, item);
 }
 
-wxMacListCtrlItem* wxMacDataBrowserListCtrlControl::CreateItem()
+wxMacDataItem* wxMacDataBrowserListCtrlControl::CreateItem()
 {
     return new wxMacListCtrlItem();
 }

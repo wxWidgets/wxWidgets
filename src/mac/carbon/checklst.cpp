@@ -39,7 +39,7 @@ public:
     wxMacDataBrowserCheckListControl( wxListBox *peer, const wxPoint& pos, const wxSize& size, long style );
     virtual ~wxMacDataBrowserCheckListControl();
 
-    virtual wxMacListBoxItem* CreateItem();
+    virtual wxMacDataItem* CreateItem();
 
     virtual bool            MacIsChecked(unsigned int n) const;
     virtual void            MacCheck(unsigned int n, bool bCheck = true);
@@ -249,7 +249,7 @@ protected :
     bool        m_isChecked;
 };
 
-wxMacListBoxItem* wxMacDataBrowserCheckListControl::CreateItem()
+wxMacDataItem* wxMacDataBrowserCheckListControl::CreateItem()
 {
     return new wxMacCheckListBoxItem();
 }
