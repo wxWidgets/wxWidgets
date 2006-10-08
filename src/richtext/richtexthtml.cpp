@@ -98,7 +98,9 @@ bool wxRichTextHTMLHandler::DoSaveFile(wxRichTextBuffer *buffer, wxOutputStream&
 
         if (para)
         {
-            OutputParagraphFormatting(currentParaStyle, para->GetAttributes(), stream);
+            wxTextAttrEx paraStyle(para->GetCombinedAttributes());
+            
+            OutputParagraphFormatting(currentParaStyle, paraStyle, stream);
 
             wxRichTextObjectList::compatibility_iterator node2 = para->GetChildren().GetFirst();
             while (node2)
@@ -107,11 +109,12 @@ bool wxRichTextHTMLHandler::DoSaveFile(wxRichTextBuffer *buffer, wxOutputStream&
                 wxRichTextPlainText* textObj = wxDynamicCast(obj, wxRichTextPlainText);
                 if (textObj && !textObj->IsEmpty())
                 {
-                    BeginCharacterFormatting(currentCharStyle, obj->GetAttributes(), stream);
+                    wxTextAttrEx charStyle(para->GetCombinedAttributes(obj->GetAttributes()));
+                    BeginCharacterFormatting(currentCharStyle, charStyle, paraStyle, stream);
 
                     str << textObj->GetText();
 
-                    EndCharacterFormatting(currentCharStyle, obj->GetAttributes(), stream);
+                    EndCharacterFormatting(currentCharStyle, charStyle, paraStyle, stream);
                 }
 
                 wxRichTextImage* image = wxDynamicCast(obj, wxRichTextImage);
@@ -131,12 +134,12 @@ bool wxRichTextHTMLHandler::DoSaveFile(wxRichTextBuffer *buffer, wxOutputStream&
     return true;
 }
 
-void wxRichTextHTMLHandler::BeginCharacterFormatting(const wxTextAttrEx& currentStyle, const wxTextAttrEx& thisStyle, wxOutputStream& stream)
+void wxRichTextHTMLHandler::BeginCharacterFormatting(const wxTextAttrEx& currentStyle, const wxTextAttrEx& thisStyle, const wxTextAttrEx& paraStyle, wxOutputStream& stream)
 {
     wxTextOutputStream str(stream);
 
     //Is the item bulleted one?
-    if( thisStyle.GetBulletStyle() != wxTEXT_ATTR_BULLET_STYLE_NONE )
+    if( paraStyle.GetBulletStyle() != wxTEXT_ATTR_BULLET_STYLE_NONE )
     {
         //Is there any opened list?
         if( m_list )
@@ -145,7 +148,7 @@ void wxRichTextHTMLHandler::BeginCharacterFormatting(const wxTextAttrEx& current
 
             //Is the item among the previous ones
             //Is the item one of the previous list tag's child items
-            if( (thisStyle.GetLeftIndent() == (m_indent + 100)) || (thisStyle.GetLeftIndent() < 100) )
+            if( (paraStyle.GetLeftIndent() == (m_indent + 100)) || (paraStyle.GetLeftIndent() < 100) )
                 str << wxT("<li>");//Yes it is
             else
             {
@@ -155,12 +158,12 @@ void wxRichTextHTMLHandler::BeginCharacterFormatting(const wxTextAttrEx& current
                 str << (m_is_ul ? wxT("</ul>") : wxT("</ol>"));
 
                 //And renavigate to new list's horizontal position
-                NavigateToListPosition(thisStyle, str);
+                NavigateToListPosition(paraStyle, str);
                 //Ok it's done
 
                 //Get the appropriate tag, an ol for numerical values, an ul for dot, square etc.
                 wxString tag;
-                TypeOfList(thisStyle, tag);
+                TypeOfList(paraStyle, tag);
                 str << tag << wxT("<li>");
             }
         }
@@ -169,11 +172,11 @@ void wxRichTextHTMLHandler::BeginCharacterFormatting(const wxTextAttrEx& current
             //No there isn't a list
 
             //navigate to new list's horizontal position(indent)
-            NavigateToListPosition(thisStyle, str);
+            NavigateToListPosition(paraStyle, str);
 
             //Get the appropriate tag, an ol for numerical values, an ul for dot, square etc.
             wxString tag;
-            TypeOfList(thisStyle, tag);
+            TypeOfList(paraStyle, tag);
             str << tag << wxT("<li>");
 
             //Now we have a list, mark it.
@@ -191,25 +194,25 @@ void wxRichTextHTMLHandler::BeginCharacterFormatting(const wxTextAttrEx& current
     }
 
     // does the item have an indentation ?
-    if( thisStyle.GetLeftIndent() )
+    if( paraStyle.GetLeftIndent() )
     {
-        if( thisStyle.GetBulletStyle() == wxTEXT_ATTR_BULLET_STYLE_NONE )
+        if( paraStyle.GetBulletStyle() == wxTEXT_ATTR_BULLET_STYLE_NONE )
         {
             if( m_indent )
             {
-                if( (thisStyle.GetLeftIndent() + thisStyle.GetLeftSubIndent()) == m_indent )
+                if( (paraStyle.GetLeftIndent() + paraStyle.GetLeftSubIndent()) == m_indent )
                 {
-                    if( thisStyle.GetLeftSubIndent() < 0 )
+                    if( paraStyle.GetLeftSubIndent() < 0 )
                     {
-                        str << SymbolicIndent(~thisStyle.GetLeftSubIndent());
+                        str << SymbolicIndent(~paraStyle.GetLeftSubIndent());
                     }
                 }
                 else
                 {
-                    if( thisStyle.GetLeftIndent() + thisStyle.GetLeftSubIndent() > m_indent )
+                    if( paraStyle.GetLeftIndent() + paraStyle.GetLeftSubIndent() > m_indent )
                     {
-                        Indent(thisStyle, str);
-                        m_indent = thisStyle.GetLeftIndent() + thisStyle.GetLeftSubIndent();
+                        Indent(paraStyle, str);
+                        m_indent = paraStyle.GetLeftIndent() + paraStyle.GetLeftSubIndent();
                         m_indents.Add( m_indent );
                     }
                     else
@@ -217,19 +220,19 @@ void wxRichTextHTMLHandler::BeginCharacterFormatting(const wxTextAttrEx& current
                         int i = m_indents.size() - 1;
                         for(; i > -1; i--)
                         {
-                            if( m_indent < (thisStyle.GetLeftIndent() + thisStyle.GetLeftSubIndent()) )
+                            if( m_indent < (paraStyle.GetLeftIndent() + paraStyle.GetLeftSubIndent()) )
                             {
-                                Indent(thisStyle, str);
-                                m_indent = thisStyle.GetLeftIndent() + thisStyle.GetLeftSubIndent();
+                                Indent(paraStyle, str);
+                                m_indent = paraStyle.GetLeftIndent() + paraStyle.GetLeftSubIndent();
                                 m_indents.Add( m_indent );
 
                                 break;
                             }
-                            else if( m_indent == (thisStyle.GetLeftIndent() + thisStyle.GetLeftSubIndent()) )
+                            else if( m_indent == (paraStyle.GetLeftIndent() + paraStyle.GetLeftSubIndent()) )
                             {
-                                if( thisStyle.GetLeftSubIndent() < 0 )
+                                if( paraStyle.GetLeftSubIndent() < 0 )
                                 {
-                                    str << SymbolicIndent(~thisStyle.GetLeftSubIndent());
+                                    str << SymbolicIndent(~paraStyle.GetLeftSubIndent());
                                 }
                                 break;
                             }
@@ -248,8 +251,8 @@ void wxRichTextHTMLHandler::BeginCharacterFormatting(const wxTextAttrEx& current
             }
             else
             {
-                Indent(thisStyle, str);
-                m_indent = thisStyle.GetLeftIndent() + thisStyle.GetLeftSubIndent();
+                Indent(paraStyle, str);
+                m_indent = paraStyle.GetLeftIndent() + paraStyle.GetLeftSubIndent();
                 m_indents.Add( m_indent );
             }
         }
@@ -291,7 +294,7 @@ void wxRichTextHTMLHandler::BeginCharacterFormatting(const wxTextAttrEx& current
         str << wxT("<u>");
 }
 
-void wxRichTextHTMLHandler::EndCharacterFormatting(const wxTextAttrEx& WXUNUSED(currentStyle), const wxTextAttrEx& thisStyle, wxOutputStream& stream)
+void wxRichTextHTMLHandler::EndCharacterFormatting(const wxTextAttrEx& WXUNUSED(currentStyle), const wxTextAttrEx& thisStyle, const wxTextAttrEx& WXUNUSED(paraStyle), wxOutputStream& stream)
 {
     wxTextOutputStream str(stream);
 
