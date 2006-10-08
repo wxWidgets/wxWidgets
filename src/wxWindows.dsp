@@ -1799,11 +1799,19 @@ SOURCE=.\richtext\richtextctrl.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\richtext\richtextformatdlg.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\richtext\richtexthtml.cpp
 # End Source File
 # Begin Source File
 
 SOURCE=.\richtext\richtextstyles.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\richtext\richtextsymboldlg.cpp
 # End Source File
 # Begin Source File
 
@@ -3019,7 +3027,15 @@ SOURCE=..\include\wx\richtext\richtextctrl.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\include\wx\richtext\richtextformatdlg.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\include\wx\richtext\richtextstyles.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\richtext\richtextsymboldlg.h
 # End Source File
 # Begin Source File
 
