@@ -478,6 +478,7 @@ if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_URL=no
   DEFAULT_wxUSE_VARIANT=no
 
+  DEFAULT_wxUSE_ABOUTDLG=no
   DEFAULT_wxUSE_COMMONDLGS=no
   DEFAULT_wxUSE_CHOICEDLG=no
   DEFAULT_wxUSE_COLOURDLG=no
@@ -693,6 +694,7 @@ else
   DEFAULT_wxUSE_URL=yes
   DEFAULT_wxUSE_VARIANT=yes
 
+  DEFAULT_wxUSE_ABOUTDLG=yes
   DEFAULT_wxUSE_COMMONDLGS=yes
   DEFAULT_wxUSE_CHOICEDLG=yes
   DEFAULT_wxUSE_COLOURDLG=yes
@@ -1207,6 +1209,7 @@ dnl common dialogs
 dnl ---------------------------------------------------------------------------
 
 WX_ARG_ENABLE(commondlg,   [  --enable-commondlg      use all common dialogs], wxUSE_COMMONDLGS)
+WX_ARG_ENABLE(aboutdlg,    [  --enable-aboutdlg       use wxAboutBox], wxUSE_ABOUTDLG)
 WX_ARG_ENABLE(choicedlg,   [  --enable-choicedlg      use wxChoiceDialog], wxUSE_CHOICEDLG)
 WX_ARG_ENABLE(coldlg,      [  --enable-coldlg         use wxColourDialog], wxUSE_COLOURDLG)
 WX_ARG_ENABLE(filedlg,     [  --enable-filedlg        use wxFileDialog], wxUSE_FILEDLG)
@@ -6951,6 +6954,10 @@ fi
 dnl ---------------------------------------------------------------------------
 dnl common dialogs
 dnl ---------------------------------------------------------------------------
+
+if test "$wxUSE_ABOUTDLG" = "yes"; then
+    AC_DEFINE(wxUSE_ABOUTDLG)
+fi
 
 if test "$wxUSE_CHOICEDLG" = "yes"; then
     AC_DEFINE(wxUSE_CHOICEDLG)
