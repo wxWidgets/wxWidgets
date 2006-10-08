@@ -152,7 +152,7 @@ bool wxNotebook::Create(wxWindow *parent,
 
     if ( (style & wxBK_ALIGN_MASK) == wxBK_DEFAULT )
         style |= wxBK_TOP;
-    
+
     m_windowId = id == wxID_ANY ? NewControlId() : id;
 
     if (!wxControl::Create(parent, id, pos, size, style|wxNO_BORDER, wxDefaultValidator, name))
@@ -190,6 +190,12 @@ int wxNotebook::SetSelection(size_t nPage)
 
     // TODO
     return 0;
+}
+
+int wxNotebook::ChangeSelection(size_t nPage)
+{
+    // FIXME: currently it does generate events too
+    return SetSelection(nPage);
 }
 
 #if 0
