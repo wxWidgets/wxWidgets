@@ -443,19 +443,14 @@ int wxNotebook::SetSelection(size_t nPage)
 {
     wxCHECK_MSG( IS_VALID_PAGE(nPage), wxNOT_FOUND, wxT("notebook page out of range") );
 
-    if ( int(nPage) != m_nSelection )
+    if ( m_nSelection == wxNOT_FOUND || nPage != (size_t)m_nSelection )
     {
-        wxNotebookEvent event(wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING, m_windowId);
-        event.SetSelection(nPage);
-        event.SetOldSelection(m_nSelection);
-        event.SetEventObject(this);
-        if ( !GetEventHandler()->ProcessEvent(event) || event.IsAllowed() )
+        if ( SendPageChangingEvent(nPage) )
         {
             // program allows the page change
-            event.SetEventType(wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED);
-           (void)GetEventHandler()->ProcessEvent(event);
+            SendPageChangedEvent(m_nSelection, nPage);
 
-           TabCtrl_SetCurSel(GetHwnd(), nPage);
+            TabCtrl_SetCurSel(GetHwnd(), nPage);
         }
     }
 

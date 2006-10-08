@@ -89,6 +89,17 @@ public:
     // On platforms that support it, get the theme page background colour, else invalid colour
     virtual wxColour GetThemeBackgroundColour() const { return wxNullColour; }
 
+
+    // send wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING/ED events
+
+    // returns false if the change to nPage is vetoed by the program
+    bool SendPageChangingEvent(int nPage);
+
+    // sends the event about page change from old to new (or GetSelection() if
+    // new is -1)
+    void SendPageChangedEvent(int nPageOld, int nPageNew = -1);
+
+
 protected:
     DECLARE_NO_COPY_CLASS(wxNotebookBase)
 };

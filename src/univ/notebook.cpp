@@ -243,14 +243,9 @@ int wxNotebook::DoSetSelection(size_t nPage, int flags)
         return m_sel;
     }
 
-    wxNotebookEvent event(wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING, m_windowId);
-    if (flags & SetSelection_SendEvent)
+    if ( flags & SetSelection_SendEvent )
     {
-        // event handling
-        event.SetSelection(nPage);
-        event.SetOldSelection(m_sel);
-        event.SetEventObject(this);
-        if ( GetEventHandler()->ProcessEvent(event) && !event.IsAllowed() )
+        if ( !SendPageChangingEvent(nPage) )
         {
             // program doesn't allow the page change
             return m_sel;
@@ -300,11 +295,10 @@ int wxNotebook::DoSetSelection(size_t nPage, int flags)
         m_pages[m_sel]->Show();
     }
 
-    if (flags & SetSelection_SendEvent)
+    if ( flags & SetSelection_SendEvent )
     {
         // event handling
-        event.SetEventType(wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED);
-        GetEventHandler()->ProcessEvent(event);
+        SendPageChangedEvent(selOld);
     }
 
     return selOld;

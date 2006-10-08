@@ -168,19 +168,14 @@ int wxNotebook::DoSetSelection(size_t nPage, int flags)
     {
         if ( flags & SetSelection_SendEvent )
         {
-            wxNotebookEvent event(wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING, m_windowId);
-            event.SetSelection(nPage);
-            event.SetOldSelection(m_nSelection);
-            event.SetEventObject(this);
-            if ( GetEventHandler()->ProcessEvent(event) && !event.IsAllowed() )
+            if ( !SendPageChangingEvent(nPage) )
             {
                 // vetoed by program
                 return m_nSelection;
             }
             //else: program allows the page change
 
-            event.SetEventType(wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED);
-            (void)GetEventHandler()->ProcessEvent(event);
+            SendPageChangedEvent(m_nSelection, nPage);
         }
 
         ChangePage(m_nSelection, nPage);
