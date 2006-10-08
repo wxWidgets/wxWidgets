@@ -155,6 +155,9 @@ bool wxGenericAboutDialog::Create(const wxAboutDialogInfo& info)
     SetSizerAndFit(sizerTop);
 
     CentreOnScreen();
+
+    FindWindow(wxID_OK)->SetFocus();
+
     return true;
 }
 
