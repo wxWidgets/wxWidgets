@@ -634,7 +634,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/common/valtext.cpp
     src/common/wincmn.cpp
     src/common/xpmdecod.cpp
-    src/generic/aboutdlgg.cpp
     src/generic/busyinfo.cpp
     src/generic/buttonbar.cpp
     src/generic/choicdgg.cpp
@@ -666,7 +665,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/vscroll.cpp
 </set>
 <set var="GUI_CMN_HDR" hints="files">
-    wx/aboutdlg.h
     wx/bmpbuttn.h
     wx/brush.h
     wx/button.h
@@ -694,7 +692,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/gauge.h
     wx/gbsizer.h
     wx/gdicmn.h
-    wx/generic/aboutdlgg.h
     wx/generic/accel.h
     wx/generic/buttonbar.h
     wx/generic/choicdgg.h
@@ -1511,7 +1508,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <set var="MSW_SRC" hints="files">
     src/generic/statusbr.cpp
     src/generic/prntdlgg.cpp
-    src/msw/aboutdlg.cpp
     src/msw/accel.cpp
     src/msw/bmpbuttn.cpp
     src/msw/button.cpp
@@ -2615,6 +2611,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 
 <set var="ADVANCED_CMN_SRC" hints="files">
     src/common/datavcmn.cpp
+    src/generic/aboutdlgg.cpp
     src/generic/bmpcboxg.cpp
     src/generic/calctrl.cpp
     src/generic/datavgen.cpp
@@ -2639,6 +2636,8 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/dataview.h
     wx/dateevt.h
     wx/dcbuffer.h
+    wx/aboutdlg.h
+    wx/generic/aboutdlgg.h
     wx/generic/bmpcbox.h
     wx/generic/calctrl.h
     wx/generic/datectrl.h
@@ -2674,6 +2673,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 
 <set var="ADVANCED_MSW_SRC" hints="files">
     src/common/taskbarcmn.cpp
+    src/msw/aboutdlg.cpp
     src/msw/sound.cpp
     src/msw/taskbar.cpp
 </set>
@@ -2700,6 +2700,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 
 <set var="ADVANCED_MAC_SRC" hints="files">
     src/common/taskbarcmn.cpp
+    src/mac/carbon/aboutdlg.cpp
     src/mac/carbon/drawer.cpp
     src/mac/carbon/sound.cpp
     src/mac/carbon/taskbar.cpp

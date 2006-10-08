@@ -114,6 +114,20 @@ public:
     bool HasTranslators() const { return !m_translators.empty(); }
     const wxArrayString& GetTranslators() const { return m_translators; }
 
+
+    // implementation only
+    // -------------------
+
+    // "simple" about dialog shows only textual information (with possibly
+    // default icon but without hyperlink nor any long texts such as the
+    // licence text)
+    bool IsSimple() const
+        { return !HasWebSite() && !HasIcon() && !HasLicence(); }
+
+    // get the description and credits (i.e. all of developers, doc writers,
+    // artists and translators) as a one long multiline string
+    wxString GetDescriptionAndCredits() const;
+
 private:
     wxString m_name,
              m_version,

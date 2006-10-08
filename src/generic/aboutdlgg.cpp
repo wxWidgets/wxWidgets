@@ -38,8 +38,51 @@
 #include "wx/hyperlink.h"
 
 // ============================================================================
-// wxAboutDialog implementation
+// implementation
 // ============================================================================
+
+// ----------------------------------------------------------------------------
+// wxAboutDialogInfo
+// ----------------------------------------------------------------------------
+
+// helper function: returns all array elements in a single comma-separated and
+// newline-terminated string
+static wxString AllAsString(const wxArrayString& a)
+{
+    wxString s;
+    const size_t count = a.size();
+    for ( size_t n = 0; n < count; n++ )
+    {
+        s << a[n] << (n == count - 1 ? _T("\n") : _T(", "));
+    }
+
+    return s;
+}
+
+wxString wxAboutDialogInfo::GetDescriptionAndCredits() const
+{
+    wxString s = GetDescription();
+    if ( !s.empty() )
+        s << _T('\n');
+
+    if ( HasDevelopers() )
+        s << _T('\n') << _("Developed by ") << AllAsString(GetDevelopers());
+
+    if ( HasDocWriters() )
+        s << _T('\n') << ("Documentation by ") << AllAsString(GetDocWriters());
+
+    if ( HasArtists() )
+        s << _T('\n') << ("Graphics art by ") << AllAsString(GetArtists());
+
+    if ( HasTranslators() )
+        s << _T('\n') << ("Translations by ") << AllAsString(GetTranslators());
+
+    return s;
+}
+
+// ----------------------------------------------------------------------------
+// wxAboutDialog
+// ----------------------------------------------------------------------------
 
 bool wxAboutDialog::Create(const wxAboutDialogInfo& info)
 {
@@ -131,10 +174,9 @@ void wxGenericAboutBox(const wxAboutDialogInfo& info)
     dlg.ShowModal();
 }
 
-// currently wxAboutBox is implemented natively only under wxMSW, so we provide
-// it here for the other platforms (this is going to change when GTK+ and Mac
-// native versions are implemented)
-#ifndef __WXMSW__
+// currently wxAboutBox is implemented natively only under these platforms, for
+// the others we provide a generic fallback here
+#if !defined(__WXMSW__) && !defined(__WXMAC__)
 
 void wxAboutBox(const wxAboutDialogInfo& info)
 {
