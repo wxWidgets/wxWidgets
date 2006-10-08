@@ -233,7 +233,7 @@ wxNotebook::~wxNotebook()
 // wxNotebook page switching
 // ----------------------------------------------------------------------------
 
-int wxNotebook::DoSetSelection(size_t nPage, int flags = 0)
+int wxNotebook::DoSetSelection(size_t nPage, int flags)
 {
     wxCHECK_MSG( IS_VALID_PAGE(nPage), wxNOT_FOUND, _T("invalid notebook page") );
 
