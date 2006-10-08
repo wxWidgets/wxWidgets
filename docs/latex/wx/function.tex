@@ -32,6 +32,7 @@ the corresponding topic.
 \helpref{IMPLEMENT\_CLASS}{implementclass}\\
 \helpref{IMPLEMENT\_DYNAMIC\_CLASS2}{implementdynamicclass2}\\
 \helpref{IMPLEMENT\_DYNAMIC\_CLASS}{implementdynamicclass}\\
+\helpref{wxAboutBox}{wxaboutbox}\\
 \helpref{wxASSERT}{wxassert}\\
 \helpref{wxASSERT\_MIN\_BITSIZE}{wxassertminbitsize}\\
 \helpref{wxASSERT\_MSG}{wxassertmsg}\\
@@ -103,6 +104,7 @@ the corresponding topic.
 \helpref{wxFindWindowByLabel}{wxfindwindowbylabel}\\
 \helpref{wxFindWindowByName}{wxfindwindowbyname}\\
 \helpref{wxFinite}{wxfinite}\\
+\helpref{wxGenericAboutBox}{wxgenericaboutbox}\\
 \helpref{wxGetActiveWindow}{wxgetactivewindow}\\
 \helpref{wxGetApp}{wxgetapp}\\
 \helpref{wxGetBatteryState}{wxgetbatterystate}\\
@@ -1804,6 +1806,39 @@ parameter, or (in MS Windows or Motif) the wrong window frame may be brought to
 the front when the dialog box is popped up.
 
 
+\membersection{::wxAboutBox}\label{wxaboutbox}
+
+\func{void}{wxAboutBox}{\param{const wxAboutDialogInfo\& }{info}}
+
+This function shows the standard about dialog containing the information
+specified in \arg{info}. If the current platform has a native about dialog
+which is capable of showing all the fields in \arg{info}, the native dialog is
+used, otherwise the function falls back to the generic wxWidgets version of the
+dialog, i.e. does the same thing as \helpref{wxGenericAboutBox()}{wxgenericaboutbox}.
+
+Here is an example of how this function may be used:
+\begin{verbatim}
+void MyFrame::ShowSimpleAboutDialog(wxCommandEvent& WXUNUSED(event))
+{
+    wxAboutDialogInfo info;
+    info.SetName(_("My Program"));
+    info.SetVersion(_("1.2.3 Beta"));
+    info.SetDescription(_("This program does something great."));
+    info.SetCopyright(_T("(C) 2007 Me <my@email.addre.ss>"));
+
+    wxAboutBox(info);
+}
+\end{verbatim}
+
+Please see the \helpref{dialogs sample}{sampledialogs} for more examples of
+using this function and \helpref{wxAboutDialogInfo}{wxaboutdialoginfo} for the
+description of the information which can be shown in the about dialog.
+
+\wxheading{Include files}
+
+<wx/aboutdlg.h>
+
+
 \membersection{::wxBeginBusyCursor}\label{wxbeginbusycursor}
 
 \func{void}{wxBeginBusyCursor}{\param{wxCursor *}{cursor = wxHOURGLASS\_CURSOR}}
@@ -1939,6 +1974,29 @@ See also \helpref{wxIsBusy}{wxisbusy}, \helpref{wxBusyCursor}{wxbusycursor}.
 \wxheading{Include files}
 
 <wx/utils.h>
+
+
+\membersection{::wxGenericAboutBox}\label{wxgenericaboutbox}
+
+\func{void}{wxGenericAboutBox}{\param{const wxAboutDialogInfo\& }{info}}
+
+This function does the same thing as \helpref{wxAboutBox}{wxaboutbox} except
+that it always uses the generic wxWidgets version of the dialog instead of the
+native one. This is mainly useful if you need to customize the dialog by e.g.
+adding custom controls to it (customizing the native dialog is not currently
+supported).
+
+See the \helpref{dialogs sample}{sampledialogs} for an example of about dialog
+customization.
+
+\wxheading{See also}
+
+\helpref{wxAboutDialogInfo}{wxaboutdialoginfo}
+
+\wxheading{Include files}
+
+<wx/aboutdlg.h>
+<wx/generic/aboutdlgg.h>
 
 
 \membersection{::wxGetColourFromUser}\label{wxgetcolourfromuser}

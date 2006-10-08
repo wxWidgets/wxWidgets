@@ -1,0 +1,224 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Name:        aboutdlginfo.tex
+%% Purpose:     wxAboutDialogInfo documentation
+%% Author:      Vadim Zeitlin
+%% Created:     2006-10-08
+%% RCS-ID:      $Id$
+%% Copyright:   (c) Vadim Zeitlin
+%% License:     wxWindows license
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{\class{wxAboutDialogInfo}}\label{wxaboutdialoginfo}
+
+wxAboutDialogInfo contains information shown in the standard \textit{About}
+dialog displayed by the \helpref{wxAboutBox()}{wxaboutbox} function.
+
+This class contains the general information about the program, such as its
+name, version, copyright and so on, as well as lists of the program developers,
+documentation writers, artists and translators. The simple properties from the
+former group are represented as a string with the exception of the program icon
+and the program web site, while the lists from the latter group are stored as 
+\helpref{wxArrayString}{wxarraystring} and can be either set entirely at once
+using \helpref{SetDevelopers}{wxaboutdialoginfosetdevelopers} and similar
+functions or built one by one using \helpref{AddDeveloper}{wxaboutdialoginfoadddeveloper} 
+etc.
+
+Please also notice that while all the main platforms have the native
+implementation of the about dialog, they are often more limited than the
+generic version provided by wxWidgets and so the generic version is used if
+wxAboutDialogInfo has any fields not supported by the native version. Currently
+GTK+ version supports all the possible fields natively but MSW and Mac versions
+don't support URLs, licence text nor custom icons in the about dialog and if
+either of those is used, \helpref{wxAboutBox()}{wxaboutbox} will automatically
+use the generic version so you should avoid specifying these fields to achieve
+more native look and feel.
+
+\wxheading{Derived from}
+
+No base class
+
+\wxheading{Include files}
+
+<wx/aboutdlg.h>
+
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+
+\membersection{wxAboutDialogInfo::wxAboutDialogInfo}\label{wxaboutdialoginfowxaboutdialoginfo}
+
+\func{}{wxAboutDialogInfo}{\void}
+
+Default constructor leaves all fields are initially uninitialized, in general
+you should call at least \helpref{SetVersion}{wxaboutdialoginfosetversion}, 
+\helpref{SetCopyright}{wxaboutdialoginfosetcopyright} and 
+\helpref{SetDescription}{wxaboutdialoginfosetdescription}.
+
+
+\membersection{wxAboutDialogInfo::AddArtist}\label{wxaboutdialoginfoaddartist}
+
+\func{void}{AddArtist}{\param{const wxString\& }{artist}}
+
+Adds an artist name to be shown in the program credits.
+
+\wxheading{See also}
+
+\helpref{SetArtists}{wxaboutdialoginfosetartists}
+
+
+\membersection{wxAboutDialogInfo::AddDeveloper}\label{wxaboutdialoginfoadddeveloper}
+
+\func{void}{AddDeveloper}{\param{const wxString\& }{developer}}
+
+Adds a developer name to be shown in the program credits.
+
+\wxheading{See also}
+
+\helpref{SetDevelopers}{wxaboutdialoginfosetdevelopers}
+
+
+\membersection{wxAboutDialogInfo::AddDocWriter}\label{wxaboutdialoginfoadddocwriter}
+
+\func{void}{AddDocWriter}{\param{const wxString\& }{docwriter}}
+
+Adds a documentation writer name to be shown in the program credits.
+
+\wxheading{See also}
+
+\helpref{SetDocWriters}{wxaboutdialoginfosetdocwriters}
+
+
+\membersection{wxAboutDialogInfo::AddTranslator}\label{wxaboutdialoginfoaddtranslator}
+
+\func{void}{AddTranslator}{\param{const wxString\& }{translator}}
+
+Adds a translator name to be shown in the program credits. Notice that if no
+translator names are specified explicitely, \helpref{wxAboutBox()}{wxaboutbox} 
+will try to use the translation of the string \texttt{translator-credits} from
+the currently used message catalog -- this can be used to show just the name of
+the translator of the program in the current language.
+
+\wxheading{See also}
+
+\helpref{SetTranslators}{wxaboutdialoginfosettranslators}
+
+
+\membersection{wxAboutDialogInfo::SetArtists}\label{wxaboutdialoginfosetartists}
+
+\func{void}{SetArtists}{\param{const wxArrayString\& }{artists}}
+
+Sets the the list of artists to be shown in the program credits.
+
+\wxheading{See also}
+
+\helpref{AddArtist}{wxaboutdialoginfoaddartist}
+
+
+\membersection{wxAboutDialogInfo::SetCopyright}\label{wxaboutdialoginfosetcopyright}
+
+\func{void}{SetCopyright}{\param{const wxString\& }{copyright}}
+
+Set the short string containing the program copyright information. Notice that
+any occurrences of \texttt{"(C)"} in \arg{copyright} will be replaced by the
+copyright symbol (circled C) automatically, which means that you can avoid
+using this symbol in the program source code which can be problematic,
+
+
+\membersection{wxAboutDialogInfo::SetDescription}\label{wxaboutdialoginfosetdescription}
+
+\func{void}{SetDescription}{\param{const wxString\& }{desc}}
+
+Set brief, but possibly multiline, description of the program.
+
+
+\membersection{wxAboutDialogInfo::SetDevelopers}\label{wxaboutdialoginfosetdevelopers}
+
+\func{void}{SetDevelopers}{\param{const wxArrayString\& }{developers}}
+
+Set the list of developers of the program.
+
+\wxheading{See also}
+
+\helpref{AddDeveloper}{wxaboutdialoginfoadddeveloper}
+
+
+\membersection{wxAboutDialogInfo::SetDocWriters}\label{wxaboutdialoginfosetdocwriters}
+
+\func{void}{SetDocWriters}{\param{const wxArrayString\& }{docwriters}}
+
+Set the list of documentation writers.
+
+\wxheading{See also}
+
+\helpref{AddDocWriter}{wxaboutdialoginfoadddocwriter}
+
+
+\membersection{wxAboutDialogInfo::SetIcon}\label{wxaboutdialoginfoseticon}
+
+\func{void}{SetIcon}{\param{const wxIcon\& }{icon}}
+
+Set the icon to be shown in the dialog. By default the icon of the main frame
+will be shown if the native about dialog supports custom icons. If it doesn't
+but a valid icon is specified using this method, the generic about dialog is
+used instead so you should avoid calling this function for maximally native
+look and feel.
+
+
+\membersection{wxAboutDialogInfo::SetLicence}\label{wxaboutdialoginfosetlicence}
+
+\func{void}{SetLicence}{\param{const wxString\& }{licence}}
+
+Set the long, multiline string containing the text of the program licence.
+
+Only GTK+ version supports showing the licence text in the native about dialog
+currently so the generic version will be used under all the other platforms if
+this method is called. To preserve the native look and feel it is advised that
+you do not call this method but provide a separate menu item in the 
+\texttt{"Help"} menu for displaying the text of your program licence.
+
+
+\membersection{wxAboutDialogInfo::SetLicense}\label{wxaboutdialoginfosetlicense}
+
+\func{void}{SetLicense}{\param{const wxString\& }{licence}}
+
+This is the same as \helpref{SetLicence}{wxaboutdialoginfosetlicence}.
+
+
+\membersection{wxAboutDialogInfo::SetName}\label{wxaboutdialoginfosetname}
+
+\func{void}{SetName}{\param{const wxString\& }{name}}
+
+Set the name of the program. If this method is not called, the string returned
+by \helpref{wxApp::GetAppName()}{wxappgetappname} will be shown in the dialog.
+
+
+\membersection{wxAboutDialogInfo::SetTranslators}\label{wxaboutdialoginfosettranslators}
+
+\func{void}{SetTranslators}{\param{const wxArrayString\& }{translators}}
+
+Set the list of translators. Please see 
+\helpref{AddTranslator}{wxaboutdialoginfoaddtranslator} for additional
+discussion.
+
+
+\membersection{wxAboutDialogInfo::SetVersion}\label{wxaboutdialoginfosetversion}
+
+\func{void}{SetVersion}{\param{const wxString\& }{version}}
+
+Set the version of the program. The version is in free format, i.e. not
+necessarily in the \texttt{x.y.z} form but it shouldn't contain the "version"
+word.
+
+
+\membersection{wxAboutDialogInfo::SetWebSite}\label{wxaboutdialoginfosetwebsite}
+
+\func{void}{SetWebSite}{\param{const wxString\& }{url}, \param{const wxString\& }{desc = wxEmptyString}}
+
+Set the web site for the program and its description (which defaults to URL
+itself if empty).
+
+Please notice that only GTK+ version currently supports showing the link in the
+native about dialog so if this method is called, the generic version will be
+used under all the other platforms.
+
+
