@@ -361,7 +361,7 @@ static void OutputStringEnt(wxOutputStream& stream, const wxString& str,
             }
             last = i + 1;
         }
-        else if ((unsigned wxChar)c > 127)
+        else if ((unsigned long)c > 127)
         {
             OutputString(stream, str.Mid(last, i - last), convMem, convFile);
 
