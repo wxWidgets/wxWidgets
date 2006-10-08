@@ -4,7 +4,7 @@
 // Author:      Stefan Csomor
 // Modified by:
 // Created:     03/02/99
-// RCS-ID:      $Id: 
+// RCS-ID:      $Id:
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -28,7 +28,7 @@
 #error "only Carbon Printing Session API is supported"
 #endif
 
-class WXDLLEXPORT wxMacCarbonPrintData : public wxPrintNativeDataBase 
+class WXDLLEXPORT wxMacCarbonPrintData : public wxPrintNativeDataBase
 {
 public :
                             wxMacCarbonPrintData() ;
@@ -37,21 +37,21 @@ public :
     virtual bool            TransferTo( wxPrintData &data );
     virtual bool            TransferFrom( const wxPrintData &data );
 
-    virtual bool            Ok() const ;
-    
+    virtual bool            IsOk() const ;
+
     virtual void            TransferFrom( wxPageSetupDialogData * )  ;
     virtual void            TransferTo( wxPageSetupDialogData * ) ;
-    
+
     virtual void            TransferFrom( wxPrintDialogData * )  ;
     virtual void            TransferTo( wxPrintDialogData * ) ;
 private :
     virtual void            ValidateOrCreate() ;
 public :
-    PMPrintSession			m_macPrintSession ;
+    PMPrintSession          m_macPrintSession ;
     PMPageFormat            m_macPageFormat ;
     PMPrintSettings         m_macPrintSettings ;
 private:
     DECLARE_DYNAMIC_CLASS(wxMacCarbonPrintData)
 } ;
 
-#endif
+#endif // _WX_MAC_PRIVATE_PRINT_H_
