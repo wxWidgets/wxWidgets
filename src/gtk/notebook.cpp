@@ -692,7 +692,7 @@ bool wxNotebook::InsertPage( size_t position,
 
     /* set the label text */
 
-    nb_page->m_text = text;
+    nb_page->m_text = wxStripMenuCodes(text);
     if (nb_page->m_text.empty()) nb_page->m_text = wxEmptyString;
 
     nb_page->m_label = GTK_LABEL( gtk_label_new(wxGTK_CONV(nb_page->m_text)) );
