@@ -312,6 +312,14 @@
    preprocessor about invalid integer expression
  */
 
+#ifndef wxUSE_ABOUTDLG
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_ABOUTDLG must be defined."
+#   else
+#       define wxUSE_ABOUTDLG 0
+#   endif
+#endif /* !defined(wxUSE_ABOUTDLG) */
+
 #ifndef wxUSE_ACCEL
 #   ifdef wxABORT_ON_CONFIG_ERROR
 #       error "wxUSE_ACCEL must be defined."

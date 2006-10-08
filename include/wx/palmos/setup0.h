@@ -901,6 +901,14 @@
 // wizards
 #define wxUSE_WIZARDDLG 1
 
+// Compile in wxAboutBox() function showing the standard "About" dialog.
+//
+// Default is 1
+//
+// Recommended setting: 1 but can be set to 0 to save some space if you don't
+//                      use this function
+#define wxUSE_ABOUTDLG 1
+
 // ----------------------------------------------------------------------------
 // Metafiles support
 // ----------------------------------------------------------------------------
