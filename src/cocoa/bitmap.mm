@@ -33,6 +33,8 @@
 #import <AppKit/NSImage.h>
 #import <AppKit/NSColor.h>
 
+IMPLEMENT_ABSTRACT_CLASS(wxBitmapHandler, wxBitmapHandlerBase)
+
 // ========================================================================
 // wxBitmapRefData
 // ========================================================================
@@ -123,7 +125,7 @@ wxBitmap::wxBitmap(int w, int h, int d)
     (void)Create(w, h, d);
 }
 
-wxBitmap::wxBitmap(void *data, wxBitmapType type, int width, int height, int depth)
+wxBitmap::wxBitmap(const void* data, wxBitmapType type, int width, int height, int depth)
 {
     (void) Create(data, type, width, height, depth);
 }
@@ -346,7 +348,7 @@ bool wxBitmap::LoadFile(const wxString& filename, wxBitmapType type)
     return true;
 }
 
-bool wxBitmap::Create(void *data, wxBitmapType type, int width, int height, int depth)
+bool wxBitmap::Create(const void* data, wxBitmapType type, int width, int height, int depth)
 {
     UnRef();
 
@@ -411,24 +413,6 @@ wxImage wxBitmap::ConvertToImage() const
     }
     [nsimage unlockFocus];
     return newImage;
-}
-
-bool wxBitmap::CreateFromXpm(const char **xpm)
-{
-#if wxUSE_IMAGE && wxUSE_XPM
-    UnRef();
-
-    wxCHECK_MSG( xpm, false, wxT("invalid XPM data") );
-
-    wxXPMDecoder decoder;
-    wxImage img = decoder.ReadData(xpm);
-    wxCHECK_MSG( img.Ok(), false, wxT("invalid XPM data") );
-
-    *this = wxBitmap(img);
-    return true;
-#else
-    return false;
-#endif
 }
 
 bool wxBitmap::CreateFromImage(const wxImage& image, int depth)

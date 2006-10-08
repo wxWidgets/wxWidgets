@@ -360,7 +360,7 @@ bool wxBitmap::Create( int width, int height, int depth )
     return Ok();
 }
 
-bool wxBitmap::Create(void *data, wxBitmapType type,
+bool wxBitmap::Create(const void* data, wxBitmapType type,
                       int width, int height, int depth)
 {
     UnRef();
@@ -417,11 +417,9 @@ bool wxBitmap::Create(WXPixmap pixmap)
     return true;
 }
 
-bool wxBitmap::CreateFromXpm( const char **bits )
+wxBitmap::wxBitmap(const char* const* bits)
 {
-    wxCHECK_MSG( bits, false, wxT("NULL pointer in wxBitmap::CreateFromXpm") );
-
-    return Create(bits, wxBITMAP_TYPE_XPM_DATA, 0, 0, 0);
+    Create(bits, wxBITMAP_TYPE_XPM_DATA, 0, 0, 0);
 }
 
 bool wxBitmap::CreateFromImage( const wxImage& image, int depth )
@@ -912,7 +910,7 @@ wxBitmap::wxBitmap( const char bits[], int width, int height, int depth )
 {
     m_refData = new wxBitmapRefData;
 
-    (void) Create((void*) bits, wxBITMAP_TYPE_XBM_DATA, width, height, depth);
+    (void) Create(bits, wxBITMAP_TYPE_XBM_DATA, width, height, depth);
 }
 
 wxBitmap::~wxBitmap()
@@ -1320,7 +1318,7 @@ public:
     virtual bool SaveFile(const wxBitmap *bitmap, const wxString& name,
                           int type, const wxPalette *palette = NULL);
 
-    virtual bool Create(wxBitmap *WXUNUSED(bitmap), void *WXUNUSED(data), long WXUNUSED(flags),
+    virtual bool Create(wxBitmap *WXUNUSED(bitmap), const void* WXUNUSED(data), long WXUNUSED(flags),
                         int WXUNUSED(width), int WXUNUSED(height), int WXUNUSED(depth) = 1)
         { return false; }
 };
@@ -1435,13 +1433,13 @@ public:
                           const wxPalette *WXUNUSED(palette) = NULL)
         { return false; }
 
-    virtual bool Create(wxBitmap *bitmap, void *data, long flags,
+    virtual bool Create(wxBitmap *bitmap, const void* data, long flags,
                         int width, int height, int depth = 1);
 };
 
 IMPLEMENT_DYNAMIC_CLASS(wxXPMDataHandler, wxBitmapHandler)
 
-bool wxXPMDataHandler::Create(wxBitmap *bitmap, void *bits,
+bool wxXPMDataHandler::Create(wxBitmap *bitmap, const void* bits,
                               long WXUNUSED(flags),
                               int WXUNUSED(width), int WXUNUSED(height), int WXUNUSED(depth))
 {
@@ -1541,13 +1539,13 @@ public:
                           const wxPalette *WXUNUSED(palette) = NULL)
         { return false; }
 
-    virtual bool Create(wxBitmap *bitmap, void *data, long flags,
+    virtual bool Create(wxBitmap *bitmap, const void* data, long flags,
                         int width, int height, int depth = 1);
 };
 
 IMPLEMENT_DYNAMIC_CLASS(wxXBMDataHandler, wxBitmapHandler)
 
-bool wxXBMDataHandler::Create( wxBitmap *bitmap, void *bits,
+bool wxXBMDataHandler::Create( wxBitmap *bitmap, const void* bits,
                                long WXUNUSED(flags),
                                int width, int height, int WXUNUSED(depth))
 {

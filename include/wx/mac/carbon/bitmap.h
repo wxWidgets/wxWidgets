@@ -78,22 +78,10 @@ private:
 
 };
 
-class WXDLLEXPORT wxBitmapHandler: public wxBitmapHandlerBase
+class WXDLLIMPEXP_CORE wxBitmapHandler: public wxBitmapHandlerBase
 {
-public:
-    wxBitmapHandler() { }
-    virtual ~wxBitmapHandler();
-
-    virtual bool Create(wxBitmap *bitmap, void *data, long flags, int width, int height, int depth = 1);
-    virtual bool LoadFile(wxBitmap *bitmap, const wxString& name, long flags,
-        int desiredWidth, int desiredHeight);
-    virtual bool SaveFile(const wxBitmap *bitmap, const wxString& name, int type, const wxPalette *palette = NULL);
-
-private:
-    DECLARE_DYNAMIC_CLASS(wxBitmapHandler)
+    DECLARE_ABSTRACT_CLASS(wxBitmapHandler)
 };
-
-#define M_BITMAPHANDLERDATA ((wxBitmapRefData *)bitmap->GetRefData())
 
 class WXDLLEXPORT wxBitmap: public wxBitmapBase
 {
@@ -108,15 +96,13 @@ public:
     wxBitmap(const char bits[], int width, int height, int depth = 1);
 
     // Initialize with XPM data
-    bool CreateFromXpm(const char **bits);
-    wxBitmap(const char **bits);
-    wxBitmap(char **bits);
+    wxBitmap(const char* const* bits);
 
     // Load a file or resource
     wxBitmap(const wxString& name, wxBitmapType type = wxBITMAP_TYPE_PICT_RESOURCE);
 
     // Constructor for generalised creation from data
-    wxBitmap(void *data, wxBitmapType type, int width, int height, int depth = 1);
+    wxBitmap(const void* data, wxBitmapType type, int width, int height, int depth = 1);
 
     // If depth is omitted, will create a bitmap compatible with the display
     wxBitmap(int width, int height, int depth = -1);
@@ -135,7 +121,7 @@ public:
     wxBitmap GetSubBitmap( const wxRect& rect ) const;
 
     virtual bool Create(int width, int height, int depth = -1);
-    virtual bool Create(void *data, wxBitmapType type, int width, int height, int depth = 1);
+    virtual bool Create(const void* data, wxBitmapType type, int width, int height, int depth = 1);
     // virtual bool Create( WXHICON icon) ;
     virtual bool LoadFile(const wxString& name, wxBitmapType type = wxBITMAP_TYPE_BMP_RESOURCE);
     virtual bool SaveFile(const wxString& name, wxBitmapType type, const wxPalette *cmap = NULL) const;

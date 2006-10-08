@@ -71,12 +71,11 @@ public:
     // Initialize with raw data.
     wxBitmap(const char bits[], int width, int height, int depth = 1);
     // Initialize with XPM data
-    wxBitmap(const char **bits) { CreateFromXpm(bits); }
-    wxBitmap(char **bits) { CreateFromXpm((const char**)bits); }
+    wxBitmap(const char* const* bits);
     // Load a file or resource
     wxBitmap(const wxString& name, wxBitmapType type = wxBITMAP_TYPE_BMP_RESOURCE);
     // Constructor for generalised creation from data
-    wxBitmap(void *data, wxBitmapType type, int width, int height, int depth = 1);
+    wxBitmap(const void* data, wxBitmapType type, int width, int height, int depth = 1);
     // If depth is omitted, will create a bitmap compatible with the display
     wxBitmap(int width, int height, int depth = -1);
     // Convert from wxImage:
@@ -92,13 +91,11 @@ public:
 // Implementation
 // ------------------------------------------------------------------------
 public:
-    // Initialize with XPM data
-    bool CreateFromXpm(const char **bits);
     // Initialize from wxImage
     bool CreateFromImage(const wxImage& image, int depth=-1);
 
     virtual bool Create(int width, int height, int depth = -1);
-    virtual bool Create(void *data, wxBitmapType type, int width, int height, int depth = 1);
+    virtual bool Create(const void* data, wxBitmapType type, int width, int height, int depth = 1);
     virtual bool LoadFile(const wxString& name, wxBitmapType type = wxBITMAP_TYPE_BMP_RESOURCE);
     virtual bool SaveFile(const wxString& name, wxBitmapType type, const wxPalette *cmap = NULL) const;
 
@@ -150,6 +147,11 @@ public:
 
     static void InitStandardHandlers() { }
     static void CleanUpHandlers() { }
+};
+
+class WXDLLIMPEXP_CORE wxBitmapHandler: public wxBitmapHandlerBase
+{
+    DECLARE_ABSTRACT_CLASS(wxBitmapHandler)
 };
 
 #endif // __WX_COCOA_BITMAP_H__

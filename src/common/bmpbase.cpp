@@ -126,6 +126,21 @@ void wxBitmapBase::CleanUpHandlers()
     }
 }
 
+bool wxBitmapHandlerBase::Create(wxBitmap*, const void*, long, int, int, int)
+{
+    return false;
+}
+
+bool wxBitmapHandlerBase::LoadFile(wxBitmap*, const wxString&, long, int, int)
+{
+    return false;
+}
+
+bool wxBitmapHandlerBase::SaveFile(const wxBitmap*, const wxString&, int, const wxPalette*)
+{
+    return false;
+}
+
 class wxBitmapBaseModule: public wxModule
 {
 DECLARE_DYNAMIC_CLASS(wxBitmapBaseModule)
@@ -138,6 +153,27 @@ public:
 IMPLEMENT_DYNAMIC_CLASS(wxBitmapBaseModule, wxModule)
 
 #endif // wxUSE_BITMAP_BASE
+
+// ----------------------------------------------------------------------------
+// wxBitmap common
+// ----------------------------------------------------------------------------
+
+#if !(defined(__WXGTK__) || defined(__WXMOTIF__) || defined(__WXX11__))
+
+wxBitmap::wxBitmap(const char* const* bits)
+{
+    wxCHECK2_MSG(bits != NULL, return, wxT("invalid bitmap data"));
+
+#if wxUSE_IMAGE && wxUSE_XPM
+    wxImage image(bits);
+    wxCHECK2_MSG(image.Ok(), return, wxT("invalid bitmap data"));
+
+    *this = wxBitmap(image);
+#else
+    wxFAIL_MSG(_T("creating bitmaps from XPMs not supported"));
+#endif // wxUSE_IMAGE && wxUSE_XPM
+}
+#endif // !(defined(__WXGTK__) || defined(__WXMOTIF__) || defined(__WXX11__))
 
 // ----------------------------------------------------------------------------
 // wxMaskBase

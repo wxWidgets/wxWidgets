@@ -99,10 +99,10 @@ public:
     void SetExtension(const wxString& ext) { m_extension = ext; }
     void SetType(long type) { m_type = type; }
     void SetMimeType(const wxString& type) { m_mime = type; }
-    wxString GetName() const { return m_name; }
-    wxString GetExtension() const { return m_extension; }
+    const wxString& GetName() const { return m_name; }
+    const wxString& GetExtension() const { return m_extension; }
     long GetType() const { return m_type; }
-    wxString GetMimeType() const { return m_mime; }
+    const wxString& GetMimeType() const { return m_mime; }
 
 protected:
 #if wxUSE_STREAMS
@@ -199,8 +199,7 @@ public:
     wxImage( int width, int height, unsigned char* data, unsigned char* alpha, bool static_data = false );
     wxImage( const wxString& name, long type = wxBITMAP_TYPE_ANY, int index = -1 );
     wxImage( const wxString& name, const wxString& mimetype, int index = -1 );
-    wxImage( const char** xpmData );
-    wxImage( char** xpmData );
+    wxImage( const char* const* xpmData );
 
 #if wxUSE_STREAMS
     wxImage( wxInputStream& stream, long type = wxBITMAP_TYPE_ANY, int index = -1 );
@@ -210,7 +209,7 @@ public:
     bool Create( int width, int height, bool clear = true );
     bool Create( int width, int height, unsigned char* data, bool static_data = false );
     bool Create( int width, int height, unsigned char* data, unsigned char* alpha, bool static_data = false );
-    bool Create( const char** xpmData );
+    bool Create( const char* const* xpmData );
     void Destroy();
 
     // creates an identical copy of the image (the = operator

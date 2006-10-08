@@ -23,12 +23,9 @@ struct bitmap_t;
 // wxBitmap
 //-----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxBitmapHandler : public wxBitmapHandlerBase
+class WXDLLIMPEXP_CORE wxBitmapHandler: public wxBitmapHandlerBase
 {
-public:
-    wxBitmapHandler() : wxBitmapHandlerBase() {}
-private:
-    DECLARE_DYNAMIC_CLASS(wxBitmapHandler)
+    DECLARE_ABSTRACT_CLASS(wxBitmapHandler)
 };
 
 class WXDLLEXPORT wxBitmap: public wxBitmapBase
@@ -37,8 +34,7 @@ public:
     wxBitmap() {}
     wxBitmap(int width, int height, int depth = -1);
     wxBitmap(const char bits[], int width, int height, int depth = 1);
-    wxBitmap(const char **bits) { CreateFromXpm(bits); }
-    wxBitmap(char **bits) { CreateFromXpm((const char **)bits); }
+    wxBitmap(const char* const* bits);
     wxBitmap(const wxString &filename, wxBitmapType type = wxBITMAP_TYPE_RESOURCE);
     wxBitmap(const wxImage& image, int depth = -1);
     virtual ~wxBitmap() {}
@@ -81,8 +77,6 @@ public:
     bitmap_t *GetMGLbitmap_t() const;
 
 protected:
-    bool CreateFromXpm(const char **bits);
-
     // creates temporary DC for access to bitmap's data:
     MGLDevCtx *CreateTmpDC() const;
     // sets fg & bg colours for 1bit bitmaps:

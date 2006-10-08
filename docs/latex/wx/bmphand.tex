@@ -38,7 +38,7 @@ Destroys the wxBitmapHandler object.
 
 \membersection{wxBitmapHandler::Create}\label{wxbitmaphandlercreate}
 
-\func{virtual bool}{Create}{\param{wxBitmap* }{bitmap}, \param{void*}{ data}, \param{int}{ type}, \param{int}{ width}, \param{int}{ height}, \param{int}{ depth = -1}}
+\func{virtual bool}{Create}{\param{wxBitmap* }{bitmap}, \param{const void*}{ data}, \param{int}{ type}, \param{int}{ width}, \param{int}{ height}, \param{int}{ depth = -1}}
 
 Creates a bitmap from the given data, which can be of arbitrary type. The wxBitmap object {\it bitmap} is
 manipulated by this function.
@@ -64,13 +64,13 @@ true if the call succeeded, false otherwise (the default).
 
 \membersection{wxBitmapHandler::GetName}\label{wxbitmaphandlergetname}
 
-\constfunc{wxString}{GetName}{\void}
+\constfunc{const wxString\&}{ GetName}{\void}
 
 Gets the name of this handler.
 
 \membersection{wxBitmapHandler::GetExtension}\label{wxbitmaphandlergetextension}
 
-\constfunc{wxString}{GetExtension}{\void}
+\constfunc{const wxString\&}{ GetExtension}{\void}
 
 Gets the file extension associated with this handler.
 

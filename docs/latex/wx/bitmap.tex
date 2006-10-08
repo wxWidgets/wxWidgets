@@ -48,7 +48,7 @@ use:
                              wxRect(0, 0, oldBitmap.GetWidth(), oldBitmap.GetHeight()));
 \end{verbatim}
 
-\func{}{wxBitmap}{\param{void*}{ data}, \param{int}{ type}, \param{int}{ width}, \param{int}{ height}, \param{int}{ depth = -1}}
+\func{}{wxBitmap}{\param{const void*}{ data}, \param{int}{ type}, \param{int}{ width}, \param{int}{ height}, \param{int}{ depth = -1}}
 
 Creates a bitmap from the given data which is interpreted in platform-dependent
 manner.
@@ -75,7 +75,7 @@ or visual. Some platforms only support 1 for monochrome and -1 for the current
 colour setting. Beginning with version 2.5.4 of wxWidgets a depth of 32 including
 an alpha channel is supported under MSW, Mac and GTK+.
 
-\func{}{wxBitmap}{\param{const char**}{ bits}}
+\func{}{wxBitmap}{\param{const char* const*}{ bits}}
 
 Creates a bitmap from XPM data.
 
@@ -260,7 +260,7 @@ Creates the bitmap from an icon.
 Creates a fresh bitmap. If the final argument is omitted, the display depth of
 the screen is used.
 
-\func{virtual bool}{Create}{\param{void*}{ data}, \param{int}{ type}, \param{int}{ width}, \param{int}{ height}, \param{int}{ depth = -1}}
+\func{virtual bool}{Create}{\param{const void*}{ data}, \param{int}{ type}, \param{int}{ width}, \param{int}{ height}, \param{int}{ depth = -1}}
 
 Creates a bitmap from the given data, which can be of arbitrary type.
 

@@ -35,7 +35,7 @@ public:
     wxImage ReadFile(wxInputStream& stream);
 #endif
     // Read directly from XPM data (as passed to wxBitmap ctor):
-    wxImage ReadData(const char **xpm_data);
+    wxImage ReadData(const char* const* xpm_data);
 };
 
 #endif // wxUSE_IMAGE && wxUSE_XPM

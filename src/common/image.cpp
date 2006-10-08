@@ -30,10 +30,7 @@
 
 #include "wx/filefn.h"
 #include "wx/wfstream.h"
-
-#if wxUSE_XPM
-    #include "wx/xpmdecod.h"
-#endif
+#include "wx/xpmdecod.h"
 
 // For memcpy
 #include <string.h>
@@ -165,17 +162,12 @@ wxImage::wxImage( wxInputStream& stream, const wxString& mimetype, int index )
 }
 #endif // wxUSE_STREAMS
 
-wxImage::wxImage( const char** xpmData )
+wxImage::wxImage(const char* const* xpmData)
 {
     Create(xpmData);
 }
 
-wxImage::wxImage( char** xpmData )
-{
-    Create((const char**) xpmData);
-}
-
-bool wxImage::Create( const char** xpmData )
+bool wxImage::Create(const char* const* xpmData)
 {
 #if wxUSE_XPM
     UnRef();

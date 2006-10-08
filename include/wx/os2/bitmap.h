@@ -84,8 +84,7 @@ public:
             );
 
     // Initialize with XPM data
-    wxBitmap(const char** ppData) { CreateFromXpm(ppData); }
-    wxBitmap(char** ppData) { CreateFromXpm((const char**)ppData); }
+    wxBitmap(const char* const* bits);
 
     // Load a resource
     wxBitmap( int             nId
@@ -98,7 +97,7 @@ public:
                    )
     { Init(); }
     // New constructor for generalised creation from data
-    wxBitmap( void* pData
+    wxBitmap( const void* pData
              ,long  lType
              ,int   nWidth
              ,int   nHeight
@@ -146,7 +145,7 @@ public:
                         ,int nHeight
                         ,int nDepth = -1
                        );
-    virtual bool Create( void* pData
+    virtual bool Create( const void* pData
                         ,long  lType
                         ,int   nWidth
                         ,int   nHeight
@@ -213,8 +212,6 @@ protected:
     inline virtual wxGDIImageRefData* CreateData() const
         { return new wxBitmapRefData; }
 
-    // creates the bitmap from XPM data, supposed to be called from ctor
-    bool CreateFromXpm(const char** ppData);
     bool CreateFromImage(const wxImage& image, int depth);
 
 private:
@@ -296,7 +293,7 @@ public:
     // keep wxBitmapHandler derived from wxGDIImageHandler compatible with the
     // old class which worked only with bitmaps
     virtual bool Create( wxBitmap* pBitmap
-                        ,void*     pData
+                        ,const void* pData
                         ,long      lFlags
                         ,int       nWidth
                         ,int       nHeight
@@ -321,7 +318,7 @@ public:
                          );
 
     virtual bool Create( wxGDIImage* pImage
-                        ,void*       pData
+                        ,const void* pData
                         ,long        lFlags
                         ,int         nWidth
                         ,int         nHeight

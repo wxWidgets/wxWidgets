@@ -113,7 +113,7 @@ public:
 
     // creating and saving icons is not supported
     virtual bool Create( wxGDIImage* WXUNUSED(pImage)
-                        ,void*       WXUNUSED(pData)
+                        ,const void* WXUNUSED(pData)
                         ,long        WXUNUSED(lFlags)
                         ,int         WXUNUSED(nWidth)
                         ,int         WXUNUSED(nHeight)

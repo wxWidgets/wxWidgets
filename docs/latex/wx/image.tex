@@ -128,7 +128,7 @@ Loads an image from a file.
 
 Loads an image from an input stream.
 
-\func{}{wxImage}{\param{const char** }{xpmData}}
+\func{}{wxImage}{\param{const char* const* }{xpmData}}
 
 Creates an image from XPM data.
 
@@ -1383,14 +1383,14 @@ Destroys the wxImageHandler object.
 
 \membersection{wxImageHandler::GetName}\label{wximagehandlergetname}
 
-\constfunc{wxString}{GetName}{\void}
+\constfunc{const wxString\&}{GetName}{\void}
 
 Gets the name of this handler.
 
 
 \membersection{wxImageHandler::GetExtension}\label{wximagehandlergetextension}
 
-\constfunc{wxString}{GetExtension}{\void}
+\constfunc{const wxString\&}{GetExtension}{\void}
 
 Gets the file extension associated with this handler.
 
@@ -1420,7 +1420,7 @@ Gets the image type associated with this handler.
 
 \membersection{wxImageHandler::GetMimeType}\label{wximagehandlergetmimetype}
 
-\constfunc{wxString}{GetMimeType}{\void}
+\constfunc{const wxString\&}{GetMimeType}{\void}
 
 Gets the MIME type associated with this handler.
 

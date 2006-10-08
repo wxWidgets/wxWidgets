@@ -473,24 +473,6 @@ wxBitmap::wxBitmap(const char bits[], int width, int height, int depth)
 #endif
 }
 
-// Create from XPM data
-bool wxBitmap::CreateFromXpm(const char **data)
-{
-#if wxUSE_IMAGE && wxUSE_XPM && wxUSE_WXDIB
-    wxCHECK_MSG( data != NULL, false, wxT("invalid bitmap data") );
-
-    wxXPMDecoder decoder;
-    wxImage img = decoder.ReadData(data);
-    wxCHECK_MSG( img.Ok(), false, wxT("invalid bitmap data") );
-
-    *this = wxBitmap(img);
-    return true;
-#else
-    wxUnusedVar(data);
-    return false;
-#endif
-}
-
 wxBitmap::wxBitmap(int w, int h, int d)
 {
     (void)Create(w, h, d);
@@ -501,7 +483,7 @@ wxBitmap::wxBitmap(int w, int h, const wxDC& dc)
     (void)Create(w, h, dc);
 }
 
-wxBitmap::wxBitmap(void *data, long type, int width, int height, int depth)
+wxBitmap::wxBitmap(const void* data, long type, int width, int height, int depth)
 {
     (void)Create(data, type, width, height, depth);
 }
@@ -1026,7 +1008,7 @@ bool wxBitmap::LoadFile(const wxString& filename, long type)
     return false;
 }
 
-bool wxBitmap::Create(void *data, long type, int width, int height, int depth)
+bool wxBitmap::Create(const void* data, long type, int width, int height, int depth)
 {
     UnRef();
 
@@ -1512,13 +1494,13 @@ bool wxMask::Create(const wxBitmap& bitmap, const wxColour& colour)
 // ----------------------------------------------------------------------------
 
 bool wxBitmapHandler::Create(wxGDIImage *image,
-                             void *data,
+                             const void* data,
                              long flags,
                              int width, int height, int depth)
 {
     wxBitmap *bitmap = wxDynamicCast(image, wxBitmap);
 
-    return bitmap ? Create(bitmap, data, flags, width, height, depth) : false;
+    return bitmap && Create(bitmap, data, flags, width, height, depth);
 }
 
 bool wxBitmapHandler::Load(wxGDIImage *image,
@@ -1528,7 +1510,7 @@ bool wxBitmapHandler::Load(wxGDIImage *image,
 {
     wxBitmap *bitmap = wxDynamicCast(image, wxBitmap);
 
-    return bitmap ? LoadFile(bitmap, name, flags, width, height) : false;
+    return bitmap && LoadFile(bitmap, name, flags, width, height);
 }
 
 bool wxBitmapHandler::Save(wxGDIImage *image,
@@ -1537,34 +1519,7 @@ bool wxBitmapHandler::Save(wxGDIImage *image,
 {
     wxBitmap *bitmap = wxDynamicCast(image, wxBitmap);
 
-    return bitmap ? SaveFile(bitmap, name, type) : false;
-}
-
-bool wxBitmapHandler::Create(wxBitmap *WXUNUSED(bitmap),
-                             void *WXUNUSED(data),
-                             long WXUNUSED(type),
-                             int WXUNUSED(width),
-                             int WXUNUSED(height),
-                             int WXUNUSED(depth))
-{
-    return false;
-}
-
-bool wxBitmapHandler::LoadFile(wxBitmap *WXUNUSED(bitmap),
-                               const wxString& WXUNUSED(name),
-                               long WXUNUSED(type),
-                               int WXUNUSED(desiredWidth),
-                               int WXUNUSED(desiredHeight))
-{
-    return false;
-}
-
-bool wxBitmapHandler::SaveFile(wxBitmap *WXUNUSED(bitmap),
-                               const wxString& WXUNUSED(name),
-                               int WXUNUSED(type),
-                               const wxPalette *WXUNUSED(palette))
-{
-    return false;
+    return bitmap && SaveFile(bitmap, name, type);
 }
 
 // ----------------------------------------------------------------------------

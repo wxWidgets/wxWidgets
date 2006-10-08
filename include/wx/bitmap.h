@@ -16,10 +16,7 @@
 // headers
 // ----------------------------------------------------------------------------
 
-#include "wx/defs.h"
-#include "wx/object.h"
 #include "wx/string.h"
-#include "wx/gdiobj.h"
 #include "wx/gdicmn.h"  // for wxBitmapType
 #include "wx/colour.h"
 
@@ -93,26 +90,21 @@ protected:
 class WXDLLEXPORT wxBitmapHandlerBase : public wxObject
 {
 public:
-    wxBitmapHandlerBase()
-        : m_name()
-        , m_extension()
-        , m_type(wxBITMAP_TYPE_INVALID)
-    { }
-
+    wxBitmapHandlerBase() { m_type = wxBITMAP_TYPE_INVALID; }
     virtual ~wxBitmapHandlerBase() { }
 
-    virtual bool Create(wxBitmap *bitmap, void *data, long flags,
-                          int width, int height, int depth = 1) = 0;
+    virtual bool Create(wxBitmap *bitmap, const void* data, long flags,
+                        int width, int height, int depth = 1);
     virtual bool LoadFile(wxBitmap *bitmap, const wxString& name, long flags,
-                          int desiredWidth, int desiredHeight) = 0;
+                          int desiredWidth, int desiredHeight);
     virtual bool SaveFile(const wxBitmap *bitmap, const wxString& name,
-                          int type, const wxPalette *palette = NULL) = 0;
+                          int type, const wxPalette *palette = NULL);
 
     void SetName(const wxString& name)      { m_name = name; }
     void SetExtension(const wxString& ext)  { m_extension = ext; }
     void SetType(wxBitmapType type)         { m_type = type; }
-    wxString GetName() const                { return m_name; }
-    wxString GetExtension() const           { return m_extension; }
+    const wxString& GetName() const         { return m_name; }
+    const wxString& GetExtension() const    { return m_extension; }
     wxBitmapType GetType() const            { return m_type; }
 
 private:
@@ -120,7 +112,6 @@ private:
     wxString      m_extension;
     wxBitmapType  m_type;
 
-private:
     DECLARE_ABSTRACT_CLASS(wxBitmapHandlerBase)
 };
 
@@ -133,8 +124,7 @@ public:
     wxBitmap();
     wxBitmap(int width, int height, int depth = -1);
     wxBitmap(const char bits[], int width, int height, int depth = 1);
-    wxBitmap(const char **bits);
-    wxBitmap(char **bits);
+    wxBitmap(const char* const* bits);
     wxBitmap(const wxString &filename, wxBitmapType type = wxBITMAP_TYPE_XPM);
     wxBitmap(const wxImage& image, int depth = -1);
     bool operator == (const wxBitmap& bmp) const;

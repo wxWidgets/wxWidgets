@@ -91,7 +91,7 @@ wxBitmapRefData::~wxBitmapRefData()
 #define M_BMPDATA ((wxBitmapRefData *)m_refData)
 
 
-IMPLEMENT_ABSTRACT_CLASS(wxBitmapHandler,wxObject)
+IMPLEMENT_ABSTRACT_CLASS(wxBitmapHandler, wxBitmapHandlerBase)
 IMPLEMENT_DYNAMIC_CLASS(wxBitmap,wxBitmapBase)
 
 wxBitmap::wxBitmap(int width, int height, int depth)
@@ -169,19 +169,6 @@ bool wxBitmap::Create(int width, int height, int depth)
     }
 
     return Ok();
-}
-
-bool wxBitmap::CreateFromXpm(const char **bits)
-{
-    wxCHECK_MSG( bits != NULL, false, wxT("invalid bitmap data") );
-
-    wxXPMDecoder decoder;
-    wxImage img = decoder.ReadData(bits);
-    wxCHECK_MSG( img.Ok(), false, wxT("invalid bitmap data") );
-
-    *this = wxBitmap(img);
-
-    return true;
 }
 
 wxBitmap::wxBitmap(const wxImage& image, int depth)
@@ -559,7 +546,7 @@ public:
                        const wxString& extension, const wxString& name);
 
     virtual bool Create(wxBitmap *WXUNUSED(bitmap),
-                        void *WXUNUSED(data),
+                        const void* WXUNUSED(data),
                         long WXUNUSED(flags),
                         int WXUNUSED(width),
                         int WXUNUSED(height),
@@ -777,7 +764,7 @@ class wxICOBitmapHandler: public wxBitmapHandler
                            const wxString& extension, const wxString& name);
 
         virtual bool Create(wxBitmap *WXUNUSED(bitmap),
-                            void *WXUNUSED(data),
+                            const void* WXUNUSED(data),
                             long WXUNUSED(flags),
                             int WXUNUSED(width),
                             int WXUNUSED(height),

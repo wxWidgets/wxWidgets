@@ -67,8 +67,7 @@ public:
     wxBitmap();
     wxBitmap( int width, int height, int depth = -1 );
     wxBitmap( const char bits[], int width, int height, int depth = 1 );
-    wxBitmap( const char **bits ) { (void)CreateFromXpm(bits); }
-    wxBitmap( char **bits ) { (void)CreateFromXpm((const char **)bits); }
+    wxBitmap( const char* const* bits );
     wxBitmap( const wxString &filename, wxBitmapType type = wxBITMAP_TYPE_XPM );
     wxBitmap( const wxImage& image, int depth = -1 ) { (void)CreateFromImage(image, depth); }
     virtual ~wxBitmap();
@@ -128,7 +127,6 @@ public:
     void UseAlpha();
 
 protected:
-    bool CreateFromXpm(const char **bits);
     bool CreateFromImage(const wxImage& image, int depth);
 
 private:
@@ -148,18 +146,7 @@ private:
 
 class WXDLLIMPEXP_CORE wxBitmapHandler: public wxBitmapHandlerBase
 {
-public:
-    wxBitmapHandler() { }
-    virtual ~wxBitmapHandler();
-
-    virtual bool Create(wxBitmap *bitmap, void *data, long flags, int width, int height, int depth = 1);
-    virtual bool LoadFile(wxBitmap *bitmap, const wxString& name, long flags,
-        int desiredWidth, int desiredHeight);
-    virtual bool SaveFile(const wxBitmap *bitmap, const wxString& name, int type, const wxPalette *palette = NULL);
-
-private:
-    DECLARE_DYNAMIC_CLASS(wxBitmapHandler)
+    DECLARE_ABSTRACT_CLASS(wxBitmapHandler)
 };
-
 
 #endif // __GTKBITMAPH__

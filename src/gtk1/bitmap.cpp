@@ -312,11 +312,9 @@ bool wxBitmap::Create( int width, int height, int depth )
     return Ok();
 }
 
-bool wxBitmap::CreateFromXpm( const char **bits )
+wxBitmap::wxBitmap(const char* const* bits)
 {
-    UnRef();
-
-    wxCHECK_MSG( bits != NULL, false, wxT("invalid bitmap data") );
+    wxCHECK2_MSG(bits != NULL, return, wxT("invalid bitmap data"));
 
     GdkVisual *visual = wxTheApp->GetGdkVisual();
 
@@ -326,7 +324,7 @@ bool wxBitmap::CreateFromXpm( const char **bits )
 
     M_BMPDATA->m_pixmap = gdk_pixmap_create_from_xpm_d( wxGetRootWindow()->window, &mask, NULL, (gchar **) bits );
 
-    wxCHECK_MSG( M_BMPDATA->m_pixmap, false, wxT("couldn't create pixmap") );
+    wxCHECK2_MSG(M_BMPDATA->m_pixmap, return, wxT("couldn't create pixmap"));
 
     if (mask)
     {
@@ -337,8 +335,6 @@ bool wxBitmap::CreateFromXpm( const char **bits )
     gdk_window_get_size( M_BMPDATA->m_pixmap, &(M_BMPDATA->m_width), &(M_BMPDATA->m_height) );
 
     M_BMPDATA->m_bpp = visual->depth;  // Can we get a different depth from create_from_xpm_d() ?
-
-    return true;
 }
 
 wxBitmap wxBitmap::Rescale( int clipx, int clipy, int clipwidth, int clipheight, int newx, int newy )
@@ -1320,7 +1316,6 @@ void wxBitmap::UngetRawData(wxPixelDataBase& WXUNUSED(data))
 {
 }
 
-
 bool wxBitmap::HasAlpha() const
 {
     return false;
@@ -1334,44 +1329,7 @@ void wxBitmap::UseAlpha()
 // wxBitmapHandler
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxBitmapHandler,wxBitmapHandlerBase)
-
-wxBitmapHandler::~wxBitmapHandler()
-{
-}
-
-bool wxBitmapHandler::Create(wxBitmap * WXUNUSED(bitmap),
-                             void * WXUNUSED(data),
-                             long WXUNUSED(type),
-                             int WXUNUSED(width),
-                             int WXUNUSED(height),
-                             int WXUNUSED(depth))
-{
-    wxFAIL_MSG( _T("not implemented") );
-
-    return false;
-}
-
-bool wxBitmapHandler::LoadFile(wxBitmap * WXUNUSED(bitmap),
-                               const wxString& WXUNUSED(name),
-                               long WXUNUSED(flags),
-                               int WXUNUSED(desiredWidth),
-                               int WXUNUSED(desiredHeight))
-{
-    wxFAIL_MSG( _T("not implemented") );
-
-    return false;
-}
-
-bool wxBitmapHandler::SaveFile(const wxBitmap * WXUNUSED(bitmap),
-                               const wxString& WXUNUSED(name),
-                               int WXUNUSED(type),
-                               const wxPalette * WXUNUSED(palette))
-{
-    wxFAIL_MSG( _T("not implemented") );
-
-    return false;
-}
+IMPLEMENT_ABSTRACT_CLASS(wxBitmapHandler, wxBitmapHandlerBase)
 
 /* static */ void wxBitmap::InitStandardHandlers()
 {

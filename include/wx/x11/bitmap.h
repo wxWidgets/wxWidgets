@@ -62,12 +62,9 @@ private:
 // wxBitmap
 //-----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxBitmapHandler : public wxBitmapHandlerBase
+class WXDLLIMPEXP_CORE wxBitmapHandler: public wxBitmapHandlerBase
 {
-public:
-    wxBitmapHandler() : wxBitmapHandlerBase() {}
-private:
-    DECLARE_DYNAMIC_CLASS(wxBitmapHandler)
+    DECLARE_ABSTRACT_CLASS(wxBitmapHandler)
 };
 
 class WXDLLIMPEXP_CORE wxBitmap: public wxBitmapBase
@@ -76,8 +73,7 @@ public:
     wxBitmap();
     wxBitmap( int width, int height, int depth = -1 );
     wxBitmap( const char bits[], int width, int height, int depth = 1 );
-    wxBitmap( const char **bits ) { (void)CreateFromXpm(bits); }
-    wxBitmap( char **bits ) { (void)CreateFromXpm((const char **)bits); }
+    wxBitmap( const char* const* bits );
     wxBitmap( const wxString &filename, wxBitmapType type = wxBITMAP_TYPE_XPM );
     virtual ~wxBitmap();
 
@@ -88,7 +84,7 @@ public:
     static void InitStandardHandlers();
 
     bool Create(int width, int height, int depth = -1);
-    bool Create(void* data, wxBitmapType type,
+    bool Create(const void* data, wxBitmapType type,
                 int width, int height, int depth = -1);
     // create the wxBitmap using a _copy_ of the pixmap
     bool Create(WXPixmap pixmap);
@@ -134,9 +130,6 @@ public:
     WXPixmap GetDrawable() const;
 
     WXDisplay *GetDisplay() const;
-
-protected:
-    bool CreateFromXpm(const char **bits);
 
 private:
     DECLARE_DYNAMIC_CLASS(wxBitmap)

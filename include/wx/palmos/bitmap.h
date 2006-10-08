@@ -45,14 +45,13 @@ public:
     wxBitmap(const char bits[], int width, int height, int depth = 1);
 
     // Initialize with XPM data
-    wxBitmap(const char **data) { CreateFromXpm(data); }
-    wxBitmap(char **data) { CreateFromXpm((const char **)data); }
+    wxBitmap(const char* const* data);
 
     // Load a file or resource
     wxBitmap(const wxString& name, wxBitmapType type = wxBITMAP_TYPE_BMP_RESOURCE);
 
     // New constructor for generalised creation from data
-    wxBitmap(void *data, long type, int width, int height, int depth = 1);
+    wxBitmap(const void* data, long type, int width, int height, int depth = 1);
 
     // Create a new, uninitialized bitmap of the given size and depth (if it
     // is omitted, will create a bitmap compatible with the display)
@@ -114,7 +113,7 @@ public:
 
     virtual bool Create(int width, int height, int depth = -1);
     virtual bool Create(int width, int height, const wxDC& dc);
-    virtual bool Create(void *data, long type, int width, int height, int depth = 1);
+    virtual bool Create(const void* data, long type, int width, int height, int depth = 1);
     virtual bool LoadFile(const wxString& name, long type = wxBITMAP_TYPE_BMP_RESOURCE);
     virtual bool SaveFile(const wxString& name, int type, const wxPalette *cmap = NULL);
 
@@ -158,9 +157,6 @@ protected:
     void Init();
 
     virtual wxGDIImageRefData *CreateData() const;
-
-    // creates the bitmap from XPM data, supposed to be called from ctor
-    bool CreateFromXpm(const char **bits);
 
     // creates an uninitialized bitmap, called from Create()s above
     bool DoCreate(int w, int h, int depth, WXHDC hdc);
@@ -235,7 +231,7 @@ public:
     // keep wxBitmapHandler derived from wxGDIImageHandler compatible with the
     // old class which worked only with bitmaps
     virtual bool Create(wxBitmap *bitmap,
-                        void *data,
+                        const void* data,
                         long flags,
                         int width, int height, int depth = 1);
     virtual bool LoadFile(wxBitmap *bitmap,
@@ -248,7 +244,7 @@ public:
                           const wxPalette *palette = NULL);
 
     virtual bool Create(wxGDIImage *image,
-                        void *data,
+                        const void* data,
                         long flags,
                         int width, int height, int depth = 1);
     virtual bool Load(wxGDIImage *image,

@@ -99,22 +99,19 @@ license is as follows:
 
 #if wxUSE_IMAGE && wxUSE_XPM
 
+#include "wx/xpmdecod.h"
+
 #ifndef WX_PRECOMP
     #include "wx/intl.h"
     #include "wx/log.h"
     #include "wx/utils.h"
     #include "wx/hashmap.h"
-    #if wxUSE_STREAMS
-        #include "wx/stream.h"
-    #endif
+    #include "wx/stream.h"
     #include "wx/image.h"
 #endif
 
 #include <string.h>
-
 #include <ctype.h>
-
-#include "wx/xpmdecod.h"
 
 #if wxUSE_STREAMS
 bool wxXPMDecoder::CanRead(wxInputStream& stream)
@@ -659,7 +656,7 @@ struct wxXPMColourMapData
 };
 WX_DECLARE_STRING_HASH_MAP(wxXPMColourMapData, wxXPMColourMap);
 
-wxImage wxXPMDecoder::ReadData(const char **xpm_data)
+wxImage wxXPMDecoder::ReadData(const char* const* xpm_data)
 {
     wxCHECK_MSG(xpm_data, wxNullImage, wxT("NULL XPM data") );
 

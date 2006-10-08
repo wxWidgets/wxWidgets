@@ -271,7 +271,7 @@ wxBitmap::wxBitmap(
 } // end of wxBitmap::wxBitmap
 
 wxBitmap::wxBitmap(
-  void*                             pData
+  const void*                       pData
 , long                              lType
 , int                               nWidth
 , int                               nHeight
@@ -380,27 +380,6 @@ bool wxBitmap::Create(
     return Ok();
 } // end of wxBitmap::Create
 
-bool wxBitmap::CreateFromXpm(
-  const char**                      ppData
-)
-{
-#if wxUSE_IMAGE && wxUSE_XPM
-    Init();
-
-    wxCHECK_MSG(ppData != NULL, false, wxT("invalid bitmap data"));
-
-    wxXPMDecoder                    vDecoder;
-    wxImage                         vImg = vDecoder.ReadData(ppData);
-
-    wxCHECK_MSG(vImg.Ok(), false, wxT("invalid bitmap data"));
-
-    *this = wxBitmap(vImg);
-    return true;
-#else
-    return false;
-#endif
-} // end of wxBitmap::CreateFromXpm
-
 bool wxBitmap::LoadFile(const wxString& filename, long type)
 {
     UnRef();
@@ -458,7 +437,7 @@ bool wxBitmap::LoadFile(
 } // end of wxBitmap::LoadFile
 
 bool wxBitmap::Create(
-  void*                             pData
+  const void*                       pData
 , long                              lType
 , int                               nWidth
 , int                               nHeight
@@ -1450,7 +1429,7 @@ bool wxMask::Create(
 // ----------------------------------------------------------------------------
 
 bool wxBitmapHandler::Create( wxGDIImage* pImage,
-                              void*       pData,
+                              const void* pData,
                               long        WXUNUSED(lFlags),
                               int         nWidth,
                               int         nHeight,
@@ -1506,7 +1485,7 @@ bool wxBitmapHandler::Save(
 
 bool wxBitmapHandler::Create(
   wxBitmap*                         WXUNUSED(pBitmap)
-, void*                             WXUNUSED(pData)
+, const void*                       WXUNUSED(pData)
 , long                              WXUNUSED(lType)
 , int                               WXUNUSED(nWidth)
 , int                               WXUNUSED(nHeight)

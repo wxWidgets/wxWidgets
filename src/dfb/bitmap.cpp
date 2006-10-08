@@ -24,9 +24,6 @@
 #include "wx/colour.h"
 #include "wx/image.h"
 
-#warning "move this to common"
-#include "wx/xpmdecod.h"
-
 #include "wx/dfb/private.h"
 
 //-----------------------------------------------------------------------------
@@ -102,7 +99,7 @@ public:
 // wxBitmap
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_ABSTRACT_CLASS(wxBitmapHandler, wxObject)
+IMPLEMENT_ABSTRACT_CLASS(wxBitmapHandler, wxBitmapHandlerBase)
 IMPLEMENT_DYNAMIC_CLASS(wxBitmap, wxBitmapBase)
 
 wxBitmap::wxBitmap(int width, int height, int depth)
@@ -136,25 +133,6 @@ bool wxBitmap::Create(int width, int height, int depth)
     desc.height = height;
 
     return Create(wxIDirectFB::Get()->CreateSurface(&desc));
-}
-
-#warning "FIXME: move this to common code"
-bool wxBitmap::CreateFromXpm(const char **bits)
-{
-    wxCHECK_MSG( bits != NULL, false, wxT("invalid bitmap data") );
-
-#if wxUSE_IMAGE && wxUSE_XPM
-    wxXPMDecoder decoder;
-    wxImage img = decoder.ReadData(bits);
-    wxCHECK_MSG( img.Ok(), false, wxT("invalid bitmap data") );
-
-    *this = wxBitmap(img);
-
-    return true;
-#else
-    wxFAIL_MSG( _T("creating bitmaps from XPMs not supported") );
-    return false;
-#endif // wxUSE_IMAGE && wxUSE_XPM
 }
 
 #if wxUSE_IMAGE
