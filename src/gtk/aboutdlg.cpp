@@ -116,14 +116,24 @@ void wxAboutBox(const wxAboutDialogInfo& info)
             gtk_about_dialog_set_documenters(dlg, GtkArray(info.GetDocWriters()));
         if ( info.HasArtists() )
             gtk_about_dialog_set_artists(dlg, GtkArray(info.GetArtists()));
+
+        wxString transCredits;
         if ( info.HasTranslators() )
         {
-            gtk_about_dialog_set_translator_credits
-            (
-                dlg,
-                GtkStr(_("translator-credits"))
-            );
+            const wxArrayString& translators = info.GetTranslators();
+            const size_t count = translators.size();
+            for ( size_t n = 0; n < count; n++ )
+            {
+                transCredits << translators[n] << _T('\n');
+            }
         }
+        else // no translators explicitely specified
+        {
+            // maybe we have translator credits in the message catalog?
+            transCredits = _("translator-credits");
+        }
+
+        gtk_about_dialog_set_translator_credits(dlg, GtkStr(transCredits));
 
         gtk_widget_show(GTK_WIDGET(dlg));
         return;

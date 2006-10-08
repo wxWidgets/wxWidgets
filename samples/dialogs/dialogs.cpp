@@ -1227,6 +1227,8 @@ static void InitAboutInfoAll(wxAboutDialogInfo& info)
 "\n"
 "                    ...and so on and so forth...\n"
     ));
+
+    info.AddTranslator(_T("Wun Ngo Wen (Martian)"));
 }
 
 void MyFrame::ShowSimpleAboutDialog(wxCommandEvent& WXUNUSED(event))
