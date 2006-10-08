@@ -2292,6 +2292,7 @@ wxGridCellAttr *wxGridCellAttr::Clone() const
     if ( IsReadOnly() )
         attr->SetReadOnly();
 
+    attr->SetOverflow( m_overflow );
     attr->SetKind( m_attrkind );
 
     return attr;
