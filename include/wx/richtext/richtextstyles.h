@@ -62,6 +62,7 @@ public:
     bool Eq(const wxRichTextStyleDefinition& def) const;
     void operator =(const wxRichTextStyleDefinition& def) { Copy(def); }
     bool operator ==(const wxRichTextStyleDefinition& def) const { return Eq(def); }
+    virtual wxRichTextStyleDefinition* Clone() const = 0;
 
     /// The name of the style.
     void SetName(const wxString& name) { m_name = name; }
@@ -98,6 +99,8 @@ public:
         wxRichTextStyleDefinition(name) {}
     virtual ~wxRichTextCharacterStyleDefinition() {}
 
+    virtual wxRichTextStyleDefinition* Clone() const { return new wxRichTextCharacterStyleDefinition(*this); }
+
 protected:
 };
 
@@ -124,6 +127,8 @@ public:
     void Copy(const wxRichTextParagraphStyleDefinition& def);
     void operator =(const wxRichTextParagraphStyleDefinition& def) { Copy(def); }
     bool operator ==(const wxRichTextParagraphStyleDefinition& def) const;
+
+    virtual wxRichTextStyleDefinition* Clone() const { return new wxRichTextParagraphStyleDefinition(*this); }
 
 protected:
 
@@ -235,6 +240,7 @@ public:
     {
         m_styleSheet = NULL;
         m_richTextCtrl = NULL;
+        m_applyOnSelection = true;
     }
 
     bool Create(wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition,
@@ -263,8 +269,8 @@ public:
     /// Updates the list
     void UpdateStyles();
 
-    /// Do selection
-    void DoSelection(int i);
+    /// Apply the style
+    void ApplyStyle(int i);
 
     /// React to selection
     void OnSelect(wxCommandEvent& event);
@@ -287,6 +293,10 @@ public:
     /// Need to override this if being used in a combobox popup
     virtual bool CanAutoSetSelection() { return true; }
 
+    /// Set whether the style should be applied as soon as the item is selected (the default)
+    void SetApplyOnSelection(bool applyOnSel) { m_applyOnSelection = applyOnSel; }
+    bool GetApplyOnSelection() const { return m_applyOnSelection; }
+
 protected:
     /// Returns the HTML for this item
     virtual wxString OnGetItem(size_t n) const;
@@ -295,6 +305,7 @@ private:
 
     wxRichTextStyleSheet*   m_styleSheet;
     wxRichTextCtrl*         m_richTextCtrl;
+    bool                    m_applyOnSelection; // if true, applies style on selection
 };
 
 #if wxUSE_COMBOCTRL

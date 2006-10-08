@@ -380,8 +380,8 @@ void wxRichTextStyleListBox::OnLeftDown(wxMouseEvent& event)
     wxVListBox::OnLeftDown(event);
 
     int item = HitTest(event.GetPosition());
-    if (item != wxNOT_FOUND)
-        DoSelection(item);
+    if (item != wxNOT_FOUND && GetApplyOnSelection())
+        ApplyStyle(item);
 }
 
 /// Auto-select from style under caret in idle time
@@ -429,7 +429,7 @@ void wxRichTextStyleListBox::OnIdle(wxIdleEvent& event)
 }
 
 /// Do selection
-void wxRichTextStyleListBox::DoSelection(int item)
+void wxRichTextStyleListBox::ApplyStyle(int item)
 {
     if ( item != wxNOT_FOUND )
     {
@@ -508,11 +508,11 @@ void wxRichTextStyleComboPopup::OnMouseClick(wxMouseEvent& WXUNUSED(event))
         m_value = m_itemHere;
 
     // Ordering is important, so we don't dismiss this popup accidentally
-    // by setting the focus elsewhere e.g. in DoSelection
+    // by setting the focus elsewhere e.g. in ApplyStyle
     Dismiss();
 
     if (m_itemHere >= 0)
-        wxRichTextStyleListBox::DoSelection(m_itemHere);
+        wxRichTextStyleListBox::ApplyStyle(m_itemHere);
 }
 
 /*!
