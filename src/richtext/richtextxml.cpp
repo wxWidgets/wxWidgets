@@ -144,6 +144,30 @@ bool wxRichTextXMLHandler::ImportXML(wxRichTextBuffer* buffer, wxXmlNode* node)
 
                 para->AppendChild(textObject);
             }
+            else if (childName == wxT("symbol"))
+            {
+                // This is a symbol that XML can't read in the normal way
+                wxString text;
+                wxXmlNode* textChild = child->GetChildren();
+                while (textChild)
+                {
+                    if (textChild->GetType() == wxXML_TEXT_NODE ||
+                        textChild->GetType() == wxXML_CDATA_SECTION_NODE)
+                    {
+                        wxString text2 = textChild->GetContent();
+                        text += text2;
+                    }
+                    textChild = textChild->GetNext();
+                }
+                
+                wxString actualText;
+                actualText << (wxChar) wxAtoi(text);
+
+                wxRichTextPlainText* textObject = new wxRichTextPlainText(actualText, para);
+                GetStyle(textObject->GetAttributes(), child, false);
+
+                para->AppendChild(textObject);
+            }
             else if (childName == wxT("image"))
             {
                 int imageType = wxBITMAP_TYPE_PNG;
@@ -337,6 +361,16 @@ static void OutputStringEnt(wxOutputStream& stream, const wxString& str,
             }
             last = i + 1;
         }
+        else if (c > 127)
+        {
+            OutputString(stream, str.Mid(last, i - last), convMem, convFile);
+
+            wxString s(wxT("&#"));
+            s << (int) c;
+            s << wxT(";");
+            OutputString(stream, s, NULL, NULL);
+            last = i + 1;
+        }
     }
     OutputString(stream, str.Mid(last, i - last), convMem, convFile);
 }
@@ -451,27 +485,82 @@ bool wxRichTextXMLHandler::ExportXML(wxOutputStream& stream, wxMBConv* convMem, 
         objectName = wxT("image");
     else
         objectName = wxT("object");
+    
+    bool terminateTag = true;
 
     if (obj.IsKindOf(CLASSINFO(wxRichTextPlainText)))
     {
-        wxRichTextPlainText& text = (wxRichTextPlainText&) obj;
-
-        OutputIndentation(stream, indent);
-        OutputString(stream, wxT("<") + objectName, convMem, convFile);
-
+        wxRichTextPlainText& textObj = (wxRichTextPlainText&) obj;
+        
         wxString style = CreateStyle(obj.GetAttributes(), false);
-
-        OutputString(stream, style + wxT(">"), convMem, convFile);
-
-        wxString str = text.GetText();
-        if (!str.empty() && (str[0] == wxT(' ') || str[str.length()-1] == wxT(' ')))
+                
+        int i;
+        int last = 0;
+        const wxString& text = textObj.GetText();
+        int len = (int) text.Length();
+        for (i = 0; i < len; i++)
         {
-            OutputString(stream, wxT("\""), convMem, convFile);
-            OutputStringEnt(stream, str, convMem, convFile);
-            OutputString(stream, wxT("\""), convMem, convFile);
+            int c = (int) text[i];
+            if (c < 32 && c != 9 && c != 10 && c != 13)
+            {
+                if (i > 0)
+                {
+                    OutputIndentation(stream, indent);
+                    OutputString(stream, wxT("<") + objectName, convMem, convFile);
+
+                    OutputString(stream, style + wxT(">"), convMem, convFile);
+
+                    wxString fragment(text.Mid(last, i-last));
+                    if (!fragment.empty() && (fragment[0] == wxT(' ') || fragment[fragment.length()-1] == wxT(' ')))
+                    {
+                        OutputString(stream, wxT("\""), convMem, convFile);
+                        OutputStringEnt(stream, fragment, convMem, convFile);
+                        OutputString(stream, wxT("\""), convMem, convFile);
+                    }
+                    else
+                        OutputStringEnt(stream, fragment, convMem, convFile);
+
+                    OutputString(stream, wxT("</text>"), convMem, convFile);
+                }                
+                
+
+                // Output this character as a number in a separate tag, because XML can't cope
+                // with entities below 32 except for 9, 10 and 13                
+                last = i + 1;
+                OutputIndentation(stream, indent);
+                OutputString(stream, wxT("<symbol"), convMem, convFile);
+
+                OutputString(stream, style + wxT(">"), convMem, convFile);
+                OutputString(stream, wxString::Format(wxT("%d"), c), convMem, convFile);                
+
+                OutputString(stream, wxT("</symbol>"), convMem, convFile);
+            }
+        }
+        
+        wxString fragment;
+        if (last == 0)
+            fragment = text;
+        else
+            fragment = text.Mid(last, i-last);
+
+        if (last < len)
+        {
+            OutputIndentation(stream, indent);
+            OutputString(stream, wxT("<") + objectName, convMem, convFile);
+
+            OutputString(stream, style + wxT(">"), convMem, convFile);
+
+            if (!fragment.empty() && (fragment[0] == wxT(' ') || fragment[fragment.length()-1] == wxT(' ')))
+            {
+                OutputString(stream, wxT("\""), convMem, convFile);
+                OutputStringEnt(stream, fragment, convMem, convFile);
+                OutputString(stream, wxT("\""), convMem, convFile);
+            }
+            else
+                OutputStringEnt(stream, fragment, convMem, convFile);
         }
         else
-            OutputStringEnt(stream, str, convMem, convFile);
+            terminateTag = false;
     }
     else if (obj.IsKindOf(CLASSINFO(wxRichTextImage)))
     {
@@ -509,7 +598,7 @@ bool wxRichTextXMLHandler::ExportXML(wxOutputStream& stream, wxMBConv* convMem, 
             isPara = true;
 
         wxString style = CreateStyle(obj.GetAttributes(), isPara);
-
+        
         if (objectName == wxT("paragraphlayout") && ((wxRichTextParagraphLayoutBox&) obj).GetPartialParagraph())
             style << wxT(" partialparagraph=\"true\"");
 
@@ -527,7 +616,8 @@ bool wxRichTextXMLHandler::ExportXML(wxOutputStream& stream, wxMBConv* convMem, 
     if (objectName != wxT("text"))
         OutputIndentation(stream, indent);
 
-    OutputString(stream, wxT("</") + objectName + wxT(">"), convMem, convFile);
+    if (terminateTag)
+        OutputString(stream, wxT("</") + objectName + wxT(">"), convMem, convFile);
 
     return true;
 }
@@ -549,7 +639,7 @@ wxString wxRichTextXMLHandler::CreateStyle(const wxTextAttrEx& attr, bool isPara
     {
         if (attr.HasSize())
             str << wxT(" fontsize=\"") << attr.GetFont().GetPointSize() << wxT("\"");
-
+        
         //if (attr.HasFamily())
         //    str << wxT(" fontfamily=\"") << attr.GetFont().GetFamily() << wxT("\"");
 
@@ -599,11 +689,14 @@ wxString wxRichTextXMLHandler::CreateStyle(const wxTextAttrEx& attr, bool isPara
             str << wxT(" bulletnumber=\"") << (int) attr.GetBulletNumber() << wxT("\"");
 
         if (attr.HasBulletSymbol())
-            str << wxT(" bulletsymbol=\"") << wxString(attr.GetBulletSymbol()) << wxT("\"");
+        {
+            str << wxT(" bulletsymbol=\"") << (int) (attr.GetBulletSymbol()) << wxT("\"");
+            str << wxT(" bulletfont=\"") << attr.GetBulletFont() << wxT("\"");
+        }
 
         if (!attr.GetParagraphStyleName().empty())
             str << wxT(" parstyle=\"") << wxString(attr.GetParagraphStyleName()) << wxT("\"");
-
+        
         if (attr.HasTabs())
         {
             str << wxT(" tabs=\"");
@@ -614,7 +707,7 @@ wxString wxRichTextXMLHandler::CreateStyle(const wxTextAttrEx& attr, bool isPara
                     str << wxT(",");
                 str << attr.GetTabs()[i];
             }
-            str << wxT("\"");
+            str << wxT("\"");            
         }
     }
 
@@ -630,7 +723,7 @@ bool wxRichTextXMLHandler::GetStyle(wxTextAttrEx& attr, wxXmlNode* node, bool is
     int fontWeight = wxNORMAL;
     int fontStyle = wxNORMAL;
     bool fontUnderlined = false;
-
+    
     int fontFlags = 0;
 
     fontFacename = node->GetPropVal(wxT("fontface"), wxEmptyString);
@@ -669,15 +762,15 @@ bool wxRichTextXMLHandler::GetStyle(wxTextAttrEx& attr, wxXmlNode* node, bool is
         fontUnderlined = wxAtoi(value) != 0;
         fontFlags |= wxTEXT_ATTR_FONT_UNDERLINE;
     }
-
+    
     attr.SetFlags(fontFlags);
-
+    
     if (attr.HasFlag(wxTEXT_ATTR_FONT))
         attr.SetFont(* wxTheFontList->FindOrCreateFont(fontSize, fontFamily, fontStyle, fontWeight, fontUnderlined, fontFacename));
 
     // Restore correct font flags
     attr.SetFlags(fontFlags);
-
+    
     value = node->GetPropVal(wxT("textcolor"), wxEmptyString);
     if (!value.empty())
     {
@@ -710,7 +803,7 @@ bool wxRichTextXMLHandler::GetStyle(wxTextAttrEx& attr, wxXmlNode* node, bool is
         int leftSubIndent = 0;
         int leftIndent = 0;
         bool hasLeftIndent = false;
-
+        
         value = node->GetPropVal(wxT("leftindent"), wxEmptyString);
         if (!value.empty())
         {
@@ -754,12 +847,16 @@ bool wxRichTextXMLHandler::GetStyle(wxTextAttrEx& attr, wxXmlNode* node, bool is
 
         value = node->GetPropVal(wxT("bulletsymbol"), wxEmptyString);
         if (!value.empty())
-            attr.SetBulletSymbol(value[0]);
+            attr.SetBulletSymbol(wxAtoi(value));
+
+        value = node->GetPropVal(wxT("bulletfont"), wxEmptyString);
+        if (!value.empty())
+            attr.SetBulletFont(value);
 
         value = node->GetPropVal(wxT("parstyle"), wxEmptyString);
         if (!value.empty())
             attr.SetParagraphStyleName(value);
-
+        
         value = node->GetPropVal(wxT("tabs"), wxEmptyString);
         if (!value.empty())
         {
@@ -782,3 +879,4 @@ bool wxRichTextXMLHandler::GetStyle(wxTextAttrEx& attr, wxXmlNode* node, bool is
 
 #endif
     // wxUSE_RICHTEXT && wxUSE_XML
+
