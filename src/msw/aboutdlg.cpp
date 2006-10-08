@@ -26,6 +26,7 @@
 #if wxUSE_ABOUTDLG
 
 #ifndef WX_PRECOMP
+    #include "wx/msgdlg.h"
 #endif //WX_PRECOMP
 
 #include "wx/aboutdlg.h"
