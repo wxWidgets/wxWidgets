@@ -55,9 +55,6 @@ protected:
 // ------------------------------------------------------------------------
 public:
     virtual wxString GetValue() const;
-    virtual void SetValue(const wxString& value);
-
-    virtual void ChangeValue(const wxString &value);
 
     virtual int GetLineLength(long lineNo) const;
     virtual wxString GetLineText(long lineNo) const;
@@ -118,6 +115,8 @@ public:
 
 protected:
     virtual wxSize DoGetBestSize() const;
+
+    virtual void DoSetValue(const wxString& value, int flags = 0);
 };
 
 #endif // __WX_COCOA_TEXTCTRL_H__

@@ -116,10 +116,6 @@ public:
     // implement base class pure virtuals
     // ----------------------------------
 
-    virtual wxString GetValue() const;
-    virtual void SetValue(const wxString& value)
-        { ChangeValue(value); SendTextUpdatedEvent(); }
-
     virtual void ChangeValue(const wxString &value);
 
     virtual int GetLineLength(long lineNo) const;
@@ -132,10 +128,6 @@ public:
     // more readable flag testing methods
     // ----------------------------------
 
-#if 0
-    // it seems now in wxTextCtrlBase
-    bool IsSingleLine() const { return !(GetWindowStyle() & wxTE_MULTILINE); }
-#endif
     bool IsPassword() const { return (GetWindowStyle() & wxTE_PASSWORD) != 0; }
     bool WrapLines() const { return false; }
 
@@ -273,6 +265,8 @@ protected:
     void Init();
 
     virtual wxSize DoGetBestSize() const;
+
+    virtual void DoSetValue(const wxString& value, int flags = 0);
 
     friend class wxSourceUndoStep;
 

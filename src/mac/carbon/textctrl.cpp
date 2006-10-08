@@ -547,30 +547,18 @@ void wxTextCtrl::GetSelection(long* from, long* to) const
     GetPeer()->GetSelection( from , to ) ;
 }
 
-void wxTextCtrl::SetValue(const wxString& str)
+void wxTextCtrl::DoSetValue(const wxString& str, int flags)
 {
     // optimize redraws
     if ( GetValue() == str )
-        return ;
+        return;
 
     GetPeer()->SetStringValue( str ) ;
 
-    if ( m_triggerOnSetValue )
+    if ( (flags & SetValue_SendEvent) && m_triggerOnSetValue )
     {
-        wxCommandEvent event( wxEVT_COMMAND_TEXT_UPDATED, m_windowId );
-        event.SetString( GetValue() );
-        event.SetEventObject( this );
-        GetEventHandler()->ProcessEvent( event );
+        SendTextUpdatedEvent();
     }
-}
-
-void wxTextCtrl::ChangeValue(const wxString& str)
-{
-    // optimize redraws
-    if ( GetValue() == str )
-        return ;
-
-    GetPeer()->SetStringValue( str ) ;
 }
 
 void wxTextCtrl::SetMaxLength(unsigned long len)

@@ -45,9 +45,6 @@ public:
     // ----------------------------------
 
     virtual wxString GetValue() const;
-    virtual void SetValue(const wxString& value);
-
-    virtual void ChangeValue(const wxString &value);
 
     virtual int GetLineLength(long lineNo) const;
     virtual wxString GetLineText(long lineNo) const;
@@ -180,6 +177,9 @@ public:
 protected:
     // common part of all ctors
     void Init();
+
+    virtual void DoSetValue(const wxString& value, int flags = 0);
+
 
     // intercept WM_GETDLGCODE
     virtual WXLRESULT MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);

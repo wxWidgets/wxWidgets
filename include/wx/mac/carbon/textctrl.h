@@ -61,9 +61,6 @@ public:
     // accessors
     // ---------
     virtual wxString GetValue() const;
-    virtual void SetValue(const wxString& value);
-
-    virtual void ChangeValue(const wxString &value);
 
     virtual int GetLineLength(long lineNo) const;
     virtual wxString GetLineText(long lineNo) const;
@@ -187,12 +184,14 @@ public:
 
     wxMacTextControl * GetPeer() const
     { return (wxMacTextControl*) m_peer; }
-    
+
 protected:
     // common part of all ctors
     void Init();
 
     virtual wxSize DoGetBestSize() const;
+
+    virtual void DoSetValue(const wxString& value, int flags = 0);
 
     bool  m_editable;
 
@@ -201,17 +200,17 @@ protected:
 
   // need to make this public because of the current implementation via callbacks
     unsigned long  m_maxLength;
-    
-    bool GetTriggerOnSetValue() const 
-    { 
-        return m_triggerOnSetValue; 
+
+    bool GetTriggerOnSetValue() const
+    {
+        return m_triggerOnSetValue;
     }
-    
-    void SetTriggerOnSetValue(bool trigger) 
-    { 
-        m_triggerOnSetValue = trigger; 
+
+    void SetTriggerOnSetValue(bool trigger)
+    {
+        m_triggerOnSetValue = trigger;
     }
-    
+
     bool m_triggerOnSetValue ;
 
 private :

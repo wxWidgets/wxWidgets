@@ -277,7 +277,7 @@ wxString wxTextCtrl::GetValue() const
     return ret;
 }
 
-void wxTextCtrl::ChangeValue(const wxString& value)
+void wxTextCtrl::DoSetValue(const wxString& value, int flags)
 {
     m_modified = false;
 
@@ -343,6 +343,9 @@ void wxTextCtrl::ChangeValue(const wxString& value)
     MyAdjustScrollbars();
 
     Refresh();
+
+    if ( flags & SetValue_SendEvent )
+        SendTextUpdatedEvent();
 }
 
 int wxTextCtrl::GetLineLength(long lineNo) const

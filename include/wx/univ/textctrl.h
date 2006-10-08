@@ -105,9 +105,6 @@ public:
     // ----------------------------------
 
     virtual wxString GetValue() const;
-    virtual void SetValue(const wxString& value);
-
-    virtual void ChangeValue(const wxString &value);
 
     virtual int GetLineLength(wxTextCoord lineNo) const;
     virtual wxString GetLineText(wxTextCoord lineNo) const;
@@ -261,6 +258,9 @@ protected:
 
     // calc the size from the text extent
     virtual wxSize DoGetBestClientSize() const;
+
+    // implements Set/ChangeValue()
+    virtual void DoSetValue(const wxString& value, int flags = 0);
 
     // common part of all ctors
     void Init();

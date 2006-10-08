@@ -298,11 +298,12 @@ public:
     // ---------
 
     virtual wxString GetValue() const = 0;
-    virtual void SetValue(const wxString& value) = 0;
-
     virtual bool IsEmpty() const { return GetValue().empty(); }
 
-    virtual void ChangeValue(const wxString &value) = 0;
+    virtual void SetValue(const wxString& value)
+        { DoSetValue(value, SetValue_SendEvent); }
+    virtual void ChangeValue(const wxString& value)
+        { DoSetValue(value); }
 
     virtual wxString GetRange(long from, long to) const;
 
@@ -422,6 +423,9 @@ public:
     wxTextCtrl& operator<<(double d);
     wxTextCtrl& operator<<(const wxChar c);
 
+    // generate the wxEVT_COMMAND_TEXT_UPDATED event, like SetValue() does
+    void SendTextUpdatedEvent();
+
     // do the window-specific processing after processing the update event
     virtual void DoUpdateWindowUI(wxUpdateUIEvent& event);
 
@@ -433,17 +437,16 @@ protected:
     int overflow(int i);
 #endif // wxHAS_TEXT_WINDOW_STREAM
 
-    // typically, wxTextCtrl classes will use a DoSetValue() function to
-    // implement both SetValue() and ChangeValue() functions and these
-    // flags are meant to be passed to such DoSetValue()
+    // flags for DoSetValue(): common part of SetValue() and ChangeValue() and
+    // also used to implement WriteText() in wxMSW
     enum
     {
         SetValue_SendEvent = 1,
         SetValue_SelectionOnly = 2
     };
 
-    // generate the wxEVT_COMMAND_TEXT_UPDATED event
-    void SendTextUpdatedEvent();
+    virtual void DoSetValue(const wxString& value, int flags = 0) = 0;
+
 
     // the name of the last file loaded with LoadFile() which will be used by
     // SaveFile() by default

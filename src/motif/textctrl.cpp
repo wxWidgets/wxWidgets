@@ -240,7 +240,7 @@ wxString wxTextCtrl::GetValue() const
     return str;
 }
 
-void wxTextCtrl::ChangeValue(const wxString& text)
+void wxTextCtrl::DoSetValue(const wxString& text, int flags)
 {
     m_inSetValue = true;
 
@@ -254,6 +254,9 @@ void wxTextCtrl::ChangeValue(const wxString& text)
     m_modified = true;
 
     m_inSetValue = false;
+
+    if ( flags & SetValue_SendEvent )
+        SendTextUpdatedEvent();
 }
 
 // Clipboard operations

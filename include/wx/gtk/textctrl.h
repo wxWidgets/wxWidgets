@@ -44,8 +44,6 @@ public:
 
     virtual wxString GetValue() const;
     virtual bool IsEmpty() const;
-    virtual void SetValue(const wxString& value) { DoSetValue(value, SetValue_SendEvent); }
-    virtual void ChangeValue(const wxString& value) { DoSetValue(value); }
 
     virtual int GetLineLength(long lineNo) const;
     virtual wxString GetLineText(long lineNo) const;
@@ -191,7 +189,7 @@ protected:
     // has the control been frozen by Freeze()?
     bool IsFrozen() const { return m_frozenness > 0; }
 
-    void DoSetValue(const wxString &value, int flags = 0);
+    virtual void DoSetValue(const wxString &value, int flags = 0);
 
 private:
     // change the font for everything in this control

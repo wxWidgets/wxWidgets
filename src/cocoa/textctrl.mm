@@ -135,10 +135,13 @@ void wxTextCtrl::Replace(long, long, wxString const&)
 {
 }
 
-void wxTextCtrl::SetValue(wxString const& value)
+void wxTextCtrl::DoSetValue(wxString const& value, int flags)
 {
     wxAutoNSAutoreleasePool pool;
     [GetNSTextField() setStringValue: wxNSStringWithWxString(value)];
+
+    if ( flags & SetValue_SendEvent )
+        SendTextUpdatedEvent();
 }
 
 void wxTextCtrl::WriteText(wxString const&)

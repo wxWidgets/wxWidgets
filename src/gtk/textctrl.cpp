@@ -448,9 +448,7 @@ gtk_text_changed_callback( GtkWidget *widget, wxTextCtrl *win )
     if ( win->MarkDirtyOnChange() )
         win->MarkDirty();
 
-    wxCommandEvent event( wxEVT_COMMAND_TEXT_UPDATED, win->GetId() );
-    event.SetEventObject( win );
-    win->GetEventHandler()->ProcessEvent( event );
+    win->SendTextUpdatedEvent();
 }
 }
 

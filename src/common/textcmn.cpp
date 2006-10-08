@@ -243,7 +243,7 @@ bool wxTextCtrlBase::DoSaveFile(const wxString& filename, int WXUNUSED(fileType)
     {
         // if it worked, save for future calls
         m_filename = filename;
-        
+
         // it's not modified any longer
         DiscardEdits();
 
@@ -523,6 +523,24 @@ wxTextCtrlBase::HitTest(const wxPoint& WXUNUSED(pt),
 {
     // not implemented
     return wxTE_HT_UNKNOWN;
+}
+
+// ----------------------------------------------------------------------------
+// events
+// ----------------------------------------------------------------------------
+
+void wxTextCtrlBase::SendTextUpdatedEvent()
+{
+    wxCommandEvent event(wxEVT_COMMAND_TEXT_UPDATED, GetId());
+
+    // do not do this as it could be very inefficient if the text control
+    // contains a lot of text and we're not using ref-counted wxString
+    // implementation -- instead, event.GetString() will query the control for
+    // its current text if needed
+    //event.SetString(GetValue());
+
+    event.SetEventObject(this);
+    GetEventHandler()->ProcessEvent(event);
 }
 
 #else // !wxUSE_TEXTCTRL

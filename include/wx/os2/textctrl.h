@@ -47,9 +47,6 @@ public:
     // ----------------------------------
     //
     virtual      wxString GetValue(void) const;
-    virtual void SetValue(const wxString& value) { DoSetValue(value, SetValue_SendEvent); }
-
-    virtual void ChangeValue(const wxString &value) { DoSetValue(value); }
 
     virtual int      GetLineLength(long nLineNo) const;
     virtual wxString GetLineText(long nLineNo) const;
@@ -183,7 +180,7 @@ protected:
                                 ,WXDWORD* dwExstyle
                                ) const;
 
-    void DoSetValue(const wxString &value, int flags = 0);
+    virtual void DoSetValue(const wxString &value, int flags = 0);
 
     bool m_bSkipUpdate;
 
