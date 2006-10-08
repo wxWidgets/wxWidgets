@@ -65,6 +65,8 @@
 #include "wx/richtext/richtextstyles.h"
 #include "wx/richtext/richtextxml.h"
 #include "wx/richtext/richtexthtml.h"
+#include "wx/richtext/richtextformatdlg.h"
+#include "wx/richtext/richtextsymboldlg.h"
 
 // ----------------------------------------------------------------------------
 // resources
@@ -126,9 +128,15 @@ public:
     void OnUpdateAlignCentre(wxUpdateUIEvent& event);
     void OnUpdateAlignRight(wxUpdateUIEvent& event);
 
-    void OnFont(wxCommandEvent& event);
     void OnIndentMore(wxCommandEvent& event);
     void OnIndentLess(wxCommandEvent& event);
+
+    void OnFont(wxCommandEvent& event);
+    void OnParagraph(wxCommandEvent& event);
+    void OnFormat(wxCommandEvent& event);
+    void OnUpdateFormat(wxUpdateUIEvent& event);
+
+    void OnInsertSymbol(wxCommandEvent& event);
 
     void OnLineSpacingHalf(wxCommandEvent& event);
     void OnLineSpacingDouble(wxCommandEvent& event);
@@ -166,6 +174,10 @@ enum
     ID_FORMAT_ITALIC,
     ID_FORMAT_UNDERLINE,
     ID_FORMAT_FONT,
+    ID_FORMAT_PARAGRAPH,
+    ID_FORMAT_CONTENT,
+
+    ID_INSERT_SYMBOL,
 
     ID_FORMAT_ALIGN_LEFT,
     ID_FORMAT_ALIGN_CENTRE,
@@ -221,6 +233,11 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_UPDATE_UI(ID_FORMAT_ALIGN_RIGHT,  MyFrame::OnUpdateAlignRight)
 
     EVT_MENU(ID_FORMAT_FONT,  MyFrame::OnFont)
+    EVT_MENU(ID_FORMAT_PARAGRAPH,  MyFrame::OnParagraph)
+    EVT_MENU(ID_FORMAT_CONTENT,  MyFrame::OnFormat)
+    EVT_UPDATE_UI(ID_FORMAT_CONTENT,  MyFrame::OnUpdateFormat)
+    EVT_UPDATE_UI(ID_FORMAT_FONT,  MyFrame::OnUpdateFormat)
+    EVT_UPDATE_UI(ID_FORMAT_PARAGRAPH,  MyFrame::OnUpdateFormat)
     EVT_MENU(ID_FORMAT_INDENT_MORE,  MyFrame::OnIndentMore)
     EVT_MENU(ID_FORMAT_INDENT_LESS,  MyFrame::OnIndentLess)
 
@@ -230,6 +247,8 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
 
     EVT_MENU(ID_FORMAT_PARAGRAPH_SPACING_MORE,  MyFrame::OnParagraphSpacingMore)
     EVT_MENU(ID_FORMAT_PARAGRAPH_SPACING_LESS,  MyFrame::OnParagraphSpacingLess)
+
+    EVT_MENU(ID_INSERT_SYMBOL,  MyFrame::OnInsertSymbol)
 
     EVT_MENU(ID_VIEW_HTML, MyFrame::OnViewHTML)
     EVT_MENU(ID_SWITCH_STYLE_SHEETS, MyFrame::OnSwitchStyleSheets)
@@ -450,14 +469,20 @@ MyFrame::MyFrame(const wxString& title, wxWindowID id, const wxPoint& pos,
     formatMenu->Append(ID_FORMAT_LINE_SPACING_DOUBLE, _("Double Line Spacing"));
     formatMenu->AppendSeparator();
     formatMenu->Append(ID_FORMAT_FONT, _("&Font..."));
+    formatMenu->Append(ID_FORMAT_PARAGRAPH, _("&Paragraph..."));
+    formatMenu->Append(ID_FORMAT_CONTENT, _("Font and Pa&ragraph...\tShift+Ctrl+F"));
     formatMenu->AppendSeparator();
     formatMenu->Append(ID_SWITCH_STYLE_SHEETS, _("&Switch Style Sheets"));
+
+    wxMenu* insertMenu = new wxMenu;
+    insertMenu->Append(ID_INSERT_SYMBOL, _("&Symbol...\tCtrl+I"));
 
     // now append the freshly created menu to the menu bar...
     wxMenuBar *menuBar = new wxMenuBar();
     menuBar->Append(fileMenu, _T("&File"));
     menuBar->Append(editMenu, _T("&Edit"));
     menuBar->Append(formatMenu, _T("F&ormat"));
+    menuBar->Append(insertMenu, _T("&Insert"));
     menuBar->Append(helpMenu, _T("&Help"));
 
     // ... and attach this menu bar to the frame
@@ -541,6 +566,22 @@ MyFrame::MyFrame(const wxString& title, wxWindowID id, const wxPoint& pos,
     styleListBox->UpdateStyles();
 
     wxRichTextCtrl& r = *m_richTextCtrl;
+
+#if 0
+    r.WriteText(wxT("One\nTwo\nThree\n"));
+#if 0
+    int i;
+    for (i = 0; i < 3; i++)
+    {
+
+        wxRichTextParagraph* para = r.GetBuffer().GetParagraphAtLine(i);
+        if (para)
+        {
+            wxLogDebug(wxT("Range for paragraph %d: %d -> %d"), i, para->GetRange().GetStart(), para->GetRange().GetEnd());
+        }
+    }
+#endif
+#else
 
     r.BeginSuppressUndo();
 
@@ -709,6 +750,7 @@ MyFrame::MyFrame(const wxString& title, wxWindowID id, const wxPoint& pos,
     r.EndParagraphSpacing();
 
     r.EndSuppressUndo();
+#endif
 }
 
 
@@ -896,6 +938,24 @@ void MyFrame::OnUpdateAlignRight(wxUpdateUIEvent& event)
 
 void MyFrame::OnFont(wxCommandEvent& WXUNUSED(event))
 {
+    wxRichTextRange range;
+    if (m_richTextCtrl->HasSelection())
+        range = m_richTextCtrl->GetSelectionRange();
+    else
+        range = wxRichTextRange(0, m_richTextCtrl->GetLastPosition()+1);
+
+    int pages = wxRICHTEXT_FORMAT_FONT;
+
+    wxRichTextFormattingDialog formatDlg(pages, this);
+    formatDlg.GetStyle(m_richTextCtrl, range);
+
+    if (formatDlg.ShowModal() == wxID_OK)
+    {
+        formatDlg.ApplyStyle(m_richTextCtrl, range);
+    }
+
+    // Old method using wxFontDialog
+#if 0
     if (!m_richTextCtrl->HasSelection())
         return;
 
@@ -919,6 +979,50 @@ void MyFrame::OnFont(wxCommandEvent& WXUNUSED(event))
             m_richTextCtrl->SetStyle(range, attr);
         }
     }
+#endif
+}
+
+void MyFrame::OnParagraph(wxCommandEvent& WXUNUSED(event))
+{
+    wxRichTextRange range;
+    if (m_richTextCtrl->HasSelection())
+        range = m_richTextCtrl->GetSelectionRange();
+    else
+        range = wxRichTextRange(0, m_richTextCtrl->GetLastPosition()+1);
+
+    int pages = wxRICHTEXT_FORMAT_INDENTS_SPACING|wxRICHTEXT_FORMAT_TABS|wxRICHTEXT_FORMAT_BULLETS;
+
+    wxRichTextFormattingDialog formatDlg(pages, this);
+    formatDlg.GetStyle(m_richTextCtrl, range);
+
+    if (formatDlg.ShowModal() == wxID_OK)
+    {
+        formatDlg.ApplyStyle(m_richTextCtrl, range);
+    }
+}
+
+void MyFrame::OnFormat(wxCommandEvent& WXUNUSED(event))
+{
+    wxRichTextRange range;
+    if (m_richTextCtrl->HasSelection())
+        range = m_richTextCtrl->GetSelectionRange();
+    else
+        range = wxRichTextRange(0, m_richTextCtrl->GetLastPosition()+1);
+
+    int pages = wxRICHTEXT_FORMAT_FONT|wxRICHTEXT_FORMAT_INDENTS_SPACING|wxRICHTEXT_FORMAT_TABS|wxRICHTEXT_FORMAT_BULLETS;
+
+    wxRichTextFormattingDialog formatDlg(pages, this);
+    formatDlg.GetStyle(m_richTextCtrl, range);
+
+    if (formatDlg.ShowModal() == wxID_OK)
+    {
+        formatDlg.ApplyStyle(m_richTextCtrl, range);
+    }
+}
+
+void MyFrame::OnUpdateFormat(wxUpdateUIEvent& event)
+{
+    event.Enable(m_richTextCtrl->HasSelection());
 }
 
 void MyFrame::OnIndentMore(wxCommandEvent& WXUNUSED(event))
@@ -1139,4 +1243,41 @@ void MyFrame::OnSwitchStyleSheets(wxCommandEvent& WXUNUSED(event))
 
     styleCombo->SetStyleSheet(sheet);
     styleCombo->UpdateStyles();
+}
+
+void MyFrame::OnInsertSymbol(wxCommandEvent& WXUNUSED(event))
+{
+    wxRichTextCtrl* ctrl = (wxRichTextCtrl*) FindWindow(ID_RICHTEXT_CTRL);
+
+    wxTextAttrEx attr;
+    attr.SetFlags(wxTEXT_ATTR_FONT);
+    ctrl->GetStyle(ctrl->GetInsertionPoint(), attr);
+
+    wxString currentFontName;
+    if (attr.HasFont() && attr.GetFont().Ok())
+        currentFontName = attr.GetFont().GetFaceName();
+
+    // Don't set the initial font in the dialog (so the user is choosing
+    // 'normal text', i.e. the current font) but do tell the dialog
+    // what 'normal text' is.
+
+    wxSymbolPickerDialog dlg(wxT("*"), wxEmptyString, currentFontName, this);
+
+    if (dlg.ShowModal() == wxID_OK)
+    {
+        if (dlg.HasSelection())
+        {
+            long insertionPoint = ctrl->GetInsertionPoint();
+
+            ctrl->WriteText(dlg.GetSymbol());
+
+            if (!dlg.UseNormalFont())
+            {
+                wxFont font(attr.GetFont());
+                font.SetFaceName(dlg.GetNormalTextFontName());
+                attr.SetFont(font);
+                ctrl->SetStyle(insertionPoint, insertionPoint+1, attr);
+            }
+        }
+    }
 }
