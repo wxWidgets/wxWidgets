@@ -27,9 +27,9 @@
 
 #ifndef WX_PRECOMP
     #include "wx/sizer.h"
-
     #include "wx/statbmp.h"
     #include "wx/stattext.h"
+    #include "wx/button.h"
 #endif //WX_PRECOMP
 
 #include "wx/aboutdlg.h"
@@ -69,13 +69,13 @@ wxString wxAboutDialogInfo::GetDescriptionAndCredits() const
         s << _T('\n') << _("Developed by ") << AllAsString(GetDevelopers());
 
     if ( HasDocWriters() )
-        s << _T('\n') << ("Documentation by ") << AllAsString(GetDocWriters());
+        s << _T('\n') << _("Documentation by ") << AllAsString(GetDocWriters());
 
     if ( HasArtists() )
-        s << _T('\n') << ("Graphics art by ") << AllAsString(GetArtists());
+        s << _T('\n') << _("Graphics art by ") << AllAsString(GetArtists());
 
     if ( HasTranslators() )
-        s << _T('\n') << ("Translations by ") << AllAsString(GetTranslators());
+        s << _T('\n') << _("Translations by ") << AllAsString(GetTranslators());
 
     return s;
 }
