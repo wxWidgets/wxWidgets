@@ -51,6 +51,10 @@
 
 #if wxUSE_ABOUTDLG
     #include "wx/aboutdlg.h"
+
+    // these headers are only needed for custom about dialog
+    #include "wx/statline.h"
+    #include "wx/generic/aboutdlgg.h"
 #endif // wxUSE_ABOUTDLG
 
 #if wxUSE_BUSYINFO
@@ -186,6 +190,8 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
 #if wxUSE_ABOUTDLG
     EVT_MENU(DIALOGS_ABOUTDLG_SIMPLE,               MyFrame::ShowSimpleAboutDialog)
     EVT_MENU(DIALOGS_ABOUTDLG_FANCY,                MyFrame::ShowFancyAboutDialog)
+    EVT_MENU(DIALOGS_ABOUTDLG_FULL,                 MyFrame::ShowFullAboutDialog)
+    EVT_MENU(DIALOGS_ABOUTDLG_CUSTOM,               MyFrame::ShowCustomAboutDialog)
 #endif // wxUSE_ABOUTDLG
 
 #if wxUSE_BUSYINFO
@@ -396,8 +402,10 @@ bool MyApp::OnInit()
 
 #if wxUSE_ABOUTDLG
     wxMenu *menuHelp = new wxMenu;
-    menuHelp->Append(DIALOGS_ABOUTDLG_SIMPLE, _T("&About (simple)..."));
-    menuHelp->Append(DIALOGS_ABOUTDLG_FANCY, _T("About (&fancy)..."));
+    menuHelp->Append(DIALOGS_ABOUTDLG_SIMPLE, _T("&About (simple)...\tF1"));
+    menuHelp->Append(DIALOGS_ABOUTDLG_FANCY, _T("About (&fancy)...\tShift-F1"));
+    menuHelp->Append(DIALOGS_ABOUTDLG_FULL, _T("About (f&ull)...\tCtrl-F1"));
+    menuHelp->Append(DIALOGS_ABOUTDLG_CUSTOM, _T("About (&custom)...\tCtrl-Shift-F1"));
 #endif // wxUSE_ABOUTDLG
 
     wxMenuBar *menubar = new wxMenuBar;
@@ -1174,7 +1182,7 @@ void MyFrame::ShowProgress( wxCommandEvent& WXUNUSED(event) )
 
 #if wxUSE_ABOUTDLG
 
-static void CommonAboutInfoInit(wxAboutDialogInfo& info)
+static void InitAboutInfoMinimal(wxAboutDialogInfo& info)
 {
     info.SetName(_T("Dialogs Sample"));
     info.SetVersion(wxVERSION_NUM_DOT_STRING_T);
@@ -1183,10 +1191,48 @@ static void CommonAboutInfoInit(wxAboutDialogInfo& info)
     info.AddDeveloper(_T("Vadim Zeitlin"));
 }
 
+static void InitAboutInfoWebsite(wxAboutDialogInfo& info)
+{
+    InitAboutInfoMinimal(info);
+
+    info.SetWebSite(_T("http://www.wxwidgets.org/"), _T("wxWidgets web site"));
+}
+
+static void InitAboutInfoAll(wxAboutDialogInfo& info)
+{
+    InitAboutInfoMinimal(info);
+
+    // we can add a second developer
+    info.AddDeveloper(_T("A.N. Other"));
+
+    // or we can add several persons at once like this
+    static const wxChar *docwriters[] =
+    {
+        _T("First D. Writer"),
+        _T("Second One"),
+    };
+
+    info.SetDocWriters(wxArrayString(WXSIZEOF(docwriters), docwriters));
+    info.SetLicence(wxString::FromAscii(
+"                wxWindows Library Licence, Version 3.1\n"
+"                ======================================\n"
+"\n"
+"  Copyright (c) 1998-2005 Julian Smart, Robert Roebling et al\n"
+"\n"
+"  Everyone is permitted to copy and distribute verbatim copies\n"
+"  of this licence document, but changing it is not allowed.\n"
+"\n"
+"                       WXWINDOWS LIBRARY LICENCE\n"
+"     TERMS AND CONDITIONS FOR COPYING, DISTRIBUTION AND MODIFICATION\n"
+"\n"
+"                    ...and so on and so forth...\n"
+    ));
+}
+
 void MyFrame::ShowSimpleAboutDialog(wxCommandEvent& WXUNUSED(event))
 {
     wxAboutDialogInfo info;
-    CommonAboutInfoInit(info);
+    InitAboutInfoMinimal(info);
 
     wxAboutBox(info);
 }
@@ -1194,10 +1240,43 @@ void MyFrame::ShowSimpleAboutDialog(wxCommandEvent& WXUNUSED(event))
 void MyFrame::ShowFancyAboutDialog(wxCommandEvent& WXUNUSED(event))
 {
     wxAboutDialogInfo info;
-    CommonAboutInfoInit(info);
-    info.SetWebSite(_T("http://www.wxwidgets.org/"), _T("wxWidgets web site"));
+    InitAboutInfoWebsite(info);
 
     wxAboutBox(info);
+}
+
+void MyFrame::ShowFullAboutDialog(wxCommandEvent& WXUNUSED(event))
+{
+    wxAboutDialogInfo info;
+    InitAboutInfoAll(info);
+
+    wxAboutBox(info);
+}
+
+void MyFrame::ShowCustomAboutDialog(wxCommandEvent& WXUNUSED(event))
+{
+    class MyAboutDialog : public wxGenericAboutDialog
+    {
+    public:
+        MyAboutDialog(const wxAboutDialogInfo& info)
+        {
+            Create(info);
+        }
+
+        // add some custom controls
+        virtual void DoAddCustomControls()
+        {
+            AddControl(new wxStaticLine(this), wxSizerFlags().Expand());
+            AddText(_T("Some custom text"));
+            AddControl(new wxStaticLine(this), wxSizerFlags().Expand());
+        }
+    };
+
+    wxAboutDialogInfo info;
+    InitAboutInfoAll(info);
+
+    MyAboutDialog dlg(info);
+    dlg.ShowModal();
 }
 
 #endif // wxUSE_ABOUTDLG

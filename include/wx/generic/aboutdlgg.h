@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Name:        wx/generic/aboutdlgg.h
-// Purpose:     generic wxAboutDialog implementation
+// Purpose:     generic wxAboutBox() implementation
 // Author:      Vadim Zeitlin
 // Created:     2006-10-07
 // RCS-ID:      $Id$
@@ -19,22 +19,23 @@
 
 class WXDLLIMPEXP_CORE wxAboutDialogInfo;
 class WXDLLIMPEXP_CORE wxSizer;
+class WXDLLIMPEXP_CORE wxSizerFlags;
 
 // ----------------------------------------------------------------------------
-// wxAboutDialog: generic "About" dialog implementation
+// wxGenericAboutDialog: generic "About" dialog implementation
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxAboutDialog : public wxDialog
+class WXDLLIMPEXP_CORE wxGenericAboutDialog : public wxDialog
 {
 public:
     // constructors and Create() method
     // --------------------------------
 
     // default ctor, you must use Create() to really initialize the dialog
-    wxAboutDialog() { Init(); }
+    wxGenericAboutDialog() { Init(); }
 
     // ctor which fully initializes the object
-    wxAboutDialog(const wxAboutDialogInfo& info)
+    wxGenericAboutDialog(const wxAboutDialogInfo& info)
     {
         Init();
 
@@ -45,14 +46,27 @@ public:
     bool Create(const wxAboutDialogInfo& info);
 
 protected:
-    // common part of all ctors
-    void Init() { m_sizerText = NULL; }
+    // this virtual method may be overridden to add some more controls to the
+    // dialog
+    //
+    // notice that for this to work you must call Create() from the derived
+    // class ctor and not use the base class ctor directly as otherwise the
+    // virtual function of the derived class wouldn't be called
+    virtual void DoAddCustomControls() { }
 
-    // add arbitrary control to the text sizer contents
+    // add arbitrary control to the text sizer contents with the specified
+    // flags
+    void AddControl(wxWindow *win, const wxSizerFlags& flags);
+
+    // add arbitrary control to the text sizer contents and center it
     void AddControl(wxWindow *win);
 
     // add the text, if it's not empty, to the text sizer contents
     void AddText(const wxString& text);
+
+private:
+    // common part of all ctors
+    void Init() { m_sizerText = NULL; }
 
 
     wxSizer *m_sizerText;

@@ -247,6 +247,8 @@ public:
 #if wxUSE_ABOUTDLG
     void ShowSimpleAboutDialog(wxCommandEvent& event);
     void ShowFancyAboutDialog(wxCommandEvent& event);
+    void ShowFullAboutDialog(wxCommandEvent& event);
+    void ShowCustomAboutDialog(wxCommandEvent& event);
 #endif // wxUSE_ABOUTDLG
 
 #if wxUSE_BUSYINFO
@@ -337,6 +339,8 @@ enum
     DIALOGS_PROGRESS,
     DIALOGS_ABOUTDLG_SIMPLE,
     DIALOGS_ABOUTDLG_FANCY,
+    DIALOGS_ABOUTDLG_FULL,
+    DIALOGS_ABOUTDLG_CUSTOM,
     DIALOGS_BUSYINFO,
     DIALOGS_FIND,
     DIALOGS_REPLACE,

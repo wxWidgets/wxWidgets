@@ -95,10 +95,10 @@ wxIcon wxAboutDialogInfo::GetIcon() const
 }
 
 // ----------------------------------------------------------------------------
-// wxAboutDialog
+// wxGenericAboutDialog
 // ----------------------------------------------------------------------------
 
-bool wxAboutDialog::Create(const wxAboutDialogInfo& info)
+bool wxGenericAboutDialog::Create(const wxAboutDialogInfo& info)
 {
     // TODO: should we use main frame as parent by default here?
     if ( !wxDialog::Create(NULL, wxID_ANY, _("About ") + info.GetName()) )
@@ -135,6 +135,8 @@ bool wxAboutDialog::Create(const wxAboutDialogInfo& info)
 
     // TODO: add credits (developers, artists, doc writers, translators)
 
+    DoAddCustomControls();
+
 
     wxSizer *sizerIconAndText = new wxBoxSizer(wxHORIZONTAL);
 #if wxUSE_STATBMP
@@ -156,15 +158,20 @@ bool wxAboutDialog::Create(const wxAboutDialogInfo& info)
     return true;
 }
 
-void wxAboutDialog::AddControl(wxWindow *win)
+void wxGenericAboutDialog::AddControl(wxWindow *win, const wxSizerFlags& flags)
 {
     wxCHECK_RET( m_sizerText, _T("can only be called after Create()") );
     wxASSERT_MSG( win, _T("can't add NULL window to about dialog") );
 
-    m_sizerText->Add(win, wxSizerFlags().Border(wxDOWN).Centre());
+    m_sizerText->Add(win, flags);
 }
 
-void wxAboutDialog::AddText(const wxString& text)
+void wxGenericAboutDialog::AddControl(wxWindow *win)
+{
+    AddControl(win, wxSizerFlags().Border(wxDOWN).Centre());
+}
+
+void wxGenericAboutDialog::AddText(const wxString& text)
 {
     if ( !text.empty() )
         AddControl(new wxStaticText(this, wxID_ANY, text));
@@ -176,7 +183,7 @@ void wxAboutDialog::AddText(const wxString& text)
 
 void wxGenericAboutBox(const wxAboutDialogInfo& info)
 {
-    wxAboutDialog dlg(info);
+    wxGenericAboutDialog dlg(info);
     dlg.ShowModal();
 }
 
