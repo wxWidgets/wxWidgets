@@ -81,8 +81,20 @@ bool wxAboutDialog::Create(const wxAboutDialogInfo& info)
 
     wxSizer *sizerIconAndText = new wxBoxSizer(wxHORIZONTAL);
 #if wxUSE_STATBMP
-    if ( info.HasIcon() )
-        sizerIconAndText->Add(new wxStaticBitmap(this, wxID_ANY, info.GetIcon()));
+    wxIcon icon = info.GetIcon();
+    if ( !icon.Ok() && wxTheApp )
+    {
+        const wxTopLevelWindow * const
+            tlw = wxDynamicCast(wxTheApp->GetTopWindow(), wxTopLevelWindow);
+        if ( tlw )
+            icon = tlw->GetIcon();
+    }
+
+    if ( icon.Ok() )
+    {
+        sizerIconAndText->Add(new wxStaticBitmap(this, wxID_ANY, icon),
+                                wxSizerFlags().Border(wxRIGHT));
+    }
 #endif // wxUSE_STATBMP
     sizerIconAndText->Add(m_sizerText, wxSizerFlags(1).Expand());
 
