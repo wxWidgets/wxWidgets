@@ -2704,15 +2704,12 @@ typedef unsigned long   HGLOBAL;
 /*  WIN32 graphics types for OS/2 GPI */
 
 /*  RGB under OS2 is more like a PALETTEENTRY struct under Windows so we need a real RGB def */
-/*  WARNING: The OS/2 headers typedef BYTE simply as 'char'; if the default is signed, all */
-/*  hell will break loose! */
-/* #define OS2RGB(r,g,b) ((DWORD ((BYTE) (b) | ((WORD) (g) << 8)) | (((DWORD)(BYTE)(r)) << 16))) */
 #define OS2RGB(r,g,b) ((DWORD)((unsigned char)(b) | ((unsigned char)(g) << 8)) | ((unsigned char)(r) << 16))
 
 typedef unsigned long COLORREF;
-#define GetBValue(rgb) ((BYTE)((rgb) >> 16))
-#define GetGValue(rgb) ((BYTE)(((WORD)(rgb)) >> 8))
-#define GetRValue(rgb) ((BYTE)(rgb))
+#define GetRValue(rgb) ((unsigned char)((rgb) >> 16))
+#define GetGValue(rgb) ((unsigned char)(((unsigned short)(rgb)) >> 8))
+#define GetBValue(rgb) ((unsigned char)(rgb))
 #define PALETTEINDEX(i) ((COLORREF)(0x01000000 | (DWORD)(WORD)(i)))
 #define PALETTERGB(r,g,b) (0x02000000 | OS2RGB(r,g,b))
 /*  OS2's RGB/RGB2 is backwards from this */

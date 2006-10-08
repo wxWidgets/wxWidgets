@@ -204,12 +204,22 @@ bool wxOwnerDrawn::OnDrawItem( wxDC& rDC,
     //
     if (eStatus & wxODSelected)
     {
-        wxColour                        vCol2(wxT("WHITE"));
-        vColBack.Set( (unsigned char)0
-                     ,(unsigned char)0
-                     ,(unsigned char)160
-                    ); // no dark blue in color table
-        vColText = vCol2;
+        vRef = (ULONG)::WinQuerySysColor( HWND_DESKTOP
+                                         ,SYSCLR_MENUHILITEBGND
+                                         ,0L
+                                        );
+        vColBack.Set( GetRValue(vRef)
+                     ,GetGValue(vRef)
+                     ,GetBValue(vRef)
+                    );
+        vRef = (ULONG)::WinQuerySysColor( HWND_DESKTOP
+                                         ,SYSCLR_MENUHILITE
+                                         ,0L
+                                        );
+        vColText.Set( GetRValue(vRef)
+                     ,GetGValue(vRef)
+                     ,GetBValue(vRef)
+                    );
     }
     else if (eStatus & wxODDisabled)
     {
