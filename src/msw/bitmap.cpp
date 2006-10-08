@@ -1522,6 +1522,33 @@ bool wxBitmapHandler::Save(wxGDIImage *image,
     return bitmap && SaveFile(bitmap, name, type);
 }
 
+bool wxBitmapHandler::Create(wxBitmap *WXUNUSED(bitmap),
+                             const void* WXUNUSED(data),
+                             long WXUNUSED(type),
+                             int WXUNUSED(width),
+                             int WXUNUSED(height),
+                             int WXUNUSED(depth))
+{
+    return false;
+}
+
+bool wxBitmapHandler::LoadFile(wxBitmap *WXUNUSED(bitmap),
+                               const wxString& WXUNUSED(name),
+                               long WXUNUSED(type),
+                               int WXUNUSED(desiredWidth),
+                               int WXUNUSED(desiredHeight))
+{
+    return false;
+}
+
+bool wxBitmapHandler::SaveFile(wxBitmap *WXUNUSED(bitmap),
+                               const wxString& WXUNUSED(name),
+                               int WXUNUSED(type),
+                               const wxPalette *WXUNUSED(palette))
+{
+    return false;
+}
+
 // ----------------------------------------------------------------------------
 // DIB functions
 // ----------------------------------------------------------------------------
