@@ -420,6 +420,8 @@
 
 #define wxUSE_WIZARDDLG 0
 
+#define wxUSE_ABOUTDLG 0
+
 
 #define wxUSE_METAFILE              0
 #define wxUSE_ENH_METAFILE          0
