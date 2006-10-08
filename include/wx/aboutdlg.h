@@ -60,7 +60,7 @@ public:
     // icon to be shown in the dialog, defaults to the main frame icon
     void SetIcon(const wxIcon& icon) { m_icon = icon; }
     bool HasIcon() const { return m_icon.Ok(); }
-    wxIcon GetIcon() const { return m_icon; }
+    wxIcon GetIcon() const;
 
     // web site for the program and its description (defaults to URL itself if
     // empty)

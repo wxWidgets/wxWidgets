@@ -80,6 +80,20 @@ wxString wxAboutDialogInfo::GetDescriptionAndCredits() const
     return s;
 }
 
+wxIcon wxAboutDialogInfo::GetIcon() const
+{
+    wxIcon icon = m_icon;
+    if ( !icon.Ok() && wxTheApp )
+    {
+        const wxTopLevelWindow * const
+            tlw = wxDynamicCast(wxTheApp->GetTopWindow(), wxTopLevelWindow);
+        if ( tlw )
+            icon = tlw->GetIcon();
+    }
+
+    return icon;
+}
+
 // ----------------------------------------------------------------------------
 // wxAboutDialog
 // ----------------------------------------------------------------------------
@@ -125,14 +139,6 @@ bool wxAboutDialog::Create(const wxAboutDialogInfo& info)
     wxSizer *sizerIconAndText = new wxBoxSizer(wxHORIZONTAL);
 #if wxUSE_STATBMP
     wxIcon icon = info.GetIcon();
-    if ( !icon.Ok() && wxTheApp )
-    {
-        const wxTopLevelWindow * const
-            tlw = wxDynamicCast(wxTheApp->GetTopWindow(), wxTopLevelWindow);
-        if ( tlw )
-            icon = tlw->GetIcon();
-    }
-
     if ( icon.Ok() )
     {
         sizerIconAndText->Add(new wxStaticBitmap(this, wxID_ANY, icon),
@@ -176,7 +182,7 @@ void wxGenericAboutBox(const wxAboutDialogInfo& info)
 
 // currently wxAboutBox is implemented natively only under these platforms, for
 // the others we provide a generic fallback here
-#if !defined(__WXMSW__) && !defined(__WXMAC__)
+#if !defined(__WXMSW__) && !defined(__WXMAC__) && !defined(__WXGTK26__)
 
 void wxAboutBox(const wxAboutDialogInfo& info)
 {

@@ -2745,6 +2745,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 </set>
 
 <set var="ADVANCED_GTK_SRC" hints="files">
+    src/gtk/aboutdlg.cpp
     src/gtk/taskbar.cpp
     src/gtk/dataview.cpp
     src/gtk/eggtrayicon.c
