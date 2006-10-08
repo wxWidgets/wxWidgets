@@ -1069,7 +1069,9 @@ RICHTEXTDLL_OBJECTS =  \
 	$(OBJS)\richtextdll_richtextbuffer.o \
 	$(OBJS)\richtextdll_richtextstyles.o \
 	$(OBJS)\richtextdll_richtextxml.o \
-	$(OBJS)\richtextdll_richtexthtml.o
+	$(OBJS)\richtextdll_richtexthtml.o \
+	$(OBJS)\richtextdll_richtextformatdlg.o \
+	$(OBJS)\richtextdll_richtextsymboldlg.o
 RICHTEXTLIB_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) \
 	$(GCCFLAGS) -DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
@@ -1084,7 +1086,9 @@ RICHTEXTLIB_OBJECTS =  \
 	$(OBJS)\richtextlib_richtextbuffer.o \
 	$(OBJS)\richtextlib_richtextstyles.o \
 	$(OBJS)\richtextlib_richtextxml.o \
-	$(OBJS)\richtextlib_richtexthtml.o
+	$(OBJS)\richtextlib_richtexthtml.o \
+	$(OBJS)\richtextlib_richtextformatdlg.o \
+	$(OBJS)\richtextlib_richtextsymboldlg.o
 GLDLL_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) $(GCCFLAGS) \
 	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
 	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) \
@@ -1269,7 +1273,9 @@ ____MONOLIB_GUI_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_richtextbuffer.o \
 	$(OBJS)\monodll_richtextstyles.o \
 	$(OBJS)\monodll_richtextxml.o \
-	$(OBJS)\monodll_richtexthtml.o
+	$(OBJS)\monodll_richtexthtml.o \
+	$(OBJS)\monodll_richtextformatdlg.o \
+	$(OBJS)\monodll_richtextsymboldlg.o
 endif
 ifeq ($(USE_GUI),1)
 ifeq ($(WXUNIV),0)
@@ -1863,7 +1869,9 @@ ____MONOLIB_GUI_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_richtextbuffer.o \
 	$(OBJS)\monolib_richtextstyles.o \
 	$(OBJS)\monolib_richtextxml.o \
-	$(OBJS)\monolib_richtexthtml.o
+	$(OBJS)\monolib_richtexthtml.o \
+	$(OBJS)\monolib_richtextformatdlg.o \
+	$(OBJS)\monolib_richtextsymboldlg.o
 endif
 ifeq ($(USE_GUI),1)
 ifeq ($(WXUNIV),0)
@@ -5214,6 +5222,12 @@ $(OBJS)\monodll_richtextxml.o: ../../src/richtext/richtextxml.cpp
 $(OBJS)\monodll_richtexthtml.o: ../../src/richtext/richtexthtml.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\monodll_richtextformatdlg.o: ../../src/richtext/richtextformatdlg.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\monodll_richtextsymboldlg.o: ../../src/richtext/richtextsymboldlg.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\monodll_xml.o: ../../src/xml/xml.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
@@ -7214,6 +7228,12 @@ $(OBJS)\monolib_richtextxml.o: ../../src/richtext/richtextxml.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monolib_richtexthtml.o: ../../src/richtext/richtexthtml.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\monolib_richtextformatdlg.o: ../../src/richtext/richtextformatdlg.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\monolib_richtextsymboldlg.o: ../../src/richtext/richtextsymboldlg.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monolib_xml.o: ../../src/xml/xml.cpp
@@ -12554,6 +12574,12 @@ $(OBJS)\richtextdll_richtextxml.o: ../../src/richtext/richtextxml.cpp
 $(OBJS)\richtextdll_richtexthtml.o: ../../src/richtext/richtexthtml.cpp
 	$(CXX) -c -o $@ $(RICHTEXTDLL_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\richtextdll_richtextformatdlg.o: ../../src/richtext/richtextformatdlg.cpp
+	$(CXX) -c -o $@ $(RICHTEXTDLL_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\richtextdll_richtextsymboldlg.o: ../../src/richtext/richtextsymboldlg.cpp
+	$(CXX) -c -o $@ $(RICHTEXTDLL_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\richtextlib_dummy.o: ../../src/common/dummy.cpp
 	$(CXX) -c -o $@ $(RICHTEXTLIB_CXXFLAGS) $(CPPDEPS) $<
 
@@ -12570,6 +12596,12 @@ $(OBJS)\richtextlib_richtextxml.o: ../../src/richtext/richtextxml.cpp
 	$(CXX) -c -o $@ $(RICHTEXTLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\richtextlib_richtexthtml.o: ../../src/richtext/richtexthtml.cpp
+	$(CXX) -c -o $@ $(RICHTEXTLIB_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\richtextlib_richtextformatdlg.o: ../../src/richtext/richtextformatdlg.cpp
+	$(CXX) -c -o $@ $(RICHTEXTLIB_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\richtextlib_richtextsymboldlg.o: ../../src/richtext/richtextsymboldlg.cpp
 	$(CXX) -c -o $@ $(RICHTEXTLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\gldll_dummy.o: ../../src/common/dummy.cpp

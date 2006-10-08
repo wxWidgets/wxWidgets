@@ -9129,7 +9129,15 @@ SOURCE=..\..\include\wx\richtext\richtextctrl.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\richtext\richtextformatdlg.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\richtext\richtextstyles.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\richtext\richtextsymboldlg.h
 # End Source File
 # Begin Source File
 

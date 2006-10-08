@@ -3094,12 +3094,16 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/richtext/richtextstyles.cpp
     src/richtext/richtextxml.cpp
     src/richtext/richtexthtml.cpp
+    src/richtext/richtextformatdlg.cpp
+    src/richtext/richtextsymboldlg.cpp
 </set>
 <set var="RICHTEXT_HDR" hints="files">
     wx/richtext/richtextctrl.h
     wx/richtext/richtextbuffer.h
     wx/richtext/richtextstyles.h
     wx/richtext/richtextxml.h
+    wx/richtext/richtextformatdlg.h
+    wx/richtext/richtextsymboldlg.h
 </set>
 
 <!-- ====================================================================== -->
