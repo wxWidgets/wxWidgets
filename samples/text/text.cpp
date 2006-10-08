@@ -297,7 +297,12 @@ public:
 
     void OnSetText(wxCommandEvent& WXUNUSED(event))
     {
-        m_panel->m_text->SetValue(_T("Hello, world (what else did you expect)?"));
+        m_panel->m_text->SetValue(_T("Hello, world! (what else did you expect?)"));
+    }
+
+    void OnChangeText(wxCommandEvent& WXUNUSED(event))
+    {
+        m_panel->m_text->ChangeValue(_T("Changed, not set: no event"));
     }
 
     void OnIdle( wxIdleEvent& event );
@@ -405,6 +410,7 @@ enum
     TEXT_REPLACE,
     TEXT_SELECT,
     TEXT_SET,
+    TEXT_CHANGE,
 
     // log menu
     TEXT_LOG_KEY,
@@ -470,6 +476,7 @@ bool MyApp::OnInit()
     menuText->Append(TEXT_REPLACE, _T("&Replace characters 4 to 8 with ABC\tCtrl-R"));
     menuText->Append(TEXT_SELECT, _T("&Select characters 4 to 8\tCtrl-I"));
     menuText->Append(TEXT_SET, _T("&Set the first text zone value\tCtrl-E"));
+    menuText->Append(TEXT_CHANGE, _T("&Change the first text zone value\tShift-Ctrl-E"));
     menuText->AppendSeparator();
     menuText->Append(TEXT_MOVE_ENDTEXT, _T("Move cursor to the end of &text"));
     menuText->Append(TEXT_MOVE_ENDENTRY, _T("Move cursor to the end of &entry"));
@@ -1333,10 +1340,11 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(TEXT_PAGE_DOWN,          MyFrame::OnScrollPageDown)
     EVT_MENU(TEXT_PAGE_UP,            MyFrame::OnScrollPageUp)
 
-    EVT_MENU(TEXT_GET_LINE,            MyFrame::OnGetLine)
-    EVT_MENU(TEXT_GET_LINELENGTH,            MyFrame::OnGetLineLength)
+    EVT_MENU(TEXT_GET_LINE,           MyFrame::OnGetLine)
+    EVT_MENU(TEXT_GET_LINELENGTH,     MyFrame::OnGetLineLength)
 
     EVT_MENU(TEXT_SET,                MyFrame::OnSetText)
+    EVT_MENU(TEXT_CHANGE,             MyFrame::OnChangeText)
 
     EVT_IDLE(MyFrame::OnIdle)
 END_EVENT_TABLE()
