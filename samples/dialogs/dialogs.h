@@ -244,6 +244,11 @@ public:
     void ShowProgress(wxCommandEvent& event);
 #endif // wxUSE_PROGRESSDLG
 
+#if wxUSE_ABOUTDLG
+    void ShowSimpleAboutDialog(wxCommandEvent& event);
+    void ShowFancyAboutDialog(wxCommandEvent& event);
+#endif // wxUSE_ABOUTDLG
+
 #if wxUSE_BUSYINFO
     void ShowBusyInfo(wxCommandEvent& event);
 #endif // wxUSE_BUSYINFO
@@ -330,6 +335,8 @@ enum
     DIALOGS_CENTRE_PARENT,
     DIALOGS_MODELESS_BTN,
     DIALOGS_PROGRESS,
+    DIALOGS_ABOUTDLG_SIMPLE,
+    DIALOGS_ABOUTDLG_FANCY,
     DIALOGS_BUSYINFO,
     DIALOGS_FIND,
     DIALOGS_REPLACE,

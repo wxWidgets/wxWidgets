@@ -49,6 +49,10 @@
     #include "wx/progdlg.h"
 #endif // wxUSE_PROGRESSDLG
 
+#if wxUSE_ABOUTDLG
+    #include "wx/aboutdlg.h"
+#endif // wxUSE_ABOUTDLG
+
 #if wxUSE_BUSYINFO
     #include "wx/busyinfo.h"
 #endif // wxUSE_BUSYINFO
@@ -179,6 +183,11 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(DIALOGS_PROGRESS,                      MyFrame::ShowProgress)
 #endif // wxUSE_PROGRESSDLG
 
+#if wxUSE_ABOUTDLG
+    EVT_MENU(DIALOGS_ABOUTDLG_SIMPLE,               MyFrame::ShowSimpleAboutDialog)
+    EVT_MENU(DIALOGS_ABOUTDLG_FANCY,                MyFrame::ShowFancyAboutDialog)
+#endif // wxUSE_ABOUTDLG
+
 #if wxUSE_BUSYINFO
     EVT_MENU(DIALOGS_BUSYINFO,                      MyFrame::ShowBusyInfo)
 #endif // wxUSE_BUSYINFO
@@ -234,9 +243,9 @@ bool MyApp::OnInit()
     MyFrame *frame = new MyFrame((wxFrame *) NULL, _T("wxWidgets dialogs example"));
 
     // Make a menubar
-    wxMenu *file_menu = new wxMenu;
+    wxMenu *menuDlg = new wxMenu;
 
-    file_menu->Append(DIALOGS_MESSAGE_BOX, _T("&Message box\tCtrl-M"));
+    menuDlg->Append(DIALOGS_MESSAGE_BOX, _T("&Message box\tCtrl-M"));
 
 
 #if wxUSE_COLOURDLG || wxUSE_FONTDLG || wxUSE_CHOICEDLG
@@ -268,7 +277,7 @@ bool MyApp::OnInit()
         choices_menu->Append(DIALOGS_CHOOSE_FONT_GENERIC, _T("Choose &font (generic)"));
     #endif // USE_FONTDLG_GENERIC
 
-    file_menu->Append(wxID_ANY,_T("&Choices and selectors"),choices_menu);
+    menuDlg->Append(wxID_ANY,_T("&Choices and selectors"),choices_menu);
 #endif // wxUSE_COLOURDLG || wxUSE_FONTDLG || wxUSE_CHOICEDLG
 
 
@@ -285,7 +294,7 @@ bool MyApp::OnInit()
         entry_menu->Append(DIALOGS_NUM_ENTRY, _T("&Numeric entry\tCtrl-N"));
     #endif // wxUSE_NUMBERDLG
 
-    file_menu->Append(wxID_ANY,_T("&Entry dialogs"),entry_menu);
+    menuDlg->Append(wxID_ANY,_T("&Entry dialogs"),entry_menu);
 
 #endif // wxUSE_TEXTDLG || wxUSE_NUMBERDLG
 
@@ -305,7 +314,7 @@ bool MyApp::OnInit()
         filedlg_menu->Append(DIALOGS_FILE_SAVE_GENERIC,  _T("Sa&ve file (generic)"));
     #endif // USE_FILEDLG_GENERIC
 
-    file_menu->Append(wxID_ANY,_T("&File operations"),filedlg_menu);
+    menuDlg->Append(wxID_ANY,_T("&File operations"),filedlg_menu);
 
 #endif // wxUSE_FILEDLG
 
@@ -314,7 +323,7 @@ bool MyApp::OnInit()
 
     dir_menu->Append(DIALOGS_DIR_CHOOSE,  _T("&Choose a directory\tCtrl-D"));
     dir_menu->Append(DIALOGS_DIRNEW_CHOOSE,  _T("Choose a directory (with \"Ne&w\" button)\tShift-Ctrl-D"));
-    file_menu->Append(wxID_ANY,_T("&Directory operations"),dir_menu);
+    menuDlg->Append(wxID_ANY,_T("&Directory operations"),dir_menu);
 
     #if USE_DIRDLG_GENERIC
         dir_menu->AppendSeparator();
@@ -344,7 +353,7 @@ bool MyApp::OnInit()
        info_menu->Append(DIALOGS_LOG_DIALOG, _T("&Log dialog\tCtrl-L"));
     #endif // wxUSE_LOG_DIALOG
 
-    file_menu->Append(wxID_ANY,_T("&Informative dialogs"),info_menu);
+    menuDlg->Append(wxID_ANY,_T("&Informative dialogs"),info_menu);
 
 #endif // wxUSE_STARTUP_TIPS || wxUSE_PROGRESSDLG || wxUSE_BUSYINFO || wxUSE_LOG_DIALOG
 
@@ -353,7 +362,7 @@ bool MyApp::OnInit()
     wxMenu *find_menu = new wxMenu;
     find_menu->AppendCheckItem(DIALOGS_FIND, _T("&Find dialog\tCtrl-F"));
     find_menu->AppendCheckItem(DIALOGS_REPLACE, _T("Find and &replace dialog\tShift-Ctrl-F"));
-    file_menu->Append(wxID_ANY,_T("&Searching"),find_menu);
+    menuDlg->Append(wxID_ANY,_T("&Searching"),find_menu);
 #endif // wxUSE_FINDREPLDLG
 
 #if USE_MODAL_PRESENTATION
@@ -362,7 +371,7 @@ bool MyApp::OnInit()
     dialogs_menu->AppendCheckItem(DIALOGS_MODELESS, _T("Mode&less dialog\tCtrl-Z"));
     dialogs_menu->Append(DIALOGS_CENTRE_SCREEN, _T("Centered on &screen\tShift-Ctrl-1"));
     dialogs_menu->Append(DIALOGS_CENTRE_PARENT, _T("Centered on &parent\tShift-Ctrl-2"));
-    file_menu->Append(wxID_ANY, _T("&Generic dialogs"), dialogs_menu);
+    menuDlg->Append(wxID_ANY, _T("&Generic dialogs"), dialogs_menu);
 #endif // USE_MODAL_PRESENTATION
 
 #if USE_SETTINGS_DIALOG
@@ -377,17 +386,27 @@ bool MyApp::OnInit()
     sheet_menu->Append(DIALOGS_PROPERTY_SHEET_BUTTONTOOLBOOK, _T("Button &Toolbook sheet\tShift-Ctrl-U"));
 #endif
 */
-    file_menu->Append(wxID_ANY, _T("&Property sheets"), sheet_menu);
+    menuDlg->Append(wxID_ANY, _T("&Property sheets"), sheet_menu);
 #endif // USE_SETTINGS_DIALOG
 
-    file_menu->Append(DIALOGS_REQUEST, _T("&Request user attention\tCtrl-R"));
+    menuDlg->Append(DIALOGS_REQUEST, _T("&Request user attention\tCtrl-R"));
 
-    file_menu->AppendSeparator();
-    file_menu->Append(wxID_EXIT, _T("E&xit\tAlt-X"));
+    menuDlg->AppendSeparator();
+    menuDlg->Append(wxID_EXIT, _T("E&xit\tAlt-X"));
 
-    wxMenuBar *menu_bar = new wxMenuBar;
-    menu_bar->Append(file_menu, _T("&File"));
-    frame->SetMenuBar(menu_bar);
+#if wxUSE_ABOUTDLG
+    wxMenu *menuHelp = new wxMenu;
+    menuHelp->Append(DIALOGS_ABOUTDLG_SIMPLE, _T("&About (simple)..."));
+    menuHelp->Append(DIALOGS_ABOUTDLG_FANCY, _T("About (&fancy)..."));
+#endif // wxUSE_ABOUTDLG
+
+    wxMenuBar *menubar = new wxMenuBar;
+    menubar->Append(menuDlg, _T("&Dialogs"));
+#if wxUSE_ABOUTDLG
+    menubar->Append(menuHelp, _T("&Help"));
+#endif // wxUSE_ABOUTDLG
+
+    frame->SetMenuBar(menubar);
 
     myCanvas = new MyCanvas(frame);
     myCanvas->SetBackgroundColour(*wxWHITE);
@@ -1152,6 +1171,35 @@ void MyFrame::ShowProgress( wxCommandEvent& WXUNUSED(event) )
 }
 
 #endif // wxUSE_PROGRESSDLG
+
+#if wxUSE_ABOUTDLG
+
+static void CommonAboutInfoInit(wxAboutDialogInfo& info)
+{
+    info.SetName(_T("Dialogs Sample"));
+    info.SetVersion(wxVERSION_NUM_DOT_STRING);
+    info.SetDescription(_T("This sample shows different wxWidgets dialogs"));
+    info.SetCopyright(_T("© 1998-2006 wxWidgets dev team"));
+}
+
+void MyFrame::ShowSimpleAboutDialog(wxCommandEvent& WXUNUSED(event))
+{
+    wxAboutDialogInfo info;
+    CommonAboutInfoInit(info);
+
+    wxAboutBox(info);
+}
+
+void MyFrame::ShowFancyAboutDialog(wxCommandEvent& WXUNUSED(event))
+{
+    wxAboutDialogInfo info;
+    CommonAboutInfoInit(info);
+    info.SetWebSite(_T("http://www.wxwidgets.org/"), _T("wxWidgets web site"));
+
+    wxAboutBox(info);
+}
+
+#endif // wxUSE_ABOUTDLG
 
 #if wxUSE_BUSYINFO
 
