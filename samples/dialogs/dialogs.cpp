@@ -1177,7 +1177,7 @@ void MyFrame::ShowProgress( wxCommandEvent& WXUNUSED(event) )
 static void CommonAboutInfoInit(wxAboutDialogInfo& info)
 {
     info.SetName(_T("Dialogs Sample"));
-    info.SetVersion(wxVERSION_NUM_DOT_STRING);
+    info.SetVersion(wxVERSION_NUM_DOT_STRING_T);
     info.SetDescription(_T("This sample shows different wxWidgets dialogs"));
     info.SetCopyright(_T("© 1998-2006 wxWidgets dev team"));
 }
