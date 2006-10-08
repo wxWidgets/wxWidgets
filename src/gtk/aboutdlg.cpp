@@ -83,6 +83,12 @@ private:
 // ============================================================================
 
 extern "C" void
+wxGtkAboutDialogOnClose(GtkAboutDialog *about)
+{
+    gtk_widget_destroy(GTK_WIDGET(about));
+}
+
+extern "C" void
 wxGtkAboutDialogOnLink(GtkAboutDialog * WXUNUSED(about),
                        const gchar *link,
                        gpointer WXUNUSED(data))
@@ -148,6 +154,9 @@ void wxAboutBox(const wxAboutDialogInfo& info)
         }
 
         gtk_about_dialog_set_translator_credits(dlg, GtkStr(transCredits));
+
+        g_signal_connect(dlg, "response",
+                            G_CALLBACK(wxGtkAboutDialogOnClose), NULL);
 
         gtk_widget_show(GTK_WIDGET(dlg));
         return;
