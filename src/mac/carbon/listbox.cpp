@@ -503,10 +503,12 @@ void wxMacListBoxItem::Notification(wxMacDataItemBrowserControl *owner ,
         event.SetString( m_label );
         event.SetInt( owner->GetLineFromItem( this ) );
         event.SetExtraLong( list->HasMultipleSelection() ? message == kDataBrowserItemSelected : true );
-        wxPostEvent( list->GetEventHandler(), event );
 
-        // direct notification is not always having the listbox GetSelection() having in synch with event
+        // direct notification is not always having the listbox GetSelection()
+        // having in synch with event, so use wxPostEvent instead
         // list->GetEventHandler()->ProcessEvent(event);
+
+        wxPostEvent( list->GetEventHandler(), event );
     }
 }
 
@@ -600,6 +602,11 @@ wxMacDataBrowserListControl::~wxMacDataBrowserListControl()
 wxWindow * wxMacDataBrowserListControl::GetPeer() const
 {
     return wxDynamicCast( wxMacControl::GetPeer() , wxWindow );
+}
+
+wxMacDataItem* wxMacDataBrowserListControl::CreateItem()
+{
+    return new wxMacListBoxItem();
 }
 
 #if 0

@@ -1054,6 +1054,8 @@ public:
     wxMacDataBrowserListControl( wxWindow *peer, const wxPoint& pos, const wxSize& size, long style );
     virtual ~wxMacDataBrowserListControl();
 
+    virtual wxMacDataItem* CreateItem();
+
     // pointing back
 
     wxWindow * GetPeer() const;
