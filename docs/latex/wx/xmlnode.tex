@@ -246,6 +246,8 @@ documents must always produce the exact same tree regardless of the locale it ru
 Removes the given node from the children list. Returns \true if the node was found and removed
 or \false if the node could not be found.
 
+Note that the caller is reponsible for deleting the removed node in order to avoid memory leaks.
+
 \membersection{wxXmlNode::SetChildren}\label{wxxmlnodesetchildren}
 
 \func{void}{SetChildren}{\param{wxXmlNode* }{child}}

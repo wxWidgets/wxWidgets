@@ -129,15 +129,15 @@ all the parameters.
 
 \constfunc{wxString}{GetPath}{\void}
 
-Returns the currently selected file.
+Returns the absolute path of the currently selected file.
 
 
 \membersection{wxFilePickerCtrl::SetPath}\label{wxfilepickerctrlsetpath}
 
 \func{void}{SetPath}{\param{const wxString \&}{filename}}
 
-Sets the currently selected file. This must be a valid file if
-{\tt wxFLP\_FILE\_MUST\_EXIST} style was given.
+Sets the absolute path of the currently selected file. This must be a valid file if
+the {\tt wxFLP\_FILE\_MUST\_EXIST} style was given.
 
 
 
@@ -187,11 +187,11 @@ The constructor is not normally used by the user code.
 
 \constfunc{wxString}{GetPath}{\void}
 
-Retrieve the file/directory the user has just selected.
+Retrieve the absolute path of the file/directory the user has just selected.
 
 
 \membersection{wxFileDirPickerEvent::SetPath}\label{wxfiledirpickereventsetpath}
 
 \func{void}{SetPath}{\param{const wxString \&}{path}}
 
-Set the file/directory associated with the event.
+Set the absolute path of the file/directory associated with the event.
