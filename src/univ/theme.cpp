@@ -93,12 +93,12 @@ wxThemeInfo::wxThemeInfo(Constructor c,
     {
         nameDefTheme = p;
     }
+#ifdef wxUNIV_DEFAULT_THEME
     else // use native theme by default
     {
-#ifdef wxUNIV_DEFAULT_THEME
-        nameDefTheme = _T(wxSTRINGIZE(wxUNIV_DEFAULT_THEME));
-#endif
+        nameDefTheme = wxSTRINGIZE_T(wxUNIV_DEFAULT_THEME);
     }
+#endif // wxUNIV_DEFAULT_THEME
 
     wxTheme *theme = Create(nameDefTheme);
 
