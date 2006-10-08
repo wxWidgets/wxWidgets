@@ -134,9 +134,13 @@ public:
     UpdatesCountFilter(int& count)
         : m_count(count)
     {
-        wxASSERT_MSG( m_count == -1, _T("wrong initial m_updatesCount value") );
+        wxASSERT_MSG( m_count == -1 || m_count == -2,
+                      _T("wrong initial m_updatesCount value") );
 
-        m_count = 0;
+        if (m_count != -2)
+            m_count = 0;
+        //else: we don't want to count how many update events we get as we're going
+        //      to ignore all of them
     }
 
     ~UpdatesCountFilter()
@@ -781,7 +785,7 @@ wxString wxTextCtrl::GetRange(long from, long to) const
     return str;
 }
 
-void wxTextCtrl::SetValue(const wxString& value)
+void wxTextCtrl::DoSetValue(const wxString& value, int flags)
 {
     // if the text is long enough, it's faster to just set it instead of first
     // comparing it with the old one (chances are that it will be different
@@ -789,7 +793,7 @@ void wxTextCtrl::SetValue(const wxString& value)
     // edit controls mostly)
     if ( (value.length() > 0x400) || (value != GetValue()) )
     {
-        DoWriteText(value, false /* not selection only */);
+        DoWriteText(value, flags);
 
         // mark the control as being not dirty - we changed its text, not the
         // user
@@ -807,7 +811,8 @@ void wxTextCtrl::SetValue(const wxString& value)
         DiscardEdits();
 
         // still send an event for consistency
-        SendUpdateEvent();
+        if (flags & SetValue_SendEvent)
+            SendUpdateEvent();
     }
 }
 
@@ -1005,8 +1010,9 @@ void wxTextCtrl::WriteText(const wxString& value)
     DoWriteText(value);
 }
 
-void wxTextCtrl::DoWriteText(const wxString& value, bool selectionOnly)
+void wxTextCtrl::DoWriteText(const wxString& value, int flags)
 {
+    bool selectionOnly = (flags & SetValue_SelectionOnly) != 0;
     wxString valueDos;
     if ( m_windowStyle & wxTE_MULTILINE )
         valueDos = wxTextFile::Translate(value, wxTextFileType_Dos);
@@ -1070,13 +1076,16 @@ void wxTextCtrl::DoWriteText(const wxString& value, bool selectionOnly)
         // we generate exactly one of them by ignoring all but the first one in
         // SendUpdateEvent() and generating one ourselves if we hadn't got any
         // notifications from Windows
+        if ( !(flags & SetValue_SendEvent) )
+            m_updatesCount = -2;        // suppress any update event
+
         UpdatesCountFilter ucf(m_updatesCount);
 
         ::SendMessage(GetHwnd(), selectionOnly ? EM_REPLACESEL : WM_SETTEXT,
                       // EM_REPLACESEL takes 1 to indicate the operation should be redoable
                       selectionOnly ? 1 : 0, (LPARAM)valueDos.c_str());
 
-        if ( !ucf.GotUpdate() )
+        if ( !ucf.GotUpdate() && (flags & SetValue_SendEvent) )
         {
             SendUpdateEvent();
         }
@@ -1427,7 +1436,7 @@ void wxTextCtrl::Replace(long from, long to, const wxString& value)
     // Set selection and remove it
     DoSetSelection(from, to, false /* don't scroll caret into view */);
 
-    DoWriteText(value, true /* selection only */);
+    DoWriteText(value, SetValue_SelectionOnly);
 }
 
 void wxTextCtrl::Remove(long from, long to)
@@ -1971,6 +1980,11 @@ bool wxTextCtrl::SendUpdateEvent()
             // we hadn't updated the control ourselves, this event comes from
             // the user, don't need to ignore it nor update the count
             break;
+
+        case -2:
+            // the control was updated programmatically and we do NOT want to
+            // send events
+            return false;
     }
 
     wxCommandEvent event(wxEVT_COMMAND_TEXT_UPDATED, GetId());

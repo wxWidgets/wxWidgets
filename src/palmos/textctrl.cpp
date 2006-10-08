@@ -233,6 +233,10 @@ void wxTextCtrl::SetValue(const wxString& value)
 {
 }
 
+void wxTextCtrl::ChangeValue(const wxString& value)
+{
+}
+
 #if wxUSE_RICHEDIT && (!wxUSE_UNICODE || wxUSE_UNICODE_MSLU)
 
 // TODO: using memcpy() would improve performance a lot for big amounts of text

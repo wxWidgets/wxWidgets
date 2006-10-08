@@ -218,9 +218,10 @@ functions that take a \helpref{wxCommandEvent}{wxcommandevent} argument.
 \twocolwidtha{7cm}%
 \begin{twocollist}\itemsep=0pt
 \twocolitem{{\bf EVT\_TEXT(id, func)}}{Respond to a wxEVT\_COMMAND\_TEXT\_UPDATED event,
-generated when the text changes. Notice that this event will always be sent
+generated when the text changes. Notice that this event will be sent
 when the text controls contents changes - whether this is due to user input or
-comes from the program itself (for example, if SetValue() is called)}
+comes from the program itself (for example, if SetValue() is called); see ChangeValue() for
+a function which does not send this event.}
 \twocolitem{{\bf EVT\_TEXT\_ENTER(id, func)}}{Respond to a wxEVT\_COMMAND\_TEXT\_ENTER event,
 generated when enter is pressed in a text control (which must have
 wxTE\_PROCESS\_ENTER style for this event to be generated).}
@@ -972,6 +973,27 @@ after the call to SetValue).
 
 Note that this function will generate a {\tt wxEVT\_COMMAND\_TEXT\_UPDATED}
 event.
+
+This function is deprecated and should not be used in new code. Please use the
+\helpref{ChangeValue}{wxtextctrlchangevalue} function instead.
+
+\wxheading{Parameters}
+
+\docparam{value}{The new value to set. It may contain newline characters if the text control is multi-line.}
+
+
+\membersection{wxTextCtrl::ChangeValue}\label{wxtextctrlchangevalue}
+
+\func{virtual void}{ChangeValue}{\param{const wxString\& }{ value}}
+
+Sets the text value and marks the control as not-modified (which means that
+\helpref{IsModified}{wxtextctrlismodified} would return {\tt false} immediately
+after the call to SetValue).
+
+Note that this function will \emph{not} generate the {\tt wxEVT\_COMMAND\_TEXT\_UPDATED} 
+event.
+This is the only difference with \helpref{SetValue}{wxtextctrlsetvalue}.
+See \helpref{this topic}{progevent} for more info.
 
 \wxheading{Parameters}
 

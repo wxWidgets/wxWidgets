@@ -107,6 +107,8 @@ public:
     virtual wxString GetValue() const;
     virtual void SetValue(const wxString& value);
 
+    virtual void ChangeValue(const wxString &value);
+
     virtual int GetLineLength(wxTextCoord lineNo) const;
     virtual wxString GetLineText(wxTextCoord lineNo) const;
     virtual int GetNumberOfLines() const;

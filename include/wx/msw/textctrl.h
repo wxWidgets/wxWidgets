@@ -45,7 +45,8 @@ public:
     // ----------------------------------
 
     virtual wxString GetValue() const;
-    virtual void SetValue(const wxString& value);
+    virtual void SetValue(const wxString& value) { DoSetValue(value, SetValue_SendEvent); }
+    virtual void ChangeValue(const wxString &value) { DoSetValue(value); }
 
     virtual wxString GetRange(long from, long to) const;
 
@@ -207,6 +208,8 @@ protected:
     // common part of all ctors
     void Init();
 
+    void DoSetValue(const wxString &value, int flags = 0);
+
     // return true if this control has a user-set limit on amount of text (i.e.
     // the limit is due to a previous call to SetMaxLength() and not built in)
     bool HasSpaceLimit(unsigned int *len) const;
@@ -229,7 +232,7 @@ protected:
 
     // replace the contents of the selection or of the entire control with the
     // given text
-    void DoWriteText(const wxString& text, bool selectionOnly = true);
+    void DoWriteText(const wxString& text, int flags = SetValue_SelectionOnly);
 
     // set the selection possibly without scrolling the caret into view
     void DoSetSelection(long from, long to, bool scrollCaret = true);

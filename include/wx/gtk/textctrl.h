@@ -43,7 +43,9 @@ public:
     // ----------------------------------
 
     virtual wxString GetValue() const;
-    virtual void SetValue(const wxString& value);
+    virtual void SetValue(const wxString& value) { DoSetValue(value, SetValue_SendEvent); }
+
+    virtual void ChangeValue(const wxString &value) { DoSetValue(value); }
 
     virtual int GetLineLength(long lineNo) const;
     virtual wxString GetLineText(long lineNo) const;
@@ -155,7 +157,7 @@ public:
     virtual void OnParentEnable( bool enable ) ;
 
     // tell the control to ignore next text changed signal
-    void IgnoreNextTextUpdate() { m_ignoreNextUpdate = true; }
+    void IgnoreNextTextUpdate(int n = 1) { m_countUpdatesToIgnore = n; }
 
     // should we ignore the changed signal? always resets the flag
     bool IgnoreTextUpdate();
@@ -189,6 +191,8 @@ protected:
     // has the control been frozen by Freeze()?
     bool IsFrozen() const { return m_frozenness > 0; }
 
+    void DoSetValue(const wxString &value, int flags = 0);
+
 private:
     // change the font for everything in this control
     void ChangeFontGlobally();
@@ -203,8 +207,9 @@ private:
     GtkWidget  *m_text;
 
     bool        m_modified:1;
-    bool        m_ignoreNextUpdate:1;
     bool        m_dontMarkDirty:1;
+
+    int         m_countUpdatesToIgnore;
 
     // Our text buffer. Convenient, and holds the buffer while using
     // a dummy one when m_frozenness > 0

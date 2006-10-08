@@ -47,7 +47,9 @@ public:
     // ----------------------------------
     //
     virtual      wxString GetValue(void) const;
-    virtual void SetValue(const wxString& rsValue);
+    virtual void SetValue(const wxString& value) { DoSetValue(value, SetValue_SendEvent); }
+
+    virtual void ChangeValue(const wxString &value) { DoSetValue(value); }
 
     virtual int      GetLineLength(long nLineNo) const;
     virtual wxString GetLineText(long nLineNo) const;
@@ -180,6 +182,11 @@ protected:
     virtual WXDWORD OS2GetStyle( long     lStyle
                                 ,WXDWORD* dwExstyle
                                ) const;
+
+    void DoSetValue(const wxString &value, int flags = 0);
+
+    bool m_bSkipUpdate;
+
 private:
     bool                            m_bIsMLE;
     DECLARE_EVENT_TABLE()

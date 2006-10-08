@@ -277,7 +277,7 @@ wxString wxTextCtrl::GetValue() const
     return ret;
 }
 
-void wxTextCtrl::SetValue(const wxString& value)
+void wxTextCtrl::ChangeValue(const wxString& value)
 {
     m_modified = false;
 

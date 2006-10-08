@@ -43,7 +43,9 @@ public:
     // ----------------------------------
 
     virtual wxString GetValue() const;
-    virtual void SetValue(const wxString& value);
+    virtual void SetValue(const wxString& value) { DoSetValue(value, SetValue_SendEvent); }
+
+    virtual void ChangeValue(const wxString &value) { DoSetValue(value); }
 
     virtual int GetLineLength(long lineNo) const;
     virtual wxString GetLineText(long lineNo) const;
@@ -181,6 +183,8 @@ protected:
     // Widgets that use the style->base colour for the BG colour should
     // override this and return true.
     virtual bool UseGTKStyleBase() const { return true; }
+
+    void DoSetValue(const wxString &value, int flags = 0);
 
 private:
     // change the font for everything in this control

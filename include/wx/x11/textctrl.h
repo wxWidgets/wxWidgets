@@ -117,7 +117,10 @@ public:
     // ----------------------------------
 
     virtual wxString GetValue() const;
-    virtual void SetValue(const wxString& value);
+    virtual void SetValue(const wxString& value)
+        { ChangeValue(value); SendTextUpdatedEvent(); }
+
+    virtual void ChangeValue(const wxString &value);
 
     virtual int GetLineLength(long lineNo) const;
     virtual wxString GetLineText(long lineNo) const;

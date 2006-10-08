@@ -412,9 +412,15 @@ wxString wxTextCtrl::GetValue() const
     return tmp;
 }
 
-void wxTextCtrl::SetValue( const wxString &value )
+void wxTextCtrl::DoSetValue( const wxString &value, int flags )
 {
     wxCHECK_RET( m_text != NULL, wxT("invalid text ctrl") );
+
+    if ( !(flags & SetValue_SendEvent) )
+    {
+        // do not generate events
+        IgnoreNextTextUpdate();
+    }
 
     if (m_windowStyle & wxTE_MULTILINE)
     {

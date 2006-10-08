@@ -947,7 +947,7 @@ void MyTextCtrl::OnKeyDown(wxKeyEvent& event)
         case WXK_F6:
             wxLogMessage(_T("IsModified() before SetValue(): %d"),
                          IsModified());
-            SetValue(_T("SetValue() has been called"));
+            ChangeValue(_T("ChangeValue() has been called"));
             wxLogMessage(_T("IsModified() after SetValue(): %d"),
                          IsModified());
             break;

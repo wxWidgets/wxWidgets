@@ -125,6 +125,7 @@ bool wxTextCtrl::Create(
 
     m_windowStyle = lStyle;
     m_bIsMLE = false;
+    m_bSkipUpdate = false;
 
     long                            lSstyle = WS_VISIBLE | WS_TABSTOP;
 
@@ -343,8 +344,9 @@ wxString wxTextCtrl::GetValue() const
     return sStr;
 } // end of wxTextCtrl::GetValue
 
-void wxTextCtrl::SetValue(
-  const wxString&                   rsValue
+void wxTextCtrl::DoSetValue(
+  const wxString&                   rsValue,
+  int flags
 )
 {
     //
@@ -355,6 +357,9 @@ void wxTextCtrl::SetValue(
     //
     if ((rsValue.length() > 0x400) || (rsValue != GetValue()))
     {
+        if ( flags & SetValue_SendEvent )
+            m_bSkipUpdate = true;
+
         ::WinSetWindowText(GetHwnd(), (PSZ)rsValue.c_str());
         AdjustSpaceLimit();
     }
@@ -1095,6 +1100,12 @@ bool wxTextCtrl::OS2Command(
 
         case EN_CHANGE:
             {
+                if (m_bSkipUpdate)
+                {
+                    m_bSkipUpdate = false;
+                    break;
+                }
+
                 wxCommandEvent      vEvent( wxEVT_COMMAND_TEXT_UPDATED
                                            ,m_windowId
                                           );

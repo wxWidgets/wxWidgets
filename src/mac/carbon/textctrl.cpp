@@ -564,6 +564,15 @@ void wxTextCtrl::SetValue(const wxString& str)
     }
 }
 
+void wxTextCtrl::ChangeValue(const wxString& str)
+{
+    // optimize redraws
+    if ( GetValue() == str )
+        return ;
+
+    GetPeer()->SetStringValue( str ) ;
+}
+
 void wxTextCtrl::SetMaxLength(unsigned long len)
 {
     m_maxLength = len ;

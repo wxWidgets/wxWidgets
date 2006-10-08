@@ -240,7 +240,7 @@ wxString wxTextCtrl::GetValue() const
     return str;
 }
 
-void wxTextCtrl::SetValue(const wxString& text)
+void wxTextCtrl::ChangeValue(const wxString& text)
 {
     m_inSetValue = true;
 

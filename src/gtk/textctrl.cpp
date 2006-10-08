@@ -544,8 +544,9 @@ END_EVENT_TABLE()
 void wxTextCtrl::Init()
 {
     m_dontMarkDirty =
-    m_ignoreNextUpdate =
     m_modified = false;
+
+    m_countUpdatesToIgnore = 0;
 
     SetUpdateFont(false);
 
@@ -820,7 +821,7 @@ wxFontEncoding wxTextCtrl::GetTextEncoding() const
     return enc;
 }
 
-void wxTextCtrl::SetValue( const wxString &value )
+void wxTextCtrl::DoSetValue( const wxString &value, int flags )
 {
     wxCHECK_RET( m_text != NULL, wxT("invalid text ctrl") );
 
@@ -842,8 +843,20 @@ void wxTextCtrl::SetValue( const wxString &value )
             return;
         }
 
-        if (gtk_text_buffer_get_char_count(m_buffer) != 0)
-            IgnoreNextTextUpdate();
+
+        // if the control is not empty, two "changed" signals are emitted
+        if ( flags & SetValue_SendEvent )
+        {
+            if ( gtk_text_buffer_get_char_count(m_buffer) != 0 )
+                IgnoreNextTextUpdate();
+        }
+        else
+        {
+            if ( gtk_text_buffer_get_char_count(m_buffer) != 0 )
+                IgnoreNextTextUpdate(2);
+            else
+                IgnoreNextTextUpdate(1);        // skip only one
+        }
 
         gtk_text_buffer_set_text( m_buffer, buffer, strlen(buffer) );
     }
@@ -851,9 +864,19 @@ void wxTextCtrl::SetValue( const wxString &value )
     {
         // gtk_entry_set_text() emits two "changed" signals if the control is
         // not empty because internally it calls gtk_editable_delete_text() and
-        // gtk_editable_insert_text() but we want to have only one event
-        if ( !GetValue().empty() )
-            IgnoreNextTextUpdate();
+        // gtk_editable_insert_text()
+        if ( flags & SetValue_SendEvent )
+        {
+            if ( !GetValue().empty() )
+                IgnoreNextTextUpdate();
+        }
+        else
+        {
+            if ( !GetValue().empty() )
+                IgnoreNextTextUpdate(2);
+            else
+                IgnoreNextTextUpdate(1);        // if we are empty, skip only one event
+        }
 
         gtk_entry_set_text( GTK_ENTRY(m_text), wxGTK_CONV(value) );
     }
@@ -1178,9 +1201,9 @@ void wxTextCtrl::DiscardEdits()
 
 bool wxTextCtrl::IgnoreTextUpdate()
 {
-    if ( m_ignoreNextUpdate )
+    if ( m_countUpdatesToIgnore > 0 )
     {
-        m_ignoreNextUpdate = false;
+        m_countUpdatesToIgnore--;
 
         return true;
     }

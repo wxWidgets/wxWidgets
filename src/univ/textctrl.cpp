@@ -778,7 +778,7 @@ wxTextCtrl::~wxTextCtrl()
 // set/get the value
 // ----------------------------------------------------------------------------
 
-void wxTextCtrl::SetValue(const wxString& value)
+void wxTextCtrl::ChangeValue(const wxString& value)
 {
     if ( IsSingleLine() && (value == GetValue()) )
     {
@@ -792,8 +792,12 @@ void wxTextCtrl::SetValue(const wxString& value)
     {
         SetInsertionPoint(0);
     }
+}
 
-    // TODO: should we generate the event or not, finally?
+void wxTextCtrl::SetValue(const wxString& value)
+{
+    ChangeValue(value);
+    SendTextUpdatedEvent();
 }
 
 const wxArrayString& wxTextCtrl::GetLines() const

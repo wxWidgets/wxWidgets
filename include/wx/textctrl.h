@@ -300,6 +300,8 @@ public:
     virtual wxString GetValue() const = 0;
     virtual void SetValue(const wxString& value) = 0;
 
+    virtual void ChangeValue(const wxString &value) = 0;
+
     virtual wxString GetRange(long from, long to) const;
 
     virtual int GetLineLength(long lineNo) const = 0;
@@ -428,6 +430,18 @@ protected:
 #if wxHAS_TEXT_WINDOW_STREAM
     int overflow(int i);
 #endif // wxHAS_TEXT_WINDOW_STREAM
+
+    // typically, wxTextCtrl classes will use a DoSetValue() function to
+    // implement both SetValue() and ChangeValue() functions and these
+    // flags are meant to be passed to such DoSetValue()
+    enum
+    {
+        SetValue_SendEvent = 1,
+        SetValue_SelectionOnly = 2
+    };
+
+    // generate the wxEVT_COMMAND_TEXT_UPDATED event
+    void SendTextUpdatedEvent();
 
     // the name of the last file loaded with LoadFile() which will be used by
     // SaveFile() by default
