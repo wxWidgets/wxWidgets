@@ -51,11 +51,22 @@
 #define wxMAKE_VERSION_DOT_STRING(x, y, z) \
     wxSTRINGIZE(x) "." wxSTRINGIZE(y) "." wxSTRINGIZE(z)
 
+#define wxMAKE_VERSION_STRING_T(x, y, z) \
+    wxSTRINGIZE_T(x) wxSTRINGIZE_T(y) wxSTRINGIZE_T(z)
+#define wxMAKE_VERSION_DOT_STRING_T(x, y, z) \
+    wxSTRINGIZE_T(x) _T(".") wxSTRINGIZE_T(y) _T(".") wxSTRINGIZE_T(z)
+
 /*  these are used by src/msw/version.rc and should always be ASCII, not Unicode */
 #define wxVERSION_NUM_STRING \
   wxMAKE_VERSION_STRING(wxMAJOR_VERSION, wxMINOR_VERSION, wxRELEASE_NUMBER)
 #define wxVERSION_NUM_DOT_STRING \
   wxMAKE_VERSION_DOT_STRING(wxMAJOR_VERSION, wxMINOR_VERSION, wxRELEASE_NUMBER)
+
+/* those are Unicode-friendly */
+#define wxVERSION_NUM_STRING_T \
+  wxMAKE_VERSION_STRING_T(wxMAJOR_VERSION, wxMINOR_VERSION, wxRELEASE_NUMBER)
+#define wxVERSION_NUM_DOT_STRING_T \
+  wxMAKE_VERSION_DOT_STRING_T(wxMAJOR_VERSION, wxMINOR_VERSION, wxRELEASE_NUMBER)
 
 /*  some more defines, not really sure if they're [still] useful */
 #define wxVERSION_NUMBER ( (wxMAJOR_VERSION * 1000) + (wxMINOR_VERSION * 100) + wxRELEASE_NUMBER )
