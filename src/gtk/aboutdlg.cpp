@@ -22,6 +22,7 @@
 #if wxUSE_ABOUTDLG && defined(__WXGTK26__)
 
 #ifndef WX_PRECOMP
+    #include "wx/utils.h"       // for wxLaunchDefaultBrowser()
 #endif //WX_PRECOMP
 
 #include "wx/aboutdlg.h"
@@ -81,6 +82,14 @@ private:
 // implementation
 // ============================================================================
 
+extern "C" void
+wxGtkAboutDialogOnLink(GtkAboutDialog * WXUNUSED(about),
+                       const gchar *link,
+                       gpointer WXUNUSED(data))
+{
+    wxLaunchDefaultBrowser(wxGTK_CONV_BACK(link));
+}
+
 void wxAboutBox(const wxAboutDialogInfo& info)
 {
     if ( !gtk_check_version(2,6,0) )
@@ -102,6 +111,11 @@ void wxAboutBox(const wxAboutDialogInfo& info)
 
         if ( info.HasWebSite() )
         {
+            // NB: must be called before gtk_about_dialog_set_website() as
+            //     otherwise it has no effect (although GTK+ docs don't mention
+            //     this...)
+            gtk_about_dialog_set_url_hook(wxGtkAboutDialogOnLink, NULL, NULL);
+
             gtk_about_dialog_set_website(dlg, GtkStr(info.GetWebSiteURL()));
             gtk_about_dialog_set_website_label
             (
