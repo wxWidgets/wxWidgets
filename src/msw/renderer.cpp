@@ -209,22 +209,30 @@ wxRendererMSW::DrawComboBoxDropButton(wxWindow * WXUNUSED(win),
 void
 wxRendererMSW::DrawPushButton(wxWindow * WXUNUSED(win),
                               wxDC& dc,
-                              const wxRect& rect,
+                              const wxRect& rectOrig,
                               int flags)
 {
-    RECT r;
-    r.left = rect.GetLeft();
-    r.top = rect.GetTop();
-    r.bottom = rect.y + rect.height;
-    r.right = rect.x + rect.width;
+    wxRect rect(rectOrig);
 
     int style = DFCS_BUTTONPUSH;
     if ( flags & wxCONTROL_DISABLED )
         style |= DFCS_INACTIVE;
     if ( flags & wxCONTROL_PRESSED )
         style |= DFCS_PUSHED | DFCS_FLAT;
+    if ( flags & wxCONTROL_ISDEFAULT )
+    {
+        // DrawFrameControl() doesn't seem to support default buttons so we
+        // have to draw the border ourselves
+        wxDCPenChanger pen(dc, *wxBLACK_PEN);
+        wxDCBrushChanger brush(dc, *wxTRANSPARENT_BRUSH);
+        dc.DrawRectangle(rect);
+        rect.Inflate(1);
+    }
 
-    ::DrawFrameControl(GetHdcOf(dc), &r, DFC_BUTTON, style);
+    RECT rc;
+    wxCopyRectToRECT(rect, rc);
+
+    ::DrawFrameControl(GetHdcOf(dc), &rc, DFC_BUTTON, style);
 }
 
 // ============================================================================
