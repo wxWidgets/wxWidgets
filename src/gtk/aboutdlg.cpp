@@ -37,7 +37,7 @@ class GtkStr : public wxGtkString
 {
 public:
     GtkStr(const wxString& s)
-        : wxGtkString(wx_const_cast(char *, wxGTK_CONV_SYS(s).data()))
+        : wxGtkString(wx_const_cast(char *, wxGTK_CONV_SYS(s).release()))
     {
     }
 };
