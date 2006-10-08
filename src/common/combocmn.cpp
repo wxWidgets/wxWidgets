@@ -1302,26 +1302,17 @@ bool wxComboCtrlBase::HandleButtonMouseEvent( wxMouseEvent& event,
     }
     else if ( type == wxEVT_LEFT_DOWN )
     {
-        // Only accept event if it wasn't right after popup dismiss
-        //if ( ::wxGetLocalTimeMillis() > m_timeCanClick )
+        if ( flags & (wxCC_MF_ON_CLICK_AREA|wxCC_MF_ON_BUTTON) )
         {
-            // Need to test this, because it might be outside.
-            if ( flags & wxCC_MF_ON_BUTTON )
-            {
-                m_btnState |= wxCONTROL_PRESSED;
-                Refresh();
+            m_btnState |= wxCONTROL_PRESSED;
+            Refresh();
 
-                if ( !(m_iFlags & wxCC_POPUP_ON_MOUSE_UP) )
-                    OnButtonClick();
-                else
-                    // If showing popup now, do not capture mouse or there will be interference
-                    CaptureMouse();
-            }
+            if ( !(m_iFlags & wxCC_POPUP_ON_MOUSE_UP) )
+                OnButtonClick();
+            else
+                // If showing popup now, do not capture mouse or there will be interference
+                CaptureMouse();
         }
-        /*else
-        {
-            m_btnState = 0;
-        }*/
     }
     else if ( type == wxEVT_LEFT_UP )
     {
@@ -1335,7 +1326,7 @@ bool wxComboCtrlBase::HandleButtonMouseEvent( wxMouseEvent& event,
             // If mouse was inside, fire the click event.
             if ( m_iFlags & wxCC_POPUP_ON_MOUSE_UP )
             {
-                if ( flags & wxCC_MF_ON_BUTTON )
+                if ( flags & (wxCC_MF_ON_CLICK_AREA|wxCC_MF_ON_BUTTON) )
                     OnButtonClick();
             }
 

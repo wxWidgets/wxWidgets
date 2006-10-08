@@ -90,7 +90,9 @@ enum
 // Flags used by PreprocessMouseEvent and HandleButtonMouseEvent
 enum
 {
-    wxCC_MF_ON_BUTTON               =   0x0001 // cursor is on dropbutton area
+    wxCC_MF_ON_BUTTON               =   0x0001, // cursor is on dropbutton area
+    wxCC_MF_ON_CLICK_AREA           =   0x0002  // cursor is on dropbutton or other area
+                                                // that can be clicked to show the popup.
 };
 
 

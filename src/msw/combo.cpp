@@ -489,11 +489,10 @@ void wxComboCtrl::OnPaintEvent( wxPaintEvent& WXUNUSED(event) )
 
 void wxComboCtrl::OnMouseEvent( wxMouseEvent& event )
 {
-    bool isOnButtonArea = m_btnArea.Contains(event.m_x,event.m_y);
+    int mx = event.m_x;
+    bool isOnButtonArea = m_btnArea.Contains(mx,event.m_y);
     int handlerFlags = isOnButtonArea ? wxCC_MF_ON_BUTTON : 0;
 
-    // Preprocessing fabricates double-clicks and prevents
-    // (it may also do other common things in future)
     if ( PreprocessMouseEvent(event,isOnButtonArea) )
         return;
 
@@ -507,8 +506,11 @@ void wxComboCtrl::OnMouseEvent( wxMouseEvent& event )
     }
     else
     {
-        if ( isOnButtonArea || HasCapture() )
+        if ( isOnButtonArea || HasCapture() ||
+             (m_widthCustomPaint && mx < (m_tcArea.x+m_widthCustomPaint)) )
         {
+            handlerFlags |= wxCC_MF_ON_CLICK_AREA;
+
             if ( HandleButtonMouseEvent(event,handlerFlags) )
                 return;
         }
