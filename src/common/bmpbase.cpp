@@ -42,7 +42,6 @@ IMPLEMENT_VARIANT_OBJECT_EXPORTED(wxIcon,WXDLLEXPORT)
     #include "wx/log.h"
     #include "wx/utils.h"
     #include "wx/palette.h"
-    #include "wx/image.h"
     #include "wx/module.h"
 #endif // WX_PRECOMP
 
@@ -147,8 +146,8 @@ class wxBitmapBaseModule: public wxModule
 DECLARE_DYNAMIC_CLASS(wxBitmapBaseModule)
 public:
     wxBitmapBaseModule() {}
-    bool OnInit() { wxBitmap::InitStandardHandlers(); return true; };
-    void OnExit() { wxBitmap::CleanUpHandlers(); };
+    bool OnInit() { wxBitmap::InitStandardHandlers(); return true; }
+    void OnExit() { wxBitmap::CleanUpHandlers(); }
 };
 
 IMPLEMENT_DYNAMIC_CLASS(wxBitmapBaseModule, wxModule)
