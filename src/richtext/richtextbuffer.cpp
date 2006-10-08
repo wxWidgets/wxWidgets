@@ -5054,7 +5054,7 @@ void wxRichTextAction::UpdateAppearance(long caretPosition, bool sendUpdateEvent
             m_ctrl->Refresh(false);
 
             if (sendUpdateEvent)
-                m_ctrl->SendUpdateEvent();
+                m_ctrl->SendTextUpdatedEvent();
         }
     }
 }

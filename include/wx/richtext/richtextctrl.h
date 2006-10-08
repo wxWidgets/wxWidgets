@@ -19,15 +19,7 @@
 #include "wx/scrolwin.h"
 #include "wx/caret.h"
 
-#if wxCHECK_VERSION(2,7,0)
-#define wxRICHTEXT_DERIVES_FROM_TEXTCTRLBASE 1
-#else
-#define wxRICHTEXT_DERIVES_FROM_TEXTCTRLBASE 0
-#endif
-
-#if wxRICHTEXT_DERIVES_FROM_TEXTCTRLBASE
 #include "wx/textctrl.h"
-#endif
 
 #if !defined(__WXGTK__) && !defined(__WXMAC__)
 #define wxRICHTEXT_BUFFERED_PAINTING 1
@@ -92,12 +84,8 @@ class WXDLLIMPEXP_RICHTEXT wxRichTextStyleDefinition;
  * wxRichTextCtrl class declaration
  */
 
-class WXDLLIMPEXP_RICHTEXT wxRichTextCtrl:
-#if wxRICHTEXT_DERIVES_FROM_TEXTCTRLBASE
- public wxTextCtrlBase, public wxScrollHelper
-#else
- public wxScrolledWindow
-#endif
+class WXDLLIMPEXP_RICHTEXT wxRichTextCtrl : public wxTextCtrlBase,
+                                            public wxScrollHelper
 {
     DECLARE_CLASS( wxRichTextCtrl )
     DECLARE_EVENT_TABLE()
@@ -124,7 +112,6 @@ public:
 // Accessors
 
     virtual wxString GetValue() const;
-    virtual void SetValue(const wxString& value);
 
     virtual wxString GetRange(long from, long to) const;
 
@@ -162,11 +149,6 @@ public:
     virtual void Clear();
     virtual void Replace(long from, long to, const wxString& value);
     virtual void Remove(long from, long to);
-
-#if !wxRICHTEXT_DERIVES_FROM_TEXTCTRLBASE
-    bool LoadFile(const wxString& file, int fileType = wxRICHTEXT_TYPE_ANY);
-    bool SaveFile(const wxString& file = wxEmptyString, int fileType = wxRICHTEXT_TYPE_ANY);
-#endif
 
     // load/save the controls contents from/to the file
     virtual bool DoLoadFile(const wxString& file, int fileType);
@@ -641,19 +623,7 @@ public:
     virtual void DoSetSelection(long from, long to, bool scrollCaret = true);
 
     /// Write text
-    virtual void DoWriteText(const wxString& value, bool selectionOnly = true);
-
-    /// Send an update event
-    virtual bool SendUpdateEvent();
-
-    /// Init command event
-    void InitCommandEvent(wxCommandEvent& event) const;
-
-    /// do the window-specific processing after processing the update event
-    //  (duplicated code from wxTextCtrlBase)
-#if !wxRICHTEXT_DERIVES_FROM_TEXTCTRLBASE
-    virtual void DoUpdateWindowUI(wxUpdateUIEvent& event);
-#endif
+    virtual void DoWriteText(const wxString& value, int flags = 0);
 
     /// Should we inherit colours?
     virtual bool ShouldInheritColours() const { return false; }
@@ -744,14 +714,15 @@ public:
 
 // Implementation
 
-#if wxRICHTEXT_DERIVES_FROM_TEXTCTRLBASE
      WX_FORWARD_TO_SCROLL_HELPER()
-#endif
 
 // Overrides
 protected:
 
     virtual wxSize DoGetBestSize() const ;
+
+    virtual void DoSetValue(const wxString& value, int flags = 0);
+
 
 // Data members
 private:
@@ -766,11 +737,6 @@ private:
 
     /// Text buffer
     wxRichTextBuffer        m_buffer;
-
-#if !wxRICHTEXT_DERIVES_FROM_TEXTCTRLBASE
-    /// Filename
-    wxString                m_filename;
-#endif
 
     wxMenu*                 m_contextMenu;
 

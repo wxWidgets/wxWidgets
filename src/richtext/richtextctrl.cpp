@@ -44,19 +44,11 @@ DEFINE_EVENT_TYPE(wxEVT_COMMAND_RICHTEXT_RIGHT_CLICK)
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_RICHTEXT_LEFT_DCLICK)
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_RICHTEXT_RETURN)
 
-#if wxRICHTEXT_DERIVES_FROM_TEXTCTRLBASE
 IMPLEMENT_CLASS( wxRichTextCtrl, wxControl )
-#else
-IMPLEMENT_CLASS( wxRichTextCtrl, wxScrolledWindow )
-#endif
 
 IMPLEMENT_CLASS( wxRichTextEvent, wxNotifyEvent )
 
-#if wxRICHTEXT_DERIVES_FROM_TEXTCTRLBASE
 BEGIN_EVENT_TABLE( wxRichTextCtrl, wxControl )
-#else
-BEGIN_EVENT_TABLE( wxRichTextCtrl, wxScrolledWindow )
-#endif
     EVT_PAINT(wxRichTextCtrl::OnPaint)
     EVT_ERASE_BACKGROUND(wxRichTextCtrl::OnEraseBackground)
     EVT_IDLE(wxRichTextCtrl::OnIdle)
@@ -100,17 +92,18 @@ END_EVENT_TABLE()
  */
 
 wxRichTextCtrl::wxRichTextCtrl()
-#if wxRICHTEXT_DERIVES_FROM_TEXTCTRLBASE
-    : wxScrollHelper(this)
-#endif
+              : wxScrollHelper(this)
 {
     Init();
 }
 
-wxRichTextCtrl::wxRichTextCtrl( wxWindow* parent, wxWindowID id, const wxString& value, const wxPoint& pos, const wxSize& size, long style)
-#if wxRICHTEXT_DERIVES_FROM_TEXTCTRLBASE
-    : wxScrollHelper(this)
-#endif
+wxRichTextCtrl::wxRichTextCtrl(wxWindow* parent,
+                               wxWindowID id,
+                               const wxString& value,
+                               const wxPoint& pos,
+                               const wxSize& size,
+                               long style)
+              : wxScrollHelper(this)
 {
     Init();
     Create(parent, id, value, pos, size, style);
@@ -119,15 +112,9 @@ wxRichTextCtrl::wxRichTextCtrl( wxWindow* parent, wxWindowID id, const wxString&
 /// Creation
 bool wxRichTextCtrl::Create( wxWindow* parent, wxWindowID id, const wxString& value, const wxPoint& pos, const wxSize& size, long style)
 {
-#if wxRICHTEXT_DERIVES_FROM_TEXTCTRLBASE
-    if (!wxTextCtrlBase::Create(parent, id, pos, size, style|wxFULL_REPAINT_ON_RESIZE
-        ))
+    if (!wxTextCtrlBase::Create(parent, id, pos, size,
+                                style|wxFULL_REPAINT_ON_RESIZE))
         return false;
-#else
-    if (!wxScrolledWindow::Create(parent, id, pos, size, style|wxFULL_REPAINT_ON_RESIZE
-        ))
-        return false;
-#endif
 
     if (!GetFont().Ok())
     {
@@ -230,7 +217,7 @@ void wxRichTextCtrl::Clear()
         SetupScrollbars();
         Refresh(false);
     }
-    SendUpdateEvent();
+    SendTextUpdatedEvent();
 }
 
 /// Painting
@@ -1652,27 +1639,6 @@ bool wxRichTextCtrl::RecreateBuffer(const wxSize& size)
 // file IO functions
 // ----------------------------------------------------------------------------
 
-#if !wxRICHTEXT_DERIVES_FROM_TEXTCTRLBASE
-bool wxRichTextCtrl::LoadFile(const wxString& filename, int fileType)
-{
-    return DoLoadFile(filename, fileType);
-}
-
-bool wxRichTextCtrl::SaveFile(const wxString& filename, int fileType)
-{
-    wxString filenameToUse = filename.empty() ? m_filename : filename;
-    if ( filenameToUse.empty() )
-    {
-        // what kind of message to give? is it an error or a program bug?
-        wxLogDebug(wxT("Can't save textctrl to file without filename."));
-
-        return false;
-    }
-
-    return DoSaveFile(filenameToUse, fileType);
-}
-#endif
-
 bool wxRichTextCtrl::DoLoadFile(const wxString& filename, int fileType)
 {
     bool success = GetBuffer().LoadFile(filename, fileType);
@@ -1685,7 +1651,7 @@ bool wxRichTextCtrl::DoLoadFile(const wxString& filename, int fileType)
     PositionCaret();
     SetupScrollbars(true);
     Refresh(false);
-    SendUpdateEvent();
+    SendTextUpdatedEvent();
 
     if (success)
         return true;
@@ -1808,22 +1774,6 @@ wxString wxRichTextCtrl::GetStringSelection() const
     return GetRange(from, to);
 }
 
-// do the window-specific processing after processing the update event
-#if !wxRICHTEXT_DERIVES_FROM_TEXTCTRLBASE
-void wxRichTextCtrl::DoUpdateWindowUI(wxUpdateUIEvent& event)
-{
-    // call inherited
-    wxWindowBase::DoUpdateWindowUI(event);
-
-    // update text
-    if ( event.GetSetText() )
-    {
-        if ( event.GetText() != GetValue() )
-            SetValue(event.GetText());
-    }
-}
-#endif // !wxRICHTEXT_DERIVES_FROM_TEXTCTRLBASE
-
 // ----------------------------------------------------------------------------
 // hit testing
 // ----------------------------------------------------------------------------
@@ -1888,7 +1838,7 @@ wxString wxRichTextCtrl::GetRange(long from, long to) const
     return GetBuffer().GetTextForRange(wxRichTextRange(from, to-1));
 }
 
-void wxRichTextCtrl::SetValue(const wxString& value)
+void wxRichTextCtrl::DoSetValue(const wxString& value, int flags)
 {
     Clear();
 
@@ -1898,15 +1848,18 @@ void wxRichTextCtrl::SetValue(const wxString& value)
     // edit controls mostly)
     if ( (value.length() > 0x400) || (value != GetValue()) )
     {
-        DoWriteText(value, false /* not selection only */);
+        DoWriteText(value);
 
         // for compatibility, don't move the cursor when doing SetValue()
         SetInsertionPoint(0);
     }
     else // same text
     {
-        // still send an event for consistency
-        SendUpdateEvent();
+        if ( flags & SetValue_SendEvent )
+        {
+            // still send an event for consistency
+            SendTextUpdatedEvent();
+        }
     }
 
     // we should reset the modified flag even if the value didn't really change
@@ -1921,11 +1874,14 @@ void wxRichTextCtrl::WriteText(const wxString& value)
     DoWriteText(value);
 }
 
-void wxRichTextCtrl::DoWriteText(const wxString& value, bool WXUNUSED(selectionOnly))
+void wxRichTextCtrl::DoWriteText(const wxString& value, int flags)
 {
     wxString valueUnix = wxTextFile::Translate(value, wxTextFileType_Unix);
 
     GetBuffer().InsertTextWithUndo(m_caretPosition+1, valueUnix, this);
+
+    if ( flags & SetValue_SendEvent )
+        SendTextUpdatedEvent();
 }
 
 void wxRichTextCtrl::AppendText(const wxString& text)
@@ -2140,13 +2096,14 @@ void wxRichTextCtrl::DoSetSelection(long from, long to, bool WXUNUSED(scrollCare
 // Editing
 // ----------------------------------------------------------------------------
 
-void wxRichTextCtrl::Replace(long WXUNUSED(from), long WXUNUSED(to), const wxString& value)
+void wxRichTextCtrl::Replace(long WXUNUSED(from), long WXUNUSED(to),
+                             const wxString& value)
 {
     BeginBatchUndo(_("Replace"));
 
     DeleteSelectedContent();
 
-    DoWriteText(value, true /* selection only */);
+    DoWriteText(value, SetValue_SelectionOnly);
 
     EndBatchUndo();
 }
@@ -2269,39 +2226,6 @@ void wxRichTextCtrl::OnDropFiles(wxDropFilesEvent& event)
         LoadFile(event.GetFiles()[0]);
     }
 }
-
-// ----------------------------------------------------------------------------
-// text control event processing
-// ----------------------------------------------------------------------------
-
-bool wxRichTextCtrl::SendUpdateEvent()
-{
-    wxCommandEvent event(wxEVT_COMMAND_TEXT_UPDATED, GetId());
-    InitCommandEvent(event);
-
-    return GetEventHandler()->ProcessEvent(event);
-}
-
-void wxRichTextCtrl::InitCommandEvent(wxCommandEvent& event) const
-{
-    event.SetEventObject((wxControlBase *)this);    // const_cast
-
-    switch ( m_clientDataType )
-    {
-        case wxClientData_Void:
-            event.SetClientData(GetClientData());
-            break;
-
-        case wxClientData_Object:
-            event.SetClientObject(GetClientObject());
-            break;
-
-        case wxClientData_None:
-            // nothing to do
-            ;
-    }
-}
-
 
 wxSize wxRichTextCtrl::DoGetBestSize() const
 {
@@ -2505,21 +2429,11 @@ bool wxRichTextCtrl::GetUncombinedStyle(long position, wxRichTextAttr& style)
 /// Set font, and also the buffer attributes
 bool wxRichTextCtrl::SetFont(const wxFont& font)
 {
-#if wxRICHTEXT_DERIVES_FROM_TEXTCTRLBASE
     wxControl::SetFont(font);
-#else
-    wxScrolledWindow::SetFont(font);
-#endif
 
     wxTextAttrEx attr = GetBuffer().GetAttributes();
     attr.SetFont(font);
     GetBuffer().SetBasicStyle(attr);
-
-#if !wxRICHTEXT_DERIVES_FROM_TEXTCTRLBASE
-    // Don't set the default style, since it will be inherited from
-    // the basic style.
-    GetBuffer().SetDefaultStyle(attr);
-#endif
 
     GetBuffer().Invalidate(wxRICHTEXT_ALL);
     Refresh(false);
