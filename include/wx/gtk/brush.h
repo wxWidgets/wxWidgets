@@ -26,7 +26,8 @@ public:
     wxBrush( const wxBitmap &stippleBitmap );
     virtual ~wxBrush();
 
-    bool Ok() const { return m_refData != NULL; }
+    bool Ok() const { return IsOk(); }
+    bool IsOk() const { return m_refData != NULL; }
 
     bool operator == ( const wxBrush& brush ) const;
     bool operator != (const wxBrush& brush) const { return !(*this == brush); }

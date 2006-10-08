@@ -94,7 +94,8 @@ public:
     // accessors
     // ---------
 
-    virtual bool Ok() const = 0;
+    virtual bool Ok() const { return IsOk(); }
+    virtual bool IsOk() const = 0;
 
     virtual ChannelType Red() const = 0;
     virtual ChannelType Green() const = 0;

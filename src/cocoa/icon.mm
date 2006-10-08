@@ -134,7 +134,7 @@ void wxIcon::CopyFromBitmap(const wxBitmap& bitmap)
     M_ICONDATA->m_quality = 0;
 }
 
-bool wxIcon::Ok() const
+bool wxIcon::IsOk() const
 {
     return m_refData && M_ICONDATA->m_ok;
 }

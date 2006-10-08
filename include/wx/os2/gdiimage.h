@@ -187,7 +187,8 @@ public:
         pData->m_hHandle = hHandle;
     }
 
-    bool Ok() const { return GetHandle() != 0; }
+    bool Ok() const { return IsOk(); }
+    bool IsOk() const { return GetHandle() != 0; }
 
     int GetWidth() const { return IsNull() ? 0 : GetGDIImageData()->m_nWidth; }
     int GetHeight() const { return IsNull() ? 0 : GetGDIImageData()->m_nHeight; }

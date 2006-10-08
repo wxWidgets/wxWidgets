@@ -30,7 +30,8 @@ public:
         { return !(*this == accel); }
 #endif
 
-    bool Ok() const;
+    bool Ok() const { return IsOk(); }
+    bool IsOk() const;
 
     void Add(const wxAcceleratorEntry& entry);
     void Remove(const wxAcceleratorEntry& entry);

@@ -277,7 +277,7 @@ bool wxBitmap::operator != (const wxBitmap& bmp) const
     return (m_refData != bmp.m_refData);
 }
 
-bool wxBitmap::Ok() const
+bool wxBitmap::IsOk() const
 {
     return (m_refData != NULL && M_BMPDATA->m_bitmap != NULL);
 }

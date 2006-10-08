@@ -252,7 +252,7 @@ void wxPrintData::operator=(const wxPrintData& data)
 }
 
 // Is this data OK for showing the print dialog?
-bool wxPrintData::Ok() const
+bool wxPrintData::IsOk() const
 {
     m_nativeData->TransferFrom( *this );
 

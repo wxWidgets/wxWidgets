@@ -92,7 +92,7 @@ wxMetaFile::~wxMetaFile()
 {
 }
 
-bool wxMetaFile::Ok() const
+bool wxMetaFile::IsOk() const
 {
     return (M_METAFILEDATA && (M_METAFILEDATA->m_metafile != NULL));
 }

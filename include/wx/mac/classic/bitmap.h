@@ -168,7 +168,8 @@ public:
   // copies the contents and mask of the given (colour) icon to the bitmap
   virtual bool CopyFromIcon(const wxIcon& icon);
 
-  bool Ok() const;
+  bool Ok() const { return IsOk(); }
+  bool IsOk() const;
   int GetWidth() const;
   int GetHeight() const;
   int GetDepth() const;

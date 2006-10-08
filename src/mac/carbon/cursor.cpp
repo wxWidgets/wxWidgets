@@ -282,7 +282,7 @@ WXHCURSOR wxCursor::GetHCURSOR() const
     return (M_CURSORDATA ? M_CURSORDATA->m_hCursor : 0);
 }
 
-bool wxCursor::Ok() const
+bool wxCursor::IsOk() const
 {
     return (m_refData != NULL && ( M_CURSORDATA->m_hCursor != NULL || M_CURSORDATA->m_themeCursor != -1 ) ) ;
 }

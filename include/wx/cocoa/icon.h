@@ -49,7 +49,8 @@ public:
     // ctors, assignment operators...), but it's ok to have such function
     void CopyFromBitmap(const wxBitmap& bmp);
 
-    bool Ok() const;
+    bool Ok() const { return IsOk(); }
+    bool IsOk() const;
     int GetWidth() const;
     int GetHeight() const;
 

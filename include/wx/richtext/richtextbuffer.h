@@ -1340,7 +1340,8 @@ public:
     void SetDataSize(size_t size) { m_dataSize = size; }
     void SetImageType(int imageType) { m_imageType = imageType; }
 
-    bool Ok() const { return GetData() != NULL; }
+    bool Ok() const { return IsOk(); }
+    bool IsOk() const { return GetData() != NULL; }
 
 /// Implementation
 

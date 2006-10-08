@@ -35,7 +35,8 @@ public:
     wxBrush(const wxColour &colour, int style = wxSOLID);
     wxBrush(const wxBitmap &stippleBitmap);
 
-    bool Ok() const;
+    bool Ok() const { return IsOk(); }
+    bool IsOk() const;
     bool operator==(const wxBrush& brush) const;
     bool operator!=(const wxBrush& brush) const { return !(*this == brush); }
 

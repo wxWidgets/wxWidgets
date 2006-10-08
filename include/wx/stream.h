@@ -266,7 +266,8 @@ public:
     wxCountingOutputStream();
 
     wxFileOffset GetLength() const;
-    bool Ok() const { return true; }
+    bool Ok() const { return IsOk(); }
+    bool IsOk() const { return true; }
 
 protected:
     virtual size_t OnSysWrite(const void *buffer, size_t size);

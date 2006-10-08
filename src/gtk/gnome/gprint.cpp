@@ -851,7 +851,7 @@ wxGnomePrintDC::~wxGnomePrintDC()
 {
 }
 
-bool wxGnomePrintDC::Ok() const
+bool wxGnomePrintDC::IsOk() const
 {
     return true;
 }

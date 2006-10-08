@@ -58,7 +58,8 @@ public:
     virtual bool SetClipboard(int width = 0, int height = 0);
 
     virtual bool Play(wxDC *dc);
-    inline bool Ok(void) const { return (M_METAFILEDATA && (M_METAFILEDATA->m_metafile != 0)); };
+    inline bool Ok() const { return IsOk(); }
+    inline bool IsOk(void) const { return (M_METAFILEDATA && (M_METAFILEDATA->m_metafile != 0)); };
 
     wxSize GetSize() const;
     int GetWidth() const { return GetSize().x; }

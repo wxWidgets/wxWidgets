@@ -45,7 +45,8 @@ public:
     // Recommended destructor :-)
     virtual ~wxPostScriptDC();
 
-  virtual bool Ok() const;
+  virtual bool Ok() const { return IsOk(); }
+  virtual bool IsOk() const;
 
   bool CanDrawBitmap() const { return true; }
 

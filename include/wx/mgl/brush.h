@@ -36,7 +36,8 @@ public:
     virtual ~wxBrush() {}
     bool operator == (const wxBrush& brush) const;
     bool operator != (const wxBrush& brush) const;
-    bool Ok() const;
+    bool Ok() const { return IsOk(); }
+    bool IsOk() const;
 
     virtual int GetStyle() const;
     wxColour &GetColour() const;

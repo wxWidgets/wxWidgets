@@ -57,7 +57,8 @@ public:
     wxDash* GetDash() const;
     wxBitmap *GetStipple() const;
 
-    bool Ok() const;
+    bool Ok() const { return IsOk(); }
+    bool IsOk() const;
 
 protected:
     // ref counting code

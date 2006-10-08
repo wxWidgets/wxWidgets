@@ -86,7 +86,8 @@ public:
     virtual bool TransferTo( wxPrintData &data );
     virtual bool TransferFrom( const wxPrintData &data );
 
-    virtual bool Ok() const { return true; }
+    virtual bool Ok() const { return IsOk(); }
+    virtual bool IsOk() const { return true; }
 
     const wxString& GetPrinterCommand() const { return m_printerCommand; }
     const wxString& GetPrinterOptions() const { return m_printerOptions; }

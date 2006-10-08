@@ -957,7 +957,7 @@ bool wxBitmap::SaveFile(const wxString& filename, wxBitmapType type,
     return false;
 }
 
-bool wxBitmap::Ok() const
+bool wxBitmap::IsOk() const
 {
    return (M_BITMAPDATA && M_BITMAPDATA->m_ok);
 }

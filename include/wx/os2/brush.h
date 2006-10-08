@@ -61,7 +61,8 @@ public:
     inline wxBitmap* GetStipple(void) const { return (M_BRUSHDATA ? & M_BRUSHDATA->m_vStipple : 0); };
     inline int       GetPS(void) const { return (M_BRUSHDATA ? M_BRUSHDATA->m_hBrush : 0); };
 
-    inline virtual bool Ok(void) const { return (m_refData != NULL) ; }
+    inline virtual bool Ok() const { return IsOk(); }
+    inline virtual bool IsOk(void) const { return (m_refData != NULL) ; }
 
     //
     // Implementation

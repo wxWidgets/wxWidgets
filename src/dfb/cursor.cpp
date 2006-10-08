@@ -63,7 +63,7 @@ wxCursor::wxCursor(const wxString& cursor_file,
 #warning "FIXME"
 }
 
-bool wxCursor::Ok() const
+bool wxCursor::IsOk() const
 {
     return m_refData && M_CURSOR->m_bitmap.Ok();
 }

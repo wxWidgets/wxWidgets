@@ -88,7 +88,8 @@ public:
   virtual bool InstantiateBitmap(wxBitmap *bitmap);
   wxMask *CreateMask(void);
 
-  inline bool Ok(void) { return imageOK; }
+  inline bool Ok() const { return IsOk(); }
+  inline bool IsOk(void) { return imageOK; }
 };
 
 class wxPNGReaderIter

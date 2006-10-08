@@ -304,7 +304,7 @@ wxPostScriptDC::~wxPostScriptDC ()
     }
 }
 
-bool wxPostScriptDC::Ok() const
+bool wxPostScriptDC::IsOk() const
 {
   return m_ok;
 }

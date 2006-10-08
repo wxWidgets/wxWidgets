@@ -146,9 +146,9 @@ On X, an allocated pixel value is returned.
 Returns the green intensity.
 
 
-\membersection{wxColour::Ok}\label{wxcolourok}
+\membersection{wxColour::IsOk}\label{wxcolourisok}
 
-\constfunc{bool}{Ok}{\void}
+\constfunc{bool}{IsOk}{\void}
 
 Returns \true if the colour object is valid (the colour has been initialised with RGB values).
 
@@ -378,7 +378,7 @@ removed in the next wxWidgets version, please don't use it.
 \func{wxColour}{Find}{\param{const wxString\& }{colourName}}
 
 Finds a colour given the name. Returns an invalid colour object (that is, such
-that its \helpref{Ok()}{wxcolourok} method returns \false) if the colour wasn't
+that its \helpref{Ok()}{wxcolourisok} method returns \false) if the colour wasn't
 found in the database.
 
 

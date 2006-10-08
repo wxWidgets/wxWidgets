@@ -58,7 +58,8 @@ public:
     int GetPixel(unsigned char red, unsigned char green, unsigned char blue) const;
     bool GetRGB(int pixel, unsigned char *red, unsigned char *green, unsigned char *blue) const;
 
-    virtual bool Ok() const { return (m_refData != NULL) ; }
+    virtual bool Ok() const { return IsOk(); }
+    virtual bool IsOk() const { return (m_refData != NULL) ; }
 
     bool operator == (const wxPalette& palette) const { return m_refData == palette.m_refData; }
     bool operator != (const wxPalette& palette) const { return m_refData != palette.m_refData; }

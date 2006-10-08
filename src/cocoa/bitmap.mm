@@ -244,7 +244,7 @@ void wxBitmap::SetMask(wxMask *mask)
     M_BITMAPDATA->m_bitmapMask = mask ;
 }
 
-bool wxBitmap::Ok() const
+bool wxBitmap::IsOk() const
 {
     return m_refData && M_BITMAPDATA->m_ok;
 }

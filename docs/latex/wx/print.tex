@@ -155,9 +155,9 @@ On input you should pass one of these identifiers, but on return you may get bac
 indicating the current resolution setting.
 
 
-\membersection{wxPrintData::Ok}\label{wxprintdataok}
+\membersection{wxPrintData::IsOk}\label{wxprintdataisok}
 
-\constfunc{bool}{Ok}{\void}
+\constfunc{bool}{IsOk}{\void}
 
 Returns true if the print data is valid for using in print dialogs.
 This can return false on Windows if the current printer is not set, for example.
@@ -562,9 +562,9 @@ a concept specific to the application).
 Returns the {\it to} page number, as entered by the user.
 
 
-\membersection{wxPrintDialogData::Ok}\label{wxprintdialogdataok}
+\membersection{wxPrintDialogData::IsOk}\label{wxprintdialogdataisok}
 
-\constfunc{bool}{Ok}{\void}
+\constfunc{bool}{IsOk}{\void}
 
 Returns true if the print data is valid for using in print dialogs.
 This can return false on Windows if the current printer is not set, for example.
@@ -1135,7 +1135,7 @@ Gets the printout object to be used for printing from within the preview interfa
 or NULL if none exists.
 
 
-\membersection{wxPrintPreview::Ok}\label{wxprintpreviewok}
+\membersection{wxPrintPreview::IsOk}\label{wxprintpreviewisok}
 
 \func{bool}{Ok}{\void}
 

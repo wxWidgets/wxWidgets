@@ -107,7 +107,8 @@ public:
     // get the given part of bitmap
     wxBitmap GetSubBitmap( const wxRect& rect ) const;
 
-    bool Ok() const;
+    bool Ok() const { return IsOk(); }
+    bool IsOk() const;
     int GetWidth() const;
     int GetHeight() const;
     int GetDepth() const;

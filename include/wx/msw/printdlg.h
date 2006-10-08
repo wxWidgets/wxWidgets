@@ -34,7 +34,8 @@ public:
     virtual bool TransferTo( wxPrintData &data );
     virtual bool TransferFrom( const wxPrintData &data );
     
-    virtual bool Ok() const;
+    virtual bool Ok() const { return IsOk(); }
+    virtual bool IsOk() const;
     
     void* GetDevMode() const { return m_devMode; }
     void SetDevMode(void* data) { m_devMode = data; }

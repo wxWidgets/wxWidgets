@@ -40,7 +40,8 @@ public:
     virtual ~wxBitmap() {}
     bool operator == (const wxBitmap& bmp) const;
     bool operator != (const wxBitmap& bmp) const;
-    bool Ok() const;
+    bool Ok() const { return IsOk(); }
+    bool IsOk() const;
 
     bool Create(int width, int height, int depth = -1);
 

@@ -38,7 +38,8 @@ public:
 
     wxFileOffset GetLength() const;
 
-    bool Ok() const { return m_file->IsOpened(); }
+    bool Ok() const { return IsOk(); }
+    bool IsOk() const { return m_file->IsOpened(); }
     bool IsSeekable() const { return m_file->GetKind() == wxFILE_KIND_DISK; }
 
 protected:
@@ -67,7 +68,8 @@ public:
     bool Close() { return m_file_destroy ? m_file->Close() : true; }
     wxFileOffset GetLength() const;
 
-    bool Ok() const { return m_file->IsOpened(); }
+    bool Ok() const { return IsOk(); }
+    bool IsOk() const { return m_file->IsOpened(); }
     bool IsSeekable() const { return m_file->GetKind() == wxFILE_KIND_DISK; }
 
 protected:
@@ -137,7 +139,8 @@ public:
 
     wxFileOffset GetLength() const;
 
-    bool Ok() const { return m_file->IsOpened(); }
+    bool Ok() const { return IsOk(); }
+    bool IsOk() const { return m_file->IsOpened(); }
     bool IsSeekable() const { return m_file->GetKind() == wxFILE_KIND_DISK; }
 
 protected:
@@ -166,7 +169,8 @@ public:
     bool Close() { return m_file_destroy ? m_file->Close() : true; }
     wxFileOffset GetLength() const;
 
-    bool Ok() const { return m_file->IsOpened(); }
+    bool Ok() const { return IsOk(); }
+    bool IsOk() const { return m_file->IsOpened(); }
     bool IsSeekable() const { return m_file->GetKind() == wxFILE_KIND_DISK; }
 
 protected:

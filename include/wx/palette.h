@@ -25,7 +25,8 @@ class WXDLLEXPORT wxPaletteBase: public wxGDIObject
 public:
     virtual ~wxPaletteBase() { }
 
-    virtual bool Ok() const = 0;
+    virtual bool Ok() const { return IsOk(); }
+    virtual bool IsOk() const = 0;
     virtual int GetColoursCount() const { wxFAIL_MSG( _T("not implemented") ); return 0; }
 };
 

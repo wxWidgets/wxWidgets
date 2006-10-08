@@ -78,7 +78,7 @@ data using the reference counting, are not affected.
 
 \func{}{wxBrush}{\void}
 
-Default constructor. The brush will be uninitialised, and \helpref{wxBrush::Ok}{wxbrushok} will
+Default constructor. The brush will be uninitialised, and \helpref{wxBrush:IsOk}{wxbrushisok} will
 return false.
 
 \func{}{wxBrush}{\param{const wxColour\&}{ colour}, \param{int}{ style = {\tt wxSOLID}}}
@@ -163,7 +163,7 @@ Returns a reference to the brush colour.
 \constfunc{wxBitmap *}{GetStipple}{\void}
 
 Gets a pointer to the stipple bitmap. If the brush does not have a wxSTIPPLE style,
-this bitmap may be non-NULL but uninitialised (\helpref{wxBitmap::Ok}{wxbitmapok} returns false).
+this bitmap may be non-NULL but uninitialised (\helpref{wxBitmap:IsOk}{wxbitmapisok} returns false).
 
 \wxheading{See also}
 
@@ -206,9 +206,9 @@ Returns true if the style of the brush is any of hatched fills.
 \helpref{wxBrush::GetStyle}{wxbrushgetstyle}
 
 
-\membersection{wxBrush::Ok}\label{wxbrushok}
+\membersection{wxBrush::IsOk}\label{wxbrushisok}
 
-\constfunc{bool}{Ok}{\void}
+\constfunc{bool}{IsOk}{\void}
 
 Returns true if the brush is initialised. It will return false if the default
 constructor has been used (for example, the brush is a member of a class, or

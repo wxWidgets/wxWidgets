@@ -40,7 +40,8 @@ public:
     virtual ~wxColour();
 
     // accessors
-    bool Ok() const { return m_cocoaNSColor; }
+    bool Ok() const { return IsOk(); }
+    bool IsOk() const { return m_cocoaNSColor; }
     WX_NSColor GetNSColor() { return m_cocoaNSColor; }
 
     unsigned char Red() const { return m_red; }

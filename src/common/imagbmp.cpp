@@ -1114,7 +1114,7 @@ bool wxICOHandler::SaveFile(wxImage *image,
         }
         wxUint32 Size = cStream.GetSize();
 
-        // wxCountingOutputStream::Ok() always returns true for now and this
+        // wxCountingOutputStream::IsOk() always returns true for now and this
         // "if" provokes VC++ warnings in optimized build
 #if 0
         if ( !cStream.Ok() )

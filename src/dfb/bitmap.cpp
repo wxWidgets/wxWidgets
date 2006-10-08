@@ -189,7 +189,7 @@ wxBitmap::wxBitmap(const char bits[], int width, int height, int depth)
     wxFAIL_MSG( _T("not implemented") );
 }
 
-bool wxBitmap::Ok() const
+bool wxBitmap::IsOk() const
 {
     return (m_refData != NULL && M_BITMAP->m_surface);
 }

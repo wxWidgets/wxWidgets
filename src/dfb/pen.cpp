@@ -189,7 +189,7 @@ wxBitmap *wxPen::GetStipple() const
     return NULL;
 }
 
-bool wxPen::Ok() const
+bool wxPen::IsOk() const
 {
     return ((m_refData) && M_PENDATA->m_colour.Ok());
 }

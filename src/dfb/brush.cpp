@@ -80,7 +80,7 @@ bool wxBrush::operator==(const wxBrush& brush) const
     return m_refData == brush.m_refData;
 }
 
-bool wxBrush::Ok() const
+bool wxBrush::IsOk() const
 {
     return ((m_refData) && M_BRUSHDATA->m_colour.Ok());
 }

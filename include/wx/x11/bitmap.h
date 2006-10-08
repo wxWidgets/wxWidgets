@@ -79,7 +79,8 @@ public:
 
     bool operator == ( const wxBitmap& bmp ) const;
     bool operator != ( const wxBitmap& bmp ) const;
-    bool Ok() const;
+    bool Ok() const { return IsOk(); }
+    bool IsOk() const;
 
     static void InitStandardHandlers();
 

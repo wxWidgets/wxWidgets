@@ -51,7 +51,8 @@ public:
     virtual bool SetClipboard(int width = 0, int height = 0);
 
     virtual bool Play(wxDC *dc);
-    bool Ok() const { return (M_METAFILEDATA && (M_METAFILEDATA->m_metafile != 0)); };
+    bool Ok() const { return IsOk(); }
+    bool IsOk() const { return (M_METAFILEDATA && (M_METAFILEDATA->m_metafile != 0)); };
 
     // set/get the size of metafile for clipboard operations
     wxSize GetSize() const { return wxSize(GetWidth(), GetHeight()); }

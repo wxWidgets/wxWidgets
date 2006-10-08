@@ -38,7 +38,8 @@ public:
     virtual bool TransferTo( wxPrintData &data );
     virtual bool TransferFrom( const wxPrintData &data );
 
-    virtual bool Ok() const { return true; }
+    virtual bool Ok() const { return IsOk(); }
+    virtual bool IsOk() const { return true; }
 
     GnomePrintConfig* GetPrintConfig() { return m_config; }
     void SetPrintJob( GnomePrintJob *job ) { m_job = job; }
@@ -200,7 +201,8 @@ public:
     wxGnomePrintDC( wxGnomePrinter *printer );
     virtual ~wxGnomePrintDC();
 
-    bool Ok() const;
+    bool Ok() const { return IsOk(); }
+    bool IsOk() const;
 
     bool DoFloodFill(wxCoord x1, wxCoord y1, const wxColour &col, int style=wxFLOOD_SURFACE );
     bool DoGetPixel(wxCoord x1, wxCoord y1, wxColour *col) const;

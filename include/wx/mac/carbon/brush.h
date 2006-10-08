@@ -57,7 +57,8 @@ public:
     virtual int GetStyle() const ;
     wxBitmap *GetStipple() const ;
 
-    virtual bool Ok() const { return (m_refData != NULL) ; }
+    virtual bool Ok() const { return IsOk(); }
+    virtual bool IsOk() const { return (m_refData != NULL) ; }
 
 // Implementation
 

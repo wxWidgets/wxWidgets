@@ -42,7 +42,8 @@ public:
     virtual int GetStyle() const;
     wxBitmap *GetStipple() const;
 
-    bool Ok() const { return m_refData != NULL; }
+    bool Ok() const { return IsOk(); }
+    bool IsOk() const { return m_refData != NULL; }
 
     // return the HBRUSH for this brush
     virtual WXHANDLE GetResourceHandle() const;

@@ -53,7 +53,8 @@ public:
     virtual bool CanGetTextExtent() const { return m_dc.CanGetTextExtent(); }
     virtual int GetDepth() const { return m_dc.GetDepth(); }
     virtual wxSize GetPPI() const { return m_dc.GetPPI(); }
-    virtual bool Ok() const { return m_dc.Ok(); }
+    virtual bool Ok() const { return IsOk(); }
+    virtual bool IsOk() const { return m_dc.Ok(); }
     virtual void SetMapMode(int mode) { m_dc.SetMapMode(mode); }
     virtual void SetUserScale(double x, double y)
         { m_dc.SetUserScale(GetX(x, y), GetY(x, y)); }

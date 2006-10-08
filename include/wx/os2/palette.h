@@ -59,7 +59,8 @@ public:
                 ,unsigned char* pBlue
                ) const;
 
-    virtual bool Ok(void) const { return (m_refData != NULL) ; }
+    virtual bool Ok() const { return IsOk(); }
+    virtual bool IsOk(void) const { return (m_refData != NULL) ; }
 
     inline bool       operator == (const wxPalette& rPalette) const
         { return m_refData == rPalette.m_refData; }

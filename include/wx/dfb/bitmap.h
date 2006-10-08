@@ -37,7 +37,8 @@ public:
     wxBitmap(const wxImage& image, int depth = -1);
 #endif
 
-    bool Ok() const;
+    bool Ok() const { return IsOk(); }
+    bool IsOk() const;
     bool operator==(const wxBitmap& bmp) const;
     bool operator!=(const wxBitmap& bmp) const { return !(*this == bmp); }
 

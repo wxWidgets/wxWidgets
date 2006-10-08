@@ -136,7 +136,7 @@ wxWindowsPrintNativeData::~wxWindowsPrintNativeData()
         GlobalFree(hDevNames);
 }
 
-bool wxWindowsPrintNativeData::Ok() const
+bool wxWindowsPrintNativeData::IsOk() const
 {
     return (m_devMode != NULL) ;
 }

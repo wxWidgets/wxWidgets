@@ -39,7 +39,8 @@ public:
     wxCursor(wxStockCursor id);
     virtual ~wxCursor();
 
-    virtual bool Ok() const;
+    virtual bool Ok() const { return IsOk(); }
+    virtual bool IsOk() const;
 
     bool operator == (const wxCursor& cursor) const
         { return m_refData == cursor.m_refData; }

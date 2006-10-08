@@ -37,7 +37,8 @@ public:
         { return !(*this == accel); }
 #endif
 
-    bool Ok() const;
+    bool Ok() const { return IsOk(); }
+    bool IsOk() const;
     void SetHACCEL(WXHACCEL hAccel);
     WXHACCEL GetHACCEL() const;
 

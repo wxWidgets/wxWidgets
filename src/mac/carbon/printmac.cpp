@@ -41,7 +41,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxMacCarbonPrintData, wxPrintNativeDataBase)
 IMPLEMENT_DYNAMIC_CLASS(wxMacPrinter, wxPrinterBase)
 IMPLEMENT_CLASS(wxMacPrintPreview, wxPrintPreviewBase)
 
-bool wxMacCarbonPrintData::Ok() const
+bool wxMacCarbonPrintData::IsOk() const
 {
     return (m_macPageFormat != kPMNoPageFormat) && (m_macPrintSettings != kPMNoPrintSettings) && (m_macPrintSession != kPMNoReference);
 }

@@ -108,7 +108,8 @@ public:
   bool Destroy();
 
   // state
-  inline bool Ok() const { return (m_socket != NULL); };
+  inline bool Ok() const { return IsOk(); }
+  inline bool IsOk() const { return (m_socket != NULL); };
   inline bool Error() const { return m_error; };
   inline bool IsConnected() const { return m_connected; };
   inline bool IsData() { return WaitForRead(0, 0); };

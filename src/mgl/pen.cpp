@@ -237,7 +237,7 @@ void* wxPen::GetPixPattern() const
 }
 
 
-bool wxPen::Ok() const
+bool wxPen::IsOk() const
 {
     return (m_refData != NULL);
 }

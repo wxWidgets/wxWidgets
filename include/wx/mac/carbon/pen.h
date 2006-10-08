@@ -57,7 +57,8 @@ public:
   inline bool operator == (const wxPen& pen) const { return m_refData == pen.m_refData; }
   inline bool operator != (const wxPen& pen) const { return m_refData != pen.m_refData; }
 
-  virtual bool Ok() const { return (m_refData != NULL) ; }
+  virtual bool Ok() const { return IsOk(); }
+  virtual bool IsOk() const { return (m_refData != NULL) ; }
 
   // Override in order to recreate the pen
   void SetColour(const wxColour& col) ;

@@ -34,7 +34,8 @@ public:
     virtual ~wxCursor();
     bool operator == ( const wxCursor& cursor ) const;
     bool operator != ( const wxCursor& cursor ) const;
-    bool Ok() const;
+    bool Ok() const { return IsOk(); }
+    bool IsOk() const;
 
     // implementation
 

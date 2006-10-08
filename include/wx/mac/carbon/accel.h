@@ -29,7 +29,8 @@ public:
     bool operator != (const wxAcceleratorTable& accel) const
     { return m_refData != accel.m_refData; }
 
-    bool Ok() const;
+    bool Ok() const { return IsOk(); }
+    bool IsOk() const;
 
     int GetCommand( wxKeyEvent &event );
 };

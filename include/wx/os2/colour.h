@@ -34,7 +34,8 @@ public:
     virtual ~wxColour();
 
     // Accessors
-    bool Ok(void) const {return m_bIsInit; }
+    bool Ok() const { return IsOk(); }
+    bool IsOk(void) const {return m_bIsInit; }
 
     unsigned char Red(void) const { return m_cRed; }
     unsigned char Green(void) const { return m_cGreen; }

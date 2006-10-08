@@ -45,7 +45,8 @@ public:
     inline bool operator!= (const wxAcceleratorTable& rAccel) const
     { return m_refData != rAccel.m_refData; };
 
-    bool Ok() const;
+    bool Ok() const { return IsOk(); }
+    bool IsOk() const;
     void SetHACCEL(WXHACCEL hAccel);
     WXHACCEL GetHACCEL(void) const;
 

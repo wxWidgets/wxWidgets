@@ -38,7 +38,8 @@ public:
     wxPen( const wxBitmap &stipple, int width );
     virtual ~wxPen();
 
-    bool Ok() const { return m_refData != NULL; }
+    bool Ok() const { return IsOk(); }
+    bool IsOk() const { return m_refData != NULL; }
 
     bool operator == ( const wxPen& pen ) const;
     bool operator != (const wxPen& pen) const { return !(*this == pen); }

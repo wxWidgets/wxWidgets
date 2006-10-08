@@ -497,7 +497,8 @@ public:
     // Resolution in Pixels per inch
     virtual wxSize GetPPI() const = 0;
 
-    virtual bool Ok() const { return m_ok; }
+    virtual bool Ok() const { return IsOk(); }
+    virtual bool IsOk() const { return m_ok; }
 
     // accessors and setters
     // ---------------------

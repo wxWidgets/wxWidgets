@@ -1371,7 +1371,7 @@ int wxPrintPreviewBase::GetMaxPage() const
 { return m_maxPage; }
 int wxPrintPreviewBase::GetMinPage() const
 { return m_minPage; }
-bool wxPrintPreviewBase::Ok() const
+bool wxPrintPreviewBase::IsOk() const
 { return m_isOk; }
 void wxPrintPreviewBase::SetOk(bool ok)
 { m_isOk = ok; }
@@ -1499,7 +1499,7 @@ int wxPrintPreview::GetMinPage() const
     return m_pimpl->GetMinPage();
 }
 
-bool wxPrintPreview::Ok() const
+bool wxPrintPreview::IsOk() const
 {
     return m_pimpl->Ok();
 }

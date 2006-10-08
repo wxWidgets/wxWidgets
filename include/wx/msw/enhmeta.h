@@ -39,7 +39,8 @@ public:
     bool Play(wxDC *dc, wxRect *rectBound = (wxRect *)NULL);
 
     // accessors
-    bool Ok() const { return m_hMF != 0; }
+    bool Ok() const { return IsOk(); }
+    bool IsOk() const { return m_hMF != 0; }
 
     wxSize GetSize() const;
     int GetWidth() const { return GetSize().x; }

@@ -157,7 +157,8 @@ public:
     static wxFont *New(const wxString& strNativeFontDesc);
 
     // was the font successfully created?
-    bool Ok() const { return m_refData != NULL; }
+    bool Ok() const { return IsOk(); }
+    bool IsOk() const { return m_refData != NULL; }
 
     // comparison
     bool operator == (const wxFont& font) const;

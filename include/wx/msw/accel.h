@@ -34,7 +34,8 @@ public:
     bool operator!=(const wxAcceleratorTable& accel) const
         { return !(*this == accel); }
 
-    bool Ok() const;
+    bool Ok() const { return IsOk(); }
+    bool IsOk() const;
     void SetHACCEL(WXHACCEL hAccel);
     WXHACCEL GetHACCEL() const;
 

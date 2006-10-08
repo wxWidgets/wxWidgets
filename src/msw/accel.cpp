@@ -140,7 +140,7 @@ bool wxAcceleratorTable::operator==(const wxAcceleratorTable& accel) const
                      : !accelData;
 }
 
-bool wxAcceleratorTable::Ok() const
+bool wxAcceleratorTable::IsOk() const
 {
     return (M_ACCELDATA && (M_ACCELDATA->m_ok));
 }

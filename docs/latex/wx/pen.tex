@@ -76,7 +76,7 @@ data using the reference counting, are not affected.
 
 \func{}{wxPen}{\void}
 
-Default constructor. The pen will be uninitialised, and \helpref{wxPen::Ok}{wxpenok} will
+Default constructor. The pen will be uninitialised, and \helpref{wxPen:IsOk}{wxpenisok} will
 return false.
 
 \func{}{wxPen}{\param{const wxColour\&}{ colour}, \param{int}{ width = $1$}, \param{int}{ style = {\tt wxSOLID}}}
@@ -239,9 +239,9 @@ Returns the pen width.
 
 \helpref{wxPen::SetWidth}{wxpensetwidth}
 
-\membersection{wxPen::Ok}\label{wxpenok}
+\membersection{wxPen::IsOk}\label{wxpenisok}
 
-\constfunc{bool}{Ok}{\void}
+\constfunc{bool}{IsOk}{\void}
 
 Returns true if the pen is initialised.
 

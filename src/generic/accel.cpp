@@ -107,7 +107,7 @@ wxAcceleratorTable::~wxAcceleratorTable()
 {
 }
 
-bool wxAcceleratorTable::Ok() const
+bool wxAcceleratorTable::IsOk() const
 {
     return m_refData != NULL;
 }

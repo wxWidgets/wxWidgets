@@ -169,7 +169,8 @@ class wxMacDrawingHelper
 public:
     wxMacDrawingHelper( wxWindowMac * theWindow , bool clientArea = false );
     ~wxMacDrawingHelper();
-    bool Ok() { return m_ok; }
+    bool Ok() const { return IsOk(); }
+    bool IsOk() { return m_ok; }
     void LocalToWindow( Rect *rect) { OffsetRect( rect , m_origin.h , m_origin.v ); }
     void LocalToWindow( Point *pt ) { AddPt( m_origin , pt ); }
     void LocalToWindow( RgnHandle rgn ) { OffsetRgn( rgn , m_origin.h , m_origin.v ); }
@@ -486,7 +487,8 @@ public :
 
     virtual void Dispose();
 
-    bool Ok() const { return GetControlRef() != NULL; }
+    bool Ok() const { return IsOk(); }
+    bool IsOk() const { return GetControlRef() != NULL; }
 
     void SetReferenceInNativeControl();
     static wxMacControl* GetReferenceFromNativeControl(ControlRef control);
@@ -1164,7 +1166,8 @@ public:
     virtual ~wxBitmapRefData();
 
     void Free();
-    bool Ok() const { return m_ok; }
+    bool Ok() const { return IsOk(); }
+    bool IsOk() const { return m_ok; }
     void SetOk( bool isOk) { m_ok = isOk; }
 
     void SetWidth( int width ) { m_width = width; }

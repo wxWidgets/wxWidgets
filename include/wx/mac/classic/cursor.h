@@ -56,7 +56,8 @@ public:
   virtual ~wxCursor();
 
 	bool CreateFromXpm(const char **bits) ;
-  virtual bool Ok() const { return (m_refData != NULL && ( M_CURSORDATA->m_hCursor != NULL || M_CURSORDATA->m_themeCursor != -1 ) ) ; }
+  virtual bool Ok() const { return IsOk(); }
+  virtual bool IsOk() const { return (m_refData != NULL && ( M_CURSORDATA->m_hCursor != NULL || M_CURSORDATA->m_themeCursor != -1 ) ) ; }
 
   inline bool operator == (const wxCursor& cursor) const { return m_refData == cursor.m_refData; }
   inline bool operator != (const wxCursor& cursor) const { return m_refData != cursor.m_refData; }

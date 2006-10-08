@@ -143,7 +143,8 @@ public:
     virtual bool TransferTo( wxPrintData &data ) = 0;
     virtual bool TransferFrom( const wxPrintData &data ) = 0;
 
-    virtual bool Ok() const = 0;
+    virtual bool Ok() const { return IsOk(); }
+    virtual bool IsOk() const = 0;
 
     int  m_ref;
 
@@ -495,7 +496,8 @@ public:
     virtual int GetMaxPage() const;
     virtual int GetMinPage() const;
 
-    virtual bool Ok() const;
+    virtual bool Ok() const { return IsOk(); }
+    virtual bool IsOk() const;
     virtual void SetOk(bool ok);
 
     ///////////////////////////////////////////////////////////////////////////
@@ -578,7 +580,8 @@ public:
     virtual int GetMaxPage() const;
     virtual int GetMinPage() const;
 
-    virtual bool Ok() const;
+    virtual bool Ok() const { return IsOk(); }
+    virtual bool IsOk() const;
     virtual void SetOk(bool ok);
 
 private:

@@ -95,7 +95,7 @@ void wxIcon::SetHeight( int height )
 {
 }
 
-bool wxIcon::Ok() const
+bool wxIcon::IsOk() const
 {
     return m_refData != NULL ;
 }

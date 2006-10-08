@@ -293,7 +293,7 @@ wxCursor::~wxCursor()
 {
 }
 
-bool wxCursor::Ok() const
+bool wxCursor::IsOk() const
 {
     return m_refData != NULL;
 }

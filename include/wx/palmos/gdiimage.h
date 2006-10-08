@@ -147,7 +147,8 @@ public:
     void SetHandle(WXHANDLE handle)
         { EnsureHasData(); GetGDIImageData()->m_handle = handle; }
 
-    bool Ok() const { return GetHandle() != 0; }
+    bool Ok() const { return IsOk(); }
+    bool IsOk() const { return GetHandle() != 0; }
 
     int GetWidth() const { return IsNull() ? 0 : GetGDIImageData()->m_width; }
     int GetHeight() const { return IsNull() ? 0 : GetGDIImageData()->m_height; }

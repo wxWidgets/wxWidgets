@@ -1196,7 +1196,7 @@ bool wxBitmap::SaveFile( const wxString& filename,
     return success;
 }
 
-bool wxBitmap::Ok() const
+bool wxBitmap::IsOk() const
 {
    return (M_BITMAPDATA && M_BITMAPDATA->Ok());
 }

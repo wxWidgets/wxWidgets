@@ -168,10 +168,10 @@ wxAcceleratorTable::wxAcceleratorTable(
     M_ACCELDATA->m_ok = (M_ACCELDATA->m_hAccel != 0);
 } // end of wxAcceleratorTable::wxAcceleratorTable
 
-bool wxAcceleratorTable::Ok() const
+bool wxAcceleratorTable::IsOk() const
 {
     return(M_ACCELDATA && (M_ACCELDATA->m_ok));
-} // end of wxAcceleratorTable::Ok
+} // end of wxAcceleratorTable::IsOk
 
 void wxAcceleratorTable::SetHACCEL(WXHACCEL hAccel)
 {

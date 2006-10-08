@@ -32,7 +32,8 @@ public:
              long flags = wxBITMAP_TYPE_CUR_RESOURCE,
              int hotSpotX = 0, int hotSpotY = 0);
 
-    bool Ok() const;
+    bool Ok() const { return IsOk(); }
+    bool IsOk() const;
     bool operator==(const wxCursor& cursor) const;
     bool operator!=(const wxCursor& cursor) const { return !(*this == cursor); }
 

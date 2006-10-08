@@ -327,7 +327,8 @@ public:
     virtual bool SaveFile( wxOutputStream& stream, const wxString& mimetype ) const;
 #endif
 
-    bool Ok() const;
+    bool Ok() const { return IsOk(); }
+    bool IsOk() const;
     int GetWidth() const;
     int GetHeight() const;
 
