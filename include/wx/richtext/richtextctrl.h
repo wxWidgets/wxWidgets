@@ -29,6 +29,12 @@
 #include "wx/textctrl.h"
 #endif
 
+#if !defined(__WXGTK__) && !defined(__WXMAC__)
+#define wxRICHTEXT_BUFFERED_PAINTING 1
+#else
+#define wxRICHTEXT_BUFFERED_PAINTING 0
+#endif
+
 class WXDLLIMPEXP_RICHTEXT wxRichTextStyleDefinition;
 
 /*!
@@ -188,6 +194,13 @@ public:
     virtual bool GetStyle(long position, wxTextAttr& style);
     virtual bool GetStyle(long position, wxTextAttrEx& style);
     virtual bool GetStyle(long position, wxRichTextAttr& style);
+
+    // extended style setting operation with flags including:
+    // wxRICHTEXT_SETSTYLE_WITH_UNDO, wxRICHTEXT_SETSTYLE_OPTIMIZE, wxRICHTEXT_SETSTYLE_PARAGRAPHS_ONLY, wxRICHTEXT_SETSTYLE_CHARACTERS_ONLY
+    // see richtextbuffer.h for more details.
+    virtual bool SetStyleEx(long start, long end, const wxTextAttrEx& style, int flags = wxRICHTEXT_SETSTYLE_WITH_UNDO);
+    virtual bool SetStyleEx(const wxRichTextRange& range, const wxTextAttrEx& style, int flags = wxRICHTEXT_SETSTYLE_WITH_UNDO);
+    virtual bool SetStyleEx(const wxRichTextRange& range, const wxRichTextAttr& style, int flags = wxRICHTEXT_SETSTYLE_WITH_UNDO);
 
     /// Get the content (uncombined) attributes for this position.
     virtual bool GetUncombinedStyle(long position, wxTextAttr& style);
@@ -619,8 +632,10 @@ public:
     /// Paint the background
     virtual void PaintBackground(wxDC& dc);
 
+#if wxRICHTEXT_BUFFERED_PAINTING
     /// Recreate buffer bitmap if necessary
     virtual bool RecreateBuffer(const wxSize& size = wxDefaultSize);
+#endif
 
     /// Set the selection
     virtual void DoSetSelection(long from, long to, bool scrollCaret = true);
@@ -744,8 +759,10 @@ private:
     /// Allows nested Freeze/Thaw
     int                     m_freezeCount;
 
+#if wxRICHTEXT_BUFFERED_PAINTING
     /// Buffer bitmap
     wxBitmap                m_bufferBitmap;
+#endif
 
     /// Text buffer
     wxRichTextBuffer        m_buffer;
@@ -857,3 +874,4 @@ typedef void (wxEvtHandler::*wxRichTextEventFunction)(wxRichTextEvent&);
 
 #endif
     // _WX_RICHTEXTCTRL_H_
+

@@ -141,6 +141,9 @@ bool wxRichTextCtrl::Create( wxWindow* parent, wxWindowID id, const wxString& va
     attributes.SetTextColour(*wxBLACK);
     attributes.SetBackgroundColour(*wxWHITE);
     attributes.SetAlignment(wxTEXT_ALIGNMENT_LEFT);
+    attributes.SetLineSpacing(10);
+    attributes.SetParagraphSpacingAfter(10);
+    attributes.SetParagraphSpacingBefore(0);
     attributes.SetFlags(wxTEXT_ATTR_ALL);
     SetBasicStyle(attributes);
 
@@ -155,8 +158,10 @@ bool wxRichTextCtrl::Create( wxWindow* parent, wxWindowID id, const wxString& va
     // Tell the sizers to use the given or best size
     SetBestFittingSize(size);
 
+#if wxRICHTEXT_BUFFERED_PAINTING
     // Create a buffer
     RecreateBuffer(size);
+#endif
 
     SetCursor(wxCursor(wxCURSOR_IBEAM));
 
@@ -235,9 +240,11 @@ void wxRichTextCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
         GetCaret()->Hide();
 
     {
+#if wxRICHTEXT_BUFFERED_PAINTING
         wxBufferedPaintDC dc(this, m_bufferBitmap);
-        //wxLogDebug(wxT("OnPaint"));
-
+#else
+        wxPaintDC dc(this);
+#endif
         PrepareDC(dc);
 
         if (m_freezeCount > 0)
@@ -418,7 +425,7 @@ void wxRichTextCtrl::OnMiddleClick(wxMouseEvent& event)
 void wxRichTextCtrl::OnChar(wxKeyEvent& event)
 {
     int flags = 0;
-    if (event.ControlDown())
+    if (event.CmdDown())
         flags |= wxRICHTEXT_CTRL_DOWN;
     if (event.ShiftDown())
         flags |= wxRICHTEXT_SHIFT_DOWN;
@@ -432,7 +439,16 @@ void wxRichTextCtrl::OnChar(wxKeyEvent& event)
         event.GetKeyCode() == WXK_HOME ||
         event.GetKeyCode() == WXK_PAGEUP ||
         event.GetKeyCode() == WXK_PAGEDOWN ||
-        event.GetKeyCode() == WXK_END)
+        event.GetKeyCode() == WXK_END ||
+
+        event.GetKeyCode() == WXK_NUMPAD_LEFT ||
+        event.GetKeyCode() == WXK_NUMPAD_RIGHT ||
+        event.GetKeyCode() == WXK_NUMPAD_UP ||
+        event.GetKeyCode() == WXK_NUMPAD_DOWN ||
+        event.GetKeyCode() == WXK_NUMPAD_HOME ||
+        event.GetKeyCode() == WXK_NUMPAD_PAGEUP ||
+        event.GetKeyCode() == WXK_NUMPAD_PAGEDOWN ||
+        event.GetKeyCode() == WXK_NUMPAD_END)
     {
         KeyboardNavigate(event.GetKeyCode(), flags);
         return;
@@ -527,18 +543,131 @@ void wxRichTextCtrl::OnChar(wxKeyEvent& event)
     }
     else
     {
-        BeginBatchUndo(_("Insert Text"));
+        long keycode = event.GetKeyCode();
+        switch ( keycode )
+        {
+            case WXK_ESCAPE:
+            // case WXK_SPACE:
+            case WXK_DELETE:
+            case WXK_START:
+            case WXK_LBUTTON:
+            case WXK_RBUTTON:
+            case WXK_CANCEL:
+            case WXK_MBUTTON:
+            case WXK_CLEAR:
+            case WXK_SHIFT:
+            case WXK_ALT:
+            case WXK_CONTROL:
+            case WXK_MENU:
+            case WXK_PAUSE:
+            case WXK_CAPITAL:
+            case WXK_END:
+            case WXK_HOME:
+            case WXK_LEFT:
+            case WXK_UP:
+            case WXK_RIGHT:
+            case WXK_DOWN:
+            case WXK_SELECT:
+            case WXK_PRINT:
+            case WXK_EXECUTE:
+            case WXK_SNAPSHOT:
+            case WXK_INSERT:
+            case WXK_HELP:
+            case WXK_NUMPAD0:
+            case WXK_NUMPAD1:
+            case WXK_NUMPAD2:
+            case WXK_NUMPAD3:
+            case WXK_NUMPAD4:
+            case WXK_NUMPAD5:
+            case WXK_NUMPAD6:
+            case WXK_NUMPAD7:
+            case WXK_NUMPAD8:
+            case WXK_NUMPAD9:
+            case WXK_MULTIPLY:
+            case WXK_ADD:
+            case WXK_SEPARATOR:
+            case WXK_SUBTRACT:
+            case WXK_DECIMAL:
+            case WXK_DIVIDE:
+            case WXK_F1:
+            case WXK_F2:
+            case WXK_F3:
+            case WXK_F4:
+            case WXK_F5:
+            case WXK_F6:
+            case WXK_F7:
+            case WXK_F8:
+            case WXK_F9:
+            case WXK_F10:
+            case WXK_F11:
+            case WXK_F12:
+            case WXK_F13:
+            case WXK_F14:
+            case WXK_F15:
+            case WXK_F16:
+            case WXK_F17:
+            case WXK_F18:
+            case WXK_F19:
+            case WXK_F20:
+            case WXK_F21:
+            case WXK_F22:
+            case WXK_F23:
+            case WXK_F24:
+            case WXK_NUMLOCK:
+            case WXK_SCROLL:
+            case WXK_PAGEUP:
+            case WXK_PAGEDOWN:
+            case WXK_NUMPAD_SPACE:
+            case WXK_NUMPAD_TAB:
+            case WXK_NUMPAD_ENTER:
+            case WXK_NUMPAD_F1:
+            case WXK_NUMPAD_F2:
+            case WXK_NUMPAD_F3:
+            case WXK_NUMPAD_F4:
+            case WXK_NUMPAD_HOME:
+            case WXK_NUMPAD_LEFT:
+            case WXK_NUMPAD_UP:
+            case WXK_NUMPAD_RIGHT:
+            case WXK_NUMPAD_DOWN:
+            case WXK_NUMPAD_PAGEUP:
+            case WXK_NUMPAD_PAGEDOWN:
+            case WXK_NUMPAD_END:
+            case WXK_NUMPAD_BEGIN:
+            case WXK_NUMPAD_INSERT:
+            case WXK_NUMPAD_DELETE:
+            case WXK_NUMPAD_EQUAL:
+            case WXK_NUMPAD_MULTIPLY:
+            case WXK_NUMPAD_ADD:
+            case WXK_NUMPAD_SEPARATOR:
+            case WXK_NUMPAD_SUBTRACT:
+            case WXK_NUMPAD_DECIMAL:
+            {
+                event.Skip();
+                return;
+            }
+            
+            default:
+            {
+                if (event.CmdDown() || event.AltDown())
+                {
+                    event.Skip();
+                    return;
+                }
 
-        long newPos = m_caretPosition;
-        DeleteSelectedContent(& newPos);
+                BeginBatchUndo(_("Insert Text"));
 
-        wxString str = (wxChar) event.GetKeyCode();
-        GetBuffer().InsertTextWithUndo(newPos+1, str, this, wxRICHTEXT_INSERT_WITH_PREVIOUS_PARAGRAPH_STYLE);
+                long newPos = m_caretPosition;
+                DeleteSelectedContent(& newPos);
 
-        EndBatchUndo();
+                wxString str = (wxChar) event.GetKeyCode();
+                GetBuffer().InsertTextWithUndo(newPos+1, str, this, wxRICHTEXT_INSERT_WITH_PREVIOUS_PARAGRAPH_STYLE);
 
-        SetDefaultStyleToCursorStyle();
-        ScrollIntoView(m_caretPosition, WXK_RIGHT);
+                EndBatchUndo();
+
+                SetDefaultStyleToCursorStyle();
+                ScrollIntoView(m_caretPosition, WXK_RIGHT);
+            }
+        }
     }
 }
 
@@ -597,50 +726,50 @@ bool wxRichTextCtrl::KeyboardNavigate(int keyCode, int flags)
 {
     bool success = false;
 
-    if (keyCode == WXK_RIGHT)
+    if (keyCode == WXK_RIGHT || keyCode == WXK_NUMPAD_RIGHT)
     {
         if (flags & wxRICHTEXT_CTRL_DOWN)
             success = WordRight(1, flags);
         else
             success = MoveRight(1, flags);
     }
-    else if (keyCode == WXK_LEFT)
+    else if (keyCode == WXK_LEFT || keyCode == WXK_NUMPAD_LEFT)
     {
         if (flags & wxRICHTEXT_CTRL_DOWN)
             success = WordLeft(1, flags);
         else
             success = MoveLeft(1, flags);
     }
-    else if (keyCode == WXK_UP)
+    else if (keyCode == WXK_UP || keyCode == WXK_NUMPAD_UP)
     {
         if (flags & wxRICHTEXT_CTRL_DOWN)
             success = MoveToParagraphStart(flags);
         else
             success = MoveUp(1, flags);
     }
-    else if (keyCode == WXK_DOWN)
+    else if (keyCode == WXK_DOWN || keyCode == WXK_NUMPAD_DOWN)
     {
         if (flags & wxRICHTEXT_CTRL_DOWN)
             success = MoveToParagraphEnd(flags);
         else
             success = MoveDown(1, flags);
     }
-    else if (keyCode == WXK_PAGEUP)
+    else if (keyCode == WXK_PAGEUP || keyCode == WXK_NUMPAD_PAGEUP)
     {
         success = PageUp(1, flags);
     }
-    else if (keyCode == WXK_PAGEDOWN)
+    else if (keyCode == WXK_PAGEDOWN || keyCode == WXK_NUMPAD_PAGEDOWN)
     {
         success = PageDown(1, flags);
     }
-    else if (keyCode == WXK_HOME)
+    else if (keyCode == WXK_HOME || keyCode == WXK_NUMPAD_HOME)
     {
         if (flags & wxRICHTEXT_CTRL_DOWN)
             success = MoveHome(flags);
         else
             success = MoveToLineStart(flags);
     }
-    else if (keyCode == WXK_END)
+    else if (keyCode == WXK_END || keyCode == WXK_NUMPAD_END)
     {
         if (flags & wxRICHTEXT_CTRL_DOWN)
             success = MoveEnd(flags);
@@ -723,7 +852,10 @@ bool wxRichTextCtrl::ScrollIntoView(long position, int keyCode)
     wxSize clientSize = GetClientSize();
 
     // Going down
-    if (keyCode == WXK_DOWN || keyCode == WXK_RIGHT || keyCode == WXK_END || keyCode == WXK_PAGEDOWN)
+    if (keyCode == WXK_DOWN || keyCode == WXK_NUMPAD_DOWN ||
+        keyCode == WXK_RIGHT || keyCode == WXK_NUMPAD_DOWN ||
+        keyCode == WXK_END || keyCode == WXK_NUMPAD_END ||
+        keyCode == WXK_PAGEDOWN || keyCode == WXK_NUMPAD_PAGEDOWN)
     {
         if ((rect.y + rect.height) > (clientSize.y + startY))
         {
@@ -757,7 +889,10 @@ bool wxRichTextCtrl::ScrollIntoView(long position, int keyCode)
         }
     }
     // Going up
-    else if (keyCode == WXK_UP || keyCode == WXK_LEFT || keyCode == WXK_HOME || keyCode == WXK_PAGEUP )
+    else if (keyCode == WXK_UP  || keyCode == WXK_NUMPAD_UP ||
+             keyCode == WXK_LEFT || keyCode == WXK_NUMPAD_LEFT ||
+             keyCode == WXK_HOME || keyCode == WXK_NUMPAD_HOME ||
+             keyCode == WXK_PAGEUP || keyCode == WXK_NUMPAD_PAGEUP )
     {
         if (rect.y < startY)
         {
@@ -1400,7 +1535,9 @@ void wxRichTextCtrl::OnSize(wxSizeEvent& event)
     else
         GetBuffer().Invalidate(wxRICHTEXT_ALL);
 
+#if wxRICHTEXT_BUFFERED_PAINTING
     RecreateBuffer();
+#endif
 
     event.Skip();
 }
@@ -1494,6 +1631,7 @@ void wxRichTextCtrl::PaintBackground(wxDC& dc)
     dc.DrawRectangle(windowRect);
 }
 
+#if wxRICHTEXT_BUFFERED_PAINTING
 /// Recreate buffer bitmap if necessary
 bool wxRichTextCtrl::RecreateBuffer(const wxSize& size)
 {
@@ -1508,6 +1646,7 @@ bool wxRichTextCtrl::RecreateBuffer(const wxSize& size)
         m_bufferBitmap = wxBitmap(sz.x, sz.y);
     return m_bufferBitmap.Ok();
 }
+#endif
 
 // ----------------------------------------------------------------------------
 // file IO functions
@@ -1618,14 +1757,14 @@ bool wxRichTextCtrl::SelectWord(long position)
 {
     if (position < 0 || position > GetBuffer().GetRange().GetEnd())
         return false;
-
+    
     wxRichTextParagraph* para = GetBuffer().GetParagraphAtPosition(position);
     if (!para)
         return false;
 
     long positionStart = position;
     long positionEnd = position;
-
+    
     for (positionStart = position; positionStart >= para->GetRange().GetStart(); positionStart --)
     {
         wxString text = GetBuffer().GetTextForRange(wxRichTextRange(positionStart, positionStart));
@@ -1637,7 +1776,7 @@ bool wxRichTextCtrl::SelectWord(long position)
     }
     if (positionStart < para->GetRange().GetStart())
         positionStart = para->GetRange().GetStart();
-
+    
     for (positionEnd = position; positionEnd < para->GetRange().GetEnd(); positionEnd ++)
     {
         wxString text = GetBuffer().GetTextForRange(wxRichTextRange(positionEnd, positionEnd));
@@ -1649,13 +1788,13 @@ bool wxRichTextCtrl::SelectWord(long position)
     }
     if (positionEnd >= para->GetRange().GetEnd())
         positionEnd = para->GetRange().GetEnd();
-
+    
     SetSelection(positionStart, positionEnd+1);
 
     if (positionStart >= 0)
     {
         MoveCaret(positionStart-1, true);
-        SetDefaultStyleToCursorStyle();
+        SetDefaultStyleToCursorStyle();        
     }
 
     return true;
@@ -2279,6 +2418,24 @@ bool wxRichTextCtrl::SetStyle(const wxRichTextRange& range, const wxRichTextAttr
     return GetBuffer().SetStyle(range.ToInternal(), style);
 }
 
+// extended style setting operation with flags including:
+// wxRICHTEXT_SETSTYLE_WITH_UNDO, wxRICHTEXT_SETSTYLE_OPTIMIZE, wxRICHTEXT_SETSTYLE_PARAGRAPHS_ONLY.
+// see richtextbuffer.h for more details.
+bool wxRichTextCtrl::SetStyleEx(long start, long end, const wxTextAttrEx& style, int flags)
+{
+    return GetBuffer().SetStyle(wxRichTextRange(start, end-1), style, flags);
+}
+
+bool wxRichTextCtrl::SetStyleEx(const wxRichTextRange& range, const wxTextAttrEx& style, int flags)
+{
+    return GetBuffer().SetStyle(range.ToInternal(), style, flags);
+}
+
+bool wxRichTextCtrl::SetStyleEx(const wxRichTextRange& range, const wxRichTextAttr& style, int flags)
+{
+    return GetBuffer().SetStyle(range.ToInternal(), style, flags);
+}
+
 bool wxRichTextCtrl::SetDefaultStyle(const wxTextAttrEx& style)
 {
     return GetBuffer().SetDefaultStyle(style);
@@ -2603,7 +2760,7 @@ bool wxRichTextCtrl::ApplyBoldToSelection()
     attr.SetFontWeight(IsSelectionBold() ? wxNORMAL : wxBOLD);
 
     if (HasSelection())
-        return SetStyle(GetSelectionRange(), attr);
+        return SetStyleEx(GetSelectionRange(), attr, wxRICHTEXT_SETSTYLE_WITH_UNDO|wxRICHTEXT_SETSTYLE_OPTIMIZE|wxRICHTEXT_SETSTYLE_CHARACTERS_ONLY);
     else
         SetAndShowDefaultStyle(attr);
     return true;
@@ -2617,7 +2774,7 @@ bool wxRichTextCtrl::ApplyItalicToSelection()
     attr.SetFontStyle(IsSelectionItalics() ? wxNORMAL : wxITALIC);
 
     if (HasSelection())
-        return SetStyle(GetSelectionRange(), attr);
+        return SetStyleEx(GetSelectionRange(), attr, wxRICHTEXT_SETSTYLE_WITH_UNDO|wxRICHTEXT_SETSTYLE_OPTIMIZE|wxRICHTEXT_SETSTYLE_CHARACTERS_ONLY);
     else
         SetAndShowDefaultStyle(attr);
     return true;
@@ -2631,7 +2788,7 @@ bool wxRichTextCtrl::ApplyUnderlineToSelection()
     attr.SetFontUnderlined(!IsSelectionUnderlined());
 
     if (HasSelection())
-        return SetStyle(GetSelectionRange(), attr);
+        return SetStyleEx(GetSelectionRange(), attr, wxRICHTEXT_SETSTYLE_WITH_UNDO|wxRICHTEXT_SETSTYLE_OPTIMIZE|wxRICHTEXT_SETSTYLE_CHARACTERS_ONLY);
     else
         SetAndShowDefaultStyle(attr);
     return true;
@@ -2663,7 +2820,7 @@ bool wxRichTextCtrl::ApplyAlignmentToSelection(wxTextAttrAlignment alignment)
     {
         wxRichTextParagraph* para = GetBuffer().GetParagraphAtPosition(GetCaretPosition()+1);
         if (para)
-            return SetStyle(para->GetRange().FromInternal(), attr);
+            return SetStyleEx(para->GetRange().FromInternal(), attr, wxRICHTEXT_SETSTYLE_WITH_UNDO|wxRICHTEXT_SETSTYLE_OPTIMIZE|wxRICHTEXT_SETSTYLE_PARAGRAPHS_ONLY);
     }
     return true;
 }
@@ -2674,15 +2831,24 @@ void wxRichTextCtrl::ApplyStyle(wxRichTextStyleDefinition* def)
     // Flags are defined within each definition, so only certain
     // attributes are applied.
     wxRichTextAttr attr(def->GetStyle());
+    
+    int flags = wxRICHTEXT_SETSTYLE_WITH_UNDO|wxRICHTEXT_SETSTYLE_OPTIMIZE;
 
     // Make sure the attr has the style name
     if (def->IsKindOf(CLASSINFO(wxRichTextParagraphStyleDefinition)))
+    {
         attr.SetParagraphStyleName(def->GetName());
+        
+        // If applying a paragraph style, we only want the paragraph nodes to adopt these
+        // attributes, and not the leaf nodes. This will allow the context (e.g. text)
+        // to change its style independently.
+        flags |= wxRICHTEXT_SETSTYLE_PARAGRAPHS_ONLY;
+    }
     else
         attr.SetCharacterStyleName(def->GetName());
 
     if (HasSelection())
-        SetStyle(GetSelectionRange(), attr);
+        SetStyleEx(GetSelectionRange(), attr, flags);
     else
         SetAndShowDefaultStyle(attr);
 }
@@ -2773,3 +2939,4 @@ void wxRichTextCtrl::SetSelectionRange(const wxRichTextRange& range)
 
 #endif
     // wxUSE_RICHTEXT
+
