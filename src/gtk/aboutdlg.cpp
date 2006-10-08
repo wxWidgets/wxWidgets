@@ -30,6 +30,19 @@
 #include "wx/gtk/private.h"
 
 // ----------------------------------------------------------------------------
+// GtkStr: temporary GTK string
+// ----------------------------------------------------------------------------
+
+class GtkStr : public wxGtkString
+{
+public:
+    GtkStr(const wxString& s)
+        : wxGtkString(wx_const_cast(char *, wxGTK_CONV_SYS(s).data()))
+    {
+    }
+};
+
+// ----------------------------------------------------------------------------
 // GtkArray: temporary array of GTK strings
 // ----------------------------------------------------------------------------
 
@@ -73,15 +86,15 @@ void wxAboutBox(const wxAboutDialogInfo& info)
     if ( !gtk_check_version(2,6,0) )
     {
         GtkAboutDialog * const dlg = GTK_ABOUT_DIALOG(gtk_about_dialog_new());
-        gtk_about_dialog_set_name(dlg, info.GetName());
+        gtk_about_dialog_set_name(dlg, GtkStr(info.GetName()));
         if ( info.HasVersion() )
-            gtk_about_dialog_set_version(dlg, info.GetVersion());
+            gtk_about_dialog_set_version(dlg, GtkStr(info.GetVersion()));
         if ( info.HasCopyright() )
-            gtk_about_dialog_set_copyright(dlg, info.GetCopyright());
+            gtk_about_dialog_set_copyright(dlg, GtkStr(info.GetCopyright()));
         if ( info.HasDescription() )
-            gtk_about_dialog_set_comments(dlg, info.GetDescription());
+            gtk_about_dialog_set_comments(dlg, GtkStr(info.GetDescription()));
         if ( info.HasLicence() )
-            gtk_about_dialog_set_license(dlg, info.GetLicence());
+            gtk_about_dialog_set_license(dlg, GtkStr(info.GetLicence()));
 
         wxIcon icon = info.GetIcon();
         if ( icon.Ok() )
@@ -89,8 +102,12 @@ void wxAboutBox(const wxAboutDialogInfo& info)
 
         if ( info.HasWebSite() )
         {
-            gtk_about_dialog_set_website(dlg, info.GetWebSiteURL());
-            gtk_about_dialog_set_website_label(dlg, info.GetWebSiteDescription());
+            gtk_about_dialog_set_website(dlg, GtkStr(info.GetWebSiteURL()));
+            gtk_about_dialog_set_website_label
+            (
+                dlg,
+                GtkStr(info.GetWebSiteDescription())
+            );
         }
 
         if ( info.HasDevelopers() )
@@ -100,7 +117,13 @@ void wxAboutBox(const wxAboutDialogInfo& info)
         if ( info.HasArtists() )
             gtk_about_dialog_set_artists(dlg, GtkArray(info.GetArtists()));
         if ( info.HasTranslators() )
-            gtk_about_dialog_set_translator_credits(dlg, _("translator-credits"));
+        {
+            gtk_about_dialog_set_translator_credits
+            (
+                dlg,
+                GtkStr(_("translator-credits"))
+            );
+        }
 
         gtk_widget_show(GTK_WIDGET(dlg));
         return;
