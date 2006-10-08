@@ -840,53 +840,31 @@ void wxTextCtrl::DoSetValue( const wxString &value, int flags )
     m_modified = false;
     DontMarkDirtyOnNextChange();
 
+    const wxCharBuffer buffer(wxGTK_CONV_ENC(value, GetTextEncoding()));
+    if ( !buffer )
+    {
+        // see comment in WriteText() as to why we must warn the user about
+        // this
+        wxLogWarning(_("Failed to set text in the text control."));
+        return;
+    }
+
+    // if the control is not empty, two "changed" signals are emitted,
+    // otherwise only one and we need to ignore either both or one of them
+    int ignore = flags & SetValue_SendEvent ? 0 : 1;
+    if ( !IsEmpty() )
+        ignore++;
+
+    if ( ignore )
+        IgnoreNextTextUpdate(ignore);
+
     if ( IsMultiLine() )
     {
-        const wxCharBuffer buffer(wxGTK_CONV_ENC(value, GetTextEncoding()));
-        if ( !buffer )
-        {
-            // see comment in WriteText() as to why we must warn the user about
-            // this
-            wxLogWarning(_("Failed to set text in the text control."));
-            return;
-        }
-
-
-        // if the control is not empty, two "changed" signals are emitted
-        if ( flags & SetValue_SendEvent )
-        {
-            if ( gtk_text_buffer_get_char_count(m_buffer) != 0 )
-                IgnoreNextTextUpdate();
-        }
-        else
-        {
-            if ( gtk_text_buffer_get_char_count(m_buffer) != 0 )
-                IgnoreNextTextUpdate(2);
-            else
-                IgnoreNextTextUpdate(1);        // skip only one
-        }
-
         gtk_text_buffer_set_text( m_buffer, buffer, strlen(buffer) );
     }
     else // single line
     {
-        // gtk_entry_set_text() emits two "changed" signals if the control is
-        // not empty because internally it calls gtk_editable_delete_text() and
-        // gtk_editable_insert_text()
-        if ( flags & SetValue_SendEvent )
-        {
-            if ( !GetValue().empty() )
-                IgnoreNextTextUpdate();
-        }
-        else
-        {
-            if ( !GetValue().empty() )
-                IgnoreNextTextUpdate(2);
-            else
-                IgnoreNextTextUpdate(1);        // if we are empty, skip only one event
-        }
-
-        gtk_entry_set_text( GTK_ENTRY(m_text), wxGTK_CONV(value) );
+        gtk_entry_set_text( GTK_ENTRY(m_text), buffer );
     }
 
     // GRG, Jun/2000: Changed this after a lot of discussion in
