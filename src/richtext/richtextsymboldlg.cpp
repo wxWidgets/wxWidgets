@@ -111,6 +111,7 @@ typedef enum
 } wxUnicodeSubsetCodes;
 
 /* Unicode subsets */
+#ifdef __UNICODE__
 
 static struct
 {
@@ -260,6 +261,8 @@ static struct
   { 0xFFF0, 0xFFFD,
     U_SPECIALS, wxT("Specials") }
 };
+
+#endif // __UNICODE__
 
 #if 0
 // Not yet used, but could be used to test under Win32 whether this subset is available
