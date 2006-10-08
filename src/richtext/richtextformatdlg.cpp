@@ -16,7 +16,7 @@
     #pragma hdrstop
 #endif
 
-#include "wx/defs.h"
+#if wxUSE_RICHTEXT
 
 #ifndef WX_PRECOMP
     #include "wx/listbox.h"
@@ -30,18 +30,16 @@
     #include "wx/bitmap.h"
     #include "wx/dcclient.h"
     #include "wx/frame.h"
-    #include "wx/imaglist.h"
     #include "wx/checkbox.h"
     #include "wx/button.h"
 #endif // WX_PRECOMP
-
-#if wxUSE_RICHTEXT
 
 #include "wx/bookctrl.h"
 #include "wx/colordlg.h"
 #include "wx/fontenum.h"
 #include "wx/settings.h"
 #include "wx/module.h"
+#include "wx/imaglist.h"
 
 #include "wx/richtext/richtextformatdlg.h"
 #include "wx/richtext/richtextctrl.h"
