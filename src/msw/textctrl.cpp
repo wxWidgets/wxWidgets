@@ -802,7 +802,7 @@ void wxTextCtrl::DoSetValue(const wxString& value, int flags)
     // edit controls mostly)
     if ( (value.length() > 0x400) || (value != GetValue()) )
     {
-        DoWriteText(value, flags);
+        DoWriteText(value, flags /* doesn't include SelectionOnly here */);
 
         // mark the control as being not dirty - we changed its text, not the
         // user
@@ -1445,7 +1445,7 @@ void wxTextCtrl::Replace(long from, long to, const wxString& value)
     // Set selection and remove it
     DoSetSelection(from, to, false /* don't scroll caret into view */);
 
-    DoWriteText(value, SetValue_SelectionOnly);
+    DoWriteText(value);
 }
 
 void wxTextCtrl::Remove(long from, long to)

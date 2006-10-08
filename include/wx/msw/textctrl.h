@@ -231,7 +231,8 @@ protected:
 
     // replace the contents of the selection or of the entire control with the
     // given text
-    void DoWriteText(const wxString& text, int flags = SetValue_SelectionOnly);
+    void DoWriteText(const wxString& text,
+                     int flags = SetValue_SendEvent | SetValue_SelectionOnly);
 
     // set the selection possibly without scrolling the caret into view
     void DoSetSelection(long from, long to, bool scrollCaret = true);
