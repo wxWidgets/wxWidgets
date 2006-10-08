@@ -963,6 +963,10 @@ SOURCE=.\common\zstream.cpp
 # PROP Default_Filter ""
 # Begin Source File
 
+SOURCE=.\generic\aboutdlgg.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\generic\bmpcboxg.cpp
 # End Source File
 # Begin Source File
@@ -1253,6 +1257,10 @@ SOURCE=.\html\winpars.cpp
 # Begin Group "MSW Files"
 
 # PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\msw\aboutdlg.cpp
+# End Source File
 # Begin Source File
 
 SOURCE=.\msw\accel.cpp
@@ -2121,6 +2129,10 @@ InputPath=..\include\wx\msw\setup.h
 # Begin Group "Common"
 
 # PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=..\include\wx\aboutdlg.h
+# End Source File
 # Begin Source File
 
 SOURCE=..\include\wx\accel.h
@@ -4061,6 +4073,10 @@ SOURCE=..\include\wx\msw\wrapwin.h
 # Begin Group "Generic"
 
 # PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=..\include\wx\generic\aboutdlgg.h
+# End Source File
 # Begin Source File
 
 SOURCE=..\include\wx\generic\accel.h

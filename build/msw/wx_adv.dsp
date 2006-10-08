@@ -470,6 +470,10 @@ SOURCE=..\..\src\common\taskbarcmn.cpp
 # PROP Default_Filter ""
 # Begin Source File
 
+SOURCE=..\..\src\msw\aboutdlg.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\msw\datectrl.cpp
 
 !IF  "$(CFG)" == "adv - Win32 DLL Universal Unicode Release"
@@ -610,6 +614,10 @@ SOURCE=..\..\src\msw\version.rc
 # Begin Group "Generic Sources"
 
 # PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=..\..\src\generic\aboutdlgg.cpp
+# End Source File
 # Begin Source File
 
 SOURCE=..\..\src\generic\bmpcboxg.cpp
@@ -1125,6 +1133,10 @@ SOURCE=..\..\include\wx\msw\taskbar.h
 # PROP Default_Filter ""
 # Begin Source File
 
+SOURCE=..\..\include\wx\generic\aboutdlgg.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\generic\bmpcbox.h
 # End Source File
 # Begin Source File
@@ -1179,6 +1191,10 @@ SOURCE=..\..\include\wx\generic\wizard.h
 # Begin Group "Common Headers"
 
 # PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=..\..\include\wx\aboutdlg.h
+# End Source File
 # Begin Source File
 
 SOURCE=..\..\include\wx\bmpcbox.h

@@ -8153,6 +8153,10 @@ SOURCE=..\..\include\wx\msw\window.h
 # PROP Default_Filter ""
 # Begin Source File
 
+SOURCE=..\..\include\wx\generic\aboutdlgg.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\generic\accel.h
 # End Source File
 # Begin Source File
@@ -8567,6 +8571,10 @@ SOURCE=..\..\include\wx\html\winpars.h
 # Begin Group "Common Headers"
 
 # PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=..\..\include\wx\aboutdlg.h
+# End Source File
 # Begin Source File
 
 SOURCE=..\..\include\wx\accel.h

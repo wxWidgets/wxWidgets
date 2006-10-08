@@ -1709,6 +1709,7 @@ endif
 ifeq ($(WXUNIV),0)
 ____ADVANCED_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_datavcmn.o \
+	$(OBJS)\monodll_aboutdlgg.o \
 	$(OBJS)\monodll_bmpcboxg.o \
 	$(OBJS)\monodll_calctrl.o \
 	$(OBJS)\monodll_datavgen.o \
@@ -1726,6 +1727,7 @@ ____ADVANCED_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_tipdlg.o \
 	$(OBJS)\monodll_wizard.o \
 	$(OBJS)\monodll_taskbarcmn.o \
+	$(OBJS)\monodll_aboutdlg.o \
 	$(OBJS)\monodll_sound.o \
 	$(OBJS)\monodll_taskbar.o \
 	$(OBJS)\monodll_joystick.o \
@@ -1734,6 +1736,7 @@ endif
 ifeq ($(WXUNIV),1)
 ____ADVANCED_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_datavcmn.o \
+	$(OBJS)\monodll_aboutdlgg.o \
 	$(OBJS)\monodll_bmpcboxg.o \
 	$(OBJS)\monodll_calctrl.o \
 	$(OBJS)\monodll_datavgen.o \
@@ -1751,6 +1754,7 @@ ____ADVANCED_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_tipdlg.o \
 	$(OBJS)\monodll_wizard.o \
 	$(OBJS)\monodll_taskbarcmn.o \
+	$(OBJS)\monodll_aboutdlg.o \
 	$(OBJS)\monodll_sound.o \
 	$(OBJS)\monodll_taskbar.o \
 	$(OBJS)\monodll_joystick.o
@@ -2299,6 +2303,7 @@ endif
 ifeq ($(WXUNIV),0)
 ____ADVANCED_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_datavcmn.o \
+	$(OBJS)\monolib_aboutdlgg.o \
 	$(OBJS)\monolib_bmpcboxg.o \
 	$(OBJS)\monolib_calctrl.o \
 	$(OBJS)\monolib_datavgen.o \
@@ -2316,6 +2321,7 @@ ____ADVANCED_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_tipdlg.o \
 	$(OBJS)\monolib_wizard.o \
 	$(OBJS)\monolib_taskbarcmn.o \
+	$(OBJS)\monolib_aboutdlg.o \
 	$(OBJS)\monolib_sound.o \
 	$(OBJS)\monolib_taskbar.o \
 	$(OBJS)\monolib_joystick.o \
@@ -2324,6 +2330,7 @@ endif
 ifeq ($(WXUNIV),1)
 ____ADVANCED_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_datavcmn.o \
+	$(OBJS)\monolib_aboutdlgg.o \
 	$(OBJS)\monolib_bmpcboxg.o \
 	$(OBJS)\monolib_calctrl.o \
 	$(OBJS)\monolib_datavgen.o \
@@ -2341,6 +2348,7 @@ ____ADVANCED_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_tipdlg.o \
 	$(OBJS)\monolib_wizard.o \
 	$(OBJS)\monolib_taskbarcmn.o \
+	$(OBJS)\monolib_aboutdlg.o \
 	$(OBJS)\monolib_sound.o \
 	$(OBJS)\monolib_taskbar.o \
 	$(OBJS)\monolib_joystick.o
@@ -3266,6 +3274,7 @@ endif
 ifeq ($(WXUNIV),0)
 ____ADVANCED_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\advdll_datavcmn.o \
+	$(OBJS)\advdll_aboutdlgg.o \
 	$(OBJS)\advdll_bmpcboxg.o \
 	$(OBJS)\advdll_calctrl.o \
 	$(OBJS)\advdll_datavgen.o \
@@ -3283,6 +3292,7 @@ ____ADVANCED_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\advdll_tipdlg.o \
 	$(OBJS)\advdll_wizard.o \
 	$(OBJS)\advdll_taskbarcmn.o \
+	$(OBJS)\advdll_aboutdlg.o \
 	$(OBJS)\advdll_sound.o \
 	$(OBJS)\advdll_taskbar.o \
 	$(OBJS)\advdll_joystick.o \
@@ -3291,6 +3301,7 @@ endif
 ifeq ($(WXUNIV),1)
 ____ADVANCED_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\advdll_datavcmn.o \
+	$(OBJS)\advdll_aboutdlgg.o \
 	$(OBJS)\advdll_bmpcboxg.o \
 	$(OBJS)\advdll_calctrl.o \
 	$(OBJS)\advdll_datavgen.o \
@@ -3308,6 +3319,7 @@ ____ADVANCED_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\advdll_tipdlg.o \
 	$(OBJS)\advdll_wizard.o \
 	$(OBJS)\advdll_taskbarcmn.o \
+	$(OBJS)\advdll_aboutdlg.o \
 	$(OBJS)\advdll_sound.o \
 	$(OBJS)\advdll_taskbar.o \
 	$(OBJS)\advdll_joystick.o
@@ -3323,6 +3335,7 @@ endif
 ifeq ($(WXUNIV),0)
 ____ADVANCED_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\advlib_datavcmn.o \
+	$(OBJS)\advlib_aboutdlgg.o \
 	$(OBJS)\advlib_bmpcboxg.o \
 	$(OBJS)\advlib_calctrl.o \
 	$(OBJS)\advlib_datavgen.o \
@@ -3340,6 +3353,7 @@ ____ADVANCED_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\advlib_tipdlg.o \
 	$(OBJS)\advlib_wizard.o \
 	$(OBJS)\advlib_taskbarcmn.o \
+	$(OBJS)\advlib_aboutdlg.o \
 	$(OBJS)\advlib_sound.o \
 	$(OBJS)\advlib_taskbar.o \
 	$(OBJS)\advlib_joystick.o \
@@ -3348,6 +3362,7 @@ endif
 ifeq ($(WXUNIV),1)
 ____ADVANCED_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\advlib_datavcmn.o \
+	$(OBJS)\advlib_aboutdlgg.o \
 	$(OBJS)\advlib_bmpcboxg.o \
 	$(OBJS)\advlib_calctrl.o \
 	$(OBJS)\advlib_datavgen.o \
@@ -3365,6 +3380,7 @@ ____ADVANCED_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\advlib_tipdlg.o \
 	$(OBJS)\advlib_wizard.o \
 	$(OBJS)\advlib_taskbarcmn.o \
+	$(OBJS)\advlib_aboutdlg.o \
 	$(OBJS)\advlib_sound.o \
 	$(OBJS)\advlib_taskbar.o \
 	$(OBJS)\advlib_joystick.o
@@ -6380,6 +6396,11 @@ $(OBJS)\monodll_datavcmn.o: ../../src/common/datavcmn.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\monodll_aboutdlgg.o: ../../src/generic/aboutdlgg.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\monodll_bmpcboxg.o: ../../src/generic/bmpcboxg.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -6461,6 +6482,11 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\monodll_taskbarcmn.o: ../../src/common/taskbarcmn.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\monodll_aboutdlg.o: ../../src/msw/aboutdlg.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 endif
 
@@ -8372,6 +8398,11 @@ $(OBJS)\monolib_datavcmn.o: ../../src/common/datavcmn.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\monolib_aboutdlgg.o: ../../src/generic/aboutdlgg.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\monolib_bmpcboxg.o: ../../src/generic/bmpcboxg.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -8453,6 +8484,11 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\monolib_taskbarcmn.o: ../../src/common/taskbarcmn.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\monolib_aboutdlg.o: ../../src/msw/aboutdlg.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 endif
 
@@ -11732,6 +11768,9 @@ $(OBJS)\advdll_datectrl.o: ../../src/msw/datectrl.cpp
 $(OBJS)\advdll_datavcmn.o: ../../src/common/datavcmn.cpp
 	$(CXX) -c -o $@ $(ADVDLL_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\advdll_aboutdlgg.o: ../../src/generic/aboutdlgg.cpp
+	$(CXX) -c -o $@ $(ADVDLL_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\advdll_bmpcboxg.o: ../../src/generic/bmpcboxg.cpp
 	$(CXX) -c -o $@ $(ADVDLL_CXXFLAGS) $(CPPDEPS) $<
 
@@ -11783,6 +11822,9 @@ $(OBJS)\advdll_wizard.o: ../../src/generic/wizard.cpp
 $(OBJS)\advdll_taskbarcmn.o: ../../src/common/taskbarcmn.cpp
 	$(CXX) -c -o $@ $(ADVDLL_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\advdll_aboutdlg.o: ../../src/msw/aboutdlg.cpp
+	$(CXX) -c -o $@ $(ADVDLL_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\advdll_sound.o: ../../src/msw/sound.cpp
 	$(CXX) -c -o $@ $(ADVDLL_CXXFLAGS) $(CPPDEPS) $<
 
@@ -11799,6 +11841,9 @@ $(OBJS)\advlib_datectrl.o: ../../src/msw/datectrl.cpp
 	$(CXX) -c -o $@ $(ADVLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\advlib_datavcmn.o: ../../src/common/datavcmn.cpp
+	$(CXX) -c -o $@ $(ADVLIB_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\advlib_aboutdlgg.o: ../../src/generic/aboutdlgg.cpp
 	$(CXX) -c -o $@ $(ADVLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\advlib_bmpcboxg.o: ../../src/generic/bmpcboxg.cpp
@@ -11850,6 +11895,9 @@ $(OBJS)\advlib_wizard.o: ../../src/generic/wizard.cpp
 	$(CXX) -c -o $@ $(ADVLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\advlib_taskbarcmn.o: ../../src/common/taskbarcmn.cpp
+	$(CXX) -c -o $@ $(ADVLIB_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\advlib_aboutdlg.o: ../../src/msw/aboutdlg.cpp
 	$(CXX) -c -o $@ $(ADVLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\advlib_sound.o: ../../src/msw/sound.cpp
