@@ -57,9 +57,12 @@ public:
     // set the currently selected page, return the index of the previously
     // selected one (or -1 on error)
     // NB: this function will _not_ generate wxEVT_NOTEBOOK_PAGE_xxx events
-  int SetSelection(size_t nPage);
+  int SetSelection(size_t nPage) { return DoSetSelection(nPage, SetSelection_SendEvent); }
     // get the currently selected page
   int GetSelection() const { return m_nSelection; }
+
+    // changes selected page without sending events
+  int ChangeSelection(size_t nPage) { return DoSetSelection(nPage); }
 
     // set/get the title of a page
   bool SetPageText(size_t nPage, const wxString& strText);
@@ -124,6 +127,8 @@ protected:
   // helper functions
   void ChangePage(int nOldSel, int nSel); // change pages
   void MacSetupTabs();
+
+  int DoSetSelection(size_t nPage, int flags = 0);
 
   // the icon indices
   wxArrayInt m_images;

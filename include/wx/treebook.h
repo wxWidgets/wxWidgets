@@ -133,7 +133,8 @@ public:
     virtual int GetPageImage(size_t n) const;
     virtual bool SetPageImage(size_t n, int imageId);
     virtual wxSize CalcSizeFromPage(const wxSize& sizePage) const;
-    virtual int SetSelection(size_t n);
+    virtual int SetSelection(size_t n) { return DoSetSelection(n, SetSelection_SendEvent); }
+    virtual int ChangeSelection(size_t n) { return DoSetSelection(n); }
     virtual void SetImageList(wxImageList *imageList);
     virtual void AssignImageList(wxImageList *imageList);
     virtual bool DeleteAllPages();
@@ -188,7 +189,7 @@ private:
                          int imageId = wxNOT_FOUND);
 
     // Sets selection in the tree control and updates the page being shown.
-    int DoSetSelection(size_t pos);
+    int DoSetSelection(size_t pos, int flags = 0);
 
     // Returns currently shown page. In a case when selected the node
     // has empty (NULL) page finds first (sub)child with not-empty page.

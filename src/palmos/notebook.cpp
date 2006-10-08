@@ -194,6 +194,11 @@ int wxNotebook::SetSelection(size_t nPage)
     return 0;
 }
 
+int wxNotebook::ChangeSelection(size_t nPage)
+{
+    return 0;
+}
+
 bool wxNotebook::SetPageText(size_t nPage, const wxString& strText)
 {
     return false;

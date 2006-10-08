@@ -52,9 +52,12 @@ public:
     // set the currently selected page, return the index of the previously
     // selected one (or -1 on error)
     // NB: this function will _not_ generate wxEVT_NOTEBOOK_PAGE_xxx events
-  int SetSelection(size_t nPage);
+    int SetSelection(size_t nPage) { return DoSetSelection(nPage, SetSelection_SendEvent); }
     // get the currently selected page
   int GetSelection() const;
+
+  // changes selected page without sending events
+  int ChangeSelection(size_t nPage) { return DoSetSelection(nPage); }
 
     // set/get the title of a page
   bool SetPageText(size_t nPage, const wxString& strText);
@@ -120,6 +123,9 @@ public:
     // flag set to true while we're inside "switch_page" callback
     bool m_inSwitchPage;
 
+    // flag set to true when the switch-page signal has been programatically generated
+    bool m_skipNextPageChangeEvent;
+
 protected:
     // set all page's attributes
     virtual void DoApplyWidgetStyle(GtkRcStyle *style);
@@ -127,6 +133,8 @@ protected:
 
     // remove one page from the notebook but do not destroy it
     virtual wxNotebookPage *DoRemovePage(size_t nPage);
+
+    int DoSetSelection(size_t nPage, int flags = 0);
 
 private:
     // the padding set by SetPadding()

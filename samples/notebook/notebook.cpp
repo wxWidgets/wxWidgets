@@ -265,6 +265,8 @@ MyFrame::MyFrame()
     menuPageOperations->Append(ID_ADD_PAGE_BEFORE, wxT("Insert page &before\tAlt-B"));
     menuPageOperations->Append(ID_ADD_SUB_PAGE, wxT("Add s&ub page\tAlt-U"));
 #endif
+    menuPageOperations->AppendSeparator();
+    menuPageOperations->Append(ID_GO_HOME, wxT("Go to the first page\tCtrl-F"));
 
     wxMenu *menuOperations = new wxMenu;
 #if wxUSE_HELP
@@ -517,6 +519,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(ID_DELETE_CUR_PAGE, MyFrame::OnDeleteCurPage)
     EVT_MENU(ID_DELETE_LAST_PAGE, MyFrame::OnDeleteLastPage)
     EVT_MENU(ID_NEXT_PAGE, MyFrame::OnNextPage)
+    EVT_MENU(ID_GO_HOME, MyFrame::OnGoHome)
 
 #if wxUSE_HELP
     EVT_MENU(ID_CONTEXT_HELP, MyFrame::OnContextHelp)
@@ -785,6 +788,18 @@ void MyFrame::OnNextPage(wxCommandEvent& WXUNUSED(event))
     if ( currBook )
     {
         currBook->AdvanceSelection();
+    }
+}
+
+void MyFrame::OnGoHome(wxCommandEvent& WXUNUSED(event))
+{
+    wxBookCtrlBase *currBook = GetCurrentBook();
+
+    if ( currBook )
+    {
+        // ChangeSelection shouldn't send any events, SetSelection() should
+        currBook->ChangeSelection(0);
+        //currBook->SetSelection(0);
     }
 }
 

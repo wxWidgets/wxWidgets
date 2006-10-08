@@ -423,4 +423,49 @@ wxSize wxBookCtrlBase::GetControllerSize() const
     return size;
 }
 
+int wxBookCtrlBase::DoSetSelection(size_t n, int flags, wxBookCtrlBaseEvent &event)
+{
+    wxCHECK_MSG( n < GetPageCount(), wxNOT_FOUND,
+                 wxT("invalid page index in wxBookCtrlBase::DoSetSelection()") );
+
+    const int oldSel = GetSelection();
+
+    if ( oldSel != wxNOT_FOUND && n != (size_t)oldSel )
+    {
+        bool allowed = false;
+
+        if ( flags & SetSelection_SendEvent )
+        {
+            event.SetSelection(n);
+            event.SetOldSelection(oldSel);
+            event.SetEventObject(this);
+
+            allowed = !GetEventHandler()->ProcessEvent(event) || event.IsAllowed();
+        }
+
+        if ( !(flags & SetSelection_SendEvent) || allowed)
+        {
+            if ( oldSel != wxNOT_FOUND )
+                m_pages[oldSel]->Hide();
+
+            wxWindow *page = m_pages[n];
+            page->SetSize(GetPageRect());
+            page->Show();
+
+            // change selection now to ignore the selection change event
+            UpdateSelectedPage(n);
+
+            if ( flags & SetSelection_SendEvent )
+            {
+                // program allows the page change
+                MakeChangedEvent(event);
+                (void)GetEventHandler()->ProcessEvent(event);
+            }
+        }
+    }
+
+    return oldSel;
+}
+
+
 #endif // wxUSE_BOOKCTRL

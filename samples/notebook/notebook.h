@@ -48,6 +48,7 @@ public:
     void OnDeleteCurPage(wxCommandEvent& event);
     void OnDeleteLastPage(wxCommandEvent& event);
     void OnNextPage(wxCommandEvent& event);
+    void OnGoHome(wxCommandEvent &event);
 
     void OnAddSubPage(wxCommandEvent& event);
     void OnAddPageBefore(wxCommandEvent& event);
@@ -147,6 +148,7 @@ enum ID_COMMANDS
     ID_NEXT_PAGE,
     ID_ADD_PAGE_BEFORE,
     ID_ADD_SUB_PAGE,
+    ID_GO_HOME,
 
 #if wxUSE_HELP
     ID_CONTEXT_HELP,

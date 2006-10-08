@@ -432,7 +432,9 @@ void wxTreebook::DoInternalRemovePageRange(size_t pagePos, size_t subCount)
             // actually shown page (the first (sub)child with page != NULL) is
             // already deleted
             m_actualSelection = m_selection;
-            DoSetSelection(m_selection);
+
+            // send event as documented
+            DoSetSelection(m_selection, SetSelection_SendEvent);
         }
         //else: nothing to do -- selection is before the deleted node
     }
@@ -583,34 +585,32 @@ int wxTreebook::GetSelection() const
    return m_selection;
 }
 
-int wxTreebook::SetSelection(size_t pagePos)
-{
-   if ( (size_t)m_selection != pagePos )
-       return DoSetSelection(pagePos);
-
-   return m_selection;
-}
-
-int wxTreebook::DoSetSelection(size_t pagePos)
+int wxTreebook::DoSetSelection(size_t pagePos, int flags)
 {
     wxCHECK_MSG( IS_VALID_PAGE(pagePos), wxNOT_FOUND,
-                 wxT("invalid page index in wxListbook::SetSelection()") );
+                 wxT("invalid page index in wxListbook::DoSetSelection()") );
     wxASSERT_MSG( GetPageCount() == DoInternalGetPageCount(),
                   wxT("wxTreebook logic error: m_treeIds and m_pages not in sync!"));
 
+    wxTreebookEvent event(wxEVT_COMMAND_TREEBOOK_PAGE_CHANGING, m_windowId);
     const int oldSel = m_selection;
     wxTreeCtrl *tree = GetTreeCtrl();
+    bool allowed = false;
 
-    wxTreebookEvent event(wxEVT_COMMAND_TREEBOOK_PAGE_CHANGING, m_windowId);
-    event.SetEventObject(this);
-    event.SetSelection(pagePos);
-    event.SetOldSelection(m_selection);
+    if (flags & SetSelection_SendEvent)
+    {
+        event.SetEventObject(this);
+        event.SetSelection(pagePos);
+        event.SetOldSelection(m_selection);
 
-    // don't send the event if the old and new pages are the same; do send it
-    // otherwise and be prepared for it to be vetoed
-    if ( (int)pagePos == m_selection ||
-            !GetEventHandler()->ProcessEvent(event) ||
-                event.IsAllowed() )
+        // don't send the event if the old and new pages are the same; do send it
+        // otherwise and be prepared for it to be vetoed
+        allowed = (int)pagePos == m_selection ||
+                  !GetEventHandler()->ProcessEvent(event) ||
+                  event.IsAllowed();
+    }
+
+    if ( !(flags & SetSelection_SendEvent) || allowed )
     {
         // hide the previously shown page
         wxTreebookPage * const oldPage = DoGetCurrentPage();
@@ -644,11 +644,14 @@ int wxTreebook::DoSetSelection(size_t pagePos)
 
         tree->SelectItem(DoInternalGetPage(pagePos));
 
-        // notify about the (now completed) page change
-        event.SetEventType(wxEVT_COMMAND_TREEBOOK_PAGE_CHANGED);
-        (void)GetEventHandler()->ProcessEvent(event);
+        if (flags & SetSelection_SendEvent)
+        {
+            // notify about the (now completed) page change
+            event.SetEventType(wxEVT_COMMAND_TREEBOOK_PAGE_CHANGED);
+            (void)GetEventHandler()->ProcessEvent(event);
+        }
     }
-    else // page change vetoed
+    else if ( (flags & SetSelection_SendEvent) && !allowed) // page change vetoed
     {
         // tree selection might have already had changed
         if ( oldSel != wxNOT_FOUND )

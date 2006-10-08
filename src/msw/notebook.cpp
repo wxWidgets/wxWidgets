@@ -462,6 +462,44 @@ int wxNotebook::SetSelection(size_t nPage)
     return m_nSelection;
 }
 
+void wxNotebook::UpdateSelection(size_t newsel)
+{
+    if ( m_nSelection != -1 )
+        m_pages[m_nSelection]->Show(false);
+
+    if ( newsel != -1 )
+    {
+        wxNotebookPage *pPage = m_pages[newsel];
+        pPage->Show(true);
+    }
+
+    // Changing the page should give the focus to it but, as per bug report
+    // http://sf.net/tracker/index.php?func=detail&aid=1150659&group_id=9863&atid=109863,
+    // we should not set the focus to it directly since it erroneously
+    // selects radio buttons and breaks keyboard handling for a notebook's
+    // scroll buttons. So give focus to the notebook and not the page.
+
+    // but don't do this is the notebook is hidden
+    if ( ::IsWindowVisible(GetHwnd()) )
+        SetFocus();
+
+    m_nSelection = newsel;
+}
+
+int wxNotebook::ChangeSelection(size_t nPage)
+{
+    wxCHECK_MSG( IS_VALID_PAGE(nPage), wxNOT_FOUND, wxT("notebook page out of range") );
+
+    if ( int(nPage) != m_nSelection )
+    {
+        TabCtrl_SetCurSel(GetHwnd(), nPage);
+
+        UpdateSelection(nPage);
+    }
+
+    return m_nSelection;
+}
+
 bool wxNotebook::SetPageText(size_t nPage, const wxString& strText)
 {
     wxCHECK_MSG( IS_VALID_PAGE(nPage), false, wxT("notebook page out of range") );
@@ -1030,35 +1068,14 @@ void wxNotebook::OnSize(wxSizeEvent& event)
 
 void wxNotebook::OnSelChange(wxNotebookEvent& event)
 {
-  // is it our tab control?
-  if ( event.GetEventObject() == this )
-  {
-      int sel = event.GetOldSelection();
-      if ( sel != -1 )
-        m_pages[sel]->Show(false);
+    // is it our tab control?
+    if ( event.GetEventObject() == this )
+    {
+        UpdateSelection(event.GetSelection());
+    }
 
-      sel = event.GetSelection();
-      if ( sel != -1 )
-      {
-        wxNotebookPage *pPage = m_pages[sel];
-        pPage->Show(true);
-      }
-
-      // Changing the page should give the focus to it but, as per bug report
-      // http://sf.net/tracker/index.php?func=detail&aid=1150659&group_id=9863&atid=109863,
-      // we should not set the focus to it directly since it erroneously
-      // selects radio buttons and breaks keyboard handling for a notebook's
-      // scroll buttons. So give focus to the notebook and not the page.
-
-      // but don't do this is the notebook is hidden
-      if ( ::IsWindowVisible(GetHwnd()) )
-        SetFocus();
-
-      m_nSelection = sel;
-  }
-
-  // we want to give others a chance to process this message as well
-  event.Skip();
+    // we want to give others a chance to process this message as well
+    event.Skip();
 }
 
 void wxNotebook::OnNavigationKey(wxNavigationKeyEvent& event)

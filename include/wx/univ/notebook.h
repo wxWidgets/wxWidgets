@@ -63,8 +63,11 @@ public:
     // implement wxNotebookBase pure virtuals
     // --------------------------------------
 
-    virtual int SetSelection(size_t nPage);
+    virtual int SetSelection(size_t nPage) { return DoSetSelection(nPage, SetSelection_SendEvent); }
     virtual int GetSelection() const { return (int) m_sel; }
+
+    // changes selected page without sending events
+    int ChangeSelection(size_t nPage) { return DoSetSelection(nPage); }
 
     virtual bool SetPageText(size_t nPage, const wxString& strText);
     virtual wxString GetPageText(size_t nPage) const;
@@ -133,6 +136,8 @@ protected:
     virtual void DoSetSize(int x, int y,
                            int width, int height,
                            int sizeFlags = wxSIZE_AUTO);
+
+    int DoSetSelection(size_t nPage, int flags = 0);
 
     // common part of all ctors
     void Init();

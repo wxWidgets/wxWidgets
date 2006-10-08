@@ -26,6 +26,7 @@
 WX_DEFINE_EXPORTED_ARRAY_PTR(wxWindow *, wxArrayPages);
 
 class WXDLLEXPORT wxImageList;
+class WXDLLEXPORT wxBookCtrlBaseEvent;
 
 // ----------------------------------------------------------------------------
 // constants
@@ -194,6 +195,9 @@ public:
     // NB: this function will generate PAGE_CHANGING/ED events
     virtual int SetSelection(size_t n) = 0;
 
+    // acts as SetSelection but does not generate events
+    virtual int ChangeSelection(size_t n) = 0;
+
 
     // cycle thru the pages
     void AdvanceSelection(bool forward = true)
@@ -218,6 +222,22 @@ public:
     virtual bool HasMultiplePages() const { return true; }
 
 protected:
+    // typically, wxBookCtrl-derived classes will use DoSetSelection() function
+    // to implement SetSelection() and ChangeSelection() functions.
+    // these flags make DoSetSelection() more readable
+    enum
+    {
+        SetSelection_SendEvent = 1
+    };
+
+    // if using DoSetSelection() for implementing [Set|Change]Selection,
+    // then override UpdateSelectedPage() and MakeChangedEvent()
+    virtual int DoSetSelection(size_t nPage, int flags, wxBookCtrlBaseEvent &event);
+    virtual void UpdateSelectedPage(size_t WXUNUSED(newsel))
+        { wxFAIL_MSG(wxT("Override this function!")); }
+    virtual void MakeChangedEvent(wxBookCtrlBaseEvent &WXUNUSED(event))
+        { wxFAIL_MSG(wxT("Override this function!")); }
+
     // Should we accept NULL page pointers in Add/InsertPage()?
     //
     // Default is no but derived classes may override it if they can treat NULL

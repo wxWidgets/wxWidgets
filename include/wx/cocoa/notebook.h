@@ -62,6 +62,9 @@ public:
     // get the currently selected page
     int GetSelection() const;
 
+    // changes selected page without sending events
+    int ChangeSelection(size_t nPage);
+
     // set/get the title of a page
     bool SetPageText(size_t nPage, const wxString& strText);
     wxString GetPageText(size_t nPage) const;

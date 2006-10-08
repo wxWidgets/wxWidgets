@@ -160,25 +160,27 @@ wxSize wxNotebook::CalcSizeFromPage(const wxSize& sizePage) const
     return DoGetSizeFromClientSize( sizePage );
 }
 
-int wxNotebook::SetSelection(size_t nPage)
+int wxNotebook::DoSetSelection(size_t nPage, int flags = 0)
 {
-    wxCHECK_MSG( IS_VALID_PAGE(nPage), wxNOT_FOUND, wxT("SetSelection: invalid notebook page") );
+    wxCHECK_MSG( IS_VALID_PAGE(nPage), wxNOT_FOUND, wxT("DoSetSelection: invalid notebook page") );
 
     if ( int(nPage) != m_nSelection )
     {
-        wxNotebookEvent event(wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING, m_windowId);
-        event.SetSelection(nPage);
-        event.SetOldSelection(m_nSelection);
-        event.SetEventObject(this);
-        if ( !GetEventHandler()->ProcessEvent(event) || event.IsAllowed() )
+        if (flags & SetSelection_SendEvent)
         {
-            // program allows the page change
-            event.SetEventType(wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED);
-            (void)GetEventHandler()->ProcessEvent(event);
+            wxNotebookEvent event(wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING, m_windowId);
+            event.SetSelection(nPage);
+            event.SetOldSelection(m_nSelection);
+            event.SetEventObject(this);
+            if ( !GetEventHandler()->ProcessEvent(event) || event.IsAllowed() )
+            {
+                // program allows the page change
+                event.SetEventType(wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED);
+                (void)GetEventHandler()->ProcessEvent(event);
 
-            ChangePage(m_nSelection, nPage);
+                ChangePage(m_nSelection, nPage);
+            }
         }
-    }
 
     return m_nSelection;
 }
@@ -225,6 +227,11 @@ bool wxNotebook::SetPageImage(size_t nPage, int nImage)
         m_images[nPage] = nImage;
 
         MacSetupTabs() ;
+    }
+        else
+        {
+            ChangePage(m_nSelection, nPage);
+        }
     }
 
     return true;

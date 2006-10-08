@@ -243,6 +243,22 @@ int wxNotebook::SetSelection( size_t nPage )
     return nPage;
 } // end of wxNotebook::SetSelection
 
+int wxNotebook::ChangeSelection( size_t nPage )
+{
+    wxCHECK_MSG( IS_VALID_PAGE(nPage), wxNOT_FOUND, wxT("notebook page out of range") );
+
+    if (nPage != (size_t)m_nSelection)
+    {
+        ::WinSendMsg( GetHWND()
+                ,BKM_TURNTOPAGE
+                ,MPFROMLONG((ULONG)m_alPageId[nPage])
+                        ,(MPARAM)0
+                    );
+    }
+    m_nSelection = nPage;
+    return nPage;
+}
+
 bool wxNotebook::SetPageText( size_t nPage,
                               const wxString& rsStrText )
 {

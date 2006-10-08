@@ -21,6 +21,10 @@
 class WXDLLEXPORT wxToolBarBase;
 class WXDLLEXPORT wxCommandEvent;
 
+extern WXDLLIMPEXP_CORE const wxEventType wxEVT_COMMAND_TOOLBOOK_PAGE_CHANGED;
+extern WXDLLIMPEXP_CORE const wxEventType wxEVT_COMMAND_TOOLBOOK_PAGE_CHANGING;
+
+
 // Use wxButtonToolBar
 #define wxBK_BUTTONBAR            0x0100
 
@@ -69,7 +73,8 @@ public:
                             const wxString& text,
                             bool bSelect = false,
                             int imageId = -1);
-    virtual int SetSelection(size_t n);
+    virtual int SetSelection(size_t n) { return DoSetSelection(n, SetSelection_SendEvent); }
+    virtual int ChangeSelection(size_t n) { return DoSetSelection(n); }
     virtual void SetImageList(wxImageList *imageList);
 
     virtual bool DeleteAllPages();
@@ -95,6 +100,19 @@ protected:
     void OnToolSelected(wxCommandEvent& event);
     void OnSize(wxSizeEvent& event);
     void OnIdle(wxIdleEvent& event);
+
+    int DoSetSelection(size_t nPage, int flags = 0);
+
+    void UpdateSelectedPage(size_t newsel)
+    {
+        m_selection = newsel;
+        GetToolBar()->ToggleTool(newsel + 1, true);
+    }
+
+    void MakeChangedEvent(wxBookCtrlBaseEvent &event)
+    {
+        event.SetEventType(wxEVT_COMMAND_TOOLBOOK_PAGE_CHANGED);
+    }
 
     // the currently selected page or wxNOT_FOUND if none
     int m_selection;
@@ -136,9 +154,6 @@ public:
 private:
     DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxToolbookEvent)
 };
-
-extern WXDLLIMPEXP_CORE const wxEventType wxEVT_COMMAND_TOOLBOOK_PAGE_CHANGED;
-extern WXDLLIMPEXP_CORE const wxEventType wxEVT_COMMAND_TOOLBOOK_PAGE_CHANGING;
 
 typedef void (wxEvtHandler::*wxToolbookEventFunction)(wxToolbookEvent&);
 

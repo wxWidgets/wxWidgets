@@ -262,45 +262,22 @@ void wxListbook::SetImageList(wxImageList *imageList)
 // selection
 // ----------------------------------------------------------------------------
 
+void wxListbook::UpdateSelectedPage(size_t newsel)
+{
+    m_selection = newsel;
+    GetListView()->Select(newsel);
+    GetListView()->Focus(newsel);
+}
+
 int wxListbook::GetSelection() const
 {
     return m_selection;
 }
 
-int wxListbook::SetSelection(size_t n)
+int wxListbook::DoSetSelection(size_t n, int flags)
 {
-    wxCHECK_MSG( IS_VALID_PAGE(n), wxNOT_FOUND,
-                 wxT("invalid page index in wxListbook::SetSelection()") );
-
-    const int oldSel = m_selection;
-
-    if ( int(n) != m_selection )
-    {
-        wxListbookEvent event(wxEVT_COMMAND_LISTBOOK_PAGE_CHANGING, m_windowId);
-        event.SetSelection(n);
-        event.SetOldSelection(m_selection);
-        event.SetEventObject(this);
-        if ( !GetEventHandler()->ProcessEvent(event) || event.IsAllowed() )
-        {
-            if ( m_selection != wxNOT_FOUND )
-                m_pages[m_selection]->Hide();
-
-            wxWindow *page = m_pages[n];
-            page->SetSize(GetPageRect());
-            page->Show();
-
-            // change m_selection now to ignore the selection change event
-            m_selection = n;
-            GetListView()->Select(n);
-            GetListView()->Focus(n);
-
-            // program allows the page change
-            event.SetEventType(wxEVT_COMMAND_LISTBOOK_PAGE_CHANGED);
-            (void)GetEventHandler()->ProcessEvent(event);
-        }
-    }
-
-    return oldSel;
+    wxListbookEvent event(wxEVT_COMMAND_LISTBOOK_PAGE_CHANGING, m_windowId);
+    return wxBookCtrlBase::DoSetSelection(n, flags, event);
 }
 
 // ----------------------------------------------------------------------------

@@ -233,7 +233,7 @@ wxNotebook::~wxNotebook()
 // wxNotebook page switching
 // ----------------------------------------------------------------------------
 
-int wxNotebook::SetSelection(size_t nPage)
+int wxNotebook::DoSetSelection(size_t nPage, int flags = 0)
 {
     wxCHECK_MSG( IS_VALID_PAGE(nPage), wxNOT_FOUND, _T("invalid notebook page") );
 
@@ -243,15 +243,18 @@ int wxNotebook::SetSelection(size_t nPage)
         return m_sel;
     }
 
-    // event handling
     wxNotebookEvent event(wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING, m_windowId);
-    event.SetSelection(nPage);
-    event.SetOldSelection(m_sel);
-    event.SetEventObject(this);
-    if ( GetEventHandler()->ProcessEvent(event) && !event.IsAllowed() )
+    if (flags & SetSelection_SendEvent)
     {
-        // program doesn't allow the page change
-        return m_sel;
+        // event handling
+        event.SetSelection(nPage);
+        event.SetOldSelection(m_sel);
+        event.SetEventObject(this);
+        if ( GetEventHandler()->ProcessEvent(event) && !event.IsAllowed() )
+        {
+            // program doesn't allow the page change
+            return m_sel;
+        }
     }
 
     // we need to change m_sel first, before calling RefreshTab() below as
@@ -297,9 +300,12 @@ int wxNotebook::SetSelection(size_t nPage)
         m_pages[m_sel]->Show();
     }
 
-    // event handling
-    event.SetEventType(wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED);
-    GetEventHandler()->ProcessEvent(event);
+    if (flags & SetSelection_SendEvent)
+    {
+        // event handling
+        event.SetEventType(wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED);
+        GetEventHandler()->ProcessEvent(event);
+    }
 
     return selOld;
 }

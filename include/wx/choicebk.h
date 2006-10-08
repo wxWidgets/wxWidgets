@@ -20,6 +20,10 @@
 
 class WXDLLEXPORT wxChoice;
 
+extern WXDLLIMPEXP_CORE const wxEventType wxEVT_COMMAND_CHOICEBOOK_PAGE_CHANGED;
+extern WXDLLIMPEXP_CORE const wxEventType wxEVT_COMMAND_CHOICEBOOK_PAGE_CHANGING;
+
+
 // ----------------------------------------------------------------------------
 // wxChoicebook
 // ----------------------------------------------------------------------------
@@ -64,7 +68,8 @@ public:
                             const wxString& text,
                             bool bSelect = false,
                             int imageId = -1);
-    virtual int SetSelection(size_t n);
+    virtual int SetSelection(size_t n) { return DoSetSelection(n, SetSelection_SendEvent); }
+    virtual int ChangeSelection(size_t n) { return DoSetSelection(n); }
     virtual void SetImageList(wxImageList *imageList);
 
     virtual bool DeleteAllPages();
@@ -77,6 +82,19 @@ protected:
 
     // get the size which the choice control should have
     virtual wxSize GetControllerSize() const;
+
+    int DoSetSelection(size_t nPage, int flags = 0);
+
+    void UpdateSelectedPage(size_t newsel)
+    {
+        m_selection = newsel;
+        GetChoiceCtrl()->Select(newsel);
+    }
+
+    void MakeChangedEvent(wxBookCtrlBaseEvent &event)
+    {
+        event.SetEventType(wxEVT_COMMAND_CHOICEBOOK_PAGE_CHANGED);
+    }
 
     // event handlers
     void OnChoiceSelected(wxCommandEvent& event);
@@ -115,9 +133,6 @@ public:
 private:
     DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxChoicebookEvent)
 };
-
-extern WXDLLIMPEXP_CORE const wxEventType wxEVT_COMMAND_CHOICEBOOK_PAGE_CHANGED;
-extern WXDLLIMPEXP_CORE const wxEventType wxEVT_COMMAND_CHOICEBOOK_PAGE_CHANGING;
 
 typedef void (wxEvtHandler::*wxChoicebookEventFunction)(wxChoicebookEvent&);
 

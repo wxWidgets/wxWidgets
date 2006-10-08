@@ -209,39 +209,10 @@ int wxChoicebook::GetSelection() const
     return m_selection;
 }
 
-int wxChoicebook::SetSelection(size_t n)
+int wxChoicebook::DoSetSelection(size_t n, int flags)
 {
-    wxCHECK_MSG( IS_VALID_PAGE(n), wxNOT_FOUND,
-                 wxT("invalid page index in wxChoicebook::SetSelection()") );
-
-    const int oldSel = m_selection;
-
-    if ( int(n) != m_selection )
-    {
-        wxChoicebookEvent event(wxEVT_COMMAND_CHOICEBOOK_PAGE_CHANGING, m_windowId);
-        event.SetSelection(n);
-        event.SetOldSelection(m_selection);
-        event.SetEventObject(this);
-        if ( !GetEventHandler()->ProcessEvent(event) || event.IsAllowed() )
-        {
-            if ( m_selection != wxNOT_FOUND )
-                m_pages[m_selection]->Hide();
-
-            wxWindow *page = m_pages[n];
-            page->SetSize(GetPageRect());
-            page->Show();
-
-            // change m_selection now to ignore the selection change event
-            m_selection = n;
-            GetChoiceCtrl()->Select(n);
-
-            // program allows the page change
-            event.SetEventType(wxEVT_COMMAND_CHOICEBOOK_PAGE_CHANGED);
-            (void)GetEventHandler()->ProcessEvent(event);
-        }
-    }
-
-    return oldSel;
+    wxChoicebookEvent event(wxEVT_COMMAND_CHOICEBOOK_PAGE_CHANGING, m_windowId);
+    return wxBookCtrlBase::DoSetSelection(n, flags, event);
 }
 
 // ----------------------------------------------------------------------------
