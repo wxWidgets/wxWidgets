@@ -102,13 +102,8 @@ protected:
     void OnIdle(wxIdleEvent& event);
 
     int DoSetSelection(size_t nPage, int flags = 0);
-
-    void UpdateSelectedPage(size_t newsel)
-    {
-        m_selection = newsel;
-        GetToolBar()->ToggleTool(newsel + 1, true);
-    }
-
+    void UpdateSelectedPage(size_t newsel);
+    
     void MakeChangedEvent(wxBookCtrlBaseEvent &event)
     {
         event.SetEventType(wxEVT_COMMAND_TOOLBOOK_PAGE_CHANGED);

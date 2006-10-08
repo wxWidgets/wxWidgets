@@ -251,6 +251,12 @@ int wxToolbook::DoSetSelection(size_t n, int flags)
     return wxBookCtrlBase::DoSetSelection(n, flags, event);
 }
 
+void wxToolbook::UpdateSelectedPage(size_t newsel)
+{
+    m_selection = newsel;
+    GetToolBar()->ToggleTool(newsel + 1, true);
+}
+
 // Not part of the wxBookctrl API, but must be called in OnIdle or
 // by application to realize the toolbar and select the initial page.
 void wxToolbook::Realize()
