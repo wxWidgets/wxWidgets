@@ -634,6 +634,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/common/valtext.cpp
     src/common/wincmn.cpp
     src/common/xpmdecod.cpp
+    src/generic/aboutdlgg.cpp
     src/generic/busyinfo.cpp
     src/generic/buttonbar.cpp
     src/generic/choicdgg.cpp
@@ -665,6 +666,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/vscroll.cpp
 </set>
 <set var="GUI_CMN_HDR" hints="files">
+    wx/aboutdlg.h
     wx/bmpbuttn.h
     wx/brush.h
     wx/button.h
@@ -692,6 +694,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/gauge.h
     wx/gbsizer.h
     wx/gdicmn.h
+    wx/generic/aboutdlgg.h
     wx/generic/accel.h
     wx/generic/buttonbar.h
     wx/generic/choicdgg.h
@@ -1508,6 +1511,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <set var="MSW_SRC" hints="files">
     src/generic/statusbr.cpp
     src/generic/prntdlgg.cpp
+    src/msw/aboutdlg.cpp
     src/msw/accel.cpp
     src/msw/bmpbuttn.cpp
     src/msw/button.cpp
