@@ -17,6 +17,7 @@
 #if wxUSE_CHOICEBOOK
 
 #include "wx/bookctrl.h"
+#include "wx/choice.h"
 
 class WXDLLEXPORT wxChoice;
 
