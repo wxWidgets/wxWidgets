@@ -769,7 +769,7 @@ wxBitmap BitmapComboBoxWidgetsPage::QueryBitmap(wxString* pStr)
                                        wxT(""),
                                        wxT(""),
                                        wxT("*.*"),
-                                       wxOPEN | wxFILE_MUST_EXIST,
+                                       wxFD_OPEN | wxFD_FILE_MUST_EXIST,
                                        this);
 
     wxBitmap bitmap;

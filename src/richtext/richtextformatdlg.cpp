@@ -18,6 +18,8 @@
 
 #if wxUSE_RICHTEXT
 
+#include "wx/richtext/richtextformatdlg.h"
+
 #ifndef WX_PRECOMP
     #include "wx/listbox.h"
     #include "wx/combobox.h"
@@ -41,7 +43,6 @@
 #include "wx/module.h"
 #include "wx/imaglist.h"
 
-#include "wx/richtext/richtextformatdlg.h"
 #include "wx/richtext/richtextctrl.h"
 #include "wx/richtext/richtextstyles.h"
 
@@ -88,7 +89,7 @@ bool wxRichTextFormattingDialog::Create(long flags, wxWindow* parent, const wxSt
     GetFormattingDialogFactory()->SetSheetStyle(this);
 
     wxPropertySheetDialog::Create(parent, id, title, pos, sz,
-        style | (int)wxPlatform::IfNot(wxWinCE, resizeBorder)
+        style | (int)wxPlatform::IfNot(wxOS_WINDOWS_CE, resizeBorder)
     );
 
     GetFormattingDialogFactory()->CreateButtons(this);
