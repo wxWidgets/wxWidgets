@@ -16,6 +16,7 @@
 
 #include "wx/stream.h"
 #include "wx/image.h"
+#include "wx/colour.h"
 
 /*
 
