@@ -174,7 +174,7 @@ void wxStringBase::InitWith(const wxChar *psz, size_t nPos, size_t nLength)
 // poor man's iterators are "void *" pointers
 wxStringBase::wxStringBase(const void *pStart, const void *pEnd)
 {
-  if ( pEnd > pStart )
+  if ( pEnd >= pStart )
   {
     InitWith((const wxChar *)pStart, 0,
              (const wxChar *)pEnd - (const wxChar *)pStart);
