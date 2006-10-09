@@ -157,7 +157,15 @@ bool wxTextFile::OnRead(const wxMBConv& conv)
                 // could be a DOS or Unix EOL
                 if ( chLast == '\r' )
                 {
-                    AddLine(wxString(lineStart, p - 1), wxTextFileType_Dos);
+                    if ( p - 1 >= lineStart )
+                    {
+                        AddLine(wxString(lineStart, p - 1), wxTextFileType_Dos);
+                    }
+                    else
+                    {
+                        // there were two line endings, so add an empty line:
+                        AddLine(wxEmptyString, wxTextFileType_Dos);
+                    }
                 }
                 else // bare '\n', Unix style
                 {
@@ -182,7 +190,15 @@ bool wxTextFile::OnRead(const wxMBConv& conv)
                 if ( chLast == '\r' )
                 {
                     // Mac line termination
-                    AddLine(wxString(lineStart, p - 1), wxTextFileType_Mac);
+                    if ( p - 1 >= lineStart )
+                    {
+                        AddLine(wxString(lineStart, p - 1), wxTextFileType_Mac);
+                    }
+                    else
+                    {
+                        // there were two line endings, so add an empty line:
+                        AddLine(wxEmptyString, wxTextFileType_Mac);
+                    }
                     lineStart = p;
                 }
         }
