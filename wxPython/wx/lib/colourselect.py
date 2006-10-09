@@ -60,7 +60,7 @@ EVT_COLOURSELECT = wx.PyEventBinder(wxEVT_COMMAND_COLOURSELECT, 1)
 #----------------------------------------------------------------------------
 
 class ColourSelect(wx.BitmapButton):
-    def __init__(self, parent, id, label="", colour=wx.BLACK,
+    def __init__(self, parent, id=wx.ID_ANY, label="", colour=wx.BLACK,
                  pos=wx.DefaultPosition, size=wx.DefaultSize,
                  callback=None, style=0):
         if label:
