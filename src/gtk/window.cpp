@@ -3822,11 +3822,9 @@ bool wxWindowGTK::DoIsExposed( int x, int y ) const
 
 bool wxWindowGTK::DoIsExposed( int x, int y, int w, int h ) const
 {
-#if 0
     if (GetLayoutDirection() == wxLayout_RightToLeft)
         return m_updateRegion.Contains(x-w, y, w, h) != wxOutRegion;
     else
-#endif
         return m_updateRegion.Contains(x, y, w, h) != wxOutRegion;
 }
 
