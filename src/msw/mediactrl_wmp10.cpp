@@ -50,7 +50,7 @@
 #pragma hdrstop
 #endif
 
-#if wxUSE_MEDIACTRL
+#if wxUSE_MEDIACTRL && wxUSE_ACTIVEX
 
 #include "wx/mediactrl.h"
 
@@ -1509,4 +1509,4 @@ bool MyApp::OnInit()
 
 #endif // WMP mobile 9 hacks
 
-#endif // wxUSE_MEDIACTRL
+#endif // wxUSE_MEDIACTRL && wxUSE_ACTIVEX

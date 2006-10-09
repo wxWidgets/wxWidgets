@@ -56,7 +56,7 @@
 #pragma warning (disable:4310)
 #endif
 
-#if wxUSE_MEDIACTRL
+#if wxUSE_MEDIACTRL && wxUSE_ACTIVEX
 
 #include "wx/mediactrl.h"
 
@@ -2270,4 +2270,4 @@ void wxAMMediaEvtHandler::OnActiveX(wxActiveXEvent& event)
 #include "wx/html/forcelnk.h"
 FORCE_LINK_ME(wxmediabackend_am)
 
-#endif // wxUSE_MEDIACTRL
+#endif // wxUSE_MEDIACTRL && wxUSE_ACTIVEX
