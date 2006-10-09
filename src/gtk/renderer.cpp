@@ -192,6 +192,10 @@ wxRendererGTK::DrawHeaderButton(wxWindow *win,
 
     GtkWidget *button = GetButtonWidget();
 
+    GdkWindow* gdk_window = dc.GetGDKWindow();
+    wxASSERT_MSG( gdk_window,
+                  wxT("cannot use wxRendererNative on wxDC of this type") );
+
     int x_diff = 0;
     if (win->GetLayoutDirection() == wxLayout_RightToLeft)
         x_diff = rect.width;
@@ -199,9 +203,7 @@ wxRendererGTK::DrawHeaderButton(wxWindow *win,
     gtk_paint_box
     (
         button->style,
-        // FIXME: I suppose GTK_PIZZA(win->m_wxwindow)->bin_window doesn't work with wxMemoryDC.
-        //   Maybe use code similar as in DrawPushButton below?
-        GTK_PIZZA(win->m_wxwindow)->bin_window,
+        gdk_window,
         flags & wxCONTROL_DISABLED ? GTK_STATE_INSENSITIVE : GTK_STATE_NORMAL,
         GTK_SHADOW_OUT,
         NULL,
@@ -220,6 +222,10 @@ wxRendererGTK::DrawTreeItemButton(wxWindow* win,
 {
     GtkWidget *tree = GetTreeWidget();
 
+    GdkWindow* gdk_window = dc.GetGDKWindow();
+    wxASSERT_MSG( gdk_window,
+                  wxT("cannot use wxRendererNative on wxDC of this type") );
+
     GtkStateType state;
     if ( flags & wxCONTROL_CURRENT )
         state = GTK_STATE_PRELIGHT;
@@ -229,13 +235,13 @@ wxRendererGTK::DrawTreeItemButton(wxWindow* win,
     int x_diff = 0;
     if (win->GetLayoutDirection() == wxLayout_RightToLeft)
         x_diff = rect.width;
-        
+
     // VZ: I don't know how to get the size of the expander so as to centre it
     //     in the given rectangle, +2/3 below is just what looks good here...
     gtk_paint_expander
     (
         tree->style,
-        GTK_PIZZA(win->m_wxwindow)->bin_window,
+        gdk_window,
         state,
         NULL,
         tree,
@@ -299,6 +305,10 @@ wxRendererGTK::DrawSplitterSash(wxWindow *win,
         return;
     }
 
+    GdkWindow* gdk_window = dc.GetGDKWindow();
+    wxASSERT_MSG( gdk_window,
+                  wxT("cannot use wxRendererNative on wxDC of this type") );
+
     wxCoord full_size = GetGtkSplitterFullSize();
 
     // are we drawing vertical or horizontal splitter?
@@ -332,7 +342,7 @@ wxRendererGTK::DrawSplitterSash(wxWindow *win,
     gtk_paint_handle
     (
         win->m_wxwindow->style,
-        GTK_PIZZA(win->m_wxwindow)->bin_window,
+        gdk_window,
         flags & wxCONTROL_CURRENT ? GTK_STATE_PRELIGHT : GTK_STATE_NORMAL,
         GTK_SHADOW_NONE,
         NULL /* no clipping */,
@@ -347,7 +357,7 @@ wxRendererGTK::DrawSplitterSash(wxWindow *win,
 }
 
 void
-wxRendererGTK::DrawDropArrow(wxWindow *win,
+wxRendererGTK::DrawDropArrow(wxWindow *WXUNUSED(win),
                              wxDC& dc,
                              const wxRect& rect,
                              int flags)
@@ -359,11 +369,9 @@ wxRendererGTK::DrawDropArrow(wxWindow *win,
     // work for wxMemoryDC. So that is why we assume wxDC
     // is wxWindowDC (wxClientDC, wxMemoryDC and wxPaintDC
     // are derived from it) and use its m_window.
-    wxWindowDC& wdc = (wxWindowDC&)dc;
-
-    // only doing debug-time checking here (it should
-    // probably be enough)
-    wxASSERT ( wdc.IsKindOf(CLASSINFO(wxWindowDC)) );
+    GdkWindow* gdk_window = dc.GetGDKWindow();
+    wxASSERT_MSG( gdk_window,
+                  wxT("cannot use wxRendererNative on wxDC of this type") );
 
     // draw arrow so that there is even space horizontally
     // on both sides
@@ -390,7 +398,7 @@ wxRendererGTK::DrawDropArrow(wxWindow *win,
     gtk_paint_arrow
     (
         button->style,
-        wdc.m_window,
+        gdk_window,
         state,
         flags & wxCONTROL_PRESSED ? GTK_SHADOW_IN : GTK_SHADOW_OUT,
         NULL,
@@ -416,7 +424,7 @@ wxRendererGTK::DrawComboBoxDropButton(wxWindow *win,
 }
 
 void
-wxRendererGTK::DrawCheckBox(wxWindow *win,
+wxRendererGTK::DrawCheckBox(wxWindow *WXUNUSED(win),
                             wxDC& dc,
                             const wxRect& rect,
                             int flags )
@@ -424,8 +432,9 @@ wxRendererGTK::DrawCheckBox(wxWindow *win,
     GtkWidget *button = GetCheckButtonWidget();
 
     // for reason why we do this, see DrawDropArrow
-    wxWindowDC& wdc = (wxWindowDC&)dc;
-    wxASSERT ( wdc.IsKindOf(CLASSINFO(wxWindowDC)) );
+    GdkWindow* gdk_window = dc.GetGDKWindow();
+    wxASSERT_MSG( gdk_window,
+                  wxT("cannot use wxRendererNative on wxDC of this type") );
 
     GtkStateType state;
 
@@ -441,7 +450,7 @@ wxRendererGTK::DrawCheckBox(wxWindow *win,
     gtk_paint_check
     (
         button->style,
-        wdc.m_window,
+        gdk_window,
         state,
         flags & wxCONTROL_CHECKED ? GTK_SHADOW_IN : GTK_SHADOW_OUT,
         NULL,
@@ -454,7 +463,7 @@ wxRendererGTK::DrawCheckBox(wxWindow *win,
 }
 
 void
-wxRendererGTK::DrawPushButton(wxWindow *win,
+wxRendererGTK::DrawPushButton(wxWindow *WXUNUSED(win),
                               wxDC& dc,
                               const wxRect& rect,
                               int flags)
@@ -462,8 +471,9 @@ wxRendererGTK::DrawPushButton(wxWindow *win,
     GtkWidget *button = GetButtonWidget();
 
     // for reason why we do this, see DrawDropArrow
-    wxWindowDC& wdc = (wxWindowDC&)dc;
-    wxASSERT ( wdc.IsKindOf(CLASSINFO(wxWindowDC)) );
+    GdkWindow* gdk_window = dc.GetGDKWindow();
+    wxASSERT_MSG( gdk_window,
+                  wxT("cannot use wxRendererNative on wxDC of this type") );
 
     // draw button
     GtkStateType state;
@@ -480,7 +490,7 @@ wxRendererGTK::DrawPushButton(wxWindow *win,
     gtk_paint_box
     (
         button->style,
-        wdc.m_window,
+        gdk_window,
         state,
         flags & wxCONTROL_PRESSED ? GTK_SHADOW_IN : GTK_SHADOW_OUT,
         NULL,
@@ -496,6 +506,10 @@ wxRendererGTK::DrawItemSelectionRect(wxWindow *win,
                                      const wxRect& rect,
                                      int flags )
 {
+    GdkWindow* gdk_window = dc.GetGDKWindow();
+    wxASSERT_MSG( gdk_window,
+                  wxT("cannot use wxRendererNative on wxDC of this type") );
+
     GtkStateType state;
     if (flags & wxCONTROL_SELECTED)
     {
@@ -505,7 +519,7 @@ wxRendererGTK::DrawItemSelectionRect(wxWindow *win,
             state = GTK_STATE_INSENSITIVE;
 
         gtk_paint_flat_box( win->m_wxwindow->style,
-                        GTK_PIZZA(win->m_wxwindow)->bin_window,
+                        gdk_window,
                         state,
                         GTK_SHADOW_NONE,
                         NULL,

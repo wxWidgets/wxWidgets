@@ -287,9 +287,6 @@ private:
     // the selection bg colour
     wxColour m_colBgSel;
 
-    // double buffer
-    wxBitmap* m_doubleBuffer;
-
     DECLARE_EVENT_TABLE()
     DECLARE_NO_COPY_CLASS(wxVListBox)
     DECLARE_ABSTRACT_CLASS(wxVListBox)

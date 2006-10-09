@@ -64,7 +64,6 @@ void wxVListBox::Init()
     m_current =
     m_anchor = wxNOT_FOUND;
     m_selStore = NULL;
-    m_doubleBuffer = NULL;
 }
 
 bool wxVListBox::Create(wxWindow *parent,
@@ -94,7 +93,6 @@ bool wxVListBox::Create(wxWindow *parent,
 
 wxVListBox::~wxVListBox()
 {
-    delete m_doubleBuffer;
     delete m_selStore;
 }
 
@@ -360,18 +358,9 @@ void wxVListBox::OnDrawBackground(wxDC& dc, const wxRect& rect, size_t n) const
 
 void wxVListBox::OnPaint(wxPaintEvent& WXUNUSED(event))
 {
-    // If size is larger, recalculate double buffer bitmap
     wxSize clientSize = GetClientSize();
 
-    if ( !m_doubleBuffer ||
-         clientSize.x > m_doubleBuffer->GetWidth() ||
-         clientSize.y > m_doubleBuffer->GetHeight() )
-    {
-        delete m_doubleBuffer;
-        m_doubleBuffer = new wxBitmap(clientSize.x+25,clientSize.y+25);
-    }
-
-    wxBufferedPaintDC dc(this,*m_doubleBuffer);
+    wxAutoBufferedPaintDC dc(this);
 
     // the update rectangle
     wxRect rectUpdate = GetUpdateClientRect();

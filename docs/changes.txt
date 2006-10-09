@@ -76,6 +76,7 @@ All (GUI):
   consistency with wxRichTextCtrl.
 - wxRichTextCtrl: fixed range out-by-one bug to be consistent with wxTextCtrl API,
   fixed some attribute bugs and added wxRichTextStyleComboCtrl.
+- Added wxWindow::IsDoubleBuffered()
 
 wxMSW:
 

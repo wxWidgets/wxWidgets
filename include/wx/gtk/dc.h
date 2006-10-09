@@ -94,6 +94,8 @@ public:
 
     virtual void ComputeScaleAndOrigin();
 
+    virtual GdkWindow* GetGDKWindow() const { return NULL; }
+
 protected:
     // implementation
     // --------------

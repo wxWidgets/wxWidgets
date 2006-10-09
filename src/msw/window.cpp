@@ -3950,6 +3950,20 @@ bool wxWindowMSW::HandlePower(WXWPARAM WXUNUSED_IN_WINCE(wParam),
 #endif
 }
 
+bool wxWindowMSW::IsDoubleBuffered() const
+{
+    const wxWindow* wnd = this;
+
+    while ( wnd )
+    {
+        if ( ::GetWindowLong((HWND)wnd->GetHWND(), GWL_EXSTYLE) & WS_EX_COMPOSITED )
+            return true;
+        wnd = wnd->GetParent();
+    }
+
+    return false;
+}
+
 // ---------------------------------------------------------------------------
 // owner drawn stuff
 // ---------------------------------------------------------------------------

@@ -1495,6 +1495,19 @@ to the dialog via validators.
 Resets the cached best size value so it will be recalculated the next time it is needed.
 
 
+\membersection{wxWindow::IsDoubleBuffered}\label{wxwindowisdoublebuffered}
+
+\constfunc{virtual bool}{IsDoubleBuffered}{\void}
+
+Returns \true if the window contents is double-buffered by the system, i.e. if
+any drawing done on the window is really done on a temporary backing surface
+and transferred to the screen all at once later.
+
+\wxheading{See also}
+
+\helpref{wxBufferedDC}{wxbuffereddc}
+
+
 \membersection{wxWindow::IsEnabled}\label{wxwindowisenabled}
 
 \constfunc{virtual bool}{IsEnabled}{\void}

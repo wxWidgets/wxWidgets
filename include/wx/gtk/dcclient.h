@@ -99,6 +99,8 @@ public:
     virtual void SetDeviceOrigin( wxCoord x, wxCoord y );
     virtual void SetAxisOrientation( bool xLeftRight, bool yBottomUp );
 
+    virtual GdkWindow* GetGDKWindow() const { return m_window; }
+
 // protected:
     // implementation
     // --------------

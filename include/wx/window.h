@@ -725,6 +725,9 @@ public:
         // adjust DC for drawing on this window
     virtual void PrepareDC( wxDC & WXUNUSED(dc) ) { }
 
+        // return true if the window contents is double buffered by the system
+    virtual bool IsDoubleBuffered() const { return false; }
+
         // the update region of the window contains the areas which must be
         // repainted by the program
     const wxRegion& GetUpdateRegion() const { return m_updateRegion; }

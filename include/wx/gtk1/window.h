@@ -108,6 +108,8 @@ public:
     virtual void SetDropTarget( wxDropTarget *dropTarget );
 #endif // wxUSE_DRAG_AND_DROP
 
+    virtual bool IsDoubleBuffered() const { return false; }
+
     // implementation
     // --------------
 

@@ -66,6 +66,8 @@ public:
 
     virtual void ComputeScaleAndOrigin();
 
+    virtual GdkWindow* GetGDKWindow() const { return NULL; }
+
     wxCoord XDEV2LOG(wxCoord x) const
     {
         wxCoord new_x = x - m_deviceOriginX;

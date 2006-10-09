@@ -199,6 +199,8 @@ public:
     virtual bool Close( bool force = false );
     virtual bool Show( bool show = true );
     virtual bool Enable( bool enable = true );
+
+    virtual bool IsDoubleBuffered() const { return true; }
 };
 
 #endif // __WX_COCOA_WINDOW_H__

@@ -35,6 +35,7 @@
 #include "wx/calctrl.h"
 #include "wx/popupwin.h"
 #include "wx/renderer.h"
+#include "wx/dcbuffer.h"
 #include "wx/icon.h"
 
 //-----------------------------------------------------------------------------
@@ -682,6 +683,7 @@ wxDataViewHeaderWindow::wxDataViewHeaderWindow( wxDataViewCtrl *parent, wxWindow
     m_resizeCursor = new wxCursor( wxCURSOR_SIZEWE );
 
     wxVisualAttributes attr = wxPanel::GetClassDefaultAttributes();
+    SetBackgroundStyle( wxBG_STYLE_CUSTOM );
     SetOwnForegroundColour( attr.colFg );
     SetOwnBackgroundColour( attr.colBg );
     if (!m_hasFont)
@@ -698,7 +700,10 @@ void wxDataViewHeaderWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
     int w, h;
     GetClientSize( &w, &h );
 
-    wxPaintDC dc( this );
+    wxAutoBufferedPaintDC dc( this );
+
+    dc.SetBackground(GetBackgroundColour());
+    dc.Clear();
 
     int xpix;
     m_owner->GetScrollPixelsPerUnit( &xpix, NULL );
@@ -953,6 +958,7 @@ wxDataViewMainWindow::wxDataViewMainWindow( wxDataViewCtrl *parent, wxWindowID i
 
     m_hasFocus = false;
 
+    SetBackgroundStyle( wxBG_STYLE_CUSTOM );
     SetBackgroundColour( *wxWHITE );
 
     UpdateDisplay();
@@ -1094,7 +1100,10 @@ void wxDataViewMainWindow::ScrollWindow( int dx, int dy, const wxRect *rect )
 
 void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
 {
-    wxPaintDC dc( this );
+    wxAutoBufferedPaintDC dc( this );
+
+    dc.SetBackground(GetBackgroundColour());
+    dc.Clear();
 
     GetOwner()->PrepareDC( dc );
 

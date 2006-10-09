@@ -124,6 +124,7 @@ public:
 
     // currently wxGTK2-only
     void SetDoubleBuffered(bool on);
+    virtual bool IsDoubleBuffered() const;
 
     // implementation
     // --------------

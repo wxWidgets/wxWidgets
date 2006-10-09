@@ -109,6 +109,8 @@ public:
 
     void OnInternalIdle();
 
+    virtual bool IsDoubleBuffered() const { return true; }
+
 protected:
     // implement the base class pure virtuals
     virtual void DoClientToScreen(int *x, int *y) const;

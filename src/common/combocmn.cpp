@@ -35,7 +35,6 @@
     #include "wx/timer.h"
 #endif
 
-#include "wx/dcbuffer.h"
 #include "wx/tooltip.h"
 
 #include "wx/combo.h"
@@ -610,9 +609,6 @@ END_EVENT_TABLE()
 
 IMPLEMENT_ABSTRACT_CLASS(wxComboCtrlBase, wxControl)
 
-// Have global double buffer - should be enough for multiple combos
-static wxBitmap* gs_doubleBuffer = (wxBitmap*) NULL;
-
 void wxComboCtrlBase::Init()
 {
     m_winPopup = (wxWindow *)NULL;
@@ -736,9 +732,6 @@ wxComboCtrlBase::~wxComboCtrlBase()
 {
     if ( HasCapture() )
         ReleaseMouse();
-
-    delete gs_doubleBuffer;
-    gs_doubleBuffer = (wxBitmap*) NULL;
 
 #if INSTALL_TOPLEV_HANDLER
     delete ((wxComboFrameEventHandler*)m_toplevEvtHandler);
@@ -1236,19 +1229,6 @@ void wxComboCtrlBase::RecalcAndRefresh()
         GetEventHandler()->ProcessEvent(evt);
         Refresh();
     }
-}
-
-wxBitmap& wxComboCtrlBase::GetBufferBitmap( const wxSize& sz ) const
-{
-    // If size is larger, recalculate double buffer bitmap
-    if ( !gs_doubleBuffer ||
-         sz.x > gs_doubleBuffer->GetWidth() ||
-         sz.y > gs_doubleBuffer->GetHeight() )
-    {
-        delete gs_doubleBuffer;
-        gs_doubleBuffer = new wxBitmap(sz.x+25,sz.y);
-    }
-    return *gs_doubleBuffer;
 }
 
 // ----------------------------------------------------------------------------

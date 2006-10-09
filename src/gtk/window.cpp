@@ -3935,6 +3935,11 @@ void wxWindowGTK::SetDoubleBuffered( bool on )
         gtk_widget_set_double_buffered( m_wxwindow, on );
 }
 
+bool wxWindowGTK::IsDoubleBuffered() const
+{
+    return GTK_WIDGET_DOUBLE_BUFFERED( m_wxwindow );
+}
+
 void wxWindowGTK::ClearBackground()
 {
     wxCHECK_RET( m_widget != NULL, wxT("invalid window") );

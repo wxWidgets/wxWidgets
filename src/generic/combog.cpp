@@ -201,7 +201,7 @@ void wxGenericComboCtrl::OnResize()
 void wxGenericComboCtrl::OnPaintEvent( wxPaintEvent& WXUNUSED(event) )
 {
     wxSize sz = GetClientSize();
-    wxBufferedPaintDC dc(this,GetBufferBitmap(sz));
+    wxAutoBufferedPaintDC dc(this);
 
     const wxRect& rectb = m_btnArea;
     wxRect rect = m_tcArea;

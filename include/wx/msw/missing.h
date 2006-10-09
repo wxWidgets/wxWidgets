@@ -126,6 +126,10 @@
 #define WS_EX_LAYOUTRTL 0x00400000
 #endif
 
+#ifndef WS_EX_COMPOSITED
+#define WS_EX_COMPOSITED 0x02000000L
+#endif
+
 #ifndef WS_EX_LAYERED
 #define WS_EX_LAYERED 0x00080000
 #endif

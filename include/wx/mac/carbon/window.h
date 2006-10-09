@@ -142,6 +142,8 @@ public:
 
     bool AcceptsFocus() const;
 
+    virtual bool IsDoubleBuffered() const { return true; }
+
 public:
     static long         MacRemoveBordersFromStyle( long style ) ;
 

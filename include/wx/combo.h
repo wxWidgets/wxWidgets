@@ -434,9 +434,6 @@ protected:
     virtual void DoSetToolTip( wxToolTip *tip );
 #endif
 
-    // Used by OnPaints of derived classes
-    wxBitmap& GetBufferBitmap(const wxSize& sz) const;
-
     // This is used when m_text is hidden (readonly).
     wxString                m_valueString;
 

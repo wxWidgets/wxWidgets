@@ -309,11 +309,9 @@ wxRendererGTK::DrawDropArrow(wxWindow *win,
     // work for wxMemoryDC. So that is why we assume wxDC
     // is wxWindowDC (wxClientDC, wxMemoryDC and wxPaintDC
     // are derived from it) and use its m_window.
-    wxWindowDC& wdc = (wxWindowDC&)dc;
-
-    // only doing debug-time checking here (it should
-    // probably be enough)
-    wxASSERT ( wdc.IsKindOf(CLASSINFO(wxWindowDC)) );
+    GdkWindow* gdk_window = dc.GetGDKWindow();
+    wxASSERT_MSG( gdk_window,
+                  wxT("cannot use wxRendererNative on wxDC of this type") );
 
     // draw arrow so that there is even space horizontally
     // on both sides
@@ -340,7 +338,7 @@ wxRendererGTK::DrawDropArrow(wxWindow *win,
     gtk_paint_arrow
     (
         button->style,
-        wdc.m_window,
+        gdk_window,
         state,
         flags & wxCONTROL_PRESSED ? GTK_SHADOW_IN : GTK_SHADOW_OUT,
         NULL,
@@ -364,8 +362,9 @@ wxRendererGTK::DrawComboBoxDropButton(wxWindow *win,
     GtkWidget *button = GetButtonWidget();
 
     // for reason why we do this, see DrawDropArrow
-    wxWindowDC& wdc = (wxWindowDC&)dc;
-    wxASSERT ( wdc.IsKindOf(CLASSINFO(wxWindowDC)) );
+    GdkWindow* gdk_window = dc.GetGDKWindow();
+    wxASSERT_MSG( gdk_window,
+                  wxT("cannot use wxRendererNative on wxDC of this type") );
 
     // draw button
     GtkStateType state;
@@ -382,7 +381,7 @@ wxRendererGTK::DrawComboBoxDropButton(wxWindow *win,
     gtk_paint_box
     (
         button->style,
-        wdc.m_window,
+        gdk_window,
         state,
         flags & wxCONTROL_PRESSED ? GTK_SHADOW_IN : GTK_SHADOW_OUT,
         NULL,

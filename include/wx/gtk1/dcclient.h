@@ -100,6 +100,8 @@ public:
     virtual wxSize GetPPI() const;
     virtual int GetDepth() const;
 
+    virtual GdkWindow* GetGDKWindow() const { return m_window; }
+
     // implementation
     // --------------
 

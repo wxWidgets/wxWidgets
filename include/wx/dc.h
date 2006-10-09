@@ -134,11 +134,6 @@ public:
 
     virtual ~wxDCBase() { }
 
-#if WXWIN_COMPATIBILITY_2_6
-    wxDEPRECATED( virtual void BeginDrawing() );
-    wxDEPRECATED( virtual void EndDrawing() );
-#endif // WXWIN_COMPATIBILITY_2_6
-
     // graphic primitives
     // ------------------
 
@@ -387,6 +382,12 @@ public:
     virtual void StartPage() { }
     virtual void EndPage() { }
 
+#if WXWIN_COMPATIBILITY_2_6
+    wxDEPRECATED( void BeginDrawing() );
+    wxDEPRECATED( void EndDrawing() );
+#endif // WXWIN_COMPATIBILITY_2_6
+
+
     // set objects to use for drawing
     // ------------------------------
 
@@ -503,20 +504,20 @@ public:
     // accessors and setters
     // ---------------------
 
-    int GetBackgroundMode() const { return m_backgroundMode; }
-    const wxBrush&  GetBackground() const { return m_backgroundBrush; }
-    const wxBrush&  GetBrush() const { return m_brush; }
-    const wxFont&   GetFont() const { return m_font; }
-    const wxPen&    GetPen() const { return m_pen; }
+    virtual int GetBackgroundMode() const { return m_backgroundMode; }
+    virtual const wxBrush&  GetBackground() const { return m_backgroundBrush; }
+    virtual const wxBrush&  GetBrush() const { return m_brush; }
+    virtual const wxFont&   GetFont() const { return m_font; }
+    virtual const wxPen&    GetPen() const { return m_pen; }
 
-    const wxColour& GetTextForeground() const { return m_textForegroundColour; }
-    const wxColour& GetTextBackground() const { return m_textBackgroundColour; }
+    virtual const wxColour& GetTextForeground() const { return m_textForegroundColour; }
+    virtual const wxColour& GetTextBackground() const { return m_textBackgroundColour; }
     virtual void SetTextForeground(const wxColour& colour)
         { m_textForegroundColour = colour; }
     virtual void SetTextBackground(const wxColour& colour)
         { m_textBackgroundColour = colour; }
 
-    int GetMapMode() const { return m_mappingMode; }
+    virtual int GetMapMode() const { return m_mappingMode; }
     virtual void SetMapMode(int mode) = 0;
 
     virtual void GetUserScale(double *x, double *y) const
@@ -553,7 +554,7 @@ public:
 
     virtual void SetAxisOrientation(bool xLeftRight, bool yBottomUp) = 0;
 
-    int GetLogicalFunction() const { return m_logicalFunction; }
+    virtual int GetLogicalFunction() const { return m_logicalFunction; }
     virtual void SetLogicalFunction(int function) = 0;
 
 #if WXWIN_COMPATIBILITY_2_4

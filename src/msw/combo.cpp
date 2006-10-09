@@ -388,7 +388,7 @@ void wxComboCtrl::OnPaintEvent( wxPaintEvent& WXUNUSED(event) )
     // TODO: Convert drawing in this function to Windows API Code
 
     wxSize sz = GetClientSize();
-    wxBufferedPaintDC dc(this,GetBufferBitmap(sz));
+    wxAutoBufferedPaintDC dc(this);
 
     const wxRect& rectb = m_btnArea;
     wxRect rect = m_tcArea;

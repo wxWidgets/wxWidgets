@@ -420,6 +420,9 @@ public:
     // check if mouse is in the window
     bool IsMouseInWindow() const;
 
+    // check if a native double-buffering applies for this window
+    virtual bool IsDoubleBuffered() const;
+
     // synthesize a wxEVT_LEAVE_WINDOW event and set m_mouseInWindow to false
     void GenerateMouseLeave();
 
