@@ -33,6 +33,12 @@
 
 #include "wx/apptrait.h"
 
+// global object
+// VERY IMPORTANT: do not use the default constructor since it would
+//                 try to init the wxPlatformInfo instance using
+//                 gs_platInfo itself!
+static wxPlatformInfo gs_platInfo(wxPORT_UNKNOWN);
+
 // ----------------------------------------------------------------------------
 // constants
 // ----------------------------------------------------------------------------
@@ -117,26 +123,8 @@ static unsigned wxGetIndexFromEnumValue(int value)
 
 wxPlatformInfo::wxPlatformInfo()
 {
-    // autodetect all informations
-    const wxAppTraits * const traits = wxTheApp ? wxTheApp->GetTraits() : NULL;
-    if ( !traits )
-    {
-        wxFAIL_MSG( _T("failed to initialize wxPlatformInfo") );
-
-        m_port = wxPORT_UNKNOWN;
-        m_usingUniversal = false;
-        m_tkVersionMajor =
-        m_tkVersionMinor = 0;
-    }
-    else
-    {
-        m_port = traits->GetToolkitVersion(&m_tkVersionMajor, &m_tkVersionMinor);
-        m_usingUniversal = traits->IsUsingUniversalWidgets();
-    }
-
-    m_os = wxGetOsVersion(&m_osVersionMajor, &m_osVersionMinor);
-    m_endian = wxIsPlatformLittleEndian() ? wxENDIAN_LITTLE : wxENDIAN_BIG;
-    m_arch = wxIsPlatform64Bit() ? wxARCH_64 : wxARCH_32;
+    // just copy platform info for currently running platform
+    *this = Get();
 }
 
 wxPlatformInfo::wxPlatformInfo(wxPortId pid, int tkMajor, int tkMinor,
@@ -170,6 +158,45 @@ bool wxPlatformInfo::operator==(const wxPlatformInfo &t) const
            m_arch == t.m_arch &&
            m_endian == t.m_endian;
 }
+
+void wxPlatformInfo::InitForCurrentPlatform()
+{
+    // autodetect all informations
+    const wxAppTraits * const traits = wxTheApp ? wxTheApp->GetTraits() : NULL;
+    if ( !traits )
+    {
+        wxFAIL_MSG( _T("failed to initialize wxPlatformInfo") );
+
+        m_port = wxPORT_UNKNOWN;
+        m_usingUniversal = false;
+        m_tkVersionMajor =
+                m_tkVersionMinor = 0;
+    }
+    else
+    {
+        m_port = traits->GetToolkitVersion(&m_tkVersionMajor, &m_tkVersionMinor);
+        m_usingUniversal = traits->IsUsingUniversalWidgets();
+    }
+
+    m_os = wxGetOsVersion(&m_osVersionMajor, &m_osVersionMinor);
+    m_endian = wxIsPlatformLittleEndian() ? wxENDIAN_LITTLE : wxENDIAN_BIG;
+    m_arch = wxIsPlatform64Bit() ? wxARCH_64 : wxARCH_32;
+}
+
+/* static */
+const wxPlatformInfo& wxPlatformInfo::Get()
+{
+    static bool initialized = false;
+    if ( !initialized )
+    {
+        gs_platInfo.InitForCurrentPlatform();
+        initialized = true;
+    }
+
+    return gs_platInfo;
+}
+
+
 
 // ----------------------------------------------------------------------------
 // wxPlatformInfo - enum -> string conversions

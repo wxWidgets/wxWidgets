@@ -2199,9 +2199,10 @@ void wxWindowBase::OnMiddleClick( wxMouseEvent& event )
         // don't translate these strings, they're for diagnostics purposes only
         wxString msg;
         msg.Printf(_T("wxWidgets Library (%s port)\n")
-                   _T("Version %d.%d.%d%s%s, compiled at %s %s%s\n")
+                   _T("Version %d.%d.%d%s%s, compiled at %s %s\n")
+                   _T("Runtime version of toolkit used is %d.%d.%s\n")
                    _T("Copyright (c) 1995-2006 wxWidgets team"),
-                   wxPlatformInfo().GetPortIdName().c_str(),
+                   wxPlatformInfo::Get().GetPortIdName().c_str(),
                    wxMAJOR_VERSION,
                    wxMINOR_VERSION,
                    wxRELEASE_NUMBER,
@@ -2217,8 +2218,10 @@ void wxWindowBase::OnMiddleClick( wxMouseEvent& event )
 #endif
                    __TDATE__,
                    __TTIME__,
+                   wxPlatformInfo::Get().GetToolkitMajorVersion(),
+                   wxPlatformInfo::Get().GetToolkitMinorVersion(),
 #ifdef __WXGTK__
-                   wxString::Format(_T("\nagainst GTK+ %d.%d.%d. Runtime GTK+ version: %d.%d.%d"), GTK_MAJOR_VERSION, GTK_MINOR_VERSION, GTK_MICRO_VERSION, gtk_major_version, gtk_minor_version, gtk_micro_version).c_str()
+                   wxString::Format(_T("\nThe compile-time GTK+ version is %d.%d.%d."), GTK_MAJOR_VERSION, GTK_MINOR_VERSION, GTK_MICRO_VERSION).c_str()
 #else
                    wxEmptyString
 #endif

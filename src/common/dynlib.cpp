@@ -247,7 +247,7 @@ wxString wxDynamicLibrary::CanonicalizePluginName(const wxString& name,
     wxString suffix;
     if ( cat == wxDL_PLUGIN_GUI )
     {
-        suffix = wxPlatformInfo().GetPortIdShortName();
+        suffix = wxPlatformInfo::Get().GetPortIdShortName();
     }
 #if wxUSE_UNICODE
     suffix << _T('u');

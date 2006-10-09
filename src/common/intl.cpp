@@ -1591,7 +1591,7 @@ bool wxLocale::Init(const wxChar *szName,
     // an error if this does not exist
     if ( bOk )
     {
-      wxString port(wxPlatformInfo().GetPortIdName());
+      wxString port(wxPlatformInfo::Get().GetPortIdName());
       if ( !port.empty() )
       {
         AddCatalog(port.BeforeFirst(wxT('/')).MakeLower());

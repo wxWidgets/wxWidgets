@@ -110,7 +110,8 @@ public:
     virtual GSocketGUIFunctionsTable* GetSocketGUIFunctionsTable() = 0;
 #endif
 
-    // return information about the (native) toolkit currently used;
+    // return information about the (native) toolkit currently used and its
+    // runtime (not compile-time) version.
     // returns wxPORT_BASE for console applications and one of the remaining
     // wxPORT_* values for GUI applications.
     virtual wxPortId GetToolkitVersion(int *majVer, int *minVer) const = 0;

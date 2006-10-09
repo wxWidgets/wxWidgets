@@ -130,6 +130,11 @@ public:
     bool operator!=(const wxPlatformInfo &t) const
         { return !(*this == t); }
 
+    // Gets a wxPlatformInfo already initialized with the values for
+    // the currently running platform.
+    static const wxPlatformInfo& Get();
+
+
 
     // string -> enum conversions
     // ---------------------------------
@@ -245,6 +250,9 @@ protected:
     {
         return majorCur > major || (majorCur == major && minorCur >= minor);
     }
+
+    void InitForCurrentPlatform();
+
 
     // OS stuff
     // -----------------

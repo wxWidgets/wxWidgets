@@ -92,7 +92,8 @@ enum wxPortId
     wxPORT_MAC      = 1 << 7,       // wxMac, using Carbon or Classic Mac API
     wxPORT_COCOA    = 1 << 8,       // wxCocoa, using Cocoa NextStep/Mac API
     wxPORT_WINCE    = 1 << 9,       // wxWinCE, toolkit is WinCE SDK API
-    wxPORT_PALMOS   = 1 << 10       // wxPalmOS, toolkit is PalmOS API
+    wxPORT_PALMOS   = 1 << 10,      // wxPalmOS, toolkit is PalmOS API
+    wxPORT_DFB      = 1 << 11       // wxDFB, using wxUniversal
 };
 \end{verbatim}
 
@@ -135,6 +136,8 @@ enum wxEndianness
 \func{}{wxPlatformInfo}{}
 
 Initializes the instance with the values corresponding to the currently running platform.
+This is a fast operation because it only requires to copy the values internally cached for the
+currently running platform (see also \helpref{Get}{wxplatforminfoget}).
 
 \func{}{wxPlatformInfo}{\param{wxPortId }{pid = wxPORT\_UNKNOWN}, \param{int }{tkMajor = -1}, \param{int }{tkMinor = -1}, \param{wxOperatingSystemId }{id = wxOS\_UNKNOWN}, \param{int }{osMajor = -1}, \param{int }{osMinor = -1}, \param{wxArchitecture }{arch = wxARCH\_INVALID}, \param{wxEndianness }{endian = wxENDIAN\_INVALID}}
 
@@ -167,6 +170,13 @@ Returns \true if the toolkit version is at least \texttt{major.minor}.
 \helpref{GetToolkitMinorVersion}{wxplatforminfogettoolkitminorversion},
 \helpref{CheckOSVersion}{wxplatforminfocheckosversion}
 
+
+
+\membersection{wxPlatformInfo::Get}\label{wxplatforminfoget}
+
+\func{static const wxPlatformInfo\& }{Get}{\void}
+
+Returns the global wxPlatformInfo object, initialized with the values for the currently running platform.
 
 
 \membersection{wxPlatformInfo::GetArch}\label{wxplatforminfogetarch}
@@ -228,7 +238,8 @@ Returns the name for the endianness of this wxPlatformInfo instance.
 
 \constfunc{int}{GetOSMajorVersion}{\void}
 
-Returns the major version of the OS associated with this wxPlatformInfo instance.
+Returns the run-time major version of the OS associated with this wxPlatformInfo instance.
+See \helpref{wxGetOsVersion}{wxgetosversion} for more info.
 
 \wxheading{See also}
 
@@ -239,7 +250,10 @@ Returns the major version of the OS associated with this wxPlatformInfo instance
 
 \constfunc{int}{GetOSMinorVersion}{\void}
 
-Returns the minor version of the OS associated with this wxPlatformInfo instance.
+Returns the run-time minor version of the OS associated with this wxPlatformInfo instance.
+See \helpref{wxGetOsVersion}{wxgetosversion} for more info.
+
+\wxheading{See also}
 
 \helpref{CheckOSVersion}{wxplatforminfocheckosversion}
 
@@ -340,8 +354,11 @@ Returns the short name of the wxWidgets port ID associated with this wxPlatformI
 
 \constfunc{int}{GetToolkitMajorVersion}{\void}
 
-Returns the major version of the toolkit associated with this wxPlatformInfo instance.
-Note that if {GetPortId}{wxplatforminfogetportid} returns wxPORT\_BASE, then this value is zero (unless externally modified with SetToolkitVersion); that is, no native toolkit is in use.
+Returns the run-time major version of the toolkit associated with this wxPlatformInfo instance.
+Note that if \helpref{GetPortId}{wxplatforminfogetportid} returns wxPORT\_BASE, then this value is zero (unless externally modified with \helpref{SetToolkitVersion}{wxplatforminfosettoolkitversion}); that is, no native toolkit is in use.
+
+See \helpref{wxAppTraits::GetToolkitVersion}{wxapptraitsgettoolkitversion} for more info.
+
 
 \wxheading{See also}
 
@@ -352,9 +369,10 @@ Note that if {GetPortId}{wxplatforminfogetportid} returns wxPORT\_BASE, then thi
 
 \constfunc{int}{GetToolkitMinorVersion}{\void}
 
-Returns the minor version of the toolkit associated with this wxPlatformInfo instance.
-Note that if {GetPortId}{wxplatforminfogetportid} returns wxPORT\_BASE, then this value is zero (unless externally modified with SetToolkitVersion); that is, no native toolkit is in use.
+Returns the run-time minor version of the toolkit associated with this wxPlatformInfo instance.
+Note that if \helpref{GetPortId}{wxplatforminfogetportid} returns wxPORT\_BASE, then this value is zero (unless externally modified with \helpref{SetToolkitVersion}{wxplatforminfosettoolkitversion}); that is, no native toolkit is in use.
 
+See \helpref{wxAppTraits::GetToolkitVersion}{wxapptraitsgettoolkitversion} for more info.
 \wxheading{See also}
 
 \helpref{CheckToolkitVersion}{wxplatforminfochecktoolkitversion}
