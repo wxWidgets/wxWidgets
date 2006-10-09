@@ -69,6 +69,19 @@ public:
     wxSizerFlags& Left() { return Align(wxALIGN_LEFT); }
     wxSizerFlags& Right() { return Align(wxALIGN_RIGHT); }
 
+    // default border size used by Border() below
+    static int GetDefaultBorder()
+    {
+#ifdef __SMARTPHONE__
+        // no borders by default on limited size screen
+        return 0;
+#else // !__SMARTPHONE__
+        // FIXME: default border size shouldn't be hardcoded and at the very
+        //        least they should depend on the current font size
+        return 5;
+#endif // __SMARTPHONE__/!__SMARTPHONE__
+    }
+
 
     wxSizerFlags& Border(int direction, int borderInPixels)
     {
@@ -82,14 +95,13 @@ public:
 
     wxSizerFlags& Border(int direction = wxALL)
     {
-        // FIXME: default border size shouldn't be hardcoded
 #ifdef __SMARTPHONE__
         // no borders by default on limited size screen
         wxUnusedVar(direction);
 
         return *this;
 #else
-        return Border(direction, 5);
+        return Border(direction, GetDefaultBorder());
 #endif
     }
 

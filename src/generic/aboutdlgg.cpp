@@ -152,7 +152,7 @@ bool wxGenericAboutDialog::Create(const wxAboutDialogInfo& info)
     wxSizer *sizerTop = new wxBoxSizer(wxVERTICAL);
     sizerTop->Add(sizerIconAndText, wxSizerFlags(1).Expand().Border());
 
-    int defBorder = wxSizerFlags().Border().GetBorderInPixels();
+    const int defBorder = wxSizerFlags::GetDefaultBorder();
     wxSizer *buttonSizer = CreateButtonSizer( wxOK , false, defBorder );
     if(buttonSizer->GetChildren().GetCount() > 0 )
     {

@@ -563,14 +563,14 @@ above.
 
 \func{}{wxSizerFlags}{\param{int }{proportion = 0}}
 
-Creates the wxSizer with the proportion specified by \tt{proportion}.
+Creates the wxSizer with the proportion specified by \arg{proportion}.
 
 
 \membersection{wxSizerFlags::Align}\label{wxsizerflagsalign}
 
 \func{wxSizerFlags\& }{Align}{\param{int }{align = 0}}
 
-Sets the alignment of this wxSizerFlags to \tt{align}.
+Sets the alignment of this wxSizerFlags to \arg{align}.
 
 Note that if this method is not called, the wxSizerFlags has no specified alignment.
 
@@ -585,11 +585,14 @@ Note that if this method is not called, the wxSizerFlags has no specified alignm
 
 \func{wxSizerFlags\& }{Border}{\param{int }{direction}, \param{int }{borderinpixels}}
 
-Sets the wxSizerFlags to have a border of a number of pixels specified by \tt{borderinpixels} with the directions specified by \tt{direction}.
-
 \func{wxSizerFlags\& }{Border}{\param{int }{direction = wxALL}}
 
-Sets the wxSizerFlags to have a border of a default size with the directions specified by \tt{direction}.
+Sets the wxSizerFlags to have a border of a number of pixels specified by
+\arg{borderinpixels} with the directions specified by \arg{direction}.
+
+In the overloaded version without \arg{borderinpixels} parameter, the border of
+default size, as returned by \helpref{GetDefaultBorder}{wxsizerflagsgetdefaultborder},
+is used.
 
 
 \membersection{wxSizerFlags::Center}\label{wxsizerflagscenter}
@@ -613,7 +616,13 @@ Sets the object of the wxSizerFlags to center itself in the area it is given.
 Sets the object of the wxSizerFlags to expand to fill as much area as it can.
 
 
-\membersection{wxSizerFlags::Left}\label{wxsizerflagsleft}
+\membersection{wxSizerFlags::GetDefaultBorder}\label{wxsizerflagsgetdefaultborder}
+
+\func{static int}{GetDefaultBorder}{\void}
+
+Returns the border used by default in \helpref{Border}{wxsizerflagsborder} method.
+
+
 \membersection{wxSizerFlags::Left}\label{wxsizerflagsleft}
 
 \func{wxSizerFlags\& }{Left}{\void}
@@ -629,7 +638,7 @@ Aligns the object to the left, shortcut for \texttt{Align(wxALIGN\_LEFT)}
 
 \func{wxSizerFlags\& }{Proportion}{\param{int }{proportion = 0}}
 
-Sets the proportion of this wxSizerFlags to \tt{proportion}
+Sets the proportion of this wxSizerFlags to \arg{proportion}
 
 
 \membersection{wxSizerFlags::Right}\label{wxsizerflagsright}
