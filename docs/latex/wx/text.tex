@@ -605,6 +605,7 @@ wxMSW and wxGTK2 ports.
 \perlnote{In wxPerl this function takes only the position argument and
 returns a 3-element list \texttt{(result, col, row)}}.
 
+
 \membersection{wxTextCtrl::IsEditable}\label{wxtextctrliseditable}
 
 \constfunc{bool}{IsEditable}{\void}
@@ -613,6 +614,17 @@ Returns {\tt true} if the controls contents may be edited by user (note that it
 always can be changed by the program), i.e. if the control hasn't been put in
 read-only mode by a previous call to
 \helpref{SetEditable}{wxtextctrlseteditable}.
+
+
+\membersection{wxTextCtrl::IsEmpty}\label{wxtextctrlisempty}
+
+\constfunc{bool}{IsEmpty}{\void}
+
+Returns \true if the control is currently empty. This is the same as 
+\texttt{GetValue().empty()} but can be much more efficient for the multiline
+controls containing big amounts of text.
+
+\newsince{2.7.1}
 
 
 \membersection{wxTextCtrl::IsModified}\label{wxtextctrlismodified}
