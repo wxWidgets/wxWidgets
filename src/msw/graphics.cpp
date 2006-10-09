@@ -417,7 +417,7 @@ wxGraphicsPath* wxGDIPlusContext::CreatePath()
 
 void wxGDIPlusContext::Rotate( wxDouble angle ) 
 {
-    m_context->RotateTransform( angle );
+    m_context->RotateTransform( RadToDeg(angle) );
 }
 
 void wxGDIPlusContext::Translate( wxDouble dx , wxDouble dy ) 
