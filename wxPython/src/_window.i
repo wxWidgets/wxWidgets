@@ -1324,6 +1324,13 @@ times that Freeze was before the window will be updated.", "");
         "Call this function to prepare the device context for drawing a
 scrolled image. It sets the device origin according to the current
 scroll position.", "");
+
+    DocDeclStr(
+        virtual bool , IsDoubleBuffered() const,
+        "Returns ``True`` if the window contents is double-buffered by the
+system, i.e. if any drawing done on the window is really done on a
+temporary backing surface and transferred to the screen all at once
+later.", "");
     
 
     DocDeclStr(

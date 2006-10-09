@@ -1338,6 +1338,11 @@ public:
     wxBufferedDC( wxDC* dc,
                   const wxSize& area,
                   int style = wxBUFFER_CLIENT_AREA );
+    wxBufferedDC(wxWindow* win,
+                 wxDC *dc,
+                 const wxSize &area,
+                 int style = wxBUFFER_CLIENT_AREA);
+
 
     DocCtorStr(
         ~wxBufferedDC(),
@@ -1376,8 +1381,6 @@ automatically when it is destroyed.  For example::
         dc = wx.BufferedPaintDC(self, self.buffer)
 
 
-
-
 ", "");
 
 class wxBufferedPaintDC : public wxBufferedDC
@@ -1391,12 +1394,9 @@ public:
         "Create a buffered paint DC.  As with `wx.BufferedDC`, you may either
 provide the bitmap to be used for buffering or let this object create
 one internally (in the latter case, the size of the client part of the
-window is automatically used).
-
-", "");
+window is automatically used).", "");
 
 };
-
 
 //---------------------------------------------------------------------------
 %newgroup
@@ -1513,6 +1513,26 @@ public:
         wxPaintDC(wxWindow* win),
         "Constructor. Pass the window on which you wish to paint.", "");
 };
+
+
+
+//---------------------------------------------------------------------------
+%newgroup
+
+%pythoncode {
+    if 'wxMac' in wx.PlatformInfo or 'gtk2' in wx.PlatformInfo:
+        _AutoBufferedPaintDCBase = PaintDC
+    else:
+        _AutoBufferedPaintDCBase = BufferedPaintDC
+            
+    class AutoBufferedPaintDC(_AutoBufferedPaintDCBase):
+        """
+        If the current platform double buffers by default then this DC is the
+        same as a plain `wx.PaintDC`, otherwise it is a `wx.BufferedPaintDC`.
+        """
+        def __init__(self, window):
+            _AutoBufferedPaintDCBase.__init__(self, window)
+}
 
 //---------------------------------------------------------------------------
 %newgroup
