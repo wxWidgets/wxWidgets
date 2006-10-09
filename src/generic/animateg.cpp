@@ -389,9 +389,11 @@ void wxAnimationCtrl::RebuildBackingStoreUpToFrame(size_t frame)
     int w = wxMin(sz.GetWidth(), winsz.GetWidth());
     int h = wxMin(sz.GetHeight(), winsz.GetHeight());
 
-    if (m_backingStore.GetWidth() < w ||
-        m_backingStore.GetHeight() < h)
+    if ( !m_backingStore.Ok() ||
+            m_backingStore.GetWidth() < w || m_backingStore.GetHeight() < h )
+    {
         m_backingStore.Create(w, h);
+    }
 
     wxMemoryDC dc;
     dc.SelectObject(m_backingStore);
