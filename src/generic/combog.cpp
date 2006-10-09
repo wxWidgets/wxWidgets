@@ -110,15 +110,16 @@ bool wxGenericComboCtrl::Create(wxWindow *parent,
                                 const wxValidator& validator,
                                 const wxString& name)
 {
-
-    // Set border
+    //
+    // Note that technically we only support 'default' border and wxNO_BORDER.
     long border = style & wxBORDER_MASK;
+    int tcBorder = wxNO_BORDER;
 
-    if ( !border )
-    {
 #if defined(__WXUNIVERSAL__)
+    if ( !border )
         border = wxBORDER_SIMPLE;
 #elif defined(__WXMSW__)
+    if ( !border )
         // For XP, have 1-width custom border, for older version use sunken
         /*if ( wxUxThemeEngine::GetIfActive() )
         {
@@ -127,22 +128,42 @@ bool wxGenericComboCtrl::Create(wxWindow *parent,
         }
         else*/
             border = wxBORDER_SUNKEN;
-#elif defined(__WXGTK__)
-        border = wxBORDER_NONE;
-        //m_widthCustomBorder = 2;
-        m_widthCustomBorder = 1;
 #else
-        border = wxBORDER_SIMPLE;
-#endif
 
-        style = (style & ~(wxBORDER_MASK)) | border;
+    //
+    // Generic version is optimized for wxGTK
+    //
+
+    #define UNRELIABLE_TEXTCTRL_BORDER
+
+    if ( !border )
+    {
+        if ( style & wxCB_READONLY )
+        {
+            m_widthCustomBorder = 1;
+        }
+        else
+        {
+            m_widthCustomBorder = 0;
+            tcBorder = 0;
+        }
+    }
+    else
+    {
+        // Have textctrl instead use the border given.
+        tcBorder = border;
     }
 
-#if defined(__WXGTK__)
+    // Because we are going to have button outside the border,
+    // let's use wxBORDER_NONE for the whole control.
+    border = wxBORDER_NONE;
+
     Customize( wxCC_BUTTON_OUTSIDE_BORDER |
                wxCC_NO_TEXT_AUTO_SELECT );
+
 #endif
 
+    style = (style & ~(wxBORDER_MASK)) | border;
     if ( style & wxCC_STD_BUTTON )
         m_iFlags |= wxCC_POPUP_ON_MOUSE_UP;
 
@@ -158,7 +179,7 @@ bool wxGenericComboCtrl::Create(wxWindow *parent,
         return false;
 
     // Create textctrl, if necessary
-    CreateTextCtrl( wxNO_BORDER, validator );
+    CreateTextCtrl( tcBorder, validator );
 
     // Add keyboard input handlers for main control and textctrl
     InstallInputHandlers();
@@ -321,6 +342,67 @@ void wxGenericComboCtrl::OnMouseEvent( wxMouseEvent& event )
     // See header file for further information on this method.
     HandleNormalMouseEvent(event);
 
+}
+
+void wxGenericComboCtrl::SetCustomPaintWidth( int width )
+{
+#ifdef UNRELIABLE_TEXTCTRL_BORDER
+    //
+    // If starting/stopping to show an image in front
+    // of a writable text-field, then re-create textctrl
+    // with different kind of border (because we can't
+    // assume that textctrl fully supports wxNO_BORDER).
+    //
+    wxTextCtrl* tc = GetTextCtrl();
+
+    if ( tc && (m_iFlags & wxCC_BUTTON_OUTSIDE_BORDER) )
+    {
+        int borderType = tc->GetWindowStyle() & wxBORDER_MASK;
+        int tcCreateStyle = -1;
+
+        if ( width > 0 )
+        {
+            // Re-create textctrl with no border
+            if ( borderType != wxNO_BORDER )
+            {
+                m_widthCustomBorder = 1;
+                tcCreateStyle = wxNO_BORDER;
+            }
+        }
+        else if ( width == 0 )
+        {
+            // Re-create textctrl with normal border
+            if ( borderType == wxNO_BORDER )
+            {
+                m_widthCustomBorder = 0;
+                tcCreateStyle = 0;
+            }
+        }
+
+        // Common textctrl re-creation code
+        if ( tcCreateStyle != -1 )
+        {
+            tc->RemoveEventHandler(m_textEvtHandler);
+            delete m_textEvtHandler;
+
+            wxValidator* pValidator = tc->GetValidator();
+            if ( pValidator )
+            {
+                pValidator = (wxValidator*) pValidator->Clone();
+                CreateTextCtrl( tcCreateStyle, *pValidator );
+                delete pValidator;
+            }
+            else
+            {
+                CreateTextCtrl( tcCreateStyle, wxDefaultValidator );
+            }
+
+            InstallInputHandlers();
+        }
+    }
+#endif // UNRELIABLE_TEXTCTRL_BORDER
+
+    wxComboCtrlBase::SetCustomPaintWidth( width );
 }
 
 bool wxGenericComboCtrl::IsKeyPopupToggle(const wxKeyEvent& event) const

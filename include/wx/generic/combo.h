@@ -65,6 +65,8 @@ public:
 
     virtual ~wxGenericComboCtrl();
 
+    void SetCustomPaintWidth( int width );
+
     virtual bool IsKeyPopupToggle(const wxKeyEvent& event) const;
 
     static int GetFeatures() { return wxComboCtrlFeatures::All; }

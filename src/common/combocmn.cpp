@@ -697,6 +697,9 @@ wxComboCtrlBase::CreateTextCtrl(int style, const wxValidator& validator)
 {
     if ( !(m_windowStyle & wxCB_READONLY) )
     {
+        if ( m_text )
+            m_text->Destroy();
+
         // wxTE_PROCESS_TAB is needed because on Windows, wxTAB_TRAVERSAL is
         // not used by the wxPropertyGrid and therefore the tab is processed by
         // looking at ancestors to see if they have wxTAB_TRAVERSAL. The
@@ -906,9 +909,10 @@ void wxComboCtrlBase::PositionTextCtrl( int textCtrlXAdjust, int textCtrlYAdjust
     }
     else
     {
+        // If it has border, have textctrl will the entire text field.
         m_text->SetSize( m_tcArea.x,
                          0,
-                         sz.x - m_btnArea.x - m_widthCustomPaint - customBorder,
+                         sz.x - m_btnArea.width - m_widthCustomPaint - customBorder,
                          sz.y );
     }
 }
