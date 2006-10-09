@@ -280,6 +280,17 @@ For consistency, all classes having an Ok() method now also have
 IsOk(), use of the latter form is preferred although the former hasn't
 been deprecated yet
 
+wx.BufferedDC and wx.BufferedPaintDC, if created with a reference to a
+window and no program supplied buffer bitmap, will not do its own
+buffering if the window is already double buffered by the system.
+Also added a wx.AutoBufferedPaintDC that is a subclass of wx.PaintDC
+on platforms that do double buffering by default, and a subclass of
+wx.BufferedPaintDC on the platforms that don't.
+
+Added the wx.AboutBox() function and wx.AboutDialogInfo class.  They
+provide a way to show a standard About box for the application, which
+will either be a native dialog or a generic one depending on what info
+is provided and if it can all be shown with the native dialog.
 
 
 

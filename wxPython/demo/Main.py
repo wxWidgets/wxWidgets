@@ -66,6 +66,7 @@ _treeList = [
         'ButtonPanel',
         'FlatNotebook',
         'CustomTreeCtrl',
+        'AboutBox',
         ]),
 
     # managed windows == things with a (optional) caption you can close
@@ -80,6 +81,7 @@ _treeList = [
 
     # the common dialogs
     ('Common Dialogs', [
+        'AboutBox',
         'ColourDialog',
         'DirDialog',
         'FileDialog',

@@ -49,5 +49,6 @@ MAKE_CONST_WXSTRING_NOSWIG(EmptyString);
 %include _display.i
 %include _stdpaths.i
 %include _power.i
+%include _about.i
 
 //---------------------------------------------------------------------------
