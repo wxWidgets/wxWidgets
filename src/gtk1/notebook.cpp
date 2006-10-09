@@ -118,16 +118,10 @@ static void gtk_notebook_page_change_callback(GtkNotebook *WXUNUSED(widget),
     }
     else
     {
-        wxNotebookEvent eventChanging( wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING,
-                                       notebook->GetId(), page, old );
-        eventChanging.SetEventObject( notebook );
-
-        if ( (notebook->GetEventHandler()->ProcessEvent(eventChanging)) &&
-              !eventChanging.IsAllowed() )
+        if ( !notebook->SendPageChangingEvent(page) )
         {
-            /* program doesn't allow the page change */
-            g_signal_stop_emission_by_name (notebook->m_widget,
-                                            "switch_page");
+            // program doesn't allow the page change
+            gtk_signal_emit_stop_by_name(GTK_OBJECT(notebook->m_widget), "switch_page");
         }
         else // change allowed
         {
@@ -136,10 +130,7 @@ static void gtk_notebook_page_change_callback(GtkNotebook *WXUNUSED(widget),
             // not really changed in GTK+
             notebook->m_selection = page;
 
-            wxNotebookEvent eventChanged( wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED,
-                                          notebook->GetId(), page, old );
-            eventChanged.SetEventObject( notebook );
-            notebook->GetEventHandler()->ProcessEvent( eventChanged );
+            notebook->SendPageChangedEvent(old);
         }
     }
 
