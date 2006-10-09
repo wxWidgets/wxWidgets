@@ -80,11 +80,7 @@ bool MyApp::OnInit()
                         wxDEFAULT_FRAME_STYLE);
 
     // Give it an icon
-#ifdef __WXMSW__
-    frame->SetIcon(wxIcon(_T("mdi_icn")));
-#else
-    frame->SetIcon(wxIcon( mondrian_xpm ));
-#endif
+    frame->SetIcon(wxICON(sample));
 
     // Make a menubar
     wxMenu *file_menu = new wxMenu;
