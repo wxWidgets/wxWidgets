@@ -120,9 +120,8 @@ static void gtk_notebook_page_change_callback(GtkNotebook *WXUNUSED(widget),
     {
         if ( !notebook->SendPageChangingEvent(page) )
         {
-            /* program doesn't allow the page change */
-            g_signal_stop_emission_by_name (notebook->m_widget,
-                                            "switch_page");
+            // program doesn't allow the page change
+            g_signal_stop_emission_by_name(notebook->m_widget, "switch_page");
         }
         else // change allowed
         {
