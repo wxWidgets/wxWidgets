@@ -801,18 +801,18 @@ wxBitmap wxMonoRenderer::GetFrameButtonBitmap(FrameButtonType type)
 
 #if wxUSE_TOOLBAR
 
-void wxMonoRenderer::DrawToolBarButton(wxDC& dc,
-                                       const wxString& label,
-                                       const wxBitmap& bitmap,
-                                       const wxRect& rect,
-                                       int flags,
-                                       long style,
-                                       int tbarStyle)
+void wxMonoRenderer::DrawToolBarButton(wxDC& WXUNUSED(dc),
+                                       const wxString& WXUNUSED(label),
+                                       const wxBitmap& WXUNUSED(bitmap),
+                                       const wxRect& WXUNUSED(rect),
+                                       int WXUNUSED(flags),
+                                       long WXUNUSED(style),
+                                       int WXUNUSED(tbarStyle))
 {
     wxFAIL_MSG(_T("TODO"));
 }
 
-wxSize wxMonoRenderer::GetToolBarButtonSize(wxCoord *separator) const
+wxSize wxMonoRenderer::GetToolBarButtonSize(wxCoord *WXUNUSED(separator)) const
 {
     wxFAIL_MSG(_T("TODO"));
 
@@ -834,13 +834,13 @@ wxSize wxMonoRenderer::GetToolBarMargin() const
 
 #if wxUSE_NOTEBOOK
 
-void wxMonoRenderer::DrawTab(wxDC& dc,
-                             const wxRect& rect,
-                             wxDirection dir,
-                             const wxString& label,
-                             const wxBitmap& bitmap,
-                             int flags,
-                             int indexAccel)
+void wxMonoRenderer::DrawTab(wxDC& WXUNUSED(dc),
+                             const wxRect& WXUNUSED(rect),
+                             wxDirection WXUNUSED(dir),
+                             const wxString& WXUNUSED(label),
+                             const wxBitmap& WXUNUSED(bitmap),
+                             int WXUNUSED(flags),
+                             int WXUNUSED(indexAccel))
 {
     wxFAIL_MSG(_T("TODO"));
 }
@@ -867,10 +867,10 @@ wxSize wxMonoRenderer::GetTabPadding() const
 
 #if wxUSE_COMBOBOX
 
-void wxMonoRenderer::GetComboBitmaps(wxBitmap *bmpNormal,
-                                     wxBitmap *bmpFocus,
-                                     wxBitmap *bmpPressed,
-                                     wxBitmap *bmpDisabled)
+void wxMonoRenderer::GetComboBitmaps(wxBitmap *WXUNUSED(bmpNormal),
+                                     wxBitmap *WXUNUSED(bmpFocus),
+                                     wxBitmap *WXUNUSED(bmpPressed),
+                                     wxBitmap *WXUNUSED(bmpDisabled))
 {
     wxFAIL_MSG(_T("TODO"));
 }
@@ -883,43 +883,43 @@ void wxMonoRenderer::GetComboBitmaps(wxBitmap *bmpNormal,
 
 #if wxUSE_MENUS
 
-void wxMonoRenderer::DrawMenuBarItem(wxDC& dc,
-                                     const wxRect& rect,
-                                     const wxString& label,
-                                     int flags,
-                                     int indexAccel)
+void wxMonoRenderer::DrawMenuBarItem(wxDC& WXUNUSED(dc),
+                                     const wxRect& WXUNUSED(rect),
+                                     const wxString& WXUNUSED(label),
+                                     int WXUNUSED(flags),
+                                     int WXUNUSED(indexAccel))
 {
     wxFAIL_MSG(_T("TODO"));
 }
 
-void wxMonoRenderer::DrawMenuItem(wxDC& dc,
-                                  wxCoord y,
-                                  const wxMenuGeometryInfo& geometryInfo,
-                                  const wxString& label,
-                                  const wxString& accel,
-                                  const wxBitmap& bitmap,
-                                  int flags,
-                                  int indexAccel)
+void wxMonoRenderer::DrawMenuItem(wxDC& WXUNUSED(dc),
+                                  wxCoord WXUNUSED(y),
+                                  const wxMenuGeometryInfo& WXUNUSED(geometryInfo),
+                                  const wxString& WXUNUSED(label),
+                                  const wxString& WXUNUSED(accel),
+                                  const wxBitmap& WXUNUSED(bitmap),
+                                  int WXUNUSED(flags),
+                                  int WXUNUSED(indexAccel))
 {
     wxFAIL_MSG(_T("TODO"));
 }
 
-void wxMonoRenderer::DrawMenuSeparator(wxDC& dc,
-                                       wxCoord y,
-                                       const wxMenuGeometryInfo& geomInfo)
+void wxMonoRenderer::DrawMenuSeparator(wxDC& WXUNUSED(dc),
+                                       wxCoord WXUNUSED(y),
+                                       const wxMenuGeometryInfo& WXUNUSED(geomInfo))
 {
     wxFAIL_MSG(_T("TODO"));
 }
 
-wxSize wxMonoRenderer::GetMenuBarItemSize(const wxSize& sizeText) const
+wxSize wxMonoRenderer::GetMenuBarItemSize(const wxSize& WXUNUSED(sizeText)) const
 {
     wxFAIL_MSG(_T("TODO"));
 
     return wxSize();
 }
 
-wxMenuGeometryInfo *wxMonoRenderer::GetMenuGeometry(wxWindow *win,
-                                                    const wxMenu& menu) const
+wxMenuGeometryInfo *wxMonoRenderer::GetMenuGeometry(wxWindow *WXUNUSED(win),
+                                                    const wxMenu& WXUNUSED(menu)) const
 {
     wxFAIL_MSG(_T("TODO"));
 
@@ -934,36 +934,36 @@ wxMenuGeometryInfo *wxMonoRenderer::GetMenuGeometry(wxWindow *win,
 
 #if wxUSE_SLIDER
 
-void wxMonoRenderer::DrawSliderShaft(wxDC& dc,
-                                     const wxRect& rect,
-                                     int lenThumb,
-                                     wxOrientation orient,
-                                     int flags,
-                                     long style,
-                                     wxRect *rectShaft)
+void wxMonoRenderer::DrawSliderShaft(wxDC& WXUNUSED(dc),
+                                     const wxRect& WXUNUSED(rect),
+                                     int WXUNUSED(lenThumb),
+                                     wxOrientation WXUNUSED(orient),
+                                     int WXUNUSED(flags),
+                                     long WXUNUSED(style),
+                                     wxRect *WXUNUSED(rectShaft))
 {
     wxFAIL_MSG(_T("TODO"));
 }
 
 
-void wxMonoRenderer::DrawSliderThumb(wxDC& dc,
-                                     const wxRect& rect,
-                                     wxOrientation orient,
-                                     int flags,
-                                     long style)
+void wxMonoRenderer::DrawSliderThumb(wxDC& WXUNUSED(dc),
+                                     const wxRect& WXUNUSED(rect),
+                                     wxOrientation WXUNUSED(orient),
+                                     int WXUNUSED(flags),
+                                     long WXUNUSED(style))
 {
     wxFAIL_MSG(_T("TODO"));
 }
 
-void wxMonoRenderer::DrawSliderTicks(wxDC& dc,
-                                     const wxRect& rect,
-                                     int lenThumb,
-                                     wxOrientation orient,
-                                     int start,
-                                     int end,
-                                     int step,
-                                     int flags,
-                                     long style)
+void wxMonoRenderer::DrawSliderTicks(wxDC& WXUNUSED(dc),
+                                     const wxRect& WXUNUSED(rect),
+                                     int WXUNUSED(lenThumb),
+                                     wxOrientation WXUNUSED(orient),
+                                     int WXUNUSED(start),
+                                     int WXUNUSED(end),
+                                     int WXUNUSED(step),
+                                     int WXUNUSED(flags),
+                                     long WXUNUSED(style))
 {
     wxFAIL_MSG(_T("TODO"));
 }
@@ -983,19 +983,19 @@ wxCoord wxMonoRenderer::GetSliderTickLen() const
 }
 
 
-wxRect wxMonoRenderer::GetSliderShaftRect(const wxRect& rect,
-                                          int lenThumb,
-                                          wxOrientation orient,
-                                          long style) const
+wxRect wxMonoRenderer::GetSliderShaftRect(const wxRect& WXUNUSED(rect),
+                                          int WXUNUSED(lenThumb),
+                                          wxOrientation WXUNUSED(orient),
+                                          long WXUNUSED(style)) const
 {
     wxFAIL_MSG(_T("TODO"));
 
     return wxRect();
 }
 
-wxSize wxMonoRenderer::GetSliderThumbSize(const wxRect& rect,
-                                          int lenThumb,
-                                          wxOrientation orient) const
+wxSize wxMonoRenderer::GetSliderThumbSize(const wxRect& WXUNUSED(rect),
+                                          int WXUNUSED(lenThumb),
+                                          wxOrientation WXUNUSED(orient)) const
 {
     wxFAIL_MSG(_T("TODO"));
 
