@@ -174,8 +174,16 @@ void wxStringBase::InitWith(const wxChar *psz, size_t nPos, size_t nLength)
 // poor man's iterators are "void *" pointers
 wxStringBase::wxStringBase(const void *pStart, const void *pEnd)
 {
-  InitWith((const wxChar *)pStart, 0,
-           (const wxChar *)pEnd - (const wxChar *)pStart);
+  if ( pEnd > pStart )
+  {
+    InitWith((const wxChar *)pStart, 0,
+             (const wxChar *)pEnd - (const wxChar *)pStart);
+  }
+  else
+  {
+    wxFAIL_MSG( _T("pStart is not before pEnd") );
+    Init();
+  }
 }
 
 wxStringBase::wxStringBase(size_type n, wxChar ch)
