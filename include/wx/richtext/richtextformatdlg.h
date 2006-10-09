@@ -30,6 +30,7 @@
 
 class WXDLLEXPORT wxNotebookEvent;
 class WXDLLIMPEXP_RICHTEXT wxRichTextFormattingDialog;
+class WXDLLIMPEXP_CORE wxImageList;
 
 /*!
  * Flags determining the pages to be created in the dialog

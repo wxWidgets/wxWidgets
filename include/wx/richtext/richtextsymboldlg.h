@@ -16,6 +16,7 @@
  * Includes
  */
 
+#include "wx/dialog.h"
 #include "wx/vscroll.h"
 
 /*!
@@ -23,7 +24,10 @@
  */
 
 ////@begin forward declarations
-class wxSymbolListCtrl;
+class WXDLLIMPEXP_RICHTEXT wxSymbolListCtrl;
+class WXDLLIMPEXP_CORE wxComboBox;
+class WXDLLIMPEXP_CORE wxStaticText;
+class WXDLLIMPEXP_CORE wxTextCtrl;
 ////@end forward declarations
 
 #ifndef __UNICODE__
@@ -36,7 +40,7 @@ class wxSymbolListCtrl;
  * Symbols
  */
 
-#define SYMBOL_WXSYMBOLPICKERDIALOG_STYLE wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER|wxCLOSE_BOX
+#define SYMBOL_WXSYMBOLPICKERDIALOG_STYLE (wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER|wxCLOSE_BOX)
 #define SYMBOL_WXSYMBOLPICKERDIALOG_TITLE _("Symbols")
 #define SYMBOL_WXSYMBOLPICKERDIALOG_IDNAME ID_SYMBOLPICKERDIALOG
 #define SYMBOL_WXSYMBOLPICKERDIALOG_SIZE wxSize(400, 300)
