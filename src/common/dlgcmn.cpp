@@ -279,80 +279,62 @@ Wrap(int width)
 
 #endif // wxUSE_STATTEXT
 
-wxSizer *wxDialogBase::CreateButtonSizer( long flags, bool separated, wxCoord distance )
+wxSizer *wxDialogBase::CreateButtonSizer(long flags)
 {
+    wxSizer *sizer = NULL;
+
 #ifdef __SMARTPHONE__
-    wxUnusedVar(separated);
-    wxUnusedVar(distance);
-
     wxDialog* dialog = (wxDialog*) this;
-    if (flags & wxOK){
+    if ( flags & wxOK )
         dialog->SetLeftMenu(wxID_OK);
-    }
 
-    if (flags & wxCANCEL){
+    if ( flags & wxCANCEL )
         dialog->SetRightMenu(wxID_CANCEL);
-    }
 
-    if (flags & wxYES){
+    if ( flags & wxYES )
         dialog->SetLeftMenu(wxID_YES);
-    }
 
-    if (flags & wxNO){
-        dialog->SetLeftMenu(wxID_NO);
-    }
-    wxBoxSizer* sizer = new wxBoxSizer(wxHORIZONTAL);
-    return sizer;
-
+    if ( flags & wxNO )
+        dialog->SetRightMenu(wxID_NO);
 #else // !__SMARTPHONE__
-
-#ifdef __POCKETPC__
-    // PocketPC guidelines recommend for Ok/Cancel dialogs to use
-    // OK button located inside caption bar and implement Cancel functionality
-    // through Undo outside dialog. As native behaviour this will be default
-    // here but can be easily replaced with real wxButtons
-    // with "wince.dialog.real-ok-cancel" option set to 1
-    if ( ((flags & ~(wxCANCEL|wxNO_DEFAULT))== wxOK) &&
-         (wxSystemOptions::GetOptionInt(wxT("wince.dialog.real-ok-cancel"))==0)
-       )
-    {
-        wxBoxSizer* sizer = new wxBoxSizer(wxHORIZONTAL);
-        return sizer;
-    }
-#endif // __POCKETPC__
 
 #if wxUSE_BUTTON
 
-    wxSizer* buttonSizer = CreateStdDialogButtonSizer( flags );
-
-    // Mac Human Interface Guidelines recommend not to use static lines as grouping elements
-#if wxUSE_STATLINE && !defined(__WXMAC__)
-    if(!separated)
-        return buttonSizer;
-
-    wxBoxSizer *topsizer = new wxBoxSizer( wxVERTICAL );
-    topsizer->Add( new wxStaticLine( this, wxID_ANY ), 0, wxEXPAND | wxBOTTOM, distance );
-    topsizer->Add( buttonSizer, 0, wxEXPAND );
-    return topsizer;
-
-#else // !wxUSE_STATLINE
-
-    wxUnusedVar(separated);
-    wxUnusedVar(distance);
-    return buttonSizer;
-
-#endif // wxUSE_STATLINE/!wxUSE_STATLINE
-
-#else // !wxUSE_BUTTON
-
-    wxUnusedVar(separated);
-    wxUnusedVar(distance);
-    wxBoxSizer* sizer = new wxBoxSizer(wxHORIZONTAL);
-    return sizer;
-
-#endif // wxUSE_BUTTON/!wxUSE_BUTTON
+#ifdef __POCKETPC__
+    // PocketPC guidelines recommend for Ok/Cancel dialogs to use OK button
+    // located inside caption bar and implement Cancel functionality through
+    // Undo outside dialog. As native behaviour this will be default here but
+    // can be replaced with real wxButtons by setting the option below to 1
+    if ( (flags & ~(wxCANCEL|wxNO_DEFAULT)) != wxOK ||
+            wxSystemOptions::GetOptionInt(wxT("wince.dialog.real-ok-cancel")) )
+#endif // __POCKETPC__
+    {
+        sizer = CreateStdDialogButtonSizer(flags);
+    }
+#endif // wxUSE_BUTTON
 
 #endif // __SMARTPHONE__/!__SMARTPHONE__
+
+    return sizer;
+}
+
+wxSizer *wxDialogBase::CreateSeparatedButtonSizer(long flags)
+{
+    wxSizer *sizer = CreateButtonSizer(flags);
+    if ( !sizer )
+        return NULL;
+
+    // Mac Human Interface Guidelines recommend not to use static lines as
+    // grouping elements
+#if wxUSE_STATLINE && !defined(__WXMAC__)
+    wxBoxSizer *topsizer = new wxBoxSizer(wxVERTICAL);
+    topsizer->Add(new wxStaticLine(this),
+                   wxSizerFlags().Expand().DoubleBorder(wxBOTTOM));
+    topsizer->Add(sizer, wxSizerFlags().Expand());
+    sizer = topsizer;
+#endif // wxUSE_STATLINE
+
+    return sizer;
 }
 
 #if wxUSE_BUTTON
@@ -365,27 +347,32 @@ wxStdDialogButtonSizer *wxDialogBase::CreateStdDialogButtonSizer( long flags )
     wxButton *yes = NULL;
     wxButton *no = NULL;
 
-    if (flags & wxOK){
+    if (flags & wxOK)
+    {
         ok = new wxButton(this, wxID_OK);
         sizer->AddButton(ok);
     }
 
-    if (flags & wxCANCEL){
+    if (flags & wxCANCEL)
+    {
         wxButton *cancel = new wxButton(this, wxID_CANCEL);
         sizer->AddButton(cancel);
     }
 
-    if (flags & wxYES){
+    if (flags & wxYES)
+    {
         yes = new wxButton(this, wxID_YES);
         sizer->AddButton(yes);
     }
 
-    if (flags & wxNO){
+    if (flags & wxNO)
+    {
         no = new wxButton(this, wxID_NO);
         sizer->AddButton(no);
     }
 
-    if (flags & wxHELP){
+    if (flags & wxHELP)
+    {
         wxButton *help = new wxButton(this, wxID_HELP);
         sizer->AddButton(help);
     }

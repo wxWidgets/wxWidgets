@@ -35,6 +35,7 @@ INCOMPATIBLE CHANGES SINCE 2.6.x
 - wxGLContext class has no 1:1 coupling to a wxGLCanvas class any more.
   As a consequence, the class interface changed largely.
   Code updates, if any are required at all, are easy to accomplish though.
+- wxDialog::CreateButtonSizer() may return NULL now, please see the manual
 
 
 
