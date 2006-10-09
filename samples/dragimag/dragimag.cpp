@@ -138,17 +138,13 @@ void MyCanvas::OnMouseEvent(wxMouseEvent& event)
         delete m_dragImage;
         m_dragImage = NULL;
 
-        wxClientDC dc(this);
-        if (m_currentlyHighlighted)
-        {
-            m_currentlyHighlighted->Draw(dc);
-        }
         m_draggedShape->SetShow(true);
-        m_draggedShape->Draw(dc);
 
         m_currentlyHighlighted = (DragShape*) NULL;
 
         m_draggedShape = (DragShape*) NULL;
+        
+        Refresh(true);
     }
     else if (event.Dragging() && m_dragMode != TEST_DRAG_NONE)
     {
@@ -170,25 +166,26 @@ void MyCanvas::OnMouseEvent(wxMouseEvent& event)
 
             // Erase the dragged shape from the canvas
             m_draggedShape->SetShow(false);
-            wxClientDC dc(this);
-            EraseShape(m_draggedShape, dc);
-            DrawShapes(dc);
+
+            // redraw immediately
+            Refresh(true);
+            Update();
 
             switch (m_draggedShape->GetDragMethod())
             {
                 case SHAPE_DRAG_BITMAP:
                 {
-                    m_dragImage = new wxDragImage(m_draggedShape->GetBitmap(), wxCursor(wxCURSOR_HAND));
+                    m_dragImage = new MyDragImage(this, m_draggedShape->GetBitmap(), wxCursor(wxCURSOR_HAND));
                     break;
                 }
                 case SHAPE_DRAG_TEXT:
                 {
-                    m_dragImage = new wxDragImage(wxString(_T("Dragging some test text")), wxCursor(wxCURSOR_HAND));
+                    m_dragImage = new MyDragImage(this, wxString(_T("Dragging some test text")), wxCursor(wxCURSOR_HAND));
                     break;
                 }
                 case SHAPE_DRAG_ICON:
                 {
-                    m_dragImage = new wxDragImage(wxICON(dragicon), wxCursor(wxCURSOR_HAND));
+                    m_dragImage = new MyDragImage(this, wxICON(dragicon), wxCursor(wxCURSOR_HAND));
                     break;
                 }
             }
@@ -235,20 +232,18 @@ void MyCanvas::OnMouseEvent(wxMouseEvent& event)
 
             if (mustUnhighlightOld || mustHighlightNew)
                 m_dragImage->Hide();
-
+            
             // Now with the drag image switched off, we can change the window contents.
-
             if (mustUnhighlightOld)
-            {
-                wxClientDC clientDC(this);
-                m_currentlyHighlighted->Draw(clientDC);
                 m_currentlyHighlighted = (DragShape*) NULL;
-            }
+
             if (mustHighlightNew)
-            {
-                wxClientDC clientDC(this);
                 m_currentlyHighlighted = onShape;
-                m_currentlyHighlighted->Draw(clientDC, wxINVERT);
+
+            if (mustUnhighlightOld || mustHighlightNew)
+            {
+                Refresh(mustUnhighlightOld);
+                Update();
             }
 
             // Move and show the image again
@@ -266,8 +261,10 @@ void MyCanvas::DrawShapes(wxDC& dc)
     while (node)
     {
         DragShape* shape = (DragShape*) node->GetData();
-        if (shape->IsShown())
-          shape->Draw(dc);
+        if (shape->IsShown() && m_draggedShape != shape)
+        {
+            shape->Draw(dc, (m_currentlyHighlighted == shape));
+        }
         node = node->GetNext();
     }
 }
@@ -471,7 +468,7 @@ bool DragShape::HitTest(const wxPoint& pt) const
     return rect.Contains(pt.x, pt.y);
 }
 
-bool DragShape::Draw(wxDC& dc, int op)
+bool DragShape::Draw(wxDC& dc, bool highlight)
 {
     if (m_bitmap.Ok())
     {
@@ -479,11 +476,34 @@ bool DragShape::Draw(wxDC& dc, int op)
         memDC.SelectObject(m_bitmap);
 
         dc.Blit(m_pos.x, m_pos.y, m_bitmap.GetWidth(), m_bitmap.GetHeight(),
-            & memDC, 0, 0, op, true);
+            & memDC, 0, 0, wxCOPY, true);
+            
+        if (highlight)
+        {
+            dc.SetPen(*wxWHITE_PEN);
+            dc.SetBrush(*wxTRANSPARENT_BRUSH);
+            dc.DrawRectangle(m_pos.x, m_pos.y, m_bitmap.GetWidth(), m_bitmap.GetHeight());
+        }
 
         return true;
     }
     else
         return false;
+}
+
+// MyDragImage
+
+// On some platforms, notably Mac OS X with Core Graphics, we can't blit from
+// a window, so we need to draw the background explicitly.
+bool MyDragImage::UpdateBackingFromWindow(wxDC& WXUNUSED(windowDC), wxMemoryDC& destDC, const wxRect& WXUNUSED(sourceRect),
+                    const wxRect& destRect) const
+{
+    destDC.SetClippingRegion(destRect);
+
+    if (wxGetApp().GetBackgroundBitmap().Ok())
+        wxGetApp().TileBitmap(destRect, destDC, wxGetApp().GetBackgroundBitmap());
+
+    m_canvas->DrawShapes(destDC);
+    return true;
 }
 

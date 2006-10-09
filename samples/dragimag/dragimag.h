@@ -128,7 +128,7 @@ public:
 //// Operations
 
     bool HitTest(const wxPoint& pt) const;
-    bool Draw(wxDC& dc, int op = wxCOPY);
+    bool Draw(wxDC& dc, bool highlight = false);
 
 //// Accessors
 
@@ -151,6 +151,40 @@ protected:
     wxBitmap    m_bitmap;
     int         m_dragMethod;
     bool        m_show;
+};
+
+// MyDragImage
+// A derived class is required since we're overriding UpdateBackingFromWindow,
+// for compatibility with Mac OS X (Core Graphics) which does not support blitting
+// from a window.
+
+class MyDragImage: public wxDragImage
+{
+public:
+    MyDragImage(MyCanvas* canvas): m_canvas(canvas) {}
+
+    MyDragImage(MyCanvas* canvas, const wxBitmap& image, const wxCursor& cursor = wxNullCursor):
+        wxDragImage(image, cursor), m_canvas(canvas)
+    {
+    }
+
+    MyDragImage(MyCanvas* canvas, const wxIcon& image, const wxCursor& cursor = wxNullCursor):
+        wxDragImage(image, cursor), m_canvas(canvas)
+    {
+    }
+
+    MyDragImage(MyCanvas* canvas, const wxString& str, const wxCursor& cursor = wxNullCursor):
+        wxDragImage(str, cursor), m_canvas(canvas)
+    {
+    }
+
+    // On some platforms, notably Mac OS X with Core Graphics, we can't blit from
+    // a window, so we need to draw the background explicitly.
+    virtual bool UpdateBackingFromWindow(wxDC& windowDC, wxMemoryDC& destDC, const wxRect& sourceRect,
+                    const wxRect& destRect) const;
+
+protected:
+    MyCanvas*   m_canvas;
 };
 
 #endif
