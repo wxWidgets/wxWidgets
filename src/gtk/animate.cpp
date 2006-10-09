@@ -20,6 +20,7 @@
 #if wxUSE_ANIMATIONCTRL
 
 #include "wx/animate.h"
+#include "wx/log.h"
 #include <gtk/gtk.h>
 #include <gtk/gtkimage.h>
 
@@ -53,7 +54,8 @@ IMPLEMENT_DYNAMIC_CLASS(wxAnimation, wxAnimationBase)
 bool wxAnimation::LoadFile(const wxString &name, wxAnimationType WXUNUSED(type))
 {
     UnRef();
-    m_pixbuf = gdk_pixbuf_animation_new_from_file(name.c_str(), NULL);
+    m_pixbuf = gdk_pixbuf_animation_new_from_file(
+        wxConvFileName->cWX2MB(name), NULL);
     return IsOk();
 }
 
