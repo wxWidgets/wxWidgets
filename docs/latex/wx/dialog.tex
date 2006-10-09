@@ -189,7 +189,23 @@ of the following flags: wxOK, wxCANCEL, wxYES, wxNO, wxHELP, wxNO\_DEFAULT.
 
 The sizer lays out the buttons in a manner appropriate to the platform.
 
-This function simply calls \helpref{CreateStdDialogButtonSizer}{wxdialogcreatestddialogbuttonsizer}.
+This function uses \helpref{CreateStdDialogButtonSizer}{wxdialogcreatestddialogbuttonsizer} 
+internally for most platforms but doesn't create the sizer at all for the
+platforms with hardware buttons (such as smartphones) for which it sets up the
+hardware buttons appropriately and returns \NULL, so don't forget to test that
+the return value is valid before using it.
+
+
+\membersection{wxDialog::CreateSeparatedButtonSizer}\label{wxdialogcreateseparatedbuttonsizer}
+
+\func{wxSizer*}{CreateSeparatedButtonSizer}{\param{long}{ flags}}
+
+Creates a sizer with standard buttons using 
+\helpref{CreateButtonSizer}{wxdialogcreatebuttonsizer} separated from the rest
+of the dialog contents by a horizontal \helpref{wxStaticLine}{wxstaticline}.
+
+Please notice that just like CreateButtonSizer() this function may return \NULL 
+if no buttons were created.
 
 
 \membersection{wxDialog::CreateStdDialogButtonSizer}\label{wxdialogcreatestddialogbuttonsizer}
