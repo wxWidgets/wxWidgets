@@ -46,11 +46,11 @@ IMPLEMENT_APP(MyApp)
 
 enum
 {
-    wxID_PLAY
+    ID_PLAY = 1
 };
 
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
-    EVT_MENU(wxID_PLAY, MyFrame::OnPlay)
+    EVT_MENU(ID_PLAY, MyFrame::OnPlay)
     EVT_MENU(wxID_STOP, MyFrame::OnStop)
     EVT_MENU(wxID_ABOUT, MyFrame::OnAbout)
     EVT_MENU(wxID_EXIT, MyFrame::OnQuit)
@@ -91,7 +91,7 @@ bool MyApp::OnInit()
     file_menu->Append(wxID_EXIT);
 
     wxMenu *play_menu = new wxMenu;
-    play_menu->Append(wxID_PLAY, _T("Play\tCtrl+P"), _T("Play the animation"));
+    play_menu->Append(ID_PLAY, _T("Play\tCtrl+P"), _T("Play the animation"));
     play_menu->Append(wxID_STOP, _T("Stop\tCtrl+P"), _T("Stop the animation"));
 
     wxMenu *help_menu = new wxMenu;
@@ -233,7 +233,7 @@ void MyFrame::OnOpen(wxCommandEvent& WXUNUSED(event))
 void MyFrame::OnUpdateUI(wxUpdateUIEvent& WXUNUSED(event) )
 {
     GetMenuBar()->FindItem(wxID_STOP)->Enable(m_animationCtrl->IsPlaying());
-    GetMenuBar()->FindItem(wxID_PLAY)->Enable(!m_animationCtrl->IsPlaying());
+    GetMenuBar()->FindItem(ID_PLAY)->Enable(!m_animationCtrl->IsPlaying());
 }
 
 // ---------------------------------------------------------------------------
