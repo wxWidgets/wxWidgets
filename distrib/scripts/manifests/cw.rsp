@@ -89,7 +89,7 @@ samples/wizard/*W7.xml
 utils/helpview/src/*W7.xml
 utils/tex2rtf/src/*W7.xml
 utils/hhp2cached/*W7.xml
-utils/helpgen/src/*W7.xml
+utils/HelpGen/src/*W7.xml
 
 demos/bombs/*W7.xml
 demos/dbbrowse/*W7.xml
