@@ -282,7 +282,7 @@ fi
 #----------------------------------------------------------------------
 # Cleanup
 
-if [ -z ${skipclean} ]; then
+if [ "${skipclean}" = "0" ]; then
     echo "*** Cleaning up"
     rm -rf ${rpmtop}
     rm -rf ${builddir}
