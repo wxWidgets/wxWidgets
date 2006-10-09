@@ -1,21 +1,27 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        richtexttabspage.cpp
+// Name:        src/richtext/richtexttabspage.cpp
 // Purpose:
 // Author:      Julian Smart
 // Modified by:
 // Created:     10/4/2006 8:03:20 AM
-// RCS-ID:
+// RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-////@begin includes
-////@end includes
+// For compilers that support precompilation, includes "wx/wx.h".
+#include "wx/wxprec.h"
 
-#include "../../include/wx/richtext/richtexttabspage.h"
+#ifdef __BORLANDC__
+    #pragma hdrstop
+#endif
 
-////@begin XPM images
-////@end XPM images
+#if wxUSE_RICHTEXT
+
+#include "wx/richtext/richtexttabspage.h"
+
+#ifndef WX_PRECOMP
+#endif
 
 /*!
  * wxRichTextTabsPage type definition
@@ -117,7 +123,12 @@ void wxRichTextTabsPage::CreateControls()
     wxStaticText* itemStaticText6 = new wxStaticText( itemPanel1, wxID_STATIC, _("&Position (tenths of a mm):"), wxDefaultPosition, wxDefaultSize, 0 );
     itemBoxSizer5->Add(itemStaticText6, 0, wxALIGN_LEFT|wxLEFT|wxRIGHT|wxTOP|wxADJUST_MINSIZE, 5);
 
-    m_tabEditCtrl = new wxTextCtrl( itemPanel1, ID_RICHTEXTTABSPAGE_TABEDIT, _T(""), wxDefaultPosition, wxDefaultSize, 0 );
+    m_tabEditCtrl = new wxTextCtrl( itemPanel1,
+                                    ID_RICHTEXTTABSPAGE_TABEDIT,
+                                    wxEmptyString,
+                                    wxDefaultPosition,
+                                    wxDefaultSize,
+                                    0 );
     itemBoxSizer5->Add(m_tabEditCtrl, 0, wxGROW|wxALL, 5);
 
     wxString* m_tabListCtrlStrings = NULL;
@@ -129,7 +140,12 @@ void wxRichTextTabsPage::CreateControls()
     wxBoxSizer* itemBoxSizer10 = new wxBoxSizer(wxVERTICAL);
     itemBoxSizer4->Add(itemBoxSizer10, 0, wxGROW, 5);
 
-    wxStaticText* itemStaticText11 = new wxStaticText( itemPanel1, wxID_STATIC, _T(""), wxDefaultPosition, wxDefaultSize, 0 );
+    wxStaticText* itemStaticText11 = new wxStaticText( itemPanel1,
+                                                       wxID_STATIC,
+                                                       wxEmptyString,
+                                                       wxDefaultPosition,
+                                                       wxDefaultSize,
+                                                       0 );
     itemBoxSizer10->Add(itemStaticText11, 0, wxALIGN_CENTER_HORIZONTAL|wxBOTTOM|wxADJUST_MINSIZE, 5);
 
     wxButton* itemButton12 = new wxButton( itemPanel1, ID_RICHTEXTTABSPAGE_NEW_TAB, _("&New"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -263,7 +279,7 @@ wxIcon wxRichTextTabsPage::GetIconResource( const wxString& name )
 void wxRichTextTabsPage::OnNewTabClick( wxCommandEvent& WXUNUSED(event) )
 {
     wxString str = m_tabEditCtrl->GetValue();
-    if (!str.IsEmpty() && str.IsNumber())
+    if (!str.empty() && str.IsNumber())
     {
         wxString s(wxString::Format(wxT("%d"), wxAtoi(str)));
 
@@ -283,7 +299,7 @@ void wxRichTextTabsPage::OnNewTabUpdate( wxUpdateUIEvent& event )
     // This may be a bit expensive - consider updating New button when text
     // changes in edit control
     wxString str = m_tabEditCtrl->GetValue();
-    if (!str.IsEmpty() && str.IsNumber())
+    if (!str.empty() && str.IsNumber())
     {
         wxString s(wxString::Format(wxT("%d"), wxAtoi(str)));
         event.Enable(m_tabListCtrl->FindString(s) == wxNOT_FOUND);
@@ -345,6 +361,8 @@ void wxRichTextTabsPage::OnDeleteAllTabsUpdate( wxUpdateUIEvent& event )
 void wxRichTextTabsPage::OnTablistSelected( wxCommandEvent& WXUNUSED(event) )
 {
     wxString str = m_tabListCtrl->GetStringSelection();
-    if (!str.IsEmpty())
+    if (!str.empty())
         m_tabEditCtrl->SetValue(str);
 }
+
+#endif // wxUSE_RICHTEXT

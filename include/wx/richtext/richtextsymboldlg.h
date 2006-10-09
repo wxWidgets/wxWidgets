@@ -1,12 +1,12 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        richtextsymboldlg.h
-// Purpose:     
+// Name:        wx/richtext/richtextsymboldlg.h
+// Purpose:
 // Author:      Julian Smart
-// Modified by: 
+// Modified by:
 // Created:     10/5/2006 3:11:58 PM
-// RCS-ID:      
+// RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:     
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _RICHTEXTSYMBOLDLG_H_
@@ -30,12 +30,6 @@ class WXDLLIMPEXP_CORE wxStaticText;
 class WXDLLIMPEXP_CORE wxTextCtrl;
 ////@end forward declarations
 
-#ifndef __UNICODE__
-#if wxUSE_UNICODE
-#define __UNICODE__
-#endif
-#endif
-
 /*!
  * Symbols
  */
@@ -51,7 +45,7 @@ class WXDLLIMPEXP_CORE wxTextCtrl;
  */
 
 class WXDLLIMPEXP_RICHTEXT wxSymbolPickerDialog: public wxDialog
-{    
+{
     DECLARE_DYNAMIC_CLASS( wxSymbolPickerDialog )
     DECLARE_EVENT_TABLE()
 
@@ -70,28 +64,28 @@ public:
 
     /// Creates the controls and sizers
     void CreateControls();
-    
+
     /// Update the display
     void UpdateSymbolDisplay(bool updateSymbolList = true, bool showAtSubset = true);
 
     /// Respond to symbol selection
     void OnSymbolSelected( wxCommandEvent& event );
-    
+
     /// Set Unicode mode
     void SetUnicodeMode(bool unicodeMode);
-    
+
     /// Show at the current subset selection
     void ShowAtSubset();
-    
+
     /// Get the selected symbol character
     int GetSymbolChar() const;
 
     /// Is there a selection?
     bool HasSelection() const { return !m_symbol.IsEmpty(); }
-    
+
     /// Specifying normal text?
     bool UseNormalFont() const { return m_fontName.IsEmpty(); }
-    
+
     /// Data transfer
     virtual bool TransferDataToWindow();
 
@@ -110,12 +104,16 @@ public:
     void OnFromUnicodeSelected( wxCommandEvent& event );
 
 #endif
-#if defined(__WXMSW__) || defined(__WXGTK__) || defined(__WXOS2__) || defined(__WXMGL__) || defined(__WXMOTIF__) || defined(__WXCOCOA__) || defined(__WXX11__) || defined(__WXPALMOS__)
-    /// wxEVT_UPDATE_UI event handler for wxID_OK
-    void OnOkUpdate( wxUpdateUIEvent& event );
+#if defined(__WXMSW__)   || \
+    defined(__WXMAC__)   || \
+    defined(__WXGTK__)   || \
+    defined(__WXPM__)    || \
+    defined(__WXMGL__)   || \
+    defined(__WXMOTIF__) || \
+    defined(__WXCOCOA__) || \
+    defined(__WXX11__)   || \
+    defined(__WXPALMOS__)
 
-#endif
-#if defined(__WXMAC__)
     /// wxEVT_UPDATE_UI event handler for wxID_OK
     void OnOkUpdate( wxUpdateUIEvent& event );
 
@@ -178,7 +176,7 @@ public:
 /*!
  * The scrolling symbol list.
  */
- 
+
 class WXDLLIMPEXP_RICHTEXT wxSymbolListCtrl : public wxVScrolledWindow
 {
 public:
@@ -221,7 +219,7 @@ public:
 
     // set the current font
     virtual bool SetFont(const wxFont& font);
-    
+
     // set Unicode/ASCII mode
     void SetUnicodeMode(bool unicodeMode);
 
@@ -246,7 +244,7 @@ public:
     // set the selection to the specified item, if it is wxNOT_FOUND the
     // selection is unset
     void SetSelection(int selection);
-    
+
     // make this item visible
     void EnsureVisible(int item);
 
@@ -257,7 +255,7 @@ public:
     // by default both margins are 0
     void SetMargins(const wxPoint& pt);
     void SetMargins(wxCoord x, wxCoord y) { SetMargins(wxPoint(x, y)); }
-    
+
     // set the cell size
     void SetCellSize(const wxSize& sz) { m_cellSize = sz; }
     const wxSize& GetCellSize() const { return m_cellSize; }
@@ -272,19 +270,19 @@ public:
 
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
-    
+
     // Get min/max symbol values
     int GetMinSymbolValue() const { return m_minSymbolValue; }
     int GetMaxSymbolValue() const { return m_maxSymbolValue; }
-    
+
     // Respond to size change
     void OnSize(wxSizeEvent& event);
 
 protected:
 
-    // draws a line of symbols    
+    // draws a line of symbols
     virtual void OnDrawItem(wxDC& dc, const wxRect& rect, size_t n) const;
-    
+
     // gets the line height
     virtual wxCoord OnGetLineHeight(size_t line) const;
 
@@ -317,13 +315,13 @@ protected:
 
     // common part of keyboard and mouse handling processing code
     void DoHandleItemClick(int item, int flags);
-    
+
     // calculate line number from symbol value
     int SymbolValueToLineNumber(int item);
-    
+
     // initialise control from current min/max values
     void SetupCtrl(bool scrollToSelection = true);
-    
+
     // hit testing
     int HitTest(const wxPoint& pt);
 
@@ -339,19 +337,19 @@ private:
 
     // double buffer
     wxBitmap*   m_doubleBuffer;
-    
+
     // cell size
     wxSize      m_cellSize;
-    
+
     // minimum and maximum symbol value
     int         m_minSymbolValue;
 
     // minimum and maximum symbol value
     int         m_maxSymbolValue;
-    
+
     // number of items per line
     int         m_symbolsPerLine;
-    
+
     // Unicode/ASCII mode
     bool        m_unicodeMode;
 

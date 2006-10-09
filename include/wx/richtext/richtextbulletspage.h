@@ -1,12 +1,12 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        richtextbulletspage.h
+// Name:        wx/richtext/richtextbulletspage.h
 // Purpose:
 // Author:      Julian Smart
 // Modified by:
 // Created:     10/4/2006 10:32:31 AM
-// RCS-ID:
+// RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _RICHTEXTBULLETSPAGE_H_
@@ -41,14 +41,6 @@ class wxRichTextCtrl;
 #define SYMBOL_WXRICHTEXTBULLETSPAGE_SIZE wxSize(400, 300)
 #define SYMBOL_WXRICHTEXTBULLETSPAGE_POSITION wxDefaultPosition
 ////@end control identifiers
-
-/*!
- * Compatibility
- */
-
-#ifndef wxCLOSE_BOX
-#define wxCLOSE_BOX 0x1000
-#endif
 
 /*!
  * wxRichTextBulletsPage class declaration

@@ -1,23 +1,30 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        richtextbulletspage.cpp
+// Name:        src/richtext/richtextbulletspage.cpp
 // Purpose:
 // Author:      Julian Smart
 // Modified by:
 // Created:     10/4/2006 10:32:31 AM
-// RCS-ID:
+// RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-////@begin includes
-////@end includes
+// For compilers that support precompilation, includes "wx/wx.h".
+#include "wx/wxprec.h"
 
-#include "../../include/wx/richtext/richtextbulletspage.h"
+#ifdef __BORLANDC__
+    #pragma hdrstop
+#endif
+
+#if wxUSE_RICHTEXT
+
+#include "wx/richtext/richtextbulletspage.h"
+
+#ifndef WX_PRECOMP
+#endif
+
 #include "wx/richtext/richtextsymboldlg.h"
 #include "wx/fontenum.h"
-
-////@begin XPM images
-////@end XPM images
 
 /*!
  * wxRichTextBulletsPage type definition
@@ -166,7 +173,14 @@ void wxRichTextBulletsPage::CreateControls()
     itemBoxSizer11->Add(itemBoxSizer13, 0, wxGROW, 5);
 
     wxString* m_symbolCtrlStrings = NULL;
-    m_symbolCtrl = new wxComboBox( itemPanel1, ID_RICHTEXTBULLETSPAGE_SYMBOLCTRL, _T(""), wxDefaultPosition, wxSize(60, -1), 0, m_symbolCtrlStrings, wxCB_DROPDOWN );
+    m_symbolCtrl = new wxComboBox( itemPanel1,
+                                   ID_RICHTEXTBULLETSPAGE_SYMBOLCTRL,
+                                   wxEmptyString,
+                                   wxDefaultPosition,
+                                   wxSize(60, wxDefaultCoord),
+                                   0,
+                                   m_symbolCtrlStrings,
+                                   wxCB_DROPDOWN );
     itemBoxSizer13->Add(m_symbolCtrl, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxFIXED_MINSIZE, 5);
 
     wxButton* itemButton15 = new wxButton( itemPanel1, ID_RICHTEXTBULLETSPAGE_CHOOSE_SYMBOL, _("Ch&oose..."), wxDefaultPosition, wxDefaultSize, 0 );
@@ -178,7 +192,14 @@ void wxRichTextBulletsPage::CreateControls()
     itemBoxSizer11->Add(itemStaticText17, 0, wxALIGN_LEFT|wxLEFT|wxRIGHT|wxTOP|wxADJUST_MINSIZE, 5);
 
     wxString* m_symbolFontCtrlStrings = NULL;
-    m_symbolFontCtrl = new wxComboBox( itemPanel1, ID_RICHTEXTBULLETSPAGE_SYMBOLFONTCTRL, _T(""), wxDefaultPosition, wxDefaultSize, 0, m_symbolFontCtrlStrings, wxCB_DROPDOWN );
+    m_symbolFontCtrl = new wxComboBox( itemPanel1,
+                                       ID_RICHTEXTBULLETSPAGE_SYMBOLFONTCTRL,
+                                       wxEmptyString,
+                                       wxDefaultPosition,
+                                       wxDefaultSize,
+                                       0,
+                                       m_symbolFontCtrlStrings,
+                                       wxCB_DROPDOWN );
     itemBoxSizer11->Add(m_symbolFontCtrl, 0, wxGROW|wxALL, 5);
 
     itemBoxSizer4->Add(2, 1, 1, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM, 5);
@@ -194,7 +215,7 @@ void wxRichTextBulletsPage::CreateControls()
     wxStaticText* itemStaticText23 = new wxStaticText( itemPanel1, ID_RICHTEXTBULLETSPAGE_NUMBERSTATIC, _("&Number:"), wxDefaultPosition, wxDefaultSize, 0 );
     itemBoxSizer22->Add(itemStaticText23, 0, wxALIGN_LEFT|wxLEFT|wxRIGHT|wxTOP|wxADJUST_MINSIZE, 5);
 
-    m_numberCtrl = new wxSpinCtrl( itemPanel1, ID_RICHTEXTBULLETSPAGE_NUMBERCTRL, _T("0"), wxDefaultPosition, wxSize(50, -1), wxSP_ARROW_KEYS, 0, 100000, 0 );
+    m_numberCtrl = new wxSpinCtrl( itemPanel1, ID_RICHTEXTBULLETSPAGE_NUMBERCTRL, _T("0"), wxDefaultPosition, wxSize(50, wxDefaultCoord), wxSP_ARROW_KEYS, 0, 100000, 0 );
     itemBoxSizer22->Add(m_numberCtrl, 0, wxGROW|wxALL, 5);
 
     itemBoxSizer22->Add(5, 5, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 5);
@@ -283,7 +304,7 @@ bool wxRichTextBulletsPage::TransferDataFromWindow()
     if (m_hasBulletSymbol)
     {
         wxChar c(wxT('*'));
-        if (m_symbolCtrl->GetValue().Length() > 0)
+        if (m_symbolCtrl->GetValue().length() > 0)
             c = m_symbolCtrl->GetValue()[0];
         attr->SetBulletSymbol(c);
         attr->SetBulletFont(m_symbolFontCtrl->GetValue());
@@ -688,4 +709,4 @@ void wxRichTextBulletsPage::OnNumberstaticUpdate( wxUpdateUIEvent& event )
     OnNumberUpdate(event);
 }
 
-
+#endif // wxUSE_RICHTEXT

@@ -1,19 +1,19 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        richtextsymboldlg.cpp
+// Name:        src/richtext/richtextsymboldlg.cpp
 // Purpose:
 // Author:      Julian Smart
 // Modified by:
 // Created:     10/5/2006 3:11:58 PM
-// RCS-ID:
+// RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-#pragma hdrstop
+    #pragma hdrstop
 #endif
 
 #if wxUSE_RICHTEXT
@@ -21,18 +21,17 @@
 #include "wx/richtext/richtextsymboldlg.h"
 
 #ifndef WX_PRECOMP
-#include "wx/wx.h"
+    #include "wx/sizer.h"
+    #include "wx/stattext.h"
+    #include "wx/combobox.h"
+    #include "wx/button.h"
+    #include "wx/settings.h"
+    #include "wx/icon.h"
+    #include "wx/listbox.h"
 #endif
-
-////@begin includes
-////@end includes
 
 #include "wx/fontenum.h"
 #include "wx/dcbuffer.h"
-#include "wx/settings.h"
-
-////@begin XPM images
-////@end XPM images
 
 /* Microsoft Unicode subset numbering
  */
@@ -397,7 +396,14 @@ void wxSymbolPickerDialog::CreateControls()
     itemBoxSizer5->Add(itemStaticText6, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxADJUST_MINSIZE, 5);
 
     wxString* m_fontCtrlStrings = NULL;
-    m_fontCtrl = new wxComboBox( itemDialog1, ID_SYMBOLPICKERDIALOG_FONT, _T(""), wxDefaultPosition, wxSize(240, -1), 0, m_fontCtrlStrings, wxCB_READONLY );
+    m_fontCtrl = new wxComboBox( itemDialog1,
+                                 ID_SYMBOLPICKERDIALOG_FONT,
+                                 wxEmptyString,
+                                 wxDefaultPosition,
+                                 wxSize(240, wxDefaultCoord),
+                                 0,
+                                 m_fontCtrlStrings,
+                                 wxCB_READONLY );
     itemBoxSizer5->Add(m_fontCtrl, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
     itemBoxSizer5->Add(5, 5, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
@@ -410,7 +416,14 @@ void wxSymbolPickerDialog::CreateControls()
 
 #if defined(__UNICODE__)
     wxString* m_subsetCtrlStrings = NULL;
-    m_subsetCtrl = new wxComboBox( itemDialog1, ID_SYMBOLPICKERDIALOG_SUBSET, _T(""), wxDefaultPosition, wxDefaultSize, 0, m_subsetCtrlStrings, wxCB_READONLY );
+    m_subsetCtrl = new wxComboBox( itemDialog1,
+                                   ID_SYMBOLPICKERDIALOG_SUBSET,
+                                   wxEmptyString,
+                                   wxDefaultPosition,
+                                   wxDefaultSize,
+                                   0,
+                                   m_subsetCtrlStrings,
+                                   wxCB_READONLY );
     m_subsetCtrl->SetHelpText(_("Shows a Unicode subset."));
     if (ShowToolTips())
         m_subsetCtrl->SetToolTip(_("Shows a Unicode subset."));
@@ -424,7 +437,7 @@ void wxSymbolPickerDialog::CreateControls()
     wxBoxSizer* itemBoxSizer12 = new wxBoxSizer(wxHORIZONTAL);
     itemBoxSizer3->Add(itemBoxSizer12, 0, wxGROW, 5);
 
-    m_symbolStaticCtrl = new wxStaticText( itemDialog1, wxID_STATIC, _("xxxx"), wxDefaultPosition, wxSize(40, -1), wxALIGN_CENTRE );
+    m_symbolStaticCtrl = new wxStaticText( itemDialog1, wxID_STATIC, _("xxxx"), wxDefaultPosition, wxSize(40, wxDefaultCoord), wxALIGN_CENTRE );
     itemBoxSizer12->Add(m_symbolStaticCtrl, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxADJUST_MINSIZE, 5);
 
     itemBoxSizer12->Add(5, 5, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
@@ -432,7 +445,12 @@ void wxSymbolPickerDialog::CreateControls()
     wxStaticText* itemStaticText15 = new wxStaticText( itemDialog1, wxID_STATIC, _("&Character code:"), wxDefaultPosition, wxDefaultSize, 0 );
     itemBoxSizer12->Add(itemStaticText15, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxADJUST_MINSIZE, 5);
 
-    m_characterCodeCtrl = new wxTextCtrl( itemDialog1, ID_SYMBOLPICKERDIALOG_CHARACTERCODE, _T(""), wxDefaultPosition, wxSize(140, -1), wxTE_READONLY|wxTE_CENTRE );
+    m_characterCodeCtrl = new wxTextCtrl( itemDialog1,
+                                          ID_SYMBOLPICKERDIALOG_CHARACTERCODE,
+                                          wxEmptyString,
+                                          wxDefaultPosition,
+                                          wxSize(140, wxDefaultCoord),
+                                          wxTE_READONLY|wxTE_CENTRE );
     itemBoxSizer12->Add(m_characterCodeCtrl, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
     itemBoxSizer12->Add(5, 5, 1, wxALIGN_CENTER_VERTICAL|wxALL, 5);
@@ -514,7 +532,7 @@ bool wxSymbolPickerDialog::TransferDataToWindow()
         m_fontCtrl->Append(faceNames);
     }
 
-    if (m_fontName.IsEmpty())
+    if (m_fontName.empty())
         m_fontCtrl->SetSelection(0);
     else
     {
@@ -524,7 +542,7 @@ bool wxSymbolPickerDialog::TransferDataToWindow()
             m_fontCtrl->SetSelection(0);
     }
 
-    if (!m_symbol.IsEmpty())
+    if (!m_symbol.empty())
     {
         int sel = (int) m_symbol[0];
         m_symbolsCtrl->SetSelection(sel);
@@ -554,12 +572,12 @@ void wxSymbolPickerDialog::UpdateSymbolDisplay(bool updateSymbolList, bool showA
 {
     wxFont font;
     wxString fontNameToUse;
-    if (m_fontName.IsEmpty())
+    if (m_fontName.empty())
         fontNameToUse = m_normalTextFontName;
     else
         fontNameToUse = m_fontName;
 
-    if (!fontNameToUse.IsEmpty())
+    if (!fontNameToUse.empty())
     {
         font = wxFont(14, wxDEFAULT, wxNORMAL, wxNORMAL, false, fontNameToUse);
     }
@@ -571,7 +589,7 @@ void wxSymbolPickerDialog::UpdateSymbolDisplay(bool updateSymbolList, bool showA
         m_symbolsCtrl->SetFont(font);
     }
 
-    if (!m_symbol.IsEmpty())
+    if (!m_symbol.empty())
     {
         m_symbolStaticCtrl->SetFont(font);
         m_symbolStaticCtrl->SetLabel(m_symbol);
@@ -624,7 +642,7 @@ void wxSymbolPickerDialog::OnSymbolSelected( wxCommandEvent& event )
         return;
 
     int sel = event.GetSelection();
-    if (sel == -1)
+    if (sel == wxNOT_FOUND)
         m_symbol = wxEmptyString;
     else
     {
@@ -702,7 +720,7 @@ void wxSymbolPickerDialog::SetUnicodeMode(bool unicodeMode)
 /// Get the selected symbol character
 int wxSymbolPickerDialog::GetSymbolChar() const
 {
-    if (m_symbol.IsEmpty())
+    if (m_symbol.empty())
         return -1;
     else
         return (int) m_symbol[0];

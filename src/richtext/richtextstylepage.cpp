@@ -1,21 +1,27 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        richtextstylepage.cpp
+// Name:        src/richtext/richtextstylepage.cpp
 // Purpose:     
 // Author:      Julian Smart
 // Modified by: 
 // Created:     10/5/2006 11:34:55 AM
-// RCS-ID:      
+// RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:     
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-////@begin includes
-////@end includes
+// For compilers that support precompilation, includes "wx/wx.h".
+#include "wx/wxprec.h"
 
-#include "../../include/wx/richtext/richtextstylepage.h"
+#ifdef __BORLANDC__
+    #pragma hdrstop
+#endif
 
-////@begin XPM images
-////@end XPM images
+#if wxUSE_RICHTEXT
+
+#include "wx/richtext/richtextstylepage.h"
+
+#ifndef WX_PRECOMP
+#endif
 
 /*!
  * wxRichTextStylePage type definition
@@ -107,21 +113,40 @@ void wxRichTextStylePage::CreateControls()
     wxStaticText* itemStaticText6 = new wxStaticText( itemPanel1, wxID_STATIC, _("&Style:"), wxDefaultPosition, wxDefaultSize, 0 );
     itemBoxSizer5->Add(itemStaticText6, 0, wxALIGN_LEFT|wxLEFT|wxRIGHT|wxTOP|wxADJUST_MINSIZE, 5);
 
-    m_styleName = new wxTextCtrl( itemPanel1, ID_RICHTEXTSTYLEPAGE_STYLE_NAME, _T(""), wxDefaultPosition, wxSize(300, -1), 0 );
+    m_styleName = new wxTextCtrl( itemPanel1,
+                                  ID_RICHTEXTSTYLEPAGE_STYLE_NAME,
+                                  wxEmptyString,
+                                  wxDefaultPosition,
+                                  wxSize(300, wxDefaultCoord),
+                                  0 );
     itemBoxSizer5->Add(m_styleName, 0, wxGROW|wxALL, 5);
 
     wxStaticText* itemStaticText8 = new wxStaticText( itemPanel1, wxID_STATIC, _("&Based on:"), wxDefaultPosition, wxDefaultSize, 0 );
     itemBoxSizer5->Add(itemStaticText8, 0, wxALIGN_LEFT|wxLEFT|wxRIGHT|wxTOP|wxADJUST_MINSIZE, 5);
 
     wxString* m_basedOnStrings = NULL;
-    m_basedOn = new wxComboBox( itemPanel1, ID_RICHTEXTSTYLEPAGE_BASED_ON, _T(""), wxDefaultPosition, wxDefaultSize, 0, m_basedOnStrings, wxCB_DROPDOWN );
+    m_basedOn = new wxComboBox( itemPanel1,
+                                ID_RICHTEXTSTYLEPAGE_BASED_ON,
+                                wxEmptyString,
+                                wxDefaultPosition,
+                                wxDefaultSize,
+                                0,
+                                m_basedOnStrings,
+                                wxCB_DROPDOWN );
     itemBoxSizer5->Add(m_basedOn, 0, wxGROW|wxALL, 5);
 
     wxStaticText* itemStaticText10 = new wxStaticText( itemPanel1, wxID_STATIC, _("&Next style:"), wxDefaultPosition, wxDefaultSize, 0 );
     itemBoxSizer5->Add(itemStaticText10, 0, wxALIGN_LEFT|wxLEFT|wxRIGHT|wxTOP|wxADJUST_MINSIZE, 5);
 
     wxString* m_nextStyleStrings = NULL;
-    m_nextStyle = new wxComboBox( itemPanel1, ID_RICHTEXTSTYLEPAGE_NEXT_STYLE, _T(""), wxDefaultPosition, wxDefaultSize, 0, m_nextStyleStrings, wxCB_DROPDOWN );
+    m_nextStyle = new wxComboBox( itemPanel1,
+                                  ID_RICHTEXTSTYLEPAGE_NEXT_STYLE,
+                                  wxEmptyString,
+                                  wxDefaultPosition,
+                                  wxDefaultSize,
+                                  0,
+                                  m_nextStyleStrings,
+                                  wxCB_DROPDOWN );
     itemBoxSizer5->Add(m_nextStyle, 0, wxGROW|wxALL, 5);
 
     itemBoxSizer3->Add(5, 5, 1, wxALIGN_CENTER_HORIZONTAL|wxALL, 5);
@@ -253,3 +278,5 @@ void wxRichTextStylePage::OnNextStyleUpdate( wxUpdateUIEvent& event )
     wxRichTextStyleDefinition* def = wxRichTextFormattingDialog::GetDialogStyleDefinition(this);
     event.Enable(def->IsKindOf(CLASSINFO(wxRichTextParagraphStyleDefinition)));
 }
+
+#endif // wxUSE_RICHTEXT

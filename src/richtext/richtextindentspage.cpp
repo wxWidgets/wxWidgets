@@ -1,21 +1,27 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        richtextindentspage.cpp
+// Name:        src/richtext/richtextindentspage.cpp
 // Purpose:
 // Author:      Julian Smart
 // Modified by:
 // Created:     10/3/2006 2:28:21 PM
-// RCS-ID:
+// RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-////@begin includes
-////@end includes
+// For compilers that support precompilation, includes "wx/wx.h".
+#include "wx/wxprec.h"
 
-#include "../../include/wx/richtext/richtextindentspage.h"
+#ifdef __BORLANDC__
+    #pragma hdrstop
+#endif
 
-////@begin XPM images
-////@end XPM images
+#if wxUSE_RICHTEXT
+
+#include "wx/richtext/richtextindentspage.h"
+
+#ifndef WX_PRECOMP
+#endif
 
 /*!
  * wxRichTextIndentsSpacingPage type definition
@@ -194,7 +200,12 @@ void wxRichTextIndentsSpacingPage::CreateControls()
     wxBoxSizer* itemBoxSizer24 = new wxBoxSizer(wxHORIZONTAL);
     itemFlexGridSizer22->Add(itemBoxSizer24, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 
-    m_indentLeft = new wxTextCtrl( itemPanel1, ID_RICHTEXTINDENTSSPACINGPAGE_INDENT_LEFT, _T(""), wxDefaultPosition, wxSize(50, -1), 0 );
+    m_indentLeft = new wxTextCtrl( itemPanel1,
+                                   ID_RICHTEXTINDENTSSPACINGPAGE_INDENT_LEFT,
+                                   wxEmptyString,
+                                   wxDefaultPosition,
+                                   wxSize(50, wxDefaultCoord),
+                                   0 );
     itemBoxSizer24->Add(m_indentLeft, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
     wxStaticText* itemStaticText26 = new wxStaticText( itemPanel1, wxID_STATIC, _("Left (&first line):"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -203,7 +214,12 @@ void wxRichTextIndentsSpacingPage::CreateControls()
     wxBoxSizer* itemBoxSizer27 = new wxBoxSizer(wxHORIZONTAL);
     itemFlexGridSizer22->Add(itemBoxSizer27, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 
-    m_indentLeftFirst = new wxTextCtrl( itemPanel1, ID_RICHTEXTINDENTSSPACINGPAGE_INDENT_LEFT_FIRST, _T(""), wxDefaultPosition, wxSize(50, -1), 0 );
+    m_indentLeftFirst = new wxTextCtrl( itemPanel1,
+                                        ID_RICHTEXTINDENTSSPACINGPAGE_INDENT_LEFT_FIRST,
+                                        wxEmptyString,
+                                        wxDefaultPosition,
+                                        wxSize(50, wxDefaultCoord),
+                                        0 );
     itemBoxSizer27->Add(m_indentLeftFirst, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
     wxStaticText* itemStaticText29 = new wxStaticText( itemPanel1, wxID_STATIC, _("&Right:"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -212,7 +228,12 @@ void wxRichTextIndentsSpacingPage::CreateControls()
     wxBoxSizer* itemBoxSizer30 = new wxBoxSizer(wxHORIZONTAL);
     itemFlexGridSizer22->Add(itemBoxSizer30, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 
-    m_indentRight = new wxTextCtrl( itemPanel1, ID_RICHTEXTINDENTSSPACINGPAGE_INDENT_RIGHT, _T(""), wxDefaultPosition, wxSize(50, -1), 0 );
+    m_indentRight = new wxTextCtrl( itemPanel1,
+                                    ID_RICHTEXTINDENTSSPACINGPAGE_INDENT_RIGHT,
+                                    wxEmptyString,
+                                    wxDefaultPosition,
+                                    wxSize(50, wxDefaultCoord),
+                                    0 );
     itemBoxSizer30->Add(m_indentRight, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
     itemBoxSizer4->Add(2, 1, 1, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM, 5);
@@ -242,7 +263,12 @@ void wxRichTextIndentsSpacingPage::CreateControls()
     wxBoxSizer* itemBoxSizer41 = new wxBoxSizer(wxHORIZONTAL);
     itemFlexGridSizer39->Add(itemBoxSizer41, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 
-    m_spacingBefore = new wxTextCtrl( itemPanel1, ID_RICHTEXTINDENTSSPACINGPAGE_SPACING_BEFORE, _T(""), wxDefaultPosition, wxSize(50, -1), 0 );
+    m_spacingBefore = new wxTextCtrl( itemPanel1,
+                                      ID_RICHTEXTINDENTSSPACINGPAGE_SPACING_BEFORE,
+                                      wxEmptyString,
+                                      wxDefaultPosition,
+                                      wxSize(50, wxDefaultCoord),
+                                      0 );
     itemBoxSizer41->Add(m_spacingBefore, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
     wxStaticText* itemStaticText43 = new wxStaticText( itemPanel1, wxID_STATIC, _("After a paragraph:"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -251,7 +277,12 @@ void wxRichTextIndentsSpacingPage::CreateControls()
     wxBoxSizer* itemBoxSizer44 = new wxBoxSizer(wxHORIZONTAL);
     itemFlexGridSizer39->Add(itemBoxSizer44, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 
-    m_spacingAfter = new wxTextCtrl( itemPanel1, ID_RICHTEXTINDENTSSPACINGPAGE_SPACING_AFTER, _T(""), wxDefaultPosition, wxSize(50, -1), 0 );
+    m_spacingAfter = new wxTextCtrl( itemPanel1,
+                                     ID_RICHTEXTINDENTSSPACINGPAGE_SPACING_AFTER,
+                                     wxEmptyString,
+                                     wxDefaultPosition,
+                                     wxSize(50, wxDefaultCoord),
+                                     0 );
     itemBoxSizer44->Add(m_spacingAfter, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
     wxStaticText* itemStaticText46 = new wxStaticText( itemPanel1, wxID_STATIC, _("Line spacing:"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -343,7 +374,7 @@ bool wxRichTextIndentsSpacingPage::TransferDataFromWindow()
 
     wxString leftIndent(m_indentLeft->GetValue());
     wxString leftFirstIndent(m_indentLeftFirst->GetValue());
-    if (!leftIndent.IsEmpty())
+    if (!leftIndent.empty())
     {
         int visualLeftIndent = wxAtoi(leftIndent);
         int visualLeftFirstIndent = wxAtoi(leftFirstIndent);
@@ -356,19 +387,19 @@ bool wxRichTextIndentsSpacingPage::TransferDataFromWindow()
         attr->SetFlags(attr->GetFlags() & (~wxTEXT_ATTR_LEFT_INDENT));
 
     wxString rightIndent(m_indentRight->GetValue());
-    if (!rightIndent.IsEmpty())
+    if (!rightIndent.empty())
         attr->SetRightIndent(wxAtoi(rightIndent));
     else
         attr->SetFlags(attr->GetFlags() & (~wxTEXT_ATTR_RIGHT_INDENT));
 
     wxString spacingAfter(m_spacingAfter->GetValue());
-    if (!spacingAfter.IsEmpty())
+    if (!spacingAfter.empty())
         attr->SetParagraphSpacingAfter(wxAtoi(spacingAfter));
     else
         attr->SetFlags(attr->GetFlags() & (~wxTEXT_ATTR_PARA_SPACING_AFTER));
 
     wxString spacingBefore(m_spacingBefore->GetValue());
-    if (!spacingBefore.IsEmpty())
+    if (!spacingBefore.empty())
         attr->SetParagraphSpacingBefore(wxAtoi(spacingBefore));
     else
         attr->SetFlags(attr->GetFlags() & (~wxTEXT_ATTR_PARA_SPACING_BEFORE));
@@ -635,4 +666,4 @@ void wxRichTextIndentsSpacingPage::OnSpacingLineSelected( wxCommandEvent& WXUNUS
         UpdatePreview();
 }
 
-
+#endif // wxUSE_RICHTEXT

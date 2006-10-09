@@ -1,12 +1,12 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        richtextstylepage.h
+// Name:        wx/richtext/richtextstylepage.h
 // Purpose:     
 // Author:      Julian Smart
 // Modified by: 
 // Created:     10/5/2006 11:34:55 AM
-// RCS-ID:      
+// RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:     
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _RICHTEXTSTYLEPAGE_H_
@@ -37,14 +37,6 @@
 #define SYMBOL_WXRICHTEXTSTYLEPAGE_SIZE wxSize(400, 300)
 #define SYMBOL_WXRICHTEXTSTYLEPAGE_POSITION wxDefaultPosition
 ////@end control identifiers
-
-/*!
- * Compatibility
- */
-
-#ifndef wxCLOSE_BOX
-#define wxCLOSE_BOX 0x1000
-#endif
 
 /*!
  * wxRichTextStylePage class declaration

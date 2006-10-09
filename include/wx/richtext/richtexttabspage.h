@@ -1,12 +1,12 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        richtexttabspage.h
+// Name:        wx/richtext/richtexttabspage.h
 // Purpose:
 // Author:      Julian Smart
 // Modified by:
 // Created:     10/4/2006 8:03:20 AM
-// RCS-ID:
+// RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _RICHTEXTTABSPAGE_H_
@@ -37,14 +37,6 @@
 #define SYMBOL_WXRICHTEXTTABSPAGE_SIZE wxSize(400, 300)
 #define SYMBOL_WXRICHTEXTTABSPAGE_POSITION wxDefaultPosition
 ////@end control identifiers
-
-/*!
- * Compatibility
- */
-
-#ifndef wxCLOSE_BOX
-#define wxCLOSE_BOX 0x1000
-#endif
 
 /*!
  * wxRichTextTabsPage class declaration

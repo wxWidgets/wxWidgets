@@ -205,7 +205,6 @@ public:
     wxRichTextColourSwatchCtrl(wxWindow* parent, wxWindowID id, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = 0);
     ~wxRichTextColourSwatchCtrl();
 
-    void OnPaint(wxPaintEvent& event);
     void OnMouseEvent(wxMouseEvent& event);
 
     void SetColour(const wxColour& colour) { m_colour = colour; SetBackgroundColour(m_colour); }
@@ -278,4 +277,3 @@ private:
 
 #endif
     // _WX_RICHTEXTFORMATDLG_H_
-
