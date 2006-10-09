@@ -22,7 +22,7 @@ BCCDIR = $(MAKEDIR)\..
 ### Variables: ###
 
 WX_RELEASE_NODOT = 27
-WX_VERSION_NODOT = $(WX_RELEASE_NODOT)0
+WX_VERSION_NODOT = $(WX_RELEASE_NODOT)1
 OBJS = \
 	bcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
 LIBDIRNAME = ..\..\src\mmedia\..\..\..\lib\bcc_$(LIBTYPE_SUFFIX)$(CFG)
@@ -32,7 +32,7 @@ MMEDIADLL_CXXFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
 	$(__OPTIMIZEFLAG) $(__THREADSFLAG) -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
 	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) $(__MSLU_DEFINE_p) \
-	-I$(SETUPHDIR) -I..\..\src\mmedia\..\..\..\include \
+	$(__GFXCTX_DEFINE_p) -I$(SETUPHDIR) -I..\..\src\mmedia\..\..\..\include \
 	-I..\..\src\mmedia\..\..\include -DWXUSINGDLL -DWXMAKINGDLL_MMEDIA -Hu \
 	-H=$(OBJS)\wxprec_mmediadll.csm $(CPPFLAGS) $(CXXFLAGS)
 MMEDIADLL_OBJECTS =  \
@@ -61,7 +61,7 @@ MMEDIALIB_CXXFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
 	$(__OPTIMIZEFLAG) $(__THREADSFLAG) -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
 	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) $(__MSLU_DEFINE_p) \
-	-I$(SETUPHDIR) -I..\..\src\mmedia\..\..\..\include \
+	$(__GFXCTX_DEFINE_p) -I$(SETUPHDIR) -I..\..\src\mmedia\..\..\..\include \
 	-I..\..\src\mmedia\..\..\include -Hu -H=$(OBJS)\wxprec_mmedialib.csm \
 	$(CPPFLAGS) $(CXXFLAGS)
 MMEDIALIB_OBJECTS =  \
@@ -168,6 +168,9 @@ __UNICODE_DEFINE_p_1 = -d_UNICODE
 !if "$(MSLU)" == "1"
 __MSLU_DEFINE_p_1 = -dwxUSE_UNICODE_MSLU=1
 !endif
+!if "$(USE_GDIPLUS)" == "1"
+__GFXCTX_DEFINE_p_1 = -dwxUSE_GRAPHICS_CONTEXT=1
+!endif
 !if "$(MONOLITHIC)" == "1"
 __WXLIB_MONO_p = \
 	wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).lib
@@ -183,6 +186,9 @@ __LIB_PNG_p = wxpng$(WXDEBUGFLAG).lib
 !endif
 !if "$(MSLU)" == "1"
 __UNICOWS_LIB_p = unicows.lib
+!endif
+!if "$(USE_GDIPLUS)" == "1"
+__GDIPLUS_LIB_p = gdiplus.lib
 !endif
 !if "$(MONOLITHIC)" == "0"
 __WXLIB_CORE_p = \
@@ -250,6 +256,9 @@ __UNICODE_DEFINE_p = -D_UNICODE
 !if "$(MSLU)" == "1"
 __MSLU_DEFINE_p = -DwxUSE_UNICODE_MSLU=1
 !endif
+!if "$(USE_GDIPLUS)" == "1"
+__GFXCTX_DEFINE_p = -DwxUSE_GRAPHICS_CONTEXT=1
+!endif
 
 
 all: $(OBJS)
@@ -276,7 +285,7 @@ clean:
 !if "$(SHARED)" == "1"
 $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_mmedia_bcc$(VENDORTAG).dll: $(OBJS)\mmediadll_dummy.obj  $(MMEDIADLL_OBJECTS)  $(OBJS)\mmediadll_version.res
 	ilink32 -Tpd -q $(LDFLAGS) -L$(BCCDIR)\lib -L$(BCCDIR)\lib\psdk $(__DEBUGINFO)  -L$(LIBDIRNAME) @&&|
-	c0d32.obj $(MMEDIADLL_OBJECTS),$@,, $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) ole2w32.lib oleacc.lib odbc32.lib $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  import32.lib cw32$(__THREADSFLAG_6)$(__RUNTIME_LIBS_9).lib,, $(OBJS)\mmediadll_version.res
+	c0d32.obj $(MMEDIADLL_OBJECTS),$@,, $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) $(__GDIPLUS_LIB_p) ole2w32.lib oleacc.lib odbc32.lib $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  import32.lib cw32$(__THREADSFLAG_6)$(__RUNTIME_LIBS_9).lib,, $(OBJS)\mmediadll_version.res
 |
 	implib -f $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_mmedia $@
 !endif
@@ -293,7 +302,7 @@ $(OBJS)\mmediadll_dummy.obj: ../../src/mmedia\..\..\..\src\common\dummy.cpp
 	$(CXX) -q -c -P -o$@ $(MMEDIADLL_CXXFLAGS) -H $**
 
 $(OBJS)\mmediadll_version.res: ../../src/mmedia\..\..\..\src\msw\version.rc
-	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include   -d__WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__EXCEPTIONS_DEFINE_p_1) $(__RTTI_DEFINE_p_1) $(__THREAD_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) $(__MSLU_DEFINE_p_1) -i$(SETUPHDIR) -i..\..\src\mmedia\..\..\..\include -dWXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_mmedia_bcc$(VENDORTAG) $**
+	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include   -d__WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__EXCEPTIONS_DEFINE_p_1) $(__RTTI_DEFINE_p_1) $(__THREAD_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) $(__MSLU_DEFINE_p_1) $(__GFXCTX_DEFINE_p_1) -i$(SETUPHDIR) -i..\..\src\mmedia\..\..\..\include -dWXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_mmedia_bcc$(VENDORTAG) $**
 
 $(OBJS)\mmediadll_cdwin.obj: ../../src/mmedia\cdwin.cpp
 	$(CXX) -q -c -P -o$@ $(MMEDIADLL_CXXFLAGS) $**

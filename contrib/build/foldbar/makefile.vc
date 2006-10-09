@@ -13,7 +13,7 @@
 ### Variables: ###
 
 WX_RELEASE_NODOT = 27
-WX_VERSION_NODOT = $(WX_RELEASE_NODOT)0
+WX_VERSION_NODOT = $(WX_RELEASE_NODOT)1
 OBJS = \
 	vc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)$(DIR_SUFFIX_CPU)
 LIBDIRNAME = \
@@ -26,10 +26,10 @@ FOLDBARDLL_CXXFLAGS = /M$(__RUNTIME_LIBS_9)$(__DEBUGRUNTIME) /DWIN32 \
 	$(____DEBUGRUNTIME) $(__OPTIMIZEFLAG) $(__NO_VC_CRTDBG_p) /D__WXMSW__ \
 	$(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) \
 	$(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) \
-	$(__MSLU_DEFINE_p) /I$(SETUPHDIR) /I..\..\src\foldbar\..\..\..\include /W4 \
-	/I..\..\src\foldbar\..\..\include /DWXUSINGDLL /DWXMAKINGDLL_FOLDBAR \
-	$(__RTTIFLAG) $(__EXCEPTIONSFLAG) /Yu"wx/wxprec.h" \
-	/Fp"$(OBJS)\wxprec_foldbardll.pch" $(CPPFLAGS) $(CXXFLAGS)
+	$(__MSLU_DEFINE_p) $(__GFXCTX_DEFINE_p) /I$(SETUPHDIR) \
+	/I..\..\src\foldbar\..\..\..\include /W4 /I..\..\src\foldbar\..\..\include \
+	/DWXUSINGDLL /DWXMAKINGDLL_FOLDBAR $(__RTTIFLAG) $(__EXCEPTIONSFLAG) \
+	/Yu"wx/wxprec.h" /Fp"$(OBJS)\wxprec_foldbardll.pch" $(CPPFLAGS) $(CXXFLAGS)
 FOLDBARDLL_OBJECTS =  \
 	$(OBJS)\foldbardll_dummy.obj \
 	$(OBJS)\foldbardll_version.res \
@@ -42,9 +42,10 @@ FOLDBARLIB_CXXFLAGS = /M$(__RUNTIME_LIBS_22)$(__DEBUGRUNTIME) /DWIN32 \
 	$(____DEBUGRUNTIME) $(__OPTIMIZEFLAG) $(__NO_VC_CRTDBG_p) /D__WXMSW__ \
 	$(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) \
 	$(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) \
-	$(__MSLU_DEFINE_p) /I$(SETUPHDIR) /I..\..\src\foldbar\..\..\..\include /W4 \
-	/I..\..\src\foldbar\..\..\include $(__RTTIFLAG) $(__EXCEPTIONSFLAG) \
-	/Yu"wx/wxprec.h" /Fp"$(OBJS)\wxprec_foldbarlib.pch" $(CPPFLAGS) $(CXXFLAGS)
+	$(__MSLU_DEFINE_p) $(__GFXCTX_DEFINE_p) /I$(SETUPHDIR) \
+	/I..\..\src\foldbar\..\..\..\include /W4 /I..\..\src\foldbar\..\..\include \
+	$(__RTTIFLAG) $(__EXCEPTIONSFLAG) /Yu"wx/wxprec.h" \
+	/Fp"$(OBJS)\wxprec_foldbarlib.pch" $(CPPFLAGS) $(CXXFLAGS)
 FOLDBARLIB_OBJECTS =  \
 	$(OBJS)\foldbarlib_dummy.obj \
 	$(OBJS)\foldbarlib_captionbar.obj \
@@ -180,6 +181,9 @@ __UNICODE_DEFINE_p_1 = /d _UNICODE
 !if "$(MSLU)" == "1"
 __MSLU_DEFINE_p_1 = /d wxUSE_UNICODE_MSLU=1
 !endif
+!if "$(USE_GDIPLUS)" == "1"
+__GFXCTX_DEFINE_p_1 = /d wxUSE_GRAPHICS_CONTEXT=1
+!endif
 !if "$(MONOLITHIC)" == "1"
 __WXLIB_MONO_p = \
 	wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).lib
@@ -195,6 +199,9 @@ __LIB_PNG_p = wxpng$(WXDEBUGFLAG).lib
 !endif
 !if "$(MSLU)" == "1"
 __UNICOWS_LIB_p = unicows.lib
+!endif
+!if "$(USE_GDIPLUS)" == "1"
+__GDIPLUS_LIB_p = gdiplus.lib
 !endif
 !if "$(MONOLITHIC)" == "0"
 __WXLIB_CORE_p = \
@@ -304,6 +311,9 @@ __UNICODE_DEFINE_p = /D_UNICODE
 !if "$(MSLU)" == "1"
 __MSLU_DEFINE_p = /DwxUSE_UNICODE_MSLU=1
 !endif
+!if "$(USE_GDIPLUS)" == "1"
+__GFXCTX_DEFINE_p = /DwxUSE_GRAPHICS_CONTEXT=1
+!endif
 
 
 all: $(OBJS)
@@ -327,7 +337,7 @@ clean:
 !if "$(SHARED)" == "1"
 $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_foldbar_vc$(VENDORTAG).dll: $(OBJS)\foldbardll_dummy.obj  $(FOLDBARDLL_OBJECTS) $(OBJS)\foldbardll_version.res
 	link /DLL /NOLOGO /OUT:$@ $(LDFLAGS) $(__DEBUGINFO_2)  $(LINK_TARGET_CPU) /LIBPATH:$(LIBDIRNAME) @<<
-	$(FOLDBARDLL_OBJECTS)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  /IMPLIB:$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_foldbar.lib
+	$(FOLDBARDLL_OBJECTS)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) $(__GDIPLUS_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  /IMPLIB:$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_foldbar.lib
 <<
 !endif
 
@@ -343,7 +353,7 @@ $(OBJS)\foldbardll_dummy.obj: ../../src/foldbar\..\..\..\src\common\dummy.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(FOLDBARDLL_CXXFLAGS) /Ycwx/wxprec.h $**
 
 $(OBJS)\foldbardll_version.res: ../../src/foldbar\..\..\..\src\msw\version.rc
-	rc /fo$@  /d WIN32 $(____DEBUGRUNTIME_3_p_1) $(__NO_VC_CRTDBG_p_1)  /d __WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__EXCEPTIONS_DEFINE_p_1) $(__RTTI_DEFINE_p_1) $(__THREAD_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) $(__MSLU_DEFINE_p_1) /i $(SETUPHDIR) /i ..\..\src\foldbar\..\..\..\include /d WXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_foldbar_vc$(VENDORTAG) $**
+	rc /fo$@  /d WIN32 $(____DEBUGRUNTIME_3_p_1) $(__NO_VC_CRTDBG_p_1)  /d __WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__EXCEPTIONS_DEFINE_p_1) $(__RTTI_DEFINE_p_1) $(__THREAD_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) $(__MSLU_DEFINE_p_1) $(__GFXCTX_DEFINE_p_1) /i $(SETUPHDIR) /i ..\..\src\foldbar\..\..\..\include /d WXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_foldbar_vc$(VENDORTAG) $**
 
 $(OBJS)\foldbardll_captionbar.obj: ../../src/foldbar\captionbar.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(FOLDBARDLL_CXXFLAGS) $**

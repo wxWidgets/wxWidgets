@@ -31,8 +31,8 @@ TEX2RTF_CXXFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
 	$(__OPTIMIZEFLAG) $(__THREADSFLAG_0) -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
 	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) $(__MSLU_DEFINE_p) \
-	-I$(SETUPHDIR) -I.\..\..\..\include -I. $(__DLLFLAG_p) -DwxUSE_GUI=0 -DNO_GUI \
-	$(CPPFLAGS) $(CXXFLAGS)
+	$(__GFXCTX_DEFINE_p) -I$(SETUPHDIR) -I.\..\..\..\include -I. $(__DLLFLAG_p) \
+	-DwxUSE_GUI=0 -DNO_GUI $(CPPFLAGS) $(CXXFLAGS)
 TEX2RTF_OBJECTS =  \
 	$(OBJS)\tex2rtf_tex2rtf.obj \
 	$(OBJS)\tex2rtf_tex2any.obj \
@@ -46,8 +46,8 @@ TEX2RTF_GUI_CXXFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
 	$(__OPTIMIZEFLAG) $(__THREADSFLAG_0) -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
 	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) $(__MSLU_DEFINE_p) \
-	-I$(SETUPHDIR) -I.\..\..\..\include -I. $(__DLLFLAG_p) -I.\..\..\..\samples \
-	-DNOPCH $(CPPFLAGS) $(CXXFLAGS)
+	$(__GFXCTX_DEFINE_p) -I$(SETUPHDIR) -I.\..\..\..\include -I. $(__DLLFLAG_p) \
+	-I.\..\..\..\samples -DNOPCH $(CPPFLAGS) $(CXXFLAGS)
 TEX2RTF_GUI_OBJECTS =  \
 	$(OBJS)\tex2rtf_gui_tex2rtf.obj \
 	$(OBJS)\tex2rtf_gui_tex2any.obj \
@@ -119,6 +119,9 @@ __UNICODE_DEFINE_p_3 = -d_UNICODE
 !endif
 !if "$(MSLU)" == "1"
 __MSLU_DEFINE_p_3 = -dwxUSE_UNICODE_MSLU=1
+!endif
+!if "$(USE_GDIPLUS)" == "1"
+__GFXCTX_DEFINE_p_3 = -dwxUSE_GRAPHICS_CONTEXT=1
 !endif
 !if "$(SHARED)" == "1"
 __DLLFLAG_p_3 = -dWXUSINGDLL
@@ -194,6 +197,9 @@ __UNICODE_DEFINE_p = -D_UNICODE
 !if "$(MSLU)" == "1"
 __MSLU_DEFINE_p = -DwxUSE_UNICODE_MSLU=1
 !endif
+!if "$(USE_GDIPLUS)" == "1"
+__GFXCTX_DEFINE_p = -DwxUSE_GRAPHICS_CONTEXT=1
+!endif
 !if "$(SHARED)" == "1"
 __DLLFLAG_p = -DWXUSINGDLL
 !endif
@@ -207,6 +213,9 @@ __WXLIB_MONO_p = \
 !endif
 !if "$(MSLU)" == "1"
 __UNICOWS_LIB_p = unicows.lib
+!endif
+!if "$(USE_GDIPLUS)" == "1"
+__GDIPLUS_LIB_p = gdiplus.lib
 !endif
 !if "$(BUILD)" == "debug" && "$(DEBUG_INFO)" == "default"
 __DEBUGINFO = -v
@@ -249,13 +258,13 @@ clean:
 
 $(OBJS)\tex2rtf.exe: $(TEX2RTF_OBJECTS)
 	ilink32 -Tpe -q $(LDFLAGS) -L$(BCCDIR)\lib -L$(BCCDIR)\lib\psdk $(__DEBUGINFO)  -L$(LIBDIRNAME) -ap @&&|
-	c0x32.obj $(TEX2RTF_OBJECTS),$@,, $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) ole2w32.lib oleacc.lib odbc32.lib import32.lib cw32$(__THREADSFLAG)$(__RUNTIME_LIBS_0).lib,,
+	c0x32.obj $(TEX2RTF_OBJECTS),$@,, $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) $(__GDIPLUS_LIB_p) ole2w32.lib oleacc.lib odbc32.lib import32.lib cw32$(__THREADSFLAG)$(__RUNTIME_LIBS_0).lib,,
 |
 
 !if "$(USE_GUI)" == "1"
 $(OBJS)\tex2rtf_gui.exe: $(TEX2RTF_GUI_OBJECTS)  $(OBJS)\tex2rtf_gui_sample.res
 	ilink32 -Tpe -q $(LDFLAGS) -L$(BCCDIR)\lib -L$(BCCDIR)\lib\psdk $(__DEBUGINFO)  -L$(LIBDIRNAME) -aa @&&|
-	c0w32.obj $(TEX2RTF_GUI_OBJECTS),$@,, $(__WXLIB_HTML_p)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) ole2w32.lib oleacc.lib odbc32.lib import32.lib cw32$(__THREADSFLAG)$(__RUNTIME_LIBS_0).lib,, $(OBJS)\tex2rtf_gui_sample.res
+	c0w32.obj $(TEX2RTF_GUI_OBJECTS),$@,, $(__WXLIB_HTML_p)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) $(__GDIPLUS_LIB_p) ole2w32.lib oleacc.lib odbc32.lib import32.lib cw32$(__THREADSFLAG)$(__RUNTIME_LIBS_0).lib,, $(OBJS)\tex2rtf_gui_sample.res
 |
 !endif
 
@@ -284,7 +293,7 @@ $(OBJS)\tex2rtf_table.obj: .\table.cpp
 	$(CXX) -q -c -P -o$@ $(TEX2RTF_CXXFLAGS) $**
 
 $(OBJS)\tex2rtf_gui_sample.res: .\..\..\..\samples\sample.rc
-	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include   -d__WXMSW__ $(__WXUNIV_DEFINE_p_3) $(__DEBUG_DEFINE_p_3) $(__EXCEPTIONS_DEFINE_p_3) $(__RTTI_DEFINE_p_3) $(__THREAD_DEFINE_p_3) $(__UNICODE_DEFINE_p_3) $(__MSLU_DEFINE_p_3) -i$(SETUPHDIR) -i.\..\..\..\include -i. $(__DLLFLAG_p_3) -i.\..\..\..\samples $**
+	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include   -d__WXMSW__ $(__WXUNIV_DEFINE_p_3) $(__DEBUG_DEFINE_p_3) $(__EXCEPTIONS_DEFINE_p_3) $(__RTTI_DEFINE_p_3) $(__THREAD_DEFINE_p_3) $(__UNICODE_DEFINE_p_3) $(__MSLU_DEFINE_p_3) $(__GFXCTX_DEFINE_p_3) -i$(SETUPHDIR) -i.\..\..\..\include -i. $(__DLLFLAG_p_3) -i.\..\..\..\samples $**
 
 $(OBJS)\tex2rtf_gui_tex2rtf.obj: .\tex2rtf.cpp
 	$(CXX) -q -c -P -o$@ $(TEX2RTF_GUI_CXXFLAGS) $**

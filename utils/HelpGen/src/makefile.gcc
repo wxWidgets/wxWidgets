@@ -23,9 +23,9 @@ HELPGEN_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG_2) $(__THREADSFLAG) \
 	$(GCCFLAGS) -DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
 	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) $(__MSLU_DEFINE_p) \
-	-I$(SETUPHDIR) -I.\..\..\..\include -W -Wall -I. $(__DLLFLAG_p) -DwxUSE_GUI=0 \
-	$(__RTTIFLAG_5) $(__EXCEPTIONSFLAG_6) -Wno-ctor-dtor-privacy $(CPPFLAGS) \
-	$(CXXFLAGS)
+	$(__GFXCTX_DEFINE_p) -I$(SETUPHDIR) -I.\..\..\..\include -W -Wall -I. \
+	$(__DLLFLAG_p) -DwxUSE_GUI=0 $(__RTTIFLAG_5) $(__EXCEPTIONSFLAG_6) \
+	-Wno-ctor-dtor-privacy $(CPPFLAGS) $(CXXFLAGS)
 HELPGEN_OBJECTS =  \
 	$(OBJS)\HelpGen_HelpGen.o \
 	$(OBJS)\HelpGen_cjparser.o \
@@ -120,6 +120,9 @@ endif
 ifeq ($(MSLU),1)
 __MSLU_DEFINE_p = -DwxUSE_UNICODE_MSLU=1
 endif
+ifeq ($(USE_GDIPLUS),1)
+__GFXCTX_DEFINE_p = -DwxUSE_GRAPHICS_CONTEXT=1
+endif
 ifeq ($(SHARED),1)
 __DLLFLAG_p = -DWXUSINGDLL
 endif
@@ -133,6 +136,9 @@ __WXLIB_MONO_p = \
 endif
 ifeq ($(MSLU),1)
 __UNICOWS_LIB_p = -lunicows
+endif
+ifeq ($(USE_GDIPLUS),1)
+__GDIPLUS_LIB_p = -lgdiplus
 endif
 ifeq ($(BUILD),debug)
 ifeq ($(DEBUG_INFO),default)
@@ -172,7 +178,7 @@ clean:
 	-if exist $(OBJS)\HelpGen.exe del $(OBJS)\HelpGen.exe
 
 $(OBJS)\HelpGen.exe: $(HELPGEN_OBJECTS)
-	$(CXX) -o $@ $(HELPGEN_OBJECTS) $(LDFLAGS) $(__DEBUGINFO) $(__THREADSFLAG) -L$(LIBDIRNAME)   $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) -lwxzlib$(WXDEBUGFLAG)  -lwxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG) -lwxexpat$(WXDEBUGFLAG) $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lwsock32 -lodbc32
+	$(CXX) -o $@ $(HELPGEN_OBJECTS) $(LDFLAGS) $(__DEBUGINFO) $(__THREADSFLAG) -L$(LIBDIRNAME)   $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) -lwxzlib$(WXDEBUGFLAG)  -lwxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG) -lwxexpat$(WXDEBUGFLAG) $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) $(__GDIPLUS_LIB_p) -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lwsock32 -lodbc32
 
 $(OBJS)\HelpGen_HelpGen.o: ./HelpGen.cpp
 	$(CXX) -c -o $@ $(HELPGEN_CXXFLAGS) $(CPPDEPS) $<

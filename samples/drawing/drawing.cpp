@@ -34,7 +34,7 @@
 #include "wx/image.h"
 #include "wx/artprov.h"
 
-#define wxTEST_GRAPHICS 0
+#define wxTEST_GRAPHICS 1
 
 #if wxTEST_GRAPHICS
 #include "wx/graphics.h"

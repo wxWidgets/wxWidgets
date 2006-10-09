@@ -22,7 +22,7 @@ BCCDIR = $(MAKEDIR)\..
 ### Variables: ###
 
 WX_RELEASE_NODOT = 27
-WX_VERSION_NODOT = $(WX_RELEASE_NODOT)0
+WX_VERSION_NODOT = $(WX_RELEASE_NODOT)1
 OBJS = \
 	bcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
 LIBDIRNAME = ..\..\src\gizmos\..\..\..\lib\bcc_$(LIBTYPE_SUFFIX)$(CFG)
@@ -32,7 +32,7 @@ GIZMOSDLL_CXXFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
 	$(__OPTIMIZEFLAG) $(__THREADSFLAG_2) -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
 	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) $(__MSLU_DEFINE_p) \
-	-I$(SETUPHDIR) -I..\..\src\gizmos\..\..\..\include \
+	$(__GFXCTX_DEFINE_p) -I$(SETUPHDIR) -I..\..\src\gizmos\..\..\..\include \
 	-I..\..\src\gizmos\..\..\include -DWXUSINGDLL -DWXMAKINGDLL_GIZMOS -Hu \
 	-H=$(OBJS)\wxprec_gizmosdll.csm $(CPPFLAGS) $(CXXFLAGS)
 GIZMOSDLL_OBJECTS =  \
@@ -47,7 +47,7 @@ GIZMOS_XRCDLL_CXXFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
 	$(__OPTIMIZEFLAG) $(__THREADSFLAG_2) -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
 	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) $(__MSLU_DEFINE_p) \
-	-I$(SETUPHDIR) -I..\..\src\gizmos\..\..\..\include \
+	$(__GFXCTX_DEFINE_p) -I$(SETUPHDIR) -I..\..\src\gizmos\..\..\..\include \
 	-I..\..\src\gizmos\..\..\include -DWXUSINGDLL -DWXMAKINGDLL_GIZMOS_XRC -Hu \
 	-H=$(OBJS)\wxprec_gizmos_xrcdll.csm $(CPPFLAGS) $(CXXFLAGS)
 GIZMOS_XRCDLL_OBJECTS =  \
@@ -57,7 +57,7 @@ GIZMOSLIB_CXXFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
 	$(__OPTIMIZEFLAG) $(__THREADSFLAG_2) -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
 	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) $(__MSLU_DEFINE_p) \
-	-I$(SETUPHDIR) -I..\..\src\gizmos\..\..\..\include \
+	$(__GFXCTX_DEFINE_p) -I$(SETUPHDIR) -I..\..\src\gizmos\..\..\..\include \
 	-I..\..\src\gizmos\..\..\include -Hu -H=$(OBJS)\wxprec_gizmoslib.csm \
 	$(CPPFLAGS) $(CXXFLAGS)
 GIZMOSLIB_OBJECTS =  \
@@ -72,7 +72,7 @@ GIZMOS_XRCLIB_CXXFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
 	$(__OPTIMIZEFLAG) $(__THREADSFLAG_2) -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
 	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) $(__MSLU_DEFINE_p) \
-	-I$(SETUPHDIR) -I..\..\src\gizmos\..\..\..\include \
+	$(__GFXCTX_DEFINE_p) -I$(SETUPHDIR) -I..\..\src\gizmos\..\..\..\include \
 	-I..\..\src\gizmos\..\..\include -Hu -H=$(OBJS)\wxprec_gizmos_xrclib.csm \
 	$(CPPFLAGS) $(CXXFLAGS)
 GIZMOS_XRCLIB_OBJECTS =  \
@@ -180,6 +180,9 @@ __UNICODE_DEFINE_p_0 = -d_UNICODE
 !if "$(MSLU)" == "1"
 __MSLU_DEFINE_p_0 = -dwxUSE_UNICODE_MSLU=1
 !endif
+!if "$(USE_GDIPLUS)" == "1"
+__GFXCTX_DEFINE_p_0 = -dwxUSE_GRAPHICS_CONTEXT=1
+!endif
 !if "$(MONOLITHIC)" == "1"
 __WXLIB_MONO_p = \
 	wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).lib
@@ -195,6 +198,9 @@ __LIB_PNG_p = wxpng$(WXDEBUGFLAG).lib
 !endif
 !if "$(MSLU)" == "1"
 __UNICOWS_LIB_p = unicows.lib
+!endif
+!if "$(USE_GDIPLUS)" == "1"
+__GDIPLUS_LIB_p = gdiplus.lib
 !endif
 !if "$(MONOLITHIC)" == "0"
 __WXLIB_CORE_p = \
@@ -258,6 +264,9 @@ __UNICODE_DEFINE_p = -D_UNICODE
 !if "$(MSLU)" == "1"
 __MSLU_DEFINE_p = -DwxUSE_UNICODE_MSLU=1
 !endif
+!if "$(USE_GDIPLUS)" == "1"
+__GFXCTX_DEFINE_p = -DwxUSE_GRAPHICS_CONTEXT=1
+!endif
 
 
 all: $(OBJS)
@@ -292,7 +301,7 @@ clean:
 !if "$(SHARED)" == "1"
 $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gizmos_bcc$(VENDORTAG).dll: $(OBJS)\gizmosdll_dummy.obj  $(GIZMOSDLL_OBJECTS)  $(OBJS)\gizmosdll_version.res
 	ilink32 -Tpd -q $(LDFLAGS) -L$(BCCDIR)\lib -L$(BCCDIR)\lib\psdk $(__DEBUGINFO)  -L$(LIBDIRNAME) @&&|
-	c0d32.obj $(GIZMOSDLL_OBJECTS),$@,, $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) ole2w32.lib oleacc.lib odbc32.lib $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  import32.lib cw32$(__THREADSFLAG)$(__RUNTIME_LIBS_0).lib,, $(OBJS)\gizmosdll_version.res
+	c0d32.obj $(GIZMOSDLL_OBJECTS),$@,, $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) $(__GDIPLUS_LIB_p) ole2w32.lib oleacc.lib odbc32.lib $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  import32.lib cw32$(__THREADSFLAG)$(__RUNTIME_LIBS_0).lib,, $(OBJS)\gizmosdll_version.res
 |
 	implib -f $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gizmos $@
 !endif
@@ -300,7 +309,7 @@ $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXD
 !if "$(SHARED)" == "1" && "$(USE_XRC)" == "1"
 $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gizmos_xrc_bcc$(VENDORTAG).dll: $(OBJS)\gizmos_xrcdll_dummy.obj  $(GIZMOS_XRCDLL_OBJECTS)  $(OBJS)\gizmos_xrcdll_version.res $(__gizmosdll___depname)
 	ilink32 -Tpd -q $(LDFLAGS) -L$(BCCDIR)\lib -L$(BCCDIR)\lib\psdk $(__DEBUGINFO)  -L$(LIBDIRNAME) @&&|
-	c0d32.obj $(GIZMOS_XRCDLL_OBJECTS),$@,, $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) ole2w32.lib oleacc.lib odbc32.lib $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gizmos.lib $(__WXLIB_XRC_p)  $(__WXLIB_XML_p)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  import32.lib cw32$(__THREADSFLAG)$(__RUNTIME_LIBS_0).lib,, $(OBJS)\gizmos_xrcdll_version.res
+	c0d32.obj $(GIZMOS_XRCDLL_OBJECTS),$@,, $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) $(__GDIPLUS_LIB_p) ole2w32.lib oleacc.lib odbc32.lib $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gizmos.lib $(__WXLIB_XRC_p)  $(__WXLIB_XML_p)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  import32.lib cw32$(__THREADSFLAG)$(__RUNTIME_LIBS_0).lib,, $(OBJS)\gizmos_xrcdll_version.res
 |
 	implib -f $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gizmos_xrc $@
 !endif
@@ -325,7 +334,7 @@ $(OBJS)\gizmosdll_dummy.obj: ../../src/gizmos\..\..\..\src\common\dummy.cpp
 	$(CXX) -q -c -P -o$@ $(GIZMOSDLL_CXXFLAGS) -H $**
 
 $(OBJS)\gizmosdll_version.res: ../../src/gizmos\..\..\..\src\msw\version.rc
-	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include   -d__WXMSW__ $(__WXUNIV_DEFINE_p_0) $(__DEBUG_DEFINE_p_0) $(__EXCEPTIONS_DEFINE_p_0) $(__RTTI_DEFINE_p_0) $(__THREAD_DEFINE_p_0) $(__UNICODE_DEFINE_p_0) $(__MSLU_DEFINE_p_0) -i$(SETUPHDIR) -i..\..\src\gizmos\..\..\..\include -dWXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gizmos_bcc$(VENDORTAG) $**
+	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include   -d__WXMSW__ $(__WXUNIV_DEFINE_p_0) $(__DEBUG_DEFINE_p_0) $(__EXCEPTIONS_DEFINE_p_0) $(__RTTI_DEFINE_p_0) $(__THREAD_DEFINE_p_0) $(__UNICODE_DEFINE_p_0) $(__MSLU_DEFINE_p_0) $(__GFXCTX_DEFINE_p_0) -i$(SETUPHDIR) -i..\..\src\gizmos\..\..\..\include -dWXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gizmos_bcc$(VENDORTAG) $**
 
 $(OBJS)\gizmosdll_dynamicsash.obj: ../../src/gizmos\dynamicsash.cpp
 	$(CXX) -q -c -P -o$@ $(GIZMOSDLL_CXXFLAGS) $**
@@ -349,7 +358,7 @@ $(OBJS)\gizmos_xrcdll_dummy.obj: ../../src/gizmos\..\..\..\src\common\dummy.cpp
 	$(CXX) -q -c -P -o$@ $(GIZMOS_XRCDLL_CXXFLAGS) -H $**
 
 $(OBJS)\gizmos_xrcdll_version.res: ../../src/gizmos\..\..\..\src\msw\version.rc
-	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include   -d__WXMSW__ $(__WXUNIV_DEFINE_p_0) $(__DEBUG_DEFINE_p_0) $(__EXCEPTIONS_DEFINE_p_0) $(__RTTI_DEFINE_p_0) $(__THREAD_DEFINE_p_0) $(__UNICODE_DEFINE_p_0) $(__MSLU_DEFINE_p_0) -i$(SETUPHDIR) -i..\..\src\gizmos\..\..\..\include -dWXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gizmos_xrc_bcc$(VENDORTAG) $**
+	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include   -d__WXMSW__ $(__WXUNIV_DEFINE_p_0) $(__DEBUG_DEFINE_p_0) $(__EXCEPTIONS_DEFINE_p_0) $(__RTTI_DEFINE_p_0) $(__THREAD_DEFINE_p_0) $(__UNICODE_DEFINE_p_0) $(__MSLU_DEFINE_p_0) $(__GFXCTX_DEFINE_p_0) -i$(SETUPHDIR) -i..\..\src\gizmos\..\..\..\include -dWXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gizmos_xrc_bcc$(VENDORTAG) $**
 
 $(OBJS)\gizmos_xrcdll_xh_statpict.obj: ../../src/gizmos\xh_statpict.cpp
 	$(CXX) -q -c -P -o$@ $(GIZMOS_XRCDLL_CXXFLAGS) $**

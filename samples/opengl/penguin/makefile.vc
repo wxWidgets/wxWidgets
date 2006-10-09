@@ -23,16 +23,16 @@ PENGUIN_CFLAGS = /M$(__RUNTIME_LIBS_8)$(__DEBUGRUNTIME_3) /DWIN32 \
 	$(__OPTIMIZEFLAG_4) $(__NO_VC_CRTDBG_p) /D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
 	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) $(__MSLU_DEFINE_p) \
-	/I$(SETUPHDIR) /I.\..\..\..\include /W4 /I. $(__DLLFLAG_p) /D_WINDOWS \
-	/I.\..\..\..\samples /DNOPCH $(CPPFLAGS) $(CFLAGS)
+	$(__GFXCTX_DEFINE_p) /I$(SETUPHDIR) /I.\..\..\..\include /W4 /I. \
+	$(__DLLFLAG_p) /D_WINDOWS /I.\..\..\..\samples /DNOPCH $(CPPFLAGS) $(CFLAGS)
 PENGUIN_CXXFLAGS = /M$(__RUNTIME_LIBS_8)$(__DEBUGRUNTIME_3) /DWIN32 \
 	$(__DEBUGINFO_0) /Fd$(OBJS)\penguin.pdb $(____DEBUGRUNTIME_2_p) \
 	$(__OPTIMIZEFLAG_4) $(__NO_VC_CRTDBG_p) /D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
 	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) $(__MSLU_DEFINE_p) \
-	/I$(SETUPHDIR) /I.\..\..\..\include /W4 /I. $(__DLLFLAG_p) /D_WINDOWS \
-	/I.\..\..\..\samples /DNOPCH $(__RTTIFLAG_9) $(__EXCEPTIONSFLAG_10) \
-	$(CPPFLAGS) $(CXXFLAGS)
+	$(__GFXCTX_DEFINE_p) /I$(SETUPHDIR) /I.\..\..\..\include /W4 /I. \
+	$(__DLLFLAG_p) /D_WINDOWS /I.\..\..\..\samples /DNOPCH $(__RTTIFLAG_9) \
+	$(__EXCEPTIONSFLAG_10) $(CPPFLAGS) $(CXXFLAGS)
 PENGUIN_OBJECTS =  \
 	$(OBJS)\penguin_penguin.obj \
 	$(OBJS)\penguin_dxfrenderer.obj \
@@ -251,6 +251,12 @@ __MSLU_DEFINE_p = /DwxUSE_UNICODE_MSLU=1
 !if "$(MSLU)" == "1"
 __MSLU_DEFINE_p_1 = /d wxUSE_UNICODE_MSLU=1
 !endif
+!if "$(USE_GDIPLUS)" == "1"
+__GFXCTX_DEFINE_p = /DwxUSE_GRAPHICS_CONTEXT=1
+!endif
+!if "$(USE_GDIPLUS)" == "1"
+__GFXCTX_DEFINE_p_1 = /d wxUSE_GRAPHICS_CONTEXT=1
+!endif
 !if "$(SHARED)" == "1"
 __DLLFLAG_p = /DWXUSINGDLL
 !endif
@@ -281,6 +287,9 @@ __LIB_PNG_p = wxpng$(WXDEBUGFLAG).lib
 !if "$(MSLU)" == "1"
 __UNICOWS_LIB_p = unicows.lib
 !endif
+!if "$(USE_GDIPLUS)" == "1"
+__GDIPLUS_LIB_p = gdiplus.lib
+!endif
 
 
 all: $(OBJS)
@@ -302,7 +311,7 @@ clean:
 !if "$(USE_OPENGL)" == "1"
 $(OBJS)\penguin.exe: $(PENGUIN_OBJECTS) $(OBJS)\penguin_penguin.res
 	link /NOLOGO /OUT:$@ $(LDFLAGS) $(__DEBUGINFO_1)  $(LINK_TARGET_CPU) /LIBPATH:$(LIBDIRNAME) /SUBSYSTEM:WINDOWS @<<
-	$(PENGUIN_OBJECTS)  wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gl.lib opengl32.lib glu32.lib $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib
+	$(PENGUIN_OBJECTS)  wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gl.lib opengl32.lib glu32.lib $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) $(__GDIPLUS_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib
 <<
 !endif
 
@@ -320,5 +329,5 @@ $(OBJS)\penguin_trackball.obj: .\trackball.c
 	$(CC) /c /nologo /TC /Fo$@ $(PENGUIN_CFLAGS) $**
 
 $(OBJS)\penguin_penguin.res: .\penguin.rc
-	rc /fo$@  /d WIN32 $(____DEBUGRUNTIME_2_p_1) $(__NO_VC_CRTDBG_p_1)  /d __WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__EXCEPTIONS_DEFINE_p_1) $(__RTTI_DEFINE_p_1) $(__THREAD_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) $(__MSLU_DEFINE_p_1) /i $(SETUPHDIR) /i .\..\..\..\include /i . $(__DLLFLAG_p_1) /d _WINDOWS /i .\..\..\..\samples /d NOPCH $**
+	rc /fo$@  /d WIN32 $(____DEBUGRUNTIME_2_p_1) $(__NO_VC_CRTDBG_p_1)  /d __WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__EXCEPTIONS_DEFINE_p_1) $(__RTTI_DEFINE_p_1) $(__THREAD_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) $(__MSLU_DEFINE_p_1) $(__GFXCTX_DEFINE_p_1) /i $(SETUPHDIR) /i .\..\..\..\include /i . $(__DLLFLAG_p_1) /d _WINDOWS /i .\..\..\..\samples /d NOPCH $**
 

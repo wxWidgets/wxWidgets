@@ -31,8 +31,8 @@ JOYTEST_CXXFLAGS = $(__RUNTIME_LIBS_7) -I$(BCCDIR)\include $(__DEBUGINFO) \
 	$(__OPTIMIZEFLAG_2) $(__THREADSFLAG_6) -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
 	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) $(__MSLU_DEFINE_p) \
-	-I$(SETUPHDIR) -I.\..\..\include -I. $(__DLLFLAG_p) -I.\..\..\samples -DNOPCH \
-	$(CPPFLAGS) $(CXXFLAGS)
+	$(__GFXCTX_DEFINE_p) -I$(SETUPHDIR) -I.\..\..\include -I. $(__DLLFLAG_p) \
+	-I.\..\..\samples -DNOPCH $(CPPFLAGS) $(CXXFLAGS)
 JOYTEST_OBJECTS =  \
 	$(OBJS)\joytest_joytest.obj
 
@@ -149,6 +149,12 @@ __MSLU_DEFINE_p = -DwxUSE_UNICODE_MSLU=1
 !if "$(MSLU)" == "1"
 __MSLU_DEFINE_p_1 = -dwxUSE_UNICODE_MSLU=1
 !endif
+!if "$(USE_GDIPLUS)" == "1"
+__GFXCTX_DEFINE_p = -DwxUSE_GRAPHICS_CONTEXT=1
+!endif
+!if "$(USE_GDIPLUS)" == "1"
+__GFXCTX_DEFINE_p_1 = -dwxUSE_GRAPHICS_CONTEXT=1
+!endif
 !if "$(SHARED)" == "1"
 __DLLFLAG_p = -DWXUSINGDLL
 !endif
@@ -191,6 +197,9 @@ __LIB_PNG_p = wxpng$(WXDEBUGFLAG).lib
 !if "$(MSLU)" == "1"
 __UNICOWS_LIB_p = unicows.lib
 !endif
+!if "$(USE_GDIPLUS)" == "1"
+__GDIPLUS_LIB_p = gdiplus.lib
+!endif
 !if "$(BUILD)" == "debug" && "$(DEBUG_INFO)" == "default"
 __DEBUGINFO = -v
 !endif
@@ -226,12 +235,12 @@ clean:
 
 $(OBJS)\joytest.exe: $(JOYTEST_OBJECTS)  $(OBJS)\joytest_joytest.res
 	ilink32 -Tpe -q $(LDFLAGS) -L$(BCCDIR)\lib -L$(BCCDIR)\lib\psdk $(__DEBUGINFO)  -L$(LIBDIRNAME) -aa @&&|
-	c0w32.obj $(JOYTEST_OBJECTS),$@,, $(__WXLIB_ADV_p)  $(__WXLIB_HTML_p)  $(__WXLIB_XML_p)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) ole2w32.lib oleacc.lib odbc32.lib import32.lib cw32$(__THREADSFLAG_5)$(__RUNTIME_LIBS_8).lib,, $(OBJS)\joytest_joytest.res
+	c0w32.obj $(JOYTEST_OBJECTS),$@,, $(__WXLIB_ADV_p)  $(__WXLIB_HTML_p)  $(__WXLIB_XML_p)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) $(__GDIPLUS_LIB_p) ole2w32.lib oleacc.lib odbc32.lib import32.lib cw32$(__THREADSFLAG_5)$(__RUNTIME_LIBS_8).lib,, $(OBJS)\joytest_joytest.res
 |
 
 $(OBJS)\joytest_joytest.obj: .\joytest.cpp
 	$(CXX) -q -c -P -o$@ $(JOYTEST_CXXFLAGS) $**
 
 $(OBJS)\joytest_joytest.res: .\joytest.rc
-	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include   -d__WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__EXCEPTIONS_DEFINE_p_1) $(__RTTI_DEFINE_p_1) $(__THREAD_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) $(__MSLU_DEFINE_p_1) -i$(SETUPHDIR) -i.\..\..\include -i. $(__DLLFLAG_p_1) -i.\..\..\samples -dNOPCH $**
+	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include   -d__WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__EXCEPTIONS_DEFINE_p_1) $(__RTTI_DEFINE_p_1) $(__THREAD_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) $(__MSLU_DEFINE_p_1) $(__GFXCTX_DEFINE_p_1) -i$(SETUPHDIR) -i.\..\..\include -i. $(__DLLFLAG_p_1) -i.\..\..\samples -dNOPCH $**
 

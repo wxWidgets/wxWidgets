@@ -14,7 +14,7 @@ include ../../../build/msw/config.gcc
 
 CPPDEPS = -MT$@ -MF$@.d -MD
 WX_RELEASE_NODOT = 27
-WX_VERSION_NODOT = $(WX_RELEASE_NODOT)0
+WX_VERSION_NODOT = $(WX_RELEASE_NODOT)1
 OBJS = \
 	gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
 LIBDIRNAME = ..\..\src\fl\..\..\..\lib\gcc_$(LIBTYPE_SUFFIX)$(CFG)
@@ -23,10 +23,10 @@ SETUPHDIR = \
 FLDLL_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) $(GCCFLAGS) \
 	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
 	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) \
-	$(__UNICODE_DEFINE_p) $(__MSLU_DEFINE_p) -I$(SETUPHDIR) \
-	-I..\..\src\fl\..\..\..\include -W -Wall -I..\..\src\fl\..\..\include \
-	-DWXUSINGDLL -DWXMAKINGDLL_FL $(__RTTIFLAG) $(__EXCEPTIONSFLAG) \
-	-Wno-ctor-dtor-privacy $(CPPFLAGS) $(CXXFLAGS)
+	$(__UNICODE_DEFINE_p) $(__MSLU_DEFINE_p) $(__GFXCTX_DEFINE_p) \
+	-I$(SETUPHDIR) -I..\..\src\fl\..\..\..\include -W -Wall \
+	-I..\..\src\fl\..\..\include -DWXUSINGDLL -DWXMAKINGDLL_FL $(__RTTIFLAG) \
+	$(__EXCEPTIONSFLAG) -Wno-ctor-dtor-privacy $(CPPFLAGS) $(CXXFLAGS)
 FLDLL_OBJECTS =  \
 	$(OBJS)\fldll_dummy.o \
 	$(OBJS)\fldll_version_rc.o \
@@ -50,10 +50,10 @@ FLDLL_OBJECTS =  \
 FLLIB_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) $(GCCFLAGS) \
 	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
 	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) \
-	$(__UNICODE_DEFINE_p) $(__MSLU_DEFINE_p) -I$(SETUPHDIR) \
-	-I..\..\src\fl\..\..\..\include -W -Wall -I..\..\src\fl\..\..\include \
-	$(__RTTIFLAG) $(__EXCEPTIONSFLAG) -Wno-ctor-dtor-privacy $(CPPFLAGS) \
-	$(CXXFLAGS)
+	$(__UNICODE_DEFINE_p) $(__MSLU_DEFINE_p) $(__GFXCTX_DEFINE_p) \
+	-I$(SETUPHDIR) -I..\..\src\fl\..\..\..\include -W -Wall \
+	-I..\..\src\fl\..\..\include $(__RTTIFLAG) $(__EXCEPTIONSFLAG) \
+	-Wno-ctor-dtor-privacy $(CPPFLAGS) $(CXXFLAGS)
 FLLIB_OBJECTS =  \
 	$(OBJS)\fllib_dummy.o \
 	$(OBJS)\fllib_antiflickpl.o \
@@ -150,6 +150,9 @@ endif
 ifeq ($(MSLU),1)
 __MSLU_DEFINE_p_1 = --define wxUSE_UNICODE_MSLU=1
 endif
+ifeq ($(USE_GDIPLUS),1)
+__GFXCTX_DEFINE_p_1 = --define wxUSE_GRAPHICS_CONTEXT=1
+endif
 ifeq ($(MONOLITHIC),1)
 __WXLIB_MONO_p = \
 	-lwx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)
@@ -165,6 +168,9 @@ __LIB_PNG_p = -lwxpng$(WXDEBUGFLAG)
 endif
 ifeq ($(MSLU),1)
 __UNICOWS_LIB_p = -lunicows
+endif
+ifeq ($(USE_GDIPLUS),1)
+__GDIPLUS_LIB_p = -lgdiplus
 endif
 ifeq ($(MONOLITHIC),0)
 __WXLIB_CORE_p = \
@@ -244,6 +250,9 @@ endif
 ifeq ($(MSLU),1)
 __MSLU_DEFINE_p = -DwxUSE_UNICODE_MSLU=1
 endif
+ifeq ($(USE_GDIPLUS),1)
+__GFXCTX_DEFINE_p = -DwxUSE_GRAPHICS_CONTEXT=1
+endif
 
 
 all: $(OBJS)
@@ -263,7 +272,7 @@ clean:
 
 ifeq ($(SHARED),1)
 $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_fl_gcc$(VENDORTAG).dll: $(FLDLL_OBJECTS) $(OBJS)\fldll_version_rc.o
-	$(CXX) -shared -fPIC -o $@ $(FLDLL_OBJECTS) $(LDFLAGS) $(__DEBUGINFO) $(__THREADSFLAG) -L$(LIBDIRNAME) -Wl,--out-implib,$(LIBDIRNAME)\libwx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_fl.a  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  -lwxzlib$(WXDEBUGFLAG)  -lwxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG) -lwxexpat$(WXDEBUGFLAG) $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lwsock32 -lodbc32 $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)
+	$(CXX) -shared -fPIC -o $@ $(FLDLL_OBJECTS) $(LDFLAGS) $(__DEBUGINFO) $(__THREADSFLAG) -L$(LIBDIRNAME) -Wl,--out-implib,$(LIBDIRNAME)\libwx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_fl.a  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  -lwxzlib$(WXDEBUGFLAG)  -lwxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG) -lwxexpat$(WXDEBUGFLAG) $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) $(__GDIPLUS_LIB_p) -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lwsock32 -lodbc32 $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)
 endif
 
 ifeq ($(SHARED),0)
@@ -277,7 +286,7 @@ $(OBJS)\fldll_dummy.o: ../../src/fl/../../../src/common/dummy.cpp
 	$(CXX) -c -o $@ $(FLDLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\fldll_version_rc.o: ../../src/fl/../../../src/msw/version.rc
-	windres --use-temp-file -i$< -o$@   --define __WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__EXCEPTIONS_DEFINE_p_1) $(__RTTI_DEFINE_p_1) $(__THREAD_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) $(__MSLU_DEFINE_p_1) --include-dir $(SETUPHDIR) --include-dir ../../src/fl/../../../include --define WXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_fl_gcc$(VENDORTAG)
+	windres --use-temp-file -i$< -o$@   --define __WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__EXCEPTIONS_DEFINE_p_1) $(__RTTI_DEFINE_p_1) $(__THREAD_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) $(__MSLU_DEFINE_p_1) $(__GFXCTX_DEFINE_p_1) --include-dir $(SETUPHDIR) --include-dir ../../src/fl/../../../include --define WXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_fl_gcc$(VENDORTAG)
 
 $(OBJS)\fldll_antiflickpl.o: ../../src/fl/antiflickpl.cpp
 	$(CXX) -c -o $@ $(FLDLL_CXXFLAGS) $(CPPDEPS) $<

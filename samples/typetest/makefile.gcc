@@ -23,9 +23,9 @@ TYPETEST_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG_2) $(__THREADSFLAG) \
 	$(GCCFLAGS) -DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
 	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) $(__MSLU_DEFINE_p) \
-	-I$(SETUPHDIR) -I.\..\..\include -W -Wall -I. $(__DLLFLAG_p) -I.\..\..\samples \
-	-DNOPCH $(__RTTIFLAG_5) $(__EXCEPTIONSFLAG_6) -Wno-ctor-dtor-privacy \
-	$(CPPFLAGS) $(CXXFLAGS)
+	$(__GFXCTX_DEFINE_p) -I$(SETUPHDIR) -I.\..\..\include -W -Wall -I. \
+	$(__DLLFLAG_p) -I.\..\..\samples -DNOPCH $(__RTTIFLAG_5) \
+	$(__EXCEPTIONSFLAG_6) -Wno-ctor-dtor-privacy $(CPPFLAGS) $(CXXFLAGS)
 TYPETEST_OBJECTS =  \
 	$(OBJS)\typetest_typetest.o \
 	$(OBJS)\typetest_typetest_rc.o
@@ -140,6 +140,12 @@ endif
 ifeq ($(MSLU),1)
 __MSLU_DEFINE_p_1 = --define wxUSE_UNICODE_MSLU=1
 endif
+ifeq ($(USE_GDIPLUS),1)
+__GFXCTX_DEFINE_p = -DwxUSE_GRAPHICS_CONTEXT=1
+endif
+ifeq ($(USE_GDIPLUS),1)
+__GFXCTX_DEFINE_p_1 = --define wxUSE_GRAPHICS_CONTEXT=1
+endif
 ifeq ($(SHARED),1)
 __DLLFLAG_p = -DWXUSINGDLL
 endif
@@ -169,6 +175,9 @@ __LIB_PNG_p = -lwxpng$(WXDEBUGFLAG)
 endif
 ifeq ($(MSLU),1)
 __UNICOWS_LIB_p = -lunicows
+endif
+ifeq ($(USE_GDIPLUS),1)
+__GDIPLUS_LIB_p = -lgdiplus
 endif
 ifeq ($(BUILD),debug)
 ifeq ($(DEBUG_INFO),default)
@@ -208,13 +217,13 @@ clean:
 	-if exist $(OBJS)\typetest.exe del $(OBJS)\typetest.exe
 
 $(OBJS)\typetest.exe: $(TYPETEST_OBJECTS) $(OBJS)\typetest_typetest_rc.o
-	$(CXX) -o $@ $(TYPETEST_OBJECTS) $(LDFLAGS) $(__DEBUGINFO) $(__THREADSFLAG) -L$(LIBDIRNAME) -Wl,--subsystem,windows -mwindows  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  -lwxzlib$(WXDEBUGFLAG)  -lwxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG) -lwxexpat$(WXDEBUGFLAG) $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lwsock32 -lodbc32
+	$(CXX) -o $@ $(TYPETEST_OBJECTS) $(LDFLAGS) $(__DEBUGINFO) $(__THREADSFLAG) -L$(LIBDIRNAME) -Wl,--subsystem,windows -mwindows  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  -lwxzlib$(WXDEBUGFLAG)  -lwxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG) -lwxexpat$(WXDEBUGFLAG) $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) $(__GDIPLUS_LIB_p) -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lwsock32 -lodbc32
 
 $(OBJS)\typetest_typetest.o: ./typetest.cpp
 	$(CXX) -c -o $@ $(TYPETEST_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\typetest_typetest_rc.o: ./typetest.rc
-	windres --use-temp-file -i$< -o$@   --define __WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__EXCEPTIONS_DEFINE_p_1) $(__RTTI_DEFINE_p_1) $(__THREAD_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) $(__MSLU_DEFINE_p_1) --include-dir $(SETUPHDIR) --include-dir ./../../include --include-dir . $(__DLLFLAG_p_1) --include-dir ./../../samples --define NOPCH
+	windres --use-temp-file -i$< -o$@   --define __WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__EXCEPTIONS_DEFINE_p_1) $(__RTTI_DEFINE_p_1) $(__THREAD_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) $(__MSLU_DEFINE_p_1) $(__GFXCTX_DEFINE_p_1) --include-dir $(SETUPHDIR) --include-dir ./../../include --include-dir . $(__DLLFLAG_p_1) --include-dir ./../../samples --define NOPCH
 
 .PHONY: all clean
 
