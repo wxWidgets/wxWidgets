@@ -558,6 +558,21 @@
 // Recommended setting: 1
 #define wxUSE_AUI       1
 
+
+// Enable the new wxGraphicsPath and wxGraphicsContext classes for an advanced
+// 2D drawing API.  (Still somewhat experimental)
+//
+// Please note that on Windows you will need to link with gdiplus.lib (use
+// USE_GDIPLUS=1 for makefile builds) and distribute gdiplus.dll with your
+// application if you want it to be runnable on pre-XP systems.
+//
+// Default is 0
+//
+// Recommended setting: 1
+#ifndef wxUSE_GRAPHICS_CONTEXT
+#define wxUSE_GRAPHICS_CONTEXT 0
+#endif
+
 // Set to 1 to compile MS Windows XP theme engine support
 #define wxUSE_UXTHEME           0
 
@@ -909,6 +924,14 @@
 
 // wizards
 #define wxUSE_WIZARDDLG 1
+
+// Compile in wxAboutBox() function showing the standard "About" dialog.
+//
+// Default is 1
+//
+// Recommended setting: 1 but can be set to 0 to save some space if you don't
+//                      use this function
+#define wxUSE_ABOUTDLG 1
 
 // ----------------------------------------------------------------------------
 // Metafiles support
