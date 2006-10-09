@@ -4,7 +4,7 @@
 // Author:      Marco Cavallini (MCK) - wx@koansoftware.com
 // Modified by:
 // Created:     31-08-2003
-// RCS-ID:
+// RCS-ID:      $Id$
 // Copyright:   (c) Marco Cavallini
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -510,7 +510,7 @@ size_t wcsftime(wchar_t *s,
     wxString formatStr(format);
     wxCharBuffer bufFormatStr(formatStr.mb_str());
 
-    size_t sz = strftime(sBuf, maxsize/sizeof(wchar_t), bufFormatStr, t);
+    size_t sz = strftime(sBuf.data(), maxsize/sizeof(wchar_t), bufFormatStr, t);
 
     wxMB2WC(s, sBuf, maxsize);
 

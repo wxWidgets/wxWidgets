@@ -799,7 +799,9 @@ bool wxNotebook::InsertPage(size_t nPage,
     // so the first panel gets the correct themed background
     if ( m_pages.empty() )
     {
+#if wxUSE_UXTHEME
         UpdateBgBrush();
+#endif // wxUSE_UXTHEME
     }
 
     // succeeded: save the pointer to the page
