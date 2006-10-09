@@ -84,18 +84,14 @@ protected:
     // get the size which the choice control should have
     virtual wxSize GetControllerSize() const;
 
-    int DoSetSelection(size_t nPage, int flags = 0);
-
     void UpdateSelectedPage(size_t newsel)
     {
         m_selection = newsel;
         GetChoiceCtrl()->Select(newsel);
     }
 
-    void MakeChangedEvent(wxBookCtrlBaseEvent &event)
-    {
-        event.SetEventType(wxEVT_COMMAND_CHOICEBOOK_PAGE_CHANGED);
-    }
+    wxBookCtrlBaseEvent* CreatePageChangingEvent() const;
+    void MakeChangedEvent(wxBookCtrlBaseEvent &event);
 
     // event handlers
     void OnChoiceSelected(wxCommandEvent& event);

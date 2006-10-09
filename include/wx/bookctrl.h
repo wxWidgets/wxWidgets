@@ -222,21 +222,35 @@ public:
     virtual bool HasMultiplePages() const { return true; }
 
 protected:
-    // typically, wxBookCtrl-derived classes will use DoSetSelection() function
-    // to implement SetSelection() and ChangeSelection() functions.
-    // these flags make DoSetSelection() more readable
+    // flags for DoSetSelection()
     enum
     {
         SetSelection_SendEvent = 1
     };
 
-    // if using DoSetSelection() for implementing [Set|Change]Selection,
-    // then override UpdateSelectedPage() and MakeChangedEvent()
-    virtual int DoSetSelection(size_t nPage, int flags, wxBookCtrlBaseEvent &event);
+    // set the selection to the given page, sending the events (which can
+    // possibly prevent the page change from taking place) if SendEvent flag is
+    // included
+    virtual int DoSetSelection(size_t nPage, int flags = 0);
+
+    // if the derived class uses DoSetSelection() for implementing
+    // [Set|Change]Selection, it must override UpdateSelectedPage(),
+    // CreatePageChangingEvent() and MakeChangedEvent(), but as it might not
+    // use it, these functions are not pure virtual
+
+    // called to notify the control about a new current page
     virtual void UpdateSelectedPage(size_t WXUNUSED(newsel))
         { wxFAIL_MSG(wxT("Override this function!")); }
-    virtual void MakeChangedEvent(wxBookCtrlBaseEvent &WXUNUSED(event))
+
+    // create a new "page changing" event
+    virtual wxBookCtrlBaseEvent* CreatePageChangingEvent() const
+        { wxFAIL_MSG(wxT("Override this function!")); return NULL; }
+
+    // modify the event created by CreatePageChangingEvent() to "page changed"
+    // event, usually by just calling SetEventType() on it
+    virtual void MakeChangedEvent(wxBookCtrlBaseEvent& WXUNUSED(event))
         { wxFAIL_MSG(wxT("Override this function!")); }
+
 
     // Should we accept NULL page pointers in Add/InsertPage()?
     //

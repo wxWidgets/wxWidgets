@@ -101,13 +101,10 @@ protected:
     void OnSize(wxSizeEvent& event);
     void OnIdle(wxIdleEvent& event);
 
-    int DoSetSelection(size_t nPage, int flags = 0);
     void UpdateSelectedPage(size_t newsel);
-    
-    void MakeChangedEvent(wxBookCtrlBaseEvent &event)
-    {
-        event.SetEventType(wxEVT_COMMAND_TOOLBOOK_PAGE_CHANGED);
-    }
+
+    wxBookCtrlBaseEvent* CreatePageChangingEvent() const;
+    void MakeChangedEvent(wxBookCtrlBaseEvent &event);
 
     // the currently selected page or wxNOT_FOUND if none
     int m_selection;

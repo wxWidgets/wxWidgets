@@ -245,10 +245,14 @@ int wxToolbook::GetSelection() const
     return m_selection;
 }
 
-int wxToolbook::DoSetSelection(size_t n, int flags)
+wxBookCtrlBaseEvent* wxToolbook::CreatePageChangingEvent() const
 {
-    wxToolbookEvent event(wxEVT_COMMAND_TOOLBOOK_PAGE_CHANGING, m_windowId);
-    return wxBookCtrlBase::DoSetSelection(n, flags, event);
+    return new wxToolbookEvent(wxEVT_COMMAND_TOOLBOOK_PAGE_CHANGING, m_windowId);
+}
+
+void wxToolbook::MakeChangedEvent(wxBookCtrlBaseEvent &event)
+{
+    event.SetEventType(wxEVT_COMMAND_TOOLBOOK_PAGE_CHANGED);
 }
 
 void wxToolbook::UpdateSelectedPage(size_t newsel)

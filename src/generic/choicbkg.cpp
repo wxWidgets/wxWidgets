@@ -209,10 +209,14 @@ int wxChoicebook::GetSelection() const
     return m_selection;
 }
 
-int wxChoicebook::DoSetSelection(size_t n, int flags)
+wxBookCtrlBaseEvent* wxChoicebook::CreatePageChangingEvent() const
 {
-    wxChoicebookEvent event(wxEVT_COMMAND_CHOICEBOOK_PAGE_CHANGING, m_windowId);
-    return wxBookCtrlBase::DoSetSelection(n, flags, event);
+    return new wxChoicebookEvent(wxEVT_COMMAND_CHOICEBOOK_PAGE_CHANGING, m_windowId);
+}
+
+void wxChoicebook::MakeChangedEvent(wxBookCtrlBaseEvent &event)
+{
+    event.SetEventType(wxEVT_COMMAND_CHOICEBOOK_PAGE_CHANGED);
 }
 
 // ----------------------------------------------------------------------------

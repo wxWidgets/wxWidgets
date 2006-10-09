@@ -274,11 +274,16 @@ int wxListbook::GetSelection() const
     return m_selection;
 }
 
-int wxListbook::DoSetSelection(size_t n, int flags)
+wxBookCtrlBaseEvent* wxListbook::CreatePageChangingEvent() const
 {
-    wxListbookEvent event(wxEVT_COMMAND_LISTBOOK_PAGE_CHANGING, m_windowId);
-    return wxBookCtrlBase::DoSetSelection(n, flags, event);
+    return new wxListbookEvent(wxEVT_COMMAND_LISTBOOK_PAGE_CHANGING, m_windowId);
 }
+
+void wxListbook::MakeChangedEvent(wxBookCtrlBaseEvent &event)
+{
+    event.SetEventType(wxEVT_COMMAND_LISTBOOK_PAGE_CHANGED);
+}
+
 
 // ----------------------------------------------------------------------------
 // adding/removing the pages

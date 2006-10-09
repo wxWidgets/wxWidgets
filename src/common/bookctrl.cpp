@@ -423,7 +423,7 @@ wxSize wxBookCtrlBase::GetControllerSize() const
     return size;
 }
 
-int wxBookCtrlBase::DoSetSelection(size_t n, int flags, wxBookCtrlBaseEvent &event)
+int wxBookCtrlBase::DoSetSelection(size_t n, int flags)
 {
     wxCHECK_MSG( n < GetPageCount(), wxNOT_FOUND,
                  wxT("invalid page index in wxBookCtrlBase::DoSetSelection()") );
@@ -432,15 +432,16 @@ int wxBookCtrlBase::DoSetSelection(size_t n, int flags, wxBookCtrlBaseEvent &eve
 
     if ( oldSel != wxNOT_FOUND && n != (size_t)oldSel )
     {
+        wxBookCtrlBaseEvent *event = CreatePageChangingEvent();
         bool allowed = false;
 
         if ( flags & SetSelection_SendEvent )
         {
-            event.SetSelection(n);
-            event.SetOldSelection(oldSel);
-            event.SetEventObject(this);
+            event->SetSelection(n);
+            event->SetOldSelection(oldSel);
+            event->SetEventObject(this);
 
-            allowed = !GetEventHandler()->ProcessEvent(event) || event.IsAllowed();
+            allowed = !GetEventHandler()->ProcessEvent(*event) || event->IsAllowed();
         }
 
         if ( !(flags & SetSelection_SendEvent) || allowed)
@@ -458,10 +459,12 @@ int wxBookCtrlBase::DoSetSelection(size_t n, int flags, wxBookCtrlBaseEvent &eve
             if ( flags & SetSelection_SendEvent )
             {
                 // program allows the page change
-                MakeChangedEvent(event);
-                (void)GetEventHandler()->ProcessEvent(event);
+                MakeChangedEvent(*event);
+                (void)GetEventHandler()->ProcessEvent(*event);
             }
         }
+
+        delete event;
     }
 
     return oldSel;

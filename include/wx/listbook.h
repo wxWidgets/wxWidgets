@@ -85,14 +85,10 @@ protected:
     // return the page corresponding to the tab at the specified position
     virtual int HitTest(const wxPoint& pt, long *flags = NULL) const;
 
-    int DoSetSelection(size_t nPage, int flags = 0);
-
     void UpdateSelectedPage(size_t newsel);
 
-    void MakeChangedEvent(wxBookCtrlBaseEvent &event)
-    {
-        event.SetEventType(wxEVT_COMMAND_LISTBOOK_PAGE_CHANGED);
-    }
+    wxBookCtrlBaseEvent* CreatePageChangingEvent() const;
+    void MakeChangedEvent(wxBookCtrlBaseEvent &event);
 
     // event handlers
     void OnListSelected(wxListEvent& event);
