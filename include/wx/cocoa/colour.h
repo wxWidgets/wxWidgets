@@ -27,7 +27,16 @@ public:
 
     // default
     wxColour() { Init(); }
-    DEFINE_STD_WXCOLOUR_CONSTRUCTORS
+
+    // the other standard ones: notice that we can't use
+    // DEFINE_STD_WXCOLOUR_CONSTRUCTORS here because we need to call Init() to
+    // initialize m_cocoaNSColor and the macro doesn't do it
+    wxColour( ChannelType red, ChannelType green, ChannelType blue,
+              ChannelType alpha = wxALPHA_OPAQUE )
+        { Init(); Set(red, green, blue, alpha); }
+    wxColour(unsigned long colRGB) { Init(); Set(colRGB); }
+    wxColour(const wxString &colourName) { Init(); Set(colourName); }
+    wxColour(const wxChar *colourName) { Init(); Set(colourName); }
 
     // initialization using existing NSColor
     wxColour( WX_NSColor aColor );
