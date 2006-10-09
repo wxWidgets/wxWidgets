@@ -81,10 +81,16 @@ enum {
 
     wxRICHTEXT_FORMATTED,
     wxRICHTEXT_UNFORMATTED,
-    
+
+    wxRICHTEXT_SETSTYLE_NONE,
+    wxRICHTEXT_SETSTYLE_WITH_UNDO,
+    wxRICHTEXT_SETSTYLE_OPTIMIZE,
+    wxRICHTEXT_SETSTYLE_PARAGRAPHS_ONLY,
+    wxRICHTEXT_SETSTYLE_CHARACTERS_ONLY,
+
     wxRICHTEXT_INSERT_NONE,
     wxRICHTEXT_INSERT_WITH_PREVIOUS_PARAGRAPH_STYLE,
-    
+
 
 
     // TODO:  Rename these to be wxRICHTEXT_* ??
@@ -348,7 +354,7 @@ public:
         def SetFont(self, font):
             return self.GetFontAttributes(font)
     }
-    
+
     // setters
     void SetTextColour(const wxColour& colText);
     void SetBackgroundColour(const wxColour& colBack);
@@ -373,7 +379,8 @@ public:
     void SetBulletStyle(int style);
     void SetBulletNumber(int n);
     void SetBulletSymbol(wxChar symbol);
-
+    void SetBulletFont(const wxString& bulletFont);
+    
     const wxColour& GetTextColour() const;
     const wxColour& GetBackgroundColour() const;
     wxTextAttrAlignment GetAlignment() const;
@@ -395,8 +402,9 @@ public:
     int GetParagraphSpacingBefore() const;
     int GetLineSpacing() const;
     int GetBulletStyle() const;
-    int GetBulletNumber() const { return m_bulletNumber; }
+    int GetBulletNumber() const;
     wxChar GetBulletSymbol() const;
+    const wxString& GetBulletFont() const;
 
     // accessors
     bool HasTextColour() const;
@@ -430,7 +438,7 @@ public:
     // returns false if we have any attributes set, true otherwise
     bool IsDefault() const;
 
-    
+
 //     // return the attribute having the valid font and colours: it uses the
 //     // attributes set in attr and falls back first to attrDefault and then to
 //     // the text control font/colours for those attributes which are not set
@@ -438,9 +446,10 @@ public:
 //                               const wxRichTextAttr& attrDef,
 //                               const wxTextCtrlBase *text);
 
-    
+
     %property(Alignment, GetAlignment, SetAlignment, doc="See `GetAlignment` and `SetAlignment`");
     %property(BackgroundColour, GetBackgroundColour, SetBackgroundColour, doc="See `GetBackgroundColour` and `SetBackgroundColour`");
+    %property(BulletFont, GetBulletFont, SetBulletFont, doc="See `GetBulletFont` and `SetBulletFont`");
     %property(BulletNumber, GetBulletNumber, SetBulletNumber, doc="See `GetBulletNumber` and `SetBulletNumber`");
     %property(BulletStyle, GetBulletStyle, SetBulletStyle, doc="See `GetBulletStyle` and `SetBulletStyle`");
     %property(BulletSymbol, GetBulletSymbol, SetBulletSymbol, doc="See `GetBulletSymbol` and `SetBulletSymbol`");
@@ -639,6 +648,15 @@ text control.", "");
         "Set the style for the text in ``range`` to ``style``", "");
 
     DocDeclStr(
+        virtual bool , SetStyleEx(const wxRichTextRange& range, const wxRichTextAttr& style,
+                                  int flags = wxRICHTEXT_SETSTYLE_WITH_UNDO),
+        "Extended style setting operation with flags including:
+RICHTEXT_SETSTYLE_WITH_UNDO, RICHTEXT_SETSTYLE_OPTIMIZE,
+RICHTEXT_SETSTYLE_PARAGRAPHS_ONLY, RICHTEXT_SETSTYLE_CHARACTERS_ONLY", "");
+    
+
+    
+    DocDeclStr(
         virtual bool , GetStyle(long position, wxRichTextAttr& style),
         "Retrieve the style used at the given position.  Copies the style
 values at ``position`` into the ``style`` parameter and returns ``True``
@@ -649,8 +667,8 @@ if successful.  Returns ``False`` otherwise.", "");
         "Get the content (uncombined) attributes for this position.  Copies the
 style values at ``position`` into the ``style`` parameter and returns
 ``True`` if successful.  Returns ``False`` otherwise.", "");
-    
-    
+
+
     DocDeclStr(
         virtual bool , SetDefaultStyle(const wxRichTextAttr& style),
         "Set the style used by default for the rich text document.", "");
@@ -1094,7 +1112,7 @@ flag.", "");
     DocDeclStr(
         virtual bool , SelectWord(long position),
         "", "");
-    
+
 
     /// Get/set the selection range in character positions. -1, -1 means no selection.
     DocDeclStr(
@@ -1111,11 +1129,11 @@ flag.", "");
     DocDeclStr(
         const wxRichTextRange& , GetInternalSelectionRange() const,
         "", "");
-    
+
     DocDeclStr(
         void , SetInternalSelectionRange(const wxRichTextRange& range),
         "", "");
-    
+
 
 
     /// Add a new paragraph of text to the end of the buffer
@@ -1367,8 +1385,8 @@ flag.", "");
     DocDeclStr(
         bool , ApplyStyleSheet(wxRichTextStyleSheet* styleSheet = NULL),
         "", "");
-    
-    
+
+
 
     %property(Buffer, GetBuffer, doc="See `GetBuffer`");
     %property(DefaultStyle, GetDefaultStyle, SetDefaultStyle, doc="See `GetDefaultStyle` and `SetDefaultStyle`");
