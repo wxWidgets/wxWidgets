@@ -21,6 +21,8 @@
 #if wxUSE_RICHTEXT
 
 #include "wx/propdlg.h"
+#include "wx/bookctrl.h"
+
 #if wxUSE_HTML
 #include "wx/htmllbox.h"
 #endif
@@ -28,7 +30,6 @@
 #include "wx/richtext/richtextbuffer.h"
 #include "wx/richtext/richtextstyles.h"
 
-class WXDLLEXPORT wxNotebookEvent;
 class WXDLLIMPEXP_RICHTEXT wxRichTextFormattingDialog;
 class WXDLLIMPEXP_CORE wxImageList;
 
@@ -145,7 +146,7 @@ public:
 
     /// Apply the styles when a different tab is selected, so the previews are
     /// up to date
-    void OnTabChanged(wxNotebookEvent& event);
+    void OnTabChanged(wxBookCtrlEvent& event);
 
     /// Set/get image list
     void SetImageList(wxImageList* imageList) { m_imageList = imageList; }

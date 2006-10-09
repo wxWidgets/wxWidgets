@@ -61,7 +61,7 @@
 IMPLEMENT_CLASS(wxRichTextFormattingDialog, wxPropertySheetDialog)
 
 BEGIN_EVENT_TABLE(wxRichTextFormattingDialog, wxPropertySheetDialog)
-    EVT_NOTEBOOK_PAGE_CHANGED(-1, wxRichTextFormattingDialog::OnTabChanged)
+    EVT_BOOKCTRL_PAGE_CHANGED(wxID_ANY, wxRichTextFormattingDialog::OnTabChanged)
 END_EVENT_TABLE()
 
 wxRichTextFormattingDialogFactory* wxRichTextFormattingDialog::ms_FormattingDialogFactory = NULL;
@@ -167,7 +167,7 @@ bool wxRichTextFormattingDialog::UpdateDisplay()
 
 /// Apply the styles when a different tab is selected, so the previews are
 /// up to date
-void wxRichTextFormattingDialog::OnTabChanged(wxNotebookEvent& event)
+void wxRichTextFormattingDialog::OnTabChanged(wxBookCtrlEvent& event)
 {
     if (GetBookCtrl() != event.GetEventObject())
     {
@@ -228,7 +228,7 @@ bool wxRichTextFormattingDialogFactory::CreatePages(long pages, wxRichTextFormat
             }
         }
     }
-    
+
     return true;
 }
 
@@ -441,6 +441,7 @@ void wxRichTextColourSwatchCtrl::OnMouseEvent(wxMouseEvent& event)
         wxColourData data;
         data.SetChooseFull(true);
         data.SetColour(m_colour);
+#if wxUSE_COLOURDLG
         wxColourDialog *dialog = new wxColourDialog(parent, &data);
         // Crashes on wxMac (no m_peer)
 #ifndef __WXMAC__
@@ -453,6 +454,7 @@ void wxRichTextColourSwatchCtrl::OnMouseEvent(wxMouseEvent& event)
             SetBackgroundColour(m_colour);
         }
         dialog->Destroy();
+#endif // wxUSE_COLOURDLG
         Refresh();
 
         wxCommandEvent event(wxEVT_COMMAND_BUTTON_CLICKED, GetId());
@@ -578,4 +580,3 @@ wxString wxRichTextFontListBox::CreateHTML(const wxString& facename) const
 
 #endif
     // wxUSE_RICHTEXT
-
