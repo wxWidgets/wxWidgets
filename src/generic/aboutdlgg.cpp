@@ -152,24 +152,15 @@ bool wxGenericAboutDialog::Create(const wxAboutDialogInfo& info)
     wxSizer *sizerTop = new wxBoxSizer(wxVERTICAL);
     sizerTop->Add(sizerIconAndText, wxSizerFlags(1).Expand().Border());
 
-    const int defBorder = wxSizerFlags::GetDefaultBorder();
-    wxSizer *buttonSizer = CreateButtonSizer( wxOK , false, defBorder );
-    if(buttonSizer->GetChildren().GetCount() > 0 )
+    wxSizer *sizerBtns = CreateButtonSizer(wxOK);
+    if ( sizerBtns )
     {
-        sizerTop->Add( buttonSizer, 0, wxEXPAND | wxALL, defBorder );
-    }
-    else
-    {
-        sizerTop->AddSpacer( defBorder );
-        delete buttonSizer;
+        sizerTop->Add(sizerBtns, wxSizerFlags().Expand().Border());
     }
 
     SetSizerAndFit(sizerTop);
 
     CentreOnScreen();
-
-    wxWindow *ok = FindWindow(wxID_OK);
-    if (ok) ok->SetFocus();
 
     return true;
 }

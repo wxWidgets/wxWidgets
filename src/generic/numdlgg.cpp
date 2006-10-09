@@ -54,20 +54,6 @@
     #define wxSpinCtrl wxTextCtrl
 #endif
 
-// ---------------------------------------------------------------------------
-// macros
-// ---------------------------------------------------------------------------
-
-/* Macro for avoiding #ifdefs when value have to be different depending on size of
-   device we display on - take it from something like wxDesktopPolicy in the future
- */
-
-#if defined(__SMARTPHONE__)
-    #define wxLARGESMALL(large,small) small
-#else
-    #define wxLARGESMALL(large,small) large
-#endif
-
 // ============================================================================
 // implementation
 // ============================================================================
@@ -127,16 +113,11 @@ wxNumberEntryDialog::wxNumberEntryDialog(wxWindow *parent,
     topsizer->Add( inputsizer, 0, wxEXPAND | wxLEFT|wxRIGHT, 5 );
 
     // 3) buttons if any
-    wxSizer *buttonSizer = CreateButtonSizer( wxOK|wxCANCEL , true, wxLARGESMALL(10,0) );
-    if(buttonSizer->GetChildren().GetCount() > 0 )
+    wxSizer *buttonSizer = CreateSeparatedButtonSizer(wxOK | wxCANCEL);
+    if ( buttonSizer )
     {
-        topsizer->Add( buttonSizer, 0, wxEXPAND | wxALL, wxLARGESMALL(10,0) );
+        topsizer->Add(buttonSizer, wxSizerFlags().Expand().DoubleBorder());
     }
-    else
-    {
-        topsizer->AddSpacer( wxLARGESMALL(15,0) );
-        delete buttonSizer;
-     }
 
     SetSizer( topsizer );
     SetAutoLayout( true );

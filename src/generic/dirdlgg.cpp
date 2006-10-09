@@ -44,20 +44,6 @@ static const int ID_NEW = 1004;
 static const int ID_SHOW_HIDDEN = 1005;
 static const int ID_GO_HOME = 1006;
 
-// ---------------------------------------------------------------------------
-// macros
-// ---------------------------------------------------------------------------
-
-/* Macro for avoiding #ifdefs when value have to be different depending on size of
-   device we display on - take it from something like wxDesktopPolicy in the future
- */
-
-#if defined(__SMARTPHONE__)
-    #define wxLARGESMALL(large,small) small
-#else
-    #define wxLARGESMALL(large,small) large
-#endif
-
 //-----------------------------------------------------------------------------
 // wxGenericDirDialog
 //-----------------------------------------------------------------------------
@@ -171,32 +157,31 @@ bool wxGenericDirDialog::Create(wxWindow* parent,
                                      wxSize(300, 200),
                                      dirStyle);
 
-    topsizer->Add( m_dirCtrl, 1, wxTOP|wxLEFT|wxRIGHT | wxEXPAND, wxLARGESMALL(10,0) );
+    wxSizerFlags flagsBorder2;
+    flagsBorder2.DoubleBorder(wxTOP | wxLEFT | wxRIGHT);
+
+    topsizer->Add(m_dirCtrl, wxSizerFlags(flagsBorder2).Proportion(1).Expand());
 
 #ifndef __SMARTPHONE__
     // Make the an option depending on a flag?
-    wxCheckBox* check = new wxCheckBox( this, ID_SHOW_HIDDEN, _("Show hidden directories") );
-    topsizer->Add( check, 0, wxLEFT|wxRIGHT|wxTOP | wxALIGN_RIGHT, 10 );
+    wxCheckBox *
+        check = new wxCheckBox(this, ID_SHOW_HIDDEN, _("Show &hidden directories"));
+    topsizer->Add(check, wxSizerFlags(flagsBorder2).Right());
 #endif // !__SMARTPHONE__
 
     // 2) text ctrl
     m_input = new wxTextCtrl( this, ID_TEXTCTRL, m_path, wxDefaultPosition );
-    topsizer->Add( m_input, 0, wxTOP|wxLEFT|wxRIGHT | wxEXPAND, wxLARGESMALL(10,0) );
+    topsizer->Add(m_input, wxSizerFlags(flagsBorder2).Expand());
 
     // 3) buttons if any
-    wxSizer *buttonSizer = CreateButtonSizer( wxOK|wxCANCEL , true, wxLARGESMALL(10,0) );
-    if(buttonSizer->GetChildren().GetCount() > 0 )
+    wxSizer *buttonSizer = CreateSeparatedButtonSizer(wxOK | wxCANCEL);
+    if ( buttonSizer )
     {
-        topsizer->Add( buttonSizer, 0, wxEXPAND | wxALL, wxLARGESMALL(10,0) );
-    }
-    else
-    {
-        topsizer->AddSpacer( wxLARGESMALL(10,0) );
-        delete buttonSizer;
+        topsizer->Add(buttonSizer, wxSizerFlags().Expand().DoubleBorder());
     }
 
 #ifdef __SMARTPHONE__
-    // overwrite menu achieved with earlier CreateButtonSizer() call
+    // overwrite menu set by CreateSeparatedButtonSizer() call above
     SetRightMenu(wxID_ANY, _("Options"), dirMenu);
 #endif
 

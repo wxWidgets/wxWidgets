@@ -112,16 +112,13 @@ wxGenericMessageDialog::wxGenericMessageDialog( wxWindow *parent,
     topsizer->Add( icon_text, 1, wxCENTER | wxLEFT|wxRIGHT|wxTOP, 10 );
 #endif // wxUSE_STATTEXT
 
-#if wxUSE_STATLINE
-    // 3) static line
-    topsizer->Add( new wxStaticLine( this, wxID_ANY ), 0, wxEXPAND | wxLEFT|wxRIGHT|wxTOP, 10 );
-#endif // wxUSE_STATLINE
-
-    // 4) buttons
+    // 3) buttons
     int center_flag = wxEXPAND;
-    if (style & wxYES_NO) center_flag = wxALIGN_CENTRE;
-    topsizer->Add( CreateButtonSizer( style & (wxOK|wxCANCEL|wxYES_NO|wxYES_DEFAULT|wxNO_DEFAULT) ),
-                   0, center_flag | wxALL, 10 );
+    if (style & wxYES_NO)
+        center_flag = wxALIGN_CENTRE;
+    wxSizer *sizerBtn = CreateSeparatedButtonSizer(style & ButtonSizerFlags);
+    if ( sizerBtn )
+        topsizer->Add(sizerBtn, 0, center_flag | wxALL, 10 );
 
     SetAutoLayout( true );
     SetSizer( topsizer );

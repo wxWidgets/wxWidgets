@@ -1116,48 +1116,50 @@ bool wxGenericFileDialog::Create( wxWindow *parent,
                              wxDefaultPosition, wxSize(540,200),
                              style2);
 
+    m_text = new wxTextCtrl(this, ID_TEXT, m_fileName,
+                            wxDefaultPosition, wxDefaultSize,
+                            wxTE_PROCESS_ENTER);
+    m_choice = new wxChoice(this, ID_CHOICE);
+
     if (is_pda)
     {
         // PDAs have a different screen layout
-        mainsizer->Add( m_list, 1, wxEXPAND | wxLEFT|wxRIGHT, 5 );
+        mainsizer->Add(m_list, wxSizerFlags(1).Expand().HorzBorder());
 
-        wxBoxSizer *textsizer = new wxBoxSizer( wxHORIZONTAL );
-        m_text = new wxTextCtrl( this, ID_TEXT, m_fileName, wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER );
-        textsizer->Add( m_text, 1, wxCENTER | wxALL, 5 );
-        mainsizer->Add( textsizer, 0, wxEXPAND );
+        wxBoxSizer *textsizer = new wxBoxSizer(wxHORIZONTAL);
+        textsizer->Add(m_text, wxSizerFlags(1).Centre().Border());
+        mainsizer->Add(textsizer, wxSizerFlags().Expand());
 
         m_check = NULL;
-        m_choice = new wxChoice( this, ID_CHOICE );
-        textsizer->Add( m_choice, 1, wxCENTER|wxALL, 5 );
+        textsizer->Add(m_choice, wxSizerFlags(1).Centre().Border());
 
-        wxSizer *bsizer = CreateButtonSizer( wxOK|wxCANCEL , false, 5 );
-        if(bsizer->GetChildren().GetCount() > 0 )
-        {
-            mainsizer->Add( bsizer, 0, wxEXPAND | wxALL, 5 );
-        }
-        else
-        {
-            delete bsizer;
-        }
+        wxSizer *bsizer = CreateButtonSizer(wxOK | wxCANCEL);
+        if ( bsizer )
+            mainsizer->Add(bsizer, wxSizerFlags().Expand().Border());
     }
-    else
+    else // !is_pda
     {
-        mainsizer->Add( m_list, 1, wxEXPAND | wxLEFT|wxRIGHT, 10 );
+        mainsizer->Add(m_list, wxSizerFlags(1).Expand().DoubleHorzBorder());
 
-        wxBoxSizer *textsizer = new wxBoxSizer( wxHORIZONTAL );
-        m_text = new wxTextCtrl( this, ID_TEXT, m_fileName, wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER );
-        textsizer->Add( m_text, 1, wxCENTER | wxLEFT|wxRIGHT|wxTOP, 10 );
-        textsizer->Add( new wxButton( this, wxID_OK ), 0, wxCENTER | wxLEFT|wxRIGHT|wxTOP, 10 );
-        mainsizer->Add( textsizer, 0, wxEXPAND );
+        wxBoxSizer *textsizer = new wxBoxSizer(wxHORIZONTAL);
+        textsizer->Add(m_text, wxSizerFlags(1).Centre().
+                                        DoubleBorder(wxLEFT | wxRIGHT | wxTOP));
+        textsizer->Add(new wxButton(this, wxID_OK), wxSizerFlags().Centre().
+                                        DoubleBorder(wxLEFT | wxRIGHT | wxTOP));
+        mainsizer->Add(textsizer, wxSizerFlags().Expand());
 
-        wxBoxSizer *choicesizer = new wxBoxSizer( wxHORIZONTAL );
-        m_choice = new wxChoice( this, ID_CHOICE );
-        choicesizer->Add( m_choice, 1, wxCENTER|wxALL, 10 );
-        m_check = new wxCheckBox( this, ID_CHECK, _("Show hidden files") );
-        m_check->SetValue( ms_lastShowHidden );
-        choicesizer->Add( m_check, 0, wxCENTER|wxALL, 10 );
-        choicesizer->Add( new wxButton( this, wxID_CANCEL ), 0, wxCENTER | wxALL, 10 );
-        mainsizer->Add( choicesizer, 0, wxEXPAND );
+        wxSizerFlags flagsCentre;
+        flagsCentre.Centre().DoubleBorder();
+
+        wxBoxSizer *choicesizer = new wxBoxSizer(wxHORIZONTAL);
+        choicesizer->Add(m_choice, wxSizerFlags(flagsCentre).Proportion(1));
+
+        m_check = new wxCheckBox(this, ID_CHECK, _("Show &hidden files"));
+        m_check->SetValue(ms_lastShowHidden);
+
+        choicesizer->Add(m_check, flagsCentre);
+        choicesizer->Add(new wxButton(this, wxID_CANCEL), flagsCentre);
+        mainsizer->Add(choicesizer, wxSizerFlags().Expand());
     }
 
     SetWildcard(wildCard);

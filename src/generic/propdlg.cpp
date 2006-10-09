@@ -119,14 +119,10 @@ void wxPropertySheetDialog::CreateButtons(int flags)
 #endif
 
     wxSizer *buttonSizer = CreateButtonSizer( flags & ButtonSizerFlags );
-    if(buttonSizer->GetChildren().GetCount() > 0 )
+    if( buttonSizer )
     {
         m_innerSizer->Add( buttonSizer, 0, wxGROW|wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT|wxRIGHT, 2);
         m_innerSizer->AddSpacer(2);
-    }
-    else
-    {
-        delete buttonSizer;
     }
 
 #ifdef __POCKETPC__

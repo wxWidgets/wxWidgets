@@ -259,6 +259,7 @@ void wxGenericColourDialog::CreateWidgets()
 
     const int sliderHeight = 160;
 
+    // first sliders
 #if wxUSE_SLIDER
     const int sliderX = singleCustomColourRect.x + singleCustomColourRect.width + sectionSpacing;
 
@@ -271,26 +272,31 @@ void wxGenericColourDialog::CreateWidgets()
 
     wxBoxSizer *sliderSizer = new wxBoxSizer( wxHORIZONTAL );
 
-    // 1) space for sliders
-    sliderSizer->Add( sliderX, sliderHeight );
-    sliderSizer->Add( redSlider, 0, wxALIGN_RIGHT | wxALIGN_CENTER_VERTICAL | wxALL, 10 );
-    sliderSizer->Add( greenSlider, 0, wxALIGN_RIGHT | wxALIGN_CENTER_VERTICAL | wxALL, 10 );
-    sliderSizer->Add( blueSlider, 0, wxALIGN_RIGHT | wxALIGN_CENTER_VERTICAL | wxALL, 10 );
+    sliderSizer->Add(sliderX, sliderHeight );
 
-    topSizer->Add( sliderSizer, 0, wxCENTRE | wxALL, 10 );
+    wxSizerFlags flagsRight;
+    flagsRight.Align(wxALIGN_RIGHT | wxALIGN_CENTER_VERTICAL).DoubleBorder();
+
+    sliderSizer->Add(redSlider, flagsRight);
+    sliderSizer->Add(greenSlider,flagsRight);
+    sliderSizer->Add(blueSlider,flagsRight);
+
+    topSizer->Add(sliderSizer, wxSizerFlags().Centre().DoubleBorder());
 #else
-    topSizer->Add( 1, sliderHeight, 0, wxCENTRE | wxALL, 15 );
+    topSizer->Add(1, sliderHeight, wxSizerFlags(1).Centre().TripleBorder());
 #endif // wxUSE_SLIDER
 
-#if wxUSE_STATLINE
-    // 2) static line
-    topSizer->Add( new wxStaticLine( this, wxID_ANY ), 0, wxEXPAND | wxLEFT|wxRIGHT|wxTOP, 10 );
-#endif
+    // then the custom button
+    topSizer->Add(new wxButton(this, wxID_ADD_CUSTOM,
+                                  _("Add to custom colours") ),
+                     wxSizerFlags().DoubleHorzBorder());
 
-    // 3) buttons
-    wxSizer *buttonsizer = CreateButtonSizer( wxOK|wxCANCEL );
-    buttonsizer->Add( new wxButton(this, wxID_ADD_CUSTOM, _("Add to custom colours") ), 0, wxLEFT|wxRIGHT, 10 );
-    topSizer->Add( buttonsizer, 0, wxEXPAND | wxALL, 10 );
+    // then the standard buttons
+    wxSizer *buttonsizer = CreateSeparatedButtonSizer(wxOK | wxCANCEL);
+    if ( buttonsizer )
+    {
+        topSizer->Add(buttonsizer, wxSizerFlags().Expand().DoubleBorder());
+    }
 
     SetAutoLayout( true );
     SetSizer( topSizer );

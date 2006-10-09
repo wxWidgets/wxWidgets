@@ -246,14 +246,11 @@ void wxGenericPrintDialog::Init(wxWindow * WXUNUSED(parent))
 
     mainsizer->Add( bottomsizer, 0, wxTOP|wxLEFT|wxRIGHT, 12 );
 
-#if wxUSE_STATLINE
-    // 4) static line
-    mainsizer->Add( new wxStaticLine( this, wxID_ANY ), 0, wxEXPAND | wxLEFT|wxRIGHT|wxTOP, 10 );
-#endif
+    // 4) buttons
 
-    // 5) buttons
-
-    mainsizer->Add( CreateButtonSizer( wxOK|wxCANCEL), 0, wxEXPAND|wxALL, 10 );
+    wxSizer *sizerBtn = CreateSeparatedButtonSizer( wxOK|wxCANCEL);
+    if ( sizerBtn )
+        mainsizer->Add(sizerBtn, 0, wxEXPAND|wxALL, 10 );
 
     SetAutoLayout( true );
     SetSizer( mainsizer );

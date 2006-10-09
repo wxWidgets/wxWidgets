@@ -48,20 +48,6 @@
 
 #define wxID_LISTBOX 3000
 
-// ---------------------------------------------------------------------------
-// macros
-// ---------------------------------------------------------------------------
-
-/* Macro for avoiding #ifdefs when value have to be different depending on size of
-   device we display on - take it from something like wxDesktopPolicy in the future
- */
-
-#if defined(__SMARTPHONE__)
-    #define wxLARGESMALL(large,small) small
-#else
-    #define wxLARGESMALL(large,small) large
-#endif
-
 // ----------------------------------------------------------------------------
 // private functions
 // ----------------------------------------------------------------------------
@@ -256,6 +242,7 @@ bool wxAnyChoiceDialog::Create(wxWindow *parent,
                                long styleLbox)
 {
 #ifdef __WXMAC__
+    // FIXME: why??
     if ( !wxDialog::Create(parent, wxID_ANY, caption, pos, wxDefaultSize, styleDlg & (~wxCANCEL) ) )
         return false;
 #else
@@ -266,30 +253,24 @@ bool wxAnyChoiceDialog::Create(wxWindow *parent,
     wxBoxSizer *topsizer = new wxBoxSizer( wxVERTICAL );
 
     // 1) text message
-#ifdef __WXMAC__
-    // align text and list at least on mac
-    topsizer->Add( CreateTextSizer( message ), 0, wxALL, wxLARGESMALL(15,0) );
-#else
-    topsizer->Add( CreateTextSizer( message ), 0, wxALL, wxLARGESMALL(10,0) );
-#endif
+    topsizer->
+        Add(CreateTextSizer(message), wxSizerFlags().Expand().TripleBorder());
+
     // 2) list box
-    m_listbox = CreateList(n,choices,styleLbox);
+    m_listbox = CreateList(n, choices, styleLbox);
 
     if ( n > 0 )
         m_listbox->SetSelection(0);
 
-    topsizer->Add( m_listbox, 1, wxEXPAND|wxLEFT|wxRIGHT, wxLARGESMALL(15,0) );
+    topsizer->
+        Add(m_listbox, wxSizerFlags().Expand().TripleBorder(wxLEFT | wxRIGHT));
 
     // 3) buttons if any
-    wxSizer *buttonSizer = CreateButtonSizer( styleDlg & ButtonSizerFlags , true, wxLARGESMALL(10,0) );
-    if(buttonSizer->GetChildren().GetCount() > 0 )
+    wxSizer *
+        buttonSizer = CreateSeparatedButtonSizer(styleDlg & ButtonSizerFlags);
+    if ( buttonSizer )
     {
-        topsizer->Add( buttonSizer, 0, wxEXPAND | wxALL, wxLARGESMALL(10,0) );
-    }
-    else
-    {
-        topsizer->AddSpacer( wxLARGESMALL(15,0) );
-        delete buttonSizer;
+        topsizer->Add(buttonSizer, wxSizerFlags().Expand().DoubleBorder());
     }
 
     SetSizer( topsizer );

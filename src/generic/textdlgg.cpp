@@ -51,20 +51,6 @@ const wxChar wxGetPasswordFromUserPromptStr[] = wxT("Enter Password");
 
 static const int wxID_TEXT = 3000;
 
-// ---------------------------------------------------------------------------
-// macros
-// ---------------------------------------------------------------------------
-
-/* Macro for avoiding #ifdefs when value have to be different depending on size of
-   device we display on - take it from something like wxDesktopPolicy in the future
- */
-
-#if defined(__SMARTPHONE__)
-    #define wxLARGESMALL(large,small) small
-#else
-    #define wxLARGESMALL(large,small) large
-#endif
-
 // ============================================================================
 // implementation
 // ============================================================================
@@ -96,16 +82,23 @@ wxTextEntryDialog::wxTextEntryDialog(wxWindow *parent,
 
     wxBoxSizer *topsizer = new wxBoxSizer( wxVERTICAL );
 
+    wxSizerFlags flagsBorder2;
+    flagsBorder2.DoubleBorder();
+
 #if wxUSE_STATTEXT
     // 1) text message
-    topsizer->Add( CreateTextSizer( message ), 0, wxALL, wxLARGESMALL(10,0) );
+    topsizer->Add(CreateTextSizer(message), flagsBorder2);
 #endif
 
     // 2) text ctrl
     m_textctrl = new wxTextCtrl(this, wxID_TEXT, value,
                                 wxDefaultPosition, wxSize(300, wxDefaultCoord),
                                 style & ~wxTextEntryDialogStyle);
-    topsizer->Add( m_textctrl, style & wxTE_MULTILINE ? 1 : 0, wxEXPAND | wxLEFT|wxRIGHT, wxLARGESMALL(15,0) );
+
+    topsizer->Add(m_textctrl,
+                  wxSizerFlags(style & wxTE_MULTILINE ? 1 : 0).
+                    Expand().
+                    TripleBorder(wxLEFT | wxRIGHT));
 
 #if wxUSE_VALIDATORS
     wxTextValidator validator( wxFILTER_NONE, &m_value );
@@ -113,15 +106,10 @@ wxTextEntryDialog::wxTextEntryDialog(wxWindow *parent,
 #endif // wxUSE_VALIDATORS
 
     // 3) buttons if any
-    wxSizer *buttonSizer = CreateButtonSizer( style & ButtonSizerFlags , true, wxLARGESMALL(10,0) );
-    if(buttonSizer->GetChildren().GetCount() > 0 )
+    wxSizer *buttonSizer = CreateSeparatedButtonSizer(style & ButtonSizerFlags);
+    if ( buttonSizer )
     {
-        topsizer->Add( buttonSizer, 0, wxEXPAND | wxALL, wxLARGESMALL(10,0) );
-    }
-    else
-    {
-        topsizer->AddSpacer( wxLARGESMALL(15,0) );
-        delete buttonSizer;
+        topsizer->Add(buttonSizer, wxSizerFlags(flagsBorder2).Expand());
     }
 
     SetAutoLayout( true );
