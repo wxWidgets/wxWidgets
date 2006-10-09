@@ -107,7 +107,7 @@ public:
 
     // real handler operations: to implement in derived classes
     virtual bool Create( wxGDIImage* pImage
-                        ,void*       pData
+                        ,const void* pData
                         ,long        lFlags
                         ,int         nWidth
                         ,int         nHeight
