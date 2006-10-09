@@ -306,6 +306,11 @@ wxGCDC::wxGCDC(const wxWindowDC& dc)
     m_ok = true;
     if ( dc.GetFont().Ok())
         m_graphicContext->SetFont(dc.GetFont());
+    if ( dc.GetPen().Ok())
+        m_graphicContext->SetPen(dc.GetPen());
+    if ( dc.GetBrush().Ok())
+        m_graphicContext->SetBrush(dc.GetBrush());
+    m_graphicContext->SetTextColor(dc.GetTextForeground());
 }
 
 void wxGCDC::Init()
