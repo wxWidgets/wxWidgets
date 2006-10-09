@@ -1311,7 +1311,6 @@ private:
 // ----------------------------------------------------------------------------
 
 #define wxCFDATA_RELEASEBUFFER  1
-#define wxCFDATA_RETAINBUFFER   0
 
 class wxCFData
 {

@@ -392,8 +392,6 @@ void wxToolBarTool::SetPosition( const wxPoint& position )
     m_x = position.x;
     m_y = position.y;
 
-    int x, y;
-    x = y = 0;
     int mac_x = position.x;
     int mac_y = position.y;
 
@@ -714,6 +712,7 @@ CantCreateEvent :
     return result ;
 }
 
+#if wxMAC_USE_NATIVE_TOOLBAR
 static const EventTypeSpec kToolbarEvents[] =
 {
     { kEventClassToolbar, kEventToolbarGetDefaultIdentifiers },
@@ -777,6 +776,7 @@ static OSStatus ToolbarDelegateHandler( EventHandlerCallRef inCallRef, EventRef 
     }
     return result ;
 }
+#endif // wxMAC_USE_NATIVE_TOOLBAR
 
 // also for the toolbar we have the dual implementation:
 // only when MacInstallNativeToolbar is called is the native toolbar set as the window toolbar
@@ -1070,7 +1070,6 @@ bool wxToolBar::Realize()
 
     bool lastIsRadio = false;
     bool curIsRadio = false;
-    bool setChoiceInGroup = false;
 
 #if wxMAC_USE_NATIVE_TOOLBAR
     CFIndex currentPosition = 0;
@@ -1165,8 +1164,6 @@ bool wxToolBar::Realize()
         {
             if ( tool->IsToggled() )
                 DoToggleTool( tool, true );
-
-            setChoiceInGroup = false;
         }
         else
         {
@@ -1175,7 +1172,6 @@ bool wxToolBar::Realize()
                 if ( tool->Toggle( true ) )
                 {
                     DoToggleTool( tool, true );
-                    setChoiceInGroup = true;
                 }
             }
             else if ( tool->IsToggled() )

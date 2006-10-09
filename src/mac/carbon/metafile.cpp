@@ -48,10 +48,6 @@ private:
 #endif
 };
 
-
-extern bool wxClipboardIsOpen;
-
-
 wxMetafileRefData::wxMetafileRefData()
 {
     m_metafile = NULL;

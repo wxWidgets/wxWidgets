@@ -17,7 +17,6 @@
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
-    #include "wx/window.h"
     #include "wx/toplevel.h"
     #include "wx/gdicmn.h"
 #endif // WX_PRECOMP
@@ -38,8 +37,7 @@ typedef struct
     wxWindow *m_currentTargetWindow;
     wxDropTarget *m_currentTarget;
     wxDropSource *m_currentSource;
-}
-MacTrackingGlobals;
+} MacTrackingGlobals;
 
 MacTrackingGlobals gTrackingGlobals;
 
@@ -113,7 +111,6 @@ bool wxDropTarget::CurrentDragHasSupportedFormat()
     if ( !supported )
     {
         UInt16 items;
-        OSErr result;
         ItemReference theItem;
         FlavorType theType;
         UInt16 flavors = 0;
@@ -127,7 +124,7 @@ bool wxDropTarget::CurrentDragHasSupportedFormat()
 
             for ( UInt16 flavor = 1; flavor <= flavors; ++flavor )
             {
-                result = GetFlavorType( (DragReference)m_currentDrag, theItem, flavor, &theType );
+                GetFlavorType( (DragReference)m_currentDrag, theItem, flavor, &theType );
                 if ( m_dataObject->IsSupportedFormat( wxDataFormat( theType ) ) )
                 {
                     supported = true;
@@ -338,11 +335,10 @@ wxDragResult wxDropSource::DoDragDrop(int flags)
     if ((m_data == NULL) || (m_data->GetFormatCount() == 0))
         return (wxDragResult)wxDragNone;
 
-    OSStatus result;
     DragReference theDrag;
     RgnHandle dragRegion;
 
-    if ((result = NewDrag( &theDrag )) != noErr)
+    if (NewDrag( &theDrag ) != noErr)
         return wxDragNone;
 
     // add data to drag
@@ -454,7 +450,7 @@ wxDragResult wxDropSource::DoDragDrop(int flags)
     // only when drag was successfully completed
 
     gTrackingGlobals.m_currentSource = this;
-    result = TrackDrag( theDrag, ev, dragRegion );
+    TrackDrag( theDrag, ev, dragRegion );
     DisposeRgn( dragRegion );
     DisposeDrag( theDrag );
     gTrackingGlobals.m_currentSource = NULL;

@@ -59,7 +59,6 @@ static const int    TEXTFOCUSBORDER = 3 ;
 static const wxCoord MARGIN = 2;
 static const int    TEXTFOCUSBORDER = 0 ;
 #endif
-static const int    POPUPHEIGHT = 23;
 
 
 // ----------------------------------------------------------------------------
@@ -119,7 +118,7 @@ protected:
                         wxCommandEvent event( wxEVT_COMMAND_BUTTON_CLICKED, def->GetId() );
                         event.SetEventObject(def);
                         def->Command(event);
-                   }
+                    }
                 }
 
                 return;

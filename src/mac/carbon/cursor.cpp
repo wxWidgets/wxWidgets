@@ -46,8 +46,7 @@ protected:
     long        m_themeCursor;
 };
 
-#define M_CURSORDATA ((wxCursorRefData *)m_refData)
-#define M_CURSORHANDLERDATA ((wxCursorRefData *)bitmap->m_refData)
+#define M_CURSORDATA wx_static_cast(wxCursorRefData*, m_refData)
 
 const short kwxCursorBullseye = 0;
 const short kwxCursorBlank = 1;

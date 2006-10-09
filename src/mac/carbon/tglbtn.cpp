@@ -26,9 +26,6 @@
 #include "wx/mac/uma.h"
 // Button
 
-static const int kMacOSXHorizontalBorder = 2 ;
-static const int kMacOSXVerticalBorder = 4 ;
-
 // ----------------------------------------------------------------------------
 // macros
 // ----------------------------------------------------------------------------

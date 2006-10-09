@@ -29,8 +29,6 @@
 // constants
 //-----------------------------------------------------------------------------
 
-#define RAD2DEG 57.2957795131
-
 //-----------------------------------------------------------------------------
 // wxPaintDC
 //-----------------------------------------------------------------------------
@@ -124,7 +122,6 @@ wxWindowDC::wxWindowDC(wxWindow *window)
     WindowRef windowref = (WindowRef) rootwindow->MacGetWindowRef() ;
     int x , y ;
     x = y = 0 ;
-    wxSize size = window->GetSize() ;
     window->MacWindowToRootWindow( &x , &y ) ;
     m_macPort = UMAGetWindowPort( windowref ) ;
     m_ok = true ;

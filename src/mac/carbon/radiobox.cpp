@@ -321,14 +321,11 @@ void wxRadioBox::Command( wxCommandEvent& event )
 //
 void wxRadioBox::SetFocus()
 {
-    int i;
     wxRadioButton *current;
 
-    i = 0;
     current = m_radioButtonCycle;
     while (!current->GetValue())
     {
-        i++;
         current = current->NextInCycle();
     }
 

@@ -24,7 +24,6 @@
     #include "wx/log.h"
     #include "wx/app.h"
     #include "wx/utils.h"
-    #include "wx/window.h"
     #include "wx/frame.h"
     #include "wx/menuitem.h"
 #endif
@@ -41,8 +40,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxMenuBar, wxEvtHandler)
 // the (popup) menu title has this special id
 static const int idMenuTitle = -3;
 
-const short kwxMacMenuBarResource = 1 ;
-const short kwxMacAppleMenuId = 1 ;
+static const short kwxMacAppleMenuId = 1 ;
 
 
 // Find an item given the Macintosh Menu Reference
@@ -488,12 +486,10 @@ void wxMenu::MacAfterDisplay( bool isSubMenu )
     if ( isSubMenu )
         ::DeleteMenu(MacGetMenuId());
 
-    wxMenuItem* previousItem = NULL ;
     wxMenuItemList::compatibility_iterator node;
     wxMenuItem *item;
-    int pos ;
 
-    for (pos = 0, node = GetMenuItems().GetFirst(); node; node = node->GetNext(), pos++)
+    for (node = GetMenuItems().GetFirst(); node; node = node->GetNext())
     {
         item = (wxMenuItem *)node->GetData();
         wxMenu* subMenu = item->GetSubMenu() ;
@@ -505,8 +501,6 @@ void wxMenu::MacAfterDisplay( bool isSubMenu )
         {
             // no need to undo hidings
         }
-
-        previousItem = item ;
     }
 }
 
@@ -663,12 +657,11 @@ void wxMenuBar::MacInstallMenuBar()
     {
         wxMenuItemList::compatibility_iterator node;
         wxMenuItem *item;
-        int pos ;
         wxMenu* menu = menuIter->GetData() , *subMenu = NULL ;
 
         if ( m_titles[i] == wxT("?") || m_titles[i] == wxT("&?")  || m_titles[i] == wxApp::s_macHelpMenuTitleName )
         {
-            for (pos = 0 , node = menu->GetMenuItems().GetFirst(); node; node = node->GetNext(), pos++)
+            for (node = menu->GetMenuItems().GetFirst(); node; node = node->GetNext())
             {
                 item = (wxMenuItem *)node->GetData();
                 subMenu = item->GetSubMenu() ;

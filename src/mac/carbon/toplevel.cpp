@@ -81,8 +81,6 @@ END_EVENT_TABLE()
 // Carbon Events
 // ---------------------------------------------------------------------------
 
-extern long wxMacTranslateKey(unsigned char key, unsigned char code) ;
-
 static const EventTypeSpec eventList[] =
 {
     // TODO: remove control related event like key and mouse (except for WindowLeave events)
@@ -884,8 +882,7 @@ typedef struct
     wxPoint m_position ;
     wxSize m_size ;
     bool m_wasResizable ;
-}
-FullScreenData ;
+} FullScreenData ;
 
 void wxTopLevelWindowMac::Init()
 {
@@ -1530,19 +1527,17 @@ void wxTopLevelWindowMac::MacPerformUpdates()
 
         EventRef currentEvent = (EventRef) wxTheApp->MacGetCurrentEvent() ;
         UInt32 currentEventClass = 0 ;
-        UInt32 currentEventKind = 0 ;
         if ( currentEvent != NULL )
         {
             currentEventClass = ::GetEventClass( currentEvent ) ;
-            currentEventKind = ::GetEventKind( currentEvent ) ;
+            ::GetEventKind( currentEvent ) ;
         }
 
         if ( currentEventClass != kEventClassMenu )
         {
             // when tracking a menu, strange redraw errors occur if we flush now, so leave..
             EventRef theEvent;
-            OSStatus status = noErr ;
-            status = ReceiveNextEvent( 0 , NULL , kEventDurationNoWait , false , &theEvent ) ;
+            ReceiveNextEvent( 0 , NULL , kEventDurationNoWait , false , &theEvent ) ;
         }
     }
 }

@@ -48,8 +48,6 @@ static bool sUMAHasAquaLayout = false ;
 
 static bool sUMAHasInittedAppearance = false;
 
-extern int gAGABackgroundColor ;
-
 bool UMAHasAppearance() { return sUMAHasAppearance ; }
 long UMAGetAppearanceVersion() { return sUMAAppearanceVersion ; }
 long UMAGetSystemVersion() { return sUMASystemVersion ; }

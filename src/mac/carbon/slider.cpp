@@ -22,7 +22,6 @@ BEGIN_EVENT_TABLE(wxSlider, wxControl)
 END_EVENT_TABLE()
 
  // The dimensions of the different styles of sliders (from Aqua document)
-#define wxSLIDER_DIMENSIONACROSS 15
 #define wxSLIDER_DIMENSIONACROSS_WITHTICKMARKS 24
 #define wxSLIDER_DIMENSIONACROSS_ARROW 18
 
@@ -416,12 +415,10 @@ wxSize wxSlider::DoGetBestSize() const
 
 void wxSlider::DoSetSize(int x, int y, int w, int h, int sizeFlags)
 {
-    int xborder, yborder;
+    int yborder = 0;
     int minValWidth, maxValWidth, textheight;
     int sliderBreadth;
     int width = w;
-
-    xborder = yborder = 0;
 
     if (GetWindowStyle() & wxSL_LABELS)
     {

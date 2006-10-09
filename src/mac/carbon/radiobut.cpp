@@ -143,7 +143,7 @@ wxInt32 wxRadioButton::MacControlHit( WXEVENTHANDLERREF WXUNUSED(handler), WXEVE
 
 wxRadioButton *wxRadioButton::AddInCycle(wxRadioButton *cycle)
 {
-    wxRadioButton *next, *current;
+    wxRadioButton *current;
 
     if (cycle == NULL)
     {
@@ -152,7 +152,7 @@ wxRadioButton *wxRadioButton::AddInCycle(wxRadioButton *cycle)
     else
     {
         current = cycle;
-        while ((next = current->m_cycle) != cycle)
+        while (current->m_cycle != cycle)
             current = current->m_cycle;
 
         m_cycle = cycle;

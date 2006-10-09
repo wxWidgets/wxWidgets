@@ -71,10 +71,6 @@
 // Keep linker from discarding wxStockGDIMac
 wxFORCE_LINK_MODULE(gdiobj)
 
-#if wxUSE_THREADS
-extern size_t g_numberOfThreads;
-#endif
-
 // statics for implementation
 static bool s_inYield = false;
 static bool s_inReceiveEvent = false ;
@@ -90,9 +86,7 @@ END_EVENT_TABLE()
 
 
 // platform specific static variables
-const short kMacMinHeap = (29 * 1024) ;
-const short kwxMacMenuBarResource = 1 ;
-const short kwxMacAppleMenuId = 1 ;
+static const short kwxMacAppleMenuId = 1 ;
 
 wxWindow* wxApp::s_captureWindow = NULL ;
 long      wxApp::s_lastModifiers = 0 ;

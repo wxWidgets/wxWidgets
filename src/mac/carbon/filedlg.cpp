@@ -30,11 +30,7 @@
     #include "PLStringFuncs.h"
 #endif
 
-#include "MoreFilesX.h"
-
 IMPLEMENT_CLASS(wxFileDialog, wxFileDialogBase)
-
-extern bool gUseNavServices;
 
 // the data we need to pass to our standard file hook routine
 // includes a pointer to the dialog, a pointer to the standard
@@ -319,7 +315,6 @@ int wxFileDialog::ShowModal()
 
     NavDialogRef dialog;
     NavObjectFilterUPP navFilterUPP = NULL;
-    CFArrayRef cfArray = NULL; // for popupExtension
     OpenUserDataRec myData;
     myData.defaultLocation = m_dir;
 
@@ -386,8 +381,6 @@ int wxFileDialog::ShowModal()
     // clean up filter related data, etc.
     if (navFilterUPP)
         ::DisposeNavObjectFilterUPP(navFilterUPP);
-    if (cfArray)
-        ::CFRelease(cfArray);
 
     if (err != noErr)
         return wxID_CANCEL;

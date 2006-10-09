@@ -55,9 +55,6 @@ const double RAD2DEG  = 180.0 / M_PI;
 const short kEmulatedMode = -1 ;
 const short kUnsupportedMode = -2 ;
 
-extern TECObjectRef s_TECNativeCToUnicode ;
-
-
 wxMacPortSetter::wxMacPortSetter( const wxDC* dc ) :
     m_ph( (GrafPtr) dc->m_macPort )
 {
@@ -153,13 +150,6 @@ wxMacWindowStateSaver::~wxMacWindowStateSaver()
     SetPort( m_newPort ) ;
     SetThemeDrawingState( m_themeDrawingState , true ) ;
 }
-
-//-----------------------------------------------------------------------------
-// Local functions
-//-----------------------------------------------------------------------------
-static inline double dmin(double a, double b) { return a < b ? a : b; }
-static inline double dmax(double a, double b) { return a > b ? a : b; }
-static inline double DegToRad(double deg) { return (deg * M_PI) / 180.0; }
 
 //-----------------------------------------------------------------------------
 // wxDC

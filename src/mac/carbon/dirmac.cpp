@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        msw/dir.cpp
+// Name:        mac/dirmac.cpp
 // Purpose:     wxDir implementation for Mac
 // Author:      Stefan Csomor
 // Modified by:
@@ -24,36 +24,16 @@
     #pragma hdrstop
 #endif
 
+#include "wx/dir.h"
+
 #ifndef WX_PRECOMP
     #include "wx/intl.h"
     #include "wx/log.h"
 #endif // PCH
 
-#include "wx/dir.h"
 #include "wx/filefn.h"          // for wxDirExists()
-
-#ifndef __DARWIN__
-  #include <windows.h>
-#endif
-
 #include "wx/filename.h"
 #include "wx/mac/private.h"
-
-#include "MoreFilesX.h"
-
-// ----------------------------------------------------------------------------
-// constants
-// ----------------------------------------------------------------------------
-
-#ifndef MAX_PATH
-    #define MAX_PATH 260        // from VC++ headers
-#endif
-
-// ----------------------------------------------------------------------------
-// macros
-// ----------------------------------------------------------------------------
-
-#define M_DIR       ((wxDirData *)m_data)
 
 // ----------------------------------------------------------------------------
 // private classes
@@ -226,7 +206,7 @@ wxDir::wxDir(const wxString& dirname)
 
 bool wxDir::Open(const wxString& dirname)
 {
-    delete M_DIR;
+    delete m_data;
     m_data = new wxDirData(dirname);
 
     return true;
@@ -242,7 +222,7 @@ wxString wxDir::GetName() const
     wxString name;
     if ( m_data )
     {
-        name = M_DIR->GetName();
+        name = m_data->GetName();
         if ( !name.empty() && (name.Last() == _T('/')) )
         {
             // chop off the last (back)slash
@@ -255,10 +235,8 @@ wxString wxDir::GetName() const
 
 wxDir::~wxDir()
 {
-    if (M_DIR != NULL) {
-        delete M_DIR;
-        m_data = NULL;
-    }
+    delete m_data;
+    m_data = NULL;
 }
 
 // ----------------------------------------------------------------------------
@@ -271,10 +249,10 @@ bool wxDir::GetFirst(wxString *filename,
 {
     wxCHECK_MSG( IsOpened(), false, _T("must wxDir::Open() first") );
 
-    M_DIR->Rewind();
+    m_data->Rewind();
 
-    M_DIR->SetFileSpec(filespec);
-    M_DIR->SetFlags(flags);
+    m_data->SetFileSpec(filespec);
+    m_data->SetFlags(flags);
 
     return GetNext(filename);
 }
@@ -285,5 +263,5 @@ bool wxDir::GetNext(wxString *filename) const
 
     wxCHECK_MSG( filename, false, _T("bad pointer in wxDir::GetNext()") );
 
-    return M_DIR->Read(filename);
+    return m_data->Read(filename);
 }

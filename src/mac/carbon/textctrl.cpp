@@ -64,13 +64,6 @@
 
 #include "wx/mac/uma.h"
 
-
-// if this is set to 1 then under OSX 10.2 the 'classic' MLTE implementation will be used
-// if set to 0 then the unicode textctrl will be used
-#ifndef wxMAC_AWAYS_USE_MLTE
-#define wxMAC_AWAYS_USE_MLTE 1
-#endif
-
 #ifndef __WXMAC_OSX__
 enum
 {
