@@ -80,7 +80,6 @@ extern WXDLLEXPORT_DATA(const wxChar) wxFileDialogNameStr[] = wxT("filedlg");
 #if defined(__WXMSW__) || defined(__OS2__)
 WXDLLEXPORT_DATA(const wxChar *) wxUserResourceStr = wxT("TEXT");
 #endif
-extern WXDLLEXPORT_DATA(const wxChar) wxHyperlinkCtrlNameStr[] = wxT("hyperlink");
 extern WXDLLEXPORT_DATA(const wxChar) wxColourPickerCtrlNameStr[] = wxT("colourpicker");
 extern WXDLLEXPORT_DATA(const wxChar) wxColourPickerWidgetNameStr[] = wxT("colourpickerwidget");
 extern WXDLLEXPORT_DATA(const wxChar) wxFontPickerCtrlNameStr[] = wxT("fontpicker");

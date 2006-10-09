@@ -53,6 +53,8 @@ DEFINE_EVENT_TYPE(wxEVT_COMMAND_HYPERLINK)
 // reserved for internal use only
 #define wxHYPERLINKCTRL_POPUP_COPY_ID           16384
 
+const wxChar wxHyperlinkCtrlNameStr[] = wxT("hyperlink");
+
 // ----------------------------------------------------------------------------
 // wxHyperlinkCtrl
 // ----------------------------------------------------------------------------

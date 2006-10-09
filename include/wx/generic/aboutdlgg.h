@@ -17,7 +17,7 @@
 
 #include "wx/dialog.h"
 
-class WXDLLIMPEXP_CORE wxAboutDialogInfo;
+class WXDLLIMPEXP_ADV  wxAboutDialogInfo;
 class WXDLLIMPEXP_CORE wxSizer;
 class WXDLLIMPEXP_CORE wxSizerFlags;
 
@@ -25,7 +25,7 @@ class WXDLLIMPEXP_CORE wxSizerFlags;
 // wxGenericAboutDialog: generic "About" dialog implementation
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxGenericAboutDialog : public wxDialog
+class WXDLLIMPEXP_ADV wxGenericAboutDialog : public wxDialog
 {
 public:
     // constructors and Create() method
@@ -74,7 +74,7 @@ private:
 
 // unlike wxAboutBox which can show either the native or generic about dialog,
 // this function always shows the generic one
-WXDLLIMPEXP_CORE void wxGenericAboutBox(const wxAboutDialogInfo& info);
+WXDLLIMPEXP_ADV void wxGenericAboutBox(const wxAboutDialogInfo& info);
 
 #endif // wxUSE_ABOUTDLG
 
