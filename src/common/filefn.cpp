@@ -1801,6 +1801,7 @@ bool wxIsWritable(const wxString &path)
 #elif defined( __WINDOWS__ )
     return wxCheckGenericPermission(path, GENERIC_WRITE);
 #else
+    wxUnusedVar(path);
     // TODO
     return false;
 #endif
@@ -1814,6 +1815,7 @@ bool wxIsReadable(const wxString &path)
 #elif defined( __WINDOWS__ )
     return wxCheckGenericPermission(path, GENERIC_READ);
 #else
+    wxUnusedVar(path);
     // TODO
     return false;
 #endif
@@ -1827,6 +1829,7 @@ bool wxIsExecutable(const wxString &path)
 #elif defined( __WINDOWS__ )
    return wxCheckGenericPermission(path, GENERIC_EXECUTE);
 #else
+    wxUnusedVar(path);
     // TODO
     return false;
 #endif
