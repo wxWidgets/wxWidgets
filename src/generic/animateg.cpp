@@ -531,6 +531,11 @@ void wxAnimationCtrl::OnTimer(wxTimerEvent &WXUNUSED(event))
     wxClientDC dc(this);
     DrawCurrentFrame(dc);
 
+#ifdef __WXMAC__
+    // without this, the animation currently doesn't redraw under Mac
+    Refresh();
+#endif // __WXMAC__
+
     // Set the timer for the next frame
     int delay = m_animation.GetDelay(m_currentFrame);
     if (delay == 0)
