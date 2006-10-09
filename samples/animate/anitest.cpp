@@ -29,7 +29,7 @@
 #endif
 
 #ifndef __WXMSW__
-    #include "mondrian.xpm"
+    #include "sample.xpm"
 #endif
 
 #include "anitest.h"
