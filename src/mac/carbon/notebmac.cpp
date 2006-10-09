@@ -164,7 +164,7 @@ int wxNotebook::DoSetSelection(size_t nPage, int flags)
 {
     wxCHECK_MSG( IS_VALID_PAGE(nPage), wxNOT_FOUND, wxT("DoSetSelection: invalid notebook page") );
 
-    if ( m_nSelection != wxNOT_FOUND && nPage != (size_t)m_nSelection )
+    if ( m_nSelection == wxNOT_FOUND || nPage != (size_t)m_nSelection )
     {
         if ( flags & SetSelection_SendEvent )
         {
@@ -180,6 +180,7 @@ int wxNotebook::DoSetSelection(size_t nPage, int flags)
 
         ChangePage(m_nSelection, nPage);
     }
+    //else: no change
 
     return m_nSelection;
 }
