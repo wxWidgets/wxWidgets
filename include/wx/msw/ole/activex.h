@@ -127,7 +127,7 @@ class wxAutoOleInterface \
     inline operator I *() const {return m_interface;}\
     inline I* operator ->() {return m_interface;}\
     inline I** GetRef()    {return &m_interface;}\
-    inline bool Ok() const { return IsOk(); }
+    inline bool Ok() const { return IsOk(); }\
     inline bool IsOk() const    {return m_interface != NULL;}\
 };
 
