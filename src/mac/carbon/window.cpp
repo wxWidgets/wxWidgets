@@ -89,8 +89,6 @@ END_EVENT_TABLE()
 #define wxMAC_DEBUG_REDRAW 0
 #endif
 
-#define wxMAC_USE_THEME_BORDER 1
-
 // ---------------------------------------------------------------------------
 // Utility Routines to move between different coordinate systems
 // ---------------------------------------------------------------------------
@@ -141,9 +139,6 @@ void wxMacWindowToNative( const wxWindow* window , Rect *rect )
 // ---------------------------------------------------------------------------
 // Carbon Events
 // ---------------------------------------------------------------------------
-
-extern long wxMacTranslateKey(unsigned char key, unsigned char code) ;
-pascal OSStatus wxMacSetupControlBackground( ControlRef iControl , SInt16 iMessage , SInt16 iDepth , Boolean iIsColor ) ;
 
 #if TARGET_API_MAC_OSX
 
@@ -2030,7 +2025,7 @@ wxPoint wxWindowMac::GetClientAreaOrigin() const
 
 void wxWindowMac::DoSetClientSize(int clientwidth, int clientheight)
 {
-    if ( clientheight != wxDefaultCoord || clientheight != wxDefaultCoord )
+    if ( clientwidth != wxDefaultCoord || clientheight != wxDefaultCoord )
     {
         int currentclientwidth , currentclientheight ;
         int currentwidth , currentheight ;
@@ -3118,8 +3113,6 @@ WXWindow wxWindowMac::MacGetTopLevelWindowRef() const
         iter = iter->GetParent() ;
     }
 
-    wxASSERT_MSG( 1 , wxT("No valid mac root window") ) ;
-
     return NULL ;
 }
 
@@ -3131,11 +3124,9 @@ void wxWindowMac::MacCreateScrollBars( long style )
     {
         bool hasBoth = ( style & wxVSCROLL ) && ( style & wxHSCROLL ) ;
         int scrlsize = MAC_SCROLLBAR_SIZE ;
-        wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL ;
         if ( GetWindowVariant() == wxWINDOW_VARIANT_SMALL || GetWindowVariant() == wxWINDOW_VARIANT_MINI )
         {
             scrlsize = MAC_SMALL_SCROLLBAR_SIZE ;
-            variant = wxWINDOW_VARIANT_SMALL ;
         }
 
         int adjust = hasBoth ? scrlsize - 1: 0 ;
