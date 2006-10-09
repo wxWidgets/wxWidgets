@@ -65,6 +65,7 @@ _treeList = [
         'ExpandoTextCtrl',
         'ButtonPanel',
         'FlatNotebook',
+        'CustomTreeCtrl',
         ]),
 
     # managed windows == things with a (optional) caption you can close
@@ -151,6 +152,7 @@ _treeList = [
         'ButtonPanel',
         'ColourSelect',
         'ComboTreeBox',
+        'CustomTreeCtrl',
         'Editor',
         'FlatNotebook',
         'GenericButtons',
