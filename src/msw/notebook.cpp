@@ -228,7 +228,7 @@ const wxNotebookPageInfoList& wxNotebook::GetPageInfos() const
 void wxNotebook::Init()
 {
     m_imageList = NULL;
-    m_nSelection = -1;
+    m_nSelection = wxNOT_FOUND;
 
 #if wxUSE_UXTHEME
     m_hbrBackground = NULL;
@@ -457,14 +457,14 @@ int wxNotebook::SetSelection(size_t nPage)
     return m_nSelection;
 }
 
-void wxNotebook::UpdateSelection(size_t newsel)
+void wxNotebook::UpdateSelection(int selNew)
 {
-    if ( m_nSelection != -1 )
+    if ( m_nSelection != wxNOT_FOUND )
         m_pages[m_nSelection]->Show(false);
 
-    if ( newsel != -1 )
+    if ( selNew != wxNOT_FOUND )
     {
-        wxNotebookPage *pPage = m_pages[newsel];
+        wxNotebookPage *pPage = m_pages[selNew];
         pPage->Show(true);
     }
 
@@ -478,14 +478,14 @@ void wxNotebook::UpdateSelection(size_t newsel)
     if ( ::IsWindowVisible(GetHwnd()) )
         SetFocus();
 
-    m_nSelection = newsel;
+    m_nSelection = selNew;
 }
 
 int wxNotebook::ChangeSelection(size_t nPage)
 {
     wxCHECK_MSG( IS_VALID_PAGE(nPage), wxNOT_FOUND, wxT("notebook page out of range") );
 
-    if ( int(nPage) != m_nSelection )
+    if ( m_nSelection == wxNOT_FOUND || nPage != (size_t)m_nSelection )
     {
         TabCtrl_SetCurSel(GetHwnd(), nPage);
 
@@ -545,7 +545,8 @@ int wxNotebook::GetPageImage(size_t nPage) const
     TC_ITEM tcItem;
     tcItem.mask = TCIF_IMAGE;
 
-    return TabCtrl_GetItem(GetHwnd(), nPage, &tcItem) ? tcItem.iImage : wxNOT_FOUND;
+    return TabCtrl_GetItem(GetHwnd(), nPage, &tcItem) ? tcItem.iImage
+                                                      : wxNOT_FOUND;
 }
 
 bool wxNotebook::SetPageImage(size_t nPage, int nImage)
@@ -565,7 +566,7 @@ void wxNotebook::SetImageList(wxImageList* imageList)
 
     if ( imageList )
     {
-        (void) TabCtrl_SetImageList(GetHwnd(), (HIMAGELIST)imageList->GetHIMAGELIST());
+        (void) TabCtrl_SetImageList(GetHwnd(), GetHimagelistOf(imageList));
     }
 }
 
@@ -680,12 +681,12 @@ wxNotebookPage *wxNotebook::DoRemovePage(size_t nPage)
     if ( m_pages.IsEmpty() )
     {
         // no selection any more, the notebook becamse empty
-        m_nSelection = -1;
+        m_nSelection = wxNOT_FOUND;
     }
     else // notebook still not empty
     {
         int selNew = TabCtrl_GetCurSel(GetHwnd());
-        if (selNew != -1)
+        if ( selNew != wxNOT_FOUND )
         {
             // No selection change, just refresh the current selection.
             // Because it could be that the slection index changed
@@ -706,7 +707,7 @@ wxNotebookPage *wxNotebook::DoRemovePage(size_t nPage)
 
             // m_nSelection must be always valid so reset it before calling
             // SetSelection()
-            m_nSelection = -1;
+            m_nSelection = wxNOT_FOUND;
             SetSelection(selNew);
         }
         else
@@ -730,7 +731,7 @@ bool wxNotebook::DeleteAllPages()
 
     TabCtrl_DeleteAllItems(GetHwnd());
 
-    m_nSelection = -1;
+    m_nSelection = wxNOT_FOUND;
 
     InvalidateBestSize();
     return true;
@@ -826,13 +827,13 @@ bool wxNotebook::InsertPage(size_t nPage,
 
     // some page should be selected: either this one or the first one if there
     // is still no selection
-    int selNew = -1;
+    int selNew = wxNOT_FOUND;
     if ( bSelect )
         selNew = nPage;
-    else if ( m_nSelection == -1 )
+    else if ( m_nSelection == wxNOT_FOUND )
         selNew = 0;
 
-    if ( selNew != -1 )
+    if ( selNew != wxNOT_FOUND )
         SetSelection(selNew);
 
     InvalidateBestSize();
@@ -1108,7 +1109,7 @@ void wxNotebook::OnNavigationKey(wxNavigationKeyEvent& event)
         {
             // no, it doesn't come from child, case (b) or (c): forward to a
             // page but only if direction is backwards (TAB) or from ourselves,
-            if ( m_nSelection != -1 &&
+            if ( m_nSelection != wxNOT_FOUND &&
                     (!event.GetDirection() || isFromSelf) )
             {
                 // so that the page knows that the event comes from it's parent

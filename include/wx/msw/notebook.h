@@ -196,8 +196,9 @@ protected:
   // common part of all ctors
   void Init();
 
-  // hides m_nSelection-th page, shows the newsel-th one and updates m_nSelection
-  void UpdateSelection(size_t newsel);
+  // hides the currently shown page and shows the given one (if not -1) and
+  // updates m_nSelection accordingly
+  void UpdateSelection(int selNew);
 
   // remove one page from the notebook, without deleting
   virtual wxNotebookPage *DoRemovePage(size_t nPage);
