@@ -76,7 +76,7 @@ inline bool wxFontDialogBase::Create(wxWindow *parent, const wxFontData *data)
 
 #if defined( __WXMAC_OSX__ ) && ( MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_2 )
 //set to 1 to use native mac font and color dialogs
-#define USE_NATIVE_FONT_DIALOG_FOR_MACOSX 0
+#define USE_NATIVE_FONT_DIALOG_FOR_MACOSX 1
 #else
 //not supported on these platforms, leave 0
 #define USE_NATIVE_FONT_DIALOG_FOR_MACOSX 0
