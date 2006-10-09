@@ -427,21 +427,7 @@ void wxGDIPlusContext::Translate( wxDouble dx , wxDouble dy )
 
 void wxGDIPlusContext::Scale( wxDouble xScale , wxDouble yScale )
 {
-    PointF penWidth( m_pen->GetWidth(), 0);
-    Matrix matrix ;
-    if ( !m_penTransparent )
-    {
-            m_context->GetTransform(&matrix);
-            matrix.TransformVectors(&penWidth);
-    }
     m_context->ScaleTransform(xScale,yScale);
-    if ( !m_penTransparent )
-    {
-        m_context->GetTransform(&matrix);
-        matrix.Invert();
-        matrix.TransformVectors(&penWidth) ;
-        m_pen->SetWidth( sqrt( penWidth.X*penWidth.X  + penWidth.Y*penWidth.Y));
-    }
 }
 
 void wxGDIPlusContext::PushState()
