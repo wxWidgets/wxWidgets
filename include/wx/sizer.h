@@ -25,6 +25,15 @@ class WXDLLEXPORT wxBoxSizer;
 class WXDLLEXPORT wxSizerItem;
 class WXDLLEXPORT wxSizer;
 
+#ifndef wxUSE_BORDER_BY_DEFAULT
+    #ifdef __SMARTPHONE__
+        // no borders by default on limited size screen
+        #define wxUSE_BORDER_BY_DEFAULT 0
+    #else
+        #define wxUSE_BORDER_BY_DEFAULT 1
+    #endif
+#endif
+
 // ----------------------------------------------------------------------------
 // wxSizerFlags: flags used for an item in the sizer
 // ----------------------------------------------------------------------------
@@ -72,14 +81,13 @@ public:
     // default border size used by Border() below
     static int GetDefaultBorder()
     {
-#ifdef __SMARTPHONE__
-        // no borders by default on limited size screen
-        return 0;
-#else // !__SMARTPHONE__
+#if wxUSE_BORDER_BY_DEFAULT
         // FIXME: default border size shouldn't be hardcoded and at the very
         //        least they should depend on the current font size
         return 5;
-#endif // __SMARTPHONE__/!__SMARTPHONE__
+#else
+        return 0;
+#endif
     }
 
 
@@ -95,16 +103,55 @@ public:
 
     wxSizerFlags& Border(int direction = wxALL)
     {
-#ifdef __SMARTPHONE__
+#if wxUSE_BORDER_BY_DEFAULT
+        return Border(direction, GetDefaultBorder());
+#else
         // no borders by default on limited size screen
         wxUnusedVar(direction);
 
         return *this;
-#else
-        return Border(direction, GetDefaultBorder());
 #endif
     }
 
+    wxSizerFlags& DoubleBorder(int direction = wxALL)
+    {
+#if wxUSE_BORDER_BY_DEFAULT
+        return Border(direction, 2*GetDefaultBorder());
+#else
+        wxUnusedVar(direction);
+
+        return *this;
+#endif
+    }
+
+    wxSizerFlags& TripleBorder(int direction = wxALL)
+    {
+#if wxUSE_BORDER_BY_DEFAULT
+        return Border(direction, 3*GetDefaultBorder());
+#else
+        wxUnusedVar(direction);
+
+        return *this;
+#endif
+    }
+
+    wxSizerFlags& HorzBorder()
+    {
+#if wxUSE_BORDER_BY_DEFAULT
+        return Border(wxLEFT | wxRIGHT, GetDefaultBorder());
+#else
+        return *this;
+#endif
+    }
+
+    wxSizerFlags& DoubleHorzBorder()
+    {
+#if wxUSE_BORDER_BY_DEFAULT
+        return Border(wxLEFT | wxRIGHT, 2*GetDefaultBorder());
+#else
+        return *this;
+#endif
+    }
 
     // accessors for wxSizer only
     int GetProportion() const { return m_proportion; }
