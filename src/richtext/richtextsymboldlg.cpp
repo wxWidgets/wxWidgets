@@ -16,6 +16,10 @@
 #pragma hdrstop
 #endif
 
+#if wxUSE_RICHTEXT
+
+#include "wx/richtext/richtextsymboldlg.h"
+
 #ifndef WX_PRECOMP
 #include "wx/wx.h"
 #endif
@@ -26,8 +30,6 @@
 #include "wx/fontenum.h"
 #include "wx/dcbuffer.h"
 #include "wx/settings.h"
-
-#include "../../include/wx/richtext/richtextsymboldlg.h"
 
 ////@begin XPM images
 ////@end XPM images
@@ -505,9 +507,7 @@ bool wxSymbolPickerDialog::TransferDataToWindow()
 
     if (m_fontCtrl->GetCount() == 0)
     {
-        wxFontEnumerator enumerator;
-        enumerator.EnumerateFacenames();
-        wxArrayString faceNames = enumerator.GetFacenames();
+        wxArrayString faceNames = wxFontEnumerator::GetFacenames();
         faceNames.Sort();
 
         faceNames.Insert(_("(Normal text)"), 0);
@@ -853,8 +853,9 @@ bool wxSymbolListCtrl::DoSetCurrent(int current)
         {
             // it is, indeed, only partly visible, so scroll it into view to
             // make it entirely visible
-            while ( (size_t)lineNo == GetLastVisibleLine() &&
-                    ScrollToLine(GetVisibleBegin()+1) ) ;
+            while ( unsigned(lineNo) == GetLastVisibleLine() &&
+                    ScrollToLine(GetVisibleBegin()+1) )
+                ;
 
             // but in any case refresh it as even if it was only partly visible
             // before we need to redraw it entirely as its background changed
@@ -1231,7 +1232,7 @@ int wxSymbolListCtrl::HitTest(const wxPoint& pt)
 
     if (symbol >= m_minSymbolValue && symbol <= m_maxSymbolValue)
         return symbol;
-    else
+
     return -1;
 }
 
@@ -1286,4 +1287,4 @@ wxSymbolListCtrl::GetClassDefaultAttributes(wxWindowVariant variant)
     return wxListBox::GetClassDefaultAttributes(variant);
 }
 
-
+#endif // wxUSE_RICHTEXT

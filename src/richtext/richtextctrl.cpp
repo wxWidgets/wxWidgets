@@ -242,8 +242,6 @@ void wxRichTextCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
         // Paint the background
         PaintBackground(dc);
 
-        wxRegion dirtyRegion = GetUpdateRegion();
-
         wxRect drawingArea(GetLogicalPoint(wxPoint(0, 0)), GetClientSize());
         wxRect availableSpace(GetClientSize());
         if (GetBuffer().GetDirty())

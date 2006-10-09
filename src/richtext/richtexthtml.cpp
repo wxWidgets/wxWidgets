@@ -556,7 +556,7 @@ wxChar* wxRichTextHTMLHandler::b64enc( unsigned char* input, size_t in_len )
 
         *p++ = enc64[ (a >> 2) & 0x3f ];
 
-        if( in_len-- <= 0 )
+        if( in_len-- == 0 )
         {
             *p++ = enc64[ (a << 4 ) & 0x30 ];
             *p++ = '=';
@@ -568,7 +568,7 @@ wxChar* wxRichTextHTMLHandler::b64enc( unsigned char* input, size_t in_len )
 
         *p++ = enc64[(( a << 4 ) | ((b >> 4) &0xf )) & 0x3f];
 
-        if( in_len-- <= 0 )
+        if( in_len-- == 0 )
         {
             *p++ = enc64[ (b << 2) & 0x3f ];
             *p++ = '=';
