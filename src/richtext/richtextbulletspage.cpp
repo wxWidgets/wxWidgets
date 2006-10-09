@@ -9,19 +9,9 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-// For compilers that support precompilation, includes "wx/wx.h".
-#include "wx/wxprec.h"
-
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
-
 #if wxUSE_RICHTEXT
 
 #include "wx/richtext/richtextbulletspage.h"
-
-#ifndef WX_PRECOMP
-#endif
 
 #include "wx/richtext/richtextsymboldlg.h"
 #include "wx/fontenum.h"
@@ -90,7 +80,7 @@ wxRichTextBulletsPage::wxRichTextBulletsPage( wxWindow* parent, wxWindowID id, c
 /*!
  * Initialise members
  */
- 
+
 void wxRichTextBulletsPage::Init()
 {
     m_hasBulletStyle = false;
@@ -252,12 +242,12 @@ void wxRichTextBulletsPage::CreateControls()
     m_symbolCtrl->Append(_(">"));
     m_symbolCtrl->Append(_("+"));
     m_symbolCtrl->Append(_("~"));
-    
+
     wxFontEnumerator enumerator;
     enumerator.EnumerateFacenames();
     wxArrayString facenames = enumerator.GetFacenames();
     facenames.Sort();
-    
+
     m_symbolFontCtrl->Append(facenames);
 }
 
@@ -347,7 +337,7 @@ bool wxRichTextBulletsPage::TransferDataToWindow()
         if (attr->GetBulletStyle() & wxTEXT_ATTR_BULLET_STYLE_PERIOD)
             m_periodCtrl->SetValue(true);
         else
-            m_periodCtrl->SetValue(false);        
+            m_periodCtrl->SetValue(false);
     }
     else
         m_styleListBox->SetSelection(-1);
@@ -625,10 +615,10 @@ void wxRichTextBulletsPage::OnChooseSymbolClick( wxCommandEvent& WXUNUSED(event)
         if (dlg.ShowModal() == wxID_OK)
         {
             m_dontUpdate = true;
-            
+
             m_symbolCtrl->SetValue(dlg.GetSymbol());
             m_symbolFontCtrl->SetValue(dlg.GetFontName());
-            
+
             UpdatePreview();
 
             m_dontUpdate = false;

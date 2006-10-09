@@ -9,13 +9,7 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-////@begin includes
-////@end includes
-
 #include "../../include/wx/richtext/richtextfontpage.h"
-
-////@begin XPM images
-////@end XPM images
 
 /*!
  * wxRichTextFontPage type definition
@@ -66,7 +60,7 @@ wxRichTextFontPage::wxRichTextFontPage( wxWindow* parent, wxWindowID id, const w
 /*!
  * Initialise members
  */
- 
+
 void wxRichTextFontPage::Init()
 {
     m_dontUpdate = false;

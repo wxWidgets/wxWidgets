@@ -9,19 +9,9 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-// For compilers that support precompilation, includes "wx/wx.h".
-#include "wx/wxprec.h"
-
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
-
 #if wxUSE_RICHTEXT
 
 #include "wx/richtext/richtextindentspage.h"
-
-#ifndef WX_PRECOMP
-#endif
 
 /*!
  * wxRichTextIndentsSpacingPage type definition
@@ -80,7 +70,7 @@ wxRichTextIndentsSpacingPage::wxRichTextIndentsSpacingPage( wxWindow* parent, wx
 /*!
  * Initialise members
  */
- 
+
 void wxRichTextIndentsSpacingPage::Init()
 {
     m_dontUpdate = false;

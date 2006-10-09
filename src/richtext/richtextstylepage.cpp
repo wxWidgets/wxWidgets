@@ -1,27 +1,17 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/richtext/richtextstylepage.cpp
-// Purpose:     
+// Purpose:
 // Author:      Julian Smart
-// Modified by: 
+// Modified by:
 // Created:     10/5/2006 11:34:55 AM
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-// For compilers that support precompilation, includes "wx/wx.h".
-#include "wx/wxprec.h"
-
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
-
 #if wxUSE_RICHTEXT
 
 #include "wx/richtext/richtextstylepage.h"
-
-#ifndef WX_PRECOMP
-#endif
 
 /*!
  * wxRichTextStylePage type definition
@@ -60,7 +50,7 @@ wxRichTextStylePage::wxRichTextStylePage( wxWindow* parent, wxWindowID id, const
 /*!
  * Initialise members
  */
- 
+
 void wxRichTextStylePage::Init()
 {
 ////@begin wxRichTextStylePage member initialisation
@@ -94,7 +84,7 @@ bool wxRichTextStylePage::Create( wxWindow* parent, wxWindowID id, const wxPoint
  */
 
 void wxRichTextStylePage::CreateControls()
-{    
+{
 ////@begin wxRichTextStylePage content construction
     wxRichTextStylePage* itemPanel1 = this;
 
@@ -197,7 +187,7 @@ bool wxRichTextStylePage::TransferDataToWindow()
         }
         m_nextStyle->SetValue(paraDef->GetNextStyle());
     }
-    
+
     if (m_basedOn->GetCount() == 0)
     {
         if (sheet)
@@ -224,7 +214,7 @@ bool wxRichTextStylePage::TransferDataToWindow()
             }
         }
     }
-    
+
     m_basedOn->SetValue(def->GetBaseStyle());
 
     return true;

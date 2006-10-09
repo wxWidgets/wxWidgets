@@ -9,19 +9,9 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-// For compilers that support precompilation, includes "wx/wx.h".
-#include "wx/wxprec.h"
-
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
-
 #if wxUSE_RICHTEXT
 
 #include "wx/richtext/richtexttabspage.h"
-
-#ifndef WX_PRECOMP
-#endif
 
 /*!
  * wxRichTextTabsPage type definition
@@ -69,7 +59,7 @@ wxRichTextTabsPage::wxRichTextTabsPage( wxWindow* parent, wxWindowID id, const w
 /*!
  * Initialise members
  */
- 
+
 void wxRichTextTabsPage::Init()
 {
     m_tabsPresent = false;
