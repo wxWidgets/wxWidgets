@@ -24,9 +24,9 @@
 
 class WXDLLIMPEXP_ADV wxAnimationBase;
 class WXDLLIMPEXP_ADV wxAnimationPlayer;
-class WXDLLEXPORT wxImage;
-class WXDLLEXPORT wxGIFDecoder;
-class WXDLLEXPORT wxAnimation;
+class WXDLLEXPORT     wxImage;
+class WXDLLEXPORT     wxGIFDecoder;
+class WXDLLIMPEXP_ADV wxAnimation;
 
 
 // ----------------------------------------------------------------------------

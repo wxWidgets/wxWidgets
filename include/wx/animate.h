@@ -28,15 +28,15 @@
 
 class WXDLLIMPEXP_ADV wxAnimation;
 
-extern WXDLLEXPORT_DATA(wxAnimation) wxNullAnimation;
-extern WXDLLEXPORT_DATA(const wxChar) wxAnimationCtrlNameStr[];
+extern WXDLLIMPEXP_DATA_ADV(wxAnimation) wxNullAnimation;
+extern WXDLLIMPEXP_DATA_ADV(const wxChar) wxAnimationCtrlNameStr[];
 
 
 // ----------------------------------------------------------------------------
 // wxAnimationBase
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxAnimationBase : public wxGDIObject
+class WXDLLIMPEXP_ADV wxAnimationBase : public wxGDIObject
 {
 public:
     wxAnimationBase() {}
