@@ -227,6 +227,10 @@ public:
     virtual wxString GetValue() const;
     virtual void SetValue(const wxString& value);
 
+    virtual bool IsEmpty() const;
+
+    virtual void ChangeValue(const wxString &value);
+    
     virtual wxString GetRange(long from, long to) const;
 
     virtual int GetLineLength(long lineNo) const;
@@ -339,6 +343,9 @@ the client area origin nor scrolling. ", "",
     virtual void SetSelection(long from, long to);
     virtual void SelectAll();
     virtual void SetEditable(bool editable);
+
+    // generate the wxEVT_COMMAND_TEXT_UPDATED event, like SetValue() does
+    void SendTextUpdatedEvent();
 
 #ifdef __WXMSW__
     // Caret handling (Windows only)
