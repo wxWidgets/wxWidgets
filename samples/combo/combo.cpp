@@ -817,7 +817,7 @@ MyFrame::MyFrame(const wxString& title)
     wxImage imgPressed(wxT("dropbutp.png"));
     wxImage imgHover(wxT("dropbuth.png"));
 
-    if ( imgNormal.Ok() && imgPressed.Ok() && imgHover.Ok() )
+    if ( imgNormal.IsOk() && imgPressed.IsOk() && imgHover.IsOk() )
     {
         wxBitmap bmpNormal(imgNormal);
         wxBitmap bmpPressed(imgPressed);
