@@ -1,0 +1,153 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Name:        animation.tex
+%% Purpose:     wxAnimation documentation
+%% Author:      Francesco Montorsi
+%% Created:     24-9-2006
+%% RCS-ID:      $Id$
+%% Copyright:   (c) 2006 Francesco Montorsi
+%% License:     wxWindows license
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{\class{wxAnimation}}\label{wxanimation}
+
+This class encapsulates the concept of a platform-dependent animation.
+An animation is a sequence of frames of the same size.
+Sound is not supported by wxAnimation.
+
+\wxheading{Derived from}
+
+\helpref{wxGDIObject}{wxgdiobject}\\
+\helpref{wxObject}{wxobject}
+
+\wxheading{Include files}
+
+<wx/animate.h>
+
+\wxheading{Predefined objects}
+
+Objects:
+
+{\bf wxNullAnimation}
+
+\wxheading{See also}
+
+\helpref{wxAnimationCtrl}{wxanimationctrl}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+
+\membersection{wxAnimation::wxAnimation}\label{wxanimationctor}
+
+\func{}{wxAnimation}{\void}
+
+Default constructor.
+
+\func{}{wxAnimation}{\param{const wxAnimation\& }{anim}}
+
+Copy constructor.
+wxAnimation objects are reference counted so that this operation is very fast.
+
+\func{}{wxAnimation}{\param{const wxString\& }{name}, \param{wxAnimationType}{ type = wxANIMATION\_TYPE\_ANY}}
+
+Loads an animation from a file.
+
+\docparam{name}{The name of the file to load.}
+
+\docparam{type}{See \helpref{LoadFile}{wxanimationloadfile} for more info.}
+
+
+\membersection{wxAnimation::\destruct{wxAnimation}}\label{wxanimationdtor}
+
+\func{}{\destruct{wxAnimation}}{\void}
+
+Destroys the wxAnimation object and possibly the underlying animation data.
+Because reference counting is used, the animation may not actually be
+destroyed at this point - only when the reference count is zero will the
+data be deleted.
+
+
+\membersection{wxAnimation::GetDelay}\label{wxanimationgetdelay}
+
+\constfunc{int}{GetDelay}{\param{size_t }{i}}
+
+Returns the delay for the i-th frame in milliseconds.
+If {\tt -1} is returned the frame is to be displayed forever.
+
+
+\membersection{wxAnimation::GetFrameCount}\label{wxanimationgetframecount}
+
+\constfunc{size_t}{GetFrameCount}{\void}
+
+Returns the number of frames for this animation.
+
+
+\membersection{wxAnimation::GetFrame}\label{wxanimationgetframe}
+
+\constfunc{wxImage}{GetFrame}{\param{size_t }{i}}
+
+Returns the i-th frame as a \helpref{wxImage}{wximage}.
+
+
+\membersection{wxAnimation::GetSize}\label{wxanimationgetsize}
+
+\constfunc{wxSize}{GetSize}{\void}
+
+Returns the size of the animation.
+
+
+\membersection{wxAnimation::IsOk}\label{wxanimationisok}
+
+\constfunc{bool}{IsOk}{\void}
+
+Returns \true if animation data is present.
+
+
+\membersection{wxAnimation::Load}\label{wxanimationload}
+
+\func{bool}{Load}{\param{wxInputStream&}{ stream}, \param{wxAnimationType}{ type = wxANIMATION\_TYPE\_ANY}}
+
+Loads an animation from the given stream.
+
+\wxheading{Parameters}
+
+\docparam{stream}{The stream to use to load the animation.}
+
+\docparam{type}{One of the following values:
+
+\twocolwidtha{5cm}
+\begin{twocollist}
+\twocolitem{\indexit{wxANIM\_TYPE\_GIF}}{Load an animated GIF file.}
+\twocolitem{\indexit{wxANIM\_TYPE\_ANI}}{Load an ANI file.}
+\twocolitem{\indexit{wxANIM\_TYPE\_ANY}}{Try to autodetect the filetype.}
+\end{twocollist}
+}
+
+\wxheading{Return value}
+
+\true if the operation succeeded, \false otherwise.
+
+
+\membersection{wxAnimation::LoadFile}\label{wxanimationloadfile}
+
+\func{bool}{LoadFile}{\param{const wxString\&}{ name}, \param{wxAnimationType}{ type = wxANIMATION\_TYPE\_ANY}}
+
+Loads an animation from a file.
+
+\wxheading{Parameters}
+
+\docparam{name}{A filename.}
+
+\docparam{type}{One of the following values:
+
+\twocolwidtha{5cm}
+\begin{twocollist}
+\twocolitem{\indexit{wxANIM\_TYPE\_GIF}}{Load an animated GIF file.}
+\twocolitem{\indexit{wxANIM\_TYPE\_ANI}}{Load an ANI file.}
+\twocolitem{\indexit{wxANIM\_TYPE\_ANY}}{Try to autodetect the filetype.}
+\end{twocollist}
+}
+
+\wxheading{Return value}
+
+\true if the operation succeeded, \false otherwise.
+

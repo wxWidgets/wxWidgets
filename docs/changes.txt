@@ -68,6 +68,7 @@ All (GUI):
 
 - Support for right-to-left text layout (started by Diaa Sami during Google Summer of
   Code, with a lot of help from Tim Kosse and others).
+- wxAnimationCtrl added (Francesco Montorsi)
 - Added wxAboutBox() function for displaying the standard about dialog
 - Added wxID_PAGE_SETUP standard id.
 - Added wxSize::IncBy() and DecBy() methods.

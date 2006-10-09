@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        imagbmp.h
-// Purpose:     wxImage BMP, ICO and CUR handlers
+// Purpose:     wxImage BMP, ICO, CUR and ANI handlers
 // Author:      Robert Roebling, Chris Elliott
 // RCS-ID:      $Id$
 // Copyright:   (c) Robert Roebling, Chris Elliott

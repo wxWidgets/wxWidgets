@@ -456,6 +456,10 @@ SOURCE=..\..\src\common\accesscmn.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\common\anidecod.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\common\appcmn.cpp
 # End Source File
 # Begin Source File
@@ -8165,6 +8169,10 @@ SOURCE=..\..\include\wx\generic\accel.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\generic\animate.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\generic\bmpcbox.h
 # End Source File
 # Begin Source File
@@ -8586,6 +8594,14 @@ SOURCE=..\..\include\wx\accel.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\access.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\anidecod.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\animate.h
 # End Source File
 # Begin Source File
 

@@ -1379,6 +1379,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_fdrepdlg.o \
 	$(OBJS)\monodll_fontdlg.o \
 	$(OBJS)\monodll_accesscmn.o \
+	$(OBJS)\monodll_anidecod.o \
 	$(OBJS)\monodll_appcmn.o \
 	$(OBJS)\monodll_artprov.o \
 	$(OBJS)\monodll_artstd.o \
@@ -1599,6 +1600,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_mono.o \
 	$(OBJS)\monodll_win32.o \
 	$(OBJS)\monodll_accesscmn.o \
+	$(OBJS)\monodll_anidecod.o \
 	$(OBJS)\monodll_appcmn.o \
 	$(OBJS)\monodll_artprov.o \
 	$(OBJS)\monodll_artstd.o \
@@ -1716,6 +1718,7 @@ endif
 endif
 ifeq ($(WXUNIV),0)
 ____ADVANCED_SRC_FILENAMES_OBJECTS =  \
+	$(OBJS)\monodll_animatecmn.o \
 	$(OBJS)\monodll_datavcmn.o \
 	$(OBJS)\monodll_aboutdlgg.o \
 	$(OBJS)\monodll_bmpcboxg.o \
@@ -1734,6 +1737,7 @@ ____ADVANCED_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_splash.o \
 	$(OBJS)\monodll_tipdlg.o \
 	$(OBJS)\monodll_wizard.o \
+	$(OBJS)\monodll_animateg.o \
 	$(OBJS)\monodll_taskbarcmn.o \
 	$(OBJS)\monodll_aboutdlg.o \
 	$(OBJS)\monodll_sound.o \
@@ -1743,6 +1747,7 @@ ____ADVANCED_SRC_FILENAMES_OBJECTS =  \
 endif
 ifeq ($(WXUNIV),1)
 ____ADVANCED_SRC_FILENAMES_OBJECTS =  \
+	$(OBJS)\monodll_animatecmn.o \
 	$(OBJS)\monodll_datavcmn.o \
 	$(OBJS)\monodll_aboutdlgg.o \
 	$(OBJS)\monodll_bmpcboxg.o \
@@ -1761,6 +1766,7 @@ ____ADVANCED_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_splash.o \
 	$(OBJS)\monodll_tipdlg.o \
 	$(OBJS)\monodll_wizard.o \
+	$(OBJS)\monodll_animateg.o \
 	$(OBJS)\monodll_taskbarcmn.o \
 	$(OBJS)\monodll_aboutdlg.o \
 	$(OBJS)\monodll_sound.o \
@@ -1977,6 +1983,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_fdrepdlg.o \
 	$(OBJS)\monolib_fontdlg.o \
 	$(OBJS)\monolib_accesscmn.o \
+	$(OBJS)\monolib_anidecod.o \
 	$(OBJS)\monolib_appcmn.o \
 	$(OBJS)\monolib_artprov.o \
 	$(OBJS)\monolib_artstd.o \
@@ -2197,6 +2204,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_mono.o \
 	$(OBJS)\monolib_win32.o \
 	$(OBJS)\monolib_accesscmn.o \
+	$(OBJS)\monolib_anidecod.o \
 	$(OBJS)\monolib_appcmn.o \
 	$(OBJS)\monolib_artprov.o \
 	$(OBJS)\monolib_artstd.o \
@@ -2314,6 +2322,7 @@ endif
 endif
 ifeq ($(WXUNIV),0)
 ____ADVANCED_SRC_FILENAMES_1_OBJECTS =  \
+	$(OBJS)\monolib_animatecmn.o \
 	$(OBJS)\monolib_datavcmn.o \
 	$(OBJS)\monolib_aboutdlgg.o \
 	$(OBJS)\monolib_bmpcboxg.o \
@@ -2332,6 +2341,7 @@ ____ADVANCED_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_splash.o \
 	$(OBJS)\monolib_tipdlg.o \
 	$(OBJS)\monolib_wizard.o \
+	$(OBJS)\monolib_animateg.o \
 	$(OBJS)\monolib_taskbarcmn.o \
 	$(OBJS)\monolib_aboutdlg.o \
 	$(OBJS)\monolib_sound.o \
@@ -2341,6 +2351,7 @@ ____ADVANCED_SRC_FILENAMES_1_OBJECTS =  \
 endif
 ifeq ($(WXUNIV),1)
 ____ADVANCED_SRC_FILENAMES_1_OBJECTS =  \
+	$(OBJS)\monolib_animatecmn.o \
 	$(OBJS)\monolib_datavcmn.o \
 	$(OBJS)\monolib_aboutdlgg.o \
 	$(OBJS)\monolib_bmpcboxg.o \
@@ -2359,6 +2370,7 @@ ____ADVANCED_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_splash.o \
 	$(OBJS)\monolib_tipdlg.o \
 	$(OBJS)\monolib_wizard.o \
+	$(OBJS)\monolib_animateg.o \
 	$(OBJS)\monolib_taskbarcmn.o \
 	$(OBJS)\monolib_aboutdlg.o \
 	$(OBJS)\monolib_sound.o \
@@ -2499,6 +2511,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_fdrepdlg.o \
 	$(OBJS)\coredll_fontdlg.o \
 	$(OBJS)\coredll_accesscmn.o \
+	$(OBJS)\coredll_anidecod.o \
 	$(OBJS)\coredll_appcmn.o \
 	$(OBJS)\coredll_artprov.o \
 	$(OBJS)\coredll_artstd.o \
@@ -2719,6 +2732,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_mono.o \
 	$(OBJS)\coredll_win32.o \
 	$(OBJS)\coredll_accesscmn.o \
+	$(OBJS)\coredll_anidecod.o \
 	$(OBJS)\coredll_appcmn.o \
 	$(OBJS)\coredll_artprov.o \
 	$(OBJS)\coredll_artstd.o \
@@ -2944,6 +2958,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_fdrepdlg.o \
 	$(OBJS)\corelib_fontdlg.o \
 	$(OBJS)\corelib_accesscmn.o \
+	$(OBJS)\corelib_anidecod.o \
 	$(OBJS)\corelib_appcmn.o \
 	$(OBJS)\corelib_artprov.o \
 	$(OBJS)\corelib_artstd.o \
@@ -3164,6 +3179,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_mono.o \
 	$(OBJS)\corelib_win32.o \
 	$(OBJS)\corelib_accesscmn.o \
+	$(OBJS)\corelib_anidecod.o \
 	$(OBJS)\corelib_appcmn.o \
 	$(OBJS)\corelib_artprov.o \
 	$(OBJS)\corelib_artstd.o \
@@ -3289,6 +3305,7 @@ endif
 endif
 ifeq ($(WXUNIV),0)
 ____ADVANCED_SRC_FILENAMES_2_OBJECTS =  \
+	$(OBJS)\advdll_animatecmn.o \
 	$(OBJS)\advdll_datavcmn.o \
 	$(OBJS)\advdll_aboutdlgg.o \
 	$(OBJS)\advdll_bmpcboxg.o \
@@ -3307,6 +3324,7 @@ ____ADVANCED_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\advdll_splash.o \
 	$(OBJS)\advdll_tipdlg.o \
 	$(OBJS)\advdll_wizard.o \
+	$(OBJS)\advdll_animateg.o \
 	$(OBJS)\advdll_taskbarcmn.o \
 	$(OBJS)\advdll_aboutdlg.o \
 	$(OBJS)\advdll_sound.o \
@@ -3316,6 +3334,7 @@ ____ADVANCED_SRC_FILENAMES_2_OBJECTS =  \
 endif
 ifeq ($(WXUNIV),1)
 ____ADVANCED_SRC_FILENAMES_2_OBJECTS =  \
+	$(OBJS)\advdll_animatecmn.o \
 	$(OBJS)\advdll_datavcmn.o \
 	$(OBJS)\advdll_aboutdlgg.o \
 	$(OBJS)\advdll_bmpcboxg.o \
@@ -3334,6 +3353,7 @@ ____ADVANCED_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\advdll_splash.o \
 	$(OBJS)\advdll_tipdlg.o \
 	$(OBJS)\advdll_wizard.o \
+	$(OBJS)\advdll_animateg.o \
 	$(OBJS)\advdll_taskbarcmn.o \
 	$(OBJS)\advdll_aboutdlg.o \
 	$(OBJS)\advdll_sound.o \
@@ -3350,6 +3370,7 @@ endif
 endif
 ifeq ($(WXUNIV),0)
 ____ADVANCED_SRC_FILENAMES_3_OBJECTS =  \
+	$(OBJS)\advlib_animatecmn.o \
 	$(OBJS)\advlib_datavcmn.o \
 	$(OBJS)\advlib_aboutdlgg.o \
 	$(OBJS)\advlib_bmpcboxg.o \
@@ -3368,6 +3389,7 @@ ____ADVANCED_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\advlib_splash.o \
 	$(OBJS)\advlib_tipdlg.o \
 	$(OBJS)\advlib_wizard.o \
+	$(OBJS)\advlib_animateg.o \
 	$(OBJS)\advlib_taskbarcmn.o \
 	$(OBJS)\advlib_aboutdlg.o \
 	$(OBJS)\advlib_sound.o \
@@ -3377,6 +3399,7 @@ ____ADVANCED_SRC_FILENAMES_3_OBJECTS =  \
 endif
 ifeq ($(WXUNIV),1)
 ____ADVANCED_SRC_FILENAMES_3_OBJECTS =  \
+	$(OBJS)\advlib_animatecmn.o \
 	$(OBJS)\advlib_datavcmn.o \
 	$(OBJS)\advlib_aboutdlgg.o \
 	$(OBJS)\advlib_bmpcboxg.o \
@@ -3395,6 +3418,7 @@ ____ADVANCED_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\advlib_splash.o \
 	$(OBJS)\advlib_tipdlg.o \
 	$(OBJS)\advlib_wizard.o \
+	$(OBJS)\advlib_animateg.o \
 	$(OBJS)\advlib_taskbarcmn.o \
 	$(OBJS)\advlib_aboutdlg.o \
 	$(OBJS)\advlib_sound.o \
@@ -5853,6 +5877,11 @@ $(OBJS)\monodll_accesscmn.o: ../../src/common/accesscmn.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\monodll_anidecod.o: ../../src/common/anidecod.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\monodll_appcmn.o: ../../src/common/appcmn.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -6418,6 +6447,11 @@ $(OBJS)\monodll_vscroll.o: ../../src/generic/vscroll.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\monodll_animatecmn.o: ../../src/common/animatecmn.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\monodll_datavcmn.o: ../../src/common/datavcmn.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -6504,6 +6538,11 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\monodll_wizard.o: ../../src/generic/wizard.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\monodll_animateg.o: ../../src/generic/animateg.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 endif
 
@@ -7866,6 +7905,11 @@ $(OBJS)\monolib_accesscmn.o: ../../src/common/accesscmn.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\monolib_anidecod.o: ../../src/common/anidecod.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\monolib_appcmn.o: ../../src/common/appcmn.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -8431,6 +8475,11 @@ $(OBJS)\monolib_vscroll.o: ../../src/generic/vscroll.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\monolib_animatecmn.o: ../../src/common/animatecmn.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\monolib_datavcmn.o: ../../src/common/datavcmn.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -8517,6 +8566,11 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\monolib_wizard.o: ../../src/generic/wizard.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\monolib_animateg.o: ../../src/generic/animateg.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 endif
 
@@ -9900,6 +9954,11 @@ $(OBJS)\coredll_accesscmn.o: ../../src/common/accesscmn.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\coredll_anidecod.o: ../../src/common/anidecod.cpp
+	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\coredll_appcmn.o: ../../src/common/appcmn.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -11240,6 +11299,11 @@ $(OBJS)\corelib_accesscmn.o: ../../src/common/accesscmn.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\corelib_anidecod.o: ../../src/common/anidecod.cpp
+	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\corelib_appcmn.o: ../../src/common/appcmn.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -11813,6 +11877,9 @@ $(OBJS)\advdll_version_rc.o: ../../src/msw/version.rc
 $(OBJS)\advdll_datectrl.o: ../../src/msw/datectrl.cpp
 	$(CXX) -c -o $@ $(ADVDLL_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\advdll_animatecmn.o: ../../src/common/animatecmn.cpp
+	$(CXX) -c -o $@ $(ADVDLL_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\advdll_datavcmn.o: ../../src/common/datavcmn.cpp
 	$(CXX) -c -o $@ $(ADVDLL_CXXFLAGS) $(CPPDEPS) $<
 
@@ -11867,6 +11934,9 @@ $(OBJS)\advdll_tipdlg.o: ../../src/generic/tipdlg.cpp
 $(OBJS)\advdll_wizard.o: ../../src/generic/wizard.cpp
 	$(CXX) -c -o $@ $(ADVDLL_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\advdll_animateg.o: ../../src/generic/animateg.cpp
+	$(CXX) -c -o $@ $(ADVDLL_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\advdll_taskbarcmn.o: ../../src/common/taskbarcmn.cpp
 	$(CXX) -c -o $@ $(ADVDLL_CXXFLAGS) $(CPPDEPS) $<
 
@@ -11886,6 +11956,9 @@ $(OBJS)\advlib_dummy.o: ../../src/common/dummy.cpp
 	$(CXX) -c -o $@ $(ADVLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\advlib_datectrl.o: ../../src/msw/datectrl.cpp
+	$(CXX) -c -o $@ $(ADVLIB_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\advlib_animatecmn.o: ../../src/common/animatecmn.cpp
 	$(CXX) -c -o $@ $(ADVLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\advlib_datavcmn.o: ../../src/common/datavcmn.cpp
@@ -11940,6 +12013,9 @@ $(OBJS)\advlib_tipdlg.o: ../../src/generic/tipdlg.cpp
 	$(CXX) -c -o $@ $(ADVLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\advlib_wizard.o: ../../src/generic/wizard.cpp
+	$(CXX) -c -o $@ $(ADVLIB_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\advlib_animateg.o: ../../src/generic/animateg.cpp
 	$(CXX) -c -o $@ $(ADVLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\advlib_taskbarcmn.o: ../../src/common/taskbarcmn.cpp

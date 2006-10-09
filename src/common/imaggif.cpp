@@ -37,12 +37,12 @@ bool wxGIFHandler::LoadFile(wxImage *image, wxInputStream& stream,
                             bool verbose, int index)
 {
     wxGIFDecoder *decod;
-    int error;
+    wxGIFErrorCode error;
     bool ok = true;
 
 //    image->Destroy();
-    decod = new wxGIFDecoder(&stream, true);
-    error = decod->ReadGIF();
+    decod = new wxGIFDecoder();
+    error = decod->LoadGIF(stream);
 
     if ((error != wxGIF_OK) && (error != wxGIF_TRUNCATED))
     {
@@ -71,24 +71,9 @@ bool wxGIFHandler::LoadFile(wxImage *image, wxInputStream& stream,
         /* go on; image data is OK */
     }
 
-    if (index != -1)
-    {
-        // We're already on index = 0 by default. So no need
-        // to call GoFrame(0) then. On top of that GoFrame doesn't
-        // accept an index of 0. (Instead GoFirstFrame() should be used)
-        // Also if the gif image has only one frame, calling GoFrame(0)
-        // fails because GoFrame() only works with gif animations.
-        // (It fails if IsAnimation() returns false)
-        // All valid reasons to NOT call GoFrame when index equals 0.
-        if (index != 0)
-        {
-            ok = decod->GoFrame(index);
-        }
-    }
-
     if (ok)
     {
-        ok = decod->ConvertToImage(image);
+        ok = decod->ConvertToImage(index != -1 ? (size_t)index : 0, image);
     }
     else
     {
@@ -111,8 +96,8 @@ bool wxGIFHandler::SaveFile( wxImage * WXUNUSED(image),
 
 bool wxGIFHandler::DoCanRead( wxInputStream& stream )
 {
-    wxGIFDecoder decod(&stream);
-    return decod.CanRead();
+    wxGIFDecoder decod;
+    return decod.CanRead(stream);
 }
 
 #endif  // wxUSE_STREAMS

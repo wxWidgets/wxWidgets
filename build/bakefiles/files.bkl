@@ -551,6 +551,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 
 <set var="GUI_CMN_SRC" hints="files">
     src/common/accesscmn.cpp
+    src/common/anidecod.cpp
     src/common/appcmn.cpp
     src/common/artprov.cpp
     src/common/artstd.cpp
@@ -756,6 +757,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 
     wx/accel.h
     wx/access.h
+    wx/anidecod.h
     wx/artprov.h
     wx/bitmap.h
     wx/bookctrl.h
@@ -2611,6 +2613,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <!-- ====================================================================== -->
 
 <set var="ADVANCED_CMN_SRC" hints="files">
+    src/common/animatecmn.cpp
     src/common/datavcmn.cpp
     src/generic/aboutdlgg.cpp
     src/generic/bmpcboxg.cpp
@@ -2632,6 +2635,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 </set>
 
 <set var="ADVANCED_CMN_HDR" hints="files">
+    wx/animate.h
     wx/bmpcbox.h
     wx/calctrl.h
     wx/dataview.h
@@ -2673,12 +2677,14 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 </set>
 
 <set var="ADVANCED_MSW_SRC" hints="files">
+    src/generic/animateg.cpp
     src/common/taskbarcmn.cpp
     src/msw/aboutdlg.cpp
     src/msw/sound.cpp
     src/msw/taskbar.cpp
 </set>
 <set var="ADVANCED_MSW_HDR" hints="files">
+    wx/generic/animate.h
     wx/msw/sound.h
     wx/msw/taskbar.h
 </set>
@@ -2700,6 +2706,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 </set>
 
 <set var="ADVANCED_MAC_SRC" hints="files">
+    src/generic/animateg.cpp
     src/common/taskbarcmn.cpp
     src/mac/carbon/aboutdlg.cpp
     src/mac/carbon/drawer.cpp
@@ -2708,6 +2715,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/mac/corefoundation/hidjoystick.cpp
 </set>
 <set var="ADVANCED_MAC_HDR" hints="files">
+    wx/generic/animate.h
     wx/mac/carbon/drawer.h
     wx/mac/carbon/sound.h
     wx/mac/carbon/taskbarosx.h
@@ -2715,20 +2723,24 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 </set>
 
 <set var="ADVANCED_COCOA_SRC" hints="files">
+    src/generic/animateg.cpp
     src/cocoa/taskbar.mm
     src/common/taskbarcmn.cpp
     src/mac/corefoundation/hidjoystick.cpp
 </set>
 <set var="ADVANCED_COCOA_HDR" hints="files">
+    wx/generic/animate.h
     wx/cocoa/taskbar.h
     wx/mac/corefoundation/joystick.h
 </set>
 
 <set var="ADVANCED_OS2_SRC" hints="files">
+    src/generic/animateg.cpp
     src/os2/joystick.cpp
     src/os2/sound.cpp
 </set>
 <set var="ADVANCED_OS2_HDR" hints="files">
+    wx/generic/animate.h
     wx/os2/joystick.h
     wx/os2/sound.h
 </set>
@@ -2747,10 +2759,15 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 
 <set var="ADVANCED_GTK_SRC" hints="files">
     src/gtk/aboutdlg.cpp
+    src/gtk/animate.cpp
     src/gtk/taskbar.cpp
     src/gtk/dataview.cpp
     src/gtk/eggtrayicon.c
 </set>
+<set var="ADVANCED_GTK_HDR" hints="files">
+    wx/gtk/animate.h
+</set>
+
 <set var="ADVANCED_GTK1_SRC" hints="files">
 </set>
 

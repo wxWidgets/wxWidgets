@@ -510,6 +510,7 @@ if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_VALIDATORS=no
 
   DEFAULT_wxUSE_ACCEL=no
+  DEFAULT_wxUSE_ANIMATIONCTRL=no
   DEFAULT_wxUSE_BUTTON=no
   DEFAULT_wxUSE_BMPBUTTON=no
   DEFAULT_wxUSE_BITMAPCOMBOBOX=no
@@ -726,6 +727,7 @@ else
   DEFAULT_wxUSE_VALIDATORS=yes
 
   DEFAULT_wxUSE_ACCEL=yes
+  DEFAULT_wxUSE_ANIMATIONCTRL=yes
   DEFAULT_wxUSE_BUTTON=yes
   DEFAULT_wxUSE_BMPBUTTON=yes
   DEFAULT_wxUSE_BITMAPCOMBOBOX=yes
@@ -1054,6 +1056,7 @@ dnl --disable-<control> later on the command line - but by default all will be
 dnl used (and vice versa)
 if test "$wxUSE_CONTROLS" = "yes"; then
   DEFAULT_wxUSE_ACCEL=yes
+  DEFAULT_wxUSE_ANIMATIONCTRL=yes
   DEFAULT_wxUSE_BMPBUTTON=yes
   DEFAULT_wxUSE_BUTTON=yes
   DEFAULT_wxUSE_CALCTRL=yes
@@ -1103,6 +1106,7 @@ if test "$wxUSE_CONTROLS" = "yes"; then
   DEFAULT_wxUSE_TIPWINDOW=yes
 elif test "$wxUSE_CONTROLS" = "no"; then
   DEFAULT_wxUSE_ACCEL=no
+  DEFAULT_wxUSE_ANIMATIONCTRL=no
   DEFAULT_wxUSE_BMPBUTTON=no
   DEFAULT_wxUSE_BUTTON=no
   DEFAULT_wxUSE_CALCTRL=no
@@ -1153,6 +1157,7 @@ elif test "$wxUSE_CONTROLS" = "no"; then
 fi
 
 WX_ARG_ENABLE(accel,       [  --enable-accel          use accelerators], wxUSE_ACCEL)
+WX_ARG_ENABLE(animatectrl, [  --enable-animatectrl    use wxAnimationCtrl class], wxUSE_ANIMATIONCTRL)
 WX_ARG_ENABLE(button,      [  --enable-button         use wxButton class], wxUSE_BUTTON)
 WX_ARG_ENABLE(bmpbutton,   [  --enable-bmpbutton      use wxBitmapButton class], wxUSE_BMPBUTTON)
 WX_ARG_ENABLE(bmpcombobox, [  --enable-bmpcombobox    use wxBitmapComboBox class], wxUSE_BITMAPCOMBOBOX)
@@ -6460,6 +6465,12 @@ fi
 if test "$wxUSE_ACCEL" = "yes"; then
   AC_DEFINE(wxUSE_ACCEL)
   USES_CONTROLS=1
+fi
+
+if test "$wxUSE_ACCEL" = "yes"; then
+  AC_DEFINE(wxUSE_ANIMATIONCTRL)
+  USES_CONTROLS=1
+  SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS animate"
 fi
 
 if test "$wxUSE_BUTTON" = "yes"; then

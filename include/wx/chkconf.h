@@ -328,6 +328,14 @@
 #   endif
 #endif /* !defined(wxUSE_ACCEL) */
 
+#ifndef wxUSE_ANIMATIONCTRL
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_ANIMATIONCTRL must be defined."
+#   else
+#       define wxUSE_ANIMATIONCTRL 0
+#   endif
+#endif /* !defined(wxUSE_ANIMATIONCTRL) */
+
 #ifndef wxUSE_BITMAPCOMBOBOX
 #   ifdef wxABORT_ON_CONFIG_ERROR
 #       error "wxUSE_BITMAPCOMBOBOX must be defined."

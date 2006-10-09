@@ -301,6 +301,14 @@ SOURCE=.\common\accesscmn.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\common\anidecod.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\common\animatecmn.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\common\appbase.cpp
 # End Source File
 # Begin Source File
@@ -968,6 +976,10 @@ SOURCE=.\common\zstream.cpp
 # Begin Source File
 
 SOURCE=.\generic\aboutdlgg.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\generic\animateg.cpp
 # End Source File
 # Begin Source File
 
@@ -2156,6 +2168,14 @@ SOURCE=..\include\wx\access.h
 # Begin Source File
 
 SOURCE=..\include\wx\afterstd.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\anidecod.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\animate.h
 # End Source File
 # Begin Source File
 
@@ -4100,6 +4120,10 @@ SOURCE=..\include\wx\generic\aboutdlgg.h
 # Begin Source File
 
 SOURCE=..\include\wx\generic\accel.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\generic\animate.h
 # End Source File
 # Begin Source File
 

@@ -452,6 +452,10 @@ LIB32=link.exe -lib
 # PROP Default_Filter ""
 # Begin Source File
 
+SOURCE=..\..\src\common\animatecmn.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\common\datavcmn.cpp
 # End Source File
 # Begin Source File
@@ -617,6 +621,10 @@ SOURCE=..\..\src\msw\version.rc
 # Begin Source File
 
 SOURCE=..\..\src\generic\aboutdlgg.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\generic\animateg.cpp
 # End Source File
 # Begin Source File
 
@@ -1137,6 +1145,10 @@ SOURCE=..\..\include\wx\generic\aboutdlgg.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\generic\animate.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\generic\bmpcbox.h
 # End Source File
 # Begin Source File
@@ -1194,6 +1206,10 @@ SOURCE=..\..\include\wx\generic\wizard.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\aboutdlg.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\animate.h
 # End Source File
 # Begin Source File
 

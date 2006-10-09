@@ -309,6 +309,7 @@ private:
     wxGIFDecoder       *m_gifDecoder;
     wxTimer            *m_gifTimer;
     int                 m_physX, m_physY;
+    size_t              m_nCurrFrame;
 #endif
     double              m_scale;
     wxHtmlImageMapCell *m_imageMap;
@@ -358,6 +359,7 @@ wxHtmlImageCell::wxHtmlImageCell(wxHtmlWindowInterface *windowIface,
     m_gifDecoder = NULL;
     m_gifTimer = NULL;
     m_physX = m_physY = wxDefaultCoord;
+    m_nCurrFrame = 0;
 #endif
 
     if ( m_bmpW && m_bmpH )
@@ -374,11 +376,11 @@ wxHtmlImageCell::wxHtmlImageCell(wxHtmlWindowInterface *windowIface,
                      (input->GetLocation().Matches(wxT("*.gif")) ||
                       input->GetLocation().Matches(wxT("*.GIF"))) )
                 {
-                    m_gifDecoder = new wxGIFDecoder(s, true);
-                    if ( m_gifDecoder->ReadGIF() == wxGIF_OK )
+                    m_gifDecoder = new wxGIFDecoder();
+                    if ( m_gifDecoder->LoadGIF(*s) == wxGIF_OK )
                     {
                         wxImage img;
-                        if ( m_gifDecoder->ConvertToImage(&img) )
+                        if ( m_gifDecoder->ConvertToImage(0, &img) )
                             SetImage(img);
 
                         readImg = false;
@@ -386,7 +388,7 @@ wxHtmlImageCell::wxHtmlImageCell(wxHtmlWindowInterface *windowIface,
                         if ( m_gifDecoder->IsAnimation() )
                         {
                             m_gifTimer = new wxGIFTimer(this);
-                            m_gifTimer->Start(m_gifDecoder->GetDelay(), true);
+                            m_gifTimer->Start(m_gifDecoder->GetDelay(0), true);
                         }
                         else
                         {
@@ -481,7 +483,10 @@ void wxHtmlImageCell::AdvanceAnimation(wxTimer *timer)
 {
     wxImage img;
 
-    m_gifDecoder->GoNextFrame(true);
+    // advance current frame
+    m_nCurrFrame++;
+    if (m_nCurrFrame == m_gifDecoder->GetFrameCount())
+        m_nCurrFrame = 0;
 
     if ( m_physX == wxDefaultCoord )
     {
@@ -499,17 +504,16 @@ void wxHtmlImageCell::AdvanceAnimation(wxTimer *timer)
     wxRect rect(pos, wxSize(m_Width, m_Height));
 
     if ( win->GetClientRect().Intersects(rect) &&
-         m_gifDecoder->ConvertToImage(&img) )
+         m_gifDecoder->ConvertToImage(m_nCurrFrame, &img) )
     {
 #if !defined(__WXMSW__) || wxUSE_WXDIB
-        if ( (int)m_gifDecoder->GetWidth() != m_Width ||
-             (int)m_gifDecoder->GetHeight() != m_Height ||
-             m_gifDecoder->GetLeft() != 0 || m_gifDecoder->GetTop() != 0 )
+        if ( m_gifDecoder->GetFrameSize(m_nCurrFrame) != wxSize(m_Width, m_Height) ||
+             m_gifDecoder->GetFramePosition(m_nCurrFrame) != wxPoint(0, 0) )
         {
             wxBitmap bmp(img);
             wxMemoryDC dc;
             dc.SelectObject(*m_bitmap);
-            dc.DrawBitmap(bmp, m_gifDecoder->GetLeft(), m_gifDecoder->GetTop(),
+            dc.DrawBitmap(bmp, m_gifDecoder->GetFramePosition(m_nCurrFrame),
                           true /* use mask */);
         }
         else
@@ -518,7 +522,7 @@ void wxHtmlImageCell::AdvanceAnimation(wxTimer *timer)
         win->Refresh(img.HasMask(), &rect);
     }
 
-    timer->Start(m_gifDecoder->GetDelay(), true);
+    timer->Start(m_gifDecoder->GetDelay(m_nCurrFrame), true);
 }
 
 void wxHtmlImageCell::Layout(int w)
