@@ -348,6 +348,7 @@ wxGDIPlusContext::wxGDIPlusContext( WXHDC hdc  )
 {
     gGDILoader.EnsureIsLoaded();
     m_context = new Graphics( (HDC) hdc);
+    m_context->SetSmoothingMode(SmoothingModeHighQuality);
     m_state1 = m_context->Save();
     m_state2 = m_context->Save();
 
