@@ -421,6 +421,10 @@ SOURCE=.\common\dcbase.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\common\dcbufcmn.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\common\debugrpt.cpp
 # End Source File
 # Begin Source File
