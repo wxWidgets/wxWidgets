@@ -528,13 +528,35 @@ Returns true if the child item was found, false otherwise.
 
 \section{\class{wxSizerFlags}}\label{wxsizerflags}
 
-PRELIMINARY.
+Normally, when you add an item to a sizer via 
+\helpref{wxSizer::Add}{wxsizeradd}, you have to specify a lot of flags and
+parameters which can be unwieldy. This is where wxSizerFlags comes in: it
+allows you to specify all parameters using the named methods instead. For
+example, instead of
 
-Normally, when you add something to a sizer via \helpref{wxSizer::Add}{wxsizeradd}, you have to specify a lot of flags and parameters.  This can be unwieldy.
+\begin{verbatim}
+    sizer->Add(ctrl, 0, wxEXPAND | wxBORDER, 10);
+\end{verbatim}
 
-This is where wxSizerFlags comes in.  Instead of a bunch of flags and other stuff, you can use wxSizerFlags, which is a convenient class for doing so.
+you can now write
 
-Note that by specification, all methods of wxSizerFlags return the wxSizerFlags object itself to ease the calling of multiple methods at a time.
+\begin{verbatim}
+    sizer->Add(ctrl, wxSizerFlags().Expand().Border(10));
+\end{verbatim}
+
+This is more readable and also allows you to create wxSizerFlags objects which
+can be reused for several sizer items.
+\begin{verbatim}
+    wxSizerFlags flagsExpand(1);
+    flagsExpand.Expand().Border(10);
+
+    sizer->Add(ctrl1, flagsExpand);
+    sizer->Add(ctrl2, flagsExpand);
+\end{verbatim}
+
+Note that by specification, all methods of wxSizerFlags return the wxSizerFlags
+object itself to allowing chaining multiple methods calls like in the examples
+above.
 
 
 \membersection{wxSizerFlags::wxSizerFlags}\label{wxsizerflagsctor}
@@ -591,6 +613,7 @@ Sets the object of the wxSizerFlags to center itself in the area it is given.
 Sets the object of the wxSizerFlags to expand to fill as much area as it can.
 
 
+\membersection{wxSizerFlags::Left}\label{wxsizerflagsleft}
 \membersection{wxSizerFlags::Left}\label{wxsizerflagsleft}
 
 \func{wxSizerFlags\& }{Left}{\void}
