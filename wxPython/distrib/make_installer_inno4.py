@@ -385,7 +385,8 @@ Source: "demo\*.txt";                       DestDir: "{app}\demo";
 Source: "demo\bitmaps\*.bmp";               DestDir: "{app}\demo\bitmaps"; 
 Source: "demo\bitmaps\*.gif";               DestDir: "{app}\demo\bitmaps"; 
 Source: "demo\bitmaps\*.jpg";               DestDir: "{app}\demo\bitmaps"; 
-Source: "demo\bitmaps\*.png";               DestDir: "{app}\demo\bitmaps"; 
+Source: "demo\bitmaps\*.png";               DestDir: "{app}\demo\bitmaps";
+Source: "demo\bitmaps\*.ico";               DestDir: "{app}\demo\bitmaps";
 
 Source: "demo\bmp_source\*.gif";               DestDir: "{app}\demo\bmp_source"; 
 Source: "demo\bmp_source\*.bmp";               DestDir: "{app}\demo\bmp_source"; 
