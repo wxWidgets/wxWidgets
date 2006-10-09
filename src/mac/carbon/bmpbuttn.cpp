@@ -16,8 +16,7 @@
 #include "wx/bmpbuttn.h"
 
 #ifndef WX_PRECOMP
-    #include "wx/window.h"
-    #include "wx/bitmap.h"
+    #include "wx/dcmemory.h"
 #endif
 
 IMPLEMENT_DYNAMIC_CLASS(wxBitmapButton, wxButton)
