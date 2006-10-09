@@ -52,7 +52,7 @@
 #include "richtextbulletspage.cpp"
 #include "richtextstylepage.cpp"
 
-#ifdef __WXMAC__
+#if 0 // def __WXMAC__
 #define wxRICHTEXT_USE_TOOLBOOK true
 #else
 #define wxRICHTEXT_USE_TOOLBOOK false
@@ -211,6 +211,7 @@ bool wxRichTextFormattingDialogFactory::CreatePages(long pages, wxRichTextFormat
 
     int availablePageCount = GetPageIdCount();
     int i;
+    bool selected = false;
     for (i = 0; i < availablePageCount; i ++)
     {
         int pageId = GetPageId(i);
@@ -222,10 +223,12 @@ bool wxRichTextFormattingDialogFactory::CreatePages(long pages, wxRichTextFormat
             if (panel)
             {
                 int imageIndex = GetPageImage(pageId);
-                dialog->GetBookCtrl()->AddPage(panel, title, false, imageIndex);
+                dialog->GetBookCtrl()->AddPage(panel, title, !selected, imageIndex);
+                selected = true;
             }
         }
     }
+    
     return true;
 }
 
