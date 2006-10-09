@@ -11,7 +11,7 @@
 # Python Code By:
 #
 # Andrea Gavana, @ 02 Oct 2006
-# Latest Revision: 04 Oct 2006, 20.00 GMT
+# Latest Revision: 05 Oct 2006, 20.00 GMT
 #
 #
 # For All Kind Of Problems, Requests Of Enhancements And Bug Reports, Please
@@ -105,8 +105,8 @@ License And Version:
 
 FlatNotebook Is Freeware And Distributed Under The wxPython License. 
 
-Latest Revision: Andrea Gavana @ 04 Oct 2006, 20.00 GMT
-Version 0.3.
+Latest Revision: Andrea Gavana @ 05 Oct 2006, 20.00 GMT
+Version 0.4.
 
 """
 
@@ -1431,13 +1431,13 @@ class FlatNotebookBase(wx.Panel):
         return self._pages._activeTextColor
 
 
-    def SetPageImageIndex(self, page, imgindex):
+    def SetPageImage(self, page, imgindex):
         """
         Sets the image index for the given page. Image is an index into the
         image list which was set with SetImageList.
         """
 
-        self._pages.SetPageImageIndex(page, imgindex)
+        self._pages.SetPageImage(page, imgindex)
 
 
     def GetPageImageIndex(self, page):
@@ -2417,7 +2417,7 @@ class PageContainerBase(wx.Panel):
             return
 
         # We draw the 'x' on the active tab only
-        if tabIdx != self.GetSelection() or tabIdx < 0 or not self.CanFitToScreen(tabIdx):
+        if tabIdx != self.GetSelection() or tabIdx < 0:
             return
 
         # Set the bitmap according to the button status
@@ -2756,9 +2756,21 @@ class PageContainerBase(wx.Panel):
         self.DrawRightArrow(dc)
 
         selection = self.GetSelection()
+
+        if selection == -1:
+            event.Skip()
+            return
         
-        if selection != -1:
-            self.DrawTabX(dc, self._pagesInfoVec[selection].GetXRect(), selection)
+        if not self.IsTabVisible(selection):
+            if selection == len(self._pagesInfoVec) - 1:
+                if not self.CanFitToScreen(selection):
+                    event.Skip()
+                    return
+            else:
+                event.Skip()
+                return
+                    
+        self.DrawTabX(dc, self._pagesInfoVec[selection].GetXRect(), selection)
             
         event.Skip()
 
@@ -2813,7 +2825,7 @@ class PageContainerBase(wx.Panel):
             bf += bstep
         
 
-    def SetPageImageIndex(self, page, imgindex):
+    def SetPageImage(self, page, imgindex):
         """ Sets the image index associated to a page. """
 
         if page < len(self._pagesInfoVec):
