@@ -99,7 +99,7 @@ wxColour wxAnimation::GetBackgroundColour() const
 bool wxAnimation::LoadFile(const wxString& filename, wxAnimationType type)
 {
     wxFileInputStream stream(filename);
-    if (!stream.Ok())
+    if ( !stream.IsOk() )
         return false;
 
     return Load(stream, type);
@@ -112,7 +112,7 @@ bool wxAnimation::Load(wxInputStream &stream, wxAnimationType type)
     const wxAnimationDecoder *handler;
     if ( type == wxANIMATION_TYPE_ANY )
     {
-        for ( wxAnimationDecoderList::compatibility_iterator node = sm_handlers.GetFirst(); 
+        for ( wxAnimationDecoderList::compatibility_iterator node = sm_handlers.GetFirst();
               node; node = node->GetNext() )
         {
             handler=(const wxAnimationDecoder*)node->GetData();
@@ -284,7 +284,7 @@ wxAnimationCtrl::~wxAnimationCtrl()
 bool wxAnimationCtrl::LoadFile(const wxString& filename, wxAnimationType type)
 {
     wxAnimation anim;
-    if (!anim.LoadFile(filename, type) || 
+    if (!anim.LoadFile(filename, type) ||
         !anim.IsOk())
         return false;
 
@@ -318,7 +318,7 @@ void wxAnimationCtrl::SetAnimation(const wxAnimation& animation)
         RebuildBackingStoreUpToFrame(0);
     else
     {
-        // clear to 
+        // clear to
         wxMemoryDC dc;
         dc.SelectObject(m_backingStore);
 
@@ -389,7 +389,7 @@ void wxAnimationCtrl::RebuildBackingStoreUpToFrame(size_t frame)
     int w = wxMin(sz.GetWidth(), winsz.GetWidth());
     int h = wxMin(sz.GetHeight(), winsz.GetHeight());
 
-    if ( !m_backingStore.Ok() ||
+    if ( !m_backingStore.IsOk() ||
             m_backingStore.GetWidth() < w || m_backingStore.GetHeight() < h )
     {
         m_backingStore.Create(w, h);
@@ -443,8 +443,8 @@ void wxAnimationCtrl::IncrementalUpdateBackingStore()
         case wxANIM_TOPREVIOUS:
             // this disposal should never be used too often.
             // E.g. GIF specification explicitely say to keep the usage of this
-            //      disposal limited to the minimum. 
-            // In fact it may require a lot of time to restore 
+            //      disposal limited to the minimum.
+            // In fact it may require a lot of time to restore
             if (m_currentFrame == 1)
             {
                 // if 0-th frame disposal is to restore to previous frame,
@@ -481,7 +481,7 @@ void wxAnimationCtrl::DrawFrame(wxDC &dc, size_t frame)
 
 void wxAnimationCtrl::DrawCurrentFrame(wxDC& dc)
 {
-    wxASSERT(m_backingStore.Ok());
+    wxASSERT( m_backingStore.IsOk() );
 
     // m_backingStore always contains the current frame
     dc.DrawBitmap(m_backingStore, 0, 0);
@@ -489,8 +489,9 @@ void wxAnimationCtrl::DrawCurrentFrame(wxDC& dc)
 
 void wxAnimationCtrl::DisposeToBackground(wxDC& dc)
 {
-    wxBrush brush(IsUsingWindowBackgroundColour() ? 
-                  this->GetBackgroundColour() : m_animation.GetBackgroundColour(), wxSOLID);
+    wxBrush brush(IsUsingWindowBackgroundColour()
+                    ? GetBackgroundColour()
+                    : m_animation.GetBackgroundColour());
     dc.SetBackground(brush);
     dc.Clear();
 }
@@ -505,7 +506,7 @@ void wxAnimationCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
     wxPaintDC dc(this);
 
     // both if we are playing or not, we need to refresh the current frame
-    if (m_backingStore.Ok())
+    if ( m_backingStore.IsOk() )
         DrawCurrentFrame(dc);
     //else: m_animation is not valid and thus we don't have a valid backing store...
 }

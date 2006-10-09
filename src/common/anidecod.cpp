@@ -36,7 +36,7 @@ wxCURHandler wxANIDecoder::sm_handler;
 class wxANIFrameInfo
 {
 public:
-    wxANIFrameInfo(size_t delay = 0, int idx = -1) 
+    wxANIFrameInfo(size_t delay = 0, int idx = -1)
         { m_delay=delay; m_imageIndex=idx; }
 
     size_t m_delay;
@@ -68,7 +68,7 @@ bool wxANIDecoder::ConvertToImage(size_t frame, wxImage *image) const
 {
     size_t idx = m_info[frame].m_imageIndex;
     *image = m_images[idx];       // copy
-    return image->Ok();
+    return image->IsOk();
 }
 
 
@@ -134,7 +134,7 @@ bool wxANIDecoder::CanRead(wxInputStream& stream) const
         // we always have a data size:
         stream.Read(&datalen, 4);
         datalen = wxINT32_SWAP_ON_BE(datalen) ;
-        
+
         // data should be padded to make even number of bytes
         if (datalen % 2 == 1) datalen ++ ;
 
@@ -160,7 +160,7 @@ bool wxANIDecoder::CanRead(wxInputStream& stream) const
 }
 
 // the "anih" RIFF chunk
-struct wxANIHeader 
+struct wxANIHeader
 {
     wxInt32 cbSizeOf;     // Num bytes in AniHeader (36 bytes)
     wxInt32 cFrames;      // Number of unique Icons in this cursor
@@ -234,7 +234,7 @@ bool wxANIDecoder::Load( wxInputStream& stream )
 
             // save interesting info from the header
             m_nFrames = header.cSteps;   // NB: not cFrames!!
-            if (m_nFrames==0)
+            if ( m_nFrames == 0 )
                 return false;
 
             globaldelay = wxINT32_SWAP_ON_BE(header.JifRate) * 1000 / 60;
@@ -247,7 +247,7 @@ bool wxANIDecoder::Load( wxInputStream& stream )
             // did we already process the anih32 chunk?
             if (m_nFrames == 0)
                 return false;       // rate chunks should always be placed after anih chunk
-            
+
             wxASSERT(m_info.GetCount() == m_nFrames);
             for (size_t i=0; i<m_nFrames; i++)
             {
