@@ -226,6 +226,7 @@ public:
     {
     }
 
+protected:
     virtual wxListItemAttr * OnGetItemAttr(long item) const
     {
         return m_nativeListCtrl->OnGetItemAttr(item);
@@ -246,7 +247,6 @@ public:
         return m_nativeListCtrl->OnGetItemText(item, column);
     }
 
-protected:
     wxListCtrl* m_nativeListCtrl;
 
 };
@@ -1414,7 +1414,7 @@ void wxMacListCtrlItem::Notification(wxMacDataItemBrowserControl *owner ,
         bool trigger = false;
 
         wxListEvent event( wxEVT_COMMAND_LIST_ITEM_SELECTED, list->GetId() );
-        bool isSingle = list->GetWindowStyle() | wxLC_SINGLE_SEL;
+        bool isSingle = (list->GetWindowStyle() & wxLC_SINGLE_SEL) != 0;
 
         event.SetEventObject( list );
         event.m_itemIndex = owner->GetLineFromItem( this ) ;
@@ -1642,7 +1642,7 @@ void wxMacDataBrowserListCtrlControl::ItemNotification(DataBrowserItemID itemID,
     else if ( message == kDataBrowserItemAdded )
     {
         // we don't issue events on adding, the item is not really stored in the list yet, so we
-        // avoid asserts by gettting out now
+        // avoid asserts by getting out now
         return  ;
     }
 
@@ -1652,7 +1652,7 @@ void wxMacDataBrowserListCtrlControl::ItemNotification(DataBrowserItemID itemID,
         bool trigger = false;
 
         wxListEvent event( wxEVT_COMMAND_LIST_ITEM_SELECTED, list->GetId() );
-        bool isSingle = list->GetWindowStyle() | wxLC_SINGLE_SEL;
+        bool isSingle = (list->GetWindowStyle() & wxLC_SINGLE_SEL) != 0;
 
         event.SetEventObject( list );
         if ( !list->IsVirtual() )
