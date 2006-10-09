@@ -171,6 +171,25 @@ struct wxANIHeader
     wxInt32 cPlanes;      // 1
     wxInt32 JifRate;      // Default Jiffies (1/60th of a second) if rate chunk not present.
     wxInt32 flags;        // Animation Flag (see AF_ constants)
+
+    // ANI files are always little endian so we need to swap bytes on big
+    // endian architectures
+#ifdef WORDS_BIGENDIAN
+    void AdjustEndianness()
+    {
+        // this works because all our fields are wxInt32 and they must be
+        // packed without holes between them (if they're not, they wouldn't map
+        // to the file header!)
+        wxInt32 * const start = (wxInt32 *)this;
+        wxInt32 * const end = start + sizeof(wxANIHeader)/sizeof(wxInt32);
+        for ( wxInt32 *p = start; p != end; p++ )
+        {
+            *p = wxINT32_SWAP_ALWAYS(*p);
+        }
+    }
+#else
+    void AdjustEndianness() { }
+#endif
 };
 
 bool wxANIDecoder::Load( wxInputStream& stream )
@@ -228,6 +247,7 @@ bool wxANIDecoder::Load( wxInputStream& stream )
 
             struct wxANIHeader header;
             stream.Read(&header, sizeof(wxANIHeader));
+            header.AdjustEndianness();
 
             // we should have a global frame size
             m_szAnimation = wxSize(header.cx, header.cy);
@@ -237,7 +257,7 @@ bool wxANIDecoder::Load( wxInputStream& stream )
             if ( m_nFrames == 0 )
                 return false;
 
-            globaldelay = wxINT32_SWAP_ON_BE(header.JifRate) * 1000 / 60;
+            globaldelay = header.JifRate * 1000 / 60;
 
             m_images.Alloc(header.cFrames);
             m_info.Add(wxANIFrameInfo(), m_nFrames);
@@ -278,7 +298,9 @@ bool wxANIDecoder::Load( wxInputStream& stream )
             m_images.Add(image);
         }
         else
+        {
             stream.SeekI(stream.TellI() + datalen);
+        }
 
         // try to read next data chunk:
         stream.Read(&FCC1, 4);
