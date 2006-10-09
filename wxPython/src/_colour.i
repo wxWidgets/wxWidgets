@@ -95,9 +95,10 @@ public:
         "Returns the Alpha value.", "");
     
     DocDeclStr(
-        bool , Ok(),
+        bool , IsOk(),
         "Returns True if the colour object is valid (the colour has been
 initialised with RGB values).", "");
+    %pythoncode { Ok = IsOk }
     
     DocDeclStr(
         void , Set(byte red, byte green, byte blue, byte alpha=wxALPHA_OPAQUE),
@@ -172,7 +173,7 @@ is returned if the pixel is invalid (on X, unallocated).", "");
             int green = -1;
             int blue = -1;
             int alpha = wxALPHA_OPAQUE;
-            if (self->Ok()) {
+            if (self->IsOk()) {
                 red =   self->Red();
                 green = self->Green();
                 blue =  self->Blue();
@@ -199,7 +200,9 @@ is returned if the pixel is invalid (on X, unallocated).", "");
         asTuple = wx._deprecated(Get, "asTuple is deprecated, use `Get` instead")
         def __str__(self):                  return str(self.Get(True))
         def __repr__(self):                 return 'wx.Colour' + str(self.Get(True))
-        def __nonzero__(self):              return self.Ok()
+        def __len__(self):                  return len(self.Get())
+        def __getitem__(self, index):       return self.Get()[index]
+        def __nonzero__(self):              return self.IsOk()
         __safe_for_unpickling__ = True
         def __reduce__(self):               return (Colour, self.Get(True))
         }

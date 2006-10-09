@@ -668,8 +668,9 @@ object, using a MIME type string to specify the image file format.", "",
     
 
     DocDeclStr(
-        bool , Ok(),
+        bool , IsOk(),
         "Returns true if image data is present.", "");
+    %pythoncode { Ok = IsOk }
     
     DocDeclStr(
         int , GetWidth(),
@@ -1035,7 +1036,7 @@ range -1.0..1.0 where -1.0 is -360 degrees and 1.0 is 360 degrees", "");
         "Converts a color in HSV color space to RGB color space.", "");
     
 
-    %pythoncode { def __nonzero__(self): return self.Ok() }
+    %pythoncode { def __nonzero__(self): return self.IsOk() }
     
     %property(AlphaBuffer, GetAlphaBuffer, SetAlphaBuffer, doc="See `GetAlphaBuffer` and `SetAlphaBuffer`");
     %property(AlphaData, GetAlphaData, SetAlphaData, doc="See `GetAlphaData` and `SetAlphaData`");

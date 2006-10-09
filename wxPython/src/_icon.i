@@ -65,7 +65,8 @@ public:
         void SetHandle(long handle) { self->SetHandle((WXHANDLE)handle); }
     }
 #endif
-    bool Ok();
+    bool IsOk();
+    %pythoncode { Ok = IsOk }
     int GetWidth();
     int GetHeight();
     int GetDepth();
@@ -77,7 +78,7 @@ public:
 #endif
     void CopyFromBitmap(const wxBitmap& bmp);
 
-    %pythoncode { def __nonzero__(self): return self.Ok() }
+    %pythoncode { def __nonzero__(self): return self.IsOk() }
     
     %property(Depth, GetDepth, SetDepth, doc="See `GetDepth` and `SetDepth`");
     %property(Height, GetHeight, SetHeight, doc="See `GetHeight` and `SetHeight`");
@@ -106,7 +107,7 @@ public:
 
     // returns True if this object is valid/initialized
     bool IsOk() const;
-    %pythoncode { def __nonzero__(self): return self.Ok() }
+    %pythoncode { def __nonzero__(self): return self.IsOk() }
 
     // set/get the icon file name
     void SetFileName(const wxString& filename);

@@ -154,7 +154,8 @@ items or or of 3-tuples (flags, keyCode, cmdID)
     wxAcceleratorTable(int n, const wxAcceleratorEntry* entries);
     ~wxAcceleratorTable();
 
-    bool Ok() const;
+    bool IsOk() const;
+    %pythoncode { Ok = IsOk }
 };
 
 

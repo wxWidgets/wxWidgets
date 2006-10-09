@@ -154,6 +154,9 @@ public:
     // NB: this function will _not_ generate PAGE_CHANGING/ED events
     virtual int SetSelection(size_t n)/* = 0*/;
 
+    
+    // acts as SetSelection but does not generate events
+    virtual int ChangeSelection(size_t n)/* = 0*/;
 
     // cycle thru the pages
     void AdvanceSelection(bool forward = true);
@@ -272,6 +275,13 @@ public:
 
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
+
+    // returns false if the change to nPage is vetoed by the program
+    bool SendPageChangingEvent(int nPage);
+
+    // sends the event about page change from old to new (or GetSelection() if
+    // new is -1)
+    void SendPageChangedEvent(int nPageOld, int nPageNew = -1);
 
     %property(RowCount, GetRowCount, doc="See `GetRowCount`");
     %property(ThemeBackgroundColour, GetThemeBackgroundColour, doc="See `GetThemeBackgroundColour`");

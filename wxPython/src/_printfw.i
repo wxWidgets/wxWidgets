@@ -70,7 +70,8 @@ public:
     bool GetCollate();
     int  GetOrientation();
 
-    bool Ok();
+    bool IsOk();
+    %pythoncode { Ok = IsOk }
 
     const wxString& GetPrinterName();
     bool GetColour();
@@ -98,7 +99,7 @@ public:
     wxString GetFilename() const;
     void SetFilename( const wxString &filename );
 
-    %pythoncode { def __nonzero__(self): return self.Ok() }
+    %pythoncode { def __nonzero__(self): return self.IsOk() }
 
     //char* GetPrivData() const;
     //int GetPrivDataLen() const;
@@ -201,7 +202,8 @@ public:
 
     wxPrintData& GetPrintData();
 
-    bool Ok();
+    bool IsOk();
+    %pythoncode { Ok = IsOk }
 
     void SetDefaultInfo(bool flag);
     void SetDefaultMinMargins(bool flag);
@@ -221,7 +223,7 @@ public:
     // Use paper id in wxPrintData to set this object's paper size
     void CalculatePaperSizeFromId();
 
-    %pythoncode { def __nonzero__(self): return self.Ok() }
+    %pythoncode { def __nonzero__(self): return self.IsOk() }
 
     %property(DefaultInfo, GetDefaultInfo, SetDefaultInfo, doc="See `GetDefaultInfo` and `SetDefaultInfo`");
     %property(DefaultMinMargins, GetDefaultMinMargins, SetDefaultMinMargins, doc="See `GetDefaultMinMargins` and `SetDefaultMinMargins`");
@@ -314,13 +316,14 @@ public:
     bool GetEnableHelp() const;
 
     // Is this data OK for showing the print dialog?
-    bool Ok() const;
+    bool IsOk() const;
+    %pythoncode { Ok = IsOk }
 
     
     wxPrintData& GetPrintData();
     void SetPrintData(const wxPrintData& printData);
 
-    %pythoncode { def __nonzero__(self): return self.Ok() }
+    %pythoncode { def __nonzero__(self): return self.IsOk() }
     
     %property(AllPages, GetAllPages, SetAllPages, doc="See `GetAllPages` and `SetAllPages`");
     %property(Collate, GetCollate, SetCollate, doc="See `GetCollate` and `SetCollate`");
@@ -692,13 +695,14 @@ public:
     int GetMaxPage();
     int GetMinPage();
 
-    bool Ok();
+    bool IsOk();
+    %pythoncode { Ok = IsOk }
     void SetOk(bool ok);
 
     virtual bool Print(bool interactive);
     virtual void DetermineScaling();
 
-    %pythoncode { def __nonzero__(self): return self.Ok() }
+    %pythoncode { def __nonzero__(self): return self.IsOk() }
     
     %property(Canvas, GetCanvas, SetCanvas, doc="See `GetCanvas` and `SetCanvas`");
     %property(CurrentPage, GetCurrentPage, SetCurrentPage, doc="See `GetCurrentPage` and `SetCurrentPage`");

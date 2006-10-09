@@ -617,8 +617,10 @@ public:
 
         // is the date valid (True even for non initialized objects)?
     inline bool IsValid() const;
-    %pythoncode { Ok = IsValid }
-    %pythoncode { def __nonzero__(self): return self.Ok() };
+    %pythoncode { IsOk = IsValid }
+    %pythoncode { Ok = IsOk }
+   
+    %pythoncode { def __nonzero__(self): return self.IsOk() };
 
     
         // get the number of seconds since the Unix epoch - returns (time_t)-1

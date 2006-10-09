@@ -178,8 +178,9 @@ bit depths, the behaviour is platform dependent.", "",
     }
 #endif
 
-    bool Ok();
-    
+    bool IsOk();
+    %pythoncode { Ok = IsOk }
+
     DocDeclStr(
         int , GetWidth(),
         "Gets the width of the bitmap in pixels.", "");
@@ -306,7 +307,7 @@ the ``type`` parameter.", "");
   #endif
 #endif
 
-    %pythoncode { def __nonzero__(self): return self.Ok() }
+    %pythoncode { def __nonzero__(self): return self.IsOk() }
 
     %extend {
         bool __eq__(const wxBitmap* other) { return other ? (*self == *other) : false; }
@@ -745,7 +746,7 @@ passed then BLACK is used.
     
     %extend {
         wxMask(const wxBitmap& bitmap, const wxColour& colour = wxNullColour) {
-            if ( !colour.Ok() )
+            if ( !colour.IsOk() )
                 return new wxMask(bitmap, *wxBLACK);
             else
                 return new wxMask(bitmap, colour);

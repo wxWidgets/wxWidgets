@@ -707,8 +707,9 @@ converting a height, for example.", "");
     
 
     DocDeclStr(
-        virtual bool , Ok() const,
+        virtual bool , IsOk() const,
         "Returns true if the DC is ok to use.", "");
+    %pythoncode { Ok = IsOk }
     
 
 
@@ -971,7 +972,7 @@ box doesn't contain anything.", "");
         // See below for implementation
     }
     
-    %pythoncode { def __nonzero__(self): return self.Ok() };
+    %pythoncode { def __nonzero__(self): return self.IsOk() };
 
 
 #ifdef __WXMSW__
@@ -1588,7 +1589,8 @@ public:
     wxMetaFile(const wxString& filename = wxPyEmptyString);
     ~wxMetaFile();
 
-    bool Ok();
+    bool IsOk();
+    %pythoncode { Ok = IsOk }
     bool SetClipboard(int width = 0, int height = 0);
 
     wxSize GetSize();
@@ -1599,7 +1601,7 @@ public:
     const wxString& GetFileName() const;
 #endif
     
-    %pythoncode { def __nonzero__(self): return self.Ok() }
+    %pythoncode { def __nonzero__(self): return self.IsOk() }
 };
 
 // bool wxMakeMetaFilePlaceable(const wxString& filename,

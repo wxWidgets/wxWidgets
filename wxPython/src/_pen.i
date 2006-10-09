@@ -42,7 +42,8 @@ public:
     int GetStyle();
     int GetWidth();
 
-    bool Ok();
+    bool IsOk();
+    %pythoncode { Ok = IsOk }
 
     void SetCap(int cap_style);
     void SetColour(wxColour& colour);
@@ -112,7 +113,7 @@ public:
         bool __eq__(const wxPen* other) { return other ? (*self == *other) : false; }
         bool __ne__(const wxPen* other) { return other ? (*self != *other) : true;  }
     }
-    %pythoncode { def __nonzero__(self): return self.Ok() }
+    %pythoncode { def __nonzero__(self): return self.IsOk() }
 
     %property(Cap, GetCap, SetCap, doc="See `GetCap` and `SetCap`");
     %property(Colour, GetColour, SetColour, doc="See `GetColour` and `SetColour`");

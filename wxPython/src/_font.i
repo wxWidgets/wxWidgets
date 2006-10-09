@@ -656,9 +656,10 @@ the closest size is found using a binary search.
 
     // was the font successfully created?
     DocDeclStr(
-        bool , Ok() const,
+        bool , IsOk() const,
         "Returns ``True`` if this font was successfully created.", "");    
-    %pythoncode { def __nonzero__(self): return self.Ok() }
+    %pythoncode { Ok = IsOk }
+    %pythoncode { def __nonzero__(self): return self.IsOk() }
 
     
     // comparison
