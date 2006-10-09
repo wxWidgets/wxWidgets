@@ -100,6 +100,9 @@ USE_EXCEPTIONS = 1
 # Enable run-time type information (RTTI) in compiled code. [0,1]
 USE_RTTI = 1
 
+# Link with gdiplus.lib? (Needed for wxGraphicsContext, will also set wxUSE_GRAPHICS_CONTEXT) [0,1]
+USE_GDIPLUS = 0
+
 # Is this official build by wxWidgets developers? [0,1]
 OFFICIAL_BUILD = 0
 

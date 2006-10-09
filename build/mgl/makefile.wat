@@ -89,6 +89,8 @@ ____MONOLIB_GUI_SRC_FILENAMES_OBJECTS =
 ____MONOLIB_GUI_SRC_FILENAMES_OBJECTS =  &
 	$(____CORE_SRC_FILENAMES_OBJECTS) &
 	$(OBJS)\monodll_datavcmn.obj &
+	$(OBJS)\monodll_aboutdlgg.obj &
+	$(OBJS)\monodll_bmpcboxg.obj &
 	$(OBJS)\monodll_calctrl.obj &
 	$(OBJS)\monodll_datavgen.obj &
 	$(OBJS)\monodll_datectlg.obj &
@@ -133,8 +135,9 @@ ____MONOLIB_GUI_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_debugrpt.obj &
 	$(OBJS)\monodll_dbgrptg.obj &
 	$(OBJS)\monodll_dbgrid.obj &
-	$(OBJS)\monodll_xh_bmpbt.obj &
 	$(OBJS)\monodll_xh_bmp.obj &
+	$(OBJS)\monodll_xh_bmpcbox.obj &
+	$(OBJS)\monodll_xh_bmpbt.obj &
 	$(OBJS)\monodll_xh_bttn.obj &
 	$(OBJS)\monodll_xh_cald.obj &
 	$(OBJS)\monodll_xh_chckb.obj &
@@ -193,7 +196,9 @@ ____MONOLIB_GUI_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_richtextbuffer.obj &
 	$(OBJS)\monodll_richtextstyles.obj &
 	$(OBJS)\monodll_richtextxml.obj &
-	$(OBJS)\monodll_richtexthtml.obj
+	$(OBJS)\monodll_richtexthtml.obj &
+	$(OBJS)\monodll_richtextformatdlg.obj &
+	$(OBJS)\monodll_richtextsymboldlg.obj
 !endif
 ____CORE_SRC_FILENAMES_OBJECTS =
 !ifeq USE_GUI 1
@@ -201,6 +206,8 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_caret.obj &
 	$(OBJS)\monodll_colour.obj &
 	$(OBJS)\monodll_icon.obj &
+	$(OBJS)\monodll_imaglist.obj &
+	$(OBJS)\monodll_mask.obj &
 	$(OBJS)\monodll_timer.obj &
 	$(OBJS)\monodll_app.obj &
 	$(OBJS)\monodll_bitmap.obj &
@@ -230,7 +237,6 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_fdrepdlg.obj &
 	$(OBJS)\monodll_filedlgg.obj &
 	$(OBJS)\monodll_fontdlgg.obj &
-	$(OBJS)\monodll_imaglist.obj &
 	$(OBJS)\monodll_listctrl.obj &
 	$(OBJS)\monodll_mdig.obj &
 	$(OBJS)\monodll_msgdlgg.obj &
@@ -265,6 +271,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_statline.obj &
 	$(OBJS)\monodll_stattext.obj &
 	$(OBJS)\monodll_statusbr.obj &
+	$(OBJS)\monodll_stdrend.obj &
 	$(OBJS)\monodll_textctrl.obj &
 	$(OBJS)\monodll_tglbtn.obj &
 	$(OBJS)\monodll_theme.obj &
@@ -273,6 +280,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_winuniv.obj &
 	$(OBJS)\monodll_gtk.obj &
 	$(OBJS)\monodll_metal.obj &
+	$(OBJS)\monodll_mono.obj &
 	$(OBJS)\monodll_win32.obj &
 	$(OBJS)\monodll_accesscmn.obj &
 	$(OBJS)\monodll_appcmn.obj &
@@ -315,6 +323,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_gdicmn.obj &
 	$(OBJS)\monodll_geometry.obj &
 	$(OBJS)\monodll_gifdecod.obj &
+	$(OBJS)\monodll_graphcmn.obj &
 	$(OBJS)\monodll_helpbase.obj &
 	$(OBJS)\monodll_iconbndl.obj &
 	$(OBJS)\monodll_imagall.obj &
@@ -331,6 +340,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_imagxpm.obj &
 	$(OBJS)\monodll_layout.obj &
 	$(OBJS)\monodll_lboxcmn.obj &
+	$(OBJS)\monodll_listctrlcmn.obj &
 	$(OBJS)\monodll_matrix.obj &
 	$(OBJS)\monodll_menucmn.obj &
 	$(OBJS)\monodll_nbkbase.obj &
@@ -398,6 +408,8 @@ ____MONOLIB_GUI_SRC_FILENAMES_1_OBJECTS =
 ____MONOLIB_GUI_SRC_FILENAMES_1_OBJECTS =  &
 	$(____CORE_SRC_FILENAMES_1_OBJECTS) &
 	$(OBJS)\monolib_datavcmn.obj &
+	$(OBJS)\monolib_aboutdlgg.obj &
+	$(OBJS)\monolib_bmpcboxg.obj &
 	$(OBJS)\monolib_calctrl.obj &
 	$(OBJS)\monolib_datavgen.obj &
 	$(OBJS)\monolib_datectlg.obj &
@@ -442,8 +454,9 @@ ____MONOLIB_GUI_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_debugrpt.obj &
 	$(OBJS)\monolib_dbgrptg.obj &
 	$(OBJS)\monolib_dbgrid.obj &
-	$(OBJS)\monolib_xh_bmpbt.obj &
 	$(OBJS)\monolib_xh_bmp.obj &
+	$(OBJS)\monolib_xh_bmpcbox.obj &
+	$(OBJS)\monolib_xh_bmpbt.obj &
 	$(OBJS)\monolib_xh_bttn.obj &
 	$(OBJS)\monolib_xh_cald.obj &
 	$(OBJS)\monolib_xh_chckb.obj &
@@ -502,7 +515,9 @@ ____MONOLIB_GUI_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_richtextbuffer.obj &
 	$(OBJS)\monolib_richtextstyles.obj &
 	$(OBJS)\monolib_richtextxml.obj &
-	$(OBJS)\monolib_richtexthtml.obj
+	$(OBJS)\monolib_richtexthtml.obj &
+	$(OBJS)\monolib_richtextformatdlg.obj &
+	$(OBJS)\monolib_richtextsymboldlg.obj
 !endif
 ____CORE_SRC_FILENAMES_1_OBJECTS =
 !ifeq USE_GUI 1
@@ -510,6 +525,8 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_caret.obj &
 	$(OBJS)\monolib_colour.obj &
 	$(OBJS)\monolib_icon.obj &
+	$(OBJS)\monolib_imaglist.obj &
+	$(OBJS)\monolib_mask.obj &
 	$(OBJS)\monolib_timer.obj &
 	$(OBJS)\monolib_app.obj &
 	$(OBJS)\monolib_bitmap.obj &
@@ -539,7 +556,6 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_fdrepdlg.obj &
 	$(OBJS)\monolib_filedlgg.obj &
 	$(OBJS)\monolib_fontdlgg.obj &
-	$(OBJS)\monolib_imaglist.obj &
 	$(OBJS)\monolib_listctrl.obj &
 	$(OBJS)\monolib_mdig.obj &
 	$(OBJS)\monolib_msgdlgg.obj &
@@ -574,6 +590,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_statline.obj &
 	$(OBJS)\monolib_stattext.obj &
 	$(OBJS)\monolib_statusbr.obj &
+	$(OBJS)\monolib_stdrend.obj &
 	$(OBJS)\monolib_textctrl.obj &
 	$(OBJS)\monolib_tglbtn.obj &
 	$(OBJS)\monolib_theme.obj &
@@ -582,6 +599,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_winuniv.obj &
 	$(OBJS)\monolib_gtk.obj &
 	$(OBJS)\monolib_metal.obj &
+	$(OBJS)\monolib_mono.obj &
 	$(OBJS)\monolib_win32.obj &
 	$(OBJS)\monolib_accesscmn.obj &
 	$(OBJS)\monolib_appcmn.obj &
@@ -624,6 +642,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_gdicmn.obj &
 	$(OBJS)\monolib_geometry.obj &
 	$(OBJS)\monolib_gifdecod.obj &
+	$(OBJS)\monolib_graphcmn.obj &
 	$(OBJS)\monolib_helpbase.obj &
 	$(OBJS)\monolib_iconbndl.obj &
 	$(OBJS)\monolib_imagall.obj &
@@ -640,6 +659,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_imagxpm.obj &
 	$(OBJS)\monolib_layout.obj &
 	$(OBJS)\monolib_lboxcmn.obj &
+	$(OBJS)\monolib_listctrlcmn.obj &
 	$(OBJS)\monolib_matrix.obj &
 	$(OBJS)\monolib_menucmn.obj &
 	$(OBJS)\monolib_nbkbase.obj &
@@ -738,6 +758,8 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_caret.obj &
 	$(OBJS)\coredll_colour.obj &
 	$(OBJS)\coredll_icon.obj &
+	$(OBJS)\coredll_imaglist.obj &
+	$(OBJS)\coredll_mask.obj &
 	$(OBJS)\coredll_timer.obj &
 	$(OBJS)\coredll_app.obj &
 	$(OBJS)\coredll_bitmap.obj &
@@ -767,7 +789,6 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_fdrepdlg.obj &
 	$(OBJS)\coredll_filedlgg.obj &
 	$(OBJS)\coredll_fontdlgg.obj &
-	$(OBJS)\coredll_imaglist.obj &
 	$(OBJS)\coredll_listctrl.obj &
 	$(OBJS)\coredll_mdig.obj &
 	$(OBJS)\coredll_msgdlgg.obj &
@@ -802,6 +823,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_statline.obj &
 	$(OBJS)\coredll_stattext.obj &
 	$(OBJS)\coredll_statusbr.obj &
+	$(OBJS)\coredll_stdrend.obj &
 	$(OBJS)\coredll_textctrl.obj &
 	$(OBJS)\coredll_tglbtn.obj &
 	$(OBJS)\coredll_theme.obj &
@@ -810,6 +832,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_winuniv.obj &
 	$(OBJS)\coredll_gtk.obj &
 	$(OBJS)\coredll_metal.obj &
+	$(OBJS)\coredll_mono.obj &
 	$(OBJS)\coredll_win32.obj &
 	$(OBJS)\coredll_accesscmn.obj &
 	$(OBJS)\coredll_appcmn.obj &
@@ -852,6 +875,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_gdicmn.obj &
 	$(OBJS)\coredll_geometry.obj &
 	$(OBJS)\coredll_gifdecod.obj &
+	$(OBJS)\coredll_graphcmn.obj &
 	$(OBJS)\coredll_helpbase.obj &
 	$(OBJS)\coredll_iconbndl.obj &
 	$(OBJS)\coredll_imagall.obj &
@@ -868,6 +892,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_imagxpm.obj &
 	$(OBJS)\coredll_layout.obj &
 	$(OBJS)\coredll_lboxcmn.obj &
+	$(OBJS)\coredll_listctrlcmn.obj &
 	$(OBJS)\coredll_matrix.obj &
 	$(OBJS)\coredll_menucmn.obj &
 	$(OBJS)\coredll_nbkbase.obj &
@@ -938,6 +963,8 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_caret.obj &
 	$(OBJS)\corelib_colour.obj &
 	$(OBJS)\corelib_icon.obj &
+	$(OBJS)\corelib_imaglist.obj &
+	$(OBJS)\corelib_mask.obj &
 	$(OBJS)\corelib_timer.obj &
 	$(OBJS)\corelib_app.obj &
 	$(OBJS)\corelib_bitmap.obj &
@@ -967,7 +994,6 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_fdrepdlg.obj &
 	$(OBJS)\corelib_filedlgg.obj &
 	$(OBJS)\corelib_fontdlgg.obj &
-	$(OBJS)\corelib_imaglist.obj &
 	$(OBJS)\corelib_listctrl.obj &
 	$(OBJS)\corelib_mdig.obj &
 	$(OBJS)\corelib_msgdlgg.obj &
@@ -1002,6 +1028,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_statline.obj &
 	$(OBJS)\corelib_stattext.obj &
 	$(OBJS)\corelib_statusbr.obj &
+	$(OBJS)\corelib_stdrend.obj &
 	$(OBJS)\corelib_textctrl.obj &
 	$(OBJS)\corelib_tglbtn.obj &
 	$(OBJS)\corelib_theme.obj &
@@ -1010,6 +1037,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_winuniv.obj &
 	$(OBJS)\corelib_gtk.obj &
 	$(OBJS)\corelib_metal.obj &
+	$(OBJS)\corelib_mono.obj &
 	$(OBJS)\corelib_win32.obj &
 	$(OBJS)\corelib_accesscmn.obj &
 	$(OBJS)\corelib_appcmn.obj &
@@ -1052,6 +1080,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_gdicmn.obj &
 	$(OBJS)\corelib_geometry.obj &
 	$(OBJS)\corelib_gifdecod.obj &
+	$(OBJS)\corelib_graphcmn.obj &
 	$(OBJS)\corelib_helpbase.obj &
 	$(OBJS)\corelib_iconbndl.obj &
 	$(OBJS)\corelib_imagall.obj &
@@ -1068,6 +1097,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_imagxpm.obj &
 	$(OBJS)\corelib_layout.obj &
 	$(OBJS)\corelib_lboxcmn.obj &
+	$(OBJS)\corelib_listctrlcmn.obj &
 	$(OBJS)\corelib_matrix.obj &
 	$(OBJS)\corelib_menucmn.obj &
 	$(OBJS)\corelib_nbkbase.obj &
@@ -1459,6 +1489,10 @@ __UNICODE_DEFINE_p =
 !ifeq UNICODE 1
 __UNICODE_DEFINE_p = -d_UNICODE
 !endif
+__GFXCTX_DEFINE_p =
+!ifeq USE_GDIPLUS 1
+__GFXCTX_DEFINE_p = -dwxUSE_GRAPHICS_CONTEXT=1
+!endif
 __BUILD_FILENAMES =
 !ifeq BUILD debug
 __BUILD_FILENAMES = debug
@@ -1478,8 +1512,9 @@ MAKEARGS = DOS32="$(DOS32)" CC="$(CC)" CXX="$(CXX)" CFLAGS="$(CFLAGS)" &
 	USE_RICHTEXT="$(USE_RICHTEXT)" USE_OPENGL="$(USE_OPENGL)" &
 	USE_ODBC="$(USE_ODBC)" USE_QA="$(USE_QA)" &
 	USE_EXCEPTIONS="$(USE_EXCEPTIONS)" USE_RTTI="$(USE_RTTI)" &
-	OFFICIAL_BUILD="$(OFFICIAL_BUILD)" VENDOR="$(VENDOR)" &
-	WX_FLAVOUR="$(WX_FLAVOUR)" WX_LIB_FLAVOUR="$(WX_LIB_FLAVOUR)" CFG="$(CFG)" &
+	USE_GDIPLUS="$(USE_GDIPLUS)" OFFICIAL_BUILD="$(OFFICIAL_BUILD)" &
+	VENDOR="$(VENDOR)" WX_FLAVOUR="$(WX_FLAVOUR)" &
+	WX_LIB_FLAVOUR="$(WX_LIB_FLAVOUR)" CFG="$(CFG)" &
 	CPPUNIT_CFLAGS="$(CPPUNIT_CFLAGS)" CPPUNIT_LIBS="$(CPPUNIT_LIBS)"
 WX_RELEASE_NODOT = 27
 OBJS = wat_$(PORTNAME)univ$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
@@ -1624,19 +1659,20 @@ WXEXPAT_OBJECTS =  &
 	$(OBJS)\wxexpat_xmltok.obj
 MONODLL_CFLAGS = $(____DOS_CFLAG_p) -bd $(__DEBUGINFO) $(__OPTIMIZEFLAG) &
 	-d__WXMGL__ -d__WXUNIVERSAL__ $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) &
-	$(__RTTI_DEFINE_p) -dwxNO_THREADS $(__UNICODE_DEFINE_p) -i=$(SETUPHDIR) &
-	-i=..\..\include -wx -wcd=549 -wcd=656 -wcd=657 -wcd=667 &
-	-i=$(%SCITECH)\include -i=..\..\src\tiff -i=..\..\src\jpeg -i=..\..\src\png &
-	-i=..\..\src\zlib -i=..\..\src\regex -i=..\..\src\expat\lib -dwxUSE_BASE=1 &
-	-dWXMAKINGDLL $(CPPFLAGS) $(CFLAGS)
+	$(__RTTI_DEFINE_p) -dwxNO_THREADS $(__UNICODE_DEFINE_p) &
+	$(__GFXCTX_DEFINE_p) -i=$(SETUPHDIR) -i=..\..\include -wx -wcd=549 -wcd=656 &
+	-wcd=657 -wcd=667 -i=$(%SCITECH)\include -i=..\..\src\tiff -i=..\..\src\jpeg &
+	-i=..\..\src\png -i=..\..\src\zlib -i=..\..\src\regex &
+	-i=..\..\src\expat\lib -dwxUSE_BASE=1 -dWXMAKINGDLL $(CPPFLAGS) $(CFLAGS)
 MONODLL_CXXFLAGS = $(____DOS_CFLAG_p) -bd $(__DEBUGINFO) $(__OPTIMIZEFLAG) &
 	-d__WXMGL__ -d__WXUNIVERSAL__ $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) &
-	$(__RTTI_DEFINE_p) -dwxNO_THREADS $(__UNICODE_DEFINE_p) -i=$(SETUPHDIR) &
-	-i=..\..\include -wx -wcd=549 -wcd=656 -wcd=657 -wcd=667 &
-	-i=$(%SCITECH)\include -i=..\..\src\tiff -i=..\..\src\jpeg -i=..\..\src\png &
-	-i=..\..\src\zlib -i=..\..\src\regex -i=..\..\src\expat\lib -dwxUSE_BASE=1 &
-	-dWXMAKINGDLL /fh=$(OBJS)\wxprec_monodll.pch $(__RTTIFLAG) &
-	$(__EXCEPTIONSFLAG) $(CPPFLAGS) $(CXXFLAGS)
+	$(__RTTI_DEFINE_p) -dwxNO_THREADS $(__UNICODE_DEFINE_p) &
+	$(__GFXCTX_DEFINE_p) -i=$(SETUPHDIR) -i=..\..\include -wx -wcd=549 -wcd=656 &
+	-wcd=657 -wcd=667 -i=$(%SCITECH)\include -i=..\..\src\tiff -i=..\..\src\jpeg &
+	-i=..\..\src\png -i=..\..\src\zlib -i=..\..\src\regex &
+	-i=..\..\src\expat\lib -dwxUSE_BASE=1 -dWXMAKINGDLL &
+	/fh=$(OBJS)\wxprec_monodll.pch $(__RTTIFLAG) $(__EXCEPTIONSFLAG) &
+	$(CPPFLAGS) $(CXXFLAGS)
 MONODLL_OBJECTS =  &
 	$(OBJS)\monodll_dummy.obj &
 	$(OBJS)\monodll_appbase.obj &
@@ -1719,19 +1755,19 @@ MONODLL_OBJECTS =  &
 	$(OBJS)\monodll_xtixml.obj
 MONOLIB_CFLAGS = $(____DOS_CFLAG_p) $(__DEBUGINFO) $(__OPTIMIZEFLAG) &
 	-d__WXMGL__ -d__WXUNIVERSAL__ $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) &
-	$(__RTTI_DEFINE_p) -dwxNO_THREADS $(__UNICODE_DEFINE_p) -i=$(SETUPHDIR) &
-	-i=..\..\include -wx -wcd=549 -wcd=656 -wcd=657 -wcd=667 &
-	-i=$(%SCITECH)\include -i=..\..\src\tiff -i=..\..\src\jpeg -i=..\..\src\png &
-	-i=..\..\src\zlib -i=..\..\src\regex -i=..\..\src\expat\lib -dwxUSE_BASE=1 &
-	$(CPPFLAGS) $(CFLAGS)
+	$(__RTTI_DEFINE_p) -dwxNO_THREADS $(__UNICODE_DEFINE_p) &
+	$(__GFXCTX_DEFINE_p) -i=$(SETUPHDIR) -i=..\..\include -wx -wcd=549 -wcd=656 &
+	-wcd=657 -wcd=667 -i=$(%SCITECH)\include -i=..\..\src\tiff -i=..\..\src\jpeg &
+	-i=..\..\src\png -i=..\..\src\zlib -i=..\..\src\regex &
+	-i=..\..\src\expat\lib -dwxUSE_BASE=1 $(CPPFLAGS) $(CFLAGS)
 MONOLIB_CXXFLAGS = $(____DOS_CFLAG_p) $(__DEBUGINFO) $(__OPTIMIZEFLAG) &
 	-d__WXMGL__ -d__WXUNIVERSAL__ $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) &
-	$(__RTTI_DEFINE_p) -dwxNO_THREADS $(__UNICODE_DEFINE_p) -i=$(SETUPHDIR) &
-	-i=..\..\include -wx -wcd=549 -wcd=656 -wcd=657 -wcd=667 &
-	-i=$(%SCITECH)\include -i=..\..\src\tiff -i=..\..\src\jpeg -i=..\..\src\png &
-	-i=..\..\src\zlib -i=..\..\src\regex -i=..\..\src\expat\lib -dwxUSE_BASE=1 &
-	/fh=$(OBJS)\wxprec_monolib.pch $(__RTTIFLAG) $(__EXCEPTIONSFLAG) &
-	$(CPPFLAGS) $(CXXFLAGS)
+	$(__RTTI_DEFINE_p) -dwxNO_THREADS $(__UNICODE_DEFINE_p) &
+	$(__GFXCTX_DEFINE_p) -i=$(SETUPHDIR) -i=..\..\include -wx -wcd=549 -wcd=656 &
+	-wcd=657 -wcd=667 -i=$(%SCITECH)\include -i=..\..\src\tiff -i=..\..\src\jpeg &
+	-i=..\..\src\png -i=..\..\src\zlib -i=..\..\src\regex &
+	-i=..\..\src\expat\lib -dwxUSE_BASE=1 /fh=$(OBJS)\wxprec_monolib.pch &
+	$(__RTTIFLAG) $(__EXCEPTIONSFLAG) $(CPPFLAGS) $(CXXFLAGS)
 MONOLIB_OBJECTS =  &
 	$(OBJS)\monolib_dummy.obj &
 	$(OBJS)\monolib_appbase.obj &
@@ -1814,19 +1850,21 @@ MONOLIB_OBJECTS =  &
 	$(OBJS)\monolib_xtixml.obj
 BASEDLL_CFLAGS = $(____DOS_CFLAG_p) -bd $(__DEBUGINFO) $(__OPTIMIZEFLAG) &
 	-d__WXMGL__ -d__WXUNIVERSAL__ $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) &
-	$(__RTTI_DEFINE_p) -dwxNO_THREADS $(__UNICODE_DEFINE_p) -i=$(SETUPHDIR) &
-	-i=..\..\include -wx -wcd=549 -wcd=656 -wcd=657 -wcd=667 &
-	-i=$(%SCITECH)\include -i=..\..\src\tiff -i=..\..\src\jpeg -i=..\..\src\png &
-	-i=..\..\src\zlib -i=..\..\src\regex -i=..\..\src\expat\lib -dwxUSE_GUI=0 &
-	-dWXMAKINGDLL_BASE -dwxUSE_BASE=1 $(CPPFLAGS) $(CFLAGS)
+	$(__RTTI_DEFINE_p) -dwxNO_THREADS $(__UNICODE_DEFINE_p) &
+	$(__GFXCTX_DEFINE_p) -i=$(SETUPHDIR) -i=..\..\include -wx -wcd=549 -wcd=656 &
+	-wcd=657 -wcd=667 -i=$(%SCITECH)\include -i=..\..\src\tiff -i=..\..\src\jpeg &
+	-i=..\..\src\png -i=..\..\src\zlib -i=..\..\src\regex &
+	-i=..\..\src\expat\lib -dwxUSE_GUI=0 -dWXMAKINGDLL_BASE -dwxUSE_BASE=1 &
+	$(CPPFLAGS) $(CFLAGS)
 BASEDLL_CXXFLAGS = $(____DOS_CFLAG_p) -bd $(__DEBUGINFO) $(__OPTIMIZEFLAG) &
 	-d__WXMGL__ -d__WXUNIVERSAL__ $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) &
-	$(__RTTI_DEFINE_p) -dwxNO_THREADS $(__UNICODE_DEFINE_p) -i=$(SETUPHDIR) &
-	-i=..\..\include -wx -wcd=549 -wcd=656 -wcd=657 -wcd=667 &
-	-i=$(%SCITECH)\include -i=..\..\src\tiff -i=..\..\src\jpeg -i=..\..\src\png &
-	-i=..\..\src\zlib -i=..\..\src\regex -i=..\..\src\expat\lib -dwxUSE_GUI=0 &
-	-dWXMAKINGDLL_BASE -dwxUSE_BASE=1 /fh=$(OBJS)\wxprec_basedll.pch &
-	$(__RTTIFLAG) $(__EXCEPTIONSFLAG) $(CPPFLAGS) $(CXXFLAGS)
+	$(__RTTI_DEFINE_p) -dwxNO_THREADS $(__UNICODE_DEFINE_p) &
+	$(__GFXCTX_DEFINE_p) -i=$(SETUPHDIR) -i=..\..\include -wx -wcd=549 -wcd=656 &
+	-wcd=657 -wcd=667 -i=$(%SCITECH)\include -i=..\..\src\tiff -i=..\..\src\jpeg &
+	-i=..\..\src\png -i=..\..\src\zlib -i=..\..\src\regex &
+	-i=..\..\src\expat\lib -dwxUSE_GUI=0 -dWXMAKINGDLL_BASE -dwxUSE_BASE=1 &
+	/fh=$(OBJS)\wxprec_basedll.pch $(__RTTIFLAG) $(__EXCEPTIONSFLAG) &
+	$(CPPFLAGS) $(CXXFLAGS)
 BASEDLL_OBJECTS =  &
 	$(OBJS)\basedll_dummy.obj &
 	$(OBJS)\basedll_appbase.obj &
@@ -1896,19 +1934,20 @@ BASEDLL_OBJECTS =  &
 	$(OBJS)\basedll_utilscmn.obj
 BASELIB_CFLAGS = $(____DOS_CFLAG_p) $(__DEBUGINFO) $(__OPTIMIZEFLAG) &
 	-d__WXMGL__ -d__WXUNIVERSAL__ $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) &
-	$(__RTTI_DEFINE_p) -dwxNO_THREADS $(__UNICODE_DEFINE_p) -i=$(SETUPHDIR) &
-	-i=..\..\include -wx -wcd=549 -wcd=656 -wcd=657 -wcd=667 &
-	-i=$(%SCITECH)\include -i=..\..\src\tiff -i=..\..\src\jpeg -i=..\..\src\png &
-	-i=..\..\src\zlib -i=..\..\src\regex -i=..\..\src\expat\lib -dwxUSE_GUI=0 &
-	-dwxUSE_BASE=1 $(CPPFLAGS) $(CFLAGS)
+	$(__RTTI_DEFINE_p) -dwxNO_THREADS $(__UNICODE_DEFINE_p) &
+	$(__GFXCTX_DEFINE_p) -i=$(SETUPHDIR) -i=..\..\include -wx -wcd=549 -wcd=656 &
+	-wcd=657 -wcd=667 -i=$(%SCITECH)\include -i=..\..\src\tiff -i=..\..\src\jpeg &
+	-i=..\..\src\png -i=..\..\src\zlib -i=..\..\src\regex &
+	-i=..\..\src\expat\lib -dwxUSE_GUI=0 -dwxUSE_BASE=1 $(CPPFLAGS) $(CFLAGS)
 BASELIB_CXXFLAGS = $(____DOS_CFLAG_p) $(__DEBUGINFO) $(__OPTIMIZEFLAG) &
 	-d__WXMGL__ -d__WXUNIVERSAL__ $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) &
-	$(__RTTI_DEFINE_p) -dwxNO_THREADS $(__UNICODE_DEFINE_p) -i=$(SETUPHDIR) &
-	-i=..\..\include -wx -wcd=549 -wcd=656 -wcd=657 -wcd=667 &
-	-i=$(%SCITECH)\include -i=..\..\src\tiff -i=..\..\src\jpeg -i=..\..\src\png &
-	-i=..\..\src\zlib -i=..\..\src\regex -i=..\..\src\expat\lib -dwxUSE_GUI=0 &
-	-dwxUSE_BASE=1 /fh=$(OBJS)\wxprec_baselib.pch $(__RTTIFLAG) &
-	$(__EXCEPTIONSFLAG) $(CPPFLAGS) $(CXXFLAGS)
+	$(__RTTI_DEFINE_p) -dwxNO_THREADS $(__UNICODE_DEFINE_p) &
+	$(__GFXCTX_DEFINE_p) -i=$(SETUPHDIR) -i=..\..\include -wx -wcd=549 -wcd=656 &
+	-wcd=657 -wcd=667 -i=$(%SCITECH)\include -i=..\..\src\tiff -i=..\..\src\jpeg &
+	-i=..\..\src\png -i=..\..\src\zlib -i=..\..\src\regex &
+	-i=..\..\src\expat\lib -dwxUSE_GUI=0 -dwxUSE_BASE=1 &
+	/fh=$(OBJS)\wxprec_baselib.pch $(__RTTIFLAG) $(__EXCEPTIONSFLAG) &
+	$(CPPFLAGS) $(CXXFLAGS)
 BASELIB_OBJECTS =  &
 	$(OBJS)\baselib_dummy.obj &
 	$(OBJS)\baselib_appbase.obj &
@@ -1978,12 +2017,13 @@ BASELIB_OBJECTS =  &
 	$(OBJS)\baselib_utilscmn.obj
 NETDLL_CXXFLAGS = $(____DOS_CFLAG_p) -bd $(__DEBUGINFO) $(__OPTIMIZEFLAG) &
 	-d__WXMGL__ -d__WXUNIVERSAL__ $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) &
-	$(__RTTI_DEFINE_p) -dwxNO_THREADS $(__UNICODE_DEFINE_p) -i=$(SETUPHDIR) &
-	-i=..\..\include -wx -wcd=549 -wcd=656 -wcd=657 -wcd=667 &
-	-i=$(%SCITECH)\include -i=..\..\src\tiff -i=..\..\src\jpeg -i=..\..\src\png &
-	-i=..\..\src\zlib -i=..\..\src\regex -i=..\..\src\expat\lib -dwxUSE_GUI=0 &
-	-dWXUSINGDLL -dWXMAKINGDLL_NET /fh=$(OBJS)\wxprec_netdll.pch $(__RTTIFLAG) &
-	$(__EXCEPTIONSFLAG) $(CPPFLAGS) $(CXXFLAGS)
+	$(__RTTI_DEFINE_p) -dwxNO_THREADS $(__UNICODE_DEFINE_p) &
+	$(__GFXCTX_DEFINE_p) -i=$(SETUPHDIR) -i=..\..\include -wx -wcd=549 -wcd=656 &
+	-wcd=657 -wcd=667 -i=$(%SCITECH)\include -i=..\..\src\tiff -i=..\..\src\jpeg &
+	-i=..\..\src\png -i=..\..\src\zlib -i=..\..\src\regex &
+	-i=..\..\src\expat\lib -dwxUSE_GUI=0 -dWXUSINGDLL -dWXMAKINGDLL_NET &
+	/fh=$(OBJS)\wxprec_netdll.pch $(__RTTIFLAG) $(__EXCEPTIONSFLAG) $(CPPFLAGS) &
+	$(CXXFLAGS)
 NETDLL_OBJECTS =  &
 	$(OBJS)\netdll_dummy.obj &
 	$(OBJS)\netdll_fs_inet.obj &
@@ -1998,12 +2038,12 @@ NETDLL_OBJECTS =  &
 	$(OBJS)\netdll_url.obj
 NETLIB_CXXFLAGS = $(____DOS_CFLAG_p) $(__DEBUGINFO) $(__OPTIMIZEFLAG) &
 	-d__WXMGL__ -d__WXUNIVERSAL__ $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) &
-	$(__RTTI_DEFINE_p) -dwxNO_THREADS $(__UNICODE_DEFINE_p) -i=$(SETUPHDIR) &
-	-i=..\..\include -wx -wcd=549 -wcd=656 -wcd=657 -wcd=667 &
-	-i=$(%SCITECH)\include -i=..\..\src\tiff -i=..\..\src\jpeg -i=..\..\src\png &
-	-i=..\..\src\zlib -i=..\..\src\regex -i=..\..\src\expat\lib -dwxUSE_GUI=0 &
-	/fh=$(OBJS)\wxprec_netlib.pch $(__RTTIFLAG) $(__EXCEPTIONSFLAG) $(CPPFLAGS) &
-	$(CXXFLAGS)
+	$(__RTTI_DEFINE_p) -dwxNO_THREADS $(__UNICODE_DEFINE_p) &
+	$(__GFXCTX_DEFINE_p) -i=$(SETUPHDIR) -i=..\..\include -wx -wcd=549 -wcd=656 &
+	-wcd=657 -wcd=667 -i=$(%SCITECH)\include -i=..\..\src\tiff -i=..\..\src\jpeg &
+	-i=..\..\src\png -i=..\..\src\zlib -i=..\..\src\regex &
+	-i=..\..\src\expat\lib -dwxUSE_GUI=0 /fh=$(OBJS)\wxprec_netlib.pch &
+	$(__RTTIFLAG) $(__EXCEPTIONSFLAG) $(CPPFLAGS) $(CXXFLAGS)
 NETLIB_OBJECTS =  &
 	$(OBJS)\netlib_dummy.obj &
 	$(OBJS)\netlib_fs_inet.obj &
@@ -2018,12 +2058,13 @@ NETLIB_OBJECTS =  &
 	$(OBJS)\netlib_url.obj
 COREDLL_CXXFLAGS = $(____DOS_CFLAG_p) -bd $(__DEBUGINFO) $(__OPTIMIZEFLAG) &
 	-d__WXMGL__ -d__WXUNIVERSAL__ $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) &
-	$(__RTTI_DEFINE_p) -dwxNO_THREADS $(__UNICODE_DEFINE_p) -i=$(SETUPHDIR) &
-	-i=..\..\include -wx -wcd=549 -wcd=656 -wcd=657 -wcd=667 &
-	-i=$(%SCITECH)\include -i=..\..\src\tiff -i=..\..\src\jpeg -i=..\..\src\png &
-	-i=..\..\src\zlib -i=..\..\src\regex -i=..\..\src\expat\lib -dWXUSINGDLL &
-	-dWXMAKINGDLL_CORE -dwxUSE_BASE=0 /fh=$(OBJS)\wxprec_coredll.pch &
-	$(__RTTIFLAG) $(__EXCEPTIONSFLAG) $(CPPFLAGS) $(CXXFLAGS)
+	$(__RTTI_DEFINE_p) -dwxNO_THREADS $(__UNICODE_DEFINE_p) &
+	$(__GFXCTX_DEFINE_p) -i=$(SETUPHDIR) -i=..\..\include -wx -wcd=549 -wcd=656 &
+	-wcd=657 -wcd=667 -i=$(%SCITECH)\include -i=..\..\src\tiff -i=..\..\src\jpeg &
+	-i=..\..\src\png -i=..\..\src\zlib -i=..\..\src\regex &
+	-i=..\..\src\expat\lib -dWXUSINGDLL -dWXMAKINGDLL_CORE -dwxUSE_BASE=0 &
+	/fh=$(OBJS)\wxprec_coredll.pch $(__RTTIFLAG) $(__EXCEPTIONSFLAG) &
+	$(CPPFLAGS) $(CXXFLAGS)
 COREDLL_OBJECTS =  &
 	$(OBJS)\coredll_dummy.obj &
 	$(OBJS)\coredll_event.obj &
@@ -2033,12 +2074,12 @@ COREDLL_OBJECTS =  &
 	$(____CORE_SRC_FILENAMES_2_OBJECTS)
 CORELIB_CXXFLAGS = $(____DOS_CFLAG_p) $(__DEBUGINFO) $(__OPTIMIZEFLAG) &
 	-d__WXMGL__ -d__WXUNIVERSAL__ $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) &
-	$(__RTTI_DEFINE_p) -dwxNO_THREADS $(__UNICODE_DEFINE_p) -i=$(SETUPHDIR) &
-	-i=..\..\include -wx -wcd=549 -wcd=656 -wcd=657 -wcd=667 &
-	-i=$(%SCITECH)\include -i=..\..\src\tiff -i=..\..\src\jpeg -i=..\..\src\png &
-	-i=..\..\src\zlib -i=..\..\src\regex -i=..\..\src\expat\lib -dwxUSE_BASE=0 &
-	/fh=$(OBJS)\wxprec_corelib.pch $(__RTTIFLAG) $(__EXCEPTIONSFLAG) &
-	$(CPPFLAGS) $(CXXFLAGS)
+	$(__RTTI_DEFINE_p) -dwxNO_THREADS $(__UNICODE_DEFINE_p) &
+	$(__GFXCTX_DEFINE_p) -i=$(SETUPHDIR) -i=..\..\include -wx -wcd=549 -wcd=656 &
+	-wcd=657 -wcd=667 -i=$(%SCITECH)\include -i=..\..\src\tiff -i=..\..\src\jpeg &
+	-i=..\..\src\png -i=..\..\src\zlib -i=..\..\src\regex &
+	-i=..\..\src\expat\lib -dwxUSE_BASE=0 /fh=$(OBJS)\wxprec_corelib.pch &
+	$(__RTTIFLAG) $(__EXCEPTIONSFLAG) $(CPPFLAGS) $(CXXFLAGS)
 CORELIB_OBJECTS =  &
 	$(OBJS)\corelib_dummy.obj &
 	$(OBJS)\corelib_event.obj &
@@ -2048,15 +2089,18 @@ CORELIB_OBJECTS =  &
 	$(____CORE_SRC_FILENAMES_3_OBJECTS)
 ADVDLL_CXXFLAGS = $(____DOS_CFLAG_p) -bd $(__DEBUGINFO) $(__OPTIMIZEFLAG) &
 	-d__WXMGL__ -d__WXUNIVERSAL__ $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) &
-	$(__RTTI_DEFINE_p) -dwxNO_THREADS $(__UNICODE_DEFINE_p) -i=$(SETUPHDIR) &
-	-i=..\..\include -wx -wcd=549 -wcd=656 -wcd=657 -wcd=667 &
-	-i=$(%SCITECH)\include -i=..\..\src\tiff -i=..\..\src\jpeg -i=..\..\src\png &
-	-i=..\..\src\zlib -i=..\..\src\regex -i=..\..\src\expat\lib -dWXUSINGDLL &
-	-dWXMAKINGDLL_ADV /fh=$(OBJS)\wxprec_advdll.pch $(__RTTIFLAG) &
-	$(__EXCEPTIONSFLAG) $(CPPFLAGS) $(CXXFLAGS)
+	$(__RTTI_DEFINE_p) -dwxNO_THREADS $(__UNICODE_DEFINE_p) &
+	$(__GFXCTX_DEFINE_p) -i=$(SETUPHDIR) -i=..\..\include -wx -wcd=549 -wcd=656 &
+	-wcd=657 -wcd=667 -i=$(%SCITECH)\include -i=..\..\src\tiff -i=..\..\src\jpeg &
+	-i=..\..\src\png -i=..\..\src\zlib -i=..\..\src\regex &
+	-i=..\..\src\expat\lib -dWXUSINGDLL -dWXMAKINGDLL_ADV &
+	/fh=$(OBJS)\wxprec_advdll.pch $(__RTTIFLAG) $(__EXCEPTIONSFLAG) $(CPPFLAGS) &
+	$(CXXFLAGS)
 ADVDLL_OBJECTS =  &
 	$(OBJS)\advdll_dummy.obj &
 	$(OBJS)\advdll_datavcmn.obj &
+	$(OBJS)\advdll_aboutdlgg.obj &
+	$(OBJS)\advdll_bmpcboxg.obj &
 	$(OBJS)\advdll_calctrl.obj &
 	$(OBJS)\advdll_datavgen.obj &
 	$(OBJS)\advdll_datectlg.obj &
@@ -2074,15 +2118,17 @@ ADVDLL_OBJECTS =  &
 	$(OBJS)\advdll_wizard.obj
 ADVLIB_CXXFLAGS = $(____DOS_CFLAG_p) $(__DEBUGINFO) $(__OPTIMIZEFLAG) &
 	-d__WXMGL__ -d__WXUNIVERSAL__ $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) &
-	$(__RTTI_DEFINE_p) -dwxNO_THREADS $(__UNICODE_DEFINE_p) -i=$(SETUPHDIR) &
-	-i=..\..\include -wx -wcd=549 -wcd=656 -wcd=657 -wcd=667 &
-	-i=$(%SCITECH)\include -i=..\..\src\tiff -i=..\..\src\jpeg -i=..\..\src\png &
-	-i=..\..\src\zlib -i=..\..\src\regex -i=..\..\src\expat\lib &
-	/fh=$(OBJS)\wxprec_advlib.pch $(__RTTIFLAG) $(__EXCEPTIONSFLAG) $(CPPFLAGS) &
-	$(CXXFLAGS)
+	$(__RTTI_DEFINE_p) -dwxNO_THREADS $(__UNICODE_DEFINE_p) &
+	$(__GFXCTX_DEFINE_p) -i=$(SETUPHDIR) -i=..\..\include -wx -wcd=549 -wcd=656 &
+	-wcd=657 -wcd=667 -i=$(%SCITECH)\include -i=..\..\src\tiff -i=..\..\src\jpeg &
+	-i=..\..\src\png -i=..\..\src\zlib -i=..\..\src\regex &
+	-i=..\..\src\expat\lib /fh=$(OBJS)\wxprec_advlib.pch $(__RTTIFLAG) &
+	$(__EXCEPTIONSFLAG) $(CPPFLAGS) $(CXXFLAGS)
 ADVLIB_OBJECTS =  &
 	$(OBJS)\advlib_dummy.obj &
 	$(OBJS)\advlib_datavcmn.obj &
+	$(OBJS)\advlib_aboutdlgg.obj &
+	$(OBJS)\advlib_bmpcboxg.obj &
 	$(OBJS)\advlib_calctrl.obj &
 	$(OBJS)\advlib_datavgen.obj &
 	$(OBJS)\advlib_datectlg.obj &
@@ -2100,80 +2146,84 @@ ADVLIB_OBJECTS =  &
 	$(OBJS)\advlib_wizard.obj
 MEDIADLL_CXXFLAGS = $(____DOS_CFLAG_p) -bd $(__DEBUGINFO) $(__OPTIMIZEFLAG) &
 	-d__WXMGL__ -d__WXUNIVERSAL__ $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) &
-	$(__RTTI_DEFINE_p) -dwxNO_THREADS $(__UNICODE_DEFINE_p) -i=$(SETUPHDIR) &
-	-i=..\..\include -wx -wcd=549 -wcd=656 -wcd=657 -wcd=667 &
-	-i=$(%SCITECH)\include -i=..\..\src\tiff -i=..\..\src\jpeg -i=..\..\src\png &
-	-i=..\..\src\zlib -i=..\..\src\regex -i=..\..\src\expat\lib -dWXUSINGDLL &
-	-dWXMAKINGDLL_MEDIA /fh=$(OBJS)\wxprec_mediadll.pch $(__RTTIFLAG) &
-	$(__EXCEPTIONSFLAG) $(CPPFLAGS) $(CXXFLAGS)
+	$(__RTTI_DEFINE_p) -dwxNO_THREADS $(__UNICODE_DEFINE_p) &
+	$(__GFXCTX_DEFINE_p) -i=$(SETUPHDIR) -i=..\..\include -wx -wcd=549 -wcd=656 &
+	-wcd=657 -wcd=667 -i=$(%SCITECH)\include -i=..\..\src\tiff -i=..\..\src\jpeg &
+	-i=..\..\src\png -i=..\..\src\zlib -i=..\..\src\regex &
+	-i=..\..\src\expat\lib -dWXUSINGDLL -dWXMAKINGDLL_MEDIA &
+	/fh=$(OBJS)\wxprec_mediadll.pch $(__RTTIFLAG) $(__EXCEPTIONSFLAG) &
+	$(CPPFLAGS) $(CXXFLAGS)
 MEDIADLL_OBJECTS =  &
 	$(OBJS)\mediadll_dummy.obj &
 	$(OBJS)\mediadll_mediactrlcmn.obj
 MEDIALIB_CXXFLAGS = $(____DOS_CFLAG_p) $(__DEBUGINFO) $(__OPTIMIZEFLAG) &
 	-d__WXMGL__ -d__WXUNIVERSAL__ $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) &
-	$(__RTTI_DEFINE_p) -dwxNO_THREADS $(__UNICODE_DEFINE_p) -i=$(SETUPHDIR) &
-	-i=..\..\include -wx -wcd=549 -wcd=656 -wcd=657 -wcd=667 &
-	-i=$(%SCITECH)\include -i=..\..\src\tiff -i=..\..\src\jpeg -i=..\..\src\png &
-	-i=..\..\src\zlib -i=..\..\src\regex -i=..\..\src\expat\lib &
-	/fh=$(OBJS)\wxprec_medialib.pch $(__RTTIFLAG) $(__EXCEPTIONSFLAG) &
-	$(CPPFLAGS) $(CXXFLAGS)
+	$(__RTTI_DEFINE_p) -dwxNO_THREADS $(__UNICODE_DEFINE_p) &
+	$(__GFXCTX_DEFINE_p) -i=$(SETUPHDIR) -i=..\..\include -wx -wcd=549 -wcd=656 &
+	-wcd=657 -wcd=667 -i=$(%SCITECH)\include -i=..\..\src\tiff -i=..\..\src\jpeg &
+	-i=..\..\src\png -i=..\..\src\zlib -i=..\..\src\regex &
+	-i=..\..\src\expat\lib /fh=$(OBJS)\wxprec_medialib.pch $(__RTTIFLAG) &
+	$(__EXCEPTIONSFLAG) $(CPPFLAGS) $(CXXFLAGS)
 MEDIALIB_OBJECTS =  &
 	$(OBJS)\medialib_dummy.obj &
 	$(OBJS)\medialib_mediactrlcmn.obj
 ODBCDLL_CXXFLAGS = $(____DOS_CFLAG_p) -bd $(__DEBUGINFO) $(__OPTIMIZEFLAG) &
 	-d__WXMGL__ -d__WXUNIVERSAL__ $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) &
-	$(__RTTI_DEFINE_p) -dwxNO_THREADS $(__UNICODE_DEFINE_p) -i=$(SETUPHDIR) &
-	-i=..\..\include -wx -wcd=549 -wcd=656 -wcd=657 -wcd=667 &
-	-i=$(%SCITECH)\include -i=..\..\src\tiff -i=..\..\src\jpeg -i=..\..\src\png &
-	-i=..\..\src\zlib -i=..\..\src\regex -i=..\..\src\expat\lib -dwxUSE_GUI=0 &
-	-dWXUSINGDLL -dWXMAKINGDLL_ODBC /fh=$(OBJS)\wxprec_odbcdll.pch &
-	$(__RTTIFLAG) $(__EXCEPTIONSFLAG) $(CPPFLAGS) $(CXXFLAGS)
+	$(__RTTI_DEFINE_p) -dwxNO_THREADS $(__UNICODE_DEFINE_p) &
+	$(__GFXCTX_DEFINE_p) -i=$(SETUPHDIR) -i=..\..\include -wx -wcd=549 -wcd=656 &
+	-wcd=657 -wcd=667 -i=$(%SCITECH)\include -i=..\..\src\tiff -i=..\..\src\jpeg &
+	-i=..\..\src\png -i=..\..\src\zlib -i=..\..\src\regex &
+	-i=..\..\src\expat\lib -dwxUSE_GUI=0 -dWXUSINGDLL -dWXMAKINGDLL_ODBC &
+	/fh=$(OBJS)\wxprec_odbcdll.pch $(__RTTIFLAG) $(__EXCEPTIONSFLAG) &
+	$(CPPFLAGS) $(CXXFLAGS)
 ODBCDLL_OBJECTS =  &
 	$(OBJS)\odbcdll_dummy.obj &
 	$(OBJS)\odbcdll_db.obj &
 	$(OBJS)\odbcdll_dbtable.obj
 ODBCLIB_CXXFLAGS = $(____DOS_CFLAG_p) $(__DEBUGINFO) $(__OPTIMIZEFLAG) &
 	-d__WXMGL__ -d__WXUNIVERSAL__ $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) &
-	$(__RTTI_DEFINE_p) -dwxNO_THREADS $(__UNICODE_DEFINE_p) -i=$(SETUPHDIR) &
-	-i=..\..\include -wx -wcd=549 -wcd=656 -wcd=657 -wcd=667 &
-	-i=$(%SCITECH)\include -i=..\..\src\tiff -i=..\..\src\jpeg -i=..\..\src\png &
-	-i=..\..\src\zlib -i=..\..\src\regex -i=..\..\src\expat\lib -dwxUSE_GUI=0 &
-	/fh=$(OBJS)\wxprec_odbclib.pch $(__RTTIFLAG) $(__EXCEPTIONSFLAG) &
-	$(CPPFLAGS) $(CXXFLAGS)
+	$(__RTTI_DEFINE_p) -dwxNO_THREADS $(__UNICODE_DEFINE_p) &
+	$(__GFXCTX_DEFINE_p) -i=$(SETUPHDIR) -i=..\..\include -wx -wcd=549 -wcd=656 &
+	-wcd=657 -wcd=667 -i=$(%SCITECH)\include -i=..\..\src\tiff -i=..\..\src\jpeg &
+	-i=..\..\src\png -i=..\..\src\zlib -i=..\..\src\regex &
+	-i=..\..\src\expat\lib -dwxUSE_GUI=0 /fh=$(OBJS)\wxprec_odbclib.pch &
+	$(__RTTIFLAG) $(__EXCEPTIONSFLAG) $(CPPFLAGS) $(CXXFLAGS)
 ODBCLIB_OBJECTS =  &
 	$(OBJS)\odbclib_dummy.obj &
 	$(OBJS)\odbclib_db.obj &
 	$(OBJS)\odbclib_dbtable.obj
 DBGRIDDLL_CXXFLAGS = $(____DOS_CFLAG_p) -bd $(__DEBUGINFO) $(__OPTIMIZEFLAG) &
 	-d__WXMGL__ -d__WXUNIVERSAL__ $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) &
-	$(__RTTI_DEFINE_p) -dwxNO_THREADS $(__UNICODE_DEFINE_p) -i=$(SETUPHDIR) &
-	-i=..\..\include -wx -wcd=549 -wcd=656 -wcd=657 -wcd=667 &
-	-i=$(%SCITECH)\include -i=..\..\src\tiff -i=..\..\src\jpeg -i=..\..\src\png &
-	-i=..\..\src\zlib -i=..\..\src\regex -i=..\..\src\expat\lib -dWXUSINGDLL &
-	-dWXMAKINGDLL_DBGRID /fh=$(OBJS)\wxprec_dbgriddll.pch $(__RTTIFLAG) &
-	$(__EXCEPTIONSFLAG) $(CPPFLAGS) $(CXXFLAGS)
+	$(__RTTI_DEFINE_p) -dwxNO_THREADS $(__UNICODE_DEFINE_p) &
+	$(__GFXCTX_DEFINE_p) -i=$(SETUPHDIR) -i=..\..\include -wx -wcd=549 -wcd=656 &
+	-wcd=657 -wcd=667 -i=$(%SCITECH)\include -i=..\..\src\tiff -i=..\..\src\jpeg &
+	-i=..\..\src\png -i=..\..\src\zlib -i=..\..\src\regex &
+	-i=..\..\src\expat\lib -dWXUSINGDLL -dWXMAKINGDLL_DBGRID &
+	/fh=$(OBJS)\wxprec_dbgriddll.pch $(__RTTIFLAG) $(__EXCEPTIONSFLAG) &
+	$(CPPFLAGS) $(CXXFLAGS)
 DBGRIDDLL_OBJECTS =  &
 	$(OBJS)\dbgriddll_dummy.obj &
 	$(OBJS)\dbgriddll_dbgrid.obj
 DBGRIDLIB_CXXFLAGS = $(____DOS_CFLAG_p) $(__DEBUGINFO) $(__OPTIMIZEFLAG) &
 	-d__WXMGL__ -d__WXUNIVERSAL__ $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) &
-	$(__RTTI_DEFINE_p) -dwxNO_THREADS $(__UNICODE_DEFINE_p) -i=$(SETUPHDIR) &
-	-i=..\..\include -wx -wcd=549 -wcd=656 -wcd=657 -wcd=667 &
-	-i=$(%SCITECH)\include -i=..\..\src\tiff -i=..\..\src\jpeg -i=..\..\src\png &
-	-i=..\..\src\zlib -i=..\..\src\regex -i=..\..\src\expat\lib &
-	/fh=$(OBJS)\wxprec_dbgridlib.pch $(__RTTIFLAG) $(__EXCEPTIONSFLAG) &
-	$(CPPFLAGS) $(CXXFLAGS)
+	$(__RTTI_DEFINE_p) -dwxNO_THREADS $(__UNICODE_DEFINE_p) &
+	$(__GFXCTX_DEFINE_p) -i=$(SETUPHDIR) -i=..\..\include -wx -wcd=549 -wcd=656 &
+	-wcd=657 -wcd=667 -i=$(%SCITECH)\include -i=..\..\src\tiff -i=..\..\src\jpeg &
+	-i=..\..\src\png -i=..\..\src\zlib -i=..\..\src\regex &
+	-i=..\..\src\expat\lib /fh=$(OBJS)\wxprec_dbgridlib.pch $(__RTTIFLAG) &
+	$(__EXCEPTIONSFLAG) $(CPPFLAGS) $(CXXFLAGS)
 DBGRIDLIB_OBJECTS =  &
 	$(OBJS)\dbgridlib_dummy.obj &
 	$(OBJS)\dbgridlib_dbgrid.obj
 HTMLDLL_CXXFLAGS = $(____DOS_CFLAG_p) -bd $(__DEBUGINFO) $(__OPTIMIZEFLAG) &
 	-d__WXMGL__ -d__WXUNIVERSAL__ $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) &
-	$(__RTTI_DEFINE_p) -dwxNO_THREADS $(__UNICODE_DEFINE_p) -i=$(SETUPHDIR) &
-	-i=..\..\include -wx -wcd=549 -wcd=656 -wcd=657 -wcd=667 &
-	-i=$(%SCITECH)\include -i=..\..\src\tiff -i=..\..\src\jpeg -i=..\..\src\png &
-	-i=..\..\src\zlib -i=..\..\src\regex -i=..\..\src\expat\lib -dWXUSINGDLL &
-	-dWXMAKINGDLL_HTML /fh=$(OBJS)\wxprec_htmldll.pch $(__RTTIFLAG) &
-	$(__EXCEPTIONSFLAG) $(CPPFLAGS) $(CXXFLAGS)
+	$(__RTTI_DEFINE_p) -dwxNO_THREADS $(__UNICODE_DEFINE_p) &
+	$(__GFXCTX_DEFINE_p) -i=$(SETUPHDIR) -i=..\..\include -wx -wcd=549 -wcd=656 &
+	-wcd=657 -wcd=667 -i=$(%SCITECH)\include -i=..\..\src\tiff -i=..\..\src\jpeg &
+	-i=..\..\src\png -i=..\..\src\zlib -i=..\..\src\regex &
+	-i=..\..\src\expat\lib -dWXUSINGDLL -dWXMAKINGDLL_HTML &
+	/fh=$(OBJS)\wxprec_htmldll.pch $(__RTTIFLAG) $(__EXCEPTIONSFLAG) &
+	$(CPPFLAGS) $(CXXFLAGS)
 HTMLDLL_OBJECTS =  &
 	$(OBJS)\htmldll_dummy.obj &
 	$(OBJS)\htmldll_helpctrl.obj &
@@ -2201,12 +2251,12 @@ HTMLDLL_OBJECTS =  &
 	$(OBJS)\htmldll_htmllbox.obj
 HTMLLIB_CXXFLAGS = $(____DOS_CFLAG_p) $(__DEBUGINFO) $(__OPTIMIZEFLAG) &
 	-d__WXMGL__ -d__WXUNIVERSAL__ $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) &
-	$(__RTTI_DEFINE_p) -dwxNO_THREADS $(__UNICODE_DEFINE_p) -i=$(SETUPHDIR) &
-	-i=..\..\include -wx -wcd=549 -wcd=656 -wcd=657 -wcd=667 &
-	-i=$(%SCITECH)\include -i=..\..\src\tiff -i=..\..\src\jpeg -i=..\..\src\png &
-	-i=..\..\src\zlib -i=..\..\src\regex -i=..\..\src\expat\lib &
-	/fh=$(OBJS)\wxprec_htmllib.pch $(__RTTIFLAG) $(__EXCEPTIONSFLAG) &
-	$(CPPFLAGS) $(CXXFLAGS)
+	$(__RTTI_DEFINE_p) -dwxNO_THREADS $(__UNICODE_DEFINE_p) &
+	$(__GFXCTX_DEFINE_p) -i=$(SETUPHDIR) -i=..\..\include -wx -wcd=549 -wcd=656 &
+	-wcd=657 -wcd=667 -i=$(%SCITECH)\include -i=..\..\src\tiff -i=..\..\src\jpeg &
+	-i=..\..\src\png -i=..\..\src\zlib -i=..\..\src\regex &
+	-i=..\..\src\expat\lib /fh=$(OBJS)\wxprec_htmllib.pch $(__RTTIFLAG) &
+	$(__EXCEPTIONSFLAG) $(CPPFLAGS) $(CXXFLAGS)
 HTMLLIB_OBJECTS =  &
 	$(OBJS)\htmllib_dummy.obj &
 	$(OBJS)\htmllib_helpctrl.obj &
@@ -2234,64 +2284,68 @@ HTMLLIB_OBJECTS =  &
 	$(OBJS)\htmllib_htmllbox.obj
 QADLL_CXXFLAGS = $(____DOS_CFLAG_p) -bd $(__DEBUGINFO) $(__OPTIMIZEFLAG) &
 	-d__WXMGL__ -d__WXUNIVERSAL__ $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) &
-	$(__RTTI_DEFINE_p) -dwxNO_THREADS $(__UNICODE_DEFINE_p) -i=$(SETUPHDIR) &
-	-i=..\..\include -wx -wcd=549 -wcd=656 -wcd=657 -wcd=667 &
-	-i=$(%SCITECH)\include -i=..\..\src\tiff -i=..\..\src\jpeg -i=..\..\src\png &
-	-i=..\..\src\zlib -i=..\..\src\regex -i=..\..\src\expat\lib -dWXUSINGDLL &
-	-dWXMAKINGDLL_QA /fh=$(OBJS)\wxprec_qadll.pch $(__RTTIFLAG) &
-	$(__EXCEPTIONSFLAG) $(CPPFLAGS) $(CXXFLAGS)
+	$(__RTTI_DEFINE_p) -dwxNO_THREADS $(__UNICODE_DEFINE_p) &
+	$(__GFXCTX_DEFINE_p) -i=$(SETUPHDIR) -i=..\..\include -wx -wcd=549 -wcd=656 &
+	-wcd=657 -wcd=667 -i=$(%SCITECH)\include -i=..\..\src\tiff -i=..\..\src\jpeg &
+	-i=..\..\src\png -i=..\..\src\zlib -i=..\..\src\regex &
+	-i=..\..\src\expat\lib -dWXUSINGDLL -dWXMAKINGDLL_QA &
+	/fh=$(OBJS)\wxprec_qadll.pch $(__RTTIFLAG) $(__EXCEPTIONSFLAG) $(CPPFLAGS) &
+	$(CXXFLAGS)
 QADLL_OBJECTS =  &
 	$(OBJS)\qadll_dummy.obj &
 	$(OBJS)\qadll_debugrpt.obj &
 	$(OBJS)\qadll_dbgrptg.obj
 QALIB_CXXFLAGS = $(____DOS_CFLAG_p) $(__DEBUGINFO) $(__OPTIMIZEFLAG) &
 	-d__WXMGL__ -d__WXUNIVERSAL__ $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) &
-	$(__RTTI_DEFINE_p) -dwxNO_THREADS $(__UNICODE_DEFINE_p) -i=$(SETUPHDIR) &
-	-i=..\..\include -wx -wcd=549 -wcd=656 -wcd=657 -wcd=667 &
-	-i=$(%SCITECH)\include -i=..\..\src\tiff -i=..\..\src\jpeg -i=..\..\src\png &
-	-i=..\..\src\zlib -i=..\..\src\regex -i=..\..\src\expat\lib &
-	/fh=$(OBJS)\wxprec_qalib.pch $(__RTTIFLAG) $(__EXCEPTIONSFLAG) $(CPPFLAGS) &
-	$(CXXFLAGS)
+	$(__RTTI_DEFINE_p) -dwxNO_THREADS $(__UNICODE_DEFINE_p) &
+	$(__GFXCTX_DEFINE_p) -i=$(SETUPHDIR) -i=..\..\include -wx -wcd=549 -wcd=656 &
+	-wcd=657 -wcd=667 -i=$(%SCITECH)\include -i=..\..\src\tiff -i=..\..\src\jpeg &
+	-i=..\..\src\png -i=..\..\src\zlib -i=..\..\src\regex &
+	-i=..\..\src\expat\lib /fh=$(OBJS)\wxprec_qalib.pch $(__RTTIFLAG) &
+	$(__EXCEPTIONSFLAG) $(CPPFLAGS) $(CXXFLAGS)
 QALIB_OBJECTS =  &
 	$(OBJS)\qalib_dummy.obj &
 	$(OBJS)\qalib_debugrpt.obj &
 	$(OBJS)\qalib_dbgrptg.obj
 XMLDLL_CXXFLAGS = $(____DOS_CFLAG_p) -bd $(__DEBUGINFO) $(__OPTIMIZEFLAG) &
 	-d__WXMGL__ -d__WXUNIVERSAL__ $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) &
-	$(__RTTI_DEFINE_p) -dwxNO_THREADS $(__UNICODE_DEFINE_p) -i=$(SETUPHDIR) &
-	-i=..\..\include -wx -wcd=549 -wcd=656 -wcd=657 -wcd=667 &
-	-i=$(%SCITECH)\include -i=..\..\src\tiff -i=..\..\src\jpeg -i=..\..\src\png &
-	-i=..\..\src\zlib -i=..\..\src\regex -i=..\..\src\expat\lib -dwxUSE_GUI=0 &
-	-dWXUSINGDLL -dWXMAKINGDLL_XML /fh=$(OBJS)\wxprec_xmldll.pch $(__RTTIFLAG) &
-	$(__EXCEPTIONSFLAG) $(CPPFLAGS) $(CXXFLAGS)
+	$(__RTTI_DEFINE_p) -dwxNO_THREADS $(__UNICODE_DEFINE_p) &
+	$(__GFXCTX_DEFINE_p) -i=$(SETUPHDIR) -i=..\..\include -wx -wcd=549 -wcd=656 &
+	-wcd=657 -wcd=667 -i=$(%SCITECH)\include -i=..\..\src\tiff -i=..\..\src\jpeg &
+	-i=..\..\src\png -i=..\..\src\zlib -i=..\..\src\regex &
+	-i=..\..\src\expat\lib -dwxUSE_GUI=0 -dWXUSINGDLL -dWXMAKINGDLL_XML &
+	/fh=$(OBJS)\wxprec_xmldll.pch $(__RTTIFLAG) $(__EXCEPTIONSFLAG) $(CPPFLAGS) &
+	$(CXXFLAGS)
 XMLDLL_OBJECTS =  &
 	$(OBJS)\xmldll_dummy.obj &
 	$(OBJS)\xmldll_xml.obj &
 	$(OBJS)\xmldll_xtixml.obj
 XMLLIB_CXXFLAGS = $(____DOS_CFLAG_p) $(__DEBUGINFO) $(__OPTIMIZEFLAG) &
 	-d__WXMGL__ -d__WXUNIVERSAL__ $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) &
-	$(__RTTI_DEFINE_p) -dwxNO_THREADS $(__UNICODE_DEFINE_p) -i=$(SETUPHDIR) &
-	-i=..\..\include -wx -wcd=549 -wcd=656 -wcd=657 -wcd=667 &
-	-i=$(%SCITECH)\include -i=..\..\src\tiff -i=..\..\src\jpeg -i=..\..\src\png &
-	-i=..\..\src\zlib -i=..\..\src\regex -i=..\..\src\expat\lib -dwxUSE_GUI=0 &
-	/fh=$(OBJS)\wxprec_xmllib.pch $(__RTTIFLAG) $(__EXCEPTIONSFLAG) $(CPPFLAGS) &
-	$(CXXFLAGS)
+	$(__RTTI_DEFINE_p) -dwxNO_THREADS $(__UNICODE_DEFINE_p) &
+	$(__GFXCTX_DEFINE_p) -i=$(SETUPHDIR) -i=..\..\include -wx -wcd=549 -wcd=656 &
+	-wcd=657 -wcd=667 -i=$(%SCITECH)\include -i=..\..\src\tiff -i=..\..\src\jpeg &
+	-i=..\..\src\png -i=..\..\src\zlib -i=..\..\src\regex &
+	-i=..\..\src\expat\lib -dwxUSE_GUI=0 /fh=$(OBJS)\wxprec_xmllib.pch &
+	$(__RTTIFLAG) $(__EXCEPTIONSFLAG) $(CPPFLAGS) $(CXXFLAGS)
 XMLLIB_OBJECTS =  &
 	$(OBJS)\xmllib_dummy.obj &
 	$(OBJS)\xmllib_xml.obj &
 	$(OBJS)\xmllib_xtixml.obj
 XRCDLL_CXXFLAGS = $(____DOS_CFLAG_p) -bd $(__DEBUGINFO) $(__OPTIMIZEFLAG) &
 	-d__WXMGL__ -d__WXUNIVERSAL__ $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) &
-	$(__RTTI_DEFINE_p) -dwxNO_THREADS $(__UNICODE_DEFINE_p) -i=$(SETUPHDIR) &
-	-i=..\..\include -wx -wcd=549 -wcd=656 -wcd=657 -wcd=667 &
-	-i=$(%SCITECH)\include -i=..\..\src\tiff -i=..\..\src\jpeg -i=..\..\src\png &
-	-i=..\..\src\zlib -i=..\..\src\regex -i=..\..\src\expat\lib -dWXUSINGDLL &
-	-dWXMAKINGDLL_XRC /fh=$(OBJS)\wxprec_xrcdll.pch $(__RTTIFLAG) &
-	$(__EXCEPTIONSFLAG) $(CPPFLAGS) $(CXXFLAGS)
+	$(__RTTI_DEFINE_p) -dwxNO_THREADS $(__UNICODE_DEFINE_p) &
+	$(__GFXCTX_DEFINE_p) -i=$(SETUPHDIR) -i=..\..\include -wx -wcd=549 -wcd=656 &
+	-wcd=657 -wcd=667 -i=$(%SCITECH)\include -i=..\..\src\tiff -i=..\..\src\jpeg &
+	-i=..\..\src\png -i=..\..\src\zlib -i=..\..\src\regex &
+	-i=..\..\src\expat\lib -dWXUSINGDLL -dWXMAKINGDLL_XRC &
+	/fh=$(OBJS)\wxprec_xrcdll.pch $(__RTTIFLAG) $(__EXCEPTIONSFLAG) $(CPPFLAGS) &
+	$(CXXFLAGS)
 XRCDLL_OBJECTS =  &
 	$(OBJS)\xrcdll_dummy.obj &
-	$(OBJS)\xrcdll_xh_bmpbt.obj &
 	$(OBJS)\xrcdll_xh_bmp.obj &
+	$(OBJS)\xrcdll_xh_bmpcbox.obj &
+	$(OBJS)\xrcdll_xh_bmpbt.obj &
 	$(OBJS)\xrcdll_xh_bttn.obj &
 	$(OBJS)\xrcdll_xh_cald.obj &
 	$(OBJS)\xrcdll_xh_chckb.obj &
@@ -2343,16 +2397,17 @@ XRCDLL_OBJECTS =  &
 	$(OBJS)\xrcdll_xmlrsall.obj
 XRCLIB_CXXFLAGS = $(____DOS_CFLAG_p) $(__DEBUGINFO) $(__OPTIMIZEFLAG) &
 	-d__WXMGL__ -d__WXUNIVERSAL__ $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) &
-	$(__RTTI_DEFINE_p) -dwxNO_THREADS $(__UNICODE_DEFINE_p) -i=$(SETUPHDIR) &
-	-i=..\..\include -wx -wcd=549 -wcd=656 -wcd=657 -wcd=667 &
-	-i=$(%SCITECH)\include -i=..\..\src\tiff -i=..\..\src\jpeg -i=..\..\src\png &
-	-i=..\..\src\zlib -i=..\..\src\regex -i=..\..\src\expat\lib &
-	/fh=$(OBJS)\wxprec_xrclib.pch $(__RTTIFLAG) $(__EXCEPTIONSFLAG) $(CPPFLAGS) &
-	$(CXXFLAGS)
+	$(__RTTI_DEFINE_p) -dwxNO_THREADS $(__UNICODE_DEFINE_p) &
+	$(__GFXCTX_DEFINE_p) -i=$(SETUPHDIR) -i=..\..\include -wx -wcd=549 -wcd=656 &
+	-wcd=657 -wcd=667 -i=$(%SCITECH)\include -i=..\..\src\tiff -i=..\..\src\jpeg &
+	-i=..\..\src\png -i=..\..\src\zlib -i=..\..\src\regex &
+	-i=..\..\src\expat\lib /fh=$(OBJS)\wxprec_xrclib.pch $(__RTTIFLAG) &
+	$(__EXCEPTIONSFLAG) $(CPPFLAGS) $(CXXFLAGS)
 XRCLIB_OBJECTS =  &
 	$(OBJS)\xrclib_dummy.obj &
-	$(OBJS)\xrclib_xh_bmpbt.obj &
 	$(OBJS)\xrclib_xh_bmp.obj &
+	$(OBJS)\xrclib_xh_bmpcbox.obj &
+	$(OBJS)\xrclib_xh_bmpbt.obj &
 	$(OBJS)\xrclib_xh_bttn.obj &
 	$(OBJS)\xrclib_xh_cald.obj &
 	$(OBJS)\xrclib_xh_chckb.obj &
@@ -2404,12 +2459,13 @@ XRCLIB_OBJECTS =  &
 	$(OBJS)\xrclib_xmlrsall.obj
 AUIDLL_CXXFLAGS = $(____DOS_CFLAG_p) -bd $(__DEBUGINFO) $(__OPTIMIZEFLAG) &
 	-d__WXMGL__ -d__WXUNIVERSAL__ $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) &
-	$(__RTTI_DEFINE_p) -dwxNO_THREADS $(__UNICODE_DEFINE_p) -i=$(SETUPHDIR) &
-	-i=..\..\include -wx -wcd=549 -wcd=656 -wcd=657 -wcd=667 &
-	-i=$(%SCITECH)\include -i=..\..\src\tiff -i=..\..\src\jpeg -i=..\..\src\png &
-	-i=..\..\src\zlib -i=..\..\src\regex -i=..\..\src\expat\lib -dWXUSINGDLL &
-	-dWXMAKINGDLL_AUI /fh=$(OBJS)\wxprec_auidll.pch $(__RTTIFLAG) &
-	$(__EXCEPTIONSFLAG) $(CPPFLAGS) $(CXXFLAGS)
+	$(__RTTI_DEFINE_p) -dwxNO_THREADS $(__UNICODE_DEFINE_p) &
+	$(__GFXCTX_DEFINE_p) -i=$(SETUPHDIR) -i=..\..\include -wx -wcd=549 -wcd=656 &
+	-wcd=657 -wcd=667 -i=$(%SCITECH)\include -i=..\..\src\tiff -i=..\..\src\jpeg &
+	-i=..\..\src\png -i=..\..\src\zlib -i=..\..\src\regex &
+	-i=..\..\src\expat\lib -dWXUSINGDLL -dWXMAKINGDLL_AUI &
+	/fh=$(OBJS)\wxprec_auidll.pch $(__RTTIFLAG) $(__EXCEPTIONSFLAG) $(CPPFLAGS) &
+	$(CXXFLAGS)
 AUIDLL_OBJECTS =  &
 	$(OBJS)\auidll_dummy.obj &
 	$(OBJS)\auidll_framemanager.obj &
@@ -2419,12 +2475,12 @@ AUIDLL_OBJECTS =  &
 	$(OBJS)\auidll_tabmdi.obj
 AUILIB_CXXFLAGS = $(____DOS_CFLAG_p) $(__DEBUGINFO) $(__OPTIMIZEFLAG) &
 	-d__WXMGL__ -d__WXUNIVERSAL__ $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) &
-	$(__RTTI_DEFINE_p) -dwxNO_THREADS $(__UNICODE_DEFINE_p) -i=$(SETUPHDIR) &
-	-i=..\..\include -wx -wcd=549 -wcd=656 -wcd=657 -wcd=667 &
-	-i=$(%SCITECH)\include -i=..\..\src\tiff -i=..\..\src\jpeg -i=..\..\src\png &
-	-i=..\..\src\zlib -i=..\..\src\regex -i=..\..\src\expat\lib &
-	/fh=$(OBJS)\wxprec_auilib.pch $(__RTTIFLAG) $(__EXCEPTIONSFLAG) $(CPPFLAGS) &
-	$(CXXFLAGS)
+	$(__RTTI_DEFINE_p) -dwxNO_THREADS $(__UNICODE_DEFINE_p) &
+	$(__GFXCTX_DEFINE_p) -i=$(SETUPHDIR) -i=..\..\include -wx -wcd=549 -wcd=656 &
+	-wcd=657 -wcd=667 -i=$(%SCITECH)\include -i=..\..\src\tiff -i=..\..\src\jpeg &
+	-i=..\..\src\png -i=..\..\src\zlib -i=..\..\src\regex &
+	-i=..\..\src\expat\lib /fh=$(OBJS)\wxprec_auilib.pch $(__RTTIFLAG) &
+	$(__EXCEPTIONSFLAG) $(CPPFLAGS) $(CXXFLAGS)
 AUILIB_OBJECTS =  &
 	$(OBJS)\auilib_dummy.obj &
 	$(OBJS)\auilib_framemanager.obj &
@@ -2434,52 +2490,58 @@ AUILIB_OBJECTS =  &
 	$(OBJS)\auilib_tabmdi.obj
 RICHTEXTDLL_CXXFLAGS = $(____DOS_CFLAG_p) -bd $(__DEBUGINFO) $(__OPTIMIZEFLAG) &
 	-d__WXMGL__ -d__WXUNIVERSAL__ $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) &
-	$(__RTTI_DEFINE_p) -dwxNO_THREADS $(__UNICODE_DEFINE_p) -i=$(SETUPHDIR) &
-	-i=..\..\include -wx -wcd=549 -wcd=656 -wcd=657 -wcd=667 &
-	-i=$(%SCITECH)\include -i=..\..\src\tiff -i=..\..\src\jpeg -i=..\..\src\png &
-	-i=..\..\src\zlib -i=..\..\src\regex -i=..\..\src\expat\lib -dWXUSINGDLL &
-	-dWXMAKINGDLL_RICHTEXT /fh=$(OBJS)\wxprec_richtextdll.pch $(__RTTIFLAG) &
-	$(__EXCEPTIONSFLAG) $(CPPFLAGS) $(CXXFLAGS)
+	$(__RTTI_DEFINE_p) -dwxNO_THREADS $(__UNICODE_DEFINE_p) &
+	$(__GFXCTX_DEFINE_p) -i=$(SETUPHDIR) -i=..\..\include -wx -wcd=549 -wcd=656 &
+	-wcd=657 -wcd=667 -i=$(%SCITECH)\include -i=..\..\src\tiff -i=..\..\src\jpeg &
+	-i=..\..\src\png -i=..\..\src\zlib -i=..\..\src\regex &
+	-i=..\..\src\expat\lib -dWXUSINGDLL -dWXMAKINGDLL_RICHTEXT &
+	/fh=$(OBJS)\wxprec_richtextdll.pch $(__RTTIFLAG) $(__EXCEPTIONSFLAG) &
+	$(CPPFLAGS) $(CXXFLAGS)
 RICHTEXTDLL_OBJECTS =  &
 	$(OBJS)\richtextdll_dummy.obj &
 	$(OBJS)\richtextdll_richtextctrl.obj &
 	$(OBJS)\richtextdll_richtextbuffer.obj &
 	$(OBJS)\richtextdll_richtextstyles.obj &
 	$(OBJS)\richtextdll_richtextxml.obj &
-	$(OBJS)\richtextdll_richtexthtml.obj
+	$(OBJS)\richtextdll_richtexthtml.obj &
+	$(OBJS)\richtextdll_richtextformatdlg.obj &
+	$(OBJS)\richtextdll_richtextsymboldlg.obj
 RICHTEXTLIB_CXXFLAGS = $(____DOS_CFLAG_p) $(__DEBUGINFO) $(__OPTIMIZEFLAG) &
 	-d__WXMGL__ -d__WXUNIVERSAL__ $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) &
-	$(__RTTI_DEFINE_p) -dwxNO_THREADS $(__UNICODE_DEFINE_p) -i=$(SETUPHDIR) &
-	-i=..\..\include -wx -wcd=549 -wcd=656 -wcd=657 -wcd=667 &
-	-i=$(%SCITECH)\include -i=..\..\src\tiff -i=..\..\src\jpeg -i=..\..\src\png &
-	-i=..\..\src\zlib -i=..\..\src\regex -i=..\..\src\expat\lib &
-	/fh=$(OBJS)\wxprec_richtextlib.pch $(__RTTIFLAG) $(__EXCEPTIONSFLAG) &
-	$(CPPFLAGS) $(CXXFLAGS)
+	$(__RTTI_DEFINE_p) -dwxNO_THREADS $(__UNICODE_DEFINE_p) &
+	$(__GFXCTX_DEFINE_p) -i=$(SETUPHDIR) -i=..\..\include -wx -wcd=549 -wcd=656 &
+	-wcd=657 -wcd=667 -i=$(%SCITECH)\include -i=..\..\src\tiff -i=..\..\src\jpeg &
+	-i=..\..\src\png -i=..\..\src\zlib -i=..\..\src\regex &
+	-i=..\..\src\expat\lib /fh=$(OBJS)\wxprec_richtextlib.pch $(__RTTIFLAG) &
+	$(__EXCEPTIONSFLAG) $(CPPFLAGS) $(CXXFLAGS)
 RICHTEXTLIB_OBJECTS =  &
 	$(OBJS)\richtextlib_dummy.obj &
 	$(OBJS)\richtextlib_richtextctrl.obj &
 	$(OBJS)\richtextlib_richtextbuffer.obj &
 	$(OBJS)\richtextlib_richtextstyles.obj &
 	$(OBJS)\richtextlib_richtextxml.obj &
-	$(OBJS)\richtextlib_richtexthtml.obj
+	$(OBJS)\richtextlib_richtexthtml.obj &
+	$(OBJS)\richtextlib_richtextformatdlg.obj &
+	$(OBJS)\richtextlib_richtextsymboldlg.obj
 GLDLL_CXXFLAGS = $(____DOS_CFLAG_p) -bd $(__DEBUGINFO) $(__OPTIMIZEFLAG) &
 	-d__WXMGL__ -d__WXUNIVERSAL__ $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) &
-	$(__RTTI_DEFINE_p) -dwxNO_THREADS $(__UNICODE_DEFINE_p) -i=$(SETUPHDIR) &
-	-i=..\..\include -wx -wcd=549 -wcd=656 -wcd=657 -wcd=667 &
-	-i=$(%SCITECH)\include -i=..\..\src\tiff -i=..\..\src\jpeg -i=..\..\src\png &
-	-i=..\..\src\zlib -i=..\..\src\regex -i=..\..\src\expat\lib -dWXUSINGDLL &
-	-dWXMAKINGDLL_GL /fh=$(OBJS)\wxprec_gldll.pch $(__RTTIFLAG) &
-	$(__EXCEPTIONSFLAG) $(CPPFLAGS) $(CXXFLAGS)
+	$(__RTTI_DEFINE_p) -dwxNO_THREADS $(__UNICODE_DEFINE_p) &
+	$(__GFXCTX_DEFINE_p) -i=$(SETUPHDIR) -i=..\..\include -wx -wcd=549 -wcd=656 &
+	-wcd=657 -wcd=667 -i=$(%SCITECH)\include -i=..\..\src\tiff -i=..\..\src\jpeg &
+	-i=..\..\src\png -i=..\..\src\zlib -i=..\..\src\regex &
+	-i=..\..\src\expat\lib -dWXUSINGDLL -dWXMAKINGDLL_GL &
+	/fh=$(OBJS)\wxprec_gldll.pch $(__RTTIFLAG) $(__EXCEPTIONSFLAG) $(CPPFLAGS) &
+	$(CXXFLAGS)
 GLDLL_OBJECTS =  &
 	$(OBJS)\gldll_dummy.obj
 GLLIB_CXXFLAGS = $(____DOS_CFLAG_p) $(__DEBUGINFO) $(__OPTIMIZEFLAG) &
 	-d__WXMGL__ -d__WXUNIVERSAL__ $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) &
-	$(__RTTI_DEFINE_p) -dwxNO_THREADS $(__UNICODE_DEFINE_p) -i=$(SETUPHDIR) &
-	-i=..\..\include -wx -wcd=549 -wcd=656 -wcd=657 -wcd=667 &
-	-i=$(%SCITECH)\include -i=..\..\src\tiff -i=..\..\src\jpeg -i=..\..\src\png &
-	-i=..\..\src\zlib -i=..\..\src\regex -i=..\..\src\expat\lib &
-	/fh=$(OBJS)\wxprec_gllib.pch $(__RTTIFLAG) $(__EXCEPTIONSFLAG) $(CPPFLAGS) &
-	$(CXXFLAGS)
+	$(__RTTI_DEFINE_p) -dwxNO_THREADS $(__UNICODE_DEFINE_p) &
+	$(__GFXCTX_DEFINE_p) -i=$(SETUPHDIR) -i=..\..\include -wx -wcd=549 -wcd=656 &
+	-wcd=657 -wcd=667 -i=$(%SCITECH)\include -i=..\..\src\tiff -i=..\..\src\jpeg &
+	-i=..\..\src\png -i=..\..\src\zlib -i=..\..\src\regex &
+	-i=..\..\src\expat\lib /fh=$(OBJS)\wxprec_gllib.pch $(__RTTIFLAG) &
+	$(__EXCEPTIONSFLAG) $(CPPFLAGS) $(CXXFLAGS)
 GLLIB_OBJECTS =  &
 	$(OBJS)\gllib_dummy.obj
 BUILD_CFG_FILE = $(SETUPHDIR)\build.cfg
@@ -3065,7 +3127,7 @@ $(SETUPHDIR)\wx\setup.h :
 build_cfg_file : .SYMBOLIC $(SETUPHDIR)
 	@echo WXVER_MAJOR=2 >$(BUILD_CFG_FILE)
 	@echo WXVER_MINOR=7 >>$(BUILD_CFG_FILE)
-	@echo WXVER_RELEASE=0 >>$(BUILD_CFG_FILE)
+	@echo WXVER_RELEASE=1 >>$(BUILD_CFG_FILE)
 	@echo BUILD=$(BUILD) >>$(BUILD_CFG_FILE)
 	@echo MONOLITHIC=$(MONOLITHIC) >>$(BUILD_CFG_FILE)
 	@echo SHARED=$(SHARED) >>$(BUILD_CFG_FILE)
@@ -3086,6 +3148,7 @@ build_cfg_file : .SYMBOLIC $(SETUPHDIR)
 	@echo USE_ODBC=$(USE_ODBC) >>$(BUILD_CFG_FILE)
 	@echo USE_OPENGL=$(USE_OPENGL) >>$(BUILD_CFG_FILE)
 	@echo USE_QA=$(USE_QA) >>$(BUILD_CFG_FILE)
+	@echo USE_GDIPLUS=$(USE_GDIPLUS) >>$(BUILD_CFG_FILE)
 	@echo COMPILER=wat >>$(BUILD_CFG_FILE)
 	@echo CC=$(CC) >>$(BUILD_CFG_FILE)
 	@echo CXX=$(CXX) >>$(BUILD_CFG_FILE)
@@ -3682,6 +3745,12 @@ $(OBJS)\monodll_colour.obj :  .AUTODEPEND ..\..\src\generic\colour.cpp
 $(OBJS)\monodll_icon.obj :  .AUTODEPEND ..\..\src\generic\icon.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
+$(OBJS)\monodll_imaglist.obj :  .AUTODEPEND ..\..\src\generic\imaglist.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_mask.obj :  .AUTODEPEND ..\..\src\generic\mask.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
 $(OBJS)\monodll_timer.obj :  .AUTODEPEND ..\..\src\generic\timer.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
@@ -3767,9 +3836,6 @@ $(OBJS)\monodll_filedlgg.obj :  .AUTODEPEND ..\..\src\generic\filedlgg.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_fontdlgg.obj :  .AUTODEPEND ..\..\src\generic\fontdlgg.cpp
-	$(CXX) -bt=dos -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
-
-$(OBJS)\monodll_imaglist.obj :  .AUTODEPEND ..\..\src\generic\imaglist.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_listctrl.obj :  .AUTODEPEND ..\..\src\generic\listctrl.cpp
@@ -3874,6 +3940,9 @@ $(OBJS)\monodll_stattext.obj :  .AUTODEPEND ..\..\src\univ\stattext.cpp
 $(OBJS)\monodll_statusbr.obj :  .AUTODEPEND ..\..\src\univ\statusbr.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
+$(OBJS)\monodll_stdrend.obj :  .AUTODEPEND ..\..\src\univ\stdrend.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
 $(OBJS)\monodll_textctrl.obj :  .AUTODEPEND ..\..\src\univ\textctrl.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
@@ -3896,6 +3965,9 @@ $(OBJS)\monodll_gtk.obj :  .AUTODEPEND ..\..\src\univ\themes\gtk.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_metal.obj :  .AUTODEPEND ..\..\src\univ\themes\metal.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_mono.obj :  .AUTODEPEND ..\..\src\univ\themes\mono.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_win32.obj :  .AUTODEPEND ..\..\src\univ\themes\win32.cpp
@@ -4024,6 +4096,9 @@ $(OBJS)\monodll_geometry.obj :  .AUTODEPEND ..\..\src\common\geometry.cpp
 $(OBJS)\monodll_gifdecod.obj :  .AUTODEPEND ..\..\src\common\gifdecod.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
+$(OBJS)\monodll_graphcmn.obj :  .AUTODEPEND ..\..\src\common\graphcmn.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
 $(OBJS)\monodll_helpbase.obj :  .AUTODEPEND ..\..\src\common\helpbase.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
@@ -4070,6 +4145,9 @@ $(OBJS)\monodll_layout.obj :  .AUTODEPEND ..\..\src\common\layout.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_lboxcmn.obj :  .AUTODEPEND ..\..\src\common\lboxcmn.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_listctrlcmn.obj :  .AUTODEPEND ..\..\src\common\listctrlcmn.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_matrix.obj :  .AUTODEPEND ..\..\src\common\matrix.cpp
@@ -4237,6 +4315,12 @@ $(OBJS)\monodll_vscroll.obj :  .AUTODEPEND ..\..\src\generic\vscroll.cpp
 $(OBJS)\monodll_datavcmn.obj :  .AUTODEPEND ..\..\src\common\datavcmn.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
+$(OBJS)\monodll_aboutdlgg.obj :  .AUTODEPEND ..\..\src\generic\aboutdlgg.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_bmpcboxg.obj :  .AUTODEPEND ..\..\src\generic\bmpcboxg.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
 $(OBJS)\monodll_calctrl.obj :  .AUTODEPEND ..\..\src\generic\calctrl.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
@@ -4369,10 +4453,13 @@ $(OBJS)\monodll_dbgrptg.obj :  .AUTODEPEND ..\..\src\generic\dbgrptg.cpp
 $(OBJS)\monodll_dbgrid.obj :  .AUTODEPEND ..\..\src\common\dbgrid.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
-$(OBJS)\monodll_xh_bmpbt.obj :  .AUTODEPEND ..\..\src\xrc\xh_bmpbt.cpp
+$(OBJS)\monodll_xh_bmp.obj :  .AUTODEPEND ..\..\src\xrc\xh_bmp.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
-$(OBJS)\monodll_xh_bmp.obj :  .AUTODEPEND ..\..\src\xrc\xh_bmp.cpp
+$(OBJS)\monodll_xh_bmpcbox.obj :  .AUTODEPEND ..\..\src\xrc\xh_bmpcbox.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_xh_bmpbt.obj :  .AUTODEPEND ..\..\src\xrc\xh_bmpbt.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_xh_bttn.obj :  .AUTODEPEND ..\..\src\xrc\xh_bttn.cpp
@@ -4550,6 +4637,12 @@ $(OBJS)\monodll_richtextxml.obj :  .AUTODEPEND ..\..\src\richtext\richtextxml.cp
 	$(CXX) -bt=dos -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_richtexthtml.obj :  .AUTODEPEND ..\..\src\richtext\richtexthtml.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_richtextformatdlg.obj :  .AUTODEPEND ..\..\src\richtext\richtextformatdlg.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_richtextsymboldlg.obj :  .AUTODEPEND ..\..\src\richtext\richtextsymboldlg.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_xml.obj :  .AUTODEPEND ..\..\src\xml\xml.cpp
@@ -4795,6 +4888,12 @@ $(OBJS)\monolib_colour.obj :  .AUTODEPEND ..\..\src\generic\colour.cpp
 $(OBJS)\monolib_icon.obj :  .AUTODEPEND ..\..\src\generic\icon.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
+$(OBJS)\monolib_imaglist.obj :  .AUTODEPEND ..\..\src\generic\imaglist.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_mask.obj :  .AUTODEPEND ..\..\src\generic\mask.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
 $(OBJS)\monolib_timer.obj :  .AUTODEPEND ..\..\src\generic\timer.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
@@ -4880,9 +4979,6 @@ $(OBJS)\monolib_filedlgg.obj :  .AUTODEPEND ..\..\src\generic\filedlgg.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_fontdlgg.obj :  .AUTODEPEND ..\..\src\generic\fontdlgg.cpp
-	$(CXX) -bt=dos -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
-
-$(OBJS)\monolib_imaglist.obj :  .AUTODEPEND ..\..\src\generic\imaglist.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_listctrl.obj :  .AUTODEPEND ..\..\src\generic\listctrl.cpp
@@ -4987,6 +5083,9 @@ $(OBJS)\monolib_stattext.obj :  .AUTODEPEND ..\..\src\univ\stattext.cpp
 $(OBJS)\monolib_statusbr.obj :  .AUTODEPEND ..\..\src\univ\statusbr.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
+$(OBJS)\monolib_stdrend.obj :  .AUTODEPEND ..\..\src\univ\stdrend.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
 $(OBJS)\monolib_textctrl.obj :  .AUTODEPEND ..\..\src\univ\textctrl.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
@@ -5009,6 +5108,9 @@ $(OBJS)\monolib_gtk.obj :  .AUTODEPEND ..\..\src\univ\themes\gtk.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_metal.obj :  .AUTODEPEND ..\..\src\univ\themes\metal.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_mono.obj :  .AUTODEPEND ..\..\src\univ\themes\mono.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_win32.obj :  .AUTODEPEND ..\..\src\univ\themes\win32.cpp
@@ -5137,6 +5239,9 @@ $(OBJS)\monolib_geometry.obj :  .AUTODEPEND ..\..\src\common\geometry.cpp
 $(OBJS)\monolib_gifdecod.obj :  .AUTODEPEND ..\..\src\common\gifdecod.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
+$(OBJS)\monolib_graphcmn.obj :  .AUTODEPEND ..\..\src\common\graphcmn.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
 $(OBJS)\monolib_helpbase.obj :  .AUTODEPEND ..\..\src\common\helpbase.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
@@ -5183,6 +5288,9 @@ $(OBJS)\monolib_layout.obj :  .AUTODEPEND ..\..\src\common\layout.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_lboxcmn.obj :  .AUTODEPEND ..\..\src\common\lboxcmn.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_listctrlcmn.obj :  .AUTODEPEND ..\..\src\common\listctrlcmn.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_matrix.obj :  .AUTODEPEND ..\..\src\common\matrix.cpp
@@ -5350,6 +5458,12 @@ $(OBJS)\monolib_vscroll.obj :  .AUTODEPEND ..\..\src\generic\vscroll.cpp
 $(OBJS)\monolib_datavcmn.obj :  .AUTODEPEND ..\..\src\common\datavcmn.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
+$(OBJS)\monolib_aboutdlgg.obj :  .AUTODEPEND ..\..\src\generic\aboutdlgg.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_bmpcboxg.obj :  .AUTODEPEND ..\..\src\generic\bmpcboxg.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
 $(OBJS)\monolib_calctrl.obj :  .AUTODEPEND ..\..\src\generic\calctrl.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
@@ -5482,10 +5596,13 @@ $(OBJS)\monolib_dbgrptg.obj :  .AUTODEPEND ..\..\src\generic\dbgrptg.cpp
 $(OBJS)\monolib_dbgrid.obj :  .AUTODEPEND ..\..\src\common\dbgrid.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
-$(OBJS)\monolib_xh_bmpbt.obj :  .AUTODEPEND ..\..\src\xrc\xh_bmpbt.cpp
+$(OBJS)\monolib_xh_bmp.obj :  .AUTODEPEND ..\..\src\xrc\xh_bmp.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
-$(OBJS)\monolib_xh_bmp.obj :  .AUTODEPEND ..\..\src\xrc\xh_bmp.cpp
+$(OBJS)\monolib_xh_bmpcbox.obj :  .AUTODEPEND ..\..\src\xrc\xh_bmpcbox.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_xh_bmpbt.obj :  .AUTODEPEND ..\..\src\xrc\xh_bmpbt.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_xh_bttn.obj :  .AUTODEPEND ..\..\src\xrc\xh_bttn.cpp
@@ -5663,6 +5780,12 @@ $(OBJS)\monolib_richtextxml.obj :  .AUTODEPEND ..\..\src\richtext\richtextxml.cp
 	$(CXX) -bt=dos -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_richtexthtml.obj :  .AUTODEPEND ..\..\src\richtext\richtexthtml.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_richtextformatdlg.obj :  .AUTODEPEND ..\..\src\richtext\richtextformatdlg.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_richtextsymboldlg.obj :  .AUTODEPEND ..\..\src\richtext\richtextsymboldlg.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_xml.obj :  .AUTODEPEND ..\..\src\xml\xml.cpp
@@ -6157,6 +6280,12 @@ $(OBJS)\coredll_colour.obj :  .AUTODEPEND ..\..\src\generic\colour.cpp
 $(OBJS)\coredll_icon.obj :  .AUTODEPEND ..\..\src\generic\icon.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
+$(OBJS)\coredll_imaglist.obj :  .AUTODEPEND ..\..\src\generic\imaglist.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+
+$(OBJS)\coredll_mask.obj :  .AUTODEPEND ..\..\src\generic\mask.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+
 $(OBJS)\coredll_timer.obj :  .AUTODEPEND ..\..\src\generic\timer.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
@@ -6242,9 +6371,6 @@ $(OBJS)\coredll_filedlgg.obj :  .AUTODEPEND ..\..\src\generic\filedlgg.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
 $(OBJS)\coredll_fontdlgg.obj :  .AUTODEPEND ..\..\src\generic\fontdlgg.cpp
-	$(CXX) -bt=dos -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
-
-$(OBJS)\coredll_imaglist.obj :  .AUTODEPEND ..\..\src\generic\imaglist.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
 $(OBJS)\coredll_listctrl.obj :  .AUTODEPEND ..\..\src\generic\listctrl.cpp
@@ -6349,6 +6475,9 @@ $(OBJS)\coredll_stattext.obj :  .AUTODEPEND ..\..\src\univ\stattext.cpp
 $(OBJS)\coredll_statusbr.obj :  .AUTODEPEND ..\..\src\univ\statusbr.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
+$(OBJS)\coredll_stdrend.obj :  .AUTODEPEND ..\..\src\univ\stdrend.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+
 $(OBJS)\coredll_textctrl.obj :  .AUTODEPEND ..\..\src\univ\textctrl.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
@@ -6371,6 +6500,9 @@ $(OBJS)\coredll_gtk.obj :  .AUTODEPEND ..\..\src\univ\themes\gtk.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
 $(OBJS)\coredll_metal.obj :  .AUTODEPEND ..\..\src\univ\themes\metal.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+
+$(OBJS)\coredll_mono.obj :  .AUTODEPEND ..\..\src\univ\themes\mono.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
 $(OBJS)\coredll_win32.obj :  .AUTODEPEND ..\..\src\univ\themes\win32.cpp
@@ -6499,6 +6631,9 @@ $(OBJS)\coredll_geometry.obj :  .AUTODEPEND ..\..\src\common\geometry.cpp
 $(OBJS)\coredll_gifdecod.obj :  .AUTODEPEND ..\..\src\common\gifdecod.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
+$(OBJS)\coredll_graphcmn.obj :  .AUTODEPEND ..\..\src\common\graphcmn.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+
 $(OBJS)\coredll_helpbase.obj :  .AUTODEPEND ..\..\src\common\helpbase.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
@@ -6545,6 +6680,9 @@ $(OBJS)\coredll_layout.obj :  .AUTODEPEND ..\..\src\common\layout.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
 $(OBJS)\coredll_lboxcmn.obj :  .AUTODEPEND ..\..\src\common\lboxcmn.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+
+$(OBJS)\coredll_listctrlcmn.obj :  .AUTODEPEND ..\..\src\common\listctrlcmn.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
 $(OBJS)\coredll_matrix.obj :  .AUTODEPEND ..\..\src\common\matrix.cpp
@@ -6733,6 +6871,12 @@ $(OBJS)\corelib_colour.obj :  .AUTODEPEND ..\..\src\generic\colour.cpp
 $(OBJS)\corelib_icon.obj :  .AUTODEPEND ..\..\src\generic\icon.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
+$(OBJS)\corelib_imaglist.obj :  .AUTODEPEND ..\..\src\generic\imaglist.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+
+$(OBJS)\corelib_mask.obj :  .AUTODEPEND ..\..\src\generic\mask.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+
 $(OBJS)\corelib_timer.obj :  .AUTODEPEND ..\..\src\generic\timer.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
@@ -6818,9 +6962,6 @@ $(OBJS)\corelib_filedlgg.obj :  .AUTODEPEND ..\..\src\generic\filedlgg.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
 $(OBJS)\corelib_fontdlgg.obj :  .AUTODEPEND ..\..\src\generic\fontdlgg.cpp
-	$(CXX) -bt=dos -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
-
-$(OBJS)\corelib_imaglist.obj :  .AUTODEPEND ..\..\src\generic\imaglist.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
 $(OBJS)\corelib_listctrl.obj :  .AUTODEPEND ..\..\src\generic\listctrl.cpp
@@ -6925,6 +7066,9 @@ $(OBJS)\corelib_stattext.obj :  .AUTODEPEND ..\..\src\univ\stattext.cpp
 $(OBJS)\corelib_statusbr.obj :  .AUTODEPEND ..\..\src\univ\statusbr.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
+$(OBJS)\corelib_stdrend.obj :  .AUTODEPEND ..\..\src\univ\stdrend.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+
 $(OBJS)\corelib_textctrl.obj :  .AUTODEPEND ..\..\src\univ\textctrl.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
@@ -6947,6 +7091,9 @@ $(OBJS)\corelib_gtk.obj :  .AUTODEPEND ..\..\src\univ\themes\gtk.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
 $(OBJS)\corelib_metal.obj :  .AUTODEPEND ..\..\src\univ\themes\metal.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+
+$(OBJS)\corelib_mono.obj :  .AUTODEPEND ..\..\src\univ\themes\mono.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
 $(OBJS)\corelib_win32.obj :  .AUTODEPEND ..\..\src\univ\themes\win32.cpp
@@ -7075,6 +7222,9 @@ $(OBJS)\corelib_geometry.obj :  .AUTODEPEND ..\..\src\common\geometry.cpp
 $(OBJS)\corelib_gifdecod.obj :  .AUTODEPEND ..\..\src\common\gifdecod.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
+$(OBJS)\corelib_graphcmn.obj :  .AUTODEPEND ..\..\src\common\graphcmn.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+
 $(OBJS)\corelib_helpbase.obj :  .AUTODEPEND ..\..\src\common\helpbase.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
@@ -7121,6 +7271,9 @@ $(OBJS)\corelib_layout.obj :  .AUTODEPEND ..\..\src\common\layout.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
 $(OBJS)\corelib_lboxcmn.obj :  .AUTODEPEND ..\..\src\common\lboxcmn.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+
+$(OBJS)\corelib_listctrlcmn.obj :  .AUTODEPEND ..\..\src\common\listctrlcmn.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
 $(OBJS)\corelib_matrix.obj :  .AUTODEPEND ..\..\src\common\matrix.cpp
@@ -7291,6 +7444,12 @@ $(OBJS)\advdll_dummy.obj :  .AUTODEPEND ..\..\src\common\dummy.cpp
 $(OBJS)\advdll_datavcmn.obj :  .AUTODEPEND ..\..\src\common\datavcmn.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(ADVDLL_CXXFLAGS) $<
 
+$(OBJS)\advdll_aboutdlgg.obj :  .AUTODEPEND ..\..\src\generic\aboutdlgg.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(ADVDLL_CXXFLAGS) $<
+
+$(OBJS)\advdll_bmpcboxg.obj :  .AUTODEPEND ..\..\src\generic\bmpcboxg.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(ADVDLL_CXXFLAGS) $<
+
 $(OBJS)\advdll_calctrl.obj :  .AUTODEPEND ..\..\src\generic\calctrl.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(ADVDLL_CXXFLAGS) $<
 
@@ -7340,6 +7499,12 @@ $(OBJS)\advlib_dummy.obj :  .AUTODEPEND ..\..\src\common\dummy.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(ADVLIB_CXXFLAGS) $<
 
 $(OBJS)\advlib_datavcmn.obj :  .AUTODEPEND ..\..\src\common\datavcmn.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(ADVLIB_CXXFLAGS) $<
+
+$(OBJS)\advlib_aboutdlgg.obj :  .AUTODEPEND ..\..\src\generic\aboutdlgg.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(ADVLIB_CXXFLAGS) $<
+
+$(OBJS)\advlib_bmpcboxg.obj :  .AUTODEPEND ..\..\src\generic\bmpcboxg.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(ADVLIB_CXXFLAGS) $<
 
 $(OBJS)\advlib_calctrl.obj :  .AUTODEPEND ..\..\src\generic\calctrl.cpp
@@ -7612,10 +7777,13 @@ $(OBJS)\xmllib_xtixml.obj :  .AUTODEPEND ..\..\src\common\xtixml.cpp
 $(OBJS)\xrcdll_dummy.obj :  .AUTODEPEND ..\..\src\common\dummy.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
 
-$(OBJS)\xrcdll_xh_bmpbt.obj :  .AUTODEPEND ..\..\src\xrc\xh_bmpbt.cpp
+$(OBJS)\xrcdll_xh_bmp.obj :  .AUTODEPEND ..\..\src\xrc\xh_bmp.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
 
-$(OBJS)\xrcdll_xh_bmp.obj :  .AUTODEPEND ..\..\src\xrc\xh_bmp.cpp
+$(OBJS)\xrcdll_xh_bmpcbox.obj :  .AUTODEPEND ..\..\src\xrc\xh_bmpcbox.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
+
+$(OBJS)\xrcdll_xh_bmpbt.obj :  .AUTODEPEND ..\..\src\xrc\xh_bmpbt.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
 
 $(OBJS)\xrcdll_xh_bttn.obj :  .AUTODEPEND ..\..\src\xrc\xh_bttn.cpp
@@ -7768,10 +7936,13 @@ $(OBJS)\xrcdll_xmlrsall.obj :  .AUTODEPEND ..\..\src\xrc\xmlrsall.cpp
 $(OBJS)\xrclib_dummy.obj :  .AUTODEPEND ..\..\src\common\dummy.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
 
-$(OBJS)\xrclib_xh_bmpbt.obj :  .AUTODEPEND ..\..\src\xrc\xh_bmpbt.cpp
+$(OBJS)\xrclib_xh_bmp.obj :  .AUTODEPEND ..\..\src\xrc\xh_bmp.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
 
-$(OBJS)\xrclib_xh_bmp.obj :  .AUTODEPEND ..\..\src\xrc\xh_bmp.cpp
+$(OBJS)\xrclib_xh_bmpcbox.obj :  .AUTODEPEND ..\..\src\xrc\xh_bmpcbox.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
+
+$(OBJS)\xrclib_xh_bmpbt.obj :  .AUTODEPEND ..\..\src\xrc\xh_bmpbt.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
 
 $(OBJS)\xrclib_xh_bttn.obj :  .AUTODEPEND ..\..\src\xrc\xh_bttn.cpp
@@ -7975,6 +8146,12 @@ $(OBJS)\richtextdll_richtextxml.obj :  .AUTODEPEND ..\..\src\richtext\richtextxm
 $(OBJS)\richtextdll_richtexthtml.obj :  .AUTODEPEND ..\..\src\richtext\richtexthtml.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(RICHTEXTDLL_CXXFLAGS) $<
 
+$(OBJS)\richtextdll_richtextformatdlg.obj :  .AUTODEPEND ..\..\src\richtext\richtextformatdlg.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(RICHTEXTDLL_CXXFLAGS) $<
+
+$(OBJS)\richtextdll_richtextsymboldlg.obj :  .AUTODEPEND ..\..\src\richtext\richtextsymboldlg.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(RICHTEXTDLL_CXXFLAGS) $<
+
 $(OBJS)\richtextlib_dummy.obj :  .AUTODEPEND ..\..\src\common\dummy.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(RICHTEXTLIB_CXXFLAGS) $<
 
@@ -7991,6 +8168,12 @@ $(OBJS)\richtextlib_richtextxml.obj :  .AUTODEPEND ..\..\src\richtext\richtextxm
 	$(CXX) -bt=dos -zq -fo=$^@ $(RICHTEXTLIB_CXXFLAGS) $<
 
 $(OBJS)\richtextlib_richtexthtml.obj :  .AUTODEPEND ..\..\src\richtext\richtexthtml.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(RICHTEXTLIB_CXXFLAGS) $<
+
+$(OBJS)\richtextlib_richtextformatdlg.obj :  .AUTODEPEND ..\..\src\richtext\richtextformatdlg.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(RICHTEXTLIB_CXXFLAGS) $<
+
+$(OBJS)\richtextlib_richtextsymboldlg.obj :  .AUTODEPEND ..\..\src\richtext\richtextsymboldlg.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(RICHTEXTLIB_CXXFLAGS) $<
 
 $(OBJS)\gldll_dummy.obj :  .AUTODEPEND ..\..\src\common\dummy.cpp
