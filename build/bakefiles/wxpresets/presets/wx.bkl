@@ -15,7 +15,7 @@
     <set var="WX_PRESETS_VERSION">3</set>
 
     <!-- list of known libraries used by wx-lib tag defined in wx_unix.bkl and wx_win32.bkl -->
-    <set var="LIB_LIST">base core net xml odbc xrc html adv media gl dbgrid qa</set>
+    <set var="LIB_LIST">base core net xml odbc xrc html adv media gl dbgrid qa aui</set>
 
     <!-- NOTE: refer to the NET contrib using NETUTILS instead of NET
                (which is already in LIB_LIST) -->
