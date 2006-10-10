@@ -1166,9 +1166,6 @@ void wxEvtHandler::ProcessPendingEvents()
 
         ProcessEvent(*event);
 
-        // eventhandling no longer in progess
-        m_eventHandlingInProgress = false;
-        
         delete event;
 
         wxENTER_CRIT_SECT( Lock() );
@@ -1178,6 +1175,9 @@ void wxEvtHandler::ProcessPendingEvents()
     }
 
     wxLEAVE_CRIT_SECT( Lock() );
+    
+    // eventhandling no longer in progess
+    m_eventHandlingInProgress = false;
 }
 
 /*
