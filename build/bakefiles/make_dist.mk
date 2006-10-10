@@ -537,6 +537,9 @@ SAMPLES_DIST: ALL_GUI_DIST
 	done
 
 	# copy the rest, not covered by the above loop
+	$(CP_P) $(SAMPDIR)/animate/hourglass.ani $(DISTDIR)/samples/hourglass.ani
+	$(CP_P) $(SAMPDIR)/animate/throbber.gif $(DISTDIR)/samples/animate
+
 	$(CP_P) $(SAMPDIR)/console/testdata.fc $(DISTDIR)/samples/console
 
 	$(CP_P) $(SAMPDIR)/dialogs/tips.txt $(DISTDIR)/samples/dialogs
