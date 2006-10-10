@@ -9,20 +9,20 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-
-// ----------------------------------------------------------------------------
-// headers
-// ----------------------------------------------------------------------------
-
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
 #if wxUSE_ANIMATIONCTRL
 
 #include "wx/animate.h"
-#include "wx/log.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/image.h"
+    #include "wx/log.h"
+    #include "wx/stream.h"
+#endif
+
 #include <gtk/gtk.h>
-#include <gtk/gtkimage.h>
 
 
 // ============================================================================
@@ -51,6 +51,27 @@ void gdk_pixbuf_area_updated(GdkPixbufLoader *loader,
 
 IMPLEMENT_DYNAMIC_CLASS(wxAnimation, wxAnimationBase)
 
+wxAnimation::wxAnimation(const wxAnimation& that)
+    : base_type(that)
+{
+    m_pixbuf = that.m_pixbuf;
+    if (m_pixbuf)
+        g_object_ref(m_pixbuf);
+}
+
+wxAnimation& wxAnimation::operator=(const wxAnimation& that)
+{
+    if (this != &that)
+    {
+        base_type::operator=(that);
+        UnRef();
+        m_pixbuf = that.m_pixbuf;
+        if (m_pixbuf)
+            g_object_ref(m_pixbuf);
+    }
+    return *this;
+}
+
 bool wxAnimation::LoadFile(const wxString &name, wxAnimationType WXUNUSED(type))
 {
     UnRef();
@@ -75,6 +96,7 @@ bool wxAnimation::Load(wxInputStream &stream, wxAnimationType type)
         break;
 
     default:
+        anim_type[0] = '\0';
         break;
     }
 
@@ -100,7 +122,7 @@ bool wxAnimation::Load(wxInputStream &stream, wxAnimationType type)
     while (stream.IsOk())
     {
         // read a chunk of data
-        stream.Read(buf, 2048);
+        stream.Read(buf, sizeof(buf));
 
         // fetch all data into the loader
         if (!gdk_pixbuf_loader_write(loader, buf, stream.LastRead(), &error))
@@ -123,6 +145,31 @@ bool wxAnimation::Load(wxInputStream &stream, wxAnimationType type)
     return true;
 }
 
+wxImage wxAnimation::GetFrame(size_t i) const
+{
+    return wxNullImage;
+}
+
+wxSize wxAnimation::GetSize() const
+{
+    return wxSize(gdk_pixbuf_animation_get_width(m_pixbuf),
+                  gdk_pixbuf_animation_get_height(m_pixbuf));
+}
+
+void wxAnimation::UnRef()
+{
+    if (m_pixbuf)
+        g_object_unref(m_pixbuf);
+    m_pixbuf = NULL;
+}
+
+void wxAnimation::SetPixbuf(GdkPixbufAnimation* p)
+{
+    UnRef();
+    m_pixbuf = p;
+    if (m_pixbuf)
+        g_object_ref(m_pixbuf);
+}
 
 //-----------------------------------------------------------------------------
 // wxAnimationCtrl
@@ -132,6 +179,13 @@ IMPLEMENT_DYNAMIC_CLASS(wxAnimationCtrl, wxAnimationCtrlBase)
 BEGIN_EVENT_TABLE(wxAnimationCtrl, wxAnimationCtrlBase)
     EVT_TIMER(wxID_ANY, wxAnimationCtrl::OnTimer)
 END_EVENT_TABLE()
+
+wxAnimationCtrl::wxAnimationCtrl()
+{
+    m_anim = NULL;
+    m_iter = NULL;
+    m_bPlaying = false;
+}
 
 bool wxAnimationCtrl::Create( wxWindow *parent, wxWindowID id,
                               const wxAnimation& anim,
@@ -144,7 +198,7 @@ bool wxAnimationCtrl::Create( wxWindow *parent, wxWindowID id,
     m_acceptsFocus = true;
 
     if (!PreCreation( parent, pos, size ) ||
-        !wxControl::CreateBase(parent, id, pos, size, style & wxWINDOW_STYLE_MASK,
+        !base_type::CreateBase(parent, id, pos, size, style & wxWINDOW_STYLE_MASK,
                                wxDefaultValidator, name))
     {
         wxFAIL_MSG( wxT("wxAnimationCtrl creation failed") );
@@ -232,6 +286,20 @@ void wxAnimationCtrl::FitToAnimation()
     //if (w > 0 && h > 0)
 //        gtk_widget_set_size_request(m_widget, w, h);
         SetSize(w, h);
+}
+
+void wxAnimationCtrl::ResetAnim()
+{
+    if (m_anim)
+        g_object_unref(m_anim);
+    m_anim = NULL;
+}
+
+void wxAnimationCtrl::ResetIter()
+{
+    if (m_iter)
+        g_object_unref(m_iter);
+    m_iter = NULL;
 }
 
 bool wxAnimationCtrl::Play()

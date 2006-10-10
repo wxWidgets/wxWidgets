@@ -14,9 +14,11 @@
 
 #if wxUSE_STREAMS && wxUSE_GIF
 
-#include "wx/stream.h"
-#include "wx/image.h"
 #include "wx/colour.h"
+#include "wx/gdicmn.h"
+
+class WXDLLIMPEXP_BASE wxInputStream;
+class WXDLLIMPEXP_CORE wxImage;
 
 /*
 

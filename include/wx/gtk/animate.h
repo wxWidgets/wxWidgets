@@ -12,8 +12,8 @@
 #ifndef _WX_GTKANIMATEH__
 #define _WX_GTKANIMATEH__
 
-#include "wx/defs.h"
-#include <gdk-pixbuf/gdk-pixbuf.h>
+typedef struct _GdkPixbufAnimation GdkPixbufAnimation;
+typedef struct _GdkPixbufAnimationIter GdkPixbufAnimationIter;
 
 // ----------------------------------------------------------------------------
 // wxAnimation
@@ -27,19 +27,11 @@
 class WXDLLEXPORT wxAnimation : public wxAnimationBase
 {
 public:
-    wxAnimation(const wxAnimation &tocopy)
-        { m_pixbuf=tocopy.m_pixbuf; if (m_pixbuf) g_object_ref(m_pixbuf); }
-    wxAnimation(GdkPixbufAnimation *p = NULL)
-        { m_pixbuf=p; }
-    ~wxAnimation()
-        { UnRef(); }
+    wxAnimation(GdkPixbufAnimation *p = NULL) { m_pixbuf = p; }
+    wxAnimation(const wxAnimation&);
+    ~wxAnimation() { UnRef(); }
 
-    wxAnimation &operator= (const wxAnimation &tocopy)
-        {
-            m_pixbuf=tocopy.m_pixbuf;
-            if (m_pixbuf) g_object_ref(m_pixbuf);
-            return *this;
-        }
+    wxAnimation& operator= (const wxAnimation&);
 
     bool operator == (const wxAnimation& anim) const
         { return m_pixbuf == anim.m_pixbuf; }
@@ -54,34 +46,24 @@ public:
 
     virtual size_t GetFrameCount() const
         { return 0; }
-    virtual wxImage GetFrame(size_t i) const
-        { return wxNullImage; }
+    virtual wxImage GetFrame(size_t i) const;
 
     // we can retrieve the delay for a frame only after building
     // a GdkPixbufAnimationIter...
     virtual int GetDelay(size_t i) const
         { return 0; }
 
-    virtual wxSize GetSize() const
-        { return wxSize(gdk_pixbuf_animation_get_width(m_pixbuf),
-                        gdk_pixbuf_animation_get_height(m_pixbuf)); }
+    virtual wxSize GetSize() const;
 
     virtual bool LoadFile(const wxString &name, wxAnimationType type = wxANIMATION_TYPE_ANY);
     virtual bool Load(wxInputStream &stream, wxAnimationType type = wxANIMATION_TYPE_ANY);
 
-    void UnRef()
-    {
-        if (m_pixbuf)
-            g_object_unref(m_pixbuf);
-        m_pixbuf = NULL;
-    }
-
+    // Implementation
 public:     // used by GTK callbacks
 
     GdkPixbufAnimation *GetPixbuf() const
         { return m_pixbuf; }
-    void SetPixbuf(GdkPixbufAnimation *p)
-        { m_pixbuf=p; if (m_pixbuf) g_object_ref(m_pixbuf); }
+    void SetPixbuf(GdkPixbufAnimation* p);
 
 protected:
     GdkPixbufAnimation *m_pixbuf;
@@ -89,10 +71,12 @@ protected:
     // used temporary by Load()
     //bool m_bLoadComplete;
 
-protected:
+private:
+    void UnRef();
+
+    typedef wxAnimationBase base_type;
     DECLARE_DYNAMIC_CLASS(wxAnimation)
 };
-
 
 
 // ----------------------------------------------------------------------------
@@ -105,7 +89,7 @@ protected:
 class WXDLLIMPEXP_ADV wxAnimationCtrl: public wxAnimationCtrlBase
 {
 public:
-    wxAnimationCtrl() {}
+    wxAnimationCtrl();
     wxAnimationCtrl(wxWindow *parent,
                         wxWindowID id,
                         const wxAnimation& anim = wxNullAnimation,
@@ -151,19 +135,8 @@ protected:
     void FitToAnimation();
     void ClearToBackgroundColour();
 
-    void ResetAnim()
-    {
-        if (m_anim)
-            g_object_unref(m_anim);
-        m_anim = NULL;
-    }
-
-    void ResetIter()
-    {
-        if (m_iter)
-            g_object_unref(m_iter);
-        m_iter = NULL;
-    }
+    void ResetAnim();
+    void ResetIter();
 
 protected:      // internal vars
 
@@ -174,6 +147,7 @@ protected:      // internal vars
     bool m_bPlaying;
 
 private:
+    typedef wxAnimationCtrlBase base_type;
     DECLARE_DYNAMIC_CLASS(wxAnimationCtrl)
     DECLARE_EVENT_TABLE()
 };

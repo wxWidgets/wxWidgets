@@ -15,26 +15,26 @@
   #pragma hdrstop
 #endif  //__BORLANDC__
 
-
 #if wxUSE_ANIMATIONCTRL
 
-#include "wx/log.h"
+#include "wx/animate.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/log.h"
+    #include "wx/image.h"
+    #include "wx/dcmemory.h"
+    #include "wx/dcclient.h"
+    #include "wx/module.h"
+#endif
+
 #include "wx/wfstream.h"
-#include "wx/image.h"
 #include "wx/gifdecod.h"
 #include "wx/anidecod.h"
-#include "wx/dcmemory.h"
-#include "wx/dc.h"
-#include "wx/dcclient.h"
-#include "wx/animate.h"
-#include "wx/animdecod.h"
 
-
-#include <wx/listimpl.cpp>
+#include "wx/listimpl.cpp"
 WX_DEFINE_LIST(wxAnimationDecoderList);
 
 wxAnimationDecoderList wxAnimation::sm_handlers;
-
 
 
 // ----------------------------------------------------------------------------
@@ -244,8 +244,6 @@ public:
 IMPLEMENT_DYNAMIC_CLASS(wxAnimationModule, wxModule)
 
 
-
-
 // ----------------------------------------------------------------------------
 // wxAnimationCtrl
 // ----------------------------------------------------------------------------
@@ -256,6 +254,14 @@ BEGIN_EVENT_TABLE(wxAnimationCtrl, wxAnimationCtrlBase)
     EVT_SIZE(wxAnimationCtrl::OnSize)
     EVT_TIMER(wxID_ANY, wxAnimationCtrl::OnTimer)
 END_EVENT_TABLE()
+
+wxAnimationCtrl::wxAnimationCtrl()
+{
+    m_currentFrame = 0;
+    m_looped = false;
+    m_isPlaying = false;
+    m_useWinBackgroundColour = false;
+}
 
 bool wxAnimationCtrl::Create(wxWindow *parent, wxWindowID id,
             const wxAnimation& animation, const wxPoint& pos,
@@ -268,7 +274,7 @@ bool wxAnimationCtrl::Create(wxWindow *parent, wxWindowID id,
     m_useWinBackgroundColour = false;
     m_timer.SetOwner(this);
 
-    if (!wxControl::Create(parent, id, pos, size, style, wxDefaultValidator, name))
+    if (!base_type::Create(parent, id, pos, size, style, wxDefaultValidator, name))
         return false;
 
     // by default we get the same background colour of our parent

@@ -16,15 +16,9 @@
 
 #if wxUSE_ANIMATIONCTRL
 
-#include <wx/defs.h>
-#include <wx/string.h>
-#include <wx/gdicmn.h>
-#include <wx/list.h>
-#include <wx/timer.h>
-#include <wx/bitmap.h>
-#include <wx/colour.h>
-#include <wx/control.h>
-#include <wx/animdecod.h>
+#include "wx/animdecod.h"
+#include "wx/control.h"
+#include "wx/timer.h"
 
 class WXDLLIMPEXP_ADV wxAnimation;
 

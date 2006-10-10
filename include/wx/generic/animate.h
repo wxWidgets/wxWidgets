@@ -12,23 +12,6 @@
 #ifndef _WX_GENERIC_ANIMATEH__
 #define _WX_GENERIC_ANIMATEH__
 
-#include <wx/defs.h>
-#include <wx/string.h>
-#include <wx/gdicmn.h>
-#include <wx/list.h>
-#include <wx/timer.h>
-#include <wx/bitmap.h>
-#include <wx/colour.h>
-#include <wx/control.h>
-#include <wx/animdecod.h>
-
-class WXDLLIMPEXP_ADV wxAnimationBase;
-class WXDLLIMPEXP_ADV wxAnimationPlayer;
-class WXDLLEXPORT     wxImage;
-class WXDLLEXPORT     wxGIFDecoder;
-class WXDLLIMPEXP_ADV wxAnimation;
-
-
 // ----------------------------------------------------------------------------
 // wxAnimation
 // ----------------------------------------------------------------------------
@@ -38,17 +21,6 @@ WX_DECLARE_LIST(wxAnimationDecoder, wxAnimationDecoderList);
 class WXDLLIMPEXP_ADV wxAnimation : public wxAnimationBase
 {
 public:
-    wxAnimation(const wxAnimation &tocopy)
-        { Ref(tocopy); }
-    wxAnimation() {}
-    ~wxAnimation() { UnRef(); }
-
-    wxAnimation &operator= (const wxAnimation &tocopy)
-    {
-        Ref(tocopy);
-        return *this;
-    }
-
     bool operator == (const wxAnimation& anim) const
         { return m_refData == anim.m_refData; }
     bool operator != (const wxAnimation& anim) const
@@ -83,7 +55,6 @@ public:
     static void CleanUpHandlers();
     static void InitStandardHandlers();
 
-protected:
     DECLARE_DYNAMIC_CLASS(wxAnimation)
 };
 
@@ -95,7 +66,7 @@ protected:
 class WXDLLIMPEXP_ADV wxAnimationCtrl: public wxAnimationCtrlBase
 {
 public:
-    wxAnimationCtrl() {}
+    wxAnimationCtrl();
     wxAnimationCtrl(wxWindow *parent,
             wxWindowID id,
             const wxAnimation& anim = wxNullAnimation,
@@ -182,6 +153,7 @@ protected:
                                       // on the screen
 
 private:
+    typedef wxAnimationCtrlBase base_type;
     DECLARE_DYNAMIC_CLASS(wxAnimationCtrl)
     DECLARE_EVENT_TABLE()
 };
