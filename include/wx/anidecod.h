@@ -21,8 +21,8 @@
 
 class /*WXDLLEXPORT*/ wxANIFrameInfo;
 
-WX_DECLARE_OBJARRAY(wxANIFrameInfo, wxANIFrameInfoArray);
-WX_DECLARE_OBJARRAY(wxImage, wxImageArray);
+WX_DECLARE_EXPORTED_OBJARRAY(wxANIFrameInfo, wxANIFrameInfoArray);
+WX_DECLARE_EXPORTED_OBJARRAY(wxImage, wxImageArray);
 
 // --------------------------------------------------------------------------
 // wxANIDecoder class

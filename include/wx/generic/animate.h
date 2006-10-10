@@ -16,7 +16,7 @@
 // wxAnimation
 // ----------------------------------------------------------------------------
 
-WX_DECLARE_LIST(wxAnimationDecoder, wxAnimationDecoderList);
+WX_DECLARE_LIST_WITH_DECL(wxAnimationDecoder, wxAnimationDecoderList, class WXDLLIMPEXP_ADV);
 
 class WXDLLIMPEXP_ADV wxAnimation : public wxAnimationBase
 {
