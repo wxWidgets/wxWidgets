@@ -192,6 +192,18 @@ void wxRichTextFormattingDialog::OnTabChanged(wxBookCtrlEvent& event)
     }
 }
 
+/// Respond to help command
+void wxRichTextFormattingDialog::OnHelp(wxCommandEvent& event)
+{
+    int selPage = GetBookCtrl()->GetSelection();
+    if (selPage != wxNOT_FOUND)
+    {
+        int pageId = m_pageIds[selPage];
+        if (!GetFormattingDialogFactory()->ShowHelp(pageId, this))
+            event.Skip();
+    }
+}
+
 void wxRichTextFormattingDialog::SetFormattingDialogFactory(wxRichTextFormattingDialogFactory* factory)
 {
     if (ms_FormattingDialogFactory)
@@ -225,6 +237,8 @@ bool wxRichTextFormattingDialogFactory::CreatePages(long pages, wxRichTextFormat
                 int imageIndex = GetPageImage(pageId);
                 dialog->GetBookCtrl()->AddPage(panel, title, !selected, imageIndex);
                 selected = true;
+                
+                dialog->AddPageId(pageId);
             }
         }
     }

@@ -528,7 +528,7 @@ public:
     virtual bool ApplyAlignmentToSelection(wxTextAttrAlignment alignment);
 
     /// Apply a named style to the selection
-    virtual void ApplyStyle(wxRichTextStyleDefinition* def);
+    virtual bool ApplyStyle(wxRichTextStyleDefinition* def);
 
     /// Set style sheet, if any.
     void SetStyleSheet(wxRichTextStyleSheet* styleSheet) { GetBuffer().SetStyleSheet(styleSheet); }

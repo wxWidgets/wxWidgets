@@ -630,7 +630,7 @@ void wxRichTextCtrl::OnChar(wxKeyEvent& event)
                 event.Skip();
                 return;
             }
-            
+
             default:
             {
                 if (event.CmdDown() || event.AltDown())
@@ -1721,14 +1721,14 @@ bool wxRichTextCtrl::SelectWord(long position)
 {
     if (position < 0 || position > GetBuffer().GetRange().GetEnd())
         return false;
-    
+
     wxRichTextParagraph* para = GetBuffer().GetParagraphAtPosition(position);
     if (!para)
         return false;
 
     long positionStart = position;
     long positionEnd = position;
-    
+
     for (positionStart = position; positionStart >= para->GetRange().GetStart(); positionStart --)
     {
         wxString text = GetBuffer().GetTextForRange(wxRichTextRange(positionStart, positionStart));
@@ -1740,7 +1740,7 @@ bool wxRichTextCtrl::SelectWord(long position)
     }
     if (positionStart < para->GetRange().GetStart())
         positionStart = para->GetRange().GetStart();
-    
+
     for (positionEnd = position; positionEnd < para->GetRange().GetEnd(); positionEnd ++)
     {
         wxString text = GetBuffer().GetTextForRange(wxRichTextRange(positionEnd, positionEnd));
@@ -1752,13 +1752,13 @@ bool wxRichTextCtrl::SelectWord(long position)
     }
     if (positionEnd >= para->GetRange().GetEnd())
         positionEnd = para->GetRange().GetEnd();
-    
+
     SetSelection(positionStart, positionEnd+1);
 
     if (positionStart >= 0)
     {
         MoveCaret(positionStart-1, true);
-        SetDefaultStyleToCursorStyle();        
+        SetDefaultStyleToCursorStyle();
     }
 
     return true;
@@ -2738,19 +2738,19 @@ bool wxRichTextCtrl::ApplyAlignmentToSelection(wxTextAttrAlignment alignment)
 }
 
 /// Apply a named style to the selection
-void wxRichTextCtrl::ApplyStyle(wxRichTextStyleDefinition* def)
+bool wxRichTextCtrl::ApplyStyle(wxRichTextStyleDefinition* def)
 {
     // Flags are defined within each definition, so only certain
     // attributes are applied.
     wxRichTextAttr attr(def->GetStyle());
-    
+
     int flags = wxRICHTEXT_SETSTYLE_WITH_UNDO|wxRICHTEXT_SETSTYLE_OPTIMIZE;
 
     // Make sure the attr has the style name
     if (def->IsKindOf(CLASSINFO(wxRichTextParagraphStyleDefinition)))
     {
         attr.SetParagraphStyleName(def->GetName());
-        
+
         // If applying a paragraph style, we only want the paragraph nodes to adopt these
         // attributes, and not the leaf nodes. This will allow the context (e.g. text)
         // to change its style independently.
@@ -2760,9 +2760,12 @@ void wxRichTextCtrl::ApplyStyle(wxRichTextStyleDefinition* def)
         attr.SetCharacterStyleName(def->GetName());
 
     if (HasSelection())
-        SetStyleEx(GetSelectionRange(), attr, flags);
+        return SetStyleEx(GetSelectionRange(), attr, flags);
     else
+    {
         SetAndShowDefaultStyle(attr);
+        return true;
+    }
 }
 
 /// Apply the style sheet to the buffer, for example if the styles have changed.

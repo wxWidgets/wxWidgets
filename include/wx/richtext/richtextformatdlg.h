@@ -148,6 +148,9 @@ public:
     /// up to date
     void OnTabChanged(wxBookCtrlEvent& event);
 
+    /// Respond to help command
+    void OnHelp(wxCommandEvent& event);
+
     /// Set/get image list
     void SetImageList(wxImageList* imageList) { m_imageList = imageList; }
     wxImageList* GetImageList() const { return m_imageList; }
@@ -165,12 +168,16 @@ public:
     /// Helper for pages to get the style
     static wxRichTextStyleDefinition* GetDialogStyleDefinition(wxWindow* win);
 
+    /// Map book control page index to our page id
+    void AddPageId(int id) { m_pageIds.Add(id); }
+
 protected:
 
     wxImageList*                                m_imageList;
     wxTextAttrEx                                m_attributes;
     wxRichTextStyleDefinition*                  m_styleDefinition;
     wxRichTextStyleSheet*                       m_styleSheet;
+    wxArrayInt                                  m_pageIds; // mapping of book control indexes to page ids
 
     static wxRichTextFormattingDialogFactory*   ms_FormattingDialogFactory;
 
