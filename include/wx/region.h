@@ -12,10 +12,10 @@
 #ifndef _WX_REGION_H_BASE_
 #define _WX_REGION_H_BASE_
 
-#include "wx/bitmap.h"
 #include "wx/gdiobj.h"
 #include "wx/gdicmn.h"
 
+class WXDLLIMPEXP_CORE wxBitmap;
 class WXDLLEXPORT wxColour;
 class WXDLLEXPORT wxRegion;
 
@@ -207,17 +207,11 @@ protected:
     virtual bool DoCombine(const wxRegion& region, wxRegionOp op) = 0;
 
     // implement some wxRegionBase pure virtuals in terms of Combine()
-    virtual bool DoUnionWithRect(const wxRect& rect)
-        { return Combine(rect, wxRGN_OR); }
-    virtual bool DoUnionWithRegion(const wxRegion& region)
-        { return Combine(region, wxRGN_OR); }
-
-    virtual bool DoIntersect(const wxRegion& region)
-        { return Combine(region, wxRGN_AND); }
-    virtual bool DoSubtract(const wxRegion& region)
-        { return Combine(region, wxRGN_DIFF); }
-    virtual bool DoXor(const wxRegion& region)
-        { return Combine(region, wxRGN_XOR); }
+    virtual bool DoUnionWithRect(const wxRect& rect);
+    virtual bool DoUnionWithRegion(const wxRegion& region);
+    virtual bool DoIntersect(const wxRegion& region);
+    virtual bool DoSubtract(const wxRegion& region);
+    virtual bool DoXor(const wxRegion& region);
 };
 
 #endif // ports with wxRegion::Combine()
