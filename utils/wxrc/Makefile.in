@@ -112,6 +112,8 @@ distclean: clean
 @COND_USE_XRC_1@install_wxrc: 
 @COND_USE_XRC_1@	$(INSTALL_DIR) $(DESTDIR)$(bindir)
 @COND_USE_XRC_1@	$(INSTALL_PROGRAM) wxrc$(EXEEXT) $(DESTDIR)$(bindir)
+@COND_USE_XRC_1@	rm -f $(DESTDIR)$(bindir)/wxrc$(EXEEXT) $(DESTDIR)$(bindir)/wxrc-$(WX_RELEASE)
+@COND_USE_XRC_1@	$(INSTALL_PROGRAM) wxrc$(EXEEXT) $(DESTDIR)$(bindir)
 @COND_USE_XRC_1@	mv -f $(DESTDIR)$(bindir)/wxrc$(EXEEXT) $(DESTDIR)$(bindir)/wxrc-$(WX_RELEASE)
 @COND_USE_XRC_1@	(cd $(DESTDIR)$(bindir) && $(LN_S) wxrc-$(WX_RELEASE) wxrc$(EXEEXT))
 

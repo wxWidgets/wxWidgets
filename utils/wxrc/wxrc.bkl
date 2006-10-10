@@ -20,6 +20,8 @@
         <set var="versioned_name">wxrc-$(WX_RELEASE)</set>
         <modify-target target="install_wxrc">
             <command>
+	        rm -f $(DESTDIR)$(BINDIR)/wxrc$(EXEEXT) $(DESTDIR)$(BINDIR)/$(versioned_name)
+		$(INSTALL_PROGRAM) wxrc$(EXEEXT) $(DESTDIR)$(BINDIR)
                 mv -f $(DESTDIR)$(BINDIR)/wxrc$(EXEEXT) $(DESTDIR)$(BINDIR)/$(versioned_name)
                 (cd $(DESTDIR)$(BINDIR) &amp;&amp; $(LN_S) $(versioned_name) wxrc$(EXEEXT))
             </command>
