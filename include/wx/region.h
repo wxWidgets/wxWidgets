@@ -142,23 +142,20 @@ public:
 #endif // wxUSE_IMAGE
 
     // Intersect rectangle or region with this one.
-    bool Intersect(wxCoord x, wxCoord y, wxCoord w, wxCoord h)
-        { return Intersect(wxRect(x, y, w, h)); }
+    bool Intersect(wxCoord x, wxCoord y, wxCoord w, wxCoord h);
     bool Intersect(const wxRect& rect);
     bool Intersect(const wxRegion& region)
         { return DoIntersect(region); }
 
     // Subtract rectangle or region from this:
     // Combines the parts of 'this' that are not part of the second region.
-    bool Subtract(wxCoord x, wxCoord y, wxCoord w, wxCoord h)
-        { return Subtract(wxRect(x, y, w, h)); }
+    bool Subtract(wxCoord x, wxCoord y, wxCoord w, wxCoord h);
     bool Subtract(const wxRect& rect);
     bool Subtract(const wxRegion& region)
         { return DoSubtract(region); }
 
     // XOR: the union of two combined regions except for any overlapping areas.
-    bool Xor(wxCoord x, wxCoord y, wxCoord w, wxCoord h)
-        { return Xor(wxRect(x, y, w, h)); }
+    bool Xor(wxCoord x, wxCoord y, wxCoord w, wxCoord h);
     bool Xor(const wxRect& rect);
     bool Xor(const wxRegion& region)
         { return DoXor(region); }
@@ -268,6 +265,24 @@ inline bool wxRegionBase::Subtract(const wxRect& rect)
 inline bool wxRegionBase::Xor(const wxRect& rect)
 {
     return DoXor(wxRegion(rect));
+}
+
+// ...and these functions are here because they call the ones above, and its
+// not really proper to call an inline function before its defined inline.
+
+inline bool wxRegionBase::Intersect(wxCoord x, wxCoord y, wxCoord w, wxCoord h)
+{
+    return Intersect(wxRect(x, y, w, h));
+}
+
+inline bool wxRegionBase::Subtract(wxCoord x, wxCoord y, wxCoord w, wxCoord h)
+{
+    return Subtract(wxRect(x, y, w, h));
+}
+
+inline bool wxRegionBase::Xor(wxCoord x, wxCoord y, wxCoord w, wxCoord h)
+{
+    return Xor(wxRect(x, y, w, h));
 }
 
 #ifdef wxHAS_REGION_COMBINE
