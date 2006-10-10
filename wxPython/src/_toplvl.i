@@ -388,10 +388,24 @@ public:
     // lines into a vertical wxBoxSizer
     wxSizer* CreateTextSizer( const wxString &message );
 
-    // places buttons into a horizontal wxBoxSizer
-    wxSizer* CreateButtonSizer( long flags,
-                                bool separated = false,
-                                wxCoord distance = 0 );
+
+    // returns a horizontal wxBoxSizer containing the given buttons
+    //
+    // notice that the returned sizer can be NULL if no buttons are put in the
+    // sizer (this mostly happens under smart phones and other atypical
+    // platforms which have hardware buttons replacing OK/Cancel and such)
+   %Rename(_CreateButtonSizer,
+           wxSizer* , CreateButtonSizer( long flags ));
+    %pythoncode {
+        def CreateButtonSizer(self, flags, *ignored):
+            return self._CreateButtonSizer(flags)
+    }
+
+    // returns the sizer containing CreateButtonSizer() below a separating
+    // static line for the platforms which use static lines for items
+    // separation (i.e. not Mac)
+    wxSizer *CreateSeparatedButtonSizer(long flags);
+   
     wxStdDialogButtonSizer* CreateStdDialogButtonSizer( long flags );
 
     //void SetModal( bool flag );
