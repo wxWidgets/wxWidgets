@@ -39,7 +39,9 @@ demos/life/makefile.dm?
 demos/makefile.dm?
 demos/poem/makefile.dm?
 samples/access/makefile.dm?
+samples/animate/makefile.dm?
 samples/artprov/makefile.dm?
+samples/aui/makefile.dm?
 samples/calendar/makefile.dm?
 samples/caret/makefile.dm?
 samples/checklst/makefile.dm?

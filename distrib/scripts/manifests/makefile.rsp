@@ -4,6 +4,7 @@ locale/Makefile
 tests/Makefile.in
 samples/Makefile.in
 samples/access/Makefile.in
+samples/animate/Makefile.in
 samples/artprov/Makefile.in
 samples/aui/Makefile.in
 samples/calendar/Makefile.in

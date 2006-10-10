@@ -6,6 +6,9 @@ build/wince/missing
 samples/access/access.vcp
 samples/access/access.vcw
 
+samples/animate/anitest.vcp
+samples/animate/anitest.vcw
+
 samples/artprov/artprov.vcp
 samples/artprov/artprov.vcw
 

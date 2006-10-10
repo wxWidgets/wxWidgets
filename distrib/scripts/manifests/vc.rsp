@@ -25,6 +25,8 @@ samples/samples.dsw
 
 samples/access/access.dsp
 
+samples/animate/anitest.dsp
+
 samples/artprov/artprov.dsp
 
 samples/aui/auidemo.dsp

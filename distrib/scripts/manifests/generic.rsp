@@ -151,6 +151,13 @@ samples/access/*.rc
 samples/access/*.pro
 samples/access/*.bkl
 
+samples/animate/*.cpp
+samples/animate/*.h
+samples/animate/makefile*
+samples/animate/*.bkl
+samples/animate/*.gif
+samples/animate/*.ani
+
 samples/artprov/*.cpp
 samples/artprov/*.h
 samples/artprov/makefile*
