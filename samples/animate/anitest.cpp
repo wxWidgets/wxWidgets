@@ -75,9 +75,7 @@ bool MyApp::OnInit()
 {
     // Create the main frame window
 
-    MyFrame* frame = new MyFrame((wxFrame *)NULL, -1, _T("Animation Demo"),
-                        wxPoint(-1, -1), wxSize(500, 400),
-                        wxDEFAULT_FRAME_STYLE);
+    MyFrame* frame = new MyFrame((wxFrame *)NULL, wxID_ANY, _T("Animation Demo"));
 
     // Give it an icon
     frame->SetIcon(wxICON(sample));
@@ -246,7 +244,7 @@ END_EVENT_TABLE()
 
 // Define a constructor for my canvas
 MyCanvas::MyCanvas(wxWindow *parent, const wxPoint& pos, const wxSize& size)
-        : wxScrolledWindow(parent, -1, pos, size,
+        : wxScrolledWindow(parent, wxID_ANY, pos, size,
                            wxSUNKEN_BORDER |
                            wxNO_FULL_REPAINT_ON_RESIZE |
                            wxVSCROLL | wxHSCROLL)
