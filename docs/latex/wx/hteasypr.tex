@@ -110,13 +110,12 @@ detailed description.
 
 \func{void}{SetHeader}{\param{const wxString\& }{header}, \param{int }{pg = wxPAGE\_ALL}}
 
-Set page header.
+Set page header. The following macros can be used inside it:
+\input htprintmacros.inc
 
 \wxheading{Parameters}
 
-\docparam{header}{HTML text to be used as header. You can use macros in it:
-\input htprintmacros.inc
-}
+\docparam{header}{HTML text to be used as header.}
 
 \docparam{pg}{one of wxPAGE\_ODD, wxPAGE\_EVEN and wxPAGE\_ALL constants.}
 
@@ -124,13 +123,12 @@ Set page header.
 
 \func{void}{SetFooter}{\param{const wxString\& }{footer}, \param{int }{pg = wxPAGE\_ALL}}
 
-Set page footer.
+Set page footer. The following macros can be used inside it:
+\input htprintmacros.inc
 
 \wxheading{Parameters}
 
-\docparam{footer}{HTML text to be used as footer. You can use macros in it:
-\input htprintmacros.inc
-}
+\docparam{footer}{HTML text to be used as footer.}
 
 \docparam{pg}{one of wxPAGE\_ODD, wxPAGE\_EVEN and wxPAGE\_ALL constants.}
 
