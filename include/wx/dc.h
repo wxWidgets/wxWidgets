@@ -1002,7 +1002,7 @@ private:
     bool m_inDrawing;
 
 
-    DECLARE_NO_COPY_CLASS(wxOverlay);
+    DECLARE_NO_COPY_CLASS(wxOverlay)
 };
 
 class WXDLLEXPORT wxDCOverlay
@@ -1029,7 +1029,7 @@ private:
     wxWindowDC* m_dc;
 
 
-    DECLARE_NO_COPY_CLASS(wxDCOverlay);
+    DECLARE_NO_COPY_CLASS(wxDCOverlay)
 };
 
 #endif // _WX_DC_H_BASE_
