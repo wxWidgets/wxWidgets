@@ -1157,6 +1157,7 @@ void wxDCBase::CalculateEllipticPoints( wxList* points,
 #if defined(wxMAC_USE_CORE_GRAPHICS) && wxMAC_USE_CORE_GRAPHICS
 
 #include "wx/mac/private.h"
+#include "wx/toplevel.h"
 
 class wxOverlayImpl
 {
@@ -1181,10 +1182,26 @@ public:
     void Clear( wxWindowDC* dc);
 
 private:
-    WindowRef m_overlayWindow ;
+    OSStatus CreateOverlayWindow();
+    
+    void MacGetBounds( Rect *bounds );
+    
+    WindowRef m_overlayWindow;
+    WindowRef m_overlayParentWindow;
     CGContextRef m_overlayContext ;
     // we store the window in case we would have to issue a Refresh()
     wxWindow* m_window ;
+    
+    EventHandlerRef m_overlayParentHandler ;
+    EventHandlerRef m_overlayHandler;
+
+    static  pascal  OSStatus OverlayParentWindowEventHandlerProc( EventHandlerCallRef inCallRef, EventRef inEvent, void* inUserData );
+    static  pascal  OSStatus OverlayWindowEventHandlerProc( EventHandlerCallRef inCallRef, EventRef inEvent, void* inUserData );
+    
+    int m_x ;
+    int m_y ;
+    int m_width ;
+    int m_height ;
 } ;
 
 wxOverlayImpl::wxOverlayImpl()
@@ -1204,22 +1221,126 @@ bool wxOverlayImpl::IsOk()
     return m_overlayContext != NULL ;
 }
 
+pascal  OSStatus wxOverlayImpl::OverlayWindowEventHandlerProc( EventHandlerCallRef WXUNUSED(inCallRef), EventRef inEvent, void* inUserData )
+{
+    OSStatus  err = noErr ;
+    wxOverlayImpl* self = (wxOverlayImpl*) inUserData;
+    
+    wxMacCarbonEvent cEvent(inEvent) ;
+    switch( cEvent.GetClass() )
+    {
+        case kEventClassWindow:
+            switch( cEvent.GetKind() )
+            {
+                case kEventWindowBoundsChanged:
+                    break;
+                default :
+                    break;
+            }
+            break ;
+        default :
+            break ;
+    }
+    // as we didn't interfere with the event itself, always return a notHandled
+    return eventNotHandledErr ;
+}
+
+pascal  OSStatus wxOverlayImpl::OverlayParentWindowEventHandlerProc( EventHandlerCallRef inCallRef, EventRef inEvent, void* inUserData )
+{
+    OSStatus err = eventNotHandledErr ;
+    wxOverlayImpl* self = (wxOverlayImpl*) inUserData;
+    
+    wxMacCarbonEvent cEvent(inEvent) ;
+    switch( cEvent.GetClass() )
+    {
+        case kEventClassWindow:
+            switch( cEvent.GetKind() )
+            {
+                case kEventWindowBoundsChanging:
+                case kEventWindowBoundsChanged:
+                    {
+                        err = CallNextEventHandler(inCallRef,inEvent);
+                        Rect bounds ;
+                        self->MacGetBounds(&bounds);
+                        SetWindowBounds(self->m_overlayWindow,kWindowContentRgn,&bounds);
+                    }
+                    break;
+                default :
+                    break;
+            }
+            break ;
+        default :
+            break ;
+    }
+    return err ;
+}
+
+void wxOverlayImpl::MacGetBounds( Rect *bounds )
+{
+    wxPoint origin(0,0);
+    origin = m_window->ClientToScreen( origin );
+    bounds->top = origin.y;
+    bounds->left = origin.x;
+    bounds->bottom = origin.y+m_y+m_height;
+    bounds->right = origin.x+m_x+m_width;
+}
+
+OSStatus wxOverlayImpl::CreateOverlayWindow()
+{
+    OSStatus err;
+
+    WindowAttributes overlayAttributes  = kWindowHideOnSuspendAttribute | kWindowIgnoreClicksAttribute;
+    
+    static  EventHandlerUPP    overlayWindowEventHandlerUPP = NULL ;
+    static  EventHandlerUPP    overlayParentWindowEventHandlerUPP = NULL ;
+    const EventTypeSpec  windowEvents[]  =
+    {
+        { kEventClassWindow, kEventWindowBoundsChanged },
+    };
+    
+    const EventTypeSpec  parentWindowEvents[]  =
+    {
+        { kEventClassWindow, kEventWindowBoundsChanged },
+        { kEventClassWindow, kEventWindowBoundsChanging },
+    };
+    
+    if ( overlayWindowEventHandlerUPP == NULL ) 
+        overlayWindowEventHandlerUPP  = NewEventHandlerUPP( OverlayWindowEventHandlerProc );
+    if ( overlayParentWindowEventHandlerUPP == NULL ) 
+    
+        overlayParentWindowEventHandlerUPP  = NewEventHandlerUPP( OverlayParentWindowEventHandlerProc );
+    
+    m_overlayParentWindow =(WindowRef) m_window->MacGetTopLevelWindowRef();
+    
+    Rect bounds ;
+    MacGetBounds(&bounds);
+    err  = CreateNewWindow( kOverlayWindowClass, overlayAttributes, &bounds, &m_overlayWindow );  
+    if ( err == noErr ) 
+    {
+        SetWindowGroup( m_overlayWindow, GetWindowGroup(m_overlayParentWindow) );    //  Put them in the same group so that their window layers are consistent
+        err  = InstallWindowEventHandler( m_overlayWindow, overlayWindowEventHandlerUPP, GetEventTypeCount(windowEvents), windowEvents, this, &m_overlayHandler );
+        if ( err == noErr )
+            err  = InstallWindowEventHandler( m_overlayParentWindow, overlayParentWindowEventHandlerUPP, GetEventTypeCount(parentWindowEvents), parentWindowEvents, this, &m_overlayParentHandler );
+    }
+    return err;
+}
+
 void wxOverlayImpl::Init( wxWindowDC* dc, int x , int y , int width , int height )
 {
     wxASSERT_MSG( !IsOk() , _("You cannot Init an overlay twice") );
 
     m_window = dc->GetWindow(); 
+    m_x = x ;
+    m_y = y ;
+    m_width = width ;
+    m_height = height ;
     
-    wxPoint origin(0,0);
-    origin = m_window->ClientToScreen( origin );
-    Rect bounds = { origin.y, origin.x, origin.y+y+height, origin.x+x+width } ;
-    
-    UInt32 flags = kWindowHideOnSuspendAttribute | kWindowIgnoreClicksAttribute;
-    OSStatus err = CreateNewWindow( kOverlayWindowClass, flags, &bounds, &m_overlayWindow );
+    OSStatus err = CreateOverlayWindow();
     wxASSERT_MSG(  err == noErr , _("Couldn't create the overlay window") );
     ShowWindow(m_overlayWindow);
+    
     err = QDBeginCGContext(GetWindowPort(m_overlayWindow), &m_overlayContext);
-    CGContextTranslateCTM( m_overlayContext, 0, bounds.bottom - bounds.top );
+    CGContextTranslateCTM( m_overlayContext, 0, m_height+m_y );
     CGContextScaleCTM( m_overlayContext, 1, -1 );
     wxASSERT_MSG(  err == noErr , _("Couldn't init the context on the overlay window") );
 }
@@ -1258,6 +1379,10 @@ void wxOverlayImpl::Reset()
     // todo : don't dispose, only hide and reposition on next run
     if (m_overlayWindow)
     {
+        RemoveEventHandler( m_overlayParentHandler ) ;
+        m_overlayParentHandler = NULL;
+        RemoveEventHandler( m_overlayHandler ) ;
+        m_overlayHandler = NULL;
         DisposeWindow(m_overlayWindow);
         m_overlayWindow = NULL ;
     }
