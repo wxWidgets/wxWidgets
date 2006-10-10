@@ -14,7 +14,7 @@
     #pragma hdrstop
 #endif
 
-#if wxUSE_STREAMS && wxUSE_GIF
+#if wxUSE_STREAMS && wxUSE_ICO_CUR
 
 #include "wx/anidecod.h"
 
@@ -330,4 +330,4 @@ bool wxANIDecoder::Load( wxInputStream& stream )
     return m_szAnimation != wxDefaultSize;
 }
 
-#endif // wxUSE_STREAMS && wxUSE_GIF
+#endif // wxUSE_STREAMS && wxUSE_ICO_CUR

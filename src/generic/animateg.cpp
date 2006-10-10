@@ -209,8 +209,12 @@ const wxAnimationDecoder *wxAnimation::FindHandler( wxAnimationType animType )
 
 void wxAnimation::InitStandardHandlers()
 {
+#if wxUSE_GIF
     AddHandler(new wxGIFDecoder);
+#endif // wxUSE_GIF
+#if wxUSE_ICO_CUR
     AddHandler(new wxANIDecoder);
+#endif // wxUSE_ICO_CUR
 }
 
 void wxAnimation::CleanUpHandlers()
