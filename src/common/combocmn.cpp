@@ -913,6 +913,9 @@ void wxComboCtrlBase::PositionTextCtrl( int textCtrlXAdjust, int textCtrlYAdjust
         }
     }
     else
+#else
+    wxUnusedVar(textCtrlXAdjust);
+    wxUnusedVar(textCtrlYAdjust);
 #endif
     {
         // If it has border, have textctrl will the entire text field.
