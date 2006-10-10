@@ -55,11 +55,9 @@ reached.}
 
 \membersection{wxProgressDialog::wxProgressDialog}\label{wxprogressdialogctor}
 
-\func{}{wxProgressDialog}{\param{const wxString\& }{title},
- \param{const wxString\& }{message},\rtfsp
- \param{int }{maximum = 100},
- \param{wxWindow * }{parent = NULL},\rtfsp
- \param{int }{style = wxPD\_AUTO\_HIDE | wxPD\_APP\_MODAL}}
+\func{}{wxProgressDialog}{\param{const wxString\& }{title}, \param{const wxString\& }{message},\rtfsp
+\param{int }{maximum = 100}, \param{wxWindow * }{parent = NULL},\rtfsp
+\param{int }{style = wxPD\_AUTO\_HIDE | wxPD\_APP\_MODAL}}
 
 Constructor. Creates the dialog, displays it and disables user input
 for other windows, or, if wxPD\_APP\_MODAL flag is not given, for its parent
@@ -92,10 +90,8 @@ ABORT.
 
 \membersection{wxProgressDialog::Update}\label{wxprogressdialogupdate}
 
-\func{virtual bool}{Update}{
-  \param{int }{value},\rtfsp
-  \param{const wxString\& }{newmsg = ""},\rtfsp
-  \param{bool *}{skip = NULL}}
+\func{virtual bool}{Update}{\param{int }{value}, \param{const wxString\& }{newmsg = ""},\rtfsp
+\param{bool *}{skip = NULL}}
 
 Updates the dialog, setting the progress bar to the new value and, if
 given changes the message above it. Returns \true unless the Cancel button
@@ -118,11 +114,11 @@ empty (which is the default) the message is not changed.}
 
 \membersection{wxProgressDialog::UpdatePulse}\label{wxprogressdialogupdatepulse}
 
-\func{virtual bool}{UpdatePulse}{
-  \param{const wxString\& }{newmsg = ""},\rtfsp
-  \param{bool *}{skip = NULL}}
+\func{virtual bool}{UpdatePulse}{\param{const wxString\& }{newmsg = ""},\rtfsp
+\param{bool *}{skip = NULL}}
 
 Just like \helpref{Update}{wxprogressdialogupdate} but makes
 the gauge control run in indeterminate mode (see \helpref{wxGauge}{wxgauge} documentation),
 sets the remaining and the estimated time labels (if present) to {\tt Unknown} and moves
 the progress bar a bit to indicate that some progress was done.
+
