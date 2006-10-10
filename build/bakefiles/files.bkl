@@ -2636,6 +2636,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 
 <set var="ADVANCED_CMN_HDR" hints="files">
     wx/animate.h
+    wx/animdecod.h
     wx/bmpcbox.h
     wx/calctrl.h
     wx/dataview.h
@@ -3296,7 +3297,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
         <if cond="TOOLKIT=='MAC'">$(ADVANCED_MAC_HDR)</if>
         <if cond="TOOLKIT=='COCOA'">$(ADVANCED_COCOA_HDR)</if>
         <if cond="TOOLKIT=='MOTIF'">$(ADVANCED_UNIX_HDR)</if>
-        <if cond="TOOLKIT=='GTK'">$(ADVANCED_UNIX_HDR)</if>
+        <if cond="TOOLKIT=='GTK'">$(ADVANCED_UNIX_HDR) $(ADVANCED_GTK_HDR)</if>
         <if cond="TOOLKIT=='X11'">$(ADVANCED_UNIX_HDR)</if>
         <if cond="TOOLKIT=='PM'">$(ADVANCED_OS2_HDR)</if>
     </set>

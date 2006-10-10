@@ -1213,6 +1213,10 @@ SOURCE=..\..\include\wx\animate.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\animdecod.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\bmpcbox.h
 # End Source File
 # Begin Source File

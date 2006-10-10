@@ -2579,8 +2579,12 @@ COND_TOOLKIT_COCOA_ADVANCED_PLATFORM_HDR =  \
 	wx/cocoa/taskbar.h \
 	wx/mac/corefoundation/joystick.h
 @COND_TOOLKIT_COCOA@ADVANCED_PLATFORM_HDR = $(COND_TOOLKIT_COCOA_ADVANCED_PLATFORM_HDR)
-@COND_TOOLKIT_GTK@ADVANCED_PLATFORM_HDR = \
-@COND_TOOLKIT_GTK@	wx/unix/joystick.h wx/unix/sound.h wx/unix/taskbarx11.h
+COND_TOOLKIT_GTK_ADVANCED_PLATFORM_HDR =  \
+	wx/unix/joystick.h \
+	wx/unix/sound.h \
+	wx/unix/taskbarx11.h \
+	wx/gtk/animate.h
+@COND_TOOLKIT_GTK@ADVANCED_PLATFORM_HDR = $(COND_TOOLKIT_GTK_ADVANCED_PLATFORM_HDR)
 COND_TOOLKIT_MAC_ADVANCED_PLATFORM_HDR =  \
 	wx/generic/animate.h \
 	wx/mac/carbon/drawer.h \
@@ -2607,6 +2611,7 @@ COND_TOOLKIT_MSW_ADVANCED_PLATFORM_HDR =  \
 @COND_TOOLKIT_WINCE@ADVANCED_PLATFORM_NATIVE_HDR = wx/msw/datectrl.h
 COND_WXUNIV_0_ADVANCED_HDR =  \
 	wx/animate.h \
+	wx/animdecod.h \
 	wx/bmpcbox.h \
 	wx/calctrl.h \
 	wx/dataview.h \
@@ -2647,6 +2652,7 @@ COND_WXUNIV_0_ADVANCED_HDR =  \
 @COND_WXUNIV_0@ADVANCED_HDR = $(COND_WXUNIV_0_ADVANCED_HDR)
 COND_WXUNIV_1_ADVANCED_HDR =  \
 	wx/animate.h \
+	wx/animdecod.h \
 	wx/bmpcbox.h \
 	wx/calctrl.h \
 	wx/dataview.h \
