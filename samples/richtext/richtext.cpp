@@ -1282,7 +1282,7 @@ void MyFrame::OnInsertSymbol(wxCommandEvent& WXUNUSED(event))
             if (!dlg.UseNormalFont())
             {
                 wxFont font(attr.GetFont());
-                font.SetFaceName(dlg.GetNormalTextFontName());
+                font.SetFaceName(dlg.GetFontName());
                 attr.SetFont(font);
                 ctrl->SetStyle(insertionPoint, insertionPoint+1, attr);
             }
