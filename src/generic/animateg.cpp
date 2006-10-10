@@ -498,10 +498,11 @@ void wxAnimationCtrl::DrawCurrentFrame(wxDC& dc)
 }
 
 void wxAnimationCtrl::DisposeToBackground(wxDC& dc)
-{
-    wxBrush brush(IsUsingWindowBackgroundColour()
+{ 
+    wxColour col = IsUsingWindowBackgroundColour()
                     ? GetBackgroundColour()
-                    : m_animation.GetBackgroundColour());
+                    : m_animation.GetBackgroundColour() ;
+    wxBrush brush(col);
     dc.SetBackground(brush);
     dc.Clear();
 }
