@@ -59,10 +59,12 @@ class MyRenderer : public wxDelegateRendererNative
 public:
     MyRenderer() : wxDelegateRendererNative(wxRendererNative::GetDefault()) { }
 
-    virtual void DrawHeaderButton(wxWindow * WXUNUSED(win),
+    virtual void DrawHeaderButton(wxWindow *WXUNUSED(win),
                                   wxDC& dc,
                                   const wxRect& rect,
-                                  int WXUNUSED(flags) = 0)
+                                  int WXUNUSED(flags) = 0,
+                                  wxHeaderSortIconType WXUNUSED(sortArrow) = wxHDR_SORT_ICON_NONE,
+                                  wxHeaderButtonParams* WXUNUSED(params) = NULL)
     {
         dc.SetBrush(*wxBLUE_BRUSH);
         dc.SetTextForeground(*wxWHITE);
@@ -205,7 +207,7 @@ bool MyApp::OnInit()
 // frame constructor
 MyFrame::MyFrame()
        : wxFrame(NULL,
-                 -1,
+                 wxID_ANY,
                  _T("Render wxWidgets Sample"),
                  wxPoint(50, 50),
                  wxSize(450, 340))
