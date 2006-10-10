@@ -1011,6 +1011,10 @@ wxEvtHandler::wxEvtHandler()
     m_eventsLocker = new wxCriticalSection;
 #  endif
 #endif
+    // reentrace not allowed by default
+    m_reentranceAllowed = false;
+    m_eventHandlingInProgress = false;
+    
     // no client data (yet)
     m_clientData = NULL;
     m_clientDataType = wxClientData_None;
@@ -1131,10 +1135,13 @@ void wxEvtHandler::AddPendingEvent(wxEvent& event)
 
 void wxEvtHandler::ProcessPendingEvents()
 {
-    // this method is only called by wxApp if this handler does have pending
-    // events
+    // this method is only called by wxApp if this handler does have
+    // pending events
     wxCHECK_RET( m_pendingEvents,
                  wxT("Please call wxApp::ProcessPendingEvents() instead") );
+    
+    // eventhandling is now in progess
+    m_eventHandlingInProgress = true;
 
     wxENTER_CRIT_SECT( Lock() );
 
@@ -1152,11 +1159,16 @@ void wxEvtHandler::ProcessPendingEvents()
         // It's importan we remove event from list before processing it.
         // Else a nested event loop, for example from a modal dialog, might
         // process the same event again.
+
         m_pendingEvents->Erase(node);
 
         wxLEAVE_CRIT_SECT( Lock() );
 
         ProcessEvent(*event);
+
+        // eventhandling no longer in progess
+        m_eventHandlingInProgress = false;
+        
         delete event;
 
         wxENTER_CRIT_SECT( Lock() );
