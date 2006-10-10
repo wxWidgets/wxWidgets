@@ -350,8 +350,8 @@ class XmlResApp:
                 if filename not in flist:
                     flist.append(filename)
                     
-                inp = open(fullname)
-                out = open(os.path.join(self.parOutputPath, filename), "w")
+                inp = open(fullname, "rb")
+                out = open(os.path.join(self.parOutputPath, filename), "wb")
                 out.write(inp.read())
 
             # subnodes:
