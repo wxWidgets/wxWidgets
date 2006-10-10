@@ -62,6 +62,7 @@
 #if defined(__WXMSW__)
 
 #define USE_TRANSIENT_POPUP           1 // Use wxPopupWindowTransient (preferred, if it works properly on platform)
+#define TEXTCTRL_TEXT_CENTERED        0 // 1 if text in textctrl is vertically centered
 
 //#undef wxUSE_POPUPWIN
 //#define wxUSE_POPUPWIN 0
@@ -69,14 +70,17 @@
 #elif defined(__WXGTK__)
 
 #define USE_TRANSIENT_POPUP           1 // Use wxPopupWindowTransient (preferred, if it works properly on platform)
+#define TEXTCTRL_TEXT_CENTERED        1 // 1 if text in textctrl is vertically centered
 
 #elif defined(__WXMAC__)
 
 #define USE_TRANSIENT_POPUP           0 // Use wxPopupWindowTransient (preferred, if it works properly on platform)
+#define TEXTCTRL_TEXT_CENTERED        1 // 1 if text in textctrl is vertically centered
 
 #else
 
 #define USE_TRANSIENT_POPUP           0 // Use wxPopupWindowTransient (preferred, if it works properly on platform)
+#define TEXTCTRL_TEXT_CENTERED        1 // 1 if text in textctrl is vertically centered
 
 #endif
 
@@ -882,6 +886,7 @@ void wxComboCtrlBase::PositionTextCtrl( int textCtrlXAdjust, int textCtrlYAdjust
     wxSize sz = GetClientSize();
     int customBorder = m_widthCustomBorder;
 
+#if !TEXTCTRL_TEXT_CENTERED
     if ( (m_text->GetWindowStyleFlag() & wxBORDER_MASK) == wxNO_BORDER )
     {
         // Centre textctrl
@@ -908,12 +913,13 @@ void wxComboCtrlBase::PositionTextCtrl( int textCtrlXAdjust, int textCtrlYAdjust
         }
     }
     else
+#endif
     {
         // If it has border, have textctrl will the entire text field.
-        m_text->SetSize( m_tcArea.x,
-                         0,
+        m_text->SetSize( m_tcArea.x + m_widthCustomPaint,
+                         customBorder,
                          sz.x - m_btnArea.width - m_widthCustomPaint - customBorder,
-                         sz.y );
+                         sz.y-(customBorder*2) );
     }
 }
 
