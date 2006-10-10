@@ -1151,6 +1151,9 @@ void wxDCBase::CalculateEllipticPoints( wxList* points,
 // temporary home for wxOverlay
 //
 
+#include "wx/dcclient.h"
+#include "wx/dcmemory.h"
+
 #if defined(wxMAC_USE_CORE_GRAPHICS) && wxMAC_USE_CORE_GRAPHICS
 
 #include "wx/mac/private.h"
