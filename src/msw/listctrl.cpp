@@ -369,7 +369,7 @@ bool wxListCtrl::Create(wxWindow *parent,
 
     // We must set the default text colour to the system/theme colour, otherwise
     // GetTextColour will always return black
-    SetTextColour(GetDefaultAttributes.colFg);
+    SetTextColour(GetDefaultAttributes().colFg);
 
     // for comctl32.dll v 4.70+ we want to have some non default extended
     // styles because it's prettier (and also because wxGTK does it like this)
