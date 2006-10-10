@@ -1192,12 +1192,6 @@ private:
     // we store the window in case we would have to issue a Refresh()
     wxWindow* m_window ;
     
-    EventHandlerRef m_overlayParentHandler ;
-    EventHandlerRef m_overlayHandler;
-
-    static  pascal  OSStatus OverlayParentWindowEventHandlerProc( EventHandlerCallRef inCallRef, EventRef inEvent, void* inUserData );
-    static  pascal  OSStatus OverlayWindowEventHandlerProc( EventHandlerCallRef inCallRef, EventRef inEvent, void* inUserData );
-    
     int m_x ;
     int m_y ;
     int m_width ;
@@ -1218,61 +1212,7 @@ wxOverlayImpl::~wxOverlayImpl()
 
 bool wxOverlayImpl::IsOk() 
 {
-    return m_overlayContext != NULL ;
-}
-
-pascal  OSStatus wxOverlayImpl::OverlayWindowEventHandlerProc( EventHandlerCallRef WXUNUSED(inCallRef), EventRef inEvent, void* inUserData )
-{
-    OSStatus  err = noErr ;
-    wxOverlayImpl* self = (wxOverlayImpl*) inUserData;
-    
-    wxMacCarbonEvent cEvent(inEvent) ;
-    switch( cEvent.GetClass() )
-    {
-        case kEventClassWindow:
-            switch( cEvent.GetKind() )
-            {
-                case kEventWindowBoundsChanged:
-                    break;
-                default :
-                    break;
-            }
-            break ;
-        default :
-            break ;
-    }
-    // as we didn't interfere with the event itself, always return a notHandled
-    return eventNotHandledErr ;
-}
-
-pascal  OSStatus wxOverlayImpl::OverlayParentWindowEventHandlerProc( EventHandlerCallRef inCallRef, EventRef inEvent, void* inUserData )
-{
-    OSStatus err = eventNotHandledErr ;
-    wxOverlayImpl* self = (wxOverlayImpl*) inUserData;
-    
-    wxMacCarbonEvent cEvent(inEvent) ;
-    switch( cEvent.GetClass() )
-    {
-        case kEventClassWindow:
-            switch( cEvent.GetKind() )
-            {
-                case kEventWindowBoundsChanging:
-                case kEventWindowBoundsChanged:
-                    {
-                        err = CallNextEventHandler(inCallRef,inEvent);
-                        Rect bounds ;
-                        self->MacGetBounds(&bounds);
-                        SetWindowBounds(self->m_overlayWindow,kWindowContentRgn,&bounds);
-                    }
-                    break;
-                default :
-                    break;
-            }
-            break ;
-        default :
-            break ;
-    }
-    return err ;
+    return m_overlayWindow != NULL ;
 }
 
 void wxOverlayImpl::MacGetBounds( Rect *bounds )
@@ -1289,27 +1229,8 @@ OSStatus wxOverlayImpl::CreateOverlayWindow()
 {
     OSStatus err;
 
-    WindowAttributes overlayAttributes  = kWindowHideOnSuspendAttribute | kWindowIgnoreClicksAttribute;
-    
-    static  EventHandlerUPP    overlayWindowEventHandlerUPP = NULL ;
-    static  EventHandlerUPP    overlayParentWindowEventHandlerUPP = NULL ;
-    const EventTypeSpec  windowEvents[]  =
-    {
-        { kEventClassWindow, kEventWindowBoundsChanged },
-    };
-    
-    const EventTypeSpec  parentWindowEvents[]  =
-    {
-        { kEventClassWindow, kEventWindowBoundsChanged },
-        { kEventClassWindow, kEventWindowBoundsChanging },
-    };
-    
-    if ( overlayWindowEventHandlerUPP == NULL ) 
-        overlayWindowEventHandlerUPP  = NewEventHandlerUPP( OverlayWindowEventHandlerProc );
-    if ( overlayParentWindowEventHandlerUPP == NULL ) 
-    
-        overlayParentWindowEventHandlerUPP  = NewEventHandlerUPP( OverlayParentWindowEventHandlerProc );
-    
+    WindowAttributes overlayAttributes  = kWindowIgnoreClicksAttribute;
+        
     m_overlayParentWindow =(WindowRef) m_window->MacGetTopLevelWindowRef();
     
     Rect bounds ;
@@ -1317,10 +1238,8 @@ OSStatus wxOverlayImpl::CreateOverlayWindow()
     err  = CreateNewWindow( kOverlayWindowClass, overlayAttributes, &bounds, &m_overlayWindow );  
     if ( err == noErr ) 
     {
-        SetWindowGroup( m_overlayWindow, GetWindowGroup(m_overlayParentWindow) );    //  Put them in the same group so that their window layers are consistent
-        err  = InstallWindowEventHandler( m_overlayWindow, overlayWindowEventHandlerUPP, GetEventTypeCount(windowEvents), windowEvents, this, &m_overlayHandler );
-        if ( err == noErr )
-            err  = InstallWindowEventHandler( m_overlayParentWindow, overlayParentWindowEventHandlerUPP, GetEventTypeCount(parentWindowEvents), parentWindowEvents, this, &m_overlayParentHandler );
+        SetWindowGroup( m_overlayWindow, GetWindowGroup(m_overlayParentWindow));    //  Put them in the same group so that their window layers are consistent
+        ShowWindow(m_overlayWindow);
     }
     return err;
 }
@@ -1337,8 +1256,7 @@ void wxOverlayImpl::Init( wxWindowDC* dc, int x , int y , int width , int height
     
     OSStatus err = CreateOverlayWindow();
     wxASSERT_MSG(  err == noErr , _("Couldn't create the overlay window") );
-    ShowWindow(m_overlayWindow);
-    
+
     err = QDBeginCGContext(GetWindowPort(m_overlayWindow), &m_overlayContext);
     CGContextTranslateCTM( m_overlayContext, 0, m_height+m_y );
     CGContextScaleCTM( m_overlayContext, 1, -1 );
@@ -1360,15 +1278,16 @@ void wxOverlayImpl::BeginDrawing( wxWindowDC* dc)
 
 void wxOverlayImpl::EndDrawing( wxWindowDC* dc)
 {
+    delete dc->m_graphicContext ;
+    dc->m_graphicContext = NULL ;
+
 }
 
 void wxOverlayImpl::Clear(wxWindowDC* dc) 
 {
     wxASSERT_MSG( IsOk() , _("You cannot Clear an overlay that is not inited") );
-    delete dc->m_graphicContext ;
-    dc->m_graphicContext = NULL ;
-
-    Reset();
+    CGRect box  = CGRectMake( m_x - 1, m_y - 1 , m_width + 2 , m_height + 2 );
+    CGContextClearRect( m_overlayContext, box );
 }
 
 void wxOverlayImpl::Reset()
@@ -1379,15 +1298,11 @@ void wxOverlayImpl::Reset()
         wxASSERT_MSG(  err == noErr , _("Couldn't end the context on the overlay window") );
 
         m_overlayContext = NULL ;
-    }
+    }    
     
     // todo : don't dispose, only hide and reposition on next run
     if (m_overlayWindow)
     {
-        RemoveEventHandler( m_overlayParentHandler ) ;
-        m_overlayParentHandler = NULL;
-        RemoveEventHandler( m_overlayHandler ) ;
-        m_overlayHandler = NULL;
         DisposeWindow(m_overlayWindow);
         m_overlayWindow = NULL ;
     }
