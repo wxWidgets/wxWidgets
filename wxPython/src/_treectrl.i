@@ -132,7 +132,7 @@ public:
     const wxTreeItemId& GetId();
     void                SetId(const wxTreeItemId& id);
 
-    %pythonAppend Destroy "args[0].thisown = 0"
+    %pythonPrepend Destroy "args[0].this.own(False)"
     %extend { void Destroy() { delete self; } }
 
     %property(Data, GetData, SetData, doc="See `GetData` and `SetData`");

@@ -750,7 +750,7 @@ public:
     virtual void StartingClick();
     virtual void HandleReturn(wxKeyEvent& event);
 
-    %pythonAppend Destroy "args[0].thisown = 0"
+    %pythonPrepend Destroy "args[0].this.own(False)"
     virtual void Destroy();
 
     %property(CellAttr, GetCellAttr, SetCellAttr, doc="See `GetCellAttr` and `SetCellAttr`");
@@ -1345,7 +1345,7 @@ public:
     wxPyGridTableBase();
     void _setCallbackInfo(PyObject* self, PyObject* _class);
 
-    %pythonAppend Destroy "args[0].thisown = 0"
+    %pythonPrepend Destroy "args[0].this.own(False)"
     %extend { void Destroy() { delete self; } }
 
     wxString GetTypeName( int row, int col );

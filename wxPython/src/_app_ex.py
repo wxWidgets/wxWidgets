@@ -191,8 +191,8 @@ in on the main display of your Mac."""
         destroy(self)
 
     def Destroy(self):
+        self.this.own(False)
         wx.PyApp.Destroy(self)
-        self.thisown = 0
 
     def SetTopWindow(self, frame):
         """Set the \"main\" top level window"""

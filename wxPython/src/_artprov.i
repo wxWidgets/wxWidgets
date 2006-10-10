@@ -299,7 +299,7 @@ topmost provider if platform_dependent = false", "");
     
     
 
-    %pythonAppend Destroy "args[0].thisown = 0"
+    %pythonPrepend Destroy "args[0].this.own(False)"
     %extend { void Destroy() { delete self; }}
 };
 

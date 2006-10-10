@@ -108,7 +108,7 @@ public:
 
     void _setCallbackInfo(PyObject* self, PyObject* _class, int incref);
 
-    %pythonAppend Destroy "args[0].thisown = 0";
+    %pythonPrepend Destroy "args[0].this.own(False)";
     %extend {
         void Destroy() {
             self->RemoveIcon();

@@ -140,12 +140,20 @@ public:
     bool Delete(int id);
     %Rename(DeleteItem,  bool, Delete(wxMenuItem *item));
 
-    %pythonAppend Destroy "args[0].thisown = 0"
+    %pythonPrepend Destroy "args[0].this.own(False)"
     %extend { void Destroy() { delete self; } }
     
     // delete the item from menu and destroy it (if it's a submenu)
-    %Rename(DestroyId,  bool, Destroy(int id));
-    %Rename(DestroyItem,  bool, Destroy(wxMenuItem *item));
+    %pythonPrepend Destroy "";
+    DocDeclStrName(
+        bool , Destroy(int id),
+        "", "",
+        DestroyId);
+    
+    DocDeclStrName(
+        bool , Destroy(wxMenuItem *item),
+        "", "",
+        DestroyItem);
 
 
     // get the items

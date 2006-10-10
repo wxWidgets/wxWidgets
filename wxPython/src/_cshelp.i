@@ -285,7 +285,7 @@ table of help strings will fill up and when window pointers are
 reused, the wrong help string will be found.", "");
     
     
-    %pythonAppend Destroy "args[0].thisown = 0"
+    %pythonPrepend Destroy "args[0].this.own(False)"
     %extend { void Destroy() { delete self; } }
 };
 

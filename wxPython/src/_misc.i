@@ -54,7 +54,7 @@ public:
     ~wxCaret(); 
 
     %extend {
-        %pythonAppend Destroy "args[0].thisown = 0"
+        %pythonPrepend Destroy "args[0].this.own(False)"
         DocStr(Destroy,
                "Deletes the C++ object this Python object is a proxy for.", "");
         void Destroy() {

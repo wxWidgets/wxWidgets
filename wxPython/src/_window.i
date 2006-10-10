@@ -259,7 +259,7 @@ instead.");
     
 
 
-    %pythonAppend Destroy "args[0].thisown = 0"
+    %pythonPrepend Destroy "args[0].this.own(False)"
     DocDeclStr(
         virtual bool , Destroy(),
         "Destroys the window safely.  Frames and dialogs are not destroyed
