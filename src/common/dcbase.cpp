@@ -1317,8 +1317,11 @@ bool wxOverlayImpl::IsOk()
 
 void wxOverlayImpl::Init( wxWindowDC* dc, int x , int y , int width , int height )
 {
+#if defined(__WXGTK__)
+    m_window = dc->m_owner;
+#else
     m_window = dc->GetWindow();
-    
+#endif
     wxMemoryDC dcMem ;
     m_bmpSaved.Create( width, height );
     dcMem.SelectObject( m_bmpSaved );
