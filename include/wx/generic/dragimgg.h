@@ -20,6 +20,10 @@
 #include "wx/listctrl.h"
 #include "wx/log.h"
 
+#if defined(wxMAC_USE_CORE_GRAPHICS) && wxMAC_USE_CORE_GRAPHICS
+#include "wx/dc.h"
+#endif
+
 /*
   To use this class, create a wxDragImage when you start dragging, for example:
 
@@ -158,7 +162,12 @@ public:
 
     // For efficiency, tell wxGenericDragImage to use a bitmap that's already
     // created (e.g. from last drag)
-    void SetBackingBitmap(wxBitmap* bitmap) { m_pBackingBitmap = bitmap; }
+    void SetBackingBitmap(wxBitmap* bitmap) { 
+#if defined(wxMAC_USE_CORE_GRAPHICS) && wxMAC_USE_CORE_GRAPHICS
+#else
+        m_pBackingBitmap = bitmap; 
+#endif
+    }
 
     // Operations
     ////////////////////////////////////////////////////////////////////////////
@@ -242,12 +251,17 @@ protected:
     wxWindow*       m_window;
     wxDC*           m_windowDC;
 
+#if defined(wxMAC_USE_CORE_GRAPHICS) && wxMAC_USE_CORE_GRAPHICS
+    wxOverlay       m_overlay;
+    wxDCOverlay*     m_dcOverlay;
+#else
     // Stores the window contents while we're dragging the image around
     wxBitmap        m_backingBitmap;
     wxBitmap*       m_pBackingBitmap; // Pointer to existing backing bitmap
                                       // (pass to wxGenericDragImage as an efficiency measure)
     // A temporary bitmap for repairing/redrawing
     wxBitmap        m_repairBitmap;
+#endif
 
     wxRect          m_boundingRect;
     bool            m_fullScreen;
