@@ -469,7 +469,7 @@ public:
         { m_targetDc->ResetBoundingBox(); }
 #if defined(__WXWINCE__)
     void Rotate( wxList* points, double angle, wxPoint center = wxPoint(0,0) )
-        { m_targetDc->Rotate(points, angle, center, 0)); }
+        { m_targetDc->Rotate(points, angle, center); }
 #endif // defined(__WXWINCE__)
     virtual void SetAxisOrientation(bool xLeftRight, bool yBottomUp)
         { m_targetDc->SetAxisOrientation(xLeftRight, yBottomUp); }
