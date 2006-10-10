@@ -39,7 +39,8 @@
 #if wxTEST_GRAPHICS
 #include "wx/graphics.h"
 #if wxUSE_GRAPHICS_CONTEXT == 0
-#error wxUSE_GRAPHICS_CONTEXT must be defined to 1 for testing
+#undef wxTEST_GRAPHICS
+#define wxTEST_GRAPHICS 0
 #endif
 #else
 #undef wxUSE_GRAPHICS_CONTEXT
