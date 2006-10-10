@@ -32,7 +32,7 @@
 #include "wx/anidecod.h"
 
 #include "wx/listimpl.cpp"
-WX_DEFINE_LIST(wxAnimationDecoderList);
+WX_DEFINE_LIST(wxAnimationDecoderList)
 
 wxAnimationDecoderList wxAnimation::sm_handlers;
 

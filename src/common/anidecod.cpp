@@ -16,18 +16,17 @@
 
 #if wxUSE_STREAMS && wxUSE_GIF
 
+#include "wx/anidecod.h"
+
 #ifndef WX_PRECOMP
     #include "wx/palette.h"
 #endif
 
 #include <stdlib.h>
 #include <string.h>
-#include "wx/anidecod.h"
 
 // static
 wxCURHandler wxANIDecoder::sm_handler;
-
-
 
 //---------------------------------------------------------------------------
 // wxANIFrameInfo
@@ -43,13 +42,11 @@ public:
     int m_imageIndex;
 };
 
-#include <wx/arrimpl.cpp> // this is a magic incantation which must be done!
-WX_DEFINE_OBJARRAY(wxImageArray);
+#include "wx/arrimpl.cpp" // this is a magic incantation which must be done!
+WX_DEFINE_OBJARRAY(wxImageArray)
 
-#include <wx/arrimpl.cpp> // this is a magic incantation which must be done!
-WX_DEFINE_OBJARRAY(wxANIFrameInfoArray);
-
-
+#include "wx/arrimpl.cpp" // this is a magic incantation which must be done!
+WX_DEFINE_OBJARRAY(wxANIFrameInfoArray)
 
 
 //---------------------------------------------------------------------------
@@ -330,7 +327,7 @@ bool wxANIDecoder::Load( wxInputStream& stream )
         m_szAnimation.GetHeight() == 0)
         m_szAnimation = wxSize(m_images[0].GetWidth(), m_images[0].GetHeight());
 
-    return m_szAnimation!=wxDefaultSize;
+    return m_szAnimation != wxDefaultSize;
 }
 
 #endif // wxUSE_STREAMS && wxUSE_GIF
