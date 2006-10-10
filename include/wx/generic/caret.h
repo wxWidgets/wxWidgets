@@ -26,6 +26,18 @@ private:
     wxCaret *m_caret;
 };
 
+#ifndef wxUSE_OVERLAY
+    #if defined(wxMAC_USE_CORE_GRAPHICS) && wxMAC_USE_CORE_GRAPHICS
+        #define wxUSE_OVERLAY 1
+    #else
+        #define wxUSE_OVERLAY 0
+    #endif
+#endif
+
+#if wxUSE_OVERLAY
+    #include "wx/dc.h"
+#endif
+
 class WXDLLIMPEXP_CORE wxCaret : public wxCaretBase
 {
 public:
@@ -70,11 +82,16 @@ private:
     // GTK specific initialization
     void InitGeneric();
 
+#if wxUSE_OVERLAY
+    // the overlay for displaying the caret
+    wxOverlay   m_overlay;
+#else
     // the bitmap holding the part of window hidden by the caret when it was
     // at (m_xOld, m_yOld)
     wxBitmap      m_bmpUnderCaret;
     int           m_xOld,
                   m_yOld;
+#endif
 
     wxCaretTimer  m_timer;
     bool          m_blinkedOut,     // true => caret hidden right now
