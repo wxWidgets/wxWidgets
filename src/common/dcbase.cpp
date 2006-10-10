@@ -1397,7 +1397,7 @@ void wxOverlayImpl::Reset()
 //
 //
 
-#else
+#else // ie not wxMAC_USE_CORE_GRAPHICS
 
 class wxOverlayImpl
 {
@@ -1427,12 +1427,20 @@ private:
     int m_y ;
     int m_width ;
     int m_height ;
+// this is to enable wxMOTIF and UNIV to compile....
+// currently (10 oct 06) we don't use m_window
+// ce - how do we fix this
+#if defined(__WXGTK__) || defined(__WXMSW__)
+//    
     wxWindow* m_window ;
+#endif   
 } ;
 
 wxOverlayImpl::wxOverlayImpl()
 {
-    m_window = NULL ;
+#if defined(__WXGTK__) || defined(__WXMSW__)
+     m_window = NULL ;
+#endif   
      m_x = m_y = m_width = m_height = 0 ;
 }
 
@@ -1450,7 +1458,10 @@ void wxOverlayImpl::Init( wxWindowDC* dc, int x , int y , int width , int height
 #if defined(__WXGTK__)
     m_window = dc->m_owner;
 #else
+    #if defined (__WXMSW__) 
     m_window = dc->GetWindow();
+    #endif  // __WXMSW__
+   
 #endif
     wxMemoryDC dcMem ;
     m_bmpSaved.Create( width, height );
