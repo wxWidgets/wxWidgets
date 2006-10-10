@@ -75,7 +75,9 @@ bool MyApp::OnInit()
 {
     // Create the main frame window
 
-    MyFrame* frame = new MyFrame((wxFrame *)NULL, wxID_ANY, _T("Animation Demo"));
+    MyFrame* frame = new MyFrame((wxFrame *)NULL, wxID_ANY, _T("Animation Demo"),
+                        wxDefaultPosition, wxSize(500, 400),
+                        wxDEFAULT_FRAME_STYLE);
 
     // Give it an icon
     frame->SetIcon(wxICON(sample));
