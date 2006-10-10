@@ -237,9 +237,6 @@ void wxGraphicsContext::DrawRoundedRectangle( wxDouble x, wxDouble y, wxDouble w
         PushState();
         Translate( x , y );
 
-        double fw = w / radius;
-        double fh = h / radius;
-        
         path->MoveToPoint(w, h / 2);
         path->AddArcToPoint(w, h, w / 2, h, radius);
         path->AddArcToPoint(0, h, 0, h / 2, radius);
@@ -257,7 +254,7 @@ void wxGraphicsContext::StrokeLines( size_t n, const wxPoint2DDouble *points)
     wxASSERT(n > 1);
     wxGraphicsPath* path = CreatePath();
     path->MoveToPoint(points[0].m_x, points[0].m_y) ;
-    for ( int i = 1 ; i < n; ++i)
+    for ( size_t i = 1 ; i < n; ++i)
         path->AddLineToPoint( points[i].m_x, points[i].m_y );
     StrokePath( path );
     delete path;
@@ -268,7 +265,7 @@ void wxGraphicsContext::DrawLines( size_t n, const wxPoint2DDouble *points, int 
     wxASSERT(n > 1);
     wxGraphicsPath* path = CreatePath();
     path->MoveToPoint(points[0].m_x, points[0].m_y) ;
-    for ( int i = 1 ; i < n; ++i)
+    for ( size_t i = 1 ; i < n; ++i)
         path->AddLineToPoint( points[i].m_x, points[i].m_y );
     DrawPath( path , fillStyle);
     delete path;
@@ -278,7 +275,7 @@ void wxGraphicsContext::StrokeLines( size_t n, const wxPoint2DDouble *beginPoint
 {
     wxASSERT(n > 0);
     wxGraphicsPath* path = CreatePath();
-    for ( int i = 0 ; i < n; ++i)
+    for ( size_t i = 0 ; i < n; ++i)
     {
         path->MoveToPoint(beginPoints[i].m_x, beginPoints[i].m_y) ;
         path->AddLineToPoint( endPoints[i].m_x, endPoints[i].m_y );
@@ -333,7 +330,7 @@ wxGCDC::~wxGCDC()
     delete m_graphicContext;
 }
 
-void wxGCDC::DoDrawBitmap( const wxBitmap &bmp, wxCoord x, wxCoord y, bool useMask )
+void wxGCDC::DoDrawBitmap( const wxBitmap &bmp, wxCoord x, wxCoord y, bool WXUNUSED(useMask) )
 {
     wxCHECK_RET( Ok(), wxT("wxGCDC(cg)::DoDrawBitmap - invalid DC") );
     wxCHECK_RET( bmp.Ok(), wxT("wxGCDC(cg)::DoDrawBitmap - invalid bitmap") );
@@ -363,7 +360,7 @@ void wxGCDC::DoDrawIcon( const wxIcon &icon, wxCoord x, wxCoord y )
     m_graphicContext->DrawIcon( icon , xx, yy, ww, hh );
 }
 
-void wxGCDC::DoSetClippingRegion( wxCoord x, wxCoord y, wxCoord width, wxCoord height )
+void wxGCDC::DoSetClippingRegion( wxCoord WXUNUSED(x), wxCoord WXUNUSED(y), wxCoord WXUNUSED(width), wxCoord WXUNUSED(height) )
 {
     // TODO Clipping
 #if 0
@@ -590,8 +587,10 @@ void wxGCDC::ComputeScaleAndOrigin()
     SetPen( pen );
 }
 
-void wxGCDC::SetPalette( const wxPalette& palette )
-{}
+void wxGCDC::SetPalette( const wxPalette& WXUNUSED(palette) )
+{
+
+}
 
 void wxGCDC::SetBackgroundMode( int mode )
 {
@@ -688,14 +687,13 @@ void wxGCDC::SetLogicalFunction( int function )
 extern bool wxDoFloodFill(wxDC *dc, wxCoord x, wxCoord y,
                               const wxColour & col, int style);
 
-bool wxGCDC::DoFloodFill(wxCoord x, wxCoord y,
-                         const wxColour& col, int style)
+bool wxGCDC::DoFloodFill(wxCoord WXUNUSED(x), wxCoord WXUNUSED(y),
+                         const wxColour& WXUNUSED(col), int WXUNUSED(style))
 {
-    //    return wxDoFloodFill(this, x, y, col, style);
     return false;
 }
 
-bool wxGCDC::DoGetPixel( wxCoord x, wxCoord y, wxColour *col ) const
+bool wxGCDC::DoGetPixel( wxCoord WXUNUSED(x), wxCoord WXUNUSED(y), wxColour *WXUNUSED(col) ) const
 {
     //  wxCHECK_MSG( 0 , false, wxT("wxGCDC(cg)::DoGetPixel - not implemented") );
     return false;
@@ -1094,9 +1092,9 @@ bool wxGCDC::CanDrawBitmap() const
 }
 
 bool wxGCDC::DoBlit(
-    wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord height,
-    wxDC *source, wxCoord xsrc, wxCoord ysrc, int logical_func , bool useMask,
-    wxCoord xsrcMask, wxCoord ysrcMask )
+    wxCoord WXUNUSED(xdest), wxCoord WXUNUSED(ydest), wxCoord WXUNUSED(width), wxCoord WXUNUSED(height),
+    wxDC *source, wxCoord WXUNUSED(xsrc), wxCoord WXUNUSED(ysrc), int logical_func , bool WXUNUSED(useMask),
+    wxCoord WXUNUSED(xsrcMask), wxCoord WXUNUSED(ysrcMask) )
 {
     wxCHECK_MSG( Ok(), false, wxT("wxGCDC(cg)::DoBlit - invalid DC") );
     wxCHECK_MSG( source->Ok(), false, wxT("wxGCDC(cg)::DoBlit - invalid source DC") );
@@ -1104,6 +1102,7 @@ bool wxGCDC::DoBlit(
     if ( logical_func == wxNO_OP )
         return true;
 
+#if 0
     if (xsrcMask == -1 && ysrcMask == -1)
     {
         xsrcMask = xsrc;
@@ -1123,7 +1122,6 @@ bool wxGCDC::DoBlit(
     wxMemoryDC* memdc = dynamic_cast<wxMemoryDC*>(source);
     if ( memdc && logical_func == wxCOPY )
     {
-#if 0
         wxBitmap blit = memdc->GetSelectedObject();
 
         wxASSERT_MSG( blit.Ok() , wxT("Invalid bitmap for blitting") );
@@ -1160,7 +1158,6 @@ bool wxGCDC::DoBlit(
         {
             m_graphicContext->DrawBitmap( blit, xxdest , yydest , wwdest , hhdest );
         }
-#endif
 
     }
     else
@@ -1168,8 +1165,9 @@ bool wxGCDC::DoBlit(
         wxFAIL_MSG( wxT("Blitting is only supported from bitmap contexts") );
         return false;
     }
+#endif
 
-    return true;
+    return false;
 }
 
 void wxGCDC::DoDrawRotatedText(const wxString& str, wxCoord x, wxCoord y,
