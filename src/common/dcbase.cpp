@@ -1330,7 +1330,7 @@ void wxOverlayImpl::Init( wxWindowDC* dc, int x , int y , int width , int height
     m_width = width ;
     m_height = height ;
 #if defined(__WXGTK__) && !defined(__WX_DC_BLIT_FIXED__)
-    wxPoint pt = dcWin.GetDeviceOrigin();
+    wxPoint pt = dc->GetDeviceOrigin();
     x += pt.x;
     y += pt.y;
 #endif // broken wxGTK wxDC::Blit
