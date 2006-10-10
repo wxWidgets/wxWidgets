@@ -5,6 +5,13 @@
 
     <include file="../../build/bakefiles/common_samples.bkl"/>
 
+    <if cond="OUT_OF_TREE_MAKEFILES=='1'">
+        <option name="SHARED">
+            <default-value>0</default-value>
+            <description>Build shared lib plugin</description>
+        </option>
+    </if>
+
     <exe id="render" template="wx_sample" template_append="wx_append">
         <sources>render.cpp</sources>
         <wx-lib>core</wx-lib>

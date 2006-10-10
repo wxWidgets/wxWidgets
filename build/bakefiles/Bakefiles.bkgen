@@ -256,6 +256,15 @@
         -DOPTIONS_FILE=../../../../build/msw/config.wat
     </add-flags>
 
+    
+    <!-- Makefiles for out-of-tree building of samples on Unix: -->
+    <add-formats files="../../samples/*/*.bkl,../../samples/*/*/*.bkl">
+        gnu
+    </add-formats>
+    <add-flags files="../../samples/*/*.bkl,../../samples/*/*/*.bkl"
+               formats="gnu">
+        -DOUT_OF_TREE_MAKEFILES=1 -o$(INPUT_FILE_DIR)/makefile.unx
+    </add-flags>
 
     <!-- Personal customizations (not in CVS): -->
     <include file="Bakefiles.local.bkgen" ignore_missing="1"/>

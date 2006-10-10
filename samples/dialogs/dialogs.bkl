@@ -4,6 +4,9 @@
     <include file="../../build/bakefiles/common_samples.bkl"/>
 
     <set var="GENERIC_DIALOGS_IN_NATIVE_BUILDS">
+        <if cond="OUT_OF_TREE_MAKEFILES=='1'">
+            <!-- no files that are not part of the sample in this case -->
+        </if>
         <if cond="TOOLKIT=='MSW' and WXUNIV=='0' and SHARED=='0'">
             $(WXTOPDIR)src/generic/colrdlgg.cpp
             $(WXTOPDIR)src/generic/dirdlgg.cpp

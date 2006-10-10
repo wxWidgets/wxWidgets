@@ -3,6 +3,10 @@
 
     <include file="../../build/bakefiles/common_samples.bkl"/>
 
+    <if cond="OUT_OF_TREE_MAKEFILES=='1'">
+        <set var="USE_ODBC">1</set>
+    </if>
+
     <exe id="dbtest" 
          cond="USE_ODBC=='1'"
          template="wx_sample" template_append="wx_append">

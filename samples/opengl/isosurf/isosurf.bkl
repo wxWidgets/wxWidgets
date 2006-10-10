@@ -5,6 +5,10 @@
 
     <include file="../../../build/bakefiles/common_samples.bkl"/>
 
+    <if cond="OUT_OF_TREE_MAKEFILES=='1'">
+        <set var="USE_OPENGL">1</set>
+    </if>
+
     <exe id="isosurf" template="wx_sample" template_append="wx_append" cond="USE_OPENGL=='1'">
         <sources>isosurf.cpp</sources>
         <wx-lib>gl</wx-lib>
