@@ -35,6 +35,10 @@
 #include "wx/sstream.h"
 #include "wx/html/htmlwin.h"
 
+#if wxUSE_HELP
+#include "wx/cshelp.h"
+#endif
+
 #ifndef __WXMSW__
     #include "../sample.xpm"
 #endif
@@ -272,6 +276,10 @@ IMPLEMENT_APP(MyApp)
 // 'Main program' equivalent: the program execution "starts" here
 bool MyApp::OnInit()
 {
+#if wxUSE_HELP
+    wxHelpProvider::Set(new wxSimpleHelpProvider);
+#endif
+
     m_styleSheet = new wxRichTextStyleSheet;
 
     CreateStyles();
