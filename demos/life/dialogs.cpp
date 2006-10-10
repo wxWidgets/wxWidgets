@@ -129,15 +129,10 @@ LifeSamplesDialog::LifeSamplesDialog(wxWindow *parent)
 #endif // wxUSE_STATLINE
     sizer3->Add( sizer2, 1, wxGROW | wxALL, 5 );
 
-    wxSizer *buttonSizer = CreateButtonSizer( wxOK|wxCANCEL , true, 10 );
-    if(buttonSizer->GetChildren().GetCount() > 0 )
+    wxSizer *sizerBtns = CreateButtonSizer(wxOK|wxCANCEL);
+    if ( sizerBtns )
     {
-        sizer3->Add( buttonSizer, 0, wxEXPAND | wxALL, 10 );
-    }
-    else
-    {
-        sizer3->AddSpacer( 10 );
-        delete buttonSizer;
+        sizer3->Add(sizerBtns, wxSizerFlags().Expand().Border());
     }
 
     // activate
@@ -202,15 +197,10 @@ XLife is (c) 1989 by Jon Bennett et al.")),
                                   0, wxCENTRE | wxRIGHT|wxLEFT|wxTOP, 20 );
 
     // buttons if any
-    wxSizer *buttonSizer = CreateButtonSizer( wxOK , true, 10 );
-    if(buttonSizer->GetChildren().GetCount() > 0 )
+    wxSizer *sizerBtns = CreateButtonSizer(wxOK);
+    if ( sizerBtns )
     {
-        sizer->Add( buttonSizer, 0, wxEXPAND | wxALL, 10 );
-    }
-    else
-    {
-        sizer->AddSpacer( 20 );
-        delete buttonSizer;
+        sizer->Add(sizerBtns, wxSizerFlags().Expand().Border());
     }
 
     // activate
