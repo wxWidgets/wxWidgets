@@ -55,6 +55,14 @@ Returns the length of the range.
 
 Returns the start of the range.
 
+\membersection{wxRichTextRange::FromInternal}\label{wxrichtextrangefrominternal}
+
+\constfunc{wxRichTextRange}{FromInternal}{\void}
+
+Converts the internal range, which uses the first and last character positions of the range,
+to the API-standard range, whose end is one past the last character in the range.
+In other words, one is added to the end position.
+
 \membersection{wxRichTextRange::IsOutside}\label{wxrichtextrangeisoutside}
 
 \constfunc{bool}{IsOutside}{\param{const wxRichTextRange\& }{range}}
@@ -97,6 +105,14 @@ Sets the start of the range.
 
 Swaps the start and end.
 
+\membersection{wxRichTextRange::ToInternal}\label{wxrichtextrangetointernal}
+
+\constfunc{wxRichTextRange}{ToInternal}{\void}
+
+Converts the API-standard range, whose end is one past the last character in the range,
+to the internal form, which uses the first and last character positions of the range.
+In other words, one is subtracted from the end position.
+
 \membersection{wxRichTextRange::operator+}\label{wxrichtextrangeoperatorplus}
 
 \constfunc{wxRichTextRange}{operator+}{\param{const wxRichTextRange\& }{range}}
@@ -107,7 +123,7 @@ Adds {\it range} to this range.
 
 \constfunc{wxRichTextRange}{operator-}{\param{const wxRichTextRange\& }{range}}
 
-Subtracs {\it range} from this range.
+Subtracts {\it range} from this range.
 
 \membersection{wxRichTextRange::operator=}\label{wxrichtextrangeoperatorassign}
 
@@ -120,3 +136,4 @@ Assigns {\it range} to this range.
 \constfunc{bool}{operator==}{\param{const wxRichTextRange\& }{range}}
 
 Returns \true if {\it range} is the same as this range.
+

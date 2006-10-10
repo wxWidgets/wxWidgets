@@ -1,3 +1,67 @@
+\section{\class{wxRichTextStyleComboCtrl}}\label{wxrichtextstylecomboctrl}
+
+This is a combo control that can display the styles in a \helpref{wxRichTextStyleSheet}{wxrichtextstylesheet},
+and apply the selection to an associated \helpref{wxRichTextCtrl}{wxrichtextctrl}.
+
+See {\tt samples/richtext} for an example of how to use it.
+
+\wxheading{Derived from}
+
+\helpref{wxComboCtrl}{wxcomboctrl}
+
+\wxheading{Include files}
+
+<wx/richtext/richtextstyles.h>
+
+\wxheading{See also}
+
+\helpref{wxRichTextStyleListBox}{wxrichtextstylelistbox}, \helpref{wxRichTextCtrl overview}{wxrichtextctrloverview}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxRichTextStyleComboCtrl::wxRichTextStyleComboCtrl}\label{wxrichtextstylecomboctrlwxrichtextstylecomboctrl}
+
+\func{}{wxRichTextStyleComboCtrl}{\param{wxWindow* }{parent}, \param{wxWindowID }{id = wxID\_ANY}, \param{const wxPoint\& }{pos = wxDefaultPosition}, \param{const wxSize\& }{size = wxDefaultSize}, \param{long }{style = 0}}
+
+Constructor.
+
+\membersection{wxRichTextStyleComboCtrl::\destruct{wxRichTextStyleComboCtrl}}\label{wxrichtextstylecomboctrldtor}
+
+\func{}{\destruct{wxRichTextStyleComboCtrl}}{\void}
+
+Destructor.
+
+\membersection{wxRichTextStyleComboCtrl::GetRichTextCtrl}\label{wxrichtextstylecomboctrlgetrichtextctrl}
+
+\constfunc{wxRichTextCtrl*}{GetRichTextCtrl}{\void}
+
+Returns the \helpref{wxRichTextCtrl}{wxrichtextctrl} associated with this control.
+
+\membersection{wxRichTextStyleComboCtrl::GetStyleSheet}\label{wxrichtextstylecomboctrlgetstylesheet}
+
+\constfunc{wxRichTextStyleSheet*}{GetStyleSheet}{\void}
+
+Returns the style sheet associated with this control.
+
+\membersection{wxRichTextStyleComboCtrl::SetRichTextCtrl}\label{wxrichtextstylecomboctrlsetrichtextctrl}
+
+\func{void}{SetRichTextCtrl}{\param{wxRichTextCtrl* }{ctrl}}
+
+Associates the control with a \helpref{wxRichTextCtrl}{wxrichtextctrl}.
+
+\membersection{wxRichTextStyleComboCtrl::SetStyleSheet}\label{wxrichtextstylecomboctrlsetstylesheet}
+
+\func{void}{SetStyleSheet}{\param{wxRichTextStyleSheet* }{styleSheet}}
+
+Associates the control with a style sheet.
+
+\membersection{wxRichTextStyleComboCtrl::UpdateStyles}\label{wxrichtextstylecomboctrlupdatestyles}
+
+\func{void}{UpdateStyles}{\void}
+
+Updates the combo control from the associated style sheet.
+
+
 \section{\class{wxRichTextStyleListBox}}\label{wxrichtextstylelistbox}
 
 This is a listbox that can display the styles in a \helpref{wxRichTextStyleSheet}{wxrichtextstylesheet},
@@ -13,7 +77,9 @@ See {\tt samples/richtext} for an example of how to use it.
 
 <wx/richtext/richtextstyles.h>
 
-\wxheading{Data structures}
+\wxheading{See also}
+
+\helpref{wxRichTextStyleComboCtrl}{wxrichtextstylecomboctrl}, \helpref{wxRichTextCtrl overview}{wxrichtextctrloverview}
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
@@ -29,6 +95,12 @@ Constructor.
 
 Destructor.
 
+\membersection{wxRichTextStyleListBox::ApplyStyle}\label{wxrichtextstylelistboxapplystyle}
+
+\func{void}{ApplyStyle}{\param{int }{i}}
+
+Applies the {\it i}th style to the associated rich text control.
+
 \membersection{wxRichTextStyleListBox::ConvertTenthsMMToPixels}\label{wxrichtextstylelistboxconverttenthsmmtopixels}
 
 \constfunc{int}{ConvertTenthsMMToPixels}{\param{wxDC\& }{dc}, \param{int }{units}}
@@ -40,6 +112,13 @@ Converts units in tenths of a millimetre to device units.
 \constfunc{wxString}{CreateHTML}{\param{wxRichTextStyleDefinition* }{def}}
 
 Creates a suitable HTML fragment for a definition.
+
+\membersection{wxRichTextStyleListBox::GetApplyOnSelection}\label{wxrichtextstylelistboxgetapplyonselection}
+
+\constfunc{bool}{GetApplyOnSelection}{\void}
+
+If the return value is \true, clicking on a style name in the list will immediately
+apply the style to the associated rich text control.
 
 \membersection{wxRichTextStyleListBox::GetRichTextCtrl}\label{wxrichtextstylelistboxgetrichtextctrl}
 
@@ -77,6 +156,13 @@ Implements left click behaviour, applying the clicked style to the wxRichTextCtr
 
 Reacts to selection.
 
+\membersection{wxRichTextStyleListBox::SetApplyOnSelection}\label{wxrichtextstylelistboxsetapplyonselection}
+
+\func{void}{SetApplyOnSelection}{\param{bool }{applyOnSelection}}
+
+If {\it applyOnSelection} is \true, clicking on a style name in the list will immediately
+apply the style to the associated rich text control.
+
 \membersection{wxRichTextStyleListBox::SetRichTextCtrl}\label{wxrichtextstylelistboxsetrichtextctrl}
 
 \func{void}{SetRichTextCtrl}{\param{wxRichTextCtrl* }{ctrl}}
@@ -94,3 +180,4 @@ Associates the control with a style sheet.
 \func{void}{UpdateStyles}{\void}
 
 Updates the list from the associated style sheet.
+

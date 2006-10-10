@@ -124,6 +124,13 @@ The following constants can be passed to wxRichTextAttr::SetLineSpacing:
 
 Constructors.
 
+\membersection{wxTextAttrEx::GetBulletFont}\label{wxtextattrexgetbulletfont}
+
+\constfunc{const wxString\&}{GetBulletFont}{\void}
+
+Returns a string containing the name of the font associated with the bullet symbol.
+Only valid for attributes with wxTEXT\_ATTR\_BULLET\_SYMBOL.
+
 \membersection{wxTextAttrEx::GetBulletNumber}\label{wxtextattrexgetbulletnumber}
 
 \constfunc{int}{GetBulletNumber}{\void}
@@ -249,6 +256,13 @@ Returns \true if the object represents a paragraph style, that is,
 the flags specify alignment, indentation, tabs, paragraph spacing, or
 bullet style.
 
+\membersection{wxTextAttrEx::SetBulletFont}\label{wxtextattrexsetbulletfont}
+
+\func{void}{SetBulletFont}{\param{const wxString\& }{font}}
+
+Sets the name of the font associated with the bullet symbol.
+Only valid for attributes with wxTEXT\_ATTR\_BULLET\_SYMBOL.
+
 \membersection{wxTextAttrEx::SetBulletNumber}\label{wxtextattrexsetbulletnumber}
 
 \func{void}{SetBulletNumber}{\param{int }{n}}
@@ -331,3 +345,4 @@ Assignment from a wxTextAttr object.
 \func{void operator}{operator=}{\param{const wxTextAttrEx\& }{attr}}
 
 Assignment from a wxTextAttrEx object.
+

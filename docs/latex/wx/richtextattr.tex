@@ -143,6 +143,13 @@ See \helpref{wxRichTextAttr::SetAlignment}{wxrichtextattrsetalignment} for a lis
 
 Returns the background colour.
 
+\membersection{wxRichTextAttr::GetBulletFont}\label{wxrichtextattrgetbulletfont}
+
+\constfunc{const wxString\&}{GetBulletFont}{\void}
+
+Returns a string containing the name of the font associated with the bullet symbol.
+Only valid for attributes with wxTEXT\_ATTR\_BULLET\_SYMBOL.
+
 \membersection{wxRichTextAttr::GetBulletNumber}\label{wxrichtextattrgetbulletnumber}
 
 \constfunc{int}{GetBulletNumber}{\void}
@@ -446,6 +453,13 @@ enum wxTextAttrAlignment
 
 Sets the background colour.
 
+\membersection{wxRichTextAttr::SetBulletFont}\label{wxrichtextattrsetbulletfont}
+
+\func{void}{SetBulletFont}{\param{const wxString\& }{font}}
+
+Sets the name of the font associated with the bullet symbol.
+Only valid for attributes with wxTEXT\_ATTR\_BULLET\_SYMBOL.
+
 \membersection{wxRichTextAttr::SetBulletNumber}\label{wxrichtextattrsetbulletnumber}
 
 \func{void}{SetBulletNumber}{\param{int }{n}}
@@ -638,3 +652,4 @@ Assignment from a \helpref{wxRichTextAttr}{wxrichtextattr} object.
 \constfunc{operator}{wxTextAttrEx}{\void}
 
 Makes a \helpref{wxTextAttrEx}{wxtextattrex} object from this object.
+

@@ -5,10 +5,13 @@ Classes: \helpref{wxRichTextCtrl}{wxrichtextctrl}, \helpref{wxRichTextBuffer}{wx
 \helpref{wxRichTextCharacterStyleDefinition}{wxrichtextcharacterstyledefinition}, 
 \helpref{wxRichTextParagraphStyleDefinition}{wxrichtextparagraphstyledefinition}, 
 \helpref{wxRichTextStyleSheet}{wxrichtextstylesheet}, 
+\helpref{wxRichTextStyleComboCtrl}{wxrichtextstylecomboctrl}, 
 \helpref{wxRichTextStyleListBox}{wxrichtextstylelistbox}, 
 \helpref{wxRichTextEvent}{wxrichtextevent}, \helpref{wxRichTextRange}{wxrichtextrange}, 
 \helpref{wxRichTextFileHandler}{wxrichtextfilehandler}, \helpref{wxRichTextHTMLHandler}{wxrichtexthtmlhandler}, 
-\helpref{wxRichTextXMLHandler}{wxrichtextxmlhandler}
+\helpref{wxRichTextXMLHandler}{wxrichtextxmlhandler}, 
+\helpref{wxRichTextFormattingDialog}{wxrichtextformattingdialog}, 
+\helpref{wxSymbolPickerDialog}{wxsymbolpickerdialog}
 
 wxRichTextCtrl provides a generic implementation of a rich text editor that can handle different character
 styles, paragraph formatting, and images. It's aimed at editing 'natural' language text - if you need an editor that supports code editing,
@@ -230,7 +233,7 @@ from the start of the main parent box.
 
 When Layout is called on an object, it is given a size which the object
 must limit itself to, or one or more flexible directions (vertical
-or horizontal). So, for example, a centered paragraph is given the page
+or horizontal). So, for example, a centred paragraph is given the page
 width to play with (minus any margins), but can extend indefinitely
 in the vertical direction. The implementation of Layout caches the calculated
 size and position.
@@ -272,15 +275,14 @@ This is a list of some of the features that have yet to be implemented. Help wit
 \item A ruler control
 \item Standard editing toolbars
 \item Automatic list numbering
-\item Standard dialogs for paragraph/character formatting
 \item Tables
 \item Text frames
-\item Add ability to show images in wxHTML output (currently uses
+\item Add ability to show images in wxHTML output (currently uses embedded data suitable only for real browsers)
 \item More complete stylesheet viewer, plus style sheet editing dialogs
-\item Ability to store style sheets with documents
-embedded images suitable only for browsers).
+\item Ability to read and write style sheets
 \end{itemize}
 
 There are also things that could be done to take advantage of the underlying text capabilities of the platform;
 higher-level text formatting APIs are available on some platforms, such as Mac OS X, and some of translation from
 high level to low level wxDC API is unnecessary. However this would require additions to the wxWidgets API.
+

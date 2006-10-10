@@ -67,6 +67,22 @@ Apples bold to the selection (undoable).
 
 Applies italic to the selection (undoable).
 
+\membersection{wxRichTextCtrl::ApplyStyle}\label{wxrichtextctrlapplystyle}
+
+\func{bool}{ApplyStyle}{\param{wxRichTextStyleDefinition*}{ def}}
+
+Applies the given style to the selection.
+
+\membersection{wxRichTextCtrl::ApplyStyleSheet}\label{wxrichtextctrlapplystylesheet}
+
+\func{bool}{ApplyStyleSheet}{\param{wxRichTextStyleSheet*}{ sheet $=$ NULL}}
+
+Applies the style sheet to the buffer, matching paragraph styles in the sheet against named styles
+in the buffer. This might be useful if the styles have changed. If {\it sheet} is NULL, the
+sheet set with SetStyleSheet is used.
+
+Currently this applies paragraph styles only.
+
 \membersection{wxRichTextCtrl::ApplyUnderlineToSelection}\label{wxrichtextctrlapplyunderlinetoselection}
 
 \func{bool}{ApplyUnderlineToSelection}{\void}
@@ -146,7 +162,6 @@ left of the actual paragraph is leftSubIndent.
 Begins appling line spacing. {\it spacing} is a multiple, where 10 means single-spacing,
 15 means 1.5 spacing, and 20 means double spacing. The following constants are
 defined for convenience:
-
 
 {\small
 \begin{verbatim}
@@ -577,11 +592,17 @@ Transforms logical (unscrolled) position to physical window position.
 
 Gets the text for the given range.
 
+The end point of range is specified as the last character position of the span of text, plus one.
+
 \membersection{wxRichTextCtrl::GetSelection}\label{wxrichtextctrlgetselection}
 
 \constfunc{void}{GetSelection}{\param{long* }{from}, \param{long* }{to}}
 
-Returns the range of the current selection. If the return values {\it from} and {\it to} are the same, there is no selection.
+Returns the range of the current selection.
+
+The end point of range is specified as the last character position of the span of text, plus one.
+
+If the return values {\it from} and {\it to} are the same, there is no selection.
 
 \membersection{wxRichTextCtrl::GetSelectionRange}\label{wxrichtextctrlgetselectionrange}
 
@@ -597,12 +618,18 @@ Returns the text within the current selection range, if any.
 
 \membersection{wxRichTextCtrl::GetStyle}\label{wxrichtextctrlgetstyle}
 
-\constfunc{bool}{GetStyle}{\param{long }{position}, \param{wxRichTextAttr\& }{style}}
+\func{bool}{GetStyle}{\param{long }{position}, \param{wxRichTextAttr\& }{style}}
 
-\constfunc{bool}{GetStyle}{\param{long }{position}, \param{wxTextAttrEx\& }{style}}
+\func{bool}{GetStyle}{\param{long }{position}, \param{wxTextAttrEx\& }{style}}
+
+\func{bool}{GetStyle}{\param{long }{position}, \param{wxTextAttr\& }{style}}
 
 Gets the attributes at the given position. The wxRichTextAttr version is generally more efficient
 because it does not use wxFont objects.
+
+This function gets the combined style - that is, the style you see on the screen as a result
+of combining base style, paragraph style and character style attributes. To get the character
+or paragraph style alone, use \helpref{GetUncombinedStyle}{wxrichtextctrlgetuncombinedstyle}.
 
 \membersection{wxRichTextCtrl::GetStyleSheet}\label{wxrichtextctrlgetstylesheet}
 
@@ -610,6 +637,24 @@ because it does not use wxFont objects.
 
 Returns the style sheet associated with the control, if any. A style sheet allows named
 character and paragraph styles to be applied.
+
+\membersection{wxRichTextCtrl::GetUncombinedStyle}\label{wxrichtextctrlgetuncombinedstyle}
+
+\func{bool}{GetUncombinedStyle}{\param{long }{position}, \param{wxRichTextAttr\& }{style}}
+
+\func{bool}{GetUncombinedStyle}{\param{long }{position}, \param{wxTextAttrEx\& }{style}}
+
+\func{bool}{GetUncombinedStyle}{\param{long }{position}, \param{wxTextAttr\& }{style}}
+
+Gets the attributes at the given position. The wxRichTextAttr version is generally more efficient
+because it does not use wxFont objects.
+
+This function gets the {\it uncombined style} - that is, the attributes associated with the
+paragraph or character content, and not necessarily the combined attributes you see on the
+screen. To get the combined attributes, use \helpref{GetStyle}{wxrichtextctrlgetstyle}.
+
+If you specify (any) paragraph attribute in {\it style}'s flags, this function will fetch
+the paragraph attributes. Otherwise, it will return the character attributes.
 
 \membersection{wxRichTextCtrl::GetValue}\label{wxrichtextctrlgetvalue}
 
@@ -675,6 +720,50 @@ Initialises the members of the control.
 \constfunc{void}{InitCommandEvent}{\param{wxCommandEvent\& }{event}}
 
 Initialises the command event.
+
+\membersection{wxRichTextCtrl::IsDefaultStyleShowing}\label{wxrichtextctrlisdefaultstyleshowing}
+
+\constfunc{bool}{IsDefaultStyleShowing}{\void}
+
+Returns \true if the user has recently set the default style without moving the caret,
+and therefore the UI needs to reflect the default style and not the style at the caret.
+
+Below is an example of code that uses this function to determine whether the UI
+should show that the current style is bold.
+
+\begin{verbatim}
+/// Is all of the selection bold?
+bool wxRichTextCtrl::IsSelectionBold()
+{
+    if (HasSelection())
+    {
+        wxRichTextAttr attr;
+        wxRichTextRange range = GetInternalSelectionRange();
+        attr.SetFlags(wxTEXT_ATTR_FONT_WEIGHT);
+        attr.SetFontWeight(wxBOLD);
+
+        return HasCharacterAttributes(range, attr);
+    }
+    else
+    {
+        // If no selection, then we need to combine current style with default style
+        // to see what the effect would be if we started typing.
+        wxRichTextAttr attr;
+        attr.SetFlags(wxTEXT_ATTR_FONT_WEIGHT);
+
+        long pos = GetAdjustedCaretPosition(GetCaretPosition());
+        if (GetStyle(pos, attr))
+        {
+            if (IsDefaultStyleShowing())
+                wxRichTextApplyStyle(attr, GetDefaultStyleEx());
+            return attr.GetFontWeight() == wxBOLD;
+        }
+    }
+    return false;
+}
+\end{verbatim}
+
+See also \helpref{SetAndShowDefaultStyle}{wxrichtextctrlsetandshowdefaultstyle}.
 
 \membersection{wxRichTextCtrl::IsEditable}\label{wxrichtextctrliseditable}
 
@@ -1031,6 +1120,15 @@ Selects all the text in the buffer.
 
 Cancels any selection.
 
+\membersection{wxRichTextCtrl::SetAndShowDefaultStyle}\label{wxrichtextctrlsetandshowdefaultstyle}
+
+\func{void}{SetAndShowDefaultStyle}{\param{const wxRichTextAttr\& }{attr}}
+
+Sets {\it attr} as the default style and tells the control that the UI should reflect
+this attribute until the user moves the caret.
+
+See also \helpref{IsDefaultStyleShowing}{wxrichtextctrlisdefaultstyleshowing}.
+
 \membersection{wxRichTextCtrl::SetBasicStyle}\label{wxrichtextctrlsetbasicstyle}
 
 \func{void}{SetBasicStyle}{\param{const wxRichTextAttr\& }{style}}
@@ -1105,11 +1203,17 @@ Sets the insertion point to the end of the text control.
 
 Sets the selection to the given range.
 
+The end point of range is specified as the last character position of the span of text, plus one.
+So, for example, to set the style for a character at position 5, use the range (5,6).
+
 \membersection{wxRichTextCtrl::SetSelectionRange}\label{wxrichtextctrlsetselectionrange}
 
 \func{void}{SetSelectionRange}{\param{const wxRichTextRange\& }{range}}
 
 Sets the selection to the given range.
+
+The end point of range is specified as the last character position of the span of text, plus one.
+So, for example, to set the style for a character at position 5, use the range (5,6).
 
 \membersection{wxRichTextCtrl::SetStyle}\label{wxrichtextctrlsetstyle}
 
@@ -1117,8 +1221,50 @@ Sets the selection to the given range.
 
 \func{bool}{SetStyle}{\param{long }{start}, \param{long }{end}, \param{const wxTextAttrEx\& }{style}}
 
+\func{bool}{SetStyle}{\param{long }{start}, \param{long }{end}, \param{const wxTextAttr\& }{style}}
+
 Sets the attributes for the given range. The wxRichTextAttr version is more efficient
 because it does not use wxFont objects.
+
+The end point of range is specified as the last character position of the span of text, plus one.
+So, for example, to set the style for a character at position 5, use the range (5,6).
+
+\membersection{wxRichTextCtrl::SetStyleEx}\label{wxrichtextctrlsetstyleex}
+
+\func{bool}{SetStyleEx}{\param{const wxRichTextRange\& }{range}, \param{const wxRichTextAttr\& }{style}, \param{int }{flags $=$ wxRICHTEXT\_SETSTYLE\_WITH\_UNDO}}
+
+\func{bool}{SetStyleEx}{\param{const wxRichTextRange\& }{range}, \param{const wxTextAttrEx\& }{style}, \param{int }{flags $=$ wxRICHTEXT\_SETSTYLE\_WITH\_UNDO}}
+
+\func{bool}{SetStyleEx}{\param{long }{start}, \param{long }{end}, \param{const wxTextAttrEx\& }{style}, \param{int }{flags $=$ wxRICHTEXT\_SETSTYLE\_WITH\_UNDO}}
+
+Sets the attributes for the given range, passing flags to determine how the attributes are set. The wxRichTextAttr version is more efficient
+because it does not use wxFont objects.
+
+The end point of range is specified as the last character position of the span of text, plus one.
+So, for example, to set the style for a character at position 5, use the range (5,6).
+
+{\it flags} may contain a bit list of the following values:
+
+\begin{verbatim}
+#define wxRICHTEXT_SETSTYLE_NONE            0x00
+
+// Specifies that this operation should be undoable
+#define wxRICHTEXT_SETSTYLE_WITH_UNDO       0x01
+
+// Specifies that the style should not be applied if the
+// combined style at this point is already the style in question.
+#define wxRICHTEXT_SETSTYLE_OPTIMIZE        0x02
+
+// Specifies that the style should only be applied to paragraphs,
+// and not the content. This allows content styling to be
+// preserved independently from that of e.g. a named paragraph style.
+#define wxRICHTEXT_SETSTYLE_PARAGRAPHS_ONLY 0x04
+
+// Specifies that the style should only be applied to characters,
+// and not the paragraph. This allows content styling to be
+// preserved independently from that of e.g. a named paragraph style.
+#define wxRICHTEXT_SETSTYLE_CHARACTERS_ONLY 0x08
+\end{verbatim}
 
 \membersection{wxRichTextCtrl::SetStyleSheet}\label{wxrichtextctrlsetstylesheet}
 
@@ -1203,3 +1349,4 @@ Writes text at the current position.
 \constfunc{long}{XYToPosition}{\param{long }{x}, \param{long }{y}}
 
 Translates from column and line number to position.
+

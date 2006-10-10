@@ -1,0 +1,272 @@
+\section{\class{wxRichTextFormattingDialog}}\label{wxrichtextformattingdialog}
+
+This dialog allows the user to edit a character and/or paragraph style.
+
+In the constructor, specify the pages that will be created. Use GetStyle
+to retrieve the common style for a given range, and then use ApplyStyle
+to apply the user-selected formatting to a control. For example:
+
+\begin{verbatim}
+    wxRichTextRange range;
+    if (m_richTextCtrl->HasSelection())
+        range = m_richTextCtrl->GetSelectionRange();
+    else
+        range = wxRichTextRange(0, m_richTextCtrl->GetLastPosition()+1);
+
+    int pages = wxRICHTEXT_FORMAT_FONT|wxRICHTEXT_FORMAT_INDENTS_SPACING|wxRICHTEXT_FORMAT_TABS|wxRICHTEXT_FORMAT_BULLETS;
+
+    wxRichTextFormattingDialog formatDlg(pages, this);
+    formatDlg.GetStyle(m_richTextCtrl, range);
+
+    if (formatDlg.ShowModal() == wxID_OK)
+    {
+        formatDlg.ApplyStyle(m_richTextCtrl, range);
+    }
+\end{verbatim}
+ 
+\wxheading{Derived from}
+
+\helpref{wxPropertySheetDialog}{wxpropertysheetdialog}
+
+\wxheading{Include files}
+
+<wx/richtext/richtextformatdlg.h>
+
+\wxheading{Data structures}
+
+The following flags passed to the dialog constructor indicate the pages to
+be created:
+
+\begin{verbatim}
+#define wxRICHTEXT_FORMAT_STYLE_EDITOR      0x0001
+#define wxRICHTEXT_FORMAT_FONT              0x0002
+#define wxRICHTEXT_FORMAT_TABS              0x0004
+#define wxRICHTEXT_FORMAT_BULLETS           0x0008
+#define wxRICHTEXT_FORMAT_INDENTS_SPACING   0x0010
+\end{verbatim}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+
+\membersection{wxRichTextFormattingDialog::wxRichTextFormattingDialog}\label{wxrichtextformattingdialogwxrichtextformattingdialog}
+
+\func{}{wxRichTextFormattingDialog}{\param{long }{flags}, \param{wxWindow* }{parent}, \param{const wxString\& }{title = \_("Formatting")}, \param{wxWindowID }{id = wxID\_ANY}, \param{const wxPoint\& }{pos = wxDefaultPosition}, \param{const wxSize\& }{sz = wxDefaultSize}, \param{long }{style = wxDEFAULT\_DIALOG\_STYLE}}
+
+\func{}{wxRichTextFormattingDialog}{\void}
+
+Constructors.
+
+\wxheading{Parameters}
+
+\docparam{flags}{The pages to show.}
+
+\docparam{parent}{The dialog's parent.}
+
+\docparam{id}{The dialog's identifier.}
+
+\docparam{title}{The dialog's caption.}
+
+\docparam{pos}{The dialog's position.}
+
+\docparam{size}{The dialog's size.}
+
+\docparam{style}{The dialog's window style.}
+
+
+\membersection{wxRichTextFormattingDialog::\destruct{wxRichTextFormattingDialog}}\label{wxrichtextformattingdialogdtor}
+
+\func{}{\destruct{wxRichTextFormattingDialog}}{\void}
+
+Destructor.
+
+\membersection{wxRichTextFormattingDialog::ApplyStyle}\label{wxrichtextformattingdialogapplystyle}
+
+\func{bool}{ApplyStyle}{\param{wxRichTextCtrl* }{ctrl}, \param{const wxRichTextRange\& }{range}, \param{int }{flags = wxRICHTEXT\_SETSTYLE\_WITH\_UNDO|wxRICHTEXT\_SETSTYLE\_OPTIMIZE}}
+
+Apply attributes to the given range, only changing attributes that need to be changed.
+
+\membersection{wxRichTextFormattingDialog::Create}\label{wxrichtextformattingdialogcreate}
+
+\func{bool}{Create}{\param{long }{flags}, \param{wxWindow* }{parent}, \param{const wxString\& }{title}, \param{wxWindowID }{id}, \param{const wxPoint\& }{pos = wxDefaultPosition}, \param{const wxSize\& }{sz = wxDefaultSize}, \param{long }{style = wxDEFAULT\_DIALOG\_STYLE}}
+
+Creation: see \helpref{the constructor}{wxrichtextformattingdialog} for details about the parameters.
+
+\membersection{wxRichTextFormattingDialog::GetAttributes}\label{wxrichtextformattingdialoggetattributes}
+
+\constfunc{const wxTextAttrEx\&}{GetAttributes}{\void}
+
+\func{wxTextAttrEx\&}{GetAttributes}{\void}
+
+Gets the attributes being edited.
+
+\membersection{wxRichTextFormattingDialog::GetDialog}\label{wxrichtextformattingdialoggetdialog}
+
+\func{wxRichTextFormattingDialog*}{GetDialog}{\param{wxWindow* }{win}}
+
+Helper for pages to get the top-level dialog.
+
+\membersection{wxRichTextFormattingDialog::GetDialogAttributes}\label{wxrichtextformattingdialoggetdialogattributes}
+
+\func{wxTextAttrEx*}{GetDialogAttributes}{\param{wxWindow* }{win}}
+
+Helper for pages to get the attributes.
+
+\membersection{wxRichTextFormattingDialog::GetDialogStyleDefinition}\label{wxrichtextformattingdialoggetdialogstyledefinition}
+
+\func{wxRichTextStyleDefinition*}{GetDialogStyleDefinition}{\param{wxWindow* }{win}}
+
+Helper for pages to get the style.
+
+\membersection{wxRichTextFormattingDialog::GetFormattingDialogFactory}\label{wxrichtextformattingdialoggetformattingdialogfactory}
+
+\func{wxRichTextFormattingDialogFactory*}{GetFormattingDialogFactory}{\void}
+
+Returns the object to be used to customize the dialog and provide pages.
+
+\membersection{wxRichTextFormattingDialog::GetImageList}\label{wxrichtextformattingdialoggetimagelist}
+
+\constfunc{wxImageList*}{GetImageList}{\void}
+
+Returns the image list associated with the dialog, used for example if showing the dialog as a toolbook.
+
+\membersection{wxRichTextFormattingDialog::GetStyle}\label{wxrichtextformattingdialoggetstyle}
+
+\func{bool}{GetStyle}{\param{wxRichTextCtrl* }{ctrl}, \param{const wxRichTextRange\& }{range}}
+
+Gets common attributes from the given range and calls SetAttributes. Attributes that do not have common values in the given range
+will be omitted from the style's flags.
+
+\membersection{wxRichTextFormattingDialog::GetStyleDefinition}\label{wxrichtextformattingdialoggetstyledefinition}
+
+\constfunc{wxRichTextStyleDefinition*}{GetStyleDefinition}{\void}
+
+Gets the associated style definition, if any.
+
+\membersection{wxRichTextFormattingDialog::GetStyleSheet}\label{wxrichtextformattingdialoggetstylesheet}
+
+\constfunc{wxRichTextStyleSheet*}{GetStyleSheet}{\void}
+
+Gets the associated style sheet, if any.
+
+\membersection{wxRichTextFormattingDialog::SetAttributes}\label{wxrichtextformattingdialogsetattributes}
+
+\func{void}{SetAttributes}{\param{const wxTextAttrEx\& }{attr}}
+
+Sets the attributes to be edited.
+
+\membersection{wxRichTextFormattingDialog::SetFormattingDialogFactory}\label{wxrichtextformattingdialogsetformattingdialogfactory}
+
+\func{void}{SetFormattingDialogFactory}{\param{wxRichTextFormattingDialogFactory* }{factory}}
+
+Sets the formatting factory object to be used for customization and page creation.
+It deletes the existing factory object.
+
+\membersection{wxRichTextFormattingDialog::SetImageList}\label{wxrichtextformattingdialogsetimagelist}
+
+\func{void}{SetImageList}{\param{wxImageList* }{imageList}}
+
+Sets the image list associated with the dialog's property sheet.
+
+\membersection{wxRichTextFormattingDialog::SetStyle}\label{wxrichtextformattingdialogsetstyle}
+
+\func{bool}{SetStyle}{\param{const wxTextAttrEx\& }{style}, \param{bool }{update = true}}
+
+Sets the attributes and optionally updates the display, if {\it update} is \true.
+
+\membersection{wxRichTextFormattingDialog::SetStyleDefinition}\label{wxrichtextformattingdialogsetstyledefinition}
+
+\func{bool}{SetStyleDefinition}{\param{const wxRichTextStyleDefinition\& }{styleDef}, \param{wxRichTextStyleSheet* }{sheet}, \param{bool }{update = true}}
+
+Sets the style definition and optionally update the display, if {\it update} is \true.
+
+\membersection{wxRichTextFormattingDialog::UpdateDisplay}\label{wxrichtextformattingdialogupdatedisplay}
+
+\func{bool}{UpdateDisplay}{\void}
+
+Updates the display.
+
+
+%
+% automatically generated by HelpGen $Revision$ from
+% richtextformatdlg.h at 10/Oct/06 15:42:06
+%
+
+
+\section{\class{wxRichTextFormattingDialogFactory}}\label{wxrichtextformattingdialogfactory}
+
+This class provides pages for wxRichTextFormattingDialog, and allows other customization of the dialog.
+A default instance of this class is provided automatically. If you wish to change the behaviour of the
+formatting dialog (for example add or replace a page), you may derive from this class,
+override one or more functions, and call the static function wxRichTextFormattingDialog::SetFormattingDialogFactory.
+ 
+\wxheading{Derived from}
+
+\helpref{wxObject}{wxobject}
+
+\wxheading{Include files}
+
+<wx/richtext/richtextformatdlg.h>
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+
+\membersection{wxRichTextFormattingDialogFactory::wxRichTextFormattingDialogFactory}\label{wxrichtextformattingdialogfactorywxrichtextformattingdialogfactory}
+
+\func{}{wxRichTextFormattingDialogFactory}{\void}
+
+Constructor.
+
+\membersection{wxRichTextFormattingDialogFactory::\destruct{wxRichTextFormattingDialogFactory}}\label{wxrichtextformattingdialogfactorydtor}
+
+\func{}{\destruct{wxRichTextFormattingDialogFactory}}{\void}
+
+Destructor.
+
+\membersection{wxRichTextFormattingDialogFactory::CreateButtons}\label{wxrichtextformattingdialogfactorycreatebuttons}
+
+\func{virtual bool}{CreateButtons}{\param{wxRichTextFormattingDialog* }{dialog}}
+
+Creates the main dialog buttons.
+
+\membersection{wxRichTextFormattingDialogFactory::CreatePage}\label{wxrichtextformattingdialogfactorycreatepage}
+
+\func{virtual wxPanel*}{CreatePage}{\param{int }{page}, \param{wxString\& }{title}, \param{wxRichTextFormattingDialog* }{dialog}}
+
+Creates a page, given a page identifier.
+
+\membersection{wxRichTextFormattingDialogFactory::CreatePages}\label{wxrichtextformattingdialogfactorycreatepages}
+
+\func{virtual bool}{CreatePages}{\param{long }{pages}, \param{wxRichTextFormattingDialog* }{dialog}}
+
+Creates all pages under the dialog's book control, also calling AddPage.
+
+\membersection{wxRichTextFormattingDialogFactory::GetPageId}\label{wxrichtextformattingdialogfactorygetpageid}
+
+\constfunc{virtual int}{GetPageId}{\param{int }{i}}
+
+Enumerate all available page identifiers.
+
+\membersection{wxRichTextFormattingDialogFactory::GetPageIdCount}\label{wxrichtextformattingdialogfactorygetpageidcount}
+
+\constfunc{virtual int}{GetPageIdCount}{\void}
+
+Gets the number of available page identifiers.
+
+\membersection{wxRichTextFormattingDialogFactory::GetPageImage}\label{wxrichtextformattingdialogfactorygetpageimage}
+
+\constfunc{virtual int}{GetPageImage}{\param{int }{id}}
+
+Gets the image index for the given page identifier.
+
+\membersection{wxRichTextFormattingDialogFactory::SetSheetStyle}\label{wxrichtextformattingdialogfactorysetsheetstyle}
+
+\func{virtual bool}{SetSheetStyle}{\param{wxRichTextFormattingDialog* }{dialog}}
+
+Set the property sheet style, called at the start of wxRichTextFormattingDialog::Create.
+
+\membersection{wxRichTextFormattingDialogFactory::ShowHelp}\label{wxrichtextformattingdialogfactoryshowhelp}
+
+\func{virtual bool}{ShowHelp}{\param{int }{page}, \param{wxRichTextFormattingDialog* }{dialog}}
+
+Invokes help for the dialog.
+
