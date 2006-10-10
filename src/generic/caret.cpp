@@ -131,6 +131,9 @@ void wxCaret::DoHide()
 
 void wxCaret::DoMove()
 {
+#if wxUSE_OVERLAY
+    m_overlay.Reset();
+#endif
     if ( IsVisible() )
     {
         if ( !m_blinkedOut )
@@ -155,7 +158,9 @@ void wxCaret::DoSize()
         m_countVisible = 0;
         DoHide();
     }
-#if wxUSE_OVERLAY == 0
+#if wxUSE_OVERLAY
+    m_overlay.Reset();
+#else
     // Change bitmap size
     m_bmpUnderCaret = wxBitmap(m_width, m_height);
 #endif
