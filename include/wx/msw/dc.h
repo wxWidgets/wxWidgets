@@ -133,6 +133,14 @@ public:
     static void ClearCache();
 #endif
 
+    // RTL related functions
+    // ---------------------
+
+    // get or change the layout direction (LTR or RTL) for this dc,
+    // wxLayout_Default is returned if layout direction is not supported
+    virtual wxLayoutDirection GetLayoutDirection() const;
+    virtual void SetLayoutDirection(wxLayoutDirection dir);
+
 protected:
     void Init()
     {

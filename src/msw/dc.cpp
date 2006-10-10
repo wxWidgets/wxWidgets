@@ -54,7 +54,11 @@
 #endif
 
 #ifndef AC_SRC_ALPHA
-#define AC_SRC_ALPHA 1
+    #define AC_SRC_ALPHA 1
+#endif
+
+#ifndef LAYOUT_RTL
+    #define LAYOUT_RTL 1
 #endif
 
 /* Quaternary raster codes */
@@ -196,36 +200,44 @@ private:
     DECLARE_NO_COPY_CLASS(StretchBltModeChanger)
 };
 
-// support for dynamic loading of msimg32.dll which we use for some functions
-class wxMSImg32DLL
+// helper class to cache dynamically loaded libraries and not attempt reloading
+// them if it fails
+class wxOnceOnlyDLLLoader
 {
 public:
-    // return the symbol with the given name if the DLL not loaded or symbol
-    // not present
-    static void *GetSymbol(const wxChar *name)
+    // ctor argument must be a literal string as we don't make a copy of it!
+    wxOnceOnlyDLLLoader(const wxChar *dllName)
+        : m_dllName(dllName)
     {
+    };
+
+
+    // return the symbol with the given name or NULL if the DLL not loaded
+    // or symbol not present
+    void *GetSymbol(const wxChar *name)
+    {
+        // we're prepared to handle errors here
         wxLogNull noLog;
 
-        if ( !ms_triedToLoad )
+        if ( m_dllName )
         {
-            ms_triedToLoad = true;
-            ms_dll.Load(_T("msimg32"));
+            m_dll.Load(m_dllName);
+
+            // reset the name whether we succeeded or failed so that we don't
+            // try again the next time
+            m_dllName = NULL;
         }
 
-        return ms_dll.IsLoaded() ? ms_dll.GetSymbol(name) : NULL;
+        return m_dll.IsLoaded() ? m_dll.GetSymbol(name) : NULL;
     }
 
 private:
-    static wxDynamicLibrary ms_dll;
-    static bool ms_triedToLoad;
+    wxDynamicLibrary m_dll;
+    const wxChar *m_dllName;
 };
 
-wxDynamicLibrary wxMSImg32DLL::ms_dll;
-bool wxMSImg32DLL::ms_triedToLoad = false;
-
-// helper macro for getting the symbols from msimg32.dll: it supposes that a
-// type "name_t" is defined and casts the returned symbol to it automatically
-#define wxMSIMG32_SYMBOL(name) (name ## _t)wxMSImg32DLL::GetSymbol(_T(#name))
+static wxOnceOnlyDLLLoader wxGDI32DLL(_T("gdi32"));
+static wxOnceOnlyDLLLoader wxMSIMG32DLL(_T("msimg32"));
 
 // ===========================================================================
 // implementation
@@ -2541,7 +2553,8 @@ static bool AlphaBlt(HDC hdcDst,
                                         HDC,int,int,int,int,
                                         BLENDFUNCTION);
 
-    static AlphaBlend_t pfnAlphaBlend = wxMSIMG32_SYMBOL(AlphaBlend);
+    static AlphaBlend_t
+        pfnAlphaBlend = (AlphaBlend_t)wxMSIMG32DLL.GetSymbol(_T("AlphaBlend"));
     if ( pfnAlphaBlend )
     {
         BLENDFUNCTION bf;
@@ -2654,7 +2667,8 @@ void wxDC::DoGradientFillLinear (const wxRect& rect,
 #if defined(GRADIENT_FILL_RECT_H) && wxUSE_DYNLIB_CLASS
     typedef BOOL
         (WINAPI *GradientFill_t)(HDC, PTRIVERTEX, ULONG, PVOID, ULONG, ULONG);
-    static GradientFill_t pfnGradientFill = wxMSIMG32_SYMBOL(GradientFill);
+    static GradientFill_t pfnGradientFill =
+        (GradientFill_t)wxMSIMG32DLL.GetSymbol(_T("GradientFill"));
 
     if ( pfnGradientFill )
     {
@@ -2704,4 +2718,47 @@ void wxDC::DoGradientFillLinear (const wxRect& rect,
 #endif // wxUSE_DYNLIB_CLASS
 
     wxDCBase::DoGradientFillLinear(rect, initialColour, destColour, nDirection);
+}
+
+static DWORD wxGetDCLayout(HDC hdc)
+{
+    typedef DWORD (WINAPI *GetLayout_t)(HDC);
+    static GetLayout_t
+        pfnGetLayout = (GetLayout_t)wxGDI32DLL.GetSymbol(_T("GetLayout"));
+
+    return pfnGetLayout ? pfnGetLayout(hdc) : (DWORD)-1;
+}
+
+wxLayoutDirection wxDC::GetLayoutDirection() const
+{
+    DWORD layout = wxGetDCLayout(GetHdc());
+
+    if ( layout == (DWORD)-1 )
+        return wxLayout_Default;
+
+    return layout & LAYOUT_RTL ? wxLayout_RightToLeft : wxLayout_LeftToRight;
+}
+
+void wxDC::SetLayoutDirection(wxLayoutDirection dir)
+{
+    typedef DWORD (WINAPI *SetLayout_t)(HDC, DWORD);
+    static SetLayout_t
+        pfnSetLayout = (SetLayout_t)wxGDI32DLL.GetSymbol(_T("SetLayout"));
+    if ( !pfnSetLayout )
+        return;
+
+    if ( dir == wxLayout_Default )
+    {
+        dir = wxTheApp->GetLayoutDirection();
+        if ( dir == wxLayout_Default )
+            return;
+    }
+
+    DWORD layout = wxGetDCLayout(GetHdc());
+    if ( dir == wxLayout_RightToLeft )
+        layout |= LAYOUT_RTL;
+    else
+        layout &= ~LAYOUT_RTL;
+
+    pfnSetLayout(GetHdc(), layout);
 }

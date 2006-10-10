@@ -651,6 +651,16 @@ public:
         if (h) *h = hh;
     }
 
+    // RTL related functions
+    // ---------------------
+
+    // get or change the layout direction (LTR or RTL) for this dc,
+    // wxLayout_Default is returned if layout direction is not supported
+    virtual wxLayoutDirection GetLayoutDirection() const
+        { return wxLayout_Default; }
+    virtual void SetLayoutDirection(wxLayoutDirection WXUNUSED(dir))
+        { }
+
 protected:
     // the pure virtual functions which should be implemented by wxDC
     virtual bool DoFloodFill(wxCoord x, wxCoord y, const wxColour& col,
