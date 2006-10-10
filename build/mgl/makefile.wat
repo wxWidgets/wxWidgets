@@ -88,6 +88,7 @@ ____MONOLIB_GUI_SRC_FILENAMES_OBJECTS =
 !ifeq USE_GUI 1
 ____MONOLIB_GUI_SRC_FILENAMES_OBJECTS =  &
 	$(____CORE_SRC_FILENAMES_OBJECTS) &
+	$(OBJS)\monodll_animatecmn.obj &
 	$(OBJS)\monodll_datavcmn.obj &
 	$(OBJS)\monodll_aboutdlgg.obj &
 	$(OBJS)\monodll_bmpcboxg.obj &
@@ -283,6 +284,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_mono.obj &
 	$(OBJS)\monodll_win32.obj &
 	$(OBJS)\monodll_accesscmn.obj &
+	$(OBJS)\monodll_anidecod.obj &
 	$(OBJS)\monodll_appcmn.obj &
 	$(OBJS)\monodll_artprov.obj &
 	$(OBJS)\monodll_artstd.obj &
@@ -301,6 +303,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_ctrlsub.obj &
 	$(OBJS)\monodll_datacmn.obj &
 	$(OBJS)\monodll_dcbase.obj &
+	$(OBJS)\monodll_dcbufcmn.obj &
 	$(OBJS)\monodll_dlgcmn.obj &
 	$(OBJS)\monodll_dndcmn.obj &
 	$(OBJS)\monodll_dobjcmn.obj &
@@ -407,6 +410,7 @@ ____MONOLIB_GUI_SRC_FILENAMES_1_OBJECTS =
 !ifeq USE_GUI 1
 ____MONOLIB_GUI_SRC_FILENAMES_1_OBJECTS =  &
 	$(____CORE_SRC_FILENAMES_1_OBJECTS) &
+	$(OBJS)\monolib_animatecmn.obj &
 	$(OBJS)\monolib_datavcmn.obj &
 	$(OBJS)\monolib_aboutdlgg.obj &
 	$(OBJS)\monolib_bmpcboxg.obj &
@@ -602,6 +606,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_mono.obj &
 	$(OBJS)\monolib_win32.obj &
 	$(OBJS)\monolib_accesscmn.obj &
+	$(OBJS)\monolib_anidecod.obj &
 	$(OBJS)\monolib_appcmn.obj &
 	$(OBJS)\monolib_artprov.obj &
 	$(OBJS)\monolib_artstd.obj &
@@ -620,6 +625,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_ctrlsub.obj &
 	$(OBJS)\monolib_datacmn.obj &
 	$(OBJS)\monolib_dcbase.obj &
+	$(OBJS)\monolib_dcbufcmn.obj &
 	$(OBJS)\monolib_dlgcmn.obj &
 	$(OBJS)\monolib_dndcmn.obj &
 	$(OBJS)\monolib_dobjcmn.obj &
@@ -835,6 +841,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_mono.obj &
 	$(OBJS)\coredll_win32.obj &
 	$(OBJS)\coredll_accesscmn.obj &
+	$(OBJS)\coredll_anidecod.obj &
 	$(OBJS)\coredll_appcmn.obj &
 	$(OBJS)\coredll_artprov.obj &
 	$(OBJS)\coredll_artstd.obj &
@@ -853,6 +860,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_ctrlsub.obj &
 	$(OBJS)\coredll_datacmn.obj &
 	$(OBJS)\coredll_dcbase.obj &
+	$(OBJS)\coredll_dcbufcmn.obj &
 	$(OBJS)\coredll_dlgcmn.obj &
 	$(OBJS)\coredll_dndcmn.obj &
 	$(OBJS)\coredll_dobjcmn.obj &
@@ -1040,6 +1048,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_mono.obj &
 	$(OBJS)\corelib_win32.obj &
 	$(OBJS)\corelib_accesscmn.obj &
+	$(OBJS)\corelib_anidecod.obj &
 	$(OBJS)\corelib_appcmn.obj &
 	$(OBJS)\corelib_artprov.obj &
 	$(OBJS)\corelib_artstd.obj &
@@ -1058,6 +1067,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_ctrlsub.obj &
 	$(OBJS)\corelib_datacmn.obj &
 	$(OBJS)\corelib_dcbase.obj &
+	$(OBJS)\corelib_dcbufcmn.obj &
 	$(OBJS)\corelib_dlgcmn.obj &
 	$(OBJS)\corelib_dndcmn.obj &
 	$(OBJS)\corelib_dobjcmn.obj &
@@ -2098,6 +2108,7 @@ ADVDLL_CXXFLAGS = $(____DOS_CFLAG_p) -bd $(__DEBUGINFO) $(__OPTIMIZEFLAG) &
 	$(CXXFLAGS)
 ADVDLL_OBJECTS =  &
 	$(OBJS)\advdll_dummy.obj &
+	$(OBJS)\advdll_animatecmn.obj &
 	$(OBJS)\advdll_datavcmn.obj &
 	$(OBJS)\advdll_aboutdlgg.obj &
 	$(OBJS)\advdll_bmpcboxg.obj &
@@ -2126,6 +2137,7 @@ ADVLIB_CXXFLAGS = $(____DOS_CFLAG_p) $(__DEBUGINFO) $(__OPTIMIZEFLAG) &
 	$(__EXCEPTIONSFLAG) $(CPPFLAGS) $(CXXFLAGS)
 ADVLIB_OBJECTS =  &
 	$(OBJS)\advlib_dummy.obj &
+	$(OBJS)\advlib_animatecmn.obj &
 	$(OBJS)\advlib_datavcmn.obj &
 	$(OBJS)\advlib_aboutdlgg.obj &
 	$(OBJS)\advlib_bmpcboxg.obj &
@@ -3976,6 +3988,9 @@ $(OBJS)\monodll_win32.obj :  .AUTODEPEND ..\..\src\univ\themes\win32.cpp
 $(OBJS)\monodll_accesscmn.obj :  .AUTODEPEND ..\..\src\common\accesscmn.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
+$(OBJS)\monodll_anidecod.obj :  .AUTODEPEND ..\..\src\common\anidecod.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
 $(OBJS)\monodll_appcmn.obj :  .AUTODEPEND ..\..\src\common\appcmn.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
@@ -4028,6 +4043,9 @@ $(OBJS)\monodll_datacmn.obj :  .AUTODEPEND ..\..\src\common\datacmn.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_dcbase.obj :  .AUTODEPEND ..\..\src\common\dcbase.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_dcbufcmn.obj :  .AUTODEPEND ..\..\src\common\dcbufcmn.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_dlgcmn.obj :  .AUTODEPEND ..\..\src\common\dlgcmn.cpp
@@ -4310,6 +4328,9 @@ $(OBJS)\monodll_vlbox.obj :  .AUTODEPEND ..\..\src\generic\vlbox.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_vscroll.obj :  .AUTODEPEND ..\..\src\generic\vscroll.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_animatecmn.obj :  .AUTODEPEND ..\..\src\common\animatecmn.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_datavcmn.obj :  .AUTODEPEND ..\..\src\common\datavcmn.cpp
@@ -5119,6 +5140,9 @@ $(OBJS)\monolib_win32.obj :  .AUTODEPEND ..\..\src\univ\themes\win32.cpp
 $(OBJS)\monolib_accesscmn.obj :  .AUTODEPEND ..\..\src\common\accesscmn.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
+$(OBJS)\monolib_anidecod.obj :  .AUTODEPEND ..\..\src\common\anidecod.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
 $(OBJS)\monolib_appcmn.obj :  .AUTODEPEND ..\..\src\common\appcmn.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
@@ -5171,6 +5195,9 @@ $(OBJS)\monolib_datacmn.obj :  .AUTODEPEND ..\..\src\common\datacmn.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_dcbase.obj :  .AUTODEPEND ..\..\src\common\dcbase.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_dcbufcmn.obj :  .AUTODEPEND ..\..\src\common\dcbufcmn.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_dlgcmn.obj :  .AUTODEPEND ..\..\src\common\dlgcmn.cpp
@@ -5453,6 +5480,9 @@ $(OBJS)\monolib_vlbox.obj :  .AUTODEPEND ..\..\src\generic\vlbox.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_vscroll.obj :  .AUTODEPEND ..\..\src\generic\vscroll.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_animatecmn.obj :  .AUTODEPEND ..\..\src\common\animatecmn.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_datavcmn.obj :  .AUTODEPEND ..\..\src\common\datavcmn.cpp
@@ -6511,6 +6541,9 @@ $(OBJS)\coredll_win32.obj :  .AUTODEPEND ..\..\src\univ\themes\win32.cpp
 $(OBJS)\coredll_accesscmn.obj :  .AUTODEPEND ..\..\src\common\accesscmn.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
+$(OBJS)\coredll_anidecod.obj :  .AUTODEPEND ..\..\src\common\anidecod.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+
 $(OBJS)\coredll_appcmn.obj :  .AUTODEPEND ..\..\src\common\appcmn.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
@@ -6563,6 +6596,9 @@ $(OBJS)\coredll_datacmn.obj :  .AUTODEPEND ..\..\src\common\datacmn.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
 $(OBJS)\coredll_dcbase.obj :  .AUTODEPEND ..\..\src\common\dcbase.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+
+$(OBJS)\coredll_dcbufcmn.obj :  .AUTODEPEND ..\..\src\common\dcbufcmn.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
 $(OBJS)\coredll_dlgcmn.obj :  .AUTODEPEND ..\..\src\common\dlgcmn.cpp
@@ -7102,6 +7138,9 @@ $(OBJS)\corelib_win32.obj :  .AUTODEPEND ..\..\src\univ\themes\win32.cpp
 $(OBJS)\corelib_accesscmn.obj :  .AUTODEPEND ..\..\src\common\accesscmn.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
+$(OBJS)\corelib_anidecod.obj :  .AUTODEPEND ..\..\src\common\anidecod.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+
 $(OBJS)\corelib_appcmn.obj :  .AUTODEPEND ..\..\src\common\appcmn.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
@@ -7154,6 +7193,9 @@ $(OBJS)\corelib_datacmn.obj :  .AUTODEPEND ..\..\src\common\datacmn.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
 $(OBJS)\corelib_dcbase.obj :  .AUTODEPEND ..\..\src\common\dcbase.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+
+$(OBJS)\corelib_dcbufcmn.obj :  .AUTODEPEND ..\..\src\common\dcbufcmn.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
 $(OBJS)\corelib_dlgcmn.obj :  .AUTODEPEND ..\..\src\common\dlgcmn.cpp
@@ -7441,6 +7483,9 @@ $(OBJS)\corelib_vscroll.obj :  .AUTODEPEND ..\..\src\generic\vscroll.cpp
 $(OBJS)\advdll_dummy.obj :  .AUTODEPEND ..\..\src\common\dummy.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(ADVDLL_CXXFLAGS) $<
 
+$(OBJS)\advdll_animatecmn.obj :  .AUTODEPEND ..\..\src\common\animatecmn.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(ADVDLL_CXXFLAGS) $<
+
 $(OBJS)\advdll_datavcmn.obj :  .AUTODEPEND ..\..\src\common\datavcmn.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(ADVDLL_CXXFLAGS) $<
 
@@ -7496,6 +7541,9 @@ $(OBJS)\advdll_wizard.obj :  .AUTODEPEND ..\..\src\generic\wizard.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(ADVDLL_CXXFLAGS) $<
 
 $(OBJS)\advlib_dummy.obj :  .AUTODEPEND ..\..\src\common\dummy.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(ADVLIB_CXXFLAGS) $<
+
+$(OBJS)\advlib_animatecmn.obj :  .AUTODEPEND ..\..\src\common\animatecmn.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(ADVLIB_CXXFLAGS) $<
 
 $(OBJS)\advlib_datavcmn.obj :  .AUTODEPEND ..\..\src\common\datavcmn.cpp
