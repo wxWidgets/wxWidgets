@@ -25,8 +25,9 @@
 
 #if wxUSE_FSVOLUME
 
+#include "wx/volume.h"
+
 #ifndef WX_PRECOMP
-    #include "wx/msw/missing.h"
     #if wxUSE_GUI
         #include "wx/icon.h"
     #endif
@@ -38,10 +39,9 @@
 #include "wx/dynlib.h"
 #include "wx/arrimpl.cpp"
 
-#include "wx/volume.h"
-
 #include <shellapi.h>
 #include <shlobj.h>
+#include "wx/msw/missing.h"
 
 #if wxUSE_BASE
 

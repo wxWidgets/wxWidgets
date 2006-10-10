@@ -27,8 +27,9 @@
 
 #if wxUSE_DISPLAY
 
+#include "wx/display.h"
+
 #ifndef WX_PRECOMP
-    #include "wx/msw/missing.h"
     #include "wx/dynarray.h"
     #include "wx/app.h"
     #include "wx/frame.h"
@@ -37,8 +38,8 @@
 #include "wx/dynload.h"
 #include "wx/sysopt.h"
 
-#include "wx/display.h"
 #include "wx/display_impl.h"
+#include "wx/msw/missing.h"
 
 // define this to use DirectDraw for display mode switching: this is disabled
 // by default because ddraw.h is now always available and also it's not really

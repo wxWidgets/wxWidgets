@@ -27,7 +27,6 @@
 #if wxUSE_TEXTCTRL && !(defined(__SMARTPHONE__) && defined(__WXWINCE__))
 
 #ifndef WX_PRECOMP
-    #include "wx/msw/missing.h"
     #include "wx/textctrl.h"
     #include "wx/settings.h"
     #include "wx/brush.h"
@@ -73,6 +72,8 @@
 #endif
 
 #endif // wxUSE_RICHEDIT
+
+#include "wx/msw/missing.h"
 
 // ----------------------------------------------------------------------------
 // private classes
