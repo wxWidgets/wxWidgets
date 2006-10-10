@@ -27,6 +27,7 @@ public:
     void TestFlexSizers(wxCommandEvent& event);
     void TestNotebookSizers(wxCommandEvent& event);
     void TestGridBagSizer(wxCommandEvent& event);
+    void TestSetMinimal(wxCommandEvent& event);
 
     void OnAbout(wxCommandEvent& event);
     void OnQuit(wxCommandEvent& event);
@@ -95,7 +96,20 @@ private:
 };
 
 
+// a frame for testing simple setting of "default size"
+class MySimpleSizerFrame : public wxFrame
+{
+public:
+    MySimpleSizerFrame(const wxChar *title, int x, int y );
+    
+    void OnSetSmallSize( wxCommandEvent &event);
+    void OnSetBigSize( wxCommandEvent &event);
+    
+private:
+    wxTextCtrl  *m_target;
 
+    DECLARE_EVENT_TABLE()
+};
 
 
 // controls and menu constants
@@ -105,6 +119,7 @@ enum
     LAYOUT_TEST_NB_SIZER,
     LAYOUT_TEST_GB_SIZER,
     LAYOUT_TEST_PROPORTIONS,
+    LAYOUT_TEST_SET_MINIMAL,
     LAYOUT_QUIT = wxID_EXIT,
     LAYOUT_ABOUT = wxID_ABOUT
 };

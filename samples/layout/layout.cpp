@@ -61,6 +61,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
   EVT_MENU(LAYOUT_TEST_SIZER, MyFrame::TestFlexSizers)
   EVT_MENU(LAYOUT_TEST_NB_SIZER, MyFrame::TestNotebookSizers)
   EVT_MENU(LAYOUT_TEST_GB_SIZER, MyFrame::TestGridBagSizer)
+  EVT_MENU(LAYOUT_TEST_SET_MINIMAL, MyFrame::TestSetMinimal)
 END_EVENT_TABLE()
 
 // Define my frame constructor
@@ -76,6 +77,7 @@ MyFrame::MyFrame()
   file_menu->Append(LAYOUT_TEST_SIZER, _T("Test wx&FlexSizer...\tF2"));
   file_menu->Append(LAYOUT_TEST_NB_SIZER, _T("Test &notebook sizers...\tF3"));
   file_menu->Append(LAYOUT_TEST_GB_SIZER, _T("Test &gridbag sizer...\tF4"));
+  file_menu->Append(LAYOUT_TEST_SET_MINIMAL, _T("Test Set&ItemMinSize...\tF5"));
 
   file_menu->AppendSeparator();
   file_menu->Append(LAYOUT_QUIT, _T("E&xit"), _T("Quit program"));
@@ -190,6 +192,12 @@ void MyFrame::TestNotebookSizers(wxCommandEvent& WXUNUSED(event) )
     MySizerDialog dialog( this, _T("Notebook Sizer Test Dialog") );
 
     dialog.ShowModal();
+}
+
+void MyFrame::TestSetMinimal(wxCommandEvent& WXUNUSED(event) )
+{
+    MySimpleSizerFrame *newFrame = new MySimpleSizerFrame(_T("Simple Sizer Test Frame"), 50, 50);
+    newFrame->Show(true);
 }
 
 
@@ -540,3 +548,59 @@ when compiled in debug mode."), _T("Warning"), wxOK | wxICON_INFORMATION);
     }
     m_gbs->Layout();
 }
+
+// ----------------------------------------------------------------------------
+// MySimpleSizerFrame
+// ----------------------------------------------------------------------------
+
+// Some IDs
+enum {
+    ID_SET_SMALL = 1300,
+    ID_SET_BIG
+};
+
+BEGIN_EVENT_TABLE(MySimpleSizerFrame, wxFrame)
+    EVT_MENU( ID_SET_SMALL, MySimpleSizerFrame::OnSetSmallSize)
+    EVT_MENU( ID_SET_BIG, MySimpleSizerFrame::OnSetBigSize)
+END_EVENT_TABLE()
+
+MySimpleSizerFrame::MySimpleSizerFrame(const wxChar *title, int x, int y )
+    : wxFrame( NULL, wxID_ANY, title, wxPoint(x, y) )
+{
+    wxMenu *menu = new wxMenu;
+    menu->Append(ID_SET_SMALL, _T("Make text control small\tF4"));
+    menu->Append(ID_SET_BIG, _T("Make text control big\tF5"));
+    
+    wxMenuBar *menu_bar = new wxMenuBar;
+    menu_bar->Append(menu, _T("&File"));
+
+    SetMenuBar( menu_bar );
+
+    wxBoxSizer *main_sizer = new wxBoxSizer( wxHORIZONTAL );
+
+    m_target = new wxTextCtrl( this, -1, wxEmptyString, wxDefaultPosition, wxSize( 80, -1 ) );
+    main_sizer->Add( m_target, 1, wxALL, 5 );
+    
+    main_sizer->Add( new wxStaticText( this, -1, wxT("Set alternating sizes using F4 and F5") ), 0, wxALL, 5 );
+    
+    SetSizer( main_sizer);
+    
+    Layout();
+    GetSizer()->Fit( this );
+}
+
+void MySimpleSizerFrame::OnSetSmallSize( wxCommandEvent &event)
+{
+    GetSizer()->SetItemMinSize( m_target, 40, -1 );
+    Layout();
+    GetSizer()->Fit( this );
+}
+
+void MySimpleSizerFrame::OnSetBigSize( wxCommandEvent &event)
+{
+    GetSizer()->SetItemMinSize( m_target, 140, -1 );
+    Layout();
+    GetSizer()->Fit( this );
+}
+
+
