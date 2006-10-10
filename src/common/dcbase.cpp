@@ -1145,4 +1145,296 @@ void wxDCBase::CalculateEllipticPoints( wxList* points,
     } // not iUseAngles
 } // CalculateEllipticPoints
 
+//
+// temporary home for wxOverlay
+//
+
+#if defined(wxMAC_USE_CORE_GRAPHICS) && wxMAC_USE_CORE_GRAPHICS
+
+#include "wx/mac/private.h"
+
+class wxOverlayImpl
+{
+public:
+    wxOverlayImpl() ;
+    ~wxOverlayImpl() ;
+    
+    
+    // clears the overlay without restoring the former state
+    // to be done eg when the window content has been changed and repainted
+    void Reset();
+    
+    // returns true if it has been setup
+    bool IsOk();
+    
+    void Init( wxWindowDC* dc, int x , int y , int width , int height );
+    
+    void BeginDrawing( wxWindowDC* dc);
+    
+    void EndDrawing( wxWindowDC* dc);
+    
+    void Clear( wxWindowDC* dc);
+
+private:
+    WindowRef m_overlayWindow ;
+    CGContextRef m_overlayContext ;
+    // we store the window in case we would have to issue a Refresh()
+    wxWindow* m_window ;
+} ;
+
+wxOverlayImpl::wxOverlayImpl()
+{
+    m_window = NULL ;
+    m_overlayContext = NULL ;
+    m_overlayWindow = NULL ;
+}
+
+wxOverlayImpl::~wxOverlayImpl()
+{
+    Reset();
+}
+
+bool wxOverlayImpl::IsOk() 
+{
+    return m_overlayContext != NULL ;
+}
+
+void wxOverlayImpl::Init( wxWindowDC* dc, int x , int y , int width , int height )
+{
+    wxASSERT_MSG( !IsOk() , _("You cannot Init an overlay twice") );
+
+    m_window = dc->GetWindow(); 
+    
+    wxPoint origin(0,0);
+    origin = m_window->ClientToScreen( origin );
+    Rect bounds = { origin.y, origin.x, origin.y+y+height, origin.x+x+width } ;
+    
+    UInt32 flags = kWindowHideOnSuspendAttribute | kWindowIgnoreClicksAttribute;
+    OSStatus err = CreateNewWindow( kOverlayWindowClass, flags, &bounds, &m_overlayWindow );
+    wxASSERT_MSG(  err == noErr , _("Couldn't create the overlay window") );
+    ShowWindow(m_overlayWindow);
+    err = QDBeginCGContext(GetWindowPort(m_overlayWindow), &m_overlayContext);
+    CGContextTranslateCTM( m_overlayContext, 0, bounds.bottom - bounds.top );
+    CGContextScaleCTM( m_overlayContext, 1, -1 );
+    wxASSERT_MSG(  err == noErr , _("Couldn't init the context on the overlay window") );
+}
+
+void wxOverlayImpl::BeginDrawing( wxWindowDC* dc)
+{
+    delete dc->m_graphicContext ;
+    dc->m_graphicContext = new wxMacCGContext( m_overlayContext );
+    dc->m_macLocalOrigin.x = 0 ;
+    dc->m_macLocalOrigin.y = 0 ;
+}
+
+void wxOverlayImpl::EndDrawing( wxWindowDC* dc)
+{
+}
+
+void wxOverlayImpl::Clear(wxWindowDC* dc) 
+{
+    wxASSERT_MSG( IsOk() , _("You cannot Clear an overlay that is not inited") );
+    delete dc->m_graphicContext ;
+    dc->m_graphicContext = NULL ;
+
+    Reset();
+}
+
+void wxOverlayImpl::Reset()
+{
+    if ( m_overlayContext )
+    {
+        OSStatus err = QDEndCGContext(GetWindowPort(m_overlayWindow), &m_overlayContext);
+        wxASSERT_MSG(  err == noErr , _("Couldn't end the context on the overlay window") );
+
+        m_overlayContext = NULL ;
+    }
+    
+    // todo : don't dispose, only hide and reposition on next run
+    if (m_overlayWindow)
+    {
+        DisposeWindow(m_overlayWindow);
+        m_overlayWindow = NULL ;
+    }
+}
+
+//
+//
+//
+
+#else
+
+class wxOverlayImpl
+{
+public:
+    wxOverlayImpl() ;
+    ~wxOverlayImpl() ;
+    
+    
+    // clears the overlay without restoring the former state
+    // to be done eg when the window content has been changed and repainted
+    void Reset();
+    
+    // returns true if it has been setup
+    bool IsOk();
+    
+    void Init( wxWindowDC* dc, int x , int y , int width , int height );
+    
+    void BeginDrawing( wxWindowDC* dc);
+    
+    void EndDrawing( wxWindowDC* dc);
+    
+    void Clear( wxWindowDC* dc);
+
+private:
+    wxBitmap m_bmpSaved ;
+    int m_x ;
+    int m_y ;
+    int m_width ;
+    int m_height ;
+    wxWindow* m_window ;
+} ;
+
+wxOverlayImpl::wxOverlayImpl()
+{
+    m_window = NULL ;
+     m_x = m_y = m_width = m_height = 0 ;
+}
+
+wxOverlayImpl::~wxOverlayImpl()
+{
+}
+
+bool wxOverlayImpl::IsOk() 
+{
+    return m_bmpSaved.Ok() ;
+}
+
+void wxOverlayImpl::Init( wxWindowDC* dc, int x , int y , int width , int height )
+{
+    m_window = dc->GetWindow();
+    
+    wxMemoryDC dcMem ;
+    m_bmpSaved.Create( width, height );
+    dcMem.SelectObject( m_bmpSaved );
+    m_x = x ;
+    m_y = y ;
+    m_width = width ;
+    m_height = height ;
+#if defined(__WXGTK__) && !defined(__WX_DC_BLIT_FIXED__)
+    wxPoint pt = dcWin.GetDeviceOrigin();
+    x += pt.x;
+    y += pt.y;
+#endif // broken wxGTK wxDC::Blit
+    dcMem.Blit(0, 0, m_width, m_height,
+        dc, x, y);
+    dcMem.SelectObject( wxNullBitmap );
+}
+
+void wxOverlayImpl::Clear(wxWindowDC* dc) 
+{
+    wxMemoryDC dcMem ;
+    dcMem.SelectObject( m_bmpSaved );
+    dc->Blit( m_x, m_y, m_width, m_height , &dcMem , 0 , 0 );
+    dcMem.SelectObject( wxNullBitmap );
+}
+
+void wxOverlayImpl::Reset()
+{
+    m_bmpSaved = wxBitmap();
+}
+
+void wxOverlayImpl::BeginDrawing(wxWindowDC*  WXUNUSED(dc))
+{
+}
+
+void wxOverlayImpl::EndDrawing(wxWindowDC* WXUNUSED(dc))
+{
+}
+
+#endif
+
+// common code
+
+wxOverlay::wxOverlay()
+{
+    m_impl = new wxOverlayImpl();
+    m_inDrawing = false;
+}
+
+wxOverlay::~wxOverlay()
+{
+    wxDELETE( m_impl );
+}
+
+bool wxOverlay::IsOk()
+{
+    return m_impl->IsOk();
+}
+
+void wxOverlay::Init( wxWindowDC* dc, int x , int y , int width , int height )
+{
+    m_impl->Init(dc, x, y, width, height);
+}
+
+void wxOverlay::BeginDrawing( wxWindowDC* dc)
+{
+    m_impl->BeginDrawing(dc);
+    m_inDrawing = true ;
+}
+
+void wxOverlay::EndDrawing( wxWindowDC* dc)
+{
+    m_impl->EndDrawing(dc);
+    m_inDrawing = false ;
+}
+
+void wxOverlay::Clear( wxWindowDC* dc)
+{
+    m_impl->Clear(dc);
+}
+
+void wxOverlay::Reset()
+{
+    wxASSERT_MSG(m_inDrawing==false,wxT("cannot reset overlay during drawing"));
+    m_impl->Reset();
+}
+
+// dc connector
+
+wxDCOverlay::wxDCOverlay(wxOverlay &overlay, wxWindowDC *dc, int x , int y , int width , int height) :
+    m_overlay(overlay)
+{
+    Init(dc, x, y, width, height);
+}
+
+wxDCOverlay::wxDCOverlay(wxOverlay &overlay, wxWindowDC *dc) :
+    m_overlay(overlay)
+{
+    int width;
+    int height;
+    dc->GetSize(&width,&height);
+    Init(dc, 0, 0, width, height);
+}
+
+wxDCOverlay::~wxDCOverlay()
+{
+    m_overlay.EndDrawing(m_dc);
+}
+
+void wxDCOverlay::Init(wxWindowDC *dc, int x , int y , int width , int height )
+{
+    m_dc = dc ;
+    if ( !m_overlay.IsOk() )
+    {
+        m_overlay.Init(dc,x,y,width,height);
+    }
+    m_overlay.BeginDrawing(dc);
+}
+
+void wxDCOverlay::Clear() 
+{
+    m_overlay.Clear(m_dc);
+}
+
 #endif
