@@ -376,7 +376,7 @@ void MyFrame::RecreateToolbar()
         combo->Append(_T("in a"));
         combo->Append(_T("toolbar"));
         toolBar->AddControl(combo);
-        
+
         //wxSpinCtrl *spin = new wxSpinCtrl( toolBar, ID_SPIN, wxT("0"), wxDefaultPosition, wxSize(80,wxDefaultCoord), 0, 100, 0 );
         //toolBar->AddControl( spin );
     }
@@ -850,7 +850,7 @@ void MyFrame::OnToggleRadioBtn(wxCommandEvent& event)
                             event.GetId() - IDM_TOOLBAR_TOGGLERADIOBTN1, true);
     }
 }
-void MyFrame::OnBottomToolbar(wxCommandEvent& event )
+void MyFrame::OnBottomToolbar(wxCommandEvent& WXUNUSED(event) )
 {
     m_bottomToolbar = !m_bottomToolbar;
     wxMenuBar *menuBar = GetMenuBar();

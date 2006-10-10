@@ -98,8 +98,8 @@ MyFrame::MyFrame()
   SetStatusText(_T("wxWidgets layout demo"));
 #endif // wxUSE_STATUSBAR
 
-  wxPanel* p = new wxPanel(this, -1);
-  
+  wxPanel* p = new wxPanel(this, wxID_ANY);
+
   // we want to get a dialog that is stretchable because it
   // has a text ctrl in the middle. at the bottom, we have
   // two buttons which.
@@ -165,7 +165,7 @@ MyFrame::MyFrame()
   topsizer->Add(button_box, wxSizerFlags().Center());
 
   p->SetSizer( topsizer );
-  
+
   // don't allow frame to get smaller than what the sizers tell it and also set
   // the initial size as calculated by the sizers
   topsizer->SetSizeHints( this );
@@ -299,7 +299,7 @@ MyFlexSizerFrame::MyFlexSizerFrame(const wxChar *title, int x, int y )
             : wxFrame(NULL, wxID_ANY, title, wxPoint(x, y) )
 {
     wxFlexGridSizer *sizerFlex;
-    wxPanel* p = new wxPanel(this, -1);
+    wxPanel* p = new wxPanel(this, wxID_ANY);
 
     // consttuct the first column
     wxSizer *sizerCol1 = new wxBoxSizer(wxVERTICAL);
@@ -400,9 +400,9 @@ MySizerDialog::MySizerDialog(wxWindow *parent, const wxChar *title)
 
     wxSizer *panelsizer = new wxBoxSizer( wxVERTICAL );
 
-    wxTextCtrl *text = new wxTextCtrl( panel, wxID_ANY, _T("TextLine 1."), wxDefaultPosition, wxSize(250,-1) );
+    wxTextCtrl *text = new wxTextCtrl( panel, wxID_ANY, _T("TextLine 1."), wxDefaultPosition, wxSize(250,wxDefaultCoord) );
     panelsizer->Add( text, 0, wxGROW|wxALL, 30 );
-    text = new wxTextCtrl( panel, wxID_ANY, _T("TextLine 2."), wxDefaultPosition, wxSize(250,-1) );
+    text = new wxTextCtrl( panel, wxID_ANY, _T("TextLine 2."), wxDefaultPosition, wxSize(250,wxDefaultCoord) );
     panelsizer->Add( text, 0, wxGROW|wxALL, 30 );
     wxButton *button2 = new wxButton( panel, wxID_ANY, _T("Hallo") );
     panelsizer->Add( button2, 0, wxALIGN_RIGHT | wxLEFT|wxRIGHT|wxBOTTOM, 30 );
@@ -486,8 +486,8 @@ MyGridBagSizerFrame::MyGridBagSizerFrame(const wxChar *title, int x, int y )
     m_hideBtn = new wxButton(p, GBS_HIDE_BTN, _T("Hide this item -->"));
     m_gbs->Add(m_hideBtn, POS(12, 3));
 
-    m_hideTxt = new wxTextCtrl(p, wxID_ANY, _T("pos(12,4), size(150, -1)"),
-                                wxDefaultPosition, wxSize(150,-1));
+    m_hideTxt = new wxTextCtrl(p, wxID_ANY, _T("pos(12,4), size(150, wxDefaultCoord)"),
+                                wxDefaultPosition, wxSize(150,wxDefaultCoord));
     m_gbs->Add( m_hideTxt, POS(12,4) );
 
     m_showBtn = new wxButton(p, GBS_SHOW_BTN, _T("<-- Show it again"));
@@ -568,9 +568,10 @@ MySimpleSizerFrame::MySimpleSizerFrame(const wxChar *title, int x, int y )
     : wxFrame( NULL, wxID_ANY, title, wxPoint(x, y) )
 {
     wxMenu *menu = new wxMenu;
+
     menu->Append(ID_SET_SMALL, _T("Make text control small\tF4"));
     menu->Append(ID_SET_BIG, _T("Make text control big\tF5"));
-    
+
     wxMenuBar *menu_bar = new wxMenuBar;
     menu_bar->Append(menu, _T("&File"));
 
@@ -578,25 +579,25 @@ MySimpleSizerFrame::MySimpleSizerFrame(const wxChar *title, int x, int y )
 
     wxBoxSizer *main_sizer = new wxBoxSizer( wxHORIZONTAL );
 
-    m_target = new wxTextCtrl( this, -1, wxEmptyString, wxDefaultPosition, wxSize( 80, -1 ) );
+    m_target = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 80, wxDefaultCoord ) );
     main_sizer->Add( m_target, 1, wxALL, 5 );
-    
-    main_sizer->Add( new wxStaticText( this, -1, wxT("Set alternating sizes using F4 and F5") ), 0, wxALL, 5 );
-    
+
+    main_sizer->Add( new wxStaticText( this, wxID_ANY, wxT("Set alternating sizes using F4 and F5") ), 0, wxALL, 5 );
+
     SetSizer( main_sizer);
-    
+
     Layout();
     GetSizer()->Fit( this );
 }
 
-void MySimpleSizerFrame::OnSetSmallSize( wxCommandEvent &event)
+void MySimpleSizerFrame::OnSetSmallSize( wxCommandEvent& WXUNUSED(event))
 {
     GetSizer()->SetItemMinSize( m_target, 40, -1 );
     Layout();
     GetSizer()->Fit( this );
 }
 
-void MySimpleSizerFrame::OnSetBigSize( wxCommandEvent &event)
+void MySimpleSizerFrame::OnSetBigSize( wxCommandEvent& WXUNUSED(event))
 {
     GetSizer()->SetItemMinSize( m_target, 140, -1 );
     Layout();
