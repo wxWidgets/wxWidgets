@@ -254,7 +254,7 @@ wxMacCGContext::~wxMacCGContext()
     }
 
     if ( m_qdPort )
-        CGContextRelease( m_cgContext ) ;
+        QDEndCGContext( m_qdPort, &m_cgContext ) ;
 }
 
 
@@ -325,7 +325,7 @@ CGContextRef wxMacCGContext::GetNativeContext()
     {
         Rect bounds ;
         GetPortBounds( (CGrafPtr) m_qdPort , &bounds ) ;
-        OSStatus status = CreateCGContextForPort((CGrafPtr) m_qdPort , &m_cgContext) ;
+        OSStatus status = QDBeginCGContext((CGrafPtr) m_qdPort , &m_cgContext) ;
         CGContextSaveGState( m_cgContext ) ;
 
         wxASSERT_MSG( status == noErr , wxT("Cannot nest wxDCs on the same window") ) ;
