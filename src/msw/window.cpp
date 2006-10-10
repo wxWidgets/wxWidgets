@@ -1703,7 +1703,7 @@ void wxWindowMSW::DoGetPosition(int *x, int *y) const
         {
             if ( wxTheApp->GetLayoutDirection() == wxLayout_RightToLeft )
             {
-                // In RTL mode, we want the logical left x-coordinate, 
+                // In RTL mode, we want the logical left x-coordinate,
                 // which would be the physical right x-coordinate.
                 point.x = rect.right;
             }
@@ -3952,7 +3952,7 @@ bool wxWindowMSW::HandlePower(WXWPARAM WXUNUSED_IN_WINCE(wParam),
 
 bool wxWindowMSW::IsDoubleBuffered() const
 {
-    for ( const wxWindow *wnd = this;
+    for ( const wxWindowMSW *wnd = this;
           wnd && !wnd->IsTopLevel(); wnd =
           wnd->GetParent() )
     {
