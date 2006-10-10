@@ -24,7 +24,7 @@ typedef struct _GdkPixbufAnimationIter GdkPixbufAnimationIter;
 // refcounted so that assignment is very fast
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxAnimation : public wxAnimationBase
+class WXDLLIMPEXP_ADV wxAnimation : public wxAnimationBase
 {
 public:
     wxAnimation(GdkPixbufAnimation *p = NULL) { m_pixbuf = p; }
