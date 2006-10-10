@@ -47,7 +47,7 @@ samples/ with demos/ where needed).
    samples, if you are not familiar with LaTeX.
 
 6. Add sample's files to build/bakefiles/make_dist.mk and
-   distrib/msw/{generic.rsp,makefile.rsp,vc.rsp}.
+   distrib/msw/{generic.rsp,makefile.rsp,vc.rsp,dmc.rsp,wince.rsp}.
 
 === EOF ===
 
