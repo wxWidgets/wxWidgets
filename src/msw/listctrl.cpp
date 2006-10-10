@@ -367,6 +367,10 @@ bool wxListCtrl::Create(wxWindow *parent,
     // versions of _some_ messages (notably LVN_GETDISPINFOA) in MSLU build
     wxSetCCUnicodeFormat(GetHwnd());
 
+    // We must set the default text colour to the system/theme colour, otherwise
+    // GetTextColour will always return black
+    SetTextColour(GetDefaultAttributes.colFg);
+
     // for comctl32.dll v 4.70+ we want to have some non default extended
     // styles because it's prettier (and also because wxGTK does it like this)
     if ( InReportView() && wxApp::GetComCtl32Version() >= 470 )
