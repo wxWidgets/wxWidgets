@@ -1145,6 +1145,8 @@ void wxDCBase::CalculateEllipticPoints( wxList* points,
     } // not iUseAngles
 } // CalculateEllipticPoints
 
+#endif
+
 //
 // temporary home for wxOverlay
 //
@@ -1436,5 +1438,3 @@ void wxDCOverlay::Clear()
 {
     m_overlay.Clear(m_dc);
 }
-
-#endif
