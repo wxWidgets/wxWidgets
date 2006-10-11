@@ -97,22 +97,23 @@ void wxBufferedDC::UnMask()
 {
     if ( m_buffer )
     {
-        wxASSERT_MSG( m_mainDc != NULL,
-                      _T("No underlying DC associated with wxBufferedDC (anymore)") );
-
         wxDC* bufferDc = DetachDC();
 
         wxASSERT( bufferDc->IsKindOf(CLASSINFO(wxMemoryDC)) );
 
-        wxCoord x=0, y=0;
+        if (m_mainDc)
+        {
+            wxCoord x=0, y=0;
 
-        if (m_style & wxBUFFER_CLIENT_AREA)
-            bufferDc->GetDeviceOrigin(& x, & y);
+            if (m_style & wxBUFFER_CLIENT_AREA)
+                bufferDc->GetDeviceOrigin(&x, &y);
 
-        m_mainDc->Blit( 0, 0,
-                        m_buffer->GetWidth(), m_buffer->GetHeight(), bufferDc,
-                        -x, -y );
-        m_mainDc = NULL;
+            m_mainDc->Blit( 0, 0,
+                            m_buffer->GetWidth(), m_buffer->GetHeight(), bufferDc,
+                            -x, -y );
+            m_mainDc = NULL;
+        }
+        
         m_buffer = NULL;
         delete bufferDc;
     }
@@ -127,7 +128,7 @@ void wxBufferedDC::UseBuffer()
 {
     wxASSERT(m_buffer);
 
-    wxMemoryDC* memoryDc = new wxMemoryDC(m_mainDc);
+    wxMemoryDC* memoryDc = m_mainDc ? new wxMemoryDC(m_mainDc): new wxMemoryDC();
     memoryDc->SelectObject(*m_buffer);
 
     AttachDC(memoryDc);
