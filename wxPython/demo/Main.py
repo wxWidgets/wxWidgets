@@ -67,6 +67,7 @@ _treeList = [
         'FlatNotebook',
         'CustomTreeCtrl',
         'AboutBox',
+        'AnimateCtrl',
         ]),
 
     # managed windows == things with a (optional) caption you can close
@@ -185,7 +186,6 @@ _treeList = [
         'FloatBar',  
         'FloatCanvas',
         'FoldPanelBar',
-        'GIFAnimationCtrl',
         'HtmlWindow',
         'HyperLinkCtrl',
         'IntCtrl',
@@ -246,11 +246,11 @@ _treeList = [
     # Images
     ('Using Images', [
 ##        'AlphaDrawing',
+        'AnimationCtrl',
         'ArtProvider',
         'BitmapFromBuffer',
         'Cursor',
         'DragImage',
-        'GIFAnimationCtrl',
         'Image',
         'ImageAlpha',
         'ImageFromStream',

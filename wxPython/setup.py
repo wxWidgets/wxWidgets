@@ -194,6 +194,7 @@ swig_sources = run_swig(['gdi.i'], 'src', GENDIR, PKGDIR,
                          'src/_colour.i',
                          'src/_dc.i',
                          'src/_graphics.i',
+                         'src/_overlay.i',
                          'src/_gdiobj.i',
                          'src/_imaglist.i',
                          'src/_region.i',
@@ -515,6 +516,23 @@ ext = Extension('_aui', swig_sources,
 wxpExtensions.append(ext)
 
 
+swig_sources = run_swig(['animate.i'], 'src', GENDIR, PKGDIR,
+                            USE_SWIG, swig_force, swig_args, swig_deps)
+ext = Extension('_animate',
+                swig_sources,
+                
+                include_dirs =  includes + CONTRIBS_INC,
+                define_macros = defines,
+                
+                library_dirs = libdirs,
+                libraries = libs,
+
+                extra_compile_args = cflags,
+                extra_link_args = lflags,
+                )
+
+wxpExtensions.append(ext)
+
 
 
 
@@ -703,34 +721,6 @@ if BUILD_GIZMOS:
                     )
 
     wxpExtensions.append(ext)
-
-
-#----------------------------------------------------------------------
-# Define the ANIMATE  extension module
-#----------------------------------------------------------------------
-
-if BUILD_ANIMATE:
-    msg('Preparing ANIMATE...')
-    location = 'contrib/animate'
-
-    swig_sources = run_swig(['animate.i'], location, GENDIR, PKGDIR,
-                            USE_SWIG, swig_force, swig_args, swig_deps)
-
-    ext = Extension('_animate',
-                    swig_sources,
-
-                    include_dirs =  includes + CONTRIBS_INC,
-                    define_macros = defines,
-
-                    library_dirs = libdirs,
-                    libraries = libs + makeLibName('animate'),
-
-                    extra_compile_args = cflags,
-                    extra_link_args = lflags,
-                    )
-
-    wxpExtensions.append(ext)
-
 
 
 #----------------------------------------------------------------------

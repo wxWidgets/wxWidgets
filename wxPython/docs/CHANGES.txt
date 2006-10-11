@@ -1,9 +1,9 @@
 Recent Changes for wxPython
 =====================================================================
 
-2.7.0.1
+2.7.1.0
 -------
-*
+* 13-Oct-2006
 
 The following deprecated items have been removed:
 
@@ -291,6 +291,27 @@ Added the wx.AboutBox() function and wx.AboutDialogInfo class.  They
 provide a way to show a standard About box for the application, which
 will either be a native dialog or a generic one depending on what info
 is provided and if it can all be shown with the native dialog.
+
+The code in the animate contrib has been moved into the code wxWidgets
+library, and refactored a bit along the way.  For wxPython it still
+exists in the wx.animate module, but has basically been reduced to two
+classes, wx.animate.Animation, and wx.animate.AnimationCtrl.  You load
+the animated GIF (and hopefully there will be other supported formats
+in the near future) in the Animation object, and then give that to the
+AnimatedCtrl for display.  See the demo for an example.  There is also
+still a GIFAnimationCtrl class that provides some level of backwards
+compatibility with the old implementation.
+
+wxMac: The compile option that turns on the use of CoreGraphics (a.k.a
+Quartz) for wxDC is now turned on by default.  This means that all
+drawing via wxDC is done using the new APIs from apple, instead of the
+old Quick Draw API.  There are, however, a few places where Quartz and
+wxDC don't fit together very well, mainly the lack of support for
+logical drawing operations such as XOR, but there work in progress to
+provide other ways to do the same sort of thing that will work with
+Quartz and also on the other platforms.
+
+
 
 
 
