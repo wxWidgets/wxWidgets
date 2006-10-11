@@ -373,6 +373,8 @@ class Frame(wx.Frame):
                                wx.SAVE | wx.OVERWRITE_PROMPT | wx.CHANGE_DIR)
             if dlg.ShowModal() == wx.ID_OK:
                 path = dlg.GetPath()
+                if isinstance(path, unicode):
+                    path = path.encode(sys.getfilesystemencoding())
                 dlg.Destroy()
             else:
                 dlg.Destroy()
