@@ -132,6 +132,17 @@ wxFontBundle::wxFontBundle(const font_info_t *info)
                info->boldFace, info->boldItalicFace);
 }
 
+wxString wxFontBundle::GetName() const
+{
+    return wxString::FromAscii(m_fontInfo->familyName);
+}
+
+bool wxFontBundle::IsFixed() const
+{
+    return m_fontInfo->isFixed;
+}
+
+
 // ----------------------------------------------------------------------------
 // wxFontsManager
 // ----------------------------------------------------------------------------

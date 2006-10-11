@@ -51,10 +51,8 @@ class wxFontBundle : public wxFontBundleBase
 public:
     wxFontBundle(const font_info_t *fontInfo);
 
-    virtual wxString GetName() const
-        { return wxString::FromAscii(m_fontInfo->familyName); }
-
-    virtual bool IsFixed() const { return m_fontInfo->isFixed; }
+    virtual wxString GetName() const;
+    virtual bool IsFixed() const;
 
     const font_info_t *GetInfo() const { return m_fontInfo; }
 
