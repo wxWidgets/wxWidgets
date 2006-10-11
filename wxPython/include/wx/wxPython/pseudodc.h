@@ -189,14 +189,14 @@ class pdcBeginDrawingOp : public pdcOp
 {
     public:
         pdcBeginDrawingOp() {}
-        virtual void DrawToDC(wxDC *dc, bool WXUNUSED(grey)=false) {dc->BeginDrawing();}
+        virtual void DrawToDC(wxDC *WXUNUSED(dc), bool WXUNUSED(grey)=false) {}
 };
 
 class pdcEndDrawingOp : public pdcOp
 {
     public:
         pdcEndDrawingOp() {}
-        virtual void DrawToDC(wxDC *dc, bool WXUNUSED(grey)=false) {dc->EndDrawing();}
+        virtual void DrawToDC(wxDC *WXUNUSED(dc), bool WXUNUSED(grey)=false) {}
 };
 
 class pdcFloodFillOp : public pdcOp
