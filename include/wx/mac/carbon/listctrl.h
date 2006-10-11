@@ -13,6 +13,7 @@
 #define _WX_LISTCTRL_H_
 
 #include "wx/generic/listctrl.h"
+#include <Carbon/Carbon.h>
 
 class wxMacDataBrowserListCtrlControl;
 class wxMacListControl;
@@ -306,6 +307,9 @@ class WXDLLEXPORT wxListCtrl: public wxControl
 
   void Command(wxCommandEvent& event) { ProcessCommand(event); };
 
+  wxListCtrlCompare GetCompareFunc() { return m_compareFunc; };
+  long GetCompareFuncData() { return m_compareFuncData; };
+
 protected:
   // overrides needed for pimpl approach
   virtual void DoSetSize(int x, int y,
@@ -317,7 +321,10 @@ protected:
   
   wxGenericListCtrl* m_genericImpl;   // allow use of the generic impl.
   wxMacDataBrowserListCtrlControl* m_dbImpl;
-    
+  EventHandlerRef   m_macListCtrlEventHandler;
+  wxListCtrlCompare m_compareFunc;
+  long m_compareFuncData;
+  
   wxTextCtrl*       m_textCtrl;        // The control used for editing a label
   wxImageList *     m_imageListNormal; // The image list for normal icons
   wxImageList *     m_imageListSmall;  // The image list for small icons

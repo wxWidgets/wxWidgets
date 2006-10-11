@@ -116,6 +116,51 @@ WX_DECLARE_EXPORTED_LIST(wxListItem, wxListItemList);
 #include "wx/listimpl.cpp"
 WX_DEFINE_LIST(wxListItemList)
 
+// so we can check for column clicks
+static const EventTypeSpec eventList[] =
+{
+    { kEventClassControl, kEventControlHit },
+};
+
+static pascal OSStatus wxMacListCtrlEventHandler( EventHandlerCallRef handler , EventRef event , void *data )
+{
+    OSStatus result = eventNotHandledErr ;
+
+    wxMacCarbonEvent cEvent( event ) ;
+
+    ControlRef controlRef ;
+    cEvent.GetParameter( kEventParamDirectObject , &controlRef ) ;
+
+    wxListCtrl *window = (wxListCtrl*) data ;
+    wxListEvent le( wxEVT_COMMAND_LIST_COL_CLICK, window->GetId() );
+    le.SetEventObject( window );
+    
+    switch ( GetEventKind( event ) )
+    {
+        // check if the column was clicked on and fire an event if so
+        case kEventControlHit :
+            {
+                ControlPartCode result = cEvent.GetParameter<ControlPartCode>(kEventParamControlPart, typeControlPartCode) ;
+                if (result == kControlButtonPart){
+                    DataBrowserPropertyID col;
+                    GetDataBrowserSortProperty(controlRef, &col);
+                    int column = col - kMinColumnId;
+                    le.m_col = column;
+                    window->GetEventHandler()->ProcessEvent( le );
+                }
+                result = CallNextEventHandler(handler, event);
+                break; 
+            }
+        default :
+            break ;
+    }
+
+    
+    return result ;
+}
+
+DEFINE_ONE_SHOT_HANDLER_GETTER( wxMacListCtrlEventHandler )
+
 class wxMacListCtrlItem : public wxMacListBoxItem
 {
 public:
@@ -209,6 +254,8 @@ void wxListCtrl::Init()
     m_textCtrl = NULL;
     m_genericImpl = NULL;
     m_dbImpl = NULL;
+    m_compareFunc = NULL;
+    m_compareFuncData = 0;
 }
 
 class wxGenericListCtrlHook : public wxGenericListCtrl
@@ -284,8 +331,12 @@ bool wxListCtrl::Create(wxWindow *parent,
             return false;
         m_dbImpl = new wxMacDataBrowserListCtrlControl( this, pos, size, style );
         m_peer = m_dbImpl;
-
+        
         MacPostControlCreate( pos, size );
+        
+        InstallControlEventHandler( m_peer->GetControlRef() , GetwxMacListCtrlEventHandlerUPP(),
+            GetEventTypeCount(eventList), eventList, this,
+            (EventHandlerRef *)&m_macListCtrlEventHandler);
     }
 
     return true;
@@ -1274,6 +1325,12 @@ bool wxListCtrl::SortItems(wxListCtrlCompare fn, long data)
 {
     if (m_genericImpl)
         return m_genericImpl->SortItems(fn, data);
+        
+    if (m_dbImpl)
+    {
+        m_compareFunc = fn;
+        m_compareFuncData = data;
+    }
 
     return true;
 }
@@ -1732,6 +1789,10 @@ Boolean wxMacDataBrowserListCtrlControl::CompareItems(DataBrowserItemID itemOneI
         {
             wxMacListCtrlItem* item = (wxMacListCtrlItem*)itemOneID;
             wxMacListCtrlItem* otherItem = (wxMacListCtrlItem*)itemTwoID;
+            wxListCtrlCompare func = list->GetCompareFunc();
+            if (func != NULL && item->HasColumnInfo(colId) && otherItem->HasColumnInfo(colId))
+                return func(item->GetColumnInfo(colId)->GetData(), otherItem->GetColumnInfo(colId)->GetData(), list->GetCompareFuncData()) >= 0;
+
             itemNum = item->GetOrder();
             otherItemNum = otherItem->GetOrder();
             if (item->HasColumnInfo(colId))
