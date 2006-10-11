@@ -815,6 +815,8 @@ public:
     %RenameCtor(Point2DCopy, wxPoint2D( const wxPoint2D &pt ));
     %RenameCtor(Point2DFromPoint, wxPoint2D( const wxPoint &pt ));
 
+    ~wxPoint2D();
+    
     DocDeclAStr(
         void, GetFloor( int *OUTPUT , int *OUTPUT ) const,
         "GetFloor() -> (x,y)",
