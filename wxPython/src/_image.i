@@ -1046,8 +1046,8 @@ range -1.0..1.0 where -1.0 is -360 degrees and 1.0 is 360 degrees", "");
     %property(MaskBlue, GetMaskBlue, doc="See `GetMaskBlue`");
     %property(MaskGreen, GetMaskGreen, doc="See `GetMaskGreen`");
     %property(MaskRed, GetMaskRed, doc="See `GetMaskRed`");
-    %property(Size, GetSize, doc="See `GetSize`");
     %property(Width, GetWidth, doc="See `GetWidth`");
+    
 };
 
 
