@@ -96,6 +96,18 @@ long wxANIDecoder::GetDelay(size_t frame) const
     return m_info[frame].m_delay;
 }
 
+wxColour wxANIDecoder::GetTransparentColour(size_t frame) const
+{
+    size_t idx = m_info[frame].m_imageIndex;
+
+    if (!m_images[idx].HasMask())
+        return wxNullColour;
+
+    return wxColour(m_images[idx].GetMaskRed(),
+                    m_images[idx].GetMaskGreen(),
+                    m_images[idx].GetMaskBlue());
+}
+
 
 //---------------------------------------------------------------------------
 // ANI reading and decoding

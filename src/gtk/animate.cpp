@@ -180,7 +180,7 @@ BEGIN_EVENT_TABLE(wxAnimationCtrl, wxAnimationCtrlBase)
     EVT_TIMER(wxID_ANY, wxAnimationCtrl::OnTimer)
 END_EVENT_TABLE()
 
-wxAnimationCtrl::wxAnimationCtrl()
+void wxAnimationCtrl::Init()
 {
     m_anim = NULL;
     m_iter = NULL;
@@ -215,9 +215,6 @@ bool wxAnimationCtrl::Create( wxWindow *parent, wxWindowID id,
     PostCreation(size);
     SetBestSize(size);
 
-    m_anim = NULL;
-    m_iter = NULL;
-    m_bPlaying = false;
     if (anim != wxNullAnimation)
         SetAnimation(anim);
 

@@ -49,6 +49,7 @@ public:
     virtual wxPoint GetFramePosition(size_t frame) const;
     virtual wxAnimationDisposal GetDisposalMethod(size_t frame) const;
     virtual long GetDelay(size_t frame) const;
+    virtual wxColour GetTransparentColour(size_t frame) const;
 
 public:
     // constructor, destructor, etc.

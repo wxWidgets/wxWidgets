@@ -42,7 +42,9 @@ public:
 public:     // extended interface used by the generic implementation of wxAnimationCtrl
 
     wxPoint GetFramePosition(size_t frame) const;
+    wxSize GetFrameSize(size_t frame) const;
     wxAnimationDisposal GetDisposalMethod(size_t frame) const;
+    wxColour GetTransparentColour(size_t frame) const;
     wxColour GetBackgroundColour() const;
 
 protected:
@@ -68,7 +70,7 @@ public:
 class WXDLLIMPEXP_ADV wxAnimationCtrl: public wxAnimationCtrlBase
 {
 public:
-    wxAnimationCtrl();
+    wxAnimationCtrl() { Init(); }
     wxAnimationCtrl(wxWindow *parent,
             wxWindowID id,
             const wxAnimation& anim = wxNullAnimation,
@@ -77,8 +79,12 @@ public:
             long style = wxAC_DEFAULT_STYLE,
             const wxString& name = wxAnimationCtrlNameStr)
     {
+        Init();
+
         Create(parent, id, anim, pos, size, style, name);
     }
+
+    void Init();
 
     bool Create(wxWindow *parent, wxWindowID id,
                 const wxAnimation& anim = wxNullAnimation,
@@ -135,9 +141,10 @@ protected:      // internal utilities
 
     // Draw the background; use this when e.g. previous frame had wxANIM_TOBACKGROUND disposal.
     void DisposeToBackground(wxDC& dc);
+    void DisposeToBackground(wxDC& dc, const wxPoint &pos, const wxSize &sz);
 
     void IncrementalUpdateBackingStore();
-    void RebuildBackingStoreUpToFrame(size_t);
+    bool RebuildBackingStoreUpToFrame(size_t);
     void DrawFrame(wxDC &dc, size_t);
 
     virtual wxSize DoGetBestSize() const;

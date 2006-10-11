@@ -82,11 +82,25 @@ wxPoint wxAnimation::GetFramePosition(size_t frame) const
     return M_ANIMDATA->GetFramePosition(frame);
 }
 
+wxSize wxAnimation::GetFrameSize(size_t frame) const
+{
+    wxCHECK_MSG( IsOk(), wxDefaultSize, wxT("invalid animation") );
+
+    return M_ANIMDATA->GetFrameSize(frame);
+}
+
 wxAnimationDisposal wxAnimation::GetDisposalMethod(size_t frame) const
 {
     wxCHECK_MSG( IsOk(), wxANIM_UNSPECIFIED, wxT("invalid animation") );
 
     return M_ANIMDATA->GetDisposalMethod(frame);
+}
+
+wxColour wxAnimation::GetTransparentColour(size_t frame) const
+{
+    wxCHECK_MSG( IsOk(), wxNullColour, wxT("invalid animation") );
+
+    return M_ANIMDATA->GetTransparentColour(frame);
 }
 
 wxColour wxAnimation::GetBackgroundColour() const
@@ -259,12 +273,15 @@ BEGIN_EVENT_TABLE(wxAnimationCtrl, wxAnimationCtrlBase)
     EVT_TIMER(wxID_ANY, wxAnimationCtrl::OnTimer)
 END_EVENT_TABLE()
 
-wxAnimationCtrl::wxAnimationCtrl()
+void wxAnimationCtrl::Init()
 {
     m_currentFrame = 0;
     m_looped = false;
     m_isPlaying = false;
-    m_useWinBackgroundColour = false;
+
+    // use the window background colour by default to be consistent
+    // with the GTK+ native version
+    m_useWinBackgroundColour = true;
 }
 
 bool wxAnimationCtrl::Create(wxWindow *parent, wxWindowID id,
@@ -272,10 +289,6 @@ bool wxAnimationCtrl::Create(wxWindow *parent, wxWindowID id,
             const wxSize& size, long style, const wxString& name)
 {
     m_animation = animation;
-    m_currentFrame = 0;
-    m_looped = true;
-    m_isPlaying = false;
-    m_useWinBackgroundColour = false;
     m_timer.SetOwner(this);
 
     if (!base_type::Create(parent, id, pos, size, style, wxDefaultValidator, name))
@@ -325,7 +338,13 @@ void wxAnimationCtrl::SetAnimation(const wxAnimation& animation)
     // display first frame
     m_currentFrame = 0;
     if (m_animation.IsOk())
-        RebuildBackingStoreUpToFrame(0);
+    {
+        if (!RebuildBackingStoreUpToFrame(0))
+        {
+            m_animation = wxNullAnimation;
+            return;
+        }
+    }
     else
     {
         // clear to
@@ -364,12 +383,14 @@ bool wxAnimationCtrl::Play(bool looped)
     int oldframe = m_currentFrame;
     m_looped = looped;
     m_currentFrame = 0;
-    m_isPlaying = true;
 
     // small optimization: if the back store was already updated to the
     // first frame, don't rebuild it
     if (oldframe != 0)
-        RebuildBackingStoreUpToFrame(0);
+        if (!RebuildBackingStoreUpToFrame(0))
+            return false;
+
+    m_isPlaying = true;
 
     // DrawCurrentFrame() will use our updated backing store
     wxClientDC clientDC(this);
@@ -390,7 +411,7 @@ bool wxAnimationCtrl::Play(bool looped)
 // wxAnimationCtrl - rendering methods
 // ----------------------------------------------------------------------------
 
-void wxAnimationCtrl::RebuildBackingStoreUpToFrame(size_t frame)
+bool wxAnimationCtrl::RebuildBackingStoreUpToFrame(size_t frame)
 {
     // if we've not created the backing store yet or it's too
     // small, then recreate it
@@ -402,7 +423,8 @@ void wxAnimationCtrl::RebuildBackingStoreUpToFrame(size_t frame)
     if ( !m_backingStore.IsOk() ||
             m_backingStore.GetWidth() < w || m_backingStore.GetHeight() < h )
     {
-        m_backingStore.Create(w, h);
+        if (!m_backingStore.Create(w, h))
+            return false;
     }
 
     wxMemoryDC dc;
@@ -419,11 +441,16 @@ void wxAnimationCtrl::RebuildBackingStoreUpToFrame(size_t frame)
         {
             DrawFrame(dc, i);
         }
+        else if (m_animation.GetDisposalMethod(i) == wxANIM_TOBACKGROUND)
+            DisposeToBackground(dc, m_animation.GetFramePosition(i),
+                                    m_animation.GetFrameSize(i));
     }
 
     // finally draw this frame
     DrawFrame(dc, frame);
     dc.SelectObject(wxNullBitmap);
+
+    return true;
 }
 
 void wxAnimationCtrl::IncrementalUpdateBackingStore()
@@ -447,7 +474,8 @@ void wxAnimationCtrl::IncrementalUpdateBackingStore()
         switch (m_animation.GetDisposalMethod(m_currentFrame-1))
         {
         case wxANIM_TOBACKGROUND:
-            DisposeToBackground(dc);
+            DisposeToBackground(dc, m_animation.GetFramePosition(m_currentFrame-1),
+                                    m_animation.GetFrameSize(m_currentFrame-1));
             break;
 
         case wxANIM_TOPREVIOUS:
@@ -462,7 +490,8 @@ void wxAnimationCtrl::IncrementalUpdateBackingStore()
                 DisposeToBackground(dc);
             }
             else
-                RebuildBackingStoreUpToFrame(m_currentFrame-2);
+                if (!RebuildBackingStoreUpToFrame(m_currentFrame-2))
+                    Stop();
             break;
 
         case wxANIM_DONOTREMOVE:
@@ -501,10 +530,21 @@ void wxAnimationCtrl::DisposeToBackground(wxDC& dc)
 { 
     wxColour col = IsUsingWindowBackgroundColour()
                     ? GetBackgroundColour()
-                    : m_animation.GetBackgroundColour() ;
+                    : m_animation.GetBackgroundColour();
     wxBrush brush(col);
     dc.SetBackground(brush);
     dc.Clear();
+}
+
+void wxAnimationCtrl::DisposeToBackground(wxDC& dc, const wxPoint &pos, const wxSize &sz)
+{
+    wxColour col = IsUsingWindowBackgroundColour()
+                    ? GetBackgroundColour()
+                    : m_animation.GetBackgroundColour();
+    wxBrush brush(col);
+    dc.SetBrush(brush);         // SetBrush and not SetBackground !!
+    dc.SetPen(*wxTRANSPARENT_PEN);
+    dc.DrawRectangle(pos, sz);
 }
 
 // ----------------------------------------------------------------------------
@@ -561,7 +601,8 @@ void wxAnimationCtrl::OnSize(wxSizeEvent &WXUNUSED(event))
     //     for big animations as the backing store must be
     //     extended and rebuilt. Try to avoid it!!
     if (m_animation.IsOk())
-        RebuildBackingStoreUpToFrame(m_currentFrame);
+        if (!RebuildBackingStoreUpToFrame(m_currentFrame))
+            Stop();     // in case we are playing
 }
 
 #endif      // wxUSE_ANIMATIONCTRL

@@ -112,6 +112,9 @@ public:     // frame specific data getters
     // if returns -1 then the frame must be displayed forever.
     virtual long GetDelay(size_t frame) const = 0;
 
+    // the transparent colour for this frame if any or wxNullColour.
+    virtual wxColour GetTransparentColour(size_t frame) const = 0;
+
     // get global data
     wxSize GetAnimationSize() const { return m_szAnimation; }
     wxColour GetBackgroundColour() const { return m_background; }

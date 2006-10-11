@@ -125,7 +125,7 @@ bool wxGIFDecoder::ConvertToImage(size_t frame, wxImage *image) const
     pal = GetPalette(frame);
     src = GetData(frame);
     dst = image->GetData();
-    transparent = GetTransparentColour(frame);
+    transparent = GetTransparentColourIndex(frame);
 
     /* set transparent colour mask */
     if (transparent != -1)
@@ -206,10 +206,22 @@ long wxGIFDecoder::GetDelay(size_t frame) const
     return GetFrame(frame)->delay;
 }
 
+wxColour wxGIFDecoder::GetTransparentColour(size_t frame) const
+{
+    unsigned char *pal = GetFrame(frame)->pal;
+    int n = GetFrame(frame)->transparent;
+    if (n == -1)
+        return wxNullColour;
+
+    return wxColour(pal[n*3 + 0],
+                    pal[n*3 + 1],
+                    pal[n*3 + 2]);
+}
+
 unsigned char* wxGIFDecoder::GetData(size_t frame) const    { return (GetFrame(frame)->p); }
 unsigned char* wxGIFDecoder::GetPalette(size_t frame) const { return (GetFrame(frame)->pal); }
 unsigned int wxGIFDecoder::GetNcolours(size_t frame) const  { return (GetFrame(frame)->ncolours); }
-int wxGIFDecoder::GetTransparentColour(size_t frame) const  { return (GetFrame(frame)->transparent); }
+int wxGIFDecoder::GetTransparentColourIndex(size_t frame) const  { return (GetFrame(frame)->transparent); }
 
 
 

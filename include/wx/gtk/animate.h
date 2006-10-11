@@ -89,7 +89,7 @@ private:
 class WXDLLIMPEXP_ADV wxAnimationCtrl: public wxAnimationCtrlBase
 {
 public:
-    wxAnimationCtrl();
+    wxAnimationCtrl() { Init(); }
     wxAnimationCtrl(wxWindow *parent,
                         wxWindowID id,
                         const wxAnimation& anim = wxNullAnimation,
@@ -98,8 +98,12 @@ public:
                         long style = wxAC_DEFAULT_STYLE,
                         const wxString& name = wxAnimationCtrlNameStr)
     {
+        Init();
+
         Create(parent, id, anim, pos, size, style, name);
     }
+
+    void Init();
 
     bool Create(wxWindow *parent, wxWindowID id,
                 const wxAnimation& anim = wxNullAnimation,

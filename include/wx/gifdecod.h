@@ -71,7 +71,8 @@ public:
     unsigned char* GetData(size_t frame) const;
     unsigned char* GetPalette(size_t frame) const;
     unsigned int GetNcolours(size_t frame) const;
-    int GetTransparentColour(size_t frame) const;
+    int GetTransparentColourIndex(size_t frame) const;
+    wxColour GetTransparentColour(size_t frame) const;
 
     virtual wxSize GetFrameSize(size_t frame) const;
     virtual wxPoint GetFramePosition(size_t frame) const;
