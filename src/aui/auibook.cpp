@@ -1969,6 +1969,7 @@ BEGIN_EVENT_TABLE(wxAuiTabCtrl, wxControl)
     EVT_ERASE_BACKGROUND(wxAuiTabCtrl::OnEraseBackground)
     EVT_SIZE(wxAuiTabCtrl::OnSize)
     EVT_LEFT_DOWN(wxAuiTabCtrl::OnLeftDown)
+    EVT_LEFT_DCLICK(wxAuiTabCtrl::OnLeftDown)
     EVT_LEFT_UP(wxAuiTabCtrl::OnLeftUp)
     EVT_MOTION(wxAuiTabCtrl::OnMotion)
     EVT_LEAVE_WINDOW(wxAuiTabCtrl::OnLeaveWindow)
@@ -2321,9 +2322,7 @@ public:
 // -- wxAuiNotebook class implementation --
 
 BEGIN_EVENT_TABLE(wxAuiNotebook, wxControl)
-    //EVT_ERASE_BACKGROUND(wxAuiNotebook::OnEraseBackground)
     EVT_SIZE(wxAuiNotebook::OnSize)
-    //EVT_LEFT_DOWN(wxAuiNotebook::OnLeftDown)
     EVT_CHILD_FOCUS(wxAuiNotebook::OnChildFocus)
     EVT_COMMAND_RANGE(10000, 10100,
                       wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGING,
@@ -2955,11 +2954,6 @@ bool wxAuiNotebook::FindTab(wxWindow* page, wxAuiTabCtrl** ctrl, int* idx)
     }
 
     return false;
-}
-
-
-void wxAuiNotebook::OnEraseBackground(wxEraseEvent&)
-{
 }
 
 void wxAuiNotebook::OnSize(wxSizeEvent& evt)

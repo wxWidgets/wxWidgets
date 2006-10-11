@@ -555,7 +555,6 @@ protected:
 
     void OnChildFocus(wxChildFocusEvent& evt);
     void OnRender(wxAuiManagerEvent& evt);
-    void OnEraseBackground(wxEraseEvent& evt);
     void OnSize(wxSizeEvent& evt);
     void OnTabClicked(wxCommandEvent& evt);
     void OnTabBeginDrag(wxCommandEvent& evt);
