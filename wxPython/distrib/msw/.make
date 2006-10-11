@@ -1,5 +1,6 @@
 #!/bin/bash
 
+# set -o xtrace
 
 function error {
     echo -----------------
@@ -99,12 +100,12 @@ if [ ! $? = 0 ]; then error 2; fi
 cd -
 
 
-#echo ------------------
-echo cd ../../contrib/build/animate
-cd ../../contrib/build/animate
-$WXWIN/build/msw/.mymake $BUILD_TYPE $@
-if [ ! $? = 0 ]; then error 2; fi
-cd -
+# echo ------------------
+# echo cd ../../contrib/build/animate
+# cd ../../contrib/build/animate
+# $WXWIN/build/msw/.mymake $BUILD_TYPE $@
+# if [ ! $? = 0 ]; then error 2; fi
+# cd -
 
 
 echo ------------------
