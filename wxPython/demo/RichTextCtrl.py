@@ -197,7 +197,7 @@ class RichTextFrame(wx.Frame):
         # TODO: Use RichTextBuffer.GetExtWildcard to get the wildcard string
         dlg = wx.FileDialog(self, "Choose a filename",
                             wildcard="All files (*.*)|*.*",
-                            style=wx.OPEN)
+                            style=wx.SAVE)
         if dlg.ShowModal() == wx.ID_OK:
             path = dlg.GetPath()
             if path:
