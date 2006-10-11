@@ -113,12 +113,16 @@ public:     // extended interface used by the generic implementation of wxAnimat
 
 #ifndef __WXGTK__
     wxPoint GetFramePosition(size_t frame) const;
+    wxSize GetFrameSize(size_t frame) const;
     wxAnimationDisposal GetDisposalMethod(size_t frame) const;
+    wxColour GetTransparentColour(size_t frame) const;
     wxColour GetBackgroundColour() const;
 #else
     %extend {
         wxPoint GetFramePosition(size_t frame) const { return wxDefaultPosition; }
+        wxSize GetFrameSize(size_t frame) const { return wxDefaultSize; }
         wxAnimationDisposal GetDisposalMethod(size_t frame) const { return wxANIM_UNSPECIFIED; }
+        wxColour GetTransparentColour(size_t frame) const { return wxNullColour; }
         wxColour GetBackgroundColour() const { return wxNullColour; }
     }
 #endif
