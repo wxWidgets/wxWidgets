@@ -12,7 +12,7 @@
 
 #include "wx/defs.h"
 
-#if wxUSE_STREAMS && wxUSE_GIF
+#if wxUSE_STREAMS
 
 #include "wx/colour.h"
 #include "wx/gdicmn.h"
@@ -140,6 +140,6 @@ public:
 };
 
 
-#endif  // wxUSE_STREAM && wxUSE_GIF
+#endif  // wxUSE_STREAM
 #endif  // _WX_ANIMDECOD_H
 
