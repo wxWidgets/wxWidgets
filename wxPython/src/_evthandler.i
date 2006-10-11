@@ -46,6 +46,11 @@ public:
     // process all pending events
     void ProcessPendingEvents();
 
+    // reentrance guard
+    void AllowReentrance( bool allow = true );
+    bool IsReentranceAllowed();
+    bool IsEventHandlingInProgress();
+
     %extend {
         // Dynamic association of a member function handler with the event handler
         void Connect( int id, int lastId, int eventType, PyObject* func) {
