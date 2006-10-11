@@ -1714,6 +1714,14 @@ class TextCtrl(_core.Control):
         """SetValue(self, String value)"""
         return _controls_.TextCtrl_SetValue(*args, **kwargs)
 
+    def IsEmpty(*args, **kwargs):
+        """IsEmpty(self) -> bool"""
+        return _controls_.TextCtrl_IsEmpty(*args, **kwargs)
+
+    def ChangeValue(*args, **kwargs):
+        """ChangeValue(self, String value)"""
+        return _controls_.TextCtrl_ChangeValue(*args, **kwargs)
+
     def GetRange(*args, **kwargs):
         """GetRange(self, long from, long to) -> String"""
         return _controls_.TextCtrl_GetRange(*args, **kwargs)
@@ -1921,6 +1929,10 @@ class TextCtrl(_core.Control):
     def SetEditable(*args, **kwargs):
         """SetEditable(self, bool editable)"""
         return _controls_.TextCtrl_SetEditable(*args, **kwargs)
+
+    def SendTextUpdatedEvent(*args, **kwargs):
+        """SendTextUpdatedEvent(self)"""
+        return _controls_.TextCtrl_SendTextUpdatedEvent(*args, **kwargs)
 
     def ShowNativeCaret(*args, **kwargs):
         """ShowNativeCaret(self, bool show=True) -> bool"""
@@ -2962,6 +2974,10 @@ class BookCtrlBase(_core.Control):
         """SetSelection(self, size_t n) -> int"""
         return _controls_.BookCtrlBase_SetSelection(*args, **kwargs)
 
+    def ChangeSelection(*args, **kwargs):
+        """ChangeSelection(self, size_t n) -> int"""
+        return _controls_.BookCtrlBase_ChangeSelection(*args, **kwargs)
+
     def AdvanceSelection(*args, **kwargs):
         """AdvanceSelection(self, bool forward=True)"""
         return _controls_.BookCtrlBase_AdvanceSelection(*args, **kwargs)
@@ -3126,6 +3142,14 @@ class Notebook(BookCtrlBase):
         return _controls_.Notebook_GetClassDefaultAttributes(*args, **kwargs)
 
     GetClassDefaultAttributes = staticmethod(GetClassDefaultAttributes)
+    def SendPageChangingEvent(*args, **kwargs):
+        """SendPageChangingEvent(self, int nPage) -> bool"""
+        return _controls_.Notebook_SendPageChangingEvent(*args, **kwargs)
+
+    def SendPageChangedEvent(*args, **kwargs):
+        """SendPageChangedEvent(self, int nPageOld, int nPageNew=-1)"""
+        return _controls_.Notebook_SendPageChangedEvent(*args, **kwargs)
+
     RowCount = property(GetRowCount,doc="See `GetRowCount`") 
     ThemeBackgroundColour = property(GetThemeBackgroundColour,doc="See `GetThemeBackgroundColour`") 
 _controls_.Notebook_swigregister(Notebook)
@@ -4126,9 +4150,8 @@ class ListItemAttr(object):
 
     def Destroy(*args, **kwargs):
         """Destroy(self)"""
-        val = _controls_.ListItemAttr_Destroy(*args, **kwargs)
-        args[0].thisown = 0
-        return val
+        args[0].this.own(False)
+        return _controls_.ListItemAttr_Destroy(*args, **kwargs)
 
     BackgroundColour = property(GetBackgroundColour,SetBackgroundColour,doc="See `GetBackgroundColour` and `SetBackgroundColour`") 
     Font = property(GetFont,SetFont,doc="See `GetFont` and `SetFont`") 
@@ -5013,9 +5036,8 @@ class TreeItemData(object):
 
     def Destroy(*args, **kwargs):
         """Destroy(self)"""
-        val = _controls_.TreeItemData_Destroy(*args, **kwargs)
-        args[0].thisown = 0
-        return val
+        args[0].this.own(False)
+        return _controls_.TreeItemData_Destroy(*args, **kwargs)
 
     Data = property(GetData,SetData,doc="See `GetData` and `SetData`") 
     Id = property(GetId,SetId,doc="See `GetId` and `SetId`") 
@@ -6198,9 +6220,8 @@ class HelpProvider(object):
 
     def Destroy(*args, **kwargs):
         """Destroy(self)"""
-        val = _controls_.HelpProvider_Destroy(*args, **kwargs)
-        args[0].thisown = 0
-        return val
+        args[0].this.own(False)
+        return _controls_.HelpProvider_Destroy(*args, **kwargs)
 
 _controls_.HelpProvider_swigregister(HelpProvider)
 

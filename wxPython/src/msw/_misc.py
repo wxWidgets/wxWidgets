@@ -821,9 +821,8 @@ class Caret(object):
 
         Deletes the C++ object this Python object is a proxy for.
         """
-        val = _misc_.Caret_Destroy(*args, **kwargs)
-        args[0].thisown = 0
-        return val
+        args[0].this.own(False)
+        return _misc_.Caret_Destroy(*args, **kwargs)
 
     def IsOk(*args, **kwargs):
         """IsOk(self) -> bool"""
@@ -1541,9 +1540,8 @@ class Log(object):
     TimeStamp = staticmethod(TimeStamp)
     def Destroy(*args, **kwargs):
         """Destroy(self)"""
-        val = _misc_.Log_Destroy(*args, **kwargs)
-        args[0].thisown = 0
-        return val
+        args[0].this.own(False)
+        return _misc_.Log_Destroy(*args, **kwargs)
 
 _misc_.Log_swigregister(Log)
 
@@ -2726,9 +2724,8 @@ class ArtProvider(object):
     GetSizeHint = staticmethod(GetSizeHint)
     def Destroy(*args, **kwargs):
         """Destroy(self)"""
-        val = _misc_.ArtProvider_Destroy(*args, **kwargs)
-        args[0].thisown = 0
-        return val
+        args[0].this.own(False)
+        return _misc_.ArtProvider_Destroy(*args, **kwargs)
 
 _misc_.ArtProvider_swigregister(ArtProvider)
 ART_TOOLBAR = cvar.ART_TOOLBAR
@@ -3794,8 +3791,9 @@ class DateTime(object):
         """IsValid(self) -> bool"""
         return _misc_.DateTime_IsValid(*args, **kwargs)
 
-    Ok = IsValid 
-    def __nonzero__(self): return self.Ok() 
+    IsOk = IsValid 
+    Ok = IsOk 
+    def __nonzero__(self): return self.IsOk() 
     def GetTicks(*args, **kwargs):
         """GetTicks(self) -> time_t"""
         return _misc_.DateTime_GetTicks(*args, **kwargs)
@@ -6229,5 +6227,413 @@ def GetBatteryState(*args):
     return approximate battery state
     """
   return _misc_.GetBatteryState(*args)
+#---------------------------------------------------------------------------
+
+class AboutDialogInfo(object):
+    """
+    `wx.AboutDialogInfo contains information shown in the standard About
+    dialog displayed by the `wx.AboutBox` function.  This class contains
+    the general information about the program, such as its name, version,
+    copyright and so on, as well as lists of the program developers,
+    documentation writers, artists and translators.
+
+    While all the main platforms have a native implementation of the about
+    dialog, they are often more limited than the generic version provided
+    by wxWidgets and so the generic version is used if
+    `wx.AboutDialogInfo` has any fields not supported by the native
+    version. Currently GTK+ version supports all the possible fields
+    natively but MSW and Mac versions don't support URLs, licence text nor
+    custom icons in the about dialog and if either of those is used,
+    wxAboutBox() will automatically use the generic version so you should
+    avoid specifying these fields to achieve more native look and feel.
+
+    """
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
+        """
+        __init__(self) -> AboutDialogInfo
+
+        `wx.AboutDialogInfo contains information shown in the standard About
+        dialog displayed by the `wx.AboutBox` function.  This class contains
+        the general information about the program, such as its name, version,
+        copyright and so on, as well as lists of the program developers,
+        documentation writers, artists and translators.
+
+        While all the main platforms have a native implementation of the about
+        dialog, they are often more limited than the generic version provided
+        by wxWidgets and so the generic version is used if
+        `wx.AboutDialogInfo` has any fields not supported by the native
+        version. Currently GTK+ version supports all the possible fields
+        natively but MSW and Mac versions don't support URLs, licence text nor
+        custom icons in the about dialog and if either of those is used,
+        wxAboutBox() will automatically use the generic version so you should
+        avoid specifying these fields to achieve more native look and feel.
+
+        """
+        _misc_.AboutDialogInfo_swiginit(self,_misc_.new_AboutDialogInfo(*args, **kwargs))
+    __swig_destroy__ = _misc_.delete_AboutDialogInfo
+    __del__ = lambda self : None;
+    def SetName(*args, **kwargs):
+        """
+        SetName(self, String name)
+
+        Set the name of the program. If this method is not called, the string
+        returned by `wx.App.GetAppName` will be shown in the dialog.
+        """
+        return _misc_.AboutDialogInfo_SetName(*args, **kwargs)
+
+    def GetName(*args, **kwargs):
+        """
+        GetName(self) -> String
+
+        Returns the program name.
+        """
+        return _misc_.AboutDialogInfo_GetName(*args, **kwargs)
+
+    Name = property(GetName,SetName) 
+    def SetVersion(*args, **kwargs):
+        """
+        SetVersion(self, String version)
+
+        Set the version of the program. The version is in free format,
+        i.e. not necessarily in the x.y.z form but it shouldn't contain the
+        "version" word.
+        """
+        return _misc_.AboutDialogInfo_SetVersion(*args, **kwargs)
+
+    def HasVersion(*args, **kwargs):
+        """
+        HasVersion(self) -> bool
+
+        Returns ``True`` if the version property has been set.
+        """
+        return _misc_.AboutDialogInfo_HasVersion(*args, **kwargs)
+
+    def GetVersion(*args, **kwargs):
+        """
+        GetVersion(self) -> String
+
+        Returns the version value.
+        """
+        return _misc_.AboutDialogInfo_GetVersion(*args, **kwargs)
+
+    Version = property(GetVersion,SetVersion) 
+    def SetDescription(*args, **kwargs):
+        """
+        SetDescription(self, String desc)
+
+        Set brief, but possibly multiline, description of the program.
+        """
+        return _misc_.AboutDialogInfo_SetDescription(*args, **kwargs)
+
+    def HasDescription(*args, **kwargs):
+        """
+        HasDescription(self) -> bool
+
+        Returns ``True`` if the description property has been set.
+        """
+        return _misc_.AboutDialogInfo_HasDescription(*args, **kwargs)
+
+    def GetDescription(*args, **kwargs):
+        """
+        GetDescription(self) -> String
+
+        Returns the description value.
+        """
+        return _misc_.AboutDialogInfo_GetDescription(*args, **kwargs)
+
+    Description = property(GetDescription,SetDescription) 
+    def SetCopyright(*args, **kwargs):
+        """
+        SetCopyright(self, String copyright)
+
+        Set the short string containing the program copyright
+        information. Notice that any occurrences of "(C)" in ``copyright``
+        will be replaced by the copyright symbol (circled C) automatically,
+        which means that you can avoid using this symbol in the program source
+        code which can be problematic.
+        """
+        return _misc_.AboutDialogInfo_SetCopyright(*args, **kwargs)
+
+    def HasCopyright(*args, **kwargs):
+        """
+        HasCopyright(self) -> bool
+
+        Returns ``True`` if the copyright property has been set.
+        """
+        return _misc_.AboutDialogInfo_HasCopyright(*args, **kwargs)
+
+    def GetCopyright(*args, **kwargs):
+        """
+        GetCopyright(self) -> String
+
+        Returns the copyright value.
+        """
+        return _misc_.AboutDialogInfo_GetCopyright(*args, **kwargs)
+
+    Copyright = property(GetCopyright,SetCopyright) 
+    def SetLicence(*args, **kwargs):
+        """
+        SetLicence(self, String licence)
+
+        Set the long, multiline string containing the text of the program
+        licence.
+
+        Only GTK+ version supports showing the licence text in the native
+        about dialog currently so the generic version will be used under all
+        the other platforms if this method is called. To preserve the native
+        look and feel it is advised that you do not call this method but
+        provide a separate menu item in the "Help" menu for displaying the
+        text of your program licence.
+
+        """
+        return _misc_.AboutDialogInfo_SetLicence(*args, **kwargs)
+
+    def SetLicense(*args, **kwargs):
+        """
+        SetLicense(self, String licence)
+
+        This is the same as `SetLicence`.
+        """
+        return _misc_.AboutDialogInfo_SetLicense(*args, **kwargs)
+
+    def HasLicence(*args, **kwargs):
+        """
+        HasLicence(self) -> bool
+
+        Returns ``True`` if the licence property has been set.
+        """
+        return _misc_.AboutDialogInfo_HasLicence(*args, **kwargs)
+
+    def GetLicence(*args, **kwargs):
+        """
+        GetLicence(self) -> String
+
+        Returns the licence value.
+        """
+        return _misc_.AboutDialogInfo_GetLicence(*args, **kwargs)
+
+    Licence = property(GetLicence,SetLicence) 
+    License = Licence 
+    def SetIcon(*args, **kwargs):
+        """
+        SetIcon(self, Icon icon)
+
+        Set the icon to be shown in the dialog. By default the icon of the
+        main frame will be shown if the native about dialog supports custom
+        icons. If it doesn't but a valid icon is specified using this method,
+        the generic about dialog is used instead so you should avoid calling
+        this function for maximally native look and feel.
+        """
+        return _misc_.AboutDialogInfo_SetIcon(*args, **kwargs)
+
+    def HasIcon(*args, **kwargs):
+        """
+        HasIcon(self) -> bool
+
+        Returns ``True`` if the icon property has been set.
+        """
+        return _misc_.AboutDialogInfo_HasIcon(*args, **kwargs)
+
+    def GetIcon(*args, **kwargs):
+        """
+        GetIcon(self) -> Icon
+
+        Return the current icon value.
+        """
+        return _misc_.AboutDialogInfo_GetIcon(*args, **kwargs)
+
+    Icon = property(GetIcon,SetIcon) 
+    def _SetWebSite(*args, **kwargs):
+        """_SetWebSite(self, String url, String desc=wxEmptyString)"""
+        return _misc_.AboutDialogInfo__SetWebSite(*args, **kwargs)
+
+    def _GetWebSiteURL(*args, **kwargs):
+        """_GetWebSiteURL(self) -> String"""
+        return _misc_.AboutDialogInfo__GetWebSiteURL(*args, **kwargs)
+
+    def _GetWebSiteDescription(*args, **kwargs):
+        """_GetWebSiteDescription(self) -> String"""
+        return _misc_.AboutDialogInfo__GetWebSiteDescription(*args, **kwargs)
+
+    def HasWebSite(*args, **kwargs):
+        """HasWebSite(self) -> bool"""
+        return _misc_.AboutDialogInfo_HasWebSite(*args, **kwargs)
+
+    def SetWebSite(self, args):
+        """
+        SetWebSite(self, URL, [Description])
+
+        Set the web site property.  The ``args`` parameter can
+        either be a single string for the URL, to a 2-tuple of
+        (URL, Description) strings.
+        """
+        if type(args) in [str, unicode]:
+            self._SetWebSite(args)
+        else:
+            self._SetWebSite(args[0], args[1])
+                
+    def GetWebSite(self):
+        """
+        GetWebSite(self) --> (URL, Description)
+        """
+        return (self._GetWebSiteURL(), self._GetWebSiteDescription())
+
+    WebSite = property(GetWebSite,SetWebSite) 
+    def SetDevelopers(*args, **kwargs):
+        """
+        SetDevelopers(self, list developers)
+
+        Set the list of the developers of the program.
+        """
+        return _misc_.AboutDialogInfo_SetDevelopers(*args, **kwargs)
+
+    def AddDeveloper(*args, **kwargs):
+        """
+        AddDeveloper(self, String developer)
+
+        Add a string to the list of developers.
+        """
+        return _misc_.AboutDialogInfo_AddDeveloper(*args, **kwargs)
+
+    def HasDevelopers(*args, **kwargs):
+        """
+        HasDevelopers(self) -> bool
+
+        Returns ``True if any developers have been set.
+        """
+        return _misc_.AboutDialogInfo_HasDevelopers(*args, **kwargs)
+
+    def GetDevelopers(*args, **kwargs):
+        """
+        GetDevelopers(self) --> list
+
+        Returns the list of developers.
+        """
+        return _misc_.AboutDialogInfo_GetDevelopers(*args, **kwargs)
+
+    Developers = property(GetDevelopers,SetDevelopers) 
+    def SetDocWriters(*args, **kwargs):
+        """
+        SetDocWriters(self, list docwriters)
+
+        Set the list of the documentation writers.
+        """
+        return _misc_.AboutDialogInfo_SetDocWriters(*args, **kwargs)
+
+    def AddDocWriter(*args, **kwargs):
+        """
+        AddDocWriter(self, String docwriter)
+
+        Add a string to the list of documentation writers.
+        """
+        return _misc_.AboutDialogInfo_AddDocWriter(*args, **kwargs)
+
+    def HasDocWriters(*args, **kwargs):
+        """
+        HasDocWriters(self) -> bool
+
+        Returns ``True if any documentation writers have been set.
+        """
+        return _misc_.AboutDialogInfo_HasDocWriters(*args, **kwargs)
+
+    def GetDocWriters(*args, **kwargs):
+        """
+        GetDocWriters(self) --> list
+
+        Returns the list of documentation writers.
+        """
+        return _misc_.AboutDialogInfo_GetDocWriters(*args, **kwargs)
+
+    DocWriters = property(GetDocWriters,SetDocWriters) 
+    def SetArtists(*args, **kwargs):
+        """
+        SetArtists(self, list artists)
+
+        Set the list of artists for the program.
+        """
+        return _misc_.AboutDialogInfo_SetArtists(*args, **kwargs)
+
+    def AddArtist(*args, **kwargs):
+        """
+        AddArtist(self, String artist)
+
+        Add a string to the list of artists.
+        """
+        return _misc_.AboutDialogInfo_AddArtist(*args, **kwargs)
+
+    def HasArtists(*args, **kwargs):
+        """
+        HasArtists(self) -> bool
+
+        Returns ``True`` if any artists have been set.
+        """
+        return _misc_.AboutDialogInfo_HasArtists(*args, **kwargs)
+
+    def GetArtists(*args, **kwargs):
+        """
+        GetArtists(self) --> list
+
+        Returns the list od artists.
+        """
+        return _misc_.AboutDialogInfo_GetArtists(*args, **kwargs)
+
+    Artists = property(GetArtists,SetArtists) 
+    def SetTranslators(*args, **kwargs):
+        """
+        SetTranslators(self, list translators)
+
+        Sets the list of program translators.
+        """
+        return _misc_.AboutDialogInfo_SetTranslators(*args, **kwargs)
+
+    def AddTranslator(*args, **kwargs):
+        """
+        AddTranslator(self, String translator)
+
+        Add a string to the list of translators.
+        """
+        return _misc_.AboutDialogInfo_AddTranslator(*args, **kwargs)
+
+    def HasTranslators(*args, **kwargs):
+        """
+        HasTranslators(self) -> bool
+
+        Returns ``True`` if any translators have been set.
+        """
+        return _misc_.AboutDialogInfo_HasTranslators(*args, **kwargs)
+
+    def GetTranslators(*args, **kwargs):
+        """
+        GetTranslators(self) --> list
+
+        Returns the list of program translators.
+        """
+        return _misc_.AboutDialogInfo_GetTranslators(*args, **kwargs)
+
+    Translators = property(GetTranslators,SetTranslators) 
+    def IsSimple(*args, **kwargs):
+        """IsSimple(self) -> bool"""
+        return _misc_.AboutDialogInfo_IsSimple(*args, **kwargs)
+
+    def GetDescriptionAndCredits(*args, **kwargs):
+        """GetDescriptionAndCredits(self) -> String"""
+        return _misc_.AboutDialogInfo_GetDescriptionAndCredits(*args, **kwargs)
+
+_misc_.AboutDialogInfo_swigregister(AboutDialogInfo)
+
+
+def AboutBox(*args, **kwargs):
+  """
+    AboutBox(AboutDialogInfo info)
+
+    This function shows the standard about dialog containing the
+    information specified in ``info``. If the current platform has a
+    native about dialog which is capable of showing all the fields in
+    ``info``, the native dialog is used, otherwise the function falls back
+    to the generic wxWidgets version of the dialog.
+    """
+  return _misc_.AboutBox(*args, **kwargs)
 
 

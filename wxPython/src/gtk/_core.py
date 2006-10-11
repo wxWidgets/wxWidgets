@@ -705,9 +705,8 @@ class Object(object):
 
         Deletes the C++ object this Python object is a proxy for.
         """
-        val = _core_.Object_Destroy(*args, **kwargs)
-        args[0].thisown = 0
-        return val
+        args[0].this.own(False)
+        return _core_.Object_Destroy(*args, **kwargs)
 
     ClassName = property(GetClassName,doc="See `GetClassName`") 
 _core_.Object_swigregister(Object)
@@ -1501,6 +1500,8 @@ class Point2D(object):
         Create a w.Point2D object.
         """
         _core_.Point2D_swiginit(self,_core_.new_Point2D(*args, **kwargs))
+    __swig_destroy__ = _core_.delete_Point2D
+    __del__ = lambda self : None;
     def GetFloor(*args, **kwargs):
         """
         GetFloor() -> (x,y)
@@ -2319,9 +2320,8 @@ class Image(Object):
 
         Destroys the image data.
         """
-        val = _core_.Image_Destroy(*args, **kwargs)
-        args[0].thisown = 0
-        return val
+        args[0].this.own(False)
+        return _core_.Image_Destroy(*args, **kwargs)
 
     def Scale(*args, **kwargs):
         """
@@ -2649,14 +2649,15 @@ class Image(Object):
         """
         return _core_.Image_LoadMimeStream(*args, **kwargs)
 
-    def Ok(*args, **kwargs):
+    def IsOk(*args, **kwargs):
         """
-        Ok(self) -> bool
+        IsOk(self) -> bool
 
         Returns true if image data is present.
         """
-        return _core_.Image_Ok(*args, **kwargs)
+        return _core_.Image_IsOk(*args, **kwargs)
 
+    Ok = IsOk 
     def GetWidth(*args, **kwargs):
         """
         GetWidth(self) -> int
@@ -3034,7 +3035,7 @@ class Image(Object):
         return _core_.Image_HSVtoRGB(*args, **kwargs)
 
     HSVtoRGB = staticmethod(HSVtoRGB)
-    def __nonzero__(self): return self.Ok() 
+    def __nonzero__(self): return self.IsOk() 
     AlphaBuffer = property(GetAlphaBuffer,SetAlphaBuffer,doc="See `GetAlphaBuffer` and `SetAlphaBuffer`") 
     AlphaData = property(GetAlphaData,SetAlphaData,doc="See `GetAlphaData` and `SetAlphaData`") 
     Data = property(GetData,SetData,doc="See `GetData` and `SetData`") 
@@ -3479,6 +3480,18 @@ class EvtHandler(Object):
     def ProcessPendingEvents(*args, **kwargs):
         """ProcessPendingEvents(self)"""
         return _core_.EvtHandler_ProcessPendingEvents(*args, **kwargs)
+
+    def AllowReentrance(*args, **kwargs):
+        """AllowReentrance(self, bool allow=True)"""
+        return _core_.EvtHandler_AllowReentrance(*args, **kwargs)
+
+    def IsReentranceAllowed(*args, **kwargs):
+        """IsReentranceAllowed(self) -> bool"""
+        return _core_.EvtHandler_IsReentranceAllowed(*args, **kwargs)
+
+    def IsEventHandlingInProgress(*args, **kwargs):
+        """IsEventHandlingInProgress(self) -> bool"""
+        return _core_.EvtHandler_IsEventHandlingInProgress(*args, **kwargs)
 
     def Connect(*args, **kwargs):
         """Connect(self, int id, int lastId, int eventType, PyObject func)"""
@@ -7483,8 +7496,8 @@ in on the main display of your Mac."""
         destroy(self)
 
     def Destroy(self):
+        self.this.own(False)
         wx.PyApp.Destroy(self)
-        self.thisown = 0
 
     def SetTopWindow(self, frame):
         """Set the \"main\" top level window"""
@@ -7799,10 +7812,11 @@ class AcceleratorTable(Object):
         _core_.AcceleratorTable_swiginit(self,_core_.new_AcceleratorTable(*args, **kwargs))
     __swig_destroy__ = _core_.delete_AcceleratorTable
     __del__ = lambda self : None;
-    def Ok(*args, **kwargs):
-        """Ok(self) -> bool"""
-        return _core_.AcceleratorTable_Ok(*args, **kwargs)
+    def IsOk(*args, **kwargs):
+        """IsOk(self) -> bool"""
+        return _core_.AcceleratorTable_IsOk(*args, **kwargs)
 
+    Ok = IsOk 
 _core_.AcceleratorTable_swigregister(AcceleratorTable)
 
 
@@ -7889,9 +7903,8 @@ class Window(EvtHandler):
         Returns True if the window has either been successfully deleted, or it
         has been added to the list of windows pending real deletion.
         """
-        val = _core_.Window_Destroy(*args, **kwargs)
-        args[0].thisown = 0
-        return val
+        args[0].this.own(False)
+        return _core_.Window_Destroy(*args, **kwargs)
 
     def DestroyChildren(*args, **kwargs):
         """
@@ -9239,6 +9252,17 @@ class Window(EvtHandler):
         """
         return _core_.Window_PrepareDC(*args, **kwargs)
 
+    def IsDoubleBuffered(*args, **kwargs):
+        """
+        IsDoubleBuffered(self) -> bool
+
+        Returns ``True`` if the window contents is double-buffered by the
+        system, i.e. if any drawing done on the window is really done on a
+        temporary backing surface and transferred to the screen all at once
+        later.
+        """
+        return _core_.Window_IsDoubleBuffered(*args, **kwargs)
+
     def GetUpdateRegion(*args, **kwargs):
         """
         GetUpdateRegion(self) -> Region
@@ -10447,29 +10471,16 @@ class Menu(EvtHandler):
 
         Deletes the C++ object this Python object is a proxy for.
         """
-        val = _core_.Menu_Destroy(*args, **kwargs)
-        args[0].thisown = 0
-        return val
+        args[0].this.own(False)
+        return _core_.Menu_Destroy(*args, **kwargs)
 
     def DestroyId(*args, **kwargs):
-        """
-        DestroyId(self, int id) -> bool
-
-        Deletes the C++ object this Python object is a proxy for.
-        """
-        val = _core_.Menu_DestroyId(*args, **kwargs)
-        args[0].thisown = 0
-        return val
+        """DestroyId(self, int id) -> bool"""
+        return _core_.Menu_DestroyId(*args, **kwargs)
 
     def DestroyItem(*args, **kwargs):
-        """
-        DestroyItem(self, MenuItem item) -> bool
-
-        Deletes the C++ object this Python object is a proxy for.
-        """
-        val = _core_.Menu_DestroyItem(*args, **kwargs)
-        args[0].thisown = 0
-        return val
+        """DestroyItem(self, MenuItem item) -> bool"""
+        return _core_.Menu_DestroyItem(*args, **kwargs)
 
     def GetMenuItemCount(*args, **kwargs):
         """GetMenuItemCount(self) -> size_t"""
@@ -13603,7 +13614,7 @@ class CallLater:
 
 
 class FutureCall(CallLater):
-    """A compatibility alias for `FutureCall`."""
+    """A compatibility alias for `CallLater`."""
 
 #----------------------------------------------------------------------------
 # Control which items in this module should be documented by epydoc.

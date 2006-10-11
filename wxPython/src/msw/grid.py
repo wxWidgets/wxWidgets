@@ -322,9 +322,8 @@ class GridCellEditor(GridCellWorker):
 
     def Destroy(*args, **kwargs):
         """Destroy(self)"""
-        val = _grid.GridCellEditor_Destroy(*args, **kwargs)
-        args[0].thisown = 0
-        return val
+        args[0].this.own(False)
+        return _grid.GridCellEditor_Destroy(*args, **kwargs)
 
     CellAttr = property(GetCellAttr,SetCellAttr,doc="See `GetCellAttr` and `SetCellAttr`") 
     Control = property(GetControl,SetControl,doc="See `GetControl` and `SetControl`") 
@@ -900,9 +899,8 @@ class PyGridTableBase(GridTableBase):
 
         Deletes the C++ object this Python object is a proxy for.
         """
-        val = _grid.PyGridTableBase_Destroy(*args, **kwargs)
-        args[0].thisown = 0
-        return val
+        args[0].this.own(False)
+        return _grid.PyGridTableBase_Destroy(*args, **kwargs)
 
     def base_GetTypeName(*args, **kw):
         return PyGridTableBase.GetTypeName(*args, **kw)

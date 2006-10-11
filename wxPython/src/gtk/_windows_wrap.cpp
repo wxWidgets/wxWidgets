@@ -7748,57 +7748,76 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_Dialog_CreateButtonSizer(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+SWIGINTERN PyObject *_wrap_Dialog__CreateButtonSizer(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   wxDialog *arg1 = (wxDialog *) 0 ;
   long arg2 ;
-  bool arg3 = (bool) false ;
-  int arg4 = (int) 0 ;
   wxSizer *result = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   long val2 ;
   int ecode2 = 0 ;
-  bool val3 ;
-  int ecode3 = 0 ;
-  int val4 ;
-  int ecode4 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
-  PyObject * obj2 = 0 ;
-  PyObject * obj3 = 0 ;
   char *  kwnames[] = {
-    (char *) "self",(char *) "flags",(char *) "separated",(char *) "distance", NULL 
+    (char *) "self",(char *) "flags", NULL 
   };
   
-  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|OO:Dialog_CreateButtonSizer",kwnames,&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:Dialog__CreateButtonSizer",kwnames,&obj0,&obj1)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxDialog, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Dialog_CreateButtonSizer" "', expected argument " "1"" of type '" "wxDialog *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Dialog__CreateButtonSizer" "', expected argument " "1"" of type '" "wxDialog *""'"); 
   }
   arg1 = reinterpret_cast< wxDialog * >(argp1);
   ecode2 = SWIG_AsVal_long(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Dialog_CreateButtonSizer" "', expected argument " "2"" of type '" "long""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Dialog__CreateButtonSizer" "', expected argument " "2"" of type '" "long""'");
   } 
   arg2 = static_cast< long >(val2);
-  if (obj2) {
-    ecode3 = SWIG_AsVal_bool(obj2, &val3);
-    if (!SWIG_IsOK(ecode3)) {
-      SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "Dialog_CreateButtonSizer" "', expected argument " "3"" of type '" "bool""'");
-    } 
-    arg3 = static_cast< bool >(val3);
-  }
-  if (obj3) {
-    ecode4 = SWIG_AsVal_int(obj3, &val4);
-    if (!SWIG_IsOK(ecode4)) {
-      SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "Dialog_CreateButtonSizer" "', expected argument " "4"" of type '" "int""'");
-    } 
-    arg4 = static_cast< int >(val4);
-  }
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    result = (wxSizer *)(arg1)->CreateButtonSizer(arg2,arg3,arg4);
+    result = (wxSizer *)(arg1)->CreateButtonSizer(arg2);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  {
+    resultobj = wxPyMake_wxObject(result, (bool)0); 
+  }
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Dialog_CreateSeparatedButtonSizer(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxDialog *arg1 = (wxDialog *) 0 ;
+  long arg2 ;
+  wxSizer *result = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  long val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "flags", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:Dialog_CreateSeparatedButtonSizer",kwnames,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxDialog, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Dialog_CreateSeparatedButtonSizer" "', expected argument " "1"" of type '" "wxDialog *""'"); 
+  }
+  arg1 = reinterpret_cast< wxDialog * >(argp1);
+  ecode2 = SWIG_AsVal_long(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Dialog_CreateSeparatedButtonSizer" "', expected argument " "2"" of type '" "long""'");
+  } 
+  arg2 = static_cast< long >(val2);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = (wxSizer *)(arg1)->CreateSeparatedButtonSizer(arg2);
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
@@ -23789,7 +23808,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_PrintData_Ok(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_PrintData_IsOk(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   wxPrintData *arg1 = (wxPrintData *) 0 ;
   bool result;
@@ -23801,12 +23820,12 @@ SWIGINTERN PyObject *_wrap_PrintData_Ok(PyObject *SWIGUNUSEDPARM(self), PyObject
   swig_obj[0] = args;
   res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxPrintData, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "PrintData_Ok" "', expected argument " "1"" of type '" "wxPrintData *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "PrintData_IsOk" "', expected argument " "1"" of type '" "wxPrintData *""'"); 
   }
   arg1 = reinterpret_cast< wxPrintData * >(argp1);
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    result = (bool)(arg1)->Ok();
+    result = (bool)(arg1)->IsOk();
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
@@ -25363,7 +25382,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_PageSetupDialogData_Ok(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_PageSetupDialogData_IsOk(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   wxPageSetupDialogData *arg1 = (wxPageSetupDialogData *) 0 ;
   bool result;
@@ -25375,12 +25394,12 @@ SWIGINTERN PyObject *_wrap_PageSetupDialogData_Ok(PyObject *SWIGUNUSEDPARM(self)
   swig_obj[0] = args;
   res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxPageSetupDialogData, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "PageSetupDialogData_Ok" "', expected argument " "1"" of type '" "wxPageSetupDialogData *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "PageSetupDialogData_IsOk" "', expected argument " "1"" of type '" "wxPageSetupDialogData *""'"); 
   }
   arg1 = reinterpret_cast< wxPageSetupDialogData * >(argp1);
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    result = (bool)(arg1)->Ok();
+    result = (bool)(arg1)->IsOk();
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
@@ -26972,7 +26991,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_PrintDialogData_Ok(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_PrintDialogData_IsOk(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   wxPrintDialogData *arg1 = (wxPrintDialogData *) 0 ;
   bool result;
@@ -26984,12 +27003,12 @@ SWIGINTERN PyObject *_wrap_PrintDialogData_Ok(PyObject *SWIGUNUSEDPARM(self), Py
   swig_obj[0] = args;
   res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxPrintDialogData, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "PrintDialogData_Ok" "', expected argument " "1"" of type '" "wxPrintDialogData const *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "PrintDialogData_IsOk" "', expected argument " "1"" of type '" "wxPrintDialogData const *""'"); 
   }
   arg1 = reinterpret_cast< wxPrintDialogData * >(argp1);
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    result = (bool)((wxPrintDialogData const *)arg1)->Ok();
+    result = (bool)((wxPrintDialogData const *)arg1)->IsOk();
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
@@ -30059,7 +30078,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_PrintPreview_Ok(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_PrintPreview_IsOk(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   wxPrintPreview *arg1 = (wxPrintPreview *) 0 ;
   bool result;
@@ -30071,12 +30090,12 @@ SWIGINTERN PyObject *_wrap_PrintPreview_Ok(PyObject *SWIGUNUSEDPARM(self), PyObj
   swig_obj[0] = args;
   res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxPrintPreview, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "PrintPreview_Ok" "', expected argument " "1"" of type '" "wxPrintPreview *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "PrintPreview_IsOk" "', expected argument " "1"" of type '" "wxPrintPreview *""'"); 
   }
   arg1 = reinterpret_cast< wxPrintPreview * >(argp1);
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    result = (bool)(arg1)->Ok();
+    result = (bool)(arg1)->IsOk();
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
@@ -31010,7 +31029,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Dialog_SetEscapeId", (PyCFunction) _wrap_Dialog_SetEscapeId, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Dialog_GetEscapeId", (PyCFunction)_wrap_Dialog_GetEscapeId, METH_O, NULL},
 	 { (char *)"Dialog_CreateTextSizer", (PyCFunction) _wrap_Dialog_CreateTextSizer, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"Dialog_CreateButtonSizer", (PyCFunction) _wrap_Dialog_CreateButtonSizer, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"Dialog__CreateButtonSizer", (PyCFunction) _wrap_Dialog__CreateButtonSizer, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"Dialog_CreateSeparatedButtonSizer", (PyCFunction) _wrap_Dialog_CreateSeparatedButtonSizer, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Dialog_CreateStdDialogButtonSizer", (PyCFunction) _wrap_Dialog_CreateStdDialogButtonSizer, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Dialog_IsModal", (PyCFunction)_wrap_Dialog_IsModal, METH_O, NULL},
 	 { (char *)"Dialog_ShowModal", (PyCFunction)_wrap_Dialog_ShowModal, METH_O, NULL},
@@ -31454,7 +31474,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"PrintData_GetNoCopies", (PyCFunction)_wrap_PrintData_GetNoCopies, METH_O, NULL},
 	 { (char *)"PrintData_GetCollate", (PyCFunction)_wrap_PrintData_GetCollate, METH_O, NULL},
 	 { (char *)"PrintData_GetOrientation", (PyCFunction)_wrap_PrintData_GetOrientation, METH_O, NULL},
-	 { (char *)"PrintData_Ok", (PyCFunction)_wrap_PrintData_Ok, METH_O, NULL},
+	 { (char *)"PrintData_IsOk", (PyCFunction)_wrap_PrintData_IsOk, METH_O, NULL},
 	 { (char *)"PrintData_GetPrinterName", (PyCFunction)_wrap_PrintData_GetPrinterName, METH_O, NULL},
 	 { (char *)"PrintData_GetColour", (PyCFunction)_wrap_PrintData_GetColour, METH_O, NULL},
 	 { (char *)"PrintData_GetDuplex", (PyCFunction)_wrap_PrintData_GetDuplex, METH_O, NULL},
@@ -31501,7 +31521,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"PageSetupDialogData_GetPaperId", (PyCFunction)_wrap_PageSetupDialogData_GetPaperId, METH_O, NULL},
 	 { (char *)"PageSetupDialogData_GetPaperSize", (PyCFunction)_wrap_PageSetupDialogData_GetPaperSize, METH_O, NULL},
 	 { (char *)"PageSetupDialogData_GetPrintData", (PyCFunction)_wrap_PageSetupDialogData_GetPrintData, METH_O, NULL},
-	 { (char *)"PageSetupDialogData_Ok", (PyCFunction)_wrap_PageSetupDialogData_Ok, METH_O, NULL},
+	 { (char *)"PageSetupDialogData_IsOk", (PyCFunction)_wrap_PageSetupDialogData_IsOk, METH_O, NULL},
 	 { (char *)"PageSetupDialogData_SetDefaultInfo", (PyCFunction) _wrap_PageSetupDialogData_SetDefaultInfo, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"PageSetupDialogData_SetDefaultMinMargins", (PyCFunction) _wrap_PageSetupDialogData_SetDefaultMinMargins, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"PageSetupDialogData_SetMarginTopLeft", (PyCFunction) _wrap_PageSetupDialogData_SetMarginTopLeft, METH_VARARGS | METH_KEYWORDS, NULL},
@@ -31550,7 +31570,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"PrintDialogData_GetEnableSelection", (PyCFunction)_wrap_PrintDialogData_GetEnableSelection, METH_O, NULL},
 	 { (char *)"PrintDialogData_GetEnablePageNumbers", (PyCFunction)_wrap_PrintDialogData_GetEnablePageNumbers, METH_O, NULL},
 	 { (char *)"PrintDialogData_GetEnableHelp", (PyCFunction)_wrap_PrintDialogData_GetEnableHelp, METH_O, NULL},
-	 { (char *)"PrintDialogData_Ok", (PyCFunction)_wrap_PrintDialogData_Ok, METH_O, NULL},
+	 { (char *)"PrintDialogData_IsOk", (PyCFunction)_wrap_PrintDialogData_IsOk, METH_O, NULL},
 	 { (char *)"PrintDialogData_GetPrintData", (PyCFunction)_wrap_PrintDialogData_GetPrintData, METH_O, NULL},
 	 { (char *)"PrintDialogData_SetPrintData", (PyCFunction) _wrap_PrintDialogData_SetPrintData, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"PrintDialogData_swigregister", PrintDialogData_swigregister, METH_VARARGS, NULL},
@@ -31641,7 +31661,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"PrintPreview_GetZoom", (PyCFunction)_wrap_PrintPreview_GetZoom, METH_O, NULL},
 	 { (char *)"PrintPreview_GetMaxPage", (PyCFunction)_wrap_PrintPreview_GetMaxPage, METH_O, NULL},
 	 { (char *)"PrintPreview_GetMinPage", (PyCFunction)_wrap_PrintPreview_GetMinPage, METH_O, NULL},
-	 { (char *)"PrintPreview_Ok", (PyCFunction)_wrap_PrintPreview_Ok, METH_O, NULL},
+	 { (char *)"PrintPreview_IsOk", (PyCFunction)_wrap_PrintPreview_IsOk, METH_O, NULL},
 	 { (char *)"PrintPreview_SetOk", (PyCFunction) _wrap_PrintPreview_SetOk, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"PrintPreview_Print", (PyCFunction) _wrap_PrintPreview_Print, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"PrintPreview_DetermineScaling", (PyCFunction)_wrap_PrintPreview_DetermineScaling, METH_O, NULL},

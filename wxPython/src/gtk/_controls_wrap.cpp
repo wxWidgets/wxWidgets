@@ -11383,13 +11383,7 @@ SWIGINTERN PyObject *_wrap_TextAttr_GetTabs(PyObject *SWIGUNUSEDPARM(self), PyOb
     if (PyErr_Occurred()) SWIG_fail;
   }
   {
-    resultobj = PyList_New(0);
-    size_t idx;
-    for (idx = 0; idx < result->GetCount(); idx += 1) {
-      PyObject* val = PyInt_FromLong( result->Item(idx) );
-      PyList_Append(resultobj, val);
-      Py_DECREF(val);
-    }
+    resultobj = wxArrayInt2PyList_helper(*result);
   }
   return resultobj;
 fail:
@@ -11946,6 +11940,81 @@ SWIGINTERN PyObject *_wrap_TextCtrl_SetValue(PyObject *SWIGUNUSEDPARM(self), PyO
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
     (arg1)->SetValue((wxString const &)*arg2);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  {
+    if (temp2)
+    delete arg2;
+  }
+  return resultobj;
+fail:
+  {
+    if (temp2)
+    delete arg2;
+  }
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_TextCtrl_IsEmpty(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxTextCtrl *arg1 = (wxTextCtrl *) 0 ;
+  bool result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxTextCtrl, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "TextCtrl_IsEmpty" "', expected argument " "1"" of type '" "wxTextCtrl const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxTextCtrl * >(argp1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = (bool)((wxTextCtrl const *)arg1)->IsEmpty();
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  {
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+  }
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_TextCtrl_ChangeValue(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxTextCtrl *arg1 = (wxTextCtrl *) 0 ;
+  wxString *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  bool temp2 = false ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "value", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:TextCtrl_ChangeValue",kwnames,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxTextCtrl, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "TextCtrl_ChangeValue" "', expected argument " "1"" of type '" "wxTextCtrl *""'"); 
+  }
+  arg1 = reinterpret_cast< wxTextCtrl * >(argp1);
+  {
+    arg2 = wxString_in_helper(obj1);
+    if (arg2 == NULL) SWIG_fail;
+    temp2 = true;
+  }
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    (arg1)->ChangeValue((wxString const &)*arg2);
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
@@ -13799,6 +13868,33 @@ SWIGINTERN PyObject *_wrap_TextCtrl_SetEditable(PyObject *SWIGUNUSEDPARM(self), 
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
     (arg1)->SetEditable(arg2);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_TextCtrl_SendTextUpdatedEvent(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxTextCtrl *arg1 = (wxTextCtrl *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxTextCtrl, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "TextCtrl_SendTextUpdatedEvent" "', expected argument " "1"" of type '" "wxTextCtrl *""'"); 
+  }
+  arg1 = reinterpret_cast< wxTextCtrl * >(argp1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    (arg1)->SendTextUpdatedEvent();
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
@@ -20151,6 +20247,45 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_BookCtrlBase_ChangeSelection(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxBookCtrlBase *arg1 = (wxBookCtrlBase *) 0 ;
+  size_t arg2 ;
+  int result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  size_t val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "n", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:BookCtrlBase_ChangeSelection",kwnames,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxBookCtrlBase, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "BookCtrlBase_ChangeSelection" "', expected argument " "1"" of type '" "wxBookCtrlBase *""'"); 
+  }
+  arg1 = reinterpret_cast< wxBookCtrlBase * >(argp1);
+  ecode2 = SWIG_AsVal_size_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "BookCtrlBase_ChangeSelection" "', expected argument " "2"" of type '" "size_t""'");
+  } 
+  arg2 = static_cast< size_t >(val2);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = (int)(arg1)->ChangeSelection(arg2);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_From_int(static_cast< int >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_BookCtrlBase_AdvanceSelection(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   wxBookCtrlBase *arg1 = (wxBookCtrlBase *) 0 ;
@@ -20854,6 +20989,96 @@ SWIGINTERN PyObject *_wrap_Notebook_GetClassDefaultAttributes(PyObject *SWIGUNUS
     if (PyErr_Occurred()) SWIG_fail;
   }
   resultobj = SWIG_NewPointerObj((new wxVisualAttributes(static_cast< const wxVisualAttributes& >(result))), SWIGTYPE_p_wxVisualAttributes, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Notebook_SendPageChangingEvent(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxNotebook *arg1 = (wxNotebook *) 0 ;
+  int arg2 ;
+  bool result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "nPage", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:Notebook_SendPageChangingEvent",kwnames,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxNotebook, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Notebook_SendPageChangingEvent" "', expected argument " "1"" of type '" "wxNotebook *""'"); 
+  }
+  arg1 = reinterpret_cast< wxNotebook * >(argp1);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Notebook_SendPageChangingEvent" "', expected argument " "2"" of type '" "int""'");
+  } 
+  arg2 = static_cast< int >(val2);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = (bool)(arg1)->SendPageChangingEvent(arg2);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  {
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+  }
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Notebook_SendPageChangedEvent(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxNotebook *arg1 = (wxNotebook *) 0 ;
+  int arg2 ;
+  int arg3 = (int) -1 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  int val3 ;
+  int ecode3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "nPageOld",(char *) "nPageNew", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|O:Notebook_SendPageChangedEvent",kwnames,&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxNotebook, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Notebook_SendPageChangedEvent" "', expected argument " "1"" of type '" "wxNotebook *""'"); 
+  }
+  arg1 = reinterpret_cast< wxNotebook * >(argp1);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Notebook_SendPageChangedEvent" "', expected argument " "2"" of type '" "int""'");
+  } 
+  arg2 = static_cast< int >(val2);
+  if (obj2) {
+    ecode3 = SWIG_AsVal_int(obj2, &val3);
+    if (!SWIG_IsOK(ecode3)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "Notebook_SendPageChangedEvent" "', expected argument " "3"" of type '" "int""'");
+    } 
+    arg3 = static_cast< int >(val3);
+  }
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    (arg1)->SendPageChangedEvent(arg2,arg3);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
   return NULL;
@@ -45411,6 +45636,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"TextCtrl_Create", (PyCFunction) _wrap_TextCtrl_Create, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"TextCtrl_GetValue", (PyCFunction)_wrap_TextCtrl_GetValue, METH_O, NULL},
 	 { (char *)"TextCtrl_SetValue", (PyCFunction) _wrap_TextCtrl_SetValue, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"TextCtrl_IsEmpty", (PyCFunction)_wrap_TextCtrl_IsEmpty, METH_O, NULL},
+	 { (char *)"TextCtrl_ChangeValue", (PyCFunction) _wrap_TextCtrl_ChangeValue, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"TextCtrl_GetRange", (PyCFunction) _wrap_TextCtrl_GetRange, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"TextCtrl_GetLineLength", (PyCFunction) _wrap_TextCtrl_GetLineLength, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"TextCtrl_GetLineText", (PyCFunction) _wrap_TextCtrl_GetLineText, METH_VARARGS | METH_KEYWORDS, NULL},
@@ -45459,6 +45686,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"TextCtrl_SetSelection", (PyCFunction) _wrap_TextCtrl_SetSelection, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"TextCtrl_SelectAll", (PyCFunction)_wrap_TextCtrl_SelectAll, METH_O, NULL},
 	 { (char *)"TextCtrl_SetEditable", (PyCFunction) _wrap_TextCtrl_SetEditable, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"TextCtrl_SendTextUpdatedEvent", (PyCFunction)_wrap_TextCtrl_SendTextUpdatedEvent, METH_O, NULL},
 	 { (char *)"TextCtrl_write", (PyCFunction) _wrap_TextCtrl_write, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"TextCtrl_GetString", (PyCFunction) _wrap_TextCtrl_GetString, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"TextCtrl_GetClassDefaultAttributes", (PyCFunction) _wrap_TextCtrl_GetClassDefaultAttributes, METH_VARARGS | METH_KEYWORDS, NULL},
@@ -45609,6 +45837,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"BookCtrlBase_AddPage", (PyCFunction) _wrap_BookCtrlBase_AddPage, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"BookCtrlBase_InsertPage", (PyCFunction) _wrap_BookCtrlBase_InsertPage, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"BookCtrlBase_SetSelection", (PyCFunction) _wrap_BookCtrlBase_SetSelection, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"BookCtrlBase_ChangeSelection", (PyCFunction) _wrap_BookCtrlBase_ChangeSelection, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"BookCtrlBase_AdvanceSelection", (PyCFunction) _wrap_BookCtrlBase_AdvanceSelection, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"BookCtrlBase_HitTest", (PyCFunction) _wrap_BookCtrlBase_HitTest, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"BookCtrlBase_GetClassDefaultAttributes", (PyCFunction) _wrap_BookCtrlBase_GetClassDefaultAttributes, METH_VARARGS | METH_KEYWORDS, NULL},
@@ -45628,6 +45857,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Notebook_SetTabSize", (PyCFunction) _wrap_Notebook_SetTabSize, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Notebook_GetThemeBackgroundColour", (PyCFunction)_wrap_Notebook_GetThemeBackgroundColour, METH_O, NULL},
 	 { (char *)"Notebook_GetClassDefaultAttributes", (PyCFunction) _wrap_Notebook_GetClassDefaultAttributes, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"Notebook_SendPageChangingEvent", (PyCFunction) _wrap_Notebook_SendPageChangingEvent, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"Notebook_SendPageChangedEvent", (PyCFunction) _wrap_Notebook_SendPageChangedEvent, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Notebook_swigregister", Notebook_swigregister, METH_VARARGS, NULL},
 	 { (char *)"Notebook_swiginit", Notebook_swiginit, METH_VARARGS, NULL},
 	 { (char *)"new_NotebookEvent", (PyCFunction) _wrap_new_NotebookEvent, METH_VARARGS | METH_KEYWORDS, NULL},

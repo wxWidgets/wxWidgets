@@ -679,9 +679,16 @@ class Dialog(TopLevelWindow):
         """CreateTextSizer(self, String message) -> Sizer"""
         return _windows_.Dialog_CreateTextSizer(*args, **kwargs)
 
-    def CreateButtonSizer(*args, **kwargs):
-        """CreateButtonSizer(self, long flags, bool separated=False, int distance=0) -> Sizer"""
-        return _windows_.Dialog_CreateButtonSizer(*args, **kwargs)
+    def _CreateButtonSizer(*args, **kwargs):
+        """_CreateButtonSizer(self, long flags) -> Sizer"""
+        return _windows_.Dialog__CreateButtonSizer(*args, **kwargs)
+
+    def CreateButtonSizer(self, flags, *ignored):
+        return self._CreateButtonSizer(flags)
+
+    def CreateSeparatedButtonSizer(*args, **kwargs):
+        """CreateSeparatedButtonSizer(self, long flags) -> Sizer"""
+        return _windows_.Dialog_CreateSeparatedButtonSizer(*args, **kwargs)
 
     def CreateStdDialogButtonSizer(*args, **kwargs):
         """CreateStdDialogButtonSizer(self, long flags) -> StdDialogButtonSizer"""
@@ -2099,9 +2106,8 @@ class TaskBarIcon(_core.EvtHandler):
 
         Deletes the C++ object this Python object is a proxy for.
         """
-        val = _windows_.TaskBarIcon_Destroy(*args, **kwargs)
-        args[0].thisown = 0
-        return val
+        args[0].this.own(False)
+        return _windows_.TaskBarIcon_Destroy(*args, **kwargs)
 
     def IsOk(*args, **kwargs):
         """IsOk(self) -> bool"""
@@ -3868,10 +3874,11 @@ class PrintData(_core.Object):
         """GetOrientation(self) -> int"""
         return _windows_.PrintData_GetOrientation(*args, **kwargs)
 
-    def Ok(*args, **kwargs):
-        """Ok(self) -> bool"""
-        return _windows_.PrintData_Ok(*args, **kwargs)
+    def IsOk(*args, **kwargs):
+        """IsOk(self) -> bool"""
+        return _windows_.PrintData_IsOk(*args, **kwargs)
 
+    Ok = IsOk 
     def GetPrinterName(*args, **kwargs):
         """GetPrinterName(self) -> String"""
         return _windows_.PrintData_GetPrinterName(*args, **kwargs)
@@ -3956,7 +3963,7 @@ class PrintData(_core.Object):
         """SetFilename(self, String filename)"""
         return _windows_.PrintData_SetFilename(*args, **kwargs)
 
-    def __nonzero__(self): return self.Ok() 
+    def __nonzero__(self): return self.IsOk() 
     def GetPrivData(*args, **kwargs):
         """GetPrivData(self) -> PyObject"""
         return _windows_.PrintData_GetPrivData(*args, **kwargs)
@@ -4071,10 +4078,11 @@ class PageSetupDialogData(_core.Object):
         """GetPrintData(self) -> PrintData"""
         return _windows_.PageSetupDialogData_GetPrintData(*args, **kwargs)
 
-    def Ok(*args, **kwargs):
-        """Ok(self) -> bool"""
-        return _windows_.PageSetupDialogData_Ok(*args, **kwargs)
+    def IsOk(*args, **kwargs):
+        """IsOk(self) -> bool"""
+        return _windows_.PageSetupDialogData_IsOk(*args, **kwargs)
 
+    Ok = IsOk 
     def SetDefaultInfo(*args, **kwargs):
         """SetDefaultInfo(self, bool flag)"""
         return _windows_.PageSetupDialogData_SetDefaultInfo(*args, **kwargs)
@@ -4119,7 +4127,7 @@ class PageSetupDialogData(_core.Object):
         """CalculatePaperSizeFromId(self)"""
         return _windows_.PageSetupDialogData_CalculatePaperSizeFromId(*args, **kwargs)
 
-    def __nonzero__(self): return self.Ok() 
+    def __nonzero__(self): return self.IsOk() 
     DefaultInfo = property(GetDefaultInfo,SetDefaultInfo,doc="See `GetDefaultInfo` and `SetDefaultInfo`") 
     DefaultMinMargins = property(GetDefaultMinMargins,SetDefaultMinMargins,doc="See `GetDefaultMinMargins` and `SetDefaultMinMargins`") 
     MarginBottomRight = property(GetMarginBottomRight,SetMarginBottomRight,doc="See `GetMarginBottomRight` and `SetMarginBottomRight`") 
@@ -4274,10 +4282,11 @@ class PrintDialogData(_core.Object):
         """GetEnableHelp(self) -> bool"""
         return _windows_.PrintDialogData_GetEnableHelp(*args, **kwargs)
 
-    def Ok(*args, **kwargs):
-        """Ok(self) -> bool"""
-        return _windows_.PrintDialogData_Ok(*args, **kwargs)
+    def IsOk(*args, **kwargs):
+        """IsOk(self) -> bool"""
+        return _windows_.PrintDialogData_IsOk(*args, **kwargs)
 
+    Ok = IsOk 
     def GetPrintData(*args, **kwargs):
         """GetPrintData(self) -> PrintData"""
         return _windows_.PrintDialogData_GetPrintData(*args, **kwargs)
@@ -4286,7 +4295,7 @@ class PrintDialogData(_core.Object):
         """SetPrintData(self, PrintData printData)"""
         return _windows_.PrintDialogData_SetPrintData(*args, **kwargs)
 
-    def __nonzero__(self): return self.Ok() 
+    def __nonzero__(self): return self.IsOk() 
     AllPages = property(GetAllPages,SetAllPages,doc="See `GetAllPages` and `SetAllPages`") 
     Collate = property(GetCollate,SetCollate,doc="See `GetCollate` and `SetCollate`") 
     FromPage = property(GetFromPage,SetFromPage,doc="See `GetFromPage` and `SetFromPage`") 
@@ -4712,10 +4721,11 @@ class PrintPreview(_core.Object):
         """GetMinPage(self) -> int"""
         return _windows_.PrintPreview_GetMinPage(*args, **kwargs)
 
-    def Ok(*args, **kwargs):
-        """Ok(self) -> bool"""
-        return _windows_.PrintPreview_Ok(*args, **kwargs)
+    def IsOk(*args, **kwargs):
+        """IsOk(self) -> bool"""
+        return _windows_.PrintPreview_IsOk(*args, **kwargs)
 
+    Ok = IsOk 
     def SetOk(*args, **kwargs):
         """SetOk(self, bool ok)"""
         return _windows_.PrintPreview_SetOk(*args, **kwargs)
@@ -4728,7 +4738,7 @@ class PrintPreview(_core.Object):
         """DetermineScaling(self)"""
         return _windows_.PrintPreview_DetermineScaling(*args, **kwargs)
 
-    def __nonzero__(self): return self.Ok() 
+    def __nonzero__(self): return self.IsOk() 
     Canvas = property(GetCanvas,SetCanvas,doc="See `GetCanvas` and `SetCanvas`") 
     CurrentPage = property(GetCurrentPage,SetCurrentPage,doc="See `GetCurrentPage` and `SetCurrentPage`") 
     Frame = property(GetFrame,SetFrame,doc="See `GetFrame` and `SetFrame`") 

@@ -146,15 +146,16 @@ class Colour(_core.Object):
         """
         return _gdi_.Colour_Alpha(*args, **kwargs)
 
-    def Ok(*args, **kwargs):
+    def IsOk(*args, **kwargs):
         """
-        Ok(self) -> bool
+        IsOk(self) -> bool
 
         Returns True if the colour object is valid (the colour has been
         initialised with RGB values).
         """
-        return _gdi_.Colour_Ok(*args, **kwargs)
+        return _gdi_.Colour_IsOk(*args, **kwargs)
 
+    Ok = IsOk 
     def Set(*args, **kwargs):
         """
         Set(self, byte red, byte green, byte blue, byte alpha=ALPHA_OPAQUE)
@@ -239,7 +240,9 @@ class Colour(_core.Object):
     asTuple = wx._deprecated(Get, "asTuple is deprecated, use `Get` instead")
     def __str__(self):                  return str(self.Get(True))
     def __repr__(self):                 return 'wx.Colour' + str(self.Get(True))
-    def __nonzero__(self):              return self.Ok()
+    def __len__(self):                  return len(self.Get())
+    def __getitem__(self, index):       return self.Get()[index]
+    def __nonzero__(self):              return self.IsOk()
     __safe_for_unpickling__ = True
     def __reduce__(self):               return (Colour, self.Get(True))
 
@@ -291,11 +294,12 @@ class Palette(GDIObject):
         """GetColoursCount(self) -> int"""
         return _gdi_.Palette_GetColoursCount(*args, **kwargs)
 
-    def Ok(*args, **kwargs):
-        """Ok(self) -> bool"""
-        return _gdi_.Palette_Ok(*args, **kwargs)
+    def IsOk(*args, **kwargs):
+        """IsOk(self) -> bool"""
+        return _gdi_.Palette_IsOk(*args, **kwargs)
 
-    def __nonzero__(self): return self.Ok() 
+    Ok = IsOk 
+    def __nonzero__(self): return self.IsOk() 
     ColoursCount = property(GetColoursCount,doc="See `GetColoursCount`") 
 _gdi_.Palette_swigregister(Palette)
 
@@ -330,10 +334,11 @@ class Pen(GDIObject):
         """GetWidth(self) -> int"""
         return _gdi_.Pen_GetWidth(*args, **kwargs)
 
-    def Ok(*args, **kwargs):
-        """Ok(self) -> bool"""
-        return _gdi_.Pen_Ok(*args, **kwargs)
+    def IsOk(*args, **kwargs):
+        """IsOk(self) -> bool"""
+        return _gdi_.Pen_IsOk(*args, **kwargs)
 
+    Ok = IsOk 
     def SetCap(*args, **kwargs):
         """SetCap(self, int cap_style)"""
         return _gdi_.Pen_SetCap(*args, **kwargs)
@@ -394,7 +399,7 @@ class Pen(GDIObject):
         """__ne__(self, Pen other) -> bool"""
         return _gdi_.Pen___ne__(*args, **kwargs)
 
-    def __nonzero__(self): return self.Ok() 
+    def __nonzero__(self): return self.IsOk() 
     Cap = property(GetCap,SetCap,doc="See `GetCap` and `SetCap`") 
     Colour = property(GetColour,SetColour,doc="See `GetColour` and `SetColour`") 
     Dashes = property(GetDashes,SetDashes,doc="See `GetDashes` and `SetDashes`") 
@@ -481,15 +486,16 @@ class Brush(GDIObject):
         """
         return _gdi_.Brush_IsHatch(*args, **kwargs)
 
-    def Ok(*args, **kwargs):
+    def IsOk(*args, **kwargs):
         """
-        Ok(self) -> bool
+        IsOk(self) -> bool
 
         Returns True if the brush is initialised and valid.
         """
-        return _gdi_.Brush_Ok(*args, **kwargs)
+        return _gdi_.Brush_IsOk(*args, **kwargs)
 
-    def __nonzero__(self): return self.Ok() 
+    Ok = IsOk 
+    def __nonzero__(self): return self.IsOk() 
     Colour = property(GetColour,SetColour,doc="See `GetColour` and `SetColour`") 
     Stipple = property(GetStipple,SetStipple,doc="See `GetStipple` and `SetStipple`") 
     Style = property(GetStyle,SetStyle,doc="See `GetStyle` and `SetStyle`") 
@@ -532,10 +538,11 @@ class Bitmap(GDIObject):
         """SetHandle(self, long handle)"""
         return _gdi_.Bitmap_SetHandle(*args, **kwargs)
 
-    def Ok(*args, **kwargs):
-        """Ok(self) -> bool"""
-        return _gdi_.Bitmap_Ok(*args, **kwargs)
+    def IsOk(*args, **kwargs):
+        """IsOk(self) -> bool"""
+        return _gdi_.Bitmap_IsOk(*args, **kwargs)
 
+    Ok = IsOk 
     def GetWidth(*args, **kwargs):
         """
         GetWidth(self) -> int
@@ -686,7 +693,7 @@ class Bitmap(GDIObject):
         """CopyFromCursor(self, Cursor cursor) -> bool"""
         return _gdi_.Bitmap_CopyFromCursor(*args, **kwargs)
 
-    def __nonzero__(self): return self.Ok() 
+    def __nonzero__(self): return self.IsOk() 
     def __eq__(*args, **kwargs):
         """__eq__(self, Bitmap other) -> bool"""
         return _gdi_.Bitmap___eq__(*args, **kwargs)
@@ -1136,10 +1143,11 @@ class Icon(GDIObject):
         """SetHandle(self, long handle)"""
         return _gdi_.Icon_SetHandle(*args, **kwargs)
 
-    def Ok(*args, **kwargs):
-        """Ok(self) -> bool"""
-        return _gdi_.Icon_Ok(*args, **kwargs)
+    def IsOk(*args, **kwargs):
+        """IsOk(self) -> bool"""
+        return _gdi_.Icon_IsOk(*args, **kwargs)
 
+    Ok = IsOk 
     def GetWidth(*args, **kwargs):
         """GetWidth(self) -> int"""
         return _gdi_.Icon_GetWidth(*args, **kwargs)
@@ -1172,7 +1180,7 @@ class Icon(GDIObject):
         """CopyFromBitmap(self, Bitmap bmp)"""
         return _gdi_.Icon_CopyFromBitmap(*args, **kwargs)
 
-    def __nonzero__(self): return self.Ok() 
+    def __nonzero__(self): return self.IsOk() 
     Depth = property(GetDepth,SetDepth,doc="See `GetDepth` and `SetDepth`") 
     Height = property(GetHeight,SetHeight,doc="See `GetHeight` and `SetHeight`") 
     Width = property(GetWidth,SetWidth,doc="See `GetWidth` and `SetWidth`") 
@@ -1211,7 +1219,7 @@ class IconLocation(object):
         """IsOk(self) -> bool"""
         return _gdi_.IconLocation_IsOk(*args, **kwargs)
 
-    def __nonzero__(self): return self.Ok() 
+    def __nonzero__(self): return self.IsOk() 
     def SetFileName(*args, **kwargs):
         """SetFileName(self, String filename)"""
         return _gdi_.IconLocation_SetFileName(*args, **kwargs)
@@ -1307,11 +1315,12 @@ class Cursor(GDIObject):
         """
         return _gdi_.Cursor_SetHandle(*args, **kwargs)
 
-    def Ok(*args, **kwargs):
-        """Ok(self) -> bool"""
-        return _gdi_.Cursor_Ok(*args, **kwargs)
+    def IsOk(*args, **kwargs):
+        """IsOk(self) -> bool"""
+        return _gdi_.Cursor_IsOk(*args, **kwargs)
 
-    def __nonzero__(self): return self.Ok() 
+    Ok = IsOk 
+    def __nonzero__(self): return self.IsOk() 
     def GetWidth(*args, **kwargs):
         """GetWidth(self) -> int"""
         return _gdi_.Cursor_GetWidth(*args, **kwargs)
@@ -1980,15 +1989,16 @@ class Font(GDIObject):
         _gdi_.Font_swiginit(self,_gdi_.new_Font(*args, **kwargs))
     __swig_destroy__ = _gdi_.delete_Font
     __del__ = lambda self : None;
-    def Ok(*args, **kwargs):
+    def IsOk(*args, **kwargs):
         """
-        Ok(self) -> bool
+        IsOk(self) -> bool
 
         Returns ``True`` if this font was successfully created.
         """
-        return _gdi_.Font_Ok(*args, **kwargs)
+        return _gdi_.Font_IsOk(*args, **kwargs)
 
-    def __nonzero__(self): return self.Ok() 
+    Ok = IsOk 
+    def __nonzero__(self): return self.IsOk() 
     def __eq__(*args, **kwargs):
         """__eq__(self, Font other) -> bool"""
         return _gdi_.Font___eq__(*args, **kwargs)
@@ -3911,14 +3921,15 @@ class DC(_core.Object):
         """
         return _gdi_.DC_GetPPI(*args, **kwargs)
 
-    def Ok(*args, **kwargs):
+    def IsOk(*args, **kwargs):
         """
-        Ok(self) -> bool
+        IsOk(self) -> bool
 
         Returns true if the DC is ok to use.
         """
-        return _gdi_.DC_Ok(*args, **kwargs)
+        return _gdi_.DC_IsOk(*args, **kwargs)
 
+    Ok = IsOk 
     def GetBackgroundMode(*args, **kwargs):
         """
         GetBackgroundMode(self) -> int
@@ -4221,7 +4232,27 @@ class DC(_core.Object):
         """
         return _gdi_.DC_GetBoundingBox(*args, **kwargs)
 
-    def __nonzero__(self): return self.Ok() 
+    def __nonzero__(self): return self.IsOk() 
+    def GetLayoutDirection(*args, **kwargs):
+        """
+        GetLayoutDirection(self) -> int
+
+        Get the layout direction (LTR or RTL)_ for this dc.  On platforms
+        where RTL layout is supported, the return value will either be
+        ``wx.Layout_LeftToRight`` or ``wx.Layout_RightToLeft``.
+        ``wx.Layout_Default`` is returned if layout direction is not
+        supported.
+        """
+        return _gdi_.DC_GetLayoutDirection(*args, **kwargs)
+
+    def SetLayoutDirection(*args, **kwargs):
+        """
+        SetLayoutDirection(self, int dir)
+
+        Change the layout direction for this dc.
+        """
+        return _gdi_.DC_SetLayoutDirection(*args, **kwargs)
+
     def GetHDC(*args, **kwargs):
         """GetHDC(self) -> long"""
         return _gdi_.DC_GetHDC(*args, **kwargs)
@@ -4440,6 +4471,7 @@ class DC(_core.Object):
     TextExtent = property(GetTextExtent,doc="See `GetTextExtent`") 
     TextForeground = property(GetTextForeground,SetTextForeground,doc="See `GetTextForeground` and `SetTextForeground`") 
     UserScale = property(GetUserScale,SetUserScale,doc="See `GetUserScale` and `SetUserScale`") 
+    LayoutDirection = property(GetLayoutDirection,SetLayoutDirection) 
 _gdi_.DC_swigregister(DC)
 
 #---------------------------------------------------------------------------
@@ -4504,7 +4536,7 @@ def MemoryDCFromDC(*args, **kwargs):
 
 BUFFER_VIRTUAL_AREA = _gdi_.BUFFER_VIRTUAL_AREA
 BUFFER_CLIENT_AREA = _gdi_.BUFFER_CLIENT_AREA
-class BufferedDC(MemoryDC):
+class BufferedDC(DC):
     """
     This simple class provides a simple way to avoid flicker: when drawing
     on it, everything is in fact first drawn on an in-memory buffer (a
@@ -4527,6 +4559,7 @@ class BufferedDC(MemoryDC):
         """
         __init__(self, DC dc, Bitmap buffer=NullBitmap, int style=BUFFER_CLIENT_AREA) -> BufferedDC
         __init__(self, DC dc, Size area, int style=BUFFER_CLIENT_AREA) -> BufferedDC
+        __init__(self, Window win, DC dc, Size area, int style=BUFFER_CLIENT_AREA) -> BufferedDC
 
         Constructs a buffered DC.
         """
@@ -4567,8 +4600,6 @@ class BufferedPaintDC(BufferedDC):
 
 
 
-
-
     """
     thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
     __repr__ = _swig_repr
@@ -4580,8 +4611,6 @@ class BufferedPaintDC(BufferedDC):
         provide the bitmap to be used for buffering or let this object create
         one internally (in the latter case, the size of the client part of the
         window is automatically used).
-
-
         """
         _gdi_.BufferedPaintDC_swiginit(self,_gdi_.new_BufferedPaintDC(*args, **kwargs))
 _gdi_.BufferedPaintDC_swigregister(BufferedPaintDC)
@@ -4729,6 +4758,21 @@ _gdi_.PaintDC_swigregister(PaintDC)
 
 #---------------------------------------------------------------------------
 
+if 'wxMac' in wx.PlatformInfo or 'gtk2' in wx.PlatformInfo:
+    _AutoBufferedPaintDCBase = PaintDC
+else:
+    _AutoBufferedPaintDCBase = BufferedPaintDC
+        
+class AutoBufferedPaintDC(_AutoBufferedPaintDCBase):
+    """
+    If the current platform double buffers by default then this DC is the
+    same as a plain `wx.PaintDC`, otherwise it is a `wx.BufferedPaintDC`.
+    """
+    def __init__(self, window):
+        _AutoBufferedPaintDCBase.__init__(self, window)
+
+#---------------------------------------------------------------------------
+
 class MirrorDC(DC):
     """
     wx.MirrorDC is a simple wrapper class which is always associated with a
@@ -4823,10 +4867,11 @@ class MetaFile(_core.Object):
         _gdi_.MetaFile_swiginit(self,_gdi_.new_MetaFile(*args, **kwargs))
     __swig_destroy__ = _gdi_.delete_MetaFile
     __del__ = lambda self : None;
-    def Ok(*args, **kwargs):
-        """Ok(self) -> bool"""
-        return _gdi_.MetaFile_Ok(*args, **kwargs)
+    def IsOk(*args, **kwargs):
+        """IsOk(self) -> bool"""
+        return _gdi_.MetaFile_IsOk(*args, **kwargs)
 
+    Ok = IsOk 
     def SetClipboard(*args, **kwargs):
         """SetClipboard(self, int width=0, int height=0) -> bool"""
         return _gdi_.MetaFile_SetClipboard(*args, **kwargs)
@@ -4847,7 +4892,7 @@ class MetaFile(_core.Object):
         """GetFileName(self) -> String"""
         return _gdi_.MetaFile_GetFileName(*args, **kwargs)
 
-    def __nonzero__(self): return self.Ok() 
+    def __nonzero__(self): return self.IsOk() 
 _gdi_.MetaFile_swigregister(MetaFile)
 
 class MetaFileDC(DC):
@@ -4957,7 +5002,7 @@ class GraphicsPath(object):
         """
         AddCircle(self, Double x, Double y, Double r)
 
-        Appends an ellipsis as a new closed subpath fitting the passed rectangle
+        Appends a circle as a new closed subpath with the given radius.
         """
         return _gdi_.GraphicsPath_AddCircle(*args, **kwargs)
 
@@ -5056,22 +5101,20 @@ class GraphicsContext(object):
         """DrawPath(self, GraphicsPath path, int fillStyle=WINDING_RULE)"""
         return _gdi_.GraphicsContext_DrawPath(*args, **kwargs)
 
-    def DrawText(*args):
-        """
-        DrawText(self, String str, Double x, Double y)
-        DrawText(self, String str, Double x, Double y, Double angle)
-        """
-        return _gdi_.GraphicsContext_DrawText(*args)
+    def DrawText(*args, **kwargs):
+        """DrawText(self, String str, Double x, Double y)"""
+        return _gdi_.GraphicsContext_DrawText(*args, **kwargs)
+
+    def DrawRotatedText(*args, **kwargs):
+        """DrawRotatedText(self, String str, Double x, Double y, Double angle)"""
+        return _gdi_.GraphicsContext_DrawRotatedText(*args, **kwargs)
 
     def GetTextExtent(*args, **kwargs):
-        """
-        GetTextExtent(self, String text, Double OUTPUT, Double OUTPUT, Double OUTPUT, 
-            Double OUTPUT)
-        """
+        """GetTextExtend(self, text) --> (width, height, descent, externalLeading)"""
         return _gdi_.GraphicsContext_GetTextExtent(*args, **kwargs)
 
     def GetPartialTextExtents(*args, **kwargs):
-        """GetPartialTextExtents(self, String text, wxArrayDouble widths)"""
+        """GetPartialTextExtents(self, text) -> [widths]"""
         return _gdi_.GraphicsContext_GetPartialTextExtents(*args, **kwargs)
 
     def DrawBitmap(*args, **kwargs):
@@ -5086,15 +5129,16 @@ class GraphicsContext(object):
         """StrokeLine(self, Double x1, Double y1, Double x2, Double y2)"""
         return _gdi_.GraphicsContext_StrokeLine(*args, **kwargs)
 
-    def StrokeLines(*args):
-        """
-        StrokeLines(self, size_t n, Point2D points)
-        StrokeLines(self, size_t n, Point2D beginPoints, Point2D endPoints)
-        """
-        return _gdi_.GraphicsContext_StrokeLines(*args)
+    def StrokeLines(*args, **kwargs):
+        """StrokeLines(self, List points)"""
+        return _gdi_.GraphicsContext_StrokeLines(*args, **kwargs)
+
+    def StrokeDisconnectedLines(*args, **kwargs):
+        """StrokeDisconnectedLines(self, PyObject beginPoints, PyObject endPoints)"""
+        return _gdi_.GraphicsContext_StrokeDisconnectedLines(*args, **kwargs)
 
     def DrawLines(*args, **kwargs):
-        """DrawLines(self, size_t n, Point2D points, int fillStyle=WINDING_RULE)"""
+        """DrawLines(self, size_t points, int fillStyle=WINDING_RULE)"""
         return _gdi_.GraphicsContext_DrawLines(*args, **kwargs)
 
     def DrawRectangle(*args, **kwargs):
@@ -5133,6 +5177,40 @@ class GCDC(DC):
         return _gdi_.GCDC_GetGraphicContext(*args, **kwargs)
 
 _gdi_.GCDC_swigregister(GCDC)
+
+class Overlay(object):
+    """Proxy of C++ Overlay class"""
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
+        """__init__(self) -> Overlay"""
+        _gdi_.Overlay_swiginit(self,_gdi_.new_Overlay(*args, **kwargs))
+    __swig_destroy__ = _gdi_.delete_Overlay
+    __del__ = lambda self : None;
+    def Reset(*args, **kwargs):
+        """Reset(self)"""
+        return _gdi_.Overlay_Reset(*args, **kwargs)
+
+_gdi_.Overlay_swigregister(Overlay)
+
+class DCOverlay(object):
+    """Proxy of C++ DCOverlay class"""
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args): 
+        """
+        __init__(self, Overlay overlay, WindowDC dc, int x, int y, int width, 
+            int height) -> DCOverlay
+        __init__(self, Overlay overlay, WindowDC dc) -> DCOverlay
+        """
+        _gdi_.DCOverlay_swiginit(self,_gdi_.new_DCOverlay(*args))
+    __swig_destroy__ = _gdi_.delete_DCOverlay
+    __del__ = lambda self : None;
+    def Clear(*args, **kwargs):
+        """Clear(self)"""
+        return _gdi_.DCOverlay_Clear(*args, **kwargs)
+
+_gdi_.DCOverlay_swigregister(DCOverlay)
 
 #---------------------------------------------------------------------------
 

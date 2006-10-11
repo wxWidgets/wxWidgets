@@ -2471,172 +2471,173 @@ SWIG_Python_MustGetPtr(PyObject *obj, swig_type_info *ty, int argnum, int flags)
 #define SWIGTYPE_p_unsigned_long swig_types[5]
 #define SWIGTYPE_p_void swig_types[6]
 #define SWIGTYPE_p_wxANIHandler swig_types[7]
-#define SWIGTYPE_p_wxAcceleratorTable swig_types[8]
-#define SWIGTYPE_p_wxActivateEvent swig_types[9]
-#define SWIGTYPE_p_wxArrayString swig_types[10]
-#define SWIGTYPE_p_wxBMPHandler swig_types[11]
-#define SWIGTYPE_p_wxBitmap swig_types[12]
-#define SWIGTYPE_p_wxBitmapDataObject swig_types[13]
-#define SWIGTYPE_p_wxBoxSizer swig_types[14]
-#define SWIGTYPE_p_wxBusyCursor swig_types[15]
-#define SWIGTYPE_p_wxBusyInfo swig_types[16]
-#define SWIGTYPE_p_wxCURHandler swig_types[17]
-#define SWIGTYPE_p_wxCaret swig_types[18]
-#define SWIGTYPE_p_wxChar swig_types[19]
-#define SWIGTYPE_p_wxChildFocusEvent swig_types[20]
-#define SWIGTYPE_p_wxClipboard swig_types[21]
-#define SWIGTYPE_p_wxClipboardLocker swig_types[22]
-#define SWIGTYPE_p_wxClipboardTextEvent swig_types[23]
-#define SWIGTYPE_p_wxCloseEvent swig_types[24]
-#define SWIGTYPE_p_wxColour swig_types[25]
-#define SWIGTYPE_p_wxCommandEvent swig_types[26]
-#define SWIGTYPE_p_wxConfig swig_types[27]
-#define SWIGTYPE_p_wxConfigBase swig_types[28]
-#define SWIGTYPE_p_wxConfigPathChanger swig_types[29]
-#define SWIGTYPE_p_wxContextMenuEvent swig_types[30]
-#define SWIGTYPE_p_wxControl swig_types[31]
-#define SWIGTYPE_p_wxControlWithItems swig_types[32]
-#define SWIGTYPE_p_wxCursor swig_types[33]
-#define SWIGTYPE_p_wxCustomDataObject swig_types[34]
-#define SWIGTYPE_p_wxDC swig_types[35]
-#define SWIGTYPE_p_wxDataFormat swig_types[36]
-#define SWIGTYPE_p_wxDataObject swig_types[37]
-#define SWIGTYPE_p_wxDataObjectComposite swig_types[38]
-#define SWIGTYPE_p_wxDataObjectSimple swig_types[39]
-#define SWIGTYPE_p_wxDateEvent swig_types[40]
-#define SWIGTYPE_p_wxDateSpan swig_types[41]
-#define SWIGTYPE_p_wxDateTime swig_types[42]
-#define SWIGTYPE_p_wxDateTime__TimeZone swig_types[43]
-#define SWIGTYPE_p_wxDisplay swig_types[44]
-#define SWIGTYPE_p_wxDisplayChangedEvent swig_types[45]
-#define SWIGTYPE_p_wxDropFilesEvent swig_types[46]
-#define SWIGTYPE_p_wxDuplexMode swig_types[47]
-#define SWIGTYPE_p_wxEraseEvent swig_types[48]
-#define SWIGTYPE_p_wxEvent swig_types[49]
-#define SWIGTYPE_p_wxEvtHandler swig_types[50]
-#define SWIGTYPE_p_wxFSFile swig_types[51]
-#define SWIGTYPE_p_wxFileConfig swig_types[52]
-#define SWIGTYPE_p_wxFileDataObject swig_types[53]
-#define SWIGTYPE_p_wxFileHistory swig_types[54]
-#define SWIGTYPE_p_wxFileSystem swig_types[55]
-#define SWIGTYPE_p_wxFileType swig_types[56]
-#define SWIGTYPE_p_wxFileTypeInfo swig_types[57]
-#define SWIGTYPE_p_wxFlexGridSizer swig_types[58]
-#define SWIGTYPE_p_wxFocusEvent swig_types[59]
-#define SWIGTYPE_p_wxFont swig_types[60]
-#define SWIGTYPE_p_wxFrame swig_types[61]
-#define SWIGTYPE_p_wxGBSizerItem swig_types[62]
-#define SWIGTYPE_p_wxGIFHandler swig_types[63]
-#define SWIGTYPE_p_wxGridBagSizer swig_types[64]
-#define SWIGTYPE_p_wxGridSizer swig_types[65]
-#define SWIGTYPE_p_wxICOHandler swig_types[66]
-#define SWIGTYPE_p_wxIcon swig_types[67]
-#define SWIGTYPE_p_wxIconizeEvent swig_types[68]
-#define SWIGTYPE_p_wxIdleEvent swig_types[69]
-#define SWIGTYPE_p_wxImage swig_types[70]
-#define SWIGTYPE_p_wxImageHandler swig_types[71]
-#define SWIGTYPE_p_wxIndividualLayoutConstraint swig_types[72]
-#define SWIGTYPE_p_wxInitDialogEvent swig_types[73]
-#define SWIGTYPE_p_wxJPEGHandler swig_types[74]
-#define SWIGTYPE_p_wxJoystick swig_types[75]
-#define SWIGTYPE_p_wxJoystickEvent swig_types[76]
-#define SWIGTYPE_p_wxKeyEvent swig_types[77]
-#define SWIGTYPE_p_wxKillError swig_types[78]
-#define SWIGTYPE_p_wxLayoutConstraints swig_types[79]
-#define SWIGTYPE_p_wxLog swig_types[80]
-#define SWIGTYPE_p_wxLogBuffer swig_types[81]
-#define SWIGTYPE_p_wxLogChain swig_types[82]
-#define SWIGTYPE_p_wxLogGui swig_types[83]
-#define SWIGTYPE_p_wxLogNull swig_types[84]
-#define SWIGTYPE_p_wxLogStderr swig_types[85]
-#define SWIGTYPE_p_wxLogTextCtrl swig_types[86]
-#define SWIGTYPE_p_wxLogWindow swig_types[87]
-#define SWIGTYPE_p_wxMaximizeEvent swig_types[88]
-#define SWIGTYPE_p_wxMenu swig_types[89]
-#define SWIGTYPE_p_wxMenuBar swig_types[90]
-#define SWIGTYPE_p_wxMenuEvent swig_types[91]
-#define SWIGTYPE_p_wxMenuItem swig_types[92]
-#define SWIGTYPE_p_wxMetafileDataObject swig_types[93]
-#define SWIGTYPE_p_wxMimeTypesManager swig_types[94]
-#define SWIGTYPE_p_wxMouseCaptureChangedEvent swig_types[95]
-#define SWIGTYPE_p_wxMouseCaptureLostEvent swig_types[96]
-#define SWIGTYPE_p_wxMouseEvent swig_types[97]
-#define SWIGTYPE_p_wxMouseState swig_types[98]
-#define SWIGTYPE_p_wxMoveEvent swig_types[99]
-#define SWIGTYPE_p_wxMutexGuiLocker swig_types[100]
-#define SWIGTYPE_p_wxNavigationKeyEvent swig_types[101]
-#define SWIGTYPE_p_wxNcPaintEvent swig_types[102]
-#define SWIGTYPE_p_wxNotifyEvent swig_types[103]
-#define SWIGTYPE_p_wxObject swig_types[104]
-#define SWIGTYPE_p_wxOutputStream swig_types[105]
-#define SWIGTYPE_p_wxPCXHandler swig_types[106]
-#define SWIGTYPE_p_wxPNGHandler swig_types[107]
-#define SWIGTYPE_p_wxPNMHandler swig_types[108]
-#define SWIGTYPE_p_wxPaintEvent swig_types[109]
-#define SWIGTYPE_p_wxPaletteChangedEvent swig_types[110]
-#define SWIGTYPE_p_wxPaperSize swig_types[111]
-#define SWIGTYPE_p_wxPlatformInfo swig_types[112]
-#define SWIGTYPE_p_wxPoint swig_types[113]
-#define SWIGTYPE_p_wxPowerEvent swig_types[114]
-#define SWIGTYPE_p_wxProcessEvent swig_types[115]
-#define SWIGTYPE_p_wxPyApp swig_types[116]
-#define SWIGTYPE_p_wxPyArtProvider swig_types[117]
-#define SWIGTYPE_p_wxPyBitmapDataObject swig_types[118]
-#define SWIGTYPE_p_wxPyCommandEvent swig_types[119]
-#define SWIGTYPE_p_wxPyDataObjectSimple swig_types[120]
-#define SWIGTYPE_p_wxPyDropSource swig_types[121]
-#define SWIGTYPE_p_wxPyDropTarget swig_types[122]
-#define SWIGTYPE_p_wxPyEvent swig_types[123]
-#define SWIGTYPE_p_wxPyFileDropTarget swig_types[124]
-#define SWIGTYPE_p_wxPyImageHandler swig_types[125]
-#define SWIGTYPE_p_wxPyLog swig_types[126]
-#define SWIGTYPE_p_wxPyProcess swig_types[127]
-#define SWIGTYPE_p_wxPySizer swig_types[128]
-#define SWIGTYPE_p_wxPyTextDataObject swig_types[129]
-#define SWIGTYPE_p_wxPyTextDropTarget swig_types[130]
-#define SWIGTYPE_p_wxPyTimer swig_types[131]
-#define SWIGTYPE_p_wxPyTipProvider swig_types[132]
-#define SWIGTYPE_p_wxPyValidator swig_types[133]
-#define SWIGTYPE_p_wxQueryNewPaletteEvent swig_types[134]
-#define SWIGTYPE_p_wxRect swig_types[135]
-#define SWIGTYPE_p_wxScrollEvent swig_types[136]
-#define SWIGTYPE_p_wxScrollWinEvent swig_types[137]
-#define SWIGTYPE_p_wxSetCursorEvent swig_types[138]
-#define SWIGTYPE_p_wxShowEvent swig_types[139]
-#define SWIGTYPE_p_wxSingleInstanceChecker swig_types[140]
-#define SWIGTYPE_p_wxSize swig_types[141]
-#define SWIGTYPE_p_wxSizeEvent swig_types[142]
-#define SWIGTYPE_p_wxSizer swig_types[143]
-#define SWIGTYPE_p_wxSizerItem swig_types[144]
-#define SWIGTYPE_p_wxSound swig_types[145]
-#define SWIGTYPE_p_wxStandardPaths swig_types[146]
-#define SWIGTYPE_p_wxStaticBoxSizer swig_types[147]
-#define SWIGTYPE_p_wxStdDialogButtonSizer swig_types[148]
-#define SWIGTYPE_p_wxStopWatch swig_types[149]
-#define SWIGTYPE_p_wxString swig_types[150]
-#define SWIGTYPE_p_wxSysColourChangedEvent swig_types[151]
-#define SWIGTYPE_p_wxSystemOptions swig_types[152]
-#define SWIGTYPE_p_wxSystemSettings swig_types[153]
-#define SWIGTYPE_p_wxTIFFHandler swig_types[154]
-#define SWIGTYPE_p_wxTextCtrl swig_types[155]
-#define SWIGTYPE_p_wxTextDataObject swig_types[156]
-#define SWIGTYPE_p_wxTimeSpan swig_types[157]
-#define SWIGTYPE_p_wxTimer swig_types[158]
-#define SWIGTYPE_p_wxTimerEvent swig_types[159]
-#define SWIGTYPE_p_wxTimerRunner swig_types[160]
-#define SWIGTYPE_p_wxTipProvider swig_types[161]
-#define SWIGTYPE_p_wxToolTip swig_types[162]
-#define SWIGTYPE_p_wxURLDataObject swig_types[163]
-#define SWIGTYPE_p_wxUpdateUIEvent swig_types[164]
-#define SWIGTYPE_p_wxValidator swig_types[165]
-#define SWIGTYPE_p_wxVideoMode swig_types[166]
-#define SWIGTYPE_p_wxWindow swig_types[167]
-#define SWIGTYPE_p_wxWindowCreateEvent swig_types[168]
-#define SWIGTYPE_p_wxWindowDestroyEvent swig_types[169]
-#define SWIGTYPE_p_wxWindowDisabler swig_types[170]
-#define SWIGTYPE_p_wxXPMHandler swig_types[171]
-static swig_type_info *swig_types[173];
-static swig_module_info swig_module = {swig_types, 172, 0, 0, 0, 0};
+#define SWIGTYPE_p_wxAboutDialogInfo swig_types[8]
+#define SWIGTYPE_p_wxAcceleratorTable swig_types[9]
+#define SWIGTYPE_p_wxActivateEvent swig_types[10]
+#define SWIGTYPE_p_wxArrayString swig_types[11]
+#define SWIGTYPE_p_wxBMPHandler swig_types[12]
+#define SWIGTYPE_p_wxBitmap swig_types[13]
+#define SWIGTYPE_p_wxBitmapDataObject swig_types[14]
+#define SWIGTYPE_p_wxBoxSizer swig_types[15]
+#define SWIGTYPE_p_wxBusyCursor swig_types[16]
+#define SWIGTYPE_p_wxBusyInfo swig_types[17]
+#define SWIGTYPE_p_wxCURHandler swig_types[18]
+#define SWIGTYPE_p_wxCaret swig_types[19]
+#define SWIGTYPE_p_wxChar swig_types[20]
+#define SWIGTYPE_p_wxChildFocusEvent swig_types[21]
+#define SWIGTYPE_p_wxClipboard swig_types[22]
+#define SWIGTYPE_p_wxClipboardLocker swig_types[23]
+#define SWIGTYPE_p_wxClipboardTextEvent swig_types[24]
+#define SWIGTYPE_p_wxCloseEvent swig_types[25]
+#define SWIGTYPE_p_wxColour swig_types[26]
+#define SWIGTYPE_p_wxCommandEvent swig_types[27]
+#define SWIGTYPE_p_wxConfig swig_types[28]
+#define SWIGTYPE_p_wxConfigBase swig_types[29]
+#define SWIGTYPE_p_wxConfigPathChanger swig_types[30]
+#define SWIGTYPE_p_wxContextMenuEvent swig_types[31]
+#define SWIGTYPE_p_wxControl swig_types[32]
+#define SWIGTYPE_p_wxControlWithItems swig_types[33]
+#define SWIGTYPE_p_wxCursor swig_types[34]
+#define SWIGTYPE_p_wxCustomDataObject swig_types[35]
+#define SWIGTYPE_p_wxDC swig_types[36]
+#define SWIGTYPE_p_wxDataFormat swig_types[37]
+#define SWIGTYPE_p_wxDataObject swig_types[38]
+#define SWIGTYPE_p_wxDataObjectComposite swig_types[39]
+#define SWIGTYPE_p_wxDataObjectSimple swig_types[40]
+#define SWIGTYPE_p_wxDateEvent swig_types[41]
+#define SWIGTYPE_p_wxDateSpan swig_types[42]
+#define SWIGTYPE_p_wxDateTime swig_types[43]
+#define SWIGTYPE_p_wxDateTime__TimeZone swig_types[44]
+#define SWIGTYPE_p_wxDisplay swig_types[45]
+#define SWIGTYPE_p_wxDisplayChangedEvent swig_types[46]
+#define SWIGTYPE_p_wxDropFilesEvent swig_types[47]
+#define SWIGTYPE_p_wxDuplexMode swig_types[48]
+#define SWIGTYPE_p_wxEraseEvent swig_types[49]
+#define SWIGTYPE_p_wxEvent swig_types[50]
+#define SWIGTYPE_p_wxEvtHandler swig_types[51]
+#define SWIGTYPE_p_wxFSFile swig_types[52]
+#define SWIGTYPE_p_wxFileConfig swig_types[53]
+#define SWIGTYPE_p_wxFileDataObject swig_types[54]
+#define SWIGTYPE_p_wxFileHistory swig_types[55]
+#define SWIGTYPE_p_wxFileSystem swig_types[56]
+#define SWIGTYPE_p_wxFileType swig_types[57]
+#define SWIGTYPE_p_wxFileTypeInfo swig_types[58]
+#define SWIGTYPE_p_wxFlexGridSizer swig_types[59]
+#define SWIGTYPE_p_wxFocusEvent swig_types[60]
+#define SWIGTYPE_p_wxFont swig_types[61]
+#define SWIGTYPE_p_wxFrame swig_types[62]
+#define SWIGTYPE_p_wxGBSizerItem swig_types[63]
+#define SWIGTYPE_p_wxGIFHandler swig_types[64]
+#define SWIGTYPE_p_wxGridBagSizer swig_types[65]
+#define SWIGTYPE_p_wxGridSizer swig_types[66]
+#define SWIGTYPE_p_wxICOHandler swig_types[67]
+#define SWIGTYPE_p_wxIcon swig_types[68]
+#define SWIGTYPE_p_wxIconizeEvent swig_types[69]
+#define SWIGTYPE_p_wxIdleEvent swig_types[70]
+#define SWIGTYPE_p_wxImage swig_types[71]
+#define SWIGTYPE_p_wxImageHandler swig_types[72]
+#define SWIGTYPE_p_wxIndividualLayoutConstraint swig_types[73]
+#define SWIGTYPE_p_wxInitDialogEvent swig_types[74]
+#define SWIGTYPE_p_wxJPEGHandler swig_types[75]
+#define SWIGTYPE_p_wxJoystick swig_types[76]
+#define SWIGTYPE_p_wxJoystickEvent swig_types[77]
+#define SWIGTYPE_p_wxKeyEvent swig_types[78]
+#define SWIGTYPE_p_wxKillError swig_types[79]
+#define SWIGTYPE_p_wxLayoutConstraints swig_types[80]
+#define SWIGTYPE_p_wxLog swig_types[81]
+#define SWIGTYPE_p_wxLogBuffer swig_types[82]
+#define SWIGTYPE_p_wxLogChain swig_types[83]
+#define SWIGTYPE_p_wxLogGui swig_types[84]
+#define SWIGTYPE_p_wxLogNull swig_types[85]
+#define SWIGTYPE_p_wxLogStderr swig_types[86]
+#define SWIGTYPE_p_wxLogTextCtrl swig_types[87]
+#define SWIGTYPE_p_wxLogWindow swig_types[88]
+#define SWIGTYPE_p_wxMaximizeEvent swig_types[89]
+#define SWIGTYPE_p_wxMenu swig_types[90]
+#define SWIGTYPE_p_wxMenuBar swig_types[91]
+#define SWIGTYPE_p_wxMenuEvent swig_types[92]
+#define SWIGTYPE_p_wxMenuItem swig_types[93]
+#define SWIGTYPE_p_wxMetafileDataObject swig_types[94]
+#define SWIGTYPE_p_wxMimeTypesManager swig_types[95]
+#define SWIGTYPE_p_wxMouseCaptureChangedEvent swig_types[96]
+#define SWIGTYPE_p_wxMouseCaptureLostEvent swig_types[97]
+#define SWIGTYPE_p_wxMouseEvent swig_types[98]
+#define SWIGTYPE_p_wxMouseState swig_types[99]
+#define SWIGTYPE_p_wxMoveEvent swig_types[100]
+#define SWIGTYPE_p_wxMutexGuiLocker swig_types[101]
+#define SWIGTYPE_p_wxNavigationKeyEvent swig_types[102]
+#define SWIGTYPE_p_wxNcPaintEvent swig_types[103]
+#define SWIGTYPE_p_wxNotifyEvent swig_types[104]
+#define SWIGTYPE_p_wxObject swig_types[105]
+#define SWIGTYPE_p_wxOutputStream swig_types[106]
+#define SWIGTYPE_p_wxPCXHandler swig_types[107]
+#define SWIGTYPE_p_wxPNGHandler swig_types[108]
+#define SWIGTYPE_p_wxPNMHandler swig_types[109]
+#define SWIGTYPE_p_wxPaintEvent swig_types[110]
+#define SWIGTYPE_p_wxPaletteChangedEvent swig_types[111]
+#define SWIGTYPE_p_wxPaperSize swig_types[112]
+#define SWIGTYPE_p_wxPlatformInfo swig_types[113]
+#define SWIGTYPE_p_wxPoint swig_types[114]
+#define SWIGTYPE_p_wxPowerEvent swig_types[115]
+#define SWIGTYPE_p_wxProcessEvent swig_types[116]
+#define SWIGTYPE_p_wxPyApp swig_types[117]
+#define SWIGTYPE_p_wxPyArtProvider swig_types[118]
+#define SWIGTYPE_p_wxPyBitmapDataObject swig_types[119]
+#define SWIGTYPE_p_wxPyCommandEvent swig_types[120]
+#define SWIGTYPE_p_wxPyDataObjectSimple swig_types[121]
+#define SWIGTYPE_p_wxPyDropSource swig_types[122]
+#define SWIGTYPE_p_wxPyDropTarget swig_types[123]
+#define SWIGTYPE_p_wxPyEvent swig_types[124]
+#define SWIGTYPE_p_wxPyFileDropTarget swig_types[125]
+#define SWIGTYPE_p_wxPyImageHandler swig_types[126]
+#define SWIGTYPE_p_wxPyLog swig_types[127]
+#define SWIGTYPE_p_wxPyProcess swig_types[128]
+#define SWIGTYPE_p_wxPySizer swig_types[129]
+#define SWIGTYPE_p_wxPyTextDataObject swig_types[130]
+#define SWIGTYPE_p_wxPyTextDropTarget swig_types[131]
+#define SWIGTYPE_p_wxPyTimer swig_types[132]
+#define SWIGTYPE_p_wxPyTipProvider swig_types[133]
+#define SWIGTYPE_p_wxPyValidator swig_types[134]
+#define SWIGTYPE_p_wxQueryNewPaletteEvent swig_types[135]
+#define SWIGTYPE_p_wxRect swig_types[136]
+#define SWIGTYPE_p_wxScrollEvent swig_types[137]
+#define SWIGTYPE_p_wxScrollWinEvent swig_types[138]
+#define SWIGTYPE_p_wxSetCursorEvent swig_types[139]
+#define SWIGTYPE_p_wxShowEvent swig_types[140]
+#define SWIGTYPE_p_wxSingleInstanceChecker swig_types[141]
+#define SWIGTYPE_p_wxSize swig_types[142]
+#define SWIGTYPE_p_wxSizeEvent swig_types[143]
+#define SWIGTYPE_p_wxSizer swig_types[144]
+#define SWIGTYPE_p_wxSizerItem swig_types[145]
+#define SWIGTYPE_p_wxSound swig_types[146]
+#define SWIGTYPE_p_wxStandardPaths swig_types[147]
+#define SWIGTYPE_p_wxStaticBoxSizer swig_types[148]
+#define SWIGTYPE_p_wxStdDialogButtonSizer swig_types[149]
+#define SWIGTYPE_p_wxStopWatch swig_types[150]
+#define SWIGTYPE_p_wxString swig_types[151]
+#define SWIGTYPE_p_wxSysColourChangedEvent swig_types[152]
+#define SWIGTYPE_p_wxSystemOptions swig_types[153]
+#define SWIGTYPE_p_wxSystemSettings swig_types[154]
+#define SWIGTYPE_p_wxTIFFHandler swig_types[155]
+#define SWIGTYPE_p_wxTextCtrl swig_types[156]
+#define SWIGTYPE_p_wxTextDataObject swig_types[157]
+#define SWIGTYPE_p_wxTimeSpan swig_types[158]
+#define SWIGTYPE_p_wxTimer swig_types[159]
+#define SWIGTYPE_p_wxTimerEvent swig_types[160]
+#define SWIGTYPE_p_wxTimerRunner swig_types[161]
+#define SWIGTYPE_p_wxTipProvider swig_types[162]
+#define SWIGTYPE_p_wxToolTip swig_types[163]
+#define SWIGTYPE_p_wxURLDataObject swig_types[164]
+#define SWIGTYPE_p_wxUpdateUIEvent swig_types[165]
+#define SWIGTYPE_p_wxValidator swig_types[166]
+#define SWIGTYPE_p_wxVideoMode swig_types[167]
+#define SWIGTYPE_p_wxWindow swig_types[168]
+#define SWIGTYPE_p_wxWindowCreateEvent swig_types[169]
+#define SWIGTYPE_p_wxWindowDestroyEvent swig_types[170]
+#define SWIGTYPE_p_wxWindowDisabler swig_types[171]
+#define SWIGTYPE_p_wxXPMHandler swig_types[172]
+static swig_type_info *swig_types[174];
+static swig_module_info swig_module = {swig_types, 173, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -4088,6 +4089,9 @@ wxPowerType wxGetPowerType()       { return wxPOWER_UNKNOWN; }
 wxBatteryState wxGetBatteryState() { return wxBATTERY_UNKNOWN_STATE; }
 
 #endif
+
+
+#include <wx/aboutdlg.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -37340,6 +37344,1632 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_new_AboutDialogInfo(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxAboutDialogInfo *result = 0 ;
+  
+  if (!SWIG_Python_UnpackTuple(args,"new_AboutDialogInfo",0,0,0)) SWIG_fail;
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = (wxAboutDialogInfo *)new wxAboutDialogInfo();
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_wxAboutDialogInfo, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_delete_AboutDialogInfo(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxAboutDialogInfo *arg1 = (wxAboutDialogInfo *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxAboutDialogInfo, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_AboutDialogInfo" "', expected argument " "1"" of type '" "wxAboutDialogInfo *""'"); 
+  }
+  arg1 = reinterpret_cast< wxAboutDialogInfo * >(argp1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    delete arg1;
+    
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_AboutDialogInfo_SetName(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxAboutDialogInfo *arg1 = (wxAboutDialogInfo *) 0 ;
+  wxString *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  bool temp2 = false ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "name", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:AboutDialogInfo_SetName",kwnames,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxAboutDialogInfo, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AboutDialogInfo_SetName" "', expected argument " "1"" of type '" "wxAboutDialogInfo *""'"); 
+  }
+  arg1 = reinterpret_cast< wxAboutDialogInfo * >(argp1);
+  {
+    arg2 = wxString_in_helper(obj1);
+    if (arg2 == NULL) SWIG_fail;
+    temp2 = true;
+  }
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    (arg1)->SetName((wxString const &)*arg2);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  {
+    if (temp2)
+    delete arg2;
+  }
+  return resultobj;
+fail:
+  {
+    if (temp2)
+    delete arg2;
+  }
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_AboutDialogInfo_GetName(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxAboutDialogInfo *arg1 = (wxAboutDialogInfo *) 0 ;
+  wxString result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxAboutDialogInfo, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AboutDialogInfo_GetName" "', expected argument " "1"" of type '" "wxAboutDialogInfo const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxAboutDialogInfo * >(argp1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = ((wxAboutDialogInfo const *)arg1)->GetName();
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  {
+#if wxUSE_UNICODE
+    resultobj = PyUnicode_FromWideChar((&result)->c_str(), (&result)->Len());
+#else
+    resultobj = PyString_FromStringAndSize((&result)->c_str(), (&result)->Len());
+#endif
+  }
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_AboutDialogInfo_SetVersion(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxAboutDialogInfo *arg1 = (wxAboutDialogInfo *) 0 ;
+  wxString *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  bool temp2 = false ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "version", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:AboutDialogInfo_SetVersion",kwnames,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxAboutDialogInfo, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AboutDialogInfo_SetVersion" "', expected argument " "1"" of type '" "wxAboutDialogInfo *""'"); 
+  }
+  arg1 = reinterpret_cast< wxAboutDialogInfo * >(argp1);
+  {
+    arg2 = wxString_in_helper(obj1);
+    if (arg2 == NULL) SWIG_fail;
+    temp2 = true;
+  }
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    (arg1)->SetVersion((wxString const &)*arg2);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  {
+    if (temp2)
+    delete arg2;
+  }
+  return resultobj;
+fail:
+  {
+    if (temp2)
+    delete arg2;
+  }
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_AboutDialogInfo_HasVersion(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxAboutDialogInfo *arg1 = (wxAboutDialogInfo *) 0 ;
+  bool result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxAboutDialogInfo, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AboutDialogInfo_HasVersion" "', expected argument " "1"" of type '" "wxAboutDialogInfo const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxAboutDialogInfo * >(argp1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = (bool)((wxAboutDialogInfo const *)arg1)->HasVersion();
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  {
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+  }
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_AboutDialogInfo_GetVersion(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxAboutDialogInfo *arg1 = (wxAboutDialogInfo *) 0 ;
+  wxString result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxAboutDialogInfo, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AboutDialogInfo_GetVersion" "', expected argument " "1"" of type '" "wxAboutDialogInfo const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxAboutDialogInfo * >(argp1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = ((wxAboutDialogInfo const *)arg1)->GetVersion();
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  {
+#if wxUSE_UNICODE
+    resultobj = PyUnicode_FromWideChar((&result)->c_str(), (&result)->Len());
+#else
+    resultobj = PyString_FromStringAndSize((&result)->c_str(), (&result)->Len());
+#endif
+  }
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_AboutDialogInfo_SetDescription(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxAboutDialogInfo *arg1 = (wxAboutDialogInfo *) 0 ;
+  wxString *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  bool temp2 = false ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "desc", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:AboutDialogInfo_SetDescription",kwnames,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxAboutDialogInfo, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AboutDialogInfo_SetDescription" "', expected argument " "1"" of type '" "wxAboutDialogInfo *""'"); 
+  }
+  arg1 = reinterpret_cast< wxAboutDialogInfo * >(argp1);
+  {
+    arg2 = wxString_in_helper(obj1);
+    if (arg2 == NULL) SWIG_fail;
+    temp2 = true;
+  }
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    (arg1)->SetDescription((wxString const &)*arg2);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  {
+    if (temp2)
+    delete arg2;
+  }
+  return resultobj;
+fail:
+  {
+    if (temp2)
+    delete arg2;
+  }
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_AboutDialogInfo_HasDescription(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxAboutDialogInfo *arg1 = (wxAboutDialogInfo *) 0 ;
+  bool result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxAboutDialogInfo, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AboutDialogInfo_HasDescription" "', expected argument " "1"" of type '" "wxAboutDialogInfo const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxAboutDialogInfo * >(argp1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = (bool)((wxAboutDialogInfo const *)arg1)->HasDescription();
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  {
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+  }
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_AboutDialogInfo_GetDescription(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxAboutDialogInfo *arg1 = (wxAboutDialogInfo *) 0 ;
+  wxString result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxAboutDialogInfo, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AboutDialogInfo_GetDescription" "', expected argument " "1"" of type '" "wxAboutDialogInfo const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxAboutDialogInfo * >(argp1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = ((wxAboutDialogInfo const *)arg1)->GetDescription();
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  {
+#if wxUSE_UNICODE
+    resultobj = PyUnicode_FromWideChar((&result)->c_str(), (&result)->Len());
+#else
+    resultobj = PyString_FromStringAndSize((&result)->c_str(), (&result)->Len());
+#endif
+  }
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_AboutDialogInfo_SetCopyright(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxAboutDialogInfo *arg1 = (wxAboutDialogInfo *) 0 ;
+  wxString *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  bool temp2 = false ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "copyright", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:AboutDialogInfo_SetCopyright",kwnames,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxAboutDialogInfo, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AboutDialogInfo_SetCopyright" "', expected argument " "1"" of type '" "wxAboutDialogInfo *""'"); 
+  }
+  arg1 = reinterpret_cast< wxAboutDialogInfo * >(argp1);
+  {
+    arg2 = wxString_in_helper(obj1);
+    if (arg2 == NULL) SWIG_fail;
+    temp2 = true;
+  }
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    (arg1)->SetCopyright((wxString const &)*arg2);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  {
+    if (temp2)
+    delete arg2;
+  }
+  return resultobj;
+fail:
+  {
+    if (temp2)
+    delete arg2;
+  }
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_AboutDialogInfo_HasCopyright(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxAboutDialogInfo *arg1 = (wxAboutDialogInfo *) 0 ;
+  bool result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxAboutDialogInfo, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AboutDialogInfo_HasCopyright" "', expected argument " "1"" of type '" "wxAboutDialogInfo const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxAboutDialogInfo * >(argp1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = (bool)((wxAboutDialogInfo const *)arg1)->HasCopyright();
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  {
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+  }
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_AboutDialogInfo_GetCopyright(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxAboutDialogInfo *arg1 = (wxAboutDialogInfo *) 0 ;
+  wxString result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxAboutDialogInfo, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AboutDialogInfo_GetCopyright" "', expected argument " "1"" of type '" "wxAboutDialogInfo const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxAboutDialogInfo * >(argp1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = ((wxAboutDialogInfo const *)arg1)->GetCopyright();
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  {
+#if wxUSE_UNICODE
+    resultobj = PyUnicode_FromWideChar((&result)->c_str(), (&result)->Len());
+#else
+    resultobj = PyString_FromStringAndSize((&result)->c_str(), (&result)->Len());
+#endif
+  }
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_AboutDialogInfo_SetLicence(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxAboutDialogInfo *arg1 = (wxAboutDialogInfo *) 0 ;
+  wxString *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  bool temp2 = false ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "licence", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:AboutDialogInfo_SetLicence",kwnames,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxAboutDialogInfo, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AboutDialogInfo_SetLicence" "', expected argument " "1"" of type '" "wxAboutDialogInfo *""'"); 
+  }
+  arg1 = reinterpret_cast< wxAboutDialogInfo * >(argp1);
+  {
+    arg2 = wxString_in_helper(obj1);
+    if (arg2 == NULL) SWIG_fail;
+    temp2 = true;
+  }
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    (arg1)->SetLicence((wxString const &)*arg2);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  {
+    if (temp2)
+    delete arg2;
+  }
+  return resultobj;
+fail:
+  {
+    if (temp2)
+    delete arg2;
+  }
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_AboutDialogInfo_SetLicense(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxAboutDialogInfo *arg1 = (wxAboutDialogInfo *) 0 ;
+  wxString *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  bool temp2 = false ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "licence", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:AboutDialogInfo_SetLicense",kwnames,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxAboutDialogInfo, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AboutDialogInfo_SetLicense" "', expected argument " "1"" of type '" "wxAboutDialogInfo *""'"); 
+  }
+  arg1 = reinterpret_cast< wxAboutDialogInfo * >(argp1);
+  {
+    arg2 = wxString_in_helper(obj1);
+    if (arg2 == NULL) SWIG_fail;
+    temp2 = true;
+  }
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    (arg1)->SetLicense((wxString const &)*arg2);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  {
+    if (temp2)
+    delete arg2;
+  }
+  return resultobj;
+fail:
+  {
+    if (temp2)
+    delete arg2;
+  }
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_AboutDialogInfo_HasLicence(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxAboutDialogInfo *arg1 = (wxAboutDialogInfo *) 0 ;
+  bool result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxAboutDialogInfo, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AboutDialogInfo_HasLicence" "', expected argument " "1"" of type '" "wxAboutDialogInfo const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxAboutDialogInfo * >(argp1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = (bool)((wxAboutDialogInfo const *)arg1)->HasLicence();
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  {
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+  }
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_AboutDialogInfo_GetLicence(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxAboutDialogInfo *arg1 = (wxAboutDialogInfo *) 0 ;
+  wxString result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxAboutDialogInfo, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AboutDialogInfo_GetLicence" "', expected argument " "1"" of type '" "wxAboutDialogInfo const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxAboutDialogInfo * >(argp1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = ((wxAboutDialogInfo const *)arg1)->GetLicence();
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  {
+#if wxUSE_UNICODE
+    resultobj = PyUnicode_FromWideChar((&result)->c_str(), (&result)->Len());
+#else
+    resultobj = PyString_FromStringAndSize((&result)->c_str(), (&result)->Len());
+#endif
+  }
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_AboutDialogInfo_SetIcon(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxAboutDialogInfo *arg1 = (wxAboutDialogInfo *) 0 ;
+  wxIcon *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "icon", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:AboutDialogInfo_SetIcon",kwnames,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxAboutDialogInfo, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AboutDialogInfo_SetIcon" "', expected argument " "1"" of type '" "wxAboutDialogInfo *""'"); 
+  }
+  arg1 = reinterpret_cast< wxAboutDialogInfo * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_wxIcon,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "AboutDialogInfo_SetIcon" "', expected argument " "2"" of type '" "wxIcon const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "AboutDialogInfo_SetIcon" "', expected argument " "2"" of type '" "wxIcon const &""'"); 
+  }
+  arg2 = reinterpret_cast< wxIcon * >(argp2);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    (arg1)->SetIcon((wxIcon const &)*arg2);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_AboutDialogInfo_HasIcon(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxAboutDialogInfo *arg1 = (wxAboutDialogInfo *) 0 ;
+  bool result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxAboutDialogInfo, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AboutDialogInfo_HasIcon" "', expected argument " "1"" of type '" "wxAboutDialogInfo const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxAboutDialogInfo * >(argp1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = (bool)((wxAboutDialogInfo const *)arg1)->HasIcon();
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  {
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+  }
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_AboutDialogInfo_GetIcon(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxAboutDialogInfo *arg1 = (wxAboutDialogInfo *) 0 ;
+  wxIcon result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxAboutDialogInfo, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AboutDialogInfo_GetIcon" "', expected argument " "1"" of type '" "wxAboutDialogInfo const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxAboutDialogInfo * >(argp1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = ((wxAboutDialogInfo const *)arg1)->GetIcon();
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_NewPointerObj((new wxIcon(static_cast< const wxIcon& >(result))), SWIGTYPE_p_wxIcon, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_AboutDialogInfo__SetWebSite(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxAboutDialogInfo *arg1 = (wxAboutDialogInfo *) 0 ;
+  wxString *arg2 = 0 ;
+  wxString const &arg3_defvalue = wxEmptyString ;
+  wxString *arg3 = (wxString *) &arg3_defvalue ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  bool temp2 = false ;
+  bool temp3 = false ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "url",(char *) "desc", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|O:AboutDialogInfo__SetWebSite",kwnames,&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxAboutDialogInfo, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AboutDialogInfo__SetWebSite" "', expected argument " "1"" of type '" "wxAboutDialogInfo *""'"); 
+  }
+  arg1 = reinterpret_cast< wxAboutDialogInfo * >(argp1);
+  {
+    arg2 = wxString_in_helper(obj1);
+    if (arg2 == NULL) SWIG_fail;
+    temp2 = true;
+  }
+  if (obj2) {
+    {
+      arg3 = wxString_in_helper(obj2);
+      if (arg3 == NULL) SWIG_fail;
+      temp3 = true;
+    }
+  }
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    (arg1)->SetWebSite((wxString const &)*arg2,(wxString const &)*arg3);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  {
+    if (temp2)
+    delete arg2;
+  }
+  {
+    if (temp3)
+    delete arg3;
+  }
+  return resultobj;
+fail:
+  {
+    if (temp2)
+    delete arg2;
+  }
+  {
+    if (temp3)
+    delete arg3;
+  }
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_AboutDialogInfo__GetWebSiteURL(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxAboutDialogInfo *arg1 = (wxAboutDialogInfo *) 0 ;
+  wxString result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxAboutDialogInfo, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AboutDialogInfo__GetWebSiteURL" "', expected argument " "1"" of type '" "wxAboutDialogInfo const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxAboutDialogInfo * >(argp1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = ((wxAboutDialogInfo const *)arg1)->GetWebSiteURL();
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  {
+#if wxUSE_UNICODE
+    resultobj = PyUnicode_FromWideChar((&result)->c_str(), (&result)->Len());
+#else
+    resultobj = PyString_FromStringAndSize((&result)->c_str(), (&result)->Len());
+#endif
+  }
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_AboutDialogInfo__GetWebSiteDescription(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxAboutDialogInfo *arg1 = (wxAboutDialogInfo *) 0 ;
+  wxString result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxAboutDialogInfo, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AboutDialogInfo__GetWebSiteDescription" "', expected argument " "1"" of type '" "wxAboutDialogInfo const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxAboutDialogInfo * >(argp1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = ((wxAboutDialogInfo const *)arg1)->GetWebSiteDescription();
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  {
+#if wxUSE_UNICODE
+    resultobj = PyUnicode_FromWideChar((&result)->c_str(), (&result)->Len());
+#else
+    resultobj = PyString_FromStringAndSize((&result)->c_str(), (&result)->Len());
+#endif
+  }
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_AboutDialogInfo_HasWebSite(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxAboutDialogInfo *arg1 = (wxAboutDialogInfo *) 0 ;
+  bool result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxAboutDialogInfo, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AboutDialogInfo_HasWebSite" "', expected argument " "1"" of type '" "wxAboutDialogInfo const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxAboutDialogInfo * >(argp1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = (bool)((wxAboutDialogInfo const *)arg1)->HasWebSite();
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  {
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+  }
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_AboutDialogInfo_SetDevelopers(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxAboutDialogInfo *arg1 = (wxAboutDialogInfo *) 0 ;
+  wxArrayString *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  bool temp2 = false ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "developers", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:AboutDialogInfo_SetDevelopers",kwnames,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxAboutDialogInfo, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AboutDialogInfo_SetDevelopers" "', expected argument " "1"" of type '" "wxAboutDialogInfo *""'"); 
+  }
+  arg1 = reinterpret_cast< wxAboutDialogInfo * >(argp1);
+  {
+    if (! PySequence_Check(obj1)) {
+      PyErr_SetString(PyExc_TypeError, "Sequence of strings expected.");
+      SWIG_fail;
+    }
+    arg2 = new wxArrayString;
+    temp2 = true;
+    int i, len=PySequence_Length(obj1);
+    for (i=0; i<len; i++) {
+      PyObject* item = PySequence_GetItem(obj1, i);
+      wxString* s = wxString_in_helper(item);
+      if (PyErr_Occurred())  SWIG_fail;
+      arg2->Add(*s);
+      delete s;
+      Py_DECREF(item);
+    }
+  }
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    (arg1)->SetDevelopers((wxArrayString const &)*arg2);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  {
+    if (temp2) delete arg2;
+  }
+  return resultobj;
+fail:
+  {
+    if (temp2) delete arg2;
+  }
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_AboutDialogInfo_AddDeveloper(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxAboutDialogInfo *arg1 = (wxAboutDialogInfo *) 0 ;
+  wxString *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  bool temp2 = false ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "developer", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:AboutDialogInfo_AddDeveloper",kwnames,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxAboutDialogInfo, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AboutDialogInfo_AddDeveloper" "', expected argument " "1"" of type '" "wxAboutDialogInfo *""'"); 
+  }
+  arg1 = reinterpret_cast< wxAboutDialogInfo * >(argp1);
+  {
+    arg2 = wxString_in_helper(obj1);
+    if (arg2 == NULL) SWIG_fail;
+    temp2 = true;
+  }
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    (arg1)->AddDeveloper((wxString const &)*arg2);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  {
+    if (temp2)
+    delete arg2;
+  }
+  return resultobj;
+fail:
+  {
+    if (temp2)
+    delete arg2;
+  }
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_AboutDialogInfo_HasDevelopers(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxAboutDialogInfo *arg1 = (wxAboutDialogInfo *) 0 ;
+  bool result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxAboutDialogInfo, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AboutDialogInfo_HasDevelopers" "', expected argument " "1"" of type '" "wxAboutDialogInfo const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxAboutDialogInfo * >(argp1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = (bool)((wxAboutDialogInfo const *)arg1)->HasDevelopers();
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  {
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+  }
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_AboutDialogInfo_GetDevelopers(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxAboutDialogInfo *arg1 = (wxAboutDialogInfo *) 0 ;
+  wxArrayString *result = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxAboutDialogInfo, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AboutDialogInfo_GetDevelopers" "', expected argument " "1"" of type '" "wxAboutDialogInfo const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxAboutDialogInfo * >(argp1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    {
+      wxArrayString const &_result_ref = ((wxAboutDialogInfo const *)arg1)->GetDevelopers();
+      result = (wxArrayString *) &_result_ref;
+    }
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  {
+    resultobj = wxArrayString2PyList_helper(*result);
+  }
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_AboutDialogInfo_SetDocWriters(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxAboutDialogInfo *arg1 = (wxAboutDialogInfo *) 0 ;
+  wxArrayString *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  bool temp2 = false ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "docwriters", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:AboutDialogInfo_SetDocWriters",kwnames,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxAboutDialogInfo, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AboutDialogInfo_SetDocWriters" "', expected argument " "1"" of type '" "wxAboutDialogInfo *""'"); 
+  }
+  arg1 = reinterpret_cast< wxAboutDialogInfo * >(argp1);
+  {
+    if (! PySequence_Check(obj1)) {
+      PyErr_SetString(PyExc_TypeError, "Sequence of strings expected.");
+      SWIG_fail;
+    }
+    arg2 = new wxArrayString;
+    temp2 = true;
+    int i, len=PySequence_Length(obj1);
+    for (i=0; i<len; i++) {
+      PyObject* item = PySequence_GetItem(obj1, i);
+      wxString* s = wxString_in_helper(item);
+      if (PyErr_Occurred())  SWIG_fail;
+      arg2->Add(*s);
+      delete s;
+      Py_DECREF(item);
+    }
+  }
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    (arg1)->SetDocWriters((wxArrayString const &)*arg2);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  {
+    if (temp2) delete arg2;
+  }
+  return resultobj;
+fail:
+  {
+    if (temp2) delete arg2;
+  }
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_AboutDialogInfo_AddDocWriter(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxAboutDialogInfo *arg1 = (wxAboutDialogInfo *) 0 ;
+  wxString *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  bool temp2 = false ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "docwriter", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:AboutDialogInfo_AddDocWriter",kwnames,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxAboutDialogInfo, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AboutDialogInfo_AddDocWriter" "', expected argument " "1"" of type '" "wxAboutDialogInfo *""'"); 
+  }
+  arg1 = reinterpret_cast< wxAboutDialogInfo * >(argp1);
+  {
+    arg2 = wxString_in_helper(obj1);
+    if (arg2 == NULL) SWIG_fail;
+    temp2 = true;
+  }
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    (arg1)->AddDocWriter((wxString const &)*arg2);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  {
+    if (temp2)
+    delete arg2;
+  }
+  return resultobj;
+fail:
+  {
+    if (temp2)
+    delete arg2;
+  }
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_AboutDialogInfo_HasDocWriters(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxAboutDialogInfo *arg1 = (wxAboutDialogInfo *) 0 ;
+  bool result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxAboutDialogInfo, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AboutDialogInfo_HasDocWriters" "', expected argument " "1"" of type '" "wxAboutDialogInfo const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxAboutDialogInfo * >(argp1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = (bool)((wxAboutDialogInfo const *)arg1)->HasDocWriters();
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  {
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+  }
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_AboutDialogInfo_GetDocWriters(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxAboutDialogInfo *arg1 = (wxAboutDialogInfo *) 0 ;
+  wxArrayString *result = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxAboutDialogInfo, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AboutDialogInfo_GetDocWriters" "', expected argument " "1"" of type '" "wxAboutDialogInfo const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxAboutDialogInfo * >(argp1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    {
+      wxArrayString const &_result_ref = ((wxAboutDialogInfo const *)arg1)->GetDocWriters();
+      result = (wxArrayString *) &_result_ref;
+    }
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  {
+    resultobj = wxArrayString2PyList_helper(*result);
+  }
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_AboutDialogInfo_SetArtists(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxAboutDialogInfo *arg1 = (wxAboutDialogInfo *) 0 ;
+  wxArrayString *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  bool temp2 = false ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "artists", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:AboutDialogInfo_SetArtists",kwnames,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxAboutDialogInfo, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AboutDialogInfo_SetArtists" "', expected argument " "1"" of type '" "wxAboutDialogInfo *""'"); 
+  }
+  arg1 = reinterpret_cast< wxAboutDialogInfo * >(argp1);
+  {
+    if (! PySequence_Check(obj1)) {
+      PyErr_SetString(PyExc_TypeError, "Sequence of strings expected.");
+      SWIG_fail;
+    }
+    arg2 = new wxArrayString;
+    temp2 = true;
+    int i, len=PySequence_Length(obj1);
+    for (i=0; i<len; i++) {
+      PyObject* item = PySequence_GetItem(obj1, i);
+      wxString* s = wxString_in_helper(item);
+      if (PyErr_Occurred())  SWIG_fail;
+      arg2->Add(*s);
+      delete s;
+      Py_DECREF(item);
+    }
+  }
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    (arg1)->SetArtists((wxArrayString const &)*arg2);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  {
+    if (temp2) delete arg2;
+  }
+  return resultobj;
+fail:
+  {
+    if (temp2) delete arg2;
+  }
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_AboutDialogInfo_AddArtist(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxAboutDialogInfo *arg1 = (wxAboutDialogInfo *) 0 ;
+  wxString *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  bool temp2 = false ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "artist", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:AboutDialogInfo_AddArtist",kwnames,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxAboutDialogInfo, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AboutDialogInfo_AddArtist" "', expected argument " "1"" of type '" "wxAboutDialogInfo *""'"); 
+  }
+  arg1 = reinterpret_cast< wxAboutDialogInfo * >(argp1);
+  {
+    arg2 = wxString_in_helper(obj1);
+    if (arg2 == NULL) SWIG_fail;
+    temp2 = true;
+  }
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    (arg1)->AddArtist((wxString const &)*arg2);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  {
+    if (temp2)
+    delete arg2;
+  }
+  return resultobj;
+fail:
+  {
+    if (temp2)
+    delete arg2;
+  }
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_AboutDialogInfo_HasArtists(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxAboutDialogInfo *arg1 = (wxAboutDialogInfo *) 0 ;
+  bool result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxAboutDialogInfo, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AboutDialogInfo_HasArtists" "', expected argument " "1"" of type '" "wxAboutDialogInfo const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxAboutDialogInfo * >(argp1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = (bool)((wxAboutDialogInfo const *)arg1)->HasArtists();
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  {
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+  }
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_AboutDialogInfo_GetArtists(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxAboutDialogInfo *arg1 = (wxAboutDialogInfo *) 0 ;
+  wxArrayString *result = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxAboutDialogInfo, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AboutDialogInfo_GetArtists" "', expected argument " "1"" of type '" "wxAboutDialogInfo const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxAboutDialogInfo * >(argp1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    {
+      wxArrayString const &_result_ref = ((wxAboutDialogInfo const *)arg1)->GetArtists();
+      result = (wxArrayString *) &_result_ref;
+    }
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  {
+    resultobj = wxArrayString2PyList_helper(*result);
+  }
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_AboutDialogInfo_SetTranslators(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxAboutDialogInfo *arg1 = (wxAboutDialogInfo *) 0 ;
+  wxArrayString *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  bool temp2 = false ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "translators", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:AboutDialogInfo_SetTranslators",kwnames,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxAboutDialogInfo, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AboutDialogInfo_SetTranslators" "', expected argument " "1"" of type '" "wxAboutDialogInfo *""'"); 
+  }
+  arg1 = reinterpret_cast< wxAboutDialogInfo * >(argp1);
+  {
+    if (! PySequence_Check(obj1)) {
+      PyErr_SetString(PyExc_TypeError, "Sequence of strings expected.");
+      SWIG_fail;
+    }
+    arg2 = new wxArrayString;
+    temp2 = true;
+    int i, len=PySequence_Length(obj1);
+    for (i=0; i<len; i++) {
+      PyObject* item = PySequence_GetItem(obj1, i);
+      wxString* s = wxString_in_helper(item);
+      if (PyErr_Occurred())  SWIG_fail;
+      arg2->Add(*s);
+      delete s;
+      Py_DECREF(item);
+    }
+  }
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    (arg1)->SetTranslators((wxArrayString const &)*arg2);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  {
+    if (temp2) delete arg2;
+  }
+  return resultobj;
+fail:
+  {
+    if (temp2) delete arg2;
+  }
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_AboutDialogInfo_AddTranslator(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxAboutDialogInfo *arg1 = (wxAboutDialogInfo *) 0 ;
+  wxString *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  bool temp2 = false ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "translator", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:AboutDialogInfo_AddTranslator",kwnames,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxAboutDialogInfo, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AboutDialogInfo_AddTranslator" "', expected argument " "1"" of type '" "wxAboutDialogInfo *""'"); 
+  }
+  arg1 = reinterpret_cast< wxAboutDialogInfo * >(argp1);
+  {
+    arg2 = wxString_in_helper(obj1);
+    if (arg2 == NULL) SWIG_fail;
+    temp2 = true;
+  }
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    (arg1)->AddTranslator((wxString const &)*arg2);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  {
+    if (temp2)
+    delete arg2;
+  }
+  return resultobj;
+fail:
+  {
+    if (temp2)
+    delete arg2;
+  }
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_AboutDialogInfo_HasTranslators(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxAboutDialogInfo *arg1 = (wxAboutDialogInfo *) 0 ;
+  bool result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxAboutDialogInfo, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AboutDialogInfo_HasTranslators" "', expected argument " "1"" of type '" "wxAboutDialogInfo const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxAboutDialogInfo * >(argp1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = (bool)((wxAboutDialogInfo const *)arg1)->HasTranslators();
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  {
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+  }
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_AboutDialogInfo_GetTranslators(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxAboutDialogInfo *arg1 = (wxAboutDialogInfo *) 0 ;
+  wxArrayString *result = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxAboutDialogInfo, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AboutDialogInfo_GetTranslators" "', expected argument " "1"" of type '" "wxAboutDialogInfo const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxAboutDialogInfo * >(argp1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    {
+      wxArrayString const &_result_ref = ((wxAboutDialogInfo const *)arg1)->GetTranslators();
+      result = (wxArrayString *) &_result_ref;
+    }
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  {
+    resultobj = wxArrayString2PyList_helper(*result);
+  }
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_AboutDialogInfo_IsSimple(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxAboutDialogInfo *arg1 = (wxAboutDialogInfo *) 0 ;
+  bool result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxAboutDialogInfo, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AboutDialogInfo_IsSimple" "', expected argument " "1"" of type '" "wxAboutDialogInfo const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxAboutDialogInfo * >(argp1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = (bool)((wxAboutDialogInfo const *)arg1)->IsSimple();
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  {
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+  }
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_AboutDialogInfo_GetDescriptionAndCredits(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxAboutDialogInfo *arg1 = (wxAboutDialogInfo *) 0 ;
+  wxString result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxAboutDialogInfo, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AboutDialogInfo_GetDescriptionAndCredits" "', expected argument " "1"" of type '" "wxAboutDialogInfo const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxAboutDialogInfo * >(argp1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = ((wxAboutDialogInfo const *)arg1)->GetDescriptionAndCredits();
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  {
+#if wxUSE_UNICODE
+    resultobj = PyUnicode_FromWideChar((&result)->c_str(), (&result)->Len());
+#else
+    resultobj = PyString_FromStringAndSize((&result)->c_str(), (&result)->Len());
+#endif
+  }
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *AboutDialogInfo_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *obj;
+  if (!SWIG_Python_UnpackTuple(args,(char*)"swigregister", 1, 1,&obj)) return NULL;
+  SWIG_TypeNewClientData(SWIGTYPE_p_wxAboutDialogInfo, SWIG_NewClientData(obj));
+  return SWIG_Py_Void();
+}
+
+SWIGINTERN PyObject *AboutDialogInfo_swiginit(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  return SWIG_Python_InitShadowInstance(args);
+}
+
+SWIGINTERN PyObject *_wrap_AboutBox(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxAboutDialogInfo *arg1 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  char *  kwnames[] = {
+    (char *) "info", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:AboutBox",kwnames,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_wxAboutDialogInfo,  0  | 0);
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AboutBox" "', expected argument " "1"" of type '" "wxAboutDialogInfo const &""'"); 
+  }
+  if (!argp1) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "AboutBox" "', expected argument " "1"" of type '" "wxAboutDialogInfo const &""'"); 
+  }
+  arg1 = reinterpret_cast< wxAboutDialogInfo * >(argp1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxAboutBox((wxAboutDialogInfo const &)*arg1);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 static PyMethodDef SwigMethods[] = {
 	 { (char *)"SystemSettings_GetColour", (PyCFunction) _wrap_SystemSettings_GetColour, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"SystemSettings_GetFont", (PyCFunction) _wrap_SystemSettings_GetFont, METH_VARARGS | METH_KEYWORDS, NULL},
@@ -38296,6 +39926,51 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"PowerEvent_swiginit", PowerEvent_swiginit, METH_VARARGS, NULL},
 	 { (char *)"GetPowerType", (PyCFunction)_wrap_GetPowerType, METH_NOARGS, NULL},
 	 { (char *)"GetBatteryState", (PyCFunction)_wrap_GetBatteryState, METH_NOARGS, NULL},
+	 { (char *)"new_AboutDialogInfo", (PyCFunction)_wrap_new_AboutDialogInfo, METH_NOARGS, NULL},
+	 { (char *)"delete_AboutDialogInfo", (PyCFunction)_wrap_delete_AboutDialogInfo, METH_O, NULL},
+	 { (char *)"AboutDialogInfo_SetName", (PyCFunction) _wrap_AboutDialogInfo_SetName, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"AboutDialogInfo_GetName", (PyCFunction)_wrap_AboutDialogInfo_GetName, METH_O, NULL},
+	 { (char *)"AboutDialogInfo_SetVersion", (PyCFunction) _wrap_AboutDialogInfo_SetVersion, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"AboutDialogInfo_HasVersion", (PyCFunction)_wrap_AboutDialogInfo_HasVersion, METH_O, NULL},
+	 { (char *)"AboutDialogInfo_GetVersion", (PyCFunction)_wrap_AboutDialogInfo_GetVersion, METH_O, NULL},
+	 { (char *)"AboutDialogInfo_SetDescription", (PyCFunction) _wrap_AboutDialogInfo_SetDescription, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"AboutDialogInfo_HasDescription", (PyCFunction)_wrap_AboutDialogInfo_HasDescription, METH_O, NULL},
+	 { (char *)"AboutDialogInfo_GetDescription", (PyCFunction)_wrap_AboutDialogInfo_GetDescription, METH_O, NULL},
+	 { (char *)"AboutDialogInfo_SetCopyright", (PyCFunction) _wrap_AboutDialogInfo_SetCopyright, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"AboutDialogInfo_HasCopyright", (PyCFunction)_wrap_AboutDialogInfo_HasCopyright, METH_O, NULL},
+	 { (char *)"AboutDialogInfo_GetCopyright", (PyCFunction)_wrap_AboutDialogInfo_GetCopyright, METH_O, NULL},
+	 { (char *)"AboutDialogInfo_SetLicence", (PyCFunction) _wrap_AboutDialogInfo_SetLicence, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"AboutDialogInfo_SetLicense", (PyCFunction) _wrap_AboutDialogInfo_SetLicense, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"AboutDialogInfo_HasLicence", (PyCFunction)_wrap_AboutDialogInfo_HasLicence, METH_O, NULL},
+	 { (char *)"AboutDialogInfo_GetLicence", (PyCFunction)_wrap_AboutDialogInfo_GetLicence, METH_O, NULL},
+	 { (char *)"AboutDialogInfo_SetIcon", (PyCFunction) _wrap_AboutDialogInfo_SetIcon, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"AboutDialogInfo_HasIcon", (PyCFunction)_wrap_AboutDialogInfo_HasIcon, METH_O, NULL},
+	 { (char *)"AboutDialogInfo_GetIcon", (PyCFunction)_wrap_AboutDialogInfo_GetIcon, METH_O, NULL},
+	 { (char *)"AboutDialogInfo__SetWebSite", (PyCFunction) _wrap_AboutDialogInfo__SetWebSite, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"AboutDialogInfo__GetWebSiteURL", (PyCFunction)_wrap_AboutDialogInfo__GetWebSiteURL, METH_O, NULL},
+	 { (char *)"AboutDialogInfo__GetWebSiteDescription", (PyCFunction)_wrap_AboutDialogInfo__GetWebSiteDescription, METH_O, NULL},
+	 { (char *)"AboutDialogInfo_HasWebSite", (PyCFunction)_wrap_AboutDialogInfo_HasWebSite, METH_O, NULL},
+	 { (char *)"AboutDialogInfo_SetDevelopers", (PyCFunction) _wrap_AboutDialogInfo_SetDevelopers, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"AboutDialogInfo_AddDeveloper", (PyCFunction) _wrap_AboutDialogInfo_AddDeveloper, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"AboutDialogInfo_HasDevelopers", (PyCFunction)_wrap_AboutDialogInfo_HasDevelopers, METH_O, NULL},
+	 { (char *)"AboutDialogInfo_GetDevelopers", (PyCFunction)_wrap_AboutDialogInfo_GetDevelopers, METH_O, NULL},
+	 { (char *)"AboutDialogInfo_SetDocWriters", (PyCFunction) _wrap_AboutDialogInfo_SetDocWriters, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"AboutDialogInfo_AddDocWriter", (PyCFunction) _wrap_AboutDialogInfo_AddDocWriter, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"AboutDialogInfo_HasDocWriters", (PyCFunction)_wrap_AboutDialogInfo_HasDocWriters, METH_O, NULL},
+	 { (char *)"AboutDialogInfo_GetDocWriters", (PyCFunction)_wrap_AboutDialogInfo_GetDocWriters, METH_O, NULL},
+	 { (char *)"AboutDialogInfo_SetArtists", (PyCFunction) _wrap_AboutDialogInfo_SetArtists, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"AboutDialogInfo_AddArtist", (PyCFunction) _wrap_AboutDialogInfo_AddArtist, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"AboutDialogInfo_HasArtists", (PyCFunction)_wrap_AboutDialogInfo_HasArtists, METH_O, NULL},
+	 { (char *)"AboutDialogInfo_GetArtists", (PyCFunction)_wrap_AboutDialogInfo_GetArtists, METH_O, NULL},
+	 { (char *)"AboutDialogInfo_SetTranslators", (PyCFunction) _wrap_AboutDialogInfo_SetTranslators, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"AboutDialogInfo_AddTranslator", (PyCFunction) _wrap_AboutDialogInfo_AddTranslator, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"AboutDialogInfo_HasTranslators", (PyCFunction)_wrap_AboutDialogInfo_HasTranslators, METH_O, NULL},
+	 { (char *)"AboutDialogInfo_GetTranslators", (PyCFunction)_wrap_AboutDialogInfo_GetTranslators, METH_O, NULL},
+	 { (char *)"AboutDialogInfo_IsSimple", (PyCFunction)_wrap_AboutDialogInfo_IsSimple, METH_O, NULL},
+	 { (char *)"AboutDialogInfo_GetDescriptionAndCredits", (PyCFunction)_wrap_AboutDialogInfo_GetDescriptionAndCredits, METH_O, NULL},
+	 { (char *)"AboutDialogInfo_swigregister", AboutDialogInfo_swigregister, METH_VARARGS, NULL},
+	 { (char *)"AboutDialogInfo_swiginit", AboutDialogInfo_swiginit, METH_VARARGS, NULL},
+	 { (char *)"AboutBox", (PyCFunction) _wrap_AboutBox, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { NULL, NULL, 0, NULL }
 };
 
@@ -38840,6 +40515,7 @@ static swig_type_info _swigt__p_unsigned_char = {"_p_unsigned_char", "unsigned c
 static swig_type_info _swigt__p_unsigned_int = {"_p_unsigned_int", "unsigned int *|time_t *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_unsigned_long = {"_p_unsigned_long", "unsigned long *|wxLogLevel *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_void = {"_p_void", "void *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_wxAboutDialogInfo = {"_p_wxAboutDialogInfo", "wxAboutDialogInfo *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_wxArrayString = {"_p_wxArrayString", "wxArrayString *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_wxBitmap = {"_p_wxBitmap", "wxBitmap *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_wxBitmapDataObject = {"_p_wxBitmapDataObject", "wxBitmapDataObject *", 0, 0, (void*)0, 0};
@@ -39015,6 +40691,7 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_unsigned_long,
   &_swigt__p_void,
   &_swigt__p_wxANIHandler,
+  &_swigt__p_wxAboutDialogInfo,
   &_swigt__p_wxAcceleratorTable,
   &_swigt__p_wxActivateEvent,
   &_swigt__p_wxArrayString,
@@ -39188,6 +40865,7 @@ static swig_cast_info _swigc__p_unsigned_char[] = {  {&_swigt__p_unsigned_char, 
 static swig_cast_info _swigc__p_unsigned_int[] = {  {&_swigt__p_unsigned_int, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_unsigned_long[] = {  {&_swigt__p_unsigned_long, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_void[] = {  {&_swigt__p_void, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_wxAboutDialogInfo[] = {  {&_swigt__p_wxAboutDialogInfo, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxArrayString[] = {  {&_swigt__p_wxArrayString, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxBitmap[] = {  {&_swigt__p_wxBitmap, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxBitmapDataObject[] = {  {&_swigt__p_wxBitmapDataObject, 0, 0, 0},  {&_swigt__p_wxPyBitmapDataObject, _p_wxPyBitmapDataObjectTo_p_wxBitmapDataObject, 0, 0},{0, 0, 0, 0}};
@@ -39363,6 +41041,7 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_unsigned_long,
   _swigc__p_void,
   _swigc__p_wxANIHandler,
+  _swigc__p_wxAboutDialogInfo,
   _swigc__p_wxAcceleratorTable,
   _swigc__p_wxActivateEvent,
   _swigc__p_wxArrayString,

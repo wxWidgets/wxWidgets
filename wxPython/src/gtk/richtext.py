@@ -81,6 +81,11 @@ RICHTEXT_HITTEST_AFTER = _richtext.RICHTEXT_HITTEST_AFTER
 RICHTEXT_HITTEST_ON = _richtext.RICHTEXT_HITTEST_ON
 RICHTEXT_FORMATTED = _richtext.RICHTEXT_FORMATTED
 RICHTEXT_UNFORMATTED = _richtext.RICHTEXT_UNFORMATTED
+RICHTEXT_SETSTYLE_NONE = _richtext.RICHTEXT_SETSTYLE_NONE
+RICHTEXT_SETSTYLE_WITH_UNDO = _richtext.RICHTEXT_SETSTYLE_WITH_UNDO
+RICHTEXT_SETSTYLE_OPTIMIZE = _richtext.RICHTEXT_SETSTYLE_OPTIMIZE
+RICHTEXT_SETSTYLE_PARAGRAPHS_ONLY = _richtext.RICHTEXT_SETSTYLE_PARAGRAPHS_ONLY
+RICHTEXT_SETSTYLE_CHARACTERS_ONLY = _richtext.RICHTEXT_SETSTYLE_CHARACTERS_ONLY
 RICHTEXT_INSERT_NONE = _richtext.RICHTEXT_INSERT_NONE
 RICHTEXT_INSERT_WITH_PREVIOUS_PARAGRAPH_STYLE = _richtext.RICHTEXT_INSERT_WITH_PREVIOUS_PARAGRAPH_STYLE
 TEXT_ATTR_TEXT_COLOUR = _richtext.TEXT_ATTR_TEXT_COLOUR
@@ -367,6 +372,10 @@ class RichTextAttr(object):
         """SetBulletSymbol(self, wxChar symbol)"""
         return _richtext.RichTextAttr_SetBulletSymbol(*args, **kwargs)
 
+    def SetBulletFont(*args, **kwargs):
+        """SetBulletFont(self, String bulletFont)"""
+        return _richtext.RichTextAttr_SetBulletFont(*args, **kwargs)
+
     def GetTextColour(*args, **kwargs):
         """GetTextColour(self) -> Colour"""
         return _richtext.RichTextAttr_GetTextColour(*args, **kwargs)
@@ -450,6 +459,10 @@ class RichTextAttr(object):
     def GetBulletSymbol(*args, **kwargs):
         """GetBulletSymbol(self) -> wxChar"""
         return _richtext.RichTextAttr_GetBulletSymbol(*args, **kwargs)
+
+    def GetBulletFont(*args, **kwargs):
+        """GetBulletFont(self) -> String"""
+        return _richtext.RichTextAttr_GetBulletFont(*args, **kwargs)
 
     def HasTextColour(*args, **kwargs):
         """HasTextColour(self) -> bool"""
@@ -549,6 +562,7 @@ class RichTextAttr(object):
 
     Alignment = property(GetAlignment,SetAlignment,doc="See `GetAlignment` and `SetAlignment`") 
     BackgroundColour = property(GetBackgroundColour,SetBackgroundColour,doc="See `GetBackgroundColour` and `SetBackgroundColour`") 
+    BulletFont = property(GetBulletFont,SetBulletFont,doc="See `GetBulletFont` and `SetBulletFont`") 
     BulletNumber = property(GetBulletNumber,SetBulletNumber,doc="See `GetBulletNumber` and `SetBulletNumber`") 
     BulletStyle = property(GetBulletStyle,SetBulletStyle,doc="See `GetBulletStyle` and `SetBulletStyle`") 
     BulletSymbol = property(GetBulletSymbol,SetBulletSymbol,doc="See `GetBulletSymbol` and `SetBulletSymbol`") 
@@ -757,6 +771,16 @@ class RichTextCtrl(_windows.ScrolledWindow):
         Set the style for the text in ``range`` to ``style``
         """
         return _richtext.RichTextCtrl_SetStyle(*args, **kwargs)
+
+    def SetStyleEx(*args, **kwargs):
+        """
+        SetStyleEx(self, RichTextRange range, RichTextAttr style, int flags=RICHTEXT_SETSTYLE_WITH_UNDO) -> bool
+
+        Extended style setting operation with flags including:
+        RICHTEXT_SETSTYLE_WITH_UNDO, RICHTEXT_SETSTYLE_OPTIMIZE,
+        RICHTEXT_SETSTYLE_PARAGRAPHS_ONLY, RICHTEXT_SETSTYLE_CHARACTERS_ONLY
+        """
+        return _richtext.RichTextCtrl_SetStyleEx(*args, **kwargs)
 
     def GetStyle(*args, **kwargs):
         """

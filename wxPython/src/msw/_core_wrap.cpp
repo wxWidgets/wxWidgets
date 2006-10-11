@@ -2889,8 +2889,10 @@ static wxPyCoreAPI API = {
     wxPyInstance_Check,
     wxPySwigInstance_Check,
 
-    wxPyCheckForApp
+    wxPyCheckForApp,
 
+    wxArrayDouble2PyList_helper,
+    wxPoint2D_LIST_helper
 };
 
 #endif
@@ -8369,6 +8371,34 @@ SWIGINTERN PyObject *_wrap_new_Point2DFromPoint(PyObject *SWIGUNUSEDPARM(self), 
     if (PyErr_Occurred()) SWIG_fail;
   }
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_wxPoint2D, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_delete_Point2D(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxPoint2D *arg1 = (wxPoint2D *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxPoint2D, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_Point2D" "', expected argument " "1"" of type '" "wxPoint2D *""'"); 
+  }
+  arg1 = reinterpret_cast< wxPoint2D * >(argp1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    delete arg1;
+    
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
   return NULL;
@@ -15646,7 +15676,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_Image_Ok(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_Image_IsOk(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   wxImage *arg1 = (wxImage *) 0 ;
   bool result;
@@ -15658,12 +15688,12 @@ SWIGINTERN PyObject *_wrap_Image_Ok(PyObject *SWIGUNUSEDPARM(self), PyObject *ar
   swig_obj[0] = args;
   res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxImage, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Image_Ok" "', expected argument " "1"" of type '" "wxImage *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Image_IsOk" "', expected argument " "1"" of type '" "wxImage *""'"); 
   }
   arg1 = reinterpret_cast< wxImage * >(argp1);
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    result = (bool)(arg1)->Ok();
+    result = (bool)(arg1)->IsOk();
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
@@ -18651,6 +18681,106 @@ SWIGINTERN PyObject *_wrap_EvtHandler_ProcessPendingEvents(PyObject *SWIGUNUSEDP
     if (PyErr_Occurred()) SWIG_fail;
   }
   resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_EvtHandler_AllowReentrance(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxEvtHandler *arg1 = (wxEvtHandler *) 0 ;
+  bool arg2 = (bool) true ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  bool val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "allow", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|O:EvtHandler_AllowReentrance",kwnames,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxEvtHandler, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "EvtHandler_AllowReentrance" "', expected argument " "1"" of type '" "wxEvtHandler *""'"); 
+  }
+  arg1 = reinterpret_cast< wxEvtHandler * >(argp1);
+  if (obj1) {
+    ecode2 = SWIG_AsVal_bool(obj1, &val2);
+    if (!SWIG_IsOK(ecode2)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "EvtHandler_AllowReentrance" "', expected argument " "2"" of type '" "bool""'");
+    } 
+    arg2 = static_cast< bool >(val2);
+  }
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    (arg1)->AllowReentrance(arg2);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_EvtHandler_IsReentranceAllowed(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxEvtHandler *arg1 = (wxEvtHandler *) 0 ;
+  bool result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxEvtHandler, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "EvtHandler_IsReentranceAllowed" "', expected argument " "1"" of type '" "wxEvtHandler *""'"); 
+  }
+  arg1 = reinterpret_cast< wxEvtHandler * >(argp1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = (bool)(arg1)->IsReentranceAllowed();
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  {
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+  }
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_EvtHandler_IsEventHandlingInProgress(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxEvtHandler *arg1 = (wxEvtHandler *) 0 ;
+  bool result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxEvtHandler, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "EvtHandler_IsEventHandlingInProgress" "', expected argument " "1"" of type '" "wxEvtHandler *""'"); 
+  }
+  arg1 = reinterpret_cast< wxEvtHandler * >(argp1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = (bool)(arg1)->IsEventHandlingInProgress();
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  {
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+  }
   return resultobj;
 fail:
   return NULL;
@@ -30117,7 +30247,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_AcceleratorTable_Ok(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_AcceleratorTable_IsOk(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   wxAcceleratorTable *arg1 = (wxAcceleratorTable *) 0 ;
   bool result;
@@ -30129,12 +30259,12 @@ SWIGINTERN PyObject *_wrap_AcceleratorTable_Ok(PyObject *SWIGUNUSEDPARM(self), P
   swig_obj[0] = args;
   res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxAcceleratorTable, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AcceleratorTable_Ok" "', expected argument " "1"" of type '" "wxAcceleratorTable const *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AcceleratorTable_IsOk" "', expected argument " "1"" of type '" "wxAcceleratorTable const *""'"); 
   }
   arg1 = reinterpret_cast< wxAcceleratorTable * >(argp1);
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    result = (bool)((wxAcceleratorTable const *)arg1)->Ok();
+    result = (bool)((wxAcceleratorTable const *)arg1)->IsOk();
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
@@ -35588,6 +35718,36 @@ SWIGINTERN PyObject *_wrap_Window_PrepareDC(PyObject *SWIGUNUSEDPARM(self), PyOb
     if (PyErr_Occurred()) SWIG_fail;
   }
   resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Window_IsDoubleBuffered(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxWindow *arg1 = (wxWindow *) 0 ;
+  bool result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxWindow, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Window_IsDoubleBuffered" "', expected argument " "1"" of type '" "wxWindow const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxWindow * >(argp1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = (bool)((wxWindow const *)arg1)->IsDoubleBuffered();
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  {
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+  }
   return resultobj;
 fail:
   return NULL;
@@ -49882,13 +50042,7 @@ SWIGINTERN PyObject *_wrap_FlexGridSizer_GetRowHeights(PyObject *SWIGUNUSEDPARM(
     if (PyErr_Occurred()) SWIG_fail;
   }
   {
-    resultobj = PyList_New(0);
-    size_t idx;
-    for (idx = 0; idx < result->GetCount(); idx += 1) {
-      PyObject* val = PyInt_FromLong( result->Item(idx) );
-      PyList_Append(resultobj, val);
-      Py_DECREF(val);
-    }
+    resultobj = wxArrayInt2PyList_helper(*result);
   }
   return resultobj;
 fail:
@@ -49921,13 +50075,7 @@ SWIGINTERN PyObject *_wrap_FlexGridSizer_GetColWidths(PyObject *SWIGUNUSEDPARM(s
     if (PyErr_Occurred()) SWIG_fail;
   }
   {
-    resultobj = PyList_New(0);
-    size_t idx;
-    for (idx = 0; idx < result->GetCount(); idx += 1) {
-      PyObject* val = PyInt_FromLong( result->Item(idx) );
-      PyList_Append(resultobj, val);
-      Py_DECREF(val);
-    }
+    resultobj = wxArrayInt2PyList_helper(*result);
   }
   return resultobj;
 fail:
@@ -54294,6 +54442,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"new_Point2D", (PyCFunction) _wrap_new_Point2D, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"new_Point2DCopy", (PyCFunction) _wrap_new_Point2DCopy, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"new_Point2DFromPoint", (PyCFunction) _wrap_new_Point2DFromPoint, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"delete_Point2D", (PyCFunction)_wrap_delete_Point2D, METH_O, NULL},
 	 { (char *)"Point2D_GetFloor", (PyCFunction)_wrap_Point2D_GetFloor, METH_O, NULL},
 	 { (char *)"Point2D_GetRounded", (PyCFunction)_wrap_Point2D_GetRounded, METH_O, NULL},
 	 { (char *)"Point2D_GetVectorLength", (PyCFunction)_wrap_Point2D_GetVectorLength, METH_O, NULL},
@@ -54488,7 +54637,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Image_CanReadStream", (PyCFunction) _wrap_Image_CanReadStream, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Image_LoadStream", (PyCFunction) _wrap_Image_LoadStream, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Image_LoadMimeStream", (PyCFunction) _wrap_Image_LoadMimeStream, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"Image_Ok", (PyCFunction)_wrap_Image_Ok, METH_O, NULL},
+	 { (char *)"Image_IsOk", (PyCFunction)_wrap_Image_IsOk, METH_O, NULL},
 	 { (char *)"Image_GetWidth", (PyCFunction)_wrap_Image_GetWidth, METH_O, NULL},
 	 { (char *)"Image_GetHeight", (PyCFunction)_wrap_Image_GetHeight, METH_O, NULL},
 	 { (char *)"Image_GetSize", (PyCFunction)_wrap_Image_GetSize, METH_O, NULL},
@@ -54582,6 +54731,9 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"EvtHandler_ProcessEvent", (PyCFunction) _wrap_EvtHandler_ProcessEvent, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"EvtHandler_AddPendingEvent", (PyCFunction) _wrap_EvtHandler_AddPendingEvent, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"EvtHandler_ProcessPendingEvents", (PyCFunction)_wrap_EvtHandler_ProcessPendingEvents, METH_O, NULL},
+	 { (char *)"EvtHandler_AllowReentrance", (PyCFunction) _wrap_EvtHandler_AllowReentrance, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"EvtHandler_IsReentranceAllowed", (PyCFunction)_wrap_EvtHandler_IsReentranceAllowed, METH_O, NULL},
+	 { (char *)"EvtHandler_IsEventHandlingInProgress", (PyCFunction)_wrap_EvtHandler_IsEventHandlingInProgress, METH_O, NULL},
 	 { (char *)"EvtHandler_Connect", (PyCFunction) _wrap_EvtHandler_Connect, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"EvtHandler_Disconnect", (PyCFunction) _wrap_EvtHandler_Disconnect, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"EvtHandler__setOORInfo", (PyCFunction) _wrap_EvtHandler__setOORInfo, METH_VARARGS | METH_KEYWORDS, NULL},
@@ -55018,7 +55170,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"AcceleratorEntry_swiginit", AcceleratorEntry_swiginit, METH_VARARGS, NULL},
 	 { (char *)"new_AcceleratorTable", (PyCFunction) _wrap_new_AcceleratorTable, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"delete_AcceleratorTable", (PyCFunction)_wrap_delete_AcceleratorTable, METH_O, NULL},
-	 { (char *)"AcceleratorTable_Ok", (PyCFunction)_wrap_AcceleratorTable_Ok, METH_O, NULL},
+	 { (char *)"AcceleratorTable_IsOk", (PyCFunction)_wrap_AcceleratorTable_IsOk, METH_O, NULL},
 	 { (char *)"AcceleratorTable_swigregister", AcceleratorTable_swigregister, METH_VARARGS, NULL},
 	 { (char *)"AcceleratorTable_swiginit", AcceleratorTable_swiginit, METH_VARARGS, NULL},
 	 { (char *)"GetAccelFromString", (PyCFunction) _wrap_GetAccelFromString, METH_VARARGS | METH_KEYWORDS, NULL},
@@ -55172,6 +55324,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Window_IsFrozen", (PyCFunction)_wrap_Window_IsFrozen, METH_O, NULL},
 	 { (char *)"Window_Thaw", (PyCFunction)_wrap_Window_Thaw, METH_O, NULL},
 	 { (char *)"Window_PrepareDC", (PyCFunction) _wrap_Window_PrepareDC, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"Window_IsDoubleBuffered", (PyCFunction)_wrap_Window_IsDoubleBuffered, METH_O, NULL},
 	 { (char *)"Window_GetUpdateRegion", (PyCFunction)_wrap_Window_GetUpdateRegion, METH_O, NULL},
 	 { (char *)"Window_GetUpdateClientRect", (PyCFunction)_wrap_Window_GetUpdateClientRect, METH_O, NULL},
 	 { (char *)"Window_IsExposed", (PyCFunction) _wrap_Window_IsExposed, METH_VARARGS | METH_KEYWORDS, NULL},
