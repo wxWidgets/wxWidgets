@@ -13,7 +13,6 @@
 #define _WX_LISTCTRL_H_
 
 #include "wx/generic/listctrl.h"
-#include <Carbon/Carbon.h>
 
 class wxMacDataBrowserListCtrlControl;
 class wxMacListControl;
@@ -321,7 +320,7 @@ protected:
   
   wxGenericListCtrl* m_genericImpl;   // allow use of the generic impl.
   wxMacDataBrowserListCtrlControl* m_dbImpl;
-  EventHandlerRef   m_macListCtrlEventHandler;
+  void* /*EventHandlerRef*/   m_macListCtrlEventHandler;
   wxListCtrlCompare m_compareFunc;
   long m_compareFuncData;
   
