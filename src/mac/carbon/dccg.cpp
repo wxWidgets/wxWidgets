@@ -1349,7 +1349,9 @@ void wxDC::SetTextForeground( const wxColour &col )
     if ( col != m_textForegroundColour )
     {
         m_textForegroundColour = col;
-        m_graphicContext->SetTextColor( col ) ;
+        m_graphicContext->SetTextColor( col );
+        // in the current implementation the font contains the text color
+        m_graphicContext->SetFont(m_font);
     }
 }
 
