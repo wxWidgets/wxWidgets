@@ -2770,6 +2770,26 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 </set>
 
 <set var="ADVANCED_GTK1_SRC" hints="files">
+    src/generic/animateg.cpp
+    src/gtk1/eggtrayicon.c
+    src/gtk1/taskbar.cpp
+</set>
+<set var="ADVANCED_GTK1_HDR" hints="files">
+    wx/generic/animate.h
+</set>
+
+<set var="ADVANCED_MOTIF_SRC" hints="files">
+    src/generic/animateg.cpp
+</set>
+<set var="ADVANCED_MOTIF_HDR" hints="files">
+    wx/generic/animate.h
+</set>
+
+<set var="ADVANCED_X11_SRC" hints="files">
+    src/generic/animateg.cpp
+</set>
+<set var="ADVANCED_X11_HDR" hints="files">
+    wx/generic/animate.h
 </set>
 
 <!-- ====================================================================== -->
@@ -3285,10 +3305,10 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
         <if cond="TOOLKIT=='WINCE'">$(ADVANCED_MSW_SRC)</if>
         <if cond="TOOLKIT=='MAC'">$(ADVANCED_MAC_SRC)</if>
         <if cond="TOOLKIT=='COCOA'">$(ADVANCED_COCOA_SRC)</if>
-        <if cond="TOOLKIT=='MOTIF'">$(ADVANCED_UNIX_SRC)</if>
+        <if cond="TOOLKIT=='MOTIF'">$(ADVANCED_UNIX_SRC) $(ADVANCED_MOTIF_SRC)</if>
         <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION=='2'">$(ADVANCED_UNIX_SRC) $(ADVANCED_GTK_SRC)</if>
         <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION==''">$(ADVANCED_UNIX_SRC) $(ADVANCED_GTK1_SRC)</if>
-        <if cond="TOOLKIT=='X11'">$(ADVANCED_UNIX_SRC)</if>
+        <if cond="TOOLKIT=='X11'">$(ADVANCED_UNIX_SRC) $(ADVANCED_X11_SRC)</if>
         <if cond="TOOLKIT=='PM'">$(ADVANCED_OS2_SRC)</if>
     </set>
     <set var="ADVANCED_PLATFORM_HDR" hints="files">
@@ -3296,9 +3316,10 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
         <if cond="TOOLKIT=='WINCE'">$(ADVANCED_MSW_HDR)</if>
         <if cond="TOOLKIT=='MAC'">$(ADVANCED_MAC_HDR)</if>
         <if cond="TOOLKIT=='COCOA'">$(ADVANCED_COCOA_HDR)</if>
-        <if cond="TOOLKIT=='MOTIF'">$(ADVANCED_UNIX_HDR)</if>
-        <if cond="TOOLKIT=='GTK'">$(ADVANCED_UNIX_HDR) $(ADVANCED_GTK_HDR)</if>
-        <if cond="TOOLKIT=='X11'">$(ADVANCED_UNIX_HDR)</if>
+        <if cond="TOOLKIT=='MOTIF'">$(ADVANCED_UNIX_HDR) $(ADVANCED_MOTIF_HDR)</if>
+        <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION=='2'">$(ADVANCED_UNIX_HDR) $(ADVANCED_GTK_HDR)</if>
+        <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION==''">$(ADVANCED_UNIX_HDR) $(ADVANCED_GTK1_HDR)</if>
+        <if cond="TOOLKIT=='X11'">$(ADVANCED_UNIX_HDR) $(ADVANCED_X11_HDR)</if>
         <if cond="TOOLKIT=='PM'">$(ADVANCED_OS2_HDR)</if>
     </set>
 

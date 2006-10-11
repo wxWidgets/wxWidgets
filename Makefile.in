@@ -2579,12 +2579,18 @@ COND_TOOLKIT_COCOA_ADVANCED_PLATFORM_HDR =  \
 	wx/cocoa/taskbar.h \
 	wx/mac/corefoundation/joystick.h
 @COND_TOOLKIT_COCOA@ADVANCED_PLATFORM_HDR = $(COND_TOOLKIT_COCOA_ADVANCED_PLATFORM_HDR)
-COND_TOOLKIT_GTK_ADVANCED_PLATFORM_HDR =  \
+COND_TOOLKIT_GTK_TOOLKIT_VERSION__ADVANCED_PLATFORM_HDR =  \
+	wx/unix/joystick.h \
+	wx/unix/sound.h \
+	wx/unix/taskbarx11.h \
+	wx/generic/animate.h
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_@ADVANCED_PLATFORM_HDR = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION__ADVANCED_PLATFORM_HDR)
+COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_ADVANCED_PLATFORM_HDR =  \
 	wx/unix/joystick.h \
 	wx/unix/sound.h \
 	wx/unix/taskbarx11.h \
 	wx/gtk/animate.h
-@COND_TOOLKIT_GTK@ADVANCED_PLATFORM_HDR = $(COND_TOOLKIT_GTK_ADVANCED_PLATFORM_HDR)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@ADVANCED_PLATFORM_HDR = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_ADVANCED_PLATFORM_HDR)
 COND_TOOLKIT_MAC_ADVANCED_PLATFORM_HDR =  \
 	wx/generic/animate.h \
 	wx/mac/carbon/drawer.h \
@@ -2592,9 +2598,12 @@ COND_TOOLKIT_MAC_ADVANCED_PLATFORM_HDR =  \
 	wx/mac/carbon/taskbarosx.h \
 	wx/mac/corefoundation/joystick.h
 @COND_TOOLKIT_MAC@ADVANCED_PLATFORM_HDR = $(COND_TOOLKIT_MAC_ADVANCED_PLATFORM_HDR)
-@COND_TOOLKIT_MOTIF@ADVANCED_PLATFORM_HDR = \
-@COND_TOOLKIT_MOTIF@	wx/unix/joystick.h wx/unix/sound.h \
-@COND_TOOLKIT_MOTIF@	wx/unix/taskbarx11.h
+COND_TOOLKIT_MOTIF_ADVANCED_PLATFORM_HDR =  \
+	wx/unix/joystick.h \
+	wx/unix/sound.h \
+	wx/unix/taskbarx11.h \
+	wx/generic/animate.h
+@COND_TOOLKIT_MOTIF@ADVANCED_PLATFORM_HDR = $(COND_TOOLKIT_MOTIF_ADVANCED_PLATFORM_HDR)
 COND_TOOLKIT_MSW_ADVANCED_PLATFORM_HDR =  \
 	wx/generic/animate.h \
 	wx/msw/sound.h \
@@ -2605,8 +2614,12 @@ COND_TOOLKIT_MSW_ADVANCED_PLATFORM_HDR =  \
 @COND_TOOLKIT_PM@	wx/generic/animate.h wx/os2/joystick.h wx/os2/sound.h
 @COND_TOOLKIT_WINCE@ADVANCED_PLATFORM_HDR = \
 @COND_TOOLKIT_WINCE@	wx/generic/animate.h wx/msw/sound.h wx/msw/taskbar.h
-@COND_TOOLKIT_X11@ADVANCED_PLATFORM_HDR = \
-@COND_TOOLKIT_X11@	wx/unix/joystick.h wx/unix/sound.h wx/unix/taskbarx11.h
+COND_TOOLKIT_X11_ADVANCED_PLATFORM_HDR =  \
+	wx/unix/joystick.h \
+	wx/unix/sound.h \
+	wx/unix/taskbarx11.h \
+	wx/generic/animate.h
+@COND_TOOLKIT_X11@ADVANCED_PLATFORM_HDR = $(COND_TOOLKIT_X11_ADVANCED_PLATFORM_HDR)
 @COND_TOOLKIT_MSW@ADVANCED_PLATFORM_NATIVE_HDR = wx/msw/datectrl.h
 @COND_TOOLKIT_WINCE@ADVANCED_PLATFORM_NATIVE_HDR = wx/msw/datectrl.h
 COND_WXUNIV_0_ADVANCED_HDR =  \
@@ -10655,7 +10668,10 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION____ADVANCED_PLATFORM_SRC_OBJECTS =  \
 	monodll_taskbarcmn.o \
 	monodll_joystick.o \
 	monodll_sound.o \
-	monodll_taskbarx11.o
+	monodll_taskbarx11.o \
+	monodll_animateg.o \
+	monodll_eggtrayicon.o \
+	monodll_taskbar.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_@__ADVANCED_PLATFORM_SRC_OBJECTS = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION____ADVANCED_PLATFORM_SRC_OBJECTS)
 COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___ADVANCED_PLATFORM_SRC_OBJECTS =  \
 	monodll_taskbarcmn.o \
@@ -10681,7 +10697,8 @@ COND_TOOLKIT_MOTIF___ADVANCED_PLATFORM_SRC_OBJECTS =  \
 	monodll_taskbarcmn.o \
 	monodll_joystick.o \
 	monodll_sound.o \
-	monodll_taskbarx11.o
+	monodll_taskbarx11.o \
+	monodll_animateg.o
 @COND_TOOLKIT_MOTIF@__ADVANCED_PLATFORM_SRC_OBJECTS = $(COND_TOOLKIT_MOTIF___ADVANCED_PLATFORM_SRC_OBJECTS)
 COND_TOOLKIT_MSW___ADVANCED_PLATFORM_SRC_OBJECTS =  \
 	monodll_animateg.o \
@@ -10704,7 +10721,8 @@ COND_TOOLKIT_X11___ADVANCED_PLATFORM_SRC_OBJECTS =  \
 	monodll_taskbarcmn.o \
 	monodll_joystick.o \
 	monodll_sound.o \
-	monodll_taskbarx11.o
+	monodll_taskbarx11.o \
+	monodll_animateg.o
 @COND_TOOLKIT_X11@__ADVANCED_PLATFORM_SRC_OBJECTS = $(COND_TOOLKIT_X11___ADVANCED_PLATFORM_SRC_OBJECTS)
 @COND_PLATFORM_MACOSX_1@__MAC_LOWLEVEL_SRC_OBJECTS_0 \
 @COND_PLATFORM_MACOSX_1@	= monolib_gsockosx.o monolib_hid.o \
@@ -10719,7 +10737,10 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION____ADVANCED_PLATFORM_SRC_OBJECTS_0 =  \
 	monolib_taskbarcmn.o \
 	monolib_joystick.o \
 	monolib_sound.o \
-	monolib_taskbarx11.o
+	monolib_taskbarx11.o \
+	monolib_animateg.o \
+	monolib_eggtrayicon.o \
+	monolib_taskbar.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_@__ADVANCED_PLATFORM_SRC_OBJECTS_0 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION____ADVANCED_PLATFORM_SRC_OBJECTS_0)
 COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___ADVANCED_PLATFORM_SRC_OBJECTS_0 =  \
 	monolib_taskbarcmn.o \
@@ -10745,7 +10766,8 @@ COND_TOOLKIT_MOTIF___ADVANCED_PLATFORM_SRC_OBJECTS_0 =  \
 	monolib_taskbarcmn.o \
 	monolib_joystick.o \
 	monolib_sound.o \
-	monolib_taskbarx11.o
+	monolib_taskbarx11.o \
+	monolib_animateg.o
 @COND_TOOLKIT_MOTIF@__ADVANCED_PLATFORM_SRC_OBJECTS_0 = $(COND_TOOLKIT_MOTIF___ADVANCED_PLATFORM_SRC_OBJECTS_0)
 COND_TOOLKIT_MSW___ADVANCED_PLATFORM_SRC_OBJECTS_0 =  \
 	monolib_animateg.o \
@@ -10768,7 +10790,8 @@ COND_TOOLKIT_X11___ADVANCED_PLATFORM_SRC_OBJECTS_0 =  \
 	monolib_taskbarcmn.o \
 	monolib_joystick.o \
 	monolib_sound.o \
-	monolib_taskbarx11.o
+	monolib_taskbarx11.o \
+	monolib_animateg.o
 @COND_TOOLKIT_X11@__ADVANCED_PLATFORM_SRC_OBJECTS_0 = $(COND_TOOLKIT_X11___ADVANCED_PLATFORM_SRC_OBJECTS_0)
 @COND_PLATFORM_MACOSX_1@__MAC_LOWLEVEL_SRC_OBJECTS_8 \
 @COND_PLATFORM_MACOSX_1@	= coredll_gsockosx.o coredll_hid.o \
@@ -10782,9 +10805,15 @@ COND_TOOLKIT_COCOA___ADVANCED_PLATFORM_SRC_OBJECTS_8 =  \
 	advdll_taskbarcmn.o \
 	advdll_hidjoystick.o
 @COND_TOOLKIT_COCOA@__ADVANCED_PLATFORM_SRC_OBJECTS_8 = $(COND_TOOLKIT_COCOA___ADVANCED_PLATFORM_SRC_OBJECTS_8)
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_@__ADVANCED_PLATFORM_SRC_OBJECTS_8 \
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_@	= advdll_taskbarcmn.o advdll_joystick.o \
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_@	advdll_sound.o advdll_taskbarx11.o
+COND_TOOLKIT_GTK_TOOLKIT_VERSION____ADVANCED_PLATFORM_SRC_OBJECTS_8 =  \
+	advdll_taskbarcmn.o \
+	advdll_joystick.o \
+	advdll_sound.o \
+	advdll_taskbarx11.o \
+	advdll_animateg.o \
+	advdll_eggtrayicon.o \
+	advdll_taskbar.o
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_@__ADVANCED_PLATFORM_SRC_OBJECTS_8 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION____ADVANCED_PLATFORM_SRC_OBJECTS_8)
 COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___ADVANCED_PLATFORM_SRC_OBJECTS_8 =  \
 	advdll_taskbarcmn.o \
 	advdll_joystick.o \
@@ -10805,9 +10834,13 @@ COND_TOOLKIT_MAC___ADVANCED_PLATFORM_SRC_OBJECTS_8 =  \
 	advdll_taskbar.o \
 	advdll_hidjoystick.o
 @COND_TOOLKIT_MAC@__ADVANCED_PLATFORM_SRC_OBJECTS_8 = $(COND_TOOLKIT_MAC___ADVANCED_PLATFORM_SRC_OBJECTS_8)
-@COND_TOOLKIT_MOTIF@__ADVANCED_PLATFORM_SRC_OBJECTS_8 = \
-@COND_TOOLKIT_MOTIF@	advdll_taskbarcmn.o advdll_joystick.o advdll_sound.o \
-@COND_TOOLKIT_MOTIF@	advdll_taskbarx11.o
+COND_TOOLKIT_MOTIF___ADVANCED_PLATFORM_SRC_OBJECTS_8 =  \
+	advdll_taskbarcmn.o \
+	advdll_joystick.o \
+	advdll_sound.o \
+	advdll_taskbarx11.o \
+	advdll_animateg.o
+@COND_TOOLKIT_MOTIF@__ADVANCED_PLATFORM_SRC_OBJECTS_8 = $(COND_TOOLKIT_MOTIF___ADVANCED_PLATFORM_SRC_OBJECTS_8)
 COND_TOOLKIT_MSW___ADVANCED_PLATFORM_SRC_OBJECTS_8 =  \
 	advdll_animateg.o \
 	advdll_taskbarcmn.o \
@@ -10825,18 +10858,28 @@ COND_TOOLKIT_WINCE___ADVANCED_PLATFORM_SRC_OBJECTS_8 =  \
 	advdll_sound.o \
 	advdll_taskbar.o
 @COND_TOOLKIT_WINCE@__ADVANCED_PLATFORM_SRC_OBJECTS_8 = $(COND_TOOLKIT_WINCE___ADVANCED_PLATFORM_SRC_OBJECTS_8)
-@COND_TOOLKIT_X11@__ADVANCED_PLATFORM_SRC_OBJECTS_8 = \
-@COND_TOOLKIT_X11@	advdll_taskbarcmn.o advdll_joystick.o advdll_sound.o \
-@COND_TOOLKIT_X11@	advdll_taskbarx11.o
+COND_TOOLKIT_X11___ADVANCED_PLATFORM_SRC_OBJECTS_8 =  \
+	advdll_taskbarcmn.o \
+	advdll_joystick.o \
+	advdll_sound.o \
+	advdll_taskbarx11.o \
+	advdll_animateg.o
+@COND_TOOLKIT_X11@__ADVANCED_PLATFORM_SRC_OBJECTS_8 = $(COND_TOOLKIT_X11___ADVANCED_PLATFORM_SRC_OBJECTS_8)
 COND_TOOLKIT_COCOA___ADVANCED_PLATFORM_SRC_OBJECTS_9 =  \
 	advlib_animateg.o \
 	advlib_taskbar.o \
 	advlib_taskbarcmn.o \
 	advlib_hidjoystick.o
 @COND_TOOLKIT_COCOA@__ADVANCED_PLATFORM_SRC_OBJECTS_9 = $(COND_TOOLKIT_COCOA___ADVANCED_PLATFORM_SRC_OBJECTS_9)
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_@__ADVANCED_PLATFORM_SRC_OBJECTS_9 \
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_@	= advlib_taskbarcmn.o advlib_joystick.o \
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_@	advlib_sound.o advlib_taskbarx11.o
+COND_TOOLKIT_GTK_TOOLKIT_VERSION____ADVANCED_PLATFORM_SRC_OBJECTS_9 =  \
+	advlib_taskbarcmn.o \
+	advlib_joystick.o \
+	advlib_sound.o \
+	advlib_taskbarx11.o \
+	advlib_animateg.o \
+	advlib_eggtrayicon.o \
+	advlib_taskbar.o
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_@__ADVANCED_PLATFORM_SRC_OBJECTS_9 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION____ADVANCED_PLATFORM_SRC_OBJECTS_9)
 COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___ADVANCED_PLATFORM_SRC_OBJECTS_9 =  \
 	advlib_taskbarcmn.o \
 	advlib_joystick.o \
@@ -10857,9 +10900,13 @@ COND_TOOLKIT_MAC___ADVANCED_PLATFORM_SRC_OBJECTS_9 =  \
 	advlib_taskbar.o \
 	advlib_hidjoystick.o
 @COND_TOOLKIT_MAC@__ADVANCED_PLATFORM_SRC_OBJECTS_9 = $(COND_TOOLKIT_MAC___ADVANCED_PLATFORM_SRC_OBJECTS_9)
-@COND_TOOLKIT_MOTIF@__ADVANCED_PLATFORM_SRC_OBJECTS_9 = \
-@COND_TOOLKIT_MOTIF@	advlib_taskbarcmn.o advlib_joystick.o advlib_sound.o \
-@COND_TOOLKIT_MOTIF@	advlib_taskbarx11.o
+COND_TOOLKIT_MOTIF___ADVANCED_PLATFORM_SRC_OBJECTS_9 =  \
+	advlib_taskbarcmn.o \
+	advlib_joystick.o \
+	advlib_sound.o \
+	advlib_taskbarx11.o \
+	advlib_animateg.o
+@COND_TOOLKIT_MOTIF@__ADVANCED_PLATFORM_SRC_OBJECTS_9 = $(COND_TOOLKIT_MOTIF___ADVANCED_PLATFORM_SRC_OBJECTS_9)
 COND_TOOLKIT_MSW___ADVANCED_PLATFORM_SRC_OBJECTS_9 =  \
 	advlib_animateg.o \
 	advlib_taskbarcmn.o \
@@ -10877,9 +10924,13 @@ COND_TOOLKIT_WINCE___ADVANCED_PLATFORM_SRC_OBJECTS_9 =  \
 	advlib_sound.o \
 	advlib_taskbar.o
 @COND_TOOLKIT_WINCE@__ADVANCED_PLATFORM_SRC_OBJECTS_9 = $(COND_TOOLKIT_WINCE___ADVANCED_PLATFORM_SRC_OBJECTS_9)
-@COND_TOOLKIT_X11@__ADVANCED_PLATFORM_SRC_OBJECTS_9 = \
-@COND_TOOLKIT_X11@	advlib_taskbarcmn.o advlib_joystick.o advlib_sound.o \
-@COND_TOOLKIT_X11@	advlib_taskbarx11.o
+COND_TOOLKIT_X11___ADVANCED_PLATFORM_SRC_OBJECTS_9 =  \
+	advlib_taskbarcmn.o \
+	advlib_joystick.o \
+	advlib_sound.o \
+	advlib_taskbarx11.o \
+	advlib_animateg.o
+@COND_TOOLKIT_X11@__ADVANCED_PLATFORM_SRC_OBJECTS_9 = $(COND_TOOLKIT_X11___ADVANCED_PLATFORM_SRC_OBJECTS_9)
 @COND_WXUNIV_1@__WXUNIV_DEFINE_p_58 = --define __WXUNIVERSAL__
 @COND_USE_EXCEPTIONS_0@__EXCEPTIONS_DEFINE_p_57 = --define wxNO_EXCEPTIONS
 @COND_USE_RTTI_0@__RTTI_DEFINE_p_57 = --define wxNO_RTTI
@@ -15861,6 +15912,15 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_COCOA_USE_GUI_1@monodll_animateg.o: $(srcdir)/src/generic/animateg.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_COCOA_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/animateg.cpp
 
+@COND_TOOLKIT_MOTIF_USE_GUI_1@monodll_animateg.o: $(srcdir)/src/generic/animateg.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_MOTIF_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/animateg.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1@monodll_animateg.o: $(srcdir)/src/generic/animateg.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/animateg.cpp
+
+@COND_TOOLKIT_X11_USE_GUI_1@monodll_animateg.o: $(srcdir)/src/generic/animateg.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/animateg.cpp
+
 @COND_TOOLKIT_PM_USE_GUI_1@monodll_animateg.o: $(srcdir)/src/generic/animateg.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_PM_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/animateg.cpp
 
@@ -15915,6 +15975,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monodll_taskbar.o: $(srcdir)/src/gtk/taskbar.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/taskbar.cpp
 
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1@monodll_taskbar.o: $(srcdir)/src/gtk1/taskbar.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk1/taskbar.cpp
+
 @COND_TOOLKIT_MSW_USE_GUI_1@monodll_joystick.o: $(srcdir)/src/msw/joystick.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/joystick.cpp
 
@@ -15959,6 +16022,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monodll_eggtrayicon.o: $(srcdir)/src/gtk/eggtrayicon.c $(MONODLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CCC) -c -o $@ $(MONODLL_CFLAGS) $(srcdir)/src/gtk/eggtrayicon.c
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1@monodll_eggtrayicon.o: $(srcdir)/src/gtk1/eggtrayicon.c $(MONODLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1@	$(CCC) -c -o $@ $(MONODLL_CFLAGS) $(srcdir)/src/gtk1/eggtrayicon.c
 
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@monodll_datectrl.o: $(srcdir)/src/msw/datectrl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/datectrl.cpp
@@ -19884,6 +19950,15 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_COCOA_USE_GUI_1@monolib_animateg.o: $(srcdir)/src/generic/animateg.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_COCOA_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/animateg.cpp
 
+@COND_TOOLKIT_MOTIF_USE_GUI_1@monolib_animateg.o: $(srcdir)/src/generic/animateg.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_MOTIF_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/animateg.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1@monolib_animateg.o: $(srcdir)/src/generic/animateg.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/animateg.cpp
+
+@COND_TOOLKIT_X11_USE_GUI_1@monolib_animateg.o: $(srcdir)/src/generic/animateg.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/animateg.cpp
+
 @COND_TOOLKIT_PM_USE_GUI_1@monolib_animateg.o: $(srcdir)/src/generic/animateg.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_PM_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/animateg.cpp
 
@@ -19938,6 +20013,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monolib_taskbar.o: $(srcdir)/src/gtk/taskbar.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/taskbar.cpp
 
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1@monolib_taskbar.o: $(srcdir)/src/gtk1/taskbar.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk1/taskbar.cpp
+
 @COND_TOOLKIT_MSW_USE_GUI_1@monolib_joystick.o: $(srcdir)/src/msw/joystick.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/joystick.cpp
 
@@ -19982,6 +20060,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monolib_eggtrayicon.o: $(srcdir)/src/gtk/eggtrayicon.c $(MONOLIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CCC) -c -o $@ $(MONOLIB_CFLAGS) $(srcdir)/src/gtk/eggtrayicon.c
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1@monolib_eggtrayicon.o: $(srcdir)/src/gtk1/eggtrayicon.c $(MONOLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1@	$(CCC) -c -o $@ $(MONOLIB_CFLAGS) $(srcdir)/src/gtk1/eggtrayicon.c
 
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@monolib_datectrl.o: $(srcdir)/src/msw/datectrl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/datectrl.cpp
@@ -27162,6 +27243,15 @@ advdll_wizard.o: $(srcdir)/src/generic/wizard.cpp $(ADVDLL_ODEP)
 @COND_TOOLKIT_COCOA@advdll_animateg.o: $(srcdir)/src/generic/animateg.cpp $(ADVDLL_ODEP)
 @COND_TOOLKIT_COCOA@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/generic/animateg.cpp
 
+@COND_TOOLKIT_MOTIF@advdll_animateg.o: $(srcdir)/src/generic/animateg.cpp $(ADVDLL_ODEP)
+@COND_TOOLKIT_MOTIF@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/generic/animateg.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_@advdll_animateg.o: $(srcdir)/src/generic/animateg.cpp $(ADVDLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/generic/animateg.cpp
+
+@COND_TOOLKIT_X11@advdll_animateg.o: $(srcdir)/src/generic/animateg.cpp $(ADVDLL_ODEP)
+@COND_TOOLKIT_X11@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/generic/animateg.cpp
+
 @COND_TOOLKIT_PM@advdll_animateg.o: $(srcdir)/src/generic/animateg.cpp $(ADVDLL_ODEP)
 @COND_TOOLKIT_PM@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/generic/animateg.cpp
 
@@ -27240,6 +27330,9 @@ advdll_wizard.o: $(srcdir)/src/generic/wizard.cpp $(ADVDLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@advdll_taskbar.o: $(srcdir)/src/gtk/taskbar.cpp $(ADVDLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/gtk/taskbar.cpp
 
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_@advdll_taskbar.o: $(srcdir)/src/gtk1/taskbar.cpp $(ADVDLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/gtk1/taskbar.cpp
+
 @COND_TOOLKIT_MSW@advdll_joystick.o: $(srcdir)/src/msw/joystick.cpp $(ADVDLL_ODEP)
 @COND_TOOLKIT_MSW@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/msw/joystick.cpp
 
@@ -27287,6 +27380,9 @@ advdll_wizard.o: $(srcdir)/src/generic/wizard.cpp $(ADVDLL_ODEP)
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@advdll_eggtrayicon.o: $(srcdir)/src/gtk/eggtrayicon.c $(ADVDLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@	$(CCC) -c -o $@ $(ADVDLL_CFLAGS) $(srcdir)/src/gtk/eggtrayicon.c
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_@advdll_eggtrayicon.o: $(srcdir)/src/gtk1/eggtrayicon.c $(ADVDLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_@	$(CCC) -c -o $@ $(ADVDLL_CFLAGS) $(srcdir)/src/gtk1/eggtrayicon.c
 
 @COND_TOOLKIT_MSW_WXUNIV_0@advdll_datectrl.o: $(srcdir)/src/msw/datectrl.cpp $(ADVDLL_ODEP)
 @COND_TOOLKIT_MSW_WXUNIV_0@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/msw/datectrl.cpp
@@ -27366,6 +27462,15 @@ advlib_wizard.o: $(srcdir)/src/generic/wizard.cpp $(ADVLIB_ODEP)
 @COND_TOOLKIT_COCOA@advlib_animateg.o: $(srcdir)/src/generic/animateg.cpp $(ADVLIB_ODEP)
 @COND_TOOLKIT_COCOA@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/generic/animateg.cpp
 
+@COND_TOOLKIT_MOTIF@advlib_animateg.o: $(srcdir)/src/generic/animateg.cpp $(ADVLIB_ODEP)
+@COND_TOOLKIT_MOTIF@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/generic/animateg.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_@advlib_animateg.o: $(srcdir)/src/generic/animateg.cpp $(ADVLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/generic/animateg.cpp
+
+@COND_TOOLKIT_X11@advlib_animateg.o: $(srcdir)/src/generic/animateg.cpp $(ADVLIB_ODEP)
+@COND_TOOLKIT_X11@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/generic/animateg.cpp
+
 @COND_TOOLKIT_PM@advlib_animateg.o: $(srcdir)/src/generic/animateg.cpp $(ADVLIB_ODEP)
 @COND_TOOLKIT_PM@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/generic/animateg.cpp
 
@@ -27444,6 +27549,9 @@ advlib_wizard.o: $(srcdir)/src/generic/wizard.cpp $(ADVLIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@advlib_taskbar.o: $(srcdir)/src/gtk/taskbar.cpp $(ADVLIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/gtk/taskbar.cpp
 
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_@advlib_taskbar.o: $(srcdir)/src/gtk1/taskbar.cpp $(ADVLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/gtk1/taskbar.cpp
+
 @COND_TOOLKIT_MSW@advlib_joystick.o: $(srcdir)/src/msw/joystick.cpp $(ADVLIB_ODEP)
 @COND_TOOLKIT_MSW@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/msw/joystick.cpp
 
@@ -27491,6 +27599,9 @@ advlib_wizard.o: $(srcdir)/src/generic/wizard.cpp $(ADVLIB_ODEP)
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@advlib_eggtrayicon.o: $(srcdir)/src/gtk/eggtrayicon.c $(ADVLIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@	$(CCC) -c -o $@ $(ADVLIB_CFLAGS) $(srcdir)/src/gtk/eggtrayicon.c
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_@advlib_eggtrayicon.o: $(srcdir)/src/gtk1/eggtrayicon.c $(ADVLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_@	$(CCC) -c -o $@ $(ADVLIB_CFLAGS) $(srcdir)/src/gtk1/eggtrayicon.c
 
 @COND_TOOLKIT_MSW_WXUNIV_0@advlib_datectrl.o: $(srcdir)/src/msw/datectrl.cpp $(ADVLIB_ODEP)
 @COND_TOOLKIT_MSW_WXUNIV_0@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/msw/datectrl.cpp
