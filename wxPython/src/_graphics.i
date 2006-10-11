@@ -20,6 +20,10 @@
 #include <wx/graphics.h>
 %}    
 
+// Turn off the aquisition of the Global Interpreter Lock for the classes and
+// functions in this file
+%threadWrapperOff
+
 //---------------------------------------------------------------------------
 
 
@@ -140,6 +144,17 @@ public:
 //---------------------------------------------------------------------------
 //---------------------------------------------------------------------------
 
+
+%typemap(in) (size_t points, wxPoint2D* points_array ) {
+    $2 = wxPoint2D_LIST_helper($input, &$1);
+    if ($2 == NULL) SWIG_fail;
+}
+%typemap(freearg) (size_t points, wxPoint2D* points_array ) {
+    if ($2) delete [] $2;
+}
+
+
+
 MustHaveApp(wxGraphicsPath);
 MustHaveApp(wxGraphicsContext);
 MustHaveApp(wxGCDC);
@@ -210,7 +225,7 @@ point and an end point", "");
 
     DocDeclStr(
         virtual void , AddCircle( wxDouble x, wxDouble y, wxDouble r ),
-        "Appends an ellipsis as a new closed subpath fitting the passed rectangle", "");
+        "Appends a circle as a new closed subpath with the given radius.", "");
     
 
     DocDeclStr(
@@ -351,23 +366,32 @@ public:
         "", "");
     
 
-    DocDeclStr(
+    DocDeclStrName(
         virtual void , DrawText( const wxString &str, wxDouble x, wxDouble y, wxDouble angle ),
-        "", "");
+        "", "",
+        DrawRotatedText);
     
 
-    DocDeclStr(
+    DocDeclAStr(
         virtual void , GetTextExtent( const wxString &text,
                                       wxDouble *OUTPUT /*width*/,
                                       wxDouble *OUTPUT /*height*/,
                                       wxDouble *OUTPUT /*descent*/,
                                       wxDouble *OUTPUT /*externalLeading*/ ) const ,
+        "GetTextExtend(self, text) --> (width, height, descent, externalLeading)",
         "", "");
     
 
-    DocDeclStr(
-        virtual void , GetPartialTextExtents(const wxString& text, wxArrayDouble& widths) const,
-        "", "");
+    %extend {
+        DocAStr(GetPartialTextExtents,
+                "GetPartialTextExtents(self, text) -> [widths]",
+                "", "");
+        wxArrayDouble GetPartialTextExtents(const wxString& text) {
+            wxArrayDouble widths;
+            self->GetPartialTextExtents(text, widths);
+            return widths;
+        }
+    }
     
 
     //
@@ -392,23 +416,39 @@ public:
     DocDeclStr(
         virtual void , StrokeLine( wxDouble x1, wxDouble y1, wxDouble x2, wxDouble y2),
         "", "");
-    
 
+    
     // stroke lines connecting each of the points
-    DocDeclStr(
-        virtual void , StrokeLines( size_t n, const wxPoint2D *points),
+    DocDeclAStr(
+        virtual void , StrokeLines( size_t points, const wxPoint2D *points_array),
+        "StrokeLines(self, List points)",
         "", "");
     
 
-    // stroke disconnected lines from begin to end points
-    DocDeclStr(
-        virtual void , StrokeLines( size_t n, const wxPoint2D *beginPoints, const wxPoint2D *endPoints),
-        "", "");
-    
+//     // stroke disconnected lines from begin to end points
+//     virtual void StrokeLines( size_t n, const wxPoint2D *beginPoints, const wxPoint2D *endPoints);
+
+    // is there a better name for this?
+    %extend {
+        void StrokeDisconnectedLines(PyObject* beginPoints, PyObject* endPoints)
+        {
+            size_t c1, c2, count;
+            wxPoint2D* beginP = wxPoint2D_LIST_helper(beginPoints, &c1);
+            wxPoint2D* endP =   wxPoint2D_LIST_helper(endPoints, &c2);
+
+            if ( beginP != NULL && endP != NULL )
+            {
+                count = wxMin(c1, c2);
+                self->StrokeLines(count, beginP, endP);
+            }
+            delete [] beginP;
+            delete [] endP;
+        }
+    }
 
     // draws a polygon
     DocDeclStr(
-        virtual void , DrawLines( size_t n, const wxPoint2D *points, int fillStyle = wxWINDING_RULE ),
+        virtual void , DrawLines( size_t points, const wxPoint2D *points_array, int fillStyle = wxWINDING_RULE ),
         "", "");
     
 
@@ -429,7 +469,6 @@ public:
         virtual void , DrawRoundedRectangle( wxDouble x, wxDouble y, wxDouble w, wxDouble h, wxDouble radius),
         "", "");
     
-
 };
 
 
@@ -449,6 +488,8 @@ public:
 };
 
 
-
-
 //---------------------------------------------------------------------------
+
+// Turn GIL acquisition back on.
+%threadWrapperOn
+

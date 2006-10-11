@@ -119,6 +119,9 @@ inline wxPyCoreAPI* wxPyGetCoreAPIPtr()
 
 #define wxPyCheckForApp()                       (wxPyGetCoreAPIPtr()->p_wxPyCheckForApp())
 
+#define wxArrayDouble2PyList_helper(a)          (wxPyGetCoreAPIPtr()->p_wxArrayDoublePyList_helper(a))
+#define wxPoint2D_LIST_helper(a,b)              (wxPyGetCoreAPIPtr()->p_wxPoint2D_LIST_helper(a, b))
+
 
 //----------------------------------------------------------------------
 #endif

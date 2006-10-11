@@ -235,6 +235,7 @@ int* int_LIST_helper(PyObject* source);
 long* long_LIST_helper(PyObject* source);
 char** string_LIST_helper(PyObject* source);
 wxPoint* wxPoint_LIST_helper(PyObject* source, int* npoints);
+wxPoint2D* wxPoint2D_LIST_helper(PyObject* source, size_t* npoints);
 wxBitmap** wxBitmap_LIST_helper(PyObject* source);
 wxString* wxString_LIST_helper(PyObject* source);
 wxAcceleratorEntry* wxAcceleratorEntry_LIST_helper(PyObject* source);
@@ -261,6 +262,7 @@ bool wxPy4int_seq_helper(PyObject* source, int* i1, int* i2, int* i3, int* i4);
 
 PyObject* wxArrayString2PyList_helper(const wxArrayString& arr);
 PyObject* wxArrayInt2PyList_helper(const wxArrayInt& arr);
+PyObject* wxArrayDouble2PyList_helper(const wxArrayDouble& arr);
 
 #endif // wxPyUSE_EXPORTED_API
 
@@ -422,7 +424,11 @@ struct wxPyCoreAPI {
 
     bool                (*p_wxPyCheckForApp)();
 
+    // Add all new items at the end...
+    PyObject*           (*p_wxArrayDoublePyList_helper)(const wxArrayDouble& arr);
+    wxPoint2D*          (*p_wxPoint2D_LIST_helper)(PyObject* source, size_t* npoints);
 };
+
 
 #ifdef wxPyUSE_EXPORTED_API
 // Notice that this is static, not extern.  This is by design, each module

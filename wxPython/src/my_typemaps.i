@@ -243,24 +243,42 @@ MAKE_INT_ARRAY_TYPEMAPS(styles, styles_field)
 
 //---------------------------------------------------------------------------
 // Typemaps to convert an array of ints to a list for return values
+// %typemap(out) wxArrayInt& {
+//     $result = PyList_New(0);
+//     size_t idx;
+//     for (idx = 0; idx < $1->GetCount(); idx += 1) {
+//         PyObject* val = PyInt_FromLong( $1->Item(idx) );
+//         PyList_Append($result, val);
+//         Py_DECREF(val);
+//     }
+// }
+
+// %typemap(out) wxArrayInt {
+//     $result = PyList_New(0);
+//     size_t idx;
+//     for (idx = 0; idx < $1.GetCount(); idx += 1) {
+//         PyObject* val = PyInt_FromLong( $1.Item(idx) );
+//         PyList_Append($result, val);
+//         Py_DECREF(val);
+//     }
+// }
+
 %typemap(out) wxArrayInt& {
-    $result = PyList_New(0);
-    size_t idx;
-    for (idx = 0; idx < $1->GetCount(); idx += 1) {
-        PyObject* val = PyInt_FromLong( $1->Item(idx) );
-        PyList_Append($result, val);
-        Py_DECREF(val);
-    }
+    $result = wxArrayInt2PyList_helper(*$1);
 }
 
 %typemap(out) wxArrayInt {
-    $result = PyList_New(0);
-    size_t idx;
-    for (idx = 0; idx < $1.GetCount(); idx += 1) {
-        PyObject* val = PyInt_FromLong( $1.Item(idx) );
-        PyList_Append($result, val);
-        Py_DECREF(val);
-    }
+    $result = wxArrayInt2PyList_helper($1);
+}
+
+
+// convert array of doubles to a Python list
+%typemap(out) wxArrayDouble& {
+    $result = wxArrayDouble2PyList_helper(*$1);
+}
+
+%typemap(out) wxArrayDouble {
+    $result = wxArrayDouble2PyList_helper($1);
 }
 
 

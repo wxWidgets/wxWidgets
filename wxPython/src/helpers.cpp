@@ -2058,37 +2058,73 @@ char** string_LIST_helper(PyObject* source) {
     return temp;
 }
 
-//--------------------------------
-// Part of patch from Tim Hochberg
-static inline bool wxPointFromObjects(PyObject* o1, PyObject* o2, wxPoint* point) {
-    if (PyInt_Check(o1) && PyInt_Check(o2)) {
-        point->x = PyInt_AS_LONG(o1);
-        point->y = PyInt_AS_LONG(o2);
-        return true;
-    }
-    if (PyFloat_Check(o1) && PyFloat_Check(o2)) {
+//---------------------------------------------------------------------------
+// NOTE: The following functions could really use some refactoring using
+// templates to make things somewhat simpler...
+
+inline bool wxPointFromObjects(PyObject* o1, PyObject* o2, wxPoint* point)
+{
+    // get the x value
+    if (PyInt_Check(o1))
+        point->x = (int)PyInt_AS_LONG(o1);
+    else if (PyFloat_Check(o1))
         point->x = (int)PyFloat_AS_DOUBLE(o1);
-        point->y = (int)PyFloat_AS_DOUBLE(o2);
-        return true;
-    }
-    if (wxPySwigInstance_Check(o1) || wxPySwigInstance_Check(o2)) {  // TODO: Why???
-        // Disallow instances because they can cause havok
+    else if (PyNumber_Check(o1))
+        point->x = (int)PyInt_AsLong(o1);
+    else
         return false;
-    }
-    if (PyNumber_Check(o1) && PyNumber_Check(o2)) {
-        // I believe this excludes instances, so this should be safe without INCREFFing o1 and o2
-        point->x = PyInt_AsLong(o1);
-        point->y = PyInt_AsLong(o2);
-        return true;
-    }
-    return false;
+
+    // get the y value
+    if (PyInt_Check(o2))
+        point->y = (int)PyInt_AS_LONG(o2);
+    else if (PyFloat_Check(o2))
+        point->y = (int)PyFloat_AS_DOUBLE(o2);
+    else if (PyNumber_Check(o2))
+        point->y = (int)PyInt_AsLong(o2);
+    else
+        return false;
+
+    return true;
+
+// NOTE: This function used to have this code in it, but I don't know why it
+// is a problem nor what havok it will cause, so removing for now...
+//     if (wxPySwigInstance_Check(o1) || wxPySwigInstance_Check(o2)) {  
+//         // Disallow instances because they can cause havok
+//         return false;
+//     }
 }
 
 
-wxPoint* wxPoint_LIST_helper(PyObject* source, int *count) {
-    // Putting all of the declarations here allows
-    // us to put the error handling all in one place.
-    int x;
+inline bool wxPoint2DFromObjects(PyObject* o1, PyObject* o2, wxPoint2D* point)
+{
+    // get the x value
+    if (PyInt_Check(o1))
+        point->m_x = (double)PyInt_AS_LONG(o1);
+    else if (PyFloat_Check(o1))
+        point->m_x = (double)PyFloat_AS_DOUBLE(o1);
+    else if (PyNumber_Check(o1))
+        point->m_x = (double)PyFloat_AsDouble(o1);
+    else
+        return false;
+
+    // get the y value
+    if (PyInt_Check(o2))
+        point->m_y = (double)PyInt_AS_LONG(o2);
+    else if (PyFloat_Check(o2))
+        point->m_y = (double)PyFloat_AS_DOUBLE(o2);
+    else if (PyNumber_Check(o2))
+        point->m_y = (double)PyFloat_AsDouble(o2);
+    else
+        return false;
+
+    return true;
+}
+
+
+
+wxPoint* wxPoint_LIST_helper(PyObject* source, int *count)
+{
+    int idx;
     wxPoint* temp;
     PyObject *o, *o1, *o2;
     bool isFast = PyList_Check(source) || PyTuple_Check(source);
@@ -2108,13 +2144,13 @@ wxPoint* wxPoint_LIST_helper(PyObject* source, int *count) {
         PyErr_SetString(PyExc_MemoryError, "Unable to allocate temporary array");
         return NULL;
     }
-    for (x=0; x<*count; x++) {
+    for (idx=0; idx<*count; idx++) {
         // Get an item: try fast way first.
         if (isFast) {
-            o = PySequence_Fast_GET_ITEM(source, x);
+            o = PySequence_Fast_GET_ITEM(source, idx);
         }
         else {
-            o = PySequence_GetItem(source, x);
+            o = PySequence_GetItem(source, idx);
             if (o == NULL) {
                 goto error1;
             }
@@ -2125,7 +2161,7 @@ wxPoint* wxPoint_LIST_helper(PyObject* source, int *count) {
             (PyList_Check(o) && PyList_GET_SIZE(o) == 2)) {
             o1 = PySequence_Fast_GET_ITEM(o, 0);
             o2 = PySequence_Fast_GET_ITEM(o, 1);
-            if (!wxPointFromObjects(o1, o2, &temp[x])) {
+            if (!wxPointFromObjects(o1, o2, &temp[idx])) {
                 goto error2;
             }
         }
@@ -2134,12 +2170,12 @@ wxPoint* wxPoint_LIST_helper(PyObject* source, int *count) {
             if (! wxPyConvertSwigPtr(o, (void **)&pt, wxT("wxPoint"))) {
                 goto error2;
             }
-            temp[x] = *pt;
+            temp[idx] = *pt;
         }
         else if (PySequence_Check(o) && PySequence_Length(o) == 2) {
             o1 = PySequence_GetItem(o, 0);
             o2 = PySequence_GetItem(o, 1);
-            if (!wxPointFromObjects(o1, o2, &temp[x])) {
+            if (!wxPointFromObjects(o1, o2, &temp[idx])) {
                 goto error3;
             }
             Py_DECREF(o1);
@@ -2166,8 +2202,91 @@ error0:
     PyErr_SetString(PyExc_TypeError, "Expected a sequence of length-2 sequences or wxPoints.");
     return NULL;
 }
-// end of patch
-//------------------------------
+
+
+
+wxPoint2D* wxPoint2D_LIST_helper(PyObject* source, size_t *count)
+{
+    size_t idx;
+    wxPoint2D* temp;
+    PyObject *o, *o1, *o2;
+    bool isFast = PyList_Check(source) || PyTuple_Check(source);
+
+    if (!PySequence_Check(source)) {
+        goto error0;
+    }
+
+    // The length of the sequence is returned in count.
+    *count = PySequence_Length(source);
+    if (*count < 0) {
+        goto error0;
+    }
+
+    temp = new wxPoint2D[*count];
+    if (!temp) {
+        PyErr_SetString(PyExc_MemoryError, "Unable to allocate temporary array");
+        return NULL;
+    }
+    for (idx=0; idx<*count; idx++) {
+        // Get an item: try fast way first.
+        if (isFast) {
+            o = PySequence_Fast_GET_ITEM(source, idx);
+        }
+        else {
+            o = PySequence_GetItem(source, idx);
+            if (o == NULL) {
+                goto error1;
+            }
+        }
+
+        // Convert o to wxPoint.
+        if ((PyTuple_Check(o) && PyTuple_GET_SIZE(o) == 2) ||
+            (PyList_Check(o) && PyList_GET_SIZE(o) == 2)) {
+            o1 = PySequence_Fast_GET_ITEM(o, 0);
+            o2 = PySequence_Fast_GET_ITEM(o, 1);
+            if (!wxPoint2DFromObjects(o1, o2, &temp[idx])) {
+                goto error2;
+            }
+        }
+        else if (wxPySwigInstance_Check(o)) {
+            wxPoint2D* pt;
+            if (! wxPyConvertSwigPtr(o, (void **)&pt, wxT("wxPoint2D"))) {
+                goto error2;
+            }
+            temp[idx] = *pt;
+        }
+        else if (PySequence_Check(o) && PySequence_Length(o) == 2) {
+            o1 = PySequence_GetItem(o, 0);
+            o2 = PySequence_GetItem(o, 1);
+            if (!wxPoint2DFromObjects(o1, o2, &temp[idx])) {
+                goto error3;
+            }
+            Py_DECREF(o1);
+            Py_DECREF(o2);
+        }
+        else {
+            goto error2;
+        }
+        // Clean up.
+        if (!isFast)
+            Py_DECREF(o);
+    }
+    return temp;
+
+error3:
+    Py_DECREF(o1);
+    Py_DECREF(o2);
+error2:
+    if (!isFast)
+        Py_DECREF(o);
+error1:
+    delete [] temp;
+error0:
+    PyErr_SetString(PyExc_TypeError, "Expected a sequence of length-2 sequences or wxPoint2Ds.");
+    return NULL;
+}
+   
+//---------------------------------------------------------------------------
 
 
 wxBitmap** wxBitmap_LIST_helper(PyObject* source) {
@@ -2612,8 +2731,8 @@ bool wxPoint2D_helper(PyObject* source, wxPoint2D** obj) {
 
 //----------------------------------------------------------------------
 
-PyObject* wxArrayString2PyList_helper(const wxArrayString& arr) {
-
+PyObject* wxArrayString2PyList_helper(const wxArrayString& arr)
+{
     PyObject* list = PyList_New(0);
     for (size_t i=0; i < arr.GetCount(); i++) {
 #if wxUSE_UNICODE
@@ -2628,11 +2747,23 @@ PyObject* wxArrayString2PyList_helper(const wxArrayString& arr) {
 }
 
 
-PyObject* wxArrayInt2PyList_helper(const wxArrayInt& arr) {
-
+PyObject* wxArrayInt2PyList_helper(const wxArrayInt& arr)
+{
     PyObject* list = PyList_New(0);
     for (size_t i=0; i < arr.GetCount(); i++) {
         PyObject* number = PyInt_FromLong(arr[i]);
+        PyList_Append(list, number);
+        Py_DECREF(number);
+    }
+    return list;
+}
+
+
+PyObject* wxArrayDouble2PyList_helper(const wxArrayDouble& arr)
+{
+    PyObject* list = PyList_New(0);
+    for (size_t i=0; i < arr.GetCount(); i++) {
+        PyObject* number = PyFloat_FromDouble(arr[i]);
         PyList_Append(list, number);
         Py_DECREF(number);
     }

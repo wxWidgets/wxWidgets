@@ -235,8 +235,10 @@ static wxPyCoreAPI API = {
     wxPyInstance_Check,
     wxPySwigInstance_Check,
 
-    wxPyCheckForApp
+    wxPyCheckForApp,
 
+    wxArrayDouble2PyList_helper,
+    wxPoint2D_LIST_helper
 };
 
 #endif
