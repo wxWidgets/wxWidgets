@@ -353,6 +353,12 @@ public:
     
 public:
 
+    // NOTE: You can add and subtract flags from this list,
+    // but do not change the values of the flags, because
+    // they are stored in a binary integer format in the 
+    // perspective string.  If you really need to change the
+    // values around, you'll have to ensure backwards-compatibility
+    // in the perspective loading code.
     enum wxAuiPaneState
     {
         optionFloating        = 1 << 0,
@@ -535,8 +541,6 @@ protected:
                 const wxPoint& pt,
                 const wxPoint& action_offset = wxPoint(0,0));
 
-    wxAuiPaneInfo& LookupPane(wxWindow* window);
-    wxAuiPaneInfo& LookupPane(const wxString& name);
     wxAuiDockUIPart* HitTest(int x, int y);
     wxAuiDockUIPart* GetPanePart(wxWindow* pane);
     int GetDockPixelOffset(wxAuiPaneInfo& test);
