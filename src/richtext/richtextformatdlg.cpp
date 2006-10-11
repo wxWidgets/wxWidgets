@@ -46,11 +46,19 @@
 #include "wx/richtext/richtextctrl.h"
 #include "wx/richtext/richtextstyles.h"
 
+#ifdef __WXMAC__
+#include "../../src/richtext/richtextfontpage.cpp"
+#include "../../src/richtext/richtextindentspage.cpp"
+#include "../../src/richtext/richtexttabspage.cpp"
+#include "../../src/richtext/richtextbulletspage.cpp"
+#include "../../src/richtext/richtextstylepage.cpp"
+#else
 #include "richtextfontpage.cpp"
 #include "richtextindentspage.cpp"
 #include "richtexttabspage.cpp"
 #include "richtextbulletspage.cpp"
 #include "richtextstylepage.cpp"
+#endif
 
 #if 0 // def __WXMAC__
 #define wxRICHTEXT_USE_TOOLBOOK true
