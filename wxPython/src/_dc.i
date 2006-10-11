@@ -975,6 +975,24 @@ box doesn't contain anything.", "");
     %pythoncode { def __nonzero__(self): return self.IsOk() };
 
 
+    // RTL related functions
+    // ---------------------
+
+    DocDeclStr(
+        virtual wxLayoutDirection , GetLayoutDirection() const,
+        "Get the layout direction (LTR or RTL)_ for this dc.  On platforms
+where RTL layout is supported, the return value will either be
+``wx.Layout_LeftToRight`` or ``wx.Layout_RightToLeft``.
+``wx.Layout_Default`` is returned if layout direction is not
+supported.", "");
+    
+    DocDeclStr(
+        virtual void , SetLayoutDirection(wxLayoutDirection dir),
+        "Change the layout direction for this dc.", "");
+    
+
+    
+
 #ifdef __WXMSW__
     long GetHDC();
 #endif
@@ -1201,6 +1219,8 @@ box doesn't contain anything.", "");
     %property(TextExtent, GetTextExtent, doc="See `GetTextExtent`");
     %property(TextForeground, GetTextForeground, SetTextForeground, doc="See `GetTextForeground` and `SetTextForeground`");
     %property(UserScale, GetUserScale, SetUserScale, doc="See `GetUserScale` and `SetUserScale`");
+
+    %property(LayoutDirection, GetLayoutDirection, SetLayoutDirection);
 };
 
 
@@ -1298,7 +1318,7 @@ natively so using this class on those platforms will normally result
 in an unneeded level of buffering.
 ", "");
 
-class wxBufferedDC : public wxMemoryDC
+class wxBufferedDC : public wxDC
 {
 public:
     %pythonAppend wxBufferedDC
