@@ -266,8 +266,23 @@ void wxMacCGContext::Clip( const wxRegion &region )
 void wxMacCGContext::StrokePath( const wxGraphicPath *p )
 {
     const wxMacCGPath* path = dynamic_cast< const wxMacCGPath*>( p ) ;
+
+    int width = m_pen.GetWidth();
+    if ( width == 0 )
+        width = 1 ;
+    if ( m_pen.GetStyle() == wxTRANSPARENT )
+        width = 0 ;
+        
+    bool offset = ( width % 2 ) == 1 ; 
+
+    if ( offset )
+        CGContextTranslateCTM( m_cgContext, 0.5, 0.5 );
+
     CGContextAddPath( m_cgContext , path->GetPath() ) ;
     CGContextStrokePath( m_cgContext ) ;
+
+    if ( offset )
+        CGContextTranslateCTM( m_cgContext, -0.5, -0.5 );
 }
 
 void wxMacCGContext::DrawPath( const wxGraphicPath *p , int fillStyle )
@@ -283,8 +298,22 @@ void wxMacCGContext::DrawPath( const wxGraphicPath *p , int fillStyle )
             mode = kCGPathEOFillStroke ;
     }
 
+    int width = m_pen.GetWidth();
+    if ( width == 0 )
+        width = 1 ;
+    if ( m_pen.GetStyle() == wxTRANSPARENT )
+        width = 0 ;
+        
+    bool offset = ( width % 2 ) == 1 ; 
+
+    if ( offset )
+        CGContextTranslateCTM( m_cgContext, 0.5, 0.5 );
+
     CGContextAddPath( m_cgContext , path->GetPath() ) ;
     CGContextDrawPath( m_cgContext , mode ) ;
+
+    if ( offset )
+        CGContextTranslateCTM( m_cgContext, -0.5, -0.5 );
 }
 
 void wxMacCGContext::FillPath( const wxGraphicPath *p , const wxColor &fillColor , int fillStyle )
@@ -1453,7 +1482,7 @@ void wxDC::SetPen( const wxPen &pen )
 {
     if ( m_pen == pen )
         return ;
-
+    
     m_pen = pen;
     if ( m_graphicContext )
     {
