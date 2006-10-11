@@ -1314,8 +1314,8 @@ use it in your EVT_PAINT handler, you should look at
 `wx.BufferedPaintDC`.
 
 Please note that GTK+ 2.0 and OS X provide double buffering themselves
-natively so using this class on those platforms will normally result
-in an unneeded level of buffering.
+natively. wxBufferedDC is aware of this however, and will bypass the buffering
+unless an explicit buffer bitmap is given.
 ", "");
 
 class wxBufferedDC : public wxDC
