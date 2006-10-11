@@ -43,6 +43,7 @@ MAKE_CONST_WXSTRING_NOSWIG(EmptyString);
 %include _intl.i
 %include _dc.i
 %include _graphics.i
+%include _overlay.i
 %include _imaglist.i
 %include _stockobjs.i
 %include _effects.i
