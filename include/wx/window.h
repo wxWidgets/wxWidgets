@@ -359,6 +359,7 @@ public:
         // returns the results.
     wxSize GetEffectiveMinSize() const;
     wxDEPRECATED( wxSize GetBestFittingSize() const );  // replaced by GetEffectiveMinSize
+    wxDEPRECATED( wxSize GetAdjustedMinSize() const );  // replaced by GetEffectiveMinSize
 
         // A 'Smart' SetSize that will fill in default size values with 'best'
         // size.  Sets the minsize to what was passed in.

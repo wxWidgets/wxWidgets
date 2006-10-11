@@ -722,11 +722,8 @@ See also \helpref{wxAccessible}{wxaccessible}.
 
 \constfunc{wxSize}{GetAdjustedBestSize}{\void}
 
-This method is similar to \helpref{GetBestSize}{wxwindowgetbestsize}, except
-in one thing.  GetBestSize should return the minimum untruncated size of the
-window, while this method will return the largest of BestSize and any user
-specified minimum size.  ie. it is the minimum size the window should currently
-be drawn at, not the minimal size it can possibly tolerate.
+This method is deprecated, use \helpref{GetEffectiveMinSize}{wxwindowgeteffectiveminsize}
+instead.
 
 
 \membersection{wxWindow::GetBackgroundColour}\label{wxwindowgetbackgroundcolour}
