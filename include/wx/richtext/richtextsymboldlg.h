@@ -30,6 +30,13 @@ class WXDLLIMPEXP_CORE wxStaticText;
 class WXDLLIMPEXP_CORE wxTextCtrl;
 ////@end forward declarations
 
+// __UNICODE__ is a symbol used by DialogBlocks-generated code.
+#ifndef __UNICODE__
+#if wxUSE_UNICODE
+#define __UNICODE__
+#endif
+#endif
+
 /*!
  * Symbols
  */
