@@ -153,9 +153,9 @@ static void DrawGradientRectangle(wxDC& dc,
         int r,g,b;
         
         
-        r = start_color.Red() + ((i*rd*100)/high)/100;
-        g = start_color.Green() + ((i*gd*100)/high)/100;
-        b = start_color.Blue() + ((i*bd*100)/high)/100;
+        r = start_color.Red() + (high == 0 ? 0 : (((i*rd*100)/high)/100));
+        g = start_color.Green() + (high == 0 ? 0 : (((i*gd*100)/high)/100));
+        b = start_color.Blue() + (high == 0 ? 0 : (((i*bd*100)/high)/100));
 
         wxPen p(wxColor((unsigned char)r,
                         (unsigned char)g,
