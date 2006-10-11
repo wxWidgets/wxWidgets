@@ -6467,7 +6467,7 @@ if test "$wxUSE_ACCEL" = "yes"; then
   USES_CONTROLS=1
 fi
 
-if test "$wxUSE_ACCEL" = "yes"; then
+if test "$wxUSE_ANIMATIONCTRL" = "yes"; then
   AC_DEFINE(wxUSE_ANIMATIONCTRL)
   USES_CONTROLS=1
   SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS animate"
