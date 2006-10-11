@@ -52,12 +52,12 @@ WX_DEFINE_OBJARRAY(wxAuiPaneInfoArray)
 
 wxAuiPaneInfo wxAuiNullPaneInfo;
 wxAuiDockInfo wxAuiNullDockInfo;
-DEFINE_EVENT_TYPE(wxEVT_AUI_PANEBUTTON)
-DEFINE_EVENT_TYPE(wxEVT_AUI_PANECLOSE)
-DEFINE_EVENT_TYPE(wxEVT_AUI_PANEMAXIMIZE)
-DEFINE_EVENT_TYPE(wxEVT_AUI_PANERESTORE)
+DEFINE_EVENT_TYPE(wxEVT_AUI_PANE_BUTTON)
+DEFINE_EVENT_TYPE(wxEVT_AUI_PANE_CLOSE)
+DEFINE_EVENT_TYPE(wxEVT_AUI_PANE_MAXIMIZE)
+DEFINE_EVENT_TYPE(wxEVT_AUI_PANE_RESTORE)
 DEFINE_EVENT_TYPE(wxEVT_AUI_RENDER)
-DEFINE_EVENT_TYPE(wxEVT_AUI_FINDMANAGER)
+DEFINE_EVENT_TYPE(wxEVT_AUI_FIND_MANAGER)
 
 #ifdef __WXMAC__
     // a few defines to avoid nameclashes
@@ -477,7 +477,7 @@ static int PaneSortFunc(wxAuiPaneInfo** p1, wxAuiPaneInfo** p2)
 
 
 BEGIN_EVENT_TABLE(wxAuiManager, wxEvtHandler)
-    EVT_AUI_PANEBUTTON(wxAuiManager::OnPaneButton)
+    EVT_AUI_PANE_BUTTON(wxAuiManager::OnPaneButton)
     EVT_AUI_RENDER(wxAuiManager::OnRender)
     EVT_PAINT(wxAuiManager::OnPaint)
     EVT_ERASE_BACKGROUND(wxAuiManager::OnEraseBackground)
@@ -488,7 +488,7 @@ BEGIN_EVENT_TABLE(wxAuiManager, wxEvtHandler)
     EVT_MOTION(wxAuiManager::OnMotion)
     EVT_LEAVE_WINDOW(wxAuiManager::OnLeaveWindow)
     EVT_CHILD_FOCUS(wxAuiManager::OnChildFocus)
-    EVT_AUI_FINDMANAGER(wxAuiManager::OnFindManager)
+    EVT_AUI_FIND_MANAGER(wxAuiManager::OnFindManager)
     EVT_TIMER(101, wxAuiManager::OnHintFadeTimer)
 END_EVENT_TABLE()
 
@@ -647,7 +647,7 @@ wxFrame* wxAuiManager::GetFrame() const
 // need to be managed by the manager itself.
 wxAuiManager* wxAuiManager::GetManager(wxWindow* window)
 {
-    wxAuiManagerEvent evt(wxEVT_AUI_FINDMANAGER);
+    wxAuiManagerEvent evt(wxEVT_AUI_FIND_MANAGER);
     evt.SetManager(NULL);
     evt.ResumePropagation(wxEVENT_PROPAGATE_MAX);
     if (!window->ProcessEvent(evt))
@@ -3450,7 +3450,7 @@ void wxAuiManager::OnFloatingPaneClosed(wxWindow* wnd, wxCloseEvent& evt)
 
 
     // fire pane close event
-    wxAuiManagerEvent e(wxEVT_AUI_PANECLOSE);
+    wxAuiManagerEvent e(wxEVT_AUI_PANE_CLOSE);
     e.SetPane(&pane);
     e.SetCanVeto(evt.CanVeto());
     ProcessMgrEvent(e);
@@ -4013,7 +4013,7 @@ void wxAuiManager::OnLeftUp(wxMouseEvent& event)
         if (m_action_part == HitTest(event.GetX(), event.GetY()))
         {
             // fire button-click event
-            wxAuiManagerEvent e(wxEVT_AUI_PANEBUTTON);
+            wxAuiManagerEvent e(wxEVT_AUI_PANE_BUTTON);
             e.SetManager(this);
             e.SetPane(m_action_part->pane);
             e.SetButton(m_action_part->button->button_id);
@@ -4263,7 +4263,7 @@ void wxAuiManager::OnPaneButton(wxAuiManagerEvent& evt)
     if (evt.button == wxAUI_BUTTON_CLOSE)
     {
         // fire pane close event
-        wxAuiManagerEvent e(wxEVT_AUI_PANECLOSE);
+        wxAuiManagerEvent e(wxEVT_AUI_PANE_CLOSE);
         e.SetManager(this);
         e.SetPane(evt.pane);
         ProcessMgrEvent(e);
@@ -4277,7 +4277,7 @@ void wxAuiManager::OnPaneButton(wxAuiManagerEvent& evt)
     else if (evt.button == wxAUI_BUTTON_MAXIMIZE_RESTORE && !pane.IsMaximized())
     {
         // fire pane close event
-        wxAuiManagerEvent e(wxEVT_AUI_PANEMAXIMIZE);
+        wxAuiManagerEvent e(wxEVT_AUI_PANE_MAXIMIZE);
         e.SetManager(this);
         e.SetPane(evt.pane);
         ProcessMgrEvent(e);
@@ -4291,7 +4291,7 @@ void wxAuiManager::OnPaneButton(wxAuiManagerEvent& evt)
     else if (evt.button == wxAUI_BUTTON_MAXIMIZE_RESTORE && pane.IsMaximized())
     {
         // fire pane close event
-        wxAuiManagerEvent e(wxEVT_AUI_PANERESTORE);
+        wxAuiManagerEvent e(wxEVT_AUI_PANE_RESTORE);
         e.SetManager(this);
         e.SetPane(evt.pane);
         ProcessMgrEvent(e);

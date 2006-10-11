@@ -792,12 +792,12 @@ public:
 // wx event machinery
 
 BEGIN_DECLARE_EVENT_TYPES()
-    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_AUI, wxEVT_AUI_PANEBUTTON, 0)
-    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_AUI, wxEVT_AUI_PANECLOSE, 0)
-    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_AUI, wxEVT_AUI_PANEMAXIMIZE, 0)
-    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_AUI, wxEVT_AUI_PANERESTORE, 0)
+    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_AUI, wxEVT_AUI_PANE_BUTTON, 0)
+    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_AUI, wxEVT_AUI_PANE_CLOSE, 0)
+    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_AUI, wxEVT_AUI_PANE_MAXIMIZE, 0)
+    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_AUI, wxEVT_AUI_PANE_RESTORE, 0)
     DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_AUI, wxEVT_AUI_RENDER, 0)
-    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_AUI, wxEVT_AUI_FINDMANAGER, 0)
+    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_AUI, wxEVT_AUI_FIND_MANAGER, 0)
 END_DECLARE_EVENT_TYPES()
 
 typedef void (wxEvtHandler::*wxAuiManagerEventFunction)(wxAuiManagerEvent&);
@@ -805,35 +805,35 @@ typedef void (wxEvtHandler::*wxAuiManagerEventFunction)(wxAuiManagerEvent&);
 #define wxAuiManagerEventHandler(func) \
     (wxObjectEventFunction)(wxEventFunction)wxStaticCastEvent(wxAuiManagerEventFunction, &func)
 
-#define EVT_AUI_PANEBUTTON(func) \
-   wx__DECLARE_EVT0(wxEVT_AUI_PANEBUTTON, wxAuiManagerEventHandler(func))
-#define EVT_AUI_PANECLOSE(func) \
-   wx__DECLARE_EVT0(wxEVT_AUI_PANECLOSE, wxAuiManagerEventHandler(func))
-#define EVT_AUI_PANEMAXIMIZE(func) \
-   wx__DECLARE_EVT0(wxEVT_AUI_PANEMAXIMIZE, wxAuiManagerEventHandler(func))
-#define EVT_AUI_PANERESTORE(func) \
-   wx__DECLARE_EVT0(wxEVT_AUI_PANERESTORE, wxAuiManagerEventHandler(func))
+#define EVT_AUI_PANE_BUTTON(func) \
+   wx__DECLARE_EVT0(wxEVT_AUI_PANE_BUTTON, wxAuiManagerEventHandler(func))
+#define EVT_AUI_PANE_CLOSE(func) \
+   wx__DECLARE_EVT0(wxEVT_AUI_PANE_CLOSE, wxAuiManagerEventHandler(func))
+#define EVT_AUI_PANE_MAXIMIZE(func) \
+   wx__DECLARE_EVT0(wxEVT_AUI_PANE_MAXIMIZE, wxAuiManagerEventHandler(func))
+#define EVT_AUI_PANE_RESTORE(func) \
+   wx__DECLARE_EVT0(wxEVT_AUI_PANE_RESTORE, wxAuiManagerEventHandler(func))
 #define EVT_AUI_RENDER(func) \
    wx__DECLARE_EVT0(wxEVT_AUI_RENDER, wxAuiManagerEventHandler(func))
-#define EVT_AUI_FINDMANAGER(func) \
-   wx__DECLARE_EVT0(wxEVT_AUI_FINDMANAGER, wxAuiManagerEventHandler(func))
+#define EVT_AUI_FIND_MANAGER(func) \
+   wx__DECLARE_EVT0(wxEVT_AUI_FIND_MANAGER, wxAuiManagerEventHandler(func))
 
 #else
 
-%constant wxEventType wxEVT_AUI_PANEBUTTON;
-%constant wxEventType wxEVT_AUI_PANECLOSE;
-%constant wxEventType wxEVT_AUI_PANEMAXIMIZE;
-%constant wxEventType wxEVT_AUI_PANERESTORE;
+%constant wxEventType wxEVT_AUI_PANE_BUTTON;
+%constant wxEventType wxEVT_AUI_PANE_CLOSE;
+%constant wxEventType wxEVT_AUI_PANE_MAXIMIZE;
+%constant wxEventType wxEVT_AUI_PANE_RESTORE;
 %constant wxEventType wxEVT_AUI_RENDER;
-%constant wxEventType wxEVT_AUI_FINDMANAGER;
+%constant wxEventType wxEVT_AUI_FIND_MANAGER;
 
 %pythoncode {
-    EVT_AUI_PANEBUTTON = wx.PyEventBinder( wxEVT_AUI_PANEBUTTON )
-    EVT_AUI_PANECLOSE = wx.PyEventBinder( wxEVT_AUI_PANECLOSE )
-    EVT_AUI_PANEMAXIMIZE = wx.PyEventBinder( wxEVT_AUI_PANEMAXIMIZE )
-    EVT_AUI_PANERESTORE = wx.PyEventBinder( wxEVT_AUI_PANERESTORE )
+    EVT_AUI_PANE_BUTTON = wx.PyEventBinder( wxEVT_AUI_PANE_BUTTON )
+    EVT_AUI_PANE_CLOSE = wx.PyEventBinder( wxEVT_AUI_PANE_CLOSE )
+    EVT_AUI_PANE_MAXIMIZE = wx.PyEventBinder( wxEVT_AUI_PANE_MAXIMIZE )
+    EVT_AUI_PANE_RESTORE = wx.PyEventBinder( wxEVT_AUI_PANE_RESTORE )
     EVT_AUI_RENDER = wx.PyEventBinder( wxEVT_AUI_RENDER )
-    EVT_AUI_FINDMANAGER = wx.PyEventBinder( wxEVT_AUI_FINDMANAGER )
+    EVT_AUI_FIND_MANAGER = wx.PyEventBinder( wxEVT_AUI_FIND_MANAGER )
 }
 #endif // SWIG
 

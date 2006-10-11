@@ -92,6 +92,17 @@ void wxAuiFloatingFrame::SetPaneWindow(const wxAuiPaneInfo& pane)
                     Layer(0).Row(0).Position(0);
 
     // Carry over the minimum size
+    wxSize pane_min_size = pane.window->GetMinSize();
+    
+    // if the frame window's max size is greater than the min size
+    // then set the max size to the min size as well
+    wxSize cur_max_size = GetMaxSize();
+    if (cur_max_size.x < pane.min_size.x ||
+        cur_max_size.y < pane.min_size.y)
+    {
+        SetMaxSize(pane_min_size);
+    }
+    
     SetMinSize(pane.window->GetMinSize());
 
     m_mgr.AddPane(m_pane_window, contained_pane);
