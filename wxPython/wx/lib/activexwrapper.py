@@ -21,7 +21,17 @@ try:
     import pywin.mfc.activex
     import win32com.client
 except ImportError:
-    raise ImportError( "ActiveXWrapper requires PythonWin.  Please install the win32all-xxx.exe package.")
+    import sys
+    if hasattr(sys, "frozen"):
+        import os, win32api
+        dllpath = os.path.join(win32api.GetSystemDirectory(), 'MFC71.DLL')
+        if sys.version[:3] >= '2.4' and not os.path.exists(dllpath):
+            message = "%s not found" % dllpath
+        else:
+            raise       # original error message
+    else:
+        message = "ActiveXWrapper requires PythonWin. Please install the PyWin32 package." 
+    raise ImportError(message) 
 
 ##from win32con import WS_TABSTOP, WS_VISIBLE
 WS_TABSTOP = 0x00010000
