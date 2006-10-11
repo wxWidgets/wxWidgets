@@ -54,7 +54,8 @@ static void wxGtkOnRemoveTag(GtkTextBuffer *buffer,
 }
 
 extern "C" {
-static void wxGtkTextApplyTagsFromAttr(GtkTextBuffer *text_buffer,
+static void wxGtkTextApplyTagsFromAttr(GtkWidget *text,
+                                       GtkTextBuffer *text_buffer,
                                        const wxTextAttr& attr,
                                        GtkTextIter *start,
                                        GtkTextIter *end)
@@ -157,6 +158,109 @@ static void wxGtkTextApplyTagsFromAttr(GtkTextBuffer *text_buffer,
                                               "justification", align, NULL );
         gtk_text_buffer_apply_tag( text_buffer, tag, &para_start, &para_end );
     }
+
+    if (attr.HasLeftIndent())
+    {
+        // Indentation attribute
+
+        // Clear old indentation tags
+        GtkTextIter para_start, para_end = *end;
+        gtk_text_buffer_get_iter_at_line( text_buffer,
+                                          &para_start,
+                                          gtk_text_iter_get_line(start) );
+        gtk_text_iter_forward_line(&para_end);
+
+        remove_handler_id = g_signal_connect (text_buffer, "remove_tag",
+                                              G_CALLBACK(wxGtkOnRemoveTag),
+                                              gpointer("WXINDENT"));
+        gtk_text_buffer_remove_all_tags( text_buffer, &para_start, &para_end );
+        g_signal_handler_disconnect (text_buffer, remove_handler_id);
+
+        // Convert indent from 1/10th of a mm into pixels
+        float factor;
+#if GTK_CHECK_VERSION(2,2,0)
+        if (!gtk_check_version(2,2,0))
+            factor = (float)gdk_screen_get_width(gtk_widget_get_screen(text)) /
+                      gdk_screen_get_width_mm(gtk_widget_get_screen(text)) / 10;
+        else
+#endif
+            factor = (float)gdk_screen_width() / gdk_screen_width_mm() / 10;
+
+        const int indent = (int)(factor * attr.GetLeftIndent());
+        const int subIndent = (int)(factor * attr.GetLeftSubIndent());
+
+        gint gindent;
+        gint gsubindent;
+
+        if (subIndent >= 0)
+        {
+            gindent = indent;
+            gsubindent = -subIndent;
+        }
+        else
+        {
+            gindent = -subIndent;
+            gsubindent = indent;
+        }
+
+        g_snprintf(buf, sizeof(buf), "WXINDENT %d %d", gindent, gsubindent);
+        tag = gtk_text_tag_table_lookup( gtk_text_buffer_get_tag_table( text_buffer ),
+                                        buf );
+        if (!tag)
+            tag = gtk_text_buffer_create_tag( text_buffer, buf,
+                                              "left-margin", gindent, "indent", gsubindent, NULL );
+        gtk_text_buffer_apply_tag (text_buffer, tag, &para_start, &para_end);
+    }
+
+    if (attr.HasTabs())
+    {
+        // Set tab stops
+
+        // Clear old tabs
+        GtkTextIter para_start, para_end = *end;
+        gtk_text_buffer_get_iter_at_line( text_buffer,
+                                          &para_start,
+                                          gtk_text_iter_get_line(start) );
+        gtk_text_iter_forward_line(&para_end);
+
+        remove_handler_id = g_signal_connect (text_buffer, "remove_tag",
+                                              G_CALLBACK(wxGtkOnRemoveTag),
+                                              gpointer("WXTABS"));
+        gtk_text_buffer_remove_all_tags( text_buffer, &para_start, &para_end );
+        g_signal_handler_disconnect (text_buffer, remove_handler_id);
+
+        const wxArrayInt& tabs = attr.GetTabs();
+
+        wxString tagname = _T("WXTABS");
+        g_snprintf(buf, sizeof(buf), "WXTABS");
+        for (size_t i = 0; i < tabs.GetCount(); i++)
+            tagname += wxString::Format(_T(" %d"), tabs[i]);
+
+        const wxWX2MBbuf buf = tagname.mb_str(wxConvUTF8);
+
+        tag = gtk_text_tag_table_lookup( gtk_text_buffer_get_tag_table( text_buffer ),
+                                        buf );
+        if (!tag)
+        {
+            // Factor to convert from 1/10th of a mm into pixels
+            float factor;
+#if GTK_CHECK_VERSION(2,2,0)
+            if (!gtk_check_version(2,2,0))
+                factor = (float)gdk_screen_get_width(gtk_widget_get_screen(text)) /
+                          gdk_screen_get_width_mm(gtk_widget_get_screen(text)) / 10;
+            else
+#endif
+                factor = (float)gdk_screen_width() / gdk_screen_width_mm() / 10;
+
+            PangoTabArray* tabArray = pango_tab_array_new(tabs.GetCount(), TRUE);
+            for (size_t i = 0; i < tabs.GetCount(); i++)
+                pango_tab_array_set_tab(tabArray, i, PANGO_TAB_LEFT, (gint)(tabs[i] * factor));
+            tag = gtk_text_buffer_create_tag( text_buffer, buf,
+                                              "tabs", tabArray, NULL );
+            pango_tab_array_free(tabArray);
+        }
+        gtk_text_buffer_apply_tag (text_buffer, tag, &para_start, &para_end);
+    }
 }
 }
 
@@ -177,7 +281,7 @@ static void wxGtkTextInsert(GtkWidget *text,
 
     gtk_text_buffer_get_iter_at_offset (text_buffer, &start, start_offset);
 
-    wxGtkTextApplyTagsFromAttr(text_buffer, attr, &start, &iter);
+    wxGtkTextApplyTagsFromAttr(text, text_buffer, attr, &start, &iter);
 }
 }
 
@@ -1651,7 +1755,7 @@ bool wxTextCtrl::SetStyle( long start, long end, const wxTextAttr& style )
         // colours for the others
         wxTextAttr attr = wxTextAttr::Combine(style, m_defaultStyle, this);
 
-        wxGtkTextApplyTagsFromAttr( m_buffer, attr, &starti, &endi );
+        wxGtkTextApplyTagsFromAttr( m_widget, m_buffer, attr, &starti, &endi );
 
         return true;
     }

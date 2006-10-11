@@ -99,6 +99,7 @@ wxGTK:
 - Automatically use stock items for menu items with standard ids.
 - Setting cursor now works for all controls.
 - Implemented right-to-left support
+- Implemented left indentation and tab stops support in wxTextCtrl (Tim Kosse).
 
 wxUniv:
 
