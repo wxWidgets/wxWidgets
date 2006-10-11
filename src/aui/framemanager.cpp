@@ -3758,6 +3758,26 @@ void wxAuiManager::OnLeftDown(wxMouseEvent& event)
          else if (part->type == wxAuiDockUIPart::typeCaption ||
                   part->type == wxAuiDockUIPart::typeGripper)
         {
+            // if we are managing a wxAuiFloatingFrame window, then
+            // we are an embedded wxAuiManager inside the wxAuiFloatingFrame.
+            // We want to initiate a toolbar drag in our owner manager
+            wxWindow* managed_wnd = GetManagedWindow();
+            
+            if (part->pane && 
+                part->pane->window &&
+                managed_wnd &&
+                managed_wnd->IsKindOf(CLASSINFO(wxAuiFloatingFrame)))
+            {
+                wxAuiFloatingFrame* floating_frame = (wxAuiFloatingFrame*)managed_wnd;
+                wxAuiManager* owner_mgr = floating_frame->GetOwnerManager();
+                owner_mgr->StartPaneDrag(part->pane->window,
+                                             wxPoint(event.m_x - part->rect.x,
+                                                     event.m_y - part->rect.y));
+                return;
+            }
+            
+        
+        
             if (part->dock && part->dock->dock_direction == wxAUI_DOCK_CENTER)
                 return;
 
