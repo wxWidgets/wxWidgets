@@ -1929,7 +1929,6 @@ class CustomTreeCtrl(wx.ScrolledWindow):
         # with associated widgets.
         self.SetFocus()
 
-        return True
 
 
     def OnDestroy(self, event):
@@ -4249,7 +4248,7 @@ class CustomTreeCtrl(wx.ScrolledWindow):
 
             oldpen = dc.GetPen()
             dc.SetPen(wx.TRANSPARENT_PEN)
-            x, y = self.GetPosition()
+            x = 0
             w, h = self.GetSize()
 
             itemrect = wx.Rect(x, item.GetY()+offset, w, total_h-offset)
