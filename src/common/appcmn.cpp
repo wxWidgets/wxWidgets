@@ -158,6 +158,8 @@ void wxAppBase::CleanUp()
 }
 
 // ----------------------------------------------------------------------------
+// various accessors
+// ----------------------------------------------------------------------------
 
 wxWindow* wxAppBase::GetTopWindow() const
 {
@@ -170,6 +172,24 @@ wxWindow* wxAppBase::GetTopWindow() const
 wxVideoMode wxAppBase::GetDisplayMode() const
 {
     return wxVideoMode();
+}
+
+wxLayoutDirection wxAppBase::GetLayoutDirection() const
+{
+#if wxUSE_INTL
+    const wxLocale *const locale = wxGetLocale();
+    if ( locale )
+    {
+        const wxLanguageInfo *const
+            info = wxLocale::GetLanguageInfo(locale->GetLanguage());
+
+        if ( info )
+            return info->LayoutDirection;
+    }
+#endif // wxUSE_INTL
+
+    // we don't know
+    return wxLayout_Default;
 }
 
 #if wxUSE_CMDLINE_PARSER

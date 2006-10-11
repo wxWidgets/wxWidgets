@@ -108,9 +108,6 @@ public:
     // Called from wxExit() function, should terminate the application a.s.a.p.
     virtual void Exit();
 
-    // Return the layout direction for the current locale
-    virtual wxLayoutDirection GetLayoutDirection() const;
-
 
     // application info: name, description, vendor
     // -------------------------------------------
@@ -475,6 +472,10 @@ public:
         // printing.
     virtual void SetPrintMode(int WXUNUSED(mode)) { }
     int GetPrintMode() const { return wxPRINT_POSTSCRIPT; }
+
+    // Return the layout direction for the current locale or wxLayout_Default
+    // if it's unknown
+    virtual wxLayoutDirection GetLayoutDirection() const;
 
 
     // command line parsing (GUI-specific)
