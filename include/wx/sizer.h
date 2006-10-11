@@ -895,6 +895,12 @@ private:
 // ----------------------------------------------------------------------------
 
 inline wxSizerItem*
+wxSizer::Add( wxSizerItem *item )
+{
+    return Insert( m_children.GetCount(), item );
+}
+
+inline wxSizerItem*
 wxSizer::Add( wxWindow *window, int proportion, int flag, int border, wxObject* userData )
 {
     return Add( new wxSizerItem( window, proportion, flag, border, userData ) );
@@ -925,12 +931,6 @@ wxSizer::Add( wxSizer *sizer, const wxSizerFlags& flags )
 }
 
 inline wxSizerItem*
-wxSizer::Add( wxSizerItem *item )
-{
-    return Insert( m_children.GetCount(), item );
-}
-
-inline wxSizerItem*
 wxSizer::AddSpacer(int size)
 {
     return Add(size, size);
@@ -940,6 +940,12 @@ inline wxSizerItem*
 wxSizer::AddStretchSpacer(int prop)
 {
     return Add(0, 0, prop);
+}
+
+inline wxSizerItem*
+wxSizer::Prepend( wxSizerItem *item )
+{
+    return Insert( 0, item );
 }
 
 inline wxSizerItem*
@@ -958,12 +964,6 @@ inline wxSizerItem*
 wxSizer::Prepend( int width, int height, int proportion, int flag, int border, wxObject* userData )
 {
     return Prepend( new wxSizerItem( width, height, proportion, flag, border, userData ) );
-}
-
-inline wxSizerItem*
-wxSizer::Prepend( wxSizerItem *item )
-{
-    return Insert( 0, item );
 }
 
 inline wxSizerItem*
