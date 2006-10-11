@@ -79,6 +79,7 @@ Name: pthfile;  Description: "Make this install be the default wxPython"; Types:
 
 [Files]
 %(RTDLL)s
+Source: "distrib\msw\gdiplus.dll"; DestDir: "{code:GetPythonDir}"; OnlyBelowVersion: 5.1; CopyMode: alwaysskipifsameorolder; Flags: sharedfile; Components: core
 Source: "%(WXDIR)s\lib\vc_dll\wx*%(WXDLLVER)s_*.dll";  DestDir: "{app}\%(PKGDIR)s\wx"; Components: core
 %(MSLU)s
 

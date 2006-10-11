@@ -257,6 +257,7 @@ if [ $skipconfig != yes -a $universal != yes ]; then
 	--enable-sound \
 	--enable-display \
 	--enable-geometry \
+	--enable-graphics_ctx \
 	$DEBUG_FLAG \
 	--enable-precomp=no \
 	--enable-optimise \

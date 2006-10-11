@@ -210,6 +210,7 @@ cd bld
 	--with-opengl \
 	--with-gnomeprint \
 	--enable-geometry \
+	--enable-graphics_ctx \
 	--enable-optimise \
 	--enable-sound 	--with-sdl \
 %if %{mediactrl}
