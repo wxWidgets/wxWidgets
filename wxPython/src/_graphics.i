@@ -428,9 +428,8 @@ public:
 //     // stroke disconnected lines from begin to end points
 //     virtual void StrokeLines( size_t n, const wxPoint2D *beginPoints, const wxPoint2D *endPoints);
 
-    // is there a better name for this?
     %extend {
-        void StrokeDisconnectedLines(PyObject* beginPoints, PyObject* endPoints)
+        void StrokeLineSegements(PyObject* beginPoints, PyObject* endPoints)
         {
             size_t c1, c2, count;
             wxPoint2D* beginP = wxPoint2D_LIST_helper(beginPoints, &c1);
