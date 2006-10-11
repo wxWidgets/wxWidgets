@@ -38,6 +38,39 @@
 		400EDEB4089D4FFD00E848D9 /* propdlg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 400EDEB2089D4FFD00E848D9 /* propdlg.cpp */; };
 		401640E607F94B2800A8837A /* imaglist.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 401640E507F94B2800A8837A /* imaglist.cpp */; };
 		401640E907F94B2800A8837A /* imaglist.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 401640E507F94B2800A8837A /* imaglist.cpp */; };
+		403F73950AC9985500FF2BCB /* listctrl_mac.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 403F73940AC9985500FF2BCB /* listctrl_mac.cpp */; };
+		403F73960AC9985500FF2BCB /* listctrl_mac.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 403F73940AC9985500FF2BCB /* listctrl_mac.cpp */; };
+		403F73980AC9986E00FF2BCB /* listctrlcmn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 403F73970AC9986E00FF2BCB /* listctrlcmn.cpp */; };
+		403F73990AC9986E00FF2BCB /* listctrlcmn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 403F73970AC9986E00FF2BCB /* listctrlcmn.cpp */; };
+		404DAED40ADD137500687775 /* aboutdlg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 404DAED30ADD137500687775 /* aboutdlg.cpp */; };
+		404DAED50ADD137500687775 /* aboutdlg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 404DAED30ADD137500687775 /* aboutdlg.cpp */; };
+		404DAED70ADD138E00687775 /* animateg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 404DAED60ADD138E00687775 /* animateg.cpp */; };
+		404DAED80ADD138E00687775 /* animateg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 404DAED60ADD138E00687775 /* animateg.cpp */; };
+		404DAEDC0ADD13E600687775 /* anidecod.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 404DAEDA0ADD13E600687775 /* anidecod.cpp */; };
+		404DAEDD0ADD13E600687775 /* animatecmn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 404DAEDB0ADD13E600687775 /* animatecmn.cpp */; };
+		404DAEDE0ADD13E600687775 /* anidecod.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 404DAEDA0ADD13E600687775 /* anidecod.cpp */; };
+		404DAEDF0ADD13E600687775 /* animatecmn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 404DAEDB0ADD13E600687775 /* animatecmn.cpp */; };
+		404DAEEB0ADD143200687775 /* aboutdlgg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 404DAEEA0ADD143200687775 /* aboutdlgg.cpp */; };
+		404DAEEC0ADD143200687775 /* aboutdlgg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 404DAEEA0ADD143200687775 /* aboutdlgg.cpp */; };
+		404DB0EC0ADD36E900687775 /* richtextformatdlg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 404DB0DE0ADD36E800687775 /* richtextformatdlg.cpp */; };
+		404DB1630ADD3EC100687775 /* richtextbuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 40F185B90AB722BC00E3BEF9 /* richtextbuffer.cpp */; };
+		404DB1640ADD3EC100687775 /* richtextctrl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 40F185BA0AB722BC00E3BEF9 /* richtextctrl.cpp */; };
+		404DB1650ADD3EC200687775 /* richtexthtml.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 40F185BB0AB722BC00E3BEF9 /* richtexthtml.cpp */; };
+		404DB1660ADD3EC200687775 /* richtextstyles.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 40F185BC0AB722BC00E3BEF9 /* richtextstyles.cpp */; };
+		404DB1670ADD3EC300687775 /* richtextxml.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 40F185BD0AB722BC00E3BEF9 /* richtextxml.cpp */; };
+		404DB2500ADD40EA00687775 /* richtextformatdlg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 404DB0DE0ADD36E800687775 /* richtextformatdlg.cpp */; };
+		404DB2640ADD41B300687775 /* richtextsymboldlg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 404DB2630ADD41B300687775 /* richtextsymboldlg.cpp */; };
+		404DB2650ADD41B300687775 /* richtextsymboldlg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 404DB2630ADD41B300687775 /* richtextsymboldlg.cpp */; };
+		404DB2720ADD429D00687775 /* dcbufcmn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 404DB2710ADD429D00687775 /* dcbufcmn.cpp */; };
+		404DB2730ADD429D00687775 /* dcbufcmn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 404DB2710ADD429D00687775 /* dcbufcmn.cpp */; };
+		4054137D0AB69C9300450E09 /* datavgen.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4054137C0AB69C9300450E09 /* datavgen.cpp */; };
+		4054137E0AB69C9300450E09 /* datavgen.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4054137C0AB69C9300450E09 /* datavgen.cpp */; };
+		4054154E0AB6A0B000450E09 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 405415210AB6A0B000450E09 /* WebKit.framework */; };
+		4054154F0AB6A0B000450E09 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 405415210AB6A0B000450E09 /* WebKit.framework */; };
+		405415550AB6A0D900450E09 /* datavcmn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 405415540AB6A0D900450E09 /* datavcmn.cpp */; };
+		405415560AB6A0D900450E09 /* datavcmn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 405415540AB6A0D900450E09 /* datavcmn.cpp */; };
+		405415850AB6A18100450E09 /* popupwin.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 405415840AB6A18100450E09 /* popupwin.cpp */; };
+		405415860AB6A18100450E09 /* popupwin.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 405415840AB6A18100450E09 /* popupwin.cpp */; };
 		405DD168063C2BFC00F579EE /* libiconv.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 405DD167063C2BFC00F579EE /* libiconv.dylib */; };
 		40607C1607493C3F00DC0420 /* archive.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 40607C1407493C3F00DC0420 /* archive.cpp */; };
 		40607C1A07493C3F00DC0420 /* archive.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 40607C1407493C3F00DC0420 /* archive.cpp */; };
@@ -57,6 +90,14 @@
 		40670AA007377B1000F7C08C /* sstream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 40670A9407377B1000F7C08C /* sstream.cpp */; };
 		40670AA107377B1000F7C08C /* stdpbase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 40670A9507377B1000F7C08C /* stdpbase.cpp */; };
 		40670AA207377B1000F7C08C /* uri.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 40670A9607377B1000F7C08C /* uri.cpp */; };
+		4067EF250ACD43BC004A2D14 /* graphcmn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4067EF240ACD43BC004A2D14 /* graphcmn.cpp */; };
+		4067EF260ACD43BC004A2D14 /* graphcmn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4067EF240ACD43BC004A2D14 /* graphcmn.cpp */; };
+		4067EFC10ACD5306004A2D14 /* xh_bmpcbox.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4067EFC00ACD5306004A2D14 /* xh_bmpcbox.cpp */; };
+		4067EFC20ACD5306004A2D14 /* xh_bmpcbox.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4067EFC00ACD5306004A2D14 /* xh_bmpcbox.cpp */; };
+		4067EFC50ACD53B1004A2D14 /* bmpcboxg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4067EFC40ACD53B1004A2D14 /* bmpcboxg.cpp */; };
+		4067EFC60ACD53B1004A2D14 /* bmpcboxg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4067EFC40ACD53B1004A2D14 /* bmpcboxg.cpp */; };
+		4067EFC90ACD53ED004A2D14 /* graphics.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4067EFC80ACD53ED004A2D14 /* graphics.cpp */; };
+		4067EFCA0ACD53ED004A2D14 /* graphics.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4067EFC80ACD53ED004A2D14 /* graphics.cpp */; };
 		407A90F7065742ED00F01665 /* spinctrl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 407A90F6065742ED00F01665 /* spinctrl.cpp */; };
 		407A90FA065742ED00F01665 /* spinctrl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 407A90F6065742ED00F01665 /* spinctrl.cpp */; };
 		407C6ADD0A899E260056252A /* auibook.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 407C6AD70A899E260056252A /* auibook.cpp */; };
@@ -976,6 +1017,8 @@
 		40ADC47B08160C200009DA36 /* listbkg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 40ADC47308160C200009DA36 /* listbkg.cpp */; };
 		40ADC48708160CAD0009DA36 /* dbgrptg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 40ADC48608160CAD0009DA36 /* dbgrptg.cpp */; };
 		40ADC48A08160CAD0009DA36 /* dbgrptg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 40ADC48608160CAD0009DA36 /* dbgrptg.cpp */; };
+		40AEF28C0AB5EC0800B2C19A /* platinfo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 40AEF28B0AB5EC0800B2C19A /* platinfo.cpp */; };
+		40AEF28D0AB5EC0800B2C19A /* platinfo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 40AEF28B0AB5EC0800B2C19A /* platinfo.cpp */; };
 		40AF909107C8A926006A6D3C /* mediactrlcmn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 40AF909007C8A926006A6D3C /* mediactrlcmn.cpp */; };
 		40AF909307C8A926006A6D3C /* mediactrlcmn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 40AF909007C8A926006A6D3C /* mediactrlcmn.cpp */; };
 		40AF909B07C8A976006A6D3C /* datectlg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 40AF909507C8A976006A6D3C /* datectlg.cpp */; };
@@ -1030,6 +1073,11 @@
 		40F10E5906AD0230003C7AC3 /* thread.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 40F10E5706AD0230003C7AC3 /* thread.cpp */; };
 		40F10E5C06AD0230003C7AC3 /* tglbtn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 40F10E5606AD0230003C7AC3 /* tglbtn.cpp */; };
 		40F10E5D06AD0230003C7AC3 /* thread.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 40F10E5706AD0230003C7AC3 /* thread.cpp */; };
+		40F185C30AB722BC00E3BEF9 /* richtextbuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 40F185B90AB722BC00E3BEF9 /* richtextbuffer.cpp */; };
+		40F185C40AB722BC00E3BEF9 /* richtextctrl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 40F185BA0AB722BC00E3BEF9 /* richtextctrl.cpp */; };
+		40F185C50AB722BC00E3BEF9 /* richtexthtml.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 40F185BB0AB722BC00E3BEF9 /* richtexthtml.cpp */; };
+		40F185C60AB722BC00E3BEF9 /* richtextstyles.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 40F185BC0AB722BC00E3BEF9 /* richtextstyles.cpp */; };
+		40F185C70AB722BC00E3BEF9 /* richtextxml.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 40F185BD0AB722BC00E3BEF9 /* richtextxml.cpp */; };
 		40FF2B0D0869B1530013E961 /* webkit.mm in Sources */ = {isa = PBXBuildFile; fileRef = 40FF2B0C0869B1530013E961 /* webkit.mm */; };
 		40FF2B0E0869B1530013E961 /* webkit.mm in Sources */ = {isa = PBXBuildFile; fileRef = 40FF2B0C0869B1530013E961 /* webkit.mm */; };
 		43DFF59D09926B080033000B /* helpdlg.h in Headers */ = {isa = PBXBuildFile; fileRef = 43DFF59B09926B080033000B /* helpdlg.h */; };
@@ -1091,6 +1139,20 @@
 		40011F3B0897D8DF00E4DE95 /* setup0.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = setup0.h; path = wx/mac/setup0.h; sourceTree = "<group>"; };
 		400EDEB2089D4FFD00E848D9 /* propdlg.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = propdlg.cpp; sourceTree = "<group>"; };
 		401640E507F94B2800A8837A /* imaglist.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = imaglist.cpp; sourceTree = "<group>"; };
+		403F73940AC9985500FF2BCB /* listctrl_mac.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = listctrl_mac.cpp; sourceTree = "<group>"; };
+		403F73970AC9986E00FF2BCB /* listctrlcmn.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = listctrlcmn.cpp; sourceTree = "<group>"; };
+		404DAED30ADD137500687775 /* aboutdlg.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = aboutdlg.cpp; sourceTree = "<group>"; };
+		404DAED60ADD138E00687775 /* animateg.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = animateg.cpp; sourceTree = "<group>"; };
+		404DAEDA0ADD13E600687775 /* anidecod.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = anidecod.cpp; sourceTree = "<group>"; };
+		404DAEDB0ADD13E600687775 /* animatecmn.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = animatecmn.cpp; sourceTree = "<group>"; };
+		404DAEEA0ADD143200687775 /* aboutdlgg.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = aboutdlgg.cpp; sourceTree = "<group>"; };
+		404DB0DE0ADD36E800687775 /* richtextformatdlg.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = richtextformatdlg.cpp; sourceTree = "<group>"; };
+		404DB2630ADD41B300687775 /* richtextsymboldlg.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = richtextsymboldlg.cpp; sourceTree = "<group>"; };
+		404DB2710ADD429D00687775 /* dcbufcmn.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = dcbufcmn.cpp; sourceTree = "<group>"; };
+		4054137C0AB69C9300450E09 /* datavgen.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = datavgen.cpp; sourceTree = "<group>"; };
+		405415210AB6A0B000450E09 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = /System/Library/Frameworks/WebKit.framework; sourceTree = "<absolute>"; };
+		405415540AB6A0D900450E09 /* datavcmn.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = datavcmn.cpp; sourceTree = "<group>"; };
+		405415840AB6A18100450E09 /* popupwin.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = popupwin.cpp; sourceTree = "<group>"; };
 		405DD167063C2BFC00F579EE /* libiconv.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libiconv.dylib; path = /usr/lib/libiconv.dylib; sourceTree = "<absolute>"; };
 		40607C1407493C3F00DC0420 /* archive.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = archive.cpp; sourceTree = "<group>"; };
 		40607C740749432A00DC0420 /* gsockosx.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = gsockosx.cpp; path = mac/corefoundation/gsockosx.cpp; sourceTree = SOURCE_ROOT; };
@@ -1101,6 +1163,10 @@
 		40670A9407377B1000F7C08C /* sstream.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = sstream.cpp; sourceTree = "<group>"; };
 		40670A9507377B1000F7C08C /* stdpbase.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = stdpbase.cpp; sourceTree = "<group>"; };
 		40670A9607377B1000F7C08C /* uri.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = uri.cpp; sourceTree = "<group>"; };
+		4067EF240ACD43BC004A2D14 /* graphcmn.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = graphcmn.cpp; sourceTree = "<group>"; };
+		4067EFC00ACD5306004A2D14 /* xh_bmpcbox.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = xh_bmpcbox.cpp; path = xrc/xh_bmpcbox.cpp; sourceTree = "<group>"; };
+		4067EFC40ACD53B1004A2D14 /* bmpcboxg.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = bmpcboxg.cpp; sourceTree = "<group>"; };
+		4067EFC80ACD53ED004A2D14 /* graphics.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = graphics.cpp; sourceTree = "<group>"; };
 		407A90F6065742ED00F01665 /* spinctrl.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = spinctrl.cpp; sourceTree = "<group>"; };
 		407C6AD70A899E260056252A /* auibook.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = auibook.cpp; sourceTree = "<group>"; };
 		407C6AD90A899E260056252A /* dockart.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = dockart.cpp; sourceTree = "<group>"; };
@@ -1192,6 +1258,7 @@
 		40ADC47208160C200009DA36 /* choicbkg.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = choicbkg.cpp; sourceTree = "<group>"; };
 		40ADC47308160C200009DA36 /* listbkg.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = listbkg.cpp; sourceTree = "<group>"; };
 		40ADC48608160CAD0009DA36 /* dbgrptg.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = dbgrptg.cpp; sourceTree = "<group>"; };
+		40AEF28B0AB5EC0800B2C19A /* platinfo.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = platinfo.cpp; sourceTree = "<group>"; };
 		40AF909007C8A926006A6D3C /* mediactrlcmn.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = mediactrlcmn.cpp; sourceTree = "<group>"; };
 		40AF909507C8A976006A6D3C /* datectlg.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = datectlg.cpp; sourceTree = "<group>"; };
 		40AF909607C8A976006A6D3C /* filedlgg.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = filedlgg.cpp; sourceTree = "<group>"; };
@@ -1219,6 +1286,11 @@
 		40F017410A306C7600AC9076 /* fontenumcmn.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = fontenumcmn.cpp; sourceTree = "<group>"; };
 		40F10E5606AD0230003C7AC3 /* tglbtn.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = tglbtn.cpp; sourceTree = "<group>"; };
 		40F10E5706AD0230003C7AC3 /* thread.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = thread.cpp; sourceTree = "<group>"; };
+		40F185B90AB722BC00E3BEF9 /* richtextbuffer.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = richtextbuffer.cpp; sourceTree = "<group>"; };
+		40F185BA0AB722BC00E3BEF9 /* richtextctrl.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = richtextctrl.cpp; sourceTree = "<group>"; };
+		40F185BB0AB722BC00E3BEF9 /* richtexthtml.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = richtexthtml.cpp; sourceTree = "<group>"; };
+		40F185BC0AB722BC00E3BEF9 /* richtextstyles.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = richtextstyles.cpp; sourceTree = "<group>"; };
+		40F185BD0AB722BC00E3BEF9 /* richtextxml.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = richtextxml.cpp; sourceTree = "<group>"; };
 		40FF2B0C0869B1530013E961 /* webkit.mm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.objcpp; name = webkit.mm; path = htmlctrl/webkit/webkit.mm; sourceTree = "<group>"; };
 		43DFF59B09926B080033000B /* helpdlg.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = helpdlg.h; sourceTree = "<group>"; };
 		43DFF59C09926B080033000B /* helpwnd.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = helpwnd.h; sourceTree = "<group>"; };
@@ -1976,6 +2048,7 @@
 				408A597F0A8998750014D20E /* AGL.framework in Frameworks */,
 				408A59800A8998750014D20E /* OpenGL.framework in Frameworks */,
 				408A5A720A8999A00014D20E /* AppKit.framework in Frameworks */,
+				4054154F0AB6A0B000450E09 /* WebKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1991,6 +2064,7 @@
 				408A597D0A8998750014D20E /* AGL.framework in Frameworks */,
 				408A597E0A8998750014D20E /* OpenGL.framework in Frameworks */,
 				408A5A710A8999A00014D20E /* AppKit.framework in Frameworks */,
+				4054154E0AB6A0B000450E09 /* WebKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2021,6 +2095,7 @@
 			isa = PBXGroup;
 			children = (
 				408A59CC0A8999A00014D20E /* AppKit.framework */,
+				405415210AB6A0B000450E09 /* WebKit.framework */,
 				408A595D0A8998750014D20E /* AGL.framework */,
 				408A595E0A8998750014D20E /* OpenGL.framework */,
 				0A98CD2207172992007B4289 /* QuickTime.framework */,
@@ -2084,6 +2159,7 @@
 		40ADC36408156DCA0009DA36 /* xrc */ = {
 			isa = PBXGroup;
 			children = (
+				4067EFC00ACD5306004A2D14 /* xh_bmpcbox.cpp */,
 				408A59B60A8999800014D20E /* xh_clrpicker.cpp */,
 				408A59B70A8999800014D20E /* xh_dirpicker.cpp */,
 				408A59B80A8999800014D20E /* xh_filepicker.cpp */,
@@ -2137,6 +2213,20 @@
 				40ADC38F08156DEB0009DA36 /* xmlrsall.cpp */,
 			);
 			name = xrc;
+			sourceTree = "<group>";
+		};
+		40F185B80AB722BC00E3BEF9 /* richtext */ = {
+			isa = PBXGroup;
+			children = (
+				40F185B90AB722BC00E3BEF9 /* richtextbuffer.cpp */,
+				40F185BA0AB722BC00E3BEF9 /* richtextctrl.cpp */,
+				404DB0DE0ADD36E800687775 /* richtextformatdlg.cpp */,
+				40F185BB0AB722BC00E3BEF9 /* richtexthtml.cpp */,
+				40F185BC0AB722BC00E3BEF9 /* richtextstyles.cpp */,
+				404DB2630ADD41B300687775 /* richtextsymboldlg.cpp */,
+				40F185BD0AB722BC00E3BEF9 /* richtextxml.cpp */,
+			);
+			path = richtext;
 			sourceTree = "<group>";
 		};
 		CADEF54203C8C0A800000133 /* morefilex */ = {
@@ -2579,6 +2669,7 @@
 				F5A8619901FA022C0175ACA7 /* mac/carbon */,
 				F5A863AB01FA022C0175ACA7 /* png */,
 				4086C62E063AAD4A00D4CD53 /* regex */,
+				40F185B80AB722BC00E3BEF9 /* richtext */,
 				F5A8641801FA022D0175ACA7 /* tiff */,
 				F5A8648A01FA022D0175ACA7 /* unix */,
 				40ADC35E08156DA90009DA36 /* xml */,
@@ -2590,16 +2681,12 @@
 		F5A85FDD01FA022B0175ACA7 /* common */ = {
 			isa = PBXGroup;
 			children = (
-				408A599F0A89992F0014D20E /* clrpickercmn.cpp */,
-				408A59A00A89992F0014D20E /* combocmn.cpp */,
-				408A59A10A89992F0014D20E /* filepickercmn.cpp */,
-				408A59A20A89992F0014D20E /* fontpickercmn.cpp */,
-				408A59A30A89992F0014D20E /* pickerbase.cpp */,
-				408A59A40A89992F0014D20E /* powercmn.cpp */,
-				40607C1407493C3F00DC0420 /* archive.cpp */,
 				CA0CB57B0450773900000102 /* accesscmn.cpp */,
+				404DAEDA0ADD13E600687775 /* anidecod.cpp */,
+				404DAEDB0ADD13E600687775 /* animatecmn.cpp */,
 				CA60175604D43A2700000080 /* appbase.cpp */,
 				F5A85FDF01FA022B0175ACA7 /* appcmn.cpp */,
+				40607C1407493C3F00DC0420 /* archive.cpp */,
 				F5F5A6A102CDB6CA01000133 /* artprov.cpp */,
 				F5F5A6A202CDB6CA01000133 /* artstd.cpp */,
 				F5A85FE101FA022B0175ACA7 /* bmpbase.cpp */,
@@ -2607,10 +2694,12 @@
 				F5A85FE201FA022B0175ACA7 /* choiccmn.cpp */,
 				F5A85FE301FA022B0175ACA7 /* clipcmn.cpp */,
 				F5A85FE401FA022B0175ACA7 /* clntdata.cpp */,
+				408A599F0A89992F0014D20E /* clrpickercmn.cpp */,
 				F5A85FE501FA022B0175ACA7 /* cmdline.cpp */,
 				F5A85FE601FA022B0175ACA7 /* cmdproc.cpp */,
 				F5A85FE701FA022B0175ACA7 /* cmndata.cpp */,
 				40F017380A30683F00AC9076 /* colourcmn.cpp */,
+				408A59A00A89992F0014D20E /* combocmn.cpp */,
 				F5A85FE801FA022B0175ACA7 /* config.cpp */,
 				F5A85FE901FA022B0175ACA7 /* containr.cpp */,
 				40F017390A30683F00AC9076 /* convauto.cpp */,
@@ -2618,12 +2707,14 @@
 				F5A85FEB01FA022B0175ACA7 /* ctrlcmn.cpp */,
 				F5A85FEC01FA022B0175ACA7 /* ctrlsub.cpp */,
 				CA0CB57C0450773900000102 /* datacmn.cpp */,
+				405415540AB6A0D900450E09 /* datavcmn.cpp */,
 				F5A85FEF01FA022B0175ACA7 /* datetime.cpp */,
 				F5A85FF001FA022B0175ACA7 /* datstrm.cpp */,
 				F5A85FF101FA022B0175ACA7 /* db.cpp */,
 				CA60175904D43A5400000080 /* dbgrid.cpp */,
 				F5A85FF301FA022B0175ACA7 /* dbtable.cpp */,
 				F5A85FF401FA022B0175ACA7 /* dcbase.cpp */,
+				404DB2710ADD429D00687775 /* dcbufcmn.cpp */,
 				40ADC34908156AE40009DA36 /* debugrpt.cpp */,
 				F5A85FF601FA022B0175ACA7 /* dircmn.cpp */,
 				F5A85FF701FA022B0175ACA7 /* dlgcmn.cpp */,
@@ -2648,12 +2739,14 @@
 				F5A8600901FA022B0175ACA7 /* fileconf.cpp */,
 				F5A8600A01FA022B0175ACA7 /* filefn.cpp */,
 				F5A8600B01FA022B0175ACA7 /* filename.cpp */,
+				408A59A10A89992F0014D20E /* filepickercmn.cpp */,
 				F5A8600C01FA022B0175ACA7 /* filesys.cpp */,
 				CA60175C04D43A8100000080 /* fldlgcmn.cpp */,
 				CA60175D04D43A8100000080 /* fmapbase.cpp */,
 				F5A8600D01FA022B0175ACA7 /* fontcmn.cpp */,
 				40F017410A306C7600AC9076 /* fontenumcmn.cpp */,
 				F5A8600E01FA022B0175ACA7 /* fontmap.cpp */,
+				408A59A20A89992F0014D20E /* fontpickercmn.cpp */,
 				F5A8600F01FA022B0175ACA7 /* framecmn.cpp */,
 				F5A8601001FA022B0175ACA7 /* fs_inet.cpp */,
 				F5A8601101FA022B0175ACA7 /* fs_mem.cpp */,
@@ -2664,6 +2757,7 @@
 				F5A8601501FA022B0175ACA7 /* gdicmn.cpp */,
 				F5A8601601FA022B0175ACA7 /* geometry.cpp */,
 				F5A8601701FA022B0175ACA7 /* gifdecod.cpp */,
+				4067EF240ACD43BC004A2D14 /* graphcmn.cpp */,
 				F5A8601901FA022B0175ACA7 /* hash.cpp */,
 				F5F5A69F02CDB27401000133 /* hashmap.cpp */,
 				F5A8601A01FA022B0175ACA7 /* helpbase.cpp */,
@@ -2687,6 +2781,7 @@
 				F5A8602A01FA022B0175ACA7 /* layout.cpp */,
 				F5A8602B01FA022B0175ACA7 /* lboxcmn.cpp */,
 				F5A8602E01FA022B0175ACA7 /* list.cpp */,
+				403F73970AC9986E00FF2BCB /* listctrlcmn.cpp */,
 				F5A8602F01FA022B0175ACA7 /* log.cpp */,
 				F5A8603001FA022B0175ACA7 /* longlong.cpp */,
 				F5A8603101FA022B0175ACA7 /* matrix.cpp */,
@@ -2700,7 +2795,10 @@
 				F5A8603701FA022B0175ACA7 /* nbkbase.cpp */,
 				F5A8603801FA022B0175ACA7 /* object.cpp */,
 				F5A8603A01FA022B0175ACA7 /* paper.cpp */,
+				408A59A30A89992F0014D20E /* pickerbase.cpp */,
+				40AEF28B0AB5EC0800B2C19A /* platinfo.cpp */,
 				F5A8603D01FA022C0175ACA7 /* popupcmn.cpp */,
+				408A59A40A89992F0014D20E /* powercmn.cpp */,
 				F5A8603E01FA022C0175ACA7 /* prntbase.cpp */,
 				F5A8603F01FA022C0175ACA7 /* process.cpp */,
 				F5A8604001FA022C0175ACA7 /* protocol.cpp */,
@@ -2758,21 +2856,19 @@
 		F5A8606E01FA022C0175ACA7 /* generic */ = {
 			isa = PBXGroup;
 			children = (
-				408A59B20A8999500014D20E /* combog.cpp */,
-				408A598C0A8998DA0014D20E /* clrpickerg.cpp */,
-				408A598D0A8998DA0014D20E /* filepickerg.cpp */,
-				408A598E0A8998DA0014D20E /* fontpickerg.cpp */,
-				408A598F0A8998DA0014D20E /* hyperlink.cpp */,
-				408A59900A8998DA0014D20E /* odcombo.cpp */,
+				404DAEEA0ADD143200687775 /* aboutdlgg.cpp */,
+				404DAED60ADD138E00687775 /* animateg.cpp */,
+				4067EFC40ACD53B1004A2D14 /* bmpcboxg.cpp */,
 				408A59820A8998A40014D20E /* buttonbar.cpp */,
-				408A59830A8998A40014D20E /* toolbkg.cpp */,
-				408A59840A8998A40014D20E /* treebkg.cpp */,
 				F5A8607001FA022C0175ACA7 /* busyinfo.cpp */,
 				F5A8607101FA022C0175ACA7 /* calctrl.cpp */,
 				F5A8607201FA022C0175ACA7 /* caret.cpp */,
 				40ADC47208160C200009DA36 /* choicbkg.cpp */,
 				F5A8607301FA022C0175ACA7 /* choicdgg.cpp */,
+				408A598C0A8998DA0014D20E /* clrpickerg.cpp */,
 				F5A8607401FA022C0175ACA7 /* colrdlgg.cpp */,
+				408A59B20A8999500014D20E /* combog.cpp */,
+				4054137C0AB69C9300450E09 /* datavgen.cpp */,
 				40AF909507C8A976006A6D3C /* datectlg.cpp */,
 				40ADC48608160CAD0009DA36 /* dbgrptg.cpp */,
 				F5A8607501FA022C0175ACA7 /* dcpsg.cpp */,
@@ -2781,17 +2877,21 @@
 				F5A8607901FA022C0175ACA7 /* dragimgg.cpp */,
 				F5A8607A01FA022C0175ACA7 /* fdrepdlg.cpp */,
 				40AF909607C8A976006A6D3C /* filedlgg.cpp */,
+				408A598D0A8998DA0014D20E /* filepickerg.cpp */,
 				F5A8607C01FA022C0175ACA7 /* fontdlgg.cpp */,
+				408A598E0A8998DA0014D20E /* fontpickerg.cpp */,
 				F5A8607D01FA022C0175ACA7 /* grid.cpp */,
 				F5A8607E01FA022C0175ACA7 /* gridctrl.cpp */,
 				F5A8608001FA022C0175ACA7 /* gridsel.cpp */,
 				F5A8608101FA022C0175ACA7 /* helpext.cpp */,
 				40AF909707C8A976006A6D3C /* htmllbox.cpp */,
+				408A598F0A8998DA0014D20E /* hyperlink.cpp */,
 				F5A8608601FA022C0175ACA7 /* laywin.cpp */,
 				40ADC47308160C200009DA36 /* listbkg.cpp */,
 				F5A8608701FA022C0175ACA7 /* listctrl.cpp */,
 				F5A8608801FA022C0175ACA7 /* logg.cpp */,
 				F5A8608B01FA022C0175ACA7 /* numdlgg.cpp */,
+				408A59900A8998DA0014D20E /* odcombo.cpp */,
 				F5A8608D01FA022C0175ACA7 /* panelg.cpp */,
 				F5A8608E01FA022C0175ACA7 /* printps.cpp */,
 				F5A8608F01FA022C0175ACA7 /* prntdlgg.cpp */,
@@ -2808,6 +2908,8 @@
 				F5A8609D01FA022C0175ACA7 /* textdlgg.cpp */,
 				F5A8609E01FA022C0175ACA7 /* tipdlg.cpp */,
 				F5A8609F01FA022C0175ACA7 /* tipwin.cpp */,
+				408A59830A8998A40014D20E /* toolbkg.cpp */,
+				408A59840A8998A40014D20E /* treebkg.cpp */,
 				F5A860A001FA022C0175ACA7 /* treectlg.cpp */,
 				40AF909907C8A976006A6D3C /* vlbox.cpp */,
 				40AF909A07C8A976006A6D3C /* vscroll.cpp */,
@@ -2903,6 +3005,7 @@
 		F5A8619901FA022C0175ACA7 /* mac/carbon */ = {
 			isa = PBXGroup;
 			children = (
+				404DAED30ADD137500687775 /* aboutdlg.cpp */,
 				F5A8619A01FA022C0175ACA7 /* accel.cpp */,
 				F5A8619C01FA022C0175ACA7 /* app.cpp */,
 				F5A861A201FA022C0175ACA7 /* button.cpp */,
@@ -2936,17 +3039,19 @@
 				40CDE8D9098250AB00E8156D /* evtloop.cpp */,
 				F5A861B901FA022C0175ACA7 /* filedlg.cpp */,
 				F5A861BB01FA022C0175ACA7 /* font.cpp */,
-				40AF90E607C8B18C006A6D3C /* fontdlgosx.mm */,
 				F5A861BC01FA022C0175ACA7 /* fontdlg.cpp */,
+				40AF90E607C8B18C006A6D3C /* fontdlgosx.mm */,
 				F5A861BD01FA022C0175ACA7 /* fontenum.cpp */,
 				F5A861BE01FA022C0175ACA7 /* fontutil.cpp */,
 				F5A861BF01FA022C0175ACA7 /* frame.cpp */,
 				F5A861C001FA022C0175ACA7 /* gauge.cpp */,
 				0A98CC470715CFBC007B4289 /* gdiobj.cpp */,
 				4086C59F063AA5C700D4CD53 /* glcanvas.cpp */,
+				4067EFC80ACD53ED004A2D14 /* graphics.cpp */,
 				F5A861C501FA022C0175ACA7 /* icon.cpp */,
 				401640E507F94B2800A8837A /* imaglist.cpp */,
 				F5A861C701FA022C0175ACA7 /* listbox.cpp */,
+				403F73940AC9985500FF2BCB /* listctrl_mac.cpp */,
 				F5A861C801FA022C0175ACA7 /* macnotfy.cpp */,
 				40AF90E807C8B18C006A6D3C /* mediactrl.cpp */,
 				F5A861CC01FA022C0175ACA7 /* mdi.cpp */,
@@ -2961,6 +3066,7 @@
 				F5A861E801FA022C0175ACA7 /* notebmac.cpp */,
 				F5A861E901FA022C0175ACA7 /* palette.cpp */,
 				F5A861EA01FA022C0175ACA7 /* pen.cpp */,
+				405415840AB6A18100450E09 /* popupwin.cpp */,
 				F5A861ED01FA022C0175ACA7 /* printdlg.cpp */,
 				F5A861EE01FA022C0175ACA7 /* printmac.cpp */,
 				F5A861EF01FA022C0175ACA7 /* radiobox.cpp */,
@@ -3167,6 +3273,7 @@
 			mainGroup = 0867D691FE84028FC02AAC07 /* wxWindows */;
 			productRefGroup = 034768DDFF38A45A11DB9C8B /* Products */;
 			projectDirPath = "";
+			projectRoot = ..;
 			targets = (
 				4086C742063AB2FF00D4CD53 /* static */,
 				4086CA55063AB30000D4CD53 /* dynamic */,
@@ -3717,6 +3824,29 @@
 				407C6AE50A899E260056252A /* floatpane.cpp in Sources */,
 				407C6AE60A899E260056252A /* framemanager.cpp in Sources */,
 				407C6AE70A899E260056252A /* tabmdi.cpp in Sources */,
+				40AEF28D0AB5EC0800B2C19A /* platinfo.cpp in Sources */,
+				4054137E0AB69C9300450E09 /* datavgen.cpp in Sources */,
+				405415560AB6A0D900450E09 /* datavcmn.cpp in Sources */,
+				405415860AB6A18100450E09 /* popupwin.cpp in Sources */,
+				40F185C30AB722BC00E3BEF9 /* richtextbuffer.cpp in Sources */,
+				40F185C40AB722BC00E3BEF9 /* richtextctrl.cpp in Sources */,
+				40F185C50AB722BC00E3BEF9 /* richtexthtml.cpp in Sources */,
+				40F185C60AB722BC00E3BEF9 /* richtextstyles.cpp in Sources */,
+				40F185C70AB722BC00E3BEF9 /* richtextxml.cpp in Sources */,
+				403F73960AC9985500FF2BCB /* listctrl_mac.cpp in Sources */,
+				403F73990AC9986E00FF2BCB /* listctrlcmn.cpp in Sources */,
+				4067EF260ACD43BC004A2D14 /* graphcmn.cpp in Sources */,
+				4067EFC20ACD5306004A2D14 /* xh_bmpcbox.cpp in Sources */,
+				4067EFC60ACD53B1004A2D14 /* bmpcboxg.cpp in Sources */,
+				4067EFCA0ACD53ED004A2D14 /* graphics.cpp in Sources */,
+				404DAED50ADD137500687775 /* aboutdlg.cpp in Sources */,
+				404DAED80ADD138E00687775 /* animateg.cpp in Sources */,
+				404DAEDE0ADD13E600687775 /* anidecod.cpp in Sources */,
+				404DAEDF0ADD13E600687775 /* animatecmn.cpp in Sources */,
+				404DAEEC0ADD143200687775 /* aboutdlgg.cpp in Sources */,
+				404DB0EC0ADD36E900687775 /* richtextformatdlg.cpp in Sources */,
+				404DB2650ADD41B300687775 /* richtextsymboldlg.cpp in Sources */,
+				404DB2730ADD429D00687775 /* dcbufcmn.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4223,6 +4353,29 @@
 				407C6ADF0A899E260056252A /* floatpane.cpp in Sources */,
 				407C6AE00A899E260056252A /* framemanager.cpp in Sources */,
 				407C6AE10A899E260056252A /* tabmdi.cpp in Sources */,
+				40AEF28C0AB5EC0800B2C19A /* platinfo.cpp in Sources */,
+				4054137D0AB69C9300450E09 /* datavgen.cpp in Sources */,
+				405415550AB6A0D900450E09 /* datavcmn.cpp in Sources */,
+				405415850AB6A18100450E09 /* popupwin.cpp in Sources */,
+				403F73950AC9985500FF2BCB /* listctrl_mac.cpp in Sources */,
+				403F73980AC9986E00FF2BCB /* listctrlcmn.cpp in Sources */,
+				4067EF250ACD43BC004A2D14 /* graphcmn.cpp in Sources */,
+				4067EFC10ACD5306004A2D14 /* xh_bmpcbox.cpp in Sources */,
+				4067EFC50ACD53B1004A2D14 /* bmpcboxg.cpp in Sources */,
+				4067EFC90ACD53ED004A2D14 /* graphics.cpp in Sources */,
+				404DAED40ADD137500687775 /* aboutdlg.cpp in Sources */,
+				404DAED70ADD138E00687775 /* animateg.cpp in Sources */,
+				404DAEDC0ADD13E600687775 /* anidecod.cpp in Sources */,
+				404DAEDD0ADD13E600687775 /* animatecmn.cpp in Sources */,
+				404DAEEB0ADD143200687775 /* aboutdlgg.cpp in Sources */,
+				404DB1630ADD3EC100687775 /* richtextbuffer.cpp in Sources */,
+				404DB1640ADD3EC100687775 /* richtextctrl.cpp in Sources */,
+				404DB1650ADD3EC200687775 /* richtexthtml.cpp in Sources */,
+				404DB1660ADD3EC200687775 /* richtextstyles.cpp in Sources */,
+				404DB1670ADD3EC300687775 /* richtextxml.cpp in Sources */,
+				404DB2500ADD40EA00687775 /* richtextformatdlg.cpp in Sources */,
+				404DB2640ADD41B300687775 /* richtextsymboldlg.cpp in Sources */,
+				404DB2720ADD429D00687775 /* dcbufcmn.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4331,6 +4484,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = (
+					i386,
+					ppc,
+				);
+				DEBUG_INFORMATION_FORMAT = stabs;
 				DYLIB_COMPATIBILITY_VERSION = 2.6;
 				DYLIB_CURRENT_VERSION = 2.6.0;
 				EXECUTABLE_PREFIX = lib;
@@ -4356,6 +4514,7 @@
 				GCC_USE_GCC3_PFE_SUPPORT = YES;
 				GCC_VERSION_i386 = 4.0;
 				GCC_VERSION_ppc = 3.3;
+				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = YES;
 				INSTALL_PATH = "@executable_path/../Frameworks/";
 				LIBRARY_STYLE = DYNAMIC;
 				MACH_O_TYPE = mh_dylib;
