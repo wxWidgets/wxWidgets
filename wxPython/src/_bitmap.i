@@ -17,7 +17,8 @@
 %}
 
 
-// Turn off the aquisition of the Global Interpreter Lock for this file
+// Turn off the aquisition of the Global Interpreter Lock for the classes and
+// functions in this file
 %threadWrapperOff
 
 //---------------------------------------------------------------------------
@@ -760,4 +761,6 @@ passed then BLACK is used.
 
 //---------------------------------------------------------------------------
 //---------------------------------------------------------------------------
+
+// Turn GIL acquisition back on.
 %threadWrapperOn
