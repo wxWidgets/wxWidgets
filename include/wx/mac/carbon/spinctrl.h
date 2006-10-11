@@ -26,6 +26,8 @@
 
 class WXDLLEXPORT wxSpinButton;
 class WXDLLEXPORT wxTextCtrl;
+class WXDLLEXPORT wxSpinCtrlText;
+class WXDLLEXPORT wxSpinCtrlButton;
 
 // ----------------------------------------------------------------------------
 // wxSpinCtrl is a combination of wxTextCtrl and wxSpinButton
@@ -106,6 +108,10 @@ private:
     wxTextCtrl *m_text;
     wxSpinButton *m_btn;
     
+    friend class wxSpinCtrlText;
+    friend class wxSpinCtrlButton;
+    
+    int            m_oldValue;
 private:
     DECLARE_EVENT_TABLE()
     DECLARE_DYNAMIC_CLASS(wxSpinCtrl)

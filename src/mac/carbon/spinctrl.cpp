@@ -57,6 +57,43 @@ public:
     }
 
 protected:
+     void OnKillFocus(wxFocusEvent &event)
+     {
+         long l;
+         if ( !GetValue().ToLong(&l) )
+         {
+             // not a number at all
+             return;
+         }
+         
+         // is within range
+         if (l < m_spin->GetMin())
+             l = m_spin->GetMin();
+         if (l > m_spin->GetMax())
+             l = m_spin->GetMax();
+         
+         // Update text control
+         wxString str;
+         str.Printf( wxT("%d"), (int)l );
+         if (str != GetValue())
+             SetValue( str );
+         
+         if (l != m_spin->m_oldValue)
+         {
+             // set value in spin button
+             // does that trigger an event?
+             m_spin->m_btn->SetValue( l );
+             
+             // if not
+             wxCommandEvent event(wxEVT_COMMAND_SPINCTRL_UPDATED, m_spin->GetId());
+             event.SetEventObject(m_spin);
+             event.SetInt(l);
+             m_spin->GetEventHandler()->ProcessEvent(event);
+             
+             m_spin->m_oldValue = l;
+         } 
+    }
+   
     void OnTextChange(wxCommandEvent& event)
     {
         int val;
@@ -93,6 +130,7 @@ private:
 
 BEGIN_EVENT_TABLE(wxSpinCtrlText, wxTextCtrl)
     EVT_TEXT(wxID_ANY, wxSpinCtrlText::OnTextChange)
+    EVT_KILL_FOCUS( wxSpinCtrlText::OnKillFocus)
 END_EVENT_TABLE()
 
 // ----------------------------------------------------------------------------
@@ -121,13 +159,16 @@ public:
 protected:
     void OnSpinButton(wxSpinEvent& eventSpin)
     {
-      m_spin->SetTextValue(eventSpin.GetPosition());
+        int pos = eventSpin.GetPosition();
+        m_spin->SetTextValue(pos);
 
-      wxCommandEvent event(wxEVT_COMMAND_SPINCTRL_UPDATED, m_spin->GetId());
-      event.SetEventObject(m_spin);
-      event.SetInt(eventSpin.GetPosition());
+        wxCommandEvent event(wxEVT_COMMAND_SPINCTRL_UPDATED, m_spin->GetId());
+        event.SetEventObject(m_spin);
+        event.SetInt(pos);
 
-      m_spin->GetEventHandler()->ProcessEvent(event);
+        m_spin->GetEventHandler()->ProcessEvent(event);
+
+        m_spin->m_oldValue = pos;
     }
 
 private:
@@ -199,6 +240,8 @@ bool wxSpinCtrl::Create(wxWindow *parent,
 
     m_btn->SetRange(min, max);
     m_btn->SetValue(initial);
+    // make it different
+    m_oldValue = GetMin()-1;
 
     if ( size.x == wxDefaultCoord ){
         csize.x = m_text->GetSize().x + MARGIN + m_btn->GetSize().x ;
@@ -348,6 +391,7 @@ void wxSpinCtrl::SetValue(int val)
     SetTextValue(val);
 
     m_btn->SetValue(val);
+    m_oldValue = val;
 }
 
 void wxSpinCtrl::SetValue(const wxString& text)
