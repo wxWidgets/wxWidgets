@@ -36,7 +36,7 @@ INCOMPATIBLE CHANGES SINCE 2.6.x
   As a consequence, the class interface changed largely.
   Code updates, if any are required at all, are easy to accomplish though.
 - wxDialog::CreateButtonSizer() may return NULL now, please see the manual
-
+- wxBufferedDC doesn't inherit from wxMemoryDC any more (but directly from wxDC)
 
 
 Deprecated methods since 2.6.x and their replacements
