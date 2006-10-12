@@ -191,6 +191,8 @@ The following code is taken from the sample, and adds text and styles to a rich 
 
 \subsection{Programming with wxRichTextCtrl}
 
+\subsubsection{Starting to use wxRichTextCtrl}
+
 You need to include {\tt <wx/richtext/richtextctrl.h>} in your source, and link
 with the appropriate wxWidgets library with {\tt richtext} suffix. Put the rich text
 library first in your link line to avoid unresolved symbols.
@@ -198,19 +200,123 @@ library first in your link line to avoid unresolved symbols.
 Then you can create a wxRichTextCtrl, with the wxWANT\_CHARS style if you want tabs to
 be processed by the control rather than being used for navigation between controls.
 
-It's helpful to have a model of how styling works. Any piece of text can have its
-style changed, but there also two global notions of style. The control's {\it basic} style
-is the fundamental style for the whole control, to which other character and paragraph styles are
-applied. For example, you can change the control's overall font by either calling SetBasicStyle with
-the appropriate font style, or by calling SetFont.
+\subsubsection{wxRichTextCtrl and styles}
 
-The {\it default} style, on the other hand, is applied to subsequently inserted
-content. You might click on a Bold formatting tool, which sets bold as one of the default
-attributes, and typing will appear in bold. Then when you select Italic, both
-bold and italic attributes are applied as you type. The default attribute
-is set with \helpref{SetDefaultStyle}{wxrichtextctrlsetdefaultstyle}.
+Styling attributes are represented by one of three classes: \helpref{wxTextAttr}{wxtextattr}, \helpref{wxTextAttrEx}{wxtextattrex} and \helpref{wxRichTextAttr}{wxrichtextattr}.
+wxTextAttr is shared across all controls that are derived from wxTextCtrl and
+can store basic character and paragraph attributes. wxTextAttrEx derives
+from wxTextAttr and adds some further attributes that are only supported
+by wxRichTextCtrl. Finally, wxRichTextAttr is a more efficient version
+of wxTextAttrEx that doesn't use a wxFont object and can be used to
+query styles more quickly. wxTextAttrEx and wxRichTextAttr are largely
+interchangeable and have suitable conversion operators between them.
 
-(To be finished.)
+When setting a style, the flags of the attribute object determine which
+attributes are applied. When querying a style, the passed flags are ignored
+except (optionally) to determine whether attributes should be retrieved from
+character content or from the paragraph object.
+
+wxRichTextCtrl takes a layered approach to styles, so that different parts of
+the content may be responsible for contributing different attributes to the final
+style you see on the screen.
+
+There are four main notions of style within a control:
+
+\begin{enumerate}\itemsep=0pt
+\item {\bf Basic style:} the fundamental style of a control, onto which any other
+styles are layered. It provides default attributes, and changing the basic style
+may immediately change the look of the content depending on what other styles
+the content uses. Calling wxRichTextCtrl::SetFont changes the font for the basic style.
+The basic style is set with \helpref{wxRichTextCtrl::SetBasicStyle}{wxrichtextctrlsetbasicstyle}.
+\item {\bf Paragraph style:} each paragraph has attributes that are set independently
+from other paragraphs and independently from the content within the paragraph.
+Normally, these attributes are paragraph-related, such as alignment and indentation,
+but it is possible to set character attributes too.
+The paragraph style can be set independently of its content by passing wxRICHTEXT\_SETSTYLE\_PARAGRAPHS\_ONLY
+to \helpref{wxRichTextCtrl::SetStyleEx}{wxrichtextctrlsetstyleex}.
+\item {\bf Character style:} characters within each paragraph can have attributes.
+A single character, or a run of characters, can have a particular set of attributes.
+The character style can be with \helpref{wxRichTextCtrl::SetStyle}{wxrichtextctrlsetstyle} or 
+\helpref{wxRichTextCtrl::SetStyleEx}{wxrichtextctrlsetstyleex}.
+\item {\bf Default style:} this is the `current' style that determines the
+style of content that is subsequently typed, pasted or programmatically inserted.
+The default style is set with \helpref{wxRichTextCtrl::SetDefaultStyle}{wxrichtextctrlsetdefaultstyle}.
+\end{enumerate}
+
+What you see on the screen is the dynamically {\it combined} style, found by merging
+the first three of the above style types (the fourth is only a guide for future content
+insertion and therefore does not affect the currently displayed content).
+
+To make all this more concrete, here are examples of where you might set these different
+styles:
+
+\begin{enumerate}\itemsep=0pt
+\item You might set the {\bf basic style} to have a Times Roman font in 12 point,
+left-aligned, with two millimetres of spacing after each paragraph.
+\item You might set the {\bf paragraph style} (for one particular paragraph) to
+be centred.
+\item You might set the {\bf character style} of one particular word to bold.
+\item You might set the {\bf default style} to be underlined, for subsequent
+inserted text.
+\end{enumerate}
+
+Naturally you can do any of these things either using your own UI, or programmatically.
+
+The basic wxTextCtrl doesn't make the same distinctions as wxRichTextCtrl regarding
+attribute storage. So we need finer control when setting and retrieving
+attributes. \helpref{wxRichTextCtrl::SetStyleEx}{wxrichtextctrlsetstyleex} takes a {\it flags} parameter:
+
+\begin{itemize}\itemsep=0pt
+\item wxRICHTEXT\_SETSTYLE\_OPTIMIZE specifies that the style should be changed only if
+the combined attributes are different from the attributes for the current object. This is important when
+applying styling that has been edited by the user, because he has just edited the {\it combined} (visible)
+style, and wxRichTextCtrl wants to leave unchanged attributes associated with their original objects
+instead of applying them to both paragraph and content objects.
+\item wxRICHTEXT\_SETSTYLE\_PARAGRAPHS\_ONLY specifies that only paragraph objects within the given range
+should take on the attributes.
+\item wxRICHTEXT\_SETSTYLE\_CHARACTERS\_ONLY specifies that only content objects (text or images) within the given range
+should take on the attributes.
+\item wxRICHTEXT\_SETSTYLE\_WITH\_UNDO specifies that the operation should be undoable.
+\end{itemize}
+
+It's great to be able to change arbitrary attributes in a wxRichTextCtrl, but
+it can be unwieldy for the user or programmer to set attributes separately. Word processors have collections
+of styles that you can tailor or use as-is, and this means that you can set a heading with one click
+instead of marking text in bold, specifying a large font size, and applying a certain
+paragraph spacing and alignment for every such heading. Similarly,
+wxWidgets provides a class called \helpref{wxRichTextStyleSheet}{wxrichtextstylesheet} which manages style definitions
+(\helpref{wxRichTextParagraphStyleDefinition}{wxrichtextparagraphstyledefinition} and \helpref{wxRichTextCharacterStyleDefinition}{wxrichtextcharacterstyledefinition}).
+Once you have added definitions to a style sheet and associated it with a wxRichTextCtrl,
+you can apply a named definition to a range of text. The classes \helpref{wxRichTextStyleComboCtrl}{wxrichtextstylecomboctrl}\rtfsp
+and \helpref{wxRichTextStyleListBox}{wxrichtextstylelistbox} can be used to present the user with a list
+of styles in a sheet, and apply them to the selected text.
+
+You can reapply a style sheet to the contents of the control, by calling \helpref{wxRichTextCtrl::ApplyStyleSheet}{wxrichtextctrlapplystylesheet}.
+This is useful if the style definitions have changed, and you want the content to reflect this.
+It relies on the fact that when you apply a named style, the style definition name is recorded in the
+content. So ApplyStyleSheet works by finding the paragraph attributes with style names and re-applying the definition's
+attributes to the paragraph. Currently, this works with paragraph style definitions only.
+
+\subsection{wxRichTextCtrl dialogs}\label{wxrichtextctrldialogs}
+
+wxRichTextCtrl comes with standard dialogs to make it easier to implement
+text editing functionality.
+
+\helpref{wxRichTextFormattingDialog}{wxrichtextformattingdialog} can be used
+for character or paragraph formatting, or a combination of both. It's a wxPropertySheetDialog
+with the following available tabs: Font, Indents \& Spacing, Tabs, Bullets, and Style.
+You can select which pages will be shown by supplying flags to the dialog constructor.
+In a character formatting dialog, typically only the Font page will be shown.
+In a paragraph formatting dialog, you'll show the Indents \& Spacing, Tabs and Bullets
+pages. The Style tab is useful when editing a style definition.
+
+You can customize this dialog by providing your own wxRichTextFormattingDialogFactory
+object, which tells the formatting dialog how many pages are supported, what their identifiers
+are, and how to creates the pages.
+
+\helpref{wxSymbolPickerDialog}{wxsymbolpickerdialog} lets the user insert a symbol from
+a specified font. It has no wxRichTextCtrl dependencies besides being included in
+the rich text library.
 
 \subsection{How wxRichTextCtrl is implemented}
 
@@ -225,8 +331,8 @@ paragraph style information is ignored by children of a paragraph (only
 character style is relevant to these objects).
 
 The top of the hierarchy is the buffer, a kind of wxRichTextParagraphLayoutBox.
-containing further wxRichTextParagraph objects, each of which can include text and
-images.
+containing further wxRichTextParagraph objects, each of which can include text,
+images and potentially other types of object.
 
 Each object maintains a range (start and end position) measured
 from the start of the main parent box.
@@ -251,24 +357,30 @@ to several objects with the same style where just one would do. So
 a Defragment function is called when updating the control's display, to ensure that
 the minimum number of objects is used.
 
-(To be finished.)
-
 \subsection{wxRichTextCtrl roadmap}
 
 \wxheading{Bugs}
 
 This is an incomplete list of bugs.
 
-\begin{itemize}
+\begin{itemize}\itemsep=0pt
 \item Moving the caret up at the beginning of a line sometimes incorrectly positions the
 caret.
+\item As the selection is expanded, the text jumps slightly due to kerning differences between
+drawing a single text string versus drawing several fragments separately. This could
+be improved by using wxDC::GetPartialTextExtents to calculate exactly where the separate fragments
+should be drawn.
+Alternatively, it might be possible to use the difference between the width of text from
+a to b+1, versus the width of the text from a to b added to the width of b to b+1.
+Note that this problem also applies to separation of text fragments due to difference in their attributes.
+\item Selection doesn't work properly for text that contains tabs.
 \end{itemize}
 
 \wxheading{Features}
 
 This is a list of some of the features that have yet to be implemented. Help with them will be appreciated.
 
-\begin{itemize}
+\begin{itemize}\itemsep=0pt
 \item Printing
 \item RTF input and output
 \item Floating images, with content wrapping around them
