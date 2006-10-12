@@ -115,16 +115,18 @@ dospinport(){
     port=$1
     
     case "$port" in
-       all)
-          portname=Widgets;;
-       base)
-          portname=Base;;
-       motif)
-          portname=Motif;;
-       mac)
-          portname=Mac;;
-       *)
-          portname=echo $port | tr [a-z] [A-Z];;
+        all)
+            portname="Widgets";;
+        base)
+            portname="Base";;
+        motif)
+            portname="Motif";;
+        mac)
+            portname="Mac";;
+        *)
+            # for all the others (DFB, GTK, MGL, MSW, X11) just use the
+            # upper-case version as they are abbreviations
+            portname=`echo $port | tr '[a-z]' '[A-Z]'`;;
     esac
     
     echo "Creating wx$portname distribution..."
