@@ -78,7 +78,8 @@ void wxMemoryDC::SelectObject( const wxBitmap& bitmap )
     if (m_selected.Ok())
     {
 #if wxMAC_USE_CORE_GRAPHICS
-        m_selected.UseAlpha() ;
+        if ( m_selected.GetDepth() != 1 )
+            m_selected.UseAlpha() ;
         void * data = m_selected.BeginRawAccess() ;
 
         int bitsPerComp = 8 ;
