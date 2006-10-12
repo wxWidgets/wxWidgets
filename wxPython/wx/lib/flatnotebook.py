@@ -1009,7 +1009,7 @@ class TabNavigatorWindow(wx.Dialog):
         self._listBox = wx.ListBox(self, wx.ID_ANY, wx.DefaultPosition, wx.Size(200, 150), [], wx.LB_SINGLE | wx.NO_BORDER)
         
         mem_dc = wx.MemoryDC()
-        mem_dc.SelectObject(wx.EmptyBitmap(10,10))
+        mem_dc.SelectObject(wx.EmptyBitmap(1,1))
         font = wx.SystemSettings_GetFont(wx.SYS_DEFAULT_GUI_FONT)
         font.SetWeight(wx.BOLD)
         mem_dc.SetFont(font)
@@ -1499,7 +1499,7 @@ class FNBRenderer:
 
         pc = pageContainer
         dc = wx.MemoryDC()
-        dc.SelectObject(wx.EmptyBitmap(10,10))
+        dc.SelectObject(wx.EmptyBitmap(1,1))
 
         boldFont = wx.SystemSettings_GetFont(wx.SYS_DEFAULT_GUI_FONT)
         boldFont.SetWeight(wx.FONTWEIGHT_BOLD)
@@ -1551,7 +1551,7 @@ class FNBRenderer:
 
         pc = pageContainer
         dc = wx.MemoryDC()
-        dc.SelectObject(wx.EmptyBitmap(10,10))
+        dc.SelectObject(wx.EmptyBitmap(1,1))
 
         # For GTK it seems that we must do this steps in order
         # for the tabs will get the proper height on initialization
@@ -3461,7 +3461,7 @@ class PageContainer(wx.Panel):
 
         # Set default page height, this is done according to the system font
         memDc = wx.MemoryDC()
-        memDc.SelectObject(wx.EmptyBitmap(10,10))
+        memDc.SelectObject(wx.EmptyBitmap(1,1))
         normalFont = wx.SystemSettings_GetFont(wx.SYS_DEFAULT_GUI_FONT)
         boldFont = normalFont
         boldFont.SetWeight(wx.BOLD)
