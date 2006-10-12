@@ -11,7 +11,7 @@
 # Python Code By:
 #
 # Andrea Gavana, @ 02 Oct 2006
-# Latest Revision: 10 Oct 2006, 21.00 GMT
+# Latest Revision: 12 Oct 2006, 20.00 GMT
 #
 #
 # For All Kind Of Problems, Requests Of Enhancements And Bug Reports, Please
@@ -58,7 +58,7 @@ License And Version:
 
 FlatNotebook Is Freeware And Distributed Under The wxPython License. 
 
-Latest Revision: Andrea Gavana @ 10 Oct 2006, 21.00 GMT
+Latest Revision: Andrea Gavana @ 12 Oct 2006, 20.00 GMT
 
 Version 2.0.
 
@@ -79,7 +79,7 @@ import random
 import math
 import weakref
 import cPickle
-
+    
 # Check for the new method in 2.7 (not present in 2.6.3.3)
 if wx.VERSION_STRING < "2.7":
     wx.Rect.Contains = lambda self, point: wx.Rect.Inside(self, point)
@@ -713,6 +713,31 @@ def PaintStraightGradientBox(dc, rect, startColor, endColor, vertical=True):
     dc.SetBrush(savedBrush)
 
 
+# ---------------------------------------------------------------------------- #
+# Class FNBDropSource
+# Gives Some Custom UI Feedback during the DnD Operations
+# ---------------------------------------------------------------------------- #
+
+class FNBDropSource(wx.DropSource):
+    """
+    Give some custom UI feedback during the drag and drop operation in this
+    function. It is called on each mouse move, so your implementation must
+    not be too slow.
+    """
+    
+    def __init__(self, win):
+        """ Default class constructor. Used internally. """
+        
+        wx.DropSource.__init__(self, win)
+        self._win = win
+
+
+    def GiveFeedback(self, effect):
+        """ Provides user with a nice feedback when tab is being dragged. """
+
+        self._win.DrawDragHint()
+        return False
+
 
 # ---------------------------------------------------------------------------- #
 # Class FNBDragInfo
@@ -1129,7 +1154,7 @@ class TabNavigatorWindow(wx.Dialog):
         bk = self.GetParent()
         self._selectedItem = self._listBox.GetSelection()
         iter = self._indexMap[self._selectedItem]
-        bk.SetSelection(iter)
+        bk._pages.FireEvent(iter)
         self.EndModal(wx.ID_OK)
         
 
@@ -1194,6 +1219,7 @@ class FNBRenderer:
         self._xBgBmp = wx.EmptyBitmap(16, 14)
         self._leftBgBmp = wx.EmptyBitmap(16, 14)
         self._rightBgBmp = wx.EmptyBitmap(16, 14)
+        self._tabHeight = None
 
 
     def GetLeftButtonPos(self, pageContainer):
@@ -1549,6 +1575,9 @@ class FNBRenderer:
     def CalcTabHeight(self, pageContainer):
         """ Calculates the height of the input tab. """
 
+        if self._tabHeight:
+            return self._tabHeight
+
         pc = pageContainer
         dc = wx.MemoryDC()
         dc.SelectObject(wx.EmptyBitmap(1,1))
@@ -1558,8 +1587,10 @@ class FNBRenderer:
         # on MSW, preforming these steps yields wierd results
         normalFont = wx.SystemSettings_GetFont(wx.SYS_DEFAULT_GUI_FONT)
         boldFont = normalFont
-        boldFont.SetWeight(wx.FONTWEIGHT_BOLD)
-        dc.SetFont(boldFont)
+
+        if "__WXGTK__" in wx.PlatformInfo:
+            boldFont.SetWeight(wx.FONTWEIGHT_BOLD)
+            dc.SetFont(boldFont)
 
         height = dc.GetCharHeight()
         
@@ -1568,11 +1599,8 @@ class FNBRenderer:
             # On GTK the tabs are should be larger
             tabHeight += 6
 
-        if pc.HasFlag(FNB_VC71):
-            tabHeight = (pc.HasFlag(FNB_BOTTOM) and [tabHeight - 4] or [tabHeight])[0]
-        elif pc.HasFlag(FNB_FANCY_TABS):
-            tabHeight = (pc.HasFlag(FNB_BOTTOM) and [tabHeight - 2] or [tabHeight])[0]
-
+        self._tabHeight = tabHeight
+        
         return tabHeight
 
 
@@ -1679,13 +1707,13 @@ class FNBRenderer:
         
         # Draw labels
         normalFont = wx.SystemSettings_GetFont(wx.SYS_DEFAULT_GUI_FONT)
-        boldFont = normalFont
+        boldFont = wx.SystemSettings_GetFont(wx.SYS_DEFAULT_GUI_FONT)
         boldFont.SetWeight(wx.FONTWEIGHT_BOLD)
         dc.SetFont(boldFont)
 
         posx = pc._pParent.GetPadding()
 
-        # Update all the tabs from 0 to 'pc.self._nFrom' to be non visible
+        # Update all the tabs from 0 to 'pc._nFrom' to be non visible
         for i in xrange(pc._nFrom):
         
             pc._pagesInfoVec[i].SetPosition(wx.Point(-1, -1))
@@ -1749,6 +1777,15 @@ class FNBRenderer:
         self.DrawRightArrow(pc, dc)
         self.DrawX(pc, dc)
         self.DrawDropDownArrow(pc, dc)
+
+
+    def DrawDragHint(self, pc, tabIdx):
+        """
+        Draws tab drag hint, the default implementation is to do nothing.
+        You can override this function to provide a nice feedback to user.
+        """
+        
+        pass
 
 
 # ---------------------------------------------------------------------------- #
@@ -1947,14 +1984,15 @@ class FNBRendererVC71(FNBRenderer):
         if tabIdx == pc.GetSelection():
         
             posy = (pc.HasFlag(FNB_BOTTOM) and [0] or [VERTICAL_BORDER_PADDING])[0]
-            dc.DrawRectangle(posx, posy, tabWidth, tabHeight - 1)
+            tabH = (pc.HasFlag(FNB_BOTTOM) and [tabHeight - 5] or [tabHeight - 3])[0]
+            dc.DrawRectangle(posx, posy, tabWidth, tabH) 
 
             # Draw a black line on the left side of the
             # rectangle
             dc.SetPen(wx.BLACK_PEN)
 
             blackLineY1 = VERTICAL_BORDER_PADDING
-            blackLineY2 = (pc.HasFlag(FNB_BOTTOM) and [pc.GetSize().y - 5] or [pc.GetSize().y - 3])[0]
+            blackLineY2 = tabH
             dc.DrawLine(posx + tabWidth, blackLineY1, posx + tabWidth, blackLineY2)
 
             # To give the tab more 3D look we do the following
@@ -1993,7 +2031,7 @@ class FNBRendererVC71(FNBRenderer):
         # The width of the images are 16 pixels
         padding = pc.GetParent().GetPadding()
         hasImage = pc._pagesInfoVec[tabIdx].GetImageIndex() != -1
-        imageYCoord = (pc.HasFlag(FNB_BOTTOM) and [6] or [8])[0]
+        imageYCoord = (pc.HasFlag(FNB_BOTTOM) and [5] or [8])[0]
 
         if hasImage:
             textOffset = 2*pc._pParent._nPadding + 16
@@ -2058,7 +2096,7 @@ class FNBRendererFancy(FNBRenderer):
         if tabIdx == pc.GetSelection():
         
             posy = (pc.HasFlag(FNB_BOTTOM) and [2] or [VERTICAL_BORDER_PADDING])[0]
-            th = (pc.HasFlag(FNB_BOTTOM) and [tabHeight - 2] or [tabHeight - 5])[0]
+            th = tabHeight - 5
 
             rect = wx.Rect(posx, posy, tabWidth, th)
 
@@ -2166,7 +2204,7 @@ class FNBRendererVC8(FNBRenderer):
 
         # Set the font for measuring the tab height
         normalFont = wx.SystemSettings_GetFont(wx.SYS_DEFAULT_GUI_FONT)
-        boldFont = normalFont
+        boldFont = wx.SystemSettings_GetFont(wx.SYS_DEFAULT_GUI_FONT)
         boldFont.SetWeight(wx.FONTWEIGHT_BOLD)
 
         # Calculate the number of rows required for drawing the tabs
@@ -2752,11 +2790,17 @@ class FlatNotebook(wx.Panel):
 
         # Set default page height
         dc = wx.ClientDC(self)
-        font = self.GetFont()
-        font.SetWeight(wx.FONTWEIGHT_BOLD)
-        dc.SetFont(font)
-        height = dc.GetCharHeight()
         
+        if "__WXGTK__" in wx.PlatformInfo:
+            # For GTK it seems that we must do this steps in order
+            # for the tabs will get the proper height on initialization
+            # on MSW, preforming these steps yields wierd results
+            boldFont = wx.SystemSettings_GetFont(wx.SYS_DEFAULT_GUI_FONT)
+            boldFont.SetWeight(wx.FONTWEIGHT_BOLD)
+            dc.SetFont(boldFont)
+        
+        height = dc.GetCharHeight()
+
         tabHeight = height + FNB_HEIGHT_SPACER         # We use 8 pixels as padding
         
         if "__WXGTK__" in wx.PlatformInfo:
@@ -2826,7 +2870,7 @@ class FlatNotebook(wx.Panel):
             event.SetOldSelection(oldSelection)
             event.SetEventObject(self)
             
-            if not self.GetEventHandler().ProcessEvent(event) or event.IsAllowed():
+            if not self.GetEventHandler().ProcessEvent(event) or event.IsAllowed() or len(self._windows) == 0:
                 bSelected = True            
         
         curSel = self._pages.GetSelection()
@@ -2866,21 +2910,21 @@ class FlatNotebook(wx.Panel):
 
             # Hide the page
             page.Hide()
-        
+
+        self.Thaw()        
         self._mainSizer.Layout()
-        self.Thaw()
         self.Refresh()
 
         return True        
 
 
-    def SetImageList(self, imglist):
+    def SetImageList(self, imageList):
         """
         Sets the image list for the page control. It does not take ownership
         of the image list, you must delete it yourself.
         """
 
-        self._pages.SetImageList(imglist)
+        self._pages.SetImageList(imageList)
 
 
     def GetImageList(self):
@@ -2941,7 +2985,7 @@ class FlatNotebook(wx.Panel):
             event.SetOldSelection(oldSelection)
             event.SetEventObject(self)
             
-            if not self.GetEventHandler().ProcessEvent(event) or event.IsAllowed():
+            if not self.GetEventHandler().ProcessEvent(event) or event.IsAllowed() or len(self._windows) == 0:
                 bSelected = True            
         
         self._pages.InsertPage(indx, text, bSelected, imageId)
@@ -2971,9 +3015,9 @@ class FlatNotebook(wx.Panel):
         
             # Hide the page
             page.Hide()
-        
+
         self.Thaw()
-        self._mainSizer.Layout()
+        self._mainSizer.Layout()        
         self.Refresh()
 
         return True
@@ -3124,17 +3168,18 @@ class FlatNotebook(wx.Panel):
         return self._pages.GetSelection()
 
 
-    def AdvanceSelection(self, bForward=True):
+    def AdvanceSelection(self, forward=True):
         """
         Cycles through the tabs.
         The call to this function generates the page changing events.
         """
 
-        self._pages.AdvanceSelection(bForward)
+        self._pages.AdvanceSelection(forward)
 
 
     def GetPageCount(self):
         """ Returns the number of pages in the L{FlatNotebook} control. """
+
         return self._pages.GetPageCount()
 
 
@@ -3142,6 +3187,8 @@ class FlatNotebook(wx.Panel):
         """ Handles the wx.EVT_NAVIGATION_KEY event for L{FlatNotebook}. """
 
         if event.IsWindowChange():
+            if len(self._windows) == 0:
+                return
             # change pages
             if self.HasFlag(FNB_SMART_TABS):
                 if not self._popupWin:
@@ -3238,6 +3285,8 @@ class FlatNotebook(wx.Panel):
         """ Sets the L{FlatNotebook} window style flags. """
             
         wx.Panel.SetWindowStyleFlag(self, style)
+        renderer = self._pages._mgr.GetRenderer(self.GetWindowStyleFlag())
+        renderer._tabHeight = None
 
         if self._pages:
         
@@ -3287,10 +3336,10 @@ class FlatNotebook(wx.Panel):
         self._pages._pRightClickMenu = menu
 
 
-    def GetPageText(self, page):
+    def GetPageText(self, nPage):
         """ Returns the tab caption. """
 
-        return self._pages.GetPageText(page)
+        return self._pages.GetPageText(nPage)
 
 
     def SetGradientColours(self, fr, to, border):
@@ -3349,22 +3398,22 @@ class FlatNotebook(wx.Panel):
         return self._pages._activeTextColor
 
 
-    def SetPageImage(self, page, imgindex):
+    def SetPageImage(self, page, image):
         """
         Sets the image index for the given page. Image is an index into the
         image list which was set with SetImageList.
         """
 
-        self._pages.SetPageImage(page, imgindex)
+        self._pages.SetPageImage(page, image)
 
 
-    def GetPageImage(self, page):
+    def GetPageImage(self, nPage):
         """
         Returns the image index for the given page. Image is an index into the
         image list which was set with SetImageList.
         """
 
-        return self._pages.GetPageImage(page)
+        return self._pages.GetPageImage(nPage)
 
 
     def GetEnabled(self, page):
@@ -3462,10 +3511,11 @@ class PageContainer(wx.Panel):
         # Set default page height, this is done according to the system font
         memDc = wx.MemoryDC()
         memDc.SelectObject(wx.EmptyBitmap(1,1))
-        normalFont = wx.SystemSettings_GetFont(wx.SYS_DEFAULT_GUI_FONT)
-        boldFont = normalFont
-        boldFont.SetWeight(wx.BOLD)
-        memDc.SetFont(boldFont)
+    
+        if "__WXGTK__" in wx.PlatformInfo:
+            boldFont = wx.SystemSettings_GetFont(wx.SYS_DEFAULT_GUI_FONT)
+            boldFont.SetWeight(wx.BOLD)
+            memDc.SetFont(boldFont)
 
         height = memDc.GetCharHeight()
         tabHeight = height + FNB_HEIGHT_SPACER # We use 10 pixels as padding
@@ -3501,18 +3551,20 @@ class PageContainer(wx.Panel):
 
         # Currently having problems with buffered DCs because of
         # recent changes.  Just do the buffering ourselves instead.
-        #dc = wx.BufferedPaintDC(self)
-        size = self.GetSize()
-        bmp = wx.EmptyBitmap(*size)
-        dc = wx.MemoryDC()
-        dc.SelectObject(bmp)
+        dc = wx.BufferedPaintDC(self)
+        #dc = wx.AutoBufferedPaintDC(self)
+        #dc = wx.AutoBufferedPaintDCFactory(self)
+##         size = self.GetSize()
+##         bmp = wx.EmptyBitmap(*size)
+##         dc = wx.MemoryDC()
+##         dc.SelectObject(bmp)
         
         renderer = self._mgr.GetRenderer(self.GetParent().GetWindowStyleFlag())
         renderer.DrawTabs(self, dc)
 
-        pdc = wx.PaintDC(self)
-        pdc.Blit(0,0, size.width, size.height, dc, 0,0)
-        
+##         pdc = wx.PaintDC(self)
+##         pdc.Blit(0,0, size.width, size.height, dc, 0,0)
+
 
     def AddPage(self, caption, selected=True, imgindex=-1):
         """
@@ -3646,25 +3698,10 @@ class PageContainer(wx.Panel):
         elif self._nLeftClickZone == FNB_TAB:
             
             if self._iActivePage != tabIdx:
-            
+                
                 # In case the tab is disabled, we dont allow to choose it
                 if self._pagesInfoVec[tabIdx].GetEnabled():
-
-                    oldSelection = self._iActivePage
-
-                    event = FlatNotebookEvent(wxEVT_FLATNOTEBOOK_PAGE_CHANGING, self.GetParent().GetId())
-                    event.SetSelection(tabIdx)
-                    event.SetOldSelection(oldSelection)
-                    event.SetEventObject(self.GetParent())
-                    
-                    if not self.GetParent().GetEventHandler().ProcessEvent(event) or event.IsAllowed():
-                    
-                        self.SetSelection(tabIdx)
-
-                        # Fire a wxEVT_FLATNOTEBOOK_PAGE_CHANGED event
-                        event.SetEventType(wxEVT_FLATNOTEBOOK_PAGE_CHANGED)
-                        event.SetOldSelection(oldSelection)
-                        self.GetParent().GetEventHandler().ProcessEvent(event)        
+                    self.FireEvent(tabIdx)
 
 
     def OnLeftUp(self, event):
@@ -4033,14 +4070,14 @@ class PageContainer(wx.Panel):
                     wx.SetCursor(wx.StockCursor(wx.CURSOR_NO_ENTRY))
                 
                 # Support for drag and drop
-                if event.LeftIsDown() and not (style & FNB_NODRAG):
+                if event.Dragging() and not (style & FNB_NODRAG):
 
                     self._isdragging = True                
                     draginfo = FNBDragInfo(self, tabIdx)
                     drginfo = cPickle.dumps(draginfo)
                     dataobject = wx.CustomDataObject(wx.CustomDataFormat("FlatNotebook"))
                     dataobject.SetData(drginfo)
-                    dragSource = wx.DropSource(self)
+                    dragSource = FNBDropSource(self)
                     dragSource.SetData(dataobject)
                     dragSource.DoDragDrop(wx.Drag_DefaultMove)
                     
@@ -4178,7 +4215,6 @@ class PageContainer(wx.Panel):
 
         nMax = self.GetPageCount() - 1
         
-        oldSelection = self._iActivePage
         if bForward:
             newSelection = (nSel == nMax and [0] or [nSel + 1])[0]
         else:
@@ -4186,20 +4222,8 @@ class PageContainer(wx.Panel):
 
         if not self._pagesInfoVec[newSelection].GetEnabled():
             return
-        
-        event = FlatNotebookEvent(wxEVT_FLATNOTEBOOK_PAGE_CHANGING, self.GetParent().GetId())
-        event.SetSelection(newSelection)
-        event.SetOldSelection(oldSelection)
-        event.SetEventObject(self.GetParent())
-        
-        if not self.GetParent().GetEventHandler().ProcessEvent(event) or event.IsAllowed():
-        
-            self.SetSelection(newSelection)
 
-            # Fire a wxEVT_FLATNOTEBOOK_PAGE_CHANGED event
-            event.SetEventType(wxEVT_FLATNOTEBOOK_PAGE_CHANGED)
-            event.SetOldSelection(oldSelection)
-            self.GetParent().GetEventHandler().ProcessEvent(event)       
+        self.FireEvent(newSelection)
 
 
     def OnMouseLeave(self, event):
@@ -4304,7 +4328,7 @@ class PageContainer(wx.Panel):
             
                 if where == FNB_TAB:
                     self.MoveTabPage(nTabPage, nIndex)
-        
+                           
         elif self.GetParent().GetWindowStyleFlag() & FNB_ALLOW_FOREIGN_DND:
         
             if wx.Platform in ["__WXMSW__", "__WXGTK__"]:
@@ -4321,7 +4345,7 @@ class PageContainer(wx.Panel):
 
                         if imageindex >= 0:
 
-                            bmp = oldNotebook.GetImageList().GetBitmap(imageindex)
+                            bmp = oldNotebook.GetImageList().GetIcon(imageindex)
                             newImageList = newNotebook.GetImageList()
     
                             if not newImageList:
@@ -4331,7 +4355,7 @@ class PageContainer(wx.Panel):
                             else:
                                 imageindex = newImageList.GetImageCount()
 
-                            newImageList.Add(bmp)
+                            newImageList.AddIcon(bmp)
                             newNotebook.SetImageList(newImageList)
                                 
                         newNotebook.InsertPage(nIndex, window, caption, True, imageindex)
@@ -4530,6 +4554,7 @@ class PageContainer(wx.Panel):
             #   item.SetBitmaps( (*m_ImageList)[pi.GetImageIndex()] );
 
             popupMenu.AppendItem(item)
+            item.Enable(pi.GetEnabled())
             
         self.PopupMenu(popupMenu)
 
@@ -4538,8 +4563,36 @@ class PageContainer(wx.Panel):
         """ Handles the wx.EVT_MENU event for L{PageContainer}. """
 
         selection = event.GetId()
-        self._pParent.SetSelection(selection)
+        self.FireEvent(selection)
 
+
+    def FireEvent(self, selection):
+        """
+        Fires the wxEVT_FLATNOTEBOOK_PAGE_CHANGING and wxEVT_FLATNOTEBOOK_PAGE_CHANGED events
+        called from other methods (from menu selection or Smart Tabbing).
+        Utility function.
+        """
+
+        if selection == self._iActivePage:
+            # No events for the same selection
+            return
+        
+        oldSelection = self._iActivePage
+
+        event = FlatNotebookEvent(wxEVT_FLATNOTEBOOK_PAGE_CHANGING, self.GetParent().GetId())
+        event.SetSelection(selection)
+        event.SetOldSelection(oldSelection)
+        event.SetEventObject(self.GetParent())
+        
+        if not self.GetParent().GetEventHandler().ProcessEvent(event) or event.IsAllowed():
+        
+            self.SetSelection(selection)
+
+            # Fire a wxEVT_FLATNOTEBOOK_PAGE_CHANGED event
+            event.SetEventType(wxEVT_FLATNOTEBOOK_PAGE_CHANGED)
+            event.SetOldSelection(oldSelection)
+            self.GetParent().GetEventHandler().ProcessEvent(event)
+            
 
     def SetImageList(self, imglist):
         """ Sets the image list for the page control. """
@@ -4577,4 +4630,13 @@ class PageContainer(wx.Panel):
         self._pagesInfoVec[page].SetCaption(text)
         return True 
 
+
+    def DrawDragHint(self):
+        """ Draws small arrow at the place that the tab will be placed. """
+
+        # get the index of tab that will be replaced with the dragged tab
+        pt = wx.GetMousePosition()
+        client_pt = self.ScreenToClient(pt)
+        where, tabIdx = self.HitTest(client_pt)
+        self._mgr.GetRenderer(self.GetParent().GetWindowStyleFlag()).DrawDragHint(self, tabIdx)
 
