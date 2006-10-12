@@ -1910,8 +1910,21 @@ void wxDC::DoDrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
         yy = yy - hh;
     }
 
+    int penwidth = m_pen.GetWidth();
+    if ( penwidth == 0 )
+        penwidth = 1 ;
+    if ( m_pen.GetStyle() == wxTRANSPARENT )
+        penwidth = 0 ;
+        
+    bool offset = ( penwidth % 2 ) == 1 ; 
+
     wxGraphicPath* path = m_graphicContext->CreatePath() ;
-    path->AddRectangle( xx , yy , ww , hh ) ;
+    // if we are offsetting the entire rectangle is moved 0.5, so the border line gets off by 1
+    if ( offset )
+        path->AddRectangle( xx , yy , ww-1 , hh-1 ) ;
+    else
+        path->AddRectangle( xx , yy , ww , hh ) ;
+        
     m_graphicContext->DrawPath( path ) ;
     delete path ;
 }
@@ -1956,19 +1969,13 @@ void wxDC::DoDrawRoundedRectangle(wxCoord x, wxCoord y,
     }
     else
     {
-        m_graphicContext->PushState() ;
-        m_graphicContext->Translate( xx , yy ) ;
-        m_graphicContext->Scale( radius , radius ) ;
-        double fw = ww / radius ;
-        double fh = hh / radius;
-        path->MoveToPoint(fw, fh / 2);
-        path->AddArcToPoint(fw, fh, fw / 2, fh, 1);
-        path->AddArcToPoint(0, fh, 0, fh / 2, 1);
-        path->AddArcToPoint(0, 0, fw / 2, 0, 1);
-        path->AddArcToPoint(fw, 0, fw, fh / 2, 1);
+        path->MoveToPoint( xx + ww, yy + hh / 2);
+        path->AddArcToPoint(xx + ww, yy + hh, xx + ww / 2,yy +  hh, radius);
+        path->AddArcToPoint(xx , yy + hh, xx , yy + hh / 2, radius);
+        path->AddArcToPoint(xx , yy , xx + ww / 2, yy , radius);
+        path->AddArcToPoint(xx + ww, yy , xx + ww, yy + hh / 2, radius);
         path->CloseSubpath();
         m_graphicContext->DrawPath( path ) ;
-        m_graphicContext->PopState() ;
     }
     delete path ;
 }
