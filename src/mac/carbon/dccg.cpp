@@ -393,14 +393,24 @@ void wxMacCGContext::Scale( wxCoord xScale , wxCoord yScale )
 void wxMacCGContext::DrawBitmap( const wxBitmap &bmp, wxCoord x, wxCoord y, wxCoord w, wxCoord h ) 
 {
     CGImageRef image = (CGImageRef)( bmp.CGImageCreate() ) ;
-    HIRect r = CGRectMake( x , y , w , h ) ;
-    HIViewDrawCGImage( m_cgContext , &r , image ) ;
+    HIRect r = CGRectMake( 0 , 0 , w , h ); 
+
+    CGContextSaveGState( m_cgContext );
+    CGContextTranslateCTM( m_cgContext, x , y + h );
+    CGContextScaleCTM( m_cgContext, 1, -1 );
+        
+    // in case image is a mask, set the foreground color
+    CGContextSetRGBFillColor( m_cgContext , m_textForegroundColor.Red() / 255.0 , m_textForegroundColor.Green() / 255.0 , 
+        m_textForegroundColor.Blue() / 255.0 , m_textForegroundColor.Alpha() / 255.0 ) ;
+    CGContextDrawImage( m_cgContext, r, image );
+    CGContextRestoreGState( m_cgContext );
+
     CGImageRelease( image ) ;
 }
 
 void wxMacCGContext::DrawIcon( const wxIcon &icon, wxCoord x, wxCoord y, wxCoord w, wxCoord h ) 
 {
-    CGRect r = CGRectMake( 00 , 00 , w , h ) ;
+    CGRect r = CGRectMake( 0 , 0 , w , h ) ;
     CGContextSaveGState( m_cgContext );
     CGContextTranslateCTM( m_cgContext, x , y + h );
     CGContextScaleCTM( m_cgContext, 1, -1 );
@@ -1209,7 +1219,18 @@ void wxDC::DoDrawBitmap( const wxBitmap &bmp, wxCoord x, wxCoord y, bool useMask
     wxCoord ww = XLOG2DEVREL(w);
     wxCoord hh = YLOG2DEVREL(h);
 
-    m_graphicContext->DrawBitmap( bmp, xx , yy , ww , hh ) ;
+    if ( bmp.GetDepth()==1 )
+    {
+        wxGraphicPath* path = m_graphicContext->CreatePath() ;
+        path->AddRectangle( xx , yy , ww , hh ) ;
+        m_graphicContext->FillPath( path , m_textBackgroundColour, wxODDEVEN_RULE) ;
+        delete path;
+        m_graphicContext->DrawBitmap( bmp, xx , yy , ww , hh ) ;
+    }
+    else
+    {
+        m_graphicContext->DrawBitmap( bmp, xx , yy , ww , hh ) ;
+    }
 }
 
 void wxDC::DoDrawIcon( const wxIcon &icon, wxCoord x, wxCoord y )
