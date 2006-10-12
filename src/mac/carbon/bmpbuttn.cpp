@@ -55,12 +55,12 @@ bool wxBitmapButton::Create( wxWindow *parent,
     Rect bounds = wxMacGetBoundsForControl( this, pos, size );
     m_peer = new wxMacControl( this );
 
-    if ( bitmap.Ok() && !size.IsFullySpecified() )
+    if ( bitmap.Ok() && HasFlag(wxBORDER_NONE) )
     {
-        // in Mac OS X the bitmap buttons can have only one of the few standard
-        // sizes and if they don't, the OS rescales them automatically
-        // resulting in really ugly images, so centre the image in a square of
-        // standard size instead
+        // in Mac OS X the icon controls (which are used for borderless bitmap
+        // buttons) can have only one of the few standard sizes and if they
+        // don't, the OS rescales them automatically resulting in really ugly
+        // images, so centre the image in a square of standard size instead
 
         // the supported sizes, sorted in decreasng order
         static const int stdSizes[] = { 128, 48, 32, 16, 0 };
