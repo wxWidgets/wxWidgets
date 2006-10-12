@@ -551,16 +551,38 @@ CGImageRef wxBitmapRefData::CGImageCreate() const
 
             membuf = new wxMemoryBuffer( m_memBuf ) ;
         }
+        
+        CGDataProviderRef dataProvider = NULL ;
+        if ( m_depth == 1 )
+        {
+            wxMemoryBuffer* maskBuf = new wxMemoryBuffer( m_width * m_height );
+            unsigned char * maskBufData = (unsigned char *) maskBuf->GetData();
+            unsigned char * bufData = (unsigned char *) membuf->GetData() ;
+            // copy one color component
+            for( int i = 0 ; i < m_width * m_height ; ++i )
+                maskBufData[i] = bufData[i*4+3];
+            dataProvider =
+                CGDataProviderCreateWithData(
+                    maskBuf , (const void *) maskBufData , m_width * m_height,
+                    wxMacMemoryBufferReleaseProc );
+            // as we are now passing the mask buffer to the data provider, we have
+            // to release the membuf ourselves
+            delete membuf ;
 
-        CGColorSpaceRef colorSpace = wxMacGetGenericRGBColorSpace();
-        CGDataProviderRef dataProvider =
-            CGDataProviderCreateWithData(
-                membuf , (const void *)membuf->GetData() , imageSize,
-                wxMacMemoryBufferReleaseProc );
-        image =
+            image = ::CGImageMaskCreate( w, h, 8, 8, m_width , dataProvider, NULL, false );
+        }
+        else
+        {
+            CGColorSpaceRef colorSpace = wxMacGetGenericRGBColorSpace();
+            dataProvider =
+                CGDataProviderCreateWithData(
+                    membuf , (const void *)membuf->GetData() , imageSize,
+                    wxMacMemoryBufferReleaseProc );
+            image =
             ::CGImageCreate(
                 w, h, 8 , 32 , 4 * m_width , colorSpace, alphaInfo ,
                 dataProvider, NULL , false , kCGRenderingIntentDefault );
+        }
         CGDataProviderRelease( dataProvider);
     }
     else
@@ -811,7 +833,7 @@ wxBitmap::wxBitmap(const char bits[], int the_width, int the_height, int no_bits
                 bit = x % 8 ;
                 mask = 1 << bit ;
 
-                if ( !(linestart[index] & mask ) )
+                if ( linestart[index] & mask )
                 {
                     *destination++ = 0xFF ;
                     *destination++ = 0 ;
