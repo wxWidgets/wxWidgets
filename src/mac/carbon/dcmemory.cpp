@@ -105,6 +105,7 @@ void wxMemoryDC::SelectObject( const wxBitmap& bitmap )
             m_graphicContext = new wxMacCGContext( bmCtx ) ;
             m_graphicContext->SetPen( m_pen ) ;
             m_graphicContext->SetBrush( m_brush ) ;
+            m_graphicContext->SetFont( m_font ) ;
         }
         m_ok = (m_graphicContext != NULL) ;
 
