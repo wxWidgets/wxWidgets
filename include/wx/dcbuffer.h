@@ -222,6 +222,10 @@ public:
     {
         return m_targetDc->GetGDKWindow();
     }
+    virtual wxBitmap GetSelectedBitmap() const
+    {
+        return m_targetDc->GetSelectedBitmap();
+    }
 #endif
 
     bool Blit(wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord height,

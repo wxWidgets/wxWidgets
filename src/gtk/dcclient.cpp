@@ -1215,9 +1215,9 @@ bool wxWindowDC::DoBlit( wxCoord xdest, wxCoord ydest,
     xsrc = source->LogicalToDeviceX(xsrc);
     ysrc = source->LogicalToDeviceY(ysrc);
 
-    wxClientDC *srcDC = (wxClientDC*)source;
-    wxMemoryDC *memDC = (wxMemoryDC*)source;
-
+    wxMemoryDC *memDC = wxDynamicCast(source, wxMemoryDC);
+    wxBitmap selected = source->GetSelectedBitmap();
+    
     bool use_bitmap_method = false;
     bool is_mono = false;
 
@@ -1227,11 +1227,11 @@ bool wxWindowDC::DoBlit( wxCoord xdest, wxCoord ydest,
         ysrcMask = ysrc;
     }
 
-    if (srcDC->m_isMemDC)
+    if (memDC && !selected.Ok()) return false;
+    
+    if (selected.Ok())
     {
-        if (!memDC->m_selected.Ok()) return false;
-
-        is_mono = (memDC->m_selected.GetDepth() == 1);
+        is_mono = (selected.GetDepth() == 1);
 
         // we use the "XCopyArea" way to copy a memory dc into
         // a different window if the memory dc BOTH
@@ -1239,7 +1239,7 @@ bool wxWindowDC::DoBlit( wxCoord xdest, wxCoord ydest,
         // b) it is clipped
         // c) is not 1-bit
 
-        if (useMask && (memDC->m_selected.GetMask()))
+        if (useMask && (selected.GetMask()))
         {
             // we HAVE TO use the direct way for memory dcs
             // that have mask since the XCopyArea doesn't know
@@ -1254,8 +1254,8 @@ bool wxWindowDC::DoBlit( wxCoord xdest, wxCoord ydest,
             use_bitmap_method = true;
         }
         else if ((xsrc == 0) && (ysrc == 0) &&
-                 (width == memDC->m_selected.GetWidth()) &&
-                 (height == memDC->m_selected.GetHeight()))
+                 (width == selected.GetWidth()) &&
+                 (height == selected.GetHeight()))
         {
             // we SHOULD use the direct way if all of the bitmap
             // in the memory dc is copied in which case XCopyArea
@@ -1290,8 +1290,8 @@ bool wxWindowDC::DoBlit( wxCoord xdest, wxCoord ydest,
     if (use_bitmap_method)
     {
         // scale/translate bitmap size
-        wxCoord bm_width = memDC->m_selected.GetWidth();
-        wxCoord bm_height = memDC->m_selected.GetHeight();
+        wxCoord bm_width = selected.GetWidth();
+        wxCoord bm_height = selected.GetHeight();
 
         // Get clip coords for the bitmap. If we don't
         // use wxBitmap::Rescale(), which can clip the
@@ -1312,8 +1312,8 @@ bool wxWindowDC::DoBlit( wxCoord xdest, wxCoord ydest,
         wxCoord bm_hh = YLOG2DEVREL( bm_height );
 
         // Scale bitmap if required
-        wxBitmap use_bitmap = memDC->m_selected;
-        if ((memDC->m_selected.GetWidth()!= bm_ww) || ( memDC->m_selected.GetHeight()!= bm_hh))
+        wxBitmap use_bitmap = selected;
+        if ((selected.GetWidth()!= bm_ww) || ( selected.GetHeight()!= bm_hh))
         {
             // This indicates that the blitting code below will get
             // a clipped bitmap and therefore needs to move the origin
@@ -1323,7 +1323,7 @@ bool wxWindowDC::DoBlit( wxCoord xdest, wxCoord ydest,
             tmp.GetBox(cx,cy,cw,ch);
 
             // Scale and clipped bitmap
-            use_bitmap = memDC->m_selected.Rescale(cx-xx,cy-yy,cw,ch,bm_ww,bm_hh);
+            use_bitmap = selected.Rescale(cx-xx,cy-yy,cw,ch,bm_ww,bm_hh);
         }
 
         // apply mask if any
@@ -1403,7 +1403,7 @@ bool wxWindowDC::DoBlit( wxCoord xdest, wxCoord ydest,
     }
     else // use_bitmap_method
     {
-        if ((width != ww) || (height != hh))
+        if (selected.Ok() && ((width != ww) || (height != hh)))
         {
             // get clip coords
             wxRegion tmp( xx,yy,ww,hh );
@@ -1412,7 +1412,7 @@ bool wxWindowDC::DoBlit( wxCoord xdest, wxCoord ydest,
             tmp.GetBox(cx,cy,cw,ch);
 
             // rescale bitmap
-            wxBitmap bitmap = memDC->m_selected.Rescale( cx-xx, cy-yy, cw, ch, ww, hh );
+            wxBitmap bitmap = selected.Rescale( cx-xx, cy-yy, cw, ch, ww, hh );
 
             // draw scaled bitmap
             // was: gdk_draw_drawable( m_window, m_penGC, bitmap.GetPixmap(), 0, 0, xx, yy, -1, -1 );
@@ -1422,10 +1422,14 @@ bool wxWindowDC::DoBlit( wxCoord xdest, wxCoord ydest,
         {
             // No scaling and not a memory dc with a mask either
 
+            GdkWindow* window = source->GetGDKWindow();
+            if ( !window )
+                return false;
+            
             // copy including child window contents
             gdk_gc_set_subwindow( m_penGC, GDK_INCLUDE_INFERIORS );
             gdk_draw_drawable( m_window, m_penGC,
-                               srcDC->GetWindow(),
+                               window,
                                xsrc, ysrc, xx, yy,
                                width, height );
             gdk_gc_set_subwindow( m_penGC, GDK_CLIP_BY_CHILDREN );

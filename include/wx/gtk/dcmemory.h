@@ -42,6 +42,7 @@ public:
     virtual void SetTextBackground( const wxColour &col );
 
     // implementation
+    virtual wxBitmap GetSelectedBitmap() const { return m_selected; }        
     wxBitmap  m_selected;
 
 protected:
