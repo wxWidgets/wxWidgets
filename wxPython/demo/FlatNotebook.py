@@ -1,8 +1,8 @@
-
 import wx
 import wx.lib.flatnotebook as fnb
 import random
 import images
+
 
 #----------------------------------------------------------------------
 def GetMondrianData():
@@ -33,39 +33,42 @@ def GetMondrianIcon():
 #----------------------------------------------------------------------
 
 
-MENU_EDIT_DELETE_ALL = wx.ID_HIGHEST + 1000
-MENU_EDIT_ADD_PAGE = MENU_EDIT_DELETE_ALL + 1
-MENU_EDIT_DELETE_PAGE = MENU_EDIT_DELETE_ALL + 2
-MENU_EDIT_SET_SELECTION = MENU_EDIT_DELETE_ALL + 3
-MENU_EDIT_ADVANCE_SELECTION_FWD = MENU_EDIT_DELETE_ALL + 4
-MENU_EDIT_ADVANCE_SELECTION_BACK = MENU_EDIT_DELETE_ALL + 5
-MENU_SET_ALL_TABS_SHAPE_ANGLE = MENU_EDIT_DELETE_ALL + 6
-MENU_SHOW_IMAGES = MENU_EDIT_DELETE_ALL + 7
-MENU_USE_VC71_STYLE = MENU_EDIT_DELETE_ALL + 8
-MENU_USE_DEFAULT_STYLE = MENU_EDIT_DELETE_ALL + 9
-MENU_USE_FANCY_STYLE = MENU_EDIT_DELETE_ALL + 10
-MENU_SELECT_GRADIENT_COLOR_FROM = MENU_EDIT_DELETE_ALL + 11
-MENU_SELECT_GRADIENT_COLOR_TO = MENU_EDIT_DELETE_ALL + 12
-MENU_SELECT_GRADIENT_COLOR_BORDER = MENU_EDIT_DELETE_ALL + 13
-MENU_SET_PAGE_IMAGE_INDEX = MENU_EDIT_DELETE_ALL + 14
-MENU_HIDE_X = MENU_EDIT_DELETE_ALL + 15
-MENU_HIDE_NAV_BUTTONS = MENU_EDIT_DELETE_ALL + 16
-MENU_USE_MOUSE_MIDDLE_BTN = MENU_EDIT_DELETE_ALL + 17
-MENU_DRAW_BORDER = MENU_EDIT_DELETE_ALL + 18
-MENU_USE_BOTTOM_TABS = MENU_EDIT_DELETE_ALL + 19
-MENU_ENABLE_TAB = MENU_EDIT_DELETE_ALL + 20
-MENU_DISABLE_TAB = MENU_EDIT_DELETE_ALL + 21
-MENU_ENABLE_DRAG_N_DROP = MENU_EDIT_DELETE_ALL + 22
-MENU_DCLICK_CLOSES_TAB = MENU_EDIT_DELETE_ALL + 23
-MENU_USE_VC8_STYLE = MENU_EDIT_DELETE_ALL + 24
+MENU_EDIT_DELETE_ALL = wx.NewId()
+MENU_EDIT_ADD_PAGE = wx.NewId()
+MENU_EDIT_DELETE_PAGE = wx.NewId()
+MENU_EDIT_SET_SELECTION = wx.NewId()
+MENU_EDIT_ADVANCE_SELECTION_FWD = wx.NewId()
+MENU_EDIT_ADVANCE_SELECTION_BACK = wx.NewId()
+MENU_SET_ALL_TABS_SHAPE_ANGLE = wx.NewId()
+MENU_SHOW_IMAGES = wx.NewId()
+MENU_USE_VC71_STYLE = wx.NewId()
+MENU_USE_DEFAULT_STYLE = wx.NewId()
+MENU_USE_FANCY_STYLE = wx.NewId()
+MENU_SELECT_GRADIENT_COLOR_FROM = wx.NewId()
+MENU_SELECT_GRADIENT_COLOR_TO = wx.NewId()
+MENU_SELECT_GRADIENT_COLOR_BORDER = wx.NewId()
+MENU_SET_PAGE_IMAGE_INDEX = wx.NewId()
+MENU_HIDE_X = wx.NewId()
+MENU_HIDE_NAV_BUTTONS = wx.NewId()
+MENU_USE_MOUSE_MIDDLE_BTN = wx.NewId()
+MENU_DRAW_BORDER = wx.NewId()
+MENU_USE_BOTTOM_TABS = wx.NewId()
+MENU_ENABLE_TAB = wx.NewId()
+MENU_DISABLE_TAB = wx.NewId()
+MENU_ENABLE_DRAG_N_DROP = wx.NewId()
+MENU_DCLICK_CLOSES_TAB = wx.NewId()
+MENU_USE_VC8_STYLE = wx.NewId()
 
-MENU_SET_ACTIVE_TEXT_COLOR = MENU_EDIT_DELETE_ALL + 27
-MENU_DRAW_TAB_X = MENU_EDIT_DELETE_ALL + 28
-MENU_SET_ACTIVE_TAB_COLOR = MENU_EDIT_DELETE_ALL + 29
-MENU_SET_TAB_AREA_COLOR = MENU_EDIT_DELETE_ALL + 30
-MENU_SELECT_NONACTIVE_TEXT_COLOR = MENU_EDIT_DELETE_ALL + 31
-MENU_GRADIENT_BACKGROUND = MENU_EDIT_DELETE_ALL + 32
-MENU_COLORFUL_TABS = MENU_EDIT_DELETE_ALL + 33
+MENU_SET_ACTIVE_TEXT_COLOR = wx.NewId()
+MENU_DRAW_TAB_X = wx.NewId()
+MENU_SET_ACTIVE_TAB_COLOR = wx.NewId()
+MENU_SET_TAB_AREA_COLOR = wx.NewId()
+MENU_SELECT_NONACTIVE_TEXT_COLOR = wx.NewId()
+MENU_GRADIENT_BACKGROUND = wx.NewId()
+MENU_COLORFUL_TABS = wx.NewId()
+MENU_SMART_TABS	= wx.NewId()
+MENU_USE_DROP_ARROW_BUTTON = wx.NewId()
+MENU_ALLOW_FOREIGN_DND = wx.NewId()
 
 
 class FlatNotebookDemo(wx.Frame):
@@ -74,7 +77,7 @@ class FlatNotebookDemo(wx.Frame):
 
         wx.Frame.__init__(self, parent, title="FlatNotebook Demo", size=(800,600))
         self.log = log
-
+        
         self._bShowImages = False
         self._bVCStyle = False
         self._newPageCounter = 0
@@ -102,17 +105,22 @@ class FlatNotebookDemo(wx.Frame):
         self.Bind(fnb.EVT_FLATNOTEBOOK_PAGE_CHANGED, self.OnPageChanged)
         self.Bind(fnb.EVT_FLATNOTEBOOK_PAGE_CLOSING, self.OnPageClosing)
 
+        self.Bind(wx.EVT_UPDATE_UI, self.OnDropDownArrowUI, id=MENU_USE_DROP_ARROW_BUTTON)
+        self.Bind(wx.EVT_UPDATE_UI, self.OnHideNavigationButtonsUI, id=MENU_HIDE_NAV_BUTTONS)
+        self.Bind(wx.EVT_UPDATE_UI, self.OnAllowForeignDndUI, id=MENU_ALLOW_FOREIGN_DND)
 
 
     def CreateMenuBar(self):
 
         self._menuBar = wx.MenuBar(wx.MB_DOCKABLE)
         self._fileMenu = wx.Menu()
+        self._editMenu = wx.Menu()
+        self._visualMenu = wx.Menu()
+        
         item = wx.MenuItem(self._fileMenu, wx.ID_ANY, "&Close\tCtrl-Q", "Close demo window")
         self.Bind(wx.EVT_MENU, self.OnQuit, item)
         self._fileMenu.AppendItem(item)
-        
-        self._editMenu = wx.Menu()
+                
         item = wx.MenuItem(self._editMenu, MENU_EDIT_ADD_PAGE, "New Page\tCtrl+N", "Add New Page")
         self.Bind(wx.EVT_MENU, self.OnAddPage, item)
         self._editMenu.AppendItem(item)
@@ -142,11 +150,11 @@ class FlatNotebookDemo(wx.Frame):
         item = wx.MenuItem(self._editMenu, MENU_SET_ALL_TABS_SHAPE_ANGLE, "Set an inclination of tab header borders",
                            "Set the shape of tab header")
         self.Bind(wx.EVT_MENU, self.OnSetAllPagesShapeAngle, item)
-        self._editMenu.AppendItem(item)
+        self._visualMenu.AppendItem(item)
 
         item = wx.MenuItem(self._editMenu, MENU_SET_PAGE_IMAGE_INDEX, "Set image index of selected page",
                            "Set image index")
-        self.Bind(wx.EVT_MENU, self.OnSetPageImageIndex, item)
+        self.Bind(wx.EVT_MENU, self.OnSetPageImage, item)
         self._editMenu.AppendItem(item)
 
         item = wx.MenuItem(self._editMenu, MENU_SHOW_IMAGES, "Show Images", "Show Images", wx.ITEM_CHECK)
@@ -170,19 +178,21 @@ class FlatNotebookDemo(wx.Frame):
         self.Bind(wx.EVT_MENU, self.OnFancyStyle, item)
         styleMenu.AppendItem(item)
 
-        self._editMenu.AppendMenu(wx.ID_ANY, "Tabs Style", styleMenu)
+        self._visualMenu.AppendMenu(wx.ID_ANY, "Tabs Style", styleMenu)
 
-        item = wx.MenuItem(styleMenu, MENU_SELECT_GRADIENT_COLOR_FROM, "Select fancy tab style 'from' color",
+        item = wx.MenuItem(self._visualMenu, MENU_SELECT_GRADIENT_COLOR_FROM, "Select fancy tab style 'from' color",
                            "Select fancy tab style 'from' color")
-        self._editMenu.AppendItem(item)
+        self._visualMenu.AppendItem(item)
 
-        item = wx.MenuItem(styleMenu, MENU_SELECT_GRADIENT_COLOR_TO, "Select fancy tab style 'to' color",
+        item = wx.MenuItem(self._visualMenu, MENU_SELECT_GRADIENT_COLOR_TO, "Select fancy tab style 'to' color",
                            "Select fancy tab style 'to' color")
-        self._editMenu.AppendItem(item)
+        self._visualMenu.AppendItem(item)
 
-        item = wx.MenuItem(styleMenu, MENU_SELECT_GRADIENT_COLOR_BORDER, "Select fancy tab style 'border' color",
+        item = wx.MenuItem(self._visualMenu, MENU_SELECT_GRADIENT_COLOR_BORDER, "Select fancy tab style 'border' color",
                            "Select fancy tab style 'border' color")
-        self._editMenu.AppendItem(item)
+        self._visualMenu.AppendItem(item)
+
+        self._editMenu.AppendSeparator()        
 
         self.Bind(wx.EVT_MENU_RANGE, self.OnSelectColor, id=MENU_SELECT_GRADIENT_COLOR_FROM,
                   id2=MENU_SELECT_GRADIENT_COLOR_BORDER)        
@@ -194,9 +204,29 @@ class FlatNotebookDemo(wx.Frame):
         item = wx.MenuItem(self._editMenu, MENU_HIDE_X, "Hide X Button", "Hide X Button", wx.ITEM_CHECK)
         self._editMenu.AppendItem(item)
 
+        item = wx.MenuItem(self._editMenu, MENU_SMART_TABS, "Smart tabbing", "Smart tabbing", wx.ITEM_CHECK)
+        self._editMenu.AppendItem(item)
+        self.Bind(wx.EVT_MENU, self.OnSmartTabs, item)
+        item.Check(False)
+
+        item = wx.MenuItem(self._editMenu, MENU_USE_DROP_ARROW_BUTTON, "Use drop down button for tab navigation",
+                           "Use drop down arrow for quick tab navigation", wx.ITEM_CHECK)
+        self._editMenu.AppendItem(item)
+        self.Bind(wx.EVT_MENU, self.OnDropDownArrow, item)
+        item.Check(False);
+        self._editMenu.AppendSeparator()
+
         item = wx.MenuItem(self._editMenu, MENU_USE_MOUSE_MIDDLE_BTN, "Use Mouse Middle Button as 'X' button",
                            "Use Mouse Middle Button as 'X' button", wx.ITEM_CHECK)
         self._editMenu.AppendItem(item)
+
+        item = wx.MenuItem(self._editMenu, MENU_DCLICK_CLOSES_TAB, "Mouse double click closes tab",
+                           "Mouse double click closes tab", wx.ITEM_CHECK)
+        self.Bind(wx.EVT_MENU, self.OnDClickCloseTab, item)
+        self._editMenu.AppendItem(item)
+        item.Check(False)
+
+        self._editMenu.AppendSeparator()
 
         item = wx.MenuItem(self._editMenu, MENU_USE_BOTTOM_TABS, "Use Bottoms Tabs", "Use Bottoms Tabs",
                            wx.ITEM_CHECK)
@@ -216,54 +246,54 @@ class FlatNotebookDemo(wx.Frame):
                            "Enable Drag And Drop of Tabs", wx.ITEM_CHECK)
         self.Bind(wx.EVT_MENU, self.OnEnableDrag, item)        
         self._editMenu.AppendItem(item)
-        item.Check(True)
+        item.Check(False)
 
-        item = wx.MenuItem(self._editMenu, MENU_DRAW_BORDER, "Draw Border around tab area",
+        item = wx.MenuItem(self._editMenu, MENU_ALLOW_FOREIGN_DND, "Enable Drag And Drop of Tabs from foreign notebooks",
+                           "Enable Drag And Drop of Tabs from foreign notebooks", wx.ITEM_CHECK)
+        self.Bind(wx.EVT_MENU, self.OnAllowForeignDnd, item)
+        self._editMenu.AppendItem(item) 
+        item.Check(False); 
+        
+        item = wx.MenuItem(self._visualMenu, MENU_DRAW_BORDER, "Draw Border around tab area",
                            "Draw Border around tab area", wx.ITEM_CHECK)
         self.Bind(wx.EVT_MENU, self.OnStyle, item)
-        self._editMenu.AppendItem(item)
+        self._visualMenu.AppendItem(item)
         item.Check(True)
 
-        item = wx.MenuItem(self._editMenu, MENU_DRAW_TAB_X, "Draw X button On Active Tab",
+        item = wx.MenuItem(self._visualMenu, MENU_DRAW_TAB_X, "Draw X button On Active Tab",
                            "Draw X button On Active Tab", wx.ITEM_CHECK)
         self.Bind(wx.EVT_MENU, self.OnDrawTabX, item)
-        self._editMenu.AppendItem(item)
+        self._visualMenu.AppendItem(item)
         
-        item = wx.MenuItem(styleMenu, MENU_SET_ACTIVE_TAB_COLOR, "Select Active Tab Color",
+        item = wx.MenuItem(self._visualMenu, MENU_SET_ACTIVE_TAB_COLOR, "Select Active Tab Color",
                            "Select Active Tab Color")
         self.Bind(wx.EVT_MENU, self.OnSelectColor, item)
-        self._editMenu.AppendItem(item)
+        self._visualMenu.AppendItem(item)
 
-        item = wx.MenuItem(styleMenu, MENU_SET_TAB_AREA_COLOR, "Select Tab Area Color",
+        item = wx.MenuItem(self._visualMenu, MENU_SET_TAB_AREA_COLOR, "Select Tab Area Color",
                            "Select Tab Area Color")
         self.Bind(wx.EVT_MENU, self.OnSelectColor, item)
-        self._editMenu.AppendItem(item)
+        self._visualMenu.AppendItem(item)
 
-        item = wx.MenuItem(styleMenu, MENU_SET_ACTIVE_TEXT_COLOR, "Select active tab text color",
+        item = wx.MenuItem(self._visualMenu, MENU_SET_ACTIVE_TEXT_COLOR, "Select active tab text color",
                            "Select active tab text color")
         self.Bind(wx.EVT_MENU, self.OnSelectColor, item)
-        self._editMenu.AppendItem(item)
+        self._visualMenu.AppendItem(item)
 
-        item = wx.MenuItem(styleMenu, MENU_SELECT_NONACTIVE_TEXT_COLOR,
+        item = wx.MenuItem(self._visualMenu, MENU_SELECT_NONACTIVE_TEXT_COLOR,
                            "Select NON-active tab text color", "Select NON-active tab text color")
         self.Bind(wx.EVT_MENU, self.OnSelectColor, item)
-        self._editMenu.AppendItem(item)
-
-        item = wx.MenuItem(self._editMenu, MENU_DCLICK_CLOSES_TAB, "Mouse double click closes tab",
-                           "Mouse double click closes tab", wx.ITEM_CHECK)
-        self.Bind(wx.EVT_MENU, self.OnDClickCloseTab, item)
-        self._editMenu.AppendItem(item)
-        item.Check(False)
+        self._visualMenu.AppendItem(item)
         
-        item = wx.MenuItem(self._editMenu, MENU_GRADIENT_BACKGROUND, "Use Gradient Coloring for tab area",
+        item = wx.MenuItem(self._visualMenu, MENU_GRADIENT_BACKGROUND, "Use Gradient Coloring for tab area",
                            "Use Gradient Coloring for tab area", wx.ITEM_CHECK)
         self.Bind(wx.EVT_MENU, self.OnGradientBack, item)
-        self._editMenu.AppendItem(item)
+        self._visualMenu.AppendItem(item)
         item.Check(False)
 
-        item = wx.MenuItem(self._editMenu, MENU_COLORFUL_TABS, "Colorful tabs", "Colorful tabs", wx.ITEM_CHECK)
+        item = wx.MenuItem(self._visualMenu, MENU_COLORFUL_TABS, "Colorful tabs", "Colorful tabs", wx.ITEM_CHECK)
         self.Bind(wx.EVT_MENU, self.OnColorfulTabs, item)
-        self._editMenu.AppendItem(item)
+        self._visualMenu.AppendItem(item)
         item.Check(False)
 
         help_menu = wx.Menu()
@@ -273,6 +303,8 @@ class FlatNotebookDemo(wx.Frame):
 
         self._menuBar.Append(self._fileMenu, "&File")
         self._menuBar.Append(self._editMenu, "&Edit")
+        self._menuBar.Append(self._visualMenu, "&Tab Appearance")
+
         self._menuBar.Append(help_menu, "&Help")
 
         self.SetMenuBar(self._menuBar)
@@ -290,10 +322,13 @@ class FlatNotebookDemo(wx.Frame):
         mainSizer = wx.BoxSizer(wx.VERTICAL)
         self.SetSizer(mainSizer)
 
-        bookStyle = fnb.FNB_TABS_BORDER_SIMPLE
+        bookStyle = fnb.FNB_NODRAG
 
-        self.book = fnb.StyledNotebook(self, wx.ID_ANY, style=bookStyle)
-        self.secondBook = fnb.StyledNotebook(self, wx.ID_ANY, style=bookStyle)
+        self.book = fnb.FlatNotebook(self, wx.ID_ANY, style=bookStyle)
+
+        bookStyle &= ~(fnb.FNB_NODRAG)
+        bookStyle |= fnb.FNB_ALLOW_FOREIGN_DND 
+        self.secondBook = fnb.FlatNotebook(self, wx.ID_ANY, style=bookStyle)
 
         # Set right click menu to the notebook
         self.book.SetRightClickMenu(self._rmenu)
@@ -312,10 +347,10 @@ class FlatNotebookDemo(wx.Frame):
         # Add some pages to the second notebook
         self.Freeze()
 
-        text = wx.TextCtrl(self.secondBook, -1, "Second Book Page 1", style=wx.TE_MULTILINE)  
+        text = wx.TextCtrl(self.secondBook, -1, "Second Book Page 1\n", style=wx.TE_MULTILINE|wx.TE_READONLY)  
         self.secondBook.AddPage(text, "Second Book Page 1")
 
-        text = wx.TextCtrl(self.secondBook, -1, "Second Book Page 2", style=wx.TE_MULTILINE)
+        text = wx.TextCtrl(self.secondBook, -1, "Second Book Page 2\n", style=wx.TE_MULTILINE|wx.TE_READONLY)
         self.secondBook.AddPage(text,  "Second Book Page 2")
 
         self.Thaw()	
@@ -334,8 +369,8 @@ class FlatNotebookDemo(wx.Frame):
                 # Hide the navigation buttons
                 style |= fnb.FNB_NO_NAV_BUTTONS
             else:
-                if style & fnb.FNB_NO_NAV_BUTTONS:
-                    style ^= fnb.FNB_NO_NAV_BUTTONS
+                style &= ~fnb.FNB_NO_NAV_BUTTONS
+                style &= ~fnb.FNB_DROPDOWN_TABS_LIST
             
             self.book.SetWindowStyleFlag(style)
 
@@ -455,11 +490,11 @@ class FlatNotebookDemo(wx.Frame):
         if dlg.ShowModal() == wx.ID_OK:
         
             if eventid == MENU_SELECT_GRADIENT_COLOR_BORDER:
-                self.book.SetGradientColorBorder(dlg.GetColourData().GetColour())
+                self.book.SetGradientColourBorder(dlg.GetColourData().GetColour())
             elif eventid == MENU_SELECT_GRADIENT_COLOR_FROM:
-                self.book.SetGradientColorFrom(dlg.GetColourData().GetColour())
+                self.book.SetGradientColourFrom(dlg.GetColourData().GetColour())
             elif eventid == MENU_SELECT_GRADIENT_COLOR_TO:
-                self.book.SetGradientColorTo(dlg.GetColourData().GetColour())
+                self.book.SetGradientColourTo(dlg.GetColourData().GetColour())
             elif eventid == MENU_SET_ACTIVE_TEXT_COLOR:
                 self.book.SetActiveTabTextColour(dlg.GetColourData().GetColour())
             elif eventid == MENU_SELECT_NONACTIVE_TEXT_COLOR:
@@ -483,7 +518,6 @@ class FlatNotebookDemo(wx.Frame):
             image = random.randint(0, self._ImageList.GetImageCount()-1)
         
         self.book.AddPage(self.CreatePage(caption), caption, True, image)
-        self.book.SetSelection(self.book.GetPageCount()-1)
         self.Thaw()
         self._newPageCounter = self._newPageCounter + 1
 
@@ -493,9 +527,7 @@ class FlatNotebookDemo(wx.Frame):
         p = wx.Panel(self.book)
         wx.StaticText(p, -1, caption, (20,20))
         wx.TextCtrl(p, -1, "", (20,40), (150,-1))
-        #wx.TextCtrl(p, -1, "", (20,75), (150,-1), style=wx.TE_MULTILINE)
         return p
-    
 
 
     def OnDeletePage(self, event):
@@ -536,32 +568,49 @@ class FlatNotebookDemo(wx.Frame):
     def OnEnableDrag(self, event):
 
         style = self.book.GetWindowStyleFlag()
+        style2 = self.secondBook.GetWindowStyleFlag()
         
         if event.IsChecked():        
             if style & fnb.FNB_NODRAG:
                 style ^= fnb.FNB_NODRAG
+            if style2 & fnb.FNB_NODRAG:
+                style2 ^= fnb.FNB_NODRAG
         else:
             style |= fnb.FNB_NODRAG
+            style2 |= fnb.FNB_NODRAG
         
         self.book.SetWindowStyleFlag(style)
+        self.secondBook.SetWindowStyleFlag(style2)
 
+
+    def OnAllowForeignDnd(self, event): 
+
+        style = self.book.GetWindowStyleFlag()
+        if event.IsChecked():
+            style |= fnb.FNB_ALLOW_FOREIGN_DND 
+        else:
+            style &= ~(fnb.FNB_ALLOW_FOREIGN_DND)
+            
+        self.book.SetWindowStyleFlag(style)
+        self.book.Refresh() 
+ 
 
     def OnSetAllPagesShapeAngle(self, event):
 
         
-        dlg = wx.TextEntryDialog(self, "Enter an inclination of header borders (0-45):", "Set Angle")
+        dlg = wx.TextEntryDialog(self, "Enter an inclination of header borders (0-15):", "Set Angle")
         if dlg.ShowModal() == wx.ID_OK:
         
             val = dlg.GetValue()
             self.book.SetAllPagesShapeAngle(int(val))
 
 
-    def OnSetPageImageIndex(self, event):
+    def OnSetPageImage(self, event):
 
         dlg = wx.TextEntryDialog(self, "Enter an image index (0-%i):"%(self.book.GetImageList().GetImageCount()-1), "Set Image Index")
         if dlg.ShowModal() == wx.ID_OK:
             val = dlg.GetValue()
-            self.book.SetPageImageIndex(self.book.GetSelection(), int(val))
+            self.book.SetPageImage(self.book.GetSelection(), int(val))
 
 
     def OnAdvanceSelectionFwd(self, event):
@@ -575,16 +624,19 @@ class FlatNotebookDemo(wx.Frame):
 
 
     def OnPageChanging(self, event):
+
         self.log.write("Page Changing From %d To %d" % (event.GetOldSelection(), event.GetSelection()))
         event.Skip()
 
 
     def OnPageChanged(self, event):
+
         self.log.write("Page Changed To %d" % event.GetSelection())
         event.Skip()
 
 
     def OnPageClosing(self, event):
+
         self.log.write("Page Closing, Selection: %d" % event.GetSelection())
         event.Skip()
 
@@ -634,6 +686,54 @@ class FlatNotebookDemo(wx.Frame):
 
         self.book.SetWindowStyleFlag(style)
         self.book.Refresh()
+
+
+    def OnSmartTabs(self, event):
+
+        style = self.book.GetWindowStyleFlag()
+        if event.IsChecked():
+            style |= fnb.FNB_SMART_TABS
+        else:
+            style &= ~fnb.FNB_SMART_TABS
+
+        self.book.SetWindowStyleFlag(style)
+        self.book.Refresh()
+
+
+    def OnDropDownArrow(self, event):
+
+        style = self.book.GetWindowStyleFlag()
+        
+        if event.IsChecked():
+        
+            style |= fnb.FNB_DROPDOWN_TABS_LIST
+            style |= fnb.FNB_NO_NAV_BUTTONS
+        
+        else:
+        
+            style &= ~fnb.FNB_DROPDOWN_TABS_LIST
+            style &= ~fnb.FNB_NO_NAV_BUTTONS
+
+        self.book.SetWindowStyleFlag(style)
+        self.book.Refresh()
+
+
+    def OnHideNavigationButtonsUI(self, event):
+
+        style = self.book.GetWindowStyleFlag()
+        event.Check((style & fnb.FNB_NO_NAV_BUTTONS and [True] or [False])[0])
+
+
+    def OnDropDownArrowUI(self, event):
+
+        style = self.book.GetWindowStyleFlag()
+        event.Check((style & fnb.FNB_DROPDOWN_TABS_LIST and [True] or [False])[0])
+        
+
+    def OnAllowForeignDndUI(self, event): 
+ 
+        style = self.book.GetWindowStyleFlag()
+        event.Enable((style & fnb.FNB_NODRAG and [False] or [True])[0])
 
 
     def OnAbout(self, event):
