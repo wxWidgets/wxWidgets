@@ -123,9 +123,17 @@ class Animation(AnimationBase):
         """GetFramePosition(self, size_t frame) -> Point"""
         return _animate.Animation_GetFramePosition(*args, **kwargs)
 
+    def GetFrameSize(*args, **kwargs):
+        """GetFrameSize(self, size_t frame) -> Size"""
+        return _animate.Animation_GetFrameSize(*args, **kwargs)
+
     def GetDisposalMethod(*args, **kwargs):
         """GetDisposalMethod(self, size_t frame) -> int"""
         return _animate.Animation_GetDisposalMethod(*args, **kwargs)
+
+    def GetTransparentColour(*args, **kwargs):
+        """GetTransparentColour(self, size_t frame) -> Colour"""
+        return _animate.Animation_GetTransparentColour(*args, **kwargs)
 
     def GetBackgroundColour(*args, **kwargs):
         """GetBackgroundColour(self) -> Colour"""

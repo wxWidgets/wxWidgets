@@ -2759,7 +2759,9 @@ SWIGINTERN wxAnimation *new_wxAnimation__SWIG_1(wxString const &name,wxAnimation
             return ani;
         }
 SWIGINTERN wxPoint wxAnimation_GetFramePosition(wxAnimation const *self,size_t frame){ return wxDefaultPosition; }
+SWIGINTERN wxSize wxAnimation_GetFrameSize(wxAnimation const *self,size_t frame){ return wxDefaultSize; }
 SWIGINTERN wxAnimationDisposal wxAnimation_GetDisposalMethod(wxAnimation const *self,size_t frame){ return wxANIM_UNSPECIFIED; }
+SWIGINTERN wxColour wxAnimation_GetTransparentColour(wxAnimation const *self,size_t frame){ return wxNullColour; }
 SWIGINTERN wxColour wxAnimation_GetBackgroundColour(wxAnimation const *self){ return wxNullColour; }
 // for backwards compatibility
 #ifndef wxAN_FIT_ANIMATION
@@ -3283,6 +3285,45 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_Animation_GetFrameSize(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxAnimation *arg1 = (wxAnimation *) 0 ;
+  size_t arg2 ;
+  wxSize result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  size_t val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "frame", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:Animation_GetFrameSize",kwnames,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxAnimation, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Animation_GetFrameSize" "', expected argument " "1"" of type '" "wxAnimation const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxAnimation * >(argp1);
+  ecode2 = SWIG_AsVal_size_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Animation_GetFrameSize" "', expected argument " "2"" of type '" "size_t""'");
+  } 
+  arg2 = static_cast< size_t >(val2);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = wxAnimation_GetFrameSize((wxAnimation const *)arg1,arg2);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_NewPointerObj((new wxSize(static_cast< const wxSize& >(result))), SWIGTYPE_p_wxSize, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_Animation_GetDisposalMethod(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   wxAnimation *arg1 = (wxAnimation *) 0 ;
@@ -3316,6 +3357,45 @@ SWIGINTERN PyObject *_wrap_Animation_GetDisposalMethod(PyObject *SWIGUNUSEDPARM(
     if (PyErr_Occurred()) SWIG_fail;
   }
   resultobj = SWIG_From_int(static_cast< int >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Animation_GetTransparentColour(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxAnimation *arg1 = (wxAnimation *) 0 ;
+  size_t arg2 ;
+  wxColour result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  size_t val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "frame", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:Animation_GetTransparentColour",kwnames,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxAnimation, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Animation_GetTransparentColour" "', expected argument " "1"" of type '" "wxAnimation const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxAnimation * >(argp1);
+  ecode2 = SWIG_AsVal_size_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Animation_GetTransparentColour" "', expected argument " "2"" of type '" "size_t""'");
+  } 
+  arg2 = static_cast< size_t >(val2);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = wxAnimation_GetTransparentColour((wxAnimation const *)arg1,arg2);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_NewPointerObj((new wxColour(static_cast< const wxColour& >(result))), SWIGTYPE_p_wxColour, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -4007,7 +4087,9 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"new_Animation", _wrap_new_Animation, METH_VARARGS, NULL},
 	 { (char *)"delete_Animation", (PyCFunction)_wrap_delete_Animation, METH_O, NULL},
 	 { (char *)"Animation_GetFramePosition", (PyCFunction) _wrap_Animation_GetFramePosition, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"Animation_GetFrameSize", (PyCFunction) _wrap_Animation_GetFrameSize, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Animation_GetDisposalMethod", (PyCFunction) _wrap_Animation_GetDisposalMethod, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"Animation_GetTransparentColour", (PyCFunction) _wrap_Animation_GetTransparentColour, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Animation_GetBackgroundColour", (PyCFunction)_wrap_Animation_GetBackgroundColour, METH_O, NULL},
 	 { (char *)"Animation_swigregister", Animation_swigregister, METH_VARARGS, NULL},
 	 { (char *)"Animation_swiginit", Animation_swiginit, METH_VARARGS, NULL},

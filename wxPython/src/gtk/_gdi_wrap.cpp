@@ -3673,7 +3673,7 @@ SWIGINTERN wxArrayDouble wxGraphicsContext_GetPartialTextExtents(wxGraphicsConte
             self->GetPartialTextExtents(text, widths);
             return widths;
         }
-SWIGINTERN void wxGraphicsContext_StrokeDisconnectedLines(wxGraphicsContext *self,PyObject *beginPoints,PyObject *endPoints){
+SWIGINTERN void wxGraphicsContext_StrokeLineSegements(wxGraphicsContext *self,PyObject *beginPoints,PyObject *endPoints){
             size_t c1, c2, count;
             wxPoint2D* beginP = wxPoint2D_LIST_helper(beginPoints, &c1);
             wxPoint2D* endP =   wxPoint2D_LIST_helper(endPoints, &c2);
@@ -26072,7 +26072,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_GraphicsContext_StrokeDisconnectedLines(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+SWIGINTERN PyObject *_wrap_GraphicsContext_StrokeLineSegements(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   wxGraphicsContext *arg1 = (wxGraphicsContext *) 0 ;
   PyObject *arg2 = (PyObject *) 0 ;
@@ -26086,16 +26086,16 @@ SWIGINTERN PyObject *_wrap_GraphicsContext_StrokeDisconnectedLines(PyObject *SWI
     (char *) "self",(char *) "beginPoints",(char *) "endPoints", NULL 
   };
   
-  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:GraphicsContext_StrokeDisconnectedLines",kwnames,&obj0,&obj1,&obj2)) SWIG_fail;
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:GraphicsContext_StrokeLineSegements",kwnames,&obj0,&obj1,&obj2)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxGraphicsContext, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "GraphicsContext_StrokeDisconnectedLines" "', expected argument " "1"" of type '" "wxGraphicsContext *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "GraphicsContext_StrokeLineSegements" "', expected argument " "1"" of type '" "wxGraphicsContext *""'"); 
   }
   arg1 = reinterpret_cast< wxGraphicsContext * >(argp1);
   arg2 = obj1;
   arg3 = obj2;
   {
-    wxGraphicsContext_StrokeDisconnectedLines(arg1,arg2,arg3);
+    wxGraphicsContext_StrokeLineSegements(arg1,arg2,arg3);
     if (PyErr_Occurred()) SWIG_fail;
   }
   resultobj = SWIG_Py_Void();
@@ -34796,7 +34796,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"GraphicsContext_DrawIcon", (PyCFunction) _wrap_GraphicsContext_DrawIcon, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"GraphicsContext_StrokeLine", (PyCFunction) _wrap_GraphicsContext_StrokeLine, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"GraphicsContext_StrokeLines", (PyCFunction) _wrap_GraphicsContext_StrokeLines, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"GraphicsContext_StrokeDisconnectedLines", (PyCFunction) _wrap_GraphicsContext_StrokeDisconnectedLines, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"GraphicsContext_StrokeLineSegements", (PyCFunction) _wrap_GraphicsContext_StrokeLineSegements, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"GraphicsContext_DrawLines", (PyCFunction) _wrap_GraphicsContext_DrawLines, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"GraphicsContext_DrawRectangle", (PyCFunction) _wrap_GraphicsContext_DrawRectangle, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"GraphicsContext_DrawEllipse", (PyCFunction) _wrap_GraphicsContext_DrawEllipse, METH_VARARGS | METH_KEYWORDS, NULL},

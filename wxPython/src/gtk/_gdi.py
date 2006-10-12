@@ -4456,8 +4456,8 @@ class BufferedDC(DC):
     `wx.BufferedPaintDC`.
 
     Please note that GTK+ 2.0 and OS X provide double buffering themselves
-    natively so using this class on those platforms will normally result
-    in an unneeded level of buffering.
+    natively. wxBufferedDC is aware of this however, and will bypass the buffering
+    unless an explicit buffer bitmap is given.
 
     """
     thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -5008,9 +5008,9 @@ class GraphicsContext(object):
         """StrokeLines(self, List points)"""
         return _gdi_.GraphicsContext_StrokeLines(*args, **kwargs)
 
-    def StrokeDisconnectedLines(*args, **kwargs):
-        """StrokeDisconnectedLines(self, PyObject beginPoints, PyObject endPoints)"""
-        return _gdi_.GraphicsContext_StrokeDisconnectedLines(*args, **kwargs)
+    def StrokeLineSegements(*args, **kwargs):
+        """StrokeLineSegements(self, PyObject beginPoints, PyObject endPoints)"""
+        return _gdi_.GraphicsContext_StrokeLineSegements(*args, **kwargs)
 
     def DrawLines(*args, **kwargs):
         """DrawLines(self, size_t points, int fillStyle=WINDING_RULE)"""

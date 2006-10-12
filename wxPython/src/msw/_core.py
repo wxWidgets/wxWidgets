@@ -3044,7 +3044,6 @@ class Image(Object):
     MaskBlue = property(GetMaskBlue,doc="See `GetMaskBlue`") 
     MaskGreen = property(GetMaskGreen,doc="See `GetMaskGreen`") 
     MaskRed = property(GetMaskRed,doc="See `GetMaskRed`") 
-    Size = property(GetSize,doc="See `GetSize`") 
     Width = property(GetWidth,doc="See `GetWidth`") 
 _core_.Image_swigregister(Image)
 
