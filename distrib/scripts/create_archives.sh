@@ -114,11 +114,18 @@ doinit()
 dospinport(){
     port=$1
     
-    if [ $port != "all" ]; then
-        portname="`echo $port|tr '[a-z]' '[A-Z]'`"    
-    else
-        portname="Widgets"
-    fi
+    case "$port" in
+       all)
+          portname=Widgets;;
+       base)
+          portname=Base;;
+       motif)
+          portname=Motif;;
+       mac)
+          portname=Mac;;
+       *)
+          portname=echo $port | tr [a-z] [A-Z];;
+    esac
     
     echo "Creating wx$portname distribution..."
 
