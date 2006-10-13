@@ -99,8 +99,6 @@ public:
     virtual void SetDeviceOrigin( wxCoord x, wxCoord y );
     virtual void SetAxisOrientation( bool xLeftRight, bool yBottomUp );
 
-    virtual GdkWindow* GetGDKWindow() const { return m_window; }
-
 // protected:
     // implementation
     // --------------
@@ -128,7 +126,7 @@ public:
 protected:
     virtual void ComputeScaleAndOrigin();
 
-    GdkWindow *GetWindow() { return m_window; }
+    virtual GdkWindow *GetGDKWindow() const { return m_window; }
 
 private:
     DECLARE_DYNAMIC_CLASS(wxWindowDC)
