@@ -1205,9 +1205,21 @@ public:
     /// Get combined attributes of the base style and paragraph style.
     wxTextAttrEx GetCombinedAttributes() const;
 
+    /// Create default tabstop array
+    static void InitDefaultTabs();
+
+    /// Clear default tabstop array
+    static void ClearDefaultTabs();
+
+    /// Get default tabstop array
+    static const wxArrayInt& GetDefaultTabs() { return sm_defaultTabs; }
+
 protected:
     /// The lines that make up the wrapped paragraph
     wxRichTextLineList m_cachedLines;
+
+    /// Default tabstops
+    static wxArrayInt  sm_defaultTabs;
 };
 
 /*!

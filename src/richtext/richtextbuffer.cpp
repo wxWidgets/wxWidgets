@@ -2433,6 +2433,8 @@ bool wxRichTextParagraphLayoutBox::ApplyStyleSheet(wxRichTextStyleSheet* styleSh
 
 IMPLEMENT_DYNAMIC_CLASS(wxRichTextParagraph, wxRichTextBox)
 
+wxArrayInt wxRichTextParagraph::sm_defaultTabs;
+
 wxRichTextParagraph::wxRichTextParagraph(wxRichTextObject* parent, wxTextAttrEx* style):
     wxRichTextBox(parent)
 {
@@ -3482,6 +3484,23 @@ wxTextAttrEx wxRichTextParagraph::GetCombinedAttributes() const
     return attr;
 }
 
+/// Create default tabstop array
+void wxRichTextParagraph::InitDefaultTabs()
+{
+    // create a default tab list at 10 mm each.
+    for (int i = 0; i < 20; ++i)
+    {
+        sm_defaultTabs.Add(i*100);
+    }
+}
+
+/// Clear default tabstop array
+void wxRichTextParagraph::ClearDefaultTabs()
+{
+    sm_defaultTabs.Clear();
+}
+
+
 /*!
  * wxRichTextLine
  * This object represents a line in a paragraph, and stores
@@ -3542,6 +3561,8 @@ wxRichTextPlainText::wxRichTextPlainText(const wxString& text, wxRichTextObject*
     m_text = text;
 }
 
+#define USE_KERNING_FIX 1
+
 /// Draw the item
 bool wxRichTextPlainText::Draw(wxDC& dc, const wxRichTextRange& range, const wxRichTextRange& selectionRange, const wxRect& rect, int descent, int WXUNUSED(style))
 {
@@ -3599,6 +3620,23 @@ bool wxRichTextPlainText::Draw(wxDC& dc, const wxRichTextRange& range, const wxR
             wxString stringFragment = m_text.Mid(r1 - offset, fragmentLen);
 
             DrawTabbedString(dc, textAttr, rect, stringFragment, x, y, false);
+
+#if USE_KERNING_FIX
+            if (stringChunk.Find(wxT("\t")) == wxNOT_FOUND)
+            {
+                // Compensate for kerning difference
+                wxString stringFragment2(m_text.Mid(r1 - offset, fragmentLen+1));
+                wxString stringFragment3(m_text.Mid(r1 - offset + fragmentLen, 1));
+                
+                wxCoord w1, h1, w2, h2, w3, h3;
+                dc.GetTextExtent(stringFragment,  & w1, & h1);
+                dc.GetTextExtent(stringFragment2, & w2, & h2);
+                dc.GetTextExtent(stringFragment3, & w3, & h3);
+                
+                int kerningDiff = (w1 + w3) - w2;
+                x = x - kerningDiff;
+            }
+#endif
         }
 
         // 2. Selected chunk, if any.
@@ -3613,6 +3651,23 @@ bool wxRichTextPlainText::Draw(wxDC& dc, const wxRichTextRange& range, const wxR
             wxString stringFragment = m_text.Mid(s1 - offset, fragmentLen);
 
             DrawTabbedString(dc, textAttr, rect, stringFragment, x, y, true);
+
+#if USE_KERNING_FIX
+            if (stringChunk.Find(wxT("\t")) == wxNOT_FOUND)
+            {
+                // Compensate for kerning difference
+                wxString stringFragment2(m_text.Mid(s1 - offset, fragmentLen+1));
+                wxString stringFragment3(m_text.Mid(s1 - offset + fragmentLen, 1));
+                
+                wxCoord w1, h1, w2, h2, w3, h3;
+                dc.GetTextExtent(stringFragment,  & w1, & h1);
+                dc.GetTextExtent(stringFragment2, & w2, & h2);
+                dc.GetTextExtent(stringFragment3, & w3, & h3);
+                
+                int kerningDiff = (w1 + w3) - w2;
+                x = x - kerningDiff;
+            }
+#endif
         }
 
         // 3. Remaining unselected chunk, if any
@@ -3635,29 +3690,33 @@ bool wxRichTextPlainText::Draw(wxDC& dc, const wxRichTextRange& range, const wxR
 
 bool wxRichTextPlainText::DrawTabbedString(wxDC& dc, const wxTextAttrEx& attr, const wxRect& rect,wxString& str, wxCoord& x, wxCoord& y, bool selected)
 {
-    wxArrayInt tab_array =  attr.GetTabs();
-    if (tab_array.IsEmpty())
+    bool hasTabs = (str.Find(wxT('\t')) != wxNOT_FOUND);
+
+    wxArrayInt tabArray;
+    int tabCount;
+    if (hasTabs)
     {
-        // create a default tab list at 10 mm each.
-        for (int i = 0; i < 20; ++i)
+        if (attr.GetTabs().IsEmpty())
+            tabArray = wxRichTextParagraph::GetDefaultTabs();
+        else
+            tabArray = attr.GetTabs();
+        tabCount = tabArray.GetCount();
+
+        for (int i = 0; i < tabCount; ++i)
         {
-            tab_array.Add(i*100);
+            int pos = tabArray[i];
+            pos = ConvertTenthsMMToPixels(dc, pos);
+            tabArray[i] = pos;
         }
     }
-    int map_mode = dc.GetMapMode();
-    dc.SetMapMode(wxMM_LOMETRIC );
-    int num_tabs = tab_array.GetCount();
-    for (int i = 0; i < num_tabs; ++i)
-    {
-       tab_array[i] = dc.LogicalToDeviceXRel(tab_array[i]);
-    }
+    else
+        tabCount = 0;
 
-    dc.SetMapMode(map_mode );
-    int next_tab_pos = -1;
-    int tab_pos = -1;
+    int nextTabPos = -1;
+    int tabPos = -1;
     wxCoord w, h;
 
-    if(selected)
+    if (selected)
     {
         dc.SetBrush(*wxBLACK_BRUSH);
         dc.SetPen(*wxBLACK_PEN);
@@ -3670,41 +3729,45 @@ bool wxRichTextPlainText::DrawTabbedString(wxDC& dc, const wxTextAttrEx& attr, c
         dc.SetBackgroundMode(wxTRANSPARENT);
     }
 
-    while (str.Find(wxT('\t')) >= 0)
+    while (hasTabs)
     {
         // the string has a tab
         // break up the string at the Tab
         wxString stringChunk = str.BeforeFirst(wxT('\t'));
         str = str.AfterFirst(wxT('\t'));
         dc.GetTextExtent(stringChunk, & w, & h);
-        tab_pos = x + w;
+        tabPos = x + w;
         bool not_found = true;
-        for (int i = 0; i < num_tabs && not_found; ++i)
+        for (int i = 0; i < tabCount && not_found; ++i)
         {
-            next_tab_pos = tab_array.Item(i);
-            if (next_tab_pos > tab_pos)
+            nextTabPos = tabArray.Item(i);
+            if (nextTabPos > tabPos)
             {
                 not_found = false;
                 if (selected)
                 {
-                    w = next_tab_pos - x;
+                    w = nextTabPos - x;
                     wxRect selRect(x, rect.y, w, rect.GetHeight());
                     dc.DrawRectangle(selRect);
                 }
                 dc.DrawText(stringChunk, x, y);
-                x = next_tab_pos;
+                x = nextTabPos;
             }
         }
+        hasTabs = (str.Find(wxT('\t')) != wxNOT_FOUND);
     }
 
-    dc.GetTextExtent(str, & w, & h);
-    if (selected)
+    if (!str.IsEmpty())
     {
-        wxRect selRect(x, rect.y, w, rect.GetHeight());
-        dc.DrawRectangle(selRect);
+        dc.GetTextExtent(str, & w, & h);
+        if (selected)
+        {
+            wxRect selRect(x, rect.y, w, rect.GetHeight());
+            dc.DrawRectangle(selRect);
+        }
+        dc.DrawText(str, x, y);
+        x += w;
     }
-    dc.DrawText(str, x, y);
-    x += w;
     return true;
 
 }
@@ -3767,29 +3830,25 @@ bool wxRichTextPlainText::GetRangeSize(const wxRichTextRange& range, wxSize& siz
     wxString stringChunk = m_text.Mid(startPos, (size_t) len);
     wxCoord w, h;
     int width = 0;
-    if (stringChunk.Find(wxT('\t')) >= 0)
+    if (stringChunk.Find(wxT('\t')) != wxNOT_FOUND)
     {
         // the string has a tab
-        wxArrayInt tab_array =  textAttr.GetTabs();
-        if (tab_array.IsEmpty())
-        {
-            // create a default tab list at 10 mm each.
-            for (int i = 0; i < 20; ++i)
-            {
-                tab_array.Add(i*100);
-            }
-        }
+        wxArrayInt tabArray;
+        if (textAttr.GetTabs().IsEmpty())
+            tabArray = wxRichTextParagraph::GetDefaultTabs();
+        else
+            tabArray = textAttr.GetTabs();
 
-        int map_mode = dc.GetMapMode();
-        dc.SetMapMode(wxMM_LOMETRIC );
-        int num_tabs = tab_array.GetCount();
-
-        for (int i = 0; i < num_tabs; ++i)
+        int tabCount = tabArray.GetCount();
+        
+        for (int i = 0; i < tabCount; ++i)
         {
-            tab_array[i] = dc.LogicalToDeviceXRel(tab_array[i]);
+            int pos = tabArray[i];
+            pos = ((wxRichTextPlainText*) this)->ConvertTenthsMMToPixels(dc, pos);
+            tabArray[i] = pos;
         }
-        dc.SetMapMode(map_mode );
-        int next_tab_pos = -1;
+        
+        int nextTabPos = -1;
 
         while (stringChunk.Find(wxT('\t')) >= 0)
         {
@@ -3799,15 +3858,15 @@ bool wxRichTextPlainText::GetRangeSize(const wxRichTextRange& range, wxSize& siz
             stringChunk = stringChunk.AfterFirst(wxT('\t'));
             dc.GetTextExtent(stringFragment, & w, & h);
             width += w;
-            int absolute_width = width + position.x;
-            bool not_found = true;
-            for (int i = 0; i < num_tabs && not_found; ++i)
+            int absoluteWidth = width + position.x;
+            bool notFound = true;
+            for (int i = 0; i < tabCount && notFound; ++i)
             {
-                next_tab_pos = tab_array.Item(i);
-                if (next_tab_pos > absolute_width)
+                nextTabPos = tabArray.Item(i);
+                if (nextTabPos > absoluteWidth)
                 {
-                    not_found = false;
-                    width = next_tab_pos - position.x;
+                    notFound = false;
+                    width = nextTabPos - position.x;
                 }
             }
         }
@@ -4858,8 +4917,18 @@ class wxRichTextModule: public wxModule
 DECLARE_DYNAMIC_CLASS(wxRichTextModule)
 public:
     wxRichTextModule() {}
-    bool OnInit() { wxRichTextBuffer::InitStandardHandlers(); return true; };
-    void OnExit() { wxRichTextBuffer::CleanUpHandlers(); wxRichTextDecimalToRoman(-1); };
+    bool OnInit()
+    {
+        wxRichTextBuffer::InitStandardHandlers();
+        wxRichTextParagraph::InitDefaultTabs();
+        return true;
+    };
+    void OnExit()
+    {
+        wxRichTextBuffer::CleanUpHandlers();
+        wxRichTextDecimalToRoman(-1);
+        wxRichTextParagraph::ClearDefaultTabs();
+    };
 };
 
 IMPLEMENT_DYNAMIC_CLASS(wxRichTextModule, wxModule)
