@@ -64,10 +64,10 @@ class TestTB(wx.Treebook):
         wx.FutureCall(100, self.AdjustSize)
 
     def AdjustSize(self):
-        print self.GetTreeCtrl().GetBestSize()
+        #print self.GetTreeCtrl().GetBestSize()
         self.GetTreeCtrl().InvalidateBestSize()
         self.SendSizeEvent()
-        print self.GetTreeCtrl().GetBestSize()
+        #print self.GetTreeCtrl().GetBestSize()
         
 
     def makeColorPanel(self, color):
