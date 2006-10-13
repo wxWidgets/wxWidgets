@@ -306,7 +306,7 @@ Quartz and also on the other platforms.
 
 The first parts of a new 2D drawing API has been added with the
 wx.GraphicsPath and wx.GraphicsContext classes.  They wrap GDI+ on
-Windows, Cairo on wxGTK and CoreGraphics on OS X, and allow path-based
+Windows, Cairo on wxGTK and CoreGraphics on OS X.  They allow path-based
 drawing with alpha-blending and anti-aliasing, and use a floating
 point cooridnate system.  Currently they can only target drawing to
 windows, but other wx.DC backends are forthcoming.  The APIs may
