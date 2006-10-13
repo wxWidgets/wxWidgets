@@ -356,15 +356,17 @@ wxTCPConnection::wxTCPConnection(wxChar *buffer, int size)
 wxTCPConnection::~wxTCPConnection ()
 {
   Disconnect();
-  wxDELETE(m_codeci);
-  wxDELETE(m_codeco);
-  wxDELETE(m_sockstrm);
 
   if (m_sock)
   {
     m_sock->SetClientData(NULL);
     m_sock->Destroy();
   }
+
+  /* Delete after destroy */
+  wxDELETE(m_codeci);
+  wxDELETE(m_codeco);
+  wxDELETE(m_sockstrm);
 }
 
 void wxTCPConnection::Compress(bool WXUNUSED(on))
@@ -424,6 +426,7 @@ wxChar *wxTCPConnection::Request (const wxString& item, int *size, wxIPCFormat f
     size_t s;
 
     s = m_codeci->Read32();
+
     wxChar *data = GetBufferAtLeast( s );
     wxASSERT_MSG(data != NULL,
                  _T("Buffer too small in wxTCPConnection::Request") );
@@ -521,6 +524,9 @@ END_EVENT_TABLE()
 void wxTCPEventHandler::Client_OnRequest(wxSocketEvent &event)
 {
   wxSocketBase *sock = event.GetSocket();
+  if (!sock) {		/* No socket, no glory */
+    return ;
+  }
   wxSocketNotify evt = event.GetSocketEvent();
   wxTCPConnection *connection = (wxTCPConnection *)(sock->GetClientData());
 
@@ -559,6 +565,7 @@ void wxTCPEventHandler::Client_OnRequest(wxSocketEvent &event)
 
     format = (wxIPCFormat)codeci->Read8();
     size = codeci->Read32();
+    
     data = connection->GetBufferAtLeast( size );
     wxASSERT_MSG(data != NULL,
                  _T("Buffer too small in wxTCPEventHandler::Client_OnRequest") );
@@ -670,6 +677,9 @@ void wxTCPEventHandler::Client_OnRequest(wxSocketEvent &event)
 void wxTCPEventHandler::Server_OnRequest(wxSocketEvent &event)
 {
   wxSocketServer *server = (wxSocketServer *) event.GetSocket();
+  if (!server) {		/* No server, Then exit */
+	  return ;
+  }
   wxTCPServer *ipcserv = (wxTCPServer *) server->GetClientData();
 
   // This socket is being deleted; skip this event
@@ -681,6 +691,9 @@ void wxTCPEventHandler::Server_OnRequest(wxSocketEvent &event)
 
   // Accept the connection, getting a new socket
   wxSocketBase *sock = server->Accept();
+  if (!sock) {		/* No socket, no glory */
+	  return ;
+  }
   if (!sock->Ok())
   {
     sock->Destroy();
