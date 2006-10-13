@@ -1,9 +1,9 @@
 Recent Changes for wxPython
 =====================================================================
 
-2.7.1.0
+2.7.1.1
 -------
-* 13-Oct-2006
+* 
 
 The following deprecated items have been removed:
 
@@ -280,13 +280,6 @@ For consistency, all classes having an Ok() method now also have
 IsOk(), use of the latter form is preferred although the former hasn't
 been deprecated yet
 
-wx.BufferedDC and wx.BufferedPaintDC, if created with a reference to a
-window and no program supplied buffer bitmap, will not do its own
-buffering if the window is already double buffered by the system.
-Also added a wx.AutoBufferedPaintDC that is a subclass of wx.PaintDC
-on platforms that do double buffering by default, and a subclass of
-wx.BufferedPaintDC on the platforms that don't.
-
 Added the wx.AboutBox() function and wx.AboutDialogInfo class.  They
 provide a way to show a standard About box for the application, which
 will either be a native dialog or a generic one depending on what info
@@ -307,8 +300,8 @@ Quartz) for wxDC is now turned on by default.  This means that all
 drawing via wxDC is done using the new APIs from apple, instead of the
 old Quick Draw API.  There are, however, a few places where Quartz and
 wxDC don't fit together very well, mainly the lack of support for
-logical drawing operations such as XOR, but there work in progress to
-provide other ways to do the same sort of thing that will work with
+logical drawing operations such as XOR, but there is work in progress
+to provide other ways to do the same sort of thing that will work with
 Quartz and also on the other platforms.
 
 The first parts of a new 2D drawing API has been added with the
@@ -321,6 +314,17 @@ evolve a bit more before they are finalaized with the 2.8 release, but
 there is enough there now to get a good feel for how things will work.
 There is also a transitional wx.GCDC class that provides the wx.DC API
 on top of wx.GraphicsContext.  Docs and a demo are still MIA.
+
+Added a wx.AutoBufferedPaintDC that is a subclass of wx.PaintDC on
+platforms that do double buffering by default, and a subclass of
+wx.BufferedPaintDC on the platforms that don't.  You can use this
+class to help avoid the overhead of buffering when it is not
+needed. There is also a wx.AutoBufferedPaintDCFactory function that
+does a little more and actually tests if the window has
+double-buffering enabled and then decides whether to return a
+wx.PaintDC or wx.BufferedPaintDC.  This uses the new
+wx.Window.IsDoubleBuffered method.
+
 
 
 

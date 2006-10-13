@@ -1247,7 +1247,7 @@ be used for anything. Typical usage is as follows::
 
     dc = wx.MemoryDC()
     dc.SelectObject(bitmap)
-    # draw on the dc usign any of the Draw methods
+    # draw on the dc using any of the Draw methods
     dc.SelectObject(wx.NullBitmap)
     # the bitmap now contains wahtever was drawn upon it
 
@@ -1258,12 +1258,13 @@ of it) before a bitmap can be reselected into another memory DC.
 class wxMemoryDC : public wxDC {
 public:
     DocCtorStr(
-        wxMemoryDC(),
+        wxMemoryDC(const wxBitmap& bitmap = wxNullBitmap),
         "Constructs a new memory device context.
 
 Use the Ok member to test whether the constructor was successful in
-creating a usable device context. Don't forget to select a bitmap into
-the DC before drawing on it.", "
+creating a usable device context. If a bitmap is not given to this
+constructor then don't forget to select a bitmap into the DC before
+drawing on it.", "
 
 :see: `MemoryDCFromDC`");
 
@@ -1318,7 +1319,7 @@ natively. wxBufferedDC is aware of this however, and will bypass the buffering
 unless an explicit buffer bitmap is given.
 ", "");
 
-class wxBufferedDC : public wxDC
+class wxBufferedDC : public wxMemoryDC
 {
 public:
     %pythonAppend wxBufferedDC
@@ -1358,10 +1359,10 @@ public:
     wxBufferedDC( wxDC* dc,
                   const wxSize& area,
                   int style = wxBUFFER_CLIENT_AREA );
-    wxBufferedDC(wxWindow* win,
-                 wxDC *dc,
-                 const wxSize &area,
-                 int style = wxBUFFER_CLIENT_AREA);
+//     wxBufferedDC(wxWindow* win,
+//                  wxDC *dc,
+//                  const wxSize &area,
+//                  int style = wxBUFFER_CLIENT_AREA);
 
 
     DocCtorStr(
@@ -1549,10 +1550,24 @@ public:
         """
         If the current platform double buffers by default then this DC is the
         same as a plain `wx.PaintDC`, otherwise it is a `wx.BufferedPaintDC`.
+
+        :see: `wx.AutoBufferedPaintDCFactory`
         """
         def __init__(self, window):
             _AutoBufferedPaintDCBase.__init__(self, window)
 }
+
+
+%newobject wxAutoBufferedPaintDCFactory;
+DocDeclStr(
+    wxDC* , wxAutoBufferedPaintDCFactory(wxWindow* window),
+    "Checks if the window is natively double buffered and will return a
+`wx.PaintDC` if it is, a `wx.BufferedPaintDC` otherwise.  The
+advantage of this function over `wx.AutoBufferedPaintDC` is that this
+function will check if the the specified window supports has
+double-buffering enabled rather than just going by platform defaults.", "");
+
+
 
 //---------------------------------------------------------------------------
 %newgroup
