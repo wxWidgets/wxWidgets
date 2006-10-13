@@ -4,7 +4,7 @@
 // Purpose:     Part of the widgets sample showing wxBitmapComboBox
 // Author:      Jaakko Salli
 // Created:     Sep-01-2006
-// Id:          $Id:
+// Id:          $Id$
 // Copyright:   (c) 2006 Jaakko Salli
 // License:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
@@ -131,7 +131,7 @@ protected:
     void OnUpdateUIAddSeveralWithImages(wxUpdateUIEvent& event);
     void OnUpdateUIClearButton(wxUpdateUIEvent& event);
     void OnUpdateUIDeleteButton(wxUpdateUIEvent& event);
-    void OnUpdateUIDeleteSelButton(wxUpdateUIEvent& event);
+    void OnUpdateUIItemManipulator(wxUpdateUIEvent& event);
     void OnUpdateUIResetButton(wxUpdateUIEvent& event);
 
     // reset the bmpcombobox parameters
@@ -205,8 +205,9 @@ BEGIN_EVENT_TABLE(BitmapComboBoxWidgetsPage, WidgetsPage)
     EVT_UPDATE_UI(BitmapComboBoxPage_Clear, BitmapComboBoxWidgetsPage::OnUpdateUIClearButton)
     EVT_UPDATE_UI(BitmapComboBoxPage_DeleteText, BitmapComboBoxWidgetsPage::OnUpdateUIClearButton)
     EVT_UPDATE_UI(BitmapComboBoxPage_Delete, BitmapComboBoxWidgetsPage::OnUpdateUIDeleteButton)
-    EVT_UPDATE_UI(BitmapComboBoxPage_Change, BitmapComboBoxWidgetsPage::OnUpdateUIDeleteSelButton)
-    EVT_UPDATE_UI(BitmapComboBoxPage_DeleteSel, BitmapComboBoxWidgetsPage::OnUpdateUIDeleteSelButton)
+    EVT_UPDATE_UI(BitmapComboBoxPage_Change, BitmapComboBoxWidgetsPage::OnUpdateUIItemManipulator)
+    EVT_UPDATE_UI(BitmapComboBoxPage_SetFromFile, BitmapComboBoxWidgetsPage::OnUpdateUIItemManipulator)
+    EVT_UPDATE_UI(BitmapComboBoxPage_DeleteSel, BitmapComboBoxWidgetsPage::OnUpdateUIItemManipulator)
 
     EVT_COMBOBOX(BitmapComboBoxPage_Combo, BitmapComboBoxWidgetsPage::OnComboBox)
     EVT_TEXT(BitmapComboBoxPage_Combo, BitmapComboBoxWidgetsPage::OnComboText)
@@ -669,7 +670,7 @@ void BitmapComboBoxWidgetsPage::OnUpdateUIDeleteButton(wxUpdateUIEvent& event)
     }
 }
 
-void BitmapComboBoxWidgetsPage::OnUpdateUIDeleteSelButton(wxUpdateUIEvent& event)
+void BitmapComboBoxWidgetsPage::OnUpdateUIItemManipulator(wxUpdateUIEvent& event)
 {
     if (m_combobox)
         event.Enable(m_combobox->GetSelection() != wxNOT_FOUND);
