@@ -190,6 +190,9 @@ gtkcombobox_changed_callback( GtkWidget *WXUNUSED(widget), wxComboBox *combo )
 
     if (!combo->m_hasVMT) return;
 
+    if (combo->GetSelection() == -1)
+        return;
+
     wxCommandEvent event( wxEVT_COMMAND_COMBOBOX_SELECTED, combo->GetId() );
     event.SetInt( combo->GetSelection() );
     event.SetString( combo->GetStringSelection() );
