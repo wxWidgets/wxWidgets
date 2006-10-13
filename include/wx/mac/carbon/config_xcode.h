@@ -135,7 +135,6 @@
 #define HAVE_STRING_H 1
 #define HAVE_SYS_STAT_H 1
 #define HAVE_SYS_TYPES_H 1
-#define HAVE_WPRINTF 1
 #define HAVE_X11_XLIB_H 1
 #define SOCKLEN_T socklen_t
 #define _FILE_OFFSET_BITS 64
