@@ -4390,7 +4390,7 @@ class MemoryDC(DC):
 
         dc = wx.MemoryDC()
         dc.SelectObject(bitmap)
-        # draw on the dc usign any of the Draw methods
+        # draw on the dc using any of the Draw methods
         dc.SelectObject(wx.NullBitmap)
         # the bitmap now contains wahtever was drawn upon it
 
@@ -4402,13 +4402,14 @@ class MemoryDC(DC):
     __repr__ = _swig_repr
     def __init__(self, *args, **kwargs): 
         """
-        __init__(self) -> MemoryDC
+        __init__(self, Bitmap bitmap=NullBitmap) -> MemoryDC
 
         Constructs a new memory device context.
 
         Use the Ok member to test whether the constructor was successful in
-        creating a usable device context. Don't forget to select a bitmap into
-        the DC before drawing on it.
+        creating a usable device context. If a bitmap is not given to this
+        constructor then don't forget to select a bitmap into the DC before
+        drawing on it.
         """
         _gdi_.MemoryDC_swiginit(self,_gdi_.new_MemoryDC(*args, **kwargs))
     def SelectObject(*args, **kwargs):
@@ -4442,7 +4443,7 @@ def MemoryDCFromDC(*args, **kwargs):
 
 BUFFER_VIRTUAL_AREA = _gdi_.BUFFER_VIRTUAL_AREA
 BUFFER_CLIENT_AREA = _gdi_.BUFFER_CLIENT_AREA
-class BufferedDC(DC):
+class BufferedDC(MemoryDC):
     """
     This simple class provides a simple way to avoid flicker: when drawing
     on it, everything is in fact first drawn on an in-memory buffer (a
@@ -4465,7 +4466,6 @@ class BufferedDC(DC):
         """
         __init__(self, DC dc, Bitmap buffer=NullBitmap, int style=BUFFER_CLIENT_AREA) -> BufferedDC
         __init__(self, DC dc, Size area, int style=BUFFER_CLIENT_AREA) -> BufferedDC
-        __init__(self, Window win, DC dc, Size area, int style=BUFFER_CLIENT_AREA) -> BufferedDC
 
         Constructs a buffered DC.
         """
@@ -4673,10 +4673,24 @@ class AutoBufferedPaintDC(_AutoBufferedPaintDCBase):
     """
     If the current platform double buffers by default then this DC is the
     same as a plain `wx.PaintDC`, otherwise it is a `wx.BufferedPaintDC`.
+
+    :see: `wx.AutoBufferedPaintDCFactory`
     """
     def __init__(self, window):
         _AutoBufferedPaintDCBase.__init__(self, window)
 
+
+def AutoBufferedPaintDCFactory(*args, **kwargs):
+  """
+    AutoBufferedPaintDCFactory(Window window) -> DC
+
+    Checks if the window is natively double buffered and will return a
+    `wx.PaintDC` if it is, a `wx.BufferedPaintDC` otherwise.  The
+    advantage of this function over `wx.AutoBufferedPaintDC` is that this
+    function will check if the the specified window supports has
+    double-buffering enabled rather than just going by platform defaults.
+    """
+  return _gdi_.AutoBufferedPaintDCFactory(*args, **kwargs)
 #---------------------------------------------------------------------------
 
 class MirrorDC(DC):
