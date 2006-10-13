@@ -22,11 +22,12 @@ your \texttt{OnPaint()} handler, you should look at
 \helpref{wxBufferedPaintDC}{wxbufferedpaintdc} or \helpref{wxAutoBufferedPaintDC}{wxautobufferedpaintdc}.
 
 Please note that GTK+ 2.0 as well as OS X provide double buffering themselves
-natively. wxBufferedDC is aware of this however, and will bypass the buffering
-unless explicit buffer bitmap is given.
++natively. Use \helpref{wxWindow::IsDoubleBuffered}{wxwindowisdoublebuffered} to
++determine whether you need to use buffering or not.
 
 \wxheading{Derived from}
 
+\helpref{wxMemoryDC}{wxmemorydc}\\
 \helpref{wxDC}{wxdc}\\
 \helpref{wxObject}{wxobject}
 
@@ -48,9 +49,9 @@ unless explicit buffer bitmap is given.
 
 \func{}{wxBufferedDC}{\void}
 
-\func{}{wxBufferedDC}{\param{wxDC *}{dc}, \param{const wxBitmap\& }{buffer}, \param{int }{style = wxBUFFER\_CLIENT\_AREA}}
+\func{}{wxBufferedDC}{\param{wxDC *}{dc}, \param{const wxSize\& }{area}, \param{int }{style = wxBUFFER\_CLIENT\_AREA}}
 
-\func{}{wxBufferedDC}{\param{wxWindow*}{window}, \param{wxDC *}{dc}, \param{const wxSize\& }{area}, \param{int }{style = wxBUFFER\_CLIENT\_AREA}}
+\func{}{wxBufferedDC}{\param{wxDC *}{dc}, \param{const wxBitmap\& }{buffer}, \param{int }{style = wxBUFFER\_CLIENT\_AREA}}
 
 If you use the first, default, constructor, you must call one of the 
 \helpref{Init}{wxbuffereddcinit} methods later in order to use the object.
@@ -63,10 +64,6 @@ must not be called after using them.
 \docparam{dc}{The underlying DC: everything drawn to this object will be
 flushed to this DC when this object is destroyed.  You may pass NULL
 in order to just initialize the buffer, and not flush it.}
-
-\docparam{window}{The window on which the dc paints. May be NULL, but
-you should normally specify this so that the DC can be aware whether the
-surface is natively double-buffered or not.}
 
 \docparam{area}{The size of the bitmap to be used for buffering (this bitmap is
 created internally when it is not given explicitly).}
@@ -83,9 +80,9 @@ device context).}
 
 \membersection{wxBufferedDC::Init}\label{wxbuffereddcinit}
 
-\func{void}{Init}{\param{wxDC *}{dc}, \param{const wxBitmap\& }{buffer}, \param{int }{style = wxBUFFER\_CLIENT\_AREA}}
+\func{void}{Init}{\param{wxDC *}{dc}, \param{const wxSize\& }{area}, \param{int }{style = wxBUFFER\_CLIENT\_AREA}}
 
-\func{void}{Init}{\param{wxWindow*}{window}, \param{wxDC *}{dc}, \param{const wxSize\& }{area}, \param{int }{style = wxBUFFER\_CLIENT\_AREA}}
+\func{void}{Init}{\param{wxDC *}{dc}, \param{const wxBitmap\& }{buffer}, \param{int }{style = wxBUFFER\_CLIENT\_AREA}}
 
 These functions initialize the object created using the default constructor.
 Please see \helpref{constructors documentation}{wxbuffereddcctor} for details.
@@ -116,6 +113,7 @@ already does this internally for the real underlying wxPaintDC.
 \wxheading{Derived from}
 
 \helpref{wxBufferedDC}{wxbuffereddc}\\
+\helpref{wxMemoryDC}{wxmemorydc}\\
 \helpref{wxDC}{wxdc}\\
 \helpref{wxObject}{wxobject}
 

@@ -36,7 +36,6 @@ INCOMPATIBLE CHANGES SINCE 2.6.x
   As a consequence, the class interface changed largely.
   Code updates, if any are required at all, are easy to accomplish though.
 - wxDialog::CreateButtonSizer() may return NULL now, please see the manual
-- wxBufferedDC doesn't inherit from wxMemoryDC any more (but directly from wxDC)
 
 
 Deprecated methods since 2.6.x and their replacements
@@ -59,7 +58,8 @@ All (GUI):
 
 - wxMemoryDC constructor now optionally accepts a wxBitmap parameter,
   calling SelectObject itself if a valid bitmap is passed.
-
+- Reverted wxBuffered[Paint]DC to pre 2.7.1 state, added
+  wxAutoBufferedPaintDC and wxAutoBufferedPaintDCFactory.
 
 
 
