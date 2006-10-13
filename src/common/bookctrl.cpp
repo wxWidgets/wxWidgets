@@ -430,7 +430,7 @@ int wxBookCtrlBase::DoSetSelection(size_t n, int flags)
 
     const int oldSel = GetSelection();
 
-    if ( oldSel != wxNOT_FOUND && n != (size_t)oldSel )
+    if ( n != (size_t)oldSel )
     {
         wxBookCtrlBaseEvent *event = CreatePageChangingEvent();
         bool allowed = false;
