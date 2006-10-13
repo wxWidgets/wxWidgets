@@ -3549,21 +3549,9 @@ class PageContainer(wx.Panel):
     def OnPaint(self, event):
         """ Handles the wx.EVT_PAINT event for L{PageContainer}."""
 
-        # Currently having problems with buffered DCs because of
-        # recent changes.  Just do the buffering ourselves instead.
         dc = wx.BufferedPaintDC(self)
-        #dc = wx.AutoBufferedPaintDC(self)
-        #dc = wx.AutoBufferedPaintDCFactory(self)
-##         size = self.GetSize()
-##         bmp = wx.EmptyBitmap(*size)
-##         dc = wx.MemoryDC()
-##         dc.SelectObject(bmp)
-        
         renderer = self._mgr.GetRenderer(self.GetParent().GetWindowStyleFlag())
         renderer.DrawTabs(self, dc)
-
-##         pdc = wx.PaintDC(self)
-##         pdc.Blit(0,0, size.width, size.height, dc, 0,0)
 
 
     def AddPage(self, caption, selected=True, imgindex=-1):
