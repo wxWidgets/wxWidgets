@@ -17,7 +17,7 @@
 class WXDLLIMPEXP_CORE wxMemoryDC : public wxDC
 {
 public:
-    wxMemoryDC();
+    wxMemoryDC( const wxBitmap& bitmap = wxNullBitmap );
     wxMemoryDC(wxDC *dc); // create compatible DC
 
     virtual void SelectObject(const wxBitmap& bitmap);

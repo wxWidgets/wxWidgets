@@ -41,13 +41,14 @@ can be reselected into another memory DC.
 
 \membersection{wxMemoryDC::wxMemoryDC}\label{wxmemorydcctor}
 
-\func{}{wxMemoryDC}{\void}
+\func{}{wxMemoryDC}{\param{const wxBitmap\& }{bitmap = wxNullBitmap}}
 
 Constructs a new memory device context.
 
 Use the {\it Ok} member to test whether the constructor was successful
-in creating a usable device context. Don't forget to select a bitmap
-into the DC before drawing on it.
+in creating a usable device context. If you don't pass a valid bitmap
+to the constructor, don't forget to select a bitmap into the DC before
+drawing on it.
 
 \membersection{wxMemoryDC::SelectObject}\label{wxmemorydcselectobject}
 

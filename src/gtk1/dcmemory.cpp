@@ -21,11 +21,15 @@
 
 IMPLEMENT_DYNAMIC_CLASS(wxMemoryDC,wxWindowDC)
 
-wxMemoryDC::wxMemoryDC() : wxWindowDC()
+wxMemoryDC::wxMemoryDC( const wxBitmap& bitmap )
+    : wxWindowDC()
 {
     m_ok = false;
 
     m_cmap = gtk_widget_get_default_colormap();
+
+    if ( bitmap.IsOk() )
+        SelectObject(bitmap);
 }
 
 wxMemoryDC::wxMemoryDC( wxDC *WXUNUSED(dc) )

@@ -47,11 +47,14 @@ IMPLEMENT_DYNAMIC_CLASS(wxMemoryDC, wxDC)
 // wxMemoryDC
 // ----------------------------------------------------------------------------
 
-wxMemoryDC::wxMemoryDC()
+wxMemoryDC::wxMemoryDC( const wxBitmap& bitmap )
 {
     CreateCompatible(NULL);
 
     Init();
+    
+    if ( bitmap.IsOk() )
+        SelectObject(bitmap);
 }
 
 wxMemoryDC::wxMemoryDC(wxDC *dc)

@@ -19,7 +19,7 @@ class WXDLLIMPEXP_CORE wxMemoryDC : public wxWindowDC
     DECLARE_DYNAMIC_CLASS(wxMemoryDC)
 
 public:
-    wxMemoryDC();
+    wxMemoryDC( const wxBitmap& bitmap = wxNullBitmap );
     wxMemoryDC( wxDC *dc ); // Create compatible DC
     virtual ~wxMemoryDC();
 

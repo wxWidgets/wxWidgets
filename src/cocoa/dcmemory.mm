@@ -30,10 +30,13 @@
 
 IMPLEMENT_DYNAMIC_CLASS(wxMemoryDC,wxDC)
 
-wxMemoryDC::wxMemoryDC(void)
+wxMemoryDC::wxMemoryDC( const wxBitmap& bitmap )
 {
     m_cocoaNSImage = NULL;
     m_ok = false;
+
+    if ( bitmap.IsOk() )
+        SelectObject(bitmap);
 }
 
 wxMemoryDC::wxMemoryDC( wxDC *WXUNUSED(dc) )

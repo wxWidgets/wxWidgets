@@ -21,7 +21,7 @@
 
 IMPLEMENT_DYNAMIC_CLASS(wxMemoryDC,wxPaintDC)
 
-wxMemoryDC::wxMemoryDC()
+wxMemoryDC::wxMemoryDC( const wxBitmap& bitmap )
 : m_selected()
 {
     m_ok = true;
@@ -30,6 +30,9 @@ wxMemoryDC::wxMemoryDC()
     SetPen(*wxBLACK_PEN);
     SetFont(*wxNORMAL_FONT);
     m_ok = false;
+
+    if ( bitmap.IsOk() )
+        SelectObject(bitmap);
 }
 
 wxMemoryDC::wxMemoryDC( wxDC *WXUNUSED(dc) )

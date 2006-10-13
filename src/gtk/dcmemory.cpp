@@ -21,7 +21,8 @@
 
 IMPLEMENT_DYNAMIC_CLASS(wxMemoryDC,wxWindowDC)
 
-wxMemoryDC::wxMemoryDC() : wxWindowDC()
+wxMemoryDC::wxMemoryDC( const wxBitmap& bitmap )
+   : wxWindowDC()
 {
     m_ok = false;
 
@@ -33,6 +34,9 @@ wxMemoryDC::wxMemoryDC() : wxWindowDC()
     pango_context_set_language( m_context, gtk_get_default_language() );
     m_layout = pango_layout_new( m_context );
     m_fontdesc = pango_font_description_copy( pango_context_get_font_description( m_context ) );
+
+    if ( bitmap.IsOk() )
+        SelectObject(bitmap);
 }
 
 wxMemoryDC::wxMemoryDC( wxDC *WXUNUSED(dc) )

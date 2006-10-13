@@ -17,7 +17,7 @@
 class WXDLLEXPORT wxMemoryDC: public wxDC
 {
 public:
-    wxMemoryDC(void);
+    wxMemoryDC( const wxBitmap& bitmap = wxNullBitmap );
     wxMemoryDC(wxDC* pDC); // Create compatible DC
 
     virtual void SelectObject(const wxBitmap& rBitmap);

@@ -19,7 +19,7 @@ class WXDLLEXPORT wxMemoryDC: public wxPaintDC
   DECLARE_DYNAMIC_CLASS(wxMemoryDC)
 
   public:
-    wxMemoryDC(void);
+    wxMemoryDC( const wxBitmap& bitmap = wxNullBitmap );
     wxMemoryDC( wxDC *dc ); // Create compatible DC
     virtual ~wxMemoryDC(void);
     virtual void SelectObject( const wxBitmap& bitmap );

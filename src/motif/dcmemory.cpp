@@ -35,7 +35,7 @@
 
 IMPLEMENT_DYNAMIC_CLASS(wxMemoryDC, wxWindowDC)
 
-wxMemoryDC::wxMemoryDC(void)
+wxMemoryDC::wxMemoryDC( const wxBitmap& bitmap )
 {
     m_ok = true;
     m_display = wxGetDisplay();
@@ -57,6 +57,9 @@ wxMemoryDC::wxMemoryDC(void)
     SetBrush (* wxWHITE_BRUSH);
     SetPen (* wxBLACK_PEN);
     SetFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT));
+    
+    if ( bitmap.IsOk() )
+        SelectObject(bitmap);
 }
 
 wxMemoryDC::wxMemoryDC( wxDC* dc )

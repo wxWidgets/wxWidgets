@@ -52,6 +52,17 @@ Major changes in 2.7 release
 - New AUI library supporting docking windows and much more
 
 
+2.7.2
+-----
+
+All (GUI): 
+
+- wxMemoryDC constructor now optionally accepts a wxBitmap parameter,
+  calling SelectObject itself if a valid bitmap is passed.
+
+
+
+
 2.7.1
 -----
 
