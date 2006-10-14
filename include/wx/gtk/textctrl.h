@@ -174,6 +174,9 @@ public:
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
 
+    // has the control been frozen by Freeze()?
+    bool IsFrozen() const { return m_frozenness > 0; }
+
 protected:
     virtual wxSize DoGetBestSize() const;
     virtual void DoApplyWidgetStyle(GtkRcStyle *style);
@@ -185,9 +188,6 @@ protected:
     // Widgets that use the style->base colour for the BG colour should
     // override this and return true.
     virtual bool UseGTKStyleBase() const { return true; }
-
-    // has the control been frozen by Freeze()?
-    bool IsFrozen() const { return m_frozenness > 0; }
 
     virtual void DoSetValue(const wxString &value, int flags = 0);
 
