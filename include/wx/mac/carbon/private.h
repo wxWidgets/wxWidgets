@@ -64,6 +64,8 @@ inline int    FixedToInt( Fixed inFixed )
 
 #include "wx/listbox.h"
 
+#ifndef __LP64__
+
 class wxMacPortStateHelper
 {
     DECLARE_NO_COPY_CLASS(wxMacPortStateHelper)
@@ -140,6 +142,7 @@ private:
     GrafPtr   m_newPort;
     ThemeDrawingState m_themeDrawingState;
 };
+#endif
 
 #if wxMAC_USE_CORE_GRAPHICS
 class WXDLLEXPORT wxMacCGContextStateSaver
@@ -496,7 +499,7 @@ public :
     virtual ControlRef * GetControlRefAddr() { return &m_controlRef; }
     virtual ControlRef GetControlRef() const { return m_controlRef; }
 
-    virtual void SetReference( SInt32 data );
+    virtual void SetReference( URefCon data );
     /*
     void operator= (ControlRef c) { m_controlRef = c; }
     operator ControlRef () { return m_controlRef; }
@@ -663,7 +666,7 @@ public :
     OSStatus GetItemCount( DataBrowserItemID container,
             Boolean recurse,
             DataBrowserItemState state,
-            UInt32 *numItems) const;
+            ItemCount *numItems) const;
 
     OSStatus GetItems( DataBrowserItemID container,
             Boolean recurse,
@@ -727,8 +730,8 @@ public :
 
     OSStatus GetColumnIDFromIndex( DataBrowserTableViewColumnIndex position, DataBrowserTableViewColumnID* id );
 
-    OSStatus GetColumnPosition( DataBrowserPropertyID column, UInt32 *position) const;
-    OSStatus SetColumnPosition( DataBrowserPropertyID column, UInt32 position);
+    OSStatus GetColumnPosition( DataBrowserPropertyID column, DataBrowserTableViewColumnIndex *position) const;
+    OSStatus SetColumnPosition( DataBrowserPropertyID column, DataBrowserTableViewColumnIndex position);
 
     OSStatus GetScrollPosition( UInt32 *top , UInt32 *left ) const;
     OSStatus SetScrollPosition( UInt32 top , UInt32 left );
@@ -1261,6 +1264,8 @@ private :
 
 ControlRef wxMacFindControlUnderMouse( wxTopLevelWindowMac* toplevelWindow, const Point& location , WindowRef window , ControlPartCode *outPart );
 
+#ifndef __LP64__
+
 #ifdef WORDS_BIGENDIAN
     inline Rect* wxMacGetPictureBounds( PicHandle pict , Rect* rect )
     {
@@ -1272,6 +1277,8 @@ ControlRef wxMacFindControlUnderMouse( wxTopLevelWindowMac* toplevelWindow, cons
     {
         return QDGetPictureBounds( pict , rect );
     }
+#endif
+
 #endif
 
 #endif // wxUSE_GUI
@@ -1300,6 +1307,15 @@ wxString wxMacMakeStringFromPascal( ConstStringPtr from );
 wxString wxMacFSRefToPath( const FSRef *fsRef , CFStringRef additionalPathComponent = NULL );
 OSStatus wxMacPathToFSRef( const wxString&path , FSRef *fsRef );
 wxString wxMacHFSUniStrToString( ConstHFSUniStr255Param uniname );
+
+#if wxUSE_GUI
+
+// deprecating QD
+
+void wxMacLocalToGlobal( WindowRef window , Point*pt );
+void wxMacGlobalToLocal( WindowRef window , Point*pt );
+
+#endif
 
 #endif
     // _WX_PRIVATE_H_
