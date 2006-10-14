@@ -6925,10 +6925,6 @@ if test "$wxUSE_RICHTEXT" = "yes"; then
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS richtext"
 fi
 
-if test "$wxUSE_GRAPHICS_CONTEXT" = "yes"; then
-  AC_DEFINE(wxUSE_GRAPHICS_CONTEXT)
-fi
-
 dnl ---------------------------------------------------------------------------
 dnl wxImage options
 dnl ---------------------------------------------------------------------------
@@ -7033,6 +7029,29 @@ fi
 if test "$wxUSE_WIZARDDLG" = "yes"; then
     AC_DEFINE(wxUSE_WIZARDDLG)
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS wizard"
+fi
+
+dnl ---------------------------------------------------------------------------
+dnl wxGraphicsContext
+dnl ---------------------------------------------------------------------------
+
+if test "$wxUSE_GRAPHICS_CONTEXT" = "yes"; then
+   if test "$wxUSE_MAC" = 1 -o "$wxUSE_COCOA" = "1"; then
+      AC_DEFINE(wxUSE_GRAPHICS_CONTEXT)
+   elif test "$wxUSE_GTK" != 1; then
+      dnl for other builds we'll just wing it for now...
+      AC_DEFINE(wxUSE_GRAPHICS_CONTEXT)
+   else  
+      dnl ...but let's check for cairo availability for wxGTK builds
+      PKG_CHECK_MODULES(CAIRO, cairo,
+	    [
+	    	AC_DEFINE(wxUSE_GRAPHICS_CONTEXT)
+	    ],
+	    [
+	        AC_MSG_WARN([Cairo library not found, unable to set wxUSE_GRAPHICS_CONTEXT])
+	    ]
+      )
+   fi
 fi
 
 dnl ---------------------------------------------------------------------------
