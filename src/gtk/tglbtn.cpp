@@ -21,12 +21,6 @@
     #include "wx/button.h"
 #endif
 
-// FIXME: Use GtkImage instead of GtkPixmap.
-#include <gtk/gtkversion.h>
-#ifdef GTK_DISABLE_DEPRECATED
-#undef GTK_DISABLE_DEPRECATED
-#endif
-
 #include "wx/gtk/private.h"
 
 extern bool      g_blockEventsOnDrag;
@@ -76,18 +70,14 @@ bool wxToggleBitmapButton::Create(wxWindow *parent, wxWindowID id,
         return false;
     }
 
-    m_bitmap = label;
-
     // Create the gtk widget.
     m_widget = gtk_toggle_button_new();
 
     if (style & wxNO_BORDER)
-       gtk_button_set_relief( GTK_BUTTON(m_widget), GTK_RELIEF_NONE );
+        gtk_button_set_relief( GTK_BUTTON(m_widget), GTK_RELIEF_NONE );
 
-    if (m_bitmap.Ok())
-    {
-        OnSetBitmap();
-    }
+    m_bitmap = label;
+    OnSetBitmap();
 
     g_signal_connect (m_widget, "clicked",
                       G_CALLBACK (gtk_togglebutton_clicked_callback),
@@ -122,7 +112,7 @@ bool wxToggleBitmapButton::GetValue() const
 {
     wxCHECK_MSG(m_widget != NULL, false, wxT("invalid toggle button"));
 
-    return GTK_TOGGLE_BUTTON(m_widget)->active;
+    return gtk_toggle_button_get_active((GtkToggleButton*)m_widget);
 }
 
 void wxToggleBitmapButton::SetLabel(const wxBitmap& label)
@@ -139,21 +129,17 @@ void wxToggleBitmapButton::OnSetBitmap()
 {
     if (!m_bitmap.Ok()) return;
 
-    GdkBitmap *mask = (GdkBitmap *) NULL;
-    if (m_bitmap.GetMask()) mask = m_bitmap.GetMask()->GetBitmap();
-
-    GtkWidget *child = GTK_BIN(m_widget)->child;
-    if (child == NULL)
+    GtkWidget* image = ((GtkBin*)m_widget)->child;
+    if (image == NULL)
     {
         // initial bitmap
-        GtkWidget *pixmap = gtk_pixmap_new(m_bitmap.GetPixmap(), mask);
-        gtk_widget_show(pixmap);
-        gtk_container_add(GTK_CONTAINER(m_widget), pixmap);
+        image = gtk_image_new_from_pixbuf(m_bitmap.GetPixbuf());
+        gtk_widget_show(image);
+        gtk_container_add((GtkContainer*)m_widget, image);
     }
     else
     {   // subsequent bitmaps
-        GtkPixmap *g_pixmap = GTK_PIXMAP(child);
-        gtk_pixmap_set(g_pixmap, m_bitmap.GetPixmap(), mask);
+        gtk_image_set_from_pixbuf((GtkImage*)image, m_bitmap.GetPixbuf());
     }
 }
 
@@ -221,7 +207,8 @@ bool wxToggleButton::Create(wxWindow *parent, wxWindowID id,
     m_blockEvent = false;
 
     if (!PreCreation(parent, pos, size) ||
-        !CreateBase(parent, id, pos, size, style, validator, name )) {
+        !CreateBase(parent, id, pos, size, style, validator, name ))
+    {
         wxFAIL_MSG(wxT("wxToggleButton creation failed"));
         return false;
     }
