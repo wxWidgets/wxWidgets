@@ -235,7 +235,6 @@ cd bld
 
 
 make 
-make -C contrib/src/animate 
 make -C contrib/src/gizmos 
 make -C contrib/src/stc
 
@@ -263,7 +262,6 @@ WXDIR=`pwd`
 # Install wxGTK and contribs
 cd bld
 make prefix=$RPM_BUILD_ROOT%{wxpref} install
-make -C contrib/src/animate prefix=$RPM_BUILD_ROOT%{wxpref} install
 make -C contrib/src/gizmos prefix=$RPM_BUILD_ROOT%{wxpref} install
 make -C contrib/src/stc prefix=$RPM_BUILD_ROOT%{wxpref} install
 
