@@ -242,6 +242,7 @@ void       gtk_pizza_set_yoffset     (GtkPizza          *pizza, gint yoffset)
 gint       gtk_pizza_get_rtl_offset  (GtkPizza          *pizza)
 {
     gint width;
+    gint border;
 
     g_return_val_if_fail ( (pizza != NULL), 0 );
     g_return_val_if_fail ( (GTK_IS_PIZZA (pizza)), 0 );
@@ -250,7 +251,15 @@ gint       gtk_pizza_get_rtl_offset  (GtkPizza          *pizza)
     
     gdk_window_get_geometry( pizza->bin_window, NULL, NULL, &width, NULL, NULL );
     
-    return width;
+    if (pizza->shadow_type == GTK_MYSHADOW_NONE)
+        border = 0;
+    else
+    if (pizza->shadow_type == GTK_MYSHADOW_THIN)
+        border = 1;
+    else
+        border = 2;
+        
+    return width-border*2;
 }
 
 
@@ -737,8 +746,20 @@ gtk_pizza_allocate_child (GtkPizza      *pizza,
     if (gtk_widget_get_direction( GTK_WIDGET(pizza) ) == GTK_TEXT_DIR_RTL)
     {
         /* reverse horizontal placement */
-        /* printf( "alloc width %d\n", GTK_WIDGET(pizza)->allocation.width ); */
-        allocation.x = GTK_WIDGET(pizza)->allocation.width - child->x - allocation.width - pizza->m_xoffset; 
+        gint offset,border; 
+        
+        offset = GTK_WIDGET(pizza)->allocation.width;
+        
+        if (pizza->shadow_type == GTK_MYSHADOW_NONE)
+            border = 0;
+        else
+            if (pizza->shadow_type == GTK_MYSHADOW_THIN)
+            border = 1;
+        else
+            border = 2;
+        offset -= border*2;
+            
+        allocation.x = offset - child->x - allocation.width - pizza->m_xoffset; 
     }
     
     gtk_widget_size_allocate (child->widget, &allocation);
