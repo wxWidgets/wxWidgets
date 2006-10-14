@@ -199,16 +199,29 @@ void wxStatusBarGeneric::OnPaint(wxPaintEvent& WXUNUSED(event) )
     {
         int width, height;
         GetClientSize(&width, &height);
-
-        gtk_paint_resize_grip( m_widget->style,
+        
+        if (GetLayoutDirection() == wxLayout_RightToLeft)
+        {
+            gtk_paint_resize_grip( m_widget->style,
+                               GTK_PIZZA(m_wxwindow)->bin_window,
+                               (GtkStateType) GTK_WIDGET_STATE (m_widget),
+                               NULL,
+                               m_widget,
+                               "statusbar",
+                               GDK_WINDOW_EDGE_SOUTH_WEST,
+                               2, 2, height-2, height-4 );
+        }
+        else
+        {
+            gtk_paint_resize_grip( m_widget->style,
                                GTK_PIZZA(m_wxwindow)->bin_window,
                                (GtkStateType) GTK_WIDGET_STATE (m_widget),
                                NULL,
                                m_widget,
                                "statusbar",
                                GDK_WINDOW_EDGE_SOUTH_EAST,
-                               width-height-2, 1, height-2, height-3 );
-
+                               width-height-2, 2, height-2, height-4 );
+        }
     }
 #endif
 
@@ -415,12 +428,24 @@ void wxStatusBarGeneric::OnLeftDown(wxMouseEvent& event)
         int org_y = 0;
         gdk_window_get_origin( source, &org_x, &org_y );
 
-        gtk_window_begin_resize_drag (GTK_WINDOW (ancestor),
+        if (GetLayoutDirection() == wxLayout_RightToLeft)
+        {
+            gtk_window_begin_resize_drag (GTK_WINDOW (ancestor),
+                                  GDK_WINDOW_EDGE_SOUTH_WEST,
+                                  1,
+                                  org_x - event.GetX() + GetSize().x ,
+                                  org_y + event.GetY(),
+                                  0);
+        }
+        else
+        {
+            gtk_window_begin_resize_drag (GTK_WINDOW (ancestor),
                                   GDK_WINDOW_EDGE_SOUTH_EAST,
                                   1,
                                   org_x + event.GetX(),
                                   org_y + event.GetY(),
                                   0);
+        }
     }
     else
     {
