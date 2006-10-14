@@ -3085,6 +3085,9 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
                 AC_MSG_WARN([Unicode configuration not supported with GTK+ 1.x])
                 wxUSE_UNICODE=no
             fi
+
+            dnl test for XIM support in libgdk
+            AC_CHECK_LIB(gdk, gdk_im_open, AC_DEFINE(HAVE_XIM))
         fi
 
         AC_LANG_POP
@@ -3101,10 +3104,6 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
         AFMINSTALL=afminstall
         TOOLKIT=GTK
         GUIDIST=GTK_DIST
-
-        dnl test for XIM support in libgdk
-        AC_CHECK_LIB(gdk, gdk_im_open, AC_DEFINE(HAVE_XIM))
-
 
         dnl test for external libxpm if we're configured to use it
         if test "$wxUSE_GPE" = "yes"; then

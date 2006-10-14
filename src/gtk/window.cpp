@@ -17,14 +17,11 @@
 #include "wx/window.h"
 
 #ifndef WX_PRECOMP
-    #include "wx/intl.h"
     #include "wx/log.h"
     #include "wx/app.h"
-    #include "wx/utils.h"
     #include "wx/frame.h"
     #include "wx/dcclient.h"
     #include "wx/menu.h"
-    #include "wx/dialog.h"
     #include "wx/settings.h"
     #include "wx/msgdlg.h"
     #include "wx/textctrl.h"
@@ -32,23 +29,12 @@
     #include "wx/toolbar.h"
     #include "wx/combobox.h"
     #include "wx/layout.h"
-    #include "wx/statusbr.h"
     #include "wx/math.h"
-    #include "wx/module.h"
 #endif
 
-#if wxUSE_DRAG_AND_DROP
-    #include "wx/dnd.h"
-#endif
-
-#if wxUSE_TOOLTIPS
-    #include "wx/tooltip.h"
-#endif
-
-#if wxUSE_CARET
-    #include "wx/caret.h"
-#endif // wxUSE_CARET
-
+#include "wx/dnd.h"
+#include "wx/tooltip.h"
+#include "wx/caret.h"
 #include "wx/fontutil.h"
 
 #ifdef __WXDEBUG__
@@ -60,24 +46,15 @@
 // FIXME: Due to a hack we use GtkCombo in here, which is deprecated since gtk2.3.0
 #include <gtk/gtkversion.h>
 #if defined(GTK_DISABLE_DEPRECATED) && GTK_CHECK_VERSION(2,3,0)
-#undef GTK_DISABLE_DEPRECATED
+    #undef GTK_DISABLE_DEPRECATED
+    #include <gtk/gtkcombo.h>
+    #define GTK_DISABLE_DEPRECATED
 #endif
 
 #include "wx/gtk/private.h"
-#include <gdk/gdkprivate.h>
+#include "wx/gtk/win_gtk.h"
 #include <gdk/gdkkeysyms.h>
 #include <gdk/gdkx.h>
-
-#include <gtk/gtk.h>
-#include <gtk/gtkprivate.h>
-
-#include "wx/gtk/win_gtk.h"
-
-#include <pango/pangox.h>
-
-#ifdef HAVE_XIM
-    #undef HAVE_XIM
-#endif
 
 //-----------------------------------------------------------------------------
 // documentation on internals
@@ -1828,11 +1805,6 @@ gtk_window_focus_in_callback( GtkWidget *widget,
     wxLogTrace(TRACE_FOCUS,
                _T("%s: focus in"), win->GetName().c_str());
 
-#ifdef HAVE_XIM
-    if (win->m_ic)
-        gdk_im_begin(win->m_ic, win->m_wxwindow->window);
-#endif
-
 #if wxUSE_CARET
     // caret needs to be informed about focus change
     wxCaret *caret = win->GetCaret();
@@ -1888,11 +1860,6 @@ gtk_window_focus_out_callback( GtkWidget *widget,
         win = winFocus;
 
     g_focusWindow = (wxWindowGTK *)NULL;
-
-#ifdef HAVE_XIM
-    if (win->m_ic)
-        gdk_im_end();
-#endif
 
 #if wxUSE_CARET
     // caret needs to be informed about focus change
@@ -2021,7 +1988,7 @@ gtk_scrollbar_value_changed(GtkRange* range, wxWindow* win)
         wxWindowGTK::ScrollDir dir = win->ScrollDirFromRange(range);
 
         // generate the corresponding wx event
-        const int orient = win->OrientFromScrollDir(dir);
+        const int orient = wxWindow::OrientFromScrollDir(dir);
         wxScrollWinEvent event(eventType, win->GetScrollPos(orient), orient);
         event.SetEventObject(win);
 
@@ -2059,7 +2026,7 @@ gtk_scrollbar_event_after(GtkRange* range, GdkEvent* event, wxWindow* win)
     {
         g_signal_handlers_block_by_func(range, (void*)gtk_scrollbar_event_after, win);
 
-        const int orient = win->OrientFromScrollDir(
+        const int orient = wxWindow::OrientFromScrollDir(
                                         win->ScrollDirFromRange(range));
         wxScrollWinEvent event(wxEVT_SCROLLWIN_THUMBRELEASE, win->GetScrollPos(orient), orient);
         event.SetEventObject(win);
@@ -2158,129 +2125,6 @@ void gtk_window_size_callback( GtkWidget *WXUNUSED(widget),
         event.SetEventObject( win );
         win->GTKProcessEvent( event );
     }
-}
-
-
-#ifdef HAVE_XIM
-    #define WXUNUSED_UNLESS_XIM(param)  param
-#else
-    #define WXUNUSED_UNLESS_XIM(param)  WXUNUSED(param)
-#endif
-
-/* Resize XIM window */
-static
-void gtk_wxwindow_size_callback( GtkWidget* WXUNUSED_UNLESS_XIM(widget),
-                                 GtkAllocation* WXUNUSED_UNLESS_XIM(alloc),
-                                 wxWindowGTK* WXUNUSED_UNLESS_XIM(win) )
-{
-    if (g_isIdle)
-        wxapp_install_idle_handler();
-
-#ifdef HAVE_XIM
-    if (!win->m_ic)
-        return;
-
-    if  (gdk_ic_get_style (win->m_ic) & GDK_IM_PREEDIT_POSITION)
-    {
-        gint width, height;
-
-        gdk_drawable_get_size (widget->window, &width, &height);
-        win->m_icattr->preedit_area.width = width;
-        win->m_icattr->preedit_area.height = height;
-        gdk_ic_set_attr (win->m_ic, win->m_icattr, GDK_IC_PREEDIT_AREA);
-    }
-#endif // HAVE_XIM
-}
-
-//-----------------------------------------------------------------------------
-// "realize" from m_wxwindow
-//-----------------------------------------------------------------------------
-
-/* Initialize XIM support */
-
-static void
-gtk_wxwindow_realized_callback( GtkWidget * WXUNUSED_UNLESS_XIM(widget),
-                                wxWindowGTK * WXUNUSED_UNLESS_XIM(win) )
-{
-    if (g_isIdle)
-        wxapp_install_idle_handler();
-
-#ifdef HAVE_XIM
-    if (win->m_ic) return;
-    if (!widget) return;
-    if (!gdk_im_ready()) return;
-
-    win->m_icattr = gdk_ic_attr_new();
-    if (!win->m_icattr) return;
-
-    gint width, height;
-    GdkEventMask mask;
-    GdkColormap *colormap;
-    GdkICAttr *attr = win->m_icattr;
-    unsigned attrmask = GDK_IC_ALL_REQ;
-    GdkIMStyle style;
-    GdkIMStyle supported_style = (GdkIMStyle)
-                                  (GDK_IM_PREEDIT_NONE |
-                                   GDK_IM_PREEDIT_NOTHING |
-                                   GDK_IM_PREEDIT_POSITION |
-                                   GDK_IM_STATUS_NONE |
-                                   GDK_IM_STATUS_NOTHING);
-
-    if (widget->style && widget->style->font->type != GDK_FONT_FONTSET)
-        supported_style = (GdkIMStyle)(supported_style & ~GDK_IM_PREEDIT_POSITION);
-
-    attr->style = style = gdk_im_decide_style (supported_style);
-    attr->client_window = widget->window;
-
-    if ((colormap = gtk_widget_get_colormap (widget)) !=
-            gtk_widget_get_default_colormap ())
-    {
-        attrmask |= GDK_IC_PREEDIT_COLORMAP;
-        attr->preedit_colormap = colormap;
-    }
-
-    attrmask |= GDK_IC_PREEDIT_FOREGROUND;
-    attrmask |= GDK_IC_PREEDIT_BACKGROUND;
-    attr->preedit_foreground = widget->style->fg[GTK_STATE_NORMAL];
-    attr->preedit_background = widget->style->base[GTK_STATE_NORMAL];
-
-    switch (style & GDK_IM_PREEDIT_MASK)
-    {
-        case GDK_IM_PREEDIT_POSITION:
-            if (widget->style && widget->style->font->type != GDK_FONT_FONTSET)
-            {
-                g_warning ("over-the-spot style requires fontset");
-                break;
-            }
-
-            gdk_drawable_get_size (widget->window, &width, &height);
-
-            attrmask |= GDK_IC_PREEDIT_POSITION_REQ;
-            attr->spot_location.x = 0;
-            attr->spot_location.y = height;
-            attr->preedit_area.x = 0;
-            attr->preedit_area.y = 0;
-            attr->preedit_area.width = width;
-            attr->preedit_area.height = height;
-            attr->preedit_fontset = widget->style->font;
-
-            break;
-    }
-
-      win->m_ic = gdk_ic_new (attr, (GdkICAttributesType)attrmask);
-
-      if (win->m_ic == NULL)
-          g_warning ("Can't create input context.");
-      else
-      {
-          mask = gdk_window_get_events (widget->window);
-          mask = (GdkEventMask)(mask | gdk_ic_get_events (win->m_ic));
-          gdk_window_set_events (widget->window, mask);
-
-          if (GTK_WIDGET_HAS_FOCUS(widget))
-              gdk_im_begin (win->m_ic, widget->window);
-      }
-#endif // HAVE_XIM
 }
 
 } // extern "C"
@@ -2564,13 +2408,6 @@ wxWindowGTK::~wxWindowGTK()
     if (m_widget)
         Show( false );
 
-#ifdef HAVE_XIM
-    if (m_ic)
-        gdk_ic_destroy (m_ic);
-    if (m_icattr)
-        gdk_ic_attr_destroy (m_icattr);
-#endif
-
     // delete before the widgets to avoid a crash on solaris
     delete m_imData;
 
@@ -2672,14 +2509,6 @@ void wxWindowGTK::PostCreation()
         // Catch native resize events
         g_signal_connect (m_wxwindow, "size_allocate",
                           G_CALLBACK (gtk_window_size_callback), this);
-
-        // Initialize XIM support
-        g_signal_connect (m_wxwindow, "realize",
-                          G_CALLBACK (gtk_wxwindow_realized_callback), this);
-
-        // And resize XIM window
-        g_signal_connect (m_wxwindow, "size_allocate",
-                          G_CALLBACK (gtk_wxwindow_size_callback), this);
     }
 
     if (GTK_IS_COMBO(m_widget))
@@ -3079,9 +2908,9 @@ void wxWindowGTK::DoGetPosition( int *x, int *y ) const
             if (GetParent())
                 GetParent()->ScreenToClient(&org_x, &org_y);
 
-            ((wxWindowGTK*) this)->m_x = org_x;
-            ((wxWindowGTK*) this)->m_y = org_y;
-	}
+            wx_const_cast(wxWindowGTK*, this)->m_x = org_x;
+            wx_const_cast(wxWindowGTK*, this)->m_y = org_y;
+        }
     }
 
     if (x) (*x) = m_x - dx;
