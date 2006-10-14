@@ -22,8 +22,13 @@ will be created.
 
 import sys, os, time
 
-KEEP_TEMPS = 0
-ISCC = r"%s\InnoSetup2Ex\ISCC.exe %s"
+KEEP_TEMPS = False
+# default InnoSetup installer location
+ISCC = r"%s\InnoSetup5\ISCC.exe %s"
+
+if os.environ.has_key("INNO5"):
+    ISCC = os.environ["INNO5"]
+
 
 #----------------------------------------------------------------------
 
@@ -36,19 +41,16 @@ OutputBaseFilename = wxPython%(SHORTVER)s-win32-%(CHARTYPE)s-%(VERSION)s-%(PYVER
 AppCopyright = Copyright © 2006 Total Control Software
 DefaultDirName = {code:GetInstallDir|c:\DoNotInstallHere}
 DefaultGroupName = wxPython %(VERSION)s (%(CHARTYPE)s) for Python %(PYTHONVER)s
-AlwaysCreateUninstallIcon = no
-AdminPrivilegesRequired = no
+PrivilegesRequired = none
 OutputDir = dist
-WizardStyle = modern
-UninstallStyle = modern
 DisableStartupPrompt = true
 Compression = bzip
+SolidCompression = yes
 DirExistsWarning = no
 DisableReadyMemo = true
 DisableReadyPage = true
 ;;DisableDirPage = true
 DisableProgramGroupPage = true
-DisableAppendDir = true
 UsePreviousAppDir = no
 UsePreviousGroup = no
 
@@ -60,9 +62,7 @@ AppVersion = %(VERSION)s-%(CHARTYPE)s
 
 UninstallFilesDir = {app}\%(PKGDIR)s
 LicenseFile = licence\licence.txt
-CodeFile = %(IFSFILE)s
 
-;; WizardDebug = yes
 
 ;;------------------------------------------------------------
 
@@ -75,7 +75,7 @@ Name: pthfile;  Description: "Make this install be the default wxPython"; Types:
 
 [Files]
 %(RTDLL)s
-Source: "distrib\msw\gdiplus.dll"; DestDir: "{code:GetPythonDir}"; OnlyBelowVersion: 5.1; CopyMode: alwaysskipifsameorolder; Flags: sharedfile; Components: core
+Source: "distrib\msw\gdiplus.dll"; DestDir: "{code:GetPythonDir}"; Check: OnlyBeforeXP; Flags: sharedfile; Components: core
 Source: "%(WXDIR)s\lib\vc_dll\wx*%(WXDLLVER)s_*.dll";  DestDir: "{app}\%(PKGDIR)s\wx"; Components: core
 %(MSLU)s
 
@@ -84,7 +84,7 @@ Source: "wx\_calendar.pyd";                    DestDir: "{app}\%(PKGDIR)s\wx"; C
 Source: "wx\_controls_.pyd";                   DestDir: "{app}\%(PKGDIR)s\wx"; Components: core
 Source: "wx\_core_.pyd";                       DestDir: "{app}\%(PKGDIR)s\wx"; Components: core
 Source: "wx\_gdi_.pyd";                        DestDir: "{app}\%(PKGDIR)s\wx"; Components: core
-Source: "wx\_animate.pyd";                      DestDir: "{app}\%(PKGDIR)s\wx"; Components: core
+Source: "wx\_animate.pyd";                     DestDir: "{app}\%(PKGDIR)s\wx"; Components: core
 Source: "wx\_gizmos.pyd";                      DestDir: "{app}\%(PKGDIR)s\wx"; Components: core
 Source: "wx\_glcanvas.pyd";                    DestDir: "{app}\%(PKGDIR)s\wx"; Components: core
 Source: "wx\_grid.pyd";                        DestDir: "{app}\%(PKGDIR)s\wx"; Components: core
@@ -239,13 +239,11 @@ Type: files; Name: "{app}\%(PKGDIR)s\wxaddons\*.pyo";
 
 %(UNINSTALL_BATCH)s
 
-'''
+''' + """
+;----------------------------------------------------------------------
 
+[Code]
 
-#----------------------------------------------------------------------
-
-
-IFS_Template = r"""
 program Setup;
 var
     PythonDir  : String;
@@ -279,10 +277,12 @@ begin
 end;
 
 
+
 function GetPythonDir(Default: String): String;
 begin
     Result := PythonDir;
 end;
+
 
 
 function GetInstallDir(Default: String): String;
@@ -304,23 +304,34 @@ begin
                              'Should I do it?',
                              mbConfirmation, MB_YESNO);
         if ResultCode = IDYES then begin
-            InstExec(FileName, '/SILENT', WizardDirValue(), True, False, SW_SHOWNORMAL, ResultCode);
+            Exec(FileName, '/SILENT', WizardDirValue(), SW_SHOWNORMAL, ewWaitUntilTerminated, ResultCode);
 
         end;
     end;
 end;
 
 
+
 function NextButtonClick(CurPage: Integer): Boolean;
-var
-    FileName: string;
-    ResultCode: Integer;
 begin
     Result := True;
     if CurPage <> wpSelectDir then Exit;
     if not UninstallOld(WizardDirValue() + '\wxPython\unins000.exe') then
         if not UninstallOld(WizardDirValue() + '\wx\unins000.exe') then
             UninstallOld(WizardDirValue() + '\%(PKGDIR)s\unins000.exe')
+end;
+
+
+
+function OnlyBeforeXP(): Boolean;
+var
+    Version: TWindowsVersion;
+begin
+    GetWindowsVersionEx(Version);
+    Result := True;
+    if (Version.Major > 5) or ((Version.Major = 5) and (Version.Minor >= 1)) then begin
+        Result := False;
+    end;
 end;
 
 
@@ -340,11 +351,9 @@ OutputBaseFilename = wxPython%(SHORTVER)s-win32-docs-demos-%(VERSION)s
 AppCopyright = Copyright © 2006 Total Control Software
 DefaultDirName = {pf}\wxPython%(SHORTVER)s Docs and Demos
 DefaultGroupName = wxPython%(SHORTVER)s Docs Demos and Tools
-AlwaysCreateUninstallIcon = yes
-AdminPrivilegesRequired = no
+PrivilegesRequired = none
 OutputDir = dist
 WizardStyle = modern
-UninstallStyle = modern
 DisableStartupPrompt = true
 Compression = bzip
 DirExistsWarning = no
@@ -352,7 +361,6 @@ DisableReadyMemo = true
 DisableReadyPage = true
 ;;DisableDirPage = true
 DisableProgramGroupPage = no
-DisableAppendDir = no
 UsePreviousAppDir = no
 UsePreviousGroup = no
 
@@ -364,7 +372,6 @@ AppVersion = %(VERSION)s
 
 UninstallDisplayIcon = {app}\demo\wxpdemo.ico
 UninstallFilesDir = {app}
-UninstallIconName = Uninstall
 LicenseFile = licence\licence.txt
 
 ;; WizardDebug = yes
@@ -495,6 +502,8 @@ Name: "{group}\Migration Guide";       Filename: "{app}\docs\MigrationGuide.html
 Name: "{group}\Recent Changes";        Filename: "{app}\docs\CHANGES.html";          
 Name: "{group}\Other Docs";            Filename: "{app}\docs";                       
 
+Name: "{group}\Uninstall wxPython Docs and Demos";  Filename: "{uninstallexe}"; 
+
 
 
 
@@ -605,7 +614,7 @@ def get_batch_files():
     return '\n'.join(scripts)
 
 
-runtime_template = 'Source: "%s"; DestDir: "{code:GetPythonDir}"; CopyMode: alwaysskipifsameorolder; Flags: uninsneveruninstall; Components: core'
+runtime_template = 'Source: "%s"; DestDir: "{code:GetPythonDir}"; Flags: uninsneveruninstall; Components: core'
 
 def get_runtime_dlls(PYVER):
     if PYVER >= "py24":
@@ -637,7 +646,6 @@ def main():
     SYSDIR          = get_system_dir()
     ISSFILE         = "__wxPython.iss"
     ISSDEMOFILE     = "__wxPythonDemo.iss"
-    IFSFILE         = "__wxPython.ifs"
     UNINSTALL_BATCH = get_batch_files()
     PKGDIR          = open('src/wx.pth').read()
     LOCALE          = build_locale_string(PKGDIR)
@@ -670,13 +678,9 @@ def main():
     if "UNICODE=1" in sys.argv:
         MSLU=r'Source: "distrib\msw\unicows.dll";  DestDir: "{code:GetPythonDir}"; Components: core' % vars()
         CHARTYPE='unicode'
-        
+
     f = open(ISSFILE, "w")
     f.write(ISS_Template % vars())
-    f.close()
-
-    f = open(IFSFILE, "w")
-    f.write(IFS_Template % vars())
     f.close()
 
     f = open(ISSDEMOFILE, "w")
@@ -686,6 +690,7 @@ def main():
     TOOLS = os.environ['TOOLS']
     if TOOLS.startswith('/cygdrive'):
         TOOLS = r"c:\TOOLS"  # temporary hack until I convert everything over to bash
+        
     os.system(ISCC % (TOOLS, ISSFILE))
     os.system(ISCC % (TOOLS, ISSDEMOFILE))
     
