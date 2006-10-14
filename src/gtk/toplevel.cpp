@@ -243,9 +243,6 @@ static void gtk_frame_size_callback( GtkWidget *WXUNUSED(widget), GtkAllocation*
         win->m_width = alloc->width;
         win->m_height = alloc->height;
         
-        if (win->m_mainWidget)
-            GTK_PIZZA(win->m_mainWidget)->m_width = win->m_width;
-        
         win->GtkUpdateSize();
     }
 }
@@ -566,8 +563,6 @@ bool wxTopLevelWindowGTK::Create( wxWindow *parent,
     GTK_WIDGET_UNSET_FLAGS( m_mainWidget, GTK_CAN_FOCUS );
     gtk_container_add( GTK_CONTAINER(m_widget), m_mainWidget );
 
-    GTK_PIZZA(m_mainWidget)->m_width = m_width;
-        
     if (m_miniEdge == 0) // wxMiniFrame has its own version.
     {
        // For m_mainWidget themes
@@ -862,9 +857,6 @@ void wxTopLevelWindowGTK::DoSetSize( int x, int y, int width, int height, int si
     if (width != -1) m_width = width;
     if (height != -1) m_height = height;
     
-    if (m_mainWidget)
-        GTK_PIZZA(m_mainWidget)->m_width = m_width;
-
 /*
     if ((sizeFlags & wxSIZE_AUTO_WIDTH) == wxSIZE_AUTO_WIDTH)
     {

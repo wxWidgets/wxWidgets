@@ -2114,8 +2114,6 @@ void gtk_window_size_callback( GtkWidget *WXUNUSED(widget),
                 alloc->height );
 #endif
                 
-    GTK_PIZZA(win->m_wxwindow)->m_width = win->GetClientSize().x;
-
     win->m_oldClientWidth = client_width;
     win->m_oldClientHeight = client_height;
 

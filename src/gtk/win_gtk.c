@@ -193,8 +193,6 @@ gtk_pizza_init (GtkPizza *pizza)
 
     pizza->m_xoffset = 0;
     pizza->m_yoffset = 0;
-    
-    pizza->m_width = -1;
 }
 
 GtkWidget*
@@ -299,8 +297,8 @@ gtk_pizza_put (GtkPizza   *pizza,
 
     if (gtk_widget_get_direction( GTK_WIDGET(pizza) ) == GTK_TEXT_DIR_RTL)
     {
-        // reverse horizontal placement
-        x = pizza->m_width - x - width;
+        /* reverse horizontal placement */
+        x = GTK_WIDGET(pizza)->allocation.width - x - width;
     }
 
     child_info = g_new (GtkPizzaChild, 1);
@@ -311,9 +309,6 @@ gtk_pizza_put (GtkPizza   *pizza,
     child_info->width = width;
     child_info->height = height;
 
-    if (GTK_IS_PIZZA(widget))
-        GTK_PIZZA(widget)->m_width = width;
-                
     pizza->children = g_list_append (pizza->children, child_info);
 
     if (GTK_WIDGET_REALIZED (pizza))
@@ -357,26 +352,16 @@ gtk_pizza_set_size (GtkPizza   *pizza,
 
         if (child->widget == widget)
         {
-            gint new_x = x;
-            if (gtk_widget_get_direction( GTK_WIDGET(pizza) ) == GTK_TEXT_DIR_RTL)
-            {
-                // reverse horizontal placement
-                new_x = pizza->m_width - new_x - width;
-            }
-
-            if ((child->x == new_x) &&
+            if ((child->x == x) &&
                 (child->y == y) &&
                 (child->width == width) &&
                 (child->height == height)) return;
 
-            child->x = new_x;
+            child->x = x;
             child->y = y;
             child->width = width;
             child->height = height;
             
-            if (GTK_IS_PIZZA(widget))
-                GTK_PIZZA(widget)->m_width = width;
-
             gtk_widget_set_size_request (widget, width, height);
 
             return;
@@ -578,6 +563,7 @@ gtk_pizza_size_allocate (GtkWidget     *widget,
     gint x,y,w,h;
     GtkPizzaChild *child;
     GList *children;
+    gboolean only_resize;
 
     g_return_if_fail (widget != NULL);
     g_return_if_fail (GTK_IS_PIZZA(widget));
@@ -585,6 +571,8 @@ gtk_pizza_size_allocate (GtkWidget     *widget,
 
     pizza = GTK_PIZZA (widget);
 
+    only_resize = ((widget->allocation.x == allocation->x) &&
+                   (widget->allocation.y == allocation->y));
     widget->allocation = *allocation;
 
     if (pizza->shadow_type == GTK_MYSHADOW_NONE)
@@ -606,8 +594,12 @@ gtk_pizza_size_allocate (GtkWidget     *widget,
 
     if (GTK_WIDGET_REALIZED (widget))
     {
-        gdk_window_move_resize( widget->window, x, y, w, h );
-        gdk_window_move_resize( pizza->bin_window, 0, 0, w, h );
+        if (only_resize)
+            gdk_window_resize( widget->window, w, h );
+        else
+            gdk_window_move_resize( widget->window, x, y, w, h );
+            
+        gdk_window_resize( pizza->bin_window, w, h );
     }
 
     children = pizza->children;
@@ -742,6 +734,13 @@ gtk_pizza_allocate_child (GtkPizza      *pizza,
     allocation.width = requisition.width;
     allocation.height = requisition.height;
 
+    if (gtk_widget_get_direction( GTK_WIDGET(pizza) ) == GTK_TEXT_DIR_RTL)
+    {
+        /* reverse horizontal placement */
+        printf( "alloc width %d\n", GTK_WIDGET(pizza)->allocation.width );
+        allocation.x = GTK_WIDGET(pizza)->allocation.width - child->x - allocation.width - pizza->m_xoffset; 
+    }
+    
     gtk_widget_size_allocate (child->widget, &allocation);
 }
 

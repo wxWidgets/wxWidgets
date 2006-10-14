@@ -53,8 +53,6 @@ struct _GtkPizza
     guint m_xoffset;
     guint m_yoffset;
     
-    gint  m_width;
-
     GdkWindow *bin_window;
 };
 
