@@ -1648,7 +1648,9 @@ void wxToolBar::OnPaint(wxPaintEvent& event)
             drawInfo.kind = kThemeBackgroundMetal;
             HIThemeApplyBackground( &hiToolbarrect, &drawInfo, cgContext, kHIThemeOrientationNormal );
 
+#ifndef __LP64__
             QDEndCGContext( (CGrafPtr) dc.m_macPort, &cgContext );
+#endif
 #endif
         }
     }

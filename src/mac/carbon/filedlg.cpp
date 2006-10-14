@@ -74,10 +74,10 @@ static pascal void NavEventProc(
         {
             // Set default location for the modern Navigation APIs
             // Apple Technical Q&A 1151
-            FSSpec theFSSpec;
-            wxMacFilename2FSSpec(data->defaultLocation, &theFSSpec);
+            FSRef theFile;
+            wxMacPathToFSRef(data->defaultLocation, &theFile);
             AEDesc theLocation = { typeNull, NULL };
-            if (noErr == ::AECreateDesc(typeFSS, &theFSSpec, sizeof(FSSpec), &theLocation))
+            if (noErr == ::AECreateDesc(typeFSRef, &theFile, sizeof(FSRef), &theLocation))
                 ::NavCustomControl(ioParams->context, kNavCtlSetLocation, (void *) &theLocation);
         }
 
@@ -275,16 +275,11 @@ pascal Boolean CrossPlatformFilterCallback(
         NavFileOrFolderInfo* theInfo = (NavFileOrFolderInfo*) info ;
         if ( !theInfo->isFolder )
         {
-            if (theItem->descriptorType == typeFSS)
+            AECoerceDesc (theItem, typeFSRef, theItem); 
+            
+            FSRef fsref ;
+            if ( AEGetDescData (theItem, &fsref, sizeof (FSRef)) == noErr )
             {
-                FSSpec    spec;
-                memcpy( &spec , *theItem->dataHandle , sizeof(FSSpec) ) ;
-                wxString file = wxMacMakeStringFromPascal( spec.name ) ;
-                display = CheckFile( file , theInfo->fileAndFolder.fileInfo.finderInfo.fdType , data ) ;
-            }
-            else if ( theItem->descriptorType == typeFSRef )
-            {
-                FSRef fsref ;
                 memcpy( &fsref , *theItem->dataHandle , sizeof(FSRef) ) ;
                 wxString file = wxMacFSRefToPath( &fsref ) ;
                 display = CheckFile( file , theInfo->fileAndFolder.fileInfo.finderInfo.fdType , data ) ;

@@ -52,11 +52,11 @@ static pascal void NavEventProc(
         {
             // Set default location for the modern Navigation APIs
             // Apple Technical Q&A 1151
-            FSSpec theFSSpec;
-            wxMacFilename2FSSpec(data->GetPath(), &theFSSpec);
+            FSRef theFile;
+            wxMacPathToFSRef(data->GetPath(), &theFile);
             AEDesc theLocation = { typeNull, NULL };
-            if (noErr == ::AECreateDesc(typeFSS, &theFSSpec, sizeof(FSSpec), &theLocation))
-                ::NavCustomControl(ioParams->context, kNavCtlSetLocation, (void *) &theLocation);
+            if (noErr == ::AECreateDesc(typeFSRef, &theFile, sizeof(FSRef), &theLocation))
+                 ::NavCustomControl(ioParams->context, kNavCtlSetLocation, (void *) &theLocation);
         }
     }
 }
