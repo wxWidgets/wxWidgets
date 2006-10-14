@@ -340,7 +340,7 @@ void wxToolBar::GtkSetStyle()
 
     gtk_toolbar_set_orientation(m_toolbar, orient);
     gtk_toolbar_set_style(m_toolbar, style);
-    gtk_toolbar_set_tooltips( GTK_TOOLBAR(m_toolbar), !(style & wxTB_NO_TOOLTIPS) );
+    gtk_toolbar_set_tooltips(m_toolbar, !(style & wxTB_NO_TOOLTIPS));
 }
 
 void wxToolBar::SetWindowStyleFlag( long style )
@@ -353,9 +353,7 @@ void wxToolBar::SetWindowStyleFlag( long style )
 
 bool wxToolBar::DoInsertTool(size_t pos, wxToolBarToolBase *toolBase)
 {
-    wxToolBarTool *tool = (wxToolBarTool *)toolBase;
-
-    size_t posGtk = pos;
+    wxToolBarTool* tool = wx_static_cast(wxToolBarTool*, toolBase);
 
     if ( tool->IsButton() )
     {
@@ -366,18 +364,14 @@ bool wxToolBar::DoInsertTool(size_t pos, wxToolBarToolBase *toolBase)
             wxCHECK_MSG( bitmap.Ok(), false,
                          wxT("invalid bitmap for wxToolBar icon") );
 
-            wxCHECK_MSG( bitmap.GetDepth() != 1, false,
-                         wxT("wxToolBar doesn't support GdkBitmap") );
-
-            wxCHECK_MSG( bitmap.GetPixmap() != NULL, false,
-                         wxT("wxToolBar::Add needs a wxBitmap") );
-
             tool->m_image = gtk_image_new();
             tool->SetImage(bitmap);
 
             gtk_misc_set_alignment((GtkMisc*)tool->m_image, 0.5, 0.5);
         }
     }
+
+    const int posGtk = int(pos);
 
     switch ( tool->GetStyle() )
     {
@@ -473,7 +467,7 @@ bool wxToolBar::DoInsertTool(size_t pos, wxToolBarToolBase *toolBase)
 
 bool wxToolBar::DoDeleteTool(size_t pos, wxToolBarToolBase *toolBase)
 {
-    wxToolBarTool *tool = (wxToolBarTool *)toolBase;
+    wxToolBarTool* tool = wx_static_cast(wxToolBarTool*, toolBase);
 
     switch ( tool->GetStyle() )
     {
@@ -500,7 +494,7 @@ bool wxToolBar::DoDeleteTool(size_t pos, wxToolBarToolBase *toolBase)
 
 void wxToolBar::DoEnableTool(wxToolBarToolBase *toolBase, bool enable)
 {
-    wxToolBarTool *tool = (wxToolBarTool *)toolBase;
+    wxToolBarTool* tool = wx_static_cast(wxToolBarTool*, toolBase);
 
     if (tool->m_item)
     {
@@ -510,7 +504,7 @@ void wxToolBar::DoEnableTool(wxToolBarToolBase *toolBase, bool enable)
 
 void wxToolBar::DoToggleTool( wxToolBarToolBase *toolBase, bool toggle )
 {
-    wxToolBarTool *tool = (wxToolBarTool *)toolBase;
+    wxToolBarTool* tool = wx_static_cast(wxToolBarTool*, toolBase);
 
     GtkWidget *item = tool->m_item;
     if ( item && GTK_IS_TOGGLE_BUTTON(item) )
@@ -566,7 +560,7 @@ void wxToolBar::SetToolSeparation( int separation )
 
 void wxToolBar::SetToolShortHelp( int id, const wxString& helpString )
 {
-    wxToolBarTool *tool = (wxToolBarTool *)FindById(id);
+    wxToolBarTool* tool = wx_static_cast(wxToolBarTool*, FindById(id));
 
     if ( tool )
     {
