@@ -264,10 +264,12 @@ bool wxDropTarget::GetData()
                             if (theData != NULL)
                             {
                                 HFSFlavor* theFile = (HFSFlavor*)theData;
+#ifndef __LP64__
                                 wxString name = wxMacFSSpec2MacFilename( &theFile->fileSpec );
 
                                 if (!name.empty())
                                     filenamesPassed += name + wxT("\n");
+#endif
                             }
                             break;
 
@@ -345,7 +347,7 @@ wxDragResult wxDropSource::DoDragDrop(int flags)
     size_t formatCount = m_data->GetFormatCount();
     wxDataFormat *formats = new wxDataFormat[formatCount];
     m_data->GetAllFormats( formats );
-    ItemReference theItem = 1;
+    ItemReference theItem = (ItemReference) 1;
 
     for ( size_t i = 0; i < formatCount; ++i )
     {
@@ -371,6 +373,7 @@ wxDragResult wxDropSource::DoDragDrop(int flags)
         {
             HFSFlavor  theFlavor;
             OSErr err = noErr;
+#ifndef __LP64__
             CInfoPBRec cat;
 
             wxMacFilename2FSSpec( wxString( dataPtr, *wxConvCurrent ), &theFlavor.fileSpec );
@@ -381,8 +384,10 @@ wxDragResult wxDropSource::DoDragDrop(int flags)
             cat.hFileInfo.ioDirID = theFlavor.fileSpec.parID;
             cat.hFileInfo.ioFDirIndex = 0;
             err = PBGetCatInfoSync( &cat );
-            if (err == noErr)
+#endif
+          if (err == noErr)
             {
+#ifndef __LP64__
                 theFlavor.fdFlags = cat.hFileInfo.ioFlFndrInfo.fdFlags;
                 if (theFlavor.fileSpec.parID == fsRtParID)
                 {
@@ -399,7 +404,7 @@ wxDragResult wxDropSource::DoDragDrop(int flags)
                     theFlavor.fileCreator = cat.hFileInfo.ioFlFndrInfo.fdCreator;
                     theFlavor.fileType = cat.hFileInfo.ioFlFndrInfo.fdType;
                 }
-
+#endif
                 AddDragItemFlavor( theDrag, theItem, type, &theFlavor, sizeof(theFlavor), 0 );
             }
         }
@@ -541,7 +546,7 @@ pascal OSErr wxMacWindowDragTrackingHandler(
 
             GetDragMouse( theDrag, &mouse, 0L );
             localMouse = mouse;
-            GlobalToLocal( &localMouse );
+            wxMacGlobalToLocal( theWindow, &localMouse );
 
             {
                 wxWindow *win = NULL;
@@ -566,7 +571,9 @@ pascal OSErr wxMacWindowDragTrackingHandler(
                         // this window is left
                         if ( trackingGlobals->m_currentTarget )
                         {
+#ifndef __LP64__
                             HideDragHilite( theDrag );
+#endif
                             trackingGlobals->m_currentTarget->SetCurrentDrag( theDrag );
                             trackingGlobals->m_currentTarget->OnLeave();
                             trackingGlobals->m_currentTarget = NULL;
@@ -595,7 +602,9 @@ pascal OSErr wxMacWindowDragTrackingHandler(
                                 RgnHandle hiliteRgn = NewRgn();
                                 Rect r = { y, x, y + win->GetSize().y, x + win->GetSize().x };
                                 RectRgn( hiliteRgn, &r );
+#ifndef __LP64__
                                 ShowDragHilite( theDrag, hiliteRgn, true );
+#endif
                                 DisposeRgn( hiliteRgn );
                             }
                         }
@@ -657,7 +666,9 @@ pascal OSErr wxMacWindowDragTrackingHandler(
             {
                 trackingGlobals->m_currentTarget->SetCurrentDrag( theDrag );
                 trackingGlobals->m_currentTarget->OnLeave();
+#ifndef __LP64__
                 HideDragHilite( theDrag );
+#endif
                 trackingGlobals->m_currentTarget = NULL;
             }
             trackingGlobals->m_currentTargetWindow = NULL;
@@ -684,7 +695,7 @@ pascal OSErr wxMacWindowDragReceiveHandler(
         trackingGlobals->m_currentTarget->SetCurrentDrag( theDrag );
         GetDragMouse( theDrag, &mouse, 0L );
         localMouse = mouse;
-        GlobalToLocal( &localMouse );
+        wxMacGlobalToLocal( theWindow, &localMouse );
         localx = localMouse.h;
         localy = localMouse.v;
 

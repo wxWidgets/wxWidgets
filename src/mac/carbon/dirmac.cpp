@@ -131,7 +131,7 @@ bool wxDirData::Read(wxString *filename)
         HFSUniStr255 uniname ;
         FSRef fileRef;
         FSCatalogInfo catalogInfo;
-        UInt32 fetched = 0;
+        ItemCount fetched = 0;
 
         err = FSGetCatalogInfoBulk( m_iterator, 1, &fetched, NULL, kFSCatInfoNodeFlags | kFSCatInfoFinderInfo , &catalogInfo , &fileRef, NULL, &uniname );
         

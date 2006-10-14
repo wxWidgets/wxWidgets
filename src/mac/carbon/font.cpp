@@ -220,8 +220,9 @@ void wxFontRefData::MacFindFont()
         if ( m_macFontStyle & underline )
             m_underlined = true ;
         m_pointSize = m_macFontSize ;
-
+#ifndef __LP64__
         m_macFontFamily = FMGetFontFamilyFromName( qdFontName );
+#endif
     }
     else
     {
@@ -229,9 +230,11 @@ void wxFontRefData::MacFindFont()
         {
             if ( m_family == wxDEFAULT )
             {
+#ifndef __LP64__
                 m_macFontFamily = GetAppFont();
                 FMGetFontFamilyName(m_macFontFamily,qdFontName);
                 m_faceName = wxMacMakeStringFromPascal( qdFontName );
+#endif
             }
             else
             {
@@ -255,17 +258,26 @@ void wxFontRefData::MacFindFont()
                         m_faceName =  wxT("Times");
                         break ;
                 }
+#ifndef __LP64__
                 wxMacStringToPascal( m_faceName , qdFontName );
                 m_macFontFamily = FMGetFontFamilyFromName( qdFontName );
+#endif
             }
         }
         else
         {
+#ifndef __LP64__
             if ( m_faceName == wxT("systemfont") )
                 m_macFontFamily = GetSysFont();
             else if ( m_faceName == wxT("applicationfont") )
                 m_macFontFamily = GetAppFont();
             else
+#else
+            if ( m_faceName == wxT("systemfont") )
+                m_faceName =  wxT("Lucida Grande");
+            else if ( m_faceName == wxT("applicationfont") )
+                m_faceName =  wxT("Lucida Grande");
+#endif
             {
                 wxMacCFStringHolder cf( m_faceName, wxLocale::GetSystemEncoding() );
                 ATSFontFamilyRef atsfamily = ATSFontFamilyFindFromName( cf , kATSOptionFlagsDefault );
@@ -289,9 +301,10 @@ void wxFontRefData::MacFindFont()
 
     // ATSUFontID and FMFont are equivalent
     FMFontStyle intrinsicStyle = 0 ;
+#ifndef __LP64__
     status = FMGetFontFromFontFamilyInstance( m_macFontFamily , m_macFontStyle , &m_macATSUFontID , &intrinsicStyle);
     wxASSERT_MSG( status == noErr , wxT("couldn't get an ATSUFont from font family") );
-
+#endif
     m_macATSUAdditionalQDStyles = m_macFontStyle & (~intrinsicStyle );
 
     if ( m_macATSUStyle )
