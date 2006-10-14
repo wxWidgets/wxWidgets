@@ -41,109 +41,22 @@
 // windows manager, control manager, navigation services etc. are
 // present
 
-static bool sUMAHasAppearance = false ;
-static long sUMAAppearanceVersion = 0 ;
-static long sUMASystemVersion = 0 ;
-static bool sUMAHasAquaLayout = false ;
+static SInt32 sUMASystemVersion = 0 ;
 
-static bool sUMAHasInittedAppearance = false;
-
-bool UMAHasAppearance() { return sUMAHasAppearance ; }
-long UMAGetAppearanceVersion() { return sUMAAppearanceVersion ; }
 long UMAGetSystemVersion() { return sUMASystemVersion ; }
-
-static bool sUMAHasWindowManager = false ;
-static long sUMAWindowManagerAttr = 0 ;
-
-bool UMAHasWindowManager() { return sUMAHasWindowManager ; }
-long UMAGetWindowManagerAttr() { return sUMAWindowManagerAttr ; }
-bool UMAHasAquaLayout() { return sUMAHasAquaLayout ; }
-
 
 void UMACleanupToolbox()
 {
-    if (sUMAHasInittedAppearance)
-        UnregisterAppearanceClient() ;
-
-    if ( NavServicesAvailable() )
-        NavUnload() ;
-
-  if ( TXNTerminateTextension != (void*) kUnresolvedCFragSymbolAddress )
-      TXNTerminateTextension( ) ;
 }
 
 void UMAInitToolbox( UInt16 inMoreMastersCalls, bool isEmbedded )
 {
-#if !TARGET_CARBON
-    ::MaxApplZone();
-    for (long i = 1; i <= inMoreMastersCalls; i++)
-        ::MoreMasters();
-
-    if (!isEmbedded)
-    {
-        ::InitGraf(&qd.thePort);
-        ::InitFonts();
-        ::InitMenus();
-        ::TEInit();
-        ::InitDialogs(0L);
-        ::FlushEvents(everyEvent, 0);
-    }
-
-    long total,contig;
-    PurgeSpace(&total, &contig);
-#endif
-
     ::InitCursor();
 
     if ( Gestalt(gestaltSystemVersion, &sUMASystemVersion) != noErr)
         sUMASystemVersion = 0x0000 ;
 
-    long theAppearance ;
-    if ( Gestalt( gestaltAppearanceAttr, &theAppearance ) == noErr )
-    {
-        // If status equals appearanceProcessRegisteredErr it means the
-        // appearance client already was registered (For example if we run
-        // embedded, the host might have registered it). In such a case
-        // we don't unregister it later on.
-
-        sUMAHasAppearance = true ;
-        OSStatus status = RegisterAppearanceClient();
-        if (status != appearanceProcessRegisteredErr)
-        {
-            // Appearance client wasn't registered yet.
-            sUMAHasInittedAppearance = true;
-        }
-
-        if ( Gestalt( gestaltAppearanceVersion, &theAppearance ) == noErr )
-            sUMAAppearanceVersion = theAppearance ;
-        else
-            sUMAAppearanceVersion = 0x0100 ;
-    }
-
-    if ( Gestalt( gestaltWindowMgrAttr, &sUMAWindowManagerAttr ) == noErr )
-        sUMAHasWindowManager = sUMAWindowManagerAttr & gestaltWindowMgrPresent ;
-
-#if TARGET_CARBON
-// Call currently implicitely done :        InitFloatingWindows() ;
-#else
-    if (!isEmbedded)
-    {
-        if ( sUMAHasWindowManager )
-            InitFloatingWindows() ;
-        else
-            InitWindows();
-    }
-#endif
-
-    if ( NavServicesAvailable() )
-        NavLoad() ;
-
-    long menuMgrAttr ;
-    Gestalt( gestaltMenuMgrAttr , &menuMgrAttr ) ;
-    if ( menuMgrAttr & gestaltMenuMgrAquaLayoutMask )
-        sUMAHasAquaLayout = true ;
-
-    if ( TXNInitTextension != (void*) kUnresolvedCFragSymbolAddress )
+#ifndef __LP64__
     {
         FontFamilyID fontId ;
         Str255 fontName ;
@@ -166,18 +79,10 @@ void UMAInitToolbox( UInt16 inMoreMastersCalls, bool isEmbedded )
 
         TXNInitTextension( fontDescriptions,  noOfFontDescriptions, options );
     }
+#endif
 
     UMASetSystemIsInitialized( true );
 }
-
-#if 0
-Boolean CanUseATSUI()
-{
-    long result;
-    OSErr err = Gestalt(gestaltATSUVersion, &result);
-    return (err == noErr);
-}
-#endif
 
 // process manager
 long UMAGetProcessMode()
@@ -190,7 +95,9 @@ long UMAGetProcessMode()
     procno.lowLongOfPSN = kCurrentProcess ;
     processinfo.processInfoLength = sizeof(ProcessInfoRec);
     processinfo.processName = NULL;
+#ifndef __LP64__
     processinfo.processAppSpec = NULL;
+#endif
 
     err = ::GetProcessInformation( &procno , &processinfo ) ;
     wxASSERT( err == noErr ) ;
@@ -266,14 +173,17 @@ void UMAEnableMenuItem( MenuRef inMenu , MenuItemIndex inItem , bool enable)
 
 void UMAAppendSubMenuItem( MenuRef menu , const wxString& title, wxFontEncoding encoding , SInt16 id )
 {
-    MacAppendMenu( menu, "\pA" );
+    AppendMenuItemTextWithCFString( menu,
+                                CFSTR("A"), 0, 0,NULL); 
     UMASetMenuItemText( menu, (SInt16) ::CountMenuItems(menu), title , encoding );
     SetMenuItemHierarchicalID( menu , CountMenuItems( menu ) , id ) ;
 }
 
 void UMAInsertSubMenuItem( MenuRef menu , const wxString& title, wxFontEncoding encoding , MenuItemIndex item , SInt16 id  )
 {
-    MacInsertMenuItem( menu, "\pA" , item );
+    InsertMenuItemTextWithCFString( menu,
+                CFSTR("A"), item, 0, 0); 
+                
     UMASetMenuItemText( menu, item+1, title , encoding );
     SetMenuItemHierarchicalID( menu , item+1 , id ) ;
 }
@@ -418,8 +328,8 @@ void UMASetMenuItemShortcut( MenuRef menu , MenuItemIndex item , wxAcceleratorEn
 
 void UMAAppendMenuItem( MenuRef menu , const wxString& title, wxFontEncoding encoding , wxAcceleratorEntry *entry )
 {
-    MacAppendMenu(menu, "\pA");
-
+    AppendMenuItemTextWithCFString( menu,
+                                CFSTR("A"), 0, 0,NULL); 
     // don't attempt to interpret metacharacters like a '-' at the beginning (would become a separator otherwise)
     ChangeMenuItemAttributes( menu , ::CountMenuItems(menu), kMenuItemAttrIgnoreMeta , 0 ) ;
     UMASetMenuItemText(menu, (SInt16) ::CountMenuItems(menu), title , encoding );
@@ -428,7 +338,8 @@ void UMAAppendMenuItem( MenuRef menu , const wxString& title, wxFontEncoding enc
 
 void UMAInsertMenuItem( MenuRef menu , const wxString& title, wxFontEncoding encoding , MenuItemIndex item , wxAcceleratorEntry *entry )
 {
-    MacInsertMenuItem( menu , "\pA" , item) ;
+    InsertMenuItemTextWithCFString( menu,
+                CFSTR("A"), item, 0, 0); 
 
     // don't attempt to interpret metacharacters like a '-' at the beginning (would become a separator otherwise)
     ChangeMenuItemAttributes( menu , item+1, kMenuItemAttrIgnoreMeta , 0 ) ;
@@ -486,37 +397,12 @@ pascal QDGlobalsPtr GetQDGlobalsPtr()
 
 void UMAShowWatchCursor()
 {
-    OSErr err = noErr;
-
-    CursHandle watchFob = GetCursor(watchCursor);
-
-    if (watchFob == NULL)
-    {
-        err = nilHandleErr;
-    }
-    else
-    {
-#if TARGET_CARBON
-//        Cursor preservedArrow;
-//        GetQDGlobalsArrow(&preservedArrow);
-//        SetQDGlobalsArrow(*watchFob);
-//        InitCursor();
-//        SetQDGlobalsArrow(&preservedArrow);
-        SetCursor(*watchFob);
-#else
-        SetCursor(*watchFob);
-#endif
-    }
+    SetThemeCursor(kThemeWatchCursor);
 }
 
 void UMAShowArrowCursor()
 {
-#if TARGET_CARBON
-    Cursor arrow;
-    SetCursor( GetQDGlobalsArrow(&arrow) );
-#else
-    SetCursor (&(qd.arrow));
-#endif
+    SetThemeCursor(kThemeArrowCursor);
 }
 
 // window manager
@@ -669,16 +555,14 @@ void UMADeactivateControl( ControlRef inControl )
 void UMAShowControl( ControlRef inControl )
 {
     SetControlVisibility( inControl , true , false ) ;
-    Rect ctrlBounds ;
-    InvalWindowRect( GetControlOwner(inControl), UMAGetControlBoundsInWindowCoords(inControl, &ctrlBounds) ) ;
+    HIViewSetNeedsDisplay( inControl, true );
 }
 
 // hides the control and adds the region to the update region
 void UMAHideControl( ControlRef inControl )
 {
     SetControlVisibility( inControl , false , false ) ;
-    Rect ctrlBounds ;
-    InvalWindowRect( GetControlOwner(inControl), UMAGetControlBoundsInWindowCoords(inControl, &ctrlBounds) ) ;
+    HIViewSetNeedsDisplay( inControl, true );
 }
 
 // keyboard focus
@@ -687,13 +571,17 @@ OSErr UMASetKeyboardFocus( WindowPtr inWindow,
                                  ControlFocusPart inPart )
 {
     OSErr err = noErr;
+#ifndef __LP64__
     GrafPtr port ;
 
     GetPort( &port ) ;
     SetPortWindowPort( inWindow ) ;
+#endif
 
     err = SetKeyboardFocus( inWindow , inControl , inPart ) ;
+#ifndef __LP64__
     SetPort( port ) ;
+#endif
 
     return err ;
 }
@@ -722,10 +610,11 @@ void UMAHighlightAndActivateWindow( WindowRef inWindowRef , bool inActivate )
     {
 //        bool isHighlighted = IsWindowHighlited( inWindowRef ) ;
 //        if ( inActivate != isHighlighted )
-
+#ifndef __LP64__
         GrafPtr port ;
         GetPort( &port ) ;
         SetPortWindowPort( inWindowRef ) ;
+#endif
         HiliteWindow( inWindowRef , inActivate ) ;
         ControlRef control = NULL ;
         ::GetRootControl( inWindowRef , &control ) ;
@@ -736,14 +625,19 @@ void UMAHighlightAndActivateWindow( WindowRef inWindowRef , bool inActivate )
             else
                 UMADeactivateControl( control ) ;
         }
-
+#ifndef __LP64__
         SetPort( port ) ;
+#endif
     }
 }
 
 OSStatus UMADrawThemePlacard( const Rect *inRect , ThemeDrawState inState )
 {
+#ifndef __LP64__
     return ::DrawThemePlacard( inRect , inState ) ;
+#else
+    return noErr;
+#endif
 }
 
 #if !TARGET_CARBON
@@ -773,6 +667,8 @@ OSStatus UMAGetHelpMenu(
     return helpMenuStatus ;
 #endif
 }
+
+#ifndef __LP64__
 
 wxMacPortStateHelper::wxMacPortStateHelper( GrafPtr newport )
 {
@@ -827,6 +723,8 @@ wxMacPortStateHelper::~wxMacPortStateHelper()
         SetPort( m_oldPort ) ;
     }
 }
+
+#endif
 
 OSStatus UMAPutScrap( Size size , OSType type , void *data )
 {

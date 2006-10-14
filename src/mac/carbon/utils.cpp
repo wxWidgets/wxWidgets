@@ -72,7 +72,7 @@
 // our OS version is the same in non GUI and GUI cases
 wxOperatingSystemId wxGetOsVersion(int *majorVsn, int *minorVsn)
 {
-    long theSystem;
+    SInt32 theSystem;
     Gestalt(gestaltSystemVersion, &theSystem);
 
     if ( majorVsn != NULL )
@@ -360,7 +360,9 @@ void wxFlushEvents()
 // Emit a beeeeeep
 void wxBell()
 {
+#ifndef __LP64__
     SysBeep(30);
+#endif
 }
 
 
@@ -529,9 +531,12 @@ bool wxCheckForInterrupt(wxWindow *wnd)
 void wxGetMousePosition( int* x, int* y )
 {
     Point pt;
-
+#if wxMAC_USE_CORE_GRAPHICS
+    GetGlobalMouse(&pt);
+#else
     GetMouse( &pt );
     LocalToGlobal( &pt );
+#endif
     *x = pt.h;
     *y = pt.v;
 };
@@ -545,21 +550,33 @@ bool wxColourDisplay()
 // Returns depth of screen
 int wxDisplayDepth()
 {
+    int theDepth = 8;
+#if wxMAC_USE_CORE_GRAPHICS
+    theDepth = (int) CGDisplayBitsPerPixel(CGMainDisplayID());
+#else
     Rect globRect;
     SetRect(&globRect, -32760, -32760, 32760, 32760);
     GDHandle    theMaxDevice;
 
-    int theDepth = 8;
     theMaxDevice = GetMaxDevice(&globRect);
     if (theMaxDevice != NULL)
         theDepth = (**(**theMaxDevice).gdPMap).pixelSize;
-
+#endif
     return theDepth;
 }
 
 // Get size of display
 void wxDisplaySize(int *width, int *height)
 {
+#if wxMAC_USE_CORE_GRAPHICS
+    CGRect bounds ;
+    // TODO adapt for multi-displays
+    bounds = CGDisplayBounds(CGMainDisplayID());
+    if ( width )
+        *width = bounds.size.width ;
+    if ( height )
+        *height = bounds.size.height;
+#else
     BitMap screenBits;
     GetQDGlobalsScreenBits( &screenBits );
 
@@ -568,6 +585,7 @@ void wxDisplaySize(int *width, int *height)
 
     if (height != NULL)
         *height = screenBits.bounds.bottom - screenBits.bounds.top;
+#endif
 }
 
 void wxDisplaySizeMM(int *width, int *height)
@@ -585,8 +603,20 @@ void wxDisplaySizeMM(int *width, int *height)
 
 void wxClientDisplayRect(int *x, int *y, int *width, int *height)
 {
+#if MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_5
+        HIRect bounds ;
+        HIWindowGetAvailablePositioningBounds(kCGNullDirectDisplay,kHICoordSpace72DPIGlobal,
+            &bounds);
+    if ( x )
+        *x = bounds.origin.x;
+    if ( y )
+        *y = bounds.origin.y;
+    if ( width )
+        *width = bounds.size.width;
+    if ( height )
+        *height = bounds.size.height;
+#else
     Rect r;
-
     GetAvailableWindowPositioningBounds( GetMainDevice() , &r );
     if ( x )
         *x = r.left;
@@ -596,6 +626,7 @@ void wxClientDisplayRect(int *x, int *y, int *width, int *height)
         *width = r.right - r.left;
     if ( height )
         *height = r.bottom - r.top;
+#endif
 }
 
 wxWindow* wxFindWindowAtPoint(const wxPoint& pt)
@@ -835,7 +866,7 @@ void wxMacControl::Dispose()
     m_controlRef = NULL;
 }
 
-void wxMacControl::SetReference( SInt32 data )
+void wxMacControl::SetReference( URefCon data )
 {
     SetControlReference( m_controlRef , data );
 }
@@ -1029,7 +1060,11 @@ void wxMacControl::SetRange( SInt32 minimum , SInt32 maximum )
 
 short wxMacControl::HandleKey( SInt16 keyCode,  SInt16 charCode, EventModifiers modifiers )
 {
+#ifndef __LP64__
     return HandleControlKey( m_controlRef , keyCode , charCode , modifiers );
+#else
+    return 0;
+#endif
 }
 
 void wxMacControl::SetActionProc( ControlActionUPP   actionProc )
@@ -1237,7 +1272,7 @@ void wxMacControl::SetReferenceInNativeControl()
 wxMacControl* wxMacControl::GetReferenceFromNativeControl(ControlRef control)
 {
     wxMacControl* ctl = NULL;
-    UInt32 actualSize;
+    ByteCount actualSize;
     if ( GetControlProperty( control ,wxMacCreator,wxMacControlProperty, sizeof(ctl) ,
         &actualSize , &ctl ) == noErr )
     {
@@ -1335,7 +1370,7 @@ wxMacDataBrowserControl::wxMacDataBrowserControl( wxWindow* peer, const wxPoint&
 OSStatus wxMacDataBrowserControl::GetItemCount( DataBrowserItemID container,
     Boolean recurse,
     DataBrowserItemState state,
-    UInt32 *numItems) const
+    ItemCount *numItems) const
 {
     return GetDataBrowserItemCount( m_controlRef, container, recurse, state, numItems );
 }
@@ -1510,12 +1545,12 @@ OSStatus wxMacDataBrowserControl::GetColumnCount(UInt32* numColumns) const
 }
 
 OSStatus wxMacDataBrowserControl::GetColumnPosition( DataBrowserPropertyID column,
-    UInt32 *position) const
+    DataBrowserTableViewColumnIndex *position) const
 {
     return GetDataBrowserTableViewColumnPosition( m_controlRef , column , position);
 }
 
-OSStatus wxMacDataBrowserControl::SetColumnPosition( DataBrowserPropertyID column, UInt32 position)
+OSStatus wxMacDataBrowserControl::SetColumnPosition( DataBrowserPropertyID column, DataBrowserTableViewColumnIndex position)
 {
     return SetDataBrowserTableViewColumnPosition( m_controlRef , column , position);
 }
@@ -1802,7 +1837,7 @@ void wxMacDataItemBrowserControl::ItemNotification(
 unsigned int wxMacDataItemBrowserControl::GetItemCount(const wxMacDataItem* container,
         bool recurse , DataBrowserItemState state) const
 {
-    UInt32 numItems = 0;
+    ItemCount numItems = 0;
     verify_noerr( wxMacDataBrowserControl::GetItemCount( (DataBrowserItemID)container,
         recurse, state, &numItems ) );
     return numItems;
@@ -1950,7 +1985,7 @@ void wxMacDataItemBrowserControl::AddItems(wxMacDataItem *container, wxArrayMacD
 void wxMacDataItemBrowserControl::RemoveItem(wxMacDataItem *container, wxMacDataItem* item)
 {
     OSStatus err = wxMacDataBrowserControl::RemoveItems( (DataBrowserItemID)container, 1,
-        (UInt32*) &item, kDataBrowserItemNoProperty );
+        (DataBrowserItemID*) &item, kDataBrowserItemNoProperty );
     verify_noerr( err );
 }
 
@@ -1962,7 +1997,7 @@ void wxMacDataItemBrowserControl::RemoveItems(wxMacDataItem *container, wxArrayM
         items[i] = (DataBrowserItemID) itemArray[i];
 
     OSStatus err = wxMacDataBrowserControl::RemoveItems( (DataBrowserItemID)container, noItems,
-        (UInt32*) items, kDataBrowserItemNoProperty );
+        (DataBrowserItemID*) items, kDataBrowserItemNoProperty );
     verify_noerr( err );
     delete [] items;
 }
@@ -2303,6 +2338,8 @@ CGColorSpaceRef wxMacGetGenericRGBColorSpace()
 }
 #endif
 
+#ifndef __LP64__
+
 wxMacPortSaver::wxMacPortSaver( GrafPtr port )
 {
     ::GetPort( &m_port );
@@ -2312,6 +2349,31 @@ wxMacPortSaver::wxMacPortSaver( GrafPtr port )
 wxMacPortSaver::~wxMacPortSaver()
 {
     ::SetPort( m_port );
+}
+#endif
+
+void wxMacGlobalToLocal( WindowRef window , Point*pt )
+{
+#if MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_4 
+    HIPoint p = CGPointMake( pt->h, pt->v );
+    HIPointConvert( &p, kHICoordSpace72DPIGlobal, NULL, kHICoordSpaceWindow, window );
+    pt->h = p.x;
+    pt->v = p.y;
+#else
+    QDGlobalToLocalPoint( GetWindowPort(window), pt ) ;
+#endif
+}
+
+void wxMacLocalToGlobal( WindowRef window , Point*pt )
+{
+#if MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_4 
+    HIPoint p = CGPointMake( pt->h, pt->v );
+    HIPointConvert( &p, kHICoordSpaceWindow, window, kHICoordSpace72DPIGlobal, NULL );
+    pt->h = p.x;
+    pt->v = p.y;
+#else
+    QDLocalToGlobalPoint( GetWindowPort(window), pt ) ;
+#endif
 }
 
 #endif // wxUSE_GUI

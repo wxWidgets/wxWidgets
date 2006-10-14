@@ -87,6 +87,8 @@ wxRegion::wxRegion(size_t n, const wxPoint *points, int WXUNUSED(fillStyle))
 {
     m_refData = new wxRegionRefData;
 
+#ifndef __LP64__
+    // TODO : any APIs ?
     // OS X somehow does not collect the region invisibly as before, so sometimes things
     // get drawn on screen instead of just being combined into a region, therefore we allocate a temp gworld now
 
@@ -124,6 +126,7 @@ wxRegion::wxRegion(size_t n, const wxPoint *points, int WXUNUSED(fillStyle))
 
         ::SetGWorld( oldWorld, oldGDHandle );
     }
+#endif
 }
 
 wxRegion::~wxRegion()
@@ -406,14 +409,26 @@ void wxRegionIterator::Reset(const wxRegion& region)
     }
     else
     {
-        RegionToRectsUPP proc = NewRegionToRectsUPP( wxMacRegionToRectsCounterCallback );
+        RegionToRectsUPP proc = 
+#ifdef __MACH__
+        (RegionToRectsUPP) wxMacRegionToRectsCounterCallback;
+#else
+        NewRegionToRectsUPP( wxMacRegionToRectsCounterCallback );
+#endif
 
         OSStatus err = noErr;
         err = QDRegionToRects (OTHER_M_REGION( region ) , kQDParseRegionFromTopLeft, proc, (void*)&m_numRects);
         if (err == noErr)
         {
+#ifndef __MACH__
             DisposeRegionToRectsUPP (proc);
-            proc = NewRegionToRectsUPP (wxMacRegionToRectsSetterCallback);
+#endif
+            proc = 
+#ifdef __MACH__
+            (RegionToRectsUPP) wxMacRegionToRectsSetterCallback;
+#else
+            NewRegionToRectsUPP (wxMacRegionToRectsSetterCallback);
+#endif
             m_rects = new wxRect[m_numRects];
             RegionToRectsCallbackData data ;
             data.m_rects = m_rects ;
@@ -425,7 +440,9 @@ void wxRegionIterator::Reset(const wxRegion& region)
             m_numRects = 0;
         }
 
+#ifndef __MACH__
         DisposeRegionToRectsUPP( proc );
+#endif
     }
 }
 
