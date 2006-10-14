@@ -91,6 +91,13 @@ wxSize wxStaticText::DoGetBestSize() const
     }
     else
     {
+#if wxMAC_USE_CORE_GRAPHICS
+        wxClientDC dc(const_cast<wxStaticText*>(this));
+        wxCoord width, height ;
+        dc.GetTextExtent( m_label , &width, &height);
+        bounds.h = width;
+        bounds.v = height;
+#else
         wxMacWindowStateSaver sv( this );
         ::TextFont( m_font.MacGetFontNum() );
         ::TextSize( (short)(m_font.MacGetFontSize()) );
@@ -100,6 +107,7 @@ wxSize wxStaticText::DoGetBestSize() const
             (!m_label.empty() ? (CFStringRef)str : CFSTR(" ")),
             kThemeCurrentPortFont, kThemeStateActive, false, &bounds, &baseline );
         verify_noerr( err );
+#endif
     }
 
     if ( m_label.empty() )

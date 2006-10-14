@@ -130,7 +130,7 @@ static pascal OSStatus KeyboardEventHandler( EventHandlerCallRef handler , Event
     UInt32 when = EventTimeToTicks( GetEventTime( event ) ) ;
 
 #if wxUSE_UNICODE
-    UInt32 dataSize = 0 ;
+    ByteCount dataSize = 0 ;
     if ( GetEventParameter( event, kEventParamKeyUnicodes, typeUnicodeText, NULL, 0 , &dataSize, NULL ) == noErr )
     {
         UniChar buf[2] ;
@@ -359,7 +359,7 @@ static void SetupMouseEvent( wxMouseEvent &wxevent , wxMacCarbonEvent &cEvent )
             wxevent.SetEventType( wxEVT_MOUSEWHEEL ) ;
 
             // EventMouseWheelAxis axis = cEvent.GetParameter<EventMouseWheelAxis>(kEventParamMouseWheelAxis, typeMouseWheelAxis) ;
-            SInt32 delta = cEvent.GetParameter<SInt32>(kEventParamMouseWheelDelta, typeLongInteger) ;
+            SInt32 delta = cEvent.GetParameter<SInt32>(kEventParamMouseWheelDelta, typeSInt32) ;
 
             wxevent.m_wheelRotation = delta;
             wxevent.m_wheelDelta = 1;
@@ -467,7 +467,7 @@ pascal OSStatus wxMacTopLevelMouseEventHandler( EventHandlerCallRef handler , Ev
 
     if ( window )
     {
-        QDGlobalToLocalPoint( UMAGetWindowPort(window ) ,  &windowMouseLocation ) ;
+        wxMacGlobalToLocal( window,  &windowMouseLocation ) ;
 
         if ( wxApp::s_captureWindow
 #if !NEW_CAPTURE_HANDLING
@@ -980,10 +980,18 @@ void wxTopLevelWindowMac::Maximize(bool maximize)
     Point idealSize = { 0 , 0 } ;
     if ( maximize )
     {
+#if MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_5
+        HIRect bounds ;
+        HIWindowGetAvailablePositioningBounds(kCGNullDirectDisplay,kHICoordSpace72DPIGlobal,
+            &bounds);
+        idealSize.h = bounds.size.width;
+        idealSize.v = bounds.size.height;
+#else
         Rect rect ;
         GetAvailableWindowPositioningBounds(GetMainDevice(),&rect) ;
         idealSize.h = rect.right - rect.left ;
         idealSize.v = rect.bottom - rect.top ;
+#endif
     }
     ZoomWindowIdeal( (WindowRef)m_macWindow , maximize ? inZoomOut : inZoomIn , &idealSize ) ;
 }
@@ -1157,8 +1165,12 @@ void  wxTopLevelWindowMac::MacCreateRealWindow(
     {
         WindowDefSpec customWindowDefSpec;
         customWindowDefSpec.defType = kWindowDefProcPtr;
-        customWindowDefSpec.u.defProc = NewWindowDefUPP(wxShapedMacWindowDef);
-
+        customWindowDefSpec.u.defProc = 
+#ifdef __LP64__
+            (WindowDefUPP) wxShapedMacWindowDef;
+#else
+            NewWindowDefUPP(wxShapedMacWindowDef);
+#endif
         err = ::CreateCustomWindow( &customWindowDefSpec, wclass,
                               attr, &theBoundsRect,
                               (WindowRef*) &m_macWindow);
@@ -1604,7 +1616,7 @@ bool wxTopLevelWindowMac::SetShape(const wxRegion& region)
         DisposeRgn(oldRgn);
 
     // Save the region so we can use it later
-    SetWRefCon((WindowRef)MacGetWindowRef(), (SInt32)shapeRegion);
+    SetWRefCon((WindowRef)MacGetWindowRef(), (URefCon)shapeRegion);
 
     // inform the window manager that the window has changed shape
     ReshapeCustomWindow((WindowRef)MacGetWindowRef());
@@ -1620,13 +1632,12 @@ bool wxTopLevelWindowMac::SetShape(const wxRegion& region)
 static void wxShapedMacWindowGetPos(WindowRef window, Rect* inRect)
 {
     GetWindowPortBounds(window, inRect);
-    Point pt = { inRect->left, inRect->top };
-
-    QDLocalToGlobalPoint( GetWindowPort(window), &pt ) ;
+    Point pt = { inRect->top ,inRect->left };
+    wxMacLocalToGlobal( window, &pt ) ;
+    inRect->bottom += pt.v - inRect->top;
+    inRect->right += pt.h - inRect->left;
     inRect->top = pt.v;
     inRect->left = pt.h;
-    inRect->bottom += pt.v;
-    inRect->right += pt.h;
 }
 
 static SInt32 wxShapedMacWindowGetFeatures(WindowRef window, SInt32 param)

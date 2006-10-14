@@ -300,13 +300,16 @@ wxSize wxChoice::DoGetBestSize() const
     int wLine;
 
 #if TARGET_CARBON
-    long metric ;
+    SInt32 metric ;
 
     GetThemeMetric( kThemeMetricPopupButtonHeight , &metric );
     lbHeight = metric ;
 #endif
 
     {
+#if wxMAC_USE_CORE_GRAPHICS
+        wxClientDC dc(const_cast<wxChoice*>(this));
+#else
         wxMacPortStateHelper st( UMAGetWindowPort( (WindowRef) MacGetTopLevelWindowRef() ) ) ;
         if ( m_font.Ok() )
         {
@@ -320,12 +323,16 @@ wxSize wxChoice::DoGetBestSize() const
             ::TextSize( 9 ) ;
             ::TextFace( 0 ) ;
         }
-
+#endif
         // Find the widest line
         for(unsigned int i = 0; i < GetCount(); i++)
         {
             wxString str(GetString(i));
-
+#if wxMAC_USE_CORE_GRAPHICS
+            wxCoord width, height ;
+            dc.GetTextExtent( str , &width, &height);
+            wLine = width ;
+#else
 #if wxUSE_UNICODE
             Point bounds = { 0, 0 } ;
             SInt16 baseline ;
@@ -341,15 +348,20 @@ wxSize wxChoice::DoGetBestSize() const
 #else
             wLine = ::TextWidth( str.c_str() , 0 , str.length() ) ;
 #endif
-
+#endif
             lbWidth = wxMax( lbWidth, wLine ) ;
         }
 
         // Add room for the popup arrow
         lbWidth += 2 * lbHeight ;
-
+#if wxMAC_USE_CORE_GRAPHICS
+        wxCoord width, height ;
+        dc.GetTextExtent( wxT("X"), &width, &height);
+        int cx = width ;
+#else
         // And just a bit more
         int cx = ::TextWidth( "X" , 0 , 1 ) ;
+#endif
         lbWidth += cx ;
     }
 

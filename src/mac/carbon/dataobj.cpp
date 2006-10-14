@@ -311,8 +311,10 @@ void wxBitmapDataObject::Clear()
 {
     if (m_pictHandle != NULL)
     {
+#ifndef __LP64__
         if (m_pictCreated)
             KillPicture( (PicHandle)m_pictHandle );
+#endif
         m_pictHandle = NULL;
     }
 
@@ -356,6 +358,7 @@ bool wxBitmapDataObject::SetData( size_t nSize, const void *pBuf )
 
     // ownership is transferred to the bitmap
     m_pictCreated = false;
+#ifndef __LP64__
     Rect frame;
     wxMacGetPictureBounds( picHandle, &frame );
 
@@ -366,6 +369,7 @@ bool wxBitmapDataObject::SetData( size_t nSize, const void *pBuf )
     mdc.SelectObject( m_bitmap );
     mf.Play( &mdc );
     mdc.SelectObject( wxNullBitmap );
+#endif
 
     return m_bitmap.Ok();
 }

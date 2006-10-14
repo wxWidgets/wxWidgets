@@ -247,6 +247,9 @@ wxSize wxListBox::DoGetBestSize() const
     int wLine;
 
     {
+#if wxMAC_USE_CORE_GRAPHICS
+        wxClientDC dc(const_cast<wxListBox*>(this));
+#else
         wxMacPortStateHelper st( UMAGetWindowPort( (WindowRef)MacGetTopLevelWindowRef() ) );
 
         // TODO: clean this up
@@ -262,12 +265,16 @@ wxSize wxListBox::DoGetBestSize() const
             ::TextSize( 9 );
             ::TextFace( 0 );
         }
-
+#endif
         // Find the widest line
         for (unsigned int i = 0; i < GetCount(); i++)
         {
             wxString str( GetString( i ) );
-
+#if wxMAC_USE_CORE_GRAPHICS
+            wxCoord width, height ;
+            dc.GetTextExtent( str , &width, &height);
+            wLine = width ;
+#else
 #if wxUSE_UNICODE
             Point bounds = {0, 0};
             SInt16 baseline;
@@ -286,6 +293,7 @@ wxSize wxListBox::DoGetBestSize() const
 #endif
 
             lbWidth = wxMax( lbWidth, wLine );
+#endif
         }
 
         // Add room for the scrollbar
@@ -293,7 +301,13 @@ wxSize wxListBox::DoGetBestSize() const
 
         // And just a bit more
         int cy = 12;
+#if wxMAC_USE_CORE_GRAPHICS
+        wxCoord width, height ;
+        dc.GetTextExtent( wxT("X") , &width, &height);
+        int cx = width ;
+#else
         int cx = ::TextWidth( "X", 0, 1 );
+#endif
         lbWidth += cx;
 
         // don't make the listbox too tall (limit height to around 10 items)
