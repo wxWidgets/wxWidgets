@@ -820,6 +820,9 @@ bool wxGenericTreeCtrl::Create(wxWindow *parent,
     if (major < 10)
         style |= wxTR_ROW_LINES;
 #endif // __WXMAC__
+#ifdef __WXGTK20__
+    style |= wxTR_NO_LINES;
+#endif
 
     if ( !wxControl::Create( parent, id, pos, size,
                              style|wxHSCROLL|wxVSCROLL,
