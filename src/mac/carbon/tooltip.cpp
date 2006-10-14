@@ -239,12 +239,12 @@ void wxMacToolTip::Draw()
     {
         m_shown = true ;
 
-#if TARGET_CARBON
         HMHelpContentRec tag ;
         tag.version = kMacHelpVersion;
-        SetRect( &tag.absHotRect , m_position.x - 2 , m_position.y - 2 , m_position.x + 2 , m_position.y + 2 ) ;
 
-        QDLocalToGlobalRect( GetWindowPort( m_window ) , &tag.absHotRect ) ;
+        Point p = { m_position.y , m_position.x };
+        wxMacLocalToGlobal( m_window , &p ) ;
+        SetRect( &tag.absHotRect , p.h - 2 , p.v - 2 , p.h + 2 , p.v + 2 );
 
         m_helpTextRef.Assign( m_label , wxFONTENCODING_DEFAULT ) ;
         tag.content[kHMMinimumContentIndex].contentType = kHMCFStringContent ;
@@ -253,137 +253,6 @@ void wxMacToolTip::Draw()
         tag.content[kHMMaximumContentIndex].u.tagCFString = m_helpTextRef ;
         tag.tagSide = kHMDefaultSide;
         HMDisplayTag( &tag );
-#else
-        wxMacPortStateHelper help( (GrafPtr)GetWindowPort( m_window ) );
-        FontFamilyID fontId ;
-        Str255 fontName ;
-        SInt16 fontSize ;
-        Style fontStyle ;
-        GetThemeFont( kThemeSmallSystemFont , GetApplicationScript() , fontName , &fontSize , &fontStyle ) ;
-        GetFNum( fontName, &fontId );
-
-        TextFont( fontId ) ;
-        TextSize( fontSize ) ;
-        TextFace( fontStyle ) ;
-        FontInfo fontInfo;
-        ::GetFontInfo(&fontInfo);
-        short lineh = fontInfo.ascent + fontInfo.descent + fontInfo.leading;
-        short height = 0 ;
-
-        int i = 0 ;
-        int length = m_label.length() ;
-        int width = 0 ;
-        int thiswidth = 0 ;
-        int laststop = 0 ;
-        wxCharBuffer text = m_label.mb_str( wxConvLocal ) ;
-
-        while ( i < length )
-        {
-            if ( text[i] == 13 || text[i] == 10)
-            {
-                thiswidth = ::TextWidth( text , laststop , i - laststop ) ;
-                if ( thiswidth > width )
-                    width = thiswidth ;
-
-                height += lineh ;
-                laststop = i + 1 ;
-            }
-
-            i++ ;
-        }
-
-        if ( i - laststop > 0 )
-        {
-            thiswidth = ::TextWidth( text , laststop , i - laststop ) ;
-            if ( thiswidth > width )
-                width = thiswidth ;
-            height += lineh ;
-        }
-
-        m_rect.left = m_position.x + kTipOffset;
-        m_rect.top = m_position.y + kTipOffset;
-        m_rect.right = m_rect.left + width + 2 * kTipBorder;
-
-        m_rect.bottom = m_rect.top + height + 2 * kTipBorder;
-        Rect r ;
-
-        GetPortBounds( GetWindowPort( m_window ) , &r ) ;
-        if ( m_rect.top < 0 )
-        {
-            m_rect.bottom += -m_rect.top ;
-            m_rect.top = 0 ;
-        }
-        if ( m_rect.left < 0 )
-        {
-            m_rect.right += -m_rect.left ;
-            m_rect.left = 0 ;
-        }
-        if ( m_rect.right > r.right )
-        {
-            m_rect.left -= (m_rect.right - r.right ) ;
-            m_rect.right = r.right ;
-        }
-        if ( m_rect.bottom > r.bottom )
-        {
-            m_rect.top -= (m_rect.bottom - r.bottom) ;
-            m_rect.bottom = r.bottom ;
-        }
-
-        GWorldPtr port ;
-        CGrafPtr  origPort ;
-        GDHandle  origDevice ;
-
-        ClipRect( &m_rect ) ;
-        BackColor( whiteColor ) ;
-        ForeColor(blackColor ) ;
-        NewGWorld( &port , wxDisplayDepth() , &m_rect , NULL , NULL , 0 ) ;
-
-        GetGWorld( &origPort , &origDevice ) ;
-        SetGWorld( port , NULL ) ;
-
-        m_backpict = OpenPicture(&m_rect);
-
-        CopyBits(GetPortBitMapForCopyBits(GetWindowPort(m_window)),
-            GetPortBitMapForCopyBits(port),
-            &m_rect,
-            &m_rect,
-            srcCopy,
-            NULL);
-        ClosePicture();
-        SetGWorld( origPort , origDevice ) ;
-        DisposeGWorld( port ) ;
-        PenNormal() ;
-
-        RGBColor tooltipbackground = { 0xFFFF , 0xFFFF , 0xC000 } ;
-        BackColor( whiteColor ) ;
-        RGBForeColor( &tooltipbackground ) ;
-
-        PaintRect( &m_rect ) ;
-        ForeColor(blackColor ) ;
-        FrameRect( &m_rect ) ;
-        SetThemeTextColor(kThemeTextColorNotification,wxDisplayDepth(),true) ;
-        ::MoveTo( m_rect.left + kTipBorder , m_rect.top + fontInfo.ascent + kTipBorder);
-
-        i = 0 ;
-        laststop = 0 ;
-        height = 0 ;
-
-        while ( i < length )
-        {
-            if ( text[i] == 13 || text[i] == 10)
-            {
-                ::DrawText( text , laststop , i - laststop ) ;
-                height += lineh ;
-                ::MoveTo( m_rect.left + kTipBorder , m_rect.top + fontInfo.ascent + kTipBorder + height );
-                laststop = i+1 ;
-            }
-
-            i++ ;
-        }
-
-        ::DrawText( text , laststop , i - laststop ) ;
-        ::TextMode( srcOr ) ;
-#endif
     }
 }
 
@@ -406,23 +275,8 @@ void wxMacToolTip::Clear()
     if ( !m_shown )
         return ;
 
-#if TARGET_CARBON
     HMHideTag() ;
     m_helpTextRef.Release() ;
-#else
-    if ( m_window == s_ToolTipWindowRef && m_backpict )
-    {
-        wxMacPortStateHelper help( (GrafPtr)GetWindowPort( m_window ) ) ;
-
-        m_shown = false ;
-
-        BackColor( whiteColor ) ;
-        ForeColor( blackColor ) ;
-        DrawPicture( m_backpict, &m_rect );
-        KillPicture( m_backpict );
-        m_backpict = NULL ;
-    }
-#endif
 }
 
 #endif // wxUSE_TOOLTIPS

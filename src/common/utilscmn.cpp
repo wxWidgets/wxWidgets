@@ -816,8 +816,8 @@ bool wxLaunchDefaultBrowser(const wxString& urlOrig, int flags)
 #elif defined(__WXMAC__)
     OSStatus err;
     ICInstance inst;
-    SInt32 startSel;
-    SInt32 endSel;
+    long int startSel;
+    long int endSel;
 
     err = ICStart(&inst, 'STKA'); // put your app creator code here
     if (err == noErr)

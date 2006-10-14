@@ -102,33 +102,33 @@ bool      wxApp::sm_isEmbedded = false; // Normally we're not a plugin
 // Core Apple Event Support
 //----------------------------------------------------------------------
 
-pascal OSErr AEHandleODoc( const AppleEvent *event , AppleEvent *reply , long refcon ) ;
-pascal OSErr AEHandleOApp( const AppleEvent *event , AppleEvent *reply , long refcon ) ;
-pascal OSErr AEHandlePDoc( const AppleEvent *event , AppleEvent *reply , long refcon ) ;
-pascal OSErr AEHandleQuit( const AppleEvent *event , AppleEvent *reply , long refcon ) ;
-pascal OSErr AEHandleRApp( const AppleEvent *event , AppleEvent *reply , long refcon ) ;
+pascal OSErr AEHandleODoc( const AppleEvent *event , AppleEvent *reply , SRefCon refcon ) ;
+pascal OSErr AEHandleOApp( const AppleEvent *event , AppleEvent *reply , SRefCon refcon ) ;
+pascal OSErr AEHandlePDoc( const AppleEvent *event , AppleEvent *reply , SRefCon refcon ) ;
+pascal OSErr AEHandleQuit( const AppleEvent *event , AppleEvent *reply , SRefCon refcon ) ;
+pascal OSErr AEHandleRApp( const AppleEvent *event , AppleEvent *reply , SRefCon refcon ) ;
 
-pascal OSErr AEHandleODoc( const AppleEvent *event , AppleEvent *reply , long WXUNUSED(refcon) )
+pascal OSErr AEHandleODoc( const AppleEvent *event , AppleEvent *reply , SRefCon WXUNUSED(refcon) )
 {
     return wxTheApp->MacHandleAEODoc( (AppleEvent*) event , reply) ;
 }
 
-pascal OSErr AEHandleOApp( const AppleEvent *event , AppleEvent *reply , long WXUNUSED(refcon) )
+pascal OSErr AEHandleOApp( const AppleEvent *event , AppleEvent *reply , SRefCon WXUNUSED(refcon) )
 {
     return wxTheApp->MacHandleAEOApp( (AppleEvent*) event , reply ) ;
 }
 
-pascal OSErr AEHandlePDoc( const AppleEvent *event , AppleEvent *reply , long WXUNUSED(refcon) )
+pascal OSErr AEHandlePDoc( const AppleEvent *event , AppleEvent *reply , SRefCon WXUNUSED(refcon) )
 {
     return wxTheApp->MacHandleAEPDoc( (AppleEvent*) event , reply ) ;
 }
 
-pascal OSErr AEHandleQuit( const AppleEvent *event , AppleEvent *reply , long WXUNUSED(refcon) )
+pascal OSErr AEHandleQuit( const AppleEvent *event , AppleEvent *reply , SRefCon WXUNUSED(refcon) )
 {
     return wxTheApp->MacHandleAEQuit( (AppleEvent*) event , reply) ;
 }
 
-pascal OSErr AEHandleRApp( const AppleEvent *event , AppleEvent *reply , long WXUNUSED(refcon) )
+pascal OSErr AEHandleRApp( const AppleEvent *event , AppleEvent *reply , SRefCon WXUNUSED(refcon) )
 {
     return wxTheApp->MacHandleAERApp( (AppleEvent*) event , reply) ;
 }
@@ -468,7 +468,7 @@ wxMenu* wxFindMenuFromMacCommand( const HICommand &command , wxMenuItem* &item )
         }
         else
         {
-            UInt32 refCon ;
+            URefCon refCon ;
 
             GetMenuItemRefCon( command.menu.menuRef , command.menu.menuItemIndex , &refCon ) ;
             itemMenu = wxFindMenuFromMacMenu( command.menu.menuRef ) ;
@@ -1021,8 +1021,9 @@ bool wxMacConvertEventToRecord( EventRef event , EventRecord *rec)
                     UInt32 keyCode ;
                     unsigned char charCode ;
                     UInt32 modifiers ;
+#ifndef __LP64__
                     GetMouse( &rec->where) ;
-
+#endif
                     err = GetEventParameter(event, kEventParamKeyModifiers, typeUInt32, NULL, 4, NULL, &modifiers);
                     err = GetEventParameter(event, kEventParamKeyCode, typeUInt32, NULL, 4, NULL, &keyCode);
                     err = GetEventParameter(event, kEventParamKeyMacCharCodes, typeChar, NULL, 1, NULL, &charCode);
@@ -1047,8 +1048,10 @@ bool wxMacConvertEventToRecord( EventRef event , EventRecord *rec)
                             {
                                 UInt32 keyCode, modifiers;
                                 unsigned char charCode ;
+#ifndef __LP64__
 
                                 GetMouse( &rec->where) ;
+#endif
                                 rec->what = keyDown ;
                                 err = GetEventParameter(rawEvent, kEventParamKeyModifiers, typeUInt32, NULL, 4, NULL, &modifiers);
                                 err = GetEventParameter(rawEvent, kEventParamKeyCode, typeUInt32, NULL, 4, NULL, &keyCode);

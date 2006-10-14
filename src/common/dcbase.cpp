@@ -1256,8 +1256,9 @@ void wxOverlayImpl::Init( wxWindowDC* dc, int x , int y , int width , int height
     
     OSStatus err = CreateOverlayWindow();
     wxASSERT_MSG(  err == noErr , _("Couldn't create the overlay window") );
-
+#ifndef __LP64__
     err = QDBeginCGContext(GetWindowPort(m_overlayWindow), &m_overlayContext);
+#endif
     CGContextTranslateCTM( m_overlayContext, 0, m_height+m_y );
     CGContextScaleCTM( m_overlayContext, 1, -1 );
     wxASSERT_MSG(  err == noErr , _("Couldn't init the context on the overlay window") );
@@ -1294,9 +1295,10 @@ void wxOverlayImpl::Reset()
 {
     if ( m_overlayContext )
     {
+#ifndef __LP64__
         OSStatus err = QDEndCGContext(GetWindowPort(m_overlayWindow), &m_overlayContext);
         wxASSERT_MSG(  err == noErr , _("Couldn't end the context on the overlay window") );
-
+#endif
         m_overlayContext = NULL ;
     }    
     

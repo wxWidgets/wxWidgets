@@ -907,6 +907,8 @@ wxString wxMacHFSUniStrToString( ConstHFSUniStr255Param uniname )
     return wxMacCFStringHolder(cfMutableString).AsString() ;
 }
 
+#ifndef __LP64__
+
 wxString wxMacFSSpec2MacFilename( const FSSpec *spec )
 {
     FSRef fsRef ;
@@ -924,6 +926,7 @@ void wxMacFilename2FSSpec( const wxString& path , FSSpec *spec )
     wxMacPathToFSRef( path , &fsRef ) ;
     err = FSRefMakeFSSpec( &fsRef , spec ) ;
 }
+#endif
 
 #endif // __WXMAC__
 
