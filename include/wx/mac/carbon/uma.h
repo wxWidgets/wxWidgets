@@ -17,11 +17,6 @@
 void UMAInitToolbox( UInt16 inMoreMastersCalls, bool isEmbedded) ;
 void UMACleanupToolbox() ;
 long UMAGetSystemVersion() ;
-bool UMAHasAppearance() ;
-long UMAGetAppearanceVersion() ;
-bool UMAHasWindowManager() ;
-long UMAGetWindowManagerAttr() ;
-bool UMAHasAquaLayout() ;
 
 bool UMASystemIsInitialized() ;
 void UMASetSystemIsInitialized(bool val);
