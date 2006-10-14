@@ -58,7 +58,7 @@
     #include <CoreServices.h>
 #endif
 
-
+#ifndef __LP64__
 //   START CODE SAMPLE FROM TECHNOTE 1002 (http://developer.apple.com/technotes/tn/tn1002.html)
 
 // IsRemoteVolume can be used to find out if the
@@ -320,7 +320,7 @@ pascal OSErr FSpGetFullPath( const FSSpec *spec,
 
     return result;
 }
-
+#endif
 //
 // On the mac there are two ways to open a file - one is through apple events and the
 // finder, another is through mime types.
@@ -458,6 +458,7 @@ wxString wxFileTypeImpl::GetCommand(const wxString& verb) const
 }
 
 #else //carbon/classic implementation
+
 
 wxString wxFileTypeImpl::GetCommand(const wxString& verb) const
 {
@@ -789,7 +790,9 @@ pascal  OSStatus  MoreProcGetProcessTypeSignature(
 
     infoRec.processInfoLength = sizeof(ProcessInfoRec);
     infoRec.processName = NULL;
+#ifndef __LP64__
     infoRec.processAppSpec = NULL;
+#endif
 
     if ( pPSN == NULL )
     {
@@ -1693,8 +1696,18 @@ wxFileType* wxMimeTypesManagerImpl::Associate(const wxFileTypeInfo& ftInfo)
     if (status == noErr)
     {
         Str255 psCreatorName;
+#ifndef __LP64__
         FSSpec dummySpec;
         status = FindApplication(creator, false, psCreatorName, &dummySpec);
+#else
+        FSRef fsref;
+        status = LSFindApplicationForInfo( creator, NULL, NULL, &fsref ,NULL);
+        HFSUniStr255 name;
+        status = FSGetCatalogInfo(&fsref, kFSCatInfoNone, NULL, &name, NULL, NULL);
+        CFStringRef str = FSCreateStringFromHFSUniStr( 0 , &name );
+        CFStringGetPascalString(str, psCreatorName, 256, CFStringGetSystemEncoding());
+        CFRelease( str );
+#endif
 
         if (status == noErr)
         {

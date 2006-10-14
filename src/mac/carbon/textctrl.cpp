@@ -481,6 +481,9 @@ bool wxTextCtrl::Create( wxWindow *parent,
         forceMLTE = true ;
     }
 #endif
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5
+    forceMLTE = false;
+#endif
 
 #ifdef __WXMAC_OSX__
 #if MAC_OS_X_VERSION_MAX_ALLOWED > MAC_OS_X_VERSION_10_2
@@ -493,13 +496,20 @@ bool wxTextCtrl::Create( wxWindow *parent,
 
     if ( !m_peer )
     {
+#if MAC_OS_X_VERSION_MAX_ALLOWED < MAC_OS_X_VERSION_10_5
         if ( !(m_windowStyle & wxTE_MULTILINE) && !forceMLTE )
+#endif
+        {
             m_peer = new wxMacUnicodeTextControl( this , str , pos , size , style ) ;
+        }
     }
 #endif
 
+    // the horizontal single line scrolling bug that made us keep 
+#if MAC_OS_X_VERSION_MAX_ALLOWED < MAC_OS_X_VERSION_10_5
     if ( !m_peer )
         m_peer = new wxMacMLTEClassicControl( this , str , pos , size , style ) ;
+#endif
 
     MacPostControlCreate(pos, size) ;
 
@@ -1710,7 +1720,9 @@ void wxMacMLTEControl::SetStringValue( const wxString &str )
     wxMacConvertNewlines10To13( &st );
 
     {
-        wxMacWindowClipper c( m_peer );
+#ifndef __LP64__
+        wxMacWindowClipper c( m_peer ) ;
+#endif
 
         {
             wxMacEditHelper help( m_txn );
@@ -1891,7 +1903,7 @@ void wxMacMLTEControl::TXNSetAttribute( const wxTextAttr& style , long from , lo
 #else
         typeAttr[attrCount].tag = kTXNATSUIStyle ;
         typeAttr[attrCount].size = kTXNATSUIStyleSize ;
-        typeAttr[attrCount].data.dataValue = (UInt32)font.MacGetATSUStyle() ;
+        typeAttr[attrCount].data.dataPtr = font.MacGetATSUStyle() ;
         attrCount++ ;
 #endif
     }
@@ -1985,7 +1997,9 @@ void wxMacMLTEControl::Replace( long from , long to , const wxString &str )
     wxMacConvertNewlines10To13( &value ) ;
 
     wxMacEditHelper help( m_txn ) ;
+#ifndef __LP64__
     wxMacWindowClipper c( m_peer ) ;
+#endif
 
     TXNSetSelection( m_txn, from, to ) ;
     TXNClear( m_txn ) ;
@@ -1994,7 +2008,9 @@ void wxMacMLTEControl::Replace( long from , long to , const wxString &str )
 
 void wxMacMLTEControl::Remove( long from , long to )
 {
+#ifndef __LP64__
     wxMacWindowClipper c( m_peer ) ;
+#endif
     wxMacEditHelper help( m_txn ) ;
     TXNSetSelection( m_txn , from , to ) ;
     TXNClear( m_txn ) ;
@@ -2007,7 +2023,9 @@ void wxMacMLTEControl::GetSelection( long* from, long* to) const
 
 void wxMacMLTEControl::SetSelection( long from , long to )
 {
+#ifndef __LP64__
     wxMacWindowClipper c( m_peer ) ;
+#endif
 
     // change the selection
     if ((from == -1) && (to == -1))
@@ -2026,7 +2044,9 @@ void wxMacMLTEControl::WriteText( const wxString& str )
     long start , end , dummy ;
 
     GetSelection( &start , &dummy ) ;
+#ifndef __LP64__
     wxMacWindowClipper c( m_peer ) ;
+#endif
 
     {
         wxMacEditHelper helper( m_txn ) ;
@@ -2040,7 +2060,9 @@ void wxMacMLTEControl::WriteText( const wxString& str )
 
 void wxMacMLTEControl::Clear()
 {
+#ifndef __LP64__
     wxMacWindowClipper c( m_peer ) ;
+#endif
     wxMacEditHelper st( m_txn ) ;
     TXNSetSelection( m_txn , kTXNStartOffset , kTXNEndOffset ) ;
     TXNClear( m_txn ) ;
@@ -2158,30 +2180,24 @@ bool wxMacMLTEControl::PositionToXY( long pos, long *x, long *y ) const
 
 void wxMacMLTEControl::ShowPosition( long pos )
 {
-#if TARGET_RT_MAC_MACHO && defined(AVAILABLE_MAC_OS_X_VERSION_10_2_AND_LATER)
-    {
-        Point current, desired ;
-        TXNOffset selstart, selend;
+    Point current, desired ;
+    TXNOffset selstart, selend;
 
-        TXNGetSelection( m_txn, &selstart, &selend );
-        TXNOffsetToPoint( m_txn, selstart, &current );
-        TXNOffsetToPoint( m_txn, pos, &desired );
+    TXNGetSelection( m_txn, &selstart, &selend );
+    TXNOffsetToPoint( m_txn, selstart, &current );
+    TXNOffsetToPoint( m_txn, pos, &desired );
 
-        // TODO: use HIPoints for 10.3 and above
-        if ( (UInt32)TXNScroll != (UInt32)kUnresolvedCFragSymbolAddress )
-        {
-            OSErr theErr = noErr;
-            SInt32 dv = desired.v - current.v;
-            SInt32 dh = desired.h - current.h;
-            TXNShowSelection( m_txn, kTXNShowStart ) ; // NB: should this be kTXNShowStart or kTXNShowEnd ??
-            theErr = TXNScroll( m_txn, kTXNScrollUnitsInPixels, kTXNScrollUnitsInPixels, &dv, &dh );
+    // TODO: use HIPoints for 10.3 and above
 
-            // there will be an error returned for classic MLTE implementation when the control is
-            // invisible, but HITextView works correctly, so we don't assert that one
-            // wxASSERT_MSG( theErr == noErr, _T("TXNScroll returned an error!") );
-        }
-    }
-#endif
+    OSErr theErr = noErr;
+    long dv = desired.v - current.v;
+    long dh = desired.h - current.h;
+    TXNShowSelection( m_txn, kTXNShowStart ) ; // NB: should this be kTXNShowStart or kTXNShowEnd ??
+    theErr = TXNScroll( m_txn, kTXNScrollUnitsInPixels, kTXNScrollUnitsInPixels, &dv, &dh );
+
+    // there will be an error returned for classic MLTE implementation when the control is
+    // invisible, but HITextView works correctly, so we don't assert that one
+    // wxASSERT_MSG( theErr == noErr, _T("TXNScroll returned an error!") );
 }
 
 void wxMacMLTEControl::SetTXNData( const wxString& st, TXNOffset start, TXNOffset end )
@@ -2281,6 +2297,8 @@ int wxMacMLTEControl::GetLineLength(long lineNo) const
 
     return theLength ;
 }
+
+#if MAC_OS_X_VERSION_MAX_ALLOWED < MAC_OS_X_VERSION_10_5
 
 // ----------------------------------------------------------------------------
 // MLTE control implementation (classic part)
@@ -2969,6 +2987,7 @@ OSStatus wxMacMLTEClassicControl::DoCreate()
 
     return err;
 }
+#endif
 
 // ----------------------------------------------------------------------------
 // MLTE control implementation (OSX part)
@@ -3078,8 +3097,9 @@ wxMacMLTEHIViewControl::wxMacMLTEHIViewControl( wxTextCtrl *wxPeer,
     }
 
     AdjustCreationAttributes( *wxWHITE , true ) ;
-
+#ifndef __LP64__
     wxMacWindowClipper c( m_peer ) ;
+#endif
     SetTXNData( st , kTXNStartOffset, kTXNEndOffset ) ;
 
     TXNSetSelection( m_txn, 0, 0 );

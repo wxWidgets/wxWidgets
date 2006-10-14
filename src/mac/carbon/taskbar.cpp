@@ -186,7 +186,7 @@ pascal OSStatus wxDockEventHandler( EventHandlerCallRef inHandlerCallRef,
                 wxMenuItem *item = NULL;
 
                 if (id != 0) // get the wxMenuItem reference from the MenuRef
-                    GetMenuItemRefCon( menuRef, menuItemIndex, (UInt32*) &item );
+                    GetMenuItemRefCon( menuRef, menuItemIndex, (URefCon*) &item );
 
                 if (item)
                 {

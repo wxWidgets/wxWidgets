@@ -61,12 +61,14 @@ wxMetafileRefData::~wxMetafileRefData()
 {
     if (m_metafile)
     {
+#ifndef __LP64__
         KillPicture( (PicHandle)m_metafile );
         m_metafile = NULL;
 
 #if wxMAC_USE_CORE_GRAPHICS
         QDPictRelease( m_qdPictRef );
         m_qdPictRef = NULL;
+#endif
 #endif
     }
 }
@@ -142,11 +144,13 @@ void wxMetafile::SetHMETAFILE(WXHMETAFILE mf)
         membuf, data, sz, wxMacMemoryBufferReleaseProc );
     M_METAFILEDATA->m_qdPictRef = NULL;
 
+#ifndef __LP64__
     if (provider != NULL)
     {
         M_METAFILEDATA->m_qdPictRef = QDPictCreateWithProvider( provider );
         CGDataProviderRelease( provider );
     }
+#endif
 #endif
 }
 
@@ -160,6 +164,7 @@ bool wxMetaFile::Play(wxDC *dc)
 
     {
 #if wxMAC_USE_CORE_GRAPHICS
+#ifndef __LP64__
         QDPictRef cgPictRef = M_METAFILEDATA->m_qdPictRef;
         CGContextRef cg = ((wxMacCGContext*)(dc->GetGraphicContext()))->GetNativeContext();
         CGRect bounds = QDPictGetBounds( cgPictRef );
@@ -169,6 +174,7 @@ bool wxMetaFile::Play(wxDC *dc)
         CGContextScaleCTM( cg, 1, -1 );
         QDPictDrawToCGContext( cg, bounds, cgPictRef );
         CGContextRestoreGState( cg );
+#endif
 #else
         PicHandle pict = (PicHandle)GetHMETAFILE();
         wxMacPortSetter helper( dc );
@@ -186,11 +192,13 @@ wxSize wxMetaFile::GetSize() const
 
     if (Ok())
     {
-        PicHandle pict = (PicHandle)GetHMETAFILE();
+#ifndef __LP64__
+       PicHandle pict = (PicHandle)GetHMETAFILE();
         Rect r;
         wxMacGetPictureBounds( pict, &r );
         dataSize.x = r.right - r.left;
         dataSize.y = r.bottom - r.top;
+#endif
     }
 
     return dataSize;
@@ -244,8 +252,9 @@ void wxMetaFileDC::DoGetSize(int *width, int *height) const
 
 wxMetaFile *wxMetaFileDC::Close()
 {
+#ifndef __LP64__
     ClosePicture();
-
+#endif
     return m_metaFile;
 }
 

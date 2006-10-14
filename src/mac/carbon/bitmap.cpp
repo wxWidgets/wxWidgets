@@ -93,8 +93,10 @@ void wxMacCreateBitmapButton( ControlButtonContentInfo*info , const wxBitmap& bi
 #endif
         else
         {
+#ifndef __LP64__
             info->contentType = kControlContentPictHandle ;
             info->u.picture = bmap->GetPictHandle() ;
+#endif
         }
     }
 }
@@ -176,10 +178,11 @@ bool wxBitmapRefData::Create( int w , int h , int d )
 
     m_hBitmap = NULL ;
     Rect rect = { 0 , 0 , m_height , m_width } ;
+#ifndef __LP64__
     verify_noerr( NewGWorldFromPtr( (GWorldPtr*) &m_hBitmap , k32ARGBPixelFormat , &rect , NULL , NULL , 0 ,
         (char*) data , m_bytesPerRow ) ) ;
     wxASSERT_MSG( m_hBitmap , wxT("Unable to create GWorld context") ) ;
-
+#endif
     m_ok = ( m_hBitmap != NULL ) ;
 
     return m_ok ;
@@ -204,9 +207,11 @@ void wxBitmapRefData::UseAlpha( bool use )
 
         memset( data , 0 , size ) ;
         Rect rect = { 0 , 0 , height , width } ;
+#ifndef __LP64__
         verify_noerr( NewGWorldFromPtr( (GWorldPtr*) &m_hMaskBitmap , k32ARGBPixelFormat , &rect , NULL , NULL , 0 ,
             (char*) data , m_maskBytesPerRow ) ) ;
         wxASSERT_MSG( m_hMaskBitmap , wxT("Unable to create GWorld context for alpha mask") ) ;
+#endif
         m_maskMemBuf.UngetWriteBuf(size) ;
 
 #if !wxMAC_USE_CORE_GRAPHICS
@@ -215,7 +220,9 @@ void wxBitmapRefData::UseAlpha( bool use )
     }
     else
     {
+#ifndef __LP64__
         DisposeGWorld( m_hMaskBitmap ) ;
+#endif
         m_hMaskBitmap = NULL ;
         m_maskBytesPerRow = 0 ;
     }
@@ -423,6 +430,7 @@ PicHandle wxBitmapRefData::GetPictHandle()
 {
     if ( m_pictHandle == NULL )
     {
+#ifndef __LP64__
         CGrafPtr origPort = NULL ;
         GDHandle origDev = NULL ;
         GWorldPtr wp = NULL ;
@@ -492,6 +500,7 @@ PicHandle wxBitmapRefData::GetPictHandle()
         SetGWorld( origPort , origDev ) ;
         if ( clipRgn )
             DisposeRgn( clipRgn ) ;
+#endif
     }
 
     return m_pictHandle ;
@@ -674,6 +683,7 @@ void wxBitmapRefData::Free()
         m_iconRef = NULL ;
     }
 
+#ifndef __LP64__
     if ( m_pictHandle )
     {
         KillPicture( m_pictHandle ) ;
@@ -691,7 +701,7 @@ void wxBitmapRefData::Free()
         DisposeGWorld( MAC_WXHBITMAP(m_hMaskBitmap) ) ;
         m_hMaskBitmap = NULL ;
     }
-
+#endif
     if (m_bitmapMask)
     {
         delete m_bitmapMask;
@@ -1368,11 +1378,13 @@ wxMask::wxMask( const wxMemoryBuffer& data, int width , int height , int bytesPe
 
 wxMask::~wxMask()
 {
+#ifndef __LP64__
     if ( m_maskBitmap )
     {
         DisposeGWorld( (GWorldPtr)m_maskBitmap ) ;
         m_maskBitmap = NULL ;
     }
+#endif
 }
 
 void wxMask::Init()
@@ -1391,6 +1403,7 @@ void *wxMask::GetRawAccess() const
 
 void wxMask::RealizeNative()
 {
+#ifndef __LP64__
     if ( m_maskBitmap )
     {
        DisposeGWorld( (GWorldPtr)m_maskBitmap ) ;
@@ -1403,6 +1416,7 @@ void wxMask::RealizeNative()
         (GWorldPtr*) &m_maskBitmap , k32ARGBPixelFormat , &rect , NULL , NULL , 0 ,
         (char*) m_memBuf.GetData() , m_bytesPerRow ) ;
     verify_noerr( err ) ;
+#endif
 }
 
 // Create a mask from a mono bitmap (copies the bitmap).

@@ -62,7 +62,9 @@ public :
     virtual void GetSize( int *w , int *h) const ;
     virtual wxSize GetPPI() const ;
 private :
+#if !wxMAC_USE_CORE_GRAPHICS
     GrafPtr m_macPrintFormerPort ;
+#endif
     wxCoord m_maxX ;
     wxCoord m_maxY ;
     wxSize  m_ppi ;
@@ -71,8 +73,9 @@ private :
 
 wxMacCarbonPrinterDC::wxMacCarbonPrinterDC( wxPrintData* data )
 {
+#if !wxMAC_USE_CORE_GRAPHICS
     ::GetPort( & m_macPrintFormerPort ) ;
-
+#endif
     m_err = noErr ;
     wxMacCarbonPrintData *native = (wxMacCarbonPrintData*) data->GetNativeData() ;
 
@@ -85,14 +88,22 @@ wxMacCarbonPrinterDC::wxMacCarbonPrinterDC( wxPrintData* data )
     m_maxY = wxCoord(rPage.bottom - rPage.top);
 
     PMResolution res;
+#if MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_5 
+    PMPrinter printer;
+    PMSessionGetCurrentPrinter(native->m_macPrintSession, &printer);
+    PMPrinterGetOutputResolution( printer, native->m_macPrintSettings, &res) ;
+#else
     m_err = PMGetResolution((PMPageFormat) (native->m_macPageFormat), &res);
     m_ppi = wxSize(int(res.hRes), int(res.vRes));
+#endif
 }
 
 wxMacCarbonPrinterDC::~wxMacCarbonPrinterDC()
 {
+#if !wxMAC_USE_CORE_GRAPHICS
     // nothing to release from print data, as wxPrinterDC has all data in its wxPrintData member
     ::SetPort( m_macPrintFormerPort ) ;
+#endif
 }
 
 wxNativePrinterDC* wxNativePrinterDC::Create(wxPrintData* data)
@@ -107,7 +118,7 @@ bool wxMacCarbonPrinterDC::StartDoc(  wxPrinterDC* dc , const wxString& WXUNUSED
 
     wxMacCarbonPrintData *native = (wxMacCarbonPrintData*) dc->GetPrintData().GetNativeData() ;
 
-#if wxMAC_USE_CORE_GRAPHICS
+#if MAC_OS_X_VERSION_MIN_REQUIRED < MAC_OS_X_VERSION_10_4 && wxMAC_USE_CORE_GRAPHICS
     {
         CFStringRef s[1] = { kPMGraphicsContextCoreGraphics };
         CFArrayRef  graphicsContextsArray = CFArrayCreate(NULL, (const void**)s, 1, &kCFTypeArrayCallBacks);
@@ -115,10 +126,17 @@ bool wxMacCarbonPrinterDC::StartDoc(  wxPrinterDC* dc , const wxString& WXUNUSED
         CFRelease(graphicsContextsArray);
     }
 #endif
-
+#if MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_4 && wxMAC_USE_CORE_GRAPHICS
+    m_err = PMSessionBeginCGDocument(native->m_macPrintSession,
+              native->m_macPrintSettings,
+              native->m_macPageFormat);
+#else
     m_err = PMSessionBeginDocument(native->m_macPrintSession,
               native->m_macPrintSettings,
               native->m_macPageFormat);
+
+#endif
+
     if ( m_err != noErr )
         return false;
 
@@ -131,7 +149,13 @@ bool wxMacCarbonPrinterDC::StartDoc(  wxPrinterDC* dc , const wxString& WXUNUSED
     m_maxY = wxCoord(rPage.bottom - rPage.top);
 
     PMResolution res;
+#if MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_5 
+    PMPrinter printer;
+    PMSessionGetCurrentPrinter(native->m_macPrintSession, &printer);
+    PMPrinterGetOutputResolution( printer, native->m_macPrintSettings, &res) ;
+#else
     m_err = PMGetResolution((PMPageFormat) (native->m_macPageFormat), &res);
+#endif
     m_ppi = wxSize(int(res.hRes), int(res.vRes));
     return true ;
 }
@@ -163,9 +187,15 @@ void wxMacCarbonPrinterDC::StartPage( wxPrinterDC* dc )
     if ( m_err == noErr )
     {
 #if wxMAC_USE_CORE_GRAPHICS
+#if MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_4
+        m_err = PMSessionGetCGGraphicsContext(native->m_macPrintSession,
+                                            &pageContext );
+
+#else
         m_err = PMSessionGetGraphicsContext(native->m_macPrintSession,
                                             kPMGraphicsContextCoreGraphics,
                                             (void**) &pageContext );
+#endif
         dc->MacSetCGContext(pageContext) ;
 #else
         m_err = PMSessionGetGraphicsContext(native->m_macPrintSession,

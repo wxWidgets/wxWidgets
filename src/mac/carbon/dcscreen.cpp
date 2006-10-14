@@ -20,6 +20,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxScreenDC, wxWindowDC)
 // Create a DC representing the whole screen
 wxScreenDC::wxScreenDC()
 {
+#ifndef __LP64__
     m_macPort = CreateNewPort() ;
     GrafPtr port ;
     GetPort( &port ) ;
@@ -51,6 +52,7 @@ wxScreenDC::wxScreenDC()
     CopyRgn( (RgnHandle) m_macBoundaryClipRgn , (RgnHandle) m_macCurrentClipRgn ) ;
 #endif
     m_ok = true ;
+#endif
 }
 
 wxScreenDC::~wxScreenDC()
@@ -60,6 +62,8 @@ wxScreenDC::~wxScreenDC()
     m_graphicContext = NULL ;
 #endif
 
+#ifndef __LP64__
     if ( m_macPort )
         DisposePort( (CGrafPtr) m_macPort ) ;
+#endif
 }

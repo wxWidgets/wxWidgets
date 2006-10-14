@@ -161,9 +161,11 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
     if ( pItem->IsSeparator() )
     {
         if ( pos == (size_t)-1 )
-            MacAppendMenu(MAC_WXHMENU(m_hMenu), "\p-");
+            AppendMenuItemTextWithCFString( MAC_WXHMENU(m_hMenu),
+                CFSTR(""), kMenuItemAttrSeparator, 0,NULL); 
         else
-            MacInsertMenuItem(MAC_WXHMENU(m_hMenu), "\p-" , pos);
+            InsertMenuItemTextWithCFString( MAC_WXHMENU(m_hMenu),
+                CFSTR(""), pos, kMenuItemAttrSeparator, 0); 
     }
     else
     {
@@ -201,7 +203,7 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
             }
 
             SetMenuItemCommandID( MAC_WXHMENU(m_hMenu) , pos , wxIdToMacCommand ( pItem->GetId() ) ) ;
-            SetMenuItemRefCon( MAC_WXHMENU(m_hMenu) , pos , (UInt32) pItem ) ;
+            SetMenuItemRefCon( MAC_WXHMENU(m_hMenu) , pos , (URefCon) pItem ) ;
             pItem->UpdateItemText() ;
             pItem->UpdateItemBitmap() ;
             pItem->UpdateItemStatus() ;
@@ -596,19 +598,19 @@ void wxMenuBar::MacInstallMenuBar()
     ::SetMenuBar( menubar ) ;
     DisposeMenuBar( menubar ) ;
     MenuHandle appleMenu = NULL ;
-    char appleMenuTitle[3] = { 01 , kMenuAppleLogoFilledGlyph , 0 } ;
 
     verify_noerr( CreateNewMenu( kwxMacAppleMenuId , 0 , &appleMenu ) ) ;
-    verify_noerr( SetMenuTitle( appleMenu , (ConstStr255Param) appleMenuTitle ) );
+    verify_noerr( SetMenuTitleWithCFString( appleMenu , CFSTR( "\x14" ) ) );
 
     // Add About/Preferences separator only on OS X
     // KH/RN: Separator is always present on 10.3 but not on 10.2
     // However, the change from 10.2 to 10.3 suggests it is preferred
 #if TARGET_API_MAC_OSX
-    MacInsertMenuItem( appleMenu , "\p-" , 0 ) ;
+    InsertMenuItemTextWithCFString( appleMenu,
+                CFSTR(""), 0, kMenuItemAttrSeparator, 0); 
 #endif
-
-    MacInsertMenuItem( appleMenu , "\pAbout..." , 0 ) ;
+    InsertMenuItemTextWithCFString( appleMenu,
+                CFSTR("About..."), 0, kMenuItemAttrSeparator, 0); 
     MacInsertMenu( appleMenu , 0 ) ;
 
     // clean-up the help menu before adding new items
@@ -687,7 +689,8 @@ void wxMenuBar::MacInstallMenuBar()
                     if ( item->IsSeparator() )
                     {
                         if ( mh )
-                            MacAppendMenu(mh, "\p-" );
+                            AppendMenuItemTextWithCFString( mh,
+                                CFSTR(""), kMenuItemAttrSeparator, 0,NULL); 
                     }
                     else
                     {
@@ -704,7 +707,7 @@ void wxMenuBar::MacInstallMenuBar()
                             {
                                 UMAAppendMenuItem(mh, wxStripMenuCodes(item->GetText()) , wxFont::GetDefaultEncoding(), entry);
                                 SetMenuItemCommandID( mh , CountMenuItems(mh) , wxIdToMacCommand ( item->GetId() ) ) ;
-                                SetMenuItemRefCon( mh , CountMenuItems(mh) , (UInt32)item ) ;
+                                SetMenuItemRefCon( mh , CountMenuItems(mh) , (URefCon) item ) ;
                             }
                         }
 
@@ -732,7 +735,7 @@ void wxMenuBar::MacInstallMenuBar()
             UMASetMenuItemText( GetMenuHandle( kwxMacAppleMenuId ) , 1 , wxStripMenuCodes ( aboutMenuItem->GetText() ) , wxFont::GetDefaultEncoding() );
             UMAEnableMenuItem( GetMenuHandle( kwxMacAppleMenuId ) , 1 , true );
             SetMenuItemCommandID( GetMenuHandle( kwxMacAppleMenuId ) , 1 , kHICommandAbout ) ;
-            SetMenuItemRefCon(GetMenuHandle( kwxMacAppleMenuId ) , 1 , (UInt32)aboutMenuItem ) ;
+            SetMenuItemRefCon(GetMenuHandle( kwxMacAppleMenuId ) , 1 , (URefCon)aboutMenuItem ) ;
             UMASetMenuItemShortcut( GetMenuHandle( kwxMacAppleMenuId ) , 1 , entry ) ;
         }
     }

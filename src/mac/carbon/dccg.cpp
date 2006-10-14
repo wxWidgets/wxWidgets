@@ -64,6 +64,7 @@ const short kUnsupportedMode = -2 ;
 
 extern TECObjectRef s_TECNativeCToUnicode ;
 
+#ifndef __LP64__
 
 // TODO: update
 // The textctrl implementation still needs that (needs what?) for the non-HIView implementation
@@ -131,6 +132,7 @@ wxMacPortSetter::~wxMacPortSetter()
 {
 //    m_dc->MacCleanupPort(&m_ph) ;
 }
+#endif
 
 //-----------------------------------------------------------------------------
 // Local functions
@@ -252,9 +254,10 @@ wxMacCGContext::~wxMacCGContext()
         CGContextRestoreGState( m_cgContext ) ;
         CGContextRestoreGState( m_cgContext ) ;
     }
-
+#ifndef __LP64__
     if ( m_qdPort )
         QDEndCGContext( m_qdPort, &m_cgContext ) ;
+#endif
 }
 
 
@@ -353,8 +356,11 @@ CGContextRef wxMacCGContext::GetNativeContext()
     if ( m_cgContext == NULL )
     {
         Rect bounds ;
+        OSStatus status = noErr;
+#ifndef __LP64__
         GetPortBounds( (CGrafPtr) m_qdPort , &bounds ) ;
-        OSStatus status = QDBeginCGContext((CGrafPtr) m_qdPort , &m_cgContext) ;
+        status = QDBeginCGContext((CGrafPtr) m_qdPort , &m_cgContext) ;
+#endif
         CGContextSaveGState( m_cgContext ) ;
 
         wxASSERT_MSG( status == noErr , wxT("Cannot nest wxDCs on the same window") ) ;
@@ -1591,14 +1597,14 @@ bool wxDC::DoGetPixel( wxCoord x, wxCoord y, wxColour *col ) const
 {
     wxCHECK_MSG( Ok(), false, wxT("wxDC(cg)::DoGetPixel - invalid DC") );
 
-    wxMacPortSaver helper((CGrafPtr)m_macPort) ;
     RGBColor colour;
-
+#ifndef __LP64__
+    wxMacPortSaver helper((CGrafPtr)m_macPort) ;
     // NB: GetCPixel is a deprecated QD call, and a slow one at that
     GetCPixel(
         XLOG2DEVMAC(x) + m_macLocalOriginInPort.x - m_macLocalOrigin.x,
         YLOG2DEVMAC(y) + m_macLocalOriginInPort.y - m_macLocalOrigin.y, &colour );
-
+#endif
     // convert from Mac colour to wx
     col->Set( colour.red >> 8, colour.green >> 8, colour.blue >> 8 );
 

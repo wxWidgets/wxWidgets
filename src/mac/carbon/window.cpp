@@ -454,7 +454,7 @@ pascal OSStatus wxMacUnicodeTextEventHandler( EventHandlerCallRef handler , Even
     UInt32 when = EventTimeToTicks( GetEventTime( event ) ) ;
 
     UniChar* charBuf = NULL;
-    UInt32 dataSize = 0 ;
+    ByteCount dataSize = 0 ;
     int numChars = 0 ;
     UniChar buf[2] ;
     if ( GetEventParameter( event, kEventParamTextInputSendText, typeUnicodeText, NULL, 0 , &dataSize, NULL ) == noErr )
@@ -1079,7 +1079,7 @@ void wxWindowMac::MacPostControlCreate(const wxPoint& pos, const wxSize& size)
 {
     wxASSERT_MSG( m_peer != NULL && m_peer->Ok() , wxT("No valid mac control") ) ;
 
-    m_peer->SetReference( (long)this ) ;
+    m_peer->SetReference( (URefCon) this ) ;
     GetParent()->AddChild( this );
 
     MacInstallEventHandler( (WXWidget) m_peer->GetControlRef() );
@@ -1430,7 +1430,7 @@ void wxWindowMac::DoScreenToClient(int *x, int *y) const
     if (y)
         localwhere.v = *y ;
 
-    QDGlobalToLocalPoint( GetWindowPort( window ) , &localwhere ) ;
+    wxMacGlobalToLocal( window , &localwhere ) ;
 
     if (x)
        *x = localwhere.h ;
@@ -1465,7 +1465,7 @@ void wxWindowMac::DoClientToScreen(int *x, int *y) const
     if (y)
        localwhere.v = *y ;
 
-    QDLocalToGlobalPoint( GetWindowPort( window ) , &localwhere ) ;
+    wxMacLocalToGlobal( window, &localwhere ) ;
 
     if (x)
        *x = localwhere.h ;
@@ -1682,23 +1682,33 @@ bool wxWindowMac::SetCursor(const wxCursor& cursor)
     {
         wxTopLevelWindowMac *tlw = MacGetTopLevelWindow() ;
         WindowRef window = (WindowRef) ( tlw ? tlw->MacGetWindowRef() : 0 ) ;
+
+        ControlPartCode part ;
+        ControlRef control ;
+        Point pt ;
+ #if MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_5
+        HIPoint hiPoint ;
+        HIGetMousePosition(kHICoordSpaceWindow, window, &hiPoint);
+        pt.h = hiPoint.x;
+        pt.v = hiPoint.y;
+ #else 
         CGrafPtr savePort ;
         Boolean swapped = QDSwapPort( GetWindowPort( window ) , &savePort ) ;
 
         // TODO: If we ever get a GetCurrentEvent... replacement
         // for the mouse position, use it...
 
-        Point pt ;
-        ControlPartCode part ;
-        ControlRef control ;
 
         GetMouse( &pt ) ;
+#endif
         control = wxMacFindControlUnderMouse( tlw , pt , window , &part ) ;
         if ( control )
             mouseWin = wxFindControlFromMacControl( control ) ;
 
-        if ( swapped )
+#if MAC_OS_X_VERSION_MIN_REQUIRED < MAC_OS_X_VERSION_10_5
+         if ( swapped )
             QDSwapPort( savePort , NULL ) ;
+#endif
     }
 
     if ( mouseWin == this && !wxIsBusy() )
@@ -2407,8 +2417,7 @@ void wxWindowMac::MacPaintBorders( int leftOrigin , int rightOrigin )
     m_peer->GetRect( &rect ) ;
     InsetRect( &rect, -1 , -1 ) ;
 
-#if wxMAC_USE_CORE_GRAPHICS && MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_3
-    if ( UMAGetSystemVersion() >= 0x1030 )
+#if wxMAC_USE_CORE_GRAPHICS 
     {
         CGRect cgrect = CGRectMake( rect.left , rect.top , rect.right - rect.left ,
             rect.bottom - rect.top ) ;
@@ -2455,8 +2464,7 @@ void wxWindowMac::MacPaintBorders( int leftOrigin , int rightOrigin )
             HIThemeDrawGrowBox( &cgpoint , &info , cgContext , kHIThemeOrientationNormal ) ;
         }
     }
-    else
-#endif
+ #else
     {
         wxTopLevelWindowMac* top = MacGetTopLevelWindow();
         if ( top )
@@ -2480,6 +2488,7 @@ void wxWindowMac::MacPaintBorders( int leftOrigin , int rightOrigin )
             // DrawThemeStandaloneNoGrowBox
         }
     }
+#endif
 }
 
 void wxWindowMac::RemoveChild( wxWindowBase *child )
@@ -2546,8 +2555,6 @@ void wxWindowMac::ScrollWindow(int dx, int dy, const wxRect *rect)
     int width , height ;
     GetClientSize( &width , &height ) ;
 
-#if TARGET_API_MAC_OSX
-    if ( true )
     {
         // note there currently is a bug in OSX which makes inefficient refreshes in case an entire control
         // area is scrolled, this does not occur if width and height are 2 pixels less,
@@ -2587,68 +2594,8 @@ void wxWindowMac::ScrollWindow(int dx, int dy, const wxRect *rect)
 #else
         // this would be the preferred version for fast drawing controls
 
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_3
-            if ( UMAGetSystemVersion() >= 0x1030 )
-                HIViewRender(m_peer->GetControlRef()) ;
-            else
+        HIViewRender(m_peer->GetControlRef()) ;
 #endif
-                Update() ;
-#endif
-    }
-    else
-#endif
-    {
-        wxPoint pos;
-        pos.x =
-        pos.y = 0;
-
-        Rect scrollrect;
-        RgnHandle updateRgn = NewRgn() ;
-
-        {
-            wxClientDC dc(this) ;
-            wxMacPortSetter helper(&dc) ;
-
-            m_peer->GetRectInWindowCoords( &scrollrect ) ;
-            //scrollrect.top += MacGetTopBorderSize() ;
-            //scrollrect.left += MacGetLeftBorderSize() ;
-            scrollrect.bottom = scrollrect.top + height ;
-            scrollrect.right = scrollrect.left + width ;
-
-            if ( rect )
-            {
-                Rect r = { dc.YLOG2DEVMAC(rect->y) , dc.XLOG2DEVMAC(rect->x) , dc.YLOG2DEVMAC(rect->y + rect->height) ,
-                    dc.XLOG2DEVMAC(rect->x + rect->width) } ;
-                SectRect( &scrollrect , &r , &scrollrect ) ;
-            }
-
-            ScrollRect( &scrollrect , dx , dy , updateRgn ) ;
-
-            // now scroll the former update region as well and add the new update region
-            WindowRef rootWindow = (WindowRef) MacGetTopLevelWindowRef() ;
-            RgnHandle formerUpdateRgn = NewRgn() ;
-            RgnHandle scrollRgn = NewRgn() ;
-            RectRgn( scrollRgn , &scrollrect ) ;
-            GetWindowUpdateRgn( rootWindow , formerUpdateRgn ) ;
-            Point pt = {0, 0} ;
-            LocalToGlobal( &pt ) ;
-            OffsetRgn( formerUpdateRgn , -pt.h , -pt.v ) ;
-            SectRgn( formerUpdateRgn , scrollRgn , formerUpdateRgn ) ;
-
-            if ( !EmptyRgn( formerUpdateRgn ) )
-            {
-                MacOffsetRgn( formerUpdateRgn , dx , dy ) ;
-                SectRgn( formerUpdateRgn , scrollRgn , formerUpdateRgn ) ;
-                InvalWindowRgn( rootWindow, formerUpdateRgn ) ;
-            }
-
-            InvalWindowRgn(rootWindow, updateRgn ) ;
-            DisposeRgn( updateRgn ) ;
-            DisposeRgn( formerUpdateRgn ) ;
-            DisposeRgn( scrollRgn ) ;
-        }
-
-        Update() ;
     }
 
     wxWindowMac *child;
@@ -3079,19 +3026,16 @@ bool wxWindowMac::MacDoRedraw( WXHRGN updatergnr , long time )
                 eventNc.SetEventObject( child );
                 if ( !child->GetEventHandler()->ProcessEvent( eventNc ) )
                 {
-#if wxMAC_USE_CORE_GRAPHICS && MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_3
-                    if ( UMAGetSystemVersion() >= 0x1030 )
-                    {
-                        child->MacPaintBorders(0, 0) ;
-                    }
-                    else
-#endif
+#if wxMAC_USE_CORE_GRAPHICS 
+                    child->MacPaintBorders(0, 0) ;
+#else
                     {
                         wxWindowDC dc(this) ;
                         dc.SetClippingRegion(wxRegion(updatergn));
                         wxMacPortSetter helper(&dc) ;
                         child->MacPaintBorders(0, 0) ;
                     }
+#endif
                 }
             }
         }

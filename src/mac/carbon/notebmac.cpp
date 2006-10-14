@@ -427,9 +427,13 @@ void wxNotebook::MacSetupTabs()
         m_peer->SetTabEnabled( ii + 1, true ) ;
     }
 
+#if wxMAC_USE_CORE_GRAPHICS
+    Refresh();
+#else
     Rect bounds;
     m_peer->GetRectInWindowCoords( &bounds ) ;
     InvalWindowRect( (WindowRef)MacGetTopLevelWindowRef(), &bounds );
+#endif
 }
 
 wxRect wxNotebook::GetPageRect() const

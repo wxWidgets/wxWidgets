@@ -223,7 +223,9 @@ wxCursorRefData::~wxCursorRefData()
 {
     if ( m_isColorCursor )
     {
-        ::DisposeCCursor( (CCrsrHandle) m_hCursor ) ;
+#ifndef __LP64__
+               ::DisposeCCursor( (CCrsrHandle) m_hCursor ) ;
+#endif
     }
     else if ( m_disposeHandle )
     {
@@ -313,6 +315,7 @@ void wxCursor::CreateFromImage(const wxImage & image)
 {
     m_refData = new wxCursorRefData;
 
+#ifndef __LP64__
     int w = 16;
     int h = 16;
 
@@ -443,6 +446,8 @@ void wxCursor::CreateFromImage(const wxImage & image)
     HUnlock( (Handle)ch ) ;
     M_CURSORDATA->m_hCursor = ch ;
     M_CURSORDATA->m_isColorCursor = true ;
+#endif
+
 }
 
 #endif //wxUSE_IMAGE
@@ -452,6 +457,7 @@ wxCursor::wxCursor(const wxString& cursor_file, long flags, int hotSpotX, int ho
     m_refData = new wxCursorRefData;
     if ( flags == wxBITMAP_TYPE_MACCURSOR_RESOURCE )
     {
+#ifndef __LP64__
         Str255 theName ;
         wxMacStringToPascal( cursor_file , theName ) ;
 
@@ -484,6 +490,7 @@ wxCursor::wxCursor(const wxString& cursor_file, long flags, int hotSpotX, int ho
                     M_CURSORDATA->m_releaseHandle = true ;
             }
         }
+#endif
     }
     else
     {
@@ -619,10 +626,12 @@ void wxCursor::MacInstall() const
     }
     else if ( m_refData && M_CURSORDATA->m_hCursor )
     {
-        if ( M_CURSORDATA->m_isColorCursor )
+#ifndef __LP64__
+       if ( M_CURSORDATA->m_isColorCursor )
             ::SetCCursor( (CCrsrHandle) M_CURSORDATA->m_hCursor ) ;
         else
             ::SetCursor( * (CursHandle) M_CURSORDATA->m_hCursor ) ;
+#endif
     }
     else
     {
