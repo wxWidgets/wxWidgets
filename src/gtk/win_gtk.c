@@ -737,7 +737,7 @@ gtk_pizza_allocate_child (GtkPizza      *pizza,
     if (gtk_widget_get_direction( GTK_WIDGET(pizza) ) == GTK_TEXT_DIR_RTL)
     {
         /* reverse horizontal placement */
-        printf( "alloc width %d\n", GTK_WIDGET(pizza)->allocation.width );
+        /* printf( "alloc width %d\n", GTK_WIDGET(pizza)->allocation.width ); */
         allocation.x = GTK_WIDGET(pizza)->allocation.width - child->x - allocation.width - pizza->m_xoffset; 
     }
     
