@@ -124,21 +124,17 @@ public:
         }
     }
 
-    void SetPixmap(const wxBitmap& bitmap)
+    void SetImage(const wxBitmap& bitmap)
     {
         if (bitmap.Ok())
         {
-            GdkBitmap *mask = bitmap.GetMask() ? bitmap.GetMask()->GetBitmap()
-                                               : (GdkBitmap *)NULL;
-            if (bitmap.HasPixbuf())
-                gtk_image_set_from_pixbuf( GTK_IMAGE(m_pixmap), bitmap.GetPixbuf() );
-            else
-                gtk_pixmap_set( GTK_PIXMAP(m_pixmap), bitmap.GetPixmap(), mask );
+            // setting from pixmap doesn't seem to work right, but pixbuf works well
+            gtk_image_set_from_pixbuf((GtkImage*)m_image, bitmap.GetPixbuf());
         }
     }
 
     GtkWidget            *m_item;
-    GtkWidget            *m_pixmap;
+    GtkWidget            *m_image;
 
 protected:
     void Init();
@@ -176,7 +172,7 @@ static void gtk_toolbar_callback( GtkWidget *WXUNUSED(widget),
     {
         tool->Toggle();
 
-        tool->SetPixmap(tool->GetBitmap());
+        tool->SetImage(tool->GetBitmap());
 
         if ( tool->IsRadio() && !tool->IsToggled() )
         {
@@ -190,7 +186,7 @@ static void gtk_toolbar_callback( GtkWidget *WXUNUSED(widget),
         // revert back
         tool->Toggle();
 
-        tool->SetPixmap(tool->GetBitmap());
+        tool->SetImage(tool->GetBitmap());
     }
 }
 }
@@ -237,7 +233,7 @@ static void wxInsertChildInToolBar( wxToolBar* WXUNUSED(parent),
 void wxToolBarTool::Init()
 {
     m_item =
-    m_pixmap = (GtkWidget *)NULL;
+    m_image = NULL;
 }
 
 wxToolBarToolBase *wxToolBar::CreateTool(int id,
@@ -376,30 +372,10 @@ bool wxToolBar::DoInsertTool(size_t pos, wxToolBarToolBase *toolBase)
             wxCHECK_MSG( bitmap.GetPixmap() != NULL, false,
                          wxT("wxToolBar::Add needs a wxBitmap") );
 
-            GtkWidget *tool_pixmap = (GtkWidget *)NULL;
+            tool->m_image = gtk_image_new();
+            tool->SetImage(bitmap);
 
-
-            if (bitmap.HasPixbuf())
-            {
-                tool_pixmap = gtk_image_new();
-                tool->m_pixmap = tool_pixmap;
-                tool->SetPixmap(bitmap);
-            }
-            else
-            {
-                GdkPixmap *pixmap = bitmap.GetPixmap();
-
-                GdkBitmap *mask = (GdkBitmap *)NULL;
-                if ( bitmap.GetMask() )
-                    mask = bitmap.GetMask()->GetBitmap();
-
-                tool_pixmap = gtk_pixmap_new( pixmap, mask );
-                gtk_pixmap_set_build_insensitive( GTK_PIXMAP(tool_pixmap), TRUE );
-            }
-
-            gtk_misc_set_alignment( GTK_MISC(tool_pixmap), 0.5, 0.5 );
-
-            tool->m_pixmap = tool_pixmap;
+            gtk_misc_set_alignment((GtkMisc*)tool->m_image, 0.5, 0.5);
         }
     }
 
@@ -451,18 +427,13 @@ bool wxToolBar::DoInsertTool(size_t pos, wxToolBarToolBase *toolBase)
                                     ? NULL
                                     : (const char*) wxGTK_CONV( tool->GetShortHelp() ),
                                   "", // tooltip_private_text (?)
-                                  tool->m_pixmap,
+                                  tool->m_image,
                                   (GtkSignalFunc)gtk_toolbar_callback,
                                   (gpointer)tool,
                                   posGtk
                                );
 
-                if ( !tool->m_item )
-                {
-                    wxFAIL_MSG( _T("gtk_toolbar_insert_element() failed") );
-
-                    return false;
-                }
+                wxCHECK_MSG(tool->m_item != NULL, false, _T("gtk_toolbar_insert_element() failed"));
 
                 g_signal_connect (tool->m_item, "enter_notify_event",
                                   G_CALLBACK (gtk_toolbar_tool_callback),
@@ -544,7 +515,7 @@ void wxToolBar::DoToggleTool( wxToolBarToolBase *toolBase, bool toggle )
     GtkWidget *item = tool->m_item;
     if ( item && GTK_IS_TOGGLE_BUTTON(item) )
     {
-        tool->SetPixmap(tool->GetBitmap());
+        tool->SetImage(tool->GetBitmap());
 
         m_blockEvent = true;
 
