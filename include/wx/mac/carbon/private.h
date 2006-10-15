@@ -64,7 +64,7 @@ inline int    FixedToInt( Fixed inFixed )
 }
 #endif
 
-#if MAC_OS_X_VERSION_MAX_REQUIRED < MAC_OS_X_VERSION_10_5
+#if MAC_OS_X_VERSION_MAX_ALLOWED < MAC_OS_X_VERSION_10_5
 typedef UInt32 URefCon;
 typedef SInt32 SRefCon;
 #endif
