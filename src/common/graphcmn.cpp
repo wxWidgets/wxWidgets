@@ -9,14 +9,6 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-// ============================================================================
-// declarations
-// ============================================================================
-
-// ---------------------------------------------------------------------------
-// headers
-// ---------------------------------------------------------------------------
-
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
@@ -24,15 +16,16 @@
     #pragma hdrstop
 #endif
 
+#if wxUSE_GRAPHICS_CONTEXT
+
 #include "wx/graphics.h"
 
 #ifndef WX_PRECOMP
     #include "wx/icon.h"
     #include "wx/bitmap.h"
     #include "wx/dcmemory.h"
+    #include "wx/region.h"
 #endif
-
-#if wxUSE_GRAPHICS_CONTEXT
 
 #if !defined(wxMAC_USE_CORE_GRAPHICS_BLEND_MODES)
 #define wxMAC_USE_CORE_GRAPHICS_BLEND_MODES 0
@@ -42,32 +35,18 @@
 // constants
 //-----------------------------------------------------------------------------
 
-const double RAD2DEG = 180.0 / M_PI;
-const short kEmulatedMode = -1;
-const short kUnsupportedMode = -2;
+static const double RAD2DEG = 180.0 / M_PI;
 
 //-----------------------------------------------------------------------------
 // Local functions
 //-----------------------------------------------------------------------------
 
-static inline double dmin(double a, double b)
-{
-    return a < b ? a : b;
-}
-static inline double dmax(double a, double b)
-{
-    return a > b ? a : b;
-}
-
 static inline double DegToRad(double deg)
 {
     return (deg * M_PI) / 180.0;
 }
-static inline double RadToDeg(double deg)
-{
-    return (deg * 180.0) / M_PI;
-}
 
+//-----------------------------------------------------------------------------
 
 wxPoint2DDouble wxGraphicsPath::GetCurrentPoint()
 {
@@ -684,9 +663,6 @@ void wxGCDC::SetLogicalFunction( int function )
 
 }
 
-extern bool wxDoFloodFill(wxDC *dc, wxCoord x, wxCoord y,
-                              const wxColour & col, int style);
-
 bool wxGCDC::DoFloodFill(wxCoord WXUNUSED(x), wxCoord WXUNUSED(y),
                          const wxColour& WXUNUSED(col), int WXUNUSED(style))
 {
@@ -930,7 +906,7 @@ void wxGCDC::DoDrawSpline(wxList *points)
     m_graphicContext->StrokePath( path );
     delete path;
 }
-#endif
+#endif // wxUSE_SPLINES
 
 void wxGCDC::DoDrawPolygon( int n, wxPoint points[],
                             wxCoord xoffset, wxCoord yoffset,
@@ -1214,7 +1190,6 @@ void wxGCDC::DoGetTextExtent( const wxString &str, wxCoord *width, wxCoord *heig
 {
     wxCHECK_RET( Ok(), wxT("wxGCDC(cg)::DoGetTextExtent - invalid DC") );
 
-    wxFont formerFont = m_font;
     if ( theFont )
     {
         m_graphicContext->SetFont( *theFont );
@@ -1396,5 +1371,4 @@ void wxGCDC::DoDrawCheckMark(wxCoord x, wxCoord y,
     wxDCBase::DoDrawCheckMark(x,y,width,height);
 }
 
-#endif
-
+#endif // wxUSE_GRAPHICS_CONTEXT
