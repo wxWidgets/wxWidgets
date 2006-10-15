@@ -239,7 +239,6 @@ void       gtk_pizza_set_yoffset     (GtkPizza          *pizza, gint yoffset)
 
 gint       gtk_pizza_get_rtl_offset  (GtkPizza          *pizza)
 {
-    gint width;
     gint border;
 
     g_return_val_if_fail ( (pizza != NULL), 0 );
@@ -695,7 +694,7 @@ gtk_pizza_allocate_child (GtkPizza      *pizza,
         border = pizza->container.border_width;
         offset -= border*2;
             
-        allocation.x = offset - child->x - allocation.width - pizza->m_xoffset; 
+        allocation.x = offset - child->x - allocation.width + pizza->m_xoffset; 
     }
     
     gtk_widget_size_allocate (child->widget, &allocation);
