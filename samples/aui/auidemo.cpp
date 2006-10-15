@@ -16,8 +16,7 @@
     #pragma hdrstop
 #endif
 
-#include "wx/wx.h"
-
+#include "wx/app.h"
 #include "wx/grid.h"
 #include "wx/treectrl.h"
 #include "wx/spinctrl.h"
@@ -28,6 +27,13 @@
 #include "wx/wxhtml.h"
 #include "wx/imaglist.h"
 #include "wx/dataobj.h"
+#include "wx/dcclient.h"
+#include "wx/bmpbuttn.h"
+#include "wx/menu.h"
+#include "wx/toolbar.h"
+#include "wx/statusbr.h"
+#include "wx/msgdlg.h"
+#include "wx/textdlg.h"
 
 #include "wx/aui/aui.h"
 #include "../sample.xpm"
@@ -138,7 +144,6 @@ private:
 };
 
 
-
 // -- wxSizeReportCtrl --
 // (a utility control that always reports it's client size)
 
@@ -220,10 +225,6 @@ BEGIN_EVENT_TABLE(wxSizeReportCtrl, wxControl)
     EVT_SIZE(wxSizeReportCtrl::OnSize)
     EVT_ERASE_BACKGROUND(wxSizeReportCtrl::OnEraseBackground)
 END_EVENT_TABLE()
-
-
-
-
 
 
 class SettingsPanel : public wxPanel
@@ -525,11 +526,6 @@ BEGIN_EVENT_TABLE(SettingsPanel, wxPanel)
 END_EVENT_TABLE()
 
 
-
-
-
-
-
 bool MyApp::OnInit()
 {
     wxFrame* frame = new MyFrame(NULL,
@@ -542,8 +538,6 @@ bool MyApp::OnInit()
 
     return true;
 }
-
-
 
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_ERASE_BACKGROUND(MyFrame::OnEraseBackground)
@@ -587,7 +581,6 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
                    MyFrame::OnRestorePerspective)
     EVT_AUI_PANECLOSE(MyFrame::OnPaneClose)
 END_EVENT_TABLE()
-
 
 
 MyFrame::MyFrame(wxWindow* parent,
@@ -679,7 +672,6 @@ MyFrame::MyFrame(wxWindow* parent,
     tb1->Realize();
 
 
-
     wxToolBar* tb2 = new wxToolBar(this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
                                    wxTB_FLAT | wxTB_NODIVIDER);
     tb2->SetToolBitmapSize(wxSize(16,16));
@@ -712,7 +704,6 @@ MyFrame::MyFrame(wxWindow* parent,
     tb3->AddTool(101, wxT("Test"), tb3_bmp1);
     tb3->AddTool(101, wxT("Test"), tb3_bmp1);
     tb3->Realize();
-
 
 
     wxToolBar* tb4 = new wxToolBar(this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
@@ -887,7 +878,6 @@ void MyFrame::DoUpdate()
     m_mgr.Update();
 }
 
-
 void MyFrame::OnEraseBackground(wxEraseEvent& event)
 {
     event.Skip();
@@ -908,7 +898,6 @@ void MyFrame::OnSettings(wxCommandEvent& WXUNUSED(event))
 
     m_mgr.Update();
 }
-
 
 void MyFrame::OnGradient(wxCommandEvent& event)
 {
@@ -960,31 +949,31 @@ void MyFrame::OnUpdateUI(wxUpdateUIEvent& event)
     switch (event.GetId())
     {
         case ID_NoGradient:
-            event.Check(m_mgr.GetArtProvider()->GetMetric(wxAUI_ART_GRADIENT_TYPE) == wxAUI_GRADIENT_NONE ? true : false);
+            event.Check(m_mgr.GetArtProvider()->GetMetric(wxAUI_ART_GRADIENT_TYPE) == wxAUI_GRADIENT_NONE);
             break;
         case ID_VerticalGradient:
-            event.Check(m_mgr.GetArtProvider()->GetMetric(wxAUI_ART_GRADIENT_TYPE) == wxAUI_GRADIENT_VERTICAL ? true : false);
+            event.Check(m_mgr.GetArtProvider()->GetMetric(wxAUI_ART_GRADIENT_TYPE) == wxAUI_GRADIENT_VERTICAL);
             break;
         case ID_HorizontalGradient:
-            event.Check(m_mgr.GetArtProvider()->GetMetric(wxAUI_ART_GRADIENT_TYPE) == wxAUI_GRADIENT_HORIZONTAL ? true : false);
+            event.Check(m_mgr.GetArtProvider()->GetMetric(wxAUI_ART_GRADIENT_TYPE) == wxAUI_GRADIENT_HORIZONTAL);
             break;
         case ID_AllowFloating:
-            event.Check(flags & wxAUI_MGR_ALLOW_FLOATING ? true : false);
+            event.Check((flags & wxAUI_MGR_ALLOW_FLOATING) != 0);
             break;
         case ID_TransparentDrag:
-            event.Check(flags & wxAUI_MGR_TRANSPARENT_DRAG ? true : false);
+            event.Check((flags & wxAUI_MGR_TRANSPARENT_DRAG) != 0);
             break;
         case ID_TransparentHint:
-            event.Check(flags & wxAUI_MGR_TRANSPARENT_HINT ? true : false);
+            event.Check((flags & wxAUI_MGR_TRANSPARENT_HINT) != 0);
             break;
         case ID_TransparentHintFade:
-            event.Check(flags & wxAUI_MGR_TRANSPARENT_HINT_FADE ? true : false);
+            event.Check((flags & wxAUI_MGR_TRANSPARENT_HINT_FADE) != 0);
             break;
         case ID_DisableVenetian:
-            event.Check(flags & wxAUI_MGR_DISABLE_VENETIAN_BLINDS ? true : false);
+            event.Check((flags & wxAUI_MGR_DISABLE_VENETIAN_BLINDS) != 0);
             break;
         case ID_DisableVenetianFade:
-            event.Check(flags & wxAUI_MGR_DISABLE_VENETIAN_BLINDS_FADE ? true : false);
+            event.Check((flags & wxAUI_MGR_DISABLE_VENETIAN_BLINDS_FADE) != 0);
             break;
     }
 }
@@ -1001,8 +990,6 @@ void MyFrame::OnPaneClose(wxFrameManagerEvent& evt)
             evt.Veto();
     }
 }
-
-
 
 void MyFrame::OnCreatePerspective(wxCommandEvent& WXUNUSED(event))
 {
@@ -1070,7 +1057,7 @@ void MyFrame::OnCreateGrid(wxCommandEvent& WXUNUSED(event))
 void MyFrame::OnCreateHTML(wxCommandEvent& WXUNUSED(event))
 {
     m_mgr.AddPane(CreateHTMLCtrl(), wxPaneInfo().
-                  Name(wxT("Test")).Caption(wxT("Grid")).
+                  Name(wxT("Test")).Caption(wxT("HTML Control")).
                   Float().FloatingPosition(GetStartPosition()).
                   FloatingSize(wxSize(300,200)));
     m_mgr.Update();
@@ -1103,12 +1090,12 @@ void MyFrame::OnCreateSizeReport(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnChangeContentPane(wxCommandEvent& event)
 {
-    m_mgr.GetPane(wxT("grid_content")).Show(event.GetId() == ID_GridContent ? true:false);
-    m_mgr.GetPane(wxT("text_content")).Show(event.GetId() == ID_TextContent ? true:false);
-    m_mgr.GetPane(wxT("tree_content")).Show(event.GetId() == ID_TreeContent ? true:false);
-    m_mgr.GetPane(wxT("sizereport_content")).Show(event.GetId() == ID_SizeReportContent ? true:false);
-    m_mgr.GetPane(wxT("html_content")).Show(event.GetId() == ID_HTMLContent ? true:false);
-    m_mgr.GetPane(wxT("notebook_content")).Show(event.GetId() == ID_NotebookContent ? true:false);
+    m_mgr.GetPane(wxT("grid_content")).Show(event.GetId() == ID_GridContent);
+    m_mgr.GetPane(wxT("text_content")).Show(event.GetId() == ID_TextContent);
+    m_mgr.GetPane(wxT("tree_content")).Show(event.GetId() == ID_TreeContent);
+    m_mgr.GetPane(wxT("sizereport_content")).Show(event.GetId() == ID_SizeReportContent);
+    m_mgr.GetPane(wxT("html_content")).Show(event.GetId() == ID_HTMLContent);
+    m_mgr.GetPane(wxT("notebook_content")).Show(event.GetId() == ID_NotebookContent);
     m_mgr.Update();
 }
 
@@ -1129,7 +1116,7 @@ wxTextCtrl* MyFrame::CreateTextCtrl(const wxString& ctrl_text)
     wxString text;
     if (ctrl_text.Length() > 0)
         text = ctrl_text;
-         else
+    else
         text.Printf(wxT("This is text box %d"), ++n);
 
     return new wxTextCtrl(this,wxID_ANY, text,
