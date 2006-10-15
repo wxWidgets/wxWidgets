@@ -247,11 +247,9 @@ gint       gtk_pizza_get_rtl_offset  (GtkPizza          *pizza)
     
     if (!pizza->bin_window) return 0;
     
-    gdk_window_get_geometry( pizza->bin_window, NULL, NULL, &width, NULL, NULL );
-    
     border = pizza->container.border_width;
         
-    return width-border*2;
+    return GTK_WIDGET(pizza)->allocation.width - border*2;
 }
 
 
