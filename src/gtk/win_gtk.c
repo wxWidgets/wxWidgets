@@ -607,6 +607,8 @@ gtk_pizza_size_allocate (GtkWidget     *widget,
             gdk_window_resize( widget->window, w, h );
         else
             gdk_window_move_resize( widget->window, x, y, w, h );
+
+        gdk_window_resize( pizza->bin_window, w, h );
     }
 
     children = pizza->children;
