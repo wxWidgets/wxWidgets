@@ -17,15 +17,11 @@
 
 #ifndef WX_PRECOMP
     #include "wx/log.h"
-    #include "wx/app.h"
     #include "wx/dcmemory.h"
-    #include "wx/dcprint.h"
     #include "wx/region.h"
-    #include "wx/image.h"
 #endif
 
 #include "wx/mac/uma.h"
-
 
 #ifdef __MSL__
     #if __MSL__ >= 0x6000
@@ -58,11 +54,7 @@ const double M_PI = 3.14159265358979 ;
 #endif
 #endif
 
-const double RAD2DEG = 180.0 / M_PI;
-const short kEmulatedMode = -1 ;
-const short kUnsupportedMode = -2 ;
-
-extern TECObjectRef s_TECNativeCToUnicode ;
+static const double RAD2DEG = 180.0 / M_PI;
 
 #ifndef __LP64__
 
@@ -138,8 +130,6 @@ wxMacPortSetter::~wxMacPortSetter()
 // Local functions
 //-----------------------------------------------------------------------------
 
-static inline double dmin(double a, double b) { return a < b ? a : b; }
-static inline double dmax(double a, double b) { return a > b ? a : b; }
 static inline double DegToRad(double deg) { return (deg * M_PI) / 180.0; }
 
 //-----------------------------------------------------------------------------
@@ -485,7 +475,7 @@ const CGPatternCallbacks wxMacCGPattern::ms_Callbacks = { 0, &wxMacCGPattern::_R
 class ImagePattern : public wxMacCGPattern
 {
 public :
-    ImagePattern( const wxBitmap* bmp , CGAffineTransform transform )
+    ImagePattern( const wxBitmap* bmp , const CGAffineTransform& transform )
     {
         wxASSERT( bmp && bmp->Ok() ) ;
 
@@ -493,7 +483,7 @@ public :
     }
 
     // ImagePattern takes ownership of CGImageRef passed in
-    ImagePattern( CGImageRef image , CGAffineTransform transform )
+    ImagePattern( CGImageRef image , const CGAffineTransform& transform )
     {
         if ( image )
             CFRetain( image ) ;
@@ -508,7 +498,7 @@ public :
     }
 
 protected :
-    void Init( CGImageRef image, CGAffineTransform transform )
+    void Init( CGImageRef image, const CGAffineTransform& transform )
     {
         m_image = image ;
         if ( m_image )
@@ -534,7 +524,7 @@ protected :
 class HatchPattern : public wxMacCGPattern
 {
 public :
-    HatchPattern( int hatchstyle, CGAffineTransform transform )
+    HatchPattern( int hatchstyle, const CGAffineTransform& transform )
     {
         m_hatch = hatchstyle ;
         m_imageBounds = CGRectMake( 0.0, 0.0, 8.0 , 8.0 ) ;
@@ -658,7 +648,7 @@ void wxMacCGContext::SetPen( const wxPen &pen )
     CGContextSetShouldAntialias( m_cgContext , false ) ;
 #endif
 
-    if ( fill | stroke )
+    if ( fill || stroke )
     {
         // set up brushes
         m_mode = kCGPathFill ; // just a default
@@ -835,7 +825,7 @@ void wxMacCGContext::SetBrush( const wxBrush &brush )
     CGContextSetShouldAntialias( m_cgContext , false ) ;
 #endif
 
-    if ( fill | stroke )
+    if ( fill || stroke )
     {
         // setup brushes
         m_mode = kCGPathFill ; // just a default
@@ -1102,8 +1092,7 @@ void wxMacCGContext::GetPartialTextExtents(const wxString& text, wxArrayInt& wid
 #endif
 #endif
 
-    OSStatus status;
-    status = ::ATSUCreateTextLayoutWithTextPtr( (UniCharArrayPtr) ubuf , 0 , chars , chars , 1 ,
+    ::ATSUCreateTextLayoutWithTextPtr( (UniCharArrayPtr) ubuf , 0 , chars , chars , 1 ,
         &chars , (ATSUStyle*) &m_macATSUIStyle , &atsuLayout ) ;
 
     for ( int pos = 0; pos < (int)chars; pos ++ )
@@ -2142,7 +2131,6 @@ void wxDC::DoGetTextExtent( const wxString &str, wxCoord *width, wxCoord *height
 {
     wxCHECK_RET( Ok(), wxT("wxDC(cg)::DoGetTextExtent - invalid DC") );
 
-    wxFont formerFont = m_font ;
     if ( theFont )
     {
         m_graphicContext->SetFont( *theFont ) ;
