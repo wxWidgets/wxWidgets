@@ -286,6 +286,7 @@ gtk_pizza_put (GtkPizza   *pizza,
 
     gtk_widget_set_parent (widget, GTK_WIDGET (pizza));
 
+    gtk_widget_set_size_request( widget, width, height );
     if (GTK_WIDGET_REALIZED (pizza))
         gtk_pizza_allocate_child (pizza, child_info);
 }
