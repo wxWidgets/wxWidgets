@@ -98,7 +98,11 @@
 #define HAVE_UNISTD_H 1
 #define HAVE_WCHAR_H 1
 #define HAVE_ICONV 1
-#define ICONV_CONST 
+#if MAC_OS_X_VERSION_MAX_ALLOWED < MAC_OS_X_VERSION_10_5
+#define ICONV_CONST const
+#else
+#define ICONV_CONST
+#endif
 #define HAVE_LANGINFO_H 1
 #define HAVE_WCSRTOMBS 1
 #define HAVE_FPUTWS 1

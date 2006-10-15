@@ -33,6 +33,7 @@
 #    if defined(__MACH__)
 #        define __WXMAC_OSX__
 #        define __WXMAC_CARBON__
+#        include <AvailabilityMacros.h>
 #        ifdef __WXMAC_XCODE__
 #            include <unistd.h>
 #            include "wx/mac/carbon/config_xcode.h"
