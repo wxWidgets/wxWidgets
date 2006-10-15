@@ -25,6 +25,7 @@
 #endif
 
 #include "wx/dc.h"
+#include "wx/dcbuffer.h" // for IMPLEMENT_DYNAMIC_CLASS
 
 #ifndef WX_PRECOMP
     #include "wx/math.h"
@@ -37,6 +38,9 @@ IMPLEMENT_ABSTRACT_CLASS(wxDCBase, wxObject)
 // ============================================================================
 // implementation
 // ============================================================================
+
+IMPLEMENT_DYNAMIC_CLASS(wxBufferedDC, wxMemoryDC)
+IMPLEMENT_ABSTRACT_CLASS(wxBufferedPaintDC, wxBufferedDC)
 
 #if WXWIN_COMPATIBILITY_2_6
 void wxDCBase::BeginDrawing()

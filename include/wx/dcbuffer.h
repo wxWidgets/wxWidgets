@@ -37,7 +37,7 @@
 // does not prepare the window DC
 #define wxBUFFER_CLIENT_AREA        0x02
 
-class wxBufferedDC : public wxMemoryDC
+class WXDLLEXPORT wxBufferedDC : public wxMemoryDC
 {
 public:
     // Default ctor, must subsequently call Init for two stage construction.
@@ -148,6 +148,7 @@ private:
     // the buffering style
     int m_style;
 
+    DECLARE_DYNAMIC_CLASS(wxBufferedDC)
     DECLARE_NO_COPY_CLASS(wxBufferedDC)
 };
 
@@ -158,7 +159,7 @@ private:
 
 // Creates a double buffered wxPaintDC, optionally allowing the
 // user to specify their own buffer to use.
-class wxBufferedPaintDC : public wxBufferedDC
+class WXDLLEXPORT wxBufferedPaintDC : public wxBufferedDC
 {
 public:
     // If no bitmap is supplied by the user, a temporary one will be created.
@@ -198,6 +199,7 @@ public:
 private:
     wxPaintDC m_paintdc;
 
+    DECLARE_ABSTRACT_CLASS(wxBufferedPaintDC)
     DECLARE_NO_COPY_CLASS(wxBufferedPaintDC)
 };
 

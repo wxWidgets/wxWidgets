@@ -670,7 +670,7 @@ wxStreamBase::~wxStreamBase()
 size_t wxStreamBase::GetSize() const
 {
     wxFileOffset length = GetLength();
-    if ( length == wxInvalidOffset )
+    if ( length == (wxFileOffset)wxInvalidOffset )
         return 0;
 
     const size_t len = wx_truncate_cast(size_t, length);
