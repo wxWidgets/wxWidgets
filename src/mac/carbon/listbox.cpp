@@ -16,15 +16,12 @@
 #include "wx/listbox.h"
 
 #ifndef WX_PRECOMP
-    #include "wx/dynarray.h"
     #include "wx/log.h"
     #include "wx/intl.h"
-    #include "wx/app.h"
     #include "wx/utils.h"
-    #include "wx/button.h"
     #include "wx/settings.h"
     #include "wx/arrstr.h"
-    #include "wx/toplevel.h"
+    #include "wx/dcclient.h"
 #endif
 
 IMPLEMENT_DYNAMIC_CLASS(wxListBox, wxControl)
@@ -33,7 +30,6 @@ BEGIN_EVENT_TABLE(wxListBox, wxControl)
 END_EVENT_TABLE()
 
 #include "wx/mac/uma.h"
-#include "wx/dynarray.h"
 
 // ============================================================================
 // list box control implementation

@@ -17,6 +17,7 @@
 
 #ifndef WX_PRECOMP
     #include "wx/menu.h"
+    #include "wx/dcclient.h"
 #endif
 
 #include "wx/mac/uma.h"
