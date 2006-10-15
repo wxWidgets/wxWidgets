@@ -2066,7 +2066,8 @@ void wxWindowDC::DoSetClippingRegion( wxCoord x, wxCoord y,
 {
     wxDC::DoSetClippingRegion( x, y, width, height );
 
-    wxRegion temp(x, y, width, height);
+    wxRegion temp(XLOG2DEV(x), YLOG2DEV(y),
+                  XLOG2DEVREL(width), YLOG2DEVREL(height));
 
     SetDCClipping(temp.GetX11Region());
 
@@ -2086,16 +2087,14 @@ void wxWindowDC::DoSetClippingRegion( wxCoord x, wxCoord y,
 
 void wxWindowDC::DoSetClippingRegionAsRegion( const wxRegion& region )
 {
-    wxRect box = region.GetBox();
-
-    wxDC::DoSetClippingRegion( box.x, box.y, box.width, box.height );
-
     SetDCClipping(region.GetX11Region());
 
     // Needs to work differently for Pixmap: without this,
     // there's a nasty (Display*) m_display bug. 8/12/94
     if (m_window && m_window->GetBackingPixmap())
     {
+        wxRect box = region.GetBox();
+
         XRectangle rects[1];
         rects[0].x = (short)XLOG2DEV_2(box.x);
         rects[0].y = (short)YLOG2DEV_2(box.y);

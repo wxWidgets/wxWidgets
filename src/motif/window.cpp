@@ -1259,10 +1259,10 @@ void wxWindow::DoSetSizeIntr(int x, int y, int width, int height,
 
     if ( !(sizeFlags & wxSIZE_ALLOW_MINUS_ONE) )
     {
-        if ( x == -1 )
-            x = oldX;
-        if ( y == -1 )
-            y = oldY;
+        if ( width == -1 )
+            width = oldW;
+        if ( height == -1 )
+            height = oldH;
     }
 
     wxSize size(wxDefaultSize);
@@ -1299,10 +1299,10 @@ void wxWindow::DoSetSizeIntr(int x, int y, int width, int height,
         {
             int flags = 0;
 
-            if (x > -1 || (sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
+            if (x != oldX)
                 flags |= wxMOVE_X;
 
-            if (y > -1 || (sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
+            if (y != oldY)
                 flags |= wxMOVE_Y;
 
             if (width > 0)
@@ -1429,8 +1429,6 @@ void wxWindow::DoMoveWindowIntr(int xx, int yy, int w, int h,
     }
     else
     {
-        if( xx < 0 ) xx = 0;
-        if( yy < 0 ) yy = 0;
         if( w < 1 ) w = 1;
         if( h < 1 ) h = 1;
 
