@@ -40,8 +40,6 @@ static void gtk_pizza_size_request  (GtkWidget        *widget,
                                      GtkRequisition   *requisition);
 static void gtk_pizza_size_allocate (GtkWidget        *widget,
                                      GtkAllocation    *allocation);
-static gint gtk_pizza_expose        (GtkWidget        *widget,
-                                     GdkEventExpose   *event);
 static void gtk_pizza_style_set     (GtkWidget *widget,
                                      GtkStyle  *previous_style);
 static void gtk_pizza_add           (GtkContainer     *container,
@@ -148,7 +146,6 @@ gtk_pizza_class_init (GtkPizzaClass *klass)
     widget_class->unrealize = gtk_pizza_unrealize;
     widget_class->size_request = gtk_pizza_size_request;
     widget_class->size_allocate = gtk_pizza_size_allocate;
-    widget_class->expose_event = gtk_pizza_expose;
     widget_class->style_set = gtk_pizza_style_set;
 
     container_class->add = gtk_pizza_add;
@@ -561,26 +558,6 @@ gtk_pizza_size_allocate (GtkWidget     *widget,
 
         gtk_pizza_allocate_child (pizza, child);
     }
-}
-
-static gint
-gtk_pizza_expose (GtkWidget      *widget,
-                  GdkEventExpose *event)
-{
-    GtkPizza *pizza;
-
-    g_return_val_if_fail (widget != NULL, FALSE);
-    g_return_val_if_fail (GTK_IS_PIZZA (widget), FALSE);
-    g_return_val_if_fail (event != NULL, FALSE);
-
-    pizza = (GtkPizza*)widget;
-
-    if (event->window != pizza->bin_window)
-        return FALSE;
-
-    pizza_parent_class->expose_event(widget, event);
-
-    return FALSE;
 }
 
 static void

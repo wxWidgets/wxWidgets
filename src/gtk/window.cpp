@@ -465,7 +465,12 @@ gtk_window_expose_callback( GtkWidget *widget,
     // time anymore.
 
     GtkPizza *pizza = GTK_PIZZA( widget );
-    if (gdk_event->window != pizza->bin_window) return FALSE;
+    if (gdk_event->window != pizza->bin_window)
+    {
+        // block expose events on GTK_WIDGET(pizza)->window,
+        //   all drawing is done on pizza->bin_window
+        return true;
+    }
 
 
 #if 0
