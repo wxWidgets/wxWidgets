@@ -604,7 +604,9 @@ wxNotebookPage *wxNotebook::DoRemovePage( size_t page )
 
     gtk_widget_ref( client->m_widget );
     gtk_widget_unrealize( client->m_widget );
-    gtk_widget_unparent( client->m_widget );
+
+    // we don't need to unparent the client->m_widget; GTK+ will do
+    // that for us (and will throw a warning if we do it!)
 
     // gtk_notebook_remove_page() sends "switch_page" signal with some strange
     // new page index (when deleting selected page 0, new page is 1 although,
