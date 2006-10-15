@@ -43,6 +43,10 @@
     #define MAC_OS_X_VERSION_10_4 1040
 #endif
 
+#ifndef MAC_OS_X_VERSION_10_5
+    #define MAC_OS_X_VERSION_10_5 1050
+#endif
+
 #ifdef __WXMAC_CARBON__
 #include "wx/mac/corefoundation/cfstring.h"
 #endif
@@ -58,6 +62,11 @@ inline int    FixedToInt( Fixed inFixed )
 {
     return (((SInt32) inFixed) >> 16);
 }
+#endif
+
+#if MAC_OS_X_VERSION_MAX_REQUIRED < MAC_OS_X_VERSION_10_5
+typedef UInt32 URefCon;
+typedef SInt32 SRefCon;
 #endif
 
 #if wxUSE_GUI
