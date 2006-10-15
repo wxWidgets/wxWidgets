@@ -22,15 +22,6 @@ extern "C" {
 #define GTK_PIZZA(obj)          GTK_CHECK_CAST (obj, gtk_pizza_get_type (), GtkPizza)
 #define GTK_IS_PIZZA(obj)       GTK_CHECK_TYPE (obj, gtk_pizza_get_type ())
 
-/* Shadow types */
-typedef enum
-{
-    GTK_MYSHADOW_NONE,
-    GTK_MYSHADOW_THIN,
-    GTK_MYSHADOW_IN,
-    GTK_MYSHADOW_OUT
-} GtkMyShadowType;
-
 typedef struct _GtkPizzaChild    GtkPizzaChild;
 typedef struct _GtkPizza        GtkPizza;
 typedef struct _GtkPizzaClass   GtkPizzaClass;
@@ -48,7 +39,6 @@ struct _GtkPizza
 {
     GtkContainer container;
     GList *children;
-    GtkMyShadowType shadow_type;
 
     guint m_xoffset;
     guint m_yoffset;
@@ -85,9 +75,6 @@ void       gtk_pizza_set_yoffset     (GtkPizza          *pizza, gint yoffset);
 WXDLLIMPEXP_CORE
 gint       gtk_pizza_get_rtl_offset  (GtkPizza          *pizza); 
 
-WXDLLIMPEXP_CORE
-void       gtk_pizza_set_shadow_type (GtkPizza          *pizza,
-                                      GtkMyShadowType    type);
 
 WXDLLIMPEXP_CORE
 void       gtk_pizza_scroll          (GtkPizza          *pizza,

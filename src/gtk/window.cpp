@@ -2318,24 +2318,10 @@ bool wxWindowGTK::Create( wxWindow *parent,
     m_wxwindow = gtk_pizza_new();
 
 #ifndef __WXUNIVERSAL__
-    GtkPizza *pizza = GTK_PIZZA(m_wxwindow);
-    
-    if (HasFlag(wxRAISED_BORDER))
-    {
-        gtk_pizza_set_shadow_type( pizza, GTK_MYSHADOW_OUT );
-    }
-    else if (HasFlag(wxSUNKEN_BORDER))
-    {
-        gtk_pizza_set_shadow_type( pizza, GTK_MYSHADOW_IN );
-    }
-    else if (HasFlag(wxSIMPLE_BORDER))
-    {
-        gtk_pizza_set_shadow_type( pizza, GTK_MYSHADOW_THIN );
-    }
-    else
-    {
-        gtk_pizza_set_shadow_type( pizza, GTK_MYSHADOW_NONE );
-    }
+    if (HasFlag(wxSIMPLE_BORDER))
+        gtk_container_set_border_width((GtkContainer*)m_wxwindow, 1);
+    else if (HasFlag(wxRAISED_BORDER) || HasFlag(wxSUNKEN_BORDER))
+        gtk_container_set_border_width((GtkContainer*)m_wxwindow, 2);
 #endif // __WXUNIVERSAL__
 
     gtk_container_add( GTK_CONTAINER(m_widget), m_wxwindow );
@@ -2812,20 +2798,9 @@ void wxWindowGTK::DoSetClientSize( int width, int height )
             GetScrollbarWidth(m_widget, dw, dh);
         }
 
-#ifndef __WXUNIVERSAL__
-        if (HasFlag(wxRAISED_BORDER) || HasFlag(wxSUNKEN_BORDER))
-        {
-            // shadow border size is 2
-            dw += 2 * 2;
-            dh += 2 * 2;
-        }
-        if (HasFlag(wxSIMPLE_BORDER))
-        {
-            // simple border size is 1
-            dw += 1 * 2;
-            dh += 1 * 2;
-        }
-#endif // __WXUNIVERSAL__
+        const int border = GTK_CONTAINER(m_wxwindow)->border_width;
+        dw += 2 * border;
+        dh += 2 * border;
 
         width += dw;
         height += dh;
@@ -2849,20 +2824,9 @@ void wxWindowGTK::DoGetClientSize( int *width, int *height ) const
         if (m_hasScrolling)
             GetScrollbarWidth(m_widget, dw, dh);
 
-#ifndef __WXUNIVERSAL__
-        if (HasFlag(wxRAISED_BORDER) || HasFlag(wxSUNKEN_BORDER))
-        {
-            // shadow border size is 2
-            dw += 2 * 2;
-            dh += 2 * 2;
-        }
-        if (HasFlag(wxSIMPLE_BORDER))
-        {
-            // simple border size is 1
-            dw += 1 * 2;
-            dh += 1 * 2;
-        }
-#endif // __WXUNIVERSAL__
+        const int border = GTK_CONTAINER(m_wxwindow)->border_width;
+        dw += 2 * border;
+        dh += 2 * border;
 
         w -= dw;
         h -= dh;

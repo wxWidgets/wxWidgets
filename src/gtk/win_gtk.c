@@ -185,8 +185,6 @@ gtk_pizza_init (GtkPizza *pizza)
 {
     GTK_WIDGET_UNSET_FLAGS (pizza, GTK_NO_WINDOW);
 
-    pizza->shadow_type = GTK_MYSHADOW_NONE;
-
     pizza->children = NULL;
 
     pizza->bin_window = NULL;
@@ -251,13 +249,7 @@ gint       gtk_pizza_get_rtl_offset  (GtkPizza          *pizza)
     
     gdk_window_get_geometry( pizza->bin_window, NULL, NULL, &width, NULL, NULL );
     
-    if (pizza->shadow_type == GTK_MYSHADOW_NONE)
-        border = 0;
-    else
-    if (pizza->shadow_type == GTK_MYSHADOW_THIN)
-        border = 1;
-    else
-        border = 2;
+    border = pizza->container.border_width;
         
     return width-border*2;
 }
@@ -269,25 +261,6 @@ gtk_pizza_scroll_set_adjustments (GtkPizza     *pizza,
                                     GtkAdjustment  *vadj)
 {
    /* We handle scrolling in the wxScrolledWindow, not here. */
-}
-
-void
-gtk_pizza_set_shadow_type (GtkPizza        *pizza,
-                           GtkMyShadowType  type)
-{
-    g_return_if_fail (pizza != NULL);
-    g_return_if_fail (GTK_IS_PIZZA (pizza));
-
-    if (pizza->shadow_type != type)
-    {
-        pizza->shadow_type = type;
-
-        if (GTK_WIDGET_VISIBLE (pizza))
-        {
-            gtk_widget_size_allocate (GTK_WIDGET (pizza), &(GTK_WIDGET (pizza)->allocation));
-            gtk_widget_queue_draw (GTK_WIDGET (pizza));
-        }
-    }
 }
 
 void
@@ -416,6 +389,7 @@ gtk_pizza_realize (GtkWidget *widget)
     gint attributes_mask;
     GtkPizzaChild *child;
     GList *children;
+    int border;
 
     g_return_if_fail (widget != NULL);
     g_return_if_fail (GTK_IS_PIZZA (widget));
@@ -430,29 +404,11 @@ gtk_pizza_realize (GtkWidget *widget)
     attributes.width = widget->allocation.width;
     attributes.height = widget->allocation.height;
 
-#ifndef __WXUNIVERSAL__
-    if (pizza->shadow_type == GTK_MYSHADOW_NONE)
-    {
-        /* no border, no changes to sizes */
-    }
-    else if (pizza->shadow_type == GTK_MYSHADOW_THIN)
-    {
-        /* GTK_MYSHADOW_THIN == wxSIMPLE_BORDER */
-        attributes.x += 1;
-        attributes.y += 1;
-        attributes.width -= 2;
-        attributes.height -= 2;
-    }
-    else
-    {
-        /* GTK_MYSHADOW_IN == wxSUNKEN_BORDER */
-        /* GTK_MYSHADOW_OUT == wxRAISED_BORDER */
-        attributes.x += 2;
-        attributes.y += 2;
-        attributes.width -= 4;
-        attributes.height -= 4;
-    }
-#endif /* __WXUNIVERSAL__ */
+    border = pizza->container.border_width;
+    attributes.x += border;
+    attributes.y += border;
+    attributes.width -= 2 * border;
+    attributes.height -= 2 * border;
 
     /* minimal size */
     if (attributes.width < 2) attributes.width = 2;
@@ -584,14 +540,7 @@ gtk_pizza_size_allocate (GtkWidget     *widget,
                    (widget->allocation.y == allocation->y));
     widget->allocation = *allocation;
 
-    if (pizza->shadow_type == GTK_MYSHADOW_NONE)
-        border = 0;
-    else
-    if (pizza->shadow_type == GTK_MYSHADOW_THIN)
-        border = 1;
-    else
-        border = 2;
-
+    border = pizza->container.border_width;
     x = allocation->x + border;
     y = allocation->y + border;
     w = allocation->width - border*2;
@@ -749,14 +698,7 @@ gtk_pizza_allocate_child (GtkPizza      *pizza,
         gint offset,border; 
         
         offset = GTK_WIDGET(pizza)->allocation.width;
-        
-        if (pizza->shadow_type == GTK_MYSHADOW_NONE)
-            border = 0;
-        else
-            if (pizza->shadow_type == GTK_MYSHADOW_THIN)
-            border = 1;
-        else
-            border = 2;
+        border = pizza->container.border_width;
         offset -= border*2;
             
         allocation.x = offset - child->x - allocation.width - pizza->m_xoffset; 
