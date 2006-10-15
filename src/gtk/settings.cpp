@@ -20,20 +20,15 @@
 
 #include "wx/fontutil.h"
 
-// Using gtk_list_new, which is deprecated since GTK2
-// Using gtk_object_sink, which is deprecated since GTK+-2.9.0
-#ifdef GTK_DISABLE_DEPRECATED
-#undef GTK_DISABLE_DEPRECATED
+#include <gtk/gtkversion.h>
+#if GTK_CHECK_VERSION(2, 9, 0)
+    // gtk_object_sink
+    #undef GTK_DISABLE_DEPRECATED
 #endif
-
-#include <gdk/gdk.h>
-#include <gdk/gdkx.h>
-#include <gdk/gdkprivate.h>
 #include <gtk/gtk.h>
+#include <gdk/gdkx.h>
 
 #include <X11/Xatom.h>
-
-#define SHIFT (8*(sizeof(short int)-sizeof(char)))
 
 // ----------------------------------------------------------------------------
 // wxSystemObjects
@@ -78,8 +73,8 @@ enum wxGtkColourType
 };
 
 // wxSystemSettings::GetColour() helper: get the colours from a GTK+
-// widget style, return true if we did get them, false to use defaults
-static bool GetColourFromGTKWidget(int& red, int& green, int& blue,
+// widget style, return true if we did get them
+static bool GetColourFromGTKWidget(GdkColor& gdkColor,
                                    wxGtkWidgetType type = wxGTK_BUTTON,
                                    GtkStateType state = GTK_STATE_NORMAL,
                                    wxGtkColourType colour = wxGTK_BG)
@@ -96,7 +91,8 @@ static bool GetColourFromGTKWidget(int& red, int& green, int& blue,
             break;
 
         case wxGTK_LIST:
-            widget = gtk_list_new();
+            widget = gtk_tree_view_new_with_model(
+                (GtkTreeModel*)gtk_list_store_new(1, G_TYPE_INT));
             break;
 
         case wxGTK_MENUITEM:
@@ -107,10 +103,9 @@ static bool GetColourFromGTKWidget(int& red, int& green, int& blue,
     if ( !def )
         def = gtk_widget_get_default_style();
 
-    bool ok;
-    if ( def )
+    const bool ok = def != NULL;
+    if (ok)
     {
-        GdkColor *col;
         switch ( colour )
         {
             default:
@@ -118,27 +113,17 @@ static bool GetColourFromGTKWidget(int& red, int& green, int& blue,
                 // fall through
 
             case wxGTK_FG:
-                col = def->fg;
+                gdkColor = def->fg[state];
                 break;
 
             case wxGTK_BG:
-                col = def->bg;
+                gdkColor = def->bg[state];
                 break;
 
             case wxGTK_BASE:
-                col = def->base;
+                gdkColor = def->base[state];
                 break;
         }
-
-        red = col[state].red;
-        green = col[state].green;
-        blue = col[state].blue;
-
-        ok = true;
-    }
-    else
-    {
-        ok = false;
     }
 
     gtk_widget_destroy( widget );
@@ -152,14 +137,23 @@ static void GetTooltipColors()
     gtk_tooltips_force_window(tooltips);
     gtk_widget_ensure_style(tooltips->tip_window);
     GdkColor c = tooltips->tip_window->style->bg[GTK_STATE_NORMAL];
-    gs_objects.m_colTooltip = wxColor(c.red >> SHIFT, c.green >> SHIFT, c.blue >> SHIFT);
+    gs_objects.m_colTooltip = wxColor(c);
     c = tooltips->tip_window->style->fg[GTK_STATE_NORMAL];
-    gs_objects.m_colTooltipText = wxColor(c.red >> SHIFT, c.green >> SHIFT, c.blue >> SHIFT);
-    gtk_object_sink(wx_reinterpret_cast(GtkObject*, tooltips));
+    gs_objects.m_colTooltipText = wxColor(c);
+#if GTK_CHECK_VERSION(2, 9, 0)
+    if (gtk_check_version(2, 9, 0) == NULL)
+        g_object_ref_sink(tooltips);
+    else
+#endif
+    {
+        gtk_object_sink((GtkObject*)tooltips);
+    }
 }
 
 wxColour wxSystemSettingsNative::GetColour( wxSystemColour index )
 {
+    wxColor color;
+    GdkColor gdkColor;
     switch (index)
     {
         case wxSYS_COLOUR_SCROLLBAR:
@@ -174,25 +168,22 @@ wxColour wxSystemSettingsNative::GetColour( wxSystemColour index )
         case wxSYS_COLOUR_3DLIGHT:
             if (!gs_objects.m_colBtnFace.Ok())
             {
-                int red, green, blue;
-                if ( !GetColourFromGTKWidget(red, green, blue) )
-                {
-                    red =
-                    green = 0;
-                    blue = 0x9c40;
-                }
-
-                gs_objects.m_colBtnFace = wxColour( red   >> SHIFT,
-                                                   green >> SHIFT,
-                                                   blue  >> SHIFT );
+                gdkColor.red =
+                gdkColor.green = 0;
+                gdkColor.blue = 0x9c40;
+                GetColourFromGTKWidget(gdkColor);
+                gs_objects.m_colBtnFace = wxColor(gdkColor);
             }
-            return gs_objects.m_colBtnFace;
+            color = gs_objects.m_colBtnFace;
+            break;
 
         case wxSYS_COLOUR_WINDOW:
-            return *wxWHITE;
+            color = *wxWHITE;
+            break;
 
         case wxSYS_COLOUR_3DDKSHADOW:
-            return *wxBLACK;
+            color = *wxBLACK;
+            break;
 
         case wxSYS_COLOUR_GRAYTEXT:
         case wxSYS_COLOUR_BTNSHADOW:
@@ -201,55 +192,48 @@ wxColour wxSystemSettingsNative::GetColour( wxSystemColour index )
             {
                 wxColour faceColour(GetColour(wxSYS_COLOUR_3DFACE));
                 gs_objects.m_colBtnShadow =
-                   wxColour((unsigned char) (faceColour.Red() * 0.666),
-                            (unsigned char) (faceColour.Green() * 0.666),
-                            (unsigned char) (faceColour.Blue() * 0.666));
+                   wxColour((unsigned char) (faceColour.Red() * 2 / 3),
+                            (unsigned char) (faceColour.Green() * 2 / 3),
+                            (unsigned char) (faceColour.Blue() * 2 / 3));
             }
-
-            return gs_objects.m_colBtnShadow;
+            color = gs_objects.m_colBtnShadow;
+            break;
 
         case wxSYS_COLOUR_3DHIGHLIGHT:
         //case wxSYS_COLOUR_BTNHIGHLIGHT:
-            return * wxWHITE;
+            color = *wxWHITE;
+            break;
 
         case wxSYS_COLOUR_HIGHLIGHT:
             if (!gs_objects.m_colHighlight.Ok())
             {
-                int red, green, blue;
-                if ( !GetColourFromGTKWidget(red, green, blue,
-                                             wxGTK_BUTTON,
-                                             GTK_STATE_SELECTED) )
-                {
-                    red =
-                    green = 0;
-                    blue = 0x9c40;
-                }
-
-                gs_objects.m_colHighlight = wxColour( red   >> SHIFT,
-                                                        green >> SHIFT,
-                                                        blue  >> SHIFT );
+                gdkColor.red =
+                gdkColor.green = 0;
+                gdkColor.blue = 0x9c40;
+                GetColourFromGTKWidget(
+                    gdkColor, wxGTK_BUTTON, GTK_STATE_SELECTED);
+                gs_objects.m_colHighlight = wxColour(gdkColor);
             }
-            return gs_objects.m_colHighlight;
+            color = gs_objects.m_colHighlight;
+            break;
 
         case wxSYS_COLOUR_LISTBOX:
             if (!gs_objects.m_colListBox.Ok())
             {
-                int red, green, blue;
-                if ( GetColourFromGTKWidget(red, green, blue,
+                if ( GetColourFromGTKWidget(gdkColor,
                                             wxGTK_LIST,
                                             GTK_STATE_NORMAL,
                                             wxGTK_BASE) )
                 {
-                    gs_objects.m_colListBox = wxColour( red   >> SHIFT,
-                                                          green >> SHIFT,
-                                                          blue  >> SHIFT );
+                    gs_objects.m_colListBox = wxColour(gdkColor);
                 }
                 else
                 {
-                    gs_objects.m_colListBox = wxColour(*wxWHITE);
+                    gs_objects.m_colListBox = *wxWHITE;
                 }
             }
-            return gs_objects.m_colListBox;
+            color = gs_objects.m_colListBox;
+            break;
 
         case wxSYS_COLOUR_MENUTEXT:
         case wxSYS_COLOUR_WINDOWTEXT:
@@ -258,99 +242,92 @@ wxColour wxSystemSettingsNative::GetColour( wxSystemColour index )
         case wxSYS_COLOUR_BTNTEXT:
             if (!gs_objects.m_colBtnText.Ok())
             {
-                int red, green, blue;
-                if ( !GetColourFromGTKWidget(red, green, blue,
-                                             wxGTK_BUTTON,
-                                             GTK_STATE_NORMAL,
-                                             wxGTK_FG) )
-                {
-                    red =
-                    green =
-                    blue = 0;
-                }
-
-                gs_objects.m_colBtnText = wxColour( red   >> SHIFT,
-                                                      green >> SHIFT,
-                                                      blue  >> SHIFT );
+                gdkColor.red =
+                gdkColor.green =
+                gdkColor.blue = 0;
+                GetColourFromGTKWidget(
+                    gdkColor, wxGTK_BUTTON, GTK_STATE_NORMAL, wxGTK_FG);
+                gs_objects.m_colBtnText = wxColour(gdkColor);
             }
-            return gs_objects.m_colBtnText;
+            color = gs_objects.m_colBtnText;
+            break;
 
         case wxSYS_COLOUR_INFOBK:
             if (!gs_objects.m_colTooltip.Ok()) {
                 GetTooltipColors();
             }
-            return gs_objects.m_colTooltip;
+            color = gs_objects.m_colTooltip;
+            break;
 
         case wxSYS_COLOUR_INFOTEXT:
             if (!gs_objects.m_colTooltipText.Ok()) {
                 GetTooltipColors();
             }
-            return gs_objects.m_colTooltipText;
+            color = gs_objects.m_colTooltipText;
+            break;
 
         case wxSYS_COLOUR_HIGHLIGHTTEXT:
             if (!gs_objects.m_colHighlightText.Ok())
             {
                 wxColour hclr = GetColour(wxSYS_COLOUR_HIGHLIGHT);
                 if (hclr.Red() > 200 && hclr.Green() > 200 && hclr.Blue() > 200)
-                    gs_objects.m_colHighlightText = wxColour(*wxBLACK);
+                    gs_objects.m_colHighlightText = *wxBLACK;
                 else
-                    gs_objects.m_colHighlightText = wxColour(*wxWHITE);
+                    gs_objects.m_colHighlightText = *wxWHITE;
             }
-            return gs_objects.m_colHighlightText;
+            color = gs_objects.m_colHighlightText;
+            break;
 
         case wxSYS_COLOUR_APPWORKSPACE:
-            return *wxWHITE;    // ?
+            color = *wxWHITE;    // ?
+            break;
 
         case wxSYS_COLOUR_ACTIVECAPTION:
         case wxSYS_COLOUR_MENUHILIGHT:
             if (!gs_objects.m_colMenuItemHighlight.Ok())
             {
-                int red, green, blue;
-                if ( !GetColourFromGTKWidget(red, green, blue,
-                                             wxGTK_MENUITEM,
-                                             GTK_STATE_SELECTED,
-                                             wxGTK_BG) )
-                {
-                    red =
-                    green =
-                    blue = 0;
-                }
-
-                gs_objects.m_colMenuItemHighlight = wxColour( red  >> SHIFT,
-                                                              green >> SHIFT,
-                                                              blue  >> SHIFT );
+                gdkColor.red =
+                gdkColor.green =
+                gdkColor.blue = 0;
+                GetColourFromGTKWidget(
+                    gdkColor, wxGTK_MENUITEM, GTK_STATE_SELECTED, wxGTK_BG);
+                gs_objects.m_colMenuItemHighlight = wxColour(gdkColor);
             }
-            return gs_objects.m_colMenuItemHighlight;
+            color = gs_objects.m_colMenuItemHighlight;
+            break;
 
         case wxSYS_COLOUR_HOTLIGHT:
         case wxSYS_COLOUR_GRADIENTACTIVECAPTION:
         case wxSYS_COLOUR_GRADIENTINACTIVECAPTION:
             // TODO
-            return *wxBLACK;
+            color = *wxBLACK;
+            break;
 
         case wxSYS_COLOUR_MAX:
         default:
             wxFAIL_MSG( _T("unknown system colour index") );
+            color = *wxWHITE;
+            break;
     }
 
-    return *wxWHITE;
+    return color;
 }
 
 wxFont wxSystemSettingsNative::GetFont( wxSystemFont index )
 {
+    wxFont font;
     switch (index)
     {
         case wxSYS_OEM_FIXED_FONT:
         case wxSYS_ANSI_FIXED_FONT:
         case wxSYS_SYSTEM_FIXED_FONT:
-        {
-            return *wxNORMAL_FONT;
-        }
+            font = *wxNORMAL_FONT;
+            break;
+
         case wxSYS_ANSI_VAR_FONT:
         case wxSYS_SYSTEM_FONT:
         case wxSYS_DEVICE_DEFAULT_FONT:
         case wxSYS_DEFAULT_GUI_FONT:
-        {
             if (!gs_objects.m_fontSystem.Ok())
             {
                 GtkWidget *widget = gtk_button_new();
@@ -380,19 +357,45 @@ wxFont wxSystemSettingsNative::GetFont( wxSystemFont index )
                 }
                 gtk_widget_destroy( widget );
             }
-            return gs_objects.m_fontSystem;
-        }
+            font = gs_objects.m_fontSystem;
+            break;
 
         default:
-            return wxNullFont;
+            break;
     }
+    return font;
+}
+
+static bool wxXGetWindowProperty(GdkWindow* window, Atom& type, int& format, gulong& nitems, guchar*& data)
+{
+    bool success = false;
+#if GTK_CHECK_VERSION(2, 2, 0)
+    if (gtk_check_version(2, 2, 0) == NULL)
+    {
+        gulong bytes_after;
+        success = XGetWindowProperty(
+            GDK_DISPLAY_XDISPLAY(gdk_drawable_get_display(window)),
+            GDK_WINDOW_XWINDOW(window),
+            gdk_x11_get_xatom_by_name_for_display(
+                gdk_drawable_get_display(window),
+                "_NET_FRAME_EXTENTS"),
+            0, // left, right, top, bottom, CARDINAL[4]/32
+            G_MAXLONG, // size of long
+            false, // do not delete property
+            XA_CARDINAL, // 32 bit
+            &type, &format, &nitems, &bytes_after, &data
+            ) == Success;
+    }
+#endif
+    return success;
 }
 
 int wxSystemSettingsNative::GetMetric( wxSystemMetric index, wxWindow* win )
 {
-    bool success = false;
-
     guchar *data = NULL;
+    Atom type;
+    int format;
+    gulong nitems;
     GdkWindow *window = NULL;
     if(win && GTK_WIDGET_REALIZED(win->GetHandle()))
         window = win->GetHandle()->window;
@@ -434,45 +437,21 @@ int wxSystemSettingsNative::GetMetric( wxSystemMetric index, wxWindow* win )
                     // Get the frame extents from the windowmanager.
                     // In most cases the top extent is the titlebar, so we use the bottom extent
                     // for the heights.
-
-                    Atom type;
-                    gint format;
-                    gulong nitems;
-
-#if GTK_CHECK_VERSION(2,2,0)
-                    if (!gtk_check_version(2,2,0))
-                    {
-                        gulong bytes_after;
-                        success = (XGetWindowProperty (GDK_DISPLAY_XDISPLAY(gdk_drawable_get_display(window)),
-                                            GDK_WINDOW_XWINDOW(window),
-                                            gdk_x11_get_xatom_by_name_for_display (
-                                                    gdk_drawable_get_display(window),
-                                                    "_NET_FRAME_EXTENTS" ),
-                                            0, // left, right, top, bottom, CARDINAL[4]/32
-                                            G_MAXLONG, // size of long
-                                            false, // do not delete property
-                                            XA_CARDINAL, // 32 bit
-                                            &type, &format, &nitems, &bytes_after, &data
-                                           ) == Success);
-                    }
-#endif
-                    if (success)
+                    if (wxXGetWindowProperty(window, type, format, nitems, data))
                     {
                         int border_return = -1;
 
                         if ((type == XA_CARDINAL) && (format == 32) && (nitems >= 4) && (data))
                         {
-                            long *borders;
-                            borders = (long*)data;
                             switch(index)
                             {
                                 case wxSYS_BORDER_X:
                                 case wxSYS_EDGE_X:
                                 case wxSYS_FRAMESIZE_X:
-                                    border_return = borders[1]; // width of right extent
+                                    border_return = int(data[1]); // width of right extent
                                     break;
                                 default:
-                                    border_return = borders[3]; // height of bottom extent
+                                    border_return = int(data[3]); // height of bottom extent
                                     break;
                             }
                         }
@@ -593,37 +572,13 @@ int wxSystemSettingsNative::GetMetric( wxSystemMetric index, wxWindow* win )
             // we could check which is the thickest wm border to decide on which side the
             // titlebar is, but this might lead to interesting behaviours in used code.
             // Reconsider when we have a way to report to the user on which side it is.
-
-            Atom type;
-            gint format;
-            gulong nitems;
-
-#if GTK_CHECK_VERSION(2,2,0)
-            if (!gtk_check_version(2,2,0))
-            {
-                gulong bytes_after;
-                success = (XGetWindowProperty (GDK_DISPLAY_XDISPLAY(gdk_drawable_get_display(window)),
-                                    GDK_WINDOW_XWINDOW(window),
-                                    gdk_x11_get_xatom_by_name_for_display (
-                                            gdk_drawable_get_display(window),
-                                            "_NET_FRAME_EXTENTS" ),
-                                    0, // left, right, top, bottom, CARDINAL[4]/32
-                                    G_MAXLONG, // size of long
-                                    false, // do not delete property
-                                    XA_CARDINAL, // 32 bit
-                                    &type, &format, &nitems, &bytes_after, &data
-                                   ) == Success);
-            }
-#endif
-            if (success)
+            if (wxXGetWindowProperty(window, type, format, nitems, data))
             {
                 int caption_height = -1;
 
                 if ((type == XA_CARDINAL) && (format == 32) && (nitems >= 3) && (data))
                 {
-                    long *borders;
-                    borders = (long*)data;
-                    caption_height = borders[2]; // top frame extent
+                    caption_height = int(data[2]); // top frame extent
                 }
 
                 if (data)
