@@ -3882,7 +3882,8 @@ void wxGridCornerLabelWindow::OnPaint( wxPaintEvent& WXUNUSED(event) )
     GetClientSize( &client_width, &client_height );
 
     // VZ: any reason for this ifdef? (FIXME)
-#ifdef __WXGTK__
+#if 0
+def __WXGTK__
     wxRect rect;
     rect.SetX( 1 );
     rect.SetY( 1 );
@@ -7798,7 +7799,8 @@ void wxGrid::DrawRowLabel( wxDC& dc, int row )
 
     wxRect rect;
 
-#ifdef __WXGTK20__
+#if 0
+def __WXGTK20__
     rect.SetX( 1 );
     rect.SetY( GetRowTop(row) + 1 );
     rect.SetWidth( m_rowLabelWidth - 2 );
@@ -7860,7 +7862,8 @@ void wxGrid::DrawColLabel( wxDC& dc, int col )
 
     wxRect rect;
 
-#ifdef __WXGTK20__
+#if 0
+def __WXGTK20__
     rect.SetX( colLeft + 1 );
     rect.SetY( 1 );
     rect.SetWidth( GetColWidth(col) - 2 );
