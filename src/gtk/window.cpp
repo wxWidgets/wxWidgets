@@ -1459,7 +1459,7 @@ gtk_window_button_press_callback( GtkWidget *widget,
     // GDK sends surplus button down events
     // before a double click event. We
     // need to filter these out.
-    if (gdk_event->type == GDK_BUTTON_PRESS)
+    if ((gdk_event->type == GDK_BUTTON_PRESS) && (win->m_wxwindow))
     {
         GdkEvent *peek_event = gdk_event_peek();
         if (peek_event)
