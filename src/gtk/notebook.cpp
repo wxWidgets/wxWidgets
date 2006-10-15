@@ -18,19 +18,12 @@
     #include "wx/intl.h"
     #include "wx/log.h"
     #include "wx/utils.h"
-    #include "wx/panel.h"
     #include "wx/msgdlg.h"
     #include "wx/bitmap.h"
 #endif
 
 #include "wx/imaglist.h"
 #include "wx/fontutil.h"
-
-// FIXME: Use GtkImage instead of GtkPixmap. Don't use gtk_container_border_width
-#include <gtk/gtkversion.h>
-#ifdef GTK_DISABLE_DEPRECATED
-#undef GTK_DISABLE_DEPRECATED
-#endif
 
 #include "wx/gtk/private.h"
 #include "wx/gtk/win_gtk.h"
@@ -500,7 +493,7 @@ bool wxNotebook::SetPageImage( size_t page, int image )
         GList *child = gtk_container_get_children(GTK_CONTAINER(nb_page->m_box));
         while (child)
         {
-            if (GTK_IS_PIXMAP(child->data))
+            if (GTK_IS_IMAGE(child->data))
             {
                 pixmapwid = GTK_WIDGET(child->data);
                 break;
@@ -526,17 +519,11 @@ bool wxNotebook::SetPageImage( size_t page, int image )
 
     /* Construct the new pixmap */
     const wxBitmap *bmp = m_imageList->GetBitmapPtr(image);
-    GdkPixmap *pixmap = bmp->GetPixmap();
-    GdkBitmap *mask = (GdkBitmap*) NULL;
-    if ( bmp->GetMask() )
-    {
-        mask = bmp->GetMask()->GetBitmap();
-    }
 
     if (pixmapwid == NULL)
     {
         /* Case 3) No old pixmap. Create a new one and prepend it to the hbox */
-        pixmapwid = gtk_pixmap_new (pixmap, mask );
+        pixmapwid = gtk_image_new_from_pixbuf(bmp->GetPixbuf());
 
         /* CHECKME: Are these pack flags okay? */
         gtk_box_pack_start(GTK_BOX(nb_page->m_box), pixmapwid, FALSE, FALSE, m_padding);
@@ -545,7 +532,7 @@ bool wxNotebook::SetPageImage( size_t page, int image )
     else
     {
         /* Case 4) Simply replace the pixmap */
-        gtk_pixmap_set(GTK_PIXMAP(pixmapwid), pixmap, mask);
+        gtk_image_set_from_pixbuf((GtkImage*)pixmapwid, bmp->GetPixbuf());
     }
 
     nb_page->m_image = image;
@@ -679,7 +666,7 @@ bool wxNotebook::InsertPage( size_t position,
     m_pages.Insert(win, position);
 
     nb_page->m_box = gtk_hbox_new( FALSE, 1 );
-    gtk_container_border_width( GTK_CONTAINER(nb_page->m_box), 2 );
+    gtk_container_set_border_width((GtkContainer*)nb_page->m_box, 2);
 
     g_signal_connect (win->m_widget, "size_allocate",
                       G_CALLBACK (gtk_page_size_callback), win);
@@ -696,17 +683,8 @@ bool wxNotebook::InsertPage( size_t position,
         wxASSERT( m_imageList != NULL );
 
         const wxBitmap *bmp = m_imageList->GetBitmapPtr(imageId);
-        GdkPixmap *pixmap = bmp->GetPixmap();
-        GdkBitmap *mask = (GdkBitmap*) NULL;
-        if ( bmp->GetMask() )
-        {
-            mask = bmp->GetMask()->GetBitmap();
-        }
-
-        GtkWidget *pixmapwid = gtk_pixmap_new (pixmap, mask );
-
+        GtkWidget* pixmapwid = gtk_image_new_from_pixbuf(bmp->GetPixbuf());
         gtk_box_pack_start(GTK_BOX(nb_page->m_box), pixmapwid, FALSE, FALSE, m_padding);
-
         gtk_widget_show(pixmapwid);
     }
 
@@ -783,7 +761,7 @@ int wxNotebook::HitTest(const wxPoint& pt, long *flags) const
                 GList *children = gtk_container_get_children(GTK_CONTAINER(box));
                 for ( GList *child = children; child; child = child->next )
                 {
-                    if ( GTK_IS_PIXMAP(child->data) )
+                    if (GTK_IS_IMAGE(child->data))
                     {
                         pixmap = GTK_WIDGET(child->data);
                         break;
