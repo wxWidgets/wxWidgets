@@ -1277,7 +1277,7 @@ be repainted.  This is the same as Refresh but has a nicer syntax.", "");
 window instead of waiting for the EVT_PAINT event to happen, (normally
 this would usually only happen when the flow of control returns to the
 event loop.)  Notice that this function doesn't refresh the window and
-does nothing if the window has been already repainted.  Use Refresh
+does nothing if the window has been already repainted.  Use `Refresh`
 first if you want to immediately redraw the window (or some portion of
 it) unconditionally.", "");
     
