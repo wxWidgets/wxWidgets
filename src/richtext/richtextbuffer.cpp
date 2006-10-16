@@ -4934,6 +4934,17 @@ public:
 IMPLEMENT_DYNAMIC_CLASS(wxRichTextModule, wxModule)
 
 
+// If the richtext lib is dynamically loaded after the app has already started
+// (such as from wxPython) then the built-in module system will not init this
+// module.  Provide this function to do it manually.
+void wxRichTextModuleInit()
+{
+    wxModule* module = new wxRichTextModule;
+    module->Init();
+    wxModule::RegisterModule(module);
+}
+
+
 /*!
  * Commands for undo/redo
  *

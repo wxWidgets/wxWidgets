@@ -2015,6 +2015,9 @@ void wxSetFontPreservingStyles(wxTextAttr& attr, const wxFont& font);
 /// Convert a decimal to Roman numerals
 wxString wxRichTextDecimalToRoman(long n);
 
+
+WXDLLIMPEXP_RICHTEXT void wxRichTextModuleInit();
+
 #endif
     // wxUSE_RICHTEXT
 
