@@ -438,10 +438,16 @@ void wxgtk_combo_size_request_callback(GtkWidget *widget,
     GtkRequisition entry_req;
     entry_req.width = 2;
     entry_req.height = 2;
-    (* GTK_WIDGET_CLASS( GTK_OBJECT_GET_CLASS(gcombo->button) )->size_request )
-        (gcombo->button, &entry_req );
+    (* GTK_WIDGET_CLASS( GTK_OBJECT_GET_CLASS(gcombo->entry) )->size_request )
+        (gcombo->entry, &entry_req );
 
-    requisition->width = w - entry_req.width;
+    GtkRequisition button_req;
+    button_req.width = 2;
+    button_req.height = 2;
+    (* GTK_WIDGET_CLASS( GTK_OBJECT_GET_CLASS(gcombo->button) )->size_request )
+        (gcombo->button, &button_req );
+        
+    requisition->width = w - button_req.width;
     requisition->height = entry_req.height;
 }
 }
