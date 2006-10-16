@@ -3603,9 +3603,10 @@ This function is currently only implemented under MSW.
 
 Calling this method immediately repaints the invalidated area of the window and
 all of its children recursively while this would usually only happen when the
-flow of control returns to the event loop. Notice that this function doesn't
-refresh the window and does nothing if the window hadn't been already
-repainted. Use \helpref{Refresh}{wxwindowrefresh} first if you want to
+flow of control returns to the event loop. 
+Notice that this function doesn't invalidate any area of the window so
+nothing happens if nothing has been invalidated (i.e. marked as requiring
+a redraw). Use \helpref{Refresh}{wxwindowrefresh} first if you want to
 immediately redraw the window unconditionally.
 
 
