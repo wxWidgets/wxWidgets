@@ -99,7 +99,7 @@ static void gtk_window_own_expose_callback( GtkWidget *widget, GdkEventExpose *g
         wxBrush brush( LightContrastColour( wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT) ) );
         dc.SetBrush( brush );
         dc.SetPen( *wxTRANSPARENT_PEN );
-        dc.DrawRectangle( 3, 3, win->m_width - 7, height-2 );
+        dc.DrawRectangle( 3, 3, win->m_width - 7, height );
 
         dc.SetTextForeground( *wxWHITE );
         dc.DrawText( win->GetTitle(), 6, 3 );
