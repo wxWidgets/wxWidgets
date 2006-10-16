@@ -249,7 +249,7 @@ wxSizer *BitmapComboBoxWidgetsPage::CreateSizerWithSmallTextAndLabel(const wxStr
     wxControl* control = new wxStaticText(this, wxID_ANY, label);
     wxSizer *sizerRow = new wxBoxSizer(wxHORIZONTAL);
     wxTextCtrl *text = new wxTextCtrl(this, id, wxEmptyString,
-        wxDefaultPosition, wxSize(50,-1), wxTE_PROCESS_ENTER);
+        wxDefaultPosition, wxSize(50,wxDefaultCoord), wxTE_PROCESS_ENTER);
 
     sizerRow->Add(control, 0, wxRIGHT | wxALIGN_CENTRE_VERTICAL, 5);
     sizerRow->Add(text, 1, wxFIXED_MINSIZE | wxLEFT | wxALIGN_CENTRE_VERTICAL, 5);
@@ -298,7 +298,7 @@ void BitmapComboBoxWidgetsPage::CreateContent()
     sizerRow = CreateSizerWithSmallTextAndLabel(_T("Control &height:"),
                                                 BitmapComboBoxPage_ChangeHeight,
                                                 &m_textChangeHeight);
-    m_textChangeHeight->SetSize(20, -1);
+    m_textChangeHeight->SetSize(20, wxDefaultCoord);
     sizerOptions->Add(sizerRow, 0, wxALL | wxFIXED_MINSIZE /*| wxGROW*/, 5);
 
     sizerLeft->Add(sizerOptions, 0, wxGROW | wxALIGN_CENTRE_HORIZONTAL | wxTOP, 2);
@@ -436,7 +436,7 @@ void BitmapComboBoxWidgetsPage::CreateCombo()
     long h = 0;
     m_textChangeHeight->GetValue().ToLong(&h);
     if ( h >= 5 )
-        m_combobox->SetSize(-1, h);
+        m_combobox->SetSize(wxDefaultCoord, h);
 }
 
 // ----------------------------------------------------------------------------
@@ -500,8 +500,11 @@ void BitmapComboBoxWidgetsPage::OnButtonInsert(wxCommandEvent& WXUNUSED(event))
         m_textInsert->SetValue(wxString::Format(_T("test item %u"), ++s_item));
     }
 
-    if (m_combobox->GetSelection() >= 0)
-        m_combobox->Insert(s, wxNullBitmap, m_combobox->GetSelection());
+    int sel = m_combobox->GetSelection();
+    if ( sel == wxNOT_FOUND )
+        sel = m_combobox->GetCount();
+
+    m_combobox->Insert(s, wxNullBitmap, m_combobox->GetSelection());
 }
 
 void BitmapComboBoxWidgetsPage::OnTextChangeHeight(wxCommandEvent& WXUNUSED(event))
@@ -510,13 +513,17 @@ void BitmapComboBoxWidgetsPage::OnTextChangeHeight(wxCommandEvent& WXUNUSED(even
     m_textChangeHeight->GetValue().ToLong(&h);
     if ( h < 5 )
         return;
-    m_combobox->SetSize(-1, h);
+    m_combobox->SetSize(wxDefaultCoord, h);
 }
 
 void BitmapComboBoxWidgetsPage::OnButtonLoadFromFile(wxCommandEvent& WXUNUSED(event))
 {
     wxString s;
-    m_combobox->Insert(s, QueryBitmap(&s), m_combobox->GetSelection());
+    int sel = m_combobox->GetSelection();
+    if ( sel == wxNOT_FOUND )
+        sel = m_combobox->GetCount();
+
+    m_combobox->Insert(s, QueryBitmap(&s), sel);
 }
 
 void BitmapComboBoxWidgetsPage::OnButtonSetFromFile(wxCommandEvent& WXUNUSED(event))
@@ -557,7 +564,7 @@ void BitmapComboBoxWidgetsPage::LoadWidgetImages( wxArrayString* strings, wxImag
     wxFileName fn;
     fn.AssignCwd();
     fn.AppendDir(wxT("icons"));
-    
+
     wxSetCursor(*wxHOURGLASS_CURSOR);
 
     if ( !wxDir::Exists(fn.GetFullPath()) ||
@@ -628,11 +635,14 @@ void BitmapComboBoxWidgetsPage::OnButtonAddWidgetIcons(wxCommandEvent& WXUNUSED(
 {
     wxArrayString strings;
 
-    int sz = 32;
-    //if ( m_chkScaleimages->GetValue() )
-    //    sz = 16;
+    wxSize sz = m_combobox->GetBitmapSize();
+    if ( sz.x <= 0 )
+    {
+        sz.x = 32;
+        sz.y = 32;
+    }
 
-    wxImageList images(sz, sz);
+    wxImageList images(sz.x, sz.y);
 
     LoadWidgetImages(&strings, &images);
 
@@ -731,6 +741,13 @@ wxBitmap BitmapComboBoxWidgetsPage::LoadBitmap(const wxString& filepath)
     // Get size of existing images in list
     wxSize foundSize = m_combobox->GetBitmapSize();
 
+    // Have some reasonable maximum size
+    if ( foundSize.x <= 0 )
+    {
+        foundSize.x = 256;
+        foundSize.y = 256;
+    }
+
     wxImage image(filepath);
     if ( image.Ok() )
     {
@@ -766,9 +783,9 @@ wxBitmap BitmapComboBoxWidgetsPage::LoadBitmap(const wxString& WXUNUSED(filepath
 wxBitmap BitmapComboBoxWidgetsPage::QueryBitmap(wxString* pStr)
 {
     wxString filepath = wxFileSelector(wxT("Choose image file"),
-                                       wxT(""),
-                                       wxT(""),
-                                       wxT(""),
+                                       wxEmptyString,
+                                       wxEmptyString,
+                                       wxEmptyString,
                                        wxT("*.*"),
                                        wxFD_OPEN | wxFD_FILE_MUST_EXIST,
                                        this);

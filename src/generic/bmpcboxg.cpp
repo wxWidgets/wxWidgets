@@ -264,6 +264,8 @@ int wxBitmapComboBox::DoInsertWithImage(const wxString& item,
                                         const wxBitmap& image,
                                         unsigned int pos)
 {
+    wxCHECK_MSG( IsValidInsert(pos), wxNOT_FOUND, wxT("invalid item index") );
+
     if ( !DoInsertBitmap(image, pos) )
         return wxNOT_FOUND;
 
