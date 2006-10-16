@@ -650,7 +650,7 @@ dialog (Windows only).  The default value is false.", "");
     %property(AllowSymbols, GetAllowSymbols, SetAllowSymbols, doc="See `GetAllowSymbols` and `SetAllowSymbols`");
     %property(ChosenFont, GetChosenFont, SetChosenFont, doc="See `GetChosenFont` and `SetChosenFont`");
     %property(Colour, GetColour, SetColour, doc="See `GetColour` and `SetColour`");
-    %property(EnableEffects, GetEnableEffects, doc="See `GetEnableEffects`");
+//    %property(EnableEffects, GetEnableEffects, doc="See `GetEnableEffects`");
     %property(InitialFont, GetInitialFont, SetInitialFont, doc="See `GetInitialFont` and `SetInitialFont`");
     %property(ShowHelp, GetShowHelp, SetShowHelp, doc="See `GetShowHelp` and `SetShowHelp`");
     
