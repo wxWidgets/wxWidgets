@@ -505,7 +505,7 @@ wxImage wxImage::Scale( int width, int height, int quality ) const
     }
 
     // If the original image has a mask, apply the mask to the new image
-	if (M_IMGDATA->m_hasMask)
+    if (M_IMGDATA->m_hasMask)
     {
         image.SetMaskColour( M_IMGDATA->m_maskRed,
                             M_IMGDATA->m_maskGreen,
@@ -571,7 +571,7 @@ wxImage wxImage::ResampleBox(int width, int height) const
             averaged_pixels = 0;
             sum_r = sum_g = sum_b = sum_a = 0.0;
 
-            for ( int j = src_y - scale_factor_y_2 + 1;
+            for ( int j = int(src_y - scale_factor_y/2.0 + 1);
                   j <= int(src_y + scale_factor_y_2);
                   j++ )
             {
@@ -579,7 +579,7 @@ wxImage wxImage::ResampleBox(int width, int height) const
                 if ( j < 0 || j > M_IMGDATA->m_height )
                     continue;
 
-                for ( int i = src_x - scale_factor_x_2 + 1;
+                for ( int i = int(src_x - scale_factor_x/2.0 + 1);
                       i <= src_x + scale_factor_x_2;
                       i++ )
                 {
@@ -848,7 +848,7 @@ wxImage wxImage::BlurHorizontal(int blurRadius)
                 sum_a += src_alpha[pixel_idx];
 
             // Save off the averaged data
-            dst = dst_data + x*3 + y*M_IMGDATA->m_width;
+            dst = dst_data + x*3 + y*M_IMGDATA->m_width*3;
             dst[0] = (unsigned char)(sum_r / blurArea);
             dst[1] = (unsigned char)(sum_g / blurArea);
             dst[2] = (unsigned char)(sum_b / blurArea);
