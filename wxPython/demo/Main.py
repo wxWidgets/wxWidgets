@@ -60,7 +60,6 @@ _treeList = [
         'BitmapFromBuffer',
         'RawBitmapAccess',
         'DragScroller',
-##        'AlphaDrawing',
         'DelayedResult',
         'ExpandoTextCtrl',
         'ButtonPanel',
@@ -68,6 +67,7 @@ _treeList = [
         'CustomTreeCtrl',
         'AboutBox',
         'AnimateCtrl',
+        'AlphaDrawing',
         ]),
 
     # managed windows == things with a (optional) caption you can close
@@ -245,7 +245,7 @@ _treeList = [
 
     # Images
     ('Using Images', [
-##        'AlphaDrawing',
+        'AlphaDrawing',
         'AnimationCtrl',
         'ArtProvider',
         'BitmapFromBuffer',
@@ -261,7 +261,7 @@ _treeList = [
 
     # Other stuff
     ('Miscellaneous', [
-##        'AlphaDrawing',
+        'AlphaDrawing',
         'ColourDB',
         ##'DialogUnits',   # needs more explanations
         'DragScroller',
