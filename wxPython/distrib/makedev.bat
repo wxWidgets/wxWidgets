@@ -68,8 +68,8 @@ rm del-files
 rm del-dirs
 
 rem *** bundle it all up  TODO: don't hard-code the 2.6
-tar cvf ../dist/wxPython2.6-win32-devel-%1.tar wxPython-%1
-bzip2 -9 ../dist/wxPython2.6-win32-devel-%1.tar
+tar cvf ../dist/wxPython2.7-win32-devel-%1.tar wxPython-%1
+bzip2 -9 ../dist/wxPython2.7-win32-devel-%1.tar
 
 rem *** cleanup
 cd ..
