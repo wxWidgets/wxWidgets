@@ -14303,6 +14303,7 @@ SWIGEXPORT void SWIG_init(void) {
   PyDict_SetItemString(d, "wxEVT_COMMAND_RICHTEXT_LEFT_DCLICK", PyInt_FromLong(wxEVT_COMMAND_RICHTEXT_LEFT_DCLICK));
   PyDict_SetItemString(d, "wxEVT_COMMAND_RICHTEXT_RETURN", PyInt_FromLong(wxEVT_COMMAND_RICHTEXT_RETURN));
   
+  wxRichTextModuleInit();
   
 }
 

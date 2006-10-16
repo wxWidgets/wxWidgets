@@ -2773,7 +2773,6 @@ class FontData(_core.Object):
     AllowSymbols = property(GetAllowSymbols,SetAllowSymbols,doc="See `GetAllowSymbols` and `SetAllowSymbols`") 
     ChosenFont = property(GetChosenFont,SetChosenFont,doc="See `GetChosenFont` and `SetChosenFont`") 
     Colour = property(GetColour,SetColour,doc="See `GetColour` and `SetColour`") 
-    EnableEffects = property(GetEnableEffects,doc="See `GetEnableEffects`") 
     InitialFont = property(GetInitialFont,SetInitialFont,doc="See `GetInitialFont` and `SetInitialFont`") 
     ShowHelp = property(GetShowHelp,SetShowHelp,doc="See `GetShowHelp` and `SetShowHelp`") 
 _windows_.FontData_swigregister(FontData)
