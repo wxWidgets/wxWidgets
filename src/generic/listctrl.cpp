@@ -888,7 +888,7 @@ void wxListItemData::SetItem( const wxListItem &info )
     if ( info.HasAttributes() )
     {
         if ( m_attr )
-            *m_attr = *info.GetAttributes();
+            m_attr->AssignFrom(*info.GetAttributes());
         else
             m_attr = new wxListItemAttr(*info.GetAttributes());
     }
