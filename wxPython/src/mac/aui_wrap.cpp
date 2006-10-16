@@ -3607,6 +3607,36 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_PaneInfo_IsDestroyOnClose(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxPaneInfo *arg1 = (wxPaneInfo *) 0 ;
+  bool result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxPaneInfo, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "PaneInfo_IsDestroyOnClose" "', expected argument " "1"" of type '" "wxPaneInfo const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxPaneInfo * >(argp1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = (bool)((wxPaneInfo const *)arg1)->IsDestroyOnClose();
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  {
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+  }
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_PaneInfo_HasCaption(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   wxPaneInfo *arg1 = (wxPaneInfo *) 0 ;
@@ -7426,6 +7456,47 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_FrameManager_ClosePane(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxFrameManager *arg1 = (wxFrameManager *) 0 ;
+  wxPaneInfo *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "pane_info", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:FrameManager_ClosePane",kwnames,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxFrameManager, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "FrameManager_ClosePane" "', expected argument " "1"" of type '" "wxFrameManager *""'"); 
+  }
+  arg1 = reinterpret_cast< wxFrameManager * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_wxPaneInfo,  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "FrameManager_ClosePane" "', expected argument " "2"" of type '" "wxPaneInfo &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "FrameManager_ClosePane" "', expected argument " "2"" of type '" "wxPaneInfo &""'"); 
+  }
+  arg2 = reinterpret_cast< wxPaneInfo * >(argp2);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    (arg1)->ClosePane(*arg2);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_FrameManager_SavePaneInfo(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   wxFrameManager *arg1 = (wxFrameManager *) 0 ;
@@ -7637,6 +7708,57 @@ SWIGINTERN PyObject *_wrap_FrameManager_Update(PyObject *SWIGUNUSEDPARM(self), P
     if (PyErr_Occurred()) SWIG_fail;
   }
   resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_FrameManager_CreateFloatingFrame(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxFrameManager *arg1 = (wxFrameManager *) 0 ;
+  wxWindow *arg2 = (wxWindow *) 0 ;
+  wxPaneInfo *arg3 = 0 ;
+  wxFloatingPane *result = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "parent",(char *) "p", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:FrameManager_CreateFloatingFrame",kwnames,&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxFrameManager, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "FrameManager_CreateFloatingFrame" "', expected argument " "1"" of type '" "wxFrameManager *""'"); 
+  }
+  arg1 = reinterpret_cast< wxFrameManager * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_wxWindow, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "FrameManager_CreateFloatingFrame" "', expected argument " "2"" of type '" "wxWindow *""'"); 
+  }
+  arg2 = reinterpret_cast< wxWindow * >(argp2);
+  res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_wxPaneInfo,  0  | 0);
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "FrameManager_CreateFloatingFrame" "', expected argument " "3"" of type '" "wxPaneInfo const &""'"); 
+  }
+  if (!argp3) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "FrameManager_CreateFloatingFrame" "', expected argument " "3"" of type '" "wxPaneInfo const &""'"); 
+  }
+  arg3 = reinterpret_cast< wxPaneInfo * >(argp3);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = (wxFloatingPane *)(arg1)->CreateFloatingFrame(arg2,(wxPaneInfo const &)*arg3);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_wxFloatingPane, 0 |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -10631,6 +10753,7 @@ SWIGINTERN PyObject *_wrap_new_FloatingPane(PyObject *SWIGUNUSEDPARM(self), PyOb
   wxFrameManager *arg2 = (wxFrameManager *) 0 ;
   wxPaneInfo *arg3 = 0 ;
   int arg4 = (int) wxID_ANY ;
+  long arg5 = (long) wxRESIZE_BORDER|wxSYSTEM_MENU|wxCAPTION|wxFRAME_NO_TASKBAR|wxFRAME_FLOAT_ON_PARENT|wxCLIP_CHILDREN ;
   wxFloatingPane *result = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
@@ -10640,15 +10763,18 @@ SWIGINTERN PyObject *_wrap_new_FloatingPane(PyObject *SWIGUNUSEDPARM(self), PyOb
   int res3 = 0 ;
   int val4 ;
   int ecode4 = 0 ;
+  long val5 ;
+  int ecode5 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
   PyObject * obj3 = 0 ;
+  PyObject * obj4 = 0 ;
   char *  kwnames[] = {
-    (char *) "parent",(char *) "owner_mgr",(char *) "pane",(char *) "id", NULL 
+    (char *) "parent",(char *) "owner_mgr",(char *) "pane",(char *) "id",(char *) "style", NULL 
   };
   
-  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO|O:new_FloatingPane",kwnames,&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO|OO:new_FloatingPane",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxWindow, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_FloatingPane" "', expected argument " "1"" of type '" "wxWindow *""'"); 
@@ -10674,9 +10800,16 @@ SWIGINTERN PyObject *_wrap_new_FloatingPane(PyObject *SWIGUNUSEDPARM(self), PyOb
     } 
     arg4 = static_cast< int >(val4);
   }
+  if (obj4) {
+    ecode5 = SWIG_AsVal_long(obj4, &val5);
+    if (!SWIG_IsOK(ecode5)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "new_FloatingPane" "', expected argument " "5"" of type '" "long""'");
+    } 
+    arg5 = static_cast< long >(val5);
+  }
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    result = (wxFloatingPane *)new wxFloatingPane(arg1,arg2,(wxPaneInfo const &)*arg3,arg4);
+    result = (wxFloatingPane *)new wxFloatingPane(arg1,arg2,(wxPaneInfo const &)*arg3,arg4,arg5);
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
@@ -13211,6 +13344,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"PaneInfo_IsRightDockable", (PyCFunction)_wrap_PaneInfo_IsRightDockable, METH_O, NULL},
 	 { (char *)"PaneInfo_IsFloatable", (PyCFunction)_wrap_PaneInfo_IsFloatable, METH_O, NULL},
 	 { (char *)"PaneInfo_IsMovable", (PyCFunction)_wrap_PaneInfo_IsMovable, METH_O, NULL},
+	 { (char *)"PaneInfo_IsDestroyOnClose", (PyCFunction)_wrap_PaneInfo_IsDestroyOnClose, METH_O, NULL},
 	 { (char *)"PaneInfo_HasCaption", (PyCFunction)_wrap_PaneInfo_HasCaption, METH_O, NULL},
 	 { (char *)"PaneInfo_HasGripper", (PyCFunction)_wrap_PaneInfo_HasGripper, METH_O, NULL},
 	 { (char *)"PaneInfo_HasBorder", (PyCFunction)_wrap_PaneInfo_HasBorder, METH_O, NULL},
@@ -13318,11 +13452,13 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"FrameManager__AddPane2", (PyCFunction) _wrap_FrameManager__AddPane2, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"FrameManager_InsertPane", (PyCFunction) _wrap_FrameManager_InsertPane, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"FrameManager_DetachPane", (PyCFunction) _wrap_FrameManager_DetachPane, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"FrameManager_ClosePane", (PyCFunction) _wrap_FrameManager_ClosePane, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"FrameManager_SavePaneInfo", (PyCFunction) _wrap_FrameManager_SavePaneInfo, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"FrameManager_LoadPaneInfo", (PyCFunction) _wrap_FrameManager_LoadPaneInfo, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"FrameManager_SavePerspective", (PyCFunction)_wrap_FrameManager_SavePerspective, METH_O, NULL},
 	 { (char *)"FrameManager_LoadPerspective", (PyCFunction) _wrap_FrameManager_LoadPerspective, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"FrameManager_Update", (PyCFunction)_wrap_FrameManager_Update, METH_O, NULL},
+	 { (char *)"FrameManager_CreateFloatingFrame", (PyCFunction) _wrap_FrameManager_CreateFloatingFrame, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"FrameManager_DrawHintRect", (PyCFunction) _wrap_FrameManager_DrawHintRect, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"FrameManager_ShowHint", (PyCFunction) _wrap_FrameManager_ShowHint, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"FrameManager_HideHint", (PyCFunction)_wrap_FrameManager_HideHint, METH_O, NULL},

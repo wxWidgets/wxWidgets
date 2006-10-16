@@ -350,6 +350,10 @@ class PaneInfo(object):
         """
         return _aui.PaneInfo_IsMovable(*args, **kwargs)
 
+    def IsDestroyOnClose(*args, **kwargs):
+        """IsDestroyOnClose(self) -> bool"""
+        return _aui.PaneInfo_IsDestroyOnClose(*args, **kwargs)
+
     def HasCaption(*args, **kwargs):
         """
         HasCaption(self) -> bool
@@ -1052,6 +1056,10 @@ class FrameManager(_core.EvtHandler):
         """
         return _aui.FrameManager_DetachPane(*args, **kwargs)
 
+    def ClosePane(*args, **kwargs):
+        """ClosePane(self, PaneInfo pane_info)"""
+        return _aui.FrameManager_ClosePane(*args, **kwargs)
+
     def SavePaneInfo(*args, **kwargs):
         """SavePaneInfo(self, PaneInfo pane) -> String"""
         return _aui.FrameManager_SavePaneInfo(*args, **kwargs)
@@ -1098,6 +1106,10 @@ class FrameManager(_core.EvtHandler):
 
         """
         return _aui.FrameManager_Update(*args, **kwargs)
+
+    def CreateFloatingFrame(*args, **kwargs):
+        """CreateFloatingFrame(self, Window parent, PaneInfo p) -> FloatingPane"""
+        return _aui.FrameManager_CreateFloatingFrame(*args, **kwargs)
 
     def DrawHintRect(*args, **kwargs):
         """DrawHintRect(self, Window pane_window, Point pt, Point offset)"""
@@ -1411,7 +1423,7 @@ class FloatingPane(_windows.MiniFrame):
     def __init__(self, *args, **kwargs): 
         """
         __init__(self, Window parent, FrameManager owner_mgr, PaneInfo pane, 
-            int id=ID_ANY) -> FloatingPane
+            int id=ID_ANY, long style=wxRESIZE_BORDER|wxSYSTEM_MENU|wxCAPTION|wxFRAME_NO_TASKBAR|wxFRAME_FLOAT_ON_PARENT|wxCLIP_CHILDREN) -> FloatingPane
         """
         _aui.FloatingPane_swiginit(self,_aui.new_FloatingPane(*args, **kwargs))
     __swig_destroy__ = _aui.delete_FloatingPane
