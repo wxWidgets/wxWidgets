@@ -218,6 +218,7 @@ public:
     bool IsRightDockable() const { return HasFlag(optionRightDockable); }
     bool IsFloatable() const { return HasFlag(optionFloatable); }
     bool IsMovable() const { return HasFlag(optionMovable); }
+    bool IsDestroyOnClose() const { return HasFlag(optionDestroyOnClose); }
     bool HasCaption() const { return HasFlag(optionCaption); }
     bool HasGripper() const { return HasFlag(optionGripper); }
     bool HasBorder() const { return HasFlag(optionPaneBorder); }
@@ -427,6 +428,8 @@ public:
                  int insert_level = wxAUI_INSERT_PANE);
 
     bool DetachPane(wxWindow* window);
+    
+    void ClosePane(wxPaneInfo& pane_info);
 
     wxString SavePaneInfo(wxPaneInfo& pane);
     void LoadPaneInfo(wxString pane_part, wxPaneInfo &pane);

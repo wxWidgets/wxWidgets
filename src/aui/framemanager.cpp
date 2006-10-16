@@ -940,6 +940,40 @@ bool wxFrameManager::DetachPane(wxWindow* window)
     return false;
 }
 
+// ClosePane() destroys or hides the pane depending on its
+// flags
+void wxFrameManager::ClosePane(wxPaneInfo& pane_info)
+{
+    // first, hide the window
+    if (pane_info.window && pane_info.window->IsShown()) {
+        pane_info.window->Show(false);
+    }
+
+    // make sure that we are the parent of this window
+    if(pane_info.window && pane_info.window->GetParent() != m_frame) {
+        pane_info.window->Reparent(m_frame);
+    }
+
+    // if we have a frame, destroy it
+    if(pane_info.frame) {
+        pane_info.frame->Destroy();
+        pane_info.frame = NULL;
+    }
+
+    // now we need to either destroy or hide the pane
+    if(pane_info.IsDestroyOnClose()) 
+    {
+        wxWindow * window = pane_info.window;
+        DetachPane(window);
+        if(window) {
+            window->Destroy();
+        }
+    } 
+    else 
+    {
+        pane_info.Hide();
+    }
+}
 
 // EscapeDelimiters() changes ";" into "\;" and "|" into "\|"
 // in the input string.  This is an internal functions which is
@@ -3117,15 +3151,9 @@ void wxFrameManager::OnFloatingPaneClosed(wxWindow* wnd, wxCloseEvent& evt)
         evt.Veto();
         return;
     }
-     else
+     else 
     {
-        // reparent the pane window back to us and
-        // prepare the frame window for destruction
-        if (pane.window->IsShown())
-            pane.window->Show(false);
-        pane.window->Reparent(m_frame);
-        pane.frame = NULL;
-        pane.Hide();
+        ClosePane(pane);
     }
 }
 
@@ -3860,7 +3888,7 @@ void wxFrameManager::OnPaneButton(wxFrameManagerEvent& evt)
 
         if (!e.GetVeto())
         {
-            pane.Hide();
+            ClosePane(pane);
             Update();
         }
     }
