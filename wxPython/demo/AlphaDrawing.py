@@ -9,17 +9,20 @@ class TestPanel(wx.Panel):
         wx.Panel.__init__(self, parent, -1)
         self.Bind(wx.EVT_PAINT, self.OnPaint)
 
-        txt = "On the Mac these squares should be transparent, if the\n" \
-              "CoreGraphics option is turned on.  "
-        if "wxMac" in wx.PlatformInfo:
-            txt += "This build of wxPython\n" \
-                   "%s have the CoreGraphics option turned on." \
-                   % ("mac-cg" in wx.PlatformInfo and "DOES" or "DOS NOT")
+        txt = """\
+If this build of wxPython includes the new wx.GCDC class (which
+provides the wx.DC API on top of the new wx.GraphicsContext class)
+then these squares should be transparent.
+"""
         wx.StaticText(self, -1, txt, (20, 20))
         
 
     def OnPaint(self, evt):
-        dc = wx.PaintDC(self)
+        pdc = wx.PaintDC(self)
+        try:
+            dc = wx.GCDC(pdc)
+        except:
+            dc = pdc
         rect = wx.Rect(0,0, 100, 100)
         for RGB, pos in [((178,  34,  34), ( 50,  90)),
                          (( 35, 142,  35), (110, 150)),
