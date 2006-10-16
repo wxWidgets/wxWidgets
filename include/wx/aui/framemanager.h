@@ -383,7 +383,7 @@ public:
 
 
 
-
+class WXDLLIMPEXP_AUI wxFloatingPane;
 
 class WXDLLIMPEXP_AUI wxFrameManager : public wxEvtHandler
 {
