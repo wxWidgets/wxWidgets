@@ -202,7 +202,8 @@ class RichTextFrame(wx.Frame):
             path = dlg.GetPath()
             if path:
                 self.rtc.SaveFile(path)
-
+        dlg.Destroy()
+        
                 
     def OnFileViewHTML(self, evt): pass
 
