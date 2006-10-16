@@ -4,7 +4,7 @@
 // Author:      Jonathan Bayer
 // Modified by:
 // Created:
-// RCS-ID:      $Id:
+// RCS-ID:      $Id$
 // Copyright:   (c) Jonathan Bayer
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -651,4 +651,3 @@ void wxMultiCellCanvas :: CalculateConstraints()
 }
 
 /*** End of File ***/
-

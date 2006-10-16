@@ -2,9 +2,9 @@
 // Name:        wx/cocoa/ObjcPose.h
 // Purpose:     Macros for initializing poseAs, among other things
 // Author:      David Elliott
-// Modified by: 
+// Modified by:
 // Created:     2002/12/03
-// RCS-ID:      $Id:
+// RCS-ID:      $Id$
 // Copyright:   (c) 2002 David Elliott <dfe@cox.net>
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -22,31 +22,31 @@ Objective-C Poser class initialization
 class wxPoseAsInitializer
 {
 public:
-	wxPoseAsInitializer()
-	: m_next(sm_first)
-	{
-		sm_first = this;
-	}
-	virtual ~wxPoseAsInitializer()
-	{
-		sm_first = m_next;
-	}
-	static void InitializePosers()
-	{
-		while(sm_first)
-		{
-			delete sm_first;
-		}
-	};
+    wxPoseAsInitializer()
+    : m_next(sm_first)
+    {
+        sm_first = this;
+    }
+    virtual ~wxPoseAsInitializer()
+    {
+        sm_first = m_next;
+    }
+    static void InitializePosers()
+    {
+        while(sm_first)
+        {
+            delete sm_first;
+        }
+    };
 protected:
-	wxPoseAsInitializer *m_next;
-	static wxPoseAsInitializer *sm_first;
+    wxPoseAsInitializer *m_next;
+    static wxPoseAsInitializer *sm_first;
 };
 
 class wxDummyForPoseAsInitializer
 {
 public:
-	wxDummyForPoseAsInitializer(void*) {}
+    wxDummyForPoseAsInitializer(void*) {}
 };
 
 #define WX_IMPLEMENT_POSER(poser) \
@@ -65,4 +65,3 @@ wxDummyForPoseAsInitializer wxDummyPoseAsInitializerFor##poser(new wxPoseAsIniti
 #endif // __OBJC__
 
 #endif // __WX_COCOA_PRIVATE_POSER_H__
-
