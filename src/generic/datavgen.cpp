@@ -29,6 +29,7 @@
     #include "wx/dcclient.h"
     #include "wx/timer.h"
     #include "wx/settings.h"
+    #include "wx/msgdlg.h"
 #endif
 
 #include "wx/stockitem.h"
@@ -494,6 +495,8 @@ wxSize wxDataViewProgressRenderer::GetSize()
 // wxDataViewDateRenderer
 // ---------------------------------------------------------
 
+#if wxUSE_CALENDARCTRL
+
 class wxDataViewDateRendererPopupTransient: public wxPopupTransientWindow
 {
 public:
@@ -540,6 +543,8 @@ void wxDataViewDateRendererPopupTransient::OnCalendar( wxCalendarEvent &event )
     DismissAndNotify();
 }
 
+#endif // wxUSE_CALENDARCTRL
+
 IMPLEMENT_ABSTRACT_CLASS(wxDataViewDateRenderer, wxDataViewCustomRenderer)
 
 wxDataViewDateRenderer::wxDataViewDateRenderer( const wxString &varianttype,
@@ -579,13 +584,16 @@ bool wxDataViewDateRenderer::Activate( wxRect WXUNUSED(cell), wxDataViewListMode
     model->GetValue( variant, col, row );
     wxDateTime value = variant.GetDateTime();
 
+#if wxUSE_CALENDARCTRL
     wxDataViewDateRendererPopupTransient *popup = new wxDataViewDateRendererPopupTransient(
         GetOwner()->GetOwner()->GetParent(), &value, model, col, row );
     wxPoint pos = wxGetMousePosition();
     popup->Move( pos );
     popup->Layout();
     popup->Popup( popup->m_cal );
-
+#else
+    wxMessageBox(value.Format());
+#endif
     return true;
 }
 
@@ -624,7 +632,7 @@ void wxDataViewColumn::SetSortable( bool WXUNUSED(sortable) )
 }
 
 bool wxDataViewColumn::GetSortable()
-{   
+{
     // TODO
     return false;
 }
