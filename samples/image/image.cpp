@@ -91,6 +91,9 @@ public:
     wxBitmap my_toucan_flipped_both;
     wxBitmap my_toucan_grey;
     wxBitmap my_toucan_head;
+    wxBitmap my_toucan_scaled_normal;
+    wxBitmap my_toucan_scaled_high;
+    wxBitmap my_toucan_blur;
 
     int xH, yH ;
     int m_ani_images;
@@ -518,6 +521,9 @@ MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
     my_toucan_flipped_both = wxBitmap(image.Mirror(true).Mirror(false));
     my_toucan_grey = wxBitmap(image.ConvertToGreyscale());
     my_toucan_head = wxBitmap(image.GetSubImage(wxRect(40, 7, 80, 60)));
+    my_toucan_scaled_normal = wxBitmap(image.Scale(110,90,wxIMAGE_QUALITY_NORMAL));
+    my_toucan_scaled_high = wxBitmap(image.Scale(110,90,wxIMAGE_QUALITY_HIGH));
+    my_toucan_blur = wxBitmap(image.Blur(10));
 
 #endif // wxUSE_LIBPNG
 
@@ -803,6 +809,18 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
         y += yy;
         dc.DrawText(wxT("Toucan's head"), x+50, y);
         dc.DrawBitmap(my_toucan_head, x, y+15, true);
+
+        y += yy;
+        dc.DrawText(wxT("Scaled with normal quality"), x+50, y);
+        dc.DrawBitmap(my_toucan_scaled_normal, x, y+15, true);
+
+        y += yy;
+        dc.DrawText(wxT("Scaled with high quality"), x+50, y);
+        dc.DrawBitmap(my_toucan_scaled_high, x, y+15, true);
+
+        y += yy;
+        dc.DrawText(wxT("Blured"), x+50, y);
+        dc.DrawBitmap(my_toucan_blur, x, y+15, true);
     }
 
     if (my_smile_xbm.Ok())
