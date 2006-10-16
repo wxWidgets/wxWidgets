@@ -443,6 +443,7 @@ public:
 
 
 public:
+    virtual wxFloatingPane * CreateFloatingFrame(wxWindow* parent, const wxPaneInfo& p);
 
     void DrawHintRect(wxWindow* pane_window,
                        const wxPoint& pt,

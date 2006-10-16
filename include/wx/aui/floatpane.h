@@ -35,18 +35,24 @@ public:
     wxFloatingPane(wxWindow* parent,
                    wxFrameManager* owner_mgr,
                    const wxPaneInfo& pane,
-                   wxWindowID id = wxID_ANY
+                   wxWindowID id = wxID_ANY,
+                   long style = wxRESIZE_BORDER | wxSYSTEM_MENU | wxCAPTION |
+                                wxFRAME_NO_TASKBAR | wxFRAME_FLOAT_ON_PARENT | 
+                                wxCLIP_CHILDREN
                    );
     virtual ~wxFloatingPane();
     void SetPaneWindow(const wxPaneInfo& pane);
+    
+protected:
+    virtual void OnMoveStart();
+    virtual void OnMoving(const wxRect& window_rect, wxDirection dir);
+    virtual void OnMoveFinished();
+    
 private:
     void OnSize(wxSizeEvent& event);
     void OnClose(wxCloseEvent& event);
     void OnMoveEvent(wxMoveEvent& event);
     void OnIdle(wxIdleEvent& event);
-    void OnMoveStart();
-    void OnMoving(const wxRect& window_rect, wxDirection dir);
-    void OnMoveFinished();
     void OnActivate(wxActivateEvent& event);
     static bool isMouseDown();
 private:

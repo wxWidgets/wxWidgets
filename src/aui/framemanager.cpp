@@ -494,6 +494,12 @@ wxFrameManager::~wxFrameManager()
     delete m_art;
 }
 
+// Creates a floating frame for the windows
+wxFloatingPane * wxFrameManager::CreateFloatingFrame(wxWindow* parent, const wxPaneInfo& p)
+{
+    return new wxFloatingPane(parent, this, p);
+}
+
 // GetPane() looks up a wxPaneInfo structure based
 // on the supplied window pointer.  Upon failure, GetPane()
 // returns an empty wxPaneInfo, a condition which can be checked
@@ -2038,9 +2044,7 @@ void wxFrameManager::Update()
             {
                 // we need to create a frame for this
                 // pane, which has recently been floated
-                wxFloatingPane* frame = new wxFloatingPane(m_frame,
-                                                  this,
-                                                  p);
+                wxFloatingPane* frame = CreateFloatingFrame(m_frame, p);
 
 #if wxCHECK_VERSION(2,7,0)
                 // on MSW and Mac, if the owner desires transparent dragging, and
