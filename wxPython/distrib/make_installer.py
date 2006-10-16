@@ -75,7 +75,7 @@ Name: pthfile;  Description: "Make this install be the default wxPython"; Types:
 
 [Files]
 %(RTDLL)s
-Source: "distrib\msw\gdiplus.dll"; DestDir: "{code:GetPythonDir}"; Check: OnlyBeforeXP; Flags: sharedfile; Components: core
+Source: "distrib\msw\gdiplus.dll"; DestDir: "{app}\%(PKGDIR)s\wx"; Check: OnlyBeforeXP; Flags: sharedfile; Components: core
 Source: "%(WXDIR)s\lib\vc_dll\wx*%(WXDLLVER)s_*.dll";  DestDir: "{app}\%(PKGDIR)s\wx"; Components: core
 %(MSLU)s
 
@@ -698,7 +698,6 @@ def main():
         time.sleep(1)
         os.remove(ISSFILE)
         os.remove(ISSDEMOFILE)
-        os.remove(IFSFILE)
 
 
 #----------------------------------------------------------------------
