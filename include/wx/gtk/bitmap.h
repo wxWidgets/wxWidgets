@@ -122,6 +122,9 @@ private:
     bool CreateFromImageAsPixmap(const wxImage& image, int depth);
     bool CreateFromImageAsPixbuf(const wxImage& image);
 
+    virtual wxObjectRefData* CreateRefData() const;
+    virtual wxObjectRefData* CloneRefData(const wxObjectRefData* data) const;
+
     enum Representation
     {
         Pixmap,

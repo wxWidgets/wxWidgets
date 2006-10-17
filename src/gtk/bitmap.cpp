@@ -754,6 +754,7 @@ void wxBitmap::SetMask( wxMask *mask )
 {
     wxCHECK_RET( Ok(), wxT("invalid bitmap") );
 
+    AllocExclusive();
     delete M_BMPDATA->m_mask;
     M_BMPDATA->m_mask = mask;
 }
@@ -857,25 +858,19 @@ void wxBitmap::SetPalette(const wxPalette& WXUNUSED(palette))
 
 void wxBitmap::SetHeight( int height )
 {
-    if (!m_refData)
-        m_refData = new wxBitmapRefData;
-
+    AllocExclusive();
     M_BMPDATA->m_height = height;
 }
 
 void wxBitmap::SetWidth( int width )
 {
-    if (!m_refData)
-        m_refData = new wxBitmapRefData;
-
+    AllocExclusive();
     M_BMPDATA->m_width = width;
 }
 
 void wxBitmap::SetDepth( int depth )
 {
-    if (!m_refData)
-        m_refData = new wxBitmapRefData;
-
+    AllocExclusive();
     M_BMPDATA->m_bpp = depth;
 }
 
@@ -884,6 +879,8 @@ void wxBitmap::SetPixmap( GdkPixmap *pixmap )
     if (!m_refData)
         m_refData = new wxBitmapRefData;
 
+    // AllocExclusive should not be needed for this internal function
+    wxASSERT(m_refData->GetRefCount() == 1);
     wxASSERT(M_BMPDATA->m_pixmap == NULL);
     M_BMPDATA->m_pixmap = pixmap;
     gdk_drawable_get_size(pixmap, &M_BMPDATA->m_width, &M_BMPDATA->m_height);
@@ -983,6 +980,8 @@ void wxBitmap::SetPixbuf(GdkPixbuf* pixbuf, int depth)
     if (!m_refData)
         m_refData = new wxBitmapRefData;
 
+    // AllocExclusive should not be needed for this internal function
+    wxASSERT(m_refData->GetRefCount() == 1);
     wxASSERT(M_BMPDATA->m_pixbuf == NULL);
     M_BMPDATA->m_pixbuf = pixbuf;
     M_BMPDATA->m_width = gdk_pixbuf_get_width(pixbuf);
@@ -998,6 +997,9 @@ void wxBitmap::SetPixbuf(GdkPixbuf* pixbuf, int depth)
 
 void wxBitmap::PurgeOtherRepresentations(wxBitmap::Representation keep)
 {
+    // AllocExclusive should not be needed for this internal function
+    wxASSERT(m_refData->GetRefCount() == 1);
+
     if (keep == Pixmap && HasPixbuf())
     {
         g_object_unref (M_BMPDATA->m_pixbuf);
@@ -1045,9 +1047,55 @@ void wxBitmap::UseAlpha()
     if (!gdk_pixbuf_get_has_alpha(pixbuf))
     {
         M_BMPDATA->m_pixbuf = NULL;
-        SetPixbuf(gdk_pixbuf_add_alpha(pixbuf, false, 0, 0, 0));
+        AllocExclusive();
+        M_BMPDATA->m_pixbuf = gdk_pixbuf_add_alpha(pixbuf, false, 0, 0, 0);
         g_object_unref(pixbuf);
     }
+}
+
+wxObjectRefData* wxBitmap::CreateRefData() const
+{
+    return new wxBitmapRefData;
+}
+
+wxObjectRefData* wxBitmap::CloneRefData(const wxObjectRefData* data) const
+{
+    const wxBitmapRefData* oldRef = wx_static_cast(const wxBitmapRefData*, data);
+    wxBitmapRefData* newRef = new wxBitmapRefData;
+    newRef->m_width = oldRef->m_width;
+    newRef->m_height = oldRef->m_height;
+    newRef->m_bpp = oldRef->m_bpp;
+    if (oldRef->m_pixmap != NULL)
+    {
+        newRef->m_pixmap = gdk_pixmap_new(
+            oldRef->m_pixmap, oldRef->m_width, oldRef->m_height,
+            // use pixmap depth, m_bpp may not match
+            gdk_drawable_get_depth(oldRef->m_pixmap));
+        GdkGC* gc = gdk_gc_new(newRef->m_pixmap);
+        gdk_draw_drawable(
+            newRef->m_pixmap, gc, oldRef->m_pixmap, 0, 0, 0, 0, -1, -1);
+        g_object_unref(gc);
+    }
+    if (oldRef->m_pixbuf != NULL)
+    {
+        newRef->m_pixbuf = gdk_pixbuf_copy(oldRef->m_pixbuf);
+    }
+    if (oldRef->m_mask != NULL)
+    {
+        newRef->m_mask = new wxMask;
+        newRef->m_mask->m_bitmap = gdk_pixmap_new(
+            oldRef->m_mask->m_bitmap, oldRef->m_width, oldRef->m_height, 1);
+        GdkGC* gc = gdk_gc_new(newRef->m_mask->m_bitmap);
+        gdk_draw_drawable(newRef->m_mask->m_bitmap,
+            gc, oldRef->m_mask->m_bitmap, 0, 0, 0, 0, -1, -1);
+        g_object_unref(gc);
+    }
+#if wxUSE_PALETTE
+    // implement this if SetPalette is ever implemented
+    wxASSERT(oldRef->m_palette == NULL);
+#endif
+
+    return newRef;
 }
 
 //-----------------------------------------------------------------------------
