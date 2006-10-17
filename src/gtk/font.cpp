@@ -31,10 +31,7 @@
 #include "wx/fontutil.h"
 #include "wx/tokenzr.h"
 
-#include <strings.h>
-
 #include "wx/gtk/private.h"
-#include <gdk/gdkprivate.h>
 
 // ----------------------------------------------------------------------------
 // constants
@@ -392,20 +389,6 @@ bool wxFont::Create(const wxString& fontname)
     return true;
 }
 
-void wxFont::Unshare()
-{
-    if (!m_refData)
-    {
-        m_refData = new wxFontRefData();
-    }
-    else
-    {
-        wxFontRefData* ref = new wxFontRefData(*(wxFontRefData*)m_refData);
-        UnRef();
-        m_refData = ref;
-    }
-}
-
 wxFont::~wxFont()
 {
 }
@@ -502,35 +485,35 @@ bool wxFont::IsFixedWidth() const
 
 void wxFont::SetPointSize(int pointSize)
 {
-    Unshare();
+    AllocExclusive();
 
     M_FONTDATA->SetPointSize(pointSize);
 }
 
 void wxFont::SetFamily(int family)
 {
-    Unshare();
+    AllocExclusive();
 
     M_FONTDATA->SetFamily(family);
 }
 
 void wxFont::SetStyle(int style)
 {
-    Unshare();
+    AllocExclusive();
 
     M_FONTDATA->SetStyle(style);
 }
 
 void wxFont::SetWeight(int weight)
 {
-    Unshare();
+    AllocExclusive();
 
     M_FONTDATA->SetWeight(weight);
 }
 
 bool wxFont::SetFaceName(const wxString& faceName)
 {
-    Unshare();
+    AllocExclusive();
 
     return M_FONTDATA->SetFaceName(faceName) &&
            wxFontBase::SetFaceName(faceName);
@@ -538,28 +521,38 @@ bool wxFont::SetFaceName(const wxString& faceName)
 
 void wxFont::SetUnderlined(bool underlined)
 {
-    Unshare();
+    AllocExclusive();
 
     M_FONTDATA->SetUnderlined(underlined);
 }
 
 void wxFont::SetEncoding(wxFontEncoding encoding)
 {
-    Unshare();
+    AllocExclusive();
 
     M_FONTDATA->SetEncoding(encoding);
 }
 
 void wxFont::DoSetNativeFontInfo( const wxNativeFontInfo& info )
 {
-    Unshare();
+    AllocExclusive();
 
     M_FONTDATA->SetNativeFontInfo( info );
 }
 
 void wxFont::SetNoAntiAliasing( bool no )
 {
-    Unshare();
+    AllocExclusive();
 
     M_FONTDATA->SetNoAntiAliasing( no );
+}
+
+wxObjectRefData* wxFont::CreateRefData() const
+{
+    return new wxFontRefData;
+}
+
+wxObjectRefData* wxFont::CloneRefData(const wxObjectRefData* data) const
+{
+    return new wxFontRefData(*wx_static_cast(const wxFontRefData*, data));
 }
