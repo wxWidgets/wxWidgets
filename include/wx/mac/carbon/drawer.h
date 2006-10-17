@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        drawer.h
+// Name:        wx/mac/carbon/drawer.h
 // Purpose:     Drawer child window class.
 //              Drawer windows appear under their parent window and
 //              behave like a drawer, opening and closing to reveal
@@ -28,26 +28,26 @@
 class WXDLLEXPORT wxDrawerWindow : public wxTopLevelWindow
 {
     DECLARE_DYNAMIC_CLASS(wxDrawerWindow)
-    
+
 public:
 
     wxDrawerWindow();
-    
+
     wxDrawerWindow(wxWindow* parent,
-     wxWindowID id,
-     const wxString& title,
-     wxSize size = wxDefaultSize,
-     wxDirection edge = wxLEFT,
-     const wxString& name = wxT("drawerwindow"))
+                   wxWindowID id,
+                   const wxString& title,
+                   wxSize size = wxDefaultSize,
+                   wxDirection edge = wxLEFT,
+                   const wxString& name = wxT("drawerwindow"))
     {
         this->Create(parent, id, title, size, edge, name);
     }
-     
+
     virtual ~wxDrawerWindow();
-    
-    // Create a drawer window. 
+
+    // Create a drawer window.
     // If parent is NULL, create as a tool window.
-    // If parent is not NULL, then wxTopLevelWindow::Attach this window to parent. 
+    // If parent is not NULL, then wxTopLevelWindow::Attach this window to parent.
     bool Create(wxWindow *parent,
      wxWindowID id,
      const wxString& title,
@@ -58,13 +58,14 @@ public:
     bool Open(bool show = true); // open or close the drawer, possibility for async param, i.e. animate
     bool Close() { return this->Open(false); }
     bool IsOpen() const;
-    
+
     // Set the edge of the parent where the drawer attaches.
     bool SetPreferredEdge(wxDirection edge);
     wxDirection GetPreferredEdge() const;
-    wxDirection GetCurrentEdge() const;	// not necessarily the preferred, due to screen constraints
+    wxDirection GetCurrentEdge() const; // not necessarily the preferred, due to screen constraints
 };
 
 #endif // defined( __WXMAC__ ) && TARGET_API_MAC_OSX && ( MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_2 )
 
-#endif // _WX_DRAWERWINDOW_H_
+#endif
+    // _WX_DRAWERWINDOW_H_

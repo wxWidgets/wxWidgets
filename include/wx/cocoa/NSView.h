@@ -4,7 +4,7 @@
 // Author:      David Elliott
 // Modified by:
 // Created:     2003/02/15
-// RCS-ID:      $Id: 
+// RCS-ID:      $Id$
 // Copyright:   (c) 2003 David Elliott
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -30,7 +30,7 @@ protected:
     static void *sm_cocoaObserver;
 public:
     virtual wxWindow* GetWxWindow() const
-    {	return NULL;	}
+    {   return NULL; }
     virtual void Cocoa_FrameChanged(void) = 0;
     virtual bool Cocoa_acceptsFirstMouse(bool &acceptsFirstMouse, WX_NSEvent theEvent)
     {   return false; }
@@ -61,8 +61,9 @@ public:
     virtual bool Cocoa_otherMouseUp(WX_NSEvent theEvent)
     {   return false; }
     virtual bool Cocoa_resetCursorRects()
-    {	return false; }
+    {   return false; }
     virtual ~wxCocoaNSView() { }
 };
 
-#endif // _WX_COCOA_NSVIEW_H_
+#endif
+    // __WX_COCOA_NSVIEW_H__

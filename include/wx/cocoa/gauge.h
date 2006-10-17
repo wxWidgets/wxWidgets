@@ -6,7 +6,7 @@
 // Created:     2003/07/15
 // RCS-ID:      $Id$
 // Copyright:   (c) 2003 David Elliott
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef __WX_COCOA_GAUGE_H__
@@ -70,4 +70,5 @@ protected:
     virtual wxSize DoGetBestSize() const;
 };
 
-#endif // __WX_COCOA_GAUGE_H__
+#endif
+    // __WX_COCOA_GAUGE_H__

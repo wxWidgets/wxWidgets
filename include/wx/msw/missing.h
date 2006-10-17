@@ -190,7 +190,7 @@ typedef OSVERSIONINFOEXA OSVERSIONINFOEX,*POSVERSIONINFOEX,*LPOSVERSIONINFOEX;
 // NMLVCUSTOMDRAW originally didn't have the iSubItem member. It was added
 // with IE4, as was IPN_FIRST which is used as a test :-(.
 //
-#ifndef IPN_FIRST	
+#ifndef IPN_FIRST
 
 typedef struct wxtagNMLVCUSTOMDRAW_ {
     NMCUSTOMDRAW nmcd;
@@ -202,7 +202,7 @@ typedef struct wxtagNMLVCUSTOMDRAW_ {
 #define NMLVCUSTOMDRAW wxNMLVCUSTOMDRAW_
 #define LPNMLVCUSTOMDRAW wxLPNMLVCUSTOMDRAW_
 
-#endif // defined IPN_FIRST	
+#endif // defined IPN_FIRST
 
 #endif // defined __VISUALC__ && __VISUALC__ <= 1100
 

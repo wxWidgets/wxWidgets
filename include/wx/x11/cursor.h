@@ -1,12 +1,12 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        cursor.h
+// Name:        wx/x11/cursor.h
 // Purpose:     wxCursor class
 // Author:      Julian Smart
 // Modified by:
 // Created:     17/09/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_CURSOR_H_
@@ -50,4 +50,4 @@ private:
 
 
 #endif
-// _WX_CURSOR_H_
+    // _WX_CURSOR_H_

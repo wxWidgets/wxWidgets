@@ -4,7 +4,7 @@
 // Author:      Robert Roebling
 // Id:          $Id$
 // Copyright:   (c) 1998 Robert Roebling
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef __GTKSTATICTEXTH__
@@ -74,4 +74,5 @@ protected:
     DECLARE_DYNAMIC_CLASS(wxStaticText)
 };
 
-#endif // __GTKSTATICTEXTH__
+#endif
+    // __GTKSTATICTEXTH__

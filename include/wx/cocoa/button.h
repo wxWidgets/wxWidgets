@@ -4,9 +4,9 @@
 // Author:      David Elliott
 // Modified by:
 // Created:     2002/12/29
-// RCS-ID:      $Id: 
+// RCS-ID:      $Id$
 // Copyright:   (c) 2002 David Elliott
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef __WX_COCOA_BUTTON_H__
@@ -36,7 +36,7 @@ public:
     {
         Create(parent, winid, label, pos, size, style, validator, name);
     }
-    
+
 
     bool Create(wxWindow *parent, wxWindowID winid,
             const wxString& label = wxEmptyString,
@@ -44,7 +44,7 @@ public:
             const wxSize& size = wxDefaultSize, long style = 0,
             const wxValidator& validator = wxDefaultValidator,
             const wxString& name = wxButtonNameStr);
-    
+
     virtual ~wxButton();
 
 // ------------------------------------------------------------------------
@@ -61,4 +61,5 @@ public:
     wxSize DoGetBestSize() const;
 };
 
-#endif // __WX_COCOA_BUTTON_H__
+#endif
+    // __WX_COCOA_BUTTON_H__

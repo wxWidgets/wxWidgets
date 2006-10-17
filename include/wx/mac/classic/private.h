@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        private.h
+// Name:        wx/mac/classic/private.h
 // Purpose:     Private declarations: as this header is only included by
 //              wxWidgets itself, it may contain identifiers which don't start
 //              with "wx".
@@ -37,12 +37,12 @@
 
 #include "wx/window.h"
 
-class wxMacPortStateHelper 
+class wxMacPortStateHelper
 {
     DECLARE_NO_COPY_CLASS(wxMacPortStateHelper)
-        
+
 public:
-    wxMacPortStateHelper( GrafPtr newport) ; 
+    wxMacPortStateHelper( GrafPtr newport) ;
     wxMacPortStateHelper() ;
     ~wxMacPortStateHelper() ;
 
@@ -65,7 +65,7 @@ private:
 class WXDLLEXPORT wxMacPortSetter
 {
     DECLARE_NO_COPY_CLASS(wxMacPortSetter)
-        
+
 public:
     wxMacPortSetter( const wxDC* dc ) ;
     ~wxMacPortSetter() ;
@@ -77,7 +77,7 @@ private:
 class WXDLLEXPORT wxMacWindowClipper
 {
     DECLARE_NO_COPY_CLASS(wxMacWindowClipper)
-        
+
 public:
     wxMacWindowClipper( const wxWindow* win ) ;
     ~wxMacWindowClipper() ;
@@ -89,7 +89,7 @@ private:
 class wxMacDrawingHelper
 {
     DECLARE_NO_COPY_CLASS(wxMacDrawingHelper)
-        
+
 public:
     wxMacDrawingHelper( wxWindowMac * theWindow , bool clientArea = false ) ;
     ~wxMacDrawingHelper() ;
@@ -177,57 +177,57 @@ void wxMacConvertNewlines10To13( wxChar * data ) ;
 
 #if TARGET_CARBON
 
-class wxMacCFStringHolder                                                             
-{                                                                           
-public:      
-	wxMacCFStringHolder()
-	{
-    	m_cfs = NULL ;
-    	m_release = false ;                                                                 
-	}
-	                                                               
-    wxMacCFStringHolder(const wxString &str , wxFontEncoding encoding )                                          
-    {      
-    	m_cfs = NULL ;
-    	m_release = false ;  
-    	Assign( str , encoding ) ;
-    }                                                                       
-                                                                            
-    wxMacCFStringHolder(CFStringRef ref , bool release = true )                                                   
-    {                                                                       
+class wxMacCFStringHolder
+{
+public:
+    wxMacCFStringHolder()
+    {
+        m_cfs = NULL ;
+        m_release = false ;
+    }
+
+    wxMacCFStringHolder(const wxString &str , wxFontEncoding encoding )
+    {
+        m_cfs = NULL ;
+        m_release = false ;
+        Assign( str , encoding ) ;
+    }
+
+    wxMacCFStringHolder(CFStringRef ref , bool release = true )
+    {
         m_cfs = ref ;
-        m_release = release ;                                           
-    }                                                                       
-                                                                            
-    ~wxMacCFStringHolder() 
-    { 
-    	Release() ;
-    }                                           
+        m_release = release ;
+    }
+
+    ~wxMacCFStringHolder()
+    {
+        Release() ;
+    }
 
     CFStringRef Detach()
     {
-    	CFStringRef retval = m_cfs ;
-    	m_release = false ;
-    	m_cfs = NULL ;
-    	return retval ;
-    }         
-                                                                   
+        CFStringRef retval = m_cfs ;
+        m_release = false ;
+        m_cfs = NULL ;
+        return retval ;
+    }
+
     void Release()
     {
-    	if ( m_release && m_cfs)
-    		CFRelease( m_cfs ) ;
-    	m_cfs = NULL ;
-    }         
+        if ( m_release && m_cfs)
+            CFRelease( m_cfs ) ;
+        m_cfs = NULL ;
+    }
 
-	void Assign( const wxString &str , wxFontEncoding encoding ) ;
+    void Assign( const wxString &str , wxFontEncoding encoding ) ;
 
-    operator CFStringRef () { return m_cfs; }   
+    operator CFStringRef () { return m_cfs; }
     wxString AsString( wxFontEncoding encoding = wxFONTENCODING_DEFAULT ) ;
-             
-private:             
-    	                                                       
+
+private:
+
     CFStringRef m_cfs;
-    bool m_release ;                                                        
+    bool m_release ;
 } ;
 
 #endif

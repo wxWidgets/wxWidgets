@@ -4,7 +4,7 @@
 // Author:      Robert Roebling
 // Id:          $Id$
 // Copyright:   (c) 1998 Robert Roebling
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef __GTKGAUGEH__
@@ -99,4 +99,5 @@ private:
 
 #endif
 
-#endif // __GTKGAUGEH__
+#endif
+    // __GTKGAUGEH__

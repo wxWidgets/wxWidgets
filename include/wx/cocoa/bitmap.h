@@ -1,12 +1,12 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        include/wx/cocoa/bitmap.h
+// Name:        wx/cocoa/bitmap.h
 // Purpose:     wxBitmap class
 // Author:      David Elliott
 // Modified by:
 // Created:     2003/07/19
 // RCS-ID:      $Id$
 // Copyright:   (c) 2003 David Elliott
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef __WX_COCOA_BITMAP_H__
@@ -86,7 +86,7 @@ public:
 
     // destructor
     virtual ~wxBitmap();
-  
+
 // ------------------------------------------------------------------------
 // Implementation
 // ------------------------------------------------------------------------
@@ -131,7 +131,7 @@ public:
     void SetMask(wxMask *mask) ;
 
     int GetBitmapType() const;
-  
+
     inline bool operator == (const wxBitmap& bitmap) const
     {   return m_refData == bitmap.m_refData; }
     inline bool operator != (const wxBitmap& bitmap) const
@@ -155,4 +155,5 @@ class WXDLLIMPEXP_CORE wxBitmapHandler: public wxBitmapHandlerBase
     DECLARE_ABSTRACT_CLASS(wxBitmapHandler)
 };
 
-#endif // __WX_COCOA_BITMAP_H__
+#endif
+    // __WX_COCOA_BITMAP_H__

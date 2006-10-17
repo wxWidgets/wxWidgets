@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/richtext/richedithtml.h
+// Name:        wx/richtext/richtexthtml.h
 // Purpose:     HTML I/O for wxRichTextCtrl
 // Author:      Julian Smart
 // Modified by:
@@ -49,54 +49,54 @@ protected:
     /// Output character formatting
     virtual void BeginCharacterFormatting(const wxTextAttrEx& currentStyle, const wxTextAttrEx& thisStyle, const wxTextAttrEx& paraStyle, wxOutputStream& stream );
     virtual void EndCharacterFormatting(const wxTextAttrEx& WXUNUSED(currentStyle), const wxTextAttrEx& thisStyle, const wxTextAttrEx& paraStyle, wxOutputStream& stream );
-	
-	/// Output paragraph formatting
+
+    /// Output paragraph formatting
     virtual void OutputParagraphFormatting(const wxTextAttrEx& WXUNUSED(currentStyle), const wxTextAttrEx& thisStyle, wxOutputStream& stream/*, bool start*/);
-	
-	/// Converts an image to its base64 equivalent
-	void Image_to_Base64(wxRichTextImage* image, wxOutputStream& stream);
-	
-	/// Builds required indentation 
-	void Indent( const wxTextAttrEx& thisStyle, wxTextOutputStream& str );
-	
-	/// Left indent
-	void LIndent( const wxTextAttrEx& thisStyle, wxTextOutputStream& str );
-	
-	/// Converts from pt to size property compatible height
-	long Pt_To_Size(long size);
-	
-	/// Typical base64 encoder
-	wxChar* b64enc( unsigned char* input, size_t in_len );
-	
-	/// Gets the mime type of the given wxBITMAP_TYPE
+
+    /// Converts an image to its base64 equivalent
+    void Image_to_Base64(wxRichTextImage* image, wxOutputStream& stream);
+
+    /// Builds required indentation
+    void Indent( const wxTextAttrEx& thisStyle, wxTextOutputStream& str );
+
+    /// Left indent
+    void LIndent( const wxTextAttrEx& thisStyle, wxTextOutputStream& str );
+
+    /// Converts from pt to size property compatible height
+    long Pt_To_Size(long size);
+
+    /// Typical base64 encoder
+    wxChar* b64enc( unsigned char* input, size_t in_len );
+
+    /// Gets the mime type of the given wxBITMAP_TYPE
     const wxChar* GetMimeType(int imageType);
-	
-	/// Gets the html equivalent of the specified value
-	wxString GetAlignment( const wxTextAttrEx& thisStyle );
 
-	/// Generates &nbsp; array for indentations
-	wxString SymbolicIndent(long indent);
-	
-	/// Finds the html equivalent of the specified bullet
-	void TypeOfList( const wxTextAttrEx& thisStyle, wxString& tag );
-	
-	/// Closes existings or Opens new tables for navigation to an item's horizontal position.
-	void NavigateToListPosition( const wxTextAttrEx& thisStyle, wxTextOutputStream& str );
-	
-	/// Indentation values of the table tags
-	wxArrayInt m_indents;
-	
-	/// Horizontal position of the current table
-	long m_indent;
+    /// Gets the html equivalent of the specified value
+    wxString GetAlignment( const wxTextAttrEx& thisStyle );
 
-	/// Is there any opened font tag 
-	bool m_font;
+    /// Generates &nbsp; array for indentations
+    wxString SymbolicIndent(long indent);
 
-	/// Is there any opened ul/ol tag
-	bool m_list;
+    /// Finds the html equivalent of the specified bullet
+    void TypeOfList( const wxTextAttrEx& thisStyle, wxString& tag );
 
-	/// type of list, ul or ol?
-	bool m_is_ul;
+    /// Closes existings or Opens new tables for navigation to an item's horizontal position.
+    void NavigateToListPosition( const wxTextAttrEx& thisStyle, wxTextOutputStream& str );
+
+    /// Indentation values of the table tags
+    wxArrayInt m_indents;
+
+    /// Horizontal position of the current table
+    long m_indent;
+
+    /// Is there any opened font tag
+    bool m_font;
+
+    /// Is there any opened ul/ol tag
+    bool m_list;
+
+    /// type of list, ul or ol?
+    bool m_is_ul;
 
 };
 

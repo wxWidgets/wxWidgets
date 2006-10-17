@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        toolbar.h
+// Name:        wx/mac/carbon/toolbar.h
 // Purpose:     wxToolBar class
 // Author:      Stefan Csomor
 // Modified by:
@@ -93,9 +93,9 @@ protected:
     virtual wxToolBarToolBase *CreateTool(wxControl *control);
 
     DECLARE_EVENT_TABLE()
-#if wxMAC_USE_NATIVE_TOOLBAR    
-	bool m_macUsesNativeToolbar ;
-	void* m_macHIToolbarRef ;
+#if wxMAC_USE_NATIVE_TOOLBAR
+    bool m_macUsesNativeToolbar ;
+    void* m_macHIToolbarRef ;
 #endif
 };
 

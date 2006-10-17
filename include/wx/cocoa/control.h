@@ -4,9 +4,9 @@
 // Author:      David Elliott
 // Modified by:
 // Created:     2003/02/15
-// RCS-ID:      $Id: 
+// RCS-ID:      $Id$
 // Copyright:   (c) 2003 David Elliott
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef __WX_COCOA_CONTROL_H__
@@ -53,7 +53,7 @@ public:
     // --------------------------
 
     void OnEraseBackground(wxEraseEvent& event);
-   
+
     virtual void Command(wxCommandEvent& event) { ProcessCommand(event); }
 
     // Calls the callback and appropriate event handlers
@@ -65,4 +65,5 @@ protected:
     virtual wxSize DoGetBestSize() const;
 };
 
-#endif // __WX_COCOA_CONTROL_H__
+#endif
+    // __WX_COCOA_CONTROL_H__

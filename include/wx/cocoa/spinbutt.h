@@ -6,7 +6,7 @@
 // Created:     2003/07/14
 // RCS-ID:      $Id$
 // Copyright:   (c) 2003 David Elliott
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef __WX_COCOA_SPINBUTT_H__
@@ -27,7 +27,7 @@ class WXDLLEXPORT wxSpinButton: public wxSpinButtonBase// , protected wxCocoaNSS
 // ------------------------------------------------------------------------
 public:
     wxSpinButton() { }
-    wxSpinButton(wxWindow *parent, wxWindowID winid = -1,
+    wxSpinButton(wxWindow *parent, wxWindowID winid = wxID_ANY,
             const wxPoint& pos = wxDefaultPosition,
             const wxSize& size = wxDefaultSize,
             long style = wxSP_VERTICAL | wxSP_ARROW_KEYS,
@@ -36,7 +36,7 @@ public:
         Create(parent, winid, pos, size, style, name);
     }
 
-    bool Create(wxWindow *parent, wxWindowID winid = -1,
+    bool Create(wxWindow *parent, wxWindowID winid = wxID_ANY,
             const wxPoint& pos = wxDefaultPosition,
             const wxSize& size = wxDefaultSize,
             long style = wxSP_HORIZONTAL,
@@ -60,4 +60,5 @@ public:
     virtual void SetRange(int minValue, int maxValue);
 };
 
-#endif // __WX_COCOA_SPINBUTT_H__
+#endif
+    // __WX_COCOA_SPINBUTT_H__

@@ -1,12 +1,12 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        print.h
+// Name:        wx/x11/print.h
 // Purpose:     wxPrinter, wxPrintPreview classes
 // Author:      Julian Smart
 // Modified by:
 // Created:     17/09/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_PRINT_H_
@@ -21,11 +21,11 @@
 class WXDLLEXPORT wxPrinter: public wxPrinterBase
 {
     DECLARE_DYNAMIC_CLASS(wxPrinter)
-        
+
 public:
     wxPrinter(wxPrintData *data = NULL);
     virtual ~wxPrinter();
-    
+
     virtual bool Print(wxWindow *parent, wxPrintout *printout, bool prompt = TRUE);
     virtual bool PrintDialog(wxWindow *parent);
     virtual bool Setup(wxWindow *parent);
@@ -39,14 +39,14 @@ public:
 class WXDLLEXPORT wxPrintPreview: public wxPrintPreviewBase
 {
     DECLARE_CLASS(wxPrintPreview)
-        
+
 public:
     wxPrintPreview(wxPrintout *printout, wxPrintout *printoutForPrinting = NULL, wxPrintData *data = NULL);
     virtual ~wxPrintPreview();
-    
+
     virtual bool Print(bool interactive);
     virtual void DetermineScaling();
 };
 
 #endif
-// _WX_PRINT_H_
+    // _WX_PRINT_H_

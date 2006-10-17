@@ -785,14 +785,14 @@ protected :
         Boolean changeValue ) = 0;
 
     static pascal Boolean DataBrowserCompareProc(
-	    ControlRef browser,
-	    DataBrowserItemID itemOneID,
-	    DataBrowserItemID itemTwoID,
-	    DataBrowserPropertyID sortProperty);
+        ControlRef browser,
+        DataBrowserItemID itemOneID,
+        DataBrowserItemID itemTwoID,
+        DataBrowserPropertyID sortProperty);
 
-	virtual Boolean CompareItems(DataBrowserItemID itemOneID,
-	    DataBrowserItemID itemTwoID,
-	    DataBrowserPropertyID sortProperty) = 0;
+    virtual Boolean CompareItems(DataBrowserItemID itemOneID,
+        DataBrowserItemID itemTwoID,
+        DataBrowserPropertyID sortProperty) = 0;
 };
 
 // ============================================================================

@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        cursor.h
+// Name:        wx/mac/carbon/cursor.h
 // Purpose:     wxCursor class
 // Author:      Stefan Csomor
 // Modified by:
@@ -34,7 +34,7 @@ public:
   wxCursor(int cursor_type);
   virtual ~wxCursor();
 
-	bool CreateFromXpm(const char **bits) ;
+  bool CreateFromXpm(const char **bits) ;
   virtual bool Ok() const { return IsOk(); }
   virtual bool IsOk() const ;
 

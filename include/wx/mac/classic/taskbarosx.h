@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////
-// File:        wx/mac/taskbarosx.h
+// File:        wx/mac/classic/taskbarosx.h
 // Purpose:     Defines wxTaskBarIcon class for OSX
 // Author:      Ryan Norton
 // Modified by:
@@ -18,14 +18,14 @@ class WXDLLEXPORT wxMenu;
 class WXDLLEXPORT wxTaskBarIcon : public wxTaskBarIconBase
 {
 public:
-	//type of taskbar item to create (currently only DOCK is implemented)
-	enum wxTaskBarIconType
-	{
-		DOCK,
-		STATUSITEM,
-		MENUEXTRA
-	};
-	
+    //type of taskbar item to create (currently only DOCK is implemented)
+    enum wxTaskBarIconType
+    {
+        DOCK,
+        STATUSITEM,
+        MENUEXTRA
+    };
+
     wxTaskBarIcon(const wxTaskBarIconType& nType = DOCK);
     virtual ~wxTaskBarIcon();
 
@@ -36,7 +36,7 @@ public:
 
 protected:
     wxTaskBarIconType m_nType;
-	
+
     DECLARE_DYNAMIC_CLASS(wxTaskBarIcon)
 };
 

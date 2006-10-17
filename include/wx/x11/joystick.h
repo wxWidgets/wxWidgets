@@ -1,12 +1,12 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        joystick.h
+// Name:        wx/x11/joystick.h
 // Purpose:     wxJoystick class
 // Author:      Julian Smart
 // Modified by:
 // Created:     17/09/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_JOYSTICK_H_
@@ -21,12 +21,12 @@ public:
 /*
 * Public interface
     */
-    
+
     wxJoystick(int joystick = wxJOYSTICK1) { m_joystick = joystick; };
-    
+
     // Attributes
     ////////////////////////////////////////////////////////////////////////////
-    
+
     wxPoint GetPosition() const;
     int GetZPosition() const;
     int GetButtonState() const;
@@ -37,10 +37,10 @@ public:
     int GetVPosition() const;
     int GetMovementThreshold() const;
     void SetMovementThreshold(int threshold) ;
-    
+
     // Capabilities
     ////////////////////////////////////////////////////////////////////////////
-    
+
     bool IsOk() const; // Checks that the joystick is functioning
     static int GetNumberJoysticks() ;
     int GetManufacturerId() const ;
@@ -64,7 +64,7 @@ public:
     int GetUMax() const;
     int GetVMin() const;
     int GetVMax() const;
-    
+
     bool HasRudder() const;
     bool HasZ() const;
     bool HasU() const;
@@ -72,18 +72,18 @@ public:
     bool HasPOV() const;
     bool HasPOV4Dir() const;
     bool HasPOVCTS() const;
-    
+
     // Operations
     ////////////////////////////////////////////////////////////////////////////
-    
+
     // pollingFreq = 0 means that movement events are sent when above the threshold.
     // If pollingFreq > 0, events are received every this many milliseconds.
     bool SetCapture(wxWindow* win, int pollingFreq = 0);
     bool ReleaseCapture();
-    
+
 protected:
     int       m_joystick;
 };
 
 #endif
-// _WX_JOYSTICK_H_
+    // _WX_JOYSTICK_H_

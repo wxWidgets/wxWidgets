@@ -6,7 +6,7 @@
 // Created:     2003/08/11
 // RCS-ID:      $Id$
 // Copyright:   (c) 2003 David Elliott
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_COCOA_ICON_H__
@@ -58,4 +58,5 @@ public:
     bool CreateFromXpm(const char **bits);
 };
 
-#endif // _WX_COCOA_ICON_H__
+#endif
+    // _WX_COCOA_ICON_H__

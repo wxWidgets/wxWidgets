@@ -1,12 +1,12 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        joystick.h
+// Name:        wx/unix/joystick.h
 // Purpose:     wxJoystick class
 // Author:      Guilhem Lavaux
 // Modified by:
 // Created:     01/02/97
 // RCS-ID:      $Id$
 // Copyright:   (c) Guilhem Lavaux
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef __JOYSTICKH__
@@ -92,5 +92,4 @@ protected:
 };
 
 #endif
-// __JOYSTICKH__
-
+    // __JOYSTICKH__

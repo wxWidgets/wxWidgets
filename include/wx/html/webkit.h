@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        webkit.h
+// Name:        wx/html/webkit.h
 // Purpose:     wxWebKitCtrl - embeddable web kit control
 // Author:      Jethro Grassie / Kevin Ollivier
 // Modified by:
@@ -63,8 +63,8 @@ public:
     bool CanGetPageSource();
     wxString GetPageSource();
     void SetPageSource(wxString& source, const wxString& baseUrl = wxEmptyString);
-	wxString GetPageURL(){ return m_currentURL; }
-	wxString GetPageTitle(){ return m_pageTitle; }
+    wxString GetPageURL(){ return m_currentURL; }
+    wxString GetPageTitle(){ return m_pageTitle; }
 
     //we need to resize the webview when the control size changes
     void OnSize(wxSizeEvent &event);
@@ -129,4 +129,5 @@ END_DECLARE_EVENT_TYPES()
 
 #endif // wxUSE_WEBKIT
 
-#endif // _WX_WEBKIT_H_
+#endif
+    // _WX_WEBKIT_H_

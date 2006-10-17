@@ -1,12 +1,12 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        cursor.h
+// Name:        wx/cocoa/cursor.h
 // Purpose:     wxCursor class
 // Author:      David Elliott <dfe@cox.net>
 // Modified by:
 // Created:     2002/11/27
-// RCS-ID:      
+// RCS-ID:      $Id$
 // Copyright:   (c) David Elliott
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_COCOA_CURSOR_H_
@@ -17,7 +17,7 @@
 class WXDLLEXPORT wxCursorRefData: public wxObjectRefData
 {
     DECLARE_NO_COPY_CLASS(wxCursorRefData)
-        
+
     friend class WXDLLEXPORT wxBitmap;
     friend class WXDLLEXPORT wxCursor;
 public:
@@ -54,9 +54,9 @@ public:
 
   inline bool operator == (const wxCursor& cursor) const { return m_refData == cursor.m_refData; }
   inline bool operator != (const wxCursor& cursor) const { return m_refData != cursor.m_refData; }
-  
+
   inline WX_NSCursor GetNSCursor() const
-  {	
+  {
     return (M_CURSORDATA ? M_CURSORDATA->m_hCursor : 0);
   }
 
@@ -64,4 +64,5 @@ public:
 
 extern WXDLLEXPORT void wxSetCursor(const wxCursor& cursor);
 
-#endif // _WX_COCOA_CURSOR_H_
+#endif
+    // _WX_COCOA_CURSOR_H_

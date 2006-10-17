@@ -1,12 +1,12 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        pnghand.h
+// Name:        wx/os2/pnghand.h
 // Purpose:     PNG bitmap handler
 // Author:      Julian Smart
 // Modified by:
 // Created:     04/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Microsoft, Julian Smart
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_PNGHAND_H_
@@ -38,5 +38,4 @@ public:
 };
 
 #endif
-  // _WX_PNGHAND_H_
-
+    // _WX_PNGHAND_H_

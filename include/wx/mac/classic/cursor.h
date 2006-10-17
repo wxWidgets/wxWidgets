@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        cursor.h
+// Name:        wx/mac/classic/cursor.h
 // Purpose:     wxCursor class
 // Author:      Stefan Csomor
 // Modified by:
@@ -17,7 +17,7 @@
 class WXDLLEXPORT wxCursorRefData: public wxBitmapRefData
 {
     DECLARE_NO_COPY_CLASS(wxCursorRefData)
-        
+
     friend class WXDLLEXPORT wxBitmap;
     friend class WXDLLEXPORT wxCursor;
 public:
@@ -55,7 +55,7 @@ public:
   wxCursor(int cursor_type);
   virtual ~wxCursor();
 
-	bool CreateFromXpm(const char **bits) ;
+  bool CreateFromXpm(const char **bits) ;
   virtual bool Ok() const { return IsOk(); }
   virtual bool IsOk() const { return (m_refData != NULL && ( M_CURSORDATA->m_hCursor != NULL || M_CURSORDATA->m_themeCursor != -1 ) ) ; }
 

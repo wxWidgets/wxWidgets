@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        dnd.h
+// Name:        wx/mac/classic/dnd.h
 // Purpose:     Declaration of the wxDropTarget, wxDropSource class etc.
 // Author:      Stefan Csomor
 // RCS-ID:      $Id$
@@ -55,7 +55,7 @@ class WXDLLEXPORT wxDropTarget: public wxDropTargetBase
     virtual bool OnDrop(wxCoord x, wxCoord y);
     virtual wxDragResult OnData(wxCoord x, wxCoord y, wxDragResult def);
     virtual bool GetData();
-    
+
     bool CurrentDragHasSupportedFormat() ;
     void SetCurrentDrag( void* drag ) { m_currentDrag = drag ; }
     void* GetCurrentDrag() { return m_currentDrag ; }
@@ -95,16 +95,14 @@ public:
     wxWindow*     GetWindow() { return m_window ; }
     void SetCurrentDrag( void* drag ) { m_currentDrag = drag ; }
     void* GetCurrentDrag() { return m_currentDrag ; }
-	bool			MacInstallDefaultCursor(wxDragResult effect) ;
-  protected :
-  	
+    bool MacInstallDefaultCursor(wxDragResult effect) ;
+protected :
+
     wxWindow        *m_window;
     void* m_currentDrag ;
 };
 
+#endif // wxUSE_DRAG_AND_DROP
+
 #endif
-      // D&D
-
-#endif  
-       //_WX_DND_H_
-
+    //_WX_DND_H_

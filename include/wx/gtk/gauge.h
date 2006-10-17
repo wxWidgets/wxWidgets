@@ -1,10 +1,10 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        gauge.h
+// Name:        wx/gtk/gauge.h
 // Purpose:
 // Author:      Robert Roebling
 // Id:          $Id$
 // Copyright:   (c) 1998 Robert Roebling
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_GTK_GAUGE_H_
@@ -57,12 +57,12 @@ public:
     virtual void Pulse();
 
     bool IsVertical() const { return HasFlag(wxGA_VERTICAL); }
-    
+
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
 
     virtual wxVisualAttributes GetDefaultAttributes() const;
-    
+
     // implementation
     // -------------
 
@@ -83,4 +83,5 @@ private:
     DECLARE_DYNAMIC_CLASS(wxGauge)
 };
 
-#endif // _WX_GTK_GAUGE_H_
+#endif
+    // _WX_GTK_GAUGE_H_

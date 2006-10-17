@@ -1,12 +1,12 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        helpxxxx.h
+// Name:        wx/os2/helpwin.h
 // Purpose:     Help system: native implementation for your system.
 // Author:      David Webster
 // Modified by:
-// Created:      10/09/99
+// Created:     10/09/99
 // RCS-ID:      $Id$
 // Copyright:   (c) David Webster
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_HELPWIN_H_

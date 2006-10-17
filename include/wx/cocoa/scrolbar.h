@@ -6,7 +6,7 @@
 // Created:     2004/04/25
 // RCS-ID:      $Id$
 // Copyright:   (c) 2004 David Elliott
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_COCOA_SCROLBAR_H__
@@ -71,4 +71,5 @@ protected:
     int m_pageSize;
 };
 
-#endif // _WX_COCOA_SCROLBAR_H__
+#endif
+    // _WX_COCOA_SCROLBAR_H__

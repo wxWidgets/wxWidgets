@@ -91,7 +91,7 @@ protected:
     wxString    m_szProductName; //product name
     int         m_nProductId; //product id
     int         m_nManufacturerId; //manufacturer id
-    mach_port_t 			m_pPort;            //mach port to use
+    mach_port_t m_pPort;            //mach port to use
 };
 
 // ---------------------------------------------------------------------------
@@ -112,4 +112,5 @@ public:
 
 #endif //__DARWIN__
 
-#endif //WX_MACCARBONHID_H
+#endif
+    // _WX_MACCARBONHID_H_

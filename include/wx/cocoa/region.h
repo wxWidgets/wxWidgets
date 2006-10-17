@@ -2,11 +2,11 @@
 // Name:        wx/cocoa/region.h
 // Purpose:     wxRegion class
 // Author:      David Elliott
-// Modified by: 
+// Modified by:
 // Created:     2004/04/12
 // RCS-ID:      $Id$
 // Copyright:   (c) 2004 David Elliott
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_COCOA_REGION_H__
@@ -68,4 +68,5 @@ public:
     {   return *(wxRegionIterator*)&(this->wxRegionIteratorGeneric::operator=(iter)); }
 };
 
-#endif //ndef _WX_COCOA_REGION_H__
+#endif
+    //ndef _WX_COCOA_REGION_H__

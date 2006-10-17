@@ -6,7 +6,7 @@
 // Created:     2003/04/01
 // RCS-ID:      $Id$
 // Copyright:   (c) 2003 David Elliott
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef __WX_COCOA_DCCLIENT_H__
@@ -66,4 +66,5 @@ protected:
     virtual bool CocoaUnlockFocus();
 };
 
-#endif // __WX_COCOA_DCCLIENT_H__
+#endif
+    // __WX_COCOA_DCCLIENT_H__

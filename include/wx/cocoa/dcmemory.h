@@ -6,7 +6,7 @@
 // Created:     2003/03/16
 // RCS-ID:      $Id$
 // Copyright:   (c) 2003 David Elliott
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef __WX_COCOA_DCMEMORY_H__
@@ -36,4 +36,5 @@ protected:
         int logicalFunc, bool useMask, wxCoord xsrcMask, wxCoord ysrcMask);
 };
 
-#endif // __WX_COCOA_DCMEMORY_H__
+#endif
+    // __WX_COCOA_DCMEMORY_H__

@@ -1,12 +1,12 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        dcscreen.h
+// Name:        wx/x11/dcscreen.h
 // Purpose:     wxScreenDC class
 // Author:      Julian Smart
 // Modified by:
 // Created:     17/09/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_DCSCREEN_H_
@@ -43,5 +43,4 @@ private:
 
 
 #endif
-// _WX_DCSCREEN_H_
-
+    // _WX_DCSCREEN_H_
