@@ -149,6 +149,13 @@ public:
     void OnParagraphSpacingMore(wxCommandEvent& event);
     void OnParagraphSpacingLess(wxCommandEvent& event);
 
+    void OnNumberList(wxCommandEvent& event);
+    void OnItemizeList(wxCommandEvent& event);
+    void OnRenumberList(wxCommandEvent& event);
+    void OnPromoteList(wxCommandEvent& event);
+    void OnDemoteList(wxCommandEvent& event);
+    void OnClearList(wxCommandEvent& event);
+
     void OnViewHTML(wxCommandEvent& event);
 
     void OnSwitchStyleSheets(wxCommandEvent& event);
@@ -196,6 +203,13 @@ enum
     ID_FORMAT_LINE_SPACING_HALF,
     ID_FORMAT_LINE_SPACING_DOUBLE,
     ID_FORMAT_LINE_SPACING_SINGLE,
+
+    ID_FORMAT_NUMBER_LIST,
+    ID_FORMAT_ITEMIZE_LIST,
+    ID_FORMAT_RENUMBER_LIST,
+    ID_FORMAT_PROMOTE_LIST,
+    ID_FORMAT_DEMOTE_LIST,
+    ID_FORMAT_CLEAR_LIST,
 
     ID_VIEW_HTML,
     ID_SWITCH_STYLE_SHEETS,
@@ -253,6 +267,13 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(ID_FORMAT_PARAGRAPH_SPACING_LESS,  MyFrame::OnParagraphSpacingLess)
 
     EVT_MENU(ID_INSERT_SYMBOL,  MyFrame::OnInsertSymbol)
+
+    EVT_MENU(ID_FORMAT_NUMBER_LIST, MyFrame::OnNumberList)
+    EVT_MENU(ID_FORMAT_ITEMIZE_LIST, MyFrame::OnItemizeList)
+    EVT_MENU(ID_FORMAT_RENUMBER_LIST, MyFrame::OnRenumberList)
+    EVT_MENU(ID_FORMAT_PROMOTE_LIST, MyFrame::OnPromoteList)
+    EVT_MENU(ID_FORMAT_DEMOTE_LIST, MyFrame::OnDemoteList)
+    EVT_MENU(ID_FORMAT_CLEAR_LIST, MyFrame::OnClearList)
 
     EVT_MENU(ID_VIEW_HTML, MyFrame::OnViewHTML)
     EVT_MENU(ID_SWITCH_STYLE_SHEETS, MyFrame::OnSwitchStyleSheets)
@@ -410,6 +431,47 @@ void MyApp::CreateStyles()
     redDef->SetStyle(redAttr);
 
     m_styleSheet->AddCharacterStyle(redDef);
+
+    wxRichTextListStyleDefinition* bulletList = new wxRichTextListStyleDefinition(wxT("Bullet List 1"));
+    int i;
+    for (i = 0; i < 10; i++)
+    {
+        wxString bulletSymbol;
+        if (i == 0)
+            bulletSymbol = wxT("*");
+        else if (i == 1)
+            bulletSymbol = wxT("-");
+        else if (i == 2)
+            bulletSymbol = wxT("*");
+        else if (i == 3)
+            bulletSymbol = wxT("-");
+        else
+            bulletSymbol = wxT("*");
+
+        bulletList->SetAttributes(i, (i+1)*60, 60, wxTEXT_ATTR_BULLET_STYLE_SYMBOL, bulletSymbol);
+    }
+
+    m_styleSheet->AddListStyle(bulletList);
+
+    wxRichTextListStyleDefinition* numberedList = new wxRichTextListStyleDefinition(wxT("Numbered List 1"));
+    for (i = 0; i < 10; i++)
+    {
+        long numberStyle;
+        if (i == 0)
+            numberStyle = wxTEXT_ATTR_BULLET_STYLE_ARABIC|wxTEXT_ATTR_BULLET_STYLE_PERIOD;
+        else if (i == 1)
+            numberStyle = wxTEXT_ATTR_BULLET_STYLE_LETTERS_LOWER|wxTEXT_ATTR_BULLET_STYLE_PARENTHESES;
+        else if (i == 2)
+            numberStyle = wxTEXT_ATTR_BULLET_STYLE_ROMAN_LOWER|wxTEXT_ATTR_BULLET_STYLE_PARENTHESES;
+        else if (i == 3)
+            numberStyle = wxTEXT_ATTR_BULLET_STYLE_ROMAN_UPPER|wxTEXT_ATTR_BULLET_STYLE_PARENTHESES;
+        else
+            numberStyle = wxTEXT_ATTR_BULLET_STYLE_ARABIC|wxTEXT_ATTR_BULLET_STYLE_PERIOD;
+
+        numberedList->SetAttributes(i, (i+1)*60, 60, numberStyle);
+    }
+
+    m_styleSheet->AddListStyle(numberedList);
 }
 
 // ----------------------------------------------------------------------------
@@ -479,6 +541,13 @@ MyFrame::MyFrame(const wxString& title, wxWindowID id, const wxPoint& pos,
     formatMenu->Append(ID_FORMAT_FONT, _("&Font..."));
     formatMenu->Append(ID_FORMAT_PARAGRAPH, _("&Paragraph..."));
     formatMenu->Append(ID_FORMAT_CONTENT, _("Font and Pa&ragraph...\tShift+Ctrl+F"));
+    formatMenu->AppendSeparator();
+    formatMenu->Append(ID_FORMAT_NUMBER_LIST, _("Number List"));
+    formatMenu->Append(ID_FORMAT_ITEMIZE_LIST, _("Itemize List"));
+    formatMenu->Append(ID_FORMAT_RENUMBER_LIST, _("Renumber List"));
+    formatMenu->Append(ID_FORMAT_PROMOTE_LIST, _("Promote List Items"));
+    formatMenu->Append(ID_FORMAT_DEMOTE_LIST, _("Demote List Items"));
+    formatMenu->Append(ID_FORMAT_CLEAR_LIST, _("Clear List Formatting"));
     formatMenu->AppendSeparator();
     formatMenu->Append(ID_SWITCH_STYLE_SHEETS, _("&Switch Style Sheets"));
 
@@ -555,41 +624,25 @@ MyFrame::MyFrame(const wxString& title, wxWindowID id, const wxPoint& pos,
     combo->SetRichTextCtrl(m_richTextCtrl);
     combo->UpdateStyles();
 
-    wxRichTextStyleListBox* styleListBox = new wxRichTextStyleListBox(splitter, ID_RICHTEXT_STYLE_LIST);
+    wxRichTextStyleListCtrl* styleListCtrl = new wxRichTextStyleListCtrl(splitter, ID_RICHTEXT_STYLE_LIST);
 
     wxSize display = wxGetDisplaySize();
     if ( is_pda && ( display.GetWidth() < display.GetHeight() ) )
     {
-        splitter->SplitHorizontally(m_richTextCtrl, styleListBox);
+        splitter->SplitHorizontally(m_richTextCtrl, styleListCtrl);
     }
     else
     {
-        splitter->SplitVertically(m_richTextCtrl, styleListBox, 500);
+        splitter->SplitVertically(m_richTextCtrl, styleListCtrl, 500);
     }
 
     splitter->UpdateSize();
 
-    styleListBox->SetStyleSheet(wxGetApp().GetStyleSheet());
-    styleListBox->SetRichTextCtrl(m_richTextCtrl);
-    styleListBox->UpdateStyles();
+    styleListCtrl->SetStyleSheet(wxGetApp().GetStyleSheet());
+    styleListCtrl->SetRichTextCtrl(m_richTextCtrl);
+    styleListCtrl->UpdateStyles();
 
     wxRichTextCtrl& r = *m_richTextCtrl;
-
-#if 0
-    r.WriteText(wxT("One\nTwo\nThree\n"));
-#if 0
-    int i;
-    for (i = 0; i < 3; i++)
-    {
-
-        wxRichTextParagraph* para = r.GetBuffer().GetParagraphAtLine(i);
-        if (para)
-        {
-            wxLogDebug(wxT("Range for paragraph %d: %d -> %d"), i, para->GetRange().GetStart(), para->GetRange().GetEnd());
-        }
-    }
-#endif
-#else
 
     r.BeginSuppressUndo();
 
@@ -669,7 +722,7 @@ MyFrame::MyFrame(const wxString& title, wxWindowID id, const wxPoint& pos,
     r.BeginNumberedBullet(1, 100, 60);
     r.Newline();
 
-    r.WriteText(wxT("This is my first item. Note that wxRichTextCtrl doesn't automatically do numbering, but this will be added later."));
+    r.WriteText(wxT("This is my first item. Note that wxRichTextCtrl can apply numbering and bullets automatically based on list styles, but this list is formatted explicitly by setting indents."));
     r.EndNumberedBullet();
 
     r.BeginNumberedBullet(2, 100, 60);
@@ -758,7 +811,6 @@ MyFrame::MyFrame(const wxString& title, wxWindowID id, const wxPoint& pos,
     r.EndParagraphSpacing();
 
     r.EndSuppressUndo();
-#endif
 }
 
 
@@ -1289,3 +1341,70 @@ void MyFrame::OnInsertSymbol(wxCommandEvent& WXUNUSED(event))
         }
     }
 }
+
+void MyFrame::OnNumberList(wxCommandEvent& WXUNUSED(event))
+{
+    wxRichTextCtrl* ctrl = (wxRichTextCtrl*) FindWindow(ID_RICHTEXT_CTRL);
+    
+    if (ctrl->HasSelection())
+    {
+        wxRichTextRange range = ctrl->GetSelectionRange();
+        ctrl->SetListStyle(range, wxT("Numbered List 1"), wxRICHTEXT_SETSTYLE_WITH_UNDO|wxRICHTEXT_SETSTYLE_RENUMBER);
+    }
+}
+
+void MyFrame::OnItemizeList(wxCommandEvent& WXUNUSED(event))
+{
+    wxRichTextCtrl* ctrl = (wxRichTextCtrl*) FindWindow(ID_RICHTEXT_CTRL);
+
+    if (ctrl->HasSelection())
+    {
+        wxRichTextRange range = ctrl->GetSelectionRange();
+        ctrl->SetListStyle(range, wxT("Bullet List 1"));
+    }
+}
+
+void MyFrame::OnRenumberList(wxCommandEvent& WXUNUSED(event))
+{
+    wxRichTextCtrl* ctrl = (wxRichTextCtrl*) FindWindow(ID_RICHTEXT_CTRL);
+
+    if (ctrl->HasSelection())
+    {
+        wxRichTextRange range = ctrl->GetSelectionRange();
+        ctrl->NumberList(range, NULL, wxRICHTEXT_SETSTYLE_WITH_UNDO|wxRICHTEXT_SETSTYLE_RENUMBER);
+    }
+}
+
+void MyFrame::OnPromoteList(wxCommandEvent& WXUNUSED(event))
+{
+    wxRichTextCtrl* ctrl = (wxRichTextCtrl*) FindWindow(ID_RICHTEXT_CTRL);
+
+    if (ctrl->HasSelection())
+    {
+        wxRichTextRange range = ctrl->GetSelectionRange();
+        ctrl->PromoteList(1, range, NULL);
+    }
+}
+
+void MyFrame::OnDemoteList(wxCommandEvent& WXUNUSED(event))
+{
+    wxRichTextCtrl* ctrl = (wxRichTextCtrl*) FindWindow(ID_RICHTEXT_CTRL);
+
+    if (ctrl->HasSelection())
+    {
+        wxRichTextRange range = ctrl->GetSelectionRange();
+        ctrl->PromoteList(-1, range, NULL);
+    }
+}
+
+void MyFrame::OnClearList(wxCommandEvent& WXUNUSED(event))
+{
+    wxRichTextCtrl* ctrl = (wxRichTextCtrl*) FindWindow(ID_RICHTEXT_CTRL);
+
+    if (ctrl->HasSelection())
+    {
+        wxRichTextRange range = ctrl->GetSelectionRange();
+        ctrl->ClearListStyle(range);
+    }
+}
+
