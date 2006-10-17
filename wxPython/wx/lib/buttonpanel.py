@@ -11,7 +11,7 @@
 # Python Code By:
 #
 # Andrea Gavana, @ 02 Oct 2006
-# Latest Revision: 16 Oct 2006, 17.00 GMT
+# Latest Revision: 17 Oct 2006, 17.00 GMT
 #
 #
 # For All Kind Of Problems, Requests Of Enhancements And Bug Reports, Please
@@ -44,6 +44,33 @@ classic look).
 
 Usage
 -----
+
+ButtonPanel supports 4 alignments: left, right, top, bottom, which have a
+different meaning and behavior wrt wx.Toolbar. The easiest thing is to try
+the demo to understand, but I'll try to explain how it works.
+
+CASE 1: ButtonPanel has a main caption text
+
+Left alignment means ButtonPanel is horizontal, with the text aligned to the
+left. When you shrink the demo frame, if there is not enough room for all
+the controls to be shown, the controls closest to the text are hidden;
+
+Right alignment means ButtonPanel is horizontal, with the text aligned to the
+right. Item layout as above;
+
+Top alignment means ButtonPanel is vertical, with the text aligned to the top.
+Item layout as above;
+
+Bottom alignment means ButtonPanel is vertical, with the text aligned to the
+bottom. Item layout as above.
+
+
+CASE 2: ButtonPanel has *no* main caption text
+In this case, left and right alignment are the same (as top and bottom are the same),
+but the layout strategy changes: now if there is not enough room for all the controls
+to be shown, the last added items are hidden ("last" means on the far right for
+horizontal ButtonPanels and far bottom for vertical ButtonPanels).
+
 
 The following example shows a simple implementation that uses ButtonPanel
 inside a very simple frame::
@@ -178,6 +205,9 @@ BP_ALIGN_BOTTOM = 8
 BP_DEFAULT_STYLE = 1
 BP_USE_GRADIENT = 2
 
+# Delay used to cancel the longHelp in the statusbar field
+_DELAY = 3000
+
 
 # Check for the new method in 2.7 (not present in 2.6.3.3)
 if wx.VERSION_STRING < "2.7":
@@ -292,13 +322,13 @@ class BPArt:
         self._buttontext_inactive_color = wx.SystemSettings_GetColour(wx.SYS_COLOUR_GRAYTEXT)
         self._selection_brush = wx.Brush(wx.Color(225, 225, 255))
         self._selection_pen = wx.Pen(wx.SystemSettings_GetColour(wx.SYS_COLOUR_ACTIVECAPTION))
-
+        
         sysfont = wx.SystemSettings.GetFont(wx.SYS_DEFAULT_GUI_FONT)
         self._caption_font = wx.Font(sysfont.GetPointSize(), wx.DEFAULT, wx.NORMAL, wx.BOLD,
                                      False, sysfont.GetFaceName())
         self._buttontext_font = wx.Font(sysfont.GetPointSize(), wx.DEFAULT, wx.NORMAL, wx.NORMAL,
                                         False, sysfont.GetFaceName())
-    
+   
         self._separator_size = 7
         self._margins_size = wx.Size(6, 6)
         self._caption_border_size = 3
@@ -596,6 +626,25 @@ class BPArt:
             gf += gstep
             bf += bstep 
                 
+
+class StatusBarTimer(wx.Timer):
+    """Timer used for deleting StatusBar long help after _DELAY seconds."""
+
+    def __init__(self, owner):
+        """
+        Default class constructor.
+        For internal use: do not call it in your code!
+        """
+        
+        wx.Timer.__init__(self)
+        self._owner = owner        
+
+
+    def Notify(self):
+        """The timer has expired."""
+
+        self._owner.OnStatusBarTimer()
+
         
 class Control(wx.EvtHandler):
 
@@ -895,7 +944,8 @@ class ButtonPanelText(Control):
 class ButtonInfo(Control):
 
     def __init__(self, parent, id=wx.ID_ANY, bmp=wx.NullBitmap,
-                 status="Normal", text="", kind=wx.ITEM_NORMAL):
+                 status="Normal", text="", kind=wx.ITEM_NORMAL,
+                 shortHelp="", longHelp=""):
         """
         Default class constructor.
 
@@ -903,8 +953,13 @@ class ButtonInfo(Control):
         - parent: the parent window (ButtonPanel);
         - id: the button id;
         - bmp: the associated bitmap;
-        - status: button status (pressed, hovered, None).
-        - text to be displayed either below of to the right of the button
+        - status: button status (pressed, hovered, normal).
+        - text: text to be displayed either below of to the right of the button
+        - kind: button kind, may be wx.ITEM_NORMAL for standard buttons or
+          wx.ITEM_CHECK for toggle buttons;
+        - shortHelp: a short help to be shown in the button tooltip;
+        - longHelp: this string is shown in the statusbar (if any) of the parent
+          frame when the mouse pointer is inside the button.
         """
         
         if id == wx.ID_ANY:
@@ -916,6 +971,8 @@ class ButtonInfo(Control):
         self._kind = kind
         self._toggle = False
         self._textAlignment = BP_BUTTONTEXT_ALIGN_BOTTOM
+        self._shortHelp = shortHelp
+        self._longHelp = longHelp
 
         disabledbmp = GrayOut(bmp)
 
@@ -982,7 +1039,7 @@ class ButtonInfo(Control):
         """ Checks whether a ButtonPanel repaint is needed or not. Convenience function. """
 
         if status == self._status:
-            self._parent.Refresh()
+            self._parent.RefreshRect(self.GetRect())
 
         
     def SetBitmap(self, bmp, status="Normal"):
@@ -1041,7 +1098,7 @@ class ButtonInfo(Control):
             status = "Toggled"
             
         self._status = status
-        self._parent.Refresh()
+        self._parent.RefreshRect(self.GetRect())
 
 
     def GetTextAlignment(self):
@@ -1137,6 +1194,30 @@ class ButtonInfo(Control):
         """ Returns the button type (standard or toggle). """
 
         return self._kind
+
+
+    def SetShortHelp(self, help=""):
+        """ Sets the help string to be shown in a tootip. """
+        
+        self._shortHelp = help
+
+
+    def GetShortHelp(self):
+        """ Returns the help string shown in a tootip. """
+
+        return self._shortHelp
+
+
+    def SetLongHelp(self, help=""):
+        """ Sets the help string to be shown in the statusbar. """
+
+        self._longHelp = help
+
+
+    def GetLongHelp(self):
+        """ Returns the help string shown in the statusbar. """
+
+        return self._longHelp
     
                 
     Bitmap = property(GetBitmap, SetBitmap)
@@ -1164,13 +1245,17 @@ class ButtonPanel(wx.PyPanel):
         """        
         
         wx.PyPanel.__init__(self, parent, id, wx.DefaultPosition, wx.DefaultSize,
-                          wx.NO_BORDER, name=name)
+                            wx.NO_BORDER, name=name)
         
         self._vButtons = []
         self._vSeparators = []
 
         self._nStyle = style
         self._alignment = alignment
+        self._statusTimer = None
+        self._useHelp = True
+        self._freezeCount = 0
+        self._currentButton = -1
 
         self._art = BPArt(style)
 
@@ -1492,7 +1577,7 @@ class ButtonPanel(wx.PyPanel):
             h += 2*margins.y + len(self._vSeparators)*separator_size
         else:
             w += 2*margins.x + len(self._vSeparators)*separator_size
-
+            
         return wx.Size(w, h)
 
 
@@ -1660,17 +1745,35 @@ class ButtonPanel(wx.PyPanel):
         """ Handles the wx.EVT_MOTION event for ButtonPanel. """
         
         # Check to see if we are hovering a button
-        for btn in self._vButtons:
+        tabId, flags = self.HitTest(event.GetPosition())
 
-            if not btn.IsEnabled():
-                continue
+        if flags != BP_HT_BUTTON:
+            self.RemoveHelp()
+            self.RepaintOldSelection()
+            self._currentButton = -1
+            return
+        
+        btn = self._vButtons[tabId]
 
-            if btn.GetRect().Contains(event.GetPosition()):
-                btn.SetStatus("Hover")
-            else:
-                btn.SetStatus("Normal") 
+        if not btn.IsEnabled():
+            self.RemoveHelp()
+            self.RepaintOldSelection()
+            return
+
+        if tabId != self._currentButton:
+            self.RepaintOldSelection()
+        
+        if btn.GetRect().Contains(event.GetPosition()):
+            btn.SetStatus("Hover")
+        else:
+            btn.SetStatus("Normal")
+
+        if tabId != self._currentButton:
+            self.RemoveHelp()
+            self.DoGiveHelp(btn)
+            
+        self._currentButton = tabId
                  
-        self.Refresh() 
         event.Skip() 
  
 
@@ -1679,40 +1782,42 @@ class ButtonPanel(wx.PyPanel):
  
         tabId, hit = self.HitTest(event.GetPosition())
 
-        if hit == BP_HT_BUTTON and self._vButtons[tabId].IsEnabled():
-             
-            self._vButtons[tabId].SetStatus("Pressed")
-            self.Refresh() 
-
+        if hit == BP_HT_BUTTON:
+            btn = self._vButtons[tabId]
+            if btn.IsEnabled():                 
+                btn.SetStatus("Pressed")
+                self._currentButton = tabId
+ 
 
     def OnLeftUp(self, event):
         """ Handles the wx.EVT_LEFT_UP event for ButtonPanel. """
         
         tabId, flags = self.HitTest(event.GetPosition())
-        hit = self._vButtons[tabId]
         
-        if flags == BP_HT_BUTTON:
+        if flags != BP_HT_BUTTON:
+            return
+            
+        hit = self._vButtons[tabId]
 
-            if hit.GetStatus() == "Disabled":
-                return
+        if hit.GetStatus() == "Disabled":
+            return
 
-            for btn in self._vButtons:
-                if btn != hit:
-                    btn.SetFocus(False)
-                    
-            if hit.GetStatus() == "Pressed": 
-                # Fire a button click event 
-                btnEvent = wx.CommandEvent(wx.wxEVT_COMMAND_BUTTON_CLICKED, hit.GetId())
-                self.GetEventHandler().ProcessEvent(btnEvent) 
-
-                hit.SetToggled(not hit.GetToggled())
+        for btn in self._vButtons:
+            if btn != hit:
+                btn.SetFocus(False)
                 
-                # Update the button status to be hovered 
-                hit.SetStatus("Hover")
-                hit.SetFocus()
+        if hit.GetStatus() == "Pressed": 
+            # Fire a button click event 
+            btnEvent = wx.CommandEvent(wx.wxEVT_COMMAND_BUTTON_CLICKED, hit.GetId())
+            self.GetEventHandler().ProcessEvent(btnEvent) 
 
-                self.Refresh() 
-                 
+            hit.SetToggled(not hit.GetToggled())
+            
+            # Update the button status to be hovered 
+            hit.SetStatus("Hover")
+            hit.SetFocus()
+            self._currentButton = tabId
+            
 
     def OnMouseLeave(self, event):
         """ Handles the wx.EVT_LEAVE_WINDOW event for ButtonPanel. """
@@ -1722,25 +1827,116 @@ class ButtonPanel(wx.PyPanel):
             if not btn.IsEnabled():
                 continue
             btn.SetStatus("Normal")
-            
-        self.Refresh() 
+
+        self.RemoveHelp()
+                
         event.Skip() 
  
 
     def OnMouseEnterWindow(self, event):
         """ Handles the wx.EVT_ENTER_WINDOW event for ButtonPanel. """
-         
+
+        tabId, flags = self.HitTest(event.GetPosition())
+
+        if flags == BP_HT_BUTTON:
+            
+            hit = self._vButtons[tabId]
+
+            if hit.GetStatus() == "Disabled":
+                event.Skip()
+                return
+
+            self.DoGiveHelp(hit)
+            self._currentButton = tabId
+                        
         event.Skip() 
  
 
+    def DoGiveHelp(self, hit):
+        """ Gives tooltips and help in StatusBar. """
+
+        if not self.GetUseHelp():
+            return
+        
+        shortHelp = hit.GetShortHelp()
+        if shortHelp:
+            self.SetToolTipString(shortHelp)
+
+        longHelp = hit.GetLongHelp()
+        if not longHelp:
+            return
+        
+        topLevel = wx.GetTopLevelParent(self)
+        
+        if isinstance(topLevel, wx.Frame) and topLevel.GetStatusBar():
+            statusBar = topLevel.GetStatusBar()
+
+            if self._statusTimer and self._statusTimer.IsRunning():
+                self._statusTimer.Stop()
+                statusBar.PopStatusText(0)
+                
+            statusBar.PushStatusText(longHelp, 0)
+            self._statusTimer = StatusBarTimer(self)
+            self._statusTimer.Start(_DELAY, wx.TIMER_ONE_SHOT)
+
+
+    def RemoveHelp(self):
+        """ Removes the tooltips and statusbar help (if any) for a button. """
+
+        if not self.GetUseHelp():
+            return
+
+        self.SetToolTipString("")
+
+        if self._statusTimer and self._statusTimer.IsRunning():
+            topLevel = wx.GetTopLevelParent(self)
+            statusBar = topLevel.GetStatusBar()
+            self._statusTimer.Stop()
+            statusBar.PopStatusText(0)
+            self._statusTimer = None
+        
+
+    def RepaintOldSelection(self):
+        """ Repaints the old selected/hovered button. """
+        
+        current = self._currentButton
+        
+        if current == -1:
+            return
+
+        btn = self._vButtons[current]
+        if not btn.IsEnabled():
+            return
+
+        btn.SetStatus("Normal")
+
+                
+    def OnStatusBarTimer(self):
+        """ Handles the timer expiring to delete the longHelp in the StatusBar. """
+
+        topLevel = wx.GetTopLevelParent(self)
+        statusBar = topLevel.GetStatusBar()        
+        statusBar.PopStatusText(0)
+        
+
+    def SetUseHelp(self, useHelp=True):
+        """ Sets whether or not shortHelp and longHelp should be displayed. """
+
+        self._useHelp = useHelp
+
+
+    def GetUseHelp(self):
+        """ Returns whether or not shortHelp and longHelp should be displayed. """
+        
+        return self._useHelp
+
+    
     def HitTest(self, pt):
         """
         HitTest method for ButtonPanel. Returns the button (if any) and
         a flag (if any).
         """
          
-        btnIdx = -1 
-
         for ii in xrange(len(self._vButtons)):
             if not self._vButtons[ii].IsEnabled():
                 continue
@@ -1754,4 +1950,35 @@ class ButtonPanel(wx.PyPanel):
         """ Returns the associated BPArt art provider. """
 
         return self._art
+    
+
+    def SetBPArt(self, art):
+        """ Sets a new BPArt to ButtonPanel. Useful only if another BPArt class is used. """
+        
+        self._art = art
+        self.Refresh()
+
+    if wx.VERSION < (2,7,1,1):
+        def Freeze(self):
+            """Freeze ButtonPanel."""
+
+            self._freezeCount = self._freezeCount + 1
+            wx.PyPanel.Freeze(self)
+
+
+        def Thaw(self):
+            """Thaw ButtonPanel."""
+
+            if self._freezeCount == 0:
+                raise "\nERROR: Thawing Unfrozen ButtonPanel?"
+
+            self._freezeCount = self._freezeCount - 1
+            wx.PyPanel.Thaw(self)        
+        
+
+        def IsFrozen(self):
+            """ Returns whether a call to Freeze() has been done. """
+
+            return self._freezeCount != 0
+
     

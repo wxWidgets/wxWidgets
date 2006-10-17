@@ -46,6 +46,7 @@ def GetMondrianIcon():
     icon.CopyFromBitmap(GetMondrianBitmap())
     return icon
 
+
 #----------------------------------------------------------------------
 
 class SettingsPanel(wx.MiniFrame):
@@ -461,7 +462,6 @@ class SettingsPanel(wx.MiniFrame):
         self.Destroy()
 
 
-
 #----------------------------------------------------------------------
 
 class ButtonPanelDemo(wx.Frame):
@@ -607,17 +607,22 @@ class ButtonPanelDemo(wx.Frame):
             self.SetProperties()
                     
         self.indices = []
+        
         for count, png in enumerate(self.pngs):
 
+            shortHelp = "Button %d"%(count+1)
+            
             if count < 2:
                 # First 2 buttons are togglebuttons
                 kind = wx.ITEM_CHECK
+                longHelp = "ButtonPanel Toggle Button No %d"%(count+1)
             else:
                 kind = wx.ITEM_NORMAL
-                
+                longHelp = "Simple Button without label No %d"%(count+1)                
+
             btn = bp.ButtonInfo(self.titleBar, wx.NewId(),
-                                png[0],
-                                kind=kind)
+                                png[0], kind=kind,
+                                shortHelp=shortHelp, longHelp=longHelp)
             
             self.titleBar.AddButton(btn)
             self.Bind(wx.EVT_BUTTON, self.OnButton, id=btn.GetId())
@@ -658,7 +663,8 @@ class ButtonPanelDemo(wx.Frame):
         if self.created:
             sizer = self.mainPanel.GetSizer()
             sizer.Detach(0)
-            self.titleBar.Destroy()
+            self.titleBar.Hide()
+            wx.CallAfter(self.titleBar.Destroy)
             self.titleBar = bp.ButtonPanel(self.mainPanel, -1, "A Simple Test & Demo",
                                            style=self.style, alignment=self.alignment)
             self.SetProperties()
@@ -667,6 +673,7 @@ class ButtonPanelDemo(wx.Frame):
         # and text
         
         self.indices = []
+        
         for count in xrange(8):
 
             itemImage = random.randint(0, 3)
@@ -865,7 +872,6 @@ class ButtonPanelDemo(wx.Frame):
         dlg.Destroy()        
 
 
-
 #----------------------------------------------------------------------
 
 class TestPanel(wx.Panel):
@@ -900,7 +906,6 @@ if __name__ == '__main__':
     import sys,os
     import run
     run.main(['', os.path.basename(sys.argv[0])] + sys.argv[1:])
-
-
-  
     
+
+
