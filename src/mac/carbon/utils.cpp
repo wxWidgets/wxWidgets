@@ -2356,7 +2356,10 @@ void wxMacGlobalToLocal( WindowRef window , Point*pt )
 {
 #if MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_4 
     HIPoint p = CGPointMake( pt->h, pt->v );
-    HIPointConvert( &p, kHICoordSpace72DPIGlobal, NULL, kHICoordSpaceWindow, window );
+	HIViewRef contentView ;
+	// TODO check toolbar offset 
+    HIViewFindByID( HIViewGetRoot( window ), kHIViewWindowContentID , &contentView) ;
+	HIPointConvert( &p, kHICoordSpace72DPIGlobal, NULL, kHICoordSpaceView, contentView );
     pt->h = p.x;
     pt->v = p.y;
 #else
@@ -2368,7 +2371,10 @@ void wxMacLocalToGlobal( WindowRef window , Point*pt )
 {
 #if MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_4 
     HIPoint p = CGPointMake( pt->h, pt->v );
-    HIPointConvert( &p, kHICoordSpaceWindow, window, kHICoordSpace72DPIGlobal, NULL );
+ 	HIViewRef contentView ;
+	// TODO check toolbar offset 
+    HIViewFindByID( HIViewGetRoot( window ), kHIViewWindowContentID , &contentView) ;
+    HIPointConvert( &p, kHICoordSpaceView, contentView, kHICoordSpace72DPIGlobal, NULL );
     pt->h = p.x;
     pt->v = p.y;
 #else
