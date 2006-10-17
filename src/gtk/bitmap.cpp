@@ -997,9 +997,6 @@ void wxBitmap::SetPixbuf(GdkPixbuf* pixbuf, int depth)
 
 void wxBitmap::PurgeOtherRepresentations(wxBitmap::Representation keep)
 {
-    // AllocExclusive should not be needed for this internal function
-    wxASSERT(m_refData->GetRefCount() == 1);
-
     if (keep == Pixmap && HasPixbuf())
     {
         g_object_unref (M_BMPDATA->m_pixbuf);
