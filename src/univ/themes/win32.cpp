@@ -1720,7 +1720,7 @@ void wxWin32Renderer::DrawToolBarButton(wxDC& dc,
         {
             int xpoint = (rect.GetLeft() + rect.GetRight() + 1 - bitmap.GetWidth()) / 2;
             int ypoint = (rect.GetTop() + rect.GetBottom() + 1 - bitmap.GetHeight()) / 2;
-            dc.DrawBitmap(bitmap, xpoint, ypoint);
+            dc.DrawBitmap(bitmap, xpoint, ypoint, bitmap.GetMask() != NULL);
         }
     }
     else if (style == wxTOOL_STYLE_SEPARATOR)
