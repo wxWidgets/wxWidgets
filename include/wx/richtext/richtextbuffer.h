@@ -98,6 +98,7 @@ class WXDLLIMPEXP_RICHTEXT wxRichTextParagraph;
 class WXDLLIMPEXP_RICHTEXT wxRichTextFileHandler;
 class WXDLLIMPEXP_RICHTEXT wxRichTextStyleSheet;
 class WXDLLIMPEXP_RICHTEXT wxTextAttrEx;
+class WXDLLIMPEXP_RICHTEXT wxRichTextListStyleDefinition;
 
 /*!
  * Flags determining the available space, passed to Layout
@@ -133,7 +134,7 @@ class WXDLLIMPEXP_RICHTEXT wxTextAttrEx;
 #define wxRICHTEXT_UNFORMATTED      0x02
 
 /*!
- * Flags for SetStyle
+ * Flags for SetStyle/SetListStyle
  */
 
 #define wxRICHTEXT_SETSTYLE_NONE            0x00
@@ -155,6 +156,14 @@ class WXDLLIMPEXP_RICHTEXT wxTextAttrEx;
 // preserved independently from that of e.g. a named paragraph style.
 #define wxRICHTEXT_SETSTYLE_CHARACTERS_ONLY 0x08
 
+// For SetListStyle only: specifies starting from the given number, otherwise
+// deduces number from existing attributes
+#define wxRICHTEXT_SETSTYLE_RENUMBER        0x10
+
+// For SetListStyle only: specifies the list level for all paragraphs, otherwise
+// the current indentation will be used
+#define wxRICHTEXT_SETSTYLE_SPECIFY_LEVEL   0x20
+
 /*!
  * Flags for text insertion
  */
@@ -174,6 +183,7 @@ class WXDLLIMPEXP_RICHTEXT wxTextAttrEx;
 #define wxTEXT_ATTR_BULLET_STYLE            0x00010000
 #define wxTEXT_ATTR_BULLET_NUMBER           0x00020000
 #define wxTEXT_ATTR_BULLET_SYMBOL           0x00040000
+#define wxTEXT_ATTR_LIST_STYLE_NAME         0x00080000
 
 /*!
  * Styles for wxTextAttrEx::SetBulletStyle
@@ -274,18 +284,22 @@ public:
     wxTextAttrEx(const wxTextAttr& attr) { Init(); (*this) = attr; }
     wxTextAttrEx() { Init(); }
 
-    // Initialise this object.
+    // Initialise this object
     void Init();
 
     // Assignment from a wxTextAttrEx object
     void operator= (const wxTextAttrEx& attr);
 
-    // Assignment from a wxTextAttr object.
+    // Assignment from a wxTextAttr object
     void operator= (const wxTextAttr& attr);
+
+    // Equality test
+    bool operator== (const wxTextAttrEx& attr) const;
 
     // setters
     void SetCharacterStyleName(const wxString& name) { m_characterStyleName = name; SetFlags(GetFlags() | wxTEXT_ATTR_CHARACTER_STYLE_NAME); }
     void SetParagraphStyleName(const wxString& name) { m_paragraphStyleName = name; SetFlags(GetFlags() | wxTEXT_ATTR_PARAGRAPH_STYLE_NAME); }
+    void SetListStyleName(const wxString& name) { m_listStyleName = name; SetFlags(GetFlags() | wxTEXT_ATTR_LIST_STYLE_NAME); }
     void SetParagraphSpacingAfter(int spacing) { m_paragraphSpacingAfter = spacing; SetFlags(GetFlags() | wxTEXT_ATTR_PARA_SPACING_AFTER); }
     void SetParagraphSpacingBefore(int spacing) { m_paragraphSpacingBefore = spacing; SetFlags(GetFlags() | wxTEXT_ATTR_PARA_SPACING_BEFORE); }
     void SetLineSpacing(int spacing) { m_lineSpacing = spacing; SetFlags(GetFlags() | wxTEXT_ATTR_LINE_SPACING); }
@@ -296,6 +310,7 @@ public:
 
     const wxString& GetCharacterStyleName() const { return m_characterStyleName; }
     const wxString& GetParagraphStyleName() const { return m_paragraphStyleName; }
+    const wxString& GetListStyleName() const { return m_listStyleName; }
     int GetParagraphSpacingAfter() const { return m_paragraphSpacingAfter; }
     int GetParagraphSpacingBefore() const { return m_paragraphSpacingBefore; }
     int GetLineSpacing() const { return m_lineSpacing; }
@@ -315,6 +330,7 @@ public:
     bool HasLineSpacing() const { return HasFlag(wxTEXT_ATTR_LINE_SPACING); }
     bool HasCharacterStyleName() const { return HasFlag(wxTEXT_ATTR_CHARACTER_STYLE_NAME) || !m_characterStyleName.IsEmpty(); }
     bool HasParagraphStyleName() const { return HasFlag(wxTEXT_ATTR_PARAGRAPH_STYLE_NAME) || !m_paragraphStyleName.IsEmpty(); }
+    bool HasListStyleName() const { return HasFlag(wxTEXT_ATTR_LIST_STYLE_NAME) || !m_listStyleName.IsEmpty(); }
     bool HasBulletStyle() const { return HasFlag(wxTEXT_ATTR_BULLET_STYLE); }
     bool HasBulletNumber() const { return HasFlag(wxTEXT_ATTR_BULLET_NUMBER); }
     bool HasBulletSymbol() const { return HasFlag(wxTEXT_ATTR_BULLET_SYMBOL); }
@@ -331,7 +347,8 @@ public:
         return !HasTextColour() && !HasBackgroundColour() && !HasFont() && !HasAlignment() &&
                !HasTabs() && !HasLeftIndent() && !HasRightIndent() &&
                !HasParagraphSpacingAfter() && !HasParagraphSpacingBefore() && !HasLineSpacing() &&
-               !HasCharacterStyleName() && !HasParagraphStyleName() && !HasBulletNumber() && !HasBulletStyle() && !HasBulletSymbol();
+               !HasCharacterStyleName() && !HasParagraphStyleName() && !HasListStyleName() &&
+               !HasBulletNumber() && !HasBulletStyle() && !HasBulletSymbol();
     }
 
     // return the attribute having the valid font and colours: it uses the
@@ -356,6 +373,9 @@ private:
 
     // Paragraph style
     wxString            m_paragraphStyleName;
+
+    // List style
+    wxString            m_listStyleName;
 };
 
 /*!
@@ -415,6 +435,7 @@ public:
 
     void SetCharacterStyleName(const wxString& name) { m_characterStyleName = name; m_flags |= wxTEXT_ATTR_CHARACTER_STYLE_NAME; }
     void SetParagraphStyleName(const wxString& name) { m_paragraphStyleName = name; m_flags |= wxTEXT_ATTR_PARAGRAPH_STYLE_NAME; }
+    void SetListStyleName(const wxString& name) { m_listStyleName = name; SetFlags(GetFlags() | wxTEXT_ATTR_LIST_STYLE_NAME); }
     void SetParagraphSpacingAfter(int spacing) { m_paragraphSpacingAfter = spacing; m_flags |= wxTEXT_ATTR_PARA_SPACING_AFTER; }
     void SetParagraphSpacingBefore(int spacing) { m_paragraphSpacingBefore = spacing; m_flags |= wxTEXT_ATTR_PARA_SPACING_BEFORE; }
     void SetLineSpacing(int spacing) { m_lineSpacing = spacing; m_flags |= wxTEXT_ATTR_LINE_SPACING; }
@@ -440,6 +461,7 @@ public:
 
     const wxString& GetCharacterStyleName() const { return m_characterStyleName; }
     const wxString& GetParagraphStyleName() const { return m_paragraphStyleName; }
+    const wxString& GetListStyleName() const { return m_listStyleName; }
     int GetParagraphSpacingAfter() const { return m_paragraphSpacingAfter; }
     int GetParagraphSpacingBefore() const { return m_paragraphSpacingBefore; }
     int GetLineSpacing() const { return m_lineSpacing; }
@@ -467,6 +489,7 @@ public:
     bool HasLineSpacing() const { return (m_flags & wxTEXT_ATTR_LINE_SPACING) != 0; }
     bool HasCharacterStyleName() const { return (m_flags & wxTEXT_ATTR_CHARACTER_STYLE_NAME) != 0 || !m_characterStyleName.IsEmpty(); }
     bool HasParagraphStyleName() const { return (m_flags & wxTEXT_ATTR_PARAGRAPH_STYLE_NAME) != 0 || !m_paragraphStyleName.IsEmpty(); }
+    bool HasListStyleName() const { return HasFlag(wxTEXT_ATTR_LIST_STYLE_NAME) || !m_listStyleName.IsEmpty(); }
     bool HasBulletStyle() const { return (m_flags & wxTEXT_ATTR_BULLET_STYLE) != 0; }
     bool HasBulletNumber() const { return (m_flags & wxTEXT_ATTR_BULLET_NUMBER) != 0; }
     bool HasBulletSymbol() const { return (m_flags & wxTEXT_ATTR_BULLET_SYMBOL) != 0; }
@@ -485,7 +508,8 @@ public:
         return !HasTextColour() && !HasBackgroundColour() && !HasFont() && !HasAlignment() &&
                !HasTabs() && !HasLeftIndent() && !HasRightIndent() &&
                !HasParagraphSpacingAfter() && !HasParagraphSpacingBefore() && !HasLineSpacing() &&
-               !HasCharacterStyleName() && !HasParagraphStyleName() && !HasBulletNumber() && !HasBulletStyle() && !HasBulletSymbol();
+               !HasCharacterStyleName() && !HasParagraphStyleName() && !HasListStyleName() &&
+               !HasBulletNumber() && !HasBulletStyle() && !HasBulletSymbol();
     }
 
     // return the attribute having the valid font and colours: it uses the
@@ -528,13 +552,16 @@ private:
 
     // Paragraph style
     wxString            m_paragraphStyleName;
+
+    // List style
+    wxString            m_listStyleName;
 };
 
 #define wxTEXT_ATTR_CHARACTER (wxTEXT_ATTR_FONT | wxTEXT_ATTR_BACKGROUND_COLOUR | wxTEXT_ATTR_TEXT_COLOUR | wxTEXT_ATTR_CHARACTER_STYLE_NAME)
 
 #define wxTEXT_ATTR_PARAGRAPH (wxTEXT_ATTR_ALIGNMENT|wxTEXT_ATTR_LEFT_INDENT|wxTEXT_ATTR_RIGHT_INDENT|wxTEXT_ATTR_TABS|\
     wxTEXT_ATTR_PARA_SPACING_BEFORE|wxTEXT_ATTR_PARA_SPACING_AFTER|wxTEXT_ATTR_LINE_SPACING|\
-    wxTEXT_ATTR_BULLET_STYLE|wxTEXT_ATTR_BULLET_NUMBER|wxTEXT_ATTR_BULLET_SYMBOL|wxTEXT_ATTR_PARAGRAPH_STYLE_NAME)
+    wxTEXT_ATTR_BULLET_STYLE|wxTEXT_ATTR_BULLET_NUMBER|wxTEXT_ATTR_BULLET_SYMBOL|wxTEXT_ATTR_PARAGRAPH_STYLE_NAME|wxTEXT_ATTR_LIST_STYLE_NAME)
 
 #define wxTEXT_ATTR_ALL (wxTEXT_ATTR_CHARACTER|wxTEXT_ATTR_PARAGRAPH)
 
@@ -858,6 +885,10 @@ public:
     void SetPartialParagraph(bool partialPara) { m_partialParagraph = partialPara; }
     bool GetPartialParagraph() const { return m_partialParagraph; }
 
+    /// If this is a buffer, returns the current style sheet. The base layout box
+    /// class doesn't have an associated style sheet.
+    virtual wxRichTextStyleSheet* GetStyleSheet() const { return NULL; }
+
 // Operations
 
     /// Initialize the object.
@@ -952,6 +983,27 @@ public:
     /// Combines 'style' with 'currentStyle' for the purpose of summarising the attributes of a range of
     /// content.
     bool CollectStyle(wxTextAttrEx& currentStyle, const wxTextAttrEx& style, long& multipleStyleAttributes);
+
+    /// Set list style
+    virtual bool SetListStyle(const wxRichTextRange& range, wxRichTextListStyleDefinition* def, int flags = wxRICHTEXT_SETSTYLE_WITH_UNDO, int startFrom = 1, int specifiedLevel = -1);
+    virtual bool SetListStyle(const wxRichTextRange& range, const wxString& defName, int flags = wxRICHTEXT_SETSTYLE_WITH_UNDO, int startFrom = 1, int specifiedLevel = -1);
+
+    /// Clear list for given range
+    virtual bool ClearListStyle(const wxRichTextRange& range, int flags = wxRICHTEXT_SETSTYLE_WITH_UNDO);
+
+    /// Number/renumber any list elements in the given range.
+    /// def/defName can be NULL/empty to indicate that the existing list style should be used.
+    virtual bool NumberList(const wxRichTextRange& range, wxRichTextListStyleDefinition* def, int flags = wxRICHTEXT_SETSTYLE_WITH_UNDO, int startFrom = 1, int specifiedLevel = -1);
+    virtual bool NumberList(const wxRichTextRange& range, const wxString& defName, int flags = wxRICHTEXT_SETSTYLE_WITH_UNDO, int startFrom = 1, int specifiedLevel = -1);
+
+    /// Promote the list items within the given range. promoteBy can be a positive or negative number, e.g. 1 or -1
+    /// def/defName can be NULL/empty to indicate that the existing list style should be used.
+    virtual bool PromoteList(int promoteBy, const wxRichTextRange& range, wxRichTextListStyleDefinition* def, int flags = wxRICHTEXT_SETSTYLE_WITH_UNDO, int specifiedLevel = -1);
+    virtual bool PromoteList(int promoteBy, const wxRichTextRange& range, const wxString& defName, int flags = wxRICHTEXT_SETSTYLE_WITH_UNDO, int specifiedLevel = -1);
+
+    /// Helper for NumberList and PromoteList, that does renumbering and promotion simultaneously
+    /// def/defName can be NULL/empty to indicate that the existing list style should be used.
+    virtual bool DoNumberList(const wxRichTextRange& range, const wxRichTextRange& promotionRange, int promoteBy, wxRichTextListStyleDefinition* def, int flags = wxRICHTEXT_SETSTYLE_WITH_UNDO, int startFrom = 1, int specifiedLevel = -1);
 
     /// Test if this whole range has character attributes of the specified kind. If any
     /// of the attributes are different within the range, the test fails. You
@@ -1465,7 +1517,13 @@ public:
 
     /// Set style sheet, if any.
     void SetStyleSheet(wxRichTextStyleSheet* styleSheet) { m_styleSheet = styleSheet; }
-    wxRichTextStyleSheet* GetStyleSheet() const { return m_styleSheet; }
+    virtual wxRichTextStyleSheet* GetStyleSheet() const { return m_styleSheet; }
+
+    /// Push style sheet to top of stack
+    bool PushStyleSheet(wxRichTextStyleSheet* styleSheet);
+
+    /// Pop style sheet from top of stack
+    wxRichTextStyleSheet* PopStyleSheet();
 
 // Operations
 

@@ -1617,7 +1617,7 @@ bool wxRichTextParagraphLayoutBox::SetStyle(const wxRichTextRange& range, const 
                 }
                 else
                     newPara = para;
-
+                
                 if (paragraphStyle && !charactersOnly)
                 {
                     if (applyMinimal)
@@ -2108,6 +2108,21 @@ bool wxRichTextParagraphLayoutBox::CollectStyle(wxTextAttrEx& currentStyle, cons
             currentStyle.SetParagraphStyleName(style.GetParagraphStyleName());
     }
 
+    if (style.HasListStyleName() && !wxHasStyle(multipleStyleAttributes, wxTEXT_ATTR_LIST_STYLE_NAME))
+    {
+        if (currentStyle.HasListStyleName())
+        {
+            if (currentStyle.HasListStyleName() != style.HasListStyleName())
+            {
+                // Clash of style - mark as such
+                multipleStyleAttributes |= wxTEXT_ATTR_LIST_STYLE_NAME;
+                currentStyle.SetFlags(currentStyle.GetFlags() & ~wxTEXT_ATTR_LIST_STYLE_NAME);
+            }
+        }
+        else
+            currentStyle.SetListStyleName(style.GetListStyleName());
+    }
+
     if (style.HasBulletStyle() && !wxHasStyle(multipleStyleAttributes, wxTEXT_ATTR_BULLET_STYLE))
     {
         if (currentStyle.HasBulletStyle())
@@ -2410,7 +2425,57 @@ bool wxRichTextParagraphLayoutBox::ApplyStyleSheet(wxRichTextStyleSheet* styleSh
 
         if (para)
         {
-            if (!para->GetAttributes().GetParagraphStyleName().IsEmpty())
+            // Combine paragraph and list styles. If there is a list style in the original attributes,
+            // the current indentation overrides anything else and is used to find the item indentation.
+            // Also, for applying paragraph styles, consider having 2 modes: (1) we merge with what we have,
+            // thereby taking into account all user changes, (2) reset the style completely (except for indentation/list
+            // exception as above).
+            // Problem: when changing from one list style to another, there's a danger that the level info will get lost.
+            // So when changing a list style interactively, could retrieve level based on current style, then
+            // set appropriate indent and apply new style.
+            
+            if (!para->GetAttributes().GetParagraphStyleName().IsEmpty() && !para->GetAttributes().GetListStyleName().IsEmpty())
+            {
+                int currentIndent = para->GetAttributes().GetLeftIndent();
+
+                wxRichTextParagraphStyleDefinition* paraDef = styleSheet->FindParagraphStyle(para->GetAttributes().GetParagraphStyleName());
+                wxRichTextListStyleDefinition* listDef = styleSheet->FindListStyle(para->GetAttributes().GetListStyleName());
+                if (paraDef && !listDef)
+                {
+                    para->GetAttributes() = paraDef->GetStyle();
+                    foundCount ++;
+                }
+                else if (listDef && !paraDef)
+                {
+                    // Set overall style defined for the list style definition
+                    para->GetAttributes() = listDef->GetStyle();
+
+                    // Apply the style for this level
+                    wxRichTextApplyStyle(para->GetAttributes(), * listDef->GetLevelAttributes(listDef->FindLevelForIndent(currentIndent)));
+                    foundCount ++;
+                }
+                else if (listDef && paraDef)
+                {
+                    // Combines overall list style, style for level, and paragraph style
+                    para->GetAttributes() = listDef->CombineWithParagraphStyle(currentIndent, paraDef->GetStyle());
+                    foundCount ++;
+                }
+            }
+            else if (para->GetAttributes().GetParagraphStyleName().IsEmpty() && !para->GetAttributes().GetListStyleName().IsEmpty())
+            {
+                int currentIndent = para->GetAttributes().GetLeftIndent();
+
+                wxRichTextListStyleDefinition* listDef = styleSheet->FindListStyle(para->GetAttributes().GetListStyleName());
+
+                // Overall list definition style                
+                para->GetAttributes() = listDef->GetStyle();
+                
+                // Style for this level
+                wxRichTextApplyStyle(para->GetAttributes(), * listDef->GetLevelAttributes(listDef->FindLevelForIndent(currentIndent)));
+
+                foundCount ++;
+            }
+            else if (!para->GetAttributes().GetParagraphStyleName().IsEmpty() && para->GetAttributes().GetListStyleName().IsEmpty())
             {
                 wxRichTextParagraphStyleDefinition* def = styleSheet->FindParagraphStyle(para->GetAttributes().GetParagraphStyleName());
                 if (def)
@@ -2424,6 +2489,344 @@ bool wxRichTextParagraphLayoutBox::ApplyStyleSheet(wxRichTextStyleSheet* styleSh
         node = node->GetNext();
     }
     return foundCount != 0;
+}
+
+/// Set list style
+bool wxRichTextParagraphLayoutBox::SetListStyle(const wxRichTextRange& range, wxRichTextListStyleDefinition* def, int flags, int startFrom, int specifiedLevel)
+{
+    bool withUndo = ((flags & wxRICHTEXT_SETSTYLE_WITH_UNDO) != 0);
+    // bool applyMinimal = ((flags & wxRICHTEXT_SETSTYLE_OPTIMIZE) != 0);
+    bool specifyLevel = ((flags & wxRICHTEXT_SETSTYLE_SPECIFY_LEVEL) != 0);
+    bool renumber = ((flags & wxRICHTEXT_SETSTYLE_RENUMBER) != 0);
+    
+    // Current number, if numbering
+    int n = startFrom;
+    
+    wxASSERT (!specifyLevel || (specifyLevel && (specifiedLevel >= 0)));
+
+    // If we are associated with a control, make undoable; otherwise, apply immediately
+    // to the data.
+
+    bool haveControl = (GetRichTextCtrl() != NULL);
+
+    wxRichTextAction* action = NULL;
+
+    if (haveControl && withUndo)
+    {
+        action = new wxRichTextAction(NULL, _("Change List Style"), wxRICHTEXT_CHANGE_STYLE, & GetRichTextCtrl()->GetBuffer(), GetRichTextCtrl());
+        action->SetRange(range);
+        action->SetPosition(GetRichTextCtrl()->GetCaretPosition());
+    }
+
+    wxRichTextObjectList::compatibility_iterator node = m_children.GetFirst();
+    while (node)
+    {
+        wxRichTextParagraph* para = wxDynamicCast(node->GetData(), wxRichTextParagraph);
+        wxASSERT (para != NULL);
+
+        if (para && para->GetChildCount() > 0)
+        {
+            // Stop searching if we're beyond the range of interest
+            if (para->GetRange().GetStart() > range.GetEnd())
+                break;
+
+            if (!para->GetRange().IsOutside(range))
+            {
+                // We'll be using a copy of the paragraph to make style changes,
+                // not updating the buffer directly.
+                wxRichTextParagraph* newPara wxDUMMY_INITIALIZE(NULL);
+
+                if (haveControl && withUndo)
+                {
+                    newPara = new wxRichTextParagraph(*para);
+                    action->GetNewParagraphs().AppendChild(newPara);
+
+                    // Also store the old ones for Undo
+                    action->GetOldParagraphs().AppendChild(new wxRichTextParagraph(*para));
+                }
+                else
+                    newPara = para;
+                
+                if (def)
+                {
+                    int thisIndent = newPara->GetAttributes().GetLeftIndent();
+                    int thisLevel = specifyLevel ? specifiedLevel : def->FindLevelForIndent(thisIndent);
+                
+                    // How is numbering going to work?
+                    // If we are renumbering, or numbering for the first time, we need to keep
+                    // track of the number for each level. But we might be simply applying a different
+                    // list style.
+                    // In Word, applying a style to several paragraphs, even if at different levels,
+                    // reverts the level back to the same one. So we could do the same here.
+                    // Renumbering will need to be done when we promote/demote a paragraph.
+
+                    // Apply the overall list style, and item style for this level
+                    wxTextAttrEx listStyle(def->GetCombinedStyleForLevel(thisLevel));
+                    wxRichTextApplyStyle(newPara->GetAttributes(), listStyle);
+                
+                    // Now we need to check numbering
+                    if (renumber)
+                    {
+                        newPara->GetAttributes().SetBulletNumber(n);
+                    }
+                
+                    n ++;
+                }
+                else if (!newPara->GetAttributes().GetListStyleName().IsEmpty())
+                {
+                    // if def is NULL, remove list style, applying any associated paragraph style
+                    // to restore the attributes
+
+                    newPara->GetAttributes().SetListStyleName(wxEmptyString);
+                    newPara->GetAttributes().SetLeftIndent(0, 0);
+                    
+                    // Eliminate the main list-related attributes
+                    newPara->GetAttributes().SetFlags(newPara->GetAttributes().GetFlags() & ~wxTEXT_ATTR_LEFT_INDENT & ~wxTEXT_ATTR_BULLET_STYLE & ~wxTEXT_ATTR_BULLET_NUMBER & ~wxTEXT_ATTR_BULLET_SYMBOL & wxTEXT_ATTR_LIST_STYLE_NAME);
+                    
+                    wxRichTextStyleSheet* styleSheet = GetStyleSheet();
+                    if (styleSheet && !newPara->GetAttributes().GetParagraphStyleName().IsEmpty())
+                    {
+                        wxRichTextParagraphStyleDefinition* def = styleSheet->FindParagraphStyle(newPara->GetAttributes().GetParagraphStyleName());
+                        if (def)
+                        {
+                            newPara->GetAttributes() = def->GetStyle();
+                        }
+                    }
+                }
+            }
+        }
+
+        node = node->GetNext();
+    }
+
+    // Do action, or delay it until end of batch.
+    if (haveControl && withUndo)
+        GetRichTextCtrl()->GetBuffer().SubmitAction(action);
+
+    return true;
+}
+
+bool wxRichTextParagraphLayoutBox::SetListStyle(const wxRichTextRange& range, const wxString& defName, int flags, int startFrom, int specifiedLevel)
+{
+    if (GetStyleSheet())
+    {
+        wxRichTextListStyleDefinition* def = GetStyleSheet()->FindListStyle(defName);
+        if (def)
+            return SetListStyle(range, def, flags, startFrom, specifiedLevel);
+    }
+    return false;
+}
+
+/// Clear list for given range
+bool wxRichTextParagraphLayoutBox::ClearListStyle(const wxRichTextRange& range, int flags)
+{
+    return SetListStyle(range, NULL, flags);
+}
+
+/// Number/renumber any list elements in the given range
+bool wxRichTextParagraphLayoutBox::NumberList(const wxRichTextRange& range, wxRichTextListStyleDefinition* def, int flags, int startFrom, int specifiedLevel)
+{
+    return DoNumberList(range, range, 0, def, flags, startFrom, specifiedLevel);
+}
+
+/// Number/renumber any list elements in the given range. Also do promotion or demotion of items, if specified
+bool wxRichTextParagraphLayoutBox::DoNumberList(const wxRichTextRange& range, const wxRichTextRange& promotionRange, int promoteBy,
+                                                wxRichTextListStyleDefinition* def, int flags, int startFrom, int specifiedLevel)
+{
+    bool withUndo = ((flags & wxRICHTEXT_SETSTYLE_WITH_UNDO) != 0);
+    // bool applyMinimal = ((flags & wxRICHTEXT_SETSTYLE_OPTIMIZE) != 0);
+    bool specifyLevel = ((flags & wxRICHTEXT_SETSTYLE_SPECIFY_LEVEL) != 0);
+
+    bool renumber = ((flags & wxRICHTEXT_SETSTYLE_RENUMBER) != 0);
+    
+    // Max number of levels
+    const int maxLevels = 10;
+    
+    // The level we're looking at now
+    int currentLevel = -1;
+    
+    // The item number for each level
+    int levels[maxLevels];
+    int i;
+    
+    // Reset all numbering
+    for (i = 0; i < maxLevels; i++)
+    {
+        if (startFrom != -1)
+            levels[i] = startFrom;
+        else if (renumber) // start again
+            levels[i] = 1;
+        else
+            levels[i] = -1; // start from the number we found, if any
+    }
+    
+    wxASSERT(!specifyLevel || (specifyLevel && (specifiedLevel >= 0)));
+
+    // If we are associated with a control, make undoable; otherwise, apply immediately
+    // to the data.
+
+    bool haveControl = (GetRichTextCtrl() != NULL);
+
+    wxRichTextAction* action = NULL;
+
+    if (haveControl && withUndo)
+    {
+        action = new wxRichTextAction(NULL, _("Renumber List"), wxRICHTEXT_CHANGE_STYLE, & GetRichTextCtrl()->GetBuffer(), GetRichTextCtrl());
+        action->SetRange(range);
+        action->SetPosition(GetRichTextCtrl()->GetCaretPosition());
+    }
+
+    wxRichTextObjectList::compatibility_iterator node = m_children.GetFirst();
+    while (node)
+    {
+        wxRichTextParagraph* para = wxDynamicCast(node->GetData(), wxRichTextParagraph);
+        wxASSERT (para != NULL);
+
+        if (para && para->GetChildCount() > 0)
+        {
+            // Stop searching if we're beyond the range of interest
+            if (para->GetRange().GetStart() > range.GetEnd())
+                break;
+
+            if (!para->GetRange().IsOutside(range))
+            {
+                // We'll be using a copy of the paragraph to make style changes,
+                // not updating the buffer directly.
+                wxRichTextParagraph* newPara wxDUMMY_INITIALIZE(NULL);
+
+                if (haveControl && withUndo)
+                {
+                    newPara = new wxRichTextParagraph(*para);
+                    action->GetNewParagraphs().AppendChild(newPara);
+
+                    // Also store the old ones for Undo
+                    action->GetOldParagraphs().AppendChild(new wxRichTextParagraph(*para));
+                }
+                else
+                    newPara = para;
+                
+                wxRichTextListStyleDefinition* defToUse = def;
+                if (!defToUse)
+                {
+                    wxRichTextStyleSheet* sheet = GetStyleSheet();
+                    
+                    if (sheet && !newPara->GetAttributes().GetListStyleName().IsEmpty())
+                        defToUse = sheet->FindListStyle(newPara->GetAttributes().GetListStyleName());
+                }
+                
+                if (defToUse)
+                {
+                    int thisIndent = newPara->GetAttributes().GetLeftIndent();
+                    int thisLevel = defToUse->FindLevelForIndent(thisIndent);
+
+                    // If the paragraph doesn't have an indent, or we've specified a level to apply to all,
+                    // change the level.
+                    if (thisIndent == 0 || specifiedLevel != -1)
+                        thisLevel = specifiedLevel;
+                        
+                    // Do promotion if specified
+                    if ((promoteBy != 0) && !para->GetRange().IsOutside(promotionRange))
+                    {
+                        thisLevel = thisLevel - promoteBy;
+                        if (thisLevel < 0)
+                            thisLevel = 0;
+                        if (thisLevel > 9)
+                            thisLevel = 9;
+                    }
+                    
+                    // Apply the overall list style, and item style for this level
+                    wxTextAttrEx listStyle(defToUse->GetCombinedStyleForLevel(thisLevel));
+                    wxRichTextApplyStyle(newPara->GetAttributes(), listStyle);
+                    
+                    // OK, we've (re)applied the style, now let's get the numbering right.
+                    
+                    if (currentLevel == -1)
+                        currentLevel = thisLevel;
+                    
+                    // Same level as before, do nothing except increment level's number afterwards
+                    if (currentLevel == thisLevel)
+                    {
+                    }
+                    // A deeper level: start renumbering all levels after current level
+                    else if (thisLevel > currentLevel)
+                    {
+                        for (i = currentLevel+1; i <= thisLevel; i++)
+                        {
+                            levels[i] = 1;
+                        }
+                        currentLevel = thisLevel;
+                    }
+                    else if (thisLevel < currentLevel)
+                    {
+                        currentLevel = thisLevel;
+                    }                    
+
+                    // Use the current numbering if -1 and we have a bullet number already
+                    if (levels[currentLevel] == -1)
+                    {
+                        if (newPara->GetAttributes().HasBulletNumber())
+                            levels[currentLevel] = newPara->GetAttributes().GetBulletNumber();
+                        else
+                            levels[currentLevel] = 1;
+                    }
+                    
+                    newPara->GetAttributes().SetBulletNumber(levels[currentLevel]);
+
+                    levels[currentLevel] ++;                        
+                }
+            }
+        }
+
+        node = node->GetNext();
+    }
+
+    // Do action, or delay it until end of batch.
+    if (haveControl && withUndo)
+        GetRichTextCtrl()->GetBuffer().SubmitAction(action);
+
+    return true;
+}
+
+bool wxRichTextParagraphLayoutBox::NumberList(const wxRichTextRange& range, const wxString& defName, int flags, int startFrom, int specifiedLevel)
+{
+    if (GetStyleSheet())
+    {
+        wxRichTextListStyleDefinition* def = NULL;
+        if (!defName.IsEmpty())
+            def = GetStyleSheet()->FindListStyle(defName);
+        return NumberList(range, def, flags, startFrom, specifiedLevel);
+    }
+    return false;
+}
+
+/// Promote the list items within the given range. promoteBy can be a positive or negative number, e.g. 1 or -1
+bool wxRichTextParagraphLayoutBox::PromoteList(int promoteBy, const wxRichTextRange& range, wxRichTextListStyleDefinition* def, int flags, int specifiedLevel)
+{
+    // TODO
+    // One strategy is to first work out the range within which renumbering must occur. Then could pass these two ranges
+    // to NumberList with a flag indicating promotion is required within one of the ranges.
+    // Find first and last paragraphs in range. Then for first, calculate new indentation and look back until we find
+    // a paragraph that either has no list style, or has one that is different or whose indentation is less.
+    // We start renumbering from the para after that different para we found. We specify that the numbering of that
+    // list position will start from 1.
+    // Similarly, we look after the last para in the promote range for an indentation that is less (or no list style).
+    // We can end the renumbering at this point.
+    
+    // For now, only renumber within the promotion range.
+    
+    return DoNumberList(range, range, promoteBy, def, flags, 1, specifiedLevel);
+}
+
+bool wxRichTextParagraphLayoutBox::PromoteList(int promoteBy, const wxRichTextRange& range, const wxString& defName, int flags, int specifiedLevel)
+{
+    if (GetStyleSheet())
+    {
+        wxRichTextListStyleDefinition* def = NULL;
+        if (!defName.IsEmpty())
+            def = GetStyleSheet()->FindListStyle(defName);
+        return PromoteList(promoteBy, range, def, flags, specifiedLevel);
+    }
+    return false;
 }
 
 /*!
@@ -4027,6 +4430,32 @@ void wxRichTextBuffer::Copy(const wxRichTextBuffer& obj)
     m_suppressUndo = obj.m_suppressUndo;
 }
 
+/// Push style sheet to top of stack
+bool wxRichTextBuffer::PushStyleSheet(wxRichTextStyleSheet* styleSheet)
+{
+    if (m_styleSheet)
+        styleSheet->InsertSheet(m_styleSheet);
+
+    SetStyleSheet(styleSheet);
+    
+    return true;
+}
+
+/// Pop style sheet from top of stack
+wxRichTextStyleSheet* wxRichTextBuffer::PopStyleSheet()
+{
+    if (m_styleSheet)
+    {
+        wxRichTextStyleSheet* oldSheet = m_styleSheet;
+        m_styleSheet = oldSheet->GetNextSheet();
+        oldSheet->Unlink();
+        
+        return oldSheet;
+    }
+    else
+        return NULL;
+}
+
 /// Submit command to insert paragraphs
 bool wxRichTextBuffer::InsertParagraphsWithUndo(long pos, const wxRichTextParagraphLayoutBox& paragraphs, wxRichTextCtrl* ctrl, int flags)
 {
@@ -5304,24 +5733,7 @@ void wxRichTextImage::Copy(const wxRichTextImage& obj)
 /// Compare two attribute objects
 bool wxTextAttrEq(const wxTextAttrEx& attr1, const wxTextAttrEx& attr2)
 {
-    return (
-        attr1.GetTextColour() == attr2.GetTextColour() &&
-        attr1.GetBackgroundColour() == attr2.GetBackgroundColour() &&
-        attr1.GetFont() == attr2.GetFont() &&
-        attr1.GetAlignment() == attr2.GetAlignment() &&
-        attr1.GetLeftIndent() == attr2.GetLeftIndent() &&
-        attr1.GetRightIndent() == attr2.GetRightIndent() &&
-        attr1.GetLeftSubIndent() == attr2.GetLeftSubIndent() &&
-        wxRichTextTabsEq(attr1.GetTabs(), attr2.GetTabs()) &&
-        attr1.GetLineSpacing() == attr2.GetLineSpacing() &&
-        attr1.GetParagraphSpacingAfter() == attr2.GetParagraphSpacingAfter() &&
-        attr1.GetParagraphSpacingBefore() == attr2.GetParagraphSpacingBefore() &&
-        attr1.GetBulletStyle() == attr2.GetBulletStyle() &&
-        attr1.GetBulletNumber() == attr2.GetBulletNumber() &&
-        attr1.GetBulletSymbol() == attr2.GetBulletSymbol() &&
-        attr1.GetBulletFont() == attr2.GetBulletFont() &&
-        attr1.GetCharacterStyleName() == attr2.GetCharacterStyleName() &&
-        attr1.GetParagraphStyleName() == attr2.GetParagraphStyleName());
+    return (attr1 == attr2);
 }
 
 bool wxTextAttrEq(const wxTextAttrEx& attr1, const wxRichTextAttr& attr2)
@@ -5347,7 +5759,8 @@ bool wxTextAttrEq(const wxTextAttrEx& attr1, const wxRichTextAttr& attr2)
         attr1.GetBulletSymbol() == attr2.GetBulletSymbol() &&
         attr1.GetBulletFont() == attr2.GetBulletFont() &&
         attr1.GetCharacterStyleName() == attr2.GetCharacterStyleName() &&
-        attr1.GetParagraphStyleName() == attr2.GetParagraphStyleName());
+        attr1.GetParagraphStyleName() == attr2.GetParagraphStyleName() &&
+        attr1.GetListStyleName() == attr2.GetListStyleName());
 }
 
 /// Compare two attribute objects, but take into account the flags
@@ -5409,6 +5822,10 @@ bool wxTextAttrEqPartial(const wxTextAttrEx& attr1, const wxTextAttrEx& attr2, i
 
     if ((flags & wxTEXT_ATTR_PARAGRAPH_STYLE_NAME) &&
         (attr1.GetParagraphStyleName() != attr2.GetParagraphStyleName()))
+        return false;
+
+    if ((flags & wxTEXT_ATTR_LIST_STYLE_NAME) &&
+        (attr1.GetListStyleName() != attr2.GetListStyleName()))
         return false;
 
     if ((flags & wxTEXT_ATTR_BULLET_STYLE) &&
@@ -5494,6 +5911,10 @@ bool wxTextAttrEqPartial(const wxTextAttrEx& attr1, const wxRichTextAttr& attr2,
 
     if ((flags & wxTEXT_ATTR_PARAGRAPH_STYLE_NAME) &&
         (attr1.GetParagraphStyleName() != attr2.GetParagraphStyleName()))
+        return false;
+
+    if ((flags & wxTEXT_ATTR_LIST_STYLE_NAME) &&
+        (attr1.GetListStyleName() != attr2.GetListStyleName()))
         return false;
 
     if ((flags & wxTEXT_ATTR_BULLET_STYLE) &&
@@ -5617,6 +6038,9 @@ bool wxRichTextApplyStyle(wxTextAttrEx& destStyle, const wxTextAttrEx& style)
 
     if (style.HasParagraphStyleName())
         destStyle.SetParagraphStyleName(style.GetParagraphStyleName());
+
+    if (style.HasListStyleName())
+        destStyle.SetListStyleName(style.GetListStyleName());
 
     if (style.HasBulletStyle())
     {
@@ -5795,6 +6219,12 @@ bool wxRichTextApplyStyle(wxTextAttrEx& destStyle, const wxRichTextAttr& style, 
             destStyle.SetParagraphStyleName(style.GetParagraphStyleName());
     }
 
+    if (style.HasListStyleName())
+    {
+        if (!(compareWith && compareWith->HasListStyleName() && compareWith->GetListStyleName() == style.GetListStyleName()))
+            destStyle.SetListStyleName(style.GetListStyleName());
+    }
+
     if (style.HasBulletStyle())
     {
         if (!(compareWith && compareWith->HasBulletStyle() && compareWith->GetBulletStyle() == style.GetBulletStyle()))
@@ -5950,6 +6380,7 @@ void wxRichTextAttr::operator= (const wxRichTextAttr& attr)
     m_lineSpacing = attr.m_lineSpacing;
     m_characterStyleName = attr.m_characterStyleName;
     m_paragraphStyleName = attr.m_paragraphStyleName;
+    m_listStyleName = attr.m_listStyleName;
     m_bulletStyle = attr.m_bulletStyle;
     m_bulletNumber = attr.m_bulletNumber;
     m_bulletSymbol = attr.m_bulletSymbol;
@@ -5973,6 +6404,7 @@ void wxRichTextAttr::operator= (const wxTextAttrEx& attr)
     m_lineSpacing = attr.GetLineSpacing();
     m_characterStyleName = attr.GetCharacterStyleName();
     m_paragraphStyleName = attr.GetParagraphStyleName();
+    m_listStyleName = attr.GetListStyleName();
     m_bulletStyle = attr.GetBulletStyle();
     m_bulletNumber = attr.GetBulletNumber();
     m_bulletSymbol = attr.GetBulletSymbol();
@@ -6009,6 +6441,7 @@ bool wxRichTextAttr::operator== (const wxRichTextAttr& attr) const
             GetLineSpacing() == attr.GetLineSpacing() &&
             GetCharacterStyleName() == attr.GetCharacterStyleName() &&
             GetParagraphStyleName() == attr.GetParagraphStyleName() &&
+            GetListStyleName() == attr.GetListStyleName() &&
 
             GetBulletStyle() == attr.GetBulletStyle() &&
             GetBulletSymbol() == attr.GetBulletSymbol() &&
@@ -6042,6 +6475,7 @@ void wxRichTextAttr::CopyTo(wxTextAttrEx& attr) const
     attr.SetBulletFont(m_bulletFont);
     attr.SetCharacterStyleName(m_characterStyleName);
     attr.SetParagraphStyleName(m_paragraphStyleName);
+    attr.SetListStyleName(m_listStyleName);
 
     attr.SetFlags(GetFlags()); // Important: set after SetFont and others, since they set flags
 }
@@ -6147,6 +6581,9 @@ wxRichTextAttr wxRichTextAttr::Combine(const wxRichTextAttr& attr,
     if (attr.HasParagraphStyleName())
         newAttr.SetParagraphStyleName(attr.GetParagraphStyleName());
 
+    if (attr.HasListStyleName())
+        newAttr.SetListStyleName(attr.GetListStyleName());
+
     if (attr.HasBulletStyle())
         newAttr.SetBulletStyle(attr.GetBulletStyle());
 
@@ -6173,6 +6610,7 @@ wxTextAttrEx::wxTextAttrEx(const wxTextAttrEx& attr): wxTextAttr(attr)
     m_lineSpacing = attr.m_lineSpacing;
     m_paragraphStyleName = attr.m_paragraphStyleName;
     m_characterStyleName = attr.m_characterStyleName;
+    m_listStyleName = attr.m_listStyleName;
     m_bulletStyle = attr.m_bulletStyle;
     m_bulletNumber = attr.m_bulletNumber;
     m_bulletSymbol = attr.m_bulletSymbol;
@@ -6201,6 +6639,7 @@ void wxTextAttrEx::operator= (const wxTextAttrEx& attr)
     m_lineSpacing = attr.m_lineSpacing;
     m_characterStyleName = attr.m_characterStyleName;
     m_paragraphStyleName = attr.m_paragraphStyleName;
+    m_listStyleName = attr.m_listStyleName;
     m_bulletStyle = attr.m_bulletStyle;
     m_bulletNumber = attr.m_bulletNumber;
     m_bulletSymbol = attr.m_bulletSymbol;
@@ -6211,6 +6650,30 @@ void wxTextAttrEx::operator= (const wxTextAttrEx& attr)
 void wxTextAttrEx::operator= (const wxTextAttr& attr)
 {
     wxTextAttr::operator= (attr);
+}
+
+// Equality test
+bool wxTextAttrEx::operator== (const wxTextAttrEx& attr) const
+{
+    return (
+        GetTextColour() == attr.GetTextColour() &&
+        GetBackgroundColour() == attr.GetBackgroundColour() &&
+        GetFont() == attr.GetFont() &&
+        GetAlignment() == attr.GetAlignment() &&
+        GetLeftIndent() == attr.GetLeftIndent() &&
+        GetRightIndent() == attr.GetRightIndent() &&
+        GetLeftSubIndent() == attr.GetLeftSubIndent() &&
+        wxRichTextTabsEq(GetTabs(), attr.GetTabs()) &&
+        GetLineSpacing() == attr.GetLineSpacing() &&
+        GetParagraphSpacingAfter() == attr.GetParagraphSpacingAfter() &&
+        GetParagraphSpacingBefore() == attr.GetParagraphSpacingBefore() &&
+        GetBulletStyle() == attr.GetBulletStyle() &&
+        GetBulletNumber() == attr.GetBulletNumber() &&
+        GetBulletSymbol() == attr.GetBulletSymbol() &&
+        GetBulletFont() == attr.GetBulletFont() &&
+        GetCharacterStyleName() == attr.GetCharacterStyleName() &&
+        GetParagraphStyleName() == attr.GetParagraphStyleName() &&
+        GetListStyleName() == attr.GetListStyleName());
 }
 
 wxTextAttrEx wxTextAttrEx::CombineEx(const wxTextAttrEx& attr,
@@ -6339,6 +6802,9 @@ wxTextAttrEx wxTextAttrEx::CombineEx(const wxTextAttrEx& attr,
 
     if (attr.HasParagraphStyleName())
         newAttr.SetParagraphStyleName(attr.GetParagraphStyleName());
+
+    if (attr.HasListStyleName())
+        newAttr.SetListStyleName(attr.GetListStyleName());
 
     if (attr.HasBulletStyle())
         newAttr.SetBulletStyle(attr.GetBulletStyle());

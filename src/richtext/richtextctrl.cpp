@@ -2746,13 +2746,30 @@ bool wxRichTextCtrl::ApplyStyle(wxRichTextStyleDefinition* def)
 
     int flags = wxRICHTEXT_SETSTYLE_WITH_UNDO|wxRICHTEXT_SETSTYLE_OPTIMIZE;
 
+    if (def->IsKindOf(CLASSINFO(wxRichTextListStyleDefinition)))
+    {
+        flags |= wxRICHTEXT_SETSTYLE_PARAGRAPHS_ONLY;
+        
+        wxRichTextRange range;
+        
+        if (HasSelection())
+            range = GetSelectionRange();
+        else
+        {
+            long pos = GetAdjustedCaretPosition(GetCaretPosition());            
+            range = wxRichTextRange(pos, pos+1);
+        }
+        
+        return SetListStyle(range, (wxRichTextListStyleDefinition*) def, flags);        
+    }    
+    
     // Make sure the attr has the style name
     if (def->IsKindOf(CLASSINFO(wxRichTextParagraphStyleDefinition)))
     {
         attr.SetParagraphStyleName(def->GetName());
 
         // If applying a paragraph style, we only want the paragraph nodes to adopt these
-        // attributes, and not the leaf nodes. This will allow the context (e.g. text)
+        // attributes, and not the leaf nodes. This will allow the content (e.g. text)
         // to change its style independently.
         flags |= wxRICHTEXT_SETSTYLE_PARAGRAPHS_ONLY;
     }
@@ -2850,6 +2867,45 @@ void wxRichTextCtrl::SetSelectionRange(const wxRichTextRange& range)
     wxASSERT( range1.GetStart() > range1.GetEnd() );
 
     SetInternalSelectionRange(range1);
+}
+
+/// Set list style
+bool wxRichTextCtrl::SetListStyle(const wxRichTextRange& range, wxRichTextListStyleDefinition* def, int flags, int startFrom, int specifiedLevel)
+{
+    return GetBuffer().SetListStyle(range.ToInternal(), def, flags, startFrom, specifiedLevel);
+}
+
+bool wxRichTextCtrl::SetListStyle(const wxRichTextRange& range, const wxString& defName, int flags, int startFrom, int specifiedLevel)
+{
+    return GetBuffer().SetListStyle(range.ToInternal(), defName, flags, startFrom, specifiedLevel);
+}
+
+/// Clear list for given range
+bool wxRichTextCtrl::ClearListStyle(const wxRichTextRange& range, int flags)
+{
+    return GetBuffer().ClearListStyle(range.ToInternal(), flags);
+}
+
+/// Number/renumber any list elements in the given range
+bool wxRichTextCtrl::NumberList(const wxRichTextRange& range, wxRichTextListStyleDefinition* def, int flags, int startFrom, int specifiedLevel)
+{
+    return GetBuffer().NumberList(range.ToInternal(), def, flags, startFrom, specifiedLevel);    
+}
+
+bool wxRichTextCtrl::NumberList(const wxRichTextRange& range, const wxString& defName, int flags, int startFrom, int specifiedLevel)
+{
+    return GetBuffer().NumberList(range.ToInternal(), defName, flags, startFrom, specifiedLevel);    
+}
+
+/// Promote the list items within the given range. promoteBy can be a positive or negative number, e.g. 1 or -1
+bool wxRichTextCtrl::PromoteList(int promoteBy, const wxRichTextRange& range, wxRichTextListStyleDefinition* def, int flags, int specifiedLevel)
+{
+    return GetBuffer().PromoteList(promoteBy, range.ToInternal(), def, flags, specifiedLevel);
+}
+
+bool wxRichTextCtrl::PromoteList(int promoteBy, const wxRichTextRange& range, const wxString& defName, int flags, int specifiedLevel)
+{
+    return GetBuffer().PromoteList(promoteBy, range.ToInternal(), defName, flags, specifiedLevel);
 }
 
 #endif

@@ -196,6 +196,23 @@ public:
     virtual const wxTextAttrEx& GetDefaultStyleEx() const;
     virtual const wxTextAttr& GetDefaultStyle() const;
 
+    /// Set list style
+    virtual bool SetListStyle(const wxRichTextRange& range, wxRichTextListStyleDefinition* def, int flags = wxRICHTEXT_SETSTYLE_WITH_UNDO, int startFrom = 1, int specifiedLevel = -1);
+    virtual bool SetListStyle(const wxRichTextRange& range, const wxString& defName, int flags = wxRICHTEXT_SETSTYLE_WITH_UNDO, int startFrom = 1, int specifiedLevel = -1);
+
+    /// Clear list for given range
+    virtual bool ClearListStyle(const wxRichTextRange& range, int flags = wxRICHTEXT_SETSTYLE_WITH_UNDO);
+
+    /// Number/renumber any list elements in the given range
+    /// def/defName can be NULL/empty to indicate that the existing list style should be used.
+    virtual bool NumberList(const wxRichTextRange& range, wxRichTextListStyleDefinition* def, int flags = wxRICHTEXT_SETSTYLE_WITH_UNDO, int startFrom = 1, int specifiedLevel = -1);
+    virtual bool NumberList(const wxRichTextRange& range, const wxString& defName, int flags = wxRICHTEXT_SETSTYLE_WITH_UNDO, int startFrom = 1, int specifiedLevel = -1);
+
+    /// Promote the list items within the given range. promoteBy can be a positive or negative number, e.g. 1 or -1
+    /// def/defName can be NULL/empty to indicate that the existing list style should be used.
+    virtual bool PromoteList(int promoteBy, const wxRichTextRange& range, wxRichTextListStyleDefinition* def, int flags = wxRICHTEXT_SETSTYLE_WITH_UNDO, int specifiedLevel = -1);
+    virtual bool PromoteList(int promoteBy, const wxRichTextRange& range, const wxString& defName, int flags = wxRICHTEXT_SETSTYLE_WITH_UNDO, int specifiedLevel = -1);
+
     // translate between the position (which is just an index in the text ctrl
     // considering all its contents as a single strings) and (x, y) coordinates
     // which represent column and line.
@@ -530,9 +547,15 @@ public:
     /// Apply a named style to the selection
     virtual bool ApplyStyle(wxRichTextStyleDefinition* def);
 
-    /// Set style sheet, if any.
+    /// Set style sheet, if any
     void SetStyleSheet(wxRichTextStyleSheet* styleSheet) { GetBuffer().SetStyleSheet(styleSheet); }
     wxRichTextStyleSheet* GetStyleSheet() const { return GetBuffer().GetStyleSheet(); }
+
+    /// Push style sheet to top of stack
+    bool PushStyleSheet(wxRichTextStyleSheet* styleSheet) { return GetBuffer().PushStyleSheet(styleSheet); }
+
+    /// Pop style sheet from top of stack
+    wxRichTextStyleSheet* PopStyleSheet() { return GetBuffer().PopStyleSheet(); }
 
     /// Apply the style sheet to the buffer, for example if the styles have changed.
     bool ApplyStyleSheet(wxRichTextStyleSheet* styleSheet = NULL);
