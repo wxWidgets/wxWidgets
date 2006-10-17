@@ -483,6 +483,7 @@ void wxListBox::DoSetSelection(int n, bool select)
                 // selecting an item in a single selection listbox deselects
                 // all the others
                 DeselectAll();
+                return;
             }
 
             m_selections.Add(n);

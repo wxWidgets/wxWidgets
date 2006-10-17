@@ -145,9 +145,9 @@ void wxComboListBox::SetStringValue(const wxString& value)
 {
     if ( !value.empty() )
     {
-		if (FindString(value) != wxNOT_FOUND)
-        	wxListBox::SetStringSelection(value);
-	}
+        if (FindString(value) != wxNOT_FOUND)
+            wxListBox::SetStringSelection(value);
+    }
     else
         wxListBox::SetSelection(-1);
 }
@@ -386,10 +386,11 @@ int wxComboBox::FindString(const wxString& s, bool bCase) const
 
 void wxComboBox::SetSelection(int n)
 {
-    wxCHECK_RET( IsValid(n), _T("invalid index in wxComboBox::Select") );
+    wxCHECK_RET( (n == wxNOT_FOUND || IsValid(n)), _T("invalid index in wxComboBox::Select") );
 
     GetLBox()->SetSelection(n);
-    if ( GetTextCtrl() ) GetTextCtrl()->SetValue(GetLBox()->GetString(n));
+    if ( GetTextCtrl() )
+        GetTextCtrl()->SetValue(GetLBox()->GetString(n));
 }
 
 int wxComboBox::GetSelection() const
