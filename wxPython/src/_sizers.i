@@ -229,7 +229,7 @@ added, if needed.", "");
 
 
     DocDeclStr(
-        const wxSize& , GetSpacer(),
+        wxSize , GetSpacer(),
         "Get the size of the spacer managed by this sizer item.", "");
 
     DocDeclStr(
