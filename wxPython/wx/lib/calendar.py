@@ -71,6 +71,9 @@
 #   behaviour.
 # o If no date has been clicked clicked, OnOk set the result to calend's date,
 #   important if keyboard only navigation is used.
+#
+# 12/10/2006 - Walter Barnes walter_barnes05@yahoo.com
+# o Fixed CalDraw to properly render months that start on a Sunday.
 
 
 import wx
@@ -289,6 +292,9 @@ class CalDraw:
         else:
             start_pos = dow
 
+        if start_pos > 6:
+            start_pos = 0
+
         self.st_pos = start_pos
 
         self.cal_days = []
@@ -311,6 +317,9 @@ class CalDraw:
             self.SetColor(COLOR_WEEKEND_BACKGROUND, MakeColor(backgrd))
 
         date = 6 - int(self.dow)     # start day of first saturday
+        if date == 0:                #...unless we start on Sunday
+            self.cal_sel[1] = (self.GetColor(COLOR_WEEKEND_FONT), self.GetColor(COLOR_WEEKEND_BACKGROUND))
+            date = 7
 
         while date <= self.dim:
             self.cal_sel[date] = (self.GetColor(COLOR_WEEKEND_FONT), self.GetColor(COLOR_WEEKEND_BACKGROUND))  # Saturday
