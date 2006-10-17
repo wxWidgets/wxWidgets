@@ -65,7 +65,8 @@ public:
                           const wxRect *rect = NULL );
     virtual void Freeze();
     virtual void Thaw();
-
+    virtual bool IsFrozen() const;
+    
     virtual void Update() ;
     virtual void ClearBackground();
 

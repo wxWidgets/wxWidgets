@@ -2301,6 +2301,11 @@ void wxWindowMac::Thaw()
 #endif
 }
 
+bool wxWindowMac::IsFrozen() const
+{
+    return m_frozenness != 0;
+}
+
 wxWindowMac *wxGetActiveWindow()
 {
     // actually this is a windows-only concept
