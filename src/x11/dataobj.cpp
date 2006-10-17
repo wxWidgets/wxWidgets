@@ -80,7 +80,7 @@ void wxDataFormat::SetType( wxDataFormatId type )
     PrepareFormats();
     m_type = type;
 
-    if (m_type == wxDF_TEXT)
+    if (m_type == wxDF_TEXT || m_type == wxDF_UNICODETEXT)
         m_format = g_textAtom;
     else
     if (m_type == wxDF_BITMAP)

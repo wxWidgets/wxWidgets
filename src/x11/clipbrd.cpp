@@ -249,7 +249,7 @@ selection_handler( GtkWidget *WXUNUSED(widget),
 
     // transform Unicode text into multibyte before putting it on clipboard
 #if wxUSE_UNICODE
-    if ( format.GetType() == wxDF_TEXT )
+    if ( format.GetType() == wxDF_TEXT || format.GetType() == wxDF_UNICODETEXT)
     {
         const wchar_t *wstr = (const wchar_t *)d;
         size_t len = wxConvCurrent->WC2MB(NULL, wstr, 0);
