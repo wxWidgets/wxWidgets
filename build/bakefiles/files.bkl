@@ -2759,6 +2759,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 </set>
 
 <set var="ADVANCED_GTK_SRC" hints="files">
+    src/generic/animateg.cpp
     src/gtk/aboutdlg.cpp
     src/gtk/animate.cpp
     src/gtk/taskbar.cpp
@@ -2766,6 +2767,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/gtk/eggtrayicon.c
 </set>
 <set var="ADVANCED_GTK_HDR" hints="files">
+    wx/generic/animate.h
     wx/gtk/animate.h
 </set>
 

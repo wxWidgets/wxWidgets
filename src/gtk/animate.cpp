@@ -12,7 +12,7 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#if wxUSE_ANIMATIONCTRL
+#if wxUSE_ANIMATIONCTRL && !defined(__WXUNIVERSAL__)
 
 #include "wx/animate.h"
 
