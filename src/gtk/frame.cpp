@@ -362,16 +362,17 @@ void wxFrame::GtkOnSize()
                                        (GtkWidget*) NULL,
                                        &geom,
                                        (GdkWindowHints) flag );
+        // TODO
+        // Rewrite this terrible code to using GtkVBox
 
-        // I revert back to wxGTK's original behaviour. m_mainWidget holds
-        // the menubar, the toolbar and the client area, which is represented
-        // by m_wxwindow.
-        // This hurts in the eye, but I don't want to call SetSize()
-        // because I don't want to call any non-native functions here.
+        // m_mainWidget holds the menubar, the toolbar and the client
+        // area, which is represented by m_wxwindow.
 
 #if wxUSE_MENUS_NATIVE
-        if (m_frameMenuBar)
+        if (m_frameMenuBar && !(m_fsIsShowing && (m_fsSaveFlag & wxFULLSCREEN_NOMENUBAR != 0)))
         {
+            if (!GTK_WIDGET_VISIBLE(m_frameMenuBar->m_widget))
+                gtk_widget_show( m_frameMenuBar->m_widget );
             int xx = m_miniEdge;
             int yy = m_miniEdge + m_miniTitle;
             int ww = m_width  - 2*m_miniEdge;
@@ -387,6 +388,14 @@ void wxFrame::GtkOnSize()
                                   m_frameMenuBar->m_widget,
                                   xx, yy, ww, hh );
             client_area_y_offset += hh;
+        }
+        else
+        {
+            if (m_frameMenuBar)
+            {
+                if (GTK_WIDGET_VISIBLE(m_frameMenuBar->m_widget))
+                    gtk_widget_hide( m_frameMenuBar->m_widget );
+            }
         }
 #endif // wxUSE_MENUS_NATIVE
 

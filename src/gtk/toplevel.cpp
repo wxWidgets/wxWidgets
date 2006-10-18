@@ -443,6 +443,7 @@ void wxTopLevelWindowGTK::Init()
     m_insertInClientArea = true;
     m_isIconized = false;
     m_fsIsShowing = false;
+    m_fsSaveFlag = 0;
     m_themeEnabled = true;
     m_gdkDecor = m_gdkFunc = 0;
     m_grabbed = false;
@@ -714,9 +715,15 @@ bool wxTopLevelWindowGTK::ShowFullScreen(bool show, long style )
     if ( (method == wxX11_FS_WMSPEC) && !gtk_check_version(2,2,0) )
     {
         if (show)
+        {
+            m_fsSaveFlag = style;
             gtk_window_fullscreen( GTK_WINDOW( m_widget ) );
+        }
         else
+        {
+            m_fsSaveFlag = 0;
             gtk_window_unfullscreen( GTK_WINDOW( m_widget ) );
+        }
     }
     else
 #endif // GTK+ >= 2.2.0
@@ -759,6 +766,7 @@ bool wxTopLevelWindowGTK::ShowFullScreen(bool show, long style )
         }
         else // hide
         {
+            m_fsSaveFlag = 0;
             if (method != wxX11_FS_WMSPEC)
             {
                 // don't do it always, Metacity hates it
