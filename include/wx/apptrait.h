@@ -118,6 +118,10 @@ public:
 
     // return true if the port is using wxUniversal for the GUI, false if not
     virtual bool IsUsingUniversalWidgets() const = 0;
+    
+    // return the name of the Desktop Environment such as 
+    // "KDE" or "GNOME". May return an empty string.
+    virtual wxString GetDesktopEnvironment() const { return wxEmptyString; }
 };
 
 // ----------------------------------------------------------------------------

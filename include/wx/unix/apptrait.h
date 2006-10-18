@@ -39,6 +39,10 @@ public:
     virtual wxStandardPathsBase& GetStandardPaths();
 #endif
     virtual wxPortId GetToolkitVersion(int *majVer, int *minVer) const;
+    
+#ifdef __WXGTK__
+    virtual wxString GetDesktopEnvironment() const;
+#endif
 };
 
 #endif // wxUSE_GUI

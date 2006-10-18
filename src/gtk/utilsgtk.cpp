@@ -47,6 +47,12 @@
     #undef explicit
 #endif // HAVE_X11_XKBLIB_H
 
+
+#if wxUSE_DETECT_SM
+    #include "X11/Xlib.h"
+    #include "X11/SM/SMlib.h"
+#endif
+
 //-----------------------------------------------------------------------------
 // data
 //-----------------------------------------------------------------------------
@@ -283,3 +289,48 @@ wxPortId wxGUIAppTraits::GetToolkitVersion(int *verMaj, int *verMin) const
 
     return wxPORT_GTK;
 }
+
+#if wxUSE_DETECT_SM
+static wxString GetSM()
+{
+	Display     *dpy;
+	SmcConn     smc_conn;
+	char        *vendor;
+	char        *client_id_ret;
+	dpy = XOpenDisplay(NULL);
+
+	smc_conn = SmcOpenConnection(NULL, NULL,
+	                             999, 999,
+	                             0 /* mask */, NULL /* callbacks */,
+	                             NULL, &client_id_ret, 0, NULL);
+
+	vendor = SmcVendor(smc_conn);
+    wxString ret = wxString::FromAscii( vendor );
+	free(vendor);
+
+	SmcCloseConnection(smc_conn, 0, NULL);
+	free(client_id_ret);
+
+	XCloseDisplay(dpy);
+    
+    return ret;
+}
+#endif
+
+wxString wxGUIAppTraits::GetDesktopEnvironment() const
+{
+#if wxUSE_DETECT_SM
+    wxString SM = GetSM();
+    
+    if (SM == wxT("GnomeSM"))
+        return wxT("GNOME");
+        
+    if (SM == wxT("KDE"))
+        return wxT("KDE");
+#endif
+
+    return wxEmptyString;
+}
+
+
+

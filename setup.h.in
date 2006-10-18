@@ -375,6 +375,8 @@
 
 #define wxUSE_DISPLAY       0
 
+#define wxUSE_DETECT_SM     0
+
 #define wxUSE_GEOMETRY            0
 
 #define wxUSE_IMAGLIST      0

@@ -525,6 +525,7 @@ if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_COMBOCTRL=no
   DEFAULT_wxUSE_DATEPICKCTRL=no
   DEFAULT_wxUSE_DISPLAY=no
+  DEFAULT_wxUSE_DETECT_SM=no
   DEFAULT_wxUSE_DIRPICKERCTRL=no
   DEFAULT_wxUSE_FILEPICKERCTRL=no
   DEFAULT_wxUSE_FONTPICKERCTRL=no
@@ -742,6 +743,7 @@ else
   DEFAULT_wxUSE_COMBOCTRL=yes
   DEFAULT_wxUSE_DATEPICKCTRL=yes
   DEFAULT_wxUSE_DISPLAY=yes
+  DEFAULT_wxUSE_DETECT_SM=yes
   DEFAULT_wxUSE_DIRPICKERCTRL=yes
   DEFAULT_wxUSE_FILEPICKERCTRL=yes
   DEFAULT_wxUSE_FONTPICKERCTRL=yes
@@ -1070,6 +1072,7 @@ if test "$wxUSE_CONTROLS" = "yes"; then
   DEFAULT_wxUSE_COMBOBOX=yes
   DEFAULT_wxUSE_DATEPICKCTRL=yes
   DEFAULT_wxUSE_DISPLAY=yes
+  DEFAULT_wxUSE_DETECT_SM=yes
   DEFAULT_wxUSE_DIRPICKERCTRL=yes
   DEFAULT_wxUSE_FILEPICKERCTRL=yes
   DEFAULT_wxUSE_FONTPICKERCTRL=yes
@@ -1120,6 +1123,7 @@ elif test "$wxUSE_CONTROLS" = "no"; then
   DEFAULT_wxUSE_COMBOBOX=no
   DEFAULT_wxUSE_DATEPICKCTRL=no
   DEFAULT_wxUSE_DISPLAY=no
+  DEFAULT_wxUSE_DETECT_SM=no
   DEFAULT_wxUSE_DIRPICKERCTRL=no
   DEFAULT_wxUSE_FILEPICKERCTRL=no
   DEFAULT_wxUSE_FONTPICKERCTRL=no
@@ -1173,6 +1177,7 @@ WX_ARG_ENABLE(comboctrl,   [  --enable-comboctrl      use wxComboCtrl class], wx
 WX_ARG_ENABLE(datepick,    [  --enable-datepick       use wxDatePickerCtrl class], wxUSE_DATEPICKCTRL)
 WX_ARG_ENABLE(dirpicker,   [  --enable-dirpicker      use wxDirPickerCtrl class], wxUSE_DIRPICKERCTRL)
 WX_ARG_ENABLE(display,     [  --enable-display        use wxDisplay class], wxUSE_DISPLAY)
+WX_ARG_ENABLE(detect_sm,   [  --enable-detect_sm      use code to detect X11 session manager], wxUSE_DETECT_SM)
 WX_ARG_ENABLE(filepicker,  [  --enable-filepicker     use wxFilePickerCtrl class], wxUSE_FILEPICKERCTRL)
 WX_ARG_ENABLE(fontpicker,  [  --enable-fontpicker     use wxFontPickerCtrl class], wxUSE_FONTPICKERCTRL)
 WX_ARG_ENABLE(gauge,       [  --enable-gauge          use wxGauge class], wxUSE_GAUGE)
@@ -3787,6 +3792,31 @@ dnl ---------------------------------------------------------------------------
         AC_CHECK_HEADERS([ddraw.h], [], [], [#include <windows.h>])
     fi
 fi
+
+dnl ---------------------------------------------------------------------------
+dnl X11 session management
+dnl ---------------------------------------------------------------------------
+if test "$wxUSE_DETECT_SM" = "yes"; then
+    if test "$wxUSE_UNIX" = "yes" -a "$wxUSE_MAC" != 1 -a "$wxUSE_COCOA" != 1; then
+        AC_MSG_CHECKING([for -lSM - X11 session management])
+        WX_PATH_FIND_LIBRARIES([$SEARCH_LIB],SM)
+        if test "$ac_find_libraries" != "" ; then
+            WX_LINK_PATH_EXIST([$ac_find_libraries],[$LDFLAGS])
+            if test "$ac_path_to_link" != " -L/usr/lib" ; then
+                LDFLAGS="$LDFLAGS $ac_path_to_link"
+            fi
+            GUI_TK_LIBRARY="$GUI_TK_LIBRARY -lSM"
+            AC_MSG_RESULT([yes])
+        else
+            AC_MSG_RESULT([no])
+            AC_MSG_WARN([libSM not found; disabling session management detection])
+            wxUSE_DETECT_SM="no"
+        fi
+    else
+        wxUSE_DETECT_SM="no"
+    fi
+fi
+
 
 dnl ---------------------------------------------------------------------------
 dnl OpenGL libraries
@@ -6553,6 +6583,10 @@ fi
 if test "$wxUSE_DISPLAY" = "yes"; then
     AC_DEFINE(wxUSE_DISPLAY)
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS display multimon"
+fi
+
+if test "$wxUSE_DETECT_SM" = "yes"; then
+    AC_DEFINE(wxUSE_DETECT_SM)
 fi
 
 if test "$wxUSE_GAUGE" = "yes"; then

@@ -57,6 +57,8 @@
 #include "wx/tokenzr.h"
 #include "wx/iconloc.h"
 #include "wx/filename.h"
+#include "wx/app.h"
+#include "wx/apptrait.h"
 
 #if wxUSE_LIBGNOMEVFS
     // Not GUI dependent
@@ -1310,15 +1312,15 @@ void wxMimeTypesManagerImpl::InitIfNeeded()
     {
         // set the flag first to prevent recursion
         m_initialized = true;
-
-    const wxString &wm = wxGetenv( wxT("WINDOWMANAGER") );
-
-    if (wm.Find( wxT("kde") ) != wxNOT_FOUND)
-        Initialize( wxMAILCAP_KDE  );
-    else if (wm.Find( wxT("gnome") ) != wxNOT_FOUND)
-        Initialize( wxMAILCAP_GNOME );
-    else
-        Initialize();
+        
+        wxString wm = wxTheApp->GetTraits()->GetDesktopEnvironment();
+        
+        if (wm == wxT("KDE"))
+            Initialize( wxMAILCAP_KDE  );
+        else if (wm == wxT("GNOME"))
+            Initialize( wxMAILCAP_GNOME );
+        else
+            Initialize();
     }
 }
 
