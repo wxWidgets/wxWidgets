@@ -1,0 +1,66 @@
+\section{Reference counting}\label{trefcount}
+
+\subsection{Reference counting and why you shouldn't care about it}\label{refcount}
+
+Many wxWidgets objects use a technique known as \it{reference counting}, also known
+as {\it copy on write} (COW).
+This means that when an object is assigned to another, no copying really takes place:
+only the reference count on the shared object data is incremented and both objects
+share the same data (a very fast operation).
+
+But as soon as one of the two (or more) objects is modified, the data has to be
+copied because the changes to one of the objects shouldn't be seen in the
+others. As data copying only happens when the object is written to, this is
+known as COW.
+
+What is important to understand is that all this happens absolutely
+transparently to the class users and that whether an object is shared or not
+is not seen from the outside of the class - in any case, the result of any
+operation on it is the same.
+
+
+
+\subsection{List of reference-counted wxWidgets classes}\label{refcountlist}
+
+The following classes in wxWidgets have efficient (i.e. fast) assignment operators
+and copy constructors since they are reference-counted:
+
+\helpref{wxAcceleratorTable}{wxacceleratortable}\\
+\helpref{wxBrush}{wxbrush}\\
+\helpref{wxCursor}{wxcursor}\\
+\helpref{wxFont}{wxfont}\\
+\helpref{wxImage}{wximage}\\
+\helpref{wxMetafile}{wxmetafile}\\
+\helpref{wxPalette}{wxpalette}\\
+\helpref{wxPen}{wxpen}\\
+\helpref{wxRegion}{wxregion}\\
+\helpref{wxRegionIterator}{wxregioniterator}\\
+\helpref{wxString}{wxstring}
+
+
+
+\subsection{Make your own reference-counted class}\label{wxobjectoverview}
+
+Reference counting can be implemented easily using \helpref{wxObject}{wxobject}
+and \helpref{wxObjectRefData}{wxobjectrefdata} classes.
+
+First, derive a new class from \helpref{wxObjectRefData}{wxobjectrefdata} and
+put there the memory-consuming data.
+
+Then derive a new class from \helpref{wxObject}{wxobject} and implement there
+the public interface which will be seen by the user of your class.
+You'll probably want to add a function to your class which does the cast from
+\helpref{wxObjectRefData}{wxobjectrefdata} to your class-specific shared data; e.g.:
+
+\begin{verbatim}
+    MyClassRefData *GetData() const   { return wx_static_cast(MyClassRefData*, m_refData); }
+\end{verbatim}
+
+in fact, all times you'll need to read the data from your wxObject-derived class,
+you'll need to call such function.
+
+Very important, all times you need to actually modify the data placed inside your
+wxObject-derived class, you must first call the \helpref{wxObject::UnShare}{wxobjectunshare}
+function to be sure that the modifications won't affect other instances which are
+eventually sharing your object's data.
+
