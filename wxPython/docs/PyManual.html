@@ -3,12 +3,294 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
-<meta name="generator" content="Docutils 0.3.7: http://docutils.sourceforge.net/" />
+<meta name="generator" content="Docutils 0.4: http://docutils.sourceforge.net/" />
 <title>The Py Manual</title>
 <meta name="author" content="Patrick K. O'Brien" />
 <meta name="organization" content="Orbtech" />
 <meta name="date" content="2004-04-15" />
-<link rel="stylesheet" href="default.css" type="text/css" />
+<style type="text/css">
+
+/*
+:Author: David Goodger
+:Contact: goodger@users.sourceforge.net
+:Date: $Date$
+:Revision: $Revision$
+:Copyright: This stylesheet has been placed in the public domain.
+
+Default cascading style sheet for the HTML output of Docutils.
+
+See http://docutils.sf.net/docs/howto/html-stylesheets.html for how to
+customize this style sheet.
+*/
+
+/* used to remove borders from tables and images */
+.borderless, table.borderless td, table.borderless th {
+  border: 0 }
+
+table.borderless td, table.borderless th {
+  /* Override padding for "table.docutils td" with "! important".
+     The right padding separates the table cells. */
+  padding: 0 0.5em 0 0 ! important }
+
+.first {
+  /* Override more specific margin styles with "! important". */
+  margin-top: 0 ! important }
+
+.last, .with-subtitle {
+  margin-bottom: 0 ! important }
+
+.hidden {
+  display: none }
+
+a.toc-backref {
+  text-decoration: none ;
+  color: black }
+
+blockquote.epigraph {
+  margin: 2em 5em ; }
+
+dl.docutils dd {
+  margin-bottom: 0.5em }
+
+/* Uncomment (and remove this text!) to get bold-faced definition list terms
+dl.docutils dt {
+  font-weight: bold }
+*/
+
+div.abstract {
+  margin: 2em 5em }
+
+div.abstract p.topic-title {
+  font-weight: bold ;
+  text-align: center }
+
+div.admonition, div.attention, div.caution, div.danger, div.error,
+div.hint, div.important, div.note, div.tip, div.warning {
+  margin: 2em ;
+  border: medium outset ;
+  padding: 1em }
+
+div.admonition p.admonition-title, div.hint p.admonition-title,
+div.important p.admonition-title, div.note p.admonition-title,
+div.tip p.admonition-title {
+  font-weight: bold ;
+  font-family: sans-serif }
+
+div.attention p.admonition-title, div.caution p.admonition-title,
+div.danger p.admonition-title, div.error p.admonition-title,
+div.warning p.admonition-title {
+  color: red ;
+  font-weight: bold ;
+  font-family: sans-serif }
+
+/* Uncomment (and remove this text!) to get reduced vertical space in
+   compound paragraphs.
+div.compound .compound-first, div.compound .compound-middle {
+  margin-bottom: 0.5em }
+
+div.compound .compound-last, div.compound .compound-middle {
+  margin-top: 0.5em }
+*/
+
+div.dedication {
+  margin: 2em 5em ;
+  text-align: center ;
+  font-style: italic }
+
+div.dedication p.topic-title {
+  font-weight: bold ;
+  font-style: normal }
+
+div.figure {
+  margin-left: 2em ;
+  margin-right: 2em }
+
+div.footer, div.header {
+  clear: both;
+  font-size: smaller }
+
+div.line-block {
+  display: block ;
+  margin-top: 1em ;
+  margin-bottom: 1em }
+
+div.line-block div.line-block {
+  margin-top: 0 ;
+  margin-bottom: 0 ;
+  margin-left: 1.5em }
+
+div.sidebar {
+  margin-left: 1em ;
+  border: medium outset ;
+  padding: 1em ;
+  background-color: #ffffee ;
+  width: 40% ;
+  float: right ;
+  clear: right }
+
+div.sidebar p.rubric {
+  font-family: sans-serif ;
+  font-size: medium }
+
+div.system-messages {
+  margin: 5em }
+
+div.system-messages h1 {
+  color: red }
+
+div.system-message {
+  border: medium outset ;
+  padding: 1em }
+
+div.system-message p.system-message-title {
+  color: red ;
+  font-weight: bold }
+
+div.topic {
+  margin: 2em }
+
+h1.section-subtitle, h2.section-subtitle, h3.section-subtitle,
+h4.section-subtitle, h5.section-subtitle, h6.section-subtitle {
+  margin-top: 0.4em }
+
+h1.title {
+  text-align: center }
+
+h2.subtitle {
+  text-align: center }
+
+hr.docutils {
+  width: 75% }
+
+img.align-left {
+  clear: left }
+
+img.align-right {
+  clear: right }
+
+ol.simple, ul.simple {
+  margin-bottom: 1em }
+
+ol.arabic {
+  list-style: decimal }
+
+ol.loweralpha {
+  list-style: lower-alpha }
+
+ol.upperalpha {
+  list-style: upper-alpha }
+
+ol.lowerroman {
+  list-style: lower-roman }
+
+ol.upperroman {
+  list-style: upper-roman }
+
+p.attribution {
+  text-align: right ;
+  margin-left: 50% }
+
+p.caption {
+  font-style: italic }
+
+p.credits {
+  font-style: italic ;
+  font-size: smaller }
+
+p.label {
+  white-space: nowrap }
+
+p.rubric {
+  font-weight: bold ;
+  font-size: larger ;
+  color: maroon ;
+  text-align: center }
+
+p.sidebar-title {
+  font-family: sans-serif ;
+  font-weight: bold ;
+  font-size: larger }
+
+p.sidebar-subtitle {
+  font-family: sans-serif ;
+  font-weight: bold }
+
+p.topic-title {
+  font-weight: bold }
+
+pre.address {
+  margin-bottom: 0 ;
+  margin-top: 0 ;
+  font-family: serif ;
+  font-size: 100% }
+
+pre.literal-block, pre.doctest-block {
+  margin-left: 2em ;
+  margin-right: 2em ;
+  background-color: #eeeeee }
+
+span.classifier {
+  font-family: sans-serif ;
+  font-style: oblique }
+
+span.classifier-delimiter {
+  font-family: sans-serif ;
+  font-weight: bold }
+
+span.interpreted {
+  font-family: sans-serif }
+
+span.option {
+  white-space: nowrap }
+
+span.pre {
+  white-space: pre }
+
+span.problematic {
+  color: red }
+
+span.section-subtitle {
+  /* font-size relative to parent (h1..h6 element) */
+  font-size: 80% }
+
+table.citation {
+  border-left: solid 1px gray;
+  margin-left: 1px }
+
+table.docinfo {
+  margin: 2em 4em }
+
+table.docutils {
+  margin-top: 0.5em ;
+  margin-bottom: 0.5em }
+
+table.footnote {
+  border-left: solid 1px black;
+  margin-left: 1px }
+
+table.docutils td, table.docutils th,
+table.docinfo td, table.docinfo th {
+  padding-left: 0.5em ;
+  padding-right: 0.5em ;
+  vertical-align: top }
+
+table.docutils th.field-name, table.docinfo th.docinfo-name {
+  font-weight: bold ;
+  text-align: left ;
+  white-space: nowrap ;
+  padding-left: 0 }
+
+h1 tt.docutils, h2 tt.docutils, h3 tt.docutils,
+h4 tt.docutils, h5 tt.docutils, h6 tt.docutils {
+  font-size: 100% }
+
+tt.docutils {
+  background-color: #eeeeee }
+
+ul.auto-toc {
+  list-style-type: none }
+
+</style>
 </head>
 <body>
 <div class="document" id="the-py-manual">
@@ -30,8 +312,8 @@
 <td>1.5</td></tr>
 </tbody>
 </table>
-<div class="contents topic" id="contents">
-<p class="topic-title first"><a name="contents">Contents</a></p>
+<div class="contents topic">
+<p class="topic-title first"><a id="contents" name="contents">Contents</a></p>
 <ul class="simple">
 <li><a class="reference" href="#introduction" id="id4" name="id4">Introduction</a></li>
 <li><a class="reference" href="#developer-reference" id="id5" name="id5">Developer Reference</a></li>
@@ -75,20 +357,20 @@
 </li>
 </ul>
 </div>
-<div class="section" id="introduction">
-<h1><a class="toc-backref" href="#id4" name="introduction">Introduction</a></h1>
+<div class="section">
+<h1><a class="toc-backref" href="#id4" id="introduction" name="introduction">Introduction</a></h1>
 <p>This document will show you how to use the Py programs and the Py
 library of Python source code modules.  Py is the new name for the
 project that began as PyCrust.  Py is officially part of <a class="reference" href="http://www.wxpython.org/">wxPython</a>,
 and includes PyCrust, so PyCrust is no longer distributed separately.</p>
 </div>
-<div class="section" id="developer-reference">
-<h1><a class="toc-backref" href="#id5" name="developer-reference">Developer Reference</a></h1>
+<div class="section">
+<h1><a class="toc-backref" href="#id5" id="developer-reference" name="developer-reference">Developer Reference</a></h1>
 <p>Source code documentation for developers is available at:</p>
 <p><a class="reference" href="http://www.orbtech.com/www/wx/epydoc/public/wx.py-module.html">http://www.orbtech.com/www/wx/epydoc/public/wx.py-module.html</a></p>
 </div>
-<div class="section" id="what-is-py">
-<h1><a class="toc-backref" href="#id6" name="what-is-py">What is Py?</a></h1>
+<div class="section">
+<h1><a class="toc-backref" href="#id6" id="what-is-py" name="what-is-py">What is Py?</a></h1>
 <p>Besides being <a class="reference" href="http://www.wikipedia.org/wiki/Pie">a delicious dessert</a>, Py is the name for a collection
 of whimsically-named Python programs and modules that began as the
 PyCrust project.  So Py is really several things: a set of standalone
@@ -99,8 +381,8 @@ do something, you might as well do it all the way, right?)  Py uses
 Python and wxPython, so it works equally well on Windows, Linux and
 Mac OS X.</p>
 </div>
-<div class="section" id="pycrust-is-dead-long-live-py">
-<h1><a class="toc-backref" href="#id7" name="pycrust-is-dead-long-live-py">PyCrust is dead! Long live Py!</a></h1>
+<div class="section">
+<h1><a class="toc-backref" href="#id7" id="pycrust-is-dead-long-live-py" name="pycrust-is-dead-long-live-py">PyCrust is dead! Long live Py!</a></h1>
 <p>This project began with a program I created called PyCrust - an
 interactive, graphical Python shell, developed using the wxPython GUI
 toolkit.  For about two years, PyCrust was hosted on <a class="reference" href="http://www.sf.net/projects/pycrust/">SourceForge</a>.
@@ -136,8 +418,8 @@ wxPython applications to provide similar services, either for your own
 use during development, or as an interface for users of your programs.
 These modules are the same ones used by all the Py programs.</p>
 </div>
-<div class="section" id="py-standalone-programs">
-<h1><a class="toc-backref" href="#id8" name="py-standalone-programs">Py standalone programs</a></h1>
+<div class="section">
+<h1><a class="toc-backref" href="#id8" id="py-standalone-programs" name="py-standalone-programs">Py standalone programs</a></h1>
 <p>These are the standalone applications in the Py collection:</p>
 <ul class="simple">
 <li>PyAlaCarte</li>
@@ -148,42 +430,42 @@ These modules are the same ones used by all the Py programs.</p>
 <li>PyWrap</li>
 </ul>
 </div>
-<div class="section" id="pyalacarte">
-<h1><a class="toc-backref" href="#id9" name="pyalacarte">PyAlaCarte</a></h1>
+<div class="section">
+<h1><a class="toc-backref" href="#id9" id="pyalacarte" name="pyalacarte">PyAlaCarte</a></h1>
 <p>PyAlaCarte is a Python source code editor.  It is designed to have a
 simple, single-file interface.  As a standalone application, it is
 good for simple, short editing tasks.  But it is really meant to be
 more of an example of how to embed the Py editor into a wxPython
 application.</p>
 </div>
-<div class="section" id="pyalamode">
-<h1><a class="toc-backref" href="#id10" name="pyalamode">PyAlaMode</a></h1>
+<div class="section">
+<h1><a class="toc-backref" href="#id10" id="pyalamode" name="pyalamode">PyAlaMode</a></h1>
 <p>PyAlaMode is a Python source code editor.</p>
 </div>
-<div class="section" id="pycrust">
-<h1><a class="toc-backref" href="#id11" name="pycrust">PyCrust</a></h1>
+<div class="section">
+<h1><a class="toc-backref" href="#id11" id="pycrust" name="pycrust">PyCrust</a></h1>
 <p>PyCrust is an interactive, Python shell.  But it's more than just a
 shell.  It includes a tabbed notebook containing a namespace tree
 (PyFilling), and several other things.</p>
 </div>
-<div class="section" id="pyfilling">
-<h1><a class="toc-backref" href="#id12" name="pyfilling">PyFilling</a></h1>
+<div class="section">
+<h1><a class="toc-backref" href="#id12" id="pyfilling" name="pyfilling">PyFilling</a></h1>
 <p>PyFilling is a namespace viewer.  It isn't really useful as a
 standalone program, but it does illustrate how to make use of the
 underlying <tt class="docutils literal"><span class="pre">filling</span></tt> module.</p>
 </div>
-<div class="section" id="pyshell">
-<h1><a class="toc-backref" href="#id13" name="pyshell">PyShell</a></h1>
+<div class="section">
+<h1><a class="toc-backref" href="#id13" id="pyshell" name="pyshell">PyShell</a></h1>
 <p>PyShell is an interactive, Python shell.  It shares the same base code
 as PyCrust, but doesn't have any of the extra features that appear in
 the PyCrust notebook interface.</p>
 <div class="figure">
-<div class="image"><img alt="screenshots/PyShell.png" src="screenshots/PyShell.png" /></div>
+<img alt="screenshots/PyShell.png" src="screenshots/PyShell.png" />
 <p class="caption">PyShell running on Mandrake Linux.</p>
 </div>
 </div>
-<div class="section" id="pywrap">
-<h1><a class="toc-backref" href="#id14" name="pywrap">PyWrap</a></h1>
+<div class="section">
+<h1><a class="toc-backref" href="#id14" id="pywrap" name="pywrap">PyWrap</a></h1>
 <p>PyWrap is a runtime utility that lets you run an existing wxPython
 program with a PyCrust frame at the same time.  Inside the PyCrust
 shell namespace, the local variable <tt class="docutils literal"><span class="pre">app</span></tt> is assigned to your
@@ -191,8 +473,8 @@ application instance.  In this way you can introspect your entire
 application within the PyCrust shell, as well as the PyFilling
 namespace viewer.</p>
 </div>
-<div class="section" id="py-modules">
-<h1><a class="toc-backref" href="#id15" name="py-modules">Py modules</a></h1>
+<div class="section">
+<h1><a class="toc-backref" href="#id15" id="py-modules" name="py-modules">Py modules</a></h1>
 <p>Py was designed to be modular.  That means graphical code is kept
 separate from non-graphical code, and many of the Py modules can be
 used by other programs.  Likewise, other programs can supply some of
@@ -202,8 +484,8 @@ application.  As long as it supports the minimum functionality
 required, PyCrust will work just as well with your interpreter as with
 its default interpreter.</p>
 </div>
-<div class="section" id="projects-using-py">
-<h1><a class="toc-backref" href="#id16" name="projects-using-py">Projects using Py</a></h1>
+<div class="section">
+<h1><a class="toc-backref" href="#id16" id="projects-using-py" name="projects-using-py">Projects using Py</a></h1>
 <ul class="simple">
 <li><a class="reference" href="http://conflictsolver.sourceforge.net/">Conflict Solver</a></li>
 <li><a class="reference" href="http://www.gnumed.org/">Gnumed</a></li>
@@ -215,12 +497,12 @@ its default interpreter.</p>
 <li><a class="reference" href="http://linus.yorktown.arlington.k12.va.us/CS/APCSC/student_sites/David_Mayo/wxGasp">wxGasp</a></li>
 </ul>
 </div>
-<div class="section" id="history-of-changes">
-<h1><a class="toc-backref" href="#id17" name="history-of-changes">History of changes</a></h1>
+<div class="section">
+<h1><a class="toc-backref" href="#id17" id="history-of-changes" name="history-of-changes">History of changes</a></h1>
 <p>This section lists all the changes that have been made to the Py
 programs and modules, since the beginning.</p>
-<div class="section" id="id1">
-<h2><a class="toc-backref" href="#id18" name="id1">0.9.5 (12/23/2005)</a></h2>
+<div class="section">
+<h2><a class="toc-backref" href="#id18" id="id1" name="id1">0.9.5 (12/23/2005)</a></h2>
 <p>Applied a series of enhancments by Franz Steinaeusler, Adi Sieker, and
 Sebastian Haase, up until their 7-31-2005 version.  (Their next
 version broke some existing functionality, and added some confusing
@@ -261,7 +543,7 @@ place that then has to reach all over the place to do anything.</li>
 <li>Enable editing of the startup python code, which will either be the
 file pointed to by PYTHONSTARTUP or a file in the config dir if
 PYTHONSTARTUP is not set in the environment.</li>
-<li>Added an option to skip the running of the startup code when 
+<li>Added an option to skip the running of the startup code when
 PyShell or PyCrust starts.</li>
 <li>PyCrust adds a pp(item) function to the shell's namespace that
 pretty prints the item in the Display tab of the notebook.  Added
@@ -271,8 +553,8 @@ when popping up the call tip.</li>
 <li>Added Find and Find-Next functions that use the wx.FindReplaceDialog.</li>
 </ul>
 </div>
-<div class="section" id="to-2004">
-<h2><a class="toc-backref" href="#id19" name="to-2004">0.9.4 (1/25/2004 to //2004)</a></h2>
+<div class="section">
+<h2><a class="toc-backref" href="#id19" id="to-2004" name="to-2004">0.9.4 (1/25/2004 to //2004)</a></h2>
 <p>Removed wxd decorators in favor of new SWIG-generated docstrings.</p>
 <p>Removed docs tabs from crust interface:
 * wxPython Docs
@@ -282,13 +564,13 @@ when popping up the call tip.</li>
 <p>Changed default namespace of Shell to __main__.__dict__, instead of an
 empty dictionary.</p>
 </div>
-<div class="section" id="to-1-24-2004">
-<h2><a class="toc-backref" href="#id20" name="to-1-24-2004">0.9.3 (9/25/2003 to 1/24/2004)</a></h2>
+<div class="section">
+<h2><a class="toc-backref" href="#id20" id="to-1-24-2004" name="to-1-24-2004">0.9.3 (9/25/2003 to 1/24/2004)</a></h2>
 <p>Fun and games with dynamic renaming.  Details of any other changes
 were lost in the confusion.  I'll try to do better in the future.</p>
 </div>
-<div class="section" id="to-9-25-2003">
-<h2><a class="toc-backref" href="#id21" name="to-9-25-2003">0.9.2 (5/3/2003 to 9/25/2003)</a></h2>
+<div class="section">
+<h2><a class="toc-backref" href="#id21" id="to-9-25-2003" name="to-9-25-2003">0.9.2 (5/3/2003 to 9/25/2003)</a></h2>
 <p>Changed to the new prefix-less &quot;wx&quot; package:</p>
 <pre class="literal-block">
 import wx
@@ -330,8 +612,8 @@ def CanPaste(self):
     return stc.StyledTextCtrl.CanPaste(self) and self.CanEdit()
 </pre>
 </div>
-<div class="section" id="to-5-2-2003">
-<h2><a class="toc-backref" href="#id22" name="to-5-2-2003">0.9.1 (3/21/2003 to 5/2/2003)</a></h2>
+<div class="section">
+<h2><a class="toc-backref" href="#id22" id="to-5-2-2003" name="to-5-2-2003">0.9.1 (3/21/2003 to 5/2/2003)</a></h2>
 <p>PyCrust is dead!  Long live Py!</p>
 <ul class="simple">
 <li>Renamed <tt class="docutils literal"><span class="pre">PyCrust</span></tt> package to <tt class="docutils literal"><span class="pre">py</span></tt>.</li>
@@ -365,8 +647,8 @@ base.</p>
 The current implementation of wxSTC can now handle lists this big.</p>
 <p>Improved handling of <tt class="docutils literal"><span class="pre">sys.path</span></tt> to mimic the standard Python shell.</p>
 </div>
-<div class="section" id="to-3-20-2003">
-<h2><a class="toc-backref" href="#id23" name="to-3-20-2003">0.9 (2/27/2003 to 3/20/2003)</a></h2>
+<div class="section">
+<h2><a class="toc-backref" href="#id23" id="to-3-20-2003" name="to-3-20-2003">0.9 (2/27/2003 to 3/20/2003)</a></h2>
 <p>Added fontIncrease, fontDecrease, fontDefault signals, receivers and
 keybindings:</p>
 <pre class="literal-block">
@@ -397,8 +679,8 @@ except NameError:
 </pre>
 <p>Added <tt class="docutils literal"><span class="pre">wxd</span></tt> directory with decoration classes.</p>
 </div>
-<div class="section" id="to-2-26-2003">
-<h2><a class="toc-backref" href="#id24" name="to-2-26-2003">0.8.2 (1/5/2003 to 2/26/2003)</a></h2>
+<div class="section">
+<h2><a class="toc-backref" href="#id24" id="to-2-26-2003" name="to-2-26-2003">0.8.2 (1/5/2003 to 2/26/2003)</a></h2>
 <p>Wrapped <tt class="docutils literal"><span class="pre">sys.ps1</span></tt>, <tt class="docutils literal"><span class="pre">sys.ps2</span></tt>, and <tt class="docutils literal"><span class="pre">sys.ps3</span></tt> in <tt class="docutils literal"><span class="pre">str()</span></tt>.
 (Thanks, Kieran Holland.)</p>
 <p>Fixed minor things found by PyChecker.</p>
@@ -432,8 +714,8 @@ func = 3 .
 </pre>
 <p>More Filling!!! The namespace tree is now dynamically updated.</p>
 </div>
-<div class="section" id="to-12-25-2002">
-<h2><a class="toc-backref" href="#id25" name="to-12-25-2002">0.8.1 (12/20/2002 to 12/25/2002)</a></h2>
+<div class="section">
+<h2><a class="toc-backref" href="#id25" id="to-12-25-2002" name="to-12-25-2002">0.8.1 (12/20/2002 to 12/25/2002)</a></h2>
 <p>Improved keyboard handling with Autocomplete active.  You can now use
 Enter as well as Tab to select an item from the list.</p>
 <p>Disabled autocomplete for lists of 2000 items or more.  The current
@@ -444,8 +726,8 @@ coming directly from the source code.  (Hmmm.  Sounds like someone is
 doing some decorating.  I wonder where that would be helpful? &lt;wink&gt;)</p>
 <p>Fixed handling of icon.  Added <tt class="docutils literal"><span class="pre">images.py</span></tt> file.</p>
 </div>
-<div class="section" id="to-12-16-2002">
-<h2><a class="toc-backref" href="#id26" name="to-12-16-2002">0.8 (10/29/2002 to 12/16/2002)</a></h2>
+<div class="section">
+<h2><a class="toc-backref" href="#id26" id="to-12-16-2002" name="to-12-16-2002">0.8 (10/29/2002 to 12/16/2002)</a></h2>
 <p>Added &quot;help&quot; to startup banner info.</p>
 <p>Made all <tt class="docutils literal"><span class="pre">wx</span></tt> and <tt class="docutils literal"><span class="pre">stc</span></tt> imports explicit.  No more <tt class="docutils literal"><span class="pre">import</span> <span class="pre">*</span></tt>.</p>
 <p>Replaced use of the <tt class="docutils literal"><span class="pre">wx</span></tt> module's <tt class="docutils literal"><span class="pre">true</span></tt> and <tt class="docutils literal"><span class="pre">false</span></tt> with
@@ -471,8 +753,8 @@ Platform: linux2
 <p>Added <tt class="docutils literal"><span class="pre">time.sleep()</span></tt> in <tt class="docutils literal"><span class="pre">readline()</span></tt> and <tt class="docutils literal"><span class="pre">OnIdle()</span></tt> event
 handler to free up the CPU.</p>
 </div>
-<div class="section" id="to-8-27-2002">
-<h2><a class="toc-backref" href="#id27" name="to-8-27-2002">0.7.2 (2/22/2002 to 8/27/2002)</a></h2>
+<div class="section">
+<h2><a class="toc-backref" href="#id27" id="to-8-27-2002" name="to-8-27-2002">0.7.2 (2/22/2002 to 8/27/2002)</a></h2>
 <p>Tweaked <tt class="docutils literal"><span class="pre">getAttributeNames()</span></tt> to pick up a few more attributes:</p>
 <pre class="literal-block">
 '__bases__', '__class__', '__dict__', '__name__', 'func_closure',
@@ -509,8 +791,8 @@ to Raul Cota for pointing this out.</p>
 boxes.  Renamed <tt class="docutils literal"><span class="pre">readIn</span></tt> to <tt class="docutils literal"><span class="pre">readline</span></tt> and <tt class="docutils literal"><span class="pre">readRaw</span></tt> to
 <tt class="docutils literal"><span class="pre">raw_input</span></tt>.</p>
 </div>
-<div class="section" id="to-2-21-2002">
-<h2><a class="toc-backref" href="#id28" name="to-2-21-2002">0.7.1 (12/12/2001 to 2/21/2002)</a></h2>
+<div class="section">
+<h2><a class="toc-backref" href="#id28" id="to-2-21-2002" name="to-2-21-2002">0.7.1 (12/12/2001 to 2/21/2002)</a></h2>
 <p>Fixed <tt class="docutils literal"><span class="pre">OnChar()</span></tt> issues effecting European keyboards, as reported by
 Jean-Michel Fauth.</p>
 <p>Fixed <tt class="docutils literal"><span class="pre">introspect.py</span></tt> issue with xmlrpc objects reported by Kevin
@@ -536,8 +818,8 @@ to insert from history - Shift+Up and Shift+Down.</p>
 <p>Better call tips on objects with <tt class="docutils literal"><span class="pre">__call__</span></tt> methods.</p>
 <p>Improved call tip positioning calculation.</p>
 </div>
-<div class="section" id="to-12-11-2001">
-<h2><a class="toc-backref" href="#id29" name="to-12-11-2001">0.7 (10/15/2001 to 12/11/2001)</a></h2>
+<div class="section">
+<h2><a class="toc-backref" href="#id29" id="to-12-11-2001" name="to-12-11-2001">0.7 (10/15/2001 to 12/11/2001)</a></h2>
 <p>Changed how command history retrieval functions work.  Added Alt-P,
 Alt-N as keybindings for Retrieve-Previous, Retrieve-Next.</p>
 <p>Added full support for multi-line commands, similar to IDLE.</p>
@@ -560,8 +842,8 @@ package/module name conflicts that kept you from doing <tt class="docutils liter
 <p>Removed the <tt class="docutils literal"><span class="pre">__date__</span></tt> property from all modules.</p>
 <p>Fixed bug in <tt class="docutils literal"><span class="pre">introspect.getCallTip()</span></tt>, reported by Kevin Altis.</p>
 </div>
-<div class="section" id="to-10-12-2001">
-<h2><a class="toc-backref" href="#id30" name="to-10-12-2001">0.6.1 (9/19/2001 to 10/12/2001)</a></h2>
+<div class="section">
+<h2><a class="toc-backref" href="#id30" id="to-10-12-2001" name="to-10-12-2001">0.6.1 (9/19/2001 to 10/12/2001)</a></h2>
 <p>Changed <tt class="docutils literal"><span class="pre">Shell.run()</span></tt> to always position to the end of existing
 text, as suggested by Raul Cota.</p>
 <p>Changed <tt class="docutils literal"><span class="pre">introspect.getAllAttributeNames()</span></tt> to break circular
@@ -578,8 +860,8 @@ platform where the font was 2 points larger than what was specified.</p>
 ZODB objects that are asleep - in a &quot;ghost&quot; state.  Otherwise it
 returns incomplete info.</p>
 </div>
-<div class="section" id="to-9-12-2001">
-<h2><a class="toc-backref" href="#id31" name="to-9-12-2001">0.6 (8/21/2001 to 9/12/2001)</a></h2>
+<div class="section">
+<h2><a class="toc-backref" href="#id31" id="to-9-12-2001" name="to-9-12-2001">0.6 (8/21/2001 to 9/12/2001)</a></h2>
 <p>Added <tt class="docutils literal"><span class="pre">PyFilling.py</span></tt> and <tt class="docutils literal"><span class="pre">filling.py</span></tt>.</p>
 <p><tt class="docutils literal"><span class="pre">PyShell.py</span></tt> and <tt class="docutils literal"><span class="pre">PyFilling.py</span></tt> can now be run standalone, as well
 as <tt class="docutils literal"><span class="pre">PyCrust.py</span></tt>.</p>
@@ -599,8 +881,8 @@ sys.path.insert(0, os.curdir)
 </pre>
 <p>Added support for distutils installations.</p>
 </div>
-<div class="section" id="to-8-20-2001">
-<h2><a class="toc-backref" href="#id32" name="to-8-20-2001">0.5.4 (8/17/2001 to 8/20/2001)</a></h2>
+<div class="section">
+<h2><a class="toc-backref" href="#id32" id="to-8-20-2001" name="to-8-20-2001">0.5.4 (8/17/2001 to 8/20/2001)</a></h2>
 <p>Changed default font size under Linux to:</p>
 <pre class="literal-block">
 'size'   : 12,
@@ -617,15 +899,15 @@ demo.</p>
 <p>Split <tt class="docutils literal"><span class="pre">PyCrust.py</span></tt> into <tt class="docutils literal"><span class="pre">PyCrust.py</span></tt> and <tt class="docutils literal"><span class="pre">PyShell.py</span></tt> in
 anticipation of <tt class="docutils literal"><span class="pre">PyFilling.py</span></tt>.</p>
 </div>
-<div class="section" id="id2">
-<h2><a class="toc-backref" href="#id33" name="id2">0.5.3 (8/16/2001)</a></h2>
+<div class="section">
+<h2><a class="toc-backref" href="#id33" id="id2" name="id2">0.5.3 (8/16/2001)</a></h2>
 <p>Added patch to <tt class="docutils literal"><span class="pre">PyCrust.py</span></tt> to fix wxPython bug:</p>
 <pre class="literal-block">
 wxID_SELECTALL = NewId() # This *should* be defined by wxPython.
 </pre>
 </div>
-<div class="section" id="to-8-15-2001">
-<h2><a class="toc-backref" href="#id34" name="to-8-15-2001">0.5.2 (8/14/2001 to 8/15/2001)</a></h2>
+<div class="section">
+<h2><a class="toc-backref" href="#id34" id="to-8-15-2001" name="to-8-15-2001">0.5.2 (8/14/2001 to 8/15/2001)</a></h2>
 <p>Shortened module names by dropping &quot;PyCrust&quot; as a prefix.</p>
 <p>Changed <tt class="docutils literal"><span class="pre">version</span></tt> to <tt class="docutils literal"><span class="pre">VERSION</span></tt> in <tt class="docutils literal"><span class="pre">version</span></tt> module.</p>
 <p>Added Options menu to PyCrust application.</p>
@@ -635,8 +917,8 @@ There just wasn't enough non-gui code to justify the separation.
 Plus, Shell will be much easier for gui toolkits/designers to deal
 with now.</p>
 </div>
-<div class="section" id="to-8-14-2001">
-<h2><a class="toc-backref" href="#id35" name="to-8-14-2001">0.5.1 (8/10/2001 to 8/14/2001)</a></h2>
+<div class="section">
+<h2><a class="toc-backref" href="#id35" id="to-8-14-2001" name="to-8-14-2001">0.5.1 (8/10/2001 to 8/14/2001)</a></h2>
 <p>Added <tt class="docutils literal"><span class="pre">introspect</span></tt> module.</p>
 <p>Moved some functionality from <tt class="docutils literal"><span class="pre">PyCrustInterp</span></tt> to <tt class="docutils literal"><span class="pre">introspect</span></tt>.</p>
 <p>Changed <tt class="docutils literal"><span class="pre">introspect.getRoot()</span></tt> to no longer remove whitespace from
@@ -687,32 +969,32 @@ exclude one or the other or both with:</p>
 &gt;&gt;&gt; shell.editor.autoCompleteExcludeDouble = 1
 </pre>
 </div>
-<div class="section" id="id3">
-<h2><a class="toc-backref" href="#id36" name="id3">0.5 (8/8/2001)</a></h2>
+<div class="section">
+<h2><a class="toc-backref" href="#id36" id="id3" name="id3">0.5 (8/8/2001)</a></h2>
 <p>Mostly just a final version change before creating a release.</p>
 </div>
-<div class="section" id="to-8-7-2001">
-<h2><a class="toc-backref" href="#id37" name="to-8-7-2001">0.4 (8/4/2001 to 8/7/2001)</a></h2>
+<div class="section">
+<h2><a class="toc-backref" href="#id37" id="to-8-7-2001" name="to-8-7-2001">0.4 (8/4/2001 to 8/7/2001)</a></h2>
 <p>Changed version/revision handling.</p>
 <p>Fixed bugs.</p>
 </div>
-<div class="section" id="to-8-3-2001">
-<h2><a class="toc-backref" href="#id38" name="to-8-3-2001">0.3 (8/2/2001 to 8/3/2001)</a></h2>
+<div class="section">
+<h2><a class="toc-backref" href="#id38" id="to-8-3-2001" name="to-8-3-2001">0.3 (8/2/2001 to 8/3/2001)</a></h2>
 <p>Removed lots of cruft.</p>
 <p>Added lots of docstrings.</p>
 <p>Imported to CVS repository at SourceForge.</p>
 <p>Added call tips.</p>
 </div>
-<div class="section" id="to-8-2-2001">
-<h2><a class="toc-backref" href="#id39" name="to-8-2-2001">0.2 (7/30/2001 to 8/2/2001)</a></h2>
+<div class="section">
+<h2><a class="toc-backref" href="#id39" id="to-8-2-2001" name="to-8-2-2001">0.2 (7/30/2001 to 8/2/2001)</a></h2>
 <p>Renamed several files.</p>
 <p>Added command autocompletion.</p>
 <p>Added menus to PyCrust.py: File, Edit and Help.</p>
 <p>Added sample applications: <tt class="docutils literal"><span class="pre">PyCrustAlaCarte.py</span></tt>,
 <tt class="docutils literal"><span class="pre">PyCrustAlaMode.py</span></tt>, and <tt class="docutils literal"><span class="pre">PyCrustMinimus.py</span></tt>.</p>
 </div>
-<div class="section" id="to-7-19-2001">
-<h2><a class="toc-backref" href="#id40" name="to-7-19-2001">0.1 (7/1/2001 to 7/19/2001)</a></h2>
+<div class="section">
+<h2><a class="toc-backref" href="#id40" id="to-7-19-2001" name="to-7-19-2001">0.1 (7/1/2001 to 7/19/2001)</a></h2>
 <p>Added basic syntax coloring much like Boa.</p>
 <p>Added read-only logging much like IDLE.</p>
 <p>Can retrieve a previous command by putting the cursor back on that
@@ -724,8 +1006,8 @@ response.</p>
 <p>Home key honors the prompt.</p>
 <p>Created SourceForge account, but nothing was posted.</p>
 </div>
-<div class="section" id="in-the-beginning-there-was-pie-7-1-2001">
-<h2><a class="toc-backref" href="#id41" name="in-the-beginning-there-was-pie-7-1-2001">In the beginning, there was pie... (7/1/2001)</a></h2>
+<div class="section">
+<h2><a class="toc-backref" href="#id41" id="in-the-beginning-there-was-pie-7-1-2001" name="in-the-beginning-there-was-pie-7-1-2001">In the beginning, there was pie... (7/1/2001)</a></h2>
 <p>Blame it all on IDLE, Boa and PythonWin.  I was using all three, got
 frustrated with their dissimilarities, and began to let everyone know
 how I felt.  At the same time, Scintilla looked like an interesting

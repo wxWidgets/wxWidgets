@@ -3,15 +3,693 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
-<meta name="generator" content="Docutils 0.3.7: http://docutils.sourceforge.net/" />
+<meta name="generator" content="Docutils 0.4: http://docutils.sourceforge.net/" />
 <title>Recent Changes for wxPython</title>
-<link rel="stylesheet" href="default.css" type="text/css" />
+<style type="text/css">
+
+/*
+:Author: David Goodger
+:Contact: goodger@users.sourceforge.net
+:Date: $Date$
+:Revision: $Revision$
+:Copyright: This stylesheet has been placed in the public domain.
+
+Default cascading style sheet for the HTML output of Docutils.
+
+See http://docutils.sf.net/docs/howto/html-stylesheets.html for how to
+customize this style sheet.
+*/
+
+/* used to remove borders from tables and images */
+.borderless, table.borderless td, table.borderless th {
+  border: 0 }
+
+table.borderless td, table.borderless th {
+  /* Override padding for "table.docutils td" with "! important".
+     The right padding separates the table cells. */
+  padding: 0 0.5em 0 0 ! important }
+
+.first {
+  /* Override more specific margin styles with "! important". */
+  margin-top: 0 ! important }
+
+.last, .with-subtitle {
+  margin-bottom: 0 ! important }
+
+.hidden {
+  display: none }
+
+a.toc-backref {
+  text-decoration: none ;
+  color: black }
+
+blockquote.epigraph {
+  margin: 2em 5em ; }
+
+dl.docutils dd {
+  margin-bottom: 0.5em }
+
+/* Uncomment (and remove this text!) to get bold-faced definition list terms
+dl.docutils dt {
+  font-weight: bold }
+*/
+
+div.abstract {
+  margin: 2em 5em }
+
+div.abstract p.topic-title {
+  font-weight: bold ;
+  text-align: center }
+
+div.admonition, div.attention, div.caution, div.danger, div.error,
+div.hint, div.important, div.note, div.tip, div.warning {
+  margin: 2em ;
+  border: medium outset ;
+  padding: 1em }
+
+div.admonition p.admonition-title, div.hint p.admonition-title,
+div.important p.admonition-title, div.note p.admonition-title,
+div.tip p.admonition-title {
+  font-weight: bold ;
+  font-family: sans-serif }
+
+div.attention p.admonition-title, div.caution p.admonition-title,
+div.danger p.admonition-title, div.error p.admonition-title,
+div.warning p.admonition-title {
+  color: red ;
+  font-weight: bold ;
+  font-family: sans-serif }
+
+/* Uncomment (and remove this text!) to get reduced vertical space in
+   compound paragraphs.
+div.compound .compound-first, div.compound .compound-middle {
+  margin-bottom: 0.5em }
+
+div.compound .compound-last, div.compound .compound-middle {
+  margin-top: 0.5em }
+*/
+
+div.dedication {
+  margin: 2em 5em ;
+  text-align: center ;
+  font-style: italic }
+
+div.dedication p.topic-title {
+  font-weight: bold ;
+  font-style: normal }
+
+div.figure {
+  margin-left: 2em ;
+  margin-right: 2em }
+
+div.footer, div.header {
+  clear: both;
+  font-size: smaller }
+
+div.line-block {
+  display: block ;
+  margin-top: 1em ;
+  margin-bottom: 1em }
+
+div.line-block div.line-block {
+  margin-top: 0 ;
+  margin-bottom: 0 ;
+  margin-left: 1.5em }
+
+div.sidebar {
+  margin-left: 1em ;
+  border: medium outset ;
+  padding: 1em ;
+  background-color: #ffffee ;
+  width: 40% ;
+  float: right ;
+  clear: right }
+
+div.sidebar p.rubric {
+  font-family: sans-serif ;
+  font-size: medium }
+
+div.system-messages {
+  margin: 5em }
+
+div.system-messages h1 {
+  color: red }
+
+div.system-message {
+  border: medium outset ;
+  padding: 1em }
+
+div.system-message p.system-message-title {
+  color: red ;
+  font-weight: bold }
+
+div.topic {
+  margin: 2em }
+
+h1.section-subtitle, h2.section-subtitle, h3.section-subtitle,
+h4.section-subtitle, h5.section-subtitle, h6.section-subtitle {
+  margin-top: 0.4em }
+
+h1.title {
+  text-align: center }
+
+h2.subtitle {
+  text-align: center }
+
+hr.docutils {
+  width: 75% }
+
+img.align-left {
+  clear: left }
+
+img.align-right {
+  clear: right }
+
+ol.simple, ul.simple {
+  margin-bottom: 1em }
+
+ol.arabic {
+  list-style: decimal }
+
+ol.loweralpha {
+  list-style: lower-alpha }
+
+ol.upperalpha {
+  list-style: upper-alpha }
+
+ol.lowerroman {
+  list-style: lower-roman }
+
+ol.upperroman {
+  list-style: upper-roman }
+
+p.attribution {
+  text-align: right ;
+  margin-left: 50% }
+
+p.caption {
+  font-style: italic }
+
+p.credits {
+  font-style: italic ;
+  font-size: smaller }
+
+p.label {
+  white-space: nowrap }
+
+p.rubric {
+  font-weight: bold ;
+  font-size: larger ;
+  color: maroon ;
+  text-align: center }
+
+p.sidebar-title {
+  font-family: sans-serif ;
+  font-weight: bold ;
+  font-size: larger }
+
+p.sidebar-subtitle {
+  font-family: sans-serif ;
+  font-weight: bold }
+
+p.topic-title {
+  font-weight: bold }
+
+pre.address {
+  margin-bottom: 0 ;
+  margin-top: 0 ;
+  font-family: serif ;
+  font-size: 100% }
+
+pre.literal-block, pre.doctest-block {
+  margin-left: 2em ;
+  margin-right: 2em ;
+  background-color: #eeeeee }
+
+span.classifier {
+  font-family: sans-serif ;
+  font-style: oblique }
+
+span.classifier-delimiter {
+  font-family: sans-serif ;
+  font-weight: bold }
+
+span.interpreted {
+  font-family: sans-serif }
+
+span.option {
+  white-space: nowrap }
+
+span.pre {
+  white-space: pre }
+
+span.problematic {
+  color: red }
+
+span.section-subtitle {
+  /* font-size relative to parent (h1..h6 element) */
+  font-size: 80% }
+
+table.citation {
+  border-left: solid 1px gray;
+  margin-left: 1px }
+
+table.docinfo {
+  margin: 2em 4em }
+
+table.docutils {
+  margin-top: 0.5em ;
+  margin-bottom: 0.5em }
+
+table.footnote {
+  border-left: solid 1px black;
+  margin-left: 1px }
+
+table.docutils td, table.docutils th,
+table.docinfo td, table.docinfo th {
+  padding-left: 0.5em ;
+  padding-right: 0.5em ;
+  vertical-align: top }
+
+table.docutils th.field-name, table.docinfo th.docinfo-name {
+  font-weight: bold ;
+  text-align: left ;
+  white-space: nowrap ;
+  padding-left: 0 }
+
+h1 tt.docutils, h2 tt.docutils, h3 tt.docutils,
+h4 tt.docutils, h5 tt.docutils, h6 tt.docutils {
+  font-size: 100% }
+
+tt.docutils {
+  background-color: #eeeeee }
+
+ul.auto-toc {
+  list-style-type: none }
+
+</style>
 </head>
 <body>
 <div class="document" id="recent-changes-for-wxpython">
 <h1 class="title">Recent Changes for wxPython</h1>
-<div class="section" id="id1">
-<h1><a name="id1">2.6.2.1</a></h1>
+<div class="section">
+<h1><a id="id1" name="id1">2.7.1.1</a></h1>
+<ul class="simple">
+<li>18-Oct-2006</li>
+</ul>
+<p>The following deprecated items have been removed:</p>
+<blockquote>
+<ul class="simple">
+<li>wx.Bitmap SetQuality and GetQuality methods</li>
+<li>The wx.GetNumberFromUser function</li>
+<li>wx.EVT_LIST_GET_INFO and wx.EVT_LIST_SET_INFO</li>
+<li>wx.BookCtrlSizer and wx.NotebookSizer</li>
+<li>The PostScript-specific methods of wx.PrintData</li>
+<li>wx.PrintDialogData SetSetupDialog and GetSetupDialog methods</li>
+<li>wx.FontMapper SetConfig method</li>
+<li>wx.html.HtmlSearchStatus.GetContentsItem method</li>
+<li>wx.html.HtmlHelpData.GetContents, GetContentsCnt, GetIndex, and
+GetIndexCnt methods</li>
+</ul>
+</blockquote>
+<p>wx.EventLoop is now implemented for wxMac.</p>
+<p>Added wxPython wrappers for the new wx.Treebook and wx.Toolbook
+classes.</p>
+<p>wx.DC.BeginDrawing and EndDrawing have been deprecated in the C++
+code, so since they never really did anything before they are now just
+empty stubs in wxPython.</p>
+<p>Solved a problem that has been around for a very long time in how C++
+methods are virtualized for overriding in derived Python classes.
+Previously we couldn't do it for methods that needed to also exist in
+the base class wrappers such that they could be called normally.  (The
+reasons are long and complex, but suffice it to say that it was due to
+mixing C++'s dynamic dispatch, and Python's runtime lookup of the
+method attributes resulting in endless recursion of function calls.)
+Because of this problem I used a hack that I have always hated, and
+that is renaming the base class methods with a &quot;base_*&quot; prefix, for
+example wx.Printout.base_OnBeginDocument.  Now that the problem has
+finally been solved I have replaced all the base_Whatever() methods
+with the real Whatever() method as well as a simple wrapper named
+base_Whatever that is marked as deprecated.  So now instead of writing
+your overridden methods like this:</p>
+<pre class="literal-block">
+def OnBeginDocument(self, start, end):
+    # do something here
+    return self.base_OnBeginDocument(start, end)
+</pre>
+<p>You can now call the base class method the normal way, like this:</p>
+<pre class="literal-block">
+def OnBeginDocument(self, start, end):
+    # do something here
+    return Printout.OnBeginDocument(self, start, end)
+</pre>
+<p>Or like this with super():</p>
+<pre class="literal-block">
+def OnBeginDocument(self, start, end):
+    # do something here
+    return super(MyPrintout, self).OnBeginDocument(start, end)
+</pre>
+<p>Note that the old way with the &quot;base_*&quot; function still works, but you
+will get a DeprecationWarning from calling base_OnBeginDocument.  The
+classes affected by this are:</p>
+<blockquote>
+<ul class="simple">
+<li>wx.DropSource</li>
+<li>wx.DropTarget</li>
+<li>wx.TextDropTarget</li>
+<li>wx.FileDropTarget</li>
+<li>wx.PyLog   (also added the ability to override Flush)</li>
+<li>wx.PyApp   (also added the ability to override ExitMainLoop)</li>
+<li>wx.Printout</li>
+<li>wx.PyPrintPreview</li>
+<li>wx.PyPreviewFrame</li>
+<li>wx.PreviewControlBar</li>
+<li>wx.Process</li>
+<li>wx.PyControl</li>
+<li>wx.PyPanel</li>
+<li>wx.PyScrolledWindow</li>
+<li>wx.PyWindow</li>
+<li>wx.Timer</li>
+<li>wx.grid.PyGridCellRenderer</li>
+<li>wx.grid.PyGridCellEditor</li>
+<li>wx.grid.PyGridCellAttrProvider</li>
+<li>wx.grid.PyGridTableBase</li>
+<li>wx.html.HtmlWindow</li>
+<li>wx.wizard.PyWizardPage</li>
+</ul>
+</blockquote>
+<p>Added the wx.DC.GradientFillConcentric and wx.DC.GradientFillLinear
+methods.</p>
+<p>wxGTK: wx.ListBox and wx.CheckListBox are now using native GTK2
+widgets.</p>
+<p>Added wx.ListBox.HitTest() from patch 1446207</p>
+<p>Bumped up to SWIG 1.3.29.  This provides some more runtime performance
+boosts, gets rid of the dreaded Ptr classes, and some other nice new
+things.</p>
+<p>Added wx.Window.GetScreenPosition and GetScreenRect which returns the
+position of the window in screen coordinates, even if the window is
+not a top-level window.</p>
+<p>Added GetResourcesDir and GetLocalizedResourcesDir to
+wx.StandardPaths.</p>
+<p>Added a GetReceivedFormat method to wx.DataObjectComposite.  You can
+use this to find out what format of data object was recieved from the
+source of the clipboard or DnD operation, and then you'll know which
+of the component data objects to use to access the data.</p>
+<p>Changed how the stock objects (wx.RED, wx.RED_PEN, wx.RED_BRUSH, etc.)
+are initialized.  They are now created as uninitialized instances
+using __new__.  Then after the wx.App has been created, but before
+OnInit is called, the .this attribute of each obhect is initialized.
+This was needed because of some delayed initialization functionality
+that was implemented in wxWidgets, but the end result is cleaner for
+wxPython as well, and allowed me to remove some ugly code previously
+hidden under the covers.</p>
+<p>Added wx.StandardPaths.GetDocumentsDir.</p>
+<p>Added wx.RendererNative.DrawCheckButton.</p>
+<p>wx.ProgressDialog.Update now returns a tuple of two values.  The first
+is a continue flag (what was returned before) and the second is a skip
+flag.  If the dialog has the wx.PD_CAN_SKIP flag and if the Skip
+button is clicked, then the skip flag is set to True the next time
+Update is called.</p>
+<p>A DeprecationWarning is now issued when the old wxPython package is
+imported.  If you are still using the old namespace please convert
+your code to use the new wx package instead.</p>
+<p>Added wrappers for Julian's new wxRichTextCtrl class, visible in
+wxPython as wx.richtext.RichTextCtrl window.  It still needs some more
+work, but it is a great start.</p>
+<p>wx.lib.mixins.listctrl.TextEditMixin: Fixed the double END_LABEL_EDIT
+event problem in TextEditMixin by checking if the editor was already
+hidden before continuing with the CloseEditor method.  Also added code
+to OpenEditor to send the BEGIN_LABEL_EDIT event and to not allow the
+opening of the editor to continue if the event handler doesn't allow
+it.</p>
+<p>wx.StaticBoxSizer now keeps better track of the wx.StaticBox, and it
+will destroy it if the sizer is destroyed before the parent window is.</p>
+<p>Added wx.HyperlinkCtrl.</p>
+<p>Added battery and power related functions and events (wxMSW only so
+far.)  See wx.PowerEvent, wx.GetPowerType and wx.GetBatteryState.</p>
+<p>Added wx.ListCtrl.HitTestSubItem which returns the sub-item (i.e. the
+column in report mode) that was hit (if any) in addition to the item
+and flags.</p>
+<p>Added wrappers for wx.ColourPickerCtrl, wx.DirPickerCtrl,
+wx.FilePickerCtrl, and wx.FontPickerCtrl.</p>
+<p>Patch #1502016 wx.Image.ConvertToGreyscale now retains the alpha
+channel.</p>
+<p>Added wrappers for the wxAUI classes, in the wx.aui module.</p>
+<p>Added the PseudoDC class from Paul Lanier.  It provides a way to
+record operations on a DC and then play them back later.</p>
+<p>Upgraded to Scintilla 1.70 for wx.stc.StyledTextCtrl.</p>
+<p>Added CanSetTransparent and SetTransparent methods to the
+wx.TopLevelWindow class, with implementations (so far) for wxMSW and
+wxMac.</p>
+<p>SetDefaultItem() and GetDefaultItem() are now members of
+wx.TopLevelWindow, not wx.Panel.</p>
+<p>wxGTK: Stock items (icons) will be used for menu items with stock
+IDs.</p>
+<p>Added wx.lib.combotreebox from Frank Niessink</p>
+<p>Added wx.ImageFromBuffer, wx.BitmapFromBuffer and
+wx.BitmapFromBufferRGBA factory functions.  They enable loading of an
+image or bitmap directly from a Python object that implements the
+buffer interface, such as strings, arrays, etc.</p>
+<p>Added wx.App.IsDisplayAvailable() which can be used to determine if a
+GUI can be created in the current environment.  (Still need an
+implementation for wxMSW...)</p>
+<p>The wx.html.HTML_FONT_SIZE_x constants are no longer available as the
+default sizes are now calculated at runtime based on the size of the
+normal GUI font.</p>
+<p>wx.Colour now includes an alpha component, which defaults to
+wx.ALPHA_OPAQUE.  This is in preparation for allowing various new
+alpha blening functionality using wx.Colour objects, such as drawing
+with pens and brushes on a wx.DC.</p>
+<p>Added wx.NativePixelBuffer, wx.AlphPixelBuffer and related iterator
+and accessor classes.  They allow platform independent direct access
+to the platform specific pixel buffer inside of a wx.Bitmap object.</p>
+<p>The beginnings of support for RTL languages has been added, thanks to
+a Google SoC project.</p>
+<p>Added wx.lib.dragscroller from Riaan Booysen.  It provides a helper
+class that can used to scroll a wx.ScrolledWindow in response to a
+mouse drag.</p>
+<p>Applied patch 1551409: Adds support for indeterminate mode gauges.</p>
+<p>wxMac: I've turned on the compile option for using the native toolbar
+on the Mac now that it supports hosting of controls.  If the toolbar
+is managed by the frame via either CreateToolBar() or SetToolBar()
+then the native toolbar will be used.  Additional toolbars, or
+toolbars that are not children of the frame, are managed by sizers or
+what-not will still use the emulated toolbar because of platform
+restrictions in how/where the native toolbar can be used.</p>
+<p>Added Python properties for many of the getter/setter methods of wx
+classes.  In order for the names to be predicatble for somebody
+already familiar with wxPython the property names are simply the name
+of the getter with the &quot;Get&quot; dropped.  For example, wx.Window has a
+property named &quot;Size&quot; that maps to GetSize and SetSize.  So far there
+is only one known name conflict using this naming convention, and that
+is wx.KeyEvent.KeyCode, however since KeyCode was formerly a
+compatibility alias for GetKeyCode (and has been for a long time) it
+was decided to just switch it to a property.  If you want to use the
+method then change your calls to event.KeyCode() to
+event.GetKeyCode(), otherwise you can use it as a property just by
+dropping the parentheses.</p>
+<p>Updated the C++ code for wx.gizmos.TreeListCtrl from the wxCode
+project.  This has resulted in some minor API changes, most of which
+were worked around in the wrapper code.</p>
+<p>Added wx.lib.delayedresult from Oliver Schoenborn.</p>
+<p>Added wx.lib.expando, a multi-line textctrl that exands as more lines
+are needed.</p>
+<p>wx.Image.Scale and Rescale methods now take an extra parameter
+specifying type of method to use for resampling the image.  It
+defaults to the current behavior of just replicating pixels, if
+wx.IMAGE_QUALITY_HIGH is passed then it uses bicubic and box averaging
+resampling methods for upsampling and downsampling respectively.</p>
+<p>Added the wx.lib.buttonpanel module, which is a tweaked version of
+Andrea Gavana's FancyButtonPanel module.</p>
+<p>Added the wx.lib.flatnotebook module, from Andrea Gavana.</p>
+<p>Renamed wx.FutureCall to wx.CallLater so it is named more like
+wx.CallAfter.  wx.FutureCall is now an empty subclass of wx.CallLater
+for compatibility of older code.</p>
+<p>Added the wx.lib.customtreectrl the from Andrea Gavana.</p>
+<p>Added ChangeSelection to wx.BookCtrl (the base class for wx.Notebook
+and other book controls) that is the same as SetSelection but doesn't
+send the change events.</p>
+<p>Added wx.TextCtrl.ChangeValue() which is the same as SetValue() but
+doesn't send the text changed event.</p>
+<p>For consistency, all classes having an Ok() method now also have
+IsOk(), use of the latter form is preferred although the former hasn't
+been deprecated yet</p>
+<p>Added the wx.AboutBox() function and wx.AboutDialogInfo class.  They
+provide a way to show a standard About box for the application, which
+will either be a native dialog or a generic one depending on what info
+is provided and if it can all be shown with the native dialog.</p>
+<p>The code in the animate contrib has been moved into the code wxWidgets
+library, and refactored a bit along the way.  For wxPython it still
+exists in the wx.animate module, but has basically been reduced to two
+classes, wx.animate.Animation, and wx.animate.AnimationCtrl.  You load
+the animated GIF (and hopefully there will be other supported formats
+in the near future) in the Animation object, and then give that to the
+AnimatedCtrl for display.  See the demo for an example.  There is also
+still a GIFAnimationCtrl class that provides some level of backwards
+compatibility with the old implementation.</p>
+<p>wxMac: The compile option that turns on the use of CoreGraphics (a.k.a
+Quartz) for wxDC is now turned on by default.  This means that all
+drawing via wxDC is done using the new APIs from apple, instead of the
+old Quick Draw API.  There are, however, a few places where Quartz and
+wxDC don't fit together very well, mainly the lack of support for
+logical drawing operations such as XOR, but there is work in progress
+to provide other ways to do the same sort of thing that will work with
+Quartz and also on the other platforms.</p>
+<p>The first parts of a new 2D drawing API has been added with the
+wx.GraphicsPath and wx.GraphicsContext classes.  They wrap GDI+ on
+Windows, Cairo on wxGTK and CoreGraphics on OS X.  They allow path-based
+drawing with alpha-blending and anti-aliasing, and use a floating
+point cooridnate system.  Currently they can only target drawing to
+windows, but other wx.DC backends are forthcoming.  The APIs may
+evolve a bit more before they are finalaized with the 2.8 release, but
+there is enough there now to get a good feel for how things will work.
+There is also a transitional wx.GCDC class that provides the wx.DC API
+on top of wx.GraphicsContext.  Docs and a demo are still MIA.</p>
+<p>Added a wx.AutoBufferedPaintDC that is a subclass of wx.PaintDC on
+platforms that do double buffering by default, and a subclass of
+wx.BufferedPaintDC on the platforms that don't.  You can use this
+class to help avoid the overhead of buffering when it is not
+needed. There is also a wx.AutoBufferedPaintDCFactory function that
+does a little more and actually tests if the window has
+double-buffering enabled and then decides whether to return a
+wx.PaintDC or wx.BufferedPaintDC.  This uses the new
+wx.Window.IsDoubleBuffered method.</p>
+</div>
+<div class="section">
+<h1><a id="id2" name="id2">2.6.3.3</a></h1>
+<ul class="simple">
+<li>15-July-2006</li>
+</ul>
+<dl class="docutils">
+<dt>wx.lib.pubsub updates from Oliver Schoenborn:</dt>
+<dd><ul class="first last simple">
+<li>fixed the hash problem with non-hashable objects</li>
+<li>now supports listeners that use *args as an argument
+(listener(*args) was not passing the validity test)</li>
+<li>corrected some mistakes in documentation</li>
+<li>added some clarifications (hopefully useful for first time
+users)</li>
+<li>changed the way singleton is implemented since old way prevented
+pydoc etc from extracting docs for Publisher</li>
+</ul>
+</dd>
+<dt>DocView and ActiveGrid IDE updates from Morgan Hua:</dt>
+<dd>New Features: In Tab-View mode, Ctrl-number will take the user to
+the numbered tab view.  Modified files now show an '*' astrisk in
+the view title.  Debugger framework can now support PHP debugging.
+Not important for python development, but at least that means the
+debugger framework is more generalized.</dd>
+</dl>
+<p>wx.lib.mixins.listctrl.TextEditMixin: Fixed the double END_LABEL_EDIT
+event problem in TextEditMixin by checking if the editor was already
+hidden before continuing with the CloseEditor method.  Also added code
+to OpenEditor to send the BEGIN_LABEL_EDIT event and to not allow the
+opening of the editor to continue if the event handler doesn't allow
+it.</p>
+<p>Undeprecated wx.GetNumberFromUser and added wx.NumberEntryDialog.</p>
+<p>Made necessaary changes for building wxPython for Python 2.5.  There
+may still be some issues related to the new Py_ssize_t type and 64-bit
+machines, but at least all compile errors and warnings related to it
+have been resolved.</p>
+</div>
+<div class="section">
+<h1><a id="id3" name="id3">2.6.3.2</a></h1>
+<ul class="simple">
+<li>3-April-2006</li>
+</ul>
+<p>Fixed reference leak in wx.gizmos.TreeListCtrl.GetSelections.</p>
+<p>wxMSW: Fixed sizing issue with wx.Choice and wx.ComboBox.  This change
+was implemented by reverting a prior fix for a different problem
+(contiuous painting/resizing when a combobox is used as a widget in a
+wx.html.HtmlWindow) so a method to fix both problems is still being
+investigated.</p>
+<p>wxGTK: Fixed potential buffer overrun when pasting from the
+clipboard.</p>
+<p>Fixed problem in wx.lib.splitter when used on 64-bit platforms.  Used
+the current length of the list for specifying an append instead of
+sys.maxint.</p>
+<p>wxMSW: Support added for XP themed owner drawn buttons and bitmap
+buttons.  For example, if you change the foreground color of a button
+it will now be drawn with the XP themed style rather than an ugly
+generic button style.</p>
+<p>XRCed: Fix for Copy/Paste objects with international characters.</p>
+<p>Fixed the equality and inequality operators for some of the basic
+data types (wx.Point, wx.Size, wx.Colour, etc.) to no longer raise a
+TypeError if the compared object is not compatible, but to just return
+a boolean as expected.  For example:</p>
+<pre class="literal-block">
+wx.Colour(64,0,64) == 123      ==&gt; False
+</pre>
+<p>wxMSW: Fixed (again) sizing/positioning issues of calling Realize on
+a wx.ToolBar that is not manaaged directly by a frame and that is
+already shown.</p>
+<p>wxMSW: Fixed wx.Choice/wx.ComboBox so they send events when a new item
+is selected only with the keyboard.</p>
+</div>
+<div class="section">
+<h1><a id="id4" name="id4">2.6.3.0</a></h1>
+<ul class="simple">
+<li>27-March-2006</li>
+</ul>
+<p>Change the wx.ListCtrl InsertStringItem wrapper to use the form that
+takes an imageIndex, and set the default to -1.  This ensures that on
+wxMSW that if there is an image list but they don't specify an image,
+the native control doesn't use one anyway.</p>
+<p>wxMSW: wx.ListCtrl in report mode is now able to support images in
+other columns besides the first one.  Simply pass an image index to
+SetStringItem.  For virtual list controls you can specify the image to
+use on the extra columns by overriding OnGetItemColumnImage in your
+derived class.  It is passed the item number and the column number as
+parameters, and the default version simply calls OnGetItemImage for
+column zero, or returns -1 for other columns.</p>
+<p>Switched to using SWIG 1.3.27 for generating the wrapper code.  There
+are some small changes needed to SWIG to work around some bugs that
+wxPython exposes, and to be able to generate code that matches that
+which wxPython is using.  If you are building wxPython yourself and
+need to modify any of the *.i files or to add your own, then you will
+want to be sure to use a matching SWIG.  See wxPython/SWIG/README.txt
+in the source tarball for details.</p>
+<p>wx.Image.Copy, Mirror, and GetSubImage now also do the right thing
+with  the alpha channel.</p>
+<p>wxMSW: Fixed problem in wx.TextCtrl where using SetValue and
+wx.TE_RICH2 would cause the control to be shown if it was hidden.</p>
+<p>wxMSW: Numpad special keys are now distinguished from normal keys in
+key events.</p>
+<p>wxMSW: Multiline notebook tab label change now resizes the control
+correctly if an extra row is removed or added.</p>
+<p>wxMSW: On XP fall back to unthemed wxNotebook if specified orientation
+not available in the themed version.</p>
+<p>Added wx.Toolbar.GetToolsCount.</p>
+<p>Added wx.GridSizer.CalcRowsCols.</p>
+<p>Added wx.OutputStream.LastWrite.</p>
+<p>wxGTK: EVT_SET_CURSOR is now sent.</p>
+<p>wxGTK: Fix RequestMore for idle events.</p>
+<p>wxGTK: Implement user dashes for PS and GNOME printing.</p>
+<p>wxGTK: Correct update region code. Don't always invalidate the whole
+window upon resize. Reenable support for thewx.NO_FULL_REPAINT_ON_RESIZE
+flag.  Also disable refreshing custom controls when focusing in and out.</p>
+<p>wx.lib.pubsub: Publisher is now able to parse a dotted notation string
+into a topic tuple.  For example: subscribing to &quot;timer.clock.seconds&quot;
+is the same as subscribing to (&quot;timer&quot;, &quot;clock&quot;, &quot;seconds&quot;).</p>
+<p>Applied patch #1441370: lib.plot - allow passing in wx.Colour()</p>
+<p>Added wx.CommandEvent.GetClientData.</p>
+<p>Updated wxStyledTextCtrl to use version 1.67 of Scintilla.
+NOTE: The STC_LEX_ASP and STC_LEX_PHP lexers have been deprecated,
+you should use STC_LEX_HTML instead.</p>
+<p>wxSTC: Implemented Fix for SF Bug #1436503.  Delay the start of the
+DnD operation in case the user just intended to click, not drag.</p>
+<p>Updated the analogclock.py module to the new analogclock package from
+E. A. Tacao.</p>
+<p>Added the wx.lib.mixins.listctrl.CheckListCtrlMixin class from Bruce
+Who, which makes it easy to put checkboxes on list control items.</p>
+<p>Applied a patch from Christian Kristukat to wx.lib.plot that adds
+scrollbars when the plot is zoomed in, and also the ability to grab a
+zoomed plot and move it around with a mouse drag.</p>
+<p>XRCed updated to allow wxMenuBar to be created inside a wxFrame.</p>
+<p>Added wx.StandardPaths.GetDocumentsDir() (patch 1214360)</p>
+</div>
+<div class="section">
+<h1><a id="id5" name="id5">2.6.2.1</a></h1>
 <ul class="simple">
 <li>10-Jan-2006</li>
 </ul>
@@ -31,13 +709,12 @@ wx.SplitterWindow class, except it allows more than one split, so it
 can manage more than two child windows.</p>
 <p>Docview and IDE patch from Morgan Hua with fix for bug #1217890
 &quot;Closing view crashes Python&quot; plus some new features:</p>
-<pre class="literal-block">
+<blockquote>
 New feature added to the IDE is 'Extensions'.  Under
 Tools|Options|Extensions, you can add calls to external programs.
 For example you can add a &quot;Notepad&quot; extension (under windows) that
 will exec Notepad on the currently open file.  A new &quot;Notepad&quot;
-menu item will appear under the Tools menu.
-</pre>
+menu item will appear under the Tools menu.</blockquote>
 <p>Some fixes to XRCed to make encoding errors a bit more user friendly.</p>
 <p>XRCed changes from Roman Rolinsky:</p>
 <blockquote>
@@ -180,8 +857,8 @@ ellipses to take (w,h) pair. This is an API change, but should
 be easy to accommodate, all you need to do is add a parenthesis
 pair:  (...x, y, ...) ---&gt;  (...(x,y), ...)</blockquote>
 </div>
-<div class="section" id="id2">
-<h1><a name="id2">2.6.1.0</a></h1>
+<div class="section">
+<h1><a id="id6" name="id6">2.6.1.0</a></h1>
 <ul class="simple">
 <li>4-June-2005</li>
 </ul>
@@ -208,8 +885,8 @@ calls.</p>
 <p>wx.FileConfig: fixed DeleteEntry to set the dirty flag properly so the
 change will get written at the next flush.</p>
 </div>
-<div class="section" id="id3">
-<h1><a name="id3">2.6.0.1</a></h1>
+<div class="section">
+<h1><a id="id7" name="id7">2.6.0.1</a></h1>
 <ul class="simple">
 <li>30-May-2005</li>
 </ul>
@@ -321,8 +998,8 @@ usual.</p>
 there is a range of allowed values (so a wx.SpinCtrl is used instead
 of a wx.TextCtrl.)</p>
 </div>
-<div class="section" id="id4">
-<h1><a name="id4">2.6.0.0</a></h1>
+<div class="section">
+<h1><a id="id8" name="id8">2.6.0.0</a></h1>
 <ul class="simple">
 <li>26-Apr-2005</li>
 </ul>
@@ -399,8 +1076,8 @@ EVT_KEY_UP and EVT_TEXT events from its embedded text control.</p>
 </dd>
 </dl>
 </div>
-<div class="section" id="id5">
-<h1><a name="id5">2.5.5.1</a></h1>
+<div class="section">
+<h1><a id="id9" name="id9">2.5.5.1</a></h1>
 <ul class="simple">
 <li>8-Apr-2005</li>
 </ul>
@@ -468,8 +1145,8 @@ list of top-level windows that currently exist in the application.</p>
 folks.</p>
 <p>Added the ActiveGrid IDE as a sample application.</p>
 </div>
-<div class="section" id="id6">
-<h1><a name="id6">2.5.4.1</a></h1>
+<div class="section">
+<h1><a id="id10" name="id10">2.5.4.1</a></h1>
 <ul class="simple">
 <li>16-Mar-2005</li>
 </ul>
@@ -702,8 +1379,8 @@ wx.Image.</p>
 </dd>
 </dl>
 </div>
-<div class="section" id="id7">
-<h1><a name="id7">2.5.3.1</a></h1>
+<div class="section">
+<h1><a id="id11" name="id11">2.5.3.1</a></h1>
 <ul class="simple">
 <li>9-Nov-2004</li>
 </ul>
@@ -859,8 +1536,8 @@ it.</p>
 <p>wxPython on OSX can now be built in Unicode mode, can support multiple
 version installs, and comes with an uninstaller script.</p>
 </div>
-<div class="section" id="id8">
-<h1><a name="id8">2.5.2.8</a></h1>
+<div class="section">
+<h1><a id="id12" name="id12">2.5.2.8</a></h1>
 <ul class="simple">
 <li>27-Aug-2004</li>
 </ul>
@@ -891,8 +1568,8 @@ wxCheckListBox.</li>
 </ul>
 </blockquote>
 </div>
-<div class="section" id="id9">
-<h1><a name="id9">2.5.2.7</a></h1>
+<div class="section">
+<h1><a id="id13" name="id13">2.5.2.7</a></h1>
 <ul class="simple">
 <li>14-Aug-2004</li>
 </ul>
@@ -990,8 +1667,8 @@ in the PyShell:</p>
 <p>wxGTK: Applied wxNO_BORDER patch (#1098374) for text control and combo
 box.</p>
 </div>
-<div class="section" id="the-this-is-not-a-joke-release">
-<h1><a name="the-this-is-not-a-joke-release">2.5.1.5    (the 'this is <em>not</em> a joke' release)</a></h1>
+<div class="section">
+<h1><a id="the-this-is-not-a-joke-release" name="the-this-is-not-a-joke-release">2.5.1.5    (the 'this is <em>not</em> a joke' release)</a></h1>
 <ul class="simple">
 <li>2-Apr-2004</li>
 </ul>
@@ -1075,8 +1752,8 @@ migrating away from using activexwrapper as well.  Please see the
 MigrationGuide for more details on using the new module.</p>
 <p>Floats are allowed again as function parameters where ints are expected.</p>
 </div>
-<div class="section" id="id11">
-<h1><a name="id11">2.4.2.4</a></h1>
+<div class="section">
+<h1><a id="id15" name="id15">2.4.2.4</a></h1>
 <ul class="simple">
 <li>1-Oct-2003</li>
 </ul>
@@ -1088,8 +1765,8 @@ demonstrated in the Threads sample in the demo.</p>
 <p>Added wxMaskedNumCtrl.</p>
 <p>Added Chris Barker's FloatCanvas.</p>
 </div>
-<div class="section" id="id12">
-<h1><a name="id12">2.4.1.2</a></h1>
+<div class="section">
+<h1><a id="id16" name="id16">2.4.1.2</a></h1>
 <ul class="simple">
 <li>19-Jun-2003</li>
 </ul>
@@ -1143,8 +1820,8 @@ release,) SetItemMinSize can now take a wxSize (or 2-tuple) parameter,
 and Spacers can be specified with a wxSize (or 2-tuple) parameter</p>
 <p>Added wxCursorFromBits.</p>
 </div>
-<div class="section" id="id13">
-<h1><a name="id13">2.4.0.7</a></h1>
+<div class="section">
+<h1><a id="id17" name="id17">2.4.0.7</a></h1>
 <ul class="simple">
 <li>24-Mar-2003</li>
 </ul>
@@ -1165,8 +1842,8 @@ flag to turn it on.  In most cases turning it into an exception (the
 default behavior) is enough.  See below in the 2.3.4.1 notes for more
 details.</p>
 </div>
-<div class="section" id="a-k-a-the-i-m-so-stupid-release">
-<h1><a name="a-k-a-the-i-m-so-stupid-release">2.4.0.6 (a.k.a. the I'm so stupid release)</a></h1>
+<div class="section">
+<h1><a id="a-k-a-the-i-m-so-stupid-release" name="a-k-a-the-i-m-so-stupid-release">2.4.0.6 (a.k.a. the I'm so stupid release)</a></h1>
 <ul class="simple">
 <li>11-Mar-2003</li>
 </ul>
@@ -1174,8 +1851,8 @@ details.</p>
 returned from OnInit.  And I promise to be sure I am testing what I
 think I am testing in the future...</p>
 </div>
-<div class="section" id="a-k-a-the-blame-it-on-kevin-release">
-<h1><a name="a-k-a-the-blame-it-on-kevin-release">2.4.0.5 (a.k.a. the blame it on Kevin release)</a></h1>
+<div class="section">
+<h1><a id="a-k-a-the-blame-it-on-kevin-release" name="a-k-a-the-blame-it-on-kevin-release">2.4.0.5 (a.k.a. the blame it on Kevin release)</a></h1>
 <ul class="simple">
 <li>7-Mar-2003</li>
 </ul>
@@ -1183,8 +1860,8 @@ think I am testing in the future...</p>
 <p>Updated pycolourchooser.</p>
 <p>Updated to 0.9b of PyCrust.</p>
 </div>
-<div class="section" id="id14">
-<h1><a name="id14">2.4.0.4</a></h1>
+<div class="section">
+<h1><a id="id18" name="id18">2.4.0.4</a></h1>
 <ul class="simple">
 <li>7-Mar-2003</li>
 </ul>
@@ -1244,8 +1921,8 @@ doesn't have a standard place for them.</p>
 <p>Fixed typemaps for wxGridCellCoordsArray.</p>
 <p>Updated to the 0.9a version of PyCrust</p>
 </div>
-<div class="section" id="id15">
-<h1><a name="id15">2.4.0.2</a></h1>
+<div class="section">
+<h1><a id="id19" name="id19">2.4.0.2</a></h1>
 <ul class="simple">
 <li>23-Jan-2003</li>
 </ul>
@@ -1253,8 +1930,8 @@ doesn't have a standard place for them.</p>
 <p>Added wxIntCtrl from Will Sadkin.</p>
 <p>Added wxPyColourChooser by Michael Gilfix.</p>
 </div>
-<div class="section" id="id16">
-<h1><a name="id16">2.4.0.1</a></h1>
+<div class="section">
+<h1><a id="id20" name="id20">2.4.0.1</a></h1>
 <ul class="simple">
 <li>10-Jan-2003</li>
 </ul>
@@ -1263,15 +1940,15 @@ enhancements.</p>
 <p>Added function wrappers for the common dialogs from Kevin Altis.  See
 wxPython/lib/dialogs.py for more details.</p>
 </div>
-<div class="section" id="id17">
-<h1><a name="id17">2.3.4.2</a></h1>
+<div class="section">
+<h1><a id="id21" name="id21">2.3.4.2</a></h1>
 <ul class="simple">
 <li>21-Dec-2002</li>
 </ul>
 <p>Various bug fixes.</p>
 </div>
-<div class="section" id="id18">
-<h1><a name="id18">2.3.4.1</a></h1>
+<div class="section">
+<h1><a id="id22" name="id22">2.3.4.1</a></h1>
 <ul class="simple">
 <li>18-Dec-2002</li>
 </ul>
@@ -1328,8 +2005,8 @@ windows when desired.</p>
 HTMLHelp viewer does.  Changed how the wxPythonDocs tarball is built
 and added a script to launch the doc viewer.</p>
 </div>
-<div class="section" id="id19">
-<h1><a name="id19">2.3.3.1</a></h1>
+<div class="section">
+<h1><a id="id23" name="id23">2.3.3.1</a></h1>
 <ul class="simple">
 <li>19-Sep-2002</li>
 </ul>
@@ -1474,8 +2151,8 @@ example.</p>
 <p>Added wxPython.lib.mixins.rubberband module from Robb Shecter.</p>
 <p>Added wxTimeCtrl from Will Sadkin.</p>
 </div>
-<div class="section" id="id20">
-<h1><a name="id20">2.3.2.1</a></h1>
+<div class="section">
+<h1><a id="id24" name="id24">2.3.2.1</a></h1>
 <ul class="simple">
 <li>20-Dec-2001</li>
 </ul>
@@ -1484,8 +2161,8 @@ well as the Python thread state.  This time it works on SMP machines
 without barfing and is also still compatible with Python debuggers.</p>
 <p>Added some patches from library contributors.</p>
 </div>
-<div class="section" id="id21">
-<h1><a name="id21">2.3.2</a></h1>
+<div class="section">
+<h1><a id="id25" name="id25">2.3.2</a></h1>
 <ul class="simple">
 <li>11-Dec-2001</li>
 </ul>
@@ -1570,8 +2247,8 @@ SendCommand method, but it is still quite powerful.  See
 wxPython/contrib/dllwidget and wxPython/demo/dllwidget for more
 details.</p>
 </div>
-<div class="section" id="id22">
-<h1><a name="id22">2.3.1</a></h1>
+<div class="section">
+<h1><a id="id26" name="id26">2.3.1</a></h1>
 <ul class="simple">
 <li>10-Jul-2001</li>
 </ul>
@@ -1587,8 +2264,8 @@ subclass wxXmlResourceHandler, etc...</p>
 <p>Fixed img2py to work correctly with Python 2.1.</p>
 <p>Added enhanced wxVTKRenderWindow by Prabhu Ramachandran</p>
 </div>
-<div class="section" id="id23">
-<h1><a name="id23">2.3.0</a></h1>
+<div class="section">
+<h1><a id="id27" name="id27">2.3.0</a></h1>
 <ul class="simple">
 <li>22-May-2001</li>
 </ul>
@@ -1687,16 +2364,16 @@ please send it to me for inclusion in this package.</p>
 by having smaller functional apps to play with.  They can be found in
 wxPython/samples.</p>
 </div>
-<div class="section" id="id24">
-<h1><a name="id24">2.2.7</a></h1>
+<div class="section">
+<h1><a id="id28" name="id28">2.2.7</a></h1>
 <ul class="simple">
 <li>19-Jun-2001</li>
 </ul>
 <p>No changes happened in the Python wrappers for this release, only
 changes and fixes in the wxWindows library.</p>
 </div>
-<div class="section" id="id25">
-<h1><a name="id25">2.2.5</a></h1>
+<div class="section">
+<h1><a id="id29" name="id29">2.2.5</a></h1>
 <ul class="simple">
 <li>30-Jan-2001</li>
 </ul>
@@ -1739,8 +2416,8 @@ mouse won't be captured when the event handler is called.</p>
 integrated with the demo yet.  It allows a wxPython GUI to be an
 XML-RPC server.</p>
 </div>
-<div class="section" id="new-in-2-2-2">
-<h1><a name="new-in-2-2-2">New in 2.2.2</a></h1>
+<div class="section">
+<h1><a id="new-in-2-2-2" name="new-in-2-2-2">New in 2.2.2</a></h1>
 <ul class="simple">
 <li>26-Oct-2000</li>
 </ul>
@@ -1779,16 +2456,16 @@ libwxPyHelpers.so on unix systems.</p>
 wxStyledTextCtrl to behave better.  It's still not as nice as on
 wxMSW, but at least it's a bit more usable now.</p>
 </div>
-<div class="section" id="new-in-2-2-1">
-<h1><a name="new-in-2-2-1">New in 2.2.1</a></h1>
+<div class="section">
+<h1><a id="new-in-2-2-1" name="new-in-2-2-1">New in 2.2.1</a></h1>
 <ul class="simple">
 <li>22-Aug-2000</li>
 </ul>
 <p>Various tweaks, fixes, missing methods, etc.</p>
 <p>Added example use of wxTaskBarIcon to the demo.</p>
 </div>
-<div class="section" id="new-in-2-2-0">
-<h1><a name="new-in-2-2-0">New in 2.2.0</a></h1>
+<div class="section">
+<h1><a id="new-in-2-2-0" name="new-in-2-2-0">New in 2.2.0</a></h1>
 <ul class="simple">
 <li>17-Jul-2000</li>
 </ul>
@@ -1796,8 +2473,8 @@ wxMSW, but at least it's a bit more usable now.</p>
 <p>Added wxFrame.ShowFullScreen for MSW.</p>
 <p>Added PyShellWindow to the wxPython.lib package.</p>
 </div>
-<div class="section" id="new-in-2-1-16">
-<h1><a name="new-in-2-1-16">New in 2.1.16</a></h1>
+<div class="section">
+<h1><a id="new-in-2-1-16" name="new-in-2-1-16">New in 2.1.16</a></h1>
 <ul class="simple">
 <li>12-Jun-2000</li>
 </ul>
@@ -1832,8 +2509,8 @@ OnCloseWindow
 OnScroll</blockquote>
 <p>Added wxSpinCtrl.</p>
 </div>
-<div class="section" id="new-in-2-1-15">
-<h1><a name="new-in-2-1-15">New in 2.1.15</a></h1>
+<div class="section">
+<h1><a id="new-in-2-1-15" name="new-in-2-1-15">New in 2.1.15</a></h1>
 <ul class="simple">
 <li>25-Apr-2000</li>
 </ul>
@@ -1876,8 +2553,8 @@ can also refer to the Scintilla documentaion at
 until the docs are done.  (The croud murmers contentedly as the tool
 provider smiles convincingly and removes his flame-proof suit.)</p>
 </div>
-<div class="section" id="what-s-new-in-2-1-13">
-<h1><a name="what-s-new-in-2-1-13">What's new in 2.1.13</a></h1>
+<div class="section">
+<h1><a id="what-s-new-in-2-1-13" name="what-s-new-in-2-1-13">What's new in 2.1.13</a></h1>
 <ul class="simple">
 <li>3-Feb-2000</li>
 </ul>
@@ -1942,8 +2619,8 @@ package.</p>
 than wxMSW!  (The feat is accomplished by using the wxTB_DOCKABLE
 style flag instead of trying to float it ourselves.)</p>
 </div>
-<div class="section" id="what-s-new-in-2-1-11">
-<h1><a name="what-s-new-in-2-1-11">What's new in 2.1.11</a></h1>
+<div class="section">
+<h1><a id="what-s-new-in-2-1-11" name="what-s-new-in-2-1-11">What's new in 2.1.11</a></h1>
 <ul class="simple">
 <li>13-Nov-1999</li>
 </ul>
@@ -1980,8 +2657,8 @@ Python object in the event handler instead of a new shadow.</p>
 wxGTK...</p>
 <p>Added an MVC tree control from Bryn Keller to the library.</p>
 </div>
-<div class="section" id="what-s-new-in-2-1-5">
-<h1><a name="what-s-new-in-2-1-5">What's new in 2.1.5</a></h1>
+<div class="section">
+<h1><a id="what-s-new-in-2-1-5" name="what-s-new-in-2-1-5">What's new in 2.1.5</a></h1>
 <ul class="simple">
 <li>12-Oct-1999</li>
 </ul>
@@ -1989,8 +2666,8 @@ wxGTK...</p>
 crept in at the last minute before 2.1.4 was called done.  No new
 major features.</p>
 </div>
-<div class="section" id="what-s-new-in-2-1-4">
-<h1><a name="what-s-new-in-2-1-4">What's new in 2.1.4</a></h1>
+<div class="section">
+<h1><a id="what-s-new-in-2-1-4" name="what-s-new-in-2-1-4">What's new in 2.1.4</a></h1>
 <ul class="simple">
 <li>7-Oct-1999</li>
 </ul>
@@ -2104,8 +2781,8 @@ bar back into the original parent.  (Unfortunately there is currently
 a bug in wxGTK's wxFrame.SetToolBar so the FloatBar has some
 problems...)</p>
 </div>
-<div class="section" id="what-s-new-in-2-1b3">
-<h1><a name="what-s-new-in-2-1b3">What's new in 2.1b3</a></h1>
+<div class="section">
+<h1><a id="what-s-new-in-2-1b3" name="what-s-new-in-2-1b3">What's new in 2.1b3</a></h1>
 <ul class="simple">
 <li>1-Sep-1999</li>
 </ul>
@@ -2140,8 +2817,8 @@ two different versions.  wxDC.BlitXY is like what was there before and
 takes raw coordinants and sizes, and the new wxDC.Blit is for the new
 interface using wxPoints and a wxSize.</p>
 </div>
-<div class="section" id="what-s-new-in-2-1b2">
-<h1><a name="what-s-new-in-2-1b2">What's new in 2.1b2</a></h1>
+<div class="section">
+<h1><a id="what-s-new-in-2-1b2" name="what-s-new-in-2-1b2">What's new in 2.1b2</a></h1>
 <ul class="simple">
 <li>6-Aug-1999</li>
 </ul>
@@ -2187,8 +2864,8 @@ for unix systems.</p>
 <p>SWIG support routines now compiled separately instead of being bundled
 in wx.cpp.</p>
 </div>
-<div class="section" id="what-s-new-in-2-1b1">
-<h1><a name="what-s-new-in-2-1b1">What's new in 2.1b1</a></h1>
+<div class="section">
+<h1><a id="what-s-new-in-2-1b1" name="what-s-new-in-2-1b1">What's new in 2.1b1</a></h1>
 <ul class="simple">
 <li>28-Jun-1999</li>
 </ul>
@@ -2209,8 +2886,8 @@ of windows and sizers.  Different types of sizers apply different
 types of layout algorithms.  You saw it here first!  These classes are
 not even in the wxWindows C++ library yet!</p>
 </div>
-<div class="section" id="what-s-new-in-2-0b9">
-<h1><a name="what-s-new-in-2-0b9">What's new in 2.0b9</a></h1>
+<div class="section">
+<h1><a id="what-s-new-in-2-0b9" name="what-s-new-in-2-0b9">What's new in 2.0b9</a></h1>
 <ul class="simple">
 <li>1-May-1999</li>
 </ul>
@@ -2234,8 +2911,8 @@ wxGIFHandler and wxBMPHandler.</p>
 <p>Fixed some problems with how SWIG was wrapping some wxTreeCtrl
 methods.</p>
 </div>
-<div class="section" id="what-s-new-in-2-0b8">
-<h1><a name="what-s-new-in-2-0b8">What's new in 2.0b8</a></h1>
+<div class="section">
+<h1><a id="what-s-new-in-2-0b8" name="what-s-new-in-2-0b8">What's new in 2.0b8</a></h1>
 <ul class="simple">
 <li>28-Mar-1999</li>
 </ul>
@@ -2243,24 +2920,24 @@ methods.</p>
 <p>Several missing methods from various classes.</p>
 <p>Various bug fixes.</p>
 </div>
-<div class="section" id="what-s-new-in-2-0b7">
-<h1><a name="what-s-new-in-2-0b7">What's new in 2.0b7</a></h1>
+<div class="section">
+<h1><a id="what-s-new-in-2-0b7" name="what-s-new-in-2-0b7">What's new in 2.0b7</a></h1>
 <ul class="simple">
 <li>15-Mar-1999</li>
 </ul>
 <p>Added DLG_PNT and DLG_SZE convienience methods to wxWindow class.</p>
 <p>Added missing constructor and other methods for wxMenuItem.</p>
 </div>
-<div class="section" id="what-s-new-in-2-0b6">
-<h1><a name="what-s-new-in-2-0b6">What's new in 2.0b6</a></h1>
+<div class="section">
+<h1><a id="what-s-new-in-2-0b6" name="what-s-new-in-2-0b6">What's new in 2.0b6</a></h1>
 <ul class="simple">
 <li>4-Mar-1999</li>
 </ul>
 <p>Just a quickie update to fix the self-installer to be compatible with
 Python 1.5.2b2's Registry settings.</p>
 </div>
-<div class="section" id="what-s-new-in-2-0b5">
-<h1><a name="what-s-new-in-2-0b5">What's new in 2.0b5</a></h1>
+<div class="section">
+<h1><a id="what-s-new-in-2-0b5" name="what-s-new-in-2-0b5">What's new in 2.0b5</a></h1>
 <ul class="simple">
 <li>25-Feb-1999</li>
 </ul>
@@ -2281,8 +2958,8 @@ it should just work...  More news on this later.</p>
 wxRegConfig class.</p>
 <p>As usual, some bug fixes, tweaks, etc.</p>
 </div>
-<div class="section" id="what-s-new-in-0-5-3">
-<h1><a name="what-s-new-in-0-5-3">What's new in 0.5.3</a></h1>
+<div class="section">
+<h1><a id="what-s-new-in-0-5-3" name="what-s-new-in-0-5-3">What's new in 0.5.3</a></h1>
 <ul class="simple">
 <li>30-Jan-1999</li>
 </ul>
@@ -2290,8 +2967,8 @@ wxRegConfig class.</p>
 <p>Various cleanup, tweaks, minor additions, etc. to maintain
 compatibility with the current wxWindows.</p>
 </div>
-<div class="section" id="what-s-new-in-0-5-0">
-<h1><a name="what-s-new-in-0-5-0">What's new in 0.5.0</a></h1>
+<div class="section">
+<h1><a id="what-s-new-in-0-5-0" name="what-s-new-in-0-5-0">What's new in 0.5.0</a></h1>
 <p>Changed the import semantics from <tt class="docutils literal"><span class="pre">&quot;from</span> <span class="pre">wxPython</span> <span class="pre">import</span> <span class="pre">*&quot;</span></tt> to
 <tt class="docutils literal"><span class="pre">&quot;from</span> <span class="pre">wxPython.wx</span> <span class="pre">import</span> <span class="pre">*&quot;</span></tt>  This is for people who are worried about
 namespace pollution, they can use &quot;from wxPython import wx&quot; and then
@@ -2304,8 +2981,8 @@ prefix all the wxPython identifiers with &quot;wx.&quot;</p>
 objects to references to reflect changes in the wxWindows API.</p>
 <p>Other assorted fixes and additions.</p>
 </div>
-<div class="section" id="what-s-new-in-0-4-2">
-<h1><a name="what-s-new-in-0-4-2">What's new in 0.4.2</a></h1>
+<div class="section">
+<h1><a id="what-s-new-in-0-4-2" name="what-s-new-in-0-4-2">What's new in 0.4.2</a></h1>
 <ul class="simple">
 <li>21-Oct-1998</li>
 </ul>
@@ -2318,8 +2995,8 @@ behavior was so different on different platforms.</p>
 <p>The dynamicly loaded module on Solaris is still segfaulting, so it
 must have been a different issue all along...</p>
 </div>
-<div class="section" id="what-s-new-in-0-4">
-<h1><a name="what-s-new-in-0-4">What's New in 0.4</a></h1>
+<div class="section">
+<h1><a id="what-s-new-in-0-4" name="what-s-new-in-0-4">What's New in 0.4</a></h1>
 <ul class="simple">
 <li>2-Oct-1998</li>
 </ul>
@@ -2334,8 +3011,8 @@ version segfault shortly after starting up.</p>
 <li>Varioius bug fixes, enhancements, etc.</li>
 </ol>
 </div>
-<div class="section" id="wxpython-0-3">
-<h1><a name="wxpython-0-3">wxPython 0.3</a></h1>
+<div class="section">
+<h1><a id="wxpython-0-3" name="wxpython-0-3">wxPython 0.3</a></h1>
 <ul class="simple">
 <li>9-Aug-1998</li>
 </ul>

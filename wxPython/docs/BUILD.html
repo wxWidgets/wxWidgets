@@ -3,18 +3,300 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
-<meta name="generator" content="Docutils 0.3.7: http://docutils.sourceforge.net/" />
-<title>Building wxPython 2.6 for Development and Testing</title>
-<link rel="stylesheet" href="default.css" type="text/css" />
+<meta name="generator" content="Docutils 0.4: http://docutils.sourceforge.net/" />
+<title>Building wxPython 2.7 for Development and Testing</title>
+<style type="text/css">
+
+/*
+:Author: David Goodger
+:Contact: goodger@users.sourceforge.net
+:Date: $Date$
+:Revision: $Revision$
+:Copyright: This stylesheet has been placed in the public domain.
+
+Default cascading style sheet for the HTML output of Docutils.
+
+See http://docutils.sf.net/docs/howto/html-stylesheets.html for how to
+customize this style sheet.
+*/
+
+/* used to remove borders from tables and images */
+.borderless, table.borderless td, table.borderless th {
+  border: 0 }
+
+table.borderless td, table.borderless th {
+  /* Override padding for "table.docutils td" with "! important".
+     The right padding separates the table cells. */
+  padding: 0 0.5em 0 0 ! important }
+
+.first {
+  /* Override more specific margin styles with "! important". */
+  margin-top: 0 ! important }
+
+.last, .with-subtitle {
+  margin-bottom: 0 ! important }
+
+.hidden {
+  display: none }
+
+a.toc-backref {
+  text-decoration: none ;
+  color: black }
+
+blockquote.epigraph {
+  margin: 2em 5em ; }
+
+dl.docutils dd {
+  margin-bottom: 0.5em }
+
+/* Uncomment (and remove this text!) to get bold-faced definition list terms
+dl.docutils dt {
+  font-weight: bold }
+*/
+
+div.abstract {
+  margin: 2em 5em }
+
+div.abstract p.topic-title {
+  font-weight: bold ;
+  text-align: center }
+
+div.admonition, div.attention, div.caution, div.danger, div.error,
+div.hint, div.important, div.note, div.tip, div.warning {
+  margin: 2em ;
+  border: medium outset ;
+  padding: 1em }
+
+div.admonition p.admonition-title, div.hint p.admonition-title,
+div.important p.admonition-title, div.note p.admonition-title,
+div.tip p.admonition-title {
+  font-weight: bold ;
+  font-family: sans-serif }
+
+div.attention p.admonition-title, div.caution p.admonition-title,
+div.danger p.admonition-title, div.error p.admonition-title,
+div.warning p.admonition-title {
+  color: red ;
+  font-weight: bold ;
+  font-family: sans-serif }
+
+/* Uncomment (and remove this text!) to get reduced vertical space in
+   compound paragraphs.
+div.compound .compound-first, div.compound .compound-middle {
+  margin-bottom: 0.5em }
+
+div.compound .compound-last, div.compound .compound-middle {
+  margin-top: 0.5em }
+*/
+
+div.dedication {
+  margin: 2em 5em ;
+  text-align: center ;
+  font-style: italic }
+
+div.dedication p.topic-title {
+  font-weight: bold ;
+  font-style: normal }
+
+div.figure {
+  margin-left: 2em ;
+  margin-right: 2em }
+
+div.footer, div.header {
+  clear: both;
+  font-size: smaller }
+
+div.line-block {
+  display: block ;
+  margin-top: 1em ;
+  margin-bottom: 1em }
+
+div.line-block div.line-block {
+  margin-top: 0 ;
+  margin-bottom: 0 ;
+  margin-left: 1.5em }
+
+div.sidebar {
+  margin-left: 1em ;
+  border: medium outset ;
+  padding: 1em ;
+  background-color: #ffffee ;
+  width: 40% ;
+  float: right ;
+  clear: right }
+
+div.sidebar p.rubric {
+  font-family: sans-serif ;
+  font-size: medium }
+
+div.system-messages {
+  margin: 5em }
+
+div.system-messages h1 {
+  color: red }
+
+div.system-message {
+  border: medium outset ;
+  padding: 1em }
+
+div.system-message p.system-message-title {
+  color: red ;
+  font-weight: bold }
+
+div.topic {
+  margin: 2em }
+
+h1.section-subtitle, h2.section-subtitle, h3.section-subtitle,
+h4.section-subtitle, h5.section-subtitle, h6.section-subtitle {
+  margin-top: 0.4em }
+
+h1.title {
+  text-align: center }
+
+h2.subtitle {
+  text-align: center }
+
+hr.docutils {
+  width: 75% }
+
+img.align-left {
+  clear: left }
+
+img.align-right {
+  clear: right }
+
+ol.simple, ul.simple {
+  margin-bottom: 1em }
+
+ol.arabic {
+  list-style: decimal }
+
+ol.loweralpha {
+  list-style: lower-alpha }
+
+ol.upperalpha {
+  list-style: upper-alpha }
+
+ol.lowerroman {
+  list-style: lower-roman }
+
+ol.upperroman {
+  list-style: upper-roman }
+
+p.attribution {
+  text-align: right ;
+  margin-left: 50% }
+
+p.caption {
+  font-style: italic }
+
+p.credits {
+  font-style: italic ;
+  font-size: smaller }
+
+p.label {
+  white-space: nowrap }
+
+p.rubric {
+  font-weight: bold ;
+  font-size: larger ;
+  color: maroon ;
+  text-align: center }
+
+p.sidebar-title {
+  font-family: sans-serif ;
+  font-weight: bold ;
+  font-size: larger }
+
+p.sidebar-subtitle {
+  font-family: sans-serif ;
+  font-weight: bold }
+
+p.topic-title {
+  font-weight: bold }
+
+pre.address {
+  margin-bottom: 0 ;
+  margin-top: 0 ;
+  font-family: serif ;
+  font-size: 100% }
+
+pre.literal-block, pre.doctest-block {
+  margin-left: 2em ;
+  margin-right: 2em ;
+  background-color: #eeeeee }
+
+span.classifier {
+  font-family: sans-serif ;
+  font-style: oblique }
+
+span.classifier-delimiter {
+  font-family: sans-serif ;
+  font-weight: bold }
+
+span.interpreted {
+  font-family: sans-serif }
+
+span.option {
+  white-space: nowrap }
+
+span.pre {
+  white-space: pre }
+
+span.problematic {
+  color: red }
+
+span.section-subtitle {
+  /* font-size relative to parent (h1..h6 element) */
+  font-size: 80% }
+
+table.citation {
+  border-left: solid 1px gray;
+  margin-left: 1px }
+
+table.docinfo {
+  margin: 2em 4em }
+
+table.docutils {
+  margin-top: 0.5em ;
+  margin-bottom: 0.5em }
+
+table.footnote {
+  border-left: solid 1px black;
+  margin-left: 1px }
+
+table.docutils td, table.docutils th,
+table.docinfo td, table.docinfo th {
+  padding-left: 0.5em ;
+  padding-right: 0.5em ;
+  vertical-align: top }
+
+table.docutils th.field-name, table.docinfo th.docinfo-name {
+  font-weight: bold ;
+  text-align: left ;
+  white-space: nowrap ;
+  padding-left: 0 }
+
+h1 tt.docutils, h2 tt.docutils, h3 tt.docutils,
+h4 tt.docutils, h5 tt.docutils, h6 tt.docutils {
+  font-size: 100% }
+
+tt.docutils {
+  background-color: #eeeeee }
+
+ul.auto-toc {
+  list-style-type: none }
+
+</style>
 </head>
 <body>
-<div class="document" id="building-wxpython-2-6-for-development-and-testing">
-<h1 class="title">Building wxPython 2.6 for Development and Testing</h1>
+<div class="document" id="building-wxpython-2-7-for-development-and-testing">
+<h1 class="title">Building wxPython 2.7 for Development and Testing</h1>
 <p>This file describes how I build wxWidgets and wxPython while doing
 development and testing, and is meant to help other people that want
 to do the same thing.  I'll assume that you are using either a CVS
 snapshot from <a class="reference" href="http://wxWidgets.org/snapshots/">http://wxWidgets.org/snapshots/</a>, a checkout from CVS, or
-one of the released wxPython-src-2.6.* tarballs.  I'll also assume that
+one of the released wxPython-src-2.7.* tarballs.  I'll also assume that
 you know your way around your system, the compiler, etc. and most
 importantly, that you know what you are doing!  ;-)</p>
 <p>If you want to also install the version of wxPython you build to be in
@@ -28,14 +310,14 @@ may already have installed.</p>
 <p>If you want to make changes to any of the <tt class="docutils literal"><span class="pre">*.i</span></tt> files, (SWIG
 interface definition files,) or to regenerate the extension sources or
 renamer modules, then you will need an up to date version of SWIG,
-plus some patches.  Get the sources for version 1.3.24, and then apply
+plus some patches.  Get the sources for version 1.3.29, and then apply
 the patches in wxPython/SWIG and then build SWIG like normal.  See the
 README.txt in the wxPython/SWIG dir for details about each patch and
 also info about those that may already have been applied to the SWIG
 sources.  If you install this build of SWIG to a location that is not
 on the PATH (so it doesn't interfere with an existing SWIG install for
-example) then you can set a setup.py command-line variable named SWIG
-to be the full path name of the executable and the wxPython build will
+example) then you can use a setup.py command-line option named SWIG
+set to the full path name of the executable and the wxPython build will
 use it.  See below for an example.</p>
 <p>In the text below I'll use WXDIR with environment variable syntax
 (either $WXDIR or %WXDIR%) to refer to the top level directory where
@@ -53,8 +335,8 @@ installed from one of the standard wxWidgets installers.  With the
 the APIs are allowed to change) there are often significant
 differences between the W.X.Y release of wxWidgets and the W.X.Y.Z
 release of wxPython.</p>
-<div class="section" id="building-on-unix-like-systems-e-g-linux-and-os-x">
-<h1><a name="building-on-unix-like-systems-e-g-linux-and-os-x">Building on Unix-like Systems (e.g. Linux and OS X)</a></h1>
+<div class="section">
+<h1><a id="building-on-unix-like-systems-e-g-linux-and-os-x" name="building-on-unix-like-systems-e-g-linux-and-os-x">Building on Unix-like Systems (e.g. Linux and OS X)</a></h1>
 <p>These platforms are built almost the same way while in development
 so I'll combine the descriptions about their build process here.
 First we will build wxWidgets and install it to an out of the way
@@ -71,12 +353,13 @@ before:</p>
 cd $WXDIR
 mkdir bld
 cd bld
-../configure --prefix=/opt/wx/2.6 \
+../configure --prefix=/opt/wx/2.7 \
              --with-gtk \
              --with-gnomeprint \
              --with-opengl \
              --enable-debug \
              --enable-geometry \
+             --enable-graphics_ctx \
              --enable-sound --with-sdl \
              --enable-mediactrl \
              --enable-display \
@@ -84,6 +367,15 @@ cd bld
 </pre>
 <p>On OS X of course you'll want to use --with-mac instead of
 --with-gtk and --with-gnomeprint.</p>
+<p>Notice that above I used a prefix option of &quot;/opt/wx/2.7&quot;.  You can
+use whatever path you want, such as a path in your HOME dir or even
+one of the standard prefix paths such as /usr or /usr/local if you
+like, but using /opt this way lets me easily have multiple versions
+and ports of wxWidgets &quot;installed&quot; and makes it easy to switch
+between them, without impacting any versions of wxWidgets that may
+have been installed via an RPM or whatever.  For the rest of the
+steps below be sure to also substitute &quot;/opt/wx/2.7&quot; with whatever
+prefix you choose for your build.</p>
 <p><strong>NOTE</strong>: Due to a recent change there is currently a dependency
 problem in the multilib builds of wxWidgets on OSX, so I have
 switched to using a monolithic build.  That means that all of the
@@ -101,23 +393,14 @@ it by changing the --with-gtk flag to specify it like this:</p>
 --with-gtk=1 \
 </pre>
 <p>To make the wxWidgets build be unicode enabled (strongly
-recommended if you are building with GTK2) then add the following.
-When wxPython is unicode enabled then all strings that are passed
-to wx functions and methods will first be converted to unicode
-objects, and any 'strings' returned from wx functions and methods
-will actually be unicode objects.:</p>
+recommended unless you are building with GTK1) then add the
+following flag.  When wxPython is unicode enabled then all strings
+that are passed to wx functions and methods will first be converted
+to unicode objects, and any 'strings' returned from wx functions
+and methods will actually be unicode objects.:</p>
 <pre class="literal-block">
 --enable-unicode \
 </pre>
-<p>Notice that I used a prefix of /opt/wx/2.6.  You can use whatever
-path you want, such as a path in your HOME dir or even one of the
-standard prefix paths such as /usr or /usr/local if you like, but
-using /opt this way lets me easily have multiple versions and ports
-of wxWidgets &quot;installed&quot; and makes it easy to switch between them,
-without impacting any versions of wxWidgets that may have been
-installed via an RPM or whatever.  For the rest of the steps below
-be sure to also substitute &quot;/opt/wx/2.6&quot; with whatever prefix you
-choose for your build.</p>
 <p>If you want to use the image and zlib libraries included with
 wxWidgets instead of those already installed on your system, (for
 example, to reduce dependencies on 3rd party libraries) then you
@@ -130,16 +413,16 @@ can add these flags to the configure command:</p>
 </pre>
 </li>
 <li><p class="first">To build and install wxWidgets you could just use the &quot;make&quot;
-command but there are other libraries besides the main wxWidgets
-libs that also need to be built so again I make a script to do it
-all for me so I don't forget anything.  This time it is called
-&quot;.make&quot; (I use the leading &quot;.&quot;  so when I do <tt class="docutils literal"><span class="pre">rm</span> <span class="pre">-r</span> <span class="pre">*</span></tt> in my build
-dir I don't lose my scripts too.)  This is what it looks like:</p>
+command but there are a couple other libraries besides the main
+wxWidgets libs that also need to be built so again I make a script
+to do it all for me so I don't forget anything.  This time it is
+called &quot;.make&quot; (I use the leading &quot;.&quot;  so when I do <tt class="docutils literal"><span class="pre">rm</span> <span class="pre">-r</span> <span class="pre">*</span></tt> in
+my build dir I don't lose my scripts too.)  This is what it looks
+like:</p>
 <pre class="literal-block">
 make $* \
-    &amp;&amp; make -C contrib/src/animate $* \
     &amp;&amp; make -C contrib/src/gizmos $* \
-    &amp;&amp; make -C contrib/src/stc $* 
+    &amp;&amp; make -C contrib/src/stc $*
 </pre>
 <p>So you just use .make as if it where make, but don't forget to set
 the execute bit on .make first!:</p>
@@ -148,16 +431,16 @@ the execute bit on .make first!:</p>
 .make install
 </pre>
 <p>When it's done you should have an installed set of files under
-/opt/wx/2.6 containing just wxWidgets.  Now to use this version of
-wxWidgets you just need to add /opt/wx/2.6/bin to the PATH and set
-LD_LIBRARY_PATH (or DYLD_LIBRARY_PATH on OS X) to /opt/wx/2.6/lib.</p>
+/opt/wx/2.7 containing just wxWidgets.  Now to use this version of
+wxWidgets you just need to add /opt/wx/2.7/bin to the PATH and set
+LD_LIBRARY_PATH (or DYLD_LIBRARY_PATH on OS X) to /opt/wx/2.7/lib.</p>
 </li>
 <li><p class="first">I also have a script to help me build wxPython and it is checked in
 to the CVS as wxWidgets/wxPython/b, but you probably don't want to
 use it as it's very cryptic and expects that you want to run SWIG,
 so if you don't have the latest patched up version of SWIG then
-you'll probably get stuck.  So I'll just give the raw commands
-instead.</p>
+you'll probably get stuck.  So in this document I'll just give the
+raw commands instead.</p>
 <p>We're not going to install the development version of wxPython with
 these commands, so it won't impact your already installed version
 of the latest release.  You'll be able test with this version when
@@ -167,33 +450,33 @@ INSTALL.txt.</p>
 <p>If you have more than one version of Python on your system then be
 sure to use the version of Python that you want to use when running
 wxPython programs to run the setup.py commands below.  I'll be
-using python2.3.</p>
-<p>Make sure that the first wx-config found on the PATH is the one you
-installed above, and then change to the $WXDIR/wxPython dir and
-run the this command:</p>
+using python2.5.</p>
+<p>Make sure that the first wx-config found on the PATH is the one
+belonging to the wxWidgets that you installed above, and then
+change to the $WXDIR/wxPython dir and run the this command:</p>
 <pre class="literal-block">
 cd $WXDIR/wxPython
-python2.3 setup.py build_ext --inplace --debug
+python2.5 setup.py build_ext --inplace --debug
 </pre>
 <p>If your new wx-config script is not on the PATH, or there is some
 other version of it found first, then you can add this to the
 command line to ensure your new one is used instead:</p>
 <pre class="literal-block">
-WX_CONFIG=/opt/wx/2.6/bin/wx-config
+WX_CONFIG=/opt/wx/2.7/bin/wx-config
 </pre>
 <p>By default setup.py will assume that you built wxWidgets to use
 GTK2.  If you built wxWidgets to use GTK 1.2.x then you should add
 this flag to the command-line:</p>
 <pre class="literal-block">
-WXPORT=gtk 
+WXPORT=gtk
 </pre>
-<p>If you would like to do a Unicode enabled build (all strings sent
-to or retruned from wx functions are Unicode objects) and your
-wxWidgets was built with unicode enabled then add this flag:</p>
+<p>Setup.py will assume by default that you are using a unicode build
+of wxWidgets.  If not then you can use this flag:</p>
 <pre class="literal-block">
-UNICODE=1
+UNICODE=0
 </pre>
 <p>If you are wanting to have the source files regenerated with swig,
+(only neccessary if you make modifications to the <tt class="docutils literal"><span class="pre">*.i</span></tt> files,)
 then you need to turn on the USE_SWIG flag and optionally tell it
 where to find the new swig executable, so add these flags:</p>
 <pre class="literal-block">
@@ -203,28 +486,28 @@ USE_SWIG=1 SWIG=/opt/swig/bin/swig
 being undeclared, or something similar then you can add
 BUILD_GLCANVAS=0 to the setup.py command line to disable the
 building of the glcanvas module.</p>
-<p>When the setup.py command is done you should have fully populated
-wxPython and wx packages locally in $WXDIR/wxPython/wxPython and
-$WXDIR/wxPython/wx, with all the extension modules (<tt class="docutils literal"><span class="pre">*.so</span></tt> files)
-located in the wx package.</p>
+<p>When the setup.py command is done you should have a fully populated
+(but uninstalled) wx package located in your $WXDIR/wxPython/wx
+directory.</p>
 </li>
 <li><p class="first">To run code with the development version of wxPython, just set the
 PYTHONPATH to the wxPython dir located in the source tree.  For
 example:</p>
 <pre class="literal-block">
-export LD_LIBRARY_PATH=/opt/wx/2.6/lib
+export LD_LIBRARY_PATH=/opt/wx/2.7/lib
 export PYTHONPATH=$WXDIR/wxPython
 cd $WXDIR/wxPython/demo
-python2.3 demo.py
+python2.5 demo.py
 </pre>
-<p>OS X NOTE: You need to use &quot;pythonw&quot; on the command line to run
-wxPython applications.  This version of the Python executable is
-part of the Python Framework and is allowed to interact with the
-display.  You can also double click on a .py or a .pyw file from
-the finder (assuming that the PythonLauncher app is associated with
-these file extensions) and it will launch the Framework version of
-Python for you.  For information about creating Applicaiton Bundles
-of your wxPython apps please see the wiki and the mail lists.</p>
+<p>OS X NOTE: Depending on your version of OS X and Python you may
+need to use &quot;pythonw&quot; on the command line to run wxPython
+applications.  This version of the Python executable is part of the
+Python Framework and is allowed to interact with the display.  You
+can also double click on a .py or a .pyw file from the finder
+(assuming that the PythonLauncher app is associated with these file
+extensions) and it will launch the Framework version of Python for
+you.  For information about creating Applicaiton Bundles of your
+wxPython apps please see the wiki and the mail lists.</p>
 <p>SOLARIS NOTE: If you get unresolved symbol errors when importing
 wxPython and you are running on Solaris and building with gcc, then
 you may be able to work around the problem by uncommenting a bit of
@@ -234,27 +517,28 @@ does not automatically add libgcc to the link step.</p>
 </li>
 </ol>
 </div>
-<div class="section" id="building-on-windows">
-<h1><a name="building-on-windows">Building on Windows</a></h1>
+<div class="section">
+<h1><a id="building-on-windows" name="building-on-windows">Building on Windows</a></h1>
 <p>The Windows builds currently require the use of Microsoft Visual C++.
 Theoretically, other compilers (such as mingw32 or the Borland
 compilers) can also be used but I've never done the work to make that
 happen.  If you want to try that then first you'll want to find out if
 there are any tricks that have to be done to make Python extension
 modules using that compiler, and then make a few changes to setup.py
-to accommodate that.  (And send the patches to me.)  If you plan on
-using VisualStudio.Net (a.k.a. MSVC 7.1) keep in mind that you'll also
-have to build Python and any other extension modules that you use with
-that compiler because a different version of the C runtime library is
-used.  The Python executable that comes from PythonLabs and the
-wxPython extensions that I distribute are built with MSVC 6 with all
-the Service Packs applied.  This policy will change with Python 2.4
-and MSVC 7.1 will be used starting with that version.</p>
+to accommodate that.  (And send the patches to me.)</p>
+<p>The standard Python 2.3 and earlier are built with MS Visual C 6.0 and
+so you must also build with MSVC 6 in order to be used with the stock
+python.exe.  If you woudl rather use a different version of
+VisualStudio keep in mind that you'll also have to build Python and
+any other extension modules that you use with that compiler because a
+different version of the C runtime library is used.  The stock Python
+2.4 and 2.5 executables are built with MSVC 7.1, and the same rules
+apply to it.</p>
 <p>If you want to build a debuggable version of wxWidgets and wxPython you
 will need to have also built a debug version of Python and any other
 extension modules you need to use.  You can tell if you have them
 already if there is a _d in the file names, for example python_d.exe
-or python23_d.dll.  If you don't need to trace through the C/C++ parts
+or python25_d.dll.  If you don't need to trace through the C/C++ parts
 of the code with the debugger then building the normal (or hybrid)
 version is fine, and you can use the regular python executables with
 it.</p>
@@ -277,7 +561,7 @@ differently.</p>
 <p>The *.btm files are for 4NT and the others are for bash.  They are:</p>
 <pre class="literal-block">
 .make/.make.btm        Builds the main lib and the needed contribs
-.mymake/.mymake.btm    Builds just one lib, use by .make
+.mymake/.mymake.btm    Builds just one lib, used by .make
 .makesetup.mk          A makefile that will copy and edit setup.h
                        as needed for the different types of builds
 </pre>
@@ -298,20 +582,18 @@ copy setup0.h setup.h
 </li>
 <li><p class="first">Edit %WXDIR%\include\wx\msw\setup.h and change a few settings:</p>
 <pre class="literal-block">
-wxDIALOG_UNIT_COMPATIBILITY    0
-wxUSE_DEBUG_CONTEXT            1
-wxUSE_MEMORY_TRACING           1
+wxUSE_DEBUGREPORT              0
+wxUSE_EXCEPTIONS               0
 wxUSE_DIALUP_MANAGER           0
+wxUSE_GRAPHICS_CONTEXT         1
 wxUSE_GLCANVAS                 1
 wxUSE_POSTSCRIPT               1
-wxUSE_AFM_FOR_POSTSCRIPT       0
-wxUSE_DISPLAY                  1
-wxUSE_DEBUGREPORT              0
+wxUSE_DIB_FOR_BITMAP           1
 </pre>
 <p>If you are using my build scripts then a few more settings will be
-changed and then a copy of setup.h is placed in a subdir of
-%WXWIN%\libvc_dll.  If you are doing it by hand and making a
-UNICODE build, then also change these:</p>
+changed automatically and then a copy of setup.h is placed in a
+subdir of %WXWIN%\libvc_dll.  If you are doing it by hand and
+making a UNICODE build, then also change these:</p>
 <pre class="literal-block">
 wxUSE_UNICODE                  1
 wxUSE_UNICODE_MSLU             1
@@ -357,11 +639,11 @@ clean up the build:</p>
 executing nmake with a bunch of extra command line parameters.
 The base set are:</p>
 <pre class="literal-block">
-nmake -f makefile.vc OFFICIAL_BUILD=1 SHARED=1 MONOLITHIC=1 USE_OPENGL=1
+nmake -f makefile.vc OFFICIAL_BUILD=1 SHARED=1 MONOLITHIC=0 USE_OPENGL=1 USE_GDIPLUS=1
 </pre>
 <p>If doing a debug build then add:</p>
 <pre class="literal-block">
-BUILD=debug 
+BUILD=debug
 </pre>
 <p>otherwise add these:</p>
 <pre class="literal-block">
@@ -372,14 +654,7 @@ DEBUG_FLAG=1 CXXFLAGS=/D__NO_VC_CRTDBG__ WXDEBUGFLAG=h BUILD=release
 UNICODE=1 MSLU=1
 </pre>
 <p>Now, from the %WXDIR%\build\msw directory run nmake with your
-selection of command-line flags as described above.  Repeat this
-same command from the following directories in order to build the
-contrib libraries:</p>
-<pre class="literal-block">
-%WXDIR%\contrib\build\animate
-%WXDIR%\contrib\build\gizmos
-%WXDIR%\contrib\build\stc
-</pre>
+selection of command-line flags as described above.</p>
 </li>
 <li><p class="first">When that is all done it will have built the main wxWidgets DLLs
 and also some of the contribs DLLs.  There should be a ton of DLLs
@@ -398,13 +673,14 @@ build for (if you have more than one on your system) and to match
 the MONOLITHIC flag with how you built wxWidgets:</p>
 <pre class="literal-block">
 cd %WXDIR%\wxPython
-python setup.py build_ext --inplace MONOLITHIC=1
+python setup.py build_ext --inplace MONOLITHIC=0
 </pre>
 <p>If you are wanting to have the source files regenerated with swig,
+(only neccessary if you make modifications to the <tt class="docutils literal"><span class="pre">*.i</span></tt> files,)
 then you need to turn on the USE_SWIG flag and optionally tell it
 where to find the new swig executable, so add these flags:</p>
 <pre class="literal-block">
-USE_SWIG=1 SWIG=e:\projects\SWIG-cvs\swig.exe
+USE_SWIG=1 SWIG=e:\\projects\\SWIG-1.2.29\\swig.exe
 </pre>
 <p>If you built a Unicode version of wxWidgets and want to also build
 the Unicode version of wxPython then add this flag:</p>
