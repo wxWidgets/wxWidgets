@@ -221,7 +221,7 @@ void wxFrame::DoGetClientSize( int *width, int *height ) const
     {
 #if wxUSE_MENUS_NATIVE
         // menu bar
-        if (m_frameMenuBar)
+        if (m_frameMenuBar && !(m_fsIsShowing && (m_fsSaveFlag & wxFULLSCREEN_NOMENUBAR != 0)))
         {
             if (!m_menuBarDetached)
                 (*height) -= m_menuBarHeight;
@@ -232,7 +232,8 @@ void wxFrame::DoGetClientSize( int *width, int *height ) const
 
 #if wxUSE_STATUSBAR
         // status bar
-        if (m_frameStatusBar && m_frameStatusBar->IsShown())
+        if (m_frameStatusBar && m_frameStatusBar->IsShown() && 
+            !(m_fsIsShowing && (m_fsSaveFlag & wxFULLSCREEN_NOSTATUSBAR != 0)))
             (*height) -= wxSTATUS_HEIGHT;
 #endif // wxUSE_STATUSBAR
     }
@@ -276,7 +277,7 @@ void wxFrame::DoSetClientSize( int width, int height )
 
 #if wxUSE_MENUS_NATIVE
         // menu bar
-        if (m_frameMenuBar)
+        if (m_frameMenuBar && !(m_fsIsShowing && (m_fsSaveFlag & wxFULLSCREEN_NOMENUBAR != 0)))
         {
             if (!m_menuBarDetached)
                 height += m_menuBarHeight;
@@ -287,7 +288,9 @@ void wxFrame::DoSetClientSize( int width, int height )
 
 #if wxUSE_STATUSBAR
         // status bar
-        if (m_frameStatusBar && m_frameStatusBar->IsShown()) height += wxSTATUS_HEIGHT;
+        if (m_frameStatusBar && m_frameStatusBar->IsShown() && 
+            !(m_fsIsShowing && (m_fsSaveFlag & wxFULLSCREEN_NOSTATUSBAR != 0)))
+            height += wxSTATUS_HEIGHT;
 #endif
 
 #if wxUSE_TOOLBAR
@@ -479,8 +482,12 @@ void wxFrame::GtkOnSize()
     }
 
 #if wxUSE_STATUSBAR
-    if (m_frameStatusBar && m_frameStatusBar->IsShown())
+    if (m_frameStatusBar && m_frameStatusBar->IsShown() &&
+        !(m_fsIsShowing && (m_fsSaveFlag & wxFULLSCREEN_NOSTATUSBAR != 0)))
     {
+        if (!GTK_WIDGET_VISIBLE(m_frameStatusBar->m_widget))
+            gtk_widget_show( m_frameStatusBar->m_widget );
+            
         int xx = 0 + m_miniEdge;
         int yy = m_height - wxSTATUS_HEIGHT - m_miniEdge - client_area_y_offset;
         int ww = m_width - 2*m_miniEdge;
@@ -494,6 +501,14 @@ void wxFrame::GtkOnSize()
         gtk_pizza_set_size( GTK_PIZZA(m_wxwindow),
                             m_frameStatusBar->m_widget,
                             xx, yy, ww, hh );
+    }
+    else
+    {
+        if (m_frameStatusBar)
+        {
+            if (GTK_WIDGET_VISIBLE(m_frameStatusBar->m_widget))
+                gtk_widget_hide( m_frameStatusBar->m_widget );
+        }
     }
 #endif // wxUSE_STATUSBAR
 
