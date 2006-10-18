@@ -1311,8 +1311,8 @@ void wxImage::Paste( const wxImage &image, int x, int y )
         {
             for (int i = 0; i < width; i+=3)
             {
-                if ((source_data[i]   != r) &&
-                    (source_data[i+1] != g) &&
+                if ((source_data[i]   != r) ||
+                    (source_data[i+1] != g) ||
                     (source_data[i+2] != b))
                 {
                     memcpy( target_data+i, source_data+i, 3 );

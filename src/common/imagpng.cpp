@@ -279,6 +279,7 @@ FindMaskColour(unsigned char **lines, png_uint_32 width, png_uint_32 height,
             r2 = *p++;
             g2 = *p++;
             b2 = *p++;
+            ++p; // jump over alpha
 
             wxImageHistogramEntry&
                 entry = h[wxImageHistogram:: MakeKey(r2, g2, b2)];
@@ -384,8 +385,8 @@ void CopyDataFromPNG(wxImage *image,
                         if ( IsTransparent(a) )
                         {
                             *ptrDst++ = rMask;
-                            *ptrDst++ = bMask;
                             *ptrDst++ = gMask;
+                            *ptrDst++ = bMask;
                             break;
                         }
                         // else: !transparent
@@ -452,8 +453,8 @@ void CopyDataFromPNG(wxImage *image,
                         if ( IsTransparent(a) )
                         {
                             *ptrDst++ = rMask;
-                            *ptrDst++ = bMask;
                             *ptrDst++ = gMask;
+                            *ptrDst++ = bMask;
                             break;
                         }
                         else // !transparent
