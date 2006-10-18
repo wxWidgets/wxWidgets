@@ -1291,6 +1291,124 @@ destroyed safely.", "");
 //---------------------------------------------------------------------------
 %newgroup
 
+MustHaveApp(wxScreenDC);
+
+DocStr(wxScreenDC,
+"A wxScreenDC can be used to paint anywhere on the screen. This should
+normally be constructed as a temporary stack object; don't store a
+wxScreenDC object.
+", "");
+class wxScreenDC : public wxDC {
+public:
+    wxScreenDC();
+
+    DocDeclStrName(
+        bool , StartDrawingOnTop(wxWindow* window),
+        "Specify that the area of the screen to be drawn upon coincides with
+the given window.
+
+:see: `EndDrawingOnTop`", "",
+        StartDrawingOnTopWin);
+    
+
+    DocDeclStr(
+        bool , StartDrawingOnTop(wxRect* rect = NULL),
+        "Specify that the area is the given rectangle, or the whole screen if
+``None`` is passed.
+
+:see: `EndDrawingOnTop`", "");
+    
+
+    DocDeclStr(
+        bool , EndDrawingOnTop(),
+        "Use this in conjunction with `StartDrawingOnTop` or
+`StartDrawingOnTopWin` to ensure that drawing to the screen occurs on
+top of existing windows. Without this, some window systems (such as X)
+only allow drawing to take place underneath other windows.
+
+You might use this pair of functions when implementing a drag feature,
+for example as in the `wx.SplitterWindow` implementation.
+
+These functions are probably obsolete since the X implementations
+allow drawing directly on the screen now. However, the fact that this
+function allows the screen to be refreshed afterwards may be useful
+to some applications.", "");
+    
+};
+
+//---------------------------------------------------------------------------
+%newgroup
+
+MustHaveApp(wxWindowDC);
+
+DocStr(wxWindowDC,
+       "A wx.WindowDC must be constructed if an application wishes to paint on
+the whole area of a window (client and decorations). This should
+normally be constructed as a temporary stack object; don't store a
+wx.WindowDC object.","");
+class wxWindowDC : public wxDC {
+public:
+    DocCtorStr(
+        wxWindowDC(wxWindow* win),
+        "Constructor. Pass the window on which you wish to paint.","");
+};
+
+//---------------------------------------------------------------------------
+%newgroup
+
+MustHaveApp(wxClientDC);
+
+DocStr(wxClientDC,
+"A wx.ClientDC must be constructed if an application wishes to paint on
+the client area of a window from outside an EVT_PAINT event. This should
+normally be constructed as a temporary stack object; don't store a
+wx.ClientDC object long term.
+
+To draw on a window from within an EVT_PAINT handler, construct a
+`wx.PaintDC` object.
+
+To draw on the whole window including decorations, construct a
+`wx.WindowDC` object (Windows only).
+", "");
+class wxClientDC : public wxWindowDC {
+public:
+    DocCtorStr(
+        wxClientDC(wxWindow* win),
+        "Constructor. Pass the window on which you wish to paint.", "");
+};
+
+//---------------------------------------------------------------------------
+%newgroup
+
+MustHaveApp(wxPaintDC);
+
+DocStr(wxPaintDC,
+"A wx.PaintDC must be constructed if an application wishes to paint on
+the client area of a window from within an EVT_PAINT event
+handler. This should normally be constructed as a temporary stack
+object; don't store a wx.PaintDC object. If you have an EVT_PAINT
+handler, you **must** create a wx.PaintDC object within it even if you
+don't actually use it.
+
+Using wx.PaintDC within EVT_PAINT handlers is important because it
+automatically sets the clipping area to the damaged area of the
+window. Attempts to draw outside this area do not appear.
+
+To draw on a window from outside EVT_PAINT handlers, construct a
+`wx.ClientDC` object.
+","");
+class wxPaintDC : public wxClientDC {
+public:
+    DocCtorStr(
+        wxPaintDC(wxWindow* win),
+        "Constructor. Pass the window on which you wish to paint.", "");
+};
+
+
+
+//---------------------------------------------------------------------------
+%newgroup
+
 
 %{
 #include <wx/dcbuffer.h>
@@ -1422,150 +1540,47 @@ window is automatically used).", "");
 //---------------------------------------------------------------------------
 %newgroup
 
-MustHaveApp(wxScreenDC);
-
-DocStr(wxScreenDC,
-"A wxScreenDC can be used to paint anywhere on the screen. This should
-normally be constructed as a temporary stack object; don't store a
-wxScreenDC object.
-", "");
-class wxScreenDC : public wxDC {
-public:
-    wxScreenDC();
-
-    DocDeclStrName(
-        bool , StartDrawingOnTop(wxWindow* window),
-        "Specify that the area of the screen to be drawn upon coincides with
-the given window.
-
-:see: `EndDrawingOnTop`", "",
-        StartDrawingOnTopWin);
-    
-
-    DocDeclStr(
-        bool , StartDrawingOnTop(wxRect* rect = NULL),
-        "Specify that the area is the given rectangle, or the whole screen if
-``None`` is passed.
-
-:see: `EndDrawingOnTop`", "");
-    
-
-    DocDeclStr(
-        bool , EndDrawingOnTop(),
-        "Use this in conjunction with `StartDrawingOnTop` or
-`StartDrawingOnTopWin` to ensure that drawing to the screen occurs on
-top of existing windows. Without this, some window systems (such as X)
-only allow drawing to take place underneath other windows.
-
-You might use this pair of functions when implementing a drag feature,
-for example as in the `wx.SplitterWindow` implementation.
-
-These functions are probably obsolete since the X implementations
-allow drawing directly on the screen now. However, the fact that this
-function allows the screen to be refreshed afterwards may be useful
-to some applications.", "");
-    
-};
-
-//---------------------------------------------------------------------------
-%newgroup
-
-MustHaveApp(wxWindowDC);
-
-DocStr(wxWindowDC,
-       "A wx.WindowDC must be constructed if an application wishes to paint on
-the whole area of a window (client and decorations). This should
-normally be constructed as a temporary stack object; don't store a
-wx.WindowDC object.","");
-class wxWindowDC : public wxDC {
-public:
-    DocCtorStr(
-        wxWindowDC(wxWindow* win),
-        "Constructor. Pass the window on which you wish to paint.","");
-};
-
-//---------------------------------------------------------------------------
-%newgroup
-
-MustHaveApp(wxClientDC);
-
-DocStr(wxClientDC,
-"A wx.ClientDC must be constructed if an application wishes to paint on
-the client area of a window from outside an EVT_PAINT event. This should
-normally be constructed as a temporary stack object; don't store a
-wx.ClientDC object long term.
-
-To draw on a window from within an EVT_PAINT handler, construct a
-`wx.PaintDC` object.
-
-To draw on the whole window including decorations, construct a
-`wx.WindowDC` object (Windows only).
-", "");
-class wxClientDC : public wxWindowDC {
-public:
-    DocCtorStr(
-        wxClientDC(wxWindow* win),
-        "Constructor. Pass the window on which you wish to paint.", "");
-};
-
-//---------------------------------------------------------------------------
-%newgroup
-
-MustHaveApp(wxPaintDC);
-
-DocStr(wxPaintDC,
-"A wx.PaintDC must be constructed if an application wishes to paint on
-the client area of a window from within an EVT_PAINT event
-handler. This should normally be constructed as a temporary stack
-object; don't store a wx.PaintDC object. If you have an EVT_PAINT
-handler, you **must** create a wx.PaintDC object within it even if you
-don't actually use it.
-
-Using wx.PaintDC within EVT_PAINT handlers is important because it
-automatically sets the clipping area to the damaged area of the
-window. Attempts to draw outside this area do not appear.
-
-To draw on a window from outside EVT_PAINT handlers, construct a
-`wx.ClientDC` object.
-","");
-class wxPaintDC : public wxClientDC {
-public:
-    DocCtorStr(
-        wxPaintDC(wxWindow* win),
-        "Constructor. Pass the window on which you wish to paint.", "");
-};
-
-
-
-//---------------------------------------------------------------------------
-%newgroup
-
-%pythoncode {
-    if 'wxMac' in wx.PlatformInfo or 'gtk2' in wx.PlatformInfo:
-        _AutoBufferedPaintDCBase = PaintDC
-    else:
-        _AutoBufferedPaintDCBase = BufferedPaintDC
+// Epydoc doesn't like this for some strange reason...
+// %pythoncode {
+//     if 'wxMac' in wx.PlatformInfo or 'gtk2' in wx.PlatformInfo:
+//         _AutoBufferedPaintDCBase = PaintDC
+//     else:
+//         _AutoBufferedPaintDCBase = BufferedPaintDC
             
-    class AutoBufferedPaintDC(_AutoBufferedPaintDCBase):
-        """
-        If the current platform double buffers by default then this DC is the
-        same as a plain `wx.PaintDC`, otherwise it is a `wx.BufferedPaintDC`.
+//     class AutoBufferedPaintDC(_AutoBufferedPaintDCBase):
+//         """
+//         If the current platform double buffers by default then this DC is the
+//         same as a plain `wx.PaintDC`, otherwise it is a `wx.BufferedPaintDC`.
 
-        :see: `wx.AutoBufferedPaintDCFactory`
-        """
-        def __init__(self, window):
-            _AutoBufferedPaintDCBase.__init__(self, window)
-}
+//         :see: `wx.AutoBufferedPaintDCFactory`
+//         """
+//         def __init__(self, window):
+//             _AutoBufferedPaintDCBase.__init__(self, window)
+// }
+
+
+DocStr(wxAutoBufferedPaintDC,
+"If the current platform double buffers by default then this DC is the
+same as a plain `wx.PaintDC`, otherwise it is a `wx.BufferedPaintDC`.
+
+:see: `wx.AutoBufferedPaintDCFactory`
+", "");
+
+class wxAutoBufferedPaintDC: public wxDC
+{
+public:
+    wxAutoBufferedPaintDC(wxWindow* win);
+};
 
 
 %newobject wxAutoBufferedPaintDCFactory;
 DocDeclStr(
     wxDC* , wxAutoBufferedPaintDCFactory(wxWindow* window),
     "Checks if the window is natively double buffered and will return a
-`wx.PaintDC` if it is, a `wx.BufferedPaintDC` otherwise.  The
-advantage of this function over `wx.AutoBufferedPaintDC` is that this
-function will check if the the specified window supports has
-double-buffering enabled rather than just going by platform defaults.", "");
+`wx.PaintDC` if it is, a `wx.BufferedPaintDC` otherwise.  The advantage of
+this function over `wx.AutoBufferedPaintDC` is that this function will check
+if the the specified window has double-buffering enabled rather than just
+going by platform defaults.", "");
 
 
 
