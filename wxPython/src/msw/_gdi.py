@@ -4535,88 +4535,6 @@ def MemoryDCFromDC(*args, **kwargs):
 
 #---------------------------------------------------------------------------
 
-BUFFER_VIRTUAL_AREA = _gdi_.BUFFER_VIRTUAL_AREA
-BUFFER_CLIENT_AREA = _gdi_.BUFFER_CLIENT_AREA
-class BufferedDC(MemoryDC):
-    """
-    This simple class provides a simple way to avoid flicker: when drawing
-    on it, everything is in fact first drawn on an in-memory buffer (a
-    `wx.Bitmap`) and then copied to the screen only once, when this object
-    is destroyed.
-
-    It can be used in the same way as any other device context.
-    wx.BufferedDC itself typically replaces `wx.ClientDC`, if you want to
-    use it in your EVT_PAINT handler, you should look at
-    `wx.BufferedPaintDC`.
-
-    Please note that GTK+ 2.0 and OS X provide double buffering themselves
-    natively. wxBufferedDC is aware of this however, and will bypass the buffering
-    unless an explicit buffer bitmap is given.
-
-    """
-    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
-    __repr__ = _swig_repr
-    def __init__(self, *args): 
-        """
-        __init__(self, DC dc, Bitmap buffer=NullBitmap, int style=BUFFER_CLIENT_AREA) -> BufferedDC
-        __init__(self, DC dc, Size area, int style=BUFFER_CLIENT_AREA) -> BufferedDC
-
-        Constructs a buffered DC.
-        """
-        _gdi_.BufferedDC_swiginit(self,_gdi_.new_BufferedDC(*args))
-        self.__dc = args[0] # save a ref so the other dc will not be deleted before self
-
-    __swig_destroy__ = _gdi_.delete_BufferedDC
-    __del__ = lambda self : None;
-    def UnMask(*args, **kwargs):
-        """
-        UnMask(self)
-
-        Blits the buffer to the dc, and detaches the dc from the buffer (so it
-        can be effectively used once only).  This is usually only called in
-        the destructor.
-        """
-        return _gdi_.BufferedDC_UnMask(*args, **kwargs)
-
-_gdi_.BufferedDC_swigregister(BufferedDC)
-
-class BufferedPaintDC(BufferedDC):
-    """
-    This is a subclass of `wx.BufferedDC` which can be used inside of an
-    EVT_PAINT event handler. Just create an object of this class instead
-    of `wx.PaintDC` and that's all you have to do to (mostly) avoid
-    flicker. The only thing to watch out for is that if you are using this
-    class together with `wx.ScrolledWindow`, you probably do **not** want
-    to call `wx.Window.PrepareDC` on it as it already does this internally
-    for the real underlying `wx.PaintDC`.
-
-    If your window is already fully buffered in a `wx.Bitmap` then your
-    EVT_PAINT handler can be as simple as just creating a
-    ``wx.BufferedPaintDC`` as it will `Blit` the buffer to the window
-    automatically when it is destroyed.  For example::
-
-        def OnPaint(self, event):
-            dc = wx.BufferedPaintDC(self, self.buffer)
-
-
-
-    """
-    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
-    __repr__ = _swig_repr
-    def __init__(self, *args, **kwargs): 
-        """
-        __init__(self, Window window, Bitmap buffer=NullBitmap, int style=BUFFER_CLIENT_AREA) -> BufferedPaintDC
-
-        Create a buffered paint DC.  As with `wx.BufferedDC`, you may either
-        provide the bitmap to be used for buffering or let this object create
-        one internally (in the latter case, the size of the client part of the
-        window is automatically used).
-        """
-        _gdi_.BufferedPaintDC_swiginit(self,_gdi_.new_BufferedPaintDC(*args, **kwargs))
-_gdi_.BufferedPaintDC_swigregister(BufferedPaintDC)
-
-#---------------------------------------------------------------------------
-
 class ScreenDC(DC):
     """
     A wxScreenDC can be used to paint anywhere on the screen. This should
@@ -4758,20 +4676,110 @@ _gdi_.PaintDC_swigregister(PaintDC)
 
 #---------------------------------------------------------------------------
 
-if 'wxMac' in wx.PlatformInfo or 'gtk2' in wx.PlatformInfo:
-    _AutoBufferedPaintDCBase = PaintDC
-else:
-    _AutoBufferedPaintDCBase = BufferedPaintDC
-        
-class AutoBufferedPaintDC(_AutoBufferedPaintDCBase):
+BUFFER_VIRTUAL_AREA = _gdi_.BUFFER_VIRTUAL_AREA
+BUFFER_CLIENT_AREA = _gdi_.BUFFER_CLIENT_AREA
+class BufferedDC(MemoryDC):
+    """
+    This simple class provides a simple way to avoid flicker: when drawing
+    on it, everything is in fact first drawn on an in-memory buffer (a
+    `wx.Bitmap`) and then copied to the screen only once, when this object
+    is destroyed.
+
+    It can be used in the same way as any other device context.
+    wx.BufferedDC itself typically replaces `wx.ClientDC`, if you want to
+    use it in your EVT_PAINT handler, you should look at
+    `wx.BufferedPaintDC`.
+
+    Please note that GTK+ 2.0 and OS X provide double buffering themselves
+    natively. wxBufferedDC is aware of this however, and will bypass the buffering
+    unless an explicit buffer bitmap is given.
+
+    """
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args): 
+        """
+        __init__(self, DC dc, Bitmap buffer=NullBitmap, int style=BUFFER_CLIENT_AREA) -> BufferedDC
+        __init__(self, DC dc, Size area, int style=BUFFER_CLIENT_AREA) -> BufferedDC
+
+        Constructs a buffered DC.
+        """
+        _gdi_.BufferedDC_swiginit(self,_gdi_.new_BufferedDC(*args))
+        self.__dc = args[0] # save a ref so the other dc will not be deleted before self
+
+    __swig_destroy__ = _gdi_.delete_BufferedDC
+    __del__ = lambda self : None;
+    def UnMask(*args, **kwargs):
+        """
+        UnMask(self)
+
+        Blits the buffer to the dc, and detaches the dc from the buffer (so it
+        can be effectively used once only).  This is usually only called in
+        the destructor.
+        """
+        return _gdi_.BufferedDC_UnMask(*args, **kwargs)
+
+_gdi_.BufferedDC_swigregister(BufferedDC)
+
+class BufferedPaintDC(BufferedDC):
+    """
+    This is a subclass of `wx.BufferedDC` which can be used inside of an
+    EVT_PAINT event handler. Just create an object of this class instead
+    of `wx.PaintDC` and that's all you have to do to (mostly) avoid
+    flicker. The only thing to watch out for is that if you are using this
+    class together with `wx.ScrolledWindow`, you probably do **not** want
+    to call `wx.Window.PrepareDC` on it as it already does this internally
+    for the real underlying `wx.PaintDC`.
+
+    If your window is already fully buffered in a `wx.Bitmap` then your
+    EVT_PAINT handler can be as simple as just creating a
+    ``wx.BufferedPaintDC`` as it will `Blit` the buffer to the window
+    automatically when it is destroyed.  For example::
+
+        def OnPaint(self, event):
+            dc = wx.BufferedPaintDC(self, self.buffer)
+
+
+
+    """
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
+        """
+        __init__(self, Window window, Bitmap buffer=NullBitmap, int style=BUFFER_CLIENT_AREA) -> BufferedPaintDC
+
+        Create a buffered paint DC.  As with `wx.BufferedDC`, you may either
+        provide the bitmap to be used for buffering or let this object create
+        one internally (in the latter case, the size of the client part of the
+        window is automatically used).
+        """
+        _gdi_.BufferedPaintDC_swiginit(self,_gdi_.new_BufferedPaintDC(*args, **kwargs))
+_gdi_.BufferedPaintDC_swigregister(BufferedPaintDC)
+
+#---------------------------------------------------------------------------
+
+class AutoBufferedPaintDC(DC):
     """
     If the current platform double buffers by default then this DC is the
     same as a plain `wx.PaintDC`, otherwise it is a `wx.BufferedPaintDC`.
 
     :see: `wx.AutoBufferedPaintDCFactory`
+
     """
-    def __init__(self, window):
-        _AutoBufferedPaintDCBase.__init__(self, window)
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
+        """
+        __init__(self, Window win) -> AutoBufferedPaintDC
+
+        If the current platform double buffers by default then this DC is the
+        same as a plain `wx.PaintDC`, otherwise it is a `wx.BufferedPaintDC`.
+
+        :see: `wx.AutoBufferedPaintDCFactory`
+
+        """
+        _gdi_.AutoBufferedPaintDC_swiginit(self,_gdi_.new_AutoBufferedPaintDC(*args, **kwargs))
+_gdi_.AutoBufferedPaintDC_swigregister(AutoBufferedPaintDC)
 
 
 def AutoBufferedPaintDCFactory(*args, **kwargs):
@@ -4779,10 +4787,10 @@ def AutoBufferedPaintDCFactory(*args, **kwargs):
     AutoBufferedPaintDCFactory(Window window) -> DC
 
     Checks if the window is natively double buffered and will return a
-    `wx.PaintDC` if it is, a `wx.BufferedPaintDC` otherwise.  The
-    advantage of this function over `wx.AutoBufferedPaintDC` is that this
-    function will check if the the specified window supports has
-    double-buffering enabled rather than just going by platform defaults.
+    `wx.PaintDC` if it is, a `wx.BufferedPaintDC` otherwise.  The advantage of
+    this function over `wx.AutoBufferedPaintDC` is that this function will check
+    if the the specified window has double-buffering enabled rather than just
+    going by platform defaults.
     """
   return _gdi_.AutoBufferedPaintDCFactory(*args, **kwargs)
 #---------------------------------------------------------------------------
