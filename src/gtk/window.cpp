@@ -3763,8 +3763,15 @@ void wxWindowGTK::DoSetToolTip( wxToolTip *tip )
 
 void wxWindowGTK::ApplyToolTip( GtkTooltips *tips, const wxChar *tip )
 {
-    wxString tmp( tip );
-    gtk_tooltips_set_tip( tips, GetConnectWidget(), wxGTK_CONV(tmp), (gchar*) NULL );
+    if (tip)
+    {
+        wxString tmp( tip );
+        gtk_tooltips_set_tip( tips, GetConnectWidget(), wxGTK_CONV(tmp), (gchar*) NULL );
+    }
+    else
+    {
+        gtk_tooltips_set_tip( tips, GetConnectWidget(), NULL, NULL);
+    }
 }
 #endif // wxUSE_TOOLTIPS
 
