@@ -119,7 +119,7 @@ Default constructor.
 
 \func{}{wxAcceleratorTable}{\param{const wxAcceleratorTable\& }{bitmap}}
 
-Copy constructor.
+Copy constructor, uses \helpref{reference counting}{trefcount}.
 
 \func{}{wxAcceleratorTable}{\param{int}{ n}, \param{wxAcceleratorEntry}{ entries[]}}
 
@@ -161,9 +161,7 @@ Returns true if the accelerator table is valid.
 
 \func{wxAcceleratorTable\& }{operator $=$}{\param{const wxAcceleratorTable\& }{accel}}
 
-Assignment operator. This operator does not copy any data, but instead
-passes a pointer to the data in {\it accel} and increments a reference
-counter. It is a fast operation.
+Assignment operator, using \helpref{reference counting}{trefcount}.
 
 \wxheading{Parameters}
 

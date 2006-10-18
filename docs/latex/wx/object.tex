@@ -12,8 +12,8 @@ The class contains optional debugging versions
 of {\bf new} and {\bf delete}, which can help trace memory allocation
 and deallocation problems.
 
-wxObject can be used to implement reference counted objects, such as
-wxPen, wxBitmap and others.
+wxObject can be used to implement \helpref{reference counted}{trefcount} objects,
+such as wxPen, wxBitmap and others (see \helpref{this list}{refcountlist}).
 
 \wxheading{See also}
 
@@ -197,12 +197,6 @@ you will need to cast to your own derived class.
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
-\membersection{wxObjectRefData::m\_count}\label{wxobjectrefdatamcount}
-
-\member{int}{m\_count}
-
-Reference count. When this goes to zero during a \helpref{wxObject::UnRef}{wxobjectunref}, an object
-can delete the {\bf wxObjectRefData} object.
 
 \membersection{wxObjectRefData::wxObjectRefData}\label{wxobjectrefdatactor}
 
@@ -216,4 +210,11 @@ Default constructor. Initialises the {\bf m\_count} member to 1.
 
 Destructor.
 
+\membersection{wxObjectRefData::GetRefCount}\label{wxobjectrefdatagetrefcount}
+
+\constfunc{int}{GetRefCount}{\void}
+
+Returns the reference count associated with this shared data.
+When this goes to zero during a \helpref{wxObject::UnRef}{wxobjectunref}, an object
+can delete this {\bf wxObjectRefData} object.
 

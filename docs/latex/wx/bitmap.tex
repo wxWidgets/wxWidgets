@@ -38,10 +38,8 @@ Default constructor.
 
 \func{}{wxBitmap}{\param{const wxBitmap\& }{bitmap}}
 
-Copy constructor. Note that this does not take a fresh copy of the data,
-but instead makes the internal data point to {\it bitmap}'s data. So
-changing one bitmap will change the other. To make a real copy, you can
-use:
+Copy constructor, uses \helpref{reference counting}{trefcount}.
+To make a real copy, you can use:
 
 \begin{verbatim}
     wxBitmap newBitmap = oldBitmap.GetSubBitmap(
@@ -587,9 +585,7 @@ Sets the width member (does not affect the bitmap data).
 
 \func{wxBitmap\& }{operator $=$}{\param{const wxBitmap\& }{bitmap}}
 
-Assignment operator. This operator does not copy any data, but instead
-passes a pointer to the data in {\it bitmap} and increments a reference
-counter. It is a fast operation.
+Assignment operator, using \helpref{reference counting}{trefcount}.
 
 \wxheading{Parameters}
 

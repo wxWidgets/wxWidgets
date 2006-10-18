@@ -95,7 +95,7 @@ Default constructor.
 
 \func{}{wxImage}{\param{const wxImage\& }{image}}
 
-Copy constructor.
+Copy constructor, uses \helpref{reference counting}{trefcount}.
 
 \func{}{wxImage}{\param{const wxBitmap\&}{ bitmap}}
 
@@ -1290,9 +1290,7 @@ data.
 
 \func{wxImage\& }{operator $=$}{\param{const wxImage\& }{image}}
 
-Assignment operator. This operator does not copy any data, but instead
-passes a pointer to the data in {\it image} and increments a reference
-counter. It is a fast operation.
+Assignment operator, using \helpref{reference counting}{trefcount}.
 
 \wxheading{Parameters}
 

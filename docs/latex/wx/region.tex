@@ -39,7 +39,7 @@ Constructs a rectangular region a wxRect object.
 
 \func{}{wxRegion}{\param{const wxRegion\&}{ region}}
 
-Constructs a region by copying another region.
+Copy constructor, uses \helpref{reference counting}{trefcount}.
 
 \func{}{wxRegion}{\param{size\_t}{ n}, \param{const wxPoint }{*points}, \param{int }{fillStyle = wxWINDING\_RULE}}
 
@@ -260,7 +260,9 @@ for any overlapping areas. The result is stored in this region.
 
 \func{void}{operator $=$}{\param{const wxRegion\&}{ region}}
 
-Copies {\it region} by reference counting.
+Assignment operator, using \helpref{reference counting}{trefcount}.
+
+
 
 \section{\class{wxRegionIterator}}\label{wxregioniterator}
 

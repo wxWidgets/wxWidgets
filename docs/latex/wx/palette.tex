@@ -54,7 +54,7 @@ Default constructor.
 
 \func{}{wxPalette}{\param{const wxPalette\&}{ palette}}
 
-Copy constructor. This uses reference counting so is a cheap operation.
+Copy constructor, uses \helpref{reference counting}{trefcount}.
 
 \func{}{wxPalette}{\param{int}{ n}, \param{const unsigned char* }{red},\\
  \param{const unsigned char* }{green}, \param{const unsigned char* }{blue}}
@@ -180,8 +180,7 @@ Returns true if palette data is present.
 
 \func{wxPalette\&}{operator $=$}{\param{const wxPalette\& }{palette}}
 
-Assignment operator, using reference counting. Returns a reference
-to `this'.
+Assignment operator, using \helpref{reference counting}{trefcount}.
 
 \membersection{wxPalette::operator $==$}\label{wxpaletteequals}
 

@@ -167,20 +167,8 @@ vastly better from a performance point of view than a wxObjectArray of wxStrings
 
 \subsection{Reference counting and why you shouldn't care about it}\label{wxstringrefcount}
 
-wxString objects use a technique known as {\it copy on write} (COW). This means
-that when a string is assigned to another, no copying really takes place: only
-the reference count on the shared string data is incremented and both strings
-share the same data.
-
-But as soon as one of the two (or more) strings is modified, the data has to be
-copied because the changes to one of the strings shouldn't be seen in the
-others. As data copying only happens when the string is written to, this is
-known as COW.
-
-What is important to understand is that all this happens absolutely
-transparently to the class users and that whether a string is shared or not is
-not seen from the outside of the class - in any case, the result of any
-operation on it is the same.
+All considerations for wxObject-derived \helpref{reference counted}{trefcount} objects
+are valid also for wxString, even if it does not derive from wxObject.
 
 Probably the unique case when you might want to think about reference
 counting is when a string character is taken from a string which is not a
