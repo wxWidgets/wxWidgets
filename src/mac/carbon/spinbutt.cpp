@@ -124,6 +124,11 @@ void wxSpinButton::MacHandleValueChanged( int inc )
     else
         scrollEvent = wxEVT_SCROLL_THUMBTRACK;
 
+    // Do not send an event if the value has not actually changed
+    // (Also works for wxSpinCtrl)
+    if ( m_value == oldValue )
+        return;
+
     wxSpinEvent event( scrollEvent, m_windowId );
 
     event.SetPosition( m_value );
