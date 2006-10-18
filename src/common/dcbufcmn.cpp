@@ -34,7 +34,55 @@
 // implementation
 // ============================================================================
 
-// This file is intentionally empty.  It has not been removed in case another
-// wxBufferedDC reimplementation is attempted in the near future.  If not then
-// this file can be removed and the bakefiles updated.
+// ============================================================================
+// wxSharedDCBufferManager
+//   Helper class to free shared buffer when the app exists.
+// ============================================================================
+
+class wxSharedDCBufferManager
+{
+    friend class wxBufferedDC;
+public:
+
+    wxSharedDCBufferManager() { }
+    ~wxSharedDCBufferManager() { }
+
+    wxBitmap* GetBuffer(int w, int h)
+    {
+        if ( !m_buffer.IsOk() ||
+             w > m_buffer.GetWidth() ||
+             h > m_buffer.GetHeight() )
+        {
+            // Create slightly larger bitmap so we don't need to
+            // be reallocating constantly when the user enlarges
+            // the frame for the first time.
+            m_buffer = wxBitmap(w, h);
+        }
+
+        return &m_buffer;
+    }
+
+private:
+    wxBitmap    m_buffer;
+};
+
+static wxSharedDCBufferManager gs_sharedDCBufferManager;
+
+
+// ============================================================================
+// wxBufferedDC
+// ============================================================================
+
+void wxBufferedDC::UseBuffer(wxCoord w, wxCoord h)
+{
+    if ( !m_buffer )
+    {
+        if ( w == -1 || h == -1 )
+            m_dc->GetSize(&w, &h);
+
+        m_buffer = gs_sharedDCBufferManager.GetBuffer(w, h);
+    }
+
+    SelectObject(*m_buffer);
+}
 

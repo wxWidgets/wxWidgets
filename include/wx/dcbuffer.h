@@ -18,7 +18,7 @@
 
 // Split platforms into two groups - those which have well-working
 // double-buffering by default, and those which do not.
-#if defined(__WXMAC__) || defined(__WXGTK20__)
+#if defined(__WXMAC__) || defined(__WXGTK20__) || defined(__WXDFB__)
     #define wxALWAYS_NATIVE_DOUBLE_BUFFER       1
 #else
     #define wxALWAYS_NATIVE_DOUBLE_BUFFER       0
@@ -41,7 +41,7 @@ class WXDLLEXPORT wxBufferedDC : public wxMemoryDC
 {
 public:
     // Default ctor, must subsequently call Init for two stage construction.
-    wxBufferedDC() : m_dc( 0 ), m_style(0)
+    wxBufferedDC() : m_dc( 0 ), m_buffer(NULL), m_style(0)
     {
     }
 
@@ -50,7 +50,7 @@ public:
                  const wxBitmap &buffer = wxNullBitmap,
                  int style = wxBUFFER_CLIENT_AREA)
         : m_dc( dc ),
-          m_buffer( buffer ),
+          m_buffer( &buffer ),
           m_style(style)
     {
         UseBuffer();
@@ -61,11 +61,11 @@ public:
     // being buffered)
     wxBufferedDC(wxDC *dc, const wxSize &area, int style = wxBUFFER_CLIENT_AREA)
         : m_dc( dc ),
-          m_buffer( area.GetWidth(), area.GetHeight() ),
+          m_buffer(NULL),
           m_style(style)
 
     {
-        UseBuffer();
+        UseBuffer(area.x, area.y);
     }
 
     // default copy ctor ok.
@@ -82,17 +82,22 @@ public:
               const wxBitmap &buffer=wxNullBitmap,
               int style = wxBUFFER_CLIENT_AREA)
     {
-        wxASSERT_MSG( m_dc == 0 && m_buffer == wxNullBitmap,
+        wxASSERT_MSG( m_dc == 0 && m_buffer == NULL,
                       _T("wxBufferedDC already initialised") );
         m_dc = dc;
-        m_buffer = buffer;
+        m_buffer = &buffer;
         m_style = style;
         UseBuffer();
     }
 
     void Init(wxDC *dc, const wxSize &area, int style = wxBUFFER_CLIENT_AREA)
     {
-        Init(dc, wxBitmap(area.GetWidth(), area.GetHeight()), style);
+        wxASSERT_MSG( m_dc == 0 && m_buffer == NULL,
+                      _T("wxBufferedDC already initialised") );
+        m_dc = dc;
+        m_buffer = NULL;
+        m_style = style;
+        UseBuffer(area.x, area.y);
     }
 
     // Blits the buffer to the dc, and detaches the dc from the buffer (so it
@@ -112,7 +117,7 @@ public:
             GetDeviceOrigin(&x, &y);
 
         m_dc->Blit( 0, 0,
-                    m_buffer.GetWidth(), m_buffer.GetHeight(), this,
+                    m_buffer->GetWidth(), m_buffer->GetHeight(), this,
                     -x, -y );
         m_dc = NULL;
     }
@@ -123,17 +128,7 @@ public:
 
 private:
     // check that the bitmap is valid and use it
-    void UseBuffer()
-    {
-        if (!m_buffer.Ok())
-        {
-            wxCoord w, h;
-            m_dc->GetSize(&w, &h);
-            m_buffer = wxBitmap(w, h);
-        }
-
-        SelectObject(m_buffer);
-    }
+    void UseBuffer(wxCoord w = -1, wxCoord h = -1);
 
     // the underlying DC to which we copy everything drawn on this one in
     // UnMask()
@@ -143,7 +138,7 @@ private:
     wxDC *m_dc;
 
     // the buffer (selected in this DC)
-    wxBitmap m_buffer;
+    const wxBitmap *m_buffer;
 
     // the buffering style
     int m_style;
@@ -238,7 +233,7 @@ private:
     {
         // Help the user to get the double-buffering working properly.
         wxASSERT_MSG( win->GetBackgroundStyle() == wxBG_STYLE_CUSTOM,
-                      wxT("In constructor, you need to call GetBackgroundStyle(wxBG_STYLE_CUSTOM), ")
+                      wxT("In constructor, you need to call SetBackgroundStyle(wxBG_STYLE_CUSTOM), ")
                       wxT("and also, if needed, paint the background manually in the paint event handler."));
     }
 
