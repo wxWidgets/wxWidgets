@@ -1788,6 +1788,39 @@ class FNBRenderer:
         pass
 
 
+    def NumberTabsCanFit(self, pageContainer, fr=-1):
+
+        pc = pageContainer
+        
+        rect = pc.GetClientRect()
+        clientWidth = rect.width
+
+        vTabInfo = []
+
+        tabHeight = self.CalcTabHeight(pageContainer)
+
+        # The drawing starts from posx 
+        posx = pc._pParent.GetPadding()
+
+        if fr < 0:
+            fr = pc._nFrom
+
+        for i in xrange(fr, len(pc._pagesInfoVec)):
+
+            tabWidth = self.CalcTabWidth(pageContainer, i, tabHeight) 
+            if posx + tabWidth + self.GetButtonsAreaLength(pc) >= clientWidth:
+                break; 
+
+            # Add a result to the returned vector 
+            tabRect = wx.Rect(posx, VERTICAL_BORDER_PADDING, tabWidth , tabHeight)
+            vTabInfo.append(tabRect)
+
+            # Advance posx 
+            posx += tabWidth + FNB_HEIGHT_SPACER
+
+        return vTabInfo
+
+    
 # ---------------------------------------------------------------------------- #
 # Class FNBRendererMgr
 # A manager that handles all the renderers defined below and calls the
@@ -3606,6 +3639,21 @@ class PageContainer(wx.Panel):
     def OnSize(self, event):
         """ Handles the wx.EVT_SIZE events for L{PageContainer}. """
 
+        # When resizing the control, try to fit to screen as many tabs as we can 
+        style = self.GetParent().GetWindowStyleFlag() 
+        renderer = self._mgr.GetRenderer(style)
+        
+        fr = 0
+        page = self.GetSelection()
+        
+        for fr in xrange(self._nFrom):
+            vTabInfo = renderer.NumberTabsCanFit(self, fr)
+            if page - fr >= len(vTabInfo):
+                continue
+            break
+
+        self._nFrom = fr
+
         self.Refresh() # Call on paint
         event.Skip()
 
@@ -3629,30 +3677,26 @@ class PageContainer(wx.Panel):
 
     def OnRightDown(self, event):
         """ Handles the wx.EVT_RIGHT_DOWN events for L{PageContainer}. """
-
-        if self._pRightClickMenu:
         
-            where, tabIdx = self.HitTest(event.GetPosition())
+        where, tabIdx = self.HitTest(event.GetPosition())
 
-            if where in [FNB_TAB, FNB_TAB_X]:
+        if where in [FNB_TAB, FNB_TAB_X]:
 
-                if self._pagesInfoVec[tabIdx].GetEnabled():
-                    # Set the current tab to be active
-                    self.SetSelection(tabIdx)
+            if self._pagesInfoVec[tabIdx].GetEnabled():
+                # Fire events and eventually (if allowed) change selection
+                self.FireEvent(tabIdx)
 
-                    # If the owner has defined a context menu for the tabs,
-                    # popup the right click menu
-                    if self._pRightClickMenu:
-                        self.PopupMenu(self._pRightClickMenu)
-                    else:
-                        # send a message to popup a custom menu
-                        event = FlatNotebookEvent(wxEVT_FLATNOTEBOOK_PAGE_CONTEXT_MENU, self.GetParent().GetId())
-                        event.SetSelection(tabIdx)
-                        event.SetOldSelection(self._iActivePage)
-                        event.SetEventObject(self.GetParent())
-                        self.GetParent().GetEventHandler().ProcessEvent(event)
-                
-            event.Skip()
+                # send a message to popup a custom menu
+                event = FlatNotebookEvent(wxEVT_FLATNOTEBOOK_PAGE_CONTEXT_MENU, self.GetParent().GetId())
+                event.SetSelection(tabIdx)
+                event.SetOldSelection(self._iActivePage)
+                event.SetEventObject(self.GetParent())
+                self.GetParent().GetEventHandler().ProcessEvent(event)
+
+                if self._pRightClickMenu:
+                    self.PopupMenu(self._pRightClickMenu)
+            
+        event.Skip()
 
 
     def OnLeftDown(self, event):
@@ -3892,22 +3936,18 @@ class PageContainer(wx.Panel):
                 da_page.SetFocus()
         
         if not self.IsTabVisible(page):
-        
-            if page == len(self._pagesInfoVec) - 1:
-                # Incase the added tab is last,
-                # the function IsTabVisible() will always return False
-                # and thus will cause an evil behaviour that the new
-                # tab will hide all other tabs, we need to check if the
-                # new selected tab can fit to the current screen
-                if not self.CanFitToScreen(page):
-                    self._nFrom = page
-                            
-            else:
+            # Try to remove one tab from start and try again
+            
+            if not self.CanFitToScreen(page):
 
-                if not self.CanFitToScreen(page):
-                    # Redraw the tabs starting from page
+                if self._nFrom > page:
                     self._nFrom = page
-                    
+                else:
+                    while self._nFrom < page:
+                        self._nFrom += 1
+                        if self.CanFitToScreen(page):
+                            break
+ 
         self.Refresh()
 
 
@@ -4106,6 +4146,9 @@ class PageContainer(wx.Panel):
 
     def GetLastVisibleTab(self):
         """ Returns the last visible tab. """
+
+        if self._nFrom < 0:
+            return -1
 
         ii = 0
         
@@ -4413,39 +4456,12 @@ class PageContainer(wx.Panel):
         style = self.GetParent().GetWindowStyleFlag()
         render = self._mgr.GetRenderer(style)
 
-        if not self.HasFlag(FNB_VC8):
-            rect = self.GetClientRect();
-            clientWidth = rect.width;
-            tabHeight = render.CalcTabHeight(self)
-            tabWidth = render.CalcTabWidth(self, page, tabHeight)
+        vTabInfo = render.NumberTabsCanFit(self)
 
-            posx = self._pParent._nPadding
-
-            if self._nFrom >= 0:
-
-                for i in xrange(self._nFrom, len(self._pagesInfoVec)):
-
-                    if self._pagesInfoVec[i].GetPosition() == wx.Point(-1, -1):
-                        break
-                    
-                    posx += self._pagesInfoVec[i].GetSize().x
-
-            if posx + tabWidth + render.GetButtonsAreaLength(self) >= clientWidth:
-                return False
-
-            return True
-
-        else:
-
-            # TODO:: this is ugly and should be improved, we should *never* access the
-            # raw pointer directly like we do here (render.Get())
-            vc8_render = render
-            vTabInfo = vc8_render.NumberTabsCanFit(self)
-
-            if page - self._nFrom >= len(vTabInfo):
-                return False
-            
-            return True
+        if page - self._nFrom >= len(vTabInfo):
+            return False
+        
+        return True
 
 
     def GetNumOfVisibleTabs(self):
