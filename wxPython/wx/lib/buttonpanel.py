@@ -1256,6 +1256,7 @@ class ButtonPanel(wx.PyPanel):
         self._useHelp = True
         self._freezeCount = 0
         self._currentButton = -1
+        self._haveTip = False
 
         self._art = BPArt(style)
 
@@ -1857,10 +1858,11 @@ class ButtonPanel(wx.PyPanel):
 
         if not self.GetUseHelp():
             return
-        
+
         shortHelp = hit.GetShortHelp()
         if shortHelp:
             self.SetToolTipString(shortHelp)
+            self._haveTip = True
 
         longHelp = hit.GetLongHelp()
         if not longHelp:
@@ -1886,7 +1888,9 @@ class ButtonPanel(wx.PyPanel):
         if not self.GetUseHelp():
             return
 
-        self.SetToolTipString("")
+        if self._haveTip:
+            self.SetToolTipString("")
+            self._haveTip = False
 
         if self._statusTimer and self._statusTimer.IsRunning():
             topLevel = wx.GetTopLevelParent(self)
