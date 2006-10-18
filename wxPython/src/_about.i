@@ -293,8 +293,8 @@ DocStr(wxAboutBox,
        "This function shows the standard about dialog containing the
 information specified in ``info``. If the current platform has a
 native about dialog which is capable of showing all the fields in
-``info``, the native dialog is used, otherwise the function falls back
-to the generic wxWidgets version of the dialog.", "");
+`wx.AboutDialogInfo`, the native dialog is used, otherwise the
+function falls back to the generic wxWidgets version of the dialog.", "");
 
 void wxAboutBox(const wxAboutDialogInfo& info);
 
