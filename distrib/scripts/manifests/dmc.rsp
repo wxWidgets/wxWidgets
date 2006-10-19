@@ -114,7 +114,6 @@ samples/printing/makefile.dm?
 samples/propsize/makefile.dm?
 samples/regtest/makefile.dm?
 samples/render/makefile.dm?
-samples/richedit/makefile.dm?
 samples/rotate/makefile.dm?
 samples/sashtest/makefile.dm?
 samples/scroll/makefile.dm?
