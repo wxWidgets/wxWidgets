@@ -115,7 +115,8 @@ enum {
     wxWEBKIT_STATE_STOP = 0,
     wxWEBKIT_STATE_FAILED = 0,
 
-    wxEVT_WEBKIT_STATE_CHANGED = 0
+    wxEVT_WEBKIT_STATE_CHANGED = 0,
+    wxEVT_WEBKIT_BEFORE_LOAD = 0
 };
 
 enum {
@@ -150,7 +151,7 @@ public:
     void SetNavigationType(int navType) { }
     int GetNavigationType() { return 0; }
 
-    wxWebKitBeforeLoadEvent( wxWindow* win = (wxWindow*) NULL ) { wxPyRaiseNotImplemented }
+    wxWebKitBeforeLoadEvent( wxWindow* win = (wxWindow*) NULL ) { wxPyRaiseNotImplemented(); }
 };
  
 #endif
