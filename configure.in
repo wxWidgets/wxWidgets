@@ -3206,6 +3206,8 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
     fi
 
     if test "$wxUSE_DFB" = 1; then
+       PKG_PROG_PKG_CONFIG()
+
        PKG_CHECK_MODULES(DIRECTFB,
                          [directfb >= 0.9.22],
                          [
@@ -3282,42 +3284,44 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
         fi
 
         if test "$wxUSE_UNICODE" = "yes"; then
-                PKG_CHECK_MODULES(PANGOX, pangox,
-                    [
-                        CXXFLAGS="$PANGOX_CFLAGS $CXXFLAGS"
-                        GUI_TK_LIBRARY="$GUI_TK_LIBRARY $PANGOX_LIBS"
-                    ],
-                    [
-                        AC_MSG_ERROR([pangox library not found, library cannot be compiled in Unicode mode])
-                    ]
-                )
-                PKG_CHECK_MODULES(PANGOFT2, pangoft2,
-                    [
-                        CXXFLAGS="$PANGOFT2_CFLAGS $CXXFLAGS"
-                        GUI_TK_LIBRARY="$GUI_TK_LIBRARY $PANGOFT2_LIBS"
-                    ],
-                    [
-                        AC_MSG_WARN([pangoft2 library not found, library will be compiled without printing support])
-                        wxUSE_PRINTING_ARCHITECTURE="no"
-                    ]
-                )
-                PKG_CHECK_MODULES(PANGOXFT, pangoxft,
-                    [
-                        AC_DEFINE(HAVE_PANGO_XFT)
-                        CXXFLAGS="$PANGOXFT_CFLAGS $CXXFLAGS"
-                        GUI_TK_LIBRARY="$GUI_TK_LIBRARY $PANGOXFT_LIBS"
-                    ],
-                    [
-                        AC_MSG_WARN([pangoxft library not found, library will be compiled without anti-aliasing support])
-                    ]
-                )
-                save_CXXFLAGS="$CXXFLAGS"
-                save_LIBS="$LIBS"
-                CXXFLAGS="$PANGOX_CFLAGS $CXXFLAGS"
-                LIBS="$LIBS $PANGOX_LIBS"
-                AC_CHECK_FUNCS([pango_font_family_is_monospace])
-                CXXFLAGS="$save_CXXFLAGS"
-                LIBS="$save_LIBS"
+            PKG_PROG_PKG_CONFIG()
+
+            PKG_CHECK_MODULES(PANGOX, pangox,
+                [
+                    CXXFLAGS="$PANGOX_CFLAGS $CXXFLAGS"
+                    GUI_TK_LIBRARY="$GUI_TK_LIBRARY $PANGOX_LIBS"
+                ],
+                [
+                    AC_MSG_ERROR([pangox library not found, library cannot be compiled in Unicode mode])
+                ]
+            )
+            PKG_CHECK_MODULES(PANGOFT2, pangoft2,
+                [
+                    CXXFLAGS="$PANGOFT2_CFLAGS $CXXFLAGS"
+                    GUI_TK_LIBRARY="$GUI_TK_LIBRARY $PANGOFT2_LIBS"
+                ],
+                [
+                    AC_MSG_WARN([pangoft2 library not found, library will be compiled without printing support])
+                    wxUSE_PRINTING_ARCHITECTURE="no"
+                ]
+            )
+            PKG_CHECK_MODULES(PANGOXFT, pangoxft,
+                [
+                    AC_DEFINE(HAVE_PANGO_XFT)
+                    CXXFLAGS="$PANGOXFT_CFLAGS $CXXFLAGS"
+                    GUI_TK_LIBRARY="$GUI_TK_LIBRARY $PANGOXFT_LIBS"
+                ],
+                [
+                    AC_MSG_WARN([pangoxft library not found, library will be compiled without anti-aliasing support])
+                ]
+            )
+            save_CXXFLAGS="$CXXFLAGS"
+            save_LIBS="$LIBS"
+            CXXFLAGS="$PANGOX_CFLAGS $CXXFLAGS"
+            LIBS="$LIBS $PANGOX_LIBS"
+            AC_CHECK_FUNCS([pango_font_family_is_monospace])
+            CXXFLAGS="$save_CXXFLAGS"
+            LIBS="$save_LIBS"
         fi
 
         wxUSE_UNIVERSAL="yes"
