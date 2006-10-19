@@ -35,6 +35,15 @@
 #endif
 
 /*
+ * wxMAC_USE_CORE_GRAPHICS is now implemented in terms of wxUSE_GRAPHICS_CONTEXT
+ */
+ 
+#if wxMAC_USE_CORE_GRAPHICS 
+	#undef wxUSE_GRAPHICS_CONTEXT
+	#define wxUSE_GRAPHICS_CONTEXT 1
+#endif
+
+/*
  * check graphics context option
  */
 #if wxUSE_GRAPHICS_CONTEXT && !wxMAC_USE_CORE_GRAPHICS
