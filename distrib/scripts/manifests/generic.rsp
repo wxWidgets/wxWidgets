@@ -714,6 +714,7 @@ samples/internat/*.ico
 samples/internat/*.bmp
 samples/internat/*.mo
 samples/internat/*.pro
+samples/internat/ar/*.?o
 samples/internat/bg/*.mo
 samples/internat/bg/*.po
 samples/internat/cs/*.mo
