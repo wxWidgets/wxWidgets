@@ -94,7 +94,7 @@ void wxRichTextStyleOrganiserDialog::Init()
 {
     m_richTextStyleSheet = NULL;
     m_richTextCtrl = NULL;
-    m_dontUpdate = NULL;
+    m_dontUpdate = false;
     m_flags = 0;
     m_restartNumbering = true;
     

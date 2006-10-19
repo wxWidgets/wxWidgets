@@ -18,6 +18,8 @@
 
 #include "wx/dialog.h"
 #include "wx/vscroll.h"
+#include "wx/combobox.h"
+#include "wx/stattext.h"
 
 /*!
  * Forward declarations
