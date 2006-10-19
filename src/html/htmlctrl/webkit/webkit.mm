@@ -9,6 +9,10 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
+    #pragma implementation "webkit.h"
+#endif
+
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 #include "wx/splitter.h"
@@ -30,8 +34,8 @@
 #endif
 
 #include "wx/html/webkit.h"
-#include "wx/notebook.h"
 
+#define DEBUG_WEBKIT_SIZING 0
 
 // ----------------------------------------------------------------------------
 // macros
@@ -44,6 +48,87 @@ BEGIN_EVENT_TABLE(wxWebKitCtrl, wxControl)
 END_EVENT_TABLE()
 
 // ----------------------------------------------------------------------------
+// Carbon Events handlers
+// ----------------------------------------------------------------------------
+
+// prototype for function in src/mac/carbon/toplevel.cpp
+void SetupMouseEvent( wxMouseEvent &wxevent , wxMacCarbonEvent &cEvent );
+
+static const EventTypeSpec eventList[] =
+{
+    //{ kEventClassControl, kEventControlTrack } ,
+    { kEventClassMouse, kEventMouseUp },
+    { kEventClassMouse, kEventMouseDown },
+    { kEventClassMouse, kEventMouseMoved },
+    { kEventClassMouse, kEventMouseDragged },
+#if DEBUG_WEBKIT_SIZING == 1
+    { kEventClassControl, kEventControlBoundsChanged } ,
+#endif
+};
+
+static pascal OSStatus wxWebKitCtrlEventHandler( EventHandlerCallRef handler , EventRef event , void *data )
+{
+    OSStatus result = eventNotHandledErr ;
+
+    wxMacCarbonEvent cEvent( event ) ;
+
+    ControlRef controlRef ;
+    wxWebKitCtrl* thisWindow = (wxWebKitCtrl*) data ;
+    wxTopLevelWindowMac* tlw = NULL;
+    if (thisWindow)
+        tlw = thisWindow->MacGetTopLevelWindow();
+
+    cEvent.GetParameter( kEventParamDirectObject , &controlRef ) ;
+    
+    wxWindow* currentMouseWindow = thisWindow ;
+    
+    if ( wxApp::s_captureWindow )
+        currentMouseWindow = wxApp::s_captureWindow;
+
+    switch ( GetEventKind( event ) )
+    {
+        case kEventMouseDragged :
+        case kEventMouseMoved :
+            {
+                wxMouseEvent wxevent(wxEVT_LEFT_DOWN);
+                SetupMouseEvent( wxevent , cEvent ) ;
+                
+                currentMouseWindow->ScreenToClient( &wxevent.m_x , &wxevent.m_y ) ;
+                wxevent.SetEventObject( currentMouseWindow ) ;
+                wxevent.SetId( currentMouseWindow->GetId() ) ;
+                
+                if ( currentMouseWindow->GetEventHandler()->ProcessEvent(wxevent) )
+                {
+                    result = noErr;
+                }
+
+                break; // this should enable WebKit to fire mouse dragged and mouse up events...
+            }
+
+        case kEventControlBoundsChanged:
+            {
+                // this is just here for debugging, so we can note any differences between
+                // native event sizes and the sizes the wxWindow receives.
+                Rect origBounds = cEvent.GetParameter<Rect>(kEventParamOriginalBounds, typeQDRectangle) ;
+                Rect prevBounds = cEvent.GetParameter<Rect>(kEventParamPreviousBounds, typeQDRectangle) ;
+                Rect curBounds = cEvent.GetParameter<Rect>(kEventParamCurrentBounds, typeQDRectangle) ;
+                    
+                fprintf(stderr, "Orig bounds x=%d, y=%d, height=%d, width=%d\n", origBounds.left, origBounds.top, origBounds.bottom -origBounds.top, origBounds.right - origBounds.left);
+                fprintf(stderr, "Prev bounds x=%d, y=%d, height=%d, width=%d\n", prevBounds.left, prevBounds.top, prevBounds.bottom -prevBounds.top, prevBounds.right - prevBounds.left);
+                fprintf(stderr, "Cur bounds x=%d, y=%d, height=%d, width=%d\n", curBounds.left, curBounds.top, curBounds.bottom -curBounds.top, curBounds.right - curBounds.left);
+            }
+        default :
+            break ;
+    }
+
+    result = CallNextEventHandler(handler, event);
+    return result ;
+}
+
+DEFINE_ONE_SHOT_HANDLER_GETTER( wxWebKitCtrlEventHandler )
+
+
+// ----------------------------------------------------------------------------
 // wxWebKit Events
 // ----------------------------------------------------------------------------
 
@@ -54,6 +139,18 @@ DEFINE_EVENT_TYPE( wxEVT_WEBKIT_STATE_CHANGED )
 wxWebKitStateChangedEvent::wxWebKitStateChangedEvent( wxWindow* win )
 {
     SetEventType( wxEVT_WEBKIT_STATE_CHANGED);
+    SetEventObject( win );
+    SetId(win->GetId());
+}
+
+IMPLEMENT_DYNAMIC_CLASS( wxWebKitBeforeLoadEvent, wxCommandEvent )
+
+DEFINE_EVENT_TYPE( wxEVT_WEBKIT_BEFORE_LOAD )
+
+wxWebKitBeforeLoadEvent::wxWebKitBeforeLoadEvent( wxWindow* win )
+{
+    m_cancelled = false;
+    SetEventType( wxEVT_WEBKIT_BEFORE_LOAD);
     SetEventObject( win );
     SetId(win->GetId());
 }
@@ -80,12 +177,40 @@ inline NSString* wxNSStringWithWxString(const wxString &wxstring)
 #endif // wxUSE_UNICODE
 }
 
-@interface MyFrameLoadMonitor : NSObject
-{
-    wxWindow* webKitWindow;
+inline int wxNavTypeFromWebNavType(int type){
+    if (type == WebNavigationTypeLinkClicked)
+        return wxWEBKIT_NAV_LINK_CLICKED;
+    
+    if (type == WebNavigationTypeFormSubmitted)
+        return wxWEBKIT_NAV_FORM_SUBMITTED;
+        
+    if (type == WebNavigationTypeBackForward)
+        return wxWEBKIT_NAV_BACK_NEXT;
+        
+    if (type == WebNavigationTypeReload)
+        return wxWEBKIT_NAV_RELOAD;
+        
+    if (type == WebNavigationTypeFormResubmitted)
+        return wxWEBKIT_NAV_FORM_RESUBMITTED;
+        
+    return wxWEBKIT_NAV_OTHER;
 }
 
-- initWithWxWindow: (wxWindow*)inWindow;
+@interface MyFrameLoadMonitor : NSObject
+{
+    wxWebKitCtrl* webKitWindow;
+}
+
+- initWithWxWindow: (wxWebKitCtrl*)inWindow;
+
+@end
+
+@interface MyPolicyDelegate : NSObject
+{
+    wxWebKitCtrl* webKitWindow;
+}
+
+- initWithWxWindow: (wxWebKitCtrl*)inWindow;
 
 @end
 
@@ -147,19 +272,28 @@ bool wxWebKitCtrl::Create(wxWindow *parent,
     HIWebViewCreate( m_peer->GetControlRefAddr() );
 
     m_webView = (WebView*) HIWebViewGetWebView( m_peer->GetControlRef() );
+    
     MacPostControlCreate(pos, size);
     HIViewSetVisible( m_peer->GetControlRef(), true );
     [m_webView setHidden:false];
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_3
     if ( UMAGetSystemVersion() >= 0x1030 )
-    HIViewChangeFeatures( m_peer->GetControlRef() , kHIViewIsOpaque , 0 ) ;
+        HIViewChangeFeatures( m_peer->GetControlRef() , kHIViewIsOpaque , 0 ) ;
 #endif
+    InstallControlEventHandler( m_peer->GetControlRef() , GetwxWebKitCtrlEventHandlerUPP(),
+        GetEventTypeCount(eventList), eventList, this,
+        (EventHandlerRef *)&m_webKitCtrlEventHandler);
+
 #endif
 
     // Register event listener interfaces
-    MyFrameLoadMonitor* myFrameLoadMonitor = [[MyFrameLoadMonitor alloc] initWithWxWindow: (wxWindow*)this];
+    MyFrameLoadMonitor* myFrameLoadMonitor = [[MyFrameLoadMonitor alloc] initWithWxWindow: this];
     [m_webView setFrameLoadDelegate:myFrameLoadMonitor];
-
+    
+    // this is used to veto page loads, etc.
+    MyPolicyDelegate* myPolicyDelegate = [[MyPolicyDelegate alloc] initWithWxWindow: this];
+    [m_webView setPolicyDelegate:myPolicyDelegate];
+    
     LoadURL(m_currentURL);
     return true;
 }
@@ -245,11 +379,128 @@ wxString wxWebKitCtrl::GetPageSource(){
     return wxEmptyString;
 }
 
-void wxWebKitCtrl::SetPageSource(wxString& source, const wxString& baseUrl){
+wxString wxWebKitCtrl::GetSelection(){
+    if ( !m_webView )
+        return wxEmptyString;
+        
+    NSString* selectedText = [[m_webView selectedDOMRange] toString];
+    return wxStringWithNSString( selectedText );
+}
+
+bool wxWebKitCtrl::CanIncreaseTextSize(){
+    if ( !m_webView )
+        return false;
+        
+    if ([m_webView canMakeTextLarger])
+        return true;
+    else
+        return false;
+}
+
+void wxWebKitCtrl::IncreaseTextSize(){
+    if ( !m_webView )
+        return;
+        
+    if (CanIncreaseTextSize())
+        [m_webView makeTextLarger:(WebView*)m_webView];
+}
+
+bool wxWebKitCtrl::CanDecreaseTextSize(){
+    if ( !m_webView )
+        return false;
+        
+    if ([m_webView canMakeTextSmaller])
+        return true;
+    else
+        return false;
+}
+
+void wxWebKitCtrl::DecreaseTextSize(){
+    if ( !m_webView )
+        return;
+        
+    if (CanDecreaseTextSize())
+        [m_webView makeTextSmaller:(WebView*)m_webView];
+}
+
+void wxWebKitCtrl::SetPageSource(const wxString& source, const wxString& baseUrl){
     if ( !m_webView )
         return;
 
     [[m_webView mainFrame] loadHTMLString:(NSString*)wxNSStringWithWxString( source ) baseURL:[NSURL URLWithString:wxNSStringWithWxString( baseUrl )]];
+
+}
+
+void wxWebKitCtrl::Print(bool showPrompt){
+    if ( !m_webView )
+        return;
+    
+    id view = [[[m_webView mainFrame] frameView] documentView]; 
+    NSPrintOperation *op = [NSPrintOperation printOperationWithView:view printInfo: [NSPrintInfo sharedPrintInfo]]; 
+    if (showPrompt){
+        [op setShowsPrintPanel: showPrompt];
+        // in my tests, the progress bar always freezes and it stops the whole print operation.
+        // do not turn this to true unless there is a workaround for the bug.
+        [op setShowsProgressPanel: false];
+    }
+    // Print it. 
+    [op runOperation]; 
+}
+
+void wxWebKitCtrl::MakeEditable(bool enable){
+    if ( !m_webView )
+        return;
+
+    [m_webView setEditable:enable ];
+}
+
+bool wxWebKitCtrl::IsEditable(){
+    if ( !m_webView )
+        return false;
+
+    return [m_webView isEditable];
+}
+
+int wxWebKitCtrl::GetScrollPos(){
+    id result = [[m_webView windowScriptObject] evaluateWebScript:@"document.body.scrollTop"];
+    return [result intValue];
+}   
+
+void wxWebKitCtrl::SetScrollPos(int pos){
+    if ( !m_webView )
+        return;
+        
+    wxString javascript; 
+    javascript.Printf(wxT("document.body.scrollTop = %d;"), pos);
+    [[m_webView windowScriptObject] evaluateWebScript:(NSString*)wxNSStringWithWxString( javascript )];
+}
+
+wxString wxWebKitCtrl::RunScript(const wxString& javascript){
+    if ( !m_webView )
+        return wxEmptyString;    
+        
+    id result = [[m_webView windowScriptObject] evaluateWebScript:(NSString*)wxNSStringWithWxString( javascript )];
+    
+    NSString* resultAsString;
+    wxString resultAsWxString = wxEmptyString;
+    NSString* className = NSStringFromClass([result class]);
+    if ([className isEqualToString:@"NSCFNumber"])
+        resultAsString = [NSString stringWithFormat:@"%@", result];
+    else if ([className isEqualToString:@"NSCFString"])
+        resultAsString = result;
+    else if ([className isEqualToString:@"NSCFBoolean"]){
+        if ([result boolValue])
+            resultAsString = @"true";
+        else
+            resultAsString = @"false";
+    }
+    else if ([className isEqualToString:@"WebScriptObject"])
+        resultAsString = [result stringRepresentation];
+    else
+        fprintf(stderr, "wxWebKitCtrl::RunScript - Unexpected return type: %s!\n", [className UTF8String]);
+
+    resultAsWxString = wxStringWithNSString( resultAsString );
+    return resultAsWxString;
 }
 
 void wxWebKitCtrl::OnSize(wxSizeEvent &event){
@@ -261,126 +512,61 @@ void wxWebKitCtrl::OnSize(wxSizeEvent &event){
     // I also left some test debugging print statements as a convenience if a(nother)
     // problem crops up.
 
-    // Let's hope that Tiger fixes this mess...
-
-    int x, y;
-    x = 0;
-    y = 0;
-
-    wxWindow* parent = GetParent();
-
     wxWindow* tlw = MacGetTopLevelWindow();
+
+    NSRect frame = [m_webView frame];
+    NSRect bounds = [m_webView bounds];
+    
+#if DEBUG_WEBKIT_SIZING
+    fprintf(stderr,"Carbon window x=%d, y=%d, width=%d, height=%d\n", GetPosition().x, GetPosition().y, GetSize().x, GetSize().y);
+    fprintf(stderr, "Cocoa window frame x=%G, y=%G, width=%G, height=%G\n", frame.origin.x, frame.origin.y, frame.size.width, frame.size.height);
+    fprintf(stderr, "Cocoa window bounds x=%G, y=%G, width=%G, height=%G\n", bounds.origin.x, bounds.origin.y, bounds.size.width, bounds.size.height);
+#endif
 
     // This must be the case that Apple tested with, because well, in this one case
     // we don't need to do anything! It just works. ;)
-    if (parent == tlw){
+    if (GetParent() == tlw){
         return;
     }
 
-    while(parent != NULL)
-    {
-        if ( parent->IsKindOf( CLASSINFO( wxSplitterWindow ) ) && GetParent()->IsKindOf( CLASSINFO( wxSplitterWindow ) ) ){
-                // When parent is not a wxSplitterWindow, we can rely on it's GetPosition() to give us the correct
-                // coordinates, but when the parent is a wxSplitterWindow, we need to manually calculate
-                // the sash position of it and any parent wxSplitterWindows into the webkit's position.
-                wxSplitterWindow* splitter;
-                splitter = dynamic_cast<wxSplitterWindow*>(parent);
-                if (splitter->GetSplitMode() == wxSPLIT_HORIZONTAL){
-                    if (splitter->GetPosition().y > 0)
-                        y += splitter->GetPosition().y;
+    int x = GetPosition().x; 
+    int y = GetPosition().y;
+    
+    HIRect rect;
+    rect.origin.x = x;
+    rect.origin.y = y;
 
-                    if (splitter->GetSashSize() > 0)
-                        y += splitter->GetSashSize();
+#if DEBUG_WEBKIT_SIZING
+    printf("Before conversion, origin is: x = %d, y = %d\n", x, y);
+#endif
 
-                    if (splitter->GetSashPosition() > 0)
-                        y += splitter->GetSashPosition();
-                }
-                else{
-                    if (splitter->GetPosition().x > 0)
-                        x += splitter->GetPosition().x;
+    // NB: In most cases, when calling HIViewConvertRect, what people want is to use GetRootControl(),
+    // and this tripped me up at first. But in fact, what we want is the root view, because we need to
+    // make the y origin relative to the very top of the window, not its contents, since we later flip 
+    // the y coordinate for Cocoa. 
+    HIViewConvertRect (&rect, HIViewGetSuperview( m_peer->GetControlRef() ), 
+                                HIViewGetRoot( (WindowRef) MacGetTopLevelWindowRef() ) );
 
-                    if (splitter->GetSashSize() > 0)
-                        x += splitter->GetSashSize();
+    x = (int)rect.origin.x;
+    y = (int)rect.origin.y;
 
-                    if (splitter->GetSashPosition() > 0)
-                        x += splitter->GetSashPosition();
-                }
-        }
-        else{
-            if (!parent->IsTopLevel()) {
-                //printf("Parent: %s\n", parent->GetClassInfo()->GetClassName());
-                int plusx = 0;
-                plusx = parent->GetClientAreaOrigin().x + parent->GetPosition().x;
-                if (plusx > 0){
-                    x += plusx;
-                    //printf("Parent: %s Added x: %d\n", parent->GetClassInfo()->GetClassName(), parent->GetClientAreaOrigin().x + parent->GetPosition().x);
-                }
-
-                int plusy = 0;
-                plusy = parent->GetClientAreaOrigin().y + parent->GetPosition().y;
-                if (plusy > 0){
-                    y += plusy;
-                    //printf("Parent: %s Added y: %d\n", parent->GetClassInfo()->GetClassName(), parent->GetClientAreaOrigin().y + parent->GetPosition().y);
-                }
-                else{
-                    //printf("Parent: %s Origin: %d Position:%d\n", parent->GetClassInfo()->GetClassName(), parent->GetClientAreaOrigin().y, parent->GetPosition().y);
-                }
-
-            }
-            else{
-                //
-                x += parent->GetClientAreaOrigin().x;
-                // calculate the title bar height (26 pixels) into the top offset.
-                // This becomes important later when we must flip the y coordinate
-                // to convert to Cocoa's coordinate system.
-                y += parent->GetClientAreaOrigin().y += 26;
-                //printf("x: %d, y:%d\n", x, y);
-            }
-            //we still need to add the y, because we have to convert/flip coordinates for Cocoa
-
-            if ( parent->IsKindOf( CLASSINFO( wxNotebook ) )  ){
-                //Not sure why calcs are off in this one scenario...
-                y -= 4;
-                //printf("x: %d, y:%d\n", x, y);
-            }
-
-            if (parent->IsKindOf( CLASSINFO( wxPanel ) ) ){
-                // Another strange case. Adding a wxPanel to the parent heirarchy
-                // causes wxWebKitCtrl's Cocoa y origin to be 4 pixels off
-                // for some reason, even if the panel has a position and origin of 0.
-                // This corrects that. Man, I wish I could debug Carbon/HIWebView!! ;)
-                y -= 4;
-            }
-        }
-
-        parent = parent->GetParent();
-    }
-
-    // Tried using MacWindowToRootWindow both for wxWebKitCtrl and its parent,
-    // but coordinates were off by a significant amount.
-    // Am leaving the code here if anyone wants to play with it.
-
-    //int x2, y2 = 0;
-    //if (GetParent())
-    //    GetParent()->MacWindowToRootWindow(&x2, &y2);
-    //printf("x = %d, y = %d\n", x, y);
-    //printf("x2 = %d, y2 = %d\n", x2, y2);
-    //x = x2;
-    //y = y2;
+#if DEBUG_WEBKIT_SIZING
+    printf("Moving Cocoa frame origin to: x = %d, y = %d\n", x, y);
+#endif
 
     if (tlw){
         //flip the y coordinate to convert to Cocoa coordinates
-        //printf("tlw y: %d, y: %d\n", tlw->GetSize().y, (GetSize().y + y));
         y = tlw->GetSize().y - ((GetSize().y) + y);
     }
 
-    //printf("Added to bounds x=%d, y=%d\n", x, y);
-    NSRect bounds = [m_webView frame];
-    bounds.origin.x = x;
-    bounds.origin.y = y;
-    [m_webView setFrame:bounds];
+#if DEBUG_WEBKIT_SIZING
+    printf("y = %d after flipping value\n", y);
+#endif
 
-    //printf("Carbon position x=%d, y=%d\n", GetPosition().x, GetPosition().y);
+    frame.origin.x = x;
+    frame.origin.y = y;
+    [m_webView setFrame:frame];
+   
     if (IsShown())
         [(WebView*)m_webView display];
     event.Skip();
@@ -400,7 +586,7 @@ void wxWebKitCtrl::MacVisibilityChanged(){
 
 @implementation MyFrameLoadMonitor
 
-- initWithWxWindow: (wxWindow*)inWindow
+- initWithWxWindow: (wxWebKitCtrl*)inWindow
 {
     [super init];
     webKitWindow = inWindow;    // non retained
@@ -465,9 +651,40 @@ void wxWebKitCtrl::MacVisibilityChanged(){
 - (void)webView:(WebView *)sender didReceiveTitle:(NSString *)title forFrame:(WebFrame *)frame
 {
     if (frame == [sender mainFrame]){
-        webKitWindow->SetLabel(wxStringWithNSString( title ));
+        webKitWindow->SetPageTitle(wxStringWithNSString( title ));
     }
 }
+@end
+
+@implementation MyPolicyDelegate
+
+- initWithWxWindow: (wxWebKitCtrl*)inWindow
+{
+    [super init];
+    webKitWindow = inWindow;    // non retained
+    return self;
+}
+
+- (void)webView:(WebView *)sender decidePolicyForNavigationAction:(NSDictionary *)actionInformation request:(NSURLRequest *)request frame:(WebFrame *)frame decisionListener:(id<WebPolicyDecisionListener>)listener
+{
+    wxWebKitBeforeLoadEvent thisEvent(webKitWindow);
+
+    // Get the navigation type. 
+    NSNumber *n = [actionInformation objectForKey:WebActionNavigationTypeKey]; 
+    int actionType = [n intValue];
+    thisEvent.SetNavigationType( wxNavTypeFromWebNavType(actionType) );
+    
+    NSString *url = [[request URL] absoluteString];
+    thisEvent.SetURL( wxStringWithNSString( url ) );
+    
+    webKitWindow->GetEventHandler()->ProcessEvent(thisEvent);
+
+	if (thisEvent.IsCancelled())
+        [listener ignore];
+    else
+        [listener use];
+}
+
 @end
 
 #endif //wxUSE_WEBKIT

@@ -86,6 +86,24 @@ public:
     void SetPageSource(wxString& source, const wxString& baseUrl = wxEmptyString) {}
     wxString GetPageURL()   { return wxEmptyString; }
     wxString GetPageTitle() { return wxEmptyString; }
+    
+    wxString GetSelection() { return wxEmptyString; }
+    
+    bool CanIncreaseTextSize() { return false; }
+    void IncreaseTextSize() { }
+    bool CanDecreaseTextSize() { return false; }
+    void DecreaseTextSize() { }
+    
+    void Print(bool showPrompt=false) { }
+    
+    void MakeEditable(bool enable=true) { }
+    bool IsEditable() { return false; }
+    
+    wxString RunScript(const wxString& javascript) { return wxEmptyString; }
+    
+    void SetScrollPos(int pos) { }
+    int GetScrollPos() { return 0; }
+    
 };
 
 
@@ -100,6 +118,16 @@ enum {
     wxEVT_WEBKIT_STATE_CHANGED = 0
 };
 
+enum {
+    wxWEBKIT_NAV_LINK_CLICKED = 0,
+    wxWEBKIT_NAV_BACK_NEXT = 0,
+    wxWEBKIT_NAV_FORM_SUBMITTED = 0,
+    wxWEBKIT_NAV_RELOAD = 0,
+    wxWEBKIT_NAV_FORM_RESUBMITTED = 0,
+    wxWEBKIT_NAV_OTHER = 0
+
+};
+
 class wxWebKitStateChangedEvent : public wxCommandEvent
 {
 public:
@@ -112,6 +140,18 @@ public:
     void SetURL(const wxString& url) {}
 };
 
+class wxWebKitBeforeLoadEvent : public wxCommandEvent
+{    
+public:
+    bool IsCancelled() { return false; }
+    void Cancel(bool cancel = true) { }
+    wxString GetURL() { return wxEmptyString; }
+    void SetURL(const wxString& url) { }
+    void SetNavigationType(int navType) { }
+    int GetNavigationType() { return 0; }
+
+    wxWebKitBeforeLoadEvent( wxWindow* win = (wxWindow*) NULL ) { wxPyRaiseNotImplemented }
+};
  
 #endif
 %}
@@ -159,9 +199,29 @@ public:
     wxString GetPageURL();
     wxString GetPageTitle();
 
+    wxString GetSelection();
+    
+    bool CanIncreaseTextSize();
+    void IncreaseTextSize();
+    bool CanDecreaseTextSize();
+    void DecreaseTextSize();
+    
+    void Print(bool showPrompt=false);
+    
+    void MakeEditable(bool enable=true);
+    bool IsEditable();
+    
+    wxString RunScript(const wxString& javascript);
+    
+    void SetScrollPos(int pos);
+    int GetScrollPos();
+    
+    
     %property(PageSource, GetPageSource, SetPageSource, doc="See `GetPageSource` and `SetPageSource`");
     %property(PageTitle, GetPageTitle, doc="See `GetPageTitle`");
     %property(PageURL, GetPageURL, doc="See `GetPageURL`");    
+    %property(ScrollPos, GetScrollPos, SetScrollPos, doc="See `GetScrollPos and SetScrollPos`");
+    %property(Selection, GetSelection, doc="See `GetSelection`");
 };
 
 
@@ -177,8 +237,34 @@ enum {
     wxWEBKIT_STATE_FAILED,
 };
 
+enum {
+    wxWEBKIT_NAV_LINK_CLICKED,
+    wxWEBKIT_NAV_BACK_NEXT,
+    wxWEBKIT_NAV_FORM_SUBMITTED,
+    wxWEBKIT_NAV_RELOAD,
+    wxWEBKIT_NAV_FORM_RESUBMITTED,
+    wxWEBKIT_NAV_OTHER
+
+};
 
 %constant wxEventType wxEVT_WEBKIT_STATE_CHANGED;
+%constant wxEventType wxEVT_WEBKIT_BEFORE_LOAD;
+
+class wxWebKitBeforeLoadEvent : public wxCommandEvent
+{    
+public:
+    bool IsCancelled();
+    void Cancel(bool cancel = true);
+    wxString GetURL();
+    void SetURL(const wxString& url);
+    void SetNavigationType(int navType);
+    int GetNavigationType();
+
+    wxWebKitBeforeLoadEvent( wxWindow* win = (wxWindow*) NULL );
+
+    %property(NavigationType, GetNavigationType, SetNavigationType, doc="See `GetNavigationType` and `SetNavigationType`");
+    %property(URL, GetURL, SetURL, doc="See `GetURL` and `SetURL`");
+};
 
 
 class wxWebKitStateChangedEvent : public wxCommandEvent
@@ -198,6 +284,7 @@ public:
 
 %pythoncode %{
     EVT_WEBKIT_STATE_CHANGED = wx.PyEventBinder(wxEVT_WEBKIT_STATE_CHANGED)
+    EVT_WEBKIT_BEFORE_LOAD = wx.PyEventBinder(wxEVT_WEBKIT_BEFORE_LOAD)
 %}
 
 
