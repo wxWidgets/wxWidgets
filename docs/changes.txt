@@ -5,11 +5,25 @@ wxWidgets Change Log - For more verbose changes, see the manual
 INCOMPATIBLE CHANGES SINCE 2.6.x
 ================================
 
+Changes in behaviour not resulting in compilation errors, please read this!
+---------------------------------------------------------------------------
+
+- For all wxInputStreams, Eof() becomes true after an attempt has been made
+  to read _past_ the end of file.
+- wxFileName::DirExists() checks if the path of the file is a directory, not
+  if the whole name is a directory
+- wxDialog::CreateButtonSizer() may return NULL now, please see the manual
+- wxStaticBoxSizer now deletes the associated wxStaticBox when it is deleted
+- Windows calling CaptureMouse() are now required to handle the
+  wxEVT_MOUSE_CAPTURE_LOST event and not call ReleaseMouse() in this case
+
+
+Changes in behaviour which may result in compilation errors
+-----------------------------------------------------------
+
 - wxFontData::GetColour() now returns a const colour.
 - wxDC objects can't be created directly now (this never worked, now it doesn't
   even compile).
-- For all wxInputStreams, Eof() becomes true after an attempt has been made
-  to read _past_ the end of file.
 - wxCHECK family of macros now must be followed by a semicolon.
 - wxMBConv::cMB2WC() and cWC2MB() take size of the input buffer and return
   length of the converted string in all cases now.
@@ -26,16 +40,12 @@ INCOMPATIBLE CHANGES SINCE 2.6.x
   override it.
 - wxFontEnumerator::GetFacenames() and GetEncodings() now return arrays and
   not pointers to arrays.
-- wxStaticBoxSizer now deletes the associated wxStaticBox when it is deleted.
-- Windows calling CaptureMouse() are now required to handle
-  the wxEVT_MOUSE_CAPTURE_LOST event.
 - SetDefaultItem() method was moved from wxPanel to wxTopLevelWindow
 - wxDialog::OnOK/OnCancel() don't exist any more, use SetAffirmative/EscapeId()
 - wxPathList doesn't derive from (deprecated) wxStringList any more
 - wxGLContext class has no 1:1 coupling to a wxGLCanvas class any more.
   As a consequence, the class interface changed largely.
   Code updates, if any are required at all, are easy to accomplish though.
-- wxDialog::CreateButtonSizer() may return NULL now, please see the manual
 
 
 Deprecated methods since 2.6.x and their replacements
@@ -45,8 +55,8 @@ Deprecated methods since 2.6.x and their replacements
 - wxDC::BeginDrawing() and wxDC::EndDrawing() deprecated, just don't use them.
 
 
-Major changes in 2.7 release
-----------------------------
+Major new features in 2.7 release
+---------------------------------
 
 - New AUI library supporting docking windows and much more
 
