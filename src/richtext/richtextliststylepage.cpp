@@ -806,11 +806,11 @@ void wxRichTextListStylePage::OnLevelUpdated( wxSpinEvent& WXUNUSED(event) )
  * wxEVT_SCROLL_LINEUP event handler for ID_RICHTEXTLISTSTYLEPAGE_LEVEL
  */
 
-void wxRichTextListStylePage::OnLevelUp( wxSpinEvent& WXUNUSED(event) )
+void wxRichTextListStylePage::OnLevelUp( wxSpinEvent& event )
 {
     if (!m_dontUpdate)
     {
-        m_currentLevel = m_levelCtrl->GetValue();
+        m_currentLevel = event.GetPosition();
         TransferDataToWindow();
     }
 }
@@ -819,11 +819,11 @@ void wxRichTextListStylePage::OnLevelUp( wxSpinEvent& WXUNUSED(event) )
  * wxEVT_SCROLL_LINEDOWN event handler for ID_RICHTEXTLISTSTYLEPAGE_LEVEL
  */
 
-void wxRichTextListStylePage::OnLevelDown( wxSpinEvent& WXUNUSED(event) )
+void wxRichTextListStylePage::OnLevelDown( wxSpinEvent& event )
 {
     if (!m_dontUpdate)
     {
-        m_currentLevel = m_levelCtrl->GetValue();
+        m_currentLevel = event.GetPosition();
         TransferDataToWindow();
     }
 }
@@ -832,13 +832,16 @@ void wxRichTextListStylePage::OnLevelDown( wxSpinEvent& WXUNUSED(event) )
  * wxEVT_COMMAND_TEXT_UPDATED event handler for ID_RICHTEXTLISTSTYLEPAGE_LEVEL
  */
 
-void wxRichTextListStylePage::OnLevelTextUpdated( wxCommandEvent& WXUNUSED(event) )
+void wxRichTextListStylePage::OnLevelTextUpdated( wxCommandEvent& event )
 {
+    // Can cause problems
+#if 0
     if (!m_dontUpdate)
     {
-        m_currentLevel = m_levelCtrl->GetValue();
+        m_currentLevel = event.GetInt();
         TransferDataToWindow();
     }
+#endif
 }
 
 /*!
