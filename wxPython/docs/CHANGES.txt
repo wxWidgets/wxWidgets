@@ -1,6 +1,37 @@
 Recent Changes for wxPython
 =====================================================================
 
+2.7.1.2
+-------
+* 20-Oct-2006
+
+Fixed a bug in the MaskedEdit controls caused by conflicting IsEmpty
+methods. 
+
+Patch #1579280: Some mimetype optimizations on unix-like systems.
+
+wxMac: Several wx.webkit.WebKitCtrl enhancements/fixes, including:
+
+    - new methods for increasing/decreasing text size, getting
+      selection, getting/setting scroll position, printing, enabling
+      editing, and running JavaScripts on the page.
+
+    - added new event (wx.webkit.WebKitBeforeLoadEvent) for catching, and
+      possibly vetoing, load events before they occur.
+
+    - wx.webkit.WebKitCtrl now fires mouse events for certain events
+      that it was eating before. This improves wxSplitterWindow
+      resizing behavior.
+
+    - refactoring of the sizing logic to move the Cocoa view.  Tested
+      with splitter windows, panels, notebooks and all position
+      correctly with this.
+
+
+
+
+
+
 2.7.1.1
 -------
 * 18-Oct-2006
@@ -67,7 +98,6 @@ Or like this with super()::
 	# do something here
 	return super(MyPrintout, self).OnBeginDocument(start, end)
 
-
 Note that the old way with the "base_*" function still works, but you
 will get a DeprecationWarning from calling base_OnBeginDocument.  The
 classes affected by this are:
@@ -123,7 +153,7 @@ of the component data objects to use to access the data.
 Changed how the stock objects (wx.RED, wx.RED_PEN, wx.RED_BRUSH, etc.)
 are initialized.  They are now created as uninitialized instances
 using __new__.  Then after the wx.App has been created, but before
-OnInit is called, the .this attribute of each obhect is initialized.
+OnInit is called, the .this attribute of each object is initialized.
 This was needed because of some delayed initialization functionality
 that was implemented in wxWidgets, but the end result is cleaner for
 wxPython as well, and allowed me to remove some ugly code previously
@@ -267,7 +297,7 @@ Renamed wx.FutureCall to wx.CallLater so it is named more like
 wx.CallAfter.  wx.FutureCall is now an empty subclass of wx.CallLater
 for compatibility of older code.
 
-Added the wx.lib.customtreectrl the from Andrea Gavana.
+Added the wx.lib.customtreectrl module from Andrea Gavana.
 
 Added ChangeSelection to wx.BookCtrl (the base class for wx.Notebook
 and other book controls) that is the same as SetSelection but doesn't
