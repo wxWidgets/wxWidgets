@@ -15,7 +15,7 @@
   #pragma hdrstop
 #endif  //__BORLANDC__
 
-#if wxUSE_ANIMATIONCTRL && (!defined(__WXGTK20__) || defined(__WXUNIVERSAL__))
+#if wxUSE_ANIMATIONCTRL
 
 #include "wx/animate.h"
 
