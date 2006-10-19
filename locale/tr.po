@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: wxWidgets-2.6.1\n"
+"Project-Id-Version: wxWidgets-2.7.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2005-08-21 17:37+0200\n"
-"PO-Revision-Date: 2005-06-06 12:56+0200\n"
+"PO-Revision-Date: 2006-10-16 17:09+0200\n"
 "Last-Translator: Hakki Dogusan <dogusanh@tr.net>\n"
 "Language-Team: Hakki Dogusan <dogusanh@tr.net>\n"
 "MIME-Version: 1.0\n"
@@ -73,8 +73,10 @@ msgstr "#9 Zarf, 3 7/8 x 8 7/8 inç"
 msgid "#define %s must be an integer."
 msgstr "#define %s bir tamsayý olmalýdýr."
 
-#: ../src/html/helpfrm.cpp:1042 ../src/html/helpfrm.cpp:1044
-#: ../src/html/helpfrm.cpp:1703 ../src/html/helpfrm.cpp:1736
+#: ../src/html/helpfrm.cpp:1042
+#: ../src/html/helpfrm.cpp:1044
+#: ../src/html/helpfrm.cpp:1703
+#: ../src/html/helpfrm.cpp:1736
 #, c-format
 msgid "%i of %i"
 msgstr "%i / %i"
@@ -131,7 +133,8 @@ msgstr "%s ikon kaynaðý tanýmý deðil."
 msgid "%s: ill-formed resource file syntax."
 msgstr "%s: hatalý oluþturulmuþ kaynak dosyasý sözdizimi."
 
-#: ../src/html/helpfrm.cpp:357 ../src/html/helpfrm.cpp:359
+#: ../src/html/helpfrm.cpp:357
+#: ../src/html/helpfrm.cpp:359
 msgid "&About..."
 msgstr "&Hakkýnda..."
 
@@ -155,8 +158,10 @@ msgstr "Geri"
 msgid "&Bold"
 msgstr "Kalýn"
 
-#: ../src/common/stockitem.cpp:110 ../src/generic/fontdlgg.cpp:363
-#: ../src/generic/fontdlgg.cpp:382 ../src/generic/wizard.cpp:422
+#: ../src/common/stockitem.cpp:110
+#: ../src/generic/fontdlgg.cpp:363
+#: ../src/generic/fontdlgg.cpp:382
+#: ../src/generic/wizard.cpp:422
 msgid "&Cancel"
 msgstr "Ýptal"
 
@@ -168,12 +173,15 @@ msgstr "&Kademelendir"
 msgid "&Clear"
 msgstr "T&emizle"
 
-#: ../src/common/prntbase.cpp:875 ../src/common/stockitem.cpp:112
-#: ../src/generic/logg.cpp:509 ../src/html/helpfrm.cpp:354
+#: ../src/common/prntbase.cpp:875
+#: ../src/common/stockitem.cpp:112
+#: ../src/generic/logg.cpp:509
+#: ../src/html/helpfrm.cpp:354
 msgid "&Close"
 msgstr "&Kapat"
 
-#: ../src/common/stockitem.cpp:113 ../src/mac/carbon/textctrl.cpp:1074
+#: ../src/common/stockitem.cpp:113
+#: ../src/mac/carbon/textctrl.cpp:1074
 #: ../src/msw/textctrl.cpp:2064
 msgid "&Copy"
 msgstr "K&opyala"
@@ -182,7 +190,8 @@ msgstr "K&opyala"
 msgid "&Debug report preview:"
 msgstr "&Hata ayýklama raporu önizleme:"
 
-#: ../src/common/stockitem.cpp:115 ../src/mac/carbon/textctrl.cpp:1076
+#: ../src/common/stockitem.cpp:115
+#: ../src/mac/carbon/textctrl.cpp:1076
 #: ../src/msw/textctrl.cpp:2066
 msgid "&Delete"
 msgstr "Sil"
@@ -219,8 +228,10 @@ msgstr "Ýleri"
 msgid "&Goto..."
 msgstr "G&it..."
 
-#: ../src/common/stockitem.cpp:122 ../src/generic/wizard.cpp:418
-#: ../src/generic/wizard.cpp:425 ../src/html/helpfrm.cpp:362
+#: ../src/common/stockitem.cpp:122
+#: ../src/generic/wizard.cpp:418
+#: ../src/generic/wizard.cpp:425
+#: ../src/html/helpfrm.cpp:362
 msgid "&Help"
 msgstr "&Yardým"
 
@@ -248,11 +259,13 @@ msgstr "Kaydýr"
 msgid "&New"
 msgstr "Yeni"
 
-#: ../src/generic/mdig.cpp:118 ../src/msw/mdi.cpp:188
+#: ../src/generic/mdig.cpp:118
+#: ../src/msw/mdi.cpp:188
 msgid "&Next"
 msgstr "&Sonraki"
 
-#: ../src/generic/wizard.cpp:421 ../src/generic/wizard.cpp:636
+#: ../src/generic/wizard.cpp:421
+#: ../src/generic/wizard.cpp:636
 msgid "&Next >"
 msgstr "&Sonraki >"
 
@@ -268,7 +281,8 @@ msgstr "Hayýr"
 msgid "&Notes:"
 msgstr "&Notlar:"
 
-#: ../src/common/stockitem.cpp:133 ../src/generic/fontdlgg.cpp:368
+#: ../src/common/stockitem.cpp:133
+#: ../src/generic/fontdlgg.cpp:368
 #: ../src/generic/fontdlgg.cpp:375
 msgid "&OK"
 msgstr "Tamam"
@@ -281,7 +295,8 @@ msgstr "Aç"
 msgid "&Open..."
 msgstr "Aç..."
 
-#: ../src/common/stockitem.cpp:135 ../src/mac/carbon/textctrl.cpp:1075
+#: ../src/common/stockitem.cpp:135
+#: ../src/mac/carbon/textctrl.cpp:1075
 #: ../src/msw/textctrl.cpp:2065
 msgid "&Paste"
 msgstr "Yapýþtýr"
@@ -294,7 +309,8 @@ msgstr "Yazý boyutu:"
 msgid "&Preferences"
 msgstr "&Tercihler"
 
-#: ../src/generic/mdig.cpp:119 ../src/msw/mdi.cpp:189
+#: ../src/generic/mdig.cpp:119
+#: ../src/msw/mdi.cpp:189
 msgid "&Previous"
 msgstr "Önceki"
 
@@ -314,13 +330,16 @@ msgstr "Özellikler"
 msgid "&Quit"
 msgstr "Çýkýþ"
 
-#: ../src/common/cmdproc.cpp:292 ../src/common/cmdproc.cpp:299
-#: ../src/common/stockitem.cpp:141 ../src/mac/carbon/textctrl.cpp:1071
+#: ../src/common/cmdproc.cpp:292
+#: ../src/common/cmdproc.cpp:299
+#: ../src/common/stockitem.cpp:141
+#: ../src/mac/carbon/textctrl.cpp:1071
 #: ../src/msw/textctrl.cpp:2061
 msgid "&Redo"
 msgstr "Geri al iptal"
 
-#: ../src/common/cmdproc.cpp:288 ../src/common/cmdproc.cpp:308
+#: ../src/common/cmdproc.cpp:288
+#: ../src/common/cmdproc.cpp:308
 msgid "&Redo "
 msgstr "Geri al iptal"
 
@@ -356,12 +375,15 @@ msgstr "Dur"
 msgid "&Style:"
 msgstr "Stil:"
 
-#: ../src/common/stockitem.cpp:149 ../src/generic/fontdlgg.cpp:337
+#: ../src/common/stockitem.cpp:149
+#: ../src/generic/fontdlgg.cpp:337
 msgid "&Underline"
 msgstr "Altçizgili"
 
-#: ../src/common/cmdproc.cpp:270 ../src/common/stockitem.cpp:150
-#: ../src/mac/carbon/textctrl.cpp:1070 ../src/msw/textctrl.cpp:2060
+#: ../src/common/cmdproc.cpp:270
+#: ../src/common/stockitem.cpp:150
+#: ../src/mac/carbon/textctrl.cpp:1070
+#: ../src/msw/textctrl.cpp:2060
 msgid "&Undo"
 msgstr "&Geri Al"
 
@@ -381,8 +403,11 @@ msgstr "Yukarý"
 msgid "&Weight:"
 msgstr "Yoðunluk:"
 
-#: ../src/generic/mdig.cpp:298 ../src/generic/mdig.cpp:314
-#: ../src/generic/mdig.cpp:318 ../src/msw/mdi.cpp:1410 ../src/msw/mdi.cpp:1417
+#: ../src/generic/mdig.cpp:298
+#: ../src/generic/mdig.cpp:314
+#: ../src/generic/mdig.cpp:318
+#: ../src/msw/mdi.cpp:1410
+#: ../src/msw/mdi.cpp:1417
 #: ../src/msw/mdi.cpp:1447
 msgid "&Window"
 msgstr "&Pencere"
@@ -391,12 +416,14 @@ msgstr "&Pencere"
 msgid "&Yes"
 msgstr "Evet"
 
-#: ../src/common/config.cpp:433 ../src/msw/regconf.cpp:258
+#: ../src/common/config.cpp:433
+#: ../src/msw/regconf.cpp:258
 #, c-format
 msgid "'%s' has extra '..', ignored."
 msgstr "'%s' içinde fazladan '..' var, gözardý edildi."
 
-#: ../src/common/valtext.cpp:132 ../src/common/valtext.cpp:162
+#: ../src/common/valtext.cpp:132
+#: ../src/common/valtext.cpp:162
 #: ../src/common/valtext.cpp:168
 #, c-format
 msgid "'%s' is invalid"
@@ -415,7 +442,7 @@ msgstr "'%s' geçerli bir mesaj kataloðu deðil."
 #: ../src/common/textbuf.cpp:246
 #, c-format
 msgid "'%s' is probably a binary buffer."
-msgstr "'%s' muhtemelen ikili tampon."
+msgstr "'%s' muhtemelen ikili arabellek."
 
 #: ../src/common/valtext.cpp:157
 #, c-format
@@ -441,7 +468,8 @@ msgstr "'%s' sadece alfabetik veya sayýsal karakterler içermeli."
 msgid "(Help)"
 msgstr "(Yardým)"
 
-#: ../src/html/helpfrm.cpp:431 ../src/html/helpfrm.cpp:1114
+#: ../src/html/helpfrm.cpp:431
+#: ../src/html/helpfrm.cpp:1114
 #: ../src/html/helpfrm.cpp:1764
 msgid "(bookmarks)"
 msgstr "(yer imleri)"
@@ -469,18 +497,19 @@ msgstr ""
 ", kaynaðý ayrýþtýrýrken static, #include veya #define\n"
 "bekleniyor."
 
-#: ../src/generic/dirctrlg.cpp:683 ../src/generic/filedlgg.cpp:740
+#: ../src/generic/dirctrlg.cpp:683
+#: ../src/generic/filedlgg.cpp:740
 msgid "."
 msgstr "."
 
-#: ../src/generic/dirctrlg.cpp:684 ../src/generic/filedlgg.cpp:741
+#: ../src/generic/dirctrlg.cpp:684
+#: ../src/generic/filedlgg.cpp:741
 msgid ".."
 msgstr ".."
 
 #: ../src/common/paper.cpp:147
-#, fuzzy
 msgid "10 x 11 in"
-msgstr "10 x 14 inç"
+msgstr "10 x 11 inç"
 
 #: ../src/common/paper.cpp:120
 msgid "10 x 14 in"
@@ -491,23 +520,20 @@ msgid "11 x 17 in"
 msgstr "11 x 17 inç"
 
 #: ../src/common/paper.cpp:191
-#, fuzzy
 msgid "12 x 11 in"
-msgstr "10 x 14 inç"
+msgstr "12 x 11 inç"
 
 #: ../src/common/paper.cpp:148
-#, fuzzy
 msgid "15 x 11 in"
-msgstr "10 x 14 inç"
+msgstr "15 x 11 inç"
 
 #: ../src/common/paper.cpp:139
 msgid "6 3/4 Envelope, 3 5/8 x 6 1/2 in"
 msgstr "6 3/4 Zarf, 3 5/8 x 6 1/2 inç"
 
 #: ../src/common/paper.cpp:146
-#, fuzzy
 msgid "9 x 11 in"
-msgstr "11 x 17 inç"
+msgstr "9 x 11 inç"
 
 #: ../src/html/htmprint.cpp:309
 msgid ": file does not exist!"
@@ -529,15 +555,18 @@ msgstr "< &Geri"
 msgid "<<"
 msgstr "<<"
 
-#: ../src/generic/filedlgg.cpp:259 ../src/generic/filedlgg.cpp:282
+#: ../src/generic/filedlgg.cpp:259
+#: ../src/generic/filedlgg.cpp:282
 msgid "<DIR>"
 msgstr "<KLASÖR>"
 
-#: ../src/generic/filedlgg.cpp:263 ../src/generic/filedlgg.cpp:286
+#: ../src/generic/filedlgg.cpp:263
+#: ../src/generic/filedlgg.cpp:286
 msgid "<DRIVE>"
 msgstr "<SÜRÜCÜ>"
 
-#: ../src/generic/filedlgg.cpp:261 ../src/generic/filedlgg.cpp:284
+#: ../src/generic/filedlgg.cpp:261
+#: ../src/generic/filedlgg.cpp:284
 msgid "<LINK>"
 msgstr "<BAÐ>"
 
@@ -575,27 +604,23 @@ msgstr "Boþ olmayan bir yýðýn 'element' düðümlerinden oluþmalýdýr"
 
 #: ../src/common/paper.cpp:166
 msgid "A2 420 x 594 mm"
-msgstr ""
+msgstr "A2 420 x 594 mm"
 
 #: ../src/common/paper.cpp:163
-#, fuzzy
 msgid "A3 Extra 322 x 445 mm"
-msgstr "C3 Zarf, 324 x 458 mm"
+msgstr "A3 Ek 322 x 445 mm"
 
 #: ../src/common/paper.cpp:168
-#, fuzzy
 msgid "A3 Extra Transverse 322 x 445 mm"
-msgstr "C3 Zarf, 324 x 458 mm"
+msgstr "A3 Ek Enine 322 x 445 mm"
 
 #: ../src/common/paper.cpp:177
-#, fuzzy
 msgid "A3 Rotated 420 x 297 mm"
-msgstr "A4 sayfa, 210 x 297 mm"
+msgstr "A3 Çevrik 420 x 297 mm"
 
 #: ../src/common/paper.cpp:167
-#, fuzzy
 msgid "A3 Transverse 297 x 420 mm"
-msgstr "A3 sayfa, 297 x 420 mm"
+msgstr "A3 Enine 297 x 420 mm"
 
 #: ../src/common/paper.cpp:113
 msgid "A3 sheet, 297 x 420 mm"
@@ -603,22 +628,19 @@ msgstr "A3 sayfa, 297 x 420 mm"
 
 #: ../src/common/paper.cpp:153
 msgid "A4 Extra 9.27 x 12.69 in"
-msgstr ""
+msgstr "A4 Ek 9.27 x 12.69 inç"
 
 #: ../src/common/paper.cpp:160
-#, fuzzy
 msgid "A4 Plus 210 x 330 mm"
-msgstr "A4 sayfa, 210 x 297 mm"
+msgstr "A4 Artý 210 x 330 mm"
 
 #: ../src/common/paper.cpp:178
-#, fuzzy
 msgid "A4 Rotated 297 x 210 mm"
-msgstr "A3 sayfa, 297 x 420 mm"
+msgstr "A4 Çevrik 297 x 210 mm"
 
 #: ../src/common/paper.cpp:155
-#, fuzzy
 msgid "A4 Transverse 210 x 297 mm"
-msgstr "A4 sayfa, 210 x 297 mm"
+msgstr "A4 Enine 210 x 297 mm"
 
 #: ../src/common/paper.cpp:104
 msgid "A4 sheet, 210 x 297 mm"
@@ -629,32 +651,28 @@ msgid "A4 small sheet, 210 x 297 mm"
 msgstr "A4 sayfa, 210 x 297 mm"
 
 #: ../src/common/paper.cpp:164
-#, fuzzy
 msgid "A5 Extra 174 x 235 mm"
-msgstr "A5 sayfa, 148 x 210 mm"
+msgstr "A5 Ek 174 x 235 mm"
 
 #: ../src/common/paper.cpp:179
 msgid "A5 Rotated 210 x 148 mm"
-msgstr ""
+msgstr "A5 Çevrik 210 x 148 mm"
 
 #: ../src/common/paper.cpp:161
-#, fuzzy
 msgid "A5 Transverse 148 x 210 mm"
-msgstr "A5 sayfa, 148 x 210 mm"
+msgstr "A5 Enine 148 x 210 mm"
 
 #: ../src/common/paper.cpp:115
 msgid "A5 sheet, 148 x 210 mm"
 msgstr "A5 sayfa, 148 x 210 mm"
 
 #: ../src/common/paper.cpp:171
-#, fuzzy
 msgid "A6 105 x 148 mm"
-msgstr "10 x 14 inç"
+msgstr "A6 105 x 148 mm"
 
 #: ../src/common/paper.cpp:184
-#, fuzzy
 msgid "A6 Rotated 148 x 105 mm"
-msgstr "A5 sayfa, 148 x 210 mm"
+msgstr "A6 Çevrik 148 x 105 mm"
 
 #: ../src/generic/fontdlgg.cpp:87
 msgid "ABCDEFGabcdefg12345"
@@ -682,8 +700,7 @@ msgstr "'AddToPropertyCollection' iþlevi genel bir eriþici üstünde çaðrýldý"
 
 #: ../include/wx/xti.h:849
 msgid "AddToPropertyCollection called w/o valid adder"
-msgstr ""
-"'AddToPropertyCollection' iþlevi geçerli bir ekleyici olmaksýzýn çaðrýldý"
+msgstr "'AddToPropertyCollection' iþlevi geçerli bir ekleyici olmaksýzýn çaðrýldý"
 
 #: ../src/html/helpctrl.cpp:106
 #, c-format
@@ -745,13 +762,12 @@ msgid "Attributes"
 msgstr "Nitelikler"
 
 #: ../src/common/paper.cpp:144
-#, fuzzy
 msgid "B4 (ISO) 250 x 353 mm"
-msgstr "B4 sayfa, 250 x 354 mm"
+msgstr "B4 (ISO) 250 x 353 mm"
 
 #: ../src/common/paper.cpp:180
 msgid "B4 (JIS) Rotated 364 x 257 mm"
-msgstr ""
+msgstr "B4 (JIS) Çevrik 364 x 257 mm"
 
 #: ../src/common/paper.cpp:134
 msgid "B4 Envelope, 250 x 353 mm"
@@ -763,16 +779,15 @@ msgstr "B4 sayfa, 250 x 354 mm"
 
 #: ../src/common/paper.cpp:165
 msgid "B5 (ISO) Extra 201 x 276 mm"
-msgstr ""
+msgstr "B5 (ISO) Ek 201 x 276 mm"
 
 #: ../src/common/paper.cpp:181
 msgid "B5 (JIS) Rotated 257 x 182 mm"
-msgstr ""
+msgstr "B5 (JIS) Çevrik 257 x 182 mm"
 
 #: ../src/common/paper.cpp:162
-#, fuzzy
 msgid "B5 (JIS) Transverse 182 x 257 mm"
-msgstr "B5 sayfa, 182 x 257 mm"
+msgstr "B5 (JIS) Enine 182 x 257 mm"
 
 #: ../src/common/paper.cpp:135
 msgid "B5 Envelope, 176 x 250 mm"
@@ -784,17 +799,18 @@ msgstr "B5 sayfa, 182 x 257 mm"
 
 #: ../src/common/paper.cpp:189
 msgid "B6 (JIS) 128 x 182 mm"
-msgstr ""
+msgstr "B6 (JIS) 128 x 182 mm"
 
 #: ../src/common/paper.cpp:190
 msgid "B6 (JIS) Rotated 182 x 128 mm"
-msgstr ""
+msgstr "B6 (JIS) Çevrik 182 x 128 mm"
 
 #: ../src/common/paper.cpp:136
 msgid "B6 Envelope, 176 x 125 mm"
 msgstr "B6 Zarf, 176 x 125 mm"
 
-#: ../src/common/imagbmp.cpp:477 ../src/common/imagbmp.cpp:493
+#: ../src/common/imagbmp.cpp:477
+#: ../src/common/imagbmp.cpp:493
 msgid "BMP: Couldn't allocate memory."
 msgstr "BMP: bellek yaratýlamadý."
 
@@ -875,7 +891,8 @@ msgstr "C6 Zarf, 114 x 162 mm"
 msgid "C65 Envelope, 114 x 229 mm"
 msgstr "C65 Zarf, 114 x 229 mm"
 
-#: ../src/html/chm.cpp:797 ../src/html/chm.cpp:856
+#: ../src/html/chm.cpp:797
+#: ../src/html/chm.cpp:856
 msgid "CHM handler currently supports only local files!"
 msgstr "CHM iþleyici þimdilik sadece yerel dosyalarý destekler!"
 
@@ -888,7 +905,8 @@ msgstr "Muteks yaratýlamadý."
 msgid "Can not enumerate files '%s'"
 msgstr "'%s' dosyalarý sayýlamýyor"
 
-#: ../src/msw/dir.cpp:205 ../src/unix/dir.cpp:232
+#: ../src/msw/dir.cpp:205
+#: ../src/unix/dir.cpp:232
 #, c-format
 msgid "Can not enumerate files in directory '%s'"
 msgstr "'%s' klasöründeki dosyalar sayýlamýyor"
@@ -898,7 +916,8 @@ msgstr "'%s' klasöründeki dosyalar sayýlamýyor"
 msgid "Can not resume thread %lu"
 msgstr "%lu iþ parçacýðý yeniden baþlatýlamadý"
 
-#: ../src/mac/classic/thread.cpp:491 ../src/msw/thread.cpp:827
+#: ../src/mac/classic/thread.cpp:491
+#: ../src/msw/thread.cpp:827
 #, c-format
 msgid "Can not resume thread %x"
 msgstr "%x iþ parçacýðý yeniden baþlatýlamadý"
@@ -912,7 +931,8 @@ msgstr "Ýþ parçacýðý baþlatýlamadý: TLS yazma hatasý."
 msgid "Can not suspend thread %lu"
 msgstr "%lu iþ parçacýðý beklemeye alýnamadý"
 
-#: ../src/mac/classic/thread.cpp:464 ../src/msw/thread.cpp:812
+#: ../src/mac/classic/thread.cpp:464
+#: ../src/msw/thread.cpp:812
 #, c-format
 msgid "Can not suspend thread %x"
 msgstr "%x iþ parçacýðý beklemeye alýnamadý"
@@ -945,8 +965,10 @@ msgstr "Desteklenmeyen %d tipinin deðerleri kopyalanamýyor."
 msgid "Can't create registry key '%s'"
 msgstr "'%s' kayýt anahtarý yaratýlamadý"
 
-#: ../src/mac/carbon/mpthread.cpp:911 ../src/mac/carbon/thread.cpp:1100
-#: ../src/mac/classic/thread.cpp:439 ../src/msw/thread.cpp:594
+#: ../src/mac/carbon/mpthread.cpp:911
+#: ../src/mac/carbon/thread.cpp:1100
+#: ../src/mac/classic/thread.cpp:439
+#: ../src/msw/thread.cpp:594
 #: ../src/os2/thread.cpp:486
 msgid "Can't create thread"
 msgstr "Ýþ parçacýðý yaratýlamýyor"
@@ -961,7 +983,8 @@ msgstr "%s sýnýfýnýn penceresi yaratýlamýyor"
 msgid "Can't delete key '%s'"
 msgstr "'%s' anahtarý silinemedi"
 
-#: ../src/msw/iniconf.cpp:444 ../src/os2/iniconf.cpp:458
+#: ../src/msw/iniconf.cpp:444
+#: ../src/os2/iniconf.cpp:458
 #, c-format
 msgid "Can't delete the INI file '%s'"
 msgstr "'%s' INI dosyasý silinemedi"
@@ -1004,7 +1027,8 @@ msgstr "Zlib sýkýþtýrma akýmý baþlatýlamýyor."
 msgid "Can't initialize zlib inflate stream."
 msgstr "Zlib açma akýmý baþlatýlamýyor."
 
-#: ../src/common/image.cpp:1367 ../src/common/image.cpp:1387
+#: ../src/common/image.cpp:1367
+#: ../src/common/image.cpp:1387
 #, c-format
 msgid "Can't load image from file '%s': file does not exist."
 msgstr "Ýmaj '%s' dosyasýndan yüklenemiyor: dosya yok."
@@ -1028,7 +1052,8 @@ msgstr "Açma akýmýndan okunamýyor: alt akýmda beklenmeyen EOF."
 msgid "Can't read value of '%s'"
 msgstr "'%s''nin deðeri okunamadý"
 
-#: ../src/msw/registry.cpp:795 ../src/msw/registry.cpp:825
+#: ../src/msw/registry.cpp:795
+#: ../src/msw/registry.cpp:825
 #: ../src/msw/registry.cpp:885
 #, c-format
 msgid "Can't read value of key '%s'"
@@ -1039,15 +1064,18 @@ msgstr "'%s' anahtarýnýn deðeri okunamýyor"
 msgid "Can't save image to file '%s': unknown extension."
 msgstr "Ýmaj '%s' dosyasýna kaydedilemiyor: bilinmeyen uzantý."
 
-#: ../src/generic/logg.cpp:569 ../src/generic/logg.cpp:1020
+#: ../src/generic/logg.cpp:569
+#: ../src/generic/logg.cpp:1020
 msgid "Can't save log contents to file."
 msgstr "Günlük içeriði dosyaya kaydedilemiyor."
 
-#: ../src/msw/thread.cpp:550 ../src/os2/thread.cpp:469
+#: ../src/msw/thread.cpp:550
+#: ../src/os2/thread.cpp:469
 msgid "Can't set thread priority"
 msgstr "Ýþ parçacýðý önceliði ayarlanamýyor"
 
-#: ../src/msw/registry.cpp:812 ../src/msw/registry.cpp:854
+#: ../src/msw/registry.cpp:812
+#: ../src/msw/registry.cpp:854
 #: ../src/msw/registry.cpp:975
 #, c-format
 msgid "Can't set value of '%s'"
@@ -1058,14 +1086,18 @@ msgstr "'%s' nin deðeri deðiþtirilemiyor"
 msgid "Can't write to deflate stream: %s"
 msgstr "Sýkýþtýrma akýmýna yazýlamýyor: %s"
 
-#: ../src/generic/choicdgg.cpp:291 ../src/generic/dirdlgg.cpp:114
-#: ../src/generic/numdlgg.cpp:136 ../src/generic/textdlgg.cpp:120
-#: ../src/gtk/fontdlg.cpp:155 ../src/motif/msgdlg.cpp:204
+#: ../src/generic/choicdgg.cpp:291
+#: ../src/generic/dirdlgg.cpp:114
+#: ../src/generic/numdlgg.cpp:136
+#: ../src/generic/textdlgg.cpp:120
+#: ../src/gtk/fontdlg.cpp:155
+#: ../src/motif/msgdlg.cpp:204
 #: ../contrib/src/deprecated/proplist.cpp:518
 msgid "Cancel"
 msgstr "Ýptal"
 
-#: ../src/xrc/xmlres.cpp:1188 ../src/xrc/xmlres.cpp:1236
+#: ../src/xrc/xmlres.cpp:1188
+#: ../src/xrc/xmlres.cpp:1236
 msgid "Cannot convert dialog units: dialog unknown."
 msgstr "Ýletiþim birimi çevrilemiyor: bilinmeyen iletiþim."
 
@@ -1185,7 +1217,8 @@ msgstr "Boyutlar '%s' içinden ayrýþtýrýlamýyor."
 msgid "Cannot print empty page."
 msgstr "Boþ sayfa basýlamýyor."
 
-#: ../src/msw/volume.cpp:160 ../src/msw/volume.cpp:491
+#: ../src/msw/volume.cpp:160
+#: ../src/msw/volume.cpp:491
 #, c-format
 msgid "Cannot read typename from '%s'!"
 msgstr "Tipadý '%s' içinden okunamýyor."
@@ -1198,11 +1231,13 @@ msgstr "Ýþparçacýðý listeleme ilkesi alýnamýyor."
 msgid "Cannot start thread: error writing TLS"
 msgstr "Ýþ parçacýðý baþlatýlamýyor: TLS yazma hatasý"
 
-#: ../src/mac/carbon/mpthread.cpp:977 ../src/mac/carbon/thread.cpp:1174
+#: ../src/mac/carbon/mpthread.cpp:977
+#: ../src/mac/carbon/thread.cpp:1174
 msgid "Cannot wait for thread termination."
 msgstr "Ýþ parçacýðýnýn bitmesi beklenemiyor."
 
-#: ../src/mac/carbon/mpthread.cpp:893 ../src/mac/carbon/thread.cpp:1082
+#: ../src/mac/carbon/mpthread.cpp:893
+#: ../src/mac/carbon/thread.cpp:1082
 msgid "Cant create the thread event queue"
 msgstr "Ýþ parçacýðý olay kuyruðu yaratýlamýyor"
 
@@ -1226,7 +1261,8 @@ msgstr "Orta Avrupa (ISO-8859-2)"
 msgid "Choose ISP to dial"
 msgstr "Çevrilecek ISP'yi seçiniz"
 
-#: ../src/generic/colrdlgg.cpp:151 ../src/gtk/colordlg.cpp:45
+#: ../src/generic/colrdlgg.cpp:151
+#: ../src/gtk/colordlg.cpp:45
 #: ../src/palmos/colordlg.cpp:79
 msgid "Choose colour"
 msgstr "Renk seç"
@@ -1243,17 +1279,22 @@ msgstr "Kapat"
 msgid "Clear the log contents"
 msgstr "Günlük içeriðini temizle"
 
-#: ../src/generic/fontdlgg.cpp:365 ../src/generic/fontdlgg.cpp:384
+#: ../src/generic/fontdlgg.cpp:365
+#: ../src/generic/fontdlgg.cpp:384
 msgid "Click to cancel the font selection."
 msgstr "Yazý tipi seçiminden vazgeçmek için týklayýnýz."
 
-#: ../src/generic/fontdlgg.cpp:370 ../src/generic/fontdlgg.cpp:372
-#: ../src/generic/fontdlgg.cpp:377 ../src/generic/fontdlgg.cpp:379
+#: ../src/generic/fontdlgg.cpp:370
+#: ../src/generic/fontdlgg.cpp:372
+#: ../src/generic/fontdlgg.cpp:377
+#: ../src/generic/fontdlgg.cpp:379
 msgid "Click to confirm the font selection."
 msgstr "Yazý tipi seçimini onaylamak için týklayýnýz."
 
-#: ../src/generic/dbgrptg.cpp:92 ../src/generic/progdlgg.cpp:629
-#: ../src/generic/progdlgg.cpp:634 ../contrib/src/deprecated/proplist.cpp:513
+#: ../src/generic/dbgrptg.cpp:92
+#: ../src/generic/progdlgg.cpp:629
+#: ../src/generic/progdlgg.cpp:634
+#: ../contrib/src/deprecated/proplist.cpp:513
 msgid "Close"
 msgstr "Kapat"
 
@@ -1282,7 +1323,8 @@ msgstr "Bilgisayar"
 msgid "Config entry name cannot start with '%c'."
 msgstr "Ayar bilgi adý '%c' ile baþlayamaz."
 
-#: ../src/generic/filedlgg.cpp:1318 ../src/gtk/filedlg.cpp:67
+#: ../src/generic/filedlgg.cpp:1318
+#: ../src/gtk/filedlg.cpp:67
 msgid "Confirm"
 msgstr "Onayla"
 
@@ -1343,8 +1385,7 @@ msgid ""
 "Could not resolve control class or id '%s'. Use (non-zero) integer instead\n"
 " or provide #define (see manual for caveats)"
 msgstr ""
-"'%s' kontrol sýnýfý veya kimliði çözülemedi. Yerine (sýfýrdan farklý) "
-"tamsayý kullanýn\n"
+"'%s' kontrol sýnýfý veya kimliði çözülemedi. Yerine (sýfýrdan farklý) tamsayý kullanýn\n"
 "veya #define saðlayýn (el kitabýna bakýnýz)"
 
 #: ../contrib/src/deprecated/resource.cpp:1278
@@ -1360,7 +1401,8 @@ msgstr ""
 msgid "Could not start document preview."
 msgstr "Döküman önizleme baþlatýlamadý."
 
-#: ../src/generic/printps.cpp:185 ../src/gtk/gnome/gprint.cpp:763
+#: ../src/generic/printps.cpp:185
+#: ../src/gtk/gnome/gprint.cpp:763
 #: ../src/msw/printwin.cpp:235
 msgid "Could not start printing."
 msgstr "Yazdýrma baþlatýlamadý."
@@ -1369,8 +1411,10 @@ msgstr "Yazdýrma baþlatýlamadý."
 msgid "Could not transfer data to window"
 msgstr "Bilgi pencereye yollanamadý"
 
-#: ../src/mac/carbon/mpthread.cpp:227 ../src/mac/carbon/mpthread.cpp:306
-#: ../src/mac/carbon/thread.cpp:414 ../src/mac/carbon/thread.cpp:495
+#: ../src/mac/carbon/mpthread.cpp:227
+#: ../src/mac/carbon/mpthread.cpp:306
+#: ../src/mac/carbon/thread.cpp:414
+#: ../src/mac/carbon/thread.cpp:495
 msgid "Could not unlock mutex"
 msgstr "Muteks kilidi açýlamýyor"
 
@@ -1378,17 +1422,21 @@ msgstr "Muteks kilidi açýlamýyor"
 msgid "Couldn't acquire a mutex lock"
 msgstr "Muteks kilidi alýnamýyor"
 
-#: ../src/msw/dragimag.cpp:166 ../src/msw/dragimag.cpp:206
-#: ../src/msw/imaglist.cpp:158 ../src/msw/imaglist.cpp:176
+#: ../src/msw/dragimag.cpp:166
+#: ../src/msw/dragimag.cpp:206
+#: ../src/msw/imaglist.cpp:158
+#: ../src/msw/imaglist.cpp:176
 #: ../src/msw/imaglist.cpp:188
 msgid "Couldn't add an image to the image list."
 msgstr "Ýmaj imaj listesine eklenemedi."
 
-#: ../src/msw/timer.cpp:106 ../src/os2/timer.cpp:155
+#: ../src/msw/timer.cpp:106
+#: ../src/os2/timer.cpp:155
 msgid "Couldn't create a timer"
 msgstr "Zamanlayýcý yaratýlamadý"
 
-#: ../src/mgl/cursor.cpp:135 ../src/mgl/cursor.cpp:166
+#: ../src/mgl/cursor.cpp:135
+#: ../src/mgl/cursor.cpp:166
 msgid "Couldn't create cursor."
 msgstr "Ýmleç yaratýlamadý."
 
@@ -1397,7 +1445,8 @@ msgstr "Ýmleç yaratýlamadý."
 msgid "Couldn't find symbol '%s' in a dynamic library"
 msgstr "'%s' sembolü devingen kitaplýkta bulunamadý"
 
-#: ../src/mac/classic/thread.cpp:521 ../src/msw/thread.cpp:853
+#: ../src/mac/classic/thread.cpp:521
+#: ../src/msw/thread.cpp:853
 msgid "Couldn't get the current thread pointer"
 msgstr "Geçerli iþparçacýðý imleci alýnamýyor"
 
@@ -1429,12 +1478,14 @@ msgstr "Muteks býrakýlamýyor"
 msgid "Couldn't retrieve information about list control item %d."
 msgstr "%d liste kontrolü elemaný hakkýnda bilgi alýnamadý."
 
-#: ../src/common/imagpng.cpp:642 ../src/common/imagpng.cpp:651
+#: ../src/common/imagpng.cpp:642
+#: ../src/common/imagpng.cpp:651
 #: ../src/common/imagpng.cpp:659
 msgid "Couldn't save PNG image."
 msgstr "PNG imajý kaydedilemedi."
 
-#: ../src/mac/classic/thread.cpp:779 ../src/msw/thread.cpp:611
+#: ../src/mac/classic/thread.cpp:779
+#: ../src/msw/thread.cpp:611
 msgid "Couldn't terminate thread"
 msgstr "Ýþ parçacýðý sonlandýrýlamýyor"
 
@@ -1446,11 +1497,13 @@ msgstr "'Create Parameter' bildirilen RTTI öðeleri içinde bulunamadý"
 msgid "Create directory"
 msgstr "Klasör yarat"
 
-#: ../src/generic/dirdlgg.cpp:140 ../src/generic/filedlgg.cpp:999
+#: ../src/generic/dirdlgg.cpp:140
+#: ../src/generic/filedlgg.cpp:999
 msgid "Create new directory"
 msgstr "Yeni klasör yarat"
 
-#: ../src/common/stockitem.cpp:114 ../src/mac/carbon/textctrl.cpp:1073
+#: ../src/common/stockitem.cpp:114
+#: ../src/mac/carbon/textctrl.cpp:1073
 #: ../src/msw/textctrl.cpp:2063
 msgid "Cu&t"
 msgstr "%Kes"
@@ -1534,21 +1587,16 @@ msgid "Desktop"
 msgstr "Masaüstü"
 
 #: ../src/msw/dialup.cpp:395
-msgid ""
-"Dial up functions are unavailable because the remote access service (RAS) is "
-"not installed on this machine. Please install it."
-msgstr ""
-"Uzaktan eriþim servisi (RAS) kurulu olmadýðý için çevirme iþlevleri yok. "
-"Lütfen kurunuz."
+msgid "Dial up functions are unavailable because the remote access service (RAS) is not installed on this machine. Please install it."
+msgstr "Uzaktan eriþim servisi (RAS) kurulu olmadýðý için çevirme iþlevleri yok. Lütfen kurunuz."
 
 #: ../src/generic/tipdlg.cpp:246
 msgid "Did you know..."
 msgstr "Biliyor muydunuz..."
 
 #: ../src/motif/filedlg.cpp:225
-#, fuzzy
 msgid "Directories"
-msgstr "Süslü"
+msgstr "Klasörler"
 
 #: ../src/common/filefn.cpp:1177
 #, c-format
@@ -1569,12 +1617,8 @@ msgid "Directory doesn't exist."
 msgstr "Klasör yok"
 
 #: ../src/html/helpfrm.cpp:503
-msgid ""
-"Display all index items that contain given substring. Search is case "
-"insensitive."
-msgstr ""
-"Verilen alt-dizgiyi içeren tüm dizin elemanlarýný göster. Arama küçük-büyük "
-"harf duyarlýdýr."
+msgid "Display all index items that contain given substring. Search is case insensitive."
+msgstr "Verilen alt-dizgiyi içeren tüm dizin elemanlarýný göster. Arama küçük-büyük harf duyarlýdýr."
 
 #: ../src/html/helpfrm.cpp:685
 msgid "Display options dialog"
@@ -1582,15 +1626,13 @@ msgstr "Seçenek penceresini göster"
 
 #: ../src/msw/mimetype.cpp:671
 msgid ""
-"Do you want to overwrite the command used to %s files with extension \"%s"
-"\" ?\n"
+"Do you want to overwrite the command used to %s files with extension \"%s\" ?\n"
 "Current value is \n"
 "%s, \n"
 "New value is \n"
 "%s %1"
 msgstr ""
-"Dosyalarý %s için kullanýlan komutu deðiþtirmek istiyor musunuz (\"%s\" "
-"uzantýlý dosyalar) ?\n"
+"Dosyalarý %s için kullanýlan komutu deðiþtirmek istiyor musunuz (\"%s\" uzantýlý dosyalar) ?\n"
 "Geçerli deðer \n"
 "%s, \n"
 "Yeni deðer \n"
@@ -1605,7 +1647,8 @@ msgstr "%s dökümanýnda yapýlan deðiþiklikleri kaydetmek istiyor musunuz?"
 msgid "Don't Save"
 msgstr "Kaydetme"
 
-#: ../src/html/htmlwin.cpp:451 ../src/msw/frame.cpp:211
+#: ../src/html/htmlwin.cpp:451
+#: ../src/msw/frame.cpp:211
 msgid "Done"
 msgstr "Tamamlandý"
 
@@ -1615,7 +1658,7 @@ msgstr "Tamamlandý."
 
 #: ../src/common/paper.cpp:183
 msgid "Double Japanese Postcard Rotated 148 x 200 mm"
-msgstr ""
+msgstr "Japon Çift Postakartý Çevrik 148 x 200 mm"
 
 #: ../src/common/xtixml.cpp:271
 #, c-format
@@ -1653,26 +1696,31 @@ msgid "Entries found"
 msgstr "Öðe bulundu"
 
 #: ../src/common/paper.cpp:149
-#, fuzzy
 msgid "Envelope Invite 220 x 220 mm"
-msgstr "DL Zarf, 110 x 220 mm"
+msgstr "Davetiye Zarf 220 x 220 mm"
 
 #: ../src/common/config.cpp:384
 #, c-format
-msgid ""
-"Environment variables expansion failed: missing '%c' at position %u in '%s'."
+msgid "Environment variables expansion failed: missing '%c' at position %u in '%s'."
 msgstr "Çevre deðiþkenleri açma baþarýsýz: eksik '%c', yer %u, '%s' içinde."
 
-#: ../src/generic/dirctrlg.cpp:689 ../src/generic/dirctrlg.cpp:707
-#: ../src/generic/dirctrlg.cpp:718 ../src/generic/dirdlgg.cpp:342
-#: ../src/generic/filedlgg.cpp:632 ../src/generic/filedlgg.cpp:744
-#: ../src/generic/filedlgg.cpp:758 ../src/generic/filedlgg.cpp:772
-#: ../src/generic/filedlgg.cpp:1269 ../src/generic/filedlgg.cpp:1295
-#: ../src/generic/filedlgg.cpp:1325 ../src/gtk/fontdlg.cpp:81
+#: ../src/generic/dirctrlg.cpp:689
+#: ../src/generic/dirctrlg.cpp:707
+#: ../src/generic/dirctrlg.cpp:718
+#: ../src/generic/dirdlgg.cpp:342
+#: ../src/generic/filedlgg.cpp:632
+#: ../src/generic/filedlgg.cpp:744
+#: ../src/generic/filedlgg.cpp:758
+#: ../src/generic/filedlgg.cpp:772
+#: ../src/generic/filedlgg.cpp:1269
+#: ../src/generic/filedlgg.cpp:1295
+#: ../src/generic/filedlgg.cpp:1325
+#: ../src/gtk/fontdlg.cpp:81
 msgid "Error"
 msgstr "Hata"
 
-#: ../src/msdos/utilsdos.cpp:213 ../src/unix/utilsunx.cpp:1090
+#: ../src/msdos/utilsdos.cpp:213
+#: ../src/unix/utilsunx.cpp:1090
 #: ../src/unix/utilsunx.cpp:1098
 msgid "Error "
 msgstr "Hata"
@@ -1693,7 +1741,8 @@ msgstr "Ayar seçenekleri okuma hatasý."
 msgid "Error saving user configuration data."
 msgstr "Kullanýcý ayarlarýný kaydetme hatasý."
 
-#: ../src/mac/carbon/mpthread.cpp:482 ../src/mac/carbon/thread.cpp:672
+#: ../src/mac/carbon/mpthread.cpp:482
+#: ../src/mac/carbon/thread.cpp:672
 msgid "Error while waiting on semaphore"
 msgstr "Bayrak bekleme hatasý"
 
@@ -1747,8 +1796,7 @@ msgstr "Kaynaðý ayrýþtýrýrken 'char' bekleniyor."
 
 #: ../src/msw/registry.cpp:1140
 #, c-format
-msgid ""
-"Exporting registry key: file \"%s\" already exists and won't be overwritten."
+msgid "Exporting registry key: file \"%s\" already exists and won't be overwritten."
 msgstr "Kayýt anahtarý verme: \"%s\" dosyasý zaten var, üstüne yazýlmayacak."
 
 #: ../src/common/fmapbase.cpp:143
@@ -1892,7 +1940,8 @@ msgstr "Standart bul/deðiþtir penceresi yaratýlamadý (hata kodu %d)"
 msgid "Failed to display HTML document in %s encoding"
 msgstr "HTML dökümaný %s kodlamada gösterilemedi"
 
-#: ../src/mac/carbon/clipbrd.cpp:194 ../src/mac/classic/clipbrd.cpp:185
+#: ../src/mac/carbon/clipbrd.cpp:194
+#: ../src/mac/classic/clipbrd.cpp:185
 #: ../src/msw/clipbrd.cpp:131
 msgid "Failed to empty the clipboard."
 msgstr "Pano temizlenemedi."
@@ -1910,7 +1959,8 @@ msgstr "DDE sunucusuyla danýþma döngüsü saðlanamadý"
 msgid "Failed to establish dialup connection: %s"
 msgstr "Çevirmeli baðlantý gerçekleþtirilemedi: %s"
 
-#: ../src/unix/utilsunx.cpp:508 ../src/unix/utilsunx.cpp:524
+#: ../src/unix/utilsunx.cpp:508
+#: ../src/unix/utilsunx.cpp:524
 #, c-format
 msgid "Failed to execute '%s'\n"
 msgstr "'%s' çalýþtýrýlamadý\n"
@@ -1951,7 +2001,8 @@ msgstr ""
 msgid "Failed to get ISP names: %s"
 msgstr "ISP adlarý alýnamadý: %s"
 
-#: ../src/mac/carbon/clipbrd.cpp:143 ../src/mac/classic/clipbrd.cpp:134
+#: ../src/mac/carbon/clipbrd.cpp:143
+#: ../src/mac/classic/clipbrd.cpp:134
 msgid "Failed to get clipboard data."
 msgstr "Pano verisi alýnamadý."
 
@@ -1985,12 +2036,8 @@ msgid "Failed to inspect the lock file '%s'"
 msgstr "'%s' kilit dosyasý incelenemedi"
 
 #: ../src/unix/threadpsx.cpp:897
-msgid ""
-"Failed to join a thread, potential memory leak detected - please restart the "
-"program"
-msgstr ""
-"Ýþparçacýðýna baðlanýlamadý, olasý bellek sýzýntýsý bulundu - lütfen "
-"programý yeniden baþlatýnýz"
+msgid "Failed to join a thread, potential memory leak detected - please restart the program"
+msgstr "Ýþparçacýðýna baðlanýlamadý, olasý bellek sýzýntýsý bulundu - lütfen programý yeniden baþlatýnýz"
 
 #: ../src/msw/utils.cpp:703
 #, c-format
@@ -2153,7 +2200,8 @@ msgstr "Ýzinler '%s' kilit dosyasýna konulamýyor"
 msgid "Failed to set temporary file permissions"
 msgstr "Geçici dosya yetkileri uygulanamadý"
 
-#: ../src/unix/threadpsx.cpp:1245 ../src/unix/threadpsx.cpp:1256
+#: ../src/unix/threadpsx.cpp:1245
+#: ../src/unix/threadpsx.cpp:1256
 #, c-format
 msgid "Failed to set thread priority %d."
 msgstr "Ýþ parçacýðý önceliði %d ayarlanamadý."
@@ -2163,7 +2211,8 @@ msgstr "Ýþ parçacýðý önceliði %d ayarlanamadý."
 msgid "Failed to store image '%s' to memory VFS!"
 msgstr "'%s' imajý bellek VFS'ye yerleþtirilemedi!"
 
-#: ../src/mac/carbon/mpthread.cpp:1273 ../src/mac/carbon/thread.cpp:1465
+#: ../src/mac/carbon/mpthread.cpp:1273
+#: ../src/mac/carbon/thread.cpp:1465
 #: ../src/unix/threadpsx.cpp:1429
 msgid "Failed to terminate a thread."
 msgstr "Ýþ parçacýðý sonlandýrýlamadý."
@@ -2223,7 +2272,8 @@ msgstr "Dosya"
 msgid "File %s does not exist."
 msgstr "'%s' dosyasý yok."
 
-#: ../src/generic/filedlgg.cpp:1316 ../src/gtk/filedlg.cpp:64
+#: ../src/generic/filedlgg.cpp:1316
+#: ../src/gtk/filedlg.cpp:64
 #, c-format
 msgid "File '%s' already exists, do you really want to overwrite it?"
 msgstr "'%s' dosyasý zaten var, üstüne yazýlsýn mý?"
@@ -2241,18 +2291,19 @@ msgstr ""
 msgid "File couldn't be loaded."
 msgstr "Dosya yüklenemedi."
 
-#: ../src/common/docview.cpp:571 ../src/common/docview.cpp:1596
+#: ../src/common/docview.cpp:571
+#: ../src/common/docview.cpp:1596
 msgid "File error"
 msgstr "Dosya hatasý"
 
-#: ../src/generic/dirctrlg.cpp:707 ../src/generic/filedlgg.cpp:758
+#: ../src/generic/dirctrlg.cpp:707
+#: ../src/generic/filedlgg.cpp:758
 msgid "File name exists already."
 msgstr "Dosya adý zaten var."
 
 #: ../src/motif/filedlg.cpp:226
-#, fuzzy
 msgid "Files"
-msgstr "Dosya"
+msgstr "Dosyalar"
 
 #: ../src/common/filefn.cpp:1746
 #, c-format
@@ -2260,9 +2311,8 @@ msgid "Files (%s)"
 msgstr "Dosyalar (%s)"
 
 #: ../src/motif/filedlg.cpp:224
-#, fuzzy
 msgid "Filter"
-msgstr "Dosya"
+msgstr "Filtre"
 
 #: ../src/html/helpfrm.cpp:491
 msgid "Find"
@@ -2353,8 +2403,7 @@ msgstr "'GetPropertyCollection' genel bir eriþici üstünde çaðrýldý"
 
 #: ../include/wx/xti.h:853
 msgid "GetPropertyCollection called w/o valid collection getter"
-msgstr ""
-"'GetPropertyCollection' geçerli bir koleksiyon alýcýsý olmaksýzýn çaðrýldý"
+msgstr "'GetPropertyCollection' geçerli bir koleksiyon alýcýsý olmaksýzýn çaðrýldý"
 
 #: ../src/html/helpfrm.cpp:651
 msgid "Go back"
@@ -2368,7 +2417,8 @@ msgstr "Ýleri git"
 msgid "Go one level up in document hierarchy"
 msgstr "Döküman sýradüzeninde bir seviye yukarý git"
 
-#: ../src/generic/dirdlgg.cpp:145 ../src/generic/filedlgg.cpp:989
+#: ../src/generic/dirdlgg.cpp:145
+#: ../src/generic/filedlgg.cpp:989
 msgid "Go to home directory"
 msgstr "Ev klasörüne git"
 
@@ -2384,7 +2434,8 @@ msgstr "Sayfaya git"
 msgid "Greek (ISO-8859-7)"
 msgstr "Yunanca (ISO-8859-7)"
 
-#: ../src/common/zstream.cpp:72 ../src/common/zstream.cpp:209
+#: ../src/common/zstream.cpp:72
+#: ../src/common/zstream.cpp:209
 msgid "Gzip not supported by this version of zlib"
 msgstr "Zlib'in bu sürümünde 'gzip' desteklenmemektedir"
 
@@ -2405,7 +2456,8 @@ msgstr "HTML dosyalarý (*.html;*.htm)|*.html;*.htm|"
 msgid "Hebrew (ISO-8859-8)"
 msgstr "Ýbranice (ISO-8859-8)"
 
-#: ../src/html/helpfrm.cpp:337 ../contrib/src/deprecated/proplist.cpp:523
+#: ../src/html/helpfrm.cpp:337
+#: ../contrib/src/deprecated/proplist.cpp:523
 msgid "Help"
 msgstr "Yardým"
 
@@ -2413,7 +2465,8 @@ msgstr "Yardým"
 msgid "Help Browser Options"
 msgstr "Yardým Gezgini Seçenekleri"
 
-#: ../src/generic/helpext.cpp:442 ../src/generic/helpext.cpp:443
+#: ../src/generic/helpext.cpp:442
+#: ../src/generic/helpext.cpp:443
 msgid "Help Index"
 msgstr "Yardým Dizini"
 
@@ -2450,9 +2503,12 @@ msgstr "I64"
 msgid "ICO: Error in reading mask DIB."
 msgstr "ICO: Hata: Maske DIB okuma."
 
-#: ../src/common/imagbmp.cpp:1048 ../src/common/imagbmp.cpp:1107
-#: ../src/common/imagbmp.cpp:1116 ../src/common/imagbmp.cpp:1127
-#: ../src/common/imagbmp.cpp:1171 ../src/common/imagbmp.cpp:1181
+#: ../src/common/imagbmp.cpp:1048
+#: ../src/common/imagbmp.cpp:1107
+#: ../src/common/imagbmp.cpp:1116
+#: ../src/common/imagbmp.cpp:1127
+#: ../src/common/imagbmp.cpp:1171
+#: ../src/common/imagbmp.cpp:1181
 #: ../src/common/imagbmp.cpp:1190
 msgid "ICO: Error writing the image file!"
 msgstr "ICO: Imaj yazma hatasý!"
@@ -2501,13 +2557,11 @@ msgstr ""
 
 #: ../src/generic/dbgrptg.cpp:310
 msgid ""
-"If you wish to suppress this debug report completely, please choose the "
-"\"Cancel\" button,\n"
+"If you wish to suppress this debug report completely, please choose the \"Cancel\" button,\n"
 "but be warned that it may hinder improving the program, so if\n"
 "at all possible please do continue with the report generation.\n"
 msgstr ""
-"Eðer bu hata raporunu tamamen saklý tutmak istiyorsanýz, lütfen\"Vazgeç\" "
-"düðmesini seçiniz,\n"
+"Eðer bu hata raporunu tamamen saklý tutmak istiyorsanýz, lütfen\"Vazgeç\" düðmesini seçiniz,\n"
 "ancak bu programýn geliþtirilmesine engel olabilir, eðer\n"
 "mümkünse lütfen rapor üretimine devam ediniz.\n"
 
@@ -2532,7 +2586,8 @@ msgstr "'ConstructObject' yordamý için geçersiz öðe sayýsý"
 msgid "Illegal Parameter Count for Create Method"
 msgstr "'Create' yordamý için geçersiz öðe sayýsý"
 
-#: ../src/generic/dirctrlg.cpp:689 ../src/generic/filedlgg.cpp:744
+#: ../src/generic/dirctrlg.cpp:689
+#: ../src/generic/filedlgg.cpp:744
 msgid "Illegal directory name."
 msgstr "Geçersiz klasör adý."
 
@@ -2550,12 +2605,8 @@ msgid "Image file is not of type %d."
 msgstr "Ýmaj dosyasý %d tipinde deðil."
 
 #: ../src/msw/textctrl.cpp:361
-msgid ""
-"Impossible to create a rich edit control, using simple text control instead. "
-"Please reinstall riched32.dll"
-msgstr ""
-"Zengin metin kontrolü yaratýlamýyor, yerine basit yazý kontrolü "
-"kullanýlýyor. Lütfen riched32.dll'yi yeniden kurunuz."
+msgid "Impossible to create a rich edit control, using simple text control instead. Please reinstall riched32.dll"
+msgstr "Zengin metin kontrolü yaratýlamýyor, yerine basit yazý kontrolü kullanýlýyor. Lütfen riched32.dll'yi yeniden kurunuz."
 
 #: ../src/unix/utilsunx.cpp:428
 msgid "Impossible to get child process input"
@@ -2590,7 +2641,7 @@ msgstr "Hintçe (ISO-8859-12)"
 
 #: ../src/common/init.cpp:232
 msgid "Initialization failed in post init, aborting."
-msgstr ""
+msgstr "Baþlangýç sonundaki baþlatma baþarýsýz oldu, durduruluyor."
 
 #: ../src/common/xtistrm.cpp:704
 msgid "Internal error, illegal wxCustomTypeInfo"
@@ -2620,7 +2671,8 @@ msgstr "Geçersiz '%s' geometri tanýmý"
 msgid "Invalid lock file '%s'."
 msgstr "Geçersiz kilit dosyasý '%s'."
 
-#: ../src/common/xtistrm.cpp:365 ../src/common/xtistrm.cpp:380
+#: ../src/common/xtistrm.cpp:365
+#: ../src/common/xtistrm.cpp:380
 msgid "Invalid or Null Object ID passed to GetObjectClassInfo"
 msgstr "GetObjectClassInfo iþlevine geçersiz veya boþ nesne kimliði geçirildi"
 
@@ -2643,7 +2695,7 @@ msgstr "Ýtalyan Zarf, 110 x 230 mm"
 
 #: ../src/common/imagjpeg.cpp:225
 msgid "JPEG: Couldn't load - file is probably corrupted."
-msgstr "JPEG: Yüklenemedi - dosya muhtemelen kýrpýlmýþ."
+msgstr "JPEG: Yüklenemedi - dosya bozuk olabilir."
 
 #: ../src/common/imagjpeg.cpp:339
 msgid "JPEG: Couldn't save image."
@@ -2651,55 +2703,55 @@ msgstr "JPEG: imaj kaydedilemedi."
 
 #: ../src/common/paper.cpp:170
 msgid "Japanese Double Postcard 200 x 148 mm"
-msgstr ""
+msgstr "Japon Çift Postakartý 200 x 148 mm"
 
 #: ../src/common/paper.cpp:174
 msgid "Japanese Envelope Chou #3"
-msgstr ""
+msgstr "Japon Zarf Chou #3"
 
 #: ../src/common/paper.cpp:187
 msgid "Japanese Envelope Chou #3 Rotated"
-msgstr ""
+msgstr "Japon Zarf Chou #3 Çevrik"
 
 #: ../src/common/paper.cpp:175
 msgid "Japanese Envelope Chou #4"
-msgstr ""
+msgstr "Japon Zarf Chou #4"
 
 #: ../src/common/paper.cpp:188
 msgid "Japanese Envelope Chou #4 Rotated"
-msgstr ""
+msgstr "Japon Zarf Chou #4 Çevrik"
 
 #: ../src/common/paper.cpp:172
 msgid "Japanese Envelope Kaku #2"
-msgstr ""
+msgstr "Japon Zarf Kaku #2"
 
 #: ../src/common/paper.cpp:185
 msgid "Japanese Envelope Kaku #2 Rotated"
-msgstr ""
+msgstr "Japon Zarf Kaku #2 Çevrik"
 
 #: ../src/common/paper.cpp:173
 msgid "Japanese Envelope Kaku #3"
-msgstr ""
+msgstr "Japon Zarf Kaku #3"
 
 #: ../src/common/paper.cpp:186
 msgid "Japanese Envelope Kaku #3 Rotated"
-msgstr ""
+msgstr "Japon Zarf Kaku #3 Çevrik"
 
 #: ../src/common/paper.cpp:192
 msgid "Japanese Envelope You #4"
-msgstr ""
+msgstr "Japon Zarf You #4"
 
 #: ../src/common/paper.cpp:193
 msgid "Japanese Envelope You #4 Rotated"
-msgstr ""
+msgstr "Japon Zarf You #4 Çevrik"
 
 #: ../src/common/paper.cpp:145
 msgid "Japanese Postcard 100 x 148 mm"
-msgstr ""
+msgstr "Japon Postakartý 100 x 148 mm"
 
 #: ../src/common/paper.cpp:182
 msgid "Japanese Postcard Rotated 148 x 100 mm"
-msgstr ""
+msgstr "Japon Postakartý Çevrik 148 x 100 mm"
 
 #: ../src/common/stockitem.cpp:128
 msgid "Justified"
@@ -2713,7 +2765,8 @@ msgstr "KOI8-R"
 msgid "KOI8-U"
 msgstr "KOI8-U"
 
-#: ../src/generic/prntdlgg.cpp:609 ../src/generic/prntdlgg.cpp:867
+#: ../src/generic/prntdlgg.cpp:609
+#: ../src/generic/prntdlgg.cpp:867
 msgid "Landscape"
 msgstr "Yatay"
 
@@ -2726,41 +2779,36 @@ msgid "Left margin (mm):"
 msgstr "Sol boþluk (mm):"
 
 #: ../src/common/paper.cpp:151
-#, fuzzy
 msgid "Legal Extra 9 1/2 x 15 in"
-msgstr "Legal, 8 1/2 x 14 inç"
+msgstr "Legal Ek 9 1/2 x 15 inç"
 
 #: ../src/common/paper.cpp:103
 msgid "Legal, 8 1/2 x 14 in"
 msgstr "Legal, 8 1/2 x 14 inç"
 
 #: ../src/common/paper.cpp:150
-#, fuzzy
 msgid "Letter Extra 9 1/2 x 12 in"
-msgstr "Letter, 8 1/2 x 11 inç"
+msgstr "Letter Ek 9 1/2 x 12 inç"
 
 #: ../src/common/paper.cpp:156
 msgid "Letter Extra Transverse 9.275 x 12 in"
-msgstr ""
+msgstr "Letter Ek Enine 9.275 x 12 inç"
 
 #: ../src/common/paper.cpp:159
-#, fuzzy
 msgid "Letter Plus 8 1/2 x 12.69 in"
-msgstr "Letter, 8 1/2 x 11 inç"
+msgstr "Letter Artý 8 1/2 x 12.69 inç"
 
 #: ../src/common/paper.cpp:176
-#, fuzzy
 msgid "Letter Rotated 11 x 8 1/2 in"
-msgstr "Letter, 8 1/2 x 11 inç"
+msgstr "Letter Çevrik 11 x 8 1/2 inç"
 
 #: ../src/common/paper.cpp:108
 msgid "Letter Small, 8 1/2 x 11 in"
 msgstr "Letter Küçük, 8 1/2 x 11 inç"
 
 #: ../src/common/paper.cpp:154
-#, fuzzy
 msgid "Letter Transverse 8 1/2 x 11 in"
-msgstr "Letter, 8 1/2 x 11 inç"
+msgstr "Letter Enine 8 1/2 x 11 inç"
 
 #: ../src/common/paper.cpp:102
 msgid "Letter, 8 1/2 x 11 in"
@@ -2798,7 +2846,8 @@ msgstr "'%s' kilit dosyasýnýn yetkileri hatalý."
 msgid "Log saved to the file '%s'."
 msgstr "Günlük '%s' dosyasýna kaydedildi."
 
-#: ../include/wx/xti.h:501 ../include/wx/xti.h:505
+#: ../include/wx/xti.h:501
+#: ../include/wx/xti.h:505
 msgid "Long Conversions not supported"
 msgstr "Long çevrimi desteklenmiyor"
 
@@ -2811,12 +2860,8 @@ msgid "MP Thread Support is not available on this System"
 msgstr "Bu sistemde MT Ýþparçacýðý desteði yok"
 
 #: ../src/msw/helpchm.cpp:60
-msgid ""
-"MS HTML Help functions are unavailable because the MS HTML Help library is "
-"not installed on this machine. Please install it."
-msgstr ""
-"MS HTML Yardým kitaplýðý kurulu olmadýðý için yardým iþlevleri "
-"kullanýlamýyor. Lütfen kurunuz."
+msgid "MS HTML Help functions are unavailable because the MS HTML Help library is not installed on this machine. Please install it."
+msgstr "MS HTML Yardým kitaplýðý kurulu olmadýðý için yardým iþlevleri kullanýlamýyor. Lütfen kurunuz."
 
 #: ../src/univ/themes/win32.cpp:4929
 msgid "Ma&ximize"
@@ -2869,7 +2914,7 @@ msgstr "Deðiþtirildi"
 #: ../src/common/module.cpp:77
 #, c-format
 msgid "Module \"%s\" initialization failed"
-msgstr ""
+msgstr "Modül \"%s\": baþlatma baþarýsýz oldu"
 
 #: ../src/common/paper.cpp:138
 msgid "Monarch Envelope, 3 7/8 x 7 1/2 in"
@@ -2895,8 +2940,10 @@ msgstr "Yeni klasör"
 msgid "New item"
 msgstr "Yeni öðe"
 
-#: ../src/generic/dirdlgg.cpp:316 ../src/generic/dirdlgg.cpp:326
-#: ../src/generic/filedlgg.cpp:608 ../src/generic/filedlgg.cpp:617
+#: ../src/generic/dirdlgg.cpp:316
+#: ../src/generic/dirdlgg.cpp:326
+#: ../src/generic/filedlgg.cpp:608
+#: ../src/generic/filedlgg.cpp:617
 msgid "NewName"
 msgstr "Yeni isim"
 
@@ -2908,8 +2955,10 @@ msgstr "Sonraki"
 msgid "Next page"
 msgstr "Sonraki sayfa"
 
-#: ../src/mac/carbon/msgdlg.cpp:58 ../src/mac/carbon/msgdlg.cpp:143
-#: ../src/mac/classic/msgdlg.cpp:56 ../src/mac/classic/msgdlg.cpp:140
+#: ../src/mac/carbon/msgdlg.cpp:58
+#: ../src/mac/carbon/msgdlg.cpp:143
+#: ../src/mac/classic/msgdlg.cpp:56
+#: ../src/mac/classic/msgdlg.cpp:140
 #: ../src/motif/msgdlg.cpp:204
 msgid "No"
 msgstr "Hayýr"
@@ -2932,13 +2981,11 @@ msgstr "Girdi bulunamadý."
 msgid ""
 "No font for displaying text in encoding '%s' found,\n"
 "but an alternative encoding '%s' is available.\n"
-"Do you want to use this encoding (otherwise you will have to choose another "
-"one)?"
+"Do you want to use this encoding (otherwise you will have to choose another one)?"
 msgstr ""
 "'%s' kodlamada gösterim için yazý tipi yok,\n"
 "ama '%s' kodlama seçeneði var.\n"
-"Bu kodlamayý kullanmak istiyor musunuz (aksi halde baþka bir tane "
-"seçmelisiniz) ?"
+"Bu kodlamayý kullanmak istiyor musunuz (aksi halde baþka bir tane seçmelisiniz) ?"
 
 #: ../src/common/fontmap.cpp:427
 #, c-format
@@ -2956,17 +3003,20 @@ msgstr ""
 msgid "No handler found for XML node '%s', class '%s'!"
 msgstr "'%s' XML düðümü için iþleyici bulunamadý, sýnýf '%s'!"
 
-#: ../src/common/image.cpp:1505 ../src/common/image.cpp:1548
+#: ../src/common/image.cpp:1505
+#: ../src/common/image.cpp:1548
 msgid "No handler found for image type."
 msgstr "Ýmaj tipi için iþleyici bulunamadý."
 
-#: ../src/common/image.cpp:1513 ../src/common/image.cpp:1556
+#: ../src/common/image.cpp:1513
+#: ../src/common/image.cpp:1556
 #: ../src/common/image.cpp:1589
 #, c-format
 msgid "No image handler for type %d defined."
 msgstr "%d tipi için imaj iþleyici tanýmlanmamýþ."
 
-#: ../src/common/image.cpp:1574 ../src/common/image.cpp:1604
+#: ../src/common/image.cpp:1574
+#: ../src/common/image.cpp:1604
 #, c-format
 msgid "No image handler for type %s defined."
 msgstr "%s tipi için imaj iþleyici tanýmlanmamýþ."
@@ -2979,7 +3029,8 @@ msgstr "Henüz çakýþan bir sayfa bulunamadý"
 msgid "No sound"
 msgstr "Ses yok"
 
-#: ../src/common/image.cpp:1200 ../src/common/image.cpp:1239
+#: ../src/common/image.cpp:1200
+#: ../src/common/image.cpp:1239
 msgid "No unused colour in image being masked."
 msgstr "Maskelenen imajda kullanýlmamýþ renk yok."
 
@@ -2991,7 +3042,8 @@ msgstr "Ýmajda kullanýlmamýþ renk yok"
 msgid "Nordic (ISO-8859-10)"
 msgstr "Norveçce (ISO-8859-10)"
 
-#: ../src/generic/fontdlgg.cpp:232 ../src/generic/fontdlgg.cpp:235
+#: ../src/generic/fontdlgg.cpp:232
+#: ../src/generic/fontdlgg.cpp:235
 msgid "Normal"
 msgstr "Normal"
 
@@ -3007,7 +3059,8 @@ msgstr "Normal yazý tipi:"
 msgid "Note, 8 1/2 x 11 in"
 msgstr "Not, 8 1/2 x 11 inç"
 
-#: ../src/gtk/fontdlg.cpp:147 ../src/msw/dialog.cpp:194
+#: ../src/gtk/fontdlg.cpp:147
+#: ../src/msw/dialog.cpp:194
 #: ../contrib/src/deprecated/proplist.cpp:506
 msgid "OK"
 msgstr "Tamam"
@@ -3016,11 +3069,13 @@ msgstr "Tamam"
 msgid "Objects must have an id attribute"
 msgstr "Nesnelerin bir kimlik özniteliði olmalýdýr"
 
-#: ../src/common/docview.cpp:1269 ../src/common/docview.cpp:1619
+#: ../src/common/docview.cpp:1269
+#: ../src/common/docview.cpp:1619
 msgid "Open File"
 msgstr "Dosya aç"
 
-#: ../src/html/helpfrm.cpp:673 ../src/html/helpfrm.cpp:1579
+#: ../src/html/helpfrm.cpp:673
+#: ../src/html/helpfrm.cpp:1579
 msgid "Open HTML document"
 msgstr "HTML dökümaný aç"
 
@@ -3029,8 +3084,10 @@ msgstr "HTML dökümaný aç"
 msgid "Open file \"%s\""
 msgstr "Dosya aç \"%s\""
 
-#: ../src/generic/dirctrlg.cpp:718 ../src/generic/dirdlgg.cpp:342
-#: ../src/generic/filedlgg.cpp:632 ../src/generic/filedlgg.cpp:772
+#: ../src/generic/dirctrlg.cpp:718
+#: ../src/generic/dirdlgg.cpp:342
+#: ../src/generic/filedlgg.cpp:632
+#: ../src/generic/filedlgg.cpp:772
 msgid "Operation not permitted."
 msgstr "Ýþleme izin verilmiyor."
 
@@ -3049,15 +3106,18 @@ msgstr "Seçenek '%s' bir deðer gerektirir."
 msgid "Option '%s': '%s' cannot be converted to a date."
 msgstr "Seçenek '%s': '%s' tarihe çevrilemiyor."
 
-#: ../src/generic/dirdlgg.cpp:116 ../src/generic/prntdlgg.cpp:614
+#: ../src/generic/dirdlgg.cpp:116
+#: ../src/generic/prntdlgg.cpp:614
 msgid "Options"
 msgstr "Seçenekler"
 
-#: ../src/generic/prntdlgg.cpp:611 ../src/generic/prntdlgg.cpp:868
+#: ../src/generic/prntdlgg.cpp:611
+#: ../src/generic/prntdlgg.cpp:868
 msgid "Orientation"
 msgstr "Yönlendirme"
 
-#: ../src/common/imagpcx.cpp:462 ../src/common/imagpcx.cpp:485
+#: ../src/common/imagpcx.cpp:462
+#: ../src/common/imagpcx.cpp:485
 msgid "PCX: couldn't allocate memory"
 msgstr "PCX: bellek yaratýlamadý."
 
@@ -3073,7 +3133,8 @@ msgstr "PCX: geçersiz imaj"
 msgid "PCX: this is not a PCX file."
 msgstr "PCX: bu bir PCX dosyasý deðil."
 
-#: ../src/common/imagpcx.cpp:464 ../src/common/imagpcx.cpp:486
+#: ../src/common/imagpcx.cpp:464
+#: ../src/common/imagpcx.cpp:486
 msgid "PCX: unknown error !!!"
 msgstr "PCX: bilinmeyen hata !!!"
 
@@ -3089,134 +3150,115 @@ msgstr "PNM: bellek yaratýlamadý."
 msgid "PNM: File format is not recognized."
 msgstr "PNM: Dosya biçemi tanýmlanamadý."
 
-#: ../src/common/imagpnm.cpp:108 ../src/common/imagpnm.cpp:125
+#: ../src/common/imagpnm.cpp:108
+#: ../src/common/imagpnm.cpp:125
 #: ../src/common/imagpnm.cpp:142
 msgid "PNM: File seems truncated."
 msgstr "PNM: Dosya kýrpýlmýþ görünüyor."
 
 #: ../src/common/paper.cpp:194
 msgid "PRC 16K 146 x 215 mm"
-msgstr ""
+msgstr "PRC 16K 146 x 215 mm"
 
 #: ../src/common/paper.cpp:207
 msgid "PRC 16K Rotated"
-msgstr ""
+msgstr "PRC 16K Çevrik"
 
 #: ../src/common/paper.cpp:195
 msgid "PRC 32K 97 x 151 mm"
-msgstr ""
+msgstr "PRC 32K 97 x 151 mm"
 
 #: ../src/common/paper.cpp:208
 msgid "PRC 32K Rotated"
-msgstr ""
+msgstr "PRC 32K Çevrik"
 
 #: ../src/common/paper.cpp:196
 msgid "PRC 32K(Big) 97 x 151 mm"
-msgstr ""
+msgstr "PRC 32K(Büyük) 97 x 151 mm"
 
 #: ../src/common/paper.cpp:209
 msgid "PRC 32K(Big) Rotated"
-msgstr ""
+msgstr "PRC 32K(Büyük) Çevrik"
 
 #: ../src/common/paper.cpp:197
-#, fuzzy
 msgid "PRC Envelope #1 102 x 165 mm"
-msgstr "C6 Zarf, 114 x 162 mm"
+msgstr "PRC Zarf #1 102 x 165 mm"
 
 #: ../src/common/paper.cpp:210
-#, fuzzy
 msgid "PRC Envelope #1 Rotated 165 x 102 mm"
-msgstr "C6 Zarf, 114 x 162 mm"
+msgstr "PRC Zarf #1 Çevrik 165 x 102 mm"
 
 #: ../src/common/paper.cpp:206
-#, fuzzy
 msgid "PRC Envelope #10 324 x 458 mm"
-msgstr "C3 Zarf, 324 x 458 mm"
+msgstr "PRC Zarf #10 324 x 458 mm"
 
 #: ../src/common/paper.cpp:219
-#, fuzzy
 msgid "PRC Envelope #10 Rotated 458 x 324 mm"
-msgstr "C4 Zarf, 229 x 324 mm"
+msgstr "PRC Zarf #10 Çevrik 458 x 324 mm"
 
 #: ../src/common/paper.cpp:198
-#, fuzzy
 msgid "PRC Envelope #2 102 x 176 mm"
-msgstr "C6 Zarf, 114 x 162 mm"
+msgstr "PRC Zarf #2 102 x 176 mm"
 
 #: ../src/common/paper.cpp:211
-#, fuzzy
 msgid "PRC Envelope #2 Rotated 176 x 102 mm"
-msgstr "B6 Zarf, 176 x 125 mm"
+msgstr "PRC Zarf #2 Çevrik 176 x 102 mm"
 
 #: ../src/common/paper.cpp:199
-#, fuzzy
 msgid "PRC Envelope #3 125 x 176 mm"
-msgstr "C6 Zarf, 114 x 162 mm"
+msgstr "PRC Zarf #3 125 x 176 mm"
 
 #: ../src/common/paper.cpp:212
-#, fuzzy
 msgid "PRC Envelope #3 Rotated 176 x 125 mm"
-msgstr "B6 Zarf, 176 x 125 mm"
+msgstr "PRC Zarf #3 Çevrik 176 x 125 mm"
 
 #: ../src/common/paper.cpp:200
-#, fuzzy
 msgid "PRC Envelope #4 110 x 208 mm"
-msgstr "DL Zarf, 110 x 220 mm"
+msgstr "PRC Zarf #4 110 x 208 mm"
 
 #: ../src/common/paper.cpp:213
-#, fuzzy
 msgid "PRC Envelope #4 Rotated 208 x 110 mm"
-msgstr "C6 Zarf, 114 x 162 mm"
+msgstr "PRC Zarf #4 Çevrik 208 x 110 mm"
 
 #: ../src/common/paper.cpp:201
-#, fuzzy
 msgid "PRC Envelope #5 110 x 220 mm"
-msgstr "DL Zarf, 110 x 220 mm"
+msgstr "PRC Zarf #5 110 x 220 mm"
 
 #: ../src/common/paper.cpp:214
-#, fuzzy
 msgid "PRC Envelope #5 Rotated 220 x 110 mm"
-msgstr "C4 Zarf, 229 x 324 mm"
+msgstr "PRC Zarf #5 Çevrik 220 x 110 mm"
 
 #: ../src/common/paper.cpp:202
-#, fuzzy
 msgid "PRC Envelope #6 120 x 230 mm"
-msgstr "C5 Zarf, 162 x 229 mm"
+msgstr "PRC Zarf #6 120 x 230 mm"
 
 #: ../src/common/paper.cpp:215
-#, fuzzy
 msgid "PRC Envelope #6 Rotated 230 x 120 mm"
-msgstr "C5 Zarf, 162 x 229 mm"
+msgstr "PRC Zarf #6 Çevrik 230 x 120 mm"
 
 #: ../src/common/paper.cpp:203
-#, fuzzy
 msgid "PRC Envelope #7 160 x 230 mm"
-msgstr "B5 Zarf, 176 x 250 mm"
+msgstr "PRC Zarf #7 160 x 230 mm"
 
 #: ../src/common/paper.cpp:216
-#, fuzzy
 msgid "PRC Envelope #7 Rotated 230 x 160 mm"
-msgstr "C6 Zarf, 114 x 162 mm"
+msgstr "PRC Zarf #7 Çevrik 230 x 160 mm"
 
 #: ../src/common/paper.cpp:204
-#, fuzzy
 msgid "PRC Envelope #8 120 x 309 mm"
-msgstr "C5 Zarf, 162 x 229 mm"
+msgstr "PRC Zarf #8 120 x 309 mm"
 
 #: ../src/common/paper.cpp:217
-#, fuzzy
 msgid "PRC Envelope #8 Rotated 309 x 120 mm"
-msgstr "C4 Zarf, 229 x 324 mm"
+msgstr "PRC Zarf #8 Çevrik 309 x 120 mm"
 
 #: ../src/common/paper.cpp:205
-#, fuzzy
 msgid "PRC Envelope #9 229 x 324 mm"
-msgstr "C4 Zarf, 229 x 324 mm"
+msgstr "PRC Zarf #9 229 x 324 mm"
 
 #: ../src/common/paper.cpp:218
-#, fuzzy
 msgid "PRC Envelope #9 Rotated 324 x 229 mm"
-msgstr "C5 Zarf, 162 x 229 mm"
+msgstr "PRC Zarf #9 Çevrik 324 x 229 mm"
 
 #: ../src/common/prntbase.cpp:1294
 #, c-format
@@ -3232,7 +3274,8 @@ msgstr "Sayfa %d / %d"
 msgid "Page Setup"
 msgstr "Sayfa düzeni"
 
-#: ../src/common/prntbase.cpp:451 ../src/gtk/gnome/gprint.cpp:540
+#: ../src/common/prntbase.cpp:451
+#: ../src/gtk/gnome/gprint.cpp:540
 msgid "Page setup"
 msgstr "Sayfa düzeni"
 
@@ -3240,12 +3283,14 @@ msgstr "Sayfa düzeni"
 msgid "Pages"
 msgstr "Sayfalar"
 
-#: ../src/generic/prntdlgg.cpp:800 ../src/generic/prntdlgg.cpp:854
+#: ../src/generic/prntdlgg.cpp:800
+#: ../src/generic/prntdlgg.cpp:854
 #: ../src/generic/prntdlgg.cpp:1056
 msgid "Paper Size"
 msgstr "Kaðýt boyutu"
 
-#: ../src/generic/prntdlgg.cpp:598 ../src/generic/prntdlgg.cpp:841
+#: ../src/generic/prntdlgg.cpp:598
+#: ../src/generic/prntdlgg.cpp:841
 #: ../src/generic/prntdlgg.cpp:1051
 msgid "Paper size"
 msgstr "Kaðýt boyutu"
@@ -3258,7 +3303,8 @@ msgstr "SetObject iþlevi kayýtlý bir nesne ile çaðrýldý"
 msgid "Passing a already registered object to SetObjectName"
 msgstr "SetObjectName iþlevi kayýtlý bir nesne ile çaðrýldý"
 
-#: ../src/common/xtistrm.cpp:436 ../src/common/xtistrm.cpp:656
+#: ../src/common/xtistrm.cpp:436
+#: ../src/common/xtistrm.cpp:656
 msgid "Passing an unkown object to GetObject"
 msgstr "GetObject iþlevi bilinmeyen bir nesne ile çaðrýldý"
 
@@ -3301,7 +3347,8 @@ msgstr ""
 msgid "Please wait while printing\n"
 msgstr "Döküm alýnýyor. Lütfen bekleyiniz\n"
 
-#: ../src/generic/prntdlgg.cpp:608 ../src/generic/prntdlgg.cpp:866
+#: ../src/generic/prntdlgg.cpp:608
+#: ../src/generic/prntdlgg.cpp:866
 msgid "Portrait"
 msgstr "Dikey"
 
@@ -3309,7 +3356,8 @@ msgstr "Dikey"
 msgid "PostScript file"
 msgstr "PostScript dosyasý"
 
-#: ../src/generic/fontdlgg.cpp:348 ../src/html/helpfrm.cpp:1235
+#: ../src/generic/fontdlgg.cpp:348
+#: ../src/html/helpfrm.cpp:1235
 msgid "Preview:"
 msgstr "Önizleme:"
 
@@ -3317,8 +3365,10 @@ msgstr "Önizleme:"
 msgid "Previous page"
 msgstr "Önceki sayfa"
 
-#: ../src/common/prntbase.cpp:393 ../src/generic/prntdlgg.cpp:138
-#: ../src/generic/prntdlgg.cpp:151 ../src/gtk/gnome/gprint.cpp:395
+#: ../src/common/prntbase.cpp:393
+#: ../src/generic/prntdlgg.cpp:138
+#: ../src/generic/prntdlgg.cpp:151
+#: ../src/gtk/gnome/gprint.cpp:395
 #: ../src/gtk/gnome/gprint.cpp:407
 msgid "Print"
 msgstr "Yazdýr"
@@ -3327,7 +3377,8 @@ msgstr "Yazdýr"
 msgid "Print Preview"
 msgstr "Baský Önizleme"
 
-#: ../src/common/prntbase.cpp:1246 ../src/common/prntbase.cpp:1272
+#: ../src/common/prntbase.cpp:1246
+#: ../src/common/prntbase.cpp:1272
 msgid "Print Preview Failure"
 msgstr "Baský Önizleme Hatasý"
 
@@ -3387,7 +3438,8 @@ msgstr "Yazýcý..."
 msgid "Printer:"
 msgstr "Yazýcý:"
 
-#: ../src/common/prntbase.cpp:310 ../src/common/prntbase.cpp:531
+#: ../src/common/prntbase.cpp:310
+#: ../src/common/prntbase.cpp:531
 msgid "Printing "
 msgstr "Yazdýrýlýyor"
 
@@ -3406,10 +3458,8 @@ msgstr "Yazdýrýlýyor..."
 
 #: ../src/common/debugrpt.cpp:546
 #, c-format
-msgid ""
-"Processing debug report has failed, leaving the files in \"%s\" directory."
-msgstr ""
-"Hata raporu iþlemi baþarýsýz oldu, dosyalar \"%s\" klasöründe býrakýldý."
+msgid "Processing debug report has failed, leaving the files in \"%s\" directory."
+msgstr "Hata raporu iþlemi baþarýsýz oldu, dosyalar \"%s\" klasöründe býrakýldý."
 
 #: ../src/common/log.cpp:466
 msgid "Program aborted."
@@ -3423,7 +3473,8 @@ msgstr "Quarto, 215 x 275 mm"
 msgid "Question"
 msgstr "Soru"
 
-#: ../src/common/ffile.cpp:125 ../src/common/ffile.cpp:144
+#: ../src/common/ffile.cpp:125
+#: ../src/common/ffile.cpp:144
 #, c-format
 msgid "Read error on file '%s'"
 msgstr "'%s' dosyasýnda okuma hatasý"
@@ -3541,17 +3592,14 @@ msgstr "Günlük içeriðini dosyaya kaydet"
 msgid "Script"
 msgstr "Betik"
 
-#: ../src/html/helpfrm.cpp:536 ../src/html/helpfrm.cpp:551
+#: ../src/html/helpfrm.cpp:536
+#: ../src/html/helpfrm.cpp:551
 msgid "Search"
 msgstr "Ara"
 
 #: ../src/html/helpfrm.cpp:538
-msgid ""
-"Search contents of help book(s) for all occurences of the text you typed "
-"above"
-msgstr ""
-"Yukarda yazdýðýnýz yazýnýn tüm tekrarlarý için yardým kitaplarý içeriðini "
-"araþtýr"
+msgid "Search contents of help book(s) for all occurences of the text you typed above"
+msgstr "Yukarda yazdýðýnýz yazýnýn tüm tekrarlarý için yardým kitaplarý içeriðini araþtýr"
 
 #: ../src/generic/fdrepdlg.cpp:166
 msgid "Search direction"
@@ -3581,10 +3629,10 @@ msgstr "'%s' dosyasýnda arama hatasý"
 #: ../src/common/ffile.cpp:212
 #, c-format
 msgid "Seek error on file '%s' (large files not supported by stdio)"
-msgstr ""
-"'%s' üstünde arama hatasý (büyük dosyalar 'stdio' tarafýndan desteklenmiyor)"
+msgstr "'%s' üstünde arama hatasý (büyük dosyalar 'stdio' tarafýndan desteklenmiyor)"
 
-#: ../src/mac/carbon/textctrl.cpp:1078 ../src/msw/textctrl.cpp:2068
+#: ../src/mac/carbon/textctrl.cpp:1078
+#: ../src/msw/textctrl.cpp:2068
 msgid "Select &All"
 msgstr "Tümünü seç"
 
@@ -3601,9 +3649,8 @@ msgid "Select a file"
 msgstr "Bir dosya seçiniz"
 
 #: ../src/motif/filedlg.cpp:226
-#, fuzzy
 msgid "Selection"
-msgstr "Bölümler"
+msgstr "Seçim"
 
 #: ../src/common/cmdline.cpp:739
 #, c-format
@@ -3630,7 +3677,8 @@ msgstr "Tümünü göster"
 msgid "Show all items in index"
 msgstr "Dizindeki tüm öðeleri göster"
 
-#: ../src/generic/dirdlgg.cpp:112 ../src/generic/dirdlgg.cpp:175
+#: ../src/generic/dirdlgg.cpp:112
+#: ../src/generic/dirdlgg.cpp:175
 msgid "Show hidden directories"
 msgstr "Gizli klasörleri göster"
 
@@ -3642,7 +3690,8 @@ msgstr "Gizli dosyalarý göster"
 msgid "Show/hide navigation panel"
 msgstr "Dolaþma panosunu göster/gizle"
 
-#: ../src/generic/fontdlgg.cpp:353 ../src/generic/fontdlgg.cpp:355
+#: ../src/generic/fontdlgg.cpp:353
+#: ../src/generic/fontdlgg.cpp:355
 msgid "Shows the font preview."
 msgstr "Yazý tipi önizlenimini gösterir."
 
@@ -3650,7 +3699,8 @@ msgstr "Yazý tipi önizlenimini gösterir."
 msgid "Size"
 msgstr "Boyut"
 
-#: ../src/generic/progdlgg.cpp:222 ../src/generic/progdlgg.cpp:240
+#: ../src/generic/progdlgg.cpp:222
+#: ../src/generic/progdlgg.cpp:240
 #: ../src/generic/progdlgg.cpp:598
 msgid "Skip"
 msgstr "Atla"
@@ -3663,7 +3713,8 @@ msgstr "Eðik"
 msgid "Sorry, could not open this file for saving."
 msgstr "Üzgünüm, bu dosya saklanmak için açýlamýyor."
 
-#: ../src/common/docview.cpp:617 ../src/common/docview.cpp:1598
+#: ../src/common/docview.cpp:617
+#: ../src/common/docview.cpp:1598
 msgid "Sorry, could not open this file."
 msgstr "Üzgünüm, bu dosya açýlamýyor."
 
@@ -3679,7 +3730,8 @@ msgstr "Üzgünüm, önizleme için bellek yetersiz."
 msgid "Sorry, print preview needs a printer to be installed."
 msgstr "Üzgünüm, baský önizleme bir yazýcýnýn yüklü olmasýný gerektirir."
 
-#: ../src/common/docview.cpp:1268 ../src/common/docview.cpp:1618
+#: ../src/common/docview.cpp:1268
+#: ../src/common/docview.cpp:1618
 msgid "Sorry, the format for this file is unknown."
 msgstr "Üzgünüm, bu dosyanýn tipi bilinmiyor."
 
@@ -3706,15 +3758,16 @@ msgstr "Durum:"
 
 #: ../src/common/xtistrm.cpp:253
 msgid "Streaming delegates for not already streamed objects not yet supported"
-msgstr ""
-"Henüz kaydedilmemiþ nesneler için akým aktarýcýlarý þimdilik desteklenmiyor"
+msgstr "Henüz kaydedilmemiþ nesneler için akým aktarýcýlarý þimdilik desteklenmiyor"
 
-#: ../src/msw/colour.cpp:38 ../src/palmos/colour.cpp:38
+#: ../src/msw/colour.cpp:38
+#: ../src/palmos/colour.cpp:38
 #, c-format
 msgid "String To Colour : Incorrect colour specification : %s"
 msgstr "Dizgiden renge: Hatalý renk tanýmý: %s"
 
-#: ../include/wx/xti.h:428 ../include/wx/xti.h:432
+#: ../include/wx/xti.h:428
+#: ../include/wx/xti.h:432
 msgid "String conversions not supported"
 msgstr "Dizgi çevrimleri desteklenmiyor"
 
@@ -3725,11 +3778,11 @@ msgstr "Altsýnýf '%s' '%s' kaynaðý içinde bulunamadý, iþlem yapýlmýyor!"
 
 #: ../src/common/paper.cpp:157
 msgid "SuperA/SuperA/A4 227 x 356 mm"
-msgstr ""
+msgstr "SuperA/SuperA/A4 227 x 356 mm"
 
 #: ../src/common/paper.cpp:158
 msgid "SuperB/SuperB/A3 305 x 487 mm"
-msgstr ""
+msgstr "SuperB/SuperB/A3 305 x 487 mm"
 
 #: ../src/generic/fontdlgg.cpp:230
 msgid "Swiss"
@@ -3737,13 +3790,14 @@ msgstr "Ýsveç"
 
 #: ../src/common/imagtiff.cpp:165
 msgid "TIFF library error."
-msgstr ""
+msgstr "TIFF kitaplýk hatasý."
 
 #: ../src/common/imagtiff.cpp:149
 msgid "TIFF library warning."
-msgstr ""
+msgstr "TIFF kitaplýk uyarýsý."
 
-#: ../src/common/imagtiff.cpp:248 ../src/common/imagtiff.cpp:259
+#: ../src/common/imagtiff.cpp:248
+#: ../src/common/imagtiff.cpp:259
 #: ../src/common/imagtiff.cpp:399
 msgid "TIFF: Couldn't allocate memory."
 msgstr "TIFF: Bellek yetersiz."
@@ -3765,9 +3819,8 @@ msgid "TIFF: Error writing image."
 msgstr "TIFF: Imaj yazma hatasý."
 
 #: ../src/common/paper.cpp:152
-#, fuzzy
 msgid "Tabloid Extra 11.69 x 18 in"
-msgstr "Tabloid, 11 x 17 inç"
+msgstr "Tabloid Ek 11.69 x 18 inç"
 
 #: ../src/common/paper.cpp:109
 msgid "Tabloid, 11 x 17 in"
@@ -3836,23 +3889,28 @@ msgstr ""
 "'%s' dosyasý yok ve açýlamadý.\n"
 "Geçmiþ kullanýlan dosyalar listesinden çýkarýldý."
 
-#: ../src/generic/fontdlgg.cpp:316 ../src/generic/fontdlgg.cpp:318
+#: ../src/generic/fontdlgg.cpp:316
+#: ../src/generic/fontdlgg.cpp:318
 msgid "The font colour."
 msgstr "Yazý tipi rengi."
 
-#: ../src/generic/fontdlgg.cpp:277 ../src/generic/fontdlgg.cpp:279
+#: ../src/generic/fontdlgg.cpp:277
+#: ../src/generic/fontdlgg.cpp:279
 msgid "The font family."
 msgstr "Yazý tipi ailesi."
 
-#: ../src/generic/fontdlgg.cpp:328 ../src/generic/fontdlgg.cpp:330
+#: ../src/generic/fontdlgg.cpp:328
+#: ../src/generic/fontdlgg.cpp:330
 msgid "The font point size."
 msgstr "Yazý tipi boyutu."
 
-#: ../src/generic/fontdlgg.cpp:288 ../src/generic/fontdlgg.cpp:290
+#: ../src/generic/fontdlgg.cpp:288
+#: ../src/generic/fontdlgg.cpp:290
 msgid "The font style."
 msgstr "Yazý tipi stili."
 
-#: ../src/generic/fontdlgg.cpp:299 ../src/generic/fontdlgg.cpp:301
+#: ../src/generic/fontdlgg.cpp:299
+#: ../src/generic/fontdlgg.cpp:301
 msgid "The font weight."
 msgstr "Yazý tipi yoðunluðu."
 
@@ -3863,12 +3921,10 @@ msgstr "'%s' yolu çok fazla \"..\" içeriyor !"
 
 #: ../src/generic/dbgrptg.cpp:308
 msgid ""
-"The report contains the files listed below. If any of these files contain "
-"private information,\n"
+"The report contains the files listed below. If any of these files contain private information,\n"
 "please uncheck them and they will be removed from the report.\n"
 msgstr ""
-"Bu rapor aþaðýdaki dosyalarý içermektedir. Eðer bu dosyalardan herhangi biri "
-"özel bilgiler içeriyorsa,\n"
+"Bu rapor aþaðýdaki dosyalarý içermektedir. Eðer bu dosyalardan herhangi biri özel bilgiler içeriyorsa,\n"
 "rapordan çýkarmak için lütfen onlarýn iþaretini kaldýrýnýz.\n"
 
 #: ../src/common/cmdline.cpp:883
@@ -3887,32 +3943,19 @@ msgstr "'%s' seçeneði için deðer belirtilmelidir."
 
 #: ../src/msw/dialup.cpp:455
 #, c-format
-msgid ""
-"The version of remote access service (RAS) installed on this machine is "
-"tooold, please upgrade (the following required function is missing: %s)."
-msgstr ""
-"Bu makinede kurulu Uzak Eriþim Hizmeti (RAS) sürümü çok eski, lütfen "
-"yenileyiniz (gereken þu iþlev yok: %s)."
+msgid "The version of remote access service (RAS) installed on this machine is tooold, please upgrade (the following required function is missing: %s)."
+msgstr "Bu makinede kurulu Uzak Eriþim Hizmeti (RAS) sürümü çok eski, lütfen yenileyiniz (gereken þu iþlev yok: %s)."
 
 #: ../src/html/htmprint.cpp:601
-msgid ""
-"There was a problem during page setup: you may need to set a default printer."
-msgstr ""
-"Sayfa ayarlarý sýrasýnda bir hata oluþtu: bir varsayýlan yazýcý belirle "
-"meniz gerekebilir."
+msgid "There was a problem during page setup: you may need to set a default printer."
+msgstr "Sayfa ayarlarý sýrasýnda bir hata oluþtu: bir varsayýlan yazýcý belirle meniz gerekebilir."
 
 #: ../src/msw/datectrl.cpp:109
-msgid ""
-"This system doesn't support date picker control, please upgrade your version "
-"of comctl32.dll"
-msgstr ""
-"Bu sistem tarih seçici öðesini desteklemiyor, lütfen comctl32.dll sürümünüzü "
-"yükseltiniz"
+msgid "This system doesn't support date picker control, please upgrade your version of comctl32.dll"
+msgstr "Bu sistem tarih seçici öðesini desteklemiyor, lütfen comctl32.dll sürümünüzü yükseltiniz"
 
 #: ../src/msw/thread.cpp:1206
-msgid ""
-"Thread module initialization failed: can not store value in thread local "
-"storage"
+msgid "Thread module initialization failed: can not store value in thread local storage"
 msgstr "Ýþparçacýðý birimi baþlatma baþarýsýz: yerel depoya deðer koyulamýyor"
 
 #: ../src/unix/threadpsx.cpp:1603
@@ -3920,11 +3963,8 @@ msgid "Thread module initialization failed: failed to create thread key"
 msgstr "Ýþparçacýðý birimi baþlatma baþarýsýz: anahtar yaratma baþarýsýz"
 
 #: ../src/msw/thread.cpp:1194
-msgid ""
-"Thread module initialization failed: impossible to allocate index in thread "
-"local storage"
-msgstr ""
-"Ýþparçacýðý birimi baþlatma baþarýsýz: yerel depoda dizin oluþturulamýyor"
+msgid "Thread module initialization failed: impossible to allocate index in thread local storage"
+msgstr "Ýþparçacýðý birimi baþlatma baþarýsýz: yerel depoda dizin oluþturulamýyor"
 
 #: ../src/unix/threadpsx.cpp:1108
 msgid "Thread priority setting is ignored."
@@ -3942,7 +3982,8 @@ msgstr "Dikey döþe"
 msgid "Timeout while waiting for FTP server to connect, try passive mode."
 msgstr "FTP sunucusuna baðlanmada zamanaþýmý oldu, pasif durumu deneyiniz."
 
-#: ../src/msw/timer.cpp:116 ../src/os2/timer.cpp:141
+#: ../src/msw/timer.cpp:116
+#: ../src/os2/timer.cpp:141
 msgid "Timer creation failed."
 msgstr "Zamanlayýcý yaratýlamadý"
 
@@ -3971,7 +4012,8 @@ msgstr "Üst boþluk (mm):"
 msgid "Trying to remove file '%s' from memory VFS, but it is not loaded!"
 msgstr "Bellek VFS'den '%s' dosyasýný silme deneniyor, ama dosya yüklü deðil!"
 
-#: ../src/common/sckaddr.cpp:146 ../src/common/sckaddr.cpp:250
+#: ../src/common/sckaddr.cpp:146
+#: ../src/common/sckaddr.cpp:250
 msgid "Trying to solve a NULL hostname: giving up"
 msgstr "NULL Makine adý çözme deneniyor: vazgeçildi"
 
@@ -3983,7 +4025,8 @@ msgstr "Türkçe (ISO-8859-9)"
 msgid "Type"
 msgstr "Tip"
 
-#: ../src/common/xtistrm.cpp:281 ../src/common/xtixml.cpp:351
+#: ../src/common/xtistrm.cpp:281
+#: ../src/common/xtixml.cpp:351
 #: ../src/common/xtixml.cpp:498
 msgid "Type must have enum - long conversion"
 msgstr "Tip enum - long çevrimini desteklemelidir"
@@ -4085,7 +4128,8 @@ msgstr "%s dosyasýnda bilinmeyen alan, satýr %d: '%s'."
 msgid "Unknown long option '%s'"
 msgstr "Blinmeyen long seçenek '%s'"
 
-#: ../src/common/cmdline.cpp:608 ../src/common/cmdline.cpp:629
+#: ../src/common/cmdline.cpp:608
+#: ../src/common/cmdline.cpp:629
 #, c-format
 msgid "Unknown option '%s'"
 msgstr "Bilinmeyen seçenek '%s'"
@@ -4104,7 +4148,8 @@ msgstr "Bilinmeyen özellik %s"
 msgid "Unmatched '{' in an entry for mime type %s."
 msgstr "%s MIME tipi girdisinde uymayan '{'."
 
-#: ../src/common/cmdproc.cpp:261 ../src/common/cmdproc.cpp:287
+#: ../src/common/cmdproc.cpp:261
+#: ../src/common/cmdproc.cpp:287
 #: ../src/common/cmdproc.cpp:307
 msgid "Unnamed command"
 msgstr "Adsýz komut"
@@ -4114,8 +4159,10 @@ msgstr "Adsýz komut"
 msgid "Unrecognized style %s while parsing resource."
 msgstr "Kaynak ayrýþtýrýlýrken tanýmlanamayan %s stili."
 
-#: ../src/mac/carbon/clipbrd.cpp:68 ../src/mac/classic/clipbrd.cpp:64
-#: ../src/msw/clipbrd.cpp:273 ../src/msw/clipbrd.cpp:445
+#: ../src/mac/carbon/clipbrd.cpp:68
+#: ../src/mac/classic/clipbrd.cpp:64
+#: ../src/msw/clipbrd.cpp:273
+#: ../src/msw/clipbrd.cpp:445
 msgid "Unsupported clipboard format."
 msgstr "Desteklenmeyen pano biçemi."
 
@@ -4177,7 +4224,8 @@ msgstr "Batý Avrupa (ISO-8859-1)"
 msgid "Western European with Euro (ISO-8859-15)"
 msgstr "Batý Avrupa (Euro) (ISO-8859-15)"
 
-#: ../src/generic/fontdlgg.cpp:339 ../src/generic/fontdlgg.cpp:341
+#: ../src/generic/fontdlgg.cpp:339
+#: ../src/generic/fontdlgg.cpp:341
 msgid "Whether the font is underlined."
 msgstr "Yazý tipi alt çizgili mi."
 
@@ -4278,9 +4326,8 @@ msgid "Windows Server 2003 (build %lu"
 msgstr "Windows Server 2003 (oluþturma %lu"
 
 #: ../src/common/fmapbase.cpp:121
-#, fuzzy
 msgid "Windows Thai (CP 874)"
-msgstr "Windows Baltýk (CP 1257)"
+msgstr "Windows Tai (CP 874)"
 
 #: ../src/common/fmapbase.cpp:130
 msgid "Windows Turkish (CP 1254)"
@@ -4313,7 +4360,8 @@ msgstr "XML ayrýþtýrma hatasý: '%s', satýr %d"
 msgid "XPM: Malformed pixel data!"
 msgstr "XPM: Bozuk piksel verisi!"
 
-#: ../src/common/xpmdecod.cpp:712 ../src/common/xpmdecod.cpp:721
+#: ../src/common/xpmdecod.cpp:712
+#: ../src/common/xpmdecod.cpp:721
 #, c-format
 msgid "XPM: malformed colour definition '%s'!"
 msgstr "XPM: bozuk renk tanýmý '%s'!"
@@ -4323,7 +4371,8 @@ msgstr "XPM: bozuk renk tanýmý '%s'!"
 msgid "XRC resource '%s' (class '%s') not found!"
 msgstr "XRC '%s' kaynaðý (sýnýf '%s') bulunamadý!"
 
-#: ../src/xrc/xmlres.cpp:1080 ../src/xrc/xmlres.cpp:1092
+#: ../src/xrc/xmlres.cpp:1080
+#: ../src/xrc/xmlres.cpp:1092
 #, c-format
 msgid "XRC resource: Cannot create bitmap from '%s'."
 msgstr "XRC kaynaðý: Ýkieþlem '%s''den yaratýlamadý."
@@ -4333,8 +4382,10 @@ msgstr "XRC kaynaðý: Ýkieþlem '%s''den yaratýlamadý."
 msgid "XRC resource: Incorrect colour specification '%s' for property '%s'."
 msgstr "XRC kaynaðý: Hatalý '%s' renk tanýmý, '%s' özelliði için."
 
-#: ../src/mac/carbon/msgdlg.cpp:59 ../src/mac/carbon/msgdlg.cpp:142
-#: ../src/mac/classic/msgdlg.cpp:57 ../src/mac/classic/msgdlg.cpp:139
+#: ../src/mac/carbon/msgdlg.cpp:59
+#: ../src/mac/carbon/msgdlg.cpp:142
+#: ../src/mac/classic/msgdlg.cpp:57
+#: ../src/mac/classic/msgdlg.cpp:139
 #: ../src/motif/msgdlg.cpp:204
 msgid "Yes"
 msgstr "Evet"
@@ -4365,8 +4416,7 @@ msgstr "bir DDEML uygulamasý uzun yarýþ durumu yarattý."
 
 #: ../src/msw/dde.cpp:1048
 msgid ""
-"a DDEML function was called without first calling the DdeInitialize "
-"function,\n"
+"a DDEML function was called without first calling the DdeInitialize function,\n"
 "or an invalid instance identifier\n"
 "was passed to a DDEML function."
 msgstr ""
@@ -4488,7 +4538,7 @@ msgstr "kalýn"
 
 #: ../src/os2/iniconf.cpp:451
 msgid "buffer is too small for Windows directory."
-msgstr ""
+msgstr "arabellek Windows klasörü için çok küçük."
 
 #: ../src/common/ffile.cpp:91
 #, c-format
@@ -4518,14 +4568,13 @@ msgstr "kullanýcý yapýlandýrma dosyasý '%s' silinemiyor"
 #: ../src/common/file.cpp:457
 #, c-format
 msgid "can't determine if the end of file is reached on descriptor %d"
-msgstr ""
-"betimleyici %d üstündeki dosyanýn sonuna ulaþýlýp ulaþýlamadýðý tesbit "
-"edilemiyor"
+msgstr "betimleyici %d üstündeki dosyanýn sonuna ulaþýlýp ulaþýlamadýðý tesbit edilemiyor"
 
-#: ../src/msdos/utilsdos.cpp:307 ../src/msdos/utilsdos.cpp:466
-#, fuzzy, c-format
+#: ../src/msdos/utilsdos.cpp:307
+#: ../src/msdos/utilsdos.cpp:466
+#, c-format
 msgid "can't execute '%s'"
-msgstr "'%s' çalýþtýrýlamadý\n"
+msgstr "'%s' çalýþtýrýlamadý"
 
 #: ../src/common/zipstrm.cpp:1357
 msgid "can't find central directory in zip"
@@ -4545,7 +4594,8 @@ msgstr "kullanýcýnýn EV'i bulunamýyor, geçerli klasör kullanýlýyor."
 msgid "can't flush file descriptor %d"
 msgstr "dosya betimleyicisi %d temizlenemiyor"
 
-#: ../src/common/file.cpp:399 ../src/msw/wince/filefnwce.cpp:202
+#: ../src/common/file.cpp:399
+#: ../src/msw/wince/filefnwce.cpp:202
 #, c-format
 msgid "can't get seek position on file descriptor %d"
 msgstr "dosya betimleyicisi %d üstündeki arama yeri alýnamýyor"
@@ -4554,7 +4604,8 @@ msgstr "dosya betimleyicisi %d üstündeki arama yeri alýnamýyor"
 msgid "can't load any font, aborting"
 msgstr "hiç yazý tipi yüklenemedi, durduruluyor"
 
-#: ../src/common/ffile.cpp:75 ../src/common/file.cpp:271
+#: ../src/common/ffile.cpp:75
+#: ../src/common/file.cpp:271
 #, c-format
 msgid "can't open file '%s'"
 msgstr "'%s' dosyasý açýlamýyor"
@@ -4600,7 +4651,8 @@ msgstr "'%s' dosyasý silinemedi"
 msgid "can't remove temporary file '%s'"
 msgstr "geçici '%s' dosyasý silinemedi"
 
-#: ../src/common/file.cpp:385 ../src/msw/wince/filefnwce.cpp:189
+#: ../src/common/file.cpp:385
+#: ../src/msw/wince/filefnwce.cpp:189
 #, c-format
 msgid "can't seek on file descriptor %d"
 msgstr "dosya betimleyicisi %d üstünde arama yapýlamýyor"
@@ -4608,7 +4660,7 @@ msgstr "dosya betimleyicisi %d üstünde arama yapýlamýyor"
 #: ../src/common/textfile.cpp:196
 #, c-format
 msgid "can't write buffer '%s' to disk."
-msgstr "'%s' tamponu diske yazýlamadý"
+msgstr "'%s' arabelleði diske yazýlamadý"
 
 #: ../src/common/file.cpp:326
 #, c-format
@@ -4648,7 +4700,8 @@ msgstr "tarih"
 msgid "decompression error"
 msgstr "sýkýþtýrma açma hatasý"
 
-#: ../src/common/fmapbase.cpp:705 ../src/common/fmapbase.cpp:737
+#: ../src/common/fmapbase.cpp:705
+#: ../src/common/fmapbase.cpp:737
 msgid "default"
 msgstr "varsayýlan"
 
@@ -4687,9 +4740,9 @@ msgid "error in data format"
 msgstr "veri biçemi hatasý"
 
 #: ../src/msdos/utilsdos.cpp:407
-#, fuzzy, c-format
+#, c-format
 msgid "error opening '%s'"
-msgstr "dosya açma hatasý"
+msgstr "'%s' açma hatasý"
 
 #: ../src/html/chm.cpp:332
 msgid "error opening file"
@@ -4743,8 +4796,7 @@ msgstr "dosya '%s', satýr %d: anahtar '%s' ilk olarak %d satýrýnda bulundu."
 #: ../src/common/fileconf.cpp:706
 #, c-format
 msgid "file '%s', line %d: value for immutable key '%s' ignored."
-msgstr ""
-"dosya '%s', satýr %d: '%s' deðiþmez anahtarý için deðer gözardý edildi."
+msgstr "dosya '%s', satýr %d: '%s' deðiþmez anahtarý için deðer gözardý edildi."
 
 #: ../src/common/fileconf.cpp:628
 #, c-format
@@ -4791,7 +4843,8 @@ msgstr "geçersiz ileti kutusu sonuç deðeri"
 msgid "invalid zip file"
 msgstr "geçersiz zip dosyasý"
 
-#: ../src/common/fontcmn.cpp:586 ../src/common/fontcmn.cpp:650
+#: ../src/common/fontcmn.cpp:586
+#: ../src/common/fontcmn.cpp:650
 msgid "italic"
 msgstr "Eðik"
 
@@ -4943,7 +4996,8 @@ msgstr "üçüncü"
 msgid "thirteenth"
 msgstr "onüçüncü"
 
-#: ../src/common/imagtiff.cpp:145 ../src/common/imagtiff.cpp:161
+#: ../src/common/imagtiff.cpp:145
+#: ../src/common/imagtiff.cpp:161
 #, c-format
 msgid "tiff module: %s"
 msgstr "tiff birimi: %s"
@@ -4986,7 +5040,8 @@ msgstr "bilinmeyen"
 msgid "unknown class %s"
 msgstr "bilinmeyen sýnýf %s"
 
-#: ../src/common/regex.cpp:163 ../src/html/chm.cpp:352
+#: ../src/common/regex.cpp:163
+#: ../src/html/chm.cpp:352
 msgid "unknown error"
 msgstr "bilinmeyen hata"
 
@@ -4999,7 +5054,8 @@ msgstr "bilinmeyen hata (hata kodu %08x)."
 msgid "unknown line terminator"
 msgstr "bilinmeyen satýr sonlayýcý"
 
-#: ../src/common/file.cpp:367 ../src/msw/wince/filefnwce.cpp:170
+#: ../src/common/file.cpp:367
+#: ../src/msw/wince/filefnwce.cpp:170
 msgid "unknown seek origin"
 msgstr "bilinmeyen arama baþlangýcý"
 
@@ -5017,7 +5073,8 @@ msgstr "isimsiz"
 msgid "unnamed%d"
 msgstr "isimsiz%d"
 
-#: ../src/common/zipstrm.cpp:1660 ../src/common/zipstrm.cpp:2030
+#: ../src/common/zipstrm.cpp:1660
+#: ../src/common/zipstrm.cpp:2030
 msgid "unsupported Zip compression method"
 msgstr "desteklemeyen Zip sýkýþtýrma yöntemi"
 
@@ -5042,12 +5099,15 @@ msgstr "yazýlýyor"
 msgid "wxGetTimeOfDay failed."
 msgstr "wxGetTimeOfDay baþarýsýz."
 
-#: ../src/common/socket.cpp:415 ../src/common/socket.cpp:469
-#: ../src/mac/carbon/cfsocket.cpp:452 ../src/mac/carbon/cfsocket.cpp:506
+#: ../src/common/socket.cpp:415
+#: ../src/common/socket.cpp:469
+#: ../src/mac/carbon/cfsocket.cpp:452
+#: ../src/mac/carbon/cfsocket.cpp:506
 msgid "wxSocket: invalid signature in ReadMsg."
 msgstr "wxSocket: ReadMsg içinde geçersiz imza."
 
-#: ../src/common/socket.cpp:966 ../src/mac/carbon/cfsocket.cpp:1006
+#: ../src/common/socket.cpp:966
+#: ../src/mac/carbon/cfsocket.cpp:1006
 msgid "wxSocket: unknown event!."
 msgstr "wxSocket: bilinmeyen olay!."
 
@@ -5064,7 +5124,8 @@ msgstr "wxWidgets görüntüyü açamadý. Çýkýlýyor."
 msgid "yesterday"
 msgstr "dün"
 
-#: ../src/common/zstream.cpp:165 ../src/common/zstream.cpp:315
+#: ../src/common/zstream.cpp:165
+#: ../src/common/zstream.cpp:315
 #, c-format
 msgid "zlib error %d"
 msgstr "zlib hatasý %d"
@@ -5079,30 +5140,23 @@ msgstr "|<<"
 #~ msgstr ""
 #~ "Yýðýn geri-izleri alýnamadý:\n"
 #~ "%s"
-
 #~ msgid "Loading Grey Ascii PNM image is not yet implemented."
 #~ msgstr "Gri Ascii PNM imaj yükleme henüz uygulanmadý."
-
 #~ msgid "Loading Grey Raw PNM image is not yet implemented."
 #~ msgstr "Gri Ham PNM imaj yükleme henüz uygulanmadý."
-
 #~ msgid "Cannot wait on thread to exit."
 #~ msgstr "Ýþ parçacýðýnýn bitmesi beklenemiyor."
-
 #~ msgid "Could not load Rich Edit DLL '%s'"
 #~ msgstr "Zengin Metin Düzenleyicisi DLL '%s' yüklenemedi"
-
 #~ msgid "ZIP handler currently supports only local files!"
 #~ msgstr "ZIP iþleyici þimdilik sadece yerel dosyalarý destekler!"
-
 #~ msgid ""
 #~ "can't seek on file descriptor %d, large files support is not enabled."
 #~ msgstr ""
 #~ "dosya betimleyicisi %d üstünde arama yapýlamýyor, büyük dosya desteði "
 #~ "aktif deðil."
-
 #~ msgid "More..."
 #~ msgstr "Daha..."
-
 #~ msgid "Setup"
 #~ msgstr "Kur"
+
