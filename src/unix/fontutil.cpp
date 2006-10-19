@@ -44,10 +44,15 @@
 #include "pango/pango.h"
 
 #ifdef __WXGTK20__
-#include "wx/gtk/private.h"
-extern GtkWidget *wxGetRootWindow();
+    #include "wx/gtk/private.h"
+    extern GtkWidget *wxGetRootWindow();
+
+    #define wxPANGO_CONV wxGTK_CONV_SYS
 #else
-#include "wx/x11/private.h"
+    #include "wx/x11/private.h"
+    #include "wx/gtk/private/string.h"
+
+    #define wxPANGO_CONV(s) (wxConvUTF8.cWX2MB((s)))
 #endif
 
 // ----------------------------------------------------------------------------
@@ -263,7 +268,7 @@ void wxNativeFontInfo::SetUnderlined(bool WXUNUSED(underlined))
 
 bool wxNativeFontInfo::SetFaceName(const wxString& facename)
 {
-    pango_font_description_set_family(description, wxGTK_CONV_SYS(facename));
+    pango_font_description_set_family(description, wxPANGO_CONV(facename));
     return true;
 }
 
@@ -309,7 +314,7 @@ bool wxNativeFontInfo::FromString(const wxString& s)
         }
     }
 
-    description = pango_font_description_from_string( wxGTK_CONV_SYS( str ) );
+    description = pango_font_description_from_string(wxPANGO_CONV(str));
 
     // ensure a valid facename is selected
     if (!wxFontEnumerator::IsValidFacename(GetFaceName()))
