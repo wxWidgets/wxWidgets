@@ -1295,9 +1295,7 @@ wxChar *wxGetTempFileName(const wxString& prefix, wxChar *buf)
 bool wxGetTempFileName(const wxString& prefix, wxString& buf)
 {
 #if wxUSE_FILE
-    wxChar *cbuf = wxGetTempFileName(prefix);
-    buf = cbuf;
-    delete [] buf;
+    buf = wxFileName::CreateTempFileName(prefix);
 
     return !buf.empty();
 #else // !wxUSE_FILE
