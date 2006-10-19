@@ -804,15 +804,7 @@ bool wxGetKeyState(wxKeyCode key)
     wxASSERT_MSG(key != WXK_LBUTTON && key != WXK_RBUTTON && key !=
         WXK_MBUTTON, wxT("can't use wxGetKeyState() for mouse buttons"));
 
-#if defined(__WXX11__)
-    Display *pDisplay = (Display*) wxApp::GetDisplay();
-#elif defined(__WXGTK__)
-    Display *pDisplay = GDK_DISPLAY();
-#elif defined(__WXMOTIF__)
-    Display *pDisplay = (Display*) (wxTheApp ? wxTheApp->GetInitialDisplay() : NULL);
-#else
-#error  Add code to get the DISPLAY for this platform
-#endif
+    Display *pDisplay = (Display*) wxGetDisplay();
 
     int iKey = wxCharCodeWXToX(key);
     int          iKeyMask = 0;
@@ -825,19 +817,21 @@ bool wxGetKeyState(wxKeyCode key)
         return false;
 
     if ( IsModifierKey(iKey) )  // If iKey is a modifier key, use a different method
-        {  for (int i = 0; i < 8; ++i)
     {
-        if ( map->modifiermap[map->max_keypermod * i] == keyCode)
+        for (int i = 0; i < 8; ++i)
         {
-            iKeyMask = 1 << i;
+            if ( map->modifiermap[map->max_keypermod * i] == keyCode)
+            {
+                iKeyMask = 1 << i;
+            }
         }
+
+        XQueryPointer(pDisplay, DefaultRootWindow(pDisplay), &wDummy1, &wDummy2,
+                        &iDummy3, &iDummy4, &iDummy5, &iDummy6, &iMask );
+        XFreeModifiermap(map);
+        return (iMask & iKeyMask) != 0;
     }
 
-    XQueryPointer(pDisplay, DefaultRootWindow(pDisplay), &wDummy1, &wDummy2,
-                  &iDummy3, &iDummy4, &iDummy5, &iDummy6, &iMask );
-    XFreeModifiermap(map);
-    return (iMask & iKeyMask) != 0;
-        }
     // From the XLib manual:
     // The XQueryKeymap() function returns a bit vector for the logical state of the keyboard, 
     // where each bit set to 1 indicates that the corresponding key is currently pressed down. 

@@ -83,7 +83,6 @@ static int wxXErrorHandler(Display *dpy, XErrorEvent *xevent)
 //------------------------------------------------------------------------
 
 long wxApp::sm_lastMessageTime = 0;
-WXDisplay *wxApp::ms_display = NULL;
 
 IMPLEMENT_DYNAMIC_CLASS(wxApp, wxEvtHandler)
 
@@ -165,34 +164,24 @@ bool wxApp::Initialize(int& argC, wxChar **argV)
         }
     }
 
-    // X11 display stuff
-    Display *xdisplay;
-    if ( displayName.empty() )
-        xdisplay = XOpenDisplay( NULL );
-    else
-        xdisplay = XOpenDisplay( displayName.ToAscii() );
-    if (!xdisplay)
+    // open and set up the X11 display
+    if ( !wxSetDisplay(displayName) )
     {
-        wxLogError( _("wxWidgets could not open display. Exiting.") );
+        wxLogError(_("wxWidgets could not open display. Exiting."));
         return false;
     }
 
+    Display *dpy = wxGlobalDisplay();
     if (syncDisplay)
-        XSynchronize(xdisplay, True);
+        XSynchronize(dpy, True);
 
-    ms_display = (WXDisplay*) xdisplay;
+    XSelectInput(dpy, XDefaultRootWindow(dpy), PropertyChangeMask);
 
-    XSelectInput( xdisplay, XDefaultRootWindow(xdisplay), PropertyChangeMask);
-
-    // Misc.
     wxSetDetectableAutoRepeat( true );
 
-    if ( !wxAppBase::Initialize(argC, argV) )
-    {
-        XCloseDisplay(xdisplay);
 
+    if ( !wxAppBase::Initialize(argC, argV) )
         return false;
-    }
 
 #if wxUSE_UNICODE
     // Glib's type system required by Pango
@@ -221,12 +210,8 @@ void wxApp::CleanUp()
 
 wxApp::wxApp()
 {
-    // TODO: parse the command line
-    argc = 0;
-    argv = NULL;
-
-    m_mainColormap = (WXColormap) NULL;
-    m_topLevelWidget = (WXWindow) NULL;
+    m_mainColormap = NULL;
+    m_topLevelWidget = NULL;
     m_maxRequestSize = 0;
     m_showIconic = false;
     m_initialSize = wxDefaultSize;
@@ -678,13 +663,14 @@ bool wxApp::OnInitGui()
     if (!wxAppBase::OnInitGui())
         return false;
 
-    GetMainColormap( wxApp::GetDisplay() );
+    Display *dpy = wxGlobalDisplay();
+    GetMainColormap(dpy);
 
-    m_maxRequestSize = XMaxRequestSize( (Display*) wxApp::GetDisplay() );
+    m_maxRequestSize = XMaxRequestSize(dpy);
 
 #if !wxUSE_NANOX
     m_visualInfo = new wxXVisualInfo;
-    wxFillXVisualInfo( m_visualInfo, (Display*) wxApp::GetDisplay() );
+    wxFillXVisualInfo(m_visualInfo, dpy);
 #endif
 
     return true;
@@ -700,33 +686,34 @@ bool wxApp::OnInitGui()
 
 PangoContext* wxApp::GetPangoContext()
 {
-    static PangoContext *ret = NULL;
-    if (ret)
-        return ret;
-
-    Display *xdisplay = (Display*) wxApp::GetDisplay();
+    static PangoContext *s_pangoContext = NULL;
+    if ( !s_pangoContext )
+    {
+        Display *dpy = wxGlobalDisplay();
 
 #ifdef HAVE_PANGO_XFT
-    int xscreen = DefaultScreen(xdisplay);
-    static int use_xft = -1;
-    if (use_xft == -1)
-    {
-        wxString val = wxGetenv( L"GDK_USE_XFT" );
-        use_xft = (val == L"1");
+        int xscreen = DefaultScreen(dpy);
+        static int use_xft = -1;
+        if (use_xft == -1)
+        {
+            wxString val = wxGetenv( L"GDK_USE_XFT" );
+            use_xft = val == L"1";
+        }
+
+        if (use_xft)
+            s_pangoContext = pango_xft_get_context(dpy, xscreen);
+        else
+#endif // HAVE_PANGO_XFT
+            s_pangoContext = pango_x_get_context(dpy);
+
+        if (!PANGO_IS_CONTEXT(s_pangoContext))
+            wxLogError( wxT("No pango context.") );
     }
 
-    if (use_xft)
-        ret = pango_xft_get_context( xdisplay, xscreen );
-    else
-#endif
-        ret = pango_x_get_context( xdisplay );
-
-    if (!PANGO_IS_CONTEXT(ret))
-        wxLogError( wxT("No pango context.") );
-
-    return ret;
+    return s_pangoContext;
 }
-#endif
+
+#endif // wxUSE_UNICODE
 
 WXColormap wxApp::GetMainColormap(WXDisplay* display)
 {

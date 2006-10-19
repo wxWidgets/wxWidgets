@@ -1694,8 +1694,14 @@ int wxNoOptimize::ms_count = 0;
 class wxWinModule : public wxModule
 {
 public:
-    bool OnInit();
-    void OnExit();
+    wxWinModule()
+    {
+        // we must be cleaned up before the display is closed
+        AddDependency(wxClassInfo::FindClass(_T("wxX11DisplayModule")));
+    }
+
+    virtual bool OnInit();
+    virtual void OnExit();
 
 private:
     DECLARE_DYNAMIC_CLASS(wxWinModule)

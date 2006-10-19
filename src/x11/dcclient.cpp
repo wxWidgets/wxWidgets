@@ -2366,8 +2366,15 @@ wxPaintDC::wxPaintDC(wxWindow* window)
 class wxDCModule : public wxModule
 {
 public:
-    bool OnInit();
-    void OnExit();
+    // we must be cleaned up before wxDisplayModule which closes the global
+    // display
+    wxDCModule()
+    {
+        AddDependency(wxClassInfo::FindClass(_T("wxX11DisplayModule")));
+    }
+
+    bool OnInit() { wxInitGCPool(); return true; }
+    void OnExit() { wxCleanUpGCPool(); }
 
 private:
     DECLARE_DYNAMIC_CLASS(wxDCModule)
@@ -2375,13 +2382,3 @@ private:
 
 IMPLEMENT_DYNAMIC_CLASS(wxDCModule, wxModule)
 
-bool wxDCModule::OnInit()
-{
-    wxInitGCPool();
-    return true;
-}
-
-void wxDCModule::OnExit()
-{
-    wxCleanUpGCPool();
-}
