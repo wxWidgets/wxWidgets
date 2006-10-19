@@ -1823,6 +1823,10 @@ SOURCE=.\richtext\richtexthtml.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\richtext\richtextstyledlg.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\richtext\richtextstyles.cpp
 # End Source File
 # Begin Source File
@@ -3056,6 +3060,10 @@ SOURCE=..\include\wx\richtext\richtextctrl.h
 # Begin Source File
 
 SOURCE=..\include\wx\richtext\richtextformatdlg.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\richtext\richtextstyledlg.h
 # End Source File
 # Begin Source File
 
