@@ -157,5 +157,5 @@ public:
 
 #endif // wxUSE_SOUND
 
-#endif
-    // _WX_SOUND_H_
+#endif // _WX_SOUND_H_
+
