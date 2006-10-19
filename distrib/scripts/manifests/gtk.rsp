@@ -9,6 +9,7 @@ docs/gtk/makewxgtk
 include/wx/gtk/*.h
 include/wx/gtk/*.xpm
 include/wx/gtk/gnome/*.h
+include/wx/gtk/private/*.h
 
 include/wx/mac/corefoundation/*.h
 src/mac/corefoundation/*.cpp
