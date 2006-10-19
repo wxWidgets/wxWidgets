@@ -406,18 +406,6 @@ class Brush(GDIObject):
     A brush is a drawing tool for filling in areas. It is used for
     painting the background of rectangles, ellipses, etc. when drawing on
     a `wx.DC`.  It has a colour and a style.
-
-    :warning: Do not create instances of wx.Brush before the `wx.App`
-        object has been created because, depending on the platform,
-        required internal data structures may not have been initialized
-        yet.  Instead create your brushes in the app's OnInit or as they
-        are needed for drawing.
-
-    :note: On monochrome displays all brushes are white, unless the colour
-        really is black.
-
-    :see: `wx.BrushList`, `wx.DC`, `wx.DC.SetBrush`
-
     """
     thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
     __repr__ = _swig_repr
@@ -425,24 +413,7 @@ class Brush(GDIObject):
         """
         __init__(self, Colour colour, int style=SOLID) -> Brush
 
-        Constructs a brush from a `wx.Colour` object and a style.The style parameter may be one of the following:
-
-            ===================   =============================
-            Style                 Meaning
-            ===================   =============================
-            wx.TRANSPARENT        Transparent (no fill).
-            wx.SOLID              Solid.
-            wx.STIPPLE            Uses a bitmap as a stipple.
-            wx.BDIAGONAL_HATCH    Backward diagonal hatch.
-            wx.CROSSDIAG_HATCH    Cross-diagonal hatch.
-            wx.FDIAGONAL_HATCH    Forward diagonal hatch.
-            wx.CROSS_HATCH        Cross hatch.
-            wx.HORIZONTAL_HATCH   Horizontal hatch.
-            wx.VERTICAL_HATCH     Vertical hatch.
-            ===================   =============================
-
-        :see: `wx.BrushFromBitmap`
-
+        Constructs a brush from a `wx.Colour` object and a style.
         """
         _gdi_.Brush_swiginit(self,_gdi_.new_Brush(*args, **kwargs))
     __swig_destroy__ = _gdi_.delete_Brush
@@ -538,23 +509,6 @@ class Bitmap(GDIObject):
     device context (instance of `wx.MemoryDC`). This enables the bitmap to
     be copied to a window or memory device context using `wx.DC.Blit`, or
     to be used as a drawing surface.
-
-    The BMP and XMP image file formats are supported on all platforms by
-    wx.Bitmap.  Other formats are automatically loaded by `wx.Image` and
-    converted to a wx.Bitmap, so any image file format supported by
-    `wx.Image` can be used.
-
-    :todo: Add wrappers and support for raw bitmap data access.  Can this
-           be be put into Python without losing the speed benefits of the
-           teplates and iterators in rawbmp.h?
-
-    :todo: Find a way to do very efficient PIL Image <--> wx.Bitmap
-           converstions.
-
-    :see: `wx.EmptyBitmap`, `wx.BitmapFromIcon`, `wx.BitmapFromImage`,
-          `wx.BitmapFromXPMData`, `wx.BitmapFromBits`, `wx.BitmapFromBuffer`,
-          `wx.BitmapFromBufferRGBA`, `wx.Image`
-
     """
     thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
     __repr__ = _swig_repr
@@ -563,32 +517,6 @@ class Bitmap(GDIObject):
         __init__(self, String name, int type=BITMAP_TYPE_ANY) -> Bitmap
 
         Loads a bitmap from a file.
-            :param name:  Name of the file to load the bitmap from.
-            :param type: The type of image to expect.  Can be one of the following
-                constants (assuming that the neccessary `wx.Image` handlers are
-                loaded):
-
-                * wx.BITMAP_TYPE_ANY
-                * wx.BITMAP_TYPE_BMP
-                * wx.BITMAP_TYPE_ICO
-                * wx.BITMAP_TYPE_CUR
-                * wx.BITMAP_TYPE_XBM
-                * wx.BITMAP_TYPE_XPM
-                * wx.BITMAP_TYPE_TIF
-                * wx.BITMAP_TYPE_GIF
-                * wx.BITMAP_TYPE_PNG
-                * wx.BITMAP_TYPE_JPEG
-                * wx.BITMAP_TYPE_PNM
-                * wx.BITMAP_TYPE_PCX
-                * wx.BITMAP_TYPE_PICT
-                * wx.BITMAP_TYPE_ICON
-                * wx.BITMAP_TYPE_ANI
-                * wx.BITMAP_TYPE_IFF
-
-        :see: Alternate constructors `wx.EmptyBitmap`, `wx.BitmapFromIcon`,
-              `wx.BitmapFromImage`, `wx.BitmapFromXPMData`, `wx.BitmapFromBits`,
-              `wx.BitmapFromBuffer`, `wx.BitmapFromBufferRGBA`,
-
         """
         _gdi_.Bitmap_swiginit(self,_gdi_.new_Bitmap(*args, **kwargs))
     __swig_destroy__ = _gdi_.delete_Bitmap
@@ -1320,40 +1248,6 @@ class Cursor(GDIObject):
     in X, rather than to set it globally as in MS Windows, although a
     global `wx.SetCursor` function is also available for use on MS Windows.
 
-
-    Stock Cursor IDs
-    -----------------
-        ========================    ======================================
-        wx.CURSOR_ARROW             A standard arrow cursor.
-        wx.CURSOR_RIGHT_ARROW       A standard arrow cursor pointing to the right.
-        wx.CURSOR_BLANK             Transparent cursor.
-        wx.CURSOR_BULLSEYE          Bullseye cursor.
-        wx.CURSOR_CHAR              Rectangular character cursor.
-        wx.CURSOR_CROSS             A cross cursor.
-        wx.CURSOR_HAND              A hand cursor.
-        wx.CURSOR_IBEAM             An I-beam cursor (vertical line).
-        wx.CURSOR_LEFT_BUTTON       Represents a mouse with the left button depressed.
-        wx.CURSOR_MAGNIFIER         A magnifier icon.
-        wx.CURSOR_MIDDLE_BUTTON     Represents a mouse with the middle button depressed.
-        wx.CURSOR_NO_ENTRY          A no-entry sign cursor.
-        wx.CURSOR_PAINT_BRUSH       A paintbrush cursor.
-        wx.CURSOR_PENCIL            A pencil cursor.
-        wx.CURSOR_POINT_LEFT        A cursor that points left.
-        wx.CURSOR_POINT_RIGHT       A cursor that points right.
-        wx.CURSOR_QUESTION_ARROW    An arrow and question mark.
-        wx.CURSOR_RIGHT_BUTTON      Represents a mouse with the right button depressed.
-        wx.CURSOR_SIZENESW          A sizing cursor pointing NE-SW.
-        wx.CURSOR_SIZENS            A sizing cursor pointing N-S.
-        wx.CURSOR_SIZENWSE          A sizing cursor pointing NW-SE.
-        wx.CURSOR_SIZEWE            A sizing cursor pointing W-E.
-        wx.CURSOR_SIZING            A general sizing cursor.
-        wx.CURSOR_SPRAYCAN          A spraycan cursor.
-        wx.CURSOR_WAIT              A wait cursor.
-        wx.CURSOR_WATCH             A watch cursor.
-        wx.CURSOR_ARROWWAIT         A cursor with both an arrow and an hourglass, (windows.)
-        ========================    ======================================
-
-
     """
     thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
     __repr__ = _swig_repr
@@ -1364,7 +1258,6 @@ class Cursor(GDIObject):
         Construct a Cursor from a file.  Specify the type of file using
         wx.BITAMP_TYPE* constants, and specify the hotspot if not using a .cur
         file.
-        :see: Alternate constructors `wx.StockCursor`,`wx.CursorFromImage`
         """
         _gdi_.Cursor_swiginit(self,_gdi_.new_Cursor(*args, **kwargs))
     __swig_destroy__ = _gdi_.delete_Cursor
@@ -1393,11 +1286,6 @@ def CursorFromImage(*args, **kwargs):
 
     Constructs a cursor from a `wx.Image`. The mask (if any) will be used
     for setting the transparent portions of the cursor.
-    In MSW the cursor is resized to 32x32 if it was larger.
-
-    In GTK the cursor will be displayed at the size of the image.
-
-    On MacOS the cursor is resized to 16x16 if it was larger.
     """
     val = _gdi_.new_CursorFromImage(*args, **kwargs)
     return val
@@ -1970,71 +1858,6 @@ class Font(GDIObject):
     of a window's text.
 
     You can retrieve the current system font settings with `wx.SystemSettings`.
-
-    The possible values for the family parameter of wx.Font constructor are:
-
-        ========================  =============================
-        wx.FONTFAMILY_DEFAULT     Chooses a default font.
-        wx.FONTFAMILY_DECORATIVE  A decorative font. 
-        wx.FONTFAMILY_ROMAN       A formal, serif font.
-        wx.FONTFAMILY_SCRIPT      A handwriting font. 
-        wx.FONTFAMILY_SWISS       A sans-serif font. 
-        wx.FONTFAMILY_MODERN      Usually a fixed pitch font.    
-        wx.FONTFAMILY_TELETYPE    A teletype font. 
-        ========================  =============================
-
-    The possible values for the weight parameter are:
-
-        ====================  ==
-        wx.FONTWEIGHT_NORMAL
-        wx.FONTWEIGHT_LIGHT
-        wx.FONTWEIGHT_BOLD
-        ====================  ==
-
-    The known font encodings are:
-
-        ===========================       ====================================
-        wx.FONTENCODING_SYSTEM            system default
-        wx.FONTENCODING_DEFAULT           current default encoding
-        wx.FONTENCODING_ISO8859_1         West European (Latin1)
-        wx.FONTENCODING_ISO8859_2         Central and East European (Latin2)
-        wx.FONTENCODING_ISO8859_3         Esperanto (Latin3)
-        wx.FONTENCODING_ISO8859_4         Baltic (old) (Latin4)
-        wx.FONTENCODING_ISO8859_5         Cyrillic
-        wx.FONTENCODING_ISO8859_6         Arabic
-        wx.FONTENCODING_ISO8859_7         Greek
-        wx.FONTENCODING_ISO8859_8         Hebrew
-        wx.FONTENCODING_ISO8859_9         Turkish (Latin5)
-        wx.FONTENCODING_ISO8859_10        Variation of Latin4 (Latin6)
-        wx.FONTENCODING_ISO8859_11        Thai
-        wx.FONTENCODING_ISO8859_12        doesn't exist currently, but put it
-                                          here anyhow to make all ISO8859
-                                          consecutive numbers
-        wx.FONTENCODING_ISO8859_13        Baltic (Latin7)
-        wx.FONTENCODING_ISO8859_14        Latin8
-        wx.FONTENCODING_ISO8859_15        Latin9 (a.k.a. Latin0, includes euro)
-        wx.FONTENCODING_KOI8              Cyrillic charset
-        wx.FONTENCODING_ALTERNATIVE       same as MS-DOS CP866
-        wx.FONTENCODING_BULGARIAN         used under Linux in Bulgaria
-        wx.FONTENCODING_CP437             original MS-DOS codepage
-        wx.FONTENCODING_CP850             CP437 merged with Latin1
-        wx.FONTENCODING_CP852             CP437 merged with Latin2
-        wx.FONTENCODING_CP855             another cyrillic encoding
-        wx.FONTENCODING_CP866             and another one
-        wx.FONTENCODING_CP874             WinThai
-        wx.FONTENCODING_CP1250            WinLatin2
-        wx.FONTENCODING_CP1251            WinCyrillic
-        wx.FONTENCODING_CP1252            WinLatin1
-        wx.FONTENCODING_CP1253            WinGreek (8859-7)
-        wx.FONTENCODING_CP1254            WinTurkish
-        wx.FONTENCODING_CP1255            WinHebrew
-        wx.FONTENCODING_CP1256            WinArabic
-        wx.FONTENCODING_CP1257            WinBaltic (same as Latin 7)
-        wx.FONTENCODING_UTF7              UTF-7 Unicode encoding
-        wx.FONTENCODING_UTF8              UTF-8 Unicode encoding
-        ===========================       ====================================
-
-
     """
     thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
     __repr__ = _swig_repr
@@ -3377,8 +3200,6 @@ class DC(_core.Object):
         Draws a circle with the given center point and radius.  The current
         pen is used for the outline and the current brush for filling the
         shape.
-
-        :see: `DrawEllipse`
         """
         return _gdi_.DC_DrawCircle(*args, **kwargs)
 
@@ -3389,8 +3210,6 @@ class DC(_core.Object):
         Draws a circle with the given center point and radius.  The current
         pen is used for the outline and the current brush for filling the
         shape.
-
-        :see: `DrawEllipse`
         """
         return _gdi_.DC_DrawCirclePoint(*args, **kwargs)
 
@@ -3400,8 +3219,6 @@ class DC(_core.Object):
 
         Draws an ellipse contained in the specified rectangle. The current pen
         is used for the outline and the current brush for filling the shape.
-
-        :see: `DrawCircle`
         """
         return _gdi_.DC_DrawEllipse(*args, **kwargs)
 
@@ -3411,8 +3228,6 @@ class DC(_core.Object):
 
         Draws an ellipse contained in the specified rectangle. The current pen
         is used for the outline and the current brush for filling the shape.
-
-        :see: `DrawCircle`
         """
         return _gdi_.DC_DrawEllipseRect(*args, **kwargs)
 
@@ -3422,8 +3237,6 @@ class DC(_core.Object):
 
         Draws an ellipse contained in the specified rectangle. The current pen
         is used for the outline and the current brush for filling the shape.
-
-        :see: `DrawCircle`
         """
         return _gdi_.DC_DrawEllipsePointSize(*args, **kwargs)
 
@@ -3455,13 +3268,6 @@ class DC(_core.Object):
         *transparent* is true and the bitmap has a transparency mask, (or
         alpha channel on the platforms that support it) then the bitmap will
         be drawn transparently.
-
-        When drawing a mono-bitmap, the current text foreground colour will be
-        used to draw the foreground of the bitmap (all bits set to 1), and the
-        current text background colour to draw the background (all bits set to
-        0).
-
-        :see: `SetTextForeground`, `SetTextBackground` and `wx.MemoryDC`
         """
         return _gdi_.DC_DrawBitmap(*args, **kwargs)
 
@@ -3473,13 +3279,6 @@ class DC(_core.Object):
         *transparent* is true and the bitmap has a transparency mask, (or
         alpha channel on the platforms that support it) then the bitmap will
         be drawn transparently.
-
-        When drawing a mono-bitmap, the current text foreground colour will be
-        used to draw the foreground of the bitmap (all bits set to 1), and the
-        current text background colour to draw the background (all bits set to
-        0).
-
-        :see: `SetTextForeground`, `SetTextBackground` and `wx.MemoryDC`
         """
         return _gdi_.DC_DrawBitmapPoint(*args, **kwargs)
 
@@ -3497,8 +3296,6 @@ class DC(_core.Object):
         **NOTE**: under wxGTK the current logical function is used by this
         function but it is ignored by wxMSW. Thus, you should avoid using
         logical functions with this function in portable programs.
-
-        :see: `DrawRotatedText`
         """
         return _gdi_.DC_DrawText(*args, **kwargs)
 
@@ -3516,8 +3313,6 @@ class DC(_core.Object):
         **NOTE**: under wxGTK the current logical function is used by this
         function but it is ignored by wxMSW. Thus, you should avoid using
         logical functions with this function in portable programs.
-
-        :see: `DrawRotatedText`
         """
         return _gdi_.DC_DrawTextPoint(*args, **kwargs)
 
@@ -3531,8 +3326,6 @@ class DC(_core.Object):
         function. In particular, a font different from ``wx.NORMAL_FONT``
         should be used as the it is not normally a TrueType
         font. ``wx.SWISS_FONT`` is an example of a font which is.
-
-        :see: `DrawText`
         """
         return _gdi_.DC_DrawRotatedText(*args, **kwargs)
 
@@ -3546,8 +3339,6 @@ class DC(_core.Object):
         function. In particular, a font different from ``wx.NORMAL_FONT``
         should be used as the it is not normally a TrueType
         font. ``wx.SWISS_FONT`` is an example of a font which is.
-
-        :see: `DrawText`
         """
         return _gdi_.DC_DrawRotatedTextPoint(*args, **kwargs)
 
@@ -3561,23 +3352,6 @@ class DC(_core.Object):
         coordinates, size of area to copy, source DC, source coordinates,
         logical function, whether to use a bitmap mask, and mask source
         position.
-
-            :param xdest:       Destination device context x position.
-            :param ydest:       Destination device context y position.
-            :param width:       Width of source area to be copied.
-            :param height:      Height of source area to be copied.
-            :param source:      Source device context.
-            :param xsrc:        Source device context x position.
-            :param ysrc:        Source device context y position.
-            :param rop:         Logical function to use: see `SetLogicalFunction`.
-            :param useMask:     If true, Blit does a transparent blit using the mask
-                                that is associated with the bitmap selected into the
-                                source device context.
-            :param xsrcMask:    Source x position on the mask. If both xsrcMask and
-                                ysrcMask are -1, xsrc and ysrc will be assumed for
-                                the mask source position.
-            :param ysrcMask:    Source y position on the mask. 
-
         """
         return _gdi_.DC_Blit(*args, **kwargs)
 
@@ -3590,17 +3364,6 @@ class DC(_core.Object):
         coordinates, size of area to copy, source DC, source coordinates,
         logical function, whether to use a bitmap mask, and mask source
         position.
-
-            :param destPt:      Destination device context position.
-            :param sz:          Size of source area to be copied.
-            :param source:      Source device context.
-            :param srcPt:       Source device context position.
-            :param rop:         Logical function to use: see `SetLogicalFunction`.
-            :param useMask:     If true, Blit does a transparent blit using the mask
-                                that is associated with the bitmap selected into the
-                                source device context.
-            :param srcPtMask:   Source position on the mask. 
-
         """
         return _gdi_.DC_BlitPointSize(*args, **kwargs)
 
@@ -3618,8 +3381,6 @@ class DC(_core.Object):
         restricted. Possible uses for the clipping region are for clipping
         text or for speeding up window redraws when only a known area of the
         screen is damaged.
-
-        :see: `DestroyClippingRegion`, `wx.Region`
         """
         return _gdi_.DC_SetClippingRegion(*args, **kwargs)
 
@@ -3637,8 +3398,6 @@ class DC(_core.Object):
         restricted. Possible uses for the clipping region are for clipping
         text or for speeding up window redraws when only a known area of the
         screen is damaged.
-
-        :see: `DestroyClippingRegion`, `wx.Region`
         """
         return _gdi_.DC_SetClippingRegionPointSize(*args, **kwargs)
 
@@ -3656,8 +3415,6 @@ class DC(_core.Object):
         restricted. Possible uses for the clipping region are for clipping
         text or for speeding up window redraws when only a known area of the
         screen is damaged.
-
-        :see: `DestroyClippingRegion`, `wx.Region`
         """
         return _gdi_.DC_SetClippingRegionAsRegion(*args, **kwargs)
 
@@ -3675,8 +3432,6 @@ class DC(_core.Object):
         restricted. Possible uses for the clipping region are for clipping
         text or for speeding up window redraws when only a known area of the
         screen is damaged.
-
-        :see: `DestroyClippingRegion`, `wx.Region`
         """
         return _gdi_.DC_SetClippingRect(*args, **kwargs)
 
@@ -3714,8 +3469,6 @@ class DC(_core.Object):
         Draw *text* within the specified rectangle, abiding by the alignment
         flags.  Will additionally emphasize the character at *indexAccel* if
         it is not -1.
-
-        :see: `DrawImageLabel`
         """
         return _gdi_.DC_DrawLabel(*args, **kwargs)
 
@@ -3788,8 +3541,6 @@ class DC(_core.Object):
 
         Sets the current font for the DC. It must be a valid font, in
         particular you should not pass ``wx.NullFont`` to this method.
-
-        :see: `wx.Font`
         """
         return _gdi_.DC_SetFont(*args, **kwargs)
 
@@ -3801,8 +3552,6 @@ class DC(_core.Object):
 
         If the argument is ``wx.NullPen``, the current pen is selected out of the
         device context, and the original pen restored.
-
-        :see: `wx.Pen`
         """
         return _gdi_.DC_SetPen(*args, **kwargs)
 
@@ -3815,8 +3564,6 @@ class DC(_core.Object):
         If the argument is ``wx.NullBrush``, the current brush is selected out
         of the device context, and the original brush restored, allowing the
         current brush to be destroyed safely.
-
-        :see: `wx.Brush`
         """
         return _gdi_.DC_SetBrush(*args, **kwargs)
 
@@ -3846,8 +3593,6 @@ class DC(_core.Object):
         window or bitmap associated with the DC. If the argument is
         ``wx.NullPalette``, the current palette is selected out of the device
         context, and the original palette restored.
-
-        :see: `wx.Palette`
         """
         return _gdi_.DC_SetPalette(*args, **kwargs)
 
@@ -3857,8 +3602,6 @@ class DC(_core.Object):
 
         Destroys the current clipping region so that none of the DC is
         clipped.
-
-        :see: `SetClippingRegion`
         """
         return _gdi_.DC_DestroyClippingRegion(*args, **kwargs)
 
@@ -4104,8 +3847,6 @@ class DC(_core.Object):
 
         Returns the current background mode, either ``wx.SOLID`` or
         ``wx.TRANSPARENT``.
-
-        :see: `SetBackgroundMode`
         """
         return _gdi_.DC_GetBackgroundMode(*args, **kwargs)
 
@@ -4114,8 +3855,6 @@ class DC(_core.Object):
         GetBackground(self) -> Brush
 
         Gets the brush used for painting the background.
-
-        :see: `SetBackground`
         """
         return _gdi_.DC_GetBackground(*args, **kwargs)
 
@@ -4199,18 +3938,6 @@ class DC(_core.Object):
             wx.MM_LOMETRIC      Each logical unit is 1/10 of a mm.
             wx.MM_TEXT          Each logical unit is 1 pixel.
             ================    =============================================
-
-        Note that in X, text drawing isn't handled consistently with the
-        mapping mode; a font is always specified in point size. However,
-        setting the user scale (see `SetUserScale`) scales the text
-        appropriately. In Windows, scalable TrueType fonts are always used; in
-        X, results depend on availability of fonts, but usually a reasonable
-        match is found.
-
-        The coordinate origin is always at the top left of the screen/printer.
-
-        Drawing to a Windows printer device context uses the current mapping
-        mode, but mapping mode is currently ignored for PostScript output.
 
         """
         return _gdi_.DC_SetMapMode(*args, **kwargs)
@@ -4684,8 +4411,6 @@ class MemoryDC(DC):
         creating a usable device context. If a bitmap is not given to this
         constructor then don't forget to select a bitmap into the DC before
         drawing on it.
-
-        :see: `MemoryDCFromDC`
         """
         _gdi_.MemoryDC_swiginit(self,_gdi_.new_MemoryDC(*args, **kwargs))
     def SelectObject(*args, **kwargs):
@@ -4885,29 +4610,6 @@ class BufferedDC(MemoryDC):
         __init__(self, DC dc, Size area, int style=BUFFER_CLIENT_AREA) -> BufferedDC
 
         Constructs a buffered DC.
-
-            :param dc: The underlying DC: everything drawn to this object will
-                be flushed to this DC when this object is destroyed. You may
-                pass ``None`` in order to just initialize the buffer, and not
-                flush it.
-
-            :param buffer: If a `wx.Size` object is passed as the 2nd arg then
-                it is the size of the bitmap that will be created internally
-                and used for an implicit buffer. If the 2nd arg is a
-                `wx.Bitmap` then it is the explicit buffer that will be
-                used. Using an explicit buffer is the most efficient solution
-                as the bitmap doesn't have to be recreated each time but it
-                also requires more memory as the bitmap is never freed. The
-                bitmap should have appropriate size, anything drawn outside of
-                its bounds is clipped.  If wx.NullBitmap is used then a new
-                buffer will be allocated that is the same size as the dc.
-
-            :param style: The style parameter indicates whether the supplied buffer is
-                intended to cover the entire virtual size of a `wx.ScrolledWindow` or
-                if it only covers the client area.  Acceptable values are
-                ``wx.BUFFER_VIRTUAL_AREA`` and ``wx.BUFFER_CLIENT_AREA``.
-
-
         """
         _gdi_.BufferedDC_swiginit(self,_gdi_.new_BufferedDC(*args))
         self.__dc = args[0] # save a ref so the other dc will not be deleted before self
@@ -6692,8 +6394,6 @@ class PseudoDC(_core.Object):
         Draws a circle with the given center point and radius.  The current
         pen is used for the outline and the current brush for filling the
         shape.
-
-        :see: `DrawEllipse`
         """
         return _gdi_.PseudoDC_DrawCircle(*args, **kwargs)
 
@@ -6704,8 +6404,6 @@ class PseudoDC(_core.Object):
         Draws a circle with the given center point and radius.  The current
         pen is used for the outline and the current brush for filling the
         shape.
-
-        :see: `DrawEllipse`
         """
         return _gdi_.PseudoDC_DrawCirclePoint(*args, **kwargs)
 
@@ -6715,8 +6413,6 @@ class PseudoDC(_core.Object):
 
         Draws an ellipse contained in the specified rectangle. The current pen
         is used for the outline and the current brush for filling the shape.
-
-        :see: `DrawCircle`
         """
         return _gdi_.PseudoDC_DrawEllipse(*args, **kwargs)
 
@@ -6726,8 +6422,6 @@ class PseudoDC(_core.Object):
 
         Draws an ellipse contained in the specified rectangle. The current pen
         is used for the outline and the current brush for filling the shape.
-
-        :see: `DrawCircle`
         """
         return _gdi_.PseudoDC_DrawEllipseRect(*args, **kwargs)
 
@@ -6737,8 +6431,6 @@ class PseudoDC(_core.Object):
 
         Draws an ellipse contained in the specified rectangle. The current pen
         is used for the outline and the current brush for filling the shape.
-
-        :see: `DrawCircle`
         """
         return _gdi_.PseudoDC_DrawEllipsePointSize(*args, **kwargs)
 
@@ -6770,13 +6462,6 @@ class PseudoDC(_core.Object):
         *transparent* is true and the bitmap has a transparency mask, (or
         alpha channel on the platforms that support it) then the bitmap will
         be drawn transparently.
-
-        When drawing a mono-bitmap, the current text foreground colour will be
-        used to draw the foreground of the bitmap (all bits set to 1), and the
-        current text background colour to draw the background (all bits set to
-        0).
-
-        :see: `SetTextForeground`, `SetTextBackground` and `wx.MemoryDC`
         """
         return _gdi_.PseudoDC_DrawBitmap(*args, **kwargs)
 
@@ -6788,13 +6473,6 @@ class PseudoDC(_core.Object):
         *transparent* is true and the bitmap has a transparency mask, (or
         alpha channel on the platforms that support it) then the bitmap will
         be drawn transparently.
-
-        When drawing a mono-bitmap, the current text foreground colour will be
-        used to draw the foreground of the bitmap (all bits set to 1), and the
-        current text background colour to draw the background (all bits set to
-        0).
-
-        :see: `SetTextForeground`, `SetTextBackground` and `wx.MemoryDC`
         """
         return _gdi_.PseudoDC_DrawBitmapPoint(*args, **kwargs)
 
@@ -6814,8 +6492,6 @@ class PseudoDC(_core.Object):
         **NOTE**: under wxGTK the current logical function is used by this
         function but it is ignored by wxMSW. Thus, you should avoid using
         logical functions with this function in portable programs.
-
-        :see: `DrawRotatedText`
         """
         return _gdi_.PseudoDC_DrawText(*args, **kwargs)
 
@@ -6835,8 +6511,6 @@ class PseudoDC(_core.Object):
         **NOTE**: under wxGTK the current logical function is used by this
         function but it is ignored by wxMSW. Thus, you should avoid using
         logical functions with this function in portable programs.
-
-        :see: `DrawRotatedText`
         """
         return _gdi_.PseudoDC_DrawTextPoint(*args, **kwargs)
 
@@ -6850,8 +6524,6 @@ class PseudoDC(_core.Object):
         function. In particular, a font different from ``wx.NORMAL_FONT``
         should be used as the it is not normally a TrueType
         font. ``wx.SWISS_FONT`` is an example of a font which is.
-
-        :see: `DrawText`
         """
         return _gdi_.PseudoDC_DrawRotatedText(*args, **kwargs)
 
@@ -6865,8 +6537,6 @@ class PseudoDC(_core.Object):
         function. In particular, a font different from ``wx.NORMAL_FONT``
         should be used as the it is not normally a TrueType
         font. ``wx.SWISS_FONT`` is an example of a font which is.
-
-        :see: `DrawText`
         """
         return _gdi_.PseudoDC_DrawRotatedTextPoint(*args, **kwargs)
 
@@ -6904,8 +6574,6 @@ class PseudoDC(_core.Object):
         Draw *text* within the specified rectangle, abiding by the alignment
         flags.  Will additionally emphasize the character at *indexAccel* if
         it is not -1.
-
-        :see: `DrawImageLabel`
         """
         return _gdi_.PseudoDC_DrawLabel(*args, **kwargs)
 
@@ -6945,8 +6613,6 @@ class PseudoDC(_core.Object):
 
         Sets the current font for the DC. It must be a valid font, in
         particular you should not pass ``wx.NullFont`` to this method.
-
-        :see: `wx.Font`
         """
         return _gdi_.PseudoDC_SetFont(*args, **kwargs)
 
@@ -6958,8 +6624,6 @@ class PseudoDC(_core.Object):
 
         If the argument is ``wx.NullPen``, the current pen is selected out of the
         device context, and the original pen restored.
-
-        :see: `wx.Pen`
         """
         return _gdi_.PseudoDC_SetPen(*args, **kwargs)
 
@@ -6972,8 +6636,6 @@ class PseudoDC(_core.Object):
         If the argument is ``wx.NullBrush``, the current brush is selected out
         of the device context, and the original brush restored, allowing the
         current brush to be destroyed safely.
-
-        :see: `wx.Brush`
         """
         return _gdi_.PseudoDC_SetBrush(*args, **kwargs)
 
@@ -7003,8 +6665,6 @@ class PseudoDC(_core.Object):
         window or bitmap associated with the DC. If the argument is
         ``wx.NullPalette``, the current palette is selected out of the device
         context, and the original palette restored.
-
-        :see: `wx.Palette`
         """
         return _gdi_.PseudoDC_SetPalette(*args, **kwargs)
 

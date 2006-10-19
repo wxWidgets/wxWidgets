@@ -2615,98 +2615,6 @@ class ArtProvider(object):
                 ...
                 return bmp
 
-
-    Identifying art resources
-    -------------------------
-
-    Every bitmap is known to wx.ArtProvider under an unique ID that is
-    used when requesting a resource from it. The IDs can have one of the
-    following predefined values.  Additionally, any string recognized by
-    custom art providers registered using `Push` may be used.
-
-    GTK+ Note
-    ---------
-
-    When running under GTK+ 2, GTK+ stock item IDs (e.g. 'gtk-cdrom') may be used
-    as well.  Additionally, if wxGTK was compiled against GTK+ >= 2.4, then it is
-    also possible to load icons from current icon theme by specifying their name
-    without the extension and directory components. Icon themes recognized by GTK+
-    follow the freedesktop.org Icon Themes specification.  Note that themes are
-    not guaranteed to contain all icons, so wx.ArtProvider may return wx.NullBitmap
-    or wx.NullIcon.  The default theme is typically installed in /usr/share/icons/hicolor.
-
-        * wx.ART_ADD_BOOKMARK
-        * wx.ART_DEL_BOOKMARK
-        * wx.ART_HELP_SIDE_PANEL
-        * wx.ART_HELP_SETTINGS
-        * wx.ART_HELP_BOOK
-        * wx.ART_HELP_FOLDER
-        * wx.ART_HELP_PAGE
-        * wx.ART_GO_BACK
-        * wx.ART_GO_FORWARD
-        * wx.ART_GO_UP
-        * wx.ART_GO_DOWN
-        * wx.ART_GO_TO_PARENT
-        * wx.ART_GO_HOME
-        * wx.ART_FILE_OPEN
-        * wx.ART_FILE_SAVE
-        * wx.ART_FILE_SAVE_AS
-        * wx.ART_PRINT
-        * wx.ART_HELP
-        * wx.ART_TIP
-        * wx.ART_REPORT_VIEW
-        * wx.ART_LIST_VIEW
-        * wx.ART_NEW_DIR
-        * wx.ART_HARDDISK
-        * wx.ART_FLOPPY
-        * wx.ART_CDROM
-        * wx.ART_REMOVABLE
-        * wx.ART_FOLDER
-        * wx.ART_FOLDER_OPEN
-        * wx.ART_GO_DIR_UP
-        * wx.ART_EXECUTABLE_FILE
-        * wx.ART_NORMAL_FILE
-        * wx.ART_TICK_MARK
-        * wx.ART_CROSS_MARK
-        * wx.ART_ERROR
-        * wx.ART_QUESTION
-        * wx.ART_WARNING
-        * wx.ART_INFORMATION
-        * wx.ART_MISSING_IMAGE
-        * wx.ART_COPY
-        * wx.ART_CUT
-        * wx.ART_PASTE
-        * wx.ART_DELETE
-        * wx.ART_NEW
-        * wx.ART_UNDO
-        * wx.ART_REDO
-        * wx.ART_QUIT
-        * wx.ART_FIND
-        * wx.ART_FIND_AND_REPLACE
-
-
-    Clients
-    -------
-
-    The Client is the entity that calls wx.ArtProvider's `GetBitmap` or
-    `GetIcon` function.  Client IDs serve as a hint to wx.ArtProvider
-    that is supposed to help it to choose the best looking bitmap. For
-    example it is often desirable to use slightly different icons in menus
-    and toolbars even though they represent the same action (e.g.
-    wx.ART_FILE_OPEN). Remember that this is really only a hint for
-    wx.ArtProvider -- it is common that `wx.ArtProvider.GetBitmap` returns
-    identical bitmap for different client values!
-
-        * wx.ART_TOOLBAR
-        * wx.ART_MENU
-        * wx.ART_FRAME_ICON
-        * wx.ART_CMN_DIALOG
-        * wx.ART_HELP_BROWSER
-        * wx.ART_MESSAGE_BOX
-        * wx.ART_BUTTON
-        * wx.ART_OTHER (used for all requests that don't fit into any
-          of the categories above)
-
     """
     thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
     __repr__ = _swig_repr
@@ -2730,98 +2638,6 @@ class ArtProvider(object):
                 def CreateBitmap(self, artid, client, size):
                     ...
                     return bmp
-
-
-        Identifying art resources
-        -------------------------
-
-        Every bitmap is known to wx.ArtProvider under an unique ID that is
-        used when requesting a resource from it. The IDs can have one of the
-        following predefined values.  Additionally, any string recognized by
-        custom art providers registered using `Push` may be used.
-
-        GTK+ Note
-        ---------
-
-        When running under GTK+ 2, GTK+ stock item IDs (e.g. 'gtk-cdrom') may be used
-        as well.  Additionally, if wxGTK was compiled against GTK+ >= 2.4, then it is
-        also possible to load icons from current icon theme by specifying their name
-        without the extension and directory components. Icon themes recognized by GTK+
-        follow the freedesktop.org Icon Themes specification.  Note that themes are
-        not guaranteed to contain all icons, so wx.ArtProvider may return wx.NullBitmap
-        or wx.NullIcon.  The default theme is typically installed in /usr/share/icons/hicolor.
-
-            * wx.ART_ADD_BOOKMARK
-            * wx.ART_DEL_BOOKMARK
-            * wx.ART_HELP_SIDE_PANEL
-            * wx.ART_HELP_SETTINGS
-            * wx.ART_HELP_BOOK
-            * wx.ART_HELP_FOLDER
-            * wx.ART_HELP_PAGE
-            * wx.ART_GO_BACK
-            * wx.ART_GO_FORWARD
-            * wx.ART_GO_UP
-            * wx.ART_GO_DOWN
-            * wx.ART_GO_TO_PARENT
-            * wx.ART_GO_HOME
-            * wx.ART_FILE_OPEN
-            * wx.ART_FILE_SAVE
-            * wx.ART_FILE_SAVE_AS
-            * wx.ART_PRINT
-            * wx.ART_HELP
-            * wx.ART_TIP
-            * wx.ART_REPORT_VIEW
-            * wx.ART_LIST_VIEW
-            * wx.ART_NEW_DIR
-            * wx.ART_HARDDISK
-            * wx.ART_FLOPPY
-            * wx.ART_CDROM
-            * wx.ART_REMOVABLE
-            * wx.ART_FOLDER
-            * wx.ART_FOLDER_OPEN
-            * wx.ART_GO_DIR_UP
-            * wx.ART_EXECUTABLE_FILE
-            * wx.ART_NORMAL_FILE
-            * wx.ART_TICK_MARK
-            * wx.ART_CROSS_MARK
-            * wx.ART_ERROR
-            * wx.ART_QUESTION
-            * wx.ART_WARNING
-            * wx.ART_INFORMATION
-            * wx.ART_MISSING_IMAGE
-            * wx.ART_COPY
-            * wx.ART_CUT
-            * wx.ART_PASTE
-            * wx.ART_DELETE
-            * wx.ART_NEW
-            * wx.ART_UNDO
-            * wx.ART_REDO
-            * wx.ART_QUIT
-            * wx.ART_FIND
-            * wx.ART_FIND_AND_REPLACE
-
-
-        Clients
-        -------
-
-        The Client is the entity that calls wx.ArtProvider's `GetBitmap` or
-        `GetIcon` function.  Client IDs serve as a hint to wx.ArtProvider
-        that is supposed to help it to choose the best looking bitmap. For
-        example it is often desirable to use slightly different icons in menus
-        and toolbars even though they represent the same action (e.g.
-        wx.ART_FILE_OPEN). Remember that this is really only a hint for
-        wx.ArtProvider -- it is common that `wx.ArtProvider.GetBitmap` returns
-        identical bitmap for different client values!
-
-            * wx.ART_TOOLBAR
-            * wx.ART_MENU
-            * wx.ART_FRAME_ICON
-            * wx.ART_CMN_DIALOG
-            * wx.ART_HELP_BROWSER
-            * wx.ART_MESSAGE_BOX
-            * wx.ART_BUTTON
-            * wx.ART_OTHER (used for all requests that don't fit into any
-              of the categories above)
 
         """
         _misc_.ArtProvider_swiginit(self,_misc_.new_ArtProvider(*args, **kwargs))
@@ -4812,29 +4628,6 @@ class DataFormat(object):
     example, pasting data from the clipboard only if the data is in a
     format the program understands.  A data format is is used to uniquely
     identify this format.
-    On the system level, a data format is usually just a number, (which
-    may be the CLIPFORMAT under Windows or Atom under X11, for example.)
-
-    The standard format IDs are:
-
-        ================    =====================================
-        wx.DF_INVALID       An invalid format
-        wx.DF_TEXT          Text format 
-        wx.DF_BITMAP        A bitmap (wx.Bitmap)
-        wx.DF_METAFILE      A metafile (wx.Metafile, Windows only)
-        wx.DF_FILENAME      A list of filenames
-        wx.DF_HTML          An HTML string. This is only valid on
-                            Windows and non-unicode builds
-        ================    =====================================
-
-    Besies the standard formats, the application may also use custom
-    formats which are identified by their names (strings) and not numeric
-    identifiers. Although internally custom format must be created (or
-    registered) first, you shouldn't care about it because it is done
-    automatically the first time the wxDataFormat object corresponding to
-    a given format name is created.
-
-
     """
     thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
     __repr__ = _swig_repr
@@ -4925,39 +4718,6 @@ class DataObject(object):
     you should instead derive from `wx.PyDataObjectSimple` or use
     `wx.CustomDataObject`.
 
-    Not surprisingly, being 'smart' comes at a price of added
-    complexity. This is reasonable for the situations when you really need
-    to support multiple formats, but may be annoying if you only want to
-    do something simple like cut and paste text.
-
-    To provide a solution for both cases, wxWidgets has two predefined
-    classes which derive from wx.DataObject: `wx.DataObjectSimple` and
-    `wx.DataObjectComposite`.  `wx.DataObjectSimple` is the simplest
-    wx.DataObject possible and only holds data in a single format (such as
-    text or bitmap) and `wx.DataObjectComposite` is the simplest way to
-    implement a wx.DataObject which supports multiple simultaneous formats
-    because it achievs this by simply holding several
-    `wx.DataObjectSimple` objects.
-
-    Please note that the easiest way to use drag and drop and the
-    clipboard with multiple formats is by using `wx.DataObjectComposite`,
-    but it is not the most efficient one as each `wx.DataObjectSimple`
-    would contain the whole data in its respective formats. Now imagine
-    that you want to paste 200 pages of text in your proprietary format,
-    as well as Word, RTF, HTML, Unicode and plain text to the clipboard
-    and even today's computers are in trouble. For this case, you will
-    have to derive from wx.DataObject directly and make it enumerate its
-    formats and provide the data in the requested format on
-    demand. (**TODO**: This is currently not possible from Python.  Make
-    it so.)
-
-    Note that the platform transfer mechanisms for the clipboard and drag
-    and drop, do not copy any data out of the source application until
-    another application actually requests the data. This is in contrast to
-    the 'feel' offered to the user of a program who would normally think
-    that the data resides in the clipboard after having pressed 'Copy' -
-    in reality it is only declared to be available.
-
     """
     thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
     def __init__(self): raise AttributeError, "No constructor defined"
@@ -5016,7 +4776,6 @@ class DataObject(object):
         GetDataHere(self, DataFormat format) -> String
 
         Get the data bytes in the specified format, returns None on failure.
-        :todo: This should use the python buffer interface isntead...
         """
         return _misc_.DataObject_GetDataHere(*args, **kwargs)
 
@@ -5026,7 +4785,6 @@ class DataObject(object):
 
         Set the data in the specified format from the bytes in the the data string.
 
-        :todo: This should use the python buffer interface isntead...
         """
         return _misc_.DataObject_SetData(*args, **kwargs)
 
@@ -5114,29 +4872,6 @@ class PyDataObjectSimple(DataObjectSimple):
     class and overload `GetDataSize`, `GetDataHere` and `SetData` when you
     need to create your own simple single-format type of `wx.DataObject`.
 
-    Here is a simple example::
-
-        class MyDataObject(wx.PyDataObjectSimple):
-            def __init__(self):
-                wx.PyDataObjectSimple.__init__(
-                    self, wx.CustomDataFormat('MyDOFormat'))
-                self.data = ''
-
-            def GetDataSize(self):
-                return len(self.data)
-            def GetDataHere(self):
-                return self.data  # returns a string  
-            def SetData(self, data):
-                self.data = data
-                return True
-
-    Note that there is already a `wx.CustomDataObject` class that behaves
-    very similarly to this example.  The value of creating your own
-    derived class like this is to be able to do additional things when the
-    data is requested or given via the clipboard or drag and drop
-    operation, such as generate the data value or decode it into needed
-    data structures.
-
     """
     thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
     __repr__ = _swig_repr
@@ -5149,29 +4884,6 @@ class PyDataObjectSimple(DataObjectSimple):
         to methods in the Python derived class.  You should derive from this
         class and overload `GetDataSize`, `GetDataHere` and `SetData` when you
         need to create your own simple single-format type of `wx.DataObject`.
-
-        Here is a simple example::
-
-            class MyDataObject(wx.PyDataObjectSimple):
-                def __init__(self):
-                    wx.PyDataObjectSimple.__init__(
-                        self, wx.CustomDataFormat('MyDOFormat'))
-                    self.data = ''
-
-                def GetDataSize(self):
-                    return len(self.data)
-                def GetDataHere(self):
-                    return self.data  # returns a string  
-                def SetData(self, data):
-                    self.data = data
-                    return True
-
-        Note that there is already a `wx.CustomDataObject` class that behaves
-        very similarly to this example.  The value of creating your own
-        derived class like this is to be able to do additional things when the
-        data is requested or given via the clipboard or drag and drop
-        operation, such as generate the data value or decode it into needed
-        data structures.
 
         """
         _misc_.PyDataObjectSimple_swiginit(self,_misc_.new_PyDataObjectSimple(*args, **kwargs))
@@ -5338,7 +5050,6 @@ class BitmapDataObject(DataObjectSimple):
     data. It can be used without change to paste data into the `wx.Clipboard`
     or a `wx.DropSource`.
 
-    :see: `wx.PyBitmapDataObject` if you wish to override `GetBitmap` to increase efficiency.
     """
     thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
     __repr__ = _swig_repr
@@ -6512,11 +6223,11 @@ def GetBatteryState(*args):
 
 class AboutDialogInfo(object):
     """
-    `wx.AboutDialogInfo contains information shown in the standard About
-    dialog displayed by the `wx.AboutBox` function.  This class contains
-    the general information about the program, such as its name, version,
-    copyright and so on, as well as lists of the program developers,
-    documentation writers, artists and translators.
+    `wx.AboutDialogInfo` contains information to be shown in the standard
+    About dialog displayed by the `wx.AboutBox` function.  This class
+    contains the general information about the program, such as its name,
+    version, copyright and so on, as well as lists of the program
+    developers, documentation writers, artists and translators.
 
     While all the main platforms have a native implementation of the about
     dialog, they are often more limited than the generic version provided
@@ -6535,11 +6246,11 @@ class AboutDialogInfo(object):
         """
         __init__(self) -> AboutDialogInfo
 
-        `wx.AboutDialogInfo contains information shown in the standard About
-        dialog displayed by the `wx.AboutBox` function.  This class contains
-        the general information about the program, such as its name, version,
-        copyright and so on, as well as lists of the program developers,
-        documentation writers, artists and translators.
+        `wx.AboutDialogInfo` contains information to be shown in the standard
+        About dialog displayed by the `wx.AboutBox` function.  This class
+        contains the general information about the program, such as its name,
+        version, copyright and so on, as well as lists of the program
+        developers, documentation writers, artists and translators.
 
         While all the main platforms have a native implementation of the about
         dialog, they are often more limited than the generic version provided

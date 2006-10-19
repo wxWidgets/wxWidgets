@@ -6231,11 +6231,11 @@ def GetBatteryState(*args):
 
 class AboutDialogInfo(object):
     """
-    `wx.AboutDialogInfo contains information shown in the standard About
-    dialog displayed by the `wx.AboutBox` function.  This class contains
-    the general information about the program, such as its name, version,
-    copyright and so on, as well as lists of the program developers,
-    documentation writers, artists and translators.
+    `wx.AboutDialogInfo` contains information to be shown in the standard
+    About dialog displayed by the `wx.AboutBox` function.  This class
+    contains the general information about the program, such as its name,
+    version, copyright and so on, as well as lists of the program
+    developers, documentation writers, artists and translators.
 
     While all the main platforms have a native implementation of the about
     dialog, they are often more limited than the generic version provided
@@ -6254,11 +6254,11 @@ class AboutDialogInfo(object):
         """
         __init__(self) -> AboutDialogInfo
 
-        `wx.AboutDialogInfo contains information shown in the standard About
-        dialog displayed by the `wx.AboutBox` function.  This class contains
-        the general information about the program, such as its name, version,
-        copyright and so on, as well as lists of the program developers,
-        documentation writers, artists and translators.
+        `wx.AboutDialogInfo` contains information to be shown in the standard
+        About dialog displayed by the `wx.AboutBox` function.  This class
+        contains the general information about the program, such as its name,
+        version, copyright and so on, as well as lists of the program
+        developers, documentation writers, artists and translators.
 
         While all the main platforms have a native implementation of the about
         dialog, they are often more limited than the generic version provided
