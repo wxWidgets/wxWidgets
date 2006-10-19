@@ -38,7 +38,7 @@
  * wxRichTextListStylePage class declaration
  */
 
-class wxRichTextListStylePage: public wxPanel
+class WXDLLIMPEXP_RICHTEXT wxRichTextListStylePage: public wxPanel
 {    
     DECLARE_DYNAMIC_CLASS( wxRichTextListStylePage )
     DECLARE_EVENT_TABLE()

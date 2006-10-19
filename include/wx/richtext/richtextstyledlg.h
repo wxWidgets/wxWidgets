@@ -72,7 +72,7 @@ class wxRichTextCtrl;
  * wxRichTextStyleOrganiserDialog class declaration
  */
 
-class wxRichTextStyleOrganiserDialog: public wxDialog
+class WXDLLIMPEXP_RICHTEXT wxRichTextStyleOrganiserDialog: public wxDialog
 {    
     DECLARE_DYNAMIC_CLASS( wxRichTextStyleOrganiserDialog )
     DECLARE_EVENT_TABLE()
