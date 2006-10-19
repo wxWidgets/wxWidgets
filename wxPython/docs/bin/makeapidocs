@@ -17,7 +17,7 @@ rm -r docs/api/*
 
 # build the docs
 export PTYHONPATH=$PWD
-/opt/python/bin/epydoc --name wxPython \
+/opt/python/bin/epydoc --name "wxPython $VERSION" \
     --html \
     --output docs/api \
     --ignore-param-mismatch \
@@ -43,6 +43,8 @@ export PTYHONPATH=$PWD
 #    --debug \
 #    --inheritance grouped \
 #    --inheritance none \
+
+
 
 python docs/bin/BuildAPIHelpBook.py wxpyapi docs/api
 
