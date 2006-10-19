@@ -383,6 +383,7 @@ public:
         m_richTextCtrl = NULL;
         m_applyOnSelection = false;
         m_styleType = wxRICHTEXT_STYLE_PARAGRAPH;
+        m_autoSetSelection = true;
     }
 
     bool Create(wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition,
@@ -414,9 +415,6 @@ public:
     /// Apply the style
     void ApplyStyle(int i);
 
-    /// React to selection
-    void OnSelect(wxCommandEvent& event);
-
     /// Left click
     void OnLeftDown(wxMouseEvent& event);
 
@@ -431,7 +429,8 @@ public:
 
     /// Can we set the selection based on the editor caret position?
     /// Need to override this if being used in a combobox popup
-    virtual bool CanAutoSetSelection() { return true; }
+    virtual bool CanAutoSetSelection() { return m_autoSetSelection; }
+    virtual void SetAutoSetSelection(bool autoSet) { m_autoSetSelection = autoSet; }
 
     /// Set whether the style should be applied as soon as the item is selected (the default)
     void SetApplyOnSelection(bool applyOnSel) { m_applyOnSelection = applyOnSel; }
@@ -454,6 +453,7 @@ private:
     wxRichTextCtrl*         m_richTextCtrl;
     bool                    m_applyOnSelection; // if true, applies style on selection
     wxRichTextStyleType     m_styleType; // style type to display
+    bool                    m_autoSetSelection;
 };
 
 /*!
@@ -461,6 +461,8 @@ private:
  * This is a container for the list control plus a combobox to switch between
  * style types.
  */
+
+#define wxRICHTEXTSTYLELIST_HIDE_TYPE_SELECTOR     0x1000
 
 class WXDLLIMPEXP_RICHTEXT wxRichTextStyleListCtrl: public wxControl
 {
@@ -493,6 +495,9 @@ public:
     bool Create(wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition,
         const wxSize& size = wxDefaultSize, long style = 0);
 
+    /// Updates the style list box
+    void UpdateStyles();
+
     /// Associates the control with a style manager
     void SetStyleSheet(wxRichTextStyleSheet* styleSheet);
     wxRichTextStyleSheet* GetStyleSheet() const;
@@ -500,9 +505,6 @@ public:
     /// Associates the control with a wxRichTextCtrl
     void SetRichTextCtrl(wxRichTextCtrl* ctrl);
     wxRichTextCtrl* GetRichTextCtrl() const;
-
-    /// Updates the style list box
-    void UpdateStyles();
 
     /// Set/get the style type to display
     void SetStyleType(wxRichTextStyleListBox::wxRichTextStyleType styleType);

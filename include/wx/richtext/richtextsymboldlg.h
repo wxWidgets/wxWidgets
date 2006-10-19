@@ -24,10 +24,7 @@
  */
 
 ////@begin forward declarations
-class WXDLLIMPEXP_RICHTEXT wxSymbolListCtrl;
-class WXDLLIMPEXP_CORE wxComboBox;
-class WXDLLIMPEXP_CORE wxStaticText;
-class WXDLLIMPEXP_CORE wxTextCtrl;
+class wxSymbolListCtrl;
 ////@end forward declarations
 
 // __UNICODE__ is a symbol used by DialogBlocks-generated code.
@@ -93,6 +90,12 @@ public:
     /// Specifying normal text?
     bool UseNormalFont() const { return m_fontName.IsEmpty(); }
 
+    /// Should we show tooltips?
+    static bool ShowToolTips() { return sm_showToolTips; }
+    
+    /// Determines whether tooltips will be shown
+    static void SetShowToolTips(bool show) { sm_showToolTips = show; }
+
     /// Data transfer
     virtual bool TransferDataToWindow();
 
@@ -111,16 +114,12 @@ public:
     void OnFromUnicodeSelected( wxCommandEvent& event );
 
 #endif
-#if defined(__WXMSW__)   || \
-    defined(__WXMAC__)   || \
-    defined(__WXGTK__)   || \
-    defined(__WXPM__)    || \
-    defined(__WXMGL__)   || \
-    defined(__WXMOTIF__) || \
-    defined(__WXCOCOA__) || \
-    defined(__WXX11__)   || \
-    defined(__WXPALMOS__)
+#if defined(__WXMSW__) || defined(__WXGTK__) || defined(__WXOS2__) || defined(__WXMGL__) || defined(__WXMOTIF__) || defined(__WXCOCOA__) || defined(__WXX11__) || defined(__WXPALMOS__)
+    /// wxEVT_UPDATE_UI event handler for wxID_OK
+    void OnOkUpdate( wxUpdateUIEvent& event );
 
+#endif
+#if defined(__WXMAC__)
     /// wxEVT_UPDATE_UI event handler for wxID_OK
     void OnOkUpdate( wxUpdateUIEvent& event );
 
@@ -147,9 +146,6 @@ public:
     /// Retrieves icon resources
     wxIcon GetIconResource( const wxString& name );
 ////@end wxSymbolPickerDialog member function declarations
-
-    /// Should we show tooltips?
-    static bool ShowToolTips();
 
 ////@begin wxSymbolPickerDialog member variables
     wxComboBox* m_fontCtrl;
@@ -178,6 +174,7 @@ public:
 ////@end wxSymbolPickerDialog member variables
 
     bool m_dontUpdate;
+    static bool             sm_showToolTips;
 };
 
 /*!

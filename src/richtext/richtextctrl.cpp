@@ -31,6 +31,7 @@
 #include "wx/filename.h"
 #include "wx/dcbuffer.h"
 #include "wx/arrimpl.cpp"
+#include "wx/fontenum.h"
 
 // DLL options compatibility check:
 #include "wx/app.h"
@@ -91,6 +92,8 @@ END_EVENT_TABLE()
  * wxRichTextCtrl
  */
 
+wxArrayString wxRichTextCtrl::sm_availableFontNames;
+
 wxRichTextCtrl::wxRichTextCtrl()
               : wxScrollHelper(this)
 {
@@ -122,6 +125,9 @@ bool wxRichTextCtrl::Create( wxWindow* parent, wxWindowID id, const wxString& va
     }
 
     GetBuffer().SetRichTextCtrl(this);
+
+    if (style & wxTE_READONLY)
+        SetEditable(false);
 
     wxTextAttrEx attributes;
     attributes.SetFont(GetFont());
@@ -637,6 +643,27 @@ void wxRichTextCtrl::OnChar(wxKeyEvent& event)
                 {
                     event.Skip();
                     return;
+                }
+                
+                if (keycode == wxT('\t'))
+                {
+                    // See if we need to promote or demote the selection or paragraph at the cursor
+                    // position, instead of inserting a tab.
+                    long pos = GetAdjustedCaretPosition(GetCaretPosition());
+                    wxRichTextParagraph* para = GetBuffer().GetParagraphAtPosition(pos);
+                    if (para && para->GetRange().GetStart() == pos && para->GetAttributes().HasListStyleName())
+                    {
+                        wxRichTextRange range;
+                        if (HasSelection())
+                            range = GetSelectionRange();
+                        else
+                            range = para->GetRange().FromInternal();
+                        
+                        int promoteBy = event.ShiftDown() ? 1 : -1;
+
+                        PromoteList(promoteBy, range, NULL);
+                        return;
+                    }
                 }
 
                 BeginBatchUndo(_("Insert Text"));
@@ -2906,6 +2933,21 @@ bool wxRichTextCtrl::PromoteList(int promoteBy, const wxRichTextRange& range, wx
 bool wxRichTextCtrl::PromoteList(int promoteBy, const wxRichTextRange& range, const wxString& defName, int flags, int specifiedLevel)
 {
     return GetBuffer().PromoteList(promoteBy, range.ToInternal(), defName, flags, specifiedLevel);
+}
+
+const wxArrayString& wxRichTextCtrl::GetAvailableFontNames()
+{
+    if (sm_availableFontNames.GetCount() == 0)
+    {
+        sm_availableFontNames = wxFontEnumerator::GetFacenames();
+        sm_availableFontNames.Sort();
+    }
+    return sm_availableFontNames;
+}
+
+void wxRichTextCtrl::ClearAvailableFontNames()
+{
+    sm_availableFontNames.Clear();
 }
 
 #endif

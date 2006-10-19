@@ -113,16 +113,16 @@ void wxRichTextTabsPage::CreateControls()
     wxStaticText* itemStaticText6 = new wxStaticText( itemPanel1, wxID_STATIC, _("&Position (tenths of a mm):"), wxDefaultPosition, wxDefaultSize, 0 );
     itemBoxSizer5->Add(itemStaticText6, 0, wxALIGN_LEFT|wxLEFT|wxRIGHT|wxTOP|wxADJUST_MINSIZE, 5);
 
-    m_tabEditCtrl = new wxTextCtrl( itemPanel1,
-                                    ID_RICHTEXTTABSPAGE_TABEDIT,
-                                    wxEmptyString,
-                                    wxDefaultPosition,
-                                    wxDefaultSize,
-                                    0 );
+    m_tabEditCtrl = new wxTextCtrl( itemPanel1, ID_RICHTEXTTABSPAGE_TABEDIT, _T(""), wxDefaultPosition, wxDefaultSize, 0 );
+    m_tabEditCtrl->SetHelpText(_("The tab position."));
+    if (ShowToolTips())
+        m_tabEditCtrl->SetToolTip(_("The tab position."));
     itemBoxSizer5->Add(m_tabEditCtrl, 0, wxGROW|wxALL, 5);
 
-    wxString* m_tabListCtrlStrings = NULL;
-    m_tabListCtrl = new wxListBox( itemPanel1, ID_RICHTEXTTABSPAGE_TABLIST, wxDefaultPosition, wxSize(80, 200), 0, m_tabListCtrlStrings, wxLB_SINGLE );
+    wxString m_tabListCtrlStrings[] = {
+        _("The tab positions.")
+    };
+    m_tabListCtrl = new wxListBox( itemPanel1, ID_RICHTEXTTABSPAGE_TABLIST, wxDefaultPosition, wxSize(80, 200), 1, m_tabListCtrlStrings, wxLB_SINGLE );
     itemBoxSizer5->Add(m_tabListCtrl, 1, wxGROW|wxLEFT|wxRIGHT|wxBOTTOM, 5);
 
     itemBoxSizer4->Add(2, 1, 1, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM, 5);
@@ -130,21 +130,25 @@ void wxRichTextTabsPage::CreateControls()
     wxBoxSizer* itemBoxSizer10 = new wxBoxSizer(wxVERTICAL);
     itemBoxSizer4->Add(itemBoxSizer10, 0, wxGROW, 5);
 
-    wxStaticText* itemStaticText11 = new wxStaticText( itemPanel1,
-                                                       wxID_STATIC,
-                                                       wxEmptyString,
-                                                       wxDefaultPosition,
-                                                       wxDefaultSize,
-                                                       0 );
+    wxStaticText* itemStaticText11 = new wxStaticText( itemPanel1, wxID_STATIC, _T(""), wxDefaultPosition, wxDefaultSize, 0 );
     itemBoxSizer10->Add(itemStaticText11, 0, wxALIGN_CENTER_HORIZONTAL|wxBOTTOM|wxADJUST_MINSIZE, 5);
 
     wxButton* itemButton12 = new wxButton( itemPanel1, ID_RICHTEXTTABSPAGE_NEW_TAB, _("&New"), wxDefaultPosition, wxDefaultSize, 0 );
+    itemButton12->SetHelpText(_("Click to create a new tab position."));
+    if (ShowToolTips())
+        itemButton12->SetToolTip(_("Click to create a new tab position."));
     itemBoxSizer10->Add(itemButton12, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 5);
 
     wxButton* itemButton13 = new wxButton( itemPanel1, ID_RICHTEXTTABSPAGE_DELETE_TAB, _("&Delete"), wxDefaultPosition, wxDefaultSize, 0 );
+    itemButton13->SetHelpText(_("Click to delete the selected tab position."));
+    if (ShowToolTips())
+        itemButton13->SetToolTip(_("Click to delete the selected tab position."));
     itemBoxSizer10->Add(itemButton13, 0, wxALIGN_CENTER_HORIZONTAL|wxLEFT|wxRIGHT|wxBOTTOM, 5);
 
     wxButton* itemButton14 = new wxButton( itemPanel1, ID_RICHTEXTTABSPAGE_DELETE_ALL_TABS, _("Delete A&ll"), wxDefaultPosition, wxDefaultSize, 0 );
+    itemButton14->SetHelpText(_("Click to delete all tab positions."));
+    if (ShowToolTips())
+        itemButton14->SetToolTip(_("Click to delete all tab positions."));
     itemBoxSizer10->Add(itemButton14, 0, wxALIGN_CENTER_HORIZONTAL|wxLEFT|wxRIGHT|wxBOTTOM, 5);
 
 ////@end wxRichTextTabsPage content construction
@@ -233,7 +237,7 @@ wxTextAttrEx* wxRichTextTabsPage::GetAttributes()
 
 bool wxRichTextTabsPage::ShowToolTips()
 {
-    return true;
+    return wxRichTextFormattingDialog::ShowToolTips();
 }
 
 /*!

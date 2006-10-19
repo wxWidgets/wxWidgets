@@ -34,7 +34,7 @@ class WXDLLIMPEXP_RICHTEXT wxRichTextFormattingDialog;
 class WXDLLIMPEXP_CORE wxImageList;
 
 /*!
- * Flags determining the pages to be created in the dialog
+ * Flags determining the pages and buttons to be created in the dialog
  */
 
 #define wxRICHTEXT_FORMAT_STYLE_EDITOR      0x0001
@@ -42,6 +42,9 @@ class WXDLLIMPEXP_CORE wxImageList;
 #define wxRICHTEXT_FORMAT_TABS              0x0004
 #define wxRICHTEXT_FORMAT_BULLETS           0x0008
 #define wxRICHTEXT_FORMAT_INDENTS_SPACING   0x0010
+#define wxRICHTEXT_FORMAT_LIST_STYLE        0x0020
+
+#define wxRICHTEXT_FORMAT_HELP_BUTTON       0x0100
 
 /*!
  * Shorthand for common combinations of pages
@@ -110,7 +113,7 @@ public:
 
     void Init();
 
-    bool Create(long flags, wxWindow* parent, const wxString& title, wxWindowID id,
+    bool Create(long flags, wxWindow* parent, const wxString& title = _("Formatting"), wxWindowID id = wxID_ANY,
         const wxPoint& pos = wxDefaultPosition, const wxSize& sz = wxDefaultSize,
         long style = wxDEFAULT_DIALOG_STYLE);
 
@@ -168,6 +171,12 @@ public:
     /// Helper for pages to get the style
     static wxRichTextStyleDefinition* GetDialogStyleDefinition(wxWindow* win);
 
+    /// Should we show tooltips?
+    static bool ShowToolTips() { return sm_showToolTips; }
+    
+    /// Determines whether tooltips will be shown
+    static void SetShowToolTips(bool show) { sm_showToolTips = show; }
+    
     /// Map book control page index to our page id
     void AddPageId(int id) { m_pageIds.Add(id); }
 
@@ -180,6 +189,7 @@ protected:
     wxArrayInt                                  m_pageIds; // mapping of book control indexes to page ids
 
     static wxRichTextFormattingDialogFactory*   ms_FormattingDialogFactory;
+    static bool                                 sm_showToolTips;
 
 DECLARE_EVENT_TABLE()
 };
