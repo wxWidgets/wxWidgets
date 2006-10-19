@@ -71,6 +71,7 @@
 #include "wx/richtext/richtexthtml.h"
 #include "wx/richtext/richtextformatdlg.h"
 #include "wx/richtext/richtextsymboldlg.h"
+#include "wx/richtext/richtextstyledlg.h"
 
 // ----------------------------------------------------------------------------
 // resources
@@ -150,6 +151,7 @@ public:
     void OnParagraphSpacingLess(wxCommandEvent& event);
 
     void OnNumberList(wxCommandEvent& event);
+    void OnBulletsAndNumbering(wxCommandEvent& event);
     void OnItemizeList(wxCommandEvent& event);
     void OnRenumberList(wxCommandEvent& event);
     void OnPromoteList(wxCommandEvent& event);
@@ -159,6 +161,7 @@ public:
     void OnViewHTML(wxCommandEvent& event);
 
     void OnSwitchStyleSheets(wxCommandEvent& event);
+    void OnManageStyles(wxCommandEvent& event);
 
     // Forward command events to the current rich text control, if any
     bool ProcessEvent(wxEvent& event);
@@ -205,6 +208,7 @@ enum
     ID_FORMAT_LINE_SPACING_SINGLE,
 
     ID_FORMAT_NUMBER_LIST,
+    ID_FORMAT_BULLETS_AND_NUMBERING,
     ID_FORMAT_ITEMIZE_LIST,
     ID_FORMAT_RENUMBER_LIST,
     ID_FORMAT_PROMOTE_LIST,
@@ -213,6 +217,7 @@ enum
 
     ID_VIEW_HTML,
     ID_SWITCH_STYLE_SHEETS,
+    ID_MANAGE_STYLES,
 
     ID_RICHTEXT_CTRL,
     ID_RICHTEXT_STYLE_LIST,
@@ -269,6 +274,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(ID_INSERT_SYMBOL,  MyFrame::OnInsertSymbol)
 
     EVT_MENU(ID_FORMAT_NUMBER_LIST, MyFrame::OnNumberList)
+    EVT_MENU(ID_FORMAT_BULLETS_AND_NUMBERING, MyFrame::OnBulletsAndNumbering)
     EVT_MENU(ID_FORMAT_ITEMIZE_LIST, MyFrame::OnItemizeList)
     EVT_MENU(ID_FORMAT_RENUMBER_LIST, MyFrame::OnRenumberList)
     EVT_MENU(ID_FORMAT_PROMOTE_LIST, MyFrame::OnPromoteList)
@@ -277,6 +283,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
 
     EVT_MENU(ID_VIEW_HTML, MyFrame::OnViewHTML)
     EVT_MENU(ID_SWITCH_STYLE_SHEETS, MyFrame::OnSwitchStyleSheets)
+    EVT_MENU(ID_MANAGE_STYLES, MyFrame::OnManageStyles)
 END_EVENT_TABLE()
 
 // Create a new application object: this macro will allow wxWidgets to create
@@ -542,14 +549,18 @@ MyFrame::MyFrame(const wxString& title, wxWindowID id, const wxPoint& pos,
     formatMenu->Append(ID_FORMAT_PARAGRAPH, _("&Paragraph..."));
     formatMenu->Append(ID_FORMAT_CONTENT, _("Font and Pa&ragraph...\tShift+Ctrl+F"));
     formatMenu->AppendSeparator();
-    formatMenu->Append(ID_FORMAT_NUMBER_LIST, _("Number List"));
-    formatMenu->Append(ID_FORMAT_ITEMIZE_LIST, _("Itemize List"));
-    formatMenu->Append(ID_FORMAT_RENUMBER_LIST, _("Renumber List"));
-    formatMenu->Append(ID_FORMAT_PROMOTE_LIST, _("Promote List Items"));
-    formatMenu->Append(ID_FORMAT_DEMOTE_LIST, _("Demote List Items"));
-    formatMenu->Append(ID_FORMAT_CLEAR_LIST, _("Clear List Formatting"));
-    formatMenu->AppendSeparator();
     formatMenu->Append(ID_SWITCH_STYLE_SHEETS, _("&Switch Style Sheets"));
+    formatMenu->Append(ID_MANAGE_STYLES, _("&Manage Styles"));
+
+    wxMenu* listsMenu = new wxMenu;
+    listsMenu->Append(ID_FORMAT_BULLETS_AND_NUMBERING, _("Bullets and &Numbering..."));
+    listsMenu->AppendSeparator();
+    listsMenu->Append(ID_FORMAT_NUMBER_LIST, _("Number List"));
+    listsMenu->Append(ID_FORMAT_ITEMIZE_LIST, _("Itemize List"));
+    listsMenu->Append(ID_FORMAT_RENUMBER_LIST, _("Renumber List"));
+    listsMenu->Append(ID_FORMAT_PROMOTE_LIST, _("Promote List Items"));
+    listsMenu->Append(ID_FORMAT_DEMOTE_LIST, _("Demote List Items"));
+    listsMenu->Append(ID_FORMAT_CLEAR_LIST, _("Clear List Formatting"));
 
     wxMenu* insertMenu = new wxMenu;
     insertMenu->Append(ID_INSERT_SYMBOL, _("&Symbol...\tCtrl+I"));
@@ -559,6 +570,7 @@ MyFrame::MyFrame(const wxString& title, wxWindowID id, const wxPoint& pos,
     menuBar->Append(fileMenu, _T("&File"));
     menuBar->Append(editMenu, _T("&Edit"));
     menuBar->Append(formatMenu, _T("F&ormat"));
+    menuBar->Append(listsMenu, _T("&Lists"));
     menuBar->Append(insertMenu, _T("&Insert"));
     menuBar->Append(helpMenu, _T("&Help"));
 
@@ -1258,7 +1270,7 @@ void MyFrame::OnSwitchStyleSheets(wxCommandEvent& WXUNUSED(event))
     static wxRichTextStyleSheet* gs_AlternateStyleSheet = NULL;
 
     wxRichTextCtrl* ctrl = (wxRichTextCtrl*) FindWindow(ID_RICHTEXT_CTRL);
-    wxRichTextStyleListBox* styleList = (wxRichTextStyleListBox*) FindWindow(ID_RICHTEXT_STYLE_LIST);
+    wxRichTextStyleListCtrl *styleList = (wxRichTextStyleListCtrl*) FindWindow(ID_RICHTEXT_STYLE_LIST);
     wxRichTextStyleComboCtrl* styleCombo = (wxRichTextStyleComboCtrl*) FindWindow(ID_RICHTEXT_STYLE_COMBO);
 
     wxRichTextStyleSheet* sheet = ctrl->GetStyleSheet();
@@ -1303,6 +1315,17 @@ void MyFrame::OnSwitchStyleSheets(wxCommandEvent& WXUNUSED(event))
 
     styleCombo->SetStyleSheet(sheet);
     styleCombo->UpdateStyles();
+}
+
+void MyFrame::OnManageStyles(wxCommandEvent& WXUNUSED(event))
+{
+    wxRichTextCtrl* ctrl = (wxRichTextCtrl*) FindWindow(ID_RICHTEXT_CTRL);
+    wxRichTextStyleSheet* sheet = ctrl->GetStyleSheet();
+
+    int flags = wxRICHTEXT_ORGANISER_CREATE_STYLES|wxRICHTEXT_ORGANISER_EDIT_STYLES;
+
+    wxRichTextStyleOrganiserDialog dlg(flags, sheet, NULL, this, wxID_ANY, _("Style Manager"));
+    dlg.ShowModal();
 }
 
 void MyFrame::OnInsertSymbol(wxCommandEvent& WXUNUSED(event))
@@ -1350,6 +1373,21 @@ void MyFrame::OnNumberList(wxCommandEvent& WXUNUSED(event))
     {
         wxRichTextRange range = ctrl->GetSelectionRange();
         ctrl->SetListStyle(range, wxT("Numbered List 1"), wxRICHTEXT_SETSTYLE_WITH_UNDO|wxRICHTEXT_SETSTYLE_RENUMBER);
+    }
+}
+
+void MyFrame::OnBulletsAndNumbering(wxCommandEvent& WXUNUSED(event))
+{
+    wxRichTextCtrl* ctrl = (wxRichTextCtrl*) FindWindow(ID_RICHTEXT_CTRL);
+    wxRichTextStyleSheet* sheet = ctrl->GetStyleSheet();
+
+    int flags = wxRICHTEXT_ORGANISER_BROWSE_NUMBERING;
+
+    wxRichTextStyleOrganiserDialog dlg(flags, sheet, ctrl, this, wxID_ANY, _("Bullets and Numbering"));
+    if (dlg.ShowModal() == wxID_OK)
+    {
+        if (dlg.GetSelectedStyleDefinition())
+            dlg.ApplyStyle();
     }
 }
 
