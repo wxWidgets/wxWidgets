@@ -170,14 +170,15 @@ class WXDLLEXPORT wxMacCoreGraphicsContext : public wxGraphicsContext
     DECLARE_NO_COPY_CLASS(wxMacCoreGraphicsContext)
 
 public:
-    wxMacCoreGraphicsContext( CGrafPtr port );
-    
     wxMacCoreGraphicsContext( CGContextRef cgcontext );
+    
+    wxMacCoreGraphicsContext( WindowRef window );
     
     wxMacCoreGraphicsContext();
     
     ~wxMacCoreGraphicsContext();
 
+	void Init();
 
     // creates a path instance that corresponds to the type of graphics context, ie GDIPlus, cairo, CoreGraphics ...
     virtual wxGraphicsPath * CreatePath();
@@ -191,6 +192,14 @@ public:
     // clips drawings to the region
     virtual void Clip( const wxRegion &region );
 
+    // clips drawings to the rect
+    virtual void Clip( wxDouble x, wxDouble y, wxDouble w, wxDouble h );
+	
+	// resets the clipping to original extent
+	virtual void ResetClip();
+
+	virtual void * GetNativeContext();
+	
     //
     // transformation
     //
@@ -259,17 +268,18 @@ public:
 
     virtual void DrawIcon( const wxIcon &icon, wxDouble x, wxDouble y, wxDouble w, wxDouble h );
 
-    CGContextRef GetNativeContext();
     void SetNativeContext( CGContextRef cg );
     CGPathDrawingMode GetDrawingMode() const { return m_mode; }
     
 private:
     CGContextRef m_cgContext;
-    CGrafPtr m_qdPort;
+	WindowRef m_windowRef;
+	bool m_releaseContext;
     CGPathDrawingMode m_mode;
     ATSUStyle m_macATSUIStyle;
     wxPen m_pen;
     wxBrush m_brush;
+	wxFont m_font;
     wxColor m_textForegroundColor;
 };
 
@@ -305,30 +315,40 @@ static const double RAD2DEG = 180.0 / M_PI;
 // wxGraphicsContext implementation
 //-----------------------------------------------------------------------------
 
-wxMacCoreGraphicsContext::wxMacCoreGraphicsContext( CGrafPtr port )
+void wxMacCoreGraphicsContext::Init()
 {
-    m_qdPort = port;
     m_cgContext = NULL;
     m_mode = kCGPathFill;
     m_macATSUIStyle = NULL;
+	m_releaseContext = false;
 }
 
 wxMacCoreGraphicsContext::wxMacCoreGraphicsContext( CGContextRef cgcontext )
 {
-    m_qdPort = NULL;
-    m_cgContext = cgcontext;
-    m_mode = kCGPathFill;
-    m_macATSUIStyle = NULL;
+	Init();
+	m_cgContext = cgcontext;
     CGContextSaveGState( m_cgContext );
     CGContextSaveGState( m_cgContext );
 }
 
+wxMacCoreGraphicsContext::wxMacCoreGraphicsContext( WindowRef window )
+{
+	Init();
+	m_windowRef = window;
+	OSStatus status = QDBeginCGContext( GetWindowPort( window ) , &m_cgContext );
+	wxASSERT_MSG( status == noErr , wxT("Cannot nest wxDCs on the same window") );
+	Rect bounds;
+	GetWindowBounds( window, kWindowContentRgn, &bounds );
+	CGContextSaveGState( m_cgContext );
+	CGContextTranslateCTM( m_cgContext , 0 , bounds.bottom - bounds.top );
+	CGContextScaleCTM( m_cgContext , 1 , -1 );
+	CGContextSaveGState( m_cgContext );
+	m_releaseContext = true;
+}
+
 wxMacCoreGraphicsContext::wxMacCoreGraphicsContext()
 {
-    m_qdPort = NULL;
-    m_cgContext = NULL;
-    m_mode = kCGPathFill;
-    m_macATSUIStyle = NULL;
+	Init();
 }
 
 wxMacCoreGraphicsContext::~wxMacCoreGraphicsContext()
@@ -340,20 +360,51 @@ wxMacCoreGraphicsContext::~wxMacCoreGraphicsContext()
         CGContextRestoreGState( m_cgContext );
     }
 
-    if ( m_qdPort )
-        CGContextRelease( m_cgContext );
+    if ( m_releaseContext )
+		QDEndCGContext( GetWindowPort( m_windowRef ) , &m_cgContext);
 }
 
 void wxMacCoreGraphicsContext::Clip( const wxRegion &region )
 {
-//    ClipCGContextToRegion ( m_cgContext, &bounds , (RgnHandle) dc->m_macCurrentClipRgn );
+	HIShapeRef shape = HIShapeCreateWithQDRgn( (RgnHandle) region.GetWXHRGN() );
+	HIShapeReplacePathInCGContext( shape, m_cgContext );
+	CGContextClip( m_cgContext );
+	CFRelease( shape );
+}
+
+// clips drawings to the rect
+void wxMacCoreGraphicsContext::Clip( wxDouble x, wxDouble y, wxDouble w, wxDouble h )
+{
+    HIRect r = CGRectMake( x , y , w , h );
+	CGContextClipToRect( m_cgContext, r );
+}
+	
+	// resets the clipping to original extent
+void wxMacCoreGraphicsContext::ResetClip()
+{
+    CGContextRestoreGState( m_cgContext );
+    CGContextSaveGState( m_cgContext );
 }
 
 void wxMacCoreGraphicsContext::StrokePath( const wxGraphicsPath *p )
 {
     const wxMacCoreGraphicsPath* path = dynamic_cast< const wxMacCoreGraphicsPath*>( p );
+    int width = m_pen.GetWidth();
+    if ( width == 0 )
+        width = 1 ;
+    if ( m_pen.GetStyle() == wxTRANSPARENT )
+        width = 0 ;
+        
+    bool offset = ( width % 2 ) == 1 ; 
+
+    if ( offset )
+        CGContextTranslateCTM( m_cgContext, 0.5, 0.5 );
+
     CGContextAddPath( m_cgContext , path->GetPath() );
     CGContextStrokePath( m_cgContext );
+
+    if ( offset )
+        CGContextTranslateCTM( m_cgContext, -0.5, -0.5 );
 }
 
 void wxMacCoreGraphicsContext::DrawPath( const wxGraphicsPath *p , int fillStyle )
@@ -369,8 +420,22 @@ void wxMacCoreGraphicsContext::DrawPath( const wxGraphicsPath *p , int fillStyle
             mode = kCGPathEOFillStroke;
     }
 
+    int width = m_pen.GetWidth();
+    if ( width == 0 )
+        width = 1 ;
+    if ( m_pen.GetStyle() == wxTRANSPARENT )
+        width = 0 ;
+        
+    bool offset = ( width % 2 ) == 1 ; 
+
+    if ( offset )
+        CGContextTranslateCTM( m_cgContext, 0.5, 0.5 );
+
     CGContextAddPath( m_cgContext , path->GetPath() );
     CGContextDrawPath( m_cgContext , mode );
+
+    if ( offset )
+        CGContextTranslateCTM( m_cgContext, -0.5, -0.5 );
 }
 
 void wxMacCoreGraphicsContext::FillPath( const wxGraphicsPath *p , int fillStyle )
@@ -386,17 +451,7 @@ void wxMacCoreGraphicsContext::FillPath( const wxGraphicsPath *p , int fillStyle
 
 wxGraphicsPath* wxMacCoreGraphicsContext::CreatePath()
 {
-    // make sure that we now have a real cgref, before doing
-    // anything with paths
-    CGContextRef cg = GetNativeContext();
-    cg = NULL;
-
     return new wxMacCoreGraphicsPath();
-}
-
-CGContextRef wxMacCoreGraphicsContext::GetNativeContext()
-{
-    return m_cgContext;
 }
 
 void wxMacCoreGraphicsContext::SetNativeContext( CGContextRef cg )
@@ -456,6 +511,8 @@ void wxMacCoreGraphicsContext::PopState()
 void wxMacCoreGraphicsContext::SetTextColor( const wxColour &col ) 
 {
     m_textForegroundColor = col;
+	// to recreate the native font after color change
+	SetFont( m_font );
 }
 
 #pragma mark -
@@ -1171,6 +1228,7 @@ void wxMacCoreGraphicsContext::SetFont( const wxFont &font )
 
     if ( font.Ok() )
     {
+		m_font = font ;
         OSStatus status;
 
         status = ATSUCreateAndCopyStyle( (ATSUStyle) font.MacGetATSUStyle() , (ATSUStyle*) &m_macATSUIStyle );
@@ -1205,9 +1263,24 @@ void wxMacCoreGraphicsContext::SetFont( const wxFont &font )
     }
 }
 
+void * wxMacCoreGraphicsContext::GetNativeContext() 
+{
+	return m_cgContext;
+}
+
 wxGraphicsContext* wxGraphicsContext::Create( const wxWindowDC &dc )
 {
     return new wxMacCoreGraphicsContext((CGContextRef)dc.GetWindow()->MacGetCGContextRef() );
+}
+
+wxGraphicsContext* wxGraphicsContext::Create( wxWindow * window )
+{
+	return new wxMacCoreGraphicsContext( (WindowRef) window->MacGetTopLevelWindowRef() );
+}
+
+wxGraphicsContext* wxGraphicsContext::CreateFromNative( void * context )
+{
+    return new wxMacCoreGraphicsContext((CGContextRef)context);
 }
 
 #endif // wxMAC_USE_CORE_GRAPHICS
