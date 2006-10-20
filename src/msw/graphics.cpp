@@ -197,6 +197,14 @@ public:
     virtual ~wxGDIPlusContext();
 
     virtual void Clip( const wxRegion &region );
+    // clips drawings to the rect
+    virtual void Clip( wxDouble x, wxDouble y, wxDouble w, wxDouble h );
+	
+	// resets the clipping to original extent
+	virtual void ResetClip();
+
+	virtual void * GetNativeContext();
+	
     virtual void StrokePath( const wxGraphicsPath *p );
     virtual void FillPath( const wxGraphicsPath *p , int fillStyle = wxWINDING_RULE );
 
@@ -388,7 +396,17 @@ wxGDIPlusContext::~wxGDIPlusContext()
 
 void wxGDIPlusContext::Clip( const wxRegion & WXUNUSED(region) )
 {
-//    ClipCGContextToRegion ( m_context, &bounds , (RgnHandle) dc->m_macCurrentClipRgn );
+// TODO
+}
+
+void wxGDIPlusContext::Clip( wxDouble x, wxDouble y, wxDouble w, wxDouble h )
+{
+// TODO
+}
+	
+void wxGDIPlusContext::ResetClip()
+{
+// TODO
 }
 
 void wxGDIPlusContext::StrokePath( const wxGraphicsPath *p )
@@ -927,10 +945,26 @@ void wxGDIPlusContext::SetFont( const wxFont &font )
     m_font = new Font( s , size , style );
 }
 
+void * wxCairoContext::GetNativeContext() 
+{
+	return m_context;
+}
+
 wxGraphicsContext* wxGraphicsContext::Create( const wxWindowDC& dc)
 {
     return new wxGDIPlusContext( (HDC) dc.GetHDC() );
 }
+
+wxGraphicsContext* wxGraphicsContext::Create( wxWindow * window )
+{
+	return NULL; // TODO
+}
+
+wxGraphicsContext* wxGraphicsContext::CreateFromNative( void * context )
+{
+	return NULL; // TODO
+}
+
 
 
 #endif  // wxUSE_GRAPHICS_CONTEXT

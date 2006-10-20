@@ -238,6 +238,15 @@ public:
     virtual ~wxCairoContext();
 
     virtual void Clip( const wxRegion &region );
+
+    // clips drawings to the rect
+    virtual void Clip( wxDouble x, wxDouble y, wxDouble w, wxDouble h );
+	
+	// resets the clipping to original extent
+	virtual void ResetClip();
+
+	virtual void * GetNativeContext();
+	
     virtual void StrokePath( const wxGraphicsPath *p );
     virtual void FillPath( const wxGraphicsPath *p , int fillStyle = wxWINDING_RULE );
 
@@ -305,10 +314,21 @@ wxCairoContext::~wxCairoContext()
 }
 
 
-void wxCairoContext::Clip( const wxRegion &region )
+void wxCairoContext::Clip( const wxRegion & WXUNUSED(region) )
 {
-    //    ClipCGContextToRegion ( m_context, &bounds , (RgnHandle) dc->m_macCurrentClipRgn );
+// TODO
 }
+
+void wxCairoContext::Clip( wxDouble x, wxDouble y, wxDouble w, wxDouble h )
+{
+// TODO
+}
+	
+void wxCairoContext::ResetClip()
+{
+// TODO
+}
+
 
 void wxCairoContext::StrokePath( const wxGraphicsPath *p )
 {
@@ -861,9 +881,24 @@ void wxCairoContext::SetFont( const wxFont &font )
     // TODO FIX SIZE
 }
 
+void * wxCairoContext::GetNativeContext() 
+{
+	return m_context;
+}
+
 wxGraphicsContext* wxGraphicsContext::Create( const wxWindowDC& dc )
 {
     return new wxCairoContext(dc);
+}
+
+wxGraphicsContext* wxGraphicsContext::Create( wxWindow * window )
+{
+	return NULL; // TODO
+}
+
+wxGraphicsContext* wxGraphicsContext::CreateFromNative( void * context )
+{
+	return NULL; // TODO
 }
 
 #endif  // wxUSE_GRAPHICS_CONTEXT
