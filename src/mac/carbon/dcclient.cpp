@@ -130,9 +130,21 @@ wxWindowDC::wxWindowDC(wxWindow *window)
 	CGContextRef cg = (CGContextRef) window->MacGetCGContextRef();
 	m_release = false;
     if ( cg == NULL )
+	{
  		SetGraphicsContext( wxGraphicsContext::Create( window ) ) ;
+		SetDeviceOrigin( x, y );
+	}
 	else
+	{
+		CGContextSaveGState( cg );
+		m_release = true ;
+		// make sure the context is having its origin at the wx-window coordinates of the 
+		// view (read at the top of window.cpp about the differences)
+		if ( window->MacGetLeftBorderSize() != 0 || window->MacGetTopBorderSize() != 0 )
+			CGContextTranslateCTM( cg , -window->MacGetLeftBorderSize() , -window->MacGetTopBorderSize() );
+		
 		SetGraphicsContext( wxGraphicsContext::CreateFromNative( cg ) );
+	}
 	m_graphicContext->SetPen( m_pen ) ;
 	m_graphicContext->SetBrush( m_brush ) ;
 	SetClippingRegion( 0 , 0 , m_width , m_height ) ;
@@ -155,6 +167,8 @@ wxWindowDC::~wxWindowDC()
 #if wxMAC_USE_CORE_GRAPHICS
 	if ( m_release && m_graphicContext )
 	{
+		CGContextRef cg = (CGContextRef) m_window->MacGetCGContextRef();
+		CGContextRestoreGState(cg);
 //		CGContextRef cg = (CGContextRef) m_graphicContext->GetNativeContext() ;
 	}
 #endif
@@ -194,6 +208,7 @@ wxClientDC::wxClientDC(wxWindow *window) :
     y = origin.y ;
     window->MacWindowToRootWindow( &x , &y ) ;
     m_window->GetClientSize( &m_width , &m_height);
+	SetDeviceOrigin( origin.x, origin.y );
 	SetClippingRegion( 0 , 0 , m_width , m_height ) ;
 }
 #else
@@ -260,6 +275,7 @@ wxPaintDC::wxPaintDC(wxWindow *window) :
     y = origin.y ;
     window->MacWindowToRootWindow( &x , &y ) ;
     m_window->GetClientSize( &m_width , &m_height);
+	SetDeviceOrigin( origin.x, origin.y );
 	SetClippingRegion( 0 , 0 , m_width , m_height ) ;
 }
 #else
