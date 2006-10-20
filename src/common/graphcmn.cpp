@@ -339,10 +339,8 @@ void wxGCDC::DoDrawIcon( const wxIcon &icon, wxCoord x, wxCoord y )
     m_graphicContext->DrawIcon( icon , xx, yy, ww, hh );
 }
 
-void wxGCDC::DoSetClippingRegion( wxCoord WXUNUSED(x), wxCoord WXUNUSED(y), wxCoord WXUNUSED(width), wxCoord WXUNUSED(height) )
+void wxGCDC::DoSetClippingRegion( wxCoord x, wxCoord y, wxCoord width, wxCoord height )
 {
-    // TODO Clipping
-#if 0
     wxCHECK_RET( Ok(), wxT("wxGCDC(cg)::DoSetClippingRegion - invalid DC") );
 
     wxCoord xx, yy, ww, hh;
@@ -351,13 +349,7 @@ void wxGCDC::DoSetClippingRegion( wxCoord WXUNUSED(x), wxCoord WXUNUSED(y), wxCo
     ww = LogicalToDeviceXRel(width);
     hh = LogicalToDeviceYRel(height);
 
-    CGContextRef cgContext = ((wxCairoContext*)(m_graphicContext))->GetNativeContext();
-    CGRect clipRect = CGRectMake( xx , yy , ww, hh );
-    CGContextClipToRect( cgContext , clipRect );
-
-    //    SetRectRgn( (RgnHandle) m_macCurrentClipRgn , xx , yy , xx + ww , yy + hh );
-    //    SectRgn( (RgnHandle) m_macCurrentClipRgn , (RgnHandle) m_macBoundaryClipRgn , (RgnHandle) m_macCurrentClipRgn );
-
+	m_graphicContext->Clip( xx, yy, ww, hh );
     if ( m_clipping )
     {
         m_clipX1 = wxMax( m_clipX1, xx );
@@ -374,11 +366,6 @@ void wxGCDC::DoSetClippingRegion( wxCoord WXUNUSED(x), wxCoord WXUNUSED(y), wxCo
         m_clipX2 = xx + ww;
         m_clipY2 = yy + hh;
     }
-
-    // TODO: as soon as we don't reset the context for each operation anymore
-    // we have to update the context as well
-#endif
-
 }
 
 void wxGCDC::DoSetClippingRegionAsRegion( const wxRegion &region )
@@ -407,48 +394,33 @@ void wxGCDC::DoSetClippingRegionAsRegion( const wxRegion &region )
     }
     else
     {
-#if 0
-        CopyRgn( (RgnHandle) region.GetWXHRGN() , (RgnHandle) m_macCurrentClipRgn );
-        if ( xx != x || yy != y )
-            OffsetRgn( (RgnHandle) m_macCurrentClipRgn , xx - x , yy - y );
-        SectRgn( (RgnHandle)m_macCurrentClipRgn , (RgnHandle)m_macBoundaryClipRgn , (RgnHandle)m_macCurrentClipRgn );
-#endif
+		m_graphicContext->Clip( region ) ;
+		if ( m_clipping )
+		{
+			m_clipX1 = wxMax( m_clipX1, xx );
+			m_clipY1 = wxMax( m_clipY1, yy );
+			m_clipX2 = wxMin( m_clipX2, (xx + ww) );
+			m_clipY2 = wxMin( m_clipY2, (yy + hh) );
+		}
+		else
+		{
+			m_clipping = true;
 
-        if ( m_clipping )
-        {
-            m_clipX1 = wxMax( m_clipX1, xx );
-            m_clipY1 = wxMax( m_clipY1, yy );
-            m_clipX2 = wxMin( m_clipX2, (xx + ww) );
-            m_clipY2 = wxMin( m_clipY2, (yy + hh) );
-        }
-        else
-        {
-            m_clipping = true;
-
-            m_clipX1 = xx;
-            m_clipY1 = yy;
-            m_clipX2 = xx + ww;
-            m_clipY2 = yy + hh;
-        }
-    }
+			m_clipX1 = xx;
+			m_clipY1 = yy;
+			m_clipX2 = xx + ww;
+			m_clipY2 = yy + hh;
+		}
+	}
 }
 
 void wxGCDC::DestroyClippingRegion()
 {
-    // TODO Clipping
-#if 0
-    //    CopyRgn( (RgnHandle) m_macBoundaryClipRgn , (RgnHandle) m_macCurrentClipRgn );
-
-    CGContextRef cgContext = ((wxCairoContext*)(m_graphicContext))->GetNativeContext();
-    CGContextRestoreGState( cgContext );
-    CGContextSaveGState( cgContext );
-
-    m_graphicContext->SetPen( m_pen );
-    m_graphicContext->SetBrush( m_brush );
+	m_graphicContext->ResetClip() ;
+    m_graphicContext->SetPen( m_pen ) ;
+    m_graphicContext->SetBrush( m_brush ) ;
 
     m_clipping = false;
-#endif
-
 }
 
 void wxGCDC::DoGetSizeMM( int* width, int* height ) const
@@ -512,9 +484,10 @@ void wxGCDC::SetMapMode( int mode )
 void wxGCDC::SetUserScale( double x, double y )
 {
     // allow negative ? -> no
+
     m_userScaleX = x;
     m_userScaleY = y;
-    ComputeScaleAndOrigin();
+	ComputeScaleAndOrigin();
 }
 
 void wxGCDC::SetLogicalScale( double x, double y )
@@ -558,12 +531,24 @@ int wxGCDC::GetDepth() const
 
 void wxGCDC::ComputeScaleAndOrigin()
 {
-    // this is a bit artificial, but we need to force wxGCDC to think
-    // the pen has changed
-    wxPen pen( GetPen() );
+    // CMB: copy scale to see if it changes
+    double origScaleX = m_scaleX;
+    double origScaleY = m_scaleY;
+    m_scaleX = m_logicalScaleX * m_userScaleX;
+    m_scaleY = m_logicalScaleY * m_userScaleY;
+    m_deviceOriginX = m_deviceOriginX + m_logicalOriginX;
+    m_deviceOriginY = m_deviceOriginY + m_logicalOriginY;
 
-    m_pen = wxNullPen;
-    SetPen( pen );
+    // CMB: if scale has changed call SetPen to recalulate the line width
+    if (m_scaleX != origScaleX || m_scaleY != origScaleY)
+    {
+        // this is a bit artificial, but we need to force wxDC to think
+        // the pen has changed
+        wxPen pen(GetPen());
+        m_pen = wxNullPen;
+        SetPen(pen);
+		SetFont(m_font);
+    }
 }
 
 void wxGCDC::SetPalette( const wxPalette& WXUNUSED(palette) )
@@ -580,7 +565,11 @@ void wxGCDC::SetFont( const wxFont &font )
 {
     m_font = font;
     if ( m_graphicContext )
-        m_graphicContext->SetFont( font );
+	{
+		wxFont f = font ;
+		f.SetPointSize( LogicalToDeviceYRel(font.GetPointSize())) ;
+        m_graphicContext->SetFont( f );
+	}
 }
 
 void wxGCDC::SetPen( const wxPen &pen )
@@ -1068,9 +1057,9 @@ bool wxGCDC::CanDrawBitmap() const
 }
 
 bool wxGCDC::DoBlit(
-    wxCoord WXUNUSED(xdest), wxCoord WXUNUSED(ydest), wxCoord WXUNUSED(width), wxCoord WXUNUSED(height),
-    wxDC *source, wxCoord WXUNUSED(xsrc), wxCoord WXUNUSED(ysrc), int logical_func , bool WXUNUSED(useMask),
-    wxCoord WXUNUSED(xsrcMask), wxCoord WXUNUSED(ysrcMask) )
+    wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord height,
+    wxDC *source, wxCoord xsrc, wxCoord ysrc, int logical_func , bool useMask,
+    wxCoord xsrcMask, wxCoord ysrcMask )
 {
     wxCHECK_MSG( Ok(), false, wxT("wxGCDC(cg)::DoBlit - invalid DC") );
     wxCHECK_MSG( source->Ok(), false, wxT("wxGCDC(cg)::DoBlit - invalid source DC") );
@@ -1078,7 +1067,6 @@ bool wxGCDC::DoBlit(
     if ( logical_func == wxNO_OP )
         return true;
 
-#if 0
     if (xsrcMask == -1 && ysrcMask == -1)
     {
         xsrcMask = xsrc;
@@ -1141,9 +1129,8 @@ bool wxGCDC::DoBlit(
         wxFAIL_MSG( wxT("Blitting is only supported from bitmap contexts") );
         return false;
     }
-#endif
 
-    return false;
+    return true;
 }
 
 void wxGCDC::DoDrawRotatedText(const wxString& str, wxCoord x, wxCoord y,
@@ -1250,7 +1237,13 @@ wxCoord wxGCDC::GetCharHeight(void) const
 void wxGCDC::Clear(void)
 {
     wxCHECK_RET( Ok(), wxT("wxGCDC(cg)::Clear - invalid DC") );
-    // TODO
+    // TODO better implementation / incorporate size info into wxGCDC or context
+	m_graphicContext->SetBrush( m_backgroundBrush );
+	wxPen p = *wxTRANSPARENT_PEN ;
+	m_graphicContext->SetPen( p );
+	DoDrawRectangle( 0, 0, 32000 , 32000 );
+	m_graphicContext->SetPen( m_pen ) ;	
+	m_graphicContext->SetBrush( m_brush );
 }
 
 void wxGCDC::DoGetSize(int *width, int *height) const
@@ -1288,6 +1281,8 @@ void wxGCDC::DoGradientFillLinear(const wxRect& rect,
         end = rect.GetLeftBottom();
         end.y++;
         break ;
+	default :
+		break;
     }
 
     m_graphicContext->SetLinearGradientBrush(
