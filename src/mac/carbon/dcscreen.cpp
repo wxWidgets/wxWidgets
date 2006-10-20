@@ -21,23 +21,23 @@ IMPLEMENT_DYNAMIC_CLASS(wxScreenDC, wxWindowDC)
 wxScreenDC::wxScreenDC()
 {
 #if wxMAC_USE_CORE_GRAPHICS
-	CGDirectDisplayID display = CGMainDisplayID();
-	m_displayId = (UInt32) display;
-	CGError err = CGDisplayCaptureWithOptions(display,kCGCaptureNoFill);
-	wxASSERT( err == kCGErrorSuccess ); 
-	CGContextRef cg = CGDisplayGetDrawingContext(display);
+	CGrafPtr grafptr = CreateNewPort() ;
+	m_displayId = (UInt32) grafptr;
+	CGContextRef cg = NULL;
+	OSStatus status = QDBeginCGContext( grafptr , &cg );
+
 	CGRect bounds ;
-    bounds = CGDisplayBounds(display);
-	/*
-    m_macLocalOrigin.x = 0;
-    m_macLocalOrigin.y = 0;
-	*/ // TODO
+    bounds = CGDisplayBounds(CGMainDisplayID());
+
     SInt16 height;
     GetThemeMenuBarHeight( &height );
     m_minY = height;
 	m_minX = 0;
     m_maxX = bounds.size.width;
     m_maxY = bounds.size.height - height;
+	CGContextTranslateCTM( cg , 0 , bounds.size.height );
+	CGContextScaleCTM( cg , 1 , -1 );
+
     SetGraphicsContext( wxGraphicsContext::CreateFromNative( cg ) );
 	m_width = bounds.size.width;
 	m_height = bounds.size.height - height;
@@ -73,10 +73,13 @@ wxScreenDC::wxScreenDC()
 wxScreenDC::~wxScreenDC()
 {
 #if wxMAC_USE_CORE_GRAPHICS
+	CGrafPtr grafptr = (CGrafPtr) m_displayId;
+	m_displayId = (UInt32) grafptr;
+	CGContextRef cg = (CGContextRef) m_graphicContext->GetNativeContext();
+	QDEndCGContext(grafptr, &cg );
+
     delete m_graphicContext;
     m_graphicContext = NULL;
-	CGDirectDisplayID display = (CGDirectDisplayID) m_displayId;
-	CGDisplayRelease( display );
 #else
     if ( m_macPort )
         DisposePort( (CGrafPtr) m_macPort ) ;
