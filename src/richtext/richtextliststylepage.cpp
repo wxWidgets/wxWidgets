@@ -1,15 +1,15 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        richtextliststylepage.cpp
-// Purpose:     
+// Name:        src/richtext/richtextliststylepage.cpp
+// Purpose:
 // Author:      Julian Smart
-// Modified by: 
+// Modified by:
 // Created:     10/18/2006 11:36:37 AM
-// RCS-ID:      
+// RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:     
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#include "../../include/wx/richtext/richtextliststylepage.h"
+#include "wx/richtext/richtextliststylepage.h"
 
 ////@begin XPM images
 ////@end XPM images
@@ -117,7 +117,7 @@ bool wxRichTextListStylePage::Create( wxWindow* parent, wxWindowID id, const wxP
 }
 
 /*!
- * Member initialisation 
+ * Member initialisation
  */
 
 void wxRichTextListStylePage::Init()
@@ -151,7 +151,7 @@ void wxRichTextListStylePage::Init()
  */
 
 void wxRichTextListStylePage::CreateControls()
-{    
+{
 ////@begin wxRichTextListStylePage content construction
     wxRichTextListStylePage* itemPanel1 = this;
 
@@ -216,7 +216,7 @@ void wxRichTextListStylePage::CreateControls()
     wxBoxSizer* itemBoxSizer21 = new wxBoxSizer(wxHORIZONTAL);
     itemBoxSizer19->Add(itemBoxSizer21, 0, wxGROW, 5);
     wxString* m_symbolCtrlStrings = NULL;
-    m_symbolCtrl = new wxComboBox( itemPanel10, ID_RICHTEXTBULLETSPAGE_SYMBOLCTRL, _T(""), wxDefaultPosition, wxSize(60, -1), 0, m_symbolCtrlStrings, wxCB_DROPDOWN );
+    m_symbolCtrl = new wxComboBox( itemPanel10, ID_RICHTEXTBULLETSPAGE_SYMBOLCTRL, wxEmptyString, wxDefaultPosition, wxSize(60, -1), 0, m_symbolCtrlStrings, wxCB_DROPDOWN );
     m_symbolCtrl->SetHelpText(_("The bullet character."));
     if (ShowToolTips())
         m_symbolCtrl->SetToolTip(_("The bullet character."));
@@ -234,7 +234,7 @@ void wxRichTextListStylePage::CreateControls()
     itemBoxSizer19->Add(itemStaticText25, 0, wxALIGN_LEFT|wxLEFT|wxRIGHT|wxTOP|wxADJUST_MINSIZE, 5);
 
     wxString* m_symbolFontCtrlStrings = NULL;
-    m_symbolFontCtrl = new wxComboBox( itemPanel10, ID_RICHTEXTLISTSTYLEPAGE_SYMBOLFONTCTRL, _T(""), wxDefaultPosition, wxDefaultSize, 0, m_symbolFontCtrlStrings, wxCB_DROPDOWN );
+    m_symbolFontCtrl = new wxComboBox( itemPanel10, ID_RICHTEXTLISTSTYLEPAGE_SYMBOLFONTCTRL, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, m_symbolFontCtrlStrings, wxCB_DROPDOWN );
     if (ShowToolTips())
         m_symbolFontCtrl->SetToolTip(_("Available fonts."));
     itemBoxSizer19->Add(m_symbolFontCtrl, 0, wxGROW|wxALL, 5);
@@ -339,7 +339,7 @@ void wxRichTextListStylePage::CreateControls()
 
     wxBoxSizer* itemBoxSizer55 = new wxBoxSizer(wxHORIZONTAL);
     itemFlexGridSizer53->Add(itemBoxSizer55, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-    m_indentLeft = new wxTextCtrl( itemPanel33, ID_RICHTEXTLISTSTYLEPAGE_INDENTLEFT, _T(""), wxDefaultPosition, wxSize(50, -1), 0 );
+    m_indentLeft = new wxTextCtrl( itemPanel33, ID_RICHTEXTLISTSTYLEPAGE_INDENTLEFT, wxEmptyString, wxDefaultPosition, wxSize(50, -1), 0 );
     m_indentLeft->SetHelpText(_("The left indent."));
     if (ShowToolTips())
         m_indentLeft->SetToolTip(_("The left indent."));
@@ -350,7 +350,7 @@ void wxRichTextListStylePage::CreateControls()
 
     wxBoxSizer* itemBoxSizer58 = new wxBoxSizer(wxHORIZONTAL);
     itemFlexGridSizer53->Add(itemBoxSizer58, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-    m_indentLeftFirst = new wxTextCtrl( itemPanel33, ID_RICHTEXTLISTSTYLEPAGE_INDENTFIRSTLINE, _T(""), wxDefaultPosition, wxSize(50, -1), 0 );
+    m_indentLeftFirst = new wxTextCtrl( itemPanel33, ID_RICHTEXTLISTSTYLEPAGE_INDENTFIRSTLINE, wxEmptyString, wxDefaultPosition, wxSize(50, -1), 0 );
     m_indentLeftFirst->SetHelpText(_("The first line indent."));
     if (ShowToolTips())
         m_indentLeftFirst->SetToolTip(_("The first line indent."));
@@ -361,7 +361,7 @@ void wxRichTextListStylePage::CreateControls()
 
     wxBoxSizer* itemBoxSizer61 = new wxBoxSizer(wxHORIZONTAL);
     itemFlexGridSizer53->Add(itemBoxSizer61, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-    m_indentRight = new wxTextCtrl( itemPanel33, ID_RICHTEXTLISTSTYLEPAGE_INDENTRIGHT, _T(""), wxDefaultPosition, wxSize(50, -1), 0 );
+    m_indentRight = new wxTextCtrl( itemPanel33, ID_RICHTEXTLISTSTYLEPAGE_INDENTRIGHT, wxEmptyString, wxDefaultPosition, wxSize(50, -1), 0 );
     m_indentRight->SetHelpText(_("The right indent."));
     if (ShowToolTips())
         m_indentRight->SetToolTip(_("The right indent."));
@@ -390,7 +390,7 @@ void wxRichTextListStylePage::CreateControls()
 
     wxBoxSizer* itemBoxSizer72 = new wxBoxSizer(wxHORIZONTAL);
     itemFlexGridSizer70->Add(itemBoxSizer72, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-    m_spacingBefore = new wxTextCtrl( itemPanel33, ID_RICHTEXTLISTSTYLEPAGE_SPACINGBEFORE, _T(""), wxDefaultPosition, wxSize(50, -1), 0 );
+    m_spacingBefore = new wxTextCtrl( itemPanel33, ID_RICHTEXTLISTSTYLEPAGE_SPACINGBEFORE, wxEmptyString, wxDefaultPosition, wxSize(50, -1), 0 );
     m_spacingBefore->SetHelpText(_("The spacing before the paragraph."));
     if (ShowToolTips())
         m_spacingBefore->SetToolTip(_("The spacing before the paragraph."));
@@ -401,7 +401,7 @@ void wxRichTextListStylePage::CreateControls()
 
     wxBoxSizer* itemBoxSizer75 = new wxBoxSizer(wxHORIZONTAL);
     itemFlexGridSizer70->Add(itemBoxSizer75, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-    m_spacingAfter = new wxTextCtrl( itemPanel33, ID_RICHTEXTLISTSTYLEPAGE_SPACINGAFTER, _T(""), wxDefaultPosition, wxSize(50, -1), 0 );
+    m_spacingAfter = new wxTextCtrl( itemPanel33, ID_RICHTEXTLISTSTYLEPAGE_SPACINGAFTER, wxEmptyString, wxDefaultPosition, wxSize(50, -1), 0 );
     m_spacingAfter->SetHelpText(_("The spacing after the paragraph."));
     if (ShowToolTips())
         m_spacingAfter->SetToolTip(_("The spacing after the paragraph."));
@@ -470,7 +470,7 @@ iaculis malesuada. Donec bibendum ipsum ut ante porta fringilla.\n");
 
     wxRichTextListStyleDefinition* def = wxDynamicCast(wxRichTextFormattingDialog::GetDialogStyleDefinition(this),
         wxRichTextListStyleDefinition);
-        
+
     wxTextAttrEx attr(def->GetStyle());
     attr.SetFlags(attr.GetFlags() &
       (wxTEXT_ATTR_ALIGNMENT|wxTEXT_ATTR_LEFT_INDENT|wxTEXT_ATTR_RIGHT_INDENT|wxTEXT_ATTR_PARA_SPACING_BEFORE|wxTEXT_ATTR_PARA_SPACING_AFTER|
@@ -491,9 +491,9 @@ iaculis malesuada. Donec bibendum ipsum ut ante porta fringilla.\n");
     m_previewCtrl->BeginStyle(normalParaAttr);
     m_previewCtrl->WriteText(s_para1);
     m_previewCtrl->EndStyle();
-    
+
     m_previewCtrl->BeginStyle(attr);
-    
+
     int i;
     for (i = 0; i < 10; i++)
     {
@@ -618,7 +618,7 @@ bool wxRichTextListStylePage::TransferDataFromWindow()
         attr->SetBulletSymbol(c);
         attr->SetBulletFont(m_symbolFontCtrl->GetValue());
     }
-    
+
     return true;
 }
 
@@ -626,7 +626,7 @@ bool wxRichTextListStylePage::TransferDataToWindow()
 {
     DoTransferDataToWindow();
     UpdatePreview();
-    
+
     return true;
 }
 
@@ -636,7 +636,7 @@ void wxRichTextListStylePage::DoTransferDataToWindow()
     m_dontUpdate = true;
 
     wxPanel::TransferDataToWindow();
-    
+
     m_levelCtrl->SetValue(m_currentLevel);
 
     wxTextAttrEx* attr = GetAttributesForSelection();
@@ -769,9 +769,9 @@ wxTextAttrEx* wxRichTextListStylePage::GetAttributesForSelection()
 {
     wxRichTextListStyleDefinition* def = wxDynamicCast(wxRichTextFormattingDialog::GetDialogStyleDefinition(this),
         wxRichTextListStyleDefinition);
-        
+
     int value = m_levelCtrl->GetValue();
-        
+
     if (def)
         return def->GetLevelAttributes(value-1);
     else
@@ -853,7 +853,7 @@ void wxRichTextListStylePage::OnLevelUIUpdate( wxUpdateUIEvent& event )
 ////@begin wxEVT_UPDATE_UI event handler for ID_RICHTEXTLISTSTYLEPAGE_LEVEL in wxRichTextListStylePage.
     // Before editing this code, remove the block markers.
     event.Skip();
-////@end wxEVT_UPDATE_UI event handler for ID_RICHTEXTLISTSTYLEPAGE_LEVEL in wxRichTextListStylePage. 
+////@end wxEVT_UPDATE_UI event handler for ID_RICHTEXTLISTSTYLEPAGE_LEVEL in wxRichTextListStylePage.
 }
 
 /*!
@@ -982,7 +982,7 @@ void wxRichTextListStylePage::OnParenthesesctrlUpdate( wxUpdateUIEvent& event )
 ////@begin wxEVT_UPDATE_UI event handler for ID_RICHTEXTLISTSTYLEPAGE__PARENTHESESCTRL in wxRichTextListStylePage.
     // Before editing this code, remove the block markers.
     event.Skip();
-////@end wxEVT_UPDATE_UI event handler for ID_RICHTEXTLISTSTYLEPAGE__PARENTHESESCTRL in wxRichTextListStylePage. 
+////@end wxEVT_UPDATE_UI event handler for ID_RICHTEXTLISTSTYLEPAGE__PARENTHESESCTRL in wxRichTextListStylePage.
 }
 
 /*!
@@ -1003,7 +1003,7 @@ void wxRichTextListStylePage::OnPeriodctrlUpdate( wxUpdateUIEvent& event )
 ////@begin wxEVT_UPDATE_UI event handler for ID_RICHTEXTLISTSTYLEPAGE_PERIODCTRL in wxRichTextListStylePage.
     // Before editing this code, remove the block markers.
     event.Skip();
-////@end wxEVT_UPDATE_UI event handler for ID_RICHTEXTLISTSTYLEPAGE_PERIODCTRL in wxRichTextListStylePage. 
+////@end wxEVT_UPDATE_UI event handler for ID_RICHTEXTLISTSTYLEPAGE_PERIODCTRL in wxRichTextListStylePage.
 }
 
 /*!
@@ -1173,5 +1173,3 @@ void wxRichTextListStylePage::OnChooseFontClick( wxCommandEvent& WXUNUSED(event)
         TransferAndPreview();
     }
 }
-
-

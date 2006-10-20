@@ -94,7 +94,7 @@ public:
 
     /// Should we show tooltips?
     static bool ShowToolTips() { return sm_showToolTips; }
-    
+
     /// Determines whether tooltips will be shown
     static void SetShowToolTips(bool show) { sm_showToolTips = show; }
 

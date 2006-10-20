@@ -869,4 +869,3 @@ typedef void (wxEvtHandler::*wxRichTextEventFunction)(wxRichTextEvent&);
 
 #endif
     // _WX_RICHTEXTCTRL_H_
-

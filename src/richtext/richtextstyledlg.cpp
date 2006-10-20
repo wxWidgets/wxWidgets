@@ -1,12 +1,12 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        richtextstyledlg.cpp
-// Purpose:     
+// Name:        src/richtext/richtextstyledlg.cpp
+// Purpose:
 // Author:      Julian Smart
-// Modified by: 
+// Modified by:
 // Created:     10/5/2006 12:05:31 PM
-// RCS-ID:      
+// RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:     
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 // For compilers that support precompilation, includes "wx/wx.h".
@@ -97,7 +97,7 @@ void wxRichTextStyleOrganiserDialog::Init()
     m_dontUpdate = false;
     m_flags = 0;
     m_restartNumbering = true;
-    
+
 ////@begin wxRichTextStyleOrganiserDialog member initialisation
     m_innerSizer = NULL;
     m_buttonSizerParent = NULL;
@@ -113,6 +113,7 @@ void wxRichTextStyleOrganiserDialog::Init()
     m_deleteStyle = NULL;
     m_closeButton = NULL;
     m_bottomButtonSizer = NULL;
+
     m_restartNumberingCtrl = NULL;
     m_okButton = NULL;
     m_cancelButton = NULL;
@@ -128,7 +129,7 @@ bool wxRichTextStyleOrganiserDialog::Create( int flags, wxRichTextStyleSheet* sh
     m_richTextStyleSheet = sheet;
     m_richTextCtrl = ctrl;
     m_flags = flags;
-    
+
 ////@begin wxRichTextStyleOrganiserDialog creation
     SetExtraStyle(GetExtraStyle()|wxWS_EX_BLOCK_EVENTS|wxDIALOG_EX_CONTEXTHELP);
     wxDialog::Create( parent, id, caption, pos, size, style );
@@ -148,10 +149,10 @@ bool wxRichTextStyleOrganiserDialog::Create( int flags, wxRichTextStyleSheet* sh
  */
 
 void wxRichTextStyleOrganiserDialog::CreateControls()
-{    
+{
     bool hideTypeSelector = false;
     wxRichTextStyleListBox::wxRichTextStyleType typesToShow = wxRichTextStyleListBox::wxRICHTEXT_STYLE_ALL;
-    
+
     if ((m_flags & wxRICHTEXT_ORGANISER_SHOW_CHARACTER) != 0)
     {
         typesToShow = wxRichTextStyleListBox::wxRICHTEXT_STYLE_CHARACTER;
@@ -171,11 +172,11 @@ void wxRichTextStyleOrganiserDialog::CreateControls()
     {
         // wxRICHTEXT_ORGANISER_SHOW_ALL is implied if the other styles aren't included
     }
-    
+
     long listCtrlStyle = 0;
     if (hideTypeSelector)
         listCtrlStyle = wxRICHTEXTSTYLELIST_HIDE_TYPE_SELECTOR;
-    
+
 ////@begin wxRichTextStyleOrganiserDialog content construction
     wxRichTextStyleOrganiserDialog* itemDialog1 = this;
 
@@ -340,18 +341,18 @@ void wxRichTextStyleOrganiserDialog::CreateControls()
     {
         m_buttonSizerParent->Show(m_buttonSizer, false);
     }
-    
+
     // No buttons in the horizontal group are shown, so hide the whole sizer
     if ((m_flags & (wxRICHTEXT_ORGANISER_OK_CANCEL|wxRICHTEXT_ORGANISER_RENUMBER)) == 0)
     {
         m_innerSizer->Show(m_bottomButtonSizer, false);
     }
-    
+
     if (hideTypeSelector)
     {
         m_stylesListBox->GetStyleListBox()->SetStyleType(typesToShow);
     }
-    
+
     m_stylesListBox->SetStyleSheet(m_richTextStyleSheet);
     m_stylesListBox->SetRichTextCtrl(m_richTextCtrl);
     m_stylesListBox->UpdateStyles();
@@ -389,9 +390,9 @@ bool wxRichTextStyleOrganiserDialog::TransferDataFromWindow()
 {
     if (!wxDialog::TransferDataFromWindow())
         return false;
-        
+
     m_restartNumbering = m_restartNumberingCtrl->GetValue();
-        
+
     return true;
 }
 
@@ -399,9 +400,9 @@ bool wxRichTextStyleOrganiserDialog::TransferDataToWindow()
 {
     if (!wxDialog::TransferDataToWindow())
         return false;
-        
+
     m_restartNumberingCtrl->SetValue(m_restartNumbering);
-        
+
     return true;
 }
 
@@ -423,15 +424,15 @@ iaculis malesuada. Donec bibendum ipsum ut ante porta fringilla.\n");
     {
         sel = m_stylesListBox->GetStyleListBox()->GetSelection();
         if (sel == -1)
-            return;    
+            return;
     }
 
     wxRichTextStyleDefinition* def = m_stylesListBox->GetStyleListBox()->GetStyle(sel);
-    
+
     wxRichTextListStyleDefinition* listDef = wxDynamicCast(def, wxRichTextListStyleDefinition);
     //wxRichTextParagraphStyleDefinition* paraDef = wxDynamicCast(def, wxRichTextParagraphStyleDefinition);
-    //wxRichTextCharacterStyleDefinition* charDef = wxDynamicCast(def, wxRichTextCharacterStyleDefinition);        
-    
+    //wxRichTextCharacterStyleDefinition* charDef = wxDynamicCast(def, wxRichTextCharacterStyleDefinition);
+
     wxTextAttrEx attr(def->GetStyle());
 #if 0
     attr.SetFlags(attr.GetFlags() &
@@ -449,14 +450,14 @@ iaculis malesuada. Donec bibendum ipsum ut ante porta fringilla.\n");
     normalParaAttr.SetTextColour(wxColour(wxT("LIGHT GREY")));
 
     m_previewCtrl->Freeze();
-    m_previewCtrl->Clear();    
+    m_previewCtrl->Clear();
 
     m_previewCtrl->BeginStyle(normalParaAttr);
     m_previewCtrl->WriteText(s_para1);
     m_previewCtrl->EndStyle();
-    
+
     m_previewCtrl->BeginStyle(attr);
-    
+
     if (listDef)
     {
         int i;
@@ -473,7 +474,7 @@ iaculis malesuada. Donec bibendum ipsum ut ante porta fringilla.\n");
     {
         m_previewCtrl->WriteText(wxString(wxT("\n")) + s_para2);
     }
-    
+
     m_previewCtrl->EndStyle();
 
     m_previewCtrl->BeginStyle(normalParaAttr);
@@ -482,7 +483,7 @@ iaculis malesuada. Donec bibendum ipsum ut ante porta fringilla.\n");
 
     m_previewCtrl->Thaw();
 }
-    
+
 /// Clears the preview
 void wxRichTextStyleOrganiserDialog::ClearPreview()
 {
@@ -500,9 +501,9 @@ bool wxRichTextStyleOrganiserDialog::ApplyStyle(wxRichTextCtrl* ctrl)
         return false;
     if (!ctrl->HasSelection())
         return false;
-        
 
-    wxRichTextStyleDefinition* def = m_stylesListBox->GetStyleListBox()->GetStyle(sel);    
+
+    wxRichTextStyleDefinition* def = m_stylesListBox->GetStyleListBox()->GetStyle(sel);
     wxRichTextListStyleDefinition* listDef = wxDynamicCast(def, wxRichTextListStyleDefinition);
 
     if (listDef && m_restartNumberingCtrl->GetValue())
@@ -575,9 +576,9 @@ void wxRichTextStyleOrganiserDialog::OnNewCharClick( wxCommandEvent& WXUNUSED(ev
             wxMessageBox(_("Sorry, that name is taken. Please choose another."), _("New Style"), wxICON_EXCLAMATION|wxOK, this);
             return;
         }
-        
+
         wxRichTextCharacterStyleDefinition* style = new wxRichTextCharacterStyleDefinition(styleName);
-        
+
         int pages = wxRICHTEXT_FORMAT_FONT|wxRICHTEXT_FORMAT_STYLE_EDITOR;
         wxRichTextFormattingDialog formatDlg;
         formatDlg.SetStyleDefinition(*style, GetStyleSheet());
@@ -586,9 +587,9 @@ void wxRichTextStyleOrganiserDialog::OnNewCharClick( wxCommandEvent& WXUNUSED(ev
         if (formatDlg.ShowModal() == wxID_OK)
         {
             wxRichTextCharacterStyleDefinition* charDef = wxDynamicCast(formatDlg.GetStyleDefinition(), wxRichTextCharacterStyleDefinition);
-            
+
             (*((wxRichTextCharacterStyleDefinition* ) style)) = (*charDef);
-            
+
             GetStyleSheet()->AddCharacterStyle(style);
 
             m_stylesListBox->UpdateStyles();
@@ -596,7 +597,7 @@ void wxRichTextStyleOrganiserDialog::OnNewCharClick( wxCommandEvent& WXUNUSED(ev
         }
         else
             delete style;
-    }    
+    }
 }
 
 /*!
@@ -623,9 +624,9 @@ void wxRichTextStyleOrganiserDialog::OnNewParaClick( wxCommandEvent& WXUNUSED(ev
             wxMessageBox(_("Sorry, that name is taken. Please choose another."), _("New Style"), wxICON_EXCLAMATION|wxOK, this);
             return;
         }
-        
+
         wxRichTextParagraphStyleDefinition* style = new wxRichTextParagraphStyleDefinition(styleName);
-        
+
         int pages = wxRICHTEXT_FORMAT_STYLE_EDITOR|wxRICHTEXT_FORMAT_FONT|wxRICHTEXT_FORMAT_INDENTS_SPACING|wxRICHTEXT_FORMAT_TABS|wxRICHTEXT_FORMAT_BULLETS;
         wxRichTextFormattingDialog formatDlg;
         formatDlg.SetStyleDefinition(*style, GetStyleSheet());
@@ -634,9 +635,9 @@ void wxRichTextStyleOrganiserDialog::OnNewParaClick( wxCommandEvent& WXUNUSED(ev
         if (formatDlg.ShowModal() == wxID_OK)
         {
             wxRichTextParagraphStyleDefinition* paraDef = wxDynamicCast(formatDlg.GetStyleDefinition(), wxRichTextParagraphStyleDefinition);
-            
+
             (*((wxRichTextParagraphStyleDefinition* ) style)) = (*paraDef);
-            
+
             GetStyleSheet()->AddParagraphStyle(style);
 
             m_stylesListBox->UpdateStyles();
@@ -644,7 +645,7 @@ void wxRichTextStyleOrganiserDialog::OnNewParaClick( wxCommandEvent& WXUNUSED(ev
         }
         else
             delete style;
-    }    
+    }
 }
 
 /*!
@@ -667,9 +668,9 @@ void wxRichTextStyleOrganiserDialog::OnEditClick( wxCommandEvent& WXUNUSED(event
     if (sel != wxNOT_FOUND)
     {
         wxRichTextStyleDefinition* def = m_stylesListBox->GetStyleListBox()->GetStyle(sel);
-        
+
         int pages = wxRICHTEXT_FORMAT_STYLE_EDITOR;
-        
+
         if (def->IsKindOf(CLASSINFO(wxRichTextCharacterStyleDefinition)))
         {
             pages |= wxRICHTEXT_FORMAT_FONT;
@@ -682,7 +683,7 @@ void wxRichTextStyleOrganiserDialog::OnEditClick( wxCommandEvent& WXUNUSED(event
         {
             pages |= wxRICHTEXT_FORMAT_FONT|wxRICHTEXT_FORMAT_INDENTS_SPACING|wxRICHTEXT_FORMAT_TABS|wxRICHTEXT_FORMAT_BULLETS;
         }
-        
+
         wxRichTextFormattingDialog formatDlg;
         formatDlg.SetStyleDefinition(*def, GetStyleSheet());
         formatDlg.Create(pages, this);
@@ -692,7 +693,7 @@ void wxRichTextStyleOrganiserDialog::OnEditClick( wxCommandEvent& WXUNUSED(event
             wxRichTextParagraphStyleDefinition* paraDef = wxDynamicCast(formatDlg.GetStyleDefinition(), wxRichTextParagraphStyleDefinition);
             wxRichTextCharacterStyleDefinition* charDef = wxDynamicCast(formatDlg.GetStyleDefinition(), wxRichTextCharacterStyleDefinition);
             wxRichTextListStyleDefinition* listDef = wxDynamicCast(formatDlg.GetStyleDefinition(), wxRichTextListStyleDefinition);
-            
+
             if (listDef)
             {
                 (*((wxRichTextListStyleDefinition* ) def)) = (*listDef);
@@ -736,14 +737,14 @@ void wxRichTextStyleOrganiserDialog::OnDeleteClick( wxCommandEvent& WXUNUSED(eve
         if (wxYES == wxMessageBox(wxString::Format(_("Delete style %s?"), (const wxChar*) name), _("Delete Style"), wxYES_NO|wxICON_QUESTION, this))
         {
             m_stylesListBox->GetStyleListBox()->SetItemCount(0);
-            
+
             if (def->IsKindOf(CLASSINFO(wxRichTextListStyleDefinition)))
                 GetStyleSheet()->RemoveListStyle((wxRichTextListStyleDefinition*) def, true);
             else if (def->IsKindOf(CLASSINFO(wxRichTextParagraphStyleDefinition)))
                 GetStyleSheet()->RemoveParagraphStyle((wxRichTextParagraphStyleDefinition*) def, true);
             else if (def->IsKindOf(CLASSINFO(wxRichTextCharacterStyleDefinition)))
                 GetStyleSheet()->RemoveCharacterStyle((wxRichTextCharacterStyleDefinition*) def, true);
-                
+
             m_stylesListBox->UpdateStyles();
 
             if (m_stylesListBox->GetStyleListBox()->GetSelection() != -1)
@@ -777,9 +778,9 @@ void wxRichTextStyleOrganiserDialog::OnNewListClick( wxCommandEvent& WXUNUSED(ev
             wxMessageBox(_("Sorry, that name is taken. Please choose another."), _("New Style"), wxICON_EXCLAMATION|wxOK, this);
             return;
         }
-        
+
         wxRichTextListStyleDefinition* style = new wxRichTextListStyleDefinition(styleName);
-        
+
         // Initialize the style to make it easier to edit
         int i;
         for (i = 0; i < 10; i++)
@@ -798,7 +799,7 @@ void wxRichTextStyleOrganiserDialog::OnNewListClick( wxCommandEvent& WXUNUSED(ev
 
             style->SetAttributes(i, (i+1)*60, 60, wxTEXT_ATTR_BULLET_STYLE_SYMBOL, bulletSymbol);
         }
-        
+
         int pages = wxRICHTEXT_FORMAT_LIST_STYLE|wxRICHTEXT_FORMAT_STYLE_EDITOR|wxRICHTEXT_FORMAT_FONT|wxRICHTEXT_FORMAT_INDENTS_SPACING;
         wxRichTextFormattingDialog formatDlg;
         formatDlg.SetStyleDefinition(*style, GetStyleSheet());
@@ -807,9 +808,9 @@ void wxRichTextStyleOrganiserDialog::OnNewListClick( wxCommandEvent& WXUNUSED(ev
         if (formatDlg.ShowModal() == wxID_OK)
         {
             wxRichTextListStyleDefinition* listDef = wxDynamicCast(formatDlg.GetStyleDefinition(), wxRichTextListStyleDefinition);
-            
+
             (*((wxRichTextListStyleDefinition* ) style)) = (*listDef);
-            
+
             GetStyleSheet()->AddListStyle(style);
 
             m_stylesListBox->UpdateStyles();
@@ -817,7 +818,7 @@ void wxRichTextStyleOrganiserDialog::OnNewListClick( wxCommandEvent& WXUNUSED(ev
         }
         else
             delete style;
-    }    
+    }
 }
 
 /*!
@@ -854,4 +855,3 @@ void wxRichTextStyleOrganiserDialog::OnListSelection(wxCommandEvent& event)
     else
         event.Skip();
 }
-

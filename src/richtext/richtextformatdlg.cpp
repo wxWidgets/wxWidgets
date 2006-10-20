@@ -248,7 +248,7 @@ bool wxRichTextFormattingDialogFactory::CreatePages(long pages, wxRichTextFormat
                 int imageIndex = GetPageImage(pageId);
                 dialog->GetBookCtrl()->AddPage(panel, title, !selected, imageIndex);
                 selected = true;
-                
+
                 dialog->AddPageId(pageId);
             }
         }

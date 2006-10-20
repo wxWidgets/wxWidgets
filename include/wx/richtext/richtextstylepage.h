@@ -1,8 +1,8 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/richtext/richtextstylepage.h
-// Purpose:     
+// Purpose:
 // Author:      Julian Smart
-// Modified by: 
+// Modified by:
 // Created:     10/5/2006 11:34:55 AM
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
@@ -29,7 +29,7 @@
  */
 
 class wxRichTextStylePage: public wxPanel
-{    
+{
     DECLARE_DYNAMIC_CLASS( wxRichTextStylePage )
     DECLARE_EVENT_TABLE()
 
@@ -40,7 +40,7 @@ public:
 
     /// Creation
     bool Create( wxWindow* parent, wxWindowID id = SYMBOL_WXRICHTEXTSTYLEPAGE_IDNAME, const wxPoint& pos = SYMBOL_WXRICHTEXTSTYLEPAGE_POSITION, const wxSize& size = SYMBOL_WXRICHTEXTSTYLEPAGE_SIZE, long style = SYMBOL_WXRICHTEXTSTYLEPAGE_STYLE );
-    
+
     /// Initialise members
     void Init();
 

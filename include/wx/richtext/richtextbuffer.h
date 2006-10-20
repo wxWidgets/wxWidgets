@@ -2081,4 +2081,3 @@ WXDLLIMPEXP_RICHTEXT void wxRichTextModuleInit();
 
 #endif
     // _WX_RICHTEXTBUFFER_H_
-

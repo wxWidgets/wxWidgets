@@ -1,12 +1,12 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        richtextliststylepage.h
-// Purpose:     
+// Name:        wx/richtext/richtextliststylepage.h
+// Purpose:
 // Author:      Julian Smart
-// Modified by: 
+// Modified by:
 // Created:     10/18/2006 11:36:37 AM
-// RCS-ID:      
+// RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:     
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _RICHTEXTLISTSTYLEPAGE_H_
@@ -39,7 +39,7 @@
  */
 
 class WXDLLIMPEXP_RICHTEXT wxRichTextListStylePage: public wxPanel
-{    
+{
     DECLARE_DYNAMIC_CLASS( wxRichTextListStylePage )
     DECLARE_EVENT_TABLE()
 
@@ -63,7 +63,7 @@ public:
     /// Transfer data from/to window
     virtual bool TransferDataFromWindow();
     virtual bool TransferDataToWindow();
-    
+
     /// Get attributes for selected level
     wxTextAttrEx* GetAttributesForSelection();
 
@@ -78,7 +78,7 @@ public:
 
     /// Transfer from the window and preview
     void TransferAndPreview();
-    
+
 ////@begin wxRichTextListStylePage event handler declarations
 
     /// wxEVT_COMMAND_SPINCTRL_UPDATED event handler for ID_RICHTEXTLISTSTYLEPAGE_LEVEL

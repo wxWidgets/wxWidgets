@@ -1,12 +1,12 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        richtextstyledlg.h
-// Purpose:     
+// Name:        wx/richtext/richtextstyledlg.h
+// Purpose:
 // Author:      Julian Smart
-// Modified by: 
+// Modified by:
 // Created:     10/5/2006 12:05:31 PM
-// RCS-ID:      
+// RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:     
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _RICHTEXTSTYLEDLG_H_
@@ -48,7 +48,7 @@ class wxRichTextCtrl;
 /*!
  * Flags for specifying permitted operations
  */
- 
+
 #define wxRICHTEXT_ORGANISER_DELETE_STYLES  0x0001
 #define wxRICHTEXT_ORGANISER_CREATE_STYLES  0x0002
 #define wxRICHTEXT_ORGANISER_APPLY_STYLES   0x0004
@@ -73,7 +73,7 @@ class wxRichTextCtrl;
  */
 
 class WXDLLIMPEXP_RICHTEXT wxRichTextStyleOrganiserDialog: public wxDialog
-{    
+{
     DECLARE_DYNAMIC_CLASS( wxRichTextStyleOrganiserDialog )
     DECLARE_EVENT_TABLE()
 
@@ -87,18 +87,18 @@ public:
 
     /// Creates the controls and sizers
     void CreateControls();
-    
+
     /// Initialise member variables
     void Init();
 
     /// Transfer data from/to window
     virtual bool TransferDataFromWindow();
     virtual bool TransferDataToWindow();
-    
+
     /// Set/get style sheet
     void SetStyleSheet(wxRichTextStyleSheet* sheet) { m_richTextStyleSheet = sheet; }
     wxRichTextStyleSheet* GetStyleSheet() const { return m_richTextStyleSheet; }
-    
+
     /// Set/get control
     void SetRichTextCtrl(wxRichTextCtrl* ctrl) { m_richTextCtrl = ctrl; }
     wxRichTextCtrl* GetRichTextCtrl() const { return m_richTextCtrl; }
@@ -106,30 +106,30 @@ public:
     /// Set/get flags
     void SetFlags(int flags) { m_flags = flags; }
     int GetFlags() const { return m_flags; }
-    
+
     /// Show preview for given or selected preview
     void ShowPreview(int sel = -1);
-    
+
     /// Clears the preview
     void ClearPreview();
-    
+
     /// List selection
     void OnListSelection(wxCommandEvent& event);
-    
+
     /// Get/set restart numbering boolean
     bool GetRestartNumbering() const { return m_restartNumbering; }
     void SetRestartNumbering(bool restartNumbering) { m_restartNumbering = restartNumbering; }
-    
+
     /// Get selected style name or definition
     wxString GetSelectedStyle() const;
     wxRichTextStyleDefinition* GetSelectedStyleDefinition() const;
-    
+
     /// Apply the style
     bool ApplyStyle(wxRichTextCtrl* ctrl = NULL);
 
     /// Should we show tooltips?
     static bool ShowToolTips() { return sm_showToolTips; }
-    
+
     /// Determines whether tooltips will be shown
     static void SetShowToolTips(bool show) { sm_showToolTips = show; }
 
@@ -226,7 +226,7 @@ private:
 
     wxRichTextCtrl*         m_richTextCtrl;
     wxRichTextStyleSheet*   m_richTextStyleSheet;
-    
+
     bool                    m_dontUpdate;
     int                     m_flags;
     static bool             sm_showToolTips;

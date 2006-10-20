@@ -644,7 +644,7 @@ void wxRichTextCtrl::OnChar(wxKeyEvent& event)
                     event.Skip();
                     return;
                 }
-                
+
                 if (keycode == wxT('\t'))
                 {
                     // See if we need to promote or demote the selection or paragraph at the cursor
@@ -658,7 +658,7 @@ void wxRichTextCtrl::OnChar(wxKeyEvent& event)
                             range = GetSelectionRange();
                         else
                             range = para->GetRange().FromInternal();
-                        
+
                         int promoteBy = event.ShiftDown() ? 1 : -1;
 
                         PromoteList(promoteBy, range, NULL);
@@ -2776,20 +2776,20 @@ bool wxRichTextCtrl::ApplyStyle(wxRichTextStyleDefinition* def)
     if (def->IsKindOf(CLASSINFO(wxRichTextListStyleDefinition)))
     {
         flags |= wxRICHTEXT_SETSTYLE_PARAGRAPHS_ONLY;
-        
+
         wxRichTextRange range;
-        
+
         if (HasSelection())
             range = GetSelectionRange();
         else
         {
-            long pos = GetAdjustedCaretPosition(GetCaretPosition());            
+            long pos = GetAdjustedCaretPosition(GetCaretPosition());
             range = wxRichTextRange(pos, pos+1);
         }
-        
-        return SetListStyle(range, (wxRichTextListStyleDefinition*) def, flags);        
-    }    
-    
+
+        return SetListStyle(range, (wxRichTextListStyleDefinition*) def, flags);
+    }
+
     // Make sure the attr has the style name
     if (def->IsKindOf(CLASSINFO(wxRichTextParagraphStyleDefinition)))
     {
@@ -2916,12 +2916,12 @@ bool wxRichTextCtrl::ClearListStyle(const wxRichTextRange& range, int flags)
 /// Number/renumber any list elements in the given range
 bool wxRichTextCtrl::NumberList(const wxRichTextRange& range, wxRichTextListStyleDefinition* def, int flags, int startFrom, int specifiedLevel)
 {
-    return GetBuffer().NumberList(range.ToInternal(), def, flags, startFrom, specifiedLevel);    
+    return GetBuffer().NumberList(range.ToInternal(), def, flags, startFrom, specifiedLevel);
 }
 
 bool wxRichTextCtrl::NumberList(const wxRichTextRange& range, const wxString& defName, int flags, int startFrom, int specifiedLevel)
 {
-    return GetBuffer().NumberList(range.ToInternal(), defName, flags, startFrom, specifiedLevel);    
+    return GetBuffer().NumberList(range.ToInternal(), defName, flags, startFrom, specifiedLevel);
 }
 
 /// Promote the list items within the given range. promoteBy can be a positive or negative number, e.g. 1 or -1
@@ -2952,4 +2952,3 @@ void wxRichTextCtrl::ClearAvailableFontNames()
 
 #endif
     // wxUSE_RICHTEXT
-

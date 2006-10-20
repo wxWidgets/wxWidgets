@@ -75,7 +75,7 @@ bool wxRichTextParagraphStyleDefinition::operator ==(const wxRichTextParagraphSt
 void wxRichTextListStyleDefinition::Copy(const wxRichTextListStyleDefinition& def)
 {
     wxRichTextParagraphStyleDefinition::Copy(def);
-    
+
     int i;
     for (i = 0; i < 10; i++)
         m_levelStyles[i] = def.m_levelStyles[i];
@@ -89,7 +89,7 @@ bool wxRichTextListStyleDefinition::operator ==(const wxRichTextListStyleDefinit
     for (i = 0; i < 10; i++)
         if (!(m_levelStyles[i] == def.m_levelStyles[i]))
             return false;
-        
+
     return true;
 }
 
@@ -126,15 +126,15 @@ void wxRichTextListStyleDefinition::SetAttributes(int i, int leftIndent, int lef
     if (i >= 0 && i < 10)
     {
         wxTextAttrEx attr;
-            
+
         attr.SetBulletStyle(bulletStyle);
         attr.SetLeftIndent(leftIndent, leftSubIndent);
 
         if (!bulletSymbol.IsEmpty())
             attr.SetBulletSymbol(bulletSymbol[0]);
-        
-        m_levelStyles[i] = attr;        
-    }    
+
+        m_levelStyles[i] = attr;
+    }
 }
 
 /// Finds the level corresponding to the given indentation
@@ -159,20 +159,20 @@ int wxRichTextListStyleDefinition::FindLevelForIndent(int indent) const
 wxTextAttrEx wxRichTextListStyleDefinition::CombineWithParagraphStyle(int indent, const wxTextAttrEx& paraStyle)
 {
     int listLevel = FindLevelForIndent(indent);
-    
+
     wxTextAttrEx attr(*GetLevelAttributes(listLevel));
     int oldLeftIndent = attr.GetLeftIndent();
     int oldLeftSubIndent = attr.GetLeftSubIndent();
 
-    // First apply the overall paragraph style, if any    
+    // First apply the overall paragraph style, if any
     wxRichTextApplyStyle(attr, GetStyle());
 
     // Then apply paragraph style, e.g. from paragraph style definition
     wxRichTextApplyStyle(attr, paraStyle);
-    
+
     // We override the indents according to the list definition
     attr.SetLeftIndent(oldLeftIndent, oldLeftSubIndent);
-    
+
     return attr;
 }
 
@@ -192,12 +192,12 @@ wxTextAttrEx wxRichTextListStyleDefinition::GetCombinedStyleForLevel(int listLev
     int oldLeftIndent = attr.GetLeftIndent();
     int oldLeftSubIndent = attr.GetLeftSubIndent();
 
-    // Apply the overall paragraph style, if any    
+    // Apply the overall paragraph style, if any
     wxRichTextApplyStyle(attr, GetStyle());
 
     // We override the indents according to the list definition
     attr.SetLeftIndent(oldLeftIndent, oldLeftSubIndent);
-    
+
     return attr;
 }
 
@@ -221,10 +221,10 @@ wxRichTextStyleSheet::~wxRichTextStyleSheet()
 
     if (m_nextSheet)
         m_nextSheet->m_previousSheet = m_previousSheet;
-    
+
     if (m_previousSheet)
         m_previousSheet->m_nextSheet = m_nextSheet;
-    
+
     m_previousSheet = NULL;
     m_nextSheet = NULL;
 }
@@ -269,7 +269,7 @@ wxRichTextStyleDefinition* wxRichTextStyleSheet::FindStyle(const wxList& list, c
         if (def->GetName().Lower() == name.Lower())
             return def;
     }
-    
+
     if (m_nextSheet && recurse)
         return m_nextSheet->FindStyle(list, name, recurse);
 
@@ -289,7 +289,7 @@ bool wxRichTextStyleSheet::InsertSheet(wxRichTextStyleSheet* before)
 {
     m_previousSheet = before->m_previousSheet;
     m_nextSheet = before;
-    
+
     before->m_previousSheet = this;
     return true;
 }
@@ -302,12 +302,12 @@ bool wxRichTextStyleSheet::AppendSheet(wxRichTextStyleSheet* after)
     {
         last = last->m_nextSheet;
     }
-    
+
     if (last)
     {
         m_previousSheet = last;
         last->m_nextSheet = this;
-        
+
         return true;
     }
     else
@@ -321,7 +321,7 @@ void wxRichTextStyleSheet::Unlink()
         m_previousSheet->m_nextSheet = m_nextSheet;
     if (m_nextSheet)
         m_nextSheet->m_previousSheet = m_previousSheet;
-    
+
     m_previousSheet = NULL;
     m_nextSheet = NULL;
 }
@@ -416,7 +416,7 @@ wxString wxRichTextStyleListBox::OnGetItem(size_t n) const
 {
     if (!GetStyleSheet())
         return wxEmptyString;
-    
+
     wxRichTextStyleDefinition* def = GetStyle(n);
     if (def)
         return CreateHTML(def);
@@ -453,7 +453,7 @@ wxRichTextStyleDefinition* wxRichTextStyleListBox::GetStyle(size_t i) const
     else if ((GetStyleType() == wxRICHTEXT_STYLE_LIST) && (i < GetStyleSheet()->GetListStyleCount()))
     {
         return GetStyleSheet()->GetListStyle(i);
-    }          
+    }
 
     return NULL;
 }
@@ -464,7 +464,7 @@ void wxRichTextStyleListBox::UpdateStyles()
     if (GetStyleSheet())
     {
         SetSelection(wxNOT_FOUND);
-        
+
         if (GetStyleType() == wxRICHTEXT_STYLE_ALL)
             SetItemCount(GetStyleSheet()->GetParagraphStyleCount()+GetStyleSheet()->GetCharacterStyleCount()+GetStyleSheet()->GetListStyleCount());
         else if (GetStyleType() == wxRICHTEXT_STYLE_PARAGRAPH)
@@ -473,14 +473,14 @@ void wxRichTextStyleListBox::UpdateStyles()
             SetItemCount(GetStyleSheet()->GetCharacterStyleCount());
         else if (GetStyleType() == wxRICHTEXT_STYLE_LIST)
             SetItemCount(GetStyleSheet()->GetListStyleCount());
-        
+
         Refresh();
 
         if (GetItemCount() > 0)
         {
             SetSelection(0);
             SendSelectedEvent();
-        }        
+        }
     }
 }
 
@@ -666,7 +666,7 @@ wxString wxRichTextStyleListBox::GetStyleToShowInIdleTime(wxRichTextCtrl* ctrl, 
     {
         styleName = para->GetAttributes().GetListStyleName();
     }
-    
+
     return styleName;
 }
 
@@ -729,27 +729,27 @@ bool wxRichTextStyleListCtrl::Create(wxWindow* parent, wxWindowID id, const wxPo
         const wxSize& size, long style)
 {
     wxControl::Create(parent, id, pos, size, style);
-    
+
     SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW));
     if (size != wxDefaultSize)
         SetBestFittingSize(size);
-    
+
     bool showSelector = ((style & wxRICHTEXTSTYLELIST_HIDE_TYPE_SELECTOR) == 0);
-    
+
     m_styleListBox = new wxRichTextStyleListBox(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, showSelector ? wxSIMPLE_BORDER : wxNO_BORDER);
 
     wxBoxSizer* boxSizer = new wxBoxSizer(wxVERTICAL);
-    
+
     if (showSelector)
-    {    
+    {
         wxArrayString choices;
         choices.Add(_("All styles"));
         choices.Add(_("Paragraph styles"));
         choices.Add(_("Character styles"));
         choices.Add(_("List styles"));
-    
+
         m_styleChoice = new wxChoice(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, choices);
-    
+
         boxSizer->Add(m_styleListBox, 1, wxALL|wxEXPAND, 5);
         boxSizer->Add(m_styleChoice, 0, wxALL|wxEXPAND, 5);
     }
@@ -757,26 +757,26 @@ bool wxRichTextStyleListCtrl::Create(wxWindow* parent, wxWindowID id, const wxPo
     {
         boxSizer->Add(m_styleListBox, 1, wxALL|wxEXPAND, 0);
     }
-    
+
     SetSizer(boxSizer);
     Layout();
 
     m_dontUpdate = true;
 
     if (m_styleChoice)
-    {    
+    {
         int i = StyleTypeToIndex(m_styleListBox->GetStyleType());
         m_styleChoice->SetSelection(i);
     }
-    
+
     m_dontUpdate = false;
-    
+
     return true;
 }
 
 wxRichTextStyleListCtrl::~wxRichTextStyleListCtrl()
 {
-    
+
 }
 
 /// React to style type choice
@@ -788,7 +788,7 @@ void wxRichTextStyleListCtrl::OnChooseType(wxCommandEvent& event)
     {
         if (m_dontUpdate)
             return;
-        
+
         wxRichTextStyleListBox::wxRichTextStyleType styleType = StyleIndexToType(event.GetSelection());
         m_styleListBox->SetStyleType(styleType);
     }
@@ -875,11 +875,11 @@ void wxRichTextStyleListCtrl::SetStyleType(wxRichTextStyleListBox::wxRichTextSty
     m_dontUpdate = true;
 
     if (m_styleChoice)
-    {    
+    {
         int i = StyleTypeToIndex(m_styleListBox->GetStyleType());
         m_styleChoice->SetSelection(i);
     }
-    
+
     m_dontUpdate = false;
 }
 
@@ -895,7 +895,7 @@ wxRichTextStyleListBox::wxRichTextStyleType wxRichTextStyleListCtrl::GetStyleTyp
 void wxRichTextStyleListCtrl::UpdateStyles()
 {
     if (m_styleListBox)
-        m_styleListBox->UpdateStyles();    
+        m_styleListBox->UpdateStyles();
 }
 
 #if wxUSE_COMBOCTRL
@@ -1003,7 +1003,7 @@ void wxRichTextStyleComboCtrl::OnIdle(wxIdleEvent& event)
     if (GetRichTextCtrl() && !IsPopupShown() && m_stylePopup && wxWindow::FindFocus() != this)
     {
         wxString styleName = wxRichTextStyleListBox::GetStyleToShowInIdleTime(GetRichTextCtrl(), m_stylePopup->GetStyleType());
-        
+
         wxString currentValue = GetValue();
         if (!styleName.IsEmpty())
         {
@@ -1027,4 +1027,3 @@ void wxRichTextStyleComboCtrl::OnIdle(wxIdleEvent& event)
 
 #endif
     // wxUSE_RICHTEXT
-
