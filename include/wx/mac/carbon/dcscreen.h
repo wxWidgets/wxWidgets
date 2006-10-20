@@ -28,6 +28,10 @@ class WXDLLEXPORT wxScreenDC: public wxWindowDC
   static bool StartDrawingOnTop(wxWindow* WXUNUSED(window)) { return TRUE; }
   static bool StartDrawingOnTop(wxRect* WXUNUSED(rect) = NULL) { return TRUE; }
   static bool EndDrawingOnTop() { return TRUE; }
+ private:
+#if wxMAC_USE_CORE_GRAPHICS
+	wxUint32 m_displayId;
+#endif
 };
 
 #endif
