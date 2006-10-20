@@ -945,7 +945,7 @@ void wxGDIPlusContext::SetFont( const wxFont &font )
     m_font = new Font( s , size , style );
 }
 
-void * wxCairoContext::GetNativeContext() 
+void* wxGDIPlusContext::GetNativeContext() 
 {
 	return m_context;
 }
