@@ -52,7 +52,7 @@ wxMemoryDC::~wxMemoryDC()
     {
 #if wxMAC_USE_CORE_GRAPHICS
         m_selected.EndRawAccess() ;
-        CGContextRef bmCtx = ((wxMacCGContext*)(m_graphicContext))->GetNativeContext() ;
+        CGContextRef bmCtx = (CGContextRef) m_graphicContext->GetNativeContext() ;
         delete m_graphicContext ;
         m_graphicContext = NULL ;
         CGContextRelease( bmCtx ) ;
@@ -68,7 +68,7 @@ void wxMemoryDC::SelectObject( const wxBitmap& bitmap )
     {
 #if wxMAC_USE_CORE_GRAPHICS
         m_selected.EndRawAccess() ;
-        CGContextRef bmCtx = ((wxMacCGContext*)(m_graphicContext))->GetNativeContext() ;
+        CGContextRef bmCtx = (CGContextRef) m_graphicContext->GetNativeContext() ;
         delete m_graphicContext ;
         m_graphicContext = NULL ;
         CGContextRelease( bmCtx ) ;
@@ -89,6 +89,8 @@ void wxMemoryDC::SelectObject( const wxBitmap& bitmap )
         int bytesPerPixel = 4 ;
         int w = bitmap.GetWidth() ;
         int h = bitmap.GetHeight() ;
+		m_width = w;
+		m_height = h;
 
         // TODO: should this be kCGImageAlphaPremultiplied[First,Last] ?
         CGImageAlphaInfo a = kCGImageAlphaNoneSkipFirst ;
@@ -105,7 +107,7 @@ void wxMemoryDC::SelectObject( const wxBitmap& bitmap )
             CGContextTranslateCTM( bmCtx , 0 ,  m_selected.GetHeight() ) ;
             CGContextScaleCTM( bmCtx , 1 , -1 ) ;
 
-            m_graphicContext = new wxMacCGContext( bmCtx ) ;
+			SetGraphicsContext( wxGraphicsContext::CreateFromNative( bmCtx ) );
             m_graphicContext->SetPen( m_pen ) ;
             m_graphicContext->SetBrush( m_brush ) ;
             m_graphicContext->SetFont( m_font ) ;

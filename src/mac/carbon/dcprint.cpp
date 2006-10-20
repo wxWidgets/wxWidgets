@@ -94,8 +94,8 @@ wxMacCarbonPrinterDC::wxMacCarbonPrinterDC( wxPrintData* data )
     PMPrinterGetOutputResolution( printer, native->m_macPrintSettings, &res) ;
 #else
     m_err = PMGetResolution((PMPageFormat) (native->m_macPageFormat), &res);
-    m_ppi = wxSize(int(res.hRes), int(res.vRes));
 #endif
+    m_ppi = wxSize(int(res.hRes), int(res.vRes));
 }
 
 wxMacCarbonPrinterDC::~wxMacCarbonPrinterDC()
@@ -286,8 +286,10 @@ wxPrinterDC::wxPrinterDC(const wxPrintData& printdata)
             m_mm_to_pix_y = mm2inches * sz.y;        
         }
 #if wxMAC_USE_CORE_GRAPHICS
+/*
         // the cgContext will only be handed over page by page
         m_graphicContext = new wxMacCGContext() ;
+		*/
 #endif
     }
 }
@@ -300,8 +302,10 @@ wxSize wxPrinterDC::GetPPI() const
 wxPrinterDC::~wxPrinterDC(void)
 {
 #if wxMAC_USE_CORE_GRAPHICS
+/*
     // this context was borrowed
     ((wxMacCGContext*)(m_graphicContext))->SetNativeContext( NULL ) ;
+	*/
 #endif
     delete m_nativePrinterDC ;
 }
@@ -309,7 +313,7 @@ wxPrinterDC::~wxPrinterDC(void)
 #if wxMAC_USE_CORE_GRAPHICS
 void wxPrinterDC::MacSetCGContext( void * cg )
 {
-    ((wxMacCGContext*)(m_graphicContext))->SetNativeContext( (CGContextRef) cg ) ;
+    SetGraphicsContext( wxGraphicsContext::CreateFromNative( cg ) );
     m_graphicContext->SetPen( m_pen ) ;
     m_graphicContext->SetBrush( m_brush ) ;
 }
