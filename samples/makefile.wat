@@ -48,7 +48,7 @@ MAKEARGS = CC="$(CC)" CXX="$(CXX)" CFLAGS="$(CFLAGS)" CXXFLAGS="$(CXXFLAGS)" &
 
 ### Targets: ###
 
-all : .SYMBOLIC access artprov calendar caret checklst config combo console controls db dialogs dialup display dnd docview docvwmdi dragimag drawing dynamic erase event exec except font grid help htlbox html image internat ipc joytest keyboard layout listbox listctrl mdi mediaplayer memcheck menu minifram minimal mobile multimon nativdlg notebook oleauto opengl ownerdrw png popup printing propsize regtest render rotate sashtest scroll scrollsub shaped sockets sound splash splitter statbar taskbar text thread toolbar treectrl typetest validate vscroll widgets wizard mfc
+all : .SYMBOLIC access animate artprov aui calendar caret checklst config combo console controls dataview db dialogs dialup display dnd docview docvwmdi dragimag drawing dynamic erase event exec except font grid help htlbox html image internat ipc joytest keyboard layout listbox listctrl mdi mediaplayer memcheck menu minifram minimal mobile multimon nativdlg notebook oleauto opengl ownerdrw png popup printing propsize regtest render richtext rotate sashtest scroll scrollsub shaped sockets sound splash splitter statbar taskbar text thread toolbar treectrl typetest validate vscroll widgets wizard mfc
 
 clean : .SYMBOLIC 
 	-if exist .\*.obj del .\*.obj
@@ -59,7 +59,13 @@ clean : .SYMBOLIC
 	cd access
 	wmake $(__MAKEOPTS__) -f makefile.wat $(MAKEARGS) clean
 	cd $(WATCOM_CWD)
+	cd animate
+	wmake $(__MAKEOPTS__) -f makefile.wat $(MAKEARGS) clean
+	cd $(WATCOM_CWD)
 	cd artprov
+	wmake $(__MAKEOPTS__) -f makefile.wat $(MAKEARGS) clean
+	cd $(WATCOM_CWD)
+	cd aui
 	wmake $(__MAKEOPTS__) -f makefile.wat $(MAKEARGS) clean
 	cd $(WATCOM_CWD)
 	cd calendar
@@ -81,6 +87,9 @@ clean : .SYMBOLIC
 	wmake $(__MAKEOPTS__) -f makefile.wat $(MAKEARGS) clean
 	cd $(WATCOM_CWD)
 	cd controls
+	wmake $(__MAKEOPTS__) -f makefile.wat $(MAKEARGS) clean
+	cd $(WATCOM_CWD)
+	cd dataview
 	wmake $(__MAKEOPTS__) -f makefile.wat $(MAKEARGS) clean
 	cd $(WATCOM_CWD)
 	cd db
@@ -221,6 +230,9 @@ clean : .SYMBOLIC
 	cd render
 	wmake $(__MAKEOPTS__) -f makefile.wat $(MAKEARGS) clean
 	cd $(WATCOM_CWD)
+	cd richtext
+	wmake $(__MAKEOPTS__) -f makefile.wat $(MAKEARGS) clean
+	cd $(WATCOM_CWD)
 	cd rotate
 	wmake $(__MAKEOPTS__) -f makefile.wat $(MAKEARGS) clean
 	cd $(WATCOM_CWD)
@@ -290,8 +302,18 @@ access : .SYMBOLIC
 	wmake $(__MAKEOPTS__) -f makefile.wat $(MAKEARGS) all
 	cd $(WATCOM_CWD)
 
+animate : .SYMBOLIC 
+	cd animate
+	wmake $(__MAKEOPTS__) -f makefile.wat $(MAKEARGS) all
+	cd $(WATCOM_CWD)
+
 artprov : .SYMBOLIC 
 	cd artprov
+	wmake $(__MAKEOPTS__) -f makefile.wat $(MAKEARGS) all
+	cd $(WATCOM_CWD)
+
+aui : .SYMBOLIC 
+	cd aui
 	wmake $(__MAKEOPTS__) -f makefile.wat $(MAKEARGS) all
 	cd $(WATCOM_CWD)
 
@@ -327,6 +349,11 @@ console : .SYMBOLIC
 
 controls : .SYMBOLIC 
 	cd controls
+	wmake $(__MAKEOPTS__) -f makefile.wat $(MAKEARGS) all
+	cd $(WATCOM_CWD)
+
+dataview : .SYMBOLIC 
+	cd dataview
 	wmake $(__MAKEOPTS__) -f makefile.wat $(MAKEARGS) all
 	cd $(WATCOM_CWD)
 
@@ -557,6 +584,11 @@ regtest : .SYMBOLIC
 
 render : .SYMBOLIC 
 	cd render
+	wmake $(__MAKEOPTS__) -f makefile.wat $(MAKEARGS) all
+	cd $(WATCOM_CWD)
+
+richtext : .SYMBOLIC 
+	cd richtext
 	wmake $(__MAKEOPTS__) -f makefile.wat $(MAKEARGS) all
 	cd $(WATCOM_CWD)
 

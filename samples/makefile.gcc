@@ -33,13 +33,15 @@ MAKEARGS = CC="$(CC)" CXX="$(CXX)" CFLAGS="$(CFLAGS)" CXXFLAGS="$(CXXFLAGS)" \
 
 ### Targets: ###
 
-all: access artprov calendar caret checklst config combo console controls db dialogs dialup display dnd docview docvwmdi dragimag drawing dynamic erase event exec except font grid help htlbox html image internat ipc joytest keyboard layout listbox listctrl mdi mediaplayer memcheck menu minifram minimal mobile multimon nativdlg notebook oleauto opengl ownerdrw png popup printing propsize regtest render rotate sashtest scroll scrollsub shaped sockets sound splash splitter statbar taskbar text thread toolbar treectrl typetest validate vscroll widgets wizard mfc
+all: access animate artprov aui calendar caret checklst config combo console controls dataview db dialogs dialup display dnd docview docvwmdi dragimag drawing dynamic erase event exec except font grid help htlbox html image internat ipc joytest keyboard layout listbox listctrl mdi mediaplayer memcheck menu minifram minimal mobile multimon nativdlg notebook oleauto opengl ownerdrw png popup printing propsize regtest render richtext rotate sashtest scroll scrollsub shaped sockets sound splash splitter statbar taskbar text thread toolbar treectrl typetest validate vscroll widgets wizard mfc
 
 clean: 
 	-if exist .\*.o del .\*.o
 	-if exist .\*.d del .\*.d
 	$(MAKE) -C access -f makefile.gcc $(MAKEARGS) clean
+	$(MAKE) -C animate -f makefile.gcc $(MAKEARGS) clean
 	$(MAKE) -C artprov -f makefile.gcc $(MAKEARGS) clean
+	$(MAKE) -C aui -f makefile.gcc $(MAKEARGS) clean
 	$(MAKE) -C calendar -f makefile.gcc $(MAKEARGS) clean
 	$(MAKE) -C caret -f makefile.gcc $(MAKEARGS) clean
 	$(MAKE) -C checklst -f makefile.gcc $(MAKEARGS) clean
@@ -47,6 +49,7 @@ clean:
 	$(MAKE) -C combo -f makefile.gcc $(MAKEARGS) clean
 	$(MAKE) -C console -f makefile.gcc $(MAKEARGS) clean
 	$(MAKE) -C controls -f makefile.gcc $(MAKEARGS) clean
+	$(MAKE) -C dataview -f makefile.gcc $(MAKEARGS) clean
 	$(MAKE) -C db -f makefile.gcc $(MAKEARGS) clean
 	$(MAKE) -C dialogs -f makefile.gcc $(MAKEARGS) clean
 	$(MAKE) -C dialup -f makefile.gcc $(MAKEARGS) clean
@@ -93,6 +96,7 @@ clean:
 	$(MAKE) -C propsize -f makefile.gcc $(MAKEARGS) clean
 	$(MAKE) -C regtest -f makefile.gcc $(MAKEARGS) clean
 	$(MAKE) -C render -f makefile.gcc $(MAKEARGS) clean
+	$(MAKE) -C richtext -f makefile.gcc $(MAKEARGS) clean
 	$(MAKE) -C rotate -f makefile.gcc $(MAKEARGS) clean
 	$(MAKE) -C sashtest -f makefile.gcc $(MAKEARGS) clean
 	$(MAKE) -C scroll -f makefile.gcc $(MAKEARGS) clean
@@ -118,8 +122,14 @@ clean:
 access: 
 	$(MAKE) -C access -f makefile.gcc $(MAKEARGS) all
 
+animate: 
+	$(MAKE) -C animate -f makefile.gcc $(MAKEARGS) all
+
 artprov: 
 	$(MAKE) -C artprov -f makefile.gcc $(MAKEARGS) all
+
+aui: 
+	$(MAKE) -C aui -f makefile.gcc $(MAKEARGS) all
 
 calendar: 
 	$(MAKE) -C calendar -f makefile.gcc $(MAKEARGS) all
@@ -141,6 +151,9 @@ console:
 
 controls: 
 	$(MAKE) -C controls -f makefile.gcc $(MAKEARGS) all
+
+dataview: 
+	$(MAKE) -C dataview -f makefile.gcc $(MAKEARGS) all
 
 db: 
 	$(MAKE) -C db -f makefile.gcc $(MAKEARGS) all
@@ -280,6 +293,9 @@ regtest:
 render: 
 	$(MAKE) -C render -f makefile.gcc $(MAKEARGS) all
 
+richtext: 
+	$(MAKE) -C richtext -f makefile.gcc $(MAKEARGS) all
+
 rotate: 
 	$(MAKE) -C rotate -f makefile.gcc $(MAKEARGS) all
 
@@ -343,7 +359,7 @@ wizard:
 mfc: 
 	$(MAKE) -C mfc -f makefile.gcc $(MAKEARGS) all
 
-.PHONY: all clean access artprov calendar caret checklst config combo console controls db dialogs dialup display dnd docview docvwmdi dragimag drawing dynamic erase event exec except font grid help htlbox html image internat ipc joytest keyboard layout listbox listctrl mdi mediaplayer memcheck menu minifram minimal mobile multimon nativdlg notebook oleauto opengl ownerdrw png popup printing propsize regtest render rotate sashtest scroll scrollsub shaped sockets sound splash splitter statbar taskbar text thread toolbar treectrl typetest validate vscroll widgets wizard mfc
+.PHONY: all clean access animate artprov aui calendar caret checklst config combo console controls dataview db dialogs dialup display dnd docview docvwmdi dragimag drawing dynamic erase event exec except font grid help htlbox html image internat ipc joytest keyboard layout listbox listctrl mdi mediaplayer memcheck menu minifram minimal mobile multimon nativdlg notebook oleauto opengl ownerdrw png popup printing propsize regtest render richtext rotate sashtest scroll scrollsub shaped sockets sound splash splitter statbar taskbar text thread toolbar treectrl typetest validate vscroll widgets wizard mfc
 
 
 # Dependencies tracking:

@@ -43,7 +43,7 @@ MAKEARGS = -DCC="$(CC)" -DCXX="$(CXX)" -DCFLAGS="$(CFLAGS)" \
 
 ### Targets: ###
 
-all: access artprov calendar caret checklst config combo console controls db dialogs dialup display dnd docview docvwmdi dragimag drawing dynamic erase event exec except font grid help htlbox html image internat ipc joytest keyboard layout listbox listctrl mdi mediaplayer memcheck menu minifram minimal mobile multimon nativdlg notebook oleauto opengl ownerdrw png popup printing propsize regtest render rotate sashtest scroll scrollsub shaped sockets sound splash splitter statbar taskbar text thread toolbar treectrl typetest validate vscroll widgets wizard mfc
+all: access animate artprov aui calendar caret checklst config combo console controls dataview db dialogs dialup display dnd docview docvwmdi dragimag drawing dynamic erase event exec except font grid help htlbox html image internat ipc joytest keyboard layout listbox listctrl mdi mediaplayer memcheck menu minifram minimal mobile multimon nativdlg notebook oleauto opengl ownerdrw png popup printing propsize regtest render richtext rotate sashtest scroll scrollsub shaped sockets sound splash splitter statbar taskbar text thread toolbar treectrl typetest validate vscroll widgets wizard mfc
 
 clean: 
 	-if exist .\*.obj del .\*.obj
@@ -53,10 +53,18 @@ clean:
 	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) clean >>access.bat
 	call access.bat
 	@del access.bat
+	@echo cd animate >animate.bat
+	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) clean >>animate.bat
+	call animate.bat
+	@del animate.bat
 	@echo cd artprov >artprov.bat
 	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) clean >>artprov.bat
 	call artprov.bat
 	@del artprov.bat
+	@echo cd aui >aui.bat
+	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) clean >>aui.bat
+	call aui.bat
+	@del aui.bat
 	@echo cd calendar >calendar.bat
 	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) clean >>calendar.bat
 	call calendar.bat
@@ -85,6 +93,10 @@ clean:
 	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) clean >>controls.bat
 	call controls.bat
 	@del controls.bat
+	@echo cd dataview >dataview.bat
+	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) clean >>dataview.bat
+	call dataview.bat
+	@del dataview.bat
 	@echo cd db >db.bat
 	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) clean >>db.bat
 	call db.bat
@@ -269,6 +281,10 @@ clean:
 	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) clean >>render.bat
 	call render.bat
 	@del render.bat
+	@echo cd richtext >richtext.bat
+	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) clean >>richtext.bat
+	call richtext.bat
+	@del richtext.bat
 	@echo cd rotate >rotate.bat
 	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) clean >>rotate.bat
 	call rotate.bat
@@ -360,11 +376,23 @@ access:
 	call access.bat
 	@del access.bat
 
+animate: 
+	@echo cd animate >animate.bat
+	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) all >>animate.bat
+	call animate.bat
+	@del animate.bat
+
 artprov: 
 	@echo cd artprov >artprov.bat
 	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) all >>artprov.bat
 	call artprov.bat
 	@del artprov.bat
+
+aui: 
+	@echo cd aui >aui.bat
+	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) all >>aui.bat
+	call aui.bat
+	@del aui.bat
 
 calendar: 
 	@echo cd calendar >calendar.bat
@@ -407,6 +435,12 @@ controls:
 	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) all >>controls.bat
 	call controls.bat
 	@del controls.bat
+
+dataview: 
+	@echo cd dataview >dataview.bat
+	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) all >>dataview.bat
+	call dataview.bat
+	@del dataview.bat
 
 db: 
 	@echo cd db >db.bat
@@ -683,6 +717,12 @@ render:
 	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) all >>render.bat
 	call render.bat
 	@del render.bat
+
+richtext: 
+	@echo cd richtext >richtext.bat
+	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) all >>richtext.bat
+	call richtext.bat
+	@del richtext.bat
 
 rotate: 
 	@echo cd rotate >rotate.bat

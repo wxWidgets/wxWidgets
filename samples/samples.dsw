@@ -3,18 +3,6 @@ Microsoft Developer Studio Workspace File, Format Version 6.00
 
 ###############################################################################
 
-Project: "calendar"=.\calendar\calendar.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
 Project: "artprov"=.\artprov\artprov.dsp - Package Owner=<4>
 
 Package=<5>
@@ -27,7 +15,43 @@ Package=<4>
 
 ###############################################################################
 
+Project: "animate"=.\animate\anitest.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "aui"=.\aui\auidemo.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
 Project: "caret"=.\caret\caret.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "calendar"=.\calendar\calendar.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -64,6 +88,18 @@ Package=<4>
 ###############################################################################
 
 Project: "controls"=.\controls\controls.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "dataview"=.\dataview\dataview.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -483,6 +519,18 @@ Package=<4>
 
 ###############################################################################
 
+Project: "mediaplayer"=.\mediaplayer\mediaplayer.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
 Project: "memcheck"=.\memcheck\memcheck.dsp - Package Owner=<4>
 
 Package=<5>
@@ -628,6 +676,18 @@ Package=<4>
 ###############################################################################
 
 Project: "regtest"=.\regtest\regtest.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "richtext"=.\richtext\richtext.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
