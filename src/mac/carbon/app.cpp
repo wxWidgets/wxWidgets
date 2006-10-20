@@ -850,6 +850,8 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
     event_posted_context.perform = macPostedEventCallback;
     m_macEventPosted = CFRunLoopSourceCreate(NULL,0,&event_posted_context);
     CFRunLoopAddSource(CFRunLoopGetCurrent(), m_macEventPosted, kCFRunLoopCommonModes);
+	// run loop takes ownership
+	CFRelease(m_macEventPosted);
 #endif
 
     UMAShowArrowCursor() ;
@@ -908,8 +910,10 @@ void wxApp::CleanUp()
 
 #ifdef __WXMAC_OSX__
     if (m_macEventPosted)
-        CFRelease(m_macEventPosted);
-    m_macEventPosted = NULL;
+	{
+		CFRunLoopRemoveSource(CFRunLoopGetCurrent(), m_macEventPosted, kCFRunLoopCommonModes);
+		m_macEventPosted = NULL;
+	}
 #endif
 
     // One last chance for pending objects to be cleaned up
