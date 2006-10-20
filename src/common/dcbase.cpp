@@ -1270,6 +1270,9 @@ void wxOverlayImpl::Init( wxWindowDC* dc, int x , int y , int width , int height
 
 void wxOverlayImpl::BeginDrawing( wxWindowDC* dc)
 {
+// TODO CS
+	dc->SetGraphicsContext( wxGraphicsContext::CreateFromNative( m_overlayContext ) );
+/*
     delete dc->m_graphicContext ;
     dc->m_graphicContext = new wxMacCGContext( m_overlayContext );
     // we are right now startin at 0,0 not at the wxWindow's origin, so most of the calculations 
@@ -1277,15 +1280,14 @@ void wxOverlayImpl::BeginDrawing( wxWindowDC* dc)
     // just to make sure :
     dc->m_macLocalOrigin.x = 0 ;
     dc->m_macLocalOrigin.y = 0 ;
+	*/
     wxSize size = m_window->GetSize() ;
     dc->SetClippingRegion( 0 , 0 , size.x , size.y ) ;
 }
 
 void wxOverlayImpl::EndDrawing( wxWindowDC* dc)
 {
-    delete dc->m_graphicContext ;
-    dc->m_graphicContext = NULL ;
-
+	dc->SetGraphicsContext(NULL);
 }
 
 void wxOverlayImpl::Clear(wxWindowDC* dc) 

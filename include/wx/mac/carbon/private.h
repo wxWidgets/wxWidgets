@@ -1080,7 +1080,7 @@ public:
 // graphics implementation
 // ============================================================================
 
-#if wxMAC_USE_CORE_GRAPHICS
+#if wxMAC_USE_CORE_GRAPHICS && !wxUSE_GRAPHICS_CONTEXT
 
 class WXDLLEXPORT wxMacCGPath : public wxGraphicPath
 {
