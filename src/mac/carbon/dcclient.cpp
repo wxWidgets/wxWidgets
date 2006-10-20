@@ -123,34 +123,24 @@ wxWindowDC::wxWindowDC(wxWindow *window)
     int x , y ;
     x = y = 0 ;
     window->MacWindowToRootWindow( &x , &y ) ;
-    m_macPort = UMAGetWindowPort( windowref ) ;
     m_ok = true ;
 
 #if wxMAC_USE_CORE_GRAPHICS
-    m_macLocalOriginInPort.x = x ;
-    m_macLocalOriginInPort.y = y ;
-
-    if ( window->MacGetCGContextRef() )
-    {
-        m_graphicContext = new wxMacCGContext( (CGContextRef) window->MacGetCGContextRef() ) ;
-        m_graphicContext->SetPen( m_pen ) ;
-        m_graphicContext->SetBrush( m_brush ) ;
-    }
-    else
-    {
-        // as out of order redraw is not supported under CQ, we have to create a qd port for these
-        // situations
-        m_macLocalOrigin.x = x ;
-        m_macLocalOrigin.y = y ;
-
-        m_graphicContext = new wxMacCGContext( (CGrafPtr) m_macPort ) ;
-        m_graphicContext->SetPen( m_pen ) ;
-        m_graphicContext->SetBrush( m_brush ) ;
-    }
-    // there is no out-of-order drawing on OSX
+    m_window->GetSize( &m_width , &m_height);
+	CGContextRef cg = (CGContextRef) window->MacGetCGContextRef();
+	m_release = false;
+    if ( cg == NULL )
+ 		SetGraphicsContext( wxGraphicsContext::Create( window ) ) ;
+	else
+		SetGraphicsContext( wxGraphicsContext::CreateFromNative( cg ) );
+	m_graphicContext->SetPen( m_pen ) ;
+	m_graphicContext->SetBrush( m_brush ) ;
+	SetClippingRegion( 0 , 0 , m_width , m_height ) ;
 #else
-    m_macLocalOrigin.x = x ;
-    m_macLocalOrigin.y = y ;
+	m_macLocalOrigin.x = x ;
+	m_macLocalOrigin.y = y ;
+    m_macPort = UMAGetWindowPort( windowref ) ;
+
     CopyRgn( (RgnHandle) window->MacGetVisibleRegion(true).GetWXHRGN() , (RgnHandle) m_macBoundaryClipRgn ) ;
     OffsetRgn( (RgnHandle) m_macBoundaryClipRgn , m_macLocalOrigin.x , m_macLocalOrigin.y ) ;
     CopyRgn( (RgnHandle) m_macBoundaryClipRgn , (RgnHandle) m_macCurrentClipRgn ) ;
@@ -162,13 +152,26 @@ wxWindowDC::wxWindowDC(wxWindow *window)
 
 wxWindowDC::~wxWindowDC()
 {
+#if wxMAC_USE_CORE_GRAPHICS
+	if ( m_release && m_graphicContext )
+	{
+//		CGContextRef cg = (CGContextRef) m_graphicContext->GetNativeContext() ;
+	}
+#endif
 }
 
 void wxWindowDC::DoGetSize( int* width, int* height ) const
 {
     wxCHECK_RET( m_window, _T("GetSize() doesn't work without window") );
 
+#if wxMAC_USE_CORE_GRAPHICS
+	if ( width )
+		*width = m_width;
+	if ( height )
+		*height = m_height;
+#else
     m_window->GetSize(width, height);
+#endif
 }
 
 /*
@@ -180,6 +183,20 @@ wxClientDC::wxClientDC()
     m_window = NULL ;
 }
 
+#if wxMAC_USE_CORE_GRAPHICS
+wxClientDC::wxClientDC(wxWindow *window) :
+	wxWindowDC( window )
+{
+    wxPoint origin = window->GetClientAreaOrigin() ;
+    wxSize size = window->GetClientSize() ;
+    int x , y ;
+    x = origin.x ;
+    y = origin.y ;
+    window->MacWindowToRootWindow( &x , &y ) ;
+    m_window->GetClientSize( &m_width , &m_height);
+	SetClippingRegion( 0 , 0 , m_width , m_height ) ;
+}
+#else
 wxClientDC::wxClientDC(wxWindow *window)
 {
     m_window = window ;
@@ -197,27 +214,6 @@ wxClientDC::wxClientDC(wxWindow *window)
     m_macPort = UMAGetWindowPort( windowref ) ;
     m_ok = true ;
 
-#if wxMAC_USE_CORE_GRAPHICS
-    m_macLocalOriginInPort.x = x ;
-    m_macLocalOriginInPort.y = y ;
-    if ( window->MacGetCGContextRef() )
-    {
-        m_graphicContext = new wxMacCGContext( (CGContextRef) window->MacGetCGContextRef() ) ;
-        m_graphicContext->SetPen( m_pen ) ;
-        m_graphicContext->SetBrush( m_brush ) ;
-        SetClippingRegion( 0 , 0 , size.x , size.y ) ;
-    }
-    else
-    {
-        // as out of order redraw is not supported under CQ,
-        // we have to create a QD port for these situations
-        m_macLocalOrigin.x = x ;
-        m_macLocalOrigin.y = y ;
-        m_graphicContext = new wxMacCGContext( (CGrafPtr) m_macPort ) ;
-        m_graphicContext->SetPen( m_pen ) ;
-        m_graphicContext->SetBrush( m_brush ) ;
-     }
-#else
     m_macLocalOrigin.x = x ;
     m_macLocalOrigin.y = y ;
     SetRectRgn( (RgnHandle) m_macBoundaryClipRgn , origin.x , origin.y , origin.x + size.x , origin.y + size.y ) ;
@@ -225,31 +221,24 @@ wxClientDC::wxClientDC(wxWindow *window)
     OffsetRgn( (RgnHandle) m_macBoundaryClipRgn , -origin.x , -origin.y ) ;
     OffsetRgn( (RgnHandle) m_macBoundaryClipRgn , m_macLocalOrigin.x , m_macLocalOrigin.y ) ;
     CopyRgn( (RgnHandle) m_macBoundaryClipRgn ,(RgnHandle)  m_macCurrentClipRgn ) ;
-#endif
 
     SetBackground(MacGetBackgroundBrush(window));
     SetFont( window->GetFont() ) ;
 }
+#endif
 
 wxClientDC::~wxClientDC()
 {
-#if wxMAC_USE_CORE_GRAPHICS
-/*
-    if ( m_window->MacGetCGContextRef() == 0)
-    {
-        CGContextRef cgContext = (wxMacCGContext*)(m_graphicContext)->GetNativeContext() ;
-        CGContextFlush( cgContext ) ;
-    }
-*/
-#endif
 }
 
+#if !wxMAC_USE_CORE_GRAPHICS
 void wxClientDC::DoGetSize(int *width, int *height) const
 {
     wxCHECK_RET( m_window, _T("GetSize() doesn't work without window") );
 
     m_window->GetClientSize( width, height );
 }
+#endif
 
 /*
  * wxPaintDC
@@ -260,6 +249,20 @@ wxPaintDC::wxPaintDC()
     m_window = NULL ;
 }
 
+#if wxMAC_USE_CORE_GRAPHICS
+wxPaintDC::wxPaintDC(wxWindow *window) :
+	wxWindowDC( window )
+{
+    wxPoint origin = window->GetClientAreaOrigin() ;
+    wxSize size = window->GetClientSize() ;
+    int x , y ;
+    x = origin.x ;
+    y = origin.y ;
+    window->MacWindowToRootWindow( &x , &y ) ;
+    m_window->GetClientSize( &m_width , &m_height);
+	SetClippingRegion( 0 , 0 , m_width , m_height ) ;
+}
+#else
 wxPaintDC::wxPaintDC(wxWindow *window)
 {
     m_window = window ;
@@ -275,8 +278,6 @@ wxPaintDC::wxPaintDC(wxWindow *window)
     m_ok = true ;
 
 #if wxMAC_USE_CORE_GRAPHICS
-    m_macLocalOriginInPort.x = x ;
-    m_macLocalOriginInPort.y = y ;
     if ( window->MacGetCGContextRef() )
     {
         m_graphicContext = new wxMacCGContext( (CGContextRef) window->MacGetCGContextRef() ) ;
@@ -305,14 +306,17 @@ wxPaintDC::wxPaintDC(wxWindow *window)
 
     SetFont( window->GetFont() ) ;
 }
+#endif
 
 wxPaintDC::~wxPaintDC()
 {
 }
 
+#if !wxMAC_USE_CORE_GRAPHICS
 void wxPaintDC::DoGetSize(int *width, int *height) const
 {
     wxCHECK_RET( m_window, _T("GetSize() doesn't work without window") );
 
     m_window->GetClientSize( width, height );
 }
+#endif
