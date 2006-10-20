@@ -1275,7 +1275,16 @@ wxGraphicsContext* wxGraphicsContext::Create( const wxWindowDC &dc )
 
 wxGraphicsContext* wxGraphicsContext::Create( wxWindow * window )
 {
-	return new wxMacCoreGraphicsContext( (WindowRef) window->MacGetTopLevelWindowRef() );
+	wxGraphicsContext* ctx = new wxMacCoreGraphicsContext( (WindowRef) window->MacGetTopLevelWindowRef() );
+	CGContextRef cg = (CGContextRef) ctx->GetNativeContext() ;
+	CGContextRestoreGState( cg );
+	int x , y;
+    x = y = 0;
+    window->MacWindowToRootWindow( &x , &y );
+	CGContextTranslateCTM( cg, x, y );
+	CGContextSaveGState( cg );
+	return ctx;
+
 }
 
 wxGraphicsContext* wxGraphicsContext::CreateFromNative( void * context )
