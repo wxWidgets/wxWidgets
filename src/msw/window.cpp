@@ -1539,9 +1539,13 @@ void wxWindowMSW::Update()
 // drag and drop
 // ---------------------------------------------------------------------------
 
+#if wxUSE_DRAG_AND_DROP || !defined(__WXWINCE__)
+
+#if wxUSE_STATBOX
+
 // we need to lower the sibling static boxes so controls contained within can be
 // a drop target
-static inline void AdjustStaticBoxZOrder(wxWindow *parent)
+static void AdjustStaticBoxZOrder(wxWindow *parent)
 {
     // no sibling static boxes if we have no parent (ie TLW)
     if ( !parent )
@@ -1559,6 +1563,16 @@ static inline void AdjustStaticBoxZOrder(wxWindow *parent)
         }
     }
 }
+
+#else // !wxUSE_STATBOX
+
+static inline void AdjustStaticBoxZOrder(wxWindow * WXUNUSED(parent))
+{
+}
+
+#endif // wxUSE_STATBOX/!wxUSE_STATBOX
+
+#endif // drag and drop is used
 
 #if wxUSE_DRAG_AND_DROP
 void wxWindowMSW::SetDropTarget(wxDropTarget *pDropTarget)
