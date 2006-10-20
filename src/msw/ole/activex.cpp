@@ -63,21 +63,21 @@
         if (! ppvObject)\
         {\
             return E_FAIL;\
-        };\
+        }\
         const char *desc = NULL;\
         cls::_GetInterface(this, iid, ppvObject, desc);\
         if (! *ppvObject)\
         {\
             return E_NOINTERFACE;\
-        };\
+        }\
         ((IUnknown * )(*ppvObject))->AddRef();\
         return S_OK;\
-    };\
+    }\
     ULONG STDMETHODCALLTYPE cls::AddRef()\
     {\
         InterlockedIncrement(&refCount.l);\
         return refCount.l;\
-    };\
+    }\
     ULONG STDMETHODCALLTYPE cls::Release()\
     {\
         if (refCount.l > 0)\
@@ -87,7 +87,7 @@
             {\
                 delete this;\
                 return 0;\
-            };\
+            }\
             return refCount.l;\
         }\
         else\
@@ -97,7 +97,7 @@
     {\
         InterlockedIncrement(&lockCount.l);\
         return lockCount.l;\
-    };\
+    }\
     ULONG STDMETHODCALLTYPE cls::ReleaseLock()\
     {\
         if (lockCount.l > 0)\
@@ -330,7 +330,7 @@ public:
         if (! SUCCEEDED(hr))
         {
             return E_UNEXPECTED;
-        };
+        }
 
         hr = QueryInterface(IID_IOleInPlaceUIWindow, (void **) ppDoc);
         if (! SUCCEEDED(hr))
@@ -338,7 +338,7 @@ public:
             (*ppFrame)->Release();
             *ppFrame = NULL;
             return E_UNEXPECTED;
-        };
+        }
 
         RECT rect;
         ::GetClientRect(m_hWndParent, &rect);
@@ -347,13 +347,13 @@ public:
             lprcPosRect->left = lprcPosRect->top = 0;
             lprcPosRect->right = rect.right;
             lprcPosRect->bottom = rect.bottom;
-        };
+        }
         if (lprcClipRect)
         {
             lprcClipRect->left = lprcClipRect->top = 0;
             lprcClipRect->right = rect.right;
             lprcClipRect->bottom = rect.bottom;
-        };
+        }
 
         memset(lpFrameInfo, 0, sizeof(OLEINPLACEFRAMEINFO));
         lpFrameInfo->cb = sizeof(OLEINPLACEFRAMEINFO);
@@ -562,11 +562,11 @@ public:
                 return E_FAIL;
 
             m_window->m_docView->SetInPlaceSite(inPlaceSite);
-        };
+        }
 
         m_window->m_docView->UIActivate(TRUE);
         return S_OK;
-    };
+    }
 
 
 protected:
@@ -605,7 +605,7 @@ DEFINE_OLE_TABLE(FrameSite)
     OLE_IINTERFACE(IOleDocumentSite)
     OLE_IINTERFACE(IAdviseSink)
     OLE_IINTERFACE(IOleControlSite)
-END_OLE_TABLE;
+END_OLE_TABLE
 
 
 wxActiveXContainer::wxActiveXContainer(wxWindow * parent, REFIID iid, IUnknown* pUnk)

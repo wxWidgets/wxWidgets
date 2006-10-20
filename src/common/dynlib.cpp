@@ -48,7 +48,7 @@
     #include "wx/mac/private.h"
 #endif
 
-WX_DEFINE_USER_EXPORTED_OBJARRAY(wxDynamicLibraryDetailsArray);
+WX_DEFINE_USER_EXPORTED_OBJARRAY(wxDynamicLibraryDetailsArray)
 
 // ============================================================================
 // implementation

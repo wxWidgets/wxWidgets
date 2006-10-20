@@ -428,7 +428,7 @@ _WX_DEFINE_BASEARRAY(double,       wxBaseArrayDouble)
 #include <functional>
 #include "wx/afterstd.h"
 
-_WX_DEFINE_BASEARRAY(wxString, wxBaseArrayStringBase);
+_WX_DEFINE_BASEARRAY(wxString, wxBaseArrayStringBase)
 
 // some compilers (Sun CC being the only known example) distinguish between
 // extern "C" functions and the functions with C++ linkage and ptr_fun and

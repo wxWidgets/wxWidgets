@@ -1684,7 +1684,7 @@ int CALLBACK wxInternalDataCompareFunc(LPARAM lParam1, LPARAM lParam2,  LPARAM l
 
     return internalData->user_fn(d1, d2, internalData->data);
 
-};
+}
 
 bool wxListCtrl::SortItems(wxListCtrlCompare fn, long data)
 {
@@ -2616,20 +2616,20 @@ static wxListItemInternalData *wxGetInternalData(HWND hwnd, long itemId)
         return NULL;
 
     return (wxListItemInternalData *) it.lParam;
-};
+}
 
 static
 wxListItemInternalData *wxGetInternalData(const wxListCtrl *ctl, long itemId)
 {
     return wxGetInternalData(GetHwndOf(ctl), itemId);
-};
+}
 
 static wxListItemAttr *wxGetInternalDataAttr(wxListCtrl *ctl, long itemId)
 {
     wxListItemInternalData *data = wxGetInternalData(ctl, itemId);
 
     return data ? data->attr : NULL;
-};
+}
 
 static void wxDeleteInternalData(wxListCtrl* ctl, long itemId)
 {

@@ -26,7 +26,7 @@
 #include "wx/log.h"
 #include "wx/listimpl.cpp"
 
-WX_DEFINE_LIST(wxModuleList);
+WX_DEFINE_LIST(wxModuleList)
 
 IMPLEMENT_CLASS(wxModule, wxObject)
 

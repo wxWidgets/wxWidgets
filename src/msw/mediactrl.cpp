@@ -1421,7 +1421,7 @@ private:
 //
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-IMPLEMENT_DYNAMIC_CLASS(wxAMMediaBackend, wxMediaBackend);
+IMPLEMENT_DYNAMIC_CLASS(wxAMMediaBackend, wxMediaBackend)
 
 //---------------------------------------------------------------------------
 // Usual debugging macros
@@ -2204,7 +2204,7 @@ void wxAMMediaBackend::Move(int WXUNUSED(x), int WXUNUSED(y),
 //
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-IMPLEMENT_DYNAMIC_CLASS(wxMCIMediaBackend, wxMediaBackend);
+IMPLEMENT_DYNAMIC_CLASS(wxMCIMediaBackend, wxMediaBackend)
 
 //---------------------------------------------------------------------------
 // Usual debugging macros for MCI returns
@@ -2734,7 +2734,7 @@ LRESULT CALLBACK wxMCIMediaBackend::OnNotifyWndProc(HWND hWnd, UINT nMsg,
 // with this backend are treated as playable anyway - not verifyed though.
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-IMPLEMENT_DYNAMIC_CLASS(wxQTMediaBackend, wxMediaBackend);
+IMPLEMENT_DYNAMIC_CLASS(wxQTMediaBackend, wxMediaBackend)
 
 //Time between timer calls - this is the Apple recommondation to the TCL
 //team I believe
@@ -3582,7 +3582,7 @@ void wxQTMediaEvtHandler::OnEraseBackground(wxEraseEvent& evt)
 
 //in source file that contains stuff you don't directly use
 #include <wx/html/forcelnk.h>
-FORCE_LINK_ME(basewxmediabackends);
+FORCE_LINK_ME(basewxmediabackends)
 
 //---------------------------------------------------------------------------
 //  End wxMediaCtrl Compilation Guard and this file

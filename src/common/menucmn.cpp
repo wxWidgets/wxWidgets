@@ -44,8 +44,8 @@
 
 #include "wx/listimpl.cpp"
 
-WX_DEFINE_LIST(wxMenuList);
-WX_DEFINE_LIST(wxMenuItemList);
+WX_DEFINE_LIST(wxMenuList)
+WX_DEFINE_LIST(wxMenuItemList)
 
 // ============================================================================
 // implementation

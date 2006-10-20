@@ -1085,7 +1085,7 @@ void wxEvtHandler::ClearEventLocker()
     delete m_eventsLocker;
     m_eventsLocker = NULL;
 #endif
-};
+}
 
 #endif // wxUSE_THREADS
 
@@ -1378,7 +1378,7 @@ bool wxEvtHandler::SearchDynamicEventTable( wxEvent& event )
     }
 
     return false;
-};
+}
 
 void wxEvtHandler::DoSetClientObject( wxClientData *data )
 {

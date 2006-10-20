@@ -68,11 +68,11 @@
 #endif
 
 // for profiling in debug mode:
-WXLO_TIMER_DEFINE(UpdateTimer);
-WXLO_TIMER_DEFINE(BlitTimer);
-WXLO_TIMER_DEFINE(LayoutTimer);
-WXLO_TIMER_DEFINE(TmpTimer);
-WXLO_TIMER_DEFINE(DrawTimer);
+WXLO_TIMER_DEFINE(UpdateTimer)
+WXLO_TIMER_DEFINE(BlitTimer)
+WXLO_TIMER_DEFINE(LayoutTimer)
+WXLO_TIMER_DEFINE(TmpTimer)
+WXLO_TIMER_DEFINE(DrawTimer)
 
 // ----------------------------------------------------------------------------
 // constants

@@ -340,7 +340,7 @@ wxString wxFileData::GetHint() const
     }
 
     return s;
-};
+}
 
 wxString wxFileData::GetEntry( fileListFieldType num ) const
 {

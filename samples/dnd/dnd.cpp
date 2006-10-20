@@ -113,7 +113,7 @@ public:
     virtual bool OnInit();
 };
 
-IMPLEMENT_APP(DnDApp);
+IMPLEMENT_APP(DnDApp)
 
 #if wxUSE_DRAG_AND_DROP || wxUSE_CLIPBOARD
 

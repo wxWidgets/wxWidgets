@@ -65,7 +65,7 @@ WX_CHECK_BUILD_OPTIONS("wxCore")
 // ----------------------------------------------------------------------------
 
 // this defines wxEventLoopPtr
-wxDEFINE_TIED_SCOPED_PTR_TYPE(wxEventLoop);
+wxDEFINE_TIED_SCOPED_PTR_TYPE(wxEventLoop)
 
 // ============================================================================
 // wxAppBase implementation

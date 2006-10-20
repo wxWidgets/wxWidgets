@@ -42,7 +42,7 @@
 
 #include "wx/listimpl.cpp"
 WX_DECLARE_LIST(wxArtProvider, wxArtProvidersList);
-WX_DEFINE_LIST(wxArtProvidersList);
+WX_DEFINE_LIST(wxArtProvidersList)
 
 // ----------------------------------------------------------------------------
 // Cache class - stores already requested bitmaps

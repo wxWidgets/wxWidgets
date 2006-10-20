@@ -47,7 +47,7 @@ FORCE_LINK_ME(m_image)
 
 WX_DECLARE_OBJARRAY(int, CoordArray);
 #include "wx/arrimpl.cpp" // this is a magic incantation which must be done!
-WX_DEFINE_OBJARRAY(CoordArray);
+WX_DEFINE_OBJARRAY(CoordArray)
 
 
 // ---------------------------------------------------------------------------

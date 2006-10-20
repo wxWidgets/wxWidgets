@@ -126,7 +126,7 @@ UINT GetMenuState(HMENU hMenu, UINT id, UINT flags)
 
 #include <wx/listimpl.cpp>
 
-WX_DEFINE_LIST( wxMenuInfoList ) ;
+WX_DEFINE_LIST( wxMenuInfoList )
 
 #if wxUSE_EXTENDED_RTTI
 

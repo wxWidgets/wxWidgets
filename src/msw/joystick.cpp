@@ -75,7 +75,7 @@ wxJoystick::wxJoystick(int joystick)
     /* No such joystick, return ID 0 */
     m_joystick = 0;
     return;
-};
+}
 
 wxPoint wxJoystick::GetPosition() const
 {

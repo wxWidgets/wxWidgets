@@ -161,7 +161,7 @@ MyFrame::MyFrame() :
 
    m_lwin->SetBackgroundBitmap(bitmap);
 #endif // 0
-};
+}
 
 void MyFrame::AddSampleText(wxLayoutList *llist)
 {
@@ -433,7 +433,7 @@ void MyFrame::OnCommand( wxCommandEvent &event )
         m_lwin->GetLayoutList()->Insert(_T("http://www.wxwidgets.org/"));
         m_lwin->Refresh();
     }
-};
+}
 
 void MyFrame::OnPrint(wxCommandEvent& WXUNUSED(event))
 {
@@ -566,7 +566,7 @@ void MyFrame::OnPageSetupPS(wxCommandEvent& WXUNUSED(event))
 MyApp::MyApp() :
    wxApp( )
 {
-};
+}
 
 bool MyApp::OnInit()
 {
@@ -575,9 +575,4 @@ bool MyApp::OnInit()
    frame->Show( true );
 //   wxSetAFMPath("/usr/local/src/wxWidgets/misc/afm/");
    return true;
-};
-
-
-
-
-
+}

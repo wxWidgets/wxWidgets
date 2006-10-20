@@ -117,7 +117,7 @@
         wxAppConsole::CheckBuildOptions(WX_BUILD_OPTIONS_SIGNATURE,     \
                                         libName);                       \
         return true;                                                    \
-    };                                                                  \
+    }                                                                   \
     static bool gs_buildOptionsCheck = wxCheckBuildOptions();
 
 

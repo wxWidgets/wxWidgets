@@ -153,7 +153,7 @@ bool MyApp::OnInit()
 // ----------------------------------------------------------------------------
 
 #include "wx/arrimpl.cpp"
-WX_DEFINE_OBJARRAY(ArrayOfImages);
+WX_DEFINE_OBJARRAY(ArrayOfImages)
 
 // ----------------------------------------------------------------------------
 // custom canvas control that we can draw on

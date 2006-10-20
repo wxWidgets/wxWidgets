@@ -91,7 +91,7 @@ enum
     OleAuto_Test,
 
     // controls start here (the numbers are, of course, arbitrary)
-    OleAuto_Text = 1000,
+    OleAuto_Text = 1000
 };
 
 // ----------------------------------------------------------------------------

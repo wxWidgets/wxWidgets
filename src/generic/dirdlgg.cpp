@@ -277,7 +277,7 @@ void wxGenericDirDialog::OnTreeSelected( wxTreeEvent &event )
 
     if (data)
        m_input->SetValue( data->m_path );
-};
+}
 
 void wxGenericDirDialog::OnTreeKeyDown( wxTreeEvent &WXUNUSED(event) )
 {
@@ -287,7 +287,7 @@ void wxGenericDirDialog::OnTreeKeyDown( wxTreeEvent &WXUNUSED(event) )
     wxDirItemData *data = (wxDirItemData*)m_dirCtrl->GetTreeCtrl()->GetItemData(m_dirCtrl->GetTreeCtrl()->GetSelection());
     if (data)
         m_input->SetValue( data->m_path );
-};
+}
 
 void wxGenericDirDialog::OnShowHidden( wxCommandEvent& event )
 {

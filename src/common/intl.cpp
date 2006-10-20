@@ -506,7 +506,7 @@ private:
     wxPluralFormsNodePtr m_plural;
 };
 
-wxDEFINE_SCOPED_PTR_TYPE(wxPluralFormsCalculator);
+wxDEFINE_SCOPED_PTR_TYPE(wxPluralFormsCalculator)
 
 void wxPluralFormsCalculator::init(wxPluralFormsToken::Number nplurals,
                                    wxPluralFormsNode* plural)
@@ -1421,7 +1421,7 @@ const wxChar *wxMsgCatalog::GetString(const wxChar *sz, size_t n) const
 
 #include "wx/arrimpl.cpp"
 WX_DECLARE_EXPORTED_OBJARRAY(wxLanguageInfo, wxLanguageInfoArray);
-WX_DEFINE_OBJARRAY(wxLanguageInfoArray);
+WX_DEFINE_OBJARRAY(wxLanguageInfoArray)
 
 wxLanguageInfoArray *wxLocale::ms_languagesDB = NULL;
 
@@ -3546,7 +3546,7 @@ void wxLocale::InitLanguagesDB()
    LNG(wxLANGUAGE_ZHUANG,                     "za"   , 0              , 0                                 , "Zhuang")
    LNG(wxLANGUAGE_ZULU,                       "zu"   , 0              , 0                                 , "Zulu")
 
-};
+}
 #undef LNG
 
 // --- --- --- generated code ends here --- --- ---

@@ -37,8 +37,8 @@
 
 //---------------------------------------------------------------------------
 
-IMPLEMENT_ABSTRACT_CLASS(wxMultiCellSizer, wxSizer);
-IMPLEMENT_ABSTRACT_CLASS(wxMultiCellItemHandle, wxObject);
+IMPLEMENT_ABSTRACT_CLASS(wxMultiCellSizer, wxSizer)
+IMPLEMENT_ABSTRACT_CLASS(wxMultiCellItemHandle, wxObject)
 
 //---------------------------------------------------------------------------
 // wxMultiCellItemHandle
@@ -110,22 +110,22 @@ int wxMultiCellItemHandle::GetHeight()
 wxResizable    wxMultiCellItemHandle :: GetStyle()
 {
     return m_style;
-};
+}
 //---------------------------------------------------------------------------
 wxSize wxMultiCellItemHandle :: GetLocalSize()
 {
     return m_fixedSize;
-};
+}
 //---------------------------------------------------------------------------
 int wxMultiCellItemHandle :: GetAlignment()
 {
     return m_alignment;
-};
+}
 //---------------------------------------------------------------------------
 wxSize wxMultiCellItemHandle :: GetWeight()
 {
     return m_weight;
-};
+}
 
 
 

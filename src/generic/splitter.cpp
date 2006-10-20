@@ -76,7 +76,7 @@ BEGIN_EVENT_TABLE(wxSplitterWindow, wxWindow)
     WX_EVENT_TABLE_CONTROL_CONTAINER(wxSplitterWindow)
 END_EVENT_TABLE()
 
-WX_DELEGATE_TO_CONTROL_CONTAINER(wxSplitterWindow);
+WX_DELEGATE_TO_CONTROL_CONTAINER(wxSplitterWindow)
 
 bool wxSplitterWindow::Create(wxWindow *parent, wxWindowID id,
                                    const wxPoint& pos,

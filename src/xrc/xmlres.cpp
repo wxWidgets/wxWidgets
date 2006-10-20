@@ -46,7 +46,7 @@
 #include "wx/xrc/xmlres.h"
 
 #include "wx/arrimpl.cpp"
-WX_DEFINE_OBJARRAY(wxXmlResourceDataRecords);
+WX_DEFINE_OBJARRAY(wxXmlResourceDataRecords)
 
 
 wxXmlResource *wxXmlResource::ms_instance = NULL;
@@ -683,7 +683,7 @@ wxObject *wxXmlResource::CreateResFromNode(wxXmlNode *node, wxObject *parent,
 
 #include "wx/listimpl.cpp"
 WX_DECLARE_LIST(wxXmlSubclassFactory, wxXmlSubclassFactoriesList);
-WX_DEFINE_LIST(wxXmlSubclassFactoriesList);
+WX_DEFINE_LIST(wxXmlSubclassFactoriesList)
 
 wxXmlSubclassFactoriesList *wxXmlResource::ms_subclassFactories = NULL;
 

@@ -52,7 +52,7 @@ END_EVENT_TABLE()
 
 #include "wx/listimpl.cpp"
 
-WX_DEFINE_LIST(wxToolBarToolsList);
+WX_DEFINE_LIST(wxToolBarToolsList)
 
 // ============================================================================
 // implementation
