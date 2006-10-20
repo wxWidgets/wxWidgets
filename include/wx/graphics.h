@@ -263,7 +263,7 @@ public:
 #endif
 
 class WXDLLEXPORT wxGCDC: 
-#idef __WXMAC__
+#ifdef __WXMAC__
 	public wxDCBase
 #else
 	public wxDC
