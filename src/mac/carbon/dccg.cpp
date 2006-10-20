@@ -34,7 +34,6 @@
 
 #include "wx/mac/private.h"
 
-IMPLEMENT_ABSTRACT_CLASS(wxDC, wxObject)
 
 #ifndef wxMAC_USE_CORE_GRAPHICS_BLEND_MODES
 #define wxMAC_USE_CORE_GRAPHICS_BLEND_MODES 0
@@ -111,6 +110,7 @@ wxMacWindowStateSaver::~wxMacWindowStateSaver()
 
 // minimal implementation only used for appearance drawing < 10.3
 
+#ifndef wxMAC_USE_CORE_GRAPHICS
 wxMacPortSetter::wxMacPortSetter( const wxDC* dc ) :
     m_ph( (GrafPtr) dc->m_macPort )
 {
@@ -124,6 +124,9 @@ wxMacPortSetter::~wxMacPortSetter()
 {
 //    m_dc->MacCleanupPort(&m_ph) ;
 }
+
+#endif
+
 #endif
 
 //-----------------------------------------------------------------------------
@@ -147,6 +150,10 @@ static inline double DegToRad(double deg) { return (deg * M_PI) / 180.0; }
 //-----------------------------------------------------------------------------
 // wxGraphicPath implementation
 //-----------------------------------------------------------------------------
+
+#if !wxUSE_GRAPHICS_CONTEXT
+
+IMPLEMENT_ABSTRACT_CLASS(wxDC, wxObject)
 
 wxMacCGPath::wxMacCGPath()
 {
@@ -1307,13 +1314,6 @@ void wxDC::DoSetClippingRegionAsRegion( const wxRegion &region )
     }
     else
     {
-#if 0
-        CopyRgn( (RgnHandle) region.GetWXHRGN() , (RgnHandle) m_macCurrentClipRgn ) ;
-        if ( xx != x || yy != y )
-            OffsetRgn( (RgnHandle) m_macCurrentClipRgn , xx - x , yy - y ) ;
-        SectRgn( (RgnHandle)m_macCurrentClipRgn , (RgnHandle)m_macBoundaryClipRgn , (RgnHandle)m_macCurrentClipRgn ) ;
-#endif
-
         if ( m_clipping )
         {
             m_clipX1 = wxMax( m_clipX1, xx );
@@ -1335,8 +1335,6 @@ void wxDC::DoSetClippingRegionAsRegion( const wxRegion &region )
 
 void wxDC::DestroyClippingRegion()
 {
-//    CopyRgn( (RgnHandle) m_macBoundaryClipRgn , (RgnHandle) m_macCurrentClipRgn ) ;
-
     CGContextRef cgContext = ((wxMacCGContext*)(m_graphicContext))->GetNativeContext() ;
     CGContextRestoreGState( cgContext );
     CGContextSaveGState( cgContext );
@@ -2260,50 +2258,98 @@ void wxDC::Clear(void)
     }
 }
 
+#endif
+
 #pragma mark -
 
 // ---------------------------------------------------------------------------
 // coordinates transformations
 // ---------------------------------------------------------------------------
+/*
+    wxCoord XLOG2DEVMAC(wxCoord x) const
+    {
+        long new_x = x - m_logicalOriginX;
+        if (new_x > 0)
+            return (wxCoord)((double)new_x * m_scaleX + 0.5) * m_signX + m_deviceOriginX + m_macLocalOrigin.x;
+        else
+            return (wxCoord)((double)new_x * m_scaleX - 0.5) * m_signX + m_deviceOriginX + m_macLocalOrigin.x;
+    }
 
+    wxCoord YLOG2DEVMAC(wxCoord y) const
+    {
+        long new_y = y - m_logicalOriginY;
+        if (new_y > 0)
+            return (wxCoord)((double)new_y * m_scaleY + 0.5) * m_signY + m_deviceOriginY + m_macLocalOrigin.y;
+        else
+            return (wxCoord)((double)new_y * m_scaleY - 0.5) * m_signY + m_deviceOriginY + m_macLocalOrigin.y;
+    }
+*/ // TODO
 wxCoord wxDCBase::DeviceToLogicalX(wxCoord x) const
 {
-    return ((wxDC *)this)->XDEV2LOG(x);
+        long new_x = x - m_deviceOriginX;
+        if (new_x > 0)
+            return (wxCoord)((double)new_x / m_scaleX + 0.5) * m_signX + m_logicalOriginX;
+        else
+            return (wxCoord)((double)new_x / m_scaleX - 0.5) * m_signX + m_logicalOriginX;
 }
 
 wxCoord wxDCBase::DeviceToLogicalY(wxCoord y) const
 {
-    return ((wxDC *)this)->YDEV2LOG(y);
+	long new_y = y - m_deviceOriginY;
+	if (new_y > 0)
+		return (wxCoord)((double)new_y / m_scaleY + 0.5) * m_signY + m_logicalOriginY;
+	else
+		return (wxCoord)((double)new_y / m_scaleY - 0.5) * m_signY + m_logicalOriginY;
 }
 
 wxCoord wxDCBase::DeviceToLogicalXRel(wxCoord x) const
 {
-    return ((wxDC *)this)->XDEV2LOGREL(x);
+	if (x > 0)
+		return (wxCoord)((double)x / m_scaleX + 0.5);
+	else
+		return (wxCoord)((double)x / m_scaleX - 0.5);
 }
 
 wxCoord wxDCBase::DeviceToLogicalYRel(wxCoord y) const
 {
-    return ((wxDC *)this)->YDEV2LOGREL(y);
+	if (y > 0)
+		return (wxCoord)((double)y / m_scaleY + 0.5);
+	else
+		return (wxCoord)((double)y / m_scaleY - 0.5);
 }
 
 wxCoord wxDCBase::LogicalToDeviceX(wxCoord x) const
 {
-    return ((wxDC *)this)->XLOG2DEV(x);
+	long new_x = x - m_logicalOriginX;
+	if (new_x > 0)
+		return (wxCoord)((double)new_x * m_scaleX + 0.5) * m_signX + m_deviceOriginX;
+	else
+		return (wxCoord)((double)new_x * m_scaleX - 0.5) * m_signX + m_deviceOriginX;
 }
 
 wxCoord wxDCBase::LogicalToDeviceY(wxCoord y) const
 {
-    return ((wxDC *)this)->YLOG2DEV(y);
+	long new_y = y - m_logicalOriginY;
+	if (new_y > 0)
+		return (wxCoord)((double)new_y * m_scaleY + 0.5) * m_signY + m_deviceOriginY;
+	else
+		return (wxCoord)((double)new_y * m_scaleY - 0.5) * m_signY + m_deviceOriginY;
 }
 
 wxCoord wxDCBase::LogicalToDeviceXRel(wxCoord x) const
 {
-    return ((wxDC *)this)->XLOG2DEVREL(x);
+	if (x > 0)
+		return (wxCoord)((double)x * m_scaleX + 0.5);
+	else
+		return (wxCoord)((double)x * m_scaleX - 0.5);
 }
 
 wxCoord wxDCBase::LogicalToDeviceYRel(wxCoord y) const
 {
-    return ((wxDC *)this)->YLOG2DEVREL(y);
+        if (y > 0)
+            return (wxCoord)((double)y * m_scaleY + 0.5);
+        else
+            return (wxCoord)((double)y * m_scaleY - 0.5);
 }
 
 #endif // wxMAC_USE_CORE_GRAPHICS

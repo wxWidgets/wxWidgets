@@ -133,10 +133,10 @@ void wxRendererMac::DrawHeaderButton( wxWindow *win,
     wxHeaderSortIconType sortArrow,
     wxHeaderButtonParams* params )
 {
-    const wxCoord x = dc.XLOG2DEV(rect.x /*- 1*/);
-    const wxCoord y = dc.YLOG2DEV(rect.y /*- 1*/);
-    const wxCoord w = dc.XLOG2DEVREL(rect.width);
-    const wxCoord h = dc.YLOG2DEVREL(rect.height);
+    const wxCoord x = dc.LogicalToDeviceX(rect.x /*- 1*/);
+    const wxCoord y = dc.LogicalToDeviceY(rect.y /*- 1*/);
+    const wxCoord w = dc.LogicalToDeviceXRel(rect.width);
+    const wxCoord h = dc.LogicalToDeviceYRel(rect.height);
 
     dc.SetBrush( *wxTRANSPARENT_BRUSH );
 
@@ -160,7 +160,7 @@ void wxRendererMac::DrawHeaderButton( wxWindow *win,
         CGContextRef cgContext;
 
 #if wxMAC_USE_CORE_GRAPHICS
-        cgContext = ((wxMacCGContext*)(dc.GetGraphicContext()))->GetNativeContext();
+        cgContext = (CGContextRef) dc.GetGraphicContext()->GetNativeContext();
 #else
         Rect bounds;
 
@@ -329,7 +329,7 @@ void wxRendererMac::DrawSplitterSash( wxWindow *win,
         CGContextRef cgContext;
 
 #if wxMAC_USE_CORE_GRAPHICS
-        cgContext = ((wxMacCGContext*)(dc.GetGraphicContext()))->GetNativeContext();
+        cgContext = (CGContextRef) dc.GetGraphicContext()->GetNativeContext();
 #else
         Rect bounds;
         GetPortBounds( (CGrafPtr) dc.m_macPort, &bounds );
