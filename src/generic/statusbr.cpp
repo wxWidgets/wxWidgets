@@ -81,13 +81,14 @@ bool wxStatusBarGeneric::Create(wxWindow *parent,
     SetFont(*wxSMALL_FONT);
 #endif
 
-    // Set the height according to the font and the border size
-    wxClientDC dc(this);
-    dc.SetFont(GetFont());
+	wxCoord y;
+	{
+		// Set the height according to the font and the border size
+		wxClientDC dc(this);
+		dc.SetFont(GetFont());
 
-    wxCoord y;
-    dc.GetTextExtent(_T("X"), NULL, &y );
-
+		dc.GetTextExtent(_T("X"), NULL, &y );
+	}
     int height = (int)( (11*y)/10 + 2*GetBorderY());
 
     SetSize(wxDefaultCoord, wxDefaultCoord, wxDefaultCoord, height);
