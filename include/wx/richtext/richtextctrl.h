@@ -384,6 +384,13 @@ public:
     /// End symbol bullet
     bool EndSymbolBullet() { return GetBuffer().EndSymbolBullet(); }
 
+    /// Begin standard bullet
+    bool BeginStandardBullet(const wxString& bulletName, int leftIndent, int leftSubIndent, int bulletStyle = wxTEXT_ATTR_BULLET_STYLE_STANDARD)
+    { return GetBuffer().BeginStandardBullet(bulletName, leftIndent, leftSubIndent, bulletStyle); }
+
+    /// End standard bullet
+    bool EndStandardBullet() { return GetBuffer().EndStandardBullet(); }
+
     /// Begin named character style
     bool BeginCharacterStyle(const wxString& characterStyle) { return GetBuffer().BeginCharacterStyle(characterStyle); }
 
@@ -395,6 +402,12 @@ public:
 
     /// End named character style
     bool EndParagraphStyle() { return GetBuffer().EndParagraphStyle(); }
+
+    /// Begin named list style
+    bool BeginListStyle(const wxString& listStyle, int level = 1, int number = 1) { return GetBuffer().BeginListStyle(listStyle, level, number); }
+
+    /// End named character style
+    bool EndListStyle() { return GetBuffer().EndListStyle(); }
 
     /// Sets the default style to the style under the cursor
     bool SetDefaultStyleToCursorStyle();

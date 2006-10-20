@@ -657,7 +657,7 @@ wxString wxRichTextXMLHandler::CreateStyle(const wxTextAttrEx& attr, bool isPara
     }
 
     if (!attr.GetCharacterStyleName().empty())
-        str << wxT(" charactertyle=\"") << wxString(attr.GetCharacterStyleName()) << wxT("\"");
+        str << wxT(" characterstyle=\"") << wxString(attr.GetCharacterStyleName()) << wxT("\"");
 
     if (isPara)
     {
@@ -694,8 +694,14 @@ wxString wxRichTextXMLHandler::CreateStyle(const wxTextAttrEx& attr, bool isPara
             str << wxT(" bulletfont=\"") << attr.GetBulletFont() << wxT("\"");
         }
 
+        if (attr.HasBulletName())
+            str << wxT(" bulletname=\"") << attr.GetBulletName() << wxT("\"");
+
         if (!attr.GetParagraphStyleName().empty())
             str << wxT(" parstyle=\"") << wxString(attr.GetParagraphStyleName()) << wxT("\"");
+        
+        if (!attr.GetListStyleName().empty())
+            str << wxT(" liststyle=\"") << wxString(attr.GetListStyleName()) << wxT("\"");
         
         if (attr.HasTabs())
         {
@@ -853,9 +859,17 @@ bool wxRichTextXMLHandler::GetStyle(wxTextAttrEx& attr, wxXmlNode* node, bool is
         if (!value.empty())
             attr.SetBulletFont(value);
 
+        value = node->GetPropVal(wxT("bulletname"), wxEmptyString);
+        if (!value.empty())
+            attr.SetBulletName(value);
+
         value = node->GetPropVal(wxT("parstyle"), wxEmptyString);
         if (!value.empty())
             attr.SetParagraphStyleName(value);
+        
+        value = node->GetPropVal(wxT("liststyle"), wxEmptyString);
+        if (!value.empty())
+            attr.SetListStyleName(value);
         
         value = node->GetPropVal(wxT("tabs"), wxEmptyString);
         if (!value.empty())

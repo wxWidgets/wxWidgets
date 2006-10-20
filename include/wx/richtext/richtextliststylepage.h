@@ -73,6 +73,9 @@ public:
     /// Update for number-related controls
     void OnNumberUpdate( wxUpdateUIEvent& event );
 
+    /// Update for standard bullet-related controls
+    void OnStandardBulletUpdate( wxUpdateUIEvent& event );
+
     /// Just transfer to the window
     void DoTransferDataToWindow();
 
@@ -102,6 +105,18 @@ public:
     /// wxEVT_COMMAND_LISTBOX_SELECTED event handler for ID_RICHTEXTLISTSTYLEPAGE_STYLELISTBOX
     void OnStylelistboxSelected( wxCommandEvent& event );
 
+    /// wxEVT_COMMAND_CHECKBOX_CLICKED event handler for ID_RICHTEXTLISTSTYLEPAGE_PERIODCTRL
+    void OnPeriodctrlClick( wxCommandEvent& event );
+
+    /// wxEVT_UPDATE_UI event handler for ID_RICHTEXTLISTSTYLEPAGE_PERIODCTRL
+    void OnPeriodctrlUpdate( wxUpdateUIEvent& event );
+
+    /// wxEVT_COMMAND_CHECKBOX_CLICKED event handler for ID_RICHTEXTLISTSTYLEPAGE_PARENTHESESCTRL
+    void OnParenthesesctrlClick( wxCommandEvent& event );
+
+    /// wxEVT_UPDATE_UI event handler for ID_RICHTEXTLISTSTYLEPAGE_PARENTHESESCTRL
+    void OnParenthesesctrlUpdate( wxUpdateUIEvent& event );
+
     /// wxEVT_UPDATE_UI event handler for ID_RICHTEXTLISTSTYLEPAGE_SYMBOLSTATIC
     void OnSymbolstaticUpdate( wxUpdateUIEvent& event );
 
@@ -129,17 +144,17 @@ public:
     /// wxEVT_UPDATE_UI event handler for ID_RICHTEXTLISTSTYLEPAGE_SYMBOLFONTCTRL
     void OnSymbolfontctrlUIUpdate( wxUpdateUIEvent& event );
 
-    /// wxEVT_COMMAND_CHECKBOX_CLICKED event handler for ID_RICHTEXTLISTSTYLEPAGE_PARENTHESESCTRL
-    void OnParenthesesctrlClick( wxCommandEvent& event );
+    /// wxEVT_UPDATE_UI event handler for ID_RICHTEXTLISTSTYLEPAGE_NAMESTATIC
+    void OnNamestaticUpdate( wxUpdateUIEvent& event );
 
-    /// wxEVT_UPDATE_UI event handler for ID_RICHTEXTLISTSTYLEPAGE_PARENTHESESCTRL
-    void OnParenthesesctrlUpdate( wxUpdateUIEvent& event );
+    /// wxEVT_COMMAND_COMBOBOX_SELECTED event handler for ID_RICHTEXTLISTSTYLEPAGE_NAMECTRL
+    void OnNamectrlSelected( wxCommandEvent& event );
 
-    /// wxEVT_COMMAND_CHECKBOX_CLICKED event handler for ID_RICHTEXTLISTSTYLEPAGE_PERIODCTRL
-    void OnPeriodctrlClick( wxCommandEvent& event );
+    /// wxEVT_COMMAND_TEXT_UPDATED event handler for ID_RICHTEXTLISTSTYLEPAGE_NAMECTRL
+    void OnNamectrlUpdated( wxCommandEvent& event );
 
-    /// wxEVT_UPDATE_UI event handler for ID_RICHTEXTLISTSTYLEPAGE_PERIODCTRL
-    void OnPeriodctrlUpdate( wxUpdateUIEvent& event );
+    /// wxEVT_UPDATE_UI event handler for ID_RICHTEXTLISTSTYLEPAGE_NAMECTRL
+    void OnNamectrlUIUpdate( wxUpdateUIEvent& event );
 
     /// wxEVT_COMMAND_RADIOBUTTON_SELECTED event handler for ID_RICHTEXTLISTSTYLEPAGE_ALIGNLEFT
     void OnRichtextliststylepageAlignleftSelected( wxCommandEvent& event );
@@ -191,10 +206,11 @@ public:
 ////@begin wxRichTextListStylePage member variables
     wxSpinCtrl* m_levelCtrl;
     wxListBox* m_styleListBox;
+    wxCheckBox* m_periodCtrl;
+    wxCheckBox* m_parenthesesCtrl;
     wxComboBox* m_symbolCtrl;
     wxComboBox* m_symbolFontCtrl;
-    wxCheckBox* m_parenthesesCtrl;
-    wxCheckBox* m_periodCtrl;
+    wxComboBox* m_bulletNameCtrl;
     wxRadioButton* m_alignmentLeft;
     wxRadioButton* m_alignmentRight;
     wxRadioButton* m_alignmentJustified;
@@ -215,12 +231,14 @@ public:
         ID_RICHTEXTLISTSTYLEPAGE_NOTEBOOK = 10618,
         ID_RICHTEXTLISTSTYLEPAGE_BULLETS = 10619,
         ID_RICHTEXTLISTSTYLEPAGE_STYLELISTBOX = 10620,
+        ID_RICHTEXTLISTSTYLEPAGE_PERIODCTRL = 10627,
+        ID_RICHTEXTLISTSTYLEPAGE_PARENTHESESCTRL = 10626,
         ID_RICHTEXTLISTSTYLEPAGE_SYMBOLSTATIC = 10621,
         ID_RICHTEXTBULLETSPAGE_SYMBOLCTRL = 10622,
         ID_RICHTEXTBULLETSPAGE_CHOOSE_SYMBOL = 10623,
         ID_RICHTEXTLISTSTYLEPAGE_SYMBOLFONTCTRL = 10625,
-        ID_RICHTEXTLISTSTYLEPAGE_PARENTHESESCTRL = 10626,
-        ID_RICHTEXTLISTSTYLEPAGE_PERIODCTRL = 10627,
+        ID_RICHTEXTLISTSTYLEPAGE_NAMESTATIC = 10600,
+        ID_RICHTEXTLISTSTYLEPAGE_NAMECTRL = 10601,
         ID_RICHTEXTLISTSTYLEPAGE_SPACING = 10628,
         ID_RICHTEXTLISTSTYLEPAGE_ALIGNLEFT = 10629,
         ID_RICHTEXTLISTSTYLEPAGE_ALIGNRIGHT = 10630,

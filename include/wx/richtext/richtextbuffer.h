@@ -180,10 +180,11 @@ class WXDLLIMPEXP_RICHTEXT wxRichTextListStyleDefinition;
 #define wxTEXT_ATTR_LINE_SPACING            0x00002000
 #define wxTEXT_ATTR_CHARACTER_STYLE_NAME    0x00004000
 #define wxTEXT_ATTR_PARAGRAPH_STYLE_NAME    0x00008000
-#define wxTEXT_ATTR_BULLET_STYLE            0x00010000
-#define wxTEXT_ATTR_BULLET_NUMBER           0x00020000
-#define wxTEXT_ATTR_BULLET_SYMBOL           0x00040000
-#define wxTEXT_ATTR_LIST_STYLE_NAME         0x00080000
+#define wxTEXT_ATTR_LIST_STYLE_NAME         0x00010000
+#define wxTEXT_ATTR_BULLET_STYLE            0x00020000
+#define wxTEXT_ATTR_BULLET_NUMBER           0x00040000
+#define wxTEXT_ATTR_BULLET_SYMBOL           0x00080000
+#define wxTEXT_ATTR_BULLET_NAME             0x00100000
 
 /*!
  * Styles for wxTextAttrEx::SetBulletStyle
@@ -199,6 +200,7 @@ class WXDLLIMPEXP_RICHTEXT wxRichTextListStyleDefinition;
 #define wxTEXT_ATTR_BULLET_STYLE_BITMAP         0x0040
 #define wxTEXT_ATTR_BULLET_STYLE_PARENTHESES    0x0080
 #define wxTEXT_ATTR_BULLET_STYLE_PERIOD         0x0100
+#define wxTEXT_ATTR_BULLET_STYLE_STANDARD       0x0200
 
 /*!
  * Line spacing values
@@ -306,6 +308,7 @@ public:
     void SetBulletStyle(int style) { m_bulletStyle = style; SetFlags(GetFlags() | wxTEXT_ATTR_BULLET_STYLE); }
     void SetBulletNumber(int n) { m_bulletNumber = n; SetFlags(GetFlags() | wxTEXT_ATTR_BULLET_NUMBER); }
     void SetBulletSymbol(wxChar symbol) { m_bulletSymbol = symbol; SetFlags(GetFlags() | wxTEXT_ATTR_BULLET_SYMBOL); }
+    void SetBulletName(const wxString& name) { m_bulletName = name; SetFlags(GetFlags() | wxTEXT_ATTR_BULLET_NAME); }
     void SetBulletFont(const wxString& bulletFont) { m_bulletFont = bulletFont; }
 
     const wxString& GetCharacterStyleName() const { return m_characterStyleName; }
@@ -317,6 +320,7 @@ public:
     int GetBulletStyle() const { return m_bulletStyle; }
     int GetBulletNumber() const { return m_bulletNumber; }
     wxChar GetBulletSymbol() const { return m_bulletSymbol; }
+    const wxString& GetBulletName() const { return m_bulletName; }
     const wxString& GetBulletFont() const { return m_bulletFont; }
 
     bool HasWeight() const { return (GetFlags() & wxTEXT_ATTR_FONT_WEIGHT) != 0; }
@@ -334,12 +338,13 @@ public:
     bool HasBulletStyle() const { return HasFlag(wxTEXT_ATTR_BULLET_STYLE); }
     bool HasBulletNumber() const { return HasFlag(wxTEXT_ATTR_BULLET_NUMBER); }
     bool HasBulletSymbol() const { return HasFlag(wxTEXT_ATTR_BULLET_SYMBOL); }
+    bool HasBulletName() const { return HasFlag(wxTEXT_ATTR_BULLET_NAME); }
 
     // Is this a character style?
     bool IsCharacterStyle() const { return (0 != (GetFlags() & (wxTEXT_ATTR_FONT | wxTEXT_ATTR_BACKGROUND_COLOUR | wxTEXT_ATTR_TEXT_COLOUR))); }
     bool IsParagraphStyle() const { return (0 != (GetFlags() & (wxTEXT_ATTR_ALIGNMENT|wxTEXT_ATTR_LEFT_INDENT|wxTEXT_ATTR_RIGHT_INDENT|wxTEXT_ATTR_TABS|
                             wxTEXT_ATTR_PARA_SPACING_BEFORE|wxTEXT_ATTR_PARA_SPACING_AFTER|wxTEXT_ATTR_LINE_SPACING|
-                            wxTEXT_ATTR_BULLET_STYLE|wxTEXT_ATTR_BULLET_NUMBER))); }
+                            wxTEXT_ATTR_BULLET_STYLE|wxTEXT_ATTR_BULLET_NUMBER|wxTEXT_ATTR_BULLET_NAME))); }
 
     // returns false if we have any attributes set, true otherwise
     bool IsDefault() const
@@ -348,7 +353,7 @@ public:
                !HasTabs() && !HasLeftIndent() && !HasRightIndent() &&
                !HasParagraphSpacingAfter() && !HasParagraphSpacingBefore() && !HasLineSpacing() &&
                !HasCharacterStyleName() && !HasParagraphStyleName() && !HasListStyleName() &&
-               !HasBulletNumber() && !HasBulletStyle() && !HasBulletSymbol();
+               !HasBulletNumber() && !HasBulletStyle() && !HasBulletSymbol() && !HasBulletName();
     }
 
     // return the attribute having the valid font and colours: it uses the
@@ -367,6 +372,7 @@ private:
     int                 m_bulletNumber;
     wxChar              m_bulletSymbol;
     wxString            m_bulletFont;
+    wxString            m_bulletName;
 
     // Character style
     wxString            m_characterStyleName;
@@ -443,6 +449,7 @@ public:
     void SetBulletNumber(int n) { m_bulletNumber = n; m_flags |= wxTEXT_ATTR_BULLET_NUMBER; }
     void SetBulletSymbol(wxChar symbol) { m_bulletSymbol = symbol; m_flags |= wxTEXT_ATTR_BULLET_NUMBER; }
     void SetBulletFont(const wxString& bulletFont) { m_bulletFont = bulletFont; }
+    void SetBulletName(const wxString& name) { m_bulletName = name; }
 
     const wxColour& GetTextColour() const { return m_colText; }
     const wxColour& GetBackgroundColour() const { return m_colBack; }
@@ -469,6 +476,7 @@ public:
     int GetBulletNumber() const { return m_bulletNumber; }
     wxChar GetBulletSymbol() const { return m_bulletSymbol; }
     const wxString& GetBulletFont() const { return m_bulletFont; }
+    const wxString& GetBulletName() const { return m_bulletName; }
 
     // accessors
     bool HasTextColour() const { return m_colText.Ok() && HasFlag(wxTEXT_ATTR_TEXT_COLOUR) ; }
@@ -493,6 +501,7 @@ public:
     bool HasBulletStyle() const { return (m_flags & wxTEXT_ATTR_BULLET_STYLE) != 0; }
     bool HasBulletNumber() const { return (m_flags & wxTEXT_ATTR_BULLET_NUMBER) != 0; }
     bool HasBulletSymbol() const { return (m_flags & wxTEXT_ATTR_BULLET_SYMBOL) != 0; }
+    bool HasBulletName() const { return (m_flags & wxTEXT_ATTR_BULLET_NAME) != 0; }
 
     bool HasFlag(long flag) const { return (m_flags & flag) != 0; }
 
@@ -500,7 +509,7 @@ public:
     bool IsCharacterStyle() const { return (0 != (GetFlags() & (wxTEXT_ATTR_FONT | wxTEXT_ATTR_BACKGROUND_COLOUR | wxTEXT_ATTR_TEXT_COLOUR))); }
     bool IsParagraphStyle() const { return (0 != (GetFlags() & (wxTEXT_ATTR_ALIGNMENT|wxTEXT_ATTR_LEFT_INDENT|wxTEXT_ATTR_RIGHT_INDENT|wxTEXT_ATTR_TABS|
                             wxTEXT_ATTR_PARA_SPACING_BEFORE|wxTEXT_ATTR_PARA_SPACING_AFTER|wxTEXT_ATTR_LINE_SPACING|
-                            wxTEXT_ATTR_BULLET_STYLE|wxTEXT_ATTR_BULLET_NUMBER))); }
+                            wxTEXT_ATTR_BULLET_STYLE|wxTEXT_ATTR_BULLET_NUMBER|wxTEXT_ATTR_BULLET_NAME))); }
 
     // returns false if we have any attributes set, true otherwise
     bool IsDefault() const
@@ -509,7 +518,7 @@ public:
                !HasTabs() && !HasLeftIndent() && !HasRightIndent() &&
                !HasParagraphSpacingAfter() && !HasParagraphSpacingBefore() && !HasLineSpacing() &&
                !HasCharacterStyleName() && !HasParagraphStyleName() && !HasListStyleName() &&
-               !HasBulletNumber() && !HasBulletStyle() && !HasBulletSymbol();
+               !HasBulletNumber() && !HasBulletStyle() && !HasBulletSymbol() && !HasBulletName();
     }
 
     // return the attribute having the valid font and colours: it uses the
@@ -537,6 +546,7 @@ private:
     int                 m_bulletNumber;
     wxChar              m_bulletSymbol;
     wxString            m_bulletFont;
+    wxString            m_bulletName;
 
     // Character styles
     wxColour            m_colText,
@@ -561,7 +571,8 @@ private:
 
 #define wxTEXT_ATTR_PARAGRAPH (wxTEXT_ATTR_ALIGNMENT|wxTEXT_ATTR_LEFT_INDENT|wxTEXT_ATTR_RIGHT_INDENT|wxTEXT_ATTR_TABS|\
     wxTEXT_ATTR_PARA_SPACING_BEFORE|wxTEXT_ATTR_PARA_SPACING_AFTER|wxTEXT_ATTR_LINE_SPACING|\
-    wxTEXT_ATTR_BULLET_STYLE|wxTEXT_ATTR_BULLET_NUMBER|wxTEXT_ATTR_BULLET_SYMBOL|wxTEXT_ATTR_PARAGRAPH_STYLE_NAME|wxTEXT_ATTR_LIST_STYLE_NAME)
+    wxTEXT_ATTR_BULLET_STYLE|wxTEXT_ATTR_BULLET_NUMBER|wxTEXT_ATTR_BULLET_SYMBOL|wxTEXT_ATTR_BULLET_NAME|\
+    wxTEXT_ATTR_PARAGRAPH_STYLE_NAME|wxTEXT_ATTR_LIST_STYLE_NAME)
 
 #define wxTEXT_ATTR_ALL (wxTEXT_ATTR_CHARACTER|wxTEXT_ATTR_PARAGRAPH)
 
@@ -1682,6 +1693,12 @@ public:
     /// End symbol bullet
     bool EndSymbolBullet() { return EndStyle(); }
 
+    /// Begin standard bullet
+    bool BeginStandardBullet(const wxString& bulletName, int leftIndent, int leftSubIndent, int bulletStyle = wxTEXT_ATTR_BULLET_STYLE_STANDARD);
+
+    /// End standard bullet
+    bool EndStandardBullet() { return EndStyle(); }
+
     /// Begin named character style
     bool BeginCharacterStyle(const wxString& characterStyle);
 
@@ -1693,6 +1710,12 @@ public:
 
     /// End named character style
     bool EndParagraphStyle() { return EndStyle(); }
+
+    /// Begin named list style
+    bool BeginListStyle(const wxString& listStyle, int level = 1, int number = 1);
+
+    /// End named character style
+    bool EndListStyle() { return EndStyle(); }
 
 // Implementation
 

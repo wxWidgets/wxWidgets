@@ -37,6 +37,12 @@ BEGIN_EVENT_TABLE( wxRichTextListStylePage, wxPanel )
 
     EVT_LISTBOX( ID_RICHTEXTLISTSTYLEPAGE_STYLELISTBOX, wxRichTextListStylePage::OnStylelistboxSelected )
 
+    EVT_CHECKBOX( ID_RICHTEXTLISTSTYLEPAGE_PERIODCTRL, wxRichTextListStylePage::OnPeriodctrlClick )
+    EVT_UPDATE_UI( ID_RICHTEXTLISTSTYLEPAGE_PERIODCTRL, wxRichTextListStylePage::OnPeriodctrlUpdate )
+
+    EVT_CHECKBOX( ID_RICHTEXTLISTSTYLEPAGE_PARENTHESESCTRL, wxRichTextListStylePage::OnParenthesesctrlClick )
+    EVT_UPDATE_UI( ID_RICHTEXTLISTSTYLEPAGE_PARENTHESESCTRL, wxRichTextListStylePage::OnParenthesesctrlUpdate )
+
     EVT_UPDATE_UI( ID_RICHTEXTLISTSTYLEPAGE_SYMBOLSTATIC, wxRichTextListStylePage::OnSymbolstaticUpdate )
 
     EVT_COMBOBOX( ID_RICHTEXTBULLETSPAGE_SYMBOLCTRL, wxRichTextListStylePage::OnSymbolctrlSelected )
@@ -50,11 +56,11 @@ BEGIN_EVENT_TABLE( wxRichTextListStylePage, wxPanel )
     EVT_TEXT( ID_RICHTEXTLISTSTYLEPAGE_SYMBOLFONTCTRL, wxRichTextListStylePage::OnSymbolfontctrlUpdated )
     EVT_UPDATE_UI( ID_RICHTEXTLISTSTYLEPAGE_SYMBOLFONTCTRL, wxRichTextListStylePage::OnSymbolfontctrlUIUpdate )
 
-    EVT_CHECKBOX( ID_RICHTEXTLISTSTYLEPAGE_PARENTHESESCTRL, wxRichTextListStylePage::OnParenthesesctrlClick )
-    EVT_UPDATE_UI( ID_RICHTEXTLISTSTYLEPAGE_PARENTHESESCTRL, wxRichTextListStylePage::OnParenthesesctrlUpdate )
+    EVT_UPDATE_UI( ID_RICHTEXTLISTSTYLEPAGE_NAMESTATIC, wxRichTextListStylePage::OnNamestaticUpdate )
 
-    EVT_CHECKBOX( ID_RICHTEXTLISTSTYLEPAGE_PERIODCTRL, wxRichTextListStylePage::OnPeriodctrlClick )
-    EVT_UPDATE_UI( ID_RICHTEXTLISTSTYLEPAGE_PERIODCTRL, wxRichTextListStylePage::OnPeriodctrlUpdate )
+    EVT_COMBOBOX( ID_RICHTEXTLISTSTYLEPAGE_NAMECTRL, wxRichTextListStylePage::OnNamectrlSelected )
+    EVT_TEXT( ID_RICHTEXTLISTSTYLEPAGE_NAMECTRL, wxRichTextListStylePage::OnNamectrlUpdated )
+    EVT_UPDATE_UI( ID_RICHTEXTLISTSTYLEPAGE_NAMECTRL, wxRichTextListStylePage::OnNamectrlUIUpdate )
 
     EVT_RADIOBUTTON( ID_RICHTEXTLISTSTYLEPAGE_ALIGNLEFT, wxRichTextListStylePage::OnRichtextliststylepageAlignleftSelected )
 
@@ -128,10 +134,11 @@ void wxRichTextListStylePage::Init()
 ////@begin wxRichTextListStylePage member initialisation
     m_levelCtrl = NULL;
     m_styleListBox = NULL;
+    m_periodCtrl = NULL;
+    m_parenthesesCtrl = NULL;
     m_symbolCtrl = NULL;
     m_symbolFontCtrl = NULL;
-    m_parenthesesCtrl = NULL;
-    m_periodCtrl = NULL;
+    m_bulletNameCtrl = NULL;
     m_alignmentLeft = NULL;
     m_alignmentRight = NULL;
     m_alignmentJustified = NULL;
@@ -146,6 +153,7 @@ void wxRichTextListStylePage::Init()
     m_previewCtrl = NULL;
 ////@end wxRichTextListStylePage member initialisation
 }
+
 /*!
  * Control creation for wxRichTextListStylePage
  */
@@ -181,7 +189,7 @@ void wxRichTextListStylePage::CreateControls()
         itemButton8->SetToolTip(_("Click to choose the font for this level."));
     itemBoxSizer4->Add(itemButton8, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
-    wxNotebook* itemNotebook9 = new wxNotebook( itemPanel1, ID_RICHTEXTLISTSTYLEPAGE_NOTEBOOK, wxDefaultPosition, wxDefaultSize, wxBK_TOP );
+    wxNotebook* itemNotebook9 = new wxNotebook( itemPanel1, ID_RICHTEXTLISTSTYLEPAGE_NOTEBOOK, wxDefaultPosition, wxDefaultSize, wxNB_TOP );
 
     wxPanel* itemPanel10 = new wxPanel( itemNotebook9, ID_RICHTEXTLISTSTYLEPAGE_BULLETS, wxDefaultPosition, wxDefaultSize, wxNO_BORDER|wxTAB_TRAVERSAL );
     wxBoxSizer* itemBoxSizer11 = new wxBoxSizer(wxVERTICAL);
@@ -195,72 +203,77 @@ void wxRichTextListStylePage::CreateControls()
     itemBoxSizer13->Add(itemStaticText14, 0, wxALIGN_LEFT|wxLEFT|wxRIGHT|wxTOP|wxADJUST_MINSIZE, 5);
 
     wxString* m_styleListBoxStrings = NULL;
-    m_styleListBox = new wxListBox( itemPanel10, ID_RICHTEXTLISTSTYLEPAGE_STYLELISTBOX, wxDefaultPosition, wxDefaultSize, 0, m_styleListBoxStrings, wxLB_SINGLE );
+    m_styleListBox = new wxListBox( itemPanel10, ID_RICHTEXTLISTSTYLEPAGE_STYLELISTBOX, wxDefaultPosition, wxSize(-1, 130), 0, m_styleListBoxStrings, wxLB_SINGLE );
     m_styleListBox->SetHelpText(_("The available bullet styles."));
     if (ShowToolTips())
         m_styleListBox->SetToolTip(_("The available bullet styles."));
-    itemBoxSizer13->Add(m_styleListBox, 1, wxALIGN_CENTER_HORIZONTAL|wxALL, 5);
+    itemBoxSizer13->Add(m_styleListBox, 1, wxGROW|wxALL, 5);
 
-    itemBoxSizer12->Add(2, 1, 1, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM, 5);
-
-    wxStaticLine* itemStaticLine17 = new wxStaticLine( itemPanel10, wxID_STATIC, wxDefaultPosition, wxDefaultSize, wxLI_VERTICAL );
-    itemBoxSizer12->Add(itemStaticLine17, 0, wxGROW|wxALL, 5);
-
-    itemBoxSizer12->Add(2, 1, 1, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM, 5);
-
-    wxBoxSizer* itemBoxSizer19 = new wxBoxSizer(wxVERTICAL);
-    itemBoxSizer12->Add(itemBoxSizer19, 0, wxGROW, 5);
-    wxStaticText* itemStaticText20 = new wxStaticText( itemPanel10, ID_RICHTEXTLISTSTYLEPAGE_SYMBOLSTATIC, _("&Symbol:"), wxDefaultPosition, wxDefaultSize, 0 );
-    itemBoxSizer19->Add(itemStaticText20, 0, wxALIGN_LEFT|wxLEFT|wxRIGHT|wxTOP|wxADJUST_MINSIZE, 5);
-
-    wxBoxSizer* itemBoxSizer21 = new wxBoxSizer(wxHORIZONTAL);
-    itemBoxSizer19->Add(itemBoxSizer21, 0, wxGROW, 5);
-    wxString* m_symbolCtrlStrings = NULL;
-    m_symbolCtrl = new wxComboBox( itemPanel10, ID_RICHTEXTBULLETSPAGE_SYMBOLCTRL, wxEmptyString, wxDefaultPosition, wxSize(60, -1), 0, m_symbolCtrlStrings, wxCB_DROPDOWN );
-    m_symbolCtrl->SetHelpText(_("The bullet character."));
-    if (ShowToolTips())
-        m_symbolCtrl->SetToolTip(_("The bullet character."));
-    itemBoxSizer21->Add(m_symbolCtrl, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxFIXED_MINSIZE, 5);
-
-    wxButton* itemButton23 = new wxButton( itemPanel10, ID_RICHTEXTBULLETSPAGE_CHOOSE_SYMBOL, _("Ch&oose..."), wxDefaultPosition, wxDefaultSize, 0 );
-    itemButton23->SetHelpText(_("Click to browse for a symbol."));
-    if (ShowToolTips())
-        itemButton23->SetToolTip(_("Click to browse for a symbol."));
-    itemBoxSizer21->Add(itemButton23, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
-
-    itemBoxSizer19->Add(5, 5, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 5);
-
-    wxStaticText* itemStaticText25 = new wxStaticText( itemPanel10, ID_RICHTEXTLISTSTYLEPAGE_SYMBOLSTATIC, _("Symbol &font:"), wxDefaultPosition, wxDefaultSize, 0 );
-    itemBoxSizer19->Add(itemStaticText25, 0, wxALIGN_LEFT|wxLEFT|wxRIGHT|wxTOP|wxADJUST_MINSIZE, 5);
-
-    wxString* m_symbolFontCtrlStrings = NULL;
-    m_symbolFontCtrl = new wxComboBox( itemPanel10, ID_RICHTEXTLISTSTYLEPAGE_SYMBOLFONTCTRL, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, m_symbolFontCtrlStrings, wxCB_DROPDOWN );
-    if (ShowToolTips())
-        m_symbolFontCtrl->SetToolTip(_("Available fonts."));
-    itemBoxSizer19->Add(m_symbolFontCtrl, 0, wxGROW|wxALL, 5);
-
-    itemBoxSizer12->Add(2, 1, 1, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM, 5);
-
-    wxStaticLine* itemStaticLine28 = new wxStaticLine( itemPanel10, wxID_STATIC, wxDefaultPosition, wxDefaultSize, wxLI_VERTICAL );
-    itemBoxSizer12->Add(itemStaticLine28, 0, wxGROW|wxALL, 5);
-
-    itemBoxSizer12->Add(2, 1, 1, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM, 5);
-
-    wxBoxSizer* itemBoxSizer30 = new wxBoxSizer(wxVERTICAL);
-    itemBoxSizer12->Add(itemBoxSizer30, 0, wxALIGN_TOP|wxRIGHT|wxTOP|wxBOTTOM, 5);
-    m_parenthesesCtrl = new wxCheckBox( itemPanel10, ID_RICHTEXTLISTSTYLEPAGE_PARENTHESESCTRL, _("&Parentheses"), wxDefaultPosition, wxDefaultSize, 0 );
-    m_parenthesesCtrl->SetValue(false);
-    m_parenthesesCtrl->SetHelpText(_("Check to enclose the bullet in parentheses."));
-    if (ShowToolTips())
-        m_parenthesesCtrl->SetToolTip(_("Check to enclose the bullet in parentheses."));
-    itemBoxSizer30->Add(m_parenthesesCtrl, 0, wxALIGN_LEFT|wxALL, 5);
-
+    wxBoxSizer* itemBoxSizer16 = new wxBoxSizer(wxHORIZONTAL);
+    itemBoxSizer13->Add(itemBoxSizer16, 0, wxGROW, 5);
     m_periodCtrl = new wxCheckBox( itemPanel10, ID_RICHTEXTLISTSTYLEPAGE_PERIODCTRL, _("Peri&od"), wxDefaultPosition, wxDefaultSize, 0 );
     m_periodCtrl->SetValue(false);
     m_periodCtrl->SetHelpText(_("Check to add a period after the bullet."));
     if (ShowToolTips())
         m_periodCtrl->SetToolTip(_("Check to add a period after the bullet."));
-    itemBoxSizer30->Add(m_periodCtrl, 0, wxALIGN_LEFT|wxALL, 5);
+    itemBoxSizer16->Add(m_periodCtrl, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+
+    m_parenthesesCtrl = new wxCheckBox( itemPanel10, ID_RICHTEXTLISTSTYLEPAGE_PARENTHESESCTRL, _("&Parentheses"), wxDefaultPosition, wxDefaultSize, 0 );
+    m_parenthesesCtrl->SetValue(false);
+    m_parenthesesCtrl->SetHelpText(_("Check to enclose the bullet in parentheses."));
+    if (ShowToolTips())
+        m_parenthesesCtrl->SetToolTip(_("Check to enclose the bullet in parentheses."));
+    itemBoxSizer16->Add(m_parenthesesCtrl, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+
+    itemBoxSizer12->Add(2, 1, 1, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM, 5);
+
+    wxStaticLine* itemStaticLine20 = new wxStaticLine( itemPanel10, wxID_STATIC, wxDefaultPosition, wxDefaultSize, wxLI_VERTICAL );
+    itemBoxSizer12->Add(itemStaticLine20, 0, wxGROW|wxALL, 5);
+
+    itemBoxSizer12->Add(2, 1, 1, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM, 5);
+
+    wxBoxSizer* itemBoxSizer22 = new wxBoxSizer(wxVERTICAL);
+    itemBoxSizer12->Add(itemBoxSizer22, 0, wxGROW, 5);
+    wxStaticText* itemStaticText23 = new wxStaticText( itemPanel10, ID_RICHTEXTLISTSTYLEPAGE_SYMBOLSTATIC, _("&Symbol:"), wxDefaultPosition, wxDefaultSize, 0 );
+    itemBoxSizer22->Add(itemStaticText23, 0, wxALIGN_LEFT|wxLEFT|wxRIGHT|wxTOP|wxADJUST_MINSIZE, 5);
+
+    wxBoxSizer* itemBoxSizer24 = new wxBoxSizer(wxHORIZONTAL);
+    itemBoxSizer22->Add(itemBoxSizer24, 0, wxGROW, 5);
+    wxString* m_symbolCtrlStrings = NULL;
+    m_symbolCtrl = new wxComboBox( itemPanel10, ID_RICHTEXTBULLETSPAGE_SYMBOLCTRL, _T(""), wxDefaultPosition, wxSize(60, -1), 0, m_symbolCtrlStrings, wxCB_DROPDOWN );
+    m_symbolCtrl->SetHelpText(_("The bullet character."));
+    if (ShowToolTips())
+        m_symbolCtrl->SetToolTip(_("The bullet character."));
+    itemBoxSizer24->Add(m_symbolCtrl, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxFIXED_MINSIZE, 5);
+
+    wxButton* itemButton26 = new wxButton( itemPanel10, ID_RICHTEXTBULLETSPAGE_CHOOSE_SYMBOL, _("Ch&oose..."), wxDefaultPosition, wxDefaultSize, 0 );
+    itemButton26->SetHelpText(_("Click to browse for a symbol."));
+    if (ShowToolTips())
+        itemButton26->SetToolTip(_("Click to browse for a symbol."));
+    itemBoxSizer24->Add(itemButton26, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+
+    itemBoxSizer22->Add(5, 5, 0, wxALIGN_CENTER_HORIZONTAL, 5);
+
+    wxStaticText* itemStaticText28 = new wxStaticText( itemPanel10, ID_RICHTEXTLISTSTYLEPAGE_SYMBOLSTATIC, _("Symbol &font:"), wxDefaultPosition, wxDefaultSize, 0 );
+    itemBoxSizer22->Add(itemStaticText28, 0, wxALIGN_LEFT|wxLEFT|wxRIGHT|wxTOP|wxADJUST_MINSIZE, 5);
+
+    wxString* m_symbolFontCtrlStrings = NULL;
+    m_symbolFontCtrl = new wxComboBox( itemPanel10, ID_RICHTEXTLISTSTYLEPAGE_SYMBOLFONTCTRL, _T(""), wxDefaultPosition, wxDefaultSize, 0, m_symbolFontCtrlStrings, wxCB_DROPDOWN );
+    if (ShowToolTips())
+        m_symbolFontCtrl->SetToolTip(_("Available fonts."));
+    itemBoxSizer22->Add(m_symbolFontCtrl, 0, wxGROW|wxALL, 5);
+
+    itemBoxSizer22->Add(5, 5, 1, wxALIGN_CENTER_HORIZONTAL, 5);
+
+    wxStaticText* itemStaticText31 = new wxStaticText( itemPanel10, ID_RICHTEXTLISTSTYLEPAGE_NAMESTATIC, _("S&tandard bullet name:"), wxDefaultPosition, wxDefaultSize, 0 );
+    itemBoxSizer22->Add(itemStaticText31, 0, wxALIGN_LEFT|wxLEFT|wxRIGHT|wxTOP|wxADJUST_MINSIZE, 5);
+
+    wxString* m_bulletNameCtrlStrings = NULL;
+    m_bulletNameCtrl = new wxComboBox( itemPanel10, ID_RICHTEXTLISTSTYLEPAGE_NAMECTRL, _T(""), wxDefaultPosition, wxDefaultSize, 0, m_bulletNameCtrlStrings, wxCB_DROPDOWN );
+    m_bulletNameCtrl->SetHelpText(_("A standard bullet name."));
+    if (ShowToolTips())
+        m_bulletNameCtrl->SetToolTip(_("A standard bullet name."));
+    itemBoxSizer22->Add(m_bulletNameCtrl, 0, wxGROW|wxALL, 5);
 
     itemNotebook9->AddPage(itemPanel10, _("Bullet style"));
 
@@ -339,7 +352,7 @@ void wxRichTextListStylePage::CreateControls()
 
     wxBoxSizer* itemBoxSizer55 = new wxBoxSizer(wxHORIZONTAL);
     itemFlexGridSizer53->Add(itemBoxSizer55, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-    m_indentLeft = new wxTextCtrl( itemPanel33, ID_RICHTEXTLISTSTYLEPAGE_INDENTLEFT, wxEmptyString, wxDefaultPosition, wxSize(50, -1), 0 );
+    m_indentLeft = new wxTextCtrl( itemPanel33, ID_RICHTEXTLISTSTYLEPAGE_INDENTLEFT, _T(""), wxDefaultPosition, wxSize(50, -1), 0 );
     m_indentLeft->SetHelpText(_("The left indent."));
     if (ShowToolTips())
         m_indentLeft->SetToolTip(_("The left indent."));
@@ -350,7 +363,7 @@ void wxRichTextListStylePage::CreateControls()
 
     wxBoxSizer* itemBoxSizer58 = new wxBoxSizer(wxHORIZONTAL);
     itemFlexGridSizer53->Add(itemBoxSizer58, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-    m_indentLeftFirst = new wxTextCtrl( itemPanel33, ID_RICHTEXTLISTSTYLEPAGE_INDENTFIRSTLINE, wxEmptyString, wxDefaultPosition, wxSize(50, -1), 0 );
+    m_indentLeftFirst = new wxTextCtrl( itemPanel33, ID_RICHTEXTLISTSTYLEPAGE_INDENTFIRSTLINE, _T(""), wxDefaultPosition, wxSize(50, -1), 0 );
     m_indentLeftFirst->SetHelpText(_("The first line indent."));
     if (ShowToolTips())
         m_indentLeftFirst->SetToolTip(_("The first line indent."));
@@ -361,7 +374,7 @@ void wxRichTextListStylePage::CreateControls()
 
     wxBoxSizer* itemBoxSizer61 = new wxBoxSizer(wxHORIZONTAL);
     itemFlexGridSizer53->Add(itemBoxSizer61, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-    m_indentRight = new wxTextCtrl( itemPanel33, ID_RICHTEXTLISTSTYLEPAGE_INDENTRIGHT, wxEmptyString, wxDefaultPosition, wxSize(50, -1), 0 );
+    m_indentRight = new wxTextCtrl( itemPanel33, ID_RICHTEXTLISTSTYLEPAGE_INDENTRIGHT, _T(""), wxDefaultPosition, wxSize(50, -1), 0 );
     m_indentRight->SetHelpText(_("The right indent."));
     if (ShowToolTips())
         m_indentRight->SetToolTip(_("The right indent."));
@@ -390,7 +403,7 @@ void wxRichTextListStylePage::CreateControls()
 
     wxBoxSizer* itemBoxSizer72 = new wxBoxSizer(wxHORIZONTAL);
     itemFlexGridSizer70->Add(itemBoxSizer72, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-    m_spacingBefore = new wxTextCtrl( itemPanel33, ID_RICHTEXTLISTSTYLEPAGE_SPACINGBEFORE, wxEmptyString, wxDefaultPosition, wxSize(50, -1), 0 );
+    m_spacingBefore = new wxTextCtrl( itemPanel33, ID_RICHTEXTLISTSTYLEPAGE_SPACINGBEFORE, _T(""), wxDefaultPosition, wxSize(50, -1), 0 );
     m_spacingBefore->SetHelpText(_("The spacing before the paragraph."));
     if (ShowToolTips())
         m_spacingBefore->SetToolTip(_("The spacing before the paragraph."));
@@ -401,7 +414,7 @@ void wxRichTextListStylePage::CreateControls()
 
     wxBoxSizer* itemBoxSizer75 = new wxBoxSizer(wxHORIZONTAL);
     itemFlexGridSizer70->Add(itemBoxSizer75, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-    m_spacingAfter = new wxTextCtrl( itemPanel33, ID_RICHTEXTLISTSTYLEPAGE_SPACINGAFTER, wxEmptyString, wxDefaultPosition, wxSize(50, -1), 0 );
+    m_spacingAfter = new wxTextCtrl( itemPanel33, ID_RICHTEXTLISTSTYLEPAGE_SPACINGAFTER, _T(""), wxDefaultPosition, wxSize(50, -1), 0 );
     m_spacingAfter->SetHelpText(_("The spacing after the paragraph."));
     if (ShowToolTips())
         m_spacingAfter->SetToolTip(_("The spacing after the paragraph."));
@@ -444,12 +457,16 @@ void wxRichTextListStylePage::CreateControls()
     m_styleListBox->Append(_("Lower case roman numerals"));
     m_styleListBox->Append(_("Symbol"));
     m_styleListBox->Append(_("Bitmap"));
+    m_styleListBox->Append(_("Standard"));
 
     m_symbolCtrl->Append(_("*"));
     m_symbolCtrl->Append(_("-"));
     m_symbolCtrl->Append(_(">"));
     m_symbolCtrl->Append(_("+"));
     m_symbolCtrl->Append(_("~"));
+
+    m_bulletNameCtrl->Append(_("standard/round"));
+    m_bulletNameCtrl->Append(_("standard/square"));
 
     wxArrayString facenames = wxRichTextCtrl::GetAvailableFontNames();
     facenames.Sort();
@@ -601,6 +618,11 @@ bool wxRichTextListStylePage::TransferDataFromWindow()
             bulletStyle |= wxTEXT_ATTR_BULLET_STYLE_SYMBOL;
         else if (index == 7)
             bulletStyle |= wxTEXT_ATTR_BULLET_STYLE_BITMAP;
+        else if (index == 8)
+        {
+            bulletStyle |= wxTEXT_ATTR_BULLET_STYLE_STANDARD;
+            attr->SetBulletName(m_bulletNameCtrl->GetValue());
+        }
 
         if (m_parenthesesCtrl->GetValue())
             bulletStyle |= wxTEXT_ATTR_BULLET_STYLE_PARENTHESES;
@@ -735,6 +757,8 @@ void wxRichTextListStylePage::DoTransferDataToWindow()
             index = 6;
         else if (attr->GetBulletStyle() & wxTEXT_ATTR_BULLET_STYLE_BITMAP)
             index = 7;
+        else if (attr->GetBulletStyle() & wxTEXT_ATTR_BULLET_STYLE_STANDARD)
+            index = 8;
         m_styleListBox->SetSelection(index);
 
         if (attr->GetBulletStyle() & wxTEXT_ATTR_BULLET_STYLE_PARENTHESES)
@@ -760,6 +784,11 @@ void wxRichTextListStylePage::DoTransferDataToWindow()
     }
     else
         m_symbolCtrl->SetValue(wxEmptyString);
+
+    if (attr->HasBulletName())
+        m_bulletNameCtrl->SetValue(attr->GetBulletName());
+    else
+        m_bulletNameCtrl->SetValue(wxEmptyString);
 
     m_dontUpdate = false;
 }
@@ -832,7 +861,7 @@ void wxRichTextListStylePage::OnLevelDown( wxSpinEvent& event )
  * wxEVT_COMMAND_TEXT_UPDATED event handler for ID_RICHTEXTLISTSTYLEPAGE_LEVEL
  */
 
-void wxRichTextListStylePage::OnLevelTextUpdated( wxCommandEvent& event )
+void wxRichTextListStylePage::OnLevelTextUpdated( wxCommandEvent& WXUNUSED(event) )
 {
     // Can cause problems
 #if 0
@@ -1151,7 +1180,14 @@ void wxRichTextListStylePage::OnSymbolUpdate( wxUpdateUIEvent& event )
 void wxRichTextListStylePage::OnNumberUpdate( wxUpdateUIEvent& event )
 {
     int sel = m_styleListBox->GetSelection();
-    event.Enable((sel != 6 && sel != 7 && sel != 0));
+    event.Enable((sel != 6 && sel != 7 && sel != 8 && sel != 0));
+}
+
+/// Update for standard bullet-related controls
+void wxRichTextListStylePage::OnStandardBulletUpdate( wxUpdateUIEvent& event )
+{
+    int sel = m_styleListBox->GetSelection();
+    event.Enable( sel == 8 );
 }
 
 /*!
@@ -1172,4 +1208,39 @@ void wxRichTextListStylePage::OnChooseFontClick( wxCommandEvent& WXUNUSED(event)
         (*attr) = formatDlg.GetAttributes();
         TransferAndPreview();
     }
+}
+/*!
+ * wxEVT_UPDATE_UI event handler for ID_RICHTEXTLISTSTYLEPAGE_NAMESTATIC
+ */
+
+void wxRichTextListStylePage::OnNamestaticUpdate( wxUpdateUIEvent& event )
+{
+    OnStandardBulletUpdate(event);
+}
+
+/*!
+ * wxEVT_COMMAND_COMBOBOX_SELECTED event handler for ID_RICHTEXTLISTSTYLEPAGE_NAMECTRL
+ */
+
+void wxRichTextListStylePage::OnNamectrlSelected( wxCommandEvent& WXUNUSED(event) )
+{
+    TransferAndPreview();
+}
+
+/*!
+ * wxEVT_COMMAND_TEXT_UPDATED event handler for ID_RICHTEXTLISTSTYLEPAGE_NAMECTRL
+ */
+
+void wxRichTextListStylePage::OnNamectrlUpdated( wxCommandEvent& WXUNUSED(event) )
+{
+    TransferAndPreview();
+}
+
+/*!
+ * wxEVT_UPDATE_UI event handler for ID_RICHTEXTLISTSTYLEPAGE_NAMECTRL
+ */
+
+void wxRichTextListStylePage::OnNamectrlUIUpdate( wxUpdateUIEvent& event )
+{
+    OnStandardBulletUpdate(event);
 }
