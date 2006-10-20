@@ -1235,17 +1235,32 @@ OSStatus wxOverlayImpl::CreateOverlayWindow()
 
     WindowAttributes overlayAttributes  = kWindowIgnoreClicksAttribute;
         
-    m_overlayParentWindow =(WindowRef) m_window->MacGetTopLevelWindowRef();
+	if ( m_window )
+	{
+		m_overlayParentWindow =(WindowRef) m_window->MacGetTopLevelWindowRef();
     
-    Rect bounds ;
-    MacGetBounds(&bounds);
-    err  = CreateNewWindow( kOverlayWindowClass, overlayAttributes, &bounds, &m_overlayWindow );  
-    if ( err == noErr ) 
-    {
+		Rect bounds ;
+		MacGetBounds(&bounds);
+		err  = CreateNewWindow( kOverlayWindowClass, overlayAttributes, &bounds, &m_overlayWindow );  
+		if ( err == noErr ) 
+		{
         SetWindowGroup( m_overlayWindow, GetWindowGroup(m_overlayParentWindow));    //  Put them in the same group so that their window layers are consistent
-        ShowWindow(m_overlayWindow);
-    }
-    return err;
+ 		}
+	}
+	else
+	{
+		m_overlayParentWindow = NULL ;
+		CGRect cgbounds ;
+		cgbounds = CGDisplayBounds(CGMainDisplayID());
+		Rect bounds;
+		bounds.top = cgbounds.origin.y;
+		bounds.left = cgbounds.origin.x;
+		bounds.bottom = bounds.top + cgbounds.size.height;
+		bounds.right = bounds.left  + cgbounds.size.width;
+		err  = CreateNewWindow( kOverlayWindowClass, overlayAttributes, &bounds, &m_overlayWindow );  		
+	}
+	ShowWindow(m_overlayWindow);
+	return err;
 }
 
 void wxOverlayImpl::Init( wxWindowDC* dc, int x , int y , int width , int height )
@@ -1281,7 +1296,7 @@ void wxOverlayImpl::BeginDrawing( wxWindowDC* dc)
     dc->m_macLocalOrigin.x = 0 ;
     dc->m_macLocalOrigin.y = 0 ;
 	*/
-    wxSize size = m_window->GetSize() ;
+    wxSize size = dc->GetSize() ;
     dc->SetClippingRegion( 0 , 0 , size.x , size.y ) ;
 }
 

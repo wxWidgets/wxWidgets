@@ -176,14 +176,13 @@ wxWindowDC::~wxWindowDC()
 
 void wxWindowDC::DoGetSize( int* width, int* height ) const
 {
-    wxCHECK_RET( m_window, _T("GetSize() doesn't work without window") );
-
 #if wxMAC_USE_CORE_GRAPHICS
 	if ( width )
 		*width = m_width;
 	if ( height )
 		*height = m_height;
 #else
+    wxCHECK_RET( m_window, _T("GetSize() doesn't work without window") );
     m_window->GetSize(width, height);
 #endif
 }

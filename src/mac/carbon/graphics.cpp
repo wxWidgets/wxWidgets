@@ -1292,4 +1292,9 @@ wxGraphicsContext* wxGraphicsContext::CreateFromNative( void * context )
     return new wxMacCoreGraphicsContext((CGContextRef)context);
 }
 
+wxGraphicsContext* wxGraphicsContext::CreateFromNativeWindow( void * window )
+{
+    return new wxMacCoreGraphicsContext((WindowRef)window);
+}
+
 #endif // wxMAC_USE_CORE_GRAPHICS

@@ -21,26 +21,19 @@ IMPLEMENT_DYNAMIC_CLASS(wxScreenDC, wxWindowDC)
 wxScreenDC::wxScreenDC()
 {
 #if wxMAC_USE_CORE_GRAPHICS
-	CGrafPtr grafptr = CreateNewPort() ;
-	m_displayId = (UInt32) grafptr;
-	CGContextRef cg = NULL;
-	OSStatus status = QDBeginCGContext( grafptr , &cg );
-
-	CGRect bounds ;
-    bounds = CGDisplayBounds(CGMainDisplayID());
-
-    SInt16 height;
-    GetThemeMenuBarHeight( &height );
-    m_minY = height;
-	m_minX = 0;
-    m_maxX = bounds.size.width;
-    m_maxY = bounds.size.height - height;
-	CGContextTranslateCTM( cg , 0 , bounds.size.height );
-	CGContextScaleCTM( cg , 1 , -1 );
-
-    SetGraphicsContext( wxGraphicsContext::CreateFromNative( cg ) );
-	m_width = bounds.size.width;
-	m_height = bounds.size.height - height;
+	CGRect cgbounds ;
+    cgbounds = CGDisplayBounds(CGMainDisplayID());
+	Rect bounds;
+	bounds.top = cgbounds.origin.y;
+	bounds.left = cgbounds.origin.x;
+	bounds.bottom = bounds.top + cgbounds.size.height;
+	bounds.right = bounds.left  + cgbounds.size.width;
+    WindowAttributes overlayAttributes  = kWindowIgnoreClicksAttribute;
+	OSStatus err = CreateNewWindow( kOverlayWindowClass, overlayAttributes, &bounds, (WindowRef*) &m_overlayWindow );  		
+	ShowWindow((WindowRef)m_overlayWindow);
+    SetGraphicsContext( wxGraphicsContext::CreateFromNativeWindow( m_overlayWindow ) );
+	m_width = cgbounds.size.width;
+	m_height = cgbounds.size.height;
 #else
     m_macPort = CreateNewPort() ;
     GrafPtr port ;
@@ -73,13 +66,9 @@ wxScreenDC::wxScreenDC()
 wxScreenDC::~wxScreenDC()
 {
 #if wxMAC_USE_CORE_GRAPHICS
-	CGrafPtr grafptr = (CGrafPtr) m_displayId;
-	m_displayId = (UInt32) grafptr;
-	CGContextRef cg = (CGContextRef) m_graphicContext->GetNativeContext();
-	QDEndCGContext(grafptr, &cg );
-
-    delete m_graphicContext;
-    m_graphicContext = NULL;
+	delete m_graphicContext;
+	m_graphicContext = NULL;
+	DisposeWindow((WindowRef) m_overlayWindow );
 #else
     if ( m_macPort )
         DisposePort( (CGrafPtr) m_macPort ) ;

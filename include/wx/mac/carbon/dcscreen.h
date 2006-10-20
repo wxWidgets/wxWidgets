@@ -30,7 +30,7 @@ class WXDLLEXPORT wxScreenDC: public wxWindowDC
   static bool EndDrawingOnTop() { return TRUE; }
  private:
 #if wxMAC_USE_CORE_GRAPHICS
-	wxUint32 m_displayId;
+	void* m_overlayWindow;
 #endif
 };
 
