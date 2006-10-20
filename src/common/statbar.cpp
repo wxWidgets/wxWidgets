@@ -222,12 +222,21 @@ wxArrayInt wxStatusBarBase::CalculateAbsWidths(wxCoord widthTotal) const
     {
         if ( m_nFields )
         {
-            // default: all fields have the same width
-            int nWidth = widthTotal / m_nFields;
-            for ( int i = 0; i < m_nFields; i++ )
+            // Default: all fields have the same width. This is not always
+            // possible to do exactly (if widthTotal is not divisible by
+            // m_nFields) - if that happens, we distribute the extra pixels
+            // among all fields:
+            int widthToUse = widthTotal;
+
+            for ( int i = m_nFields; i > 0; i-- )
             {
-                widths.Add(nWidth);
+                // divide the unassigned width evently between the
+                // not yet processed fields:
+                int w = widthToUse / i;
+                widths.Add(w);
+                widthToUse -= w;
             }
+
         }
         //else: we're empty anyhow
     }
