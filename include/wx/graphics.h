@@ -12,16 +12,12 @@
 #ifndef _WX_GRAPHICS_H_
 #define _WX_GRAPHICS_H_
 
+#include "wx/geometry.h"
+#include "wx/dynarray.h"
+
+class WXDLLEXPORT wxWindowDC;
 
 #if wxUSE_GRAPHICS_CONTEXT
-
-// ---------------------------------------------------------------------------
-// macros
-// ---------------------------------------------------------------------------
-
-#include "wx/geometry.h"
-#include "wx/dcclient.h"
-#include "wx/dynarray.h"
 
 /*
  * notes about the graphics context apis
@@ -86,32 +82,86 @@ public :
     void AddCurveToPoint( const wxPoint2DDouble& c1, const wxPoint2DDouble& c2, const wxPoint2DDouble& e);
 
     void AddArc( const wxPoint2DDouble& c, wxDouble r, wxDouble startAngle, wxDouble endAngle, bool clockwise);
-
+	
     DECLARE_NO_COPY_CLASS(wxGraphicsPath)
 };
+
+/*
+class WXDLLEXPORT wxGraphicsMatrix
+{
+public :
+	wxGraphicsMatrix() {}
+	
+	virtual ~wxGraphicsMatrix() {}
+	
+	wxGraphicsMatrix* Concat( const wxGraphicsMatrix *t ) const;
+	
+	// returns the inverse matrix
+	wxGraphicsMatrix* Invert() const;
+	
+	// returns true if the elements of the transformation matrix are equal ?
+    bool operator==(const wxGraphicsMatrix& t) const;
+	
+	// return true if this is the identity matrix
+	bool IsIdentity();
+	
+    //
+    // transformation
+    //
+    
+    // translate
+    virtual void Translate( wxDouble dx , wxDouble dy ) = 0;
+
+    // scale
+    virtual void Scale( wxDouble xScale , wxDouble yScale ) = 0;
+
+    // rotate (radians)
+    virtual void Rotate( wxDouble angle ) = 0;	
+} ;
+*/
 
 class WXDLLEXPORT wxGraphicsContext
 {
 public:
     wxGraphicsContext() {}
+
     virtual ~wxGraphicsContext() {}
     
     static wxGraphicsContext* Create( const wxWindowDC& dc) ;
+	
+    static wxGraphicsContext* CreateFromNative( void * native ) ;
+
+    static wxGraphicsContext* Create( wxWindow* window ) ;
 
     // creates a path instance that corresponds to the type of graphics context, ie GDIPlus, cairo, CoreGraphics ...
     virtual wxGraphicsPath * CreatePath() = 0;
-
+	
+	/*
+	// create a 'native' matrix corresponding to these values
+	virtual wxGraphicsMatrix* CreateMatrix( wxDouble a=1.0, wxDouble b=0.0, wxDouble c=0.0, wxDouble d=1.0, 
+		wxDouble tx=0.0, wxDouble ty=0.0) = 0;
+	*/
+	
     // push the current state of the context, ie the transformation matrix on a stack
     virtual void PushState() = 0;
 
     // pops a stored state from the stack
     virtual void PopState() = 0;
 
-    // clips drawings to the region
+    // clips drawings to the region, combined to current clipping region
     virtual void Clip( const wxRegion &region ) = 0;
 
+    // clips drawings to the rect
+    virtual void Clip( wxDouble x, wxDouble y, wxDouble w, wxDouble h ) = 0;
+	
+	// resets the clipping to original extent
+	virtual void ResetClip() = 0 ;
+
+	// returns the native context
+	virtual void * GetNativeContext() = 0;
+
     //
-    // transformation
+    // transformation : changes the current transformation matrix CTM of the context
     //
     
     // translate
@@ -156,7 +206,7 @@ public:
 
     // draws a path by first filling and then stroking
     virtual void DrawPath( const wxGraphicsPath *path, int fillStyle = wxWINDING_RULE );
-
+	
     //
     // text
     //
@@ -208,7 +258,16 @@ public:
     DECLARE_NO_COPY_CLASS(wxGraphicsContext)
 };
 
-class WXDLLEXPORT wxGCDC: public wxDC
+#ifdef __WXMAC__
+#define wxGCDC wxDC
+#endif
+
+class WXDLLEXPORT wxGCDC: 
+#idef __WXMAC__
+	public wxDCBase
+#else
+	public wxDC
+#endif
 {
     DECLARE_DYNAMIC_CLASS(wxGCDC)
     DECLARE_NO_COPY_CLASS(wxGCDC)
@@ -264,7 +323,8 @@ public:
     virtual void ComputeScaleAndOrigin();
 
     wxGraphicsContext* GetGraphicContext() { return m_graphicContext; }
-
+	virtual void SetGraphicsContext( wxGraphicsContext* ctx )
+		{ delete m_graphicContext; m_graphicContext = ctx; }
 protected:
     // the true implementations
     virtual bool DoFloodFill(wxCoord x, wxCoord y, const wxColour& col,
@@ -347,9 +407,12 @@ protected:
 protected:
     // scaling variables
     double       m_mm_to_pix_x, m_mm_to_pix_y;
+	
+	double m_formerScaleX, m_formerScaleY;
 
     wxGraphicsContext* m_graphicContext;
 };
+
 #endif
 
 #endif
