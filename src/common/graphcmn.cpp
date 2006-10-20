@@ -1058,7 +1058,7 @@ bool wxGCDC::CanDrawBitmap() const
 
 bool wxGCDC::DoBlit(
     wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord height,
-    wxDC *source, wxCoord xsrc, wxCoord ysrc, int logical_func , bool useMask,
+    wxDC *source, wxCoord xsrc, wxCoord ysrc, int logical_func , bool WXUNUSED(useMask),
     wxCoord xsrcMask, wxCoord ysrcMask )
 {
     wxCHECK_MSG( Ok(), false, wxT("wxGCDC(cg)::DoBlit - invalid DC") );
@@ -1086,7 +1086,7 @@ bool wxGCDC::DoBlit(
     wxMemoryDC* memdc = dynamic_cast<wxMemoryDC*>(source);
     if ( memdc && logical_func == wxCOPY )
     {
-        wxBitmap blit = memdc->GetSelectedObject();
+        wxBitmap blit = memdc->GetSelectedBitmap();
 
         wxASSERT_MSG( blit.Ok() , wxT("Invalid bitmap for blitting") );
 
@@ -1122,7 +1122,6 @@ bool wxGCDC::DoBlit(
         {
             m_graphicContext->DrawBitmap( blit, xxdest , yydest , wwdest , hhdest );
         }
-
     }
     else
     {
