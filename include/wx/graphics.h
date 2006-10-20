@@ -129,8 +129,11 @@ public:
     
     static wxGraphicsContext* Create( const wxWindowDC& dc) ;
 	
-    static wxGraphicsContext* CreateFromNative( void * native ) ;
+    static wxGraphicsContext* CreateFromNative( void * context ) ;
 
+#ifdef __WXMAC__
+    static wxGraphicsContext* CreateFromNativeWindow( void * window ) ;
+#endif
     static wxGraphicsContext* Create( wxWindow* window ) ;
 
     // creates a path instance that corresponds to the type of graphics context, ie GDIPlus, cairo, CoreGraphics ...
