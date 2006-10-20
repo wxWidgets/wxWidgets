@@ -36,6 +36,12 @@
 
 class wxMacPortStateHelper;
 
+#if wxUSE_GRAPHICS_CONTEXT
+
+#include "wx/graphics.h"
+
+#else
+
 class WXDLLEXPORT wxGraphicPath
 {
 public :
@@ -343,7 +349,6 @@ public:
 
 #if wxMAC_USE_CORE_GRAPHICS
     wxGraphicContext                *m_graphicContext;
-    wxPoint                         m_macLocalOriginInPort;
 #else
     void                            MacInstallPen() const;
     void                            MacInstallBrush() const;
@@ -366,5 +371,7 @@ public:
     mutable void                   *m_macBackgroundPixMap;
 #endif
 };
+
+#endif
 
 #endif // _WX_DC_H_
