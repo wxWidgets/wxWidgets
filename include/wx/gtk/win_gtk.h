@@ -22,18 +22,7 @@ extern "C" {
 #define GTK_PIZZA(obj)          GTK_CHECK_CAST (obj, gtk_pizza_get_type (), GtkPizza)
 #define GTK_IS_PIZZA(obj)       GTK_CHECK_TYPE (obj, gtk_pizza_get_type ())
 
-typedef struct _GtkPizzaChild    GtkPizzaChild;
 typedef struct _GtkPizza        GtkPizza;
-typedef struct _GtkPizzaClass   GtkPizzaClass;
-
-struct _GtkPizzaChild
-{
-    GtkWidget *widget;
-    gint x;
-    gint y;
-    gint width;
-    gint height;
-};
 
 struct _GtkPizza
 {
@@ -44,15 +33,6 @@ struct _GtkPizza
     guint m_yoffset;
     
     GdkWindow *bin_window;
-};
-
-struct _GtkPizzaClass
-{
-  GtkContainerClass parent_class;
-
-  void  (*set_scroll_adjustments)   (GtkPizza     *pizza,
-                                     GtkAdjustment  *hadjustment,
-                                     GtkAdjustment  *vadjustment);
 };
 
 WXDLLIMPEXP_CORE

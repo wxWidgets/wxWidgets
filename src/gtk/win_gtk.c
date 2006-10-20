@@ -20,7 +20,25 @@
 extern "C" {
 #endif /* __cplusplus */
 
+typedef struct _GtkPizzaChild GtkPizzaChild;
+typedef struct _GtkPizzaClass GtkPizzaClass;
 typedef struct _GtkPizzaAdjData  GtkPizzaAdjData;
+
+struct _GtkPizzaClass
+{
+  GtkContainerClass parent_class;
+
+  void  (*set_scroll_adjustments)   (GtkPizza     *pizza,
+                                     GtkAdjustment  *hadjustment,
+                                     GtkAdjustment  *vadjustment);
+};
+
+struct _GtkPizzaChild
+{
+    GtkWidget *widget;
+    gint x;
+    gint y;
+};
 
 struct _GtkPizzaAdjData
 {
@@ -276,8 +294,6 @@ gtk_pizza_put (GtkPizza   *pizza,
     child_info->widget = widget;
     child_info->x = x;
     child_info->y = y;
-    child_info->width = width;
-    child_info->height = height;
 
     pizza->children = g_list_append (pizza->children, child_info);
 
@@ -324,16 +340,9 @@ gtk_pizza_set_size (GtkPizza   *pizza,
 
         if (child->widget == widget)
         {
-            if ((child->x == x) &&
-                (child->y == y) &&
-                (child->width == width) &&
-                (child->height == height)) return;
-
             child->x = x;
             child->y = y;
-            child->width = width;
-            child->height = height;
-            
+
             gtk_widget_set_size_request (widget, width, height);
 
             return;
