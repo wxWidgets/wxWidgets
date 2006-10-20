@@ -251,6 +251,10 @@ static pascal OSStatus wxMacWindowControlEventHandler( EventHandlerCallRef handl
 
                     {
                         wxMacCGContextStateSaver sg( cgContext ) ;
+                        // make sure the context is having its origin at the wx-window coordinates of the 
+                        // view (read at the top of this file about the differences)
+						if ( thisWindow->MacGetLeftBorderSize() != 0 || thisWindow->MacGetTopBorderSize() != 0 )
+							CGContextTranslateCTM( cgContext , -thisWindow->MacGetLeftBorderSize() , -thisWindow->MacGetTopBorderSize() );
                         float alpha = 1.0 ;
                         {
                             wxWindow* iter = thisWindow ;
