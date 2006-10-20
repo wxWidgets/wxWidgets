@@ -569,13 +569,12 @@ int wxDisplayDepth()
 void wxDisplaySize(int *width, int *height)
 {
 #if wxMAC_USE_CORE_GRAPHICS
-    CGRect bounds ;
     // TODO adapt for multi-displays
-    bounds = CGDisplayBounds(CGMainDisplayID());
+    CGRect bounds = CGDisplayBounds(CGMainDisplayID());
     if ( width )
-        *width = bounds.size.width ;
+        *width = (int)bounds.size.width ;
     if ( height )
-        *height = bounds.size.height;
+        *height = (int)bounds.size.height;
 #else
     BitMap screenBits;
     GetQDGlobalsScreenBits( &screenBits );
