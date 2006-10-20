@@ -567,7 +567,8 @@ void wxGCDC::SetFont( const wxFont &font )
     if ( m_graphicContext )
 	{
 		wxFont f = font ;
-		f.SetPointSize( LogicalToDeviceYRel(font.GetPointSize())) ;
+		if ( f.Ok() )
+			f.SetPointSize( LogicalToDeviceYRel(font.GetPointSize())) ;
         m_graphicContext->SetFont( f );
 	}
 }
