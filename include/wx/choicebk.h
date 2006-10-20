@@ -24,6 +24,13 @@ class WXDLLEXPORT wxChoice;
 extern WXDLLIMPEXP_CORE const wxEventType wxEVT_COMMAND_CHOICEBOOK_PAGE_CHANGED;
 extern WXDLLIMPEXP_CORE const wxEventType wxEVT_COMMAND_CHOICEBOOK_PAGE_CHANGING;
 
+// wxChoicebook flags
+#define wxCHB_DEFAULT          wxBK_DEFAULT
+#define wxCHB_TOP              wxBK_TOP
+#define wxCHB_BOTTOM           wxBK_BOTTOM
+#define wxCHB_LEFT             wxBK_LEFT
+#define wxCHB_RIGHT            wxBK_RIGHT
+#define wxCHB_ALIGN_MASK       wxBK_ALIGN_MASK
 
 // ----------------------------------------------------------------------------
 // wxChoicebook

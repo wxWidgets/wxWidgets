@@ -24,6 +24,14 @@ class WXDLLEXPORT wxListEvent;
 extern WXDLLIMPEXP_CORE const wxEventType wxEVT_COMMAND_LISTBOOK_PAGE_CHANGED;
 extern WXDLLIMPEXP_CORE const wxEventType wxEVT_COMMAND_LISTBOOK_PAGE_CHANGING;
 
+// wxListbook flags
+#define wxLB_DEFAULT          wxBK_DEFAULT
+#define wxLB_TOP              wxBK_TOP
+#define wxLB_BOTTOM           wxBK_BOTTOM
+#define wxLB_LEFT             wxBK_LEFT
+#define wxLB_RIGHT            wxBK_RIGHT
+#define wxLB_ALIGN_MASK       wxBK_ALIGN_MASK
+
 // ----------------------------------------------------------------------------
 // wxListbook
 // ----------------------------------------------------------------------------

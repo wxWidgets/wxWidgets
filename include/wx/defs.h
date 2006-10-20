@@ -1546,60 +1546,6 @@ enum wxBorder
 #define wxSP_WRAP             0x2000
 
 /*
- * wxBookCtrl flags (common for wxNotebook, wxListbook, wxChoicebook, wxTreebook)
- */
-
-#define wxBK_DEFAULT          0x0000
-#define wxBK_TOP              0x0010
-#define wxBK_BOTTOM           0x0020
-#define wxBK_LEFT             0x0040
-#define wxBK_RIGHT            0x0080
-#define wxBK_ALIGN_MASK       ( wxBK_TOP | wxBK_BOTTOM | wxBK_LEFT | wxBK_RIGHT )
-
-/*
- * wxNotebook flags
- */
-#if WXWIN_COMPATIBILITY_2_6
-/* Use common book wxBK_* flags for describing alignment */
-#define wxNB_DEFAULT          wxBK_DEFAULT
-#define wxNB_TOP              wxBK_TOP
-#define wxNB_BOTTOM           wxBK_BOTTOM
-#define wxNB_LEFT             wxBK_LEFT
-#define wxNB_RIGHT            wxBK_RIGHT
-#endif
-
-#define wxNB_FIXEDWIDTH       0x0100
-#define wxNB_MULTILINE        0x0200
-#define wxNB_NOPAGETHEME      0x0400
-#define wxNB_FLAT             0x0800
-
-/*
- * wxListbook flags
- */
-#if WXWIN_COMPATIBILITY_2_6
-/* Use common book wxBK_* flags for describing alignment */
-#define wxLB_DEFAULT          wxBK_DEFAULT
-#define wxLB_TOP              wxBK_TOP
-#define wxLB_BOTTOM           wxBK_BOTTOM
-#define wxLB_LEFT             wxBK_LEFT
-#define wxLB_RIGHT            wxBK_RIGHT
-#define wxLB_ALIGN_MASK       wxBK_ALIGN_MASK
-#endif
-
-/*
- * wxChoicebook flags
- */
-#if WXWIN_COMPATIBILITY_2_6
-/* Use common book wxBK_* flags for describing alignment */
-#define wxCHB_DEFAULT          wxBK_DEFAULT
-#define wxCHB_TOP              wxBK_TOP
-#define wxCHB_BOTTOM           wxBK_BOTTOM
-#define wxCHB_LEFT             wxBK_LEFT
-#define wxCHB_RIGHT            wxBK_RIGHT
-#define wxCHB_ALIGN_MASK       wxBK_ALIGN_MASK
-#endif
-
-/*
  * wxTabCtrl flags
  */
 #define wxTC_RIGHTJUSTIFY     0x0010
