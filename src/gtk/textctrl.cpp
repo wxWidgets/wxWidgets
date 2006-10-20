@@ -2176,7 +2176,10 @@ void wxTextCtrl::Freeze()
                 GTK_SIGNAL_FUNC(gtk_text_exposed_callback), (gpointer)this);
             gtk_widget_set_sensitive(m_widget, false);
             g_object_ref(m_buffer);
-            gtk_text_view_set_buffer(GTK_TEXT_VIEW(m_text), gtk_text_buffer_new(NULL));
+            GtkTextBuffer* buf_new = gtk_text_buffer_new(NULL);
+            gtk_text_view_set_buffer(GTK_TEXT_VIEW(m_text), buf_new);
+            // gtk_text_view_set_buffer adds its own reference
+            g_object_unref(buf_new);
         }
 #else
         gtk_text_freeze(GTK_TEXT(m_text));
