@@ -419,26 +419,34 @@ void wxFrameBase::DoGiveHelp(const wxString& text, bool show)
 
     wxString help;
     if ( show )
+    {
         help = text;
 
-    // remember the old status bar text if this is the first time we're called
-    // since the menu has been opened as we're going to overwrite it in our
-    // DoGiveHelp() and we want to restore it when the menu is closed
-    //
-    // note that it would be logical to do this in OnMenuOpen() but under MSW
-    // we get an EVT_MENU_HIGHLIGHT before EVT_MENU_OPEN, strangely enough, and
-    // so this doesn't work and instead we use the ugly trick with using
-    // special m_oldStatusText value as "menu opened" (but it is arguably
-    // better than adding yet another member variable to wxFrame on all
-    // platforms)
-    if ( m_oldStatusText.empty() )
-    {
-        m_oldStatusText = statbar->GetStatusText(m_statusBarPane);
+        // remember the old status bar text if this is the first time we're
+        // called since the menu has been opened as we're going to overwrite it
+        // in our DoGiveHelp() and we want to restore it when the menu is
+        // closed
+        //
+        // note that it would be logical to do this in OnMenuOpen() but under
+        // MSW we get an EVT_MENU_HIGHLIGHT before EVT_MENU_OPEN, strangely
+        // enough, and so this doesn't work and instead we use the ugly trick
+        // with using special m_oldStatusText value as "menu opened" (but it is
+        // arguably better than adding yet another member variable to wxFrame
+        // on all platforms)
         if ( m_oldStatusText.empty() )
         {
-            // use special value to prevent us from doing this the next time
-            m_oldStatusText += _T('\0');
+            m_oldStatusText = statbar->GetStatusText(m_statusBarPane);
+            if ( m_oldStatusText.empty() )
+            {
+                // use special value to prevent us from doing this the next time
+                m_oldStatusText += _T('\0');
+            }
         }
+    }
+    else // hide the status bar text
+    {
+        // i.e. restore the old one
+        help = m_oldStatusText;
     }
 
     statbar->SetStatusText(help, m_statusBarPane);
