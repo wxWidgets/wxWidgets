@@ -167,7 +167,7 @@ the combobox text field.", "",
 #else
     %pythoncode {
         def GetMark(self):
-            raise NotImplementedError
+            return (0,0)
     }
 #endif
     
