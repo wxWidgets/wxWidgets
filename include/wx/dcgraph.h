@@ -86,8 +86,8 @@ public:
     virtual void ComputeScaleAndOrigin();
 
     wxGraphicsContext* GetGraphicContext() { return m_graphicContext; }
-	virtual void SetGraphicsContext( wxGraphicsContext* ctx )
-		{ delete m_graphicContext; m_graphicContext = ctx; }
+	virtual void SetGraphicsContext( wxGraphicsContext* ctx );
+    
 protected:
     // the true implementations
     virtual bool DoFloodFill(wxCoord x, wxCoord y, const wxColour& col,

@@ -274,6 +274,11 @@ wxGCDC::wxGCDC()
     Init();
 }
 
+void wxGCDC::SetGraphicsContext( wxGraphicsContext* ctx )
+{ 
+    delete m_graphicContext;
+    m_graphicContext = ctx;
+}
 
 wxGCDC::wxGCDC(const wxWindowDC& dc)
 {
