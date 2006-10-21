@@ -3946,6 +3946,8 @@ bool wxListMainWindow::GetItemPosition(long item, wxPoint& pos) const
 
 void wxListMainWindow::RecalculatePositions(bool noRefresh)
 {
+    const int lineHeight = GetLineHeight();
+
     wxClientDC dc( this );
     dc.SetFont( GetFont() );
 
@@ -3978,8 +3980,6 @@ void wxListMainWindow::RecalculatePositions(bool noRefresh)
     int clientWidth,
         clientHeight;
     GetSize( &clientWidth, &clientHeight );
-
-    const int lineHeight = GetLineHeight();
 
     if ( InReportView() )
     {
