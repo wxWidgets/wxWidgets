@@ -856,6 +856,10 @@ private:
     #include "wx/os2/dc.h"
 #endif
 
+#if wxUSE_GRAPHICS_CONTEXT
+    #include "wx/dcgraph.h"
+#endif
+
 // ----------------------------------------------------------------------------
 // helper class: you can use it to temporarily change the DC text colour and
 // restore it automatically when the object goes out of scope

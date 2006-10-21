@@ -1162,6 +1162,7 @@ void wxDCBase::CalculateEllipticPoints( wxList* points,
 
 #include "wx/mac/private.h"
 #include "wx/toplevel.h"
+#include "wx/graphics.h"
 
 class wxOverlayImpl
 {

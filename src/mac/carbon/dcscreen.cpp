@@ -14,6 +14,7 @@
 #include "wx/dcscreen.h"
 
 #include "wx/mac/uma.h"
+#include "wx/graphics.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxScreenDC, wxWindowDC)
 

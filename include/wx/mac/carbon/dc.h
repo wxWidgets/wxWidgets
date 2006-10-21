@@ -36,11 +36,7 @@
 
 class wxMacPortStateHelper;
 
-#if wxUSE_GRAPHICS_CONTEXT
-
-#include "wx/graphics.h"
-
-#else
+#if !wxUSE_GRAPHICS_CONTEXT
 
 class WXDLLEXPORT wxGraphicPath
 {

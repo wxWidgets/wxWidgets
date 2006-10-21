@@ -25,6 +25,7 @@
 #include "wx/metafile.h"
 #include "wx/clipbrd.h"
 #include "wx/mac/private.h"
+#include "wx/graphics.h"
 
 #include <stdio.h>
 #include <string.h>

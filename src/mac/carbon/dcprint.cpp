@@ -27,6 +27,7 @@
 
 #include "wx/mac/uma.h"
 #include "wx/mac/private/print.h"
+#include "wx/graphics.h"
 
 IMPLEMENT_CLASS(wxPrinterDC, wxDC)
 

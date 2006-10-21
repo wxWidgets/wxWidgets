@@ -36,6 +36,7 @@
 
 #ifdef __WXMAC__
 #include "wx/mac/private.h"
+#include "wx/graphics.h"
 #endif
 
 #ifdef __WXGTK__

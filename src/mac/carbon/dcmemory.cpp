@@ -12,6 +12,7 @@
 #include "wx/wxprec.h"
 
 #include "wx/dcmemory.h"
+#include "wx/graphics.h"
 
 #include "wx/mac/private.h"
 

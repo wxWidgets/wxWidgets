@@ -23,6 +23,7 @@
     #include "wx/region.h"
 #endif
 
+#include "wx/graphics.h"
 #include "wx/mac/private.h"
 
 //-----------------------------------------------------------------------------
