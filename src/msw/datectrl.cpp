@@ -253,10 +253,13 @@ void wxDatePickerCtrl::SetValue(const wxDateTime& dt)
     {
         wxLogDebug(_T("DateTime_SetSystemtime() failed"));
     }
+
+    m_date = dt;
 }
 
 wxDateTime wxDatePickerCtrl::GetValue() const
 {
+#ifdef __WXDEBUG__
     wxDateTime dt;
     SYSTEMTIME st;
     if ( DateTime_GetSystemtime(GetHwnd(), &st) == GDT_VALID )
@@ -264,7 +267,12 @@ wxDateTime wxDatePickerCtrl::GetValue() const
         wxFromSystemTime(&dt, st);
     }
 
-    return dt;
+    wxASSERT_MSG( m_date.IsValid() == dt.IsValid() &&
+                    (!dt.IsValid() || dt == m_date),
+                  _T("bug in wxDatePickerCtrl: m_date not in sync") );
+#endif // __WXDEBUG__
+
+    return m_date;
 }
 
 void wxDatePickerCtrl::SetRange(const wxDateTime& dt1, const wxDateTime& dt2)
@@ -331,11 +339,17 @@ wxDatePickerCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
             if ( dtch->dwFlags == GDT_VALID )
                 wxFromSystemTime(&dt, dtch->st);
 
-            wxDateEvent event(this, dt, wxEVT_DATE_CHANGED);
-            if ( GetEventHandler()->ProcessEvent(event) )
+            // filter out duplicate DTN_DATETIMECHANGE events which the native
+            // control sends us when using wxDP_DROPDOWN style
+            if ( !m_date.IsValid() || dt != m_date )
             {
-                *result = 0;
-                return true;
+                m_date = dt;
+                wxDateEvent event(this, dt, wxEVT_DATE_CHANGED);
+                if ( GetEventHandler()->ProcessEvent(event) )
+                {
+                    *result = 0;
+                    return true;
+                }
             }
         }
     }

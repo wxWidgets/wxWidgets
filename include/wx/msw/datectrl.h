@@ -60,6 +60,9 @@ public:
 protected:
     virtual wxSize DoGetBestSize() const;
 
+    // the date currently shown by the control, may be invalid
+    wxDateTime m_date;
+
 
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxDatePickerCtrl)
 };
