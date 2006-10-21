@@ -238,23 +238,73 @@ to (x2,y2), also a straight line from (current) to (x1,y1)", "");
 
 //---------------------------------------------------------------------------
 
+/*
+class wxGraphicsMatrix
+{
+public :
+    wxGraphicsMatrix() {}
+	
+    virtual ~wxGraphicsMatrix() {}
+	
+    wxGraphicsMatrix* Concat( const wxGraphicsMatrix *t ) const;
+	
+    // returns the inverse matrix
+    wxGraphicsMatrix* Invert() const;
+	
+    // returns true if the elements of the transformation matrix are equal ?
+    bool operator==(const wxGraphicsMatrix& t) const;
+	
+    // return true if this is the identity matrix
+    bool IsIdentity();
+	
+    //
+    // transformation
+    //
+    
+    // translate
+    virtual void Translate( wxDouble dx , wxDouble dy ) = 0;
+
+    // scale
+    virtual void Scale( wxDouble xScale , wxDouble yScale ) = 0;
+
+    // rotate (radians)
+    virtual void Rotate( wxDouble angle ) = 0;	
+} ;
+*/
+
+
+//---------------------------------------------------------------------------
+
 
 class wxGraphicsContext
 {
 public:
     // wxGraphicsContext()         This is also an ABC, use Create to make an instance...
     virtual ~wxGraphicsContext();
-    
-    %pythonAppend Create
+
+    %nokwargs Create;
+    %pythonAppend Create( const wxWindowDC& dc)
         "val.__dc = args[0] # save a ref so the other dc will not be deleted before self";
     static wxGraphicsContext* Create( const wxWindowDC& dc);
+    
+    static wxGraphicsContext* Create( wxWindow* window ) ;
+
+    static wxGraphicsContext* CreateFromNative( void * context ) ;
+
 
     // creates a path instance that corresponds to the type of graphics context, ie GDIPlus, cairo, CoreGraphics ...
     DocDeclStr(
         virtual wxGraphicsPath * , CreatePath(),
         "", "");
     
+    /*
+    // create a 'native' matrix corresponding to these values
+    virtual wxGraphicsMatrix* CreateMatrix( wxDouble a=1.0, wxDouble b=0.0,
+                                            wxDouble c=0.0, wxDouble d=1.0, 
+                                            wxDouble tx=0.0, wxDouble ty=0.0) = 0;
+    */
 
+    
     // push the current state of the context, ie the transformation matrix on a stack
     DocDeclStr(
         virtual void , PushState(),
@@ -268,13 +318,32 @@ public:
     
 
     // clips drawings to the region
-    DocDeclStr(
+    DocDeclStrName(
         virtual void , Clip( const wxRegion &region ),
+        "", "",
+        ClipRegion);
+    
+    // clips drawings to the rect
+    DocDeclStr(
+        virtual void , Clip( wxDouble x, wxDouble y, wxDouble w, wxDouble h ),
+        "", "");
+    
+	
+    // resets the clipping to original extent
+    DocDeclStr(
+        virtual void , ResetClip(),
         "", "");
     
 
+    // returns the native context
+    DocDeclStr(
+        virtual void * , GetNativeContext(),
+        "", "");
+    
+
+    
     //
-    // transformation
+    // transformation: changes the current transformation matrix CTM of the context
     //
     
     // translate
@@ -483,7 +552,10 @@ public:
     //wxGCDC();
     virtual ~wxGCDC();
 
-    wxGraphicsContext* GetGraphicContext();
+    wxGraphicsContext* GetGraphicsContext();
+    virtual void SetGraphicsContext( wxGraphicsContext* ctx );
+
+    %property(GraphicsContext, GetGraphicsContext, SetGraphicsContext);
 };
 
 
