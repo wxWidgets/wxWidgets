@@ -243,7 +243,7 @@ public:
     }
 
 #if wxMAC_USE_CORE_GRAPHICS
-    wxGraphicContext* GetGraphicContext() { return m_graphicContext; }
+    wxGraphicsContext* GetGraphicsContext() { return m_graphicContext; }
 #else
     WXHRGN MacGetCurrentClipRgn() { return m_macCurrentClipRgn; }
     static void MacSetupBackgroundForCurrentPort(const wxBrush& background );
@@ -344,7 +344,7 @@ public:
     WXHDC                           m_macPort;
 
 #if wxMAC_USE_CORE_GRAPHICS
-    wxGraphicContext                *m_graphicContext;
+    wxGraphicsContext              *m_graphicContext;
 #else
     void                            MacInstallPen() const;
     void                            MacInstallBrush() const;
