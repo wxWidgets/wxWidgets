@@ -561,8 +561,14 @@ PyObject *wxPseudoDC::FindObjects(wxCoord x, wxCoord y,
                 memdc.SetPen(bgpen);
                 memdc.DrawRectangle(viewrect);
                 memdc.SetLogicalFunction(wxCOPY);
+#ifdef __WXMAC__
+                // wxAND is not supported on wxMac, but it doesn't seem to
+                // hurt anything to use wxCOPY instead...
+                memdc.Blit(x-radius,y-radius,2*radius,2*radius,&maskdc,0,0,wxCOPY);
+#else
                 // AND with circle bitmap
                 memdc.Blit(x-radius,y-radius,2*radius,2*radius,&maskdc,0,0,wxAND);
+#endif
                 // clear and update rgn2
                 memdc.SelectObject(wxNullBitmap);
                 rgn2.Clear();
