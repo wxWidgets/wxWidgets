@@ -404,6 +404,33 @@ void wxListCtrl::DoSetSize( int x, int y, int width, int height, int sizeFlags )
         m_genericImpl->SetSize(x, y, width, height, sizeFlags);
 }
 
+bool wxListCtrl::SetFont(const wxFont& font)
+{
+    bool rv;
+    rv = wxControl::SetFont(font);
+    if (m_genericImpl)
+        rv = m_genericImpl->SetFont(font);
+    return rv;
+}
+
+bool wxListCtrl::SetForegroundColour(const wxColour& colour)
+{
+    bool rv;
+    rv = wxControl::SetForegroundColour(colour);
+    if (m_genericImpl)
+        rv = m_genericImpl->SetForegroundColour(colour);
+    return rv;
+}
+
+bool wxListCtrl::SetBackgroundColour(const wxColour& colour)
+{
+    bool rv;
+    rv = wxControl::SetBackgroundColour(colour);
+    if (m_genericImpl)
+        rv = m_genericImpl->SetBackgroundColour(colour);
+    return rv;
+}
+
 // ----------------------------------------------------------------------------
 // accessors
 // ----------------------------------------------------------------------------

@@ -309,11 +309,17 @@ class WXDLLEXPORT wxListCtrl: public wxControl
   wxListCtrlCompare GetCompareFunc() { return m_compareFunc; };
   long GetCompareFuncData() { return m_compareFuncData; };
 
+  
+  // public overrides needed for pimpl approach  
+  virtual bool SetFont(const wxFont& font);
+  virtual bool SetForegroundColour(const wxColour& colour);
+  virtual bool SetBackgroundColour(const wxColour& colour);
+
 protected:
-  // overrides needed for pimpl approach
+  // protected overrides needed for pimpl approach
   virtual void DoSetSize(int x, int y,
-                           int width, int height,
-                           int sizeFlags = wxSIZE_AUTO);
+                         int width, int height,
+                         int sizeFlags = wxSIZE_AUTO);
 
   // common part of all ctors
   void Init();
