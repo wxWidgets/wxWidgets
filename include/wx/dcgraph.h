@@ -27,9 +27,9 @@ class WXDLLEXPORT wxWindowDC;
 
 class WXDLLEXPORT wxGCDC: 
 #ifdef __WXMAC__
-	public wxDCBase
+    public wxDCBase
 #else
-	public wxDC
+    public wxDC
 #endif
 {
     DECLARE_DYNAMIC_CLASS(wxGCDC)
@@ -85,8 +85,8 @@ public:
 
     virtual void ComputeScaleAndOrigin();
 
-    wxGraphicsContext* GetGraphicContext() { return m_graphicContext; }
-	virtual void SetGraphicsContext( wxGraphicsContext* ctx );
+    wxGraphicsContext* GetGraphicsContext() { return m_graphicContext; }
+    virtual void SetGraphicsContext( wxGraphicsContext* ctx );
     
 protected:
     // the true implementations
@@ -170,8 +170,8 @@ protected:
 protected:
     // scaling variables
     double       m_mm_to_pix_x, m_mm_to_pix_y;
-	
-	double m_formerScaleX, m_formerScaleY;
+
+    double m_formerScaleX, m_formerScaleY;
 
     wxGraphicsContext* m_graphicContext;
 };
