@@ -302,7 +302,7 @@ BEGIN_EVENT_TABLE( wxSymbolPickerDialog, wxDialog )
     EVT_COMBOBOX( ID_SYMBOLPICKERDIALOG_FROM, wxSymbolPickerDialog::OnFromUnicodeSelected )
 #endif
 
-#if defined(__WXMSW__) || defined(__WXGTK__) || defined(__WXOS2__) || defined(__WXMGL__) || defined(__WXMOTIF__) || defined(__WXCOCOA__) || defined(__WXX11__) || defined(__WXPALMOS__)
+#if defined(__WXMSW__) || defined(__WXGTK__) || defined(__WXPM__) || defined(__WXMGL__) || defined(__WXMOTIF__) || defined(__WXCOCOA__) || defined(__WXX11__) || defined(__WXPALMOS__)
     EVT_UPDATE_UI( wxID_OK, wxSymbolPickerDialog::OnOkUpdate )
 #endif
 
@@ -466,7 +466,7 @@ void wxSymbolPickerDialog::CreateControls()
 
 #endif
 
-#if defined(__WXMSW__) || defined(__WXGTK__) || defined(__WXOS2__) || defined(__WXMGL__) || defined(__WXMOTIF__) || defined(__WXCOCOA__) || defined(__WXX11__) || defined(__WXPALMOS__)
+#if defined(__WXMSW__) || defined(__WXGTK__) || defined(__WXPM__) || defined(__WXMGL__) || defined(__WXMOTIF__) || defined(__WXCOCOA__) || defined(__WXX11__) || defined(__WXPALMOS__)
     wxBoxSizer* itemBoxSizer20 = new wxBoxSizer(wxHORIZONTAL);
     itemBoxSizer3->Add(itemBoxSizer20, 0, wxGROW, 5);
 
