@@ -116,21 +116,8 @@ class GraphWindow(wx.Window):
 
 
     def OnPaint(self, evt):
-        width, height = size =self.GetSize()
-        bmp = wx.EmptyBitmap(width, height)
-
-        dc = wx.MemoryDC()
-        dc.SelectObject(bmp)
-
-        
-        self.Draw(dc, size)
-
-        wdc = wx.PaintDC(self)
-        wdc.BeginDrawing()
-        wdc.Blit(0,0, size[0], size[1], dc, 0,0)
-        wdc.EndDrawing()
-
-        dc.SelectObject(wx.NullBitmap)
+        dc = wx.BufferedPaintDC(self)
+        self.Draw(dc, self.GetSize())
 
 
     def OnEraseBackground(self, evt):
