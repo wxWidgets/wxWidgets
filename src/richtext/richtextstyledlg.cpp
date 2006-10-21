@@ -16,18 +16,14 @@
 #pragma hdrstop
 #endif
 
+#if wxUSE_RICHTEXT
+
 #ifndef WX_PRECOMP
 #include "wx/wx.h"
 #endif
 
-////@begin includes
-////@end includes
-
 #include "wx/richtext/richtextstyledlg.h"
 #include "wx/richtext/richtextformatdlg.h"
-
-////@begin XPM images
-////@end XPM images
 
 /*!
  * wxRichTextStyleOrganiserDialog type definition
@@ -855,3 +851,7 @@ void wxRichTextStyleOrganiserDialog::OnListSelection(wxCommandEvent& event)
     else
         event.Skip();
 }
+
+#endif
+    // wxUSE_RICHTEXT
+    
