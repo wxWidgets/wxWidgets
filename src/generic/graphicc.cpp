@@ -335,7 +335,7 @@ void wxCairoContext::StrokePath( const wxGraphicsPath *p )
     if ( m_penTransparent )
         return;
 
-    const wxCairoPath* path = dynamic_cast< const wxCairoPath*>( p );
+    const wxCairoPath* path = (const wxCairoPath *) p;
     cairo_path_t* cp = path->GetPath() ;
     cairo_append_path(m_context,cp);
 
@@ -524,7 +524,7 @@ void wxCairoContext::FillPath( const wxGraphicsPath *p , int fillStyle )
 {
     if ( !m_brushTransparent )
     {
-        const wxCairoPath* path = dynamic_cast< const wxCairoPath*>( p );
+        const wxCairoPath* path = (const wxCairoPath *) p;
         cairo_path_t* cp = path->GetPath() ;
         cairo_append_path(m_context,cp);
 
