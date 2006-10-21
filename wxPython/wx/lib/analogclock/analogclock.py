@@ -128,9 +128,9 @@ class AnalogClock(wx.PyWindow):
 
 
     def _OnTimer(self, evt):
-        dc = wx.BufferedDC(wx.ClientDC(self), self.GetClientSize())
-        self.DrawHands(dc)
-
+        self.Refresh(False)
+        self.Update()
+        
 
     def _OnDestroyWindow(self, evt):
         self.timer.Stop()
@@ -186,15 +186,11 @@ class AnalogClock(wx.PyWindow):
 
 
     def _drawBox(self):
-        """Draws clock face and tick marks."""
-
-        dc = wx.BufferedDC(wx.ClientDC(self), self.GetClientSize())
-        dc.BeginDrawing()
-        dc.SelectObject(self.faceBitmap)
+        """Draws clock face and tick marks onto the faceBitmap."""
+        dc = wx.BufferedDC(None, self.faceBitmap)
         dc.SetBackground(wx.Brush(self.GetBackgroundColour(), wx.SOLID))
         dc.Clear()
         self.Box.Draw(dc)
-        dc.EndDrawing()
 
 
     def _drawHands(self, dc):
@@ -202,11 +198,8 @@ class AnalogClock(wx.PyWindow):
         Draws the face bitmap, created on the last DrawBox call, and
         clock hands.
         """
-
-        dc.BeginDrawing()
         dc.DrawBitmap(self.faceBitmap, 0, 0)
         self.Hands.Draw(dc)
-        dc.EndDrawing()
 
 
     # Public methods --------------------------------------------------
@@ -331,22 +324,18 @@ class AnalogClock(wx.PyWindow):
         return self.Box.GetTickStyle(target)
 
 
-    def Refresh(self):
+    def Reset(self):
         """
-        Overriden base wx.Window method. Forces an immediate
-        recalculation and redraw of all clock elements.
+        Forces an immediate recalculation and redraw of all clock
+        elements.
         """
-
         size = self.GetClientSize()
         if size.x < 1 or size.y < 1:
             return
-        self.Freeze()
         self.RecalcCoords(size)
         self.DrawBox()
-        dc = wx.BufferedDC(wx.ClientDC(self), self.GetClientSize())
-        self.DrawHands(dc)
-        self.Thaw()
-
+        self.Refresh(False)
+        
 
     def SetHandSize(self, size, target=ALL):
         """Sets thickness of hands."""
@@ -376,28 +365,28 @@ class AnalogClock(wx.PyWindow):
         """Sets sizes of ticks."""
 
         self.Box.SetTickSize(size, target)
-        self.Refresh()
+        self.Reset()
 
 
     def SetTickFillColour(self, colour, target=ALL):
         """Sets fill colours of ticks."""
 
         self.Box.SetTickFillColour(colour, target)
-        self.Refresh()
+        self.Reset()
 
 
     def SetTickBorderColour(self, colour, target=ALL):
         """Sets border colours of ticks."""
 
         self.Box.SetTickBorderColour(colour, target)
-        self.Refresh()
+        self.Reset()
 
 
     def SetTickBorderWidth(self, width, target=ALL):
         """Sets border widths of ticks."""
 
         self.Box.SetTickBorderWidth(width, target)
-        self.Refresh()
+        self.Reset()
 
 
     def SetTickPolygon(self, polygon, target=ALL):
@@ -407,7 +396,7 @@ class AnalogClock(wx.PyWindow):
         """
 
         self.Box.SetTickPolygon(polygon, target)
-        self.Refresh()
+        self.Reset()
 
 
     def SetTickFont(self, font, target=ALL):
@@ -417,35 +406,35 @@ class AnalogClock(wx.PyWindow):
         """
 
         self.Box.SetTickFont(font, target)
-        self.Refresh()
+        self.Reset()
 
 
     def SetTickOffset(self, offset, target=ALL):
         """Sets the distance of tick marks for hours from border."""
 
         self.Box.SetTickOffset(offset, target)
-        self.Refresh()
+        self.Reset()
 
 
     def SetFaceFillColour(self, colour):
         """Sets fill colours of watch."""
 
         self.Box.Face.SetFillColour(colour)
-        self.Refresh()
+        self.Reset()
 
 
     def SetFaceBorderColour(self, colour):
         """Sets border colours of watch."""
 
         self.Box.Face.SetBorderColour(colour)
-        self.Refresh()
+        self.Reset()
 
 
     def SetFaceBorderWidth(self, width):
         """Sets border width of watch."""
 
         self.Box.Face.SetBorderWidth(width)
-        self.Refresh()
+        self.Reset()
 
 
     def SetShadowColour(self, colour):
@@ -453,7 +442,7 @@ class AnalogClock(wx.PyWindow):
 
         self.Hands.SetShadowColour(colour)
         self.Box.SetShadowColour(colour)
-        self.Refresh()
+        self.Reset()
 
 
     def SetClockStyle(self, style):
@@ -479,7 +468,7 @@ class AnalogClock(wx.PyWindow):
 
         self.clockStyle = style
         self.Box.SetIsRotated(style & ROTATE_TICKS)
-        self.Refresh()
+        self.Reset()
 
 
     def SetTickStyle(self, style, target=ALL):
@@ -502,14 +491,14 @@ class AnalogClock(wx.PyWindow):
         """
 
         self.Box.SetTickStyle(style, target)
-        self.Refresh()
+        self.Reset()
 
 
     def SetBackgroundColour(self, colour):
         """Overriden base wx.Window method."""
 
         wx.Window.SetBackgroundColour(self, colour)
-        self.Refresh()
+        self.Reset()
 
 
     def SetForegroundColour(self, colour):
@@ -523,7 +512,7 @@ class AnalogClock(wx.PyWindow):
         self.SetHandBorderColour(colour)
         self.SetTickFillColour(colour)
         self.SetTickBorderColour(colour)
-        self.Refresh()
+        self.Reset()
 
 
     def SetWindowStyle(self, *args, **kwargs):
