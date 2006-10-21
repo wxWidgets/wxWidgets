@@ -53,13 +53,15 @@ private :
     PicHandle    m_backpict ;
     bool        m_shown ;
     long        m_mark ;
+#if wxUSE_TIMER 
     wxMacToolTipTimer* m_timer ;
-
+#endif
 #if TARGET_CARBON
     wxMacCFStringHolder m_helpTextRef ;
 #endif
 } ;
 
+#if wxUSE_TIMER
 class wxMacToolTipTimer : public wxTimer
 {
 public:
@@ -77,6 +79,7 @@ protected:
     wxMacToolTip*     m_tip;
     long        m_mark ;
 };
+#endif // wxUSE_TIMER
 
 //-----------------------------------------------------------------------------
 // wxToolTip
@@ -181,19 +184,22 @@ void wxToolTip::RemoveToolTips()
 }
 
 // --- mac specific
-
+#if wxUSE_TIMER 
 wxMacToolTipTimer::wxMacToolTipTimer( wxMacToolTip *tip , int msec )
 {
     m_tip = tip;
     m_mark = tip->GetMark() ;
     Start(msec, true);
 }
+#endif // wxUSE_TIMER
 
 wxMacToolTip::wxMacToolTip()
 {
     m_window = NULL ;
     m_backpict = NULL ;
+#if wxUSE_TIMER 
     m_timer = NULL ;
+#endif
     m_mark = 0 ;
     m_shown = false ;
 }
@@ -208,21 +214,23 @@ void wxMacToolTip::Setup( WindowRef win  , const wxString& text , const wxPoint&
     m_window =win;
     s_ToolTipWindowRef = m_window ;
     m_backpict = NULL ;
-
+#if wxUSE_TIMER 
     if ( m_timer )
         delete m_timer ;
 
     m_timer = new wxMacToolTipTimer( this , s_ToolTipDelay ) ;
+#endif // wxUSE_TIMER
 }
 
 wxMacToolTip::~wxMacToolTip()
 {
+#if wxUSE_TIMER 
     if ( m_timer )
     {
         delete m_timer ;
         m_timer = NULL;
     }
-
+#endif // wxUSE_TIMER
     if ( m_backpict )
         Clear() ;
 }
@@ -265,13 +273,13 @@ void wxToolTip::NotifyWindowDelete( WXHWND win )
 void wxMacToolTip::Clear()
 {
     m_mark++ ;
-
+#if wxUSE_TIMER 
     if ( m_timer )
     {
         delete m_timer ;
         m_timer = NULL ;
     }
-
+#endif // wxUSE_TIMER
     if ( !m_shown )
         return ;
 

@@ -11,6 +11,8 @@
 
 #include "wx/wxprec.h"
 
+#if wxUSE_STATUSBAR
+
 #include "wx/statusbr.h"
 
 #ifndef WX_PRECOMP
@@ -175,3 +177,6 @@ void wxStatusBarMac::MacHiliteChanged()
     Refresh();
     Update();
 }
+
+#endif // wxUSE_STATUSBAR
+

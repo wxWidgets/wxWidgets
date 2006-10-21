@@ -11,6 +11,8 @@
 
 #include "wx/wxprec.h"
 
+#if wxUSE_TIMER
+
 #ifndef WX_PRECOMP
     #include "wx/dynarray.h"
 #endif
@@ -215,4 +217,7 @@ void wxTimer::Stop()
     wxMacRemoveAllNotifiersForData( wxMacGetNotifierTable(), this );
 }
 
-#endif
+#endif // wxMAC_USE_CARBON_TIMER
+
+#endif // wxUSE_TIMER
+

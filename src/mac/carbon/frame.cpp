@@ -117,6 +117,7 @@ bool wxFrame::Enable(bool enable)
     return true;
 }
 
+#if wxUSE_STATUSBAR
 wxStatusBar *wxFrame::OnCreateStatusBar(int number, long style, wxWindowID id,
     const wxString& name)
 {
@@ -141,6 +142,7 @@ void wxFrame::PositionStatusBar()
         m_frameStatusBar->SetSize(0, h, w, WX_MAC_STATUSBAR_HEIGHT);
     }
 }
+#endif // wxUSE_STATUSBAR
 
 // Responds to colour changes, and passes event on to children.
 void wxFrame::OnSysColourChanged(wxSysColourChangedEvent& event)
@@ -148,6 +150,7 @@ void wxFrame::OnSysColourChanged(wxSysColourChangedEvent& event)
     SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_APPWORKSPACE));
     Refresh();
 
+#if wxUSE_STATUSBAR
     if ( m_frameStatusBar )
     {
         wxSysColourChangedEvent event2;
@@ -155,6 +158,7 @@ void wxFrame::OnSysColourChanged(wxSysColourChangedEvent& event)
         event2.SetEventObject( m_frameStatusBar );
         m_frameStatusBar->ProcessEvent(event2);
     }
+#endif // wxUSE_STATUSBAR
 
     // Propagate the event to the non-top-level children
     wxWindow::OnSysColourChanged(event);
@@ -356,7 +360,6 @@ void wxFrame::PositionToolBar()
     }
 #endif
 
-#if wxUSE_TOOLBAR
     if (GetToolBar())
     {
         int tx, ty, tw, th;
@@ -387,8 +390,8 @@ void wxFrame::PositionToolBar()
 #endif
         }
     }
-#endif
 }
+#endif // wxUSE_TOOLBAR
 
 void wxFrame::PositionBars()
 {
@@ -400,4 +403,4 @@ void wxFrame::PositionBars()
 #endif
 }
 
-#endif
+

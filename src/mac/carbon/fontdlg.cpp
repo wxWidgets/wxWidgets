@@ -20,6 +20,8 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
+#if wxUSE_FONTDLG
+
 #ifdef __BORLANDC__
     #pragma hdrstop
 #endif
@@ -782,4 +784,6 @@ int FontFamilyStringToInt(const wxChar *family)
 
 #endif // !USE_NATIVE_FONT_DIALOG_FOR_MACOSX
 
-#endif
+#endif // wxMAC_USE_EXPERIMENTAL_FONTDIALOG
+
+#endif // wxUSE_FONTDLG

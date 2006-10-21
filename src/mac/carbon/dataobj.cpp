@@ -361,13 +361,16 @@ bool wxBitmapDataObject::SetData( size_t nSize, const void *pBuf )
 #ifndef __LP64__
     Rect frame;
     wxMacGetPictureBounds( picHandle, &frame );
-
+#if wxUSE_METAFILE
     wxMetafile mf;
     mf.SetHMETAFILE( (WXHMETAFILE)m_pictHandle );
+#endif
     wxMemoryDC mdc;
     m_bitmap.Create( frame.right - frame.left, frame.bottom - frame.top );
     mdc.SelectObject( m_bitmap );
+#if wxUSE_METAFILE  
     mf.Play( &mdc );
+#endif
     mdc.SelectObject( wxNullBitmap );
 #endif
 

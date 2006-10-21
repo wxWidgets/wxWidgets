@@ -11,6 +11,8 @@
 
 #include "wx/wxprec.h"
 
+#if wxUSE_FILEDLG
+
 #include "wx/filedlg.h"
 
 #ifndef WX_PRECOMP
@@ -428,3 +430,6 @@ int wxFileDialog::ShowModal()
 
     return (err == noErr) ? wxID_OK : wxID_CANCEL;
 }
+
+#endif // wxUSE_FILEDLG
+
