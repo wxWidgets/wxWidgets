@@ -115,18 +115,27 @@ const int wxInvalidOffset = -1;
 // macros
 // ----------------------------------------------------------------------------
 
-// we need to translate Mac filenames before passing them to OS functions
+// translate the filenames before passing them to OS functions
 #define OS_FILENAME(s) (s.fn_str())
 
 // ============================================================================
 // implementation
 // ============================================================================
 
+// ----------------------------------------------------------------------------
+// wrappers around standard POSIX functions
+// ----------------------------------------------------------------------------
+
 #ifdef wxNEED_WX_UNISTD_H
 
 WXDLLEXPORT int wxStat( const wxChar *file_name, wxStructStat *buf )
 {
     return stat( wxConvFile.cWX2MB( file_name ), buf );
+}
+
+WXDLLEXPORT int wxLstat( const wxChar *file_name, wxStructStat *buf )
+{
+    return lstat( wxConvFile.cWX2MB( file_name ), buf );
 }
 
 WXDLLEXPORT int wxAccess( const wxChar *pathname, int mode )
@@ -139,8 +148,7 @@ WXDLLEXPORT int wxOpen( const wxChar *pathname, int flags, mode_t mode )
     return open( wxConvFile.cWX2MB( pathname ), flags, mode );
 }
 
-#endif
-   // wxNEED_WX_UNISTD_H
+#endif // wxNEED_WX_UNISTD_H
 
 // ----------------------------------------------------------------------------
 // wxPathList
@@ -1232,7 +1240,7 @@ bool wxDirExists(const wxChar *pszPathName)
 #if defined(__WINDOWS__) || defined(__OS2__)
     // Windows fails to find directory named "c:\dir\" even if "c:\dir" exists,
     // so remove all trailing backslashes from the path - but don't do this for
-    // the pathes "d:\" (which are different from "d:") nor for just "\"
+    // the paths "d:\" (which are different from "d:") nor for just "\"
     while ( wxEndsWithPathSeparator(strPath) )
     {
         size_t len = strPath.length();

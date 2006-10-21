@@ -342,6 +342,7 @@ enum wxFileKind
             typedef unsigned long mode_t;
         #endif
         WXDLLIMPEXP_BASE int wxStat( const wxChar *file_name, wxStructStat *buf );
+        WXDLLIMPEXP_BASE int wxLstat( const wxChar *file_name, wxStructStat *buf );
         WXDLLIMPEXP_BASE int wxAccess( const wxChar *pathname, int mode );
         WXDLLIMPEXP_BASE int wxOpen( const wxChar *pathname, int flags, mode_t mode );
     #else
