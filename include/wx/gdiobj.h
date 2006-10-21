@@ -31,7 +31,7 @@ class WXDLLIMPEXP_CORE wxGDIObject: public wxObject
 public:
     bool IsNull() const { return m_refData == NULL; }
 
-#if defined(__WXMSW__) || defined(__WXOS2__) || defined(__WXPALMOS__)
+#if defined(__WXMSW__) || defined(__WXPM__) || defined(__WXPALMOS__)
     // Creates the resource
     virtual bool RealizeResource() { return false; }
 
@@ -42,7 +42,7 @@ public:
 
     // Returns handle.
     virtual WXHANDLE GetResourceHandle() const { return 0; }
-#endif // defined(__WXMSW__) || defined(__WXOS2__)
+#endif // defined(__WXMSW__) || defined(__WXPM__)
 
     DECLARE_DYNAMIC_CLASS(wxGDIObject)
 };
