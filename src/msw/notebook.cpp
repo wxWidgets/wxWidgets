@@ -911,6 +911,9 @@ void wxNotebook::OnPaint(wxPaintEvent& WXUNUSED(event))
     wxBitmap bmp(rc.right, rc.bottom);
     memdc.SelectObject(bmp);
 
+    const wxLayoutDirection dir = dc.GetLayoutDirection();
+    memdc.SetLayoutDirection(dir);
+
     // if there is no special brush just use the solid background colour
 #if wxUSE_UXTHEME
     HBRUSH hbr = (HBRUSH)m_hbrBackground;
@@ -928,7 +931,10 @@ void wxNotebook::OnPaint(wxPaintEvent& WXUNUSED(event))
 
     MSWDefWindowProc(WM_PAINT, (WPARAM)memdc.GetHDC(), 0);
 
-    dc.Blit(0, 0, rc.right, rc.bottom, &memdc, 0, 0);
+    // For some reason in RTL mode, source offset has to be -1, otherwise the 
+    // right border (physical) remains unpainted.
+    const wxCoord ofs = dir == wxLayout_RightToLeft ? -1 : 0;
+    dc.Blit(ofs, 0, rc.right, rc.bottom, &memdc, ofs, 0);
 }
 
 #endif // USE_NOTEBOOK_ANTIFLICKER
