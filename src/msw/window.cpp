@@ -93,6 +93,7 @@
 
 #include "wx/notebook.h"
 #include "wx/listctrl.h"
+#include "wx/dynlib.h"
 
 #include <string.h>
 
@@ -119,7 +120,7 @@
 #endif
 #endif
 
-#if defined(TME_LEAVE) && defined(WM_MOUSELEAVE)
+#if defined(TME_LEAVE) && defined(WM_MOUSELEAVE) && wxUSE_DYNLIB_CLASS
     #define HAVE_TRACKMOUSEEVENT
 #endif // everything needed for TrackMouseEvent()
 
@@ -2644,7 +2645,8 @@ WXLRESULT wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM l
 
 #ifdef HAVE_TRACKMOUSEEVENT
         case WM_MOUSELEAVE:
-            // filter out excess WM_MOUSELEAVE events sent after PopupMenu() (on XP at least)
+            // filter out excess WM_MOUSELEAVE events sent after PopupMenu()
+            // (on XP at least)
             if ( m_mouseInWindow )
             {
                 GenerateMouseLeave();
@@ -4932,14 +4934,41 @@ bool wxWindowMSW::HandleMouseMove(int x, int y, WXUINT flags)
             m_mouseInWindow = true;
 
 #ifdef HAVE_TRACKMOUSEEVENT
-            WinStruct<TRACKMOUSEEVENT> trackinfo;
+            typedef BOOL (WINAPI *_TrackMouseEvent_t)(LPTRACKMOUSEEVENT);
+#ifdef __WXWINCE__
+            static const _TrackMouseEvent_t
+                s_pfn_TrackMouseEvent = _TrackMouseEvent;
+#else // !__WXWINCE__
+            static _TrackMouseEvent_t s_pfn_TrackMouseEvent;
+            static bool s_initDone = false;
+            if ( !s_initDone )
+            {
+                wxLogNull noLog;
 
-            trackinfo.dwFlags = TME_LEAVE;
-            trackinfo.hwndTrack = GetHwnd();
+                wxDynamicLibrary dllComCtl32(_T("comctl32.dll"), wxDL_VERBATIM);
+                if ( dllComCtl32.IsLoaded() )
+                {
+                    s_pfn_TrackMouseEvent = (_TrackMouseEvent_t)
+                        dllComCtl32.GetSymbol(_T("_TrackMouseEvent"));
+                }
 
-            // Use the commctrl.h _TrackMouseEvent(), which will call the real
-            // TrackMouseEvent() if available or emulate it
-            _TrackMouseEvent(&trackinfo);
+                s_initDone = true;
+
+                // notice that it's ok to unload comctl32.dll here as it won't
+                // be really unloaded, being still in use because we link to it
+                // statically too
+            }
+
+            if ( s_pfn_TrackMouseEvent )
+#endif // __WXWINCE__/!__WXWINCE__
+            {
+                WinStruct<TRACKMOUSEEVENT> trackinfo;
+
+                trackinfo.dwFlags = TME_LEAVE;
+                trackinfo.hwndTrack = GetHwnd();
+
+                (*s_pfn_TrackMouseEvent)(&trackinfo);
+            }
 #endif // HAVE_TRACKMOUSEEVENT
 
             wxMouseEvent event(wxEVT_ENTER_WINDOW);
@@ -4949,7 +4978,7 @@ bool wxWindowMSW::HandleMouseMove(int x, int y, WXUINT flags)
         }
     }
 #ifdef HAVE_TRACKMOUSEEVENT
-    else
+    else // mouse not in window
     {
         // Check if we need to send a LEAVE event
         // Windows doesn't send WM_MOUSELEAVE if the mouse has been captured so
