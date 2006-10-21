@@ -14,6 +14,7 @@
 
 #include "wx/geometry.h"
 #include "wx/dynarray.h"
+#include "wx/dc.h"
 
 class WXDLLEXPORT wxWindowDC;
 
