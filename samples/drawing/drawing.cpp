@@ -895,8 +895,17 @@ void MyCanvas::DrawWithLogicalOps(wxDC& dc)
 }
 
 #if wxUSE_GRAPHICS_CONTEXT
+#ifdef __WXGTK20__
+void MyCanvas::DrawAlpha(wxDC& no_dc)
+#else
 void MyCanvas::DrawAlpha(wxDC& dc)
+#endif
 {
+#ifdef __WXGTK__
+    wxGCDC dc( this );
+    PrepareDC( dc );
+#endif
+
     wxDouble margin = 20 ;
     wxDouble width = 180 ;
     wxDouble radius = 30 ;
@@ -925,6 +934,10 @@ void MyCanvas::DrawAlpha(wxDC& dc)
     dc.SetPen( *wxTRANSPARENT_PEN ) ;
     dc.SetBrush( wxBrush( wxColour(255,255,128,128) ) );
     dc.DrawRoundedRectangle( 0 , margin + width / 2 , width * 3 , 100 , radius) ;
+    
+    dc.SetTextForeground( wxColour(255,255,0,128) );
+    dc.SetFont( wxFont( 40, wxFONTFAMILY_SWISS, wxFONTSTYLE_ITALIC, wxFONTWEIGHT_NORMAL ) );
+    dc.DrawText( wxT("Hello!"), 120, 80 );
 }
 
 #endif
