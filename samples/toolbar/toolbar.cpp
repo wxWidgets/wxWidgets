@@ -116,7 +116,6 @@ public:
 
     void OnToolLeftClick(wxCommandEvent& event);
     void OnToolRightClick(wxCommandEvent& event);
-    void OnToolEnter(wxCommandEvent& event);
 
     void OnCombo(wxCommandEvent& event);
 
@@ -233,7 +232,6 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
 
     EVT_COMBOBOX(ID_COMBO, MyFrame::OnCombo)
 
-    EVT_TOOL_ENTER(ID_TOOLBAR, MyFrame::OnToolEnter)
     EVT_TOOL_RCLICKED(wxID_ANY, MyFrame::OnToolRightClick)
 
     EVT_UPDATE_UI(wxID_COPY, MyFrame::OnUpdateCopyAndCut)
@@ -361,8 +359,12 @@ void MyFrame::RecreateToolbar()
 
     toolBar->SetToolBitmapSize(wxSize(w, h));
 
-    toolBar->AddTool(wxID_NEW, _T("New"), toolBarBitmaps[Tool_new], _T("New file"));
-    toolBar->AddTool(wxID_OPEN, _T("Open"), toolBarBitmaps[Tool_open], _T("Open file"));
+    toolBar->AddTool(wxID_NEW, _T("New"),
+                     toolBarBitmaps[Tool_new], wxNullBitmap, wxITEM_NORMAL,
+                     _T("New file"), _T("This is help for new file tool"));
+    toolBar->AddTool(wxID_OPEN, _T("Open"),
+                     toolBarBitmaps[Tool_open], wxNullBitmap, wxITEM_NORMAL,
+                     _T("Open file"), _T("This is help for open file tool"));
 
     // the generic toolbar doesn't really support this
 #if wxUSE_TOOLBAR_NATIVE && !defined(__WXX11__) || defined(__WXUNIVERSAL__)
@@ -824,22 +826,6 @@ void MyFrame::OnInsertPrint(wxCommandEvent& WXUNUSED(event))
 
     // must call Realize() after adding a new button
     tb->Realize();
-}
-
-void MyFrame::OnToolEnter(wxCommandEvent& event)
-{
-#if wxUSE_STATUSBAR
-    if (event.GetSelection() > -1)
-    {
-        wxString str;
-        str.Printf(_T("This is tool number %d"), event.GetSelection());
-        SetStatusText(str);
-    }
-    else
-        SetStatusText(wxEmptyString);
-#else
-    wxUnusedVar(event);
-#endif // wxUSE_STATUSBAR
 }
 
 void MyFrame::OnToggleRadioBtn(wxCommandEvent& event)
