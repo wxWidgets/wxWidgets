@@ -32,6 +32,8 @@
     #include "wx/textctrl.h"
 #endif
 
+const wxChar wxColourPickerCtrlNameStr[] = wxT("colourpicker");
+const wxChar wxColourPickerWidgetNameStr[] = wxT("colourpickerwidget");
 
 // ============================================================================
 // implementation
