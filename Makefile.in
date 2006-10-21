@@ -1262,6 +1262,7 @@ XRCDLL_CXXFLAGS = $(__xrcdll_PCH_INC) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	-DWXMAKINGDLL_XRC $(PIC_FLAG) $(CPPFLAGS) $(CXXFLAGS)
 XRCDLL_OBJECTS =  \
 	$(__xrcdll___win32rc) \
+	xrcdll_xh_animatctrl.o \
 	xrcdll_xh_bmp.o \
 	xrcdll_xh_bmpcbox.o \
 	xrcdll_xh_bmpbt.o \
@@ -1320,6 +1321,7 @@ XRCLIB_CXXFLAGS = $(__xrclib_PCH_INC) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	$(__INC_TIFF_p) $(__INC_JPEG_p) $(__INC_PNG_p) $(__INC_ZLIB_p) \
 	$(__INC_ODBC_p) $(__INC_REGEX_p) $(__INC_EXPAT_p) $(CPPFLAGS) $(CXXFLAGS)
 XRCLIB_OBJECTS =  \
+	xrclib_xh_animatctrl.o \
 	xrclib_xh_bmp.o \
 	xrclib_xh_bmpcbox.o \
 	xrclib_xh_bmpbt.o \
@@ -2975,6 +2977,7 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/debugrpt.h \
 	wx/dbgrid.h \
 	wx/xrc/xh_all.h \
+	wx/xrc/xh_animatctrl.h \
 	wx/xrc/xh_bmpbt.h \
 	wx/xrc/xh_bmp.h \
 	wx/xrc/xh_bmpcbox.h \
@@ -3277,6 +3280,7 @@ COND_USE_GUI_1___MONOLIB_GUI_SRC_OBJECTS =  \
 	monodll_debugrpt.o \
 	monodll_dbgrptg.o \
 	monodll_dbgrid.o \
+	monodll_xh_animatctrl.o \
 	monodll_xh_bmp.o \
 	monodll_xh_bmpcbox.o \
 	monodll_xh_bmpbt.o \
@@ -5017,6 +5021,7 @@ COND_USE_GUI_1___MONOLIB_GUI_SRC_OBJECTS_1 =  \
 	monolib_debugrpt.o \
 	monolib_dbgrptg.o \
 	monolib_dbgrid.o \
+	monolib_xh_animatctrl.o \
 	monolib_xh_bmp.o \
 	monolib_xh_bmpcbox.o \
 	monolib_xh_bmpbt.o \
@@ -12607,6 +12612,9 @@ monodll_dbgrptg.o: $(srcdir)/src/generic/dbgrptg.cpp $(MONODLL_ODEP)
 monodll_dbgrid.o: $(srcdir)/src/common/dbgrid.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/dbgrid.cpp
 
+monodll_xh_animatctrl.o: $(srcdir)/src/xrc/xh_animatctrl.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/xrc/xh_animatctrl.cpp
+
 monodll_xh_bmp.o: $(srcdir)/src/xrc/xh_bmp.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/xrc/xh_bmp.cpp
 
@@ -16650,6 +16658,9 @@ monolib_dbgrptg.o: $(srcdir)/src/generic/dbgrptg.cpp $(MONOLIB_ODEP)
 
 monolib_dbgrid.o: $(srcdir)/src/common/dbgrid.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/dbgrid.cpp
+
+monolib_xh_animatctrl.o: $(srcdir)/src/xrc/xh_animatctrl.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_animatctrl.cpp
 
 monolib_xh_bmp.o: $(srcdir)/src/xrc/xh_bmp.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_bmp.cpp
@@ -27928,6 +27939,9 @@ xmllib_xtixml.o: $(srcdir)/src/common/xtixml.cpp $(XMLLIB_ODEP)
 xrcdll_version_rc.o: $(srcdir)/src/msw/version.rc $(XRCDLL_ODEP)
 	$(WINDRES) -i$< -o$@   --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_58)  $(__EXCEPTIONS_DEFINE_p_57) $(__RTTI_DEFINE_p_57) $(__THREAD_DEFINE_p_57)   --define WXDLLNAME=$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_xrc$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG) $(__RCDEFDIR_p) --include-dir $(top_srcdir)/include
 
+xrcdll_xh_animatctrl.o: $(srcdir)/src/xrc/xh_animatctrl.cpp $(XRCDLL_ODEP)
+	$(CXXC) -c -o $@ $(XRCDLL_CXXFLAGS) $(srcdir)/src/xrc/xh_animatctrl.cpp
+
 xrcdll_xh_bmp.o: $(srcdir)/src/xrc/xh_bmp.cpp $(XRCDLL_ODEP)
 	$(CXXC) -c -o $@ $(XRCDLL_CXXFLAGS) $(srcdir)/src/xrc/xh_bmp.cpp
 
@@ -28083,6 +28097,9 @@ xrcdll_xmlres.o: $(srcdir)/src/xrc/xmlres.cpp $(XRCDLL_ODEP)
 
 xrcdll_xmlrsall.o: $(srcdir)/src/xrc/xmlrsall.cpp $(XRCDLL_ODEP)
 	$(CXXC) -c -o $@ $(XRCDLL_CXXFLAGS) $(srcdir)/src/xrc/xmlrsall.cpp
+
+xrclib_xh_animatctrl.o: $(srcdir)/src/xrc/xh_animatctrl.cpp $(XRCLIB_ODEP)
+	$(CXXC) -c -o $@ $(XRCLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_animatctrl.cpp
 
 xrclib_xh_bmp.o: $(srcdir)/src/xrc/xh_bmp.cpp $(XRCLIB_ODEP)
 	$(CXXC) -c -o $@ $(XRCLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_bmp.cpp
