@@ -325,8 +325,8 @@ public:
 
     virtual void ComputeScaleAndOrigin();
 
-    wxGraphicsContext* GetGraphicContext() { return m_graphicContext; }
-	virtual void SetGraphicsContext( wxGraphicsContext* ctx )
+    wxGraphicsContext* GetGraphicsContext() { return m_graphicContext; }
+    virtual void SetGraphicsContext( wxGraphicsContext* ctx )
 		{ delete m_graphicContext; m_graphicContext = ctx; }
 protected:
     // the true implementations

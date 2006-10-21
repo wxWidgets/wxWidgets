@@ -160,7 +160,7 @@ void wxRendererMac::DrawHeaderButton( wxWindow *win,
         CGContextRef cgContext;
 
 #if wxMAC_USE_CORE_GRAPHICS
-        cgContext = (CGContextRef) dc.GetGraphicContext()->GetNativeContext();
+        cgContext = (CGContextRef) dc.GetGraphicsContext()->GetNativeContext();
 #else
         Rect bounds;
 
@@ -329,7 +329,7 @@ void wxRendererMac::DrawSplitterSash( wxWindow *win,
         CGContextRef cgContext;
 
 #if wxMAC_USE_CORE_GRAPHICS
-        cgContext = (CGContextRef) dc.GetGraphicContext()->GetNativeContext();
+        cgContext = (CGContextRef) dc.GetGraphicsContext()->GetNativeContext();
 #else
         Rect bounds;
         GetPortBounds( (CGrafPtr) dc.m_macPort, &bounds );

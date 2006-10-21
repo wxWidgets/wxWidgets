@@ -312,7 +312,7 @@ void wxDefaultDockArt::DrawSash(wxDC& dc, wxWindow *window, int orientation, con
     HIRect splitterRect = CGRectMake( rect.x , rect.y , rect.width , rect.height );
     CGContextRef cgContext ;
 #if wxMAC_USE_CORE_GRAPHICS
-    cgContext = (CGContextRef) dc.GetGraphicContext()->GetNativeContext() ;
+    cgContext = (CGContextRef) dc.GetGraphicsContext()->GetNativeContext() ;
 #else
     Rect bounds ;
     GetPortBounds( (CGrafPtr) dc.m_macPort , &bounds ) ;
