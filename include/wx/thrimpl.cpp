@@ -116,12 +116,12 @@ wxCondError wxConditionInternal::Wait()
 
     // a potential race condition can occur here
     //
-    // after a thread increments nwaiters, and unlocks the mutex and before the
-    // semaphore.Wait() is called, if another thread can cause a signal to be
-    // generated
+    // after a thread increments m_numWaiters, and unlocks the mutex and before
+    // the semaphore.Wait() is called, if another thread can cause a signal to
+    // be generated
     //
     // this race condition is handled by using a semaphore and incrementing the
-    // semaphore only if 'nwaiters' is greater that zero since the semaphore,
+    // semaphore only if m_numWaiters is greater that zero since the semaphore,
     // can 'remember' signals the race condition will not occur
 
     // wait ( if necessary ) and decrement semaphore
@@ -154,22 +154,22 @@ wxCondError wxConditionInternal::WaitTimeout(unsigned long milliseconds)
     if ( err == wxSEMA_TIMEOUT )
     {
         // another potential race condition exists here it is caused when a
-        // 'waiting' thread timesout, and returns from WaitForSingleObject, but
-        // has not yet decremented 'nwaiters'.
+        // 'waiting' thread times out, and returns from WaitForSingleObject,
+        // but has not yet decremented m_numWaiters
         //
         // at this point if another thread calls signal() then the semaphore
         // will be incremented, but the waiting thread will miss it.
         //
         // to handle this particular case, the waiting thread calls
         // WaitForSingleObject again with a timeout of 0, after locking
-        // 'nwaiters_mutex'. this call does not block because of the zero
+        // m_csWaiters. This call does not block because of the zero
         // timeout, but will allow the waiting thread to catch the missed
         // signals.
         wxCriticalSectionLocker lock(m_csWaiters);
 
-        err = m_semaphore.WaitTimeout(0);
+        wxSemaError err2 = m_semaphore.WaitTimeout(0);
 
-        if ( err != wxSEMA_NO_ERROR )
+        if ( err2 != wxSEMA_NO_ERROR )
         {
             m_numWaiters--;
         }
