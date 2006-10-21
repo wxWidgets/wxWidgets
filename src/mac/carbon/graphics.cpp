@@ -16,6 +16,7 @@
 #include "wx/graphics.h"
 
 #ifndef WX_PRECOMP
+    #include "wx/dcclient.h"
     #include "wx/log.h"
     #include "wx/region.h"
 #endif
