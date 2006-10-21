@@ -68,9 +68,6 @@ public:     // used by GTK callbacks
 protected:
     GdkPixbufAnimation *m_pixbuf;
 
-    // used temporary by Load()
-    //bool m_bLoadComplete;
-
 private:
     void UnRef();
 
@@ -132,12 +129,14 @@ public:     // public API
     virtual bool IsPlaying() const;
 
     bool SetBackgroundColour( const wxColour &colour );
+    void SetInactiveBitmap(const wxBitmap &bmp);
 
 protected:
 
     virtual wxSize DoGetBestSize() const;
     void FitToAnimation();
     void ClearToBackgroundColour();
+    void DisplayStaticImage();
 
     void ResetAnim();
     void ResetIter();

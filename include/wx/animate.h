@@ -19,6 +19,7 @@
 #include "wx/animdecod.h"
 #include "wx/control.h"
 #include "wx/timer.h"
+#include "wx/bitmap.h"
 
 class WXDLLIMPEXP_ADV wxAnimation;
 
@@ -64,7 +65,6 @@ protected:
 // auto-resizes by default to fit the new animation when SetAnimation() is called
 #define wxAC_DEFAULT_STYLE       (wxNO_BORDER)
 
-
 class WXDLLIMPEXP_ADV wxAnimationCtrlBase : public wxControl
 {
 public:
@@ -81,6 +81,13 @@ public:     // public API
     virtual void Stop() = 0;
 
     virtual bool IsPlaying() const = 0;
+
+    virtual void SetInactiveBitmap(const wxBitmap &bmp);
+    wxBitmap GetInactiveBitmap() const
+        { return m_bmpStatic; }
+
+protected:
+    wxBitmap m_bmpStatic;
 
 private:
     DECLARE_ABSTRACT_CLASS(wxAnimationCtrlBase)

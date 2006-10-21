@@ -335,27 +335,19 @@ void wxAnimationCtrl::SetAnimation(const wxAnimation& animation)
     if (!this->HasFlag(wxAC_NO_AUTORESIZE))
         FitToAnimation();
 
-    // display first frame
+    // reset frame counter
     m_currentFrame = 0;
-    if (m_animation.IsOk())
-    {
-        if (!RebuildBackingStoreUpToFrame(0))
-        {
-            m_animation = wxNullAnimation;
-            return;
-        }
-    }
-    else
-    {
-        // clear to
-        wxMemoryDC dc;
-        dc.SelectObject(m_backingStore);
 
-        // Draw the background
-        DisposeToBackground(dc);
-    }
+    UpdateBackingStoreWithStaticImage();
+}
 
-    Refresh();
+void wxAnimationCtrl::SetInactiveBitmap(const wxBitmap &bmp)
+{
+    wxAnimationCtrlBase::SetInactiveBitmap(bmp);
+
+    // if not playing, update the backing store now
+    if (!IsPlaying())
+        UpdateBackingStoreWithStaticImage();
 }
 
 void wxAnimationCtrl::FitToAnimation()
@@ -370,9 +362,10 @@ void wxAnimationCtrl::FitToAnimation()
 
 void wxAnimationCtrl::Stop()
 {
-    // leave current frame displayed until Play() is called again
     m_timer.Stop();
     m_isPlaying = false;
+
+    UpdateBackingStoreWithStaticImage();
 }
 
 bool wxAnimationCtrl::Play(bool looped)
@@ -391,6 +384,10 @@ bool wxAnimationCtrl::Play(bool looped)
             return false;
 
     m_isPlaying = true;
+
+    // do a ClearBackground() to avoid that e.g. the custom static bitmap which
+    // was eventually shown previously remains partially drawn
+    ClearBackground();
 
     // DrawCurrentFrame() will use our updated backing store
     wxClientDC clientDC(this);
@@ -505,6 +502,29 @@ void wxAnimationCtrl::IncrementalUpdateBackingStore()
     dc.SelectObject(wxNullBitmap);
 }
 
+void wxAnimationCtrl::UpdateBackingStoreWithStaticImage()
+{
+    wxASSERT(!IsPlaying());
+
+    if (m_bmpStatic.IsOk())
+    {
+        // copy the inactive bitmap in the backing store
+        m_backingStore = m_bmpStatic;
+    }
+    else
+    {
+        // put in the backing store the first frame of the animation
+        if (!m_animation.IsOk() ||
+            !RebuildBackingStoreUpToFrame(0))
+        {
+            m_animation = wxNullAnimation;
+            DisposeToBackground();
+        }
+    }
+
+    Refresh();
+}
+
 void wxAnimationCtrl::DrawFrame(wxDC &dc, size_t frame)
 {
     // PERFORMANCE NOTE:
@@ -523,7 +543,15 @@ void wxAnimationCtrl::DrawCurrentFrame(wxDC& dc)
     wxASSERT( m_backingStore.IsOk() );
 
     // m_backingStore always contains the current frame
-    dc.DrawBitmap(m_backingStore, 0, 0);
+    dc.DrawBitmap(m_backingStore, 0, 0, true /* use mask in case it's present */);
+}
+
+void wxAnimationCtrl::DisposeToBackground()
+{
+    // clear the backing store
+    wxMemoryDC dc;
+    dc.SelectObject(m_backingStore);
+    DisposeToBackground(dc);
 }
 
 void wxAnimationCtrl::DisposeToBackground(wxDC& dc)
@@ -556,10 +584,14 @@ void wxAnimationCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
     // VERY IMPORTANT: the wxPaintDC *must* be created in any case
     wxPaintDC dc(this);
 
-    // both if we are playing or not, we need to refresh the current frame
     if ( m_backingStore.IsOk() )
         DrawCurrentFrame(dc);
-    //else: m_animation is not valid and thus we don't have a valid backing store...
+    else
+    {
+        // m_animation is not valid and thus we don't have a valid backing store...
+        // clear then our area to the background colour
+        DisposeToBackground(dc);
+    }
 }
 
 void wxAnimationCtrl::OnTimer(wxTimerEvent &WXUNUSED(event))
@@ -570,8 +602,7 @@ void wxAnimationCtrl::OnTimer(wxTimerEvent &WXUNUSED(event))
         // Should a non-looped animation display the last frame?
         if (!m_looped)
         {
-            m_timer.Stop();
-            m_isPlaying = false;
+            Stop();
             return;
         }
         else

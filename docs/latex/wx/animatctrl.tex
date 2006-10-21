@@ -110,6 +110,14 @@ of the animation is displayed.
 Returns the animation associated with this control.
 
 
+\membersection{wxAnimationCtrl::GetInactiveBitmap}\label{wxanimationctrlgetinactivebitmap}
+
+\constfunc{wxBitmap}{GetInactiveBitmap}{\void}
+
+Returns the inactive bitmap shown in this control when the;
+see \helpref{SetInactiveBitmap}{wxanimationctrlsetinactivebitmap} for more info.
+
+
 \membersection{wxAnimationCtrl::IsPlaying}\label{wxanimationctrlisplaying}
 
 \constfunc{bool}{IsPlaying}{\void}
@@ -143,17 +151,31 @@ displayed).
 Sets the animation to play in this control.
 If the previous animation is being played, it's \helpref{Stopped}{wxanimationctrlstop}.
 
-Until \helpref{Play}{wxanimationctrlplay} isn't called, the first frame
-of the animation is displayed.
+Until \helpref{Play}{wxanimationctrlplay} isn't called, a static image, the first
+frame of the given animation or the background colour will be shown
+(see \helpref{SetInactiveBitmap}{wxanimationctrlsetinactivebitmap} for more info).
 
-If {\tt wxNullAnimation} is given as animation, the control will be cleared to display
-the background colour (see \helpref{wxWindow::GetBackgroundColour}{wxwindowgetbackgroundcolour}).
 
+\membersection{wxAnimationCtrl::SetInactiveBitmap}\label{wxanimationctrlsetinactivebitmap}
+
+\func{void}{SetInactiveBitmap}{\param{const wxBitmap\& }{bmp}}
+
+Sets the bitmap to show on the control when it's not playing an animation.
+If you set as inactive bitmap {\tt wxNullBitmap} (which is the default), then the
+first frame of the animation is instead shown when the control is inactive; in this case,
+if there's no valid animation associated with the control (see \helpref{SetAnimation}{wxanimationctrlsetanimation}),
+then the background colour of the window is shown.
+
+If the control is not playing the animation, the given bitmap will be immediately
+shown, otherwise it will be shown as soon as \helpref{Stop}{wxanimationctrlstop}
+is called.
 
 \membersection{wxAnimationCtrl::Stop}\label{wxanimationctrlstop}
 
 \func{void}{Stop}{\void}
 
 Stops playing the animation.
-The control will show the last frame rendered of the current animation until \helpref{Play}{wxanimationctrlplay} is called.
+The control will show the first frame of the animation, a custom static image or
+the window's background colour as specified by the
+last \helpref{SetInactiveBitmap}{wxanimationctrlsetinactivebitmap} call.
 

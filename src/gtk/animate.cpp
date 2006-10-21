@@ -117,7 +117,6 @@ bool wxAnimation::Load(wxInputStream &stream, wxAnimationType type)
     // connect to loader signals
     g_signal_connect(loader, "area-updated", G_CALLBACK(gdk_pixbuf_area_updated), this);
 
-    //m_bLoadComplete = false;
     guchar buf[2048];
     while (stream.IsOk())
     {
@@ -139,7 +138,6 @@ bool wxAnimation::Load(wxInputStream &stream, wxAnimationType type)
         wxLogDebug(wxT("Could not close the loader"));
         return false;
     }
-    //m_bLoadComplete = true;
 
     // wait until we get the last area_updated signal
     return true;
@@ -259,16 +257,9 @@ void wxAnimationCtrl::SetAnimation(const wxAnimation &anim)
 
         if (!this->HasFlag(wxAC_NO_AUTORESIZE))
             FitToAnimation();
+    }
 
-        // display first frame
-        gtk_image_set_from_pixbuf(GTK_IMAGE(m_widget),
-                                  gdk_pixbuf_animation_get_static_image(m_anim));
-    }
-    else
-    {
-        // we need to clear the control to the background colour
-        ClearToBackgroundColour();
-    }
+    DisplayStaticImage();
 }
 
 void wxAnimationCtrl::FitToAnimation()
@@ -280,8 +271,6 @@ void wxAnimationCtrl::FitToAnimation()
         h = gdk_pixbuf_animation_get_height(m_anim);
 
     // update our size to fit animation
-    //if (w > 0 && h > 0)
-//        gtk_widget_set_size_request(m_widget, w, h);
         SetSize(w, h);
 }
 
@@ -324,6 +313,49 @@ void wxAnimationCtrl::Stop()
     if (IsPlaying())
         m_timer.Stop();
     m_bPlaying = false;
+
+    ResetIter();
+    DisplayStaticImage();
+}
+
+void wxAnimationCtrl::SetInactiveBitmap(const wxBitmap &bmp)
+{
+    wxAnimationCtrlBase::SetInactiveBitmap(bmp);
+
+    // update the pixbuf associated with m_widget now...
+    if (!IsPlaying())
+        DisplayStaticImage();
+}
+
+void wxAnimationCtrl::DisplayStaticImage()
+{
+    wxASSERT(!IsPlaying());
+
+    if (m_bmpStatic.IsOk())
+    {
+        // show inactive bitmap
+        GdkBitmap *mask = (GdkBitmap *) NULL;
+        if (m_bmpStatic.GetMask())
+            mask = m_bmpStatic.GetMask()->GetBitmap();
+
+        if (m_bmpStatic.HasPixbuf())
+        {
+            gtk_image_set_from_pixbuf(GTK_IMAGE(m_widget),
+                                        m_bmpStatic.GetPixbuf());
+        }
+        else
+        {
+            gtk_image_set_from_pixmap(GTK_IMAGE(m_widget),
+                                        m_bmpStatic.GetPixmap(), mask);
+        }
+    }
+    else
+    {
+        // even if not clearly documented, gdk_pixbuf_animation_get_static_image()
+        // always returns the first frame of the animation
+        gtk_image_set_from_pixbuf(GTK_IMAGE(m_widget),
+                                    gdk_pixbuf_animation_get_static_image(m_anim));
+    }
 }
 
 bool wxAnimationCtrl::IsPlaying() const
@@ -357,8 +389,6 @@ void wxAnimationCtrl::ClearToBackgroundColour()
     wxColour clr = GetBackgroundColour();
     guint32 col = (clr.Red() << 24) | (clr.Green() << 16) | (clr.Blue() << 8);
     gdk_pixbuf_fill(newpix, col);
-
-    wxLogDebug(wxT("Clearing to background %s"), clr.GetAsString().c_str());
 
     gtk_image_set_from_pixbuf(GTK_IMAGE(m_widget), newpix);
     g_object_unref(newpix);

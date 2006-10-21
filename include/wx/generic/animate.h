@@ -108,6 +108,8 @@ public:
     wxAnimation GetAnimation() const
         { return m_animation; }
 
+    void SetInactiveBitmap(const wxBitmap &bmp);
+
 public:     // event handlers
 
     void OnPaint(wxPaintEvent& event);
@@ -140,9 +142,11 @@ protected:      // internal utilities
     void FitToAnimation();
 
     // Draw the background; use this when e.g. previous frame had wxANIM_TOBACKGROUND disposal.
+    void DisposeToBackground();
     void DisposeToBackground(wxDC& dc);
     void DisposeToBackground(wxDC& dc, const wxPoint &pos, const wxSize &sz);
 
+    void UpdateBackingStoreWithStaticImage();
     void IncrementalUpdateBackingStore();
     bool RebuildBackingStoreUpToFrame(size_t);
     void DrawFrame(wxDC &dc, size_t);

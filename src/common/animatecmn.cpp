@@ -20,16 +20,21 @@
 #if wxUSE_ANIMATIONCTRL
 
 #include "wx/animate.h"
+#include "wx/bitmap.h"
 
 const wxChar wxAnimationCtrlNameStr[] = wxT("animationctrl");
 
 // global object
 wxAnimation wxNullAnimation;
 
-//wxIMPLEMENT_HANDLER_LIST_MANAGER(wxAnimation,
 IMPLEMENT_ABSTRACT_CLASS(wxAnimationBase, wxObject)
 IMPLEMENT_ABSTRACT_CLASS(wxAnimationCtrlBase, wxControl)
 
+void wxAnimationCtrlBase::SetInactiveBitmap(const wxBitmap &bmp)
+{ 
+    m_bmpStatic = bmp; 
+    m_bmpStatic.UnShare();
+}
 
 
 #endif      // wxUSE_ANIMATIONCTRL
