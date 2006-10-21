@@ -351,7 +351,15 @@ enum wxFileKind
         #define   wxLstat      lstat
         #define   wxAccess     access
     #endif
+
+    #define wxHAVE_NATIVE_LSTAT
 #endif // platforms
+
+// if the platform doesn't have symlinks, define wxLstat to be the same as
+// wxStat to avoid #ifdefs in the code using it
+#ifndef wxHAVE_NATIVE_LSTAT
+    #define wxLstat wxStat
+#endif
 
 #if defined(__VISAGECPP__) && __IBMCPP__ >= 400
 //
