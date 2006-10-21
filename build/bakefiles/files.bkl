@@ -2920,6 +2920,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <!-- ====================================================================== -->
 
 <set var="XRC_SRC" hints="files">
+    src/xrc/xh_animatctrl.cpp
     src/xrc/xh_bmp.cpp
     src/xrc/xh_bmpcbox.cpp
     src/xrc/xh_bmpbt.cpp
@@ -2975,6 +2976,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 </set>
 <set var="XRC_HDR" hints="files">
     wx/xrc/xh_all.h
+    wx/xrc/xh_animatctrl.h
     wx/xrc/xh_bmpbt.h
     wx/xrc/xh_bmp.h
     wx/xrc/xh_bmpcbox.h

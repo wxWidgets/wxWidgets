@@ -167,6 +167,9 @@ void wxXmlResource::InitAllHandlers()
 #if wxUSE_HYPERLINKCTRL
     AddHandler( new wxHyperlinkCtrlXmlHandler);
 #endif
+#if wxUSE_ANIMATIONCTRL
+    AddHandler( new wxAnimationCtrlXmlHandler);
+#endif
 }
 
 #endif // wxUSE_XRC

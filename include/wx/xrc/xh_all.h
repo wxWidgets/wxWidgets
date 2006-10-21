@@ -64,5 +64,6 @@
 #include "wx/xrc/xh_dirpicker.h"
 #include "wx/xrc/xh_hyperlink.h"
 #include "wx/xrc/xh_bmpcbox.h"
+#include "wx/xrc/xh_animatctrl.h"
 
 #endif // _WX_XH_ALL_H_

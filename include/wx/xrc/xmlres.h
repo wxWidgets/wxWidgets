@@ -25,6 +25,7 @@
 #include "wx/icon.h"
 #include "wx/artprov.h"
 #include "wx/colour.h"
+#include "wx/animate.h"
 
 #include "wx/xml/xml.h"
 
@@ -127,6 +128,8 @@ public:
     // Destructor.
     virtual ~wxXmlResource();
 
+    wxXmlNode *GetFirstRoot();
+    
     // Loads resources from XML files that match given filemask.
     // This method understands VFS (see filesys.h).
     bool Load(const wxString& filemask);
@@ -449,6 +452,11 @@ protected:
     wxIcon GetIcon(const wxString& param = wxT("icon"),
                    const wxArtClient& defaultArtClient = wxART_OTHER,
                    wxSize size = wxDefaultSize);
+
+#if wxUSE_ANIMATIONCTRL
+    // Gets an animation.
+    wxAnimation GetAnimation(const wxString& param = wxT("animation"));
+#endif
 
     // Gets a font.
     wxFont GetFont(const wxString& param = wxT("font"));

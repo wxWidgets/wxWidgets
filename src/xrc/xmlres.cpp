@@ -1139,6 +1139,39 @@ wxBitmap wxXmlResourceHandler::GetBitmap(const wxString& param,
     return wxBitmap(img);
 }
 
+#if wxUSE_ANIMATIONCTRL
+wxAnimation wxXmlResourceHandler::GetAnimation(const wxString& param)
+{
+    wxAnimation ani;
+
+    /* load the animation from file: */
+    wxString name = GetParamValue(param);
+    if (name.empty()) return wxNullAnimation;
+#if wxUSE_FILESYSTEM
+    wxFSFile *fsfile = GetCurFileSystem().OpenFile(name);
+    if (fsfile == NULL)
+    {
+        wxLogError(_("XRC resource: Cannot create animation from '%s'."),
+                   name.c_str());
+        return wxNullAnimation;
+    }
+    ani.Load(*(fsfile->GetStream()));
+    delete fsfile;
+#else
+    ani.LoadFile(name);
+#endif
+
+    if (!ani.IsOk())
+    {
+        wxLogError(_("XRC resource: Cannot create animation from '%s'."),
+                   name.c_str());
+        return wxNullAnimation;
+    }
+
+    return ani;
+}
+#endif      // wxUSE_ANIMATIONCTRL
+
 
 
 wxIcon wxXmlResourceHandler::GetIcon(const wxString& param,
