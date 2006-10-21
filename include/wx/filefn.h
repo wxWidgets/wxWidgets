@@ -348,6 +348,7 @@ enum wxFileKind
     #else
         #define   wxOpen       open
         #define   wxStat       stat
+        #define   wxLstat      lstat
         #define   wxAccess     access
     #endif
 #endif // platforms
