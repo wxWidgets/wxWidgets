@@ -17,7 +17,16 @@
 // headers
 // ----------------------------------------------------------------------------
 
-#include <wx/string.h>
+#include "testprec.h"
+
+#ifdef __BORLANDC__
+    #pragma hdrstop
+#endif
+
+#ifndef WX_PRECOMP
+    #include <wx/string.h>
+#endif // WX_PRECOMP
+
 #include <wx/stopwatch.h>
 #include <wx/utils.h>
 #include <wx/cmdline.h>
