@@ -178,6 +178,27 @@ void MyFrame::OnDerivedDialogToolOrMenuCommand(wxCommandEvent& WXUNUSED(event))
     preferencesDialog.ShowModal();
 }
 
+void MyFrame::OnAnimationCtrlPlay(wxCommandEvent& event)
+{
+#if wxUSE_ANIMATIONCTRL
+    // get the pointers we need
+    wxButton *btn = wxDynamicCast(event.GetEventObject(), wxButton);
+    if (!btn || !btn->GetParent()) return;
+
+    wxWindow *win = btn->GetParent();
+    wxAnimationCtrl *ctrl = XRCCTRL(*win, "controls_animation_ctrl", wxAnimationCtrl);
+    if (ctrl->IsPlaying())
+    {
+        ctrl->Stop();
+        btn->SetLabel(wxT("Play"));
+    }
+    else
+    {
+        ctrl->Play();
+        btn->SetLabel(wxT("Stop"));
+    }
+#endif
+}
 
 void MyFrame::OnControlsToolOrMenuCommand(wxCommandEvent& WXUNUSED(event))
 {
@@ -217,6 +238,13 @@ void MyFrame::OnControlsToolOrMenuCommand(wxCommandEvent& WXUNUSED(event))
     treectrl->AppendItem(treectrl->GetRootItem(), _("Evil henchman 1"));
     treectrl->AppendItem(treectrl->GetRootItem(), _("Evil henchman 2"));
     treectrl->AppendItem(treectrl->GetRootItem(), _("Evil accountant"));
+#endif
+
+#if wxUSE_ANIMATIONCTRL
+    // dynamically connect our event handler for the "clicked" event of the "play" button
+    // in the animation ctrl page of our dialog
+    dlg.Connect(XRCID("controls_animation_button_play"), wxEVT_COMMAND_BUTTON_CLICKED,
+                wxCommandEventHandler(MyFrame::OnAnimationCtrlPlay));
 #endif
 
     // All done. Show the dialog.

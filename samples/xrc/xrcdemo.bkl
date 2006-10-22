@@ -29,6 +29,7 @@
             fuzzy.gif menu.xrc platform.xpm platform.xrc quotes.gif
             resource.xrc toolbar.xrc uncenter.xpm
             uncenter.xrc update.gif variable.xpm variable.xrc
+            throbber.gif stop.xpm
         </files>
     </wx-data>
 

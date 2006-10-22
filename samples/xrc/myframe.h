@@ -48,6 +48,7 @@ private:
     void OnPlatformPropertyToolOrMenuCommand(wxCommandEvent& event);
     void OnArtProviderToolOrMenuCommand(wxCommandEvent& event);
     void OnVariableExpansionToolOrMenuCommand(wxCommandEvent& event);
+    void OnAnimationCtrlPlay(wxCommandEvent& event);
 
     // Any class wishing to process wxWidgets events must use this macro
     DECLARE_EVENT_TABLE()
