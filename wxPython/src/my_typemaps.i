@@ -370,7 +370,7 @@ MAKE_INT_ARRAY_TYPEMAPS(styles, styles_field)
 %typemap(out) wxDC*                     { $result = wxPyMake_wxObject($1, (bool)$owner); }
 %typemap(out) wxFSFile*                 { $result = wxPyMake_wxObject($1, (bool)$owner); }
 %typemap(out) wxFileSystem*             { $result = wxPyMake_wxObject($1, (bool)$owner); }
-%typemap(out) wxImageList*              { $result = wxPyMake_wxObject($1, (bool)$owner); }
+//%typemap(out) wxImageList*              { $result = wxPyMake_wxObject($1, (bool)$owner); }
 %typemap(out) wxImage*                  { $result = wxPyMake_wxObject($1, (bool)$owner); }
 %typemap(out) wxListItem*               { $result = wxPyMake_wxObject($1, (bool)$owner); }
 %typemap(out) wxMenuItem*               { $result = wxPyMake_wxObject($1, (bool)$owner); }
