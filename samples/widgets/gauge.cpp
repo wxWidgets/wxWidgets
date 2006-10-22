@@ -54,6 +54,7 @@ enum
 {
     GaugePage_Reset = wxID_HIGHEST,
     GaugePage_Progress,
+    GaugePage_IndeterminateProgress,
     GaugePage_Clear,
     GaugePage_SetValue,
     GaugePage_SetRange,
@@ -61,6 +62,7 @@ enum
     GaugePage_ValueText,
     GaugePage_RangeText,
     GaugePage_Timer,
+    GaugePage_IndeterminateTimer,
     GaugePage_Gauge
 };
 
@@ -84,6 +86,7 @@ protected:
     // event handlers
     void OnButtonReset(wxCommandEvent& event);
     void OnButtonProgress(wxCommandEvent& event);
+    void OnButtonIndeterminateProgress(wxCommandEvent& event);
     void OnButtonClear(wxCommandEvent& event);
     void OnButtonSetValue(wxCommandEvent& event);
     void OnButtonSetRange(wxCommandEvent& event);
@@ -97,6 +100,7 @@ protected:
     void OnUpdateUICurValueText(wxUpdateUIEvent& event);
 
     void OnProgressTimer(wxTimerEvent& event);
+    void OnIndeterminateProgressTimer(wxTimerEvent& event);
 
     // reset the gauge parameters
     void Reset();
@@ -104,8 +108,11 @@ protected:
     // (re)create the gauge
     void CreateGauge();
 
+    // start progress timer
+    void StartTimer(wxButton*);
+
     // stop the progress timer
-    void StopTimer();
+    void StopTimer(wxButton*);
 
     // the gauge range
     unsigned long m_range;
@@ -115,8 +122,7 @@ protected:
 
     // the checkboxes for styles
     wxCheckBox *m_chkVert,
-               *m_chkSmooth,
-               *m_chkIndeterminate;
+               *m_chkSmooth;
 
     // the gauge itself and the sizer it is in
     wxGauge *m_gauge;
@@ -141,6 +147,7 @@ private:
 BEGIN_EVENT_TABLE(GaugeWidgetsPage, WidgetsPage)
     EVT_BUTTON(GaugePage_Reset, GaugeWidgetsPage::OnButtonReset)
     EVT_BUTTON(GaugePage_Progress, GaugeWidgetsPage::OnButtonProgress)
+    EVT_BUTTON(GaugePage_IndeterminateProgress, GaugeWidgetsPage::OnButtonIndeterminateProgress)
     EVT_BUTTON(GaugePage_Clear, GaugeWidgetsPage::OnButtonClear)
     EVT_BUTTON(GaugePage_SetValue, GaugeWidgetsPage::OnButtonSetValue)
     EVT_BUTTON(GaugePage_SetRange, GaugeWidgetsPage::OnButtonSetRange)
@@ -155,6 +162,7 @@ BEGIN_EVENT_TABLE(GaugeWidgetsPage, WidgetsPage)
     EVT_RADIOBOX(wxID_ANY, GaugeWidgetsPage::OnCheckOrRadioBox)
 
     EVT_TIMER(GaugePage_Timer, GaugeWidgetsPage::OnProgressTimer)
+    EVT_TIMER(GaugePage_IndeterminateTimer, GaugeWidgetsPage::OnIndeterminateProgressTimer)
 END_EVENT_TABLE()
 
 // ============================================================================
@@ -179,8 +187,7 @@ GaugeWidgetsPage::GaugeWidgetsPage(WidgetsBookCtrl *book,
     m_timer = (wxTimer *)NULL;
 
     m_chkVert =
-    m_chkSmooth =
-    m_chkIndeterminate = (wxCheckBox *)NULL;
+    m_chkSmooth = (wxCheckBox *)NULL;
 
     m_gauge = (wxGauge *)NULL;
     m_sizerGauge = (wxSizer *)NULL;
@@ -197,7 +204,6 @@ void GaugeWidgetsPage::CreateContent()
 
     m_chkVert = CreateCheckBoxAndAddToSizer(sizerLeft, _T("&Vertical"));
     m_chkSmooth = CreateCheckBoxAndAddToSizer(sizerLeft, _T("&Smooth"));
-    m_chkIndeterminate = CreateCheckBoxAndAddToSizer(sizerLeft, _T("&Indeterminate"));
 
     sizerLeft->Add(5, 5, 0, wxGROW | wxALL, 5); // spacer
 
@@ -231,6 +237,9 @@ void GaugeWidgetsPage::CreateContent()
     sizerMiddle->Add(sizerRow, 0, wxALL | wxGROW, 5);
 
     btn = new wxButton(this, GaugePage_Progress, _T("Simulate &progress"));
+    sizerMiddle->Add(btn, 0, wxALL | wxGROW, 5);
+
+    btn = new wxButton(this, GaugePage_IndeterminateProgress, _T("Simulate undeterminate job"));
     sizerMiddle->Add(btn, 0, wxALL | wxGROW, 5);
 
     btn = new wxButton(this, GaugePage_Clear, _T("&Clear"));
@@ -269,7 +278,6 @@ void GaugeWidgetsPage::Reset()
 {
     m_chkVert->SetValue(false);
     m_chkSmooth->SetValue(false);
-    m_chkIndeterminate->SetValue(false);
 }
 
 void GaugeWidgetsPage::CreateGauge()
@@ -298,16 +306,52 @@ void GaugeWidgetsPage::CreateGauge()
                           flags);
     m_gauge->SetValue(val);
     
-    if ( m_chkIndeterminate->GetValue() ){
-        m_gauge->Pulse();
-    }
-
     if ( flags & wxGA_VERTICAL )
         m_sizerGauge->Add(m_gauge, 0, wxGROW | wxALL, 5);
     else
         m_sizerGauge->Add(m_gauge, 1, wxCENTRE | wxALL, 5);
 
     m_sizerGauge->Layout();
+}
+
+void GaugeWidgetsPage::StartTimer(wxButton *clicked)
+{
+    static const int INTERVAL = 300;
+
+    wxLogMessage(_T("Launched progress timer (interval = %d ms)"), INTERVAL);
+
+    m_timer = new wxTimer(this,
+        clicked->GetId() == GaugePage_Progress ? GaugePage_Timer : GaugePage_IndeterminateTimer);
+    m_timer->Start(INTERVAL);
+
+    clicked->SetLabel(_T("&Stop timer"));
+
+    if (clicked->GetId() == GaugePage_Progress)
+        FindWindow(GaugePage_IndeterminateProgress)->Disable();
+    else
+        FindWindow(GaugePage_Progress)->Disable();
+}
+
+void GaugeWidgetsPage::StopTimer(wxButton *clicked)
+{
+    wxCHECK_RET( m_timer, _T("shouldn't be called") );
+
+    m_timer->Stop();
+    delete m_timer;
+    m_timer = NULL;
+
+    if (clicked->GetId() == GaugePage_Progress)
+    {
+        clicked->SetLabel(_T("Simulate &progress"));
+        FindWindow(GaugePage_IndeterminateProgress)->Enable();
+    }
+    else
+    {
+        clicked->SetLabel(_T("Simulate undeterminate job"));
+        FindWindow(GaugePage_Progress)->Enable();
+    }
+
+    wxLogMessage(_T("Progress finished."));
 }
 
 // ----------------------------------------------------------------------------
@@ -323,21 +367,29 @@ void GaugeWidgetsPage::OnButtonReset(wxCommandEvent& WXUNUSED(event))
 
 void GaugeWidgetsPage::OnButtonProgress(wxCommandEvent& event)
 {
+    wxButton *b = (wxButton *)event.GetEventObject();
     if ( !m_timer )
     {
-        static const int INTERVAL = 300;
-
-        wxLogMessage(_T("Launched progress timer (interval = %d ms)"), INTERVAL);
-
-        m_timer = new wxTimer(this, GaugePage_Timer);
-        m_timer->Start(INTERVAL);
-
-        wxButton *btn = (wxButton *)event.GetEventObject();
-        btn->SetLabel(_T("&Stop timer"));
+        StartTimer(b);
     }
     else // stop the running timer
     {
-        StopTimer();
+        StopTimer(b);
+
+        wxLogMessage(_T("Stopped the timer."));
+    }
+}
+
+void GaugeWidgetsPage::OnButtonIndeterminateProgress(wxCommandEvent& event)
+{
+    wxButton *b = (wxButton *)event.GetEventObject();
+    if ( !m_timer )
+    {
+        StartTimer(b);
+    }
+    else // stop the running timer
+    {
+        StopTimer(b);
 
         wxLogMessage(_T("Stopped the timer."));
     }
@@ -356,7 +408,6 @@ void GaugeWidgetsPage::OnButtonSetRange(wxCommandEvent& WXUNUSED(event))
 
     m_range = val;
     m_gauge->SetRange(val);
-    m_chkIndeterminate->SetValue(0);
 }
 
 void GaugeWidgetsPage::OnButtonSetValue(wxCommandEvent& WXUNUSED(event))
@@ -366,7 +417,6 @@ void GaugeWidgetsPage::OnButtonSetValue(wxCommandEvent& WXUNUSED(event))
         return;
 
     m_gauge->SetValue(val);
-    m_chkIndeterminate->SetValue(0);
 }
 
 void GaugeWidgetsPage::OnUpdateUIValueButton(wxUpdateUIEvent& event)
@@ -400,29 +450,21 @@ void GaugeWidgetsPage::OnProgressTimer(wxTimerEvent& WXUNUSED(event))
     }
     else // reached the end
     {
-        StopTimer();
+        wxButton *btn = (wxButton *)FindWindow(GaugePage_Progress);
+        wxCHECK_RET( btn, _T("no progress button?") );
+
+        StopTimer(btn);
     }
+}
+
+void GaugeWidgetsPage::OnIndeterminateProgressTimer(wxTimerEvent& WXUNUSED(event))
+{
+    m_gauge->Pulse();
 }
 
 void GaugeWidgetsPage::OnUpdateUICurValueText(wxUpdateUIEvent& event)
 {
     event.SetText( wxString::Format(_T("%d"), m_gauge->GetValue()));
-}
-
-void GaugeWidgetsPage::StopTimer()
-{
-    wxCHECK_RET( m_timer, _T("shouldn't be called") );
-
-    m_timer->Stop();
-    delete m_timer;
-    m_timer = NULL;
-
-    wxButton *btn = (wxButton *)FindWindow(GaugePage_Progress);
-    wxCHECK_RET( btn, _T("no progress button?") );
-
-    btn->SetLabel(_T("Simulate &progress"));
-
-    wxLogMessage(_T("Progress finished."));
 }
 
 #endif
