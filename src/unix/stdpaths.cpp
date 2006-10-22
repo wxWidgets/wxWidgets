@@ -106,34 +106,58 @@ wxStandardPaths::GetLocalizedResourcesDir(const wxChar *lang,
 // wxStandardPaths implementation for Unix
 // ============================================================================
 
+void wxStandardPaths::DetectPrefix()
+{
+#ifdef __LINUX__
+    // under Linux, we can try to infer the prefix from the location of the
+    // executable
+    wxString exeStr;
+
+    char buf[4096];
+    int result = readlink("/proc/self/exe", buf, WXSIZEOF(buf) - sizeof(char));
+    if ( result != -1 )
+    {
+        buf[result] = '\0'; // readlink() doesn't NUL-terminate the buffer
+
+        // if the /proc/self/exe symlink has been dropped by the kernel for
+        // some reason, then readlink() could also return success but
+        // "(deleted)" as link destination...
+        if ( strcmp(buf, "(deleted)") != 0 )
+            exeStr = wxString(buf, wxConvLibc);
+    }
+
+    if ( exeStr.empty() )
+    {
+        // UPX-specific hack: when using UPX on linux, the kernel will drop the
+        // /proc/self/exe link; in this case we try to look for a special
+        // environment variable called "   " which is created by UPX to save
+        // /proc/self/exe contents. See
+        //      http://sf.net/tracker/?func=detail&atid=309863&aid=1565357&group_id=9863
+        // for more information about this issue.
+        wxGetEnv(wxT("   "), &exeStr);
+    }
+
+    if ( !exeStr.empty() )
+    {
+        // consider that we're in the last "bin" subdirectory of our prefix
+        size_t pos = exeStr.rfind(wxT("/bin/"));
+        if ( pos != wxString::npos )
+            m_prefix.assign(exeStr, 0, pos);
+    }
+#endif // __LINUX__
+
+    if ( m_prefix.empty() )
+    {
+        m_prefix = wxT("/usr/local");
+    }
+}
+
 wxString wxStandardPaths::GetInstallPrefix() const
 {
     if ( m_prefix.empty() )
     {
         wxStandardPaths *pathPtr = wx_const_cast(wxStandardPaths *, this);
-
-#ifdef __LINUX__
-        // under Linux, we can try to infer the prefix from the location of the
-        // executable
-        char buf[4096];
-        int result = readlink("/proc/self/exe", buf, WXSIZEOF(buf) - sizeof(char));
-        if ( result != -1 )
-        {
-            buf[result] = '\0'; // readlink() doesn't NUL-terminate the buffer
-
-            const wxString exeStr(buf, wxConvLibc);
-
-            // consider that we're in the last "bin" subdirectory of our prefix
-            size_t pos = exeStr.rfind(wxT("/bin/"));
-            if ( pos != wxString::npos )
-                pathPtr->m_prefix.assign(exeStr, 0, pos);
-        }
-#endif // __LINUX__
-
-        if ( m_prefix.empty() )
-        {
-            pathPtr->m_prefix = wxT("/usr/local");
-        }
+        pathPtr->DetectPrefix();
     }
 
     return m_prefix;

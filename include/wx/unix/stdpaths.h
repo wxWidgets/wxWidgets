@@ -19,6 +19,10 @@
 class WXDLLIMPEXP_BASE wxStandardPaths : public wxStandardPathsBase
 {
 public:
+    // tries to determine the installation prefix automatically (Linux only right
+    // now) and returns /usr/local if it failed
+    void DetectPrefix();
+
     // set the program installation directory which is /usr/local by default
     //
     // under some systems (currently only Linux) the program directory can be
@@ -29,8 +33,7 @@ public:
     // get the program installation prefix
     //
     // if the prefix had been previously by SetInstallPrefix, returns that
-    // value, otherwise tries to determine it automatically (Linux only right
-    // now) and returns /usr/local if it failed
+    // value, otherwise calls DetectPrefix()
     wxString GetInstallPrefix() const;
 
 
