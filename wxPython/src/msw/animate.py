@@ -174,6 +174,15 @@ class AnimationCtrlBase(_core.Control):
         """IsPlaying(self) -> bool"""
         return _animate.AnimationCtrlBase_IsPlaying(*args, **kwargs)
 
+    def SetInactiveBitmap(*args, **kwargs):
+        """SetInactiveBitmap(self, Bitmap bmp)"""
+        return _animate.AnimationCtrlBase_SetInactiveBitmap(*args, **kwargs)
+
+    def GetInactiveBitmap(*args, **kwargs):
+        """GetInactiveBitmap(self) -> Bitmap"""
+        return _animate.AnimationCtrlBase_GetInactiveBitmap(*args, **kwargs)
+
+    InactiveBitmap = property(GetInactiveBitmap,SetInactiveBitmap) 
 _animate.AnimationCtrlBase_swigregister(AnimationCtrlBase)
 NullAnimation = cvar.NullAnimation
 

@@ -3670,6 +3670,75 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_AnimationCtrlBase_SetInactiveBitmap(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxAnimationCtrlBase *arg1 = (wxAnimationCtrlBase *) 0 ;
+  wxBitmap *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "bmp", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:AnimationCtrlBase_SetInactiveBitmap",kwnames,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxAnimationCtrlBase, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AnimationCtrlBase_SetInactiveBitmap" "', expected argument " "1"" of type '" "wxAnimationCtrlBase *""'"); 
+  }
+  arg1 = reinterpret_cast< wxAnimationCtrlBase * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_wxBitmap,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "AnimationCtrlBase_SetInactiveBitmap" "', expected argument " "2"" of type '" "wxBitmap const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "AnimationCtrlBase_SetInactiveBitmap" "', expected argument " "2"" of type '" "wxBitmap const &""'"); 
+  }
+  arg2 = reinterpret_cast< wxBitmap * >(argp2);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    (arg1)->SetInactiveBitmap((wxBitmap const &)*arg2);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_AnimationCtrlBase_GetInactiveBitmap(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxAnimationCtrlBase *arg1 = (wxAnimationCtrlBase *) 0 ;
+  wxBitmap result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxAnimationCtrlBase, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AnimationCtrlBase_GetInactiveBitmap" "', expected argument " "1"" of type '" "wxAnimationCtrlBase const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxAnimationCtrlBase * >(argp1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = ((wxAnimationCtrlBase const *)arg1)->GetInactiveBitmap();
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_NewPointerObj((new wxBitmap(static_cast< const wxBitmap& >(result))), SWIGTYPE_p_wxBitmap, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *AnimationCtrlBase_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
   if (!SWIG_Python_UnpackTuple(args,(char*)"swigregister", 1, 1,&obj)) return NULL;
@@ -4099,6 +4168,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"AnimationCtrlBase_Play", (PyCFunction)_wrap_AnimationCtrlBase_Play, METH_O, NULL},
 	 { (char *)"AnimationCtrlBase_Stop", (PyCFunction)_wrap_AnimationCtrlBase_Stop, METH_O, NULL},
 	 { (char *)"AnimationCtrlBase_IsPlaying", (PyCFunction)_wrap_AnimationCtrlBase_IsPlaying, METH_O, NULL},
+	 { (char *)"AnimationCtrlBase_SetInactiveBitmap", (PyCFunction) _wrap_AnimationCtrlBase_SetInactiveBitmap, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"AnimationCtrlBase_GetInactiveBitmap", (PyCFunction)_wrap_AnimationCtrlBase_GetInactiveBitmap, METH_O, NULL},
 	 { (char *)"AnimationCtrlBase_swigregister", AnimationCtrlBase_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_AnimationCtrl", (PyCFunction) _wrap_new_AnimationCtrl, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"new_PreAnimationCtrl", (PyCFunction)_wrap_new_PreAnimationCtrl, METH_NOARGS, NULL},

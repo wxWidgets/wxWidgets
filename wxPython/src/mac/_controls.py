@@ -678,7 +678,7 @@ class ComboBox(_core.Control,_core.ItemContainer):
         return _controls_.ComboBox_SetMark(*args, **kwargs)
 
     def GetMark(self):
-        raise NotImplementedError
+        return (0,0)
 
     def GetCurrentSelection(*args, **kwargs):
         """

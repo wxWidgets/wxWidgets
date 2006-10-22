@@ -2472,104 +2472,105 @@ SWIG_Python_MustGetPtr(PyObject *obj, swig_type_info *ty, int argnum, int flags)
 #define SWIGTYPE_p_wxANIHandler swig_types[6]
 #define SWIGTYPE_p_wxAcceleratorTable swig_types[7]
 #define SWIGTYPE_p_wxActivateEvent swig_types[8]
-#define SWIGTYPE_p_wxArtClient swig_types[9]
-#define SWIGTYPE_p_wxBMPHandler swig_types[10]
-#define SWIGTYPE_p_wxBitmap swig_types[11]
-#define SWIGTYPE_p_wxBoxSizer swig_types[12]
-#define SWIGTYPE_p_wxCURHandler swig_types[13]
-#define SWIGTYPE_p_wxChildFocusEvent swig_types[14]
-#define SWIGTYPE_p_wxClipboardTextEvent swig_types[15]
-#define SWIGTYPE_p_wxCloseEvent swig_types[16]
-#define SWIGTYPE_p_wxColour swig_types[17]
-#define SWIGTYPE_p_wxCommandEvent swig_types[18]
-#define SWIGTYPE_p_wxContextMenuEvent swig_types[19]
-#define SWIGTYPE_p_wxControl swig_types[20]
-#define SWIGTYPE_p_wxControlWithItems swig_types[21]
-#define SWIGTYPE_p_wxDateEvent swig_types[22]
-#define SWIGTYPE_p_wxDialog swig_types[23]
-#define SWIGTYPE_p_wxDisplayChangedEvent swig_types[24]
-#define SWIGTYPE_p_wxDropFilesEvent swig_types[25]
-#define SWIGTYPE_p_wxDuplexMode swig_types[26]
-#define SWIGTYPE_p_wxEraseEvent swig_types[27]
-#define SWIGTYPE_p_wxEvent swig_types[28]
-#define SWIGTYPE_p_wxEvtHandler swig_types[29]
-#define SWIGTYPE_p_wxFSFile swig_types[30]
-#define SWIGTYPE_p_wxFileSystem swig_types[31]
-#define SWIGTYPE_p_wxFlexGridSizer swig_types[32]
-#define SWIGTYPE_p_wxFocusEvent swig_types[33]
-#define SWIGTYPE_p_wxFont swig_types[34]
-#define SWIGTYPE_p_wxFrame swig_types[35]
-#define SWIGTYPE_p_wxGBSizerItem swig_types[36]
-#define SWIGTYPE_p_wxGIFHandler swig_types[37]
-#define SWIGTYPE_p_wxGridBagSizer swig_types[38]
-#define SWIGTYPE_p_wxGridSizer swig_types[39]
-#define SWIGTYPE_p_wxICOHandler swig_types[40]
-#define SWIGTYPE_p_wxIcon swig_types[41]
-#define SWIGTYPE_p_wxIconizeEvent swig_types[42]
-#define SWIGTYPE_p_wxIdleEvent swig_types[43]
-#define SWIGTYPE_p_wxImage swig_types[44]
-#define SWIGTYPE_p_wxImageHandler swig_types[45]
-#define SWIGTYPE_p_wxIndividualLayoutConstraint swig_types[46]
-#define SWIGTYPE_p_wxInitDialogEvent swig_types[47]
-#define SWIGTYPE_p_wxInputStream swig_types[48]
-#define SWIGTYPE_p_wxJPEGHandler swig_types[49]
-#define SWIGTYPE_p_wxKeyEvent swig_types[50]
-#define SWIGTYPE_p_wxLayoutConstraints swig_types[51]
-#define SWIGTYPE_p_wxMaximizeEvent swig_types[52]
-#define SWIGTYPE_p_wxMenu swig_types[53]
-#define SWIGTYPE_p_wxMenuBar swig_types[54]
-#define SWIGTYPE_p_wxMenuEvent swig_types[55]
-#define SWIGTYPE_p_wxMenuItem swig_types[56]
-#define SWIGTYPE_p_wxMouseCaptureChangedEvent swig_types[57]
-#define SWIGTYPE_p_wxMouseCaptureLostEvent swig_types[58]
-#define SWIGTYPE_p_wxMouseEvent swig_types[59]
-#define SWIGTYPE_p_wxMoveEvent swig_types[60]
-#define SWIGTYPE_p_wxNavigationKeyEvent swig_types[61]
-#define SWIGTYPE_p_wxNcPaintEvent swig_types[62]
-#define SWIGTYPE_p_wxNotifyEvent swig_types[63]
-#define SWIGTYPE_p_wxObject swig_types[64]
-#define SWIGTYPE_p_wxOutputStream swig_types[65]
-#define SWIGTYPE_p_wxPCXHandler swig_types[66]
-#define SWIGTYPE_p_wxPNGHandler swig_types[67]
-#define SWIGTYPE_p_wxPNMHandler swig_types[68]
-#define SWIGTYPE_p_wxPaintEvent swig_types[69]
-#define SWIGTYPE_p_wxPaletteChangedEvent swig_types[70]
-#define SWIGTYPE_p_wxPanel swig_types[71]
-#define SWIGTYPE_p_wxPaperSize swig_types[72]
-#define SWIGTYPE_p_wxPoint swig_types[73]
-#define SWIGTYPE_p_wxPyApp swig_types[74]
-#define SWIGTYPE_p_wxPyCommandEvent swig_types[75]
-#define SWIGTYPE_p_wxPyEvent swig_types[76]
-#define SWIGTYPE_p_wxPyImageHandler swig_types[77]
-#define SWIGTYPE_p_wxPySizer swig_types[78]
-#define SWIGTYPE_p_wxPyValidator swig_types[79]
-#define SWIGTYPE_p_wxPyXmlResourceHandler swig_types[80]
-#define SWIGTYPE_p_wxPyXmlSubclassFactory swig_types[81]
-#define SWIGTYPE_p_wxQueryNewPaletteEvent swig_types[82]
-#define SWIGTYPE_p_wxScrollEvent swig_types[83]
-#define SWIGTYPE_p_wxScrollWinEvent swig_types[84]
-#define SWIGTYPE_p_wxSetCursorEvent swig_types[85]
-#define SWIGTYPE_p_wxShowEvent swig_types[86]
-#define SWIGTYPE_p_wxSize swig_types[87]
-#define SWIGTYPE_p_wxSizeEvent swig_types[88]
-#define SWIGTYPE_p_wxSizer swig_types[89]
-#define SWIGTYPE_p_wxSizerItem swig_types[90]
-#define SWIGTYPE_p_wxStaticBoxSizer swig_types[91]
-#define SWIGTYPE_p_wxStdDialogButtonSizer swig_types[92]
-#define SWIGTYPE_p_wxSysColourChangedEvent swig_types[93]
-#define SWIGTYPE_p_wxTIFFHandler swig_types[94]
-#define SWIGTYPE_p_wxUpdateUIEvent swig_types[95]
-#define SWIGTYPE_p_wxValidator swig_types[96]
-#define SWIGTYPE_p_wxWindow swig_types[97]
-#define SWIGTYPE_p_wxWindowCreateEvent swig_types[98]
-#define SWIGTYPE_p_wxWindowDestroyEvent swig_types[99]
-#define SWIGTYPE_p_wxXPMHandler swig_types[100]
-#define SWIGTYPE_p_wxXmlDocument swig_types[101]
-#define SWIGTYPE_p_wxXmlNode swig_types[102]
-#define SWIGTYPE_p_wxXmlProperty swig_types[103]
-#define SWIGTYPE_p_wxXmlResource swig_types[104]
-static swig_type_info *swig_types[106];
-static swig_module_info swig_module = {swig_types, 105, 0, 0, 0, 0};
+#define SWIGTYPE_p_wxAnimation swig_types[9]
+#define SWIGTYPE_p_wxArtClient swig_types[10]
+#define SWIGTYPE_p_wxBMPHandler swig_types[11]
+#define SWIGTYPE_p_wxBitmap swig_types[12]
+#define SWIGTYPE_p_wxBoxSizer swig_types[13]
+#define SWIGTYPE_p_wxCURHandler swig_types[14]
+#define SWIGTYPE_p_wxChildFocusEvent swig_types[15]
+#define SWIGTYPE_p_wxClipboardTextEvent swig_types[16]
+#define SWIGTYPE_p_wxCloseEvent swig_types[17]
+#define SWIGTYPE_p_wxColour swig_types[18]
+#define SWIGTYPE_p_wxCommandEvent swig_types[19]
+#define SWIGTYPE_p_wxContextMenuEvent swig_types[20]
+#define SWIGTYPE_p_wxControl swig_types[21]
+#define SWIGTYPE_p_wxControlWithItems swig_types[22]
+#define SWIGTYPE_p_wxDateEvent swig_types[23]
+#define SWIGTYPE_p_wxDialog swig_types[24]
+#define SWIGTYPE_p_wxDisplayChangedEvent swig_types[25]
+#define SWIGTYPE_p_wxDropFilesEvent swig_types[26]
+#define SWIGTYPE_p_wxDuplexMode swig_types[27]
+#define SWIGTYPE_p_wxEraseEvent swig_types[28]
+#define SWIGTYPE_p_wxEvent swig_types[29]
+#define SWIGTYPE_p_wxEvtHandler swig_types[30]
+#define SWIGTYPE_p_wxFSFile swig_types[31]
+#define SWIGTYPE_p_wxFileSystem swig_types[32]
+#define SWIGTYPE_p_wxFlexGridSizer swig_types[33]
+#define SWIGTYPE_p_wxFocusEvent swig_types[34]
+#define SWIGTYPE_p_wxFont swig_types[35]
+#define SWIGTYPE_p_wxFrame swig_types[36]
+#define SWIGTYPE_p_wxGBSizerItem swig_types[37]
+#define SWIGTYPE_p_wxGIFHandler swig_types[38]
+#define SWIGTYPE_p_wxGridBagSizer swig_types[39]
+#define SWIGTYPE_p_wxGridSizer swig_types[40]
+#define SWIGTYPE_p_wxICOHandler swig_types[41]
+#define SWIGTYPE_p_wxIcon swig_types[42]
+#define SWIGTYPE_p_wxIconizeEvent swig_types[43]
+#define SWIGTYPE_p_wxIdleEvent swig_types[44]
+#define SWIGTYPE_p_wxImage swig_types[45]
+#define SWIGTYPE_p_wxImageHandler swig_types[46]
+#define SWIGTYPE_p_wxIndividualLayoutConstraint swig_types[47]
+#define SWIGTYPE_p_wxInitDialogEvent swig_types[48]
+#define SWIGTYPE_p_wxInputStream swig_types[49]
+#define SWIGTYPE_p_wxJPEGHandler swig_types[50]
+#define SWIGTYPE_p_wxKeyEvent swig_types[51]
+#define SWIGTYPE_p_wxLayoutConstraints swig_types[52]
+#define SWIGTYPE_p_wxMaximizeEvent swig_types[53]
+#define SWIGTYPE_p_wxMenu swig_types[54]
+#define SWIGTYPE_p_wxMenuBar swig_types[55]
+#define SWIGTYPE_p_wxMenuEvent swig_types[56]
+#define SWIGTYPE_p_wxMenuItem swig_types[57]
+#define SWIGTYPE_p_wxMouseCaptureChangedEvent swig_types[58]
+#define SWIGTYPE_p_wxMouseCaptureLostEvent swig_types[59]
+#define SWIGTYPE_p_wxMouseEvent swig_types[60]
+#define SWIGTYPE_p_wxMoveEvent swig_types[61]
+#define SWIGTYPE_p_wxNavigationKeyEvent swig_types[62]
+#define SWIGTYPE_p_wxNcPaintEvent swig_types[63]
+#define SWIGTYPE_p_wxNotifyEvent swig_types[64]
+#define SWIGTYPE_p_wxObject swig_types[65]
+#define SWIGTYPE_p_wxOutputStream swig_types[66]
+#define SWIGTYPE_p_wxPCXHandler swig_types[67]
+#define SWIGTYPE_p_wxPNGHandler swig_types[68]
+#define SWIGTYPE_p_wxPNMHandler swig_types[69]
+#define SWIGTYPE_p_wxPaintEvent swig_types[70]
+#define SWIGTYPE_p_wxPaletteChangedEvent swig_types[71]
+#define SWIGTYPE_p_wxPanel swig_types[72]
+#define SWIGTYPE_p_wxPaperSize swig_types[73]
+#define SWIGTYPE_p_wxPoint swig_types[74]
+#define SWIGTYPE_p_wxPyApp swig_types[75]
+#define SWIGTYPE_p_wxPyCommandEvent swig_types[76]
+#define SWIGTYPE_p_wxPyEvent swig_types[77]
+#define SWIGTYPE_p_wxPyImageHandler swig_types[78]
+#define SWIGTYPE_p_wxPySizer swig_types[79]
+#define SWIGTYPE_p_wxPyValidator swig_types[80]
+#define SWIGTYPE_p_wxPyXmlResourceHandler swig_types[81]
+#define SWIGTYPE_p_wxPyXmlSubclassFactory swig_types[82]
+#define SWIGTYPE_p_wxQueryNewPaletteEvent swig_types[83]
+#define SWIGTYPE_p_wxScrollEvent swig_types[84]
+#define SWIGTYPE_p_wxScrollWinEvent swig_types[85]
+#define SWIGTYPE_p_wxSetCursorEvent swig_types[86]
+#define SWIGTYPE_p_wxShowEvent swig_types[87]
+#define SWIGTYPE_p_wxSize swig_types[88]
+#define SWIGTYPE_p_wxSizeEvent swig_types[89]
+#define SWIGTYPE_p_wxSizer swig_types[90]
+#define SWIGTYPE_p_wxSizerItem swig_types[91]
+#define SWIGTYPE_p_wxStaticBoxSizer swig_types[92]
+#define SWIGTYPE_p_wxStdDialogButtonSizer swig_types[93]
+#define SWIGTYPE_p_wxSysColourChangedEvent swig_types[94]
+#define SWIGTYPE_p_wxTIFFHandler swig_types[95]
+#define SWIGTYPE_p_wxUpdateUIEvent swig_types[96]
+#define SWIGTYPE_p_wxValidator swig_types[97]
+#define SWIGTYPE_p_wxWindow swig_types[98]
+#define SWIGTYPE_p_wxWindowCreateEvent swig_types[99]
+#define SWIGTYPE_p_wxWindowDestroyEvent swig_types[100]
+#define SWIGTYPE_p_wxXPMHandler swig_types[101]
+#define SWIGTYPE_p_wxXmlDocument swig_types[102]
+#define SWIGTYPE_p_wxXmlNode swig_types[103]
+#define SWIGTYPE_p_wxXmlProperty swig_types[104]
+#define SWIGTYPE_p_wxXmlResource swig_types[105]
+static swig_type_info *swig_types[107];
+static swig_module_info swig_module = {swig_types, 106, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -2682,6 +2683,7 @@ namespace swig {
  static const wxString wxPyBitmapString(wxT("bitmap")); 
  static const wxString wxPyIconString(wxT("icon")); 
  static const wxString wxPyFontString(wxT("font")); 
+ static const wxString wxPyAnimationString(wxT("animation")); 
 
   #define SWIG_From_long   PyInt_FromLong 
 
@@ -2853,6 +2855,9 @@ public:
                    const wxArtClient& defaultArtClient = wxART_OTHER,
                    wxSize size = wxDefaultSize)
         { return wxXmlResourceHandler::GetIcon(param, defaultArtClient, size); }
+
+    wxAnimation GetAnimation(const wxString& param = wxT("animation"))
+        { return wxXmlResourceHandler::GetAnimation(param); }
 
     wxFont GetFont(const wxString& param = wxT("font"))
         { return wxXmlResourceHandler::GetFont(param); }
@@ -3042,6 +3047,26 @@ SWIGINTERN PyObject *FontString_get(void) {
 }
 
 
+SWIGINTERN int AnimationString_set(PyObject *) {
+  SWIG_Error(SWIG_AttributeError,"Variable AnimationString is read-only.");
+  return 1;
+}
+
+
+SWIGINTERN PyObject *AnimationString_get(void) {
+  PyObject *pyobj = 0;
+  
+  {
+#if wxUSE_UNICODE
+    pyobj = PyUnicode_FromWideChar((&wxPyAnimationString)->c_str(), (&wxPyAnimationString)->Len());
+#else
+    pyobj = PyString_FromStringAndSize((&wxPyAnimationString)->c_str(), (&wxPyAnimationString)->Len());
+#endif
+  }
+  return pyobj;
+}
+
+
 SWIGINTERN PyObject *_wrap_new_XmlResource(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   wxString *arg1 = 0 ;
@@ -3182,6 +3207,34 @@ SWIGINTERN PyObject *_wrap_delete_XmlResource(PyObject *SWIGUNUSEDPARM(self), Py
     if (PyErr_Occurred()) SWIG_fail;
   }
   resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_XmlResource_GetFirstRoot(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxXmlResource *arg1 = (wxXmlResource *) 0 ;
+  wxXmlNode *result = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxXmlResource, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "XmlResource_GetFirstRoot" "', expected argument " "1"" of type '" "wxXmlResource *""'"); 
+  }
+  arg1 = reinterpret_cast< wxXmlResource * >(argp1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = (wxXmlNode *)(arg1)->GetFirstRoot();
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_wxXmlNode, 0 |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -8429,6 +8482,55 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_XmlResourceHandler_GetAnimation(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxPyXmlResourceHandler *arg1 = (wxPyXmlResourceHandler *) 0 ;
+  wxString const &arg2_defvalue = wxPyAnimationString ;
+  wxString *arg2 = (wxString *) &arg2_defvalue ;
+  wxAnimation result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  bool temp2 = false ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "param", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|O:XmlResourceHandler_GetAnimation",kwnames,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxPyXmlResourceHandler, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "XmlResourceHandler_GetAnimation" "', expected argument " "1"" of type '" "wxPyXmlResourceHandler *""'"); 
+  }
+  arg1 = reinterpret_cast< wxPyXmlResourceHandler * >(argp1);
+  if (obj1) {
+    {
+      arg2 = wxString_in_helper(obj1);
+      if (arg2 == NULL) SWIG_fail;
+      temp2 = true;
+    }
+  }
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = (arg1)->GetAnimation((wxString const &)*arg2);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_NewPointerObj((new wxAnimation(static_cast< const wxAnimation& >(result))), SWIGTYPE_p_wxAnimation, SWIG_POINTER_OWN |  0 );
+  {
+    if (temp2)
+    delete arg2;
+  }
+  return resultobj;
+fail:
+  {
+    if (temp2)
+    delete arg2;
+  }
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_XmlResourceHandler_SetupWindow(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   wxPyXmlResourceHandler *arg1 = (wxPyXmlResourceHandler *) 0 ;
@@ -8672,6 +8774,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"new_XmlResource", (PyCFunction) _wrap_new_XmlResource, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"new_EmptyXmlResource", (PyCFunction) _wrap_new_EmptyXmlResource, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"delete_XmlResource", (PyCFunction)_wrap_delete_XmlResource, METH_O, NULL},
+	 { (char *)"XmlResource_GetFirstRoot", (PyCFunction)_wrap_XmlResource_GetFirstRoot, METH_O, NULL},
 	 { (char *)"XmlResource_Load", (PyCFunction) _wrap_XmlResource_Load, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"XmlResource_LoadFromString", (PyCFunction) _wrap_XmlResource_LoadFromString, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"XmlResource_Unload", (PyCFunction) _wrap_XmlResource_Unload, METH_VARARGS | METH_KEYWORDS, NULL},
@@ -8798,6 +8901,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"XmlResourceHandler_GetBitmap", (PyCFunction) _wrap_XmlResourceHandler_GetBitmap, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"XmlResourceHandler_GetIcon", (PyCFunction) _wrap_XmlResourceHandler_GetIcon, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"XmlResourceHandler_GetFont", (PyCFunction) _wrap_XmlResourceHandler_GetFont, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"XmlResourceHandler_GetAnimation", (PyCFunction) _wrap_XmlResourceHandler_GetAnimation, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"XmlResourceHandler_SetupWindow", (PyCFunction) _wrap_XmlResourceHandler_SetupWindow, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"XmlResourceHandler_CreateChildren", (PyCFunction) _wrap_XmlResourceHandler_CreateChildren, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"XmlResourceHandler_CreateChildrenPrivately", (PyCFunction) _wrap_XmlResourceHandler_CreateChildrenPrivately, METH_VARARGS | METH_KEYWORDS, NULL},
@@ -8811,6 +8915,15 @@ static PyMethodDef SwigMethods[] = {
 
 /* -------- TYPE CONVERSION AND EQUIVALENCE RULES (BEGIN) -------- */
 
+static void *_p_wxControlTo_p_wxWindow(void *x) {
+    return (void *)((wxWindow *)  ((wxControl *) x));
+}
+static void *_p_wxControlWithItemsTo_p_wxWindow(void *x) {
+    return (void *)((wxWindow *) (wxControl *) ((wxControlWithItems *) x));
+}
+static void *_p_wxMenuBarTo_p_wxWindow(void *x) {
+    return (void *)((wxWindow *)  ((wxMenuBar *) x));
+}
 static void *_p_wxLayoutConstraintsTo_p_wxObject(void *x) {
     return (void *)((wxObject *)  ((wxLayoutConstraints *) x));
 }
@@ -9054,21 +9167,13 @@ static void *_p_wxPyValidatorTo_p_wxObject(void *x) {
 static void *_p_wxValidatorTo_p_wxObject(void *x) {
     return (void *)((wxObject *) (wxEvtHandler *) ((wxValidator *) x));
 }
-static void *_p_wxControlTo_p_wxWindow(void *x) {
-    return (void *)((wxWindow *)  ((wxControl *) x));
-}
-static void *_p_wxControlWithItemsTo_p_wxWindow(void *x) {
-    return (void *)((wxWindow *) (wxControl *) ((wxControlWithItems *) x));
-}
-static void *_p_wxMenuBarTo_p_wxWindow(void *x) {
-    return (void *)((wxWindow *)  ((wxMenuBar *) x));
-}
 static swig_type_info _swigt__p_char = {"_p_char", "char *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_form_ops_t = {"_p_form_ops_t", "enum form_ops_t *|form_ops_t *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_int = {"_p_int", "int *|wxEventType *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_unsigned_char = {"_p_unsigned_char", "unsigned char *|byte *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_unsigned_int = {"_p_unsigned_int", "unsigned int *|time_t *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_unsigned_long = {"_p_unsigned_long", "unsigned long *|wxUIntPtr *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_wxAnimation = {"_p_wxAnimation", "wxAnimation *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_wxArtClient = {"_p_wxArtClient", "wxArtClient *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_wxBitmap = {"_p_wxBitmap", "wxBitmap *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_wxColour = {"_p_wxColour", "wxColour *", 0, 0, (void*)0, 0};
@@ -9179,6 +9284,7 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_wxANIHandler,
   &_swigt__p_wxAcceleratorTable,
   &_swigt__p_wxActivateEvent,
+  &_swigt__p_wxAnimation,
   &_swigt__p_wxArtClient,
   &_swigt__p_wxBMPHandler,
   &_swigt__p_wxBitmap,
@@ -9283,6 +9389,7 @@ static swig_cast_info _swigc__p_int[] = {  {&_swigt__p_int, 0, 0, 0},{0, 0, 0, 0
 static swig_cast_info _swigc__p_unsigned_char[] = {  {&_swigt__p_unsigned_char, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_unsigned_int[] = {  {&_swigt__p_unsigned_int, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_unsigned_long[] = {  {&_swigt__p_unsigned_long, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_wxAnimation[] = {  {&_swigt__p_wxAnimation, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxArtClient[] = {  {&_swigt__p_wxArtClient, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxBitmap[] = {  {&_swigt__p_wxBitmap, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxColour[] = {  {&_swigt__p_wxColour, 0, 0, 0},{0, 0, 0, 0}};
@@ -9393,6 +9500,7 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_wxANIHandler,
   _swigc__p_wxAcceleratorTable,
   _swigc__p_wxActivateEvent,
+  _swigc__p_wxAnimation,
   _swigc__p_wxArtClient,
   _swigc__p_wxBMPHandler,
   _swigc__p_wxBitmap,
@@ -10000,6 +10108,7 @@ SWIGEXPORT void SWIG_init(void) {
   SWIG_addvarlink(SWIG_globals(),(char*)"BitmapString",BitmapString_get, BitmapString_set);
   SWIG_addvarlink(SWIG_globals(),(char*)"IconString",IconString_get, IconString_set);
   SWIG_addvarlink(SWIG_globals(),(char*)"FontString",FontString_get, FontString_set);
+  SWIG_addvarlink(SWIG_globals(),(char*)"AnimationString",AnimationString_get, AnimationString_set);
   SWIG_Python_SetConstant(d, "WX_XMLRES_CURRENT_VERSION_MAJOR",SWIG_From_int(static_cast< int >(WX_XMLRES_CURRENT_VERSION_MAJOR)));
   SWIG_Python_SetConstant(d, "WX_XMLRES_CURRENT_VERSION_MINOR",SWIG_From_int(static_cast< int >(WX_XMLRES_CURRENT_VERSION_MINOR)));
   SWIG_Python_SetConstant(d, "WX_XMLRES_CURRENT_VERSION_RELEASE",SWIG_From_int(static_cast< int >(WX_XMLRES_CURRENT_VERSION_RELEASE)));

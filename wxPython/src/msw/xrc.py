@@ -79,6 +79,10 @@ class XmlResource(_core.Object):
 
     __swig_destroy__ = _xrc.delete_XmlResource
     __del__ = lambda self : None;
+    def GetFirstRoot(*args, **kwargs):
+        """GetFirstRoot(self) -> XmlNode"""
+        return _xrc.XmlResource_GetFirstRoot(*args, **kwargs)
+
     def Load(*args, **kwargs):
         """Load(self, String filemask) -> bool"""
         return _xrc.XmlResource_Load(*args, **kwargs)
@@ -223,6 +227,7 @@ PosString = cvar.PosString
 BitmapString = cvar.BitmapString
 IconString = cvar.IconString
 FontString = cvar.FontString
+AnimationString = cvar.AnimationString
 
 def EmptyXmlResource(*args, **kwargs):
     """EmptyXmlResource(int flags=XRC_USE_LOCALE, String domain=wxEmptyString) -> XmlResource"""
@@ -659,6 +664,10 @@ class XmlResourceHandler(_core.Object):
     def GetFont(*args, **kwargs):
         """GetFont(self, String param=FontString) -> Font"""
         return _xrc.XmlResourceHandler_GetFont(*args, **kwargs)
+
+    def GetAnimation(*args, **kwargs):
+        """GetAnimation(self, String param=AnimationString) -> wxAnimation"""
+        return _xrc.XmlResourceHandler_GetAnimation(*args, **kwargs)
 
     def SetupWindow(*args, **kwargs):
         """SetupWindow(self, Window wnd)"""

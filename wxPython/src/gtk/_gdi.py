@@ -4921,13 +4921,19 @@ class GraphicsContext(object):
     __repr__ = _swig_repr
     __swig_destroy__ = _gdi_.delete_GraphicsContext
     __del__ = lambda self : None;
-    def Create(*args, **kwargs):
-        """Create(WindowDC dc) -> GraphicsContext"""
-        val = _gdi_.GraphicsContext_Create(*args, **kwargs)
-        val.__dc = args[0] # save a ref so the other dc will not be deleted before self
-        return val
+    def Create(*args):
+        """
+        Create(WindowDC dc) -> GraphicsContext
+        Create(Window window) -> GraphicsContext
+        """
+        return _gdi_.GraphicsContext_Create(*args)
 
     Create = staticmethod(Create)
+    def CreateFromNative(*args, **kwargs):
+        """CreateFromNative(void context) -> GraphicsContext"""
+        return _gdi_.GraphicsContext_CreateFromNative(*args, **kwargs)
+
+    CreateFromNative = staticmethod(CreateFromNative)
     def CreatePath(*args, **kwargs):
         """CreatePath(self) -> GraphicsPath"""
         return _gdi_.GraphicsContext_CreatePath(*args, **kwargs)
@@ -4940,9 +4946,21 @@ class GraphicsContext(object):
         """PopState(self)"""
         return _gdi_.GraphicsContext_PopState(*args, **kwargs)
 
+    def ClipRegion(*args, **kwargs):
+        """ClipRegion(self, Region region)"""
+        return _gdi_.GraphicsContext_ClipRegion(*args, **kwargs)
+
     def Clip(*args, **kwargs):
-        """Clip(self, Region region)"""
+        """Clip(self, Double x, Double y, Double w, Double h)"""
         return _gdi_.GraphicsContext_Clip(*args, **kwargs)
+
+    def ResetClip(*args, **kwargs):
+        """ResetClip(self)"""
+        return _gdi_.GraphicsContext_ResetClip(*args, **kwargs)
+
+    def GetNativeContext(*args, **kwargs):
+        """GetNativeContext(self) -> void"""
+        return _gdi_.GraphicsContext_GetNativeContext(*args, **kwargs)
 
     def Translate(*args, **kwargs):
         """Translate(self, Double dx, Double dy)"""
@@ -5052,11 +5070,16 @@ class GraphicsContext(object):
 
 _gdi_.GraphicsContext_swigregister(GraphicsContext)
 
-def GraphicsContext_Create(*args, **kwargs):
-  """GraphicsContext_Create(WindowDC dc) -> GraphicsContext"""
-  val = _gdi_.GraphicsContext_Create(*args, **kwargs)
-  val.__dc = args[0] # save a ref so the other dc will not be deleted before self
-  return val
+def GraphicsContext_Create(*args):
+  """
+    Create(WindowDC dc) -> GraphicsContext
+    GraphicsContext_Create(Window window) -> GraphicsContext
+    """
+  return _gdi_.GraphicsContext_Create(*args)
+
+def GraphicsContext_CreateFromNative(*args, **kwargs):
+  """GraphicsContext_CreateFromNative(void context) -> GraphicsContext"""
+  return _gdi_.GraphicsContext_CreateFromNative(*args, **kwargs)
 
 class GCDC(DC):
     """Proxy of C++ GCDC class"""
@@ -5069,10 +5092,15 @@ class GCDC(DC):
 
     __swig_destroy__ = _gdi_.delete_GCDC
     __del__ = lambda self : None;
-    def GetGraphicContext(*args, **kwargs):
-        """GetGraphicContext(self) -> GraphicsContext"""
-        return _gdi_.GCDC_GetGraphicContext(*args, **kwargs)
+    def GetGraphicsContext(*args, **kwargs):
+        """GetGraphicsContext(self) -> GraphicsContext"""
+        return _gdi_.GCDC_GetGraphicsContext(*args, **kwargs)
 
+    def SetGraphicsContext(*args, **kwargs):
+        """SetGraphicsContext(self, GraphicsContext ctx)"""
+        return _gdi_.GCDC_SetGraphicsContext(*args, **kwargs)
+
+    GraphicsContext = property(GetGraphicsContext,SetGraphicsContext) 
 _gdi_.GCDC_swigregister(GCDC)
 
 class Overlay(object):
