@@ -52,6 +52,7 @@ wxX11:
 wxMSW:
 - Drag and drop now works inside wxStaticBox.
 - Implemented wxComboBox::SetEditable()
+- Respect wxBU_EXACTFIT in wxToggleButton
 
 
 2.6.3
