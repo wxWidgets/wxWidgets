@@ -264,7 +264,6 @@ case "${host}" in
     SO_SUFFIX=dll
     PROGRAM_EXT=".exe"
     DEFAULT_DEFAULT_wxUSE_MSW=1
-    DEFAULT_STD_FLAG=no
   ;;
 
   *-pc-msdosdjgpp )
