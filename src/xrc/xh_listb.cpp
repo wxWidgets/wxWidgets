@@ -27,7 +27,8 @@
 IMPLEMENT_DYNAMIC_CLASS(wxListBoxXmlHandler, wxXmlResourceHandler)
 
 wxListBoxXmlHandler::wxListBoxXmlHandler()
-: wxXmlResourceHandler() , m_insideBox(false)
+                   : wxXmlResourceHandler(),
+                     m_insideBox(false)
 {
     XRC_ADD_STYLE(wxLB_SINGLE);
     XRC_ADD_STYLE(wxLB_MULTIPLE);
@@ -41,7 +42,7 @@ wxListBoxXmlHandler::wxListBoxXmlHandler()
 
 wxObject *wxListBoxXmlHandler::DoCreateResource()
 {
-    if( m_class == wxT("wxListBox"))
+    if ( m_class == wxT("wxListBox"))
     {
         // find the selection
         long selection = GetLong(wxT("selection"), -1);
@@ -49,22 +50,14 @@ wxObject *wxListBoxXmlHandler::DoCreateResource()
         // need to build the list of strings from children
         m_insideBox = true;
         CreateChildrenPrivately(NULL, GetParamNode(wxT("content")));
-        wxString *strings = (wxString *) NULL;
-        if (strList.GetCount() > 0)
-        {
-            strings = new wxString[strList.GetCount()];
-            int count = strList.GetCount();
-            for (int i = 0; i < count; i++)
-                strings[i]=strList[i];
-        }
+        m_insideBox = false;
 
         XRC_MAKE_INSTANCE(control, wxListBox)
 
         control->Create(m_parentAsWindow,
                         GetID(),
                         GetPosition(), GetSize(),
-                        strList.GetCount(),
-                        strings,
+                        strList,
                         GetStyle(),
                         wxDefaultValidator,
                         GetName());
@@ -73,9 +66,6 @@ wxObject *wxListBoxXmlHandler::DoCreateResource()
             control->SetSelection(selection);
 
         SetupWindow(control);
-
-        if (strings != NULL)
-            delete[] strings;
         strList.Clear();    // dump the strings
 
         return control;

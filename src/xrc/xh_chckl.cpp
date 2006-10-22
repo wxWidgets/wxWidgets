@@ -57,29 +57,21 @@ wxObject *wxCheckListBoxXmlHandler::DoCreateResource()
         // need to build the list of strings from children
         m_insideBox = true;
         CreateChildrenPrivately(NULL, GetParamNode(wxT("content")));
-        wxString *strings = (wxString *) NULL;
-        if (strList.GetCount() > 0)
-        {
-            strings = new wxString[strList.GetCount()];
-            int count = strList.GetCount();
-            for(int i = 0; i < count; i++)
-                strings[i] = strList[i];
-        }
 
         XRC_MAKE_INSTANCE(control, wxCheckListBox)
 
         control->Create(m_parentAsWindow,
                         GetID(),
                         GetPosition(), GetSize(),
-                        strList.GetCount(),
-                        strings,
+                        strList,
                         GetStyle(),
                         wxDefaultValidator,
                         GetName());
 
         // step through children myself (again.)
         wxXmlNode *n = GetParamNode(wxT("content"));
-        if (n) n = n->GetChildren();
+        if (n)
+            n = n->GetChildren();
         int i = 0;
         while (n)
         {
@@ -99,8 +91,6 @@ wxObject *wxCheckListBoxXmlHandler::DoCreateResource()
 
         SetupWindow(control);
 
-        if (strings != NULL)
-            delete[] strings;
         strList.Clear();    // dump the strings
 
         return control;
