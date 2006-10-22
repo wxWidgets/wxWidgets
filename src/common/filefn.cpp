@@ -1803,7 +1803,7 @@ static bool wxCheckWin32Permission(const wxString& path, DWORD access)
 
 bool wxIsWritable(const wxString &path)
 {
-#if defined( __UNIX__ )
+#if defined( __UNIX__ ) || defined(__OS2__)
     // access() will take in count also symbolic links
     return access(wxConvFile.cWX2MB(path), W_OK) == 0;
 #elif defined( __WINDOWS__ )
@@ -1817,7 +1817,7 @@ bool wxIsWritable(const wxString &path)
 
 bool wxIsReadable(const wxString &path)
 {
-#if defined( __UNIX__ )
+#if defined( __UNIX__ ) || defined(__OS2__)
     // access() will take in count also symbolic links
     return access(wxConvFile.cWX2MB(path), R_OK) == 0;
 #elif defined( __WINDOWS__ )
@@ -1831,7 +1831,7 @@ bool wxIsReadable(const wxString &path)
 
 bool wxIsExecutable(const wxString &path)
 {
-#if defined( __UNIX__ )
+#if defined( __UNIX__ ) || defined(__OS2__)
     // access() will take in count also symbolic links
     return access(wxConvFile.cWX2MB(path), X_OK) == 0;
 #elif defined( __WINDOWS__ )
