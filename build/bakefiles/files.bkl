@@ -948,6 +948,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <set var="GTK_SRC" hints="files">
     <!-- Generic implementations used by wxGTK: -->
     src/generic/accel.cpp
+    src/generic/collpaneg.cpp
     src/generic/colrdlgg.cpp
     src/generic/dirdlgg.cpp
     src/generic/fdrepdlg.cpp
@@ -968,6 +969,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/gtk/checklst.cpp
     src/gtk/choice.cpp
     src/gtk/colordlg.cpp
+    src/gtk/collpane.cpp
     src/gtk/combobox.cpp
     src/gtk/control.cpp
     src/gtk/clrpicker.cpp
@@ -1510,6 +1512,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 </set>
 
 <set var="MSW_SRC" hints="files">
+    src/generic/collpaneg.cpp
     src/generic/statusbr.cpp
     src/generic/prntdlgg.cpp
     src/msw/accel.cpp

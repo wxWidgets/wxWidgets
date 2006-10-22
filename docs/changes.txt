@@ -71,6 +71,7 @@ All (GUI):
 - Reverted wxBuffered[Paint]DC to pre 2.7.1 state, added
   wxAutoBufferedPaintDC and wxAutoBufferedPaintDCFactory.
 - Renamed wxProgressDialog::UpdatePulse() to just Pulse()
+- Added wxCollapsiblePane (Francesco Montorsi)
 - Added wxSimpleHtmlListBox (Francesco Montorsi)
 
 Unix Ports:

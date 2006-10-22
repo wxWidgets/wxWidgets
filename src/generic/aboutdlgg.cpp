@@ -36,6 +36,7 @@
 #include "wx/generic/aboutdlgg.h"
 
 #include "wx/hyperlink.h"
+#include "wx/collpane.h"
 
 // ============================================================================
 // implementation
@@ -101,7 +102,8 @@ wxIcon wxAboutDialogInfo::GetIcon() const
 bool wxGenericAboutDialog::Create(const wxAboutDialogInfo& info)
 {
     // TODO: should we use main frame as parent by default here?
-    if ( !wxDialog::Create(NULL, wxID_ANY, _("About ") + info.GetName()) )
+    if ( !wxDialog::Create(NULL, wxID_ANY, _("About ") + info.GetName(),
+                           wxDefaultPosition, wxDefaultSize, wxRESIZE_BORDER|wxDEFAULT_DIALOG_STYLE) )
         return false;
 
     m_sizerText = new wxBoxSizer(wxVERTICAL);
@@ -131,7 +133,14 @@ bool wxGenericAboutDialog::Create(const wxAboutDialogInfo& info)
 #endif // wxUSE_HYPERLINKCTRL/!wxUSE_HYPERLINKCTRL
     }
 
-    // TODO: add licence
+    // add licence
+    wxCollapsiblePane *licensepnl = new wxCollapsiblePane(this, wxID_ANY, wxT("License"));
+
+    new wxStaticText(licensepnl->GetPane(), wxID_ANY, info.GetLicence(),
+                     wxDefaultPosition, wxDefaultSize,
+                     wxALIGN_CENTRE);
+
+    m_sizerText->Add(licensepnl, wxSizerFlags(1).Expand().Border(wxBOTTOM));
 
     // TODO: add credits (developers, artists, doc writers, translators)
 

@@ -1,0 +1,114 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Name:        collpane.tex
+%% Purpose:     wxCollapsiblePane documentation
+%% Author:      Francesco Montorsi
+%% Created:     2006-10-14
+%% RCS-ID:      $Id$
+%% Copyright:   (c) 2006 Francesco Montorsi
+%% License:     wxWindows license
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+\section{\class{wxCollapsiblePane}}\label{wxcollapsiblepane}
+
+A collapsable panel is a container with an embedded button-like control which can be
+used by the user to collapse or expand the pane's contents.
+
+\wxheading{Derived from}
+
+\helpref{wxControl}{wxcontrol}\\
+\helpref{wxWindow}{wxwindow}\\
+\helpref{wxEvtHandler}{wxevthandler}\\
+\helpref{wxObject}{wxobject}
+
+\wxheading{Include files}
+
+<wx/collpane.h>
+
+\wxheading{Window styles}
+
+There are no specific styles for this window.
+
+See also \helpref{window styles overview}{windowstyles}.
+
+\wxheading{See also}
+
+\helpref{wxPanel}{wxpanel}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+
+
+\membersection{wxCollapsiblePane::wxCollapsiblePane}\label{wxcollapsiblepane}
+
+\func{}{wxCollapsiblePane}{\param{wxWindow *}{parent},\rtfsp
+\param{wxWindowID}{ id},\rtfsp
+\param{const wxString\& }{label},\rtfsp
+\param{const wxPoint\& }{pos = wxDefaultPosition},\rtfsp
+\param{const wxSize\& }{size = wxDefaultSize},\rtfsp
+\param{long}{ style = wxCP\_DEFAULT\_STYLE},\rtfsp
+\param{const wxValidator\& }{validator = wxDefaultValidator},
+\param{const wxString\& }{name = ``collapsiblePane"}}
+
+Initializes the object and calls \helpref{Create}{wxcollapsiblepanecreate} with
+all the parameters.
+
+
+\membersection{wxCollapsiblePane::Create}\label{wxcollapsiblepanecreate}
+
+\func{bool}{Create}{\param{wxWindow *}{parent},\rtfsp
+\param{wxWindowID}{ id},\rtfsp
+\param{const wxString\& }{label},\rtfsp
+\param{const wxPoint\& }{pos = wxDefaultPosition},\rtfsp
+\param{const wxSize\& }{size = wxDefaultSize},\rtfsp
+\param{long}{ style = wxCP\_DEFAULT\_STYLE},\rtfsp
+\param{const wxValidator\& }{validator = wxDefaultValidator},
+\param{const wxString\& }{name = ``colourpickerctrl"}}
+
+\wxheading{Parameters}
+
+\docparam{parent}{Parent window, must not be non-\texttt{NULL}.}
+
+\docparam{id}{The identifier for the control.}
+
+\docparam{label}{The initial label shown in the button which allows the user to expand or collapse the pane window.}
+
+\docparam{pos}{Initial position.}
+
+\docparam{size}{Initial size.}
+
+\docparam{style}{The window style, see {\tt wxCP\_*} flags.}
+
+\docparam{validator}{Validator which can be used for additional date checks.}
+
+\docparam{name}{Control name.}
+
+\wxheading{Return value}
+
+\true if the control was successfully created or \false if creation failed.
+
+
+\membersection{wxCollapsiblePane::IsCollapsed}\label{wxcollapsiblepaneiscollapsed}
+
+\constfunc{bool}{IsCollapsed}{\void}
+
+Returns \true if the pane window is currently hidden.
+
+
+
+\membersection{wxCollapsiblePane::Collapse}\label{wxcollapsiblepanecollapse}
+
+\func{void}{Collapse}{\param{bool }{collapse = true}}
+
+Collapses or expands the pane window.
+
+
+
+\membersection{wxCollapsiblePane::Expand}\label{wxcollapsiblepaneexpand}
+
+\func{void}{Expand}{\void}
+
+Equivalent to {\tt Collapse(false)}.
+
+
