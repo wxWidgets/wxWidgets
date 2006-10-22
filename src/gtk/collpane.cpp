@@ -158,7 +158,8 @@ bool wxCollapsiblePane::Create(wxWindow *parent,
         return false;
     }
 
-    m_widget = gtk_expander_new(label.c_str());
+    m_widget =
+        gtk_expander_new_with_mnemonic(wxGTK_CONV(GTKConvertMnemonics(label)));
 
     // see the gtk_collapsiblepane_expanded_callback comments to understand why
     // we connect to the "notify::expanded" signal instead of the more common
