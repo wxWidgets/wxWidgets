@@ -682,6 +682,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/cursor.h
     wx/dc.h
     wx/dcclient.h
+    wx/dcgraph.h
     wx/dcmemory.h
     wx/dcprint.h
     wx/dcscreen.h

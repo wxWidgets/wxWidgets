@@ -1843,6 +1843,10 @@ SOURCE=.\xml\xml.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\xrc\xh_animatctrl.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\xrc\xh_bmp.cpp
 # End Source File
 # Begin Source File
@@ -2432,6 +2436,10 @@ SOURCE=..\include\wx\dcbuffer.h
 # Begin Source File
 
 SOURCE=..\include\wx\dcclient.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\dcgraph.h
 # End Source File
 # Begin Source File
 
@@ -3416,6 +3424,10 @@ SOURCE=..\include\wx\xpmhand.h
 # Begin Source File
 
 SOURCE=..\include\wx\xrc\xh_all.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\xrc\xh_animatctrl.h
 # End Source File
 # Begin Source File
 

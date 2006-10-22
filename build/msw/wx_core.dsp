@@ -8757,6 +8757,10 @@ SOURCE=..\..\include\wx\dcclient.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\dcgraph.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\dcmemory.h
 # End Source File
 # Begin Source File
@@ -9362,6 +9366,10 @@ SOURCE=..\..\include\wx\wxhtml.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\xrc\xh_all.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\xrc\xh_animatctrl.h
 # End Source File
 # Begin Source File
 

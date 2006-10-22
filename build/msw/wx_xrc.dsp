@@ -962,6 +962,10 @@ SOURCE=..\..\include\wx\xrc\xh_all.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\xrc\xh_animatctrl.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\xrc\xh_bmp.h
 # End Source File
 # Begin Source File
@@ -1168,6 +1172,10 @@ SOURCE=..\..\include\wx\xrc\xmlres.h
 # Begin Group "Source Files"
 
 # PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=..\..\src\xrc\xh_animatctrl.cpp
+# End Source File
 # Begin Source File
 
 SOURCE=..\..\src\xrc\xh_bmp.cpp

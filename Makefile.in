@@ -2780,6 +2780,7 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/cursor.h \
 	wx/dc.h \
 	wx/dcclient.h \
+	wx/dcgraph.h \
 	wx/dcmemory.h \
 	wx/dcprint.h \
 	wx/dcscreen.h \
