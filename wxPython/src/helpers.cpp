@@ -1822,6 +1822,7 @@ PyObject* wxPy_ConvertList(wxListBase* listbase) {
         wxObj = node->GetData();
         pyObj = wxPyMake_wxObject(wxObj,false);
         PyList_Append(pyList, pyObj);
+        Py_DECREF(pyObj);  // the Append also does an INCREF, that's one more than we need.
         node = node->GetNext();
     }
     wxPyEndBlockThreads(blocked);
