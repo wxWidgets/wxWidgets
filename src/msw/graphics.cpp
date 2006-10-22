@@ -182,7 +182,12 @@ public :
     virtual void AddArcToPoint( wxDouble x1, wxDouble y1 , wxDouble x2, wxDouble y2, wxDouble r )  ;
 */
 
-    GraphicsPath* GetPath() const;
+	// returns the native path
+	virtual void * GetNativePath() const { return m_path; }
+	
+	// give the native path returned by GetNativePath() back (there might be some deallocations necessary)
+	virtual void UnGetNativePath(void *p) {}
+
 private :
     GraphicsPath* m_path;
 };
@@ -261,11 +266,6 @@ wxGDIPlusPath::wxGDIPlusPath()
 wxGDIPlusPath::~wxGDIPlusPath()
 {
     delete m_path;
-}
-
-GraphicsPath* wxGDIPlusPath::GetPath() const
-{
-    return m_path;
 }
 
 //
@@ -409,22 +409,20 @@ void wxGDIPlusContext::ResetClip()
 // TODO
 }
 
-void wxGDIPlusContext::StrokePath( const wxGraphicsPath *p )
+void wxGDIPlusContext::StrokePath( const wxGraphicsPath *path )
 {
     if ( m_penTransparent )
         return;
 
-    const wxGDIPlusPath* path = dynamic_cast< const wxGDIPlusPath*>( p );
-    m_context->DrawPath( m_pen , path->GetPath() );
+    m_context->DrawPath( m_pen , (GraphicsPath*) path->GetNativePath() );
 }
 
-void wxGDIPlusContext::FillPath( const wxGraphicsPath *p , int fillStyle )
+void wxGDIPlusContext::FillPath( const wxGraphicsPath *path , int fillStyle )
 {
     if ( !m_brushTransparent )
     {
-        const wxGDIPlusPath* path = dynamic_cast< const wxGDIPlusPath*>( p );
-        path->GetPath()->SetFillMode( fillStyle == wxODDEVEN_RULE ? FillModeAlternate : FillModeWinding);
-        m_context->FillPath( m_brush , path->GetPath() );
+        ((GraphicsPath*) path->GetNativePath())->SetFillMode( fillStyle == wxODDEVEN_RULE ? FillModeAlternate : FillModeWinding);
+        m_context->FillPath( m_brush , (GraphicsPath*) path->GetNativePath());
     }
 }
 

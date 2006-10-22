@@ -144,7 +144,12 @@ public :
     virtual void AddArcToPoint( wxDouble x1, wxDouble y1 , wxDouble x2, wxDouble y2, wxDouble r )  ;
     */
 
-    cairo_path_t* GetPath() const;
+	// returns the native path
+	virtual void * GetNativePath() const ;
+	
+	// give the native path returned by GetNativePath() back (there might be some deallocations necessary)
+	virtual void UnGetNativePath(void *p) ;
+
 private :
     cairo_t* m_pathContext;
 };
@@ -161,9 +166,14 @@ wxCairoPath::~wxCairoPath()
     cairo_destroy(m_pathContext);
 }
 
-cairo_path_t* wxCairoPath::GetPath() const
+cairo_path_t* wxCairoPath::GetNativePath() const
 {
     return cairo_copy_path(m_pathContext) ;
+}
+
+void wxCairoPath::UnGetNativePath(void *p)
+{
+	cairo_path_destroy((cairo_path_t*)p);
 }
 
 //
@@ -330,13 +340,12 @@ void wxCairoContext::ResetClip()
 }
 
 
-void wxCairoContext::StrokePath( const wxGraphicsPath *p )
+void wxCairoContext::StrokePath( const wxGraphicsPath *path )
 {
     if ( m_penTransparent )
         return;
 
-    const wxCairoPath* path = (const wxCairoPath *) p;
-    cairo_path_t* cp = path->GetPath() ;
+	cairo_path_t* cp = (cairo_path_t*) path->GetNativePath() ;
     cairo_append_path(m_context,cp);
 
     // setup pen
@@ -517,15 +526,14 @@ void wxCairoContext::StrokePath( const wxGraphicsPath *p )
     if ( userLengths )
         delete[] userLengths;
     cairo_stroke(m_context);
-    cairo_path_destroy(cp);
+    path->UnGetNativePath(cp);
 }
 
-void wxCairoContext::FillPath( const wxGraphicsPath *p , int fillStyle )
+void wxCairoContext::FillPath( const wxGraphicsPath *path , int fillStyle )
 {
     if ( !m_brushTransparent )
     {
-        const wxCairoPath* path = (const wxCairoPath *) p;
-        cairo_path_t* cp = path->GetPath() ;
+		cairo_path_t* cp = (cairo_path_t*) path->GetNativePath() ;
         cairo_append_path(m_context,cp);
 
         if ( m_brushPattern )
@@ -542,7 +550,7 @@ void wxCairoContext::FillPath( const wxGraphicsPath *p , int fillStyle )
 
         cairo_set_fill_rule(m_context,fillStyle==wxODDEVEN_RULE ? CAIRO_FILL_RULE_EVEN_ODD : CAIRO_FILL_RULE_WINDING);
         cairo_fill(m_context);
-        cairo_path_destroy(cp);
+		path->UnGetNativePath(cp);
     }
 }
 
