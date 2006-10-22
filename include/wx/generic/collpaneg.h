@@ -12,22 +12,12 @@
 #ifndef _WX_COLLAPSABLE_PANE_H_GENERIC_
 #define _WX_COLLAPSABLE_PANE_H_GENERIC_
 
-#include "wx/button.h"
-
-
-// the ID of the wxButton used to collapse/expand the panel
-#define wxCP_BUTTON_ID      12356
-
-// the number of pixels to leave between the button and the static line and
-// between the button and the pane
-#define wxCP_MARGIN         10
-
 // forward declared
+class WXDLLEXPORT wxButton;
 class WXDLLEXPORT wxStaticLine;
 
 // class name
 extern WXDLLEXPORT_DATA(const wxChar) wxGenericCollapsiblePaneNameStr[];
-
 
 
 // ----------------------------------------------------------------------------
@@ -70,34 +60,28 @@ public:
                 const wxString& name = wxGenericCollapsiblePaneNameStr);
 
 
-public:     // public API
+    // public wxCollapsiblePane API
+    virtual void Collapse(bool collapse = true);
+    virtual void SetLabel(const wxString &label);
 
-    void Collapse(bool collapse = true);
-    void SetLabel(const wxString &label);
-
-    bool IsCollapsed() const
+    virtual bool IsCollapsed() const
         { return m_pPane==NULL || !m_pPane->IsShown(); }
-    wxWindow *GetPane() const
+    virtual wxWindow *GetPane() const
         { return m_pPane; }
-    wxString GetLabel() const
+    virtual wxString GetLabel() const
         { return m_strLabel; }
 
-    wxWindow *GetTopLevelParent();
+protected: 
+    // overridden methods
+    virtual wxSize DoGetBestSize() const;
 
-public:         // event handlers
-
-    void OnButton(wxCommandEvent &ev);
-    void OnSize(wxSizeEvent &ev);
-
-protected:      // internal utils
-
+    // internal helpers
     void LayoutChildren();
 
     wxString GetBtnLabel() const;
-    virtual wxSize DoGetBestSize() const;
 
-protected:
 
+    // child controls
     wxButton *m_pButton;
     wxStaticLine *m_pStatLine;
     wxWindow *m_pPane;
@@ -106,10 +90,14 @@ protected:
     wxString m_strLabel;
 
 private:
+    // event handlers
+    void OnButton(wxCommandEvent &ev);
+    void OnSize(wxSizeEvent &ev);
+
     DECLARE_DYNAMIC_CLASS(wxGenericCollapsiblePane)
     DECLARE_EVENT_TABLE()
 };
 
 
-#endif
-    // _WX_COLLAPSABLE_PANE_H_GENERIC_
+#endif // _WX_COLLAPSABLE_PANE_H_GENERIC_
+

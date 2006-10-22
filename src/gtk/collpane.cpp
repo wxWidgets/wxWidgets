@@ -20,9 +20,9 @@
 #ifdef __WXGTK24__
 
 #include "wx/collpane.h"
+#include "wx/gtk/private.h"
 
 #include <gtk/gtkexpander.h>
-#include <gtk/gtk.h>
 
 const wxChar wxCollapsiblePaneNameStr[] = wxT("CollapsiblePane");
 
@@ -76,7 +76,7 @@ static void gtk_collapsiblepane_expanded_callback (GObject    *object,
     p->SetMinSize(sz);
     p->SetSize(sz);
 
-    wxWindow *top = p->GetTopLevelParent();
+    wxWindow *top = wxGetTopLevelParent(p);
     if (top)
     {
         // we've changed our size, thus our top level parent needs to relayout
