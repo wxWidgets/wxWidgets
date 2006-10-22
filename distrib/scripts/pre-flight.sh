@@ -28,7 +28,7 @@ if [ ! -d $WX_WEB_DIR ]; then
   cvs -d:pserver:anoncvs@cvs.wxwidgets.org:/pack/cvsroots/wxwidgets checkout wxWebSite
 else
     cd $WX_WEB_DIR
-    cvs update -d
+    cvs update -d -P
 fi
 
 if [ ! -d $WX_SRC_DIR ]; then
@@ -38,7 +38,7 @@ if [ ! -d $WX_SRC_DIR ]; then
   cvs -d:pserver:anoncvs@cvs.wxwidgets.org:/pack/cvsroots/wxwidgets checkout -r $BUILD_TAG wxWidgets
 else
     cd $WX_SRC_DIR
-    cvs update -d
+    cvs update -d -P
 fi
 
 # this is where we will store the wxAll tarball we create
