@@ -438,18 +438,9 @@ wxProgressDialog::Update(int value, const wxString& newmsg, bool *skip)
             Hide();
         }
     }
-    else
+    else // not at maximum yet
     {
-        // we have to yield because not only we want to update the display but
-        // also to process the clicks on the cancel and skip buttons
-        wxYieldIfNeeded() ;
-
-        if ( (m_skip) && (skip != NULL) && (*skip == false) )
-        {
-            *skip = true;
-            m_skip = false;
-            EnableSkip();
-        }
+        return DoAfterUpdate(skip);
     }
 
     // update the display in case yielding above didn't do it
@@ -458,8 +449,7 @@ wxProgressDialog::Update(int value, const wxString& newmsg, bool *skip)
     return m_state != Canceled;
 }
 
-bool
-wxProgressDialog::UpdatePulse(const wxString& newmsg, bool *skip)
+bool wxProgressDialog::Pulse(const wxString& newmsg, bool *skip)
 {
     wxASSERT_MSG( m_gauge, wxT("cannot update non existent dialog") );
 
@@ -477,11 +467,18 @@ wxProgressDialog::UpdatePulse(const wxString& newmsg, bool *skip)
         SetTimeLabel((unsigned long)-1, m_remaining);
     }
 
+    return DoAfterUpdate(skip);
+}
+
+bool wxProgressDialog::DoAfterUpdate(bool *skip)
+{
     // we have to yield because not only we want to update the display but
     // also to process the clicks on the cancel and skip buttons
-    wxYieldIfNeeded() ;
+    wxYieldIfNeeded();
 
-    if ( (m_skip) && (skip != NULL) && (*skip == false) )
+    Update();
+
+    if ( m_skip && skip && !*skip )
     {
         *skip = true;
         m_skip = false;

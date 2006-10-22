@@ -1108,8 +1108,9 @@ void MyFrame::ShowProgress( wxCommandEvent& WXUNUSED(event) )
                             // wxPD_AUTO_HIDE | -- try this as well
                             wxPD_ELAPSED_TIME |
                             wxPD_ESTIMATED_TIME |
-                            wxPD_REMAINING_TIME |
-                            wxPD_SMOOTH);
+                            wxPD_REMAINING_TIME
+                            //wxPD_SMOOTH - makes indeterminate mode bar on WinXP very small
+                            );
 
     bool cont = true;
     bool skip = false;
@@ -1138,15 +1139,29 @@ void MyFrame::ShowProgress( wxCommandEvent& WXUNUSED(event) )
 
         wxString msg;
 
+        // test both behaviours of wxProgressDialog:
+        // determinate mode for first 33% and last 33% of the time
+        // indeterminate mode from 33% to 66% of the progress
+        const int firstpart = max /3,
+                  secondpart = 2 * max /3;
+        bool determinate = i < firstpart || i > secondpart;
+        bool indeterminate = !determinate;
+
         if ( i == max )
         {
             msg = _T("That's all, folks!");
         }
-        else if ( i > max / 2 )
+        else if ( indeterminate )
         {
-            msg = _T("Only a half left (very long message)!");
+            msg = _T("Now test indeterminate mode");
+        }
+        else if ( i > secondpart )
+        {
+            msg = _T("Back to determinate mode");
         }
 
+        if (determinate)
+        {
 #if wxUSE_STOPWATCH && wxUSE_LONGLONG
         if ( (i % (max/100)) == 0 ) // // only 100 updates, this makes it much faster
         {
@@ -1155,6 +1170,18 @@ void MyFrame::ShowProgress( wxCommandEvent& WXUNUSED(event) )
 #else
         cont = dialog.Update(i, msg, &skip);
 #endif
+        }
+        else
+        {
+#if wxUSE_STOPWATCH && wxUSE_LONGLONG
+            if ( (i % (max/100)) == 0 ) // // only 100 updates, this makes it much faster
+            {
+                cont = dialog.Pulse(msg, &skip);
+            }
+#else
+            cont = dialog.Pulse(msg, &skip);
+#endif
+        }
 
         if ( !cont )
         {

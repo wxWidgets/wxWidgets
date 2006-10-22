@@ -70,6 +70,7 @@ All (GUI):
   calling SelectObject itself if a valid bitmap is passed.
 - Reverted wxBuffered[Paint]DC to pre 2.7.1 state, added
   wxAutoBufferedPaintDC and wxAutoBufferedPaintDCFactory.
+- Renamed wxProgressDialog::UpdatePulse() to just Pulse()
 
 Unix Ports:
 

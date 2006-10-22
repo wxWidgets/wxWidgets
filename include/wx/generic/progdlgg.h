@@ -56,7 +56,7 @@ public:
 
     /* Switches the dialog to use a gauge in indeterminate mode and calls
        wxGauge::Pulse() to show to the user a bit of progress */
-    virtual bool UpdatePulse(const wxString& newmsg = wxEmptyString, bool *skip = NULL);
+    virtual bool Pulse(const wxString& newmsg = wxEmptyString, bool *skip = NULL);
 
     // Must provide overload to avoid hiding it (and warnings about it)
     virtual void Update() { wxDialog::Update(); }
@@ -90,6 +90,9 @@ private:
 
     // updates the label message
    void UpdateMessage(const wxString &newmsg);
+
+   // common part of Update() and Pulse(), returns true if not cancelled
+   bool DoAfterUpdate(bool *skip);
 
    // shortcuts for enabling buttons
    void EnableClose();
