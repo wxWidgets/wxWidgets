@@ -942,16 +942,12 @@ class TreeTextCtrl(wx.TextCtrl):
         x += image_w + wcheck
         w -= image_w + 4 + wcheck
 
-        if wx.Platform == "__WXMAC__":
-            bs = self.DoGetBestSize() 
-            # edit control height
-            if h > bs.y - 8:
-                diff = h - ( bs.y - 8 ) 
-                h -= diff 
-                y += diff / 2 
-
         wx.TextCtrl.__init__(self, self._owner, wx.ID_ANY, self._startValue,
                              wx.Point(x - 4, y), wx.Size(w + 15, h))
+        if wx.Platform == "__WXMAC__":
+            self.SetFont(owner.GetFont())
+            bs = self.GetBestSize()
+            self.SetSize((-1, bs.height))
         
         self.Bind(wx.EVT_CHAR, self.OnChar)
         self.Bind(wx.EVT_KEY_UP, self.OnKeyUp)
@@ -1735,7 +1731,7 @@ def EventFlagsToSelType(style, shiftDown=False, ctrlDown=False):
 # This Is The Main Class.
 # -----------------------------------------------------------------------------
 
-class CustomTreeCtrl(wx.ScrolledWindow):
+class CustomTreeCtrl(wx.PyScrolledWindow):
 
     def __init__(self, parent, id=wx.ID_ANY, pos=wx.DefaultPosition, size=wx.DefaultSize,
                  style=0, ctstyle=TR_DEFAULT_STYLE, validator=wx.DefaultValidator,
@@ -1872,12 +1868,10 @@ class CustomTreeCtrl(wx.ScrolledWindow):
         self._itemWithWindow = []
         
         if wx.Platform == "__WXMAC__":
-            
-            platform, major, minor = wx.GetOsVersion()
-
             ctstyle &= ~TR_LINES_AT_ROOT
             ctstyle |= TR_NO_LINES
             
+            platform, major, minor = wx.GetOsVersion()
             if major < 10:
                 ctstyle |= TR_ROW_LINES
 
@@ -1894,7 +1888,7 @@ class CustomTreeCtrl(wx.ScrolledWindow):
             self._drawingfunction = wx.RendererNative.Get().DrawTreeItemButton
 
         # Create our container... at last!    
-        wx.ScrolledWindow.__init__(self, parent, id, pos, size, style|wx.HSCROLL|wx.VSCROLL, name)
+        wx.PyScrolledWindow.__init__(self, parent, id, pos, size, style|wx.HSCROLL|wx.VSCROLL, name)
 
         # If the tree display has no buttons, but does have
         # connecting lines, we can use a narrower layout.
@@ -1922,7 +1916,6 @@ class CustomTreeCtrl(wx.ScrolledWindow):
         self.Bind(wx.EVT_SET_FOCUS, self.OnSetFocus)
         self.Bind(wx.EVT_KILL_FOCUS, self.OnKillFocus)
         self.Bind(EVT_TREE_ITEM_GETTOOLTIP, self.OnGetToolTip)
-        self.Bind(wx.EVT_IDLE, self.OnInternalIdle)
         self.Bind(wx.EVT_WINDOW_DESTROY, self.OnDestroy)
 
         # Sets the focus to ourselves: this is useful if you have items
@@ -1930,6 +1923,12 @@ class CustomTreeCtrl(wx.ScrolledWindow):
         self.SetFocus()
 
 
+    def AcceptsFocus(self):
+        # overridden base class method, allows this ctrl to
+        # participate in the tab-order, etc.  It's overridable because
+        # of deriving this class from wx.PyScrolledWindow...
+        return True
+    
 
     def OnDestroy(self, event):
         """Handles the wx.EVT_WINDOW_DESTROY event."""
@@ -2104,7 +2103,6 @@ class CustomTreeCtrl(wx.ScrolledWindow):
             return False
 
         item.Check(checked)
-        dc = wx.ClientDC(self)
         self.RefreshLine(item)
         self.EnableChildren(item, checked)
         e = TreeEvent(wxEVT_TREE_ITEM_CHECKED, self.GetId())
@@ -4056,9 +4054,8 @@ class CustomTreeCtrl(wx.ScrolledWindow):
     def DrawVerticalGradient(self, dc, rect, hasfocus):
         """Gradient fill from colour 1 to colour 2 from top to bottom."""
 
-        dc.DrawRectangleRect(rect)
-        border = self._borderPen.GetWidth()
-        
+        oldpen = dc.GetPen()
+        oldbrush = dc.GetBrush()
         dc.SetPen(wx.TRANSPARENT_PEN)
 
         # calculate gradient coefficients
@@ -4080,21 +4077,25 @@ class CustomTreeCtrl(wx.ScrolledWindow):
 
         rf, gf, bf = 0, 0, 0
         
-        for y in xrange(rect.y+border, rect.y + rect.height-border):
+        for y in xrange(rect.y, rect.y + rect.height):
             currCol = (r1 + rf, g1 + gf, b1 + bf)                
             dc.SetBrush(wx.Brush(currCol, wx.SOLID))
-            dc.DrawRectangle(rect.x+border, y, rect.width-2*border, 1)
+            dc.DrawRectangle(rect.x, y, rect.width, 1)
             rf = rf + rstep
             gf = gf + gstep
             bf = bf + bstep
         
+        dc.SetPen(oldpen)
+        dc.SetBrush(wx.TRANSPARENT_BRUSH)
+        dc.DrawRectangleRect(rect)
+        dc.SetBrush(oldbrush)
+
 
     def DrawHorizontalGradient(self, dc, rect, hasfocus):
         """Gradient fill from colour 1 to colour 2 from left to right."""
 
-        dc.DrawRectangleRect(rect)
-        border = self._borderPen.GetWidth()
-        
+        oldpen = dc.GetPen()
+        oldbrush = dc.GetBrush()
         dc.SetPen(wx.TRANSPARENT_PEN)
 
         # calculate gradient coefficients
@@ -4116,15 +4117,20 @@ class CustomTreeCtrl(wx.ScrolledWindow):
         bstep = float((b2 - b1)) / flrect
 
         rf, gf, bf = 0, 0, 0
-        
-        for x in xrange(rect.x+border, rect.x + rect.width-border):
+
+        for x in xrange(rect.x, rect.x + rect.width):
             currCol = (int(r1 + rf), int(g1 + gf), int(b1 + bf))
             dc.SetBrush(wx.Brush(currCol, wx.SOLID))
-            dc.DrawRectangle(x, rect.y+border, 1, rect.height-2*border)
+            dc.DrawRectangle(x, rect.y, 1, rect.height)
             rf = rf + rstep
             gf = gf + gstep
             bf = bf + bstep
-            
+
+        dc.SetPen(oldpen)
+        dc.SetBrush(wx.TRANSPARENT_BRUSH)
+        dc.DrawRectangleRect(rect)
+        dc.SetBrush(oldbrush)
+        
 
     def DrawVistaRectangle(self, dc, rect, hasfocus):
         """Draw the selected item(s) with the Windows Vista style."""
@@ -4146,18 +4152,14 @@ class CustomTreeCtrl(wx.ScrolledWindow):
         oldpen = dc.GetPen()
         oldbrush = dc.GetBrush()
 
-        dc.SetBrush(wx.TRANSPARENT_BRUSH)
-        dc.SetPen(wx.Pen(outer))
-        dc.DrawRoundedRectangleRect(rect, 3)
-        rect.Deflate(1, 1)
-        dc.SetPen(wx.Pen(inner))
-        dc.DrawRoundedRectangleRect(rect, 2)
-        rect.Deflate(1, 1)
-
+        bdrRect = wx.Rect(*rect.Get())
+        filRect = wx.Rect(*rect.Get())
+        filRect.Deflate(1,1)
+        
         r1, g1, b1 = int(top.Red()), int(top.Green()), int(top.Blue())
         r2, g2, b2 = int(bottom.Red()), int(bottom.Green()), int(bottom.Blue())
 
-        flrect = float(rect.height)
+        flrect = float(filRect.height)
 
         rstep = float((r2 - r1)) / flrect
         gstep = float((g2 - g1)) / flrect
@@ -4166,14 +4168,21 @@ class CustomTreeCtrl(wx.ScrolledWindow):
         rf, gf, bf = 0, 0, 0
         dc.SetPen(wx.TRANSPARENT_PEN)
         
-        for y in xrange(rect.y, rect.y + rect.height):
+        for y in xrange(filRect.y, filRect.y + filRect.height):
             currCol = (r1 + rf, g1 + gf, b1 + bf)
             dc.SetBrush(wx.Brush(currCol, wx.SOLID))
-            dc.DrawRectangle(rect.x, y, rect.width, 1)
+            dc.DrawRectangle(filRect.x, y, filRect.width, 1)
             rf = rf + rstep
             gf = gf + gstep
             bf = bf + bstep
         
+        dc.SetBrush(wx.TRANSPARENT_BRUSH)
+        dc.SetPen(wx.Pen(outer))
+        dc.DrawRoundedRectangleRect(bdrRect, 3)
+        bdrRect.Deflate(1, 1)
+        dc.SetPen(wx.Pen(inner))
+        dc.DrawRoundedRectangleRect(bdrRect, 2)
+
         dc.SetPen(oldpen)
         dc.SetBrush(oldbrush)
 
@@ -4219,7 +4228,7 @@ class CustomTreeCtrl(wx.ScrolledWindow):
 
         total_h = self.GetLineHeight(item)
         drawItemBackground = False
-
+            
         if item.IsSelected():
         
             # under mac selections are only a rectangle in case they don't have the focus
@@ -4243,13 +4252,10 @@ class CustomTreeCtrl(wx.ScrolledWindow):
             dc.SetPen(wx.TRANSPARENT_PEN)
         
         offset = (self.HasFlag(TR_ROW_LINES) and [1] or [0])[0]
-
+        
         if self.HasFlag(TR_FULL_ROW_HIGHLIGHT):
-
-            oldpen = dc.GetPen()
-            dc.SetPen(wx.TRANSPARENT_PEN)
             x = 0
-            w, h = self.GetSize()
+            w, h = self.GetClientSize()
 
             itemrect = wx.Rect(x, item.GetY()+offset, w, total_h-offset)
             
@@ -4264,8 +4270,6 @@ class CustomTreeCtrl(wx.ScrolledWindow):
                 else:
                     dc.DrawRectangleRect(itemrect)
 
-            dc.SetPen(oldpen)
-        
         else:
         
             if item.IsSelected() and image != _NO_IMAGE:
@@ -4279,9 +4283,11 @@ class CustomTreeCtrl(wx.ScrolledWindow):
                 if wnd:
                     wndx, wndy = item.GetWindowSize()
 
-                itemrect = wx.Rect(item.GetX() + wcheck + image_w - 2, item.GetY()+offset,
-                                   item.GetWidth() - image_w - wcheck + 2 - wndx, total_h-offset)
-                
+                itemrect = wx.Rect(item.GetX() + wcheck + image_w - 2,
+                                   item.GetY()+offset,
+                                   item.GetWidth() - image_w - wcheck + 2 - wndx,
+                                   total_h-offset)
+
                 if self._usegradients:
                     if self._gradientstyle == 0:   # Horizontal
                         self.DrawHorizontalGradient(dc, itemrect, self._hasFocus)
@@ -4298,7 +4304,10 @@ class CustomTreeCtrl(wx.ScrolledWindow):
             elif drawItemBackground:
 
                 minusicon = wcheck + image_w - 2
-                itemrect = wx.Rect(item.GetX()+minusicon, item.GetY()+offset, item.GetWidth()-minusicon, total_h-offset)
+                itemrect = wx.Rect(item.GetX()+minusicon,
+                                   item.GetY()+offset,
+                                   item.GetWidth()-minusicon,
+                                   total_h-offset)
                                 
                 if self._usegradients and self._hasFocus:
                     if self._gradientstyle == 0:   # Horizontal
@@ -5404,7 +5413,7 @@ class CustomTreeCtrl(wx.ScrolledWindow):
                         self.Toggle(item)
                         
 
-    def OnInternalIdle(self, event):
+    def OnInternalIdle(self):
         """Performs operations in idle time (essentially drawing)."""
 
         # Check if we need to select the root item
