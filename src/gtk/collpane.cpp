@@ -72,33 +72,7 @@ static void gtk_collapsiblepane_expanded_callback (GObject    *object,
         sz = p->m_szCollapsed;
     }
 
-    // minimal size has priority over the best size so set here our min size
-    p->SetMinSize(sz);
-    p->SetSize(sz);
-
-    wxWindow *top = wxGetTopLevelParent(p);
-    if (top)
-    {
-        // we've changed our size, thus our top level parent needs to relayout
-        // itself
-        top->Layout();
-
-        if (p->IsExpanded())
-        {
-            // force our parent to "fit", i.e. expand so that it can honour
-            // our minimal size
-            top->Fit();
-        }
-        else // correctly
-        {
-            if (top->GetSizer())
-                top->GetSizer()->SetSizeHints(top);
-
-            // use SetClientSize() and not SetSize() otherwise the size for
-            // e.g. a wxFrame with a menubar wouldn't be correctly set
-            top->SetClientSize(sz);
-        }
-    }
+    p->OnStateChange(sz);
 
     if ( p->m_bIgnoreNextChange )
     {

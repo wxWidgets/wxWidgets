@@ -102,21 +102,9 @@ wxString wxGenericCollapsiblePane::GetBtnLabel() const
     return m_strLabel + (IsCollapsed() ? wxT(" >>") : wxT(" <<"));
 }
 
-void wxGenericCollapsiblePane::Collapse(bool collapse)
+void wxGenericCollapsiblePane::OnStateChange(const wxSize& sz)
 {
-    // optimization
-    if ( IsCollapsed() == collapse )
-        return;
-
-    // update our state
-    m_pPane->Show(!collapse);
-
-    // update button label
-    // NB: this must be done after updating our "state"
-    m_pButton->SetLabel(GetBtnLabel());
-
     // minimal size has priority over the best size so set here our min size
-    wxSize sz = GetBestSize();
     SetMinSize(sz);
     SetSize(sz);
 
@@ -155,6 +143,22 @@ void wxGenericCollapsiblePane::Collapse(bool collapse)
             top->Fit();
         }
     }
+}
+
+void wxGenericCollapsiblePane::Collapse(bool collapse)
+{
+    // optimization
+    if ( IsCollapsed() == collapse )
+        return;
+
+    // update our state
+    m_pPane->Show(!collapse);
+
+    // update button label
+    // NB: this must be done after updating our "state"
+    m_pButton->SetLabel(GetBtnLabel());
+
+    OnStateChange(GetBestSize());
 }
 
 void wxGenericCollapsiblePane::SetLabel(const wxString &label)

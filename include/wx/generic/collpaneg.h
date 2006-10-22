@@ -71,6 +71,10 @@ public:
     virtual wxString GetLabel() const
         { return m_strLabel; }
 
+
+    // implementation only, don't use
+    void OnStateChange(const wxSize& sizeNew);
+
 protected: 
     // overridden methods
     virtual wxSize DoGetBestSize() const;
