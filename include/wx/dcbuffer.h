@@ -41,7 +41,10 @@ class WXDLLEXPORT wxBufferedDC : public wxMemoryDC
 {
 public:
     // Default ctor, must subsequently call Init for two stage construction.
-    wxBufferedDC() : m_dc( 0 ), m_buffer(NULL), m_style(0)
+    wxBufferedDC()
+        : m_dc(NULL),
+          m_buffer(NULL),
+          m_style(0)
     {
     }
 
@@ -49,8 +52,8 @@ public:
     wxBufferedDC(wxDC *dc,
                  const wxBitmap &buffer = wxNullBitmap,
                  int style = wxBUFFER_CLIENT_AREA)
-        : m_dc( dc ),
-          m_buffer( &buffer ),
+        : m_dc(dc),
+          m_buffer(&buffer),
           m_style(style)
     {
         UseBuffer();
@@ -60,7 +63,7 @@ public:
     // (where area is usually something like the size of the window
     // being buffered)
     wxBufferedDC(wxDC *dc, const wxSize &area, int style = wxBUFFER_CLIENT_AREA)
-        : m_dc( dc ),
+        : m_dc(dc),
           m_buffer(NULL),
           m_style(style)
 
@@ -73,30 +76,27 @@ public:
     // The usually desired  action in the dtor is to blit the buffer.
     virtual ~wxBufferedDC()
     {
-        if ( m_dc ) UnMask();
+        if ( m_dc )
+            UnMask();
     }
 
     // These reimplement the actions of the ctors for two stage creation, but
     // are not used by the ctors themselves to save a few cpu cycles.
     void Init(wxDC *dc,
-              const wxBitmap &buffer=wxNullBitmap,
+              const wxBitmap& buffer = wxNullBitmap,
               int style = wxBUFFER_CLIENT_AREA)
     {
-        wxASSERT_MSG( m_dc == 0 && m_buffer == NULL,
-                      _T("wxBufferedDC already initialised") );
-        m_dc = dc;
+        InitCommon(dc, style);
+
         m_buffer = &buffer;
-        m_style = style;
+
         UseBuffer();
     }
 
     void Init(wxDC *dc, const wxSize &area, int style = wxBUFFER_CLIENT_AREA)
     {
-        wxASSERT_MSG( m_dc == 0 && m_buffer == NULL,
-                      _T("wxBufferedDC already initialised") );
-        m_dc = dc;
-        m_buffer = NULL;
-        m_style = style;
+        InitCommon(dc, style);
+
         UseBuffer(area.x, area.y);
     }
 
@@ -108,17 +108,16 @@ public:
     // blitting to) is destroyed.
     void UnMask()
     {
-        wxASSERT_MSG( m_dc != 0,
-                      _T("No underlying DC associated with wxBufferedDC (anymore)") );
+        wxCHECK_RET( m_dc, _T("No underlying DC in wxBufferedDC") );
 
-        wxCoord x=0, y=0;
+        wxCoord x = 0,
+                y = 0;
 
-        if (m_style & wxBUFFER_CLIENT_AREA)
+        if ( m_style & wxBUFFER_CLIENT_AREA )
             GetDeviceOrigin(&x, &y);
 
-        m_dc->Blit( 0, 0,
-                    m_buffer->GetWidth(), m_buffer->GetHeight(), this,
-                    -x, -y );
+        m_dc->Blit(0, 0, m_buffer->GetWidth(), m_buffer->GetHeight(),
+                   this, -x, -y );
         m_dc = NULL;
     }
 
@@ -127,6 +126,19 @@ public:
     int GetStyle() const { return m_style; }
 
 private:
+    // common part of Init()s
+    void InitCommon(wxDC *dc, int style)
+    {
+        wxASSERT_MSG( !m_dc && !m_buffer, _T("wxBufferedDC already initialised") );
+        wxCHECK_RET( dc, _T("can't associate NULL DC with wxBufferedDC") );
+
+        m_dc = dc;
+        m_style = style;
+
+        // inherit the same layout direction as the original DC
+        SetLayoutDirection(dc->GetLayoutDirection());
+    }
+
     // check that the bitmap is valid and use it
     void UseBuffer(wxCoord w = -1, wxCoord h = -1);
 
