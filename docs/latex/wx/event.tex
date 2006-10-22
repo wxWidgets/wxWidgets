@@ -172,14 +172,12 @@ is currently greater than $0$.
 
 \func{void}{Skip}{\param{bool}{ skip = true}}
 
-This method can be called by an event handler and controls whether additional
-event handlers bound to this event will be called after the current event
-handler returns. The default behavior is equivalent to calling Skip(false)
-(which is, hence, usually unnecessary) and will prevent additional event
-handlers from being called and control will be returned to the sender of the
-event immediately after the current handler has finished. If Skip(true) is
-called, the event processing system continues searching for a handler
-function for this event as if the current handler didn't exist.
+This method can be used inside an event handler to control whether further
+event handlers bound to this event will be called after the current one
+returns. Without Skip() (or equivalently if Skip(false) is used),
+the event will not be processed any more. If Skip(true) is called, the event
+processing system continues searching for a further handler function for this
+event, even though it has been processed already in the current handler.
 
 In general, it is recommended to skip all non-command events to allow the
 default handling to take place. The command events are, however, normally not
