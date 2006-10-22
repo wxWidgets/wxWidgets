@@ -207,26 +207,6 @@ wxColour wxSystemSettingsNative::GetColour(
 // fonts
 // ----------------------------------------------------------------------------
 
-wxFont wxCreateFontFromStockObject(int WXUNUSED(index))
-{
-    wxFont font;
-
-    FONTMETRICS metrics;
-    HPS hPS = ::WinGetScreenPS(HWND_DESKTOP);
-    if (::GpiQueryFontMetrics(hPS, sizeof(FONTMETRICS), &metrics))
-    {
-        wxNativeFontInfo info;
-        info.fm = metrics;
-        font.Create(info);
-    }
-    else // GetStockObject() failed
-    {
-        wxFAIL_MSG( _T("stock font not found") );
-    }
-
-    return font;
-}
-
 wxFont wxSystemSettingsNative::GetFont(
   wxSystemFont                      index
 )
@@ -238,7 +218,40 @@ wxFont wxSystemSettingsNative::GetFont(
             return *gs_fontDefault;
     }
 
-    wxFont font = wxCreateFontFromStockObject(index);
+    wxFont font;
+    // FIXME: The mapping could be improved and also OS/2 system fonts
+    // should be taken into account e.g. by using PrfQueryProfileString
+    // to look for PM_System_Fonts in HINI_USERPROFILE.
+    // FIXME2: Creating a font from the native font info does not
+    // seem to work properly.
+    switch (index)
+    {
+        case wxSYS_SYSTEM_FIXED_FONT:
+        case wxSYS_OEM_FIXED_FONT:
+        case wxSYS_ANSI_FIXED_FONT:
+                font.Create(  10,
+                              wxFONTFAMILY_TELETYPE,
+                              wxFONTSTYLE_NORMAL,
+                              wxFONTWEIGHT_NORMAL   );
+                break;
+        case wxSYS_ANSI_VAR_FONT:
+                font.Create(  10,
+                              wxFONTFAMILY_MODERN,
+                              wxFONTSTYLE_NORMAL,
+                              wxFONTWEIGHT_NORMAL   );
+                break;
+        case wxSYS_SYSTEM_FONT:
+        case wxSYS_DEFAULT_GUI_FONT:
+                font.Create(  10,
+                              wxFONTFAMILY_SWISS,
+                              wxFONTSTYLE_NORMAL,
+                              wxFONTWEIGHT_NORMAL   );
+                break;
+        default:
+                wxFAIL_MSG( _T("stock font not found") );
+                return GetFont(wxSYS_ANSI_VAR_FONT);
+    }
+
 
     if ( isDefaultRequested )
     {
