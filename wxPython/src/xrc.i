@@ -35,14 +35,14 @@ controls on a panel, etc. to be loaded from an XML file."
 
 
 MAKE_CONST_WXSTRING_NOSWIG(EmptyString);
-MAKE_CONST_WXSTRING2(UTF8String,   wxT("UTF-8"));
-MAKE_CONST_WXSTRING2(StyleString,  wxT("style"));
-MAKE_CONST_WXSTRING2(SizeString,   wxT("size"));
-MAKE_CONST_WXSTRING2(PosString,    wxT("pos"));
-MAKE_CONST_WXSTRING2(BitmapString, wxT("bitmap"));
-MAKE_CONST_WXSTRING2(IconString,   wxT("icon"));
-MAKE_CONST_WXSTRING2(FontString,   wxT("font"));
-
+MAKE_CONST_WXSTRING2(UTF8String,       wxT("UTF-8"));
+MAKE_CONST_WXSTRING2(StyleString,      wxT("style"));
+MAKE_CONST_WXSTRING2(SizeString,       wxT("size"));
+MAKE_CONST_WXSTRING2(PosString,        wxT("pos"));
+MAKE_CONST_WXSTRING2(BitmapString,     wxT("bitmap"));
+MAKE_CONST_WXSTRING2(IconString,       wxT("icon"));
+MAKE_CONST_WXSTRING2(FontString,       wxT("font"));
+MAKE_CONST_WXSTRING2(AnimationString,  wxT("animation"));
 
 
 // Include all the files that make up this module

@@ -63,7 +63,8 @@ public:
     
     ~wxXmlResource();
 
-
+    //wxXmlNode* GetFirstRoot();  ** Link error
+    
     // Loads resources from XML files that match given filemask.
     // This method understands VFS (see filesys.h).
     bool Load(const wxString& filemask);
