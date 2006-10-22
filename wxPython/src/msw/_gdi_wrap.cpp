@@ -27963,9 +27963,7 @@ SWIGINTERN PyObject *_wrap_new_ImageList(PyObject *SWIGUNUSEDPARM(self), PyObjec
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
-  {
-    resultobj = wxPyMake_wxObject(result, (bool)SWIG_POINTER_NEW); 
-  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_wxImageList, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
   return NULL;

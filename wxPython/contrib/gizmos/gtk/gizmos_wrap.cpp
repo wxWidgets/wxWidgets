@@ -6188,9 +6188,7 @@ SWIGINTERN PyObject *_wrap_TreeListCtrl_GetImageList(PyObject *SWIGUNUSEDPARM(se
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
-  {
-    resultobj = wxPyMake_wxObject(result, (bool)0); 
-  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_wxImageList, 0 |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -6218,9 +6216,7 @@ SWIGINTERN PyObject *_wrap_TreeListCtrl_GetStateImageList(PyObject *SWIGUNUSEDPA
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
-  {
-    resultobj = wxPyMake_wxObject(result, (bool)0); 
-  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_wxImageList, 0 |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -6248,9 +6244,7 @@ SWIGINTERN PyObject *_wrap_TreeListCtrl_GetButtonsImageList(PyObject *SWIGUNUSED
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
-  {
-    resultobj = wxPyMake_wxObject(result, (bool)0); 
-  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_wxImageList, 0 |  0 );
   return resultobj;
 fail:
   return NULL;

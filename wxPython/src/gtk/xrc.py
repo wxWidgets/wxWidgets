@@ -79,10 +79,6 @@ class XmlResource(_core.Object):
 
     __swig_destroy__ = _xrc.delete_XmlResource
     __del__ = lambda self : None;
-    def GetFirstRoot(*args, **kwargs):
-        """GetFirstRoot(self) -> XmlNode"""
-        return _xrc.XmlResource_GetFirstRoot(*args, **kwargs)
-
     def Load(*args, **kwargs):
         """Load(self, String filemask) -> bool"""
         return _xrc.XmlResource_Load(*args, **kwargs)

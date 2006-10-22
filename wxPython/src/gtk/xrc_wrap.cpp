@@ -3213,34 +3213,6 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_XmlResource_GetFirstRoot(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  wxXmlResource *arg1 = (wxXmlResource *) 0 ;
-  wxXmlNode *result = 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject *swig_obj[1] ;
-  
-  if (!args) SWIG_fail;
-  swig_obj[0] = args;
-  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxXmlResource, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "XmlResource_GetFirstRoot" "', expected argument " "1"" of type '" "wxXmlResource *""'"); 
-  }
-  arg1 = reinterpret_cast< wxXmlResource * >(argp1);
-  {
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    result = (wxXmlNode *)(arg1)->GetFirstRoot();
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) SWIG_fail;
-  }
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_wxXmlNode, 0 |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
 SWIGINTERN PyObject *_wrap_XmlResource_Load(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   wxXmlResource *arg1 = (wxXmlResource *) 0 ;
@@ -8774,7 +8746,6 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"new_XmlResource", (PyCFunction) _wrap_new_XmlResource, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"new_EmptyXmlResource", (PyCFunction) _wrap_new_EmptyXmlResource, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"delete_XmlResource", (PyCFunction)_wrap_delete_XmlResource, METH_O, NULL},
-	 { (char *)"XmlResource_GetFirstRoot", (PyCFunction)_wrap_XmlResource_GetFirstRoot, METH_O, NULL},
 	 { (char *)"XmlResource_Load", (PyCFunction) _wrap_XmlResource_Load, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"XmlResource_LoadFromString", (PyCFunction) _wrap_XmlResource_LoadFromString, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"XmlResource_Unload", (PyCFunction) _wrap_XmlResource_Unload, METH_VARARGS | METH_KEYWORDS, NULL},
