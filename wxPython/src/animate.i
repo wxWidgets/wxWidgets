@@ -178,6 +178,10 @@ public:
     virtual void Stop();
 
     virtual bool IsPlaying() const;
+    virtual void SetInactiveBitmap(const wxBitmap &bmp);
+    wxBitmap GetInactiveBitmap() const;
+
+    %property(InactiveBitmap, GetInactiveBitmap, SetInactiveBitmap);
 };
 
 
