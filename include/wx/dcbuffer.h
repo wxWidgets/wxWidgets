@@ -50,28 +50,24 @@ public:
 
     // Construct a wxBufferedDC using a user supplied buffer.
     wxBufferedDC(wxDC *dc,
-                 const wxBitmap &buffer = wxNullBitmap,
+                 const wxBitmap& buffer = wxNullBitmap,
                  int style = wxBUFFER_CLIENT_AREA)
-        : m_dc(dc),
-          m_buffer(&buffer),
-          m_style(style)
+        : m_dc(NULL),
+          m_buffer(NULL)
     {
-        UseBuffer();
+        Init(dc, buffer, style);
     }
 
     // Construct a wxBufferedDC with an internal buffer of 'area'
     // (where area is usually something like the size of the window
     // being buffered)
-    wxBufferedDC(wxDC *dc, const wxSize &area, int style = wxBUFFER_CLIENT_AREA)
-        : m_dc(dc),
-          m_buffer(NULL),
-          m_style(style)
+    wxBufferedDC(wxDC *dc, const wxSize& area, int style = wxBUFFER_CLIENT_AREA)
+        : m_dc(NULL),
+          m_buffer(NULL)
 
     {
-        UseBuffer(area.x, area.y);
+        Init(dc, area, style);
     }
-
-    // default copy ctor ok.
 
     // The usually desired  action in the dtor is to blit the buffer.
     virtual ~wxBufferedDC()
@@ -80,8 +76,7 @@ public:
             UnMask();
     }
 
-    // These reimplement the actions of the ctors for two stage creation, but
-    // are not used by the ctors themselves to save a few cpu cycles.
+    // These reimplement the actions of the ctors for two stage creation
     void Init(wxDC *dc,
               const wxBitmap& buffer = wxNullBitmap,
               int style = wxBUFFER_CLIENT_AREA)
@@ -270,6 +265,5 @@ inline wxDC* wxAutoBufferedPaintDCFactory(wxWindow* window)
     else
         return new wxBufferedPaintDC(window);
 }
-            
 
 #endif  // _WX_DCBUFFER_H_
