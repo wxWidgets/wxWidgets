@@ -83,7 +83,9 @@ enum
     // Internal use: SetTextIndent has been called
     wxCC_IFLAG_INDENT_SET           = 0x0400,
     // Internal use: Set wxTAB_TRAVERSAL to parent when popup is dismissed
-    wxCC_IFLAG_PARENT_TAB_TRAVERSAL = 0x0800
+    wxCC_IFLAG_PARENT_TAB_TRAVERSAL = 0x0800,
+    // Internal use: Secondary popup window type should be used (if available).
+    wxCC_IFLAG_USE_ALT_POPUP        = 0x1000
 };
 
 
@@ -305,6 +307,21 @@ public:
         return m_tcArea;
     }
 
+    // Call with enable as true to use a type of popup window that guarantees ability
+    // to focus the popup control, and normal function of common native controls.
+    // This alternative popup window is usually a wxDialog, and as such it's parent
+    // frame will appear as if the focus has been lost from it.
+    void UseAltPopupWindow( bool enable = true )
+    {
+        wxASSERT_MSG( !m_winPopup,
+                      wxT("call this only before SetPopupControl") );
+
+        if ( enable )
+            m_iFlags |= wxCC_IFLAG_USE_ALT_POPUP;
+        else
+            m_iFlags &= ~wxCC_IFLAG_USE_ALT_POPUP;
+    }
+
     //
     // Utilies needed by the popups or native implementations
     //
@@ -459,6 +476,9 @@ protected:
     // this is for the control in popup
     wxEvtHandler*           m_popupExtraHandler;
 
+    // this is for the popup window
+    wxEvtHandler*           m_popupWinEvtHandler;
+
     // used to prevent immediate re-popupping incase closed popup
     // by clicking on the combo control (needed because of inconsistent
     // transient implementation across platforms).
@@ -526,6 +546,9 @@ private:
     void Init();
 
     wxByte                  m_ignoreEvtText;  // Number of next EVT_TEXTs to ignore
+
+    // Is popup window wxPopupTransientWindow, wxPopupWindow or wxDialog?
+    wxByte                  m_popupWinType;
 
     DECLARE_EVENT_TABLE()
 

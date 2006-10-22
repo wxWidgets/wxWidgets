@@ -664,3 +664,15 @@ Show the popup.
 
 Undoes the last edit in the text field. Windows only.
 
+
+\membersection{wxComboCtrl::UseAltPopupWindow}\label{wxcomboctrlusealtpopupwindow}
+
+\func{void}{UseAltPopupWindow}{\param{bool }{enable = true}}
+
+Enable or disable usage of an alternative popup window, which guarantees
+ability to focus the popup control, and allows common native controls to
+function normally. This alternative popup window is usually a wxDialog,
+and as such, when it is shown, its parent top-level window will appear
+as if the focus has been lost from it.
+
+

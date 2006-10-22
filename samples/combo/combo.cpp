@@ -83,6 +83,8 @@ public:
     // log wxComboCtrl events
     void OnComboBoxUpdate( wxCommandEvent& event );
 
+    void OnIdle( wxIdleEvent& event );
+
 protected:
     wxTextCtrl*     m_logWin;
     wxLog*          m_logOld;
@@ -127,6 +129,8 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(ComboControl_Compare,  MyFrame::OnShowComparison)
     EVT_MENU(ComboControl_Quit,     MyFrame::OnQuit)
     EVT_MENU(ComboControl_About,    MyFrame::OnAbout)
+
+    EVT_IDLE(MyFrame::OnIdle)
 END_EVENT_TABLE()
 
 // Create a new application object: this macro will allow wxWidgets to create
@@ -729,6 +733,9 @@ MyFrame::MyFrame(const wxString& title)
     cc = new wxComboCtrl(panel,2,wxEmptyString,
                          wxDefaultPosition, wxDefaultSize);
 
+    // Make sure we use popup that allows focusing the listview.
+    cc->UseAltPopupWindow();
+
     cc->SetPopupMinWidth(300);
 
     ListViewComboPopup* iface = new ListViewComboPopup();
@@ -748,6 +755,9 @@ MyFrame::MyFrame(const wxString& title)
     // Note that we test that wxGenericComboCtrl works
     gcc = new wxGenericComboCtrl(panel,wxID_ANY,wxEmptyString,
                                  wxDefaultPosition, wxDefaultSize);
+
+    // Make sure we use popup that allows focusing the treectrl.
+    gcc->UseAltPopupWindow();
 
     // Set popup interface right away, otherwise some of the calls
     // below may fail
@@ -1058,4 +1068,28 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
                  _T("About wxComboCtrl sample"),
                  wxOK | wxICON_INFORMATION,
                  this);
+}
+
+void MyFrame::OnIdle(wxIdleEvent& event)
+{
+    // This code is useful for debugging focus problems
+    // (which are plentiful when dealing with popup windows).
+#if 0
+    static wxWindow* lastFocus = (wxWindow*) NULL;
+
+    wxWindow* curFocus = ::wxWindow::FindFocus();
+
+    if ( curFocus != lastFocus )
+    {
+        const wxChar* className = wxT("<none>");
+        if ( curFocus )
+            className = curFocus->GetClassInfo()->GetClassName();
+        lastFocus = curFocus;
+        wxLogDebug( wxT("FOCUSED: %s %X"),
+            className,
+            (unsigned int)curFocus);
+    }
+#endif
+
+    event.Skip();
 }

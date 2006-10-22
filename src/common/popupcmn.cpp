@@ -561,7 +561,7 @@ void wxPopupFocusHandler::OnKillFocus(wxFocusEvent& event)
 void wxPopupFocusHandler::OnKeyDown(wxKeyEvent& event)
 {
     // let the window have it first, it might process the keys
-    if ( !m_popup->ProcessEvent(event) )
+    if ( !m_popup->GetEventHandler()->ProcessEvent(event) )
     {
         // by default, dismiss the popup
         m_popup->DismissAndNotify();

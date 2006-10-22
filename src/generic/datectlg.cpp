@@ -414,6 +414,10 @@ bool wxDatePickerCtrlGeneric::Create(wxWindow *parent,
 
     m_popup = new wxCalendarComboPopup();
 
+#if defined(__WXMSW__)
+    // without this keyboard navigation in month control doesn't work
+    m_combo->UseAltPopupWindow();
+#endif
     m_combo->SetPopupControl(m_popup);
 
     m_cal = m_popup;
