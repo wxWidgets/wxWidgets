@@ -92,6 +92,7 @@ void wxXmlResource::InitAllHandlers()
 #endif
 #if wxUSE_HTML
     AddHandler(new wxHtmlWindowXmlHandler);
+    AddHandler(new wxSimpleHtmlListBoxXmlHandler);
 #endif
 #if wxUSE_HYPERLINKCTRL
     AddHandler( new wxHyperlinkCtrlXmlHandler);

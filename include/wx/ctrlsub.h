@@ -155,13 +155,13 @@ protected:
 // two versions
 #define wxCONTROL_ITEMCONTAINER_CLIENTDATAOBJECT_RECAST                    \
     void SetClientData(void *data)                                         \
-        { wxControl::SetClientData(data); }                                \
+        { wxEvtHandler::SetClientData(data); }                             \
     void *GetClientData() const                                            \
-        { return wxControl::GetClientData(); }                             \
+        { return wxEvtHandler::GetClientData(); }                          \
     void SetClientObject(wxClientData *data)                               \
-        { wxControl::SetClientObject(data); }                              \
+        { wxEvtHandler::SetClientObject(data); }                           \
     wxClientData *GetClientObject() const                                  \
-        { return wxControl::GetClientObject(); }                           \
+        { return wxEvtHandler::GetClientObject(); }                        \
     void SetClientData(unsigned int n, void* clientData)                   \
         { wxItemContainer::SetClientData(n, clientData); }                 \
     void* GetClientData(unsigned int n) const                              \

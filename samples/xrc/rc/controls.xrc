@@ -559,6 +559,34 @@
                     </object>
                 </object>
                 <object class="notebookpage">
+                    <label>wxSimpleHtmlListBox</label>
+                    <object class="wxPanel" name="simplehtmllistbox">
+                        <object class="wxFlexGridSizer">
+                            <cols>1</cols>
+                            <rows>0</rows>
+                            <vgap>0</vgap>
+                            <hgap>0</hgap>
+                            <growablecols>0</growablecols>
+                            <growablerows>0</growablerows>
+                            <object class="sizeritem">
+                                <flag>wxALIGN_CENTER|wxALL</flag>
+                                <border>5</border>
+                                <object class="wxSimpleHtmlListBox" name="controls_simplehtmllistbox">
+                                    <size>250,160</size>
+                                    <style>wxHLB_MULTIPLE|wxHLB_DEFAULT_STYLE</style>
+                                    <content>
+                                        <item>&lt;b&gt;Bold&lt;/b&gt; Milk</item>
+                                        <item>&lt;i&gt;Rainbow &lt;font color="red"&gt;P&lt;/font&gt;&lt;font color="blue"&gt;i&lt;/font&gt;&lt;font color="yellow"&gt;z&lt;/font&gt;&lt;font color="green"&gt;z&lt;/font&gt;&lt;font color="purple"&gt;a&lt;/font&gt;&lt;/i&gt;</item>
+                                        <item>&lt;tt&gt;Plain bread&lt;/tt&gt;</item>
+                                        <item>&lt;font color="orange" size="+1"&gt;Orange juice&lt;/font&gt;</item>
+                                        <item>Paper towels</item>
+                                    </content>
+                                </object>
+                            </object>
+                        </object>
+                    </object>
+                </object>
+                <object class="notebookpage">
                     <label>wxListCtrl</label>
                     <object class="wxPanel" name="listctrl">
                         <object class="wxFlexGridSizer">

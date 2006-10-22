@@ -46,6 +46,9 @@ FORCE_WXHTML_MODULES()
 // small border always added to the cells:
 static const wxCoord CELL_BORDER = 2;
 
+const wxChar wxHtmlListBoxNameStr[] = wxT("htmlListBox");
+const wxChar wxSimpleHtmlListBoxNameStr[] = wxT("simpleHtmlListBox");
+
 // ============================================================================
 // private classes
 // ============================================================================
@@ -539,6 +542,133 @@ void wxHtmlListBox::OnLeftDown(wxMouseEvent& event)
         // by selecting another item in the list):
         event.Skip();
     }
+}
+
+
+// ----------------------------------------------------------------------------
+// wxSimpleHtmlListBox
+// ----------------------------------------------------------------------------
+
+bool wxSimpleHtmlListBox::Create(wxWindow *parent, wxWindowID id,
+                                 const wxPoint& pos,
+                                 const wxSize& size,
+                                 int n, const wxString choices[],
+                                 long style,
+                                 const wxValidator& validator,
+                                 const wxString& name)
+{
+    if (!wxHtmlListBox::Create(parent, id, pos, size, style, name))
+        return false;
+
+    SetValidator(validator);
+    for (int i=0; i<n; i++)
+        Append(choices[i]);
+
+    return true;
+}
+
+bool wxSimpleHtmlListBox::Create(wxWindow *parent, wxWindowID id,
+                                    const wxPoint& pos,
+                                    const wxSize& size,
+                                    const wxArrayString& choices,
+                                    long style,
+                                    const wxValidator& validator,
+                                    const wxString& name)
+{
+    if (!wxHtmlListBox::Create(parent, id, pos, size, style, name))
+        return false;
+
+    SetValidator(validator);
+    Append(choices);
+
+    return true;
+}
+
+wxSimpleHtmlListBox::~wxSimpleHtmlListBox()
+{
+    wxASSERT(m_items.GetCount() == m_clientData.GetCount());
+    if (HasClientObjectData())
+    {
+        // clear the array of client data objects
+        for (size_t i=0; i<m_items.GetCount(); i++)
+            delete DoGetItemClientObject(i);
+    }
+
+    m_items.Clear();
+    m_clientData.Clear();
+}
+
+void wxSimpleHtmlListBox::Clear()
+{
+    m_items.Clear();
+    m_clientData.Clear();
+    UpdateCount();
+}
+
+void wxSimpleHtmlListBox::Delete(unsigned int n)
+{
+    m_items.RemoveAt(n);
+    m_clientData.RemoveAt(n);
+    UpdateCount();
+}
+
+void wxSimpleHtmlListBox::Append(const wxArrayString& strings)
+{
+    // we know how many items are going to be added - avoid too many reallocs
+    // m_items.Alloc(strings.GetCount());
+    // FIXME: Alloc() will clear all the old contents.
+    //        Suggested fix = make Grow() public and make WX_APPEND_ARRAY take
+    //        care of calling it automatically
+
+    // append all given items at once
+    WX_APPEND_ARRAY(m_items, strings);
+    m_clientData.Add(NULL, strings.GetCount());
+    UpdateCount();
+}
+
+int wxSimpleHtmlListBox::DoAppend(const wxString& item)
+{
+    m_items.Add(item);
+    m_clientData.Add(NULL);
+    UpdateCount();
+    return GetCount()-1;
+}
+
+int wxSimpleHtmlListBox::DoInsert(const wxString& item, unsigned int pos)
+{
+    m_items.Insert(item, pos);
+    m_clientData.Insert(NULL, pos);
+    UpdateCount();
+    return pos;
+}
+
+void wxSimpleHtmlListBox::SetString(unsigned int n, const wxString& s)
+{
+    wxCHECK_RET( IsValid(n),
+                 wxT("invalid index in wxSimpleHtmlListBox::SetString") );
+
+    m_items[n]=s; 
+    RefreshLine(n);
+}
+
+wxString wxSimpleHtmlListBox::GetString(unsigned int n) const
+{
+    wxCHECK_MSG( IsValid(n), wxEmptyString,
+                 wxT("invalid index in wxSimpleHtmlListBox::GetString") );
+
+    return m_items[n];
+}
+
+void wxSimpleHtmlListBox::UpdateCount()
+{
+    wxASSERT(m_items.GetCount() == m_clientData.GetCount());
+    wxHtmlListBox::SetItemCount(m_items.GetCount());
+
+    // very small optimization: if you need to add lot of items to
+    // a wxSimpleHtmlListBox be sure to use the
+    // wxSimpleHtmlListBox::Append(const wxArrayString&) method instead!
+    if (!this->IsFrozen())
+        RefreshAll();
 }
 
 #endif // wxUSE_HTML

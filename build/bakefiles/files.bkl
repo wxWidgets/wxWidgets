@@ -2956,6 +2956,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/xrc/xh_radbx.cpp
     src/xrc/xh_scrol.cpp
     src/xrc/xh_scwin.cpp
+    src/xrc/xh_htmllbox.cpp
     src/xrc/xh_sizer.cpp
     src/xrc/xh_slidr.cpp
     src/xrc/xh_spin.cpp
@@ -3012,6 +3013,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/xrc/xh_radbx.h
     wx/xrc/xh_scrol.h
     wx/xrc/xh_scwin.h
+    wx/xrc/xh_htmllbox.h
     wx/xrc/xh_sizer.h
     wx/xrc/xh_slidr.h
     wx/xrc/xh_spin.h

@@ -53,6 +53,7 @@
 #include "wx/xrc/xh_gdctl.h"
 #include "wx/xrc/xh_frame.h"
 #include "wx/xrc/xh_scwin.h"
+#include "wx/xrc/xh_htmllbox.h"
 #include "wx/xrc/xh_split.h"
 #include "wx/xrc/xh_wizrd.h"
 #include "wx/xrc/xh_statbar.h"

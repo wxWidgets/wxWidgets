@@ -14,6 +14,7 @@
 
 #include "wx/vlbox.h"               // base class
 #include "wx/html/htmlwin.h"
+#include "wx/ctrlsub.h"
 
 #if wxUSE_FILESYSTEM
     #include "wx/filesys.h"
@@ -23,6 +24,9 @@ class WXDLLIMPEXP_HTML wxHtmlCell;
 class WXDLLIMPEXP_HTML wxHtmlWinParser;
 class WXDLLIMPEXP_HTML wxHtmlListBoxCache;
 class WXDLLIMPEXP_HTML wxHtmlListBoxStyle;
+
+extern WXDLLEXPORT_DATA(const wxChar) wxHtmlListBoxNameStr[];
+extern WXDLLEXPORT_DATA(const wxChar) wxSimpleHtmlListBoxNameStr[];
 
 // ----------------------------------------------------------------------------
 // wxHtmlListBox
@@ -46,7 +50,7 @@ public:
                   const wxPoint& pos = wxDefaultPosition,
                   const wxSize& size = wxDefaultSize,
                   long style = 0,
-                  const wxString& name = wxVListBoxNameStr);
+                  const wxString& name = wxHtmlListBoxNameStr);
 
     // really creates the control and sets the initial number of items in it
     // (which may be changed later with SetItemCount())
@@ -59,7 +63,7 @@ public:
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = 0,
-                const wxString& name = wxVListBoxNameStr);
+                const wxString& name = wxHtmlListBoxNameStr);
 
     // destructor cleans up whatever resources we use
     virtual ~wxHtmlListBox();
@@ -111,7 +115,7 @@ protected:
     // This method may be overriden to handle clicking on a link in
     // the listbox. By default, clicking links is ignored.
     virtual void OnLinkClicked(size_t WXUNUSED(n),
-                               const wxHtmlLinkInfo& WXUNUSED(link)) {}
+                               const wxHtmlLinkInfo& WXUNUSED(link)) { }
 
     // event handlers
     void OnSize(wxSizeEvent& event);
@@ -181,6 +185,138 @@ private:
 
     DECLARE_EVENT_TABLE()
     DECLARE_NO_COPY_CLASS(wxHtmlListBox)
+};
+
+
+// ----------------------------------------------------------------------------
+// wxSimpleHtmlListBox
+// ----------------------------------------------------------------------------
+
+#define wxHLB_DEFAULT_STYLE     wxBORDER_SUNKEN
+#define wxHLB_MULTIPLE          wxLB_MULTIPLE
+
+class WXDLLIMPEXP_HTML wxSimpleHtmlListBox : public wxHtmlListBox,
+                                             public wxItemContainer
+{
+public:
+    // wxListbox-compatible constructors
+    // ---------------------------------
+
+    wxSimpleHtmlListBox() { }
+
+    wxSimpleHtmlListBox(wxWindow *parent,
+                        wxWindowID id,
+                        const wxPoint& pos = wxDefaultPosition,
+                        const wxSize& size = wxDefaultSize,
+                        int n = 0, const wxString choices[] = NULL,
+                        long style = wxHLB_DEFAULT_STYLE,
+                        const wxValidator& validator = wxDefaultValidator,
+                        const wxString& name = wxSimpleHtmlListBoxNameStr)
+    {
+        Create(parent, id, pos, size, n, choices, style, validator, name);
+    }
+
+    wxSimpleHtmlListBox(wxWindow *parent,
+                        wxWindowID id,
+                        const wxPoint& pos,
+                        const wxSize& size,
+                        const wxArrayString& choices,
+                        long style = wxHLB_DEFAULT_STYLE,
+                        const wxValidator& validator = wxDefaultValidator,
+                        const wxString& name = wxSimpleHtmlListBoxNameStr)
+    {
+        Create(parent, id, pos, size, choices, style, validator, name);
+    }
+
+    bool Create(wxWindow *parent, wxWindowID id,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                int n = 0, const wxString choices[] = NULL,
+                long style = wxHLB_DEFAULT_STYLE,
+                const wxValidator& validator = wxDefaultValidator,
+                const wxString& name = wxSimpleHtmlListBoxNameStr);
+    bool Create(wxWindow *parent, wxWindowID id,
+                const wxPoint& pos,
+                const wxSize& size,
+                const wxArrayString& choices,
+                long style = wxHLB_DEFAULT_STYLE,
+                const wxValidator& validator = wxDefaultValidator,
+                const wxString& name = wxSimpleHtmlListBoxNameStr);
+                
+    virtual ~wxSimpleHtmlListBox();
+
+    // these must be overloaded otherwise the compiler will complain
+    // about  wxItemContainerImmutable::[G|S]etSelection being pure virtuals...
+    void SetSelection(int n)
+        { return wxVListBox::SetSelection(n); }
+    int GetSelection() const
+        { return wxVListBox::GetSelection(); }
+
+    // see ctrlsub.h for more info about this:
+    wxCONTROL_ITEMCONTAINER_CLIENTDATAOBJECT_RECAST
+
+
+    // accessing strings
+    // -----------------
+
+    virtual unsigned int GetCount() const
+        { return m_items.GetCount(); }
+
+    virtual wxString GetString(unsigned int n) const;
+
+    // override default unoptimized wxItemContainer::GetStrings() function
+    wxArrayString GetStrings() const
+        { return m_items; }
+
+    virtual void SetString(unsigned int n, const wxString& s);
+
+    virtual void Clear();
+    virtual void Delete(unsigned int n);
+
+    // override default unoptimized wxItemContainer::Append() function
+    void Append(const wxArrayString& strings);
+
+    // since we override one Append() overload, we need to overload all others too
+    int Append(const wxString& item)
+        { return wxItemContainer::Append(item); }
+    int Append(const wxString& item, void *clientData)
+        { return wxItemContainer::Append(item, clientData); }
+    int Append(const wxString& item, wxClientData *clientData)
+        { return wxItemContainer::Append(item, clientData); }
+
+
+protected:
+
+    virtual int DoAppend(const wxString& item);
+    virtual int DoInsert(const wxString& item, unsigned int pos);
+
+    virtual void DoSetItemClientData(unsigned int n, void *clientData)
+        { m_clientData[n] = clientData; }
+
+    virtual void *DoGetItemClientData(unsigned int n) const
+        { return m_clientData[n]; }
+    virtual void DoSetItemClientObject(unsigned int n, wxClientData *clientData)
+        { m_clientData[n] = (void *)clientData; }
+    virtual wxClientData *DoGetItemClientObject(unsigned int n) const
+        { return (wxClientData *)m_clientData[n]; }
+
+    // calls wxHtmlListBox::SetItemCount() and RefreshAll()
+    void UpdateCount();
+
+    // overload these functions just to change their visibility: users of
+    // wxSimpleHtmlListBox shouldn't be allowed to call them directly!
+    virtual void SetItemCount(size_t count)
+        { return wxHtmlListBox::SetItemCount(count); }
+    virtual void SetLineCount(size_t count)
+        { return wxHtmlListBox::SetLineCount(count); }
+
+    virtual wxString OnGetItem(size_t n) const
+        { return m_items[n]; }
+
+    wxArrayString m_items;
+    wxArrayPtrVoid m_clientData;
+
+    DECLARE_NO_COPY_CLASS(wxSimpleHtmlListBox)
 };
 
 #endif // _WX_HTMLLBOX_H_
