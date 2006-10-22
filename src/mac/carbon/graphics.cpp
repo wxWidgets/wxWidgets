@@ -38,13 +38,24 @@
 typedef float CGFloat;
 #endif
 
+//-----------------------------------------------------------------------------
+// constants
+//-----------------------------------------------------------------------------
+
+#if !defined( __DARWIN__ ) || defined(__MWERKS__)
+#ifndef M_PI
+const double M_PI = 3.14159265358979;
+#endif
+#endif
+
+static const double RAD2DEG = 180.0 / M_PI;
+
 //
 // Graphics Path
 //
 
 class WXDLLEXPORT wxMacCoreGraphicsPath : public wxGraphicsPath
 {
-    DECLARE_NO_COPY_CLASS(wxMacCoreGraphicsPath)
 public :
     wxMacCoreGraphicsPath();
     ~wxMacCoreGraphicsPath();
@@ -84,10 +95,23 @@ public :
     // draws a an arc to two tangents connecting (current) to (x1,y1) and (x1,y1) to (x2,y2), also a straight line from (current) to (x1,y1)
     virtual void AddArcToPoint( wxDouble x1, wxDouble y1 , wxDouble x2, wxDouble y2, wxDouble r );
     
-    CGPathRef GetPath() const;
+	// returns the native path
+	virtual void * GetNativePath() const { return m_path; }
+	
+	// give the native path returned by GetNativePath() back (there might be some deallocations necessary)
+	virtual void UnGetNativePath(void *p) {}
+
+    DECLARE_DYNAMIC_CLASS(wxMacCoreGraphicsPath)
+    DECLARE_NO_COPY_CLASS(wxMacCoreGraphicsPath)
 private :
     CGMutablePathRef m_path;
 };
+
+//-----------------------------------------------------------------------------
+// wxGraphicsPath implementation
+//-----------------------------------------------------------------------------
+
+IMPLEMENT_DYNAMIC_CLASS(wxMacCoreGraphicsPath, wxGraphicsPath)
 
 wxMacCoreGraphicsPath::wxMacCoreGraphicsPath()
 {
@@ -149,11 +173,6 @@ void wxMacCoreGraphicsPath::CloseSubpath()
     CGPathCloseSubpath( m_path );
 }
 
-CGPathRef wxMacCoreGraphicsPath::GetPath() const
-{
-    return m_path;
-}
-
 // gets the last point of the current path, (0,0) if not yet set
 void wxMacCoreGraphicsPath::GetCurrentPoint( wxDouble& x, wxDouble&y)
 {
@@ -168,12 +187,12 @@ void wxMacCoreGraphicsPath::GetCurrentPoint( wxDouble& x, wxDouble&y)
 
 class WXDLLEXPORT wxMacCoreGraphicsContext : public wxGraphicsContext
 {
-    DECLARE_NO_COPY_CLASS(wxMacCoreGraphicsContext)
-
 public:
     wxMacCoreGraphicsContext( CGContextRef cgcontext );
     
     wxMacCoreGraphicsContext( WindowRef window );
+    
+    wxMacCoreGraphicsContext( wxWindow* window );
     
     wxMacCoreGraphicsContext();
     
@@ -272,9 +291,17 @@ public:
     void SetNativeContext( CGContextRef cg );
     CGPathDrawingMode GetDrawingMode() const { return m_mode; }
     
+    DECLARE_NO_COPY_CLASS(wxMacCoreGraphicsContext)
+    DECLARE_DYNAMIC_CLASS(wxMacCoreGraphicsContext)
+
 private:
+	void EnsureIsValid();
+
     CGContextRef m_cgContext;
 	WindowRef m_windowRef;
+	int m_originX;
+	int m_originY;
+	wxMacCFRefHolder<HIShapeRef> m_clipRgn;
 	bool m_releaseContext;
     CGPathDrawingMode m_mode;
     ATSUStyle m_macATSUIStyle;
@@ -283,18 +310,6 @@ private:
 	wxFont m_font;
     wxColor m_textForegroundColor;
 };
-
-//-----------------------------------------------------------------------------
-// constants
-//-----------------------------------------------------------------------------
-
-#if !defined( __DARWIN__ ) || defined(__MWERKS__)
-#ifndef M_PI
-const double M_PI = 3.14159265358979;
-#endif
-#endif
-
-static const double RAD2DEG = 180.0 / M_PI;
 
 //-----------------------------------------------------------------------------
 // device context implementation
@@ -309,12 +324,10 @@ static const double RAD2DEG = 180.0 / M_PI;
 // (this one is used for getting back clippings etc)
 
 //-----------------------------------------------------------------------------
-// wxGraphicsPath implementation
-//-----------------------------------------------------------------------------
-
-//-----------------------------------------------------------------------------
 // wxGraphicsContext implementation
 //-----------------------------------------------------------------------------
+
+IMPLEMENT_DYNAMIC_CLASS(wxMacCoreGraphicsContext, wxGraphicsContext)
 
 void wxMacCoreGraphicsContext::Init()
 {
@@ -322,6 +335,7 @@ void wxMacCoreGraphicsContext::Init()
     m_mode = kCGPathFill;
     m_macATSUIStyle = NULL;
 	m_releaseContext = false;
+	m_clipRgn.Set(HIShapeCreateEmpty());
 }
 
 wxMacCoreGraphicsContext::wxMacCoreGraphicsContext( CGContextRef cgcontext )
@@ -336,15 +350,14 @@ wxMacCoreGraphicsContext::wxMacCoreGraphicsContext( WindowRef window )
 {
 	Init();
 	m_windowRef = window;
-	OSStatus status = QDBeginCGContext( GetWindowPort( window ) , &m_cgContext );
-	wxASSERT_MSG( status == noErr , wxT("Cannot nest wxDCs on the same window") );
-	Rect bounds;
-	GetWindowBounds( window, kWindowContentRgn, &bounds );
-	CGContextSaveGState( m_cgContext );
-	CGContextTranslateCTM( m_cgContext , 0 , bounds.bottom - bounds.top );
-	CGContextScaleCTM( m_cgContext , 1 , -1 );
-	CGContextSaveGState( m_cgContext );
-	m_releaseContext = true;
+}
+
+wxMacCoreGraphicsContext::wxMacCoreGraphicsContext( wxWindow* window )
+{
+	Init();
+	m_windowRef = (WindowRef) window->MacGetTopLevelWindowRef();
+    m_originX = m_originY = 0;
+    window->MacWindowToRootWindow( &m_originX , &m_originY );
 }
 
 wxMacCoreGraphicsContext::wxMacCoreGraphicsContext()
@@ -356,7 +369,7 @@ wxMacCoreGraphicsContext::~wxMacCoreGraphicsContext()
 {
     if ( m_cgContext )
     {
-        CGContextSynchronize( m_cgContext );
+        // TODO : when is this necessary - should we add a Flush() method ? CGContextSynchronize( m_cgContext );
         CGContextRestoreGState( m_cgContext );
         CGContextRestoreGState( m_cgContext );
     }
@@ -365,31 +378,76 @@ wxMacCoreGraphicsContext::~wxMacCoreGraphicsContext()
 		QDEndCGContext( GetWindowPort( m_windowRef ) , &m_cgContext);
 }
 
+void wxMacCoreGraphicsContext::EnsureIsValid()
+{
+	if ( !m_cgContext )
+	{
+		OSStatus status = QDBeginCGContext( GetWindowPort( m_windowRef ) , &m_cgContext );
+		wxASSERT_MSG( status == noErr , wxT("Cannot nest wxDCs on the same window") );
+		Rect bounds;
+		GetWindowBounds( m_windowRef, kWindowContentRgn, &bounds );
+		CGContextSaveGState( m_cgContext );
+		CGContextTranslateCTM( m_cgContext , 0 , bounds.bottom - bounds.top );
+		CGContextScaleCTM( m_cgContext , 1 , -1 );
+		CGContextTranslateCTM( m_cgContext, m_originX, m_originY );
+		CGContextSaveGState( m_cgContext );
+		m_releaseContext = true;
+		if ( !HIShapeIsEmpty(m_clipRgn) )
+		{
+			HIShapeReplacePathInCGContext( m_clipRgn, m_cgContext );
+			CGContextClip( m_cgContext );
+		}
+	}
+}
+
+
 void wxMacCoreGraphicsContext::Clip( const wxRegion &region )
 {
-	HIShapeRef shape = HIShapeCreateWithQDRgn( (RgnHandle) region.GetWXHRGN() );
-	HIShapeReplacePathInCGContext( shape, m_cgContext );
-	CGContextClip( m_cgContext );
-	CFRelease( shape );
+	if( m_cgContext )
+	{
+		HIShapeRef shape = HIShapeCreateWithQDRgn( (RgnHandle) region.GetWXHRGN() );
+		HIShapeReplacePathInCGContext( shape, m_cgContext );
+		CGContextClip( m_cgContext );
+		CFRelease( shape );
+	}
+	else
+	{
+		m_clipRgn.Set(HIShapeCreateWithQDRgn( (RgnHandle) region.GetWXHRGN() ));
+	}
 }
 
 // clips drawings to the rect
 void wxMacCoreGraphicsContext::Clip( wxDouble x, wxDouble y, wxDouble w, wxDouble h )
 {
-    HIRect r = CGRectMake( x , y , w , h );
-	CGContextClipToRect( m_cgContext, r );
+	HIRect r = CGRectMake( x , y , w , h );
+	if ( m_cgContext )
+	{
+		CGContextClipToRect( m_cgContext, r );
+	}
+	else
+	{
+		m_clipRgn.Set(HIShapeCreateWithRect(&r));
+	}
 }
 	
 	// resets the clipping to original extent
 void wxMacCoreGraphicsContext::ResetClip()
 {
-    CGContextRestoreGState( m_cgContext );
-    CGContextSaveGState( m_cgContext );
+	if ( m_cgContext )
+	{
+		CGContextRestoreGState( m_cgContext );
+		CGContextSaveGState( m_cgContext );
+	}
+	else
+	{
+		m_clipRgn.Set(HIShapeCreateEmpty());
+	}
 }
 
-void wxMacCoreGraphicsContext::StrokePath( const wxGraphicsPath *p )
+void wxMacCoreGraphicsContext::StrokePath( const wxGraphicsPath *path )
 {
-    const wxMacCoreGraphicsPath* path = dynamic_cast< const wxMacCoreGraphicsPath*>( p );
+	EnsureIsValid();
+	
     int width = m_pen.GetWidth();
     if ( width == 0 )
         width = 1 ;
@@ -401,16 +459,17 @@ void wxMacCoreGraphicsContext::StrokePath( const wxGraphicsPath *p )
     if ( offset )
         CGContextTranslateCTM( m_cgContext, 0.5, 0.5 );
 
-    CGContextAddPath( m_cgContext , path->GetPath() );
+    CGContextAddPath( m_cgContext , (CGPathRef) path->GetNativePath() );
     CGContextStrokePath( m_cgContext );
 
     if ( offset )
         CGContextTranslateCTM( m_cgContext, -0.5, -0.5 );
 }
 
-void wxMacCoreGraphicsContext::DrawPath( const wxGraphicsPath *p , int fillStyle )
+void wxMacCoreGraphicsContext::DrawPath( const wxGraphicsPath *path , int fillStyle )
 {
-    const wxMacCoreGraphicsPath* path = dynamic_cast< const wxMacCoreGraphicsPath*>( p );
+	EnsureIsValid();
+	
     CGPathDrawingMode mode = m_mode;
 
     if ( fillStyle == wxODDEVEN_RULE )
@@ -432,18 +491,18 @@ void wxMacCoreGraphicsContext::DrawPath( const wxGraphicsPath *p , int fillStyle
     if ( offset )
         CGContextTranslateCTM( m_cgContext, 0.5, 0.5 );
 
-    CGContextAddPath( m_cgContext , path->GetPath() );
+    CGContextAddPath( m_cgContext , (CGPathRef) path->GetNativePath() );
     CGContextDrawPath( m_cgContext , mode );
 
     if ( offset )
         CGContextTranslateCTM( m_cgContext, -0.5, -0.5 );
 }
 
-void wxMacCoreGraphicsContext::FillPath( const wxGraphicsPath *p , int fillStyle )
+void wxMacCoreGraphicsContext::FillPath( const wxGraphicsPath *path , int fillStyle )
 {
-    const wxMacCoreGraphicsPath* path = dynamic_cast< const wxMacCoreGraphicsPath*>( p );
-
-    CGContextAddPath( m_cgContext , path->GetPath() );
+	EnsureIsValid();
+	
+    CGContextAddPath( m_cgContext , (CGPathRef) path->GetNativePath() );
     if ( fillStyle == wxODDEVEN_RULE )
         CGContextEOFillPath( m_cgContext );
     else
@@ -467,21 +526,29 @@ void wxMacCoreGraphicsContext::SetNativeContext( CGContextRef cg )
 
 void wxMacCoreGraphicsContext::Translate( wxDouble dx , wxDouble dy ) 
 {
+	EnsureIsValid();
+	
     CGContextTranslateCTM( m_cgContext, dx, dy );
 }
 
 void wxMacCoreGraphicsContext::Scale( wxDouble xScale , wxDouble yScale )
 {
+	EnsureIsValid();
+	
     CGContextScaleCTM( m_cgContext , xScale , yScale );
 }
 
 void wxMacCoreGraphicsContext::Rotate( wxDouble angle )
 {
+	EnsureIsValid();
+	
     CGContextRotateCTM( m_cgContext , angle );
 }
 
 void wxMacCoreGraphicsContext::DrawBitmap( const wxBitmap &bmp, wxDouble x, wxDouble y, wxDouble w, wxDouble h ) 
 {
+	EnsureIsValid();
+	
     CGImageRef image = (CGImageRef)( bmp.CGImageCreate() );
     HIRect r = CGRectMake( x , y , w , h );
     HIViewDrawCGImage( m_cgContext , &r , image );
@@ -490,6 +557,8 @@ void wxMacCoreGraphicsContext::DrawBitmap( const wxBitmap &bmp, wxDouble x, wxDo
 
 void wxMacCoreGraphicsContext::DrawIcon( const wxIcon &icon, wxDouble x, wxDouble y, wxDouble w, wxDouble h ) 
 {
+	EnsureIsValid();
+	
     CGRect r = CGRectMake( 00 , 00 , w , h );
     CGContextSaveGState( m_cgContext );
     CGContextTranslateCTM( m_cgContext, x , y + h );
@@ -501,11 +570,15 @@ void wxMacCoreGraphicsContext::DrawIcon( const wxIcon &icon, wxDouble x, wxDoubl
 
 void wxMacCoreGraphicsContext::PushState()
 {
+	EnsureIsValid();
+	
     CGContextSaveGState( m_cgContext );
 }
 
 void wxMacCoreGraphicsContext::PopState() 
 {
+	EnsureIsValid();
+	
     CGContextRestoreGState( m_cgContext );
 }
 
@@ -979,6 +1052,8 @@ void wxMacCoreGraphicsContext::DrawText( const wxString &str, wxDouble x, wxDoub
 
 void wxMacCoreGraphicsContext::DrawText( const wxString &str, wxDouble x, wxDouble y, wxDouble angle ) 
 {
+	EnsureIsValid();
+	
     OSStatus status = noErr;
     ATSUTextLayout atsuLayout;
     UniCharCount chars = str.length();
@@ -1276,16 +1351,7 @@ wxGraphicsContext* wxGraphicsContext::Create( const wxWindowDC &dc )
 
 wxGraphicsContext* wxGraphicsContext::Create( wxWindow * window )
 {
-	wxGraphicsContext* ctx = new wxMacCoreGraphicsContext( (WindowRef) window->MacGetTopLevelWindowRef() );
-	CGContextRef cg = (CGContextRef) ctx->GetNativeContext() ;
-	CGContextRestoreGState( cg );
-	int x , y;
-    x = y = 0;
-    window->MacWindowToRootWindow( &x , &y );
-	CGContextTranslateCTM( cg, x, y );
-	CGContextSaveGState( cg );
-	return ctx;
-
+	return new wxMacCoreGraphicsContext( window );
 }
 
 wxGraphicsContext* wxGraphicsContext::CreateFromNative( void * context )
