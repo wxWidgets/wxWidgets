@@ -83,13 +83,11 @@ public :
 
     void AddArc( const wxPoint2DDouble& c, wxDouble r, wxDouble startAngle, wxDouble endAngle, bool clockwise);
 	
-	/*
 	// returns the native path
-	virtual void * GetNativePath() = 0;
+	virtual void * GetNativePath() const = 0;
 	
 	// give the native path returned by GetNativePath() back (there might be some deallocations necessary)
 	virtual void UnGetNativePath(void *p) = 0;
-	*/
 
     DECLARE_NO_COPY_CLASS(wxGraphicsPath)
     DECLARE_ABSTRACT_CLASS(wxGraphicsPath)
