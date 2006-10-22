@@ -26,15 +26,16 @@ class WXDLLEXPORT wxCollapsiblePaneBase : public wxControl
 public:
     wxCollapsiblePaneBase() {}
 
-    virtual void Expand()
-        { Collapse(false); }
-
     virtual void Collapse(bool collapse = true) = 0;
+    void Expand() { Collapse(false); }
+
     virtual bool IsCollapsed() const = 0;
+    bool IsExpanded() const { return !IsCollapsed(); }
+
     virtual wxWindow *GetPane() const = 0;
 
     virtual wxString GetLabel() const = 0;
-    virtual void SetLabel(const wxString &label) = 0;
+    virtual void SetLabel(const wxString& label) = 0;
 };
 
 

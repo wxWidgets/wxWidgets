@@ -56,7 +56,8 @@ bool wxGenericCollapsiblePane::Create( wxWindow *parent, wxWindowID id,
     m_pButton = new wxButton(this, wxCP_BUTTON_ID, GetBtnLabel(), wxPoint(0, 0),
                              wxDefaultSize, wxBU_EXACTFIT);
     m_pStatLine = new wxStaticLine(this, wxID_ANY);
-    m_pPane = new wxWindow(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxNO_BORDER);
+    m_pPane = new wxWindow(this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
+                           wxNO_BORDER);
 
     // start as collapsed:
     m_pPane->Hide();
@@ -70,27 +71,27 @@ wxSize wxGenericCollapsiblePane::DoGetBestSize() const
     wxSize sz = m_pButton->GetBestSize();
 
     // set width
-    sz.SetWidth( sz.GetWidth() + wxCP_MARGIN + m_pStatLine->GetBestSize().GetWidth() );
-    sz.SetWidth( wxMax(sz.GetWidth(), m_pPane->GetBestSize().GetWidth()) );
+    sz.SetWidth(sz.x + wxCP_MARGIN + m_pStatLine->GetBestSize().x);
+    const wxCoord paneWidth = m_pPane->GetBestSize().x;
+    if ( sz.x < paneWidth )
+        sz.x = paneWidth;
 
     // when expanded, we need more vertical space
-    if (!IsCollapsed())
-        sz.SetHeight( sz.GetHeight() + wxCP_MARGIN + m_pPane->GetBestSize().GetHeight() );
+    if ( IsExpanded() )
+        sz.SetHeight(sz.y + wxCP_MARGIN + m_pPane->GetBestSize().y);
 
     return sz;
 }
 
 wxString wxGenericCollapsiblePane::GetBtnLabel() const
 {
-    if (IsCollapsed())
-        return m_strLabel + wxT(" >>");
-    return m_strLabel + wxT(" <<");
+    return m_strLabel + (IsCollapsed() ? wxT(" >>") : wxT(" <<"));
 }
 
 void wxGenericCollapsiblePane::Collapse(bool collapse)
 {
     // optimization
-    if (IsCollapsed() == collapse)
+    if ( IsCollapsed() == collapse )
         return;
 
     // update our state
@@ -108,28 +109,29 @@ void wxGenericCollapsiblePane::Collapse(bool collapse)
     wxWindow *top = GetTopLevelParent();
     if (top)
     {
-        // we've changed our size, thus our top level parent needs to relayout itself
+        // we've changed our size, thus our top level parent needs to relayout
+        // itself
         top->Layout();
 
-        // FIXME: this makes wxGenericCollapsiblePane behave as the user expect but
-        //        maybe there are cases where this is unwanted!
+        // FIXME: this makes wxGenericCollapsiblePane behave as the user expect
+        //        but maybe there are cases where this is unwanted!
         if (top->GetSizer())
 #ifdef __WXGTK__
-        // FIXME: the SetSizeHints() call would be required also for GTK+ for the
-        //        expanded->collapsed transition.
-        //        Unfortunately if we enable this line, then the GTK+ top window
-        //        won't always be resized by the SetClientSize() call below!
-        //        As a side effect of this dirty fix, the minimal size for the
-        //        pane window is not set in GTK+ and the user can hide it shrinking
-        //        the "top" window...
+        // FIXME: the SetSizeHints() call would be required also for GTK+ for
+        //        the expanded->collapsed transition. Unfortunately if we
+        //        enable this line, then the GTK+ top window won't always be
+        //        resized by the SetClientSize() call below! As a side effect
+        //        of this dirty fix, the minimal size for the pane window is
+        //        not set in GTK+ and the user can hide it shrinking the "top"
+        //        window...
         if (IsCollapsed())
 #endif
             top->GetSizer()->SetSizeHints(top);
 
         if (IsCollapsed())
         {
-            // NB: we need to use SetClientSize() and not SetSize() otherwise the size for
-            //     windows like e.g. wxFrames with wxMenubars won't be correctly set
+            // use SetClientSize() and not SetSize() otherwise the size for
+            // e.g. a wxFrame with a menubar wouldn't be correctly set
             top->SetClientSize(sz);
         }
         else
@@ -166,13 +168,13 @@ void wxGenericCollapsiblePane::LayoutChildren()
     // the button position & size are always ok...
 
     // move & resize the static line
-    m_pStatLine->SetSize(btnSz.GetWidth() + wxCP_MARGIN, btnSz.GetHeight()/2,
-                         GetSize().GetWidth() - btnSz.GetWidth() - wxCP_MARGIN, -1,
+    m_pStatLine->SetSize(btnSz.x + wxCP_MARGIN, btnSz.y/2,
+                         GetSize().x - btnSz.x - wxCP_MARGIN, -1,
                          wxSIZE_USE_EXISTING);
 
     // move & resize the container window
-    m_pPane->SetSize(0, btnSz.GetHeight() + wxCP_MARGIN,
-                     GetSize().GetWidth(), GetSize().GetHeight() - btnSz.GetHeight() - wxCP_MARGIN);
+    m_pPane->SetSize(0, btnSz.y + wxCP_MARGIN,
+                     GetSize().x, GetSize().y - btnSz.y - wxCP_MARGIN);
 }
 
 

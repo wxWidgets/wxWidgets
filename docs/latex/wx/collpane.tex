@@ -8,8 +8,6 @@
 %% License:     wxWindows license
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-
-
 \section{\class{wxCollapsiblePane}}\label{wxcollapsiblepane}
 
 A collapsable panel is a container with an embedded button-like control which can be
@@ -96,6 +94,12 @@ all the parameters.
 Returns \true if the pane window is currently hidden.
 
 
+\membersection{wxCollapsiblePane::IsExpanded}\label{wxcollapsiblepaneisexpanded}
+
+\constfunc{bool}{IsExpanded}{\void}
+
+Returns \true if the pane window is currently shown.
+
 
 \membersection{wxCollapsiblePane::Collapse}\label{wxcollapsiblepanecollapse}
 
@@ -104,11 +108,10 @@ Returns \true if the pane window is currently hidden.
 Collapses or expands the pane window.
 
 
-
 \membersection{wxCollapsiblePane::Expand}\label{wxcollapsiblepaneexpand}
 
 \func{void}{Expand}{\void}
 
-Equivalent to {\tt Collapse(false)}.
+Same as \texttt{\helpref{Collapse}{wxcollapsiblepanecollapse}(false)}.
 
 
