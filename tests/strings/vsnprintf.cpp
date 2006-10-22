@@ -76,6 +76,11 @@ public:
 
 private:
     CPPUNIT_TEST_SUITE( VsnprintfTestCase );
+        CPPUNIT_TEST( D );
+        CPPUNIT_TEST( X );
+        CPPUNIT_TEST( O );
+        CPPUNIT_TEST( P );
+        CPPUNIT_TEST( N );
         CPPUNIT_TEST( E );
         CPPUNIT_TEST( F );
         CPPUNIT_TEST( G );
@@ -87,6 +92,11 @@ private:
         CPPUNIT_TEST( BigToSmallBuffer );
     CPPUNIT_TEST_SUITE_END();
 
+    void D();
+    void X();
+    void O();
+    void P();
+    void N();
     void E();
     void F();
     void G();
@@ -110,6 +120,58 @@ CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( VsnprintfTestCase, "VsnprintfTestCase" );
 
 VsnprintfTestCase::VsnprintfTestCase()
 {
+}
+
+void VsnprintfTestCase::D()
+{
+    CMP3("+123456", "%+d", 123456);
+    CMP3("-123456", "%d", -123456);
+    CMP3(" 123456", "% d", 123456);
+    CMP3("    123456", "%10d", 123456);
+    CMP3("0000123456", "%010d", 123456);
+    CMP3("-123456   ", "%-10d", -123456);
+}
+
+void VsnprintfTestCase::X()
+{
+    CMP3("ABCD", "%X", 0xABCD);
+    CMP3("0XABCD", "%#X", 0xABCD);
+    CMP3("0xabcd", "%#x", 0xABCD);
+}
+
+void VsnprintfTestCase::O()
+{
+    CMP3("1234567", "%o", 01234567);
+    CMP3("01234567", "%#o", 01234567);
+}
+
+void VsnprintfTestCase::P()
+{
+    // WARNING: printing of pointers is not fully standard.
+    //          GNU prints them as %#x except for NULL pointers which are
+    //          printed as '(nil)'.
+    //          MSVC always print them as %8X on 32 bit systems and as %16X
+    //          on 64 bit systems
+#ifdef __VISUALC__
+    #if SIZEOF_VOID_P == 4
+        CMP3("00ABCDEF", "%p", (void*)0xABCDEF);
+        CMP3("00000000", "%p", (void*)NULL);
+    #elif SIZEOF_VOID_P == 8
+        CMP3("0000ABCDEFABCDEF", "%p", (void*)0xABCDEFABCDEF);
+        CMP3("0000000000000000", "%p", (void*)NULL);
+    #endif
+#elif defined(__GNUG__)
+    CMP3("0xabcdef", "%p", (void*)0xABCDEF);
+    CMP3("(nil)", "%p", (void*)NULL);
+#endif
+}
+
+void VsnprintfTestCase::N()
+{
+    int nchar;
+
+    wxSnprintf(buf, MAX_TEST_LEN, "%d %s%n\n", 3, "bears", &nchar);
+    CPPUNIT_ASSERT_EQUAL( 7, nchar );
 }
 
 void VsnprintfTestCase::E()
