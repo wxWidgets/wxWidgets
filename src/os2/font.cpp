@@ -51,7 +51,7 @@ class WXDLLEXPORT wxFontRefData: public wxGDIRefData
 public:
     wxFontRefData()
     {
-        Init(-1, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, FALSE,
+        Init(-1, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false,
              wxEmptyString, wxFONTENCODING_DEFAULT);
     }
 
@@ -948,7 +948,7 @@ bool wxFont::FreeResource( bool WXUNUSED(bForce) )
     return false;
 } // end of wxFont::FreeResource
 
-WXHANDLE wxFont::GetResourceHandle()
+WXHANDLE wxFont::GetResourceHandle() const
 {
     return GetHFONT();
 } // end of wxFont::GetResourceHandle

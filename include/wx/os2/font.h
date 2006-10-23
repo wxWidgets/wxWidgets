@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        font.h
+// Name:        wx/os2/font.h
 // Purpose:     wxFont class
 // Author:      David Webster
 // Modified by:
@@ -105,7 +105,7 @@ public:
     //
     virtual bool     IsFree(void) const;
     virtual bool     RealizeResource(void);
-    virtual WXHANDLE GetResourceHandle(void);
+    virtual WXHANDLE GetResourceHandle(void) const;
     virtual bool     FreeResource(bool bForce = false);
 
     WXHFONT GetHFONT(void) const;

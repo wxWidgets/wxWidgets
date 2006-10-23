@@ -72,7 +72,7 @@ public:
     // Useful helper: create the brush resource
     //
     bool     RealizeResource(void);
-    WXHANDLE GetResourceHandle(void) ;
+    virtual WXHANDLE GetResourceHandle(void) const;
     bool     FreeResource(bool bForce = false);
     bool     IsFree(void) const;
     void     Unshare(void);
