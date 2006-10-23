@@ -166,6 +166,7 @@ extern LONG APIENTRY _EXPORT
 // Intel, Visual Age.
 #if defined(__WXWINCE__)
     #define wxGetOSFHandle(fd) ((HANDLE)fd)
+    #define wxOpenOSFHandle(h, flags) ((int)wxPtrToUInt(h))
 #elif defined(__CYGWIN__)
     #define wxGetOSFHandle(fd) ((HANDLE)get_osfhandle(fd))
 #elif defined(__VISUALC__) \
@@ -175,6 +176,8 @@ extern LONG APIENTRY _EXPORT
    || defined(__MINGW32__) \
    || (defined(__MWERKS__) && defined(__MSL__))
     #define wxGetOSFHandle(fd) ((HANDLE)_get_osfhandle(fd))
+    #define wxOpenOSFHandle(h, flags) (_open_osfhandle(wxPtrToUInt(h), flags))
+    #define wx_fdopen _fdopen
 #endif
 
 // close the handle in the class dtor
