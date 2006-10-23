@@ -1547,6 +1547,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_automtn.obj \
 	$(OBJS)\monodll_uuid.obj \
 	$(OBJS)\monodll_accel.obj \
+	$(OBJS)\monodll_collpaneg.obj \
 	$(OBJS)\monodll_colrdlgg.obj \
 	$(OBJS)\monodll_dirdlgg.obj \
 	$(OBJS)\monodll_fdrepdlg.obj \
@@ -2149,6 +2150,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_automtn.obj \
 	$(OBJS)\monolib_uuid.obj \
 	$(OBJS)\monolib_accel.obj \
+	$(OBJS)\monolib_collpaneg.obj \
 	$(OBJS)\monolib_colrdlgg.obj \
 	$(OBJS)\monolib_dirdlgg.obj \
 	$(OBJS)\monolib_fdrepdlg.obj \
@@ -2662,6 +2664,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_automtn.obj \
 	$(OBJS)\coredll_uuid.obj \
 	$(OBJS)\coredll_accel.obj \
+	$(OBJS)\coredll_collpaneg.obj \
 	$(OBJS)\coredll_colrdlgg.obj \
 	$(OBJS)\coredll_dirdlgg.obj \
 	$(OBJS)\coredll_fdrepdlg.obj \
@@ -3102,6 +3105,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_automtn.obj \
 	$(OBJS)\corelib_uuid.obj \
 	$(OBJS)\corelib_accel.obj \
+	$(OBJS)\corelib_collpaneg.obj \
 	$(OBJS)\corelib_colrdlgg.obj \
 	$(OBJS)\corelib_dirdlgg.obj \
 	$(OBJS)\corelib_fdrepdlg.obj \
@@ -4724,9 +4728,6 @@ $(OBJS)\monodll_gsocket.obj: ..\..\src\msw\gsocket.cpp
 $(OBJS)\monodll_urlmsw.obj: ..\..\src\msw\urlmsw.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) $**
 
-$(OBJS)\monodll_collpaneg.obj: ..\..\src\generic\collpaneg.cpp
-	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) $**
-
 $(OBJS)\monodll_colordlg.obj: ..\..\src\msw\colordlg.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) $**
 
@@ -5424,6 +5425,11 @@ $(OBJS)\monodll_automtn.obj: ..\..\src\msw\ole\automtn.cpp
 
 !if "$(USE_GUI)" == "1"
 $(OBJS)\monodll_uuid.obj: ..\..\src\msw\ole\uuid.cpp
+	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) $**
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\monodll_collpaneg.obj: ..\..\src\generic\collpaneg.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) $**
 !endif
 
@@ -6664,9 +6670,6 @@ $(OBJS)\monolib_gsocket.obj: ..\..\src\msw\gsocket.cpp
 $(OBJS)\monolib_urlmsw.obj: ..\..\src\msw\urlmsw.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) $**
 
-$(OBJS)\monolib_collpaneg.obj: ..\..\src\generic\collpaneg.cpp
-	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) $**
-
 $(OBJS)\monolib_colordlg.obj: ..\..\src\msw\colordlg.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) $**
 
@@ -7364,6 +7367,11 @@ $(OBJS)\monolib_automtn.obj: ..\..\src\msw\ole\automtn.cpp
 
 !if "$(USE_GUI)" == "1"
 $(OBJS)\monolib_uuid.obj: ..\..\src\msw\ole\uuid.cpp
+	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) $**
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\monolib_collpaneg.obj: ..\..\src\generic\collpaneg.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) $**
 !endif
 
@@ -8925,9 +8933,6 @@ $(OBJS)\coredll_mslu.obj: ..\..\src\msw\mslu.cpp
 $(OBJS)\coredll_volume.obj: ..\..\src\msw\volume.cpp
 	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) $**
 
-$(OBJS)\coredll_collpaneg.obj: ..\..\src\generic\collpaneg.cpp
-	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) $**
-
 $(OBJS)\coredll_colordlg.obj: ..\..\src\msw\colordlg.cpp
 	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) $**
 
@@ -9316,6 +9321,11 @@ $(OBJS)\coredll_automtn.obj: ..\..\src\msw\ole\automtn.cpp
 
 !if "$(USE_GUI)" == "1"
 $(OBJS)\coredll_uuid.obj: ..\..\src\msw\ole\uuid.cpp
+	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) $**
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\coredll_collpaneg.obj: ..\..\src\generic\collpaneg.cpp
 	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) $**
 !endif
 
@@ -10173,9 +10183,6 @@ $(OBJS)\corelib_mslu.obj: ..\..\src\msw\mslu.cpp
 $(OBJS)\corelib_volume.obj: ..\..\src\msw\volume.cpp
 	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) $**
 
-$(OBJS)\corelib_collpaneg.obj: ..\..\src\generic\collpaneg.cpp
-	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) $**
-
 $(OBJS)\corelib_colordlg.obj: ..\..\src\msw\colordlg.cpp
 	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) $**
 
@@ -10564,6 +10571,11 @@ $(OBJS)\corelib_automtn.obj: ..\..\src\msw\ole\automtn.cpp
 
 !if "$(USE_GUI)" == "1"
 $(OBJS)\corelib_uuid.obj: ..\..\src\msw\ole\uuid.cpp
+	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) $**
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\corelib_collpaneg.obj: ..\..\src\generic\collpaneg.cpp
 	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) $**
 !endif
 
