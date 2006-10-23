@@ -110,6 +110,8 @@ GTK_CONFIGURE_OPTIONS = $(COMMON_CONFIGURE_OPTIONS) \
     --enable-sound \
     --with-sdl \
     --enable-display \
+    --enable-geometry \
+    --enable-graphics_ctx \
     --with-libjpeg=sys \
     --with-libpng=sys \
     --with-libtiff=sys \
@@ -156,6 +158,7 @@ package_gtk_dbg         := libwxgtk$(release)$(unicode_suffix)-dbg
 package_gtk_py_lib      := python-wxgtk$(release)$(unicode_suffix)
 package_gtk_py_ver       = python-wxversion
 package_gtk_py_tools     = python-wxtools
+package_gtk_py_addons    = python-wxaddons
 
 package_headers         := wx$(release)-headers
 package_i18n            := wx$(release)-i18n
@@ -165,7 +168,7 @@ package_common           = wx-common
 
 # The packages listed here are common to all wx versions, and may be provided
 # by another source package if more than one is in the release simultaneously.
-common_packages	:= $(package_common) $(package_gtk_py_ver) $(package_gtk_py_tools)
+common_packages	:= $(package_common) $(package_gtk_py_ver) $(package_gtk_py_tools) $(package_gtk_py_addons)
 
 
 package_gtk_dbg_py      := python-wxgtk$(release)$(unicode_suffix)-dbg
@@ -730,6 +733,8 @@ else
 	rm debian/$(package_gtk_py_lib)/$(pydir)/wxversion.py
 endif
 
+
+
 install-gtk-py-tools: DH_OPTIONS=-p$(package_gtk_py_tools)
 install-gtk-py-tools: install-gtk-py-ver
 	dh_testdir
@@ -768,7 +773,20 @@ endif
 
 	rm -r debian/$(package_gtk_py_lib)/usr/bin
 
-install-gtk-py: install-gtk-py-tools
+install-gtk-py-addons: DH_OPTIONS=-p$(package_gtk_py_addons)
+install-gtk-py-addons: install-gtk-py-tools
+	dh_testdir
+	dh_testroot
+	dh_clean -k
+ifndef DEBIAN_WX_DEFAULT_VERSION
+
+	dh_movefiles --sourcedir=debian/$(package_gtk_py_lib) $(pydir)/wxaddons
+else
+	rm -r debian/$(package_gtk_py_lib)/$(pydir)/wxaddons
+endif
+
+
+install-gtk-py: install-gtk-py-addons
 
 
 install-common: DH_OPTIONS=-p$(package_common)

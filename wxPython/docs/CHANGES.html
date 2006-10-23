@@ -293,7 +293,34 @@ ul.auto-toc {
 <div class="document" id="recent-changes-for-wxpython">
 <h1 class="title">Recent Changes for wxPython</h1>
 <div class="section">
-<h1><a id="id1" name="id1">2.7.1.1</a></h1>
+<h1><a id="id1" name="id1">2.7.1.2</a></h1>
+<ul class="simple">
+<li>21-Oct-2006</li>
+</ul>
+<p>Fixed a bug in the MaskedEdit controls caused by conflicting IsEmpty
+methods.</p>
+<p>Patch #1579280: Some mimetype optimizations on unix-like systems.</p>
+<p>wxMac: Several wx.webkit.WebKitCtrl enhancements/fixes, including:</p>
+<blockquote>
+<ul class="simple">
+<li>new methods for increasing/decreasing text size, getting
+selection, getting/setting scroll position, printing, enabling
+editing, and running JavaScripts on the page.</li>
+<li>added new event (wx.webkit.WebKitBeforeLoadEvent) for catching, and
+possibly vetoing, load events before they occur.</li>
+<li>wx.webkit.WebKitCtrl now fires mouse events for certain events
+that it was eating before. This improves wxSplitterWindow
+resizing behavior.</li>
+<li>refactoring of the sizing logic to move the Cocoa view.  Tested
+with splitter windows, panels, notebooks and all position
+correctly with this.</li>
+</ul>
+</blockquote>
+<p>Some improvements to the drawing code in CustomTreeCtrl.</p>
+<p>Fixed refcount leak in wx.Window.GetChildren.</p>
+</div>
+<div class="section">
+<h1><a id="id2" name="id2">2.7.1.1</a></h1>
 <ul class="simple">
 <li>18-Oct-2006</li>
 </ul>
@@ -398,7 +425,7 @@ of the component data objects to use to access the data.</p>
 <p>Changed how the stock objects (wx.RED, wx.RED_PEN, wx.RED_BRUSH, etc.)
 are initialized.  They are now created as uninitialized instances
 using __new__.  Then after the wx.App has been created, but before
-OnInit is called, the .this attribute of each obhect is initialized.
+OnInit is called, the .this attribute of each object is initialized.
 This was needed because of some delayed initialization functionality
 that was implemented in wxWidgets, but the end result is cleaner for
 wxPython as well, and allowed me to remove some ugly code previously
@@ -505,7 +532,7 @@ Andrea Gavana's FancyButtonPanel module.</p>
 <p>Renamed wx.FutureCall to wx.CallLater so it is named more like
 wx.CallAfter.  wx.FutureCall is now an empty subclass of wx.CallLater
 for compatibility of older code.</p>
-<p>Added the wx.lib.customtreectrl the from Andrea Gavana.</p>
+<p>Added the wx.lib.customtreectrl module from Andrea Gavana.</p>
 <p>Added ChangeSelection to wx.BookCtrl (the base class for wx.Notebook
 and other book controls) that is the same as SetSelection but doesn't
 send the change events.</p>
@@ -556,7 +583,7 @@ wx.PaintDC or wx.BufferedPaintDC.  This uses the new
 wx.Window.IsDoubleBuffered method.</p>
 </div>
 <div class="section">
-<h1><a id="id2" name="id2">2.6.3.3</a></h1>
+<h1><a id="id3" name="id3">2.6.3.3</a></h1>
 <ul class="simple">
 <li>15-July-2006</li>
 </ul>
@@ -593,7 +620,7 @@ machines, but at least all compile errors and warnings related to it
 have been resolved.</p>
 </div>
 <div class="section">
-<h1><a id="id3" name="id3">2.6.3.2</a></h1>
+<h1><a id="id4" name="id4">2.6.3.2</a></h1>
 <ul class="simple">
 <li>3-April-2006</li>
 </ul>
@@ -627,7 +654,7 @@ already shown.</p>
 is selected only with the keyboard.</p>
 </div>
 <div class="section">
-<h1><a id="id4" name="id4">2.6.3.0</a></h1>
+<h1><a id="id5" name="id5">2.6.3.0</a></h1>
 <ul class="simple">
 <li>27-March-2006</li>
 </ul>
@@ -689,7 +716,7 @@ zoomed plot and move it around with a mouse drag.</p>
 <p>Added wx.StandardPaths.GetDocumentsDir() (patch 1214360)</p>
 </div>
 <div class="section">
-<h1><a id="id5" name="id5">2.6.2.1</a></h1>
+<h1><a id="id6" name="id6">2.6.2.1</a></h1>
 <ul class="simple">
 <li>10-Jan-2006</li>
 </ul>
@@ -858,7 +885,7 @@ be easy to accommodate, all you need to do is add a parenthesis
 pair:  (...x, y, ...) ---&gt;  (...(x,y), ...)</blockquote>
 </div>
 <div class="section">
-<h1><a id="id6" name="id6">2.6.1.0</a></h1>
+<h1><a id="id7" name="id7">2.6.1.0</a></h1>
 <ul class="simple">
 <li>4-June-2005</li>
 </ul>
@@ -886,7 +913,7 @@ calls.</p>
 change will get written at the next flush.</p>
 </div>
 <div class="section">
-<h1><a id="id7" name="id7">2.6.0.1</a></h1>
+<h1><a id="id8" name="id8">2.6.0.1</a></h1>
 <ul class="simple">
 <li>30-May-2005</li>
 </ul>
@@ -999,7 +1026,7 @@ there is a range of allowed values (so a wx.SpinCtrl is used instead
 of a wx.TextCtrl.)</p>
 </div>
 <div class="section">
-<h1><a id="id8" name="id8">2.6.0.0</a></h1>
+<h1><a id="id9" name="id9">2.6.0.0</a></h1>
 <ul class="simple">
 <li>26-Apr-2005</li>
 </ul>
@@ -1077,7 +1104,7 @@ EVT_KEY_UP and EVT_TEXT events from its embedded text control.</p>
 </dl>
 </div>
 <div class="section">
-<h1><a id="id9" name="id9">2.5.5.1</a></h1>
+<h1><a id="id10" name="id10">2.5.5.1</a></h1>
 <ul class="simple">
 <li>8-Apr-2005</li>
 </ul>
@@ -1146,7 +1173,7 @@ folks.</p>
 <p>Added the ActiveGrid IDE as a sample application.</p>
 </div>
 <div class="section">
-<h1><a id="id10" name="id10">2.5.4.1</a></h1>
+<h1><a id="id11" name="id11">2.5.4.1</a></h1>
 <ul class="simple">
 <li>16-Mar-2005</li>
 </ul>
@@ -1380,7 +1407,7 @@ wx.Image.</p>
 </dl>
 </div>
 <div class="section">
-<h1><a id="id11" name="id11">2.5.3.1</a></h1>
+<h1><a id="id12" name="id12">2.5.3.1</a></h1>
 <ul class="simple">
 <li>9-Nov-2004</li>
 </ul>
@@ -1537,7 +1564,7 @@ it.</p>
 version installs, and comes with an uninstaller script.</p>
 </div>
 <div class="section">
-<h1><a id="id12" name="id12">2.5.2.8</a></h1>
+<h1><a id="id13" name="id13">2.5.2.8</a></h1>
 <ul class="simple">
 <li>27-Aug-2004</li>
 </ul>
@@ -1569,7 +1596,7 @@ wxCheckListBox.</li>
 </blockquote>
 </div>
 <div class="section">
-<h1><a id="id13" name="id13">2.5.2.7</a></h1>
+<h1><a id="id14" name="id14">2.5.2.7</a></h1>
 <ul class="simple">
 <li>14-Aug-2004</li>
 </ul>
@@ -1753,7 +1780,7 @@ MigrationGuide for more details on using the new module.</p>
 <p>Floats are allowed again as function parameters where ints are expected.</p>
 </div>
 <div class="section">
-<h1><a id="id15" name="id15">2.4.2.4</a></h1>
+<h1><a id="id16" name="id16">2.4.2.4</a></h1>
 <ul class="simple">
 <li>1-Oct-2003</li>
 </ul>
@@ -1766,7 +1793,7 @@ demonstrated in the Threads sample in the demo.</p>
 <p>Added Chris Barker's FloatCanvas.</p>
 </div>
 <div class="section">
-<h1><a id="id16" name="id16">2.4.1.2</a></h1>
+<h1><a id="id17" name="id17">2.4.1.2</a></h1>
 <ul class="simple">
 <li>19-Jun-2003</li>
 </ul>
@@ -1821,7 +1848,7 @@ and Spacers can be specified with a wxSize (or 2-tuple) parameter</p>
 <p>Added wxCursorFromBits.</p>
 </div>
 <div class="section">
-<h1><a id="id17" name="id17">2.4.0.7</a></h1>
+<h1><a id="id18" name="id18">2.4.0.7</a></h1>
 <ul class="simple">
 <li>24-Mar-2003</li>
 </ul>
@@ -1861,7 +1888,7 @@ think I am testing in the future...</p>
 <p>Updated to 0.9b of PyCrust.</p>
 </div>
 <div class="section">
-<h1><a id="id18" name="id18">2.4.0.4</a></h1>
+<h1><a id="id19" name="id19">2.4.0.4</a></h1>
 <ul class="simple">
 <li>7-Mar-2003</li>
 </ul>
@@ -1922,7 +1949,7 @@ doesn't have a standard place for them.</p>
 <p>Updated to the 0.9a version of PyCrust</p>
 </div>
 <div class="section">
-<h1><a id="id19" name="id19">2.4.0.2</a></h1>
+<h1><a id="id20" name="id20">2.4.0.2</a></h1>
 <ul class="simple">
 <li>23-Jan-2003</li>
 </ul>
@@ -1931,7 +1958,7 @@ doesn't have a standard place for them.</p>
 <p>Added wxPyColourChooser by Michael Gilfix.</p>
 </div>
 <div class="section">
-<h1><a id="id20" name="id20">2.4.0.1</a></h1>
+<h1><a id="id21" name="id21">2.4.0.1</a></h1>
 <ul class="simple">
 <li>10-Jan-2003</li>
 </ul>
@@ -1941,14 +1968,14 @@ enhancements.</p>
 wxPython/lib/dialogs.py for more details.</p>
 </div>
 <div class="section">
-<h1><a id="id21" name="id21">2.3.4.2</a></h1>
+<h1><a id="id22" name="id22">2.3.4.2</a></h1>
 <ul class="simple">
 <li>21-Dec-2002</li>
 </ul>
 <p>Various bug fixes.</p>
 </div>
 <div class="section">
-<h1><a id="id22" name="id22">2.3.4.1</a></h1>
+<h1><a id="id23" name="id23">2.3.4.1</a></h1>
 <ul class="simple">
 <li>18-Dec-2002</li>
 </ul>
@@ -2006,7 +2033,7 @@ HTMLHelp viewer does.  Changed how the wxPythonDocs tarball is built
 and added a script to launch the doc viewer.</p>
 </div>
 <div class="section">
-<h1><a id="id23" name="id23">2.3.3.1</a></h1>
+<h1><a id="id24" name="id24">2.3.3.1</a></h1>
 <ul class="simple">
 <li>19-Sep-2002</li>
 </ul>
@@ -2152,7 +2179,7 @@ example.</p>
 <p>Added wxTimeCtrl from Will Sadkin.</p>
 </div>
 <div class="section">
-<h1><a id="id24" name="id24">2.3.2.1</a></h1>
+<h1><a id="id25" name="id25">2.3.2.1</a></h1>
 <ul class="simple">
 <li>20-Dec-2001</li>
 </ul>
@@ -2162,7 +2189,7 @@ without barfing and is also still compatible with Python debuggers.</p>
 <p>Added some patches from library contributors.</p>
 </div>
 <div class="section">
-<h1><a id="id25" name="id25">2.3.2</a></h1>
+<h1><a id="id26" name="id26">2.3.2</a></h1>
 <ul class="simple">
 <li>11-Dec-2001</li>
 </ul>
@@ -2248,7 +2275,7 @@ wxPython/contrib/dllwidget and wxPython/demo/dllwidget for more
 details.</p>
 </div>
 <div class="section">
-<h1><a id="id26" name="id26">2.3.1</a></h1>
+<h1><a id="id27" name="id27">2.3.1</a></h1>
 <ul class="simple">
 <li>10-Jul-2001</li>
 </ul>
@@ -2265,7 +2292,7 @@ subclass wxXmlResourceHandler, etc...</p>
 <p>Added enhanced wxVTKRenderWindow by Prabhu Ramachandran</p>
 </div>
 <div class="section">
-<h1><a id="id27" name="id27">2.3.0</a></h1>
+<h1><a id="id28" name="id28">2.3.0</a></h1>
 <ul class="simple">
 <li>22-May-2001</li>
 </ul>
@@ -2365,7 +2392,7 @@ by having smaller functional apps to play with.  They can be found in
 wxPython/samples.</p>
 </div>
 <div class="section">
-<h1><a id="id28" name="id28">2.2.7</a></h1>
+<h1><a id="id29" name="id29">2.2.7</a></h1>
 <ul class="simple">
 <li>19-Jun-2001</li>
 </ul>
@@ -2373,7 +2400,7 @@ wxPython/samples.</p>
 changes and fixes in the wxWindows library.</p>
 </div>
 <div class="section">
-<h1><a id="id29" name="id29">2.2.5</a></h1>
+<h1><a id="id30" name="id30">2.2.5</a></h1>
 <ul class="simple">
 <li>30-Jan-2001</li>
 </ul>

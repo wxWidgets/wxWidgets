@@ -80,11 +80,22 @@ public:
         wxPyEndBlockThreads(blocked);
         return NULL;
     }
-    
+
+    static wxGraphicsContext* CreateFromNative( void *  ) {
+        wxPyBlock_t blocked = wxPyBeginBlockThreads();
+        PyErr_SetString(PyExc_NotImplementedError,
+                        "wxGraphicsContext is not available on this platform.");
+        wxPyEndBlockThreads(blocked);
+        return NULL;
+    }        
+
     wxGraphicsPath * CreatePath() { return NULL; }
     void PushState() {}
     void PopState() {}
     void Clip( const wxRegion & ) {}
+    void Clip( wxDouble, wxDouble, wxDouble, wxDouble ) {}
+    void ResetClip() {}
+    void * GetNativeContext() { return NULL; }
     void Translate( wxDouble  , wxDouble  ) {}
     void Scale( wxDouble  , wxDouble  ) {}
     void Rotate( wxDouble  ) {}
@@ -135,7 +146,8 @@ public:
     
     virtual ~wxGCDC() {}
 
-    wxGraphicsContext* GetGraphicContext() { return NULL; }
+    wxGraphicsContext* GetGraphicsContext() { return NULL; }
+    void SetGraphicsContext( wxGraphicsContext* ) {}
 };
 
 #endif

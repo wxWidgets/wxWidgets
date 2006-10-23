@@ -84,7 +84,7 @@ On MacOS if the cursor is larger than 16x16 it is resized and currently only sho
 
 \func{}{wxCursor}{\param{const wxCursor\&}{ cursor}}
 
-Copy constructor, uses \helpref{reference counting}{trefcount}.
+Copy constructor. This uses reference counting so is a cheap operation.
 
 \wxheading{Parameters}
 
@@ -244,7 +244,8 @@ Returns true if cursor data is present.
 
 \func{wxCursor\&}{operator $=$}{\param{const wxCursor\& }{cursor}}
 
-Assignment operator, using \helpref{reference counting}{trefcount}.
+Assignment operator, using reference counting. Returns a reference
+to `this'.
 
 \membersection{wxCursor::operator $==$}\label{wxcursorequals}
 
