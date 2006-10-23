@@ -473,6 +473,10 @@ SOURCE=.\streams\ffilestream.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\streams\fileback.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\fileconf\fileconftest.cpp
 # End Source File
 # Begin Source File

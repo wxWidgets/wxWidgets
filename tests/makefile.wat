@@ -261,6 +261,7 @@ TEST_OBJECTS =  &
 	$(OBJS)\test_bstream.obj &
 	$(OBJS)\test_datastreamtest.obj &
 	$(OBJS)\test_ffilestream.obj &
+	$(OBJS)\test_fileback.obj &
 	$(OBJS)\test_filestream.obj &
 	$(OBJS)\test_largefile.obj &
 	$(OBJS)\test_memstream.obj &
@@ -440,6 +441,9 @@ $(OBJS)\test_datastreamtest.obj :  .AUTODEPEND .\streams\datastreamtest.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_CXXFLAGS) $<
 
 $(OBJS)\test_ffilestream.obj :  .AUTODEPEND .\streams\ffilestream.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_CXXFLAGS) $<
+
+$(OBJS)\test_fileback.obj :  .AUTODEPEND .\streams\fileback.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_CXXFLAGS) $<
 
 $(OBJS)\test_filestream.obj :  .AUTODEPEND .\streams\filestream.cpp

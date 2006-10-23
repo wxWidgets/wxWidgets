@@ -73,6 +73,7 @@ TEST_OBJECTS =  \
 	test_bstream.o \
 	test_datastreamtest.o \
 	test_ffilestream.o \
+	test_fileback.o \
 	test_filestream.o \
 	test_largefile.o \
 	test_memstream.o \
@@ -369,6 +370,9 @@ test_datastreamtest.o: $(srcdir)/streams/datastreamtest.cpp $(TEST_ODEP)
 
 test_ffilestream.o: $(srcdir)/streams/ffilestream.cpp $(TEST_ODEP)
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/streams/ffilestream.cpp
+
+test_fileback.o: $(srcdir)/streams/fileback.cpp $(TEST_ODEP)
+	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/streams/fileback.cpp
 
 test_filestream.o: $(srcdir)/streams/filestream.cpp $(TEST_ODEP)
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/streams/filestream.cpp

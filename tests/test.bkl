@@ -51,6 +51,7 @@
             streams/bstream.cpp
             streams/datastreamtest.cpp
             streams/ffilestream.cpp
+            streams/fileback.cpp
             streams/filestream.cpp
             streams/largefile.cpp
             streams/memstream.cpp

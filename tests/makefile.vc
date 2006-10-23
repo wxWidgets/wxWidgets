@@ -56,6 +56,7 @@ TEST_OBJECTS =  \
 	$(OBJS)\test_bstream.obj \
 	$(OBJS)\test_datastreamtest.obj \
 	$(OBJS)\test_ffilestream.obj \
+	$(OBJS)\test_fileback.obj \
 	$(OBJS)\test_filestream.obj \
 	$(OBJS)\test_largefile.obj \
 	$(OBJS)\test_memstream.obj \
@@ -491,6 +492,9 @@ $(OBJS)\test_datastreamtest.obj: .\streams\datastreamtest.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_CXXFLAGS) $**
 
 $(OBJS)\test_ffilestream.obj: .\streams\ffilestream.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(TEST_CXXFLAGS) $**
+
+$(OBJS)\test_fileback.obj: .\streams\fileback.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_CXXFLAGS) $**
 
 $(OBJS)\test_filestream.obj: .\streams\filestream.cpp
