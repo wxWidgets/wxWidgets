@@ -204,6 +204,7 @@ MONODLL_OBJECTS =  \
 	$(OBJS)\monodll_extended.o \
 	$(OBJS)\monodll_ffile.o \
 	$(OBJS)\monodll_file.o \
+	$(OBJS)\monodll_fileback.o \
 	$(OBJS)\monodll_fileconf.o \
 	$(OBJS)\monodll_filefn.o \
 	$(OBJS)\monodll_filename.o \
@@ -317,6 +318,7 @@ MONOLIB_OBJECTS =  \
 	$(OBJS)\monolib_extended.o \
 	$(OBJS)\monolib_ffile.o \
 	$(OBJS)\monolib_file.o \
+	$(OBJS)\monolib_fileback.o \
 	$(OBJS)\monolib_fileconf.o \
 	$(OBJS)\monolib_filefn.o \
 	$(OBJS)\monolib_filename.o \
@@ -432,6 +434,7 @@ BASEDLL_OBJECTS =  \
 	$(OBJS)\basedll_extended.o \
 	$(OBJS)\basedll_ffile.o \
 	$(OBJS)\basedll_file.o \
+	$(OBJS)\basedll_fileback.o \
 	$(OBJS)\basedll_fileconf.o \
 	$(OBJS)\basedll_filefn.o \
 	$(OBJS)\basedll_filename.o \
@@ -530,6 +533,7 @@ BASELIB_OBJECTS =  \
 	$(OBJS)\baselib_extended.o \
 	$(OBJS)\baselib_ffile.o \
 	$(OBJS)\baselib_file.o \
+	$(OBJS)\baselib_fileback.o \
 	$(OBJS)\baselib_fileconf.o \
 	$(OBJS)\baselib_filefn.o \
 	$(OBJS)\baselib_filename.o \
@@ -4614,6 +4618,9 @@ $(OBJS)\monodll_ffile.o: ../../src/common/ffile.cpp
 $(OBJS)\monodll_file.o: ../../src/common/file.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\monodll_fileback.o: ../../src/common/fileback.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\monodll_fileconf.o: ../../src/common/fileconf.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
@@ -6654,6 +6661,9 @@ $(OBJS)\monolib_ffile.o: ../../src/common/ffile.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monolib_file.o: ../../src/common/file.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\monolib_fileback.o: ../../src/common/fileback.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monolib_fileconf.o: ../../src/common/fileconf.cpp
@@ -8701,6 +8711,9 @@ $(OBJS)\basedll_ffile.o: ../../src/common/ffile.cpp
 $(OBJS)\basedll_file.o: ../../src/common/file.cpp
 	$(CXX) -c -o $@ $(BASEDLL_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\basedll_fileback.o: ../../src/common/fileback.cpp
+	$(CXX) -c -o $@ $(BASEDLL_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\basedll_fileconf.o: ../../src/common/fileconf.cpp
 	$(CXX) -c -o $@ $(BASEDLL_CXXFLAGS) $(CPPDEPS) $<
 
@@ -8945,6 +8958,9 @@ $(OBJS)\baselib_ffile.o: ../../src/common/ffile.cpp
 	$(CXX) -c -o $@ $(BASELIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\baselib_file.o: ../../src/common/file.cpp
+	$(CXX) -c -o $@ $(BASELIB_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\baselib_fileback.o: ../../src/common/fileback.cpp
 	$(CXX) -c -o $@ $(BASELIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\baselib_fileconf.o: ../../src/common/fileconf.cpp

@@ -304,6 +304,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/common/extended.c
     src/common/ffile.cpp
     src/common/file.cpp
+    src/common/fileback.cpp
     src/common/fileconf.cpp
     src/common/filefn.cpp
     src/common/filename.cpp
@@ -387,6 +388,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/features.h
     wx/ffile.h
     wx/file.h
+    wx/fileback.h
     wx/fileconf.h
     wx/filefn.h
     wx/filename.h

@@ -506,6 +506,7 @@ if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_BUSYINFO=no
   DEFAULT_wxUSE_ARCHIVE_STREAMS=no
   DEFAULT_wxUSE_ZIPSTREAM=no
+  DEFAULT_wxUSE_BACKINGFILE=no
   DEFAULT_wxUSE_VALIDATORS=no
 
   DEFAULT_wxUSE_ACCEL=no
@@ -724,6 +725,7 @@ else
   DEFAULT_wxUSE_BUSYINFO=yes
   DEFAULT_wxUSE_ARCHIVE_STREAMS=yes
   DEFAULT_wxUSE_ZIPSTREAM=yes
+  DEFAULT_wxUSE_BACKINGFILE=yes
   DEFAULT_wxUSE_VALIDATORS=yes
 
   DEFAULT_wxUSE_ACCEL=yes
@@ -945,6 +947,7 @@ WX_ARG_ENABLE(ipc,           [  --enable-ipc            use interprocess communi
 dnl please keep the settings below in alphabetical order
 WX_ARG_ENABLE(apple_ieee,    [  --enable-apple_ieee     use the Apple IEEE codec], wxUSE_APPLE_IEEE)
 WX_ARG_ENABLE(arcstream,     [  --enable-arcstream      use wxArchive streams], wxUSE_ARCHIVE_STREAMS)
+WX_ARG_ENABLE(backingfile,   [  --enable-backingfile    use wxBackingFile], wxUSE_BACKINGFILE)
 WX_ARG_ENABLE(backtrace,     [  --enable-backtrace      use wxStackWalker class for getting backtraces], wxUSE_STACKWALKER)
 WX_ARG_ENABLE(catch_segvs,   [  --enable-catch_segvs    catch signals in wxApp::OnFatalException (Unix only)], wxUSE_ON_FATAL_EXCEPTION)
 WX_ARG_ENABLE(cmdline,       [  --enable-cmdline        use wxCmdLineParser class], wxUSE_CMDLINE_PARSER)
@@ -5719,6 +5722,14 @@ if test "$wxUSE_ZIPSTREAM" = "yes"; then
     AC_MSG_WARN(wxZip requires wxZlib... disabled)
   else
     AC_DEFINE(wxUSE_ZIPSTREAM)
+  fi
+fi
+
+if test "$wxUSE_BACKINGFILE" = "yes"; then
+  if test "$wxUSE_STREAMS" != yes -o \( "$wxUSE_FILE" != yes -a "$wxUSE_FFILE" != yes \); then
+    AC_MSG_WARN(wxBackingFile requires wxStreams and wxFile or wxFFile... disabled)
+  else
+    AC_DEFINE(wxUSE_BACKINGFILE)
   fi
 fi
 

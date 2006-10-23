@@ -2905,6 +2905,7 @@ MONODLL_OBJECTS =  &
 	$(OBJS)\monodll_extended.obj &
 	$(OBJS)\monodll_ffile.obj &
 	$(OBJS)\monodll_file.obj &
+	$(OBJS)\monodll_fileback.obj &
 	$(OBJS)\monodll_fileconf.obj &
 	$(OBJS)\monodll_filefn.obj &
 	$(OBJS)\monodll_filename.obj &
@@ -3018,6 +3019,7 @@ MONOLIB_OBJECTS =  &
 	$(OBJS)\monolib_extended.obj &
 	$(OBJS)\monolib_ffile.obj &
 	$(OBJS)\monolib_file.obj &
+	$(OBJS)\monolib_fileback.obj &
 	$(OBJS)\monolib_fileconf.obj &
 	$(OBJS)\monolib_filefn.obj &
 	$(OBJS)\monolib_filename.obj &
@@ -3133,6 +3135,7 @@ BASEDLL_OBJECTS =  &
 	$(OBJS)\basedll_extended.obj &
 	$(OBJS)\basedll_ffile.obj &
 	$(OBJS)\basedll_file.obj &
+	$(OBJS)\basedll_fileback.obj &
 	$(OBJS)\basedll_fileconf.obj &
 	$(OBJS)\basedll_filefn.obj &
 	$(OBJS)\basedll_filename.obj &
@@ -3232,6 +3235,7 @@ BASELIB_OBJECTS =  &
 	$(OBJS)\baselib_extended.obj &
 	$(OBJS)\baselib_ffile.obj &
 	$(OBJS)\baselib_file.obj &
+	$(OBJS)\baselib_fileback.obj &
 	$(OBJS)\baselib_fileconf.obj &
 	$(OBJS)\baselib_filefn.obj &
 	$(OBJS)\baselib_filename.obj &
@@ -4840,6 +4844,9 @@ $(OBJS)\monodll_ffile.obj :  .AUTODEPEND ..\..\src\common\ffile.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_file.obj :  .AUTODEPEND ..\..\src\common\file.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_fileback.obj :  .AUTODEPEND ..\..\src\common\fileback.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_fileconf.obj :  .AUTODEPEND ..\..\src\common\fileconf.cpp
@@ -6882,6 +6889,9 @@ $(OBJS)\monolib_ffile.obj :  .AUTODEPEND ..\..\src\common\ffile.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_file.obj :  .AUTODEPEND ..\..\src\common\file.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_fileback.obj :  .AUTODEPEND ..\..\src\common\fileback.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_fileconf.obj :  .AUTODEPEND ..\..\src\common\fileconf.cpp
@@ -8929,6 +8939,9 @@ $(OBJS)\basedll_ffile.obj :  .AUTODEPEND ..\..\src\common\ffile.cpp
 $(OBJS)\basedll_file.obj :  .AUTODEPEND ..\..\src\common\file.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
+$(OBJS)\basedll_fileback.obj :  .AUTODEPEND ..\..\src\common\fileback.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
+
 $(OBJS)\basedll_fileconf.obj :  .AUTODEPEND ..\..\src\common\fileconf.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
@@ -9173,6 +9186,9 @@ $(OBJS)\baselib_ffile.obj :  .AUTODEPEND ..\..\src\common\ffile.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_file.obj :  .AUTODEPEND ..\..\src\common\file.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
+
+$(OBJS)\baselib_fileback.obj :  .AUTODEPEND ..\..\src\common\fileback.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_fileconf.obj :  .AUTODEPEND ..\..\src\common\fileconf.cpp

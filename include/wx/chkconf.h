@@ -83,6 +83,14 @@
    please keep the options in alphabetical order!
  */
 
+#ifndef wxUSE_BACKINGFILE
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_BACKINGFILE must be defined."
+#   else
+#       define wxUSE_BACKINGFILE 0
+#   endif
+#endif /* !defined(wxUSE_BACKINGFILE) */
+
 #ifndef wxUSE_CRASHREPORT
     /* this one is special: as currently it is Windows-only, don't force it
        to be defined on other platforms */
@@ -1156,6 +1164,17 @@
 #       else
 #           undef wxUSE_ARCHIVE_STREAMS
 #           define wxUSE_ARCHIVE_STREAMS 1
+#       endif
+#   endif
+#endif /* wxUSE_ZIPSTREAM */
+
+#if wxUSE_BACKINGFILE
+#   if !wxUSE_STREAMS || (!wxUSE_FILE && !wxUSE_FFILE)
+#       ifdef wxABORT_ON_CONFIG_ERROR
+#           error "wxBackingFile requires wxStream and wxFile or wxFFile"
+#       else
+#           undef wxUSE_BACKINGFILE
+#           define wxUSE_BACKINGFILE 1
 #       endif
 #   endif
 #endif /* wxUSE_ZIPSTREAM */

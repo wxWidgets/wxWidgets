@@ -64,6 +64,11 @@ Major new features in 2.7 release
 2.7.2
 -----
 
+All:
+
+- Added wxFFile overload to wxFileName::CreateTemporaryFileName().
+- Added wxBackingFile and wxBackedInputStream
+
 All (GUI): 
 
 - wxMemoryDC constructor now optionally accepts a wxBitmap parameter,

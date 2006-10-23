@@ -240,6 +240,7 @@ wx/except.h
 wx/features.h
 wx/ffile.h
 wx/file.h
+wx/fileback.h
 wx/fileconf.h
 wx/filefn.h
 wx/filename.h

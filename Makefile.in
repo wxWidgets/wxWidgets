@@ -252,6 +252,7 @@ ALL_BASE_HEADERS =  \
 	wx/features.h \
 	wx/ffile.h \
 	wx/file.h \
+	wx/fileback.h \
 	wx/fileconf.h \
 	wx/filefn.h \
 	wx/filename.h \
@@ -383,6 +384,7 @@ ALL_PORTS_BASE_HEADERS =  \
 	wx/features.h \
 	wx/ffile.h \
 	wx/file.h \
+	wx/fileback.h \
 	wx/fileconf.h \
 	wx/filefn.h \
 	wx/filename.h \
@@ -534,6 +536,7 @@ ALL_BASE_SOURCES =  \
 	src/common/extended.c \
 	src/common/ffile.cpp \
 	src/common/file.cpp \
+	src/common/fileback.cpp \
 	src/common/fileconf.cpp \
 	src/common/filefn.cpp \
 	src/common/filename.cpp \
@@ -682,6 +685,7 @@ MONODLL_OBJECTS =  \
 	monodll_extended.o \
 	monodll_ffile.o \
 	monodll_file.o \
+	monodll_fileback.o \
 	monodll_fileconf.o \
 	monodll_filefn.o \
 	monodll_filename.o \
@@ -774,6 +778,7 @@ MONOLIB_OBJECTS =  \
 	monolib_extended.o \
 	monolib_ffile.o \
 	monolib_file.o \
+	monolib_fileback.o \
 	monolib_fileconf.o \
 	monolib_filefn.o \
 	monolib_filename.o \
@@ -868,6 +873,7 @@ BASEDLL_OBJECTS =  \
 	basedll_extended.o \
 	basedll_ffile.o \
 	basedll_file.o \
+	basedll_fileback.o \
 	basedll_fileconf.o \
 	basedll_filefn.o \
 	basedll_filename.o \
@@ -945,6 +951,7 @@ BASELIB_OBJECTS =  \
 	baselib_extended.o \
 	baselib_ffile.o \
 	baselib_file.o \
+	baselib_fileback.o \
 	baselib_fileconf.o \
 	baselib_filefn.o \
 	baselib_filename.o \
@@ -12126,6 +12133,9 @@ monodll_ffile.o: $(srcdir)/src/common/ffile.cpp $(MONODLL_ODEP)
 monodll_file.o: $(srcdir)/src/common/file.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/file.cpp
 
+monodll_fileback.o: $(srcdir)/src/common/fileback.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/fileback.cpp
+
 monodll_fileconf.o: $(srcdir)/src/common/fileconf.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/fileconf.cpp
 
@@ -16193,6 +16203,9 @@ monolib_ffile.o: $(srcdir)/src/common/ffile.cpp $(MONOLIB_ODEP)
 
 monolib_file.o: $(srcdir)/src/common/file.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/file.cpp
+
+monolib_fileback.o: $(srcdir)/src/common/fileback.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/fileback.cpp
 
 monolib_fileconf.o: $(srcdir)/src/common/fileconf.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/fileconf.cpp
@@ -20265,6 +20278,9 @@ basedll_ffile.o: $(srcdir)/src/common/ffile.cpp $(BASEDLL_ODEP)
 basedll_file.o: $(srcdir)/src/common/file.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/common/file.cpp
 
+basedll_fileback.o: $(srcdir)/src/common/fileback.cpp $(BASEDLL_ODEP)
+	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/common/fileback.cpp
+
 basedll_fileconf.o: $(srcdir)/src/common/fileconf.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/common/fileconf.cpp
 
@@ -20828,6 +20844,9 @@ baselib_ffile.o: $(srcdir)/src/common/ffile.cpp $(BASELIB_ODEP)
 
 baselib_file.o: $(srcdir)/src/common/file.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/common/file.cpp
+
+baselib_fileback.o: $(srcdir)/src/common/fileback.cpp $(BASELIB_ODEP)
+	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/common/fileback.cpp
 
 baselib_fileconf.o: $(srcdir)/src/common/fileconf.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/common/fileconf.cpp

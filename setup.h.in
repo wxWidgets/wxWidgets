@@ -251,6 +251,8 @@
 
 #define wxUSE_ZIPSTREAM     0
 
+#define wxUSE_BACKINGFILE   0
+
 #define wxUSE_ZLIB          0
 
 #define wxUSE_APPLE_IEEE          0
@@ -374,8 +376,6 @@
 #define wxUSE_CARET         0
 
 #define wxUSE_DISPLAY       0
-
-#define wxUSE_DETECT_SM     0
 
 #define wxUSE_GEOMETRY            0
 
