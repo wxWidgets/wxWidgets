@@ -84,6 +84,12 @@ Unix Ports:
 - Added autopackage for wxGTK and an example of using autopackage for a wx
   program (Francesco Montorsi)
 
+wxGTK
+- More RTL work.
+- Support wxALWAYS_SHOW_SB
+- Speed up MIME types loading. Only the GNOME database
+  should be loaded under GNOME etc. For this, the code
+  queries the X11 session protocol.
 
 
 2.7.1
