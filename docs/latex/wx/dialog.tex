@@ -16,6 +16,23 @@ can be moved around the screen. It can contain controls and other windows and
 is often used to allow the user to make some choice or to answer a question.
 
 
+\subsection{Dialog Buttons}
+
+The dialog usually contains either a single button allowing to close the
+dialog or two buttons, one accepting the changes and the other one discarding
+them (such button, if present, is automatically activated if the user presses
+the \texttt{"Esc"} key). By default, buttons with the standard \texttt{wxID\_OK} 
+and \texttt{wxID\_CANCEL} identifiers behave as expected. Starting with
+wxWidgets 2.7 it is also possible to use a button with a different identifier
+instead, see \helpref{SetAffirmativeId}{wxdialogsetaffirmativeid} and 
+\helpref{SetEscapeId}{wxdialogsetescapeid}.
+
+Also notice that the \helpref{CreateButtonSizer()}{wxdialogcreatebuttonsizer} 
+should be used to create the buttons appropriate for the current platform and
+positioned correctly (including their order which is platform-dependent).
+
+
+
 \wxheading{Derived from}
 
 \helpref{wxTopLevelWindow}{wxtoplevelwindow}\\
