@@ -137,7 +137,6 @@ static GDILoader gGDILoader;
 
 class WXDLLEXPORT wxGDIPlusPath : public wxGraphicsPath
 {
-    DECLARE_NO_COPY_CLASS(wxGDIPlusPath)
 public :
     wxGDIPlusPath();
     ~wxGDIPlusPath();
@@ -186,19 +185,21 @@ public :
 	virtual void * GetNativePath() const { return m_path; }
 	
 	// give the native path returned by GetNativePath() back (there might be some deallocations necessary)
-	virtual void UnGetNativePath(void *p) {}
+	virtual void UnGetNativePath(void * WXUNUSED(path)) {}
 
 private :
     GraphicsPath* m_path;
+    DECLARE_DYNAMIC_CLASS_NO_COPY(wxGDIPlusPath)
 };
 
 class WXDLLEXPORT wxGDIPlusContext : public wxGraphicsContext
 {
-    DECLARE_NO_COPY_CLASS(wxGDIPlusContext)
-
 public:
-    wxGDIPlusContext( WXHDC hdc );
+    wxGDIPlusContext( HDC hdc );
+    wxGDIPlusContext( HWND hwnd );
+    wxGDIPlusContext( Graphics* gr);
     wxGDIPlusContext();
+
     virtual ~wxGDIPlusContext();
 
     virtual void Clip( const wxRegion &region );
@@ -237,6 +238,9 @@ public:
     virtual void GetPartialTextExtents(const wxString& text, wxArrayDouble& widths) const;
 
 private:
+    void    Init();
+    void    SetDefaults();
+
     Graphics* m_context;
     vector<GraphicsState> m_stateStack;
     GraphicsState m_state1;
@@ -256,7 +260,10 @@ private:
     Font* m_font;
     // wxPen m_pen;
     // wxBrush m_brush;
+    DECLARE_DYNAMIC_CLASS_NO_COPY(wxGDIPlusContext)
 };
+
+IMPLEMENT_DYNAMIC_CLASS(wxGDIPlusPath,wxGraphicsPath)
 
 wxGDIPlusPath::wxGDIPlusPath()
 {
@@ -336,30 +343,59 @@ void wxGDIPlusPath::AddRectangle( wxDouble x, wxDouble y, wxDouble w, wxDouble h
     m_path->AddRectangle(RectF(x,y,w,h));
 }
 
-//
-//
-//
-/*
-// closes the current subpath
-void wxGDIPlusPath::AddArcToPoint( wxDouble x1, wxDouble y1 , wxDouble x2, wxDouble y2, wxDouble r ) 
-{
-//    CGPathAddArcToPoint( m_path, NULL , x1, y1, x2, y2, r); 
-}
-
-*/
-
 //-----------------------------------------------------------------------------
 // wxGDIPlusContext implementation
 //-----------------------------------------------------------------------------
 
-wxGDIPlusContext::wxGDIPlusContext( WXHDC hdc  )
+IMPLEMENT_DYNAMIC_CLASS(wxGDIPlusContext,wxGraphicsContext)
+
+wxGDIPlusContext::wxGDIPlusContext( HDC hdc  )
+{
+    Init();
+    m_context = new Graphics( hdc);
+    SetDefaults();
+}
+
+wxGDIPlusContext::wxGDIPlusContext( HWND hwnd  )
+{
+    Init();
+    m_context = new Graphics( hwnd);
+    SetDefaults();
+}
+
+wxGDIPlusContext::wxGDIPlusContext( Graphics* gr  )
+{
+    Init();
+    m_context = gr;
+    SetDefaults();
+}
+
+void wxGDIPlusContext::Init()
 {
     gGDILoader.EnsureIsLoaded();
-    m_context = new Graphics( (HDC) hdc);
+    m_context = NULL;
+    m_state1 = 0;
+    m_state2= 0;
+
+    m_pen = NULL;
+    m_penTransparent = true;
+    m_penImage = NULL;
+    m_penBrush = NULL;
+
+    m_brush = NULL;
+    m_brushTransparent = true;
+    m_brushImage = NULL;
+    m_brushPath = NULL;
+
+    m_textBrush = NULL;
+    m_font = NULL;
+}
+
+void wxGDIPlusContext::SetDefaults()
+{
     m_context->SetSmoothingMode(SmoothingModeHighQuality);
     m_state1 = m_context->Save();
     m_state2 = m_context->Save();
-
     // set defaults
 
     m_penTransparent = false;
@@ -394,19 +430,19 @@ wxGDIPlusContext::~wxGDIPlusContext()
 }
 
 
-void wxGDIPlusContext::Clip( const wxRegion & WXUNUSED(region) )
+void wxGDIPlusContext::Clip( const wxRegion &region )
 {
-// TODO
+    m_context->SetClip((HRGN)region.GetHRGN(),CombineModeIntersect);
 }
 
 void wxGDIPlusContext::Clip( wxDouble x, wxDouble y, wxDouble w, wxDouble h )
 {
-// TODO
+    m_context->SetClip(RectF(x,y,w,h),CombineModeIntersect);
 }
 	
 void wxGDIPlusContext::ResetClip()
 {
-// TODO
+    m_context->ResetClip();
 }
 
 void wxGDIPlusContext::StrokePath( const wxGraphicsPath *path )
@@ -955,12 +991,12 @@ wxGraphicsContext* wxGraphicsContext::Create( const wxWindowDC& dc)
 
 wxGraphicsContext* wxGraphicsContext::Create( wxWindow * window )
 {
-	return NULL; // TODO
+    return new wxGDIPlusContext( (HWND) window->GetHWND() );
 }
 
 wxGraphicsContext* wxGraphicsContext::CreateFromNative( void * context )
 {
-	return NULL; // TODO
+    return new wxGDIPlusContext( (Graphics*) context );
 }
 
 
