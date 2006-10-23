@@ -2343,6 +2343,10 @@ SOURCE=..\include\wx\cmndata.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\include\wx\collpane.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\include\wx\colordlg.h
 # End Source File
 # Begin Source File
@@ -4196,6 +4200,10 @@ SOURCE=..\include\wx\generic\clrpickerg.h
 # Begin Source File
 
 SOURCE=..\include\wx\generic\clrpickerg.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\generic\colpaneg.h
 # End Source File
 # Begin Source File
 

@@ -676,6 +676,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/checklst.h
     wx/choicdlg.h
     wx/choice.h
+    wx/collpane.h
     wx/cmndata.h
     wx/combo.h
     wx/combobox.h
@@ -701,6 +702,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/generic/buttonbar.h
     wx/generic/choicdgg.h
     wx/generic/clrpickerg.h
+    wx/generic/colpaneg.h
     wx/generic/colrdlgg.h
     wx/generic/combo.h
     wx/generic/dcpsg.h
@@ -1024,6 +1026,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/gtk/combobox.h
     wx/gtk/control.h
     wx/gtk/clrpicker.h
+    wx/gtk/collpane.h
     wx/gtk/dialog.h
     wx/gtk/dirdlg.h
     wx/gtk/filedlg.h
@@ -2130,6 +2133,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/mac/carbon/window.cpp
     <!-- Generic implementations used by wxMac: -->
     src/generic/caret.cpp
+    src/generic/collpaneg.cpp
     src/generic/fdrepdlg.cpp
     src/generic/fontdlgg.cpp
     src/generic/listctrl.cpp

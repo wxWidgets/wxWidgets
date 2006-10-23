@@ -8201,6 +8201,10 @@ SOURCE=..\..\include\wx\generic\clrpickerg.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\generic\colpaneg.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\generic\colrdlgg.h
 # End Source File
 # Begin Source File
@@ -8694,6 +8698,10 @@ SOURCE=..\..\include\wx\cmdproc.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\cmndata.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\collpane.h
 # End Source File
 # Begin Source File
 
