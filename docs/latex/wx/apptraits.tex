@@ -68,6 +68,15 @@ this is used in GUI mode only and always returns \NULL in console.
 
 NOTE: returned pointer will be deleted by the caller.
 
+\membersection{wxAppTraits::GetDesktopEnvironment}\label{wxapptraitsgetdesktopenvironment}
+
+\constfunc{virtual wxString}{GetDesktopEnvironment}{\void}
+
+This method returns the name of the desktop environment currently
+running in a Unix desktop. Currently only "KDE" or "GNOME" are
+supported and the code uses the X11 session protocol vendor name
+to figure out, which desktop environment is running. The methods
+return an empty string otherwise and on all other platforms.
 
 \membersection{wxAppTraits::GetStandardPaths}\label{wxapptraitsgetstandardpaths}
 
