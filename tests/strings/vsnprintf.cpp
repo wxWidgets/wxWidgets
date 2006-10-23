@@ -170,7 +170,7 @@ void VsnprintfTestCase::N()
 {
     int nchar;
 
-    wxSnprintf(buf, MAX_TEST_LEN, "%d %s%n\n", 3, "bears", &nchar);
+    wxSnprintf(buf, MAX_TEST_LEN, _T("%d %s%n\n"), 3, _T("bears"), &nchar);
     CPPUNIT_ASSERT_EQUAL( 7, nchar );
 }
 
