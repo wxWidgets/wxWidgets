@@ -242,13 +242,13 @@ public:
                 long style = wxHLB_DEFAULT_STYLE,
                 const wxValidator& validator = wxDefaultValidator,
                 const wxString& name = wxSimpleHtmlListBoxNameStr);
-                
+
     virtual ~wxSimpleHtmlListBox();
 
     // these must be overloaded otherwise the compiler will complain
     // about  wxItemContainerImmutable::[G|S]etSelection being pure virtuals...
     void SetSelection(int n)
-        { return wxVListBox::SetSelection(n); }
+        { wxVListBox::SetSelection(n); }
     int GetSelection() const
         { return wxVListBox::GetSelection(); }
 
@@ -306,9 +306,9 @@ protected:
     // overload these functions just to change their visibility: users of
     // wxSimpleHtmlListBox shouldn't be allowed to call them directly!
     virtual void SetItemCount(size_t count)
-        { return wxHtmlListBox::SetItemCount(count); }
+        { wxHtmlListBox::SetItemCount(count); }
     virtual void SetLineCount(size_t count)
-        { return wxHtmlListBox::SetLineCount(count); }
+        { wxHtmlListBox::SetLineCount(count); }
 
     virtual wxString OnGetItem(size_t n) const
         { return m_items[n]; }
