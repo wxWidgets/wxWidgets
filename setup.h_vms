@@ -1205,6 +1205,9 @@ typedef pid_t GPid;
 /* Define if you have Pango xft support */
 #undef HAVE_PANGO_XFT
 
+/* Define if fdopen is available.  */
+#undef HAVE_FDOPEN
+
 /* ---------------------------------------------------------------------
    Win32 adjustments section
    ---------------------------------------------------------------------

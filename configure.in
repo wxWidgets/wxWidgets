@@ -4828,7 +4828,10 @@ if test "x$INET_LINK" != "x"; then
     INET_LINK=" -l$INET_LINK"
 fi
 
+WX_CHECK_FUNCS(fdopen)
+
 fi
+
 dnl if !MSW
 
 
