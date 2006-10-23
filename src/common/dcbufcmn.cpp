@@ -29,25 +29,21 @@
 
 #include "wx/dcbuffer.h"
 
-
 // ============================================================================
 // implementation
 // ============================================================================
 
-// ============================================================================
-// wxSharedDCBufferManager
-//   Helper class to free shared buffer when the app exists.
-// ============================================================================
+// ----------------------------------------------------------------------------
+// wxSharedDCBufferManager: helper class maintaining backing store bitmap
+// ----------------------------------------------------------------------------
 
 class wxSharedDCBufferManager
 {
-    friend class wxBufferedDC;
 public:
-
     wxSharedDCBufferManager() { }
     ~wxSharedDCBufferManager() { }
 
-    wxBitmap* GetBuffer(int w, int h)
+    wxBitmap GetBuffer(int w, int h)
     {
         if ( !m_buffer.IsOk() ||
              w > m_buffer.GetWidth() ||
@@ -59,11 +55,11 @@ public:
             m_buffer = wxBitmap(w, h);
         }
 
-        return &m_buffer;
+        return m_buffer;
     }
 
 private:
-    wxBitmap    m_buffer;
+    wxBitmap m_buffer;
 };
 
 static wxSharedDCBufferManager gs_sharedDCBufferManager;
@@ -75,7 +71,7 @@ static wxSharedDCBufferManager gs_sharedDCBufferManager;
 
 void wxBufferedDC::UseBuffer(wxCoord w, wxCoord h)
 {
-    if ( !m_buffer )
+    if ( !m_buffer.IsOk() )
     {
         if ( w == -1 || h == -1 )
             m_dc->GetSize(&w, &h);
@@ -83,6 +79,6 @@ void wxBufferedDC::UseBuffer(wxCoord w, wxCoord h)
         m_buffer = gs_sharedDCBufferManager.GetBuffer(w, h);
     }
 
-    SelectObject(*m_buffer);
+    SelectObject(m_buffer);
 }
 

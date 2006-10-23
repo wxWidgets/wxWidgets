@@ -43,7 +43,6 @@ public:
     // Default ctor, must subsequently call Init for two stage construction.
     wxBufferedDC()
         : m_dc(NULL),
-          m_buffer(NULL),
           m_style(0)
     {
     }
@@ -52,8 +51,7 @@ public:
     wxBufferedDC(wxDC *dc,
                  const wxBitmap& buffer = wxNullBitmap,
                  int style = wxBUFFER_CLIENT_AREA)
-        : m_dc(NULL),
-          m_buffer(NULL)
+        : m_dc(NULL)
     {
         Init(dc, buffer, style);
     }
@@ -62,9 +60,7 @@ public:
     // (where area is usually something like the size of the window
     // being buffered)
     wxBufferedDC(wxDC *dc, const wxSize& area, int style = wxBUFFER_CLIENT_AREA)
-        : m_dc(NULL),
-          m_buffer(NULL)
-
+        : m_dc(NULL)
     {
         Init(dc, area, style);
     }
@@ -83,7 +79,7 @@ public:
     {
         InitCommon(dc, style);
 
-        m_buffer = &buffer;
+        m_buffer = buffer;
 
         UseBuffer();
     }
@@ -103,7 +99,8 @@ public:
     // blitting to) is destroyed.
     void UnMask()
     {
-        wxCHECK_RET( m_dc, _T("No underlying DC in wxBufferedDC") );
+        wxCHECK_RET( m_dc, _T("no underlying wxDC?") );
+        wxASSERT_MSG( m_buffer.IsOk(), _T("invalid backing store") );
 
         wxCoord x = 0,
                 y = 0;
@@ -111,7 +108,7 @@ public:
         if ( m_style & wxBUFFER_CLIENT_AREA )
             GetDeviceOrigin(&x, &y);
 
-        m_dc->Blit(0, 0, m_buffer->GetWidth(), m_buffer->GetHeight(),
+        m_dc->Blit(0, 0, m_buffer.GetWidth(), m_buffer.GetHeight(),
                    this, -x, -y );
         m_dc = NULL;
     }
@@ -124,7 +121,7 @@ private:
     // common part of Init()s
     void InitCommon(wxDC *dc, int style)
     {
-        wxASSERT_MSG( !m_dc && !m_buffer, _T("wxBufferedDC already initialised") );
+        wxASSERT_MSG( !m_dc, _T("wxBufferedDC already initialised") );
         wxCHECK_RET( dc, _T("can't associate NULL DC with wxBufferedDC") );
 
         m_dc = dc;
@@ -144,8 +141,8 @@ private:
     //     could probably be a reference.
     wxDC *m_dc;
 
-    // the buffer (selected in this DC)
-    const wxBitmap *m_buffer;
+    // the buffer (selected in this DC), initially invalid
+    wxBitmap m_buffer;
 
     // the buffering style
     int m_style;
