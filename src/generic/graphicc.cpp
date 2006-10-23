@@ -144,11 +144,11 @@ public :
     virtual void AddArcToPoint( wxDouble x1, wxDouble y1 , wxDouble x2, wxDouble y2, wxDouble r )  ;
     */
 
-	// returns the native path
-	virtual void * GetNativePath() const ;
-	
-	// give the native path returned by GetNativePath() back (there might be some deallocations necessary)
-	virtual void UnGetNativePath(void *p) ;
+    // returns the native path
+    virtual void * GetNativePath() const ;
+
+    // give the native path returned by GetNativePath() back (there might be some deallocations necessary)
+    virtual void UnGetNativePath(void *p) ;
 
 private :
     cairo_t* m_pathContext;
@@ -166,14 +166,14 @@ wxCairoPath::~wxCairoPath()
     cairo_destroy(m_pathContext);
 }
 
-cairo_path_t* wxCairoPath::GetNativePath() const
+void* wxCairoPath::GetNativePath() const
 {
     return cairo_copy_path(m_pathContext) ;
 }
 
 void wxCairoPath::UnGetNativePath(void *p)
 {
-	cairo_path_destroy((cairo_path_t*)p);
+    cairo_path_destroy((cairo_path_t*)p);
 }
 
 //
@@ -251,12 +251,12 @@ public:
 
     // clips drawings to the rect
     virtual void Clip( wxDouble x, wxDouble y, wxDouble w, wxDouble h );
-	
-	// resets the clipping to original extent
-	virtual void ResetClip();
 
-	virtual void * GetNativeContext();
-	
+    // resets the clipping to original extent
+    virtual void ResetClip();
+
+    virtual void * GetNativeContext();
+
     virtual void StrokePath( const wxGraphicsPath *p );
     virtual void FillPath( const wxGraphicsPath *p , int fillStyle = wxWINDING_RULE );
 
@@ -333,7 +333,7 @@ void wxCairoContext::Clip( wxDouble x, wxDouble y, wxDouble w, wxDouble h )
 {
 // TODO
 }
-	
+
 void wxCairoContext::ResetClip()
 {
 // TODO
@@ -345,7 +345,7 @@ void wxCairoContext::StrokePath( const wxGraphicsPath *path )
     if ( m_penTransparent )
         return;
 
-	cairo_path_t* cp = (cairo_path_t*) path->GetNativePath() ;
+    cairo_path_t* cp = (cairo_path_t*) path->GetNativePath() ;
     cairo_append_path(m_context,cp);
 
     // setup pen
@@ -526,14 +526,14 @@ void wxCairoContext::StrokePath( const wxGraphicsPath *path )
     if ( userLengths )
         delete[] userLengths;
     cairo_stroke(m_context);
-    path->UnGetNativePath(cp);
+    wxConstCast(path, wxGraphicsPath)->UnGetNativePath(cp);
 }
 
 void wxCairoContext::FillPath( const wxGraphicsPath *path , int fillStyle )
 {
     if ( !m_brushTransparent )
     {
-		cairo_path_t* cp = (cairo_path_t*) path->GetNativePath() ;
+        cairo_path_t* cp = (cairo_path_t*) path->GetNativePath() ;
         cairo_append_path(m_context,cp);
 
         if ( m_brushPattern )
@@ -550,7 +550,7 @@ void wxCairoContext::FillPath( const wxGraphicsPath *path , int fillStyle )
 
         cairo_set_fill_rule(m_context,fillStyle==wxODDEVEN_RULE ? CAIRO_FILL_RULE_EVEN_ODD : CAIRO_FILL_RULE_WINDING);
         cairo_fill(m_context);
-		path->UnGetNativePath(cp);
+        wxConstCast(path, wxGraphicsPath)->UnGetNativePath(cp);
     }
 }
 
@@ -891,7 +891,7 @@ void wxCairoContext::SetFont( const wxFont &font )
 
 void * wxCairoContext::GetNativeContext() 
 {
-	return m_context;
+    return m_context;
 }
 
 wxGraphicsContext* wxGraphicsContext::Create( const wxWindowDC& dc )
@@ -901,12 +901,12 @@ wxGraphicsContext* wxGraphicsContext::Create( const wxWindowDC& dc )
 
 wxGraphicsContext* wxGraphicsContext::Create( wxWindow * window )
 {
-	return NULL; // TODO
+    return NULL; // TODO
 }
 
 wxGraphicsContext* wxGraphicsContext::CreateFromNative( void * context )
 {
-	return NULL; // TODO
+    return NULL; // TODO
 }
 
 #endif  // wxUSE_GRAPHICS_CONTEXT
