@@ -2,8 +2,7 @@
 # $Id$
 #
 
-# Note: Remove all of the tags below except for the last one when creating
-#       new development branch.
+# Note: Remove all of the tags below when creating new development branch.
 
 
 # An example:
@@ -15,10 +14,3 @@
 #   };
 
 
-# symbols available since the beginning of this branch are only given
-# generic branch tag (don't remove this!):
-
-@WX_VERSION_TAG@ {
-    global:
-        *;
-};
