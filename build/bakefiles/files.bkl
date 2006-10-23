@@ -676,7 +676,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/checklst.h
     wx/choicdlg.h
     wx/choice.h
-    wx/collpane.h
     wx/cmndata.h
     wx/combo.h
     wx/combobox.h
@@ -952,7 +951,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <set var="GTK_SRC" hints="files">
     <!-- Generic implementations used by wxGTK: -->
     src/generic/accel.cpp
-    src/generic/collpaneg.cpp
     src/generic/colrdlgg.cpp
     src/generic/dirdlgg.cpp
     src/generic/fdrepdlg.cpp
@@ -973,7 +971,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/gtk/checklst.cpp
     src/gtk/choice.cpp
     src/gtk/colordlg.cpp
-    src/gtk/collpane.cpp
     src/gtk/combobox.cpp
     src/gtk/control.cpp
     src/gtk/clrpicker.cpp
@@ -1026,7 +1023,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/gtk/combobox.h
     wx/gtk/control.h
     wx/gtk/clrpicker.h
-    wx/gtk/collpane.h
     wx/gtk/dialog.h
     wx/gtk/dirdlg.h
     wx/gtk/filedlg.h
@@ -1517,7 +1513,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 </set>
 
 <set var="MSW_SRC" hints="files">
-    src/generic/collpaneg.cpp
     src/generic/statusbr.cpp
     src/generic/prntdlgg.cpp
     src/msw/accel.cpp
@@ -1863,7 +1858,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <set var="OS2_SRC" hints="files">
     <!-- Generic implementations used by wxOS2: -->
     src/generic/caret.cpp
-    src/generic/collpaneg.cpp
     src/generic/colrdlgg.cpp
     src/generic/dirdlgg.cpp
     src/generic/fdrepdlg.cpp
@@ -2133,7 +2127,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/mac/carbon/window.cpp
     <!-- Generic implementations used by wxMac: -->
     src/generic/caret.cpp
-    src/generic/collpaneg.cpp
     src/generic/fdrepdlg.cpp
     src/generic/fontdlgg.cpp
     src/generic/listctrl.cpp
@@ -2521,7 +2514,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 
 <set var="UNIV_SRC" hints="files">
     src/generic/accel.cpp
-    src/generic/collpaneg.cpp
     src/generic/colrdlgg.cpp
     src/generic/dirdlgg.cpp
     src/generic/fdrepdlg.cpp
@@ -2630,6 +2622,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/aboutdlgg.cpp
     src/generic/bmpcboxg.cpp
     src/generic/calctrl.cpp
+    src/generic/collpaneg.cpp
     src/generic/datavgen.cpp
     src/generic/datectlg.cpp
     src/generic/grid.cpp
@@ -2651,6 +2644,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/animdecod.h
     wx/bmpcbox.h
     wx/calctrl.h
+    wx/collpane.h
     wx/dataview.h
     wx/dateevt.h
     wx/dcbuffer.h
@@ -2658,6 +2652,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/generic/aboutdlgg.h
     wx/generic/bmpcbox.h
     wx/generic/calctrl.h
+    wx/generic/collpaneg.h
     wx/generic/datectrl.h
     wx/generic/dataview.h
     wx/generic/grid.h
@@ -2774,13 +2769,15 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/animateg.cpp
     src/gtk/aboutdlg.cpp
     src/gtk/animate.cpp
-    src/gtk/taskbar.cpp
+    src/gtk/collpane.cpp
     src/gtk/dataview.cpp
+    src/gtk/taskbar.cpp
     src/gtk/eggtrayicon.c
 </set>
 <set var="ADVANCED_GTK_HDR" hints="files">
     wx/generic/animate.h
     wx/gtk/animate.h
+    wx/gtk/collpane.h
 </set>
 
 <set var="ADVANCED_GTK1_SRC" hints="files">
