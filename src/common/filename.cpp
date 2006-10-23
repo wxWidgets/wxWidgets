@@ -74,14 +74,13 @@
     #include "wx/dynarray.h"
     #include "wx/intl.h"
     #include "wx/log.h"
-    #include "wx/file.h"
     #include "wx/utils.h"
 #endif
 
 #include "wx/filename.h"
+#include "wx/private/filename.h"
 #include "wx/tokenzr.h"
 #include "wx/config.h"          // for wxExpandEnvVars
-#include "wx/file.h"
 #include "wx/dynlib.h"
 
 #if defined(__WIN32__) && defined(__MINGW32__)
@@ -583,30 +582,118 @@ wxString wxFileName::GetHomeDir()
     return ::wxGetHomeDir();
 }
 
-#if wxUSE_FILE
 
-void wxFileName::AssignTempFileName(const wxString& prefix, wxFile *fileTemp)
+// ----------------------------------------------------------------------------
+// CreateTempFileName
+// ----------------------------------------------------------------------------
+
+#if wxUSE_FILE || wxUSE_FFILE
+
+
+#if !defined wx_fdopen && defined HAVE_FDOPEN
+    #define wx_fdopen fdopen
+#endif
+
+// NB: GetTempFileName() under Windows creates the file, so using
+//     O_EXCL there would fail
+#ifdef __WINDOWS__
+    #define wxOPEN_EXCL 0
+#else
+    #define wxOPEN_EXCL O_EXCL
+#endif
+
+
+#ifdef wxOpenOSFHandle
+#define WX_HAVE_DELETE_ON_CLOSE
+// On Windows create a file with the FILE_FLAGS_DELETE_ON_CLOSE flags.
+//
+static int wxOpenWithDeleteOnClose(const wxString& filename)
 {
-    wxString tempname = CreateTempFileName(prefix, fileTemp);
-    if ( tempname.empty() )
-    {
-        // error, failed to get temp file name
-        Clear();
-    }
-    else // ok
-    {
-        Assign(tempname);
-    }
+    DWORD access = GENERIC_READ | GENERIC_WRITE;
+
+    DWORD disposition = OPEN_ALWAYS;
+
+    DWORD attributes = FILE_ATTRIBUTE_TEMPORARY |
+                       FILE_FLAG_DELETE_ON_CLOSE;
+
+    HANDLE h = ::CreateFile(filename, access, 0, NULL,
+                            disposition, attributes, NULL);
+
+    return wxOpenOSFHandle(h, 0);
+}
+#endif // wxOpenOSFHandle
+
+
+// Helper to open the file
+//
+static int wxTempOpen(const wxString& path, bool *deleteOnClose)
+{
+#ifdef WX_HAVE_DELETE_ON_CLOSE
+    if (*deleteOnClose)
+        return wxOpenWithDeleteOnClose(path);
+#endif
+
+    *deleteOnClose = false;
+
+    return wxOpen(path, wxO_BINARY | O_RDWR | O_CREAT | wxOPEN_EXCL, 0600);
 }
 
-/* static */
-wxString
-wxFileName::CreateTempFileName(const wxString& prefix, wxFile *fileTemp)
+
+#if wxUSE_FFILE
+// Helper to open the file and attach it to the wxFFile
+//
+static bool wxTempOpen(wxFFile *file, const wxString& path, bool *deleteOnClose)
 {
+#ifndef wx_fdopen
+    *deleteOnClose = false;
+    return file->Open(path, _T("w+b"));
+#else // wx_fdopen
+    int fd = wxTempOpen(path, deleteOnClose);
+    if (fd != -1)
+        return false;
+    file->Attach(wx_fdopen(fd, "w+b"));
+    return file->IsOpened();
+#endif // wx_fdopen
+}
+#endif // wxUSE_FFILE
+
+
+#if !wxUSE_FILE
+    #define WXFILEARGS(x, y) y
+#elif !wxUSE_FFILE
+    #define WXFILEARGS(x, y) x
+#else
+    #define WXFILEARGS(x, y) x, y
+#endif
+
+
+// Implementation of wxFileName::CreateTempFileName().
+//
+static wxString wxCreateTempImpl(
+        const wxString& prefix,
+        WXFILEARGS(wxFile *fileTemp, wxFFile *ffileTemp),
+        bool *deleteOnClose = NULL)
+{
+#if wxUSE_FILE && wxUSE_FFILE
+    wxASSERT(fileTemp == NULL || ffileTemp == NULL);
+#endif
     wxString path, dir, name;
+    bool wantDeleteOnClose = false;
+
+    if (deleteOnClose)
+    {
+        // set the result to false initially
+        wantDeleteOnClose = *deleteOnClose;
+        *deleteOnClose = false;
+    }
+    else
+    {
+        // easier if it alwasys points to something
+        deleteOnClose = &wantDeleteOnClose;
+    }
 
     // use the directory specified by the prefix
-    SplitPath(prefix, &dir, &name, NULL /* extension */);
+    wxFileName::SplitPath(prefix, &dir, &name, NULL /* extension */);
 
     if (dir.empty())
     {
@@ -625,12 +712,12 @@ wxFileName::CreateTempFileName(const wxString& prefix, wxFile *fileTemp)
     if (dir.empty())
     {
         // FIXME. Create \temp dir?
-        if (DirExists(wxT("\\temp")))
+        if (wxFileName::DirExists(wxT("\\temp")))
             dir = wxT("\\temp");
     }
     path = dir + wxT("\\") + name;
     int i = 1;
-    while (FileExists(path))
+    while (wxFileName::FileExists(path))
     {
         path = dir + wxT("\\") + name ;
         path << i;
@@ -708,12 +795,28 @@ wxFileName::CreateTempFileName(const wxString& prefix, wxFile *fileTemp)
     {
         path = wxConvFile.cMB2WX( (const char*) buf );
 
+    #if wxUSE_FILE
         // avoid leaking the fd
         if ( fileTemp )
         {
             fileTemp->Attach(fdTemp);
         }
         else
+    #endif
+
+    #if wxUSE_FFILE
+        if ( ffileTemp )
+        {
+        #ifdef wx_fdopen
+            ffileTemp->Attach(wx_fdopen(fdTemp, "r+b"));
+        #else
+            ffileTemp->Open(path, _T("r+b"));
+            close(fdTemp);
+        #endif
+        }
+        else
+    #endif
+
         {
             close(fdTemp);
         }
@@ -725,7 +828,7 @@ wxFileName::CreateTempFileName(const wxString& prefix, wxFile *fileTemp)
     path += _T("XXXXXX");
 
     wxCharBuffer buf = wxConvFile.cWX2MB( path );
-    if ( !mktemp( (const char*) buf ) )
+    if ( !mktemp( (char*)(const char*) buf ) )
     {
         path.clear();
     }
@@ -746,7 +849,7 @@ wxFileName::CreateTempFileName(const wxString& prefix, wxFile *fileTemp)
     {
         // 3 hex digits is enough for numTries == 1000 < 4096
         pathTry = path + wxString::Format(_T("%.03x"), (unsigned int) n);
-        if ( !FileExists(pathTry) )
+        if ( !wxFileName::FileExists(pathTry) )
         {
             break;
         }
@@ -765,20 +868,33 @@ wxFileName::CreateTempFileName(const wxString& prefix, wxFile *fileTemp)
     {
         wxLogSysError(_("Failed to create a temporary file name"));
     }
-    else if ( fileTemp && !fileTemp->IsOpened() )
+    else
     {
+        bool ok = true;
+
         // open the file - of course, there is a race condition here, this is
         // why we always prefer using mkstemp()...
-        //
-        // NB: GetTempFileName() under Windows creates the file, so using
-        //     write_excl there would fail
-        if ( !fileTemp->Open(path,
-#if defined(__WINDOWS__) && !defined(__WXMICROWIN__)
-                             wxFile::write,
-#else
-                             wxFile::write_excl,
-#endif
-                             wxS_IRUSR | wxS_IWUSR) )
+    #if wxUSE_FILE
+        if ( fileTemp && !fileTemp->IsOpened() )
+        {
+            *deleteOnClose = wantDeleteOnClose;
+            int fd = wxTempOpen(path, deleteOnClose);
+            if (fd != -1)
+                fileTemp->Attach(fd);
+            else
+                ok = false;
+        }
+    #endif
+
+    #if wxUSE_FFILE
+        if ( ffileTemp && !ffileTemp->IsOpened() )
+        {
+            *deleteOnClose = wantDeleteOnClose;
+            ok = wxTempOpen(ffileTemp, path, deleteOnClose);
+        }
+    #endif
+
+        if ( !ok )
         {
             // FIXME: If !ok here should we loop and try again with another
             //        file name?  That is the standard recourse if open(O_EXCL)
@@ -794,7 +910,127 @@ wxFileName::CreateTempFileName(const wxString& prefix, wxFile *fileTemp)
     return path;
 }
 
+
+static bool wxCreateTempImpl(
+        const wxString& prefix,
+        WXFILEARGS(wxFile *fileTemp, wxFFile *ffileTemp),
+        wxString *name)
+{
+    bool deleteOnClose = true;
+
+    *name = wxCreateTempImpl(prefix,
+                             WXFILEARGS(fileTemp, ffileTemp),
+                             &deleteOnClose);
+
+    bool ok = !name->empty();
+
+    if (deleteOnClose)
+        name->clear();
+#ifdef __UNIX__
+    else if (ok && wxRemoveFile(*name))
+        name->clear();
+#endif
+
+    return ok;
+}
+
+
+static void wxAssignTempImpl(
+        wxFileName *fn,
+        const wxString& prefix,
+        WXFILEARGS(wxFile *fileTemp, wxFFile *ffileTemp))
+{
+    wxString tempname;
+    tempname = wxCreateTempImpl(prefix, WXFILEARGS(fileTemp, ffileTemp));
+
+    if ( tempname.empty() )
+    {
+        // error, failed to get temp file name
+        fn->Clear();
+    }
+    else // ok
+    {
+        fn->Assign(tempname);
+    }
+}
+
+
+void wxFileName::AssignTempFileName(const wxString& prefix)
+{
+    wxAssignTempImpl(this, prefix, WXFILEARGS(NULL, NULL));
+}
+
+/* static */
+wxString wxFileName::CreateTempFileName(const wxString& prefix)
+{
+    return wxCreateTempImpl(prefix, WXFILEARGS(NULL, NULL));
+}
+
+#endif // wxUSE_FILE || wxUSE_FFILE
+
+
+#if wxUSE_FILE
+
+wxString wxCreateTempFileName(const wxString& prefix,
+                              wxFile *fileTemp,
+                              bool *deleteOnClose)
+{
+    return wxCreateTempImpl(prefix, WXFILEARGS(fileTemp, NULL), deleteOnClose);
+}
+
+bool wxCreateTempFile(const wxString& prefix,
+                      wxFile *fileTemp,
+                      wxString *name)
+{
+    return wxCreateTempImpl(prefix, WXFILEARGS(fileTemp, NULL), name);
+}
+
+void wxFileName::AssignTempFileName(const wxString& prefix, wxFile *fileTemp)
+{
+    wxAssignTempImpl(this, prefix, WXFILEARGS(fileTemp, NULL));
+}
+
+/* static */
+wxString
+wxFileName::CreateTempFileName(const wxString& prefix, wxFile *fileTemp)
+{
+    return wxCreateTempFileName(prefix, fileTemp);
+}
+
 #endif // wxUSE_FILE
+
+
+#if wxUSE_FFILE
+
+wxString wxCreateTempFileName(const wxString& prefix,
+                              wxFFile *fileTemp,
+                              bool *deleteOnClose)
+{
+    return wxCreateTempImpl(prefix, WXFILEARGS(NULL, fileTemp), deleteOnClose);
+}
+
+bool wxCreateTempFile(const wxString& prefix,
+                      wxFFile *fileTemp,
+                      wxString *name)
+{
+    return wxCreateTempImpl(prefix, WXFILEARGS(NULL, fileTemp), name);
+
+}
+
+void wxFileName::AssignTempFileName(const wxString& prefix, wxFFile *fileTemp)
+{
+    wxAssignTempImpl(this, prefix, WXFILEARGS(NULL, fileTemp));
+}
+
+/* static */
+wxString
+wxFileName::CreateTempFileName(const wxString& prefix, wxFFile *fileTemp)
+{
+    return wxCreateTempFileName(prefix, fileTemp);
+}
+
+#endif // wxUSE_FFILE
+
 
 // ----------------------------------------------------------------------------
 // directory operations
