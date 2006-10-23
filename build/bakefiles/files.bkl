@@ -1858,6 +1858,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <set var="OS2_SRC" hints="files">
     <!-- Generic implementations used by wxOS2: -->
     src/generic/caret.cpp
+    src/generic/collpaneg.cpp
     src/generic/colrdlgg.cpp
     src/generic/dirdlgg.cpp
     src/generic/fdrepdlg.cpp
