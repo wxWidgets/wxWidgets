@@ -155,30 +155,28 @@ enum wxFileKind
     #define   wxRmDir      _wrmdir
     #define   wxStat       _wstat
     #define   wxStructStat struct _stat
-
-// Microsoft compiler loves underscores, feed them to it
-#elif defined( __VISUALC__ ) \
-    || ( defined(__MINGW32__) && !defined(__WINE__) && wxCHECK_W32API_VERSION( 0, 5 ) ) \
-    || ( defined(__MWERKS__) && defined(__WXMSW__) ) \
-    || ( defined(__DMC__) && defined(__WXMSW__) ) \
-    || ( defined(__WATCOMC__) && defined(__WXMSW__) )
-
-    // detect compilers which have support for huge files (currently only
-    // Digital Mars doesn't)
-    #ifndef __WXPALMOS__
-    #include "wx/msw/private.h"
-    #endif
+#elif defined(__WXMSW__) && !defined(__WXPALMOS__) && \
+      ( \
+        defined(__VISUALC__) || \
+        (defined(__MINGW32__) && !defined(__WINE__) && \
+                                wxCHECK_W32API_VERSION(0, 5)) || \
+        defined(__MWERKS__) || \
+        defined(__DMC__) || \
+        defined(__WATCOMC__) || \
+        defined(__BORLANDC__) \
+      )
 
     #undef wxHAS_HUGE_FILES
-    #if defined(__MINGW32__)
+
+    // detect compilers which have support for huge files (notice that the
+    // first case covers MSVC, so we don't have to test for it explicitly)
+    #if ((_INTEGRAL_MAX_BITS >= 64) || defined(_LARGE_FILES))
         #define wxHAS_HUGE_FILES 1
-    #elif defined(__MWERKS__)
-        #define wxHAS_HUGE_FILES 0
-    #elif defined(__DMC__)
-        #define wxHAS_HUGE_FILES 0
-    #elif ((_INTEGRAL_MAX_BITS >= 64) || defined(_LARGE_FILES))
+    #elif defined(__MINGW32__)
         #define wxHAS_HUGE_FILES 1
     #else
+        // DMC, Watcom, Metrowerks and Borland don't have huge file support (or
+        // at least not all functions needed for it by wx) currently
         #define wxHAS_HUGE_FILES 0
     #endif
 
@@ -211,20 +209,22 @@ enum wxFileKind
             #define wxRead        ::read
             #define wxWrite       ::write
         #else
-            #define wxRead        _read
+            #define wxRead         _read
             #define wxWrite        _write
         #endif
     #endif
     #if wxHAS_HUGE_FILES
-        #define   wxSeek      _lseeki64
+        #define   wxSeek       _lseeki64
         #define   wxLseek      _lseeki64
         #define   wxTell       _telli64
-    #else
-        #define   wxSeek      _lseek
+    #else // !wxHAS_HUGE_FILES
+        #define   wxSeek       _lseek
         #define   wxLseek      _lseek
         #define   wxTell       _tell
-    #endif
+    #endif // wxHAS_HUGE_FILES/!wxHAS_HUGE_FILES
+
     #define   wxFsync      _commit
+
     #if defined(__WATCOMC__)
         #define   wxEof        ::eof
     #else
@@ -272,7 +272,7 @@ enum wxFileKind
         #else
             #define   wxStat       _stat
         #endif
-    #endif
+    #endif // wxUSE_UNICODE/!wxUSE_UNICODE
 
     // Types: Notice that Watcom is the only compiler to have a wide char
     // version of struct stat as well as a wide char stat function variant.
@@ -292,7 +292,7 @@ enum wxFileKind
     #endif
 
     // constants (unless already defined by the user code)
-    #if !defined(__BORLANDC__) && !defined(__WATCOMC__) && !defined(__WXPALMOS__)
+    #if !defined(__BORLANDC__) && !defined(__WATCOMC__)
         #ifndef O_RDONLY
             #define   O_RDONLY    _O_RDONLY
             #define   O_WRONLY    _O_WRONLY
@@ -317,10 +317,10 @@ enum wxFileKind
             #define WXFILE_LARGEFILE 1
         #endif
     #endif
-        
-    // It's a private define, undefine it so nobody gets tempted to use it
+
+    // it's a private define, undefine it so that nobody gets tempted to use it
     #undef wxHAS_HUGE_FILES
-#else // Unix platforms using configure
+#else // Unix or Windows using unknown compiler, assume POSIX supported
     typedef off_t wxFileOffset;
     #ifdef _LARGE_FILES
         #define wxFileOffsetFmtSpec wxLongLongFmtSpec
@@ -369,7 +369,7 @@ enum wxFileKind
         #define   wxAccess     access
     #endif
 
-    #define wxHAVE_NATIVE_LSTAT
+    #define wxHAS_NATIVE_LSTAT
 #endif // platforms
 
 #ifdef O_BINARY
@@ -380,7 +380,7 @@ enum wxFileKind
 
 // if the platform doesn't have symlinks, define wxLstat to be the same as
 // wxStat to avoid #ifdefs in the code using it
-#ifndef wxHAVE_NATIVE_LSTAT
+#ifndef wxHAS_NATIVE_LSTAT
     #define wxLstat wxStat
 #endif
 
