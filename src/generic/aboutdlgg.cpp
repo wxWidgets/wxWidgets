@@ -134,13 +134,17 @@ bool wxGenericAboutDialog::Create(const wxAboutDialogInfo& info)
     }
 
     // add licence
-    wxCollapsiblePane *licensepnl = new wxCollapsiblePane(this, wxID_ANY, wxT("License"));
+    if ( info.HasLicence() )
+    {
+        wxCollapsiblePane *
+            licensepnl = new wxCollapsiblePane(this, wxID_ANY, wxT("License"));
 
-    new wxStaticText(licensepnl->GetPane(), wxID_ANY, info.GetLicence(),
-                     wxDefaultPosition, wxDefaultSize,
-                     wxALIGN_CENTRE);
+        new wxStaticText(licensepnl->GetPane(), wxID_ANY, info.GetLicence(),
+                         wxDefaultPosition, wxDefaultSize,
+                         wxALIGN_CENTRE);
 
-    m_sizerText->Add(licensepnl, wxSizerFlags(1).Expand().Border(wxBOTTOM));
+        m_sizerText->Add(licensepnl, wxSizerFlags(1).Expand().Border(wxBOTTOM));
+    }
 
     // TODO: add credits (developers, artists, doc writers, translators)
 
