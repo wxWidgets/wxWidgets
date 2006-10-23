@@ -25,6 +25,7 @@
 #endif
 
 #ifndef WX_PRECOMP
+    #include "wx/module.h"
 #endif
 
 #include "wx/dcbuffer.h"
@@ -37,33 +38,34 @@
 // wxSharedDCBufferManager: helper class maintaining backing store bitmap
 // ----------------------------------------------------------------------------
 
-class wxSharedDCBufferManager
+class wxSharedDCBufferManager : public wxModule
 {
 public:
     wxSharedDCBufferManager() { }
-    ~wxSharedDCBufferManager() { }
 
-    wxBitmap GetBuffer(int w, int h)
+    virtual bool OnInit() { return true; }
+    virtual void OnExit() { wxDELETE(ms_buffer); }
+
+    static wxBitmap GetBuffer(int w, int h)
     {
-        if ( !m_buffer.IsOk() ||
-             w > m_buffer.GetWidth() ||
-             h > m_buffer.GetHeight() )
+        if ( !ms_buffer ||
+                w > ms_buffer->GetWidth() ||
+                    h > ms_buffer->GetHeight() )
         {
-            // Create slightly larger bitmap so we don't need to
-            // be reallocating constantly when the user enlarges
-            // the frame for the first time.
-            m_buffer = wxBitmap(w, h);
+            delete ms_buffer;
+            ms_buffer = new wxBitmap(w, h);
         }
 
-        return m_buffer;
+        return *ms_buffer;
     }
 
 private:
-    wxBitmap m_buffer;
+    static wxBitmap *ms_buffer;
+
+    DECLARE_DYNAMIC_CLASS(wxSharedDCBufferManager)
 };
 
-static wxSharedDCBufferManager gs_sharedDCBufferManager;
-
+IMPLEMENT_DYNAMIC_CLASS(wxSharedDCBufferManager, wxModule)
 
 // ============================================================================
 // wxBufferedDC
@@ -76,7 +78,7 @@ void wxBufferedDC::UseBuffer(wxCoord w, wxCoord h)
         if ( w == -1 || h == -1 )
             m_dc->GetSize(&w, &h);
 
-        m_buffer = gs_sharedDCBufferManager.GetBuffer(w, h);
+        m_buffer = wxSharedDCBufferManager::GetBuffer(w, h);
     }
 
     SelectObject(m_buffer);
