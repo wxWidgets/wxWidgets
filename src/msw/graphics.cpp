@@ -370,6 +370,11 @@ wxGDIPlusContext::wxGDIPlusContext( Graphics* gr  )
     SetDefaults();
 }
 
+wxGDIPlusContext::wxGDIPlusContext()
+{
+    Init();
+}
+
 void wxGDIPlusContext::Init()
 {
     gGDILoader.EnsureIsLoaded();
