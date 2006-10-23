@@ -636,6 +636,10 @@ SOURCE=..\..\src\generic\calctrl.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\generic\collpaneg.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\generic\datavgen.cpp
 # End Source File
 # Begin Source File
@@ -1157,6 +1161,10 @@ SOURCE=..\..\include\wx\generic\calctrl.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\generic\collpaneg.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\generic\dataview.h
 # End Source File
 # Begin Source File
@@ -1222,6 +1230,10 @@ SOURCE=..\..\include\wx\bmpcbox.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\calctrl.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\collpane.h
 # End Source File
 # Begin Source File
 

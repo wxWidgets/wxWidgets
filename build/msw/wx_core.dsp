@@ -4082,10 +4082,6 @@ SOURCE=..\..\src\generic\clrpickerg.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\generic\collpaneg.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\src\generic\colrdlgg.cpp
 
 !IF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
@@ -8198,6 +8194,10 @@ SOURCE=..\..\include\wx\generic\choicdgg.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\generic\clrpickerg.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\generic\collpaneg.h
 # End Source File
 # Begin Source File
 
