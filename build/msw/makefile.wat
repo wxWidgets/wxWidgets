@@ -168,6 +168,7 @@ ____MONOLIB_GUI_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_xh_radbx.obj &
 	$(OBJS)\monodll_xh_scrol.obj &
 	$(OBJS)\monodll_xh_scwin.obj &
+	$(OBJS)\monodll_xh_htmllbox.obj &
 	$(OBJS)\monodll_xh_sizer.obj &
 	$(OBJS)\monodll_xh_slidr.obj &
 	$(OBJS)\monodll_xh_spin.obj &
@@ -254,6 +255,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_helpwin.obj &
 	$(OBJS)\monodll_automtn.obj &
 	$(OBJS)\monodll_uuid.obj &
+	$(OBJS)\monodll_collpaneg.obj &
 	$(OBJS)\monodll_statusbr.obj &
 	$(OBJS)\monodll_prntdlgg.obj &
 	$(OBJS)\monodll_accel.obj &
@@ -778,6 +780,7 @@ ____MONOLIB_GUI_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_xh_radbx.obj &
 	$(OBJS)\monolib_xh_scrol.obj &
 	$(OBJS)\monolib_xh_scwin.obj &
+	$(OBJS)\monolib_xh_htmllbox.obj &
 	$(OBJS)\monolib_xh_sizer.obj &
 	$(OBJS)\monolib_xh_slidr.obj &
 	$(OBJS)\monolib_xh_spin.obj &
@@ -864,6 +867,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_helpwin.obj &
 	$(OBJS)\monolib_automtn.obj &
 	$(OBJS)\monolib_uuid.obj &
+	$(OBJS)\monolib_collpaneg.obj &
 	$(OBJS)\monolib_statusbr.obj &
 	$(OBJS)\monolib_prntdlgg.obj &
 	$(OBJS)\monolib_accel.obj &
@@ -1399,6 +1403,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_helpwin.obj &
 	$(OBJS)\coredll_automtn.obj &
 	$(OBJS)\coredll_uuid.obj &
+	$(OBJS)\coredll_collpaneg.obj &
 	$(OBJS)\coredll_statusbr.obj &
 	$(OBJS)\coredll_prntdlgg.obj &
 	$(OBJS)\coredll_accel.obj &
@@ -1848,6 +1853,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_helpwin.obj &
 	$(OBJS)\corelib_automtn.obj &
 	$(OBJS)\corelib_uuid.obj &
+	$(OBJS)\corelib_collpaneg.obj &
 	$(OBJS)\corelib_statusbr.obj &
 	$(OBJS)\corelib_prntdlgg.obj &
 	$(OBJS)\corelib_accel.obj &
@@ -3634,6 +3640,7 @@ XRCDLL_OBJECTS =  &
 	$(OBJS)\xrcdll_xh_radbx.obj &
 	$(OBJS)\xrcdll_xh_scrol.obj &
 	$(OBJS)\xrcdll_xh_scwin.obj &
+	$(OBJS)\xrcdll_xh_htmllbox.obj &
 	$(OBJS)\xrcdll_xh_sizer.obj &
 	$(OBJS)\xrcdll_xh_slidr.obj &
 	$(OBJS)\xrcdll_xh_spin.obj &
@@ -3697,6 +3704,7 @@ XRCLIB_OBJECTS =  &
 	$(OBJS)\xrclib_xh_radbx.obj &
 	$(OBJS)\xrclib_xh_scrol.obj &
 	$(OBJS)\xrclib_xh_scwin.obj &
+	$(OBJS)\xrclib_xh_htmllbox.obj &
 	$(OBJS)\xrclib_xh_sizer.obj &
 	$(OBJS)\xrclib_xh_slidr.obj &
 	$(OBJS)\xrclib_xh_spin.obj &
@@ -5061,6 +5069,9 @@ $(OBJS)\monodll_gsocket.obj :  .AUTODEPEND ..\..\src\msw\gsocket.cpp
 $(OBJS)\monodll_urlmsw.obj :  .AUTODEPEND ..\..\src\msw\urlmsw.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
+$(OBJS)\monodll_collpaneg.obj :  .AUTODEPEND ..\..\src\generic\collpaneg.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
 $(OBJS)\monodll_colordlg.obj :  .AUTODEPEND ..\..\src\msw\colordlg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
@@ -5407,6 +5418,9 @@ $(OBJS)\monodll_xh_scrol.obj :  .AUTODEPEND ..\..\src\xrc\xh_scrol.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_xh_scwin.obj :  .AUTODEPEND ..\..\src\xrc\xh_scwin.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_xh_htmllbox.obj :  .AUTODEPEND ..\..\src\xrc\xh_htmllbox.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_xh_sizer.obj :  .AUTODEPEND ..\..\src\xrc\xh_sizer.cpp
@@ -7095,6 +7109,9 @@ $(OBJS)\monolib_gsocket.obj :  .AUTODEPEND ..\..\src\msw\gsocket.cpp
 $(OBJS)\monolib_urlmsw.obj :  .AUTODEPEND ..\..\src\msw\urlmsw.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
+$(OBJS)\monolib_collpaneg.obj :  .AUTODEPEND ..\..\src\generic\collpaneg.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
 $(OBJS)\monolib_colordlg.obj :  .AUTODEPEND ..\..\src\msw\colordlg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
@@ -7441,6 +7458,9 @@ $(OBJS)\monolib_xh_scrol.obj :  .AUTODEPEND ..\..\src\xrc\xh_scrol.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_xh_scwin.obj :  .AUTODEPEND ..\..\src\xrc\xh_scwin.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_xh_htmllbox.obj :  .AUTODEPEND ..\..\src\xrc\xh_htmllbox.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_xh_sizer.obj :  .AUTODEPEND ..\..\src\xrc\xh_sizer.cpp
@@ -9450,6 +9470,9 @@ $(OBJS)\coredll_mslu.obj :  .AUTODEPEND ..\..\src\msw\mslu.cpp
 $(OBJS)\coredll_volume.obj :  .AUTODEPEND ..\..\src\msw\volume.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
+$(OBJS)\coredll_collpaneg.obj :  .AUTODEPEND ..\..\src\generic\collpaneg.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+
 $(OBJS)\coredll_colordlg.obj :  .AUTODEPEND ..\..\src\msw\colordlg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
@@ -10793,6 +10816,9 @@ $(OBJS)\corelib_mslu.obj :  .AUTODEPEND ..\..\src\msw\mslu.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
 $(OBJS)\corelib_volume.obj :  .AUTODEPEND ..\..\src\msw\volume.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+
+$(OBJS)\corelib_collpaneg.obj :  .AUTODEPEND ..\..\src\generic\collpaneg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
 $(OBJS)\corelib_colordlg.obj :  .AUTODEPEND ..\..\src\msw\colordlg.cpp
@@ -12656,6 +12682,9 @@ $(OBJS)\xrcdll_xh_scrol.obj :  .AUTODEPEND ..\..\src\xrc\xh_scrol.cpp
 $(OBJS)\xrcdll_xh_scwin.obj :  .AUTODEPEND ..\..\src\xrc\xh_scwin.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
 
+$(OBJS)\xrcdll_xh_htmllbox.obj :  .AUTODEPEND ..\..\src\xrc\xh_htmllbox.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
+
 $(OBJS)\xrcdll_xh_sizer.obj :  .AUTODEPEND ..\..\src\xrc\xh_sizer.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
 
@@ -12816,6 +12845,9 @@ $(OBJS)\xrclib_xh_scrol.obj :  .AUTODEPEND ..\..\src\xrc\xh_scrol.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
 
 $(OBJS)\xrclib_xh_scwin.obj :  .AUTODEPEND ..\..\src\xrc\xh_scwin.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
+
+$(OBJS)\xrclib_xh_htmllbox.obj :  .AUTODEPEND ..\..\src\xrc\xh_htmllbox.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
 
 $(OBJS)\xrclib_xh_sizer.obj :  .AUTODEPEND ..\..\src\xrc\xh_sizer.cpp

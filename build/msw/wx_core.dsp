@@ -4082,6 +4082,69 @@ SOURCE=..\..\src\generic\clrpickerg.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\generic\collpaneg.cpp
+
+!IF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Debug"
+
+
+!ENDIF
+
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\generic\colrdlgg.cpp
 
 !IF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
@@ -9454,6 +9517,10 @@ SOURCE=..\..\include\wx\xrc\xh_grid.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\xrc\xh_html.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\xrc\xh_htmllbox.h
 # End Source File
 # Begin Source File
 

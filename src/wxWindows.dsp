@@ -1011,6 +1011,10 @@ SOURCE=.\generic\clrpickerg.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\generic\collpaneg.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\generic\combog.cpp
 # End Source File
 # Begin Source File
@@ -1928,6 +1932,10 @@ SOURCE=.\xrc\xh_grid.cpp
 # Begin Source File
 
 SOURCE=.\xrc\xh_html.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\xrc\xh_htmllbox.cpp
 # End Source File
 # Begin Source File
 
@@ -3512,6 +3520,10 @@ SOURCE=..\include\wx\xrc\xh_grid.h
 # Begin Source File
 
 SOURCE=..\include\wx\xrc\xh_html.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\xrc\xh_htmllbox.h
 # End Source File
 # Begin Source File
 
