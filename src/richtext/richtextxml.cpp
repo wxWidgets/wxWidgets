@@ -853,7 +853,7 @@ bool wxRichTextXMLHandler::GetStyle(wxTextAttrEx& attr, wxXmlNode* node, bool is
 
         value = node->GetPropVal(wxT("bulletsymbol"), wxEmptyString);
         if (!value.empty())
-            attr.SetBulletSymbol(wxAtoi(value));
+            attr.SetBulletSymbol(wxChar(wxAtoi(value)));
 
         value = node->GetPropVal(wxT("bulletfont"), wxEmptyString);
         if (!value.empty())
