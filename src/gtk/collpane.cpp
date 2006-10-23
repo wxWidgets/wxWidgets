@@ -206,7 +206,7 @@ bool wxCollapsiblePane::IsCollapsed() const
 void wxCollapsiblePane::SetLabel(const wxString &str)
 {
     if (!gtk_check_version(2,4,0))
-        gtk_expander_set_label(GTK_EXPANDER(m_widget), str.c_str());
+        gtk_expander_set_label(GTK_EXPANDER(m_widget), wxGTK_CONV(str));
     else
         wxGenericCollapsiblePane::SetLabel(str);
 }
