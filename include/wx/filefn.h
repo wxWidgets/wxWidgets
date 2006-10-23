@@ -314,7 +314,7 @@ enum wxFileKind
         // doesn't have large file support with any Windows compiler (even
         // Win64 ones).
         #if wxUSE_FILE
-            #define WXFILE_LARGEFILE 1
+            #define wxHAS_LARGE_FILES
         #endif
     #endif
 
@@ -328,11 +328,11 @@ enum wxFileKind
                                 BadFileSizeType );
         // wxFile is present and supports large files
         #ifdef wxUSE_FILE
-            #define WXFILE_LARGEFILE
+            #define wxHAS_LARGE_FILES
         #endif
         // wxFFile is present and supports large files
         #if SIZEOF_LONG == 8 || defined HAVE_FSEEKO
-            #define WXFFILE_LARGEFILE
+            #define wxHAS_LARGE_FFILES
         #endif
     #else
         #define wxFileOffsetFmtSpec _T("")
