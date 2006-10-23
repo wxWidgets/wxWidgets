@@ -1,11 +1,10 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Name:        cppconst.tex
-%% Purpose:     Peprocessor symbols
-%% Author:
-%% Modified by:
-%% Created:
+%% Purpose:     Preprocessor symbols
+%% Author:      Vadim Zeitlin
+%% Created:     2002-08-22
 %% RCS-ID:      $Id$
-%% Copyright:   (c) wxWidgets
+%% Copyright:   (c) 2002-2006 wxWidgets
 %% License:     wxWindows license
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -151,6 +150,35 @@ version), $1100$ for $5.0$, $1200$ for $6.0$ and so on}
 \twocolitem{\_\_WATCOMC\_\_}{Watcom C++. The value of this macro corresponds to
 the compiler version, $1100$ is $11.0$ and $1200$ is OpenWatcom.}
 \twocolitem{\_WIN32\_WCE}{Windows CE version}
+\end{twocollist}
+
+
+\subsection{Feature tests}\label{featuretests}
+
+Some library features may not be always available even if they were selected by
+the user. To make it possible to check if this is the case, the library
+predefines the symbols in the form \texttt{wxHAS\_FEATURE}. Unlike 
+\texttt{wxUSE\_FEATURE} symbols which are defined by the library user (directly
+in \texttt{setup.h} or by running configure script) and which must be always
+defined as either $0$ or $1$, the \texttt{wxHAS} symbols are only defined if
+the corresponding feature is available and not defined at all otherwise.
+
+Currently the following symbols exist:
+\begin{twocollist}\itemsep=0pt
+\twocolitem{wxHAS\_LARGE\_FILES}{Defined if \helpref{wxFile}{wxfile} supports
+files more than 4GB in size.}
+\twocolitem{wxHAS\_LARGE\_FFILES}{Defined if \helpref{wxFFile}{wxffile}
+supports files more than 4GB in size.}
+\twocolitem{wxHAS\_POWER\_EVENTS}{Defined if 
+\helpref{wxPowerEvent}{wxpowerevent} are ever generated on the current platform.}
+\twocolitem{wxHAS\_RADIO\_MENU\_ITEMS}{Defined if the current port supports 
+\helpref{radio menu items}{wxmenuappendradioitem}.}
+\twocolitem{wxHAS\_RAW\_KEY\_CODES}{Defined if 
+\helpref{raw key codes}{wxkeyeventgetrawkeycode} are supported.}
+\twocolitem{wxHAS\_REGEX\_ADVANCED}{Defined if advanced syntax is available in 
+\helpref{wxRegEx}{wxregex}.}
+\twocolitem{wxHAS\_TASK\_BAR\_ICON}{Defined if 
+\helpref{wxTaskBarIcon}{wxtaskbaricon} is available on the current platform.}
 \end{twocollist}
 
 
