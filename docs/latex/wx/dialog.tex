@@ -13,7 +13,8 @@
 
 A dialog box is a window with a title bar and sometimes a system menu, which
 can be moved around the screen. It can contain controls and other windows and
-is usually used to allow the user to make some choice or to answer a question.
+is often used to allow the user to make some choice or to answer a question.
+
 
 \wxheading{Derived from}
 
@@ -334,54 +335,6 @@ Always returns false under Windows since dialogs cannot be iconized.
 
 Returns true if the dialog box is modal, false otherwise.
 
-
-\membersection{wxDialog::OnApply}\label{wxdialogonapply}
-
-\func{void}{OnApply}{\param{wxCommandEvent\& }{event}}
-
-The default handler for the wxID\_APPLY identifier.
-
-\wxheading{Remarks}
-
-This function calls \helpref{wxWindow::Validate}{wxwindowvalidate} and \helpref{wxWindow::TransferDataFromWindow}{wxwindowtransferdatafromwindow}.
-
-\wxheading{See also}
-
-\helpref{wxDialog::OnOK}{wxdialogonok}, \helpref{wxDialog::OnCancel}{wxdialogoncancel}
-
-
-\membersection{wxDialog::OnCancel}\label{wxdialogoncancel}
-
-\func{void}{OnCancel}{\param{wxCommandEvent\& }{event}}
-
-The default handler for the wxID\_CANCEL identifier.
-
-\wxheading{Remarks}
-
-The function either calls {\bf EndModal(wxID\_CANCEL)} if the dialog is modal, or
-sets the return value to wxID\_CANCEL and calls {\bf Show(false)} if the dialog is modeless.
-
-\wxheading{See also}
-
-\helpref{wxDialog::OnOK}{wxdialogonok}, \helpref{wxDialog::OnApply}{wxdialogonapply}
-
-
-\membersection{wxDialog::OnOK}\label{wxdialogonok}
-
-\func{void}{OnOK}{\param{wxCommandEvent\& }{event}}
-
-The default handler for the wxID\_OK identifier.
-
-\wxheading{Remarks}
-
-The function calls
-\rtfsp\helpref{wxWindow::Validate}{wxwindowvalidate}, then \helpref{wxWindow::TransferDataFromWindow}{wxwindowtransferdatafromwindow}.
-If this returns true, the function either calls {\bf EndModal(wxID\_OK)} if the dialog is modal, or
-sets the return value to wxID\_OK and calls {\bf Show(false)} if the dialog is modeless.
-
-\wxheading{See also}
-
-\helpref{wxDialog::OnCancel}{wxdialogoncancel}, \helpref{wxDialog::OnApply}{wxdialogonapply}
 
 
 \membersection{wxDialog::OnSysColourChanged}\label{wxdialogonsyscolourchanged}
