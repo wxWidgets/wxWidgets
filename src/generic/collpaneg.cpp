@@ -109,8 +109,9 @@ void wxGenericCollapsiblePane::OnStateChange(const wxSize& sz)
     SetMinSize(sz);
     SetSize(sz);
 
-    wxWindow *top = wxGetTopLevelParent(this);
-    if (top)
+    wxTopLevelWindow *
+        top = wxDynamicCast(wxGetTopLevelParent(this), wxTopLevelWindow);
+    if ( top )
     {
         // we've changed our size, thus our top level parent needs to relayout
         // itself
@@ -131,17 +132,22 @@ void wxGenericCollapsiblePane::OnStateChange(const wxSize& sz)
 #endif
             top->GetSizer()->SetSizeHints(top);
 
-        if (IsCollapsed())
+
+        // we shouldn't attempt to resize a maximized window, whatever happens
+        if ( !top->IsMaximized() )
         {
-            // use SetClientSize() and not SetSize() otherwise the size for
-            // e.g. a wxFrame with a menubar wouldn't be correctly set
-            top->SetClientSize(sz);
-        }
-        else
-        {
-            // force our parent to "fit", i.e. expand so that it can honour
-            // our minimal size
-            top->Fit();
+            if ( IsCollapsed() )
+            {
+                // use SetClientSize() and not SetSize() otherwise the size for
+                // e.g. a wxFrame with a menubar wouldn't be correctly set
+                top->SetClientSize(sz);
+            }
+            else
+            {
+                // force our parent to "fit", i.e. expand so that it can honour
+                // our minimal size
+                top->Fit();
+            }
         }
     }
 }
