@@ -697,24 +697,10 @@ static wxString wxCreateTempImpl(
 
     if (dir.empty())
     {
-        dir = wxGetenv(_T("TMPDIR"));
-        if (dir.empty())
-        {
-            dir = wxGetenv(_T("TMP"));
-            if (dir.empty())
-            {
-                dir = wxGetenv(_T("TEMP"));
-            }
-        }
+        dir = wxFileName::GetTempDir();
     }
 
 #if defined(__WXWINCE__)
-    if (dir.empty())
-    {
-        // FIXME. Create \temp dir?
-        if (wxFileName::DirExists(wxT("\\temp")))
-            dir = wxT("\\temp");
-    }
     path = dir + wxT("\\") + name;
     int i = 1;
     while (wxFileName::FileExists(path))
@@ -725,27 +711,6 @@ static wxString wxCreateTempImpl(
     }
 
 #elif defined(__WINDOWS__) && !defined(__WXMICROWIN__)
-
-    if ( dir.empty() )
-    {
-        if ( !::GetTempPath(MAX_PATH, wxStringBuffer(dir, MAX_PATH + 1)) )
-        {
-            wxLogLastError(_T("GetTempPath"));
-        }
-
-        if ( dir.empty() )
-        {
-            // GetTempFileName() fails if we pass it an empty string
-            dir = _T('.');
-        }
-    }
-    else // we have a dir to create the file in
-    {
-        // ensure we use only the back slashes as GetTempFileName(), unlike all
-        // the other APIs, is picky and doesn't accept the forward ones
-        dir.Replace(_T("/"), _T("\\"));
-    }
-
     if ( !::GetTempFileName(dir, name, 0, wxStringBuffer(path, MAX_PATH + 1)) )
     {
         wxLogLastError(_T("GetTempFileName"));
@@ -754,18 +719,6 @@ static wxString wxCreateTempImpl(
     }
 
 #else // !Windows
-    if ( dir.empty() )
-    {
-        // default
-#if defined(__DOS__) || defined(__OS2__)
-        dir = _T(".");
-#elif defined(__WXMAC__)
-        dir = wxMacFindFolder(short(kOnSystemDisk), kTemporaryFolderType, kCreateFolder);
-#else
-        dir = _T("/tmp");
-#endif
-    }
-
     path = dir;
 
     if ( !wxEndsWithPathSeparator(dir) &&
@@ -1035,6 +988,59 @@ wxFileName::CreateTempFileName(const wxString& prefix, wxFFile *fileTemp)
 // ----------------------------------------------------------------------------
 // directory operations
 // ----------------------------------------------------------------------------
+
+wxString wxFileName::GetTempDir()
+{
+    wxString dir;
+    dir = wxGetenv(_T("TMPDIR"));
+    if (dir.empty())
+    {
+        dir = wxGetenv(_T("TMP"));
+        if (dir.empty())
+        {
+            dir = wxGetenv(_T("TEMP"));
+        }
+    }
+
+#if defined(__WXWINCE__)
+    if (dir.empty())
+    {
+        // FIXME. Create \temp dir?
+        if (DirExists(wxT("\\temp")))
+            dir = wxT("\\temp");
+    }
+#elif defined(__WINDOWS__) && !defined(__WXMICROWIN__)
+
+    if ( dir.empty() )
+    {
+        if ( !::GetTempPath(MAX_PATH, wxStringBuffer(dir, MAX_PATH + 1)) )
+        {
+            wxLogLastError(_T("GetTempPath"));
+        }
+
+        if ( dir.empty() )
+        {
+            // GetTempFileName() fails if we pass it an empty string
+            dir = _T('.');
+        }
+    }
+#else // !Windows
+
+    if ( dir.empty() )
+    {
+        // default
+#if defined(__DOS__) || defined(__OS2__)
+        dir = _T(".");
+#elif defined(__WXMAC__)
+        dir = wxMacFindFolder(short(kOnSystemDisk), kTemporaryFolderType, kCreateFolder);
+#else
+        dir = _T("/tmp");
+#endif
+    }
+#endif
+
+    return dir;
+}
 
 bool wxFileName::Mkdir( int perm, int flags )
 {

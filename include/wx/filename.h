@@ -270,6 +270,9 @@ public:
     void AssignHomeDir();
     static wxString GetHomeDir();
 
+        // get the system temporary directory
+    static wxString GetTempDir();
+
 #if wxUSE_FILE || wxUSE_FFILE
         // get a temp file name starting with the specified prefix
     void AssignTempFileName(const wxString& prefix);
