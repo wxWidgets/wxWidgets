@@ -26,13 +26,13 @@
 
 #if wxUSE_STDPATHS
 
+#include "wx/stdpaths.h"
+
 #ifndef WX_PRECOMP
-    #include "wx/app.h"
+    #include "wx/utils.h"
 #endif //WX_PRECOMP
 
 #include "wx/filename.h"
-
-#include "wx/stdpaths.h"
 
 #if defined( __LINUX__ ) || defined( __VMS )
     #include <unistd.h>
