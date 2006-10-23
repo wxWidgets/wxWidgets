@@ -70,14 +70,6 @@
 // global variables
 // ----------------------------------------------------------------------------
 
-// this should have been a flag in wxDatePickerCtrlGeneric itself but adding it
-// there now would break backwards compatibility, so put it here as a global:
-// this shouldn't be a big problem as only one (GUI) thread normally can call
-// wxDatePickerCtrlGeneric::SetValue() and so it can be only ever used for one
-// control at a time
-//
-// if the value is not NULL, it points to the control which is inside SetValue()
-static wxDatePickerCtrlGeneric *gs_inSetValue = NULL;
 
 // ----------------------------------------------------------------------------
 // local classes
