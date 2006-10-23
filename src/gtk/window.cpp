@@ -2319,7 +2319,17 @@ bool wxWindowGTK::Create( wxWindow *parent,
     GtkScrolledWindowClass *scroll_class = GTK_SCROLLED_WINDOW_CLASS( GTK_OBJECT_GET_CLASS(m_widget) );
     scroll_class->scrollbar_spacing = 0;
 
-    gtk_scrolled_window_set_policy( scrolledWindow, GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC );
+    if (HasFlag(wxALWAYS_SHOW_SB))
+    {
+        gtk_scrolled_window_set_policy( scrolledWindow, GTK_POLICY_ALWAYS, GTK_POLICY_ALWAYS );
+
+        scrolledWindow->hscrollbar_visible = TRUE;
+        scrolledWindow->vscrollbar_visible = TRUE;
+    } 
+    else
+    {
+        gtk_scrolled_window_set_policy( scrolledWindow, GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC );
+    }
 
     m_scrollBar[ScrollDir_Horz] = GTK_RANGE(scrolledWindow->hscrollbar);
     m_scrollBar[ScrollDir_Vert] = GTK_RANGE(scrolledWindow->vscrollbar);
