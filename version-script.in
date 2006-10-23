@@ -14,3 +14,8 @@
 #   };
 
 
+# symbols available since the beginning of this branch are left unversioned
+# (don't remove this!):
+
+@WX_VERSION_TAG@ {
+};
