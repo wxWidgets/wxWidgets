@@ -1177,7 +1177,7 @@
 #           define wxUSE_BACKINGFILE 1
 #       endif
 #   endif
-#endif /* wxUSE_ZIPSTREAM */
+#endif /* wxUSE_BACKINGFILE */
 
 /* the rest of the tests is for the GUI settings only */
 #if wxUSE_GUI
