@@ -169,23 +169,29 @@ enum wxFileKind
     #undef wxHAS_HUGE_FILES
 
     // detect compilers which have support for huge files (notice that the
-    // first case covers MSVC, so we don't have to test for it explicitly)
-    #if ((_INTEGRAL_MAX_BITS >= 64) || defined(_LARGE_FILES))
-        #define wxHAS_HUGE_FILES 1
+    // MSVC falls under _INTEGRAL_MAX_BITS >= 64 branch, so we don't have to
+    // test for it explicitly)
+    #if defined(_INTEGRAL_MAX_BITS)
+        #if _INTEGRAL_MAX_BITS >= 64
+            #define wxHAS_HUGE_FILES 1
+        #endif
     #elif defined(__MINGW32__)
         #define wxHAS_HUGE_FILES 1
-    #else
-        // DMC, Watcom, Metrowerks and Borland don't have huge file support (or
-        // at least not all functions needed for it by wx) currently
-        #define wxHAS_HUGE_FILES 0
+    #elif defined(_LARGE_FILES)
+        #define wxHAS_HUGE_FILES 1
     #endif
+
+    // other Windows compilers (DMC, Watcom, Metrowerks and Borland) don't have
+    // huge file support (or at least not all functions needed for it by wx)
+    // currently
+
 
     // functions
     #if defined(__BORLANDC__) || defined(__WATCOMC__)
         #define   _tell        tell
     #endif
 
-    #if wxHAS_HUGE_FILES
+    #ifdef wxHAS_HUGE_FILES
         typedef wxLongLong_t wxFileOffset;
         #define wxFileOffsetFmtSpec wxLongLongFmtSpec
     #else
@@ -213,7 +219,7 @@ enum wxFileKind
             #define wxWrite        _write
         #endif
     #endif
-    #if wxHAS_HUGE_FILES
+    #ifdef wxHAS_HUGE_FILES
         #define   wxSeek       _lseeki64
         #define   wxLseek      _lseeki64
         #define   wxTell       _telli64
@@ -238,7 +244,7 @@ enum wxFileKind
             #define   wxAccess     wxMSLU__waccess
             #define   wxMkDir      wxMSLU__wmkdir
             #define   wxRmDir      wxMSLU__wrmdir
-            #if wxHAS_HUGE_FILES
+            #ifdef wxHAS_HUGE_FILES
                 #define   wxStat       wxMSLU__wstati64
             #else
                 #define   wxStat       wxMSLU__wstat
@@ -248,7 +254,7 @@ enum wxFileKind
             #define   wxAccess     _waccess
             #define   wxMkDir      _wmkdir
             #define   wxRmDir      _wrmdir
-            #if wxHAS_HUGE_FILES
+            #ifdef wxHAS_HUGE_FILES
                 #define   wxStat       _wstati64
             #else
                 #define   wxStat       _wstat
@@ -267,7 +273,7 @@ enum wxFileKind
         #else
             #define   wxRmDir      _rmdir
         #endif
-        #if wxHAS_HUGE_FILES
+        #ifdef wxHAS_HUGE_FILES
             #define   wxStat       _stati64
         #else
             #define   wxStat       _stat
@@ -277,7 +283,7 @@ enum wxFileKind
     // Types: Notice that Watcom is the only compiler to have a wide char
     // version of struct stat as well as a wide char stat function variant.
     // This was droped since OW 1.4 "for consistency across platforms".
-    #if wxHAS_HUGE_FILES
+    #ifdef wxHAS_HUGE_FILES
         #if wxUSE_UNICODE && wxONLY_WATCOM_EARLIER_THAN(1,4)
             #define   wxStructStat struct _wstati64
         #else
@@ -309,7 +315,7 @@ enum wxFileKind
         #endif
     #endif
 
-    #if wxHAS_HUGE_FILES
+    #ifdef wxHAS_HUGE_FILES
         // wxFile is present and supports large files. Currently wxFFile
         // doesn't have large file support with any Windows compiler (even
         // Win64 ones).
