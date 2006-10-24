@@ -540,23 +540,24 @@ private :
 // more debugging macros
 // ----------------------------------------------------------------------------
 
-#ifdef __WXDEBUG__
-    #ifndef WXDEBUG_NEW
-        #define WXDEBUG_NEW new(__TFILE__,__LINE__)
-    #endif
-#else // !__WXDEBUG__
-    #define WXDEBUG_NEW new
-#endif
-
 // Redefine new to be the debugging version. This doesn't work with all
 // compilers, in which case you need to use WXDEBUG_NEW explicitly if you wish
 // to use the debugging version.
 
-#if defined(__WXDEBUG__) && wxUSE_GLOBAL_MEMORY_OPERATORS && wxUSE_DEBUG_NEW_ALWAYS
-    #define new new(__TFILE__,__LINE__)
-#elif (defined(__WXDEBUG__) && defined(__VISUALC__) && !wxUSE_GLOBAL_MEMORY_OPERATORS && wxUSE_DEBUG_NEW_ALWAYS)
-    // Including this file redefines new and allows leak reports to contain line numbers
-    #include "wx/msw/msvcrt.h"
-#endif
+#ifdef __WXDEBUG__
+    #define WXDEBUG_NEW new(__TFILE__,__LINE__)
+
+    #if wxUSE_DEBUG_NEW_ALWAYS
+        #if wxUSE_GLOBAL_MEMORY_OPERATORS
+            #define new WXDEBUG_NEW
+        #elif defined(__VISUALC__)
+            // Including this file redefines new and allows leak reports to
+            // contain line numbers
+            #include "wx/msw/msvcrt.h"
+        #endif
+    #endif // wxUSE_DEBUG_NEW_ALWAYS
+#else // !__WXDEBUG__
+    #define WXDEBUG_NEW new
+#endif // __WXDEBUG__/!__WXDEBUG__
 
 #endif // _WX_OBJECTH__
