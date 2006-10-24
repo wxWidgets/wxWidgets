@@ -1594,7 +1594,9 @@ public:
 
     wxHtmlHelpFrame(wxWindow* parent, int wxWindowID,
 		    const wxString& title = wxPyEmptyString,
-		    int style = wxHF_DEFAULTSTYLE, wxHtmlHelpData* data = NULL);
+		    int style = wxHF_DEFAULTSTYLE, wxHtmlHelpData* data = NULL,
+                    wxConfigBase *config=NULL,
+                    const wxString& rootpath = wxPyEmptyString);
     %RenameCtor(PreHtmlHelpFrame, wxHtmlHelpFrame(wxHtmlHelpData* data = NULL));
 
     // Turn it back on again
@@ -1602,7 +1604,9 @@ public:
 
     bool Create(wxWindow* parent, wxWindowID id,
                 const wxString& title = wxPyEmptyString,
-                int style = wxHF_DEFAULT_STYLE);
+                int style = wxHF_DEFAULT_STYLE,
+                wxConfigBase *config=NULL,
+                const wxString& rootpath = wxPyEmptyString);
 
     wxHtmlHelpData* GetData();
     void SetTitleFormat(const wxString& format);

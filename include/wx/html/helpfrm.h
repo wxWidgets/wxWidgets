@@ -74,9 +74,11 @@ public:
     wxHtmlHelpFrame(wxHtmlHelpData* data = NULL) { Init(data); }
     wxHtmlHelpFrame(wxWindow* parent, wxWindowID wxWindowID,
                     const wxString& title = wxEmptyString,
-                    int style = wxHF_DEFAULT_STYLE, wxHtmlHelpData* data = NULL);
+                    int style = wxHF_DEFAULT_STYLE, wxHtmlHelpData* data = NULL,
+                    wxConfigBase *config=NULL, const wxString& rootpath = wxEmptyString);
     bool Create(wxWindow* parent, wxWindowID id, const wxString& title = wxEmptyString,
-                int style = wxHF_DEFAULT_STYLE);
+                int style = wxHF_DEFAULT_STYLE,
+                wxConfigBase *config=NULL, const wxString& rootpath = wxEmptyString);
     virtual ~wxHtmlHelpFrame();
 
     /// Returns the data associated with the window.

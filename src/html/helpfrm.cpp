@@ -69,10 +69,11 @@ BEGIN_EVENT_TABLE(wxHtmlHelpFrame, wxFrame)
 END_EVENT_TABLE()
 
 wxHtmlHelpFrame::wxHtmlHelpFrame(wxWindow* parent, wxWindowID id, const wxString& title,
-                                 int style, wxHtmlHelpData* data)
+                                 int style, wxHtmlHelpData* data,
+                                 wxConfigBase *config, const wxString& rootpath)
 {
     Init(data);
-    Create(parent, id, title, style);
+    Create(parent, id, title, style, config, rootpath);
 }
 
 void wxHtmlHelpFrame::Init(wxHtmlHelpData* data)
@@ -85,10 +86,13 @@ void wxHtmlHelpFrame::Init(wxHtmlHelpData* data)
 
 // Create: builds the GUI components.
 bool wxHtmlHelpFrame::Create(wxWindow* parent, wxWindowID id,
-                             const wxString& WXUNUSED(title), int style)
+                             const wxString& WXUNUSED(title), int style,
+                             wxConfigBase *config, const wxString& rootpath)
 {
     m_HtmlHelpWin = new wxHtmlHelpWindow(m_Data);
-
+    if ( config)
+        m_HtmlHelpWin->UseConfig(config, rootpath);
+    
     wxFrame::Create(parent, id, _("Help"),
                     wxPoint(m_HtmlHelpWin->GetCfgData().x, m_HtmlHelpWin->GetCfgData().y),
                     wxSize(m_HtmlHelpWin->GetCfgData().w, m_HtmlHelpWin->GetCfgData().h),

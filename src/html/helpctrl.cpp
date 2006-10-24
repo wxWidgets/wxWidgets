@@ -155,8 +155,8 @@ wxHtmlHelpFrame* wxHtmlHelpController::CreateHelpFrame(wxHtmlHelpData *data)
 {
     wxHtmlHelpFrame* frame = new wxHtmlHelpFrame(data);
     frame->SetController(this);
+    frame->Create(m_parentWindow, -1, wxEmptyString, m_FrameStyle, m_Config, m_ConfigRoot);
     frame->SetTitleFormat(m_titleFormat);    
-    frame->Create(m_parentWindow, -1, wxEmptyString, m_FrameStyle);
     m_helpFrame = frame;
     return frame;
 }
