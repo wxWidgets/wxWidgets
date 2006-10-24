@@ -210,7 +210,7 @@ wxDC* wxNativePrintFactory::CreatePrinterDC( const wxPrintData& data )
 #elif defined(__WXMAC__)
     return new wxPrinterDC(data);
 #else
-    return new wxPrinterDC(data);
+    return new wxPostScriptDC(data);
 #endif
 }
 
