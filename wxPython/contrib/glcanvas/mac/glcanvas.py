@@ -103,9 +103,9 @@ class GLCanvas(_core.Window):
         _glcanvas.GLCanvas_swiginit(self,_glcanvas.new_GLCanvas(*args, **kwargs))
         self._setOORInfo(self)
 
-    def SetCurrent(*args, **kwargs):
+    def SetCurrent(*args):
         """SetCurrent(self)"""
-        return _glcanvas.GLCanvas_SetCurrent(*args, **kwargs)
+        return _glcanvas.GLCanvas_SetCurrent(*args)
 
     def SetColour(*args, **kwargs):
         """SetColour(self, String colour)"""

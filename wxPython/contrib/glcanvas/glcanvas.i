@@ -131,9 +131,9 @@ public:
                     int *attribList = NULL,
                     const wxPalette& palette = wxNullPalette ));
 
-#ifdef __WXMAC__
+    %nokwargs SetCurrent;
     void SetCurrent();
-#else
+#ifndef __WXMAC__
     void SetCurrent(const wxGLContext& RC);
 #endif
     void SetColour(const wxString& colour);
