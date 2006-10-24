@@ -132,9 +132,14 @@ Using project files (VC++ 6 and later):
    know you won't need some of the libraries (i.e. html part), you don't have
    to compile it.  It will also produce similar variations on jpeg.lib,
    png.lib, tiff.lib, zlib.lib, and regex.lib.
+
    If you want to build DLLs, you have to either build them one by one in
    proper order (jpeg, png, tiff, zlib, regex, expat, base, core, the rest
    in any order) or to use wx_dll.dsw workspace which has correct dependencies.
+   Unfortunately, VC++ 6 (but not VC++ 7 and later) doesn't always respect the
+   dependencies among the projects so you may still get linking errors due to
+   wrong build order. If this happens, please just start the build again and
+   eventually all the libraries will be built.
 3. Open a sample project file, choose a configuration such as
    Win32 Debug using Build | Set Active Configuration..., and compile.
    The project files don't use precompiled headers, to save disk
