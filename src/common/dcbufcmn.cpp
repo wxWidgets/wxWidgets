@@ -24,11 +24,11 @@
     #pragma hdrstop
 #endif
 
+#include "wx/dcbuffer.h"
+
 #ifndef WX_PRECOMP
     #include "wx/module.h"
 #endif
-
-#include "wx/dcbuffer.h"
 
 // ============================================================================
 // implementation
@@ -64,6 +64,8 @@ private:
 
     DECLARE_DYNAMIC_CLASS(wxSharedDCBufferManager)
 };
+
+wxBitmap* wxSharedDCBufferManager::ms_buffer;
 
 IMPLEMENT_DYNAMIC_CLASS(wxSharedDCBufferManager, wxModule)
 
