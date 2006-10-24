@@ -37185,6 +37185,40 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_StandardPaths_GetTempDir(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxStandardPaths *arg1 = (wxStandardPaths *) 0 ;
+  wxString result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxStandardPaths, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "StandardPaths_GetTempDir" "', expected argument " "1"" of type '" "wxStandardPaths const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxStandardPaths * >(argp1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = ((wxStandardPaths const *)arg1)->GetTempDir();
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  {
+#if wxUSE_UNICODE
+    resultobj = PyUnicode_FromWideChar((&result)->c_str(), (&result)->Len());
+#else
+    resultobj = PyString_FromStringAndSize((&result)->c_str(), (&result)->Len());
+#endif
+  }
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_StandardPaths_SetInstallPrefix(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   wxStandardPaths *arg1 = (wxStandardPaths *) 0 ;
@@ -39979,6 +40013,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"StandardPaths_GetResourcesDir", (PyCFunction)_wrap_StandardPaths_GetResourcesDir, METH_O, NULL},
 	 { (char *)"StandardPaths_GetLocalizedResourcesDir", (PyCFunction) _wrap_StandardPaths_GetLocalizedResourcesDir, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"StandardPaths_GetDocumentsDir", (PyCFunction)_wrap_StandardPaths_GetDocumentsDir, METH_O, NULL},
+	 { (char *)"StandardPaths_GetTempDir", (PyCFunction)_wrap_StandardPaths_GetTempDir, METH_O, NULL},
 	 { (char *)"StandardPaths_SetInstallPrefix", (PyCFunction) _wrap_StandardPaths_SetInstallPrefix, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"StandardPaths_GetInstallPrefix", (PyCFunction)_wrap_StandardPaths_GetInstallPrefix, METH_O, NULL},
 	 { (char *)"StandardPaths_swigregister", StandardPaths_swigregister, METH_VARARGS, NULL},

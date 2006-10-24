@@ -6137,6 +6137,14 @@ class StandardPaths(object):
         """
         return _misc_.StandardPaths_GetDocumentsDir(*args, **kwargs)
 
+    def GetTempDir(*args, **kwargs):
+        """
+        GetTempDir(self) -> String
+
+        Return the user's directory for temporary files.
+        """
+        return _misc_.StandardPaths_GetTempDir(*args, **kwargs)
+
     def SetInstallPrefix(*args, **kwargs):
         """
         SetInstallPrefix(self, String prefix)

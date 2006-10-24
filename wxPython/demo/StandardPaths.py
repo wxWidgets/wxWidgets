@@ -8,7 +8,7 @@ class TestPanel(wx.Panel):
         self.log = log
         wx.Panel.__init__(self, parent, -1)
 
-        sizer = wx.FlexGridSizer(0, 3, 2, 2)
+        sizer = wx.FlexGridSizer(0, 3, 5, 5)
         box = wx.BoxSizer(wx.VERTICAL)
         fs = self.GetFont().GetPointSize()
         bf = wx.Font(fs+4, wx.SWISS, wx.NORMAL, wx.BOLD)
@@ -54,6 +54,7 @@ class TestPanel(wx.Panel):
                   'GetPluginsDir',
                   'GetInstallPrefix',
                   'GetResourcesDir',
+                  'GetTempDir',
                   ]:
             makeitem(x)
 

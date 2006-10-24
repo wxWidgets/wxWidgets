@@ -15,7 +15,7 @@ switch your programs over to the wx package.
 Fixed wx.glcanvas.GLCanvas.SetCurrent to be compatible with prevoius
 versons. 
 
-
+Added wx.StandardPaths.GetTmpDir.
 
 
 

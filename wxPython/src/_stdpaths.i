@@ -165,7 +165,10 @@ standard prefix/share/locale/lang/LC_MESSAGES.)", "");
 C:\Documents and Settings\username\Documents under Windows,
 $HOME under Unix and ~/Documents under Mac", "");
     
-       
+    DocDeclStr(
+        virtual wxString , GetTempDir() const,
+        "Return the user's directory for temporary files.", "");
+    
     
     DocStr(SetInstallPrefix,
            "Set the program installation directory which is /usr/local by default.
