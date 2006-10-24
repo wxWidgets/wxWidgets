@@ -78,6 +78,8 @@ public:
     virtual wxPageSetupDialogBase *CreatePageSetupDialog( wxWindow *parent,
                                                           wxPageSetupDialogData * data = NULL );
 
+    virtual wxDC* CreatePrinterDC( const wxPrintData& data );
+
     virtual bool HasPrintSetupDialog();
     virtual wxDialog *CreatePrintSetupDialog( wxWindow *parent, wxPrintData *data );
     virtual bool HasOwnPrintToFile();
@@ -199,6 +201,7 @@ class wxGnomePrintDC: public wxDC
 {
 public:
     wxGnomePrintDC( wxGnomePrinter *printer );
+    wxGnomePrintDC( const wxPrintData& data );
     virtual ~wxGnomePrintDC();
 
     bool Ok() const { return IsOk(); }
@@ -275,6 +278,7 @@ private:
     static float ms_PSScaleFactor;
 
 private:
+    wxPrintData             m_printData;
     PangoContext           *m_context;
     PangoLayout            *m_layout;
     PangoFontDescription   *m_fontdesc;
@@ -286,6 +290,7 @@ private:
 
     wxGnomePrinter         *m_printer;
     GnomePrintContext      *m_gpc;
+    GnomePrintJob*          m_job; // only used and destroyed when created with wxPrintData
 
     void makeEllipticalPath(wxCoord x, wxCoord y, wxCoord width, wxCoord height);
     
@@ -354,6 +359,34 @@ private:
     DECLARE_DYNAMIC_CLASS(wxGnomePrintDC)
     DECLARE_NO_COPY_CLASS(wxGnomePrintDC)
 };
+
+// ----------------------------------------------------------------------------
+// wxGnomePrintPreview: programmer creates an object of this class to preview a
+// wxPrintout.
+// ----------------------------------------------------------------------------
+
+class wxGnomePreview : public wxPrintPreviewBase
+{
+public:
+    wxGnomePrintPreview(wxPrintout *printout,
+                             wxPrintout *printoutForPrinting = (wxPrintout *) NULL,
+                             wxPrintDialogData *data = (wxPrintDialogData *) NULL);
+    wxGnomePrintPreview(wxPrintout *printout,
+                             wxPrintout *printoutForPrinting,
+                             wxPrintData *data);
+
+    virtual ~wxGnomePrintPreview();
+
+    virtual bool Print(bool interactive);
+    virtual void DetermineScaling();
+
+private:
+    void Init(wxPrintout *printout, wxPrintout *printoutForPrinting);
+
+private:
+    DECLARE_CLASS(wxGnomePrintPreview)
+};
+
 
 #endif
     // wxUSE_LIBGNOMEPRINT

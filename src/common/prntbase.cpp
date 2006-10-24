@@ -43,6 +43,7 @@
 #include "wx/prntbase.h"
 #include "wx/printdlg.h"
 #include "wx/print.h"
+#include "wx/dcprint.h"
 
 #include <stdlib.h>
 #include <string.h>
@@ -54,6 +55,7 @@
 #include "wx/mac/private/print.h"
 #else
 #include "wx/generic/prntdlgg.h"
+#include "wx/dcps.h"
 #endif
 
 #ifdef __WXMSW__
@@ -198,6 +200,17 @@ wxDialog *wxNativePrintFactory::CreatePrintSetupDialog( wxWindow *parent,
     // none, don't make it accessible or let you configure
     // the printer from the wxPrintDialog anyway.
     return new wxGenericPrintSetupDialog( parent, data );
+#endif
+}
+
+wxDC* wxNativePrintFactory::CreatePrinterDC( const wxPrintData& data )
+{
+#if defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
+    return new wxPrinterDC(data);
+#elif defined(__WXMAC__)
+    return new wxPrinterDC(data);
+#else
+    return new wxPrinterDC(data);
 #endif
 }
 

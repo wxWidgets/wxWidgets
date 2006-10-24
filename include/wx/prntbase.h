@@ -77,6 +77,8 @@ public:
     virtual wxPageSetupDialogBase *CreatePageSetupDialog( wxWindow *parent,
                                                           wxPageSetupDialogData * data = NULL ) = 0;
 
+    virtual wxDC* CreatePrinterDC( const wxPrintData& data ) = 0;
+
     // What to do and what to show in the wxPrintDialog
     // a) Use the generic print setup dialog or a native one?
     virtual bool HasPrintSetupDialog() = 0;
@@ -118,6 +120,8 @@ public:
 
     virtual wxPageSetupDialogBase *CreatePageSetupDialog( wxWindow *parent,
                                                           wxPageSetupDialogData * data = NULL );
+
+    virtual wxDC* CreatePrinterDC( const wxPrintData& data );
 
     virtual bool HasPrintSetupDialog();
     virtual wxDialog *CreatePrintSetupDialog( wxWindow *parent, wxPrintData *data );

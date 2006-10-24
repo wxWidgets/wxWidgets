@@ -309,14 +309,14 @@ wxPrintPreviewBase *wxGnomePrintFactory::CreatePrintPreview( wxPrintout *preview
                                                     wxPrintout *printout,
                                                     wxPrintDialogData *data )
 {
-    return new wxPostScriptPrintPreview( preview, printout, data );
+    return new wxGnomePrintPreview( preview, printout, data );
 }
 
 wxPrintPreviewBase *wxGnomePrintFactory::CreatePrintPreview( wxPrintout *preview,
                                                     wxPrintout *printout,
                                                     wxPrintData *data )
 {
-    return new wxPostScriptPrintPreview( preview, printout, data );
+    return new wxGnomePrintPreview( preview, printout, data );
 }
 
 wxPrintDialogBase *wxGnomePrintFactory::CreatePrintDialog( wxWindow *parent,
@@ -352,6 +352,11 @@ bool wxGnomePrintFactory::HasPrintSetupDialog()
 wxDialog *wxGnomePrintFactory::CreatePrintSetupDialog( wxWindow *parent, wxPrintData *data )
 {
     return NULL;
+}
+
+wxDC* wxGnomePrintFactory::CreatePrinterDC( const wxPrintData& data )
+{
+    return new wxGnomePrintDC(data);
 }
 
 bool wxGnomePrintFactory::HasOwnPrintToFile()
@@ -835,6 +840,7 @@ wxGnomePrintDC::wxGnomePrintDC( wxGnomePrinter *printer )
     m_printer = printer;
 
     m_gpc = printer->GetPrintContext();
+    m_job = NULL; // only used and destroyed when created with wxPrintData
 
     m_layout = gs_lgp->gnome_print_pango_create_layout( m_gpc );
     m_fontdesc = pango_font_description_from_string( "Sans 12" );
@@ -847,8 +853,33 @@ wxGnomePrintDC::wxGnomePrintDC( wxGnomePrinter *printer )
     m_signY = -1;  // default y-axis bottom up -> top down
 }
 
+wxGnomePrintDC::wxGnomePrintDC( const wxPrintData& data )
+{
+    m_printer = NULL;
+    m_printData = data;
+
+    wxGnomePrintNativeData *native =
+        (wxGnomePrintNativeData*) m_printData.GetNativeData();
+
+    GnomePrintJob *job = gs_lgp->gnome_print_job_new( native->GetPrintConfig() );
+    m_gpc = gs_lgp->gnome_print_job_get_context (job);
+    m_job = job; // only used and destroyed when created with wxPrintData
+
+    m_layout = gs_lgp->gnome_print_pango_create_layout( m_gpc );
+    m_fontdesc = pango_font_description_from_string( "Sans 12" );
+
+    m_currentRed = 0;
+    m_currentBlue = 0;
+    m_currentGreen = 0;
+
+    m_signX =  1;  // default x-axis left to right
+    m_signY = -1;  // default y-axis bottom up -> top down    
+}
+
 wxGnomePrintDC::~wxGnomePrintDC()
 {
+    if (m_job)
+        g_object_unref (job);
 }
 
 bool wxGnomePrintDC::IsOk() const
@@ -1838,6 +1869,96 @@ void wxGnomePrintModule::OnExit()
 }
 
 IMPLEMENT_DYNAMIC_CLASS(wxGnomePrintModule, wxModule)
+
+// ----------------------------------------------------------------------------
+// Print preview
+// ----------------------------------------------------------------------------
+
+IMPLEMENT_CLASS(wxGnomePrintPreview, wxPrintPreviewBase)
+
+void wxGnomePrintPreview::Init(wxPrintout * WXUNUSED(printout),
+                                    wxPrintout * WXUNUSED(printoutForPrinting))
+{
+    DetermineScaling();
+}
+
+wxGnomePrintPreview::wxGnomePrintPreview(wxPrintout *printout,
+                                                   wxPrintout *printoutForPrinting,
+                                                   wxPrintDialogData *data)
+                        : wxPrintPreviewBase(printout, printoutForPrinting, data)
+{
+    Init(printout, printoutForPrinting);
+}
+
+wxGnomePrintPreview::wxGnomePrintPreview(wxPrintout *printout,
+                                                   wxPrintout *printoutForPrinting,
+                                                   wxPrintData *data)
+                        : wxPrintPreviewBase(printout, printoutForPrinting, data)
+{
+    Init(printout, printoutForPrinting);
+}
+
+wxGnomePrintPreview::~wxGnomePrintPreview()
+{
+}
+
+bool wxGnomePrintPreview::Print(bool interactive)
+{
+    if (!m_printPrintout)
+        return false;
+
+    wxPrinter printer(& m_printDialogData);
+    return printer.Print(m_previewFrame, m_printPrintout, interactive);
+}
+
+void wxGnomePrintPreview::DetermineScaling()
+{
+    wxPaperSize paperType = m_printDialogData.GetPrintData().GetPaperId();
+    if (paperType == wxPAPER_NONE)
+        paperType = wxPAPER_NONE;
+
+    wxPrintPaperType *paper = wxThePrintPaperDatabase->FindPaperType(paperType);
+    if (!paper)
+        paper = wxThePrintPaperDatabase->FindPaperType(wxPAPER_A4);
+
+    if (paper)
+    {
+        wxSize ScreenPixels = wxGetDisplaySize();
+        wxSize ScreenMM = wxGetDisplaySizeMM();
+
+        m_previewPrintout->SetPPIScreen( (int) ((ScreenPixels.GetWidth() * 25.4) / ScreenMM.GetWidth()),
+                                         (int) ((ScreenPixels.GetHeight() * 25.4) / ScreenMM.GetHeight()) );
+        m_previewPrintout->SetPPIPrinter(wxGnomePrintDC::GetResolution(), wxGnomePrintDC::GetResolution());
+
+        wxSize sizeDevUnits(paper->GetSizeDeviceUnits());
+        
+        // TODO: get better resolution information from wxGnomePrintDC, if possible.
+
+        sizeDevUnits.x = (wxCoord)((float)sizeDevUnits.x * wxGnomePrintDC::GetResolution() / 72.0);
+        sizeDevUnits.y = (wxCoord)((float)sizeDevUnits.y * wxGnomePrintDC::GetResolution() / 72.0);
+        wxSize sizeTenthsMM(paper->GetSize());
+        wxSize sizeMM(sizeTenthsMM.x / 10, sizeTenthsMM.y / 10);
+
+        // If in landscape mode, we need to swap the width and height.
+        if ( m_printDialogData.GetPrintData().GetOrientation() == wxLANDSCAPE )
+        {
+            m_pageWidth = sizeDevUnits.y;
+            m_pageHeight = sizeDevUnits.x;
+            m_previewPrintout->SetPageSizeMM(sizeMM.y, sizeMM.x);
+            m_previewPrintout->SetPageSizePixels(m_pageWidth, m_pageHeight);
+        }
+        else
+        {
+            m_pageWidth = sizeDevUnits.x;
+            m_pageHeight = sizeDevUnits.y;
+            m_previewPrintout->SetPageSizeMM(sizeMM.x, sizeMM.y);
+            m_previewPrintout->SetPageSizePixels(m_pageWidth, m_pageHeight);
+        }
+
+        // At 100%, the page should look about page-size on the screen.
+        m_previewScale = (float)0.8 * 72.0 / (float)wxGnomePrintDC::GetResolution();
+    }
+}
 
 #endif
     // wxUSE_LIBGNOMEPRINT
