@@ -286,7 +286,6 @@ private:
     unsigned char           m_currentRed;
     unsigned char           m_currentGreen;
     unsigned char           m_currentBlue;
-    wxPrintData             m_printData;
 
     wxGnomePrinter         *m_printer;
     GnomePrintContext      *m_gpc;
@@ -365,7 +364,7 @@ private:
 // wxPrintout.
 // ----------------------------------------------------------------------------
 
-class wxGnomePreview : public wxPrintPreviewBase
+class wxGnomePrintPreview : public wxPrintPreviewBase
 {
 public:
     wxGnomePrintPreview(wxPrintout *printout,

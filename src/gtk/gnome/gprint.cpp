@@ -31,6 +31,7 @@
 #include "wx/fontutil.h"
 #include "wx/gtk/private.h"
 #include "wx/dynlib.h"
+#include "wx/paper.h"
 
 #include <libgnomeprint/gnome-print.h>
 #include <libgnomeprint/gnome-print-pango.h>
@@ -879,7 +880,7 @@ wxGnomePrintDC::wxGnomePrintDC( const wxPrintData& data )
 wxGnomePrintDC::~wxGnomePrintDC()
 {
     if (m_job)
-        g_object_unref (job);
+        g_object_unref (m_job);
 }
 
 bool wxGnomePrintDC::IsOk() const
