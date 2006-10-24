@@ -753,6 +753,13 @@ void wxGenericTreeCtrl::Init()
     m_indent = 15;
     m_spacing = 18;
 
+#ifdef __WXMAC__
+    // OS X sel item highlight color differs from text highlight color, which is
+    // what wxSYS_COLOUR_HIGHLIGHT returns. 
+    RGBColor hilight;
+    GetThemeBrushAsColor(kThemeBrushAlternatePrimaryHighlightColor, 32, true, &hilight);
+    m_hilightBrush = new wxBrush( wxColour(hilight.red, hilight.green, hilight.blue ), wxSOLID );
+#else
     m_hilightBrush = new wxBrush
                          (
                             wxSystemSettings::GetColour
@@ -761,7 +768,14 @@ void wxGenericTreeCtrl::Init()
                             ),
                             wxSOLID
                          );
+#endif
 
+#ifdef __WXMAC__
+    // on Mac, this color also differs from the wxSYS_COLOUR_BTNSHADOW, enough to be noticable.
+    // I don't know if BTNSHADOW is appropriate in other contexts, so I'm just changing it here.
+    GetThemeBrushAsColor(kThemeBrushSecondaryHighlightColor, 32, true, &hilight);
+    m_hilightUnfocusedBrush = new wxBrush( wxColour(hilight.red, hilight.green, hilight.blue ), wxSOLID );
+#else
     m_hilightUnfocusedBrush = new wxBrush
                               (
                                  wxSystemSettings::GetColour
@@ -770,7 +784,7 @@ void wxGenericTreeCtrl::Init()
                                  ),
                                  wxSOLID
                               );
-
+#endif
     m_imageListButtons = NULL;
     m_ownsImageListButtons = false;
 
@@ -819,6 +833,10 @@ bool wxGenericTreeCtrl::Create(wxWindow *parent,
     style |= wxTR_NO_LINES;
     if (major < 10)
         style |= wxTR_ROW_LINES;
+        
+    if (style == 0 || style & wxTR_DEFAULT_STYLE)
+        style |= wxTR_FULL_ROW_HIGHLIGHT;
+        
 #endif // __WXMAC__
 #ifdef __WXGTK20__
     style |= wxTR_NO_LINES;
@@ -2191,20 +2209,7 @@ void wxGenericTreeCtrl::PaintItem(wxGenericTreeItem *item, wxDC& dc)
 
     if ( item->IsSelected() )
     {
-// under mac selections are only a rectangle in case they don't have the focus
-#ifdef __WXMAC__
-        if ( !m_hasFocus )
-        {
-            dc.SetBrush( *wxTRANSPARENT_BRUSH ) ;
-            dc.SetPen( wxPen( wxSystemSettings::GetColour( wxSYS_COLOUR_HIGHLIGHT ) , 1 , wxSOLID ) ) ;
-        }
-        else
-        {
-            dc.SetBrush( *m_hilightBrush ) ;
-        }
-#else
         dc.SetBrush(*(m_hasFocus ? m_hilightBrush : m_hilightUnfocusedBrush));
-#endif
         drawItemBackground = true;
     }
     else
@@ -2337,7 +2342,11 @@ void wxGenericTreeCtrl::PaintLevel( wxGenericTreeItem *item, wxDC &dc, int level
 #endif
             )
         {
+#ifdef __WXMAC__
+            colText = *wxWHITE;
+#else
             colText = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT);
+#endif
         }
         else
         {

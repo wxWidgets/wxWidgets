@@ -1380,7 +1380,11 @@ bool wxListLineData::SetAttributes(wxDC *dc,
     // arithmetics on wxColour, unfortunately)
     wxColour colText;
     if ( highlighted )
+#ifdef __WXMAC__
+        colText = *wxWHITE;
+#else
         colText = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT);
+#endif
     else if ( attr && attr->HasTextColour() )
         colText = attr->GetTextColour();
     else
@@ -2182,23 +2186,39 @@ wxListMainWindow::wxListMainWindow( wxWindow *parent,
 {
     Init();
 
+
+#ifdef __WXMAC__
+    // OS X sel item highlight color differs from text highlight color, which is
+    // what wxSYS_COLOUR_HIGHLIGHT returns. 
+    RGBColor hilight;
+    GetThemeBrushAsColor(kThemeBrushAlternatePrimaryHighlightColor, 32, true, &hilight);
+    m_highlightBrush = new wxBrush( wxColour(hilight.red, hilight.green, hilight.blue ), wxSOLID );
+#else
     m_highlightBrush = new wxBrush
-                           (
+                         (
                             wxSystemSettings::GetColour
                             (
                                 wxSYS_COLOUR_HIGHLIGHT
                             ),
                             wxSOLID
-                           );
+                         );
+#endif
 
+#ifdef __WXMAC__
+    // on Mac, this color also differs from the wxSYS_COLOUR_BTNSHADOW, enough to be noticable.
+    // I don't know if BTNSHADOW is appropriate in other contexts, so I'm just changing it here.
+    GetThemeBrushAsColor(kThemeBrushSecondaryHighlightColor, 32, true, &hilight);
+    m_highlightUnfocusedBrush = new wxBrush( wxColour(hilight.red, hilight.green, hilight.blue ), wxSOLID );
+#else
     m_highlightUnfocusedBrush = new wxBrush
-                                    (
-                                       wxSystemSettings::GetColour
-                                       (
-                                           wxSYS_COLOUR_BTNSHADOW
-                                       ),
-                                       wxSOLID
-                                    );
+                              (
+                                 wxSystemSettings::GetColour
+                                 (
+                                     wxSYS_COLOUR_BTNSHADOW
+                                 ),
+                                 wxSOLID
+                              );
+#endif
 
     SetScrollbars( 0, 0, 0, 0, 0, 0 );
 
