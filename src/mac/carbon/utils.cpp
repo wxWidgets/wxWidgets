@@ -1394,12 +1394,12 @@ OSStatus wxMacDataBrowserControl::AddColumn( DataBrowserListViewColumnDesc *colu
 }
 
 OSStatus wxMacDataBrowserControl::GetColumnIDFromIndex( DataBrowserTableViewColumnIndex position, DataBrowserTableViewColumnID* id ){
-    return GetDataBrowserTableViewColumnProperty( m_controlRef, position, id ); 
+    return GetDataBrowserTableViewColumnProperty( m_controlRef, position, id );
 }
 
 OSStatus wxMacDataBrowserControl::RemoveColumn( DataBrowserTableViewColumnIndex position )
 {
-    DataBrowserTableViewColumnID id; 
+    DataBrowserTableViewColumnID id;
     GetColumnIDFromIndex( position, &id );
     return RemoveDataBrowserTableViewColumn( m_controlRef, id );
 }
@@ -1624,6 +1624,7 @@ OSStatus wxMacDataBrowserControl::SetDisclosureColumn( DataBrowserPropertyID pro
 wxMacDataItem::wxMacDataItem()
 {
     m_data = NULL;
+
     m_order = 0;
     m_colId = kTextColumnId; // for compat with existing wx*ListBox impls.
 }
@@ -1660,7 +1661,7 @@ short wxMacDataItem::GetColumn()
 void wxMacDataItem::SetColumn( short col )
 {
     m_colId = col;
-} 
+}
 
 void wxMacDataItem::SetLabel( const wxString& str)
 {
@@ -1679,11 +1680,11 @@ bool wxMacDataItem::IsLessThan(wxMacDataItemBrowserControl *owner ,
 {
     const wxMacDataItem* otherItem = dynamic_cast<const wxMacDataItem*>(rhs);
     bool retval = false;
-    
+
     if ( sortProperty == m_colId ){
         retval = m_label.CmpNoCase( otherItem->m_label) < 0;
     }
-    
+
     else if ( sortProperty == kNumericOrderColumnId )
         retval = m_order < otherItem->m_order;
 
@@ -1805,7 +1806,7 @@ OSStatus wxMacDataItemBrowserControl::GetSetItemData(
             // right now default behaviour on these
             break;
         default :
-            
+
             if ( item != NULL ){
                 err = item->GetSetData( this, property , itemData , changeValue );
             }
@@ -1842,7 +1843,7 @@ unsigned int wxMacDataItemBrowserControl::GetItemCount(const wxMacDataItem* cont
     return numItems;
 }
 
-unsigned int wxMacDataItemBrowserControl::GetSelectedItemCount( const wxMacDataItem* container, 
+unsigned int wxMacDataItemBrowserControl::GetSelectedItemCount( const wxMacDataItem* container,
         bool recurse ) const
 {
     return GetItemCount( container, recurse, kDataBrowserItemIsSelected );
@@ -1913,11 +1914,11 @@ void wxMacDataItemBrowserControl::InsertColumn(int colId, DataBrowserPropertyTyp
     columnDesc.headerBtnDesc.btnFontStyle.flags =
         kControlUseFontMask | kControlUseJustMask;
 
-    columnDesc.headerBtnDesc.btnContentInfo.contentType = kControlContentTextOnly; 
+    columnDesc.headerBtnDesc.btnContentInfo.contentType = kControlContentTextOnly;
     columnDesc.headerBtnDesc.btnFontStyle.just = just;
     columnDesc.headerBtnDesc.btnFontStyle.font = kControlFontViewSystemFont;
     columnDesc.headerBtnDesc.btnFontStyle.style = normal;
-    
+
     // TODO: Why is m_font not defined when we enter wxLC_LIST mode, but is
     // defined for other modes?
     wxFontEncoding enc;
@@ -1927,14 +1928,17 @@ void wxMacDataItemBrowserControl::InsertColumn(int colId, DataBrowserPropertyTyp
         enc = wxLocale::GetSystemEncoding();
     wxMacCFStringHolder cfTitle;
     cfTitle.Assign( title, enc );
-    columnDesc.headerBtnDesc.titleString = cfTitle; 
+    columnDesc.headerBtnDesc.titleString = cfTitle;
 
     columnDesc.headerBtnDesc.minimumWidth = 0;
     columnDesc.headerBtnDesc.maximumWidth = 30000;
 
     columnDesc.propertyDesc.propertyID = (kMinColumnId + colId);
     columnDesc.propertyDesc.propertyType = colType;
-    columnDesc.propertyDesc.propertyFlags = kDataBrowserListViewSortableColumn | kDataBrowserListViewTypeSelectColumn; 
+    columnDesc.propertyDesc.propertyFlags = kDataBrowserListViewSortableColumn;
+#if MAC_OS_X_VERSION_MAX_ALLOWED > MAC_OS_X_VERSION_10_2
+    columnDesc.propertyDesc.propertyFlags |= kDataBrowserListViewTypeSelectColumn;
+#endif
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_4
     columnDesc.propertyDesc.propertyFlags |= kDataBrowserListViewNoGapForIconInHeaderButton;
 #endif
@@ -2125,7 +2129,7 @@ void wxMacDataItemBrowserControl::MacInsert( unsigned int n, const wxArrayString
         item->SetLabel( items[i]);
         if ( column != -1 )
             item->SetColumn( kMinColumnId + column );
-        
+
         if ( m_sortOrder == SortOrder_None )
             item->SetOrder( frontLineOrder + 1 + i );
 
@@ -2353,12 +2357,12 @@ wxMacPortSaver::~wxMacPortSaver()
 
 void wxMacGlobalToLocal( WindowRef window , Point*pt )
 {
-#if MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_4 
+#if MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_4
     HIPoint p = CGPointMake( pt->h, pt->v );
-	HIViewRef contentView ;
-	// TODO check toolbar offset 
+    HIViewRef contentView ;
+    // TODO check toolbar offset
     HIViewFindByID( HIViewGetRoot( window ), kHIViewWindowContentID , &contentView) ;
-	HIPointConvert( &p, kHICoordSpace72DPIGlobal, NULL, kHICoordSpaceView, contentView );
+    HIPointConvert( &p, kHICoordSpace72DPIGlobal, NULL, kHICoordSpaceView, contentView );
     pt->h = p.x;
     pt->v = p.y;
 #else
@@ -2368,10 +2372,10 @@ void wxMacGlobalToLocal( WindowRef window , Point*pt )
 
 void wxMacLocalToGlobal( WindowRef window , Point*pt )
 {
-#if MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_4 
+#if MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_4
     HIPoint p = CGPointMake( pt->h, pt->v );
- 	HIViewRef contentView ;
-	// TODO check toolbar offset 
+    HIViewRef contentView ;
+    // TODO check toolbar offset
     HIViewFindByID( HIViewGetRoot( window ), kHIViewWindowContentID , &contentView) ;
     HIPointConvert( &p, kHICoordSpaceView, contentView, kHICoordSpace72DPIGlobal, NULL );
     pt->h = p.x;
