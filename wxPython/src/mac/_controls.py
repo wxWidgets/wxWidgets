@@ -5678,7 +5678,6 @@ class GenericDirCtrl(_core.Control):
     FilterListCtrl = property(GetFilterListCtrl,doc="See `GetFilterListCtrl`") 
     Path = property(GetPath,SetPath,doc="See `GetPath` and `SetPath`") 
     RootId = property(GetRootId,doc="See `GetRootId`") 
-    ShowHidden = property(GetShowHidden,ShowHidden,doc="See `GetShowHidden` and `ShowHidden`") 
     TreeCtrl = property(GetTreeCtrl,doc="See `GetTreeCtrl`") 
 _controls_.GenericDirCtrl_swigregister(GenericDirCtrl)
 DirDialogDefaultFolderStr = cvar.DirDialogDefaultFolderStr

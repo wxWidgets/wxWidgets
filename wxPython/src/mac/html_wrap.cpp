@@ -15058,6 +15058,9 @@ SWIGINTERN PyObject *_wrap_new_HtmlHelpFrame(PyObject *SWIGUNUSEDPARM(self), PyO
   wxString *arg3 = (wxString *) &arg3_defvalue ;
   int arg4 = (int) wxHF_DEFAULTSTYLE ;
   wxHtmlHelpData *arg5 = (wxHtmlHelpData *) NULL ;
+  wxConfigBase *arg6 = (wxConfigBase *) NULL ;
+  wxString const &arg7_defvalue = wxPyEmptyString ;
+  wxString *arg7 = (wxString *) &arg7_defvalue ;
   wxHtmlHelpFrame *result = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
@@ -15068,16 +15071,21 @@ SWIGINTERN PyObject *_wrap_new_HtmlHelpFrame(PyObject *SWIGUNUSEDPARM(self), PyO
   int ecode4 = 0 ;
   void *argp5 = 0 ;
   int res5 = 0 ;
+  void *argp6 = 0 ;
+  int res6 = 0 ;
+  bool temp7 = false ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
   PyObject * obj3 = 0 ;
   PyObject * obj4 = 0 ;
+  PyObject * obj5 = 0 ;
+  PyObject * obj6 = 0 ;
   char *  kwnames[] = {
-    (char *) "parent",(char *)"arg2",(char *) "title",(char *) "style",(char *) "data", NULL 
+    (char *) "parent",(char *)"arg2",(char *) "title",(char *) "style",(char *) "data",(char *) "config",(char *) "rootpath", NULL 
   };
   
-  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|OOO:new_HtmlHelpFrame",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4)) SWIG_fail;
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|OOOOO:new_HtmlHelpFrame",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxWindow, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_HtmlHelpFrame" "', expected argument " "1"" of type '" "wxWindow *""'"); 
@@ -15109,10 +15117,24 @@ SWIGINTERN PyObject *_wrap_new_HtmlHelpFrame(PyObject *SWIGUNUSEDPARM(self), PyO
     }
     arg5 = reinterpret_cast< wxHtmlHelpData * >(argp5);
   }
+  if (obj5) {
+    res6 = SWIG_ConvertPtr(obj5, &argp6,SWIGTYPE_p_wxConfigBase, 0 |  0 );
+    if (!SWIG_IsOK(res6)) {
+      SWIG_exception_fail(SWIG_ArgError(res6), "in method '" "new_HtmlHelpFrame" "', expected argument " "6"" of type '" "wxConfigBase *""'"); 
+    }
+    arg6 = reinterpret_cast< wxConfigBase * >(argp6);
+  }
+  if (obj6) {
+    {
+      arg7 = wxString_in_helper(obj6);
+      if (arg7 == NULL) SWIG_fail;
+      temp7 = true;
+    }
+  }
   {
     if (!wxPyCheckForApp()) SWIG_fail;
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    result = (wxHtmlHelpFrame *)new wxHtmlHelpFrame(arg1,arg2,(wxString const &)*arg3,arg4,arg5);
+    result = (wxHtmlHelpFrame *)new wxHtmlHelpFrame(arg1,arg2,(wxString const &)*arg3,arg4,arg5,arg6,(wxString const &)*arg7);
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
@@ -15121,11 +15143,19 @@ SWIGINTERN PyObject *_wrap_new_HtmlHelpFrame(PyObject *SWIGUNUSEDPARM(self), PyO
     if (temp3)
     delete arg3;
   }
+  {
+    if (temp7)
+    delete arg7;
+  }
   return resultobj;
 fail:
   {
     if (temp3)
     delete arg3;
+  }
+  {
+    if (temp7)
+    delete arg7;
   }
   return NULL;
 }
@@ -15172,6 +15202,9 @@ SWIGINTERN PyObject *_wrap_HtmlHelpFrame_Create(PyObject *SWIGUNUSEDPARM(self), 
   wxString const &arg4_defvalue = wxPyEmptyString ;
   wxString *arg4 = (wxString *) &arg4_defvalue ;
   int arg5 = (int) wxHF_DEFAULT_STYLE ;
+  wxConfigBase *arg6 = (wxConfigBase *) NULL ;
+  wxString const &arg7_defvalue = wxPyEmptyString ;
+  wxString *arg7 = (wxString *) &arg7_defvalue ;
   bool result;
   void *argp1 = 0 ;
   int res1 = 0 ;
@@ -15182,16 +15215,21 @@ SWIGINTERN PyObject *_wrap_HtmlHelpFrame_Create(PyObject *SWIGUNUSEDPARM(self), 
   bool temp4 = false ;
   int val5 ;
   int ecode5 = 0 ;
+  void *argp6 = 0 ;
+  int res6 = 0 ;
+  bool temp7 = false ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
   PyObject * obj3 = 0 ;
   PyObject * obj4 = 0 ;
+  PyObject * obj5 = 0 ;
+  PyObject * obj6 = 0 ;
   char *  kwnames[] = {
-    (char *) "self",(char *) "parent",(char *) "id",(char *) "title",(char *) "style", NULL 
+    (char *) "self",(char *) "parent",(char *) "id",(char *) "title",(char *) "style",(char *) "config",(char *) "rootpath", NULL 
   };
   
-  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO|OO:HtmlHelpFrame_Create",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4)) SWIG_fail;
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO|OOOO:HtmlHelpFrame_Create",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxHtmlHelpFrame, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "HtmlHelpFrame_Create" "', expected argument " "1"" of type '" "wxHtmlHelpFrame *""'"); 
@@ -15221,9 +15259,23 @@ SWIGINTERN PyObject *_wrap_HtmlHelpFrame_Create(PyObject *SWIGUNUSEDPARM(self), 
     } 
     arg5 = static_cast< int >(val5);
   }
+  if (obj5) {
+    res6 = SWIG_ConvertPtr(obj5, &argp6,SWIGTYPE_p_wxConfigBase, 0 |  0 );
+    if (!SWIG_IsOK(res6)) {
+      SWIG_exception_fail(SWIG_ArgError(res6), "in method '" "HtmlHelpFrame_Create" "', expected argument " "6"" of type '" "wxConfigBase *""'"); 
+    }
+    arg6 = reinterpret_cast< wxConfigBase * >(argp6);
+  }
+  if (obj6) {
+    {
+      arg7 = wxString_in_helper(obj6);
+      if (arg7 == NULL) SWIG_fail;
+      temp7 = true;
+    }
+  }
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    result = (bool)(arg1)->Create(arg2,arg3,(wxString const &)*arg4,arg5);
+    result = (bool)(arg1)->Create(arg2,arg3,(wxString const &)*arg4,arg5,arg6,(wxString const &)*arg7);
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
@@ -15234,11 +15286,19 @@ SWIGINTERN PyObject *_wrap_HtmlHelpFrame_Create(PyObject *SWIGUNUSEDPARM(self), 
     if (temp4)
     delete arg4;
   }
+  {
+    if (temp7)
+    delete arg7;
+  }
   return resultobj;
 fail:
   {
     if (temp4)
     delete arg4;
+  }
+  {
+    if (temp7)
+    delete arg7;
   }
   return NULL;
 }

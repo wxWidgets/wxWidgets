@@ -1689,13 +1689,18 @@ class HtmlHelpFrame(_windows.Frame):
     def __init__(self, *args, **kwargs): 
         """
         __init__(self, Window parent, int ?, String title=EmptyString, int style=wxHF_DEFAULTSTYLE, 
-            HtmlHelpData data=None) -> HtmlHelpFrame
+            HtmlHelpData data=None, 
+            ConfigBase config=None, String rootpath=EmptyString) -> HtmlHelpFrame
         """
         _html.HtmlHelpFrame_swiginit(self,_html.new_HtmlHelpFrame(*args, **kwargs))
         self._setOORInfo(self)
 
     def Create(*args, **kwargs):
-        """Create(self, Window parent, int id, String title=EmptyString, int style=HF_DEFAULT_STYLE) -> bool"""
+        """
+        Create(self, Window parent, int id, String title=EmptyString, int style=HF_DEFAULT_STYLE, 
+            ConfigBase config=None, 
+            String rootpath=EmptyString) -> bool
+        """
         return _html.HtmlHelpFrame_Create(*args, **kwargs)
 
     def GetData(*args, **kwargs):
