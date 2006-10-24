@@ -754,6 +754,12 @@
  */
 #define CONST_COMPATIBILITY 0
 
+/*
+ * use the session manager to detect KDE/GNOME
+ */
+#define wxUSE_DETECT_SM     0
+
+
 /* define with the name of timezone variable */
 #undef WX_TIMEZONE
 
