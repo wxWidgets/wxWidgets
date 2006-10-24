@@ -1113,7 +1113,7 @@ class ButtonInfo(Control):
         if alignment == self._textAlignment:
             return
 
-        self._alignment = alignment
+        self._textAlignment = alignment
         
 
     def GetToggled(self):
