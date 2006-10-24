@@ -834,13 +834,13 @@ abort is not confirmed the dialog may be resumed with `Resume` function.
 
 
     DocDeclAStr(
-        virtual bool , UpdatePulse(const wxString& newmsg = wxPyEmptyString,
+        virtual bool , Pulse(const wxString& newmsg = wxPyEmptyString,
                                    bool *OUTPUT),
-        "UpdatePulse(self, String newmsg) --> (continue, skip)",
+        "Pulse(self, String newmsg) --> (continue, skip)",
         "Just like `Update` but switches the dialog to use a gauge in
 interminante mode and calls `wx.Gauge.Pulse` to show the user a bit of
 progress.", "");
-    
+    %pythoncode { UpdatePulse =  Pulse }
 
     DocDeclStr(
         void , Resume(),
