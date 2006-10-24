@@ -17,12 +17,14 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
+#include "wx/collpane.h"
+
 #ifndef WX_PRECOMP
+    #include "wx/toplevel.h"
     #include "wx/button.h"
     #include "wx/sizer.h"
 #endif // !WX_PRECOMP
 
-#include "wx/collpane.h"
 #include "wx/statline.h"
 
 // ----------------------------------------------------------------------------

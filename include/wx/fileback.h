@@ -14,6 +14,8 @@
 
 #if wxUSE_BACKINGFILE
 
+#include "wx/stream.h"
+
 // ----------------------------------------------------------------------------
 // Backs an input stream with memory or a file to make it seekable.
 //

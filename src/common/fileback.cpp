@@ -16,13 +16,13 @@
 
 #if wxUSE_BACKINGFILE
 
+#include "wx/fileback.h"
+
 #ifndef WX_PRECOMP
-    #include "wx/stream.h"
     #include "wx/utils.h"
     #include "wx/log.h"
 #endif
 
-#include "wx/fileback.h"
 #include "wx/private/filename.h"
 
 // Prefer wxFFile unless wxFile has large file support but wxFFile does not.
