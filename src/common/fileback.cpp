@@ -171,7 +171,7 @@ wxStreamError wxBackingFileImpl::ReadAt(wxFileOffset pos,
                         delete m_stream;
                         m_stream = NULL;
                         if (count > 0) {
-                            delete m_buf;
+                            delete[] m_buf;
                             m_buf = NULL;
                             m_buflen = 0;
                         }
@@ -182,7 +182,7 @@ wxStreamError wxBackingFileImpl::ReadAt(wxFileOffset pos,
                     m_buflen = 0;
 
                     if (!m_stream) {
-                        delete m_buf;
+                        delete[] m_buf;
                         m_buf = NULL;
                     }
                 }
