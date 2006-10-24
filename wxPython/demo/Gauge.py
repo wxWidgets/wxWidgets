@@ -18,6 +18,9 @@ class TestPanel(wx.Panel):
         self.timer = wx.Timer(self)
         self.timer.Start(100)
 
+    def __del__(self):
+        self.timer.Stop()
+
     def TimerHandler(self, event):
         self.count = self.count + 1
 
@@ -27,7 +30,6 @@ class TestPanel(wx.Panel):
         self.g1.SetValue(self.count)
         self.g2.Pulse()
     
-
 
 #----------------------------------------------------------------------
 
