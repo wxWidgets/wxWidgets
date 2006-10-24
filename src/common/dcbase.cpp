@@ -330,7 +330,7 @@ void wxDCBase::DoDrawSpline( wxList *points )
     double           x1, y1, x2, y2;
 
     wxList::compatibility_iterator node = points->GetFirst();
-    if (node == wxList::compatibility_iterator())
+    if (!node)
         // empty list
         return;
 
