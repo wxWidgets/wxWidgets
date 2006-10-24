@@ -26,27 +26,29 @@
 
 #else // !wxHAS_NATIVE_OVERLAY
 
+#include "wx/bitmap.h"
+
 // generic implementation of wxOverlay
 class wxOverlayImpl
 {
 public:
     wxOverlayImpl();
     ~wxOverlayImpl();
-    
-    
+
+
     // clears the overlay without restoring the former state
     // to be done eg when the window content has been changed and repainted
     void Reset();
-    
+
     // returns true if it has been setup
     bool IsOk();
-    
+
     void Init(wxWindowDC* dc, int x , int y , int width , int height);
-    
+
     void BeginDrawing(wxWindowDC* dc);
-    
+
     void EndDrawing(wxWindowDC* dc);
-    
+
     void Clear(wxWindowDC* dc);
 
 private:
@@ -60,7 +62,7 @@ private:
 // ce - how do we fix this
 #if defined(__WXGTK__) || defined(__WXMSW__)
     wxWindow* m_window ;
-#endif   
+#endif
 } ;
 
 #endif // wxHAS_NATIVE_OVERLAY/!wxHAS_NATIVE_OVERLAY
