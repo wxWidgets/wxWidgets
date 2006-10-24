@@ -17,14 +17,14 @@ class WXDLLEXPORT wxButton;
 class WXDLLEXPORT wxStaticLine;
 
 // class name
-extern WXDLLEXPORT_DATA(const wxChar) wxGenericCollapsiblePaneNameStr[];
+extern WXDLLIMPEXP_DATA_ADV(const wxChar) wxGenericCollapsiblePaneNameStr[];
 
 
 // ----------------------------------------------------------------------------
 // wxGenericCollapsiblePane
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxGenericCollapsiblePane : public wxCollapsiblePaneBase
+class WXDLLIMPEXP_ADV wxGenericCollapsiblePane : public wxCollapsiblePaneBase
 {
 public:
     wxGenericCollapsiblePane() { Init(); }
@@ -75,7 +75,7 @@ public:
     // implementation only, don't use
     void OnStateChange(const wxSize& sizeNew);
 
-protected: 
+protected:
     // overridden methods
     virtual wxSize DoGetBestSize() const;
 
@@ -104,4 +104,3 @@ private:
 
 
 #endif // _WX_COLLAPSABLE_PANE_H_GENERIC_
-
