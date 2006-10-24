@@ -18,6 +18,7 @@ regen
 
 build/msw/config.*
 build/msw/makefile.*
+build/msw/wx_base.dsp
 
 src/common/*.cpp
 src/common/extended.c
