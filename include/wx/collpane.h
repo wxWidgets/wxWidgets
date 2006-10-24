@@ -44,10 +44,10 @@ public:
 // ----------------------------------------------------------------------------
 
 BEGIN_DECLARE_EVENT_TYPES()
-    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_CORE, wxEVT_COMMAND_COLLPANE_CHANGED, 1102)
+    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_ADV, wxEVT_COMMAND_COLLPANE_CHANGED, 1102)
 END_DECLARE_EVENT_TYPES()
 
-class WXDLLIMPEXP_CORE wxCollapsiblePaneEvent : public wxCommandEvent
+class WXDLLIMPEXP_ADV wxCollapsiblePaneEvent : public wxCommandEvent
 {
 public:
     wxCollapsiblePaneEvent() {}
