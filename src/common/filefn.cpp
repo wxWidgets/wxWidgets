@@ -24,13 +24,15 @@
     #pragma hdrstop
 #endif
 
+#include "wx/filefn.h"
+
 #ifndef WX_PRECOMP
     #include "wx/intl.h"
     #include "wx/log.h"
     #include "wx/utils.h"
 #endif
 
-#include "wx/file.h" // This does include filefn.h
+#include "wx/file.h"
 #include "wx/filename.h"
 #include "wx/dir.h"
 
@@ -1909,7 +1911,7 @@ wxFileKind wxGetFileKind(FILE *fp)
 #if defined(wxFILEKIND_STUB) || wxONLY_WATCOM_EARLIER_THAN(1,4)
     (void)fp;
     return wxFILE_KIND_DISK;
-#elif defined __WINDOWS__ && !defined __CYGWIN__
+#elif defined(__WINDOWS__) && !defined(__CYGWIN__) && !defined(__WATCOMC__)
     return fp ? wxGetFileKind(_fileno(fp)) : wxFILE_KIND_UNKNOWN;
 #else
     return fp ? wxGetFileKind(fileno(fp)) : wxFILE_KIND_UNKNOWN;
