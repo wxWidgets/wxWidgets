@@ -26,6 +26,7 @@
 
 #include "wx/overlay.h"
 #include "wx/private/overlay.h"
+#include "wx/dcclient.h"
 
 #if wxHAS_NATIVE_OVERLAY
 
