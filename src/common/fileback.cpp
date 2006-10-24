@@ -83,7 +83,7 @@ wxBackingFileImpl::wxBackingFileImpl(wxInputStream *stream,
     wxFileOffset len = m_stream->GetLength();
 
     if (len >= 0 && len + size_t(0) < m_bufsize)
-        m_bufsize = len;
+        m_bufsize = size_t(len);
 
     if (m_bufsize)
         m_buf = new char[m_bufsize];
@@ -114,7 +114,7 @@ wxStreamError wxBackingFileImpl::ReadAt(wxFileOffset pos,
         size1 = reqestedSize;
         size2 = 0;
     } else if (pos < m_filelen) {
-        size1 = m_filelen - pos;
+        size1 = size_t(m_filelen - pos);
         size2 = reqestedSize - size1;
     } else {
         size1 = 0;
@@ -203,7 +203,7 @@ wxStreamError wxBackingFileImpl::ReadAt(wxFileOffset pos,
             }
 
             // copy to the user's buffer
-            size_t start = pos - m_filelen;
+            size_t start = size_t(pos - m_filelen);
             size_t len = wxMin(m_buflen - start, reqestedSize - *size);
 
             memcpy((char*)buffer + *size, m_buf + start, len);
