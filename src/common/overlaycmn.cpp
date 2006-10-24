@@ -45,7 +45,7 @@ wxOverlay::wxOverlay()
 
 wxOverlay::~wxOverlay()
 {
-    m_impl;
+    delete m_impl;
 }
 
 bool wxOverlay::IsOk()

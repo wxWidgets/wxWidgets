@@ -27,6 +27,7 @@
 #else // !wxHAS_NATIVE_OVERLAY
 
 #include "wx/bitmap.h"
+#include "wx/window.h"
 
 // generic implementation of wxOverlay
 class wxOverlayImpl
