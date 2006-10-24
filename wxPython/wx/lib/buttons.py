@@ -255,16 +255,25 @@ class GenButton(wx.PyControl):
         dc.DrawRectangle(bw+2,bw+2,  w-bw*2-4, h-bw*2-4)
         dc.SetLogicalFunction(wx.COPY)
 
-
     def OnPaint(self, event):
         (width, height) = self.GetClientSizeTuple()
         x1 = y1 = 0
         x2 = width-1
         y2 = height-1
-        
+
         dc = wx.PaintDC(self)
-        brush = None
-        
+        brush = self.GetBackgroundBrush(dc)
+        if brush is not None:
+            dc.SetBackground(brush)
+            dc.Clear()
+
+        self.DrawBezel(dc, x1, y1, x2, y2)
+        self.DrawLabel(dc, width, height)
+        if self.hasFocus and self.useFocusInd:
+            self.DrawFocusIndicator(dc, width, height)
+
+
+    def GetBackgroundBrush(self, dc):
         if self.up:
             colBg = self.GetBackgroundColour()
             brush = wx.Brush(colBg, wx.SOLID)
@@ -283,15 +292,10 @@ class GenButton(wx.PyControl):
                     colBg = self.GetParent().GetBackgroundColour()
                     brush = wx.Brush(colBg, wx.SOLID)
         else:
+            # this line assumes that a pressed button should be hilighted with
+            # a solid colour even if the background is supposed to be transparent
             brush = wx.Brush(self.faceDnClr, wx.SOLID)
-        if brush is not None:
-            dc.SetBackground(brush)
-            dc.Clear()
-                    
-        self.DrawBezel(dc, x1, y1, x2, y2)
-        self.DrawLabel(dc, width, height)
-        if self.hasFocus and self.useFocusInd:
-            self.DrawFocusIndicator(dc, width, height)
+        return brush
 
 
     def OnLeftDown(self, event):
