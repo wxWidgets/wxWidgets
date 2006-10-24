@@ -3704,6 +3704,9 @@ SWIGINTERN void wxGraphicsContext_StrokeLineSegements(wxGraphicsContext *self,Py
 #include "wx/dcgraph.h"
 
 
+#include <wx/overlay.h>
+
+
 
 SWIGINTERN void wxColourDatabase_Append(wxColourDatabase *self,wxString const &name,int red,int green,int blue){
             self->AddColour(name, wxColour(red, green, blue));
