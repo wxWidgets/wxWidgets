@@ -1,6 +1,6 @@
 # $Id$
 
-CONTRIB_SUBDIRS=fl gizmos mmedia ogl plot stc svg deprecated #animate #applet
+CONTRIB_SUBDIRS=fl gizmos mmedia ogl plot stc svg deprecated #applet
 
 all:
 	@for d in $(CONTRIB_SUBDIRS); do (cd $$d && $(MAKE)); done
