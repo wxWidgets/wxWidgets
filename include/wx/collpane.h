@@ -21,7 +21,7 @@
 
 #define wxCP_DEFAULT_STYLE          (0)
 
-class WXDLLEXPORT wxCollapsiblePaneBase : public wxControl
+class WXDLLIMPEXP_ADV wxCollapsiblePaneBase : public wxControl
 {
 public:
     wxCollapsiblePaneBase() {}
