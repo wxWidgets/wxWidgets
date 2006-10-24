@@ -117,13 +117,13 @@ public:
 protected:
     bool CreateFromImage(const wxImage& image, int depth);
 
+    virtual wxObjectRefData* CreateRefData() const;
+    virtual wxObjectRefData* CloneRefData(const wxObjectRefData* data) const;
+
 private:
     // to be called from CreateFromImage only!
     bool CreateFromImageAsPixmap(const wxImage& image, int depth);
     bool CreateFromImageAsPixbuf(const wxImage& image);
-
-    virtual wxObjectRefData* CreateRefData() const;
-    virtual wxObjectRefData* CloneRefData(const wxObjectRefData* data) const;
 
     enum Representation
     {

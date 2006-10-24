@@ -123,7 +123,6 @@ public:
     void SetUpDC();
     void Destroy();
     
-protected:
     virtual void ComputeScaleAndOrigin();
 
     virtual GdkWindow *GetGDKWindow() const { return m_window; }
