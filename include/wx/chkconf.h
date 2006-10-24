@@ -1174,7 +1174,7 @@
 #           error "wxBackingFile requires wxStream and wxFile or wxFFile"
 #       else
 #           undef wxUSE_BACKINGFILE
-#           define wxUSE_BACKINGFILE 1
+#           define wxUSE_BACKINGFILE 0
 #       endif
 #   endif
 #endif /* wxUSE_BACKINGFILE */
