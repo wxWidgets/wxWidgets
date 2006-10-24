@@ -13,6 +13,12 @@
 #define _WX_CARET_H_
 
 #include "wx/timer.h"
+#include "wx/dc.h"
+#include "wx/overlay.h"
+
+#if wxHAS_NATIVE_OVERLAY
+    #define wxHAS_CARET_USING_OVERLAYS 1
+#endif
 
 class WXDLLIMPEXP_CORE wxCaret;
 
@@ -25,18 +31,6 @@ public:
 private:
     wxCaret *m_caret;
 };
-
-#ifndef wxUSE_OVERLAY
-    #if defined(wxMAC_USE_CORE_GRAPHICS) && wxMAC_USE_CORE_GRAPHICS
-        #define wxUSE_OVERLAY 1
-    #else
-        #define wxUSE_OVERLAY 0
-    #endif
-#endif
-
-#if wxUSE_OVERLAY
-    #include "wx/dc.h"
-#endif
 
 class WXDLLIMPEXP_CORE wxCaret : public wxCaretBase
 {
@@ -82,7 +76,7 @@ private:
     // GTK specific initialization
     void InitGeneric();
 
-#if wxUSE_OVERLAY
+#if wxHAS_CARET_USING_OVERLAYS
     // the overlay for displaying the caret
     wxOverlay   m_overlay;
 #else

@@ -2844,6 +2844,7 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/menu.h \
 	wx/msgdlg.h \
 	wx/numdlg.h \
+	wx/overlay.h \
 	wx/palette.h \
 	wx/panel.h \
 	wx/pen.h \
@@ -3432,6 +3433,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS =  \
 	monodll_matrix.o \
 	monodll_menucmn.o \
 	monodll_nbkbase.o \
+	monodll_overlaycmn.o \
 	monodll_paper.o \
 	monodll_pickerbase.o \
 	monodll_popupcmn.o \
@@ -3601,6 +3603,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS =  \
 	monodll_matrix.o \
 	monodll_menucmn.o \
 	monodll_nbkbase.o \
+	monodll_overlaycmn.o \
 	monodll_paper.o \
 	monodll_pickerbase.o \
 	monodll_popupcmn.o \
@@ -3673,6 +3676,7 @@ COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS =  \
 	monodll_evtloop.o \
 	monodll_font.o \
 	monodll_fontenum.o \
+	monodll_overlay.o \
 	monodll_pen.o \
 	monodll_region.o \
 	monodll_settings.o \
@@ -4182,6 +4186,7 @@ COND_TOOLKIT_MAC___GUI_SRC_OBJECTS =  \
 	monodll_minifram.o \
 	monodll_msgdlg.o \
 	monodll_notebmac.o \
+	monodll_overlay.o \
 	monodll_palette.o \
 	monodll_pen.o \
 	monodll_printdlg.o \
@@ -4499,6 +4504,7 @@ COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_1 =  \
 	monodll_evtloop.o \
 	monodll_font.o \
 	monodll_fontenum.o \
+	monodll_overlay.o \
 	monodll_pen.o \
 	monodll_region.o \
 	monodll_settings.o \
@@ -5176,6 +5182,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_1 =  \
 	monolib_matrix.o \
 	monolib_menucmn.o \
 	monolib_nbkbase.o \
+	monolib_overlaycmn.o \
 	monolib_paper.o \
 	monolib_pickerbase.o \
 	monolib_popupcmn.o \
@@ -5345,6 +5352,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_1 =  \
 	monolib_matrix.o \
 	monolib_menucmn.o \
 	monolib_nbkbase.o \
+	monolib_overlaycmn.o \
 	monolib_paper.o \
 	monolib_pickerbase.o \
 	monolib_popupcmn.o \
@@ -5417,6 +5425,7 @@ COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_2 =  \
 	monolib_evtloop.o \
 	monolib_font.o \
 	monolib_fontenum.o \
+	monolib_overlay.o \
 	monolib_pen.o \
 	monolib_region.o \
 	monolib_settings.o \
@@ -5927,6 +5936,7 @@ COND_TOOLKIT_MAC___GUI_SRC_OBJECTS_1 =  \
 	monolib_minifram.o \
 	monolib_msgdlg.o \
 	monolib_notebmac.o \
+	monolib_overlay.o \
 	monolib_palette.o \
 	monolib_pen.o \
 	monolib_printdlg.o \
@@ -6244,6 +6254,7 @@ COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_3 =  \
 	monolib_evtloop.o \
 	monolib_font.o \
 	monolib_fontenum.o \
+	monolib_overlay.o \
 	monolib_pen.o \
 	monolib_region.o \
 	monolib_settings.o \
@@ -7133,6 +7144,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_2 =  \
 	coredll_matrix.o \
 	coredll_menucmn.o \
 	coredll_nbkbase.o \
+	coredll_overlaycmn.o \
 	coredll_paper.o \
 	coredll_pickerbase.o \
 	coredll_popupcmn.o \
@@ -7302,6 +7314,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_2 =  \
 	coredll_matrix.o \
 	coredll_menucmn.o \
 	coredll_nbkbase.o \
+	coredll_overlaycmn.o \
 	coredll_paper.o \
 	coredll_pickerbase.o \
 	coredll_popupcmn.o \
@@ -7374,6 +7387,7 @@ COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_4 =  \
 	coredll_evtloop.o \
 	coredll_font.o \
 	coredll_fontenum.o \
+	coredll_overlay.o \
 	coredll_pen.o \
 	coredll_region.o \
 	coredll_settings.o \
@@ -7884,6 +7898,7 @@ COND_TOOLKIT_MAC___GUI_SRC_OBJECTS_2 =  \
 	coredll_minifram.o \
 	coredll_msgdlg.o \
 	coredll_notebmac.o \
+	coredll_overlay.o \
 	coredll_palette.o \
 	coredll_pen.o \
 	coredll_printdlg.o \
@@ -8201,6 +8216,7 @@ COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_5 =  \
 	coredll_evtloop.o \
 	coredll_font.o \
 	coredll_fontenum.o \
+	coredll_overlay.o \
 	coredll_pen.o \
 	coredll_region.o \
 	coredll_settings.o \
@@ -8560,6 +8576,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_3 =  \
 	corelib_matrix.o \
 	corelib_menucmn.o \
 	corelib_nbkbase.o \
+	corelib_overlaycmn.o \
 	corelib_paper.o \
 	corelib_pickerbase.o \
 	corelib_popupcmn.o \
@@ -8729,6 +8746,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_3 =  \
 	corelib_matrix.o \
 	corelib_menucmn.o \
 	corelib_nbkbase.o \
+	corelib_overlaycmn.o \
 	corelib_paper.o \
 	corelib_pickerbase.o \
 	corelib_popupcmn.o \
@@ -8801,6 +8819,7 @@ COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_6 =  \
 	corelib_evtloop.o \
 	corelib_font.o \
 	corelib_fontenum.o \
+	corelib_overlay.o \
 	corelib_pen.o \
 	corelib_region.o \
 	corelib_settings.o \
@@ -9311,6 +9330,7 @@ COND_TOOLKIT_MAC___GUI_SRC_OBJECTS_3 =  \
 	corelib_minifram.o \
 	corelib_msgdlg.o \
 	corelib_notebmac.o \
+	corelib_overlay.o \
 	corelib_palette.o \
 	corelib_pen.o \
 	corelib_printdlg.o \
@@ -9628,6 +9648,7 @@ COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_7 =  \
 	corelib_evtloop.o \
 	corelib_font.o \
 	corelib_fontenum.o \
+	corelib_overlay.o \
 	corelib_pen.o \
 	corelib_region.o \
 	corelib_settings.o \
@@ -14383,6 +14404,12 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@monodll_dirmgl.o: $(srcdir)/src/mgl/dirmgl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/mgl/dirmgl.cpp
 
+@COND_TOOLKIT_DFB_USE_GUI_1@monodll_overlay.o: $(srcdir)/src/dfb/overlay.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/dfb/overlay.cpp
+
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@monodll_overlay.o: $(srcdir)/src/mac/carbon/overlay.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/mac/carbon/overlay.cpp
+
 @COND_TOOLKIT_DFB_USE_GUI_1@monodll_wrapdfb.o: $(srcdir)/src/dfb/wrapdfb.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/dfb/wrapdfb.cpp
 
@@ -15747,6 +15774,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 
 @COND_USE_GUI_1@monodll_nbkbase.o: $(srcdir)/src/common/nbkbase.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/nbkbase.cpp
+
+@COND_USE_GUI_1@monodll_overlaycmn.o: $(srcdir)/src/common/overlaycmn.cpp $(MONODLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/overlaycmn.cpp
 
 @COND_USE_GUI_1@monodll_paper.o: $(srcdir)/src/common/paper.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/paper.cpp
@@ -18442,6 +18472,12 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@monolib_dirmgl.o: $(srcdir)/src/mgl/dirmgl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/mgl/dirmgl.cpp
 
+@COND_TOOLKIT_DFB_USE_GUI_1@monolib_overlay.o: $(srcdir)/src/dfb/overlay.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/dfb/overlay.cpp
+
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@monolib_overlay.o: $(srcdir)/src/mac/carbon/overlay.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/mac/carbon/overlay.cpp
+
 @COND_TOOLKIT_DFB_USE_GUI_1@monolib_wrapdfb.o: $(srcdir)/src/dfb/wrapdfb.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/dfb/wrapdfb.cpp
 
@@ -19806,6 +19842,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_USE_GUI_1@monolib_nbkbase.o: $(srcdir)/src/common/nbkbase.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/nbkbase.cpp
+
+@COND_USE_GUI_1@monolib_overlaycmn.o: $(srcdir)/src/common/overlaycmn.cpp $(MONOLIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/overlaycmn.cpp
 
 @COND_USE_GUI_1@monolib_paper.o: $(srcdir)/src/common/paper.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/paper.cpp
@@ -22867,6 +22906,12 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@coredll_dirmgl.o: $(srcdir)/src/mgl/dirmgl.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/mgl/dirmgl.cpp
 
+@COND_TOOLKIT_DFB_USE_GUI_1@coredll_overlay.o: $(srcdir)/src/dfb/overlay.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/dfb/overlay.cpp
+
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@coredll_overlay.o: $(srcdir)/src/mac/carbon/overlay.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/mac/carbon/overlay.cpp
+
 @COND_TOOLKIT_DFB_USE_GUI_1@coredll_wrapdfb.o: $(srcdir)/src/dfb/wrapdfb.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/dfb/wrapdfb.cpp
 
@@ -24198,6 +24243,9 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 
 @COND_USE_GUI_1@coredll_nbkbase.o: $(srcdir)/src/common/nbkbase.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/nbkbase.cpp
+
+@COND_USE_GUI_1@coredll_overlaycmn.o: $(srcdir)/src/common/overlaycmn.cpp $(COREDLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/overlaycmn.cpp
 
 @COND_USE_GUI_1@coredll_paper.o: $(srcdir)/src/common/paper.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/paper.cpp
@@ -25777,6 +25825,12 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@corelib_dirmgl.o: $(srcdir)/src/mgl/dirmgl.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/mgl/dirmgl.cpp
 
+@COND_TOOLKIT_DFB_USE_GUI_1@corelib_overlay.o: $(srcdir)/src/dfb/overlay.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/dfb/overlay.cpp
+
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@corelib_overlay.o: $(srcdir)/src/mac/carbon/overlay.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/mac/carbon/overlay.cpp
+
 @COND_TOOLKIT_DFB_USE_GUI_1@corelib_wrapdfb.o: $(srcdir)/src/dfb/wrapdfb.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/dfb/wrapdfb.cpp
 
@@ -27108,6 +27162,9 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 
 @COND_USE_GUI_1@corelib_nbkbase.o: $(srcdir)/src/common/nbkbase.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/nbkbase.cpp
+
+@COND_USE_GUI_1@corelib_overlaycmn.o: $(srcdir)/src/common/overlaycmn.cpp $(CORELIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/overlaycmn.cpp
 
 @COND_USE_GUI_1@corelib_paper.o: $(srcdir)/src/common/paper.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/paper.cpp

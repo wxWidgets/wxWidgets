@@ -72,7 +72,7 @@ void wxGenericDragImage::Init()
     m_windowDC = (wxDC*) NULL;
     m_window = (wxWindow*) NULL;
     m_fullScreen = false;
-#if defined(wxMAC_USE_CORE_GRAPHICS) && wxMAC_USE_CORE_GRAPHICS
+#if wxHAS_NATIVE_OVERLAY
     m_dcOverlay = NULL;
 #else
     m_pBackingBitmap = (wxBitmap*) NULL;
@@ -288,14 +288,12 @@ bool wxGenericDragImage::BeginDrag(const wxPoint& hotspot,
         }
     }
 
-#if defined(wxMAC_USE_CORE_GRAPHICS) && wxMAC_USE_CORE_GRAPHICS
-    // nothing to setup here
-#else
+#if !wxHAS_NATIVE_OVERLAY
     wxBitmap* backing = (m_pBackingBitmap ? m_pBackingBitmap : (wxBitmap*) & m_backingBitmap);
 
     if (!backing->Ok() || (backing->GetWidth() < clientSize.x || backing->GetHeight() < clientSize.y))
         (*backing) = wxBitmap(clientSize.x, clientSize.y);
-#endif
+#endif // !wxHAS_NATIVE_OVERLAY
 
     if (!m_fullScreen)
     {
@@ -358,7 +356,7 @@ bool wxGenericDragImage::EndDrag()
 
     if (m_windowDC)
     {
-#if defined(wxMAC_USE_CORE_GRAPHICS) && wxMAC_USE_CORE_GRAPHICS
+#if wxHAS_NATIVE_OVERLAY
         m_overlay.Reset();
 #else
         m_windowDC->DestroyClippingRegion();
@@ -367,9 +365,7 @@ bool wxGenericDragImage::EndDrag()
         m_windowDC = (wxDC*) NULL;
     }
 
-#if defined(wxMAC_USE_CORE_GRAPHICS) && wxMAC_USE_CORE_GRAPHICS
-    // nothing to do for overlays
-#else
+#if !wxHAS_NATIVE_OVERLAY
     m_repairBitmap = wxNullBitmap;
 #endif
 
@@ -413,9 +409,7 @@ bool wxGenericDragImage::Show()
         // This is where we restore the backing bitmap, in case
         // something has changed on the window.
 
-#if defined(wxMAC_USE_CORE_GRAPHICS) && wxMAC_USE_CORE_GRAPHICS
-        // overlay will be set up in the drawing routine
-#else
+#if !wxHAS_NATIVE_OVERLAY
         wxBitmap* backing = (m_pBackingBitmap ? m_pBackingBitmap : (wxBitmap*) & m_backingBitmap);
         wxMemoryDC memDC;
         memDC.SelectObject(* backing);
@@ -424,7 +418,7 @@ bool wxGenericDragImage::Show()
 
         //memDC.Blit(0, 0, m_boundingRect.width, m_boundingRect.height, m_windowDC, m_boundingRect.x, m_boundingRect.y);
         memDC.SelectObject(wxNullBitmap);
-#endif
+#endif // !wxHAS_NATIVE_OVERLAY
 
         RedrawImage(m_position - m_offset, m_position - m_offset, false, true);
     }
@@ -466,13 +460,13 @@ bool wxGenericDragImage::RedrawImage(const wxPoint& oldPos, const wxPoint& newPo
     if (!m_windowDC)
         return false;
 
-#if defined(wxMAC_USE_CORE_GRAPHICS) && wxMAC_USE_CORE_GRAPHICS
+#if wxHAS_NATIVE_OVERLAY
     wxDCOverlay dcoverlay( m_overlay, (wxWindowDC*) m_windowDC ) ;
     if ( eraseOld )
         dcoverlay.Clear() ;
     if (drawNew)
         DoDrawImage(*m_windowDC, newPos);
-#else
+#else // !wxHAS_NATIVE_OVERLAY
     wxBitmap* backing = (m_pBackingBitmap ? m_pBackingBitmap : (wxBitmap*) & m_backingBitmap);
     if (!backing->Ok())
         return false;
@@ -538,7 +532,8 @@ bool wxGenericDragImage::RedrawImage(const wxPoint& oldPos, const wxPoint& newPo
 
     memDCTemp.SelectObject(wxNullBitmap);
     memDC.SelectObject(wxNullBitmap);
-#endif
+#endif // wxHAS_NATIVE_OVERLAY/!wxHAS_NATIVE_OVERLAY
+
     return true;
 }
 

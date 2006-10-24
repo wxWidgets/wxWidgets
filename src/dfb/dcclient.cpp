@@ -96,6 +96,8 @@ void wxWindowDC::InitForWin(wxWindow *win, const wxRect *rect)
 {
     wxCHECK_RET( win, _T("invalid window") );
 
+    m_win = win;
+
     // obtain the surface used for painting:
     wxPoint origin;
     wxIDirectFBSurfacePtr surface;
@@ -154,6 +156,7 @@ void wxWindowDC::InitForWin(wxWindow *win, const wxRect *rect)
     }
     else
     {
+        m_winRect = r;
         DFBRectangle dfbrect = { r.x, r.y, r.width, r.height };
         surface = win->GetDfbSurface()->GetSubSurface(&dfbrect);
 
@@ -195,6 +198,10 @@ wxWindowDC::~wxWindowDC()
 
     if ( m_shouldFlip )
     {
+        // paint overlays on top of the surface being drawn to by this DC
+        // before showing anything on the screen:
+        m_win->PaintOverlays(m_winRect);
+
         DFBSurfaceCapabilities caps = DSCAPS_NONE;
         surface->GetCapabilities(&caps);
         if ( caps & DSCAPS_DOUBLE )

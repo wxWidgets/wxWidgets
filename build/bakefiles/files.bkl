@@ -616,6 +616,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/common/matrix.cpp
     src/common/menucmn.cpp
     src/common/nbkbase.cpp
+    src/common/overlaycmn.cpp
     src/common/paper.cpp
     src/common/pickerbase.cpp
     src/common/popupcmn.cpp
@@ -734,6 +735,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/menu.h
     wx/msgdlg.h
     wx/numdlg.h
+    wx/overlay.h
     wx/palette.h
     wx/panel.h
     wx/pen.h
@@ -1810,6 +1812,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/dfb/evtloop.cpp
     src/dfb/font.cpp
     src/dfb/fontenum.cpp
+    src/dfb/overlay.cpp
     src/dfb/pen.cpp
     src/dfb/region.cpp
     src/dfb/settings.cpp
@@ -2099,6 +2102,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/mac/carbon/minifram.cpp
     src/mac/carbon/msgdlg.cpp
     src/mac/carbon/notebmac.cpp
+    src/mac/carbon/overlay.cpp
     src/mac/carbon/palette.cpp
     src/mac/carbon/pen.cpp
     src/mac/carbon/printdlg.cpp

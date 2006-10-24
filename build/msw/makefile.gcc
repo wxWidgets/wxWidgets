@@ -1455,6 +1455,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_matrix.o \
 	$(OBJS)\monodll_menucmn.o \
 	$(OBJS)\monodll_nbkbase.o \
+	$(OBJS)\monodll_overlaycmn.o \
 	$(OBJS)\monodll_paper.o \
 	$(OBJS)\monodll_pickerbase.o \
 	$(OBJS)\monodll_popupcmn.o \
@@ -1676,6 +1677,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_matrix.o \
 	$(OBJS)\monodll_menucmn.o \
 	$(OBJS)\monodll_nbkbase.o \
+	$(OBJS)\monodll_overlaycmn.o \
 	$(OBJS)\monodll_paper.o \
 	$(OBJS)\monodll_pickerbase.o \
 	$(OBJS)\monodll_popupcmn.o \
@@ -2064,6 +2066,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_matrix.o \
 	$(OBJS)\monolib_menucmn.o \
 	$(OBJS)\monolib_nbkbase.o \
+	$(OBJS)\monolib_overlaycmn.o \
 	$(OBJS)\monolib_paper.o \
 	$(OBJS)\monolib_pickerbase.o \
 	$(OBJS)\monolib_popupcmn.o \
@@ -2285,6 +2288,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_matrix.o \
 	$(OBJS)\monolib_menucmn.o \
 	$(OBJS)\monolib_nbkbase.o \
+	$(OBJS)\monolib_overlaycmn.o \
 	$(OBJS)\monolib_paper.o \
 	$(OBJS)\monolib_pickerbase.o \
 	$(OBJS)\monolib_popupcmn.o \
@@ -2594,6 +2598,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_matrix.o \
 	$(OBJS)\coredll_menucmn.o \
 	$(OBJS)\coredll_nbkbase.o \
+	$(OBJS)\coredll_overlaycmn.o \
 	$(OBJS)\coredll_paper.o \
 	$(OBJS)\coredll_pickerbase.o \
 	$(OBJS)\coredll_popupcmn.o \
@@ -2815,6 +2820,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_matrix.o \
 	$(OBJS)\coredll_menucmn.o \
 	$(OBJS)\coredll_nbkbase.o \
+	$(OBJS)\coredll_overlaycmn.o \
 	$(OBJS)\coredll_paper.o \
 	$(OBJS)\coredll_pickerbase.o \
 	$(OBJS)\coredll_popupcmn.o \
@@ -3041,6 +3047,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_matrix.o \
 	$(OBJS)\corelib_menucmn.o \
 	$(OBJS)\corelib_nbkbase.o \
+	$(OBJS)\corelib_overlaycmn.o \
 	$(OBJS)\corelib_paper.o \
 	$(OBJS)\corelib_pickerbase.o \
 	$(OBJS)\corelib_popupcmn.o \
@@ -3262,6 +3269,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_matrix.o \
 	$(OBJS)\corelib_menucmn.o \
 	$(OBJS)\corelib_nbkbase.o \
+	$(OBJS)\corelib_overlaycmn.o \
 	$(OBJS)\corelib_paper.o \
 	$(OBJS)\corelib_pickerbase.o \
 	$(OBJS)\corelib_popupcmn.o \
@@ -6228,6 +6236,11 @@ $(OBJS)\monodll_nbkbase.o: ../../src/common/nbkbase.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\monodll_overlaycmn.o: ../../src/common/overlaycmn.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\monodll_paper.o: ../../src/common/paper.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -8269,6 +8282,11 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\monolib_nbkbase.o: ../../src/common/nbkbase.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\monolib_overlaycmn.o: ../../src/common/overlaycmn.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 endif
 
@@ -10333,6 +10351,11 @@ $(OBJS)\coredll_nbkbase.o: ../../src/common/nbkbase.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\coredll_overlaycmn.o: ../../src/common/overlaycmn.cpp
+	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\coredll_paper.o: ../../src/common/paper.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -11674,6 +11697,11 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\corelib_nbkbase.o: ../../src/common/nbkbase.cpp
+	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\corelib_overlaycmn.o: ../../src/common/overlaycmn.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
 endif
 

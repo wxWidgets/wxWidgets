@@ -62,6 +62,7 @@ src/regex/regex.7
 include/wx/*.h
 include/wx/*.inl
 include/wx/*.cpp
+include/wx/private/*.h
 include/wx/protocol/*.h
 include/wx/wx_setup.vms
 include/wx/unix/*.h

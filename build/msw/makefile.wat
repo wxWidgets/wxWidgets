@@ -367,6 +367,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_matrix.obj &
 	$(OBJS)\monodll_menucmn.obj &
 	$(OBJS)\monodll_nbkbase.obj &
+	$(OBJS)\monodll_overlaycmn.obj &
 	$(OBJS)\monodll_paper.obj &
 	$(OBJS)\monodll_pickerbase.obj &
 	$(OBJS)\monodll_popupcmn.obj &
@@ -588,6 +589,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_matrix.obj &
 	$(OBJS)\monodll_menucmn.obj &
 	$(OBJS)\monodll_nbkbase.obj &
+	$(OBJS)\monodll_overlaycmn.obj &
 	$(OBJS)\monodll_paper.obj &
 	$(OBJS)\monodll_pickerbase.obj &
 	$(OBJS)\monodll_popupcmn.obj &
@@ -980,6 +982,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_matrix.obj &
 	$(OBJS)\monolib_menucmn.obj &
 	$(OBJS)\monolib_nbkbase.obj &
+	$(OBJS)\monolib_overlaycmn.obj &
 	$(OBJS)\monolib_paper.obj &
 	$(OBJS)\monolib_pickerbase.obj &
 	$(OBJS)\monolib_popupcmn.obj &
@@ -1201,6 +1204,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_matrix.obj &
 	$(OBJS)\monolib_menucmn.obj &
 	$(OBJS)\monolib_nbkbase.obj &
+	$(OBJS)\monolib_overlaycmn.obj &
 	$(OBJS)\monolib_paper.obj &
 	$(OBJS)\monolib_pickerbase.obj &
 	$(OBJS)\monolib_popupcmn.obj &
@@ -1517,6 +1521,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_matrix.obj &
 	$(OBJS)\coredll_menucmn.obj &
 	$(OBJS)\coredll_nbkbase.obj &
+	$(OBJS)\coredll_overlaycmn.obj &
 	$(OBJS)\coredll_paper.obj &
 	$(OBJS)\coredll_pickerbase.obj &
 	$(OBJS)\coredll_popupcmn.obj &
@@ -1738,6 +1743,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_matrix.obj &
 	$(OBJS)\coredll_menucmn.obj &
 	$(OBJS)\coredll_nbkbase.obj &
+	$(OBJS)\coredll_overlaycmn.obj &
 	$(OBJS)\coredll_paper.obj &
 	$(OBJS)\coredll_pickerbase.obj &
 	$(OBJS)\coredll_popupcmn.obj &
@@ -1966,6 +1972,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_matrix.obj &
 	$(OBJS)\corelib_menucmn.obj &
 	$(OBJS)\corelib_nbkbase.obj &
+	$(OBJS)\corelib_overlaycmn.obj &
 	$(OBJS)\corelib_paper.obj &
 	$(OBJS)\corelib_pickerbase.obj &
 	$(OBJS)\corelib_popupcmn.obj &
@@ -2187,6 +2194,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_matrix.obj &
 	$(OBJS)\corelib_menucmn.obj &
 	$(OBJS)\corelib_nbkbase.obj &
+	$(OBJS)\corelib_overlaycmn.obj &
 	$(OBJS)\corelib_paper.obj &
 	$(OBJS)\corelib_pickerbase.obj &
 	$(OBJS)\corelib_popupcmn.obj &
@@ -6456,6 +6464,11 @@ $(OBJS)\monodll_nbkbase.obj :  .AUTODEPEND ..\..\src\common\nbkbase.cpp
 !endif
 
 !ifeq USE_GUI 1
+$(OBJS)\monodll_overlaycmn.obj :  .AUTODEPEND ..\..\src\common\overlaycmn.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
 $(OBJS)\monodll_paper.obj :  .AUTODEPEND ..\..\src\common\paper.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
@@ -8497,6 +8510,11 @@ $(OBJS)\monolib_menucmn.obj :  .AUTODEPEND ..\..\src\common\menucmn.cpp
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_nbkbase.obj :  .AUTODEPEND ..\..\src\common\nbkbase.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\monolib_overlaycmn.obj :  .AUTODEPEND ..\..\src\common\overlaycmn.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
@@ -10561,6 +10579,11 @@ $(OBJS)\coredll_nbkbase.obj :  .AUTODEPEND ..\..\src\common\nbkbase.cpp
 !endif
 
 !ifeq USE_GUI 1
+$(OBJS)\coredll_overlaycmn.obj :  .AUTODEPEND ..\..\src\common\overlaycmn.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
 $(OBJS)\coredll_paper.obj :  .AUTODEPEND ..\..\src\common\paper.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
@@ -11902,6 +11925,11 @@ $(OBJS)\corelib_menucmn.obj :  .AUTODEPEND ..\..\src\common\menucmn.cpp
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_nbkbase.obj :  .AUTODEPEND ..\..\src\common\nbkbase.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\corelib_overlaycmn.obj :  .AUTODEPEND ..\..\src\common\overlaycmn.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 

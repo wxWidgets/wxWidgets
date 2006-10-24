@@ -755,6 +755,10 @@ SOURCE=.\common\object.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\common\overlaycmn.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\common\paper.cpp
 # End Source File
 # Begin Source File
@@ -2956,6 +2960,10 @@ SOURCE=..\include\wx\object.h
 # Begin Source File
 
 SOURCE=..\include\wx\odcombo.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\overlay.h
 # End Source File
 # Begin Source File
 

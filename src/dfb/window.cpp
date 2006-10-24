@@ -31,8 +31,10 @@
 #endif
 
 #include "wx/caret.h"
+#include "wx/dynarray.h"
 
 #include "wx/dfb/private.h"
+#include "wx/private/overlay.h"
 
 #define TRACE_EVENTS _T("events")
 #define TRACE_PAINT  _T("paint")
@@ -54,6 +56,12 @@ static wxWindow *gs_toBeFocusedWindow = NULL;
 static wxWindowDFB *gs_mouseCapture = NULL;
 
 // ---------------------------------------------------------------------------
+// overlays support
+// ---------------------------------------------------------------------------
+
+WX_DEFINE_ARRAY_PTR(wxOverlayImpl*, wxDfbOverlaysList);
+
+// ---------------------------------------------------------------------------
 // event tables
 // ---------------------------------------------------------------------------
 
@@ -72,6 +80,7 @@ void wxWindowDFB::Init()
     m_isShown = true;
     m_frozenness = 0;
     m_tlw = NULL;
+    m_overlays = NULL;
 }
 
 // Destructor
@@ -623,7 +632,7 @@ void wxWindowDFB::Refresh(bool WXUNUSED(eraseBack), const wxRect *rect)
 
     // NB[1]: We intentionally ignore the eraseBack argument here. This is
     //        because of the way wxDFB's painting is implemented: the refresh
-    //        request is probagated up to wxTLW, which is then painted in
+    //        request is propagated up to wxTLW, which is then painted in
     //        top-down order. This means that this window's area is first
     //        painted by its parent and this window is then painted over it, so
     //        it's not safe to not paint this window's background even if
@@ -636,6 +645,14 @@ void wxWindowDFB::Refresh(bool WXUNUSED(eraseBack), const wxRect *rect)
         DoRefreshRect(*rect);
     else
         DoRefreshWindow();
+}
+
+void wxWindowDFB::RefreshWindowRect(const wxRect& rect)
+{
+    if ( !IsShown() || IsFrozen() )
+        return;
+
+    DoRefreshRect(rect);
 }
 
 void wxWindowDFB::DoRefreshWindow()
@@ -701,17 +718,6 @@ void wxWindowDFB::PaintWindow(const wxRect& rect)
                this, GetName().c_str(),
                rect.x, rect.y, rect.GetRight(), rect.GetBottom());
 
-#if wxUSE_CARET
-    // FIXME: we're doing this before setting m_updateRegion because wxDFB
-    //        clips all DCs for this window to it, but this results in flicker,
-    //        it should be fixed by using overlays for the caret
-
-    // must hide caret temporarily, otherwise we'd get rendering artifacts
-    wxCaret *caret = GetCaret();
-    if ( caret )
-        caret->Hide();
-#endif // wxUSE_CARET
-
     m_updateRegion = rect;
 
     // FIXME_DFB: don't waste time rendering the area if it's fully covered
@@ -752,14 +758,10 @@ void wxWindowDFB::PaintWindow(const wxRect& rect)
                    this, GetName().c_str());
     }
 
-    m_updateRegion.Clear();
+    // draw window's overlays on top of the painted window, if we have any:
+    PaintOverlays(rect);
 
-#if wxUSE_CARET
-    // FIXME: this should be ideally done before m_updateRegion.Clear() or not
-    //        at all, see the comment where the caret is hidden
-    if ( caret )
-        caret->Show();
-#endif // wxUSE_CARET
+    m_updateRegion.Clear();
 
     // paint the children:
     wxPoint origin = GetClientAreaOrigin();
@@ -784,6 +786,59 @@ void wxWindowDFB::PaintWindow(const wxRect& rect)
         childrect.Offset(-origin);
         child->PaintWindow(childrect);
     }
+}
+
+void wxWindowDFB::PaintOverlays(const wxRect& rect)
+{
+    if ( !m_overlays )
+        return;
+
+    for ( wxDfbOverlaysList::const_iterator i = m_overlays->begin();
+          i != m_overlays->end(); ++i )
+    {
+        wxOverlayImpl *overlay = *i;
+
+        wxRect orectOrig(overlay->GetRect());
+        wxRect orect(orectOrig);
+        orect.Intersect(rect);
+        if ( orect.IsEmpty() )
+            continue;
+
+        if ( overlay->IsEmpty() )
+            continue; // nothing to paint
+
+        DFBRectangle dfbRect = { orect.x - orectOrig.x, orect.y - orectOrig.y,
+                                 orect.width, orect.height };
+        GetDfbSurface()->Blit
+                         (
+                           overlay->GetDirectFBSurface(),
+                           &dfbRect,
+                           orect.x, orect.y
+                         );
+    }
+}
+
+void wxWindowDFB::AddOverlay(wxOverlayImpl *overlay)
+{
+    if ( !m_overlays )
+        m_overlays = new wxDfbOverlaysList;
+
+    m_overlays->Add(overlay);
+}
+
+void wxWindowDFB::RemoveOverlay(wxOverlayImpl *overlay)
+{
+    wxCHECK_RET( m_overlays, _T("no overlays to remove") );
+
+    m_overlays->Remove(overlay);
+
+    if ( m_overlays->empty() )
+    {
+        wxDELETE(m_overlays);
+    }
+
+    if ( !m_isBeingDeleted )
+        RefreshWindowRect(overlay->GetRect());
 }
 
 

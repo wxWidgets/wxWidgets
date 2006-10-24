@@ -19,10 +19,7 @@
 #include "wx/treectrl.h"
 #include "wx/listctrl.h"
 #include "wx/log.h"
-
-#if defined(wxMAC_USE_CORE_GRAPHICS) && wxMAC_USE_CORE_GRAPHICS
-#include "wx/dc.h"
-#endif
+#include "wx/overlay.h"
 
 /*
   To use this class, create a wxDragImage when you start dragging, for example:
@@ -163,8 +160,7 @@ public:
     // For efficiency, tell wxGenericDragImage to use a bitmap that's already
     // created (e.g. from last drag)
     void SetBackingBitmap(wxBitmap* bitmap) { 
-#if defined(wxMAC_USE_CORE_GRAPHICS) && wxMAC_USE_CORE_GRAPHICS
-#else
+#if !wxHAS_NATIVE_OVERLAY
         m_pBackingBitmap = bitmap; 
 #endif
     }
@@ -251,7 +247,7 @@ protected:
     wxWindow*       m_window;
     wxDC*           m_windowDC;
 
-#if defined(wxMAC_USE_CORE_GRAPHICS) && wxMAC_USE_CORE_GRAPHICS
+#if wxHAS_NATIVE_OVERLAY
     wxOverlay       m_overlay;
     wxDCOverlay*     m_dcOverlay;
 #else
@@ -261,7 +257,7 @@ protected:
                                       // (pass to wxGenericDragImage as an efficiency measure)
     // A temporary bitmap for repairing/redrawing
     wxBitmap        m_repairBitmap;
-#endif
+#endif // !wxHAS_NATIVE_OVERLAY
 
     wxRect          m_boundingRect;
     bool            m_fullScreen;

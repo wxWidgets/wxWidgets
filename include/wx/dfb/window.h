@@ -23,6 +23,9 @@ struct wxDFBWindowEvent;
 class WXDLLIMPEXP_CORE wxFont;
 class WXDLLIMPEXP_CORE wxTopLevelWindowDFB;
 
+class wxOverlayImpl;
+class wxDfbOverlaysList;
+
 // ---------------------------------------------------------------------------
 // wxWindow
 // ---------------------------------------------------------------------------
@@ -144,10 +147,21 @@ protected:
     // called by parent to render (part of) the window
     void PaintWindow(const wxRect& rect);
 
+    // paint window's overlays (if any) on top of window's surface
+    void PaintOverlays(const wxRect& rect);
+
     // refreshes the entire window (including non-client areas)
     void DoRefreshWindow();
     // refreshes given rectangle of the window (in window, _not_ client coords)
     virtual void DoRefreshRect(const wxRect& rect);
+    // refreshes given rectangle; unlike RefreshRect(), the argument is in
+    // window, not client, coords and unlike DoRefreshRect() and like Refresh(),
+    // does nothing if the window is hidden or frozen
+    void RefreshWindowRect(const wxRect& rect);
+
+    // add/remove overlay for this window
+    void AddOverlay(wxOverlayImpl *overlay);
+    void RemoveOverlay(wxOverlayImpl *overlay);
 
     // DirectFB events handling
     void HandleKeyEvent(const wxDFBWindowEvent& event_);
@@ -173,7 +187,12 @@ private:
     // number of calls to Freeze() minus number of calls to Thaw()
     unsigned m_frozenness;
 
+    // overlays for this window (or NULL if it doesn't have any)
+    wxDfbOverlaysList *m_overlays;
+
     friend class wxTopLevelWindowDFB; // for HandleXXXEvent
+    friend class wxOverlayImpl; // for Add/RemoveOverlay
+    friend class wxWindowDC; // for PaintOverlays
 
     DECLARE_DYNAMIC_CLASS(wxWindowDFB)
     DECLARE_NO_COPY_CLASS(wxWindowDFB)

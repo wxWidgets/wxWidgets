@@ -726,6 +726,10 @@ SOURCE=..\..\src\common\nbkbase.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\common\overlaycmn.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\common\paper.cpp
 # End Source File
 # Begin Source File
@@ -9082,6 +9086,10 @@ SOURCE=..\..\include\wx\numdlg.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\odcombo.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\overlay.h
 # End Source File
 # Begin Source File
 

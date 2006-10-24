@@ -26,13 +26,20 @@ public:
     wxWindowDC(wxWindow *win);
     virtual ~wxWindowDC();
 
+    virtual wxWindow *GetWindow() const { return m_win; }
+
 protected:
     // initializes the DC for painting on given window; if rect!=NULL, then
     // for painting only on the given region of the window
     void InitForWin(wxWindow *win, const wxRect *rect);
 
 private:
+    wxWindow *m_win;
+    wxRect    m_winRect; // rectangle of the window being painted
+
     bool m_shouldFlip; // flip the surface when done?
+
+    friend class wxOverlayImpl; // for m_shouldFlip;
 
     DECLARE_DYNAMIC_CLASS(wxWindowDC)
     DECLARE_NO_COPY_CLASS(wxWindowDC)
