@@ -60,7 +60,7 @@ Returns reference to the unique global standard paths object.
 
 \membersection{wxStandardPaths::GetConfigDir}\label{wxstandardpathsgetconfigdir}
 
-\func{wxString}{GetConfigDir}{\void}
+\constfunc{wxString}{GetConfigDir}{\void}
 
 Return the directory containing the system config files.
 
@@ -78,7 +78,7 @@ Example return values:
 
 \membersection{wxStandardPaths::GetDataDir}\label{wxstandardpathsgetdatadir}
 
-\func{wxString}{GetDataDir}{\void}
+\constfunc{wxString}{GetDataDir}{\void}
 
 Return the location of the applications global, i.e. not user-specific,
 data files.
@@ -97,7 +97,7 @@ Example return values:
 
 \membersection{wxStandardPaths::GetDocumentsDir}\label{wxstandardpathsgetdocumentsdir}
 
-\func{wxString}{GetDocumentsDir}{\void}
+\constfunc{wxString}{GetDocumentsDir}{\void}
 
 Return the directory containing the current user's documents.
 
@@ -113,7 +113,7 @@ Example return values:
 
 \membersection{wxStandardPaths::GetInstallPrefix}\label{wxstandardpathsgetinstallprefix}
 
-\func{wxString}{GetInstallPrefix}{\void}
+\constfunc{wxString}{GetInstallPrefix}{\void}
 
 \textbf{Note: } This function is only available under Unix.
 
@@ -128,7 +128,7 @@ now) and finally returns the default \texttt{/usr/local} value if it failed.
 
 \membersection{wxStandardPaths::GetLocalDataDir}\label{wxstandardpathsgetlocaldatadir}
 
-\func{wxString}{GetLocalDataDir}{\void}
+\constfunc{wxString}{GetLocalDataDir}{\void}
 
 Return the location for application data files which are host-specific and
 can't, or shouldn't, be shared with the other machines.
@@ -139,7 +139,7 @@ under Unix where it returns \texttt{/etc/\textit{appname}}.
 
 \membersection{wxStandardPaths::GetLocalizedResourcesDir}\label{wxstandardpathsgetlocalizedresourcesdir}
 
-\func{wxString}{GetLocalizedResourcesDir}{\param{const wxChar*}{ lang}, \param{ResourceCat}{ category = ResourceCat\_None}}
+\constfunc{wxString}{GetLocalizedResourcesDir}{\param{const wxChar*}{ lang}, \param{ResourceCat}{ category = ResourceCat\_None}}
 
 Return the localized resources directory containing the resource files of the
 specified category for the given language.
@@ -155,7 +155,7 @@ different for message catalog category under Unix where it returns the standard
 
 \membersection{wxStandardPaths::GetPluginsDir}\label{wxstandardpathsgetpluginsdir}
 
-\func{wxString}{GetPluginsDir}{\void}
+\constfunc{wxString}{GetPluginsDir}{\void}
 
 Return the directory where the loadable modules (plugins) live.
 
@@ -173,7 +173,7 @@ Example return values:
 
 \membersection{wxStandardPaths::GetResourcesDir}\label{wxstandardpathsgetresourcesdir}
 
-\func{wxString}{GetResourcesDir}{\void}
+\constfunc{wxString}{GetResourcesDir}{\void}
 
 Return the directory where the application resource files are located. The
 resources are the auxiliary data files needed for the application to run and
@@ -196,10 +196,19 @@ Example return values:
 
 \helpref{GetLocalizedResourcesDir}{wxstandardpathsgetlocalizedresourcesdir}
 
+\membersection{wxStandardPaths::GetTempDir}\label{wxstandardpathsgettempdir}
+
+\constfunc{wxString}{GetTempDir}{\void}
+
+Return the directory for storing temporary files. To create unique temporary files,
+it is best to use \helpref{wxFileName::CreateTempFileName}{wxfilenamecreatetempfilename} for correct behaviour when
+multiple processes are attempting to create temporary files.
+
+\newsince{2.7.2}
 
 \membersection{wxStandardPaths::GetUserConfigDir}\label{wxstandardpathsgetuserconfigdir}
 
-\func{wxString}{GetUserConfigDir}{\void}
+\constfunc{wxString}{GetUserConfigDir}{\void}
 
 Return the directory for the user config files:
 \begin{itemize}
@@ -215,7 +224,7 @@ more appropriate.
 
 \membersection{wxStandardPaths::GetUserDataDir}\label{wxstandardpathsgetuserdatadir}
 
-\func{wxString}{GetUserDataDir}{\void}
+\constfunc{wxString}{GetUserDataDir}{\void}
 
 Return the directory for the user-dependent application data files:
 \begin{itemize}
@@ -227,7 +236,7 @@ Return the directory for the user-dependent application data files:
 
 \membersection{wxStandardPaths::GetUserLocalDataDir}\label{wxstandardpathsgetuserlocaldatadir}
 
-\func{wxString}{GetUserLocalDataDir}{\void}
+\constfunc{wxString}{GetUserLocalDataDir}{\void}
 
 Return the directory for user data files which shouldn't be shared with
 the other machines.
@@ -244,12 +253,11 @@ all platforms except Windows where it returns
 \textbf{Note:} This function is only available under Unix.
 
 Lets wxStandardPaths know about the real program installation prefix on a Unix
-system. By default, the value returned by
+system. By default, the value returned by 
 \helpref{GetInstallPrefix}{wxstandardpathsgetinstallprefix} is used.
 
 Although under Linux systems the program prefix may usually be determined
 automatically, portable programs should call this function. Usually the prefix
 is set during program configuration if using GNU autotools and so it is enough
 to pass its value defined in \texttt{config.h} to this function.
-
 

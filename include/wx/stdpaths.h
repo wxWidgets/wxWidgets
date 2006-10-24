@@ -117,6 +117,9 @@ public:
     // $HOME under Unix and ~/Documents under Mac
     virtual wxString GetDocumentsDir() const;
 
+    // return the temporary directory for the current user
+    virtual wxString GetTempDir() const;
+
 
     // virtual dtor for the base class
     virtual ~wxStandardPathsBase();

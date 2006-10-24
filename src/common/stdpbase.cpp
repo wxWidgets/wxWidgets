@@ -78,6 +78,12 @@ wxString wxStandardPathsBase::GetDocumentsDir() const
     return wxFileName::GetHomeDir();
 }
 
+// return the temporary directory for the current user
+wxString wxStandardPathsBase::GetTempDir() const
+{
+    return wxFileName::GetTempDir();
+}
+
 /* static */
 wxString wxStandardPathsBase::AppendAppName(const wxString& dir)
 {
