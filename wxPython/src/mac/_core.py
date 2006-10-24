@@ -4015,14 +4015,13 @@ class Event(Object):
         """
         Skip(self, bool skip=True)
 
-        Called by an event handler, it controls whether additional event
-        handlers bound to this event will be called after the current event
-        handler returns.  Skip(false) (the default setting) will prevent
-        additional event handlers from being called and control will be
-        returned to the sender of the event immediately after the current
-        handler has finished.  Skip(True) will cause the event processing
-        system to continue searching for a handler function for this event.
-
+        This method can be used inside an event handler to control whether
+        further event handlers bound to this event will be called after the
+        current one returns. Without Skip() (or equivalently if Skip(False) is
+        used), the event will not be processed any more. If Skip(True) is
+        called, the event processing system continues searching for a further
+        handler function for this event, even though it has been processed
+        already in the current handler.
         """
         return _core_.Event_Skip(*args, **kwargs)
 

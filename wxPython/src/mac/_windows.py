@@ -2880,16 +2880,17 @@ class ProgressDialog(Frame):
         """
         return _windows_.ProgressDialog_Update(*args, **kwargs)
 
-    def UpdatePulse(*args, **kwargs):
+    def Pulse(*args, **kwargs):
         """
-        UpdatePulse(self, String newmsg) --> (continue, skip)
+        Pulse(self, String newmsg) --> (continue, skip)
 
         Just like `Update` but switches the dialog to use a gauge in
         interminante mode and calls `wx.Gauge.Pulse` to show the user a bit of
         progress.
         """
-        return _windows_.ProgressDialog_UpdatePulse(*args, **kwargs)
+        return _windows_.ProgressDialog_Pulse(*args, **kwargs)
 
+    UpdatePulse =  Pulse 
     def Resume(*args, **kwargs):
         """
         Resume(self)

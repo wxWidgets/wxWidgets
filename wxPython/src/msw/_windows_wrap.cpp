@@ -19653,7 +19653,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_ProgressDialog_UpdatePulse(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+SWIGINTERN PyObject *_wrap_ProgressDialog_Pulse(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   wxProgressDialog *arg1 = (wxProgressDialog *) 0 ;
   wxString const &arg2_defvalue = wxPyEmptyString ;
@@ -19672,10 +19672,10 @@ SWIGINTERN PyObject *_wrap_ProgressDialog_UpdatePulse(PyObject *SWIGUNUSEDPARM(s
   };
   
   arg3 = &temp3;
-  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|O:ProgressDialog_UpdatePulse",kwnames,&obj0,&obj1)) SWIG_fail;
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|O:ProgressDialog_Pulse",kwnames,&obj0,&obj1)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxProgressDialog, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ProgressDialog_UpdatePulse" "', expected argument " "1"" of type '" "wxProgressDialog *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ProgressDialog_Pulse" "', expected argument " "1"" of type '" "wxProgressDialog *""'"); 
   }
   arg1 = reinterpret_cast< wxProgressDialog * >(argp1);
   if (obj1) {
@@ -19687,7 +19687,7 @@ SWIGINTERN PyObject *_wrap_ProgressDialog_UpdatePulse(PyObject *SWIGUNUSEDPARM(s
   }
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    result = (bool)(arg1)->UpdatePulse((wxString const &)*arg2,arg3);
+    result = (bool)(arg1)->Pulse((wxString const &)*arg2,arg3);
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
@@ -31494,7 +31494,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"MessageDialog_swiginit", MessageDialog_swiginit, METH_VARARGS, NULL},
 	 { (char *)"new_ProgressDialog", (PyCFunction) _wrap_new_ProgressDialog, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"ProgressDialog_Update", (PyCFunction) _wrap_ProgressDialog_Update, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"ProgressDialog_UpdatePulse", (PyCFunction) _wrap_ProgressDialog_UpdatePulse, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"ProgressDialog_Pulse", (PyCFunction) _wrap_ProgressDialog_Pulse, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"ProgressDialog_Resume", (PyCFunction)_wrap_ProgressDialog_Resume, METH_O, NULL},
 	 { (char *)"ProgressDialog_swigregister", ProgressDialog_swigregister, METH_VARARGS, NULL},
 	 { (char *)"ProgressDialog_swiginit", ProgressDialog_swiginit, METH_VARARGS, NULL},
