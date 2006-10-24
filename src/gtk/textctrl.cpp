@@ -967,6 +967,12 @@ void wxTextCtrl::DoSetValue( const wxString &value, int flags )
         gtk_entry_set_text( GTK_ENTRY(m_text), buffer );
     }
 
+    // if, for whatever reason, the callback wasn't called the expected number
+    // of times, still reset the flags to the default values
+    m_dontMarkDirty = false;
+    m_countUpdatesToIgnore = 0;
+
+
     // GRG, Jun/2000: Changed this after a lot of discussion in
     //   the lists. wxWidgets 2.2 will have a set of flags to
     //   customize this behaviour.
