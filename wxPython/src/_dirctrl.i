@@ -141,7 +141,6 @@ leaf), done is set to True.
     %property(FilterListCtrl, GetFilterListCtrl, doc="See `GetFilterListCtrl`");
     %property(Path, GetPath, SetPath, doc="See `GetPath` and `SetPath`");
     %property(RootId, GetRootId, doc="See `GetRootId`");
-    %property(ShowHidden, GetShowHidden, ShowHidden, doc="See `GetShowHidden` and `ShowHidden`");
     %property(TreeCtrl, GetTreeCtrl, doc="See `GetTreeCtrl`");
 };
 
