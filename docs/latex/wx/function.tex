@@ -84,6 +84,8 @@ the corresponding topic.
 \helpref{wxEndBusyCursor}{wxendbusycursor}\\
 \helpref{wxENTER\_CRIT\_SECT}{wxentercritsect}\\
 \helpref{wxEntry}{wxentry}\\
+\helpref{wxEntryStart}{wxentrystart}\\
+\helpref{wxEntryCleanup}{wxentrycleanup}\\
 \helpref{wxEnumClipboardFormats}{wxenumclipboardformats}\\
 \helpref{wxError}{wxerror}\\
 \helpref{wxExecute}{wxexecute}\\
@@ -366,26 +368,27 @@ to control the behaviour of the main event loop of the GUI programs.
 
 \membersection{::wxEntry}\label{wxentry}
 
-This initializes wxWidgets in a platform-dependent way. Use this if you
-are not using the default wxWidgets entry code (e.g. main or WinMain). For example,
-you can initialize wxWidgets from an Microsoft Foundation Classes application using
+This initializes wxWidgets in a platform-dependent way. Use this if you are not
+using the default wxWidgets entry code (e.g. main or WinMain). For example, you
+can initialize wxWidgets from an Microsoft Foundation Classes application using
 this function.
 
-\func{void}{wxEntry}{\param{HANDLE}{ hInstance}, \param{HANDLE}{ hPrevInstance},
- \param{const wxString\& }{commandLine}, \param{int}{ cmdShow}, \param{bool}{ enterLoop = true}}
+The following overload of wxEntry is available under all platforms:
 
-wxWidgets initialization under Windows (non-DLL). If {\it enterLoop} is false, the
-function will return immediately after calling wxApp::OnInit. Otherwise, the wxWidgets
-message loop will be entered.
+\func{int}{wxEntry}{\param{int\&}{ argc}, \param{wxChar **}{argv}}
 
-\func{void}{wxEntry}{\param{HANDLE}{ hInstance}, \param{HANDLE}{ hPrevInstance},
- \param{WORD}{ wDataSegment}, \param{WORD}{ wHeapSize}, \param{const wxString\& }{ commandLine}}
+Under MS Windows, an additional overload suitable for calling from 
+\texttt{WinMain} is available:
 
-wxWidgets initialization under Windows (for applications constructed as a DLL).
+\func{int}{wxEntry}{\param{HINSTANCE }{hInstance}, \param{HINSTANCE }{hPrevInstance = \NULL}, \param{char *}{pCmdLine = \NULL}, \param{int }{nCmdShow = \texttt{SW\_SHOWNORMAL}}}
 
-\func{int}{wxEntry}{\param{int}{ argc}, \param{const wxString\& *}{argv}}
+(notice that under Windows CE platform, and only there, the type of 
+\arg{pCmdLine} is \texttt{wchar\_t *}, otherwise it is \texttt{char *}, even in
+Unicode build).
 
-wxWidgets initialization under Unix.
+\wxheading{See also}
+
+\helpref{wxEntryStart}{wxentrystart}
 
 \wxheading{Remarks}
 
@@ -407,6 +410,38 @@ int CTheApp::ExitInstance()
 
 <wx/app.h>
 
+
+
+\membersection{::wxEntryCleanup}\label{wxentrycleanup}
+
+\func{void}{wxEntryCleanup}{\void}
+
+Free resources allocated by a successful call to \helpref{wxEntryStart}{wxentrystart}.
+
+\wxheading{Include files}
+
+<wx/init.h>
+
+
+\membersection{::wxEntryStart}\label{wxentrystart}
+
+\func{bool}{wxEntryStart}{\param{int\&}{ argc}, \param{wxChar **}{argv}}
+
+This function can be used to perform the initialization of wxWidgets if you
+can't use the default initialization code for any reason.
+
+If the function returns \true, the initialization was successful and the global 
+\helpref{wxApp}{wxapp} object \texttt{wxTheApp} has been created. Moreover, 
+\helpref{wxEntryCleanup}{wxentrycleanup} must be called afterwards. If the
+function returns \false, a catastrophic initialization error occured and (at
+least the GUI part of) the library can't be used at all.
+
+Notice that parameters \arg{argc} and \arg{argv} may be modified by this
+function.
+
+\wxheading{Include files}
+
+<wx/init.h>
 
 
 \membersection{::wxGetApp}\label{wxgetapp}
