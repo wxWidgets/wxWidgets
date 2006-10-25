@@ -128,8 +128,8 @@ Things are much simpler for wxArray and wxSortedArray however: it is enough
 just to write
 
 \begin{verbatim}
-WX_DEFINE_ARRAY(int, ArrayOfDirectories);
-WX_DEFINE_SORTED_ARRAY(int, ArrayOfFiles);
+WX_DEFINE_ARRAY_INT(int, ArrayOfInts);
+WX_DEFINE_SORTED_ARRAY_INT(int, ArrayOfSortedInts);
 \end{verbatim}
 
 i.e. there is only one {\tt DEFINE} macro and no need for separate
