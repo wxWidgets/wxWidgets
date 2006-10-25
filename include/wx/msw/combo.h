@@ -60,6 +60,7 @@ public:
     virtual ~wxComboCtrl();
 
     virtual void PrepareBackground( wxDC& dc, const wxRect& rect, int flags ) const;
+    virtual bool AnimateShow( const wxRect& rect, int flags );
     virtual bool IsKeyPopupToggle(const wxKeyEvent& event) const;
 
     static int GetFeatures() { return wxComboCtrlFeatures::All; }

@@ -152,7 +152,7 @@ public:
     virtual void OnButtonClick();
 
     // return true if the popup is currently shown
-    bool IsPopupShown() const { return m_isPopupShown; }
+    bool IsPopupShown() const { return m_popupWinState == Visible; }
 
     // set interface class instance derived from wxComboPopup
     // NULL popup can be used to indicate default in a derived class
@@ -350,7 +350,7 @@ public:
     bool ShouldDrawFocus() const
     {
         const wxWindow* curFocus = FindFocus();
-        return ( !m_isPopupShown &&
+        return ( !IsPopupShown() &&
                  (curFocus == this || (m_btn && curFocus == m_btn)) &&
                  (m_windowStyle & wxCB_READONLY) );
     }
@@ -369,6 +369,19 @@ public:
 
     // common code to be called on popup hide/dismiss
     void OnPopupDismiss();
+
+    // PopupShown states
+    enum
+    {
+        Hidden       = 0,
+        //Closing      = 1,
+        Animating    = 2,
+        Visible      = 3
+    };
+
+    bool IsPopupWindowState( int state ) const { return (state == m_popupWinState) ? true : false; }
+
+    wxByte GetPopupWindowState() const { return m_popupWinState; }
 
 protected:
 
@@ -446,6 +459,23 @@ protected:
 
     // Dispatches size event and refreshes
     void RecalcAndRefresh();
+
+    // Flags for DoShowPopup and AnimateShow
+    enum
+    {
+        ShowBelow       = 0x0000,  // Showing popup below the control
+        ShowAbove       = 0x0001,  // Showing popup above the control
+        CanDeferShow    = 0x0002  // Can only return true from AnimateShow if this is set
+    };
+
+    // Shows and positions the popup.
+    virtual void DoShowPopup( const wxRect& rect, int flags );
+
+    // Implement in derived class to create a drop-down animation.
+    // Return true if finished immediately. Otherwise popup is only
+    // shown when the derived class call DoShowPopup.
+    // Flags are same as for DoShowPopup.
+    virtual bool AnimateShow( const wxRect& rect, int flags );
 
 #if wxUSE_TOOLTIPS
     virtual void DoSetToolTip( wxToolTip *tip );
@@ -540,7 +570,7 @@ protected:
     bool                    m_blankButtonBg;
 
     // is the popup window currenty shown?
-    bool                    m_isPopupShown;
+    wxByte                  m_popupWinState;
 
 private:
     void Init();

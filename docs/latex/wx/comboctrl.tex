@@ -213,6 +213,25 @@ appropriately.}
 Destructor, destroying the combo control.
 
 
+\membersection{wxComboCtrl::AnimateShow}\label{wxcomboctrlanimateshow}
+
+\func{virtual bool}{AnimateShow}{\param{const wxRect\& }{rect}, \param{int }{flags}}
+
+This member function is not normally called in application code.
+Instead, it can be implemented in a derived class to create a
+custom popup animation.
+
+\wxheading{Parameters}
+
+Same as in \helpref{DoShowPopup}{wxcomboctrldoshowpopup}.
+
+\wxheading{Return value}
+
+\true if animation finishes before the function returns.
+\false otherwise. In the latter case you need to manually call DoShowPopup
+after the animation ends.
+
+
 \membersection{wxComboCtrl::Create}\label{wxcomboctrlcreate}
 
 \func{bool}{Create}{\param{wxWindow*}{ parent}, \param{wxWindowID}{ id},\rtfsp
@@ -249,6 +268,31 @@ default wxComboPopup, incase {\tt popup} is NULL.
 \textbf{Note:} If you have implemented OnButtonClick to do
 something else than show the popup, then DoSetPopupControl
 must always return NULL.
+
+
+\membersection{wxComboCtrl::DoShowPopup}\label{wxcomboctrldoshowpopup}
+
+\func{virtual void}{DoShowPopup}{\param{const wxRect\& }{rect}, \param{int }{flags}}
+
+This member function is not normally called in application code.
+Instead, it must be called in a derived class to make sure popup
+is properly shown after a popup animation has finished (but only
+if \helpref{AnimateShow}{wxcomboctrlanimateshow} did not finish
+the animation within it's function scope).
+
+\wxheading{Parameters}
+
+\docparam{rect}{Position to show the popup window at, in screen coordinates.}
+
+\docparam{flags}{Combination of any of the following:}
+\twocolwidtha{8cm}%
+\begin{twocollist}\itemsep=0pt
+\twocolitem{{\tt wxComboCtrl::ShowAbove}}{Popup is shown above the control instead
+of below.}
+\twocolitem{{\tt wxComboCtrl::CanDeferShow}}{Showing the popup can be deferred
+to happen sometime after \helpref{ShowPopup}{wxcomboctrlshowpopup} has finished.
+In this case, \helpref{AnimateShow}{wxcomboctrlanimateshow} must return \false.}
+\end{twocollist}
 
 
 \membersection{wxComboCtrl::GetBitmapDisabled}\label{wxcomboctrlgetbitmapdisabled}
@@ -359,6 +403,22 @@ Returns the insertion point for the combo control's text field.
 
 \textbf{Note:} Under wxMSW, this function always returns $0$ if the combo control
 doesn't have the focus.
+
+
+\membersection{wxComboCtrl::IsPopupWindowState}\label{wxcomboctrlispopupwindowstate}
+
+\constfunc{bool}{IsPopupWindowState}{\param{int }{state}}
+
+Returns \true if the popup window is in the given state.
+Possible values are:
+\twocolwidtha{8cm}%
+\begin{twocollist}\itemsep=0pt
+\twocolitem{{\tt wxComboCtrl::Hidden}}{Popup window is hidden.}
+\twocolitem{{\tt wxComboCtrl::Animating}}{Popup window is being shown, but the
+popup animation has not yet finished.}
+\twocolitem{{\tt wxComboCtrl::Visible}}{Popup window is fully visible.}
+\end{twocollist}
+
 
 
 \membersection{wxComboCtrl::GetLastPosition}\label{wxcomboctrlgetlastposition}

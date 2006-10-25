@@ -85,6 +85,9 @@ public:
 
     void OnIdle( wxIdleEvent& event );
 
+
+    wxCheckBox*     m_cbUseAnim;
+
 protected:
     wxTextCtrl*     m_logWin;
     wxLog*          m_logOld;
@@ -491,6 +494,66 @@ BEGIN_EVENT_TABLE(TreeCtrlComboPopup, wxTreeCtrl)
 END_EVENT_TABLE()
 
 // ----------------------------------------------------------------------------
+// wxComboCtrl with custom popup animation
+// ----------------------------------------------------------------------------
+
+class wxComboCtrlWithCustomPopupAnim : public wxComboCtrl
+{
+public:
+
+    virtual bool AnimateShow( const wxRect& rect, int WXUNUSED(flags) )
+    {
+        MyFrame* myFrame = (MyFrame*) ::wxGetTopLevelParent(this);
+
+        if ( !myFrame->m_cbUseAnim->GetValue() )
+            return true;
+
+        int width = rect.width;
+        int height = rect.height;
+        wxBitmap bitmap( width, height, -1 );
+        wxScreenDC dc;
+        wxMemoryDC memdc( bitmap );
+        memdc.Blit( 0, 0, width, height, &dc, rect.x, rect.y );
+        memdc.SelectObject(wxNullBitmap); 
+
+        wxLongLong tStart = ::wxGetLocalTimeMillis();
+        const int delay = 300;
+        const int resolution = 10;
+
+        int center_x = rect.x + (width/2);
+        int center_y = rect.y + (height/2);
+
+        double d_height = (double) height;
+
+        dc.SetPen( *wxBLACK_PEN );
+        dc.SetBrush( *wxTRANSPARENT_BRUSH );
+        for (;;)
+        {
+            wxLongLong t = ::wxGetLocalTimeMillis();
+            int pos = (int) (t-tStart).GetLo();
+            if ( pos > delay )
+                break;
+
+            int w = (((pos*256)/delay)*width)/256;
+
+            double ratio = ((double)w / (double)width);
+            int h = (int)(d_height * ratio);
+            dc.DrawRectangle( center_x - w/2, center_y - h/2, w, h );
+            wxMilliSleep( resolution );
+            wxYield();
+            dc.DrawBitmap( bitmap, rect.x, rect.y );
+
+            if ( IsPopupWindowState(Hidden) )
+                return true;
+        }
+
+        return true;
+    }
+
+protected:
+};
+
+// ----------------------------------------------------------------------------
 // wxComboCtrl with entirely custom button action (opens file dialog)
 // ----------------------------------------------------------------------------
 
@@ -730,8 +793,8 @@ MyFrame::MyFrame(const wxString& title)
     colSizer->Add( rowSizer, 0, wxEXPAND|wxALL, 5 );
 
     rowSizer = new wxBoxSizer( wxHORIZONTAL );
-    cc = new wxComboCtrl(panel,2,wxEmptyString,
-                         wxDefaultPosition, wxDefaultSize);
+    cc = new wxComboCtrlWithCustomPopupAnim();
+    cc->Create(panel, wxID_ANY, wxEmptyString);
 
     // Make sure we use popup that allows focusing the listview.
     cc->UseAltPopupWindow();
@@ -879,7 +942,23 @@ MyFrame::MyFrame(const wxString& title)
 
     topRowSizer->Add( colSizer, 1, wxALL, 2 );
 
-    topRowSizer->Add( m_logWin, 1, wxEXPAND|wxALL, 5 );
+    colSizer = new wxBoxSizer( wxVERTICAL );
+
+    wxStaticBoxSizer* sbSizer = new wxStaticBoxSizer( new wxStaticBox(panel,
+                                                                      wxID_ANY,
+                                                                      wxT("Options")),
+                                                      wxVERTICAL );
+
+    m_cbUseAnim = new wxCheckBox(panel, wxID_ANY, wxT("Custom popup animation for ListView wxComboCtrl"));
+    m_cbUseAnim->SetValue(true);
+    sbSizer->Add( m_cbUseAnim, 0, wxALL, 3 );
+
+    colSizer->Add( sbSizer, 0, wxEXPAND|wxALL, 3 );
+    colSizer->AddSpacer(8);
+    colSizer->Add( new wxStaticText(panel, wxID_ANY, wxT("Log Messages:")), 0, wxTOP|wxLEFT, 3 );
+    colSizer->Add( m_logWin, 1, wxEXPAND|wxALL, 3 );
+
+    topRowSizer->Add( colSizer, 1, wxEXPAND|wxALL, 2 );
     topSizer->Add( topRowSizer, 1, wxEXPAND );
 
     panel->SetSizer( topSizer );

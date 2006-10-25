@@ -37,7 +37,7 @@
 
 #include "wx/combo.h"
 
-
+#include "wx/msw/registry.h"
 #include "wx/msw/uxtheme.h"
 
 // Change to #if 1 to include tmschema.h for easier testing of theme
@@ -70,6 +70,7 @@
 #define TEXTCTRLXADJUST_CLASSIC     1
 #define TEXTCTRLYADJUST_CLASSIC     2
 
+#define COMBOBOX_ANIMATION_DURATION     200  // In milliseconds
 
 // ============================================================================
 // implementation
@@ -527,6 +528,94 @@ void wxComboCtrl::OnMouseEvent( wxMouseEvent& event )
     // See header file for further information on this method.
     HandleNormalMouseEvent(event);
 
+}
+
+#if !defined(__WXWINCE__)
+static wxUint32 GetUserPreferencesMask()
+{
+    static wxUint32 userPreferencesMask = 0;
+    static bool valueSet = false;
+
+    if ( valueSet )
+        return userPreferencesMask;
+
+    wxRegKey key(wxRegKey::HKCU, wxT("Control Panel\\Desktop"));
+    if( key.Open(wxRegKey::Read) )
+    {
+        wxMemoryBuffer buf;
+        if ( key.QueryValue(wxT("UserPreferencesMask"), buf) )
+        {
+            if ( buf.GetDataLen() >= 4 )
+            {
+                wxByte* p = (wxByte*) buf.GetData();
+                userPreferencesMask = p[3] + (p[2]<<8) + (p[1]<<16) + (p[0]<<24);
+            }
+        }
+    }
+
+    valueSet = true;
+
+    return userPreferencesMask;
+}
+#endif
+
+bool wxComboCtrl::AnimateShow( const wxRect& rect, int flags )
+{
+#if !defined(__WXWINCE__)
+    if ( GetUserPreferencesMask() & (1<<26) )
+    {
+        wxLongLong tStart = ::wxGetLocalTimeMillis();
+
+        int height = rect.height;
+
+        wxWindow* win = GetPopupWindow();
+        wxWindow* popup = GetPopupControl()->GetControl();
+
+        const int delay = COMBOBOX_ANIMATION_DURATION;
+        const int resolution = 10;
+        int h0 = popup->GetSize().y;
+
+        win->SetSize( rect.x, rect.y, rect.width, 0 );
+        win->Show();
+
+        for (;;)
+        {
+            wxLongLong t = ::wxGetLocalTimeMillis();
+            int pos = (int) (t-tStart).GetLo();
+            if ( pos > delay )
+                break;
+
+            int h = (((pos*256)/delay)*height)/256;
+            int y = (h0 - h);
+            if ( y < 0 )
+                y = 0;
+
+            if ( flags & ShowAbove )
+            {
+                win->SetSize( rect.x, rect.y + h0 - h, rect.width, h );
+            }
+            else
+            {
+                popup->Move( 0, -y );
+                win->SetSize( rect.x, rect.y, rect.width, h );
+            }
+
+            wxMilliSleep( resolution );
+            wxYield();
+
+            // Popup was hidden before it was fully shown?
+            if ( IsPopupWindowState(Hidden) )
+                return true;
+        }
+
+        popup->Move( 0, 0 );
+    }
+#else
+    wxUnusedVar(rect);
+    wxUnusedVar(flags);
+#endif
+
+    return true;
 }
 
 wxCoord wxComboCtrl::GetNativeTextIndent() const
