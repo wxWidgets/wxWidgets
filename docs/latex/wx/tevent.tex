@@ -440,7 +440,9 @@ and this is done using the following macros:
 
 \begin{verbatim}
 // in the header of the source file
+BEGIN_DECLARE_EVENT_TYPES()
 DECLARE_EVENT_TYPE(name, value)
+END_DECLARE_EVENT_TYPES()
 
 // in the implementation
 DEFINE_EVENT_TYPE(name)
@@ -449,6 +451,9 @@ DEFINE_EVENT_TYPE(name)
 You can ignore the {\it value} parameter of the DECLARE\_EVENT\_TYPE macro
 since it used only for backwards compatibility with wxWidgets 2.0.x based
 applications where you have to give the event type ID an explicit value.
+
+See also the \helpref{event sample}{sampleevent} for an example of code
+defining and working with the custom event types.
 
 \wxheading{Using existing event classes}
 
