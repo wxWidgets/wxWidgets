@@ -319,12 +319,11 @@ wheel action.  Defaults to three.
 \constfunc{int}{GetWheelRotation}{\void}
 
 Get wheel rotation, positive or negative indicates direction of
-rotation.  Current devices all send an event when rotation is equal to
-+/-WheelDelta, but this allows for finer resolution devices to be
-created in the future.  Because of this you shouldn't assume that one
-event is equal to 1 line or whatever, but you should be able to either
-do partial line scrolling or wait until +/-WheelDelta rotation values
-have been accumulated before scrolling.
+rotation.  Current devices all send an event when rotation is at least
++/-WheelDelta, but finer resolution devices can be created in the future.
+Because of this you shouldn't assume that one event is equal to 1 line, but you
+should be able to either do partial line scrolling or wait until several
+events accumulate before scrolling.
 
 
 \membersection{wxMouseEvent::GetWheelDelta}\label{wxmouseeventgetwheeldelta}
