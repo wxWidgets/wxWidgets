@@ -447,9 +447,9 @@ Using makefiles directly
 ----------------------------------------------------------------
 
 NOTE: The makefile.gcc makefiles are for compilation under MinGW using
-      native make and Windows command interpreter (command.com/cmd.exe), they
-      won't work in other environments (such as UNIX or Unix-like, e.g. MSYS;
-      you have to use configure instead)
+      Windows command interpreter (command.com/cmd.exe), they won't work in
+      other environments (such as UNIX or Unix-like, e.g. MSYS where you have
+      to use configure instead, see the section below)
 
 Here are the steps required using the provided makefiles:
 
