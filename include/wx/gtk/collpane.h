@@ -14,13 +14,13 @@
 
 #include "wx/generic/collpaneg.h"
 
-extern WXDLLEXPORT_DATA(const wxChar) wxCollapsiblePaneNameStr[];
+extern WXDLLIMPEXP_DATA_ADV(const wxChar) wxCollapsiblePaneNameStr[];
 
 // ----------------------------------------------------------------------------
 // wxCollapsiblePane
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxCollapsiblePane : public wxGenericCollapsiblePane
+class WXDLLIMPEXP_ADV wxCollapsiblePane : public wxGenericCollapsiblePane
 {
 public:
     wxCollapsiblePane() { Init(); }
