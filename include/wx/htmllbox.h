@@ -25,8 +25,8 @@ class WXDLLIMPEXP_HTML wxHtmlWinParser;
 class WXDLLIMPEXP_HTML wxHtmlListBoxCache;
 class WXDLLIMPEXP_HTML wxHtmlListBoxStyle;
 
-extern WXDLLEXPORT_DATA(const wxChar) wxHtmlListBoxNameStr[];
-extern WXDLLEXPORT_DATA(const wxChar) wxSimpleHtmlListBoxNameStr[];
+extern WXDLLIMPEXP_DATA_HTML(const wxChar) wxHtmlListBoxNameStr[];
+extern WXDLLIMPEXP_DATA_HTML(const wxChar) wxSimpleHtmlListBoxNameStr[];
 
 // ----------------------------------------------------------------------------
 // wxHtmlListBox
