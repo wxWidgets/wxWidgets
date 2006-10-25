@@ -2811,7 +2811,7 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/generic/buttonbar.h \
 	wx/generic/choicdgg.h \
 	wx/generic/clrpickerg.h \
-	wx/generic/colpaneg.h \
+	wx/generic/collpaneg.h \
 	wx/generic/colrdlgg.h \
 	wx/generic/combo.h \
 	wx/generic/dcpsg.h \

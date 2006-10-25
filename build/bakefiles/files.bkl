@@ -702,7 +702,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/generic/buttonbar.h
     wx/generic/choicdgg.h
     wx/generic/clrpickerg.h
-    wx/generic/colpaneg.h
+    wx/generic/collpaneg.h
     wx/generic/colrdlgg.h
     wx/generic/combo.h
     wx/generic/dcpsg.h
