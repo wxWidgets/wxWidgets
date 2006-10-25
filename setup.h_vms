@@ -3,7 +3,7 @@
  * Template for the set.h file for VMS                                       *
  * Created from setup.h_in                                                   *
  * Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                            *
- * Date : 6 October 2006                                                     *
+ * Date : 25 October 2006                                                     *
  *                                                                           *
  *****************************************************************************/
 
@@ -265,6 +265,8 @@ typedef pid_t GPid;
 #define wxUSE_ARCHIVE_STREAMS     1
 
 #define wxUSE_ZIPSTREAM     1
+
+#define wxUSE_BACKINGFILE   1
 
 #define wxUSE_ZLIB          1
 
@@ -797,6 +799,11 @@ typedef pid_t GPid;
  */
 #define CONST_COMPATIBILITY 0
 
+/*
+ * use the session manager to detect KDE/GNOME
+ */
+#define wxUSE_DETECT_SM     0
+
 /* define with the name of timezone variable */
 #undef WX_TIMEZONE
  
@@ -1206,7 +1213,7 @@ typedef pid_t GPid;
 #undef HAVE_PANGO_XFT
 
 /* Define if fdopen is available.  */
-#undef HAVE_FDOPEN
+#define HAVE_FDOPEN 1
 
 /* ---------------------------------------------------------------------
    Win32 adjustments section
