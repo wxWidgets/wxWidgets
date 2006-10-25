@@ -541,6 +541,8 @@ ALL_BASE_SOURCES =  \
 	src/common/filefn.cpp \
 	src/common/filename.cpp \
 	src/common/filesys.cpp \
+	src/common/filtall.cpp \
+	src/common/filtfind.cpp \
 	src/common/fmapbase.cpp \
 	src/common/fs_zip.cpp \
 	src/common/hash.cpp \
@@ -690,6 +692,8 @@ MONODLL_OBJECTS =  \
 	monodll_filefn.o \
 	monodll_filename.o \
 	monodll_filesys.o \
+	monodll_filtall.o \
+	monodll_filtfind.o \
 	monodll_fmapbase.o \
 	monodll_fs_zip.o \
 	monodll_hash.o \
@@ -783,6 +787,8 @@ MONOLIB_OBJECTS =  \
 	monolib_filefn.o \
 	monolib_filename.o \
 	monolib_filesys.o \
+	monolib_filtall.o \
+	monolib_filtfind.o \
 	monolib_fmapbase.o \
 	monolib_fs_zip.o \
 	monolib_hash.o \
@@ -878,6 +884,8 @@ BASEDLL_OBJECTS =  \
 	basedll_filefn.o \
 	basedll_filename.o \
 	basedll_filesys.o \
+	basedll_filtall.o \
+	basedll_filtfind.o \
 	basedll_fmapbase.o \
 	basedll_fs_zip.o \
 	basedll_hash.o \
@@ -956,6 +964,8 @@ BASELIB_OBJECTS =  \
 	baselib_filefn.o \
 	baselib_filename.o \
 	baselib_filesys.o \
+	baselib_filtall.o \
+	baselib_filtfind.o \
 	baselib_fmapbase.o \
 	baselib_fs_zip.o \
 	baselib_hash.o \
@@ -12163,6 +12173,12 @@ monodll_filename.o: $(srcdir)/src/common/filename.cpp $(MONODLL_ODEP)
 monodll_filesys.o: $(srcdir)/src/common/filesys.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/filesys.cpp
 
+monodll_filtall.o: $(srcdir)/src/common/filtall.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/filtall.cpp
+
+monodll_filtfind.o: $(srcdir)/src/common/filtfind.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/filtfind.cpp
+
 monodll_fmapbase.o: $(srcdir)/src/common/fmapbase.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/fmapbase.cpp
 
@@ -16230,6 +16246,12 @@ monolib_filename.o: $(srcdir)/src/common/filename.cpp $(MONOLIB_ODEP)
 
 monolib_filesys.o: $(srcdir)/src/common/filesys.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/filesys.cpp
+
+monolib_filtall.o: $(srcdir)/src/common/filtall.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/filtall.cpp
+
+monolib_filtfind.o: $(srcdir)/src/common/filtfind.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/filtfind.cpp
 
 monolib_fmapbase.o: $(srcdir)/src/common/fmapbase.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/fmapbase.cpp
@@ -20302,6 +20324,12 @@ basedll_filename.o: $(srcdir)/src/common/filename.cpp $(BASEDLL_ODEP)
 basedll_filesys.o: $(srcdir)/src/common/filesys.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/common/filesys.cpp
 
+basedll_filtall.o: $(srcdir)/src/common/filtall.cpp $(BASEDLL_ODEP)
+	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/common/filtall.cpp
+
+basedll_filtfind.o: $(srcdir)/src/common/filtfind.cpp $(BASEDLL_ODEP)
+	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/common/filtfind.cpp
+
 basedll_fmapbase.o: $(srcdir)/src/common/fmapbase.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/common/fmapbase.cpp
 
@@ -20868,6 +20896,12 @@ baselib_filename.o: $(srcdir)/src/common/filename.cpp $(BASELIB_ODEP)
 
 baselib_filesys.o: $(srcdir)/src/common/filesys.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/common/filesys.cpp
+
+baselib_filtall.o: $(srcdir)/src/common/filtall.cpp $(BASELIB_ODEP)
+	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/common/filtall.cpp
+
+baselib_filtfind.o: $(srcdir)/src/common/filtfind.cpp $(BASELIB_ODEP)
+	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/common/filtfind.cpp
 
 baselib_fmapbase.o: $(srcdir)/src/common/fmapbase.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/common/fmapbase.cpp

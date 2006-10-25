@@ -2918,6 +2918,8 @@ MONODLL_OBJECTS =  &
 	$(OBJS)\monodll_filefn.obj &
 	$(OBJS)\monodll_filename.obj &
 	$(OBJS)\monodll_filesys.obj &
+	$(OBJS)\monodll_filtall.obj &
+	$(OBJS)\monodll_filtfind.obj &
 	$(OBJS)\monodll_fmapbase.obj &
 	$(OBJS)\monodll_fs_zip.obj &
 	$(OBJS)\monodll_hash.obj &
@@ -3032,6 +3034,8 @@ MONOLIB_OBJECTS =  &
 	$(OBJS)\monolib_filefn.obj &
 	$(OBJS)\monolib_filename.obj &
 	$(OBJS)\monolib_filesys.obj &
+	$(OBJS)\monolib_filtall.obj &
+	$(OBJS)\monolib_filtfind.obj &
 	$(OBJS)\monolib_fmapbase.obj &
 	$(OBJS)\monolib_fs_zip.obj &
 	$(OBJS)\monolib_hash.obj &
@@ -3148,6 +3152,8 @@ BASEDLL_OBJECTS =  &
 	$(OBJS)\basedll_filefn.obj &
 	$(OBJS)\basedll_filename.obj &
 	$(OBJS)\basedll_filesys.obj &
+	$(OBJS)\basedll_filtall.obj &
+	$(OBJS)\basedll_filtfind.obj &
 	$(OBJS)\basedll_fmapbase.obj &
 	$(OBJS)\basedll_fs_zip.obj &
 	$(OBJS)\basedll_hash.obj &
@@ -3248,6 +3254,8 @@ BASELIB_OBJECTS =  &
 	$(OBJS)\baselib_filefn.obj &
 	$(OBJS)\baselib_filename.obj &
 	$(OBJS)\baselib_filesys.obj &
+	$(OBJS)\baselib_filtall.obj &
+	$(OBJS)\baselib_filtfind.obj &
 	$(OBJS)\baselib_fmapbase.obj &
 	$(OBJS)\baselib_fs_zip.obj &
 	$(OBJS)\baselib_hash.obj &
@@ -4867,6 +4875,12 @@ $(OBJS)\monodll_filename.obj :  .AUTODEPEND ..\..\src\common\filename.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_filesys.obj :  .AUTODEPEND ..\..\src\common\filesys.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_filtall.obj :  .AUTODEPEND ..\..\src\common\filtall.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_filtfind.obj :  .AUTODEPEND ..\..\src\common\filtfind.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_fmapbase.obj :  .AUTODEPEND ..\..\src\common\fmapbase.cpp
@@ -6917,6 +6931,12 @@ $(OBJS)\monolib_filename.obj :  .AUTODEPEND ..\..\src\common\filename.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_filesys.obj :  .AUTODEPEND ..\..\src\common\filesys.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_filtall.obj :  .AUTODEPEND ..\..\src\common\filtall.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_filtfind.obj :  .AUTODEPEND ..\..\src\common\filtfind.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_fmapbase.obj :  .AUTODEPEND ..\..\src\common\fmapbase.cpp
@@ -8972,6 +8992,12 @@ $(OBJS)\basedll_filename.obj :  .AUTODEPEND ..\..\src\common\filename.cpp
 $(OBJS)\basedll_filesys.obj :  .AUTODEPEND ..\..\src\common\filesys.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
+$(OBJS)\basedll_filtall.obj :  .AUTODEPEND ..\..\src\common\filtall.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
+
+$(OBJS)\basedll_filtfind.obj :  .AUTODEPEND ..\..\src\common\filtfind.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
+
 $(OBJS)\basedll_fmapbase.obj :  .AUTODEPEND ..\..\src\common\fmapbase.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
@@ -9219,6 +9245,12 @@ $(OBJS)\baselib_filename.obj :  .AUTODEPEND ..\..\src\common\filename.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_filesys.obj :  .AUTODEPEND ..\..\src\common\filesys.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
+
+$(OBJS)\baselib_filtall.obj :  .AUTODEPEND ..\..\src\common\filtall.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
+
+$(OBJS)\baselib_filtfind.obj :  .AUTODEPEND ..\..\src\common\filtfind.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_fmapbase.obj :  .AUTODEPEND ..\..\src\common\fmapbase.cpp

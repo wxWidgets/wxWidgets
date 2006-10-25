@@ -543,6 +543,14 @@ SOURCE=.\common\filesys.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\common\filtall.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\common\filtfind.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\common\fldlgcmn.cpp
 # End Source File
 # Begin Source File

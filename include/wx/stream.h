@@ -288,6 +288,7 @@ class WXDLLIMPEXP_BASE wxFilterInputStream : public wxInputStream
 public:
     wxFilterInputStream();
     wxFilterInputStream(wxInputStream& stream);
+    wxFilterInputStream(wxInputStream *stream);
     virtual ~wxFilterInputStream();
 
     char Peek() { return m_parent_i_stream->Peek(); }
@@ -298,6 +299,7 @@ public:
 
 protected:
     wxInputStream *m_parent_i_stream;
+    bool m_owns;
 
     DECLARE_NO_COPY_CLASS(wxFilterInputStream)
 };
@@ -307,16 +309,72 @@ class WXDLLIMPEXP_BASE wxFilterOutputStream : public wxOutputStream
 public:
     wxFilterOutputStream();
     wxFilterOutputStream(wxOutputStream& stream);
+    wxFilterOutputStream(wxOutputStream *stream);
     virtual ~wxFilterOutputStream();
 
     wxFileOffset GetLength() const { return m_parent_o_stream->GetLength(); }
 
     wxOutputStream *GetFilterOutputStream() const { return m_parent_o_stream; }
 
+    bool Close();
+
 protected:
     wxOutputStream *m_parent_o_stream;
+    bool m_owns;
 
     DECLARE_NO_COPY_CLASS(wxFilterOutputStream)
+};
+
+enum wxStreamProtocolType
+{
+    wxSTREAM_PROTOCOL,      // wxFileSystem protocol (should be only one)
+    wxSTREAM_MIMETYPE,      // Mime types the stream handles
+    wxSTREAM_ENCODING,      // The http Content-Encodings the stream handles
+    wxSTREAM_FILEEXTENSION  // File extensions the stream handles
+};
+
+void WXDLLIMPEXP_BASE wxUseFilterClasses();
+
+class WXDLLIMPEXP_BASE wxFilterClassFactory : public wxObject
+{
+public:
+    virtual ~wxFilterClassFactory() { }
+
+    virtual wxFilterInputStream  *NewStream(wxInputStream& stream)  const = 0;
+    virtual wxFilterOutputStream *NewStream(wxOutputStream& stream) const = 0;
+    virtual wxFilterInputStream  *NewStream(wxInputStream *stream)  const = 0;
+    virtual wxFilterOutputStream *NewStream(wxOutputStream *stream) const = 0;
+
+    wxString GetProtocol() const { return wxString(*GetProtocols()); }
+
+    virtual const wxChar * const *GetProtocols(wxStreamProtocolType type
+                                               = wxSTREAM_PROTOCOL) const = 0;
+
+    bool CanHandle(const wxChar *protocol,
+                   wxStreamProtocolType type
+                   = wxSTREAM_PROTOCOL) const;
+
+    static const wxFilterClassFactory *Find(const wxChar *protocol,
+                                            wxStreamProtocolType type
+                                            = wxSTREAM_PROTOCOL);
+
+    static const wxFilterClassFactory *GetFirst();
+    const wxFilterClassFactory *GetNext() const { return m_next; }
+
+    void PushFront() { Remove(); m_next = sm_first; sm_first = this; }
+    void Remove();
+
+protected:
+    wxFilterClassFactory() : m_next(this) { }
+
+    wxFilterClassFactory& operator=(const wxFilterClassFactory&)
+        { return *this; }
+
+private:
+    static wxFilterClassFactory *sm_first;
+    wxFilterClassFactory *m_next;
+
+    DECLARE_ABSTRACT_CLASS(wxFilterClassFactory)
 };
 
 // ============================================================================

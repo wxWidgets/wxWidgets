@@ -1046,17 +1046,27 @@ wxFileOffset wxCountingOutputStream::OnSysTell() const
 // ----------------------------------------------------------------------------
 
 wxFilterInputStream::wxFilterInputStream()
+ :  m_parent_i_stream(NULL),
+    m_owns(false)
 {
-    m_parent_i_stream = NULL;
 }
 
 wxFilterInputStream::wxFilterInputStream(wxInputStream& stream)
+ :  m_parent_i_stream(&stream),
+    m_owns(false)
 {
-    m_parent_i_stream = &stream;
+}
+
+wxFilterInputStream::wxFilterInputStream(wxInputStream *stream)
+ :  m_parent_i_stream(stream),
+    m_owns(true)
+{
 }
 
 wxFilterInputStream::~wxFilterInputStream()
 {
+    if (m_owns)
+        delete m_parent_i_stream;
 }
 
 // ----------------------------------------------------------------------------
@@ -1064,17 +1074,83 @@ wxFilterInputStream::~wxFilterInputStream()
 // ----------------------------------------------------------------------------
 
 wxFilterOutputStream::wxFilterOutputStream()
+ :  m_parent_o_stream(NULL),
+    m_owns(false)
 {
-    m_parent_o_stream = NULL;
 }
 
 wxFilterOutputStream::wxFilterOutputStream(wxOutputStream& stream)
+ :  m_parent_o_stream(&stream),
+    m_owns(false)
 {
-    m_parent_o_stream = &stream;
+}
+
+wxFilterOutputStream::wxFilterOutputStream(wxOutputStream *stream)
+ :  m_parent_o_stream(stream),
+    m_owns(true)
+{
+}
+
+bool wxFilterOutputStream::Close()
+{
+    if (m_parent_o_stream && m_owns)
+        return m_parent_o_stream->Close();
+    else
+        return true;
 }
 
 wxFilterOutputStream::~wxFilterOutputStream()
 {
+    if (m_owns)
+        delete m_parent_o_stream;
+}
+
+// ----------------------------------------------------------------------------
+// wxFilterClassFactory
+// ----------------------------------------------------------------------------
+
+IMPLEMENT_ABSTRACT_CLASS(wxFilterClassFactory, wxObject)
+
+wxFilterClassFactory *wxFilterClassFactory::sm_first = NULL;
+
+bool wxFilterClassFactory::CanHandle(const wxChar *protocol,
+                                     wxStreamProtocolType type) const
+{
+    if (type == wxSTREAM_FILEEXTENSION)
+    {
+        size_t len = wxStrlen(protocol);
+
+        for (const wxChar * const *p = GetProtocols(type); p && *p; p++)
+        {
+            size_t l = wxStrlen(*p);
+
+            if (l <= len && wxStrcmp(*p, protocol + len - l) == 0)
+                return true;
+        }
+    }
+    else
+    {
+        for (const wxChar * const *p = GetProtocols(type); p && *p; p++)
+            if (wxStrcmp(*p, protocol) == 0)
+                return true;
+    }
+
+    return false;
+}
+
+void wxFilterClassFactory::Remove()
+{
+    if (m_next != this)
+    {
+        wxFilterClassFactory **pp = &sm_first;
+
+        while (*pp != this)
+            pp = &(*pp)->m_next;
+
+        *pp = m_next;
+
+        m_next = this;
+    }
 }
 
 // ----------------------------------------------------------------------------
