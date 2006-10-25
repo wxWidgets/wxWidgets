@@ -27,14 +27,15 @@ Default constructor.
 
 \func{}{wxGridCellAttr}{\param{const wxColour\& }{colText}, \param{const wxColour\& }{colBack}, \param{const wxFont\& }{font}, \param{int }{hAlign}, \param{int }{vAlign}}
 
-VZ: considering the number of members wxGridCellAttr has now, this ctor
-seems to be pretty useless... may be we should just remove it?
+Constructor specifying some of the often used attributes.
+
 
 \membersection{wxGridCellAttr::Clone}\label{wxgridcellattrclone}
 
 \constfunc{wxGridCellAttr*}{Clone}{\void}
 
 Creates a new copy of this object.
+
 
 \membersection{wxGridCellAttr::IncRef}\label{wxgridcellattrincref}
 
@@ -43,6 +44,7 @@ Creates a new copy of this object.
 This class is ref counted: it is created with ref count of 1, so
 calling DecRef() once will delete it. Calling IncRef() allows to lock
 it until the matching DecRef() is called
+
 
 \membersection{wxGridCellAttr::DecRef}\label{wxgridcellattrdecref}
 
@@ -54,11 +56,13 @@ it until the matching DecRef() is called
 
 Sets the text colour.
 
+
 \membersection{wxGridCellAttr::SetBackgroundColour}\label{wxgridcellattrsetbackgroundcolour}
 
 \func{void}{SetBackgroundColour}{\param{const wxColour\& }{colBack}}
 
 Sets the background colour.
+
 
 \membersection{wxGridCellAttr::SetFont}\label{wxgridcellattrsetfont}
 
@@ -66,11 +70,15 @@ Sets the background colour.
 
 Sets the font.
 
+
 \membersection{wxGridCellAttr::SetAlignment}\label{wxgridcellattrsetalignment}
 
 \func{void}{SetAlignment}{\param{int }{hAlign}, \param{int }{vAlign}}
 
-Sets the alignment.
+Sets the alignment. \arg{hAlign} can be one of \texttt{wxALIGN\_LEFT}, 
+\texttt{wxALIGN\_CENTRE} or \texttt{wxALIGN\_RIGHT} and \arg{vAlign} can be one
+of \texttt{wxALIGN\_TOP}, \texttt{wxALIGN\_CENTRE} or \texttt{wxALIGN\_BOTTOM}.
+
 
 \membersection{wxGridCellAttr::SetReadOnly}\label{wxgridcellattrsetreadonly}
 
@@ -142,6 +150,9 @@ accessors
 
 \perlnote{This method takes no parameters and
 returns a 2-element list {\tt ( hAlign, vAlign )}.}
+
+See \helpref{SetAlignment}{wxgridcellattrsetalignment} for the returned values.
+
 
 \membersection{wxGridCellAttr::GetRenderer}\label{wxgridcellattrgetrenderer}
 
