@@ -239,6 +239,8 @@ enum wxFileKind
 
     #if wxUSE_UNICODE
         #if wxUSE_UNICODE_MSLU
+            #include "wx/msw/mslu.h"
+
             #define   wxOpen       wxMSLU__wopen
 
             #define   wxAccess     wxMSLU__waccess

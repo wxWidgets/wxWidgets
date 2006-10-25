@@ -329,6 +329,8 @@
     #define  wxFgetchar  _fgettchar
     #define  wxFgets     _fgetts
     #if wxUSE_UNICODE_MSLU
+        WXDLLIMPEXP_BASE FILE * wxMSLU__tfopen(const wxChar *name, const wxChar *mode);
+
         #define  wxFopen    wxMSLU__tfopen
     #else
         #define  wxFopen     _tfopen
@@ -371,6 +373,9 @@
     /* special case: these functions are missing under Win9x with Unicows so we */
     /* have to implement them ourselves */
     #if wxUSE_UNICODE_MSLU
+        WXDLLIMPEXP_BASE int wxMSLU__trename(const wxChar *oldname, const wxChar *newname);
+        WXDLLIMPEXP_BASE int wxMSLU__tremove(const wxChar *name);
+
         #define  wxRemove    wxMSLU__tremove
         #define  wxRename    wxMSLU__trename
     #else

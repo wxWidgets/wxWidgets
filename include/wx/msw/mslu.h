@@ -43,15 +43,11 @@ WXDLLEXPORT int wxMSLU_GetOpenFileNameW(void *ofn);
 WXDLLEXPORT int wxMSLU_GetSaveFileNameW(void *ofn);
 #define GetSaveFileNameW(ofn) wxMSLU_GetSaveFileNameW((void*)ofn)
 
-#endif
+#endif // wxUSE_GUI
 
 //------------------------------------------------------------------------
 // Missing libc file manipulation functions in Win9x
 //------------------------------------------------------------------------
-
-WXDLLIMPEXP_BASE int wxMSLU__trename(const wxChar *oldname, const wxChar *newname);
-WXDLLIMPEXP_BASE int wxMSLU__tremove(const wxChar *name);
-WXDLLIMPEXP_BASE FILE* wxMSLU__tfopen(const wxChar *name, const wxChar *mode);
 
 #if defined( __VISUALC__ ) \
     || ( defined(__MINGW32__) && wxCHECK_W32API_VERSION( 0, 5 ) ) \
@@ -70,7 +66,8 @@ WXDLLIMPEXP_BASE int wxMSLU__wmkdir(const wxChar *name);
 WXDLLIMPEXP_BASE int wxMSLU__wrmdir(const wxChar *name);
 WXDLLIMPEXP_BASE int wxMSLU__wstat(const wxChar *name, struct _stat *buffer);
 WXDLLIMPEXP_BASE int wxMSLU__wstati64(const wxChar *name, struct _stati64 *buffer);
-#endif
+
+#endif // Windows compilers with MSLU support
 
 #endif // wxUSE_UNICODE_MSLU
 
