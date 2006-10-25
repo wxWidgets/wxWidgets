@@ -610,7 +610,7 @@ void wxMenuBar::MacInstallMenuBar()
                 CFSTR(""), 0, kMenuItemAttrSeparator, 0); 
 #endif
     InsertMenuItemTextWithCFString( appleMenu,
-                CFSTR("About..."), 0, kMenuItemAttrSeparator, 0); 
+                CFSTR("About..."), 0, 0, 0); 
     MacInsertMenu( appleMenu , 0 ) ;
 
     // clean-up the help menu before adding new items
