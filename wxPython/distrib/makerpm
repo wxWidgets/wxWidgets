@@ -168,7 +168,7 @@ if [ -z "${skipcopy}" ]; then
     rm -f ChangeLog
     rm *.spec
     rm -rf distrib/msw/tmake
-    rm -rf docs/html
+    #rm -rf docs/html
     #rm -rf docs/latex
     #rm -rf contrib/docs
     #rm -rf contrib/samples
