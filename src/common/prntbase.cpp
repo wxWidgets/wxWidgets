@@ -890,27 +890,38 @@ void wxPreviewControlBar::CreateButtons()
         item0->Add( m_printButton, 0, wxALIGN_CENTRE|wxALL, 5 );
     }
 
+    // Exact-fit buttons are too tiny on wxUniversal
+    int navButtonStyle;
+    wxSize navButtonSize;
+#ifdef __WXUNIVERSAL__
+    navButtonStyle = 0;
+    navButtonSize = wxSize(50, m_closeButton->GetSize().y);
+#else
+    navButtonStyle = wxBU_EXACTFIT;
+    navButtonSize = wxDefaultSize;
+#endif
+
     if (m_buttonFlags & wxPREVIEW_FIRST)
     {
-        m_firstPageButton = new wxButton( this, wxID_PREVIEW_FIRST, _("|<<"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+        m_firstPageButton = new wxButton( this, wxID_PREVIEW_FIRST, _("|<<"), wxDefaultPosition, navButtonSize, navButtonStyle );
         item0->Add( m_firstPageButton, 0, wxALIGN_CENTRE|wxALL, 5 );
     }
 
     if (m_buttonFlags & wxPREVIEW_PREVIOUS)
     {
-        m_previousPageButton = new wxButton( this, wxID_PREVIEW_PREVIOUS, _("<<"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+        m_previousPageButton = new wxButton( this, wxID_PREVIEW_PREVIOUS, _("<<"), wxDefaultPosition, navButtonSize, navButtonStyle );
         item0->Add( m_previousPageButton, 0, wxALIGN_CENTRE|wxRIGHT|wxTOP|wxBOTTOM, 5 );
     }
 
     if (m_buttonFlags & wxPREVIEW_NEXT)
     {
-        m_nextPageButton = new wxButton( this, wxID_PREVIEW_NEXT, _(">>"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+        m_nextPageButton = new wxButton( this, wxID_PREVIEW_NEXT, _(">>"), wxDefaultPosition, navButtonSize, navButtonStyle );
         item0->Add( m_nextPageButton, 0, wxALIGN_CENTRE|wxRIGHT|wxTOP|wxBOTTOM, 5 );
     }
 
     if (m_buttonFlags & wxPREVIEW_LAST)
     {
-        m_lastPageButton = new wxButton( this, wxID_PREVIEW_LAST, _(">>|"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+        m_lastPageButton = new wxButton( this, wxID_PREVIEW_LAST, _(">>|"), wxDefaultPosition, navButtonSize, navButtonStyle );
         item0->Add( m_lastPageButton, 0, wxALIGN_CENTRE|wxRIGHT|wxTOP|wxBOTTOM, 5 );
     }
 
