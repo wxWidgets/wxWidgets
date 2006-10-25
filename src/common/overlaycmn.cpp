@@ -125,7 +125,7 @@ void wxDCOverlay::Clear()
 // generic implementation of wxOverlayImpl
 // ----------------------------------------------------------------------------
 
-#if !wxHAS_NATIVE_OVERLAY
+#ifndef wxHAS_NATIVE_OVERLAY
 
 wxOverlayImpl::wxOverlayImpl()
 {

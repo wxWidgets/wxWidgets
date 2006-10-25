@@ -14,14 +14,12 @@
 
 #include "wx/defs.h"
 
-#ifndef wxHAS_NATIVE_OVERLAY
-    #if defined(wxMAC_USE_CORE_GRAPHICS) && wxMAC_USE_CORE_GRAPHICS
-        #define wxHAS_NATIVE_OVERLAY 1
-    #elif defined(__WXDFB__)
-        #define wxHAS_NATIVE_OVERLAY 1
-    #else
-        #define wxHAS_NATIVE_OVERLAY 0
-    #endif
+#if defined(wxMAC_USE_CORE_GRAPHICS) && wxMAC_USE_CORE_GRAPHICS
+    #define wxHAS_NATIVE_OVERLAY 1
+#elif defined(__WXDFB__)
+    #define wxHAS_NATIVE_OVERLAY 1
+#else
+    // don't define wxHAS_NATIVE_OVERLAY
 #endif
 
 // ----------------------------------------------------------------------------

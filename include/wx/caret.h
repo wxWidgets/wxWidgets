@@ -199,17 +199,13 @@ private:
     #include "wx/generic/caret.h"
 #endif // platform
 
-#ifndef wxHAS_CARET_USING_OVERLAYS
-    #define wxHAS_CARET_USING_OVERLAYS 0
-#endif
-
 // ----------------------------------------------------------------------------
 // wxCaretSuspend: a simple class which hides the caret in its ctor and
 // restores it in the dtor, this should be used when drawing on the screen to
 // avoid overdrawing the caret
 // ----------------------------------------------------------------------------
 
-#if wxHAS_CARET_USING_OVERLAYS
+#ifdef wxHAS_CARET_USING_OVERLAYS
 
 // we don't need to hide the caret if it's rendered using overlays
 class WXDLLEXPORT wxCaretSuspend

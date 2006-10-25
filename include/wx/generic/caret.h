@@ -16,10 +16,8 @@
 #include "wx/dc.h"
 #include "wx/overlay.h"
 
-#if wxHAS_NATIVE_OVERLAY
-    #define wxHAS_CARET_USING_OVERLAYS 1
-#else
-    #define wxHAS_CARET_USING_OVERLAYS 0
+#ifdef wxHAS_NATIVE_OVERLAY
+    #define wxHAS_CARET_USING_OVERLAYS
 #endif
 
 class WXDLLIMPEXP_CORE wxCaret;
@@ -78,7 +76,7 @@ private:
     // GTK specific initialization
     void InitGeneric();
 
-#if wxHAS_CARET_USING_OVERLAYS
+#ifdef wxHAS_CARET_USING_OVERLAYS
     // the overlay for displaying the caret
     wxOverlay   m_overlay;
 #else

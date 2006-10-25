@@ -88,7 +88,7 @@ void wxCaret::InitGeneric()
 {
     m_hasFocus = true;
     m_blinkedOut = true;
-#if !wxHAS_CARET_USING_OVERLAYS
+#ifndef wxHAS_CARET_USING_OVERLAYS
     m_xOld =
     m_yOld = -1;
     m_bmpUnderCaret.Create(m_width, m_height);
@@ -131,7 +131,7 @@ void wxCaret::DoHide()
 
 void wxCaret::DoMove()
 {
-#if wxHAS_CARET_USING_OVERLAYS
+#ifdef wxHAS_CARET_USING_OVERLAYS
     m_overlay.Reset();
 #endif
     if ( IsVisible() )
@@ -158,7 +158,7 @@ void wxCaret::DoSize()
         m_countVisible = 0;
         DoHide();
     }
-#if wxHAS_CARET_USING_OVERLAYS
+#ifdef wxHAS_CARET_USING_OVERLAYS
     m_overlay.Reset();
 #else
     // Change bitmap size
@@ -217,7 +217,7 @@ void wxCaret::Refresh()
 {
     wxClientDC dcWin(GetWindow());
 // this is the new code, switch to 0 if this gives problems
-#if wxHAS_CARET_USING_OVERLAYS
+#ifdef wxHAS_CARET_USING_OVERLAYS
     wxDCOverlay dcOverlay( m_overlay, &dcWin, m_x, m_y, m_width , m_height );
     if ( m_blinkedOut )
     {
