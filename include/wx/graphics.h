@@ -263,8 +263,12 @@ public:
     // draws a rounded rectangle
     virtual void DrawRoundedRectangle( wxDouble x, wxDouble y, wxDouble w, wxDouble h, wxDouble radius);
 
-     // wrappers using wxPoint2DDouble TODO
+    // wrappers using wxPoint2DDouble TODO
 
+    
+    // helper to determine if a 0.5 offset should be applied for the drawing operation
+    virtual bool ShouldOffset() const { return false; }
+    
     DECLARE_NO_COPY_CLASS(wxGraphicsContext)
     DECLARE_ABSTRACT_CLASS(wxGraphicsContext)
 };

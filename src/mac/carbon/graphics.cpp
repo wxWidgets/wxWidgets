@@ -290,6 +290,18 @@ public:
 
     void SetNativeContext( CGContextRef cg );
     CGPathDrawingMode GetDrawingMode() const { return m_mode; }
+
+
+    virtual bool ShouldOffset() const
+    {
+        int penwidth = m_pen.GetWidth();
+        if ( penwidth == 0 )
+            penwidth = 1;
+        if ( m_pen.GetStyle() == wxTRANSPARENT )
+            penwidth = 0;
+        return ( penwidth % 2 ) == 1; 
+    }
+        
     
     DECLARE_NO_COPY_CLASS(wxMacCoreGraphicsContext)
     DECLARE_DYNAMIC_CLASS(wxMacCoreGraphicsContext)
@@ -446,15 +458,9 @@ void wxMacCoreGraphicsContext::ResetClip()
 
 void wxMacCoreGraphicsContext::StrokePath( const wxGraphicsPath *path )
 {
-	EnsureIsValid();
-	
-    int width = m_pen.GetWidth();
-    if ( width == 0 )
-        width = 1 ;
-    if ( m_pen.GetStyle() == wxTRANSPARENT )
-        width = 0 ;
-        
-    bool offset = ( width % 2 ) == 1 ; 
+    EnsureIsValid();
+       
+    bool offset = ShouldOffset();
 
     if ( offset )
         CGContextTranslateCTM( m_cgContext, 0.5, 0.5 );
@@ -479,14 +485,8 @@ void wxMacCoreGraphicsContext::DrawPath( const wxGraphicsPath *path , int fillSt
         else if ( mode == kCGPathFillStroke )
             mode = kCGPathEOFillStroke;
     }
-
-    int width = m_pen.GetWidth();
-    if ( width == 0 )
-        width = 1 ;
-    if ( m_pen.GetStyle() == wxTRANSPARENT )
-        width = 0 ;
-        
-    bool offset = ( width % 2 ) == 1 ; 
+       
+    bool offset = ShouldOffset();
 
     if ( offset )
         CGContextTranslateCTM( m_cgContext, 0.5, 0.5 );
