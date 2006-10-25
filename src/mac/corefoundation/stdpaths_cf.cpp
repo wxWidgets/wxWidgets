@@ -31,7 +31,6 @@
 #include "wx/mac/private.h"
 #endif
 #include "wx/mac/corefoundation/cfstring.h"
-#include "wx/mac/private.h"
 
 #if defined(__DARWIN__)
 #include <CoreFoundation/CFBundle.h>

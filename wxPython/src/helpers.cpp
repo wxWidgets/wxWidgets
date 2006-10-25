@@ -29,7 +29,11 @@
 #include <gdk/gdkx.h>
 #include <gtk/gtk.h>
 #include <gdk/gdkprivate.h>
+#ifdef __WXGTK20__
 #include <wx/gtk/win_gtk.h>
+#else
+#include <wx/gtk1/win_gtk.h>
+#endif
 #define GetXWindow(wxwin) (wxwin)->m_wxwindow ? \
                           GDK_WINDOW_XWINDOW(GTK_PIZZA((wxwin)->m_wxwindow)->bin_window) : \
                           GDK_WINDOW_XWINDOW((wxwin)->m_widget->window)

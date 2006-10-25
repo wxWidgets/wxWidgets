@@ -196,3 +196,8 @@ wxPortId wxGUIAppTraits::GetToolkitVersion(int *verMaj, int *verMin) const
 
     return wxPORT_GTK;
 }
+
+wxString wxGUIAppTraits::GetDesktopEnvironment() const
+{
+    return wxEmptyString;
+}
