@@ -1102,7 +1102,7 @@ bool wxGenericFileDialog::Create( wxWindow *parent,
     mainsizer->Add( staticsizer, 0, wxEXPAND | wxLEFT|wxRIGHT|wxBOTTOM, 10 );
 
     long style2 = ms_lastViewStyle;
-    if ( !HasFlag(wxFD_MULTIPLE) )
+    if ( style & wxFD_MULTIPLE == 0 )
         style2 |= wxLC_SINGLE_SEL;
 
 #ifdef __WXWINCE__
