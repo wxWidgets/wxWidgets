@@ -3,7 +3,8 @@
 A wxSpinButton has two small up and down (or left and right) arrow buttons. It
 is often used next to a text control for increment and decrementing a value.
 Portable programs should try to use \helpref{wxSpinCtrl}{wxspinctrl} instead
-as wxSpinButton is not implemented for all platforms.
+as wxSpinButton is not implemented for all platforms but wxSpinCtrl is as it
+degenerates to a simple \helpref{wxTextCtrl}{wxtextctrl} on such platforms.
 
 {\bf NB:} the range supported by this control (and wxSpinCtrl) depends on the
 platform but is at least {\tt -0x8000} to {\tt 0x7fff}. Under GTK and
