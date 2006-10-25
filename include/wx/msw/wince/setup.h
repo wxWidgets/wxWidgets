@@ -1251,6 +1251,11 @@
 #undef wxUSE_COMMON_DIALOGS
 #define wxUSE_COMMON_DIALOGS 1
 
+// don't use wxRichTextCtrl on WinCE yet, it's not ready, plus it's
+// probably overkill for a WinCE environment.
+#undef wxUSE_RICHTEXT
+#define wxUSE_RICHTEXT 0
+
 // ----------------------------------------------------------------------------
 // Crash debugging helpers
 // ----------------------------------------------------------------------------
