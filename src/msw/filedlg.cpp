@@ -278,13 +278,13 @@ int wxFileDialog::ShowModal()
 
 #if WXWIN_COMPATIBILITY_2_4
     long msw_flags = 0;
-    if ( (m_windowStyle & wxHIDE_READONLY) || (m_windowStyle & wxFD_SAVE) )
+    if ( HasFdFlag(wxHIDE_READONLY) || HasFdFlag(wxFD_SAVE) )
         msw_flags |= OFN_HIDEREADONLY;
 #else
     long msw_flags = OFN_HIDEREADONLY;
 #endif
 
-    if ( m_windowStyle & wxFD_FILE_MUST_EXIST )
+    if ( HasFdFlag(wxFD_FILE_MUST_EXIST) )
         msw_flags |= OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;
     /*
         If the window has been moved the programmer is probably
@@ -302,7 +302,7 @@ int wxFileDialog::ShowModal()
 #endif
     }
 
-    if (m_windowStyle & wxFD_MULTIPLE )
+    if ( HasFdFlag(wxFD_MULTIPLE) )
     {
         // OFN_EXPLORER must always be specified with OFN_ALLOWMULTISELECT
         msw_flags |= OFN_EXPLORER | OFN_ALLOWMULTISELECT;
@@ -311,12 +311,12 @@ int wxFileDialog::ShowModal()
     // if wxFD_CHANGE_DIR flag is not given we shouldn't change the CWD which the
     // standard dialog does by default (notice that under NT it does it anyhow,
     // OFN_NOCHANGEDIR or not, see below)
-    if ( !(m_windowStyle & wxFD_CHANGE_DIR) )
+    if ( !HasFdFlag(wxFD_CHANGE_DIR) )
     {
         msw_flags |= OFN_NOCHANGEDIR;
     }
 
-    if ( m_windowStyle & wxFD_OVERWRITE_PROMPT )
+    if ( HasFdFlag(wxFD_OVERWRITE_PROMPT) )
     {
         msw_flags |= OFN_OVERWRITEPROMPT;
     }
@@ -413,7 +413,7 @@ int wxFileDialog::ShowModal()
     // user types "foo" and the default extension is ".bar" we should force it
     // to check for "foo.bar" existence and not "foo")
     wxString defextBuffer; // we need it to be alive until GetSaveFileName()!
-    if (m_windowStyle & wxFD_SAVE)
+    if (HasFdFlag(wxFD_SAVE))
     {
         const wxChar* extension = filterBuffer;
         int maxFilter = (int)(of.nFilterIndex*2L) - 1;
@@ -470,7 +470,7 @@ int wxFileDialog::ShowModal()
 
         m_fileNames.Empty();
 
-        if ( ( m_windowStyle & wxFD_MULTIPLE ) &&
+        if ( ( HasFdFlag(wxFD_MULTIPLE) ) &&
 #if defined(OFN_EXPLORER)
              ( fileNameBuffer[of.nFileOffset-1] == wxT('\0') )
 #else

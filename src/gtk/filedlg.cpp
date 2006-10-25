@@ -404,7 +404,7 @@ void wxFileDialog::SetFilename(const wxString& name)
 {
     if (!gtk_check_version(2,4,0))
     {
-        if (HasFlag(wxFD_SAVE))
+        if (HasFdFlag(wxFD_SAVE))
             gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(m_widget), wxGTK_CONV(name));
         else
             SetPath(wxFileName(GetDirectory(), name).GetFullPath());

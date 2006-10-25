@@ -88,6 +88,8 @@ public:
                 const wxSize& sz = wxDefaultSize,
                 const wxString& name = wxFileDialogNameStr);
 
+    bool HasFdFlag(int flag) const { return (m_fdStyle & flag) != 0; }
+
     virtual void SetMessage(const wxString& message) { m_message = message; }
     virtual void SetPath(const wxString& path) { m_path = path; }
     virtual void SetDirectory(const wxString& dir) { m_dir = dir; }
@@ -131,6 +133,7 @@ protected:
     wxString      m_fileName;
     wxString      m_wildCard;
     int           m_filterIndex;
+    int           m_fdStyle;
 
 private:
     void Init();

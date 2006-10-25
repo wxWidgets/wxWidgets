@@ -1102,7 +1102,7 @@ bool wxGenericFileDialog::Create( wxWindow *parent,
     mainsizer->Add( staticsizer, 0, wxEXPAND | wxLEFT|wxRIGHT|wxBOTTOM, 10 );
 
     long style2 = ms_lastViewStyle;
-    if ( style & wxFD_MULTIPLE == 0 )
+    if ( !HasFdFlag(wxFD_MULTIPLE) )
         style2 |= wxLC_SINGLE_SEL;
 
 #ifdef __WXWINCE__
@@ -1406,7 +1406,7 @@ void wxGenericFileDialog::HandleAction( const wxString &fn )
     }
 #endif // __UNIX__
 
-    if (!HasFlag(wxFD_SAVE))
+    if (!HasFdFlag(wxFD_SAVE))
     {
         if ((filename.Find(wxT('*')) != wxNOT_FOUND) ||
             (filename.Find(wxT('?')) != wxNOT_FOUND))
@@ -1451,13 +1451,13 @@ void wxGenericFileDialog::HandleAction( const wxString &fn )
     // VZ: the logic of testing for !wxFileExists() only for the open file
     //     dialog is not entirely clear to me, why don't we allow saving to a
     //     file without extension as well?
-    if ( !HasFlag(wxFD_OPEN) || !wxFileExists(filename) )
+    if ( !HasFdFlag(wxFD_OPEN) || !wxFileExists(filename) )
     {
         filename = AppendExtension(filename, m_filterExtension);
     }
 
     // check that the file [doesn't] exist if necessary
-    if ( HasFlag(wxFD_SAVE) && HasFlag(wxFD_OVERWRITE_PROMPT) &&
+    if ( HasFdFlag(wxFD_SAVE) && HasFdFlag(wxFD_OVERWRITE_PROMPT) &&
                 wxFileExists( filename ) )
     {
         wxString msg;
@@ -1466,7 +1466,7 @@ void wxGenericFileDialog::HandleAction( const wxString &fn )
         if (wxMessageBox(msg, _("Confirm"), wxYES_NO) != wxYES)
             return;
     }
-    else if ( HasFlag(wxFD_OPEN) && HasFlag(wxFD_FILE_MUST_EXIST) &&
+    else if ( HasFdFlag(wxFD_OPEN) && HasFdFlag(wxFD_FILE_MUST_EXIST) &&
                     !wxFileExists(filename) )
     {
         wxMessageBox(_("Please choose an existing file."), _("Error"),
@@ -1476,7 +1476,7 @@ void wxGenericFileDialog::HandleAction( const wxString &fn )
     SetPath( filename );
 
     // change to the directory where the user went if asked
-    if ( HasFlag(wxFD_CHANGE_DIR) )
+    if ( HasFdFlag(wxFD_CHANGE_DIR) )
     {
         wxString cwd;
         wxSplitPath(filename, &cwd, NULL, NULL);
