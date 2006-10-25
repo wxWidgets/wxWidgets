@@ -31,6 +31,12 @@ add empty space of the desired size and attributes, and then use the wxSizerItem
 method to determine where the drawing operations should take place.
 
 
+Please notice that sizers, like child windows, are owned by the library and
+will be deleted by it which implies that they must be allocated on the heap.
+However if you create a sizer and do not add it to another sizer or window, the
+library wouldn't be able to delete such an orphan sizer and in this, and only
+this, case it should be deleted explicitly.
+
 \pythonnote{If you wish to create a sizer class in wxPython you should
 derive the class from {\tt wxPySizer} in order to get Python-aware
 capabilities for the various virtual methods.}
