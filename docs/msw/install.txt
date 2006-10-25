@@ -269,7 +269,8 @@ See http://support.microsoft.com/?id=894573 for more information.
 Borland C++ compilation
 ----------------------------------------------------------------
 
-The minimum version required is 5.5, which can be downloaded for free from:
+The minimum version required is 5.5 (last version supported by BC++ 5.0 was
+2.4.2), which can be downloaded for free from:
 http://www.borland.com/products/downloads/download_cbuilder.html#
 
 Compiling using the makefiles:
@@ -345,6 +346,12 @@ Note (4): if Watcom can't read the precompiled header when building a sample,
 
 Metrowerks CodeWarrior compilation
 ----------------------------------------------------------------
+
+** NOTE: We don't use Metrowerks compiler any more and so depend on
+**       your contributions to keep it up to date. It is possible that
+**       the project files mentioned below are out of date due to recently
+**       added files, please add them manually if you get linking errors.
+**       The authoritative list of files is in build/bakefiles/files.bkl
 
 1. CodeWarrior Pro 7 project files in XML format are already
    included in wxMSW-2.7.0.zip and the setup version.
