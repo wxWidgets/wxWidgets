@@ -250,19 +250,24 @@ wxMDIChildFrame *wxMDIParentFrame::GetActiveChild() const
 
     gint i = gtk_notebook_get_current_page( notebook );
     if (i < 0) return (wxMDIChildFrame*) NULL;
-
+    
     GtkNotebookPage* page = (GtkNotebookPage*) (g_list_nth(notebook->children,i)->data);
     if (!page) return (wxMDIChildFrame*) NULL;
 
     wxWindowList::compatibility_iterator node = m_clientWindow->GetChildren().GetFirst();
     while (node)
     {
+        if ( wxPendingDelete.Member(node->GetData()) )
+            return (wxMDIChildFrame*) NULL;
+        
         wxMDIChildFrame *child_frame = wxDynamicCast( node->GetData(), wxMDIChildFrame );
 
-        wxASSERT_MSG( child_frame, _T("child is not a wxMDIChildFrame") );
+        if (!child_frame)
+            return (wxMDIChildFrame*) NULL;
 
         if (child_frame->m_page == page)
             return child_frame;
+            
         node = node->GetNext();
     }
 
@@ -333,6 +338,19 @@ bool wxMDIChildFrame::Create( wxMDIParentFrame *parent,
     m_title = title;
 
     return wxWindow::Create( parent->GetClientWindow(), id, wxDefaultPosition, size, style, name );
+}
+
+bool wxMDIChildFrame::Destroy()
+{
+    // delayed destruction: the frame will be deleted during
+    // the next idle loop iteration.
+    // I'm not sure if delayed destruction really makes so
+    // much sense for MDI child frames, actually, but hiding
+    // it doesn't make any sense.
+    if ( !wxPendingDelete.Member(this) )
+        wxPendingDelete.Append(this);
+
+    return true;
 }
 
 void wxMDIChildFrame::DoSetSize( int x, int y, int width, int height, int sizeFlags )
