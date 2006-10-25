@@ -133,7 +133,6 @@ protected:
 
     // Returns the best size for the window, which is the size needed
     // to display the text label.
-    virtual void DoGetSize(int *width, int *height) const;
     virtual wxSize DoGetBestSize() const;
 
     // creates a context menu with "Copy URL" menuitem

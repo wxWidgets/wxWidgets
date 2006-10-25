@@ -115,10 +115,8 @@ bool wxHyperlinkCtrl::Create(wxWindow *parent, wxWindowID id,
     f.SetUnderlined(true);
     SetFont(f);
 
-    CacheBestSize(DoGetBestSize());
-    SetMinSize(GetBestSize());
-    SetSize (DoGetBestSize());
-
+    SetBestFittingSize(size);
+    
     return true;
 }
 
@@ -130,14 +128,11 @@ wxSize wxHyperlinkCtrl::DoGetBestSize() const
     dc.SetFont(GetFont());
     dc.GetTextExtent(GetLabel(), &w, &h);
 
-    return wxSize(w, h);
+    wxSize best(w, h);
+    CacheBestSize(best);
+    return best;
 }
 
-void wxHyperlinkCtrl::DoGetSize(int *width, int *height) const
-{
-    if (width) *width = GetBestSize().GetWidth();
-    if (height) *height = GetBestSize().GetHeight();
-}
 
 void wxHyperlinkCtrl::SetNormalColour(const wxColour &colour)
 {
