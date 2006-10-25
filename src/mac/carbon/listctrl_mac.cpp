@@ -115,11 +115,13 @@ IMPLEMENT_DYNAMIC_CLASS(wxListEvent, wxNotifyEvent)
 WX_DECLARE_EXPORTED_LIST(wxListItem, wxListItemList);
 #include "wx/listimpl.cpp"
 WX_DEFINE_LIST(wxListItemList)
+WX_DEFINE_LIST(wxColumnList)
 
 // so we can check for column clicks
 static const EventTypeSpec eventList[] =
 {
     { kEventClassControl, kEventControlHit },
+    { kEventClassControl, kEventControlDraw }
 };
 
 static pascal OSStatus wxMacListCtrlEventHandler( EventHandlerCallRef handler , EventRef event , void *data )
@@ -151,6 +153,11 @@ static pascal OSStatus wxMacListCtrlEventHandler( EventHandlerCallRef handler , 
                 result = CallNextEventHandler(handler, event);
                 break; 
             }
+        case kEventControlDraw:
+            CGContextRef context = cEvent.GetParameter<CGContextRef>(kEventParamCGContextRef, typeCGContextRef) ;
+            window->MacSetDrawingContext(context);
+            result = CallNextEventHandler(handler, event);
+            window->MacSetDrawingContext(NULL);
         default :
             break ;
     }
@@ -185,6 +192,10 @@ protected:
     wxListItemList m_rowItems;
 };
 
+DataBrowserDrawItemUPP gDataBrowserDrawItemUPP = NULL;
+//DataBrowserEditItemUPP gDataBrowserEditItemUPP = NULL;
+DataBrowserHitTestUPP gDataBrowserHitTestUPP = NULL;
+
 // TODO: Make a better name!!
 class wxMacDataBrowserListCtrlControl : public wxMacDataItemBrowserControl
 {
@@ -217,15 +228,73 @@ protected:
                         DataBrowserItemID itemTwoID,
                         DataBrowserPropertyID sortProperty);
 
+    static pascal void    DataBrowserDrawItemProc(ControlRef browser,
+                        DataBrowserItemID item,
+                        DataBrowserPropertyID property,
+                        DataBrowserItemState itemState,
+                        const Rect *theRect,
+                        SInt16 gdDepth,
+                        Boolean colorDevice);
+                        
+    virtual void        DrawItem(DataBrowserItemID itemID,
+                            DataBrowserPropertyID property,
+                            DataBrowserItemState itemState,
+                            const Rect *itemRect,
+                            SInt16 gdDepth,
+                            Boolean colorDevice);
+
+    static pascal Boolean  DataBrowserEditTextProc(ControlRef browser,
+                                    DataBrowserItemID item,
+                                    DataBrowserPropertyID property,
+                                    CFStringRef theString,
+                                    Rect *maxEditTextRect,
+                                    Boolean *shrinkToFit);
+
+    static pascal Boolean  DataBrowserHitTestProc(ControlRef browser, 
+                                    DataBrowserItemID itemID,
+                                    DataBrowserPropertyID property,
+                                    const Rect *theRect,
+                                    const Rect *mouseRect) { return true; }
+
+    virtual bool        ConfirmEditText(DataBrowserItemID item,
+                                    DataBrowserPropertyID property,
+                                    CFStringRef theString,
+                                    Rect *maxEditTextRect,
+                                    Boolean *shrinkToFit);
+
+    
+
     wxClientDataType m_clientDataItemsType;
     bool m_isVirtual;
 
 };
 
-// TODO: This gives errors, find out why.
-//BEGIN_EVENT_TABLE(wxListCtrl, wxControl)
-//    EVT_PAINT(wxListCtrl::OnPaint)
-//END_EVENT_TABLE()
+class wxMacListCtrlEventDelegate : public wxEvtHandler 
+{
+public:
+    wxMacListCtrlEventDelegate( wxListCtrl* list, int id );
+    virtual bool ProcessEvent( wxEvent& event );
+    
+private:
+    wxListCtrl* m_list;
+    int         m_id;
+};
+
+wxMacListCtrlEventDelegate::wxMacListCtrlEventDelegate( wxListCtrl* list, int id )
+{
+    m_list = list;
+    m_id = id;
+}
+
+bool wxMacListCtrlEventDelegate::ProcessEvent( wxEvent& event )
+{
+    // even though we use a generic list ctrl underneath, make sure
+    // we present ourselves as wxListCtrl.
+    event.SetEventObject( m_list );
+    event.SetId( m_id );
+    
+    return wxEvtHandler::ProcessEvent(event);
+}
 
 // ============================================================================
 // implementation
@@ -256,6 +325,9 @@ void wxListCtrl::Init()
     m_dbImpl = NULL;
     m_compareFunc = NULL;
     m_compareFuncData = 0;
+    m_colsInfo = wxColumnList();
+    m_textColor = wxNullColour;
+    m_bgColor = wxNullColour;
 }
 
 class wxGenericListCtrlHook : public wxGenericListCtrl
@@ -313,13 +385,14 @@ bool wxListCtrl::Create(wxWindow *parent,
     // Also, use generic list control in VIRTUAL mode.
     if ( (wxSystemOptions::HasOption( wxMAC_ALWAYS_USE_GENERIC_LISTCTRL )
             && (wxSystemOptions::GetOptionInt( wxMAC_ALWAYS_USE_GENERIC_LISTCTRL ) == 1)) ||
-            (style & wxLC_ICON) || (style & wxLC_SMALL_ICON) || (style & wxLC_LIST) /* || (style & wxLC_VIRTUAL) */ )
+            (style & wxLC_ICON) || (style & wxLC_SMALL_ICON) || (style & wxLC_LIST) || (style & wxLC_EDIT_LABELS) )
     {
         m_macIsUserPane = true;
 
         if ( !wxWindow::Create(parent, id, pos, size, style, name) )
             return false;
         m_genericImpl = new wxGenericListCtrlHook(this, id, pos, size, style, validator, name);
+        m_genericImpl->PushEventHandler( new wxMacListCtrlEventDelegate( this, GetId() ) );
         return true;
     }
 
@@ -344,6 +417,11 @@ bool wxListCtrl::Create(wxWindow *parent,
 
 wxListCtrl::~wxListCtrl()
 {
+    if (m_genericImpl)
+    {
+        m_genericImpl->PopEventHandler(/* deleteHandler = */ true); 
+    }
+    
     if (m_ownsImageListNormal)
         delete m_imageListNormal;
     if (m_ownsImageListSmall)
@@ -406,7 +484,7 @@ void wxListCtrl::DoSetSize( int x, int y, int width, int height, int sizeFlags )
 
 bool wxListCtrl::SetFont(const wxFont& font)
 {
-    bool rv;
+    bool rv = true;
     rv = wxControl::SetFont(font);
     if (m_genericImpl)
         rv = m_genericImpl->SetFont(font);
@@ -415,20 +493,32 @@ bool wxListCtrl::SetFont(const wxFont& font)
 
 bool wxListCtrl::SetForegroundColour(const wxColour& colour)
 {
-    bool rv;
-    rv = wxControl::SetForegroundColour(colour);
+    bool rv = true;
     if (m_genericImpl)
         rv = m_genericImpl->SetForegroundColour(colour);
+    if (m_dbImpl)
+        SetTextColour(colour);
     return rv;
 }
 
 bool wxListCtrl::SetBackgroundColour(const wxColour& colour)
 {
-    bool rv;
-    rv = wxControl::SetBackgroundColour(colour);
+    bool rv = true;
     if (m_genericImpl)
         rv = m_genericImpl->SetBackgroundColour(colour);
+    if (m_dbImpl)
+        m_bgColor = colour;
     return rv;
+}
+
+wxColour wxListCtrl::GetBackgroundColour()
+{
+    if (m_genericImpl)
+        return m_genericImpl->GetBackgroundColour();
+    if (m_dbImpl)
+        return m_bgColor;
+        
+    return wxNullColour;
 }
 
 // ----------------------------------------------------------------------------
@@ -443,22 +533,27 @@ bool wxListCtrl::GetColumn(int col, wxListItem& item) const
 
     bool success = true;
 
-    if ( item.m_mask & wxLIST_MASK_TEXT )
+    if (m_dbImpl)
     {
+    
+        wxColumnList::compatibility_iterator node = m_colsInfo.Item( col );
+        wxASSERT_MSG( node, _T("invalid column index in wxMacListCtrlItem") );
+        wxListItem* column = node->GetData();
+        
+        long mask = column->GetMask();
+        if (mask & wxLIST_MASK_TEXT)
+            item.SetText(column->GetText());
+        if (mask & wxLIST_MASK_DATA)
+            item.SetData(column->GetData());
+        if (mask & wxLIST_MASK_IMAGE)
+            item.SetImage(column->GetImage());
+        if (mask & wxLIST_MASK_STATE)
+            item.SetState(column->GetState());
+        if (mask & wxLIST_MASK_FORMAT)
+            item.SetAlign(column->GetAlign());
+        if (mask & wxLIST_MASK_WIDTH)
+            item.SetWidth(column->GetWidth());
     }
-
-    if ( item.m_mask & wxLIST_MASK_FORMAT )
-    {
-    }
-
-    if ( item.m_mask & wxLIST_MASK_IMAGE )
-    {
-    }
-
-    if ( (item.m_mask & wxLIST_MASK_TEXT) )
-    {
-    }
-
 
     return success;
 }
@@ -469,7 +564,69 @@ bool wxListCtrl::SetColumn(int col, wxListItem& item)
     if (m_genericImpl)
         return m_genericImpl->SetColumn(col, item);
 
-    return false;
+    if (m_dbImpl)
+    {
+        if ( col >= (int)m_colsInfo.GetCount() )
+        {
+            wxListItem* listItem = new wxListItem(item);
+            m_colsInfo.Append( listItem );
+        }
+        else
+        {
+            wxListItem listItem;
+            GetColumn( col, listItem );
+            long mask = item.GetMask();
+            if (mask & wxLIST_MASK_TEXT)
+                listItem.SetText(item.GetText());
+            if (mask & wxLIST_MASK_DATA)
+                listItem.SetData(item.GetData());
+            if (mask & wxLIST_MASK_IMAGE)
+                listItem.SetImage(item.GetImage());
+            if (mask & wxLIST_MASK_STATE)
+                listItem.SetState(item.GetState());
+            if (mask & wxLIST_MASK_FORMAT)
+                listItem.SetAlign(item.GetAlign());
+            if (mask & wxLIST_MASK_WIDTH)
+                listItem.SetWidth(item.GetWidth());
+        }
+        
+        // change the appearance in the databrowser.
+        DataBrowserListViewHeaderDesc columnDesc;
+        columnDesc.version=kDataBrowserListViewLatestHeaderDesc;
+        verify_noerr( m_dbImpl->GetHeaderDesc( kMinColumnId + col, &columnDesc ) );
+        
+        /*
+        if (item.GetMask() & wxLIST_MASK_TEXT)
+        {
+            wxFontEncoding enc;
+            if ( m_font.Ok() )
+                enc = m_font.GetEncoding();
+            else
+                enc = wxLocale::GetSystemEncoding();
+            wxMacCFStringHolder cfTitle;
+            cfTitle.Assign( item.GetText() , enc );
+            if(columnDesc.titleString) 
+                CFRelease(columnDesc.titleString);
+            columnDesc.titleString = cfTitle; 
+        }
+        */
+        
+        if (item.GetMask() & wxLIST_MASK_IMAGE && item.GetImage() != -1 )
+        {
+            columnDesc.btnContentInfo.contentType = kControlContentIconRef;
+            wxImageList* imageList = GetImageList(wxIMAGE_LIST_SMALL);
+            if (imageList && imageList->GetImageCount() > 0 )
+            {
+                wxBitmap bmp = imageList->GetBitmap( item.GetImage() );
+                IconRef icon = bmp.GetBitmapData()->GetIconRef();
+                columnDesc.btnContentInfo.u.iconRef = icon;
+            }
+        }
+        
+        verify_noerr( m_dbImpl->SetHeaderDesc( kMinColumnId + col, &columnDesc ) );
+
+    }
+    return true;
 }
 
 int wxListCtrl::GetColumnCount() const
@@ -506,10 +663,6 @@ bool wxListCtrl::SetColumnWidth(int col, int width)
 {
     if (m_genericImpl)
         return m_genericImpl->SetColumnWidth(col, width);
-
-    // TODO: This is setting the width of the first column
-    //       to the entire window width; investigate why
-    //       this is.
 
     if (m_dbImpl)
     {
@@ -889,7 +1042,7 @@ wxColour wxListCtrl::GetTextColour() const
 
     // TODO: we need owner drawn list items to customize text color.
     if (m_dbImpl)
-        return *wxBLACK;
+        return m_textColor;
 
     return wxNullColour;
 }
@@ -903,8 +1056,8 @@ void wxListCtrl::SetTextColour(const wxColour& col)
         return;
     }
 
-    // TODO: if we add owner-drawn item support for DataBrowser,
-    // consider supporting this property
+    if (m_dbImpl)
+        m_textColor = col;
 }
 
 // Gets the index of the topmost visible item when in
@@ -1271,16 +1424,17 @@ long wxListCtrl::InsertColumn(long col, wxListItem& item)
 
     if (m_dbImpl)
     {
+        int width = item.GetWidth();
         if ( !(item.GetMask() & wxLIST_MASK_WIDTH) )
-            item.SetWidth(150);
+            width = 150;
 
-        DataBrowserPropertyType type = kDataBrowserTextType;
+        DataBrowserPropertyType type = kDataBrowserCustomType; //kDataBrowserTextType;
         wxImageList* imageList = GetImageList(wxIMAGE_LIST_SMALL);
         if (imageList && imageList->GetImageCount() > 0)
         {
             wxBitmap bmp = imageList->GetBitmap(0);
-            if (bmp.Ok())
-                type = kDataBrowserIconAndTextType;
+            //if (bmp.Ok())
+            //    type = kDataBrowserIconAndTextType;
         }
 
         SInt16 just = teFlushDefault;
@@ -1293,7 +1447,8 @@ long wxListCtrl::InsertColumn(long col, wxListItem& item)
             else if (item.GetAlign() == wxLIST_FORMAT_RIGHT)
                 just = teFlushRight;
         }
-        m_dbImpl->InsertColumn(col, type, item.GetText(), just, item.GetWidth());
+        m_dbImpl->InsertColumn(col, type, item.GetText(), just, width);
+        SetColumn(col, item);
 
         // set/remove options based on the wxListCtrl type.
         DataBrowserTableViewColumnID id;
@@ -1520,7 +1675,7 @@ void wxMacListCtrlItem::Notification(wxMacDataItemBrowserControl *owner ,
                 break;
 
             case kDataBrowserItemDoubleClicked:
-                event.SetEventType( wxEVT_LEFT_DCLICK );
+                event.SetEventType( wxEVT_COMMAND_LIST_ITEM_ACTIVATED );
                 trigger = true;
                 break;
 
@@ -1572,6 +1727,24 @@ wxMacDataBrowserListCtrlControl::wxMacDataBrowserListCtrlControl( wxWindow *peer
 
     err = SetSelectionFlags( options );
     verify_noerr( err );
+    
+    DataBrowserCustomCallbacks callbacks;
+    InitializeDataBrowserCustomCallbacks( &callbacks, kDataBrowserLatestCustomCallbacks );
+
+    if ( gDataBrowserDrawItemUPP == NULL )
+        gDataBrowserDrawItemUPP = NewDataBrowserDrawItemUPP(DataBrowserDrawItemProc);
+
+//    if ( gDataBrowserEditItemUPP == NULL )
+//        gDataBrowserEditItemUPP = NewDataBrowserEditItemUPP(DataBrowserEditTextProc);
+
+    if ( gDataBrowserHitTestUPP == NULL )
+        gDataBrowserHitTestUPP = NewDataBrowserHitTestUPP(DataBrowserHitTestProc);
+    
+    callbacks.u.v1.drawItemCallback = gDataBrowserDrawItemUPP;
+//    callbacks.u.v1.editTextCallback = gDataBrowserEditItemUPP;
+    callbacks.u.v1.hitTestCallback = gDataBrowserHitTestUPP;
+    
+    SetDataBrowserCustomCallbacks( GetControlRef(), &callbacks );
 
     if ( style & wxLC_LIST )
     {
@@ -1610,6 +1783,291 @@ wxMacDataBrowserListCtrlControl::wxMacDataBrowserListCtrlControl( wxWindow *peer
 
     verify_noerr( SetHiliteStyle(kDataBrowserTableViewFillHilite ) );
     err = SetHasScrollBars( (style & wxHSCROLL) != 0 , true );
+}
+
+pascal Boolean wxMacDataBrowserListCtrlControl::DataBrowserEditTextProc(
+        ControlRef browser,
+        DataBrowserItemID itemID,
+        DataBrowserPropertyID property,
+        CFStringRef theString,
+        Rect *maxEditTextRect,
+        Boolean *shrinkToFit)
+{
+    Boolean result = false;
+    wxMacDataBrowserListCtrlControl* ctl = dynamic_cast<wxMacDataBrowserListCtrlControl*>( wxMacControl::GetReferenceFromNativeControl( browser ) );
+    if ( ctl != 0 )
+    {
+        result = ctl->ConfirmEditText(itemID, property, theString, maxEditTextRect, shrinkToFit);
+        theString = CFSTR("Hello!");
+    }
+    return result;
+}
+
+bool wxMacDataBrowserListCtrlControl::ConfirmEditText(
+        DataBrowserItemID itemID,
+        DataBrowserPropertyID property,
+        CFStringRef theString,
+        Rect *maxEditTextRect,
+        Boolean *shrinkToFit)
+{
+    //wxListCtrl* list = wxDynamicCast( GetPeer() , wxListCtrl );
+    return false;
+}
+
+pascal void wxMacDataBrowserListCtrlControl::DataBrowserDrawItemProc(
+        ControlRef browser,
+        DataBrowserItemID itemID,
+        DataBrowserPropertyID property,
+        DataBrowserItemState itemState,
+        const Rect *itemRect,
+        SInt16 gdDepth,
+        Boolean colorDevice)
+{
+    wxMacDataBrowserListCtrlControl* ctl = dynamic_cast<wxMacDataBrowserListCtrlControl*>( wxMacControl::GetReferenceFromNativeControl( browser ) );
+    if ( ctl != 0 )
+    {
+        ctl->DrawItem(itemID, property, itemState, itemRect, gdDepth, colorDevice);
+    }
+}
+
+// routines needed for DrawItem
+enum
+{
+  kIconWidth = 16,
+  kIconHeight = 16,
+  kTextBoxHeight = 14,
+  kIconTextSpacingV = 2,
+  kItemPadding = 4,  
+  kContentHeight = kIconHeight + kTextBoxHeight + kIconTextSpacingV
+};
+
+static void calculateCGDrawingBounds(CGRect inItemRect, CGRect *outIconRect, CGRect *outTextRect, bool hasIcon = false)
+{
+  float textBottom;
+  float iconH, iconW = 0;
+  float padding = kItemPadding;
+  if (hasIcon)
+  {
+    iconH = kIconHeight;
+    iconW = kIconWidth;
+    padding = padding*2;
+  }
+  
+  textBottom = inItemRect.origin.y;
+  
+  *outIconRect = CGRectMake(inItemRect.origin.x + kItemPadding, 
+                textBottom + kIconTextSpacingV, kIconWidth, 
+                kIconHeight);
+                
+  *outTextRect = CGRectMake(inItemRect.origin.x + padding + iconW, 
+                textBottom + kIconTextSpacingV, inItemRect.size.width - padding - iconW, 
+                inItemRect.size.height - kIconTextSpacingV);
+}
+
+void wxMacDataBrowserListCtrlControl::DrawItem(
+        DataBrowserItemID itemID,
+        DataBrowserPropertyID property,
+        DataBrowserItemState itemState,
+        const Rect *itemRect,
+        SInt16 gdDepth,
+        Boolean colorDevice)
+{
+    wxString text;
+    wxFont font = wxNullFont;
+    int imgIndex = -1;
+    short listColumn = property - kMinColumnId;
+
+    wxListCtrl* list = wxDynamicCast( GetPeer() , wxListCtrl );
+    wxMacListCtrlItem* lcItem;
+    wxColour color = *wxBLACK;
+    wxColour bgColor = wxNullColour;
+
+    if (listColumn >= 0)
+    {
+        if (!m_isVirtual)
+        {
+            lcItem = (wxMacListCtrlItem*) itemID;
+            if (lcItem->HasColumnInfo(listColumn)){
+                wxListItem* item = lcItem->GetColumnInfo(listColumn);
+                
+                // we always use the 0 column to get font and text/background colors.
+                if (lcItem->HasColumnInfo(0))
+                {
+                    wxListItem* firstItem = lcItem->GetColumnInfo(0);
+                    color = firstItem->GetTextColour();
+                    bgColor = firstItem->GetBackgroundColour();
+                    font = firstItem->GetFont();
+                }
+                
+                if (item->GetMask() & wxLIST_MASK_TEXT)
+                    text = item->GetText();
+                if (item->GetMask() & wxLIST_MASK_IMAGE)
+                    imgIndex = item->GetImage();
+            }
+            
+        }
+        else
+        {
+            text = list->OnGetItemText( (long)itemID-1, listColumn );
+            imgIndex = list->OnGetItemColumnImage( (long)itemID-1, listColumn );
+            wxListItemAttr* attrs = list->OnGetItemAttr( (long)itemID-1 );
+            if (attrs)
+            {
+                if (attrs->HasBackgroundColour())
+                    bgColor = attrs->GetBackgroundColour();
+                if (attrs->HasTextColour())
+                    color = attrs->GetTextColour();
+                if (attrs->HasFont())
+                    font = attrs->GetFont();
+            }
+        }
+    }
+    
+    wxColour listBgColor = list->GetBackgroundColour();
+    if (bgColor == wxNullColour)
+        bgColor = listBgColor;
+    
+    wxFont listFont = list->GetFont();
+    if (font == wxNullFont)
+        font = listFont;
+    
+    wxMacCFStringHolder cfString;
+    cfString.Assign( text, wxLocale::GetSystemEncoding() );
+    
+    Rect enclosingRect;
+    CGRect enclosingCGRect, iconCGRect, textCGRect;
+    Boolean active;
+    ThemeDrawingState savedState = NULL;
+    CGContextRef context = (CGContextRef)list->MacGetDrawingContext();
+    RGBColor labelColor;
+    
+    GetDataBrowserItemPartBounds(GetControlRef(), itemID, property, kDataBrowserPropertyEnclosingPart, 
+              &enclosingRect);
+      
+    enclosingCGRect = CGRectMake(enclosingRect.left, 
+                      enclosingRect.top, 
+                      enclosingRect.right - enclosingRect.left, 
+                      enclosingRect.bottom - enclosingRect.top);
+
+    active = IsControlActive(GetControlRef());
+
+    if (itemState == kDataBrowserItemIsSelected)
+    {
+        RGBColor foregroundColor;
+        
+        GetThemeDrawingState(&savedState);
+
+        GetThemeBrushAsColor(kThemeBrushAlternatePrimaryHighlightColor, 32, true, &foregroundColor);
+        GetThemeTextColor(kThemeTextColorWhite, gdDepth, colorDevice, &labelColor);
+
+        CGContextSaveGState(context);
+        
+        CGContextSetRGBFillColor(context, (float)foregroundColor.red / (float)USHRT_MAX, 
+                      (float)foregroundColor.green / (float)USHRT_MAX, 
+                      (float)foregroundColor.blue / (float)USHRT_MAX, 1.0);
+        CGContextFillRect(context, enclosingCGRect);
+        
+        CGContextRestoreGState(context);
+    }
+    else
+    {        
+        
+        if (color.Ok())
+            labelColor = MAC_WXCOLORREF( color.GetPixel() );
+        else if (list->GetTextColour().Ok())
+            labelColor = MAC_WXCOLORREF( list->GetTextColour().GetPixel() );
+        else
+        {
+            labelColor.red = 0;
+            labelColor.green = 0;
+            labelColor.blue = 0;
+        }
+            
+        if (bgColor.Ok())
+        {
+            RGBColor foregroundColor = MAC_WXCOLORREF( bgColor.GetPixel() );
+            CGContextSaveGState(context);
+        
+            CGContextSetRGBFillColor(context, (float)foregroundColor.red / (float)USHRT_MAX, 
+                          (float)foregroundColor.green / (float)USHRT_MAX, 
+                          (float)foregroundColor.blue / (float)USHRT_MAX, 1.0);
+            CGContextFillRect(context, enclosingCGRect);
+            
+            CGContextRestoreGState(context);
+        }
+    }
+   
+    calculateCGDrawingBounds(enclosingCGRect, &iconCGRect, &textCGRect, (imgIndex != -1) );
+    
+    if (imgIndex != -1)
+    {
+        wxImageList* imageList = list->GetImageList(wxIMAGE_LIST_SMALL);
+        if (imageList && imageList->GetImageCount() > 0){
+            wxBitmap bmp = imageList->GetBitmap(imgIndex);
+            IconRef icon = bmp.GetBitmapData()->GetIconRef();
+    
+            RGBColor iconLabel;
+            iconLabel.red = 0;
+            iconLabel.green = 0;
+            iconLabel.blue = 0;
+            
+            PlotIconRefInContext(context, &iconCGRect, kAlignNone, 
+              active ? kTransformNone : kTransformDisabled, &iconLabel, 
+              kPlotIconRefNormalFlags, icon);
+        }
+    }
+    
+    HIThemeTextHorizontalFlush hFlush = kHIThemeTextHorizontalFlushLeft;
+    UInt16 fontID = kThemeViewsFont;
+    
+    if (font.Ok())
+    {
+        if (font.GetFamily() != wxFONTFAMILY_DEFAULT)
+            fontID = font.MacGetThemeFontID();
+        
+// FIXME: replace these with CG or ATSUI calls so we can remove this #ifndef.
+#ifndef __LP64__
+        ::TextSize( (short)(font.MacGetFontSize()) ) ;
+        ::TextFace( font.MacGetFontStyle() ) ;
+#endif
+    }
+    
+    wxListItem item;
+    list->GetColumn(listColumn, item);
+    if (item.GetMask() & wxLIST_MASK_FORMAT)
+    {
+        if (item.GetAlign() == wxLIST_FORMAT_LEFT)
+            hFlush = kHIThemeTextHorizontalFlushLeft; 
+        else if (item.GetAlign() == wxLIST_FORMAT_CENTER)
+            hFlush = kHIThemeTextHorizontalFlushCenter; 
+        else if (item.GetAlign() == wxLIST_FORMAT_RIGHT)
+        {
+            hFlush = kHIThemeTextHorizontalFlushRight;
+            textCGRect.origin.x -= kItemPadding; // give a little extra paddding
+        }
+    }
+    
+    HIThemeTextInfo info;
+    info.version = kHIThemeTextInfoVersionZero;
+    info.state = active ? kThemeStateActive : kThemeStateInactive;
+    info.fontID = fontID;
+    info.horizontalFlushness = hFlush;
+    info.verticalFlushness = kHIThemeTextVerticalFlushCenter;
+    info.options = kHIThemeTextBoxOptionNone;
+    info.truncationPosition = kHIThemeTextTruncationEnd;
+    info.truncationMaxLines = 1;
+
+    CGContextSaveGState(context);
+    CGContextSetRGBFillColor (context, (float)labelColor.red / (float)USHRT_MAX, 
+                      (float)labelColor.green / (float)USHRT_MAX, 
+                      (float)labelColor.blue / (float)USHRT_MAX, 1.0);
+    
+    HIThemeDrawTextBox(cfString, &textCGRect, &info, context, kHIThemeOrientationNormal); 
+            
+    CGContextRestoreGState(context);
+  
+    if (savedState != NULL)
+        SetThemeDrawingState(savedState, true);
 }
 
 OSStatus wxMacDataBrowserListCtrlControl::GetSetItemData(DataBrowserItemID itemID,
@@ -1758,15 +2216,16 @@ void wxMacDataBrowserListCtrlControl::ItemNotification(DataBrowserItemID itemID,
             case kDataBrowserItemDeselected:
                 event.SetEventType(wxEVT_COMMAND_LIST_ITEM_DESELECTED);
                 if ( !isSingle )
-                    trigger = IsSelectionSuppressed();
+                    trigger = !IsSelectionSuppressed();
                 break;
 
             case kDataBrowserItemSelected:
-                trigger = IsSelectionSuppressed();
+                trigger = !IsSelectionSuppressed();
+                
                 break;
 
             case kDataBrowserItemDoubleClicked:
-                event.SetEventType( wxEVT_LEFT_DCLICK );
+                event.SetEventType( wxEVT_COMMAND_LIST_ITEM_ACTIVATED );
                 trigger = true;
                 break;
 
@@ -2002,6 +2461,10 @@ void wxMacListCtrlItem::SetColumnInfo( unsigned int column, wxListItem* item )
             listItem->SetAlign(item->GetAlign());
         if (mask & wxLIST_MASK_WIDTH)
             listItem->SetWidth(item->GetWidth());
+            
+        listItem->SetTextColour(item->GetTextColour());
+        listItem->SetBackgroundColour(item->GetBackgroundColour());
+        listItem->SetFont(item->GetFont());
     }
 }
 

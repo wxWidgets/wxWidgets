@@ -17,6 +17,8 @@
 class wxMacDataBrowserListCtrlControl;
 class wxMacListControl;
 
+WX_DECLARE_EXPORTED_LIST(wxListItem, wxColumnList);
+
 class WXDLLEXPORT wxListCtrl: public wxControl
 {
   DECLARE_DYNAMIC_CLASS(wxListCtrl)
@@ -314,6 +316,14 @@ class WXDLLEXPORT wxListCtrl: public wxControl
   virtual bool SetFont(const wxFont& font);
   virtual bool SetForegroundColour(const wxColour& colour);
   virtual bool SetBackgroundColour(const wxColour& colour);
+  virtual wxColour GetBackgroundColour();
+  
+  // with CG, we need to get the context from an kEventControlDraw event
+  // unfortunately, the DataBrowser callbacks don't provide the context
+  // and we need it, so we need to set/remove it before and after draw 
+  // events so we can access it in the callbacks.
+  void MacSetDrawingContext(void* context) { m_cgContext = context; }
+  void* MacGetDrawingContext() { return m_cgContext; }
 
 protected:
   // protected overrides needed for pimpl approach
@@ -326,7 +336,8 @@ protected:
   
   wxGenericListCtrl* m_genericImpl;   // allow use of the generic impl.
   wxMacDataBrowserListCtrlControl* m_dbImpl;
-  void* /*EventHandlerRef*/   m_macListCtrlEventHandler;
+  void*  m_macListCtrlEventHandler;
+  void*  m_cgContext;
   wxListCtrlCompare m_compareFunc;
   long m_compareFuncData;
   
@@ -334,6 +345,10 @@ protected:
   wxImageList *     m_imageListNormal; // The image list for normal icons
   wxImageList *     m_imageListSmall;  // The image list for small icons
   wxImageList *     m_imageListState;  // The image list state icons (not implemented yet)
+  
+  wxColumnList      m_colsInfo; // for storing info about each column
+  wxColour          m_textColor;
+  wxColour          m_bgColor; 
   
   // keep track of whether or not we should delete the image list ourselves.
   bool              m_ownsImageListNormal,
