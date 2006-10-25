@@ -189,9 +189,9 @@ void wxRichTextListStylePage::CreateControls()
         itemButton8->SetToolTip(_("Click to choose the font for this level."));
     itemBoxSizer4->Add(itemButton8, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
-    wxNotebook* itemNotebook9 = new wxNotebook( itemPanel1, ID_RICHTEXTLISTSTYLEPAGE_NOTEBOOK, wxDefaultPosition, wxDefaultSize, wxNB_TOP );
+    wxBookCtrl* itemBook9 = new wxBookCtrl( itemPanel1, ID_RICHTEXTLISTSTYLEPAGE_BOOK, wxDefaultPosition, wxDefaultSize, wxBC_TOP );
 
-    wxPanel* itemPanel10 = new wxPanel( itemNotebook9, ID_RICHTEXTLISTSTYLEPAGE_BULLETS, wxDefaultPosition, wxDefaultSize, wxNO_BORDER|wxTAB_TRAVERSAL );
+    wxPanel* itemPanel10 = new wxPanel( itemBook9, ID_RICHTEXTLISTSTYLEPAGE_BULLETS, wxDefaultPosition, wxDefaultSize, wxNO_BORDER|wxTAB_TRAVERSAL );
     wxBoxSizer* itemBoxSizer11 = new wxBoxSizer(wxVERTICAL);
     itemPanel10->SetSizer(itemBoxSizer11);
 
@@ -275,9 +275,9 @@ void wxRichTextListStylePage::CreateControls()
         m_bulletNameCtrl->SetToolTip(_("A standard bullet name."));
     itemBoxSizer22->Add(m_bulletNameCtrl, 0, wxGROW|wxALL, 5);
 
-    itemNotebook9->AddPage(itemPanel10, _("Bullet style"));
+    itemBook9->AddPage(itemPanel10, _("Bullet style"));
 
-    wxPanel* itemPanel33 = new wxPanel( itemNotebook9, ID_RICHTEXTLISTSTYLEPAGE_SPACING, wxDefaultPosition, wxDefaultSize, wxNO_BORDER|wxTAB_TRAVERSAL );
+    wxPanel* itemPanel33 = new wxPanel( itemBook9, ID_RICHTEXTLISTSTYLEPAGE_SPACING, wxDefaultPosition, wxDefaultSize, wxNO_BORDER|wxTAB_TRAVERSAL );
     wxBoxSizer* itemBoxSizer34 = new wxBoxSizer(wxVERTICAL);
     itemPanel33->SetSizer(itemBoxSizer34);
 
@@ -437,9 +437,9 @@ void wxRichTextListStylePage::CreateControls()
         m_spacingLine->SetToolTip(_("The line spacing."));
     itemBoxSizer78->Add(m_spacingLine, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
-    itemNotebook9->AddPage(itemPanel33, _("Spacing"));
+    itemBook9->AddPage(itemPanel33, _("Spacing"));
 
-    itemBoxSizer3->Add(itemNotebook9, 0, wxGROW|wxALL, 5);
+    itemBoxSizer3->Add(itemBook9, 0, wxGROW|wxALL, 5);
 
     m_previewCtrl = new wxRichTextCtrl( itemPanel1, ID_RICHTEXTLISTSTYLEPAGE_RICHTEXTCTRL, wxEmptyString, wxDefaultPosition, wxSize(350, 180), wxSUNKEN_BORDER );
     m_previewCtrl->SetHelpText(_("Shows a preview of the bullet settings."));
