@@ -895,7 +895,7 @@ void wxPreviewControlBar::CreateButtons()
     wxSize navButtonSize;
 #ifdef __WXUNIVERSAL__
     navButtonStyle = 0;
-    navButtonSize = wxSize(50, m_closeButton->GetSize().y);
+    navButtonSize = wxSize(40, m_closeButton->GetSize().y);
 #else
     navButtonStyle = wxBU_EXACTFIT;
     navButtonSize = wxDefaultSize;
