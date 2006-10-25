@@ -463,20 +463,26 @@ build-gtk-py-stamp: build-gtk-shared-stamp purge-dbg-py
 
 build-doc-stamp: build-gtk-shared-stamp
 	dh_testdir
-	cd $(objdir_gtk_shared)/utils/tex2rtf/src && $(FAST_MAKE)
-	rm -rf $(objdir_doc)
-	rm -rf $(objdir_doc_cruft)
-	mkdir $(objdir_doc)
-	mkdir $(objdir_doc_cruft)
-	cd $(objdir_doc_cruft) \
-		&& LD_LIBRARY_PATH=../$(objdir_gtk_shared)/lib:$(LD_LIBRARY_PATH) \
-		   ../$(objdir_gtk_shared)/utils/tex2rtf/src/tex2rtf              \
-		   ../docs/latex/wx/manual.tex                                    \
-		   ../$(objdir_doc)/wx$(release)-manual.html                      \
-		   -twice -html
-	cp docs/latex/wx/*.gif $(objdir_doc)
-	rm -rf $(objdir_doc_cruft)
-	rm -f $(objdir_doc)/wx$(release)-manual.{con,hh*,htx,ref}
+	mkdir $(objdir_doc); 
+	# the tarball may already have the generated docs in it
+	if [ ! -e docs/html/wx/index.html ]; then \
+		cd $(objdir_gtk_shared)/utils/tex2rtf/src && $(FAST_MAKE); \
+		rm -rf $(objdir_doc); \
+		rm -rf $(objdir_doc_cruft); \
+		mkdir $(objdir_doc_cruft); \
+		cd $(objdir_doc_cruft); \
+		LD_LIBRARY_PATH=../$(objdir_gtk_shared)/lib:$(LD_LIBRARY_PATH) \
+		   ../$(objdir_gtk_shared)/utils/tex2rtf/src/tex2rtf           \
+		   ../docs/latex/wx/manual.tex                                 \
+		   ../$(objdir_doc)/wx$(release)-manual.html                   \
+		   -twice -html;                                               \
+		cp docs/latex/wx/*.gif $(objdir_doc); \
+		rm -rf $(objdir_doc_cruft); \
+		rm -f $(objdir_doc)/wx$(release)-manual.{con,hh*,htx,ref}; \
+	else \
+		cp docs/html/wx/* $(objdir_doc); \
+		mv $(objdir_doc)/index.html $(objdir_doc)/wx-$(release)-manual_contents.html; \
+	fi
 	touch $@
 
 build-examples-stamp: build-gtk-shared-stamp
