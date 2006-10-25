@@ -43,12 +43,89 @@ enum {
     ZSTREAM_AUTO        = 0x20      // auto detect between gzip and zlib
 };
 
+
+/////////////////////////////////////////////////////////////////////////////
+// Zlib Class factory
+
+IMPLEMENT_DYNAMIC_CLASS(wxZlibClassFactory, wxFilterClassFactory)
+
+static wxZlibClassFactory g_wxZlibClassFactory;
+
+wxZlibClassFactory::wxZlibClassFactory()
+{
+    if (this == &g_wxZlibClassFactory)
+        PushFront();
+}
+
+const wxChar * const *
+wxZlibClassFactory::GetProtocols(wxStreamProtocolType type) const
+{
+    static const wxChar *mimes[] = { _T("application/x-deflate"), NULL };
+    static const wxChar *encs[] =  { _T("deflate"), NULL };
+    static const wxChar *empty[] = { NULL };
+
+    switch (type) {
+        case wxSTREAM_MIMETYPE:         return mimes;
+        case wxSTREAM_ENCODING:         return encs;
+        default:                        return empty;
+    }
+}
+
+
+/////////////////////////////////////////////////////////////////////////////
+// Gzip Class factory
+
+IMPLEMENT_DYNAMIC_CLASS(wxGzipClassFactory, wxFilterClassFactory)
+
+static wxGzipClassFactory g_wxGzipClassFactory;
+
+wxGzipClassFactory::wxGzipClassFactory()
+{
+    if (this == &g_wxGzipClassFactory && wxZlibInputStream::CanHandleGZip())
+        PushFront();
+}
+
+const wxChar * const *
+wxGzipClassFactory::GetProtocols(wxStreamProtocolType type) const
+{
+    static const wxChar *protos[] =     
+        { _T("gzip"), NULL };
+    static const wxChar *mimes[] =     
+        { _T("application/gzip"), _T("application/x-gzip"), NULL };
+    static const wxChar *encs[] = 
+        { _T("gzip"), NULL };
+    static const wxChar *exts[] =    
+        { _T(".gz"), _T(".gzip"), NULL };
+    static const wxChar *empty[] =
+        { NULL };
+
+    switch (type) {
+        case wxSTREAM_PROTOCOL:         return protos;
+        case wxSTREAM_MIMETYPE:         return mimes;
+        case wxSTREAM_ENCODING:         return encs;
+        case wxSTREAM_FILEEXTENSION:    return exts;
+        default:                        return empty;
+    }
+}
+
+
 //////////////////////
 // wxZlibInputStream
 //////////////////////
 
 wxZlibInputStream::wxZlibInputStream(wxInputStream& stream, int flags)
   : wxFilterInputStream(stream)
+{
+    Init(flags);
+}
+
+wxZlibInputStream::wxZlibInputStream(wxInputStream *stream, int flags)
+  : wxFilterInputStream(stream)
+{
+    Init(flags);
+}
+
+void wxZlibInputStream::Init(int flags)
 {
   m_inflate = NULL;
   m_z_buffer = new unsigned char[ZSTREAM_BUFFER_SIZE];
@@ -193,6 +270,19 @@ wxZlibOutputStream::wxZlibOutputStream(wxOutputStream& stream,
                                        int flags)
  : wxFilterOutputStream(stream)
 {
+    Init(level, flags);
+}
+
+wxZlibOutputStream::wxZlibOutputStream(wxOutputStream *stream,
+                                       int level,
+                                       int flags)
+ : wxFilterOutputStream(stream)
+{
+    Init(level, flags);
+}
+
+void wxZlibOutputStream::Init(int level, int flags)
+{
   m_deflate = NULL;
   m_z_buffer = new unsigned char[ZSTREAM_BUFFER_SIZE];
   m_z_size = ZSTREAM_BUFFER_SIZE;
@@ -250,7 +340,8 @@ bool wxZlibOutputStream::Close()
   m_deflate = NULL;
    delete[] m_z_buffer;
   m_z_buffer = NULL;
-  return IsOk();
+
+  return wxFilterOutputStream::Close() && IsOk();
  }
 
 void wxZlibOutputStream::DoFlush(bool final)
