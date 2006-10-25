@@ -992,6 +992,13 @@ void wxGCDC::DoDrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height
         hh = -hh;
         yy = yy - hh;
     }
+    if ( m_graphicContext->ShouldOffset() )
+    {
+        // if we are offsetting the entire rectangle is moved 0.5, so the
+        // border line gets off by 1
+        ww -= 1;
+        hh -= 1;
+    }
     m_graphicContext->DrawRectangle( xx,yy,ww,hh);
 }
 
