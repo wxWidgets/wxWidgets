@@ -1425,16 +1425,26 @@ DocStr(wxBufferedDC,
 "This simple class provides a simple way to avoid flicker: when drawing
 on it, everything is in fact first drawn on an in-memory buffer (a
 `wx.Bitmap`) and then copied to the screen only once, when this object
-is destroyed.
+is destroyed.  You can either provide a buffer bitmap yourself, and
+reuse it the next time something needs painted, or you can let the
+buffered DC create and provide a buffer bitmap itself.
 
-It can be used in the same way as any other device context.
+Buffered DCs can be used in the same way as any other device context.
 wx.BufferedDC itself typically replaces `wx.ClientDC`, if you want to
 use it in your EVT_PAINT handler, you should look at
-`wx.BufferedPaintDC`.
+`wx.BufferedPaintDC`.  You can also use a wx.BufferedDC without
+providing a target DC.  In this case the operations done on the dc
+will only be written to the buffer bitmap and *not* to any window, so
+you will want to have provided the buffer bitmap and then reuse it
+when it needs painted to the window.
 
 Please note that GTK+ 2.0 and OS X provide double buffering themselves
-natively. wxBufferedDC is aware of this however, and will bypass the buffering
-unless an explicit buffer bitmap is given.
+natively.  You may want to use `wx.Window.IsDoubleBuffered` to
+determine whether you need to use buffering or not, or use
+`wx.AutoBufferedPaintDC` to avoid needless double buffering on systems
+that already do it automatically.
+
+
 ", "");
 
 class wxBufferedDC : public wxMemoryDC
