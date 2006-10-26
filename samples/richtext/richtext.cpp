@@ -35,6 +35,11 @@
 #include "wx/sstream.h"
 #include "wx/html/htmlwin.h"
 
+#if wxUSE_FILESYSTEM
+#include "wx/filesys.h"
+#include "wx/fs_mem.h"
+#endif
+
 #if wxUSE_HELP
 #include "wx/cshelp.h"
 #endif
@@ -163,6 +168,10 @@ public:
     void OnSwitchStyleSheets(wxCommandEvent& event);
     void OnManageStyles(wxCommandEvent& event);
 
+    void OnInsertURL(wxCommandEvent& event);
+    void OnURL(wxTextUrlEvent& event);
+    void OnStyleSheetReplacing(wxRichTextEvent& event);
+
     // Forward command events to the current rich text control, if any
     bool ProcessEvent(wxEvent& event);
 
@@ -192,6 +201,7 @@ enum
     ID_FORMAT_CONTENT,
 
     ID_INSERT_SYMBOL,
+    ID_INSERT_URL,
 
     ID_FORMAT_ALIGN_LEFT,
     ID_FORMAT_ALIGN_CENTRE,
@@ -272,6 +282,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(ID_FORMAT_PARAGRAPH_SPACING_LESS,  MyFrame::OnParagraphSpacingLess)
 
     EVT_MENU(ID_INSERT_SYMBOL,  MyFrame::OnInsertSymbol)
+    EVT_MENU(ID_INSERT_URL,  MyFrame::OnInsertURL)
 
     EVT_MENU(ID_FORMAT_NUMBER_LIST, MyFrame::OnNumberList)
     EVT_MENU(ID_FORMAT_BULLETS_AND_NUMBERING, MyFrame::OnBulletsAndNumbering)
@@ -284,6 +295,9 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(ID_VIEW_HTML, MyFrame::OnViewHTML)
     EVT_MENU(ID_SWITCH_STYLE_SHEETS, MyFrame::OnSwitchStyleSheets)
     EVT_MENU(ID_MANAGE_STYLES, MyFrame::OnManageStyles)
+
+    EVT_TEXT_URL(wxID_ANY, MyFrame::OnURL)
+    EVT_RICHTEXT_STYLESHEET_REPLACING(wxID_ANY, MyFrame::OnStyleSheetReplacing)
 END_EVENT_TABLE()
 
 // Create a new application object: this macro will allow wxWidgets to create
@@ -327,6 +341,10 @@ bool MyApp::OnInit()
 
 #if wxUSE_GIF
     wxImage::AddHandler( new wxGIFHandler );
+#endif
+
+#if wxUSE_FILESYSTEM
+    wxFileSystem::AddHandler( new wxMemoryFSHandler );
 #endif
 
     // create the main application window
@@ -443,19 +461,19 @@ void MyApp::CreateStyles()
     int i;
     for (i = 0; i < 10; i++)
     {
-        wxString bulletSymbol;
+        wxString bulletText;
         if (i == 0)
-            bulletSymbol = wxT("*");
+            bulletText = wxT("standard/circle");
         else if (i == 1)
-            bulletSymbol = wxT("-");
+            bulletText = wxT("standard/square");
         else if (i == 2)
-            bulletSymbol = wxT("*");
+            bulletText = wxT("standard/circle");
         else if (i == 3)
-            bulletSymbol = wxT("-");
+            bulletText = wxT("standard/square");
         else
-            bulletSymbol = wxT("*");
+            bulletText = wxT("standard/circle");
 
-        bulletList->SetAttributes(i, (i+1)*60, 60, wxTEXT_ATTR_BULLET_STYLE_SYMBOL, bulletSymbol);
+        bulletList->SetAttributes(i, (i+1)*60, 60, wxTEXT_ATTR_BULLET_STYLE_STANDARD, bulletText);
     }
 
     m_styleSheet->AddListStyle(bulletList);
@@ -475,10 +493,26 @@ void MyApp::CreateStyles()
         else
             numberStyle = wxTEXT_ATTR_BULLET_STYLE_ARABIC|wxTEXT_ATTR_BULLET_STYLE_PERIOD;
 
+        numberStyle |= wxTEXT_ATTR_BULLET_STYLE_ALIGN_RIGHT;
+
         numberedList->SetAttributes(i, (i+1)*60, 60, numberStyle);
     }
 
     m_styleSheet->AddListStyle(numberedList);
+
+    wxRichTextListStyleDefinition* outlineList = new wxRichTextListStyleDefinition(wxT("Outline List 1"));
+    for (i = 0; i < 10; i++)
+    {
+        long numberStyle;
+        if (i < 4)
+            numberStyle = wxTEXT_ATTR_BULLET_STYLE_OUTLINE|wxTEXT_ATTR_BULLET_STYLE_PERIOD;
+        else
+            numberStyle = wxTEXT_ATTR_BULLET_STYLE_ARABIC|wxTEXT_ATTR_BULLET_STYLE_PERIOD;
+
+        outlineList->SetAttributes(i, (i+1)*120, 120, numberStyle);
+    }
+
+    m_styleSheet->AddListStyle(outlineList);
 }
 
 // ----------------------------------------------------------------------------
@@ -564,6 +598,7 @@ MyFrame::MyFrame(const wxString& title, wxWindowID id, const wxPoint& pos,
 
     wxMenu* insertMenu = new wxMenu;
     insertMenu->Append(ID_INSERT_SYMBOL, _("&Symbol...\tCtrl+I"));
+    insertMenu->Append(ID_INSERT_URL, _("&URL..."));
 
     // now append the freshly created menu to the menu bar...
     wxMenuBar *menuBar = new wxMenuBar();
@@ -815,6 +850,21 @@ MyFrame::MyFrame(const wxString& title, wxWindowID id, const wxPoint& pos,
     r.Newline();
     r.WriteText(wxT("A design that can easily be extended to other content types, ultimately with text boxes, tables, controls, and so on"));
     r.EndSymbolBullet();
+
+    r.Newline();
+
+    // Make a style suitable for showing a URL
+    wxRichTextAttr urlStyle;
+    urlStyle.SetTextColour(*wxBLUE);
+    urlStyle.SetFontUnderlined(true);
+
+    r.WriteText(wxT("wxRichTextCtrl can also display URLs, such as this one: "));
+    r.BeginStyle(urlStyle);
+    r.BeginURL(wxT("http://www.wxwidgets.org"));
+    r.WriteText(wxT("The wxWidgets Web Site"));
+    r.EndURL();
+    r.EndStyle();
+    r.WriteText(wxT(". Click on the URL to generate an event."));
 
     r.Newline();
 
@@ -1252,6 +1302,8 @@ void MyFrame::OnViewHTML(wxCommandEvent& WXUNUSED(event))
     wxStringOutputStream strStream(& text);
 
     wxRichTextHTMLHandler htmlHandler;
+    htmlHandler.SetFlags(wxRICHTEXT_HANDLER_SAVE_IMAGES_TO_MEMORY);
+
     if (htmlHandler.SaveFile(& m_richTextCtrl->GetBuffer(), strStream))
     {
         win->SetPage(text);
@@ -1260,6 +1312,9 @@ void MyFrame::OnViewHTML(wxCommandEvent& WXUNUSED(event))
     boxSizer->Fit(& dialog);
 
     dialog.ShowModal();
+
+    // Now delete the temporary in-memory images
+    htmlHandler.DeleteTemporaryImages();
 }
 
 // Demonstrates how you can change the style sheets and have the changes
@@ -1446,3 +1501,34 @@ void MyFrame::OnClearList(wxCommandEvent& WXUNUSED(event))
     }
 }
 
+void MyFrame::OnInsertURL(wxCommandEvent& WXUNUSED(event))
+{
+    wxString url = wxGetTextFromUser(_("URL:"), _("Insert URL"));
+    if (!url.IsEmpty())
+    {
+        wxRichTextCtrl* ctrl = (wxRichTextCtrl*) FindWindow(ID_RICHTEXT_CTRL);
+        
+        // Make a style suitable for showing a URL
+        wxRichTextAttr urlStyle;
+        urlStyle.SetTextColour(*wxBLUE);
+        urlStyle.SetFontUnderlined(true);
+        
+        ctrl->BeginStyle(urlStyle);
+        ctrl->BeginURL(url);
+        ctrl->WriteText(url);
+        ctrl->EndURL();
+        ctrl->EndStyle();
+    }
+}
+
+void MyFrame::OnURL(wxTextUrlEvent& event)
+{
+    wxMessageBox(event.GetString());
+}
+
+// Veto style sheet replace events when loading from XML, since we want
+// to keep the original style sheet.
+void MyFrame::OnStyleSheetReplacing(wxRichTextEvent& event)
+{
+    event.Veto();
+}
