@@ -9273,6 +9273,34 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_delete_StopWatch(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxStopWatch *arg1 = (wxStopWatch *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxStopWatch, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_StopWatch" "', expected argument " "1"" of type '" "wxStopWatch *""'"); 
+  }
+  arg1 = reinterpret_cast< wxStopWatch * >(argp1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    delete arg1;
+    
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_StopWatch_Start(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   wxStopWatch *arg1 = (wxStopWatch *) 0 ;
@@ -39220,6 +39248,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"BusyInfo_swigregister", BusyInfo_swigregister, METH_VARARGS, NULL},
 	 { (char *)"BusyInfo_swiginit", BusyInfo_swiginit, METH_VARARGS, NULL},
 	 { (char *)"new_StopWatch", (PyCFunction)_wrap_new_StopWatch, METH_NOARGS, NULL},
+	 { (char *)"delete_StopWatch", (PyCFunction)_wrap_delete_StopWatch, METH_O, NULL},
 	 { (char *)"StopWatch_Start", (PyCFunction) _wrap_StopWatch_Start, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"StopWatch_Pause", (PyCFunction)_wrap_StopWatch_Pause, METH_O, NULL},
 	 { (char *)"StopWatch_Resume", (PyCFunction)_wrap_StopWatch_Resume, METH_O, NULL},

@@ -19571,7 +19571,9 @@ SWIGINTERN PyObject *_wrap_BookCtrlBase_GetImageList(PyObject *SWIGUNUSEDPARM(se
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_wxImageList, 0 |  0 );
+  {
+    resultobj = wxPyMake_wxObject(result, (bool)0); 
+  }
   return resultobj;
 fail:
   return NULL;
@@ -26589,9 +26591,7 @@ SWIGINTERN PyObject *_wrap_new_ListItem(PyObject *SWIGUNUSEDPARM(self), PyObject
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
-  {
-    resultobj = wxPyMake_wxObject(result, (bool)SWIG_POINTER_NEW); 
-  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_wxListItem, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -28462,7 +28462,7 @@ SWIGINTERN PyObject *_wrap_ListEvent_m_item_get(PyObject *SWIGUNUSEDPARM(self), 
   arg1 = reinterpret_cast< wxListEvent * >(argp1);
   result = (wxListItem *)& ((arg1)->m_item);
   {
-    resultobj = wxPyMake_wxObject(result, (bool)0); 
+    resultobj = wxPyMake_wxObject(result, 0); 
   }
   return resultobj;
 fail:
@@ -29217,7 +29217,7 @@ SWIGINTERN PyObject *_wrap_ListCtrl_GetColumn(PyObject *SWIGUNUSEDPARM(self), Py
     if (PyErr_Occurred()) SWIG_fail;
   }
   {
-    resultobj = wxPyMake_wxObject(result, (bool)0); 
+    resultobj = wxPyMake_wxObject(result, 0); 
   }
   return resultobj;
 fail:
@@ -29497,7 +29497,7 @@ SWIGINTERN PyObject *_wrap_ListCtrl_GetItem(PyObject *SWIGUNUSEDPARM(self), PyOb
     if (PyErr_Occurred()) SWIG_fail;
   }
   {
-    resultobj = wxPyMake_wxObject(result, (bool)0); 
+    resultobj = wxPyMake_wxObject(result, 0); 
   }
   return resultobj;
 fail:
@@ -30522,7 +30522,9 @@ SWIGINTERN PyObject *_wrap_ListCtrl_GetImageList(PyObject *SWIGUNUSEDPARM(self),
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_wxImageList, 0 |  0 );
+  {
+    resultobj = wxPyMake_wxObject(result, (bool)0); 
+  }
   return resultobj;
 fail:
   return NULL;
@@ -34350,7 +34352,9 @@ SWIGINTERN PyObject *_wrap_TreeCtrl_GetImageList(PyObject *SWIGUNUSEDPARM(self),
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_wxImageList, 0 |  0 );
+  {
+    resultobj = wxPyMake_wxObject(result, (bool)0); 
+  }
   return resultobj;
 fail:
   return NULL;
@@ -34378,7 +34382,9 @@ SWIGINTERN PyObject *_wrap_TreeCtrl_GetStateImageList(PyObject *SWIGUNUSEDPARM(s
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_wxImageList, 0 |  0 );
+  {
+    resultobj = wxPyMake_wxObject(result, (bool)0); 
+  }
   return resultobj;
 fail:
   return NULL;

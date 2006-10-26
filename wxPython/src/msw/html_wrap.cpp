@@ -3407,7 +3407,7 @@ SWIGINTERN PyObject *_wrap_HtmlLinkInfo_GetEvent(PyObject *SWIGUNUSEDPARM(self),
     if (PyErr_Occurred()) SWIG_fail;
   }
   {
-    resultobj = wxPyMake_wxObject(result, (bool)0); 
+    resultobj = wxPyMake_wxObject(result, 0); 
   }
   return resultobj;
 fail:
@@ -3890,7 +3890,7 @@ SWIGINTERN PyObject *_wrap_HtmlParser_GetFS(PyObject *SWIGUNUSEDPARM(self), PyOb
     if (PyErr_Occurred()) SWIG_fail;
   }
   {
-    resultobj = wxPyMake_wxObject(result, (bool)0); 
+    resultobj = wxPyMake_wxObject(result, 0); 
   }
   return resultobj;
 fail:

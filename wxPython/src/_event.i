@@ -842,6 +842,9 @@ enum
 class  wxMouseEvent : public wxEvent
 {
 public:
+    // turn off this typemap
+    %typemap(out) wxMouseEvent*;    
+    
     DocCtorStr(
         wxMouseEvent(wxEventType mouseType = wxEVT_NULL),
 "Constructs a wx.MouseEvent.  Valid event types are:
@@ -860,6 +863,8 @@ public:
     * wxEVT_MOTION
     * wxEVT_MOUSEWHEEL ", "");
 
+    // Turn it back on again
+    %typemap(out) wxMouseEvent* { $result = wxPyMake_wxObject($1, $owner); }
 
     DocDeclStr(
         bool , IsButton() const,

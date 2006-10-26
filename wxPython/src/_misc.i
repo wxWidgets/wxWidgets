@@ -140,7 +140,8 @@ class  wxStopWatch
 public:
     // ctor starts the stop watch
     wxStopWatch();
-
+    ~wxStopWatch();
+    
     // start the stop watch at the moment t0
     void Start(long t0 = 0);
 

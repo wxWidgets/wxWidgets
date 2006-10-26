@@ -192,8 +192,14 @@ public:
 // wxListItem: the item or column info, used to exchange data with wxListCtrl
 class wxListItem : public wxObject {
 public:
+    // turn off this typemap
+    %typemap(out) wxListItem*;    
+    
     wxListItem();
     ~wxListItem();
+
+    // Turn it back on again
+    %typemap(out) wxListItem* { $result = wxPyMake_wxObject($1, $owner); }
 
     // resetting
     void Clear();
@@ -455,6 +461,8 @@ MustHaveApp(wxPyListCtrl);
 %rename(ListCtrl) wxPyListCtrl;
 class wxPyListCtrl : public wxControl {
 public:
+    // turn off this typemap
+    %typemap(out) wxPyListCtrl*;    
 
     %pythonAppend wxPyListCtrl         "self._setOORInfo(self);self._setCallbackInfo(self, ListCtrl)"
     %pythonAppend wxPyListCtrl()       ""
@@ -466,6 +474,9 @@ public:
                  const wxValidator& validator = wxDefaultValidator,
                  const wxString& name = wxPyListCtrlNameStr);
     %RenameCtor(PreListCtrl, wxPyListCtrl());
+
+    // Turn it back on again
+    %typemap(out) wxPyListCtrl* { $result = wxPyMake_wxObject($1, $owner); }
 
     bool Create(wxWindow* parent, wxWindowID id = -1,
                  const wxPoint& pos = wxDefaultPosition,

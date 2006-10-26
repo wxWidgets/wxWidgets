@@ -941,6 +941,8 @@ class StopWatch(object):
     def __init__(self, *args, **kwargs): 
         """__init__(self) -> StopWatch"""
         _misc_.StopWatch_swiginit(self,_misc_.new_StopWatch(*args, **kwargs))
+    __swig_destroy__ = _misc_.delete_StopWatch
+    __del__ = lambda self : None;
     def Start(*args, **kwargs):
         """Start(self, long t0=0)"""
         return _misc_.StopWatch_Start(*args, **kwargs)

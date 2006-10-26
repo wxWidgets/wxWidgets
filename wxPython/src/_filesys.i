@@ -144,8 +144,14 @@ public:
 
 class wxFileSystem : public wxObject {
 public:
+    // turn off this typemap
+    %typemap(out) wxFileSystem*;    
+
     wxFileSystem();
     ~wxFileSystem();
+
+    // Turn it back on again
+    %typemap(out) wxFileSystem* { $result = wxPyMake_wxObject($1, $owner); }
 
     void ChangePathTo(const wxString& location, bool is_dir = false);
     wxString GetPath();
