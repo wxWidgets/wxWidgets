@@ -34,6 +34,12 @@
 #        define __WXMAC_OSX__
 #        define __WXMAC_CARBON__
 #        include <AvailabilityMacros.h>
+#        ifndef MAC_OS_X_VERSION_10_4
+#           define MAC_OS_X_VERSION_10_4 1040
+#        endif
+#        ifndef MAC_OS_X_VERSION_10_5
+#           define MAC_OS_X_VERSION_10_5 1050
+#        endif
 #        ifdef __WXMAC_XCODE__
 #            include <unistd.h>
 #            include "wx/mac/carbon/config_xcode.h"
