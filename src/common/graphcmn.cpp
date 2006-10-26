@@ -130,6 +130,38 @@ void wxGraphicsPath::AddCircle( wxDouble x, wxDouble y, wxDouble r )
     CloseSubpath();
 }
 
+void wxGraphicsPath::AddEllipse( wxDouble x, wxDouble y, wxDouble w, wxDouble h)
+{
+    wxDouble rw = w/2;
+    wxDouble rh = h/2;
+    wxDouble xc = x + rw;
+    wxDouble yc = y + rh;
+    wxGraphicsMatrix* m = GetRenderer()->CreateMatrix();
+    m->Translate(xc,yc);
+    m->Scale(rw/rh,1.0);
+    wxGraphicsPath* p = GetRenderer()->CreatePath();
+    p->AddCircle(0,0,rh);
+    p->Transform(m);
+    AddPath(p);
+    delete p;
+    delete m;
+}
+
+void wxGraphicsPath::AddRoundedRectangle( wxDouble x, wxDouble y, wxDouble w, wxDouble h, wxDouble radius)
+{
+    if ( radius == 0 )
+        AddRectangle(x,y,w,h);
+    else
+    {
+        MoveToPoint( x + w, y + h / 2);
+        AddArcToPoint(x + w, y + h, x + w / 2, y + h, radius);
+        AddArcToPoint(x, y + h, x, y + h / 2, radius);
+        AddArcToPoint(x, y , x + w / 2, y, radius);
+        AddArcToPoint(x + w, y, x + w, y + h / 2, radius);
+        CloseSubpath();
+    }
+}
+
 // draws a an arc to two tangents connecting (current) to (x1,y1) and (x1,y1) to (x2,y2), also a straight line from (current) to (x1,y1)
 void wxGraphicsPath::AddArcToPoint( wxDouble x1, wxDouble y1 , wxDouble x2, wxDouble y2, wxDouble r )
 {   
@@ -273,46 +305,16 @@ void wxGraphicsContext::DrawRectangle( wxDouble x, wxDouble y, wxDouble w, wxDou
 void wxGraphicsContext::DrawEllipse( wxDouble x, wxDouble y, wxDouble w, wxDouble h)
 {
     wxGraphicsPath* path = CreatePath();
-    if ( w == h )
-    {
-        path->AddCircle( x+w/2,y+w/2,w/2);
-        DrawPath(path);
-    }
-    else
-    {
-        PushState();
-        Translate(x+w/2,y+h/2);
-        wxDouble factor = ((wxDouble) w) / h;
-        Scale( factor , 1.0);
-        path->AddCircle(0,0,h/2);
-        DrawPath(path);
-        PopState();
-    }
+    path->AddEllipse(x,y,w,h);
+    DrawPath(path);
     delete path;
 }
 
 void wxGraphicsContext::DrawRoundedRectangle( wxDouble x, wxDouble y, wxDouble w, wxDouble h, wxDouble radius)
 {
     wxGraphicsPath* path = CreatePath();
-    if ( radius == 0)
-    {
-        path->AddRectangle( x , y , w , h );
-        DrawPath( path );
-    }
-    else
-    {
-        PushState();
-        Translate( x , y );
-
-        path->MoveToPoint(w, h / 2);
-        path->AddArcToPoint(w, h, w / 2, h, radius);
-        path->AddArcToPoint(0, h, 0, h / 2, radius);
-        path->AddArcToPoint(0, 0, w / 2, 0, radius);
-        path->AddArcToPoint(w, 0, w, h / 2, radius);
-        path->CloseSubpath();
-        DrawPath( path );
-        PopState();
-    }
+    path->AddRoundedRectangle(x,y,w,h,radius);
+    DrawPath(path);
     delete path;
 }
 

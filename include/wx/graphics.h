@@ -139,9 +139,15 @@ public :
     // appends an ellipsis as a new closed subpath fitting the passed rectangle
     virtual void AddCircle( wxDouble x, wxDouble y, wxDouble r );
 
-    // draws a an arc to two tangents connecting (current) to (x1,y1) and (x1,y1) to (x2,y2), also a straight line from (current) to (x1,y1)
+    // appends a an arc to two tangents connecting (current) to (x1,y1) and (x1,y1) to (x2,y2), also a straight line from (current) to (x1,y1)
     virtual void AddArcToPoint( wxDouble x1, wxDouble y1 , wxDouble x2, wxDouble y2, wxDouble r ) ;
 	
+    // appends an ellipse
+    virtual void AddEllipse( wxDouble x, wxDouble y, wxDouble w, wxDouble h);
+
+    // appends a rounded rectangle
+    virtual void AddRoundedRectangle( wxDouble x, wxDouble y, wxDouble w, wxDouble h, wxDouble radius);
+
 	// returns the native path
 	virtual void * GetNativePath() const = 0;
 	
