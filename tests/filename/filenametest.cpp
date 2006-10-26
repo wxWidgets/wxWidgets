@@ -55,8 +55,13 @@ static struct FileNameInfo
     { _T("c:foo.bar"), _T("c"), _T(""), _T("foo"), _T("bar"), false, wxPATH_DOS },
     { _T("c:\\foo.bar"), _T("c"), _T("\\"), _T("foo"), _T("bar"), true, wxPATH_DOS },
     { _T("c:\\Windows\\command.com"), _T("c"), _T("\\Windows"), _T("command"), _T("com"), true, wxPATH_DOS },
+
+    // NB: when using the wxFileName::GetLongPath() function on these two strings,
+    //     the program will hang various seconds. All those time is taken by the
+    //     call to the win32 API GetLongPathName()...
     { _T("\\\\server\\foo.bar"), _T("server"), _T("\\"), _T("foo"), _T("bar"), true, wxPATH_DOS },
     { _T("\\\\server\\dir\\foo.bar"), _T("server"), _T("\\dir"), _T("foo"), _T("bar"), true, wxPATH_DOS },
+
 
     // wxFileName support for Mac file names is broken currently
 #if 0
@@ -70,6 +75,8 @@ static struct FileNameInfo
 #endif // 0
 
     // VMS file names
+    // NB: on Windows they have the same effect of the \\server\\ strings
+    //     (see the note above)
     { _T("device:[dir1.dir2.dir3]file.txt"), _T("device"), _T("dir1.dir2.dir3"), _T("file"), _T("txt"), true, wxPATH_VMS },
     { _T("file.txt"), _T(""), _T(""), _T("file"), _T("txt"), false, wxPATH_VMS },
 };
@@ -90,6 +97,7 @@ private:
         CPPUNIT_TEST( TestSplit );
         CPPUNIT_TEST( TestSetPath );
         CPPUNIT_TEST( TestStrip );
+        CPPUNIT_TEST( TestNormalize );
 #ifdef __WINDOWS__
         CPPUNIT_TEST( TestShortLongPath );
 #endif // __WINDOWS__
@@ -100,6 +108,7 @@ private:
     void TestSplit();
     void TestSetPath();
     void TestStrip();
+    void TestNormalize();
 #ifdef __WINDOWS__
     void TestShortLongPath();
 #endif // __WINDOWS__
@@ -149,7 +158,6 @@ void FileNameTestCase::TestComparison()
     fn1.Normalize();
     fn2.Normalize();
     CPPUNIT_ASSERT(fn1.GetPath() == fn2.GetPath());
-
 }
 
 void FileNameTestCase::TestSplit()
@@ -181,6 +189,76 @@ void FileNameTestCase::TestSetPath()
     fn = wxFileName(_T("/usr/bin/ls"), wxPATH_UNIX);
     fn.SetPath(_T("/usr/local/bin"), wxPATH_UNIX);
     CPPUNIT_ASSERT( fn.SameAs(wxFileName(_T("/usr/local/bin/ls"), wxPATH_UNIX)) );
+}
+
+void FileNameTestCase::TestNormalize()
+{
+    // prepare some data to be used later
+    wxString sep = wxFileName::GetPathSeparator();
+    wxString cwd = wxGetCwd();
+    wxString home = wxGetUserHome();
+
+    cwd.Replace(sep, wxT("/"));
+    if (cwd.Last() != wxT('/'))
+        cwd += wxT('/');
+    home.Replace(sep, wxT("/"));
+    if (home.Last() != wxT('/'))
+        home += wxT('/');
+
+    // since we will always be testing paths using the wxPATH_UNIX
+    // format, we need to remove the volume, if present
+    if (home.Contains(wxT(':')))
+        home = home.AfterFirst(wxT(':'));
+    if (cwd.Contains(wxT(':')))
+        cwd = cwd.AfterFirst(wxT(':'));
+
+    static struct FileNameTest
+    {
+        wxString original;
+        int flags;
+        wxString expected;
+    } tests[] =
+    {
+        // test wxPATH_NORM_ENV_VARS
+#ifdef __WXMSW__
+        { wxT("%ABCDEF%/g/h/i"), wxPATH_NORM_ENV_VARS, wxT("abcdef/g/h/i") },
+#else
+        { wxT("$(ABCDEF)/g/h/i"), wxPATH_NORM_ENV_VARS, wxT("abcdef/g/h/i") },
+#endif
+
+        // test wxPATH_NORM_DOTS
+        { wxT("a/.././b/c/../../"), wxPATH_NORM_DOTS, wxT("") },
+
+        // test wxPATH_NORM_TILDE
+        // NB: do the tilde expansion also under Windows to test if it works there too
+        { wxT("/a/b/~"), wxPATH_NORM_TILDE, wxT("/a/b/~") },
+        { wxT("/~/a/b"), wxPATH_NORM_TILDE, home + wxT("a/b") },
+        { wxT("~/a/b"), wxPATH_NORM_TILDE, home + wxT("a/b") },
+
+        // test wxPATH_NORM_ABSOLUTE
+        { wxT("a/b/"), wxPATH_NORM_ABSOLUTE, cwd + wxT("a/b/") },
+        { wxT("a/b/c.ext"), wxPATH_NORM_ABSOLUTE, cwd + wxT("a/b/c.ext") },
+        { wxT("/a"), wxPATH_NORM_ABSOLUTE, wxT("/a") },
+
+        // test giving no flags at all to Normalize()
+        { wxT("a/b/"), 0, wxT("a/b/") },
+        { wxT("a/b/c.ext"), 0, wxT("a/b/c.ext") },
+        { wxT("/a"), 0, wxT("/a") }
+    };
+
+    // set the env var ABCDEF
+    wxSetEnv(_T("ABCDEF"), _T("abcdef"));
+
+    for (size_t i=0; i < WXSIZEOF(tests); i++)
+    {
+        wxFileName fn(tests[i].original, wxPATH_UNIX);
+
+        // be sure this normalization does not fail
+        CPPUNIT_ASSERT( fn.Normalize(tests[i].flags, cwd, wxPATH_UNIX) );
+
+        // compare result with expected string
+        CPPUNIT_ASSERT_EQUAL( tests[i].expected, fn.GetFullPath(wxPATH_UNIX) );
+    }
 }
 
 wxString wxTestStripExtension(wxString szFile)

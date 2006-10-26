@@ -815,20 +815,25 @@ any or-combination of the following constants:
 
 \begin{twocollist}
 \twocolitem{{\bf wxPATH\_NORM\_ENV\_VARS}}{replace env vars with their values}
-\twocolitem{{\bf wxPATH\_NORM\_DOTS}}{squeeze all .. and . and prepend cwd}
-\twocolitem{{\bf wxPATH\_NORM\_TILDE}}{Unix only: replace ~ and ~user}
+\twocolitem{{\bf wxPATH\_NORM\_DOTS}}{squeeze all .. and . when possible; if there are too many .. and thus they cannot be all removed, \false will be returned}
 \twocolitem{{\bf wxPATH\_NORM\_CASE}}{if filesystem is case insensitive, transform to lower case}
-\twocolitem{{\bf wxPATH\_NORM\_ABSOLUTE}}{make the path absolute}
+\twocolitem{{\bf wxPATH\_NORM\_ABSOLUTE}}{make the path absolute prepending \arg{cwd}}
 \twocolitem{{\bf wxPATH\_NORM\_LONG}}{make the path the long form}
 \twocolitem{{\bf wxPATH\_NORM\_SHORTCUT}}{resolve if it is a shortcut (Windows only)}
+\twocolitem{{\bf wxPATH\_NORM\_TILDE}}{replace ~ and ~user (Unix only)}
 \twocolitem{{\bf wxPATH\_NORM\_ALL}}{all of previous flags except \texttt{wxPATH\_NORM\_CASE}}
 \end{twocollist}
 }%
 
 \docparam{cwd}{If not empty, this directory will be used instead of current
-working directory in normalization.}
+working directory in normalization (see wxPATH\_NORM\_ABSOLUTE).}
 
-\docparam{format}{The file name format, native by default.}
+\docparam{format}{The file name format to use when processing the paths, native by default.}
+
+
+\wxheading{Return value}
+
+\true if normalization was successfully or \false otherwise.
 
 
 \membersection{wxFileName::PrependDir}\label{wxfilenameprependdir}

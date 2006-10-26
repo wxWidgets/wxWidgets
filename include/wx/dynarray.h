@@ -967,6 +967,18 @@ WX_DEFINE_USER_EXPORTED_ARRAY_PTR(void *, wxArrayPtrVoid, class WXDLLIMPEXP_BASE
 // convenience macros
 // -----------------------------------------------------------------------------
 
+// prepend all element of one array to another one; e.g. if first array contains
+// elements X,Y,Z and the second contains A,B,C (in those orders), then the
+// first array will be result as A,B,C,X,Y,Z
+#define WX_PREPEND_ARRAY(array, other)                                        \
+    {                                                                         \
+        size_t wxAAcnt = (other).size();                                      \
+        for ( size_t wxAAn = 0; wxAAn < wxAAcnt; wxAAn++ )                    \
+        {                                                                     \
+            (array).Insert((other)[wxAAn], wxAAn);                            \
+        }                                                                     \
+    }
+
 // append all element of one array to another one
 #define WX_APPEND_ARRAY(array, other)                                         \
     {                                                                         \
