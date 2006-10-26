@@ -2041,7 +2041,7 @@ class WXDLLIMPEXP_RICHTEXT wxRichTextFileHandler: public wxObject
     DECLARE_CLASS(wxRichTextFileHandler)
 public:
     wxRichTextFileHandler(const wxString& name = wxEmptyString, const wxString& ext = wxEmptyString, int type = 0)
-        : m_name(name), m_extension(ext), m_type(type), m_visible(true), m_flags(0)
+        : m_name(name), m_extension(ext), m_type(type), m_flags(0), m_visible(true)
         { }
 
 #if wxUSE_STREAMS
