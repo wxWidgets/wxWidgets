@@ -3400,6 +3400,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS =  \
 	monodll_datacmn.o \
 	monodll_dcbase.o \
 	monodll_dcbufcmn.o \
+	monodll_dcgraph.o \
 	monodll_dlgcmn.o \
 	monodll_dndcmn.o \
 	monodll_dobjcmn.o \
@@ -3570,6 +3571,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS =  \
 	monodll_datacmn.o \
 	monodll_dcbase.o \
 	monodll_dcbufcmn.o \
+	monodll_dcgraph.o \
 	monodll_dlgcmn.o \
 	monodll_dndcmn.o \
 	monodll_dobjcmn.o \
@@ -5149,6 +5151,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_1 =  \
 	monolib_datacmn.o \
 	monolib_dcbase.o \
 	monolib_dcbufcmn.o \
+	monolib_dcgraph.o \
 	monolib_dlgcmn.o \
 	monolib_dndcmn.o \
 	monolib_dobjcmn.o \
@@ -5319,6 +5322,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_1 =  \
 	monolib_datacmn.o \
 	monolib_dcbase.o \
 	monolib_dcbufcmn.o \
+	monolib_dcgraph.o \
 	monolib_dlgcmn.o \
 	monolib_dndcmn.o \
 	monolib_dobjcmn.o \
@@ -7111,6 +7115,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_2 =  \
 	coredll_datacmn.o \
 	coredll_dcbase.o \
 	coredll_dcbufcmn.o \
+	coredll_dcgraph.o \
 	coredll_dlgcmn.o \
 	coredll_dndcmn.o \
 	coredll_dobjcmn.o \
@@ -7281,6 +7286,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_2 =  \
 	coredll_datacmn.o \
 	coredll_dcbase.o \
 	coredll_dcbufcmn.o \
+	coredll_dcgraph.o \
 	coredll_dlgcmn.o \
 	coredll_dndcmn.o \
 	coredll_dobjcmn.o \
@@ -8543,6 +8549,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_3 =  \
 	corelib_datacmn.o \
 	corelib_dcbase.o \
 	corelib_dcbufcmn.o \
+	corelib_dcgraph.o \
 	corelib_dlgcmn.o \
 	corelib_dndcmn.o \
 	corelib_dobjcmn.o \
@@ -8713,6 +8720,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_3 =  \
 	corelib_datacmn.o \
 	corelib_dcbase.o \
 	corelib_dcbufcmn.o \
+	corelib_dcgraph.o \
 	corelib_dlgcmn.o \
 	corelib_dndcmn.o \
 	corelib_dobjcmn.o \
@@ -15662,6 +15670,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@monodll_dcbufcmn.o: $(srcdir)/src/common/dcbufcmn.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/dcbufcmn.cpp
 
+@COND_USE_GUI_1@monodll_dcgraph.o: $(srcdir)/src/common/dcgraph.cpp $(MONODLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/dcgraph.cpp
+
 @COND_USE_GUI_1@monodll_dlgcmn.o: $(srcdir)/src/common/dlgcmn.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/dlgcmn.cpp
 
@@ -19735,6 +19746,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_USE_GUI_1@monolib_dcbufcmn.o: $(srcdir)/src/common/dcbufcmn.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/dcbufcmn.cpp
+
+@COND_USE_GUI_1@monolib_dcgraph.o: $(srcdir)/src/common/dcgraph.cpp $(MONOLIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/dcgraph.cpp
 
 @COND_USE_GUI_1@monolib_dlgcmn.o: $(srcdir)/src/common/dlgcmn.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/dlgcmn.cpp
@@ -24149,6 +24163,9 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@coredll_dcbufcmn.o: $(srcdir)/src/common/dcbufcmn.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/dcbufcmn.cpp
 
+@COND_USE_GUI_1@coredll_dcgraph.o: $(srcdir)/src/common/dcgraph.cpp $(COREDLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/dcgraph.cpp
+
 @COND_USE_GUI_1@coredll_dlgcmn.o: $(srcdir)/src/common/dlgcmn.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/dlgcmn.cpp
 
@@ -27067,6 +27084,9 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 
 @COND_USE_GUI_1@corelib_dcbufcmn.o: $(srcdir)/src/common/dcbufcmn.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/dcbufcmn.cpp
+
+@COND_USE_GUI_1@corelib_dcgraph.o: $(srcdir)/src/common/dcgraph.cpp $(CORELIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/dcgraph.cpp
 
 @COND_USE_GUI_1@corelib_dlgcmn.o: $(srcdir)/src/common/dlgcmn.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/dlgcmn.cpp

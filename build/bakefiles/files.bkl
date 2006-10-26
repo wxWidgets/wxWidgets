@@ -575,6 +575,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/common/datacmn.cpp
     src/common/dcbase.cpp
     src/common/dcbufcmn.cpp
+    src/common/dcgraph.cpp
     src/common/dlgcmn.cpp
     src/common/dndcmn.cpp
     src/common/dobjcmn.cpp

@@ -536,6 +536,10 @@ SOURCE=..\..\src\common\dcbufcmn.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\common\dcgraph.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\common\dlgcmn.cpp
 # End Source File
 # Begin Source File
