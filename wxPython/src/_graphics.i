@@ -106,7 +106,7 @@ public:
     void SetRadialGradientBrush( wxDouble , wxDouble , wxDouble , wxDouble , wxDouble ,
         const wxColour &, const wxColour &) {}
     void SetFont( const wxFont & ) {}
-    void SetTextColor( const wxColour & ) {}
+    void SetTextColour( const wxColour & ) {}
     void StrokePath( const wxGraphicsPath * ) {}
     void FillPath( const wxGraphicsPath *, int  ) {}
     void DrawPath( const wxGraphicsPath *, int  ) {}
@@ -294,16 +294,19 @@ public:
     // wxGraphicsContext()         This is also an ABC, use Create to make an instance...
     virtual ~wxGraphicsContext();
 
+    %newobject Create;
     %nokwargs Create;
-    %pythonAppend Create( const wxWindowDC& dc)
-        "val.__dc = args[0] # save a ref so the other dc will not be deleted before self";
+    %pythonAppend Create
+        "val.__dc = args[0] # save a ref so the dc will not be deleted before self";
     static wxGraphicsContext* Create( const wxWindowDC& dc);
     
     static wxGraphicsContext* Create( wxWindow* window ) ;
 
+    %newobject CreateFromNative;
     static wxGraphicsContext* CreateFromNative( void * context ) ;
 
 
+    %newobject CreatePath;
     // creates a path instance that corresponds to the type of graphics context, ie GDIPlus, cairo, CoreGraphics ...
     DocDeclStr(
         virtual wxGraphicsPath * , CreatePath(),
@@ -399,12 +402,12 @@ public:
         "", "");
     
 
-    // sets the brush to a radial gradient originating at (xo,yc) with color oColor and ends on a circle around (xc,yc) 
-    // with radius r and color cColor
+    // sets the brush to a radial gradient originating at (xo,yc) with color oColour and ends on a circle around (xc,yc) 
+    // with radius r and color cColour
     DocDeclStr(
         virtual void , SetRadialGradientBrush( wxDouble xo, wxDouble yo, wxDouble xc, wxDouble yc,
                                                wxDouble radius,
-                                               const wxColour &oColor, const wxColour &cColor),
+                                               const wxColour &oColour, const wxColour &cColour),
         "", "");
     
 
@@ -416,7 +419,7 @@ public:
     
     // sets the text color
     DocDeclStr(
-        virtual void , SetTextColor( const wxColour &col ),
+        virtual void , SetTextColour( const wxColour &col ),
         "", "");
     
 
@@ -459,7 +462,7 @@ public:
                                       wxDouble *OUTPUT /*height*/,
                                       wxDouble *OUTPUT /*descent*/,
                                       wxDouble *OUTPUT /*externalLeading*/ ) const ,
-        "GetTextExtend(self, text) --> (width, height, descent, externalLeading)",
+        "GetTextExtent(self, text) --> (width, height, descent, externalLeading)",
         "", "");
     
 
