@@ -852,13 +852,23 @@ void wxMacCoreGraphicsMatrix::Invert()
 // returns true if the elements of the transformation matrix are equal ?
 bool wxMacCoreGraphicsMatrix::IsEqual( const wxGraphicsMatrix* t) const  
 {
+    const CGAffineTransform* tm = (CGAffineTransform*) t->GetNativeMatrix();
+    return ( 
+        m_matrix.a == tm->a && 
+        m_matrix.b == tm->b && 
+        m_matrix.c == tm->c && 
+        m_matrix.d == tm->d && 
+        m_matrix.tx == tm->tx && 
+        m_matrix.ty == tm->ty ) ;
+
     return CGAffineTransformEqualToTransform(m_matrix, *((CGAffineTransform*) t->GetNativeMatrix()));
 }
 
 // return true if this is the identity matrix
 bool wxMacCoreGraphicsMatrix::IsIdentity() 
 {
-    return CGAffineTransformIsIdentity(m_matrix);
+    return ( m_matrix.a == 1 && m_matrix.d == 1 &&
+        m_matrix.b == 0 && m_matrix.d == 0 && m_matrix.tx == 0 && m_matrix.ty == 0);
 }
 
 //
@@ -890,25 +900,18 @@ void wxMacCoreGraphicsMatrix::Rotate( wxDouble angle )
 // applies that matrix to the point
 void wxMacCoreGraphicsMatrix::TransformPoint( wxDouble *x, wxDouble *y ) 
 {
-    wxDouble x1, y1 ;
+    CGPoint pt = CGPointApplyAffineTransform( CGPointMake(*x,*y), m_matrix);
     
-    x1 = m_matrix.a * (*x) + m_matrix.c * (*y) + m_matrix.tx ;
-    y1 = m_matrix.b * (*x) + m_matrix.d * (*y) + m_matrix.ty ;
-    
-    *x = x1;
-    *y = y1;
+    *x = pt.x;
+    *y = pt.y;
 }
 
 // applies the matrix except for translations
 void wxMacCoreGraphicsMatrix::TransformDistance( wxDouble *dx, wxDouble *dy ) 
 {
-    wxDouble x1, y1 ;
-    
-    x1 = m_matrix.a * (*dx) + m_matrix.c * (*dy);
-    y1 = m_matrix.b * (*dx) + m_matrix.d * (*dy);
-    
-    *dx = x1;
-    *dy = y1;
+    CGSize sz = CGSizeApplyAffineTransform( CGSizeMake(*dx,*dy) , m_matrix );
+    *dx = sz.width;
+    *dy = sz.height;
 }
 
 // returns the native representation
