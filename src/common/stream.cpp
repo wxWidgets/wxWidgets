@@ -1113,27 +1113,37 @@ IMPLEMENT_ABSTRACT_CLASS(wxFilterClassFactory, wxObject)
 
 wxFilterClassFactory *wxFilterClassFactory::sm_first = NULL;
 
+wxString wxFilterClassFactory::PopExtension(const wxString& location) const
+{
+    return location.substr(0, FindExtension(location));
+}
+
+wxString::size_type wxFilterClassFactory::FindExtension(const wxChar *location) const
+{
+    size_t len = wxStrlen(location);
+
+    for (const wxChar *const *p = GetProtocols(wxSTREAM_FILEEXTENSION);
+         p && *p;
+         p++)
+    {
+        size_t l = wxStrlen(*p);
+
+        if (l <= len && wxStrcmp(*p, location + len - l) == 0)
+            return len - l;
+    }
+
+    return wxString::npos;
+}
+
 bool wxFilterClassFactory::CanHandle(const wxChar *protocol,
                                      wxStreamProtocolType type) const
 {
     if (type == wxSTREAM_FILEEXTENSION)
-    {
-        size_t len = wxStrlen(protocol);
-
-        for (const wxChar * const *p = GetProtocols(type); p && *p; p++)
-        {
-            size_t l = wxStrlen(*p);
-
-            if (l <= len && wxStrcmp(*p, protocol + len - l) == 0)
-                return true;
-        }
-    }
+        return FindExtension(protocol) != wxString::npos;
     else
-    {
-        for (const wxChar * const *p = GetProtocols(type); p && *p; p++)
+        for (const wxChar *const *p = GetProtocols(type); p && *p; p++)
             if (wxStrcmp(*p, protocol) == 0)
                 return true;
-    }
 
     return false;
 }

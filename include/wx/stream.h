@@ -346,6 +346,7 @@ public:
     virtual wxFilterOutputStream *NewStream(wxOutputStream *stream) const = 0;
 
     wxString GetProtocol() const { return wxString(*GetProtocols()); }
+    wxString PopExtension(const wxString& location) const;
 
     virtual const wxChar * const *GetProtocols(wxStreamProtocolType type
                                                = wxSTREAM_PROTOCOL) const = 0;
@@ -369,6 +370,8 @@ protected:
 
     wxFilterClassFactory& operator=(const wxFilterClassFactory&)
         { return *this; }
+
+    wxString::size_type FindExtension(const wxChar *location) const;
 
 private:
     static wxFilterClassFactory *sm_first;
