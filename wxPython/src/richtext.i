@@ -115,7 +115,6 @@ enum {
     wxTEXT_ATTR_PARAGRAPH_STYLE_NAME,
     wxTEXT_ATTR_BULLET_STYLE,
     wxTEXT_ATTR_BULLET_NUMBER,
-    wxTEXT_ATTR_BULLET_SYMBOL,
 
     wxTEXT_ATTR_BULLET_STYLE_NONE,
     wxTEXT_ATTR_BULLET_STYLE_ARABIC,
@@ -378,7 +377,7 @@ public:
     void SetLineSpacing(int spacing);
     void SetBulletStyle(int style);
     void SetBulletNumber(int n);
-    void SetBulletSymbol(wxChar symbol);
+    void SetBulletText(wxChar symbol);
     void SetBulletFont(const wxString& bulletFont);
     
     const wxColour& GetTextColour() const;
@@ -403,7 +402,7 @@ public:
     int GetLineSpacing() const;
     int GetBulletStyle() const;
     int GetBulletNumber() const;
-    wxChar GetBulletSymbol() const;
+    const wxString& GetBulletText() const;
     const wxString& GetBulletFont() const;
 
     // accessors
@@ -427,7 +426,7 @@ public:
     bool HasParagraphStyleName() const;
     bool HasBulletStyle() const;
     bool HasBulletNumber() const;
-    bool HasBulletSymbol() const;
+    bool HasBulletText() const;
 
     bool HasFlag(long flag) const;
 
@@ -452,7 +451,7 @@ public:
     %property(BulletFont, GetBulletFont, SetBulletFont, doc="See `GetBulletFont` and `SetBulletFont`");
     %property(BulletNumber, GetBulletNumber, SetBulletNumber, doc="See `GetBulletNumber` and `SetBulletNumber`");
     %property(BulletStyle, GetBulletStyle, SetBulletStyle, doc="See `GetBulletStyle` and `SetBulletStyle`");
-    %property(BulletSymbol, GetBulletSymbol, SetBulletSymbol, doc="See `GetBulletSymbol` and `SetBulletSymbol`");
+    %property(BulletText, GetBulletText, SetBulletText, doc="See `GetBulletText` and `SetBulletText`");
     %property(CharacterStyleName, GetCharacterStyleName, SetCharacterStyleName, doc="See `GetCharacterStyleName` and `SetCharacterStyleName`");
     %property(Flags, GetFlags, SetFlags, doc="See `GetFlags` and `SetFlags`");
     %property(Font, GetFont, SetFont, doc="See `GetFont` and `SetFont`");
@@ -615,6 +614,14 @@ during sizing.", "");
         "Save the contents of the document to the given filename, or if the
 empty string is passed then to the filename set with `SetFilename`.", "");
 
+
+    DocDeclStr(
+        void , SetHandlerFlags(int flags), 
+        "Set the handler flags, controlling loading and saving.", "");
+
+    DocDeclStr(
+        int , GetHandlerFlags() const, 
+        "Get the handler flags, controlling loading and saving.", "");
 
     // sets/clears the dirty flag
     DocDeclStr(
@@ -1060,7 +1067,7 @@ flag.", "");
 
     /// Begin symbol bullet
     DocDeclStr(
-        bool , BeginSymbolBullet(char symbol,
+        bool , BeginSymbolBullet(const wxString& symbol,
                                  int leftIndent,
                                  int leftSubIndent,
                                  int bulletStyle = wxTEXT_ATTR_BULLET_STYLE_SYMBOL),
@@ -1096,6 +1103,20 @@ flag.", "");
         bool , EndParagraphStyle(),
         "", "");
 
+
+    DocDeclStr(
+        bool , BeginListStyle(const wxString& listStyle, int level = 1, int number = 1),
+        "Begin named list style.", "");
+        
+    DocDeclStr(
+        bool , EndListStyle(), "End named list style.", "");
+
+    DocDeclStr(
+        bool , BeginURL(const wxString& url, const wxString& characterStyle = wxEmptyString),
+            "Begin URL.", "");
+    
+    DocDeclStr(
+        bool , EndURL(), "End URL.", "");
 
     /// Sets the default style to the style under the cursor
     DocDeclStr(
@@ -1511,7 +1532,10 @@ flag.", "");
 %constant wxEventType wxEVT_COMMAND_RICHTEXT_MIDDLE_CLICK;
 %constant wxEventType wxEVT_COMMAND_RICHTEXT_LEFT_DCLICK;
 %constant wxEventType wxEVT_COMMAND_RICHTEXT_RETURN;
-
+%constant wxEventType wxEVT_COMMAND_RICHTEXT_STYLESHEET_CHANGING;
+%constant wxEventType wxEVT_COMMAND_RICHTEXT_STYLESHEET_CHANGED;
+%constant wxEventType wxEVT_COMMAND_RICHTEXT_STYLESHEET_REPLACING;
+%constant wxEventType wxEVT_COMMAND_RICHTEXT_STYLESHEET_REPLACED;
 
 %pythoncode {
 EVT_RICHTEXT_ITEM_SELECTED = wx.PyEventBinder(wxEVT_COMMAND_RICHTEXT_ITEM_SELECTED, 1)
@@ -1521,6 +1545,10 @@ EVT_RICHTEXT_RIGHT_CLICK = wx.PyEventBinder(wxEVT_COMMAND_RICHTEXT_RIGHT_CLICK, 
 EVT_RICHTEXT_MIDDLE_CLICK = wx.PyEventBinder(wxEVT_COMMAND_RICHTEXT_MIDDLE_CLICK, 1)
 EVT_RICHTEXT_LEFT_DCLICK = wx.PyEventBinder(wxEVT_COMMAND_RICHTEXT_LEFT_DCLICK, 1)
 EVT_RICHTEXT_RETURN = wx.PyEventBinder( wxEVT_COMMAND_RICHTEXT_RETURN, 1)
+EVT_RICHTEXT_STYLESHEET_CHANGING = wx.PyEventBinder( wxEVT_COMMAND_RICHTEXT_STYLESHEET_CHANGING, 1)
+EVT_RICHTEXT_STYLESHEET_CHANGED = wx.PyEventBinder( wxEVT_COMMAND_RICHTEXT_STYLESHEET_CHANGED, 1)
+EVT_RICHTEXT_STYLESHEET_REPLACING = wx.PyEventBinder( wxEVT_COMMAND_RICHTEXT_STYLESHEET_REPLACING, 1)
+EVT_RICHTEXT_STYLESHEET_REPLACED = wx.PyEventBinder( wxEVT_COMMAND_RICHTEXT_STYLESHEET_REPLACED, 1)
 }
 
 
