@@ -77,6 +77,34 @@ private:
 };
 
 // ----------------------------------------------------------------------------
+// wxDelegateTheme: it is impossible to inherit from any of standard
+// themes as their declarations are in private code, but you can use this
+// class to override only some of their functions - all the other ones
+// will be left to the original theme
+// ----------------------------------------------------------------------------
+
+class wxDelegateTheme : public wxTheme
+{
+public:
+    wxDelegateTheme(const wxChar *theme);
+    virtual ~wxDelegateTheme();
+
+    virtual wxRenderer *GetRenderer();
+    virtual wxArtProvider *GetArtProvider();
+    virtual wxInputHandler *GetInputHandler(const wxString& control,
+                                            wxInputConsumer *consumer);
+    virtual wxColourScheme *GetColourScheme();
+
+protected:
+    // gets or creates theme and sets m_theme to point to it,
+    // returns true on success
+    bool GetOrCreateTheme();
+
+    wxString    m_themeName;
+    wxTheme    *m_theme;
+};
+
+// ----------------------------------------------------------------------------
 // dynamic theme creation helpers
 // ----------------------------------------------------------------------------
 

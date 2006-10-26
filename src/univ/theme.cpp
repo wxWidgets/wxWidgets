@@ -147,3 +147,58 @@ wxTheme::~wxTheme()
 {
 }
 
+
+// ----------------------------------------------------------------------------
+// wxDelegateTheme
+// ----------------------------------------------------------------------------
+
+wxDelegateTheme::wxDelegateTheme(const wxChar *theme)
+{
+    m_themeName = theme;
+    m_theme = NULL;
+}
+
+wxDelegateTheme::~wxDelegateTheme()
+{
+    delete m_theme;
+}
+
+bool wxDelegateTheme::GetOrCreateTheme()
+{
+    if ( !m_theme )
+        m_theme = wxTheme::Create(m_themeName);
+    return m_theme != NULL;
+}
+
+wxRenderer *wxDelegateTheme::GetRenderer()
+{
+    if ( !GetOrCreateTheme() )
+        return NULL;
+
+    return m_theme->GetRenderer();
+}
+
+wxArtProvider *wxDelegateTheme::GetArtProvider()
+{
+    if ( !GetOrCreateTheme() )
+        return NULL;
+
+    return m_theme->GetArtProvider();
+}
+
+wxInputHandler *wxDelegateTheme::GetInputHandler(const wxString& control,
+                                                 wxInputConsumer *consumer)
+{
+    if ( !GetOrCreateTheme() )
+        return NULL;
+
+    return m_theme->GetInputHandler(control, consumer);
+}
+
+wxColourScheme *wxDelegateTheme::GetColourScheme()
+{
+    if ( !GetOrCreateTheme() )
+        return NULL;
+
+    return m_theme->GetColourScheme();
+}
