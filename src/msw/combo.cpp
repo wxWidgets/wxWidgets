@@ -34,8 +34,8 @@
 #endif
 
 #include "wx/dcbuffer.h"
-
 #include "wx/combo.h"
+#include "wx/stopwatch.h"
 
 #include "wx/msw/registry.h"
 #include "wx/msw/uxtheme.h"
