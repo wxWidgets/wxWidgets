@@ -70,7 +70,12 @@
 #define TEXTCTRLXADJUST_CLASSIC     1
 #define TEXTCTRLYADJUST_CLASSIC     2
 
+#define COMBOBOX_ANIMATION_RESOLUTION   10
+
 #define COMBOBOX_ANIMATION_DURATION     200  // In milliseconds
+
+#define wxMSW_DESKTOP_USERPREFERENCESMASK_COMBOBOXANIM    (1<<26)
+
 
 // ============================================================================
 // implementation
@@ -80,6 +85,7 @@
 BEGIN_EVENT_TABLE(wxComboCtrl, wxComboCtrlBase)
     EVT_PAINT(wxComboCtrl::OnPaintEvent)
     EVT_MOUSE_EVENTS(wxComboCtrl::OnMouseEvent)
+    EVT_TIMER(wxID_ANY, wxComboCtrl::OnTimerEvent)
 END_EVENT_TABLE()
 
 
@@ -530,7 +536,7 @@ void wxComboCtrl::OnMouseEvent( wxMouseEvent& event )
 
 }
 
-#if !defined(__WXWINCE__)
+#if wxUSE_COMBOCTRL_POPUP_ANIMATION
 static wxUint32 GetUserPreferencesMask()
 {
     static wxUint32 userPreferencesMask = 0;
@@ -559,64 +565,83 @@ static wxUint32 GetUserPreferencesMask()
 }
 #endif
 
-bool wxComboCtrl::AnimateShow( const wxRect& rect, int flags )
+#if wxUSE_COMBOCTRL_POPUP_ANIMATION
+void wxComboCtrl::OnTimerEvent( wxTimerEvent& WXUNUSED(event) )
 {
-#if !defined(__WXWINCE__)
-    if ( GetUserPreferencesMask() & (1<<26) )
+    bool stopTimer = false;
+
+    wxWindow* popup = GetPopupControl()->GetControl();
+
+    // Popup was hidden before it was fully shown?
+    if ( IsPopupWindowState(Hidden) )
     {
-        wxLongLong tStart = ::wxGetLocalTimeMillis();
-
-        int height = rect.height;
-
+        stopTimer = true;
+    }
+    else
+    {
+        wxLongLong t = ::wxGetLocalTimeMillis();
+        const wxRect& rect = m_animRect;
         wxWindow* win = GetPopupWindow();
-        wxWindow* popup = GetPopupControl()->GetControl();
 
-        const int delay = COMBOBOX_ANIMATION_DURATION;
-        const int resolution = 10;
-        int h0 = popup->GetSize().y;
-
-        win->SetSize( rect.x, rect.y, rect.width, 0 );
-        win->Show();
-
-        for (;;)
+        int pos = (int) (t-m_animStart).GetLo();
+        if ( pos < COMBOBOX_ANIMATION_DURATION )
         {
-            wxLongLong t = ::wxGetLocalTimeMillis();
-            int pos = (int) (t-tStart).GetLo();
-            if ( pos > delay )
-                break;
-
-            int h = (((pos*256)/delay)*height)/256;
-            int y = (h0 - h);
+            int height = rect.height;
+            //int h0 = rect.height;
+            int h = (((pos*256)/COMBOBOX_ANIMATION_DURATION)*height)/256;
+            int y = (height - h);
             if ( y < 0 )
                 y = 0;
 
-            if ( flags & ShowAbove )
+            if ( m_animFlags & ShowAbove )
             {
-                win->SetSize( rect.x, rect.y + h0 - h, rect.width, h );
+                win->SetSize( rect.x, rect.y + height - h, rect.width, h );
             }
             else
             {
                 popup->Move( 0, -y );
                 win->SetSize( rect.x, rect.y, rect.width, h );
             }
-
-            wxMilliSleep( resolution );
-            wxYield();
-
-            // Popup was hidden before it was fully shown?
-            if ( IsPopupWindowState(Hidden) )
-                return true;
         }
-
-        popup->Move( 0, 0 );
+        else
+        {
+            stopTimer = true;
+        }
     }
-#else
-    wxUnusedVar(rect);
-    wxUnusedVar(flags);
+
+    if ( stopTimer )
+    {
+        popup->Move( 0, 0 );
+        m_animTimer.Stop();
+        DoShowPopup( m_animRect, m_animFlags );
+    }
+}
 #endif
+
+#if wxUSE_COMBOCTRL_POPUP_ANIMATION
+bool wxComboCtrl::AnimateShow( const wxRect& rect, int flags )
+{
+    if ( GetUserPreferencesMask() & wxMSW_DESKTOP_USERPREFERENCESMASK_COMBOBOXANIM )
+    {
+        m_animStart = ::wxGetLocalTimeMillis();
+        m_animRect = rect;
+        m_animFlags = flags;
+
+        wxWindow* win = GetPopupWindow();
+        win->SetSize( rect.x, rect.y, rect.width, 0 );
+        win->Show();
+
+        m_animTimer.SetOwner( this, wxID_ANY );
+        m_animTimer.Start( COMBOBOX_ANIMATION_RESOLUTION, wxTIMER_CONTINUOUS );
+
+        OnTimerEvent(*((wxTimerEvent*)NULL));  // Event is never used, so we can give NULL
+
+        return false;
+    }
 
     return true;
 }
+#endif
 
 wxCoord wxComboCtrl::GetNativeTextIndent() const
 {

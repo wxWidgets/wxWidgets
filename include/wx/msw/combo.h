@@ -18,6 +18,14 @@
 
 #if wxUSE_COMBOCTRL
 
+#if !defined(__WXWINCE__) && wxUSE_TIMER
+    #include "wx/timer.h"
+    #define wxUSE_COMBOCTRL_POPUP_ANIMATION     1
+#else
+    #define wxUSE_COMBOCTRL_POPUP_ANIMATION     0
+#endif
+
+
 // ----------------------------------------------------------------------------
 // Native wxComboCtrl
 // ----------------------------------------------------------------------------
@@ -60,10 +68,14 @@ public:
     virtual ~wxComboCtrl();
 
     virtual void PrepareBackground( wxDC& dc, const wxRect& rect, int flags ) const;
-    virtual bool AnimateShow( const wxRect& rect, int flags );
     virtual bool IsKeyPopupToggle(const wxKeyEvent& event) const;
 
     static int GetFeatures() { return wxComboCtrlFeatures::All; }
+
+#if wxUSE_COMBOCTRL_POPUP_ANIMATION
+    virtual bool AnimateShow( const wxRect& rect, int flags );
+    void OnTimerEvent( wxTimerEvent& event );
+#endif
 
 protected:
 
@@ -78,6 +90,14 @@ protected:
 
 private:
     void Init();
+
+#if wxUSE_COMBOCTRL_POPUP_ANIMATION
+    // Popup animation related
+    wxLongLong  m_animStart;
+    wxTimer     m_animTimer;
+    wxRect      m_animRect;
+    int         m_animFlags;
+#endif
 
     DECLARE_EVENT_TABLE()
 

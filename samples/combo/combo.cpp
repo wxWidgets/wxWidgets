@@ -494,64 +494,125 @@ BEGIN_EVENT_TABLE(TreeCtrlComboPopup, wxTreeCtrl)
 END_EVENT_TABLE()
 
 // ----------------------------------------------------------------------------
-// wxComboCtrl with custom popup animation
+// wxComboCtrl with custom popup animation. We use EVT_TIMER, which is quite
+// safe, but requires much more can than doing it in a single function (ie.
+// AnimateShow) and using combination of wxSleep and wxSafeYield.
 // ----------------------------------------------------------------------------
+
+#if wxUSE_TIMER
+
+#define CUSTOM_COMBOBOX_ANIMATION_DURATION  200  // In milliseconds
+
+#include "wx/timer.h"
 
 class wxComboCtrlWithCustomPopupAnim : public wxComboCtrl
 {
 public:
 
-    virtual bool AnimateShow( const wxRect& rect, int WXUNUSED(flags) )
+    virtual bool AnimateShow( const wxRect& rect, int flags )
     {
         MyFrame* myFrame = (MyFrame*) ::wxGetTopLevelParent(this);
 
         if ( !myFrame->m_cbUseAnim->GetValue() )
             return true;
 
-        int width = rect.width;
-        int height = rect.height;
-        wxBitmap bitmap( width, height, -1 );
+        m_animStart = ::wxGetLocalTimeMillis();
+        m_animRect = rect;
+        m_animFlags = flags;
+
         wxScreenDC dc;
+
+        wxBitmap bitmap( rect.width, rect.height, -1 );
         wxMemoryDC memdc( bitmap );
-        memdc.Blit( 0, 0, width, height, &dc, rect.x, rect.y );
+        memdc.Blit( 0, 0, rect.width, rect.height, &dc, rect.x, rect.y );
         memdc.SelectObject(wxNullBitmap); 
+        m_animBackBitmap = bitmap;
 
-        wxLongLong tStart = ::wxGetLocalTimeMillis();
-        const int delay = 300;
-        const int resolution = 10;
+        m_animTimer.SetOwner( this, wxID_ANY );
+        m_animTimer.Start( 10, wxTIMER_CONTINUOUS );
 
-        int center_x = rect.x + (width/2);
-        int center_y = rect.y + (height/2);
+        OnTimerEvent(*((wxTimerEvent*)NULL));  // Event is never used, so we can give NULL
+        return false;
+    }
 
-        double d_height = (double) height;
+    void OnTimerEvent( wxTimerEvent& WXUNUSED(event) )
+    {
+        bool stopTimer = false;
 
-        dc.SetPen( *wxBLACK_PEN );
-        dc.SetBrush( *wxTRANSPARENT_BRUSH );
-        for (;;)
+        wxWindow* popup = GetPopupControl()->GetControl();
+        wxScreenDC dc;
+        const wxRect& rect = m_animRect;
+
+        // Popup was hidden before it was fully shown?
+        if ( IsPopupWindowState(Hidden) )
+        {
+            stopTimer = true;
+        }
+        else
         {
             wxLongLong t = ::wxGetLocalTimeMillis();
-            int pos = (int) (t-tStart).GetLo();
-            if ( pos > delay )
-                break;
 
-            int w = (((pos*256)/delay)*width)/256;
+            int pos = (int) (t-m_animStart).GetLo();
+            if ( pos < CUSTOM_COMBOBOX_ANIMATION_DURATION )
+            {
+                //
+                // Actual animation happens here
+                //
+                int width = rect.width;
+                int height = rect.height;
 
-            double ratio = ((double)w / (double)width);
-            int h = (int)(d_height * ratio);
-            dc.DrawRectangle( center_x - w/2, center_y - h/2, w, h );
-            wxMilliSleep( resolution );
-            wxYield();
-            dc.DrawBitmap( bitmap, rect.x, rect.y );
+                int center_x = rect.x + (width/2);
+                int center_y = rect.y + (height/2);
 
-            if ( IsPopupWindowState(Hidden) )
-                return true;
+                double d_height = (double) height;
+
+                dc.SetPen( *wxBLACK_PEN );
+                dc.SetBrush( *wxTRANSPARENT_BRUSH );
+
+                int w = (((pos*256)/CUSTOM_COMBOBOX_ANIMATION_DURATION)*width)/256;
+
+                double ratio = ((double)w / (double)width);
+                int h = (int)(d_height * ratio);
+                dc.DrawBitmap( m_animBackBitmap, rect.x, rect.y );
+                dc.DrawRectangle( center_x - w/2, center_y - h/2, w, h );
+            }
+            else
+            {
+                stopTimer = true;
+            }
         }
 
-        return true;
+        if ( stopTimer )
+        {
+            dc.DrawBitmap( m_animBackBitmap, rect.x, rect.y );
+            popup->Move( 0, 0 );
+            m_animTimer.Stop();
+            DoShowPopup( m_animRect, m_animFlags );
+        }
     }
 
 protected:
+
+    // Popup animation related
+    wxLongLong  m_animStart;
+    wxTimer     m_animTimer;
+    wxRect      m_animRect;
+    wxBitmap    m_animBackBitmap;
+    int         m_animFlags;
+
+private:
+    DECLARE_EVENT_TABLE()
 };
+
+BEGIN_EVENT_TABLE(wxComboCtrlWithCustomPopupAnim, wxComboCtrl)
+    EVT_TIMER(wxID_ANY, wxComboCtrlWithCustomPopupAnim::OnTimerEvent)
+END_EVENT_TABLE()
+
+#else
+
+#define wxComboCtrlWithCustomPopupAnim wxComboCtrl
+
+#endif
 
 // ----------------------------------------------------------------------------
 // wxComboCtrl with entirely custom button action (opens file dialog)

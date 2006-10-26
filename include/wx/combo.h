@@ -85,7 +85,9 @@ enum
     // Internal use: Set wxTAB_TRAVERSAL to parent when popup is dismissed
     wxCC_IFLAG_PARENT_TAB_TRAVERSAL = 0x0800,
     // Internal use: Secondary popup window type should be used (if available).
-    wxCC_IFLAG_USE_ALT_POPUP        = 0x1000
+    wxCC_IFLAG_USE_ALT_POPUP        = 0x1000,
+    // Internal use: Skip popup animation.
+    wxCC_IFLAG_DISABLE_POPUP_ANIM   = 0x2000
 };
 
 
@@ -320,6 +322,15 @@ public:
             m_iFlags |= wxCC_IFLAG_USE_ALT_POPUP;
         else
             m_iFlags &= ~wxCC_IFLAG_USE_ALT_POPUP;
+    }
+
+    // Call with false to disable popup animation, if any.
+    void EnablePopupAnimation( bool enable = true )
+    {
+        if ( enable )
+            m_iFlags &= ~wxCC_IFLAG_DISABLE_POPUP_ANIM;
+        else
+            m_iFlags |= wxCC_IFLAG_DISABLE_POPUP_ANIM;
     }
 
     //

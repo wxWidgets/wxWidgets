@@ -1870,7 +1870,8 @@ void wxComboCtrlBase::ShowPopup()
     wxRect popupWinRect( popupX, popupY, szp.x, szp.y );
 
     m_popup = popup;
-    if ( AnimateShow( popupWinRect, showFlags ) )
+    if ( (m_iFlags & wxCC_IFLAG_DISABLE_POPUP_ANIM) ||
+         AnimateShow( popupWinRect, showFlags ) )
     {
         DoShowPopup( popupWinRect, showFlags );
     }
