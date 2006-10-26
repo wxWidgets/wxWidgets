@@ -154,10 +154,13 @@ static pascal OSStatus wxMacListCtrlEventHandler( EventHandlerCallRef handler , 
                 break; 
             }
         case kEventControlDraw:
-            CGContextRef context = cEvent.GetParameter<CGContextRef>(kEventParamCGContextRef, typeCGContextRef) ;
-            window->MacSetDrawingContext(context);
-            result = CallNextEventHandler(handler, event);
-            window->MacSetDrawingContext(NULL);
+            {
+                CGContextRef context = cEvent.GetParameter<CGContextRef>(kEventParamCGContextRef, typeCGContextRef) ;
+                window->MacSetDrawingContext(context);
+                result = CallNextEventHandler(handler, event);
+                window->MacSetDrawingContext(NULL);
+                break;
+            }
         default :
             break ;
     }
