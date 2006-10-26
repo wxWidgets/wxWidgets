@@ -218,7 +218,7 @@ void MyFrame::EnableControls()
     GetHostname()->Enable(m_client == NULL);
     GetTopic()->Enable(m_client == NULL);
 
-    const bool isConnected = m_client->IsConnected();
+    const bool isConnected = (m_client != NULL && m_client->IsConnected());
     GetDisconnect()->Enable(m_client != NULL && isConnected);
     GetStartAdvise()->Enable(m_client != NULL && isConnected);
     GetStopAdvise()->Enable(m_client != NULL && isConnected);
@@ -261,7 +261,7 @@ void MyFrame::OnStart(wxCommandEvent& WXUNUSED(event))
         delete m_client;
         m_client = NULL;
     }
-    Enable();
+    EnableControls();
 }
 
 void MyFrame::OnServername( wxCommandEvent& WXUNUSED(event) )
@@ -315,7 +315,7 @@ void MyFrame::Disconnect()
 {
     delete m_client;
     m_client = NULL;
-    Enable();
+    EnableControls();
 }
 
 void MyFrame::OnStartAdvise(wxCommandEvent& WXUNUSED(event))
@@ -399,7 +399,7 @@ void MyClient::Disconnect()
         m_connection->Disconnect();
         delete m_connection;
         m_connection = NULL;
-        wxGetApp().GetFrame()->Enable();
+        wxGetApp().GetFrame()->EnableControls();
         wxLogMessage(_T("Client disconnected from server"));
     }
 }
