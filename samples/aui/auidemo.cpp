@@ -74,9 +74,11 @@ class MyFrame : public wxFrame
         ID_AllowFloating,
         ID_AllowActivePane,
         ID_TransparentHint,
-        ID_TransparentHintFade,
-        ID_DisableVenetian,
-        ID_DisableVenetianFade,
+        ID_VenetianBlindsHint,
+        ID_RectangleHint,
+        ID_NoHint,
+        ID_HintFade,
+        ID_NoVenetianFade,
         ID_TransparentDrag,
         ID_NoGradient,
         ID_VerticalGradient,
@@ -551,9 +553,11 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(MyFrame::ID_CopyPerspectiveCode, MyFrame::OnCopyPerspectiveCode)
     EVT_MENU(ID_AllowFloating, MyFrame::OnManagerFlag)
     EVT_MENU(ID_TransparentHint, MyFrame::OnManagerFlag)
-    EVT_MENU(ID_TransparentHintFade, MyFrame::OnManagerFlag)
-    EVT_MENU(ID_DisableVenetian, MyFrame::OnManagerFlag)
-    EVT_MENU(ID_DisableVenetianFade, MyFrame::OnManagerFlag)
+    EVT_MENU(ID_VenetianBlindsHint, MyFrame::OnManagerFlag)
+    EVT_MENU(ID_RectangleHint, MyFrame::OnManagerFlag)
+    EVT_MENU(ID_NoHint, MyFrame::OnManagerFlag)
+    EVT_MENU(ID_HintFade, MyFrame::OnManagerFlag)
+    EVT_MENU(ID_NoVenetianFade, MyFrame::OnManagerFlag)
     EVT_MENU(ID_TransparentDrag, MyFrame::OnManagerFlag)
     EVT_MENU(ID_AllowActivePane, MyFrame::OnManagerFlag)
     EVT_MENU(ID_NoGradient, MyFrame::OnGradient)
@@ -570,9 +574,11 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(wxID_ABOUT, MyFrame::OnAbout)
     EVT_UPDATE_UI(ID_AllowFloating, MyFrame::OnUpdateUI)
     EVT_UPDATE_UI(ID_TransparentHint, MyFrame::OnUpdateUI)
-    EVT_UPDATE_UI(ID_TransparentHintFade, MyFrame::OnUpdateUI)
-    EVT_UPDATE_UI(ID_DisableVenetian, MyFrame::OnUpdateUI)
-    EVT_UPDATE_UI(ID_DisableVenetianFade, MyFrame::OnUpdateUI)
+    EVT_UPDATE_UI(ID_VenetianBlindsHint, MyFrame::OnUpdateUI)
+    EVT_UPDATE_UI(ID_RectangleHint, MyFrame::OnUpdateUI)
+    EVT_UPDATE_UI(ID_NoHint, MyFrame::OnUpdateUI)
+    EVT_UPDATE_UI(ID_HintFade, MyFrame::OnUpdateUI)
+    EVT_UPDATE_UI(ID_NoVenetianFade, MyFrame::OnUpdateUI)
     EVT_UPDATE_UI(ID_TransparentDrag, MyFrame::OnUpdateUI)
     EVT_UPDATE_UI(ID_NoGradient, MyFrame::OnUpdateUI)
     EVT_UPDATE_UI(ID_VerticalGradient, MyFrame::OnUpdateUI)
@@ -618,11 +624,14 @@ MyFrame::MyFrame(wxWindow* parent,
     view_menu->Append(ID_SizeReportContent, _("Use a Size Reporter for the Content Pane"));
 
     wxMenu* options_menu = new wxMenu;
+    options_menu->AppendRadioItem(ID_TransparentHint, _("Transparent Hint"));
+    options_menu->AppendRadioItem(ID_VenetianBlindsHint, _("Venetian Blinds Hint"));
+    options_menu->AppendRadioItem(ID_RectangleHint, _("Rectangle Hint"));
+    options_menu->AppendRadioItem(ID_NoHint, _("No Hint"));
+    options_menu->AppendSeparator();
+    options_menu->AppendCheckItem(ID_HintFade, _("Hint Fade-in"));
     options_menu->AppendCheckItem(ID_AllowFloating, _("Allow Floating"));
-    options_menu->AppendCheckItem(ID_TransparentHint, _("Transparent Hint"));
-    options_menu->AppendCheckItem(ID_TransparentHintFade, _("Transparent Hint Fade-in"));
-    options_menu->AppendCheckItem(ID_DisableVenetian, _("Disable Venetian Blinds Hint"));
-    options_menu->AppendCheckItem(ID_DisableVenetianFade, _("Disable Venetian Blinds Hint Fade-in"));
+    options_menu->AppendCheckItem(ID_NoVenetianFade, _("Disable Venetian Blinds Hint Fade-in"));
     options_menu->AppendCheckItem(ID_TransparentDrag, _("Transparent Drag"));
     options_menu->AppendCheckItem(ID_AllowActivePane, _("Allow Active Pane"));
     options_menu->AppendSeparator();
@@ -921,24 +930,44 @@ void MyFrame::OnManagerFlag(wxCommandEvent& event)
 #if !defined(__WXMSW__) && !defined(__WXMAC__) && !defined(__WXGTK__)
     if (event.GetId() == ID_TransparentDrag ||
         event.GetId() == ID_TransparentHint ||
-        event.GetId() == ID_TransparentHintFade)
+        event.GetId() == ID_HintFade)
     {
         wxMessageBox(wxT("This option is presently only available on wxGTK, wxMSW and wxMac"));
         return;
     }
 #endif
 
-    switch (event.GetId())
+    int id = event.GetId();
+
+    if (id == ID_TransparentHint ||
+        id == ID_VenetianBlindsHint ||
+        id == ID_RectangleHint ||
+        id == ID_NoHint)
+    {
+        unsigned int flags = m_mgr.GetFlags();
+        flags &= ~wxAUI_MGR_TRANSPARENT_HINT;
+        flags &= ~wxAUI_MGR_VENETIAN_BLINDS_HINT;
+        flags &= ~wxAUI_MGR_RECTANGLE_HINT;
+        m_mgr.SetFlags(flags);
+    }
+
+    switch (id)
     {
         case ID_AllowFloating: flag = wxAUI_MGR_ALLOW_FLOATING; break;
         case ID_TransparentDrag: flag = wxAUI_MGR_TRANSPARENT_DRAG; break;
-        case ID_TransparentHint: flag = wxAUI_MGR_TRANSPARENT_HINT; break;
-        case ID_TransparentHintFade: flag = wxAUI_MGR_TRANSPARENT_HINT_FADE; break;
-        case ID_DisableVenetian: flag = wxAUI_MGR_DISABLE_VENETIAN_BLINDS; break;
-        case ID_DisableVenetianFade: flag = wxAUI_MGR_DISABLE_VENETIAN_BLINDS_FADE; break;
+        case ID_HintFade: flag = wxAUI_MGR_HINT_FADE; break;
+        case ID_NoVenetianFade: flag = wxAUI_MGR_NO_VENETIAN_BLINDS_FADE; break;
         case ID_AllowActivePane: flag = wxAUI_MGR_ALLOW_ACTIVE_PANE; break;
+        case ID_TransparentHint: flag = wxAUI_MGR_TRANSPARENT_HINT; break;
+        case ID_VenetianBlindsHint: flag = wxAUI_MGR_VENETIAN_BLINDS_HINT; break;
+        case ID_RectangleHint: flag = wxAUI_MGR_RECTANGLE_HINT; break;
     }
-    m_mgr.SetFlags(m_mgr.GetFlags() ^ flag);
+    
+    if (flag)
+    {
+        m_mgr.SetFlags(m_mgr.GetFlags() ^ flag);
+    }
+    
     m_mgr.Update();
 }
 
@@ -966,14 +995,22 @@ void MyFrame::OnUpdateUI(wxUpdateUIEvent& event)
         case ID_TransparentHint:
             event.Check((flags & wxAUI_MGR_TRANSPARENT_HINT) != 0);
             break;
-        case ID_TransparentHintFade:
-            event.Check((flags & wxAUI_MGR_TRANSPARENT_HINT_FADE) != 0);
+        case ID_VenetianBlindsHint:
+            event.Check((flags & wxAUI_MGR_VENETIAN_BLINDS_HINT) != 0);
             break;
-        case ID_DisableVenetian:
-            event.Check((flags & wxAUI_MGR_DISABLE_VENETIAN_BLINDS) != 0);
+        case ID_RectangleHint:
+            event.Check((flags & wxAUI_MGR_RECTANGLE_HINT) != 0);
             break;
-        case ID_DisableVenetianFade:
-            event.Check((flags & wxAUI_MGR_DISABLE_VENETIAN_BLINDS_FADE) != 0);
+        case ID_NoHint:
+            event.Check(((wxAUI_MGR_TRANSPARENT_HINT |
+                          wxAUI_MGR_VENETIAN_BLINDS_HINT |
+                          wxAUI_MGR_RECTANGLE_HINT) & flags) == 0);
+            break;        
+        case ID_HintFade:
+            event.Check((flags & wxAUI_MGR_HINT_FADE) != 0);
+            break;
+        case ID_NoVenetianFade:
+            event.Check((flags & wxAUI_MGR_NO_VENETIAN_BLINDS_FADE) != 0);
             break;
     }
 }

@@ -147,7 +147,11 @@ public:
     }
 
 #ifdef __WXGTK__
-    void OnWindowCreate(wxWindowCreateEvent& WXUNUSED(event)) {m_CanSetShape=true; SetTransparent(0);}
+    void OnWindowCreate(wxWindowCreateEvent& WXUNUSED(event))
+    {
+        m_CanSetShape=true;
+        SetTransparent(0);
+    }
 #endif
 
     void OnSize(wxSizeEvent& event)
@@ -184,7 +188,7 @@ private:
 };
 
 
-IMPLEMENT_DYNAMIC_CLASS( wxPseudoTransparentFrame, wxFrame )
+IMPLEMENT_DYNAMIC_CLASS(wxPseudoTransparentFrame, wxFrame)
 
 BEGIN_EVENT_TABLE(wxPseudoTransparentFrame, wxFrame)
     EVT_PAINT(wxPseudoTransparentFrame::OnPaint)
@@ -580,7 +584,22 @@ wxDockUIPart* wxFrameManager::HitTest(int x, int y)
 // options which are global to wxFrameManager
 void wxFrameManager::SetFlags(unsigned int flags)
 {
+    // find out if we have to call UpdateHintWindowConfig()
+    bool update_hint_wnd = false;
+    unsigned int hint_mask = wxAUI_MGR_TRANSPARENT_HINT |
+                             wxAUI_MGR_VENETIAN_BLINDS_HINT |
+                             wxAUI_MGR_RECTANGLE_HINT;
+    if ((flags & hint_mask) != (m_flags & hint_mask))
+        update_hint_wnd = true;
+
+
+    // set the new flags
     m_flags = flags;
+    
+    if (update_hint_wnd)
+    {
+        UpdateHintWindowConfig();
+    }
 }
 
 unsigned int wxFrameManager::GetFlags() const
@@ -602,16 +621,97 @@ wxFrame* wxFrameManager::GetFrame() const
 }
 
 
+void wxFrameManager::UpdateHintWindowConfig()
+{
+    // find out if the the system can do transparent frames
+    bool can_do_transparent = false;
+    
+    wxWindow* w = m_frame;
+    while (w)
+    {
+        if (w->IsKindOf(CLASSINFO(wxFrame)))
+        {
+            wxFrame* f = static_cast<wxFrame*>(w);
+            #if wxCHECK_VERSION(2,7,0)
+            can_do_transparent = f->CanSetTransparent();
+            #endif
+            break;
+        }
+        
+        w = w->GetParent();
+    }
+    
+    // if there is an existing hint window, delete it
+    if (m_hint_wnd)
+    {
+        m_hint_wnd->Destroy();
+        m_hint_wnd = NULL;
+    }
+
+    m_hint_fademax = 50;
+    m_hint_wnd = NULL;
+    
+    if ((m_flags & wxAUI_MGR_TRANSPARENT_HINT) && can_do_transparent)
+    { 
+        // Make a window to use for a transparent hint
+        #if defined(__WXMSW__) || defined(__WXGTK__)
+            m_hint_wnd = new wxFrame(m_frame, wxID_ANY, wxEmptyString,
+                                     wxDefaultPosition, wxSize(1,1),
+                                         wxFRAME_TOOL_WINDOW |
+                                         wxFRAME_FLOAT_ON_PARENT |
+                                         wxFRAME_NO_TASKBAR |
+                                         wxNO_BORDER);
+
+            m_hint_wnd->SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_ACTIVECAPTION));
+        #elif defined(__WXMAC__)
+            // Using a miniframe with float and tool styles keeps the parent
+            // frame activated and highlighted as such...
+            m_hint_wnd = new wxMiniFrame(m_frame, wxID_ANY, wxEmptyString,
+                                         wxDefaultPosition, wxSize(1,1),
+                                         wxFRAME_FLOAT_ON_PARENT
+                                         | wxFRAME_TOOL_WINDOW );
+
+            // Can't set the bg colour of a Frame in wxMac
+            wxPanel* p = new wxPanel(m_hint_wnd);
+
+            // The default wxSYS_COLOUR_ACTIVECAPTION colour is a light silver
+            // color that is really hard to see, especially transparent.
+            // Until a better system color is decided upon we'll just use
+            // blue.
+            p->SetBackgroundColour(*wxBLUE);
+        #endif
+        
+    }
+     else
+    {
+        if ((m_flags & wxAUI_MGR_TRANSPARENT_HINT) != 0 ||
+            (m_flags & wxAUI_MGR_VENETIAN_BLINDS_HINT) != 0)
+        {
+            // system can't support transparent fade, or the venetian
+            // blinds effect was explicitly requested
+            m_hint_wnd = new wxPseudoTransparentFrame(m_frame,
+                                                      wxID_ANY,
+                                                      wxEmptyString,
+                                                      wxDefaultPosition,
+                                                      wxSize(1,1),
+                                                            wxFRAME_TOOL_WINDOW |
+                                                            wxFRAME_FLOAT_ON_PARENT |
+                                                            wxFRAME_NO_TASKBAR |
+                                                            wxNO_BORDER);
+            m_hint_fademax = 128;
+        }
+    }
+}
 
 
 // SetManagedWindow() is usually called once when the frame
 // manager class is being initialized.  "frame" specifies
 // the frame which should be managed by the frame mananger
-void wxFrameManager::SetManagedWindow(wxWindow* frame)
+void wxFrameManager::SetManagedWindow(wxWindow* wnd)
 {
-    wxASSERT_MSG(frame, wxT("specified frame must be non-NULL"));
+    wxASSERT_MSG(wnd, wxT("specified window must be non-NULL"));
 
-    m_frame = frame;
+    m_frame = wnd;
     m_frame->PushEventHandler(this);
 
 #if wxUSE_MDI
@@ -619,9 +719,9 @@ void wxFrameManager::SetManagedWindow(wxWindow* frame)
     // we need to add the MDI client window as the default
     // center pane
 
-    if (frame->IsKindOf(CLASSINFO(wxMDIParentFrame)))
+    if (m_frame->IsKindOf(CLASSINFO(wxMDIParentFrame)))
     {
-        wxMDIParentFrame* mdi_frame = (wxMDIParentFrame*)frame;
+        wxMDIParentFrame* mdi_frame = (wxMDIParentFrame*)m_frame;
         wxWindow* client_window = mdi_frame->GetClientWindow();
 
         wxASSERT_MSG(client_window, wxT("Client window is NULL!"));
@@ -632,57 +732,7 @@ void wxFrameManager::SetManagedWindow(wxWindow* frame)
     }
 #endif
 
-    // Make a window to use for a transparent hint
-#if defined(__WXMSW__) || defined(__WXGTK__)
-    m_hint_wnd = new wxFrame(m_frame, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize(1,1),
-                             wxFRAME_TOOL_WINDOW |
-                             wxFRAME_FLOAT_ON_PARENT |
-                             wxFRAME_NO_TASKBAR |
-                             wxNO_BORDER);
-
-    m_hint_wnd->SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_ACTIVECAPTION));
-
-#elif defined(__WXMAC__)
-    // Using a miniframe with float and tool styles keeps the parent
-    // frame activated and highlighted as such...
-    m_hint_wnd = new wxMiniFrame(m_frame, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize(1,1),
-                                 wxFRAME_FLOAT_ON_PARENT
-                                 | wxFRAME_TOOL_WINDOW );
-
-    // Can't set the bg colour of a Frame in wxMac
-    wxPanel* p = new wxPanel(m_hint_wnd);
-
-    // The default wxSYS_COLOUR_ACTIVECAPTION colour is a light silver
-    // color that is really hard to see, especially transparent.
-    // Until a better system color is decided upon we'll just use
-    // blue.
-    p->SetBackgroundColour(*wxBLUE);
-#endif
-
-    m_hint_fademax=50;
-
-    if (m_hint_wnd
-        // CanSetTransparent is only present in the 2.7.0 ABI. To allow this file to be easily used
-        // in a backported environment, conditionally compile this in.
-#if wxCHECK_VERSION(2,7,0)
-       && !m_hint_wnd->CanSetTransparent()
-#endif
-        )
-    {
-
-        m_hint_wnd->Close();
-        m_hint_wnd->Destroy();
-        m_hint_wnd = NULL;
-
-        // If we can convert it to a PseudoTransparent window, do so
-        m_hint_wnd = new wxPseudoTransparentFrame (m_frame, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize(1,1),
-                                                wxFRAME_TOOL_WINDOW |
-                                                wxFRAME_FLOAT_ON_PARENT |
-                                                wxFRAME_NO_TASKBAR |
-                                                wxNO_BORDER);
-
-        m_hint_fademax = 128;
-    }
+    UpdateHintWindowConfig();
 }
 
 
@@ -871,7 +921,7 @@ bool wxFrameManager::InsertPane(wxWindow* window, const wxPaneInfo& pane_info,
     {
         return AddPane(window, pane_info);
     }
-    else
+     else
     {
         if (pane_info.IsFloating())
         {
@@ -2724,27 +2774,24 @@ void wxFrameManager::OnHintFadeTimer(wxTimerEvent& WXUNUSED(event))
 
 void wxFrameManager::ShowHint(const wxRect& rect)
 {
-    if ((m_flags & wxAUI_MGR_TRANSPARENT_HINT) != 0
-        && m_hint_wnd
-        // Finally, don't use a venetian blind effect if it's been specifically disabled
-        && !((m_hint_wnd->IsKindOf(CLASSINFO(wxPseudoTransparentFrame))) &&
-             (m_flags & wxAUI_MGR_DISABLE_VENETIAN_BLINDS))
-       )
+    if (m_hint_wnd)
     {
+        // if the hint rect is the same as last time, don't do anything
         if (m_last_hint == rect)
             return;
         m_last_hint = rect;
 
         m_hint_fadeamt = m_hint_fademax;
-        if ((m_flags & wxAUI_MGR_TRANSPARENT_HINT_FADE)
+        
+        if ((m_flags & wxAUI_MGR_HINT_FADE)
             && !((m_hint_wnd->IsKindOf(CLASSINFO(wxPseudoTransparentFrame))) &&
-                 (m_flags & wxAUI_MGR_DISABLE_VENETIAN_BLINDS_FADE))
+                 (m_flags & wxAUI_MGR_NO_VENETIAN_BLINDS_FADE))
             )
             m_hint_fadeamt = 0;
 
         m_hint_wnd->SetSize(rect);
 
-        if (! m_hint_wnd->IsShown())
+        if (!m_hint_wnd->IsShown())
             m_hint_wnd->Show();
 
         // if we are dragging a floating pane, set the focus
@@ -2756,7 +2803,7 @@ void wxFrameManager::ShowHint(const wxRect& rect)
         m_hint_wnd->SetTransparent(m_hint_fadeamt);
 #else
         if (m_hint_wnd->IsKindOf(CLASSINFO(wxPseudoTransparentFrame)))
-            ((wxPseudoTransparentFrame *)m_hint_wnd)->SetTransparent(m_hint_fadeamt);
+            ((wxPseudoTransparentFrame*)m_hint_wnd)->SetTransparent(m_hint_fadeamt);
 #endif
         m_hint_wnd->Raise();
 
@@ -2768,10 +2815,11 @@ void wxFrameManager::ShowHint(const wxRect& rect)
             m_hint_fadetimer.Start(5);
         }
     }
-
-    else  // Not using a transparent hint window...
+     else  // Not using a transparent hint window...
     {
-
+        if (!(m_flags & wxAUI_MGR_RECTANGLE_HINT))
+            return;
+            
         if (m_last_hint != rect)
         {
             // remove the last hint rectangle
