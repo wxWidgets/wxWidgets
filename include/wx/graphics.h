@@ -234,9 +234,8 @@ public:
 	
     static wxGraphicsContext* CreateFromNative( void * context ) ;
 
-#ifdef __WXMAC__
     static wxGraphicsContext* CreateFromNativeWindow( void * window ) ;
-#endif
+
     static wxGraphicsContext* Create( wxWindow* window ) ;
 
     wxGraphicsPath * CreatePath();
