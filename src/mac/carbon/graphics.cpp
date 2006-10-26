@@ -353,10 +353,20 @@ void wxMacCoreGraphicsContext::Init()
 
 wxMacCoreGraphicsContext::wxMacCoreGraphicsContext( CGContextRef cgcontext )
 {
-    Init();
-    m_cgContext = cgcontext;
-    CGContextSaveGState( m_cgContext );
-    CGContextSaveGState( m_cgContext );
+	Init();
+	m_cgContext = cgcontext;
+    // FIXME: This check is needed because currently we need to use a DC/GraphicsContext
+    // in order to get font properties, like wxFont::GetPixelSize, but since we don't have 
+    // a native window attached to use, I create a wxGraphicsContext with a NULL CGContextRef
+    // for this one operation.
+    
+    // When wxFont::GetPixelSize on Mac no longer needs a graphics context, this check
+    // can be removed. 
+    if (m_cgContext)
+    {
+        CGContextSaveGState( m_cgContext );
+        CGContextSaveGState( m_cgContext );
+    }
 }
 
 wxMacCoreGraphicsContext::wxMacCoreGraphicsContext( WindowRef window )
