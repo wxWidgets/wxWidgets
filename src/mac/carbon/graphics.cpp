@@ -256,7 +256,7 @@ public:
     virtual void SetFont( const wxFont &font );
     
     // sets the text color
-    virtual void SetTextColor( const wxColour &col );
+    virtual void SetTextColour( const wxColour &col );
 
     // strokes along a path with the current pen
     virtual void StrokePath( const wxGraphicsPath *path );
@@ -594,7 +594,7 @@ void wxMacCoreGraphicsContext::PopState()
     CGContextRestoreGState( m_cgContext );
 }
 
-void wxMacCoreGraphicsContext::SetTextColor( const wxColour &col ) 
+void wxMacCoreGraphicsContext::SetTextColour( const wxColour &col ) 
 {
     m_textForegroundColor = col;
     // to recreate the native font after color change

@@ -277,7 +277,7 @@ public:
     virtual void PopState();
 
     virtual void SetFont( const wxFont &font );
-    virtual void SetTextColor( const wxColour &col );
+    virtual void SetTextColour( const wxColour &col );
     virtual void DrawText( const wxString &str, wxDouble x, wxDouble y);
     virtual void GetTextExtent( const wxString &str, wxDouble *width, wxDouble *height,
                                 wxDouble *descent, wxDouble *externalLeading ) const;
@@ -601,7 +601,7 @@ void wxCairoContext::PopState()
     cairo_restore(m_context);
 }
 
-void wxCairoContext::SetTextColor( const wxColour &col )
+void wxCairoContext::SetTextColour( const wxColour &col )
 {
     m_textColour = col;
 }
