@@ -4,6 +4,7 @@ Classes: \helpref{wxRichTextCtrl}{wxrichtextctrl}, \helpref{wxRichTextBuffer}{wx
 \helpref{wxRichTextAttr}{wxrichtextattr}, \helpref{wxTextAttrEx}{wxtextattrex}, 
 \helpref{wxRichTextCharacterStyleDefinition}{wxrichtextcharacterstyledefinition}, 
 \helpref{wxRichTextParagraphStyleDefinition}{wxrichtextparagraphstyledefinition}, 
+\helpref{wxRichTextListStyleDefinition}{wxrichtextliststyledefinition}, 
 \helpref{wxRichTextStyleSheet}{wxrichtextstylesheet}, 
 \helpref{wxRichTextStyleComboCtrl}{wxrichtextstylecomboctrl}, 
 \helpref{wxRichTextStyleListBox}{wxrichtextstylelistbox}, 
@@ -285,7 +286,7 @@ of styles that you can tailor or use as-is, and this means that you can set a he
 instead of marking text in bold, specifying a large font size, and applying a certain
 paragraph spacing and alignment for every such heading. Similarly,
 wxWidgets provides a class called \helpref{wxRichTextStyleSheet}{wxrichtextstylesheet} which manages style definitions
-(\helpref{wxRichTextParagraphStyleDefinition}{wxrichtextparagraphstyledefinition} and \helpref{wxRichTextCharacterStyleDefinition}{wxrichtextcharacterstyledefinition}).
+(\helpref{wxRichTextParagraphStyleDefinition}{wxrichtextparagraphstyledefinition}, \helpref{wxRichTextListStyleDefinition}{wxrichtextliststyledefinition} and \helpref{wxRichTextCharacterStyleDefinition}{wxrichtextcharacterstyledefinition}).
 Once you have added definitions to a style sheet and associated it with a wxRichTextCtrl,
 you can apply a named definition to a range of text. The classes \helpref{wxRichTextStyleComboCtrl}{wxrichtextstylecomboctrl}\rtfsp
 and \helpref{wxRichTextStyleListBox}{wxrichtextstylelistbox} can be used to present the user with a list
@@ -295,7 +296,7 @@ You can reapply a style sheet to the contents of the control, by calling \helpre
 This is useful if the style definitions have changed, and you want the content to reflect this.
 It relies on the fact that when you apply a named style, the style definition name is recorded in the
 content. So ApplyStyleSheet works by finding the paragraph attributes with style names and re-applying the definition's
-attributes to the paragraph. Currently, this works with paragraph style definitions only.
+attributes to the paragraph. Currently, this works with paragraph and list style definitions only.
 
 \subsection{wxRichTextCtrl dialogs}\label{wxrichtextctrldialogs}
 
@@ -386,12 +387,8 @@ This is a list of some of the features that have yet to be implemented. Help wit
 \item Floating images, with content wrapping around them
 \item A ruler control
 \item Standard editing toolbars
-\item Automatic list numbering
 \item Tables
 \item Text frames
-\item Add ability to show images in wxHTML output (currently uses embedded data suitable only for real browsers)
-\item More complete stylesheet viewer, plus style sheet editing dialogs
-\item Ability to read and write style sheets
 \end{itemize}
 
 There are also things that could be done to take advantage of the underlying text capabilities of the platform;

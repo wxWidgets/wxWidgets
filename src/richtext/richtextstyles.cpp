@@ -94,14 +94,14 @@ bool wxRichTextListStyleDefinition::operator ==(const wxRichTextListStyleDefinit
 }
 
 /// Sets/gets the attributes for the given level
-void wxRichTextListStyleDefinition::SetLevelAttributes(int i, const wxTextAttrEx& attr)
+void wxRichTextListStyleDefinition::SetLevelAttributes(int i, const wxRichTextAttr& attr)
 {
     wxASSERT( (i >= 0 && i < 10) );
     if (i >= 0 && i < 10)
         m_levelStyles[i] = attr;
 }
 
-const wxTextAttrEx* wxRichTextListStyleDefinition::GetLevelAttributes(int i) const
+const wxRichTextAttr* wxRichTextListStyleDefinition::GetLevelAttributes(int i) const
 {
     wxASSERT( (i >= 0 && i < 10) );
     if (i >= 0 && i < 10)
@@ -110,7 +110,7 @@ const wxTextAttrEx* wxRichTextListStyleDefinition::GetLevelAttributes(int i) con
         return NULL;
 }
 
-wxTextAttrEx* wxRichTextListStyleDefinition::GetLevelAttributes(int i)
+wxRichTextAttr* wxRichTextListStyleDefinition::GetLevelAttributes(int i)
 {
     wxASSERT( (i >= 0 && i < 10) );
     if (i >= 0 && i < 10)
@@ -125,13 +125,18 @@ void wxRichTextListStyleDefinition::SetAttributes(int i, int leftIndent, int lef
     wxASSERT( (i >= 0 && i < 10) );
     if (i >= 0 && i < 10)
     {
-        wxTextAttrEx attr;
+        wxRichTextAttr attr;
 
         attr.SetBulletStyle(bulletStyle);
         attr.SetLeftIndent(leftIndent, leftSubIndent);
 
         if (!bulletSymbol.IsEmpty())
-            attr.SetBulletSymbol(bulletSymbol[0]);
+        {
+            if (bulletStyle & wxTEXT_ATTR_BULLET_STYLE_SYMBOL)
+                attr.SetBulletText(bulletSymbol);
+            else
+                attr.SetBulletName(bulletSymbol);
+        }
 
         m_levelStyles[i] = attr;
     }
@@ -156,11 +161,11 @@ int wxRichTextListStyleDefinition::FindLevelForIndent(int indent) const
 
 /// Combine the list style with a paragraph style, using the given indent (from which
 /// an appropriate level is found)
-wxTextAttrEx wxRichTextListStyleDefinition::CombineWithParagraphStyle(int indent, const wxTextAttrEx& paraStyle)
+wxRichTextAttr wxRichTextListStyleDefinition::CombineWithParagraphStyle(int indent, const wxRichTextAttr& paraStyle)
 {
     int listLevel = FindLevelForIndent(indent);
 
-    wxTextAttrEx attr(*GetLevelAttributes(listLevel));
+    wxRichTextAttr attr(*GetLevelAttributes(listLevel));
     int oldLeftIndent = attr.GetLeftIndent();
     int oldLeftSubIndent = attr.GetLeftSubIndent();
 
@@ -178,7 +183,7 @@ wxTextAttrEx wxRichTextListStyleDefinition::CombineWithParagraphStyle(int indent
 
 /// Combine the base and list style, using the given indent (from which
 /// an appropriate level is found)
-wxTextAttrEx wxRichTextListStyleDefinition::GetCombinedStyle(int indent)
+wxRichTextAttr wxRichTextListStyleDefinition::GetCombinedStyle(int indent)
 {
     int listLevel = FindLevelForIndent(indent);
     return GetCombinedStyleForLevel(listLevel);
@@ -186,9 +191,9 @@ wxTextAttrEx wxRichTextListStyleDefinition::GetCombinedStyle(int indent)
 
 /// Combine the base and list style, using the given indent (from which
 /// an appropriate level is found)
-wxTextAttrEx wxRichTextListStyleDefinition::GetCombinedStyleForLevel(int listLevel)
+wxRichTextAttr wxRichTextListStyleDefinition::GetCombinedStyleForLevel(int listLevel)
 {
-    wxTextAttrEx attr(*GetLevelAttributes(listLevel));
+    wxRichTextAttr attr(*GetLevelAttributes(listLevel));
     int oldLeftIndent = attr.GetLeftIndent();
     int oldLeftSubIndent = attr.GetLeftSubIndent();
 

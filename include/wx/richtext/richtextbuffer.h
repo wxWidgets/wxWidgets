@@ -99,6 +99,8 @@ class WXDLLIMPEXP_RICHTEXT wxRichTextFileHandler;
 class WXDLLIMPEXP_RICHTEXT wxRichTextStyleSheet;
 class WXDLLIMPEXP_RICHTEXT wxTextAttrEx;
 class WXDLLIMPEXP_RICHTEXT wxRichTextListStyleDefinition;
+class WXDLLIMPEXP_RICHTEXT wxRichTextEvent;
+class WXDLLIMPEXP_RICHTEXT wxRichTextRenderer;
 
 /*!
  * Flags determining the available space, passed to Layout
@@ -183,24 +185,31 @@ class WXDLLIMPEXP_RICHTEXT wxRichTextListStyleDefinition;
 #define wxTEXT_ATTR_LIST_STYLE_NAME         0x00010000
 #define wxTEXT_ATTR_BULLET_STYLE            0x00020000
 #define wxTEXT_ATTR_BULLET_NUMBER           0x00040000
-#define wxTEXT_ATTR_BULLET_SYMBOL           0x00080000
+#define wxTEXT_ATTR_BULLET_TEXT             0x00080000
 #define wxTEXT_ATTR_BULLET_NAME             0x00100000
+#define wxTEXT_ATTR_URL                     0x00200000
 
 /*!
  * Styles for wxTextAttrEx::SetBulletStyle
  */
 
-#define wxTEXT_ATTR_BULLET_STYLE_NONE           0x0000
-#define wxTEXT_ATTR_BULLET_STYLE_ARABIC         0x0001
-#define wxTEXT_ATTR_BULLET_STYLE_LETTERS_UPPER  0x0002
-#define wxTEXT_ATTR_BULLET_STYLE_LETTERS_LOWER  0x0004
-#define wxTEXT_ATTR_BULLET_STYLE_ROMAN_UPPER    0x0008
-#define wxTEXT_ATTR_BULLET_STYLE_ROMAN_LOWER    0x0010
-#define wxTEXT_ATTR_BULLET_STYLE_SYMBOL         0x0020
-#define wxTEXT_ATTR_BULLET_STYLE_BITMAP         0x0040
-#define wxTEXT_ATTR_BULLET_STYLE_PARENTHESES    0x0080
-#define wxTEXT_ATTR_BULLET_STYLE_PERIOD         0x0100
-#define wxTEXT_ATTR_BULLET_STYLE_STANDARD       0x0200
+#define wxTEXT_ATTR_BULLET_STYLE_NONE               0x00000000
+#define wxTEXT_ATTR_BULLET_STYLE_ARABIC             0x00000001
+#define wxTEXT_ATTR_BULLET_STYLE_LETTERS_UPPER      0x00000002
+#define wxTEXT_ATTR_BULLET_STYLE_LETTERS_LOWER      0x00000004
+#define wxTEXT_ATTR_BULLET_STYLE_ROMAN_UPPER        0x00000008
+#define wxTEXT_ATTR_BULLET_STYLE_ROMAN_LOWER        0x00000010
+#define wxTEXT_ATTR_BULLET_STYLE_SYMBOL             0x00000020
+#define wxTEXT_ATTR_BULLET_STYLE_BITMAP             0x00000040
+#define wxTEXT_ATTR_BULLET_STYLE_PARENTHESES        0x00000080
+#define wxTEXT_ATTR_BULLET_STYLE_PERIOD             0x00000100
+#define wxTEXT_ATTR_BULLET_STYLE_STANDARD           0x00000200
+#define wxTEXT_ATTR_BULLET_STYLE_RIGHT_PARENTHESIS  0x00000400
+#define wxTEXT_ATTR_BULLET_STYLE_OUTLINE            0x00000800
+
+#define wxTEXT_ATTR_BULLET_STYLE_ALIGN_LEFT         0x00000000
+#define wxTEXT_ATTR_BULLET_STYLE_ALIGN_RIGHT        0x00001000
+#define wxTEXT_ATTR_BULLET_STYLE_ALIGN_CENTRE       0x00002000
 
 /*!
  * Line spacing values
@@ -209,6 +218,19 @@ class WXDLLIMPEXP_RICHTEXT wxRichTextListStyleDefinition;
 #define wxTEXT_ATTR_LINE_SPACING_NORMAL         10
 #define wxTEXT_ATTR_LINE_SPACING_HALF           15
 #define wxTEXT_ATTR_LINE_SPACING_TWICE          20
+
+/*!
+ * Character and paragraph combined styles
+ */
+
+#define wxTEXT_ATTR_CHARACTER (wxTEXT_ATTR_FONT | wxTEXT_ATTR_BACKGROUND_COLOUR | wxTEXT_ATTR_TEXT_COLOUR | wxTEXT_ATTR_CHARACTER_STYLE_NAME | wxTEXT_ATTR_URL)
+
+#define wxTEXT_ATTR_PARAGRAPH (wxTEXT_ATTR_ALIGNMENT|wxTEXT_ATTR_LEFT_INDENT|wxTEXT_ATTR_RIGHT_INDENT|wxTEXT_ATTR_TABS|\
+    wxTEXT_ATTR_PARA_SPACING_BEFORE|wxTEXT_ATTR_PARA_SPACING_AFTER|wxTEXT_ATTR_LINE_SPACING|\
+    wxTEXT_ATTR_BULLET_STYLE|wxTEXT_ATTR_BULLET_NUMBER|wxTEXT_ATTR_BULLET_TEXT|wxTEXT_ATTR_BULLET_NAME|\
+    wxTEXT_ATTR_PARAGRAPH_STYLE_NAME|wxTEXT_ATTR_LIST_STYLE_NAME)
+
+#define wxTEXT_ATTR_ALL (wxTEXT_ATTR_CHARACTER|wxTEXT_ATTR_PARAGRAPH)
 
 /*!
  * wxRichTextRange class declaration
@@ -289,6 +311,9 @@ public:
     // Initialise this object
     void Init();
 
+    // Copy
+    void Copy(const wxTextAttrEx& attr);
+
     // Assignment from a wxTextAttrEx object
     void operator= (const wxTextAttrEx& attr);
 
@@ -307,9 +332,10 @@ public:
     void SetLineSpacing(int spacing) { m_lineSpacing = spacing; SetFlags(GetFlags() | wxTEXT_ATTR_LINE_SPACING); }
     void SetBulletStyle(int style) { m_bulletStyle = style; SetFlags(GetFlags() | wxTEXT_ATTR_BULLET_STYLE); }
     void SetBulletNumber(int n) { m_bulletNumber = n; SetFlags(GetFlags() | wxTEXT_ATTR_BULLET_NUMBER); }
-    void SetBulletSymbol(wxChar symbol) { m_bulletSymbol = symbol; SetFlags(GetFlags() | wxTEXT_ATTR_BULLET_SYMBOL); }
+    void SetBulletText(const wxString& text) { m_bulletText = text; SetFlags(GetFlags() | wxTEXT_ATTR_BULLET_TEXT); }
     void SetBulletName(const wxString& name) { m_bulletName = name; SetFlags(GetFlags() | wxTEXT_ATTR_BULLET_NAME); }
     void SetBulletFont(const wxString& bulletFont) { m_bulletFont = bulletFont; }
+    void SetURL(const wxString& url) { m_urlTarget = url; SetFlags(GetFlags() | wxTEXT_ATTR_URL); }
 
     const wxString& GetCharacterStyleName() const { return m_characterStyleName; }
     const wxString& GetParagraphStyleName() const { return m_paragraphStyleName; }
@@ -319,9 +345,10 @@ public:
     int GetLineSpacing() const { return m_lineSpacing; }
     int GetBulletStyle() const { return m_bulletStyle; }
     int GetBulletNumber() const { return m_bulletNumber; }
-    wxChar GetBulletSymbol() const { return m_bulletSymbol; }
+    const wxString& GetBulletText() const { return m_bulletText; }
     const wxString& GetBulletName() const { return m_bulletName; }
     const wxString& GetBulletFont() const { return m_bulletFont; }
+    const wxString& GetURL() const { return m_urlTarget; }
 
     bool HasWeight() const { return (GetFlags() & wxTEXT_ATTR_FONT_WEIGHT) != 0; }
     bool HasSize() const { return (GetFlags() & wxTEXT_ATTR_FONT_SIZE) != 0; }
@@ -337,14 +364,13 @@ public:
     bool HasListStyleName() const { return HasFlag(wxTEXT_ATTR_LIST_STYLE_NAME) || !m_listStyleName.IsEmpty(); }
     bool HasBulletStyle() const { return HasFlag(wxTEXT_ATTR_BULLET_STYLE); }
     bool HasBulletNumber() const { return HasFlag(wxTEXT_ATTR_BULLET_NUMBER); }
-    bool HasBulletSymbol() const { return HasFlag(wxTEXT_ATTR_BULLET_SYMBOL); }
+    bool HasBulletText() const { return HasFlag(wxTEXT_ATTR_BULLET_TEXT); }
     bool HasBulletName() const { return HasFlag(wxTEXT_ATTR_BULLET_NAME); }
+    bool HasURL() const { return HasFlag(wxTEXT_ATTR_URL); }
 
     // Is this a character style?
-    bool IsCharacterStyle() const { return (0 != (GetFlags() & (wxTEXT_ATTR_FONT | wxTEXT_ATTR_BACKGROUND_COLOUR | wxTEXT_ATTR_TEXT_COLOUR))); }
-    bool IsParagraphStyle() const { return (0 != (GetFlags() & (wxTEXT_ATTR_ALIGNMENT|wxTEXT_ATTR_LEFT_INDENT|wxTEXT_ATTR_RIGHT_INDENT|wxTEXT_ATTR_TABS|
-                            wxTEXT_ATTR_PARA_SPACING_BEFORE|wxTEXT_ATTR_PARA_SPACING_AFTER|wxTEXT_ATTR_LINE_SPACING|
-                            wxTEXT_ATTR_BULLET_STYLE|wxTEXT_ATTR_BULLET_NUMBER|wxTEXT_ATTR_BULLET_NAME))); }
+    bool IsCharacterStyle() const { return (0 != (GetFlags() & wxTEXT_ATTR_CHARACTER)); }
+    bool IsParagraphStyle() const { return (0 != (GetFlags() & wxTEXT_ATTR_PARAGRAPH)); }
 
     // returns false if we have any attributes set, true otherwise
     bool IsDefault() const
@@ -353,7 +379,7 @@ public:
                !HasTabs() && !HasLeftIndent() && !HasRightIndent() &&
                !HasParagraphSpacingAfter() && !HasParagraphSpacingBefore() && !HasLineSpacing() &&
                !HasCharacterStyleName() && !HasParagraphStyleName() && !HasListStyleName() &&
-               !HasBulletNumber() && !HasBulletStyle() && !HasBulletSymbol() && !HasBulletName();
+               !HasBulletNumber() && !HasBulletStyle() && !HasBulletText() && !HasBulletName() && !HasURL();
     }
 
     // return the attribute having the valid font and colours: it uses the
@@ -370,9 +396,10 @@ private:
     int                 m_lineSpacing;
     int                 m_bulletStyle;
     int                 m_bulletNumber;
-    wxChar              m_bulletSymbol;
+    wxString            m_bulletText;
     wxString            m_bulletFont;
     wxString            m_bulletName;
+    wxString            m_urlTarget;
 
     // Character style
     wxString            m_characterStyleName;
@@ -394,6 +421,7 @@ class WXDLLIMPEXP_RICHTEXT wxRichTextAttr
 public:
     // ctors
     wxRichTextAttr(const wxTextAttrEx& attr);
+    wxRichTextAttr(const wxRichTextAttr& attr);
     wxRichTextAttr() { Init(); }
     wxRichTextAttr(const wxColour& colText,
                const wxColour& colBack = wxNullColour,
@@ -401,6 +429,9 @@ public:
 
     // Initialise this object.
     void Init();
+
+    // Copy
+    void Copy(const wxRichTextAttr& attr);
 
     // Assignment from a wxRichTextAttr object.
     void operator= (const wxRichTextAttr& attr);
@@ -447,9 +478,10 @@ public:
     void SetLineSpacing(int spacing) { m_lineSpacing = spacing; m_flags |= wxTEXT_ATTR_LINE_SPACING; }
     void SetBulletStyle(int style) { m_bulletStyle = style; m_flags |= wxTEXT_ATTR_BULLET_STYLE; }
     void SetBulletNumber(int n) { m_bulletNumber = n; m_flags |= wxTEXT_ATTR_BULLET_NUMBER; }
-    void SetBulletSymbol(wxChar symbol) { m_bulletSymbol = symbol; m_flags |= wxTEXT_ATTR_BULLET_NUMBER; }
+    void SetBulletText(const wxString& text) { m_bulletText = text; m_flags |= wxTEXT_ATTR_BULLET_TEXT; }
     void SetBulletFont(const wxString& bulletFont) { m_bulletFont = bulletFont; }
-    void SetBulletName(const wxString& name) { m_bulletName = name; }
+    void SetBulletName(const wxString& name) { m_bulletName = name; m_flags |= wxTEXT_ATTR_BULLET_NAME; }
+    void SetURL(const wxString& url) { m_urlTarget = url; m_flags |= wxTEXT_ATTR_URL; }
 
     const wxColour& GetTextColour() const { return m_colText; }
     const wxColour& GetBackgroundColour() const { return m_colBack; }
@@ -474,9 +506,10 @@ public:
     int GetLineSpacing() const { return m_lineSpacing; }
     int GetBulletStyle() const { return m_bulletStyle; }
     int GetBulletNumber() const { return m_bulletNumber; }
-    wxChar GetBulletSymbol() const { return m_bulletSymbol; }
+    const wxString& GetBulletText() const { return m_bulletText; }
     const wxString& GetBulletFont() const { return m_bulletFont; }
     const wxString& GetBulletName() const { return m_bulletName; }
+    const wxString& GetURL() const { return m_urlTarget; }
 
     // accessors
     bool HasTextColour() const { return m_colText.Ok() && HasFlag(wxTEXT_ATTR_TEXT_COLOUR) ; }
@@ -500,16 +533,15 @@ public:
     bool HasListStyleName() const { return HasFlag(wxTEXT_ATTR_LIST_STYLE_NAME) || !m_listStyleName.IsEmpty(); }
     bool HasBulletStyle() const { return (m_flags & wxTEXT_ATTR_BULLET_STYLE) != 0; }
     bool HasBulletNumber() const { return (m_flags & wxTEXT_ATTR_BULLET_NUMBER) != 0; }
-    bool HasBulletSymbol() const { return (m_flags & wxTEXT_ATTR_BULLET_SYMBOL) != 0; }
+    bool HasBulletText() const { return (m_flags & wxTEXT_ATTR_BULLET_TEXT) != 0; }
     bool HasBulletName() const { return (m_flags & wxTEXT_ATTR_BULLET_NAME) != 0; }
+    bool HasURL() const { return HasFlag(wxTEXT_ATTR_URL); }
 
     bool HasFlag(long flag) const { return (m_flags & flag) != 0; }
 
     // Is this a character style?
-    bool IsCharacterStyle() const { return (0 != (GetFlags() & (wxTEXT_ATTR_FONT | wxTEXT_ATTR_BACKGROUND_COLOUR | wxTEXT_ATTR_TEXT_COLOUR))); }
-    bool IsParagraphStyle() const { return (0 != (GetFlags() & (wxTEXT_ATTR_ALIGNMENT|wxTEXT_ATTR_LEFT_INDENT|wxTEXT_ATTR_RIGHT_INDENT|wxTEXT_ATTR_TABS|
-                            wxTEXT_ATTR_PARA_SPACING_BEFORE|wxTEXT_ATTR_PARA_SPACING_AFTER|wxTEXT_ATTR_LINE_SPACING|
-                            wxTEXT_ATTR_BULLET_STYLE|wxTEXT_ATTR_BULLET_NUMBER|wxTEXT_ATTR_BULLET_NAME))); }
+    bool IsCharacterStyle() const { return (0 != (GetFlags() & wxTEXT_ATTR_CHARACTER)); }
+    bool IsParagraphStyle() const { return (0 != (GetFlags() & wxTEXT_ATTR_PARAGRAPH)); }
 
     // returns false if we have any attributes set, true otherwise
     bool IsDefault() const
@@ -518,7 +550,7 @@ public:
                !HasTabs() && !HasLeftIndent() && !HasRightIndent() &&
                !HasParagraphSpacingAfter() && !HasParagraphSpacingBefore() && !HasLineSpacing() &&
                !HasCharacterStyleName() && !HasParagraphStyleName() && !HasListStyleName() &&
-               !HasBulletNumber() && !HasBulletStyle() && !HasBulletSymbol() && !HasBulletName();
+               !HasBulletNumber() && !HasBulletStyle() && !HasBulletText() && !HasBulletName() && !HasURL();
     }
 
     // return the attribute having the valid font and colours: it uses the
@@ -544,9 +576,10 @@ private:
     int                 m_lineSpacing;
     int                 m_bulletStyle;
     int                 m_bulletNumber;
-    wxChar              m_bulletSymbol;
+    wxString            m_bulletText;
     wxString            m_bulletFont;
     wxString            m_bulletName;
+    wxString            m_urlTarget;
 
     // Character styles
     wxColour            m_colText,
@@ -566,15 +599,6 @@ private:
     // List style
     wxString            m_listStyleName;
 };
-
-#define wxTEXT_ATTR_CHARACTER (wxTEXT_ATTR_FONT | wxTEXT_ATTR_BACKGROUND_COLOUR | wxTEXT_ATTR_TEXT_COLOUR | wxTEXT_ATTR_CHARACTER_STYLE_NAME)
-
-#define wxTEXT_ATTR_PARAGRAPH (wxTEXT_ATTR_ALIGNMENT|wxTEXT_ATTR_LEFT_INDENT|wxTEXT_ATTR_RIGHT_INDENT|wxTEXT_ATTR_TABS|\
-    wxTEXT_ATTR_PARA_SPACING_BEFORE|wxTEXT_ATTR_PARA_SPACING_AFTER|wxTEXT_ATTR_LINE_SPACING|\
-    wxTEXT_ATTR_BULLET_STYLE|wxTEXT_ATTR_BULLET_NUMBER|wxTEXT_ATTR_BULLET_SYMBOL|wxTEXT_ATTR_BULLET_NAME|\
-    wxTEXT_ATTR_PARAGRAPH_STYLE_NAME|wxTEXT_ATTR_LIST_STYLE_NAME)
-
-#define wxTEXT_ATTR_ALL (wxTEXT_ATTR_CHARACTER|wxTEXT_ATTR_PARAGRAPH)
 
 /*!
  * wxRichTextObject class declaration
@@ -704,7 +728,7 @@ public:
     void Dereference();
 
     /// Convert units in tends of a millimetre to device units
-    int ConvertTenthsMMToPixels(wxDC& dc, int units);
+    static int ConvertTenthsMMToPixels(wxDC& dc, int units);
 
 protected:
     wxSize                  m_size;
@@ -1015,6 +1039,9 @@ public:
     /// Helper for NumberList and PromoteList, that does renumbering and promotion simultaneously
     /// def/defName can be NULL/empty to indicate that the existing list style should be used.
     virtual bool DoNumberList(const wxRichTextRange& range, const wxRichTextRange& promotionRange, int promoteBy, wxRichTextListStyleDefinition* def, int flags = wxRICHTEXT_SETSTYLE_WITH_UNDO, int startFrom = 1, int specifiedLevel = -1);
+
+    /// Fills in the attributes for numbering a paragraph after previousParagraph.
+    virtual bool FindNextParagraphNumber(wxRichTextParagraph* previousParagraph, wxRichTextAttr& attr) const;
 
     /// Test if this whole range has character attributes of the specified kind. If any
     /// of the attributes are different within the range, the test fails. You
@@ -1418,9 +1445,12 @@ public:
     bool Ok() const { return IsOk(); }
     bool IsOk() const { return GetData() != NULL; }
 
+    // Gets the extension for the block's type
+    wxString GetExtension() const;
+
 /// Implementation
 
-    /// Allocate and read from stream as a block of memory
+    // Allocate and read from stream as a block of memory
     static unsigned char* ReadBlock(wxInputStream& stream, size_t size);
     static unsigned char* ReadBlock(const wxString& filename, size_t size);
 
@@ -1530,6 +1560,9 @@ public:
     void SetStyleSheet(wxRichTextStyleSheet* styleSheet) { m_styleSheet = styleSheet; }
     virtual wxRichTextStyleSheet* GetStyleSheet() const { return m_styleSheet; }
 
+    /// Set style sheet and notify of the change
+    bool SetStyleSheetAndNotify(wxRichTextStyleSheet* sheet);
+
     /// Push style sheet to top of stack
     bool PushStyleSheet(wxRichTextStyleSheet* styleSheet);
 
@@ -1558,6 +1591,12 @@ public:
 
     /// Save to a stream
     virtual bool SaveFile(wxOutputStream& stream, int type = wxRICHTEXT_TYPE_ANY);
+
+    /// Set the handler flags, controlling loading and saving
+    void SetHandlerFlags(int flags) { m_handlerFlags = flags; }
+
+    /// Get the handler flags, controlling loading and saving
+    int GetHandlerFlags() const { return m_handlerFlags; }
 
     /// Convenience function to add a paragraph of text
     virtual wxRichTextRange AddParagraph(const wxString& text, wxTextAttrEx* paraStyle = NULL) { Modify(); return wxRichTextParagraphLayoutBox::AddParagraph(text, paraStyle); }
@@ -1688,7 +1727,7 @@ public:
     bool EndNumberedBullet() { return EndStyle(); }
 
     /// Begin symbol bullet
-    bool BeginSymbolBullet(wxChar symbol, int leftIndent, int leftSubIndent, int bulletStyle = wxTEXT_ATTR_BULLET_STYLE_SYMBOL);
+    bool BeginSymbolBullet(const wxString& symbol, int leftIndent, int leftSubIndent, int bulletStyle = wxTEXT_ATTR_BULLET_STYLE_SYMBOL);
 
     /// End symbol bullet
     bool EndSymbolBullet() { return EndStyle(); }
@@ -1716,6 +1755,27 @@ public:
 
     /// End named character style
     bool EndListStyle() { return EndStyle(); }
+
+    /// Begin URL
+    bool BeginURL(const wxString& url, const wxString& characterStyle = wxEmptyString);
+
+    /// End URL
+    bool EndURL() { return EndStyle(); }
+
+// Event handling
+
+    /// Add an event handler
+    bool AddEventHandler(wxEvtHandler* handler);
+
+    /// Remove an event handler
+    bool RemoveEventHandler(wxEvtHandler* handler, bool deleteHandler = false);
+
+    /// Clear event handlers
+    void ClearEventHandlers();
+
+    /// Send event to event handlers. If sendToAll is true, will send to all event handlers,
+    /// otherwise will stop at the first successful one.
+    bool SendEvent(wxEvent& event, bool sendToAll = true);
 
 // Implementation
 
@@ -1788,6 +1848,19 @@ public:
     /// Initialise the standard handlers
     static void InitStandardHandlers();
 
+    /// Get renderer
+    static wxRichTextRenderer* GetRenderer() { return sm_renderer; }
+
+    /// Set renderer, deleting old one
+    static void SetRenderer(wxRichTextRenderer* renderer);
+
+    /// Minimum margin between bullet and paragraph in 10ths of a mm
+    static int GetBulletRightMargin() { return sm_bulletRightMargin; }
+    static void SetBulletRightMargin(int margin) { sm_bulletRightMargin = margin; }
+
+    /// Factor to multiply by character height to get a reasonable bullet size
+    static float GetBulletProportion() { return sm_bulletProportion; }
+    static void SetBulletProportion(float prop) { sm_bulletProportion = prop; }
 protected:
 
     /// Command processor
@@ -1811,11 +1884,26 @@ protected:
     /// Style sheet, if any
     wxRichTextStyleSheet*   m_styleSheet;
 
+    /// List of event handlers that will be notified of events
+    wxList                  m_eventHandlers;
+
     /// Stack of attributes for convenience functions
     wxList                  m_attributeStack;
 
+    /// Flags to be passed to handlers
+    int                     m_handlerFlags;
+
     /// File handlers
     static wxList           sm_handlers;
+
+    /// Renderer
+    static wxRichTextRenderer* sm_renderer;
+
+    /// Minimum margin between bullet and paragraph in 10ths of a mm
+    static int              sm_bulletRightMargin;
+
+    /// Factor to multiply by character height to get a reasonable bullet size
+    static float            sm_bulletProportion;
 };
 
 /*!
@@ -1928,6 +2016,22 @@ protected:
 };
 
 /*!
+ * Handler flags
+ */
+
+// Include style sheet when loading and saving
+#define wxRICHTEXT_HANDLER_INCLUDE_STYLESHEET       0x0001
+
+// Save images to memory file system in HTML handler
+#define wxRICHTEXT_HANDLER_SAVE_IMAGES_TO_MEMORY    0x0010
+
+// Save images to files in HTML handler
+#define wxRICHTEXT_HANDLER_SAVE_IMAGES_TO_FILES     0x0020
+
+// Save images as inline base64 data in HTML handler
+#define wxRICHTEXT_HANDLER_SAVE_IMAGES_TO_BASE64    0x0040
+
+/*!
  * wxRichTextFileHandler
  * Base class for file handlers
  */
@@ -1937,7 +2041,7 @@ class WXDLLIMPEXP_RICHTEXT wxRichTextFileHandler: public wxObject
     DECLARE_CLASS(wxRichTextFileHandler)
 public:
     wxRichTextFileHandler(const wxString& name = wxEmptyString, const wxString& ext = wxEmptyString, int type = 0)
-        : m_name(name), m_extension(ext), m_type(type), m_visible(true)
+        : m_name(name), m_extension(ext), m_type(type), m_visible(true), m_flags(0)
         { }
 
 #if wxUSE_STREAMS
@@ -1975,6 +2079,10 @@ public:
     void SetType(int type) { m_type = type; }
     int GetType() const { return m_type; }
 
+    /// Flags controlling how loading and saving is done
+    void SetFlags(int flags) { m_flags = flags; }
+    int GetFlags() const { return m_flags; }
+
     /// Encoding to use when saving a file. If empty, a suitable encoding is chosen
     void SetEncoding(const wxString& encoding) { m_encoding = encoding; }
     const wxString& GetEncoding() const { return m_encoding; }
@@ -1990,6 +2098,7 @@ protected:
     wxString  m_encoding;
     wxString  m_extension;
     int       m_type;
+    int       m_flags;
     bool      m_visible;
 };
 
@@ -2027,7 +2136,7 @@ protected:
  * The data object for a wxRichTextBuffer
  */
 
-class wxRichTextBufferDataObject: public wxDataObjectSimple
+class WXDLLIMPEXP_RICHTEXT wxRichTextBufferDataObject: public wxDataObjectSimple
 {
 public:
     // ctor doesn't copy the pointer, so it shouldn't go away while this object
@@ -2064,6 +2173,51 @@ private:
 #endif
 
 /*!
+ * wxRichTextRenderer isolates common drawing functionality
+ */
+
+class WXDLLIMPEXP_RICHTEXT wxRichTextRenderer: public wxObject
+{
+public:
+    wxRichTextRenderer() {}
+    virtual ~wxRichTextRenderer() {}
+
+    /// Draw a standard bullet, as specified by the value of GetBulletName
+    virtual bool DrawStandardBullet(wxRichTextParagraph* paragraph, wxDC& dc, const wxTextAttrEx& attr, const wxRect& rect) = 0;
+
+    /// Draw a bullet that can be described by text, such as numbered or symbol bullets
+    virtual bool DrawTextBullet(wxRichTextParagraph* paragraph, wxDC& dc, const wxTextAttrEx& attr, const wxRect& rect, const wxString& text) = 0;
+
+    /// Draw a bitmap bullet, where the bullet bitmap is specified by the value of GetBulletName
+    virtual bool DrawBitmapBullet(wxRichTextParagraph* paragraph, wxDC& dc, const wxTextAttrEx& attr, const wxRect& rect) = 0;
+
+    /// Enumerate the standard bullet names currently supported
+    virtual bool EnumerateStandardBulletNames(wxArrayString& bulletNames) = 0;
+};
+
+/*!
+ * wxRichTextStdRenderer: standard renderer
+ */
+
+class WXDLLIMPEXP_RICHTEXT wxRichTextStdRenderer: public wxRichTextRenderer
+{
+public:
+    wxRichTextStdRenderer() {}
+
+    /// Draw a standard bullet, as specified by the value of GetBulletName
+    virtual bool DrawStandardBullet(wxRichTextParagraph* paragraph, wxDC& dc, const wxTextAttrEx& attr, const wxRect& rect);
+
+    /// Draw a bullet that can be described by text, such as numbered or symbol bullets
+    virtual bool DrawTextBullet(wxRichTextParagraph* paragraph, wxDC& dc, const wxTextAttrEx& attr, const wxRect& rect, const wxString& text);
+
+    /// Draw a bitmap bullet, where the bullet bitmap is specified by the value of GetBulletName
+    virtual bool DrawBitmapBullet(wxRichTextParagraph* paragraph, wxDC& dc, const wxTextAttrEx& attr, const wxRect& rect);
+
+    /// Enumerate the standard bullet names currently supported
+    virtual bool EnumerateStandardBulletNames(wxArrayString& bulletNames);
+};
+
+/*!
  * Utilities
  *
  */
@@ -2074,28 +2228,27 @@ inline bool wxRichTextHasStyle(int flags, int style)
 }
 
 /// Compare two attribute objects
-bool wxTextAttrEq(const wxTextAttrEx& attr1, const wxTextAttrEx& attr2);
-bool wxTextAttrEq(const wxTextAttr& attr1, const wxRichTextAttr& attr2);
+WXDLLIMPEXP_RICHTEXT bool wxTextAttrEq(const wxTextAttrEx& attr1, const wxTextAttrEx& attr2);
+WXDLLIMPEXP_RICHTEXT bool wxTextAttrEq(const wxTextAttr& attr1, const wxRichTextAttr& attr2);
 
 /// Compare two attribute objects, but take into account the flags
 /// specifying attributes of interest.
-bool wxTextAttrEqPartial(const wxTextAttrEx& attr1, const wxTextAttrEx& attr2, int flags);
-bool wxTextAttrEqPartial(const wxTextAttrEx& attr1, const wxRichTextAttr& attr2, int flags);
+WXDLLIMPEXP_RICHTEXT bool wxTextAttrEqPartial(const wxTextAttrEx& attr1, const wxTextAttrEx& attr2, int flags);
+WXDLLIMPEXP_RICHTEXT bool wxTextAttrEqPartial(const wxTextAttrEx& attr1, const wxRichTextAttr& attr2, int flags);
 
 /// Apply one style to another
-bool wxRichTextApplyStyle(wxTextAttrEx& destStyle, const wxTextAttrEx& style);
-bool wxRichTextApplyStyle(wxRichTextAttr& destStyle, const wxTextAttrEx& style);
-bool wxRichTextApplyStyle(wxTextAttrEx& destStyle, const wxRichTextAttr& style, wxRichTextAttr* compareWith = NULL);
+WXDLLIMPEXP_RICHTEXT bool wxRichTextApplyStyle(wxTextAttrEx& destStyle, const wxTextAttrEx& style);
+WXDLLIMPEXP_RICHTEXT bool wxRichTextApplyStyle(wxRichTextAttr& destStyle, const wxTextAttrEx& style);
+WXDLLIMPEXP_RICHTEXT bool wxRichTextApplyStyle(wxTextAttrEx& destStyle, const wxRichTextAttr& style, wxRichTextAttr* compareWith = NULL);
 
 /// Compare tabs
-bool wxRichTextTabsEq(const wxArrayInt& tabs1, const wxArrayInt& tabs2);
+WXDLLIMPEXP_RICHTEXT bool wxRichTextTabsEq(const wxArrayInt& tabs1, const wxArrayInt& tabs2);
 
 /// Set the font without changing the font attributes
-void wxSetFontPreservingStyles(wxTextAttr& attr, const wxFont& font);
+WXDLLIMPEXP_RICHTEXT void wxSetFontPreservingStyles(wxTextAttr& attr, const wxFont& font);
 
 /// Convert a decimal to Roman numerals
-wxString wxRichTextDecimalToRoman(long n);
-
+WXDLLIMPEXP_RICHTEXT wxString wxRichTextDecimalToRoman(long n);
 
 WXDLLIMPEXP_RICHTEXT void wxRichTextModuleInit();
 
@@ -2104,3 +2257,4 @@ WXDLLIMPEXP_RICHTEXT void wxRichTextModuleInit();
 
 #endif
     // _WX_RICHTEXTBUFFER_H_
+

@@ -198,9 +198,9 @@ public:
     virtual wxRichTextStyleDefinition* Clone() const { return new wxRichTextListStyleDefinition(*this); }
 
     /// Sets/gets the attributes for the given level
-    void SetLevelAttributes(int i, const wxTextAttrEx& attr);
-    wxTextAttrEx* GetLevelAttributes(int i);
-    const wxTextAttrEx* GetLevelAttributes(int i) const;
+    void SetLevelAttributes(int i, const wxRichTextAttr& attr);
+    wxRichTextAttr* GetLevelAttributes(int i);
+    const wxRichTextAttr* GetLevelAttributes(int i) const;
 
     /// Convenience function for setting the major attributes for a list level specification
     void SetAttributes(int i, int leftIndent, int leftSubIndent, int bulletStyle, const wxString& bulletSymbol = wxEmptyString);
@@ -210,15 +210,15 @@ public:
 
     /// Combine the base and list style with a paragraph style, using the given indent (from which
     /// an appropriate level is found)
-    wxTextAttrEx CombineWithParagraphStyle(int indent, const wxTextAttrEx& paraStyle);
+    wxRichTextAttr CombineWithParagraphStyle(int indent, const wxRichTextAttr& paraStyle);
 
     /// Combine the base and list style, using the given indent (from which
     /// an appropriate level is found)
-    wxTextAttrEx GetCombinedStyle(int indent);
+    wxRichTextAttr GetCombinedStyle(int indent);
 
     /// Combine the base and list style, using the given level from which
     /// an appropriate level is found)
-    wxTextAttrEx GetCombinedStyleForLevel(int level);
+    wxRichTextAttr GetCombinedStyleForLevel(int level);
 
     /// Gets the number of available levels
     int GetLevelCount() const { return 10; }
@@ -229,7 +229,7 @@ public:
 protected:
 
     /// The styles for each level (up to 10)
-    wxTextAttrEx m_levelStyles[10];
+    wxRichTextAttr m_levelStyles[10];
 };
 
 /*!

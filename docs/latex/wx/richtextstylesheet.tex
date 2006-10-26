@@ -37,6 +37,12 @@ Destructor.
 
 Adds a definition to the character style list.
 
+\membersection{wxRichTextStyleSheet::AddListStyle}\label{wxrichtextstylesheetaddliststyle}
+
+\func{bool}{AddListStyle}{\param{wxRichTextListStyleDefinition* }{def}}
+
+Adds a definition to the list style list.
+
 \membersection{wxRichTextStyleSheet::AddParagraphStyle}\label{wxrichtextstylesheetaddparagraphstyle}
 
 \func{bool}{AddParagraphStyle}{\param{wxRichTextParagraphStyleDefinition* }{def}}
@@ -55,6 +61,12 @@ Deletes all styles.
 
 Finds a character definition by name.
 
+\membersection{wxRichTextStyleSheet::FindListStyle}\label{wxrichtextstylesheetfindliststyle}
+
+\constfunc{wxRichTextListStyleDefinition*}{FindListStyle}{\param{const wxString\& }{name}}
+
+Finds a list definition by name.
+
 \membersection{wxRichTextStyleSheet::FindParagraphStyle}\label{wxrichtextstylesheetfindparagraphstyle}
 
 \constfunc{wxRichTextParagraphStyleDefinition*}{FindParagraphStyle}{\param{const wxString\& }{name}}
@@ -72,6 +84,18 @@ Returns the {\it n}th character style.
 \constfunc{size\_t}{GetCharacterStyleCount}{\void}
 
 Returns the number of character styles.
+
+\membersection{wxRichTextStyleSheet::GetListStyle}\label{wxrichtextstylesheetgetliststyle}
+
+\constfunc{wxRichTextListStyleDefinition*}{GetListStyle}{\param{size\_t }{n}}
+
+Returns the {\it n}th list style.
+
+\membersection{wxRichTextStyleSheet::GetListStyleCount}\label{wxrichtextstylesheetgetliststylecount}
+
+\constfunc{size\_t}{GetListStyleCount}{\void}
+
+Returns the number of list styles.
 
 \membersection{wxRichTextStyleSheet::GetParagraphStyle}\label{wxrichtextstylesheetgetparagraphstyle}
 
@@ -96,6 +120,12 @@ Initialises the style sheet.
 \func{bool}{RemoveCharacterStyle}{\param{wxRichTextStyleDefinition* }{def}, \param{bool }{deleteStyle = false}}
 
 Removes a character style.
+
+\membersection{wxRichTextStyleSheet::RemoveListStyle}\label{wxrichtextstylesheetremoveliststyle}
+
+\func{bool}{RemoveListStyle}{\param{wxRichTextStyleDefinition* }{def}, \param{bool }{deleteStyle = false}}
+
+Removes a list style.
 
 \membersection{wxRichTextStyleSheet::RemoveParagraphStyle}\label{wxrichtextstylesheetremoveparagraphstyle}
 

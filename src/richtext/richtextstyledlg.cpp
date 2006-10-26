@@ -456,6 +456,7 @@ iaculis malesuada. Donec bibendum ipsum ut ante porta fringilla.\n");
 
     if (listDef)
     {
+        long listStart = m_previewCtrl->GetInsertionPoint() + 1;
         int i;
         for (i = 0; i < 10; i++)
         {
@@ -465,6 +466,8 @@ iaculis malesuada. Donec bibendum ipsum ut ante porta fringilla.\n");
             m_previewCtrl->WriteText(wxString::Format(wxT("\nList level %d. "), i+1) + s_para2List);
             m_previewCtrl->EndStyle();
         }
+        long listEnd = m_previewCtrl->GetInsertionPoint();
+        m_previewCtrl->NumberList(wxRichTextRange(listStart, listEnd), listDef);
     }
     else
     {

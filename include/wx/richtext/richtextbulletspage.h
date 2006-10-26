@@ -17,8 +17,8 @@
  */
 
 ////@begin includes
-#include "wx/spinctrl.h"
 #include "wx/statline.h"
+#include "wx/spinctrl.h"
 ////@end includes
 
 /*!
@@ -101,23 +101,14 @@ public:
     /// wxEVT_UPDATE_UI event handler for ID_RICHTEXTBULLETSPAGE_PARENTHESESCTRL
     void OnParenthesesctrlUpdate( wxUpdateUIEvent& event );
 
-    /// wxEVT_UPDATE_UI event handler for ID_RICHTEXTBULLETSPAGE_NUMBERSTATIC
-    void OnNumberstaticUpdate( wxUpdateUIEvent& event );
+    /// wxEVT_COMMAND_CHECKBOX_CLICKED event handler for ID_RICHTEXTBULLETSPAGE_RIGHTPARENTHESISCTRL
+    void OnRightParenthesisCtrlClick( wxCommandEvent& event );
 
-    /// wxEVT_COMMAND_SPINCTRL_UPDATED event handler for ID_RICHTEXTBULLETSPAGE_NUMBERCTRL
-    void OnNumberctrlUpdated( wxSpinEvent& event );
+    /// wxEVT_UPDATE_UI event handler for ID_RICHTEXTBULLETSPAGE_RIGHTPARENTHESISCTRL
+    void OnRightParenthesisCtrlUpdate( wxUpdateUIEvent& event );
 
-    /// wxEVT_SCROLL_LINEUP event handler for ID_RICHTEXTBULLETSPAGE_NUMBERCTRL
-    void OnNumberctrlUp( wxSpinEvent& event );
-
-    /// wxEVT_SCROLL_LINEDOWN event handler for ID_RICHTEXTBULLETSPAGE_NUMBERCTRL
-    void OnNumberctrlDown( wxSpinEvent& event );
-
-    /// wxEVT_COMMAND_TEXT_UPDATED event handler for ID_RICHTEXTBULLETSPAGE_NUMBERCTRL
-    void OnNumberctrlTextUpdated( wxCommandEvent& event );
-
-    /// wxEVT_UPDATE_UI event handler for ID_RICHTEXTBULLETSPAGE_NUMBERCTRL
-    void OnNumberctrlUpdate( wxUpdateUIEvent& event );
+    /// wxEVT_COMMAND_COMBOBOX_SELECTED event handler for ID_RICHTEXTBULLETSPAGE_BULLETALIGNMENTCTRL
+    void OnBulletAlignmentCtrlSelected( wxCommandEvent& event );
 
     /// wxEVT_UPDATE_UI event handler for ID_RICHTEXTBULLETSPAGE_SYMBOLSTATIC
     void OnSymbolstaticUpdate( wxUpdateUIEvent& event );
@@ -158,6 +149,24 @@ public:
     /// wxEVT_UPDATE_UI event handler for ID_RICHTEXTBULLETSPAGE_NAMECTRL
     void OnNamectrlUIUpdate( wxUpdateUIEvent& event );
 
+    /// wxEVT_UPDATE_UI event handler for ID_RICHTEXTBULLETSPAGE_NUMBERSTATIC
+    void OnNumberstaticUpdate( wxUpdateUIEvent& event );
+
+    /// wxEVT_COMMAND_SPINCTRL_UPDATED event handler for ID_RICHTEXTBULLETSPAGE_NUMBERCTRL
+    void OnNumberctrlUpdated( wxSpinEvent& event );
+
+    /// wxEVT_SCROLL_LINEUP event handler for ID_RICHTEXTBULLETSPAGE_NUMBERCTRL
+    void OnNumberctrlUp( wxSpinEvent& event );
+
+    /// wxEVT_SCROLL_LINEDOWN event handler for ID_RICHTEXTBULLETSPAGE_NUMBERCTRL
+    void OnNumberctrlDown( wxSpinEvent& event );
+
+    /// wxEVT_COMMAND_TEXT_UPDATED event handler for ID_RICHTEXTBULLETSPAGE_NUMBERCTRL
+    void OnNumberctrlTextUpdated( wxCommandEvent& event );
+
+    /// wxEVT_UPDATE_UI event handler for ID_RICHTEXTBULLETSPAGE_NUMBERCTRL
+    void OnNumberctrlUpdate( wxUpdateUIEvent& event );
+
 ////@end wxRichTextBulletsPage event handler declarations
 
 ////@begin wxRichTextBulletsPage member function declarations
@@ -176,10 +185,12 @@ public:
     wxListBox* m_styleListBox;
     wxCheckBox* m_periodCtrl;
     wxCheckBox* m_parenthesesCtrl;
-    wxSpinCtrl* m_numberCtrl;
+    wxCheckBox* m_rightParenthesisCtrl;
+    wxComboBox* m_bulletAlignmentCtrl;
     wxComboBox* m_symbolCtrl;
     wxComboBox* m_symbolFontCtrl;
     wxComboBox* m_bulletNameCtrl;
+    wxSpinCtrl* m_numberCtrl;
     wxRichTextCtrl* m_previewCtrl;
     /// Control identifiers
     enum {
@@ -187,14 +198,16 @@ public:
         ID_RICHTEXTBULLETSPAGE_STYLELISTBOX = 10305,
         ID_RICHTEXTBULLETSPAGE_PERIODCTRL = 10313,
         ID_RICHTEXTBULLETSPAGE_PARENTHESESCTRL = 10311,
-        ID_RICHTEXTBULLETSPAGE_NUMBERSTATIC = 10302,
-        ID_RICHTEXTBULLETSPAGE_NUMBERCTRL = 10310,
+        ID_RICHTEXTBULLETSPAGE_RIGHTPARENTHESISCTRL = 10306,
+        ID_RICHTEXTBULLETSPAGE_BULLETALIGNMENTCTRL = 10315,
         ID_RICHTEXTBULLETSPAGE_SYMBOLSTATIC = 10301,
         ID_RICHTEXTBULLETSPAGE_SYMBOLCTRL = 10307,
         ID_RICHTEXTBULLETSPAGE_CHOOSE_SYMBOL = 10308,
         ID_RICHTEXTBULLETSPAGE_SYMBOLFONTCTRL = 10309,
         ID_RICHTEXTBULLETSPAGE_NAMESTATIC = 10303,
         ID_RICHTEXTBULLETSPAGE_NAMECTRL = 10304,
+        ID_RICHTEXTBULLETSPAGE_NUMBERSTATIC = 10302,
+        ID_RICHTEXTBULLETSPAGE_NUMBERCTRL = 10310,
         ID_RICHTEXTBULLETSPAGE_PREVIEW_CTRL = 10314
     };
 ////@end wxRichTextBulletsPage member variables

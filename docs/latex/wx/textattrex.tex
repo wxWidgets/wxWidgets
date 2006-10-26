@@ -75,9 +75,12 @@ for a text control.
 #define wxTEXT_ATTR_LINE_SPACING            0x00002000
 #define wxTEXT_ATTR_CHARACTER_STYLE_NAME    0x00004000
 #define wxTEXT_ATTR_PARAGRAPH_STYLE_NAME    0x00008000
-#define wxTEXT_ATTR_BULLET_STYLE            0x00010000
-#define wxTEXT_ATTR_BULLET_NUMBER           0x00020000
-#define wxTEXT_ATTR_BULLET_SYMBOL           0x00040000
+#define wxTEXT_ATTR_LIST_STYLE_NAME         0x00010000
+#define wxTEXT_ATTR_BULLET_STYLE            0x00020000
+#define wxTEXT_ATTR_BULLET_NUMBER           0x00040000
+#define wxTEXT_ATTR_BULLET_TEXT             0x00080000
+#define wxTEXT_ATTR_BULLET_NAME             0x00100000
+#define wxTEXT_ATTR_URL                     0x00200000
 \end{verbatim}
 }
 
@@ -85,16 +88,22 @@ The following styles can be passed to wxRichTextAttr::SetBulletStyle:
 
 {\small
 \begin{verbatim}
-#define wxTEXT_ATTR_BULLET_STYLE_NONE           0x0000
-#define wxTEXT_ATTR_BULLET_STYLE_ARABIC         0x0001
-#define wxTEXT_ATTR_BULLET_STYLE_LETTERS_UPPER  0x0002
-#define wxTEXT_ATTR_BULLET_STYLE_LETTERS_LOWER  0x0004
-#define wxTEXT_ATTR_BULLET_STYLE_ROMAN_UPPER    0x0008
-#define wxTEXT_ATTR_BULLET_STYLE_ROMAN_LOWER    0x0010
-#define wxTEXT_ATTR_BULLET_STYLE_SYMBOL         0x0020
-#define wxTEXT_ATTR_BULLET_STYLE_BITMAP         0x0040
-#define wxTEXT_ATTR_BULLET_STYLE_PARENTHESES    0x0080
-#define wxTEXT_ATTR_BULLET_STYLE_PERIOD         0x0100
+#define wxTEXT_ATTR_BULLET_STYLE_NONE               0x00000000
+#define wxTEXT_ATTR_BULLET_STYLE_ARABIC             0x00000001
+#define wxTEXT_ATTR_BULLET_STYLE_LETTERS_UPPER      0x00000002
+#define wxTEXT_ATTR_BULLET_STYLE_LETTERS_LOWER      0x00000004
+#define wxTEXT_ATTR_BULLET_STYLE_ROMAN_UPPER        0x00000008
+#define wxTEXT_ATTR_BULLET_STYLE_ROMAN_LOWER        0x00000010
+#define wxTEXT_ATTR_BULLET_STYLE_SYMBOL             0x00000020
+#define wxTEXT_ATTR_BULLET_STYLE_BITMAP             0x00000040
+#define wxTEXT_ATTR_BULLET_STYLE_PARENTHESES        0x00000080
+#define wxTEXT_ATTR_BULLET_STYLE_PERIOD             0x00000100
+#define wxTEXT_ATTR_BULLET_STYLE_STANDARD           0x00000200
+#define wxTEXT_ATTR_BULLET_STYLE_RIGHT_PARENTHESIS  0x00000400
+#define wxTEXT_ATTR_BULLET_STYLE_OUTLINE            0x00000800
+#define wxTEXT_ATTR_BULLET_STYLE_ALIGN_LEFT         0x00000000
+#define wxTEXT_ATTR_BULLET_STYLE_ALIGN_RIGHT        0x00001000
+#define wxTEXT_ATTR_BULLET_STYLE_ALIGN_CENTRE       0x00002000
 \end{verbatim}
 }
 
@@ -131,6 +140,24 @@ Constructors.
 Returns a string containing the name of the font associated with the bullet symbol.
 Only valid for attributes with wxTEXT\_ATTR\_BULLET\_SYMBOL.
 
+\membersection{wxTextAttrEx::GetBulletName}\label{wxtextattrexgetbulletname}
+
+\constfunc{const wxString\&}{GetBulletName}{\void}
+
+Returns the standard bullet name, applicable if the bullet style is wxTEXT\_ATTR\_BULLET\_STYLE\_STANDARD.
+Currently the following standard bullet names are supported:
+
+\begin{itemize}\itemsep=0pt
+\item {\tt standard/circle}
+\item {\tt standard/square}
+\item {\tt standard/diamond}
+\item {\tt standard/triangle}
+\end{itemize}
+
+If you wish your application to support further bullet graphics, you can derive a
+class from wxRichTextRenderer or wxRichTextStdRenderer, override {\tt DrawStandardBullet} and {\tt EnumerateStandardBulletNames}, and
+set an instance of the class using \helpref{wxRichTextBuffer::SetRenderer}{wxrichtextbuffersetrenderer}.
+
 \membersection{wxTextAttrEx::GetBulletNumber}\label{wxtextattrexgetbulletnumber}
 
 \constfunc{int}{GetBulletNumber}{\void}
@@ -144,11 +171,11 @@ Returns the bullet number.
 Returns the bullet style.
 See \helpref{wxTextAttrEx::SetBulletStyle}{wxtextattrexsetbulletstyle} for a list of available styles.
 
-\membersection{wxTextAttrEx::GetBulletSymbol}\label{wxtextattrexgetbulletsymbol}
+\membersection{wxTextAttrEx::GetBulletText}\label{wxrichtextattrgetbullettext}
 
-\constfunc{wxChar}{GetBulletSymbol}{\void}
+\constfunc{const wxString\&}{GetBulletText}{\void}
 
-Returns the bullet symbol, a character.
+Returns the bullet text, which could be a symbol, or (for example) cached outline text.
 
 \membersection{wxTextAttrEx::GetCharacterStyleName}\label{wxtextattrexgetcharacterstylename}
 
@@ -162,6 +189,12 @@ Returns the name of the character style.
 
 Returns the line spacing value, one of wxTEXT\_ATTR\_LINE\_SPACING\_NORMAL,
 wxTEXT\_ATTR\_LINE\_SPACING\_HALF, and wxTEXT\_ATTR\_LINE\_SPACING\_TWICE.
+
+\membersection{wxTextAttrEx::GetListStyleName}\label{wxtextattrexgetliststylename}
+
+\constfunc{const wxString\&}{GetListStyleName}{\void}
+
+Returns the name of the list style.
 
 \membersection{wxTextAttrEx::GetParagraphSpacingAfter}\label{wxtextattrexgetparagraphspacingafter}
 
@@ -181,6 +214,20 @@ Returns the space in tenths of a millimeter before the paragraph.
 
 Returns the name of the paragraph style.
 
+\membersection{wxTextAttrEx::GetURL}\label{wxtextattrexgeturl}
+
+\constfunc{const wxString\&}{GetURL}{\void}
+
+Returns the URL for the content. Content with wxTEXT\_ATTR\_URL style
+causes wxRichTextCtrl to show a hand cursor over it, and wxRichTextCtrl generates
+a wxTextUrlEvent when the content is clicked.
+
+\membersection{wxTextAttrEx::HasBulletName}\label{wxtextattrexhasbulletname}
+
+\constfunc{bool}{HasBulletName}{\void}
+
+Returns \true if the attribute object specifies a standard bullet name.
+
 \membersection{wxTextAttrEx::HasBulletNumber}\label{wxtextattrexhasbulletnumber}
 
 \constfunc{bool}{HasBulletNumber}{\void}
@@ -193,11 +240,11 @@ Returns \true if the attribute object specifies a bullet number.
 
 Returns \true if the attribute object specifies a bullet style.
 
-\membersection{wxTextAttrEx::HasBulletSymbol}\label{wxtextattrexhasbulletsymbol}
+\membersection{wxTextAttrEx::HasBulletText}\label{wxtextattrexhasbullettext}
 
-\constfunc{bool}{HasBulletSymbol}{\void}
+\constfunc{bool}{HasBulletText}{\void}
 
-Returns \true if the attribute object specifies a bullet symbol.
+Returns \true if the attribute object specifies bullet text (usually containing a symbol).
 
 \membersection{wxTextAttrEx::HasCharacterStyleName}\label{wxtextattrexhascharacterstylename}
 
@@ -210,6 +257,12 @@ Returns \true if the attribute object specifies a character style name.
 \constfunc{bool}{HasLineSpacing}{\void}
 
 Returns \true if the attribute object specifies line spacing.
+
+\membersection{wxTextAttrEx::HasListStyleName}\label{wxtextattrexhasliststylename}
+
+\constfunc{bool}{HasListStyleName}{\void}
+
+Returns \true if the attribute object specifies a list style name.
 
 \membersection{wxTextAttrEx::HasParagraphSpacingAfter}\label{wxtextattrexhasparagraphspacingafter}
 
@@ -269,6 +322,14 @@ Only valid for attributes with wxTEXT\_ATTR\_BULLET\_SYMBOL.
 
 Sets the bullet number.
 
+\membersection{wxTextAttrEx::SetBulletName}\label{wxtextattrexsetbulletname}
+
+\func{void}{SetBulletName}{\param{const wxString\& }{name}}
+
+Sets the standard bullet name, applicable if the bullet style is wxTEXT\_ATTR\_BULLET\_STYLE\_STANDARD.
+See \helpref{wxTextAttrEx::GetBulletName}{wxtextattrexgetbulletname} for a list
+of supported names, and how to expand the range of supported types.
+
 \membersection{wxTextAttrEx::SetBulletStyle}\label{wxtextattrexsetbulletstyle}
 
 \func{void}{SetBulletStyle}{\param{int }{style}}
@@ -277,24 +338,30 @@ Sets the bullet style. The following styles can be passed:
 
 {\small
 \begin{verbatim}
-#define wxTEXT_ATTR_BULLET_STYLE_NONE           0x0000
-#define wxTEXT_ATTR_BULLET_STYLE_ARABIC         0x0001
-#define wxTEXT_ATTR_BULLET_STYLE_LETTERS_UPPER  0x0002
-#define wxTEXT_ATTR_BULLET_STYLE_LETTERS_LOWER  0x0004
-#define wxTEXT_ATTR_BULLET_STYLE_ROMAN_UPPER    0x0008
-#define wxTEXT_ATTR_BULLET_STYLE_ROMAN_LOWER    0x0010
-#define wxTEXT_ATTR_BULLET_STYLE_SYMBOL         0x0020
-#define wxTEXT_ATTR_BULLET_STYLE_BITMAP         0x0040
-#define wxTEXT_ATTR_BULLET_STYLE_PARENTHESES    0x0080
-#define wxTEXT_ATTR_BULLET_STYLE_PERIOD         0x0100
+#define wxTEXT_ATTR_BULLET_STYLE_NONE               0x00000000
+#define wxTEXT_ATTR_BULLET_STYLE_ARABIC             0x00000001
+#define wxTEXT_ATTR_BULLET_STYLE_LETTERS_UPPER      0x00000002
+#define wxTEXT_ATTR_BULLET_STYLE_LETTERS_LOWER      0x00000004
+#define wxTEXT_ATTR_BULLET_STYLE_ROMAN_UPPER        0x00000008
+#define wxTEXT_ATTR_BULLET_STYLE_ROMAN_LOWER        0x00000010
+#define wxTEXT_ATTR_BULLET_STYLE_SYMBOL             0x00000020
+#define wxTEXT_ATTR_BULLET_STYLE_BITMAP             0x00000040
+#define wxTEXT_ATTR_BULLET_STYLE_PARENTHESES        0x00000080
+#define wxTEXT_ATTR_BULLET_STYLE_PERIOD             0x00000100
+#define wxTEXT_ATTR_BULLET_STYLE_STANDARD           0x00000200
+#define wxTEXT_ATTR_BULLET_STYLE_RIGHT_PARENTHESIS  0x00000400
+#define wxTEXT_ATTR_BULLET_STYLE_OUTLINE            0x00000800
+#define wxTEXT_ATTR_BULLET_STYLE_ALIGN_LEFT         0x00000000
+#define wxTEXT_ATTR_BULLET_STYLE_ALIGN_RIGHT        0x00001000
+#define wxTEXT_ATTR_BULLET_STYLE_ALIGN_CENTRE       0x00002000
 \end{verbatim}
 }
 
-\membersection{wxTextAttrEx::SetBulletSymbol}\label{wxtextattrexsetbulletsymbol}
+\membersection{wxTextAttrEx::SetBulletText}\label{wxtextattrexsetbullettext}
 
-\func{void}{SetBulletSymbol}{\param{wxChar }{symbol}}
+\func{void}{SetBulletText}{\param{const wxString\& }{text}}
 
-Sets the paragraph symbol.
+Sets the bullet text, which could be a symbol, or (for example) cached outline text.
 
 \membersection{wxTextAttrEx::SetCharacterStyleName}\label{wxtextattrexsetcharacterstylename}
 
@@ -318,6 +385,12 @@ defined for convenience:
 \end{verbatim}
 }
 
+\membersection{wxTextAttrEx::SetListStyleName}\label{wxtextattrexsetliststylename}
+
+\func{void}{SetListStyleName}{\param{const wxString\& }{name}}
+
+Sets the list style name.
+
 \membersection{wxTextAttrEx::SetParagraphSpacingAfter}\label{wxtextattrexsetparagraphspacingafter}
 
 \func{void}{SetParagraphSpacingAfter}{\param{int }{spacing}}
@@ -335,6 +408,14 @@ Sets the spacing before a paragraph, in tenths of a millimetre.
 \func{void}{SetParagraphStyleName}{\param{const wxString\& }{name}}
 
 Sets the name of the paragraph style.
+
+\membersection{wxTextAttrEx::SetURL}\label{wxtextattrexseturl}
+
+\func{void}{SetURL}{\param{const wxString\& }{url}}
+
+Sets the URL for the content. Sets the wxTEXT\_ATTR\_URL style; content with this style
+causes wxRichTextCtrl to show a hand cursor over it, and wxRichTextCtrl generates
+a wxTextUrlEvent when the content is clicked.
 
 \membersection{wxTextAttrEx::operator=}\label{wxtextattrexoperatorassign}
 

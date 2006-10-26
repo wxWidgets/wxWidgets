@@ -154,6 +154,12 @@ public:
     virtual bool DoLoadFile(const wxString& file, int fileType);
     virtual bool DoSaveFile(const wxString& file = wxEmptyString, int fileType = wxRICHTEXT_TYPE_ANY);
 
+    /// Set the handler flags, controlling loading and saving
+    void SetHandlerFlags(int flags) { GetBuffer().SetHandlerFlags(flags); }
+
+    /// Get the handler flags, controlling loading and saving
+    int GetHandlerFlags() const { return GetBuffer().GetHandlerFlags(); }
+
     // sets/clears the dirty flag
     virtual void MarkDirty();
     virtual void DiscardEdits();
@@ -378,7 +384,7 @@ public:
     bool EndNumberedBullet() { return GetBuffer().EndNumberedBullet(); }
 
     /// Begin symbol bullet
-    bool BeginSymbolBullet(wxChar symbol, int leftIndent, int leftSubIndent, int bulletStyle = wxTEXT_ATTR_BULLET_STYLE_SYMBOL)
+    bool BeginSymbolBullet(const wxString& symbol, int leftIndent, int leftSubIndent, int bulletStyle = wxTEXT_ATTR_BULLET_STYLE_SYMBOL)
     { return GetBuffer().BeginSymbolBullet(symbol, leftIndent, leftSubIndent, bulletStyle); }
 
     /// End symbol bullet
@@ -408,6 +414,12 @@ public:
 
     /// End named character style
     bool EndListStyle() { return GetBuffer().EndListStyle(); }
+
+    /// Begin URL
+    bool BeginURL(const wxString& url, const wxString& characterStyle = wxEmptyString) { return GetBuffer().BeginURL(url, characterStyle); }
+
+    /// End URL
+    bool EndURL() { return GetBuffer().EndURL(); }
 
     /// Sets the default style to the style under the cursor
     bool SetDefaultStyleToCursorStyle();
@@ -817,6 +829,10 @@ private:
     /// Threshold for doing delayed layout
     long                    m_delayedLayoutThreshold;
 
+    /// Cursors
+    wxCursor                m_textCursor;
+    wxCursor                m_urlCursor;
+
     static wxArrayString    sm_availableFontNames;
 };
 
@@ -829,12 +845,13 @@ class WXDLLIMPEXP_RICHTEXT wxRichTextEvent : public wxNotifyEvent
 public:
     wxRichTextEvent(wxEventType commandType = wxEVT_NULL, int winid = 0)
         : wxNotifyEvent(commandType, winid),
-        m_itemIndex(-1), m_flags(0)
+        m_itemIndex(-1), m_flags(0), m_oldStyleSheet(NULL), m_newStyleSheet(NULL)
         { }
 
     wxRichTextEvent(const wxRichTextEvent& event)
         : wxNotifyEvent(event),
-        m_itemIndex(event.m_itemIndex), m_flags(event.m_flags)
+        m_itemIndex(event.m_itemIndex), m_flags(event.m_flags),
+        m_oldStyleSheet(event.m_oldStyleSheet), m_newStyleSheet(event.m_newStyleSheet)
         { }
 
     int GetIndex() const { return m_itemIndex; }
@@ -843,11 +860,19 @@ public:
     int GetFlags() const { return m_flags; }
     void SetFlags(int flags) { m_flags = flags; }
 
+    wxRichTextStyleSheet* GetOldStyleSheet() const { return m_oldStyleSheet; }
+    void SetOldStyleSheet(wxRichTextStyleSheet* sheet) { m_oldStyleSheet = sheet; }
+
+    wxRichTextStyleSheet* GetNewStyleSheet() const { return m_newStyleSheet; }
+    void SetNewStyleSheet(wxRichTextStyleSheet* sheet) { m_newStyleSheet = sheet; }
+
     virtual wxEvent *Clone() const { return new wxRichTextEvent(*this); }
 
 protected:
-    int                 m_itemIndex;
-    int                 m_flags;
+    int                     m_itemIndex;
+    int                     m_flags;
+    wxRichTextStyleSheet*   m_oldStyleSheet;
+    wxRichTextStyleSheet*   m_newStyleSheet;
 
 private:
     DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxRichTextEvent)
@@ -865,6 +890,11 @@ BEGIN_DECLARE_EVENT_TYPES()
     DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_RICHTEXT, wxEVT_COMMAND_RICHTEXT_MIDDLE_CLICK, 2604)
     DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_RICHTEXT, wxEVT_COMMAND_RICHTEXT_LEFT_DCLICK, 2605)
     DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_RICHTEXT, wxEVT_COMMAND_RICHTEXT_RETURN, 2606)
+
+    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_RICHTEXT, wxEVT_COMMAND_RICHTEXT_STYLESHEET_CHANGING, 2607)
+    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_RICHTEXT, wxEVT_COMMAND_RICHTEXT_STYLESHEET_CHANGED, 2608)
+    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_RICHTEXT, wxEVT_COMMAND_RICHTEXT_STYLESHEET_REPLACING, 2609)
+    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_RICHTEXT, wxEVT_COMMAND_RICHTEXT_STYLESHEET_REPLACED, 2610)
 END_DECLARE_EVENT_TYPES()
 
 typedef void (wxEvtHandler::*wxRichTextEventFunction)(wxRichTextEvent&);
@@ -876,6 +906,11 @@ typedef void (wxEvtHandler::*wxRichTextEventFunction)(wxRichTextEvent&);
 #define EVT_RICHTEXT_MIDDLE_CLICK(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_RICHTEXT_MIDDLE_CLICK, id, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxRichTextEventFunction, & fn ), NULL ),
 #define EVT_RICHTEXT_LEFT_DCLICK(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_RICHTEXT_LEFT_DCLICK, id, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxRichTextEventFunction, & fn ), NULL ),
 #define EVT_RICHTEXT_RETURN(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_RICHTEXT_RETURN, id, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxRichTextEventFunction, & fn ), NULL ),
+
+#define EVT_RICHTEXT_STYLESHEET_CHANGING(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_RICHTEXT_STYLESHEET_CHANGING, id, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxRichTextEventFunction, & fn ), NULL ),
+#define EVT_RICHTEXT_STYLESHEET_CHANGED(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_RICHTEXT_STYLESHEET_CHANGED, id, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxRichTextEventFunction, & fn ), NULL ),
+#define EVT_RICHTEXT_STYLESHEET_REPLACING(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_RICHTEXT_STYLESHEET_REPLACING, id, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxRichTextEventFunction, & fn ), NULL ),
+#define EVT_RICHTEXT_STYLESHEET_REPLACED(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_RICHTEXT_STYLESHEET_REPLACED, id, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxRichTextEventFunction, & fn ), NULL ),
 
 #endif
     // wxUSE_RICHTEXT

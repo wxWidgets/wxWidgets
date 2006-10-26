@@ -210,6 +210,27 @@ bool wxRichTextXMLHandler::ImportXML(wxRichTextBuffer* buffer, wxXmlNode* node)
 
         doneChildren = true;
     }
+    else if (name == wxT("stylesheet"))
+    {
+        if (GetFlags() & wxRICHTEXT_HANDLER_INCLUDE_STYLESHEET)
+        {
+            wxRichTextStyleSheet* sheet = new wxRichTextStyleSheet;
+            
+            wxXmlNode* child = node->GetChildren();
+            while (child)
+            {
+                ImportStyleDefinition(sheet, child);
+                
+                child = child->GetNext();
+            }
+            
+            // Notify that styles have changed. If this is vetoed by the app,
+            // the new sheet will be deleted. If it is not vetoed, the
+            // old sheet will be deleted and replaced with the new one.
+            buffer->SetStyleSheetAndNotify(sheet);
+        }
+        doneChildren = true;
+    }
 
     if (!doneChildren)
     {
@@ -224,6 +245,94 @@ bool wxRichTextXMLHandler::ImportXML(wxRichTextBuffer* buffer, wxXmlNode* node)
     return true;
 }
 
+bool wxRichTextXMLHandler::ImportStyleDefinition(wxRichTextStyleSheet* sheet, wxXmlNode* node)
+{
+    wxString styleType = node->GetName();    
+    wxString styleName = node->GetPropVal(wxT("name"), wxEmptyString);
+    wxString baseStyleName = node->GetPropVal(wxT("basestyle"), wxEmptyString);
+    
+    if (styleName.IsEmpty())
+        return false;
+    
+    if (styleType == wxT("characterstyle"))
+    {
+        wxRichTextCharacterStyleDefinition* def = new wxRichTextCharacterStyleDefinition(styleName);
+        def->SetBaseStyle(baseStyleName);
+
+        wxXmlNode* child = node->GetChildren();
+        while (child)
+        {
+            if (child->GetName() == wxT("style"))
+            {
+                wxTextAttrEx attr;
+                GetStyle(attr, child, false);
+                def->SetStyle(attr);
+            }
+            child = child->GetNext();
+        }
+        
+        sheet->AddCharacterStyle(def);
+    }
+    else if (styleType == wxT("paragraphstyle"))
+    {
+        wxRichTextParagraphStyleDefinition* def = new wxRichTextParagraphStyleDefinition(styleName);
+
+        wxString nextStyleName = node->GetPropVal(wxT("nextstyle"), wxEmptyString);
+        def->SetNextStyle(nextStyleName);
+        def->SetBaseStyle(baseStyleName);
+
+        wxXmlNode* child = node->GetChildren();
+        while (child)
+        {
+            if (child->GetName() == wxT("style"))
+            {
+                wxTextAttrEx attr;
+                GetStyle(attr, child, false);
+                def->SetStyle(attr);
+            }
+            child = child->GetNext();
+        }
+
+        sheet->AddParagraphStyle(def);
+    }
+    else if (styleType == wxT("liststyle"))
+    {
+        wxRichTextListStyleDefinition* def = new wxRichTextListStyleDefinition(styleName);
+
+        wxString nextStyleName = node->GetPropVal(wxT("nextstyle"), wxEmptyString);
+        def->SetNextStyle(nextStyleName);
+        def->SetBaseStyle(baseStyleName);
+
+        wxXmlNode* child = node->GetChildren();
+        while (child)
+        {
+            if (child->GetName() == wxT("style"))
+            {
+                wxTextAttrEx attr;
+                GetStyle(attr, child, false);
+
+                wxString styleLevel = child->GetPropVal(wxT("level"), wxEmptyString);
+                if (styleLevel.IsEmpty())
+                {                
+                    def->SetStyle(attr);
+                }
+                else
+                {
+                    int level = wxAtoi(styleLevel);
+                    if (level > 0 && level <= 10)
+                    {
+                        def->SetLevelAttributes(level-1, attr);
+                    }
+                }
+            }
+            child = child->GetNext();
+        }
+
+        sheet->AddListStyle(def);
+    }
+    
+    return true;
+}
 
 //-----------------------------------------------------------------------------
 //  xml support routines
@@ -460,8 +569,39 @@ bool wxRichTextXMLHandler::DoSaveFile(wxRichTextBuffer *buffer, wxOutputStream& 
     OutputString(stream, wxT("<richtext version=\"1.0.0.0\" xmlns=\"http://www.wxwidgets.org\">") , NULL, NULL);
 
     int level = 1;
-    bool success = ExportXML(stream, convMem, convFile, *buffer, level);
 
+    if (buffer->GetStyleSheet() && (GetFlags() & wxRICHTEXT_HANDLER_INCLUDE_STYLESHEET))
+    {
+        OutputIndentation(stream, level);
+        OutputString(stream, wxT("<stylesheet>"), convMem, convFile);
+
+        int i;
+
+        for (i = 0; i < (int) buffer->GetStyleSheet()->GetCharacterStyleCount(); i++)
+        {
+            wxRichTextCharacterStyleDefinition* def = buffer->GetStyleSheet()->GetCharacterStyle(i);
+            ExportStyleDefinition(stream, convMem, convFile, def, level + 1);
+        }
+
+        for (i = 0; i < (int) buffer->GetStyleSheet()->GetParagraphStyleCount(); i++)
+        {
+            wxRichTextParagraphStyleDefinition* def = buffer->GetStyleSheet()->GetParagraphStyle(i);
+            ExportStyleDefinition(stream, convMem, convFile, def, level + 1);
+        }
+
+        for (i = 0; i < (int) buffer->GetStyleSheet()->GetListStyleCount(); i++)
+        {
+            wxRichTextListStyleDefinition* def = buffer->GetStyleSheet()->GetListStyle(i);
+            ExportStyleDefinition(stream, convMem, convFile, def, level + 1);
+        }
+
+        OutputIndentation(stream, level);
+        OutputString(stream, wxT("</stylesheet>"), convMem, convFile);
+    }
+
+
+    bool success = ExportXML(stream, convMem, convFile, *buffer, level);
+    
     OutputString(stream, wxT("\n</richtext>") , NULL, NULL);
     OutputString(stream, wxT("\n"), NULL, NULL);
 
@@ -622,6 +762,106 @@ bool wxRichTextXMLHandler::ExportXML(wxOutputStream& stream, wxMBConv* convMem, 
     return true;
 }
 
+bool wxRichTextXMLHandler::ExportStyleDefinition(wxOutputStream& stream, wxMBConv* convMem, wxMBConv* convFile, wxRichTextStyleDefinition* def, int level)
+{
+    wxRichTextCharacterStyleDefinition* charDef = wxDynamicCast(def, wxRichTextCharacterStyleDefinition);    
+    wxRichTextParagraphStyleDefinition* paraDef = wxDynamicCast(def, wxRichTextParagraphStyleDefinition);
+    wxRichTextListStyleDefinition* listDef = wxDynamicCast(def, wxRichTextListStyleDefinition);
+    
+    wxString baseStyle = def->GetBaseStyle();
+    wxString baseStyleProp;
+    if (!baseStyle.IsEmpty())
+        baseStyleProp = wxT(" basestyle=\"") + baseStyle + wxT("\"");
+    
+    if (charDef)
+    {
+        OutputIndentation(stream, level);
+        OutputString(stream, wxT("<characterstyle") + baseStyleProp + wxT(">"), convMem, convFile);
+        
+        level ++;
+
+        wxString style = CreateStyle(def->GetStyle(), false);
+
+        OutputIndentation(stream, level);
+        OutputString(stream, wxT("<style ") + style + wxT(">"), convMem, convFile);
+        
+        OutputIndentation(stream, level);
+        OutputString(stream, wxT("</style>"), convMem, convFile);
+
+        level --;
+
+        OutputIndentation(stream, level);
+        OutputString(stream, wxT("</characterstyle>"), convMem, convFile);
+    }
+    else if (listDef)
+    {
+        OutputIndentation(stream, level);
+        
+        if (!listDef->GetNextStyle().IsEmpty())
+            baseStyleProp << wxT(" basestyle=\"") << listDef->GetNextStyle() << wxT("\"");
+        
+        OutputString(stream, wxT("<liststyle") + baseStyleProp + wxT(">"), convMem, convFile);
+        
+        level ++;
+
+        wxString style = CreateStyle(def->GetStyle(), false);
+
+        OutputIndentation(stream, level);
+        OutputString(stream, wxT("<style ") + style + wxT(">"), convMem, convFile);
+        
+        OutputIndentation(stream, level);
+        OutputString(stream, wxT("</style>"), convMem, convFile);
+
+        int i;
+        for (i = 0; i < 10; i ++)
+        {
+            wxRichTextAttr* levelAttr = listDef->GetLevelAttributes(i);
+            if (levelAttr)
+            {
+                wxString style = CreateStyle(def->GetStyle(), false);
+                wxString levelStr = wxString::Format(wxT(" level=\"%d\" "), (i+1));
+
+                OutputIndentation(stream, level);
+                OutputString(stream, wxT("<style ") + levelStr + style + wxT(">"), convMem, convFile);
+        
+                OutputIndentation(stream, level);
+                OutputString(stream, wxT("</style>"), convMem, convFile);
+            }
+        }
+
+        level --;
+
+        OutputIndentation(stream, level);
+        OutputString(stream, wxT("</liststyle>"), convMem, convFile);
+    }
+    else if (paraDef)
+    {
+        OutputIndentation(stream, level);
+        
+        if (!listDef->GetNextStyle().IsEmpty())
+            baseStyleProp << wxT(" basestyle=\"") << listDef->GetNextStyle() << wxT("\"");
+        
+        OutputString(stream, wxT("<paragraphstyle") + baseStyleProp + wxT(">"), convMem, convFile);
+        
+        level ++;
+
+        wxString style = CreateStyle(def->GetStyle(), false);
+
+        OutputIndentation(stream, level);
+        OutputString(stream, wxT("<style ") + style + wxT(">"), convMem, convFile);
+        
+        OutputIndentation(stream, level);
+        OutputString(stream, wxT("</style>"), convMem, convFile);
+        
+        level --;
+
+        OutputIndentation(stream, level);
+        OutputString(stream, wxT("</paragraphstyle>"), convMem, convFile);
+    }
+
+    return true;
+}
+
 /// Create style parameters
 wxString wxRichTextXMLHandler::CreateStyle(const wxTextAttrEx& attr, bool isPara)
 {
@@ -688,15 +928,24 @@ wxString wxRichTextXMLHandler::CreateStyle(const wxTextAttrEx& attr, bool isPara
         if (attr.HasBulletNumber())
             str << wxT(" bulletnumber=\"") << (int) attr.GetBulletNumber() << wxT("\"");
 
-        if (attr.HasBulletSymbol())
+        if (attr.HasBulletText())
         {
-            str << wxT(" bulletsymbol=\"") << (int) (attr.GetBulletSymbol()) << wxT("\"");
+            // If using a bullet symbol, convert to integer in case it's a non-XML-friendly character.
+            // Otherwise, assume it's XML-friendly text such as outline numbering, e.g. 1.2.3.1
+            if (!attr.GetBulletText().IsEmpty() && (attr.GetBulletStyle() & wxTEXT_ATTR_BULLET_STYLE_SYMBOL))
+                str << wxT(" bulletsymbol=\"") << (int) (attr.GetBulletText()[0]) << wxT("\"");
+            else
+                str << wxT(" bullettext=\"") << attr.GetBulletText() << wxT("\"");
+                
             str << wxT(" bulletfont=\"") << attr.GetBulletFont() << wxT("\"");
         }
 
         if (attr.HasBulletName())
             str << wxT(" bulletname=\"") << attr.GetBulletName() << wxT("\"");
 
+        if (attr.HasURL())
+            str << wxT(" url=\"") << attr.GetURL() << wxT("\"");
+        
         if (!attr.GetParagraphStyleName().empty())
             str << wxT(" parstyle=\"") << wxString(attr.GetParagraphStyleName()) << wxT("\"");
         
@@ -853,7 +1102,16 @@ bool wxRichTextXMLHandler::GetStyle(wxTextAttrEx& attr, wxXmlNode* node, bool is
 
         value = node->GetPropVal(wxT("bulletsymbol"), wxEmptyString);
         if (!value.empty())
-            attr.SetBulletSymbol(wxChar(wxAtoi(value)));
+        {
+            wxChar ch = wxAtoi(value);
+            wxString s;
+            s << ch;
+            attr.SetBulletText(s);
+        }
+
+        value = node->GetPropVal(wxT("bullettext"), wxEmptyString);
+        if (!value.empty())
+            attr.SetBulletText(value);
 
         value = node->GetPropVal(wxT("bulletfont"), wxEmptyString);
         if (!value.empty())
@@ -862,6 +1120,10 @@ bool wxRichTextXMLHandler::GetStyle(wxTextAttrEx& attr, wxXmlNode* node, bool is
         value = node->GetPropVal(wxT("bulletname"), wxEmptyString);
         if (!value.empty())
             attr.SetBulletName(value);
+
+        value = node->GetPropVal(wxT("url"), wxEmptyString);
+        if (!value.empty())
+            attr.SetURL(value);
 
         value = node->GetPropVal(wxT("parstyle"), wxEmptyString);
         if (!value.empty())

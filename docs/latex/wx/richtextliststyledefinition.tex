@@ -1,0 +1,85 @@
+\section{\class{wxRichTextListStyleDefinition}}\label{wxrichtextliststyledefinition}
+
+This class represents a list style definition, usually added to a \helpref{wxRichTextStyleSheet}{wxrichtextstylesheet}.
+
+The class inherits paragraph attributes from wxRichTextStyleParagraphDefinition, and adds 10 further attribute objects, one for each level of a list.
+When applying a list style to a paragraph, the list style's base and appropriate level attributes are merged with the
+paragraph's existing attributes.
+
+You can apply a list style to one or more paragraphs using \helpref{wxRichTextCtrl::SetListStyle}{wxrichtextctrlsetliststyle}. You
+can also use the functions \helpref{wxRichTextCtrl::NumberList}{wxrichtextctrlnumberlist}, \helpref{wxRichTextCtrl::PromoteList}{wxrichtextctrlpromotelist} and 
+\helpref{wxRichTextCtrl::ClearListStyle}{wxrichtextctrlclearliststyle}. As usual, there are wxRichTextBuffer versions of these functions
+so that you can apply them directly to a buffer without requiring a control.
+
+\wxheading{Derived from}
+
+\helpref{wxRichTextStyleParagraphDefinition}{wxrichtextstyleparagraphdefinition}
+
+\wxheading{Include files}
+
+<wx/richtext/richtextstyles.h>
+
+\wxheading{Data structures}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxRichTextListStyleDefinition::wxRichTextListStyleDefinition}\label{wxrichtextliststyledefinitionwxrichtextliststyledefinition}
+
+\func{}{wxRichTextListStyleDefinition}{\param{const wxString\& }{name = wxEmptyString}}
+
+Constructor.
+
+\membersection{wxRichTextListStyleDefinition::\destruct{wxRichTextListStyleDefinition}}\label{wxrichtextliststyledefinitiondtor}
+
+\func{}{\destruct{wxRichTextListStyleDefinition}}{\void}
+
+Destructor.
+
+\membersection{wxRichTextListStyleDefinition::CombineWithParagraphStyle}\label{wxrichtextliststyledefinitioncombinewithparagraphstyle}
+
+\func{wxRichTextAttr}{CombineWithParagraphStyle}{\param{int }{indent}, \param{const wxRichTextAttr\&}{ paraStyle}}
+
+This function combines the given paragraph style with the list style's base attributes and level style matching the given indent, returning the combined attributes.
+
+\membersection{wxRichTextListStyleDefinition::FindLevelForIndent}\label{wxrichtextliststyledefinitionfindlevelforindent}
+
+\constfunc{int}{FindLevelForIndent}{\param{int }{indent}}
+
+This function finds the level (from 0 to 9) whose indentation attribute mostly closely matches {\it indent} (expressed in tenths of a millimetre).
+
+\membersection{wxRichTextListStyleDefinition::GetCombinedStyle}\label{wxrichtextliststyledefinitioncombinewithparagraphstyle}
+
+\constfunc{wxRichTextAttr}{GetCombinedStyle}{\param{int }{indent}}
+
+This function combines the list style's base attributes and the level style matching the given indent, returning the combined attributes.
+
+\membersection{wxRichTextListStyleDefinition::GetLevelAttributes}\label{wxrichtextliststyledefinitiongetlevelattributes}
+
+\constfunc{const wxRichTextAttr*}{GetLevelAttributes}{\param{int }{level}}
+
+Returns the style for the given level. {\it level} is a number between 0 and 9.
+
+\membersection{wxRichTextListStyleDefinition::GetLevelCount}\label{wxrichtextliststyledefinitiongetlevelcount}
+
+\constfunc{int}{GetLevelCount}{\void}
+
+Returns the number of levels. This is hard-wired to 10.
+
+Returns the style for the given level. {\it level} is a number between 0 and 9.
+
+\membersection{wxRichTextListStyleDefinition::IsNumbered}\label{wxrichtextliststyledefinitionisnumbered}
+
+\constfunc{int}{IsNumbered}{\param{int}{ level}}
+
+Returns \true if the given level has numbered list attributes.
+
+\membersection{wxRichTextListStyleDefinition::SetLevelAttributes}\label{wxrichtextliststyledefinitionsetlevelattributes}
+
+\func{void}{SetLevelAttributes}{\param{int }{level}, \param{const wxRichTextAttr\&}{ attr}}
+
+\func{void}{SetLevelAttributes}{\param{int }{level}, \param{int}{ leftIndent}, \param{int}{ leftSubIndent}, \param{int}{ bulletStyle}, \param{const wxString\&}{ bulletSymbol = wxEmptyString}}
+
+Sets the style for the given level. {\it level} is a number between 0 and 9.
+
+The first and most flexible form uses a wxRichTextAttr object, while the second form is for convenient setting of the most commonly-used attributes.
+

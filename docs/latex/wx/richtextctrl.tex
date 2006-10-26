@@ -171,6 +171,12 @@ defined for convenience:
 \end{verbatim}
 }
 
+\membersection{wxRichTextCtrl::BeginListStyle}\label{wxrichtextctrlbeginliststyle}
+
+\func{bool}{BeginListStyle}{\param{const wxString\&}{ listStyle}, \param{int}{ level=1}, \param{int}{ number=1}}
+
+Begins using a specified list style. Optionally, you can also pass a level and a number.
+
 \membersection{wxRichTextCtrl::BeginNumberedBullet}\label{wxrichtextctrlbeginnumberedbullet}
 
 \func{bool}{BeginNumberedBullet}{\param{int }{bulletNumber}, \param{int }{leftIndent}, \param{int }{leftSubIndent}, \param{int }{bulletStyle = wxTEXT\_ATTR\_BULLET\_STYLE\_ARABIC|wxTEXT\_ATTR\_BULLET\_STYLE\_PERIOD}}
@@ -253,6 +259,13 @@ Begins using this colour.
 \func{bool}{BeginUnderline}{\void}
 
 Begins using underlining.
+
+\membersection{wxRichTextCtrl::BeginURL}\label{wxrichtextctrlbeginurl}
+
+\func{bool}{BeginURL}{\param{const wxString\&}{ url}, \param{const wxString\&}{ characterStyle = wxEmptyString}}
+
+Begins applying wxTEXT\_ATTR\_URL to the content. Pass a URL and optionally, a character style to apply,
+since it is common to mark a URL with a familiar style such as blue text with underlining.
 
 \membersection{wxRichTextCtrl::CanCopy}\label{wxrichtextctrlcancopy}
 
@@ -407,6 +420,12 @@ Ends left indent.
 
 Ends line spacing.
 
+\membersection{wxRichTextCtrl::EndListStyle}\label{wxrichtextctrlendliststyle}
+
+\func{bool}{EndListStyle}{\void}
+
+Ends using a specified list style.
+
 \membersection{wxRichTextCtrl::EndNumberedBullet}\label{wxrichtextctrlendnumberedbullet}
 
 \func{bool}{EndNumberedBullet}{\void}
@@ -460,6 +479,12 @@ Ends applying a text colour.
 \func{bool}{EndUnderline}{\void}
 
 End applying underlining.
+
+\membersection{wxRichTextCtrl::EndURL}\label{wxrichtextctrlendurl}
+
+\func{bool}{EndURL}{\void}
+
+Ends applying a URL.
 
 \membersection{wxRichTextCtrl::ExtendSelection}\label{wxrichtextctrlextendselection}
 

@@ -44,6 +44,10 @@ DEFINE_EVENT_TYPE(wxEVT_COMMAND_RICHTEXT_MIDDLE_CLICK)
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_RICHTEXT_RIGHT_CLICK)
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_RICHTEXT_LEFT_DCLICK)
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_RICHTEXT_RETURN)
+DEFINE_EVENT_TYPE(wxEVT_COMMAND_RICHTEXT_STYLESHEET_REPLACING)
+DEFINE_EVENT_TYPE(wxEVT_COMMAND_RICHTEXT_STYLESHEET_REPLACED)
+DEFINE_EVENT_TYPE(wxEVT_COMMAND_RICHTEXT_STYLESHEET_CHANGING)
+DEFINE_EVENT_TYPE(wxEVT_COMMAND_RICHTEXT_STYLESHEET_CHANGED)
 
 IMPLEMENT_CLASS( wxRichTextCtrl, wxControl )
 
@@ -137,7 +141,7 @@ bool wxRichTextCtrl::Create( wxWindow* parent, wxWindowID id, const wxString& va
     attributes.SetLineSpacing(10);
     attributes.SetParagraphSpacingAfter(10);
     attributes.SetParagraphSpacingBefore(0);
-    attributes.SetFlags(wxTEXT_ATTR_ALL);
+
     SetBasicStyle(attributes);
 
     // The default attributes will be merged with base attributes, so
@@ -156,16 +160,23 @@ bool wxRichTextCtrl::Create( wxWindow* parent, wxWindowID id, const wxString& va
     RecreateBuffer(size);
 #endif
 
-    SetCursor(wxCursor(wxCURSOR_IBEAM));
+    m_textCursor = wxCursor(wxCURSOR_IBEAM);
+    m_urlCursor = wxCursor(wxCURSOR_HAND);
+
+    SetCursor(m_textCursor);
 
     if (!value.IsEmpty())
         SetValue(value);
+
+    GetBuffer().AddEventHandler(this);
 
     return true;
 }
 
 wxRichTextCtrl::~wxRichTextCtrl()
 {
+    GetBuffer().RemoveEventHandler(this);
+    
     delete m_contextMenu;
 }
 
@@ -333,25 +344,59 @@ void wxRichTextCtrl::OnLeftClick(wxMouseEvent& event)
 }
 
 /// Left-up
-void wxRichTextCtrl::OnLeftUp(wxMouseEvent& WXUNUSED(event))
+void wxRichTextCtrl::OnLeftUp(wxMouseEvent& event)
 {
     if (m_dragging)
     {
         m_dragging = false;
         if (GetCapture() == this)
             ReleaseMouse();
+
+        // See if we clicked on a URL
+        wxClientDC dc(this);
+        PrepareDC(dc);
+        dc.SetFont(GetFont());
+
+        long position = 0;
+        wxPoint logicalPt = event.GetLogicalPosition(dc);
+        int hit = GetBuffer().HitTest(dc, logicalPt, position);
+    
+        if (hit != wxRICHTEXT_HITTEST_NONE)
+        {
+            wxTextAttrEx attr;
+            if (GetStyle(position, attr))
+            {
+                if (attr.HasFlag(wxTEXT_ATTR_URL))
+                {
+                    wxString urlTarget = attr.GetURL();
+                    if (!urlTarget.IsEmpty())
+                    {
+                        wxMouseEvent mouseEvent(event);
+                        
+                        long startPos = 0, endPos = 0;
+                        wxRichTextObject* obj = GetBuffer().GetLeafObjectAtPosition(position);
+                        if (obj)
+                        {
+                            startPos = obj->GetRange().GetStart();
+                            endPos = obj->GetRange().GetEnd();
+                        }                        
+                        
+                        wxTextUrlEvent urlEvent(GetId(), mouseEvent, startPos, endPos);
+                        InitCommandEvent(urlEvent);
+
+                        urlEvent.SetString(urlTarget);
+                        
+                        GetEventHandler()->ProcessEvent(urlEvent);
+                    }
+                }
+            }
+        }
     }
 }
 
 /// Left-click
 void wxRichTextCtrl::OnMoveMouse(wxMouseEvent& event)
 {
-    if (!event.Dragging())
-    {
-        event.Skip();
-        return;
-    }
-
     wxClientDC dc(this);
     PrepareDC(dc);
     dc.SetFont(GetFont());
@@ -359,6 +404,34 @@ void wxRichTextCtrl::OnMoveMouse(wxMouseEvent& event)
     long position = 0;
     wxPoint logicalPt = event.GetLogicalPosition(dc);
     int hit = GetBuffer().HitTest(dc, logicalPt, position);
+    
+    // See if we need to change the cursor
+    
+    {
+        if (hit != wxRICHTEXT_HITTEST_NONE)
+        {
+            wxTextAttrEx attr;
+            if (GetStyle(position, attr))
+            {
+                if (attr.HasFlag(wxTEXT_ATTR_URL))
+                {
+                    if (GetCursor() != m_urlCursor)
+                        SetCursor(m_urlCursor);
+                }
+                else if (!attr.HasFlag(wxTEXT_ATTR_URL))
+                {
+                    if (GetCursor() != m_textCursor)
+                        SetCursor(m_textCursor);
+                }
+            }
+        }
+    }
+
+    if (!event.Dragging())
+    {
+        event.Skip();
+        return;
+    }
 
     if (m_dragging && hit != wxRICHTEXT_HITTEST_NONE)
     {
@@ -462,18 +535,24 @@ void wxRichTextCtrl::OnChar(wxKeyEvent& event)
         DeleteSelectedContent(& newPos);
 
         GetBuffer().InsertNewlineWithUndo(newPos+1, this, wxRICHTEXT_INSERT_WITH_PREVIOUS_PARAGRAPH_STYLE);
+        EndBatchUndo();
+        SetDefaultStyleToCursorStyle();
+
+        ScrollIntoView(m_caretPosition, WXK_RIGHT);
 
         wxRichTextEvent cmdEvent(
             wxEVT_COMMAND_RICHTEXT_RETURN,
             GetId());
         cmdEvent.SetEventObject(this);
         cmdEvent.SetFlags(flags);
-        GetEventHandler()->ProcessEvent(cmdEvent);
-
-        EndBatchUndo();
-        SetDefaultStyleToCursorStyle();
-
-        ScrollIntoView(m_caretPosition, WXK_RIGHT);
+        if (!GetEventHandler()->ProcessEvent(cmdEvent))
+        {
+            // Generate conventional event
+            wxCommandEvent textEvent(wxEVT_COMMAND_TEXT_ENTER, GetId());
+            InitCommandEvent(textEvent);
+            
+            GetEventHandler()->ProcessEvent(textEvent);
+        }
     }
     else if (event.GetKeyCode() == WXK_BACK)
     {
@@ -662,6 +741,7 @@ void wxRichTextCtrl::OnChar(wxKeyEvent& event)
                         int promoteBy = event.ShiftDown() ? 1 : -1;
 
                         PromoteList(promoteBy, range, NULL);
+
                         return;
                     }
                 }

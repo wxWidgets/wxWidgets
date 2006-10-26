@@ -34,6 +34,18 @@ Default constructors.
 
 Destructor.
 
+\membersection{wxRichTextBuffer::AddEventHandler}\label{wxrichtextbufferaddeventhandler}
+
+\func{bool}{AddEventHandler}{\param{wxEvtHandler* }{handler}}
+
+Adds an event handler to the buffer's list of handlers. A buffer associated with
+a contol has the control as the only event handler, but the application is free
+to add more if further notification is required. All handlers are notified
+of an event originating from the buffer, such as the replacement of a style sheet
+during loading. The buffer never deletes any of the event handlers, unless 
+\helpref{wxRichTextBuffer::RemoveEventHandler}{wxrichtextbufferremoveeventhandler} is
+called with \true as the second argument.
+
 \membersection{wxRichTextBuffer::AddHandler}\label{wxrichtextbufferaddhandler}
 
 \func{void}{AddHandler}{\param{wxRichTextFileHandler* }{handler}}
@@ -127,6 +139,12 @@ defined for convenience:
 \end{verbatim}
 }
 
+\membersection{wxRichTextBuffer::BeginListStyle}\label{wxrichtextbufferbeginliststyle}
+
+\func{bool}{BeginListStyle}{\param{const wxString\&}{ listStyle}, \param{int}{ level=1}, \param{int}{ number=1}}
+
+Begins using a specified list style. Optionally, you can also pass a level and a number.
+
 \membersection{wxRichTextBuffer::BeginNumberedBullet}\label{wxrichtextbufferbeginnumberedbullet}
 
 \func{bool}{BeginNumberedBullet}{\param{int }{bulletNumber}, \param{int }{leftIndent}, \param{int }{leftSubIndent}, \param{int }{bulletStyle = wxTEXT\_ATTR\_BULLET\_STYLE\_ARABIC|wxTEXT\_ATTR\_BULLET\_STYLE\_PERIOD}}
@@ -194,6 +212,13 @@ differently by each command. If not dealt with by a command implementation, then
 it will be implemented automatically by not storing the command in the undo history
 when the action is submitted to the command processor.
 
+\membersection{wxRichTextBuffer::BeginStandardBullet}\label{wxrichtextbufferbeginstandardbullet}
+
+\func{bool}{BeginStandardBullet}{\param{const wxString\&}{ bulletName}, \param{int }{leftIndent}, \param{int }{leftSubIndent}, \param{int }{bulletStyle = wxTEXT\_ATTR\_BULLET\_STYLE\_STANDARD}}
+
+Begins applying a standard bullet, using one of the standard bullet names (currently {\tt standard/circle} or {\tt standard/square}.
+See \helpref{BeginNumberedBullet}{wxrichtextbufferbeginnumberedbullet} for an explanation of how indentation is used to render the bulleted paragraph.
+
 \membersection{wxRichTextBuffer::BeginSymbolBullet}\label{wxrichtextbufferbeginsymbolbullet}
 
 \func{bool}{BeginSymbolBullet}{\param{wxChar }{symbol}, \param{int }{leftIndent}, \param{int }{leftSubIndent}, \param{int }{bulletStyle = wxTEXT\_ATTR\_BULLET\_STYLE\_SYMBOL}}
@@ -212,6 +237,13 @@ Begins using the specified text foreground colour.
 \func{bool}{BeginUnderline}{\void}
 
 Begins using underline.
+
+\membersection{wxRichTextBuffer::BeginURL}\label{wxrichtextbufferbeginurl}
+
+\func{bool}{BeginURL}{\param{const wxString\&}{ url}, \param{const wxString\&}{ characterStyle = wxEmptyString}}
+
+Begins applying wxTEXT\_ATTR\_URL to the content. Pass a URL and optionally, a character style to apply,
+since it is common to mark a URL with a familiar style such as blue text with underlining.
 
 \membersection{wxRichTextBuffer::CanPasteFromClipboard}\label{wxrichtextbuffercanpastefromclipboard}
 
@@ -329,6 +361,12 @@ Ends using a left indent.
 
 Ends using a line spacing.
 
+\membersection{wxRichTextBuffer::EndListStyle}\label{wxrichtextbufferendliststyle}
+
+\func{bool}{EndListStyle}{\void}
+
+Ends using a specified list style.
+
 \membersection{wxRichTextBuffer::EndNumberedBullet}\label{wxrichtextbufferendnumberedbullet}
 
 \func{bool}{EndNumberedBullet}{\void}
@@ -371,6 +409,12 @@ Ends suppressing undo/redo commands.
 
 Ends using a symbol bullet.
 
+\membersection{wxRichTextBuffer::EndStandardBullet}\label{wxrichtextbufferendstandardbullet}
+
+\func{bool}{EndStandardBullet}{\void}
+
+Ends using a standard bullet.
+
 \membersection{wxRichTextBuffer::EndTextColour}\label{wxrichtextbufferendtextcolour}
 
 \func{bool}{EndTextColour}{\void}
@@ -382,6 +426,12 @@ Ends using a text foreground colour.
 \func{bool}{EndUnderline}{\void}
 
 Ends using underline.
+
+\membersection{wxRichTextBuffer::EndURL}\label{wxrichtextbufferendurl}
+
+\func{bool}{EndURL}{\void}
+
+Ends applying a URL.
 
 \membersection{wxRichTextBuffer::FindHandler}\label{wxrichtextbufferfindhandler}
 
@@ -445,6 +495,12 @@ used to determine the type to pass to \helpref{LoadFile}{wxrichtextbuffergetextw
 \func{wxList\&}{GetHandlers}{\void}
 
 Returns the list of file handlers.
+
+\membersection{wxRichTextBuffer::GetRenderer}\label{wxrichtextbuffergetrenderer}
+
+\func{static wxRichTextRenderer*}{GetRenderer}{\void}
+
+Returns the object to be used to render certain aspects of the content, such as bullets.
 
 \membersection{wxRichTextBuffer::GetStyle}\label{wxrichtextbuffergetstyle}
 
@@ -596,6 +652,12 @@ Marks the buffer as modified or unmodified.
 
 Pastes the clipboard content to the buffer at the given position.
 
+\membersection{wxRichTextBuffer::RemoveEventHandler}\label{wxrichtextbufferremoveeventhandler}
+
+\func{bool}{RemoveEventHandler}{\param{wxEvtHandler* }{handler}, \param{bool}{ deleteHandler = false}}
+
+Removes an event handler from the buffer's list of handlers, deleting the object if {\it deleteHandler} is \true.
+
 \membersection{wxRichTextBuffer::RemoveHandler}\label{wxrichtextbufferremovehandler}
 
 \func{bool}{RemoveHandler}{\param{const wxString\& }{name}}
@@ -637,6 +699,14 @@ Sets the default style, affecting the style currently being applied (for example
 style to bold will cause subsequently inserted text to be bold).
 
 This is not cumulative - setting the default style will replace the previous default style.
+
+\membersection{wxRichTextBuffer::SetRenderer}\label{wxrichtextbuffersetrenderer}
+
+\func{static void}{SetRenderer}{\param{wxRichTextRenderer* }{renderer}}
+
+Sets {\it renderer} as the object to be used to render certain aspects of the content, such as bullets.
+You can override default rendering by deriving a new class from wxRichTextRenderer or wxRichTextStdRenderer,
+overriding one or more virtual functions, and setting an instance of the class using this function.
 
 \membersection{wxRichTextBuffer::SetStyle}\label{wxrichtextbuffersetstyle}
 
