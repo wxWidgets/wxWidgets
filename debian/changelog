@@ -1,3 +1,10 @@
+wxwidgets2.7 (2.7.1.3-0) unstable; urgency=low
+
+  * wxGTK:  The wx.ALWAYS_SHOW_SB style is now supported.
+  * Fixed name errors in the old wxPython package namespace.
+
+ -- Robin Dunn <robin@alldunn.com>  Thu, 26 Oct 2006 14:35:29 -0700
+
 wxwidgets2.7 (2.7.1.2-0) unstable; urgency=low
 
   * Fixed a bug in the MaskedEdit controls caused by conflicting IsEmpty methods.
