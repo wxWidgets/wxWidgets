@@ -476,14 +476,22 @@ void wxListBox::DoSetSelection(int n, bool select)
 {
     if ( select )
     {
-        if ( m_selections.Index(n) == wxNOT_FOUND )
+        if ( n == wxNOT_FOUND )
+        {
+            if ( !HasMultipleSelection() )
+            {
+                // selecting wxNOT_FOUND is documented to deselect all items
+                DeselectAll();
+                return;
+            }
+        }
+        else if ( m_selections.Index(n) == wxNOT_FOUND )
         {
             if ( !HasMultipleSelection() )
             {
                 // selecting an item in a single selection listbox deselects
                 // all the others
                 DeselectAll();
-                return;
             }
 
             m_selections.Add(n);
