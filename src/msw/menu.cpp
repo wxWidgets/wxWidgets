@@ -416,7 +416,7 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
             // while our owner-drawn code is not
 
             // first compile-time check
-#ifdef MIIM_BITMAP
+#if defined(MIIM_BITMAP) && !defined(__MINGW32__)
             WinStruct<MENUITEMINFO> mii;
 
             // now run-time one: MIIM_BITMAP only works under WinME/2000+
