@@ -175,6 +175,7 @@ wx/filename.h
 wx/filesys.h
 wx/fontenc.h
 wx/fontmap.h
+wx/fs_filter.h
 wx/fs_mem.h
 wx/fs_zip.h
 wx/hash.h

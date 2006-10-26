@@ -559,6 +559,10 @@ SOURCE=..\..\src\common\fmapbase.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\common\fs_filter.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\common\fs_mem.cpp
 # End Source File
 # Begin Source File
@@ -1536,6 +1540,10 @@ SOURCE=..\..\include\wx\fontenc.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\fontmap.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\fs_filter.h
 # End Source File
 # Begin Source File
 

@@ -312,6 +312,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/common/filtall.cpp
     src/common/filtfind.cpp
     src/common/fmapbase.cpp
+    src/common/fs_filter.cpp
     src/common/fs_zip.cpp
     src/common/hash.cpp
     src/common/hashmap.cpp
@@ -397,6 +398,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/filesys.h
     wx/fontenc.h
     wx/fontmap.h
+    wx/fs_filter.h
     wx/fs_mem.h
     wx/fs_zip.h
     wx/hash.h
