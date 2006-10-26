@@ -49,11 +49,11 @@ extern bool           g_blockEventsOnScroll;
 // Macro to tell which row the strings are in (1 if native checklist, 0 if not)
 //-----------------------------------------------------------------------------
 
-#if wxUSE_CHECKLISTBOX && wxUSE_NATIVEGTKCHECKLIST
+#if wxUSE_CHECKLISTBOX
 #   define WXLISTBOX_DATACOLUMN_ARG(x)  (x->m_hasCheckBoxes ? 1 : 0)
 #else
 #   define WXLISTBOX_DATACOLUMN_ARG(x)  (0)
-#endif // wxUSE_CHECKLISTBOX && wxUSE_NATIVEGTKCHECKLIST
+#endif // wxUSE_CHECKLISTBOX
 
 #define WXLISTBOX_DATACOLUMN    WXLISTBOX_DATACOLUMN_ARG(this)
 
@@ -73,123 +73,41 @@ gtk_listbox_row_activated_callback(GtkTreeView        *treeview,
     if (g_blockEventsOnDrag) return;
     if (g_blockEventsOnScroll) return;
 
-    if (!listbox->m_hasVMT) return;
-
-    //Notes:
-    //1) This is triggered by either a double-click or a space press
-    //2) We handle both here because
-    //2a) in the case of a space/keypress we can't really know
-    //    which item was pressed on because we can't get coords
-    //    from a keyevent
-    //2b) It seems more correct
+    // This is triggered by either a double-click or a space press
 
     int sel = gtk_tree_path_get_indices(path)[0];
 
-    if(!listbox->m_spacePressed)
+    wxCommandEvent event(wxEVT_COMMAND_LISTBOX_DOUBLECLICKED, listbox->GetId() );
+    event.SetEventObject( listbox );
+
+    if (listbox->IsSelected(sel))
     {
-        //Assume it was double-click
-        wxCommandEvent event(wxEVT_COMMAND_LISTBOX_DOUBLECLICKED, listbox->GetId() );
-        event.SetEventObject( listbox );
-
-        if(listbox->IsSelected(sel))
+        GtkTreeEntry* entry = listbox->GtkGetEntry(sel);
+        
+        if (entry)
         {
-            GtkTreeEntry* entry = listbox->GtkGetEntry(sel);
+            event.SetInt(sel);
+            event.SetString(wxConvUTF8.cMB2WX(gtk_tree_entry_get_label(entry)));
 
-            if(entry)
-            {
-                event.SetInt(sel);
-                event.SetString(wxConvUTF8.cMB2WX(gtk_tree_entry_get_label(entry)));
-
-                if ( listbox->HasClientObjectData() )
-                    event.SetClientObject(
-                    (wxClientData*) gtk_tree_entry_get_userdata(entry) );
-                else if ( listbox->HasClientUntypedData() )
-                    event.SetClientData( gtk_tree_entry_get_userdata(entry) );
-                g_object_unref (entry);
-            }
-            else
-            {
-                wxLogSysError(wxT("Internal error - could not get entry for double-click"));
-                event.SetInt(-1);
-            }
+            if ( listbox->HasClientObjectData() )
+                event.SetClientObject( (wxClientData*) gtk_tree_entry_get_userdata(entry) );
+            else if ( listbox->HasClientUntypedData() )
+                event.SetClientData( gtk_tree_entry_get_userdata(entry) );
+                
+            g_object_unref (entry);
         }
         else
+        {
+            wxLogSysError(wxT("Internal error - could not get entry for double-click"));
             event.SetInt(-1);
-
-        listbox->GetEventHandler()->ProcessEvent( event );
+        }
     }
     else
     {
-        listbox->m_spacePressed = false; //don't block selection behaviour anymore
-
-        //Space was pressed - toggle the appropriate checkbox and the selection
-#if wxUSE_CHECKLISTBOX //Do it for both native and non-native
-        if (listbox->m_hasCheckBoxes)
-        {
-            wxCheckListBox *clb = (wxCheckListBox *)listbox;
-
-            clb->Check( sel, !clb->IsChecked(sel) );
-
-            wxCommandEvent new_event( wxEVT_COMMAND_CHECKLISTBOX_TOGGLED, listbox->GetId() );
-            new_event.SetEventObject( listbox );
-            new_event.SetInt( sel );
-            listbox->GetEventHandler()->ProcessEvent( new_event );
-        }
-#endif // wxUSE_CHECKLISTBOX
-
-        if(  (((listbox->GetWindowStyleFlag() & wxLB_MULTIPLE) != 0) ||
-              ((listbox->GetWindowStyleFlag() & wxLB_EXTENDED) != 0)) )
-        {
-            //toggle the selection + send event
-            listbox->GtkSetSelection(sel, !listbox->IsSelected( sel ), false);
-        }
+        event.SetInt(-1);
     }
-}
-}
 
-//-----------------------------------------------------------------------------
-// "button_press_event"
-//-----------------------------------------------------------------------------
-
-extern "C" {
-static gint
-gtk_listbox_button_press_callback( GtkWidget *widget,
-                                   GdkEventButton *gdk_event,
-                                   wxListBox *listbox )
-{
-    // don't need to install idle handler, its done from "event" signal
-
-    if (g_blockEventsOnDrag) return FALSE;
-    if (g_blockEventsOnScroll) return FALSE;
-
-    if (!listbox->m_hasVMT) return FALSE;
-
-    //Just to be on the safe side - it should be unset in the activate callback
-    //but we don't want any obscure bugs if it doesn't get called somehow...
-    listbox->m_spacePressed = false;
-
-#if wxUSE_CHECKLISTBOX && !wxUSE_NATIVEGTKCHECKLIST
-    if ((listbox->m_hasCheckBoxes) && (gdk_event->x < 15) && (gdk_event->type != GDK_2BUTTON_PRESS))
-    {
-        GtkTreePath* path;
-        gtk_tree_view_get_path_at_pos(GTK_TREE_VIEW(widget),
-                                  (gint)gdk_event->x, (gint)gdk_event->y,
-                                  &path, NULL, NULL, NULL);
-        int sel = gtk_tree_path_get_indices(path)[0];
-        gtk_tree_path_free(path);
-
-        wxCheckListBox *clb = (wxCheckListBox *)listbox;
-
-        clb->Check( sel, !clb->IsChecked(sel) );
-
-        wxCommandEvent event( wxEVT_COMMAND_CHECKLISTBOX_TOGGLED, listbox->GetId() );
-        event.SetEventObject( listbox );
-        event.SetInt( sel );
-        listbox->GetEventHandler()->ProcessEvent( event );
-    }
-#endif // wxUSE_CHECKLISTBOX && !wxUSE_NATIVEGTKCHECKLIST
-
-    return FALSE;
+    listbox->GetEventHandler()->ProcessEvent( event );
 }
 }
 
@@ -203,12 +121,7 @@ gtk_listbox_key_press_callback( GtkWidget *widget,
                                 GdkEventKey *gdk_event,
                                 wxListBox *listbox )
 {
-    // don't need to install idle handler, its done from "event" signal
-
     if (g_blockEventsOnDrag) return FALSE;
-
-
-    bool ret = false;
 
     if ((gdk_event->keyval == GDK_Tab) || (gdk_event->keyval == GDK_ISO_Left_Tab))
     {
@@ -218,106 +131,88 @@ gtk_listbox_key_press_callback( GtkWidget *widget,
         /* CTRL-TAB changes the (parent) window, i.e. switch notebook page */
         new_event.SetWindowChange( (gdk_event->state & GDK_CONTROL_MASK) );
         new_event.SetCurrentFocus( listbox );
-        ret = listbox->GetEventHandler()->ProcessEvent( new_event );
+        if (listbox->GetEventHandler()->ProcessEvent( new_event ))
+            return TRUE;
     }
 
-    if ((gdk_event->keyval == GDK_Return) && (!ret))
-    {
-        // eat return in all modes (RN:WHY?)
-        ret = true;
-    }
-
-    // Check or uncheck item with SPACE
-    if (gdk_event->keyval == ' ')
-        {
-        //In the keyevent we don't know the index of the item
-        //and the activated event gets called anyway...
-        //
-        //Also, activating with the space causes the treeview to
-        //unselect all the items and then select the item in question
-        //wx's behaviour is to just toggle the item's selection state
-        //and leave the others alone
-        listbox->m_spacePressed = true;
-    }
-
-    return ret;
+    return FALSE;
 }
 }
 
 //-----------------------------------------------------------------------------
-// "select" and "deselect"
+// "changed"
 //-----------------------------------------------------------------------------
 
 extern "C" {
-static gboolean gtk_listitem_select_cb( GtkTreeSelection* selection,
-                                        GtkTreeModel* model,
-                                        GtkTreePath* path,
-                                        gboolean is_selected,
-                                        wxListBox *listbox )
+static void
+gtk_listitem_changed_callback( GtkTreeSelection* selection, wxListBox *listbox )
 {
-    if (g_isIdle) wxapp_install_idle_handler();
+    if (g_blockEventsOnDrag) return;
+    
+    if (listbox->m_blockEvent) return;
+    
+    wxCommandEvent event(wxEVT_COMMAND_LISTBOX_SELECTED, listbox->GetId() );
+    event.SetEventObject( listbox );
 
-    if (!listbox->m_hasVMT) return TRUE;
-    if (g_blockEventsOnDrag) return TRUE;
-
-    if (listbox->m_spacePressed) return FALSE; //see keyevent callback
-    if (listbox->m_blockEvent) return TRUE;
-
-    // NB: wxdocs explicitly say that this event only gets sent when
-    // something is actually selected, plus the controls example
-    // assumes so and passes -1 to the dogetclientdata funcs if not
-
-    // OK, so basically we need to do a bit of a run-around here as
-    // 1) is_selected says whether the item(s?) are CURRENTLY selected -
-    //    i.e. if is_selected is FALSE then the item is going to be
-    //    selected right now!
-    // 2) However, since it is not already selected and the user
-    //    will expect it to be we need to manually select it and
-    //    return FALSE telling GTK we handled the selection
-    if (is_selected) return TRUE;
-
-    int nIndex = gtk_tree_path_get_indices(path)[0];
-    GtkTreeEntry* entry = listbox->GtkGetEntry(nIndex);
-
-    if(entry)
+    if (listbox->HasFlag(wxLB_MULTIPLE) || listbox->HasFlag(wxLB_EXTENDED))
     {
-        //Now, as mentioned above, we manually select the row that is/was going
-        //to be selected anyway by GTK
-        listbox->m_blockEvent = true; //if we don't block events we will lock the
-                                      //app due to recursion!!
+        wxArrayInt selections;
+        listbox->GetSelections( selections );
+        
+        if (selections.GetCount() == 0)
+        {
+            // indicate that this is a deselection
+            event.SetExtraLong( 0 );
+            event.SetInt( -1 );
+        
+            listbox->GetEventHandler()->ProcessEvent( event );
+        
+            return;
+        }
+        else
+        {
+            // indicate that this is a selection
+            event.SetExtraLong( 1 );
+            event.SetInt( selections[0] );
+        
+            listbox->GetEventHandler()->ProcessEvent( event );
+        }
+    }
+    else
+    {
+        int index = listbox->GetSelection();
+        if (index == wxNOT_FOUND)
+        {
+            // indicate that this is a deselection
+            event.SetExtraLong( 0 );
+            event.SetInt( -1 );
+        
+            listbox->GetEventHandler()->ProcessEvent( event );
+        
+            return;
+        }
+        else
+        {
+            GtkTreeEntry* entry = listbox->GtkGetEntry( index );
 
-        GtkTreeSelection* selection =
-            gtk_tree_view_get_selection(listbox->m_treeview);
-        GtkTreeIter iter;
-        gtk_tree_model_get_iter(GTK_TREE_MODEL(listbox->m_liststore), &iter, path);
-        gtk_tree_selection_select_iter(selection, &iter);
+            // indicate that this is a selection
+            event.SetExtraLong( 1 );
 
-        listbox->m_blockEvent = false;
+            event.SetInt( index );
+            event.SetString(wxConvUTF8.cMB2WX(gtk_tree_entry_get_label(entry)));
 
-        //Finally, send the wx event
-        wxCommandEvent event(wxEVT_COMMAND_LISTBOX_SELECTED, listbox->GetId() );
-        event.SetEventObject( listbox );
-
-        // indicate whether this is a selection or a deselection
-        event.SetExtraLong( 1 );
-
-        event.SetInt(nIndex);
-        event.SetString(wxConvUTF8.cMB2WX(gtk_tree_entry_get_label(entry)));
-
-        if ( listbox->HasClientObjectData() )
-            event.SetClientObject(
+            if ( listbox->HasClientObjectData() )
+                event.SetClientObject(
                     (wxClientData*) gtk_tree_entry_get_userdata(entry)
                                  );
-        else if ( listbox->HasClientUntypedData() )
-            event.SetClientData( gtk_tree_entry_get_userdata(entry) );
+            else if ( listbox->HasClientUntypedData() )
+                event.SetClientData( gtk_tree_entry_get_userdata(entry) );
 
-        listbox->GetEventHandler()->ProcessEvent( event );
+            listbox->GetEventHandler()->ProcessEvent( event );
 
-        g_object_unref (entry);
-        return FALSE;  //We handled it/did it manually
+            g_object_unref (entry);
+        }
     }
-
-    return TRUE; //allow selection to change
 }
 }
 
@@ -329,10 +224,10 @@ extern "C" {
 static void gtk_tree_entry_destroy_cb(GtkTreeEntry* entry,
                                       wxListBox* listbox)
 {
-    if(listbox->HasClientObjectData())
+    if (listbox->HasClientObjectData())
     {
         gpointer userdata = gtk_tree_entry_get_userdata(entry);
-        if(userdata)
+        if (userdata)
             delete (wxClientData *)userdata;
     }
 }
@@ -419,7 +314,6 @@ void wxListBox::Init()
 #if wxUSE_CHECKLISTBOX
     m_hasCheckBoxes = false;
 #endif // wxUSE_CHECKLISTBOX
-    m_spacePressed = false;
 }
 
 bool wxListBox::Create( wxWindow *parent, wxWindowID id,
@@ -472,10 +366,10 @@ bool wxListBox::Create( wxWindow *parent, wxWindowID id,
     //NB: If enabled SetFirstItem doesn't work correctly
     gtk_tree_view_set_headers_visible(m_treeview, FALSE);
 
-#if wxUSE_CHECKLISTBOX && wxUSE_NATIVEGTKCHECKLIST
+#if wxUSE_CHECKLISTBOX
     if(m_hasCheckBoxes)
         ((wxCheckListBox*)this)->DoCreateCheckList();
-#endif // wxUSE_CHECKLISTBOX && wxUSE_NATIVEGTKCHECKLIST
+#endif // wxUSE_CHECKLISTBOX
 
     // Create the data column
     gtk_tree_view_insert_column_with_attributes(m_treeview, -1, "",
@@ -484,7 +378,7 @@ bool wxListBox::Create( wxWindow *parent, wxWindowID id,
                                                 WXLISTBOX_DATACOLUMN, NULL);
 
     // Now create+set the model (GtkListStore) - first argument # of columns
-#if wxUSE_CHECKLISTBOX && wxUSE_NATIVEGTKCHECKLIST
+#if wxUSE_CHECKLISTBOX
     if(m_hasCheckBoxes)
         m_liststore = gtk_list_store_new(2, G_TYPE_BOOLEAN,
                                             GTK_TYPE_TREE_ENTRY);
@@ -512,9 +406,9 @@ bool wxListBox::Create( wxWindow *parent, wxWindowID id,
 
 
     GtkTreeSelection* selection = gtk_tree_view_get_selection( m_treeview );
-    gtk_tree_selection_set_select_function(selection,
-                     (GtkTreeSelectionFunc)gtk_listitem_select_cb,
-                                           this, NULL); //NULL == destroycb
+    
+    g_signal_connect_after (selection, "changed",
+                            G_CALLBACK (gtk_listitem_changed_callback), this);
 
     GtkSelectionMode mode;
     if (style & wxLB_MULTIPLE)
@@ -534,15 +428,15 @@ bool wxListBox::Create( wxWindow *parent, wxWindowID id,
 
     gtk_tree_selection_set_mode( selection, mode );
 
-    //Handle sortable stuff
+    // Handle sortable stuff
     if(style & wxLB_SORT)
     {
-        //Setup sorting in ascending (wx) order
+        // Setup sorting in ascending (wx) order
         gtk_tree_sortable_set_sort_column_id(GTK_TREE_SORTABLE(m_liststore),
                                              WXLISTBOX_DATACOLUMN,
                                              GTK_SORT_ASCENDING);
 
-        //Set the sort callback
+        // Set the sort callback
         gtk_tree_sortable_set_sort_func(GTK_TREE_SORTABLE(m_liststore),
                                         WXLISTBOX_DATACOLUMN,
                    (GtkTreeIterCompareFunc) gtk_listbox_sort_callback,
@@ -559,14 +453,11 @@ bool wxListBox::Create( wxWindow *parent, wxWindowID id,
 
     wxListBox::DoInsertItems(wxArrayString(n, choices), 0); // insert initial items
 
-    //treeview-specific events
-    g_signal_connect(m_treeview, "row-activated",
+    // generate dclick events
+    g_signal_connect_after(m_treeview, "row-activated",
                      G_CALLBACK(gtk_listbox_row_activated_callback), this);
 
-    // other events
-    g_signal_connect (m_treeview, "button_press_event",
-                      G_CALLBACK (gtk_listbox_button_press_callback),
-                      this);
+    // for panel navigation
     g_signal_connect (m_treeview, "key_press_event",
                       G_CALLBACK (gtk_listbox_key_press_callback),
                            this);
@@ -624,14 +515,6 @@ void wxListBox::GtkInsertItems(const wxArrayString& items,
     {
         wxString label = items[i];
 
-#if wxUSE_CHECKLISTBOX && !wxUSE_NATIVEGTKCHECKLIST
-        if (m_hasCheckBoxes)
-        {
-            label.Prepend(wxCHECKLBOX_STRING);
-        }
-#endif // wxUSE_CHECKLISTBOX
-
-
         GtkTreeEntry* entry = gtk_tree_entry_new();
         gtk_tree_entry_set_label(entry, wxConvUTF8.cWX2MB(label));
         gtk_tree_entry_set_destroy_func(entry,
@@ -644,7 +527,7 @@ void wxListBox::GtkInsertItems(const wxArrayString& items,
         GtkTreeIter itercur;
         gtk_list_store_insert_before(m_liststore, &itercur, pIter);
 
-#if wxUSE_CHECKLISTBOX && wxUSE_NATIVEGTKCHECKLIST
+#if wxUSE_CHECKLISTBOX
         if (m_hasCheckBoxes)
         {
             gtk_list_store_set(m_liststore, &itercur,
@@ -799,11 +682,6 @@ void wxListBox::SetString(unsigned int n, const wxString &string)
 
     wxString label = string;
 
-#if wxUSE_CHECKLISTBOX && !wxUSE_NATIVEGTKCHECKLIST
-    if (m_hasCheckBoxes)
-        label.Prepend(wxCHECKLBOX_STRING);
-#endif // wxUSE_CHECKLISTBOX
-
     // RN: This may look wierd but the problem is that the TreeView
     // doesn't resort or update when changed above and there is no real
     // notification function...
@@ -829,14 +707,6 @@ wxString wxListBox::GetString(unsigned int n) const
     wxCHECK_MSG( entry, wxEmptyString, wxT("wrong listbox index") );
 
     wxString label = wxGTK_CONV_BACK( gtk_tree_entry_get_label(entry) );
-
-#if wxUSE_CHECKLISTBOX && !wxUSE_NATIVEGTKCHECKLIST
-    // checklistboxes have "[±] " prepended to their lables, remove it
-    //
-    // NB: 4 below is the length of wxCHECKLBOX_STRING from wx/gtk/checklst.h
-    if ( m_hasCheckBoxes )
-        label.erase(0, 4);
-#endif // wxUSE_CHECKLISTBOX
 
     g_object_unref (entry);
     return label;
@@ -942,7 +812,7 @@ void wxListBox::DoSetSelection( int n, bool select )
     {
         // ... and not generate any events in the process
         GtkDeselectAll();
-	return;
+        return;
     }
 
     wxCHECK_RET( IsValid(n), wxT("invalid index in wxListBox::SetSelection") );
@@ -1120,7 +990,7 @@ wxSize wxListBox::DoGetBestSize() const
 
         // And just a bit more for the checkbox if present and then some
         // (these are rough guesses)
-#if wxUSE_CHECKLISTBOX && wxUSE_NATIVEGTKCHECKLIST
+#if wxUSE_CHECKLISTBOX
         if ( m_hasCheckBoxes )
         {
             lbWidth += 35;

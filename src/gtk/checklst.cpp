@@ -23,7 +23,6 @@
 //-----------------------------------------------------------------------------
 // "toggled"
 //-----------------------------------------------------------------------------
-#if wxUSE_NATIVEGTKCHECKLIST
 extern "C" {
 static void gtk_checklist_toggled(GtkCellRendererToggle *renderer,
                                   gchar                 *stringpath,
@@ -41,7 +40,6 @@ static void gtk_checklist_toggled(GtkCellRendererToggle *renderer,
     listbox->GetEventHandler()->ProcessEvent( new_event );
 }
 }
-#endif
 
 //-----------------------------------------------------------------------------
 // wxCheckListBox
@@ -80,7 +78,6 @@ wxCheckListBox::wxCheckListBox(wxWindow *parent, wxWindowID id,
                        style, validator, name );
 }
 
-#if wxUSE_NATIVEGTKCHECKLIST
 void wxCheckListBox::DoCreateCheckList()
 {
     //Create the checklist in our treeview and set up events for it
@@ -153,53 +150,5 @@ int wxCheckListBox::GetItemHeight() const
                                        &height);
     return height;
 }
-
-#else //NON-NATIVE
-
-bool wxCheckListBox::IsChecked( int index ) const
-{
-    wxCHECK_MSG( m_treeview != NULL, false, wxT("invalid checklistbox") );
-
-    GtkTreeEntry* entry = GtkGetEntry(index);
-    if (entry)
-    {
-        wxString str( wxGTK_CONV_BACK( gtk_tree_entry_get_label(entry) ) );
-
-        return str.GetChar(1) == wxCHECKLBOX_CHECKED;
-    }
-
-    wxFAIL_MSG(wxT("wrong checklistbox index"));
-    return false;
-}
-
-void wxCheckListBox::Check( int index, bool check )
-{
-    wxCHECK_RET( m_treeview != NULL, wxT("invalid checklistbox") );
-
-    GtkTreeEntry* entry = GtkGetEntry(index);
-    if (entry)
-    {
-        wxString str( wxGTK_CONV_BACK( gtk_tree_entry_get_label(entry) ) );
-
-        if (check == (str.GetChar(1) == wxCHECKLBOX_CHECKED))
-            return;
-
-        str.SetChar( 1, check ? wxCHECKLBOX_CHECKED : wxCHECKLBOX_UNCHECKED );
-
-        gtk_tree_entry_set_label( entry, wxGTK_CONV( str ) );
-
-        return;
-    }
-
-    wxFAIL_MSG(wxT("wrong checklistbox index"));
-}
-
-int wxCheckListBox::GetItemHeight() const
-{
-    // FIXME
-    return 22;
-}
-
-#endif //wxUSE_NATIVEGTKCHECKLIST
 
 #endif //wxUSE_CHECKLISTBOX

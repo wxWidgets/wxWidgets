@@ -93,7 +93,6 @@ public:
 #endif // wxUSE_CHECKLISTBOX
 
     bool       m_blockEvent;
-    bool       m_spacePressed;
 
     struct _GtkTreeEntry* GtkGetEntry(int pos) const;
     void GtkInsertItems(const wxArrayString& items,
