@@ -924,7 +924,7 @@ wxFontEncoding wxTextCtrl::GetTextEncoding() const
 bool wxTextCtrl::IsEmpty() const
 {
     if ( IsMultiLine() )
-        return gtk_text_buffer_get_char_count(m_buffer) != 0;
+        return gtk_text_buffer_get_char_count(m_buffer) == 0;
 
     return wxTextCtrlBase::IsEmpty();
 }
