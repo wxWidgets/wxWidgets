@@ -366,6 +366,9 @@ public:
 
 class wxMenuItem : public wxObject {
 public:
+    // turn off this typemap
+    %typemap(out) wxMenuItem*;    
+
     wxMenuItem(wxMenu* parentMenu=NULL, int id=wxID_ANY,
                const wxString& text = wxPyEmptyString,
                const wxString& help = wxPyEmptyString,
@@ -373,6 +376,10 @@ public:
                wxMenu* subMenu = NULL);
     ~wxMenuItem();
 
+    // Turn it back on again
+    %typemap(out) wxEvtHandler* { $result = wxPyMake_wxObject($1, $owner); }
+
+    
     // the menu we're in
     wxMenu *GetMenu() const;
     void SetMenu(wxMenu* menu);

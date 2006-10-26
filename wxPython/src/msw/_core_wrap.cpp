@@ -10850,9 +10850,7 @@ SWIGINTERN PyObject *_wrap_new_FileSystem(PyObject *SWIGUNUSEDPARM(self), PyObje
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
-  {
-    resultobj = wxPyMake_wxObject(result, (bool)SWIG_POINTER_NEW); 
-  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_wxFileSystem, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -20661,9 +20659,7 @@ SWIGINTERN PyObject *_wrap_new_MouseEvent(PyObject *SWIGUNUSEDPARM(self), PyObje
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
-  {
-    resultobj = wxPyMake_wxObject(result, (bool)SWIG_POINTER_NEW); 
-  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_wxMouseEvent, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -43615,9 +43611,7 @@ SWIGINTERN PyObject *_wrap_new_MenuItem(PyObject *SWIGUNUSEDPARM(self), PyObject
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
-  {
-    resultobj = wxPyMake_wxObject(result, (bool)SWIG_POINTER_NEW); 
-  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_wxMenuItem, SWIG_POINTER_NEW |  0 );
   {
     if (temp3)
     delete arg3;

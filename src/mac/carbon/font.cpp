@@ -21,7 +21,7 @@
 #endif
 
 #include "wx/fontutil.h"
-#include "wx/fontutil.h"
+#include "wx/graphics.h"
 
 #include "wx/mac/private.h"
 
@@ -526,6 +526,20 @@ int wxFont::GetPointSize() const
     wxCHECK_MSG( M_FONTDATA != NULL , 0, wxT("invalid font") );
 
     return M_FONTDATA->m_pointSize;
+}
+
+wxSize wxFont::GetPixelSize() const
+{
+#if wxUSE_GRAPHICS_CONTEXT
+    // TODO: consider caching the value
+    wxGraphicsContext* dc = wxGraphicsContext::CreateFromNative((CGContextRef) NULL);
+    dc->SetFont(*(wxFont *)this);
+    wxDouble width, height = 0;
+    dc->GetTextExtent( wxT("g"), &width, &height, NULL, NULL); 
+    return wxSize(width, height);
+#else
+    wxFontBase::GetPixelSize();
+#endif
 }
 
 int wxFont::GetFamily() const

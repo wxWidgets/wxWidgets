@@ -154,10 +154,13 @@ static pascal OSStatus wxMacListCtrlEventHandler( EventHandlerCallRef handler , 
                 break; 
             }
         case kEventControlDraw:
-            CGContextRef context = cEvent.GetParameter<CGContextRef>(kEventParamCGContextRef, typeCGContextRef) ;
-            window->MacSetDrawingContext(context);
-            result = CallNextEventHandler(handler, event);
-            window->MacSetDrawingContext(NULL);
+            {
+                CGContextRef context = cEvent.GetParameter<CGContextRef>(kEventParamCGContextRef, typeCGContextRef) ;
+                window->MacSetDrawingContext(context);
+                result = CallNextEventHandler(handler, event);
+                window->MacSetDrawingContext(NULL);
+                break;
+            }
         default :
             break ;
     }
@@ -718,7 +721,22 @@ bool wxListCtrl::GetItem(wxListItem& info) const
         return m_genericImpl->GetItem(info);
 
     if (m_dbImpl)
-        m_dbImpl->MacGetColumnInfo(info.m_itemId, info.m_col, info);
+    {
+        if (!IsVirtual())
+            m_dbImpl->MacGetColumnInfo(info.m_itemId, info.m_col, info);
+        else
+        {
+            info.SetText( OnGetItemText(info.m_itemId, info.m_col) );
+            info.SetImage( OnGetItemColumnImage(info.m_itemId, info.m_col) );
+            wxListItemAttr* attrs = OnGetItemAttr( info.m_itemId );
+            if (attrs)
+            {
+                info.SetFont( attrs->GetFont() );
+                info.SetBackgroundColour( attrs->GetBackgroundColour() );
+                info.SetTextColour( attrs->GetTextColour() );
+            }
+        }
+    }
     bool success = true;
     return success;
 }

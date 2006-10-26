@@ -232,6 +232,7 @@ public:
 };
 
 
+
 class wxImage : public wxObject {
 public:
     %typemap(out) wxImage*;    // turn off this typemap

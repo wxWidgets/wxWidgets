@@ -122,13 +122,13 @@ private:
     void InitCommon(wxDC *dc, int style)
     {
         wxASSERT_MSG( !m_dc, _T("wxBufferedDC already initialised") );
-        wxCHECK_RET( dc, _T("can't associate NULL DC with wxBufferedDC") );
 
         m_dc = dc;
         m_style = style;
 
         // inherit the same layout direction as the original DC
-        SetLayoutDirection(dc->GetLayoutDirection());
+        if (dc && dc->IsOk())
+            SetLayoutDirection(dc->GetLayoutDirection());
     }
 
     // check that the bitmap is valid and use it

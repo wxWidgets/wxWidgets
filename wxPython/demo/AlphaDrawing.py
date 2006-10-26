@@ -50,13 +50,13 @@ def runTest(frame, nb, log):
 overview = """<html><body>
 <h2><center>Alpha Drawing</center></h2>
 
-The wx.DC on Mac now supports alpha transparent drawing using pens and
-brushes.  This is accomplished by enabling the wx.Colour class to have
-a fourth component for the alpha value, where 0 is fully transparent,
-and 255 is fully opaque.
-
-<p>You can consider this a \"preview of coming attractions\" for the
-other platforms.
+The wx.GCDC class is a class that implemented the wx.DC API using the
+new wx.GraphicsContext class, and so it supports anti-aliased drawing
+using pens and brushes, that can optionally also be drawn using an
+alpha transparency.  (On the Mac all the DC classes are using this new
+implementation.)  This is accomplished by enabling the wx.Colour class
+to have a fourth component for the alpha value, where 0 is fully
+transparent, and 255 is fully opaque.
 
 </body></html>
 """

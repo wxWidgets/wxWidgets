@@ -3636,7 +3636,7 @@ public:
     void SetRadialGradientBrush( wxDouble , wxDouble , wxDouble , wxDouble , wxDouble ,
         const wxColour &, const wxColour &) {}
     void SetFont( const wxFont & ) {}
-    void SetTextColor( const wxColour & ) {}
+    void SetTextColour( const wxColour & ) {}
     void StrokePath( const wxGraphicsPath * ) {}
     void FillPath( const wxGraphicsPath *, int  ) {}
     void DrawPath( const wxGraphicsPath *, int  ) {}
@@ -3682,6 +3682,16 @@ public:
 
 #endif
 
+SWIGINTERN PyObject *wxGraphicsContext_GetTextExtent(wxGraphicsContext *self,wxString const &text){
+            wxDouble width = 0.0,
+                     height = 0.0;
+            self->GetTextExtent(text, &width, &height, NULL, NULL);
+            // thread wrapers are turned off for this .i file, so no need to acquire GIL...
+            PyObject* rv = PyTuple_New(2);
+            PyTuple_SET_ITEM(rv, 0, PyFloat_FromDouble(width));
+            PyTuple_SET_ITEM(rv, 1, PyFloat_FromDouble(height));
+            return rv;
+        }
 SWIGINTERN wxArrayDouble wxGraphicsContext_GetPartialTextExtents(wxGraphicsContext *self,wxString const &text){
             wxArrayDouble widths;
             self->GetPartialTextExtents(text, widths);
@@ -24881,7 +24891,7 @@ SWIGINTERN PyObject *_wrap_GraphicsContext_Create__SWIG_0(PyObject *SWIGUNUSEDPA
     result = (wxGraphicsContext *)wxGraphicsContext::Create((wxWindowDC const &)*arg1);
     if (PyErr_Occurred()) SWIG_fail;
   }
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_wxGraphicsContext, 0 |  0 );
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_wxGraphicsContext, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -24905,7 +24915,7 @@ SWIGINTERN PyObject *_wrap_GraphicsContext_Create__SWIG_1(PyObject *SWIGUNUSEDPA
     result = (wxGraphicsContext *)wxGraphicsContext::Create(arg1);
     if (PyErr_Occurred()) SWIG_fail;
   }
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_wxGraphicsContext, 0 |  0 );
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_wxGraphicsContext, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -24958,7 +24968,7 @@ SWIGINTERN PyObject *_wrap_GraphicsContext_CreateFromNative(PyObject *SWIGUNUSED
     result = (wxGraphicsContext *)wxGraphicsContext::CreateFromNative(arg1);
     if (PyErr_Occurred()) SWIG_fail;
   }
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_wxGraphicsContext, 0 |  0 );
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_wxGraphicsContext, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -24984,7 +24994,7 @@ SWIGINTERN PyObject *_wrap_GraphicsContext_CreatePath(PyObject *SWIGUNUSEDPARM(s
     result = (wxGraphicsPath *)(arg1)->CreatePath();
     if (PyErr_Occurred()) SWIG_fail;
   }
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_wxGraphicsPath, 0 |  0 );
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_wxGraphicsPath, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -25508,7 +25518,7 @@ SWIGINTERN PyObject *_wrap_GraphicsContext_SetRadialGradientBrush(PyObject *SWIG
   PyObject * obj6 = 0 ;
   PyObject * obj7 = 0 ;
   char *  kwnames[] = {
-    (char *) "self",(char *) "xo",(char *) "yo",(char *) "xc",(char *) "yc",(char *) "radius",(char *) "oColor",(char *) "cColor", NULL 
+    (char *) "self",(char *) "xo",(char *) "yo",(char *) "xc",(char *) "yc",(char *) "radius",(char *) "oColour",(char *) "cColour", NULL 
   };
   
   if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOOOOOO:GraphicsContext_SetRadialGradientBrush",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6,&obj7)) SWIG_fail;
@@ -25600,7 +25610,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_GraphicsContext_SetTextColor(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+SWIGINTERN PyObject *_wrap_GraphicsContext_SetTextColour(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   wxGraphicsContext *arg1 = (wxGraphicsContext *) 0 ;
   wxColour *arg2 = 0 ;
@@ -25613,10 +25623,10 @@ SWIGINTERN PyObject *_wrap_GraphicsContext_SetTextColor(PyObject *SWIGUNUSEDPARM
     (char *) "self",(char *) "col", NULL 
   };
   
-  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:GraphicsContext_SetTextColor",kwnames,&obj0,&obj1)) SWIG_fail;
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:GraphicsContext_SetTextColour",kwnames,&obj0,&obj1)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxGraphicsContext, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "GraphicsContext_SetTextColor" "', expected argument " "1"" of type '" "wxGraphicsContext *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "GraphicsContext_SetTextColour" "', expected argument " "1"" of type '" "wxGraphicsContext *""'"); 
   }
   arg1 = reinterpret_cast< wxGraphicsContext * >(argp1);
   {
@@ -25624,7 +25634,7 @@ SWIGINTERN PyObject *_wrap_GraphicsContext_SetTextColor(PyObject *SWIGUNUSEDPARM
     if ( ! wxColour_helper(obj1, &arg2)) SWIG_fail;
   }
   {
-    (arg1)->SetTextColor((wxColour const &)*arg2);
+    (arg1)->SetTextColour((wxColour const &)*arg2);
     if (PyErr_Occurred()) SWIG_fail;
   }
   resultobj = SWIG_Py_Void();
@@ -25895,7 +25905,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_GraphicsContext_GetTextExtent(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+SWIGINTERN PyObject *_wrap_GraphicsContext_GetFullTextExtent(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   wxGraphicsContext *arg1 = (wxGraphicsContext *) 0 ;
   wxString *arg2 = 0 ;
@@ -25924,10 +25934,10 @@ SWIGINTERN PyObject *_wrap_GraphicsContext_GetTextExtent(PyObject *SWIGUNUSEDPAR
   arg4 = &temp4;
   arg5 = &temp5;
   arg6 = &temp6;
-  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:GraphicsContext_GetTextExtent",kwnames,&obj0,&obj1)) SWIG_fail;
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:GraphicsContext_GetFullTextExtent",kwnames,&obj0,&obj1)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxGraphicsContext, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "GraphicsContext_GetTextExtent" "', expected argument " "1"" of type '" "wxGraphicsContext const *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "GraphicsContext_GetFullTextExtent" "', expected argument " "1"" of type '" "wxGraphicsContext const *""'"); 
   }
   arg1 = reinterpret_cast< wxGraphicsContext * >(argp1);
   {
@@ -25964,6 +25974,50 @@ SWIGINTERN PyObject *_wrap_GraphicsContext_GetTextExtent(PyObject *SWIGUNUSEDPAR
     int new_flags = SWIG_IsNewObj(res6) ? (SWIG_POINTER_OWN |  0 ) :  0 ;
     resultobj = SWIG_Python_AppendOutput(resultobj, SWIG_NewPointerObj((void*)(arg6), SWIGTYPE_p_double, new_flags));
   }
+  {
+    if (temp2)
+    delete arg2;
+  }
+  return resultobj;
+fail:
+  {
+    if (temp2)
+    delete arg2;
+  }
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_GraphicsContext_GetTextExtent(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxGraphicsContext *arg1 = (wxGraphicsContext *) 0 ;
+  wxString *arg2 = 0 ;
+  PyObject *result = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  bool temp2 = false ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "text", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:GraphicsContext_GetTextExtent",kwnames,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxGraphicsContext, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "GraphicsContext_GetTextExtent" "', expected argument " "1"" of type '" "wxGraphicsContext *""'"); 
+  }
+  arg1 = reinterpret_cast< wxGraphicsContext * >(argp1);
+  {
+    arg2 = wxString_in_helper(obj1);
+    if (arg2 == NULL) SWIG_fail;
+    temp2 = true;
+  }
+  {
+    result = (PyObject *)wxGraphicsContext_GetTextExtent(arg1,(wxString const &)*arg2);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = result;
   {
     if (temp2)
     delete arg2;
@@ -35031,12 +35085,13 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"GraphicsContext_SetLinearGradientBrush", (PyCFunction) _wrap_GraphicsContext_SetLinearGradientBrush, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"GraphicsContext_SetRadialGradientBrush", (PyCFunction) _wrap_GraphicsContext_SetRadialGradientBrush, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"GraphicsContext_SetFont", (PyCFunction) _wrap_GraphicsContext_SetFont, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"GraphicsContext_SetTextColor", (PyCFunction) _wrap_GraphicsContext_SetTextColor, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"GraphicsContext_SetTextColour", (PyCFunction) _wrap_GraphicsContext_SetTextColour, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"GraphicsContext_StrokePath", (PyCFunction) _wrap_GraphicsContext_StrokePath, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"GraphicsContext_FillPath", (PyCFunction) _wrap_GraphicsContext_FillPath, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"GraphicsContext_DrawPath", (PyCFunction) _wrap_GraphicsContext_DrawPath, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"GraphicsContext_DrawText", (PyCFunction) _wrap_GraphicsContext_DrawText, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"GraphicsContext_DrawRotatedText", (PyCFunction) _wrap_GraphicsContext_DrawRotatedText, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"GraphicsContext_GetFullTextExtent", (PyCFunction) _wrap_GraphicsContext_GetFullTextExtent, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"GraphicsContext_GetTextExtent", (PyCFunction) _wrap_GraphicsContext_GetTextExtent, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"GraphicsContext_GetPartialTextExtents", (PyCFunction) _wrap_GraphicsContext_GetPartialTextExtents, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"GraphicsContext_DrawBitmap", (PyCFunction) _wrap_GraphicsContext_DrawBitmap, METH_VARARGS | METH_KEYWORDS, NULL},

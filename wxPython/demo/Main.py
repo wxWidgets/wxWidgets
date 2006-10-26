@@ -68,6 +68,7 @@ _treeList = [
         'AboutBox',
         'AnimateCtrl',
         'AlphaDrawing',
+        'GraphicsContext',
         ]),
 
     # managed windows == things with a (optional) caption you can close
@@ -268,6 +269,7 @@ _treeList = [
         'DrawXXXList',
         'FileHistory',
         'FontEnumerator',
+        'GraphicsContext',
         'GLCanvas',
         'Joystick',
         'MimeTypesManager',

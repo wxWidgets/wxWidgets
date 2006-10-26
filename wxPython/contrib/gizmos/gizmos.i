@@ -172,6 +172,11 @@ enum {
     wxEL_ALLOW_DELETE,
 };
 
+
+%typemap(out) wxPyListCtrl*
+{ $result = wxPyMake_wxObject((wxObject*)$1, (bool)$owner); }
+
+
 // This class provides a composite control that lets the
 // user easily enter list of strings
 MustHaveApp(wxEditableListBox);

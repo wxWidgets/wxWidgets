@@ -793,6 +793,8 @@ else:
     i_files = glob.glob(opj("src/*.i"))   + \
               glob.glob(opj("src/_*.py")) + \
               glob.glob(opj("src/*.swg"))
+    if BUILD_GLCANVAS:
+        i_files += glob.glob(opj("contrib/glcanvas/*.i"))
 
     HEADERS = zip(h_files, ["/wxPython"]*len(h_files)) + \
               zip(i_files, ["/wxPython/i_files"]*len(i_files))

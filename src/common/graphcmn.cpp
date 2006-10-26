@@ -295,7 +295,7 @@ wxGCDC::wxGCDC(const wxWindowDC& dc)
         m_graphicContext->SetPen(dc.GetPen());
     if ( dc.GetBrush().Ok())
         m_graphicContext->SetBrush(dc.GetBrush());
-    m_graphicContext->SetTextColor(dc.GetTextForeground());
+    m_graphicContext->SetTextColour(dc.GetTextForeground());
 }
 
 void wxGCDC::Init()
@@ -450,7 +450,7 @@ void wxGCDC::SetTextForeground( const wxColour &col )
     if ( col != m_textForegroundColour )
     {
         m_textForegroundColour = col;
-        m_graphicContext->SetTextColor( col );
+        m_graphicContext->SetTextColour( col );
     }
 }
 

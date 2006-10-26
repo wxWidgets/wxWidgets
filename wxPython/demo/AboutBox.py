@@ -34,6 +34,8 @@ class TestPanel(wx.Panel):
                             "Jane Coder",
                             "Vippy the Mascot" ]
 
+        info.License = wordwrap(licenseText, 500, wx.ClientDC(self))
+
         # Then we call wx.AboutBox giving it that info object
         wx.AboutBox(info)
         
@@ -60,6 +62,8 @@ generic wxWidgets version of the dialog.
 </body></html>
 """
 
+
+licenseText = "blah " * 250 + "\n\n" +"yadda " * 100
 
 
 if __name__ == '__main__':

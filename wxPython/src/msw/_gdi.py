@@ -4683,16 +4683,26 @@ class BufferedDC(MemoryDC):
     This simple class provides a simple way to avoid flicker: when drawing
     on it, everything is in fact first drawn on an in-memory buffer (a
     `wx.Bitmap`) and then copied to the screen only once, when this object
-    is destroyed.
+    is destroyed.  You can either provide a buffer bitmap yourself, and
+    reuse it the next time something needs painted, or you can let the
+    buffered DC create and provide a buffer bitmap itself.
 
-    It can be used in the same way as any other device context.
+    Buffered DCs can be used in the same way as any other device context.
     wx.BufferedDC itself typically replaces `wx.ClientDC`, if you want to
     use it in your EVT_PAINT handler, you should look at
-    `wx.BufferedPaintDC`.
+    `wx.BufferedPaintDC`.  You can also use a wx.BufferedDC without
+    providing a target DC.  In this case the operations done on the dc
+    will only be written to the buffer bitmap and *not* to any window, so
+    you will want to have provided the buffer bitmap and then reuse it
+    when it needs painted to the window.
 
     Please note that GTK+ 2.0 and OS X provide double buffering themselves
-    natively. wxBufferedDC is aware of this however, and will bypass the buffering
-    unless an explicit buffer bitmap is given.
+    natively.  You may want to use `wx.Window.IsDoubleBuffered` to
+    determine whether you need to use buffering or not, or use
+    `wx.AutoBufferedPaintDC` to avoid needless double buffering on systems
+    that already do it automatically.
+
+
 
     """
     thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -5051,7 +5061,9 @@ class GraphicsContext(object):
         Create(WindowDC dc) -> GraphicsContext
         Create(Window window) -> GraphicsContext
         """
-        return _gdi_.GraphicsContext_Create(*args)
+        val = _gdi_.GraphicsContext_Create(*args)
+        val.__dc = args[0] # save a ref so the dc will not be deleted before self
+        return val
 
     Create = staticmethod(Create)
     def CreateFromNative(*args, **kwargs):
@@ -5117,7 +5129,7 @@ class GraphicsContext(object):
     def SetRadialGradientBrush(*args, **kwargs):
         """
         SetRadialGradientBrush(self, Double xo, Double yo, Double xc, Double yc, Double radius, 
-            Colour oColor, Colour cColor)
+            Colour oColour, Colour cColour)
         """
         return _gdi_.GraphicsContext_SetRadialGradientBrush(*args, **kwargs)
 
@@ -5125,9 +5137,9 @@ class GraphicsContext(object):
         """SetFont(self, Font font)"""
         return _gdi_.GraphicsContext_SetFont(*args, **kwargs)
 
-    def SetTextColor(*args, **kwargs):
-        """SetTextColor(self, Colour col)"""
-        return _gdi_.GraphicsContext_SetTextColor(*args, **kwargs)
+    def SetTextColour(*args, **kwargs):
+        """SetTextColour(self, Colour col)"""
+        return _gdi_.GraphicsContext_SetTextColour(*args, **kwargs)
 
     def StrokePath(*args, **kwargs):
         """StrokePath(self, GraphicsPath path)"""
@@ -5149,8 +5161,12 @@ class GraphicsContext(object):
         """DrawRotatedText(self, String str, Double x, Double y, Double angle)"""
         return _gdi_.GraphicsContext_DrawRotatedText(*args, **kwargs)
 
+    def GetFullTextExtent(*args, **kwargs):
+        """GetFullTextExtent(self, text) --> (width, height, descent, externalLeading)"""
+        return _gdi_.GraphicsContext_GetFullTextExtent(*args, **kwargs)
+
     def GetTextExtent(*args, **kwargs):
-        """GetTextExtend(self, text) --> (width, height, descent, externalLeading)"""
+        """GetTextExtent(self, text) --> (width, height)"""
         return _gdi_.GraphicsContext_GetTextExtent(*args, **kwargs)
 
     def GetPartialTextExtents(*args, **kwargs):
@@ -5200,7 +5216,9 @@ def GraphicsContext_Create(*args):
     Create(WindowDC dc) -> GraphicsContext
     GraphicsContext_Create(Window window) -> GraphicsContext
     """
-  return _gdi_.GraphicsContext_Create(*args)
+  val = _gdi_.GraphicsContext_Create(*args)
+  val.__dc = args[0] # save a ref so the dc will not be deleted before self
+  return val
 
 def GraphicsContext_CreateFromNative(*args, **kwargs):
   """GraphicsContext_CreateFromNative(void context) -> GraphicsContext"""

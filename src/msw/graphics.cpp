@@ -231,7 +231,7 @@ public:
     virtual void PopState();
 
     virtual void SetFont( const wxFont &font );
-    virtual void SetTextColor( const wxColour &col );    
+    virtual void SetTextColour( const wxColour &col );    
     virtual void DrawText( const wxString &str, wxDouble x, wxDouble y);
     virtual void GetTextExtent( const wxString &str, wxDouble *width, wxDouble *height,
         wxDouble *descent, wxDouble *externalLeading ) const;
@@ -500,7 +500,7 @@ void wxGDIPlusContext::PopState()
     m_context->Restore(state);
 }
 
-void wxGDIPlusContext::SetTextColor( const wxColour &col ) 
+void wxGDIPlusContext::SetTextColour( const wxColour &col ) 
 {
     delete m_textBrush;
     m_textBrush = new SolidBrush( Color( col.Alpha() , col.Red() ,

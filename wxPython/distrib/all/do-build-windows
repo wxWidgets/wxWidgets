@@ -116,13 +116,14 @@ fi
 # $WXDIR/lib/vc_dll/tex2rtf.exe $DOCSRC $DOCDEST -twice -html -macros $DOCINI
 
 
-echo "Extracting html docs..."
-mkdir -p $WXDIR/docs/html/wx
-cd $WXDIR/docs/html/wx
-rm -rf *
-tar xjf $DESTDIR/wxPython-docs-$VERSION.tar.bz2
-rm $DESTDIR/wxPython-docs-$VERSION.tar.bz2
-unzip wxPython-$VERSION/docs/wx.zip
+# echo "Extracting html docs..."
+# mkdir -p $WXDIR/docs/html/wx
+# cd $WXDIR/docs/html/wx
+# rm -rf *
+# tar xjf $DESTDIR/wxPython-docs-$VERSION.tar.bz2
+# rm $DESTDIR/wxPython-docs-$VERSION.tar.bz2
+# unzip wxPython-$VERSION/docs/wx.zip
+
 
 echo "Building the HTMLHelp file..."
 cd $WXDIR/docs/html/wx
@@ -148,6 +149,7 @@ if [ $CHARTYPE = both -o $CHARTYPE = unicode ]; then
     b $PYVER h UNICODE=1 USE_SWIG=0 EP_ADD_OPTS=1
     b $PYVER r UNICODE=1 USE_SWIG=0
 fi
+
 
 echo "Building the developer package..."
 WXWIN=`cygpath -w $WXDIR`

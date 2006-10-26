@@ -206,7 +206,7 @@ public:
     virtual void SetFont( const wxFont &font ) = 0;
     
     // sets the text color
-    virtual void SetTextColor( const wxColour &col ) = 0;
+    virtual void SetTextColour( const wxColour &col ) = 0;
 
     // strokes along a path with the current pen
     virtual void StrokePath( const wxGraphicsPath *path ) = 0;

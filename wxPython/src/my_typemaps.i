@@ -370,7 +370,7 @@ MAKE_INT_ARRAY_TYPEMAPS(styles, styles_field)
 %typemap(out) wxDC*                     { $result = wxPyMake_wxObject($1, (bool)$owner); }
 %typemap(out) wxFSFile*                 { $result = wxPyMake_wxObject($1, (bool)$owner); }
 %typemap(out) wxFileSystem*             { $result = wxPyMake_wxObject($1, (bool)$owner); }
-//%typemap(out) wxImageList*              { $result = wxPyMake_wxObject($1, (bool)$owner); }
+%typemap(out) wxImageList*              { $result = wxPyMake_wxObject($1, (bool)$owner); }
 %typemap(out) wxImage*                  { $result = wxPyMake_wxObject($1, (bool)$owner); }
 %typemap(out) wxListItem*               { $result = wxPyMake_wxObject($1, (bool)$owner); }
 %typemap(out) wxMenuItem*               { $result = wxPyMake_wxObject($1, (bool)$owner); }
@@ -386,7 +386,7 @@ MAKE_INT_ARRAY_TYPEMAPS(styles, styles_field)
 %typemap(out) wxControl*                { $result = wxPyMake_wxObject($1, (bool)$owner); }
 %typemap(out) wxFrame*                  { $result = wxPyMake_wxObject($1, (bool)$owner); }
 %typemap(out) wxGrid*                   { $result = wxPyMake_wxObject($1, (bool)$owner); }
-//%typemap(out) wxListCtrl*               { $result = wxPyMake_wxObject($1, (bool)$owner); }
+%typemap(out) wxPyListCtrl*             { $result = wxPyMake_wxObject($1, (bool)$owner); }
 %typemap(out) wxMDIChildFrame*          { $result = wxPyMake_wxObject($1, (bool)$owner); }
 %typemap(out) wxMDIClientWindow*        { $result = wxPyMake_wxObject($1, (bool)$owner); }
 %typemap(out) wxMenuBar*                { $result = wxPyMake_wxObject($1, (bool)$owner); }
@@ -396,7 +396,6 @@ MAKE_INT_ARRAY_TYPEMAPS(styles, styles_field)
 %typemap(out) wxTextCtrl*               { $result = wxPyMake_wxObject($1, (bool)$owner); }
 %typemap(out) wxToolBar*                { $result = wxPyMake_wxObject($1, (bool)$owner); }
 %typemap(out) wxToolBarBase*            { $result = wxPyMake_wxObject($1, (bool)$owner); }
-//%typemap(out) wxTreeCtrl*               { $result = wxPyMake_wxObject($1, (bool)$owner); }
 %typemap(out) wxPyTreeCtrl*             { $result = wxPyMake_wxObject($1, (bool)$owner); }
 %typemap(out) wxWindow*                 { $result = wxPyMake_wxObject($1, (bool)$owner); }
 %typemap(out) wxPyHtmlWindow*           { $result = wxPyMake_wxObject($1, (bool)$owner); }

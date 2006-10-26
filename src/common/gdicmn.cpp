@@ -327,7 +327,7 @@ void wxColourDatabase::Initialize()
         {wxT("ORANGE RED"), 255, 0, 127},
         {wxT("ORCHID"), 219, 112, 219},
         {wxT("PALE GREEN"), 143, 188, 143},
-        {wxT("PINK"), 188, 143, 234},
+        {wxT("PINK"), 255, 192, 203},
         {wxT("PLUM"), 234, 173, 234},
         {wxT("PURPLE"), 176, 0, 255},
         {wxT("RED"), 255, 0, 0},

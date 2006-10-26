@@ -56,6 +56,7 @@ public:
 
     // implement base class pure virtuals
     virtual int GetPointSize() const;
+    virtual wxSize GetPixelSize() const;
     virtual int GetFamily() const;
     virtual int GetStyle() const;
     virtual int GetWeight() const;

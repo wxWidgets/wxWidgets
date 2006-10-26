@@ -43,8 +43,14 @@ MustHaveApp(wxImageList);
 //  two bitmaps, or an icon.
 class wxImageList : public wxObject {
 public:
+    // turn off this typemap
+    %typemap(out) wxImageList*;    
+
     wxImageList(int width, int height, int mask=true, int initialCount=1);
     ~wxImageList();
+    
+    // Turn it back on again
+    %typemap(out) wxImageList* { $result = wxPyMake_wxObject($1, $owner); }
 
     int Add(const wxBitmap& bitmap, const wxBitmap& mask = wxNullBitmap);
     %Rename(AddWithColourMask,int, Add(const wxBitmap& bitmap, const wxColour& maskColour));
