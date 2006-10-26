@@ -870,6 +870,11 @@ class WXDLLEXPORT wxDCTextColourChanger
 public:
     wxDCTextColourChanger(wxDC& dc) : m_dc(dc), m_colFgOld() { }
 
+    wxDCTextColourChanger(wxDC& dc, const wxColour& col) : m_dc(dc)
+    {
+        Set(col);
+    }
+
     ~wxDCTextColourChanger()
     {
         if ( m_colFgOld.Ok() )
