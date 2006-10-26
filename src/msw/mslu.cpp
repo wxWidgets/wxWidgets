@@ -65,7 +65,7 @@ bool WXDLLIMPEXP_BASE wxUsingUnicowsDll()
     #include <direct.h>
 #endif
 
-// Undef redirection macros defined in wx/msw/mslu.h:
+// Undef redirection macros defined in wx/msw/wrapwin.h:
 #undef DrawStateW
 #undef GetOpenFileNameW
 #undef GetSaveFileNameW
@@ -120,7 +120,7 @@ static void wxFixOPENFILENAME(LPOPENFILENAME ofn)
             ofn->nFileOffset = wxStrlen(ofn->lpstrFile)+1;
         }
     }
-#endif
+#endif // OFN_EXPLORER
 }
 
 WXDLLEXPORT int wxMSLU_GetOpenFileNameW(void *ofn)
@@ -222,7 +222,7 @@ WXDLLIMPEXP_BASE int wxMSLU__wstat(const wxChar *name, struct _stat *buffer)
 }
 
 #ifdef __BORLANDC__
-//here _stati64 is defined as stati64, see msw/mslu.h line 62
+//here _stati64 is defined as stati64, see wx/filefn.h
 #undef _stati64
 WXDLLIMPEXP_BASE int wxMSLU__wstati64(const wxChar *name, struct _stati64 *buffer)
  {

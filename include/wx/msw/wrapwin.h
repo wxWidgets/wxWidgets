@@ -57,7 +57,6 @@
 // #undef the macros defined in winsows.h which conflict with code elsewhere
 #include "wx/msw/winundef.h"
 
-
 // Types DWORD_PTR, ULONG_PTR and so on are used for 64-bit compatability 
 // in the WINAPI SDK (they are an integral type that is the size of a
 // pointer) on MSVC 7 and later. However, they are not available in older 
@@ -69,6 +68,32 @@
     #define ULONG_PTR unsigned long
     #define DWORD_PTR unsigned long
 #endif // !defined(_MSC_VER) || _MSC_VER < 1300
+
+// ----------------------------------------------------------------------------
+// Fix the functions wrongly implemented in unicows.dll
+// ----------------------------------------------------------------------------
+
+#if wxUSE_UNICODE_MSLU
+
+#if wxUSE_GUI
+
+WXDLLEXPORT int wxMSLU_DrawStateW(WXHDC dc, WXHBRUSH br, WXFARPROC outputFunc,
+                                  WXLPARAM lData, WXWPARAM wData,
+                                  int x, int y, int cx, int cy,
+                                  unsigned int flags);
+#define DrawStateW(dc, br, func, ld, wd, x, y, cx, cy, flags) \
+    wxMSLU_DrawStateW((WXHDC)dc,(WXHBRUSH)br,(WXFARPROC)func, \
+                      ld, wd, x, y, cx, cy, flags)
+
+WXDLLEXPORT int wxMSLU_GetOpenFileNameW(void *ofn);
+#define GetOpenFileNameW(ofn) wxMSLU_GetOpenFileNameW((void*)ofn)
+
+WXDLLEXPORT int wxMSLU_GetSaveFileNameW(void *ofn);
+#define GetSaveFileNameW(ofn) wxMSLU_GetSaveFileNameW((void*)ofn)
+
+#endif // wxUSE_GUI
+
+#endif // wxUSE_UNICODE_MSLU
 
 #endif // _WX_WRAPWIN_H_
 
