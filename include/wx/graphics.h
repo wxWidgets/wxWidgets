@@ -152,7 +152,7 @@ public :
 	virtual void Transform( wxGraphicsMatrix* matrix ) =0;
 	
 	// gets the bounding box enclosing all points (possibly including control points)
-	virtual void GetBox(wxDouble *x, wxDouble *y, wxDouble *w, wxDouble *y) =0;
+	virtual void GetBox(wxDouble *x, wxDouble *y, wxDouble *w, wxDouble *h) =0;
 	wxRect2DDouble GetBox();
 	
 	virtual bool Contains( wxDouble x, wxDouble y, int fillStyle = wxWINDING_RULE) =0;
