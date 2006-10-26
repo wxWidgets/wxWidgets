@@ -50,12 +50,12 @@ BEGIN_EVENT_TABLE( wxRichTextListStylePage, wxPanel )
 
     EVT_UPDATE_UI( ID_RICHTEXTLISTSTYLEPAGE_SYMBOLSTATIC, wxRichTextListStylePage::OnSymbolstaticUpdate )
 
-    EVT_COMBOBOX( ID_RICHTEXTBULLETSPAGE_SYMBOLCTRL, wxRichTextListStylePage::OnSymbolctrlSelected )
-    EVT_TEXT( ID_RICHTEXTBULLETSPAGE_SYMBOLCTRL, wxRichTextListStylePage::OnSymbolctrlUpdated )
-    EVT_UPDATE_UI( ID_RICHTEXTBULLETSPAGE_SYMBOLCTRL, wxRichTextListStylePage::OnSymbolctrlUIUpdate )
+    EVT_COMBOBOX( ID_RICHTEXTLISTSTYLEPAGE_SYMBOLCTRL, wxRichTextListStylePage::OnSymbolctrlSelected )
+    EVT_TEXT( ID_RICHTEXTLISTSTYLEPAGE_SYMBOLCTRL, wxRichTextListStylePage::OnSymbolctrlUpdated )
+    EVT_UPDATE_UI( ID_RICHTEXTLISTSTYLEPAGE_SYMBOLCTRL, wxRichTextListStylePage::OnSymbolctrlUIUpdate )
 
-    EVT_BUTTON( ID_RICHTEXTBULLETSPAGE_CHOOSE_SYMBOL, wxRichTextListStylePage::OnChooseSymbolClick )
-    EVT_UPDATE_UI( ID_RICHTEXTBULLETSPAGE_CHOOSE_SYMBOL, wxRichTextListStylePage::OnChooseSymbolUpdate )
+    EVT_BUTTON( ID_RICHTEXTLISTSTYLEPAGE_CHOOSE_SYMBOL, wxRichTextListStylePage::OnChooseSymbolClick )
+    EVT_UPDATE_UI( ID_RICHTEXTLISTSTYLEPAGE_CHOOSE_SYMBOL, wxRichTextListStylePage::OnChooseSymbolUpdate )
 
     EVT_COMBOBOX( ID_RICHTEXTLISTSTYLEPAGE_SYMBOLFONTCTRL, wxRichTextListStylePage::OnSymbolfontctrlSelected )
     EVT_TEXT( ID_RICHTEXTLISTSTYLEPAGE_SYMBOLFONTCTRL, wxRichTextListStylePage::OnSymbolfontctrlUpdated )
@@ -271,13 +271,13 @@ void wxRichTextListStylePage::CreateControls()
     wxBoxSizer* itemBoxSizer28 = new wxBoxSizer(wxHORIZONTAL);
     itemBoxSizer26->Add(itemBoxSizer28, 0, wxGROW, 5);
     wxString* m_symbolCtrlStrings = NULL;
-    m_symbolCtrl = new wxComboBox( itemPanel10, ID_RICHTEXTBULLETSPAGE_SYMBOLCTRL, _T(""), wxDefaultPosition, wxSize(60, -1), 0, m_symbolCtrlStrings, wxCB_DROPDOWN );
+    m_symbolCtrl = new wxComboBox( itemPanel10, ID_RICHTEXTLISTSTYLEPAGE_SYMBOLCTRL, _T(""), wxDefaultPosition, wxSize(60, -1), 0, m_symbolCtrlStrings, wxCB_DROPDOWN );
     m_symbolCtrl->SetHelpText(_("The bullet character."));
     if (ShowToolTips())
         m_symbolCtrl->SetToolTip(_("The bullet character."));
     itemBoxSizer28->Add(m_symbolCtrl, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxFIXED_MINSIZE, 5);
 
-    wxButton* itemButton30 = new wxButton( itemPanel10, ID_RICHTEXTBULLETSPAGE_CHOOSE_SYMBOL, _("Ch&oose..."), wxDefaultPosition, wxDefaultSize, 0 );
+    wxButton* itemButton30 = new wxButton( itemPanel10, ID_RICHTEXTLISTSTYLEPAGE_CHOOSE_SYMBOL, _("Ch&oose..."), wxDefaultPosition, wxDefaultSize, 0 );
     itemButton30->SetHelpText(_("Click to browse for a symbol."));
     if (ShowToolTips())
         itemButton30->SetToolTip(_("Click to browse for a symbol."));
