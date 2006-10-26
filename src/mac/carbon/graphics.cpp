@@ -1472,6 +1472,8 @@ void wxMacCoreGraphicsContext::DrawPath( const wxGraphicsPath *path , int fillSt
 
     if ( m_brush )
         m_brush->Apply(this);
+    if ( m_pen )
+        m_pen->Apply(this);
 
     bool offset = ShouldOffset();
     
