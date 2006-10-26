@@ -24,3 +24,7 @@ src/gtk/gnome/*.cpp
 misc/afm/*.afm
 misc/gs_afm/*.afm
 
+distrib/autopackage/sample/autopackage/*.apspec
+distrib/autopackage/sample/*.bkl
+distrib/autopackage/sample/*.cpp
+distrib/autopackage/sample/README
