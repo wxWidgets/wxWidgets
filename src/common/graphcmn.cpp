@@ -358,4 +358,60 @@ wxGraphicsMatrix* wxGraphicsContext::CreateMatrix( wxDouble a, wxDouble b, wxDou
     return GetRenderer()->CreateMatrix(a,b,c,d,tx,ty);
 }
 
+wxGraphicsPath * wxGraphicsContext::CreatePath()
+{
+    return GetRenderer()->CreatePath();
+}
+
+wxGraphicsPen* wxGraphicsContext::CreatePen(const wxPen& pen)
+{
+    return GetRenderer()->CreatePen(pen);
+}
+
+wxGraphicsBrush* wxGraphicsContext::CreateBrush(const wxBrush& brush )
+{
+    return GetRenderer()->CreateBrush(brush);
+}
+
+// sets the brush to a linear gradient, starting at (x1,y1) with color c1 to (x2,y2) with color c2
+wxGraphicsBrush* wxGraphicsContext::CreateLinearGradientBrush( wxDouble x1, wxDouble y1, wxDouble x2, wxDouble y2, 
+                                                   const wxColour&c1, const wxColour&c2)
+{
+    return GetRenderer()->CreateLinearGradientBrush(x1,y1,x2,y2,c1,c2);
+}
+
+// sets the brush to a radial gradient originating at (xo,yc) with color oColor and ends on a circle around (xc,yc) 
+// with radius r and color cColor
+wxGraphicsBrush* wxGraphicsContext::CreateRadialGradientBrush( wxDouble xo, wxDouble yo, wxDouble xc, wxDouble yc, wxDouble radius,
+                                                   const wxColour &oColor, const wxColour &cColor)
+{
+    return GetRenderer()->CreateRadialGradientBrush(xo,yo,xc,yc,radius,oColor,cColor);
+}
+
+// sets the font
+wxGraphicsFont* wxGraphicsContext::CreateFont( const wxFont &font , const wxColour &col )
+{
+    return GetRenderer()->CreateFont(font,col);
+}
+
+wxGraphicsContext* wxGraphicsContext::Create( const wxWindowDC& dc) 
+{
+    return wxGraphicsRenderer::GetDefaultRenderer()->CreateContext(dc);
+}
+
+wxGraphicsContext* wxGraphicsContext::CreateFromNative( void * context )
+{
+    return wxGraphicsRenderer::GetDefaultRenderer()->CreateContextFromNativeContext(context);
+}
+
+wxGraphicsContext* wxGraphicsContext::CreateFromNativeWindow( void * window )
+{
+    return wxGraphicsRenderer::GetDefaultRenderer()->CreateContextFromNativeWindow(window);
+}
+
+wxGraphicsContext* wxGraphicsContext::Create( wxWindow* window )
+{
+    return wxGraphicsRenderer::GetDefaultRenderer()->CreateContext(window);
+}
+
 #endif // wxUSE_GRAPHICS_CONTEXT
