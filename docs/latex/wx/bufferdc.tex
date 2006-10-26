@@ -11,23 +11,30 @@
 
 \section{\class{wxBufferedDC}}\label{wxbuffereddc}
 
-This simple class provides a simple way to avoid flicker: when drawing on it,
-everything is in fact first drawn on an in-memory buffer (a 
-\helpref{wxBitmap}{wxbitmap}) and then copied to the screen only once, when this
-object is destroyed.
+This class provides a simple way to avoid flicker: when drawing on it,
+everything is in fact first drawn on an in-memory buffer (a
+\helpref{wxBitmap}{wxbitmap}) and then copied to the screen, using the
+associated wxDC, only once, when this object is destroyed. wxBufferedDC itself
+is typically associated with \helpref{wxClientDC}{wxclientdc}, if you want to
+use it in your \texttt{EVT\_PAINT} handler, you should look at
+\helpref{wxBufferedPaintDC}{wxbufferedpaintdc} instead.
 
-It can be used in the same way as any other device context. wxBufferedDC itself
-typically replaces \helpref{wxClientDC}{wxclientdc}, if you want to use it in
-your \texttt{OnPaint()} handler, you should look at
-\helpref{wxBufferedPaintDC}{wxbufferedpaintdc} or \helpref{wxAutoBufferedPaintDC}{wxautobufferedpaintdc}.
+When used like this, a valid \arg{dc} must be specified in the constructor
+while the \arg{buffer} bitmap doesn't have to be explicitly provided, by
+default this class will allocate the bitmap of required size itself. However
+using a dedicated bitmap can speed up the redrawing process by eliminating the
+repeated creation and destruction of a possibly big bitmap. Otherwise,
+wxBufferedDC can be used in the same way as any other device context. 
 
-Please note that GTK+ 2.0 as well as OS X provide double buffering themselves
-+natively. Use \helpref{wxWindow::IsDoubleBuffered}{wxwindowisdoublebuffered} to
-+determine whether you need to use buffering or not.
+There is another possible use for wxBufferedDC is to use it to maintain a
+backing store for the window contents. In this case, the associated \arg{dc}
+may be \NULL but a valid backing store bitmap should be specified.
 
-\wxheading{Localization Support}
-
-If you pass in a valid DC, wxBufferedDC will inherit its layout direction.
+Finally, please note that GTK+ 2.0 as well as OS X provide double buffering
+themselves natively. You can either use \helpref{wxWindow::IsDoubleBuffered}{wxwindowisdoublebuffered} 
+to determine whether you need to use buffering or not, or use 
+\helpref{wxAutoBufferedPaintDC}{wxautobufferedpaintdc} to avoid needless double
+buffering on the systems which already do it automatically.
 
 \wxheading{Derived from}
 
