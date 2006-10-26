@@ -23,6 +23,8 @@ of wx.ListCtrl available, which will be used for wx.LC_REPORT style
 list controls if you set the "mac.listctrl.always_use_generic"
 SystemOption to zero.  In a future release this will be the default.
 
+Added a sample to the demo that shows some of what can be done with
+the new wx.GraphicsContext and wx.GraphicsPath classes.
 
 
 
