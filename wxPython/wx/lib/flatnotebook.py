@@ -2538,8 +2538,8 @@ class FNBRendererVC8(FNBRenderer):
             pc._colorTo   = LightColour(wx.SystemSettings_GetColour(wx.SYS_COLOUR_3DFACE), 0) 
             pc._colorFrom = LightColour(wx.SystemSettings_GetColour(wx.SYS_COLOUR_3DFACE), 60)
         
-        col2 = (pc.HasFlag(FNB_BOTTOM) and [pc._pParent.GetGradientColourTo()] or [pc._pParent.GetGradientColourFrom()])[0]
-        col1 = (pc.HasFlag(FNB_BOTTOM) and [pc._pParent.GetGradientColourFrom()] or [pc._pParent.GetGradientColourTo()])[0]
+        col2 = pc._pParent.GetGradientColourTo()
+        col1 = pc._pParent.GetGradientColourFrom()
 
         # If colorful tabs style is set, override the tab color
         if pc.HasFlag(FNB_COLORFUL_TABS):
