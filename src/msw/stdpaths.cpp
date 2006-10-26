@@ -26,14 +26,14 @@
 
 #if wxUSE_STDPATHS
 
+#include "wx/stdpaths.h"
+
 #ifndef WX_PRECOMP
-    #include "wx/app.h"
+    #include "wx/utils.h"
 #endif //WX_PRECOMP
 
 #include "wx/dynlib.h"
 #include "wx/filename.h"
-
-#include "wx/stdpaths.h"
 
 #include "wx/msw/private.h"
 #include "wx/msw/wrapshl.h"
