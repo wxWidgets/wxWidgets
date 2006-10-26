@@ -4,7 +4,7 @@ Recent Changes for wxPython
 
 2.7.1.3
 -------
-* 25-Oct-2006
+* 26-Oct-2006
 
 wxGTK:  The wx.ALWAYS_SHOW_SB style is now supported.
 
