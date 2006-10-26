@@ -456,14 +456,33 @@ public:
         DrawRotatedText);
     
 
-    DocDeclAStr(
+    DocDeclAStrName(
         virtual void , GetTextExtent( const wxString &text,
                                       wxDouble *OUTPUT /*width*/,
                                       wxDouble *OUTPUT /*height*/,
                                       wxDouble *OUTPUT /*descent*/,
                                       wxDouble *OUTPUT /*externalLeading*/ ) const ,
-        "GetTextExtent(self, text) --> (width, height, descent, externalLeading)",
-        "", "");
+        "GetFullTextExtent(self, text) --> (width, height, descent, externalLeading)",
+        "", "",
+        GetFullTextExtent);
+
+    %extend {
+        DocAStr(GetTextExtent,
+                "GetTextExtent(self, text) --> (width, height)",
+                "", "");
+               
+        PyObject* GetTextExtent( const wxString &text )
+        {
+            wxDouble width = 0.0,
+                     height = 0.0;
+            self->GetTextExtent(text, &width, &height, NULL, NULL);
+            // thread wrapers are turned off for this .i file, so no need to acquire GIL...
+            PyObject* rv = PyTuple_New(2);
+            PyTuple_SET_ITEM(rv, 0, PyFloat_FromDouble(width));
+            PyTuple_SET_ITEM(rv, 1, PyFloat_FromDouble(height));
+            return rv;
+        }
+    }
     
 
     %extend {
