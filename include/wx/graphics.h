@@ -376,9 +376,10 @@ public:
 
      // wrappers using wxPoint2DDouble TODO
 
-protected :
     // helper to determine if a 0.5 offset should be applied for the drawing operation
     virtual bool ShouldOffset() const { return false; }
+
+protected :
 
     wxGraphicsPen* m_pen;
     bool m_releasePen;
