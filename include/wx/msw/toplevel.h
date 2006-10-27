@@ -70,7 +70,7 @@ public:
 
     // wxMSW only: EnableCloseButton(false) may be used to remove the "Close"
     // button from the title bar
-    bool EnableCloseButton(bool enable = true);
+    virtual bool EnableCloseButton(bool enable = true);
 
     // Set window transparency if the platform supports it
     virtual bool SetTransparent(wxByte alpha);
