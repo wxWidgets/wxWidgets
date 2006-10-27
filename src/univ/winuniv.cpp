@@ -124,20 +124,27 @@ bool wxWindow::Create(wxWindow *parent,
 {
     long actualStyle = style;
 
-    // FIXME: may need this on other platforms
-#ifdef __WXMSW__
-    actualStyle &= ~wxVSCROLL;
-    actualStyle &= ~wxHSCROLL;
-#endif
-
     // we add wxCLIP_CHILDREN to get the same ("natural") behaviour under MSW
     // as under the other platforms
-    if ( !wxWindowNative::Create(parent, id, pos, size,
-                                 actualStyle | wxCLIP_CHILDREN,
-                                 name) )
-    {
+    actualStyle |= wxCLIP_CHILDREN;
+
+#ifdef __WXMSW__
+    // FIXME: may need this on other platforms
+    actualStyle &= ~wxVSCROLL;
+    actualStyle &= ~wxHSCROLL;
+
+    // without this, borders (non-client areas in general) are not repainted
+    // correctly when resizing; apparently, native NC areas are fully repainted
+    // even without this style by MSW, but wxUniv implements client area
+    // itself, so it doesn't work correctly for us
+    //
+    // FIXME: this is very expensive, we need to fix the (commented-out) code
+    //        in OnSize() instead
+    actualStyle |= wxFULL_REPAINT_ON_RESIZE;
+#endif
+
+    if ( !wxWindowNative::Create(parent, id, pos, size, actualStyle, name) )
         return false;
-    }
 
     // Set full style again, including those we didn't want present
     // when calling the base window Create().
