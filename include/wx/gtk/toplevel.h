@@ -51,6 +51,8 @@ public:
     virtual void SetIcons(const wxIconBundle& icons);
     virtual void Restore();
 
+    virtual bool EnableCloseButton(bool enable = true);
+
     virtual bool ShowFullScreen(bool show, long style = wxFULLSCREEN_ALL);
     virtual bool IsFullScreen() const { return m_fsIsShowing; };
 

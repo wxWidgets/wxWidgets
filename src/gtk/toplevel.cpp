@@ -694,7 +694,18 @@ wxTopLevelWindowGTK::~wxTopLevelWindowGTK()
         g_lastActiveFrame = NULL;
 }
 
-
+bool wxTopLevelWindowGTK::EnableCloseButton( bool enable )
+{
+    if (enable)
+        m_gdkFunc |= GDK_FUNC_CLOSE;
+    else
+        m_gdkFunc &= ~GDK_FUNC_CLOSE;
+    
+    if (GTK_WIDGET_REALIZED(m_widget) && (m_widget->window))
+        gdk_window_set_functions( m_widget->window, (GdkWMFunction)m_gdkFunc );
+        
+    return true;
+}
 
 bool wxTopLevelWindowGTK::ShowFullScreen(bool show, long style )
 {
