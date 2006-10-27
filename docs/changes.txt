@@ -80,6 +80,12 @@ All (GUI):
 - Renamed wxProgressDialog::UpdatePulse() to just Pulse().
 - Added wxCollapsiblePane (Francesco Montorsi).
 - Added wxSimpleHtmlListBox (Francesco Montorsi).
+- Printing framework fixes by Robert J. Lang. Bugs fixed,
+  wxPrinterDC::GetPaperRect() and other functions added to allow
+  easier printing implementation, and the documentation updated.
+- Many enhancements to wxRichTextCtrl including URL support,
+  formatting and symbol dialogs, print/preview, and better list
+  formatting.
 
 Unix Ports:
 
@@ -92,6 +98,7 @@ wxGTK:
 - Support wxALWAYS_SHOW_SB.
 - Speed up MIME types loading. Only the GNOME database should be loaded under
   GNOME etc. For this, the code queries the X11 session protocol.
+- wxCaret redraw problem during scrolling fixed.
 
 
 2.7.1
