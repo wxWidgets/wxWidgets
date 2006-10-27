@@ -531,7 +531,7 @@ bool wxRichTextParagraphLayoutBox::Draw(wxDC& dc, const wxRichTextRange& range, 
                 // Skip
             }
             else
-                child->Draw(dc, child->GetRange(), selectionRange, childRect, descent, style);
+                child->Draw(dc, range, selectionRange, childRect, descent, style);
         }
 
         node = node->GetNext();
@@ -2996,7 +2996,7 @@ wxRichTextParagraph::~wxRichTextParagraph()
 }
 
 /// Draw the item
-bool wxRichTextParagraph::Draw(wxDC& dc, const wxRichTextRange& WXUNUSED(range), const wxRichTextRange& selectionRange, const wxRect& WXUNUSED(rect), int WXUNUSED(descent), int style)
+bool wxRichTextParagraph::Draw(wxDC& dc, const wxRichTextRange& range, const wxRichTextRange& selectionRange, const wxRect& WXUNUSED(rect), int WXUNUSED(descent), int style)
 {
 #if wxRICHTEXT_USE_DYNAMIC_STYLES
     wxTextAttrEx attr = GetCombinedAttributes();
@@ -3081,7 +3081,8 @@ bool wxRichTextParagraph::Draw(wxDC& dc, const wxRichTextRange& WXUNUSED(range),
         while (node2)
         {
             wxRichTextObject* child = node2->GetData();
-            if (!child->GetRange().IsOutside(lineRange))
+            
+            if (!child->GetRange().IsOutside(lineRange) && !lineRange.IsOutside(range))
             {
                 // Draw this part of the line at the correct position
                 wxRichTextRange objectRange(child->GetRange());
