@@ -544,7 +544,7 @@ void wxWebKitCtrl::OnSize(wxSizeEvent &event){
     // and this tripped me up at first. But in fact, what we want is the root view, because we need to
     // make the y origin relative to the very top of the window, not its contents, since we later flip 
     // the y coordinate for Cocoa. 
-    HIViewConvertRect (&rect, HIViewGetSuperview( m_peer->GetControlRef() ), 
+    HIViewConvertRect (&rect, m_peer->GetControlRef(), 
                                 HIViewGetRoot( (WindowRef) MacGetTopLevelWindowRef() ) );
 
     x = (int)rect.origin.x;
