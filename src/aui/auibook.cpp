@@ -1028,9 +1028,9 @@ bool wxAuiMultiNotebook::InsertPage(size_t page_idx,
 // DeletePage() removes a tab from the multi-notebook,
 // and destroys the window as well
 bool wxAuiMultiNotebook::DeletePage(size_t page_idx)
-{
+{    
     wxWindow* wnd = m_tabs.GetWindowFromIdx(page_idx);
-
+    wxWindow* new_active = NULL;
 
     // find out which onscreen tab ctrl owns this tab
     wxAuiTabCtrl* ctrl;
@@ -1045,32 +1045,23 @@ bool wxAuiMultiNotebook::DeletePage(size_t page_idx)
 
     if (new_idx >= 0 && new_idx < (int)ctrl->GetPageCount())
     {
-        wxWindow* new_wnd = ctrl->GetWindowFromIdx(new_idx);
-        int main_idx = m_tabs.GetIdxFromWindow(new_wnd);
-        wxASSERT(main_idx != -1);
-        SetSelection(main_idx);
+        new_active = ctrl->GetWindowFromIdx(new_idx);
     }
      else
     {
         // set the active page to the first page that
         // isn't the one being deleted
-        bool found = false;
         size_t i, page_count = m_tabs.GetPageCount();
         for (i = 0; i < page_count; ++i)
         {
             wxWindow* w = m_tabs.GetWindowFromIdx(i);
             if (wnd != w)
             {
-                found = true;
-                SetSelection(i);
+                new_active = m_tabs.GetWindowFromIdx(i);
                 break;
             }
         }
-
-        if (!found)
-            m_curpage = -1;
     }
-
 
     // remove the tab from main catalog
     if (!m_tabs.RemovePage(wnd))
@@ -1094,6 +1085,13 @@ bool wxAuiMultiNotebook::DeletePage(size_t page_idx)
 
     RemoveEmptyTabFrames();
 
+    // set new active pane
+    if (new_active)
+    {
+        m_curpage = -1;
+        SetSelection(m_tabs.GetIdxFromWindow(new_active));
+    }
+    
     return true;
 }
 
