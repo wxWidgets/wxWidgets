@@ -233,12 +233,11 @@ private:
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxCairoMatrix)
 } ;
 
-class WXDLLIMPEXP_CORE wxCairoPen : public wxGraphicsPen
+class WXDLLIMPEXP_CORE wxCairoPenData : public wxGraphicsObjectRefData
 {
 public:
-    wxCairoPen();
-    wxCairoPen( wxGraphicsRenderer* renderer, const wxPen &pen );
-    ~wxCairoPen();
+    wxCairoPenData( wxGraphicsRenderer* renderer, const wxPen &pen );
+    ~wxCairoPenData();
 
     void Init();
 
@@ -261,16 +260,14 @@ private :
     double *m_userLengths;
 
     wxPen m_pen;
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxCairoPen)
 };
 
-class WXDLLIMPEXP_CORE wxCairoBrush : public wxGraphicsBrush
+class WXDLLIMPEXP_CORE wxCairoBrushData : public wxGraphicsObjectRefData
 {
 public:
-    wxCairoBrush();
-    wxCairoBrush( wxGraphicsRenderer* renderer );
-    wxCairoBrush( wxGraphicsRenderer* renderer, const wxBrush &brush );
-    ~wxCairoBrush ();
+    wxCairoBrushData( wxGraphicsRenderer* renderer );
+    wxCairoBrushData( wxGraphicsRenderer* renderer, const wxBrush &brush );
+    ~wxCairoBrushData ();
 
     virtual void Apply( wxGraphicsContext* context );
     void CreateLinearGradientBrush( wxDouble x1, wxDouble y1, wxDouble x2, wxDouble y2, 
@@ -288,16 +285,13 @@ private :
     double m_alpha;
 
     cairo_pattern_t* m_brushPattern;
-
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxCairoBrush)
 };
 
-class wxCairoFont : public wxGraphicsFont
+class wxCairoFontData : public wxGraphicsObjectRefData
 {
 public:
-    wxCairoFont();
-    wxCairoFont( wxGraphicsRenderer* renderer, const wxFont &font, const wxColour& col );
-    ~wxCairoFont();
+    wxCairoFontData( wxGraphicsRenderer* renderer, const wxFont &font, const wxColour& col );
+    ~wxCairoFontData();
 
     virtual void Apply( wxGraphicsContext* context );
 private :
@@ -309,7 +303,6 @@ private :
     double m_green;
     double m_blue;
     double m_alpha;
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxCairoFont)
 };
 
 class WXDLLIMPEXP_CORE wxCairoContext : public wxGraphicsContext
@@ -367,22 +360,15 @@ private:
 };
 
 //-----------------------------------------------------------------------------
-// wxCairoPen implementation
+// wxCairoPenData implementation
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxCairoPen,wxGraphicsPen)
-
-wxCairoPen::wxCairoPen() : wxGraphicsPen(NULL)
-{
-    wxLogDebug(wxT("Illegal Constructor called"));
-}
-
-wxCairoPen::~wxCairoPen()
+wxCairoPenData::~wxCairoPenData()
 {
     delete[] m_userLengths;
 }
 
-void wxCairoPen::Init()
+void wxCairoPenData::Init()
 {
     m_lengths = NULL;
     m_userLengths = NULL;
@@ -390,8 +376,8 @@ void wxCairoPen::Init()
     m_count = 0;
 }
 
-wxCairoPen::wxCairoPen( wxGraphicsRenderer* renderer, const wxPen &pen )
-: wxGraphicsPen(renderer)
+wxCairoPenData::wxCairoPenData( wxGraphicsRenderer* renderer, const wxPen &pen )
+: wxGraphicsObjectRefData(renderer)
 {    
     Init();
     m_width = pen.GetWidth();
@@ -558,7 +544,7 @@ wxCairoPen::wxCairoPen( wxGraphicsRenderer* renderer, const wxPen &pen )
     }
 }
 
-void wxCairoPen::Apply( wxGraphicsContext* context )
+void wxCairoPenData::Apply( wxGraphicsContext* context )
 {
     cairo_t * ctext = (cairo_t*) context->GetNativeContext();
     cairo_set_line_width(ctext,m_width);
@@ -569,23 +555,16 @@ void wxCairoPen::Apply( wxGraphicsContext* context )
 }
 
 //-----------------------------------------------------------------------------
-// wxCairoBrush implementation
+// wxCairoBrushData implementation
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxCairoBrush,wxGraphicsBrush)
-
-wxCairoBrush::wxCairoBrush() : wxGraphicsBrush( NULL )
-{
-    wxLogDebug(wxT("Illegal Constructor called"));
-}
-
-wxCairoBrush::wxCairoBrush( wxGraphicsRenderer* renderer ) : wxGraphicsBrush( renderer )
+wxCairoBrushData::wxCairoBrushData( wxGraphicsRenderer* renderer ) : wxGraphicsObjectRefData( renderer )
 {
     Init();
 }
 
-wxCairoBrush::wxCairoBrush( wxGraphicsRenderer* renderer, const wxBrush &brush )
-: wxGraphicsBrush(renderer)
+wxCairoBrushData::wxCairoBrushData( wxGraphicsRenderer* renderer, const wxBrush &brush )
+: wxGraphicsObjectRefData(renderer)
 {
     m_red = brush.GetColour().Red()/255.0;
     m_green = brush.GetColour().Green()/255.0; 
@@ -638,13 +617,13 @@ wxCairoBrush::wxCairoBrush( wxGraphicsRenderer* renderer, const wxBrush &brush )
     */
 }
 
-wxCairoBrush::~wxCairoBrush ()
+wxCairoBrushData::~wxCairoBrushData ()
 {
     if (m_brushPattern)
         cairo_pattern_destroy(m_brushPattern);
 }
 
-void wxCairoBrush::Apply( wxGraphicsContext* context )
+void wxCairoBrushData::Apply( wxGraphicsContext* context )
 {
     cairo_t * ctext = (cairo_t*) context->GetNativeContext();
     if ( m_brushPattern )
@@ -657,7 +636,7 @@ void wxCairoBrush::Apply( wxGraphicsContext* context )
     }
 }
 
-void wxCairoBrush::CreateLinearGradientBrush( wxDouble x1, wxDouble y1, wxDouble x2, wxDouble y2, 
+void wxCairoBrushData::CreateLinearGradientBrush( wxDouble x1, wxDouble y1, wxDouble x2, wxDouble y2, 
         const wxColour&c1, const wxColour&c2 )
 {
     m_brushPattern = cairo_pattern_create_linear(x1,y1,x2,y2);
@@ -668,7 +647,7 @@ void wxCairoBrush::CreateLinearGradientBrush( wxDouble x1, wxDouble y1, wxDouble
     wxASSERT_MSG(cairo_pattern_status(m_brushPattern) == CAIRO_STATUS_SUCCESS, wxT("Couldn't create cairo pattern"));
 }
 
-void wxCairoBrush::CreateRadialGradientBrush( wxDouble xo, wxDouble yo, wxDouble xc, wxDouble yc, wxDouble radius,
+void wxCairoBrushData::CreateRadialGradientBrush( wxDouble xo, wxDouble yo, wxDouble xc, wxDouble yc, wxDouble radius,
         const wxColour &oColor, const wxColour &cColor )
 {
     m_brushPattern = cairo_pattern_create_radial(xo,yo,0.0,xc,yc,radius);
@@ -679,24 +658,17 @@ void wxCairoBrush::CreateRadialGradientBrush( wxDouble xo, wxDouble yo, wxDouble
     wxASSERT_MSG(cairo_pattern_status(m_brushPattern) == CAIRO_STATUS_SUCCESS, wxT("Couldn't create cairo pattern"));
 }
 
-void wxCairoBrush::Init()
+void wxCairoBrushData::Init()
 {
     m_brushPattern = NULL;
 }
 
 //-----------------------------------------------------------------------------
-// wxCairoFont implementation
+// wxCairoFontData implementation
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxCairoFont,wxGraphicsFont)
-
-wxCairoFont::wxCairoFont() : wxGraphicsFont(NULL)
-{
-    wxLogDebug(wxT("Illegal Constructor called"));
-}
-
-wxCairoFont::wxCairoFont( wxGraphicsRenderer* renderer, const wxFont &font, 
-                         const wxColour& col ) : wxGraphicsFont(renderer)
+wxCairoFontData::wxCairoFontData( wxGraphicsRenderer* renderer, const wxFont &font, 
+                         const wxColour& col ) : wxGraphicsObjectRefData(renderer)
 {
     m_red = col.Red()/255.0;
     m_green = col.Green()/255.0; 
@@ -709,11 +681,11 @@ wxCairoFont::wxCairoFont( wxGraphicsRenderer* renderer, const wxFont &font,
     m_weight = font.GetWeight() == wxFONTWEIGHT_BOLD ? CAIRO_FONT_WEIGHT_BOLD:CAIRO_FONT_WEIGHT_NORMAL;
 }
 
-wxCairoFont::~wxCairoFont()
+wxCairoFontData::~wxCairoFontData()
 {
 }
 
-void wxCairoFont::Apply( wxGraphicsContext* context )
+void wxCairoFontData::Apply( wxGraphicsContext* context )
 {
     cairo_t * ctext = (cairo_t*) context->GetNativeContext();
     cairo_set_source_rgba(ctext,m_red,m_green, m_blue,m_alpha);
@@ -1054,10 +1026,6 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, wxWindow *window)
 
 wxCairoContext::~wxCairoContext()
 {
-    SetPen(NULL);
-    SetBrush(NULL);
-    SetFont(NULL);
-
     if ( m_context )
     {
         PopState();
@@ -1085,11 +1053,11 @@ void wxCairoContext::ResetClip()
 
 void wxCairoContext::StrokePath( const wxGraphicsPath *path )
 {
-    if ( m_pen )
+    if ( !m_pen.IsNull() )
     {   
         cairo_path_t* cp = (cairo_path_t*) path->GetNativePath() ;
         cairo_append_path(m_context,cp);
-        m_pen->Apply(this);
+        ((wxCairoPenData*)m_pen.GetRefData())->Apply(this);
         cairo_stroke(m_context);
         wxConstCast(path, wxGraphicsPath)->UnGetNativePath(cp);
     }
@@ -1097,11 +1065,11 @@ void wxCairoContext::StrokePath( const wxGraphicsPath *path )
 
 void wxCairoContext::FillPath( const wxGraphicsPath *path , int fillStyle )
 {
-    if ( m_brush )
+    if ( !m_brush.IsNull() )
     {
         cairo_path_t* cp = (cairo_path_t*) path->GetNativePath() ;
         cairo_append_path(m_context,cp);
-        m_brush->Apply(this);
+        ((wxCairoBrushData*)m_brush.GetRefData())->Apply(this);
         cairo_set_fill_rule(m_context,fillStyle==wxODDEVEN_RULE ? CAIRO_FILL_RULE_EVEN_ODD : CAIRO_FILL_RULE_WINDING);
         cairo_fill(m_context);
         wxConstCast(path, wxGraphicsPath)->UnGetNativePath(cp);
@@ -1174,11 +1142,11 @@ void wxCairoContext::DrawIcon( const wxIcon &icon, wxDouble x, wxDouble y, wxDou
 
 void wxCairoContext::DrawText( const wxString &str, wxDouble x, wxDouble y )
 {
-    if ( m_font == NULL || str.IsEmpty())
+    if ( m_font.IsNull() || str.IsEmpty())
         return ;
     cairo_move_to(m_context,x,y);
     const wxWX2MBbuf buf(str.mb_str(wxConvUTF8));
-    m_font->Apply(this);
+    ((wxCairoFontData*)m_font.GetRefData())->Apply(this);
     cairo_show_text(m_context,buf);
 }
 
@@ -1235,21 +1203,21 @@ public :
         wxDouble tx=0.0, wxDouble ty=0.0);
 
 
-    virtual wxGraphicsPen* CreatePen(const wxPen& pen) ;
+    virtual wxGraphicsPen CreatePen(const wxPen& pen) ;
 
-    virtual wxGraphicsBrush* CreateBrush(const wxBrush& brush ) ;
+    virtual wxGraphicsBrush CreateBrush(const wxBrush& brush ) ;
 
     // sets the brush to a linear gradient, starting at (x1,y1) with color c1 to (x2,y2) with color c2
-    virtual wxGraphicsBrush* CreateLinearGradientBrush( wxDouble x1, wxDouble y1, wxDouble x2, wxDouble y2, 
+    virtual wxGraphicsBrush CreateLinearGradientBrush( wxDouble x1, wxDouble y1, wxDouble x2, wxDouble y2, 
         const wxColour&c1, const wxColour&c2) ;
 
     // sets the brush to a radial gradient originating at (xo,yc) with color oColor and ends on a circle around (xc,yc) 
     // with radius r and color cColor
-    virtual wxGraphicsBrush* CreateRadialGradientBrush( wxDouble xo, wxDouble yo, wxDouble xc, wxDouble yc, wxDouble radius,
+    virtual wxGraphicsBrush CreateRadialGradientBrush( wxDouble xo, wxDouble yo, wxDouble xc, wxDouble yc, wxDouble radius,
         const wxColour &oColor, const wxColour &cColor) ;
 
     // sets the font
-    virtual wxGraphicsFont* CreateFont( const wxFont &font , const wxColour &col = *wxBLACK ) ;
+    virtual wxGraphicsFont CreateFont( const wxFont &font , const wxColour &col = *wxBLACK ) ;
 
 private :
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxCairoRenderer)
@@ -1314,48 +1282,64 @@ wxGraphicsMatrix * wxCairoRenderer::CreateMatrix( wxDouble a, wxDouble b, wxDoub
     return m;
 }
 
-wxGraphicsPen* wxCairoRenderer::CreatePen(const wxPen& pen) 
+wxGraphicsPen wxCairoRenderer::CreatePen(const wxPen& pen) 
 {
     if ( !pen.Ok() || pen.GetStyle() == wxTRANSPARENT )
-        return NULL;
+        return wxNullGraphicsPen;
     else
-        return new wxCairoPen( this, pen );
+    {
+        wxGraphicsPen p;
+        p.SetRefData(new wxCairoPenData( this, pen ));
+        return p;
+    }
 }
 
-wxGraphicsBrush* wxCairoRenderer::CreateBrush(const wxBrush& brush ) 
+wxGraphicsBrush wxCairoRenderer::CreateBrush(const wxBrush& brush ) 
 {
     if ( !brush.Ok() || brush.GetStyle() == wxTRANSPARENT )
-        return NULL;
+        return wxNullGraphicsBrush;
     else
-        return new wxCairoBrush( this, brush );
+    {
+        wxGraphicsBrush p;
+        p.SetRefData(new wxCairoBrushData( this, brush ));
+        return p;
+    }
 }
 
 // sets the brush to a linear gradient, starting at (x1,y1) with color c1 to (x2,y2) with color c2
-wxGraphicsBrush* wxCairoRenderer::CreateLinearGradientBrush( wxDouble x1, wxDouble y1, wxDouble x2, wxDouble y2, 
+wxGraphicsBrush wxCairoRenderer::CreateLinearGradientBrush( wxDouble x1, wxDouble y1, wxDouble x2, wxDouble y2, 
                                                                       const wxColour&c1, const wxColour&c2) 
 {
-    wxCairoBrush* brush = new wxCairoBrush(this);
-    brush->CreateLinearGradientBrush(x1, y1, x2, y2, c1, c2);
-    return brush;
+    wxGraphicsBrush p;
+    wxCairoBrushData* d = new wxCairoBrushData( this );
+    d->CreateLinearGradientBrush(x1, y1, x2, y2, c1, c2);
+    p.SetRefData(d);
+    return p;
 }
 
 // sets the brush to a radial gradient originating at (xo,yc) with color oColor and ends on a circle around (xc,yc) 
 // with radius r and color cColor
-wxGraphicsBrush* wxCairoRenderer::CreateRadialGradientBrush( wxDouble xo, wxDouble yo, wxDouble xc, wxDouble yc, wxDouble radius,
+wxGraphicsBrush wxCairoRenderer::CreateRadialGradientBrush( wxDouble xo, wxDouble yo, wxDouble xc, wxDouble yc, wxDouble radius,
                                                                       const wxColour &oColor, const wxColour &cColor) 
 {
-    wxCairoBrush* brush = new wxCairoBrush(this);
-    brush->CreateRadialGradientBrush(xo,yo,xc,yc,radius,oColor,cColor);
-    return brush;
+    wxGraphicsBrush p;
+    wxCairoBrushData* d = new wxCairoBrushData( this );
+    d->CreateRadialGradientBrush(xo,yo,xc,yc,radius,oColor,cColor);
+    p.SetRefData(d);
+    return p;
 }
 
 // sets the font
-wxGraphicsFont* wxCairoRenderer::CreateFont( const wxFont &font , const wxColour &col ) 
+wxGraphicsFont wxCairoRenderer::CreateFont( const wxFont &font , const wxColour &col ) 
 {
     if ( font.Ok() )
-        return new wxCairoFont( this , font, col );
+    {        
+        wxGraphicsFont p;
+        p.SetRefData(new wxCairoFontData( this , font, col ));
+        return p;
+    }
     else
-        return NULL;
+        return wxNullGraphicsFont;
 }
 
 #endif  // wxUSE_GRAPHICS_CONTEXT
