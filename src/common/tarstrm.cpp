@@ -181,10 +181,12 @@ const wxTarField wxTarHeaderBlock::fields[] =
 
 void wxTarHeaderBlock::check()
 {
+#if 0
     wxCOMPILE_TIME_ASSERT(
         WXSIZEOF(fields) == TAR_NUMFIELDS + 1,
         Wrong_number_of_elements_in_fields_table
     );
+#endif
 }
 
 bool wxTarHeaderBlock::IsAllZeros() const
