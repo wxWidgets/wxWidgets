@@ -222,16 +222,14 @@ private:
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxGDIPlusMatrix)
 } ;
 
-class WXDLLIMPEXP_CORE wxGDIPlusPen : public wxGraphicsPen
+class WXDLLIMPEXP_CORE wxGDIPlusPenData : public wxGraphicsObjectRefData
 {
 public:
-    wxGDIPlusPen();
-    wxGDIPlusPen( wxGraphicsRenderer* renderer, const wxPen &pen );
-    ~wxGDIPlusPen();
+    wxGDIPlusPenData( wxGraphicsRenderer* renderer, const wxPen &pen );
+    ~wxGDIPlusPenData();
 
     void Init();
 
-    virtual void Apply( wxGraphicsContext* context );
     virtual wxDouble GetWidth() { return m_width; }
     virtual Pen* GetGDIPlusPen() { return m_pen; }
 
@@ -241,19 +239,15 @@ protected :
     Brush* m_penBrush;
 
     wxDouble m_width;
-private :
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxGDIPlusPen)
 };
 
-class WXDLLIMPEXP_CORE wxGDIPlusBrush : public wxGraphicsBrush
+class WXDLLIMPEXP_CORE wxGDIPlusBrushData : public wxGraphicsObjectRefData
 {
 public:
-    wxGDIPlusBrush();
-    wxGDIPlusBrush( wxGraphicsRenderer* renderer );
-    wxGDIPlusBrush( wxGraphicsRenderer* renderer, const wxBrush &brush );
-    ~wxGDIPlusBrush ();
+    wxGDIPlusBrushData( wxGraphicsRenderer* renderer );
+    wxGDIPlusBrushData( wxGraphicsRenderer* renderer, const wxBrush &brush );
+    ~wxGDIPlusBrushData ();
 
-    virtual void Apply( wxGraphicsContext* context );
     void CreateLinearGradientBrush( wxDouble x1, wxDouble y1, wxDouble x2, wxDouble y2, 
         const wxColour&c1, const wxColour&c2 );
     void CreateRadialGradientBrush( wxDouble xo, wxDouble yo, wxDouble xc, wxDouble yc, wxDouble radius,
@@ -267,25 +261,19 @@ private :
     Brush* m_brush;
     Image* m_brushImage;
     GraphicsPath* m_brushPath;
-
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxGDIPlusBrush)
 };
 
-class wxGDIPlusFont : public wxGraphicsFont
+class WXDLLIMPEXP_CORE wxGDIPlusFontData : public wxGraphicsObjectRefData
 {
 public:
-    wxGDIPlusFont();
-    wxGDIPlusFont( wxGraphicsRenderer* renderer, const wxFont &font, const wxColour& col );
-    ~wxGDIPlusFont();
+    wxGDIPlusFontData( wxGraphicsRenderer* renderer, const wxFont &font, const wxColour& col );
+    ~wxGDIPlusFontData();
 
-    virtual void Apply( wxGraphicsContext* context );
     virtual Brush* GetGDIPlusBrush() { return m_textBrush; }
     virtual Font* GetGDIPlusFont() { return m_font; }
 private :
     Brush* m_textBrush;
     Font* m_font;
-
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxGDIPlusFont)
 };
 
 class WXDLLIMPEXP_CORE wxGDIPlusContext : public wxGraphicsContext
@@ -349,29 +337,22 @@ private:
 // wxGDIPlusPen implementation
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxGDIPlusPen,wxGraphicsPen)
-
-wxGDIPlusPen::wxGDIPlusPen() : wxGraphicsPen(NULL)
-{
-    wxLogDebug(wxT("Illegal Constructor called"));
-}
-
-wxGDIPlusPen::~wxGDIPlusPen()
+wxGDIPlusPenData::~wxGDIPlusPenData()
 {
     delete m_pen;
     delete m_penImage;
     delete m_penBrush;
 }
 
-void wxGDIPlusPen::Init()
+void wxGDIPlusPenData::Init()
 {
     m_pen = NULL ;
     m_penImage = NULL;
     m_penBrush = NULL;
 }
 
-wxGDIPlusPen::wxGDIPlusPen( wxGraphicsRenderer* renderer, const wxPen &pen )
-: wxGraphicsPen(renderer)
+wxGDIPlusPenData::wxGDIPlusPenData( wxGraphicsRenderer* renderer, const wxPen &pen )
+: wxGraphicsObjectRefData(renderer)
 {    
     Init();
     m_width = pen.GetWidth();
@@ -512,33 +493,18 @@ wxGDIPlusPen::wxGDIPlusPen( wxGraphicsRenderer* renderer, const wxPen &pen )
         m_pen->SetDashStyle(dashStyle);
 }
 
-void wxGDIPlusPen::Apply( wxGraphicsContext* WXUNUSED(context) )
-{
-    // nothing to do here
-}
-
-
 //-----------------------------------------------------------------------------
 // wxGDIPlusBrush implementation
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxGDIPlusBrush,wxGraphicsBrush)
-
-wxGDIPlusBrush::wxGDIPlusBrush( wxGraphicsRenderer* renderer )
-: wxGraphicsBrush(renderer)
+wxGDIPlusBrushData::wxGDIPlusBrushData( wxGraphicsRenderer* renderer )
+: wxGraphicsObjectRefData(renderer)
 {
     Init();
 }
 
-wxGDIPlusBrush::wxGDIPlusBrush( )
-: wxGraphicsBrush(NULL)
-{
-    wxLogDebug(wxT("Illegal Constructor called"));
-}
-
-
-wxGDIPlusBrush::wxGDIPlusBrush( wxGraphicsRenderer* renderer , const wxBrush &brush )
-: wxGraphicsBrush(renderer)
+wxGDIPlusBrushData::wxGDIPlusBrushData( wxGraphicsRenderer* renderer , const wxBrush &brush )
+: wxGraphicsObjectRefData(renderer)
 {
     Init();
     if ( brush.GetStyle() == wxSOLID)
@@ -586,28 +552,28 @@ wxGDIPlusBrush::wxGDIPlusBrush( wxGraphicsRenderer* renderer , const wxBrush &br
     }
 }
 
-wxGDIPlusBrush::~wxGDIPlusBrush()
+wxGDIPlusBrushData::~wxGDIPlusBrushData()
 {
     delete m_brush;
     delete m_brushImage;
     delete m_brushPath;
 };
 
-void wxGDIPlusBrush::Init()
+void wxGDIPlusBrushData::Init()
 {
     m_brush = NULL;
     m_brushImage= NULL;
     m_brushPath= NULL;
 }
 
-void wxGDIPlusBrush::CreateLinearGradientBrush( wxDouble x1, wxDouble y1, wxDouble x2, wxDouble y2, const wxColour&c1, const wxColour&c2) 
+void wxGDIPlusBrushData::CreateLinearGradientBrush( wxDouble x1, wxDouble y1, wxDouble x2, wxDouble y2, const wxColour&c1, const wxColour&c2) 
 {
     m_brush = new LinearGradientBrush( PointF( x1,y1) , PointF( x2,y2),
         Color( c1.Alpha(), c1.Red(),c1.Green() , c1.Blue() ),
         Color( c2.Alpha(), c2.Red(),c2.Green() , c2.Blue() ));
 }
 
-void wxGDIPlusBrush::CreateRadialGradientBrush( wxDouble xo, wxDouble yo, wxDouble xc, wxDouble yc, wxDouble radius,
+void wxGDIPlusBrushData::CreateRadialGradientBrush( wxDouble xo, wxDouble yo, wxDouble xc, wxDouble yc, wxDouble radius,
                                                const wxColour &oColor, const wxColour &cColor)
 {
     // Create a path that consists of a single circle.
@@ -624,24 +590,12 @@ void wxGDIPlusBrush::CreateRadialGradientBrush( wxDouble xo, wxDouble yo, wxDoub
     b->SetSurroundColors(colors, &count);
 }
 
-void wxGDIPlusBrush::Apply( wxGraphicsContext* WXUNUSED(context) )
-{
-    // nothing to do here
-}
-
 //-----------------------------------------------------------------------------
 // wxGDIPlusFont implementation
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxGDIPlusFont,wxGraphicsFont)
-
-wxGDIPlusFont::wxGDIPlusFont() : wxGraphicsFont( NULL )
-{
-    wxLogDebug(wxT("Illegal Constructor called"));
-}
-
-wxGDIPlusFont::wxGDIPlusFont( wxGraphicsRenderer* renderer, const wxFont &font, 
-                             const wxColour& col ) : wxGraphicsFont( renderer )
+wxGDIPlusFontData::wxGDIPlusFontData( wxGraphicsRenderer* renderer, const wxFont &font, 
+                             const wxColour& col ) : wxGraphicsObjectRefData( renderer )
 {
     m_textBrush = NULL;
     m_font = NULL;
@@ -660,15 +614,10 @@ wxGDIPlusFont::wxGDIPlusFont( wxGraphicsRenderer* renderer, const wxFont &font,
         col.Green() , col.Blue() ));
 }
 
-wxGDIPlusFont::~wxGDIPlusFont()
+wxGDIPlusFontData::~wxGDIPlusFontData()
 {
     delete m_textBrush;
     delete m_font;
-}
-
-void wxGDIPlusFont::Apply( wxGraphicsContext* WXUNUSED(context) )
-{
-    // nothing to do here
 }
 
 //-----------------------------------------------------------------------------
@@ -969,10 +918,6 @@ void wxGDIPlusContext::SetDefaults()
 
 wxGDIPlusContext::~wxGDIPlusContext()
 {
-    SetBrush(NULL);
-    SetFont(NULL);
-    SetPen(NULL);
-
     if ( m_context )
     {
         m_context->Restore( m_state2 );
@@ -999,18 +944,18 @@ void wxGDIPlusContext::ResetClip()
 
 void wxGDIPlusContext::StrokePath( const wxGraphicsPath *path )
 {
-    if ( m_pen )
+    if ( !m_pen.IsNull() )
     {
-        m_context->DrawPath( ((wxGDIPlusPen*)m_pen)->GetGDIPlusPen() , (GraphicsPath*) path->GetNativePath() );
+        m_context->DrawPath( ((wxGDIPlusPenData*)m_pen.GetGraphicsData())->GetGDIPlusPen() , (GraphicsPath*) path->GetNativePath() );
     }
 }
 
 void wxGDIPlusContext::FillPath( const wxGraphicsPath *path , int fillStyle )
 {
-    if ( m_brush )
+    if ( !m_brush.IsNull() )
     {
         ((GraphicsPath*) path->GetNativePath())->SetFillMode( fillStyle == wxODDEVEN_RULE ? FillModeAlternate : FillModeWinding);
-        m_context->FillPath( ((wxGDIPlusBrush*)m_brush)->GetGDIPlusBrush() , 
+        m_context->FillPath( ((wxGDIPlusBrushData*)m_brush.GetRefData())->GetGDIPlusBrush() , 
             (GraphicsPath*) path->GetNativePath());
     }
 }
@@ -1173,15 +1118,14 @@ void wxGDIPlusContext::DrawIcon( const wxIcon &icon, wxDouble x, wxDouble y, wxD
     DeleteObject(iconInfo.hbmMask);
 }
 
-
 void wxGDIPlusContext::DrawText( const wxString &str, wxDouble x, wxDouble y ) 
 {
-    if ( str.IsEmpty())
+    if ( m_font.IsNull() || str.IsEmpty())
         return ;
 
     wxWCharBuffer s = str.wc_str( *wxConvUI );
-    m_context->DrawString( s , -1 , ((wxGDIPlusFont*)m_font)->GetGDIPlusFont() , 
-            PointF( x , y ) , ((wxGDIPlusFont*)m_font)->GetGDIPlusBrush() );
+    m_context->DrawString( s , -1 , ((wxGDIPlusFontData*)m_font.GetRefData())->GetGDIPlusFont() , 
+            PointF( x , y ) , ((wxGDIPlusFontData*)m_font.GetRefData())->GetGDIPlusBrush() );
     // TODO m_backgroundMode == wxSOLID
 }
 
@@ -1190,7 +1134,7 @@ void wxGDIPlusContext::GetTextExtent( const wxString &str, wxDouble *width, wxDo
 {
     wxWCharBuffer s = str.wc_str( *wxConvUI );
     FontFamily ffamily ;
-    Font* f = ((wxGDIPlusFont*)m_font)->GetGDIPlusFont();
+    Font* f = ((wxGDIPlusFontData*)m_font.GetRefData())->GetGDIPlusFont();
     
     f->GetFamily(&ffamily) ;
 
@@ -1240,7 +1184,7 @@ void wxGDIPlusContext::GetPartialTextExtents(const wxString& text, wxArrayDouble
     if (text.empty())
         return;
 
-    Font* f = ((wxGDIPlusFont*)m_font)->GetGDIPlusFont();
+    Font* f = ((wxGDIPlusFontData*)m_font.GetRefData())->GetGDIPlusFont();
     wxWCharBuffer ws = text.wc_str( *wxConvUI );
     size_t len = wcslen( ws ) ;
     wxASSERT_MSG(text.length() == len , wxT("GetPartialTextExtents not yet implemented for multichar situations"));
@@ -1329,21 +1273,21 @@ public :
         wxDouble tx=0.0, wxDouble ty=0.0);
 
 
-    virtual wxGraphicsPen* CreatePen(const wxPen& pen) ;
+    virtual wxGraphicsPen CreatePen(const wxPen& pen) ;
 
-    virtual wxGraphicsBrush* CreateBrush(const wxBrush& brush ) ;
+    virtual wxGraphicsBrush CreateBrush(const wxBrush& brush ) ;
 
     // sets the brush to a linear gradient, starting at (x1,y1) with color c1 to (x2,y2) with color c2
-    virtual wxGraphicsBrush* CreateLinearGradientBrush( wxDouble x1, wxDouble y1, wxDouble x2, wxDouble y2, 
+    virtual wxGraphicsBrush CreateLinearGradientBrush( wxDouble x1, wxDouble y1, wxDouble x2, wxDouble y2, 
         const wxColour&c1, const wxColour&c2) ;
 
     // sets the brush to a radial gradient originating at (xo,yc) with color oColor and ends on a circle around (xc,yc) 
     // with radius r and color cColor
-    virtual wxGraphicsBrush* CreateRadialGradientBrush( wxDouble xo, wxDouble yo, wxDouble xc, wxDouble yc, wxDouble radius,
+    virtual wxGraphicsBrush CreateRadialGradientBrush( wxDouble xo, wxDouble yo, wxDouble xc, wxDouble yc, wxDouble radius,
         const wxColour &oColor, const wxColour &cColor) ;
 
     // sets the font
-    virtual wxGraphicsFont* CreateFont( const wxFont &font , const wxColour &col = *wxBLACK ) ;
+    virtual wxGraphicsFont CreateFont( const wxFont &font , const wxColour &col = *wxBLACK ) ;
 protected :
     void EnsureIsLoaded();
     void Load();
@@ -1437,53 +1381,69 @@ wxGraphicsMatrix * wxGDIPlusRenderer::CreateMatrix( wxDouble a, wxDouble b, wxDo
     return m;
 }
 
-wxGraphicsPen* wxGDIPlusRenderer::CreatePen(const wxPen& pen) 
+wxGraphicsPen wxGDIPlusRenderer::CreatePen(const wxPen& pen) 
 {
     EnsureIsLoaded();
     if ( !pen.Ok() || pen.GetStyle() == wxTRANSPARENT )
-        return NULL;
+        return wxNullGraphicsPen;
     else
-        return new wxGDIPlusPen( this, pen );
+    {
+        wxGraphicsPen p;
+        p.SetRefData(new wxGDIPlusPenData( this, pen ));
+        return p;
+    }
 }
 
-wxGraphicsBrush* wxGDIPlusRenderer::CreateBrush(const wxBrush& brush ) 
+wxGraphicsBrush wxGDIPlusRenderer::CreateBrush(const wxBrush& brush ) 
 {
     EnsureIsLoaded();
     if ( !brush.Ok() || brush.GetStyle() == wxTRANSPARENT )
-        return NULL;
+        return wxNullGraphicsBrush;
     else
-        return new wxGDIPlusBrush( this, brush );
+    {
+        wxGraphicsBrush p;
+        p.SetRefData(new wxGDIPlusBrushData( this, brush ));
+        return p;
+    }
 }
 
 // sets the brush to a linear gradient, starting at (x1,y1) with color c1 to (x2,y2) with color c2
-wxGraphicsBrush* wxGDIPlusRenderer::CreateLinearGradientBrush( wxDouble x1, wxDouble y1, wxDouble x2, wxDouble y2, 
+wxGraphicsBrush wxGDIPlusRenderer::CreateLinearGradientBrush( wxDouble x1, wxDouble y1, wxDouble x2, wxDouble y2, 
                                                                       const wxColour&c1, const wxColour&c2) 
 {
     EnsureIsLoaded();
-    wxGDIPlusBrush* brush = new wxGDIPlusBrush(this);
-    brush->CreateLinearGradientBrush(x1, y1, x2, y2, c1, c2);
-    return brush;
-}
+    wxGraphicsBrush p;
+    wxGDIPlusBrushData* d = new wxGDIPlusBrushData( this );
+    d->CreateLinearGradientBrush(x1, y1, x2, y2, c1, c2);
+    p.SetRefData(d);
+    return p;
+ }
 
 // sets the brush to a radial gradient originating at (xo,yc) with color oColor and ends on a circle around (xc,yc) 
 // with radius r and color cColor
-wxGraphicsBrush* wxGDIPlusRenderer::CreateRadialGradientBrush( wxDouble xo, wxDouble yo, wxDouble xc, wxDouble yc, wxDouble radius,
+wxGraphicsBrush wxGDIPlusRenderer::CreateRadialGradientBrush( wxDouble xo, wxDouble yo, wxDouble xc, wxDouble yc, wxDouble radius,
                                                                       const wxColour &oColor, const wxColour &cColor) 
 {
     EnsureIsLoaded();
-    wxGDIPlusBrush* brush = new wxGDIPlusBrush(this);
-    brush->CreateRadialGradientBrush(xo,yo,xc,yc,radius,oColor,cColor);
-    return brush;
+    wxGraphicsBrush p;
+    wxGDIPlusBrushData* d = new wxGDIPlusBrushData( this );
+    d->CreateRadialGradientBrush(xo,yo,xc,yc,radius,oColor,cColor);
+    p.SetRefData(d);
+    return p;
 }
 
 // sets the font
-wxGraphicsFont* wxGDIPlusRenderer::CreateFont( const wxFont &font , const wxColour &col ) 
+wxGraphicsFont wxGDIPlusRenderer::CreateFont( const wxFont &font , const wxColour &col ) 
 {
     EnsureIsLoaded();
     if ( font.Ok() )
-        return new wxGDIPlusFont( this , font, col );
+    {        
+        wxGraphicsFont p;
+        p.SetRefData(new wxGDIPlusFontData( this , font, col ));
+        return p;
+    }
     else
-        return NULL;
+        return wxNullGraphicsFont;
 }
 
 #endif  // wxUSE_GRAPHICS_CONTEXT

@@ -48,19 +48,84 @@ static inline double DegToRad(double deg)
 
 //-----------------------------------------------------------------------------
 
+//-----------------------------------------------------------------------------
+// wxGraphicsObject
+//-----------------------------------------------------------------------------
+
 IMPLEMENT_DYNAMIC_CLASS(wxGraphicsObject, wxObject)
 
+wxGraphicsObjectRefData::wxGraphicsObjectRefData( wxGraphicsRenderer* renderer )
+{
+    m_renderer = renderer;
+}
+wxGraphicsObjectRefData::wxGraphicsObjectRefData( const wxGraphicsObjectRefData* data )
+{
+    m_renderer = data->m_renderer;
+}
+wxGraphicsRenderer* wxGraphicsObjectRefData::GetRenderer() const 
+{ 
+    return m_renderer ; 
+}
+
+wxGraphicsObjectRefData* wxGraphicsObjectRefData::Clone() const 
+{
+    return new wxGraphicsObjectRefData(this);
+}
+
+wxGraphicsObject::wxGraphicsObject() 
+{
+}
+
+wxGraphicsObject::wxGraphicsObject( wxGraphicsRenderer* renderer ) 
+{
+    SetRefData( new wxGraphicsObjectRefData(renderer));
+}
+
+wxGraphicsObject::~wxGraphicsObject() 
+{
+}
+
+bool wxGraphicsObject::IsNull() const 
+{ 
+    return m_refData == NULL; 
+}
+
+wxGraphicsRenderer* wxGraphicsObject::GetRenderer() const 
+{ 
+    return ( IsNull() ? NULL : GetGraphicsData()->GetRenderer() ); 
+}
+
+wxGraphicsObjectRefData* wxGraphicsObject::GetGraphicsData() const 
+{ 
+    return (wxGraphicsObjectRefData*) m_refData; 
+}
+
+wxObjectRefData* wxGraphicsObject::CreateRefData() const
+{
+    wxLogDebug(wxT("A Null Object cannot be changed"));
+    return NULL;
+}
+
+wxObjectRefData* wxGraphicsObject::CloneRefData(const wxObjectRefData* data) const
+{
+    const wxGraphicsObjectRefData* ptr = (const wxGraphicsObjectRefData*) data;
+    return ptr->Clone();
+}
+
+//-----------------------------------------------------------------------------
+// pens etc.
+//-----------------------------------------------------------------------------
+
+IMPLEMENT_DYNAMIC_CLASS(wxGraphicsPen, wxGraphicsObject)
+IMPLEMENT_DYNAMIC_CLASS(wxGraphicsBrush, wxGraphicsObject)
+IMPLEMENT_DYNAMIC_CLASS(wxGraphicsFont, wxGraphicsObject)
+WXDLLIMPEXP_DATA_CORE(wxGraphicsPen) wxNullGraphicsPen;
+WXDLLIMPEXP_DATA_CORE(wxGraphicsBrush) wxNullGraphicsBrush;
+WXDLLIMPEXP_DATA_CORE(wxGraphicsFont) wxNullGraphicsFont;
+
 IMPLEMENT_ABSTRACT_CLASS(wxGraphicsRenderer, wxObject)
-
 IMPLEMENT_ABSTRACT_CLASS(wxGraphicsMatrix, wxGraphicsObject)
-
 IMPLEMENT_ABSTRACT_CLASS(wxGraphicsPath, wxGraphicsObject)
-
-IMPLEMENT_ABSTRACT_CLASS(wxGraphicsPen, wxGraphicsObject)
-
-IMPLEMENT_ABSTRACT_CLASS(wxGraphicsBrush, wxGraphicsObject)
-
-IMPLEMENT_ABSTRACT_CLASS(wxGraphicsFont, wxGraphicsObject)
 
 wxPoint2DDouble wxGraphicsPath::GetCurrentPoint()
 {
@@ -208,66 +273,52 @@ IMPLEMENT_ABSTRACT_CLASS(wxGraphicsContext, wxObject)
 
 wxGraphicsContext::wxGraphicsContext(wxGraphicsRenderer* renderer) : wxGraphicsObject(renderer) 
 {
-    m_pen = NULL;
-    m_releasePen = false;
-    m_brush = NULL;
-    m_releaseBrush = false;
-    m_font = NULL;
-    m_releaseFont = false;
 }
 
 wxGraphicsContext::~wxGraphicsContext() 
 {
-    wxASSERT_MSG( m_pen == NULL , wxT("No pen should be selected during destruction") );
-    wxASSERT_MSG( m_brush == NULL , wxT("No pen should be selected during destruction") );
 }
 
 // sets the pen
-void wxGraphicsContext::SetPen( wxGraphicsPen* pen , bool release ) 
+void wxGraphicsContext::SetPen( const wxGraphicsPen& pen ) 
 {
-    if ( m_releasePen )
-        delete m_pen;
     m_pen = pen;
-    m_releasePen = release;
 }
 
 void wxGraphicsContext::SetPen( const wxPen& pen )
 {
     if ( pen.GetStyle() == wxTRANSPARENT )
-        SetPen( NULL );
+        SetPen( wxNullGraphicsPen );
     else
         SetPen( CreatePen( pen ) );
 }
     
 // sets the brush for filling
-void wxGraphicsContext::SetBrush( wxGraphicsBrush* brush , bool release ) 
+void wxGraphicsContext::SetBrush( const wxGraphicsBrush& brush ) 
 {
-    if ( m_releaseBrush )
-        delete m_brush;
     m_brush = brush;
-    m_releaseBrush = release;
 }
 
 void wxGraphicsContext::SetBrush( const wxBrush& brush )
 {
     if ( brush.GetStyle() == wxTRANSPARENT )
-        SetBrush( NULL );
+        SetBrush( wxNullGraphicsBrush );
     else
         SetBrush( CreateBrush( brush ) );
 }
 
 // sets the brush for filling
-void wxGraphicsContext::SetFont( wxGraphicsFont* font , bool release ) 
+void wxGraphicsContext::SetFont( const wxGraphicsFont& font ) 
 {
-    if ( m_releaseFont )
-        delete m_font;
     m_font = font;
-    m_releaseFont = release;
 }
 
 void wxGraphicsContext::SetFont( const wxFont& font, const wxColour& colour )
 {
-    SetFont( CreateFont( font, colour ) );
+    if ( font.Ok() )
+        SetFont( CreateFont( font, colour ) );
+    else
+        SetFont( wxNullGraphicsFont );
 }
 
 void wxGraphicsContext::DrawPath( const wxGraphicsPath *path, int fillStyle )
@@ -365,18 +416,18 @@ wxGraphicsPath * wxGraphicsContext::CreatePath()
     return GetRenderer()->CreatePath();
 }
 
-wxGraphicsPen* wxGraphicsContext::CreatePen(const wxPen& pen)
+wxGraphicsPen wxGraphicsContext::CreatePen(const wxPen& pen)
 {
     return GetRenderer()->CreatePen(pen);
 }
 
-wxGraphicsBrush* wxGraphicsContext::CreateBrush(const wxBrush& brush )
+wxGraphicsBrush wxGraphicsContext::CreateBrush(const wxBrush& brush )
 {
     return GetRenderer()->CreateBrush(brush);
 }
 
 // sets the brush to a linear gradient, starting at (x1,y1) with color c1 to (x2,y2) with color c2
-wxGraphicsBrush* wxGraphicsContext::CreateLinearGradientBrush( wxDouble x1, wxDouble y1, wxDouble x2, wxDouble y2, 
+wxGraphicsBrush wxGraphicsContext::CreateLinearGradientBrush( wxDouble x1, wxDouble y1, wxDouble x2, wxDouble y2, 
                                                    const wxColour&c1, const wxColour&c2)
 {
     return GetRenderer()->CreateLinearGradientBrush(x1,y1,x2,y2,c1,c2);
@@ -384,14 +435,14 @@ wxGraphicsBrush* wxGraphicsContext::CreateLinearGradientBrush( wxDouble x1, wxDo
 
 // sets the brush to a radial gradient originating at (xo,yc) with color oColor and ends on a circle around (xc,yc) 
 // with radius r and color cColor
-wxGraphicsBrush* wxGraphicsContext::CreateRadialGradientBrush( wxDouble xo, wxDouble yo, wxDouble xc, wxDouble yc, wxDouble radius,
+wxGraphicsBrush wxGraphicsContext::CreateRadialGradientBrush( wxDouble xo, wxDouble yo, wxDouble xc, wxDouble yc, wxDouble radius,
                                                    const wxColour &oColor, const wxColour &cColor)
 {
     return GetRenderer()->CreateRadialGradientBrush(xo,yo,xc,yc,radius,oColor,cColor);
 }
 
 // sets the font
-wxGraphicsFont* wxGraphicsContext::CreateFont( const wxFont &font , const wxColour &col )
+wxGraphicsFont wxGraphicsContext::CreateFont( const wxFont &font , const wxColour &col )
 {
     return GetRenderer()->CreateFont(font,col);
 }

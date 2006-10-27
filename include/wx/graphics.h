@@ -37,55 +37,77 @@ class WXDLLIMPEXP_CORE wxGraphicsFont;
 // Base class of all objects used for drawing in the new graphics API, the always point back to their
 // originating rendering engine, there is no dynamic unloading of a renderer currently allowed, 
 // these references are not counted
+
+//
+// The data used by objects like graphics pens etc is ref counted, in order to avoid unnecessary expensive
+// duplication. Any operation on a shared instance that results in a modified state, uncouples this
+// instance from the other instances that were shared - using copy on write semantics
+//
  
+class WXDLLIMPEXP_CORE wxGraphicsObjectRefData : public wxObjectRefData
+{
+public :
+    wxGraphicsObjectRefData( wxGraphicsRenderer* renderer );
+    wxGraphicsObjectRefData( const wxGraphicsObjectRefData* data );
+    wxGraphicsRenderer* GetRenderer() const ;
+    virtual wxGraphicsObjectRefData* Clone() const ;
+
+protected :
+    wxGraphicsRenderer* m_renderer;
+} ;
+
 class WXDLLIMPEXP_CORE wxGraphicsObject : public wxObject
 {
 public :
-    wxGraphicsObject( wxGraphicsRenderer* renderer = NULL ) : m_renderer(renderer) {}
+    wxGraphicsObject() ;
+    wxGraphicsObject( wxGraphicsRenderer* renderer ) ;
+    virtual ~wxGraphicsObject() ;
     
-    wxGraphicsObject( const wxGraphicsObject& obj ) : m_renderer(obj.GetRenderer()) {}
-    
-    virtual ~wxGraphicsObject() {}
-    
-    wxGraphicsRenderer* GetRenderer() const { return m_renderer ; }
+    bool IsNull() const ;
+
+    // returns the renderer that was used to create this instance, or NULL if it has not been initialized yet
+    wxGraphicsRenderer* GetRenderer() const ;
+    wxGraphicsObjectRefData* GetGraphicsData() const ;
 protected :
-    wxGraphicsRenderer* m_renderer;
+    virtual wxObjectRefData* CreateRefData() const;
+    virtual wxObjectRefData* CloneRefData(const wxObjectRefData* data) const;
+
     DECLARE_DYNAMIC_CLASS(wxGraphicsObject);
 } ;
 
 class WXDLLIMPEXP_CORE wxGraphicsPen : public wxGraphicsObject
 {
 public :
-    wxGraphicsPen(wxGraphicsRenderer* renderer) : wxGraphicsObject(renderer) {}
+    wxGraphicsPen() {}
     virtual ~wxGraphicsPen() {}
-    virtual void Apply( wxGraphicsContext* context) = 0;
-    virtual wxDouble GetWidth() = 0;
 private :
-    DECLARE_NO_COPY_CLASS(wxGraphicsPen)
-    DECLARE_ABSTRACT_CLASS(wxGraphicsPen)
+    DECLARE_DYNAMIC_CLASS(wxGraphicsPen)
 } ;
+
+extern WXDLLEXPORT_DATA(wxGraphicsPen) wxNullGraphicsPen;
 
 class WXDLLIMPEXP_CORE wxGraphicsBrush : public wxGraphicsObject
 {
 public :
-    wxGraphicsBrush(wxGraphicsRenderer* renderer) : wxGraphicsObject(renderer) {}
+    wxGraphicsBrush() {}
     virtual ~wxGraphicsBrush() {}
-    virtual void Apply( wxGraphicsContext* context) = 0;
 private :
-    DECLARE_NO_COPY_CLASS(wxGraphicsBrush)
-    DECLARE_ABSTRACT_CLASS(wxGraphicsBrush)
+    DECLARE_DYNAMIC_CLASS(wxGraphicsBrush)
 } ;
+
+extern WXDLLEXPORT_DATA(wxGraphicsBrush) wxNullGraphicsBrush;
 
 class WXDLLIMPEXP_CORE wxGraphicsFont : public wxGraphicsObject
 {
 public :
-    wxGraphicsFont(wxGraphicsRenderer* renderer) : wxGraphicsObject(renderer) {}
+    wxGraphicsFont() {}
     virtual ~wxGraphicsFont() {}
-    virtual void Apply( wxGraphicsContext* context) = 0;
 private :
-    DECLARE_NO_COPY_CLASS(wxGraphicsFont)
-    DECLARE_ABSTRACT_CLASS(wxGraphicsFont)
+    DECLARE_DYNAMIC_CLASS(wxGraphicsFont)
 } ;
+
+extern WXDLLEXPORT_DATA(wxGraphicsFont) wxNullGraphicsFont;
+
 
 class WXDLLIMPEXP_CORE wxGraphicsPath : public wxGraphicsObject
 {
@@ -246,21 +268,21 @@ public:
 
     wxGraphicsPath * CreatePath();
     
-    virtual wxGraphicsPen* CreatePen(const wxPen& pen);
+    virtual wxGraphicsPen CreatePen(const wxPen& pen);
     
-    virtual wxGraphicsBrush* CreateBrush(const wxBrush& brush );
+    virtual wxGraphicsBrush CreateBrush(const wxBrush& brush );
     
     // sets the brush to a linear gradient, starting at (x1,y1) with color c1 to (x2,y2) with color c2
-    virtual wxGraphicsBrush* CreateLinearGradientBrush( wxDouble x1, wxDouble y1, wxDouble x2, wxDouble y2, 
+    virtual wxGraphicsBrush CreateLinearGradientBrush( wxDouble x1, wxDouble y1, wxDouble x2, wxDouble y2, 
         const wxColour&c1, const wxColour&c2);
 
     // sets the brush to a radial gradient originating at (xo,yc) with color oColor and ends on a circle around (xc,yc) 
     // with radius r and color cColor
-    virtual wxGraphicsBrush* CreateRadialGradientBrush( wxDouble xo, wxDouble yo, wxDouble xc, wxDouble yc, wxDouble radius,
+    virtual wxGraphicsBrush CreateRadialGradientBrush( wxDouble xo, wxDouble yo, wxDouble xc, wxDouble yc, wxDouble radius,
         const wxColour &oColor, const wxColour &cColor);
 
     // sets the font
-    virtual wxGraphicsFont* CreateFont( const wxFont &font , const wxColour &col = *wxBLACK );
+    virtual wxGraphicsFont CreateFont( const wxFont &font , const wxColour &col = *wxBLACK );
 
     // create a 'native' matrix corresponding to these values
     virtual wxGraphicsMatrix* CreateMatrix( wxDouble a=1.0, wxDouble b=0.0, wxDouble c=0.0, wxDouble d=1.0, 
@@ -310,17 +332,17 @@ public:
     //
     
     // sets the pen
-    virtual void SetPen( wxGraphicsPen* pen , bool release = true );
+    virtual void SetPen( const wxGraphicsPen& pen );
     
     void SetPen( const wxPen& pen );
 
     // sets the brush for filling
-    virtual void SetBrush( wxGraphicsBrush* brush , bool release = true );
+    virtual void SetBrush( const wxGraphicsBrush& brush );
     
     void SetBrush( const wxBrush& brush );
 
     // sets the font
-    virtual void SetFont( wxGraphicsFont* font, bool release = true );
+    virtual void SetFont( const wxGraphicsFont& font );
     
     void SetFont( const wxFont& font, const wxColour& colour );
 
@@ -387,12 +409,9 @@ public:
 
 protected :
 
-    wxGraphicsPen* m_pen;
-    bool m_releasePen;
-    wxGraphicsBrush* m_brush;
-    bool m_releaseBrush;
-    wxGraphicsFont* m_font;
-    bool m_releaseFont;
+    wxGraphicsPen m_pen;
+    wxGraphicsBrush m_brush;
+    wxGraphicsFont m_font;
 
 private :
     DECLARE_NO_COPY_CLASS(wxGraphicsContext)
@@ -470,21 +489,21 @@ public :
         
     // Paints
     
-    virtual wxGraphicsPen* CreatePen(const wxPen& pen) = 0 ;
+    virtual wxGraphicsPen CreatePen(const wxPen& pen) = 0 ;
     
-    virtual wxGraphicsBrush* CreateBrush(const wxBrush& brush ) = 0 ;
+    virtual wxGraphicsBrush CreateBrush(const wxBrush& brush ) = 0 ;
     
     // sets the brush to a linear gradient, starting at (x1,y1) with color c1 to (x2,y2) with color c2
-    virtual wxGraphicsBrush* CreateLinearGradientBrush( wxDouble x1, wxDouble y1, wxDouble x2, wxDouble y2, 
+    virtual wxGraphicsBrush CreateLinearGradientBrush( wxDouble x1, wxDouble y1, wxDouble x2, wxDouble y2, 
         const wxColour&c1, const wxColour&c2) = 0;
 
     // sets the brush to a radial gradient originating at (xo,yc) with color oColor and ends on a circle around (xc,yc) 
     // with radius r and color cColor
-    virtual wxGraphicsBrush* CreateRadialGradientBrush( wxDouble xo, wxDouble yo, wxDouble xc, wxDouble yc, wxDouble radius,
+    virtual wxGraphicsBrush CreateRadialGradientBrush( wxDouble xo, wxDouble yo, wxDouble xc, wxDouble yc, wxDouble radius,
         const wxColour &oColor, const wxColour &cColor) = 0;
 
    // sets the font
-    virtual wxGraphicsFont* CreateFont( const wxFont &font , const wxColour &col = *wxBLACK ) = 0;
+    virtual wxGraphicsFont CreateFont( const wxFont &font , const wxColour &col = *wxBLACK ) = 0;
     
 private :
     DECLARE_NO_COPY_CLASS(wxGraphicsRenderer)
