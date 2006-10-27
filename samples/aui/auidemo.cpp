@@ -106,7 +106,7 @@ private:
     wxTreeCtrl* CreateTreeCtrl();
     wxSizeReportCtrl* CreateSizeReportCtrl(int width = 80, int height = 80);
     wxPoint GetStartPosition();
-    wxHtmlWindow* CreateHTMLCtrl();
+    wxHtmlWindow* CreateHTMLCtrl(wxWindow* parent = NULL);
     wxAuiMultiNotebook* CreateNotebook();
 
     wxString GetIntroText();
@@ -862,7 +862,7 @@ MyFrame::MyFrame(wxWindow* parent,
     m_mgr.GetPane(wxT("tb6")).Hide();
     m_mgr.GetPane(wxT("test8")).Show().Left().Layer(0).Row(0).Position(0);
     m_mgr.GetPane(wxT("test10")).Show().Bottom().Layer(0).Row(0).Position(0);
-    m_mgr.GetPane(wxT("html_content")).Show();
+    m_mgr.GetPane(wxT("notebook_content")).Show();
     wxString perspective_default = m_mgr.SavePerspective();
 
     m_perspectives.Add(perspective_default);
@@ -1219,9 +1219,12 @@ wxSizeReportCtrl* MyFrame::CreateSizeReportCtrl(int width, int height)
     return ctrl;
 }
 
-wxHtmlWindow* MyFrame::CreateHTMLCtrl()
+wxHtmlWindow* MyFrame::CreateHTMLCtrl(wxWindow* parent)
 {
-    wxHtmlWindow* ctrl = new wxHtmlWindow(this, wxID_ANY,
+    if (!parent)
+        parent = this;
+        
+    wxHtmlWindow* ctrl = new wxHtmlWindow(parent, wxID_ANY,
                                    wxDefaultPosition,
                                    wxSize(400,300));
     ctrl->SetPage(GetIntroText());
@@ -1232,6 +1235,8 @@ wxAuiMultiNotebook* MyFrame::CreateNotebook()
 {
    wxAuiMultiNotebook* ctrl = new wxAuiMultiNotebook( this, wxID_ANY,
                                     wxDefaultPosition, wxSize(400,300), wxNO_BORDER );
+                                    
+   ctrl->AddPage(CreateHTMLCtrl(ctrl), wxT("Welcome"));
                                     
    wxPanel *panel = new wxPanel( ctrl, wxID_ANY );
    wxFlexGridSizer *flex = new wxFlexGridSizer( 2 );
