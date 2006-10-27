@@ -103,11 +103,21 @@ void wxRichTextObject::SetMargins(int leftMargin, int rightMargin, int topMargin
     m_bottomMargin = bottomMargin;
 }
 
-// Convert units in tends of a millimetre to device units
+// Convert units in tenths of a millimetre to device units
 int wxRichTextObject::ConvertTenthsMMToPixels(wxDC& dc, int units)
 {
-    int ppi = dc.GetPPI().x;
+    int p = ConvertTenthsMMToPixels(dc.GetPPI().x, units);
 
+    // Unscale
+    wxRichTextBuffer* buffer = GetBuffer();
+    if (buffer)
+        p = (int) ((double)p / buffer->GetScale());
+    return p;
+}
+
+// Convert units in tenths of a millimetre to device units
+int wxRichTextObject::ConvertTenthsMMToPixels(int ppi, int units)
+{
     // There are ppi pixels in 254.1 "1/10 mm"
 
     double pixels = ((double) units * (double)ppi) / 254.1;
@@ -123,6 +133,14 @@ void wxRichTextObject::Dump(wxTextOutputStream& stream)
     stream << wxString::Format(wxT("Text colour: %d,%d,%d."), (int) m_attributes.GetTextColour().Red(), (int) m_attributes.GetTextColour().Green(), (int) m_attributes.GetTextColour().Blue()) << wxT("\n");
 }
 
+/// Gets the containing buffer
+wxRichTextBuffer* wxRichTextObject::GetBuffer() const
+{
+    const wxRichTextObject* obj = this;
+    while (obj && !obj->IsKindOf(CLASSINFO(wxRichTextBuffer)))
+        obj = obj->GetParent();
+    return wxDynamicCast(obj, wxRichTextBuffer);
+}
 
 /*!
  * wxRichTextCompositeObject
@@ -508,7 +526,7 @@ bool wxRichTextParagraphLayoutBox::Draw(wxDC& dc, const wxRichTextRange& range, 
         {
             wxRect childRect(child->GetPosition(), child->GetCachedSize());
 
-            if (childRect.GetTop() > rect.GetBottom() || childRect.GetBottom() < rect.GetTop())
+            if (((style & wxRICHTEXT_DRAW_IGNORE_CACHE) == 0) && childRect.GetTop() > rect.GetBottom() || childRect.GetBottom() < rect.GetTop())
             {
                 // Skip
             }
@@ -528,7 +546,10 @@ bool wxRichTextParagraphLayoutBox::Layout(wxDC& dc, const wxRect& rect, int styl
     bool formatRect = (style & wxRICHTEXT_LAYOUT_SPECIFIED_RECT) == wxRICHTEXT_LAYOUT_SPECIFIED_RECT;
 
     // If only laying out a specific area, the passed rect has a different meaning:
-    // the visible part of the buffer.
+    // the visible part of the buffer. This is used in wxRichTextCtrl::OnSize,
+    // so that during a size, only the visible part will be relaid out, or
+    // it would take too long causing flicker. As an approximation, we assume that
+    // everything up to the start of the visible area is laid out correctly.
     if (formatRect)
     {
         availableSpace = wxRect(0 + m_leftMargin,
@@ -3328,7 +3349,7 @@ void wxRichTextParagraph::ApplyParagraphStyle(const wxTextAttrEx& attr, const wx
         }
         else if (attr.HasAlignment() && GetAttributes().GetAlignment() == wxTEXT_ALIGNMENT_RIGHT)
         {
-            pos.x = rect.GetRight() - size.x;
+            pos.x = pos.x + rect.GetWidth() - size.x;
             line->SetPosition(pos);
         }
 
@@ -4510,6 +4531,7 @@ void wxRichTextBuffer::Init()
     m_batchedCommand = NULL;
     m_suppressUndo = 0;
     m_handlerFlags = 0;
+    m_scale = 1.0;
 }
 
 /// Initialisation
@@ -5629,7 +5651,7 @@ void wxRichTextBuffer::SetRenderer(wxRichTextRenderer* renderer)
     sm_renderer = renderer;
 }
 
-bool wxRichTextStdRenderer::DrawStandardBullet(wxRichTextParagraph* WXUNUSED(paragraph), wxDC& dc, const wxTextAttrEx& bulletAttr, const wxRect& rect)
+bool wxRichTextStdRenderer::DrawStandardBullet(wxRichTextParagraph* paragraph, wxDC& dc, const wxTextAttrEx& bulletAttr, const wxRect& rect)
 {
     if (bulletAttr.GetTextColour().Ok())
     {
@@ -5664,7 +5686,7 @@ bool wxRichTextStdRenderer::DrawStandardBullet(wxRichTextParagraph* WXUNUSED(par
     y = y + (charHeight+1)/2 - (bulletHeight+1)/2;
                 
     // The margin between a bullet and text.
-    int margin = wxRichTextObject::ConvertTenthsMMToPixels(dc, wxRichTextBuffer::GetBulletRightMargin());
+    int margin = paragraph->ConvertTenthsMMToPixels(dc, wxRichTextBuffer::GetBulletRightMargin());
                 
     if (bulletAttr.GetBulletStyle() & wxTEXT_ATTR_BULLET_STYLE_ALIGN_RIGHT)
         x = rect.x + rect.width - bulletWidth - margin;
@@ -5702,7 +5724,7 @@ bool wxRichTextStdRenderer::DrawStandardBullet(wxRichTextParagraph* WXUNUSED(par
     return true;
 }
 
-bool wxRichTextStdRenderer::DrawTextBullet(wxRichTextParagraph* WXUNUSED(paragraph), wxDC& dc, const wxTextAttrEx& attr, const wxRect& rect, const wxString& text)
+bool wxRichTextStdRenderer::DrawTextBullet(wxRichTextParagraph* paragraph, wxDC& dc, const wxTextAttrEx& attr, const wxRect& rect, const wxString& text)
 {
     if (!text.empty())
     {
@@ -5735,7 +5757,7 @@ bool wxRichTextStdRenderer::DrawTextBullet(wxRichTextParagraph* WXUNUSED(paragra
         int y = rect.y + (rect.height - charHeight);    
 
         // The margin between a bullet and text.
-        int margin = wxRichTextObject::ConvertTenthsMMToPixels(dc, wxRichTextBuffer::GetBulletRightMargin());
+        int margin = paragraph->ConvertTenthsMMToPixels(dc, wxRichTextBuffer::GetBulletRightMargin());
                 
         if (attr.GetBulletStyle() & wxTEXT_ATTR_BULLET_STYLE_ALIGN_RIGHT)
             x = (rect.x + rect.width) - tw - margin;

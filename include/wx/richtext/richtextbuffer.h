@@ -101,6 +101,7 @@ class WXDLLIMPEXP_RICHTEXT wxTextAttrEx;
 class WXDLLIMPEXP_RICHTEXT wxRichTextListStyleDefinition;
 class WXDLLIMPEXP_RICHTEXT wxRichTextEvent;
 class WXDLLIMPEXP_RICHTEXT wxRichTextRenderer;
+class WXDLLIMPEXP_RICHTEXT wxRichTextBuffer;
 
 /*!
  * Flags determining the available space, passed to Layout
@@ -114,6 +115,15 @@ class WXDLLIMPEXP_RICHTEXT wxRichTextRenderer;
 // Only lay out the part of the buffer that lies within
 // the rect passed to Layout.
 #define wxRICHTEXT_LAYOUT_SPECIFIED_RECT 0x10
+
+/*!
+ * Flags to pass to Draw
+ */
+
+// Ignore paragraph cache optimization, e.g. for printing purposes
+// where one line may be drawn higher (on the next page) compared
+// with the previous line
+#define wxRICHTEXT_DRAW_IGNORE_CACHE    0x01
 
 /*!
  * Flags returned from hit-testing
@@ -714,6 +724,9 @@ public:
     void SetDescent(int descent) { m_descent = descent; }
     int GetDescent() const { return m_descent; }
 
+    /// Gets the containing buffer
+    wxRichTextBuffer* GetBuffer() const;
+
 // Operations
 
     /// Clone the object
@@ -727,8 +740,9 @@ public:
     void Reference() { m_refCount ++; }
     void Dereference();
 
-    /// Convert units in tends of a millimetre to device units
-    static int ConvertTenthsMMToPixels(wxDC& dc, int units);
+    /// Convert units in tenths of a millimetre to device units
+    int ConvertTenthsMMToPixels(wxDC& dc, int units);
+    static int ConvertTenthsMMToPixels(int ppi, int units);
 
 protected:
     wxSize                  m_size;
@@ -1861,6 +1875,11 @@ public:
     /// Factor to multiply by character height to get a reasonable bullet size
     static float GetBulletProportion() { return sm_bulletProportion; }
     static void SetBulletProportion(float prop) { sm_bulletProportion = prop; }
+
+    /// Scale factor for calculating dimensions
+    double GetScale() const { return m_scale; }
+    void SetScale(double scale) { m_scale = scale; }
+
 protected:
 
     /// Command processor
@@ -1904,6 +1923,9 @@ protected:
 
     /// Factor to multiply by character height to get a reasonable bullet size
     static float            sm_bulletProportion;
+
+    /// Scaling factor in use: needed to calculate correct dimensions when printing
+    double                  m_scale;
 };
 
 /*!
