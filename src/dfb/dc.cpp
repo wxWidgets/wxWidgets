@@ -181,9 +181,9 @@ void wxDC::DoDrawLine(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2)
         return;
 
     wxCoord xx1 = XLOG2DEV(x1);
-    wxCoord yy1 = XLOG2DEV(y1);
+    wxCoord yy1 = YLOG2DEV(y1);
     wxCoord xx2 = XLOG2DEV(x2);
-    wxCoord yy2 = XLOG2DEV(y2);
+    wxCoord yy2 = YLOG2DEV(y2);
 
     // FIXME: DrawLine() shouldn't draw the last pixel, but DFB's DrawLine()
     //        does draw it. We should undo any change to the last pixel by
