@@ -1106,19 +1106,18 @@ wxFilterOutputStream::~wxFilterOutputStream()
 }
 
 // ----------------------------------------------------------------------------
-// wxFilterClassFactory
+// wxFilterClassFactoryBase
 // ----------------------------------------------------------------------------
 
-IMPLEMENT_ABSTRACT_CLASS(wxFilterClassFactory, wxObject)
+IMPLEMENT_ABSTRACT_CLASS(wxFilterClassFactoryBase, wxObject)
 
-wxFilterClassFactory *wxFilterClassFactory::sm_first = NULL;
-
-wxString wxFilterClassFactory::PopExtension(const wxString& location) const
+wxString wxFilterClassFactoryBase::PopExtension(const wxString& location) const
 {
     return location.substr(0, FindExtension(location));
 }
 
-wxString::size_type wxFilterClassFactory::FindExtension(const wxChar *location) const
+wxString::size_type wxFilterClassFactoryBase::FindExtension(
+        const wxChar *location) const
 {
     size_t len = wxStrlen(location);
 
@@ -1135,8 +1134,8 @@ wxString::size_type wxFilterClassFactory::FindExtension(const wxChar *location) 
     return wxString::npos;
 }
 
-bool wxFilterClassFactory::CanHandle(const wxChar *protocol,
-                                     wxStreamProtocolType type) const
+bool wxFilterClassFactoryBase::CanHandle(const wxChar *protocol,
+                                         wxStreamProtocolType type) const
 {
     if (type == wxSTREAM_FILEEXTENSION)
         return FindExtension(protocol) != wxString::npos;
@@ -1147,6 +1146,14 @@ bool wxFilterClassFactory::CanHandle(const wxChar *protocol,
 
     return false;
 }
+
+// ----------------------------------------------------------------------------
+// wxFilterClassFactory
+// ----------------------------------------------------------------------------
+
+IMPLEMENT_ABSTRACT_CLASS(wxFilterClassFactory, wxFilterClassFactoryBase)
+
+wxFilterClassFactory *wxFilterClassFactory::sm_first = NULL;
 
 void wxFilterClassFactory::Remove()
 {

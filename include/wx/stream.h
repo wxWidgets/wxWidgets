@@ -335,15 +335,10 @@ enum wxStreamProtocolType
 
 void WXDLLIMPEXP_BASE wxUseFilterClasses();
 
-class WXDLLIMPEXP_BASE wxFilterClassFactory : public wxObject
+class WXDLLIMPEXP_BASE wxFilterClassFactoryBase : public wxObject
 {
 public:
-    virtual ~wxFilterClassFactory() { }
-
-    virtual wxFilterInputStream  *NewStream(wxInputStream& stream)  const = 0;
-    virtual wxFilterOutputStream *NewStream(wxOutputStream& stream) const = 0;
-    virtual wxFilterInputStream  *NewStream(wxInputStream *stream)  const = 0;
-    virtual wxFilterOutputStream *NewStream(wxOutputStream *stream) const = 0;
+    virtual ~wxFilterClassFactoryBase() { }
 
     wxString GetProtocol() const { return wxString(*GetProtocols()); }
     wxString PopExtension(const wxString& location) const;
@@ -354,6 +349,22 @@ public:
     bool CanHandle(const wxChar *protocol,
                    wxStreamProtocolType type
                    = wxSTREAM_PROTOCOL) const;
+
+protected:
+    wxString::size_type FindExtension(const wxChar *location) const;
+
+    DECLARE_ABSTRACT_CLASS(wxFilterClassFactoryBase)
+};
+
+class WXDLLIMPEXP_BASE wxFilterClassFactory : public wxFilterClassFactoryBase
+{
+public:
+    virtual ~wxFilterClassFactory() { }
+
+    virtual wxFilterInputStream  *NewStream(wxInputStream& stream)  const = 0;
+    virtual wxFilterOutputStream *NewStream(wxOutputStream& stream) const = 0;
+    virtual wxFilterInputStream  *NewStream(wxInputStream *stream)  const = 0;
+    virtual wxFilterOutputStream *NewStream(wxOutputStream *stream) const = 0;
 
     static const wxFilterClassFactory *Find(const wxChar *protocol,
                                             wxStreamProtocolType type
@@ -370,8 +381,6 @@ protected:
 
     wxFilterClassFactory& operator=(const wxFilterClassFactory&)
         { return *this; }
-
-    wxString::size_type FindExtension(const wxChar *location) const;
 
 private:
     static wxFilterClassFactory *sm_first;
