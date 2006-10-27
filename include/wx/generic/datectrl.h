@@ -76,6 +76,7 @@ private:
 
     void OnText(wxCommandEvent &event);
     void OnSize(wxSizeEvent& event);
+    void OnFocus(wxFocusEvent& event);
 
     wxCalendarCtrl *m_cal;
     wxComboCtrl* m_combo;

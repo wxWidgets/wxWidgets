@@ -394,6 +394,9 @@ public:
 
     wxByte GetPopupWindowState() const { return m_popupWinState; }
 
+    // Set value returned by GetMainWindowOfCompositeControl
+    void SetCtrlMainWnd( wxWindow* wnd ) { m_mainCtrlWnd = wnd; }
+
 protected:
 
     //
@@ -492,6 +495,9 @@ protected:
     virtual void DoSetToolTip( wxToolTip *tip );
 #endif
 
+    virtual wxWindow *GetMainWindowOfCompositeControl()
+        { return m_mainCtrlWnd; }
+
     // This is used when m_text is hidden (readonly).
     wxString                m_valueString;
 
@@ -519,6 +525,9 @@ protected:
 
     // this is for the popup window
     wxEvtHandler*           m_popupWinEvtHandler;
+
+    // main (ie. topmost) window of a composite control (default = this)
+    wxWindow*               m_mainCtrlWnd;
 
     // used to prevent immediate re-popupping incase closed popup
     // by clicking on the combo control (needed because of inconsistent

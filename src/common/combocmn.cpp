@@ -732,6 +732,8 @@ void wxComboCtrlBase::Init()
     m_toplevEvtHandler = (wxEvtHandler*) NULL;
 #endif
 
+    m_mainCtrlWnd = this;
+
     m_heightPopup = -1;
     m_widthMinPopup = -1;
     m_anchorSide = 0;
@@ -1537,11 +1539,15 @@ void wxComboCtrlBase::OnKeyEvent(wxKeyEvent& event)
         if ( keycode == WXK_TAB )
         {
             wxNavigationKeyEvent evt;
+
+            wxWindow* mainCtrl = GetMainWindowOfCompositeControl();
+
             evt.SetFlags(wxNavigationKeyEvent::FromTab|
                          (!event.ShiftDown() ? wxNavigationKeyEvent::IsForward
                                              : wxNavigationKeyEvent::IsBackward));
-            evt.SetEventObject(this);
-            GetParent()->GetEventHandler()->AddPendingEvent(evt);
+            evt.SetEventObject(mainCtrl);
+            evt.SetCurrentFocus(mainCtrl);
+            mainCtrl->GetParent()->GetEventHandler()->AddPendingEvent(evt);
             return;
         }
 

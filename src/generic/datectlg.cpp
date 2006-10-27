@@ -370,6 +370,7 @@ END_EVENT_TABLE()
 BEGIN_EVENT_TABLE(wxDatePickerCtrlGeneric, wxDatePickerCtrlBase)
     EVT_TEXT(wxID_ANY, wxDatePickerCtrlGeneric::OnText)
     EVT_SIZE(wxDatePickerCtrlGeneric::OnSize)
+    EVT_SET_FOCUS(wxDatePickerCtrlGeneric::OnFocus)
 END_EVENT_TABLE()
 
 #ifndef wxHAS_NATIVE_DATEPICKCTRL
@@ -403,6 +404,8 @@ bool wxDatePickerCtrlGeneric::Create(wxWindow *parent,
 
     m_combo = new wxComboCtrl(this, -1, wxEmptyString,
                               wxDefaultPosition, wxDefaultSize);
+
+    m_combo->SetCtrlMainWnd(this);
 
     m_popup = new wxCalendarComboPopup();
 
@@ -521,6 +524,12 @@ void wxDatePickerCtrlGeneric::OnText(wxCommandEvent &ev)
         return;
 
     m_popup->SendDateEvent(dt);
+}
+
+
+void wxDatePickerCtrlGeneric::OnFocus(wxFocusEvent& WXUNUSED(event))
+{
+    m_combo->SetFocus();
 }
 
 
