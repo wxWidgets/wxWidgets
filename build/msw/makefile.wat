@@ -2933,6 +2933,7 @@ MONODLL_OBJECTS =  &
 	$(OBJS)\monodll_filtall.obj &
 	$(OBJS)\monodll_filtfind.obj &
 	$(OBJS)\monodll_fmapbase.obj &
+	$(OBJS)\monodll_fs_arc.obj &
 	$(OBJS)\monodll_fs_filter.obj &
 	$(OBJS)\monodll_fs_zip.obj &
 	$(OBJS)\monodll_hash.obj &
@@ -3053,6 +3054,7 @@ MONOLIB_OBJECTS =  &
 	$(OBJS)\monolib_filtall.obj &
 	$(OBJS)\monolib_filtfind.obj &
 	$(OBJS)\monolib_fmapbase.obj &
+	$(OBJS)\monolib_fs_arc.obj &
 	$(OBJS)\monolib_fs_filter.obj &
 	$(OBJS)\monolib_fs_zip.obj &
 	$(OBJS)\monolib_hash.obj &
@@ -3175,6 +3177,7 @@ BASEDLL_OBJECTS =  &
 	$(OBJS)\basedll_filtall.obj &
 	$(OBJS)\basedll_filtfind.obj &
 	$(OBJS)\basedll_fmapbase.obj &
+	$(OBJS)\basedll_fs_arc.obj &
 	$(OBJS)\basedll_fs_filter.obj &
 	$(OBJS)\basedll_fs_zip.obj &
 	$(OBJS)\basedll_hash.obj &
@@ -3281,6 +3284,7 @@ BASELIB_OBJECTS =  &
 	$(OBJS)\baselib_filtall.obj &
 	$(OBJS)\baselib_filtfind.obj &
 	$(OBJS)\baselib_fmapbase.obj &
+	$(OBJS)\baselib_fs_arc.obj &
 	$(OBJS)\baselib_fs_filter.obj &
 	$(OBJS)\baselib_fs_zip.obj &
 	$(OBJS)\baselib_hash.obj &
@@ -4918,6 +4922,9 @@ $(OBJS)\monodll_filtfind.obj :  .AUTODEPEND ..\..\src\common\filtfind.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_fmapbase.obj :  .AUTODEPEND ..\..\src\common\fmapbase.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_fs_arc.obj :  .AUTODEPEND ..\..\src\common\fs_arc.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_fs_filter.obj :  .AUTODEPEND ..\..\src\common\fs_filter.cpp
@@ -6994,6 +7001,9 @@ $(OBJS)\monolib_filtfind.obj :  .AUTODEPEND ..\..\src\common\filtfind.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_fmapbase.obj :  .AUTODEPEND ..\..\src\common\fmapbase.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_fs_arc.obj :  .AUTODEPEND ..\..\src\common\fs_arc.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_fs_filter.obj :  .AUTODEPEND ..\..\src\common\fs_filter.cpp
@@ -9075,6 +9085,9 @@ $(OBJS)\basedll_filtfind.obj :  .AUTODEPEND ..\..\src\common\filtfind.cpp
 $(OBJS)\basedll_fmapbase.obj :  .AUTODEPEND ..\..\src\common\fmapbase.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
+$(OBJS)\basedll_fs_arc.obj :  .AUTODEPEND ..\..\src\common\fs_arc.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
+
 $(OBJS)\basedll_fs_filter.obj :  .AUTODEPEND ..\..\src\common\fs_filter.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
@@ -9340,6 +9353,9 @@ $(OBJS)\baselib_filtfind.obj :  .AUTODEPEND ..\..\src\common\filtfind.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_fmapbase.obj :  .AUTODEPEND ..\..\src\common\fmapbase.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
+
+$(OBJS)\baselib_fs_arc.obj :  .AUTODEPEND ..\..\src\common\fs_arc.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_fs_filter.obj :  .AUTODEPEND ..\..\src\common\fs_filter.cpp

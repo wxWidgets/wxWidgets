@@ -214,6 +214,7 @@ MONODLL_OBJECTS =  \
 	$(OBJS)\monodll_filtall.o \
 	$(OBJS)\monodll_filtfind.o \
 	$(OBJS)\monodll_fmapbase.o \
+	$(OBJS)\monodll_fs_arc.o \
 	$(OBJS)\monodll_fs_filter.o \
 	$(OBJS)\monodll_fs_zip.o \
 	$(OBJS)\monodll_hash.o \
@@ -334,6 +335,7 @@ MONOLIB_OBJECTS =  \
 	$(OBJS)\monolib_filtall.o \
 	$(OBJS)\monolib_filtfind.o \
 	$(OBJS)\monolib_fmapbase.o \
+	$(OBJS)\monolib_fs_arc.o \
 	$(OBJS)\monolib_fs_filter.o \
 	$(OBJS)\monolib_fs_zip.o \
 	$(OBJS)\monolib_hash.o \
@@ -456,6 +458,7 @@ BASEDLL_OBJECTS =  \
 	$(OBJS)\basedll_filtall.o \
 	$(OBJS)\basedll_filtfind.o \
 	$(OBJS)\basedll_fmapbase.o \
+	$(OBJS)\basedll_fs_arc.o \
 	$(OBJS)\basedll_fs_filter.o \
 	$(OBJS)\basedll_fs_zip.o \
 	$(OBJS)\basedll_hash.o \
@@ -561,6 +564,7 @@ BASELIB_OBJECTS =  \
 	$(OBJS)\baselib_filtall.o \
 	$(OBJS)\baselib_filtfind.o \
 	$(OBJS)\baselib_fmapbase.o \
+	$(OBJS)\baselib_fs_arc.o \
 	$(OBJS)\baselib_fs_filter.o \
 	$(OBJS)\baselib_fs_zip.o \
 	$(OBJS)\baselib_hash.o \
@@ -4692,6 +4696,9 @@ $(OBJS)\monodll_filtfind.o: ../../src/common/filtfind.cpp
 $(OBJS)\monodll_fmapbase.o: ../../src/common/fmapbase.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\monodll_fs_arc.o: ../../src/common/fs_arc.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\monodll_fs_filter.o: ../../src/common/fs_filter.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
@@ -6766,6 +6773,9 @@ $(OBJS)\monolib_filtfind.o: ../../src/common/filtfind.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monolib_fmapbase.o: ../../src/common/fmapbase.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\monolib_fs_arc.o: ../../src/common/fs_arc.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monolib_fs_filter.o: ../../src/common/fs_filter.cpp
@@ -8847,6 +8857,9 @@ $(OBJS)\basedll_filtfind.o: ../../src/common/filtfind.cpp
 $(OBJS)\basedll_fmapbase.o: ../../src/common/fmapbase.cpp
 	$(CXX) -c -o $@ $(BASEDLL_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\basedll_fs_arc.o: ../../src/common/fs_arc.cpp
+	$(CXX) -c -o $@ $(BASEDLL_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\basedll_fs_filter.o: ../../src/common/fs_filter.cpp
 	$(CXX) -c -o $@ $(BASEDLL_CXXFLAGS) $(CPPDEPS) $<
 
@@ -9112,6 +9125,9 @@ $(OBJS)\baselib_filtfind.o: ../../src/common/filtfind.cpp
 	$(CXX) -c -o $@ $(BASELIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\baselib_fmapbase.o: ../../src/common/fmapbase.cpp
+	$(CXX) -c -o $@ $(BASELIB_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\baselib_fs_arc.o: ../../src/common/fs_arc.cpp
 	$(CXX) -c -o $@ $(BASELIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\baselib_fs_filter.o: ../../src/common/fs_filter.cpp

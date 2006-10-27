@@ -69,7 +69,8 @@ All:
 - Added wxFFile overload to wxFileName::CreateTemporaryFileName().
 - Added wxBackingFile and wxBackedInputStream.
 - Added GetTempDir() to wxFileName and wxStandardPaths.
-- Added wxFilterFSHandler.
+- Added wxTar streams.
+- Added wxFilterFSHandler and wxArchiveFSHandler.
 
 All (GUI): 
 

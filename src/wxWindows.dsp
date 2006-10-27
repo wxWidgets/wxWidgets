@@ -591,6 +591,10 @@ SOURCE=.\common\framecmn.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\common\fs_arc.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\common\fs_filter.cpp
 # End Source File
 # Begin Source File
@@ -2692,6 +2696,10 @@ SOURCE=..\include\wx\fontutil.h
 # Begin Source File
 
 SOURCE=..\include\wx\frame.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\fs_arc.h
 # End Source File
 # Begin Source File
 
