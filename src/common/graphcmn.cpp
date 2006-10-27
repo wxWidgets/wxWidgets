@@ -25,6 +25,7 @@
     #include "wx/bitmap.h"
     #include "wx/dcmemory.h"
     #include "wx/region.h"
+    #include "wx/log.h"
 #endif
 
 #if !defined(wxMAC_USE_CORE_GRAPHICS_BLEND_MODES)
