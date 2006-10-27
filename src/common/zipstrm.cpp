@@ -14,19 +14,20 @@
     #pragma hdrstop
 #endif
 
-#if wxUSE_ZLIB && wxUSE_STREAMS && wxUSE_ZIPSTREAM
+#if wxUSE_ZIPSTREAM
+
+#include "wx/zipstrm.h"
 
 #ifndef WX_PRECOMP
+    #include "wx/hashmap.h"
     #include "wx/intl.h"
     #include "wx/log.h"
     #include "wx/utils.h"
 #endif
 
-#include "wx/zipstrm.h"
 #include "wx/datstrm.h"
 #include "wx/zstream.h"
 #include "wx/mstream.h"
-#include "wx/buffer.h"
 #include "wx/ptr_scpd.h"
 #include "wx/wfstream.h"
 #include "zlib.h"
@@ -2421,4 +2422,4 @@ size_t wxZipOutputStream::OnSysWrite(const void *buffer, size_t size)
     return m_comp->LastWrite();
 }
 
-#endif // wxUSE_ZLIB && wxUSE_STREAMS && wxUSE_ZIPSTREAM
+#endif // wxUSE_ZIPSTREAM

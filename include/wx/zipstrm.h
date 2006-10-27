@@ -12,10 +12,9 @@
 
 #include "wx/defs.h"
 
-#if wxUSE_ZLIB && wxUSE_STREAMS && wxUSE_ZIPSTREAM
+#if wxUSE_ZIPSTREAM
 
 #include "wx/archive.h"
-#include "wx/hashmap.h"
 #include "wx/filename.h"
 
 // some methods from wxZipInputStream and wxZipOutputStream stream do not get
@@ -570,6 +569,6 @@ inline void wxZipEntry::SetName(const wxString& name,
 }
 
 
-#endif // wxUSE_ZLIB && wxUSE_STREAMS && wxUSE_ZIPSTREAM
+#endif // wxUSE_ZIPSTREAM
 
 #endif // _WX_WXZIPSTREAM_H__
