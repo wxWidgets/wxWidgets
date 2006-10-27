@@ -167,6 +167,9 @@ public:
     virtual void SetTitle(const wxString& title) = 0;
     virtual wxString GetTitle() const = 0;
 
+    // enable/disable close button [x]
+    virtual bool EnableCloseButton(bool WXUNUSED(enable) ) { return false; } 
+
     // Set the shape of the window to the given region.
     // Returns true if the platform supports this feature (and the
     // operation is successful.)
