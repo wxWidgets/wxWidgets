@@ -332,7 +332,11 @@ wxFSFile *wxHtmlWinParser::OpenURL(wxHtmlURLType type,
     if ( status == wxHTML_BLOCK )
         return NULL;
 
-    return GetFS()->OpenFile(myurl);
+    int flags = wxFS_READ;
+    if (type == wxHTML_URL_IMAGE)
+        flags |= wxFS_SEEKABLE;
+
+    return GetFS()->OpenFile(myurl, flags);
 }
 
 void wxHtmlWinParser::AddText(const wxChar* txt)
