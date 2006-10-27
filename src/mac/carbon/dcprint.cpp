@@ -359,6 +359,21 @@ void wxPrinterDC::EndDoc(void)
     }
 }
 
+wxRect wxPrinterDC::GetPaperRect()
+{
+    wxCoord w, h;
+    GetSize(&w, &h);
+    wxRect pageRect(0, 0, w, h);
+    wxMacCarbonPrintData *native = (wxMacCarbonPrintData*) m_printData.GetNativeData() ;
+    OSStatus err = noErr ;
+    PMRect rPaper;
+    err = PMGetAdjustedPaperRect(native->m_macPageFormat, &rPaper);
+    if ( err != noErr )
+        return pageRect;
+    return wxRect(wxCoord(rPaper.left), wxCoord(rPaper.top),
+        wxCoord(rPaper.right - rPaper.left), wxCoord(rPaper.bottom - rPaper.top));
+}
+
 void wxPrinterDC::StartPage(void)
 {
     if ( !m_ok )

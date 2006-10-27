@@ -34,6 +34,8 @@ public:
     virtual void StartPage();
     virtual void EndPage();
 
+    wxRect GetPaperRect();
+
 protected:
     virtual void DoDrawBitmap(const wxBitmap &bmp, wxCoord x, wxCoord y,
                               bool useMask = FALSE);

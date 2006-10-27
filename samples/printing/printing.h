@@ -1,5 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        printing.h
+// Name:        samples/printing.h
+
 // Purpose:     Printing demo for wxWidgets
 // Author:      Julian Smart
 // Modified by:
@@ -46,6 +47,9 @@ class MyFrame: public wxFrame
     void OnPrintPreviewPS(wxCommandEvent& event);
     void OnPageSetupPS(wxCommandEvent& event);
 #endif
+#ifdef __WXMAC__
+    void OnPageMargins(wxCommandEvent& event);
+#endif
 
     void OnExit(wxCommandEvent& event);
     void OnPrintAbout(wxCommandEvent& event);
@@ -74,8 +78,10 @@ class MyPrintout: public wxPrintout
   bool OnBeginDocument(int startPage, int endPage);
   void GetPageInfo(int *minPage, int *maxPage, int *selPageFrom, int *selPageTo);
 
-  void DrawPageOne(wxDC *dc);
-  void DrawPageTwo(wxDC *dc);
+  void DrawPageOne();
+
+  void DrawPageTwo();
+
 };
 
 #define WXPRINT_QUIT            100
@@ -91,3 +97,7 @@ class MyPrintout: public wxPrintout
 
 #define WXPRINT_ANGLEUP         110
 #define WXPRINT_ANGLEDOWN       111
+
+#ifdef __WXMAC__
+    #define WXPRINT_PAGE_MARGINS 112
+#endif

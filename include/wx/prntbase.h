@@ -261,6 +261,22 @@ public:
 
     wxDC *GetDC() const { return m_printoutDC; }
     void SetDC(wxDC *dc) { m_printoutDC = dc; }
+
+    void FitThisSizeToPaper(const wxSize& imageSize);
+    void FitThisSizeToPage(const wxSize& imageSize);
+    void FitThisSizeToPageMargins(const wxSize& imageSize, const wxPageSetupDialogData& pageSetupData);
+    void MapScreenSizeToPaper();
+    void MapScreenSizeToPage();
+    void MapScreenSizeToPageMargins(const wxPageSetupDialogData& pageSetupData);
+    void MapScreenSizeToDevice();
+
+    wxRect GetLogicalPaperRect() const;
+    wxRect GetLogicalPageRect() const;
+    wxRect GetLogicalPageMarginsRect(const wxPageSetupDialogData& pageSetupData) const;
+
+    void SetLogicalOrigin(wxCoord x, wxCoord y);
+    void OffsetLogicalOrigin(wxCoord xoff, wxCoord yoff);
+
     void SetPageSizePixels(int w, int  h) { m_pageWidthPixels = w; m_pageHeightPixels = h; }
     void GetPageSizePixels(int *w, int  *h) const { *w = m_pageWidthPixels; *h = m_pageHeightPixels; }
     void SetPageSizeMM(int w, int  h) { m_pageWidthMM = w; m_pageHeightMM = h; }
@@ -270,6 +286,9 @@ public:
     void GetPPIScreen(int *x, int *y) const { *x = m_PPIScreenX; *y = m_PPIScreenY; }
     void SetPPIPrinter(int x, int y) { m_PPIPrinterX = x; m_PPIPrinterY = y; }
     void GetPPIPrinter(int *x, int *y) const { *x = m_PPIPrinterX; *y = m_PPIPrinterY; }
+
+    void SetPaperRectPixels(const wxRect& paperRectPixels) { m_paperRectPixels = paperRectPixels; }
+    wxRect GetPaperRectPixels() const { return m_paperRectPixels; }
 
     virtual bool IsPreview() const { return m_isPreview; }
 
@@ -290,6 +309,8 @@ private:
     int              m_PPIPrinterX;
     int              m_PPIPrinterY;
 
+    wxRect           m_paperRectPixels;
+
     bool             m_isPreview;
 
 private:
@@ -297,8 +318,11 @@ private:
     DECLARE_NO_COPY_CLASS(wxPrintout)
 };
 
+//----------------------------------------------------------------------------
+// wxPreviewCanvas
+//----------------------------------------------------------------------------
+
 /*
- * wxPreviewCanvas
  * Canvas upon which a preview is drawn.
  */
 
@@ -330,8 +354,11 @@ private:
     DECLARE_NO_COPY_CLASS(wxPreviewCanvas)
 };
 
+//----------------------------------------------------------------------------
+// wxPreviewFrame
+//----------------------------------------------------------------------------
+
 /*
- * wxPreviewFrame
  * Default frame for showing preview.
  */
 
@@ -366,8 +393,11 @@ private:
     DECLARE_NO_COPY_CLASS(wxPreviewFrame)
 };
 
+//----------------------------------------------------------------------------
+// wxPreviewControlBar
+//----------------------------------------------------------------------------
+
 /*
- * wxPreviewControlBar
  * A panel with buttons for controlling a print preview.
  * The programmer may wish to use other means for controlling
  * the print preview.
@@ -479,6 +509,10 @@ public:
     virtual wxFrame *GetFrame() const;
     virtual wxPreviewCanvas *GetCanvas() const;
 
+    // This is a helper routine, used by the next 4 routines.
+
+    virtual void CalcRects(wxPreviewCanvas *canvas, wxRect& printableAreaRect, wxRect& paperRect);
+
     // The preview canvas should call this from OnPaint
     virtual bool PaintPage(wxPreviewCanvas *canvas, wxDC& dc);
 
@@ -526,7 +560,8 @@ protected:
     wxPrintout*       m_printPrintout;
     int               m_currentPage;
     int               m_currentZoom;
-    float             m_previewScale;
+    float             m_previewScaleX;
+    float             m_previewScaleY;
     int               m_topMargin;
     int               m_leftMargin;
     int               m_pageWidth;

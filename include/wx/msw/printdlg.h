@@ -68,11 +68,12 @@ public:
 
     wxPrintDialogData& GetPrintDialogData() { return m_printDialogData; }
     wxPrintData& GetPrintData() { return m_printDialogData.GetPrintData(); }
+
     virtual wxDC *GetPrintDC();
 
 private:
     wxPrintDialogData m_printDialogData;
-    wxDC*             m_printerDC;
+    wxPrinterDC*      m_printerDC;
     bool              m_destroyDC;
     wxWindow*         m_dialogParent;
     

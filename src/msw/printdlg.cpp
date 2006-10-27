@@ -647,7 +647,7 @@ wxDC *wxWindowsPrintDialog::GetPrintDC()
         return m_printerDC;
     }
     else
-        return (wxDC*) NULL;
+        return (wxPrinterDC*) NULL;
 }
 
 bool wxWindowsPrintDialog::ConvertToNative( wxPrintDialogData &data )

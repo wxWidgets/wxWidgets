@@ -221,6 +221,19 @@ void wxPrinterDC::EndPage()
         ::EndPage((HDC) m_hDC);
 }
 
+
+wxRect wxPrinterDC::GetPaperRect()
+
+{
+    if (!Ok()) return wxRect(0, 0, 0, 0);
+    int w = ::GetDeviceCaps((HDC) m_hDC, PHYSICALWIDTH);
+    int h = ::GetDeviceCaps((HDC) m_hDC, PHYSICALHEIGHT);
+    int x = -::GetDeviceCaps((HDC) m_hDC, PHYSICALOFFSETX);
+    int y = -::GetDeviceCaps((HDC) m_hDC, PHYSICALOFFSETY);
+    return wxRect(x, y, w, h);
+}
+
+
 #if !wxUSE_PS_PRINTING
 
 // Returns default device and port names

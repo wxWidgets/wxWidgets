@@ -118,6 +118,7 @@ bool wxPalmPrintPreview::Print(bool interactive)
 
 void wxPalmPrintPreview::DetermineScaling()
 {
+    // TODO
 }
 
 #endif

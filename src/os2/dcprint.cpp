@@ -223,6 +223,15 @@ void wxPrinterDC::EndPage()
 //    if (m_hDC)
 //        ::EndPage((HDC) m_hDC);
 } // end of wxPrinterDC::EndPage
+
+wxRect wxPrinterDC::GetPaperRect()
+{
+    // Use page rect if we can't get paper rect.
+    wxCoord w, h;
+    GetSize(&w, &h);
+    return wxRect(0, 0, w, h);
+}
+
 #if 0
 // Returns default device and port names
 static bool wxGetDefaultDeviceName( wxString& rsDeviceName, wxString& rsPortName )

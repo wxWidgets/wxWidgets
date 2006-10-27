@@ -16,6 +16,7 @@ between the print dialogs and the application.
 
 \wxheading{See also}
 
+\helpref{Printing framework overview}{printingoverview}, 
 \helpref{wxPrintDialog}{wxprintdialog}, 
 \helpref{wxPageSetupDialog}{wxpagesetupdialog}, 
 \helpref{wxPrintDialogData}{wxprintdialogdata}, 
@@ -371,6 +372,7 @@ a successfully dismissed print dialog.
 
 \wxheading{See also}
 
+\helpref{Printing framework overview}{printingoverview}, 
 \helpref{wxPrintDialog Overview}{wxprintdialogoverview}
 
 \latexignore{\rtfignore{\wxheading{Members}}}
@@ -436,7 +438,9 @@ It contains a wxPrintData object with underlying printing settings.
 
 \wxheading{See also}
 
-\helpref{wxPrintDialog}{wxprintdialog}, \helpref{wxPrintDialog Overview}{wxprintdialogoverview}
+\helpref{Printing framework overview}{printingoverview}, 
+\helpref{wxPrintDialog}{wxprintdialog}, 
+\helpref{wxPrintDialog Overview}{wxprintdialogoverview}
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
@@ -672,8 +676,11 @@ method of printing.
 
 \wxheading{See also}
 
-\helpref{Printing framework overview}{printingoverview}, \helpref{wxPrinterDC}{wxprinterdc}, \helpref{wxPrintDialog}{wxprintdialog},\rtfsp
-\helpref{wxPrintout}{wxprintout}, \helpref{wxPrintPreview}{wxprintpreview}.
+\helpref{Printing framework overview}{printingoverview}, 
+\helpref{wxPrinterDC}{wxprinterdc}, 
+\helpref{wxPrintDialog}{wxprintdialog}, 
+\helpref{wxPrintout}{wxprintout}, 
+\helpref{wxPrintPreview}{wxprintpreview}.
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
@@ -775,10 +782,10 @@ Windows 95, though retained for backward compatibility.
 
 \section{\class{wxPrinterDC}}\label{wxprinterdc}
 
-A printer device context is specific to Windows, and allows access to
-any printer with a Windows driver. See \helpref{wxDC}{wxdc} for further information
-on device contexts, and \helpref{wxDC::GetSize}{wxdcgetsize} for advice on
-achieving the correct scaling for the page.
+A printer device context is specific to MSW and Mac, and allows access to any
+printer with a Windows or Macintosh driver. See \helpref{wxDC}{wxdc} for further
+information on device contexts, and \helpref{wxDC::GetSize}{wxdcgetsize} for
+advice on achieving the correct scaling for the page.
 
 \wxheading{Derived from}
 
@@ -791,7 +798,8 @@ achieving the correct scaling for the page.
 
 \wxheading{See also}
 
-\helpref{wxDC}{wxdc}, \helpref{Printing framework overview}{printingoverview}
+\helpref{Printing framework overview}{printingoverview}, 
+\helpref{wxDC}{wxdc}
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
@@ -800,7 +808,7 @@ achieving the correct scaling for the page.
 
 \func{}{wxPrinterDC}{\param{const wxPrintData\& }{printData}}
 
-Pass a \helpref{wxPrintData}{wxprintdata} object with information
+Constructor. Pass a \helpref{wxPrintData}{wxprintdata} object with information
 necessary for setting up a suitable printer device context. This
 is the recommended way to construct a wxPrinterDC.  Make sure you 
 specify a reference to a \helpref{wxPrintData}{wxprintdata} object,
@@ -818,13 +826,43 @@ constructor was successful in creating a usable device context.
 
 This constructor is deprecated and retained only for backward compatibility.
 
+\membersection{wxPrinterDC::GetPaperRect}\label{wxprinterdcgetpaperrect}
+
+\func{wxRect}{wxPrinterDC::GetPaperRect}{}
+
+Return the rectangle in device coordinates that corresponds to the full paper
+area, including the nonprinting regions of the paper. The point (0,0) in device
+coordinates is the top left corner of the page rectangle, which is the printable
+area on MSW and Mac. The coordinates of the top left corner of the paper
+rectangle will therefore have small negative values, while the bottom right
+coordinates will be somewhat larger than the values returned by
+\helpref{wxDC::GetSize}{wxdcgetsize}.
+
+
 \section{\class{wxPrintout}}\label{wxprintout}
 
-This class encapsulates the functionality of printing out an
-application document. A new class must be derived and members
-overridden to respond to calls such as OnPrintPage and HasPage.
-Instances of this class are passed to wxPrinter::Print or a
-wxPrintPreview object to initiate printing or previewing.
+This class encapsulates the functionality of printing out an application
+document. A new class must be derived and members overridden to respond to calls
+such as OnPrintPage and HasPage and to render the print image onto an associated
+\helpref{wxDC}{wxdc}. Instances of this class are passed to wxPrinter::Print or
+to a wxPrintPreview object to initiate printing or previewing.
+
+Your derived wxPrintout is responsible for drawing both the preview image and
+the printed page. If your windows' drawing routines accept an arbitrary DC as an
+argument, you can re-use those routines within your wxPrintout subclass to draw
+the printout image. You may also add additional drawing elements within your
+wxPrintout subclass, like headers, footers, and/or page numbers. However, the
+image on the printed page will often differ from the image drawn on the screen,
+as will the print preview image -- not just in the presence of headers and
+footers, but typically in scale. A high-resolution printer presents a much
+larger drawing surface (i.e., a higher-resolution DC); a zoomed-out preview
+image presents a much smaller drawing surface (lower-resolution DC). By using
+the routines FitThisSizeToXXX() and/or MapScreenSizeToXXX() within your
+wxPrintout subclass to set the user scale and origin of the associated DC, you
+can easily use a single drawing routine to draw on your application's windows,
+to create the print preview image, and to create the printed paper image, and
+achieve a common appearance to the preview image and the printed page.
+
 
 \wxheading{Derived from}
 
@@ -836,8 +874,12 @@ wxPrintPreview object to initiate printing or previewing.
 
 \wxheading{See also}
 
-\helpref{Printing framework overview}{printingoverview}, \helpref{wxPrinterDC}{wxprinterdc}, \helpref{wxPrintDialog}{wxprintdialog},\rtfsp
-\helpref{wxPrinter}{wxprinter}, \helpref{wxPrintPreview}{wxprintpreview}
+\helpref{Printing framework overview}{printingoverview}, 
+\helpref{wxPrinterDC}{wxprinterdc}, 
+\helpref{wxPrintDialog}{wxprintdialog}, 
+\helpref{wxPageSetupDialog}{wxpagesetupdialog}, 
+\helpref{wxPrinter}{wxprinter}, 
+\helpref{wxPrintPreview}{wxprintpreview}
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
@@ -862,7 +904,7 @@ Destructor.
 \func{wxDC *}{GetDC}{\void}
 
 Returns the device context associated with the printout (given to the printout at start of
-printing or previewing). This will be a wxPrinterDC if printing under Windows,
+printing or previewing). This will be a wxPrinterDC if printing under Windows or Mac,
 a wxPostScriptDC if printing on other platforms, and a wxMemoryDC if previewing.
 
 
@@ -870,9 +912,10 @@ a wxPostScriptDC if printing on other platforms, and a wxMemoryDC if previewing.
 
 \func{void}{GetPageInfo}{\param{int *}{minPage}, \param{int *}{maxPage}, \param{int *}{pageFrom}, \param{int *}{pageTo}}
 
-Called by the framework to obtain information from the application about minimum and maximum page values that
-the user can select, and the required page range to be printed. By default this
-returns 1, 32000 for the page minimum and maximum values, and 1, 1 for the required page range.
+Called by the framework to obtain information from the application about minimum
+and maximum page values that the user can select, and the required page range to
+be printed. By default this returns 1, 32000 for the page minimum and maximum
+values, and 1, 1 for the required page range.
 
 If {\it minPage} is zero, the page number controls in the print dialog will be disabled.
 
@@ -902,12 +945,13 @@ Returns the size of the printer page in millimetres.
 
 \func{void}{GetPageSizePixels}{\param{int *}{w}, \param{int *}{h}}
 
-Returns the size of the printer page in pixels. These may not be the
-same as the values returned from \helpref{wxDC::GetSize}{wxdcgetsize} if
-the printout is being used for previewing, since in this case, a
-memory device context is used, using a bitmap size reflecting the current
-preview zoom. The application must take this discrepancy into account if
-previewing is to be supported.
+Returns the size of the printer page in pixels, called the \em{page rectangle}.
+The page rectangle has a top left corner at (0,0) and a bottom right corner at
+(w,h). These values may not be the same as the values returned from
+\helpref{wxDC::GetSize}{wxdcgetsize}; if the printout is being used for
+previewing, a memory device context is used, which uses a bitmap size reflecting
+the current preview zoom. The application must take this discrepancy into
+account if previewing is to be supported.
 
 \pythonnote{This method returns the output-only parameters as a tuple.}
 
@@ -915,14 +959,37 @@ previewing is to be supported.
 2-element list {\tt ( w, h )}}
 
 
+\membersection{wxPrintout::GetPaperRectPixels}\label{wxprintoutgetpaperrectpixels}
+
+\func{wxRect}{GetPaperRectPixels}{}
+
+Returns the rectangle that corresponds to the entire paper in pixels, called the
+\em{paper rectangle}. This distinction between paper rectangle and page
+rectangle reflects the fact that most printers cannot print all the way to the
+edge of the paper. The page rectangle is a rectangle whose top left corner is at
+(0,0) and whose width and height are given by
+\helpref{wxDC::GetPageSizePixels}{wxprintoutgetpagesizepixels}. On MSW and Mac,
+the page rectangle gives the printable area of the paper, while the paper
+rectangle represents the entire paper, including non-printable borders. Thus,
+the rectangle returned by GetPaperRectPixels will have a top left corner whose
+coordinates are small negative numbers and the bottom right corner will have
+values somewhat larger than the width and height given by
+\helpref{wxDC::GetPageSizePixels}{wxprintoutgetpagesizepixels}. On other
+platforms and for PostScript printing, the paper is treated as if its entire
+area were printable, so this function will return the same rectangle as the page
+rectangle.
+
+
 \membersection{wxPrintout::GetPPIPrinter}\label{wxprintoutgetppiprinter}
 
 \func{void}{GetPPIPrinter}{\param{int *}{w}, \param{int *}{h}}
 
 Returns the number of pixels per logical inch of the printer device context.
-Dividing the printer PPI by the screen PPI can give a suitable scaling
-factor for drawing text onto the printer. Remember to multiply
-this by a scaling factor to take the preview DC size into account.
+Dividing the printer PPI by the screen PPI can give a suitable scaling factor
+for drawing text onto the printer. Remember to multiply this by a scaling factor
+to take the preview DC size into account. Or you can just use the
+FitThisSizeToXXX() and MapScreenSizeToXXX routines below, which do most of the
+scaling calculations for you.
 
 \pythonnote{This method returns the output-only parameters as a tuple.}
 
@@ -935,9 +1002,9 @@ this by a scaling factor to take the preview DC size into account.
 \func{void}{GetPPIScreen}{\param{int *}{w}, \param{int *}{h}}
 
 Returns the number of pixels per logical inch of the screen device context.
-Dividing the printer PPI by the screen PPI can give a suitable scaling
-factor for drawing text onto the printer. Remember to multiply
-this by a scaling factor to take the preview DC size into account.
+Dividing the printer PPI by the screen PPI can give a suitable scaling factor
+for drawing text onto the printer. If you are doing your own scaling, remember
+to multiply this by a scaling factor to take the preview DC size into account.
 
 
 \membersection{wxPrintout::GetTitle}\label{wxprintoutgettitle}
@@ -966,6 +1033,134 @@ HasPage behaves as if the document has only one page.
 \func{bool}{IsPreview}{\void}
 
 Returns true if the printout is currently being used for previewing.
+
+
+\membersection{wxPrintout::FitThisSizeToPaper}\label{wxprintoutfitthissizetopaper}
+
+\func{void}{FitThisSizeToPaper}{\param{const wxSize\& }{imageSize}}
+
+Set the user scale and device origin of the wxDC associated with this wxPrintout
+so that the given image size fits entirely within the paper and the origin is at
+the top left corner of the paper. Note that with most printers, the region
+around the edges of the paper are not printable so that the edges of the image
+could be cut off. Use this if you're managing your own page margins.
+
+\membersection{wxPrintout::FitThisSizeToPage}\label{wxprintoutfitthissizetopage}
+
+
+\func{void}{FitThisSizeToPage}{\param{const wxSize\& }{imageSize}}
+
+Set the user scale and device origin of the wxDC associated with this wxPrintout
+so that the given image size fits entirely within the page rectangle and the
+origin is at the top left corner of the page rectangle. On MSW and Mac, the page
+rectangle is the printable area of the page. On other platforms and PostScript
+printing, the page rectangle is the entire paper. Use this if you want your
+printed image as large as possible, but with the caveat that on some platforms, 
+portions of the image might be cut off at the edges.
+
+
+\membersection{wxPrintout::FitThisSizeToPageMargins}\label{wxprintoutfitthissizetopagemargins}
+
+\func{void}{FitThisSizeToPageMargins}{\param{const wxSize\& }{imageSize}, \param{const wxPageSetupDialogData\& }{pageSetupData}}
+
+Set the user scale and device origin of the wxDC associated with this wxPrintout
+so that the given image size fits entirely within the page margins set in the
+given wxPageSetupDialogData object. This function provides the greatest
+consistency across all platforms because it does not depend on having access to
+the printable area of the paper. Note that on Mac, the native wxPageSetupDialog
+does not let you set the page margins; you'll have to provide your own mechanism,
+or you can use the Mac-only class wxMacPageMarginsDialog.
+
+
+\membersection{wxPrintout::MapScreenSizeToPaper}\label{wxprintoutmapscreensizetopaper}
+
+\func{void}{MapScreenSizeToPaper}{}
+
+Set the user scale and device origin of the wxDC associated with this wxPrintout
+so that the printed page matches the screen size as closely as possible
+and the logical origin is in the top left corner of the paper rectangle.
+That is,
+a 100-pixel object on screen should appear at the same size on the printed page. (It
+will, of course, be larger or smaller in the preview image, depending on the zoom
+factor.) Use this if you want WYSIWYG behavior, e.g., in a text editor.
+
+
+\membersection{wxPrintout::MapScreenSizeToPage}\label{wxprintoutmapscreensizetopage}
+
+\func{void}{MapScreenSizeToPage}{}
+
+This sets the user scale of the wxDC assocated with this wxPrintout to the same
+scale as \helpref{MapScreenSizeToPaper}{wxprintoutmapscreensizetopaper} but sets
+the logical origin to the top left corner of the page rectangle.
+
+
+\membersection{wxPrintout::MapScreenSizeToPageMargins}\label{wxprintoutmapscreensizetopagemargins}
+
+\func{void}{MapScreenSizeToPageMargins}{\param{const wxPageSetupDialogData\& }{pageSetupData}}
+
+This sets the user scale of the wxDC assocated with this wxPrintout to the same
+scale as
+\helpref{MapScreenSizeToPageMargins}{wxprintoutmapscreensizetopagemargins} but
+sets the logical origin to the top left corner of the page margins specified by
+the given wxPageSetupDialogData object.
+
+
+\membersection{wxPrintout::MapScreenSizeToDevice}\label{wxprintoutmapscreensizetodevice}
+
+\func{void}{MapScreenSizeToDevice}{}
+
+Set the user scale and device origin of the wxDC associated with this wxPrintout
+so that one screen pixel maps to one device pixel on the DC. That is, the user
+scale is set to (1,1) and the device origin is set to (0,0). Use this if you
+want to do your own scaling prior to calling wxDC drawing calls, for example, if
+your underlying model is floating-point and you want to achieve maximum drawing
+precision on high-resolution printers. (Note that while the underlying drawing
+model of Mac OS X is floating-point, wxWidgets's drawing model scales from integer
+coordinates.) You can use the GetLogicalXXXRect() routines below to obtain the
+paper rectangle, page rectangle, or page margins rectangle to perform your own scaling.
+
+
+\membersection{wxPrintout::GetLogicalPaperRect}\label{wxprintoutgetlogicalpaperrect}
+
+\func{wxRect}{GetLogicalPaperRect}{}
+
+Return the rectangle corresponding to the paper in the associated wxDC's
+logical coordinates for the current user scale and device origin.
+
+
+\membersection{wxPrintout::GetLogicalPageRect}\label{wxprintoutgetlogicalpagerect}
+
+\func{wxRect}{GetLogicalPageRect}{}
+
+Return the rectangle corresponding to the page in the associated wxDC's
+logical coordinates for the current user scale and device origin. 
+On MSW and Mac, this will be the printable area of the paper. On other platforms
+and PostScript printing, this will be the full paper rectangle.
+
+
+\membersection{wxPrintout::GetLogicalPageMarginsRect}\label{wxprintoutgetlogicalpagemarginsrect}
+
+\func{wxRect}{GetLogicalPageMarginsRect}{\param{const wxPageSetupDialogData\& }{pageSetupData}}
+
+Return the rectangle corresponding to the page margins specified by the given
+wxPageSetupDialogData object in the associated wxDC's logical coordinates for the
+current user scale and device origin. The page margins are specified
+with respect to the edges of the paper on all platforms.
+
+
+\membersection{wxPrintout::SetLogicalOrigin}\label{wxprintoutsetlogicalorigin}
+
+\func{void}{SetLogicalOrigin}{\param{wxCoord }{x}, \param{wxCoord }{y}}
+
+Set the device origin of the associated wxDC so that the current logical point
+becomes the new logical origin.
+
+
+\membersection{wxPrintout::OffsetLogicalOrigin}\label{wxprintoutoffsetlogicalorigin}
+
+\func{void}{OffsetLogicalOrigin}{\param{wxCoord }{xoff}, \param{wxCoord }{yoff}}
+
+Shift the device origin by an amount specified in logical coordinates.
 
 
 \membersection{wxPrintout::OnBeginDocument}\label{wxprintoutonbegindocument}
@@ -1046,9 +1241,13 @@ immediately after the frame is shown.
 
 \wxheading{See also}
 
-\overview{Printing framework overview}{printingoverview}, \helpref{wxPrinterDC}{wxprinterdc}, \helpref{wxPrintDialog}{wxprintdialog},\rtfsp
-\helpref{wxPrintout}{wxprintout}, \helpref{wxPrinter}{wxprinter},\rtfsp
-\helpref{wxPreviewCanvas}{wxpreviewcanvas}, \helpref{wxPreviewControlBar}{wxpreviewcontrolbar},\rtfsp
+\overview{Printing framework overview}{printingoverview}, 
+\helpref{wxPrinterDC}{wxprinterdc}, 
+\helpref{wxPrintDialog}{wxprintdialog}, 
+\helpref{wxPrintout}{wxprintout}, 
+\helpref{wxPrinter}{wxprinter}, 
+\helpref{wxPreviewCanvas}{wxpreviewcanvas}, 
+\helpref{wxPreviewControlBar}{wxpreviewcontrolbar}, 
 \helpref{wxPreviewFrame}{wxpreviewframe}.
 
 \latexignore{\rtfignore{\wxheading{Members}}}

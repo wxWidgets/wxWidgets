@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        dcprint.h
+// Name:        wx/os2/dcprint.h
 // Purpose:     wxPrinterDC class
 // Author:      David Webster
 // Modified by:
@@ -36,6 +36,8 @@ class WXDLLEXPORT wxPrinterDC: public wxDC
     void EndDoc(void);
     void StartPage(void);
     void EndPage(void);
+
+    wxRect GetPaperRect();
 
 protected:
     virtual void DoDrawBitmap( const wxBitmap& rBmp

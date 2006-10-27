@@ -732,8 +732,10 @@ bool wxGnomePrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt )
     int w, h;
     dc->GetSize(&w, &h);
     printout->SetPageSizePixels((int)w, (int)h);
-    dc->GetSizeMM(&w, &h);
-    printout->SetPageSizeMM((int)w, (int)h);
+    printout->SetPaperRectPixels(wxRect(0, 0, w, h));
+    int mw, mh;
+    dc->GetSizeMM(&mw, &mh);
+    printout->SetPageSizeMM((int)mw, (int)mh);
 
     printout->OnPreparePrinting();
 
@@ -1946,18 +1948,19 @@ void wxGnomePrintPreview::DetermineScaling()
             m_pageWidth = sizeDevUnits.y;
             m_pageHeight = sizeDevUnits.x;
             m_previewPrintout->SetPageSizeMM(sizeMM.y, sizeMM.x);
-            m_previewPrintout->SetPageSizePixels(m_pageWidth, m_pageHeight);
         }
         else
         {
             m_pageWidth = sizeDevUnits.x;
             m_pageHeight = sizeDevUnits.y;
             m_previewPrintout->SetPageSizeMM(sizeMM.x, sizeMM.y);
-            m_previewPrintout->SetPageSizePixels(m_pageWidth, m_pageHeight);
         }
+        m_previewPrintout->SetPageSizePixels(m_pageWidth, m_pageHeight);
+        m_previewPrintout->SetPaperRectPixels(wxRect(0, 0, m_pageWidth, m_pageHeight));
 
         // At 100%, the page should look about page-size on the screen.
-        m_previewScale = (float)0.8 * 72.0 / (float)wxGnomePrintDC::GetResolution();
+        m_previewScaleX = (float)0.8 * 72.0 / (float)wxGnomePrintDC::GetResolution();
+        m_previewScaleY = m_previewScaleX;
     }
 }
 

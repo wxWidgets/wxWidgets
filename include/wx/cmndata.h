@@ -419,6 +419,7 @@ public:
     wxPageSetupDialogData& operator=(const wxPrintData& data);
 
     wxPrintData& GetPrintData() { return m_printData; }
+    const wxPrintData& GetPrintData() const { return m_printData; }
     void SetPrintData(const wxPrintData& printData);
 
 private:

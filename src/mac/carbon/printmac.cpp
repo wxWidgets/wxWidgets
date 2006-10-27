@@ -334,13 +334,14 @@ bool wxMacPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt)
         m_printDialogData.SetMaxPage(9999);
 
     // Create a suitable device context
-    wxDC *dc = NULL;
+    wxPrinterDC *dc = NULL;
     if (prompt)
     {
-        wxPrintDialog dialog(parent, & m_printDialogData);
+        wxMacPrintDialog dialog(parent, & m_printDialogData);
         if (dialog.ShowModal() == wxID_OK)
         {
-            dc = dialog.GetPrintDC();
+            dc = wxDynamicCast(dialog.GetPrintDC(), wxPrinterDC);
+            wxASSERT(dc);
             m_printDialogData = dialog.GetPrintDialogData();
         }
     }
@@ -375,11 +376,12 @@ bool wxMacPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt)
     printout->SetDC(dc);
 
     int w, h;
-    wxCoord ww, hh;
     dc->GetSize(&w, &h);
     printout->SetPageSizePixels((int)w, (int)h);
-    dc->GetSizeMM(&ww, &hh);
-    printout->SetPageSizeMM((int)ww, (int)hh);
+    printout->SetPaperRectPixels(dc->GetPaperRect());
+    wxCoord mw, mh;
+    dc->GetSizeMM(&mw, &mh);
+    printout->SetPageSizeMM((int)mw, (int)mh);
 
     // Create an abort window
     wxBeginBusyCursor();
@@ -555,36 +557,43 @@ void wxMacPrintPreview::DetermineScaling(void)
     wxSize ppiScreen( 72 , 72 ) ;
     wxSize ppiPrinter( 72 , 72 ) ;
     
+    // Note that with Leopard, screen dpi=72 is no longer a given
     m_previewPrintout->SetPPIScreen( ppiScreen.x , ppiScreen.y ) ;
     
-    int x , y ;
+    wxCoord w , h ;
     wxCoord ww, hh;
+    wxRect paperRect;
 
     // Get a device context for the currently selected printer
     wxPrinterDC printerDC(m_printDialogData.GetPrintData());
     if (printerDC.Ok())
     {
         printerDC.GetSizeMM(&ww, &hh);
-        printerDC.GetSize( &x , &y ) ;
+        printerDC.GetSize( &w , &h ) ;
         ppiPrinter = printerDC.GetPPI() ;
+        paperRect = printerDC.GetPaperRect();
         m_isOk = true ;
     }
     else
     {
         // use some defaults
-        x = 8 * 72 ;
-        y = 11 * 72 ;
-        ww = (int) (x * 25.4 / ppiPrinter.x) ;
-        hh = (int) (y * 25.4 / ppiPrinter.y) ;
+        w = 8 * 72 ;
+        h = 11 * 72 ;
+        ww = (wxCoord) (w * 25.4 / ppiPrinter.x) ;
+        hh = (wxCoord) (h * 25.4 / ppiPrinter.y) ;
+        paperRect = wxRect(0, 0, w, h);
         m_isOk = false ;
     }
-    m_previewPrintout->SetPageSizeMM((int)ww, (int)hh);
-    m_previewPrintout->SetPageSizePixels( x , y) ;
-    m_pageWidth = x ;
-    m_pageHeight = y ;
+    m_pageWidth = w;
+    m_pageHeight = h;
+    
+    m_previewPrintout->SetPageSizePixels(w , h) ;
+    m_previewPrintout->SetPageSizeMM(ww, hh);
+    m_previewPrintout->SetPaperRectPixels(paperRect);
     m_previewPrintout->SetPPIPrinter( ppiPrinter.x , ppiPrinter.y ) ;
 
-    m_previewScale = (float)((float)ppiScreen.x/(float)ppiPrinter.y);
+    m_previewScaleX = float(ppiScreen.x) / ppiPrinter.x;
+    m_previewScaleY = float(ppiScreen.y) / ppiPrinter.y;
 }
 
 #endif

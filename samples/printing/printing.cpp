@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        printing.cpp
+// Name:        samples/printing.cpp
 // Purpose:     Printing demo for wxWidgets
 // Author:      Julian Smart
 // Modified by:
@@ -40,6 +40,10 @@
 #include "wx/generic/prntdlgg.h"
 #endif
 
+#ifdef __WXMAC__
+#include "wx/mac/printdlg.h"
+#endif
+
 #include "printing.h"
 
 #ifndef __WXMSW__
@@ -60,7 +64,7 @@ MyFrame   *frame = (MyFrame *) NULL;
 wxPrintData *g_printData = (wxPrintData*) NULL ;
 
 // Global page setup data
-wxPageSetupData* g_pageSetupData = (wxPageSetupData*) NULL;
+wxPageSetupDialogData* g_pageSetupData = (wxPageSetupDialogData*) NULL;
 
 // Main proc
 IMPLEMENT_APP(MyApp)
@@ -78,10 +82,20 @@ bool MyApp::OnInit(void)
     m_testFont.Create(10, wxSWISS, wxNORMAL, wxNORMAL);
 
     g_printData = new wxPrintData;
+    // Set an initial paper size
+//    g_printData->SetPaperId(wxPAPER_LETTER); // for Americans
+    g_printData->SetPaperId(wxPAPER_A4);    // for everyone else    
+
     g_pageSetupData = new wxPageSetupDialogData;
+    // copy over initial paper size from print record
+    (*g_pageSetupData) = *g_printData;
+    // Set some initial page margins in mm. 
+    g_pageSetupData->SetMarginTopLeft(wxPoint(15, 15));
+    g_pageSetupData->SetMarginBottomRight(wxPoint(15, 15));
 
     // Create the main frame window
-    frame = new MyFrame((wxFrame *) NULL, _T("wxWidgets Printing Demo"), wxPoint(0, 0), wxSize(400, 400));
+    frame = new MyFrame((wxFrame *) NULL, _T("wxWidgets Printing Demo"), 
+        wxPoint(0, 0), wxSize(400, 400));
 
 #if wxUSE_STATUSBAR
     // Give it a status line
@@ -96,6 +110,9 @@ bool MyApp::OnInit(void)
 
     file_menu->Append(WXPRINT_PRINT, _T("&Print..."),              _T("Print"));
     file_menu->Append(WXPRINT_PAGE_SETUP, _T("Page Set&up..."),              _T("Page setup"));
+#ifdef __WXMAC__
+    file_menu->Append(WXPRINT_PAGE_MARGINS, _T("Page Margins..."), _T("Page margins"));
+#endif
     file_menu->Append(WXPRINT_PREVIEW, _T("Print Pre&view"),              _T("Preview"));
 
 #if wxUSE_ACCEL
@@ -112,6 +129,7 @@ bool MyApp::OnInit(void)
     file_menu->Append(WXPRINT_PAGE_SETUP_PS, _T("Page Setup PostScript..."),              _T("Page setup (PostScript)"));
     file_menu->Append(WXPRINT_PREVIEW_PS, _T("Print Preview PostScript"),              _T("Preview (PostScript)"));
 #endif
+
     file_menu->AppendSeparator();
     file_menu->Append(WXPRINT_ANGLEUP, _T("Angle up\tAlt-U"),                _T("Raise rotated text angle"));
     file_menu->Append(WXPRINT_ANGLEDOWN, _T("Angle down\tAlt-D"),            _T("Lower rotated text angle"));
@@ -165,6 +183,9 @@ EVT_MENU(WXPRINT_ABOUT, MyFrame::OnPrintAbout)
 EVT_MENU(WXPRINT_PRINT_PS, MyFrame::OnPrintPS)
 EVT_MENU(WXPRINT_PREVIEW_PS, MyFrame::OnPrintPreviewPS)
 EVT_MENU(WXPRINT_PAGE_SETUP_PS, MyFrame::OnPageSetupPS)
+#endif
+#ifdef __WXMAC__
+EVT_MENU(WXPRINT_PAGE_MARGINS, MyFrame::OnPageMargins)
 #endif
 EVT_MENU(WXPRINT_ANGLEUP, MyFrame::OnAngleUp)
 EVT_MENU(WXPRINT_ANGLEDOWN, MyFrame::OnAngleDown)
@@ -236,8 +257,8 @@ void MyFrame::OnPageSetup(wxCommandEvent& WXUNUSED(event))
     wxPageSetupDialog pageSetupDialog(this, g_pageSetupData);
     pageSetupDialog.ShowModal();
 
-    (*g_printData) = pageSetupDialog.GetPageSetupData().GetPrintData();
-    (*g_pageSetupData) = pageSetupDialog.GetPageSetupData();
+    (*g_printData) = pageSetupDialog.GetPageSetupDialogData().GetPrintData();
+    (*g_pageSetupData) = pageSetupDialog.GetPageSetupDialogData();
 }
 
 #if defined(__WXMSW__) && wxTEST_POSTSCRIPT_IN_MSW
@@ -268,8 +289,22 @@ void MyFrame::OnPageSetupPS(wxCommandEvent& WXUNUSED(event))
     wxGenericPageSetupDialog pageSetupDialog(this, g_pageSetupData);
     pageSetupDialog.ShowModal();
 
-    (*g_printData) = pageSetupDialog.GetPageSetupData().GetPrintData();
-    (*g_pageSetupData) = pageSetupDialog.GetPageSetupData();
+    (*g_printData) = pageSetupDialog.GetPageSetupDialogData().GetPrintData();
+    (*g_pageSetupData) = pageSetupDialog.GetPageSetupDialogData();
+}
+#endif
+
+
+#ifdef __WXMAC__
+void MyFrame::OnPageMargins(wxCommandEvent& WXUNUSED(event))
+{
+    (*g_pageSetupData) = *g_printData;
+
+    wxMacPageMarginsDialog pageMarginsDialog(this, g_pageSetupData);
+    pageMarginsDialog.ShowModal();
+
+    (*g_printData) = pageMarginsDialog.GetPageSetupDialogData().GetPrintData();
+    (*g_pageSetupData) = pageMarginsDialog.GetPageSetupDialogData();
 }
 #endif
 
@@ -294,11 +329,22 @@ void MyFrame::OnAngleDown(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::Draw(wxDC& dc)
 {
+    // This routine just draws a bunch of random stuff on the screen so that we
+    // can check that different types of object are being drawn consistently
+    // between the screen image, the print preview image (at various zoom
+    // levels), and the printed page.
     dc.SetBackground(*wxWHITE_BRUSH);
     dc.Clear();
     dc.SetFont(wxGetApp().m_testFont);
 
     dc.SetBackgroundMode(wxTRANSPARENT);
+
+    dc.SetPen(*wxBLACK_PEN);
+    dc.SetBrush(*wxLIGHT_GREY_BRUSH);
+    dc.DrawRectangle(0, 0, 230, 350);
+    dc.DrawLine(0, 0, 229, 349);
+    dc.DrawLine(229, 0, 0, 349);
+    dc.SetBrush(*wxTRANSPARENT_BRUSH);
 
     dc.SetBrush(*wxCYAN_BRUSH);
     dc.SetPen(*wxRED_PEN);
@@ -313,7 +359,6 @@ void MyFrame::Draw(wxDC& dc)
 
     dc.DrawText( wxT("Test message: this is in 10 point text"), 10, 180);
     
-
 #if wxUSE_UNICODE
     char *test = "Hebrew    שלום -- Japanese (日本語)";
     wxString tmp = wxConvUTF8.cMB2WC( test );
@@ -357,10 +402,6 @@ void MyFrame::Draw(wxDC& dc)
     str.Printf( wxT("---- Text at angle %d ----"), i );
     dc.DrawRotatedText( str, 100, 300, i );
 
-    dc.SetPen(* wxBLACK_PEN);
-    dc.DrawLine(0, 0, 200, 200);
-    dc.DrawLine(200, 0, 0, 200);
-
     wxIcon my_icon = wxICON(mondrian) ;
 
     dc.DrawIcon( my_icon, 100, 100);
@@ -378,14 +419,12 @@ BEGIN_EVENT_TABLE(MyCanvas, wxScrolledWindow)
 EVT_MOUSE_EVENTS(MyCanvas::OnEvent)
 END_EVENT_TABLE()
 
-// Define a constructor for my canvas
 MyCanvas::MyCanvas(wxFrame *frame, const wxPoint& pos, const wxSize& size, long style):
     wxScrolledWindow(frame, wxID_ANY, pos, size, style)
 {
     SetBackgroundColour(* wxWHITE);
 }
 
-// Define the repainting behaviour
 void MyCanvas::OnDraw(wxDC& dc)
 {
     frame->Draw(dc);
@@ -401,16 +440,16 @@ bool MyPrintout::OnPrintPage(int page)
     if (dc)
     {
         if (page == 1)
-            DrawPageOne(dc);
+            DrawPageOne();
         else if (page == 2)
-            DrawPageTwo(dc);
+            DrawPageTwo();
 
-        dc->SetDeviceOrigin(0, 0);
-        dc->SetUserScale(1.0, 1.0);
-
+        // Draw page numbers at top left corner of printable area, sized so that
+        // screen size of text matches paper size.
+        MapScreenSizeToPage();
         wxChar buf[200];
         wxSprintf(buf, wxT("PAGE %d"), page);
-        dc->DrawText(buf, 10, 10);
+        dc->DrawText(buf, 0, 0);
 
         return true;
     }
@@ -439,51 +478,91 @@ bool MyPrintout::HasPage(int pageNum)
     return (pageNum == 1 || pageNum == 2);
 }
 
-void MyPrintout::DrawPageOne(wxDC *dc)
+void MyPrintout::DrawPageOne()
 {
-    // You might use THIS code if you were scaling
-    // graphics of known size to fit on the page.
+    // You might use THIS code if you were scaling graphics of known size to fit
+    // on the page. The commented-out code illustrates different ways of scaling
+    // the graphics.
 
-    // We know the graphic is 200x200. If we didn't know this,
-    // we'd need to calculate it.
-    float maxX = 200;
-    float maxY = 200;
+    // We know the graphic is 230x350. If we didn't know this, we'd need to
+    // calculate it.
+    wxCoord maxX = 230;
+    wxCoord maxY = 350;
 
-    // Let's have at least 50 device units margin
-    float marginX = 50;
-    float marginY = 50;
+    // This sets the user scale and origin of the DC so that the image fits
+    // within the paper rectangle (but the edges could be cut off by printers
+    // that can't print to the edges of the paper -- which is most of them. Use
+    // this if your image already has its own margins.
+//    FitThisSizeToPaper(wxSize(maxX, maxY));
+//    wxRect fitRect = GetLogicalPaperRect();
 
-    // Add the margin to the graphic size
-    maxX += (2*marginX);
-    maxY += (2*marginY);
+    // This sets the user scale and origin of the DC so that the image fits
+    // within the page rectangle, which is the printable area on Mac and MSW
+    // and is the entire page on other platforms.
+//    FitThisSizeToPage(wxSize(maxX, maxY));
+//    wxRect fitRect = GetLogicalPageRect();
 
-    // Get the size of the DC in pixels
-    int w, h;
-    dc->GetSize(&w, &h);
+    // This sets the user scale and origin of the DC so that the image fits
+    // within the page margins as specified by g_PageSetupData, which you can
+    // change (on some platforms, at least) in the Page Setup dialog. Note that
+    // on Mac, the native Page Setup dialog doesn't let you change the margins
+    // of a wxPageSetupDialogData object, so you'll have to write your own dialog or
+    // use the Mac-only wxMacPageMarginsDialog, as we do in this program.
+    FitThisSizeToPageMargins(wxSize(maxX, maxY), *g_pageSetupData);
+    wxRect fitRect = GetLogicalPageMarginsRect(*g_pageSetupData);
 
-    // Calculate a suitable scaling factor
-    float scaleX=(float)(w/maxX);
-    float scaleY=(float)(h/maxY);
+    // This sets the user scale and origin of the DC so that the image appears
+    // on the paper at the same size that it appears on screen (i.e., 10-point
+    // type on screen is 10-point on the printed page) and is positioned in the
+    // top left corner of the page rectangle (just as the screen image appears
+    // in the top left corner of the window).
+//    MapScreenSizeToPage();
+//    wxRect fitRect = GetLogicalPageRect();
 
-    // Use x or y scaling factor, whichever fits on the DC
-    float actualScale = wxMin(scaleX,scaleY);
+    // You could also map the screen image to the entire paper at the same size
+    // as it appears on screen.
+//    MapScreenSizeToPaper();
+//    wxRect fitRect = GetLogicalPaperRect();
 
-    // Calculate the position on the DC for centring the graphic
-    float posX = (float)((w - (200*actualScale))/2.0);
-    float posY = (float)((h - (200*actualScale))/2.0);
+    // You might also wish to do you own scaling in order to draw objects at
+    // full native device resolution. In this case, you should do the following.
+    // Note that you can use the GetLogicalXXXRect() commands to obtain the
+    // appropriate rect to scale to.
+//    MapScreenSizeToDevice();
+//    wxRect fitRect = GetLogicalPageRect();
 
-    // Set the scale and origin
-    dc->SetUserScale(actualScale, actualScale);
-    dc->SetDeviceOrigin( (long)posX, (long)posY );
+    // Each of the preceding Fit or Map routines positions the origin so that
+    // the drawn image is positioned at the top left corner of the reference
+    // rectangle. You can easily center or right- or bottom-justify the image as
+    // follows.
 
-    frame->Draw(*dc);
+    // This offsets the image so that it is centered within the reference
+    // rectangle defined above.
+    wxCoord xoff = (fitRect.width - maxX) / 2;
+    wxCoord yoff = (fitRect.height - maxY) / 2;
+    OffsetLogicalOrigin(xoff, yoff);
+
+    // This offsets the image so that it is positioned at the bottom right of
+    // the reference rectangle defined above.
+//    wxCoord xoff = (fitRect.width - maxX);
+//    wxCoord yoff = (fitRect.height - maxY);
+//    OffsetLogicalOrigin(xoff, yoff);
+
+    frame->Draw(*GetDC());
 }
 
-void MyPrintout::DrawPageTwo(wxDC *dc)
+void MyPrintout::DrawPageTwo()
 {
     // You might use THIS code to set the printer DC to ROUGHLY reflect
     // the screen text size. This page also draws lines of actual length
     // 5cm on the page.
+
+    // Compare this to DrawPageOne(), which uses the really convenient routines
+    // from wxPrintout to fit the screen image onto the printed page. This page
+    // illustrates how to do all the scaling calculations yourself, if you're so
+    // inclined.
+
+    wxDC *dc = GetDC();
 
     // Get the logical pixels per inch of screen and printer
     int ppiScreenX, ppiScreenY;
@@ -491,31 +570,28 @@ void MyPrintout::DrawPageTwo(wxDC *dc)
     int ppiPrinterX, ppiPrinterY;
     GetPPIPrinter(&ppiPrinterX, &ppiPrinterY);
 
-    // This scales the DC so that the printout roughly represents the
-    // the screen scaling. The text point size _should_ be the right size
-    // but in fact is too small for some reason. This is a detail that will
-    // need to be addressed at some point but can be fudged for the
-    // moment.
+    // This scales the DC so that the printout roughly represents the the screen
+    // scaling. The text point size _should_ be the right size but in fact is
+    // too small for some reason. This is a detail that will need to be
+    // addressed at some point but can be fudged for the moment.
     float scale = (float)((float)ppiPrinterX/(float)ppiScreenX);
 
-    // Now we have to check in case our real page size is reduced
-    // (e.g. because we're drawing to a print preview memory DC)
+    // Now we have to check in case our real page size is reduced (e.g. because
+    // we're drawing to a print preview memory DC)
     int pageWidth, pageHeight;
     int w, h;
     dc->GetSize(&w, &h);
     GetPageSizePixels(&pageWidth, &pageHeight);
 
-    // If printer pageWidth == current DC width, then this doesn't
-    // change. But w might be the preview bitmap width, so scale down.
+    // If printer pageWidth == current DC width, then this doesn't change. But w
+    // might be the preview bitmap width, so scale down.
     float overallScale = scale * (float)(w/(float)pageWidth);
     dc->SetUserScale(overallScale, overallScale);
 
-    // Calculate conversion factor for converting millimetres into
-    // logical units.
-    // There are approx. 25.4 mm to the inch. There are ppi
-    // device units to the inch. Therefore 1 mm corresponds to
-    // ppi/25.4 device units. We also divide by the
-    // screen-to-printer scaling factor, because we need to
+    // Calculate conversion factor for converting millimetres into logical
+    // units. There are approx. 25.4 mm to the inch. There are ppi device units
+    // to the inch. Therefore 1 mm corresponds to ppi/25.4 device units. We also
+    // divide by the screen-to-printer scaling factor, because we need to
     // unscale to pass logical units to DrawLine.
 
     // Draw 50 mm by 50 mm L shape

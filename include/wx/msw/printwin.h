@@ -29,7 +29,8 @@ public:
     virtual bool Print(wxWindow *parent,
                        wxPrintout *printout,
                        bool prompt = true);
-    virtual wxDC* PrintDialog(wxWindow *parent);
+
+    virtual wxDC *PrintDialog(wxWindow *parent);
     virtual bool Setup(wxWindow *parent);
 
 private:

@@ -540,7 +540,7 @@ bool wxMacPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt)
         m_printDialogData.SetMaxPage(9999);
 
     // Create a suitable device context
-    wxDC *dc = NULL;
+    wxPrinterDC *dc = NULL;
     if (prompt)
     {
         wxPrintDialog dialog(parent, & m_printDialogData);
@@ -555,7 +555,6 @@ bool wxMacPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt)
         dc = new wxPrinterDC( m_printDialogData.GetPrintData() ) ;
     }
 
-
     // May have pressed cancel.
     if (!dc || !dc->Ok())
     {
@@ -564,7 +563,6 @@ bool wxMacPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt)
     }
 
     // on the mac we have always pixels as addressing mode with 72 dpi
-
     printout->SetPPIScreen(72, 72);
     printout->SetPPIPrinter(72, 72);
 
@@ -575,6 +573,7 @@ bool wxMacPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt)
     wxCoord ww, hh;
     dc->GetSize(&w, &h);
     printout->SetPageSizePixels((int)w, (int)h);
+    printout->SetPaperRectPixels(dc->GetPaperRect());
     dc->GetSizeMM(&ww, &hh);
     printout->SetPageSizeMM((int)ww, (int)hh);
 
@@ -742,35 +741,42 @@ void wxMacPrintPreview::DetermineScaling(void)
     int screenWidth , screenHeight ;
     wxDisplaySize( &screenWidth , &screenHeight ) ;
 
-    m_previewPrintout->SetPPIScreen( 72 , 72 ) ;
-    m_previewPrintout->SetPPIPrinter( 72 , 72 ) ;
-    m_previewPrintout->SetPageSizeMM( (int) (8.0 * 25.6), (int) (11.0 * 25.6) );
-    m_previewPrintout->SetPageSizePixels( 8 * 72 , 11 * 72 ) ;
-    m_pageWidth = 8 * 72 ;
-    m_pageHeight = 11 * 72 ;
-    m_previewScale = 1 ;
+    wxSize ppiScreen( 72 , 72 ) ;
+    wxSize ppiPrinter( 72 , 72 ) ;
+
+    m_previewPrintout->SetPPIScreen( ppiScreen.x , ppiScreen.y ) ;
+
+    wxCoord w , h ;
+    wxCoord ww, hh;
+    wxRect paperRect;
 
     // Get a device context for the currently selected printer
     wxPrinterDC printerDC(m_printDialogData.GetPrintData());
     if (printerDC.Ok())
     {
-        int x , y ;
-        wxCoord ww, hh;
         printerDC.GetSizeMM(&ww, &hh);
-        printerDC.GetSize( &x , &y ) ;
-        m_previewPrintout->SetPageSizeMM((int)ww, (int)hh);
-        m_previewPrintout->SetPageSizePixels( x , y) ;
-        m_pageWidth = x ;
-        m_pageHeight =  y ;
+        printerDC.GetSize( &w , &h ) ;
+        ppiPrinter = printerDC.GetPPI() ;
+        paperRect = printerDC.GetPaperRect();
         m_isOk = true ;
     }
     else
     {
+        // use some defaults
+        w = 8 * 72 ;
+        h = 11 * 72 ;
+        ww = (wxCoord) (w * 25.4 / ppiPrinter.x) ;
+        hh = (wxCoord) (h * 25.4 / ppiPrinter.y) ;
+        paperRect = wxRect(0, 0, w, h);
         m_isOk = false ;
     }
-    // At 100%, the page should look about page-size on the screen.
-    // m_previewScale = (float)((float)screenWidth/(float)printerWidth);
-    // m_previewScale = m_previewScale * (float)((float)screenXRes/(float)printerXRes);
+    m_previewPrintout->SetPageSizeMM(ww, hh);
+    m_previewPrintout->SetPageSizePixels(w , h) ;
+    m_previewPrintout->SetPaperRectPixels(paperRect);
+    m_pageWidth = w;
+    m_pageHeight = h;
+    m_previewPrintout->SetPPIPrinter( ppiPrinter.x , ppiPrinter.y ) ;
 
-    m_previewScale = 1 ;
+    m_previewScaleX = float(ppiScreen.x) / ppiPrinter.x;
+    m_previewScaleY = float(ppiScreen.y) / ppiPrinter.y;
 }

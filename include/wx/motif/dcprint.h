@@ -22,6 +22,8 @@ public:
     // Create a printer DC
     wxPrinterDC(const wxString& driver, const wxString& device, const wxString& output, bool interactive = true, int orientation = wxPORTRAIT);
 
+    wxRect GetPaperRect();
+
     virtual ~wxPrinterDC();
 };
 

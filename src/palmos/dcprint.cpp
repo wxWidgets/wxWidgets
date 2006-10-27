@@ -100,6 +100,14 @@ void wxPrinterDC::EndPage()
 {
 }
 
+wxRect wxPrinterDC::GetPaperRect()
+{
+    // Use page rect if we can't get paper rect.
+    wxCoord w, h;
+    GetSize(&w, &h);
+    return wxRect(0, 0, w, h);
+}
+
 // Returns default device and port names
 static bool wxGetDefaultDeviceName(wxString& deviceName, wxString& portName)
 {

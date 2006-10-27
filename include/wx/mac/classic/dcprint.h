@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        dcprint.h
+// Name:        wx/mac/classic/dcprint.h
 // Purpose:     wxPrinterDC class
 // Author:      Stefan Csomor
 // Modified by:
@@ -31,6 +31,9 @@ class WXDLLEXPORT wxPrinterDC: public wxDC
     virtual void EndDoc(void) ;
     virtual void StartPage(void) ;
     virtual void EndPage(void) ;
+
+    wxRect GetPaperRect();
+
     wxPrintData& GetPrintData() { return m_printData; }
     virtual void DoGetSize( int *width, int *height ) const;
     
