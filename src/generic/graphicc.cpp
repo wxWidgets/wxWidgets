@@ -688,6 +688,8 @@ void wxCairoBrush::Init()
 // wxCairoFont implementation
 //-----------------------------------------------------------------------------
 
+IMPLEMENT_DYNAMIC_CLASS(wxCairoFont,wxGraphicsFont)
+
 wxCairoFont::wxCairoFont() : wxGraphicsFont(NULL)
 {
     wxLogDebug(wxT("Illegal Constructor called"));
@@ -724,6 +726,8 @@ void wxCairoFont::Apply( wxGraphicsContext* context )
 //-----------------------------------------------------------------------------
 // wxCairoPath implementation
 //-----------------------------------------------------------------------------
+
+IMPLEMENT_DYNAMIC_CLASS(wxCairoPath,wxGraphicsPath)
 
 wxCairoPath::wxCairoPath() : wxGraphicsPath(NULL)
 {
@@ -785,6 +789,11 @@ void wxCairoPath::MoveToPoint( wxDouble x , wxDouble y )
 void wxCairoPath::AddLineToPoint( wxDouble x , wxDouble y )
 {
     cairo_line_to(m_pathContext,x,y);
+}
+
+void wxCairoPath::AddPath( const wxGraphicsPath* path )
+{
+    // TODO
 }
 
 void wxCairoPath::CloseSubpath()
