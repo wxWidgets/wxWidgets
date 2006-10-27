@@ -1006,7 +1006,7 @@ bool wxGenericFileDialog::Create( wxWindow *parent,
         return true;
 
     if (!wxDialog::Create( parent, wxID_ANY, message, pos, sz,
-                           wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER, name
+                           wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER | style, name
                            ))
     {
         return false;
