@@ -35,6 +35,7 @@
 
 #if USE_POLLING
 
+#if wxUSE_THREADS
 class wxProcessTerminationEventHandler: public wxEvtHandler
 {
   public:
@@ -117,6 +118,13 @@ int wxAddProcessCallbackForPid(wxEndProcessData *proc_data, int pid)
 
     return 0;
 }
+#else // !wxUSE_THREADS
+int wxAddProcessCallbackForPid(wxEndProcessData*, int)
+{
+    wxLogDebug(wxT("Could not create termination detection thread."));
+    return -1;
+}
+#endif // wxUSE_THREADS/!wxUSE_THREADS
 
 #else // !USE_POLLING
 
