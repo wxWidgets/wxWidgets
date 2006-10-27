@@ -256,12 +256,11 @@ protected :
     int         m_hatch;
 };
 
-class wxMacCoreGraphicsPen : public wxGraphicsPen
+class wxMacCoreGraphicsPenData : public wxGraphicsObjectRefData
 {
 public:
-    wxMacCoreGraphicsPen();
-    wxMacCoreGraphicsPen( wxGraphicsRenderer* renderer, const wxPen &pen );
-    ~wxMacCoreGraphicsPen();
+    wxMacCoreGraphicsPenData( wxGraphicsRenderer* renderer, const wxPen &pen );
+    ~wxMacCoreGraphicsPenData();
     
     void Init();
     virtual void Apply( wxGraphicsContext* context );
@@ -283,19 +282,10 @@ protected :
     bool m_isPattern;
     wxMacCFRefHolder<CGPatternRef> m_pattern;
     CGFloat* m_patternColorComponents;
-private :
-DECLARE_DYNAMIC_CLASS_NO_COPY(wxMacCoreGraphicsPen)
 };
 
-IMPLEMENT_DYNAMIC_CLASS(wxMacCoreGraphicsPen,wxGraphicsPen)
-
-wxMacCoreGraphicsPen::wxMacCoreGraphicsPen() : wxGraphicsPen( NULL )
-{
-    wxLogDebug(wxT("Illegal Constructor called"));
-}
-
-wxMacCoreGraphicsPen::wxMacCoreGraphicsPen( wxGraphicsRenderer* renderer, const wxPen &pen ) :
-    wxGraphicsPen( renderer )
+wxMacCoreGraphicsPenData::wxMacCoreGraphicsPenData( wxGraphicsRenderer* renderer, const wxPen &pen ) :
+    wxGraphicsObjectRefData( renderer )
 {
     Init();
     
@@ -433,13 +423,13 @@ wxMacCoreGraphicsPen::wxMacCoreGraphicsPen( wxGraphicsRenderer* renderer, const 
     }
 }
 
-wxMacCoreGraphicsPen::~wxMacCoreGraphicsPen()
+wxMacCoreGraphicsPenData::~wxMacCoreGraphicsPenData()
 {
     delete[] m_userLengths;
     delete[] m_patternColorComponents;
 }
 
-void wxMacCoreGraphicsPen::Init()
+void wxMacCoreGraphicsPenData::Init()
 {
     m_lengths = NULL;
     m_userLengths = NULL;
@@ -449,7 +439,7 @@ void wxMacCoreGraphicsPen::Init()
     m_isPattern = false;
 }
 
-void wxMacCoreGraphicsPen::Apply( wxGraphicsContext* context )
+void wxMacCoreGraphicsPenData::Apply( wxGraphicsContext* context )
 {
     CGContextRef cg = (CGContextRef) context->GetNativeContext();
     CGContextSetLineWidth( cg , m_width );
@@ -473,13 +463,12 @@ void wxMacCoreGraphicsPen::Apply( wxGraphicsContext* context )
 // Brush
 //
 
-class wxMacCoreGraphicsBrush : public wxGraphicsBrush
+class wxMacCoreGraphicsBrushData : public wxGraphicsObjectRefData
 {
 public:
-    wxMacCoreGraphicsBrush();
-    wxMacCoreGraphicsBrush( wxGraphicsRenderer* renderer );
-    wxMacCoreGraphicsBrush( wxGraphicsRenderer* renderer, const wxBrush &brush );
-    ~wxMacCoreGraphicsBrush ();
+    wxMacCoreGraphicsBrushData( wxGraphicsRenderer* renderer );
+    wxMacCoreGraphicsBrushData( wxGraphicsRenderer* renderer, const wxBrush &brush );
+    ~wxMacCoreGraphicsBrushData ();
     
     virtual void Apply( wxGraphicsContext* context );
     void CreateLinearGradientBrush( wxDouble x1, wxDouble y1, wxDouble x2, wxDouble y2, 
@@ -505,23 +494,14 @@ protected:
     CGFunctionRef m_gradientFunction;
     CGShadingRef m_shading;
     CGFloat *m_gradientComponents;
-private :
-DECLARE_DYNAMIC_CLASS_NO_COPY(wxMacCoreGraphicsBrush)
 };
 
-IMPLEMENT_DYNAMIC_CLASS(wxMacCoreGraphicsBrush,wxGraphicsBrush)
-
-wxMacCoreGraphicsBrush::wxMacCoreGraphicsBrush() : wxGraphicsBrush( NULL )
-{
-    wxLogDebug(wxT("Illegal Constructor called"));
-}
-
-wxMacCoreGraphicsBrush::wxMacCoreGraphicsBrush( wxGraphicsRenderer* renderer) : wxGraphicsBrush( renderer )
+wxMacCoreGraphicsBrushData::wxMacCoreGraphicsBrushData( wxGraphicsRenderer* renderer) : wxGraphicsObjectRefData( renderer )
 {
     Init();
 }
 
-void wxMacCoreGraphicsBrush::CreateLinearGradientBrush( wxDouble x1, wxDouble y1, wxDouble x2, wxDouble y2, 
+void wxMacCoreGraphicsBrushData::CreateLinearGradientBrush( wxDouble x1, wxDouble y1, wxDouble x2, wxDouble y2, 
         const wxColour&c1, const wxColour&c2 )
 {
     m_gradientFunction = CreateGradientFunction( c1, c2 );
@@ -529,7 +509,7 @@ void wxMacCoreGraphicsBrush::CreateLinearGradientBrush( wxDouble x1, wxDouble y1
     m_isShading = true ;
 }
         
-void wxMacCoreGraphicsBrush::CreateRadialGradientBrush( wxDouble xo, wxDouble yo, wxDouble xc, wxDouble yc, wxDouble radius,
+void wxMacCoreGraphicsBrushData::CreateRadialGradientBrush( wxDouble xo, wxDouble yo, wxDouble xc, wxDouble yc, wxDouble radius,
     const wxColour &oColor, const wxColour &cColor )
 {
     m_gradientFunction = CreateGradientFunction( oColor, cColor );
@@ -537,7 +517,7 @@ void wxMacCoreGraphicsBrush::CreateRadialGradientBrush( wxDouble xo, wxDouble yo
     m_isShading = true ;
 }
                 
-wxMacCoreGraphicsBrush::wxMacCoreGraphicsBrush(wxGraphicsRenderer* renderer, const wxBrush &brush) : wxGraphicsBrush( renderer )
+wxMacCoreGraphicsBrushData::wxMacCoreGraphicsBrushData(wxGraphicsRenderer* renderer, const wxBrush &brush) : wxGraphicsObjectRefData( renderer )
 {
     Init();
     
@@ -574,7 +554,7 @@ wxMacCoreGraphicsBrush::wxMacCoreGraphicsBrush(wxGraphicsRenderer* renderer, con
     }
 }
 
-wxMacCoreGraphicsBrush::~wxMacCoreGraphicsBrush()
+wxMacCoreGraphicsBrushData::~wxMacCoreGraphicsBrushData()
 {
     if ( m_shading )
         CGShadingRelease(m_shading);
@@ -586,7 +566,7 @@ wxMacCoreGraphicsBrush::~wxMacCoreGraphicsBrush()
     delete[] m_patternColorComponents;
 }
 
-void wxMacCoreGraphicsBrush::Init()
+void wxMacCoreGraphicsBrushData::Init()
 {
     m_patternColorComponents = NULL;
     m_gradientFunction = NULL;
@@ -596,7 +576,7 @@ void wxMacCoreGraphicsBrush::Init()
     m_isShading = false;
 }
 
-void wxMacCoreGraphicsBrush::Apply( wxGraphicsContext* context )
+void wxMacCoreGraphicsBrushData::Apply( wxGraphicsContext* context )
 {
     CGContextRef cg = (CGContextRef) context->GetNativeContext();
     
@@ -617,7 +597,7 @@ void wxMacCoreGraphicsBrush::Apply( wxGraphicsContext* context )
     }
 }
 
-void wxMacCoreGraphicsBrush::CalculateShadingValues (void *info, const CGFloat *in, CGFloat *out)
+void wxMacCoreGraphicsBrushData::CalculateShadingValues (void *info, const CGFloat *in, CGFloat *out)
 {
     CGFloat* colors = (CGFloat*) info ;
     CGFloat f = *in;
@@ -627,7 +607,7 @@ void wxMacCoreGraphicsBrush::CalculateShadingValues (void *info, const CGFloat *
     }
 }
 
-CGFunctionRef wxMacCoreGraphicsBrush::CreateGradientFunction( const wxColour& c1, const wxColour& c2 )
+CGFunctionRef wxMacCoreGraphicsBrushData::CreateGradientFunction( const wxColour& c1, const wxColour& c2 )
 {
     static const CGFunctionCallbacks callbacks = { 0, &CalculateShadingValues, NULL };
     static const CGFloat input_value_range [2] = { 0, 1 };
@@ -653,28 +633,18 @@ CGFunctionRef wxMacCoreGraphicsBrush::CreateGradientFunction( const wxColour& c1
 // Font
 //
 
-class wxMacCoreGraphicsFont : public wxGraphicsFont
+class wxMacCoreGraphicsFontData : public wxGraphicsObjectRefData
 {
 public:
-    wxMacCoreGraphicsFont();
-    wxMacCoreGraphicsFont( wxGraphicsRenderer* renderer, const wxFont &font, const wxColour& col );
-    ~wxMacCoreGraphicsFont();
+    wxMacCoreGraphicsFontData( wxGraphicsRenderer* renderer, const wxFont &font, const wxColour& col );
+    ~wxMacCoreGraphicsFontData();
     
-    virtual void Apply( wxGraphicsContext* context );
     virtual ATSUStyle GetATSUStyle() { return m_macATSUIStyle; }
 private :
     ATSUStyle m_macATSUIStyle;
-DECLARE_DYNAMIC_CLASS_NO_COPY(wxMacCoreGraphicsFont)
 };
 
-IMPLEMENT_DYNAMIC_CLASS(wxMacCoreGraphicsFont,wxGraphicsFont)
-
-wxMacCoreGraphicsFont::wxMacCoreGraphicsFont() : wxGraphicsFont( NULL )
-{
-    wxLogDebug(wxT("Illegal Constructor called"));
-}
-
-wxMacCoreGraphicsFont::wxMacCoreGraphicsFont(wxGraphicsRenderer* renderer, const wxFont &font, const wxColour& col) : wxGraphicsFont( renderer )
+wxMacCoreGraphicsFontData::wxMacCoreGraphicsFontData(wxGraphicsRenderer* renderer, const wxFont &font, const wxColour& col) : wxGraphicsObjectRefData( renderer )
 {
     m_macATSUIStyle = NULL;
     
@@ -711,18 +681,13 @@ wxMacCoreGraphicsFont::wxMacCoreGraphicsFont(wxGraphicsRenderer* renderer, const
     wxASSERT_MSG( status == noErr , wxT("couldn't modify ATSU style") );
 }
 
-wxMacCoreGraphicsFont::~wxMacCoreGraphicsFont()
+wxMacCoreGraphicsFontData::~wxMacCoreGraphicsFontData()
 {
     if ( m_macATSUIStyle )
     {
         ::ATSUDisposeStyle((ATSUStyle)m_macATSUIStyle);
         m_macATSUIStyle = NULL;
     }
-}
-
-void wxMacCoreGraphicsFont::Apply( wxGraphicsContext* WXUNUSED(context) )
-{
-    // nothing to do here
 }
 
 //
@@ -1191,15 +1156,6 @@ public:
     // setting the paint
     //
     
-    // sets the pen
-    virtual void SetPen( wxGraphicsPen* pen , bool release = true );
-    
-    // sets the brush for filling
-    virtual void SetBrush( wxGraphicsBrush* brush , bool release = true );
-
-    // sets the font
-    virtual void SetFont( wxGraphicsFont* font, bool release = true );
-
     // strokes along a path with the current pen
     virtual void StrokePath( const wxGraphicsPath *path );
 
@@ -1212,9 +1168,9 @@ public:
     virtual bool ShouldOffset() const
     {
         int penwidth = 0 ;
-        if ( m_pen )
+        if ( !m_pen.IsNull() )
         {
-            penwidth = m_pen->GetWidth();
+            penwidth = ((wxMacCoreGraphicsPenData*)m_pen.GetRefData())->GetWidth();
             if ( penwidth == 0 )
                 penwidth = 1;
         }
@@ -1331,10 +1287,6 @@ wxMacCoreGraphicsContext::wxMacCoreGraphicsContext() : wxGraphicsContext(NULL)
 
 wxMacCoreGraphicsContext::~wxMacCoreGraphicsContext()
 {
-    SetPen(NULL);
-    SetFont(NULL);
-    SetBrush(NULL);
-    
     if ( m_cgContext )
     {
         // TODO : when is this necessary - should we add a Flush() method ? CGContextSynchronize( m_cgContext );
@@ -1415,7 +1367,7 @@ void wxMacCoreGraphicsContext::ResetClip()
 
 void wxMacCoreGraphicsContext::StrokePath( const wxGraphicsPath *path )
 {
-    if ( m_pen == NULL )
+    if ( m_pen.IsNull() )
         return ;
 
 	EnsureIsValid();
@@ -1424,7 +1376,7 @@ void wxMacCoreGraphicsContext::StrokePath( const wxGraphicsPath *path )
     if ( offset )
         CGContextTranslateCTM( m_cgContext, 0.5, 0.5 );
 
-    m_pen->Apply(this);
+    ((wxMacCoreGraphicsPenData*)m_pen.GetRefData())->Apply(this);
     CGContextAddPath( m_cgContext , (CGPathRef) path->GetNativePath() );
     CGContextStrokePath( m_cgContext );
 
@@ -1434,7 +1386,7 @@ void wxMacCoreGraphicsContext::StrokePath( const wxGraphicsPath *path )
 
 void wxMacCoreGraphicsContext::DrawPath( const wxGraphicsPath *path , int fillStyle )
 {        
-    if ( m_brush != NULL && ((wxMacCoreGraphicsBrush*)m_brush)->IsShading() )
+    if ( !m_brush.IsNull() && ((wxMacCoreGraphicsBrushData*)m_brush.GetRefData())->IsShading() )
     {
         // when using shading, we cannot draw pen and brush at the same time
         // revert to the base implementation of first filling and then stroking
@@ -1443,16 +1395,16 @@ void wxMacCoreGraphicsContext::DrawPath( const wxGraphicsPath *path , int fillSt
     }
     
     CGPathDrawingMode mode = kCGPathFill ;
-    if ( m_brush == NULL )
+    if ( m_brush.IsNull() )
     {
-        if ( m_pen == NULL )
+        if ( m_pen.IsNull() )
             return;
         else
             mode = kCGPathStroke;
     }
     else
     {
-        if ( m_pen == NULL )
+        if ( m_pen.IsNull() )
         {
             if ( fillStyle == wxODDEVEN_RULE )
                 mode = kCGPathEOFill;
@@ -1470,10 +1422,10 @@ void wxMacCoreGraphicsContext::DrawPath( const wxGraphicsPath *path , int fillSt
         
 	EnsureIsValid();
 
-    if ( m_brush )
-        m_brush->Apply(this);
-    if ( m_pen )
-        m_pen->Apply(this);
+    if ( !m_brush.IsNull() )
+        ((wxMacCoreGraphicsBrushData*)m_brush.GetRefData())->Apply(this);
+    if ( !m_pen.IsNull() )
+        ((wxMacCoreGraphicsPenData*)m_pen.GetRefData())->Apply(this);
 
     bool offset = ShouldOffset();
     
@@ -1489,22 +1441,22 @@ void wxMacCoreGraphicsContext::DrawPath( const wxGraphicsPath *path , int fillSt
 
 void wxMacCoreGraphicsContext::FillPath( const wxGraphicsPath *path , int fillStyle )
 {
-    if ( m_brush == NULL )
+    if ( m_brush.IsNull() )
         return;
         
 	EnsureIsValid();
     
-    if ( ((wxMacCoreGraphicsBrush*)m_brush)->IsShading() )
+    if ( ((wxMacCoreGraphicsBrushData*)m_brush.GetRefData())->IsShading() )
     {
         CGContextSaveGState( m_cgContext );
         CGContextAddPath( m_cgContext , (CGPathRef) path->GetNativePath() );
         CGContextClip( m_cgContext );
-        CGContextDrawShading( m_cgContext, ((wxMacCoreGraphicsBrush*)m_brush)->GetShading() );
+        CGContextDrawShading( m_cgContext, ((wxMacCoreGraphicsBrushData*)m_brush.GetRefData())->GetShading() );
         CGContextRestoreGState( m_cgContext);
     }
     else
     {	
-        m_brush->Apply(this);
+        ((wxMacCoreGraphicsBrushData*)m_brush.GetRefData())->Apply(this);
         CGContextAddPath( m_cgContext , (CGPathRef) path->GetNativePath() );
         if ( fillStyle == wxODDEVEN_RULE )
             CGContextEOFillPath( m_cgContext );
@@ -1581,24 +1533,6 @@ void wxMacCoreGraphicsContext::PopState()
     CGContextRestoreGState( m_cgContext );
 }
 
-// sets the pen
-void wxMacCoreGraphicsContext::SetPen( wxGraphicsPen* pen , bool release )
-{
-    wxGraphicsContext::SetPen( pen, release );
-}
-
-// sets the brush for filling
-void wxMacCoreGraphicsContext::SetBrush( wxGraphicsBrush* brush , bool release )
-{
-    wxGraphicsContext::SetBrush( brush, release );
-}
-
-// sets the font
-void wxMacCoreGraphicsContext::SetFont( wxGraphicsFont* font, bool release )
-{
-    wxGraphicsContext::SetFont( font, release );
-}
-
 void wxMacCoreGraphicsContext::DrawText( const wxString &str, wxDouble x, wxDouble y ) 
 {
     DrawText(str, x, y, 0.0);
@@ -1606,7 +1540,7 @@ void wxMacCoreGraphicsContext::DrawText( const wxString &str, wxDouble x, wxDoub
 
 void wxMacCoreGraphicsContext::DrawText( const wxString &str, wxDouble x, wxDouble y, wxDouble angle ) 
 {
-    if ( m_font == NULL )
+    if ( m_font.IsNull() )
         return;
         
 	EnsureIsValid();
@@ -1639,7 +1573,7 @@ void wxMacCoreGraphicsContext::DrawText( const wxString &str, wxDouble x, wxDoub
 #endif
 #endif
 
-    ATSUStyle style = (((wxMacCoreGraphicsFont*)m_font)->GetATSUStyle());
+    ATSUStyle style = (((wxMacCoreGraphicsFontData*)m_font.GetRefData())->GetATSUStyle());
     status = ::ATSUCreateTextLayoutWithTextPtr( (UniCharArrayPtr) ubuf , 0 , chars , chars , 1 ,
         &chars , &style , &atsuLayout );
 
@@ -1741,7 +1675,7 @@ void wxMacCoreGraphicsContext::DrawText( const wxString &str, wxDouble x, wxDoub
 void wxMacCoreGraphicsContext::GetTextExtent( const wxString &str, wxDouble *width, wxDouble *height,
                             wxDouble *descent, wxDouble *externalLeading ) const
 {
-    wxCHECK_RET( m_font != NULL, wxT("wxDC(cg)::DoGetTextExtent - no valid font set") );
+    wxCHECK_RET( !m_font.IsNull(), wxT("wxDC(cg)::DoGetTextExtent - no valid font set") );
 
     OSStatus status = noErr;
     
@@ -1772,7 +1706,7 @@ void wxMacCoreGraphicsContext::GetTextExtent( const wxString &str, wxDouble *wid
 #endif
 #endif
 
-    ATSUStyle style = (((wxMacCoreGraphicsFont*)m_font)->GetATSUStyle());
+    ATSUStyle style = (((wxMacCoreGraphicsFontData*)m_font.GetRefData())->GetATSUStyle());
     status = ::ATSUCreateTextLayoutWithTextPtr( (UniCharArrayPtr) ubuf , 0 , chars , chars , 1 ,
         &chars , &style , &atsuLayout );
 
@@ -1831,7 +1765,7 @@ void wxMacCoreGraphicsContext::GetPartialTextExtents(const wxString& text, wxArr
 #endif
 #endif
 
-    ATSUStyle style = (((wxMacCoreGraphicsFont*)m_font)->GetATSUStyle());
+    ATSUStyle style = (((wxMacCoreGraphicsFontData*)m_font.GetRefData())->GetATSUStyle());
     ::ATSUCreateTextLayoutWithTextPtr( (UniCharArrayPtr) ubuf , 0 , chars , chars , 1 ,
         &chars , &style , &atsuLayout );
 
@@ -1909,21 +1843,21 @@ public :
 		wxDouble tx=0.0, wxDouble ty=0.0);
 
 
-    virtual wxGraphicsPen* CreatePen(const wxPen& pen) ;
+    virtual wxGraphicsPen CreatePen(const wxPen& pen) ;
     
-    virtual wxGraphicsBrush* CreateBrush(const wxBrush& brush ) ;
+    virtual wxGraphicsBrush CreateBrush(const wxBrush& brush ) ;
     
     // sets the brush to a linear gradient, starting at (x1,y1) with color c1 to (x2,y2) with color c2
-    virtual wxGraphicsBrush* CreateLinearGradientBrush( wxDouble x1, wxDouble y1, wxDouble x2, wxDouble y2, 
+    virtual wxGraphicsBrush CreateLinearGradientBrush( wxDouble x1, wxDouble y1, wxDouble x2, wxDouble y2, 
         const wxColour&c1, const wxColour&c2) ;
 
     // sets the brush to a radial gradient originating at (xo,yc) with color oColor and ends on a circle around (xc,yc) 
     // with radius r and color cColor
-    virtual wxGraphicsBrush* CreateRadialGradientBrush( wxDouble xo, wxDouble yo, wxDouble xc, wxDouble yc, wxDouble radius,
+    virtual wxGraphicsBrush CreateRadialGradientBrush( wxDouble xo, wxDouble yo, wxDouble xc, wxDouble yc, wxDouble radius,
         const wxColour &oColor, const wxColour &cColor) ;
 
    // sets the font
-    virtual wxGraphicsFont* CreateFont( const wxFont &font , const wxColour &col = *wxBLACK ) ;
+    virtual wxGraphicsFont CreateFont( const wxFont &font , const wxColour &col = *wxBLACK ) ;
 
 private :
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxMacCoreGraphicsRenderer)
@@ -1982,48 +1916,64 @@ wxGraphicsMatrix * wxMacCoreGraphicsRenderer::CreateMatrix( wxDouble a, wxDouble
     return m;
 }
 
-wxGraphicsPen* wxMacCoreGraphicsRenderer::CreatePen(const wxPen& pen) 
+wxGraphicsPen wxMacCoreGraphicsRenderer::CreatePen(const wxPen& pen) 
 {
     if ( !pen.Ok() || pen.GetStyle() == wxTRANSPARENT )
-        return NULL;
+        return wxNullGraphicsPen;
     else
-        return new wxMacCoreGraphicsPen( this, pen );
+    {
+        wxGraphicsPen p;
+        p.SetRefData(new wxMacCoreGraphicsPenData( this, pen ));
+        return p;
+    }
 }
 
-wxGraphicsBrush* wxMacCoreGraphicsRenderer::CreateBrush(const wxBrush& brush ) 
+wxGraphicsBrush wxMacCoreGraphicsRenderer::CreateBrush(const wxBrush& brush ) 
 {
     if ( !brush.Ok() || brush.GetStyle() == wxTRANSPARENT )
-        return NULL;
+        return wxNullGraphicsBrush;
     else
-        return new wxMacCoreGraphicsBrush( this, brush );
+    {
+        wxGraphicsBrush p;
+        p.SetRefData(new wxMacCoreGraphicsBrushData( this, brush ));
+        return p;
+    }
 }
 
 // sets the brush to a linear gradient, starting at (x1,y1) with color c1 to (x2,y2) with color c2
-wxGraphicsBrush* wxMacCoreGraphicsRenderer::CreateLinearGradientBrush( wxDouble x1, wxDouble y1, wxDouble x2, wxDouble y2, 
+wxGraphicsBrush wxMacCoreGraphicsRenderer::CreateLinearGradientBrush( wxDouble x1, wxDouble y1, wxDouble x2, wxDouble y2, 
     const wxColour&c1, const wxColour&c2) 
 {
-    wxMacCoreGraphicsBrush* brush = new wxMacCoreGraphicsBrush(this);
-    brush->CreateLinearGradientBrush(x1, y1, x2, y2, c1, c2);
-    return brush;
+    wxGraphicsBrush p;
+    wxMacCoreGraphicsBrushData* d = new wxMacCoreGraphicsBrushData( this );
+    d->CreateLinearGradientBrush(x1, y1, x2, y2, c1, c2);
+    p.SetRefData(d);
+    return p;
 }
 
 // sets the brush to a radial gradient originating at (xo,yc) with color oColor and ends on a circle around (xc,yc) 
 // with radius r and color cColor
-wxGraphicsBrush* wxMacCoreGraphicsRenderer::CreateRadialGradientBrush( wxDouble xo, wxDouble yo, wxDouble xc, wxDouble yc, wxDouble radius,
+wxGraphicsBrush wxMacCoreGraphicsRenderer::CreateRadialGradientBrush( wxDouble xo, wxDouble yo, wxDouble xc, wxDouble yc, wxDouble radius,
     const wxColour &oColor, const wxColour &cColor) 
 {
-    wxMacCoreGraphicsBrush* brush = new wxMacCoreGraphicsBrush(this);
-    brush->CreateRadialGradientBrush(xo,yo,xc,yc,radius,oColor,cColor);
-    return brush;
+    wxGraphicsBrush p;
+    wxMacCoreGraphicsBrushData* d = new wxMacCoreGraphicsBrushData( this );
+    d->CreateRadialGradientBrush(xo,yo,xc,yc,radius,oColor,cColor);
+    p.SetRefData(d);
+    return p;
 }
 
 // sets the font
-wxGraphicsFont* wxMacCoreGraphicsRenderer::CreateFont( const wxFont &font , const wxColour &col ) 
+wxGraphicsFont wxMacCoreGraphicsRenderer::CreateFont( const wxFont &font , const wxColour &col ) 
 {
     if ( font.Ok() )
-        return new wxMacCoreGraphicsFont( this , font, col );
+    {        
+        wxGraphicsFont p;
+        p.SetRefData(new wxMacCoreGraphicsFontData( this , font, col ));
+        return p;
+    }
     else
-        return NULL;
+        return wxNullGraphicsFont;
 }
 
 
