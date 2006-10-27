@@ -1238,6 +1238,64 @@ static void wxDC_GetBoundingBox(wxDC* dc, int* x1, int* y1, int* x2, int* y2) {
 //---------------------------------------------------------------------------
 %newgroup
 
+DocStr(wxDCTextColourChanger,
+"wx.DCTextColourChanger can be used to temporarily change the DC text
+colour and restore it automatically when the object goes out of scope", "");
+
+class wxDCTextColourChanger
+{
+public:
+    wxDCTextColourChanger(wxDC& dc, const wxColour& col);
+    ~wxDCTextColourChanger();
+};
+
+
+DocStr(wxDCPenChanger,
+"wx.DCPenChanger can be used to temporarily change the DC pen and
+restore it automatically when the object goes out of scope", "");
+
+class  wxDCPenChanger
+{
+public:
+    wxDCPenChanger(wxDC& dc, const wxPen& pen);
+    ~wxDCPenChanger();
+};
+
+
+
+DocStr(wxDCBrushChanger,
+"wx.DCBrushChanger can be used to temporarily change the DC brush and
+restore it automatically when the object goes out of scope", "");
+
+class wxDCBrushChanger
+{
+public:
+    wxDCBrushChanger(wxDC& dc, const wxBrush& brush);
+    ~wxDCBrushChanger();
+};
+
+
+DocStr(wxDCClipper,
+"wx.wxDCClipper sets the DC's clipping region when it is constructed,
+and then automatically destroys the clipping region when the clipper
+goes out of scope.", "");
+
+class wxDCClipper
+{
+public:
+    %nokwargs wxDCClipper;
+    wxDCClipper(wxDC& dc, const wxRegion& r);
+    wxDCClipper(wxDC& dc, const wxRect& r);
+    wxDCClipper(wxDC& dc, wxCoord x, wxCoord y, wxCoord w, wxCoord h);
+    ~wxDCClipper();
+};
+
+
+
+
+//---------------------------------------------------------------------------
+%newgroup
+
 MustHaveApp(wxMemoryDC);
 
 DocStr(wxMemoryDC,
