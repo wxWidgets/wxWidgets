@@ -38,7 +38,7 @@ class wxZipFSInputStream : public wxZipInputStream
                : wxZipInputStream(*file->GetStream())
        {
             m_file = file;
-#if 1 //WXWIN_COMPATIBILITY_2_6
+#if WXWIN_COMPATIBILITY_2_6
             m_allowSeeking = true;
 #endif
        }
