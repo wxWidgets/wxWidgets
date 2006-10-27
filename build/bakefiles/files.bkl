@@ -289,6 +289,8 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <!-- =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- -->
 <set var="BASE_CMN_SRC" hints="files">
     src/common/appbase.cpp
+    src/common/arcall.cpp
+    src/common/arcfind.cpp
     src/common/archive.cpp
     src/common/clntdata.cpp
     src/common/cmdline.cpp
@@ -338,6 +340,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/common/stream.cpp
     src/common/string.cpp
     src/common/sysopt.cpp
+    src/common/tarstrm.cpp
     src/common/textbuf.cpp
     src/common/textfile.cpp
     src/common/tokenzr.cpp
@@ -447,6 +450,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/stream.h
     wx/string.h
     wx/sysopt.h
+    wx/tarstrm.h
     wx/textbuf.h
     wx/textfile.h
     wx/thread.h

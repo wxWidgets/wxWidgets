@@ -308,6 +308,7 @@ ALL_BASE_HEADERS =  \
 	wx/stream.h \
 	wx/string.h \
 	wx/sysopt.h \
+	wx/tarstrm.h \
 	wx/textbuf.h \
 	wx/textfile.h \
 	wx/thread.h \
@@ -441,6 +442,7 @@ ALL_PORTS_BASE_HEADERS =  \
 	wx/stream.h \
 	wx/string.h \
 	wx/sysopt.h \
+	wx/tarstrm.h \
 	wx/textbuf.h \
 	wx/textfile.h \
 	wx/thread.h \
@@ -523,6 +525,8 @@ ALL_PORTS_BASE_HEADERS =  \
 	wx/dbtable.h
 ALL_BASE_SOURCES =  \
 	src/common/appbase.cpp \
+	src/common/arcall.cpp \
+	src/common/arcfind.cpp \
 	src/common/archive.cpp \
 	src/common/clntdata.cpp \
 	src/common/cmdline.cpp \
@@ -572,6 +576,7 @@ ALL_BASE_SOURCES =  \
 	src/common/stream.cpp \
 	src/common/string.cpp \
 	src/common/sysopt.cpp \
+	src/common/tarstrm.cpp \
 	src/common/textbuf.cpp \
 	src/common/textfile.cpp \
 	src/common/tokenzr.cpp \
@@ -675,6 +680,8 @@ MONODLL_CXXFLAGS = $(__monodll_PCH_INC) -D__WX$(TOOLKIT)__ \
 MONODLL_OBJECTS =  \
 	$(__monodll___win32rc) \
 	monodll_appbase.o \
+	monodll_arcall.o \
+	monodll_arcfind.o \
 	monodll_archive.o \
 	monodll_clntdata.o \
 	monodll_cmdline.o \
@@ -724,6 +731,7 @@ MONODLL_OBJECTS =  \
 	monodll_stream.o \
 	monodll_string.o \
 	monodll_sysopt.o \
+	monodll_tarstrm.o \
 	monodll_textbuf.o \
 	monodll_textfile.o \
 	monodll_tokenzr.o \
@@ -771,6 +779,8 @@ MONOLIB_CXXFLAGS = $(__monolib_PCH_INC) -D__WX$(TOOLKIT)__ \
 	-DwxUSE_BASE=1 $(CPPFLAGS) $(CXXFLAGS)
 MONOLIB_OBJECTS =  \
 	monolib_appbase.o \
+	monolib_arcall.o \
+	monolib_arcfind.o \
 	monolib_archive.o \
 	monolib_clntdata.o \
 	monolib_cmdline.o \
@@ -820,6 +830,7 @@ MONOLIB_OBJECTS =  \
 	monolib_stream.o \
 	monolib_string.o \
 	monolib_sysopt.o \
+	monolib_tarstrm.o \
 	monolib_textbuf.o \
 	monolib_textfile.o \
 	monolib_tokenzr.o \
@@ -869,6 +880,8 @@ BASEDLL_CXXFLAGS = $(__basedll_PCH_INC) -D__WX$(TOOLKIT)__ \
 BASEDLL_OBJECTS =  \
 	$(__basedll___win32rc) \
 	basedll_appbase.o \
+	basedll_arcall.o \
+	basedll_arcfind.o \
 	basedll_archive.o \
 	basedll_clntdata.o \
 	basedll_cmdline.o \
@@ -918,6 +931,7 @@ BASEDLL_OBJECTS =  \
 	basedll_stream.o \
 	basedll_string.o \
 	basedll_sysopt.o \
+	basedll_tarstrm.o \
 	basedll_textbuf.o \
 	basedll_textfile.o \
 	basedll_tokenzr.o \
@@ -950,6 +964,8 @@ BASELIB_CXXFLAGS = $(__baselib_PCH_INC) -D__WX$(TOOLKIT)__ \
 	-DwxUSE_GUI=0 -DwxUSE_BASE=1 $(CPPFLAGS) $(CXXFLAGS)
 BASELIB_OBJECTS =  \
 	baselib_appbase.o \
+	baselib_arcall.o \
+	baselib_arcfind.o \
 	baselib_archive.o \
 	baselib_clntdata.o \
 	baselib_cmdline.o \
@@ -999,6 +1015,7 @@ BASELIB_OBJECTS =  \
 	baselib_stream.o \
 	baselib_string.o \
 	baselib_sysopt.o \
+	baselib_tarstrm.o \
 	baselib_textbuf.o \
 	baselib_textfile.o \
 	baselib_tokenzr.o \
@@ -12133,6 +12150,12 @@ monodll_version_rc.o: $(srcdir)/src/msw/version.rc $(MONODLL_ODEP)
 monodll_appbase.o: $(srcdir)/src/common/appbase.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/appbase.cpp
 
+monodll_arcall.o: $(srcdir)/src/common/arcall.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/arcall.cpp
+
+monodll_arcfind.o: $(srcdir)/src/common/arcfind.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/arcfind.cpp
+
 monodll_archive.o: $(srcdir)/src/common/archive.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/archive.cpp
 
@@ -12279,6 +12302,9 @@ monodll_string.o: $(srcdir)/src/common/string.cpp $(MONODLL_ODEP)
 
 monodll_sysopt.o: $(srcdir)/src/common/sysopt.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/sysopt.cpp
+
+monodll_tarstrm.o: $(srcdir)/src/common/tarstrm.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/tarstrm.cpp
 
 monodll_textbuf.o: $(srcdir)/src/common/textbuf.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/textbuf.cpp
@@ -16216,6 +16242,12 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 monolib_appbase.o: $(srcdir)/src/common/appbase.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/appbase.cpp
 
+monolib_arcall.o: $(srcdir)/src/common/arcall.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/arcall.cpp
+
+monolib_arcfind.o: $(srcdir)/src/common/arcfind.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/arcfind.cpp
+
 monolib_archive.o: $(srcdir)/src/common/archive.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/archive.cpp
 
@@ -16362,6 +16394,9 @@ monolib_string.o: $(srcdir)/src/common/string.cpp $(MONOLIB_ODEP)
 
 monolib_sysopt.o: $(srcdir)/src/common/sysopt.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/sysopt.cpp
+
+monolib_tarstrm.o: $(srcdir)/src/common/tarstrm.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/tarstrm.cpp
 
 monolib_textbuf.o: $(srcdir)/src/common/textbuf.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/textbuf.cpp
@@ -20302,6 +20337,12 @@ basedll_version_rc.o: $(srcdir)/src/msw/version.rc $(BASEDLL_ODEP)
 basedll_appbase.o: $(srcdir)/src/common/appbase.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/common/appbase.cpp
 
+basedll_arcall.o: $(srcdir)/src/common/arcall.cpp $(BASEDLL_ODEP)
+	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/common/arcall.cpp
+
+basedll_arcfind.o: $(srcdir)/src/common/arcfind.cpp $(BASEDLL_ODEP)
+	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/common/arcfind.cpp
+
 basedll_archive.o: $(srcdir)/src/common/archive.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/common/archive.cpp
 
@@ -20448,6 +20489,9 @@ basedll_string.o: $(srcdir)/src/common/string.cpp $(BASEDLL_ODEP)
 
 basedll_sysopt.o: $(srcdir)/src/common/sysopt.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/common/sysopt.cpp
+
+basedll_tarstrm.o: $(srcdir)/src/common/tarstrm.cpp $(BASEDLL_ODEP)
+	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/common/tarstrm.cpp
 
 basedll_textbuf.o: $(srcdir)/src/common/textbuf.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/common/textbuf.cpp
@@ -20878,6 +20922,12 @@ basedll_uma.o: $(srcdir)/src/mac/carbon/uma.cpp $(BASEDLL_ODEP)
 baselib_appbase.o: $(srcdir)/src/common/appbase.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/common/appbase.cpp
 
+baselib_arcall.o: $(srcdir)/src/common/arcall.cpp $(BASELIB_ODEP)
+	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/common/arcall.cpp
+
+baselib_arcfind.o: $(srcdir)/src/common/arcfind.cpp $(BASELIB_ODEP)
+	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/common/arcfind.cpp
+
 baselib_archive.o: $(srcdir)/src/common/archive.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/common/archive.cpp
 
@@ -21024,6 +21074,9 @@ baselib_string.o: $(srcdir)/src/common/string.cpp $(BASELIB_ODEP)
 
 baselib_sysopt.o: $(srcdir)/src/common/sysopt.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/common/sysopt.cpp
+
+baselib_tarstrm.o: $(srcdir)/src/common/tarstrm.cpp $(BASELIB_ODEP)
+	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/common/tarstrm.cpp
 
 baselib_textbuf.o: $(srcdir)/src/common/textbuf.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/common/textbuf.cpp

@@ -203,6 +203,8 @@ MONODLL_CXXFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
 MONODLL_OBJECTS =  \
 	$(OBJS)\monodll_dummy.obj \
 	$(OBJS)\monodll_appbase.obj \
+	$(OBJS)\monodll_arcall.obj \
+	$(OBJS)\monodll_arcfind.obj \
 	$(OBJS)\monodll_archive.obj \
 	$(OBJS)\monodll_clntdata.obj \
 	$(OBJS)\monodll_cmdline.obj \
@@ -252,6 +254,7 @@ MONODLL_OBJECTS =  \
 	$(OBJS)\monodll_stream.obj \
 	$(OBJS)\monodll_string.obj \
 	$(OBJS)\monodll_sysopt.obj \
+	$(OBJS)\monodll_tarstrm.obj \
 	$(OBJS)\monodll_textbuf.obj \
 	$(OBJS)\monodll_textfile.obj \
 	$(OBJS)\monodll_tokenzr.obj \
@@ -320,6 +323,8 @@ MONOLIB_CXXFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
 MONOLIB_OBJECTS =  \
 	$(OBJS)\monolib_dummy.obj \
 	$(OBJS)\monolib_appbase.obj \
+	$(OBJS)\monolib_arcall.obj \
+	$(OBJS)\monolib_arcfind.obj \
 	$(OBJS)\monolib_archive.obj \
 	$(OBJS)\monolib_clntdata.obj \
 	$(OBJS)\monolib_cmdline.obj \
@@ -369,6 +374,7 @@ MONOLIB_OBJECTS =  \
 	$(OBJS)\monolib_stream.obj \
 	$(OBJS)\monolib_string.obj \
 	$(OBJS)\monolib_sysopt.obj \
+	$(OBJS)\monolib_tarstrm.obj \
 	$(OBJS)\monolib_textbuf.obj \
 	$(OBJS)\monolib_textfile.obj \
 	$(OBJS)\monolib_tokenzr.obj \
@@ -438,6 +444,8 @@ BASEDLL_CXXFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
 BASEDLL_OBJECTS =  \
 	$(OBJS)\basedll_dummy.obj \
 	$(OBJS)\basedll_appbase.obj \
+	$(OBJS)\basedll_arcall.obj \
+	$(OBJS)\basedll_arcfind.obj \
 	$(OBJS)\basedll_archive.obj \
 	$(OBJS)\basedll_clntdata.obj \
 	$(OBJS)\basedll_cmdline.obj \
@@ -487,6 +495,7 @@ BASEDLL_OBJECTS =  \
 	$(OBJS)\basedll_stream.obj \
 	$(OBJS)\basedll_string.obj \
 	$(OBJS)\basedll_sysopt.obj \
+	$(OBJS)\basedll_tarstrm.obj \
 	$(OBJS)\basedll_textbuf.obj \
 	$(OBJS)\basedll_textfile.obj \
 	$(OBJS)\basedll_tokenzr.obj \
@@ -540,6 +549,8 @@ BASELIB_CXXFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
 BASELIB_OBJECTS =  \
 	$(OBJS)\baselib_dummy.obj \
 	$(OBJS)\baselib_appbase.obj \
+	$(OBJS)\baselib_arcall.obj \
+	$(OBJS)\baselib_arcfind.obj \
 	$(OBJS)\baselib_archive.obj \
 	$(OBJS)\baselib_clntdata.obj \
 	$(OBJS)\baselib_cmdline.obj \
@@ -589,6 +600,7 @@ BASELIB_OBJECTS =  \
 	$(OBJS)\baselib_stream.obj \
 	$(OBJS)\baselib_string.obj \
 	$(OBJS)\baselib_sysopt.obj \
+	$(OBJS)\baselib_tarstrm.obj \
 	$(OBJS)\baselib_textbuf.obj \
 	$(OBJS)\baselib_textfile.obj \
 	$(OBJS)\baselib_tokenzr.obj \
@@ -4488,6 +4500,12 @@ $(OBJS)\monodll_version.res: ..\..\src\msw\version.rc
 $(OBJS)\monodll_appbase.obj: ..\..\src\common\appbase.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) $**
 
+$(OBJS)\monodll_arcall.obj: ..\..\src\common\arcall.cpp
+	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) $**
+
+$(OBJS)\monodll_arcfind.obj: ..\..\src\common\arcfind.cpp
+	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) $**
+
 $(OBJS)\monodll_archive.obj: ..\..\src\common\archive.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) $**
 
@@ -4633,6 +4651,9 @@ $(OBJS)\monodll_string.obj: ..\..\src\common\string.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) $**
 
 $(OBJS)\monodll_sysopt.obj: ..\..\src\common\sysopt.cpp
+	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) $**
+
+$(OBJS)\monodll_tarstrm.obj: ..\..\src\common\tarstrm.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) $**
 
 $(OBJS)\monodll_textbuf.obj: ..\..\src\common\textbuf.cpp
@@ -6455,6 +6476,12 @@ $(OBJS)\monolib_dummy.obj: ..\..\src\common\dummy.cpp
 $(OBJS)\monolib_appbase.obj: ..\..\src\common\appbase.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) $**
 
+$(OBJS)\monolib_arcall.obj: ..\..\src\common\arcall.cpp
+	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) $**
+
+$(OBJS)\monolib_arcfind.obj: ..\..\src\common\arcfind.cpp
+	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) $**
+
 $(OBJS)\monolib_archive.obj: ..\..\src\common\archive.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) $**
 
@@ -6600,6 +6627,9 @@ $(OBJS)\monolib_string.obj: ..\..\src\common\string.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) $**
 
 $(OBJS)\monolib_sysopt.obj: ..\..\src\common\sysopt.cpp
+	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) $**
+
+$(OBJS)\monolib_tarstrm.obj: ..\..\src\common\tarstrm.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) $**
 
 $(OBJS)\monolib_textbuf.obj: ..\..\src\common\textbuf.cpp
@@ -8425,6 +8455,12 @@ $(OBJS)\basedll_version.res: ..\..\src\msw\version.rc
 $(OBJS)\basedll_appbase.obj: ..\..\src\common\appbase.cpp
 	$(CXX) -q -c -P -o$@ $(BASEDLL_CXXFLAGS) $**
 
+$(OBJS)\basedll_arcall.obj: ..\..\src\common\arcall.cpp
+	$(CXX) -q -c -P -o$@ $(BASEDLL_CXXFLAGS) $**
+
+$(OBJS)\basedll_arcfind.obj: ..\..\src\common\arcfind.cpp
+	$(CXX) -q -c -P -o$@ $(BASEDLL_CXXFLAGS) $**
+
 $(OBJS)\basedll_archive.obj: ..\..\src\common\archive.cpp
 	$(CXX) -q -c -P -o$@ $(BASEDLL_CXXFLAGS) $**
 
@@ -8572,6 +8608,9 @@ $(OBJS)\basedll_string.obj: ..\..\src\common\string.cpp
 $(OBJS)\basedll_sysopt.obj: ..\..\src\common\sysopt.cpp
 	$(CXX) -q -c -P -o$@ $(BASEDLL_CXXFLAGS) $**
 
+$(OBJS)\basedll_tarstrm.obj: ..\..\src\common\tarstrm.cpp
+	$(CXX) -q -c -P -o$@ $(BASEDLL_CXXFLAGS) $**
+
 $(OBJS)\basedll_textbuf.obj: ..\..\src\common\textbuf.cpp
 	$(CXX) -q -c -P -o$@ $(BASEDLL_CXXFLAGS) $**
 
@@ -8681,6 +8720,12 @@ $(OBJS)\baselib_dummy.obj: ..\..\src\common\dummy.cpp
 	$(CXX) -q -c -P -o$@ $(BASELIB_CXXFLAGS) -H $**
 
 $(OBJS)\baselib_appbase.obj: ..\..\src\common\appbase.cpp
+	$(CXX) -q -c -P -o$@ $(BASELIB_CXXFLAGS) $**
+
+$(OBJS)\baselib_arcall.obj: ..\..\src\common\arcall.cpp
+	$(CXX) -q -c -P -o$@ $(BASELIB_CXXFLAGS) $**
+
+$(OBJS)\baselib_arcfind.obj: ..\..\src\common\arcfind.cpp
 	$(CXX) -q -c -P -o$@ $(BASELIB_CXXFLAGS) $**
 
 $(OBJS)\baselib_archive.obj: ..\..\src\common\archive.cpp
@@ -8828,6 +8873,9 @@ $(OBJS)\baselib_string.obj: ..\..\src\common\string.cpp
 	$(CXX) -q -c -P -o$@ $(BASELIB_CXXFLAGS) $**
 
 $(OBJS)\baselib_sysopt.obj: ..\..\src\common\sysopt.cpp
+	$(CXX) -q -c -P -o$@ $(BASELIB_CXXFLAGS) $**
+
+$(OBJS)\baselib_tarstrm.obj: ..\..\src\common\tarstrm.cpp
 	$(CXX) -q -c -P -o$@ $(BASELIB_CXXFLAGS) $**
 
 $(OBJS)\baselib_textbuf.obj: ..\..\src\common\textbuf.cpp

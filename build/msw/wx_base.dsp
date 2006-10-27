@@ -456,6 +456,14 @@ SOURCE=..\..\src\common\appbase.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\common\arcall.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\common\arcfind.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\common\archive.cpp
 # End Source File
 # Begin Source File
@@ -668,6 +676,10 @@ SOURCE=..\..\src\common\string.cpp
 # Begin Source File
 
 SOURCE=..\..\src\common\sysopt.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\common\tarstrm.cpp
 # End Source File
 # Begin Source File
 
@@ -1728,6 +1740,10 @@ SOURCE=..\..\include\wx\string.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\sysopt.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\tarstrm.h
 # End Source File
 # Begin Source File
 

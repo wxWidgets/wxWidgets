@@ -199,6 +199,7 @@ wx/strconv.h
 wx/stream.h
 wx/string.h
 wx/sysopt.h
+wx/tarstrm.h
 wx/textbuf.h
 wx/textfile.h
 wx/thread.h

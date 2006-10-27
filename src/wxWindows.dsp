@@ -317,6 +317,14 @@ SOURCE=.\common\appcmn.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\common\arcall.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\common\arcfind.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\common\archive.cpp
 # End Source File
 # Begin Source File
@@ -888,6 +896,10 @@ SOURCE=.\common\string.cpp
 # Begin Source File
 
 SOURCE=.\common\sysopt.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\common\tarstrm.cpp
 # End Source File
 # Begin Source File
 
@@ -3288,6 +3300,10 @@ SOURCE=..\include\wx\tab.h
 # Begin Source File
 
 SOURCE=..\include\wx\tabctrl.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\tarstrm.h
 # End Source File
 # Begin Source File
 

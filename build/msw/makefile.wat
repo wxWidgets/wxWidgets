@@ -2908,6 +2908,8 @@ MONODLL_CXXFLAGS = -bd $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) &
 MONODLL_OBJECTS =  &
 	$(OBJS)\monodll_dummy.obj &
 	$(OBJS)\monodll_appbase.obj &
+	$(OBJS)\monodll_arcall.obj &
+	$(OBJS)\monodll_arcfind.obj &
 	$(OBJS)\monodll_archive.obj &
 	$(OBJS)\monodll_clntdata.obj &
 	$(OBJS)\monodll_cmdline.obj &
@@ -2957,6 +2959,7 @@ MONODLL_OBJECTS =  &
 	$(OBJS)\monodll_stream.obj &
 	$(OBJS)\monodll_string.obj &
 	$(OBJS)\monodll_sysopt.obj &
+	$(OBJS)\monodll_tarstrm.obj &
 	$(OBJS)\monodll_textbuf.obj &
 	$(OBJS)\monodll_textfile.obj &
 	$(OBJS)\monodll_tokenzr.obj &
@@ -3025,6 +3028,8 @@ MONOLIB_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) &
 MONOLIB_OBJECTS =  &
 	$(OBJS)\monolib_dummy.obj &
 	$(OBJS)\monolib_appbase.obj &
+	$(OBJS)\monolib_arcall.obj &
+	$(OBJS)\monolib_arcfind.obj &
 	$(OBJS)\monolib_archive.obj &
 	$(OBJS)\monolib_clntdata.obj &
 	$(OBJS)\monolib_cmdline.obj &
@@ -3074,6 +3079,7 @@ MONOLIB_OBJECTS =  &
 	$(OBJS)\monolib_stream.obj &
 	$(OBJS)\monolib_string.obj &
 	$(OBJS)\monolib_sysopt.obj &
+	$(OBJS)\monolib_tarstrm.obj &
 	$(OBJS)\monolib_textbuf.obj &
 	$(OBJS)\monolib_textfile.obj &
 	$(OBJS)\monolib_tokenzr.obj &
@@ -3144,6 +3150,8 @@ BASEDLL_CXXFLAGS = -bd $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) &
 BASEDLL_OBJECTS =  &
 	$(OBJS)\basedll_dummy.obj &
 	$(OBJS)\basedll_appbase.obj &
+	$(OBJS)\basedll_arcall.obj &
+	$(OBJS)\basedll_arcfind.obj &
 	$(OBJS)\basedll_archive.obj &
 	$(OBJS)\basedll_clntdata.obj &
 	$(OBJS)\basedll_cmdline.obj &
@@ -3193,6 +3201,7 @@ BASEDLL_OBJECTS =  &
 	$(OBJS)\basedll_stream.obj &
 	$(OBJS)\basedll_string.obj &
 	$(OBJS)\basedll_sysopt.obj &
+	$(OBJS)\basedll_tarstrm.obj &
 	$(OBJS)\basedll_textbuf.obj &
 	$(OBJS)\basedll_textfile.obj &
 	$(OBJS)\basedll_tokenzr.obj &
@@ -3247,6 +3256,8 @@ BASELIB_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) &
 BASELIB_OBJECTS =  &
 	$(OBJS)\baselib_dummy.obj &
 	$(OBJS)\baselib_appbase.obj &
+	$(OBJS)\baselib_arcall.obj &
+	$(OBJS)\baselib_arcfind.obj &
 	$(OBJS)\baselib_archive.obj &
 	$(OBJS)\baselib_clntdata.obj &
 	$(OBJS)\baselib_cmdline.obj &
@@ -3296,6 +3307,7 @@ BASELIB_OBJECTS =  &
 	$(OBJS)\baselib_stream.obj &
 	$(OBJS)\baselib_string.obj &
 	$(OBJS)\baselib_sysopt.obj &
+	$(OBJS)\baselib_tarstrm.obj &
 	$(OBJS)\baselib_textbuf.obj &
 	$(OBJS)\baselib_textfile.obj &
 	$(OBJS)\baselib_tokenzr.obj &
@@ -4833,6 +4845,12 @@ $(OBJS)\monodll_version.res :  .AUTODEPEND ..\..\src\msw\version.rc
 $(OBJS)\monodll_appbase.obj :  .AUTODEPEND ..\..\src\common\appbase.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
+$(OBJS)\monodll_arcall.obj :  .AUTODEPEND ..\..\src\common\arcall.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_arcfind.obj :  .AUTODEPEND ..\..\src\common\arcfind.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
 $(OBJS)\monodll_archive.obj :  .AUTODEPEND ..\..\src\common\archive.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
@@ -4978,6 +4996,9 @@ $(OBJS)\monodll_string.obj :  .AUTODEPEND ..\..\src\common\string.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_sysopt.obj :  .AUTODEPEND ..\..\src\common\sysopt.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_tarstrm.obj :  .AUTODEPEND ..\..\src\common\tarstrm.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_textbuf.obj :  .AUTODEPEND ..\..\src\common\textbuf.cpp
@@ -6900,6 +6921,12 @@ $(OBJS)\monolib_dummy.obj :  .AUTODEPEND ..\..\src\common\dummy.cpp
 $(OBJS)\monolib_appbase.obj :  .AUTODEPEND ..\..\src\common\appbase.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
+$(OBJS)\monolib_arcall.obj :  .AUTODEPEND ..\..\src\common\arcall.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_arcfind.obj :  .AUTODEPEND ..\..\src\common\arcfind.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
 $(OBJS)\monolib_archive.obj :  .AUTODEPEND ..\..\src\common\archive.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
@@ -7045,6 +7072,9 @@ $(OBJS)\monolib_string.obj :  .AUTODEPEND ..\..\src\common\string.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_sysopt.obj :  .AUTODEPEND ..\..\src\common\sysopt.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_tarstrm.obj :  .AUTODEPEND ..\..\src\common\tarstrm.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_textbuf.obj :  .AUTODEPEND ..\..\src\common\textbuf.cpp
@@ -8970,6 +9000,12 @@ $(OBJS)\basedll_version.res :  .AUTODEPEND ..\..\src\msw\version.rc
 $(OBJS)\basedll_appbase.obj :  .AUTODEPEND ..\..\src\common\appbase.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
+$(OBJS)\basedll_arcall.obj :  .AUTODEPEND ..\..\src\common\arcall.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
+
+$(OBJS)\basedll_arcfind.obj :  .AUTODEPEND ..\..\src\common\arcfind.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
+
 $(OBJS)\basedll_archive.obj :  .AUTODEPEND ..\..\src\common\archive.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
@@ -9117,6 +9153,9 @@ $(OBJS)\basedll_string.obj :  .AUTODEPEND ..\..\src\common\string.cpp
 $(OBJS)\basedll_sysopt.obj :  .AUTODEPEND ..\..\src\common\sysopt.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
+$(OBJS)\basedll_tarstrm.obj :  .AUTODEPEND ..\..\src\common\tarstrm.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
+
 $(OBJS)\basedll_textbuf.obj :  .AUTODEPEND ..\..\src\common\textbuf.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
@@ -9226,6 +9265,12 @@ $(OBJS)\baselib_dummy.obj :  .AUTODEPEND ..\..\src\common\dummy.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_appbase.obj :  .AUTODEPEND ..\..\src\common\appbase.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
+
+$(OBJS)\baselib_arcall.obj :  .AUTODEPEND ..\..\src\common\arcall.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
+
+$(OBJS)\baselib_arcfind.obj :  .AUTODEPEND ..\..\src\common\arcfind.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_archive.obj :  .AUTODEPEND ..\..\src\common\archive.cpp
@@ -9373,6 +9418,9 @@ $(OBJS)\baselib_string.obj :  .AUTODEPEND ..\..\src\common\string.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_sysopt.obj :  .AUTODEPEND ..\..\src\common\sysopt.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
+
+$(OBJS)\baselib_tarstrm.obj :  .AUTODEPEND ..\..\src\common\tarstrm.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_textbuf.obj :  .AUTODEPEND ..\..\src\common\textbuf.cpp
