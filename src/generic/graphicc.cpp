@@ -32,6 +32,10 @@
 #include "wx/module.h"
 #endif
 
+#ifdef __WXGTK__
+#include "wx/gtk/win_gtk.h"
+#endif
+
 #include "wx/graphics.h"
 
 #if wxUSE_GRAPHICS_CONTEXT
@@ -1271,7 +1275,7 @@ wxGraphicsContext * wxCairoRenderer::CreateContextFromNativeContext( void * cont
 wxGraphicsContext * wxCairoRenderer::CreateContextFromNativeWindow( void * window )
 {
 #ifdef __WXGTK__
-    return new wxCairoContext(this,(GdkDrawable)window);
+    return new wxCairoContext(this,(GdkDrawable*)window);
 #else
     return NULL;
 #endif
