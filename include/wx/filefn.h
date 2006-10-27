@@ -168,11 +168,10 @@ enum wxFileKind
 
     #undef wxHAS_HUGE_FILES
 
-    // detect compilers which have support for huge files (notice that the
-    // MSVC falls under _INTEGRAL_MAX_BITS >= 64 branch, so we don't have to
-    // test for it explicitly)
-    #if defined(_INTEGRAL_MAX_BITS)
-        #if _INTEGRAL_MAX_BITS >= 64
+    // detect compilers which have support for huge files
+    #if defined(__VISUALC__)
+        // not sure if VC++ 5 supports huge files, remove the #if below if yes
+        #if __VISUALC__ >= 1200
             #define wxHAS_HUGE_FILES 1
         #endif
     #elif defined(__MINGW32__)
