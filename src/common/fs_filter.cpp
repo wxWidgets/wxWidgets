@@ -56,7 +56,7 @@ wxFSFile* wxFilterFSHandler::OpenFile(
     if (!leftStream.get() || !leftStream->IsOk())
         return NULL;
 
-    wxInputStreamPtr stream(factory->NewStream(leftStream.get()));
+    wxInputStreamPtr stream(factory->NewStream(leftStream.release()));
 
     // The way compressed streams are supposed to be served is e.g.:
     //  Content-type: application/postscript
