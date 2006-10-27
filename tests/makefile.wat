@@ -236,6 +236,7 @@ TEST_OBJECTS =  &
 	$(OBJS)\test_test.obj &
 	$(OBJS)\test_archivetest.obj &
 	$(OBJS)\test_ziptest.obj &
+	$(OBJS)\test_tartest.obj &
 	$(OBJS)\test_arrays.obj &
 	$(OBJS)\test_datetimetest.obj &
 	$(OBJS)\test_fileconftest.obj &
@@ -366,6 +367,9 @@ $(OBJS)\test_archivetest.obj :  .AUTODEPEND .\archive\archivetest.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_CXXFLAGS) $<
 
 $(OBJS)\test_ziptest.obj :  .AUTODEPEND .\archive\ziptest.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_CXXFLAGS) $<
+
+$(OBJS)\test_tartest.obj :  .AUTODEPEND .\archive\tartest.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_CXXFLAGS) $<
 
 $(OBJS)\test_arrays.obj :  .AUTODEPEND .\arrays\arrays.cpp

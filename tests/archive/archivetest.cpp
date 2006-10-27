@@ -1407,4 +1407,9 @@ template class ArchiveTestCase<wxArchiveClassFactory>;
 template class ArchiveTestCase<wxZipClassFactory>;
 #endif
 
+#if wxUSE_TARSTREAM
+#include "wx/tarstrm.h"
+template class ArchiveTestCase<wxTarClassFactory>;
+#endif
+
 #endif // wxUSE_STREAMS && wxUSE_ARCHIVE_STREAMS

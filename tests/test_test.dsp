@@ -549,6 +549,10 @@ SOURCE=.\strings\strings.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\archive\tartest.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\streams\tempfile.cpp
 # End Source File
 # Begin Source File

@@ -48,6 +48,7 @@ TEST_OBJECTS =  \
 	test_test.o \
 	test_archivetest.o \
 	test_ziptest.o \
+	test_tartest.o \
 	test_arrays.o \
 	test_datetimetest.o \
 	test_fileconftest.o \
@@ -295,6 +296,9 @@ test_archivetest.o: $(srcdir)/archive/archivetest.cpp $(TEST_ODEP)
 
 test_ziptest.o: $(srcdir)/archive/ziptest.cpp $(TEST_ODEP)
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/archive/ziptest.cpp
+
+test_tartest.o: $(srcdir)/archive/tartest.cpp $(TEST_ODEP)
+	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/archive/tartest.cpp
 
 test_arrays.o: $(srcdir)/arrays/arrays.cpp $(TEST_ODEP)
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/arrays/arrays.cpp

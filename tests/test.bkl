@@ -26,6 +26,7 @@
             test.cpp
             archive/archivetest.cpp
             archive/ziptest.cpp
+            archive/tartest.cpp
             arrays/arrays.cpp
             datetime/datetimetest.cpp
             fileconf/fileconftest.cpp
