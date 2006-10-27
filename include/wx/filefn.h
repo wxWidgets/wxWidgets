@@ -669,7 +669,7 @@ public:
     void AddEnvList(const wxString& envVariable);
 
     // Adds given path to this list
-    void Add(const wxString& path);
+    bool Add(const wxString& path);
     void Add(const wxArrayString &paths);
 
     // Find the first full path for which the file exists
@@ -680,10 +680,12 @@ public:
     wxString FindAbsoluteValidPath(const wxString& filename) const;
 
     // Given full path and filename, add path to list
-    void EnsureFileAccessible(const wxString& path);
+    bool EnsureFileAccessible(const wxString& path);
 
+#if WXWIN_COMPATIBILITY_2_6
     // Returns true if the path is in the list
     wxDEPRECATED( bool Member(const wxString& path) const );
+#endif
 };
 
 #endif // _WX_FILEFN_H_

@@ -156,7 +156,7 @@ WXDLLEXPORT int wxOpen( const wxChar *pathname, int flags, mode_t mode )
 // wxPathList
 // ----------------------------------------------------------------------------
 
-void wxPathList::Add(const wxString& path)
+bool wxPathList::Add(const wxString& path)
 {
     // add a path separator to force wxFileName to interpret it always as a directory
     // (i.e. if we are called with '/home/user' we want to consider it a folder and
@@ -164,11 +164,17 @@ void wxPathList::Add(const wxString& path)
     wxFileName fn(path + wxFileName::GetPathSeparator());
 
     // add only normalized relative/absolute paths
-    fn.Normalize(wxPATH_NORM_DOTS|wxPATH_NORM_TILDE|wxPATH_NORM_LONG|wxPATH_NORM_ENV_VARS);
+    // NB: we won't do wxPATH_NORM_DOTS in order to avoid problems when trying to
+    //     normalize paths which starts with ".." (which can be normalized only if
+    //     we use also wxPATH_NORM_ABSOLUTE - which we don't want to use).
+    if (!fn.Normalize(wxPATH_NORM_TILDE|wxPATH_NORM_LONG|wxPATH_NORM_ENV_VARS))
+        return false;
 
     wxString toadd = fn.GetPath();
     if (Index(toadd) == wxNOT_FOUND)
         wxArrayString::Add(toadd);      // do not add duplicates
+
+    return true;
 }
 
 void wxPathList::Add(const wxArrayString &arr)
@@ -207,21 +213,17 @@ void wxPathList::AddEnvList (const wxString& WXUNUSED_IN_WINCE(envVariable))
 // Given a full filename (with path), ensure that that file can
 // be accessed again USING FILENAME ONLY by adding the path
 // to the list if not already there.
-void wxPathList::EnsureFileAccessible (const wxString& path)
+bool wxPathList::EnsureFileAccessible (const wxString& path)
 {
-    wxString path_only(wxPathOnly(path));
-    if ( !path_only.empty() )
-    {
-        if ( Index(path_only) == wxNOT_FOUND )
-            Add(path_only);
-    }
+    return Add(wxPathOnly(path));
 }
 
-// deprecated !
+#if WXWIN_COMPATIBILITY_2_6
 bool wxPathList::Member (const wxString& path) const
 {
     return Index(path) != wxNOT_FOUND;
 }
+#endif
 
 wxString wxPathList::FindValidPath (const wxString& file) const
 {
@@ -230,8 +232,13 @@ wxString wxPathList::FindValidPath (const wxString& file) const
     wxFileName fn(file);
     wxString strend;
 
-    // NB: normalize without making absolute !
-    fn.Normalize(wxPATH_NORM_DOTS|wxPATH_NORM_TILDE|wxPATH_NORM_LONG|wxPATH_NORM_ENV_VARS);
+    // NB: normalize without making absolute otherwise calling this function with
+    //     e.g. "b/c.txt" would result in removing the directory 'b' and the for loop
+    //     below would only add to the paths of this list the 'c.txt' part when doing
+    //     the existence checks...
+    // NB: we don't use wxPATH_NORM_DOTS here, too (see wxPathList::Add for more info)
+    if (!fn.Normalize(wxPATH_NORM_TILDE|wxPATH_NORM_LONG|wxPATH_NORM_ENV_VARS))
+        return wxEmptyString;
 
     wxASSERT_MSG(!fn.IsDir(), wxT("Cannot search for directories; only for files"));
     if (fn.IsAbsolute())
