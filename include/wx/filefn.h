@@ -170,10 +170,7 @@ enum wxFileKind
 
     // detect compilers which have support for huge files
     #if defined(__VISUALC__)
-        // not sure if VC++ 5 supports huge files, remove the #if below if yes
-        #if __VISUALC__ >= 1200
-            #define wxHAS_HUGE_FILES 1
-        #endif
+	#define wxHAS_HUGE_FILES 1
     #elif defined(__MINGW32__)
         #define wxHAS_HUGE_FILES 1
     #elif defined(_LARGE_FILES)
