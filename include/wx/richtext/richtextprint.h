@@ -187,7 +187,7 @@ public:
     wxString GetFooterText(wxRichTextOddEvenPage page = wxRICHTEXT_PAGE_EVEN, wxRichTextPageLocation location = wxRICHTEXT_PAGE_CENTRE) const;
 
     /// Show header/footer on first page, or not
-    bool SetShowOnFirstPage(bool show) { m_headerFooterData.SetShowOnFirstPage(show); }
+    void SetShowOnFirstPage(bool show) { m_headerFooterData.SetShowOnFirstPage(show); }
 
     /// Get print and page setup data
     wxPrintData *GetPrintData();
