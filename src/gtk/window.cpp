@@ -4235,6 +4235,26 @@ void wxWindowGTK::ScrollWindow( int dx, int dy, const wxRect* WXUNUSED(rect) )
         gtk_pizza_scroll( GTK_PIZZA(m_wxwindow), -dx, -dy );
 
     m_clipPaintRegion = false;
+
+    bool restoreCaret = (GetCaret() != NULL && GetCaret()->IsVisible());
+    if (restoreCaret)
+    {
+        wxRect caretRect(GetCaret()->GetPosition(), GetCaret()->GetSize());
+        if (dx > 0)
+            caretRect.width += dx;
+        else
+	{
+            caretRect.x += dx; caretRect.width -= dx;
+	}
+        if (dy > 0)
+            caretRect.height += dy;
+        else
+	{
+            caretRect.y += dy; caretRect.height -= dy;
+	}
+     
+        RefreshRect(caretRect);
+    }
 }
 
 void wxWindowGTK::GtkScrolledWindowSetBorder(GtkWidget* w, int wxstyle)
