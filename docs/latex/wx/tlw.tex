@@ -40,6 +40,15 @@ Returns \true if the platform supports making the window translucent.
 \helpref{wxTopLevelWindow::SetTransparent}{wxtoplevelwindowsettransparent}
 
 
+\membersection{wxTopLevelWindow::EnableCloseButton}\label{wxtoplevelenableclosebutton}
+
+\func{bool}{EnableCloseButton}{\param{bool}{ enable = true}}
+
+Enables or disables the Close button (most often in the right
+upper corner of a dialog) and the Close entry of the system
+menu (most often in the left upper corner of the dialog).
+Currently only implemented for wxMSW and wxGTK.
+
 \membersection{wxTopLevelWindow::GetDefaultItem}\label{wxtoplevelwindowgetdefaultitem}
 
 \constfunc{wxWindow *}{GetDefaultItem}{\void}
