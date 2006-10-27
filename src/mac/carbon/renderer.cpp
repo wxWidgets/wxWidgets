@@ -63,58 +63,6 @@ private:
     wxBitmap m_bmpTreeCollapsed;
 };
 
-// ----------------------------------------------------------------------------
-// Aqua arrows
-// ----------------------------------------------------------------------------
-
-/* XPM */
-static const char *aqua_arrow_right_xpm[] =
-{
-// columns rows colors chars-per-pixel
-"13 11 4 1",
-"  c None",
-"b c #C0C0C0",
-"c c #707070",
-"d c #A0A0A0",
-
-// pixels
-"    b        ",
-"    ddb      ",
-"    cccdb    ",
-"    cccccd   ",
-"    ccccccdb ",
-"    ccccccccd",
-"    ccccccdb ",
-"    cccccb   ",
-"    cccdb    ",
-"    ddb      ",
-"    b        "
-};
-
-/* XPM */
-static const char *aqua_arrow_down_xpm[] =
-{
-// columns rows colors chars-per-pixel
-"13 11 4 1",
-"  c None",
-"b c #C0C0C0",
-"c c #707070",
-"d c #A0A0A0",
-
-// pixels
-"             ",
-"             ",
-" bdcccccccdb ",
-"  dcccccccd  ",
-"  bcccccccb  ",
-"   dcccccd   ",
-"   bcccccb   ",
-"    bcccd    ",
-"     dcd     ",
-"     bcb     ",
-"      d      "
-};
-
 // ============================================================================
 // implementation
 // ============================================================================
@@ -239,49 +187,75 @@ int wxRendererMac::GetHeaderButtonHeight(wxWindow* WXUNUSED(win))
     return -1;
 }
 
-
 void wxRendererMac::DrawTreeItemButton( wxWindow *win,
     wxDC& dc,
     const wxRect& rect,
     int flags )
 {
-    // init the buttons on demand
-    if ( !m_bmpTreeExpanded.Ok() )
+    const wxCoord x = dc.LogicalToDeviceX(rect.x /*- 1*/);
+    const wxCoord y = dc.LogicalToDeviceY(rect.y /*- 1*/);
+    const wxCoord w = dc.LogicalToDeviceXRel(rect.width);
+    const wxCoord h = dc.LogicalToDeviceYRel(rect.height);
+
+    dc.SetBrush( *wxTRANSPARENT_BRUSH );
+
+    HIRect headerRect = CGRectMake( x, y, w, h );
+    if ( !dc.IsKindOf( CLASSINFO( wxPaintDC ) ) )
     {
-        m_bmpTreeExpanded = wxBitmap(aqua_arrow_down_xpm);
-        m_bmpTreeCollapsed = wxBitmap(aqua_arrow_right_xpm);
+        Rect r =
+    {
+            (short) headerRect.origin.y, (short) headerRect.origin.x,
+            (short) (headerRect.origin.y + headerRect.size.height),
+            (short) (headerRect.origin.x + headerRect.size.width)
+        };
+
+        RgnHandle updateRgn = NewRgn();
+        RectRgn( updateRgn, &r );
+        HIViewSetNeedsDisplayInRegion( (HIViewRef) win->GetHandle(), updateRgn, true );
+        DisposeRgn( updateRgn );
     }
-
-    // draw them
-
-    // VZ: this is the old code from treectlg.cpp which apparently doesn't work
-    //     but I kept it here just in case it is needed -- if not, please
-    //     remove it
-
-#if 0 // def __WXMAC__
-    wxMacPortSetter helper(&dc);
-    wxMacWindowClipper clipper(this);
-    wxDC::MacSetupBackgroundForCurrentPort( MacGetBackgroundBrush() );
-
-    int loc_x = x - 5;
-    int loc_y = y_mid - 6;
-    MacWindowToRootWindow( &loc_x, &loc_y );
-    Rect bounds = { loc_y, loc_x, loc_y + 18, loc_x + 12 };
-    ThemeButtonDrawInfo info =
+    else
     {
-        kThemeStateActive,
-        item->IsExpanded() ? kThemeDisclosureDown : kThemeDisclosureRight,
-        kThemeAdornmentNone
-    };
+        CGContextRef cgContext;
 
-    DrawThemeButton( &bounds, kThemeDisclosureButton, &info, NULL, NULL, NULL, NULL );
-#else // 1
-    dc.DrawBitmap(
-        flags & wxCONTROL_EXPANDED
-        ? m_bmpTreeExpanded
-        : m_bmpTreeCollapsed,
-         rect.x, rect.y, true /* use mask */);
+#if wxMAC_USE_CORE_GRAPHICS
+        cgContext = (CGContextRef) dc.GetGraphicsContext()->GetNativeContext();
+#else
+        Rect bounds;
+
+        GetPortBounds( (CGrafPtr) dc.m_macPort, &bounds );
+        QDBeginCGContext( (CGrafPtr) dc.m_macPort, &cgContext );
+
+        CGContextTranslateCTM( cgContext, 0, bounds.bottom - bounds.top );
+        CGContextScaleCTM( cgContext, 1, -1 );
+
+        HIShapeReplacePathInCGContext( HIShapeCreateWithQDRgn( (RgnHandle) dc.m_macCurrentClipRgn ), cgContext );
+        CGContextClip( cgContext );
+        HIViewConvertRect( &headerRect, (HIViewRef) win->GetHandle(), (HIViewRef) win->MacGetTopLevelWindow()->GetHandle() );
 #endif
+
+    {
+            HIThemeButtonDrawInfo drawInfo;
+            HIRect labelRect;
+
+            memset( &drawInfo, 0, sizeof(drawInfo) );
+            drawInfo.version = 0;
+            drawInfo.kind = kThemeDisclosureButton;
+            drawInfo.state = (flags & wxCONTROL_DISABLED) ? kThemeStateInactive : kThemeStateActive;
+            // Apple mailing list posts say to use the arrow adornment constants, but those don't work.
+            // We need to set the value using the 'old' DrawThemeButton constants instead.
+            drawInfo.value = (flags & wxCONTROL_EXPANDED) ? kThemeDisclosureDown : kThemeDisclosureRight;
+            drawInfo.adornment = kThemeAdornmentNone; 
+
+            HIThemeDrawButton( &headerRect, &drawInfo, cgContext, kHIThemeOrientationNormal, &labelRect );
+            
+        }
+
+#if wxMAC_USE_CORE_GRAPHICS
+#else
+        QDEndCGContext( (CGrafPtr) dc.m_macPort, &cgContext );
+#endif
+    }
 }
 
 void wxRendererMac::DrawSplitterSash( wxWindow *win,
