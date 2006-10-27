@@ -271,6 +271,29 @@ wxBackedInputStream::wxBackedInputStream(const wxBackingFile& backer)
 {
 }
 
+wxFileOffset wxBackedInputStream::GetLength() const
+{
+    return m_backer.m_impl->GetLength();
+}
+
+wxFileOffset wxBackedInputStream::FindLength() const
+{
+    wxFileOffset len = GetLength();
+
+    if (len == wxInvalidOffset && IsOk()) {
+        // read a byte at 7ff...ffe
+        wxFileOffset pos = 1;
+        pos <<= sizeof(pos) * 8 - 1;
+        pos = ~pos - 1;
+        char ch;
+        size_t size = 1;
+        m_backer.m_impl->ReadAt(pos, &ch, &size);
+        len = GetLength();
+    }
+
+    return len;
+}
+    
 size_t wxBackedInputStream::OnSysRead(void *buffer, size_t size)
 {
     if (!IsOk())
@@ -279,11 +302,6 @@ size_t wxBackedInputStream::OnSysRead(void *buffer, size_t size)
     m_lasterror = m_backer.m_impl->ReadAt(m_pos, buffer, &size);
     m_pos += size;
     return size;
-}
-
-wxFileOffset wxBackedInputStream::GetLength() const
-{
-    return m_backer.m_impl->GetLength();
 }
 
 wxFileOffset wxBackedInputStream::OnSysSeek(wxFileOffset pos, wxSeekMode mode)

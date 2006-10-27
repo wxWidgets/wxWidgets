@@ -57,7 +57,13 @@ class WXDLLIMPEXP_BASE wxBackedInputStream : public wxInputStream
 public:
     wxBackedInputStream(const wxBackingFile& backer);
 
+    // If the length of the backer's parent stream is unknown then GetLength()
+    // returns wxInvalidOffset until the parent has been read to the end.
     wxFileOffset GetLength() const;
+
+    // Returns the length, reading the parent stream to the end if necessary.
+    wxFileOffset FindLength() const;
+
     bool IsSeekable() const { return true; }
 
 protected:
