@@ -77,6 +77,7 @@
 #include "wx/richtext/richtextformatdlg.h"
 #include "wx/richtext/richtextsymboldlg.h"
 #include "wx/richtext/richtextstyledlg.h"
+#include "wx/richtext/richtextprint.h"
 
 // ----------------------------------------------------------------------------
 // resources
@@ -102,8 +103,10 @@ public:
     void CreateStyles();
 
     wxRichTextStyleSheet* GetStyleSheet() const { return m_styleSheet; }
+    wxRichTextPrinting* GetPrinting() const { return m_printing; }
 
-    wxRichTextStyleSheet* m_styleSheet;
+    wxRichTextStyleSheet*   m_styleSheet;
+    wxRichTextPrinting*     m_printing;
 };
 
 // Define a new frame type: this is going to be our main frame
@@ -172,6 +175,10 @@ public:
     void OnURL(wxTextUrlEvent& event);
     void OnStyleSheetReplacing(wxRichTextEvent& event);
 
+    void OnPrint(wxCommandEvent& event);
+    void OnPreview(wxCommandEvent& event);
+    void OnPageSetup(wxCommandEvent& event);
+
     // Forward command events to the current rich text control, if any
     bool ProcessEvent(wxEvent& event);
 
@@ -228,6 +235,10 @@ enum
     ID_VIEW_HTML,
     ID_SWITCH_STYLE_SHEETS,
     ID_MANAGE_STYLES,
+
+    ID_PRINT,
+    ID_PREVIEW,
+    ID_PAGE_SETUP,
 
     ID_RICHTEXT_CTRL,
     ID_RICHTEXT_STYLE_LIST,
@@ -296,6 +307,10 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(ID_SWITCH_STYLE_SHEETS, MyFrame::OnSwitchStyleSheets)
     EVT_MENU(ID_MANAGE_STYLES, MyFrame::OnManageStyles)
 
+    EVT_MENU(ID_PRINT, MyFrame::OnPrint)
+    EVT_MENU(ID_PREVIEW, MyFrame::OnPreview)
+    EVT_MENU(ID_PAGE_SETUP, MyFrame::OnPageSetup)
+
     EVT_TEXT_URL(wxID_ANY, MyFrame::OnURL)
     EVT_RICHTEXT_STYLESHEET_REPLACING(wxID_ANY, MyFrame::OnStyleSheetReplacing)
 END_EVENT_TABLE()
@@ -323,6 +338,10 @@ bool MyApp::OnInit()
 #endif
 
     m_styleSheet = new wxRichTextStyleSheet;
+    m_printing = new wxRichTextPrinting(wxT("Test Document"));
+
+    m_printing->SetFooterText(wxT("@TITLE@"), wxRICHTEXT_PAGE_ALL, wxRICHTEXT_PAGE_CENTRE);
+    m_printing->SetFooterText(wxT("Page @PAGENUM@"), wxRICHTEXT_PAGE_ALL, wxRICHTEXT_PAGE_RIGHT);
 
     CreateStyles();
 
@@ -350,6 +369,8 @@ bool MyApp::OnInit()
     // create the main application window
     MyFrame *frame = new MyFrame(_T("wxRichTextCtrl Sample"), wxID_ANY, wxDefaultPosition, wxSize(700, 600));
 
+    m_printing->SetParentWindow(frame);
+
     // and show it (the frames, unlike simple controls, are not shown when
     // created initially)
     frame->Show(true);
@@ -362,7 +383,9 @@ bool MyApp::OnInit()
 
 int MyApp::OnExit()
 {
+    delete m_printing;
     delete m_styleSheet;
+
     return 0;
 }
 
@@ -537,6 +560,10 @@ MyFrame::MyFrame(const wxString& title, wxWindowID id, const wxPoint& pos,
     fileMenu->Append(wxID_OPEN, _T("&Open\tCtrl+O"), _T("Open a file"));
     fileMenu->Append(wxID_SAVE, _T("&Save\tCtrl+S"), _T("Save a file"));
     fileMenu->Append(wxID_SAVEAS, _T("&Save As...\tF12"), _T("Save to a new file"));
+    fileMenu->AppendSeparator();
+    fileMenu->Append(ID_PAGE_SETUP, _T("Page Set&up..."), _T("Page setup"));
+    fileMenu->Append(ID_PRINT, _T("&Print...\tCtrl+P"), _T("Print"));
+    fileMenu->Append(ID_PREVIEW, _T("Print Pre&view"), _T("Print preview"));
     fileMenu->AppendSeparator();
     fileMenu->Append(ID_VIEW_HTML, _T("&View as HTML"), _T("View HTML"));
     fileMenu->AppendSeparator();
@@ -1324,11 +1351,10 @@ void MyFrame::OnSwitchStyleSheets(wxCommandEvent& WXUNUSED(event))
 {
     static wxRichTextStyleSheet* gs_AlternateStyleSheet = NULL;
 
-    wxRichTextCtrl* ctrl = (wxRichTextCtrl*) FindWindow(ID_RICHTEXT_CTRL);
     wxRichTextStyleListCtrl *styleList = (wxRichTextStyleListCtrl*) FindWindow(ID_RICHTEXT_STYLE_LIST);
     wxRichTextStyleComboCtrl* styleCombo = (wxRichTextStyleComboCtrl*) FindWindow(ID_RICHTEXT_STYLE_COMBO);
 
-    wxRichTextStyleSheet* sheet = ctrl->GetStyleSheet();
+    wxRichTextStyleSheet* sheet = m_richTextCtrl->GetStyleSheet();
 
     // One-time creation of an alternate style sheet
     if (!gs_AlternateStyleSheet)
@@ -1362,8 +1388,8 @@ void MyFrame::OnSwitchStyleSheets(wxCommandEvent& WXUNUSED(event))
     gs_AlternateStyleSheet = sheet;
     sheet = tmp;
 
-    ctrl->SetStyleSheet(sheet);
-    ctrl->ApplyStyleSheet(sheet); // Makes the control reflect the new style definitions
+    m_richTextCtrl->SetStyleSheet(sheet);
+    m_richTextCtrl->ApplyStyleSheet(sheet); // Makes the control reflect the new style definitions
 
     styleList->SetStyleSheet(sheet);
     styleList->UpdateStyles();
@@ -1374,8 +1400,7 @@ void MyFrame::OnSwitchStyleSheets(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnManageStyles(wxCommandEvent& WXUNUSED(event))
 {
-    wxRichTextCtrl* ctrl = (wxRichTextCtrl*) FindWindow(ID_RICHTEXT_CTRL);
-    wxRichTextStyleSheet* sheet = ctrl->GetStyleSheet();
+    wxRichTextStyleSheet* sheet = m_richTextCtrl->GetStyleSheet();
 
     int flags = wxRICHTEXT_ORGANISER_CREATE_STYLES|wxRICHTEXT_ORGANISER_EDIT_STYLES;
 
@@ -1385,11 +1410,9 @@ void MyFrame::OnManageStyles(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnInsertSymbol(wxCommandEvent& WXUNUSED(event))
 {
-    wxRichTextCtrl* ctrl = (wxRichTextCtrl*) FindWindow(ID_RICHTEXT_CTRL);
-
     wxTextAttrEx attr;
     attr.SetFlags(wxTEXT_ATTR_FONT);
-    ctrl->GetStyle(ctrl->GetInsertionPoint(), attr);
+    m_richTextCtrl->GetStyle(m_richTextCtrl->GetInsertionPoint(), attr);
 
     wxString currentFontName;
     if (attr.HasFont() && attr.GetFont().Ok())
@@ -1405,16 +1428,16 @@ void MyFrame::OnInsertSymbol(wxCommandEvent& WXUNUSED(event))
     {
         if (dlg.HasSelection())
         {
-            long insertionPoint = ctrl->GetInsertionPoint();
+            long insertionPoint = m_richTextCtrl->GetInsertionPoint();
 
-            ctrl->WriteText(dlg.GetSymbol());
+            m_richTextCtrl->WriteText(dlg.GetSymbol());
 
             if (!dlg.UseNormalFont())
             {
                 wxFont font(attr.GetFont());
                 font.SetFaceName(dlg.GetFontName());
                 attr.SetFont(font);
-                ctrl->SetStyle(insertionPoint, insertionPoint+1, attr);
+                m_richTextCtrl->SetStyle(insertionPoint, insertionPoint+1, attr);
             }
         }
     }
@@ -1422,23 +1445,20 @@ void MyFrame::OnInsertSymbol(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnNumberList(wxCommandEvent& WXUNUSED(event))
 {
-    wxRichTextCtrl* ctrl = (wxRichTextCtrl*) FindWindow(ID_RICHTEXT_CTRL);
-    
-    if (ctrl->HasSelection())
+    if (m_richTextCtrl->HasSelection())
     {
-        wxRichTextRange range = ctrl->GetSelectionRange();
-        ctrl->SetListStyle(range, wxT("Numbered List 1"), wxRICHTEXT_SETSTYLE_WITH_UNDO|wxRICHTEXT_SETSTYLE_RENUMBER);
+        wxRichTextRange range = m_richTextCtrl->GetSelectionRange();
+        m_richTextCtrl->SetListStyle(range, wxT("Numbered List 1"), wxRICHTEXT_SETSTYLE_WITH_UNDO|wxRICHTEXT_SETSTYLE_RENUMBER);
     }
 }
 
 void MyFrame::OnBulletsAndNumbering(wxCommandEvent& WXUNUSED(event))
 {
-    wxRichTextCtrl* ctrl = (wxRichTextCtrl*) FindWindow(ID_RICHTEXT_CTRL);
-    wxRichTextStyleSheet* sheet = ctrl->GetStyleSheet();
+    wxRichTextStyleSheet* sheet = m_richTextCtrl->GetStyleSheet();
 
     int flags = wxRICHTEXT_ORGANISER_BROWSE_NUMBERING;
 
-    wxRichTextStyleOrganiserDialog dlg(flags, sheet, ctrl, this, wxID_ANY, _("Bullets and Numbering"));
+    wxRichTextStyleOrganiserDialog dlg(flags, sheet, m_richTextCtrl, this, wxID_ANY, _("Bullets and Numbering"));
     if (dlg.ShowModal() == wxID_OK)
     {
         if (dlg.GetSelectedStyleDefinition())
@@ -1448,56 +1468,46 @@ void MyFrame::OnBulletsAndNumbering(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnItemizeList(wxCommandEvent& WXUNUSED(event))
 {
-    wxRichTextCtrl* ctrl = (wxRichTextCtrl*) FindWindow(ID_RICHTEXT_CTRL);
-
-    if (ctrl->HasSelection())
+    if (m_richTextCtrl->HasSelection())
     {
-        wxRichTextRange range = ctrl->GetSelectionRange();
-        ctrl->SetListStyle(range, wxT("Bullet List 1"));
+        wxRichTextRange range = m_richTextCtrl->GetSelectionRange();
+        m_richTextCtrl->SetListStyle(range, wxT("Bullet List 1"));
     }
 }
 
 void MyFrame::OnRenumberList(wxCommandEvent& WXUNUSED(event))
 {
-    wxRichTextCtrl* ctrl = (wxRichTextCtrl*) FindWindow(ID_RICHTEXT_CTRL);
-
-    if (ctrl->HasSelection())
+    if (m_richTextCtrl->HasSelection())
     {
-        wxRichTextRange range = ctrl->GetSelectionRange();
-        ctrl->NumberList(range, NULL, wxRICHTEXT_SETSTYLE_WITH_UNDO|wxRICHTEXT_SETSTYLE_RENUMBER);
+        wxRichTextRange range = m_richTextCtrl->GetSelectionRange();
+        m_richTextCtrl->NumberList(range, NULL, wxRICHTEXT_SETSTYLE_WITH_UNDO|wxRICHTEXT_SETSTYLE_RENUMBER);
     }
 }
 
 void MyFrame::OnPromoteList(wxCommandEvent& WXUNUSED(event))
 {
-    wxRichTextCtrl* ctrl = (wxRichTextCtrl*) FindWindow(ID_RICHTEXT_CTRL);
-
-    if (ctrl->HasSelection())
+    if (m_richTextCtrl->HasSelection())
     {
-        wxRichTextRange range = ctrl->GetSelectionRange();
-        ctrl->PromoteList(1, range, NULL);
+        wxRichTextRange range = m_richTextCtrl->GetSelectionRange();
+        m_richTextCtrl->PromoteList(1, range, NULL);
     }
 }
 
 void MyFrame::OnDemoteList(wxCommandEvent& WXUNUSED(event))
 {
-    wxRichTextCtrl* ctrl = (wxRichTextCtrl*) FindWindow(ID_RICHTEXT_CTRL);
-
-    if (ctrl->HasSelection())
+    if (m_richTextCtrl->HasSelection())
     {
-        wxRichTextRange range = ctrl->GetSelectionRange();
-        ctrl->PromoteList(-1, range, NULL);
+        wxRichTextRange range = m_richTextCtrl->GetSelectionRange();
+        m_richTextCtrl->PromoteList(-1, range, NULL);
     }
 }
 
 void MyFrame::OnClearList(wxCommandEvent& WXUNUSED(event))
 {
-    wxRichTextCtrl* ctrl = (wxRichTextCtrl*) FindWindow(ID_RICHTEXT_CTRL);
-
-    if (ctrl->HasSelection())
+    if (m_richTextCtrl->HasSelection())
     {
-        wxRichTextRange range = ctrl->GetSelectionRange();
-        ctrl->ClearListStyle(range);
+        wxRichTextRange range = m_richTextCtrl->GetSelectionRange();
+        m_richTextCtrl->ClearListStyle(range);
     }
 }
 
@@ -1506,18 +1516,16 @@ void MyFrame::OnInsertURL(wxCommandEvent& WXUNUSED(event))
     wxString url = wxGetTextFromUser(_("URL:"), _("Insert URL"));
     if (!url.IsEmpty())
     {
-        wxRichTextCtrl* ctrl = (wxRichTextCtrl*) FindWindow(ID_RICHTEXT_CTRL);
-        
         // Make a style suitable for showing a URL
         wxRichTextAttr urlStyle;
         urlStyle.SetTextColour(*wxBLUE);
         urlStyle.SetFontUnderlined(true);
         
-        ctrl->BeginStyle(urlStyle);
-        ctrl->BeginURL(url);
-        ctrl->WriteText(url);
-        ctrl->EndURL();
-        ctrl->EndStyle();
+        m_richTextCtrl->BeginStyle(urlStyle);
+        m_richTextCtrl->BeginURL(url);
+        m_richTextCtrl->WriteText(url);
+        m_richTextCtrl->EndURL();
+        m_richTextCtrl->EndStyle();
     }
 }
 
@@ -1531,4 +1539,19 @@ void MyFrame::OnURL(wxTextUrlEvent& event)
 void MyFrame::OnStyleSheetReplacing(wxRichTextEvent& event)
 {
     event.Veto();
+}
+
+void MyFrame::OnPrint(wxCommandEvent& WXUNUSED(event))
+{
+    wxGetApp().GetPrinting()->PrintBuffer(m_richTextCtrl->GetBuffer());
+}
+
+void MyFrame::OnPreview(wxCommandEvent& WXUNUSED(event))
+{
+    wxGetApp().GetPrinting()->PreviewBuffer(m_richTextCtrl->GetBuffer());
+}
+
+void MyFrame::OnPageSetup(wxCommandEvent& WXUNUSED(event))
+{
+    wxGetApp().GetPrinting()->PageSetup();
 }
