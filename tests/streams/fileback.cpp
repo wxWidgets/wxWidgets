@@ -67,7 +67,7 @@ public:
 
 private:
     void Read(wxInputStream& in, size_t size1, size_t size2, size_t size3);
-    void Len(wxInputStream& in);
+    void Len(wxBackedInputStream& in);
     void Seek(wxInputStream& in);
 
     char m_testdata[TESTSIZE];
@@ -91,7 +91,7 @@ void backStream::ReadLenSeek()
 
 void backStream::LenSeekRead()
 {
-    wxBackingFile bf(new wxMemoryInputStream(m_testdata, TESTSIZE), BUFSIZE);
+    wxBackingFile bf(new TestStream(m_testdata, TESTSIZE), BUFSIZE);
     wxBackedInputStream in(bf);
 
     Len(in);
@@ -174,9 +174,9 @@ void backStream::Read(wxInputStream& in,
     CPPUNIT_ASSERT(in.Eof());
 }
 
-void backStream::Len(wxInputStream& in)
+void backStream::Len(wxBackedInputStream& in)
 {
-    CPPUNIT_ASSERT_EQUAL(wxFileOffset(TESTSIZE), in.GetLength());
+    CPPUNIT_ASSERT_EQUAL(wxFileOffset(TESTSIZE), in.FindLength());
 }
 
 void backStream::Seek(wxInputStream& in)
