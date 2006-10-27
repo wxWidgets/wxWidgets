@@ -324,8 +324,8 @@ void wxRichTextPrintout::CalculateScaling(wxDC* dc, wxRect& textRect, wxRect& he
     
     dc->SetUserScale(overallScale, overallScale);
 
-    wxRect rect(marginLeft/scale, marginTop/scale,
-                (pageWidth - marginLeft - marginRight)/scale, (pageHeight - marginTop - marginBottom)/scale);
+    wxRect rect((int) (marginLeft/scale), (int) (marginTop/scale),
+                (int) ((pageWidth - marginLeft - marginRight)/scale), (int)((pageHeight - marginTop - marginBottom)/scale));
                 
     headerRect = wxRect(0, 0, 0, 0);
 
@@ -344,7 +344,7 @@ void wxRichTextPrintout::CalculateScaling(wxDC* dc, wxRect& textRect, wxRect& he
         
         int charHeight = dc->GetCharHeight();
         
-        int headerHeight = charHeight + headerMargin/scale;
+        int headerHeight = (int) (charHeight + headerMargin/scale);
 
         headerRect = wxRect(rect.x, rect.y, rect.width, headerHeight);
 
@@ -369,7 +369,7 @@ void wxRichTextPrintout::CalculateScaling(wxDC* dc, wxRect& textRect, wxRect& he
         
         int charHeight = dc->GetCharHeight();
         
-        int footerHeight = charHeight + footerMargin/scale;
+        int footerHeight = (int) (charHeight + footerMargin/scale);
 
         footerRect = wxRect(rect.x, rect.y + rect.height, rect.width, footerHeight);
 
