@@ -166,6 +166,13 @@ protected:
 //                  kinds of files (HTPP, FTP, local, tar.gz etc..)
 //--------------------------------------------------------------------------------
 
+// Open Bit Flags
+enum {
+    wxFS_READ = 1,      // Open for reading
+    wxFS_WRITE = 2,     // Open for writing
+    wxFS_SEEKABLE = 4   // Returned stream will be seekable
+};
+
 class WXDLLIMPEXP_BASE wxFileSystem : public wxObject
 {
 public:
@@ -187,7 +194,7 @@ public:
     // It first tries to open the file in relative scope
     // (based on ChangePathTo()'s value) and then as an absolute
     // path.
-    wxFSFile* OpenFile(const wxString& location);
+    wxFSFile* OpenFile(const wxString& location, int flags = wxFS_READ);
 
     // Finds first/next file that matches spec wildcard. flags can be wxDIR for restricting
     // the query to directories or wxFILE for files only or 0 for either.
@@ -204,7 +211,6 @@ public:
 
     // Removes FS handler
     static wxFileSystemHandler* RemoveHandler(wxFileSystemHandler *handler);
-
 
     // Returns true if there is a handler which can open the given location.
     static bool HasHandlerForPath(const wxString& location);

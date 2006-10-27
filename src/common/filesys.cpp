@@ -27,6 +27,7 @@
 #include "wx/mimetype.h"
 #include "wx/filename.h"
 #include "wx/tokenzr.h"
+#include "wx/fileback.h"
 
 
 //--------------------------------------------------------------------------------
@@ -357,7 +358,7 @@ void wxFileSystem::ChangePathTo(const wxString& location, bool is_dir)
 
 
 
-wxFSFile* wxFileSystem::OpenFile(const wxString& location)
+wxFSFile* wxFileSystem::OpenFile(const wxString& location, int flags)
 {
     wxString loc = MakeCorrectPath(location);
     unsigned i, ln;
@@ -410,6 +411,15 @@ wxFSFile* wxFileSystem::OpenFile(const wxString& location)
             node = node->GetNext();
         }
     }
+
+    if (s && (flags & wxFS_SEEKABLE) != 0 && !s->GetStream()->IsSeekable())
+    {
+        wxBackedInputStream *stream;
+        stream = new wxBackedInputStream(s->DetachStream());
+        stream->FindLength();
+        s->SetStream(stream);
+    }
+
     return (s);
 }
 
