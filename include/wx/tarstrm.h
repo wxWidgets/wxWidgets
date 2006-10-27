@@ -148,6 +148,8 @@ private:
 /////////////////////////////////////////////////////////////////////////////
 // wxTarInputStream
 
+WX_DECLARE_STRING_HASH_MAP(wxString, wxTarHeaderRecords);
+
 class WXDLLIMPEXP_BASE wxTarInputStream : public wxArchiveInputStream
 {
 public:
@@ -178,7 +180,7 @@ private:
     bool IsOpened() const               { return m_pos != wxInvalidOffset; }
 
     wxStreamError ReadHeaders();
-    bool ReadExtendedHeader(class wxTarHeaderRecords*& recs);
+    bool ReadExtendedHeader(wxTarHeaderRecords*& recs);
 
     wxString GetExtendedHeader(const wxString& key) const;
     wxString GetHeaderPath() const;
@@ -193,8 +195,8 @@ private:
     int m_sumType;
     int m_tarType;
     class wxTarHeaderBlock *m_hdr;
-    class wxTarHeaderRecords *m_HeaderRecs;
-    class wxTarHeaderRecords *m_GlobalHeaderRecs;
+    wxTarHeaderRecords *m_HeaderRecs;
+    wxTarHeaderRecords *m_GlobalHeaderRecs;
 
     DECLARE_NO_COPY_CLASS(wxTarInputStream)
 };

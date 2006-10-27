@@ -569,8 +569,6 @@ void wxTarEntry::SetMode(int mode)
 wxDECLARE_SCOPED_PTR(wxTarEntry, wxTarEntryPtr_)
 wxDEFINE_SCOPED_PTR (wxTarEntry, wxTarEntryPtr_)
 
-WX_DECLARE_STRING_HASH_MAP(wxString, wxTarHeaderRecords);
-
 wxTarInputStream::wxTarInputStream(wxInputStream& stream,
                                    wxMBConv& conv /*=wxConvLocal*/)
  :  wxArchiveInputStream(stream, conv)
