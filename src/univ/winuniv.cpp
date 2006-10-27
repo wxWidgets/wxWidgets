@@ -128,11 +128,10 @@ bool wxWindow::Create(wxWindow *parent,
     // as under the other platforms
     actualStyle |= wxCLIP_CHILDREN;
 
-#ifdef __WXMSW__
-    // FIXME: may need this on other platforms
     actualStyle &= ~wxVSCROLL;
     actualStyle &= ~wxHSCROLL;
 
+#ifdef __WXMSW__
     // without this, borders (non-client areas in general) are not repainted
     // correctly when resizing; apparently, native NC areas are fully repainted
     // even without this style by MSW, but wxUniv implements client area
