@@ -19,6 +19,8 @@
 
 #include "wx/collpane.h"
 
+#if wxUSE_BUTTON && wxUSE_STATLINE
+
 #ifndef WX_PRECOMP
     #include "wx/toplevel.h"
     #include "wx/button.h"
@@ -236,3 +238,5 @@ void wxGenericCollapsiblePane::OnSize(wxSizeEvent& WXUNUSED(event))
     // this is very important to make the pane window layout show correctly
     m_pPane->Layout();
 }
+
+#endif // wxUSE_BUTTON && wxUSE_STATLINE
