@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        fs_filter.cpp
+// Name:        src/common/fs_filter.cpp
 // Purpose:     wxFilter file system handler
 // Author:      Mike Wetherell
 // Copyright:   (c) 2006 Mike Wetherell
@@ -10,7 +10,7 @@
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-#pragma hdrstop
+    #pragma hdrstop
 #endif
 
 #if wxUSE_FILESYSTEM
@@ -41,7 +41,7 @@ wxFSFile* wxFilterFSHandler::OpenFile(
     wxString right = GetRightLocation(location);
     if (!right.empty())
         return NULL;
-    
+
     wxString protocol = GetProtocol(location);
     const wxFilterClassFactory *factory = wxFilterClassFactory::Find(protocol);
     if (!factory)
@@ -59,8 +59,8 @@ wxFSFile* wxFilterFSHandler::OpenFile(
     wxInputStreamPtr stream(factory->NewStream(leftStream.get()));
 
     // The way compressed streams are supposed to be served is e.g.:
-    //  Content-type: application/postscript 
-    //  Content-encoding: gzip 
+    //  Content-type: application/postscript
+    //  Content-encoding: gzip
     // So the mime type should be just the mime type of the lhs. However check
     // whether the mime type is that of this compression format (e.g.
     // application/gzip). If so pop any extension and try GetMimeTypeFromExt,
@@ -79,7 +79,7 @@ wxFSFile* wxFilterFSHandler::OpenFile(
                        );
 }
 
-wxString wxFilterFSHandler::FindFirst(const wxString& spec, int flags)
+wxString wxFilterFSHandler::FindFirst(const wxString& WXUNUSED(spec), int WXUNUSED(flags))
 {
     return wxEmptyString;
 }
