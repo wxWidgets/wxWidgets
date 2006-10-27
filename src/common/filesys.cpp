@@ -262,6 +262,12 @@ IMPLEMENT_ABSTRACT_CLASS(wxFSFile, wxObject)
 wxList wxFileSystem::m_Handlers;
 
 
+wxFileSystem::~wxFileSystem()
+{
+    WX_CLEAR_HASH_MAP(wxFSHandlerHash, m_LocalHandlers)
+}
+
+
 static wxString MakeCorrectPath(const wxString& path)
 {
     wxString p(path);
@@ -358,6 +364,25 @@ void wxFileSystem::ChangePathTo(const wxString& location, bool is_dir)
 
 
 
+wxFileSystemHandler *wxFileSystem::MakeLocal(wxFileSystemHandler *h)
+{
+    wxClassInfo *classinfo = h->GetClassInfo();
+
+    if (classinfo->IsDynamic())
+    {
+        wxFileSystemHandler*& local = m_LocalHandlers[classinfo];
+        if (!local)
+            local = (wxFileSystemHandler*)classinfo->CreateObject();
+        return local;
+    }
+    else
+    {
+        return h;
+    }
+}
+
+
+
 wxFSFile* wxFileSystem::OpenFile(const wxString& location, int flags)
 {
     wxString loc = MakeCorrectPath(location);
@@ -389,7 +414,7 @@ wxFSFile* wxFileSystem::OpenFile(const wxString& location, int flags)
             wxFileSystemHandler *h = (wxFileSystemHandler*) node -> GetData();
             if (h->CanOpen(m_Path + loc))
             {
-                s = h->OpenFile(*this, m_Path + loc);
+                s = MakeLocal(h)->OpenFile(*this, m_Path + loc);
                 if (s) { m_LastName = m_Path + loc; break; }
             }
             node = node->GetNext();
@@ -405,7 +430,7 @@ wxFSFile* wxFileSystem::OpenFile(const wxString& location, int flags)
             wxFileSystemHandler *h = (wxFileSystemHandler*) node->GetData();
             if (h->CanOpen(loc))
             {
-                s = h->OpenFile(*this, loc);
+                s = MakeLocal(h)->OpenFile(*this, loc);
                 if (s) { m_LastName = loc; break; }
             }
             node = node->GetNext();
@@ -438,18 +463,24 @@ wxString wxFileSystem::FindFirst(const wxString& spec, int flags)
     node = m_Handlers.GetFirst();
     while (node)
     {
-        m_FindFileHandler = (wxFileSystemHandler*) node -> GetData();
-        if (m_FindFileHandler -> CanOpen(m_Path + spec2))
+        wxFileSystemHandler *h = (wxFileSystemHandler*) node -> GetData();
+        if (h -> CanOpen(m_Path + spec2))
+        {
+            m_FindFileHandler = MakeLocal(h);
             return m_FindFileHandler -> FindFirst(m_Path + spec2, flags);
+        }
         node = node->GetNext();
     }
 
     node = m_Handlers.GetFirst();
     while (node)
     {
-        m_FindFileHandler = (wxFileSystemHandler*) node -> GetData();
-        if (m_FindFileHandler -> CanOpen(spec2))
+        wxFileSystemHandler *h = (wxFileSystemHandler*) node -> GetData();
+        if (h -> CanOpen(spec2))
+        {
+            m_FindFileHandler = MakeLocal(h);
             return m_FindFileHandler -> FindFirst(spec2, flags);
+        }
         node = node->GetNext();
     }
 

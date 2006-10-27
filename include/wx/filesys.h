@@ -25,6 +25,7 @@
 #include "wx/stream.h"
 #include "wx/datetime.h"
 #include "wx/filename.h"
+#include "wx/hashmap.h"
 
 class WXDLLIMPEXP_BASE wxFSFile;
 class WXDLLIMPEXP_BASE wxFileSystemHandler;
@@ -173,11 +174,13 @@ enum {
     wxFS_SEEKABLE = 4   // Returned stream will be seekable
 };
 
+WX_DECLARE_VOIDPTR_HASH_MAP(wxFileSystemHandler*, wxFSHandlerHash);
+
 class WXDLLIMPEXP_BASE wxFileSystem : public wxObject
 {
 public:
     wxFileSystem() : wxObject() { m_FindFileHandler = NULL;}
-    virtual ~wxFileSystem() { }
+    virtual ~wxFileSystem();
 
     // sets the current location. Every call to OpenFile is
     // relative to this location.
@@ -226,6 +229,8 @@ public:
 
 
 protected:
+    wxFileSystemHandler *MakeLocal(wxFileSystemHandler *h);
+
     wxString m_Path;
             // the path (location) we are currently in
             // this is path, not file!
@@ -237,6 +242,8 @@ protected:
             // list of FS handlers
     wxFileSystemHandler *m_FindFileHandler;
             // handler that succeed in FindFirst query
+    wxFSHandlerHash m_LocalHandlers;
+            // Handlers local to this instance
 
     DECLARE_DYNAMIC_CLASS(wxFileSystem)
     DECLARE_NO_COPY_CLASS(wxFileSystem)
