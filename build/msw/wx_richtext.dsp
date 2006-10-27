@@ -970,6 +970,10 @@ SOURCE=..\..\include\wx\richtext\richtextformatdlg.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\richtext\richtextprint.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\richtext\richtextstyledlg.h
 # End Source File
 # Begin Source File
@@ -1003,6 +1007,10 @@ SOURCE=..\..\src\richtext\richtextformatdlg.cpp
 # Begin Source File
 
 SOURCE=..\..\src\richtext\richtexthtml.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\richtext\richtextprint.cpp
 # End Source File
 # Begin Source File
 

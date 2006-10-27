@@ -9181,6 +9181,10 @@ SOURCE=..\..\include\wx\richtext\richtextformatdlg.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\richtext\richtextprint.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\richtext\richtextstyledlg.h
 # End Source File
 # Begin Source File

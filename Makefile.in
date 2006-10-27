@@ -1439,7 +1439,8 @@ RICHTEXTDLL_OBJECTS =  \
 	richtextdll_richtexthtml.o \
 	richtextdll_richtextformatdlg.o \
 	richtextdll_richtextsymboldlg.o \
-	richtextdll_richtextstyledlg.o
+	richtextdll_richtextstyledlg.o \
+	richtextdll_richtextprint.o
 RICHTEXTDLL_ODEP =  $(___pch_wxprec_richtextdll_wx_wxprec_h_gch___depname)
 RICHTEXTLIB_CXXFLAGS = $(__richtextlib_PCH_INC) -D__WX$(TOOLKIT)__ \
 	$(__WXUNIV_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
@@ -1454,7 +1455,8 @@ RICHTEXTLIB_OBJECTS =  \
 	richtextlib_richtexthtml.o \
 	richtextlib_richtextformatdlg.o \
 	richtextlib_richtextsymboldlg.o \
-	richtextlib_richtextstyledlg.o
+	richtextlib_richtextstyledlg.o \
+	richtextlib_richtextprint.o
 RICHTEXTLIB_ODEP =  $(___pch_wxprec_richtextlib_wx_wxprec_h_gch___depname)
 GLDLL_CXXFLAGS = $(__gldll_PCH_INC) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) \
@@ -3076,7 +3078,8 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/richtext/richtextxml.h \
 	wx/richtext/richtextformatdlg.h \
 	wx/richtext/richtextsymboldlg.h \
-	wx/richtext/richtextstyledlg.h
+	wx/richtext/richtextstyledlg.h \
+	wx/richtext/richtextprint.h
 @COND_USE_GUI_1@ALL_GUI_HEADERS = $(COND_USE_GUI_1_ALL_GUI_HEADERS)
 COND_MONOLITHIC_1_SHARED_1___monodll___depname = \
 	$(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3)
@@ -3381,7 +3384,8 @@ COND_USE_GUI_1___MONOLIB_GUI_SRC_OBJECTS =  \
 	monodll_richtexthtml.o \
 	monodll_richtextformatdlg.o \
 	monodll_richtextsymboldlg.o \
-	monodll_richtextstyledlg.o
+	monodll_richtextstyledlg.o \
+	monodll_richtextprint.o
 @COND_USE_GUI_1@__MONOLIB_GUI_SRC_OBJECTS = $(COND_USE_GUI_1___MONOLIB_GUI_SRC_OBJECTS)
 COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS =  \
 	$(__LOWLEVEL_SRC_OBJECTS) \
@@ -5132,7 +5136,8 @@ COND_USE_GUI_1___MONOLIB_GUI_SRC_OBJECTS_1 =  \
 	monolib_richtexthtml.o \
 	monolib_richtextformatdlg.o \
 	monolib_richtextsymboldlg.o \
-	monolib_richtextstyledlg.o
+	monolib_richtextstyledlg.o \
+	monolib_richtextprint.o
 @COND_USE_GUI_1@__MONOLIB_GUI_SRC_OBJECTS_1 = $(COND_USE_GUI_1___MONOLIB_GUI_SRC_OBJECTS_1)
 COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_1 =  \
 	$(__LOWLEVEL_SRC_OBJECTS_2) \
@@ -12902,6 +12907,9 @@ monodll_richtextsymboldlg.o: $(srcdir)/src/richtext/richtextsymboldlg.cpp $(MONO
 monodll_richtextstyledlg.o: $(srcdir)/src/richtext/richtextstyledlg.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/richtext/richtextstyledlg.cpp
 
+monodll_richtextprint.o: $(srcdir)/src/richtext/richtextprint.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/richtext/richtextprint.cpp
+
 monodll_xml.o: $(srcdir)/src/xml/xml.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/xml/xml.cpp
 
@@ -16981,6 +16989,9 @@ monolib_richtextsymboldlg.o: $(srcdir)/src/richtext/richtextsymboldlg.cpp $(MONO
 
 monolib_richtextstyledlg.o: $(srcdir)/src/richtext/richtextstyledlg.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/richtext/richtextstyledlg.cpp
+
+monolib_richtextprint.o: $(srcdir)/src/richtext/richtextprint.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/richtext/richtextprint.cpp
 
 monolib_xml.o: $(srcdir)/src/xml/xml.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/xml/xml.cpp
@@ -28526,6 +28537,9 @@ richtextdll_richtextsymboldlg.o: $(srcdir)/src/richtext/richtextsymboldlg.cpp $(
 richtextdll_richtextstyledlg.o: $(srcdir)/src/richtext/richtextstyledlg.cpp $(RICHTEXTDLL_ODEP)
 	$(CXXC) -c -o $@ $(RICHTEXTDLL_CXXFLAGS) $(srcdir)/src/richtext/richtextstyledlg.cpp
 
+richtextdll_richtextprint.o: $(srcdir)/src/richtext/richtextprint.cpp $(RICHTEXTDLL_ODEP)
+	$(CXXC) -c -o $@ $(RICHTEXTDLL_CXXFLAGS) $(srcdir)/src/richtext/richtextprint.cpp
+
 richtextlib_richtextctrl.o: $(srcdir)/src/richtext/richtextctrl.cpp $(RICHTEXTLIB_ODEP)
 	$(CXXC) -c -o $@ $(RICHTEXTLIB_CXXFLAGS) $(srcdir)/src/richtext/richtextctrl.cpp
 
@@ -28549,6 +28563,9 @@ richtextlib_richtextsymboldlg.o: $(srcdir)/src/richtext/richtextsymboldlg.cpp $(
 
 richtextlib_richtextstyledlg.o: $(srcdir)/src/richtext/richtextstyledlg.cpp $(RICHTEXTLIB_ODEP)
 	$(CXXC) -c -o $@ $(RICHTEXTLIB_CXXFLAGS) $(srcdir)/src/richtext/richtextstyledlg.cpp
+
+richtextlib_richtextprint.o: $(srcdir)/src/richtext/richtextprint.cpp $(RICHTEXTLIB_ODEP)
+	$(CXXC) -c -o $@ $(RICHTEXTLIB_CXXFLAGS) $(srcdir)/src/richtext/richtextprint.cpp
 
 gldll_version_rc.o: $(srcdir)/src/msw/version.rc $(GLDLL_ODEP)
 	$(WINDRES) -i$< -o$@   --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_58)  $(__EXCEPTIONS_DEFINE_p_57) $(__RTTI_DEFINE_p_57) $(__THREAD_DEFINE_p_57)   --define WXDLLNAME=$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gl$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG) $(__RCDEFDIR_p) --include-dir $(top_srcdir)/include
