@@ -16,18 +16,10 @@
 
 #if wxUSE_STREAMS && wxUSE_ARCHIVE_STREAMS
 
-#ifndef WX_PRECOMP
-#endif
-
 #include "wx/archive.h"
-#include "wx/link.h"
 
 IMPLEMENT_ABSTRACT_CLASS(wxArchiveEntry, wxObject)
-IMPLEMENT_ABSTRACT_CLASS(wxArchiveClassFactory, wxObject)
-
-#if wxUSE_ZIPSTREAM
-wxFORCE_LINK_MODULE(zipstrm)
-#endif
+IMPLEMENT_ABSTRACT_CLASS(wxArchiveClassFactory, wxFilterClassFactoryBase)
 
 
 /////////////////////////////////////////////////////////////////////////////
@@ -40,11 +32,25 @@ wxArchiveInputStream::wxArchiveInputStream(wxInputStream& stream,
 {
 }
 
+wxArchiveInputStream::wxArchiveInputStream(wxInputStream *stream,
+                                           wxMBConv& conv)
+  : wxFilterInputStream(stream),
+    m_conv(conv)
+{
+}
+
 
 /////////////////////////////////////////////////////////////////////////////
 // wxArchiveOutputStream
 
 wxArchiveOutputStream::wxArchiveOutputStream(wxOutputStream& stream,
+                                             wxMBConv& conv)
+  : wxFilterOutputStream(stream),
+    m_conv(conv)
+{
+}
+
+wxArchiveOutputStream::wxArchiveOutputStream(wxOutputStream *stream,
                                              wxMBConv& conv)
   : wxFilterOutputStream(stream),
     m_conv(conv)
@@ -66,6 +72,27 @@ wxArchiveEntry& wxArchiveEntry::operator=(const wxArchiveEntry& WXUNUSED(e))
 {
     m_notifier = NULL;
     return *this;
+}
+
+
+/////////////////////////////////////////////////////////////////////////////
+// wxArchiveClassFactory
+
+wxArchiveClassFactory *wxArchiveClassFactory::sm_first = NULL;
+
+void wxArchiveClassFactory::Remove()
+{
+    if (m_next != this)
+    {
+        wxArchiveClassFactory **pp = &sm_first;
+
+        while (*pp != this)
+            pp = &(*pp)->m_next;
+
+        *pp = m_next;
+
+        m_next = this;
+    }
 }
 
 #endif // wxUSE_STREAMS && wxUSE_ARCHIVE_STREAMS

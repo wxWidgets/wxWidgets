@@ -104,6 +104,7 @@ public:
     
 protected:
     wxArchiveInputStream(wxInputStream& stream, wxMBConv& conv);
+    wxArchiveInputStream(wxInputStream *stream, wxMBConv& conv);
 
     virtual wxArchiveEntry *DoGetNextEntry() = 0;
 
@@ -149,6 +150,7 @@ public:
 
 protected:
     wxArchiveOutputStream(wxOutputStream& stream, wxMBConv& conv);
+    wxArchiveOutputStream(wxOutputStream *stream, wxMBConv& conv);
 
     wxMBConv& GetConv() const { return m_conv; }
 
@@ -308,7 +310,9 @@ typedef wxArchiveIterator<wxArchiveInputStream,
 // A wxArchiveClassFactory instance for a particular archive type allows
 // the creation of the other classes that may be needed.
 
-class WXDLLIMPEXP_BASE wxArchiveClassFactory : public wxObject
+void WXDLLIMPEXP_BASE wxUseArchiveClasses();
+
+class WXDLLIMPEXP_BASE wxArchiveClassFactory : public wxFilterClassFactoryBase
 {
 public:
     typedef wxArchiveEntry        entry_type;
@@ -328,6 +332,10 @@ public:
         { return DoNewStream(stream); }
     wxArchiveOutputStream *NewStream(wxOutputStream& stream) const
         { return DoNewStream(stream); }
+    wxArchiveInputStream *NewStream(wxInputStream *stream) const
+        { return DoNewStream(stream); }
+    wxArchiveOutputStream *NewStream(wxOutputStream *stream) const
+        { return DoNewStream(stream); }
 
     virtual wxString GetInternalName(
         const wxString& name,
@@ -336,19 +344,33 @@ public:
     void SetConv(wxMBConv& conv) { m_pConv = &conv; }
     wxMBConv& GetConv() const { return *m_pConv; }
 
+    static const wxArchiveClassFactory *Find(const wxChar *protocol,
+                                             wxStreamProtocolType type
+                                             = wxSTREAM_PROTOCOL);
+
+    static const wxArchiveClassFactory *GetFirst();
+    const wxArchiveClassFactory *GetNext() const { return m_next; }
+
+    void PushFront() { Remove(); m_next = sm_first; sm_first = this; }
+    void Remove();
+
 protected:
     // old compilers don't support covarient returns, so 'Do' methods are
     // used to simulate them
     virtual wxArchiveEntry        *DoNewEntry() const = 0;
     virtual wxArchiveInputStream  *DoNewStream(wxInputStream& stream) const = 0;
     virtual wxArchiveOutputStream *DoNewStream(wxOutputStream& stream) const = 0;
+    virtual wxArchiveInputStream  *DoNewStream(wxInputStream *stream) const = 0;
+    virtual wxArchiveOutputStream *DoNewStream(wxOutputStream *stream) const = 0;
 
-    wxArchiveClassFactory() : m_pConv(&wxConvLocal) { }
+    wxArchiveClassFactory() : m_pConv(&wxConvLocal), m_next(this) { }
     wxArchiveClassFactory& operator=(const wxArchiveClassFactory& WXUNUSED(f))
         { return *this; }
 
 private:
     wxMBConv *m_pConv;
+    static wxArchiveClassFactory *sm_first;
+    wxArchiveClassFactory *m_next;
 
     DECLARE_ABSTRACT_CLASS(wxArchiveClassFactory)
 };
