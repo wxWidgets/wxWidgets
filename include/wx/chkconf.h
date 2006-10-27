@@ -125,6 +125,14 @@
 #   endif
 #endif /* !defined(wxUSE_FILESYSTEM) */
 
+#ifndef wxUSE_FS_ARCHIVE
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_FS_ARCHIVE must be defined."
+#   else
+#       define wxUSE_FS_ARCHIVE 0
+#   endif
+#endif /* !defined(wxUSE_FS_ARCHIVE) */
+
 /* don't give an error about this one yet, it's not fully implemented */
 #ifndef wxUSE_FSVOLUME
 #   define wxUSE_FSVOLUME 0
@@ -1168,16 +1176,48 @@
 #   endif
 #endif /* wxUSE_ZIPSTREAM */
 
-#if wxUSE_BACKINGFILE
-#   if !wxUSE_STREAMS || (!wxUSE_FILE && !wxUSE_FFILE)
+#if wxUSE_FS_ARCHIVE
+#   if !wxUSE_ARCHIVE_STREAMS
 #       ifdef wxABORT_ON_CONFIG_ERROR
-#           error "wxBackingFile requires wxStream and wxFile or wxFFile"
+#           error "wxArchiveFSHandler requires wxArchive and wxBackingFile"
 #       else
+#           undef wxUSE_ARCHIVE_STREAMS
+#           define wxUSE_ARCHIVE_STREAMS 1
 #           undef wxUSE_BACKINGFILE
-#           define wxUSE_BACKINGFILE 0
+#           define wxUSE_BACKINGFILE 1
+#       endif
+#   endif
+#endif /* wxUSE_FS_ARCHIVE */
+
+#if wxUSE_BACKINGFILE
+#   if !wxUSE_STREAMS
+#       ifdef wxABORT_ON_CONFIG_ERROR
+#           error "wxBackingFile requires wxStream"
+#       else
+#           undef wxUSE_STREAMS
+#           define wxUSE_STREAMS 1
+#       endif
+#   endif
+#   if !wxUSE_FILE && !wxUSE_FFILE
+#       ifdef wxABORT_ON_CONFIG_ERROR
+#           error "wxBackingFile requires wxFile or wxFFile"
+#       else
+#           undef wxUSE_FFILE
+#           define wxUSE_FFILE 1
 #       endif
 #   endif
 #endif /* wxUSE_BACKINGFILE */
+
+#if wxUSE_TARSTREAM
+#   if !wxUSE_ARCHIVE_STREAMS
+#       ifdef wxABORT_ON_CONFIG_ERROR
+#           error "wxTar requires wxArchive"
+#       else
+#           undef wxUSE_ARCHIVE_STREAMS
+#           define wxUSE_ARCHIVE_STREAMS 1
+#       endif
+#   endif
+#endif /* wxUSE_TARSTREAM */
 
 /* the rest of the tests is for the GUI settings only */
 #if wxUSE_GUI

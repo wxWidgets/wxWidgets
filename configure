@@ -995,6 +995,7 @@ Optional Features:
   --enable-file           use wxFile class
   --enable-filesystem     use virtual file systems classes
   --enable-fontmap        use font encodings conversion classes
+  --enable-fs_archive     use virtual archive filesystems
   --enable-fs_inet        use virtual HTTP/FTP filesystems
   --enable-fs_zip         use virtual ZIP filesystems
   --enable-geometry       use geometry class
@@ -1009,6 +1010,7 @@ Optional Features:
   --enable-stopwatch      use wxStopWatch class
   --enable-streams        use wxStream etc classes
   --enable-sysoptions     use wxSystemOptions
+  --enable-tarstream      use wxTar streams
   --enable-textbuf        use wxTextBuffer class
   --enable-textfile       use wxTextFile class
   --enable-timer          use wxTimer class
@@ -2314,9 +2316,11 @@ if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_FILESYSTEM=no
   DEFAULT_wxUSE_FS_INET=no
   DEFAULT_wxUSE_FS_ZIP=no
+  DEFAULT_wxUSE_FS_ARCHIVE=no
   DEFAULT_wxUSE_BUSYINFO=no
   DEFAULT_wxUSE_ARCHIVE_STREAMS=no
   DEFAULT_wxUSE_ZIPSTREAM=no
+  DEFAULT_wxUSE_TARSTREAM=no
   DEFAULT_wxUSE_BACKINGFILE=no
   DEFAULT_wxUSE_VALIDATORS=no
 
@@ -2533,9 +2537,11 @@ else
   DEFAULT_wxUSE_FILESYSTEM=yes
   DEFAULT_wxUSE_FS_INET=yes
   DEFAULT_wxUSE_FS_ZIP=yes
+  DEFAULT_wxUSE_FS_ARCHIVE=yes
   DEFAULT_wxUSE_BUSYINFO=yes
   DEFAULT_wxUSE_ARCHIVE_STREAMS=yes
   DEFAULT_wxUSE_ZIPSTREAM=yes
+  DEFAULT_wxUSE_TARSTREAM=yes
   DEFAULT_wxUSE_BACKINGFILE=yes
   DEFAULT_wxUSE_VALIDATORS=yes
 
@@ -5637,6 +5643,47 @@ echo "${ECHO_T}no" >&6
 
 
 	  enablestring=
+          echo "$as_me:$LINENO: checking for --${enablestring:-enable}-fs_archive" >&5
+echo $ECHO_N "checking for --${enablestring:-enable}-fs_archive... $ECHO_C" >&6
+          no_cache=0
+          # Check whether --enable-fs_archive or --disable-fs_archive was given.
+if test "${enable_fs_archive+set}" = set; then
+  enableval="$enable_fs_archive"
+
+                          if test "$enableval" = yes; then
+                            ac_cv_use_fs_archive='wxUSE_FS_ARCHIVE=yes'
+                          else
+                            ac_cv_use_fs_archive='wxUSE_FS_ARCHIVE=no'
+                          fi
+
+else
+
+                          LINE=`grep "wxUSE_FS_ARCHIVE" ${wx_arg_cache_file}`
+                          if test "x$LINE" != x ; then
+                            eval "DEFAULT_$LINE"
+                          else
+                            no_cache=1
+                          fi
+
+                          ac_cv_use_fs_archive='wxUSE_FS_ARCHIVE='$DEFAULT_wxUSE_FS_ARCHIVE
+
+fi;
+
+          eval "$ac_cv_use_fs_archive"
+          if test "$no_cache" != 1; then
+            echo $ac_cv_use_fs_archive >> ${wx_arg_cache_file}.tmp
+          fi
+
+          if test "$wxUSE_FS_ARCHIVE" = yes; then
+            echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
+          else
+            echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+          fi
+
+
+	  enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-fs_inet" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-fs_inet... $ECHO_C" >&6
           no_cache=0
@@ -6202,6 +6249,47 @@ fi;
           fi
 
           if test "$wxUSE_SYSTEM_OPTIONS" = yes; then
+            echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
+          else
+            echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+          fi
+
+
+	  enablestring=
+          echo "$as_me:$LINENO: checking for --${enablestring:-enable}-tarstream" >&5
+echo $ECHO_N "checking for --${enablestring:-enable}-tarstream... $ECHO_C" >&6
+          no_cache=0
+          # Check whether --enable-tarstream or --disable-tarstream was given.
+if test "${enable_tarstream+set}" = set; then
+  enableval="$enable_tarstream"
+
+                          if test "$enableval" = yes; then
+                            ac_cv_use_tarstream='wxUSE_TARSTREAM=yes'
+                          else
+                            ac_cv_use_tarstream='wxUSE_TARSTREAM=no'
+                          fi
+
+else
+
+                          LINE=`grep "wxUSE_TARSTREAM" ${wx_arg_cache_file}`
+                          if test "x$LINE" != x ; then
+                            eval "DEFAULT_$LINE"
+                          else
+                            no_cache=1
+                          fi
+
+                          ac_cv_use_tarstream='wxUSE_TARSTREAM='$DEFAULT_wxUSE_TARSTREAM
+
+fi;
+
+          eval "$ac_cv_use_tarstream"
+          if test "$no_cache" != 1; then
+            echo $ac_cv_use_tarstream >> ${wx_arg_cache_file}.tmp
+          fi
+
+          if test "$wxUSE_TARSTREAM" = yes; then
             echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
           else
@@ -43122,10 +43210,15 @@ _ACEOF
 fi
 
 if test "$wxUSE_ARCHIVE_STREAMS" = "yes"; then
-  cat >>confdefs.h <<\_ACEOF
+  if test "$wxUSE_STREAMS" != yes; then
+    { echo "$as_me:$LINENO: WARNING: wxArchive requires wxStreams... disabled" >&5
+echo "$as_me: WARNING: wxArchive requires wxStreams... disabled" >&2;}
+  else
+    cat >>confdefs.h <<\_ACEOF
 #define wxUSE_ARCHIVE_STREAMS 1
 _ACEOF
 
+  fi
 fi
 
 if test "$wxUSE_ZIPSTREAM" = "yes"; then
@@ -43143,6 +43236,18 @@ _ACEOF
   fi
 fi
 
+if test "$wxUSE_TARSTREAM" = "yes"; then
+  if test "$wxUSE_ARCHIVE_STREAMS" != "yes"; then
+    { echo "$as_me:$LINENO: WARNING: wxTar requires wxArchive... disabled" >&5
+echo "$as_me: WARNING: wxTar requires wxArchive... disabled" >&2;}
+  else
+    cat >>confdefs.h <<\_ACEOF
+#define wxUSE_TARSTREAM 1
+_ACEOF
+
+  fi
+fi
+
 if test "$wxUSE_BACKINGFILE" = "yes"; then
   if test "$wxUSE_STREAMS" != yes -o \( "$wxUSE_FILE" != yes -a "$wxUSE_FFILE" != yes \); then
     { echo "$as_me:$LINENO: WARNING: wxBackingFile requires wxStreams and wxFile or wxFFile... disabled" >&5
@@ -43150,6 +43255,18 @@ echo "$as_me: WARNING: wxBackingFile requires wxStreams and wxFile or wxFFile...
   else
     cat >>confdefs.h <<\_ACEOF
 #define wxUSE_BACKINGFILE 1
+_ACEOF
+
+  fi
+fi
+
+if test "$wxUSE_FS_ARCHIVE" = "yes"; then
+  if test "$wxUSE_ARCHIVE_STREAMS" != yes -o "$wxUSE_BACKINGFILE" != yes; then
+    { echo "$as_me:$LINENO: WARNING: wxArchiveFSHandler requires wxArchive and wxBackingFile... disabled" >&5
+echo "$as_me: WARNING: wxArchiveFSHandler requires wxArchive and wxBackingFile... disabled" >&2;}
+  else
+    cat >>confdefs.h <<\_ACEOF
+#define wxUSE_FS_ARCHIVE 1
 _ACEOF
 
   fi

@@ -260,11 +260,15 @@ typedef pid_t GPid;
 
 #define wxUSE_FS_ZIP        1
 
+#define wxUSE_FS_ARCHIVE    1
+
 #define wxUSE_FS_INET       1
 
 #define wxUSE_ARCHIVE_STREAMS     1
 
 #define wxUSE_ZIPSTREAM     1
+
+#define wxUSE_TARSTREAM     1
 
 #define wxUSE_BACKINGFILE   1
 

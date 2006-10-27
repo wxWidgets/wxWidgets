@@ -503,9 +503,11 @@ if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_FILESYSTEM=no
   DEFAULT_wxUSE_FS_INET=no
   DEFAULT_wxUSE_FS_ZIP=no
+  DEFAULT_wxUSE_FS_ARCHIVE=no
   DEFAULT_wxUSE_BUSYINFO=no
   DEFAULT_wxUSE_ARCHIVE_STREAMS=no
   DEFAULT_wxUSE_ZIPSTREAM=no
+  DEFAULT_wxUSE_TARSTREAM=no
   DEFAULT_wxUSE_BACKINGFILE=no
   DEFAULT_wxUSE_VALIDATORS=no
 
@@ -722,9 +724,11 @@ else
   DEFAULT_wxUSE_FILESYSTEM=yes
   DEFAULT_wxUSE_FS_INET=yes
   DEFAULT_wxUSE_FS_ZIP=yes
+  DEFAULT_wxUSE_FS_ARCHIVE=yes
   DEFAULT_wxUSE_BUSYINFO=yes
   DEFAULT_wxUSE_ARCHIVE_STREAMS=yes
   DEFAULT_wxUSE_ZIPSTREAM=yes
+  DEFAULT_wxUSE_TARSTREAM=yes
   DEFAULT_wxUSE_BACKINGFILE=yes
   DEFAULT_wxUSE_VALIDATORS=yes
 
@@ -961,6 +965,7 @@ WX_ARG_ENABLE(ffile,         [  --enable-ffile          use wxFFile class], wxUS
 WX_ARG_ENABLE(file,          [  --enable-file           use wxFile class], wxUSE_FILE)
 WX_ARG_ENABLE(filesystem,    [  --enable-filesystem     use virtual file systems classes], wxUSE_FILESYSTEM)
 WX_ARG_ENABLE(fontmap,       [  --enable-fontmap        use font encodings conversion classes], wxUSE_FONTMAP)
+WX_ARG_ENABLE(fs_archive,    [  --enable-fs_archive     use virtual archive filesystems], wxUSE_FS_ARCHIVE)
 WX_ARG_ENABLE(fs_inet,       [  --enable-fs_inet        use virtual HTTP/FTP filesystems], wxUSE_FS_INET)
 WX_ARG_ENABLE(fs_zip,        [  --enable-fs_zip         use virtual ZIP filesystems], wxUSE_FS_ZIP)
 WX_ARG_ENABLE(geometry,      [  --enable-geometry       use geometry class], wxUSE_GEOMETRY)
@@ -975,6 +980,7 @@ WX_ARG_ENABLE(stdpaths,      [  --enable-stdpaths       use wxStandardPaths clas
 WX_ARG_ENABLE(stopwatch,     [  --enable-stopwatch      use wxStopWatch class], wxUSE_STOPWATCH)
 WX_ARG_ENABLE(streams,       [  --enable-streams        use wxStream etc classes], wxUSE_STREAMS)
 WX_ARG_ENABLE(system_options,[  --enable-sysoptions     use wxSystemOptions], wxUSE_SYSTEM_OPTIONS)
+WX_ARG_ENABLE(tarstream,     [  --enable-tarstream      use wxTar streams], wxUSE_TARSTREAM)
 WX_ARG_ENABLE(textbuf,       [  --enable-textbuf        use wxTextBuffer class], wxUSE_TEXTBUFFER)
 WX_ARG_ENABLE(textfile,      [  --enable-textfile       use wxTextFile class], wxUSE_TEXTFILE)
 WX_ARG_ENABLE(timer,         [  --enable-timer          use wxTimer class], wxUSE_TIMER)
@@ -5712,7 +5718,11 @@ if test "$wxUSE_FS_ZIP" = "yes"; then
 fi
 
 if test "$wxUSE_ARCHIVE_STREAMS" = "yes"; then
-  AC_DEFINE(wxUSE_ARCHIVE_STREAMS)
+  if test "$wxUSE_STREAMS" != yes; then
+    AC_MSG_WARN(wxArchive requires wxStreams... disabled)
+  else
+    AC_DEFINE(wxUSE_ARCHIVE_STREAMS)
+  fi
 fi
 
 if test "$wxUSE_ZIPSTREAM" = "yes"; then
@@ -5725,11 +5735,27 @@ if test "$wxUSE_ZIPSTREAM" = "yes"; then
   fi
 fi
 
+if test "$wxUSE_TARSTREAM" = "yes"; then
+  if test "$wxUSE_ARCHIVE_STREAMS" != "yes"; then
+    AC_MSG_WARN(wxTar requires wxArchive... disabled)
+  else
+    AC_DEFINE(wxUSE_TARSTREAM)
+  fi
+fi
+
 if test "$wxUSE_BACKINGFILE" = "yes"; then
   if test "$wxUSE_STREAMS" != yes -o \( "$wxUSE_FILE" != yes -a "$wxUSE_FFILE" != yes \); then
     AC_MSG_WARN(wxBackingFile requires wxStreams and wxFile or wxFFile... disabled)
   else
     AC_DEFINE(wxUSE_BACKINGFILE)
+  fi
+fi
+
+if test "$wxUSE_FS_ARCHIVE" = "yes"; then
+  if test "$wxUSE_ARCHIVE_STREAMS" != yes -o "$wxUSE_BACKINGFILE" != yes; then
+    AC_MSG_WARN(wxArchiveFSHandler requires wxArchive and wxBackingFile... disabled)
+  else
+    AC_DEFINE(wxUSE_FS_ARCHIVE)
   fi
 fi
 

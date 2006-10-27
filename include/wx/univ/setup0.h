@@ -435,6 +435,9 @@
 // Set to 1 to enable virtual ZIP filesystem (requires wxUSE_FILESYSTEM)
 #define wxUSE_FS_ZIP 1
 
+// Set to 1 to enable virtual archive filesystem (requires wxUSE_FILESYSTEM)
+#define wxUSE_FS_ARCHIVE    1
+
 // wxArchive classes for accessing archives such as zip and tar
 #define wxUSE_ARCHIVE_STREAMS 1
 
@@ -443,6 +446,9 @@
 
 // Set to 1 to compile wxBackingFile and wxBackedInputStream
 #define wxUSE_BACKINGFILE   1
+
+// Set to 1 to compile wxTarInput/OutputStream classes.
+#define wxUSE_TARSTREAM     1
 
 // Set to 1 to compile wxZlibInput/OutputStream classes. Also required by
 // wxUSE_LIBPNG
