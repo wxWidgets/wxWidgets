@@ -41,16 +41,16 @@ class WXDLLIMPEXP_CORE wxGraphicsFont;
 class WXDLLIMPEXP_CORE wxGraphicsObject : public wxObject
 {
 public :
-	wxGraphicsObject( wxGraphicsRenderer* renderer = NULL ) : m_renderer(renderer) {}
-	
-	wxGraphicsObject( const wxGraphicsObject& obj ) : m_renderer(obj.GetRenderer()) {}
-	
-	virtual ~wxGraphicsObject() {}
-	
-	wxGraphicsRenderer* GetRenderer() const { return m_renderer ; }
+    wxGraphicsObject( wxGraphicsRenderer* renderer = NULL ) : m_renderer(renderer) {}
+    
+    wxGraphicsObject( const wxGraphicsObject& obj ) : m_renderer(obj.GetRenderer()) {}
+    
+    virtual ~wxGraphicsObject() {}
+    
+    wxGraphicsRenderer* GetRenderer() const { return m_renderer ; }
 protected :
-	wxGraphicsRenderer* m_renderer;
-	DECLARE_DYNAMIC_CLASS(wxGraphicsObject);
+    wxGraphicsRenderer* m_renderer;
+    DECLARE_DYNAMIC_CLASS(wxGraphicsObject);
 } ;
 
 class WXDLLIMPEXP_CORE wxGraphicsPen : public wxGraphicsObject
@@ -110,9 +110,9 @@ public :
     // adds a cubic Bezier curve from the current point, using two control points and an end point
     virtual void AddCurveToPoint( wxDouble cx1, wxDouble cy1, wxDouble cx2, wxDouble cy2, wxDouble x, wxDouble y ) = 0;
     void AddCurveToPoint( const wxPoint2DDouble& c1, const wxPoint2DDouble& c2, const wxPoint2DDouble& e);
-	
-	// adds another path
-	virtual void AddPath( const wxGraphicsPath* path ) =0;
+    
+    // adds another path
+    virtual void AddPath( const wxGraphicsPath* path ) =0;
 
     // closes the current sub-path
     virtual void CloseSubpath() = 0;
@@ -123,7 +123,7 @@ public :
 
     // adds an arc of a circle centering at (x,y) with radius (r) from startAngle to endAngle
     virtual void AddArc( wxDouble x, wxDouble y, wxDouble r, wxDouble startAngle, wxDouble endAngle, bool clockwise ) = 0;
-	void AddArc( const wxPoint2DDouble& c, wxDouble r, wxDouble startAngle, wxDouble endAngle, bool clockwise);
+    void AddArc( const wxPoint2DDouble& c, wxDouble r, wxDouble startAngle, wxDouble endAngle, bool clockwise);
 
     //
     // These are convenience functions which - if not available natively will be assembled 
@@ -141,29 +141,29 @@ public :
 
     // appends a an arc to two tangents connecting (current) to (x1,y1) and (x1,y1) to (x2,y2), also a straight line from (current) to (x1,y1)
     virtual void AddArcToPoint( wxDouble x1, wxDouble y1 , wxDouble x2, wxDouble y2, wxDouble r ) ;
-	
+    
     // appends an ellipse
     virtual void AddEllipse( wxDouble x, wxDouble y, wxDouble w, wxDouble h);
 
     // appends a rounded rectangle
     virtual void AddRoundedRectangle( wxDouble x, wxDouble y, wxDouble w, wxDouble h, wxDouble radius);
 
-	// returns the native path
-	virtual void * GetNativePath() const = 0;
-	
-	// give the native path returned by GetNativePath() back (there might be some deallocations necessary)
-	virtual void UnGetNativePath(void *p) = 0;
-	
-	// transforms each point of this path by the matrix
-	virtual void Transform( wxGraphicsMatrix* matrix ) =0;
-	
-	// gets the bounding box enclosing all points (possibly including control points)
-	virtual void GetBox(wxDouble *x, wxDouble *y, wxDouble *w, wxDouble *h) =0;
-	wxRect2DDouble GetBox();
-	
-	virtual bool Contains( wxDouble x, wxDouble y, int fillStyle = wxWINDING_RULE) =0;
-	bool Contains( const wxPoint2DDouble& c, int fillStyle = wxWINDING_RULE);
-	
+    // returns the native path
+    virtual void * GetNativePath() const = 0;
+    
+    // give the native path returned by GetNativePath() back (there might be some deallocations necessary)
+    virtual void UnGetNativePath(void *p) = 0;
+    
+    // transforms each point of this path by the matrix
+    virtual void Transform( wxGraphicsMatrix* matrix ) =0;
+    
+    // gets the bounding box enclosing all points (possibly including control points)
+    virtual void GetBox(wxDouble *x, wxDouble *y, wxDouble *w, wxDouble *h) =0;
+    wxRect2DDouble GetBox();
+    
+    virtual bool Contains( wxDouble x, wxDouble y, int fillStyle = wxWINDING_RULE) =0;
+    bool Contains( const wxPoint2DDouble& c, int fillStyle = wxWINDING_RULE);
+    
     DECLARE_NO_COPY_CLASS(wxGraphicsPath)
     DECLARE_ABSTRACT_CLASS(wxGraphicsPath)
 };
@@ -171,34 +171,34 @@ public :
 class WXDLLIMPEXP_CORE wxGraphicsMatrix : public wxGraphicsObject
 {
 public :
-	wxGraphicsMatrix(wxGraphicsRenderer* renderer) : wxGraphicsObject(renderer) {}
-	
-	virtual ~wxGraphicsMatrix() {}
-	
+    wxGraphicsMatrix(wxGraphicsRenderer* renderer) : wxGraphicsObject(renderer) {}
+    
+    virtual ~wxGraphicsMatrix() {}
+    
     virtual wxGraphicsMatrix *Clone() const = 0;
 
-	// concatenates the matrix
-	virtual void Concat( const wxGraphicsMatrix *t ) = 0;
-	void Concat( const wxGraphicsMatrix &t ) { Concat( &t ); }
-	
-	// copies the passed in matrix
-	virtual void Copy( const wxGraphicsMatrix *t )  = 0;
-	void Copy( const wxGraphicsMatrix &t ) { Copy( &t ); }
+    // concatenates the matrix
+    virtual void Concat( const wxGraphicsMatrix *t ) = 0;
+    void Concat( const wxGraphicsMatrix &t ) { Concat( &t ); }
+    
+    // copies the passed in matrix
+    virtual void Copy( const wxGraphicsMatrix *t )  = 0;
+    void Copy( const wxGraphicsMatrix &t ) { Copy( &t ); }
 
-	// sets the matrix to the respective values
-	virtual void Set(wxDouble a=1.0, wxDouble b=0.0, wxDouble c=0.0, wxDouble d=1.0, 
-		wxDouble tx=0.0, wxDouble ty=0.0) = 0;
+    // sets the matrix to the respective values
+    virtual void Set(wxDouble a=1.0, wxDouble b=0.0, wxDouble c=0.0, wxDouble d=1.0, 
+        wxDouble tx=0.0, wxDouble ty=0.0) = 0;
 
-	// makes this the inverse matrix
-	virtual void Invert() = 0;
-	
-	// returns true if the elements of the transformation matrix are equal ?
+    // makes this the inverse matrix
+    virtual void Invert() = 0;
+    
+    // returns true if the elements of the transformation matrix are equal ?
     virtual bool IsEqual( const wxGraphicsMatrix* t) const  = 0;
-	bool IsEqual( const wxGraphicsMatrix& t) const { return IsEqual( &t ); }
-	
-	// return true if this is the identity matrix
-	virtual bool IsIdentity()  = 0;
-	
+    bool IsEqual( const wxGraphicsMatrix& t) const { return IsEqual( &t ); }
+    
+    // return true if this is the identity matrix
+    virtual bool IsIdentity()  = 0;
+    
     //
     // transformation
     //
@@ -210,21 +210,21 @@ public :
     virtual void Scale( wxDouble xScale , wxDouble yScale ) = 0;
 
     // add the rotation to this matrix (radians)
-    virtual void Rotate( wxDouble angle ) = 0;	
-	
+    virtual void Rotate( wxDouble angle ) = 0;  
+    
     //
     // apply the transforms
     //
-	
-	// applies that matrix to the point
-	virtual void TransformPoint( wxDouble *x, wxDouble *y ) = 0;
-	
-	// applies the matrix except for translations
-	virtual void TransformDistance( wxDouble *dx, wxDouble *dy ) =0;
-	
-	// returns the native representation
-	virtual void * GetNativeMatrix() const = 0;
-	
+    
+    // applies that matrix to the point
+    virtual void TransformPoint( wxDouble *x, wxDouble *y ) = 0;
+    
+    // applies the matrix except for translations
+    virtual void TransformDistance( wxDouble *dx, wxDouble *dy ) =0;
+    
+    // returns the native representation
+    virtual void * GetNativeMatrix() const = 0;
+    
     DECLARE_NO_COPY_CLASS(wxGraphicsMatrix)
     DECLARE_ABSTRACT_CLASS(wxGraphicsMatrix)
 } ;
@@ -237,7 +237,7 @@ public:
     virtual ~wxGraphicsContext();
     
     static wxGraphicsContext* Create( const wxWindowDC& dc) ;
-	
+    
     static wxGraphicsContext* CreateFromNative( void * context ) ;
 
     static wxGraphicsContext* CreateFromNativeWindow( void * window ) ;
@@ -245,7 +245,7 @@ public:
     static wxGraphicsContext* Create( wxWindow* window ) ;
 
     wxGraphicsPath * CreatePath();
-	
+    
     virtual wxGraphicsPen* CreatePen(const wxPen& pen);
     
     virtual wxGraphicsBrush* CreateBrush(const wxBrush& brush );
@@ -262,10 +262,10 @@ public:
     // sets the font
     virtual wxGraphicsFont* CreateFont( const wxFont &font , const wxColour &col = *wxBLACK );
 
-	// create a 'native' matrix corresponding to these values
-	virtual wxGraphicsMatrix* CreateMatrix( wxDouble a=1.0, wxDouble b=0.0, wxDouble c=0.0, wxDouble d=1.0, 
-		wxDouble tx=0.0, wxDouble ty=0.0);
-	
+    // create a 'native' matrix corresponding to these values
+    virtual wxGraphicsMatrix* CreateMatrix( wxDouble a=1.0, wxDouble b=0.0, wxDouble c=0.0, wxDouble d=1.0, 
+        wxDouble tx=0.0, wxDouble ty=0.0);
+    
     // push the current state of the context, ie the transformation matrix on a stack
     virtual void PushState() = 0;
 
@@ -277,12 +277,12 @@ public:
 
     // clips drawings to the rect
     virtual void Clip( wxDouble x, wxDouble y, wxDouble w, wxDouble h ) = 0;
-	
-	// resets the clipping to original extent
-	virtual void ResetClip() = 0 ;
+    
+    // resets the clipping to original extent
+    virtual void ResetClip() = 0 ;
 
-	// returns the native context
-	virtual void * GetNativeContext() = 0;
+    // returns the native context
+    virtual void * GetNativeContext() = 0;
 
     //
     // transformation : changes the current transformation matrix CTM of the context
@@ -296,15 +296,15 @@ public:
 
     // rotate (radians)
     virtual void Rotate( wxDouble angle ) = 0;
-	
-	// concatenates this transform with the current transform of this context
-	virtual void ConcatTransform( const wxGraphicsMatrix* matrix ) = 0;
+    
+    // concatenates this transform with the current transform of this context
+    virtual void ConcatTransform( const wxGraphicsMatrix* matrix ) = 0;
 
-	// sets the transform of this context
-	virtual void SetTransform( const wxGraphicsMatrix* matrix ) = 0;
+    // sets the transform of this context
+    virtual void SetTransform( const wxGraphicsMatrix* matrix ) = 0;
 
-	// gets the matrix of this context
-	virtual void GetTransform( wxGraphicsMatrix* matrix ) = 0;
+    // gets the matrix of this context
+    virtual void GetTransform( wxGraphicsMatrix* matrix ) = 0;
     //
     // setting the paint
     //
@@ -323,6 +323,7 @@ public:
     virtual void SetFont( wxGraphicsFont* font, bool release = true );
     
     void SetFont( const wxFont& font, const wxColour& colour );
+
     
     // strokes along a path with the current pen
     virtual void StrokePath( const wxGraphicsPath *path ) = 0;
@@ -332,7 +333,7 @@ public:
 
     // draws a path by first filling and then stroking
     virtual void DrawPath( const wxGraphicsPath *path, int fillStyle = wxWINDING_RULE );
-	
+    
     //
     // text
     //
@@ -407,26 +408,26 @@ private :
 class WXDLLIMPEXP_CORE wxGraphicsFigure : public wxGraphicsObject
 {
 public :
-	wxGraphicsFigure(wxGraphicsRenderer* renderer) ;
-		
-	virtual ~wxGraphicsFigure() ;
-	
-	void SetPath( wxGraphicsMatrix* matrix );
-	
-	void SetMatrix( wxGraphicsPath* path);
+    wxGraphicsFigure(wxGraphicsRenderer* renderer) ;
+        
+    virtual ~wxGraphicsFigure() ;
+    
+    void SetPath( wxGraphicsMatrix* matrix );
+    
+    void SetMatrix( wxGraphicsPath* path);
 
-	// draws this object on the context
-	virtual void Draw( wxGraphicsContext* cg );
-	
-	// returns the path of this object
-	wxGraphicsPath* GetPath() { return m_path; }
-	
-	// returns the transformation matrix of this object, may be null if there is no transformation necessary
-	wxGraphicsMatrix* GetMatrix() { return m_matrix; }
-	
+    // draws this object on the context
+    virtual void Draw( wxGraphicsContext* cg );
+    
+    // returns the path of this object
+    wxGraphicsPath* GetPath() { return m_path; }
+    
+    // returns the transformation matrix of this object, may be null if there is no transformation necessary
+    wxGraphicsMatrix* GetMatrix() { return m_matrix; }
+    
 private :
-	wxGraphicsMatrix* m_matrix;
-	wxGraphicsPath* m_path;
+    wxGraphicsMatrix* m_matrix;
+    wxGraphicsPath* m_path;
     
     DECLARE_DYNAMIC_CLASS(wxGraphicsFigure)
 } ;
@@ -446,26 +447,26 @@ public :
 
     virtual ~wxGraphicsRenderer() {}
 
-	static wxGraphicsRenderer* GetDefaultRenderer();
+    static wxGraphicsRenderer* GetDefaultRenderer();
 
-	// Context
+    // Context
 
-	virtual wxGraphicsContext * CreateContext( const wxWindowDC& dc) = 0 ;
-	
-	virtual wxGraphicsContext * CreateContextFromNativeContext( void * context ) = 0;
+    virtual wxGraphicsContext * CreateContext( const wxWindowDC& dc) = 0 ;
+    
+    virtual wxGraphicsContext * CreateContextFromNativeContext( void * context ) = 0;
 
-	virtual wxGraphicsContext * CreateContextFromNativeWindow( void * window ) = 0;
+    virtual wxGraphicsContext * CreateContextFromNativeWindow( void * window ) = 0;
 
-	virtual wxGraphicsContext * CreateContext( wxWindow* window ) = 0;
+    virtual wxGraphicsContext * CreateContext( wxWindow* window ) = 0;
 
-	// Path
-	
+    // Path
+    
     virtual wxGraphicsPath * CreatePath() = 0;
 
-	// Matrix
-	
-	virtual wxGraphicsMatrix * CreateMatrix( wxDouble a=1.0, wxDouble b=0.0, wxDouble c=0.0, wxDouble d=1.0, 
-		wxDouble tx=0.0, wxDouble ty=0.0) = 0;
+    // Matrix
+    
+    virtual wxGraphicsMatrix * CreateMatrix( wxDouble a=1.0, wxDouble b=0.0, wxDouble c=0.0, wxDouble d=1.0, 
+        wxDouble tx=0.0, wxDouble ty=0.0) = 0;
         
     // Paints
     
@@ -486,7 +487,7 @@ public :
     virtual wxGraphicsFont* CreateFont( const wxFont &font , const wxColour &col = *wxBLACK ) = 0;
     
 private :
-	DECLARE_NO_COPY_CLASS(wxGraphicsRenderer)
+    DECLARE_NO_COPY_CLASS(wxGraphicsRenderer)
     DECLARE_ABSTRACT_CLASS(wxGraphicsRenderer)
 } ;
 
