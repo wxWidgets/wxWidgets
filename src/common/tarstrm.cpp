@@ -19,7 +19,6 @@
 #include "wx/tarstrm.h"
 
 #ifndef WX_PRECOMP
-    #include "wx/hashmap.h"
     #include "wx/intl.h"
     #include "wx/log.h"
     #include "wx/utils.h"
