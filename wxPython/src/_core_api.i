@@ -238,7 +238,9 @@ static wxPyCoreAPI API = {
     wxPyCheckForApp,
 
     wxArrayDouble2PyList_helper,
-    wxPoint2D_LIST_helper
+    wxPoint2D_LIST_helper,
+    wxRect2D_helper,
+
 };
 
 #endif

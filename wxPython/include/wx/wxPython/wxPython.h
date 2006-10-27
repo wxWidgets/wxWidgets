@@ -121,6 +121,7 @@ inline wxPyCoreAPI* wxPyGetCoreAPIPtr()
 
 #define wxArrayDouble2PyList_helper(a)          (wxPyGetCoreAPIPtr()->p_wxArrayDoublePyList_helper(a))
 #define wxPoint2D_LIST_helper(a,b)              (wxPyGetCoreAPIPtr()->p_wxPoint2D_LIST_helper(a, b))
+#define wxRect2D_helper(a,b)                    (wxPyGetCoreAPIPtr()->p_wxRect2D_helper(a,b))
 
 
 //----------------------------------------------------------------------

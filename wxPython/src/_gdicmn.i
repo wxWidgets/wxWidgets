@@ -17,6 +17,11 @@
 %newgroup
 
 
+// Turn off the aquisition of the Global Interpreter Lock for the classes and
+// functions in this file
+%threadWrapperOff
+
+
 enum wxBitmapType
 {
     wxBITMAP_TYPE_INVALID,          // should be == 0 for compatibility!
@@ -132,7 +137,7 @@ public:
 
     
     %extend {
-        KeepGIL(__eq__);
+        //KeepGIL(__eq__);
         DocStr(__eq__, "Test for equality of wx.Size objects.", "");
         bool __eq__(PyObject* other) {
             wxSize  temp, *obj = &temp;
@@ -145,7 +150,7 @@ public:
         }
 
         
-        KeepGIL(__ne__);
+        //KeepGIL(__ne__);
         DocStr(__ne__, "Test for inequality of wx.Size objects.", "");
         bool __ne__(PyObject* other) {
             wxSize  temp, *obj = &temp;
@@ -225,11 +230,11 @@ of this object (i.e. equal to -1) with those of the other.", "");
                "Get() -> (width,height)",
                "Returns the width and height properties as a tuple.", "");
         PyObject* Get() {
-            wxPyBlock_t blocked = wxPyBeginBlockThreads();
+            //wxPyBlock_t blocked = wxPyBeginBlockThreads();
             PyObject* tup = PyTuple_New(2);
             PyTuple_SET_ITEM(tup, 0, PyInt_FromLong(self->x));
             PyTuple_SET_ITEM(tup, 1, PyInt_FromLong(self->y));
-            wxPyEndBlockThreads(blocked);
+            //wxPyEndBlockThreads(blocked);
             return tup;
         }
     }
@@ -270,7 +275,7 @@ public:
     ~wxRealPoint();
 
     %extend {
-        KeepGIL(__eq__);
+        //KeepGIL(__eq__);
         DocStr(__eq__, "Test for equality of wx.RealPoint objects.", "");
         bool __eq__(PyObject* other) {
             wxRealPoint  temp, *obj = &temp;
@@ -283,7 +288,7 @@ public:
         }
 
         
-        KeepGIL(__ne__);
+        //KeepGIL(__ne__);
         DocStr(__ne__, "Test for inequality of wx.RealPoint objects.", "");
         bool __ne__(PyObject* other) {
             wxRealPoint  temp, *obj = &temp;
@@ -317,11 +322,11 @@ public:
                "Get() -> (x,y)",
                "Return the x and y properties as a tuple. ", "");
         PyObject* Get() {
-            wxPyBlock_t blocked = wxPyBeginBlockThreads();
+            //wxPyBlock_t blocked = wxPyBeginBlockThreads();
             PyObject* tup = PyTuple_New(2);
             PyTuple_SET_ITEM(tup, 0, PyFloat_FromDouble(self->x));
             PyTuple_SET_ITEM(tup, 1, PyFloat_FromDouble(self->y));
-            wxPyEndBlockThreads(blocked);
+            //PyEndBlockThreads(blocked);
             return tup;
         }
     }
@@ -365,7 +370,7 @@ public:
 
     
     %extend {
-        KeepGIL(__eq__);
+        //KeepGIL(__eq__);
         DocStr(__eq__, "Test for equality of wx.Point objects.", "");
         bool __eq__(PyObject* other) {
             wxPoint  temp, *obj = &temp;
@@ -378,7 +383,7 @@ public:
         }
 
         
-        KeepGIL(__ne__);
+        //KeepGIL(__ne__);
         DocStr(__ne__, "Test for inequality of wx.Point objects.", "");
         bool __ne__(PyObject* other) {
             wxPoint  temp, *obj = &temp;
@@ -448,11 +453,11 @@ public:
                "Get() -> (x,y)",
                "Return the x and y properties as a tuple. ", "");
         PyObject* Get() {
-            wxPyBlock_t blocked = wxPyBeginBlockThreads();
+            //wxPyBlock_t blocked = wxPyBeginBlockThreads();
             PyObject* tup = PyTuple_New(2);
             PyTuple_SET_ITEM(tup, 0, PyInt_FromLong(self->x));
             PyTuple_SET_ITEM(tup, 1, PyInt_FromLong(self->y));
-            wxPyEndBlockThreads(blocked);
+            //wxPyEndBlockThreads(blocked);
             return tup;
         }
     }
@@ -651,7 +656,7 @@ bottom, otherwise it is moved to the left or top respectively.", "",
         "Add the properties of rect to this rectangle, updating this rectangle.", "");
 
     %extend {
-        KeepGIL(__eq__);
+        //KeepGIL(__eq__);
         DocStr(__eq__, "Test for equality of wx.Rect objects.", "");
         bool __eq__(PyObject* other) {
             wxRect  temp, *obj = &temp;
@@ -664,7 +669,7 @@ bottom, otherwise it is moved to the left or top respectively.", "",
         }
 
         
-        KeepGIL(__ne__);
+        //KeepGIL(__ne__);
         DocStr(__ne__, "Test for inequality of wx.Rect objects.", "");
         bool __ne__(PyObject* other) {
             wxRect  temp, *obj = &temp;
@@ -724,13 +729,13 @@ usually, but not necessarily, the larger one.", "");
                "Get() -> (x,y,width,height)",
                "Return the rectangle properties as a tuple.", "");
         PyObject* Get() {
-            wxPyBlock_t blocked = wxPyBeginBlockThreads();
+            //wxPyBlock_t blocked = wxPyBeginBlockThreads();
             PyObject* tup = PyTuple_New(4);
             PyTuple_SET_ITEM(tup, 0, PyInt_FromLong(self->x));
             PyTuple_SET_ITEM(tup, 1, PyInt_FromLong(self->y));
             PyTuple_SET_ITEM(tup, 2, PyInt_FromLong(self->width));
             PyTuple_SET_ITEM(tup, 3, PyInt_FromLong(self->height));
-            wxPyEndBlockThreads(blocked);
+            //wxPyEndBlockThreads(blocked);
             return tup;
         }
     }
@@ -788,10 +793,10 @@ DocAStr(wxIntersectRect,
         dest = reg1.GetBox();
 
         if (dest != wxRect(0,0,0,0)) {
-            wxPyBlock_t blocked = wxPyBeginBlockThreads();
+            //wxPyBlock_t blocked = wxPyBeginBlockThreads();
             wxRect* newRect = new wxRect(dest);
             obj = wxPyConstructObject((void*)newRect, wxT("wxRect"), true);
-            wxPyEndBlockThreads(blocked);
+            //wxPyEndBlockThreads(blocked);
             return obj;
         }
         Py_INCREF(Py_None);
@@ -858,7 +863,7 @@ public:
     wxPoint2D& operator/=(const wxPoint2D& pt);
 
     %extend {
-        KeepGIL(__eq__);
+        //KeepGIL(__eq__);
         DocStr(__eq__, "Test for equality of wx.Point2D objects.", "");
         bool __eq__(PyObject* other) {
             wxPoint2D  temp, *obj = &temp;
@@ -871,7 +876,7 @@ public:
         }
 
         
-        KeepGIL(__ne__);
+        //KeepGIL(__ne__);
         DocStr(__ne__, "Test for inequality of wx.Point2D objects.", "");
         bool __ne__(PyObject* other) {
             wxPoint2D  temp, *obj = &temp;
@@ -897,11 +902,11 @@ public:
                "Get() -> (x,y)",
                "Return x and y properties as a tuple.", "");               
         PyObject* Get() {
-            wxPyBlock_t blocked = wxPyBeginBlockThreads();
+            //wxPyBlock_t blocked = wxPyBeginBlockThreads();
             PyObject* tup = PyTuple_New(2);
             PyTuple_SET_ITEM(tup, 0, PyFloat_FromDouble(self->m_x));
             PyTuple_SET_ITEM(tup, 1, PyFloat_FromDouble(self->m_y));
-            wxPyEndBlockThreads(blocked);
+            //wxPyEndBlockThreads(blocked);
             return tup;
         }
     }
@@ -930,6 +935,177 @@ public:
 
 
 //---------------------------------------------------------------------------
+%newgroup
+
+
+enum wxOutCode
+{
+    wxInside = 0x00 ,
+    wxOutLeft = 0x01 ,
+    wxOutRight = 0x02 ,
+    wxOutTop = 0x08 ,
+    wxOutBottom = 0x04
+};
+
+
+DocStr(wxRect2D,
+      "wx.Rect2D is a rectangle, with position and size, in a 2D coordinate system
+with floating point component values.", "");
+
+class wxRect2D
+{
+public:
+    wxRect2D(wxDouble x=0.0, wxDouble y=0.0, wxDouble w=0.0, wxDouble h=0.0);
+
+    ~wxRect2D();
+
+    wxPoint2D GetPosition();
+    wxSize GetSize();
+
+    // for the edge and corner accessors there are two setters conterparts,
+    // the Set.. functions keep the other corners at their position whenever
+    // sensible, the Move.. functions keep the size of the rect and move the
+    // other corners apropriately
+
+    wxDouble GetLeft() const;
+    void SetLeft( wxDouble n );
+    void MoveLeftTo( wxDouble n );
+    wxDouble GetTop() const;
+    void SetTop( wxDouble n );
+    void MoveTopTo( wxDouble n );
+    wxDouble GetBottom() const;
+    void SetBottom( wxDouble n );
+    void MoveBottomTo( wxDouble n );
+    wxDouble GetRight() const;
+    void SetRight( wxDouble n );
+    void MoveRightTo( wxDouble n );
+
+    wxPoint2D GetLeftTop() const;
+    void SetLeftTop( const wxPoint2D &pt );
+    void MoveLeftTopTo( const wxPoint2D &pt );
+    wxPoint2D GetLeftBottom() const;
+    void SetLeftBottom( const wxPoint2D &pt );
+    void MoveLeftBottomTo( const wxPoint2D &pt );
+    wxPoint2D GetRightTop() const;
+    void SetRightTop( const wxPoint2D &pt );
+    void MoveRightTopTo( const wxPoint2D &pt );
+    wxPoint2D GetRightBottom() const;
+    void SetRightBottom( const wxPoint2D &pt );
+    void MoveRightBottomTo( const wxPoint2D &pt );
+    wxPoint2D GetCentre() const;
+    void SetCentre( const wxPoint2D &pt );
+    void MoveCentreTo( const wxPoint2D &pt );
+    wxOutCode GetOutcode(const wxPoint2D &pt) const;
+    bool Contains( const wxPoint2D &pt ) const;
+    %Rename(ContainsRect, bool , Contains( const wxRect2D &rect ) const);
+    bool IsEmpty() const;
+    bool HaveEqualSize( const wxRect2D &rect ) const;
+
+    %nokwargs Inset;
+    void Inset( wxDouble x , wxDouble y );
+    void Inset( wxDouble left , wxDouble top ,wxDouble right , wxDouble bottom  );
+    void Offset( const wxPoint2D &pt );
+
+    void ConstrainTo( const wxRect2D &rect );
+
+    wxPoint2D Interpolate( wxInt32 widthfactor , wxInt32 heightfactor );
+
+    //static void Intersect( const wxRect2D &src1 , const wxRect2D &src2 , wxRect2D *dest );
+
+    void Intersect( const wxRect2D &otherRect );
+    wxRect2D CreateIntersection( const wxRect2D &otherRect ) const;
+    bool Intersects( const wxRect2D &rect ) const;
+
+    // static void Union( const wxRect2D &src1 , const wxRect2D &src2 , wxRect2D *dest );
+
+    void Union( const wxRect2D &otherRect );
+    //void Union( const wxPoint2D &pt );
+    
+    wxRect2D CreateUnion( const wxRect2D &otherRect ) const;
+
+    %nokwargs Scale;
+    void Scale( wxDouble f );
+    void Scale( int num , int denum );
+
+    //wxRect2D& operator = (const wxRect2D& rect);
+    //bool operator == (const wxRect2D& rect) const;
+    //bool operator != (const wxRect2D& rect) const;
+
+    %extend {
+        //KeepGIL(__eq__);
+        DocStr(__eq__, "Test for equality of wx.Rect2D objects.", "");
+        bool __eq__(PyObject* other) {
+            wxRect2D  temp, *obj = &temp;
+            if ( other == Py_None ) return false;
+            if ( ! wxRect2D_helper(other, &obj) ) {
+                PyErr_Clear();
+                return false;
+            }
+            return self->operator==(*obj);
+        }
+
+        
+        //KeepGIL(__ne__);
+        DocStr(__ne__, "Test for inequality of wx.Rect2D objects.", "");
+        bool __ne__(PyObject* other) {
+            wxRect2D  temp, *obj = &temp;
+            if ( other == Py_None ) return true;
+            if ( ! wxRect2D_helper(other, &obj)) {
+                PyErr_Clear();
+                return true;
+            }
+            return self->operator!=(*obj);
+        }
+    }
+    
+
+    %Rename(x, wxDouble ,  m_x);
+    %Rename(y, wxDouble ,  m_y);
+    %Rename(width,  wxDouble , m_width);
+    %Rename(height, wxDouble , m_height);
+
+    %extend {
+        void Set( wxDouble x=0 , wxDouble y=0, wxDouble width=0, wxDouble height=0 ) {
+            self->m_x = x;
+            self->m_y = y;
+            self->m_width = width;
+            self->m_height = height;
+        }
+
+        DocAStr(Get,
+               "Get() -> (x,y, width, height)",
+               "Return x, y, width and height y properties as a tuple.", "");               
+        PyObject* Get() {
+            //wxPyBlock_t blocked = wxPyBeginBlockThreads();
+            PyObject* tup = PyTuple_New(4);
+            PyTuple_SET_ITEM(tup, 0, PyFloat_FromDouble(self->m_x));
+            PyTuple_SET_ITEM(tup, 1, PyFloat_FromDouble(self->m_y));
+            PyTuple_SET_ITEM(tup, 2, PyFloat_FromDouble(self->m_width));
+            PyTuple_SET_ITEM(tup, 3, PyFloat_FromDouble(self->m_height));
+            //wxPyEndBlockThreads(blocked);
+            return tup;
+        }
+    }
+
+    %pythoncode {
+    def __str__(self):                   return str(self.Get())
+    def __repr__(self):                  return 'wx.Rect2D'+str(self.Get())
+    def __len__(self):                   return len(self.Get())
+    def __getitem__(self, index):        return self.Get()[index]
+    def __setitem__(self, index, val):
+        if index == 0: self.x = val
+        elif index == 1: self.y = val
+        elif index == 2: self.width = val
+        elif index == 3: self.height = val                        
+        else: raise IndexError
+    def __nonzero__(self):               return self.Get() != (0.0, 0.0, 0.0, 0.0)
+    __safe_for_unpickling__ = True
+    def __reduce__(self):                return (wx.Rect2D, self.Get())
+    }
+
+};
+
+//---------------------------------------------------------------------------
 
 %immutable;
 const wxPoint     wxDefaultPosition;
@@ -937,3 +1113,6 @@ const wxSize      wxDefaultSize;
 %mutable;
 
 //---------------------------------------------------------------------------
+
+// Turn GIL acquisition back on.
+%threadWrapperOn

@@ -107,6 +107,7 @@ typedef unsigned char  byte;
 typedef unsigned char* buffer;
 
 typedef wxPoint2DDouble wxPoint2D;    
+typedef wxRect2DDouble  wxRect2D;
 
 #ifndef SWIG_TYPE_TABLE
 #define SWIG_TYPE_TABLE wxPython_type_table
@@ -247,6 +248,7 @@ bool wxRealPoint_helper(PyObject* source, wxRealPoint** obj);
 bool wxRect_helper(PyObject* source, wxRect** obj);
 bool wxColour_helper(PyObject* source, wxColour** obj);
 bool wxPoint2D_helper(PyObject* source, wxPoint2D** obj);
+bool wxRect2D_helper(PyObject* source, wxRect2D** obj);
 
 
 bool wxPySimple_typecheck(PyObject* source, const wxChar* classname, int seqLen);
@@ -392,7 +394,7 @@ struct wxPyCoreAPI {
     bool                (*p_wxRealPoint_helper)(PyObject* source, wxRealPoint** obj);
     bool                (*p_wxRect_helper)(PyObject* source, wxRect** obj);
     bool                (*p_wxColour_helper)(PyObject* source, wxColour** obj);
-    bool                (*p_wxPoint2D_helper)(PyObject* source, wxPoint2DDouble** obj);
+    bool                (*p_wxPoint2D_helper)(PyObject* source, wxPoint2D** obj);
 
     
     bool                (*p_wxPySimple_typecheck)(PyObject* source, const wxChar* classname, int seqLen);
@@ -427,6 +429,8 @@ struct wxPyCoreAPI {
     // Add all new items at the end...
     PyObject*           (*p_wxArrayDoublePyList_helper)(const wxArrayDouble& arr);
     wxPoint2D*          (*p_wxPoint2D_LIST_helper)(PyObject* source, size_t* npoints);
+    bool                (*p_wxRect2D_helper)(PyObject* source, wxRect2D** obj);
+
 };
 
 

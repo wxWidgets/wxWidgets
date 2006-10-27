@@ -2729,7 +2729,52 @@ bool wxPoint2D_helper(PyObject* source, wxPoint2D** obj) {
         return true;
     }
  error:
-    PyErr_SetString(PyExc_TypeError, "Expected a 2-tuple of floats or a wxPoint2D object.");
+    PyErr_SetString(PyExc_TypeError, "Expected a 2-tuple of floats or a wx.Point2D object.");
+    return false;
+}
+
+
+
+bool wxRect2D_helper(PyObject* source, wxRect2D** obj) {
+
+    if (source == Py_None) {
+        **obj = wxRect2D(-1,-1,-1,-1);
+        return true;
+    }
+
+    // If source is an object instance then it may already be the right type
+    if (wxPySwigInstance_Check(source)) {
+        wxRect2D* ptr;
+        if (! wxPyConvertSwigPtr(source, (void **)&ptr, wxT("wxRect2D")))
+            goto error;
+        *obj = ptr;
+        return true;
+    }
+    // otherwise a length-4 sequence of floats is expected
+    if (PySequence_Check(source) && PySequence_Length(source) == 4) {
+        PyObject* o1 = PySequence_GetItem(source, 0);
+        PyObject* o2 = PySequence_GetItem(source, 1);
+        PyObject* o3 = PySequence_GetItem(source, 2);
+        PyObject* o4 = PySequence_GetItem(source, 3);
+        // This should really check for floats, not numbers -- but that would break code.
+        if (!PyNumber_Check(o1) || !PyNumber_Check(o2) ||
+            !PyNumber_Check(o3) || !PyNumber_Check(o4)) {
+            Py_DECREF(o1);
+            Py_DECREF(o2);
+            Py_DECREF(o3);
+            Py_DECREF(o4);
+            goto error;
+        }
+        **obj = wxRect2D(PyFloat_AsDouble(o1), PyFloat_AsDouble(o2),
+                         PyFloat_AsDouble(o3), PyFloat_AsDouble(o4));
+        Py_DECREF(o1);
+        Py_DECREF(o2);
+        Py_DECREF(o3);
+        Py_DECREF(o4);
+        return true;
+    }
+ error:
+    PyErr_SetString(PyExc_TypeError, "Expected a 4-tuple of floats or a wx.Rect2D object.");
     return false;
 }
 
