@@ -54,11 +54,11 @@ bool wxFileDialogBase::Create(wxWindow *parent,
     m_wildCard = wildCard;
 
     m_parent = parent;
-    m_fdStyle = style;
+    m_windowStyle = style;
     m_filterIndex = 0;
 
     if (!HasFdFlag(wxFD_OPEN) && !HasFdFlag(wxFD_SAVE))
-        m_fdStyle |= wxFD_OPEN;     // wxFD_OPEN is the default
+        m_windowStyle |= wxFD_OPEN;     // wxFD_OPEN is the default
 
     // check that the styles are not contradictory
     wxASSERT_MSG( !(HasFdFlag(wxFD_SAVE) && HasFdFlag(wxFD_OPEN)),

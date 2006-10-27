@@ -23,6 +23,16 @@
 // wxFileDialog data
 //----------------------------------------------------------------------------
 
+/*
+    The flags below must coexist with the following flags in m_windowStyle
+    #define wxCAPTION               0x20000000
+    #define wxMAXIMIZE              0x00002000
+    #define wxCLOSE_BOX             0x00001000
+    #define wxSYSTEM_MENU           0x00000800
+    wxBORDER_NONE   =               0x00200000
+    #define wxRESIZE_BORDER         0x00000040
+*/
+
 enum
 {
     wxFD_OPEN              = 0x0001,
@@ -30,8 +40,8 @@ enum
     wxFD_OVERWRITE_PROMPT  = 0x0004,
     wxFD_FILE_MUST_EXIST   = 0x0010,
     wxFD_MULTIPLE          = 0x0020,
-    wxFD_CHANGE_DIR        = 0x0040,
-    wxFD_PREVIEW           = 0x0080
+    wxFD_CHANGE_DIR        = 0x0080,
+    wxFD_PREVIEW           = 0x0100
 };
 
 #if WXWIN_COMPATIBILITY_2_6
@@ -88,7 +98,7 @@ public:
                 const wxSize& sz = wxDefaultSize,
                 const wxString& name = wxFileDialogNameStr);
 
-    bool HasFdFlag(int flag) const { return (m_fdStyle & flag) != 0; }
+    bool HasFdFlag(int flag) const { return HasFlag(flag); }
 
     virtual void SetMessage(const wxString& message) { m_message = message; }
     virtual void SetPath(const wxString& path) { m_path = path; }
@@ -133,7 +143,6 @@ protected:
     wxString      m_fileName;
     wxString      m_wildCard;
     int           m_filterIndex;
-    int           m_fdStyle;
 
 private:
     void Init();
