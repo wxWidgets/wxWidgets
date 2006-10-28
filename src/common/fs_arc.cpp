@@ -285,7 +285,7 @@ wxArchiveFSCacheData* wxArchiveFSCache::Add(
         const wxArchiveClassFactory& factory,
         wxInputStream *stream)
 {
-    wxArchiveFSCacheData& data(m_hash[name]);
+    wxArchiveFSCacheData& data = m_hash[name];
 
     if (stream->IsSeekable())
         data = wxArchiveFSCacheData(factory, stream);
