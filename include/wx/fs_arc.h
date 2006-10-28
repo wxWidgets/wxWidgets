@@ -40,7 +40,7 @@ private:
 
     // these vars are used by FindFirst/Next:
     class wxArchiveFSCacheData *m_Archive;
-    class wxArchiveFSEntry *m_FindEntry;
+    struct wxArchiveFSEntry *m_FindEntry;
     wxString m_Pattern, m_BaseDir, m_ZipFile;
     bool m_AllowDirs, m_AllowFiles;
     wxArchiveFilenameHashMap *m_DirsFound;
