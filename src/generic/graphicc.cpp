@@ -380,7 +380,8 @@ wxCairoPenData::wxCairoPenData( wxGraphicsRenderer* renderer, const wxPen &pen )
 : wxGraphicsObjectRefData(renderer)
 {    
     Init();
-    m_width = pen.GetWidth();
+    m_pen = pen;
+    m_width = m_pen.GetWidth();
     if (m_width <= 0.0)
         m_width = 0.1;
 
@@ -558,14 +559,17 @@ void wxCairoPenData::Apply( wxGraphicsContext* context )
 // wxCairoBrushData implementation
 //-----------------------------------------------------------------------------
 
-wxCairoBrushData::wxCairoBrushData( wxGraphicsRenderer* renderer ) : wxGraphicsObjectRefData( renderer )
+wxCairoBrushData::wxCairoBrushData( wxGraphicsRenderer* renderer )
+  : wxGraphicsObjectRefData( renderer )
 {
     Init();
 }
 
 wxCairoBrushData::wxCairoBrushData( wxGraphicsRenderer* renderer, const wxBrush &brush )
-: wxGraphicsObjectRefData(renderer)
+  : wxGraphicsObjectRefData(renderer)
 {
+    Init();
+    
     m_red = brush.GetColour().Red()/255.0;
     m_green = brush.GetColour().Green()/255.0; 
     m_blue = brush.GetColour().Blue()/255.0;
