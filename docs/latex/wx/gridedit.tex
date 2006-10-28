@@ -33,6 +33,25 @@ The editor for boolean data.
 Default constructor.
 
 
+\membersection{wxGridCellBoolEditor::IsTrueValue}\label{wxgridcellbooleditoristruevalue}
+
+\func{static bool}{IsTrueValue}{\param{const wxString\& }{value}}
+
+Returns \true if the given \arg{value} is equal to the string representation of
+the truth value we currently use (see 
+\helpref{UseStringValues}{wxgridcellbooleditorusestringvalues}).
+
+
+\membersection{wxGridCellBoolEditor::UseStringValues}\label{wxgridcellbooleditorusestringvalues}
+
+\func{static void}{UseStringValues}{\param{const wxString\& }{valueTrue = \_T("1")}, \param{const wxString\& }{valueFalse = \_T("")}}
+
+This method allows to customize the values returned by GetValue() method for
+the cell using this editor. By default, the default values of the arguments are
+used, i.e. \texttt{"1"} is returned if the cell is checked and an empty string
+otherwise, using this method allows to change this.
+
+
 \section{\class{wxGridCellChoiceEditor}}\label{wxgridcellchoiceeditor}
 
 The editor for string data allowing to choose from a list of strings.

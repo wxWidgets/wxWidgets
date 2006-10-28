@@ -348,7 +348,6 @@ public:
     // create a new object which is the copy of this one
     virtual wxGridCellEditor *Clone() const = 0;
 
-    // DJC MAPTEK
     // added GetValue so we can get the value which is in the control
     virtual wxString GetValue() const = 0;
 
@@ -405,9 +404,9 @@ public:
     virtual wxGridCellEditor *Clone() const
         { return new wxGridCellTextEditor; }
 
-    // DJC MAPTEK
     // added GetValue so we can get the value which is in the control
     virtual wxString GetValue() const;
+
 protected:
     wxTextCtrl *Text() const { return (wxTextCtrl *)m_control; }
 
@@ -446,7 +445,7 @@ public:
 
     virtual wxGridCellEditor *Clone() const
         { return new wxGridCellNumberEditor(m_min, m_max); }
-    // DJC MAPTEK
+
     // added GetValue so we can get the value which is in the control
     virtual wxString GetValue() const;
 
@@ -528,7 +527,7 @@ public:
                         wxEvtHandler* evtHandler);
 
     virtual void SetSize(const wxRect& rect);
-    virtual void Show(bool show, wxGridCellAttr *attr = (wxGridCellAttr *)NULL);
+    virtual void Show(bool show, wxGridCellAttr *attr = NULL);
 
     virtual bool IsAcceptedKey(wxKeyEvent& event);
     virtual void BeginEdit(int row, int col, wxGrid* grid);
@@ -540,15 +539,27 @@ public:
 
     virtual wxGridCellEditor *Clone() const
         { return new wxGridCellBoolEditor; }
-    // DJC MAPTEK
-    // added GetValue so we can get the value which is in the control
+
+    // added GetValue so we can get the value which is in the control, see
+    // also UseStringValues()
     virtual wxString GetValue() const;
+
+    // set the string values returned by GetValue() for the true and false
+    // states, respectively
+    static void UseStringValues(const wxString& valueTrue = _T("1"),
+                                const wxString& valueFalse = wxEmptyString);
+
+    // return true if the given string is equal to the string representation of
+    // true value which we currently use
+    static bool IsTrueValue(const wxString& value);
 
 protected:
     wxCheckBox *CBox() const { return (wxCheckBox *)m_control; }
 
 private:
     bool m_startValue;
+
+    static wxString ms_stringValues[2];
 
     DECLARE_NO_COPY_CLASS(wxGridCellBoolEditor)
 };
@@ -583,7 +594,7 @@ public:
     virtual void SetParameters(const wxString& params);
 
     virtual wxGridCellEditor *Clone() const;
-    // DJC MAPTEK
+
     // added GetValue so we can get the value which is in the control
     virtual wxString GetValue() const;
 

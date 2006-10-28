@@ -1233,6 +1233,9 @@ bool wxGridCellFloatEditor::IsAcceptedKey(wxKeyEvent& event)
 // wxGridCellBoolEditor
 // ----------------------------------------------------------------------------
 
+// the default values for GetValue()
+wxString wxGridCellBoolEditor::ms_stringValues[2] = { _T("1"), _T("") };
+
 void wxGridCellBoolEditor::Create(wxWindow* parent,
                                   wxWindowID id,
                                   wxEvtHandler* evtHandler)
@@ -1358,10 +1361,11 @@ bool wxGridCellBoolEditor::EndEdit(int row, int col,
 
     if ( changed )
     {
-        if (grid->GetTable()->CanGetValueAs(row, col, wxGRID_VALUE_BOOL))
-            grid->GetTable()->SetValueAsBool(row, col, value);
+        wxGridTableBase * const table = grid->GetTable();
+        if ( table->CanGetValueAs(row, col, wxGRID_VALUE_BOOL) )
+            table->SetValueAsBool(row, col, value);
         else
-            grid->GetTable()->SetValue(row, col, value ? _T("1") : wxEmptyString);
+            table->SetValue(row, col, GetValue());
     }
 
     return changed;
@@ -1416,12 +1420,23 @@ void wxGridCellBoolEditor::StartingKey(wxKeyEvent& event)
     }
 }
 
-
-// return the value as "1" for true and the empty string for false
 wxString wxGridCellBoolEditor::GetValue() const
 {
-  bool bSet = CBox()->GetValue();
-  return bSet ? _T("1") : wxEmptyString;
+  return ms_stringValues[CBox()->GetValue()];
+}
+
+/* static */ void
+wxGridCellBoolEditor::UseStringValues(const wxString& valueTrue,
+                                      const wxString& valueFalse)
+{
+    ms_stringValues[false] = valueFalse;
+    ms_stringValues[true] = valueTrue;
+}
+
+/* static */ bool
+wxGridCellBoolEditor::IsTrueValue(const wxString& value)
+{
+    return value == ms_stringValues[true];
 }
 
 #endif // wxUSE_CHECKBOX
@@ -2217,7 +2232,7 @@ void wxGridCellBoolRenderer::Draw(wxGrid& grid,
     else
     {
         wxString cellval( grid.GetTable()->GetValue(row, col) );
-        value = !( !cellval || (cellval == wxT("0")) );
+        value = wxGridCellBoolEditor::IsTrueValue(cellval);
     }
 
     if ( value )
