@@ -765,7 +765,12 @@ items in the tree control. The function should return a negative, zero or
 positive value if the first item is less than, equal to or greater than the
 second one.
 
-The base class version compares items alphabetically.
+Please note that you \textbf{must} use wxRTTI macros 
+\helpref{DECLARE\_DYNAMIC\_CLASS}{declaredynamicclass} and 
+\helpref{IMPLEMENT\_DYNAMIC\_CLASS}{implementdynamicclass} if you override this
+function because otherwise the base class considers that it is not overridden
+and uses the default comparison, i.e. sorts the items alphabetically, which
+allows it optimize away the calls to the virtual function completely.
 
 See also: \helpref{SortChildren}{wxtreectrlsortchildren}
 
