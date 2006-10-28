@@ -314,26 +314,6 @@ protected:
     // draw inner GTK shadow
     void DrawInnerShadedRect(wxDC& dc, wxRect *rect);
 
-#if wxUSE_SCROLLBAR
-    // returns the size of the arrow for the scrollbar (depends on
-    // orientation)
-    wxSize GetScrollbarArrowSize(const wxScrollBar *scrollbar) const
-    {
-        wxSize size;
-        if ( scrollbar->IsVertical() )
-        {
-            size = m_sizeScrollbarArrow;
-        }
-        else
-        {
-            size.x = m_sizeScrollbarArrow.y;
-            size.y = m_sizeScrollbarArrow.x;
-        }
-
-        return size;
-    }
-#endif // wxUSE_SCROLLBAR
-
     // get the line wrap indicator bitmap
     wxBitmap GetLineWrapBitmap() const;
 
