@@ -969,7 +969,7 @@ inline void *wxUIntToPtr(wxUIntPtr p)
         #define wxULongLong_t unsigned wxLongLong_t
     #endif
 
-    /*  these macros allow to definea 64 bit constants in a portable way */
+    /*  these macros allow to define 64 bit constants in a portable way */
     #define wxLL(x) wxCONCAT(x, wxLongLongSuffix)
     #define wxULL(x) wxCONCAT(x, wxCONCAT(u, wxLongLongSuffix))
 
@@ -979,7 +979,7 @@ inline void *wxUIntToPtr(wxUIntPtr p)
     #define wxHAS_INT64 1
 
 #elif wxUSE_LONGLONG
-    /*  these macros allow to definea 64 bit constants in a portable way */
+    /*  these macros allow to define 64 bit constants in a portable way */
     #define wxLL(x) wxLongLong(x)
     #define wxULL(x) wxULongLong(x)
 
