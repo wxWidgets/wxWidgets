@@ -365,8 +365,13 @@ void ArraysTestCase::TestSTL()
     wxArrayInt::iterator it, en;
     wxArrayInt::reverse_iterator rit, ren;
     int i;
-    for ( i = 0; i < 5; ++i )
+    static const int COUNT = 5;
+
+    for ( i = 0; i < COUNT; ++i )
         list1.push_back(i);
+
+    CPPUNIT_ASSERT( list1.capacity() >= (size_t)COUNT );
+    CPPUNIT_ASSERT_EQUAL( (size_t)COUNT, list1.size() );
 
     for ( it = list1.begin(), en = list1.end(), i = 0;
           it != en; ++it, ++i )
@@ -374,11 +379,15 @@ void ArraysTestCase::TestSTL()
         CPPUNIT_ASSERT( *it == i );
     }
 
-    for ( rit = list1.rbegin(), ren = list1.rend(), i = 4;
+    CPPUNIT_ASSERT_EQUAL( COUNT, i );
+
+    for ( rit = list1.rbegin(), ren = list1.rend(), i = COUNT;
           rit != ren; ++rit, --i )
     {
-        CPPUNIT_ASSERT( *rit == i );
+        CPPUNIT_ASSERT( *rit == i-1 );
     }
+
+    CPPUNIT_ASSERT_EQUAL( 0, i );
 
     CPPUNIT_ASSERT( *list1.rbegin() == *(list1.end()-1) &&
                     *list1.begin() == *(list1.rend()-1) );
@@ -388,7 +397,7 @@ void ArraysTestCase::TestSTL()
     CPPUNIT_ASSERT( *list1.begin() == *(it-1) &&
                     *list1.rbegin() == *(rit-1) );
 
-    CPPUNIT_ASSERT( ( list1.front() == 0 ) && ( list1.back() == 4 ) );
+    CPPUNIT_ASSERT( ( list1.front() == 0 ) && ( list1.back() == COUNT - 1 ) );
 
     list1.erase(list1.begin());
     list1.erase(list1.end()-1);
