@@ -47,6 +47,10 @@ private:
         CPPUNIT_TEST( Contains );
         CPPUNIT_TEST( ToLong );
         CPPUNIT_TEST( ToULong );
+#ifdef wxLongLong_t
+        CPPUNIT_TEST( ToLongLong );
+        CPPUNIT_TEST( ToULongLong );
+#endif // wxLongLong_t
         CPPUNIT_TEST( ToDouble );
     CPPUNIT_TEST_SUITE_END();
 
@@ -65,6 +69,10 @@ private:
     void Contains();
     void ToLong();
     void ToULong();
+#ifdef wxLongLong_t
+    void ToLongLong();
+    void ToULongLong();
+#endif // wxLongLong_t
     void ToDouble();
 
     DECLARE_NO_COPY_CLASS(StringTestCase)
@@ -439,60 +447,123 @@ void StringTestCase::Contains()
     }
 }
 
-void StringTestCase::ToLong()
+// flags used in ToLongData.flags
+enum
 {
-    static const struct ToLongData
+    Number_Ok       = 0,
+    Number_Invalid  = 1,
+    Number_Unsigned = 2,    // if not specified, works for signed conversion
+    Number_Signed   = 4,    // if not specified, works for unsigned
+    Number_LongLong = 8,    // only for long long tests
+    Number_Long     = 16,   // only for long tests
+};
+
+static const struct ToLongData
+{
+    const wxChar *str;
+    union
     {
-        const wxChar *str;
-        long value;
-        bool ok;
-    } longData[] =
-    {
-        { _T("1"), 1, true },
-        { _T("0"), 0, true },
-        { _T("a"), 0, false },
-        { _T("12345"), 12345, true },
-        { _T("-1"), -1, true },
-        { _T("--1"), 0, false },
+#ifdef wxLongLong_t
+        wxLongLong_t llvalue;
+        wxULongLong_t ullvalue;
+#endif // wxLongLong_t
+        long lvalue;
+        unsigned long ulvalue;
     };
 
+    int flags;
+
+    bool IsOk() const { return !(flags & Number_Invalid); }
+} longData[] =
+{
+    { _T("1"), 1, Number_Ok },
+    { _T("0"), 0, Number_Ok },
+    { _T("a"), 0, Number_Invalid },
+    { _T("12345"), 12345, Number_Ok },
+    { _T("--1"), 0, Number_Invalid },
+
+    { _T("-1"), -1, Number_Signed | Number_Long },
+    // this is surprizing but consistent with strtoul() behaviour
+    { _T("-1"), ULONG_MAX, Number_Unsigned | Number_Long },
+
+    // this must overflow, even with 64 bit long
+    { _T("922337203685477580711"), 0, Number_Invalid },
+
+#ifdef wxLongLong_t
+    { _T("2147483648"), wxLL(2147483648), Number_LongLong },
+    { _T("-2147483648"), wxLL(-2147483648), Number_LongLong | Number_Signed },
+    { _T("9223372036854775808"), wxULL(9223372036854775808), Number_LongLong |
+                                                             Number_Unsigned },
+#endif // wxLongLong_t
+};
+
+void StringTestCase::ToLong()
+{
     long l;
     for ( size_t n = 0; n < WXSIZEOF(longData); n++ )
     {
         const ToLongData& ld = longData[n];
-        CPPUNIT_ASSERT_EQUAL( ld.ok, wxString(ld.str).ToLong(&l) );
-        if ( ld.ok )
-            CPPUNIT_ASSERT_EQUAL( ld.value, l );
+
+        if ( ld.flags & (Number_LongLong | Number_Unsigned) )
+            continue;
+
+        CPPUNIT_ASSERT_EQUAL( ld.IsOk(), wxString(ld.str).ToLong(&l) );
+        if ( ld.IsOk() )
+            CPPUNIT_ASSERT_EQUAL( ld.lvalue, l );
     }
 }
 
 void StringTestCase::ToULong()
 {
     unsigned long ul;
-    static const struct ToULongData
+    for ( size_t n = 0; n < WXSIZEOF(longData); n++ )
     {
-        const wxChar *str;
-        unsigned long value;
-        bool ok;
-    } ulongData[] =
-    {
-        { _T("1"), 1, true },
-        { _T("0"), 0, true },
-        { _T("a"), 0, false },
-        { _T("12345"), 12345, true },
-        // this is surprizing but consistent with strtoul() behaviour
-        { _T("-1"), ULONG_MAX, true },
-    };
+        const ToLongData& ld = longData[n];
 
-    size_t n;
-    for ( n = 0; n < WXSIZEOF(ulongData); n++ )
-    {
-        const ToULongData& uld = ulongData[n];
-        CPPUNIT_ASSERT_EQUAL( uld.ok, wxString(uld.str).ToULong(&ul) );
-        if ( uld.ok )
-            CPPUNIT_ASSERT_EQUAL( uld.value, ul );
+        if ( ld.flags & (Number_LongLong | Number_Signed) )
+            continue;
+
+        CPPUNIT_ASSERT_EQUAL( ld.IsOk(), wxString(ld.str).ToULong(&ul) );
+        if ( ld.IsOk() )
+            CPPUNIT_ASSERT_EQUAL( ld.ulvalue, ul );
     }
 }
+
+#ifdef wxLongLong_t
+
+void StringTestCase::ToLongLong()
+{
+    wxLongLong_t l;
+    for ( size_t n = 0; n < WXSIZEOF(longData); n++ )
+    {
+        const ToLongData& ld = longData[n];
+
+        if ( ld.flags & (Number_Long | Number_Unsigned) )
+            continue;
+
+        CPPUNIT_ASSERT_EQUAL( ld.IsOk(), wxString(ld.str).ToLongLong(&l) );
+        if ( ld.IsOk() )
+            CPPUNIT_ASSERT_EQUAL( ld.llvalue, l );
+    }
+}
+
+void StringTestCase::ToULongLong()
+{
+    wxULongLong_t ul;
+    for ( size_t n = 0; n < WXSIZEOF(longData); n++ )
+    {
+        const ToLongData& ld = longData[n];
+
+        if ( ld.flags & (Number_Long | Number_Signed) )
+            continue;
+
+        CPPUNIT_ASSERT_EQUAL( ld.IsOk(), wxString(ld.str).ToULongLong(&ul) );
+        if ( ld.IsOk() )
+            CPPUNIT_ASSERT_EQUAL( ld.ullvalue, ul );
+    }
+}
+
+#endif // wxLongLong_t
 
 void StringTestCase::ToDouble()
 {

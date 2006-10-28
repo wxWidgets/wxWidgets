@@ -1706,6 +1706,26 @@ bool wxString::ToULong(unsigned long *val, int base) const
     return wxStringToIntType(c_str(), val, base, wxStrtoul);
 }
 
+bool wxString::ToLongLong(wxLongLong_t *val, int base) const
+{
+#ifdef wxHAS_STRTOLL
+    return wxStringToIntType(c_str(), val, base, wxStrtoll);
+#else
+    // TODO: implement this ourselves
+    return false;
+#endif // wxHAS_STRTOLL
+}
+
+bool wxString::ToULongLong(wxULongLong_t *val, int base) const
+{
+#ifdef wxHAS_STRTOLL
+    return wxStringToIntType(c_str(), val, base, wxStrtoull);
+#else
+    // TODO: implement this ourselves
+    return false;
+#endif
+}
+
 bool wxString::ToDouble(double *val) const
 {
     wxCHECK_MSG( val, false, _T("NULL pointer in wxString::ToDouble") );

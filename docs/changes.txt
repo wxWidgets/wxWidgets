@@ -72,6 +72,7 @@ All:
 - Added GetTempDir() to wxFileName and wxStandardPaths.
 - Added wxTar streams.
 - Added wxFilterFSHandler and wxArchiveFSHandler.
+- Added wxString::ToLongLong() and ToULongLong()
 
 All (GUI): 
 

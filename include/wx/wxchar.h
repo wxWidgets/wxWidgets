@@ -322,6 +322,12 @@
     #define  wxStrtod    _tcstod
     #define  wxStrtol    _tcstol
     #define  wxStrtoul   _tcstoul
+    #ifdef __VISUALC__
+        #if __VISUALC__ >= 1300
+            #define wxStrtoll  _tcstoi64
+            #define wxStrtoull _tcstoui64
+        #endif /* VC++ 7+ */
+    #endif
     #define  wxStrxfrm   _tcsxfrm
 
     /* stdio.h functions */
@@ -540,6 +546,11 @@
             #define  wxStrtod    wcstod
             #define  wxStrtol    wcstol
             #define  wxStrtoul   wcstoul
+            #ifdef HAVE_WCSTOULL
+                /* assume that we have wcstoull(), which is also C99, too */
+                #define  wxStrtoll   wcstoll
+                #define  wxStrtoull  wcstoull
+            #endif /* HAVE_WCSTOULL */
             #define  wxStrxfrm   wcsxfrm
 
             #define  wxFgetc     fgetwc
@@ -709,6 +720,11 @@
         #endif
         #define  wxStrtol    strtol
         #define  wxStrtoul   strtoul
+        #ifdef HAVE_STRTOULL
+            /* assume that we have wcstoull(), which is also C99, too */
+            #define  wxStrtoll   strtoll
+            #define  wxStrtoull  strtoull
+        #endif /* HAVE_WCSTOULL */
         #define  wxStrxfrm   strxfrm
 
         /* stdio.h functions */
@@ -757,6 +773,10 @@
         #define  wxStrftime  strftime
     #endif /* Unicode/ASCII */
 #endif /* TCHAR-aware compilers/the others */
+
+#ifdef wxStrtoll
+    #define wxHAS_STRTOLL
+#endif
 
 /*
     various special cases
