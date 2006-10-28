@@ -23,6 +23,10 @@ In most cases, the only class you will need to derive from is
 
 A brief description of each class's role and how they work together follows.
 
+For the special case of printing under Unix, where various different
+printing backends have to be offered, please have a look at the
+\helpref{Unix printing overview}{unixprinting}.
+
 \subsection{\helpref{wxPrintout}{wxprintout}}
 
 A document's printing ability is represented in an application by a derived
@@ -187,7 +191,6 @@ queries these data structures to get information like the printed page range
 wxPageSetupDialogData).
 
 
-
 \section{Printing under Unix (GTK+)}\label{unixprinting}
 
 Printing under Unix has always been a cause of problems as Unix
@@ -207,7 +210,7 @@ by which especially the font problem is mostly solved. Beginning
 with version 2.5.4, the GTK+ port of wxWidgets can make use of
 these libraries if wxWidgets is configured accordingly and if the
 libraries are present. You need to configure wxWidgets with the
-{\it configure --with-gnomeprint} switch and you application will
+{\it configure --with-gnomeprint} switch and your application will
 then search for the GNOME print libraries at runtime. If they
 are found, printing will be done through these, otherwise the
 application will fall back to the old PostScript printing code.
@@ -215,6 +218,6 @@ Note that the application will not require the GNOME print libraries
 to be installed in order to run (there will be no dependency on
 these libraries).
 
-It is expected that the printing code that is currently implemented
-in the GNOME print libraries will be moved into GTK+ later.
-
+In version GTK+ 2.10, support for printing has finally been
+added to GTK+ itself. Support for this has yet to be written
+for wxGTK (which requires drawing through Cairo).
