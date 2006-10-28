@@ -35,6 +35,7 @@
 #endif
 
 #include <ctype.h>
+#include <errno.h>
 #include <string.h>
 #include <stdlib.h>
 
@@ -1684,8 +1685,8 @@ bool wxString::ToLong(long *val, int base) const
     *val = wxStrtol(start, &end, base);
 
     // return true only if scan was stopped by the terminating NUL and if the
-    // string was not empty to start with
-    return !*end && (end != start);
+    // string was not empty to start with and no under/overflow occurred
+    return !*end && (end != start) && (errno != ERANGE);
 }
 
 bool wxString::ToULong(unsigned long *val, int base) const
@@ -1698,8 +1699,8 @@ bool wxString::ToULong(unsigned long *val, int base) const
     *val = wxStrtoul(start, &end, base);
 
     // return true only if scan was stopped by the terminating NUL and if the
-    // string was not empty to start with
-    return !*end && (end != start);
+    // string was not empty to start with and no overflow occurred
+    return !*end && (end != start) && (errno != ERANGE);
 }
 
 bool wxString::ToDouble(double *val) const
@@ -1711,8 +1712,8 @@ bool wxString::ToDouble(double *val) const
     *val = wxStrtod(start, &end);
 
     // return true only if scan was stopped by the terminating NUL and if the
-    // string was not empty to start with
-    return !*end && (end != start);
+    // string was not empty to start with and no under/overflow occurred
+    return !*end && (end != start) && (errno != ERANGE);
 }
 
 // ---------------------------------------------------------------------------
