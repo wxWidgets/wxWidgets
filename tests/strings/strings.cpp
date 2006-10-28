@@ -461,17 +461,19 @@ enum
 static const struct ToLongData
 {
     const wxChar *str;
-    union
-    {
 #ifdef wxLongLong_t
-        wxLongLong_t llvalue;
-        wxULongLong_t ullvalue;
+    wxLongLong_t value;
+#else
+    long value;
 #endif // wxLongLong_t
-        long lvalue;
-        unsigned long ulvalue;
-    };
-
     int flags;
+
+    long LValue() const { return value; }
+    unsigned long ULValue() const { return value; }
+#ifdef wxLongLong_t
+    wxLongLong_t LLValue() const { return value; }
+    wxULongLong_t ULLValue() const { return (wxULongLong_t)value; }
+#endif // wxLongLong_t
 
     bool IsOk() const { return !(flags & Number_Invalid); }
 } longData[] =
@@ -509,7 +511,7 @@ void StringTestCase::ToLong()
 
         CPPUNIT_ASSERT_EQUAL( ld.IsOk(), wxString(ld.str).ToLong(&l) );
         if ( ld.IsOk() )
-            CPPUNIT_ASSERT_EQUAL( ld.lvalue, l );
+            CPPUNIT_ASSERT_EQUAL( ld.LValue(), l );
     }
 }
 
@@ -525,7 +527,7 @@ void StringTestCase::ToULong()
 
         CPPUNIT_ASSERT_EQUAL( ld.IsOk(), wxString(ld.str).ToULong(&ul) );
         if ( ld.IsOk() )
-            CPPUNIT_ASSERT_EQUAL( ld.ulvalue, ul );
+            CPPUNIT_ASSERT_EQUAL( ld.ULValue(), ul );
     }
 }
 
@@ -543,7 +545,7 @@ void StringTestCase::ToLongLong()
 
         CPPUNIT_ASSERT_EQUAL( ld.IsOk(), wxString(ld.str).ToLongLong(&l) );
         if ( ld.IsOk() )
-            CPPUNIT_ASSERT_EQUAL( ld.llvalue, l );
+            CPPUNIT_ASSERT_EQUAL( ld.LLValue(), l );
     }
 }
 
@@ -559,7 +561,7 @@ void StringTestCase::ToULongLong()
 
         CPPUNIT_ASSERT_EQUAL( ld.IsOk(), wxString(ld.str).ToULongLong(&ul) );
         if ( ld.IsOk() )
-            CPPUNIT_ASSERT_EQUAL( ld.ullvalue, ul );
+            CPPUNIT_ASSERT_EQUAL( ld.ULLValue(), ul );
     }
 }
 
