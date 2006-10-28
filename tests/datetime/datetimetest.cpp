@@ -671,6 +671,10 @@ void DateTimeTestCase::TestTimeFormat()
                     case CompareTime:
                         CPPUNIT_ASSERT( dt.IsSameTime(dt2) );
                         break;
+
+                    case CompareNone:
+                        wxFAIL_MSG( _T("unexpected") );
+                        break;
                 }
             }
         }
