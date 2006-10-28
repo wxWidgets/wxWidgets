@@ -28,7 +28,6 @@ class GridFrame : public wxFrame
     wxTextCtrl     *logWin;
     wxLogTextCtrl  *logger;
 #endif // wxUSE_LOG
-    wxString       logBuf;
 
     void SetDefaults();
 

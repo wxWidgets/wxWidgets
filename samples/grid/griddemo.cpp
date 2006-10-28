@@ -789,7 +789,7 @@ void GridFrame::OnAddToSelectToggle(wxCommandEvent& event)
 
 void GridFrame::OnLabelLeftClick( wxGridEvent& ev )
 {
-    logBuf = wxEmptyString;
+    wxString logBuf;
     if ( ev.GetRow() != -1 )
     {
         logBuf << _T("Left click on row label ") << ev.GetRow();
@@ -803,8 +803,10 @@ void GridFrame::OnLabelLeftClick( wxGridEvent& ev )
         logBuf << _T("Left click on corner label");
     }
 
-    if ( ev.ShiftDown() ) logBuf << _T(" (shift down)");
-    if ( ev.ControlDown() ) logBuf << _T(" (control down)");
+    if ( ev.ShiftDown() )
+        logBuf << _T(" (shift down)");
+    if ( ev.ControlDown() )
+        logBuf << _T(" (control down)");
     wxLogMessage( wxT("%s"), logBuf.c_str() );
 
     // you must call event skip if you want default grid processing
@@ -815,10 +817,7 @@ void GridFrame::OnLabelLeftClick( wxGridEvent& ev )
 
 void GridFrame::OnCellLeftClick( wxGridEvent& ev )
 {
-    logBuf = wxEmptyString;
-    logBuf << _T("Left click at row ") << ev.GetRow()
-           << _T(" col ") << ev.GetCol();
-    wxLogMessage( wxT("%s"), logBuf.c_str() );
+    wxLogMessage(_T("Left click at row %d, col %d"), ev.GetRow(), ev.GetCol());
 
     // you must call event skip if you want default grid processing
     // (cell highlighting etc.)
@@ -829,9 +828,7 @@ void GridFrame::OnCellLeftClick( wxGridEvent& ev )
 
 void GridFrame::OnRowSize( wxGridSizeEvent& ev )
 {
-    logBuf = wxEmptyString;
-    logBuf << _T("Resized row ") << ev.GetRowOrCol();
-    wxLogMessage( wxT("%s"), logBuf.c_str() );
+    wxLogMessage(_T("Resized row %d"), ev.GetRowOrCol());
 
     ev.Skip();
 }
@@ -839,9 +836,7 @@ void GridFrame::OnRowSize( wxGridSizeEvent& ev )
 
 void GridFrame::OnColSize( wxGridSizeEvent& ev )
 {
-    logBuf = wxEmptyString;
-    logBuf << _T("Resized col ") << ev.GetRowOrCol();
-    wxLogMessage( wxT("%s"), logBuf.c_str() );
+    wxLogMessage(_T("Resized col %d"), ev.GetRowOrCol());
 
     ev.Skip();
 }
@@ -925,7 +920,7 @@ void GridFrame::OnShowSelection(wxCommandEvent& WXUNUSED(event))
 
 void GridFrame::OnSelectCell( wxGridEvent& ev )
 {
-    logBuf = wxEmptyString;
+    wxString logBuf;
     if ( ev.Selecting() )
         logBuf << _T("Selected ");
     else
@@ -950,7 +945,7 @@ void GridFrame::OnSelectCell( wxGridEvent& ev )
 
 void GridFrame::OnRangeSelected( wxGridRangeSelectEvent& ev )
 {
-    logBuf = wxEmptyString;
+    wxString logBuf;
     if ( ev.Selecting() )
         logBuf << _T("Selected ");
     else
@@ -970,24 +965,19 @@ void GridFrame::OnRangeSelected( wxGridRangeSelectEvent& ev )
 
 void GridFrame::OnCellValueChanged( wxGridEvent& ev )
 {
-    logBuf = wxEmptyString;
-    logBuf  << _T("Value changed for cell at")
-            << _T(" row ") << ev.GetRow()
-            << _T(" col ") << ev.GetCol();
+    int row = ev.GetRow(),
+        col = ev.GetCol();
 
-    wxLogMessage( wxT("%s"), logBuf.c_str() );
+    wxLogMessage(_T("Value changed for cell at row %d, col %d: now \"%s\""),
+                 row, col, grid->GetCellValue(row, col));
 
     ev.Skip();
 }
 
 void GridFrame::OnCellBeginDrag( wxGridEvent& ev )
 {
-    logBuf = wxEmptyString;
-    logBuf  << _T("Got request to drag cell at")
-            << _T(" row ") << ev.GetRow()
-            << _T(" col ") << ev.GetCol();
-
-    wxLogMessage( wxT("%s"), logBuf.c_str() );
+    wxLogMessage(_T("Got request to drag cell at row %d, col %d"),
+                 ev.GetRow(), ev.GetCol());
 
     ev.Skip();
 }
