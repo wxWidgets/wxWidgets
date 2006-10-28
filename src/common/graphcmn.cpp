@@ -162,6 +162,11 @@ wxRect2DDouble wxGraphicsPath::GetBox()
 	return wxRect2DDouble( x,y,w,h );
 }
 
+bool wxGraphicsPath::Contains( const wxPoint2DDouble& c, int fillStyle )
+{
+    return Contains( c.m_x, c.m_y, fillStyle);
+}
+
 //
 // Emulations
 //
