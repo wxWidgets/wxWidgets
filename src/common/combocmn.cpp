@@ -838,7 +838,7 @@ wxComboCtrlBase::CreateTextCtrl(int style, const wxValidator& validator)
 
 void wxComboCtrlBase::OnThemeChange()
 {
-    SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW));
+    SetOwnBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW));
 }
 
 wxComboCtrlBase::~wxComboCtrlBase()
