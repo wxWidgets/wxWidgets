@@ -18,8 +18,6 @@ transparently to the class users and that whether an object is shared or not
 is not seen from the outside of the class - in any case, the result of any
 operation on it is the same.
 
-
-
 \subsection{List of reference-counted wxWidgets classes}\label{refcountlist}
 
 The following classes in wxWidgets have efficient (i.e. fast) assignment operators
@@ -36,8 +34,6 @@ and copy constructors since they are reference-counted:
 \helpref{wxRegion}{wxregion}\\
 \helpref{wxRegionIterator}{wxregioniterator}\\
 \helpref{wxString}{wxstring}
-
-
 
 \subsection{Make your own reference-counted class}\label{wxobjectoverview}
 
@@ -60,7 +56,7 @@ in fact, all times you'll need to read the data from your wxObject-derived class
 you'll need to call such function.
 
 Very important, all times you need to actually modify the data placed inside your
-wxObject-derived class, you must first call the \helpref{wxObject::UnShare}{wxobjectunshare}
+wxObject-derived class, you must first call the wxObject::UnShare
 function to be sure that the modifications won't affect other instances which are
 eventually sharing your object's data.
 
