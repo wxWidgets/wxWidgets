@@ -7634,9 +7634,10 @@ then
             then
                 wx_cv_gcc_pch_bug=
 
-                if $CXX -o conftest conftest.cpp >/dev/null 2>&1
+                if $CXX -o conftest$PROGRAM_EXT conftest.cpp >/dev/null 2>&1
                 then
-                    if tr -dc '[a-z]' < conftest | grep awidetest >/dev/null
+                    if tr -dc '[a-z]' < conftest$PROGRAM_EXT |
+                        grep awidetest >/dev/null
                     then
                         wx_cv_gcc_pch_bug=no
                     else
@@ -7645,7 +7646,7 @@ then
                 fi
             fi
 
-            rm -f conftest.h conftest.gch conftest.cpp conftest
+            rm -f conftest.h conftest.gch conftest.cpp conftest$PROGRAM_EXT
         ]])
 
     if test "$wx_cv_gcc_pch_bug" = yes; then
