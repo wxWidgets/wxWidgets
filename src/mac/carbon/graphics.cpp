@@ -1752,16 +1752,24 @@ void * wxMacCoreGraphicsContext::GetNativeContext()
 // concatenates this transform with the current transform of this context
 void wxMacCoreGraphicsContext::ConcatTransform( const wxGraphicsMatrix& matrix )
 {
+    CGContextConcatCTM( m_cgContext, *(CGAffineTransform*) matrix.GetNativeMatrix());
 }
 
 // sets the transform of this context
 void wxMacCoreGraphicsContext::SetTransform( const wxGraphicsMatrix& matrix )
 {
+    CGAffineTransform transform = CGContextGetCTM( m_cgContext );
+    transform = CGAffineTransformInvert( transform ) ;
+    CGContextConcatCTM( m_cgContext, transform);
+    CGContextConcatCTM( m_cgContext, *(CGAffineTransform*) matrix.GetNativeMatrix());
 }
 
 // gets the matrix of this context
 wxGraphicsMatrix wxMacCoreGraphicsContext::GetTransform() const
 {
+    wxGraphicsMatrix m = CreateMatrix();
+    *((CGAffineTransform*) m.GetNativeMatrix()) = CGContextGetCTM( m_cgContext );
+    return m;
 }
 
 //
