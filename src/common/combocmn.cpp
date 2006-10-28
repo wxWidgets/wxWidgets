@@ -1580,8 +1580,10 @@ void wxComboCtrlBase::OnFocusEvent( wxFocusEvent& event )
 {
     if ( event.GetEventType() == wxEVT_SET_FOCUS )
     {
+#ifndef __WXMAC__
         if ( m_text && m_text != ::wxWindow::FindFocus() )
             m_text->SetFocus();
+#endif
     }
 
     Refresh();
