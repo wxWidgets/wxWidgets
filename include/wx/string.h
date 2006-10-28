@@ -76,8 +76,14 @@ class WXDLLIMPEXP_BASE wxString;
 // constants
 // ----------------------------------------------------------------------------
 
+#if WXWIN_COMPATIBILITY_2_6
+
+// deprecated in favour of wxString::npos, don't use in new code
+//
 // maximum possible length for a string means "take all string" everywhere
 #define wxSTRING_MAXLEN wxStringBase::npos
+
+#endif // WXWIN_COMPATIBILITY_2_6
 
 // ----------------------------------------------------------------------------
 // global data
@@ -407,7 +413,7 @@ public:
     // return the length of the string
   size_type size() const { return length(); }
     // return the maximum size of the string
-  size_type max_size() const { return wxSTRING_MAXLEN; }
+  size_type max_size() const { return npos; }
     // resize the string, filling the space with c if c != 0
   void resize(size_t nSize, wxChar ch = wxT('\0'));
     // delete the contents of the string
