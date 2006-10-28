@@ -1,0 +1,175 @@
+\section{\class{wxRichTextHeaderFooterData}}\label{wxrichtextheaderfooterdata}
+
+
+This class represents header and footer data to be passed to the \helpref{wxRichTextPrinting}{wxrichtextprinting} and
+\helpref{wxRichTextPrintout}{wxrichtextprintout} classes.
+
+Headers and footers can be specified independently for odd, even or both page sides. Different text can be specified
+for left, centre and right locations on the page, and the font and text colour can also
+be specified. You can specify the following keywords in header and footer text, which will
+be substituted for the actual values during printing and preview.
+
+\begin{itemize}\itemsep=0pt
+\item @DATE@: the current date.
+\item @PAGESCNT@: the total number of pages.
+\item @PAGENUM@: the current page number.
+\item @TIME@: the current time.
+\item @TITLE@: the title of the document, as passed to the wxRichTextPrinting or wxRichTextLayout constructor.
+\end{itemize}
+ 
+\wxheading{Derived from}
+
+\helpref{wxObject}{wxobject}
+
+\wxheading{Include files}
+
+<wx/richtex/richtextprint.h>
+
+\wxheading{Data structures}
+
+These are the header and footer page identifiers, passed to functions such as SetFooterText to specify
+the odd or even page for the text:
+
+\begin{verbatim}
+enum wxRichTextOddEvenPage {
+    wxRICHTEXT_PAGE_ODD,
+    wxRICHTEXT_PAGE_EVEN,
+    wxRICHTEXT_PAGE_ALL,
+}
+\end{verbatim}
+
+These are the location identifiers for passing to functions such as SetFooterText, to specify
+whether the text is on the left, centre or right of the page:
+
+\begin{verbatim}
+enum wxRichTextPageLocation {
+    wxRICHTEXT_PAGE_LEFT,
+    wxRICHTEXT_PAGE_CENTRE,
+    wxRICHTEXT_PAGE_RIGHT
+}
+\end{verbatim}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxRichTextHeaderFooterData::wxRichTextHeaderFooterData}\label{wxrichtextheaderfooterdatawxrichtextheaderfooterdata}
+
+\func{}{wxRichTextHeaderFooterData}{\void}
+
+\func{}{wxRichTextHeaderFooterData}{\param{const wxRichTextHeaderFooterData\& }{data}}
+
+Constructors.
+
+\membersection{wxRichTextHeaderFooterData::Clear}\label{wxrichtextheaderfooterdataclear}
+
+\func{void}{Clear}{\void}
+
+Clears all text.
+
+\membersection{wxRichTextHeaderFooterData::Copy}\label{wxrichtextheaderfooterdatacopy}
+
+\func{void}{Copy}{\param{const wxRichTextHeaderFooterData\& }{data}}
+
+Copies the data.
+
+\membersection{wxRichTextHeaderFooterData::GetFont}\label{wxrichtextheaderfooterdatagetfont}
+
+\constfunc{const wxFont\&}{GetFont}{\void}
+
+Returns the font specified for printing the header and footer.
+
+\membersection{wxRichTextHeaderFooterData::GetFooterMargin}\label{wxrichtextheaderfooterdatagetfootermargin}
+
+\constfunc{int}{GetFooterMargin}{\void}
+
+Returns the margin between the text and the footer.
+
+\membersection{wxRichTextHeaderFooterData::GetFooterText}\label{wxrichtextheaderfooterdatagetfootertext}
+
+\constfunc{wxString}{GetFooterText}{\param{wxRichTextOddEvenPage }{page = wxRICHTEXT\_PAGE\_EVEN}, \param{wxRichTextPageLocation }{location = wxRICHTEXT\_PAGE\_CENTRE}}
+
+Returns the footer text on odd or even pages, and at a given position on the page (left, centre or right).
+
+\membersection{wxRichTextHeaderFooterData::GetHeaderMargin}\label{wxrichtextheaderfooterdatagetheadermargin}
+
+\constfunc{int}{GetHeaderMargin}{\void}
+
+Returns the margin between the text and the header.
+
+\membersection{wxRichTextHeaderFooterData::GetHeaderText}\label{wxrichtextheaderfooterdatagetheadertext}
+
+\constfunc{wxString}{GetHeaderText}{\param{wxRichTextOddEvenPage }{page = wxRICHTEXT\_PAGE\_EVEN}, \param{wxRichTextPageLocation }{location = wxRICHTEXT\_PAGE\_CENTRE}}
+
+Returns the header text on odd or even pages, and at a given position on the page (left, centre or right).
+
+\membersection{wxRichTextHeaderFooterData::GetShowOnFirstPage}\label{wxrichtextheaderfooterdatagetshowonfirstpage}
+
+\constfunc{bool}{GetShowOnFirstPage}{\void}
+
+Returns \true if the header and footer will be shown on the first page.
+
+\membersection{wxRichTextHeaderFooterData::GetText}\label{wxrichtextheaderfooterdatagettext}
+
+\constfunc{wxString}{GetText}{\param{int }{headerFooter}, \param{wxRichTextOddEvenPage }{page}, \param{wxRichTextPageLocation }{location}}
+
+Helper function for getting the header or footer text, odd or even pages, and at a given position on the page (left, centre or right).
+
+\membersection{wxRichTextHeaderFooterData::GetTextColour}\label{wxrichtextheaderfooterdatagettextcolour}
+
+\constfunc{const wxColour\&}{GetTextColour}{\void}
+
+Returns the text colour for drawing the header and footer.
+
+\membersection{wxRichTextHeaderFooterData::Init}\label{wxrichtextheaderfooterdatainit}
+
+\func{void}{Init}{\void}
+
+Initialises the object.
+
+\membersection{wxRichTextHeaderFooterData::SetFont}\label{wxrichtextheaderfooterdatasetfont}
+
+\func{void}{SetFont}{\param{const wxFont\& }{font}}
+
+Sets the font for drawing the header and footer.
+
+\membersection{wxRichTextHeaderFooterData::SetFooterText}\label{wxrichtextheaderfooterdatasetfootertext}
+
+\func{void}{SetFooterText}{\param{const wxString\& }{text}, \param{wxRichTextOddEvenPage }{page = wxRICHTEXT\_PAGE\_ALL}, \param{wxRichTextPageLocation }{location = wxRICHTEXT\_PAGE\_CENTRE}}
+
+Sets the footer text on odd or even pages, and at a given position on the page (left, centre or right).
+
+\membersection{wxRichTextHeaderFooterData::SetHeaderText}\label{wxrichtextheaderfooterdatasetheadertext}
+
+\func{void}{SetHeaderText}{\param{const wxString\& }{text}, \param{wxRichTextOddEvenPage }{page = wxRICHTEXT\_PAGE\_ALL}, \param{wxRichTextPageLocation }{location = wxRICHTEXT\_PAGE\_CENTRE}}
+
+Sets the header text on odd or even pages, and at a given position on the page (left, centre or right).
+
+\membersection{wxRichTextHeaderFooterData::SetMargins}\label{wxrichtextheaderfooterdatasetmargins}
+
+\func{void}{SetMargins}{\param{int }{headerMargin}, \param{int }{footerMargin}}
+
+Sets the margins between text and header or footer, in tenths of a millimeter.
+
+\membersection{wxRichTextHeaderFooterData::SetShowOnFirstPage}\label{wxrichtextheaderfooterdatasetshowonfirstpage}
+
+\func{void}{SetShowOnFirstPage}{\param{bool }{showOnFirstPage}}
+
+Pass \true to show the header or footer on first page (the default).
+
+\membersection{wxRichTextHeaderFooterData::SetText}\label{wxrichtextheaderfooterdatasettext}
+
+\func{void}{SetText}{\param{const wxString\& }{text}, \param{int }{headerFooter}, \param{wxRichTextOddEvenPage }{page}, \param{wxRichTextPageLocation }{location}}
+
+Helper function for setting the header or footer text, odd or even pages, and at a given position on the page (left, centre or right).
+
+\membersection{wxRichTextHeaderFooterData::SetTextColour}\label{wxrichtextheaderfooterdatasettextcolour}
+
+\func{void}{SetTextColour}{\param{const wxColour\& }{col}}
+
+Sets the text colour for drawing the header and footer.
+
+\membersection{wxRichTextHeaderFooterData::operator=}\label{wxrichtextheaderfooterdataoperatorassign}
+
+\func{void operator}{operator=}{\param{const wxRichTextHeaderFooterData\& }{data}}
+
+Assignment operator.
+

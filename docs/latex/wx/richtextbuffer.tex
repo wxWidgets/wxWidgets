@@ -160,16 +160,22 @@ application should take care of incrementing the numbering.
 
 {\small
 \begin{verbatim}
-#define wxTEXT_ATTR_BULLET_STYLE_NONE           0x0000
-#define wxTEXT_ATTR_BULLET_STYLE_ARABIC         0x0001
-#define wxTEXT_ATTR_BULLET_STYLE_LETTERS_UPPER  0x0002
-#define wxTEXT_ATTR_BULLET_STYLE_LETTERS_LOWER  0x0004
-#define wxTEXT_ATTR_BULLET_STYLE_ROMAN_UPPER    0x0008
-#define wxTEXT_ATTR_BULLET_STYLE_ROMAN_LOWER    0x0010
-#define wxTEXT_ATTR_BULLET_STYLE_SYMBOL         0x0020
-#define wxTEXT_ATTR_BULLET_STYLE_BITMAP         0x0040
-#define wxTEXT_ATTR_BULLET_STYLE_PARENTHESES    0x0080
-#define wxTEXT_ATTR_BULLET_STYLE_PERIOD         0x0100
+#define wxTEXT_ATTR_BULLET_STYLE_NONE               0x00000000
+#define wxTEXT_ATTR_BULLET_STYLE_ARABIC             0x00000001
+#define wxTEXT_ATTR_BULLET_STYLE_LETTERS_UPPER      0x00000002
+#define wxTEXT_ATTR_BULLET_STYLE_LETTERS_LOWER      0x00000004
+#define wxTEXT_ATTR_BULLET_STYLE_ROMAN_UPPER        0x00000008
+#define wxTEXT_ATTR_BULLET_STYLE_ROMAN_LOWER        0x00000010
+#define wxTEXT_ATTR_BULLET_STYLE_SYMBOL             0x00000020
+#define wxTEXT_ATTR_BULLET_STYLE_BITMAP             0x00000040
+#define wxTEXT_ATTR_BULLET_STYLE_PARENTHESES        0x00000080
+#define wxTEXT_ATTR_BULLET_STYLE_PERIOD             0x00000100
+#define wxTEXT_ATTR_BULLET_STYLE_STANDARD           0x00000200
+#define wxTEXT_ATTR_BULLET_STYLE_RIGHT_PARENTHESIS  0x00000400
+#define wxTEXT_ATTR_BULLET_STYLE_OUTLINE            0x00000800
+#define wxTEXT_ATTR_BULLET_STYLE_ALIGN_LEFT         0x00000000
+#define wxTEXT_ATTR_BULLET_STYLE_ALIGN_RIGHT        0x00001000
+#define wxTEXT_ATTR_BULLET_STYLE_ALIGN_CENTRE       0x00002000
 \end{verbatim}
 }
 
@@ -261,7 +267,23 @@ Cleans up the file handlers.
 
 \func{void}{Clear}{\void}
 
-Clears the buffer and resets the command processor.
+Clears the buffer.
+
+\membersection{wxRichTextBuffer::ClearListStyle}\label{wxrichtextbufferclearliststyle}
+
+\func{bool}{ClearListStyle}{\param{const wxRichTextRange\& }{range}, \param{int }{flags $=$ wxRICHTEXT\_SETSTYLE\_WITH\_UNDO}}
+
+\func{bool}{ClearListStyle}{\param{const wxRichTextRange\& }{range}, \param{int }{flags $=$ wxRICHTEXT\_SETSTYLE\_WITH\_UNDO}}
+
+Clears the list style from the given range, clearing list-related attributes and applying any named paragraph style associated with each paragraph.
+
+{\it flags} is a bit list of the following:
+
+\begin{itemize}\itemsep=0pt
+\item wxRICHTEXT\_SETSTYLE\_WITH\_UNDO: specifies that this command will be undoable.
+\end{itemize}
+
+See also \helpref{wxRichTextBuffer::SetListStyle}{wxrichtextbuffersetliststyle}, \helpref{wxRichTextBuffer::PromoteList}{wxrichtextbufferpromotelist}, \helpref{wxRichTextBuffer::NumberList}{wxrichtextbuffernumberlist}.
 
 \membersection{wxRichTextBuffer::ClearStyleStack}\label{wxrichtextbufferclearstylestack}
 
@@ -646,11 +668,50 @@ Loads content from a file.
 
 Marks the buffer as modified or unmodified.
 
+\membersection{wxRichTextBuffer::NumberList}\label{wxrichtextbuffernumberlist}
+
+\func{bool}{NumberList}{\param{const wxRichTextRange\& }{range}, \param{const wxRichTextListStyleDefinition* }{style}, \param{int }{flags $=$ wxRICHTEXT\_SETSTYLE\_WITH\_UNDO}, \param{int}{ startFrom = -1}, \param{int}{ listLevel = -1}}
+
+\func{bool}{Number}{\param{const wxRichTextRange\& }{range}, \param{const wxString\& }{styleName}, \param{int }{flags $=$ wxRICHTEXT\_SETSTYLE\_WITH\_UNDO}, \param{int}{ startFrom = -1}, \param{int}{ listLevel = -1}}
+
+Numbers the paragraphs in the given range. Pass flags to determine how the attributes are set.
+Either the style definition or the name of the style definition (in the current sheet) can be passed.
+
+{\it flags} is a bit list of the following:
+
+\begin{itemize}\itemsep=0pt
+\item wxRICHTEXT\_SETSTYLE\_WITH\_UNDO: specifies that this command will be undoable.
+\item wxRICHTEXT\_SETSTYLE\_RENUMBER: specifies that numbering should start from {\it startFrom}, otherwise existing attributes are used.
+\item wxRICHTEXT\_SETSTYLE\_SPECIFY\_LEVEL: specifies that {\it listLevel} should be used as the level for all paragraphs, otherwise the current indentation will be used.
+\end{itemize}
+
+See also \helpref{wxRichTextBuffer::SetListStyle}{wxrichtextbuffersetliststyle}, \helpref{wxRichTextBuffer::PromoteList}{wxrichtextbufferpromotelist}, \helpref{wxRichTextBuffer::ClearListStyle}{wxrichtextbufferclearliststyle}.
+
 \membersection{wxRichTextBuffer::PasteFromClipboard}\label{wxrichtextbufferpastefromclipboard}
 
 \func{bool}{PasteFromClipboard}{\param{long }{position}}
 
 Pastes the clipboard content to the buffer at the given position.
+
+\membersection{wxRichTextBuffer::PromoteList}\label{wxrichtextbufferpromotelist}
+
+\func{bool}{PromoteList}{\param{int}{ promoteBy}, \param{const wxRichTextRange\& }{range}, \param{const wxRichTextListStyleDefinition* }{style}, \param{int }{flags $=$ wxRICHTEXT\_SETSTYLE\_WITH\_UNDO}, \param{int}{ listLevel = -1}}
+
+\func{bool}{PromoteList}{\param{int}{ promoteBy}, \param{const wxRichTextRange\& }{range}, \param{const wxString\& }{styleName}, \param{int }{flags $=$ wxRICHTEXT\_SETSTYLE\_WITH\_UNDO}, \param{int}{ listLevel = -1}}
+
+Promotes or demotes the paragraphs in the given range. A positive {\it promoteBy} produces a smaller indent, and a negative number
+produces a larger indent. Pass flags to determine how the attributes are set.
+Either the style definition or the name of the style definition (in the current sheet) can be passed.
+
+{\it flags} is a bit list of the following:
+
+\begin{itemize}\itemsep=0pt
+\item wxRICHTEXT\_SETSTYLE\_WITH\_UNDO: specifies that this command will be undoable.
+\item wxRICHTEXT\_SETSTYLE\_RENUMBER: specifies that numbering should start from {\it startFrom}, otherwise existing attributes are used.
+\item wxRICHTEXT\_SETSTYLE\_SPECIFY\_LEVEL: specifies that {\it listLevel} should be used as the level for all paragraphs, otherwise the current indentation will be used.
+\end{itemize}
+
+See also \helpref{wxRichTextBuffer::SetListStyle}{wxrichtextbuffersetliststyle}, See also \helpref{wxRichTextBuffer::SetListStyle}{wxrichtextbuffernumberlist}, \helpref{wxRichTextBuffer::ClearListStyle}{wxrichtextbufferclearliststyle}.
 
 \membersection{wxRichTextBuffer::RemoveEventHandler}\label{wxrichtextbufferremoveeventhandler}
 
@@ -664,11 +725,11 @@ Removes an event handler from the buffer's list of handlers, deleting the object
 
 Removes a handler.
 
-\membersection{wxRichTextBuffer::Reset}\label{wxrichtextbufferreset}
+\membersection{wxRichTextBuffer::ResetAndClearCommands}\label{wxrichtextbufferresetandclearcommands}
 
-\func{void}{Reset}{\void}
+\func{void}{ResetAndClearCommands}{\void}
 
-The same as \helpref{Clear}{wxrichtextbufferclear}, plus an empty paragraph is added.
+Clears the buffer, adds a new blank paragraph, and clears the command history.
 
 \membersection{wxRichTextBuffer::SaveFile}\label{wxrichtextbuffersavefile}
 
@@ -700,6 +761,25 @@ style to bold will cause subsequently inserted text to be bold).
 
 This is not cumulative - setting the default style will replace the previous default style.
 
+\membersection{wxRichTextBuffer::SetListStyle}\label{wxrichtextbuffersetliststyle}
+
+\func{bool}{SetListStyle}{\param{const wxRichTextRange\& }{range}, \param{const wxRichTextListStyleDefinition* }{style}, \param{int }{flags $=$ wxRICHTEXT\_SETSTYLE\_WITH\_UNDO}, \param{int}{ startFrom = -1}, \param{int}{ listLevel = -1}}
+
+\func{bool}{SetListStyle}{\param{const wxRichTextRange\& }{range}, \param{const wxString\& }{styleName}, \param{int }{flags $=$ wxRICHTEXT\_SETSTYLE\_WITH\_UNDO}, \param{int}{ startFrom = -1}, \param{int}{ listLevel = -1}}
+
+Sets the list attributes for the given range, passing flags to determine how the attributes are set.
+Either the style definition or the name of the style definition (in the current sheet) can be passed.
+
+{\it flags} is a bit list of the following:
+
+\begin{itemize}\itemsep=0pt
+\item wxRICHTEXT\_SETSTYLE\_WITH\_UNDO: specifies that this command will be undoable.
+\item wxRICHTEXT\_SETSTYLE\_RENUMBER: specifies that numbering should start from {\it startFrom}, otherwise existing attributes are used.
+\item wxRICHTEXT\_SETSTYLE\_SPECIFY\_LEVEL: specifies that {\it listLevel} should be used as the level for all paragraphs, otherwise the current indentation will be used.
+\end{itemize}
+
+See also \helpref{wxRichTextBuffer::NumberList}{wxrichtextbuffernumberlist}, \helpref{wxRichTextBuffer::PromoteList}{wxrichtextbufferpromotelist}, \helpref{wxRichTextBuffer::ClearListStyle}{wxrichtextbufferclearliststyle}.
+
 \membersection{wxRichTextBuffer::SetRenderer}\label{wxrichtextbuffersetrenderer}
 
 \func{static void}{SetRenderer}{\param{wxRichTextRenderer* }{renderer}}
@@ -714,7 +794,7 @@ overriding one or more virtual functions, and setting an instance of the class u
 
 \func{bool}{SetStyle}{\param{const wxRichTextRange\& }{range}, \param{const wxTextAttrEx\& }{style}, \param{int }{flags $=$ wxRICHTEXT\_SETSTYLE\_WITH\_UNDO}}
 
-Sets the attributes for the given range, passing flags to determine how the attributes are set.
+Sets the attributes for the given range. Pass flags to determine how the attributes are set.
 
 The end point of range is specified as the last character position of the span of text.
 So, for example, to set the style for a character at position 5, use the range (5,5).
@@ -722,26 +802,16 @@ This differs from the wxRichTextCtrl API, where you would specify (5,6).
 
 {\it flags} may contain a bit list of the following values:
 
-\begin{verbatim}
-#define wxRICHTEXT_SETSTYLE_NONE            0x00
-
-// Specifies that this operation should be undoable
-#define wxRICHTEXT_SETSTYLE_WITH_UNDO       0x01
-
-// Specifies that the style should not be applied if the
-// combined style at this point is already the style in question.
-#define wxRICHTEXT_SETSTYLE_OPTIMIZE        0x02
-
-// Specifies that the style should only be applied to paragraphs,
-// and not the content. This allows content styling to be
-// preserved independently from that of e.g. a named paragraph style.
-#define wxRICHTEXT_SETSTYLE_PARAGRAPHS_ONLY 0x04
-
-// Specifies that the style should only be applied to characters,
-// and not the paragraph. This allows content styling to be
-// preserved independently from that of e.g. a named paragraph style.
-#define wxRICHTEXT_SETSTYLE_CHARACTERS_ONLY 0x08
-\end{verbatim}
+\begin{itemize}\itemsep=0pt
+\item wxRICHTEXT\_SETSTYLE\_NONE: no style flag.
+\item wxRICHTEXT\_SETSTYLE\_WITH\_UNDO: specifies that this operation should be undoable.
+\item wxRICHTEXT\_SETSTYLE\_OPTIMIZE: specifies that the style should not be applied if the
+combined style at this point is already the style in question.
+\item define wxRICHTEXT\_SETSTYLE\_PARAGRAPHS\_ONLY: specifies that the style should only be applied to paragraphs,
+and not the content. This allows content styling to be preserved independently from that of e.g. a named paragraph style.
+\item wxRICHTEXT\_SETSTYLE\_CHARACTERS\_ONLY: specifies that the style should only be applied to characters,
+and not the paragraph. This allows content styling to be preserved independently from that of e.g. a named paragraph style.
+\end{itemize}
 
 \membersection{wxRichTextBuffer::SetStyleSheet}\label{wxrichtextbuffersetstylesheet}
 

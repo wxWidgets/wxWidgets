@@ -1,0 +1,158 @@
+\section{\class{wxRichTextPrinting}}\label{wxrichtextprinting}
+
+This class provides a simple interface for performing \helpref{wxRichTextBuffer}{wxrichtextbuffer} printing
+and previewing. It uses \helpref{wxRichTextPrintout}{wxrichtextprintout} for layout and rendering.
+ 
+\wxheading{Derived from}
+
+\helpref{wxObject}{wxobject}
+
+\wxheading{Include files}
+
+<wx/richtext/richtextprint.h>
+
+\wxheading{Data structures}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxRichTextPrinting::wxRichTextPrinting}\label{wxrichtextprintingwxrichtextprinting}
+
+\func{}{wxRichTextPrinting}{\param{const wxString\& }{name = wxT("Printing")}, \param{wxWindow* }{parentWindow = NULL}}
+
+Constructor. Optionally pass a title to be used in the preview frame and printing wait dialog, and
+also a parent window for these windows.
+
+\membersection{wxRichTextPrinting::GetFooterText}\label{wxrichtextprintinggetfootertext}
+
+\constfunc{wxString}{GetFooterText}{\param{wxRichTextOddEvenPage }{page = wxRICHTEXT\_PAGE\_EVEN}, \param{wxRichTextPageLocation }{location = wxRICHTEXT\_PAGE\_CENTRE}}
+
+A convenience function to get the footer text. See \helpref{wxRichTextHeaderFooterData}{wxrichtextheaderfooterdata} for details.
+
+\membersection{wxRichTextPrinting::GetHeaderFooterData}\label{wxrichtextprintinggetheaderfooterdata}
+
+\constfunc{const wxRichTextHeaderFooterData\&}{GetHeaderFooterData}{\void}
+
+Returns the internal \helpref{wxRichTextHeaderFooterData}{wxrichtextheaderfooterdata} object.
+
+\membersection{wxRichTextPrinting::GetHeaderText}\label{wxrichtextprintinggetheadertext}
+
+\constfunc{wxString}{GetHeaderText}{\param{wxRichTextOddEvenPage }{page = wxRICHTEXT\_PAGE\_EVEN}, \param{wxRichTextPageLocation }{location = wxRICHTEXT\_PAGE\_CENTRE}}
+
+A convenience function to get the header text. See \helpref{wxRichTextHeaderFooterData}{wxrichtextheaderfooterdata} for details.
+
+\membersection{wxRichTextPrinting::GetPageSetupData}\label{wxrichtextprintinggetpagesetupdata}
+
+\func{wxPageSetupDialogData*}{GetPageSetupData}{\void}
+
+Returns a pointer to the internal page setup data.
+
+\membersection{wxRichTextPrinting::GetParentWindow}\label{wxrichtextprintinggetparentwindow}
+
+\constfunc{wxWindow*}{GetParentWindow}{\void}
+
+Returns the parent window to be used for the preview window and printing wait dialog.
+
+\membersection{wxRichTextPrinting::GetPreviewRect}\label{wxrichtextprintinggetpreviewrect}
+
+\constfunc{const wxRect\&}{GetPreviewRect}{\void}
+
+Returns the dimensions to be used for the preview window.
+
+\membersection{wxRichTextPrinting::GetPrintData}\label{wxrichtextprintinggetprintdata}
+
+\func{wxPrintData*}{GetPrintData}{\void}
+
+Returns a pointer to the internal print data.
+
+\membersection{wxRichTextPrinting::GetTitle}\label{wxrichtextprintinggettitle}
+
+\constfunc{const wxString\&}{GetTitle}{\void}
+
+Returns the title of the preview window or printing wait caption.
+
+\membersection{wxRichTextPrinting::PageSetup}\label{wxrichtextprintingpagesetup}
+
+\func{void}{PageSetup}{\void}
+
+Shows the page setup dialog.
+
+\membersection{wxRichTextPrinting::PreviewBuffer}\label{wxrichtextprintingpreviewbuffer}
+
+\func{bool}{PreviewBuffer}{\param{const wxRichTextBuffer\& }{buffer}}
+
+Shows a preview window for the given buffer. The function takes its own copy of {\it buffer}.
+
+\membersection{wxRichTextPrinting::PreviewFile}\label{wxrichtextprintingpreviewfile}
+
+\func{bool}{PreviewFile}{\param{const wxString\& }{richTextFile}}
+
+Shows a preview window for the given file. {\it richTextFile} can be a text file or XML file, or other file
+depending on the available file handlers.
+
+\membersection{wxRichTextPrinting::PrintBuffer}\label{wxrichtextprintingprintbuffer}
+
+\func{bool}{PrintBuffer}{\param{const wxRichTextBuffer\& }{buffer}}
+
+Prints the given buffer. The function takes its own copy of {\it buffer}.
+
+\membersection{wxRichTextPrinting::PrintFile}\label{wxrichtextprintingprintfile}
+
+\func{bool}{PrintFile}{\param{const wxString\& }{richTextFile}}
+
+Prints the given file. {\it richTextFile} can be a text file or XML file, or other file
+depending on the available file handlers.
+
+\membersection{wxRichTextPrinting::SetFooterText}\label{wxrichtextprintingsetfootertext}
+
+\func{void}{SetFooterText}{\param{const wxString\& }{text}, \param{wxRichTextOddEvenPage }{page = wxRICHTEXT\_PAGE\_ALL}, \param{wxRichTextPageLocation }{location = wxRICHTEXT\_PAGE\_CENTRE}}
+
+A convenience function to set the footer text. See \helpref{wxRichTextHeaderFooterData}{wxrichtextheaderfooterdata} for details.
+
+\membersection{wxRichTextPrinting::SetHeaderFooterData}\label{wxrichtextprintingsetheaderfooterdata}
+
+\func{void}{SetHeaderFooterData}{\param{const wxRichTextHeaderFooterData\& }{data}}
+
+Sets the internal \helpref{wxRichTextHeaderFooterData}{wxrichtextheaderfooterdata} object.
+
+\membersection{wxRichTextPrinting::SetHeaderFooterFont}\label{wxrichtextprintingsetheaderfooterfont}
+
+\func{void}{SetHeaderFooterFont}{\param{const wxFont\& }{font}}
+
+Sets the \helpref{wxRichTextHeaderFooterData}{wxrichtextheaderfooterdata} font.
+
+\membersection{wxRichTextPrinting::SetHeaderFooterTextColour}\label{wxrichtextprintingsetheaderfootertextcolour}
+
+\func{void}{SetHeaderFooterTextColour}{\param{const wxColour\& }{colour}}
+
+Sets the \helpref{wxRichTextHeaderFooterData}{wxrichtextheaderfooterdata} text colour.
+
+\membersection{wxRichTextPrinting::SetHeaderText}\label{wxrichtextprintingsetheadertext}
+
+\func{void}{SetHeaderText}{\param{const wxString\& }{text}, \param{wxRichTextOddEvenPage }{page = wxRICHTEXT\_PAGE\_ALL}, \param{wxRichTextPageLocation }{location = wxRICHTEXT\_PAGE\_CENTRE}}
+
+A convenience function to set the header text. See \helpref{wxRichTextHeaderFooterData}{wxrichtextheaderfooterdata} for details.
+
+\membersection{wxRichTextPrinting::SetParentWindow}\label{wxrichtextprintingsetparentwindow}
+
+\func{void}{SetParentWindow}{\param{wxWindow* }{parent}}
+
+Sets the parent window to be used for the preview window and printing wait dialog.
+
+\membersection{wxRichTextPrinting::SetPreviewRect}\label{wxrichtextprintingsetpreviewrect}
+
+\func{void}{SetPreviewRect}{\param{const wxRect\& }{rect}}
+
+Sets the dimensions to be used for the preview window.
+
+\membersection{wxRichTextPrinting::SetShowOnFirstPage}\label{wxrichtextprintingsetshowonfirstpage}
+
+\func{void}{SetShowOnFirstPage}{\param{bool }{show}}
+
+Pass \true to show the header and footer on the first page.
+
+\membersection{wxRichTextPrinting::SetTitle}\label{wxrichtextprintingsettitle}
+
+\func{void}{SetTitle}{\param{const wxString\& }{title}}
+
+Pass the title of the preview window or printing wait caption.
+
