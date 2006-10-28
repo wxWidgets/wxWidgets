@@ -279,7 +279,7 @@ $(OBJS)\xrcdemo.exe :  $(XRCDEMO_OBJECTS) $(OBJS)\xrcdemo_xrcdemo.res
 
 data : .SYMBOLIC 
 	if not exist $(OBJS)\rc mkdir $(OBJS)\rc
-	for %f in (appicon.ico appicon.xpm artprov.xpm artprov.xrc basicdlg.xpm basicdlg.xrc controls.xpm controls.xrc custclas.xpm custclas.xrc derivdlg.xpm derivdlg.xrc fileopen.gif filesave.gif frame.xrc fuzzy.gif menu.xrc platform.xpm platform.xrc quotes.gif resource.xrc toolbar.xrc uncenter.xpm uncenter.xrc update.gif variable.xpm variable.xrc) do if not exist $(OBJS)\rc\%f copy .\rc\%f $(OBJS)\rc
+	for %f in (appicon.ico appicon.xpm artprov.xpm artprov.xrc basicdlg.xpm basicdlg.xrc controls.xpm controls.xrc custclas.xpm custclas.xrc derivdlg.xpm derivdlg.xrc fileopen.gif filesave.gif frame.xrc fuzzy.gif menu.xrc platform.xpm platform.xrc quotes.gif resource.xrc toolbar.xrc uncenter.xpm uncenter.xrc update.gif variable.xpm variable.xrc throbber.gif stop.xpm) do if not exist $(OBJS)\rc\%f copy .\rc\%f $(OBJS)\rc
 
 $(OBJS)\xrcdemo_xrcdemo.obj :  .AUTODEPEND .\xrcdemo.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(XRCDEMO_CXXFLAGS) $<

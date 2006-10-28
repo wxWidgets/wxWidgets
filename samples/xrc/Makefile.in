@@ -41,7 +41,7 @@ SAMPLES_RPATH_POSTLINK = @SAMPLES_RPATH_POSTLINK@
 
 DESTDIR = 
 WX_RELEASE = 2.7
-WX_VERSION = $(WX_RELEASE).1
+WX_VERSION = $(WX_RELEASE).2
 LIBDIRNAME = $(top_builddir)lib
 XRCDEMO_CXXFLAGS = -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) \
@@ -199,7 +199,7 @@ xrcdemo.app/Contents/PkgInfo: xrcdemo$(EXEEXT) $(top_srcdir)/src/mac/carbon/Info
 
 data: 
 	@mkdir -p ./rc
-	@for f in appicon.ico appicon.xpm artprov.xpm artprov.xrc basicdlg.xpm basicdlg.xrc controls.xpm controls.xrc custclas.xpm custclas.xrc derivdlg.xpm derivdlg.xrc fileopen.gif filesave.gif frame.xrc fuzzy.gif menu.xrc platform.xpm platform.xrc quotes.gif resource.xrc toolbar.xrc uncenter.xpm uncenter.xrc update.gif variable.xpm variable.xrc; do \
+	@for f in appicon.ico appicon.xpm artprov.xpm artprov.xrc basicdlg.xpm basicdlg.xrc controls.xpm controls.xrc custclas.xpm custclas.xrc derivdlg.xpm derivdlg.xrc fileopen.gif filesave.gif frame.xrc fuzzy.gif menu.xrc platform.xpm platform.xrc quotes.gif resource.xrc toolbar.xrc uncenter.xpm uncenter.xrc update.gif variable.xpm variable.xrc throbber.gif stop.xpm; do \
 	if test ! -f ./rc/$$f -a ! -d ./rc/$$f ; \
 	then x=yep ; \
 	else x=`find $(srcdir)/rc/$$f -newer ./rc/$$f -print` ; \
