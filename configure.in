@@ -1748,7 +1748,7 @@ case "${host}" in
       if test "$wxUSE_SHARED" = "yes" -a "$wxUSE_OMF" = "no"; then
         AC_MSG_WARN([Building DLLs requires OMF mode, enabled])
         wxUSE_OMF=yes
-	enable_omf=yes
+        enable_omf=yes
       fi
       dnl (end of OS/2-only piece)
   ;;
@@ -5250,7 +5250,7 @@ dnl AC_CHECK_FUNC(getaddrinfo, AC_DEFINE(HAVE_GETADDRINFO), [
     dnl sigh -- gethostbyname_r is a mess; it can have 3, 5 or 6 arguments
       AX_FUNC_WHICH_GETHOSTBYNAME_R
       if test "x$ac_cv_func_which_gethostbyname_r" = "xno" -o \
-	      "x$ac_cv_func_which_gethostbyname_r" = "xunknown" ; then
+              "x$ac_cv_func_which_gethostbyname_r" = "xunknown" ; then
           AC_CHECK_FUNC(gethostbyname, [ AC_DEFINE(HAVE_GETHOSTBYNAME) ])
       fi
       dnl A similar test for getservbyname_r
@@ -5259,7 +5259,7 @@ dnl AC_CHECK_FUNC(getaddrinfo, AC_DEFINE(HAVE_GETADDRINFO), [
       dnl doing the test already exists, so using it is easy enough.     - SN
       AC_raf_FUNC_WHICH_GETSERVBYNAME_R
       if test "x$ac_cv_func_which_getservbyname_r" = "xno" -o \
-	      "x$ac_cv_func_which_getservbyname_r" = "xunknown" ; then
+              "x$ac_cv_func_which_getservbyname_r" = "xunknown" ; then
           AC_CHECK_FUNCS(getservbyname,[ AC_DEFINE(HAVE_GETSERVBYNAME) ])
       fi
       dnl For gethostbyaddr_r, we currently do no separate test, instead, we
@@ -7118,15 +7118,11 @@ if test "$wxUSE_GRAPHICS_CONTEXT" = "yes"; then
    elif test "$wxUSE_GTK" != 1; then
       dnl for other builds we'll just wing it for now...
       AC_DEFINE(wxUSE_GRAPHICS_CONTEXT)
-   else  
+   else
       dnl ...but let's check for cairo availability for wxGTK builds
       PKG_CHECK_MODULES(CAIRO, cairo,
-	    [
-	    	AC_DEFINE(wxUSE_GRAPHICS_CONTEXT)
-	    ],
-	    [
-	        AC_MSG_WARN([Cairo library not found, unable to set wxUSE_GRAPHICS_CONTEXT])
-	    ]
+          AC_DEFINE(wxUSE_GRAPHICS_CONTEXT),
+          AC_MSG_WARN([Cairo library not found, unable to set wxUSE_GRAPHICS_CONTEXT])
       )
    fi
 fi
@@ -7704,8 +7700,8 @@ if test "$wxUSE_SHARED" = "yes"; then
       *-pc-os2_emx | *-pc-os2-emx )
         SHARED_LD_CC="`pwd`/dllar.sh -name-mangler-script ./dllnames.sh -libf INITINSTANCE -libf TERMINSTANCE -o"
         SHARED_LD_CXX="`pwd`/dllar.sh -name-mangler-script ./dllnames.sh -libf INITINSTANCE -libf TERMINSTANCE -o"
-	cp -p ${srcdir}/src/os2/dllnames.sh .
-	cp -p ${srcdir}/src/os2/dllar.sh .
+        cp -p ${srcdir}/src/os2/dllnames.sh .
+        cp -p ${srcdir}/src/os2/dllar.sh .
       ;;
     esac
 else
