@@ -140,6 +140,7 @@ class WXDLLIMPEXP_AUI wxAuiTabContainerButton
 public:
     int id;               // button's id
     int cur_state;        // current state (normal, hover, pressed)
+    int location;         // buttons location (wxLEFT or wxRIGHT)
     wxBitmap bitmap;      // button's bitmap
     wxRect rect;          // button's hit rectangle
 };
@@ -180,7 +181,7 @@ public:
     void SetMeasuringFont(const wxFont& measuring_font);
     void DoShowHide();
     void SetRect(const wxRect& rect);
-    void AddButton(int id, const wxBitmap& bmp);
+    void AddButton(int id, int location, const wxBitmap& bmp);
 
 protected:
 

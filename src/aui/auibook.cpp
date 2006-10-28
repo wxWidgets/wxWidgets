@@ -448,11 +448,12 @@ size_t wxAuiTabContainer::GetPageCount() const
     return m_pages.GetCount();
 }
 
-void wxAuiTabContainer::AddButton(int id, const wxBitmap& bmp)
+void wxAuiTabContainer::AddButton(int id, int location, const wxBitmap& bmp)
 {
     wxAuiTabContainerButton button;
     button.id = id;
     button.bitmap = bmp;
+    button.location = location;
     button.cur_state = wxAUI_BUTTON_STATE_NORMAL;
 
     m_buttons.Add(button);
@@ -470,11 +471,64 @@ void wxAuiTabContainer::Render(wxDC* raw_dc)
     bmp.Create(m_rect.GetWidth(), m_rect.GetHeight());
     dc.SelectObject(bmp);
 
-
     m_art->DrawBackground(&dc, m_rect);
 
-    size_t i, page_count = m_pages.GetCount();
     int offset = 0;
+    size_t i;
+
+    // draw the buttons on the right side
+    offset = m_rect.x + m_rect.width;
+    size_t button_count = m_buttons.GetCount();
+    for (i = 0; i < button_count; ++i)
+    {
+        wxAuiTabContainerButton& button = m_buttons.Item(button_count - i - 1);
+        
+        if (button.location != wxRIGHT)
+            continue;
+            
+        wxRect button_rect(offset - button.bitmap.GetWidth(), 1,
+                           button.bitmap.GetWidth(), button.bitmap.GetHeight());
+
+        button.rect = button_rect;
+
+        DrawButton(dc, button.rect, button.bitmap,
+                   //m_bkbrush.GetColour(),
+                   *wxWHITE,
+                   button.cur_state);
+
+        offset -= button.bitmap.GetWidth();
+    }
+
+
+
+    offset = 0;
+    
+    // draw the buttons on the left side
+
+    for (i = 0; i < button_count; ++i)
+    {
+        wxAuiTabContainerButton& button = m_buttons.Item(button_count - i - 1);
+        
+        if (button.location != wxLEFT)
+            continue;
+            
+        wxRect button_rect(offset, 1,
+                           button.bitmap.GetWidth(),
+                           button.bitmap.GetHeight());
+
+        button.rect = button_rect;
+
+        DrawButton(dc, button.rect, button.bitmap,
+                   //m_bkbrush.GetColour(),
+                   *wxWHITE,
+                   button.cur_state);
+
+        offset += button.bitmap.GetWidth();
+    }
+
+    
+    // draw the tabs
+    size_t page_count = m_pages.GetCount();
 
     size_t active = 999;
     int active_offset = 0;
@@ -519,26 +573,6 @@ void wxAuiTabContainer::Render(wxDC* raw_dc)
                 page.active,
                 &page.rect,
                 &x_extent);
-    }
-
-    // draw the buttons
-    offset = m_rect.x + m_rect.width;
-    size_t button_count = m_buttons.GetCount();
-    for (i = 0; i < button_count; ++i)
-    {
-        wxAuiTabContainerButton& button = m_buttons.Item(button_count - i - 1);
-
-        wxRect button_rect(offset - button.bitmap.GetWidth(), 1,
-                           button.bitmap.GetWidth(), button.bitmap.GetHeight());
-
-        button.rect = button_rect;
-
-        DrawButton(dc, button.rect, button.bitmap,
-                   //m_bkbrush.GetColour(),
-                   *wxWHITE,
-                   button.cur_state);
-
-        offset -= button.bitmap.GetWidth();
     }
 
 
@@ -686,7 +720,7 @@ wxAuiTabCtrl::wxAuiTabCtrl(wxWindow* parent,
         0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff};
 #endif
 
-    AddButton(101, BitmapFromBits(close_bits, 16, 16, *wxBLACK));
+    AddButton(101, wxRIGHT, BitmapFromBits(close_bits, 16, 16, *wxBLACK));
 }
 
 
@@ -780,6 +814,14 @@ void wxAuiTabCtrl::OnMotion(wxMouseEvent& evt)
     wxAuiTabContainerButton* button;
     if (ButtonHitTest(pos.x, pos.y, &button))
     {
+        if (m_hover_button && button != m_hover_button)
+        {
+            m_hover_button->cur_state = wxAUI_BUTTON_STATE_NORMAL;
+            m_hover_button = NULL;
+            Refresh();
+            Update();
+        }
+        
         if (button->cur_state != wxAUI_BUTTON_STATE_HOVER)
         {
             button->cur_state = wxAUI_BUTTON_STATE_HOVER;
