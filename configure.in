@@ -2466,6 +2466,14 @@ else
     fi
 fi
 
+dnl check for C99 string to long long conversion functions, assume that if we
+dnl have the unsigned variants, then we have the signed ones as well
+if test "wxUSE_UNICODE" = "yes"; then
+    AC_CHECK_FUNCS(wcstoull)
+else
+    AC_CHECK_FUNCS(strtoull)
+fi
+
 dnl ---------------------------------------------------------------------------
 dnl Optional libraries
 dnl
@@ -7121,8 +7129,8 @@ if test "$wxUSE_GRAPHICS_CONTEXT" = "yes"; then
    else
       dnl ...but let's check for cairo availability for wxGTK builds
       PKG_CHECK_MODULES(CAIRO, cairo,
-          AC_DEFINE(wxUSE_GRAPHICS_CONTEXT),
-          AC_MSG_WARN([Cairo library not found, unable to set wxUSE_GRAPHICS_CONTEXT])
+          [AC_DEFINE(wxUSE_GRAPHICS_CONTEXT)],
+          [AC_MSG_WARN([Cairo library not found, unable to set wxUSE_GRAPHICS_CONTEXT])]
       )
    fi
 fi

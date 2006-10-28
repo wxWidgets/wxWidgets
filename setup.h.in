@@ -872,6 +872,9 @@
 /* Define if strptime() is declared in headers */
 #undef HAVE_STRPTIME_DECL
 
+/* Define if you have strtoull() and strtoll() */
+#undef HAVE_STRTOULL
+
 /* Define if you have all functions to set thread priority */
 #undef HAVE_THREAD_PRIORITY_FUNCTIONS
 
@@ -893,6 +896,9 @@
 
 /* Define if you have wcslen function  */
 #undef HAVE_WCSLEN
+
+/* Define if you have wcstoull() and wcstoll() */
+#undef HAVE_WCSTOULL
 
 /* define if you have vsscanf function */
 #undef HAVE_VSSCANF
