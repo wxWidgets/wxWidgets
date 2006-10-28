@@ -34,6 +34,9 @@ class wxTabArt
 {
 public:
 
+    wxTabArt() { }
+    virtual ~wxTabArt() { }
+
     virtual void DrawBackground(
                          wxDC* dc,
                          const wxRect& rect) = 0;
@@ -57,6 +60,7 @@ class wxDefaultTabArt : public wxTabArt
 public:
 
     wxDefaultTabArt();
+    virtual ~wxDefaultTabArt();
     
     void DrawBackground(
                  wxDC* dc,

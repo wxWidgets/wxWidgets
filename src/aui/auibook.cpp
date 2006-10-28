@@ -125,6 +125,10 @@ wxDefaultTabArt::wxDefaultTabArt()
     m_selected_bkpen = wxPen(selectedtab_colour);
 }
 
+wxDefaultTabArt::~wxDefaultTabArt()
+{
+}
+
 void wxDefaultTabArt::DrawBackground(
              wxDC* dc,
              const wxRect& rect)
