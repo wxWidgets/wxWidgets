@@ -1686,6 +1686,8 @@ bool wxStringToIntType(const wxChar *start,
     wxCHECK_MSG( val, false, _T("NULL output pointer") );
     wxASSERT_MSG( !base || (base > 1 && base <= 36), _T("invalid base") );
 
+    errno = 0;
+
     wxChar *end;
     *val = (*func)(start, &end, base);
 
