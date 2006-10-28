@@ -24,13 +24,15 @@
 // functions in this file
 %threadWrapperOff
 
-//---------------------------------------------------------------------------
 
+//---------------------------------------------------------------------------
+//---------------------------------------------------------------------------
 
 %{
 #if !wxUSE_GRAPHICS_CONTEXT
 // C++ stub classes for platforms or build configurations that don't have
 // wxGraphicsContext yet.
+
 
 class wxGraphicsObject : public wxObject
 {
@@ -41,32 +43,40 @@ public :
     }
     wxGraphicsObject( const wxGraphicsObject&  ) {}
     virtual ~wxGraphicsObject() {}
+    bool IsNull() const { return false; }
     wxGraphicsRenderer* GetRenderer() const { return NULL; }
 } ;
 
+
+
 class wxGraphicsPen : public wxGraphicsObject
 {
-    //wxGraphicsPen(wxGraphicsRenderer* )  {}
+    wxGraphicsPen()  {}
     virtual ~wxGraphicsPen() {}
-    virtual void Apply( wxGraphicsContext* ) {}
-    virtual wxDouble GetWidth() { return 0; }
 } ;
+wxGraphicsPen wxNullGraphicsPen;
+
+
 
 class wxGraphicsBrush : public wxGraphicsObject
 {
 public :
-    //wxGraphicsBrush(wxGraphicsRenderer* renderer) {}
+    wxGraphicsBrush() {}
     virtual ~wxGraphicsBrush() {}
-    virtual void Apply( wxGraphicsContext* ) {}
 } ;
+wxGraphicsBrush wxNullGraphicsBrush;
+
+
 
 class wxGraphicsFont : public wxGraphicsObject
 {
 public :
-    //wxGraphicsFont(wxGraphicsRenderer* renderer) {}
+    wxGraphicsFont() {}
     virtual ~wxGraphicsFont() {}
-    virtual void Apply( wxGraphicsContext* ) {}
 } ;
+wxGraphicsFont wxNullGraphicsFont;
+
+
 
 class wxGraphicsPath : public wxGraphicsObject
 {
@@ -169,18 +179,18 @@ public:
 
     wxGraphicsPath * CreatePath()  { return NULL; }
 
-    virtual wxGraphicsPen* CreatePen(const wxPen& )  { return NULL; }
+    virtual wxGraphicsPen CreatePen(const wxPen& )  { return NULL; }
 
-    virtual wxGraphicsBrush* CreateBrush(const wxBrush& ) { return NULL; }
+    virtual wxGraphicsBrush CreateBrush(const wxBrush& ) { return NULL; }
 
-    virtual wxGraphicsBrush* CreateLinearGradientBrush( wxDouble , wxDouble , wxDouble , wxDouble ,
+    virtual wxGraphicsBrush CreateLinearGradientBrush( wxDouble , wxDouble , wxDouble , wxDouble ,
                                                         const wxColour&, const wxColour&) { return NULL; }
 
-    virtual wxGraphicsBrush* CreateRadialGradientBrush( wxDouble xo, wxDouble yo,
+    virtual wxGraphicsBrush CreateRadialGradientBrush( wxDouble xo, wxDouble yo,
                                                         wxDouble xc, wxDouble yc, wxDouble radius,
                                                         const wxColour &oColor, const wxColour &cColor) { return NULL; }
 
-    virtual wxGraphicsFont* CreateFont( const wxFont &, const wxColour & )  { return NULL; }
+    virtual wxGraphicsFont CreateFont( const wxFont &, const wxColour & )  { return NULL; }
 
     virtual wxGraphicsMatrix* CreateMatrix( wxDouble, wxDouble, wxDouble, wxDouble,
                                             wxDouble, wxDouble)  { return NULL; }
@@ -198,13 +208,13 @@ public:
     virtual void SetTransform( const wxGraphicsMatrix* ) {}
     virtual void GetTransform( wxGraphicsMatrix* ) {}
 
-    virtual void SetPen( wxGraphicsPen* , bool ) {}
+    virtual void SetPen( const wxGraphicsPen& ) {}
     void SetPen( const wxPen& ) {}
 
-    virtual void SetBrush( wxGraphicsBrush* , bool ) {}
+    virtual void SetBrush( const wxGraphicsBrush& ) {}
     void SetBrush( const wxBrush& ) {}
 
-    virtual void SetFont( wxGraphicsFont*, bool ) {}
+    virtual void SetFont( const wxGraphicsFont& ) {}
     void SetFont( const wxFont&, const wxColour& ) {}
 
     virtual void StrokePath( const wxGraphicsPath * ) {}
@@ -254,17 +264,15 @@ public :
     virtual wxGraphicsPath * CreatePath()  { return NULL; }
 
     virtual wxGraphicsMatrix * CreateMatrix( wxDouble , wxDouble , wxDouble , wxDouble ,
-                                             wxDouble , wxDouble ) {}
+                                             wxDouble , wxDouble ) { return NULL; }
 
-    virtual wxGraphicsPen* CreatePen(const wxPen& )  { return NULL; }
-    virtual wxGraphicsBrush* CreateBrush(const wxBrush&  )  { return NULL; }
-    virtual wxGraphicsBrush* CreateLinearGradientBrush(
-        wxDouble , wxDouble , wxDouble , wxDouble ,
-        const wxColour&, const wxColour&)  { return NULL; }
-    virtual wxGraphicsBrush* CreateRadialGradientBrush(
-        wxDouble , wxDouble , wxDouble , wxDouble , wxDouble ,
-        const wxColour &, const wxColour &)  { return NULL; }
-    virtual wxGraphicsFont* CreateFont( const wxFont & , const wxColour & ) { return NULL; }
+    virtual wxGraphicsPen CreatePen(const wxPen& )  { return wxNullGaphicsPen; }
+    virtual wxGraphicsBrush CreateBrush(const wxBrush&  )  { return wxNullGaphicsBrush; }
+    virtual wxGraphicsBrush CreateLinearGradientBrush(xDouble , wxDouble , wxDouble , wxDouble ,
+                                                      const wxColour&, const wxColour&)  { return wxNullGaphicsBrush; }
+    virtual wxGraphicsBrush CreateRadialGradientBrush(wxDouble , wxDouble , wxDouble , wxDouble , wxDouble ,
+                                                      const wxColour &, const wxColour &)  { return wxNullGaphicsBrush; }
+    virtual wxGraphicsFont CreateFont( const wxFont & , const wxColour & ) { return wxNullGaphicsFont; }
 };
 
 
@@ -316,12 +324,15 @@ MustHaveApp(wxGCDC);
 typedef double wxDouble;
 
 
+//---------------------------------------------------------------------------
+
 
 class wxGraphicsObject : public wxObject
 {
 public :
     wxGraphicsObject( wxGraphicsRenderer* renderer = NULL );
     virtual ~wxGraphicsObject();
+    bool IsNull() const ;
     wxGraphicsRenderer* GetRenderer() const;
 };
 
@@ -329,29 +340,32 @@ public :
 class wxGraphicsPen : public wxGraphicsObject
 {
 public :
-    //wxGraphicsPen(wxGraphicsRenderer* renderer);
+    wxGraphicsPen();
     virtual ~wxGraphicsPen();
-    virtual void Apply( wxGraphicsContext* context);
-    virtual wxDouble GetWidth();
 };
 
 
 class wxGraphicsBrush : public wxGraphicsObject
 {
 public :
-    //wxGraphicsBrush(wxGraphicsRenderer* renderer);
+    wxGraphicsBrush();
     virtual ~wxGraphicsBrush();
-    virtual void Apply( wxGraphicsContext* context);
 };
 
 
 class wxGraphicsFont : public wxGraphicsObject
 {
 public :
-    //wxGraphicsFont(wxGraphicsRenderer* renderer);
+    wxGraphicsFont();
     virtual ~wxGraphicsFont();
-    virtual void Apply( wxGraphicsContext* context);
 };
+
+
+%immutable;
+const wxGraphicsPen wxNullGraphicsPen;
+const wxGraphicsBrush wxNullGraphicsBrush;
+const wxGraphicsFont wxNullGraphicsFont;
+%mutable;
 
 //---------------------------------------------------------------------------
 
@@ -363,25 +377,29 @@ public :
 
     virtual wxGraphicsPath *Clone() const = 0;
 
-    DocDeclStr(
-        virtual void , MoveToPoint( wxDouble x, wxDouble y ),
+
+    %nokwargs MoveToPoint;
+    DocStr(MoveToPoint,
         "Begins a new subpath at (x,y)", "");
-//    void MoveToPoint( const wxPoint2D& p);
+    virtual void  MoveToPoint( wxDouble x, wxDouble y );
+    void MoveToPoint( const wxPoint2D& p);
 
 
-    DocDeclStr(
-        virtual void , AddLineToPoint( wxDouble x, wxDouble y ),
+    %nokwargs AddLineToPoint;
+    DocStr(AddLineToPoint,
         "Adds a straight line from the current point to (x,y) ", "");
-//    void AddLineToPoint( const wxPoint2D& p);
+    virtual void AddLineToPoint( wxDouble x, wxDouble y );
+    void AddLineToPoint( const wxPoint2D& p);
 
 
-    DocDeclStr(
-        virtual void , AddCurveToPoint( wxDouble cx1, wxDouble cy1,
-                                        wxDouble cx2, wxDouble cy2,
-                                        wxDouble x, wxDouble y ),
+    %nokwargs AddCurveToPoint;
+    DocStr(AddCurveToPoint,
         "Adds a cubic Bezier curve from the current point, using two control
 points and an end point", "");
-//    void AddCurveToPoint( const wxPoint2D& c1, const wxPoint2D& c2, const wxPoint2D& e);
+    virtual void AddCurveToPoint( wxDouble cx1, wxDouble cy1,
+                                  wxDouble cx2, wxDouble cy2,
+                                  wxDouble x, wxDouble y );
+    void AddCurveToPoint( const wxPoint2D& c1, const wxPoint2D& c2, const wxPoint2D& e);
 
 
 
@@ -395,18 +413,18 @@ points and an end point", "");
         "closes the current sub-path", "");
 
 
-    //virtual void , GetCurrentPoint( wxDouble& x, wxDouble&y),
     DocDeclStr(
         wxPoint2D , GetCurrentPoint(),
         "Gets the last point of the current path, (0,0) if not yet set", "");
 
 
-    DocDeclStr(
-        virtual void , AddArc( wxDouble x, wxDouble y, wxDouble r,
-                               wxDouble startAngle, wxDouble endAngle, bool clockwise ),
+    %nokwargs AddArc;
+    DocStr(AddArc,
         "Adds an arc of a circle centering at (x,y) with radius (r) from
 startAngle to endAngle", "");
-//    void AddArc( const wxPoint2D& c, wxDouble r, wxDouble startAngle, wxDouble endAngle, bool clockwise);
+    virtual void AddArc( wxDouble x, wxDouble y, wxDouble r,
+                         wxDouble startAngle, wxDouble endAngle, bool clockwise );
+    void AddArc( const wxPoint2D& c, wxDouble r, wxDouble startAngle, wxDouble endAngle, bool clockwise);
 
 
     DocDeclStr(
@@ -457,16 +475,16 @@ deallocations necessary)", "");
         "transforms each point of this path by the matrix", "");
 
 
-    //virtual void GetBox(wxDouble *x, wxDouble *y, wxDouble *w, wxDouble *h) =0;
     DocDeclStr(
         wxRect2DDouble , GetBox(),
         "gets the bounding box enclosing all points (possibly including control points)", "");
 
 
-    DocDeclStr(
-        virtual bool , Contains( wxDouble x, wxDouble y, int fillStyle = wxWINDING_RULE),
+    %nokwargs Contains;
+    DocStr(Contains,
         "", "");
-    //bool Contains( const wxPoint2DDouble& c, int fillStyle = wxWINDING_RULE);
+    virtual bool Contains( wxDouble x, wxDouble y, int fillStyle = wxWINDING_RULE);
+    bool Contains( const wxPoint2DDouble& c, int fillStyle = wxWINDING_RULE);
 
 };
 
@@ -574,30 +592,26 @@ public:
         "creates a path instance that corresponds to the type of graphics context, ie GDIPlus, Cairo, CoreGraphics ...", "");
 
 
-    %newobject CreatePen;
     DocDeclStr(
-        virtual wxGraphicsPen* , CreatePen(const wxPen& pen),
+        virtual wxGraphicsPen , CreatePen(const wxPen& pen),
         "", "");
 
 
-    %newobject CreateBrush;
     DocDeclStr(
-        virtual wxGraphicsBrush* , CreateBrush(const wxBrush& brush ),
+        virtual wxGraphicsBrush , CreateBrush(const wxBrush& brush ),
         "", "");
 
 
-    %newobject CreateLinearGradientBrush;
     DocDeclStr(
-        virtual wxGraphicsBrush* ,
+        virtual wxGraphicsBrush ,
         CreateLinearGradientBrush( wxDouble x1, wxDouble y1, wxDouble x2, wxDouble y2,
                                    const wxColour& c1, const wxColour& c2),
         "sets the brush to a linear gradient, starting at (x1,y1) with color c1
 to (x2,y2) with color c2", "");
 
     
-    %newobject CreateRadialGradientBrush;
     DocDeclStr(
-        virtual wxGraphicsBrush* ,
+        virtual wxGraphicsBrush ,
         CreateRadialGradientBrush( wxDouble xo, wxDouble yo, wxDouble xc, wxDouble yc, wxDouble radius,
                                    const wxColour &oColor, const wxColour &cColor),
         "sets the brush to a radial gradient originating at (xo,yc) with color
@@ -606,9 +620,8 @@ cColor
 ", "");
 
 
-    %newobject CreateFont;
     DocDeclStr(
-        virtual wxGraphicsFont* , CreateFont( const wxFont &font , const wxColour &col = *wxBLACK ),
+        virtual wxGraphicsFont , CreateFont( const wxFont &font , const wxColour &col = *wxBLACK ),
         "sets the font", "");
 
 
@@ -670,19 +683,19 @@ cColor
 
     DocStr(SetPen, "sets the stroke pen", "");
     %nokwargs SetPen;
-    virtual void SetPen( wxGraphicsPen* pen , bool release = true );
+    virtual void SetPen( const wxGraphicsPen& pen );
     void SetPen( const wxPen& pen );
 
     
     DocStr(SetBrush, "sets the brush for filling", "");
     %nokwargs SetBrush;
-    virtual void SetBrush( wxGraphicsBrush* brush , bool release = true );
+    virtual void SetBrush( const wxGraphicsBrush& brush );
     void SetBrush( const wxBrush& brush );
 
     
     DocStr(SetFont, "sets the font", "");
     %nokwargs SetFont;
-    virtual void SetFont( wxGraphicsFont* font, bool release = true );
+    virtual void SetFont( const wxGraphicsFont& font );
     void SetFont( const wxFont& font, const wxColour& colour = *wxBLACK);
 
     
@@ -855,22 +868,17 @@ public :
     virtual wxGraphicsMatrix * CreateMatrix( wxDouble a=1.0, wxDouble b=0.0, wxDouble c=0.0, wxDouble d=1.0, 
         wxDouble tx=0.0, wxDouble ty=0.0);
         
-    %newobject CreatePen;
-    virtual wxGraphicsPen* CreatePen(const wxPen& pen) ;
+    virtual wxGraphicsPen CreatePen(const wxPen& pen) ;
     
-    %newobject CreateBrush;
-    virtual wxGraphicsBrush* CreateBrush(const wxBrush& brush ) ;
+    virtual wxGraphicsBrush CreateBrush(const wxBrush& brush ) ;
     
-    %newobject CreateLinearGradientBrush;
-    virtual wxGraphicsBrush* CreateLinearGradientBrush( wxDouble x1, wxDouble y1, wxDouble x2, wxDouble y2, 
+    virtual wxGraphicsBrush CreateLinearGradientBrush( wxDouble x1, wxDouble y1, wxDouble x2, wxDouble y2, 
                                                         const wxColour&c1, const wxColour&c2);
 
-    %newobject CreateRadialGradientBrush;
-    virtual wxGraphicsBrush* CreateRadialGradientBrush( wxDouble xo, wxDouble yo, wxDouble xc, wxDouble yc, wxDouble radius,
+    virtual wxGraphicsBrush CreateRadialGradientBrush( wxDouble xo, wxDouble yo, wxDouble xc, wxDouble yc, wxDouble radius,
                                                         const wxColour &oColor, const wxColour &cColor);
 
-    %newobject CreateFont;
-    virtual wxGraphicsFont* CreateFont( const wxFont &font , const wxColour &col = *wxBLACK );
+    virtual wxGraphicsFont CreateFont( const wxFont &font , const wxColour &col = *wxBLACK );
     
 };
 
