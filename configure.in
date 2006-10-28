@@ -7618,25 +7618,34 @@ then
         [for gcc precompiled header bug],
         [wx_cv_gcc_pch_bug],
         [[
-            wx_cv_gcc_pch_bug=no
-            echo 'const wchar_t test_var[] = L"wide string";' > conftest.h
+            echo '#include <stdio.h>
+                  const wchar_t test_var[] = L"awidetest";' > conftest.h
+
+            echo '#include "conftest.h"
+                  int main()
+                  {
+                     printf("%ls\n", test_var);
+                     return 0;
+                  }' > conftest.cpp
+
+            wx_cv_gcc_pch_bug="pch not supported"
 
             if $CXX conftest.h >/dev/null 2>&1
             then
-                {
-                    echo '#include "conftest.h"'
-                    echo 'const wchar_t *test() { return test_var; }'
-                } > conftest.cpp
+                wx_cv_gcc_pch_bug=
 
-                if $CXX -c -o conftest.o conftest.cpp >/dev/null 2>&1
+                if $CXX -o conftest conftest.cpp >/dev/null 2>&1
                 then
-                    tr -dc 'a-z' < conftest.o |
-                        grep 'widestring' >/dev/null ||
+                    if tr -dc '[a-z]' < conftest | grep awidetest >/dev/null
+                    then
+                        wx_cv_gcc_pch_bug=no
+                    else
                         wx_cv_gcc_pch_bug=yes
+                    fi
                 fi
             fi
 
-            rm -f conftest.h conftest.gch conftest.cpp conftest.o
+            rm -f conftest.h conftest.gch conftest.cpp conftest
         ]])
 
     if test "$wx_cv_gcc_pch_bug" = yes; then
