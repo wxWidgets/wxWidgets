@@ -1710,6 +1710,8 @@ bool wxString::ToDouble(double *val) const
 {
     wxCHECK_MSG( val, false, _T("NULL pointer in wxString::ToDouble") );
 
+    errno = 0;
+
     const wxChar *start = c_str();
     wxChar *end;
     *val = wxStrtod(start, &end);
