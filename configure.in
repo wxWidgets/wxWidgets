@@ -7624,7 +7624,7 @@ then
             echo '#include "conftest.h"
                   int main()
                   {
-                     printf("%ls\n", test_var);
+                     printf("%ls", test_var);
                      return 0;
                   }' > conftest.cpp
 
