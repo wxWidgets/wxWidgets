@@ -540,14 +540,13 @@ void wxGCDC::DoDrawArc( wxCoord x1, wxCoord y1,
 
     bool fill = m_brush.GetStyle() != wxTRANSPARENT;
 
-    wxGraphicsPath* path = m_graphicContext->CreatePath();
+    wxGraphicsPath path = m_graphicContext->CreatePath();
     if ( fill && ((x1!=x2)||(y1!=y2)) )
-        path->MoveToPoint( xxc, yyc );
-    path->AddArc( xxc, yyc , rad , DegToRad(sa) , DegToRad(ea), false );
+        path.MoveToPoint( xxc, yyc );
+    path.AddArc( xxc, yyc , rad , DegToRad(sa) , DegToRad(ea), false );
     if ( fill && ((x1!=x2)||(y1!=y2)) )
-        path->AddLineToPoint( xxc, yyc );
+        path.AddLineToPoint( xxc, yyc );
     m_graphicContext->DrawPath(path);
-    delete path;
 }
 
 void wxGCDC::DoDrawEllipticArc( wxCoord x, wxCoord y, wxCoord w, wxCoord h,
@@ -577,21 +576,20 @@ void wxGCDC::DoDrawEllipticArc( wxCoord x, wxCoord y, wxCoord w, wxCoord h,
 
     bool fill = m_brush.GetStyle() != wxTRANSPARENT;
 
-    wxGraphicsPath* path = m_graphicContext->CreatePath();
+    wxGraphicsPath path = m_graphicContext->CreatePath();
     m_graphicContext->PushState();
     m_graphicContext->Translate(xx+ww/2,yy+hh/2);
     wxDouble factor = ((wxDouble) ww) / hh;
     m_graphicContext->Scale( factor , 1.0);
     if ( fill && (sa!=ea) )
-        path->MoveToPoint(0,0);
+        path.MoveToPoint(0,0);
     // since these angles (ea,sa) are measured counter-clockwise, we invert them to
     // get clockwise angles
-    path->AddArc( 0, 0, hh/2 , DegToRad(-sa) , DegToRad(-ea), sa > ea );
+    path.AddArc( 0, 0, hh/2 , DegToRad(-sa) , DegToRad(-ea), sa > ea );
     if ( fill && (sa!=ea) )
-        path->AddLineToPoint(0,0);
+        path.AddLineToPoint(0,0);
     m_graphicContext->DrawPath( path );
     m_graphicContext->PopState();
-    delete path;
 }
 
 void wxGCDC::DoDrawPoint( wxCoord x, wxCoord y )
@@ -631,7 +629,7 @@ void wxGCDC::DoDrawSpline(wxList *points)
     if ( m_logicalFunction != wxCOPY )
         return;
 
-    wxGraphicsPath* path = m_graphicContext->CreatePath();
+    wxGraphicsPath path = m_graphicContext->CreatePath();
 
     wxList::compatibility_iterator node = points->GetFirst();
     if (node == wxList::compatibility_iterator())
@@ -651,8 +649,8 @@ void wxGCDC::DoDrawSpline(wxList *points)
     wxCoord cx1 = ( x1 + x2 ) / 2;
     wxCoord cy1 = ( y1 + y2 ) / 2;
 
-    path->MoveToPoint( LogicalToDeviceX( x1 ) , LogicalToDeviceY( y1 ) );
-    path->AddLineToPoint( LogicalToDeviceX( cx1 ) , LogicalToDeviceY( cy1 ) );
+    path.MoveToPoint( LogicalToDeviceX( x1 ) , LogicalToDeviceY( y1 ) );
+    path.AddLineToPoint( LogicalToDeviceX( cx1 ) , LogicalToDeviceY( cy1 ) );
 #if !wxUSE_STL
 
     while ((node = node->GetNext()) != NULL)
@@ -670,7 +668,7 @@ void wxGCDC::DoDrawSpline(wxList *points)
         wxCoord cx4 = (x1 + x2) / 2;
         wxCoord cy4 = (y1 + y2) / 2;
 
-        path->AddQuadCurveToPoint(
+        path.AddQuadCurveToPoint(
             LogicalToDeviceX( x1 ) , LogicalToDeviceY( y1 ) ,
             LogicalToDeviceX( cx4 ) , LogicalToDeviceY( cy4 ) );
 
@@ -678,10 +676,9 @@ void wxGCDC::DoDrawSpline(wxList *points)
         cy1 = cy4;
     }
 
-    path->AddLineToPoint( LogicalToDeviceX( x2 ) , LogicalToDeviceY( y2 ) );
+    path.AddLineToPoint( LogicalToDeviceX( x2 ) , LogicalToDeviceY( y2 ) );
 
     m_graphicContext->StrokePath( path );
-    delete path;
 }
 #endif // wxUSE_SPLINES
 
@@ -721,26 +718,25 @@ void wxGCDC::DoDrawPolyPolygon(int n,
                                int fillStyle)
 {
     wxASSERT(n > 1);
-    wxGraphicsPath* path = m_graphicContext->CreatePath();
+    wxGraphicsPath path = m_graphicContext->CreatePath();
 
     int i = 0;
     for ( int j = 0; j < n; ++j)
     {
         wxPoint start = points[i];
-        path->MoveToPoint(LogicalToDeviceX(start.x+ xoffset), LogicalToDeviceY(start.y+ yoffset));
+        path.MoveToPoint(LogicalToDeviceX(start.x+ xoffset), LogicalToDeviceY(start.y+ yoffset));
         ++i;
         int l = count[j];
         for ( int k = 1; k < l; ++k)
         {
-            path->AddLineToPoint( LogicalToDeviceX(points[i].x+ xoffset), LogicalToDeviceY(points[i].y+ yoffset));
+            path.AddLineToPoint( LogicalToDeviceX(points[i].x+ xoffset), LogicalToDeviceY(points[i].y+ yoffset));
             ++i;
         }
         // close the polygon
         if ( start != points[i-1])
-            path->AddLineToPoint( LogicalToDeviceX(start.x+ xoffset), LogicalToDeviceY(start.y+ yoffset));
+            path.AddLineToPoint( LogicalToDeviceX(start.x+ xoffset), LogicalToDeviceY(start.y+ yoffset));
     }
     m_graphicContext->DrawPath( path , fillStyle);
-    delete path;
 }
 
 void wxGCDC::DoDrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height)

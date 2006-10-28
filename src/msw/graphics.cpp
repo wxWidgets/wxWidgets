@@ -92,14 +92,13 @@ static inline double RadToDeg(double deg) { return (deg * 180.0) / M_PI; }
 #include "gdiplus.h"
 using namespace Gdiplus;
 
-class WXDLLIMPEXP_CORE wxGDIPlusPath : public wxGraphicsPath
+class WXDLLIMPEXP_CORE wxGDIPlusPathData : public wxGraphicsPathData
 {
 public :
-    wxGDIPlusPath();
-    wxGDIPlusPath(wxGraphicsRenderer* renderer, GraphicsPath* path = NULL);
-    ~wxGDIPlusPath();
+    wxGDIPlusPathData(wxGraphicsRenderer* renderer, GraphicsPath* path = NULL);
+    ~wxGDIPlusPathData();
 
-    virtual wxGraphicsPath *Clone() const;
+    virtual wxGraphicsObjectRefData *Clone() const;
 
     //
     // These are the path primitives from which everything else can be constructed
@@ -119,10 +118,10 @@ public :
     virtual void AddArc( wxDouble x, wxDouble y, wxDouble r, wxDouble startAngle, wxDouble endAngle, bool clockwise ) ;
 
     // gets the last point of the current path, (0,0) if not yet set
-    virtual void GetCurrentPoint( wxDouble& x, wxDouble&y) ;
+    virtual void GetCurrentPoint( wxDouble* x, wxDouble* y) const;
 
     // adds another path
-    virtual void AddPath( const wxGraphicsPath* path );
+    virtual void AddPath( const wxGraphicsPathData* path );
 
     // closes the current sub-path
     virtual void CloseSubpath();
@@ -147,36 +146,30 @@ public :
 	virtual void * GetNativePath() const { return m_path; }
 	
 	// give the native path returned by GetNativePath() back (there might be some deallocations necessary)
-	virtual void UnGetNativePath(void * WXUNUSED(path)) {}
+	virtual void UnGetNativePath(void * WXUNUSED(path)) const {}
 
     // transforms each point of this path by the matrix
-    virtual void Transform( wxGraphicsMatrix* matrix ) ;
+    virtual void Transform( const wxGraphicsMatrixData* matrix ) ;
 
     // gets the bounding box enclosing all points (possibly including control points)
-    virtual void GetBox(wxDouble *x, wxDouble *y, wxDouble *w, wxDouble *h) ;
+    virtual void GetBox(wxDouble *x, wxDouble *y, wxDouble *w, wxDouble *h) const;
 
-    virtual bool Contains( wxDouble x, wxDouble y, int fillStyle = wxWINDING_RULE) ;
+    virtual bool Contains( wxDouble x, wxDouble y, int fillStyle = wxODDEVEN_RULE) const;
 
 private :
     GraphicsPath* m_path;
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxGDIPlusPath)
 };
 
-class WXDLLIMPEXP_CORE wxGDIPlusMatrix : public wxGraphicsMatrix
+class WXDLLIMPEXP_CORE wxGDIPlusMatrixData : public wxGraphicsMatrixData
 {
 public :
-    wxGDIPlusMatrix() ;
+    wxGDIPlusMatrixData(wxGraphicsRenderer* renderer, Matrix* matrix = NULL) ;
+    virtual ~wxGDIPlusMatrixData() ;
 
-    wxGDIPlusMatrix(wxGraphicsRenderer* renderer, Matrix* matrix = NULL ) ;
-    virtual ~wxGDIPlusMatrix() ;
-
-    virtual wxGraphicsMatrix *Clone() const ;
+    virtual wxGraphicsObjectRefData* Clone() const ;
 
     // concatenates the matrix
-    virtual void Concat( const wxGraphicsMatrix *t );
-
-    // copies the passed in matrix
-    virtual void Copy( const wxGraphicsMatrix *t );
+    virtual void Concat( const wxGraphicsMatrixData *t );
 
     // sets the matrix to the respective values
     virtual void Set(wxDouble a=1.0, wxDouble b=0.0, wxDouble c=0.0, wxDouble d=1.0, 
@@ -186,10 +179,10 @@ public :
     virtual void Invert();
 
     // returns true if the elements of the transformation matrix are equal ?
-    virtual bool IsEqual( const wxGraphicsMatrix* t) const ;
+    virtual bool IsEqual( const wxGraphicsMatrixData* t) const ;
 
     // return true if this is the identity matrix
-    virtual bool IsIdentity();
+    virtual bool IsIdentity() const;
 
     //
     // transformation
@@ -209,17 +202,15 @@ public :
     //
 
     // applies that matrix to the point
-    virtual void TransformPoint( wxDouble *x, wxDouble *y );
+    virtual void TransformPoint( wxDouble *x, wxDouble *y ) const;
 
     // applies the matrix except for translations
-    virtual void TransformDistance( wxDouble *dx, wxDouble *dy );
+    virtual void TransformDistance( wxDouble *dx, wxDouble *dy ) const;
 
     // returns the native representation
     virtual void * GetNativeMatrix() const;
 private:
     Matrix* m_matrix ;
-
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxGDIPlusMatrix)
 } ;
 
 class WXDLLIMPEXP_CORE wxGDIPlusPenData : public wxGraphicsObjectRefData
@@ -295,21 +286,21 @@ public:
 
 	virtual void * GetNativeContext();
 	
-    virtual void StrokePath( const wxGraphicsPath *p );
-    virtual void FillPath( const wxGraphicsPath *p , int fillStyle = wxWINDING_RULE );
+    virtual void StrokePath( const wxGraphicsPath& p );
+    virtual void FillPath( const wxGraphicsPath& p , int fillStyle = wxODDEVEN_RULE );
 
     virtual void Translate( wxDouble dx , wxDouble dy );    
     virtual void Scale( wxDouble xScale , wxDouble yScale );    
     virtual void Rotate( wxDouble angle );    
 
     // concatenates this transform with the current transform of this context
-    virtual void ConcatTransform( const wxGraphicsMatrix* matrix );
+    virtual void ConcatTransform( const wxGraphicsMatrix& matrix );
 
     // sets the transform of this context
-    virtual void SetTransform( const wxGraphicsMatrix* matrix );
+    virtual void SetTransform( const wxGraphicsMatrix& matrix );
 
     // gets the matrix of this context
-    virtual void GetTransform( wxGraphicsMatrix* matrix );
+    virtual wxGraphicsMatrix GetTransform() const;
 
     virtual void DrawBitmap( const wxBitmap &bmp, wxDouble x, wxDouble y, wxDouble w, wxDouble h );
     virtual void DrawIcon( const wxIcon &icon, wxDouble x, wxDouble y, wxDouble w, wxDouble h );
@@ -624,9 +615,7 @@ wxGDIPlusFontData::~wxGDIPlusFontData()
 // wxGDIPlusPath implementation
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxGDIPlusPath,wxGraphicsPath)
-
-wxGDIPlusPath::wxGDIPlusPath(wxGraphicsRenderer* renderer, GraphicsPath* path ) : wxGraphicsPath(renderer)
+wxGDIPlusPathData::wxGDIPlusPathData(wxGraphicsRenderer* renderer, GraphicsPath* path ) : wxGraphicsPathData(renderer)
 {
     if ( path )
         m_path = path;
@@ -634,45 +623,37 @@ wxGDIPlusPath::wxGDIPlusPath(wxGraphicsRenderer* renderer, GraphicsPath* path ) 
         m_path = new GraphicsPath();
 }
 
-wxGDIPlusPath::wxGDIPlusPath() : wxGraphicsPath(NULL)
-{
-    wxLogDebug(wxT("Illegal Constructor called"));
-}
-
-
-wxGDIPlusPath::~wxGDIPlusPath()
+wxGDIPlusPathData::~wxGDIPlusPathData()
 {
     delete m_path;
 }
 
-wxGraphicsPath* wxGDIPlusPath::Clone() const
+wxGraphicsObjectRefData* wxGDIPlusPathData::Clone() const
 {
-    return new wxGDIPlusPath( GetRenderer() , m_path->Clone());
+    return new wxGDIPlusPathData( GetRenderer() , m_path->Clone());
 }
-
-
 
 //
 // The Primitives
 //
 
-void wxGDIPlusPath::MoveToPoint( wxDouble x , wxDouble y )
+void wxGDIPlusPathData::MoveToPoint( wxDouble x , wxDouble y )
 {
     m_path->StartFigure();
     m_path->AddLine((REAL) x,(REAL) y,(REAL) x,(REAL) y);
 }
 
-void wxGDIPlusPath::AddLineToPoint( wxDouble x , wxDouble y )
+void wxGDIPlusPathData::AddLineToPoint( wxDouble x , wxDouble y )
 {
     m_path->AddLine((REAL) x,(REAL) y,(REAL) x,(REAL) y);
 }
 
-void wxGDIPlusPath::CloseSubpath()
+void wxGDIPlusPathData::CloseSubpath()
 {
     m_path->CloseFigure();
 }
 
-void wxGDIPlusPath::AddCurveToPoint( wxDouble cx1, wxDouble cy1, wxDouble cx2, wxDouble cy2, wxDouble x, wxDouble y )
+void wxGDIPlusPathData::AddCurveToPoint( wxDouble cx1, wxDouble cy1, wxDouble cx2, wxDouble cy2, wxDouble x, wxDouble y )
 {
     PointF c1(cx1,cy1);
     PointF c2(cx2,cy2);
@@ -683,15 +664,15 @@ void wxGDIPlusPath::AddCurveToPoint( wxDouble cx1, wxDouble cy1, wxDouble cx2, w
 }
 
 // gets the last point of the current path, (0,0) if not yet set
-void wxGDIPlusPath::GetCurrentPoint( wxDouble& x, wxDouble&y) 
+void wxGDIPlusPathData::GetCurrentPoint( wxDouble* x, wxDouble* y) const
 {
     PointF start;
     m_path->GetLastPoint(&start);
-    x = start.X ;
-    y = start.Y ;
+    *x = start.X ;
+    *y = start.Y ;
 }
 
-void wxGDIPlusPath::AddArc( wxDouble x, wxDouble y, wxDouble r, double startAngle, double endAngle, bool clockwise ) 
+void wxGDIPlusPathData::AddArc( wxDouble x, wxDouble y, wxDouble r, double startAngle, double endAngle, bool clockwise ) 
 {
     double sweepAngle = endAngle - startAngle ;
     if( abs(sweepAngle) >= 2*M_PI)
@@ -715,25 +696,25 @@ void wxGDIPlusPath::AddArc( wxDouble x, wxDouble y, wxDouble r, double startAngl
    m_path->AddArc((REAL) (x-r),(REAL) (y-r),(REAL) (2*r),(REAL) (2*r),RadToDeg(startAngle),RadToDeg(sweepAngle)); 
 }
 
-void wxGDIPlusPath::AddRectangle( wxDouble x, wxDouble y, wxDouble w, wxDouble h )
+void wxGDIPlusPathData::AddRectangle( wxDouble x, wxDouble y, wxDouble w, wxDouble h )
 {
     m_path->AddRectangle(RectF(x,y,w,h));
 }
 
-void wxGDIPlusPath::AddPath( const wxGraphicsPath* path )
+void wxGDIPlusPathData::AddPath( const wxGraphicsPathData* path )
 {
     m_path->AddPath( (GraphicsPath*) path->GetNativePath(), FALSE);
 }
 
 
 // transforms each point of this path by the matrix
-void wxGDIPlusPath::Transform( wxGraphicsMatrix* matrix ) 
+void wxGDIPlusPathData::Transform( const wxGraphicsMatrixData* matrix ) 
 {
     m_path->Transform( (Matrix*) matrix->GetNativeMatrix() );
 }
 
 // gets the bounding box enclosing all points (possibly including control points)
-void wxGDIPlusPath::GetBox(wxDouble *x, wxDouble *y, wxDouble *w, wxDouble *h) 
+void wxGDIPlusPathData::GetBox(wxDouble *x, wxDouble *y, wxDouble *w, wxDouble *h) const
 {
     RectF bounds;
     m_path->GetBounds( &bounds, NULL, NULL) ;
@@ -743,25 +724,18 @@ void wxGDIPlusPath::GetBox(wxDouble *x, wxDouble *y, wxDouble *w, wxDouble *h)
     *h = bounds.Height;
 }
 
-bool wxGDIPlusPath::Contains( wxDouble x, wxDouble y, int fillStyle ) 
+bool wxGDIPlusPathData::Contains( wxDouble x, wxDouble y, int fillStyle ) const
 {
     m_path->SetFillMode( fillStyle == wxODDEVEN_RULE ? FillModeAlternate : FillModeWinding);
     return m_path->IsVisible( (FLOAT) x,(FLOAT) y) == TRUE ;
 }
 
 //-----------------------------------------------------------------------------
-// wxGDIPlusMatrix implementation
+// wxGDIPlusMatrixData implementation
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxGDIPlusMatrix,wxGraphicsMatrix)
-
-wxGDIPlusMatrix::wxGDIPlusMatrix() : wxGraphicsMatrix(NULL)
-{
-    wxLogDebug(wxT("Illegal Constructor called"));
-}
-
-wxGDIPlusMatrix::wxGDIPlusMatrix(wxGraphicsRenderer* renderer, Matrix* matrix )
-    : wxGraphicsMatrix(renderer)
+wxGDIPlusMatrixData::wxGDIPlusMatrixData(wxGraphicsRenderer* renderer, Matrix* matrix )
+    : wxGraphicsMatrixData(renderer)
 {
     if ( matrix )
         m_matrix = matrix ;
@@ -769,50 +743,43 @@ wxGDIPlusMatrix::wxGDIPlusMatrix(wxGraphicsRenderer* renderer, Matrix* matrix )
         m_matrix = new Matrix();
 }
 
-wxGDIPlusMatrix::~wxGDIPlusMatrix() 
+wxGDIPlusMatrixData::~wxGDIPlusMatrixData() 
 {
     delete m_matrix;
 }
 
-wxGraphicsMatrix *wxGDIPlusMatrix::Clone() const 
+wxGraphicsObjectRefData *wxGDIPlusMatrixData::Clone() const 
 {
-    return new wxGDIPlusMatrix( GetRenderer(), m_matrix->Clone());
+    return new wxGDIPlusMatrixData( GetRenderer(), m_matrix->Clone());
 }
 
 // concatenates the matrix
-void wxGDIPlusMatrix::Concat( const wxGraphicsMatrix *t )
+void wxGDIPlusMatrixData::Concat( const wxGraphicsMatrixData *t )
 {
     m_matrix->Multiply( (Matrix*) t->GetNativeMatrix());
 }
 
-// copies the passed in matrix
-void wxGDIPlusMatrix::Copy( const wxGraphicsMatrix *t )
-{
-    delete m_matrix;
-    m_matrix = ((Matrix*) t->GetNativeMatrix())->Clone();
-}
-
 // sets the matrix to the respective values
-void wxGDIPlusMatrix::Set(wxDouble a, wxDouble b, wxDouble c, wxDouble d, 
+void wxGDIPlusMatrixData::Set(wxDouble a, wxDouble b, wxDouble c, wxDouble d, 
                  wxDouble tx, wxDouble ty)
 {
     m_matrix->SetElements(a,b,c,d,tx,ty);
 }
 
 // makes this the inverse matrix
-void wxGDIPlusMatrix::Invert()
+void wxGDIPlusMatrixData::Invert()
 {
     m_matrix->Invert();
 }
 
 // returns true if the elements of the transformation matrix are equal ?
-bool wxGDIPlusMatrix::IsEqual( const wxGraphicsMatrix* t) const 
+bool wxGDIPlusMatrixData::IsEqual( const wxGraphicsMatrixData* t) const 
 {
     return m_matrix->Equals((Matrix*) t->GetNativeMatrix())== TRUE ;
 }
 
 // return true if this is the identity matrix
-bool wxGDIPlusMatrix::IsIdentity()
+bool wxGDIPlusMatrixData::IsIdentity() const
 {
     return m_matrix->IsIdentity() == TRUE ;
 }
@@ -822,19 +789,19 @@ bool wxGDIPlusMatrix::IsIdentity()
 //
 
 // add the translation to this matrix
-void wxGDIPlusMatrix::Translate( wxDouble dx , wxDouble dy )
+void wxGDIPlusMatrixData::Translate( wxDouble dx , wxDouble dy )
 {
     m_matrix->Translate(dx,dy);
 }
 
 // add the scale to this matrix
-void wxGDIPlusMatrix::Scale( wxDouble xScale , wxDouble yScale )
+void wxGDIPlusMatrixData::Scale( wxDouble xScale , wxDouble yScale )
 {
     m_matrix->Scale(xScale,yScale);
 }
 
 // add the rotation to this matrix (radians)
-void wxGDIPlusMatrix::Rotate( wxDouble angle )
+void wxGDIPlusMatrixData::Rotate( wxDouble angle )
 {
     m_matrix->Rotate( angle );
 }
@@ -844,7 +811,7 @@ void wxGDIPlusMatrix::Rotate( wxDouble angle )
 //
 
 // applies that matrix to the point
-void wxGDIPlusMatrix::TransformPoint( wxDouble *x, wxDouble *y )
+void wxGDIPlusMatrixData::TransformPoint( wxDouble *x, wxDouble *y ) const
 {
     PointF pt(*x,*y);
     m_matrix->TransformPoints(&pt);
@@ -853,7 +820,7 @@ void wxGDIPlusMatrix::TransformPoint( wxDouble *x, wxDouble *y )
 }
 
 // applies the matrix except for translations
-void wxGDIPlusMatrix::TransformDistance( wxDouble *dx, wxDouble *dy )
+void wxGDIPlusMatrixData::TransformDistance( wxDouble *dx, wxDouble *dy ) const
 {
     PointF pt(*dx,*dy);
     m_matrix->TransformVectors(&pt);
@@ -862,7 +829,7 @@ void wxGDIPlusMatrix::TransformDistance( wxDouble *dx, wxDouble *dy )
 }
 
 // returns the native representation
-void * wxGDIPlusMatrix::GetNativeMatrix() const
+void * wxGDIPlusMatrixData::GetNativeMatrix() const
 {
     return m_matrix;
 }
@@ -942,21 +909,21 @@ void wxGDIPlusContext::ResetClip()
     m_context->ResetClip();
 }
 
-void wxGDIPlusContext::StrokePath( const wxGraphicsPath *path )
+void wxGDIPlusContext::StrokePath( const wxGraphicsPath& path )
 {
     if ( !m_pen.IsNull() )
     {
-        m_context->DrawPath( ((wxGDIPlusPenData*)m_pen.GetGraphicsData())->GetGDIPlusPen() , (GraphicsPath*) path->GetNativePath() );
+        m_context->DrawPath( ((wxGDIPlusPenData*)m_pen.GetGraphicsData())->GetGDIPlusPen() , (GraphicsPath*) path.GetNativePath() );
     }
 }
 
-void wxGDIPlusContext::FillPath( const wxGraphicsPath *path , int fillStyle )
+void wxGDIPlusContext::FillPath( const wxGraphicsPath& path , int fillStyle )
 {
     if ( !m_brush.IsNull() )
     {
-        ((GraphicsPath*) path->GetNativePath())->SetFillMode( fillStyle == wxODDEVEN_RULE ? FillModeAlternate : FillModeWinding);
+        ((GraphicsPath*) path.GetNativePath())->SetFillMode( fillStyle == wxODDEVEN_RULE ? FillModeAlternate : FillModeWinding);
         m_context->FillPath( ((wxGDIPlusBrushData*)m_brush.GetRefData())->GetGDIPlusBrush() , 
-            (GraphicsPath*) path->GetNativePath());
+            (GraphicsPath*) path.GetNativePath());
     }
 }
 
@@ -1216,21 +1183,23 @@ void* wxGDIPlusContext::GetNativeContext()
 }
 
 // concatenates this transform with the current transform of this context
-void wxGDIPlusContext::ConcatTransform( const wxGraphicsMatrix* matrix )
+void wxGDIPlusContext::ConcatTransform( const wxGraphicsMatrix& matrix )
 {
-    m_context->MultiplyTransform((Matrix*) matrix->GetNativeMatrix());
+    m_context->MultiplyTransform((Matrix*) matrix.GetNativeMatrix());
 }
 
 // sets the transform of this context
-void wxGDIPlusContext::SetTransform( const wxGraphicsMatrix* matrix )
+void wxGDIPlusContext::SetTransform( const wxGraphicsMatrix& matrix )
 {
-    m_context->SetTransform((Matrix*) matrix->GetNativeMatrix());
+    m_context->SetTransform((Matrix*) matrix.GetNativeMatrix());
 }
 
 // gets the matrix of this context
-void wxGDIPlusContext::GetTransform( wxGraphicsMatrix* matrix )
+wxGraphicsMatrix wxGDIPlusContext::GetTransform() const
 {
-    m_context->GetTransform((Matrix*) matrix->GetNativeMatrix());
+    wxGraphicsMatrix matrix = CreateMatrix();
+    m_context->GetTransform((Matrix*) matrix.GetNativeMatrix());
+    return matrix;
 }
 //-----------------------------------------------------------------------------
 // wxGDIPlusRenderer declaration
@@ -1265,11 +1234,11 @@ public :
 
     // Path
 
-    virtual wxGraphicsPath * CreatePath();
+    virtual wxGraphicsPath CreatePath();
 
     // Matrix
 
-    virtual wxGraphicsMatrix * CreateMatrix( wxDouble a=1.0, wxDouble b=0.0, wxDouble c=0.0, wxDouble d=1.0, 
+    virtual wxGraphicsMatrix CreateMatrix( wxDouble a=1.0, wxDouble b=0.0, wxDouble c=0.0, wxDouble d=1.0, 
         wxDouble tx=0.0, wxDouble ty=0.0);
 
 
@@ -1362,22 +1331,26 @@ wxGraphicsContext * wxGDIPlusRenderer::CreateContext( wxWindow* window )
 
 // Path
 
-wxGraphicsPath * wxGDIPlusRenderer::CreatePath()
+wxGraphicsPath wxGDIPlusRenderer::CreatePath()
 {
     EnsureIsLoaded();
-    return new wxGDIPlusPath( this );
+    wxGraphicsPath m;
+    m.SetRefData( new wxGDIPlusPathData(this));
+    return m;
 }
 
 
 // Matrix
 
-wxGraphicsMatrix * wxGDIPlusRenderer::CreateMatrix( wxDouble a, wxDouble b, wxDouble c, wxDouble d, 
+wxGraphicsMatrix wxGDIPlusRenderer::CreateMatrix( wxDouble a, wxDouble b, wxDouble c, wxDouble d, 
                                                            wxDouble tx, wxDouble ty)
 
 {
     EnsureIsLoaded();
-    wxGDIPlusMatrix* m = new wxGDIPlusMatrix( this );
-    m->Set( a,b,c,d,tx,ty ) ;
+    wxGraphicsMatrix m;
+    wxGDIPlusMatrixData* data = new wxGDIPlusMatrixData( this );
+    data->Set( a,b,c,d,tx,ty ) ;
+    m.SetRefData(data);
     return m;
 }
 

@@ -120,18 +120,107 @@ wxObjectRefData* wxGraphicsObject::CloneRefData(const wxObjectRefData* data) con
 IMPLEMENT_DYNAMIC_CLASS(wxGraphicsPen, wxGraphicsObject)
 IMPLEMENT_DYNAMIC_CLASS(wxGraphicsBrush, wxGraphicsObject)
 IMPLEMENT_DYNAMIC_CLASS(wxGraphicsFont, wxGraphicsObject)
+
 WXDLLIMPEXP_DATA_CORE(wxGraphicsPen) wxNullGraphicsPen;
 WXDLLIMPEXP_DATA_CORE(wxGraphicsBrush) wxNullGraphicsBrush;
 WXDLLIMPEXP_DATA_CORE(wxGraphicsFont) wxNullGraphicsFont;
 
-IMPLEMENT_ABSTRACT_CLASS(wxGraphicsRenderer, wxObject)
-IMPLEMENT_ABSTRACT_CLASS(wxGraphicsMatrix, wxGraphicsObject)
-IMPLEMENT_ABSTRACT_CLASS(wxGraphicsPath, wxGraphicsObject)
+//-----------------------------------------------------------------------------
+// matrix
+//-----------------------------------------------------------------------------
 
-wxPoint2DDouble wxGraphicsPath::GetCurrentPoint()
+IMPLEMENT_DYNAMIC_CLASS(wxGraphicsMatrix, wxGraphicsObject)
+WXDLLIMPEXP_DATA_CORE(wxGraphicsMatrix) wxNullGraphicsMatrix;
+
+// concatenates the matrix
+void wxGraphicsMatrix::Concat( const wxGraphicsMatrix *t )
+{
+    AllocExclusive();
+    GetMatrixData()->Concat(t->GetMatrixData());
+}
+
+// sets the matrix to the respective values
+void wxGraphicsMatrix::Set(wxDouble a, wxDouble b, wxDouble c, wxDouble d, 
+                           wxDouble tx, wxDouble ty)
+{
+    AllocExclusive();
+    GetMatrixData()->Set(a,b,c,d,tx,ty);
+}
+
+// makes this the inverse matrix
+void wxGraphicsMatrix::Invert()
+{
+    AllocExclusive();
+    GetMatrixData()->Invert();
+}
+
+// returns true if the elements of the transformation matrix are equal ?
+bool wxGraphicsMatrix::IsEqual( const wxGraphicsMatrix* t) const
+{
+    return GetMatrixData()->IsEqual(t->GetMatrixData());
+}
+
+// return true if this is the identity matrix
+bool wxGraphicsMatrix::IsIdentity() const
+{
+    return GetMatrixData()->IsIdentity();
+}
+
+// add the translation to this matrix
+void wxGraphicsMatrix::Translate( wxDouble dx , wxDouble dy )
+{
+    AllocExclusive();
+    GetMatrixData()->Translate(dx,dy);
+}
+
+// add the scale to this matrix
+void wxGraphicsMatrix::Scale( wxDouble xScale , wxDouble yScale )
+{
+    AllocExclusive();
+    GetMatrixData()->Scale(xScale,yScale);
+}
+
+// add the rotation to this matrix (radians)
+void wxGraphicsMatrix::Rotate( wxDouble angle )
+{
+    AllocExclusive();
+    GetMatrixData()->Rotate(angle);
+}  
+
+//
+// apply the transforms
+//
+
+// applies that matrix to the point
+void wxGraphicsMatrix::TransformPoint( wxDouble *x, wxDouble *y ) const
+{
+    GetMatrixData()->TransformPoint(x,y);
+}
+
+// applies the matrix except for translations
+void wxGraphicsMatrix::TransformDistance( wxDouble *dx, wxDouble *dy ) const
+{
+    GetMatrixData()->TransformDistance(dx,dy);
+}
+
+// returns the native representation
+void * wxGraphicsMatrix::GetNativeMatrix() const
+{
+    return GetMatrixData()->GetNativeMatrix();
+}
+
+//-----------------------------------------------------------------------------
+// path
+//-----------------------------------------------------------------------------
+
+IMPLEMENT_DYNAMIC_CLASS(wxGraphicsPath, wxGraphicsObject)
+
+// convenience functions, for using wxPoint2DDouble etc
+
+wxPoint2DDouble wxGraphicsPath::GetCurrentPoint() const
 {
     wxDouble x,y;
-    GetCurrentPoint(x,y);
+    GetCurrentPoint(&x,&y);
     return wxPoint2DDouble(x,y);
 }
 
@@ -155,29 +244,156 @@ void wxGraphicsPath::AddArc( const wxPoint2DDouble& c, wxDouble r, wxDouble star
     AddArc(c.m_x, c.m_y, r, startAngle, endAngle, clockwise);
 }
 
-wxRect2DDouble wxGraphicsPath::GetBox()
+wxRect2DDouble wxGraphicsPath::GetBox() const
 {
 	wxDouble x,y,w,h;
 	GetBox(&x,&y,&w,&h);
 	return wxRect2DDouble( x,y,w,h );
 }
 
-bool wxGraphicsPath::Contains( const wxPoint2DDouble& c, int fillStyle )
+bool wxGraphicsPath::Contains( const wxPoint2DDouble& c, int fillStyle ) const
 {
     return Contains( c.m_x, c.m_y, fillStyle);
 }
 
+// true redirections
+
+// begins a new subpath at (x,y)
+void wxGraphicsPath::MoveToPoint( wxDouble x, wxDouble y )
+{
+    AllocExclusive();
+    GetPathData()->MoveToPoint(x,y);
+}
+
+// adds a straight line from the current point to (x,y) 
+void wxGraphicsPath::AddLineToPoint( wxDouble x, wxDouble y )
+{
+    AllocExclusive();
+    GetPathData()->AddLineToPoint(x,y);
+}
+
+// adds a cubic Bezier curve from the current point, using two control points and an end point
+void wxGraphicsPath::AddCurveToPoint( wxDouble cx1, wxDouble cy1, wxDouble cx2, wxDouble cy2, wxDouble x, wxDouble y )
+{
+    AllocExclusive();
+    GetPathData()->AddCurveToPoint(cx1,cy1,cx2,cy2,x,y);
+}
+
+// adds another path
+void wxGraphicsPath::AddPath( const wxGraphicsPath& path )
+{
+    AllocExclusive();
+    GetPathData()->AddPath(path.GetPathData());
+}
+
+// closes the current sub-path
+void wxGraphicsPath::CloseSubpath()
+{
+    AllocExclusive();
+    GetPathData()->CloseSubpath();
+}
+
+// gets the last point of the current path, (0,0) if not yet set
+void wxGraphicsPath::GetCurrentPoint( wxDouble* x, wxDouble* y) const
+{
+    GetPathData()->GetCurrentPoint(x,y);
+}
+
+// adds an arc of a circle centering at (x,y) with radius (r) from startAngle to endAngle
+void wxGraphicsPath::AddArc( wxDouble x, wxDouble y, wxDouble r, wxDouble startAngle, wxDouble endAngle, bool clockwise )
+{
+    AllocExclusive();
+    GetPathData()->AddArc(x,y,r,startAngle,endAngle,clockwise);
+}
+
 //
-// Emulations
+// These are convenience functions which - if not available natively will be assembled 
+// using the primitives from above
 //
 
+// adds a quadratic Bezier curve from the current point, using a control point and an end point
 void wxGraphicsPath::AddQuadCurveToPoint( wxDouble cx, wxDouble cy, wxDouble x, wxDouble y )
+{
+    AllocExclusive();
+    GetPathData()->AddQuadCurveToPoint(cx,cy,x,y);
+}
+
+// appends a rectangle as a new closed subpath 
+void wxGraphicsPath::AddRectangle( wxDouble x, wxDouble y, wxDouble w, wxDouble h )
+{
+    AllocExclusive();
+    GetPathData()->AddRectangle(x,y,w,h);
+}
+
+// appends an ellipsis as a new closed subpath fitting the passed rectangle
+void wxGraphicsPath::AddCircle( wxDouble x, wxDouble y, wxDouble r )
+{
+    AllocExclusive();
+    GetPathData()->AddCircle(x,y,r);
+}
+
+// appends a an arc to two tangents connecting (current) to (x1,y1) and (x1,y1) to (x2,y2), also a straight line from (current) to (x1,y1)
+void wxGraphicsPath::AddArcToPoint( wxDouble x1, wxDouble y1 , wxDouble x2, wxDouble y2, wxDouble r ) 
+{
+    GetPathData()->AddArcToPoint(x1,y1,x2,y2,r);
+}
+
+// appends an ellipse
+void wxGraphicsPath::AddEllipse( wxDouble x, wxDouble y, wxDouble w, wxDouble h)
+{
+    AllocExclusive();
+    GetPathData()->AddEllipse(x,y,w,h);
+}
+
+// appends a rounded rectangle
+void wxGraphicsPath::AddRoundedRectangle( wxDouble x, wxDouble y, wxDouble w, wxDouble h, wxDouble radius)
+{
+    AllocExclusive();
+    GetPathData()->AddRoundedRectangle(x,y,w,h,radius);
+}
+
+// returns the native path
+void * wxGraphicsPath::GetNativePath() const
+{
+    return GetPathData()->GetNativePath();
+}
+
+// give the native path returned by GetNativePath() back (there might be some deallocations necessary)
+void wxGraphicsPath::UnGetNativePath(void *p)const
+{
+    GetPathData()->UnGetNativePath(p);
+}
+
+// transforms each point of this path by the matrix
+void wxGraphicsPath::Transform( const wxGraphicsMatrix& matrix )
+{
+    AllocExclusive();
+    GetPathData()->Transform(matrix.GetMatrixData());
+}
+
+// gets the bounding box enclosing all points (possibly including control points)
+void wxGraphicsPath::GetBox(wxDouble *x, wxDouble *y, wxDouble *w, wxDouble *h) const
+{
+    GetPathData()->GetBox(x,y,w,h);
+}
+
+bool wxGraphicsPath::Contains( wxDouble x, wxDouble y, int fillStyle ) const
+{
+    return GetPathData()->Contains(x,y,fillStyle);
+}
+
+//
+// Emulations, these mus be implemented in the ...Data classes in order to allow for proper overrides
+//
+
+void wxGraphicsPathData::AddQuadCurveToPoint( wxDouble cx, wxDouble cy, wxDouble x, wxDouble y )
 {
     // calculate using degree elevation to a cubic bezier
     wxPoint2DDouble c1;
     wxPoint2DDouble c2;
 
-    wxPoint2DDouble start = GetCurrentPoint();
+    wxPoint2DDouble start;
+    GetCurrentPoint(&start.m_x,&start.m_y);
     wxPoint2DDouble end(x,y);
     wxPoint2DDouble c(cx,cy);
     c1 = wxDouble(1/3.0) * start + wxDouble(2/3.0) * c;
@@ -185,7 +401,7 @@ void wxGraphicsPath::AddQuadCurveToPoint( wxDouble cx, wxDouble cy, wxDouble x, 
     AddCurveToPoint(c1.m_x,c1.m_y,c2.m_x,c2.m_y,x,y);
 }
 
-void wxGraphicsPath::AddRectangle( wxDouble x, wxDouble y, wxDouble w, wxDouble h )
+void wxGraphicsPathData::AddRectangle( wxDouble x, wxDouble y, wxDouble w, wxDouble h )
 {
     MoveToPoint(x,y);
     AddLineToPoint(x,y+h);
@@ -194,31 +410,29 @@ void wxGraphicsPath::AddRectangle( wxDouble x, wxDouble y, wxDouble w, wxDouble 
     CloseSubpath();
 }
 
-void wxGraphicsPath::AddCircle( wxDouble x, wxDouble y, wxDouble r )
+void wxGraphicsPathData::AddCircle( wxDouble x, wxDouble y, wxDouble r )
 {
     MoveToPoint(x+r,y);
     AddArc( x,y,r,0,2*M_PI,false);
     CloseSubpath();
 }
 
-void wxGraphicsPath::AddEllipse( wxDouble x, wxDouble y, wxDouble w, wxDouble h)
+void wxGraphicsPathData::AddEllipse( wxDouble x, wxDouble y, wxDouble w, wxDouble h)
 {
     wxDouble rw = w/2;
     wxDouble rh = h/2;
     wxDouble xc = x + rw;
     wxDouble yc = y + rh;
-    wxGraphicsMatrix* m = GetRenderer()->CreateMatrix();
-    m->Translate(xc,yc);
-    m->Scale(rw/rh,1.0);
-    wxGraphicsPath* p = GetRenderer()->CreatePath();
-    p->AddCircle(0,0,rh);
-    p->Transform(m);
-    AddPath(p);
-    delete p;
-    delete m;
+    wxGraphicsMatrix m = GetRenderer()->CreateMatrix();
+    m.Translate(xc,yc);
+    m.Scale(rw/rh,1.0);
+    wxGraphicsPath p = GetRenderer()->CreatePath();
+    p.AddCircle(0,0,rh);
+    p.Transform(m);
+    AddPath(p.GetPathData());
 }
 
-void wxGraphicsPath::AddRoundedRectangle( wxDouble x, wxDouble y, wxDouble w, wxDouble h, wxDouble radius)
+void wxGraphicsPathData::AddRoundedRectangle( wxDouble x, wxDouble y, wxDouble w, wxDouble h, wxDouble radius)
 {
     if ( radius == 0 )
         AddRectangle(x,y,w,h);
@@ -234,9 +448,10 @@ void wxGraphicsPath::AddRoundedRectangle( wxDouble x, wxDouble y, wxDouble w, wx
 }
 
 // draws a an arc to two tangents connecting (current) to (x1,y1) and (x1,y1) to (x2,y2), also a straight line from (current) to (x1,y1)
-void wxGraphicsPath::AddArcToPoint( wxDouble x1, wxDouble y1 , wxDouble x2, wxDouble y2, wxDouble r )
+void wxGraphicsPathData::AddArcToPoint( wxDouble x1, wxDouble y1 , wxDouble x2, wxDouble y2, wxDouble r )
 {   
-    wxPoint2DDouble current = GetCurrentPoint();
+    wxPoint2DDouble current;
+    GetCurrentPoint(&current.m_x,&current.m_y);
     wxPoint2DDouble p1(x1,y1);
     wxPoint2DDouble p2(x2,y2);
 
@@ -265,9 +480,9 @@ void wxGraphicsPath::AddArcToPoint( wxDouble x1, wxDouble y1 , wxDouble x2, wxDo
     wxDouble a1 = v1.GetVectorAngle()+90;
     wxDouble a2 = v2.GetVectorAngle()-90;
 
-    AddLineToPoint(t1);
+    AddLineToPoint(t1.m_x,t1.m_y);
     AddArc(c.m_x,c.m_y,r,DegToRad(a1),DegToRad(a2),true);
-    AddLineToPoint(p2);
+    AddLineToPoint(p2.m_x,p2.m_y);
 }
 
 //-----------------------------------------------------------------------------
@@ -327,7 +542,7 @@ void wxGraphicsContext::SetFont( const wxFont& font, const wxColour& colour )
         SetFont( wxNullGraphicsFont );
 }
 
-void wxGraphicsContext::DrawPath( const wxGraphicsPath *path, int fillStyle )
+void wxGraphicsContext::DrawPath( const wxGraphicsPath& path, int fillStyle )
 {
     FillPath( path , fillStyle );
     StrokePath( path );
@@ -344,97 +559,90 @@ void wxGraphicsContext::DrawText( const wxString &str, wxDouble x, wxDouble y, w
 
 void wxGraphicsContext::StrokeLine( wxDouble x1, wxDouble y1, wxDouble x2, wxDouble y2)
 {
-    wxGraphicsPath* path = CreatePath();
-    path->MoveToPoint(x1, y1);
-    path->AddLineToPoint( x2, y2 );
+    wxGraphicsPath path = CreatePath();
+    path.MoveToPoint(x1, y1);
+    path.AddLineToPoint( x2, y2 );
     StrokePath( path );
-    delete path;
 }
 
 void wxGraphicsContext::DrawRectangle( wxDouble x, wxDouble y, wxDouble w, wxDouble h)
 {
-    wxGraphicsPath* path = CreatePath();
-    path->AddRectangle( x , y , w , h );
+    wxGraphicsPath path = CreatePath();
+    path.AddRectangle( x , y , w , h );
     DrawPath( path );
-    delete path;
 }
 
 void wxGraphicsContext::DrawEllipse( wxDouble x, wxDouble y, wxDouble w, wxDouble h)
 {
-    wxGraphicsPath* path = CreatePath();
-    path->AddEllipse(x,y,w,h);
+    wxGraphicsPath path = CreatePath();
+    path.AddEllipse(x,y,w,h);
     DrawPath(path);
-    delete path;
 }
 
 void wxGraphicsContext::DrawRoundedRectangle( wxDouble x, wxDouble y, wxDouble w, wxDouble h, wxDouble radius)
 {
-    wxGraphicsPath* path = CreatePath();
-    path->AddRoundedRectangle(x,y,w,h,radius);
+    wxGraphicsPath path = CreatePath();
+    path.AddRoundedRectangle(x,y,w,h,radius);
     DrawPath(path);
-    delete path;
 }
 
 void wxGraphicsContext::StrokeLines( size_t n, const wxPoint2DDouble *points)
 {
     wxASSERT(n > 1);
-    wxGraphicsPath* path = CreatePath();
-    path->MoveToPoint(points[0].m_x, points[0].m_y);
+    wxGraphicsPath path = CreatePath();
+    path.MoveToPoint(points[0].m_x, points[0].m_y);
     for ( size_t i = 1; i < n; ++i)
-        path->AddLineToPoint( points[i].m_x, points[i].m_y );
+        path.AddLineToPoint( points[i].m_x, points[i].m_y );
     StrokePath( path );
-    delete path;
 }
 
 void wxGraphicsContext::DrawLines( size_t n, const wxPoint2DDouble *points, int fillStyle)
 {
     wxASSERT(n > 1);
-    wxGraphicsPath* path = CreatePath();
-    path->MoveToPoint(points[0].m_x, points[0].m_y);
+    wxGraphicsPath path = CreatePath();
+    path.MoveToPoint(points[0].m_x, points[0].m_y);
     for ( size_t i = 1; i < n; ++i)
-        path->AddLineToPoint( points[i].m_x, points[i].m_y );
+        path.AddLineToPoint( points[i].m_x, points[i].m_y );
     DrawPath( path , fillStyle);
-    delete path;
 }
 
 void wxGraphicsContext::StrokeLines( size_t n, const wxPoint2DDouble *beginPoints, const wxPoint2DDouble *endPoints)
 {
     wxASSERT(n > 0);
-    wxGraphicsPath* path = CreatePath();
+    wxGraphicsPath path = CreatePath();
     for ( size_t i = 0; i < n; ++i)
     {
-        path->MoveToPoint(beginPoints[i].m_x, beginPoints[i].m_y);
-        path->AddLineToPoint( endPoints[i].m_x, endPoints[i].m_y );
+        path.MoveToPoint(beginPoints[i].m_x, beginPoints[i].m_y);
+        path.AddLineToPoint( endPoints[i].m_x, endPoints[i].m_y );
     }
     StrokePath( path );
-    delete path;
 }
 
 // create a 'native' matrix corresponding to these values
-wxGraphicsMatrix* wxGraphicsContext::CreateMatrix( wxDouble a, wxDouble b, wxDouble c, wxDouble d, 
-    wxDouble tx, wxDouble ty)
+wxGraphicsMatrix wxGraphicsContext::CreateMatrix( wxDouble a, wxDouble b, wxDouble c, wxDouble d, 
+    wxDouble tx, wxDouble ty) const
 {
     return GetRenderer()->CreateMatrix(a,b,c,d,tx,ty);
 }
 
-wxGraphicsPath * wxGraphicsContext::CreatePath()
+wxGraphicsPath wxGraphicsContext::CreatePath() const
 {
     return GetRenderer()->CreatePath();
 }
 
-wxGraphicsPen wxGraphicsContext::CreatePen(const wxPen& pen)
+wxGraphicsPen wxGraphicsContext::CreatePen(const wxPen& pen) const
 {
     return GetRenderer()->CreatePen(pen);
 }
 
-wxGraphicsBrush wxGraphicsContext::CreateBrush(const wxBrush& brush )
+wxGraphicsBrush wxGraphicsContext::CreateBrush(const wxBrush& brush ) const
 {
     return GetRenderer()->CreateBrush(brush);
 }
 
 // sets the brush to a linear gradient, starting at (x1,y1) with color c1 to (x2,y2) with color c2
 wxGraphicsBrush wxGraphicsContext::CreateLinearGradientBrush( wxDouble x1, wxDouble y1, wxDouble x2, wxDouble y2, 
-                                                   const wxColour&c1, const wxColour&c2)
+                                                   const wxColour&c1, const wxColour&c2) const
 {
     return GetRenderer()->CreateLinearGradientBrush(x1,y1,x2,y2,c1,c2);
 }
@@ -442,13 +650,13 @@ wxGraphicsBrush wxGraphicsContext::CreateLinearGradientBrush( wxDouble x1, wxDou
 // sets the brush to a radial gradient originating at (xo,yc) with color oColor and ends on a circle around (xc,yc) 
 // with radius r and color cColor
 wxGraphicsBrush wxGraphicsContext::CreateRadialGradientBrush( wxDouble xo, wxDouble yo, wxDouble xc, wxDouble yc, wxDouble radius,
-                                                   const wxColour &oColor, const wxColour &cColor)
+                                                   const wxColour &oColor, const wxColour &cColor) const
 {
     return GetRenderer()->CreateRadialGradientBrush(xo,yo,xc,yc,radius,oColor,cColor);
 }
 
 // sets the font
-wxGraphicsFont wxGraphicsContext::CreateFont( const wxFont &font , const wxColour &col )
+wxGraphicsFont wxGraphicsContext::CreateFont( const wxFont &font , const wxColour &col ) const
 {
     return GetRenderer()->CreateFont(font,col);
 }
@@ -472,5 +680,11 @@ wxGraphicsContext* wxGraphicsContext::Create( wxWindow* window )
 {
     return wxGraphicsRenderer::GetDefaultRenderer()->CreateContext(window);
 }
+
+//-----------------------------------------------------------------------------
+// wxGraphicsRenderer
+//-----------------------------------------------------------------------------
+
+IMPLEMENT_ABSTRACT_CLASS(wxGraphicsRenderer, wxObject)
 
 #endif // wxUSE_GRAPHICS_CONTEXT
