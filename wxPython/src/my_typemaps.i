@@ -179,6 +179,15 @@ MAKE_INT_ARRAY_TYPEMAPS(styles, styles_field)
 }
 
 
+%typemap(in) wxRect2D& (wxRect2D temp) {
+    $1 = &temp;
+    if ( ! wxRect2D_helper($input, &$1)) SWIG_fail;
+}
+%typemap(typecheck, precedence=SWIG_TYPECHECK_POINTER) wxRect2D& {
+    $1 = wxPySimple_typecheck($input, wxT("wxRect2D"), 4);
+}
+
+
 //---------------------------------------------------------------------------
 // Typemap to convert strings to wxColour.  Two string formats are accepted,
 // either a colour name, or a hex colour spec like "#RRGGBB"
