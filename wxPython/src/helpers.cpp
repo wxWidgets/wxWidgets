@@ -1724,7 +1724,7 @@ PyObject* wxPyCBH_callCallbackObj(const wxPyCallbackHelper& cbh, PyObject* argTu
 
 
 void wxPyCBH_delete(wxPyCallbackHelper* cbh) {
-    if (cbh->m_incRef) {
+    if (cbh->m_incRef && Py_IsInitialized()) {
         wxPyBlock_t blocked = wxPyBeginBlockThreads();
         Py_XDECREF(cbh->m_self);
         Py_XDECREF(cbh->m_class);
