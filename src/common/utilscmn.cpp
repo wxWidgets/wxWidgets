@@ -727,9 +727,13 @@ bool wxLaunchDefaultBrowser(const wxString& urlOrig, int flags)
     wxUnusedVar(flags);
 
     // set the scheme of url to http if it does not have one
+    // RR: This doesn't work if the url is just a local path
     wxString url(urlOrig);
+#if 0
     if ( !wxURI(url).HasScheme() )
         url.Prepend(wxT("http://"));
+#endif
+
 
 #if defined(__WXMSW__)
 
@@ -842,8 +846,25 @@ bool wxLaunchDefaultBrowser(const wxString& urlOrig, int flags)
         wxLogDebug(wxT("ICStart error %d"), (int) err);
         return false;
     }
-#elif wxUSE_MIMETYPE
-    // Non-windows way
+#else 
+    // (non-Mac, non-MSW)
+
+#ifdef __UNIX__
+    if (wxTheApp->GetTraits()->GetDesktopEnvironment() == wxT("GNOME"))
+    {
+        wxArrayString errors;
+        wxArrayString output;
+        long res = wxExecute( wxT("gconftool-2 --get /desktop/gnome/applications/browser/exec"), output, errors, wxEXEC_NODISABLE );
+        if (res >= 0 && errors.GetCount() == 0)
+        {
+            wxString cmd = output[0];
+            cmd << _T(' ') << url;
+            if (wxExecute(cmd))
+                return true;
+        }
+    }
+#endif
+
     bool ok = false;
     wxString cmd;
 
