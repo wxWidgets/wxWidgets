@@ -121,7 +121,7 @@ WX_DEFINE_ARRAY_PTR(wxColWidthInfo *, ColWidthArray);
 //  wxListItemData (internal)
 //-----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxListItemData
+class wxListItemData
 {
 public:
     wxListItemData(wxListMainWindow *owner);
@@ -191,7 +191,7 @@ protected:
 //  wxListHeaderData (internal)
 //-----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxListHeaderData : public wxObject
+class wxListHeaderData : public wxObject
 {
 public:
     wxListHeaderData();
@@ -372,7 +372,7 @@ WX_DEFINE_OBJARRAY(wxListLineDataArray)
 //  wxListHeaderWindow (internal)
 //-----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxListHeaderWindow : public wxWindow
+class wxListHeaderWindow : public wxWindow
 {
 protected:
     wxListMainWindow  *m_owner;
@@ -429,7 +429,7 @@ private:
 // wxListRenameTimer (internal)
 //-----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxListRenameTimer: public wxTimer
+class wxListRenameTimer: public wxTimer
 {
 private:
     wxListMainWindow *m_owner;
@@ -443,7 +443,7 @@ public:
 // wxListTextCtrlWrapper: wraps a wxTextCtrl to make it work for inline editing
 //-----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxListTextCtrlWrapper : public wxEvtHandler
+class wxListTextCtrlWrapper : public wxEvtHandler
 {
 public:
     // NB: text must be a valid object but not Create()d yet

@@ -227,7 +227,7 @@ static const size_t PAGE_OVERLAP_IN_LINES = 1;
 // ----------------------------------------------------------------------------
 
 // the data only used by single line text controls
-struct WXDLLEXPORT wxTextSingleLineData
+struct wxTextSingleLineData
 {
     // the position of the first visible pixel and the first visible column
     wxCoord m_ofsHorz;
@@ -251,7 +251,7 @@ struct WXDLLEXPORT wxTextSingleLineData
 };
 
 // the data only used by multi line text controls
-struct WXDLLEXPORT wxTextMultiLineData
+struct wxTextMultiLineData
 {
     // the lines of text
     wxArrayString m_lines;
@@ -300,7 +300,7 @@ struct WXDLLEXPORT wxTextMultiLineData
 };
 
 // the data only used by multi line text controls in line wrap mode
-class WXDLLEXPORT wxWrappedLineData
+class wxWrappedLineData
 {
     // these functions set all our values, so give them access to them
 friend void wxTextCtrl::LayoutLine(wxTextCoord line,
@@ -460,7 +460,7 @@ WX_DECLARE_OBJARRAY(wxWrappedLineData, wxArrayWrappedLinesData);
 #include "wx/arrimpl.cpp"
 WX_DEFINE_OBJARRAY(wxArrayWrappedLinesData);
 
-struct WXDLLEXPORT wxTextWrappedData : public wxTextMultiLineData
+struct wxTextWrappedData : public wxTextMultiLineData
 {
     // the width of the column to the right of the text rect used for the
     // indicator mark display for the wrapped lines
