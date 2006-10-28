@@ -107,7 +107,6 @@ TEXT_ATTR_CHARACTER_STYLE_NAME = _richtext.TEXT_ATTR_CHARACTER_STYLE_NAME
 TEXT_ATTR_PARAGRAPH_STYLE_NAME = _richtext.TEXT_ATTR_PARAGRAPH_STYLE_NAME
 TEXT_ATTR_BULLET_STYLE = _richtext.TEXT_ATTR_BULLET_STYLE
 TEXT_ATTR_BULLET_NUMBER = _richtext.TEXT_ATTR_BULLET_NUMBER
-TEXT_ATTR_BULLET_SYMBOL = _richtext.TEXT_ATTR_BULLET_SYMBOL
 TEXT_ATTR_BULLET_STYLE_NONE = _richtext.TEXT_ATTR_BULLET_STYLE_NONE
 TEXT_ATTR_BULLET_STYLE_ARABIC = _richtext.TEXT_ATTR_BULLET_STYLE_ARABIC
 TEXT_ATTR_BULLET_STYLE_LETTERS_UPPER = _richtext.TEXT_ATTR_BULLET_STYLE_LETTERS_UPPER
@@ -368,9 +367,9 @@ class RichTextAttr(object):
         """SetBulletNumber(self, int n)"""
         return _richtext.RichTextAttr_SetBulletNumber(*args, **kwargs)
 
-    def SetBulletSymbol(*args, **kwargs):
-        """SetBulletSymbol(self, wxChar symbol)"""
-        return _richtext.RichTextAttr_SetBulletSymbol(*args, **kwargs)
+    def SetBulletText(*args, **kwargs):
+        """SetBulletText(self, wxChar symbol)"""
+        return _richtext.RichTextAttr_SetBulletText(*args, **kwargs)
 
     def SetBulletFont(*args, **kwargs):
         """SetBulletFont(self, String bulletFont)"""
@@ -456,9 +455,9 @@ class RichTextAttr(object):
         """GetBulletNumber(self) -> int"""
         return _richtext.RichTextAttr_GetBulletNumber(*args, **kwargs)
 
-    def GetBulletSymbol(*args, **kwargs):
-        """GetBulletSymbol(self) -> wxChar"""
-        return _richtext.RichTextAttr_GetBulletSymbol(*args, **kwargs)
+    def GetBulletText(*args, **kwargs):
+        """GetBulletText(self) -> String"""
+        return _richtext.RichTextAttr_GetBulletText(*args, **kwargs)
 
     def GetBulletFont(*args, **kwargs):
         """GetBulletFont(self) -> String"""
@@ -540,9 +539,9 @@ class RichTextAttr(object):
         """HasBulletNumber(self) -> bool"""
         return _richtext.RichTextAttr_HasBulletNumber(*args, **kwargs)
 
-    def HasBulletSymbol(*args, **kwargs):
-        """HasBulletSymbol(self) -> bool"""
-        return _richtext.RichTextAttr_HasBulletSymbol(*args, **kwargs)
+    def HasBulletText(*args, **kwargs):
+        """HasBulletText(self) -> bool"""
+        return _richtext.RichTextAttr_HasBulletText(*args, **kwargs)
 
     def HasFlag(*args, **kwargs):
         """HasFlag(self, long flag) -> bool"""
@@ -565,7 +564,7 @@ class RichTextAttr(object):
     BulletFont = property(GetBulletFont,SetBulletFont,doc="See `GetBulletFont` and `SetBulletFont`") 
     BulletNumber = property(GetBulletNumber,SetBulletNumber,doc="See `GetBulletNumber` and `SetBulletNumber`") 
     BulletStyle = property(GetBulletStyle,SetBulletStyle,doc="See `GetBulletStyle` and `SetBulletStyle`") 
-    BulletSymbol = property(GetBulletSymbol,SetBulletSymbol,doc="See `GetBulletSymbol` and `SetBulletSymbol`") 
+    BulletText = property(GetBulletText,SetBulletText,doc="See `GetBulletText` and `SetBulletText`") 
     CharacterStyleName = property(GetCharacterStyleName,SetCharacterStyleName,doc="See `GetCharacterStyleName` and `SetCharacterStyleName`") 
     Flags = property(GetFlags,SetFlags,doc="See `GetFlags` and `SetFlags`") 
     Font = property(GetFont,SetFont,doc="See `GetFont` and `SetFont`") 
@@ -720,6 +719,22 @@ class RichTextCtrl(_windows.ScrolledWindow):
         empty string is passed then to the filename set with `SetFilename`.
         """
         return _richtext.RichTextCtrl_SaveFile(*args, **kwargs)
+
+    def SetHandlerFlags(*args, **kwargs):
+        """
+        SetHandlerFlags(self, int flags)
+
+        Set the handler flags, controlling loading and saving.
+        """
+        return _richtext.RichTextCtrl_SetHandlerFlags(*args, **kwargs)
+
+    def GetHandlerFlags(*args, **kwargs):
+        """
+        GetHandlerFlags(self) -> int
+
+        Get the handler flags, controlling loading and saving.
+        """
+        return _richtext.RichTextCtrl_GetHandlerFlags(*args, **kwargs)
 
     def MarkDirty(*args, **kwargs):
         """
@@ -1158,7 +1173,7 @@ class RichTextCtrl(_windows.ScrolledWindow):
         return _richtext.RichTextCtrl_EndNumberedBullet(*args, **kwargs)
 
     def BeginSymbolBullet(*args, **kwargs):
-        """BeginSymbolBullet(self, char symbol, int leftIndent, int leftSubIndent, int bulletStyle=TEXT_ATTR_BULLET_STYLE_SYMBOL) -> bool"""
+        """BeginSymbolBullet(self, String symbol, int leftIndent, int leftSubIndent, int bulletStyle=TEXT_ATTR_BULLET_STYLE_SYMBOL) -> bool"""
         return _richtext.RichTextCtrl_BeginSymbolBullet(*args, **kwargs)
 
     def EndSymbolBullet(*args, **kwargs):
@@ -1180,6 +1195,38 @@ class RichTextCtrl(_windows.ScrolledWindow):
     def EndParagraphStyle(*args, **kwargs):
         """EndParagraphStyle(self) -> bool"""
         return _richtext.RichTextCtrl_EndParagraphStyle(*args, **kwargs)
+
+    def BeginListStyle(*args, **kwargs):
+        """
+        BeginListStyle(self, String listStyle, int level=1, int number=1) -> bool
+
+        Begin named list style.
+        """
+        return _richtext.RichTextCtrl_BeginListStyle(*args, **kwargs)
+
+    def EndListStyle(*args, **kwargs):
+        """
+        EndListStyle(self) -> bool
+
+        End named list style.
+        """
+        return _richtext.RichTextCtrl_EndListStyle(*args, **kwargs)
+
+    def BeginURL(*args, **kwargs):
+        """
+        BeginURL(self, String url, String characterStyle=wxEmptyString) -> bool
+
+        Begin URL.
+        """
+        return _richtext.RichTextCtrl_BeginURL(*args, **kwargs)
+
+    def EndURL(*args, **kwargs):
+        """
+        EndURL(self) -> bool
+
+        End URL.
+        """
+        return _richtext.RichTextCtrl_EndURL(*args, **kwargs)
 
     def SetDefaultStyleToCursorStyle(*args, **kwargs):
         """SetDefaultStyleToCursorStyle(self) -> bool"""
@@ -1388,6 +1435,10 @@ wxEVT_COMMAND_RICHTEXT_RIGHT_CLICK = _richtext.wxEVT_COMMAND_RICHTEXT_RIGHT_CLIC
 wxEVT_COMMAND_RICHTEXT_MIDDLE_CLICK = _richtext.wxEVT_COMMAND_RICHTEXT_MIDDLE_CLICK
 wxEVT_COMMAND_RICHTEXT_LEFT_DCLICK = _richtext.wxEVT_COMMAND_RICHTEXT_LEFT_DCLICK
 wxEVT_COMMAND_RICHTEXT_RETURN = _richtext.wxEVT_COMMAND_RICHTEXT_RETURN
+wxEVT_COMMAND_RICHTEXT_STYLESHEET_CHANGING = _richtext.wxEVT_COMMAND_RICHTEXT_STYLESHEET_CHANGING
+wxEVT_COMMAND_RICHTEXT_STYLESHEET_CHANGED = _richtext.wxEVT_COMMAND_RICHTEXT_STYLESHEET_CHANGED
+wxEVT_COMMAND_RICHTEXT_STYLESHEET_REPLACING = _richtext.wxEVT_COMMAND_RICHTEXT_STYLESHEET_REPLACING
+wxEVT_COMMAND_RICHTEXT_STYLESHEET_REPLACED = _richtext.wxEVT_COMMAND_RICHTEXT_STYLESHEET_REPLACED
 EVT_RICHTEXT_ITEM_SELECTED = wx.PyEventBinder(wxEVT_COMMAND_RICHTEXT_ITEM_SELECTED, 1)
 EVT_RICHTEXT_ITEM_DESELECTED = wx.PyEventBinder(wxEVT_COMMAND_RICHTEXT_ITEM_DESELECTED, 1)
 EVT_RICHTEXT_LEFT_CLICK = wx.PyEventBinder(wxEVT_COMMAND_RICHTEXT_LEFT_CLICK, 1)
@@ -1395,6 +1446,10 @@ EVT_RICHTEXT_RIGHT_CLICK = wx.PyEventBinder(wxEVT_COMMAND_RICHTEXT_RIGHT_CLICK, 
 EVT_RICHTEXT_MIDDLE_CLICK = wx.PyEventBinder(wxEVT_COMMAND_RICHTEXT_MIDDLE_CLICK, 1)
 EVT_RICHTEXT_LEFT_DCLICK = wx.PyEventBinder(wxEVT_COMMAND_RICHTEXT_LEFT_DCLICK, 1)
 EVT_RICHTEXT_RETURN = wx.PyEventBinder( wxEVT_COMMAND_RICHTEXT_RETURN, 1)
+EVT_RICHTEXT_STYLESHEET_CHANGING = wx.PyEventBinder( wxEVT_COMMAND_RICHTEXT_STYLESHEET_CHANGING, 1)
+EVT_RICHTEXT_STYLESHEET_CHANGED = wx.PyEventBinder( wxEVT_COMMAND_RICHTEXT_STYLESHEET_CHANGED, 1)
+EVT_RICHTEXT_STYLESHEET_REPLACING = wx.PyEventBinder( wxEVT_COMMAND_RICHTEXT_STYLESHEET_REPLACING, 1)
+EVT_RICHTEXT_STYLESHEET_REPLACED = wx.PyEventBinder( wxEVT_COMMAND_RICHTEXT_STYLESHEET_REPLACED, 1)
 
 class RichTextEvent(_core.NotifyEvent):
     """Proxy of C++ RichTextEvent class"""

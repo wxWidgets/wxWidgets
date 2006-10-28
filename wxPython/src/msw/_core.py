@@ -1649,6 +1649,260 @@ def Point2DFromPoint(*args, **kwargs):
 
 #---------------------------------------------------------------------------
 
+Inside = _core_.Inside
+OutLeft = _core_.OutLeft
+OutRight = _core_.OutRight
+OutTop = _core_.OutTop
+OutBottom = _core_.OutBottom
+class Rect2D(object):
+    """
+    wx.Rect2D is a rectangle, with position and size, in a 2D coordinate system
+    with floating point component values.
+    """
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
+        """
+        __init__(self, wxDouble x=0.0, wxDouble y=0.0, wxDouble w=0.0, wxDouble h=0.0) -> Rect2D
+
+        wx.Rect2D is a rectangle, with position and size, in a 2D coordinate system
+        with floating point component values.
+        """
+        _core_.Rect2D_swiginit(self,_core_.new_Rect2D(*args, **kwargs))
+    __swig_destroy__ = _core_.delete_Rect2D
+    __del__ = lambda self : None;
+    def GetPosition(*args, **kwargs):
+        """GetPosition(self) -> Point2D"""
+        return _core_.Rect2D_GetPosition(*args, **kwargs)
+
+    def GetSize(*args, **kwargs):
+        """GetSize(self) -> Size"""
+        return _core_.Rect2D_GetSize(*args, **kwargs)
+
+    def GetLeft(*args, **kwargs):
+        """GetLeft(self) -> wxDouble"""
+        return _core_.Rect2D_GetLeft(*args, **kwargs)
+
+    def SetLeft(*args, **kwargs):
+        """SetLeft(self, wxDouble n)"""
+        return _core_.Rect2D_SetLeft(*args, **kwargs)
+
+    def MoveLeftTo(*args, **kwargs):
+        """MoveLeftTo(self, wxDouble n)"""
+        return _core_.Rect2D_MoveLeftTo(*args, **kwargs)
+
+    def GetTop(*args, **kwargs):
+        """GetTop(self) -> wxDouble"""
+        return _core_.Rect2D_GetTop(*args, **kwargs)
+
+    def SetTop(*args, **kwargs):
+        """SetTop(self, wxDouble n)"""
+        return _core_.Rect2D_SetTop(*args, **kwargs)
+
+    def MoveTopTo(*args, **kwargs):
+        """MoveTopTo(self, wxDouble n)"""
+        return _core_.Rect2D_MoveTopTo(*args, **kwargs)
+
+    def GetBottom(*args, **kwargs):
+        """GetBottom(self) -> wxDouble"""
+        return _core_.Rect2D_GetBottom(*args, **kwargs)
+
+    def SetBottom(*args, **kwargs):
+        """SetBottom(self, wxDouble n)"""
+        return _core_.Rect2D_SetBottom(*args, **kwargs)
+
+    def MoveBottomTo(*args, **kwargs):
+        """MoveBottomTo(self, wxDouble n)"""
+        return _core_.Rect2D_MoveBottomTo(*args, **kwargs)
+
+    def GetRight(*args, **kwargs):
+        """GetRight(self) -> wxDouble"""
+        return _core_.Rect2D_GetRight(*args, **kwargs)
+
+    def SetRight(*args, **kwargs):
+        """SetRight(self, wxDouble n)"""
+        return _core_.Rect2D_SetRight(*args, **kwargs)
+
+    def MoveRightTo(*args, **kwargs):
+        """MoveRightTo(self, wxDouble n)"""
+        return _core_.Rect2D_MoveRightTo(*args, **kwargs)
+
+    def GetLeftTop(*args, **kwargs):
+        """GetLeftTop(self) -> Point2D"""
+        return _core_.Rect2D_GetLeftTop(*args, **kwargs)
+
+    def SetLeftTop(*args, **kwargs):
+        """SetLeftTop(self, Point2D pt)"""
+        return _core_.Rect2D_SetLeftTop(*args, **kwargs)
+
+    def MoveLeftTopTo(*args, **kwargs):
+        """MoveLeftTopTo(self, Point2D pt)"""
+        return _core_.Rect2D_MoveLeftTopTo(*args, **kwargs)
+
+    def GetLeftBottom(*args, **kwargs):
+        """GetLeftBottom(self) -> Point2D"""
+        return _core_.Rect2D_GetLeftBottom(*args, **kwargs)
+
+    def SetLeftBottom(*args, **kwargs):
+        """SetLeftBottom(self, Point2D pt)"""
+        return _core_.Rect2D_SetLeftBottom(*args, **kwargs)
+
+    def MoveLeftBottomTo(*args, **kwargs):
+        """MoveLeftBottomTo(self, Point2D pt)"""
+        return _core_.Rect2D_MoveLeftBottomTo(*args, **kwargs)
+
+    def GetRightTop(*args, **kwargs):
+        """GetRightTop(self) -> Point2D"""
+        return _core_.Rect2D_GetRightTop(*args, **kwargs)
+
+    def SetRightTop(*args, **kwargs):
+        """SetRightTop(self, Point2D pt)"""
+        return _core_.Rect2D_SetRightTop(*args, **kwargs)
+
+    def MoveRightTopTo(*args, **kwargs):
+        """MoveRightTopTo(self, Point2D pt)"""
+        return _core_.Rect2D_MoveRightTopTo(*args, **kwargs)
+
+    def GetRightBottom(*args, **kwargs):
+        """GetRightBottom(self) -> Point2D"""
+        return _core_.Rect2D_GetRightBottom(*args, **kwargs)
+
+    def SetRightBottom(*args, **kwargs):
+        """SetRightBottom(self, Point2D pt)"""
+        return _core_.Rect2D_SetRightBottom(*args, **kwargs)
+
+    def MoveRightBottomTo(*args, **kwargs):
+        """MoveRightBottomTo(self, Point2D pt)"""
+        return _core_.Rect2D_MoveRightBottomTo(*args, **kwargs)
+
+    def GetCentre(*args, **kwargs):
+        """GetCentre(self) -> Point2D"""
+        return _core_.Rect2D_GetCentre(*args, **kwargs)
+
+    def SetCentre(*args, **kwargs):
+        """SetCentre(self, Point2D pt)"""
+        return _core_.Rect2D_SetCentre(*args, **kwargs)
+
+    def MoveCentreTo(*args, **kwargs):
+        """MoveCentreTo(self, Point2D pt)"""
+        return _core_.Rect2D_MoveCentreTo(*args, **kwargs)
+
+    def GetOutcode(*args, **kwargs):
+        """GetOutcode(self, Point2D pt) -> int"""
+        return _core_.Rect2D_GetOutcode(*args, **kwargs)
+
+    def Contains(*args, **kwargs):
+        """Contains(self, Point2D pt) -> bool"""
+        return _core_.Rect2D_Contains(*args, **kwargs)
+
+    def ContainsRect(*args, **kwargs):
+        """ContainsRect(self, Rect2D rect) -> bool"""
+        return _core_.Rect2D_ContainsRect(*args, **kwargs)
+
+    def IsEmpty(*args, **kwargs):
+        """IsEmpty(self) -> bool"""
+        return _core_.Rect2D_IsEmpty(*args, **kwargs)
+
+    def HaveEqualSize(*args, **kwargs):
+        """HaveEqualSize(self, Rect2D rect) -> bool"""
+        return _core_.Rect2D_HaveEqualSize(*args, **kwargs)
+
+    def Inset(*args):
+        """
+        Inset(self, wxDouble x, wxDouble y)
+        Inset(self, wxDouble left, wxDouble top, wxDouble right, wxDouble bottom)
+        """
+        return _core_.Rect2D_Inset(*args)
+
+    def Offset(*args, **kwargs):
+        """Offset(self, Point2D pt)"""
+        return _core_.Rect2D_Offset(*args, **kwargs)
+
+    def ConstrainTo(*args, **kwargs):
+        """ConstrainTo(self, Rect2D rect)"""
+        return _core_.Rect2D_ConstrainTo(*args, **kwargs)
+
+    def Interpolate(*args, **kwargs):
+        """Interpolate(self, int widthfactor, int heightfactor) -> Point2D"""
+        return _core_.Rect2D_Interpolate(*args, **kwargs)
+
+    def Intersect(*args, **kwargs):
+        """Intersect(self, Rect2D otherRect)"""
+        return _core_.Rect2D_Intersect(*args, **kwargs)
+
+    def CreateIntersection(*args, **kwargs):
+        """CreateIntersection(self, Rect2D otherRect) -> Rect2D"""
+        return _core_.Rect2D_CreateIntersection(*args, **kwargs)
+
+    def Intersects(*args, **kwargs):
+        """Intersects(self, Rect2D rect) -> bool"""
+        return _core_.Rect2D_Intersects(*args, **kwargs)
+
+    def Union(*args, **kwargs):
+        """Union(self, Rect2D otherRect)"""
+        return _core_.Rect2D_Union(*args, **kwargs)
+
+    def CreateUnion(*args, **kwargs):
+        """CreateUnion(self, Rect2D otherRect) -> Rect2D"""
+        return _core_.Rect2D_CreateUnion(*args, **kwargs)
+
+    def Scale(*args):
+        """
+        Scale(self, wxDouble f)
+        Scale(self, int num, int denum)
+        """
+        return _core_.Rect2D_Scale(*args)
+
+    def __eq__(*args, **kwargs):
+        """
+        __eq__(self, PyObject other) -> bool
+
+        Test for equality of wx.Rect2D objects.
+        """
+        return _core_.Rect2D___eq__(*args, **kwargs)
+
+    def __ne__(*args, **kwargs):
+        """
+        __ne__(self, PyObject other) -> bool
+
+        Test for inequality of wx.Rect2D objects.
+        """
+        return _core_.Rect2D___ne__(*args, **kwargs)
+
+    x = property(_core_.Rect2D_x_get, _core_.Rect2D_x_set)
+    y = property(_core_.Rect2D_y_get, _core_.Rect2D_y_set)
+    width = property(_core_.Rect2D_width_get, _core_.Rect2D_width_set)
+    height = property(_core_.Rect2D_height_get, _core_.Rect2D_height_set)
+    def Set(*args, **kwargs):
+        """Set(self, wxDouble x=0, wxDouble y=0, wxDouble width=0, wxDouble height=0)"""
+        return _core_.Rect2D_Set(*args, **kwargs)
+
+    def Get(*args, **kwargs):
+        """
+        Get() -> (x,y, width, height)
+
+        Return x, y, width and height y properties as a tuple.
+        """
+        return _core_.Rect2D_Get(*args, **kwargs)
+
+    def __str__(self):                   return str(self.Get())
+    def __repr__(self):                  return 'wx.Rect2D'+str(self.Get())
+    def __len__(self):                   return len(self.Get())
+    def __getitem__(self, index):        return self.Get()[index]
+    def __setitem__(self, index, val):
+        if index == 0: self.x = val
+        elif index == 1: self.y = val
+        elif index == 2: self.width = val
+        elif index == 3: self.height = val                        
+        else: raise IndexError
+    def __nonzero__(self):               return self.Get() != (0.0, 0.0, 0.0, 0.0)
+    __safe_for_unpickling__ = True
+    def __reduce__(self):                return (wx.Rect2D, self.Get())
+
+_core_.Rect2D_swigregister(Rect2D)
+
+#---------------------------------------------------------------------------
+
 FromStart = _core_.FromStart
 FromCurrent = _core_.FromCurrent
 FromEnd = _core_.FromEnd

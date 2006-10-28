@@ -4476,6 +4476,88 @@ _gdi_.DC_swigregister(DC)
 
 #---------------------------------------------------------------------------
 
+class DCTextColourChanger(object):
+    """
+    wx.DCTextColourChanger can be used to temporarily change the DC text
+    colour and restore it automatically when the object goes out of scope
+    """
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
+        """
+        __init__(self, DC dc, Colour col) -> DCTextColourChanger
+
+        wx.DCTextColourChanger can be used to temporarily change the DC text
+        colour and restore it automatically when the object goes out of scope
+        """
+        _gdi_.DCTextColourChanger_swiginit(self,_gdi_.new_DCTextColourChanger(*args, **kwargs))
+    __swig_destroy__ = _gdi_.delete_DCTextColourChanger
+    __del__ = lambda self : None;
+_gdi_.DCTextColourChanger_swigregister(DCTextColourChanger)
+
+class DCPenChanger(object):
+    """
+    wx.DCPenChanger can be used to temporarily change the DC pen and
+    restore it automatically when the object goes out of scope
+    """
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
+        """
+        __init__(self, DC dc, Pen pen) -> DCPenChanger
+
+        wx.DCPenChanger can be used to temporarily change the DC pen and
+        restore it automatically when the object goes out of scope
+        """
+        _gdi_.DCPenChanger_swiginit(self,_gdi_.new_DCPenChanger(*args, **kwargs))
+    __swig_destroy__ = _gdi_.delete_DCPenChanger
+    __del__ = lambda self : None;
+_gdi_.DCPenChanger_swigregister(DCPenChanger)
+
+class DCBrushChanger(object):
+    """
+    wx.DCBrushChanger can be used to temporarily change the DC brush and
+    restore it automatically when the object goes out of scope
+    """
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
+        """
+        __init__(self, DC dc, Brush brush) -> DCBrushChanger
+
+        wx.DCBrushChanger can be used to temporarily change the DC brush and
+        restore it automatically when the object goes out of scope
+        """
+        _gdi_.DCBrushChanger_swiginit(self,_gdi_.new_DCBrushChanger(*args, **kwargs))
+    __swig_destroy__ = _gdi_.delete_DCBrushChanger
+    __del__ = lambda self : None;
+_gdi_.DCBrushChanger_swigregister(DCBrushChanger)
+
+class DCClipper(object):
+    """
+    wx.wxDCClipper sets the DC's clipping region when it is constructed,
+    and then automatically destroys the clipping region when the clipper
+    goes out of scope.
+    """
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args): 
+        """
+        __init__(self, DC dc, Region r) -> DCClipper
+        __init__(self, DC dc, Rect r) -> DCClipper
+        __init__(self, DC dc, int x, int y, int w, int h) -> DCClipper
+
+        wx.wxDCClipper sets the DC's clipping region when it is constructed,
+        and then automatically destroys the clipping region when the clipper
+        goes out of scope.
+        """
+        _gdi_.DCClipper_swiginit(self,_gdi_.new_DCClipper(*args))
+    __swig_destroy__ = _gdi_.delete_DCClipper
+    __del__ = lambda self : None;
+_gdi_.DCClipper_swigregister(DCClipper)
+
+#---------------------------------------------------------------------------
+
 class MemoryDC(DC):
     """
     A memory device context provides a means to draw graphics onto a
@@ -4954,38 +5036,105 @@ _gdi_.PrinterDC_swigregister(PrinterDC)
 
 #---------------------------------------------------------------------------
 
-class GraphicsPath(object):
+class GraphicsObject(_core.Object):
+    """Proxy of C++ GraphicsObject class"""
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
+        """__init__(self, GraphicsRenderer renderer=None) -> GraphicsObject"""
+        _gdi_.GraphicsObject_swiginit(self,_gdi_.new_GraphicsObject(*args, **kwargs))
+    __swig_destroy__ = _gdi_.delete_GraphicsObject
+    __del__ = lambda self : None;
+    def IsNull(*args, **kwargs):
+        """IsNull(self) -> bool"""
+        return _gdi_.GraphicsObject_IsNull(*args, **kwargs)
+
+    def GetRenderer(*args, **kwargs):
+        """GetRenderer(self) -> GraphicsRenderer"""
+        return _gdi_.GraphicsObject_GetRenderer(*args, **kwargs)
+
+_gdi_.GraphicsObject_swigregister(GraphicsObject)
+
+class GraphicsPen(GraphicsObject):
+    """Proxy of C++ GraphicsPen class"""
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
+        """__init__(self) -> GraphicsPen"""
+        _gdi_.GraphicsPen_swiginit(self,_gdi_.new_GraphicsPen(*args, **kwargs))
+    __swig_destroy__ = _gdi_.delete_GraphicsPen
+    __del__ = lambda self : None;
+_gdi_.GraphicsPen_swigregister(GraphicsPen)
+
+class GraphicsBrush(GraphicsObject):
+    """Proxy of C++ GraphicsBrush class"""
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
+        """__init__(self) -> GraphicsBrush"""
+        _gdi_.GraphicsBrush_swiginit(self,_gdi_.new_GraphicsBrush(*args, **kwargs))
+    __swig_destroy__ = _gdi_.delete_GraphicsBrush
+    __del__ = lambda self : None;
+_gdi_.GraphicsBrush_swigregister(GraphicsBrush)
+
+class GraphicsFont(GraphicsObject):
+    """Proxy of C++ GraphicsFont class"""
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
+        """__init__(self) -> GraphicsFont"""
+        _gdi_.GraphicsFont_swiginit(self,_gdi_.new_GraphicsFont(*args, **kwargs))
+    __swig_destroy__ = _gdi_.delete_GraphicsFont
+    __del__ = lambda self : None;
+_gdi_.GraphicsFont_swigregister(GraphicsFont)
+
+class GraphicsPath(GraphicsObject):
     """Proxy of C++ GraphicsPath class"""
     thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
     def __init__(self): raise AttributeError, "No constructor defined"
     __repr__ = _swig_repr
     __swig_destroy__ = _gdi_.delete_GraphicsPath
     __del__ = lambda self : None;
-    def MoveToPoint(*args, **kwargs):
+    def Clone(*args, **kwargs):
+        """Clone(self) -> GraphicsPath"""
+        return _gdi_.GraphicsPath_Clone(*args, **kwargs)
+
+    def MoveToPoint(*args):
         """
         MoveToPoint(self, Double x, Double y)
+        MoveToPoint(self, Point2D p)
 
         Begins a new subpath at (x,y)
         """
-        return _gdi_.GraphicsPath_MoveToPoint(*args, **kwargs)
+        return _gdi_.GraphicsPath_MoveToPoint(*args)
 
-    def AddLineToPoint(*args, **kwargs):
+    def AddLineToPoint(*args):
         """
         AddLineToPoint(self, Double x, Double y)
+        AddLineToPoint(self, Point2D p)
 
         Adds a straight line from the current point to (x,y) 
         """
-        return _gdi_.GraphicsPath_AddLineToPoint(*args, **kwargs)
+        return _gdi_.GraphicsPath_AddLineToPoint(*args)
 
-    def AddCurveToPoint(*args, **kwargs):
+    def AddCurveToPoint(*args):
         """
         AddCurveToPoint(self, Double cx1, Double cy1, Double cx2, Double cy2, Double x, 
             Double y)
+        AddCurveToPoint(self, Point2D c1, Point2D c2, Point2D e)
 
         Adds a cubic Bezier curve from the current point, using two control
         points and an end point
         """
-        return _gdi_.GraphicsPath_AddCurveToPoint(*args, **kwargs)
+        return _gdi_.GraphicsPath_AddCurveToPoint(*args)
+
+    def AddPath(*args, **kwargs):
+        """
+        AddPath(self, GraphicsPath path)
+
+        adds another path
+        """
+        return _gdi_.GraphicsPath_AddPath(*args, **kwargs)
 
     def CloseSubpath(*args, **kwargs):
         """
@@ -5003,15 +5152,17 @@ class GraphicsPath(object):
         """
         return _gdi_.GraphicsPath_GetCurrentPoint(*args, **kwargs)
 
-    def AddArc(*args, **kwargs):
+    def AddArc(*args):
         """
         AddArc(self, Double x, Double y, Double r, Double startAngle, Double endAngle, 
+            bool clockwise)
+        AddArc(self, Point2D c, Double r, Double startAngle, Double endAngle, 
             bool clockwise)
 
         Adds an arc of a circle centering at (x,y) with radius (r) from
         startAngle to endAngle
         """
-        return _gdi_.GraphicsPath_AddArc(*args, **kwargs)
+        return _gdi_.GraphicsPath_AddArc(*args)
 
     def AddQuadCurveToPoint(*args, **kwargs):
         """
@@ -5047,9 +5198,179 @@ class GraphicsPath(object):
         """
         return _gdi_.GraphicsPath_AddArcToPoint(*args, **kwargs)
 
-_gdi_.GraphicsPath_swigregister(GraphicsPath)
+    def AddEllipse(*args, **kwargs):
+        """
+        AddEllipse(self, Double x, Double y, Double w, Double h)
 
-class GraphicsContext(object):
+        appends an ellipse
+        """
+        return _gdi_.GraphicsPath_AddEllipse(*args, **kwargs)
+
+    def AddRoundedRectangle(*args, **kwargs):
+        """
+        AddRoundedRectangle(self, Double x, Double y, Double w, Double h, Double radius)
+
+        appends a rounded rectangle
+        """
+        return _gdi_.GraphicsPath_AddRoundedRectangle(*args, **kwargs)
+
+    def GetNativePath(*args, **kwargs):
+        """
+        GetNativePath(self) -> void
+
+        returns the native path
+        """
+        return _gdi_.GraphicsPath_GetNativePath(*args, **kwargs)
+
+    def UnGetNativePath(*args, **kwargs):
+        """
+        UnGetNativePath(self, void p)
+
+        give the native path returned by GetNativePath() back (there might be some
+        deallocations necessary)
+        """
+        return _gdi_.GraphicsPath_UnGetNativePath(*args, **kwargs)
+
+    def Transform(*args, **kwargs):
+        """
+        Transform(self, GraphicsMatrix matrix)
+
+        transforms each point of this path by the matrix
+        """
+        return _gdi_.GraphicsPath_Transform(*args, **kwargs)
+
+    def GetBox(*args, **kwargs):
+        """
+        GetBox(self) -> wxRect2DDouble
+
+        gets the bounding box enclosing all points (possibly including control points)
+        """
+        return _gdi_.GraphicsPath_GetBox(*args, **kwargs)
+
+    def Contains(*args):
+        """
+        Contains(self, Double x, Double y, int fillStyle=WINDING_RULE) -> bool
+        Contains(self, wxPoint2DDouble c, int fillStyle=WINDING_RULE) -> bool
+        """
+        return _gdi_.GraphicsPath_Contains(*args)
+
+_gdi_.GraphicsPath_swigregister(GraphicsPath)
+cvar = _gdi_.cvar
+NullGraphicsPen = cvar.NullGraphicsPen
+NullGraphicsBrush = cvar.NullGraphicsBrush
+NullGraphicsFont = cvar.NullGraphicsFont
+
+class GraphicsMatrix(GraphicsObject):
+    """Proxy of C++ GraphicsMatrix class"""
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    def __init__(self): raise AttributeError, "No constructor defined"
+    __repr__ = _swig_repr
+    __swig_destroy__ = _gdi_.delete_GraphicsMatrix
+    __del__ = lambda self : None;
+    def Clone(*args, **kwargs):
+        """Clone(self) -> GraphicsMatrix"""
+        return _gdi_.GraphicsMatrix_Clone(*args, **kwargs)
+
+    def Concat(*args, **kwargs):
+        """
+        Concat(self, GraphicsMatrix t)
+
+        concatenates the matrix
+        """
+        return _gdi_.GraphicsMatrix_Concat(*args, **kwargs)
+
+    def Copy(*args, **kwargs):
+        """
+        Copy(self, GraphicsMatrix t)
+
+        copies the passed in matrix
+        """
+        return _gdi_.GraphicsMatrix_Copy(*args, **kwargs)
+
+    def Set(*args, **kwargs):
+        """
+        Set(self, Double a=1.0, Double b=0.0, Double c=0.0, Double d=1.0, 
+            Double tx=0.0, Double ty=0.0)
+
+        sets the matrix to the respective values
+        """
+        return _gdi_.GraphicsMatrix_Set(*args, **kwargs)
+
+    def Invert(*args, **kwargs):
+        """
+        Invert(self)
+
+        makes this the inverse matrix
+        """
+        return _gdi_.GraphicsMatrix_Invert(*args, **kwargs)
+
+    def IsEqual(*args, **kwargs):
+        """
+        IsEqual(self, GraphicsMatrix t) -> bool
+
+        returns true if the elements of the transformation matrix are equal
+        """
+        return _gdi_.GraphicsMatrix_IsEqual(*args, **kwargs)
+
+    def IsIdentity(*args, **kwargs):
+        """
+        IsIdentity(self) -> bool
+
+        return true if this is the identity matrix
+        """
+        return _gdi_.GraphicsMatrix_IsIdentity(*args, **kwargs)
+
+    def Translate(*args, **kwargs):
+        """
+        Translate(self, Double dx, Double dy)
+
+        add the translation to this matrix
+        """
+        return _gdi_.GraphicsMatrix_Translate(*args, **kwargs)
+
+    def Scale(*args, **kwargs):
+        """
+        Scale(self, Double xScale, Double yScale)
+
+        add the scale to this matrix
+        """
+        return _gdi_.GraphicsMatrix_Scale(*args, **kwargs)
+
+    def Rotate(*args, **kwargs):
+        """
+        Rotate(self, Double angle)
+
+        add the rotation to this matrix (radians)
+        """
+        return _gdi_.GraphicsMatrix_Rotate(*args, **kwargs)
+
+    def TransformPoint(*args, **kwargs):
+        """
+        TransformPoint(self, x, y) --> (x, y)
+
+        applies that matrix to the point
+        """
+        return _gdi_.GraphicsMatrix_TransformPoint(*args, **kwargs)
+
+    def TransformDistance(*args, **kwargs):
+        """
+        TransformDistance(self, dx, dy) --> (dx, dy)
+
+        applies the matrix except for translations
+        """
+        return _gdi_.GraphicsMatrix_TransformDistance(*args, **kwargs)
+
+    def GetNativeMatrix(*args, **kwargs):
+        """
+        GetNativeMatrix(self) -> void
+
+        returns the native representation
+        """
+        return _gdi_.GraphicsMatrix_GetNativeMatrix(*args, **kwargs)
+
+_gdi_.GraphicsMatrix_swigregister(GraphicsMatrix)
+
+class GraphicsContext(GraphicsObject):
     """Proxy of C++ GraphicsContext class"""
     thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
     def __init__(self): raise AttributeError, "No constructor defined"
@@ -5071,86 +5392,187 @@ class GraphicsContext(object):
         return _gdi_.GraphicsContext_CreateFromNative(*args, **kwargs)
 
     CreateFromNative = staticmethod(CreateFromNative)
+    def CreateFromNativeWindow(*args, **kwargs):
+        """CreateFromNativeWindow(void window) -> GraphicsContext"""
+        return _gdi_.GraphicsContext_CreateFromNativeWindow(*args, **kwargs)
+
+    CreateFromNativeWindow = staticmethod(CreateFromNativeWindow)
     def CreatePath(*args, **kwargs):
-        """CreatePath(self) -> GraphicsPath"""
+        """
+        CreatePath(self) -> GraphicsPath
+
+        creates a path instance that corresponds to the type of graphics context, ie GDIPlus, Cairo, CoreGraphics ...
+        """
         return _gdi_.GraphicsContext_CreatePath(*args, **kwargs)
 
+    def CreatePen(*args, **kwargs):
+        """CreatePen(self, Pen pen) -> GraphicsPen"""
+        return _gdi_.GraphicsContext_CreatePen(*args, **kwargs)
+
+    def CreateBrush(*args, **kwargs):
+        """CreateBrush(self, Brush brush) -> GraphicsBrush"""
+        return _gdi_.GraphicsContext_CreateBrush(*args, **kwargs)
+
+    def CreateLinearGradientBrush(*args, **kwargs):
+        """
+        CreateLinearGradientBrush(self, Double x1, Double y1, Double x2, Double y2, Colour c1, 
+            Colour c2) -> GraphicsBrush
+
+        sets the brush to a linear gradient, starting at (x1,y1) with color c1
+        to (x2,y2) with color c2
+        """
+        return _gdi_.GraphicsContext_CreateLinearGradientBrush(*args, **kwargs)
+
+    def CreateRadialGradientBrush(*args, **kwargs):
+        """
+        CreateRadialGradientBrush(self, Double xo, Double yo, Double xc, Double yc, Double radius, 
+            Colour oColor, Colour cColor) -> GraphicsBrush
+
+        sets the brush to a radial gradient originating at (xo,yc) with color
+        oColor and ends on a circle around (xc,yc) with radius r and color
+        cColor
+
+        """
+        return _gdi_.GraphicsContext_CreateRadialGradientBrush(*args, **kwargs)
+
+    def CreateFont(*args, **kwargs):
+        """
+        CreateFont(self, Font font, Colour col=*wxBLACK) -> GraphicsFont
+
+        sets the font
+        """
+        return _gdi_.GraphicsContext_CreateFont(*args, **kwargs)
+
+    def CreateMatrix(*args, **kwargs):
+        """
+        CreateMatrix(self, Double a=1.0, Double b=0.0, Double c=0.0, Double d=1.0, 
+            Double tx=0.0, Double ty=0.0) -> GraphicsMatrix
+
+        create a 'native' matrix corresponding to these values
+        """
+        return _gdi_.GraphicsContext_CreateMatrix(*args, **kwargs)
+
     def PushState(*args, **kwargs):
-        """PushState(self)"""
+        """
+        PushState(self)
+
+        push the current state of the context, ie the transformation matrix on a stack
+        """
         return _gdi_.GraphicsContext_PushState(*args, **kwargs)
 
     def PopState(*args, **kwargs):
-        """PopState(self)"""
+        """
+        PopState(self)
+
+        pops a stored state from the stack
+        """
         return _gdi_.GraphicsContext_PopState(*args, **kwargs)
 
     def ClipRegion(*args, **kwargs):
-        """ClipRegion(self, Region region)"""
+        """
+        ClipRegion(self, Region region)
+
+        clips drawings to the region
+        """
         return _gdi_.GraphicsContext_ClipRegion(*args, **kwargs)
 
     def Clip(*args, **kwargs):
-        """Clip(self, Double x, Double y, Double w, Double h)"""
+        """
+        Clip(self, Double x, Double y, Double w, Double h)
+
+        clips drawings to the rect
+        """
         return _gdi_.GraphicsContext_Clip(*args, **kwargs)
 
     def ResetClip(*args, **kwargs):
-        """ResetClip(self)"""
+        """
+        ResetClip(self)
+
+        resets the clipping to original extent
+        """
         return _gdi_.GraphicsContext_ResetClip(*args, **kwargs)
 
     def GetNativeContext(*args, **kwargs):
-        """GetNativeContext(self) -> void"""
+        """
+        GetNativeContext(self) -> void
+
+        returns the native context
+        """
         return _gdi_.GraphicsContext_GetNativeContext(*args, **kwargs)
 
     def Translate(*args, **kwargs):
-        """Translate(self, Double dx, Double dy)"""
+        """
+        Translate(self, Double dx, Double dy)
+
+        translate the current transformation matrix CTM of the context
+        """
         return _gdi_.GraphicsContext_Translate(*args, **kwargs)
 
     def Scale(*args, **kwargs):
-        """Scale(self, Double xScale, Double yScale)"""
+        """
+        Scale(self, Double xScale, Double yScale)
+
+        scale the current transformation matrix CTM of the context
+        """
         return _gdi_.GraphicsContext_Scale(*args, **kwargs)
 
     def Rotate(*args, **kwargs):
-        """Rotate(self, Double angle)"""
+        """
+        Rotate(self, Double angle)
+
+        rotate (radians) the current transformation matrix CTM of the context
+        """
         return _gdi_.GraphicsContext_Rotate(*args, **kwargs)
 
-    def SetPen(*args, **kwargs):
-        """SetPen(self, Pen pen)"""
-        return _gdi_.GraphicsContext_SetPen(*args, **kwargs)
-
-    def SetBrush(*args, **kwargs):
-        """SetBrush(self, Brush brush)"""
-        return _gdi_.GraphicsContext_SetBrush(*args, **kwargs)
-
-    def SetLinearGradientBrush(*args, **kwargs):
+    def SetPen(*args):
         """
-        SetLinearGradientBrush(self, Double x1, Double y1, Double x2, Double y2, Colour c1, 
-            Colour c2)
-        """
-        return _gdi_.GraphicsContext_SetLinearGradientBrush(*args, **kwargs)
+        SetPen(self, GraphicsPen pen)
+        SetPen(self, Pen pen)
 
-    def SetRadialGradientBrush(*args, **kwargs):
+        sets the stroke pen
         """
-        SetRadialGradientBrush(self, Double xo, Double yo, Double xc, Double yc, Double radius, 
-            Colour oColour, Colour cColour)
+        return _gdi_.GraphicsContext_SetPen(*args)
+
+    def SetBrush(*args):
         """
-        return _gdi_.GraphicsContext_SetRadialGradientBrush(*args, **kwargs)
+        SetBrush(self, GraphicsBrush brush)
+        SetBrush(self, Brush brush)
 
-    def SetFont(*args, **kwargs):
-        """SetFont(self, Font font)"""
-        return _gdi_.GraphicsContext_SetFont(*args, **kwargs)
+        sets the brush for filling
+        """
+        return _gdi_.GraphicsContext_SetBrush(*args)
 
-    def SetTextColour(*args, **kwargs):
-        """SetTextColour(self, Colour col)"""
-        return _gdi_.GraphicsContext_SetTextColour(*args, **kwargs)
+    def SetFont(*args):
+        """
+        SetFont(self, GraphicsFont font)
+        SetFont(self, Font font, Colour colour=*wxBLACK)
+
+        sets the font
+        """
+        return _gdi_.GraphicsContext_SetFont(*args)
 
     def StrokePath(*args, **kwargs):
-        """StrokePath(self, GraphicsPath path)"""
+        """
+        StrokePath(self, GraphicsPath path)
+
+        strokes along a path with the current pen
+        """
         return _gdi_.GraphicsContext_StrokePath(*args, **kwargs)
 
     def FillPath(*args, **kwargs):
-        """FillPath(self, GraphicsPath path, int fillStyle=WINDING_RULE)"""
+        """
+        FillPath(self, GraphicsPath path, int fillStyle=WINDING_RULE)
+
+        fills a path with the current brush
+        """
         return _gdi_.GraphicsContext_FillPath(*args, **kwargs)
 
     def DrawPath(*args, **kwargs):
-        """DrawPath(self, GraphicsPath path, int fillStyle=WINDING_RULE)"""
+        """
+        DrawPath(self, GraphicsPath path, int fillStyle=WINDING_RULE)
+
+        draws a path by first filling and then stroking
+        """
         return _gdi_.GraphicsContext_DrawPath(*args, **kwargs)
 
     def DrawText(*args, **kwargs):
@@ -5182,32 +5604,68 @@ class GraphicsContext(object):
         return _gdi_.GraphicsContext_DrawIcon(*args, **kwargs)
 
     def StrokeLine(*args, **kwargs):
-        """StrokeLine(self, Double x1, Double y1, Double x2, Double y2)"""
+        """
+        StrokeLine(self, Double x1, Double y1, Double x2, Double y2)
+
+        strokes a single line
+        """
         return _gdi_.GraphicsContext_StrokeLine(*args, **kwargs)
 
     def StrokeLines(*args, **kwargs):
-        """StrokeLines(self, List points)"""
+        """
+        StrokeLines(self, List points)
+
+        stroke lines connecting each of the points
+        """
         return _gdi_.GraphicsContext_StrokeLines(*args, **kwargs)
 
     def StrokeLineSegements(*args, **kwargs):
-        """StrokeLineSegements(self, PyObject beginPoints, PyObject endPoints)"""
+        """
+        StrokeLineSegements(self, PyObject beginPoints, PyObject endPoints)
+
+        stroke disconnected lines from begin to end points
+        """
         return _gdi_.GraphicsContext_StrokeLineSegements(*args, **kwargs)
 
     def DrawLines(*args, **kwargs):
-        """DrawLines(self, size_t points, int fillStyle=WINDING_RULE)"""
+        """
+        DrawLines(self, size_t points, int fillStyle=WINDING_RULE)
+
+        draws a polygon
+        """
         return _gdi_.GraphicsContext_DrawLines(*args, **kwargs)
 
     def DrawRectangle(*args, **kwargs):
-        """DrawRectangle(self, Double x, Double y, Double w, Double h)"""
+        """
+        DrawRectangle(self, Double x, Double y, Double w, Double h)
+
+        draws a rectangle
+        """
         return _gdi_.GraphicsContext_DrawRectangle(*args, **kwargs)
 
     def DrawEllipse(*args, **kwargs):
-        """DrawEllipse(self, Double x, Double y, Double w, Double h)"""
+        """
+        DrawEllipse(self, Double x, Double y, Double w, Double h)
+
+        draws an ellipse
+        """
         return _gdi_.GraphicsContext_DrawEllipse(*args, **kwargs)
 
     def DrawRoundedRectangle(*args, **kwargs):
-        """DrawRoundedRectangle(self, Double x, Double y, Double w, Double h, Double radius)"""
+        """
+        DrawRoundedRectangle(self, Double x, Double y, Double w, Double h, Double radius)
+
+        draws a rounded rectangle
+        """
         return _gdi_.GraphicsContext_DrawRoundedRectangle(*args, **kwargs)
+
+    def ShouldOffset(*args, **kwargs):
+        """
+        ShouldOffset(self) -> bool
+
+        helper to determine if a 0.5 offset should be applied for the drawing operation
+        """
+        return _gdi_.GraphicsContext_ShouldOffset(*args, **kwargs)
 
 _gdi_.GraphicsContext_swigregister(GraphicsContext)
 
@@ -5223,6 +5681,80 @@ def GraphicsContext_Create(*args):
 def GraphicsContext_CreateFromNative(*args, **kwargs):
   """GraphicsContext_CreateFromNative(void context) -> GraphicsContext"""
   return _gdi_.GraphicsContext_CreateFromNative(*args, **kwargs)
+
+def GraphicsContext_CreateFromNativeWindow(*args, **kwargs):
+  """GraphicsContext_CreateFromNativeWindow(void window) -> GraphicsContext"""
+  return _gdi_.GraphicsContext_CreateFromNativeWindow(*args, **kwargs)
+
+class GraphicsRenderer(_core.Object):
+    """Proxy of C++ GraphicsRenderer class"""
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    def __init__(self): raise AttributeError, "No constructor defined"
+    __repr__ = _swig_repr
+    __swig_destroy__ = _gdi_.delete_GraphicsRenderer
+    __del__ = lambda self : None;
+    def GetDefaultRenderer(*args, **kwargs):
+        """GetDefaultRenderer() -> GraphicsRenderer"""
+        return _gdi_.GraphicsRenderer_GetDefaultRenderer(*args, **kwargs)
+
+    GetDefaultRenderer = staticmethod(GetDefaultRenderer)
+    def CreateContext(*args):
+        """
+        CreateContext(self, WindowDC dc) -> GraphicsContext
+        CreateContext(self, Window window) -> GraphicsContext
+        """
+        return _gdi_.GraphicsRenderer_CreateContext(*args)
+
+    def CreateContextFromNativeContext(*args, **kwargs):
+        """CreateContextFromNativeContext(self, void context) -> GraphicsContext"""
+        return _gdi_.GraphicsRenderer_CreateContextFromNativeContext(*args, **kwargs)
+
+    def CreateContextFromNativeWindow(*args, **kwargs):
+        """CreateContextFromNativeWindow(self, void window) -> GraphicsContext"""
+        return _gdi_.GraphicsRenderer_CreateContextFromNativeWindow(*args, **kwargs)
+
+    def CreatePath(*args, **kwargs):
+        """CreatePath(self) -> GraphicsPath"""
+        return _gdi_.GraphicsRenderer_CreatePath(*args, **kwargs)
+
+    def CreateMatrix(*args, **kwargs):
+        """
+        CreateMatrix(self, Double a=1.0, Double b=0.0, Double c=0.0, Double d=1.0, 
+            Double tx=0.0, Double ty=0.0) -> GraphicsMatrix
+        """
+        return _gdi_.GraphicsRenderer_CreateMatrix(*args, **kwargs)
+
+    def CreatePen(*args, **kwargs):
+        """CreatePen(self, Pen pen) -> GraphicsPen"""
+        return _gdi_.GraphicsRenderer_CreatePen(*args, **kwargs)
+
+    def CreateBrush(*args, **kwargs):
+        """CreateBrush(self, Brush brush) -> GraphicsBrush"""
+        return _gdi_.GraphicsRenderer_CreateBrush(*args, **kwargs)
+
+    def CreateLinearGradientBrush(*args, **kwargs):
+        """
+        CreateLinearGradientBrush(self, Double x1, Double y1, Double x2, Double y2, Colour c1, 
+            Colour c2) -> GraphicsBrush
+        """
+        return _gdi_.GraphicsRenderer_CreateLinearGradientBrush(*args, **kwargs)
+
+    def CreateRadialGradientBrush(*args, **kwargs):
+        """
+        CreateRadialGradientBrush(self, Double xo, Double yo, Double xc, Double yc, Double radius, 
+            Colour oColor, Colour cColor) -> GraphicsBrush
+        """
+        return _gdi_.GraphicsRenderer_CreateRadialGradientBrush(*args, **kwargs)
+
+    def CreateFont(*args, **kwargs):
+        """CreateFont(self, Font font, Colour col=*wxBLACK) -> GraphicsFont"""
+        return _gdi_.GraphicsRenderer_CreateFont(*args, **kwargs)
+
+_gdi_.GraphicsRenderer_swigregister(GraphicsRenderer)
+
+def GraphicsRenderer_GetDefaultRenderer(*args):
+  """GraphicsRenderer_GetDefaultRenderer() -> GraphicsRenderer"""
+  return _gdi_.GraphicsRenderer_GetDefaultRenderer(*args)
 
 class GCDC(DC):
     """Proxy of C++ GCDC class"""
@@ -5555,7 +6087,6 @@ class GDIObjListBase(object):
     __swig_destroy__ = _gdi_.delete_GDIObjListBase
     __del__ = lambda self : None;
 _gdi_.GDIObjListBase_swigregister(GDIObjListBase)
-cvar = _gdi_.cvar
 NullBitmap = cvar.NullBitmap
 NullIcon = cvar.NullIcon
 NullCursor = cvar.NullCursor

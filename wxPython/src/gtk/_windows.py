@@ -397,6 +397,10 @@ class TopLevelWindow(_core.Window):
         """GetTitle(self) -> String"""
         return _windows_.TopLevelWindow_GetTitle(*args, **kwargs)
 
+    def EnableCloseButton(*args, **kwargs):
+        """EnableCloseButton(self, bool enable) -> bool"""
+        return _windows_.TopLevelWindow_EnableCloseButton(*args, **kwargs)
+
     def SetShape(*args, **kwargs):
         """SetShape(self, Region region) -> bool"""
         return _windows_.TopLevelWindow_SetShape(*args, **kwargs)
@@ -426,10 +430,6 @@ class TopLevelWindow(_core.Window):
         return _windows_.TopLevelWindow_CenterOnScreen(*args, **kwargs)
 
     CentreOnScreen = CenterOnScreen 
-    def EnableCloseButton(*args, **kwargs):
-        """EnableCloseButton(self, bool enable=True) -> bool"""
-        return _windows_.TopLevelWindow_EnableCloseButton(*args, **kwargs)
-
     def GetDefaultItem(*args, **kwargs):
         """
         GetDefaultItem(self) -> Window
@@ -4403,6 +4403,54 @@ class Printout(_core.Object):
         """SetDC(self, DC dc)"""
         return _windows_.Printout_SetDC(*args, **kwargs)
 
+    def FitThisSizeToPaper(*args, **kwargs):
+        """FitThisSizeToPaper(self, Size imageSize)"""
+        return _windows_.Printout_FitThisSizeToPaper(*args, **kwargs)
+
+    def FitThisSizeToPage(*args, **kwargs):
+        """FitThisSizeToPage(self, Size imageSize)"""
+        return _windows_.Printout_FitThisSizeToPage(*args, **kwargs)
+
+    def FitThisSizeToPageMargins(*args, **kwargs):
+        """FitThisSizeToPageMargins(self, Size imageSize, PageSetupDialogData pageSetupData)"""
+        return _windows_.Printout_FitThisSizeToPageMargins(*args, **kwargs)
+
+    def MapScreenSizeToPaper(*args, **kwargs):
+        """MapScreenSizeToPaper(self)"""
+        return _windows_.Printout_MapScreenSizeToPaper(*args, **kwargs)
+
+    def MapScreenSizeToPage(*args, **kwargs):
+        """MapScreenSizeToPage(self)"""
+        return _windows_.Printout_MapScreenSizeToPage(*args, **kwargs)
+
+    def MapScreenSizeToPageMargins(*args, **kwargs):
+        """MapScreenSizeToPageMargins(self, PageSetupDialogData pageSetupData)"""
+        return _windows_.Printout_MapScreenSizeToPageMargins(*args, **kwargs)
+
+    def MapScreenSizeToDevice(*args, **kwargs):
+        """MapScreenSizeToDevice(self)"""
+        return _windows_.Printout_MapScreenSizeToDevice(*args, **kwargs)
+
+    def GetLogicalPaperRect(*args, **kwargs):
+        """GetLogicalPaperRect(self) -> Rect"""
+        return _windows_.Printout_GetLogicalPaperRect(*args, **kwargs)
+
+    def GetLogicalPageRect(*args, **kwargs):
+        """GetLogicalPageRect(self) -> Rect"""
+        return _windows_.Printout_GetLogicalPageRect(*args, **kwargs)
+
+    def GetLogicalPageMarginsRect(*args, **kwargs):
+        """GetLogicalPageMarginsRect(self, PageSetupDialogData pageSetupData) -> Rect"""
+        return _windows_.Printout_GetLogicalPageMarginsRect(*args, **kwargs)
+
+    def SetLogicalOrigin(*args, **kwargs):
+        """SetLogicalOrigin(self, int x, int y)"""
+        return _windows_.Printout_SetLogicalOrigin(*args, **kwargs)
+
+    def OffsetLogicalOrigin(*args, **kwargs):
+        """OffsetLogicalOrigin(self, int xoff, int yoff)"""
+        return _windows_.Printout_OffsetLogicalOrigin(*args, **kwargs)
+
     def SetPageSizePixels(*args, **kwargs):
         """SetPageSizePixels(self, int w, int h)"""
         return _windows_.Printout_SetPageSizePixels(*args, **kwargs)
@@ -4434,6 +4482,14 @@ class Printout(_core.Object):
     def GetPPIPrinter(*args, **kwargs):
         """GetPPIPrinter() -> (x,y)"""
         return _windows_.Printout_GetPPIPrinter(*args, **kwargs)
+
+    def SetPaperRectPixels(*args, **kwargs):
+        """SetPaperRectPixels(self, Rect paperRectPixels)"""
+        return _windows_.Printout_SetPaperRectPixels(*args, **kwargs)
+
+    def GetPaperRectPixels(*args, **kwargs):
+        """GetPaperRectPixels(self) -> Rect"""
+        return _windows_.Printout_GetPaperRectPixels(*args, **kwargs)
 
     def IsPreview(*args, **kwargs):
         """IsPreview(self) -> bool"""

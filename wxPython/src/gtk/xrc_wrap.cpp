@@ -2775,7 +2775,7 @@ IMP_PYCALLBACK_OBJECT_STRING_pure(wxPyXmlSubclassFactory, wxXmlSubclassFactory, 
 class wxPyXmlResourceHandler : public wxXmlResourceHandler {
 public:
     wxPyXmlResourceHandler() : wxXmlResourceHandler() {}
-    //~wxPyXmlResourceHandler();
+    ~wxPyXmlResourceHandler() {}
 
     // Base class virtuals
 

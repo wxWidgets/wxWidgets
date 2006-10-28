@@ -5824,6 +5824,47 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_TopLevelWindow_EnableCloseButton(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxTopLevelWindow *arg1 = (wxTopLevelWindow *) 0 ;
+  bool arg2 ;
+  bool result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  bool val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "enable", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:TopLevelWindow_EnableCloseButton",kwnames,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxTopLevelWindow, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "TopLevelWindow_EnableCloseButton" "', expected argument " "1"" of type '" "wxTopLevelWindow *""'"); 
+  }
+  arg1 = reinterpret_cast< wxTopLevelWindow * >(argp1);
+  ecode2 = SWIG_AsVal_bool(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "TopLevelWindow_EnableCloseButton" "', expected argument " "2"" of type '" "bool""'");
+  } 
+  arg2 = static_cast< bool >(val2);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = (bool)(arg1)->EnableCloseButton(arg2);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  {
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+  }
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_TopLevelWindow_SetShape(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   wxTopLevelWindow *arg1 = (wxTopLevelWindow *) 0 ;
@@ -6040,49 +6081,6 @@ SWIGINTERN PyObject *_wrap_TopLevelWindow_CenterOnScreen(PyObject *SWIGUNUSEDPAR
     if (PyErr_Occurred()) SWIG_fail;
   }
   resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_TopLevelWindow_EnableCloseButton(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
-  PyObject *resultobj = 0;
-  wxTopLevelWindow *arg1 = (wxTopLevelWindow *) 0 ;
-  bool arg2 = (bool) true ;
-  bool result;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  bool val2 ;
-  int ecode2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  char *  kwnames[] = {
-    (char *) "self",(char *) "enable", NULL 
-  };
-  
-  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|O:TopLevelWindow_EnableCloseButton",kwnames,&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxTopLevelWindow, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "TopLevelWindow_EnableCloseButton" "', expected argument " "1"" of type '" "wxTopLevelWindow *""'"); 
-  }
-  arg1 = reinterpret_cast< wxTopLevelWindow * >(argp1);
-  if (obj1) {
-    ecode2 = SWIG_AsVal_bool(obj1, &val2);
-    if (!SWIG_IsOK(ecode2)) {
-      SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "TopLevelWindow_EnableCloseButton" "', expected argument " "2"" of type '" "bool""'");
-    } 
-    arg2 = static_cast< bool >(val2);
-  }
-  {
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    result = (bool)(arg1)->EnableCloseButton(arg2);
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) SWIG_fail;
-  }
-  {
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
-  }
   return resultobj;
 fail:
   return NULL;
@@ -28049,6 +28047,440 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_Printout_FitThisSizeToPaper(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxPyPrintout *arg1 = (wxPyPrintout *) 0 ;
+  wxSize *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  wxSize temp2 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "imageSize", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:Printout_FitThisSizeToPaper",kwnames,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxPyPrintout, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Printout_FitThisSizeToPaper" "', expected argument " "1"" of type '" "wxPyPrintout *""'"); 
+  }
+  arg1 = reinterpret_cast< wxPyPrintout * >(argp1);
+  {
+    arg2 = &temp2;
+    if ( ! wxSize_helper(obj1, &arg2)) SWIG_fail;
+  }
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    (arg1)->FitThisSizeToPaper((wxSize const &)*arg2);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Printout_FitThisSizeToPage(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxPyPrintout *arg1 = (wxPyPrintout *) 0 ;
+  wxSize *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  wxSize temp2 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "imageSize", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:Printout_FitThisSizeToPage",kwnames,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxPyPrintout, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Printout_FitThisSizeToPage" "', expected argument " "1"" of type '" "wxPyPrintout *""'"); 
+  }
+  arg1 = reinterpret_cast< wxPyPrintout * >(argp1);
+  {
+    arg2 = &temp2;
+    if ( ! wxSize_helper(obj1, &arg2)) SWIG_fail;
+  }
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    (arg1)->FitThisSizeToPage((wxSize const &)*arg2);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Printout_FitThisSizeToPageMargins(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxPyPrintout *arg1 = (wxPyPrintout *) 0 ;
+  wxSize *arg2 = 0 ;
+  wxPageSetupDialogData *arg3 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  wxSize temp2 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "imageSize",(char *) "pageSetupData", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:Printout_FitThisSizeToPageMargins",kwnames,&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxPyPrintout, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Printout_FitThisSizeToPageMargins" "', expected argument " "1"" of type '" "wxPyPrintout *""'"); 
+  }
+  arg1 = reinterpret_cast< wxPyPrintout * >(argp1);
+  {
+    arg2 = &temp2;
+    if ( ! wxSize_helper(obj1, &arg2)) SWIG_fail;
+  }
+  res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_wxPageSetupDialogData,  0  | 0);
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "Printout_FitThisSizeToPageMargins" "', expected argument " "3"" of type '" "wxPageSetupDialogData const &""'"); 
+  }
+  if (!argp3) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Printout_FitThisSizeToPageMargins" "', expected argument " "3"" of type '" "wxPageSetupDialogData const &""'"); 
+  }
+  arg3 = reinterpret_cast< wxPageSetupDialogData * >(argp3);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    (arg1)->FitThisSizeToPageMargins((wxSize const &)*arg2,(wxPageSetupDialogData const &)*arg3);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Printout_MapScreenSizeToPaper(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxPyPrintout *arg1 = (wxPyPrintout *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxPyPrintout, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Printout_MapScreenSizeToPaper" "', expected argument " "1"" of type '" "wxPyPrintout *""'"); 
+  }
+  arg1 = reinterpret_cast< wxPyPrintout * >(argp1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    (arg1)->MapScreenSizeToPaper();
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Printout_MapScreenSizeToPage(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxPyPrintout *arg1 = (wxPyPrintout *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxPyPrintout, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Printout_MapScreenSizeToPage" "', expected argument " "1"" of type '" "wxPyPrintout *""'"); 
+  }
+  arg1 = reinterpret_cast< wxPyPrintout * >(argp1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    (arg1)->MapScreenSizeToPage();
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Printout_MapScreenSizeToPageMargins(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxPyPrintout *arg1 = (wxPyPrintout *) 0 ;
+  wxPageSetupDialogData *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "pageSetupData", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:Printout_MapScreenSizeToPageMargins",kwnames,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxPyPrintout, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Printout_MapScreenSizeToPageMargins" "', expected argument " "1"" of type '" "wxPyPrintout *""'"); 
+  }
+  arg1 = reinterpret_cast< wxPyPrintout * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_wxPageSetupDialogData,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Printout_MapScreenSizeToPageMargins" "', expected argument " "2"" of type '" "wxPageSetupDialogData const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Printout_MapScreenSizeToPageMargins" "', expected argument " "2"" of type '" "wxPageSetupDialogData const &""'"); 
+  }
+  arg2 = reinterpret_cast< wxPageSetupDialogData * >(argp2);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    (arg1)->MapScreenSizeToPageMargins((wxPageSetupDialogData const &)*arg2);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Printout_MapScreenSizeToDevice(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxPyPrintout *arg1 = (wxPyPrintout *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxPyPrintout, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Printout_MapScreenSizeToDevice" "', expected argument " "1"" of type '" "wxPyPrintout *""'"); 
+  }
+  arg1 = reinterpret_cast< wxPyPrintout * >(argp1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    (arg1)->MapScreenSizeToDevice();
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Printout_GetLogicalPaperRect(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxPyPrintout *arg1 = (wxPyPrintout *) 0 ;
+  wxRect result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxPyPrintout, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Printout_GetLogicalPaperRect" "', expected argument " "1"" of type '" "wxPyPrintout const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxPyPrintout * >(argp1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = ((wxPyPrintout const *)arg1)->GetLogicalPaperRect();
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_NewPointerObj((new wxRect(static_cast< const wxRect& >(result))), SWIGTYPE_p_wxRect, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Printout_GetLogicalPageRect(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxPyPrintout *arg1 = (wxPyPrintout *) 0 ;
+  wxRect result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxPyPrintout, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Printout_GetLogicalPageRect" "', expected argument " "1"" of type '" "wxPyPrintout const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxPyPrintout * >(argp1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = ((wxPyPrintout const *)arg1)->GetLogicalPageRect();
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_NewPointerObj((new wxRect(static_cast< const wxRect& >(result))), SWIGTYPE_p_wxRect, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Printout_GetLogicalPageMarginsRect(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxPyPrintout *arg1 = (wxPyPrintout *) 0 ;
+  wxPageSetupDialogData *arg2 = 0 ;
+  wxRect result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "pageSetupData", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:Printout_GetLogicalPageMarginsRect",kwnames,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxPyPrintout, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Printout_GetLogicalPageMarginsRect" "', expected argument " "1"" of type '" "wxPyPrintout const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxPyPrintout * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_wxPageSetupDialogData,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Printout_GetLogicalPageMarginsRect" "', expected argument " "2"" of type '" "wxPageSetupDialogData const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Printout_GetLogicalPageMarginsRect" "', expected argument " "2"" of type '" "wxPageSetupDialogData const &""'"); 
+  }
+  arg2 = reinterpret_cast< wxPageSetupDialogData * >(argp2);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = ((wxPyPrintout const *)arg1)->GetLogicalPageMarginsRect((wxPageSetupDialogData const &)*arg2);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_NewPointerObj((new wxRect(static_cast< const wxRect& >(result))), SWIGTYPE_p_wxRect, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Printout_SetLogicalOrigin(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxPyPrintout *arg1 = (wxPyPrintout *) 0 ;
+  int arg2 ;
+  int arg3 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  int val3 ;
+  int ecode3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "x",(char *) "y", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:Printout_SetLogicalOrigin",kwnames,&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxPyPrintout, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Printout_SetLogicalOrigin" "', expected argument " "1"" of type '" "wxPyPrintout *""'"); 
+  }
+  arg1 = reinterpret_cast< wxPyPrintout * >(argp1);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Printout_SetLogicalOrigin" "', expected argument " "2"" of type '" "int""'");
+  } 
+  arg2 = static_cast< int >(val2);
+  ecode3 = SWIG_AsVal_int(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "Printout_SetLogicalOrigin" "', expected argument " "3"" of type '" "int""'");
+  } 
+  arg3 = static_cast< int >(val3);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    (arg1)->SetLogicalOrigin(arg2,arg3);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Printout_OffsetLogicalOrigin(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxPyPrintout *arg1 = (wxPyPrintout *) 0 ;
+  int arg2 ;
+  int arg3 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  int val3 ;
+  int ecode3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "xoff",(char *) "yoff", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:Printout_OffsetLogicalOrigin",kwnames,&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxPyPrintout, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Printout_OffsetLogicalOrigin" "', expected argument " "1"" of type '" "wxPyPrintout *""'"); 
+  }
+  arg1 = reinterpret_cast< wxPyPrintout * >(argp1);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Printout_OffsetLogicalOrigin" "', expected argument " "2"" of type '" "int""'");
+  } 
+  arg2 = static_cast< int >(val2);
+  ecode3 = SWIG_AsVal_int(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "Printout_OffsetLogicalOrigin" "', expected argument " "3"" of type '" "int""'");
+  } 
+  arg3 = static_cast< int >(val3);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    (arg1)->OffsetLogicalOrigin(arg2,arg3);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_Printout_SetPageSizePixels(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   wxPyPrintout *arg1 = (wxPyPrintout *) 0 ;
@@ -28419,6 +28851,70 @@ SWIGINTERN PyObject *_wrap_Printout_GetPPIPrinter(PyObject *SWIGUNUSEDPARM(self)
     int new_flags = SWIG_IsNewObj(res3) ? (SWIG_POINTER_OWN |  0 ) :  0 ;
     resultobj = SWIG_Python_AppendOutput(resultobj, SWIG_NewPointerObj((void*)(arg3), SWIGTYPE_p_int, new_flags));
   }
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Printout_SetPaperRectPixels(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxPyPrintout *arg1 = (wxPyPrintout *) 0 ;
+  wxRect *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  wxRect temp2 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "paperRectPixels", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:Printout_SetPaperRectPixels",kwnames,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxPyPrintout, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Printout_SetPaperRectPixels" "', expected argument " "1"" of type '" "wxPyPrintout *""'"); 
+  }
+  arg1 = reinterpret_cast< wxPyPrintout * >(argp1);
+  {
+    arg2 = &temp2;
+    if ( ! wxRect_helper(obj1, &arg2)) SWIG_fail;
+  }
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    (arg1)->SetPaperRectPixels((wxRect const &)*arg2);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Printout_GetPaperRectPixels(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxPyPrintout *arg1 = (wxPyPrintout *) 0 ;
+  wxRect result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxPyPrintout, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Printout_GetPaperRectPixels" "', expected argument " "1"" of type '" "wxPyPrintout const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxPyPrintout * >(argp1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = ((wxPyPrintout const *)arg1)->GetPaperRectPixels();
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_NewPointerObj((new wxRect(static_cast< const wxRect& >(result))), SWIGTYPE_p_wxRect, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -31116,13 +31612,13 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"TopLevelWindow_IsFullScreen", (PyCFunction)_wrap_TopLevelWindow_IsFullScreen, METH_O, NULL},
 	 { (char *)"TopLevelWindow_SetTitle", (PyCFunction) _wrap_TopLevelWindow_SetTitle, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"TopLevelWindow_GetTitle", (PyCFunction)_wrap_TopLevelWindow_GetTitle, METH_O, NULL},
+	 { (char *)"TopLevelWindow_EnableCloseButton", (PyCFunction) _wrap_TopLevelWindow_EnableCloseButton, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"TopLevelWindow_SetShape", (PyCFunction) _wrap_TopLevelWindow_SetShape, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"TopLevelWindow_RequestUserAttention", (PyCFunction) _wrap_TopLevelWindow_RequestUserAttention, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"TopLevelWindow_IsActive", (PyCFunction)_wrap_TopLevelWindow_IsActive, METH_O, NULL},
 	 { (char *)"TopLevelWindow_MacSetMetalAppearance", (PyCFunction) _wrap_TopLevelWindow_MacSetMetalAppearance, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"TopLevelWindow_MacGetMetalAppearance", (PyCFunction)_wrap_TopLevelWindow_MacGetMetalAppearance, METH_O, NULL},
 	 { (char *)"TopLevelWindow_CenterOnScreen", (PyCFunction) _wrap_TopLevelWindow_CenterOnScreen, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"TopLevelWindow_EnableCloseButton", (PyCFunction) _wrap_TopLevelWindow_EnableCloseButton, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"TopLevelWindow_GetDefaultItem", (PyCFunction)_wrap_TopLevelWindow_GetDefaultItem, METH_O, NULL},
 	 { (char *)"TopLevelWindow_SetDefaultItem", (PyCFunction) _wrap_TopLevelWindow_SetDefaultItem, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"TopLevelWindow_SetTmpDefaultItem", (PyCFunction) _wrap_TopLevelWindow_SetTmpDefaultItem, METH_VARARGS | METH_KEYWORDS, NULL},
@@ -31736,6 +32232,18 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Printout_GetTitle", (PyCFunction)_wrap_Printout_GetTitle, METH_O, NULL},
 	 { (char *)"Printout_GetDC", (PyCFunction)_wrap_Printout_GetDC, METH_O, NULL},
 	 { (char *)"Printout_SetDC", (PyCFunction) _wrap_Printout_SetDC, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"Printout_FitThisSizeToPaper", (PyCFunction) _wrap_Printout_FitThisSizeToPaper, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"Printout_FitThisSizeToPage", (PyCFunction) _wrap_Printout_FitThisSizeToPage, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"Printout_FitThisSizeToPageMargins", (PyCFunction) _wrap_Printout_FitThisSizeToPageMargins, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"Printout_MapScreenSizeToPaper", (PyCFunction)_wrap_Printout_MapScreenSizeToPaper, METH_O, NULL},
+	 { (char *)"Printout_MapScreenSizeToPage", (PyCFunction)_wrap_Printout_MapScreenSizeToPage, METH_O, NULL},
+	 { (char *)"Printout_MapScreenSizeToPageMargins", (PyCFunction) _wrap_Printout_MapScreenSizeToPageMargins, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"Printout_MapScreenSizeToDevice", (PyCFunction)_wrap_Printout_MapScreenSizeToDevice, METH_O, NULL},
+	 { (char *)"Printout_GetLogicalPaperRect", (PyCFunction)_wrap_Printout_GetLogicalPaperRect, METH_O, NULL},
+	 { (char *)"Printout_GetLogicalPageRect", (PyCFunction)_wrap_Printout_GetLogicalPageRect, METH_O, NULL},
+	 { (char *)"Printout_GetLogicalPageMarginsRect", (PyCFunction) _wrap_Printout_GetLogicalPageMarginsRect, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"Printout_SetLogicalOrigin", (PyCFunction) _wrap_Printout_SetLogicalOrigin, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"Printout_OffsetLogicalOrigin", (PyCFunction) _wrap_Printout_OffsetLogicalOrigin, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Printout_SetPageSizePixels", (PyCFunction) _wrap_Printout_SetPageSizePixels, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Printout_GetPageSizePixels", (PyCFunction)_wrap_Printout_GetPageSizePixels, METH_O, NULL},
 	 { (char *)"Printout_SetPageSizeMM", (PyCFunction) _wrap_Printout_SetPageSizeMM, METH_VARARGS | METH_KEYWORDS, NULL},
@@ -31744,6 +32252,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Printout_GetPPIScreen", (PyCFunction)_wrap_Printout_GetPPIScreen, METH_O, NULL},
 	 { (char *)"Printout_SetPPIPrinter", (PyCFunction) _wrap_Printout_SetPPIPrinter, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Printout_GetPPIPrinter", (PyCFunction)_wrap_Printout_GetPPIPrinter, METH_O, NULL},
+	 { (char *)"Printout_SetPaperRectPixels", (PyCFunction) _wrap_Printout_SetPaperRectPixels, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"Printout_GetPaperRectPixels", (PyCFunction)_wrap_Printout_GetPaperRectPixels, METH_O, NULL},
 	 { (char *)"Printout_IsPreview", (PyCFunction)_wrap_Printout_IsPreview, METH_O, NULL},
 	 { (char *)"Printout_SetIsPreview", (PyCFunction) _wrap_Printout_SetIsPreview, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Printout_OnBeginDocument", (PyCFunction) _wrap_Printout_OnBeginDocument, METH_VARARGS | METH_KEYWORDS, NULL},

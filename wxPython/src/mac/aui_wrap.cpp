@@ -16268,9 +16268,10 @@ SWIGEXPORT void SWIG_init(void) {
   SWIG_Python_SetConstant(d, "AUI_MGR_ALLOW_ACTIVE_PANE",SWIG_From_int(static_cast< int >(wxAUI_MGR_ALLOW_ACTIVE_PANE)));
   SWIG_Python_SetConstant(d, "AUI_MGR_TRANSPARENT_DRAG",SWIG_From_int(static_cast< int >(wxAUI_MGR_TRANSPARENT_DRAG)));
   SWIG_Python_SetConstant(d, "AUI_MGR_TRANSPARENT_HINT",SWIG_From_int(static_cast< int >(wxAUI_MGR_TRANSPARENT_HINT)));
-  SWIG_Python_SetConstant(d, "AUI_MGR_TRANSPARENT_HINT_FADE",SWIG_From_int(static_cast< int >(wxAUI_MGR_TRANSPARENT_HINT_FADE)));
-  SWIG_Python_SetConstant(d, "AUI_MGR_DISABLE_VENETIAN_BLINDS",SWIG_From_int(static_cast< int >(wxAUI_MGR_DISABLE_VENETIAN_BLINDS)));
-  SWIG_Python_SetConstant(d, "AUI_MGR_DISABLE_VENETIAN_BLINDS_FADE",SWIG_From_int(static_cast< int >(wxAUI_MGR_DISABLE_VENETIAN_BLINDS_FADE)));
+  SWIG_Python_SetConstant(d, "AUI_MGR_VENETIAN_BLINDS_HINT",SWIG_From_int(static_cast< int >(wxAUI_MGR_VENETIAN_BLINDS_HINT)));
+  SWIG_Python_SetConstant(d, "AUI_MGR_RECTANGLE_HINT",SWIG_From_int(static_cast< int >(wxAUI_MGR_RECTANGLE_HINT)));
+  SWIG_Python_SetConstant(d, "AUI_MGR_HINT_FADE",SWIG_From_int(static_cast< int >(wxAUI_MGR_HINT_FADE)));
+  SWIG_Python_SetConstant(d, "AUI_MGR_NO_VENETIAN_BLINDS_FADE",SWIG_From_int(static_cast< int >(wxAUI_MGR_NO_VENETIAN_BLINDS_FADE)));
   SWIG_Python_SetConstant(d, "AUI_MGR_DEFAULT",SWIG_From_int(static_cast< int >(wxAUI_MGR_DEFAULT)));
   SWIG_Python_SetConstant(d, "AUI_ART_SASH_SIZE",SWIG_From_int(static_cast< int >(wxAUI_ART_SASH_SIZE)));
   SWIG_Python_SetConstant(d, "AUI_ART_CAPTION_SIZE",SWIG_From_int(static_cast< int >(wxAUI_ART_CAPTION_SIZE)));
