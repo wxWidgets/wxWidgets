@@ -493,7 +493,8 @@ append a lot of items.
 Preallocates memory for a given number of array elements. It is worth calling
 when the number of items which are going to be added to the array is known in
 advance because it will save unneeded memory reallocation. If the array already
-has enough memory for the given number of items, nothing happens.
+has enough memory for the given number of items, nothing happens. In any case,
+the existing contents of the array is not modified.
 
 \membersection{wxArray::Clear}\label{wxarrayclear}
 

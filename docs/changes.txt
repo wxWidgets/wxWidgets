@@ -14,6 +14,7 @@ Changes in behaviour not resulting in compilation errors, please read this!
   if the whole name is a directory.
 - wxDialog::CreateButtonSizer() may return NULL now, please see the manual.
 - wxStaticBoxSizer now deletes the associated wxStaticBox when it is deleted.
+- wxArray::Alloc() now works as reserve() and does not clear the array any more
 - Windows calling CaptureMouse() are now required to handle the
   wxEVT_MOUSE_CAPTURE_LOST event and not call ReleaseMouse() in this case.
 

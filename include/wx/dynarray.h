@@ -169,7 +169,7 @@ public:                                                             \
                                                                     \
   void Empty() { m_nCount = 0; }                                    \
   void Clear();                                                     \
-  void Alloc(size_t uiSize);                                        \
+  void Alloc(size_t n) { if ( n > m_nSize ) Realloc(n); }           \
   void Shrink();                                                    \
                                                                     \
   size_t GetCount() const { return m_nCount; }                      \
@@ -225,7 +225,7 @@ protected:                                                          \
   void insert(iterator it, const_iterator first, const_iterator last);\
   void pop_back() { RemoveAt(size() - 1); }                         \
   void push_back(const value_type& v) { Add(v); }                   \
-  void reserve(size_type n) { if(n > m_nSize) Realloc(n); }         \
+  void reserve(size_type n) { Alloc(n); }                           \
   void resize(size_type n, value_type v = value_type())             \
     { SetCount(n, v); }                                             \
                                                                     \

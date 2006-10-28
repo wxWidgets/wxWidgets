@@ -149,6 +149,7 @@ private:
         CPPUNIT_TEST( wxArrayUShortTest );
         CPPUNIT_TEST( wxArrayIntTest );
         CPPUNIT_TEST( TestSTL );
+        CPPUNIT_TEST( Alloc );
     CPPUNIT_TEST_SUITE_END();
 
     void wxStringArrayTest();
@@ -156,6 +157,7 @@ private:
     void wxArrayUShortTest();
     void wxArrayIntTest();
     void TestSTL();
+    void Alloc();
 
     DECLARE_NO_COPY_CLASS(ArraysTestCase)
 };
@@ -358,6 +360,20 @@ void ArraysTestCase::wxArray ## name ## Test()                                \
 TestArrayOf(UShort);
 
 TestArrayOf(Int);
+
+void ArraysTestCase::Alloc()
+{
+    wxArrayInt a;
+    a.Add(17);
+    a.Add(9);
+    CPPUNIT_ASSERT_EQUAL( 2u, a.GetCount() );
+
+    a.Alloc(1000);
+
+    CPPUNIT_ASSERT_EQUAL( 2u, a.GetCount() );
+    CPPUNIT_ASSERT_EQUAL( 17, a[0] );
+    CPPUNIT_ASSERT_EQUAL( 9, a[1] );
+}
 
 void ArraysTestCase::TestSTL()
 {

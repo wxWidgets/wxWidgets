@@ -244,23 +244,6 @@ void name::Clear()                                                          \
   wxDELETEA(m_pItems);                                                      \
 }                                                                           \
                                                                             \
-/* pre-allocates memory (frees the previous data!) */                       \
-void name::Alloc(size_t nSize)                                              \
-{                                                                           \
-  /* only if old buffer was not big enough */                               \
-  if ( nSize > m_nSize ) {                                                  \
-    wxDELETEA(m_pItems);                                                    \
-    m_nSize  = 0;                                                           \
-    m_pItems = new T[nSize];                                                \
-    /* only alloc if allocation succeeded */                                \
-    if ( m_pItems ) {                                                       \
-        m_nSize  = nSize;                                                   \
-    }                                                                       \
-  }                                                                         \
-                                                                            \
-  m_nCount = 0;                                                             \
-}                                                                           \
-                                                                            \
 /* minimizes the memory usage by freeing unused memory */                   \
 void name::Shrink()                                                         \
 {                                                                           \
