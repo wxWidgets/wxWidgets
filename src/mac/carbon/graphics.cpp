@@ -698,24 +698,18 @@ wxMacCoreGraphicsFontData::~wxMacCoreGraphicsFontData()
 // wxMacCoreGraphicsMatrix declaration
 //-----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxMacCoreGraphicsMatrix : public wxGraphicsMatrix
+class WXDLLIMPEXP_CORE wxMacCoreGraphicsMatrixData : public wxGraphicsMatrixData
 {
 public :
-    wxMacCoreGraphicsMatrix() ;
-    
-	wxMacCoreGraphicsMatrix(wxGraphicsRenderer* renderer, wxDouble a=1.0, wxDouble b=0.0, wxDouble c=0.0, wxDouble d=1.0, 
-		wxDouble tx=0.0, wxDouble ty=0.0) ;
+	wxMacCoreGraphicsMatrixData(wxGraphicsRenderer* renderer) ;
 	
-	virtual ~wxMacCoreGraphicsMatrix() ;
+	virtual ~wxMacCoreGraphicsMatrixData() ;
 	
-    virtual wxGraphicsMatrix *Clone() const ;
+    virtual wxGraphicsObjectRefData *Clone() const ;
 
 	// concatenates the matrix
-	virtual void Concat( const wxGraphicsMatrix *t );
+	virtual void Concat( const wxGraphicsMatrixData *t );
 	
-	// copies the passed in matrix
-	virtual void Copy( const wxGraphicsMatrix *t );
-
 	// sets the matrix to the respective values
 	virtual void Set(wxDouble a=1.0, wxDouble b=0.0, wxDouble c=0.0, wxDouble d=1.0, 
 		wxDouble tx=0.0, wxDouble ty=0.0);
@@ -724,10 +718,10 @@ public :
 	virtual void Invert();
 	
 	// returns true if the elements of the transformation matrix are equal ?
-    virtual bool IsEqual( const wxGraphicsMatrix* t) const ;
+    virtual bool IsEqual( const wxGraphicsMatrixData* t) const ;
 	
 	// return true if this is the identity matrix
-	virtual bool IsIdentity();
+	virtual bool IsIdentity() const;
 	
     //
     // transformation
@@ -747,75 +741,58 @@ public :
     //
 	
 	// applies that matrix to the point
-	virtual void TransformPoint( wxDouble *x, wxDouble *y );
+	virtual void TransformPoint( wxDouble *x, wxDouble *y ) const;
 	
 	// applies the matrix except for translations
-	virtual void TransformDistance( wxDouble *dx, wxDouble *dy );
+	virtual void TransformDistance( wxDouble *dx, wxDouble *dy ) const;
 	
 	// returns the native representation
 	virtual void * GetNativeMatrix() const;
 	
 private :
     CGAffineTransform m_matrix;
-    
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxMacCoreGraphicsMatrix)
 } ;
 
 //-----------------------------------------------------------------------------
 // wxMacCoreGraphicsMatrix implementation
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxMacCoreGraphicsMatrix, wxGraphicsMatrix)
-
-wxMacCoreGraphicsMatrix::wxMacCoreGraphicsMatrix() : wxGraphicsMatrix(NULL)
-{
-    wxLogDebug(wxT("Illegal Constructor called"));
-}
-
-wxMacCoreGraphicsMatrix::wxMacCoreGraphicsMatrix(wxGraphicsRenderer* renderer, wxDouble a, wxDouble b, wxDouble c, wxDouble d, 
-    wxDouble tx, wxDouble ty) : wxGraphicsMatrix(renderer)
-{
-    m_matrix = CGAffineTransformMake(a,b,c,d,tx,ty);
-}
-
-wxMacCoreGraphicsMatrix::~wxMacCoreGraphicsMatrix() 
+wxMacCoreGraphicsMatrixData::wxMacCoreGraphicsMatrixData(wxGraphicsRenderer* renderer) : wxGraphicsMatrixData(renderer)
 {
 }
 
-wxGraphicsMatrix *wxMacCoreGraphicsMatrix::Clone() const 
+wxMacCoreGraphicsMatrixData::~wxMacCoreGraphicsMatrixData() 
 {
-    wxMacCoreGraphicsMatrix* m = new wxMacCoreGraphicsMatrix(GetRenderer()) ;
+}
+
+wxGraphicsObjectRefData *wxMacCoreGraphicsMatrixData::Clone() const 
+{
+    wxMacCoreGraphicsMatrixData* m = new wxMacCoreGraphicsMatrixData(GetRenderer()) ;
     m->m_matrix = m_matrix ;
     return m;
 }
 
 // concatenates the matrix
-void wxMacCoreGraphicsMatrix::Concat( const wxGraphicsMatrix *t ) 
+void wxMacCoreGraphicsMatrixData::Concat( const wxGraphicsMatrixData *t ) 
 {
     m_matrix = CGAffineTransformConcat(m_matrix, *((CGAffineTransform*) t->GetNativeMatrix()) );
 }
 
-// copies the passed in matrix
-void wxMacCoreGraphicsMatrix::Copy( const wxGraphicsMatrix *t ) 
-{
-    m_matrix = *((CGAffineTransform*) t->GetNativeMatrix());
-}
-
 // sets the matrix to the respective values
-void wxMacCoreGraphicsMatrix::Set(wxDouble a, wxDouble b, wxDouble c, wxDouble d, 
+void wxMacCoreGraphicsMatrixData::Set(wxDouble a, wxDouble b, wxDouble c, wxDouble d, 
     wxDouble tx, wxDouble ty) 
 {
     m_matrix = CGAffineTransformMake(a,b,c,d,tx,ty);
 }
 
 // makes this the inverse matrix
-void wxMacCoreGraphicsMatrix::Invert() 
+void wxMacCoreGraphicsMatrixData::Invert() 
 {
     m_matrix = CGAffineTransformInvert( m_matrix );
 }
 
 // returns true if the elements of the transformation matrix are equal ?
-bool wxMacCoreGraphicsMatrix::IsEqual( const wxGraphicsMatrix* t) const  
+bool wxMacCoreGraphicsMatrixData::IsEqual( const wxGraphicsMatrixData* t) const  
 {
     const CGAffineTransform* tm = (CGAffineTransform*) t->GetNativeMatrix();
     return ( 
@@ -830,7 +807,7 @@ bool wxMacCoreGraphicsMatrix::IsEqual( const wxGraphicsMatrix* t) const
 }
 
 // return true if this is the identity matrix
-bool wxMacCoreGraphicsMatrix::IsIdentity() 
+bool wxMacCoreGraphicsMatrixData::IsIdentity() const
 {
     return ( m_matrix.a == 1 && m_matrix.d == 1 &&
         m_matrix.b == 0 && m_matrix.d == 0 && m_matrix.tx == 0 && m_matrix.ty == 0);
@@ -841,19 +818,19 @@ bool wxMacCoreGraphicsMatrix::IsIdentity()
 //
 
 // add the translation to this matrix
-void wxMacCoreGraphicsMatrix::Translate( wxDouble dx , wxDouble dy ) 
+void wxMacCoreGraphicsMatrixData::Translate( wxDouble dx , wxDouble dy ) 
 {
     m_matrix = CGAffineTransformTranslate( m_matrix, dx, dy);
 }
 
 // add the scale to this matrix
-void wxMacCoreGraphicsMatrix::Scale( wxDouble xScale , wxDouble yScale ) 
+void wxMacCoreGraphicsMatrixData::Scale( wxDouble xScale , wxDouble yScale ) 
 {
     m_matrix = CGAffineTransformScale( m_matrix, xScale, yScale);
 }
 
 // add the rotation to this matrix (radians)
-void wxMacCoreGraphicsMatrix::Rotate( wxDouble angle ) 
+void wxMacCoreGraphicsMatrixData::Rotate( wxDouble angle ) 
 {
     m_matrix = CGAffineTransformRotate( m_matrix, angle);
 }
@@ -863,7 +840,7 @@ void wxMacCoreGraphicsMatrix::Rotate( wxDouble angle )
 //
 
 // applies that matrix to the point
-void wxMacCoreGraphicsMatrix::TransformPoint( wxDouble *x, wxDouble *y ) 
+void wxMacCoreGraphicsMatrixData::TransformPoint( wxDouble *x, wxDouble *y ) const
 {
     CGPoint pt = CGPointApplyAffineTransform( CGPointMake(*x,*y), m_matrix);
     
@@ -872,7 +849,7 @@ void wxMacCoreGraphicsMatrix::TransformPoint( wxDouble *x, wxDouble *y )
 }
 
 // applies the matrix except for translations
-void wxMacCoreGraphicsMatrix::TransformDistance( wxDouble *dx, wxDouble *dy ) 
+void wxMacCoreGraphicsMatrixData::TransformDistance( wxDouble *dx, wxDouble *dy ) const
 {
     CGSize sz = CGSizeApplyAffineTransform( CGSizeMake(*dx,*dy) , m_matrix );
     *dx = sz.width;
@@ -880,7 +857,7 @@ void wxMacCoreGraphicsMatrix::TransformDistance( wxDouble *dx, wxDouble *dy )
 }
 
 // returns the native representation
-void * wxMacCoreGraphicsMatrix::GetNativeMatrix() const 
+void * wxMacCoreGraphicsMatrixData::GetNativeMatrix() const 
 {
     return (void*) &m_matrix;
 }
@@ -893,16 +870,14 @@ void * wxMacCoreGraphicsMatrix::GetNativeMatrix() const
 // wxMacCoreGraphicsPath declaration
 //-----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxMacCoreGraphicsPath : public wxGraphicsPath
+class WXDLLEXPORT wxMacCoreGraphicsPathData : public wxGraphicsPathData
 {
 public :
-    wxMacCoreGraphicsPath( wxGraphicsRenderer* renderer, CGMutablePathRef path = NULL);
+    wxMacCoreGraphicsPathData( wxGraphicsRenderer* renderer, CGMutablePathRef path = NULL);
     
-    wxMacCoreGraphicsPath();
-    
-    ~wxMacCoreGraphicsPath();
+    ~wxMacCoreGraphicsPathData();
 
-    virtual wxGraphicsPath *Clone() const;
+    virtual wxGraphicsObjectRefData *Clone() const;
 
     // begins a new subpath at (x,y)
     virtual void MoveToPoint( wxDouble x, wxDouble y );
@@ -917,7 +892,7 @@ public :
     virtual void CloseSubpath();
 
     // gets the last point of the current path, (0,0) if not yet set
-    virtual void GetCurrentPoint( wxDouble& x, wxDouble&y);
+    virtual void GetCurrentPoint( wxDouble* x, wxDouble* y) const;
 
     // adds an arc of a circle centering at (x,y) with radius (r) from startAngle to endAngle
     virtual void AddArc( wxDouble x, wxDouble y, wxDouble r, wxDouble startAngle, wxDouble endAngle, bool clockwise );
@@ -940,22 +915,21 @@ public :
     virtual void AddArcToPoint( wxDouble x1, wxDouble y1 , wxDouble x2, wxDouble y2, wxDouble r );
 
 	// adds another path
-	virtual void AddPath( const wxGraphicsPath* path );
+	virtual void AddPath( const wxGraphicsPathData* path );
 
 	// returns the native path
 	virtual void * GetNativePath() const { return m_path; }
 	
 	// give the native path returned by GetNativePath() back (there might be some deallocations necessary)
-	virtual void UnGetNativePath(void *p) {}
+	virtual void UnGetNativePath(void *p) const {}
 
 	// transforms each point of this path by the matrix
-	virtual void Transform( wxGraphicsMatrix* matrix );
+	virtual void Transform( const wxGraphicsMatrixData* matrix );
 	
 	// gets the bounding box enclosing all points (possibly including control points)
-	virtual void GetBox(wxDouble *x, wxDouble *y, wxDouble *w, wxDouble *y);
+	virtual void GetBox(wxDouble *x, wxDouble *y, wxDouble *w, wxDouble *y) const;
 	
-	virtual bool Contains( wxDouble x, wxDouble y, int fillStyle = wxWINDING_RULE);
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxMacCoreGraphicsPath)
+	virtual bool Contains( wxDouble x, wxDouble y, int fillStyle = wxODDEVEN_RULE) const;
 private :
     CGMutablePathRef m_path;
 };
@@ -964,15 +938,7 @@ private :
 // wxMacCoreGraphicsPath implementation
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxMacCoreGraphicsPath, wxGraphicsPath)
-
-wxMacCoreGraphicsPath::wxMacCoreGraphicsPath() :  wxGraphicsPath(NULL)
-{
-    wxLogDebug(wxT("Illegal Constructor called"));
-}    
-
-
-wxMacCoreGraphicsPath::wxMacCoreGraphicsPath( wxGraphicsRenderer* renderer, CGMutablePathRef path) : wxGraphicsPath(renderer)
+wxMacCoreGraphicsPathData::wxMacCoreGraphicsPathData( wxGraphicsRenderer* renderer, CGMutablePathRef path) : wxGraphicsPathData(renderer)
 {
 	if ( path )
 		m_path = path;
@@ -980,83 +946,83 @@ wxMacCoreGraphicsPath::wxMacCoreGraphicsPath( wxGraphicsRenderer* renderer, CGMu
 		m_path = CGPathCreateMutable();
 }
 
-wxMacCoreGraphicsPath::~wxMacCoreGraphicsPath()
+wxMacCoreGraphicsPathData::~wxMacCoreGraphicsPathData()
 {
     CGPathRelease( m_path );
 }
 
-wxGraphicsPath* wxMacCoreGraphicsPath::Clone() const 
+wxGraphicsObjectRefData* wxMacCoreGraphicsPathData::Clone() const 
 {
-	wxMacCoreGraphicsPath* clone = new wxMacCoreGraphicsPath(GetRenderer(),CGPathCreateMutableCopy(m_path));
+	wxMacCoreGraphicsPathData* clone = new wxMacCoreGraphicsPathData(GetRenderer(),CGPathCreateMutableCopy(m_path));
 	return clone ;
 }
 
 
 // opens (starts) a new subpath
-void wxMacCoreGraphicsPath::MoveToPoint( wxDouble x1 , wxDouble y1 )
+void wxMacCoreGraphicsPathData::MoveToPoint( wxDouble x1 , wxDouble y1 )
 {
     CGPathMoveToPoint( m_path , NULL , x1 , y1 );
 }
 
-void wxMacCoreGraphicsPath::AddLineToPoint( wxDouble x1 , wxDouble y1 )
+void wxMacCoreGraphicsPathData::AddLineToPoint( wxDouble x1 , wxDouble y1 )
 {
     CGPathAddLineToPoint( m_path , NULL , x1 , y1 );
 }
 
-void wxMacCoreGraphicsPath::AddCurveToPoint( wxDouble cx1, wxDouble cy1, wxDouble cx2, wxDouble cy2, wxDouble x, wxDouble y )
+void wxMacCoreGraphicsPathData::AddCurveToPoint( wxDouble cx1, wxDouble cy1, wxDouble cx2, wxDouble cy2, wxDouble x, wxDouble y )
 {
     CGPathAddCurveToPoint( m_path , NULL , cx1 , cy1 , cx2, cy2, x , y );
 }
 
-void wxMacCoreGraphicsPath::AddQuadCurveToPoint( wxDouble cx1, wxDouble cy1, wxDouble x, wxDouble y )
+void wxMacCoreGraphicsPathData::AddQuadCurveToPoint( wxDouble cx1, wxDouble cy1, wxDouble x, wxDouble y )
 {
     CGPathAddQuadCurveToPoint( m_path , NULL , cx1 , cy1 , x , y );
 }
 
-void wxMacCoreGraphicsPath::AddRectangle( wxDouble x, wxDouble y, wxDouble w, wxDouble h )
+void wxMacCoreGraphicsPathData::AddRectangle( wxDouble x, wxDouble y, wxDouble w, wxDouble h )
 {
     CGRect cgRect = { { x , y } , { w , h } };
     CGPathAddRect( m_path , NULL , cgRect );
 }
 
-void wxMacCoreGraphicsPath::AddCircle( wxDouble x, wxDouble y , wxDouble r )
+void wxMacCoreGraphicsPathData::AddCircle( wxDouble x, wxDouble y , wxDouble r )
 {
     CGPathAddArc( m_path , NULL , x , y , r , 0.0 , 2 * M_PI , true );
 }
 
 // adds an arc of a circle centering at (x,y) with radius (r) from startAngle to endAngle
-void wxMacCoreGraphicsPath::AddArc( wxDouble x, wxDouble y, wxDouble r, wxDouble startAngle, wxDouble endAngle, bool clockwise )
+void wxMacCoreGraphicsPathData::AddArc( wxDouble x, wxDouble y, wxDouble r, wxDouble startAngle, wxDouble endAngle, bool clockwise )
 {
     // inverse direction as we the 'normal' state is a y axis pointing down, ie mirrored to the standard core graphics setup
     CGPathAddArc( m_path, NULL , x, y, r, startAngle, endAngle, !clockwise); 
 }
 
-void wxMacCoreGraphicsPath::AddArcToPoint( wxDouble x1, wxDouble y1 , wxDouble x2, wxDouble y2, wxDouble r )
+void wxMacCoreGraphicsPathData::AddArcToPoint( wxDouble x1, wxDouble y1 , wxDouble x2, wxDouble y2, wxDouble r )
 {
     CGPathAddArcToPoint( m_path, NULL , x1, y1, x2, y2, r); 
 }
 
-void wxMacCoreGraphicsPath::AddPath( const wxGraphicsPath* path )
+void wxMacCoreGraphicsPathData::AddPath( const wxGraphicsPathData* path )
 {
 	CGPathAddPath( m_path , NULL, (CGPathRef) path->GetNativePath() );
 }
 
 // closes the current subpath
-void wxMacCoreGraphicsPath::CloseSubpath()
+void wxMacCoreGraphicsPathData::CloseSubpath()
 {
     CGPathCloseSubpath( m_path );
 }
 
 // gets the last point of the current path, (0,0) if not yet set
-void wxMacCoreGraphicsPath::GetCurrentPoint( wxDouble& x, wxDouble&y)
+void wxMacCoreGraphicsPathData::GetCurrentPoint( wxDouble* x, wxDouble* y) const
 {
     CGPoint p = CGPathGetCurrentPoint( m_path );
-    x = p.x;
-    y = p.y;
+    *x = p.x;
+    *y = p.y;
 }
 
 // transforms each point of this path by the matrix
-void wxMacCoreGraphicsPath::Transform( wxGraphicsMatrix* matrix )
+void wxMacCoreGraphicsPathData::Transform( const wxGraphicsMatrixData* matrix )
 {
 	CGMutablePathRef p = CGPathCreateMutable() ;
 	CGPathAddPath( p, (CGAffineTransform*) matrix->GetNativeMatrix() , m_path );
@@ -1065,7 +1031,7 @@ void wxMacCoreGraphicsPath::Transform( wxGraphicsMatrix* matrix )
 }
 
 // gets the bounding box enclosing all points (possibly including control points)
-void wxMacCoreGraphicsPath::GetBox(wxDouble *x, wxDouble *y, wxDouble *w, wxDouble *h)
+void wxMacCoreGraphicsPathData::GetBox(wxDouble *x, wxDouble *y, wxDouble *w, wxDouble *h) const
 {
 	CGRect bounds = CGPathGetBoundingBox( m_path ) ;
 	*x = bounds.origin.x;
@@ -1074,20 +1040,10 @@ void wxMacCoreGraphicsPath::GetBox(wxDouble *x, wxDouble *y, wxDouble *w, wxDoub
 	*h = bounds.size.height;
 }
 
-bool wxMacCoreGraphicsPath::Contains( wxDouble x, wxDouble y, int fillStyle) 
+bool wxMacCoreGraphicsPathData::Contains( wxDouble x, wxDouble y, int fillStyle) const
 {
 	return CGPathContainsPoint( m_path, NULL, CGPointMake(x,y), fillStyle == wxODDEVEN_RULE );
 }
-
-
-//
-// Graphics Pen
-//
-
-//-----------------------------------------------------------------------------
-// wxMacCoreGraphicsPen declaration
-//-----------------------------------------------------------------------------
-
 
 //
 // Graphics Context
@@ -1145,25 +1101,25 @@ public:
     virtual void Rotate( wxDouble angle );
 
 	// concatenates this transform with the current transform of this context
-	virtual void ConcatTransform( const wxGraphicsMatrix* matrix );
+	virtual void ConcatTransform( const wxGraphicsMatrix& matrix );
 
 	// sets the transform of this context
-	virtual void SetTransform( const wxGraphicsMatrix* matrix );
+	virtual void SetTransform( const wxGraphicsMatrix& matrix );
 
 	// gets the matrix of this context
-	virtual void GetTransform( wxGraphicsMatrix* matrix );
+	virtual wxGraphicsMatrix GetTransform() const;
     //
     // setting the paint
     //
     
     // strokes along a path with the current pen
-    virtual void StrokePath( const wxGraphicsPath *path );
+    virtual void StrokePath( const wxGraphicsPath &path );
 
     // fills a path with the current brush
-    virtual void FillPath( const wxGraphicsPath *path, int fillStyle = wxWINDING_RULE );
+    virtual void FillPath( const wxGraphicsPath &path, int fillStyle = wxODDEVEN_RULE );
 
     // draws a path by first filling and then stroking
-    virtual void DrawPath( const wxGraphicsPath *path, int fillStyle = wxWINDING_RULE );
+    virtual void DrawPath( const wxGraphicsPath &path, int fillStyle = wxODDEVEN_RULE );
 
     virtual bool ShouldOffset() const
     {
@@ -1365,7 +1321,7 @@ void wxMacCoreGraphicsContext::ResetClip()
 	}
 }
 
-void wxMacCoreGraphicsContext::StrokePath( const wxGraphicsPath *path )
+void wxMacCoreGraphicsContext::StrokePath( const wxGraphicsPath &path )
 {
     if ( m_pen.IsNull() )
         return ;
@@ -1377,14 +1333,14 @@ void wxMacCoreGraphicsContext::StrokePath( const wxGraphicsPath *path )
         CGContextTranslateCTM( m_cgContext, 0.5, 0.5 );
 
     ((wxMacCoreGraphicsPenData*)m_pen.GetRefData())->Apply(this);
-    CGContextAddPath( m_cgContext , (CGPathRef) path->GetNativePath() );
+    CGContextAddPath( m_cgContext , (CGPathRef) path.GetNativePath() );
     CGContextStrokePath( m_cgContext );
 
     if ( offset )
         CGContextTranslateCTM( m_cgContext, -0.5, -0.5 );
 }
 
-void wxMacCoreGraphicsContext::DrawPath( const wxGraphicsPath *path , int fillStyle )
+void wxMacCoreGraphicsContext::DrawPath( const wxGraphicsPath &path , int fillStyle )
 {        
     if ( !m_brush.IsNull() && ((wxMacCoreGraphicsBrushData*)m_brush.GetRefData())->IsShading() )
     {
@@ -1432,14 +1388,14 @@ void wxMacCoreGraphicsContext::DrawPath( const wxGraphicsPath *path , int fillSt
     if ( offset )
         CGContextTranslateCTM( m_cgContext, 0.5, 0.5 );
 
-    CGContextAddPath( m_cgContext , (CGPathRef) path->GetNativePath() );
+    CGContextAddPath( m_cgContext , (CGPathRef) path.GetNativePath() );
     CGContextDrawPath( m_cgContext , mode );
 
     if ( offset )
         CGContextTranslateCTM( m_cgContext, -0.5, -0.5 );
 }
 
-void wxMacCoreGraphicsContext::FillPath( const wxGraphicsPath *path , int fillStyle )
+void wxMacCoreGraphicsContext::FillPath( const wxGraphicsPath &path , int fillStyle )
 {
     if ( m_brush.IsNull() )
         return;
@@ -1449,7 +1405,7 @@ void wxMacCoreGraphicsContext::FillPath( const wxGraphicsPath *path , int fillSt
     if ( ((wxMacCoreGraphicsBrushData*)m_brush.GetRefData())->IsShading() )
     {
         CGContextSaveGState( m_cgContext );
-        CGContextAddPath( m_cgContext , (CGPathRef) path->GetNativePath() );
+        CGContextAddPath( m_cgContext , (CGPathRef) path.GetNativePath() );
         CGContextClip( m_cgContext );
         CGContextDrawShading( m_cgContext, ((wxMacCoreGraphicsBrushData*)m_brush.GetRefData())->GetShading() );
         CGContextRestoreGState( m_cgContext);
@@ -1457,7 +1413,7 @@ void wxMacCoreGraphicsContext::FillPath( const wxGraphicsPath *path , int fillSt
     else
     {	
         ((wxMacCoreGraphicsBrushData*)m_brush.GetRefData())->Apply(this);
-        CGContextAddPath( m_cgContext , (CGPathRef) path->GetNativePath() );
+        CGContextAddPath( m_cgContext , (CGPathRef) path.GetNativePath() );
         if ( fillStyle == wxODDEVEN_RULE )
             CGContextEOFillPath( m_cgContext );
         else
@@ -1794,17 +1750,17 @@ void * wxMacCoreGraphicsContext::GetNativeContext()
 }
 
 // concatenates this transform with the current transform of this context
-void wxMacCoreGraphicsContext::ConcatTransform( const wxGraphicsMatrix* matrix )
+void wxMacCoreGraphicsContext::ConcatTransform( const wxGraphicsMatrix& matrix )
 {
 }
 
 // sets the transform of this context
-void wxMacCoreGraphicsContext::SetTransform( const wxGraphicsMatrix* matrix )
+void wxMacCoreGraphicsContext::SetTransform( const wxGraphicsMatrix& matrix )
 {
 }
 
 // gets the matrix of this context
-void wxMacCoreGraphicsContext::GetTransform( wxGraphicsMatrix* matrix )
+wxGraphicsMatrix wxMacCoreGraphicsContext::GetTransform() const
 {
 }
 
@@ -1835,11 +1791,11 @@ public :
 
 	// Path
 	
-    virtual wxGraphicsPath * CreatePath();
+    virtual wxGraphicsPath CreatePath();
 
 	// Matrix
 	
-	virtual wxGraphicsMatrix * CreateMatrix( wxDouble a=1.0, wxDouble b=0.0, wxDouble c=0.0, wxDouble d=1.0, 
+	virtual wxGraphicsMatrix CreateMatrix( wxDouble a=1.0, wxDouble b=0.0, wxDouble c=0.0, wxDouble d=1.0, 
 		wxDouble tx=0.0, wxDouble ty=0.0);
 
 
@@ -1899,20 +1855,23 @@ wxGraphicsContext * wxMacCoreGraphicsRenderer::CreateContext( wxWindow* window )
 
 // Path
 
-wxGraphicsPath * wxMacCoreGraphicsRenderer::CreatePath()
+wxGraphicsPath wxMacCoreGraphicsRenderer::CreatePath()
 {
-	return new wxMacCoreGraphicsPath( this );
+    wxGraphicsPath m;
+    m.SetRefData( new wxMacCoreGraphicsPathData(this));
+    return m;
 }
 
 
 // Matrix
 
-wxGraphicsMatrix * wxMacCoreGraphicsRenderer::CreateMatrix( wxDouble a, wxDouble b, wxDouble c, wxDouble d, 
+wxGraphicsMatrix wxMacCoreGraphicsRenderer::CreateMatrix( wxDouble a, wxDouble b, wxDouble c, wxDouble d, 
 	wxDouble tx, wxDouble ty)
-	
 {
-    wxMacCoreGraphicsMatrix* m = new wxMacCoreGraphicsMatrix( this );
-    m->Set( a,b,c,d,tx,ty ) ;
+    wxGraphicsMatrix m;
+    wxMacCoreGraphicsMatrixData* data = new wxMacCoreGraphicsMatrixData( this );
+    data->Set( a,b,c,d,tx,ty ) ;
+    m.SetRefData(data);
     return m;
 }
 
