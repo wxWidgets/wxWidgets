@@ -174,7 +174,7 @@ enum {
     wxFS_SEEKABLE = 4   // Returned stream will be seekable
 };
 
-WX_DECLARE_VOIDPTR_HASH_MAP(wxFileSystemHandler*, wxFSHandlerHash);
+WX_DECLARE_VOIDPTR_HASH_MAP_WITH_DECL(wxFileSystemHandler*, wxFSHandlerHash, class WXDLLIMPEXP_BASE);
 
 class WXDLLIMPEXP_BASE wxFileSystem : public wxObject
 {
