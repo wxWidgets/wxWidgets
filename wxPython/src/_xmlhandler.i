@@ -24,7 +24,7 @@
 class wxPyXmlResourceHandler : public wxXmlResourceHandler {
 public:
     wxPyXmlResourceHandler() : wxXmlResourceHandler() {}
-    //~wxPyXmlResourceHandler();
+    ~wxPyXmlResourceHandler() {}
 
     // Base class virtuals
 

@@ -130,6 +130,9 @@ public:
     virtual void SetTitle(const wxString& title);
     virtual wxString GetTitle() const;
 
+    // enable/disable close button [x]
+    virtual bool EnableCloseButton(bool enable );
+
     // Set the shape of the window to the given region.
     // Returns True if the platform supports this feature
     // (and the operation is successful.)
@@ -168,15 +171,6 @@ public:
         "Center the window on screen", "");
     %pythoncode { CentreOnScreen = CenterOnScreen }
 
-#ifdef __WXMSW__
-    bool EnableCloseButton(bool enable = true);
-#else
-    %extend {
-        bool EnableCloseButton(bool enable = true) { return false; }
-    }
-#endif
-
-    
     
     DocDeclStr(
         virtual wxWindow *, GetDefaultItem() const,

@@ -495,6 +495,23 @@ public:
     wxDC* GetDC();
     void SetDC(wxDC *dc);
 
+    
+    void FitThisSizeToPaper(const wxSize& imageSize);
+    void FitThisSizeToPage(const wxSize& imageSize);
+    void FitThisSizeToPageMargins(const wxSize& imageSize, const wxPageSetupDialogData& pageSetupData);
+    void MapScreenSizeToPaper();
+    void MapScreenSizeToPage();
+    void MapScreenSizeToPageMargins(const wxPageSetupDialogData& pageSetupData);
+    void MapScreenSizeToDevice();
+
+    wxRect GetLogicalPaperRect() const;
+    wxRect GetLogicalPageRect() const;
+    wxRect GetLogicalPageMarginsRect(const wxPageSetupDialogData& pageSetupData) const;
+
+    void SetLogicalOrigin(wxCoord x, wxCoord y);
+    void OffsetLogicalOrigin(wxCoord xoff, wxCoord yoff);
+
+    
     void SetPageSizePixels(int w, int  h);
     DocDeclA(
         void, GetPageSizePixels(int *OUTPUT, int *OUTPUT),
@@ -514,6 +531,9 @@ public:
     DocDeclA(
         void, GetPPIPrinter(int *OUTPUT, int *OUTPUT),
         "GetPPIPrinter() -> (x,y)");
+
+    void SetPaperRectPixels(const wxRect& paperRectPixels);
+    wxRect GetPaperRectPixels() const;
 
     bool IsPreview();
     void SetIsPreview(bool p);
