@@ -1675,32 +1675,33 @@ int wxString::Find(const wxChar *pszSub) const
 // conversion to numbers
 // ----------------------------------------------------------------------------
 
-bool wxString::ToLong(long *val, int base) const
+// the implementation of all the functions below is exactly the same so factor
+// it out
+template <typename T>
+bool wxStringToIntType(const wxChar *start,
+                       T *val,
+                       int base,
+                       T (*func)(const wxChar *, wxChar **, int))
 {
-    wxCHECK_MSG( val, false, _T("NULL pointer in wxString::ToLong") );
+    wxCHECK_MSG( val, false, _T("NULL output pointer") );
     wxASSERT_MSG( !base || (base > 1 && base <= 36), _T("invalid base") );
 
-    const wxChar *start = c_str();
     wxChar *end;
-    *val = wxStrtol(start, &end, base);
+    *val = (*func)(start, &end, base);
 
     // return true only if scan was stopped by the terminating NUL and if the
     // string was not empty to start with and no under/overflow occurred
     return !*end && (end != start) && (errno != ERANGE);
 }
 
+bool wxString::ToLong(long *val, int base) const
+{
+    return wxStringToIntType(c_str(), val, base, wxStrtol);
+}
+
 bool wxString::ToULong(unsigned long *val, int base) const
 {
-    wxCHECK_MSG( val, false, _T("NULL pointer in wxString::ToULong") );
-    wxASSERT_MSG( !base || (base > 1 && base <= 36), _T("invalid base") );
-
-    const wxChar *start = c_str();
-    wxChar *end;
-    *val = wxStrtoul(start, &end, base);
-
-    // return true only if scan was stopped by the terminating NUL and if the
-    // string was not empty to start with and no overflow occurred
-    return !*end && (end != start) && (errno != ERANGE);
+    return wxStringToIntType(c_str(), val, base, wxStrtoul);
 }
 
 bool wxString::ToDouble(double *val) const
