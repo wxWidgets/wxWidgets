@@ -491,6 +491,11 @@ try:
             if wx.Platform == '__WXMSW__':
                 self.StyleSetSpec(stc.STC_STYLE_DEFAULT, 
                                   'fore:#000000,back:#FFFFFF,face:Courier New,size:9')
+            elif wx.Platform == '__WXMAC__':
+                # TODO: if this looks fine on Linux too, remove the Mac-specific case 
+                # and use this whenever OS != MSW.
+                self.StyleSetSpec(stc.STC_STYLE_DEFAULT, 
+                                  'fore:#000000,back:#FFFFFF,face:Courier')
             else:
                 self.StyleSetSpec(stc.STC_STYLE_DEFAULT, 
                                   'fore:#000000,back:#FFFFFF,face:Courier,size:9')
