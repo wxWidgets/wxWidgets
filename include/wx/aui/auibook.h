@@ -27,6 +27,66 @@
 #include "wx/control.h"
 
 
+// tab art class
+
+
+class wxTabArt
+{
+public:
+
+    virtual void DrawBackground(
+                         wxDC* dc,
+                         const wxRect& rect) = 0;
+
+    virtual void DrawTab(wxDC* dc,
+                         const wxRect& in_rect,
+                         const wxString& caption,
+                         bool active,
+                         wxRect* out_rect,
+                         int* x_extent) = 0;     
+                         
+    virtual void SetNormalFont(const wxFont& font) = 0;
+    virtual void SetSelectedFont(const wxFont& font) = 0;
+    virtual void SetMeasuringFont(const wxFont& font) = 0;
+};
+
+
+class wxDefaultTabArt : public wxTabArt
+{
+
+public:
+
+    wxDefaultTabArt();
+    
+    void DrawBackground(
+                 wxDC* dc,
+                 const wxRect& rect);
+
+    void DrawTab(wxDC* dc,
+                 const wxRect& in_rect,
+                 const wxString& caption,
+                 bool active,
+                 wxRect* out_rect,
+                 int* x_extent);
+              
+    void SetNormalFont(const wxFont& font);
+    void SetSelectedFont(const wxFont& font);
+    void SetMeasuringFont(const wxFont& font);
+   
+private:
+
+    wxFont m_normal_font;
+    wxFont m_selected_font;
+    wxFont m_measuring_font;
+    wxPen m_normal_bkpen;
+    wxPen m_selected_bkpen;
+    wxBrush m_normal_bkbrush;
+    wxBrush m_selected_bkbrush;
+    wxBrush m_bkbrush;
+};
+
+
+
 // event declarations/classes
 
 class WXDLLIMPEXP_AUI wxAuiNotebookEvent : public wxNotifyEvent
@@ -98,6 +158,9 @@ public:
     wxAuiTabContainer();
     virtual ~wxAuiTabContainer();
 
+    void SetArtProvider(wxTabArt* art);
+    wxTabArt* GetArtProvider();
+
     bool AddPage(wxWindow* page, const wxAuiNotebookPage& info);
     bool InsertPage(wxWindow* page, const wxAuiNotebookPage& info, size_t idx);
     bool RemovePage(wxWindow* page);
@@ -123,25 +186,12 @@ protected:
 
     virtual void Render(wxDC* dc);
 
-    virtual void DrawTab(wxDC* dc,
-                         const wxRect& in_rect,
-                         const wxString& caption,
-                         bool active,
-                         wxRect* out_rect,
-                         int* x_extent);
 private:
 
+    wxTabArt* m_art;
     wxAuiNotebookPageArray m_pages;
     wxAuiTabContainerButtonArray m_buttons;
     wxRect m_rect;
-    wxFont m_normal_font;
-    wxFont m_selected_font;
-    wxFont m_measuring_font;
-    wxPen m_normal_bkpen;
-    wxPen m_selected_bkpen;
-    wxBrush m_normal_bkbrush;
-    wxBrush m_selected_bkbrush;
-    wxBrush m_bkbrush;
 };
 
 
@@ -222,6 +272,9 @@ public:
     int GetSelection() const;
     size_t GetPageCount() const;
     wxWindow* GetPage(size_t page_idx) const;
+
+    void SetArtProvider(wxTabArt* art);
+    wxTabArt* GetArtProvider();
 
 protected:
 

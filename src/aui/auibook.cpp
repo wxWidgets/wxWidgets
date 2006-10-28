@@ -45,17 +45,8 @@ DEFINE_EVENT_TYPE(wxEVT_COMMAND_AUINOTEBOOK_DRAG_MOTION)
 
 IMPLEMENT_DYNAMIC_CLASS(wxAuiNotebookEvent, wxEvent)
 
-// -- wxAuiTabContainer class implementation --
 
 
-// wxAuiTabContainer is a class which contains information about each
-// tab.  It also can render an entire tab control to a specified DC.
-// It's not a window class itself, because this code will be used by
-// the wxFrameMananger, where it is disadvantageous to have separate
-// windows for each tab control in the case of "docked tabs"
-
-// A derived class, wxAuiTabCtrl, is an actual wxWindow-derived window
-// which can be used as a tab control in the normal sense.
 
 
 // This functions are here for this proof of concept
@@ -111,7 +102,10 @@ static void DrawButton(wxDC& dc,
 
 
 
-wxAuiTabContainer::wxAuiTabContainer()
+
+// -- wxDefaultTabArt class implementation --
+
+wxDefaultTabArt::wxDefaultTabArt()
 {
     m_normal_font = *wxNORMAL_FONT;
     m_selected_font = *wxNORMAL_FONT;
@@ -131,23 +125,188 @@ wxAuiTabContainer::wxAuiTabContainer()
     m_selected_bkpen = wxPen(selectedtab_colour);
 }
 
-wxAuiTabContainer::~wxAuiTabContainer()
+void wxDefaultTabArt::DrawBackground(
+             wxDC* dc,
+             const wxRect& rect)
 {
+    // draw background
+    dc->SetBrush(m_bkbrush);
+    dc->SetPen(*wxTRANSPARENT_PEN);
+    dc->DrawRectangle(-1, -1, rect.GetWidth()+2, rect.GetHeight()+2);
+
+    // draw base line
+    dc->SetPen(*wxGREY_PEN);
+    dc->DrawLine(0, rect.GetHeight()-1, rect.GetWidth(), rect.GetHeight()-1);
 }
 
-void wxAuiTabContainer::SetNormalFont(const wxFont& font)
+// DrawTab() draws an individual tab.
+//
+// dc       - output dc
+// in_rect  - rectangle the tab should be confined to
+// caption  - tab's caption
+// active   - whether or not the tab is active
+// out_rect - actual output rectangle
+// x_extent - the advance x; where the next tab should start
+
+void wxDefaultTabArt::DrawTab(wxDC* dc,
+             const wxRect& in_rect,
+             const wxString& caption_text,
+             bool active,
+             wxRect* out_rect,
+             int* x_extent)
+{
+    wxCoord normal_textx, normal_texty;
+    wxCoord selected_textx, selected_texty;
+    wxCoord measured_textx, measured_texty;
+    wxCoord textx, texty;
+
+
+    // if the caption is empty, measure some temporary text
+    wxString caption = caption_text;
+    if (caption_text.empty())
+        caption = wxT("Xj");
+        
+    // measure text
+    dc->SetFont(m_measuring_font);
+    dc->GetTextExtent(caption, &measured_textx, &measured_texty);
+
+    dc->SetFont(m_selected_font);
+    dc->GetTextExtent(caption, &selected_textx, &selected_texty);
+
+    dc->SetFont(m_normal_font);
+    dc->GetTextExtent(caption, &normal_textx, &normal_texty);
+
+    caption = caption_text;
+
+    wxCoord tab_height = measured_texty + 4;
+    wxCoord tab_width = measured_textx + tab_height + 5;
+    wxCoord tab_x = in_rect.x;
+    wxCoord tab_y = in_rect.y + in_rect.height - tab_height;
+
+
+    // select pen, brush and font for the tab to be drawn
+
+    if (active)
+    {
+        dc->SetPen(m_selected_bkpen);
+        dc->SetBrush(m_selected_bkbrush);
+        dc->SetFont(m_selected_font);
+        textx = selected_textx;
+        texty = selected_texty;
+    }
+     else
+    {
+        dc->SetPen(m_normal_bkpen);
+        dc->SetBrush(m_normal_bkbrush);
+        dc->SetFont(m_normal_font);
+        textx = normal_textx;
+        texty = normal_texty;
+    }
+
+
+    // -- draw line --
+
+    wxPoint points[7];
+    points[0].x = tab_x;
+    points[0].y = tab_y + tab_height - 1;
+    points[1].x = tab_x + tab_height - 3;
+    points[1].y = tab_y + 2;
+    points[2].x = tab_x + tab_height + 3;
+    points[2].y = tab_y;
+    points[3].x = tab_x + tab_width - 2;
+    points[3].y = tab_y;
+    points[4].x = tab_x + tab_width;
+    points[4].y = tab_y + 2;
+    points[5].x = tab_x + tab_width;
+    points[5].y = tab_y + tab_height - 1;
+    points[6] = points[0];
+
+
+    dc->DrawPolygon(6, points);
+
+    dc->SetPen(*wxGREY_PEN);
+
+    //dc->DrawLines(active ? 6 : 7, points);
+    dc->DrawLines(7, points);
+
+    // -- draw text --
+
+    dc->DrawText(caption,
+                 tab_x + (tab_height/3) + (tab_width/2) - (textx/2),
+                 tab_y + tab_height - texty - 2);
+
+    *out_rect = wxRect(tab_x, tab_y, tab_width, tab_height);
+    *x_extent = tab_width - (tab_height/2) - 1;
+}
+
+
+void wxDefaultTabArt::SetNormalFont(const wxFont& font)
 {
     m_normal_font = font;
 }
 
-void wxAuiTabContainer::SetSelectedFont(const wxFont& font)
+void wxDefaultTabArt::SetSelectedFont(const wxFont& font)
 {
     m_selected_font = font;
 }
 
-void wxAuiTabContainer::SetMeasuringFont(const wxFont& font)
+void wxDefaultTabArt::SetMeasuringFont(const wxFont& font)
 {
     m_measuring_font = font;
+}
+
+
+
+
+
+
+// -- wxAuiTabContainer class implementation --
+
+
+// wxAuiTabContainer is a class which contains information about each
+// tab.  It also can render an entire tab control to a specified DC.
+// It's not a window class itself, because this code will be used by
+// the wxFrameMananger, where it is disadvantageous to have separate
+// windows for each tab control in the case of "docked tabs"
+
+// A derived class, wxAuiTabCtrl, is an actual wxWindow-derived window
+// which can be used as a tab control in the normal sense.
+
+
+wxAuiTabContainer::wxAuiTabContainer()
+{
+    m_art = new wxDefaultTabArt;
+}
+
+wxAuiTabContainer::~wxAuiTabContainer()
+{
+    delete m_art;
+}
+
+void wxAuiTabContainer::SetArtProvider(wxTabArt* art)
+{
+    delete m_art;
+    m_art = art;
+}
+
+wxTabArt* wxAuiTabContainer::GetArtProvider()
+{
+    return m_art;
+}
+
+void wxAuiTabContainer::SetNormalFont(const wxFont& font)
+{
+    m_art->SetNormalFont(font);
+}
+
+void wxAuiTabContainer::SetSelectedFont(const wxFont& font)
+{
+    m_art->SetSelectedFont(font);
+}
+
+void wxAuiTabContainer::SetMeasuringFont(const wxFont& font)
+{
+    m_art->SetMeasuringFont(font);
 }
 
 void wxAuiTabContainer::SetRect(const wxRect& rect)
@@ -301,108 +460,6 @@ void wxAuiTabContainer::AddButton(int id, const wxBitmap& bmp)
 
 
 
-// DrawTab() draws an individual tab.
-// As it is virtual it may be overridden.
-//
-// dc       - output dc
-// in_rect  - rectangle the tab should be confined to
-// caption  - tab's caption
-// active   - whether or not the tab is active
-// out_rect - actual output rectangle
-// x_extent - the advance x; where the next tab should start
-
-void wxAuiTabContainer::DrawTab(wxDC* dc,
-                                const wxRect& in_rect,
-                                const wxString& caption_text,
-                                bool active,
-                                wxRect* out_rect,
-                                int* x_extent)
-{
-    wxCoord normal_textx, normal_texty;
-    wxCoord selected_textx, selected_texty;
-    wxCoord measured_textx, measured_texty;
-    wxCoord textx, texty;
-
-
-    // if the caption is empty, measure some temporary text
-    wxString caption = caption_text;
-    if (caption_text.empty())
-        caption = wxT("Xj");
-        
-    // measure text
-    dc->SetFont(m_measuring_font);
-    dc->GetTextExtent(caption, &measured_textx, &measured_texty);
-
-    dc->SetFont(m_selected_font);
-    dc->GetTextExtent(caption, &selected_textx, &selected_texty);
-
-    dc->SetFont(m_normal_font);
-    dc->GetTextExtent(caption, &normal_textx, &normal_texty);
-
-    caption = caption_text;
-
-    wxCoord tab_height = measured_texty + 4;
-    wxCoord tab_width = measured_textx + tab_height + 5;
-    wxCoord tab_x = in_rect.x;
-    wxCoord tab_y = in_rect.y + in_rect.height - tab_height;
-
-
-    // select pen, brush and font for the tab to be drawn
-
-    if (active)
-    {
-        dc->SetPen(m_selected_bkpen);
-        dc->SetBrush(m_selected_bkbrush);
-        dc->SetFont(m_selected_font);
-        textx = selected_textx;
-        texty = selected_texty;
-    }
-     else
-    {
-        dc->SetPen(m_normal_bkpen);
-        dc->SetBrush(m_normal_bkbrush);
-        dc->SetFont(m_normal_font);
-        textx = normal_textx;
-        texty = normal_texty;
-    }
-
-
-    // -- draw line --
-
-    wxPoint points[7];
-    points[0].x = tab_x;
-    points[0].y = tab_y + tab_height - 1;
-    points[1].x = tab_x + tab_height - 3;
-    points[1].y = tab_y + 2;
-    points[2].x = tab_x + tab_height + 3;
-    points[2].y = tab_y;
-    points[3].x = tab_x + tab_width - 2;
-    points[3].y = tab_y;
-    points[4].x = tab_x + tab_width;
-    points[4].y = tab_y + 2;
-    points[5].x = tab_x + tab_width;
-    points[5].y = tab_y + tab_height - 1;
-    points[6] = points[0];
-
-
-    dc->DrawPolygon(6, points);
-
-    dc->SetPen(*wxGREY_PEN);
-
-    //dc->DrawLines(active ? 6 : 7, points);
-    dc->DrawLines(7, points);
-
-    // -- draw text --
-
-    dc->DrawText(caption,
-                 tab_x + (tab_height/3) + (tab_width/2) - (textx/2),
-                 tab_y + tab_height - texty - 2);
-
-    *out_rect = wxRect(tab_x, tab_y, tab_width, tab_height);
-    *x_extent = tab_width - (tab_height/2) - 1;
-}
-
-
 // Render() renders the tab catalog to the specified DC
 // It is a virtual function and can be overridden to
 // provide custom drawing capabilities
@@ -413,15 +470,8 @@ void wxAuiTabContainer::Render(wxDC* raw_dc)
     bmp.Create(m_rect.GetWidth(), m_rect.GetHeight());
     dc.SelectObject(bmp);
 
-    // draw background
-    dc.SetBrush(m_bkbrush);
-    dc.SetPen(*wxTRANSPARENT_PEN);
-    dc.DrawRectangle(-1, -1, m_rect.GetWidth()+2, m_rect.GetHeight()+2);
 
-    // draw base line
-    dc.SetPen(*wxGREY_PEN);
-    dc.DrawLine(0, m_rect.GetHeight()-1, m_rect.GetWidth(), m_rect.GetHeight()-1);
-
+    m_art->DrawBackground(&dc, m_rect);
 
     size_t i, page_count = m_pages.GetCount();
     int offset = 0;
@@ -441,7 +491,7 @@ void wxAuiTabContainer::Render(wxDC* raw_dc)
 
         rect.x = offset;
 
-        DrawTab(&dc,
+        m_art->DrawTab(&dc, 
                 rect,
                 page.caption,
                 page.active,
@@ -463,7 +513,7 @@ void wxAuiTabContainer::Render(wxDC* raw_dc)
         wxAuiNotebookPage& page = m_pages.Item(active);
 
         rect.x = active_offset;
-        DrawTab(&dc,
+        m_art->DrawTab(&dc,
                 rect,
                 page.caption,
                 page.active,
@@ -484,7 +534,8 @@ void wxAuiTabContainer::Render(wxDC* raw_dc)
         button.rect = button_rect;
 
         DrawButton(dc, button.rect, button.bitmap,
-                   m_bkbrush.GetColour(),
+                   //m_bkbrush.GetColour(),
+                   *wxWHITE,
                    button.cur_state);
 
         offset -= button.bitmap.GetWidth();
@@ -975,6 +1026,16 @@ void wxAuiMultiNotebook::InitNotebook()
 wxAuiMultiNotebook::~wxAuiMultiNotebook()
 {
     m_mgr.UnInit();
+}
+
+void wxAuiMultiNotebook::SetArtProvider(wxTabArt* art)
+{
+    m_tabs.SetArtProvider(art);
+}
+
+wxTabArt* wxAuiMultiNotebook::GetArtProvider()
+{
+    return m_tabs.GetArtProvider();
 }
 
 bool wxAuiMultiNotebook::AddPage(wxWindow* page,
