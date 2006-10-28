@@ -1588,11 +1588,8 @@ public:
     /// Initialisation
     void Init();
 
-    /// Clears the buffer and resets the command processor
-    virtual void Clear();
-
-    /// The same as Clear, and adds an empty paragraph.
-    virtual void Reset();
+    /// Clears the buffer, adds an empty paragraph, and clears the command processor.
+    virtual void ResetAndClearCommands();
 
     /// Load a file
     virtual bool LoadFile(const wxString& filename, int type = wxRICHTEXT_TYPE_ANY);

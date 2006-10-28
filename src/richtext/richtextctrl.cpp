@@ -128,6 +128,7 @@ bool wxRichTextCtrl::Create( wxWindow* parent, wxWindowID id, const wxString& va
         SetFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT));
     }
 
+    GetBuffer().Reset();
     GetBuffer().SetRichTextCtrl(this);
 
     if (style & wxTE_READONLY)
@@ -220,7 +221,7 @@ void wxRichTextCtrl::Thaw()
 /// Clear all text
 void wxRichTextCtrl::Clear()
 {
-    m_buffer.Reset();
+    m_buffer.ResetAndClearCommands();
     m_buffer.SetDirty(true);
     m_caretPosition = -1;
     m_caretPositionForDefaultStyle = -2;
@@ -572,7 +573,6 @@ void wxRichTextCtrl::OnChar(wxKeyEvent& event)
 
         EndBatchUndo();
 
-        // Shouldn't this be in Do()?
         if (GetLastPosition() == -1)
         {
             GetBuffer().Reset();
@@ -601,7 +601,6 @@ void wxRichTextCtrl::OnChar(wxKeyEvent& event)
 
         EndBatchUndo();
 
-        // Shouldn't this be in Do()?
         if (GetLastPosition() == -1)
         {
             GetBuffer().Reset();

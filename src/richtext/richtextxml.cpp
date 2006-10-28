@@ -41,7 +41,7 @@ bool wxRichTextXMLHandler::DoLoadFile(wxRichTextBuffer *buffer, wxInputStream& s
     if (!stream.IsOk())
         return false;
 
-    buffer->Clear();
+    buffer->ResetAndClearCommands();
 
     wxXmlDocument* xmlDoc = new wxXmlDocument;
     bool success = true;

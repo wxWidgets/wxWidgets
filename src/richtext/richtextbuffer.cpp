@@ -2420,6 +2420,8 @@ void wxRichTextParagraphLayoutBox::Reset()
     Clear();
 
     AddParagraph(wxEmptyString);
+    
+    Invalidate(wxRICHTEXT_ALL);
 }
 
 /// Invalidate the buffer. With no argument, invalidates whole buffer.
@@ -4545,19 +4547,12 @@ wxRichTextBuffer::~wxRichTextBuffer()
     ClearEventHandlers();
 }
 
-void wxRichTextBuffer::Clear()
+void wxRichTextBuffer::ResetAndClearCommands()
 {
-    DeleteChildren();
+    Reset();
+    
     GetCommandProcessor()->ClearCommands();
-    Modify(false);
-    Invalidate(wxRICHTEXT_ALL);
-}
 
-void wxRichTextBuffer::Reset()
-{
-    DeleteChildren();
-    AddParagraph(wxEmptyString);
-    GetCommandProcessor()->ClearCommands();
     Modify(false);
     Invalidate(wxRICHTEXT_ALL);
 }
