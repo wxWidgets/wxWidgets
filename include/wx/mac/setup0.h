@@ -273,7 +273,7 @@
 #define wxUSE_STD_IOSTREAM  0
 
 // Enable conversion to standard C++ string if 1.
-#define wxUSE_STD_STRING  0
+#define wxUSE_STD_STRING  1
 
 // Support for positional parameters (e.g. %1$d, %2$s ...) in wxVsnprintf.
 // Note that if the system's implementation does not support positional
