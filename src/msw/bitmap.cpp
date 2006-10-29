@@ -45,8 +45,6 @@
     #include "wx/msw/dib.h"
 #endif
 
-#include "wx/xpmdecod.h"
-
 #ifdef wxHAVE_RAW_BITMAP
     #include "wx/rawbmp.h"
 #endif
