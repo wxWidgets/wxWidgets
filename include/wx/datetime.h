@@ -168,7 +168,7 @@ public:
         GMT_6, GMT_5, GMT_4, GMT_3, GMT_2, GMT_1,
         GMT0,
         GMT1, GMT2, GMT3, GMT4, GMT5, GMT6,
-        GMT7, GMT8, GMT9, GMT10, GMT11, GMT12,
+        GMT7, GMT8, GMT9, GMT10, GMT11, GMT12, GMT13,
         // Note that GMT12 and GMT_12 are not the same: there is a difference
         // of exactly one day between them
 
@@ -202,9 +202,13 @@ public:
         // Australia
 
         A_WST = GMT8,                       // Western Standard Time
-        A_CST = GMT12 + 1,                  // Central Standard Time (+9.5)
+        A_CST = GMT13 + 1,                  // Central Standard Time (+9.5)
         A_EST = GMT10,                      // Eastern Standard Time
         A_ESST = GMT11,                     // Eastern Summer Time
+
+        // New Zealand
+        NZST = GMT12,                       // Standard Time
+        NZDT = GMT13,                       // Daylight Saving Time
 
         // TODO add more symbolic timezone names here
 

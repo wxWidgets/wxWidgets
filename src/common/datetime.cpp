@@ -721,6 +721,7 @@ wxDateTime::TimeZone::TimeZone(wxDateTime::TZ tz)
         case wxDateTime::GMT10:
         case wxDateTime::GMT11:
         case wxDateTime::GMT12:
+        case wxDateTime::GMT13:
             m_offset = 3600*(tz - wxDateTime::GMT0);
             break;
 
