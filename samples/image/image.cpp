@@ -460,14 +460,14 @@ END_EVENT_TABLE()
 #endif // wxHAVE_RAW_BITMAP
 
 BEGIN_EVENT_TABLE(MyCanvas, wxScrolledWindow)
-  EVT_PAINT(MyCanvas::OnPaint)
+    EVT_PAINT(MyCanvas::OnPaint)
 END_EVENT_TABLE()
 
 MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
                     const wxPoint &pos, const wxSize &size )
-        : wxScrolledWindow( parent, id, pos, size, wxSUNKEN_BORDER )
-          , m_bmpSmileXpm((const char **) smile_xpm)
-          , m_iconSmileXpm((const char **) smile_xpm)
+    : wxScrolledWindow( parent, id, pos, size, wxSUNKEN_BORDER )
+    , m_bmpSmileXpm(smile_xpm)
+    , m_iconSmileXpm(smile_xpm)
 {
     my_horse_ani = NULL;
     m_ani_images = 0 ;
