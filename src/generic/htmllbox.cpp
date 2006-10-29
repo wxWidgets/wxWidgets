@@ -405,6 +405,13 @@ void wxHtmlListBox::OnHTMLLinkClicked(const wxHtmlLinkInfo& link)
     OnLinkClicked(GetItemForCell(link.GetHtmlCell()), link);
 }
 
+void wxHtmlListBox::OnLinkClicked(size_t WXUNUSED(n),
+                                  const wxHtmlLinkInfo& link)
+{
+    wxHtmlLinkEvent event(GetId(), link);
+    GetEventHandler()->ProcessEvent(event);
+}
+
 wxHtmlOpeningStatus
 wxHtmlListBox::OnHTMLOpeningURL(wxHtmlURLType WXUNUSED(type),
                                 const wxString& WXUNUSED(url),
