@@ -939,11 +939,22 @@ public:
 };
 
 
+MAKE_CONST_WXSTRING2(OneString, _T("1"));
 class wxGridCellBoolEditor : public wxGridCellEditor
 {
 public:
     %pythonAppend wxGridCellBoolEditor  "self._setOORInfo(self)"
     wxGridCellBoolEditor();
+
+    // set the string values returned by GetValue() for the true and false
+    // states, respectively
+    static void UseStringValues(const wxString& valueTrue = wxPyOneString,
+                                const wxString& valueFalse = wxPyEmptyString);
+
+    // return true if the given string is equal to the string representation of
+    // true value which we currently use
+    static bool IsTrueValue(const wxString& value);
+
 };
 
 class wxGridCellChoiceEditor : public wxGridCellEditor
