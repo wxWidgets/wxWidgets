@@ -150,10 +150,20 @@ void wxAboutBox(const wxAboutDialogInfo& info)
         else // no translators explicitely specified
         {
             // maybe we have translator credits in the message catalog?
-            transCredits = _("translator-credits");
+            wxString translator = _("translator-credits");
+
+            // gtk_about_dialog_set_translator_credits() is smart enough to
+            // detect if "translator-credits" is untranslated and hide the
+            // translators tab in that case, however it will still show the
+            // "credits" button, (at least GTK 2.10.6) even if there are no
+            // credits informations at all, so we still need to do the check
+            // ourselves
+            if ( translator != wxT("translator-credits") ) // untranslated!
+                transCredits = translator;
         }
 
-        gtk_about_dialog_set_translator_credits(dlg, GtkStr(transCredits));
+        if ( !transCredits.empty() )
+            gtk_about_dialog_set_translator_credits(dlg, GtkStr(transCredits));
 
         g_signal_connect(dlg, "response",
                             G_CALLBACK(wxGtkAboutDialogOnClose), NULL);
