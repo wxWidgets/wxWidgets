@@ -1521,6 +1521,25 @@ extern wxPyApp *wxPythonApp;
 
 //---------------------------------------------------------------------------
 
+#define DEC_PYCALLBACK__FONT(CBNAME)                                            \
+    void CBNAME(const wxFont& a);
+
+#define IMP_PYCALLBACK__FONT(CLASS, PCLASS, CBNAME)                             \
+    void CLASS::CBNAME(const wxFont& a) {                                       \
+        bool found;                                                             \
+        wxPyBlock_t blocked = wxPyBeginBlockThreads();                          \
+        if ((found = wxPyCBH_findCallback(m_myInst, #CBNAME))) {                \
+            PyObject* obj = wxPyConstructObject((void*)&a, wxT("wxFont"), 0);   \
+            wxPyCBH_callCallbackObj(m_myInst, Py_BuildValue("(O)", obj));       \
+            Py_DECREF(obj);                                                     \
+        }                                                                       \
+        wxPyEndBlockThreads(blocked);                                           \
+        if (! found)                                                            \
+            PCLASS::CBNAME(a);                                                  \
+    }                                                                           \
+
+//---------------------------------------------------------------------------
+
 #define DEC_PYCALLBACK_BOOL_CELLINTINTME(CBNAME)                                    \
     bool CBNAME(wxHtmlCell *cell, wxCoord x, wxCoord y, const wxMouseEvent& e)
 
