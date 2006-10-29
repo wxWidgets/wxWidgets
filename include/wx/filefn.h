@@ -181,12 +181,6 @@ enum wxFileKind
     // huge file support (or at least not all functions needed for it by wx)
     // currently
 
-
-    // functions
-    #if defined(__BORLANDC__) || defined(__WATCOMC__)
-        #define   _tell        tell
-    #endif
-
     #ifdef wxHAS_HUGE_FILES
         typedef wxLongLong_t wxFileOffset;
         #define wxFileOffsetFmtSpec wxLongLongFmtSpec
@@ -194,7 +188,26 @@ enum wxFileKind
         typedef off_t wxFileOffset;
     #endif
 
-    #define   wxClose      _close
+
+    // functions
+
+    // MSVC and compatible compilers prepend underscores to the POSIX function
+    // names, other compilers don't and even if their later versions usually do
+    // define the versions with underscores for MSVC compatibility, it's better
+    // to avoid using them as they're not present in earlier versions and
+    // always using the native functions spelling is easier than testing for
+    // the versions
+    #if defined(__BORLANDC__) || defined(__DMC__) || defined(__WATCOMC__)
+        #define wxPOSIX_IDENT(func)    ::func
+    #else // by default assume MSVC-compatible names
+        #define wxPOSIX_IDENT(func)    _ ## func
+        #define wxHAS_UNDERSCORES_IN_POSIX_IDENTS
+    #endif
+
+
+    // first functions not working with strings, i.e. without ANSI/Unicode
+    // complications
+    #define   wxClose      wxPOSIX_IDENT(close)
 
     #if defined(__MWERKS__)
         #if __MSL__ >= 0x6000
@@ -206,33 +219,31 @@ enum wxFileKind
             #define wxWrite(fd, buf, nCount)\
                   _write(fd, (const char *)buf, nCount)
         #endif
-    #else
-        #if defined(__DMC__) || defined(__WATCOMC__)
-            #define wxRead        ::read
-            #define wxWrite       ::write
-        #else
-            #define wxRead         _read
-            #define wxWrite        _write
-        #endif
+    #else // __MWERKS__
+        #define wxRead         wxPOSIX_IDENT(read)
+        #define wxWrite        wxPOSIX_IDENT(write)
     #endif
+
     #ifdef wxHAS_HUGE_FILES
-        #define   wxSeek       _lseeki64
-        #define   wxLseek      _lseeki64
-        #define   wxTell       _telli64
+        #define   wxSeek       wxPOSIX_IDENT(lseeki64)
+        #define   wxLseek      wxPOSIX_IDENT(lseeki64)
+        #define   wxTell       wxPOSIX_IDENT(telli64)
     #else // !wxHAS_HUGE_FILES
-        #define   wxSeek       _lseek
-        #define   wxLseek      _lseek
-        #define   wxTell       _tell
+        #define   wxSeek       wxPOSIX_IDENT(lseek)
+        #define   wxLseek      wxPOSIX_IDENT(lseek)
+        #define   wxTell       wxPOSIX_IDENT(tell)
     #endif // wxHAS_HUGE_FILES/!wxHAS_HUGE_FILES
 
-    #define   wxFsync      _commit
+    #ifndef __WATCOMC__
+        // NB: this one is not POSIX and always has the underscore
+        #define   wxFsync      _commit
 
-    #if defined(__WATCOMC__)
-        #define   wxEof        ::eof
-    #else
-        #define   wxEof        _eof
+        #define HAVE_FSYNC
     #endif
 
+    #define   wxEof        wxPOSIX_IDENT(eof)
+
+    // then the functions taking strings
     #if wxUSE_UNICODE
         #if wxUSE_UNICODE_MSLU
             // implement the missing file functions in Win9x ourselves
@@ -241,17 +252,20 @@ enum wxFileKind
                 || ( defined(__MWERKS__) && defined(__WXMSW__) ) \
                 || ( defined(__BORLANDC__) && (__BORLANDC__ > 0x460) ) \
                 || defined(__DMC__)
-                #ifdef __BORLANDC__
-                    // BCC has _stati64() function but struct stati64
-                    #define _stati64 stati64
-                #endif // __BORLANDC__
 
-                WXDLLIMPEXP_BASE int wxMSLU__wopen(const wxChar *name, int flags, int mode);
-                WXDLLIMPEXP_BASE int wxMSLU__waccess(const wxChar *name, int mode);
+                WXDLLIMPEXP_BASE int wxMSLU__wopen(const wxChar *name,
+                                                   int flags, int mode);
+                WXDLLIMPEXP_BASE int wxMSLU__waccess(const wxChar *name,
+                                                     int mode);
                 WXDLLIMPEXP_BASE int wxMSLU__wmkdir(const wxChar *name);
                 WXDLLIMPEXP_BASE int wxMSLU__wrmdir(const wxChar *name);
-                WXDLLIMPEXP_BASE int wxMSLU__wstat(const wxChar *name, struct _stat *buffer);
-                WXDLLIMPEXP_BASE int wxMSLU__wstati64(const wxChar *name, struct _stati64 *buffer);
+
+                WXDLLIMPEXP_BASE int
+                wxMSLU__wstat(const wxChar *name,
+                              struct wxPOSIX_IDENT(stat) *buffer);
+                WXDLLIMPEXP_BASE int
+                wxMSLU__wstati64(const wxChar *name,
+                                 struct wxPOSIX_IDENT(stati64) *buffer);
             #endif // Windows compilers with MSLU support
 
             #define   wxOpen       wxMSLU__wopen
@@ -264,7 +278,7 @@ enum wxFileKind
             #else
                 #define   wxStat       wxMSLU__wstat
             #endif
-        #else
+        #else // !wxUSE_UNICODE_MSLU
             #define   wxOpen       _wopen
             #define   wxAccess     _waccess
             #define   wxMkDir      _wmkdir
@@ -274,24 +288,16 @@ enum wxFileKind
             #else
                 #define   wxStat       _wstat
             #endif
-        #endif
+        #endif // wxUSE_UNICODE_MSLU/!wxUSE_UNICODE_MSLU
     #else // !wxUSE_UNICODE
-        #ifdef __BORLANDC__
-            #define   wxOpen       open
-        #else
-            #define   wxOpen       _open
-        #endif
-        #define   wxAccess     _access
-        #define   wxMkDir      _mkdir
-        #ifdef __WATCOMC__
-            #define   wxRmDir      rmdir
-        #else
-            #define   wxRmDir      _rmdir
-        #endif
+        #define   wxOpen       wxPOSIX_IDENT(open)
+        #define   wxAccess     wxPOSIX_IDENT(access)
+        #define   wxMkDir      wxPOSIX_IDENT(mkdir)
+        #define   wxRmDir      wxPOSIX_IDENT(rmdir)
         #ifdef wxHAS_HUGE_FILES
-            #define   wxStat       _stati64
+            #define   wxStat       wxPOSIX_IDENT(stati64)
         #else
-            #define   wxStat       _stat
+            #define   wxStat       wxPOSIX_IDENT(stat)
         #endif
     #endif // wxUSE_UNICODE/!wxUSE_UNICODE
 
@@ -313,7 +319,7 @@ enum wxFileKind
     #endif
 
     // constants (unless already defined by the user code)
-    #if !defined(__BORLANDC__) && !defined(__WATCOMC__)
+    #ifdef wxHAS_UNDERSCORES_IN_POSIX_IDENTS
         #ifndef O_RDONLY
             #define   O_RDONLY    _O_RDONLY
             #define   O_WRONLY    _O_WRONLY
@@ -328,7 +334,7 @@ enum wxFileKind
             #define   S_IFDIR     _S_IFDIR
             #define   S_IFREG     _S_IFREG
         #endif
-    #endif
+    #endif // wxHAS_UNDERSCORES_IN_POSIX_IDENTS
 
     #ifdef wxHAS_HUGE_FILES
         // wxFile is present and supports large files. Currently wxFFile
