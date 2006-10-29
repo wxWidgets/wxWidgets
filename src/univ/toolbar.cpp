@@ -288,59 +288,15 @@ bool wxToolBar::DoDeleteTool(size_t WXUNUSED(pos),
 
 void wxToolBar::DoEnableTool(wxToolBarToolBase *tool, bool enable)
 {
+#if wxUSE_IMAGE
     // created disabled-state bitmap on demand
     if ( !enable && !tool->GetDisabledBitmap().Ok() )
     {
-        wxImage image( tool->GetNormalBitmap().ConvertToImage() );
+        wxImage image(tool->GetNormalBitmap().ConvertToImage());
 
-        // TODO: don't hardcode 180
-        unsigned char bg_red = 180;
-        unsigned char bg_green = 180;
-        unsigned char bg_blue = 180;
-
-        unsigned char mask_red = image.GetMaskRed();
-        unsigned char mask_green = image.GetMaskGreen();
-        unsigned char mask_blue = image.GetMaskBlue();
-
-        bool has_mask = image.HasMask();
-
-        int x,y;
-        for (y = 0; y < image.GetHeight(); y++)
-        {
-            for (x = 0; x < image.GetWidth(); x++)
-            {
-                unsigned char red = image.GetRed(x,y);
-                unsigned char green = image.GetGreen(x,y);
-                unsigned char blue = image.GetBlue(x,y);
-                if (!has_mask || red != mask_red || green != mask_green || blue != mask_blue)
-                {
-                    red = (unsigned char)((((wxInt32) red  - bg_red) >> 1) + bg_red);
-                    green = (unsigned char)((((wxInt32) green  - bg_green) >> 1) + bg_green);
-                    blue = (unsigned char)((((wxInt32) blue  - bg_blue) >> 1) + bg_blue);
-                    image.SetRGB( x, y, red, green, blue );
-                }
-            }
-        }
-
-        for (y = 0; y < image.GetHeight(); y++)
-        {
-            for (x = y % 2; x < image.GetWidth(); x += 2)
-            {
-                unsigned char red = image.GetRed(x,y);
-                unsigned char green = image.GetGreen(x,y);
-                unsigned char blue = image.GetBlue(x,y);
-                if (!has_mask || red != mask_red || green != mask_green || blue != mask_blue)
-                {
-                    red = (unsigned char)((((wxInt32) red  - bg_red) >> 1) + bg_red);
-                    green = (unsigned char)((((wxInt32) green  - bg_green) >> 1) + bg_green);
-                    blue = (unsigned char)((((wxInt32) blue  - bg_blue) >> 1) + bg_blue);
-                    image.SetRGB( x, y, red, green, blue );
-                }
-            }
-        }
-
-        tool->SetDisabledBitmap(image);
+        tool->SetDisabledBitmap(image.ConvertToGreyscale());
     }
+#endif // wxUSE_IMAGE
 
     RefreshTool(tool);
 }
