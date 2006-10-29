@@ -19,7 +19,7 @@
     extern unsigned long wxGlobalSEHandler(EXCEPTION_POINTERS *pExcPtrs);
 
     // helper macro for wxSEH_HANDLE
-#if defined(__VISUALC__) && (__VISUALC__ <= 1200)
+#if defined(__BORLANDC__) || (defined(__VISUALC__) && (__VISUALC__ <= 1200))
     // some compilers don't understand that this code is unreachable and warn
     // about no value being returned from the function without it, so calm them
     // down
