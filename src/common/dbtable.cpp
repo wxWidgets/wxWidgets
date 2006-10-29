@@ -560,21 +560,17 @@ bool wxDbTable::bindUpdateParams(void)
 /********** wxDbTable::bindCols() **********/
 bool wxDbTable::bindCols(HSTMT cursor)
 {
-    static SQLLEN cb;
-
     // Bind each column of the table to a memory address for fetching data
     UWORD i;
     for (i = 0; i < m_numCols; i++)
     {
-        cb = colDefs[i].CbValue;
         if (SQLBindCol(cursor, (UWORD)(i+1), colDefs[i].SqlCtype, (UCHAR*) colDefs[i].PtrDataObj,
-                       colDefs[i].SzDataObj, &cb ) != SQL_SUCCESS)
+                       colDefs[i].SzDataObj, &colDefs[i].CbValue ) != SQL_SUCCESS)
           return (pDb->DispAllErrors(henv, hdbc, cursor));
     }
 
     // Completed successfully
     return true;
-
 }  // wxDbTable::bindCols()
 
 
