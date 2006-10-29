@@ -65,8 +65,8 @@ void wxOverlayImpl::MacGetBounds( Rect *bounds )
     Point localwhere = { y, x };
     wxMacLocalToGlobal( window, &localwhere ) ;
 
-    bounds->top = localwhere.v;
-    bounds->left = localwhere.h;
+    bounds->top = localwhere.v+m_y;
+    bounds->left = localwhere.h+m_x;
     bounds->bottom = localwhere.v+m_y+m_height;
     bounds->right = localwhere.h+m_x+m_width;
 }
@@ -126,8 +126,9 @@ void wxOverlayImpl::Init( wxWindowDC* dc, int x , int y , int width , int height
 #ifndef __LP64__
     err = QDBeginCGContext(GetWindowPort(m_overlayWindow), &m_overlayContext);
 #endif
-    CGContextTranslateCTM( m_overlayContext, 0, m_height+m_y );
+    CGContextTranslateCTM( m_overlayContext, 0, m_height );
     CGContextScaleCTM( m_overlayContext, 1, -1 );
+    CGContextTranslateCTM( m_overlayContext, -m_x , -m_y );
     wxASSERT_MSG(  err == noErr , _("Couldn't init the context on the overlay window") );
 }
 
