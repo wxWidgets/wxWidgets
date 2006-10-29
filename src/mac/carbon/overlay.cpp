@@ -139,6 +139,7 @@ void wxOverlayImpl::BeginDrawing( wxWindowDC* dc)
 void wxOverlayImpl::EndDrawing( wxWindowDC* dc)
 {
     dc->SetGraphicsContext(NULL);
+    CGContextSynchronize( m_overlayContext );
 }
 
 void wxOverlayImpl::Clear(wxWindowDC* dc)
