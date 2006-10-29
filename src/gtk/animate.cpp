@@ -351,10 +351,17 @@ void wxAnimationCtrl::DisplayStaticImage()
     }
     else
     {
-        // even if not clearly documented, gdk_pixbuf_animation_get_static_image()
-        // always returns the first frame of the animation
-        gtk_image_set_from_pixbuf(GTK_IMAGE(m_widget),
-                                    gdk_pixbuf_animation_get_static_image(m_anim));
+        if (m_anim)
+        {
+            // even if not clearly documented, gdk_pixbuf_animation_get_static_image()
+            // always returns the first frame of the animation
+            gtk_image_set_from_pixbuf(GTK_IMAGE(m_widget),
+                                        gdk_pixbuf_animation_get_static_image(m_anim));
+        }
+        else
+        {
+            ClearToBackgroundColour();
+        }
     }
 }
 
