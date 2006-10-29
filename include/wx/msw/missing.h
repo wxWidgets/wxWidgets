@@ -235,6 +235,10 @@ typedef struct wxtagNMLVCUSTOMDRAW_ {
 #define CCS_VERT                0x00000080L
 #endif
 
+#if !defined(CCS_RIGHT)
+#define CCS_RIGHT               (CCS_VERT|CCS_BOTTOM)
+#endif
+
 #if !defined(TB_SETDISABLEDIMAGELIST)
     #define TB_SETDISABLEDIMAGELIST (WM_USER + 54)
 #endif // !defined(TB_SETDISABLEDIMAGELIST)
