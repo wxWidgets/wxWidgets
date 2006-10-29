@@ -165,16 +165,16 @@ void wxTopLevelWindowBase::GetRectForTopLevelChildren(int *x, int *y, int *w, in
 
 wxSize wxTopLevelWindowBase::GetMaxSize() const
 {
-    wxSize  size( GetMaxWidth(), GetMaxHeight() );
-    int     w, h;
+    wxSize size = wxWindow::GetMaxSize();
 
-    wxClientDisplayRect( 0, 0, &w, &h );
+    int w, h;
+    wxClientDisplayRect(NULL, NULL, &w, &h );
 
-    if( size.GetWidth() == wxDefaultCoord )
-        size.SetWidth( w );
+    if ( size.GetWidth() == wxDefaultCoord )
+        size.SetWidth(w);
 
-    if( size.GetHeight() == wxDefaultCoord )
-        size.SetHeight( h );
+    if ( size.GetHeight() == wxDefaultCoord )
+        size.SetHeight(h);
 
     return size;
 }
