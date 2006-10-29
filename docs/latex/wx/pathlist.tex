@@ -65,10 +65,8 @@ The {\it path} is always considered a directory but no existence checks will be 
 
 \func{bool}{EnsureFileAccessible}{\param{const wxString\& }{filename}}
 
-Given a full filename (with path), ensures that the file exists and
-then calls \helpref{Add}{wxpathlistadd} with the path of the file.
-
-Returns \false if the file does not exist (and in this case its path won't be added).
+Given a full filename (with path), calls \helpref{Add}{wxpathlistadd} with the path
+of the file.
 
 
 \membersection{wxPathList::FindAbsoluteValidPath}\label{wxpathlistfindabsolutepath}
