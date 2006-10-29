@@ -263,7 +263,7 @@ The following example shows a simple implementation that utilizes
 //---------------------------------------------------------------------------
 
 %{
-// A wxDocArt class that knows how to forward virtuals to Python methods  
+// A wxDocArt class that knows how to forward virtuals to Python methods
 class wxPyDockArt :  public wxDefaultDockArt
 {
     wxPyDockArt() : wxDefaultDockArt() {}
@@ -435,7 +435,7 @@ methods to the Python methods implemented in the derived class.", "");
 class wxPyDockArt :  public wxDefaultDockArt
 {
     %pythonAppend wxPyDockArt     "self._setCallbackInfo(self, PyDockArt)"
-    PyDocArt();
+    wxPyDocArt();
 
 };
 
@@ -474,6 +474,105 @@ class wxPyDockArt :  public wxDefaultDockArt
     %property(DC, GetDC, SetDC, doc="See `GetDC` and `SetDC`");
     %property(Pane, GetPane, SetPane, doc="See `GetPane` and `SetPane`");
 }
+
+
+//---------------------------------------------------------------------------
+
+%{
+// A wxTabArt class that knows how to forward virtuals to Python methods
+class wxPyTabArt :  public wxDefaultTabArt
+{
+    wxPyTabArt() : wxDefaultTabArt() {}
+
+    virtual void DrawBackground( wxDC* dc,
+                                 const wxRect& rect )
+    {
+        bool found;
+        wxPyBlock_t blocked = wxPyBeginBlockThreads();
+        if ((found = wxPyCBH_findCallback(m_myInst, "DrawBackground"))) {
+            PyObject* odc = wxPyMake_wxObject(dc, false);
+            PyObject* orect = wxPyConstructObject((void*)&rect, wxT("wxRect"), 0);
+            wxPyCBH_callCallback(m_myInst, Py_BuildValue("(OO)", odc, orect));
+            Py_DECREF(odc);
+            Py_DECREF(orect);
+        }
+        wxPyEndBlockThreads(blocked);
+        if (!found)
+            wxDefaultTabArt::DrawBackground(dc, rect);
+    }
+
+    virtual void DrawTab( wxDC* dc,
+                          const wxRect& in_rect,
+                          const wxString& caption,
+                          bool active,
+                          wxRect* out_rect,
+                          int* x_extent)
+    {
+        bool found;
+        const char* errmsg = "DrawTab should return a sequence containing (out_rect, x_extent)";
+        wxPyBlock_t blocked = wxPyBeginBlockThreads();
+        if ((found = wxPyCBH_findCallback(m_myInst, "DrawTab"))) {
+            PyObject* odc = wxPyMake_wxObject(dc, false);
+            PyObject* orect = wxPyConstructObject((void*)&in_rect, wxT("wxRect"), 0);
+            PyObject* otext = wx2PyString(caption);
+            PyObject* ro;
+            ro = wxPyCBH_callCallbackObj(m_myInst, Py_BuildValue("(OOOi)", odc, orect, otext, (int)active));
+            if (ro) {
+                if (PySequence_Check(ro) && PyObject_Length(ro) == 2) {
+                    PyObject* o1 = PySequence_GetItem(ro, 0);
+                    PyObject* o2 = PySequence_GetItem(ro, 1);
+                    if (!wxRect_helper(o1, &out_rect)) 
+                        PyErr_SetString(PyExc_TypeError, errmsg);
+                    else if (!PyInt_Check(o2)) 
+                        PyErr_SetString(PyExc_TypeError, errmsg);
+                    else
+                        *x_extent = PyInt_AsLong(o2);
+                    
+                    Py_DECREF(o1);
+                    Py_DECREF(o2);
+                }
+                else {
+                    PyErr_SetString(PyExc_TypeError, errmsg);
+                }
+                Py_DECREF(ro);
+            }
+
+            Py_DECREF(odc);
+            Py_DECREF(orect);
+            Py_DECREF(otext);
+        }
+        wxPyEndBlockThreads(blocked);
+        if (!found)
+            wxDefaultTabArt::DrawTab(dc, in_rect, caption, active, out_rect, x_extent);
+    }
+
+
+    DEC_PYCALLBACK__FONT(SetNormalFont);
+    DEC_PYCALLBACK__FONT(SetSelectedFont);
+    DEC_PYCALLBACK__FONT(SetMeasuringFont);
+
+    PYPRIVATE;
+};
+
+
+IMP_PYCALLBACK__FONT(wxPyTabArt, wxDefaultTabArt, SetNormalFont);
+IMP_PYCALLBACK__FONT(wxPyTabArt, wxDefaultTabArt, SetSelectedFont);
+IMP_PYCALLBACK__FONT(wxPyTabArt, wxDefaultTabArt, SetMeasuringFont);
+
+%}
+
+
+DocStr(wxPyTabArt,
+"This version of the `TabArt` class has been instrumented to be
+subclassable in Python and to reflect all calls to the C++ base class
+methods to the Python methods implemented in the derived class.", "");
+
+class wxPyTabArt :  public wxDefaultTabArt
+{
+    %pythonAppend wxPyTabArt     "self._setCallbackInfo(self, PyTabArt)"
+    wxPyTabArt();
+
+};
 
 
 //---------------------------------------------------------------------------
