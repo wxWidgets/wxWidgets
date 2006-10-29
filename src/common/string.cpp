@@ -1815,9 +1815,11 @@ int wxString::PrintfV(const wxChar* pszFormat, va_list argptr)
             // current size of the buffer
             size *= 2;
         }
-        else if ( len > size )
+        else if ( len >= size )
         {
-            size = len;
+            // some vsnprintf() implementations NUL-terminate the buffer and
+            // some don't in len == size case, to be safe always add 1
+            size = len + 1;
         }
         else // ok, there was enough space
         {
