@@ -252,7 +252,6 @@ ALL_BASE_HEADERS =  \
 	wx/features.h \
 	wx/ffile.h \
 	wx/file.h \
-	wx/fileback.h \
 	wx/fileconf.h \
 	wx/filefn.h \
 	wx/filename.h \
@@ -387,7 +386,6 @@ ALL_PORTS_BASE_HEADERS =  \
 	wx/features.h \
 	wx/ffile.h \
 	wx/file.h \
-	wx/fileback.h \
 	wx/fileconf.h \
 	wx/filefn.h \
 	wx/filename.h \
@@ -554,7 +552,6 @@ ALL_BASE_SOURCES =  \
 	src/common/fmapbase.cpp \
 	src/common/fs_arc.cpp \
 	src/common/fs_filter.cpp \
-	src/common/fs_zip.cpp \
 	src/common/hash.cpp \
 	src/common/hashmap.cpp \
 	src/common/init.cpp \
@@ -710,7 +707,6 @@ MONODLL_OBJECTS =  \
 	monodll_fmapbase.o \
 	monodll_fs_arc.o \
 	monodll_fs_filter.o \
-	monodll_fs_zip.o \
 	monodll_hash.o \
 	monodll_hashmap.o \
 	monodll_init.o \
@@ -810,7 +806,6 @@ MONOLIB_OBJECTS =  \
 	monolib_fmapbase.o \
 	monolib_fs_arc.o \
 	monolib_fs_filter.o \
-	monolib_fs_zip.o \
 	monolib_hash.o \
 	monolib_hashmap.o \
 	monolib_init.o \
@@ -912,7 +907,6 @@ BASEDLL_OBJECTS =  \
 	basedll_fmapbase.o \
 	basedll_fs_arc.o \
 	basedll_fs_filter.o \
-	basedll_fs_zip.o \
 	basedll_hash.o \
 	basedll_hashmap.o \
 	basedll_init.o \
@@ -997,7 +991,6 @@ BASELIB_OBJECTS =  \
 	baselib_fmapbase.o \
 	baselib_fs_arc.o \
 	baselib_fs_filter.o \
-	baselib_fs_zip.o \
 	baselib_hash.o \
 	baselib_hashmap.o \
 	baselib_init.o \
@@ -12247,9 +12240,6 @@ monodll_fs_arc.o: $(srcdir)/src/common/fs_arc.cpp $(MONODLL_ODEP)
 monodll_fs_filter.o: $(srcdir)/src/common/fs_filter.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/fs_filter.cpp
 
-monodll_fs_zip.o: $(srcdir)/src/common/fs_zip.cpp $(MONODLL_ODEP)
-	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/fs_zip.cpp
-
 monodll_hash.o: $(srcdir)/src/common/hash.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/hash.cpp
 
@@ -16344,9 +16334,6 @@ monolib_fs_arc.o: $(srcdir)/src/common/fs_arc.cpp $(MONOLIB_ODEP)
 
 monolib_fs_filter.o: $(srcdir)/src/common/fs_filter.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/fs_filter.cpp
-
-monolib_fs_zip.o: $(srcdir)/src/common/fs_zip.cpp $(MONOLIB_ODEP)
-	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/fs_zip.cpp
 
 monolib_hash.o: $(srcdir)/src/common/hash.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/hash.cpp
@@ -20446,9 +20433,6 @@ basedll_fs_arc.o: $(srcdir)/src/common/fs_arc.cpp $(BASEDLL_ODEP)
 basedll_fs_filter.o: $(srcdir)/src/common/fs_filter.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/common/fs_filter.cpp
 
-basedll_fs_zip.o: $(srcdir)/src/common/fs_zip.cpp $(BASEDLL_ODEP)
-	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/common/fs_zip.cpp
-
 basedll_hash.o: $(srcdir)/src/common/hash.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/common/hash.cpp
 
@@ -21033,9 +21017,6 @@ baselib_fs_arc.o: $(srcdir)/src/common/fs_arc.cpp $(BASELIB_ODEP)
 
 baselib_fs_filter.o: $(srcdir)/src/common/fs_filter.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/common/fs_filter.cpp
-
-baselib_fs_zip.o: $(srcdir)/src/common/fs_zip.cpp $(BASELIB_ODEP)
-	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/common/fs_zip.cpp
 
 baselib_hash.o: $(srcdir)/src/common/hash.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/common/hash.cpp

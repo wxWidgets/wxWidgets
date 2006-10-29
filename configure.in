@@ -508,7 +508,6 @@ if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_ARCHIVE_STREAMS=no
   DEFAULT_wxUSE_ZIPSTREAM=no
   DEFAULT_wxUSE_TARSTREAM=no
-  DEFAULT_wxUSE_BACKINGFILE=no
   DEFAULT_wxUSE_VALIDATORS=no
 
   DEFAULT_wxUSE_ACCEL=no
@@ -729,7 +728,6 @@ else
   DEFAULT_wxUSE_ARCHIVE_STREAMS=yes
   DEFAULT_wxUSE_ZIPSTREAM=yes
   DEFAULT_wxUSE_TARSTREAM=yes
-  DEFAULT_wxUSE_BACKINGFILE=yes
   DEFAULT_wxUSE_VALIDATORS=yes
 
   DEFAULT_wxUSE_ACCEL=yes
@@ -951,7 +949,6 @@ WX_ARG_ENABLE(ipc,           [  --enable-ipc            use interprocess communi
 dnl please keep the settings below in alphabetical order
 WX_ARG_ENABLE(apple_ieee,    [  --enable-apple_ieee     use the Apple IEEE codec], wxUSE_APPLE_IEEE)
 WX_ARG_ENABLE(arcstream,     [  --enable-arcstream      use wxArchive streams], wxUSE_ARCHIVE_STREAMS)
-WX_ARG_ENABLE(backingfile,   [  --enable-backingfile    use wxBackingFile], wxUSE_BACKINGFILE)
 WX_ARG_ENABLE(backtrace,     [  --enable-backtrace      use wxStackWalker class for getting backtraces], wxUSE_STACKWALKER)
 WX_ARG_ENABLE(catch_segvs,   [  --enable-catch_segvs    catch signals in wxApp::OnFatalException (Unix only)], wxUSE_ON_FATAL_EXCEPTION)
 WX_ARG_ENABLE(cmdline,       [  --enable-cmdline        use wxCmdLineParser class], wxUSE_CMDLINE_PARSER)
@@ -967,7 +964,7 @@ WX_ARG_ENABLE(filesystem,    [  --enable-filesystem     use virtual file systems
 WX_ARG_ENABLE(fontmap,       [  --enable-fontmap        use font encodings conversion classes], wxUSE_FONTMAP)
 WX_ARG_ENABLE(fs_archive,    [  --enable-fs_archive     use virtual archive filesystems], wxUSE_FS_ARCHIVE)
 WX_ARG_ENABLE(fs_inet,       [  --enable-fs_inet        use virtual HTTP/FTP filesystems], wxUSE_FS_INET)
-WX_ARG_ENABLE(fs_zip,        [  --enable-fs_zip         use virtual ZIP filesystems], wxUSE_FS_ZIP)
+WX_ARG_ENABLE(fs_zip,        [  --enable-fs_zip         now replaced by fs_archive], wxUSE_FS_ZIP)
 WX_ARG_ENABLE(geometry,      [  --enable-geometry       use geometry class], wxUSE_GEOMETRY)
 WX_ARG_ENABLE(log,           [  --enable-log            use logging system], wxUSE_LOG)
 WX_ARG_ENABLE(longlong,      [  --enable-longlong       use wxLongLong class], wxUSE_LONGLONG)
@@ -5717,17 +5714,10 @@ if test "$wxUSE_FFILE" = "yes"; then
   AC_DEFINE(wxUSE_FFILE)
 fi
 
-if test "$wxUSE_FILESYSTEM" = "yes"; then
-  AC_DEFINE(wxUSE_FILESYSTEM)
-fi
-
-if test "$wxUSE_FS_ZIP" = "yes"; then
-  AC_DEFINE(wxUSE_FS_ZIP)
-fi
-
 if test "$wxUSE_ARCHIVE_STREAMS" = "yes"; then
   if test "$wxUSE_STREAMS" != yes; then
     AC_MSG_WARN(wxArchive requires wxStreams... disabled)
+    wxUSE_ARCHIVE_STREAMS=no
   else
     AC_DEFINE(wxUSE_ARCHIVE_STREAMS)
   fi
@@ -5751,19 +5741,28 @@ if test "$wxUSE_TARSTREAM" = "yes"; then
   fi
 fi
 
-if test "$wxUSE_BACKINGFILE" = "yes"; then
+if test "$wxUSE_FILESYSTEM" = "yes"; then
   if test "$wxUSE_STREAMS" != yes -o \( "$wxUSE_FILE" != yes -a "$wxUSE_FFILE" != yes \); then
-    AC_MSG_WARN(wxBackingFile requires wxStreams and wxFile or wxFFile... disabled)
+    AC_MSG_WARN(wxFileSystem requires wxStreams and wxFile or wxFFile... disabled)
+    wxUSE_FILESYSTEM=no
   else
-    AC_DEFINE(wxUSE_BACKINGFILE)
+    AC_DEFINE(wxUSE_FILESYSTEM)
   fi
 fi
 
 if test "$wxUSE_FS_ARCHIVE" = "yes"; then
-  if test "$wxUSE_ARCHIVE_STREAMS" != yes -o "$wxUSE_BACKINGFILE" != yes; then
-    AC_MSG_WARN(wxArchiveFSHandler requires wxArchive and wxBackingFile... disabled)
+  if test "$wxUSE_FILESYSTEM" != yes -o "$wxUSE_ARCHIVE_STREAMS" != yes; then
+    AC_MSG_WARN(wxArchiveFSHandler requires wxArchive and wxFileSystem... disabled)
   else
     AC_DEFINE(wxUSE_FS_ARCHIVE)
+  fi
+fi
+
+if test "$wxUSE_FS_ZIP" = "yes"; then
+  if test "$wxUSE_FS_ARCHIVE" != yes; then
+    AC_MSG_WARN(wxZipFSHandler requires wxArchiveFSHandler... disabled)
+  else
+    AC_DEFINE(wxUSE_FS_ZIP)
   fi
 fi
 

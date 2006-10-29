@@ -439,9 +439,6 @@
 // Set to 1 to compile wxZipInput/OutputStream classes.
 #define wxUSE_ZIPSTREAM     1
 
-// Set to 1 to compile wxBackingFile and wxBackedInputStream
-#define wxUSE_BACKINGFILE   1
-
 // Set to 1 to compile wxTarInput/OutputStream classes.
 #define wxUSE_TARSTREAM     1
 

@@ -83,14 +83,6 @@
    please keep the options in alphabetical order!
  */
 
-#ifndef wxUSE_BACKINGFILE
-#   ifdef wxABORT_ON_CONFIG_ERROR
-#       error "wxUSE_BACKINGFILE must be defined."
-#   else
-#       define wxUSE_BACKINGFILE 0
-#   endif
-#endif /* !defined(wxUSE_BACKINGFILE) */
-
 #ifndef wxUSE_CRASHREPORT
     /* this one is special: as currently it is Windows-only, don't force it
        to be defined on other platforms */
@@ -1059,6 +1051,25 @@
 #   endif
 #endif /* wxUSE_HTML */
 
+#if wxUSE_FS_ARCHIVE
+#   if !wxUSE_FILESYSTEM
+#       ifdef wxABORT_ON_CONFIG_ERROR
+#           error "wxArchiveFSHandler requires wxFileSystem"
+#       else
+#           undef wxUSE_FILESYSTEM
+#           define wxUSE_FILESYSTEM 1
+#       endif
+#   endif
+#   if !wxUSE_ARCHIVE_STREAMS
+#       ifdef wxABORT_ON_CONFIG_ERROR
+#           error "wxArchiveFSHandler requires wxArchive"
+#       else
+#           undef wxUSE_ARCHIVE_STREAMS
+#           define wxUSE_ARCHIVE_STREAMS 1
+#       endif
+#   endif
+#endif /* wxUSE_FS_ARCHIVE */
+
 #if wxUSE_FILESYSTEM
 #   if !wxUSE_STREAMS
 #       ifdef wxABORT_ON_CONFIG_ERROR
@@ -1072,8 +1083,10 @@
 #       ifdef wxABORT_ON_CONFIG_ERROR
 #           error "wxUSE_FILESYSTEM requires either wxUSE_FILE or wxUSE_FFILE"
 #       else
-#           undef wxUSE_FILESYSTEM
-#           define wxUSE_FILESYSTEM 0
+#           undef wxUSE_FILE
+#           define wxUSE_FILE 1
+#           undef wxUSE_FFILE
+#           define wxUSE_FFILE 1
 #       endif
 #   endif
 #endif /* wxUSE_FILESYSTEM */
@@ -1175,38 +1188,6 @@
 #       endif
 #   endif
 #endif /* wxUSE_ZIPSTREAM */
-
-#if wxUSE_FS_ARCHIVE
-#   if !wxUSE_ARCHIVE_STREAMS
-#       ifdef wxABORT_ON_CONFIG_ERROR
-#           error "wxArchiveFSHandler requires wxArchive and wxBackingFile"
-#       else
-#           undef wxUSE_ARCHIVE_STREAMS
-#           define wxUSE_ARCHIVE_STREAMS 1
-#           undef wxUSE_BACKINGFILE
-#           define wxUSE_BACKINGFILE 1
-#       endif
-#   endif
-#endif /* wxUSE_FS_ARCHIVE */
-
-#if wxUSE_BACKINGFILE
-#   if !wxUSE_STREAMS
-#       ifdef wxABORT_ON_CONFIG_ERROR
-#           error "wxBackingFile requires wxStream"
-#       else
-#           undef wxUSE_STREAMS
-#           define wxUSE_STREAMS 1
-#       endif
-#   endif
-#   if !wxUSE_FILE && !wxUSE_FFILE
-#       ifdef wxABORT_ON_CONFIG_ERROR
-#           error "wxBackingFile requires wxFile or wxFFile"
-#       else
-#           undef wxUSE_FFILE
-#           define wxUSE_FFILE 1
-#       endif
-#   endif
-#endif /* wxUSE_BACKINGFILE */
 
 #if wxUSE_TARSTREAM
 #   if !wxUSE_ARCHIVE_STREAMS

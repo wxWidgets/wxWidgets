@@ -216,7 +216,6 @@ MONODLL_OBJECTS =  \
 	$(OBJS)\monodll_fmapbase.o \
 	$(OBJS)\monodll_fs_arc.o \
 	$(OBJS)\monodll_fs_filter.o \
-	$(OBJS)\monodll_fs_zip.o \
 	$(OBJS)\monodll_hash.o \
 	$(OBJS)\monodll_hashmap.o \
 	$(OBJS)\monodll_init.o \
@@ -337,7 +336,6 @@ MONOLIB_OBJECTS =  \
 	$(OBJS)\monolib_fmapbase.o \
 	$(OBJS)\monolib_fs_arc.o \
 	$(OBJS)\monolib_fs_filter.o \
-	$(OBJS)\monolib_fs_zip.o \
 	$(OBJS)\monolib_hash.o \
 	$(OBJS)\monolib_hashmap.o \
 	$(OBJS)\monolib_init.o \
@@ -460,7 +458,6 @@ BASEDLL_OBJECTS =  \
 	$(OBJS)\basedll_fmapbase.o \
 	$(OBJS)\basedll_fs_arc.o \
 	$(OBJS)\basedll_fs_filter.o \
-	$(OBJS)\basedll_fs_zip.o \
 	$(OBJS)\basedll_hash.o \
 	$(OBJS)\basedll_hashmap.o \
 	$(OBJS)\basedll_init.o \
@@ -566,7 +563,6 @@ BASELIB_OBJECTS =  \
 	$(OBJS)\baselib_fmapbase.o \
 	$(OBJS)\baselib_fs_arc.o \
 	$(OBJS)\baselib_fs_filter.o \
-	$(OBJS)\baselib_fs_zip.o \
 	$(OBJS)\baselib_hash.o \
 	$(OBJS)\baselib_hashmap.o \
 	$(OBJS)\baselib_init.o \
@@ -4710,9 +4706,6 @@ $(OBJS)\monodll_fs_arc.o: ../../src/common/fs_arc.cpp
 $(OBJS)\monodll_fs_filter.o: ../../src/common/fs_filter.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
-$(OBJS)\monodll_fs_zip.o: ../../src/common/fs_zip.cpp
-	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
-
 $(OBJS)\monodll_hash.o: ../../src/common/hash.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
@@ -6792,9 +6785,6 @@ $(OBJS)\monolib_fs_arc.o: ../../src/common/fs_arc.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monolib_fs_filter.o: ../../src/common/fs_filter.cpp
-	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\monolib_fs_zip.o: ../../src/common/fs_zip.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monolib_hash.o: ../../src/common/hash.cpp
@@ -8881,9 +8871,6 @@ $(OBJS)\basedll_fs_arc.o: ../../src/common/fs_arc.cpp
 $(OBJS)\basedll_fs_filter.o: ../../src/common/fs_filter.cpp
 	$(CXX) -c -o $@ $(BASEDLL_CXXFLAGS) $(CPPDEPS) $<
 
-$(OBJS)\basedll_fs_zip.o: ../../src/common/fs_zip.cpp
-	$(CXX) -c -o $@ $(BASEDLL_CXXFLAGS) $(CPPDEPS) $<
-
 $(OBJS)\basedll_hash.o: ../../src/common/hash.cpp
 	$(CXX) -c -o $@ $(BASEDLL_CXXFLAGS) $(CPPDEPS) $<
 
@@ -9149,9 +9136,6 @@ $(OBJS)\baselib_fs_arc.o: ../../src/common/fs_arc.cpp
 	$(CXX) -c -o $@ $(BASELIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\baselib_fs_filter.o: ../../src/common/fs_filter.cpp
-	$(CXX) -c -o $@ $(BASELIB_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\baselib_fs_zip.o: ../../src/common/fs_zip.cpp
 	$(CXX) -c -o $@ $(BASELIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\baselib_hash.o: ../../src/common/hash.cpp

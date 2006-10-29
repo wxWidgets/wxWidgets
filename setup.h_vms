@@ -270,8 +270,6 @@ typedef pid_t GPid;
 
 #define wxUSE_TARSTREAM     1
 
-#define wxUSE_BACKINGFILE   1
-
 #define wxUSE_ZLIB          1
 
 #define wxUSE_APPLE_IEEE          0

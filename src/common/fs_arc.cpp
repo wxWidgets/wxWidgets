@@ -23,8 +23,7 @@
 #endif
 
 #include "wx/archive.h"
-#include "wx/fileback.h"
-#include "wx/thread.h"
+#include "wx/private/fileback.h"
 
 //---------------------------------------------------------------------------
 // wxArchiveFSCacheDataImpl

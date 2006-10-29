@@ -253,8 +253,6 @@
 
 #define wxUSE_ZIPSTREAM     0
 
-#define wxUSE_BACKINGFILE   0
-
 #define wxUSE_TARSTREAM     0
 
 #define wxUSE_ZLIB          0

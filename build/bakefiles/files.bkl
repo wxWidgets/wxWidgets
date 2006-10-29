@@ -316,7 +316,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/common/fmapbase.cpp
     src/common/fs_arc.cpp
     src/common/fs_filter.cpp
-    src/common/fs_zip.cpp
     src/common/hash.cpp
     src/common/hashmap.cpp
     src/common/init.cpp
@@ -395,7 +394,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/features.h
     wx/ffile.h
     wx/file.h
-    wx/fileback.h
     wx/fileconf.h
     wx/filefn.h
     wx/filename.h

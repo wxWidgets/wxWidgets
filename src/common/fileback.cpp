@@ -14,9 +14,9 @@
     #pragma hdrstop
 #endif
 
-#if wxUSE_BACKINGFILE
+#if wxUSE_FILESYSTEM
 
-#include "wx/fileback.h"
+#include "wx/private/fileback.h"
 
 #ifndef WX_PRECOMP
     #include "wx/utils.h"
@@ -335,4 +335,4 @@ wxFileOffset wxBackedInputStream::OnSysTell() const
     return m_pos;
 }
 
-#endif // wxUSE_BACKINGFILE
+#endif // wxUSE_FILESYSTEM
