@@ -235,10 +235,12 @@ enum wxFileKind
     #endif // wxHAS_HUGE_FILES/!wxHAS_HUGE_FILES
 
     #ifndef __WATCOMC__
-        // NB: this one is not POSIX and always has the underscore
-        #define   wxFsync      _commit
+        #if !defined(__BORLANDC__) || (__BORLANDC__ > 0x540)
+           // NB: this one is not POSIX and always has the underscore
+           #define   wxFsync      _commit
 
-        #define HAVE_FSYNC
+           #define HAVE_FSYNC
+       #endif // BORLANDC
     #endif
 
     #define   wxEof        wxPOSIX_IDENT(eof)
