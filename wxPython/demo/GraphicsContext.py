@@ -42,7 +42,6 @@ class TestPanel(wx.Panel):
 
         gc.SetPen(wx.Pen("navy", 1))
         gc.SetBrush(wx.Brush("pink"))
-        gc.SetTextColour("black")
 
         # show the difference between stroking, filling and drawing
         for label, PathFunc in [("StrokePath", gc.StrokePath),
