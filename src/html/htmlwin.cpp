@@ -34,6 +34,14 @@
 #include "wx/arrimpl.cpp"
 #include "wx/listimpl.cpp"
 
+// HTML events:
+IMPLEMENT_DYNAMIC_CLASS(wxHtmlLinkEvent, wxCommandEvent)
+IMPLEMENT_DYNAMIC_CLASS(wxHtmlCellEvent, wxCommandEvent)
+
+DEFINE_EVENT_TYPE(wxEVT_COMMAND_HTML_CELL_CLICKED)
+DEFINE_EVENT_TYPE(wxEVT_COMMAND_HTML_CELL_HOVER)
+DEFINE_EVENT_TYPE(wxEVT_COMMAND_HTML_LINK_CLICKED)
+
 
 #if wxUSE_CLIPBOARD
 // ----------------------------------------------------------------------------
@@ -227,17 +235,35 @@ bool wxHtmlWindowMouseHelper::OnCellClicked(wxHtmlCell *cell,
                                             wxCoord x, wxCoord y,
                                             const wxMouseEvent& event)
 {
-    wxCHECK_MSG( cell, false, _T("can't be called with NULL cell") );
+    wxHtmlCellEvent ev(wxEVT_COMMAND_HTML_CELL_CLICKED,
+                       m_interface->GetHTMLWindow()->GetId(),
+                       cell, wxPoint(x,y), event);
 
-    return cell->ProcessMouseClick(m_interface, wxPoint(x, y), event);
+    if (!m_interface->GetHTMLWindow()->GetEventHandler()->ProcessEvent(ev))
+    {
+        // if the event wasn't handled, do the default processing here:
+
+        wxASSERT_MSG( cell, _T("can't be called with NULL cell") );
+
+        cell->ProcessMouseClick(m_interface, ev.GetPoint(), ev.GetMouseEvent());
+    }
+
+    // true if a link was clicked, false otherwise
+    return ev.GetLinkClicked();
 }
 
-void wxHtmlWindowMouseHelper::OnCellMouseHover(wxHtmlCell * WXUNUSED(cell),
-                                               wxCoord WXUNUSED(x),
-                                               wxCoord WXUNUSED(y))
+void wxHtmlWindowMouseHelper::OnCellMouseHover(wxHtmlCell * cell,
+                                               wxCoord x,
+                                               wxCoord y)
 {
-    // do nothing here
+    wxHtmlCellEvent ev(wxEVT_COMMAND_HTML_CELL_HOVER,
+                       m_interface->GetHTMLWindow()->GetId(),
+                       cell, wxPoint(x,y), wxMouseEvent());
+    m_interface->GetHTMLWindow()->GetEventHandler()->ProcessEvent(ev);
 }
+
+
+
 
 //-----------------------------------------------------------------------------
 // wxHtmlWindow
@@ -926,9 +952,14 @@ bool wxHtmlWindow::CopySelection(ClipboardType t)
 
 void wxHtmlWindow::OnLinkClicked(const wxHtmlLinkInfo& link)
 {
-    const wxMouseEvent *e = link.GetEvent();
-    if (e == NULL || e->LeftUp())
-        LoadPage(link.GetHref());
+    wxHtmlLinkEvent event(GetId(), link);
+    if (!GetEventHandler()->ProcessEvent(event))
+    {
+        // the default behaviour is to load the URL in this window
+        const wxMouseEvent *e = event.GetLinkInfo().GetEvent();
+        if (e == NULL || e->LeftUp())
+            LoadPage(event.GetLinkInfo().GetHref());
+    }
 }
 
 void wxHtmlWindow::OnEraseBackground(wxEraseEvent& event)
@@ -1256,7 +1287,8 @@ void wxHtmlWindow::OnInternalIdle()
                     if ( m_tmpSelFromCell->IsBefore(selcell) )
                     {
                         m_selection->Set(m_tmpSelFromPos, m_tmpSelFromCell,
-                                         wxPoint(x,y), selcell);                                    }
+                                         wxPoint(x,y), selcell);
+                    }
                     else
                     {
                         m_selection->Set(wxPoint(x,y), selcell,

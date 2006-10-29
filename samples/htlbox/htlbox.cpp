@@ -78,9 +78,6 @@ protected:
     virtual void OnDrawSeparator(wxDC& dc, wxRect& rect, size_t n) const;
     virtual wxColour GetSelectedTextColour(const wxColour& colFg) const;
 
-    // override this method to handle mouse clicks
-    virtual void OnLinkClicked(size_t n, const wxHtmlLinkInfo& link);
-
     // flag telling us whether we should use fg colour even for the selected
     // item
     bool m_change;
@@ -88,10 +85,11 @@ protected:
     // flag which we toggle to update the first items text in OnGetItem()
     bool m_firstItemUpdated;
 
+public:
+
     // flag which we toggle when the user clicks on the link in 2nd item
     // to change 2nd item's text
     bool m_linkClicked;
-
 
 #ifdef USE_HTML_FILE
     wxTextFile m_file;
@@ -132,6 +130,10 @@ public:
         wxLogMessage(_T("Listbox item %d double clicked."), event.GetInt());
     }
     
+    void OnHtmlLinkClicked(wxHtmlLinkEvent& event);
+    void OnHtmlCellHover(wxHtmlCellEvent &event);
+    void OnHtmlCellClicked(wxHtmlCellEvent &event);
+
     wxSimpleHtmlListBox *GetSimpleBox() 
         { return wxDynamicCast(m_hlbox, wxSimpleHtmlListBox); }
     MyHtmlListBox *GetMyBox()
@@ -206,6 +208,13 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
 
     EVT_LISTBOX(wxID_ANY, MyFrame::OnLboxSelect)
     EVT_LISTBOX_DCLICK(wxID_ANY, MyFrame::OnLboxDClick)
+
+
+    // the HTML listbox's events
+    EVT_HTML_LINK_CLICKED(wxID_ANY, MyFrame::OnHtmlLinkClicked)
+    EVT_HTML_CELL_HOVER(wxID_ANY, MyFrame::OnHtmlCellHover)
+    EVT_HTML_CELL_CLICKED(wxID_ANY, MyFrame::OnHtmlCellClicked)
+
 END_EVENT_TABLE()
 
 IMPLEMENT_APP(MyApp)
@@ -454,6 +463,32 @@ void MyFrame::OnSetSelFgCol(wxCommandEvent& event)
     }
 }
 
+void MyFrame::OnHtmlLinkClicked(wxHtmlLinkEvent &event)
+{
+    wxLogMessage(wxT("The url '%s' has been clicked!"), event.GetLinkInfo().GetHref().c_str());
+
+    if (GetMyBox())
+    {
+        GetMyBox()->m_linkClicked = true;
+        GetMyBox()->RefreshLine(1);
+    }
+}
+
+void MyFrame::OnHtmlCellHover(wxHtmlCellEvent &event)
+{
+    wxLogMessage(wxT("Mouse moved over cell %p at %d;%d"),
+                 event.GetCell(), event.GetPoint().x, event.GetPoint().y);
+}
+
+void MyFrame::OnHtmlCellClicked(wxHtmlCellEvent &event)
+{
+    wxLogMessage(wxT("Click over cell %p at %d;%d"),
+                 event.GetCell(), event.GetPoint().x, event.GetPoint().y);
+
+    // if we don't skip the event, OnHtmlLinkClicked won't be called!
+    event.Skip();
+}
+
 // ----------------------------------------------------------------------------
 // listbox event handlers
 // ----------------------------------------------------------------------------
@@ -585,12 +620,3 @@ void MyHtmlListBox::UpdateFirstItem()
 
     RefreshLine(0);
 }
-
-void MyHtmlListBox::OnLinkClicked(size_t WXUNUSED(n),
-                                  const wxHtmlLinkInfo& WXUNUSED(link))
-{
-    m_linkClicked = true;
-
-    RefreshLine(1);
-}
-

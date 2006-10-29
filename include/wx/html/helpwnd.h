@@ -295,37 +295,6 @@ enum
     wxID_HTML_COUNTINFO
 };
 
-/*!
- * Help window event
- */
-
-class WXDLLIMPEXP_HTML wxHtmlWindowEvent: public wxNotifyEvent
-{
-public:
-    wxHtmlWindowEvent(wxEventType commandType = wxEVT_NULL, int id = 0):
-                 wxNotifyEvent(commandType, id)
-    {
-
-    }
-
-    void SetURL(const wxString& url) { m_url = url; }
-    const wxString& GetURL() const { return m_url; }
-
-private:
-    wxString    m_url;
-
-    DECLARE_DYNAMIC_CLASS(wxHtmlWindowEvent)
-};
-
-typedef void (wxEvtHandler::*wxHtmlWindowEventFunction)(wxHtmlWindowEvent&);
-
-BEGIN_DECLARE_EVENT_TYPES()
-    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_HTML,
-                                wxEVT_COMMAND_HTMLWINDOW_URL_CLICKED, 1000)
-END_DECLARE_EVENT_TYPES()
-
-#define EVT_HTMLWINDOW_URL_CLICKED(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_HTMLWINDOW_URL_CLICKED, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxHtmlWindowEventFunction) & fn, (wxObject *) NULL ),
-
 #endif // wxUSE_WXHTML_HELP
 
 #endif

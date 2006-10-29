@@ -35,6 +35,19 @@ example) but you will only need to override a single
 \helpref{wxSimpleHtmlListBox}{wxsimplehtmllistbox}
 
 
+\wxheading{Event handling}
+
+To process input from a wxHtmlListBox, use these event handler macros to direct input to member
+functions that take a \helpref{wxHtmlCellEvent}{wxhtmlcellevent} argument or a \helpref{wxHtmlLinkEvent}{wxhtmllinkevent}.
+
+\twocolwidtha{7cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{{\bf EVT\_HTMLWINDOW\_CELL\_CLICKED(id, func)}}{A \helpref{wxHtmlCell}{wxhtmlcell} was clicked.}
+\twocolitem{{\bf EVT\_HTMLWINDOW\_CELL\_HOVER(id, func)}}{The mouse passed over a {\helpref{wxHtmlCell}{wxhtmlcell}.}
+\twocolitem{{\bf EVT\_HTMLWINDOW\_LINK\_CLICKED(id, func)}}{A \helpref{wxHtmlCell}{wxhtmlcell} which contains an hyperlink was clicked.}
+\end{twocollist}
+
+
 \latexignore{\rtfignore{\wxheading{Members}}}
 
 
@@ -147,6 +160,7 @@ This function may be overridden to decorate HTML returned by
 \func{virtual void}{OnLinkClicked}{\param{size\_t }{n}, \param{const wxHtmlLinkInfo\& }{link}}
 
 Called when the user clicks on hypertext link. Does nothing by default.
+Overloading this method is deprecated; intercept the event instead.
 
 \wxheading{Parameters}
 
@@ -226,7 +240,10 @@ See also \helpref{window styles overview}{windowstyles}.
 
 \wxheading{Event handling}
 
-A wxSimpleHtmlListBox emits the same events used by \helpref{wxListBox}{wxlistbox}:
+A wxSimpleHtmlListBox emits the same events used by \helpref{wxListBox}{wxlistbox} and by
+\helpref{wxHtmlListBox}{wxhtmllistbox}.
+
+The event handlers for the following events take a \helpref{wxCommandEvent}{wxcommandevent}:
 
 \twocolwidtha{7cm}
 \begin{twocollist}\itemsep=0pt
@@ -234,6 +251,16 @@ A wxSimpleHtmlListBox emits the same events used by \helpref{wxListBox}{wxlistbo
 when an item on the list is selected.}
 \twocolitem{{\bf EVT\_LISTBOX\_DCLICK(id, func)}}{Process a wxEVT\_COMMAND\_LISTBOX\_DOUBLECLICKED event,
 when the listbox is double-clicked.}
+\end{twocollist}
+
+The event handlers for the following events take a \helpref{wxHtmlCellEvent}{wxhtmlcellevent}
+or a \helpref{wxHtmlLinkEvent}{wxhtmllinkevent}:
+
+\twocolwidtha{7cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{{\bf EVT\_HTMLWINDOW\_CELL\_CLICKED(id, func)}}{A \helpref{wxHtmlCell}{wxhtmlcell} was clicked.}
+\twocolitem{{\bf EVT\_HTMLWINDOW\_CELL\_HOVER(id, func)}}{The mouse passed over a {\helpref{wxHtmlCell}{wxhtmlcell}.}
+\twocolitem{{\bf EVT\_HTMLWINDOW\_LINK\_CLICKED(id, func)}}{A \helpref{wxHtmlCell}{wxhtmlcell} which contains an hyperlink was clicked.}
 \end{twocollist}
 
 

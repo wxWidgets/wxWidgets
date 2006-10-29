@@ -104,8 +104,6 @@ class wxHtmlHelpHashData : public wxObject
 // wxHtmlHelpHtmlWindow (private)
 //--------------------------------------------------------------------------
 
-DEFINE_EVENT_TYPE(wxEVT_COMMAND_HTMLWINDOW_URL_CLICKED)
-IMPLEMENT_DYNAMIC_CLASS(wxHtmlWindowEvent, wxNotifyEvent)
 
 class wxHtmlHelpHtmlWindow : public wxHtmlWindow
 {
@@ -116,15 +114,9 @@ class wxHtmlHelpHtmlWindow : public wxHtmlWindow
             SetStandardFonts();
         }
 
-        virtual void OnLinkClicked(const wxHtmlLinkInfo& link)
+        void OnLinkClicked(wxHtmlLinkEvent& ev)
         {
-            wxHtmlWindowEvent event(wxEVT_COMMAND_HTMLWINDOW_URL_CLICKED, GetId());
-            event.SetURL(link.GetHref());
-            if (!ProcessEvent(event))
-            {
-                wxHtmlWindow::OnLinkClicked(link);
-            }
-            const wxMouseEvent *e = link.GetEvent();
+            const wxMouseEvent *e = ev.GetLinkInfo().GetEvent();
             if (e == NULL || e->LeftUp())
                 m_Window->NotifyPageChanged();
         }
@@ -149,7 +141,12 @@ class wxHtmlHelpHtmlWindow : public wxHtmlWindow
         wxHtmlHelpWindow *m_Window;
 
     DECLARE_NO_COPY_CLASS(wxHtmlHelpHtmlWindow)
+    DECLARE_EVENT_TABLE()
 };
+
+BEGIN_EVENT_TABLE(wxHtmlHelpHtmlWindow, wxHtmlWindow)
+    EVT_HTML_LINK_CLICKED(wxID_ANY, wxHtmlHelpHtmlWindow::OnLinkClicked)
+END_EVENT_TABLE()
 
 
 //---------------------------------------------------------------------------

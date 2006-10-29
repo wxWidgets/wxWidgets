@@ -114,8 +114,7 @@ protected:
 
     // This method may be overriden to handle clicking on a link in
     // the listbox. By default, clicking links is ignored.
-    virtual void OnLinkClicked(size_t WXUNUSED(n),
-                               const wxHtmlLinkInfo& WXUNUSED(link)) { }
+    virtual void OnLinkClicked(size_t n, const wxHtmlLinkInfo& link);
 
     // event handlers
     void OnSize(wxSizeEvent& event);

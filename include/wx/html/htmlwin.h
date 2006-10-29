@@ -29,6 +29,8 @@ class wxHtmlWinModule;
 class wxHtmlHistoryArray;
 class wxHtmlProcessorList;
 class WXDLLIMPEXP_HTML wxHtmlWinAutoScrollTimer;
+class WXDLLIMPEXP_HTML wxHtmlCellEvent;
+class WXDLLIMPEXP_HTML wxHtmlLinkEvent;
 
 
 // wxHtmlWindow flags:
@@ -545,6 +547,101 @@ private:
     DECLARE_EVENT_TABLE()
     DECLARE_NO_COPY_CLASS(wxHtmlWindow)
 };
+
+
+
+
+BEGIN_DECLARE_EVENT_TYPES()
+    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_HTML,
+                                wxEVT_COMMAND_HTML_CELL_CLICKED, 1000)
+    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_HTML,
+                                wxEVT_COMMAND_HTML_CELL_HOVER, 1001)
+    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_HTML,
+                                wxEVT_COMMAND_HTML_LINK_CLICKED, 1002)
+END_DECLARE_EVENT_TYPES()
+
+
+/*!
+ * Html cell window event
+ */
+
+class WXDLLIMPEXP_HTML wxHtmlCellEvent : public wxCommandEvent
+{
+public:
+    wxHtmlCellEvent() {}
+    wxHtmlCellEvent(wxEventType commandType, int id,
+                    wxHtmlCell *cell, const wxPoint &pt,
+                    const wxMouseEvent &ev)
+        : wxCommandEvent(commandType, id)
+    {
+        m_cell = cell;
+        m_pt = pt;
+        m_mouseEvent = ev;
+        m_bLinkWasClicked = false;
+    }
+
+    wxHtmlCell* GetCell() const { return m_cell; }
+    wxPoint GetPoint() const { return m_pt; }
+    wxMouseEvent GetMouseEvent() const { return m_mouseEvent; }
+
+    void SetLinkClicked(bool linkclicked) { m_bLinkWasClicked=linkclicked; }
+    bool GetLinkClicked() const { return m_bLinkWasClicked; }
+
+    // default copy ctor, assignment operator and dtor are ok
+    virtual wxEvent *Clone() const { return new wxHtmlCellEvent(*this); }
+
+private:
+    wxHtmlCell *m_cell;
+    wxMouseEvent m_mouseEvent;
+    wxPoint m_pt;
+
+    bool m_bLinkWasClicked;
+
+    DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxHtmlCellEvent)
+};
+
+
+
+/*!
+ * Html link event
+ */
+
+class WXDLLIMPEXP_HTML wxHtmlLinkEvent : public wxCommandEvent
+{
+public:
+    wxHtmlLinkEvent() {}
+    wxHtmlLinkEvent(int id, const wxHtmlLinkInfo &linkinfo)
+        : wxCommandEvent(wxEVT_COMMAND_HTML_LINK_CLICKED, id)
+    {
+        m_linkInfo = linkinfo;
+    }
+
+    const wxHtmlLinkInfo &GetLinkInfo() const { return m_linkInfo; }
+
+    // default copy ctor, assignment operator and dtor are ok
+    virtual wxEvent *Clone() const { return new wxHtmlLinkEvent(*this); }
+
+private:
+    wxHtmlLinkInfo m_linkInfo;
+
+    DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxHtmlLinkEvent)
+};
+
+
+typedef void (wxEvtHandler::*wxHtmlCellEventFunction)(wxHtmlCellEvent&);
+typedef void (wxEvtHandler::*wxHtmlLinkEventFunction)(wxHtmlLinkEvent&);
+
+#define wxHtmlCellEventHandler(func) \
+    (wxObjectEventFunction)(wxEventFunction)wxStaticCastEvent(wxHtmlCellEventFunction, &func)
+#define wxHtmlLinkEventHandler(func) \
+    (wxObjectEventFunction)(wxEventFunction)wxStaticCastEvent(wxHtmlLinkEventFunction, &func)
+
+#define EVT_HTML_CELL_CLICKED(id, fn) \
+    wx__DECLARE_EVT1(wxEVT_COMMAND_HTML_CELL_CLICKED, id, wxHtmlCellEventHandler(fn))
+#define EVT_HTML_CELL_HOVER(id, fn) \
+    wx__DECLARE_EVT1(wxEVT_COMMAND_HTML_CELL_HOVER, id, wxHtmlCellEventHandler(fn))
+#define EVT_HTML_LINK_CLICKED(id, fn) \
+    wx__DECLARE_EVT1(wxEVT_COMMAND_HTML_LINK_CLICKED, id, wxHtmlLinkEventHandler(fn))
 
 
 #endif // wxUSE_HTML

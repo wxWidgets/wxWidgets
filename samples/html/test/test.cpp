@@ -71,6 +71,10 @@ public:
     void OnForward(wxCommandEvent& event);
     void OnProcessor(wxCommandEvent& event);
 
+    void OnHtmlLinkClicked(wxHtmlLinkEvent& event);
+    void OnHtmlCellHover(wxHtmlCellEvent &event);
+    void OnHtmlCellClicked(wxHtmlCellEvent &event);
+
 private:
     MyHtmlWindow *m_Html;
     wxHtmlProcessor *m_Processor;
@@ -121,6 +125,10 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(ID_Back, MyFrame::OnBack)
     EVT_MENU(ID_Forward, MyFrame::OnForward)
     EVT_MENU(ID_Processor, MyFrame::OnProcessor)
+
+    EVT_HTML_LINK_CLICKED(wxID_ANY, MyFrame::OnHtmlLinkClicked)
+    EVT_HTML_CELL_HOVER(wxID_ANY, MyFrame::OnHtmlCellHover)
+    EVT_HTML_CELL_CLICKED(wxID_ANY, MyFrame::OnHtmlCellClicked)
 END_EVENT_TABLE()
 
 IMPLEMENT_APP(MyApp)
@@ -216,6 +224,17 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     m_Html->ReadCustomization(wxConfig::Get());
     m_Html->LoadFile(wxFileName(wxT("test.htm")));
     m_Html->AddProcessor(m_Processor);
+
+    wxTextCtrl *text = new wxTextCtrl(this, wxID_ANY, _T(""),
+                                      wxDefaultPosition, wxDefaultSize,
+                                      wxTE_MULTILINE);
+
+    delete wxLog::SetActiveTarget(new wxLogTextCtrl(text));
+
+    wxSizer *sz = new wxBoxSizer(wxVERTICAL);
+    sz->Add(m_Html, 3, wxGROW);
+    sz->Add(text, 1, wxGROW);
+    SetSizer(sz);
 }
 
 
@@ -270,6 +289,30 @@ void MyFrame::OnProcessor(wxCommandEvent& WXUNUSED(event))
 {
     m_Processor->Enable(!m_Processor->IsEnabled());
     m_Html->LoadPage(m_Html->GetOpenedPage());
+}
+
+void MyFrame::OnHtmlLinkClicked(wxHtmlLinkEvent &event)
+{
+    wxLogMessage(wxT("The url '%s' has been clicked!"), event.GetLinkInfo().GetHref().c_str());
+
+    // skipping this event the default behaviour (load the clicked URL)
+    // will happen...
+    event.Skip();
+}
+
+void MyFrame::OnHtmlCellHover(wxHtmlCellEvent &event)
+{
+    wxLogMessage(wxT("Mouse moved over cell %d at %d;%d"),
+                 event.GetCell(), event.GetPoint().x, event.GetPoint().y);
+}
+
+void MyFrame::OnHtmlCellClicked(wxHtmlCellEvent &event)
+{
+    wxLogMessage(wxT("Click over cell %d at %d;%d"),
+                 event.GetCell(), event.GetPoint().x, event.GetPoint().y);
+
+    // if we don't skip the event, OnHtmlLinkClicked won't be called!
+    event.Skip();
 }
 
 wxHtmlOpeningStatus MyHtmlWindow::OnOpeningURL(wxHtmlURLType WXUNUSED(type),
