@@ -16,10 +16,9 @@
 
 #include "wx/geometry.h"
 #include "wx/dynarray.h"
+#include "wx/graphics.h"
 
-class WXDLLEXPORT wxGraphicsContext;
 class WXDLLEXPORT wxWindowDC;
-
 
 #ifdef __WXMAC__
 #define wxGCDC wxDC
@@ -170,6 +169,8 @@ protected:
 protected:
     // scaling variables
     double       m_mm_to_pix_x, m_mm_to_pix_y;
+    wxGraphicsMatrix m_matrixOriginal;
+    wxGraphicsMatrix m_matrixCurrent;
 
     double m_formerScaleX, m_formerScaleY;
 
