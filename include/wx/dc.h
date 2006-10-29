@@ -314,9 +314,9 @@ public:
                       source, srcPt.x, srcPt.y, rop, useMask, srcPtMask.x, srcPtMask.y);
     }
     
-    wxBitmap GetAsBitmap()
+    wxBitmap GetAsBitmap(const wxRect *subrect = (const wxRect *) NULL) const
     {
-        return DoGetAsBitmap();
+        return DoGetAsBitmap(subrect);
     }
 
 #if wxUSE_SPLINES
@@ -717,7 +717,7 @@ protected:
                         wxDC *source, wxCoord xsrc, wxCoord ysrc,
                         int rop = wxCOPY, bool useMask = false, wxCoord xsrcMask = wxDefaultCoord, wxCoord ysrcMask = wxDefaultCoord) = 0;
 
-    virtual wxBitmap DoGetAsBitmap() const { return wxNullBitmap; }
+    virtual wxBitmap DoGetAsBitmap(const wxRect *WXUNUSED(subrect)) const { return wxNullBitmap; }
 
     virtual void DoGetSize(int *width, int *height) const = 0;
     virtual void DoGetSizeMM(int* width, int* height) const = 0;
