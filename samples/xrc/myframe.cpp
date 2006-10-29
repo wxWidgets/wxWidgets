@@ -194,8 +194,10 @@ void MyFrame::OnAnimationCtrlPlay(wxCommandEvent& event)
     }
     else
     {
-        ctrl->Play();
-        btn->SetLabel(wxT("Stop"));
+        if (ctrl->Play())
+            btn->SetLabel(wxT("Stop"));
+        else
+            wxLogError(wxT("Cannot play the animation..."));
     }
 #endif
 }
