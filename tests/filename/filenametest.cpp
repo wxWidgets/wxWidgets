@@ -18,6 +18,7 @@
 #endif
 
 #ifndef WX_PRECOMP
+    #include "wx/utils.h"
 #endif // WX_PRECOMP
 
 #include "wx/filename.h"
