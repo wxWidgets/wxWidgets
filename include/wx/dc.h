@@ -313,6 +313,11 @@ public:
         return DoBlit(destPt.x, destPt.y, sz.x, sz.y,
                       source, srcPt.x, srcPt.y, rop, useMask, srcPtMask.x, srcPtMask.y);
     }
+    
+    wxBitmap GetAsBitmap()
+    {
+        return DoGetAsBitmap();
+    }
 
 #if wxUSE_SPLINES
     // TODO: this API needs fixing (wxPointList, why (!const) "wxList *"?)
@@ -711,6 +716,8 @@ protected:
                         wxCoord width, wxCoord height,
                         wxDC *source, wxCoord xsrc, wxCoord ysrc,
                         int rop = wxCOPY, bool useMask = false, wxCoord xsrcMask = wxDefaultCoord, wxCoord ysrcMask = wxDefaultCoord) = 0;
+
+    virtual wxBitmap DoGetAsBitmap() const { return wxNullBitmap; }
 
     virtual void DoGetSize(int *width, int *height) const = 0;
     virtual void DoGetSizeMM(int* width, int* height) const = 0;

@@ -35,6 +35,7 @@ class WXDLLEXPORT wxWindowDC: public wxDC
   wxWindow *GetWindow() const { return m_window; }
   protected :
     virtual void DoGetSize( int *width, int *height ) const;
+    virtual wxBitmap DoGetAsBitmap() const; 
     wxWindow     *m_window;
 #if wxMAC_USE_CORE_GRAPHICS
 	bool		m_release;

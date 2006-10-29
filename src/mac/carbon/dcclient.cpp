@@ -24,6 +24,7 @@
 #endif
 
 #include "wx/graphics.h"
+#include "wx/rawbmp.h"
 #include "wx/mac/private.h"
 
 //-----------------------------------------------------------------------------
@@ -185,6 +186,54 @@ void wxWindowDC::DoGetSize( int* width, int* height ) const
     wxCHECK_RET( m_window, _T("GetSize() doesn't work without window") );
     m_window->GetSize(width, height);
 #endif
+}
+
+wxBitmap wxWindowDC::DoGetAsBitmap() const
+{
+    ControlRef handle = (ControlRef) m_window->GetHandle(); 
+    if ( !handle )
+        return wxNullBitmap;
+
+    HIRect rect;    
+    CGImageRef image;
+    CGContextRef context;
+    void* data;
+     
+    size_t bytesPerRow;
+    
+    HIViewCreateOffscreenImage( handle, 0, &rect, &image);
+    
+    int width = rect.size.width;
+    int height = rect.size.height; 
+    
+    bytesPerRow = ( ( width * 8 * 4 + 7 ) / 8 );
+
+    data = calloc( 1, bytesPerRow * height );
+    context = CGBitmapContextCreate( data, width, height, 8, bytesPerRow, CGColorSpaceCreateDeviceRGB(), kCGImageAlphaPremultipliedFirst );
+    
+    CGContextDrawImage( context, rect, image );
+
+    unsigned char* buffer = (unsigned char*) data;          
+    wxBitmap bmp = wxBitmap(width, height, 32);
+    wxAlphaPixelData pixData(bmp, wxPoint(0,0), wxSize(width, height));
+    
+    pixData.UseAlpha();
+    wxAlphaPixelData::Iterator p(pixData);
+    for (int y=0; y<height; y++) {
+        wxAlphaPixelData::Iterator rowStart = p;
+        for (int x=0; x<width; x++) {
+            unsigned char a = buffer[3];
+            p.Red()   = a; buffer++;
+            p.Green() = a; buffer++;
+            p.Blue()  = a; buffer++;
+            p.Alpha() = a; buffer++;
+            ++p; 
+        }
+        p = rowStart;
+        p.OffsetY(pixData, 1);
+    }
+    
+    return bmp;
 }
 
 /*

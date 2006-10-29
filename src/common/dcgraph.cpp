@@ -854,9 +854,14 @@ bool wxGCDC::DoBlit(
 {
     wxCHECK_MSG( Ok(), false, wxT("wxGCDC(cg)::DoBlit - invalid DC") );
     wxCHECK_MSG( source->Ok(), false, wxT("wxGCDC(cg)::DoBlit - invalid source DC") );
-
+    
     if ( logical_func == wxNO_OP )
         return true;
+    else if ( logical_func != wxCOPY )
+    {
+        wxFAIL_MSG( wxT("Blitting is only supported with wxCOPY logical operation.") );
+        return false;
+    }
 
     if (xsrcMask == -1 && ysrcMask == -1)
     {
@@ -874,10 +879,11 @@ bool wxGCDC::DoBlit(
     wxCoord wwdest = LogicalToDeviceXRel(width);
     wxCoord hhdest = LogicalToDeviceYRel(height);
 
+    wxBitmap blit;
     wxMemoryDC* memdc = wxDynamicCast(source,wxMemoryDC);
-    if ( memdc && logical_func == wxCOPY )
+    if ( memdc )
     {
-        wxBitmap blit = memdc->GetSelectedBitmap();
+        blit = memdc->GetSelectedBitmap();
 
         wxASSERT_MSG( blit.Ok() , wxT("Invalid bitmap for blitting") );
 
@@ -908,15 +914,26 @@ bool wxGCDC::DoBlit(
                 blit = wxNullBitmap;
             }
         }
-
-        if ( blit.Ok() )
-        {
-            m_graphicContext->DrawBitmap( blit, xxdest , yydest , wwdest , hhdest );
+    }
+    else
+    {  
+        wxWindowDC* windc = wxDynamicCast(source,wxWindowDC);
+        if (windc)
+        {   
+            wxBitmap bmp;
+            bmp = windc->GetAsBitmap();
+            if (bmp.IsOk())
+                blit = bmp.GetSubBitmap( wxRect(xsrc, ysrc, width, height ) ); 
         }
+    }
+    
+    if ( blit.Ok() )
+    {
+        m_graphicContext->DrawBitmap( blit, xxdest , yydest , wwdest , hhdest );
     }
     else
     {
-        wxFAIL_MSG( wxT("Blitting is only supported from bitmap contexts, and only with wxCOPY logical operation.") );
+        wxFAIL_MSG( wxT("Cannot Blit. Unable to get contents of DC as bitmap.") );
         return false;
     }
 
