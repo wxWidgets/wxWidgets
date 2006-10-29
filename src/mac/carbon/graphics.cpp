@@ -1160,13 +1160,13 @@ public:
 
 private:
     void EnsureIsValid();
-
+    
     CGContextRef m_cgContext;
 	WindowRef m_windowRef;
-	int m_originX;
-	int m_originY;
-	wxMacCFRefHolder<HIShapeRef> m_clipRgn;
 	bool m_releaseContext;
+    CGAffineTransform m_windowTransform;
+    
+	wxMacCFRefHolder<HIShapeRef> m_clipRgn;
 };
 
 //-----------------------------------------------------------------------------
@@ -1192,8 +1192,7 @@ void wxMacCoreGraphicsContext::Init()
     m_cgContext = NULL;
 	m_releaseContext = false;
     m_windowRef = NULL;
-	m_originX = 0;
-	m_originY = 0;
+
     HIRect r = CGRectMake(0,0,0,0);
     m_clipRgn.Set(HIShapeCreateWithRect(&r));
 }
@@ -1201,19 +1200,7 @@ void wxMacCoreGraphicsContext::Init()
 wxMacCoreGraphicsContext::wxMacCoreGraphicsContext( wxGraphicsRenderer* renderer, CGContextRef cgcontext ) : wxGraphicsContext(renderer)
 {
 	Init();
-	m_cgContext = cgcontext;
-    // FIXME: This check is needed because currently we need to use a DC/GraphicsContext
-    // in order to get font properties, like wxFont::GetPixelSize, but since we don't have 
-    // a native window attached to use, I create a wxGraphicsContext with a NULL CGContextRef
-    // for this one operation.
-    
-    // When wxFont::GetPixelSize on Mac no longer needs a graphics context, this check
-    // can be removed. 
-    if (m_cgContext)
-    {
-        CGContextSaveGState( m_cgContext );
-        CGContextSaveGState( m_cgContext );
-    }
+    SetNativeContext(cgcontext);
 }
 
 wxMacCoreGraphicsContext::wxMacCoreGraphicsContext( wxGraphicsRenderer* renderer, WindowRef window ): wxGraphicsContext(renderer)
@@ -1226,8 +1213,15 @@ wxMacCoreGraphicsContext::wxMacCoreGraphicsContext( wxGraphicsRenderer* renderer
 {
 	Init();
 	m_windowRef = (WindowRef) window->MacGetTopLevelWindowRef();
-    m_originX = m_originY = 0;
-    window->MacWindowToRootWindow( &m_originX , &m_originY );
+    int originX , originY;
+    originX = originY = 0;
+    window->MacWindowToRootWindow( &originX , &originY );
+    Rect bounds;
+    GetWindowBounds( m_windowRef, kWindowContentRgn, &bounds );
+
+    m_windowTransform = CGAffineTransformMakeTranslation( 0 , bounds.bottom - bounds.top );
+    m_windowTransform = CGAffineTransformScale( m_windowTransform , 1 , -1 );
+    m_windowTransform = CGAffineTransformTranslate( m_windowTransform, originX, originY ) ;
 }
 
 wxMacCoreGraphicsContext::wxMacCoreGraphicsContext(wxGraphicsRenderer* renderer) : wxGraphicsContext(renderer)
@@ -1243,15 +1237,7 @@ wxMacCoreGraphicsContext::wxMacCoreGraphicsContext() : wxGraphicsContext(NULL)
 
 wxMacCoreGraphicsContext::~wxMacCoreGraphicsContext()
 {
-    if ( m_cgContext )
-    {
-        // TODO : when is this necessary - should we add a Flush() method ? CGContextSynchronize( m_cgContext );
-        CGContextRestoreGState( m_cgContext );
-        CGContextRestoreGState( m_cgContext );
-    }
-
-    if ( m_releaseContext )
-		QDEndCGContext( GetWindowPort( m_windowRef ) , &m_cgContext);
+    SetNativeContext(NULL);
 }
 
 void wxMacCoreGraphicsContext::EnsureIsValid()
@@ -1260,12 +1246,8 @@ void wxMacCoreGraphicsContext::EnsureIsValid()
 	{
 		OSStatus status = QDBeginCGContext( GetWindowPort( m_windowRef ) , &m_cgContext );
 		wxASSERT_MSG( status == noErr , wxT("Cannot nest wxDCs on the same window") );
-		Rect bounds;
-		GetWindowBounds( m_windowRef, kWindowContentRgn, &bounds );
-		CGContextSaveGState( m_cgContext );
-		CGContextTranslateCTM( m_cgContext , 0 , bounds.bottom - bounds.top );
-		CGContextScaleCTM( m_cgContext , 1 , -1 );
-		CGContextTranslateCTM( m_cgContext, m_originX, m_originY );
+
+        CGContextConcatCTM( m_cgContext, m_windowTransform );
 		CGContextSaveGState( m_cgContext );
 		m_releaseContext = true;
 		if ( !HIShapeIsEmpty(m_clipRgn) )
@@ -1426,30 +1408,58 @@ void wxMacCoreGraphicsContext::SetNativeContext( CGContextRef cg )
     // we allow either setting or clearing but not replacing
     wxASSERT( m_cgContext == NULL || cg == NULL );
 
-    if ( cg )
-        CGContextSaveGState( cg );
+    if ( m_cgContext )
+    {
+        // TODO : when is this necessary - should we add a Flush() method ? CGContextSynchronize( m_cgContext );
+        CGContextRestoreGState( m_cgContext );
+        CGContextRestoreGState( m_cgContext );
+        if ( m_releaseContext )
+            QDEndCGContext( GetWindowPort( m_windowRef ) , &m_cgContext);
+        else
+            CGContextRelease(m_cgContext);
+    }
+
+
     m_cgContext = cg;
+
+    // FIXME: This check is needed because currently we need to use a DC/GraphicsContext
+    // in order to get font properties, like wxFont::GetPixelSize, but since we don't have 
+    // a native window attached to use, I create a wxGraphicsContext with a NULL CGContextRef
+    // for this one operation.
+    
+    // When wxFont::GetPixelSize on Mac no longer needs a graphics context, this check
+    // can be removed. 
+    if (m_cgContext)
+    {
+        CGContextRetain(m_cgContext);
+        CGContextSaveGState( m_cgContext );
+        CGContextSaveGState( m_cgContext );
+        m_releaseContext = NULL;
+    }
 }
 
 void wxMacCoreGraphicsContext::Translate( wxDouble dx , wxDouble dy ) 
 {
-	EnsureIsValid();
-	
-    CGContextTranslateCTM( m_cgContext, dx, dy );
+	if ( m_cgContext )
+        CGContextTranslateCTM( m_cgContext, dx, dy );
+    else
+        m_windowTransform = CGAffineTransformTranslate(m_windowTransform,dx,dy);
 }
 
 void wxMacCoreGraphicsContext::Scale( wxDouble xScale , wxDouble yScale )
 {
-	EnsureIsValid();
-	
-    CGContextScaleCTM( m_cgContext , xScale , yScale );
+	if ( m_cgContext )
+        CGContextScaleCTM( m_cgContext , xScale , yScale );
+    else
+        m_windowTransform = CGAffineTransformScale(m_windowTransform,xScale,yScale);
 }
 
 void wxMacCoreGraphicsContext::Rotate( wxDouble angle )
 {
-	EnsureIsValid();
-	
-    CGContextRotateCTM( m_cgContext , angle );
+	if ( m_cgContext )
+        CGContextRotateCTM( m_cgContext , angle );
+    else
+        m_windowTransform = CGAffineTransformRotate(m_windowTransform,angle);
 }
 
 void wxMacCoreGraphicsContext::DrawBitmap( const wxBitmap &bmp, wxDouble x, wxDouble y, wxDouble w, wxDouble h ) 
@@ -1752,23 +1762,34 @@ void * wxMacCoreGraphicsContext::GetNativeContext()
 // concatenates this transform with the current transform of this context
 void wxMacCoreGraphicsContext::ConcatTransform( const wxGraphicsMatrix& matrix )
 {
-    CGContextConcatCTM( m_cgContext, *(CGAffineTransform*) matrix.GetNativeMatrix());
+    if ( m_cgContext )
+        CGContextConcatCTM( m_cgContext, *(CGAffineTransform*) matrix.GetNativeMatrix());
+    else
+        m_windowTransform = CGAffineTransformConcat(m_windowTransform, *(CGAffineTransform*) matrix.GetNativeMatrix());
 }
 
 // sets the transform of this context
 void wxMacCoreGraphicsContext::SetTransform( const wxGraphicsMatrix& matrix )
 {
-    CGAffineTransform transform = CGContextGetCTM( m_cgContext );
-    transform = CGAffineTransformInvert( transform ) ;
-    CGContextConcatCTM( m_cgContext, transform);
-    CGContextConcatCTM( m_cgContext, *(CGAffineTransform*) matrix.GetNativeMatrix());
+    if ( m_cgContext )
+    {
+        CGAffineTransform transform = CGContextGetCTM( m_cgContext );
+        transform = CGAffineTransformInvert( transform ) ;
+        CGContextConcatCTM( m_cgContext, transform);
+        CGContextConcatCTM( m_cgContext, *(CGAffineTransform*) matrix.GetNativeMatrix());
+    }
+    else
+    {
+        m_windowTransform = *(CGAffineTransform*) matrix.GetNativeMatrix();
+    }
 }
 
 // gets the matrix of this context
 wxGraphicsMatrix wxMacCoreGraphicsContext::GetTransform() const
 {
     wxGraphicsMatrix m = CreateMatrix();
-    *((CGAffineTransform*) m.GetNativeMatrix()) = CGContextGetCTM( m_cgContext );
+    *((CGAffineTransform*) m.GetNativeMatrix()) = ( m_cgContext == NULL ? m_windowTransform :
+        CGContextGetCTM( m_cgContext ));
     return m;
 }
 
