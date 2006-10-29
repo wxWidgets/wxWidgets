@@ -717,8 +717,7 @@ wxString wxHtmlHelpData::FindPageByName(const wxString& x)
     wxFileSystem fsys;
     wxFSFile *f;
 
-    /* 1. try to open given file: */
-
+    // 1. try to open given file:
     cnt = m_bookRecords.GetCount();
     for (i = 0; i < cnt; i++)
     {
@@ -732,16 +731,14 @@ wxString wxHtmlHelpData::FindPageByName(const wxString& x)
     }
 
 
-    /* 2. try to find a book: */
-
+    // 2. try to find a book:
     for (i = 0; i < cnt; i++)
     {
         if (m_bookRecords[i].GetTitle() == x)
             return m_bookRecords[i].GetFullPath(m_bookRecords[i].GetStart());
     }
 
-    /* 3. try to find in contents: */
-
+    // 3. try to find in contents:
     cnt = m_contents.size();
     for (i = 0; i < cnt; i++)
     {
@@ -750,12 +747,18 @@ wxString wxHtmlHelpData::FindPageByName(const wxString& x)
     }
 
 
-    /* 4. try to find in index: */
-
+    // 4. try to find in index:
     cnt = m_index.size();
     for (i = 0; i < cnt; i++)
     {
         if (m_index[i].name == x)
+            return m_index[i].GetFullPath();
+    }
+
+    // 4b. if still not found, try case-insensitive comparison
+    for (i = 0; i < cnt; i++)
+    {
+        if (m_index[i].name.CmpNoCase(x) == 0)
             return m_index[i].GetFullPath();
     }
 
