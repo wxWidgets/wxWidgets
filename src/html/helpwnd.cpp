@@ -107,45 +107,44 @@ class wxHtmlHelpHashData : public wxObject
 
 class wxHtmlHelpHtmlWindow : public wxHtmlWindow
 {
-    public:
-        wxHtmlHelpHtmlWindow(wxHtmlHelpWindow *win, wxWindow *parent)
-            : wxHtmlWindow(parent), m_Window(win)
+public:
+    wxHtmlHelpHtmlWindow(wxHtmlHelpWindow *win, wxWindow *parent)
+        : wxHtmlWindow(parent), m_Window(win)
+    {
+        SetStandardFonts();
+    }
+
+    void OnLink(wxHtmlLinkEvent& ev)
+    {
+        const wxMouseEvent *e = ev.GetLinkInfo().GetEvent();
+        if (e == NULL || e->LeftUp())
+            m_Window->NotifyPageChanged();
+    }
+
+    // Returns full location with anchor (helper)
+    static wxString GetOpenedPageWithAnchor(wxHtmlWindow *win)
+    {
+        if(!win)
+            return wxEmptyString;
+
+        wxString an = win->GetOpenedAnchor();
+        wxString pg = win->GetOpenedPage();
+        if(!an.empty())
         {
-            SetStandardFonts();
+            pg << wxT("#") << an;
         }
+        return pg;
+    }
 
-        void OnLinkClicked(wxHtmlLinkEvent& ev)
-        {
-            const wxMouseEvent *e = ev.GetLinkInfo().GetEvent();
-            if (e == NULL || e->LeftUp())
-                m_Window->NotifyPageChanged();
-        }
-
-        // Returns full location with anchor (helper)
-        static wxString GetOpenedPageWithAnchor(wxHtmlWindow *win)
-        {
-            if(!win)
-                return wxEmptyString;
-
-            wxString an = win->GetOpenedAnchor();
-            wxString pg = win->GetOpenedPage();
-            if(!an.empty())
-            {
-                pg << wxT("#");
-                pg << an;
-            }
-            return pg;
-        }
-
-    private:
-        wxHtmlHelpWindow *m_Window;
+private:
+    wxHtmlHelpWindow *m_Window;
 
     DECLARE_NO_COPY_CLASS(wxHtmlHelpHtmlWindow)
     DECLARE_EVENT_TABLE()
 };
 
 BEGIN_EVENT_TABLE(wxHtmlHelpHtmlWindow, wxHtmlWindow)
-    EVT_HTML_LINK_CLICKED(wxID_ANY, wxHtmlHelpHtmlWindow::OnLinkClicked)
+    EVT_HTML_LINK_CLICKED(wxID_ANY, wxHtmlHelpHtmlWindow::OnLink)
 END_EVENT_TABLE()
 
 
