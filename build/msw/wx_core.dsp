@@ -694,6 +694,10 @@ SOURCE=..\..\src\common\imagpnm.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\common\imagtga.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\common\imagtiff.cpp
 # End Source File
 # Begin Source File
@@ -9006,6 +9010,10 @@ SOURCE=..\..\include\wx\imagpng.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\imagpnm.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\imagtga.h
 # End Source File
 # Begin Source File
 

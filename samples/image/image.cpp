@@ -69,6 +69,7 @@ public:
     wxBitmap  my_horse_pcx;
     wxBitmap  my_horse_pnm;
     wxBitmap  my_horse_tiff;
+    wxBitmap  my_horse_tga;
     wxBitmap  my_horse_xpm;
     wxBitmap  my_horse_ico32;
     wxBitmap  my_horse_ico16;
@@ -618,6 +619,15 @@ MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
         my_horse_tiff = wxBitmap( image );
 #endif
 
+#if wxUSE_LIBTIFF
+    image.Destroy();
+
+    if ( !image.LoadFile( dir + _T("horse.tga"), wxBITMAP_TYPE_TGA ) )
+        wxLogError(wxT("Can't load TGA image"));
+    else
+        my_horse_tga = wxBitmap( image );
+#endif
+
     CreateAntiAliasedBitmap();
 
     my_smile_xbm = wxBitmap( (const char*)smile_bits, smile_width,
@@ -782,9 +792,13 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
     if (my_horse_tiff.Ok())
         dc.DrawBitmap( my_horse_tiff, 30, 1530 );
 
-    dc.DrawText( _T("XPM handler"), 30, 1745 );
+    dc.DrawText( _T("TGA handler"), 30, 1745 );
+    if (my_horse_tga.Ok())
+        dc.DrawBitmap( my_horse_tga, 30, 1760 );
+
+    dc.DrawText( _T("XPM handler"), 30, 1975 );
     if (my_horse_xpm.Ok())
-        dc.DrawBitmap( my_horse_xpm, 30, 1760 );
+        dc.DrawBitmap( my_horse_xpm, 30, 2000 );
 
     // toucans
     {
@@ -825,15 +839,17 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
 
     if (my_smile_xbm.Ok())
     {
-        dc.DrawText( _T("XBM bitmap"), 30, 1975 );
-        dc.DrawText( _T("(green on red)"), 30, 1990 );
+        int x = 300, y = 1800;
+
+        dc.DrawText( _T("XBM bitmap"), x, y );
+        dc.DrawText( _T("(green on red)"), x, y + 15 );
         dc.SetTextForeground( _T("GREEN") );
         dc.SetTextBackground( _T("RED") );
-        dc.DrawBitmap( my_smile_xbm, 30, 2010 );
+        dc.DrawBitmap( my_smile_xbm, x, y + 30 );
 
         dc.SetTextForeground( *wxBLACK );
-        dc.DrawText( _T("After wxImage conversion"), 150, 1975 );
-        dc.DrawText( _T("(red on white)"), 150, 1990 );
+        dc.DrawText( _T("After wxImage conversion"), x + 120, y );
+        dc.DrawText( _T("(red on white)"), x + 120, y + 15 );
         dc.SetTextForeground( wxT("RED") );
         wxImage i = my_smile_xbm.ConvertToImage();
         i.SetMaskColour( 255, 255, 255 );
@@ -841,7 +857,7 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
                wxRED_PEN->GetColour().Red(),
                wxRED_PEN->GetColour().Green(),
                wxRED_PEN->GetColour().Blue() );
-        dc.DrawBitmap( wxBitmap(i), 150, 2010, true );
+        dc.DrawBitmap( wxBitmap(i), x + 120, y + 30, true );
         dc.SetTextForeground( *wxBLACK );
     }
 
@@ -865,15 +881,17 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
 
     if (mono.Ok())
     {
-        dc.DrawText( _T("Mono bitmap"), 30, 2095 );
-        dc.DrawText( _T("(red on green)"), 30, 2110 );
+        int x = 300, y = 1900;
+
+        dc.DrawText( _T("Mono bitmap"), x, y );
+        dc.DrawText( _T("(red on green)"), x, y + 15 );
         dc.SetTextForeground( wxT("RED") );
         dc.SetTextBackground( wxT("GREEN") );
-        dc.DrawBitmap( mono, 30, 2130 );
+        dc.DrawBitmap( mono, x, y + 30 );
 
         dc.SetTextForeground( *wxBLACK );
-        dc.DrawText( _T("After wxImage conversion"), 150, 2095 );
-        dc.DrawText( _T("(red on white)"), 150, 2110 );
+        dc.DrawText( _T("After wxImage conversion"), x + 120, y );
+        dc.DrawText( _T("(red on white)"), x + 120, y + 15 );
         dc.SetTextForeground( wxT("RED") );
         wxImage i = mono.ConvertToImage();
         i.SetMaskColour( 255,255,255 );
@@ -881,7 +899,7 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
                wxRED_PEN->GetColour().Red(),
                wxRED_PEN->GetColour().Green(),
                wxRED_PEN->GetColour().Blue() );
-        dc.DrawBitmap( wxBitmap(i), 150, 2130, true );
+        dc.DrawBitmap( wxBitmap(i), x + 120, y + 30, true );
         dc.SetTextForeground( *wxBLACK );
     }
 
@@ -1150,42 +1168,10 @@ void MyFrame::OnPaste(wxCommandEvent& WXUNUSED(event))
 
 bool MyApp::OnInit()
 {
-#if wxUSE_LIBPNG
-  wxImage::AddHandler( new wxPNGHandler );
-#endif
+    wxInitAllImageHandlers();
 
-#if wxUSE_LIBJPEG
-  wxImage::AddHandler( new wxJPEGHandler );
-#endif
+    wxFrame *frame = new MyFrame();
+    frame->Show( true );
 
-#if wxUSE_LIBTIFF
-  wxImage::AddHandler( new wxTIFFHandler );
-#endif
-
-#if wxUSE_GIF
-  wxImage::AddHandler( new wxGIFHandler );
-#endif
-
-#if wxUSE_PCX
-  wxImage::AddHandler( new wxPCXHandler );
-#endif
-
-#if wxUSE_PNM
-  wxImage::AddHandler( new wxPNMHandler );
-#endif
-
-#if wxUSE_XPM
-  wxImage::AddHandler( new wxXPMHandler );
-#endif
-
-#if wxUSE_ICO_CUR
-  wxImage::AddHandler( new wxICOHandler );
-  wxImage::AddHandler( new wxCURHandler );
-  wxImage::AddHandler( new wxANIHandler );
-#endif
-
-  wxFrame *frame = new MyFrame();
-  frame->Show( true );
-
-  return true;
+    return true;
 }

@@ -442,6 +442,7 @@ extern WXDLLEXPORT_DATA(wxImage)    wxNullImage;
 #include "wx/imaggif.h"
 #include "wx/imagpcx.h"
 #include "wx/imagjpeg.h"
+#include "wx/imagtga.h"
 #include "wx/imagtiff.h"
 #include "wx/imagpnm.h"
 #include "wx/imagxpm.h"

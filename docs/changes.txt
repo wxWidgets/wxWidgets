@@ -93,6 +93,7 @@ All (GUI):
 - Many enhancements to wxRichTextCtrl including URL support,
   formatting and symbol dialogs, print/preview, and better list
   formatting.
+- Support for loading TGA files added (Seth Jackson)
 
 Unix Ports:
 

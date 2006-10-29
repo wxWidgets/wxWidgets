@@ -619,6 +619,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/common/imagpcx.cpp
     src/common/imagpng.cpp
     src/common/imagpnm.cpp
+    src/common/imagtga.cpp
     src/common/imagtiff.cpp
     src/common/imagxpm.cpp
     src/common/layout.cpp
@@ -825,6 +826,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/imagpcx.h
     wx/imagpng.h
     wx/imagpnm.h
+    wx/imagtga.h
     wx/imagtiff.h
     wx/imagxpm.h
     wx/listbase.h

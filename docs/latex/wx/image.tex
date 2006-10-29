@@ -45,7 +45,7 @@ as support for saving images with alpha channel which also isn't implemented).
 
 The following image handlers are available. {\bf wxBMPHandler} is always
 installed by default. To use other image formats, install the appropriate
-handler with \helpref{wxImage::AddHandler}{wximageaddhandler} or
+handler with \helpref{wxImage::AddHandler}{wximageaddhandler} or call 
 \helpref{wxInitAllImageHandlers}{wxinitallimagehandlers}.
 
 \twocolwidtha{5cm}%
@@ -57,6 +57,7 @@ handler with \helpref{wxImage::AddHandler}{wximageaddhandler} or
 \twocolitem{\indexit{wxPCXHandler}}{For loading and saving (see below).}
 \twocolitem{\indexit{wxPNMHandler}}{For loading and saving (see below).}
 \twocolitem{\indexit{wxTIFFHandler}}{For loading and saving.}
+\twocolitem{\indexit{wxTGAHandler}}{For loading only.}
 \twocolitem{\indexit{wxIFFHandler}}{For loading only.}
 \twocolitem{\indexit{wxXPMHandler}}{For loading and saving.}
 \twocolitem{\indexit{wxICOHandler}}{For loading and saving.}
@@ -153,6 +154,7 @@ Creates an image from XPM data.
 \twocolitem{\indexit{wxBITMAP\_TYPE\_PCX}}{Load a PCX bitmap file.}
 \twocolitem{\indexit{wxBITMAP\_TYPE\_PNM}}{Load a PNM bitmap file.}
 \twocolitem{\indexit{wxBITMAP\_TYPE\_TIF}}{Load a TIFF bitmap file.}
+\twocolitem{\indexit{wxBITMAP\_TYPE\_TGA}}{Load a TGA bitmap file.}
 \twocolitem{\indexit{wxBITMAP\_TYPE\_XPM}}{Load a XPM bitmap file.}
 \twocolitem{\indexit{wxBITMAP\_TYPE\_ICO}}{Load a Windows icon file (ICO).}
 \twocolitem{\indexit{wxBITMAP\_TYPE\_CUR}}{Load a Windows cursor file (CUR).}

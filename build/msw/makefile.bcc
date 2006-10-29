@@ -1469,6 +1469,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_imagpcx.obj \
 	$(OBJS)\monodll_imagpng.obj \
 	$(OBJS)\monodll_imagpnm.obj \
+	$(OBJS)\monodll_imagtga.obj \
 	$(OBJS)\monodll_imagtiff.obj \
 	$(OBJS)\monodll_imagxpm.obj \
 	$(OBJS)\monodll_layout.obj \
@@ -1690,6 +1691,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_imagpcx.obj \
 	$(OBJS)\monodll_imagpng.obj \
 	$(OBJS)\monodll_imagpnm.obj \
+	$(OBJS)\monodll_imagtga.obj \
 	$(OBJS)\monodll_imagtiff.obj \
 	$(OBJS)\monodll_imagxpm.obj \
 	$(OBJS)\monodll_layout.obj \
@@ -2077,6 +2079,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_imagpcx.obj \
 	$(OBJS)\monolib_imagpng.obj \
 	$(OBJS)\monolib_imagpnm.obj \
+	$(OBJS)\monolib_imagtga.obj \
 	$(OBJS)\monolib_imagtiff.obj \
 	$(OBJS)\monolib_imagxpm.obj \
 	$(OBJS)\monolib_layout.obj \
@@ -2298,6 +2301,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_imagpcx.obj \
 	$(OBJS)\monolib_imagpng.obj \
 	$(OBJS)\monolib_imagpnm.obj \
+	$(OBJS)\monolib_imagtga.obj \
 	$(OBJS)\monolib_imagtiff.obj \
 	$(OBJS)\monolib_imagxpm.obj \
 	$(OBJS)\monolib_layout.obj \
@@ -2595,6 +2599,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_imagpcx.obj \
 	$(OBJS)\coredll_imagpng.obj \
 	$(OBJS)\coredll_imagpnm.obj \
+	$(OBJS)\coredll_imagtga.obj \
 	$(OBJS)\coredll_imagtiff.obj \
 	$(OBJS)\coredll_imagxpm.obj \
 	$(OBJS)\coredll_layout.obj \
@@ -2816,6 +2821,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_imagpcx.obj \
 	$(OBJS)\coredll_imagpng.obj \
 	$(OBJS)\coredll_imagpnm.obj \
+	$(OBJS)\coredll_imagtga.obj \
 	$(OBJS)\coredll_imagtiff.obj \
 	$(OBJS)\coredll_imagxpm.obj \
 	$(OBJS)\coredll_layout.obj \
@@ -3038,6 +3044,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_imagpcx.obj \
 	$(OBJS)\corelib_imagpng.obj \
 	$(OBJS)\corelib_imagpnm.obj \
+	$(OBJS)\corelib_imagtga.obj \
 	$(OBJS)\corelib_imagtiff.obj \
 	$(OBJS)\corelib_imagxpm.obj \
 	$(OBJS)\corelib_layout.obj \
@@ -3259,6 +3266,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_imagpcx.obj \
 	$(OBJS)\corelib_imagpng.obj \
 	$(OBJS)\corelib_imagpnm.obj \
+	$(OBJS)\corelib_imagtga.obj \
 	$(OBJS)\corelib_imagtiff.obj \
 	$(OBJS)\corelib_imagxpm.obj \
 	$(OBJS)\corelib_layout.obj \
@@ -6048,6 +6056,11 @@ $(OBJS)\monodll_imagpnm.obj: ..\..\src\common\imagpnm.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
+$(OBJS)\monodll_imagtga.obj: ..\..\src\common\imagtga.cpp
+	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) $**
+!endif
+
+!if "$(USE_GUI)" == "1"
 $(OBJS)\monodll_imagtiff.obj: ..\..\src\common\imagtiff.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) $**
 !endif
@@ -8023,6 +8036,11 @@ $(OBJS)\monolib_imagpng.obj: ..\..\src\common\imagpng.cpp
 
 !if "$(USE_GUI)" == "1"
 $(OBJS)\monolib_imagpnm.obj: ..\..\src\common\imagpnm.cpp
+	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) $**
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\monolib_imagtga.obj: ..\..\src\common\imagtga.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) $**
 !endif
 
@@ -10039,6 +10057,11 @@ $(OBJS)\coredll_imagpnm.obj: ..\..\src\common\imagpnm.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
+$(OBJS)\coredll_imagtga.obj: ..\..\src\common\imagtga.cpp
+	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) $**
+!endif
+
+!if "$(USE_GUI)" == "1"
 $(OBJS)\coredll_imagtiff.obj: ..\..\src\common\imagtiff.cpp
 	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) $**
 !endif
@@ -11290,6 +11313,11 @@ $(OBJS)\corelib_imagpng.obj: ..\..\src\common\imagpng.cpp
 
 !if "$(USE_GUI)" == "1"
 $(OBJS)\corelib_imagpnm.obj: ..\..\src\common\imagpnm.cpp
+	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) $**
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\corelib_imagtga.obj: ..\..\src\common\imagtga.cpp
 	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) $**
 !endif
 

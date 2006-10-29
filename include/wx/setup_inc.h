@@ -1147,6 +1147,9 @@
 // Set to 1 for TIFF format support (requires libtiff)
 #define wxUSE_LIBTIFF       1
 
+// Set to 1 for TGA format support (loading only)
+#define wxUSE_TGA           1
+
 // Set to 1 for GIF format support
 #define wxUSE_GIF           1
 

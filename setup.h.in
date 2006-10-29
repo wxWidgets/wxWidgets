@@ -511,6 +511,8 @@
 
 #define wxUSE_LIBTIFF       0
 
+#define wxUSE_TGA           0
+
 #define wxUSE_GIF           0
 
 #define wxUSE_PNM           0

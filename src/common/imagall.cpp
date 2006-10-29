@@ -53,6 +53,9 @@ void wxInitAllImageHandlers()
   wxImage::AddHandler( new wxCURHandler );
   wxImage::AddHandler( new wxANIHandler );
 #endif
+#if wxUSE_TGA
+  wxImage::AddHandler( new wxTGAHandler );
+#endif
 #if wxUSE_XPM
   wxImage::AddHandler( new wxXPMHandler );
 #endif

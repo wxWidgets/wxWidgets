@@ -2965,6 +2965,7 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/imagpcx.h \
 	wx/imagpng.h \
 	wx/imagpnm.h \
+	wx/imagtga.h \
 	wx/imagtiff.h \
 	wx/imagxpm.h \
 	wx/listbase.h \
@@ -3471,6 +3472,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS =  \
 	monodll_imagpcx.o \
 	monodll_imagpng.o \
 	monodll_imagpnm.o \
+	monodll_imagtga.o \
 	monodll_imagtiff.o \
 	monodll_imagxpm.o \
 	monodll_layout.o \
@@ -3642,6 +3644,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS =  \
 	monodll_imagpcx.o \
 	monodll_imagpng.o \
 	monodll_imagpnm.o \
+	monodll_imagtga.o \
 	monodll_imagtiff.o \
 	monodll_imagxpm.o \
 	monodll_layout.o \
@@ -5223,6 +5226,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_1 =  \
 	monolib_imagpcx.o \
 	monolib_imagpng.o \
 	monolib_imagpnm.o \
+	monolib_imagtga.o \
 	monolib_imagtiff.o \
 	monolib_imagxpm.o \
 	monolib_layout.o \
@@ -5394,6 +5398,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_1 =  \
 	monolib_imagpcx.o \
 	monolib_imagpng.o \
 	monolib_imagpnm.o \
+	monolib_imagtga.o \
 	monolib_imagtiff.o \
 	monolib_imagxpm.o \
 	monolib_layout.o \
@@ -7187,6 +7192,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_2 =  \
 	coredll_imagpcx.o \
 	coredll_imagpng.o \
 	coredll_imagpnm.o \
+	coredll_imagtga.o \
 	coredll_imagtiff.o \
 	coredll_imagxpm.o \
 	coredll_layout.o \
@@ -7358,6 +7364,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_2 =  \
 	coredll_imagpcx.o \
 	coredll_imagpng.o \
 	coredll_imagpnm.o \
+	coredll_imagtga.o \
 	coredll_imagtiff.o \
 	coredll_imagxpm.o \
 	coredll_layout.o \
@@ -8621,6 +8628,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_3 =  \
 	corelib_imagpcx.o \
 	corelib_imagpng.o \
 	corelib_imagpnm.o \
+	corelib_imagtga.o \
 	corelib_imagtiff.o \
 	corelib_imagxpm.o \
 	corelib_layout.o \
@@ -8792,6 +8800,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_3 =  \
 	corelib_imagpcx.o \
 	corelib_imagpng.o \
 	corelib_imagpnm.o \
+	corelib_imagtga.o \
 	corelib_imagtiff.o \
 	corelib_imagxpm.o \
 	corelib_layout.o \
@@ -15832,6 +15841,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@monodll_imagpnm.o: $(srcdir)/src/common/imagpnm.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/imagpnm.cpp
 
+@COND_USE_GUI_1@monodll_imagtga.o: $(srcdir)/src/common/imagtga.cpp $(MONODLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/imagtga.cpp
+
 @COND_USE_GUI_1@monodll_imagtiff.o: $(srcdir)/src/common/imagtiff.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/imagtiff.cpp
 
@@ -19926,6 +19938,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_USE_GUI_1@monolib_imagpnm.o: $(srcdir)/src/common/imagpnm.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/imagpnm.cpp
+
+@COND_USE_GUI_1@monolib_imagtga.o: $(srcdir)/src/common/imagtga.cpp $(MONOLIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/imagtga.cpp
 
 @COND_USE_GUI_1@monolib_imagtiff.o: $(srcdir)/src/common/imagtiff.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/imagtiff.cpp
@@ -24373,6 +24388,9 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@coredll_imagpnm.o: $(srcdir)/src/common/imagpnm.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/imagpnm.cpp
 
+@COND_USE_GUI_1@coredll_imagtga.o: $(srcdir)/src/common/imagtga.cpp $(COREDLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/imagtga.cpp
+
 @COND_USE_GUI_1@coredll_imagtiff.o: $(srcdir)/src/common/imagtiff.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/imagtiff.cpp
 
@@ -27294,6 +27312,9 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 
 @COND_USE_GUI_1@corelib_imagpnm.o: $(srcdir)/src/common/imagpnm.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/imagpnm.cpp
+
+@COND_USE_GUI_1@corelib_imagtga.o: $(srcdir)/src/common/imagtga.cpp $(CORELIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/imagtga.cpp
 
 @COND_USE_GUI_1@corelib_imagtiff.o: $(srcdir)/src/common/imagtiff.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/imagtiff.cpp
