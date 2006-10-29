@@ -403,9 +403,11 @@ public:
                        const wxSize& incSize=wxDefaultSize)
     { DoSetSizeHints(minSize.x, minSize.y, maxSize.x, maxSize.y, incSize.x, incSize.y); }
 
-    virtual void DoSetSizeHints( int minW, int minH,
-                                 int maxW = wxDefaultCoord, int maxH = wxDefaultCoord,
-                                 int incW = wxDefaultCoord, int incH = wxDefaultCoord ) { }
+    virtual void DoSetSizeHints( int WXUNUSED(minW), int WXUNUSED(minH),
+                                 int WXUNUSED(maxW), int WXUNUSED(maxH),
+                                 int WXUNUSED(incW), int WXUNUSED(incH) )
+    {
+    }
 
         // Methods for setting virtual size hints
         // FIXME: What are virtual size hints?
@@ -418,17 +420,15 @@ public:
         SetVirtualSizeHints(minSize.x, minSize.y, maxSize.x, maxSize.y);
     }
 
+    int GetMinWidth() const { return GetMinSize().x; }
+    int GetMinHeight() const { return GetMinSize().y; }
+    int GetMaxWidth() const { return GetMaxSize().x; }
+    int GetMaxHeight() const { return GetMaxSize().y; }
 
-        // Override this method to control the values given to Sizers etc.
-    virtual wxSize GetMaxSize() const { return wxSize( m_maxWidth, m_maxHeight ); }
-    virtual wxSize GetMinSize() const { return wxSize( m_minWidth, m_minHeight ); }
+        // Override these methods to impose restrictions on min/max size
+    virtual wxSize GetMinSize() const { return wxSize(m_minWidth, m_minHeight); }
+    virtual wxSize GetMaxSize() const { return wxSize(m_maxWidth, m_maxHeight); }
 
-        // If a class doesn't override GetMinSize() or GetMaxSize()
-        // these values will be returned
-    int GetMinWidth() const { return m_minWidth; }
-    int GetMinHeight() const { return m_minHeight; }
-    int GetMaxWidth() const { return m_maxWidth; }
-    int GetMaxHeight() const { return m_maxHeight; }
     void SetMinSize(const wxSize& minSize) { m_minWidth = minSize.x; m_minHeight = minSize.y; }
     void SetMaxSize(const wxSize& maxSize) { m_maxWidth = maxSize.x; m_maxHeight = maxSize.y; }
 
