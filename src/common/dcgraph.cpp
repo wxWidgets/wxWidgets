@@ -61,15 +61,17 @@ void wxGCDC::SetGraphicsContext( wxGraphicsContext* ctx )
 { 
     delete m_graphicContext;
     m_graphicContext = ctx;
-    m_matrixOriginal = m_graphicContext->GetTransform();
+    if ( m_graphicContext )
+    {
+        m_matrixOriginal = m_graphicContext->GetTransform();
+        m_ok = true;
+    }
 }
 
 wxGCDC::wxGCDC(const wxWindowDC& dc)
 {
     Init();
-    m_graphicContext = wxGraphicsContext::Create(dc);
-    m_matrixOriginal = m_graphicContext->GetTransform();
-    m_ok = true;
+    SetGraphicsContext( wxGraphicsContext::Create(dc) );
     if ( dc.GetFont().Ok())
         m_graphicContext->SetFont( m_graphicContext->CreateFont(dc.GetFont(),dc.GetTextForeground()));
     if ( dc.GetPen().Ok())
