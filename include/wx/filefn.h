@@ -279,14 +279,26 @@ enum wxFileKind
                 #define   wxStat       wxMSLU__wstat
             #endif
         #else // !wxUSE_UNICODE_MSLU
-            #define   wxOpen       _wopen
-            #define   wxAccess     _waccess
-            #define   wxMkDir      _wmkdir
-            #define   wxRmDir      _wrmdir
-            #ifdef wxHAS_HUGE_FILES
-                #define   wxStat       _wstati64
+            #ifdef __BORLANDC__
+                #define   wxOpen       _wopen
+                #define   wxAccess     _waccess
+                #define   wxMkDir      _mkdir
+                #define   wxRmDir      _rmdir
+                #ifdef wxHAS_HUGE_FILES
+                    #define   wxStat       _wstati64
+                #else
+                    #define   wxStat       _wstat
+                #endif
             #else
-                #define   wxStat       _wstat
+                #define   wxOpen       _wopen
+                #define   wxAccess     _waccess
+                #define   wxMkDir      _wmkdir
+                #define   wxRmDir      _wrmdir
+                #ifdef wxHAS_HUGE_FILES
+                    #define   wxStat       _wstati64
+                #else
+                    #define   wxStat       _wstat
+                #endif
             #endif
         #endif // wxUSE_UNICODE_MSLU/!wxUSE_UNICODE_MSLU
     #else // !wxUSE_UNICODE
