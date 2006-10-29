@@ -210,6 +210,11 @@ public:
     bool Create( int width, int height, unsigned char* data, bool static_data = false );
     bool Create( int width, int height, unsigned char* data, unsigned char* alpha, bool static_data = false );
     bool Create( const char* const* xpmData );
+#ifdef __BORLANDC__
+    // needed for Borland 5.5
+    wxImage( char** xpmData ) { Create(wx_const_cast(const char* const*, xpmData)); }
+    bool Create( char** xpmData ) { return Create(wx_const_cast(const char* const*, xpmData)); }
+#endif
     void Destroy();
 
     // creates an identical copy of the image (the = operator

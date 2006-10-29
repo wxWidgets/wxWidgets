@@ -45,6 +45,13 @@ public:
 
     // Initialize with XPM data
     wxBitmap(const char* const* data);
+#ifdef __BORLANDC__
+    // needed for Borland 5.5
+    wxBitmap(char** data)
+    {
+        *this = wxBitmap(wx_const_cast(const char* const*, data));
+    }
+#endif
 
     // Load a file or resource
     wxBitmap(const wxString& name, wxBitmapType type = wxBITMAP_TYPE_BMP_RESOURCE);
