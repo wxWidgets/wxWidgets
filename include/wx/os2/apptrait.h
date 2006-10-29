@@ -36,6 +36,9 @@ public:
 
     // Clean up message queue.
     virtual void TerminateGui(unsigned long ulHab);
+#ifdef __WXGTK__
+    virtual wxString GetDesktopEnvironment() const;
+#endif
 };
 
 #endif // wxUSE_GUI
