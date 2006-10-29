@@ -1121,9 +1121,7 @@ wxString::size_type wxFilterClassFactoryBase::FindExtension(
 {
     size_t len = wxStrlen(location);
 
-    for (const wxChar *const *p = GetProtocols(wxSTREAM_FILEEXTENSION);
-         p && *p;
-         p++)
+    for (const wxChar *const *p = GetProtocols(wxSTREAM_FILEEXT); *p; p++)
     {
         size_t l = wxStrlen(*p);
 
@@ -1137,10 +1135,10 @@ wxString::size_type wxFilterClassFactoryBase::FindExtension(
 bool wxFilterClassFactoryBase::CanHandle(const wxChar *protocol,
                                          wxStreamProtocolType type) const
 {
-    if (type == wxSTREAM_FILEEXTENSION)
+    if (type == wxSTREAM_FILEEXT)
         return FindExtension(protocol) != wxString::npos;
     else
-        for (const wxChar *const *p = GetProtocols(type); p && *p; p++)
+        for (const wxChar *const *p = GetProtocols(type); *p; p++)
             if (wxStrcmp(*p, protocol) == 0)
                 return true;
 

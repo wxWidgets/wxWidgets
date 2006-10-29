@@ -327,10 +327,10 @@ protected:
 
 enum wxStreamProtocolType
 {
-    wxSTREAM_PROTOCOL,      // wxFileSystem protocol (should be only one)
-    wxSTREAM_MIMETYPE,      // Mime types the stream handles
-    wxSTREAM_ENCODING,      // The http Content-Encodings the stream handles
-    wxSTREAM_FILEEXTENSION  // File extensions the stream handles
+    wxSTREAM_PROTOCOL,  // wxFileSystem protocol (should be only one)
+    wxSTREAM_MIMETYPE,  // MIME types the stream handles
+    wxSTREAM_ENCODING,  // The HTTP Content-Encodings the stream handles
+    wxSTREAM_FILEEXT    // File extensions the stream handles
 };
 
 void WXDLLIMPEXP_BASE wxUseFilterClasses();

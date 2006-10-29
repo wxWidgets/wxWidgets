@@ -108,10 +108,10 @@ wxTarClassFactory::GetProtocols(wxStreamProtocolType type) const
     static const wxChar *empty[]     = { NULL };
 
     switch (type) {
-        case wxSTREAM_PROTOCOL:         return protocols;
-        case wxSTREAM_MIMETYPE:         return mimetypes;
-        case wxSTREAM_FILEEXTENSION:    return fileexts;
-        default:                        return empty;
+        case wxSTREAM_PROTOCOL: return protocols;
+        case wxSTREAM_MIMETYPE: return mimetypes;
+        case wxSTREAM_FILEEXT:  return fileexts;
+        default:                return empty;
     }
 }
 

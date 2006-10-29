@@ -100,11 +100,11 @@ wxGzipClassFactory::GetProtocols(wxStreamProtocolType type) const
         { NULL };
 
     switch (type) {
-        case wxSTREAM_PROTOCOL:         return protos;
-        case wxSTREAM_MIMETYPE:         return mimes;
-        case wxSTREAM_ENCODING:         return encs;
-        case wxSTREAM_FILEEXTENSION:    return exts;
-        default:                        return empty;
+        case wxSTREAM_PROTOCOL: return protos;
+        case wxSTREAM_MIMETYPE: return mimes;
+        case wxSTREAM_ENCODING: return encs;
+        case wxSTREAM_FILEEXT:  return exts;
+        default:                return empty;
     }
 }
 
