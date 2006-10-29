@@ -60,17 +60,17 @@ iscc wxwidgets.iss >> c:\temp.log
 echo Zipping
 cd %WXWIN%
 del %DAILY%\*.zip
-zip %DAILY%\wx-docs-chm.ZIP docs\htmlhelp\wx.chm
-zip %DAILY%\wx-docs-hlp.ZIP docs\winhelp\wx.hlp docs\winhelp\wx.cnt
-zip %DAILY%\wx-docs-extra-hlp.ZIP utils/tex2rtf/docs/*.HLP utils/tex2rtf/docs/*.cnt docs/winhelp/*.hlp docs/winhelp/*.cnt -x  docs/winhelp/wx.hlp docs/winhelp/wx.*
-zip %DAILY%\wx-docs-extra-chm.ZIP utils/tex2rtf/docs/*.chm docs/htmlhelp/*.chm 
+zip %DAILY%\wxWidgets-Docs-CHM.zip docs\htmlhelp\wx.chm utils/tex2rtf/docs/*.chm docs/htmlhelp/*.chm
+zip %DAILY%\wxWidgets-Docs-HLP.zip docs\winhelp\wx.hlp docs\winhelp\wx.cnt utils/tex2rtf/docs/*.HLP utils/tex2rtf/docs/*.cnt docs/winhelp/*.hlp docs/winhelp/*.cnt
+Rem zip %DAILY%\wx-docs-extra-hlp.ZIP utils/tex2rtf/docs/*.HLP utils/tex2rtf/docs/*.cnt docs/winhelp/*.hlp docs/winhelp/*.cnt -x  docs/winhelp/wx.hlp docs/winhelp/wx.*
+Rem zip %DAILY%\wx-docs-extra-chm.ZIP utils/tex2rtf/docs/*.chm docs/htmlhelp/*.chm 
 cd %DAILY%\
 mkdir docs
 mkdir docs\pdf
 del docs\pdf\*.pdf
 move in\*.pdf docs\pdf
-zip wx-docs-pdf.ZIP docs\pdf\wx.pdf
-zip wx-docs-extra-pdf.ZIP docs\pdf\*.pdf -x docs\pdf\wx.pdf
+zip wxWidgets-Docs-PDF.zip docs\pdf\*.pdf
+Rem zip wx-docs-extra-pdf.ZIP docs\pdf\*.pdf -x docs\pdf\wx.pdf
 
 
 echo setting S

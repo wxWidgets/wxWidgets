@@ -98,12 +98,12 @@ echo CVS Makefiles generated from bakefiles last updated at `date -u` > ${FTPDIR
 
 
 ## Docs...
-find ${FTPDIR}/CVS_Docs/files -type f -name wx-do\* -mtime +3 | xargs rm -rf
-cp  ${WORKDIR}/archives/wx-docs-* ${FTPDIR}/CVS_Docs/files
+find ${FTPDIR}/CVS_Docs/files -type f -name wxWidgets-Do\* -mtime +3 | xargs rm -rf
+cp  ${WORKDIR}/archives/wxWidgets-Docs-* ${FTPDIR}/CVS_Docs/files
 
 rm ${FTPDIR}/CVS_Docs/wx* ${FTPDIR}/CVS_Docs/MD5SUM
 ##there must be an easier way of doing these links...
-for f in `find ${FTPDIR}/CVS_Docs/files -type f -name wx-do\* -mmin -601` ; do
+for f in `find ${FTPDIR}/CVS_Docs/files -type f -name wxWidgets-Do\* -mmin -601` ; do
        ln -s $f `echo $f | sed -e "s/-${CURDATE}//" | sed -e "s|/files||" `
 done
 md5sum ${FTPDIR}/CVS_Docs/wx* > ${FTPDIR}/CVS_Docs/MD5SUM
@@ -140,7 +140,7 @@ zip -q -9 ${WORKDIR}/archives/htb/$1.htb  *.gif
 do_docs ()
 {
 ##remove files, then regenerate
-rm ${WORKDIR}/archives/wx-docs*
+rm ${WORKDIR}/archives/wxWidgets-Docs*
 rm ${WORKDIR}/archives/htb/*.*
 
 ######### dir index.tex rootdir
@@ -154,11 +154,13 @@ do_texrtf fl fl.tex contrib
 do_util_texrtf tex2rtf tex2rtf.tex 
 
 cd ${WORKDIR}/archives/
-tar zcvf ${WORKDIR}/archives/wx-docs-html-${CURDATE}.tar.gz  html/wx/*.html html/wx/*.gif html/wx/*.css
-tar zcvf ${WORKDIR}/archives/wx-docs-extra-html-${CURDATE}.tar.gz `find . -name 'wx' -prune -o -name '*.html' -print`
+tar zcvf ${WORKDIR}/archives/wxWidgets-Docs-HTML-${CURDATE}.tar.gz  html/wx/*.html html/wx/*.gif html/wx/*.css
+# TODO: include the extra HTML docs into the above archive.
+# TODO: we need to add the version number to the doc archives
+# tar zcvf ${WORKDIR}/archives/wxWidgets-Docs-Extra-HTML-${CURDATE}.tar.gz `find . -name 'wx' -prune -o -name '*.html' -print`
 
-tar zcvf ${WORKDIR}/archives/wx-docs-htb-${CURDATE}.tar.gz  htb/wx.htb
-tar zcvf ${WORKDIR}/archives/wx-docs-extra-htb-${CURDATE}.tar.gz --exclude wx.htb htb/*.htb
+tar zcvf ${WORKDIR}/archives/wxWidgets-Docs-HTB-${CURDATE}.tar.gz  htb/*.htb
+# tar zcvf ${WORKDIR}/archives/wxWidgets-Docs-Extra-HTB-${CURDATE}.tar.gz --exclude wx.htb htb/*.htb
 
 ##remove .con files
 rm ${WORKDIR}/*.con
@@ -168,14 +170,14 @@ rm ${WORKDIR}/*.con
 
 add_win_files ()
 {
-### starts with wx-docs-xxx.zip
-for f in `find ${WORKDIR}/archives/win/ -name wx\*.ZIP ` ; do       
-       mv $f ${WORKDIR}/archives/`basename $f | tr -d ".ZIP"`-${CURDATE}.zip
+### starts with wxWidgets-Docs-xxx.zip
+for f in `find ${WORKDIR}/archives/win/ -name wx\*.zip ` ; do       
+       mv $f ${WORKDIR}/archives/`basename $f | tr -d ".zip"`-${CURDATE}.zip
        done
 
 rm ${WORKDIR}/archives/*.exe
-for f in `find ${WORKDIR}/archives/win/ -name wx\*.EXE ` ; do       
-       mv $f ${WORKDIR}/archives/`basename $f | tr -d ".EXE"`-${CURDATE}.exe
+for f in `find ${WORKDIR}/archives/win/ -name wx\*.exe ` ; do       
+       mv $f ${WORKDIR}/archives/`basename $f | tr -d ".exe"`-${CURDATE}.exe
        done
 
 }
