@@ -30,7 +30,7 @@
 // tab art class
 
 
-class wxTabArt
+class WXDLLIMPEXP_AUI wxTabArt
 {
 public:
 
@@ -54,7 +54,7 @@ public:
 };
 
 
-class wxDefaultTabArt : public wxTabArt
+class WXDLLIMPEXP_AUI wxDefaultTabArt : public wxTabArt
 {
 
 public:
