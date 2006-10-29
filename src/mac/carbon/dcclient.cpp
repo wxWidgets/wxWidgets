@@ -121,9 +121,6 @@ wxWindowDC::wxWindowDC(wxWindow *window)
     if (!rootwindow)
         return;
 
-    int x , y ;
-    x = y = 0 ;
-    window->MacWindowToRootWindow( &x , &y ) ;
     m_ok = true ;
 
 #if wxMAC_USE_CORE_GRAPHICS
@@ -149,6 +146,9 @@ wxWindowDC::wxWindowDC(wxWindow *window)
     m_graphicContext->SetBrush( m_brush ) ;
     SetClippingRegion( 0 , 0 , m_width , m_height ) ;
 #else
+    int x , y ;
+    x = y = 0 ;
+    window->MacWindowToRootWindow( &x , &y ) ;
     m_macLocalOrigin.x = x ;
     m_macLocalOrigin.y = y ;
     m_macPort = UMAGetWindowPort( (WindowRef) rootwindow->MacGetWindowRef() ) ;
@@ -252,11 +252,6 @@ wxClientDC::wxClientDC(wxWindow *window) :
     wxWindowDC( window )
 {
     wxPoint origin = window->GetClientAreaOrigin() ;
-    wxSize size = window->GetClientSize() ;
-    int x , y ;
-    x = origin.x ;
-    y = origin.y ;
-    window->MacWindowToRootWindow( &x , &y ) ;
     m_window->GetClientSize( &m_width , &m_height);
     SetDeviceOrigin( origin.x, origin.y );
     SetClippingRegion( 0 , 0 , m_width , m_height ) ;
@@ -319,11 +314,6 @@ wxPaintDC::wxPaintDC(wxWindow *window) :
     wxWindowDC( window )
 {
     wxPoint origin = window->GetClientAreaOrigin() ;
-    wxSize size = window->GetClientSize() ;
-    int x , y ;
-    x = origin.x ;
-    y = origin.y ;
-    window->MacWindowToRootWindow( &x , &y ) ;
     m_window->GetClientSize( &m_width , &m_height);
     SetDeviceOrigin( origin.x, origin.y );
     SetClippingRegion( 0 , 0 , m_width , m_height ) ;
