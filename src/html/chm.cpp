@@ -696,7 +696,7 @@ wxChmInputStream::CreateHHPStream()
 bool wxChmInputStream::CreateFileStream(const wxString& pattern)
 {
     wxFileInputStream * fin;
-    wxString tmpfile = wxFileName::CreateTempFileName(_T("chmstrm"), NULL);
+    wxString tmpfile = wxFileName::CreateTempFileName(_T("chmstrm"));
 
     if ( tmpfile.empty() )
     {
