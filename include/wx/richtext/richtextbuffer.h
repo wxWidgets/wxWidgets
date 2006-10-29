@@ -2259,6 +2259,7 @@ WXDLLIMPEXP_RICHTEXT bool wxTextAttrEqPartial(const wxTextAttrEx& attr1, const w
 WXDLLIMPEXP_RICHTEXT bool wxRichTextApplyStyle(wxTextAttrEx& destStyle, const wxTextAttrEx& style);
 WXDLLIMPEXP_RICHTEXT bool wxRichTextApplyStyle(wxRichTextAttr& destStyle, const wxTextAttrEx& style);
 WXDLLIMPEXP_RICHTEXT bool wxRichTextApplyStyle(wxTextAttrEx& destStyle, const wxRichTextAttr& style, wxRichTextAttr* compareWith = NULL);
+WXDLLIMPEXP_RICHTEXT bool wxRichTextApplyStyle(wxRichTextAttr& destStyle, const wxRichTextAttr& style, wxRichTextAttr* compareWith = NULL);
 
 /// Compare tabs
 WXDLLIMPEXP_RICHTEXT bool wxRichTextTabsEq(const wxArrayInt& tabs1, const wxArrayInt& tabs2);

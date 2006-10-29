@@ -54,10 +54,10 @@ class WXDLLIMPEXP_RICHTEXT wxRichTextBulletsPage: public wxPanel
 public:
     /// Constructors
     wxRichTextBulletsPage( );
-    wxRichTextBulletsPage( wxWindow* parent, wxWindowID id = SYMBOL_WXRICHTEXTBULLETSPAGE_IDNAME, const wxPoint& pos = SYMBOL_WXRICHTEXTBULLETSPAGE_POSITION, const wxSize& size = SYMBOL_WXRICHTEXTBULLETSPAGE_SIZE, long style = SYMBOL_WXRICHTEXTBULLETSPAGE_STYLE );
+    wxRichTextBulletsPage( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = SYMBOL_WXRICHTEXTBULLETSPAGE_POSITION, const wxSize& size = SYMBOL_WXRICHTEXTBULLETSPAGE_SIZE, long style = SYMBOL_WXRICHTEXTBULLETSPAGE_STYLE );
 
     /// Creation
-    bool Create( wxWindow* parent, wxWindowID id = SYMBOL_WXRICHTEXTBULLETSPAGE_IDNAME, const wxPoint& pos = SYMBOL_WXRICHTEXTBULLETSPAGE_POSITION, const wxSize& size = SYMBOL_WXRICHTEXTBULLETSPAGE_SIZE, long style = SYMBOL_WXRICHTEXTBULLETSPAGE_STYLE );
+    bool Create( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = SYMBOL_WXRICHTEXTBULLETSPAGE_POSITION, const wxSize& size = SYMBOL_WXRICHTEXTBULLETSPAGE_SIZE, long style = SYMBOL_WXRICHTEXTBULLETSPAGE_STYLE );
 
     /// Initialise members
     void Init();

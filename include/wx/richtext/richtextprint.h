@@ -189,6 +189,12 @@ public:
     /// Show header/footer on first page, or not
     void SetShowOnFirstPage(bool show) { m_headerFooterData.SetShowOnFirstPage(show); }
 
+    /// Set the font
+    void SetHeaderFooterFont(const wxFont& font) { m_headerFooterData.SetFont(font); }
+
+    /// Set the colour
+    void SetHeaderFooterTextColour(const wxColour& font) { m_headerFooterData.SetTextColour(font); }
+
     /// Get print and page setup data
     wxPrintData *GetPrintData();
     wxPageSetupDialogData *GetPageSetupData() { return m_pageSetupData; }

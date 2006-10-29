@@ -46,10 +46,10 @@ class WXDLLIMPEXP_RICHTEXT wxRichTextListStylePage: public wxPanel
 public:
     /// Constructors
     wxRichTextListStylePage( );
-    wxRichTextListStylePage( wxWindow* parent, wxWindowID id = SYMBOL_WXRICHTEXTLISTSTYLEPAGE_IDNAME, const wxPoint& pos = SYMBOL_WXRICHTEXTLISTSTYLEPAGE_POSITION, const wxSize& size = SYMBOL_WXRICHTEXTLISTSTYLEPAGE_SIZE, long style = SYMBOL_WXRICHTEXTLISTSTYLEPAGE_STYLE );
+    wxRichTextListStylePage( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = SYMBOL_WXRICHTEXTLISTSTYLEPAGE_POSITION, const wxSize& size = SYMBOL_WXRICHTEXTLISTSTYLEPAGE_SIZE, long style = SYMBOL_WXRICHTEXTLISTSTYLEPAGE_STYLE );
 
     /// Creation
-    bool Create( wxWindow* parent, wxWindowID id = SYMBOL_WXRICHTEXTLISTSTYLEPAGE_IDNAME, const wxPoint& pos = SYMBOL_WXRICHTEXTLISTSTYLEPAGE_POSITION, const wxSize& size = SYMBOL_WXRICHTEXTLISTSTYLEPAGE_SIZE, long style = SYMBOL_WXRICHTEXTLISTSTYLEPAGE_STYLE );
+    bool Create( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = SYMBOL_WXRICHTEXTLISTSTYLEPAGE_POSITION, const wxSize& size = SYMBOL_WXRICHTEXTLISTSTYLEPAGE_SIZE, long style = SYMBOL_WXRICHTEXTLISTSTYLEPAGE_STYLE );
 
     /// Initialises member variables
     void Init();

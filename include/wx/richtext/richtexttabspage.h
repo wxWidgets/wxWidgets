@@ -50,10 +50,10 @@ class WXDLLIMPEXP_RICHTEXT wxRichTextTabsPage: public wxPanel
 public:
     /// Constructors
     wxRichTextTabsPage( );
-    wxRichTextTabsPage( wxWindow* parent, wxWindowID id = SYMBOL_WXRICHTEXTTABSPAGE_IDNAME, const wxPoint& pos = SYMBOL_WXRICHTEXTTABSPAGE_POSITION, const wxSize& size = SYMBOL_WXRICHTEXTTABSPAGE_SIZE, long style = SYMBOL_WXRICHTEXTTABSPAGE_STYLE );
+    wxRichTextTabsPage( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = SYMBOL_WXRICHTEXTTABSPAGE_POSITION, const wxSize& size = SYMBOL_WXRICHTEXTTABSPAGE_SIZE, long style = SYMBOL_WXRICHTEXTTABSPAGE_STYLE );
 
     /// Creation
-    bool Create( wxWindow* parent, wxWindowID id = SYMBOL_WXRICHTEXTTABSPAGE_IDNAME, const wxPoint& pos = SYMBOL_WXRICHTEXTTABSPAGE_POSITION, const wxSize& size = SYMBOL_WXRICHTEXTTABSPAGE_SIZE, long style = SYMBOL_WXRICHTEXTTABSPAGE_STYLE );
+    bool Create( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = SYMBOL_WXRICHTEXTTABSPAGE_POSITION, const wxSize& size = SYMBOL_WXRICHTEXTTABSPAGE_SIZE, long style = SYMBOL_WXRICHTEXTTABSPAGE_STYLE );
 
     /// Creates the controls and sizers
     void CreateControls();
