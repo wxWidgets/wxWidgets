@@ -529,14 +529,14 @@ wxString wxTarEntry::GetInternalName(const wxString& name,
 
 bool wxTarEntry::IsDir() const
 {
-    return m_TypeFlag - wxTAR_DIRTYPE == 0;
+    return m_TypeFlag == wxTAR_DIRTYPE;
 }
 
 void wxTarEntry::SetIsDir(bool isDir)
 {
     if (isDir)
         m_TypeFlag = wxTAR_DIRTYPE;
-    else if (m_TypeFlag - wxTAR_DIRTYPE == 0)
+    else if (m_TypeFlag == wxTAR_DIRTYPE)
         m_TypeFlag = wxTAR_REGTYPE;
 }
 

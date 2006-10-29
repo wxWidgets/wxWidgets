@@ -133,7 +133,7 @@ private:
     wxDateTime   m_ModifyTime;
     wxDateTime   m_AccessTime;
     wxDateTime   m_CreateTime;
-    wxChar       m_TypeFlag;
+    int          m_TypeFlag;
     wxString     m_LinkName;
     wxString     m_UserName;
     wxString     m_GroupName;
