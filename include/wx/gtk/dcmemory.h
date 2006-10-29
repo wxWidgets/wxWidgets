@@ -47,6 +47,8 @@ public:
 
 protected:
     void DoGetSize( int *width, int *height ) const;
+    virtual wxBitmap DoGetAsBitmap(const wxRect *subrect) const 
+    { return subrect == NULL ? GetSelectedBitmap() : GetSelectedBitmap().GetSubBitmap(*subrect); }
 
     DECLARE_DYNAMIC_CLASS(wxMemoryDC)
 };

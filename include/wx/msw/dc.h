@@ -232,6 +232,8 @@ protected:
     virtual void DoDrawPolyPolygon(int n, int count[], wxPoint points[],
                                    wxCoord xoffset, wxCoord yoffset,
                                    int fillStyle = wxODDEVEN_RULE);
+    virtual wxBitmap DoGetAsBitmap(const wxRect *subrect) const 
+    { return subrect == NULL ? GetSelectedBitmap() : GetSelectedBitmap().GetSubBitmap(*subrect); }
 
 
 #if wxUSE_PALETTE
