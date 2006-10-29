@@ -21,7 +21,6 @@ Changes in behaviour not resulting in compilation errors, please read this!
   instead of a char the range -128 - 127.
 - A sequence returned by wxFileSystem::FindFirst()/FindNext() may now be
   be scoped to a single instance of wxFileSystem.
-  
 
 
 Changes in behaviour which may result in compilation errors
