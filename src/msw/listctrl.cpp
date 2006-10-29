@@ -1394,21 +1394,19 @@ bool wxListCtrl::EndEditLabel(bool cancel)
 {
     // m_textCtrl is not always ready, ie. in EVT_LIST_BEGIN_LABEL_EDIT
     HWND hwnd = ListView_GetEditControl(GetHwnd());
-    bool b = (hwnd != NULL);
-    if (b)
-    {
-        if (cancel)
-            ::SetWindowText(hwnd, wxEmptyString); // dubious but better than nothing
-        if (m_textCtrl)
-        {
-            m_textCtrl->UnsubclassWin();
-            m_textCtrl->SetHWND(0);
-            delete m_textCtrl;
-            m_textCtrl = NULL;
-        }
-        ::DestroyWindow(hwnd);
-    }
-    return b;
+    if ( !hwnd )
+        return false;
+
+    if ( cancel )
+        ::SetWindowText(hwnd, wxEmptyString); // dubious but better than nothing
+
+    // we shouldn't destroy the control ourselves according to MSDN, which
+    // proposes WM_CANCELMODE to do this, but it doesn't seem to work
+    //
+    // posting WM_CLOSE to it does seem to work without any side effects
+    ::PostMessage(hwnd, WM_CLOSE, 0, 0);
+
+    return true;
 }
 
 // Ensures this item is visible
