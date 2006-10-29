@@ -290,14 +290,14 @@ protected:
     virtual int DoInsert(const wxString& item, unsigned int pos);
 
     virtual void DoSetItemClientData(unsigned int n, void *clientData)
-        { m_clientData[n] = clientData; }
+        { m_HTMLclientData[n] = clientData; }
 
     virtual void *DoGetItemClientData(unsigned int n) const
-        { return m_clientData[n]; }
+        { return m_HTMLclientData[n]; }
     virtual void DoSetItemClientObject(unsigned int n, wxClientData *clientData)
-        { m_clientData[n] = (void *)clientData; }
+        { m_HTMLclientData[n] = (void *)clientData; }
     virtual wxClientData *DoGetItemClientObject(unsigned int n) const
-        { return (wxClientData *)m_clientData[n]; }
+        { return (wxClientData *)m_HTMLclientData[n]; }
 
     // calls wxHtmlListBox::SetItemCount() and RefreshAll()
     void UpdateCount();
@@ -313,7 +313,10 @@ protected:
         { return m_items[n]; }
 
     wxArrayString m_items;
-    wxArrayPtrVoid m_clientData;
+    wxArrayPtrVoid m_HTMLclientData;
+    // Note: For the benefit of old compilers (like gcc-2.8) this should
+    // not be named m_clientdata as that clashes with the name of an
+    // anonymous struct member in wxEvtHandler, which we derive from.
 
     DECLARE_NO_COPY_CLASS(wxSimpleHtmlListBox)
 };

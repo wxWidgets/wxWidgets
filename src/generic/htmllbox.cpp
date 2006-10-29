@@ -593,7 +593,7 @@ bool wxSimpleHtmlListBox::Create(wxWindow *parent, wxWindowID id,
 
 wxSimpleHtmlListBox::~wxSimpleHtmlListBox()
 {
-    wxASSERT(m_items.GetCount() == m_clientData.GetCount());
+    wxASSERT(m_items.GetCount() == m_HTMLclientData.GetCount());
     if (HasClientObjectData())
     {
         // clear the array of client data objects
@@ -602,20 +602,20 @@ wxSimpleHtmlListBox::~wxSimpleHtmlListBox()
     }
 
     m_items.Clear();
-    m_clientData.Clear();
+    m_HTMLclientData.Clear();
 }
 
 void wxSimpleHtmlListBox::Clear()
 {
     m_items.Clear();
-    m_clientData.Clear();
+    m_HTMLclientData.Clear();
     UpdateCount();
 }
 
 void wxSimpleHtmlListBox::Delete(unsigned int n)
 {
     m_items.RemoveAt(n);
-    m_clientData.RemoveAt(n);
+    m_HTMLclientData.RemoveAt(n);
     UpdateCount();
 }
 
@@ -629,14 +629,14 @@ void wxSimpleHtmlListBox::Append(const wxArrayString& strings)
 
     // append all given items at once
     WX_APPEND_ARRAY(m_items, strings);
-    m_clientData.Add(NULL, strings.GetCount());
+    m_HTMLclientData.Add(NULL, strings.GetCount());
     UpdateCount();
 }
 
 int wxSimpleHtmlListBox::DoAppend(const wxString& item)
 {
     m_items.Add(item);
-    m_clientData.Add(NULL);
+    m_HTMLclientData.Add(NULL);
     UpdateCount();
     return GetCount()-1;
 }
@@ -644,7 +644,7 @@ int wxSimpleHtmlListBox::DoAppend(const wxString& item)
 int wxSimpleHtmlListBox::DoInsert(const wxString& item, unsigned int pos)
 {
     m_items.Insert(item, pos);
-    m_clientData.Insert(NULL, pos);
+    m_HTMLclientData.Insert(NULL, pos);
     UpdateCount();
     return pos;
 }
@@ -668,7 +668,7 @@ wxString wxSimpleHtmlListBox::GetString(unsigned int n) const
 
 void wxSimpleHtmlListBox::UpdateCount()
 {
-    wxASSERT(m_items.GetCount() == m_clientData.GetCount());
+    wxASSERT(m_items.GetCount() == m_HTMLclientData.GetCount());
     wxHtmlListBox::SetItemCount(m_items.GetCount());
 
     // very small optimization: if you need to add lot of items to
