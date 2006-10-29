@@ -658,6 +658,18 @@ typedef int wxCoord;
 
 enum {  wxDefaultCoord = -1 };
 
+/*  round-to-nearest (used in scaling) */
+#ifdef __cplusplus
+inline wxCoord wxCoordRound(const float& f)
+{
+    return (f > 0) ? (wxCoord)(f + 0.5) : (f < 0) ? (wxCoord)(f - 0.5) : 0;
+}
+inline wxCoord wxCoordRound(const double& f)
+{
+    return (f > 0) ? (wxCoord)(f + 0.5) : (f < 0) ? (wxCoord)(f - 0.5) : 0;
+}
+#endif
+
 /*  ---------------------------------------------------------------------------- */
 /*  define fixed length types */
 /*  ---------------------------------------------------------------------------- */

@@ -2286,70 +2286,42 @@ void wxDC::Clear(void)
 */ // TODO
 wxCoord wxDCBase::DeviceToLogicalX(wxCoord x) const
 {
-        long new_x = x - m_deviceOriginX;
-        if (new_x > 0)
-            return (wxCoord)((double)new_x / m_scaleX + 0.5) * m_signX + m_logicalOriginX;
-        else
-            return (wxCoord)((double)new_x / m_scaleX - 0.5) * m_signX + m_logicalOriginX;
+    return wxCoordRound((double)(x - m_deviceOriginX) / m_scaleX) * m_signX + m_logicalOriginX;
 }
 
 wxCoord wxDCBase::DeviceToLogicalY(wxCoord y) const
 {
-	long new_y = y - m_deviceOriginY;
-	if (new_y > 0)
-		return (wxCoord)((double)new_y / m_scaleY + 0.5) * m_signY + m_logicalOriginY;
-	else
-		return (wxCoord)((double)new_y / m_scaleY - 0.5) * m_signY + m_logicalOriginY;
+    return wxCoordRound((double)(y - m_deviceOriginY) / m_scaleY) * m_signY + m_logicalOriginY;
 }
 
 wxCoord wxDCBase::DeviceToLogicalXRel(wxCoord x) const
 {
-	if (x > 0)
-		return (wxCoord)((double)x / m_scaleX + 0.5);
-	else
-		return (wxCoord)((double)x / m_scaleX - 0.5);
+    return wxCoordRound((double)(x) / m_scaleX);
 }
 
 wxCoord wxDCBase::DeviceToLogicalYRel(wxCoord y) const
 {
-	if (y > 0)
-		return (wxCoord)((double)y / m_scaleY + 0.5);
-	else
-		return (wxCoord)((double)y / m_scaleY - 0.5);
+    return wxCoordRound((double)(y) / m_scaleY);
 }
 
 wxCoord wxDCBase::LogicalToDeviceX(wxCoord x) const
 {
-	long new_x = x - m_logicalOriginX;
-	if (new_x > 0)
-		return (wxCoord)((double)new_x * m_scaleX + 0.5) * m_signX + m_deviceOriginX;
-	else
-		return (wxCoord)((double)new_x * m_scaleX - 0.5) * m_signX + m_deviceOriginX;
+    return wxCoordRound((double)(x - m_logicalOriginX) * m_scaleX) * m_signX + m_deviceOriginX;
 }
 
 wxCoord wxDCBase::LogicalToDeviceY(wxCoord y) const
 {
-	long new_y = y - m_logicalOriginY;
-	if (new_y > 0)
-		return (wxCoord)((double)new_y * m_scaleY + 0.5) * m_signY + m_deviceOriginY;
-	else
-		return (wxCoord)((double)new_y * m_scaleY - 0.5) * m_signY + m_deviceOriginY;
+    return wxCoordRound((double)(y - m_logicalOriginY) * m_scaleY) * m_signY + m_deviceOriginY;
 }
 
 wxCoord wxDCBase::LogicalToDeviceXRel(wxCoord x) const
 {
-	if (x > 0)
-		return (wxCoord)((double)x * m_scaleX + 0.5);
-	else
-		return (wxCoord)((double)x * m_scaleX - 0.5);
+    return wxCoordRound((double)(x) * m_scaleX);
 }
 
 wxCoord wxDCBase::LogicalToDeviceYRel(wxCoord y) const
 {
-        if (y > 0)
-            return (wxCoord)((double)y * m_scaleY + 0.5);
-        else
-            return (wxCoord)((double)y * m_scaleY - 0.5);
+    return wxCoordRound((double)(y) * m_scaleY);
 }
 
 #endif // wxMAC_USE_CORE_GRAPHICS
