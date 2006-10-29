@@ -291,12 +291,11 @@ void wxGCDC::ComputeScaleAndOrigin()
 {
     m_scaleX = m_logicalScaleX * m_userScaleX;
     m_scaleY = m_logicalScaleY * m_userScaleY;
-    m_deviceOriginX = /* m_deviceOriginX + */ m_logicalOriginX;
-    m_deviceOriginY = /* m_deviceOriginY + */ m_logicalOriginY;
 
     m_matrixCurrent = m_graphicContext->CreateMatrix();
-    m_matrixCurrent.Translate( m_deviceOriginX , m_deviceOriginY );
+    m_matrixCurrent.Translate( m_deviceOriginX, m_deviceOriginY );
     m_matrixCurrent.Scale( m_scaleX, m_scaleY );
+    m_matrixCurrent.Translate( m_logicalOriginX, m_logicalOriginY );
     
     m_graphicContext->SetTransform( m_matrixOriginal );
     m_graphicContext->ConcatTransform( m_matrixCurrent );
