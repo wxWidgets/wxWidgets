@@ -366,11 +366,11 @@ void ArraysTestCase::Alloc()
     wxArrayInt a;
     a.Add(17);
     a.Add(9);
-    CPPUNIT_ASSERT_EQUAL( 2u, a.GetCount() );
+    CPPUNIT_ASSERT_EQUAL( size_t(2), a.GetCount() );
 
     a.Alloc(1000);
 
-    CPPUNIT_ASSERT_EQUAL( 2u, a.GetCount() );
+    CPPUNIT_ASSERT_EQUAL( size_t(2), a.GetCount() );
     CPPUNIT_ASSERT_EQUAL( 17, a[0] );
     CPPUNIT_ASSERT_EQUAL( 9, a[1] );
 }
