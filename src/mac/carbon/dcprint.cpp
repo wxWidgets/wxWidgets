@@ -197,7 +197,6 @@ void wxMacCarbonPrinterDC::StartPage( wxPrinterDC* dc )
                                             kPMGraphicsContextCoreGraphics,
                                             (void**) &pageContext );
 #endif
-        dc->MacSetCGContext(pageContext) ;
 #else
         m_err = PMSessionGetGraphicsContext(native->m_macPrintSession,
                                             kPMGraphicsContextQuickdraw,
@@ -222,7 +221,6 @@ void wxMacCarbonPrinterDC::StartPage( wxPrinterDC* dc )
             PMGetAdjustedPaperRect( native->m_macPageFormat , &paperRect ) ;
             CGContextTranslateCTM( pageContext , -paperRect.left , -paperRect.top + ( rPage.bottom - rPage.top ) ) ;
             CGContextScaleCTM( pageContext , 1 , -1 ) ;
-            CGContextSaveGState( pageContext ) ;
 #else
             dc->m_macLocalOrigin.x = (int) rPage.left;
             dc->m_macLocalOrigin.y = (int) rPage.top;
@@ -231,6 +229,9 @@ void wxMacCarbonPrinterDC::StartPage( wxPrinterDC* dc )
         // since this is a non-critical error, we set the flag back
         m_err = noErr ;
     }
+#if wxMAC_USE_CORE_GRAPHICS
+    dc->MacSetCGContext(pageContext) ;
+#endif
 }
 
 void wxMacCarbonPrinterDC::EndPage( wxPrinterDC* dc )
@@ -245,6 +246,9 @@ void wxMacCarbonPrinterDC::EndPage( wxPrinterDC* dc )
     {
         PMSessionEndDocument(native->m_macPrintSession);
     }
+#if wxMAC_USE_CORE_GRAPHICS
+    dc->MacSetCGContext(NULL) ;
+#endif
 }
 
 void wxMacCarbonPrinterDC::GetSize( int *w , int *h) const
