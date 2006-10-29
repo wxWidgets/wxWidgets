@@ -4812,7 +4812,7 @@ wxRichTextAttr wxRichTextBuffer::GetStyleForNewParagraph(long pos, bool caretPos
         {
             wxRichTextAttr numberingAttr;
             if (FindNextParagraphNumber(para, numberingAttr))
-                wxRichTextApplyStyle(attr, numberingAttr);
+                wxRichTextApplyStyle(attr, (const wxRichTextAttr&) numberingAttr);
         }
 
         return attr;
@@ -6524,6 +6524,14 @@ bool wxRichTextApplyStyle(wxRichTextAttr& destStyle, const wxTextAttrEx& style)
     destStyle.CopyTo(destStyle2);
     wxRichTextApplyStyle(destStyle2, style);
     destStyle = destStyle2;
+    return true;
+}
+
+bool wxRichTextApplyStyle(wxRichTextAttr& destStyle, const wxRichTextAttr& style, wxRichTextAttr* compareWith)
+{
+    wxTextAttrEx attr(destStyle);
+    wxRichTextApplyStyle(attr, style, compareWith);
+    destStyle = attr;
     return true;
 }
 

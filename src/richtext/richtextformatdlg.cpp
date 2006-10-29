@@ -57,8 +57,11 @@
 #include "richtextindentspage.cpp"
 #include "richtexttabspage.cpp"
 #include "richtextbulletspage.cpp"
+// Digital Mars can't cope with this much code
+#ifndef __DMC__
+  #include "richtextliststylepage.cpp"
+#endif
 #include "richtextstylepage.cpp"
-#include "richtextliststylepage.cpp"
 #endif
 
 #if 0 // def __WXMAC__
@@ -290,12 +293,14 @@ wxPanel* wxRichTextFormattingDialogFactory::CreatePage(int page, wxString& title
         title = _("Bullets");
         return page;
     }
+#ifndef __DMC__
     else if (page == wxRICHTEXT_FORMAT_LIST_STYLE)
     {
         wxRichTextListStylePage* page = new wxRichTextListStylePage(dialog->GetBookCtrl(), wxID_ANY);
         title = _("List Style");
         return page;
     }
+#endif
     else
         return NULL;
 }
@@ -320,7 +325,11 @@ int wxRichTextFormattingDialogFactory::GetPageId(int i) const
 /// Get the number of available page identifiers
 int wxRichTextFormattingDialogFactory::GetPageIdCount() const
 {
+#ifdef __DMC__
+    return 5;
+#else
     return 6;
+#endif
 }
 
 /// Set the sheet style, called at the start of wxRichTextFormattingDialog::Create
