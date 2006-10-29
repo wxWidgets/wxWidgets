@@ -707,6 +707,25 @@ Drops the data table view named in 'viewName'.
 
 If the view does not exist, this function will return true.  Note that views are not supported with all datasources.
 
+\membersection{wxDb::EscapeSqlChars}\label{wxdbescapesqlchars}
+
+\func{wxString}{EscapeSqlChars}{\param{const wxString\& }{value}}
+
+This function is used internally by wxWidgets while building SQL statements.
+It has been provided to help users who wish to explicity construct SQL
+statements to be sent to the server.  The function takes the value passed and
+returns it with any special characters escaped.  Which characters are
+considered special depends on what type of datasource the object is connected
+to.  For example, most database servers use a backslash as the escape
+character; if the value passed contains a backlash it will be replaced with a
+double backslash before it is passed to the server.  This function can be used
+to avoid passing statements with syntax errors to the server as well as prevent
+SQL injection attacks.
+
+\wxheading{Parameters}
+
+\docparam{value}{The value to be escaped.}
+
 \membersection{wxDb::ExecSql}\label{wxdbexecsql}
 
 \func{bool}{ExecSql}{\param{const wxString \&}{pSqlStmt}}

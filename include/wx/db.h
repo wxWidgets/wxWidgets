@@ -734,6 +734,9 @@ public:
 
     bool         FwdOnlyCursors(void)  {return fwdOnlyCursors;}
 
+    // return the string with all special SQL characters escaped
+    wxString     EscapeSqlChars(const wxString& value);
+
     // These two functions are provided strictly for use by wxDbTable.
     // DO NOT USE THESE FUNCTIONS, OR MEMORY LEAKS MAY OCCUR
     void         incrementTableCount() { nTables++; return; }

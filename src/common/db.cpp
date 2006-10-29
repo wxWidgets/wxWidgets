@@ -4086,6 +4086,28 @@ bool wxDb::ModifyColumn(const wxString &tableName, const wxString &columnName,
 
 } // wxDb::ModifyColumn()
 
+/********** wxDb::EscapeSqlChars() **********/
+wxString wxDb::EscapeSqlChars(const wxString& valueOrig)
+{
+    wxString value(valueOrig);
+    switch (Dbms())
+    {
+        case dbmsACCESS:
+            // Access doesn't seem to care about backslashes, so only escape single quotes.
+            value.Replace(wxT("'"), wxT("''"));
+            break;
+
+        default:
+            // All the others are supposed to be the same for now, add special
+            // handling for them if necessary
+            value.Replace(wxT("\\"), wxT("\\\\"));
+            value.Replace(wxT("'"), wxT("\\'"));
+            break;
+    }
+
+    return value;
+} // wxDb::EscapeSqlChars()
+
 
 /********** wxDbGetConnection() **********/
 wxDb WXDLLIMPEXP_ODBC *wxDbGetConnection(wxDbConnectInf *pDbConfig, bool FwdOnlyCursors)
