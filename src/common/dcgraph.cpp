@@ -714,59 +714,11 @@ bool wxGCDC::DoBlit(
         ysrcMask = ysrc;
     }
 
-    wxCoord yysrc = source-> LogicalToDeviceY(ysrc);
-    wxCoord xxsrc = source-> LogicalToDeviceX(xsrc);
-    wxCoord wwsrc = source-> LogicalToDeviceXRel(width);
-    wxCoord hhsrc = source-> LogicalToDeviceYRel(height);
-
-    wxBitmap blit;
-    wxMemoryDC* memdc = wxDynamicCast(source,wxMemoryDC);
-    if ( memdc )
-    {
-        blit = memdc->GetSelectedBitmap();
-
-        wxASSERT_MSG( blit.Ok() , wxT("Invalid bitmap for blitting") );
-
-        wxCoord bmpwidth = blit.GetWidth();
-        wxCoord bmpheight = blit.GetHeight();
-
-        if ( xxsrc != 0 || yysrc != 0 || bmpwidth != wwsrc || bmpheight != hhsrc )
-        {
-            wwsrc = wxMin( wwsrc , bmpwidth - xxsrc );
-            hhsrc = wxMin( hhsrc , bmpheight - yysrc );
-            if ( wwsrc > 0 && hhsrc > 0 )
-            {
-                if ( xxsrc >= 0 && yysrc >= 0 )
-                {
-                    wxRect subrect( xxsrc, yysrc, wwsrc , hhsrc );
-                    // TODO we perhaps could add a DrawSubBitmap call to dc for performance reasons
-                    blit = blit.GetSubBitmap( subrect );
-                }
-                else
-                {
-                    // in this case we'd probably have to adjust the different coordinates, but
-                    // we have to find out proper contract first
-                    blit = wxNullBitmap;
-                }
-            }
-            else
-            {
-                blit = wxNullBitmap;
-            }
-        }
-    }
-    else
-    {  
-        wxWindowDC* windc = wxDynamicCast(source,wxWindowDC);
-        if (windc)
-        {   
-            wxBitmap bmp;
-            bmp = windc->GetAsBitmap();
-            if (bmp.IsOk())
-                blit = bmp.GetSubBitmap( wxRect(xsrc, ysrc, width, height ) ); 
-        }
-    }
-    
+    wxRect subrect(source-> LogicalToDeviceX(xsrc),source-> LogicalToDeviceY(ysrc),
+        source-> LogicalToDeviceXRel(width),source-> LogicalToDeviceYRel(height));
+        
+    wxBitmap blit = source->GetAsBitmap( &subrect );
+        
     if ( blit.Ok() )
     {
         m_graphicContext->DrawBitmap( blit, xdest , ydest , width , height );
