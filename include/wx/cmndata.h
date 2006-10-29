@@ -166,6 +166,7 @@ enum wxPrintBin
     wxPRINTBIN_USER
 };
 
+const int wxPRINTMEDIA_DEFAULT = 0;
 
 class WXDLLEXPORT wxPrintData: public wxObject
 {
@@ -191,6 +192,7 @@ public:
     wxPrintQuality GetQuality() const { return m_printQuality; }
     wxPrintBin GetBin() const { return m_bin; }
     wxPrintMode GetPrintMode() const { return m_printMode; }
+    int GetMedia() const { return m_media; }
 
     void SetNoCopies(int v) { m_printNoCopies = v; }
     void SetCollate(bool flag) { m_printCollate = flag; }
@@ -203,6 +205,7 @@ public:
     void SetPaperSize(const wxSize& sz) { m_paperSize = sz; }
     void SetQuality(wxPrintQuality quality) { m_printQuality = quality; }
     void SetBin(wxPrintBin bin) { m_bin = bin; }
+    void SetMedia(int media) { m_media = media; }
     void SetPrintMode(wxPrintMode printMode) { m_printMode = printMode; }
 
     wxString GetFilename() const { return m_filename; }
@@ -246,6 +249,7 @@ public:
 
 private:
     wxPrintBin      m_bin;
+    int             m_media;
     wxPrintMode     m_printMode;
 
     int             m_printNoCopies;

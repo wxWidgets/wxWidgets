@@ -150,6 +150,7 @@ wxFontDialogBase::~wxFontDialogBase()
 wxPrintData::wxPrintData()
 {
     m_bin = wxPRINTBIN_DEFAULT;
+    m_media = wxPRINTMEDIA_DEFAULT;
     m_printMode = wxPRINT_MODE_PRINTER;
     m_printOrientation = wxPORTRAIT;
     m_printNoCopies = 1;
@@ -224,6 +225,7 @@ void wxPrintData::operator=(const wxPrintData& data)
     m_paperId = data.m_paperId;
     m_paperSize = data.m_paperSize;
     m_bin = data.m_bin;
+    m_media = data.m_media;
     m_printMode = data.m_printMode;
     m_filename = data.m_filename;
 

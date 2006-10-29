@@ -198,7 +198,11 @@ bool wxWindowsPrintNativeData::TransferTo( wxPrintData &data )
         } else {
             data.SetBin(wxPRINTBIN_DEFAULT);
         }
-
+        if (devMode->dmFields & DM_MEDIATYPE)
+        {
+            wxASSERT(devMode->dmMediaType != wxPRINTMEDIA_DEFAULT);
+            data.SetMedia(devMode->dmMediaType);
+        }
         //// Printer name
         if (devMode->dmDeviceName[0] != 0)
             // This syntax fixes a crash when using VS 7.1
@@ -547,7 +551,11 @@ bool wxWindowsPrintNativeData::TransferFrom( const wxPrintData &data )
 
             devMode->dmFields |= DM_DEFAULTSOURCE;
         }
-
+        if (data.GetMedia() != wxPRINTMEDIA_DEFAULT)
+        {
+            devMode->dmMediaType = data.GetMedia();
+            devMode->dmFields |= DM_MEDIATYPE;
+        }
         GlobalUnlock(hDevMode);
     }
 
