@@ -52,8 +52,7 @@ extern wxCursor   g_globalCursor;
 static void GetGtkStyle(long style,
                         GtkOrientation *orient, GtkToolbarStyle *gtkStyle)
 {
-    *orient = style & wxTB_VERTICAL ? GTK_ORIENTATION_VERTICAL
-                                    : GTK_ORIENTATION_HORIZONTAL;
+    *orient = ( style & wxTB_LEFT || style & wxTB_RIGHT ) ? GTK_ORIENTATION_VERTICAL : GTK_ORIENTATION_HORIZONTAL;
 
 
     if ( style & wxTB_TEXT )
@@ -633,4 +632,8 @@ wxToolBar::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
     return GetDefaultAttributesFromGTKWidget(gtk_toolbar_new);
 }
 
+bool wxToolBar::IsVertical()
+{
+    return HasFlag(wxTB_LEFT) || HasFlag(wxTB_RIGHT);
+}
 #endif // wxUSE_TOOLBAR_NATIVE

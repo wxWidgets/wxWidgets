@@ -420,7 +420,7 @@ public:
     wxToolBarToolBase *FindById(int toolid) const;
 
     // return true if this is a vertical toolbar, otherwise false
-    bool IsVertical() const { return HasFlag(wxTB_VERTICAL); }
+    bool IsVertical() const { return HasFlag(wxTB_LEFT | wxTB_RIGHT); }
 
 
     // the old versions of the various methods kept for compatibility

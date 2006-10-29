@@ -347,7 +347,7 @@ wxSize wxToolBar::DoGetBestSize() const
         sizeBest.x *= GetToolsCount();
 
         // reverse horz and vertical components if necessary
-        if ( HasFlag(wxTB_VERTICAL) )
+        if ( IsVertical() )
         {
             int t = sizeBest.x;
             sizeBest.x = sizeBest.y;
@@ -404,6 +404,9 @@ WXDWORD wxToolBar::MSWGetStyle(long style, WXDWORD *exstyle) const
 
     if( style & wxTB_BOTTOM )
         msStyle |= CCS_BOTTOM;
+
+    if ( style & wxTB_RIGHT )
+        msStyle |= CCS_RIGHT;
 
     return msStyle;
 }
@@ -540,8 +543,6 @@ bool wxToolBar::Realize()
     if ( nTools == 0 )
         // nothing to do
         return true;
-
-    const bool isVertical = HasFlag(wxTB_VERTICAL);
 
 #ifdef wxREMAP_BUTTON_COLOURS
     // don't change the values of these constants, they can be set from the
@@ -819,7 +820,7 @@ bool wxToolBar::Realize()
 
         // don't add separators to the vertical toolbar with old comctl32.dll
         // versions as they didn't handle this properly
-        if ( isVertical && tool->IsSeparator() &&
+        if ( IsVertical() && tool->IsSeparator() &&
                 wxApp::GetComCtl32Version() <= 472 )
         {
             continue;
@@ -943,7 +944,7 @@ bool wxToolBar::Realize()
         // get the items size for all items but for the horizontal ones we
         // don't need to deal with the non controls
         bool isControl = tool->IsControl();
-        if ( !isControl && !isVertical )
+        if ( !isControl && !IsVertical() )
             continue;
 
         // note that we use TB_GETITEMRECT and not TB_GETRECT because the
@@ -1034,7 +1035,7 @@ bool wxToolBar::Realize()
         }
 
         int top;
-        if ( isVertical )
+        if ( IsVertical() )
         {
             left = 0;
             top = y;
@@ -1056,7 +1057,7 @@ bool wxToolBar::Realize()
     // separators which we added just for aligning the controls
     m_nButtons = index;
 
-    if ( !isVertical )
+    if ( !IsVertical() )
     {
         if ( m_maxRows == 0 )
             // if not set yet, only one row
@@ -1428,7 +1429,7 @@ bool wxToolBar::HandleSize(WXWPARAM WXUNUSED(wParam), WXLPARAM lParam)
     {
         int w, h;
 
-        if ( GetWindowStyle() & wxTB_VERTICAL )
+        if ( IsVertical() )
         {
             w = r.right - r.left;
             if ( m_maxRows )

@@ -64,6 +64,14 @@
     #include "bitmaps/help.xpm"
 #endif // USE_XPM_BITMAPS
 
+enum Positions
+{
+    TOOLBAR_LEFT,
+    TOOLBAR_TOP,
+    TOOLBAR_RIGHT,
+    TOOLBAR_BOTTOM
+};
+
 // ----------------------------------------------------------------------------
 // classes
 // ----------------------------------------------------------------------------
@@ -97,9 +105,8 @@ public:
     void OnToggleAnotherToolbar(wxCommandEvent& event);
     void OnToggleHorizontalText(wxCommandEvent& WXUNUSED(event));
 
-    void OnBottomToolbar(wxCommandEvent& WXUNUSED(event));
     void OnToggleToolbarSize(wxCommandEvent& event);
-    void OnToggleToolbarOrient(wxCommandEvent& event);
+    void OnChangeOrientation(wxCommandEvent& event);
     void OnToggleToolbarRows(wxCommandEvent& event);
     void OnToggleTooltips(wxCommandEvent& event);
     void OnToggleCustomDisabled(wxCommandEvent& event);
@@ -132,8 +139,6 @@ private:
     void LayoutChildren();
 
     bool                m_smallToolbar,
-                        m_horzToolbar,
-                        m_bottomToolbar,
                         m_horzText,
                         m_useCustomDisabled,
                         m_showTooltips;
@@ -141,6 +146,9 @@ private:
 
     // the number of print buttons we have (they're added/removed dynamically)
     size_t              m_nPrint;
+
+    // store toolbar position for future use
+    Positions           m_toolbarPosition;
 
     wxTextCtrl         *m_textWindow;
 
@@ -163,7 +171,6 @@ static const long TOOLBAR_STYLE = wxTB_FLAT | wxTB_DOCKABLE | wxTB_TEXT;
 enum
 {
     IDM_TOOLBAR_TOGGLETOOLBARSIZE = 200,
-    IDM_TOOLBAR_TOGGLETOOLBARORIENT,
     IDM_TOOLBAR_TOGGLETOOLBARROWS,
     IDM_TOOLBAR_TOGGLETOOLTIPS,
     IDM_TOOLBAR_TOGGLECUSTOMDISABLED,
@@ -182,7 +189,10 @@ enum
     IDM_TOOLBAR_SHOW_ICONS,
     IDM_TOOLBAR_SHOW_BOTH,
     IDM_TOOLBAR_CUSTOM_PATH,
+    IDM_TOOLBAR_TOP_ORIENTATION,
+    IDM_TOOLBAR_LEFT_ORIENTATION,
     IDM_TOOLBAR_BOTTOM_ORIENTATION,
+    IDM_TOOLBAR_RIGHT_ORIENTATION,
     IDM_TOOLBAR_OTHER_1,
     IDM_TOOLBAR_OTHER_2,
     IDM_TOOLBAR_OTHER_3,
@@ -208,9 +218,8 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(IDM_TOOLBAR_TOGGLE_ANOTHER_TOOLBAR, MyFrame::OnToggleAnotherToolbar)
     EVT_MENU(IDM_TOOLBAR_TOGGLE_HORIZONTAL_TEXT, MyFrame::OnToggleHorizontalText)
 
-    EVT_MENU(IDM_TOOLBAR_BOTTOM_ORIENTATION, MyFrame::OnBottomToolbar)
+    EVT_MENU_RANGE(IDM_TOOLBAR_TOP_ORIENTATION, IDM_TOOLBAR_RIGHT_ORIENTATION, MyFrame::OnChangeOrientation)
     EVT_MENU(IDM_TOOLBAR_TOGGLETOOLBARSIZE, MyFrame::OnToggleToolbarSize)
-    EVT_MENU(IDM_TOOLBAR_TOGGLETOOLBARORIENT, MyFrame::OnToggleToolbarOrient)
     EVT_MENU(IDM_TOOLBAR_TOGGLETOOLBARROWS, MyFrame::OnToggleToolbarRows)
     EVT_MENU(IDM_TOOLBAR_TOGGLETOOLTIPS, MyFrame::OnToggleTooltips)
     EVT_MENU(IDM_TOOLBAR_TOGGLECUSTOMDISABLED, MyFrame::OnToggleCustomDisabled)
@@ -292,11 +301,22 @@ void MyFrame::RecreateToolbar()
 
     SetToolBar(NULL);
 
-    style &= ~(wxTB_HORIZONTAL | wxTB_VERTICAL | wxTB_BOTTOM | wxTB_HORZ_LAYOUT);
-    if( m_bottomToolbar )
+    style &= ~(wxTB_HORIZONTAL | wxTB_VERTICAL | wxTB_BOTTOM | wxTB_RIGHT | wxTB_HORZ_LAYOUT);
+    switch( m_toolbarPosition )
+    {
+        case TOOLBAR_LEFT:
+            style |= wxTB_LEFT;
+            break;
+        case TOOLBAR_TOP:
+            style |= wxTB_TOP;
+            break;
+        case TOOLBAR_RIGHT:
+            style |= wxTB_RIGHT;
+            break;
+        case TOOLBAR_BOTTOM:
         style |= wxTB_BOTTOM;
-    else
-    style |= m_horzToolbar ? wxTB_HORIZONTAL : wxTB_VERTICAL;
+        break;
+    }
 
     if ( m_showTooltips )
         style &= ~wxTB_NO_TOOLTIPS;
@@ -369,7 +389,7 @@ void MyFrame::RecreateToolbar()
     // the generic toolbar doesn't really support this
 #if wxUSE_TOOLBAR_NATIVE && !defined(__WXX11__) || defined(__WXUNIVERSAL__)
     // adding a combo to a vertical toolbar is not very smart
-    if ( m_horzToolbar )
+    if ( !( toolBar->IsVertical() ) )
     {
         wxComboBox *combo = new wxComboBox(toolBar, ID_COMBO, wxEmptyString, wxDefaultPosition, wxSize(200,wxDefaultCoord) );
         combo->Append(_T("This"));
@@ -432,7 +452,7 @@ void MyFrame::RecreateToolbar()
     // the changes
     toolBar->Realize();
 
-    toolBar->SetRows(m_horzToolbar ? m_rows : 10 / m_rows);
+    toolBar->SetRows(!(toolBar->IsVertical()) ? m_rows : 10 / m_rows);
 }
 
 // ----------------------------------------------------------------------------
@@ -451,8 +471,6 @@ MyFrame::MyFrame(wxFrame* parent,
     m_tbar = NULL;
 
     m_smallToolbar = true;
-    m_horzToolbar = true;
-    m_bottomToolbar = false;
     m_horzText = false;
     m_useCustomDisabled = false;
     m_showTooltips = true;
@@ -486,10 +504,6 @@ MyFrame::MyFrame(wxFrame* parent,
                               _T("&Toggle toolbar size\tCtrl-S"),
                               _T("Toggle between big/small toolbar"));
 
-    tbarMenu->AppendCheckItem(IDM_TOOLBAR_TOGGLETOOLBARORIENT,
-                              _T("Toggle toolbar &orientation\tCtrl-O"),
-                              _T("Toggle toolbar orientation"));
-
     tbarMenu->AppendCheckItem(IDM_TOOLBAR_TOGGLETOOLBARROWS,
                               _T("Toggle number of &rows\tCtrl-R"),
                               _T("Toggle number of toolbar rows between 1 and 2"));
@@ -503,9 +517,19 @@ MyFrame::MyFrame(wxFrame* parent,
                               _T("Switch between using system-generated and custom disabled images"));
 
 
-    tbarMenu->AppendCheckItem(IDM_TOOLBAR_BOTTOM_ORIENTATION,
+    tbarMenu->AppendSeparator();
+    tbarMenu->AppendRadioItem(IDM_TOOLBAR_TOP_ORIENTATION,
+                              _T("Set toolbar at the top of the window"),
+                              _T("Set toolbar at the top of the window"));
+    tbarMenu->AppendRadioItem(IDM_TOOLBAR_LEFT_ORIENTATION,
+                              _T("Set toolbar at the left of the window"),
+                              _T("Set toolbar at the left of the window"));
+    tbarMenu->AppendRadioItem(IDM_TOOLBAR_BOTTOM_ORIENTATION,
                               _T("Set toolbar at the bottom of the window"),
                               _T("Set toolbar at the bottom of the window"));
+    tbarMenu->AppendRadioItem(IDM_TOOLBAR_RIGHT_ORIENTATION,
+                              _T("Set toolbar at the right edge of the window"),
+                              _T("Set toolbar at the right edge of the window"));
     tbarMenu->AppendSeparator();
 
     tbarMenu->Append(IDM_TOOLBAR_ENABLEPRINT, _T("&Enable print button\tCtrl-E"));
@@ -543,6 +567,8 @@ MyFrame::MyFrame(wxFrame* parent,
     menuBar->Check(IDM_TOOLBAR_SHOW_BOTH, true);
     menuBar->Check(IDM_TOOLBAR_TOGGLETOOLTIPS, true);
 
+    menuBar->Check(IDM_TOOLBAR_TOP_ORIENTATION, true );
+    m_toolbarPosition = TOOLBAR_TOP;
     // Create the toolbar
     RecreateToolbar();
 
@@ -660,7 +686,7 @@ void MyFrame::OnToggleToolbarRows(wxCommandEvent& WXUNUSED(event))
     // m_rows may be only 1 or 2
     m_rows = 3 - m_rows;
 
-    GetToolBar()->SetRows(m_horzToolbar ? m_rows : 10 / m_rows);
+    GetToolBar()->SetRows(!(GetToolBar()->IsVertical()) ? m_rows : 10 / m_rows);
 
     //RecreateToolbar(); -- this is unneeded
 }
@@ -679,15 +705,23 @@ void MyFrame::OnToggleCustomDisabled(wxCommandEvent& WXUNUSED(event))
     RecreateToolbar();
 }
 
-void MyFrame::OnToggleToolbarOrient(wxCommandEvent& WXUNUSED(event))
+void MyFrame::OnChangeOrientation(wxCommandEvent& event)
 {
-    if( m_bottomToolbar )
-        m_bottomToolbar = false;
-    m_horzToolbar = !m_horzToolbar;
-    wxMenuBar *menuBar = GetMenuBar();
-    if( menuBar->IsChecked( IDM_TOOLBAR_BOTTOM_ORIENTATION ) )
-        menuBar->Check( IDM_TOOLBAR_BOTTOM_ORIENTATION, false );
-
+    switch( event.GetId() )
+    {
+        case IDM_TOOLBAR_LEFT_ORIENTATION:
+            m_toolbarPosition = TOOLBAR_LEFT;
+            break;
+        case IDM_TOOLBAR_TOP_ORIENTATION:
+            m_toolbarPosition = TOOLBAR_TOP;
+            break;
+        case IDM_TOOLBAR_RIGHT_ORIENTATION:
+            m_toolbarPosition = TOOLBAR_RIGHT;
+            break;
+        case IDM_TOOLBAR_BOTTOM_ORIENTATION:
+            m_toolbarPosition = TOOLBAR_BOTTOM;
+            break;
+    }
     RecreateToolbar();
 }
 
@@ -835,14 +869,4 @@ void MyFrame::OnToggleRadioBtn(wxCommandEvent& event)
         m_tbar->ToggleTool(IDM_TOOLBAR_OTHER_1 +
                             event.GetId() - IDM_TOOLBAR_TOGGLERADIOBTN1, true);
     }
-}
-void MyFrame::OnBottomToolbar(wxCommandEvent& WXUNUSED(event) )
-{
-    m_bottomToolbar = !m_bottomToolbar;
-    wxMenuBar *menuBar = GetMenuBar();
-    if( menuBar->IsChecked( IDM_TOOLBAR_TOGGLETOOLBARORIENT ) )
-        menuBar->Check( IDM_TOOLBAR_TOGGLETOOLBARORIENT, false );
-    if( !m_horzToolbar )
-        m_horzToolbar = true;
-    RecreateToolbar();
 }

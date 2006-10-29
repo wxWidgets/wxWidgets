@@ -251,7 +251,7 @@ void wxFrame::DoGetClientSize( int *width, int *height ) const
         {
             int x, y;
             m_frameToolBar->GetSize( &x, &y );
-            if ( m_frameToolBar->GetWindowStyle() & wxTB_VERTICAL )
+            if ( m_frameToolBar->IsVertical() )
             {
                 if (width != NULL)
                     *width -= x;
@@ -305,7 +305,7 @@ void wxFrame::DoSetClientSize( int width, int height )
             {
                 int x, y;
                 m_frameToolBar->GetSize( &x, &y );
-                if ( m_frameToolBar->GetWindowStyle() & wxTB_VERTICAL )
+                if ( m_frameToolBar->IsVertical() )
                 {
                     width += x;
                 }
@@ -430,6 +430,17 @@ void wxFrame::GtkOnSize()
                 hh = m_height - 2*m_miniEdge;
 
                 client_area_x_offset += ww;
+            }
+            else if( m_frameToolBar->HasFlag(wxTB_RIGHT) )
+            {
+               yy += 2;
+               ww = m_toolBarDetached ? wxPLACE_HOLDER
+                                      : m_frameToolBar->m_width;
+               xx = GetClientSize().x - 1;
+               hh = m_height - 2*m_miniEdge;
+               if( hh < 0 )
+                  hh = 0;
+
             }
             else if( m_frameToolBar->GetWindowStyle() & wxTB_BOTTOM )
             {

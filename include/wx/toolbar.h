@@ -22,9 +22,11 @@ enum
 {
     // lay out the toolbar horizontally
     wxTB_HORIZONTAL  = wxHORIZONTAL,    // == 0x0004
+    wxTB_TOP         = wxTB_HORIZONTAL,
 
     // lay out the toolbar vertically
     wxTB_VERTICAL    = wxVERTICAL,      // == 0x0008
+    wxTB_LEFT        = wxTB_VERTICAL,
 
     // show 3D buttons (wxToolBarSimple only)
     wxTB_3DBUTTONS   = 0x0010,
@@ -55,7 +57,10 @@ enum
     wxTB_NO_TOOLTIPS = 0x1000,
 
     // lay out toolbar at the bottom of the window
-    wxTB_BOTTOM       = 0x2000
+    wxTB_BOTTOM       = 0x2000,
+
+    // lay out toolbar at the right edge of the window
+    wxTB_RIGHT        = 0x4000
 };
 
 #if wxUSE_TOOLBAR
