@@ -400,16 +400,14 @@ bool wxTabMDIChildFrame::Destroy()
     wxTabMDIClientWindow* pClientWindow = pParentFrame->GetClientWindow();
     wxASSERT_MSG(pClientWindow, wxT("Missing MDI Client Window"));
 
-    bool bActive = false;
     if (pParentFrame->GetActiveChild() == this)
     {
         pParentFrame->SetActiveChild(NULL);
         pParentFrame->SetChildMenuBar(NULL);
-        bActive = true;
     }
 
-    size_t pos, page_count = pClientWindow->GetPageCount();
-    for (pos = 0; pos < page_count; pos++)
+    const size_t page_count = pClientWindow->GetPageCount();
+    for (size_t pos = 0; pos < page_count; pos++)
     {
         if (pClientWindow->GetPage(pos) == this)
             return pClientWindow->DeletePage(pos);

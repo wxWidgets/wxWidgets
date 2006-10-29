@@ -1590,8 +1590,6 @@ wxWindow* wxAuiMultiNotebook::GetTabFrameFromTabCtrl(wxWindow* tab_ctrl)
 
 void wxAuiMultiNotebook::RemoveEmptyTabFrames()
 {
-    bool must_update = false;
-
     // if we've just removed the last tab from the source
     // tab set, the remove the tab control completely
     wxPaneInfoArray all_panes = m_mgr.GetAllPanes();
@@ -1613,7 +1611,6 @@ void wxAuiMultiNotebook::RemoveEmptyTabFrames()
             //tab_frame->m_tabs->Destroy();
 
             delete tab_frame;
-            must_update = true;
         }
     }
 
@@ -1637,7 +1634,6 @@ void wxAuiMultiNotebook::RemoveEmptyTabFrames()
     if (!center_found && first_good)
     {
         m_mgr.GetPane(first_good).Centre();
-        must_update = true;
     }
 
     m_mgr.Update();
