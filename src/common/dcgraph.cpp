@@ -61,12 +61,14 @@ void wxGCDC::SetGraphicsContext( wxGraphicsContext* ctx )
 { 
     delete m_graphicContext;
     m_graphicContext = ctx;
+    m_matrixOriginal = m_graphicContext->GetTransform();
 }
 
 wxGCDC::wxGCDC(const wxWindowDC& dc)
 {
     Init();
     m_graphicContext = wxGraphicsContext::Create(dc);
+    m_matrixOriginal = m_graphicContext->GetTransform();
     m_ok = true;
     if ( dc.GetFont().Ok())
         m_graphicContext->SetFont( m_graphicContext->CreateFont(dc.GetFont(),dc.GetTextForeground()));
@@ -101,14 +103,7 @@ void wxGCDC::DoDrawBitmap( const wxBitmap &bmp, wxCoord x, wxCoord y, bool WXUNU
     wxCHECK_RET( Ok(), wxT("wxGCDC(cg)::DoDrawBitmap - invalid DC") );
     wxCHECK_RET( bmp.Ok(), wxT("wxGCDC(cg)::DoDrawBitmap - invalid bitmap") );
 
-    wxCoord xx = LogicalToDeviceX(x);
-    wxCoord yy = LogicalToDeviceY(y);
-    wxCoord w = bmp.GetWidth();
-    wxCoord h = bmp.GetHeight();
-    wxCoord ww = LogicalToDeviceXRel(w);
-    wxCoord hh = LogicalToDeviceYRel(h);
-
-    m_graphicContext->DrawBitmap( bmp, xx , yy , ww , hh );
+    m_graphicContext->DrawBitmap( bmp, x , y , bmp.GetWidth() , bmp.GetHeight() );
 }
 
 void wxGCDC::DoDrawIcon( const wxIcon &icon, wxCoord x, wxCoord y )
@@ -116,42 +111,32 @@ void wxGCDC::DoDrawIcon( const wxIcon &icon, wxCoord x, wxCoord y )
     wxCHECK_RET( Ok(), wxT("wxGCDC(cg)::DoDrawIcon - invalid DC") );
     wxCHECK_RET( icon.Ok(), wxT("wxGCDC(cg)::DoDrawIcon - invalid icon") );
 
-    wxCoord xx = LogicalToDeviceX(x);
-    wxCoord yy = LogicalToDeviceY(y);
     wxCoord w = icon.GetWidth();
     wxCoord h = icon.GetHeight();
-    wxCoord ww = LogicalToDeviceXRel(w);
-    wxCoord hh = LogicalToDeviceYRel(h);
 
-    m_graphicContext->DrawIcon( icon , xx, yy, ww, hh );
+    m_graphicContext->DrawIcon( icon , x, y, w, h );
 }
 
-void wxGCDC::DoSetClippingRegion( wxCoord x, wxCoord y, wxCoord width, wxCoord height )
+void wxGCDC::DoSetClippingRegion( wxCoord x, wxCoord y, wxCoord w, wxCoord h )
 {
     wxCHECK_RET( Ok(), wxT("wxGCDC(cg)::DoSetClippingRegion - invalid DC") );
 
-    wxCoord xx, yy, ww, hh;
-    xx = LogicalToDeviceX(x);
-    yy = LogicalToDeviceY(y);
-    ww = LogicalToDeviceXRel(width);
-    hh = LogicalToDeviceYRel(height);
-
-    m_graphicContext->Clip( xx, yy, ww, hh );
+    m_graphicContext->Clip( x, y, w, h );
     if ( m_clipping )
     {
-        m_clipX1 = wxMax( m_clipX1, xx );
-        m_clipY1 = wxMax( m_clipY1, yy );
-        m_clipX2 = wxMin( m_clipX2, (xx + ww) );
-        m_clipY2 = wxMin( m_clipY2, (yy + hh) );
+        m_clipX1 = wxMax( m_clipX1, x );
+        m_clipY1 = wxMax( m_clipY1, y );
+        m_clipX2 = wxMin( m_clipX2, (x + w) );
+        m_clipY2 = wxMin( m_clipY2, (y + h) );
     }
     else
     {
         m_clipping = true;
 
-        m_clipX1 = xx;
-        m_clipY1 = yy;
-        m_clipX2 = xx + ww;
-        m_clipY2 = yy + hh;
+        m_clipX1 = x;
+        m_clipY1 = y;
+        m_clipX2 = x + w;
+        m_clipY2 = y + h;
     }
 }
 
@@ -167,37 +152,23 @@ void wxGCDC::DoSetClippingRegionAsRegion( const wxRegion &region )
 
     wxCoord x, y, w, h;
     region.GetBox( x, y, w, h );
-    wxCoord xx, yy, ww, hh;
-    xx = LogicalToDeviceX(x);
-    yy = LogicalToDeviceY(y);
-    ww = LogicalToDeviceXRel(w);
-    hh = LogicalToDeviceYRel(h);
 
-    // if we have a scaling that we cannot map onto native regions
-    // we must use the box
-    if ( ww != w || hh != h )
+    m_graphicContext->Clip( region );
+    if ( m_clipping )
     {
-        wxGCDC::DoSetClippingRegion( x, y, w, h );
+        m_clipX1 = wxMax( m_clipX1, x );
+        m_clipY1 = wxMax( m_clipY1, y );
+        m_clipX2 = wxMin( m_clipX2, (x + w) );
+        m_clipY2 = wxMin( m_clipY2, (y + h) );
     }
     else
     {
-        m_graphicContext->Clip( region );
-        if ( m_clipping )
-        {
-            m_clipX1 = wxMax( m_clipX1, xx );
-            m_clipY1 = wxMax( m_clipY1, yy );
-            m_clipX2 = wxMin( m_clipX2, (xx + ww) );
-            m_clipY2 = wxMin( m_clipY2, (yy + hh) );
-        }
-        else
-        {
-            m_clipping = true;
+        m_clipping = true;
 
-            m_clipX1 = xx;
-            m_clipY1 = yy;
-            m_clipX2 = xx + ww;
-            m_clipY2 = yy + hh;
-        }
+        m_clipX1 = x;
+        m_clipY1 = y;
+        m_clipX2 = x + w;
+        m_clipY2 = y + h;
     }
 }
 
@@ -318,24 +289,17 @@ int wxGCDC::GetDepth() const
 
 void wxGCDC::ComputeScaleAndOrigin()
 {
-    // CMB: copy scale to see if it changes
-    double origScaleX = m_scaleX;
-    double origScaleY = m_scaleY;
     m_scaleX = m_logicalScaleX * m_userScaleX;
     m_scaleY = m_logicalScaleY * m_userScaleY;
-    m_deviceOriginX = m_deviceOriginX + m_logicalOriginX;
-    m_deviceOriginY = m_deviceOriginY + m_logicalOriginY;
+    m_deviceOriginX = /* m_deviceOriginX + */ m_logicalOriginX;
+    m_deviceOriginY = /* m_deviceOriginY + */ m_logicalOriginY;
 
-    // CMB: if scale has changed call SetPen to recalulate the line width
-    if (m_scaleX != origScaleX || m_scaleY != origScaleY)
-    {
-        // this is a bit artificial, but we need to force wxDC to think
-        // the pen has changed
-        wxPen pen(GetPen());
-        m_pen = wxNullPen;
-        SetPen(pen);
-        SetFont(m_font);
-    }
+    m_matrixCurrent = m_graphicContext->CreateMatrix();
+    m_matrixCurrent.Translate( m_deviceOriginX , m_deviceOriginY );
+    m_matrixCurrent.Scale( m_scaleX, m_scaleY );
+    
+    m_graphicContext->SetTransform( m_matrixOriginal );
+    m_graphicContext->ConcatTransform( m_matrixCurrent );
 }
 
 void wxGCDC::SetPalette( const wxPalette& WXUNUSED(palette) )
@@ -355,7 +319,7 @@ void wxGCDC::SetFont( const wxFont &font )
     {
         wxFont f = font;
         if ( f.Ok() )
-            f.SetPointSize( LogicalToDeviceYRel(font.GetPointSize()));
+            f.SetPointSize( /*LogicalToDeviceYRel*/(font.GetPointSize()));
         m_graphicContext->SetFont( f, m_textForegroundColour );
     }
 }
@@ -368,20 +332,7 @@ void wxGCDC::SetPen( const wxPen &pen )
     m_pen = pen;
     if ( m_graphicContext )
     {
-        if ( m_pen.GetStyle() == wxSOLID || m_pen.GetStyle() == wxTRANSPARENT )
-        {
-            m_graphicContext->SetPen( m_pen );
-        }
-        else
-        {
-            // we have to compensate for moved device origins etc. otherwise patterned pens are standing still
-            // eg when using a wxScrollWindow and scrolling around
-            int origX = LogicalToDeviceX( 0 );
-            int origY = LogicalToDeviceY( 0 );
-            m_graphicContext->Translate( origX , origY );
-            m_graphicContext->SetPen( m_pen );
-            m_graphicContext->Translate( -origX , -origY );
-        }
+        m_graphicContext->SetPen( m_pen );
     }
 }
 
@@ -393,21 +344,7 @@ void wxGCDC::SetBrush( const wxBrush &brush )
     m_brush = brush;
     if ( m_graphicContext )
     {
-        if ( brush.GetStyle() == wxSOLID || brush.GetStyle() == wxTRANSPARENT )
-        {
-            m_graphicContext->SetBrush( m_brush );
-        }
-        else
-        {
-            // we have to compensate for moved device origins etc. otherwise patterned brushes are standing still
-            // eg when using a wxScrollWindow and scrolling around
-            // TODO on MSW / GDIPlus this still occurs with hatched brushes
-            int origX = LogicalToDeviceX(0);
-            int origY = LogicalToDeviceY(0);
-            m_graphicContext->Translate( origX , origY );
-            m_graphicContext->SetBrush( m_brush );
-            m_graphicContext->Translate( -origX , -origY );
-        }
+        m_graphicContext->SetBrush( m_brush );
     }
 }
 
@@ -462,12 +399,7 @@ void wxGCDC::DoDrawLine( wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2 )
         return;
 #endif
 
-    wxCoord xx1 = LogicalToDeviceX(x1);
-    wxCoord yy1 = LogicalToDeviceY(y1);
-    wxCoord xx2 = LogicalToDeviceX(x2);
-    wxCoord yy2 = LogicalToDeviceY(y2);
-
-    m_graphicContext->StrokeLine(xx1,yy1,xx2,yy2);
+    m_graphicContext->StrokeLine(x1,y1,x2,y2);
 
     CalcBoundingBox(x1, y1);
     CalcBoundingBox(x2, y2);
@@ -484,18 +416,11 @@ void wxGCDC::DoCrossHair( wxCoord x, wxCoord y )
 
     GetSize( &w, &h );
 
-    wxCoord xx = LogicalToDeviceX(x);
-    wxCoord yy = LogicalToDeviceY(y);
-    wxCoord xw = LogicalToDeviceX(w);
-    wxCoord x0 = LogicalToDeviceX(0);
-    wxCoord y0 = LogicalToDeviceY(0);
-    wxCoord yh = LogicalToDeviceY(h);
+    m_graphicContext->StrokeLine(0,y,w,y);
+    m_graphicContext->StrokeLine(x,0,x,h);
 
-    m_graphicContext->StrokeLine(x0,yy,xw,yy);
-    m_graphicContext->StrokeLine(xx,y0,xx,yh);
-
-    CalcBoundingBox(x0, y0);
-    CalcBoundingBox(x0+xw, y0+yh);
+    CalcBoundingBox(0, 0);
+    CalcBoundingBox(0+w, 0+h);
 }
 
 void wxGCDC::DoDrawArc( wxCoord x1, wxCoord y1,
@@ -507,19 +432,12 @@ void wxGCDC::DoDrawArc( wxCoord x1, wxCoord y1,
     if ( m_logicalFunction != wxCOPY )
         return;
 
-    wxCoord xx1 = LogicalToDeviceX(x1);
-    wxCoord yy1 = LogicalToDeviceY(y1);
-    wxCoord xx2 = LogicalToDeviceX(x2);
-    wxCoord yy2 = LogicalToDeviceY(y2);
-    wxCoord xxc = LogicalToDeviceX(xc);
-    wxCoord yyc = LogicalToDeviceY(yc);
-
-    double dx = xx1 - xxc;
-    double dy = yy1 - yyc;
+    double dx = x1 - xc;
+    double dy = y1 - yc;
     double radius = sqrt((double)(dx * dx + dy * dy));
     wxCoord rad = (wxCoord)radius;
     double sa, ea;
-    if (xx1 == xx2 && yy1 == yy2)
+    if (x1 == x2 && y1 == y2)
     {
         sa = 0.0;
         ea = 360.0;
@@ -530,22 +448,22 @@ void wxGCDC::DoDrawArc( wxCoord x1, wxCoord y1,
     }
     else
     {
-        sa = (xx1 - xxc == 0) ?
-     (yy1 - yyc < 0) ? 90.0 : -90.0 :
-             -atan2(double(yy1 - yyc), double(xx1 - xxc)) * RAD2DEG;
-        ea = (xx2 - xxc == 0) ?
-     (yy2 - yyc < 0) ? 90.0 : -90.0 :
-             -atan2(double(yy2 - yyc), double(xx2 - xxc)) * RAD2DEG;
+        sa = (x1 - xc == 0) ?
+     (y1 - yc < 0) ? 90.0 : -90.0 :
+             -atan2(double(y1 - yc), double(x1 - xc)) * RAD2DEG;
+        ea = (x2 - xc == 0) ?
+     (y2 - yc < 0) ? 90.0 : -90.0 :
+             -atan2(double(y2 - yc), double(x2 - xc)) * RAD2DEG;
     }
 
     bool fill = m_brush.GetStyle() != wxTRANSPARENT;
 
     wxGraphicsPath path = m_graphicContext->CreatePath();
     if ( fill && ((x1!=x2)||(y1!=y2)) )
-        path.MoveToPoint( xxc, yyc );
-    path.AddArc( xxc, yyc , rad , DegToRad(sa) , DegToRad(ea), false );
+        path.MoveToPoint( xc, yc );
+    path.AddArc( xc, yc , rad , DegToRad(sa) , DegToRad(ea), false );
     if ( fill && ((x1!=x2)||(y1!=y2)) )
-        path.AddLineToPoint( xxc, yyc );
+        path.AddLineToPoint( xc, yc );
     m_graphicContext->DrawPath(path);
 }
 
@@ -557,35 +475,18 @@ void wxGCDC::DoDrawEllipticArc( wxCoord x, wxCoord y, wxCoord w, wxCoord h,
     if ( m_logicalFunction != wxCOPY )
         return;
 
-    wxCoord xx = LogicalToDeviceX(x);
-    wxCoord yy = LogicalToDeviceY(y);
-    wxCoord ww = m_signX * LogicalToDeviceXRel(w);
-    wxCoord hh = m_signY * LogicalToDeviceYRel(h);
-
-    // handle -ve width and/or height
-    if (ww < 0)
-    {
-        ww = -ww;
-        xx = xx - ww;
-    }
-    if (hh < 0)
-    {
-        hh = -hh;
-        yy = yy - hh;
-    }
-
     bool fill = m_brush.GetStyle() != wxTRANSPARENT;
 
     wxGraphicsPath path = m_graphicContext->CreatePath();
     m_graphicContext->PushState();
-    m_graphicContext->Translate(xx+ww/2,yy+hh/2);
-    wxDouble factor = ((wxDouble) ww) / hh;
+    m_graphicContext->Translate(x+w/2,y+h/2);
+    wxDouble factor = ((wxDouble) w) / h;
     m_graphicContext->Scale( factor , 1.0);
     if ( fill && (sa!=ea) )
         path.MoveToPoint(0,0);
     // since these angles (ea,sa) are measured counter-clockwise, we invert them to
     // get clockwise angles
-    path.AddArc( 0, 0, hh/2 , DegToRad(-sa) , DegToRad(-ea), sa > ea );
+    path.AddArc( 0, 0, h/2 , DegToRad(-sa) , DegToRad(-ea), sa > ea );
     if ( fill && (sa!=ea) )
         path.AddLineToPoint(0,0);
     m_graphicContext->DrawPath( path );
@@ -613,8 +514,8 @@ void wxGCDC::DoDrawLines(int n, wxPoint points[],
     wxPoint2DDouble* pointsD = new wxPoint2DDouble[n];
     for( int i = 0; i < n; ++i)
     {
-        pointsD[i].m_x = LogicalToDeviceX(points[i].x + xoffset);
-        pointsD[i].m_y = LogicalToDeviceY(points[i].y + yoffset);
+        pointsD[i].m_x = points[i].x + xoffset;
+        pointsD[i].m_y = points[i].y + yoffset;
     }
 
     m_graphicContext->StrokeLines( n , pointsD);
@@ -649,8 +550,8 @@ void wxGCDC::DoDrawSpline(wxList *points)
     wxCoord cx1 = ( x1 + x2 ) / 2;
     wxCoord cy1 = ( y1 + y2 ) / 2;
 
-    path.MoveToPoint( LogicalToDeviceX( x1 ) , LogicalToDeviceY( y1 ) );
-    path.AddLineToPoint( LogicalToDeviceX( cx1 ) , LogicalToDeviceY( cy1 ) );
+    path.MoveToPoint( x1 , y1 );
+    path.AddLineToPoint( cx1 , cy1 );
 #if !wxUSE_STL
 
     while ((node = node->GetNext()) != NULL)
@@ -668,15 +569,13 @@ void wxGCDC::DoDrawSpline(wxList *points)
         wxCoord cx4 = (x1 + x2) / 2;
         wxCoord cy4 = (y1 + y2) / 2;
 
-        path.AddQuadCurveToPoint(
-            LogicalToDeviceX( x1 ) , LogicalToDeviceY( y1 ) ,
-            LogicalToDeviceX( cx4 ) , LogicalToDeviceY( cy4 ) );
+        path.AddQuadCurveToPoint(x1 , y1 ,cx4 , cy4 );
 
         cx1 = cx4;
         cy1 = cy4;
     }
 
-    path.AddLineToPoint( LogicalToDeviceX( x2 ) , LogicalToDeviceY( y2 ) );
+    path.AddLineToPoint( x2 , y2 );
 
     m_graphicContext->StrokePath( path );
 }
@@ -700,8 +599,8 @@ void wxGCDC::DoDrawPolygon( int n, wxPoint points[],
     wxPoint2DDouble* pointsD = new wxPoint2DDouble[n+(closeIt?1:0)];
     for( int i = 0; i < n; ++i)
     {
-        pointsD[i].m_x = LogicalToDeviceX(points[i].x + xoffset);
-        pointsD[i].m_y = LogicalToDeviceY(points[i].y + yoffset);
+        pointsD[i].m_x = points[i].x + xoffset;
+        pointsD[i].m_y = points[i].y + yoffset;
     }
     if ( closeIt )
         pointsD[n] = pointsD[0];
@@ -724,60 +623,44 @@ void wxGCDC::DoDrawPolyPolygon(int n,
     for ( int j = 0; j < n; ++j)
     {
         wxPoint start = points[i];
-        path.MoveToPoint(LogicalToDeviceX(start.x+ xoffset), LogicalToDeviceY(start.y+ yoffset));
+        path.MoveToPoint( start.x+ xoffset, start.y+ yoffset);
         ++i;
         int l = count[j];
         for ( int k = 1; k < l; ++k)
         {
-            path.AddLineToPoint( LogicalToDeviceX(points[i].x+ xoffset), LogicalToDeviceY(points[i].y+ yoffset));
+            path.AddLineToPoint( points[i].x+ xoffset, points[i].y+ yoffset);
             ++i;
         }
         // close the polygon
         if ( start != points[i-1])
-            path.AddLineToPoint( LogicalToDeviceX(start.x+ xoffset), LogicalToDeviceY(start.y+ yoffset));
+            path.AddLineToPoint( start.x+ xoffset, start.y+ yoffset);
     }
     m_graphicContext->DrawPath( path , fillStyle);
 }
 
-void wxGCDC::DoDrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
+void wxGCDC::DoDrawRectangle(wxCoord x, wxCoord y, wxCoord w, wxCoord h)
 {
     wxCHECK_RET( Ok(), wxT("wxGCDC(cg)::DoDrawRectangle - invalid DC") );
 
     if ( m_logicalFunction != wxCOPY )
         return;
 
-    wxCoord xx = LogicalToDeviceX(x);
-    wxCoord yy = LogicalToDeviceY(y);
-    wxCoord ww = m_signX * LogicalToDeviceXRel(width);
-    wxCoord hh = m_signY * LogicalToDeviceYRel(height);
-
     // CMB: draw nothing if transformed w or h is 0
-    if (ww == 0 || hh == 0)
+    if (w == 0 || h == 0)
         return;
 
-    // CMB: handle -ve width and/or height
-    if (ww < 0)
-    {
-        ww = -ww;
-        xx = xx - ww;
-    }
-    if (hh < 0)
-    {
-        hh = -hh;
-        yy = yy - hh;
-    }
     if ( m_graphicContext->ShouldOffset() )
     {
         // if we are offsetting the entire rectangle is moved 0.5, so the
         // border line gets off by 1
-        ww -= 1;
-        hh -= 1;
+        w -= 1;
+        h -= 1;
     }
-    m_graphicContext->DrawRectangle( xx,yy,ww,hh);
+    m_graphicContext->DrawRectangle(x,y,w,h);
 }
 
 void wxGCDC::DoDrawRoundedRectangle(wxCoord x, wxCoord y,
-                                    wxCoord width, wxCoord height,
+                                    wxCoord w, wxCoord h,
                                     double radius)
 {
     wxCHECK_RET( Ok(), wxT("wxGCDC(cg)::DoDrawRoundedRectangle - invalid DC") );
@@ -786,60 +669,23 @@ void wxGCDC::DoDrawRoundedRectangle(wxCoord x, wxCoord y,
         return;
 
     if (radius < 0.0)
-        radius = - radius * ((width < height) ? width : height);
-    wxCoord xx = LogicalToDeviceX(x);
-    wxCoord yy = LogicalToDeviceY(y);
-    wxCoord ww = m_signX * LogicalToDeviceXRel(width);
-    wxCoord hh = m_signY * LogicalToDeviceYRel(height);
+        radius = - radius * ((w < h) ? w : h);
 
     // CMB: draw nothing if transformed w or h is 0
-    if (ww == 0 || hh == 0)
+    if (w == 0 || h == 0)
         return;
 
-    // CMB: handle -ve width and/or height
-    if (ww < 0)
-    {
-        ww = -ww;
-        xx = xx - ww;
-    }
-    if (hh < 0)
-    {
-        hh = -hh;
-        yy = yy - hh;
-    }
-
-    m_graphicContext->DrawRoundedRectangle( xx,yy,ww,hh,radius);
+    m_graphicContext->DrawRoundedRectangle( x,y,w,h,radius);
 }
 
-void wxGCDC::DoDrawEllipse(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
+void wxGCDC::DoDrawEllipse(wxCoord x, wxCoord y, wxCoord w, wxCoord h)
 {
     wxCHECK_RET( Ok(), wxT("wxGCDC(cg)::DoDrawEllipse - invalid DC") );
 
     if ( m_logicalFunction != wxCOPY )
         return;
 
-    wxDouble xx = LogicalToDeviceX(x);
-    wxDouble yy = LogicalToDeviceY(y);
-    wxDouble ww = m_signX * LogicalToDeviceXRel(width);
-    wxDouble hh = m_signY * LogicalToDeviceYRel(height);
-
-    // CMB: draw nothing if transformed w or h is 0
-    if (ww == 0 || hh == 0)
-        return;
-
-    // CMB: handle -ve width and/or height
-    if (ww < 0)
-    {
-        ww = -ww;
-        xx = xx - ww;
-    }
-    if (hh < 0)
-    {
-        hh = -hh;
-        yy = yy - hh;
-    }
-
-    m_graphicContext->DrawEllipse(xx,yy,ww,hh);
+    m_graphicContext->DrawEllipse(x,y,w,h);
 }
 
 bool wxGCDC::CanDrawBitmap() const
@@ -873,11 +719,6 @@ bool wxGCDC::DoBlit(
     wxCoord xxsrc = source-> LogicalToDeviceX(xsrc);
     wxCoord wwsrc = source-> LogicalToDeviceXRel(width);
     wxCoord hhsrc = source-> LogicalToDeviceYRel(height);
-
-    wxCoord yydest = LogicalToDeviceY(ydest);
-    wxCoord xxdest = LogicalToDeviceX(xdest);
-    wxCoord wwdest = LogicalToDeviceXRel(width);
-    wxCoord hhdest = LogicalToDeviceYRel(height);
 
     wxBitmap blit;
     wxMemoryDC* memdc = wxDynamicCast(source,wxMemoryDC);
@@ -929,7 +770,7 @@ bool wxGCDC::DoBlit(
     
     if ( blit.Ok() )
     {
-        m_graphicContext->DrawBitmap( blit, xxdest , yydest , wwdest , hhdest );
+        m_graphicContext->DrawBitmap( blit, xdest , ydest , width , height );
     }
     else
     {
@@ -950,10 +791,7 @@ void wxGCDC::DoDrawRotatedText(const wxString& str, wxCoord x, wxCoord y,
     if ( m_logicalFunction != wxCOPY )
         return;
 
-    int drawX = LogicalToDeviceX(x);
-    int drawY = LogicalToDeviceY(y);
-
-    m_graphicContext->DrawText( str, drawX ,drawY , DegToRad(angle ));
+     m_graphicContext->DrawText( str, x ,y , DegToRad(angle ));
 }
 
 void wxGCDC::DoDrawText(const wxString& str, wxCoord x, wxCoord y)
@@ -965,10 +803,7 @@ void wxGCDC::DoDrawText(const wxString& str, wxCoord x, wxCoord y)
     if ( m_logicalFunction != wxCOPY )
         return;
 
-    int drawX = LogicalToDeviceX(x);
-    int drawY = LogicalToDeviceY(y);
-
-    m_graphicContext->DrawText( str, drawX ,drawY);
+    m_graphicContext->DrawText( str, x ,y);
 }
 
 bool wxGCDC::CanGetTextExtent() const
@@ -994,13 +829,13 @@ void wxGCDC::DoGetTextExtent( const wxString &str, wxCoord *width, wxCoord *heig
     m_graphicContext->GetTextExtent( str, &w, &h, &d, &e );
 
     if ( height )
-        *height = DeviceToLogicalYRel((wxCoord)h);
+        *height = h;
     if ( descent )
-        *descent = DeviceToLogicalYRel((wxCoord)d);
+        *descent = d;
     if ( externalLeading )
-        *externalLeading = DeviceToLogicalYRel((wxCoord)e);
+        *externalLeading =e;
     if ( width )
-        *width = DeviceToLogicalXRel((wxCoord)w);
+        *width = w;
 
     if ( theFont )
     {
@@ -1020,7 +855,7 @@ bool wxGCDC::DoGetPartialTextExtents(const wxString& text, wxArrayInt& widths) c
 
     m_graphicContext->GetPartialTextExtents( text, widthsD );
     for ( size_t i = 0; i < widths.GetCount(); ++i )
-        widths[i] = DeviceToLogicalXRel((wxCoord)(widthsD[i] + 0.5));
+        widths[i] = (wxCoord)(widthsD[i] + 0.5);
 
     return true;
 }
@@ -1092,31 +927,13 @@ void wxGCDC::DoGradientFillLinear(const wxRect& rect,
         break;
     }
 
-    m_graphicContext->SetBrush( m_graphicContext->CreateLinearGradientBrush(
-        LogicalToDeviceX(start.x),LogicalToDeviceY(start.y),
-        LogicalToDeviceX(end.x),LogicalToDeviceY(end.y), initialColour, destColour));
-
-    wxDouble xx = LogicalToDeviceX(rect.x);
-    wxDouble yy = LogicalToDeviceY(rect.y);
-    wxDouble ww = m_signX * LogicalToDeviceXRel(rect.width);
-    wxDouble hh = m_signY * LogicalToDeviceYRel(rect.height);
-
-    if (ww == 0 || hh == 0)
+    if (rect.width == 0 || rect.height == 0)
         return;
 
-    if (ww < 0)
-    {
-        ww = -ww;
-        xx = xx - ww;
-    }
-    if (hh < 0)
-    {
-        hh = -hh;
-        yy = yy - hh;
-    }
-
+    m_graphicContext->SetBrush( m_graphicContext->CreateLinearGradientBrush(
+        start.x,start.y,end.x,end.y, initialColour, destColour));
     m_graphicContext->SetPen(*wxTRANSPARENT_PEN);
-    m_graphicContext->DrawRectangle(xx,yy,ww,hh);
+    m_graphicContext->DrawRectangle(rect.x,rect.y,rect.width,rect.height);
     m_graphicContext->SetPen(m_pen);
 }
 
@@ -1134,36 +951,17 @@ void wxGCDC::DoGradientFillConcentric(const wxRect& rect,
     else
         nRadius = cy;
 
-    wxDouble xx = LogicalToDeviceX(rect.x);
-    wxDouble yy = LogicalToDeviceY(rect.y);
-    wxDouble ww = m_signX * LogicalToDeviceXRel(rect.width);
-    wxDouble hh = m_signY * LogicalToDeviceYRel(rect.height);
-
-    if (ww == 0 || hh == 0)
-        return;
-
-    if (ww < 0)
-    {
-        ww = -ww;
-        xx = xx - ww;
-    }
-    if (hh < 0)
-    {
-        hh = -hh;
-        yy = yy - hh;
-    }
-
+    // make sure the background is filled (todo move into specific platform implementation ?)
     m_graphicContext->SetPen(*wxTRANSPARENT_PEN);
     m_graphicContext->SetBrush( wxBrush( destColour) );
-    m_graphicContext->DrawRectangle( xx,yy,ww,hh);
+    m_graphicContext->DrawRectangle(rect.x,rect.y,rect.width,rect.height);
 
     m_graphicContext->SetBrush( m_graphicContext->CreateRadialGradientBrush(
-        xx+LogicalToDeviceX(circleCenter.x),yy+LogicalToDeviceY(circleCenter.y),
-        xx+LogicalToDeviceX(circleCenter.x),yy+LogicalToDeviceY(circleCenter.y),
-        LogicalToDeviceXRel(nRadius),
-        initialColour,destColour));
+        rect.x+circleCenter.x,rect.y+circleCenter.y,
+        rect.x+circleCenter.x,rect.y+circleCenter.y,
+        nRadius,initialColour,destColour));
 
-    m_graphicContext->DrawRectangle( xx,yy,ww,hh);
+    m_graphicContext->DrawRectangle(rect.x,rect.y,rect.width,rect.height);
     m_graphicContext->SetPen(m_pen);
 }
 
