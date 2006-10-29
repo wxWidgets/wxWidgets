@@ -30,6 +30,11 @@ not supported, it always returns $0$.
 
 \func{}{wxZlibInputStream}{\param{wxInputStream\&}{ stream}, \param{int}{ flags = wxZLIB\_AUTO}}
 
+\func{}{wxZlibInputStream}{\param{wxInputStream*}{ stream}, \param{int}{ flags = wxZLIB\_AUTO}}
+
+If the parent stream is passed as a pointer then the new filter stream
+takes ownership of it. If it is passed by reference then it does not.
+
 The {\it flags} wxZLIB\_ZLIB and wxZLIB\_GZIP specify whether the input data
 is in zlib or gzip format. If wxZLIB\_AUTO is used, then zlib will
 autodetect the stream type, this is the default.
@@ -101,10 +106,15 @@ The stream is not seekable, \helpref{SeekO()}{wxoutputstreamseeko} returns
 
 \func{}{wxZlibOutputStream}{\param{wxOutputStream\&}{ stream}, \param{int}{ level = -1}, \param{int}{ flags = wxZLIB\_ZLIB}}
 
+\func{}{wxZlibOutputStream}{\param{wxOutputStream*}{ stream}, \param{int}{ level = -1}, \param{int}{ flags = wxZLIB\_ZLIB}}
+
 Creates a new write-only compressed stream. {\it level} means level of 
 compression. It is number between 0 and 9 (including these values) where
 0 means no compression and 9 best but slowest compression. -1 is default
 value (currently equivalent to 6).
+
+If the parent stream is passed as a pointer then the new filter stream
+takes ownership of it. If it is passed by reference then it does not.
 
 The {\it flags} wxZLIB\_ZLIB and wxZLIB\_GZIP specify whether the output data
 will be in zlib or gzip format. wxZLIB\_ZLIB is the default.

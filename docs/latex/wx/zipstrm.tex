@@ -462,13 +462,18 @@ typedef wxZipEntry entry_type
 
 \func{}{wxZipInputStream}{\param{wxInputStream\& }{stream}, \param{wxMBConv\& }{conv = wxConvLocal}}
 
+\func{}{wxZipInputStream}{\param{wxInputStream*}{stream}, \param{wxMBConv\& }{conv = wxConvLocal}}
+
 Constructor. In a Unicode build the second parameter {\tt conv} is
 used to translate the filename and comment fields into Unicode. It has
 no effect on the stream's data.
 
+If the parent stream is passed as a pointer then the new filter stream
+takes ownership of it. If it is passed by reference then it does not.
+
 \func{}{wxZipInputStream}{\param{const wxString\& }{archive}, \param{const wxString\& }{file}}
 
-Compatibility constructor.
+Compatibility constructor (requires WXWIN\_COMPATIBILITY\_2\_6).
 
 When this constructor is used, an emulation of seeking is
 switched on for compatibility with previous versions. Note however,
@@ -608,9 +613,14 @@ entry and begins the next.
 
 \func{}{wxZipOutputStream}{\param{wxOutputStream\& }{stream}, \param{int }{level = -1}, \param{wxMBConv\& }{conv = wxConvLocal}}
 
+\func{}{wxZipOutputStream}{\param{wxOutputStream*}{stream}, \param{int }{level = -1}, \param{wxMBConv\& }{conv = wxConvLocal}}
+
 Constructor. {\tt level} is the compression level to use.
 It can be a value between 0 and 9 or -1 to use the default value
 which currently is equivalent to 6.
+
+If the parent stream is passed as a pointer then the new filter stream
+takes ownership of it. If it is passed by reference then it does not.
 
 In a Unicode build the third parameter {\tt conv} is used to translate
 the filename and comment fields to Unicode. It has no effect on the

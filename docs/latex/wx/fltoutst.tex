@@ -22,6 +22,11 @@ stream.
 The use of this class is exactly the same as of wxOutputStream. Only a constructor
 differs and it is documented below.
 
+\wxheading{See also}
+
+\helpref{wxFilterClassFactory}{wxfilterclassfactory}\\
+\helpref{wxFilterInputStream}{wxfilterinputstream}
+
 \latexignore{\rtfignore{\wxheading{Members}}}
 
 % -----------
@@ -31,5 +36,10 @@ differs and it is documented below.
 
 \func{}{wxFilterOutputStream}{\param{wxOutputStream\&}{ stream}}
 
+\func{}{wxFilterOutputStream}{\param{wxOutputStream*}{ stream}}
+
 Initializes a "filter" stream.
+
+If the parent stream is passed as a pointer then the new filter stream
+takes ownership of it. If it is passed by reference then it does not.
 
