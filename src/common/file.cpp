@@ -327,7 +327,7 @@ size_t wxFile::Write(const void *pBuf, size_t nCount)
 // flush
 bool wxFile::Flush()
 {
-#if defined(__VISUALC__) || defined(HAVE_FSYNC)
+#ifdef HAVE_FSYNC
     // fsync() only works on disk files and returns errors for pipes, don't
     // call it then
     if ( IsOpened() && GetKind() == wxFILE_KIND_DISK )
@@ -338,7 +338,7 @@ bool wxFile::Flush()
             return false;
         }
     }
-#endif // fsync
+#endif // HAVE_FSYNC
 
     return true;
 }
