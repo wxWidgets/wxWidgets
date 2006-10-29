@@ -440,7 +440,26 @@ class GridCellBoolEditor(GridCellEditor):
         _grid.GridCellBoolEditor_swiginit(self,_grid.new_GridCellBoolEditor(*args, **kwargs))
         self._setOORInfo(self)
 
+    def UseStringValues(*args, **kwargs):
+        """UseStringValues(String valueTrue=OneString, String valueFalse=EmptyString)"""
+        return _grid.GridCellBoolEditor_UseStringValues(*args, **kwargs)
+
+    UseStringValues = staticmethod(UseStringValues)
+    def IsTrueValue(*args, **kwargs):
+        """IsTrueValue(String value) -> bool"""
+        return _grid.GridCellBoolEditor_IsTrueValue(*args, **kwargs)
+
+    IsTrueValue = staticmethod(IsTrueValue)
 _grid.GridCellBoolEditor_swigregister(GridCellBoolEditor)
+OneString = cvar.OneString
+
+def GridCellBoolEditor_UseStringValues(*args, **kwargs):
+  """GridCellBoolEditor_UseStringValues(String valueTrue=OneString, String valueFalse=EmptyString)"""
+  return _grid.GridCellBoolEditor_UseStringValues(*args, **kwargs)
+
+def GridCellBoolEditor_IsTrueValue(*args, **kwargs):
+  """GridCellBoolEditor_IsTrueValue(String value) -> bool"""
+  return _grid.GridCellBoolEditor_IsTrueValue(*args, **kwargs)
 
 class GridCellChoiceEditor(GridCellEditor):
     """Proxy of C++ GridCellChoiceEditor class"""

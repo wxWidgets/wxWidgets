@@ -1435,6 +1435,49 @@ class FloatingPane(_windows.MiniFrame):
 
 _aui.FloatingPane_swigregister(FloatingPane)
 
+class TabArt(object):
+    """Proxy of C++ TabArt class"""
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    def __init__(self): raise AttributeError, "No constructor defined"
+    __repr__ = _swig_repr
+    __swig_destroy__ = _aui.delete_TabArt
+    __del__ = lambda self : None;
+    def DrawBackground(*args, **kwargs):
+        """DrawBackground(self, DC dc, Rect rect)"""
+        return _aui.TabArt_DrawBackground(*args, **kwargs)
+
+    def DrawTab(*args, **kwargs):
+        """
+        DrawTab(self, DC dc, Rect in_rect, String caption, bool active, Rect out_rect, 
+            int x_extent)
+        """
+        return _aui.TabArt_DrawTab(*args, **kwargs)
+
+    def SetNormalFont(*args, **kwargs):
+        """SetNormalFont(self, Font font)"""
+        return _aui.TabArt_SetNormalFont(*args, **kwargs)
+
+    def SetSelectedFont(*args, **kwargs):
+        """SetSelectedFont(self, Font font)"""
+        return _aui.TabArt_SetSelectedFont(*args, **kwargs)
+
+    def SetMeasuringFont(*args, **kwargs):
+        """SetMeasuringFont(self, Font font)"""
+        return _aui.TabArt_SetMeasuringFont(*args, **kwargs)
+
+_aui.TabArt_swigregister(TabArt)
+
+class DefaultTabArt(TabArt):
+    """Proxy of C++ DefaultTabArt class"""
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
+        """__init__(self) -> DefaultTabArt"""
+        _aui.DefaultTabArt_swiginit(self,_aui.new_DefaultTabArt(*args, **kwargs))
+    __swig_destroy__ = _aui.delete_DefaultTabArt
+    __del__ = lambda self : None;
+_aui.DefaultTabArt_swigregister(DefaultTabArt)
+
 class AuiNotebookEvent(_core.NotifyEvent):
     """Proxy of C++ AuiNotebookEvent class"""
     thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -1488,6 +1531,7 @@ class AuiTabContainerButton(object):
     __repr__ = _swig_repr
     id = property(_aui.AuiTabContainerButton_id_get, _aui.AuiTabContainerButton_id_set)
     cur_state = property(_aui.AuiTabContainerButton_cur_state_get, _aui.AuiTabContainerButton_cur_state_set)
+    location = property(_aui.AuiTabContainerButton_location_get, _aui.AuiTabContainerButton_location_set)
     bitmap = property(_aui.AuiTabContainerButton_bitmap_get, _aui.AuiTabContainerButton_bitmap_set)
     rect = property(_aui.AuiTabContainerButton_rect_get, _aui.AuiTabContainerButton_rect_set)
 _aui.AuiTabContainerButton_swigregister(AuiTabContainerButton)
@@ -1501,6 +1545,14 @@ class AuiTabContainer(object):
         _aui.AuiTabContainer_swiginit(self,_aui.new_AuiTabContainer(*args, **kwargs))
     __swig_destroy__ = _aui.delete_AuiTabContainer
     __del__ = lambda self : None;
+    def SetArtProvider(*args, **kwargs):
+        """SetArtProvider(self, TabArt art)"""
+        return _aui.AuiTabContainer_SetArtProvider(*args, **kwargs)
+
+    def GetArtProvider(*args, **kwargs):
+        """GetArtProvider(self) -> TabArt"""
+        return _aui.AuiTabContainer_GetArtProvider(*args, **kwargs)
+
     def AddPage(*args, **kwargs):
         """AddPage(self, Window page, AuiNotebookPage info) -> bool"""
         return _aui.AuiTabContainer_AddPage(*args, **kwargs)
@@ -1577,7 +1629,7 @@ class AuiTabContainer(object):
         return _aui.AuiTabContainer_SetRect(*args, **kwargs)
 
     def AddButton(*args, **kwargs):
-        """AddButton(self, int id, Bitmap bmp)"""
+        """AddButton(self, int id, int location, Bitmap bmp)"""
         return _aui.AuiTabContainer_AddButton(*args, **kwargs)
 
     ActivePage = property(GetActivePage,SetActivePage,doc="See `GetActivePage` and `SetActivePage`") 
@@ -1659,6 +1711,14 @@ class AuiMultiNotebook(_core.Control):
         """GetPage(self, size_t page_idx) -> Window"""
         return _aui.AuiMultiNotebook_GetPage(*args, **kwargs)
 
+    def SetArtProvider(*args, **kwargs):
+        """SetArtProvider(self, TabArt art)"""
+        return _aui.AuiMultiNotebook_SetArtProvider(*args, **kwargs)
+
+    def GetArtProvider(*args, **kwargs):
+        """GetArtProvider(self) -> TabArt"""
+        return _aui.AuiMultiNotebook_GetArtProvider(*args, **kwargs)
+
     PageCount = property(GetPageCount,doc="See `GetPageCount`") 
     Selection = property(GetSelection,SetSelection,doc="See `GetSelection` and `SetSelection`") 
 _aui.AuiMultiNotebook_swigregister(AuiMultiNotebook)
@@ -1692,6 +1752,17 @@ class PyDockArt(DefaultDockArt):
     def __init__(self): raise AttributeError, "No constructor defined"
     __repr__ = _swig_repr
 _aui.PyDockArt_swigregister(PyDockArt)
+
+class PyTabArt(DefaultTabArt):
+    """
+    This version of the `TabArt` class has been instrumented to be
+    subclassable in Python and to reflect all calls to the C++ base class
+    methods to the Python methods implemented in the derived class.
+    """
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    def __init__(self): raise AttributeError, "No constructor defined"
+    __repr__ = _swig_repr
+_aui.PyTabArt_swigregister(PyTabArt)
 
 
 

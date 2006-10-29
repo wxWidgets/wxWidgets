@@ -4963,6 +4963,112 @@ class GraphicsFont(GraphicsObject):
     __del__ = lambda self : None;
 _gdi_.GraphicsFont_swigregister(GraphicsFont)
 
+class GraphicsMatrix(GraphicsObject):
+    """Proxy of C++ GraphicsMatrix class"""
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    def __init__(self): raise AttributeError, "No constructor defined"
+    __repr__ = _swig_repr
+    __swig_destroy__ = _gdi_.delete_GraphicsMatrix
+    __del__ = lambda self : None;
+    def Concat(*args, **kwargs):
+        """
+        Concat(self, GraphicsMatrix t)
+
+        concatenates the matrix
+        """
+        return _gdi_.GraphicsMatrix_Concat(*args, **kwargs)
+
+    def Copy(*args, **kwargs):
+        """
+        Copy(self, GraphicsMatrix t)
+
+        Copy the passed in matrix to this one.
+        """
+        return _gdi_.GraphicsMatrix_Copy(*args, **kwargs)
+
+    def Set(*args, **kwargs):
+        """
+        Set(self, Double a=1.0, Double b=0.0, Double c=0.0, Double d=1.0, 
+            Double tx=0.0, Double ty=0.0)
+
+        sets the matrix to the respective values
+        """
+        return _gdi_.GraphicsMatrix_Set(*args, **kwargs)
+
+    def Invert(*args, **kwargs):
+        """
+        Invert(self)
+
+        makes this the inverse matrix
+        """
+        return _gdi_.GraphicsMatrix_Invert(*args, **kwargs)
+
+    def IsEqual(*args, **kwargs):
+        """
+        IsEqual(self, GraphicsMatrix t) -> bool
+
+        returns true if the elements of the transformation matrix are equal
+        """
+        return _gdi_.GraphicsMatrix_IsEqual(*args, **kwargs)
+
+    def IsIdentity(*args, **kwargs):
+        """
+        IsIdentity(self) -> bool
+
+        return true if this is the identity matrix
+        """
+        return _gdi_.GraphicsMatrix_IsIdentity(*args, **kwargs)
+
+    def Translate(*args, **kwargs):
+        """
+        Translate(self, Double dx, Double dy)
+
+        add the translation to this matrix
+        """
+        return _gdi_.GraphicsMatrix_Translate(*args, **kwargs)
+
+    def Scale(*args, **kwargs):
+        """
+        Scale(self, Double xScale, Double yScale)
+
+        add the scale to this matrix
+        """
+        return _gdi_.GraphicsMatrix_Scale(*args, **kwargs)
+
+    def Rotate(*args, **kwargs):
+        """
+        Rotate(self, Double angle)
+
+        add the rotation to this matrix (radians)
+        """
+        return _gdi_.GraphicsMatrix_Rotate(*args, **kwargs)
+
+    def TransformPoint(*args, **kwargs):
+        """
+        TransformPoint(self, x, y) --> (x, y)
+
+        applies that matrix to the point
+        """
+        return _gdi_.GraphicsMatrix_TransformPoint(*args, **kwargs)
+
+    def TransformDistance(*args, **kwargs):
+        """
+        TransformDistance(self, dx, dy) --> (dx, dy)
+
+        applies the matrix except for translations
+        """
+        return _gdi_.GraphicsMatrix_TransformDistance(*args, **kwargs)
+
+    def GetNativeMatrix(*args, **kwargs):
+        """
+        GetNativeMatrix(self) -> void
+
+        returns the native representation
+        """
+        return _gdi_.GraphicsMatrix_GetNativeMatrix(*args, **kwargs)
+
+_gdi_.GraphicsMatrix_swigregister(GraphicsMatrix)
+
 class GraphicsPath(GraphicsObject):
     """Proxy of C++ GraphicsPath class"""
     thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -4970,10 +5076,6 @@ class GraphicsPath(GraphicsObject):
     __repr__ = _swig_repr
     __swig_destroy__ = _gdi_.delete_GraphicsPath
     __del__ = lambda self : None;
-    def Clone(*args, **kwargs):
-        """Clone(self) -> GraphicsPath"""
-        return _gdi_.GraphicsPath_Clone(*args, **kwargs)
-
     def MoveToPoint(*args):
         """
         MoveToPoint(self, Double x, Double y)
@@ -5124,126 +5226,12 @@ class GraphicsPath(GraphicsObject):
 
     def Contains(*args):
         """
-        Contains(self, Double x, Double y, int fillStyle=WINDING_RULE) -> bool
-        Contains(self, wxPoint2DDouble c, int fillStyle=WINDING_RULE) -> bool
+        Contains(self, Double x, Double y, int fillStyle=ODDEVEN_RULE) -> bool
+        Contains(self, wxPoint2DDouble c, int fillStyle=ODDEVEN_RULE) -> bool
         """
         return _gdi_.GraphicsPath_Contains(*args)
 
 _gdi_.GraphicsPath_swigregister(GraphicsPath)
-cvar = _gdi_.cvar
-NullGraphicsPen = cvar.NullGraphicsPen
-NullGraphicsBrush = cvar.NullGraphicsBrush
-NullGraphicsFont = cvar.NullGraphicsFont
-
-class GraphicsMatrix(GraphicsObject):
-    """Proxy of C++ GraphicsMatrix class"""
-    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
-    def __init__(self): raise AttributeError, "No constructor defined"
-    __repr__ = _swig_repr
-    __swig_destroy__ = _gdi_.delete_GraphicsMatrix
-    __del__ = lambda self : None;
-    def Clone(*args, **kwargs):
-        """Clone(self) -> GraphicsMatrix"""
-        return _gdi_.GraphicsMatrix_Clone(*args, **kwargs)
-
-    def Concat(*args, **kwargs):
-        """
-        Concat(self, GraphicsMatrix t)
-
-        concatenates the matrix
-        """
-        return _gdi_.GraphicsMatrix_Concat(*args, **kwargs)
-
-    def Copy(*args, **kwargs):
-        """
-        Copy(self, GraphicsMatrix t)
-
-        copies the passed in matrix
-        """
-        return _gdi_.GraphicsMatrix_Copy(*args, **kwargs)
-
-    def Set(*args, **kwargs):
-        """
-        Set(self, Double a=1.0, Double b=0.0, Double c=0.0, Double d=1.0, 
-            Double tx=0.0, Double ty=0.0)
-
-        sets the matrix to the respective values
-        """
-        return _gdi_.GraphicsMatrix_Set(*args, **kwargs)
-
-    def Invert(*args, **kwargs):
-        """
-        Invert(self)
-
-        makes this the inverse matrix
-        """
-        return _gdi_.GraphicsMatrix_Invert(*args, **kwargs)
-
-    def IsEqual(*args, **kwargs):
-        """
-        IsEqual(self, GraphicsMatrix t) -> bool
-
-        returns true if the elements of the transformation matrix are equal
-        """
-        return _gdi_.GraphicsMatrix_IsEqual(*args, **kwargs)
-
-    def IsIdentity(*args, **kwargs):
-        """
-        IsIdentity(self) -> bool
-
-        return true if this is the identity matrix
-        """
-        return _gdi_.GraphicsMatrix_IsIdentity(*args, **kwargs)
-
-    def Translate(*args, **kwargs):
-        """
-        Translate(self, Double dx, Double dy)
-
-        add the translation to this matrix
-        """
-        return _gdi_.GraphicsMatrix_Translate(*args, **kwargs)
-
-    def Scale(*args, **kwargs):
-        """
-        Scale(self, Double xScale, Double yScale)
-
-        add the scale to this matrix
-        """
-        return _gdi_.GraphicsMatrix_Scale(*args, **kwargs)
-
-    def Rotate(*args, **kwargs):
-        """
-        Rotate(self, Double angle)
-
-        add the rotation to this matrix (radians)
-        """
-        return _gdi_.GraphicsMatrix_Rotate(*args, **kwargs)
-
-    def TransformPoint(*args, **kwargs):
-        """
-        TransformPoint(self, x, y) --> (x, y)
-
-        applies that matrix to the point
-        """
-        return _gdi_.GraphicsMatrix_TransformPoint(*args, **kwargs)
-
-    def TransformDistance(*args, **kwargs):
-        """
-        TransformDistance(self, dx, dy) --> (dx, dy)
-
-        applies the matrix except for translations
-        """
-        return _gdi_.GraphicsMatrix_TransformDistance(*args, **kwargs)
-
-    def GetNativeMatrix(*args, **kwargs):
-        """
-        GetNativeMatrix(self) -> void
-
-        returns the native representation
-        """
-        return _gdi_.GraphicsMatrix_GetNativeMatrix(*args, **kwargs)
-
-_gdi_.GraphicsMatrix_swigregister(GraphicsMatrix)
 
 class GraphicsContext(GraphicsObject):
     """Proxy of C++ GraphicsContext class"""
@@ -5399,6 +5387,30 @@ class GraphicsContext(GraphicsObject):
         """
         return _gdi_.GraphicsContext_Rotate(*args, **kwargs)
 
+    def ConcatTransform(*args, **kwargs):
+        """
+        ConcatTransform(self, GraphicsMatrix matrix)
+
+        concatenates this transform with the current transform of this context
+        """
+        return _gdi_.GraphicsContext_ConcatTransform(*args, **kwargs)
+
+    def SetTransform(*args, **kwargs):
+        """
+        SetTransform(self, GraphicsMatrix matrix)
+
+        sets the transform of this context
+        """
+        return _gdi_.GraphicsContext_SetTransform(*args, **kwargs)
+
+    def GetTransform(*args, **kwargs):
+        """
+        GetTransform(self) -> GraphicsMatrix
+
+        gets the matrix of this context
+        """
+        return _gdi_.GraphicsContext_GetTransform(*args, **kwargs)
+
     def SetPen(*args):
         """
         SetPen(self, GraphicsPen pen)
@@ -5436,7 +5448,7 @@ class GraphicsContext(GraphicsObject):
 
     def FillPath(*args, **kwargs):
         """
-        FillPath(self, GraphicsPath path, int fillStyle=WINDING_RULE)
+        FillPath(self, GraphicsPath path, int fillStyle=ODDEVEN_RULE)
 
         fills a path with the current brush
         """
@@ -5444,7 +5456,7 @@ class GraphicsContext(GraphicsObject):
 
     def DrawPath(*args, **kwargs):
         """
-        DrawPath(self, GraphicsPath path, int fillStyle=WINDING_RULE)
+        DrawPath(self, GraphicsPath path, int fillStyle=ODDEVEN_RULE)
 
         draws a path by first filling and then stroking
         """
@@ -5504,7 +5516,7 @@ class GraphicsContext(GraphicsObject):
 
     def DrawLines(*args, **kwargs):
         """
-        DrawLines(self, size_t points, int fillStyle=WINDING_RULE)
+        DrawLines(self, size_t points, int fillStyle=ODDEVEN_RULE)
 
         draws a polygon
         """
@@ -5543,6 +5555,12 @@ class GraphicsContext(GraphicsObject):
         return _gdi_.GraphicsContext_ShouldOffset(*args, **kwargs)
 
 _gdi_.GraphicsContext_swigregister(GraphicsContext)
+cvar = _gdi_.cvar
+NullGraphicsPen = cvar.NullGraphicsPen
+NullGraphicsBrush = cvar.NullGraphicsBrush
+NullGraphicsFont = cvar.NullGraphicsFont
+NullGraphicsMatrix = cvar.NullGraphicsMatrix
+NullGraphicsPath = cvar.NullGraphicsPath
 
 def GraphicsContext_Create(*args):
   """

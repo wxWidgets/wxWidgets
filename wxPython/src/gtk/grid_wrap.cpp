@@ -3482,6 +3482,7 @@ IMP_PYCALLBACK__(wxPyGridCellEditor, wxGridCellEditor, Destroy);
 IMP_PYCALLBACK_STRING__constpure(wxPyGridCellEditor, wxGridCellEditor, GetValue);
 
 
+ static const wxString wxPyOneString(_T("1")); 
 SWIGINTERN void wxGridCellAttr__setOORInfo(wxGridCellAttr *self,PyObject *_self){
             if (!self->GetClientObject())
                 self->SetClientObject(new wxPyOORClientData(_self));
@@ -5700,6 +5701,26 @@ SWIGINTERN PyObject *GridCellFloatEditor_swiginit(PyObject *SWIGUNUSEDPARM(self)
   return SWIG_Python_InitShadowInstance(args);
 }
 
+SWIGINTERN int OneString_set(PyObject *) {
+  SWIG_Error(SWIG_AttributeError,"Variable OneString is read-only.");
+  return 1;
+}
+
+
+SWIGINTERN PyObject *OneString_get(void) {
+  PyObject *pyobj = 0;
+  
+  {
+#if wxUSE_UNICODE
+    pyobj = PyUnicode_FromWideChar((&wxPyOneString)->c_str(), (&wxPyOneString)->Len());
+#else
+    pyobj = PyString_FromStringAndSize((&wxPyOneString)->c_str(), (&wxPyOneString)->Len());
+#endif
+  }
+  return pyobj;
+}
+
+
 SWIGINTERN PyObject *_wrap_new_GridCellBoolEditor(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   wxGridCellBoolEditor *result = 0 ;
@@ -5714,6 +5735,103 @@ SWIGINTERN PyObject *_wrap_new_GridCellBoolEditor(PyObject *SWIGUNUSEDPARM(self)
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_wxGridCellBoolEditor, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_GridCellBoolEditor_UseStringValues(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxString const &arg1_defvalue = wxPyOneString ;
+  wxString *arg1 = (wxString *) &arg1_defvalue ;
+  wxString const &arg2_defvalue = wxPyEmptyString ;
+  wxString *arg2 = (wxString *) &arg2_defvalue ;
+  bool temp1 = false ;
+  bool temp2 = false ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "valueTrue",(char *) "valueFalse", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"|OO:GridCellBoolEditor_UseStringValues",kwnames,&obj0,&obj1)) SWIG_fail;
+  if (obj0) {
+    {
+      arg1 = wxString_in_helper(obj0);
+      if (arg1 == NULL) SWIG_fail;
+      temp1 = true;
+    }
+  }
+  if (obj1) {
+    {
+      arg2 = wxString_in_helper(obj1);
+      if (arg2 == NULL) SWIG_fail;
+      temp2 = true;
+    }
+  }
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxGridCellBoolEditor::UseStringValues((wxString const &)*arg1,(wxString const &)*arg2);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  {
+    if (temp1)
+    delete arg1;
+  }
+  {
+    if (temp2)
+    delete arg2;
+  }
+  return resultobj;
+fail:
+  {
+    if (temp1)
+    delete arg1;
+  }
+  {
+    if (temp2)
+    delete arg2;
+  }
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_GridCellBoolEditor_IsTrueValue(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxString *arg1 = 0 ;
+  bool result;
+  bool temp1 = false ;
+  PyObject * obj0 = 0 ;
+  char *  kwnames[] = {
+    (char *) "value", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:GridCellBoolEditor_IsTrueValue",kwnames,&obj0)) SWIG_fail;
+  {
+    arg1 = wxString_in_helper(obj0);
+    if (arg1 == NULL) SWIG_fail;
+    temp1 = true;
+  }
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = (bool)wxGridCellBoolEditor::IsTrueValue((wxString const &)*arg1);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  {
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+  }
+  {
+    if (temp1)
+    delete arg1;
+  }
+  return resultobj;
+fail:
+  {
+    if (temp1)
+    delete arg1;
+  }
   return NULL;
 }
 
@@ -20576,6 +20694,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"GridCellFloatEditor_swigregister", GridCellFloatEditor_swigregister, METH_VARARGS, NULL},
 	 { (char *)"GridCellFloatEditor_swiginit", GridCellFloatEditor_swiginit, METH_VARARGS, NULL},
 	 { (char *)"new_GridCellBoolEditor", (PyCFunction)_wrap_new_GridCellBoolEditor, METH_NOARGS, NULL},
+	 { (char *)"GridCellBoolEditor_UseStringValues", (PyCFunction) _wrap_GridCellBoolEditor_UseStringValues, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"GridCellBoolEditor_IsTrueValue", (PyCFunction) _wrap_GridCellBoolEditor_IsTrueValue, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"GridCellBoolEditor_swigregister", GridCellBoolEditor_swigregister, METH_VARARGS, NULL},
 	 { (char *)"GridCellBoolEditor_swiginit", GridCellBoolEditor_swiginit, METH_VARARGS, NULL},
 	 { (char *)"new_GridCellChoiceEditor", (PyCFunction) _wrap_new_GridCellChoiceEditor, METH_VARARGS | METH_KEYWORDS, NULL},
@@ -23387,6 +23507,7 @@ SWIGEXPORT void SWIG_init(void) {
   SWIG_Python_SetConstant(d, "GRID_MIN_ROW_HEIGHT",SWIG_From_int(static_cast< int >(wxGRID_MIN_ROW_HEIGHT)));
   SWIG_Python_SetConstant(d, "GRID_MIN_COL_WIDTH",SWIG_From_int(static_cast< int >(wxGRID_MIN_COL_WIDTH)));
   SWIG_Python_SetConstant(d, "GRID_DEFAULT_SCROLLBAR_WIDTH",SWIG_From_int(static_cast< int >(wxGRID_DEFAULT_SCROLLBAR_WIDTH)));
+  SWIG_addvarlink(SWIG_globals(),(char*)"OneString",OneString_get, OneString_set);
   SWIG_Python_SetConstant(d, "GridCellAttr_Any",SWIG_From_int(static_cast< int >(wxGridCellAttr::Any)));
   SWIG_Python_SetConstant(d, "GridCellAttr_Default",SWIG_From_int(static_cast< int >(wxGridCellAttr::Default)));
   SWIG_Python_SetConstant(d, "GridCellAttr_Cell",SWIG_From_int(static_cast< int >(wxGridCellAttr::Cell)));
