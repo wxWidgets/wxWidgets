@@ -1047,22 +1047,44 @@ void wxFileDataObject::AddFile(const wxString& file)
 size_t wxFileDataObject::GetDataSize() const
 {
 #ifndef __WXWINCE__
-    // size returned will be the size of the DROPFILES structure,
-    // plus the list of filesnames (null byte separated), plus
-    // a double null at the end
+    // size returned will be the size of the DROPFILES structure, plus the list
+    // of filesnames (null byte separated), plus a double null at the end
 
     // if no filenames in list, size is 0
-    if ( m_filenames.GetCount() == 0 )
+    if ( m_filenames.empty() )
         return 0;
 
-    // inital size of DROPFILES struct + null byte
-    size_t sz = sizeof(DROPFILES) + (1 * sizeof(wxChar));
+#if wxUSE_UNICODE_MSLU
+    size_t sizeOfChar;
+    if ( wxGetOsVersion() == wxWIN95 )
+    {
+        // Win9x always uses ANSI file names and MSLU doesn't help with this
+        sizeOfChar = sizeof(char);
+    }
+    else
+    {
+        sizeOfChar = sizeof(wxChar);
+    }
+#else // !wxUSE_UNICODE_MSLU
+    static const size_t sizeOfChar = sizeof(wxChar);
+#endif // wxUSE_UNICODE_MSLU/!wxUSE_UNICODE_MSLU
 
-    size_t count = m_filenames.GetCount();
+    // inital size of DROPFILES struct + null byte
+    size_t sz = sizeof(DROPFILES) + sizeOfChar;
+
+    const size_t count = m_filenames.size();
     for ( size_t i = 0; i < count; i++ )
     {
         // add filename length plus null byte
-        sz += (m_filenames[i].Len() + 1) * sizeof(wxChar);
+        size_t len;
+#if wxUSE_UNICODE_MSLU
+        if ( sizeOfChar == sizeof(char) )
+            len = strlen(wxConvFileName->cWC2MB(m_filenames[i]));
+        else
+#endif // wxUSE_UNICODE_MSLU
+            len = m_filenames[i].length();
+
+        sz += (len + 1) * sizeOfChar;
     }
 
     return sz;
@@ -1078,7 +1100,7 @@ bool wxFileDataObject::GetDataHere(void *WXUNUSED_IN_WINCE(pData)) const
     // created using the size returned by GetDataSize()
 
     // if pData is NULL, or there are no files, return
-    if ( !pData || m_filenames.GetCount() == 0 )
+    if ( !pData || m_filenames.empty() )
         return false;
 
     // convert data pointer to a DROPFILES struct pointer
@@ -1087,27 +1109,44 @@ bool wxFileDataObject::GetDataHere(void *WXUNUSED_IN_WINCE(pData)) const
     // initialize DROPFILES struct
     pDrop->pFiles = sizeof(DROPFILES);
     pDrop->fNC = FALSE;                 // not non-client coords
-#if wxUSE_UNICODE
-    pDrop->fWide = TRUE;
-#else // ANSI
-    pDrop->fWide = FALSE;
-#endif // Unicode/Ansi
+#if wxUSE_UNICODE_MSLU
+    pDrop->fWide = wxGetOsVersion() != wxWIN95 ? TRUE : FALSE;
+#else
+    pDrop->fWide = wxUSE_UNICODE;
+#endif
+
+    const size_t sizeOfChar = pDrop->fWide ? sizeof(wchar_t) : sizeof(char);
 
     // set start of filenames list (null separated)
-    wxChar *pbuf = (wxChar*) ((BYTE *)pDrop + sizeof(DROPFILES));
+    BYTE *pbuf = (BYTE *)(pDrop + 1);
 
-    size_t count = m_filenames.GetCount();
-    for (size_t i = 0; i < count; i++ )
+    const size_t count = m_filenames.size();
+    for ( size_t i = 0; i < count; i++ )
     {
         // copy filename to pbuf and add null terminator
-        size_t len = m_filenames[i].Len();
-        memcpy(pbuf, m_filenames[i], len*sizeof(wxChar));
-        pbuf += len;
-        *pbuf++ = wxT('\0');
+        size_t len;
+#if wxUSE_UNICODE_MSLU
+        if ( sizeOfChar == sizeof(char) )
+        {
+            wxCharBuffer buf(wxConvFileName->cWC2MB(m_filenames[i]));
+            len = strlen(buf);
+            memcpy(pbuf, buf, len*sizeOfChar);
+        }
+        else
+#endif // wxUSE_UNICODE_MSLU
+        {
+            len = m_filenames[i].length();
+            memcpy(pbuf, m_filenames[i].c_str(), len*sizeOfChar);
+        }
+
+        pbuf += len*sizeOfChar;
+
+        memset(pbuf, 0, sizeOfChar);
+        pbuf += sizeOfChar;
     }
 
     // add final null terminator
-    *pbuf = wxT('\0');
+    memset(pbuf, 0, sizeOfChar);
 
     return true;
 #else
