@@ -246,12 +246,9 @@ static void wxMSWDrawFocusRect( wxDC& dc, const wxRect& rect )
 }
 
 // draw focus background on area in a way typical on platform
-void wxComboCtrl::PrepareBackground( wxDC& dc, const wxRect& rect, int flags ) const
+void
+wxComboCtrl::PrepareBackground( wxDC& dc, const wxRect& rect, int flags ) const
 {
-    wxUxThemeEngine* theme = (wxUxThemeEngine*) NULL;
-
-    // Constructor only calls GetHWND() const, so it should be safe
-    // to cast "this" to const.
     wxUxThemeHandle hTheme(this, L"COMBOBOX");
     //COLORREF cref;
 
@@ -314,8 +311,9 @@ void wxComboCtrl::PrepareBackground( wxDC& dc, const wxRect& rect, int flags ) c
     selRect.x += wcp + focusSpacingX;
     selRect.width -= wcp + (focusSpacingX*2);
 
-    if ( hTheme )
-        theme = wxUxThemeEngine::GetIfActive();
+    //wxUxThemeEngine* theme = (wxUxThemeEngine*) NULL;
+    //if ( hTheme )
+    //    theme = wxUxThemeEngine::GetIfActive();
 
     wxColour bgCol;
     bool drawDottedEdge = false;
