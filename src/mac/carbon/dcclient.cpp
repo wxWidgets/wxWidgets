@@ -133,7 +133,6 @@ wxWindowDC::wxWindowDC(wxWindow *window)
     if ( cg == NULL )
     {
         SetGraphicsContext( wxGraphicsContext::Create( window ) ) ;
-        SetDeviceOrigin( x, y );
     }
     else
     {
@@ -188,7 +187,7 @@ void wxWindowDC::DoGetSize( int* width, int* height ) const
 #endif
 }
 
-wxBitmap wxWindowDC::DoGetAsBitmap() const
+wxBitmap wxWindowDC::DoGetAsBitmap(const wxRect *subrect) const
 {
     ControlRef handle = (ControlRef) m_window->GetHandle(); 
     if ( !handle )
@@ -203,14 +202,17 @@ wxBitmap wxWindowDC::DoGetAsBitmap() const
     
     HIViewCreateOffscreenImage( handle, 0, &rect, &image);
     
-    int width = rect.size.width;
-    int height = rect.size.height; 
+    
+    int width = subrect != NULL ? subrect->width : rect.size.width;
+    int height = subrect !=  NULL ? subrect->height : rect.size.height ; 
     
     bytesPerRow = ( ( width * 8 * 4 + 7 ) / 8 );
 
     data = calloc( 1, bytesPerRow * height );
     context = CGBitmapContextCreate( data, width, height, 8, bytesPerRow, CGColorSpaceCreateDeviceRGB(), kCGImageAlphaPremultipliedFirst );
     
+    if ( subrect )
+        rect = CGRectOffset( rect, -subrect->x, -subrect->y ) ;
     CGContextDrawImage( context, rect, image );
 
     unsigned char* buffer = (unsigned char*) data;          
