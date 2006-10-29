@@ -32,7 +32,13 @@
     #include "sample.xpm"
 #endif
 
+#include "wx/aboutdlg.h"
 #include "anitest.h"
+
+#if !wxUSE_ANIMATIONCTRL
+    #error Cannot compile this sample if wxAnimationCtrl is not enabled
+#endif
+
 
 IMPLEMENT_APP(MyApp)
 
@@ -133,18 +139,10 @@ MyFrame::MyFrame(wxWindow *parent,
        : wxFrame(parent, id, title, pos, size,
                           style | wxNO_FULL_REPAINT_ON_RESIZE)
 {
-    //m_canvas = new MyCanvas(this, wxPoint(0, 0), wxDefaultSize);
-
-    //wxSizer *sz = new wxBoxSizer(wxVERTICAL);
-
     m_animationCtrl = new wxAnimationCtrl(this, wxID_ANY, wxNullAnimation,
                                           wxPoint(0,0),wxSize(100,100));
     if (m_animationCtrl->LoadFile(wxT("throbber.gif")))
         m_animationCtrl->Play();
-
-    //sz->Add(m_animationCtrl, 1, wxGROW);
-
-    //SetSizer(sz);
 }
 
 MyFrame::~MyFrame()
@@ -169,16 +167,16 @@ void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event) )
 {
-    /*
+    wxAboutDialogInfo info;
+    info.SetName(_("wxAnimationCtrl and wxAnimation sample"));
+    info.SetDescription(_("This sample program demonstrates the usage of wxAnimationCtrl"));
+    info.SetCopyright(_T("(C) 2006 Julian Smart"));
 
-    FIXME: on wxGTK at least using File->About command it shows
-    the message dialog but does not focus it
+    info.AddDeveloper(_T("Julian Smart"));
+    info.AddDeveloper(_T("Guillermo Rodriguez Garcia"));
+    info.AddDeveloper(_T("Francesco Montorsi"));
 
-    */
-
-    (void)wxMessageBox(_T("wxWidgets 2 Animation Demo\n")
-                       _T("Author: Julian Smart (c) 2001\n"),
-                       _T("About Animation Demo"));
+    wxAboutBox(info);
 }
 
 #if wxUSE_FILEDLG
@@ -236,27 +234,3 @@ void MyFrame::OnUpdateUI(wxUpdateUIEvent& WXUNUSED(event) )
     GetMenuBar()->FindItem(ID_PLAY)->Enable(!m_animationCtrl->IsPlaying());
 }
 
-// ---------------------------------------------------------------------------
-// MyCanvas
-// ---------------------------------------------------------------------------
-
-BEGIN_EVENT_TABLE(MyCanvas, wxScrolledWindow)
-    //EVT_PAINT(MyCanvas::OnPaint)
-END_EVENT_TABLE()
-
-// Define a constructor for my canvas
-MyCanvas::MyCanvas(wxWindow *parent, const wxPoint& pos, const wxSize& size)
-        : wxScrolledWindow(parent, wxID_ANY, pos, size,
-                           wxSUNKEN_BORDER |
-                           wxNO_FULL_REPAINT_ON_RESIZE |
-                           wxVSCROLL | wxHSCROLL)
-{
-    SetBackgroundColour(wxColour(_T("YELLOW")));
-}
-
-void MyCanvas::OnPaint(wxPaintEvent& WXUNUSED(event))
-{
-    //wxPaintDC dc(this);
-
-    //dc.DrawRotatedText(wxT("Background"),
-}

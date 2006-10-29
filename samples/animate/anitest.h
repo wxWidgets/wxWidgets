@@ -18,16 +18,6 @@ public:
     bool OnInit();
 };
 
-class MyCanvas : public wxScrolledWindow
-{
-public:
-    MyCanvas(wxWindow *parent, const wxPoint& pos, const wxSize& size);
-    void OnPaint(wxPaintEvent& event);
-
-private:
-    DECLARE_EVENT_TABLE()
-};
-
 // Define a new frame
 class MyFrame : public wxFrame
 {
@@ -49,11 +39,9 @@ public:
     void OnOpen(wxCommandEvent& event);
 #endif // wxUSE_FILEDLG
 
-    MyCanvas* GetCanvas() const { return m_canvas; }
     wxAnimationCtrl* GetAnimationCtrl() const { return m_animationCtrl; }
 
 protected:
-    MyCanvas*           m_canvas;
     wxAnimationCtrl*    m_animationCtrl;
 
 private:
