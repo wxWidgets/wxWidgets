@@ -90,7 +90,7 @@ here:
 
 \docparam{window}{The window to be added to the sizer. Its initial size (either set explicitly by the
 user or calculated internally when using wxDefaultSize) is interpreted as the minimal and in many
-cases also the initial size. This is particularly useful in connection with \helpref{SetSizeHints}{wxsizersetsizehints}.}
+cases also the initial size.}
 
 \docparam{sizer}{The (child-)sizer to be added to the sizer. This allows placing a child sizer in a
 sizer and thus to create hierarchies of sizers (typically a vertical box as the top sizer and several
@@ -492,11 +492,16 @@ after initial creation.
 
 \func{void}{SetSizeHints}{\param{wxWindow* }{window}}
 
-Tell the sizer to set (and \helpref{Fit}{wxsizerfit}) the minimal size of the \arg{window} to
-match the sizer's minimal size.  This is commonly done in the constructor of the window itself,
-see sample in the description of \helpref{wxBoxSizer}{wxboxsizer} if the window is resizable
-(as are many dialogs under Unix and frames on probably all platforms).
+This method first calls \helpref{wxSizer::Fit}{wxsizerfit} and then 
+\helpref{SetSizeHints}{wxtoplevelwindowsetsizehints} on the {\it window}
+passed to it. This only makes sense when {\it window} is actually a
+\helpref{wxTopLevelWindow}{wxtoplevelwindow} such as a wxFrame or a
+wxDialog, since SetSizeHints only has any effect in these classes. 
+It does nothing in normal windows or controls.
 
+This method is commonly invoked in the constructor of a toplevel window itself
+(see the sample in the description of \helpref{wxBoxSizer}{wxboxsizer}) if the
+toplevel window is resizable.
 
 \membersection{wxSizer::SetVirtualSizeHints}\label{wxsizersetvirtualsizehints}
 
