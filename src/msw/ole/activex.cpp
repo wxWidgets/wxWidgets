@@ -894,7 +894,6 @@ void wxActiveXContainer::CreateActiveX(REFIID iid, IUnknown* pUnk)
             continue;
 
         // check if default event sink
-        bool defInterface = false;
         bool defEventSink = false;
         int impTypeFlags = 0;
         typeInfo->GetImplTypeFlags(i, &impTypeFlags);
@@ -911,11 +910,6 @@ void wxActiveXContainer::CreateActiveX(REFIID iid, IUnknown* pUnk)
                     defEventSink = false;
                     wxFAIL_MSG(wxT("Default event sink is in vtable!"));
                 }
-            }
-            else
-            {
-                // WXOLE_TRACEOUT("Default Interface");
-                defInterface = true;
             }
         }
 
