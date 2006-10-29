@@ -42,6 +42,8 @@ enum wxStreamError
     wxSTREAM_READ_ERROR         // generic read error
 };
 
+const int wxEOF = -1;
+
 // ============================================================================
 // base stream classes: wxInputStream and wxOutputStream
 // ============================================================================
@@ -106,11 +108,11 @@ public:
     // undefined), otherwise 1
     virtual char Peek();
 
-    // return one character from the stream, blocking until it appears if
+    // return one byte from the stream, blocking until it appears if
     // necessary
     //
-    // if EOF, return value is undefined and LastRead() will return 0 and not 1
-    char GetC();
+    // on success returns a value between 0 - 255, or wxEOF on EOF or error.
+    int GetC();
 
     // read at most the given number of bytes from the stream
     //

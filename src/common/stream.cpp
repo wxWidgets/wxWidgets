@@ -809,11 +809,11 @@ bool wxInputStream::Ungetch(char c)
     return Ungetch(&c, sizeof(c)) != 0;
 }
 
-char wxInputStream::GetC()
+int wxInputStream::GetC()
 {
-    char c;
+    unsigned char c;
     Read(&c, sizeof(c));
-    return c;
+    return LastRead() ? c : wxEOF;
 }
 
 wxInputStream& wxInputStream::Read(void *buf, size_t size)
