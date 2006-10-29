@@ -61,9 +61,6 @@ bool MyApp::OnInit()
   main_frame = new MyMainFrame((wxFrame *) NULL, wxID_ANY, _T("wxFrame sample"),
      wxPoint(100, 100), wxSize(300, 200));
 
-  // main_frame->SetMinSize( wxSize(100,100) );
-  // main_frame->SetMaxSize( wxSize(400,400) );
-  // same as
   main_frame->SetSizeHints( 100,100, 400,400 );
 
   wxMenu *file_menu = new wxMenu;
@@ -238,10 +235,10 @@ void MyMainFrame::OnSetSize_200_200(wxCommandEvent& WXUNUSED(event))
 
 void MyMainFrame::OnSetMaxSize_150_150(wxCommandEvent& WXUNUSED(event))
 {
-    SetMaxSize( wxSize(150,150) );
+    SetSizeHints( -1, -1, 150, 150 );
 }
 
 void MyMainFrame::OnSetMaxSize_300_300(wxCommandEvent& WXUNUSED(event))
 {
-    SetMaxSize( wxSize(300,300) );
+    SetSizeHints( -1, -1, 300, 300 );
 }
