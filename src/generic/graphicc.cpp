@@ -103,14 +103,13 @@ static inline double RadToDeg(double deg)
 #include <gtk/gtk.h>
 #endif
 
-class WXDLLIMPEXP_CORE wxCairoPath : public wxGraphicsPath
+class WXDLLIMPEXP_CORE wxCairoPathData : public wxGraphicsPathData
 {
 public :
-    wxCairoPath();
-    wxCairoPath(wxGraphicsRenderer* renderer, cairo_t* pathcontext = NULL);
-    ~wxCairoPath();
+    wxCairoPathData(wxGraphicsRenderer* renderer, cairo_t* path = NULL);
+    ~wxCairoPathData();
 
-    virtual wxGraphicsPath *Clone() const;
+    virtual wxGraphicsObjectRefData *Clone() const;
 
     //
     // These are the path primitives from which everything else can be constructed
@@ -130,10 +129,10 @@ public :
     virtual void AddArc( wxDouble x, wxDouble y, wxDouble r, wxDouble startAngle, wxDouble endAngle, bool clockwise ) ;
 
     // gets the last point of the current path, (0,0) if not yet set
-    virtual void GetCurrentPoint( wxDouble& x, wxDouble&y) ;
+    virtual void GetCurrentPoint( wxDouble* x, wxDouble* y) const;
 
     // adds another path
-    virtual void AddPath( const wxGraphicsPath* path );
+    virtual void AddPath( const wxGraphicsPathData* path );
 
     // closes the current sub-path
     virtual void CloseSubpath();
@@ -158,36 +157,30 @@ public :
     virtual void * GetNativePath() const ;
 
     // give the native path returned by GetNativePath() back (there might be some deallocations necessary)
-    virtual void UnGetNativePath(void *p) ;
+    virtual void UnGetNativePath(void *p) const;
 
     // transforms each point of this path by the matrix
-    virtual void Transform( wxGraphicsMatrix* matrix ) ;
+    virtual void Transform( const wxGraphicsMatrixData* matrix ) ;
 
     // gets the bounding box enclosing all points (possibly including control points)
-    virtual void GetBox(wxDouble *x, wxDouble *y, wxDouble *w, wxDouble *h) ;
+    virtual void GetBox(wxDouble *x, wxDouble *y, wxDouble *w, wxDouble *h) const;
 
-    virtual bool Contains( wxDouble x, wxDouble y, int fillStyle = wxWINDING_RULE) ;
+    virtual bool Contains( wxDouble x, wxDouble y, int fillStyle = wxWINDING_RULE) const;
 
 private :
     cairo_t* m_pathContext;
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxCairoPath)
 };
 
-class WXDLLIMPEXP_CORE wxCairoMatrix : public wxGraphicsMatrix
+class WXDLLIMPEXP_CORE wxCairoMatrixData : public wxGraphicsMatrixData
 {
 public :
-    wxCairoMatrix() ;
+    wxCairoMatrixData(wxGraphicsRenderer* renderer, const cairo_matrix_t* matrix = NULL ) ;
+    virtual ~wxCairoMatrixData() ;
 
-    wxCairoMatrix(wxGraphicsRenderer* renderer, const cairo_matrix_t* matrix = NULL ) ;
-    virtual ~wxCairoMatrix() ;
-
-    virtual wxGraphicsMatrix *Clone() const ;
+    virtual wxGraphicsObjectRefData *Clone() const ;
 
     // concatenates the matrix
-    virtual void Concat( const wxGraphicsMatrix *t );
-
-    // copies the passed in matrix
-    virtual void Copy( const wxGraphicsMatrix *t );
+    virtual void Concat( const wxGraphicsMatrixData *t );
 
     // sets the matrix to the respective values
     virtual void Set(wxDouble a=1.0, wxDouble b=0.0, wxDouble c=0.0, wxDouble d=1.0, 
@@ -197,10 +190,10 @@ public :
     virtual void Invert();
 
     // returns true if the elements of the transformation matrix are equal ?
-    virtual bool IsEqual( const wxGraphicsMatrix* t) const ;
+    virtual bool IsEqual( const wxGraphicsMatrixData* t) const ;
 
     // return true if this is the identity matrix
-    virtual bool IsIdentity();
+    virtual bool IsIdentity() const;
 
     //
     // transformation
@@ -220,17 +213,15 @@ public :
     //
 
     // applies that matrix to the point
-    virtual void TransformPoint( wxDouble *x, wxDouble *y );
+    virtual void TransformPoint( wxDouble *x, wxDouble *y ) const;
 
     // applies the matrix except for translations
-    virtual void TransformDistance( wxDouble *dx, wxDouble *dy );
+    virtual void TransformDistance( wxDouble *dx, wxDouble *dy ) const;
 
     // returns the native representation
     virtual void * GetNativeMatrix() const;
 private:
     cairo_matrix_t m_matrix ;
-
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxCairoMatrix)
 } ;
 
 class WXDLLIMPEXP_CORE wxCairoPenData : public wxGraphicsObjectRefData
@@ -329,21 +320,21 @@ public:
 
     virtual void * GetNativeContext();
 
-    virtual void StrokePath( const wxGraphicsPath *p );
-    virtual void FillPath( const wxGraphicsPath *p , int fillStyle = wxWINDING_RULE );
+    virtual void StrokePath( const wxGraphicsPath& p );
+    virtual void FillPath( const wxGraphicsPath& p , int fillStyle = wxWINDING_RULE );
 
     virtual void Translate( wxDouble dx , wxDouble dy );
     virtual void Scale( wxDouble xScale , wxDouble yScale );
     virtual void Rotate( wxDouble angle );
 
     // concatenates this transform with the current transform of this context
-    virtual void ConcatTransform( const wxGraphicsMatrix* matrix );
+    virtual void ConcatTransform( const wxGraphicsMatrix& matrix );
 
     // sets the transform of this context
-    virtual void SetTransform( const wxGraphicsMatrix* matrix );
+    virtual void SetTransform( const wxGraphicsMatrix& matrix );
 
     // gets the matrix of this context
-    virtual void GetTransform( wxGraphicsMatrix* matrix );
+    virtual wxGraphicsMatrix GetTransform() const;
 
     virtual void DrawBitmap( const wxBitmap &bmp, wxDouble x, wxDouble y, wxDouble w, wxDouble h );
     virtual void DrawIcon( const wxIcon &icon, wxDouble x, wxDouble y, wxDouble w, wxDouble h );
@@ -700,18 +691,11 @@ void wxCairoFontData::Apply( wxGraphicsContext* context )
 }
 
 //-----------------------------------------------------------------------------
-// wxCairoPath implementation
+// wxCairoPathData implementation
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxCairoPath,wxGraphicsPath)
-
-wxCairoPath::wxCairoPath() : wxGraphicsPath(NULL)
-{
-    wxLogDebug(wxT("Illegal Constructor called"));
-}
-
-wxCairoPath::wxCairoPath( wxGraphicsRenderer* renderer, cairo_t* pathcontext) 
-    : wxGraphicsPath(renderer)
+wxCairoPathData::wxCairoPathData( wxGraphicsRenderer* renderer, cairo_t* pathcontext)
+    : wxGraphicsPathData(renderer)
 {
     if (pathcontext)
     {
@@ -725,12 +709,12 @@ wxCairoPath::wxCairoPath( wxGraphicsRenderer* renderer, cairo_t* pathcontext)
     }
 }
 
-wxCairoPath::~wxCairoPath()
+wxCairoPathData::~wxCairoPathData()
 {
     cairo_destroy(m_pathContext);
 }
 
-wxGraphicsPath *wxCairoPath::Clone() const
+wxGraphicsObjectRefData *wxCairoPathData::Clone() const
 {
     cairo_surface_t* surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32,1,1);
     cairo_t* pathcontext = cairo_create(surface);
@@ -739,16 +723,16 @@ wxGraphicsPath *wxCairoPath::Clone() const
     cairo_path_t* path = cairo_copy_path(m_pathContext);
     cairo_append_path(pathcontext, path);
     cairo_path_destroy(path);
-    return new wxCairoPath( GetRenderer() ,pathcontext);
+    return new wxCairoPathData( GetRenderer() ,pathcontext);
 }
 
 
-void* wxCairoPath::GetNativePath() const
+void* wxCairoPathData::GetNativePath() const
 {
     return cairo_copy_path(m_pathContext) ;
 }
 
-void wxCairoPath::UnGetNativePath(void *p)
+void wxCairoPathData::UnGetNativePath(void *p) const
 {
     cairo_path_destroy((cairo_path_t*)p);
 }
@@ -757,41 +741,43 @@ void wxCairoPath::UnGetNativePath(void *p)
 // The Primitives
 //
 
-void wxCairoPath::MoveToPoint( wxDouble x , wxDouble y )
+void wxCairoPathData::MoveToPoint( wxDouble x , wxDouble y )
 {
     cairo_move_to(m_pathContext,x,y);
 }
 
-void wxCairoPath::AddLineToPoint( wxDouble x , wxDouble y )
+void wxCairoPathData::AddLineToPoint( wxDouble x , wxDouble y )
 {
     cairo_line_to(m_pathContext,x,y);
 }
 
-void wxCairoPath::AddPath( const wxGraphicsPath* path )
+void wxCairoPathData::AddPath( const wxGraphicsPathData* path )
 {
     // TODO
 }
 
-void wxCairoPath::CloseSubpath()
+void wxCairoPathData::CloseSubpath()
 {
     cairo_close_path(m_pathContext);
 }
 
-void wxCairoPath::AddCurveToPoint( wxDouble cx1, wxDouble cy1, wxDouble cx2, wxDouble cy2, wxDouble x, wxDouble y )
+void wxCairoPathData::AddCurveToPoint( wxDouble cx1, wxDouble cy1, wxDouble cx2, wxDouble cy2, wxDouble x, wxDouble y )
 {
     cairo_curve_to(m_pathContext,cx1,cy1,cx2,cy2,x,y);
 }
 
 // gets the last point of the current path, (0,0) if not yet set
-void wxCairoPath::GetCurrentPoint( wxDouble& x, wxDouble&y)
+void wxCairoPathData::GetCurrentPoint( wxDouble* x, wxDouble* y) const
 {
     double dx,dy;
     cairo_get_current_point(m_pathContext,&dx,&dy);
-    x = dx;
-    y = dy;
+    if (x)
+        *x = dx;
+    if (y)
+        *y = dy;
 }
 
-void wxCairoPath::AddArc( wxDouble x, wxDouble y, wxDouble r, double startAngle, double endAngle, bool clockwise )
+void wxCairoPathData::AddArc( wxDouble x, wxDouble y, wxDouble r, double startAngle, double endAngle, bool clockwise )
 {
     // as clockwise means positive in our system (y pointing downwards) 
     // TODO make this interpretation dependent of the
@@ -803,7 +789,7 @@ void wxCairoPath::AddArc( wxDouble x, wxDouble y, wxDouble r, double startAngle,
 }
 
 // transforms each point of this path by the matrix
-void wxCairoPath::Transform( wxGraphicsMatrix* matrix ) 
+void wxCairoPathData::Transform( const wxGraphicsMatrixData* matrix ) 
 {
     // as we don't have a true path object, we have to apply the inverse
     // matrix to the context
@@ -813,7 +799,7 @@ void wxCairoPath::Transform( wxGraphicsMatrix* matrix )
 }   
 
 // gets the bounding box enclosing all points (possibly including control points)
-void wxCairoPath::GetBox(wxDouble *x, wxDouble *y, wxDouble *w, wxDouble *h) 
+void wxCairoPathData::GetBox(wxDouble *x, wxDouble *y, wxDouble *w, wxDouble *h) const
 {
     double x1,y1,x2,y2;
 
@@ -841,66 +827,53 @@ void wxCairoPath::GetBox(wxDouble *x, wxDouble *y, wxDouble *w, wxDouble *h)
     }
 }
 
-bool wxCairoPath::Contains( wxDouble x, wxDouble y, int fillStyle ) 
+bool wxCairoPathData::Contains( wxDouble x, wxDouble y, int fillStyle ) const
 {
-    return cairo_in_stroke( m_pathContext, x, y) != NULL;
+    return cairo_in_stroke( m_pathContext, x, y) != 0;
 }
 
 //-----------------------------------------------------------------------------
-// wxCairoMatrix implementation
+// wxCairoMatrixData implementation
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxCairoMatrix,wxGraphicsMatrix)
-
-wxCairoMatrix::wxCairoMatrix() : wxGraphicsMatrix(NULL)
-{
-    wxLogDebug(wxT("Illegal Constructor called"));
-}
-
-wxCairoMatrix::wxCairoMatrix(wxGraphicsRenderer* renderer, const cairo_matrix_t* matrix )
-    : wxGraphicsMatrix(renderer)
+wxCairoMatrixData::wxCairoMatrixData(wxGraphicsRenderer* renderer, const cairo_matrix_t* matrix )
+    : wxGraphicsMatrixData(renderer)
 {
     if ( matrix )
         m_matrix = *matrix;
 }
 
-wxCairoMatrix::~wxCairoMatrix() 
+wxCairoMatrixData::~wxCairoMatrixData() 
 {
     // nothing to do
 }
 
-wxGraphicsMatrix *wxCairoMatrix::Clone() const 
+wxGraphicsObjectRefData *wxCairoMatrixData::Clone() const 
 {
-    return new wxCairoMatrix(GetRenderer(),&m_matrix);
+    return new wxCairoMatrixData(GetRenderer(),&m_matrix);
 }
 
 // concatenates the matrix
-void wxCairoMatrix::Concat( const wxGraphicsMatrix *t ) 
+void wxCairoMatrixData::Concat( const wxGraphicsMatrixData *t ) 
 {
     cairo_matrix_multiply( &m_matrix, &m_matrix, (cairo_matrix_t*) t->GetNativeMatrix());           
 }
 
-// copies the passed in matrix
-void wxCairoMatrix::Copy( const wxGraphicsMatrix *t ) 
-{
-    m_matrix = *((cairo_matrix_t*) t->GetNativeMatrix());
-}
-
 // sets the matrix to the respective values
-void wxCairoMatrix::Set(wxDouble a, wxDouble b, wxDouble c, wxDouble d, 
+void wxCairoMatrixData::Set(wxDouble a, wxDouble b, wxDouble c, wxDouble d, 
                         wxDouble tx, wxDouble ty) 
 {
     cairo_matrix_init( &m_matrix, a, b, c, d, tx, ty);
 }
 
 // makes this the inverse matrix
-void wxCairoMatrix::Invert() 
+void wxCairoMatrixData::Invert() 
 {
     cairo_matrix_invert( &m_matrix );
 }
 
 // returns true if the elements of the transformation matrix are equal ?
-bool wxCairoMatrix::IsEqual( const wxGraphicsMatrix* t) const  
+bool wxCairoMatrixData::IsEqual( const wxGraphicsMatrixData* t) const  
 {
     const cairo_matrix_t* tm = (cairo_matrix_t*) t->GetNativeMatrix();
     return ( 
@@ -913,7 +886,7 @@ bool wxCairoMatrix::IsEqual( const wxGraphicsMatrix* t) const
 }
 
 // return true if this is the identity matrix
-bool wxCairoMatrix::IsIdentity() 
+bool wxCairoMatrixData::IsIdentity() const
 {
     return ( m_matrix.xx == 1 && m_matrix.yy == 1 &&
         m_matrix.yx == 0 && m_matrix.xy == 0 && m_matrix.x0 == 0 && m_matrix.y0 == 0);
@@ -924,19 +897,19 @@ bool wxCairoMatrix::IsIdentity()
 //
 
 // add the translation to this matrix
-void wxCairoMatrix::Translate( wxDouble dx , wxDouble dy ) 
+void wxCairoMatrixData::Translate( wxDouble dx , wxDouble dy )
 {
     cairo_matrix_translate( &m_matrix, dx, dy) ;
 }
 
 // add the scale to this matrix
-void wxCairoMatrix::Scale( wxDouble xScale , wxDouble yScale ) 
+void wxCairoMatrixData::Scale( wxDouble xScale , wxDouble yScale )
 {
     cairo_matrix_scale( &m_matrix, xScale, yScale) ;
 }
 
 // add the rotation to this matrix (radians)
-void wxCairoMatrix::Rotate( wxDouble angle ) 
+void wxCairoMatrixData::Rotate( wxDouble angle ) 
 {
     cairo_matrix_rotate( &m_matrix, angle) ;
 }	
@@ -946,7 +919,7 @@ void wxCairoMatrix::Rotate( wxDouble angle )
 //
 
 // applies that matrix to the point
-void wxCairoMatrix::TransformPoint( wxDouble *x, wxDouble *y )
+void wxCairoMatrixData::TransformPoint( wxDouble *x, wxDouble *y ) const
 {
     double lx = *x, ly = *y ;
     cairo_matrix_transform_point( &m_matrix, &lx, &ly);
@@ -955,7 +928,7 @@ void wxCairoMatrix::TransformPoint( wxDouble *x, wxDouble *y )
 }
 
 // applies the matrix except for translations
-void wxCairoMatrix::TransformDistance( wxDouble *dx, wxDouble *dy )
+void wxCairoMatrixData::TransformDistance( wxDouble *dx, wxDouble *dy ) const
 {
     double lx = *dx, ly = *dy ;
     cairo_matrix_transform_distance( &m_matrix, &lx, &ly);
@@ -964,7 +937,7 @@ void wxCairoMatrix::TransformDistance( wxDouble *dx, wxDouble *dy )
 }
 
 // returns the native representation
-void * wxCairoMatrix::GetNativeMatrix() const
+void * wxCairoMatrixData::GetNativeMatrix() const
 {
     return (void*) &m_matrix;
 }
@@ -1055,28 +1028,28 @@ void wxCairoContext::ResetClip()
 }
 
 
-void wxCairoContext::StrokePath( const wxGraphicsPath *path )
+void wxCairoContext::StrokePath( const wxGraphicsPath& path )
 {
     if ( !m_pen.IsNull() )
     {   
-        cairo_path_t* cp = (cairo_path_t*) path->GetNativePath() ;
+        cairo_path_t* cp = (cairo_path_t*) path.GetNativePath() ;
         cairo_append_path(m_context,cp);
         ((wxCairoPenData*)m_pen.GetRefData())->Apply(this);
         cairo_stroke(m_context);
-        wxConstCast(path, wxGraphicsPath)->UnGetNativePath(cp);
+        path.UnGetNativePath(cp);
     }
 }
 
-void wxCairoContext::FillPath( const wxGraphicsPath *path , int fillStyle )
+void wxCairoContext::FillPath( const wxGraphicsPath& path , int fillStyle )
 {
     if ( !m_brush.IsNull() )
     {
-        cairo_path_t* cp = (cairo_path_t*) path->GetNativePath() ;
+        cairo_path_t* cp = (cairo_path_t*) path.GetNativePath() ;
         cairo_append_path(m_context,cp);
         ((wxCairoBrushData*)m_brush.GetRefData())->Apply(this);
         cairo_set_fill_rule(m_context,fillStyle==wxODDEVEN_RULE ? CAIRO_FILL_RULE_EVEN_ODD : CAIRO_FILL_RULE_WINDING);
         cairo_fill(m_context);
-        wxConstCast(path, wxGraphicsPath)->UnGetNativePath(cp);
+        path.UnGetNativePath(cp);
     }
 }
 
@@ -1096,21 +1069,23 @@ void wxCairoContext::Scale( wxDouble xScale , wxDouble yScale )
 }
 
 // concatenates this transform with the current transform of this context
-void wxCairoContext::ConcatTransform( const wxGraphicsMatrix* matrix )
+void wxCairoContext::ConcatTransform( const wxGraphicsMatrix& matrix )
 {
-    cairo_transform(m_context,(const cairo_matrix_t *) matrix->GetNativeMatrix());
+    cairo_transform(m_context,(const cairo_matrix_t *) matrix.GetNativeMatrix());
 }
 
 // sets the transform of this context
-void wxCairoContext::SetTransform( const wxGraphicsMatrix* matrix )
+void wxCairoContext::SetTransform( const wxGraphicsMatrix& matrix )
 {
-    cairo_set_matrix(m_context,(const cairo_matrix_t*) matrix->GetNativeMatrix());
+    cairo_set_matrix(m_context,(const cairo_matrix_t*) matrix.GetNativeMatrix());
 }
 
 // gets the matrix of this context
-void wxCairoContext::GetTransform( wxGraphicsMatrix* matrix )
+wxGraphicsMatrix wxCairoContext::GetTransform() const
 {
-    cairo_get_matrix(m_context,(cairo_matrix_t*) matrix->GetNativeMatrix());
+    wxGraphicsMatrix matrix = CreateMatrix();
+    cairo_get_matrix(m_context,(cairo_matrix_t*) matrix.GetNativeMatrix());
+    return matrix;
 }
 
 
@@ -1199,11 +1174,11 @@ public :
 
     // Path
 
-    virtual wxGraphicsPath * CreatePath();
+    virtual wxGraphicsPath CreatePath();
 
     // Matrix
 
-    virtual wxGraphicsMatrix * CreateMatrix( wxDouble a=1.0, wxDouble b=0.0, wxDouble c=0.0, wxDouble d=1.0, 
+    virtual wxGraphicsMatrix CreateMatrix( wxDouble a=1.0, wxDouble b=0.0, wxDouble c=0.0, wxDouble d=1.0, 
         wxDouble tx=0.0, wxDouble ty=0.0);
 
 
@@ -1269,20 +1244,24 @@ wxGraphicsContext * wxCairoRenderer::CreateContext( wxWindow* window )
 
 // Path
 
-wxGraphicsPath * wxCairoRenderer::CreatePath()
+wxGraphicsPath wxCairoRenderer::CreatePath()
 {
-    return new wxCairoPath( this );
+    wxGraphicsPath path;
+    path.SetRefData( new wxCairoPathData(this) );
+    return path;
 }
 
 
 // Matrix
 
-wxGraphicsMatrix * wxCairoRenderer::CreateMatrix( wxDouble a, wxDouble b, wxDouble c, wxDouble d, 
-                                                           wxDouble tx, wxDouble ty)
+wxGraphicsMatrix wxCairoRenderer::CreateMatrix( wxDouble a, wxDouble b, wxDouble c, wxDouble d, 
+                                                wxDouble tx, wxDouble ty)
 
 {
-    wxCairoMatrix* m = new wxCairoMatrix( this );
-    m->Set( a,b,c,d,tx,ty ) ;
+    wxGraphicsMatrix m;
+    wxCairoMatrixData* data = new wxCairoMatrixData( this );
+    data->Set( a,b,c,d,tx,ty ) ;
+    m.SetRefData(data);
     return m;
 }
 
