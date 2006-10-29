@@ -214,6 +214,7 @@ void * wxGraphicsMatrix::GetNativeMatrix() const
 //-----------------------------------------------------------------------------
 
 IMPLEMENT_DYNAMIC_CLASS(wxGraphicsPath, wxGraphicsObject)
+WXDLLIMPEXP_DATA_CORE(wxGraphicsPath) wxNullGraphicsPath;
 
 // convenience functions, for using wxPoint2DDouble etc
 
