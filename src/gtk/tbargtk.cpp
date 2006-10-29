@@ -632,8 +632,4 @@ wxToolBar::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
     return GetDefaultAttributesFromGTKWidget(gtk_toolbar_new);
 }
 
-bool wxToolBar::IsVertical()
-{
-    return HasFlag(wxTB_LEFT) || HasFlag(wxTB_RIGHT);
-}
 #endif // wxUSE_TOOLBAR_NATIVE
