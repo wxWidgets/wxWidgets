@@ -61,7 +61,7 @@ enum {
 };
 
 enum {
-    TAR_BLOCKSIZE = 512,
+    TAR_BLOCKSIZE = 512
 };
 
 // checksum type
@@ -154,7 +154,7 @@ private:
     static void check();
 };
 
-wxDEFINE_SCOPED_PTR_TYPE(wxTarHeaderBlock);
+wxDEFINE_SCOPED_PTR_TYPE(wxTarHeaderBlock)
 
 // A table giving the field names and offsets in a tar header block
 const wxTarField wxTarHeaderBlock::fields[] =

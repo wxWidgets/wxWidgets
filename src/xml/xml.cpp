@@ -414,7 +414,7 @@ bool wxXmlDocument::Save(const wxString& filename, int indentstep) const
 // converts Expat-produced string in UTF-8 into wxString using the specified
 // conv or keep in UTF-8 if conv is NULL
 static wxString CharToString(wxMBConv *conv,
-                                    const char *s, size_t len = wxSTRING_MAXLEN)
+                                    const char *s, size_t len = wxString::npos)
 {
 #if wxUSE_UNICODE
     wxUnusedVar(conv);
@@ -426,13 +426,13 @@ static wxString CharToString(wxMBConv *conv,
         // there can be no embedded NULs in this string so we don't need the
         // output length, it will be NUL-terminated
         const wxWCharBuffer wbuf(
-            wxConvUTF8.cMB2WC(s, len == wxSTRING_MAXLEN ? wxNO_LEN : len, NULL));
+            wxConvUTF8.cMB2WC(s, len == wxString::npos ? wxNO_LEN : len, NULL));
 
         return wxString(wbuf, *conv);
     }
     else // already in UTF-8, no conversion needed
     {
-        return wxString(s, len != wxSTRING_MAXLEN ? len : strlen(s));
+        return wxString(s, len != wxString::npos ? len : strlen(s));
     }
 #endif // wxUSE_UNICODE/!wxUSE_UNICODE
 }

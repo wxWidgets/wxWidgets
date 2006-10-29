@@ -26,7 +26,7 @@
 enum wxRichTextOddEvenPage {
     wxRICHTEXT_PAGE_ODD,
     wxRICHTEXT_PAGE_EVEN,
-    wxRICHTEXT_PAGE_ALL,
+    wxRICHTEXT_PAGE_ALL
 };
 
 // Header/footer text locations
