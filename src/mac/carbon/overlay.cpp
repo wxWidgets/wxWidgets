@@ -57,12 +57,18 @@ bool wxOverlayImpl::IsOk()
 
 void wxOverlayImpl::MacGetBounds( Rect *bounds )
 {
-    wxPoint origin(0,0);
-    origin = m_window->ClientToScreen( origin );
-    bounds->top = origin.y;
-    bounds->left = origin.x;
-    bounds->bottom = origin.y+m_y+m_height;
-    bounds->right = origin.x+m_x+m_width;
+    int x, y;
+    x=y=0;
+    m_window->MacWindowToRootWindow( &x , &y ) ;
+    WindowRef window = (WindowRef) m_window->MacGetTopLevelWindowRef() ;
+
+    Point localwhere = { y, x };
+    wxMacLocalToGlobal( window, &localwhere ) ;
+
+    bounds->top = localwhere.v;
+    bounds->left = localwhere.h;
+    bounds->bottom = localwhere.v+m_y+m_height;
+    bounds->right = localwhere.h+m_x+m_width;
 }
 
 OSStatus wxOverlayImpl::CreateOverlayWindow()
@@ -106,6 +112,12 @@ void wxOverlayImpl::Init( wxWindowDC* dc, int x , int y , int width , int height
     m_window = dc->GetWindow();
     m_x = x ;
     m_y = y ;
+    if ( dc->IsKindOf( CLASSINFO( wxClientDC ) ))
+    {
+        wxPoint origin = m_window->GetClientAreaOrigin();
+        m_x += origin.x; 
+        m_y += origin.y;
+    }
     m_width = width ;
     m_height = height ;
 
@@ -123,15 +135,8 @@ void wxOverlayImpl::BeginDrawing( wxWindowDC* dc)
 {
 // TODO CS
     dc->SetGraphicsContext( wxGraphicsContext::CreateFromNative( m_overlayContext ) );
-/*
-    delete dc->m_graphicContext ;
-    dc->m_graphicContext = new wxMacCGContext( m_overlayContext );
-    // we are right now startin at 0,0 not at the wxWindow's origin, so most of the calculations
-    // int dc are already corect
-    // just to make sure :
-    dc->m_macLocalOrigin.x = 0 ;
-    dc->m_macLocalOrigin.y = 0 ;
-*/
+    // triggers an application of the already set device origins to the native context
+    dc->SetUserScale(1,1);
     wxSize size = dc->GetSize() ;
     dc->SetClippingRegion( 0 , 0 , size.x , size.y ) ;
 }
