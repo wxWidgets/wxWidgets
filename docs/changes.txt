@@ -17,6 +17,11 @@ Changes in behaviour not resulting in compilation errors, please read this!
 - wxArray::Alloc() now works as reserve() and does not clear the array any more
 - Windows calling CaptureMouse() are now required to handle the
   wxEVT_MOUSE_CAPTURE_LOST event and not call ReleaseMouse() in this case.
+- wxInputStream::GetC() now returns an int in the range 0 - 255 on success
+  instead of a char the range -128 - 127.
+- A sequence returned by wxFileSystem::FindFirst()/FindNext() may now be
+  be scoped to a single instance of wxFileSystem.
+  
 
 
 Changes in behaviour which may result in compilation errors
