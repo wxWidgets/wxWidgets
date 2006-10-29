@@ -93,7 +93,8 @@ All (GUI):
 - Many enhancements to wxRichTextCtrl including URL support,
   formatting and symbol dialogs, print/preview, and better list
   formatting.
-- Support for loading TGA files added (Seth Jackson).
+- Support for loading TGA files added (Seth Jackson)
+- Added wxTB_RIGHT style for right-aligned toolbars (Igor Korot)
 - Added events API to wxHtmlWindow (Francesco Montorsi).
 
 Unix Ports:
