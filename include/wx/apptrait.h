@@ -243,12 +243,12 @@ public:
     #include "wx/palmos/apptrait.h"
 #elif defined(__WIN32__)
     #include "wx/msw/apptrait.h"
-#elif defined(__UNIX__) && !defined(__EMX__)
+#elif defined(__OS2__)
+    #include "wx/os2/apptrait.h"
+#elif defined(__UNIX__)
     #include "wx/unix/apptrait.h"
 #elif defined(__WXMAC__)
     #include "wx/mac/apptrait.h"
-#elif defined(__WXPM__)
-    #include "wx/os2/apptrait.h"
 #elif defined(__DOS__)
     #include "wx/msdos/apptrait.h"
 #else
