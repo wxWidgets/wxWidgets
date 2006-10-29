@@ -87,8 +87,6 @@ public :
     }
     virtual ~wxGraphicsPath() {}
 
-    virtual wxGraphicsPath *Clone() const { return NULL; }
-
     void MoveToPoint( wxDouble, wxDouble ) {}
     void MoveToPoint( const wxPoint2DDouble& ) {}
     void AddLineToPoint( wxDouble, wxDouble ) {}
@@ -118,6 +116,7 @@ public :
     bool Contains( wxDouble , wxDouble , int ) { return false; }
     bool Contains( const wxPoint2DDouble& , int ) { return false; }
 };
+wxGraphicsPath wxNullGraphicsPath;
 
 
 class wxGraphicsMatrix : public wxGraphicsObject
@@ -128,7 +127,6 @@ public :
                         "wx.GraphicsMatrix is not available on this platform.");
     }
     virtual ~wxGraphicsMatrix() {}
-    virtual wxGraphicsMatrix *Clone() const { return NULL; }
     virtual void Concat( const wxGraphicsMatrix * ) {}
     virtual void Copy( const wxGraphicsMatrix * )  {}
     virtual void Set(wxDouble , wxDouble , wxDouble , wxDouble ,
@@ -143,7 +141,7 @@ public :
     virtual void TransformDistance( wxDouble *, wxDouble * ) {}
     virtual void * GetNativeMatrix() const { return NULL; }
 };
-
+wxGraphicsMatrix wxNullGraphicsMatrix;
 
 
 class wxGraphicsContext : public wxGraphicsObject
@@ -361,11 +359,80 @@ public :
 };
 
 
-%immutable;
-const wxGraphicsPen wxNullGraphicsPen;
-const wxGraphicsBrush wxNullGraphicsBrush;
-const wxGraphicsFont wxNullGraphicsFont;
-%mutable;
+//---------------------------------------------------------------------------
+
+class wxGraphicsMatrix : public wxGraphicsObject
+{
+public :
+    // wxGraphicsMatrix(wxGraphicsRenderer* renderer);     *** This class is an ABC
+
+    virtual ~wxGraphicsMatrix();
+
+    DocDeclStr(
+        virtual void , Concat( const wxGraphicsMatrix& t ),
+        "concatenates the matrix", "");
+
+    %extend  {
+        DocStr(Copy,
+               "Copy the passed in matrix to this one.", "");
+        void Copy( const wxGraphicsMatrix& t ) {
+            *self = t;
+        }
+    }
+
+
+    DocDeclStr(
+        virtual void , Set(wxDouble a=1.0, wxDouble b=0.0, wxDouble c=0.0, wxDouble d=1.0,
+                           wxDouble tx=0.0, wxDouble ty=0.0),
+        "sets the matrix to the respective values", "");
+
+
+    DocDeclStr(
+        virtual void , Invert(),
+        "makes this the inverse matrix", "");
+
+
+    DocDeclStr(
+        virtual bool , IsEqual( const wxGraphicsMatrix& t) const,
+        "returns true if the elements of the transformation matrix are equal", "");
+
+
+    DocDeclStr(
+        virtual bool , IsIdentity() const,
+        "return true if this is the identity matrix", "");
+
+
+    DocDeclStr(
+        virtual void , Translate( wxDouble dx , wxDouble dy ),
+        "add the translation to this matrix", "");
+
+
+    DocDeclStr(
+        virtual void , Scale( wxDouble xScale , wxDouble yScale ),
+        "add the scale to this matrix", "");
+
+
+    DocDeclStr(
+        virtual void , Rotate( wxDouble angle ),
+        "add the rotation to this matrix (radians)", "");
+
+
+    DocDeclAStr(
+        virtual void , TransformPoint( wxDouble *INOUT, wxDouble *INOUT ) const,
+        "TransformPoint(self, x, y) --> (x, y)",
+        "applies that matrix to the point", "");
+
+
+    DocDeclAStr(
+        virtual void , TransformDistance( wxDouble *INOUT, wxDouble *INOUT ) const,
+        "TransformDistance(self, dx, dy) --> (dx, dy)",
+        "applies the matrix except for translations", "");
+
+
+    DocDeclStr(
+        virtual void * , GetNativeMatrix() const,
+        "returns the native representation", "");
+};
 
 //---------------------------------------------------------------------------
 
@@ -374,8 +441,6 @@ class wxGraphicsPath : public wxGraphicsObject
 public :
     //wxGraphicsPath(wxGraphicsRenderer* renderer);            *** This class is an ABC, so we can't allow instances to be created directly
     virtual ~wxGraphicsPath();
-
-    virtual wxGraphicsPath *Clone() const = 0;
 
 
     %nokwargs MoveToPoint;
@@ -404,7 +469,7 @@ points and an end point", "");
 
 
     DocDeclStr(
-        virtual void , AddPath( const wxGraphicsPath* path ),
+        virtual void , AddPath( const wxGraphicsPath& path ),
         "adds another path", "");
 
 
@@ -414,7 +479,7 @@ points and an end point", "");
 
 
     DocDeclStr(
-        wxPoint2D , GetCurrentPoint(),
+        wxPoint2D , GetCurrentPoint() const,
         "Gets the last point of the current path, (0,0) if not yet set", "");
 
 
@@ -465,102 +530,39 @@ to (x2,y2), also a straight line from (current) to (x1,y1)", "");
 
 
     DocDeclStr(
-        virtual void , UnGetNativePath(void *p),
+        virtual void , UnGetNativePath(void *p) const,
         "give the native path returned by GetNativePath() back (there might be some
 deallocations necessary)", "");
 
 
     DocDeclStr(
-        virtual void , Transform( wxGraphicsMatrix* matrix ),
+        virtual void , Transform( const wxGraphicsMatrix& matrix ),
         "transforms each point of this path by the matrix", "");
 
 
     DocDeclStr(
-        wxRect2DDouble , GetBox(),
+        wxRect2DDouble , GetBox() const,
         "gets the bounding box enclosing all points (possibly including control points)", "");
 
 
     %nokwargs Contains;
     DocStr(Contains,
         "", "");
-    virtual bool Contains( wxDouble x, wxDouble y, int fillStyle = wxWINDING_RULE);
-    bool Contains( const wxPoint2DDouble& c, int fillStyle = wxWINDING_RULE);
+    virtual bool Contains( wxDouble x, wxDouble y, int fillStyle = wxODDEVEN_RULE) const;
+    bool Contains( const wxPoint2DDouble& c, int fillStyle = wxODDEVEN_RULE) const;
 
 };
+
 
 //---------------------------------------------------------------------------
 
-class wxGraphicsMatrix : public wxGraphicsObject
-{
-public :
-    // wxGraphicsMatrix(wxGraphicsRenderer* renderer);     *** This class is an ABC
-
-    virtual ~wxGraphicsMatrix();
-
-    virtual wxGraphicsMatrix *Clone() const;
-
-    DocDeclStr(
-        virtual void , Concat( const wxGraphicsMatrix *t ),
-        "concatenates the matrix", "");
-
-
-    DocDeclStr(
-        virtual void , Copy( const wxGraphicsMatrix *t ),
-        "copies the passed in matrix", "");
-
-
-    DocDeclStr(
-        virtual void , Set(wxDouble a=1.0, wxDouble b=0.0, wxDouble c=0.0, wxDouble d=1.0,
-                           wxDouble tx=0.0, wxDouble ty=0.0),
-        "sets the matrix to the respective values", "");
-
-
-    DocDeclStr(
-        virtual void , Invert(),
-        "makes this the inverse matrix", "");
-
-
-    DocDeclStr(
-        virtual bool , IsEqual( const wxGraphicsMatrix* t) const,
-        "returns true if the elements of the transformation matrix are equal", "");
-
-
-    DocDeclStr(
-        virtual bool , IsIdentity(),
-        "return true if this is the identity matrix", "");
-
-
-    DocDeclStr(
-        virtual void , Translate( wxDouble dx , wxDouble dy ),
-        "add the translation to this matrix", "");
-
-
-    DocDeclStr(
-        virtual void , Scale( wxDouble xScale , wxDouble yScale ),
-        "add the scale to this matrix", "");
-
-
-    DocDeclStr(
-        virtual void , Rotate( wxDouble angle ),
-        "add the rotation to this matrix (radians)", "");
-
-
-    DocDeclAStr(
-        virtual void , TransformPoint( wxDouble *INOUT, wxDouble *INOUT ),
-        "TransformPoint(self, x, y) --> (x, y)",
-        "applies that matrix to the point", "");
-
-
-    DocDeclAStr(
-        virtual void , TransformDistance( wxDouble *INOUT, wxDouble *INOUT ),
-        "TransformDistance(self, dx, dy) --> (dx, dy)",
-        "applies the matrix except for translations", "");
-
-
-    DocDeclStr(
-        virtual void * , GetNativeMatrix() const,
-        "returns the native representation", "");
-};
+%immutable;
+const wxGraphicsPen     wxNullGraphicsPen;
+const wxGraphicsBrush   wxNullGraphicsBrush;
+const wxGraphicsFont    wxNullGraphicsFont;
+const wxGraphicsMatrix  wxNullGraphicsMatrix;
+const wxGraphicsPath    wxNullGraphicsPath;
+%mutable;
 
 //---------------------------------------------------------------------------
 
@@ -586,9 +588,8 @@ public:
     static wxGraphicsContext* CreateFromNativeWindow( void * window ) ;
 
 
-    %newobject CreatePath;
     DocDeclStr(
-        virtual wxGraphicsPath * , CreatePath(),
+        virtual wxGraphicsPath , CreatePath(),
         "creates a path instance that corresponds to the type of graphics context, ie GDIPlus, Cairo, CoreGraphics ...", "");
 
 
@@ -625,11 +626,10 @@ cColor
         "sets the font", "");
 
 
-    %newobject CreateMatrix;
     DocDeclStr(
-        virtual wxGraphicsMatrix* , CreateMatrix( wxDouble a=1.0, wxDouble b=0.0,
-                                                  wxDouble c=0.0, wxDouble d=1.0,
-                                                  wxDouble tx=0.0, wxDouble ty=0.0),
+        virtual wxGraphicsMatrix , CreateMatrix( wxDouble a=1.0, wxDouble b=0.0,
+                                                 wxDouble c=0.0, wxDouble d=1.0,
+                                                 wxDouble tx=0.0, wxDouble ty=0.0),
         "create a 'native' matrix corresponding to these values", "");
 
 
@@ -680,6 +680,22 @@ cColor
         "rotate (radians) the current transformation matrix CTM of the context", "");
 
 
+    DocDeclStr(
+        virtual void , ConcatTransform( const wxGraphicsMatrix& matrix ),
+        "concatenates this transform with the current transform of this context", "");
+    
+
+    DocDeclStr(
+        virtual void , SetTransform( const wxGraphicsMatrix& matrix ),
+        "sets the transform of this context", "");
+    
+
+    DocDeclStr(
+        virtual wxGraphicsMatrix , GetTransform() const,
+        "gets the matrix of this context", "");
+    
+    
+
 
     DocStr(SetPen, "sets the stroke pen", "");
     %nokwargs SetPen;
@@ -701,17 +717,17 @@ cColor
     
    
     DocDeclStr(
-        virtual void , StrokePath( const wxGraphicsPath *path ),
+        virtual void , StrokePath( const wxGraphicsPath& path ),
         "strokes along a path with the current pen", "");
 
     
     DocDeclStr(
-        virtual void , FillPath( const wxGraphicsPath *path, int fillStyle = wxWINDING_RULE ),
+        virtual void , FillPath( const wxGraphicsPath& path, int fillStyle = wxODDEVEN_RULE ),
         "fills a path with the current brush", "");
 
    
     DocDeclStr(
-        virtual void , DrawPath( const wxGraphicsPath *path, int fillStyle = wxWINDING_RULE ),
+        virtual void , DrawPath( const wxGraphicsPath& path, int fillStyle = wxODDEVEN_RULE ),
         "draws a path by first filling and then stroking", "");
 
 
@@ -810,7 +826,8 @@ cColor
 
 
     DocDeclStr(
-        virtual void , DrawLines( size_t points, const wxPoint2D *points_array, int fillStyle = wxWINDING_RULE ),
+        virtual void , DrawLines( size_t points, const wxPoint2D *points_array,
+                                  int fillStyle = wxODDEVEN_RULE ),
         "draws a polygon", "");
 
 
@@ -861,12 +878,10 @@ public :
     virtual wxGraphicsContext * CreateContextFromNativeWindow( void * window );
 
 
-    %newobject CreatePath;
-    virtual wxGraphicsPath * CreatePath();
+    virtual wxGraphicsPath CreatePath();
 
-    %newobject CreateMatrix;
-    virtual wxGraphicsMatrix * CreateMatrix( wxDouble a=1.0, wxDouble b=0.0, wxDouble c=0.0, wxDouble d=1.0, 
-        wxDouble tx=0.0, wxDouble ty=0.0);
+    virtual wxGraphicsMatrix CreateMatrix( wxDouble a=1.0, wxDouble b=0.0, wxDouble c=0.0, wxDouble d=1.0, 
+                                           wxDouble tx=0.0, wxDouble ty=0.0);
         
     virtual wxGraphicsPen CreatePen(const wxPen& pen) ;
     
