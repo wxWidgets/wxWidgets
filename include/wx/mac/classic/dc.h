@@ -105,45 +105,45 @@ class WXDLLEXPORT wxDC: public wxDCBase
 
     wxCoord XDEV2LOG(wxCoord x) const
     {
-        return wxCoordRound((double)(x - m_deviceOriginX) / m_scaleX) * m_signX + m_logicalOriginX;
+        return wxRound((double)(x - m_deviceOriginX) / m_scaleX) * m_signX + m_logicalOriginX;
     }
     wxCoord XDEV2LOGREL(wxCoord x) const
     {
-        return wxCoordRound((double)(x) / m_scaleX);
+        return wxRound((double)(x) / m_scaleX);
     }
     wxCoord YDEV2LOG(wxCoord y) const
     {
-        return wxCoordRound((double)(y - m_deviceOriginY) / m_scaleY) * m_signY + m_logicalOriginY;
+        return wxRound((double)(y - m_deviceOriginY) / m_scaleY) * m_signY + m_logicalOriginY;
     }
     wxCoord YDEV2LOGREL(wxCoord y) const
     {
-        return wCoordRound((double)(y) / m_scaleY);
+        return wxRound((double)(y) / m_scaleY);
     }
     wxCoord XLOG2DEV(wxCoord x) const
     {
-        return wxCoordRound((double)(x - m_logicalOriginX) * m_scaleX) * m_signX + m_deviceOriginX;
+        return wxRound((double)(x - m_logicalOriginX) * m_scaleX) * m_signX + m_deviceOriginX;
     }
     wxCoord XLOG2DEVREL(wxCoord x) const
     {
-        return wxCoordRound((double)(x) * m_scaleX);
+        return wxRound((double)(x) * m_scaleX);
     }
     wxCoord YLOG2DEV(wxCoord y) const
     {
-        return wxCoordRound((double)(y - m_logicalOriginY) * m_scaleY) * m_signY + m_deviceOriginY;
+        return wxRound((double)(y - m_logicalOriginY) * m_scaleY) * m_signY + m_deviceOriginY;
     }
     wxCoord YLOG2DEVREL(wxCoord y) const
     {
-        return wxCoordRound((double)(y) * m_scaleY);
+        return wxRound((double)(y) * m_scaleY);
     }
 
     wxCoord XLOG2DEVMAC(wxCoord x) const
     {
-        return wxCoordRound((double)(x - m_logicalOriginX) * m_scaleX) * m_signX + m_deviceOriginX + m_macLocalOrigin.x;
+        return wxRound((double)(x - m_logicalOriginX) * m_scaleX) * m_signX + m_deviceOriginX + m_macLocalOrigin.x;
     }
 
     wxCoord YLOG2DEVMAC(wxCoord y) const
     {
-        return wxCoordRound((double)(y - m_logicalOriginY) * m_scaleY) * m_signY + m_deviceOriginY + m_macLocalOrigin.y;
+        return wxRound((double)(y - m_logicalOriginY) * m_scaleY) * m_signY + m_deviceOriginY + m_macLocalOrigin.y;
     }
 
     WXHRGN MacGetCurrentClipRgn() { return m_macCurrentClipRgn ; }
