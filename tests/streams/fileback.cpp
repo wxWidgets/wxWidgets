@@ -19,14 +19,11 @@
 #endif
 
 #include "wx/mstream.h"
-#include "wx/fileback.h"
+#include "wx/private/fileback.h"
 #include "bstream.h"
-
-#if wxUSE_STREAMS
 
 const size_t TESTSIZE = 256;
 const size_t BUFSIZE = 100;
-
 
 ///////////////////////////////////////////////////////////////////////////////
 // Parent stream for testing
@@ -189,7 +186,7 @@ void backStream::Seek(wxInputStream& in)
     for (wxFileOffset i = TESTSIZE - 1; i >= 0; i--) {
         CPPUNIT_ASSERT_EQUAL(i, in.SeekI(i));
         CPPUNIT_ASSERT_EQUAL(i, in.TellI());
-        CPPUNIT_ASSERT_EQUAL(char(i), in.GetC());
+        CPPUNIT_ASSERT_EQUAL(int(i), in.GetC());
         CPPUNIT_ASSERT_EQUAL(size_t(1), in.LastRead());
         CPPUNIT_ASSERT(in.IsOk());
     }
@@ -198,5 +195,3 @@ void backStream::Seek(wxInputStream& in)
 // Register the stream sub suite, by using some stream helper macro.
 // Note: Don't forget to connect it to the base suite (See: bstream.cpp => StreamCase::suite())
 STREAM_TEST_SUBSUITE_NAMED_REGISTRATION(backStream)
-
-#endif // wxUSE_STREAMS
