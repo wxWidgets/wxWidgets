@@ -562,10 +562,10 @@ bool wxDebugReport::Process()
 
 bool wxDebugReport::DoProcess()
 {
-    wxString msg = _("*** A debug report has been generated\n");
-    msg += wxString::Format(_("*** It can be found in \"%s\"\n"),
-                            GetDirectory().c_str());
-    msg += _("*** And includes the following files:\n");
+    wxString msg(_("A debug report has been generated. It can be found in"));
+    msg << _T("\n")
+           _T("\t") << GetDirectory() << _T("\n\n")
+        << _("And includes the following files:\n");
 
     wxString name, desc;
     const size_t count = GetFilesCount();
