@@ -280,6 +280,29 @@ Unavailable on full keyboard machines.
 \helpref{wxTopLevelWindow::SetRightMenu}{wxtoplevelwindowsetrightmenu}.
 
 
+\membersection{wxTopLevelWindow::SetSizeHints}\label{wxtoplevelwindowsetsizehints}
+
+\func{virtual void}{SetSizeHints}{\param{int}{ minW}, \param{int}{ minH}, \param{int}{ maxW=-1}, \param{int}{ maxH=-1},
+ \param{int}{ incW=-1}, \param{int}{ incH=-1}}
+
+\func{void}{SetSizeHints}{\param{const wxSize\&}{ minSize},
+\param{const wxSize\&}{ maxSize=wxDefaultSize}, \param{const wxSize\&}{ incSize=wxDefaultSize}}
+
+Allows specification of minimum and maximum window sizes, and window size increments.
+If a pair of values is not set (or set to -1), the default values will be used.
+
+\docparam{incW}{Specifies the increment for sizing the width (Motif/Xt only).}
+
+\docparam{incH}{Specifies the increment for sizing the height (Motif/Xt only).}
+
+\docparam{incSize}{Increment size (Motif/Xt only).}
+
+\wxheading{Remarks}
+
+If this function is called, the user will not be able to size the window outside
+the given bounds. The resizing increments are only significant under Motif or Xt.
+
+
 \membersection{wxTopLevelWindow::SetRightMenu}\label{wxtoplevelwindowsetrightmenu}
 
 \func{void}{SetRightMenu}{\param{int}{ id = wxID\_ANY}, \param{const wxString\&}{ label = wxEmptyString}, \param{wxMenu *}{ subMenu = NULL}}

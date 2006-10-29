@@ -250,6 +250,10 @@ public:
     virtual void DoUpdateWindowUI(wxUpdateUIEvent& event) ;
 
 protected:
+    virtual void DoSetSizeHints( int minW, int minH,
+                                 int maxW = wxDefaultCoord, int maxH = wxDefaultCoord,
+                                 int incW = wxDefaultCoord, int incH = wxDefaultCoord );
+
     // the frame client to screen translation should take account of the
     // toolbar which may shift the origin of the client area
     virtual void DoClientToScreen(int *x, int *y) const;

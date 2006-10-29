@@ -958,6 +958,59 @@ void wxTopLevelWindowGTK::DoSetClientSize( int width, int height )
               width + m_miniEdge*2, height  + m_miniEdge*2 + m_miniTitle, 0);
 }
 
+void wxTopLevelWindowGTK::DoSetSizeHints( int minW, int minH,
+                                          int maxW, int maxH,
+                                          int incW, int incH )
+{
+    wxTopLevelWindowBase::DoSetSizeHints( minW, minH, maxW, maxH, incW, incH );
+    
+    if (m_widget)
+    {
+        int minWidth = GetMinWidth(),
+            minHeight = GetMinHeight(),
+            maxWidth = GetMaxWidth(),
+            maxHeight = GetMaxHeight();
+            
+        // set size hints
+        gint            flag = 0; // GDK_HINT_POS;
+        GdkGeometry     geom;
+
+        if ((minWidth != -1) || (minHeight != -1)) flag |= GDK_HINT_MIN_SIZE;
+        if ((maxWidth != -1) || (maxHeight != -1)) flag |= GDK_HINT_MAX_SIZE;
+
+        geom.min_width = minWidth;
+        geom.min_height = minHeight;
+
+            // Because of the way we set GDK_HINT_MAX_SIZE above, if either of
+            // maxHeight or maxWidth is set, we must set them both, else the
+            // remaining -1 will be taken literally.
+
+            // I'm certain this also happens elsewhere, and is the probable
+            // cause of other such things as:
+            // Gtk-WARNING **: gtk_widget_size_allocate():
+            //       attempt to allocate widget with width 65535 and height 600
+            // but I don't have time to track them all now..
+            //
+            // Really we need to encapulate all this height/width business and
+            // stop any old method from ripping at the members directly and
+            // scattering -1's without regard for who might resolve them later.
+
+        geom.max_width = ( maxHeight == -1 ) ? maxWidth
+                         : ( maxWidth == -1 ) ? wxGetDisplaySize().GetWidth()
+                           : maxWidth ;
+
+        geom.max_height = ( maxWidth == -1 ) ? maxHeight    // ( == -1 here )
+                          : ( maxHeight == -1 ) ? wxGetDisplaySize().GetHeight()
+                            : maxHeight ;
+
+        gtk_window_set_geometry_hints( GTK_WINDOW(m_widget),
+                                       (GtkWidget*) NULL,
+                                       &geom,
+                                       (GdkWindowHints) flag );
+    }
+}
+
+
 void wxTopLevelWindowGTK::GtkOnSize()
 {
     // avoid recursions
@@ -995,49 +1048,8 @@ void wxTopLevelWindowGTK::GtkOnSize()
 
     if (m_mainWidget)
     {
-        // set size hints
-        gint            flag = 0; // GDK_HINT_POS;
-        GdkGeometry     geom;
-
-        if ((minWidth != -1) || (minHeight != -1)) flag |= GDK_HINT_MIN_SIZE;
-        if ((maxWidth != -1) || (maxHeight != -1)) flag |= GDK_HINT_MAX_SIZE;
-
-        geom.min_width = minWidth;
-        geom.min_height = minHeight;
-
-            // Because of the way we set GDK_HINT_MAX_SIZE above, if either of
-            // maxHeight or maxWidth is set, we must set them both, else the
-            // remaining -1 will be taken literally.
-
-            // I'm certain this also happens elsewhere, and is the probable
-            // cause of other such things as:
-            // Gtk-WARNING **: gtk_widget_size_allocate():
-            //       attempt to allocate widget with width 65535 and height 600
-            // but I don't have time to track them all now..
-            //
-            // Really we need to encapulate all this height/width business and
-            // stop any old method from ripping at the members directly and
-            // scattering -1's without regard for who might resolve them later.
-
-        geom.max_width = ( maxHeight == -1 ) ? maxWidth
-                         : ( maxWidth == -1 ) ? wxGetDisplaySize().GetWidth()
-                           : maxWidth ;
-
-        geom.max_height = ( maxWidth == -1 ) ? maxHeight    // ( == -1 here )
-                          : ( maxHeight == -1 ) ? wxGetDisplaySize().GetHeight()
-                            : maxHeight ;
-
-        gtk_window_set_geometry_hints( GTK_WINDOW(m_widget),
-                                       (GtkWidget*) NULL,
-                                       &geom,
-                                       (GdkWindowHints) flag );
-
-        /* I revert back to wxGTK's original behaviour. m_mainWidget holds the
-         * menubar, the toolbar and the client area, which is represented by
-         * m_wxwindow.
-         * this hurts in the eye, but I don't want to call SetSize()
-         * because I don't want to call any non-native functions here. */
-
+        // m_mainWidget holds the menubar, the toolbar and the client area,
+        // which is represented by m_wxwindow.
         int client_x = m_miniEdge;
         int client_y = m_miniEdge + m_miniTitle;
         int client_w = m_width - 2*m_miniEdge;

@@ -389,26 +389,26 @@ public:
         // set virtual size to satisfy children
     virtual void FitInside();
 
-        // set min/max size of the window
+
+        // Methods for setting size hints. This is only used
+        // for toplevel windows.
+        
     virtual void SetSizeHints( int minW, int minH,
                                int maxW = wxDefaultCoord, int maxH = wxDefaultCoord,
                                int incW = wxDefaultCoord, int incH = wxDefaultCoord )
-    {
-        DoSetSizeHints(minW, minH, maxW, maxH, incW, incH);
-    }
+    { DoSetSizeHints(minW, minH, maxW, maxH, incW, incH); }
 
     void SetSizeHints( const wxSize& minSize,
                        const wxSize& maxSize=wxDefaultSize,
                        const wxSize& incSize=wxDefaultSize)
-    {
-        DoSetSizeHints(minSize.x, minSize.y,
-                       maxSize.x, maxSize.y,
-                       incSize.x, incSize.y);
-    }
+    { DoSetSizeHints(minSize.x, minSize.y, maxSize.x, maxSize.y, incSize.x, incSize.y); }
 
-    virtual void DoSetSizeHints(int minW, int minH,
-                                int maxW = wxDefaultCoord, int maxH = wxDefaultCoord,
-                               int incW = wxDefaultCoord, int incH = wxDefaultCoord );
+    virtual void DoSetSizeHints( int minW, int minH,
+                                 int maxW = wxDefaultCoord, int maxH = wxDefaultCoord,
+                                 int incW = wxDefaultCoord, int incH = wxDefaultCoord ) { }
+
+        // Methods for setting virtual size hints
+        // FIXME: What are virtual size hints?
 
     virtual void SetVirtualSizeHints( int minW, int minH,
                                       int maxW = wxDefaultCoord, int maxH = wxDefaultCoord );
@@ -418,17 +418,20 @@ public:
         SetVirtualSizeHints(minSize.x, minSize.y, maxSize.x, maxSize.y);
     }
 
-    virtual int GetMinWidth() const { return m_minWidth; }
-    virtual int GetMinHeight() const { return m_minHeight; }
-    int GetMaxWidth() const { return m_maxWidth; }
-    int GetMaxHeight() const { return m_maxHeight; }
 
         // Override this method to control the values given to Sizers etc.
     virtual wxSize GetMaxSize() const { return wxSize( m_maxWidth, m_maxHeight ); }
     virtual wxSize GetMinSize() const { return wxSize( m_minWidth, m_minHeight ); }
 
-    void SetMinSize(const wxSize& minSize) { SetSizeHints(minSize); }
-    void SetMaxSize(const wxSize& maxSize) { SetSizeHints(GetMinSize(), maxSize); }
+        // If a class doesn't override GetMinSize() or GetMaxSize()
+        // these values will be returned
+    int GetMinWidth() const { return m_minWidth; }
+    int GetMinHeight() const { return m_minHeight; }
+    int GetMaxWidth() const { return m_maxWidth; }
+    int GetMaxHeight() const { return m_maxHeight; }
+    void SetMinSize(const wxSize& minSize) { m_minWidth = minSize.x; m_minHeight = minSize.y; }
+    void SetMaxSize(const wxSize& maxSize) { m_maxWidth = maxSize.x; m_maxHeight = maxSize.y; }
+
 
         // Methods for accessing the virtual size of a window.  For most
         // windows this is just the client area of the window, but for

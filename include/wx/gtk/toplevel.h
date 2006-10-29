@@ -121,6 +121,10 @@ protected:
                            int width, int height,
                            int sizeFlags = wxSIZE_AUTO);
 
+    virtual void DoSetSizeHints( int minW, int minH,
+                                 int maxW = wxDefaultCoord, int maxH = wxDefaultCoord,
+                                 int incW = wxDefaultCoord, int incH = wxDefaultCoord );
+                                 
     virtual void DoSetClientSize(int width, int height);
     virtual void DoGetClientSize( int *width, int *height ) const;
 

@@ -767,8 +767,7 @@ Merges the window's best size into the min size and returns the result.
 \wxheading{See also}
 
 \helpref{wxWindow::GetBestSize}{wxwindowgetbestsize},\rtfsp
-\helpref{wxWindow::SetBestFittingSize}{wxwindowsetbestfittingsize},\rtfsp
-\helpref{wxWindow::SetSizeHints}{wxwindowsetsizehints}
+\helpref{wxWindow::SetBestFittingSize}{wxwindowsetbestfittingsize}
 
 
 \membersection{wxWindow::GetBestSize}\label{wxwindowgetbestsize}
@@ -2675,8 +2674,7 @@ needs of the window for layout.
 
 \helpref{wxWindow::SetSize}{wxwindowsetsize},\rtfsp
 \helpref{wxWindow::GetBestSize}{wxwindowgetbestsize},\rtfsp
-\helpref{wxWindow::GetBestFittingSize}{wxwindowgetbestfittingsize},\rtfsp
-\helpref{wxWindow::SetSizeHints}{wxwindowsetsizehints}
+\helpref{wxWindow::GetBestFittingSize}{wxwindowgetbestfittingsize}
 
 
 \membersection{wxWindow::SetCaret}\label{wxwindowsetcaret}
@@ -3292,42 +3290,9 @@ implements the following methods:\par
 
 \membersection{wxWindow::SetSizeHints}\label{wxwindowsetsizehints}
 
-\func{virtual void}{SetSizeHints}{\param{int}{ minW}, \param{int}{ minH}, \param{int}{ maxW=-1}, \param{int}{ maxH=-1},
- \param{int}{ incW=-1}, \param{int}{ incH=-1}}
-
-\func{void}{SetSizeHints}{\param{const wxSize\&}{ minSize},
-\param{const wxSize\&}{ maxSize=wxDefaultSize}, \param{const wxSize\&}{ incSize=wxDefaultSize}}
-
-
-Allows specification of minimum and maximum window sizes, and window size increments.
-If a pair of values is not set (or set to -1), the default values will be used.
-
-\wxheading{Parameters}
-
-\docparam{minW}{Specifies the minimum width allowable.}
-
-\docparam{minH}{Specifies the minimum height allowable.}
-
-\docparam{maxW}{Specifies the maximum width allowable.}
-
-\docparam{maxH}{Specifies the maximum height allowable.}
-
-\docparam{incW}{Specifies the increment for sizing the width (Motif/Xt only).}
-
-\docparam{incH}{Specifies the increment for sizing the height (Motif/Xt only).}
-
-\docparam{minSize}{Minimum size.}
-
-\docparam{maxSize}{Maximum size.}
-
-\docparam{incSize}{Increment size (Motif/Xt only).}
-
-\wxheading{Remarks}
-
-If this function is called, the user will not be able to size the window outside the
-given bounds.
-
-The resizing increments are only significant under Motif or Xt.
+This method does nothing for a normal wxWindow and is only kept
+for backwards compatibility. The actual implementation is in
+\helpref{wxTopLevelWindow::SetSizeHints}{wxtoplevelwindowsetsizehints}.
 
 
 \membersection{wxWindow::SetSizer}\label{wxwindowsetsizer}

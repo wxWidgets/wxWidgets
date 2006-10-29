@@ -352,19 +352,6 @@ void wxFrame::GtkOnSize()
 
     if (m_mainWidget)
     {
-        // set size hints
-        gint flag = 0; // GDK_HINT_POS;
-        if ((minWidth != -1) || (minHeight != -1)) flag |= GDK_HINT_MIN_SIZE;
-        if ((maxWidth != -1) || (maxHeight != -1)) flag |= GDK_HINT_MAX_SIZE;
-        GdkGeometry geom;
-        geom.min_width = minWidth;
-        geom.min_height = minHeight;
-        geom.max_width = maxWidth;
-        geom.max_height = maxHeight;
-        gtk_window_set_geometry_hints( GTK_WINDOW(m_widget),
-                                       (GtkWidget*) NULL,
-                                       &geom,
-                                       (GdkWindowHints) flag );
         // TODO
         // Rewrite this terrible code to using GtkVBox
 
