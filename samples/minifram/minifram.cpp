@@ -48,6 +48,11 @@ MyMiniFrame   *mini_frame = (MyMiniFrame*) NULL;
 bool           mini_frame_exists = false;
 wxButton      *button     = (wxButton*) NULL;
 
+#define ID_SET_SIZE_TO_150_150      100
+#define ID_SET_SIZE_TO_200_200      101
+#define ID_SET_MAX_SIZE_TO_150_150  102
+#define ID_SET_MAX_SIZE_TO_300_300  103
+
 // The `main program' equivalent, creating the windows and returning the
 // main frame
 bool MyApp::OnInit()
@@ -55,11 +60,31 @@ bool MyApp::OnInit()
   // Create the main frame window
   main_frame = new MyMainFrame((wxFrame *) NULL, wxID_ANY, _T("wxFrame sample"),
      wxPoint(100, 100), wxSize(300, 200));
-     
+
   // main_frame->SetMinSize( wxSize(100,100) );
   // main_frame->SetMaxSize( wxSize(400,400) );
   // same as
   main_frame->SetSizeHints( 100,100, 400,400 );
+
+  wxMenu *file_menu = new wxMenu;
+  file_menu->Append(wxID_EXIT, _T("E&xit\tAlt-Q"));
+  file_menu->Append(ID_SET_SIZE_TO_150_150, _T("Set frame size to 150,150\tF2"));
+  file_menu->Append(ID_SET_SIZE_TO_200_200, _T("Set frame size to 200,200\tF3"));
+  file_menu->Append(ID_SET_MAX_SIZE_TO_150_150, _T("Set frame max size to 150,150\tF4"));
+  file_menu->Append(ID_SET_MAX_SIZE_TO_300_300, _T("Set frame max size to 300,300\tF5"));
+  
+  wxMenuBar *menu_bar = new wxMenuBar;
+  menu_bar->Append(file_menu, _T("&File"));
+  main_frame->SetMenuBar(menu_bar);
+
+  main_frame->Connect( ID_SET_SIZE_TO_150_150,  wxID_ANY,
+                    wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(MyMainFrame::OnSetSize_150_150) );
+  main_frame->Connect( ID_SET_SIZE_TO_200_200, wxID_ANY,
+                    wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(MyMainFrame::OnSetSize_200_200) );
+  main_frame->Connect( ID_SET_MAX_SIZE_TO_150_150,  wxID_ANY,
+                    wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(MyMainFrame::OnSetMaxSize_150_150) );
+  main_frame->Connect( ID_SET_MAX_SIZE_TO_300_300, wxID_ANY,
+                    wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(MyMainFrame::OnSetMaxSize_300_300) );
 
   main_frame->CreateToolBar(wxNO_BORDER|wxTB_VERTICAL, ID_TOOLBAR);
   InitToolbar(main_frame->GetToolBar());
@@ -199,4 +224,24 @@ void MyMainFrame::OnReparent(wxCommandEvent& WXUNUSED(event))
     // same as above
     mini_frame->SendSizeEvent();
   }
+}
+
+void MyMainFrame::OnSetSize_150_150(wxCommandEvent& WXUNUSED(event))
+{
+    SetSize( 150, 150 );
+}
+
+void MyMainFrame::OnSetSize_200_200(wxCommandEvent& WXUNUSED(event))
+{
+    SetSize( 200, 200 );
+}
+
+void MyMainFrame::OnSetMaxSize_150_150(wxCommandEvent& WXUNUSED(event))
+{
+    SetMaxSize( wxSize(150,150) );
+}
+
+void MyMainFrame::OnSetMaxSize_300_300(wxCommandEvent& WXUNUSED(event))
+{
+    SetMaxSize( wxSize(300,300) );
 }
