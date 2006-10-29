@@ -82,7 +82,7 @@ public:
     }
     wxCoord YDEV2LOGREL(wxCoord y) const
     {
-        return wCoordRound((double)(y) / m_scaleY);
+        return wxCoordRound((double)(y) / m_scaleY);
     }
     wxCoord XLOG2DEV(wxCoord x) const
     {
