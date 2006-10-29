@@ -56,8 +56,7 @@ public:
                                      const wxString& name = wxToolBarNameStr);
 #endif // wxUSE_TOOLBAR
 
-    virtual int GetMinWidth() const;
-    virtual int GetMinHeight() const;
+    virtual wxSize GetMinSize() const;
 
     // sends wxSizeEvent to itself (used after attaching xxxBar)
     virtual void SendSizeEvent();

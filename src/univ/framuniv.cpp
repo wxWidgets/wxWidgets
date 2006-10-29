@@ -285,47 +285,35 @@ void wxFrame::DoSetClientSize(int width, int height)
     wxFrameBase::DoSetClientSize(width, height);
 }
 
-int wxFrame::GetMinWidth() const
+wxSize wxFrame::GetMinSize() const
 {
-#if wxUSE_MENUS
-    if ( m_frameMenuBar )
-    {
-        return wxMax(m_frameMenuBar->GetBestSize().x, wxFrameBase::GetMinWidth());
-    }
-    else
-#endif // wxUSE_MENUS
-        return wxFrameBase::GetMinWidth();
-}
-
-int wxFrame::GetMinHeight() const
-{
-    int height = 0;
+    wxSize size = wxFrameBase::GetMinSize();
 
 #if wxUSE_MENUS
     if ( m_frameMenuBar )
     {
-        height += m_frameMenuBar->GetSize().y;
+        const wxSize sizeMenu = m_frameMenuBar->GetBestSize();
+        if ( sizeMenu.x > size.x )
+            size.x = sizeMenu.x;
+        size.y += sizeMenu.y;
     }
 #endif // wxUSE_MENUS
 
 #if wxUSE_TOOLBAR
     if ( m_frameToolBar )
     {
-        height += m_frameToolBar->GetSize().y;
+        size.y += m_frameToolBar->GetSize().y;
     }
 #endif // wxUSE_TOOLBAR
 
 #if wxUSE_STATUSBAR
     if ( m_frameStatusBar )
     {
-        height += m_frameStatusBar->GetSize().y;
+        size.y += m_frameStatusBar->GetSize().y;
     }
 #endif // wxUSE_STATUSBAR
 
-    if ( height )
-        return height + wxMax(0, wxFrameBase::GetMinHeight());
-    else
-        return wxFrameBase::GetMinHeight();
+    return size;
 }
 
 bool wxFrame::Enable(bool enable)

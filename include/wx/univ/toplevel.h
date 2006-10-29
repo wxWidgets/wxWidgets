@@ -152,8 +152,7 @@ public:
     // move/resize the frame interactively, i.e. let the user do it
     virtual void InteractiveMove(int flags = wxINTERACTIVE_MOVE);
 
-    virtual int GetMinWidth() const;
-    virtual int GetMinHeight() const;
+    virtual wxSize GetMinSize() const;
 
     virtual wxWindow *GetInputWindow() const { return wx_const_cast(wxTopLevelWindow*, this); }
 

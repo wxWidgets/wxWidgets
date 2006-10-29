@@ -303,26 +303,15 @@ long wxTopLevelWindow::HitTest(const wxPoint& pt) const
     return m_renderer->HitTestFrame(rect, pt+GetClientAreaOrigin(), GetDecorationsStyle());
 }
 
-int wxTopLevelWindow::GetMinWidth() const
+wxSize wxTopLevelWindow::GetMinSize() const
 {
+    wxSize size = wxTopLevelWindowNative::GetMinSize();
     if ( !m_usingNativeDecorations )
     {
-        return wxMax(wxTopLevelWindowNative::GetMinWidth(),
-                     m_renderer->GetFrameMinSize(GetDecorationsStyle()).x);
+        size.IncTo(m_renderer->GetFrameMinSize(GetDecorationsStyle()));
     }
-    else
-        return wxTopLevelWindowNative::GetMinWidth();
-}
 
-int wxTopLevelWindow::GetMinHeight() const
-{
-    if ( !m_usingNativeDecorations )
-    {
-        return wxMax(wxTopLevelWindowNative::GetMinHeight(),
-                     m_renderer->GetFrameMinSize(GetDecorationsStyle()).y);
-    }
-    else
-        return wxTopLevelWindowNative::GetMinHeight();
+    return size;
 }
 
 // ----------------------------------------------------------------------------
