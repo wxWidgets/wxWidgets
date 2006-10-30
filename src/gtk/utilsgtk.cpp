@@ -293,27 +293,32 @@ wxPortId wxGUIAppTraits::GetToolkitVersion(int *verMaj, int *verMin) const
 #if wxUSE_DETECT_SM
 static wxString GetSM()
 {
-	Display     *dpy;
-	SmcConn     smc_conn;
-	char        *vendor;
-	char        *client_id_ret;
-	dpy = XOpenDisplay(NULL);
+    Display     *dpy;
+    SmcConn     smc_conn;
+    char        *vendor;
+    char        *client_id_ret;
+    dpy = XOpenDisplay(NULL);
 
-	smc_conn = SmcOpenConnection(NULL, NULL,
+    smc_conn = SmcOpenConnection(NULL, NULL,
 	                             999, 999,
 	                             0 /* mask */, NULL /* callbacks */,
 	                             NULL, &client_id_ret, 0, NULL);
 
-	vendor = SmcVendor(smc_conn);
-    wxString ret = wxString::FromAscii( vendor );
-	free(vendor);
+    if (smc_conn)
+    {
+        vendor = SmcVendor(smc_conn);
+        wxString ret = wxString::FromAscii( vendor );
+        free(vendor);
 
-	SmcCloseConnection(smc_conn, 0, NULL);
-	free(client_id_ret);
+        SmcCloseConnection(smc_conn, 0, NULL);
+        free(client_id_ret);
 
-	XCloseDisplay(dpy);
+        XCloseDisplay(dpy);
+        
+        return ret;
+    }
     
-    return ret;
+    return wxEmptyString;
 }
 #endif
 
