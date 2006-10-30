@@ -42,6 +42,7 @@
 #include "wx/clrpicker.h"
 #include "wx/filepicker.h"
 #include "wx/fontpicker.h"
+#include "wx/aboutdlg.h"
 
 // ----------------------------------------------------------------------------
 // constants
@@ -54,6 +55,7 @@ enum
     PANE_EXPAND,
     PANE_SETLABEL,
     PANE_SHOWDLG,
+    PANE_ABOUT = wxID_ABOUT,
     PANE_QUIT = wxID_EXIT
 };
 
@@ -84,6 +86,7 @@ public:
     void OnSetLabel(wxCommandEvent& event);
     void OnShowDialog(wxCommandEvent& event);
     void Quit(wxCommandEvent& event);
+    void OnAbout(wxCommandEvent& event);
 
     // Menu command update functions
     void UpdateUI(wxUpdateUIEvent& event);
@@ -100,6 +103,7 @@ class MyDialog : public wxDialog
 public:
     MyDialog(wxFrame *parent);
     void OnToggleStatus(wxCommandEvent& WXUNUSED(ev));
+    void OnPaneChanged(wxCollapsiblePaneEvent& event);
 
 private:
     wxCollapsiblePane *m_collPane;
@@ -139,6 +143,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(PANE_EXPAND, MyFrame::OnExpand)
     EVT_MENU(PANE_SETLABEL, MyFrame::OnSetLabel)
     EVT_MENU(PANE_SHOWDLG, MyFrame::OnShowDialog)
+    EVT_MENU(PANE_ABOUT, MyFrame::OnAbout)
     EVT_MENU(PANE_QUIT, MyFrame::Quit)
 
     EVT_UPDATE_UI(wxID_ANY, MyFrame::UpdateUI)
@@ -165,8 +170,12 @@ MyFrame::MyFrame()
     paneMenu->AppendSeparator();
     paneMenu->Append(PANE_QUIT);
 
+    wxMenu *helpMenu = new wxMenu;
+    helpMenu->Append(PANE_ABOUT);
+
     wxMenuBar *menuBar = new wxMenuBar;
     menuBar->Append(paneMenu, _T("&Pane"));
+    menuBar->Append(helpMenu, _T("&Help"));
     SetMenuBar(menuBar);
 
     m_collPane = new wxCollapsiblePane(this, -1, wxT("test!"));
@@ -211,11 +220,22 @@ void MyFrame::OnShowDialog(wxCommandEvent& WXUNUSED(event) )
     dlg.ShowModal();
 }
 
+void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event) )
+{
+    wxAboutDialogInfo info;
+    info.SetName(_("wxCollapsiblePane sample"));
+    info.SetDescription(_("This sample program demonstrates usage of wxCollapsiblePane"));
+    info.SetCopyright(_T("(C) 2006 Francesco Montorsi <frm@users.sourceforge.net>"));
+
+    wxAboutBox(info);
+}
+
 void MyFrame::UpdateUI(wxUpdateUIEvent& event)
 {
     GetMenuBar()->Enable(PANE_COLLAPSE, !m_collPane->IsCollapsed());
     GetMenuBar()->Enable(PANE_EXPAND, m_collPane->IsCollapsed());
 }
+
 
 // ----------------------------------------------------------------------------
 // MyDialog
@@ -228,6 +248,7 @@ enum
 
 BEGIN_EVENT_TABLE(MyDialog, wxDialog)
     EVT_BUTTON(PANEDLG_TOGGLESTATUS_BTN, MyDialog::OnToggleStatus)
+    EVT_COLLAPSIBLEPANE_CHANGED(wxID_ANY, MyDialog::OnPaneChanged)
 END_EVENT_TABLE()
 
 MyDialog::MyDialog(wxFrame *parent)
@@ -236,14 +257,14 @@ MyDialog::MyDialog(wxFrame *parent)
                             wxRESIZE_BORDER|wxDEFAULT_DIALOG_STYLE )
 {
     wxSizer *sz = new wxBoxSizer(wxVERTICAL);
-    sz->Add(new wxStaticText(this, -1, 
+    sz->Add(new wxStaticText(this, -1,
         wxT("This dialog allows you to test the wxCollapsiblePane control")),
         0, wxALL, 5);
-    sz->Add(new wxButton(this, PANEDLG_TOGGLESTATUS_BTN, wxT("Change status")), 
+    sz->Add(new wxButton(this, PANEDLG_TOGGLESTATUS_BTN, wxT("Change status")),
         1, wxGROW|wxALL, 5);
-    
+
     m_collPane = new wxCollapsiblePane(this, -1, wxT("Click here for a surprise"));
-    sz->Add(m_collPane, 1, wxGROW|wxALL, 5);
+    sz->Add(m_collPane, 0, wxGROW|wxALL, 5);
     sz->Add(new wxTextCtrl(this, -1, wxT("just a test")), 0, wxGROW|wxALL, 5);
     sz->AddSpacer(10);
     sz->Add(new wxButton(this, wxID_OK), 0, wxALIGN_RIGHT|wxALL, 5);
@@ -265,5 +286,11 @@ MyDialog::MyDialog(wxFrame *parent)
 void MyDialog::OnToggleStatus(wxCommandEvent& WXUNUSED(ev))
 {
     m_collPane->Collapse(!m_collPane->IsCollapsed());
+}
+
+void MyDialog::OnPaneChanged(wxCollapsiblePaneEvent &event)
+{
+    wxLogDebug(wxT("The pane has just been %s by the user"),
+               event.GetCollapsed() ? wxT("collapsed") : wxT("expanded"));
 }
 

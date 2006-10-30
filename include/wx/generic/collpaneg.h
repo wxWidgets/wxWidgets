@@ -48,9 +48,12 @@ public:
     void Init()
     {
         m_pButton = NULL;
-        m_pStatLine = NULL;
         m_pPane = NULL;
+        m_pStaticLine = NULL;
+        m_sz = NULL;
     }
+
+    ~wxGenericCollapsiblePane();
 
     bool Create(wxWindow *parent,
                 wxWindowID winid,
@@ -80,17 +83,16 @@ public:
 protected:
     // overridden methods
     virtual wxSize DoGetBestSize() const;
-
-    // internal helpers
-    void LayoutChildren();
+    bool Layout();
 
     wxString GetBtnLabel() const;
-
+    int GetBorder() const;
 
     // child controls
     wxButton *m_pButton;
-    wxStaticLine *m_pStatLine;
+    wxStaticLine *m_pStaticLine;
     wxWindow *m_pPane;
+    wxSizer *m_sz;
 
     // the button label without ">>" or "<<"
     wxString m_strLabel;

@@ -1119,6 +1119,54 @@
                 </object>
 
                 <object class="notebookpage">
+                    <label>wxCollapsiblePane</label>
+                    <object class="wxPanel" name="collpane">
+                        <object class="wxFlexGridSizer">
+                            <cols>1</cols>
+                            <rows>1</rows>
+                            <vgap>0</vgap>
+                            <hgap>0</hgap>
+                            <growablecols>0</growablecols>
+                            <growablerows>0</growablerows>
+
+                            <object class="sizeritem">
+                                <flag>wxGROW|wxALL</flag>
+                                <border>5</border>
+                                <option>1</option>
+                                <object class="wxCollapsiblePane" name="controls_collpane">
+                                    <label>Details:</label>
+                                    <collapsed>0</collapsed>
+                                    <object class="panewindow">
+
+                                        <object class="wxFlexGridSizer">
+                                            <cols>1</cols>
+                                            <rows>1</rows>
+                                            <vgap>0</vgap>
+                                            <hgap>0</hgap>
+                                            <growablecols>0</growablecols>
+                                            <growablerows>0</growablerows>
+
+                                            <object class="sizeritem">
+                                                <flag>wxALIGN_CENTRE|wxALL</flag>
+                                                <border>5</border>
+                                                <object class="wxStaticText" name="controls_dialog_statictext">
+                                                    <label>
+Inside a wxCollapsiblePane you can put everything you want and
+lay them out using wxSizers, absolute positioning, everything you like!
+                                                    </label>
+                                                </object>
+                                            </object>
+                                        </object>
+
+                                    </object>
+                                </object>
+                            </object>
+
+                        </object>
+                    </object>
+                </object>
+
+                <object class="notebookpage">
                     <label>The Rest</label>
                     <object class="wxPanel" name="Rest">
                         <object class="wxFlexGridSizer">

@@ -514,7 +514,7 @@
 //
 // Default is 1.
 //
-// Recommended setting: 1 
+// Recommended setting: 1
 #define wxUSE_MEDIACTRL     1
 
 // Use GStreamer for Unix (req a lot of dependancies)
@@ -609,6 +609,7 @@
 #define wxUSE_CHECKBOX      1   // wxCheckBox
 #define wxUSE_CHECKLISTBOX  1   // wxCheckListBox (requires wxUSE_OWNER_DRAWN)
 #define wxUSE_CHOICE        1   // wxChoice
+#define wxUSE_COLLPANE      1   // wxCollapsiblePane
 #define wxUSE_COLOURPICKERCTRL 1    // wxColourPickerCtrl
 #define wxUSE_COMBOBOX      1   // wxComboBox
 #define wxUSE_DATAVIEWCTRL  1   // wxDataViewCtrl

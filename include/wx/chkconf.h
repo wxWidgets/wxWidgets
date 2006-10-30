@@ -432,6 +432,14 @@
 #   endif
 #endif /* !defined(wxUSE_CLIPBOARD) */
 
+#ifndef wxUSE_COLLPANE
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_COLLPANE must be defined."
+#   else
+#       define wxUSE_COLLPANE 0
+#   endif
+#endif /* !defined(wxUSE_COLLPANE) */
+
 #ifndef wxUSE_COLOURDLG
 #   ifdef wxABORT_ON_CONFIG_ERROR
 #       error "wxUSE_COLOURDLG must be defined."

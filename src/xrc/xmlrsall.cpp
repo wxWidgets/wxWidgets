@@ -63,6 +63,9 @@ void wxXmlResource::InitAllHandlers()
 #if wxUSE_CHOICEBOOK
     AddHandler(new wxChoicebookXmlHandler);
 #endif
+#if wxUSE_COLLPANE
+    AddHandler(new wxCollapsiblePaneXmlHandler);
+#endif
 #if wxUSE_COLOURPICKERCTRL
     AddHandler(new wxColourPickerCtrlXmlHandler);
 #endif

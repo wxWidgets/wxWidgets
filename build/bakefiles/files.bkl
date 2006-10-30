@@ -2955,6 +2955,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/xrc/xh_choic.cpp
     src/xrc/xh_choicbk.cpp
     src/xrc/xh_clrpicker.cpp
+    src/xrc/xh_collpane.cpp
     src/xrc/xh_combo.cpp
     src/xrc/xh_datectrl.cpp
     src/xrc/xh_dirpicker.cpp
@@ -3012,6 +3013,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/xrc/xh_choic.h
     wx/xrc/xh_choicbk.h
     wx/xrc/xh_clrpicker.h
+    wx/xrc/xh_collpane.h
     wx/xrc/xh_combo.h
     wx/xrc/xh_datectrl.h
     wx/xrc/xh_dirpicker.h

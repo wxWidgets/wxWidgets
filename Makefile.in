@@ -1314,6 +1314,7 @@ XRCDLL_OBJECTS =  \
 	xrcdll_xh_choic.o \
 	xrcdll_xh_choicbk.o \
 	xrcdll_xh_clrpicker.o \
+	xrcdll_xh_collpane.o \
 	xrcdll_xh_combo.o \
 	xrcdll_xh_datectrl.o \
 	xrcdll_xh_dirpicker.o \
@@ -1374,6 +1375,7 @@ XRCLIB_OBJECTS =  \
 	xrclib_xh_choic.o \
 	xrclib_xh_choicbk.o \
 	xrclib_xh_clrpicker.o \
+	xrclib_xh_collpane.o \
 	xrclib_xh_combo.o \
 	xrclib_xh_datectrl.o \
 	xrclib_xh_dirpicker.o \
@@ -3042,6 +3044,7 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/xrc/xh_choic.h \
 	wx/xrc/xh_choicbk.h \
 	wx/xrc/xh_clrpicker.h \
+	wx/xrc/xh_collpane.h \
 	wx/xrc/xh_combo.h \
 	wx/xrc/xh_datectrl.h \
 	wx/xrc/xh_dirpicker.h \
@@ -3347,6 +3350,7 @@ COND_USE_GUI_1___MONOLIB_GUI_SRC_OBJECTS =  \
 	monodll_xh_choic.o \
 	monodll_xh_choicbk.o \
 	monodll_xh_clrpicker.o \
+	monodll_xh_collpane.o \
 	monodll_xh_combo.o \
 	monodll_xh_datectrl.o \
 	monodll_xh_dirpicker.o \
@@ -5101,6 +5105,7 @@ COND_USE_GUI_1___MONOLIB_GUI_SRC_OBJECTS_1 =  \
 	monolib_xh_choic.o \
 	monolib_xh_choicbk.o \
 	monolib_xh_clrpicker.o \
+	monolib_xh_collpane.o \
 	monolib_xh_combo.o \
 	monolib_xh_datectrl.o \
 	monolib_xh_dirpicker.o \
@@ -12774,6 +12779,9 @@ monodll_xh_choicbk.o: $(srcdir)/src/xrc/xh_choicbk.cpp $(MONODLL_ODEP)
 monodll_xh_clrpicker.o: $(srcdir)/src/xrc/xh_clrpicker.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/xrc/xh_clrpicker.cpp
 
+monodll_xh_collpane.o: $(srcdir)/src/xrc/xh_collpane.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/xrc/xh_collpane.cpp
+
 monodll_xh_combo.o: $(srcdir)/src/xrc/xh_combo.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/xrc/xh_combo.cpp
 
@@ -16868,6 +16876,9 @@ monolib_xh_choicbk.o: $(srcdir)/src/xrc/xh_choicbk.cpp $(MONOLIB_ODEP)
 
 monolib_xh_clrpicker.o: $(srcdir)/src/xrc/xh_clrpicker.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_clrpicker.cpp
+
+monolib_xh_collpane.o: $(srcdir)/src/xrc/xh_collpane.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_collpane.cpp
 
 monolib_xh_combo.o: $(srcdir)/src/xrc/xh_combo.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_combo.cpp
@@ -28260,6 +28271,9 @@ xrcdll_xh_choicbk.o: $(srcdir)/src/xrc/xh_choicbk.cpp $(XRCDLL_ODEP)
 xrcdll_xh_clrpicker.o: $(srcdir)/src/xrc/xh_clrpicker.cpp $(XRCDLL_ODEP)
 	$(CXXC) -c -o $@ $(XRCDLL_CXXFLAGS) $(srcdir)/src/xrc/xh_clrpicker.cpp
 
+xrcdll_xh_collpane.o: $(srcdir)/src/xrc/xh_collpane.cpp $(XRCDLL_ODEP)
+	$(CXXC) -c -o $@ $(XRCDLL_CXXFLAGS) $(srcdir)/src/xrc/xh_collpane.cpp
+
 xrcdll_xh_combo.o: $(srcdir)/src/xrc/xh_combo.cpp $(XRCDLL_ODEP)
 	$(CXXC) -c -o $@ $(XRCDLL_CXXFLAGS) $(srcdir)/src/xrc/xh_combo.cpp
 
@@ -28421,6 +28435,9 @@ xrclib_xh_choicbk.o: $(srcdir)/src/xrc/xh_choicbk.cpp $(XRCLIB_ODEP)
 
 xrclib_xh_clrpicker.o: $(srcdir)/src/xrc/xh_clrpicker.cpp $(XRCLIB_ODEP)
 	$(CXXC) -c -o $@ $(XRCLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_clrpicker.cpp
+
+xrclib_xh_collpane.o: $(srcdir)/src/xrc/xh_collpane.cpp $(XRCLIB_ODEP)
+	$(CXXC) -c -o $@ $(XRCLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_collpane.cpp
 
 xrclib_xh_combo.o: $(srcdir)/src/xrc/xh_combo.cpp $(XRCLIB_ODEP)
 	$(CXXC) -c -o $@ $(XRCLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_combo.cpp

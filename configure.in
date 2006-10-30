@@ -521,6 +521,7 @@ if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_CHECKLST=no
   DEFAULT_wxUSE_CHOICE=no
   DEFAULT_wxUSE_CHOICEBOOK=no
+  DEFAULT_wxUSE_COLLPANE=no
   DEFAULT_wxUSE_COLOURPICKERCTRL=no
   DEFAULT_wxUSE_COMBOBOX=no
   DEFAULT_wxUSE_COMBOCTRL=no
@@ -741,6 +742,7 @@ else
   DEFAULT_wxUSE_CHECKLST=yes
   DEFAULT_wxUSE_CHOICE=yes
   DEFAULT_wxUSE_CHOICEBOOK=yes
+  DEFAULT_wxUSE_COLLPANE=yes
   DEFAULT_wxUSE_COLOURPICKERCTRL=yes
   DEFAULT_wxUSE_COMBOBOX=yes
   DEFAULT_wxUSE_COMBOCTRL=yes
@@ -1073,6 +1075,7 @@ if test "$wxUSE_CONTROLS" = "yes"; then
   DEFAULT_wxUSE_CHECKLISTBOX=yes
   DEFAULT_wxUSE_CHOICE=yes
   DEFAULT_wxUSE_CHOICEBOOK=yes
+  DEFAULT_wxUSE_COLLPANE=yes
   DEFAULT_wxUSE_COLOURPICKERCTRL=yes
   DEFAULT_wxUSE_COMBOBOX=yes
   DEFAULT_wxUSE_DATEPICKCTRL=yes
@@ -1119,6 +1122,7 @@ elif test "$wxUSE_CONTROLS" = "no"; then
   DEFAULT_wxUSE_BUTTON=no
   DEFAULT_wxUSE_CALCTRL=no
   DEFAULT_wxUSE_CARET=no
+  DEFAULT_wxUSE_COLLPANE=no
   DEFAULT_wxUSE_COMBOBOX=no
   DEFAULT_wxUSE_CHECKBOX=no
   DEFAULT_wxUSE_CHECKLISTBOX=no
@@ -1176,6 +1180,7 @@ WX_ARG_ENABLE(checkbox,    [  --enable-checkbox       use wxCheckBox class], wxU
 WX_ARG_ENABLE(checklst,    [  --enable-checklst       use wxCheckListBox (listbox with checkboxes) class], wxUSE_CHECKLST)
 WX_ARG_ENABLE(choice,      [  --enable-choice         use wxChoice class], wxUSE_CHOICE)
 WX_ARG_ENABLE(choicebook,  [  --enable-choicebook     use wxChoicebook class], wxUSE_CHOICEBOOK)
+WX_ARG_ENABLE(collpane,    [  --enable-collpane       use wxCollapsiblePane class], wxUSE_COLLPANE)
 WX_ARG_ENABLE(colourpicker,[  --enable-colourpicker   use wxColourPickerCtrl class], wxUSE_COLOURPICKERCTRL)
 WX_ARG_ENABLE(combobox,    [  --enable-combobox       use wxComboBox class], wxUSE_COMBOBOX)
 WX_ARG_ENABLE(comboctrl,   [  --enable-comboctrl      use wxComboCtrl class], wxUSE_COMBOCTRL)
@@ -5679,7 +5684,7 @@ fi
 
 if test "$WXGTK20" = 1; then
     if test "$wxUSE_LIBHILDON" = "yes" ; then
-        PKG_CHECK_MODULES(HILDON, 
+        PKG_CHECK_MODULES(HILDON,
                           [hildon-lgpl >= 0.9],
             [
                 EXTRALIBS_HILDON="$HILDON_LIBS"
@@ -6572,6 +6577,12 @@ if test "$wxUSE_CARET" = "yes"; then
   AC_DEFINE(wxUSE_CARET)
   USES_CONTROLS=1
   SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS caret"
+fi
+
+if test "$wxUSE_COLLPANE" = "yes"; then
+    AC_DEFINE(wxUSE_COLLPANE)
+    USES_CONTROLS=1
+    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS collpane"
 fi
 
 if test "$wxUSE_COMBOBOX" = "yes"; then
@@ -7587,7 +7598,7 @@ if test "$wxUSE_WINE" = "yes"; then
 fi
 
 dnl ---------------------------------------------------------------------------
-dnl Add Universal binary support 
+dnl Add Universal binary support
 dnl Note we don't do this earlier because adding these cpp/ld flags could
 dnl cause configure tests to fail.
 dnl ---------------------------------------------------------------------------
@@ -7597,7 +7608,7 @@ if test "$wxUSE_MAC" = 1 ; then
         dnl --enable-universal_binary=SDK names a path to an SDK
         if test "x$wxUSE_UNIVERSAL_BINARY" == xyes; then
             OSX_UNIV_OPTS="-isysroot /Developer/SDKs/MacOSX10.4u.sdk"
-        else 
+        else
             dnl '' would mean universal with no SDK, which may be the case if
             dnl the compiler uses a sysroot by default
             OSX_UNIV_OPTS=${wxUSE_UNIVERSAL_BINARY:+"-isysroot '$wxUSE_UNIVERSAL_BINARY'"}
@@ -7675,7 +7686,7 @@ then
     CPPFLAGS="-DWX_PRECOMP $CPPFLAGS"
 fi
 
-dnl HACK ALERT!! 
+dnl HACK ALERT!!
 dnl For now, we need to alter bk-deps not to generate deps
 dnl when we've configured a Universal binary build.
 dnl The next version of Bakefile will have the correct fix for this

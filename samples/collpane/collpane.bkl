@@ -5,6 +5,7 @@
 
     <exe id="collpane" template="wx_sample" template_append="wx_append">
         <sources>collpane.cpp</sources>
+        <wx-lib>adv</wx-lib>
         <wx-lib>core</wx-lib>
         <wx-lib>base</wx-lib>
         <win32-res>../sample.rc</win32-res>

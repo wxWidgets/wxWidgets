@@ -16,10 +16,11 @@
 
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
+#include "wx/defs.h"
+
+#if wxUSE_COLLPANE && wxUSE_BUTTON && wxUSE_STATLINE
 
 #include "wx/collpane.h"
-
-#if wxUSE_BUTTON && wxUSE_STATLINE
 
 #ifndef WX_PRECOMP
     #include "wx/toplevel.h"
@@ -32,10 +33,6 @@
 // ----------------------------------------------------------------------------
 // constants
 // ----------------------------------------------------------------------------
-
-// the number of pixels to leave between the button and the static line and
-// between the button and the pane
-#define wxCP_MARGIN         10
 
 // ============================================================================
 // implementation
@@ -71,33 +68,56 @@ bool wxGenericCollapsiblePane::Create(wxWindow *parent,
 
     m_strLabel = label;
 
-    // create children; their size & position is set in OnSize()
+    // create children and lay them out using a wxBoxSizer
+    // (so that we automatically get RTL features)
     m_pButton = new wxButton(this, wxID_ANY, GetBtnLabel(), wxPoint(0, 0),
                              wxDefaultSize, wxBU_EXACTFIT);
-    m_pStatLine = new wxStaticLine(this, wxID_ANY);
+    m_pStaticLine = new wxStaticLine(this, wxID_ANY);
+#ifdef __WXMAC__
+    // on Mac we put the static libe above the button
+    m_sz = new wxBoxSizer(wxVERTICAL);
+    m_sz->Add(m_pStaticLine, 0, wxALL|wxGROW, GetBorder());
+    m_sz->Add(m_pButton, 0, wxLEFT|wxRIGHT|wxBOTTOM, GetBorder());
+#else
+    // on other platforms we put the static line and the button horizontally
+    m_sz = new wxBoxSizer(wxHORIZONTAL);
+    m_sz->Add(m_pButton, 0, wxLEFT|wxTOP|wxBOTTOM, GetBorder());
+    m_sz->Add(m_pStaticLine, 1, wxALIGN_CENTER|wxLEFT|wxRIGHT, GetBorder());
+#endif
+
+    // do not set sz as our sizers since we handle the pane window without using sizers
     m_pPane = new wxWindow(this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
                            wxNO_BORDER);
 
     // start as collapsed:
     m_pPane->Hide();
 
-    //CacheBestSize(GetBestSize());
     return true;
+}
+
+wxGenericCollapsiblePane::~wxGenericCollapsiblePane()
+{
+    if (m_pButton && m_pStaticLine && m_sz)
+    {
+        m_pButton->SetContainingSizer(NULL);
+        m_pStaticLine->SetContainingSizer(NULL);
+
+        // our sizer is not deleted automatically since we didn't use SetSizer()!
+        wxDELETE(m_sz);
+    }
 }
 
 wxSize wxGenericCollapsiblePane::DoGetBestSize() const
 {
-    wxSize sz = m_pButton->GetBestSize();
-
-    // set width
-    sz.SetWidth(sz.x + wxCP_MARGIN + m_pStatLine->GetBestSize().x);
-    const wxCoord paneWidth = m_pPane->GetBestSize().x;
-    if ( sz.x < paneWidth )
-        sz.x = paneWidth;
+    // NB: do not use GetSize() but rather GetMinSize()
+    wxSize sz = m_sz->GetMinSize();
 
     // when expanded, we need more vertical space
     if ( IsExpanded() )
-        sz.SetHeight(sz.y + wxCP_MARGIN + m_pPane->GetBestSize().y);
+    {
+        sz.SetWidth(wxMax( sz.GetWidth(), m_pPane->GetBestSize().x ));
+        sz.SetHeight(sz.y + GetBorder() + m_pPane->GetBestSize().y);
+    }
 
     return sz;
 }
@@ -113,16 +133,27 @@ void wxGenericCollapsiblePane::OnStateChange(const wxSize& sz)
     SetMinSize(sz);
     SetSize(sz);
 
+    if (this->HasFlag(wxCP_NO_TLW_RESIZE))
+    {
+        // the user asked to explicitely handle the resizing itself...
+        return;
+    }
+
+
+    //
+    // NB: the following block of code has been accurately designed to
+    //     as much flicker-free as possible; be careful when modifying it!
+    //
+
     wxTopLevelWindow *
         top = wxDynamicCast(wxGetTopLevelParent(this), wxTopLevelWindow);
     if ( top )
     {
-        // we've changed our size, thus our top level parent needs to relayout
-        // itself
-        top->Layout();
+        // NB: don't Layout() the 'top' window as its size has not been correctly
+        //     updated yet and we don't want to do an initial Layout() with the old
+        //     size immediately followed by a SetClientSize/Fit call for the new
+        //     size; that would provoke flickering!
 
-        // FIXME: this makes wxGenericCollapsiblePane behave as the user expect
-        //        but maybe there are cases where this is unwanted!
         if (top->GetSizer())
 #ifdef __WXGTK__
         // FIXME: the SetSizeHints() call would be required also for GTK+ for
@@ -142,12 +173,23 @@ void wxGenericCollapsiblePane::OnStateChange(const wxSize& sz)
         {
             if ( IsCollapsed() )
             {
-                // use SetClientSize() and not SetSize() otherwise the size for
-                // e.g. a wxFrame with a menubar wouldn't be correctly set
-                top->SetClientSize(sz);
+                // expanded -> collapsed transition
+                if (top->GetSizer())
+                {
+                    // we have just set the size hints...
+                    wxSize sz = top->GetSizer()->CalcMin();
+
+                    // use SetClientSize() and not SetSize() otherwise the size for
+                    // e.g. a wxFrame with a menubar wouldn't be correctly set
+                    top->SetClientSize(sz);
+                }
+                else
+                    top->Layout();
             }
             else
             {
+                // collapsed -> expanded transition
+
                 // force our parent to "fit", i.e. expand so that it can honour
                 // our minimal size
                 top->Fit();
@@ -178,23 +220,46 @@ void wxGenericCollapsiblePane::SetLabel(const wxString &label)
     m_pButton->SetLabel(GetBtnLabel());
     m_pButton->SetBestFittingSize();
 
-    LayoutChildren();
+    Layout();
 }
 
-void wxGenericCollapsiblePane::LayoutChildren()
+bool wxGenericCollapsiblePane::Layout()
 {
-    wxSize btnSz = m_pButton->GetSize();
+    if (!m_pButton || !m_pStaticLine || !m_pPane || !m_sz)
+        return false;     // we need to complete the creation first!
 
-    // the button position & size are always ok...
+    wxSize oursz(GetSize());
 
-    // move & resize the static line
-    m_pStatLine->SetSize(btnSz.x + wxCP_MARGIN, btnSz.y/2,
-                         GetSize().x - btnSz.x - wxCP_MARGIN, -1,
-                         wxSIZE_USE_EXISTING);
+    // move & resize the button and the static line
+    m_sz->SetDimension(0, 0, oursz.GetWidth(), m_sz->GetMinSize().GetHeight());
+    m_sz->Layout();
 
-    // move & resize the container window
-    m_pPane->SetSize(0, btnSz.y + wxCP_MARGIN,
-                     GetSize().x, GetSize().y - btnSz.y - wxCP_MARGIN);
+    if ( IsExpanded() )
+    {
+        // move & resize the container window
+        int yoffset = m_sz->GetSize().GetHeight() + GetBorder();
+        m_pPane->SetSize(0, yoffset,
+                        oursz.x, oursz.y - yoffset);
+
+        // this is very important to make the pane window layout show correctly
+        m_pPane->Layout();
+    }
+
+    return true;
+}
+
+int wxGenericCollapsiblePane::GetBorder() const
+{
+#if defined( __WXMAC__ )
+    return 6;
+#elif defined(__WXGTK20__)
+    return 3;
+#elif defined(__WXMSW__)
+    wxASSERT(m_pButton);
+    return m_pButton->ConvertDialogToPixels(wxSize(2, 0)).x;
+#else
+    return 5;
+#endif
 }
 
 
@@ -229,14 +294,7 @@ void wxGenericCollapsiblePane::OnSize(wxSizeEvent& WXUNUSED(event))
     dc.DrawRectangle(wxPoint(0,0), GetBestSize());
 #endif
 
-
-    if (!m_pButton || !m_pStatLine || !m_pPane)
-        return;     // we need to complete the creation first!
-
-    LayoutChildren();
-
-    // this is very important to make the pane window layout show correctly
-    m_pPane->Layout();
+    Layout();
 }
 
-#endif // wxUSE_BUTTON && wxUSE_STATLINE
+#endif // wxUSE_COLLPANE && wxUSE_BUTTON && wxUSE_STATLINE

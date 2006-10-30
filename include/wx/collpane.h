@@ -12,6 +12,11 @@
 #ifndef _WX_COLLAPSABLE_PANE_H_BASE_
 #define _WX_COLLAPSABLE_PANE_H_BASE_
 
+#include "wx/defs.h"
+
+
+#if wxUSE_COLLPANE
+
 #include "wx/control.h"
 
 
@@ -19,7 +24,8 @@
 // wxCollapsiblePaneBase: interface for wxCollapsiblePane
 // ----------------------------------------------------------------------------
 
-#define wxCP_DEFAULT_STYLE          (0)
+#define wxCP_DEFAULT_STYLE          (wxNO_BORDER)
+#define wxCP_NO_TLW_RESIZE          (0x0002)
 
 class WXDLLIMPEXP_ADV wxCollapsiblePaneBase : public wxControl
 {
@@ -81,15 +87,19 @@ typedef void (wxEvtHandler::*wxCollapsiblePaneEventFunction)(wxCollapsiblePaneEv
     (wxObjectEventFunction)(wxEventFunction)wxStaticCastEvent(wxCollapsiblePaneEventFunction, &func)
 
 #define EVT_COLLAPSIBLEPANE_CHANGED(id, fn) \
-    wx__DECLARE_EVT1(wxEVT_COMMAND_COLLPANE_CHANGED, id, wxCollapsiblePaneEventFunction(fn))
+    wx__DECLARE_EVT1(wxEVT_COMMAND_COLLPANE_CHANGED, id, wxCollapsiblePaneEventHandler(fn))
 
 
 #if defined(__WXGTK24__)
     #include "wx/gtk/collpane.h"
 #else
     #include "wx/generic/collpaneg.h"
-    #define wxCollapsiblePane   wxGenericCollapsiblePane
+
+    // use a typedef and not a #define to avoid problems with XRC forward declarations
+    typedef wxCollapsiblePane wxGenericCollapsiblePane
 #endif
+
+#endif      // wxUSE_COLLPANE
 
 #endif
     // _WX_COLLAPSABLE_PANE_H_BASE_

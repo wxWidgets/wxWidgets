@@ -316,6 +316,7 @@
 #define wxUSE_CHECKBOX      0
 #define wxUSE_CHECKLISTBOX  0
 #define wxUSE_CHOICE        0
+#define wxUSE_COLLPANE      0
 #define wxUSE_COLOURPICKERCTRL 0
 #define wxUSE_COMBOBOX      0
 #define wxUSE_DATAVIEWCTRL  0

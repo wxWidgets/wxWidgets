@@ -1935,6 +1935,10 @@ SOURCE=.\xrc\xh_clrpicker.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\xrc\xh_collpane.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\xrc\xh_combo.cpp
 # End Source File
 # Begin Source File
@@ -3548,6 +3552,10 @@ SOURCE=..\include\wx\xrc\xh_choicbk.h
 # Begin Source File
 
 SOURCE=..\include\wx\xrc\xh_clrpicker.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\xrc\xh_collpane.h
 # End Source File
 # Begin Source File
 
