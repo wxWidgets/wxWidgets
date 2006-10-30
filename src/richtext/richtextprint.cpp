@@ -80,18 +80,22 @@ void wxRichTextPrintout::OnPreparePrinting()
             // child is a paragraph
             wxRichTextParagraph* child = wxDynamicCast(node->GetData(), wxRichTextParagraph);
             wxASSERT (child != NULL);
-
+            
             wxRichTextLineList::compatibility_iterator node2 = child->GetLines().GetFirst();
             while (node2)
             {
                 wxRichTextLine* line = node2->GetData();
-                
+
                 // Set the line to the page-adjusted position
                 line->SetPosition(wxPoint(line->GetPosition().x, line->GetPosition().y - yOffset));
 
                 int lineY = child->GetPosition().y + line->GetPosition().y;
                 
-                if ((lineY + line->GetSize().y) > rect.GetBottom())
+                // Break the page if either we're going off the bottom, or this paragraph specifies
+                // an explicit page break
+                
+                if (((lineY + line->GetSize().y) > rect.GetBottom()) ||
+                    ((node2 == child->GetLines().GetFirst()) && child->GetAttributes().HasPageBreak()))
                 {
                     // New page starting at this line
                     int newY = rect.y;

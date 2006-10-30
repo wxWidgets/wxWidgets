@@ -130,6 +130,9 @@ bool wxRichTextCtrl::Create( wxWindow* parent, wxWindowID id, const wxString& va
 
     GetBuffer().Reset();
     GetBuffer().SetRichTextCtrl(this);
+    
+    SetCaret(new wxCaret(this, wxRICHTEXT_DEFAULT_CARET_WIDTH, 16));
+    GetCaret()->Show();
 
     if (style & wxTE_READONLY)
         SetEditable(false);
@@ -241,7 +244,7 @@ void wxRichTextCtrl::Clear()
 /// Painting
 void wxRichTextCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
 {
-    if (GetCaret())
+    if (GetCaret() && GetCaret()->IsVisible())
         GetCaret()->Hide();
 
     {
@@ -260,7 +263,11 @@ void wxRichTextCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
         // Paint the background
         PaintBackground(dc);
 
-        wxRect drawingArea(GetLogicalPoint(wxPoint(0, 0)), GetClientSize());
+        // wxRect drawingArea(GetLogicalPoint(wxPoint(0, 0)), GetClientSize());
+
+        wxRect drawingArea(GetUpdateRegion().GetBox());
+        drawingArea.SetPosition(GetLogicalPoint(drawingArea.GetPosition()));
+
         wxRect availableSpace(GetClientSize());
         if (GetBuffer().GetDirty())
         {
@@ -272,7 +279,7 @@ void wxRichTextCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
         GetBuffer().Draw(dc, GetBuffer().GetRange(), GetInternalSelectionRange(), drawingArea, 0 /* descent */, 0 /* flags */);
     }
 
-    if (GetCaret())
+    if (GetCaret() && !GetCaret()->IsVisible())
         GetCaret()->Show();
 
     PositionCaret();
@@ -285,21 +292,24 @@ void wxRichTextCtrl::OnEraseBackground(wxEraseEvent& WXUNUSED(event))
 
 void wxRichTextCtrl::OnSetFocus(wxFocusEvent& WXUNUSED(event))
 {
-    wxCaret* caret = new wxCaret(this, wxRICHTEXT_DEFAULT_CARET_WIDTH, 16);
-    SetCaret(caret);
-    caret->Show();
-    PositionCaret();
+    if (GetCaret())
+    {
+        if (!GetCaret()->IsVisible())
+            GetCaret()->Show();
+        PositionCaret();
+    }
 
-    if (!IsFrozen())
-        Refresh(false);
+    // if (!IsFrozen())
+    //    Refresh(false);
 }
 
 void wxRichTextCtrl::OnKillFocus(wxFocusEvent& WXUNUSED(event))
 {
-    SetCaret(NULL);
+    if (GetCaret() && GetCaret()->IsVisible())
+        GetCaret()->Hide();
 
-    if (!IsFrozen())
-        Refresh(false);
+    // if (!IsFrozen())
+    //    Refresh(false);
 }
 
 /// Left-click
@@ -2943,6 +2953,18 @@ long wxRichTextCtrl::GetFirstVisiblePosition() const
         return line->GetAbsoluteRange().GetStart();
     else
         return 0;
+}
+
+/// Get the first visible point in the window
+wxPoint wxRichTextCtrl::GetFirstVisiblePoint() const
+{
+    int ppuX, ppuY;
+    int startXUnits, startYUnits;
+
+    GetScrollPixelsPerUnit(& ppuX, & ppuY);
+    GetViewStart(& startXUnits, & startYUnits);
+
+    return wxPoint(startXUnits * ppuX, startYUnits * ppuY);
 }
 
 /// The adjusted caret position is the character position adjusted to take

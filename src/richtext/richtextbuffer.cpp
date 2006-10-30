@@ -43,6 +43,9 @@
 WX_DEFINE_LIST(wxRichTextObjectList)
 WX_DEFINE_LIST(wxRichTextLineList)
 
+// Switch off if the platform doesn't like it for some reason
+#define wxRICHTEXT_USE_OPTIMIZED_DRAWING 1
+
 /*!
  * wxRichTextObject
  * This is the base for drawable objects.
@@ -526,7 +529,12 @@ bool wxRichTextParagraphLayoutBox::Draw(wxDC& dc, const wxRichTextRange& range, 
         {
             wxRect childRect(child->GetPosition(), child->GetCachedSize());
 
-            if (((style & wxRICHTEXT_DRAW_IGNORE_CACHE) == 0) && childRect.GetTop() > rect.GetBottom() || childRect.GetBottom() < rect.GetTop())
+            if (((style & wxRICHTEXT_DRAW_IGNORE_CACHE) == 0) && childRect.GetTop() > rect.GetBottom())
+            {
+                // Stop drawing
+                break;
+            }
+            else if (((style & wxRICHTEXT_DRAW_IGNORE_CACHE) == 0) && childRect.GetBottom() < rect.GetTop())
             {
                 // Skip
             }
@@ -5911,6 +5919,57 @@ bool wxRichTextAction::Do()
     {
     case wxRICHTEXT_INSERT:
         {
+            // Store a list of line start character and y positions so we can figure out which area
+            // we need to refresh
+            wxArrayInt optimizationLineCharPositions;
+            wxArrayInt optimizationLineYPositions;
+
+#if wxRICHTEXT_USE_OPTIMIZED_DRAWING
+            // NOTE: we're assuming that the buffer is laid out correctly at this point.
+            // If we had several actions, which only invalidate and leave layout until the
+            // paint handler is called, then this might not be true. So we may need to switch
+            // optimisation on only when we're simply adding text and not simultaneously
+            // deleting a selection, for example. Or, we make sure the buffer is laid out correctly
+            // first, but of course this means we'll be doing it twice.
+            if (!m_buffer->GetDirty() && m_ctrl) // can only do optimisation if the buffer is already laid out correctly
+            {
+                wxSize clientSize = m_ctrl->GetClientSize();
+                wxPoint firstVisiblePt = m_ctrl->GetFirstVisiblePoint();
+                int lastY = firstVisiblePt.y + clientSize.y;
+                
+                wxRichTextParagraph* para = m_buffer->GetParagraphAtPosition(GetPosition());
+                wxRichTextObjectList::compatibility_iterator node = m_buffer->GetChildren().Find(para);
+                while (node)
+                {
+                    wxRichTextParagraph* child = (wxRichTextParagraph*) node->GetData();
+                    wxRichTextLineList::compatibility_iterator node2 = child->GetLines().GetFirst();
+                    while (node2)
+                    {
+                        wxRichTextLine* line = node2->GetData();
+                        wxPoint pt = line->GetAbsolutePosition();
+                        wxRichTextRange range = line->GetAbsoluteRange();
+                        
+                        if (pt.y > lastY)
+                        {
+                            node2 = NULL;
+                            node = NULL;
+                        }
+                        else if (range.GetStart() > GetPosition() && pt.y >= firstVisiblePt.y)
+                        {                    
+                            optimizationLineCharPositions.Add(range.GetStart());
+                            optimizationLineYPositions.Add(pt.y);
+                        }
+
+                        if (node2)
+                            node2 = node2->GetNext();
+                    }
+                
+                    if (node)
+                        node = node->GetNext();
+                }
+            }            
+#endif
+
             m_buffer->InsertFragment(GetPosition(), m_newParagraphs);
             m_buffer->UpdateRanges();
             m_buffer->Invalidate(GetRange());
@@ -5925,8 +5984,12 @@ bool wxRichTextAction::Do()
                 newCaretPosition --;
 
             newCaretPosition = wxMin(newCaretPosition, (m_buffer->GetRange().GetEnd()-1));
+            
 
-            UpdateAppearance(newCaretPosition, true /* send update event */);
+            if (optimizationLineCharPositions.GetCount() > 0)
+                UpdateAppearance(newCaretPosition, true /* send update event */, & optimizationLineCharPositions, & optimizationLineYPositions);
+            else
+                UpdateAppearance(newCaretPosition, true /* send update event */);
 
             break;
         }
@@ -5971,7 +6034,7 @@ bool wxRichTextAction::Undo()
             long newCaretPosition = GetPosition() - 1;
             // if (m_newParagraphs.GetPartialParagraph())
             //    newCaretPosition --;
-
+            
             UpdateAppearance(newCaretPosition, true /* send update event */);
 
             break;
@@ -6003,7 +6066,7 @@ bool wxRichTextAction::Undo()
 }
 
 /// Update the control appearance
-void wxRichTextAction::UpdateAppearance(long caretPosition, bool sendUpdateEvent)
+void wxRichTextAction::UpdateAppearance(long caretPosition, bool sendUpdateEvent, wxArrayInt* optimizationLineCharPositions, wxArrayInt* optimizationLineYPositions)
 {
     if (m_ctrl)
     {
@@ -6012,7 +6075,98 @@ void wxRichTextAction::UpdateAppearance(long caretPosition, bool sendUpdateEvent
         {
             m_ctrl->LayoutContent();
             m_ctrl->PositionCaret();
-            m_ctrl->Refresh(false);
+            
+#if wxRICHTEXT_USE_OPTIMIZED_DRAWING
+            // Find refresh rectangle if we are in a position to optimise refresh
+            if (m_cmdId == wxRICHTEXT_INSERT && optimizationLineCharPositions && optimizationLineCharPositions->GetCount() > 0)
+            {
+                size_t i;
+                
+                wxSize clientSize = m_ctrl->GetClientSize();
+                wxPoint firstVisiblePt = m_ctrl->GetFirstVisiblePoint();
+                
+                // Start/end positions
+                int firstY = 0;
+                int lastY = firstVisiblePt.y + clientSize.y;
+                
+                bool foundStart = false;
+                bool foundEnd = false;
+                
+                // position offset - how many characters were inserted
+                int positionOffset = GetRange().GetLength();
+
+                // find the first line which is being drawn at the same position as it was
+                // before. Since we're talking about a simple insertion, we can assume
+                // that the rest of the window does not need to be redrawn.
+                
+                wxRichTextParagraph* para = m_buffer->GetParagraphAtPosition(GetPosition());
+                wxRichTextObjectList::compatibility_iterator node = m_buffer->GetChildren().Find(para);
+                while (node)
+                {
+                    wxRichTextParagraph* child = (wxRichTextParagraph*) node->GetData();
+                    wxRichTextLineList::compatibility_iterator node2 = child->GetLines().GetFirst();
+                    while (node2)
+                    {
+                        wxRichTextLine* line = node2->GetData();
+                        wxPoint pt = line->GetAbsolutePosition();
+                        wxRichTextRange range = line->GetAbsoluteRange();
+                        
+                        // we want to find the first line that is in the same position
+                        // as before. This will mean we're at the end of the changed text.
+                        
+                        if (pt.y > lastY) // going past the end of the window, no more info
+                        {
+                            node2 = NULL;
+                            node = NULL;
+                        }
+                        else
+                        {
+                            if (!foundStart)
+                            {
+                                firstY = pt.y - firstVisiblePt.y;
+                                foundStart = true;
+                            }
+
+                            // search for this line being at the same position as before                            
+                            for (i = 0; i < optimizationLineCharPositions->GetCount(); i++)
+                            {
+                                if (((*optimizationLineCharPositions)[i] + positionOffset == range.GetStart()) &&
+                                    ((*optimizationLineYPositions)[i] == pt.y))
+                                {
+                                    // Stop, we're now the same as we were
+                                    foundEnd = true;
+                                    lastY = pt.y - firstVisiblePt.y;
+
+                                    node2 = NULL;
+                                    node = NULL;
+                                    break;
+                                }                    
+                            }
+                        }
+
+                        if (node2)
+                            node2 = node2->GetNext();
+                    }
+                
+                    if (node)
+                        node = node->GetNext();
+                }
+                
+                if (!foundStart)
+                    firstY = firstVisiblePt.y;
+                if (!foundEnd)
+                    lastY = firstVisiblePt.y + clientSize.y;
+
+                wxRect rect(firstVisiblePt.x, firstY, firstVisiblePt.x + clientSize.x, lastY - firstY);
+                m_ctrl->RefreshRect(rect);
+                
+                // TODO: we need to make sure that lines are only drawn if in the update region. The rect
+                // passed to Draw is currently used in different ways (to pass the position the content should
+                // be drawn at as well as the relevant region).
+            }
+            else            
+#endif
+                m_ctrl->Refresh(false);
 
             if (sendUpdateEvent)
                 m_ctrl->SendTextUpdatedEvent();
@@ -6213,7 +6367,8 @@ bool wxTextAttrEq(const wxTextAttrEx& attr1, const wxRichTextAttr& attr2)
         attr1.GetBulletFont() == attr2.GetBulletFont() &&
         attr1.GetCharacterStyleName() == attr2.GetCharacterStyleName() &&
         attr1.GetParagraphStyleName() == attr2.GetParagraphStyleName() &&
-        attr1.GetListStyleName() == attr2.GetListStyleName());
+        attr1.GetListStyleName() == attr2.GetListStyleName() &&
+        attr1.HasPageBreak() == attr2.HasPageBreak());
 }
 
 /// Compare two attribute objects, but take into account the flags
@@ -6301,6 +6456,10 @@ bool wxTextAttrEqPartial(const wxTextAttrEx& attr1, const wxTextAttrEx& attr2, i
     if ((flags & wxTEXT_ATTR_TABS) &&
         !wxRichTextTabsEq(attr1.GetTabs(), attr2.GetTabs()))
         return false;
+
+    if ((flags & wxTEXT_ATTR_PAGE_BREAK) &&
+        (attr1.HasPageBreak() != attr2.HasPageBreak()))
+         return false;
 
     return true;
 }
@@ -6391,6 +6550,10 @@ bool wxTextAttrEqPartial(const wxTextAttrEx& attr1, const wxRichTextAttr& attr2,
     if ((flags & wxTEXT_ATTR_TABS) &&
         !wxRichTextTabsEq(attr1.GetTabs(), attr2.GetTabs()))
         return false;
+
+    if ((flags & wxTEXT_ATTR_PAGE_BREAK) &&
+        (attr1.HasPageBreak() != attr2.HasPageBreak()))
+         return false;
 
     return true;
 }
@@ -6514,6 +6677,9 @@ bool wxRichTextApplyStyle(wxTextAttrEx& destStyle, const wxTextAttrEx& style)
 
     if (style.HasURL())
         destStyle.SetURL(style.GetURL());
+
+    if (style.HasPageBreak())
+        destStyle.SetPageBreak();
 
     return true;
 }
@@ -6727,6 +6893,12 @@ bool wxRichTextApplyStyle(wxTextAttrEx& destStyle, const wxRichTextAttr& style, 
     {
         if (!(compareWith && compareWith->HasURL() && compareWith->GetURL() == style.GetURL()))
             destStyle.SetURL(style.GetURL());
+    }
+
+    if (style.HasPageBreak())
+    {
+        if (!(compareWith && compareWith->HasPageBreak()))
+            destStyle.SetPageBreak();
     }
 
     return true;
@@ -7105,6 +7277,9 @@ wxRichTextAttr wxRichTextAttr::Combine(const wxRichTextAttr& attr,
 
     if (attr.HasURL())
         newAttr.SetURL(attr.GetURL());
+
+    if (attr.HasPageBreak())
+        newAttr.SetPageBreak();
 
     return newAttr;
 }

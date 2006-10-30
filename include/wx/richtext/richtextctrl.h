@@ -760,6 +760,9 @@ public:
         SetCaretPositionForDefaultStyle(GetCaretPosition());
     }
 
+    /// Get the first visible point in the window
+    wxPoint GetFirstVisiblePoint() const;
+
 // Implementation
 
      /// Font names take a long time to retrieve, so cache them (on demand)

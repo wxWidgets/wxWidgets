@@ -198,6 +198,7 @@ class WXDLLIMPEXP_RICHTEXT wxRichTextBuffer;
 #define wxTEXT_ATTR_BULLET_TEXT             0x00080000
 #define wxTEXT_ATTR_BULLET_NAME             0x00100000
 #define wxTEXT_ATTR_URL                     0x00200000
+#define wxTEXT_ATTR_PAGE_BREAK              0x00400000
 
 /*!
  * Styles for wxTextAttrEx::SetBulletStyle
@@ -346,6 +347,7 @@ public:
     void SetBulletName(const wxString& name) { m_bulletName = name; SetFlags(GetFlags() | wxTEXT_ATTR_BULLET_NAME); }
     void SetBulletFont(const wxString& bulletFont) { m_bulletFont = bulletFont; }
     void SetURL(const wxString& url) { m_urlTarget = url; SetFlags(GetFlags() | wxTEXT_ATTR_URL); }
+    void SetPageBreak(bool pageBreak = true) { SetFlags(pageBreak ? (GetFlags() | wxTEXT_ATTR_PAGE_BREAK) : (GetFlags() & ~wxTEXT_ATTR_PAGE_BREAK)); }
 
     const wxString& GetCharacterStyleName() const { return m_characterStyleName; }
     const wxString& GetParagraphStyleName() const { return m_paragraphStyleName; }
@@ -377,6 +379,7 @@ public:
     bool HasBulletText() const { return HasFlag(wxTEXT_ATTR_BULLET_TEXT); }
     bool HasBulletName() const { return HasFlag(wxTEXT_ATTR_BULLET_NAME); }
     bool HasURL() const { return HasFlag(wxTEXT_ATTR_URL); }
+    bool HasPageBreak() const { return HasFlag(wxTEXT_ATTR_PAGE_BREAK); }
 
     // Is this a character style?
     bool IsCharacterStyle() const { return (0 != (GetFlags() & wxTEXT_ATTR_CHARACTER)); }
@@ -492,6 +495,7 @@ public:
     void SetBulletFont(const wxString& bulletFont) { m_bulletFont = bulletFont; }
     void SetBulletName(const wxString& name) { m_bulletName = name; m_flags |= wxTEXT_ATTR_BULLET_NAME; }
     void SetURL(const wxString& url) { m_urlTarget = url; m_flags |= wxTEXT_ATTR_URL; }
+    void SetPageBreak(bool pageBreak = true) { SetFlags(pageBreak ? (GetFlags() | wxTEXT_ATTR_PAGE_BREAK) : (GetFlags() & ~wxTEXT_ATTR_PAGE_BREAK)); }
 
     const wxColour& GetTextColour() const { return m_colText; }
     const wxColour& GetBackgroundColour() const { return m_colBack; }
@@ -546,6 +550,7 @@ public:
     bool HasBulletText() const { return (m_flags & wxTEXT_ATTR_BULLET_TEXT) != 0; }
     bool HasBulletName() const { return (m_flags & wxTEXT_ATTR_BULLET_NAME) != 0; }
     bool HasURL() const { return HasFlag(wxTEXT_ATTR_URL); }
+    bool HasPageBreak() const { return HasFlag(wxTEXT_ATTR_PAGE_BREAK); }
 
     bool HasFlag(long flag) const { return (m_flags & flag) != 0; }
 
@@ -1985,7 +1990,8 @@ public:
     bool Undo();
 
     /// Update the control appearance
-    void UpdateAppearance(long caretPosition, bool sendUpdateEvent = false);
+    void UpdateAppearance(long caretPosition, bool sendUpdateEvent = false,
+                            wxArrayInt* optimizationLineCharPositions = NULL, wxArrayInt* optimizationLineYPositions = NULL);
 
     /// Replace the buffer paragraphs with the given fragment.
     void ApplyParagraphs(const wxRichTextParagraphLayoutBox& fragment);
