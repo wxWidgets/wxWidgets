@@ -1690,7 +1690,7 @@ void wxWindowDC::SetPen( const wxPen &pen )
             XSetStipple ((Display*) m_display,(GC) m_gcBacking, myStipple);
     }
     else if (m_currentStipple.Ok()
-        && ((m_currentStipple != oldStipple) || !GET_OPTIMIZATION))
+        && ((!m_currentStipple.IsSameAs(oldStipple)) || !GET_OPTIMIZATION))
     {
         XSetStipple ((Display*) m_display, (GC) m_gc, (Pixmap) m_currentStipple.GetDrawable());
 

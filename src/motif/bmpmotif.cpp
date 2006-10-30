@@ -70,7 +70,7 @@ wxBitmapCache::~wxBitmapCache()
 
 void wxBitmapCache::SetBitmap( const wxBitmap& bitmap )
 {
-    if( m_bitmap != bitmap )
+    if ( !m_bitmap.IsSameAs(bitmap) )
     {
         InvalidateCache();
         m_bitmap = bitmap;

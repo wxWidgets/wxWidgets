@@ -49,7 +49,7 @@ void wxDC::DoDrawBitmap( const wxBitmap& bitmap, wxCoord x, wxCoord y, bool useM
     wxCHECK_RET( bitmap.Ok(), "invalid bitmap" );
 
     wxMemoryDC memDC;
-    memDC.SelectObject(bitmap);
+    memDC.SelectObjectAsSource(bitmap);
 
 #if 0
     // Not sure if we need this. The mask should leave the masked areas as per

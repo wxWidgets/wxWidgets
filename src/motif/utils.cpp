@@ -971,7 +971,7 @@ wxBitmap wxCreateMaskedBitmap(const wxBitmap& bitmap, const wxColour& colour)
     wxMemoryDC destDC;
     wxMemoryDC srcDC;
 
-    srcDC.SelectObject(bitmap);
+    srcDC.SelectObjectAsSource(bitmap);
     destDC.SelectObject(newBitmap);
 
     wxBrush brush(colour, wxSOLID);
