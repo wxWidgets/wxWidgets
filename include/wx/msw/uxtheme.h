@@ -14,7 +14,7 @@
 
 #include "wx/defs.h"
 
-#include "wx/msw/wrapwin.h"
+#include "wx/msw/private.h"     // we use GetHwndOf()
 #include "wx/msw/uxthemep.h"
 
 typedef HTHEME  (__stdcall *PFNWXUOPENTHEMEDATA)(HWND, const wchar_t *);
