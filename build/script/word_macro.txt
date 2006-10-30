@@ -26,6 +26,7 @@ Sub do_ps(mydir, myfile)
         "", Revert:=False, WritePasswordDocument:="", WritePasswordTemplate:="", _
         Format:=wdOpenFormatAuto
         ActivePrinter = "\\biolpc22\laserjet"
+    ActiveDocument.Fields.Update
     Application.PrintOut FileName:="", Range:=wdPrintAllDocument, Item:= _
         wdPrintDocumentContent, Copies:=1, Pages:="", PageType:=wdPrintAllPages, _
         Collate:=True, Background:=False, PrintToFile:=True, PrintZoomColumn:=0, _
