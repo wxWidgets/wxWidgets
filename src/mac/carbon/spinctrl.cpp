@@ -44,7 +44,7 @@ public:
         m_spin = spin;
 
         // remove the default minsize, the spinctrl will have one instead
-        SetSizeHints(-1,-1);
+        SetMinSize(wxDefaultSize);
     }
 
     bool ProcessEvent(wxEvent &event)
@@ -153,7 +153,7 @@ public:
         //SetWindowVariant(wxWINDOW_VARIANT_SMALL);
 
         // remove the default minsize, the spinctrl will have one instead
-        SetSizeHints(-1,-1);
+        SetMinSize(wxDefaultSize);
     }
 
 protected:
