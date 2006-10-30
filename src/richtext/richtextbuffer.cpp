@@ -7288,7 +7288,7 @@ wxRichTextAttr wxRichTextAttr::Combine(const wxRichTextAttr& attr,
  * wxTextAttrEx is an extended version of wxTextAttr with more paragraph attributes.
  */
 
-wxTextAttrEx::wxTextAttrEx(const wxTextAttrEx& attr)
+wxTextAttrEx::wxTextAttrEx(const wxTextAttrEx& attr): wxTextAttr()
 {
     Copy(attr);
 }
