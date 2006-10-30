@@ -1,9 +1,9 @@
-/*****************************************************************************
+	/*****************************************************************************
  *                                                                           *
  * Template for the set.h file for VMS                                       *
  * Created from setup.h_in                                                   *
  * Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                            *
- * Date : 25 October 2006                                                     *
+ * Date : 30 October 2006                                                    *
  *                                                                           *
  *****************************************************************************/
 
@@ -537,6 +537,8 @@ typedef pid_t GPid;
 
 #define wxUSE_LIBTIFF       1
 
+#define wxUSE_TGA           1
+
 #define wxUSE_GIF           1
 
 #define wxUSE_PNM           1
@@ -939,6 +941,9 @@ typedef pid_t GPid;
 /* Define if you have strptime() declaration */
 #define HAVE_STRPTIME_DECL 1
 
+/* Define if you have strtoull() and strtoll() */
+#define HAVE_STRTOULL 1
+
 /* Define if you have all functions to set thread priority */
 #define HAVE_THREAD_PRIORITY_FUNCTIONS 1
 
@@ -968,6 +973,9 @@ typedef pid_t GPid;
 
 /* Define if you have wcslen function  */
 #define HAVE_WCSLEN 1
+
+/* Define if you have wcstoull() and wcstoll() */
+#undef HAVE_WCSTOULL
 
 /* define if you have vsscanf function */
 #undef HAVE_VSSCANF
