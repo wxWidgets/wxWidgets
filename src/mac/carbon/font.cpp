@@ -535,8 +535,8 @@ wxSize wxFont::GetPixelSize() const
     wxGraphicsContext* dc = wxGraphicsContext::CreateFromNative((CGContextRef) NULL);
     dc->SetFont(*(wxFont *)this,*wxBLACK);
     wxDouble width, height = 0;
-    dc->GetTextExtent( wxT("g"), &width, &height, NULL, NULL); 
-    return wxSize(width, height);
+    dc->GetTextExtent( wxT("g"), &width, &height, NULL, NULL);
+    return wxSize((int)width, (int)height);
 #else
     wxFontBase::GetPixelSize();
 #endif

@@ -135,7 +135,7 @@ wxWindowDC::wxWindowDC(wxWindow *window)
     {
         CGContextSaveGState( cg );
         m_release = true ;
-        // make sure the context is having its origin at the wx-window coordinates of the 
+        // make sure the context is having its origin at the wx-window coordinates of the
         // view (read at the top of window.cpp about the differences)
         if ( window->MacGetLeftBorderSize() != 0 || window->MacGetTopBorderSize() != 0 )
             CGContextTranslateCTM( cg , -window->MacGetLeftBorderSize() , -window->MacGetTopBorderSize() );
@@ -189,36 +189,36 @@ void wxWindowDC::DoGetSize( int* width, int* height ) const
 
 wxBitmap wxWindowDC::DoGetAsBitmap(const wxRect *subrect) const
 {
-    ControlRef handle = (ControlRef) m_window->GetHandle(); 
+    ControlRef handle = (ControlRef) m_window->GetHandle();
     if ( !handle )
         return wxNullBitmap;
 
-    HIRect rect;    
+    HIRect rect;
     CGImageRef image;
     CGContextRef context;
     void* data;
-     
+
     size_t bytesPerRow;
-    
+
     HIViewCreateOffscreenImage( handle, 0, &rect, &image);
-    
-    
-    int width = subrect != NULL ? subrect->width : rect.size.width;
-    int height = subrect !=  NULL ? subrect->height : rect.size.height ; 
-    
+
+
+    int width = subrect != NULL ? subrect->width : (int)rect.size.width;
+    int height = subrect !=  NULL ? subrect->height : (int)rect.size.height ;
+
     bytesPerRow = ( ( width * 8 * 4 + 7 ) / 8 );
 
     data = calloc( 1, bytesPerRow * height );
     context = CGBitmapContextCreate( data, width, height, 8, bytesPerRow, CGColorSpaceCreateDeviceRGB(), kCGImageAlphaPremultipliedFirst );
-    
+
     if ( subrect )
         rect = CGRectOffset( rect, -subrect->x, -subrect->y ) ;
     CGContextDrawImage( context, rect, image );
 
-    unsigned char* buffer = (unsigned char*) data;          
+    unsigned char* buffer = (unsigned char*) data;
     wxBitmap bmp = wxBitmap(width, height, 32);
     wxAlphaPixelData pixData(bmp, wxPoint(0,0), wxSize(width, height));
-    
+
     pixData.UseAlpha();
     wxAlphaPixelData::Iterator p(pixData);
     for (int y=0; y<height; y++) {
@@ -229,12 +229,12 @@ wxBitmap wxWindowDC::DoGetAsBitmap(const wxRect *subrect) const
             p.Green() = a; buffer++;
             p.Blue()  = a; buffer++;
             p.Alpha() = a; buffer++;
-            ++p; 
+            ++p;
         }
         p = rowStart;
         p.OffsetY(pixData, 1);
     }
-    
+
     return bmp;
 }
 

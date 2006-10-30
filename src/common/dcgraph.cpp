@@ -786,13 +786,13 @@ void wxGCDC::DoGetTextExtent( const wxString &str, wxCoord *width, wxCoord *heig
     m_graphicContext->GetTextExtent( str, &w, &h, &d, &e );
 
     if ( height )
-        *height = h;
+        *height = (wxCoord)h;
     if ( descent )
-        *descent = d;
+        *descent = (wxCoord)d;
     if ( externalLeading )
-        *externalLeading =e;
+        *externalLeading = (wxCoord)e;
     if ( width )
-        *width = w;
+        *width = (wxCoord)w;
 
     if ( theFont )
     {
