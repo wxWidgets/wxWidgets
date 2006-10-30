@@ -93,6 +93,7 @@ ____MONOLIB_GUI_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_aboutdlgg.obj &
 	$(OBJS)\monodll_bmpcboxg.obj &
 	$(OBJS)\monodll_calctrl.obj &
+	$(OBJS)\monodll_collpaneg.obj &
 	$(OBJS)\monodll_datavgen.obj &
 	$(OBJS)\monodll_datectlg.obj &
 	$(OBJS)\monodll_grid.obj &
@@ -202,7 +203,8 @@ ____MONOLIB_GUI_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_richtexthtml.obj &
 	$(OBJS)\monodll_richtextformatdlg.obj &
 	$(OBJS)\monodll_richtextsymboldlg.obj &
-	$(OBJS)\monodll_richtextstyledlg.obj
+	$(OBJS)\monodll_richtextstyledlg.obj &
+	$(OBJS)\monodll_richtextprint.obj
 !endif
 ____CORE_SRC_FILENAMES_OBJECTS =
 !ifeq USE_GUI 1
@@ -236,7 +238,6 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_utils.obj &
 	$(OBJS)\monodll_window.obj &
 	$(OBJS)\monodll_accel.obj &
-	$(OBJS)\monodll_collpaneg.obj &
 	$(OBJS)\monodll_colrdlgg.obj &
 	$(OBJS)\monodll_dirdlgg.obj &
 	$(OBJS)\monodll_fdrepdlg.obj &
@@ -308,6 +309,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_datacmn.obj &
 	$(OBJS)\monodll_dcbase.obj &
 	$(OBJS)\monodll_dcbufcmn.obj &
+	$(OBJS)\monodll_dcgraph.obj &
 	$(OBJS)\monodll_dlgcmn.obj &
 	$(OBJS)\monodll_dndcmn.obj &
 	$(OBJS)\monodll_dobjcmn.obj &
@@ -343,6 +345,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_imagpcx.obj &
 	$(OBJS)\monodll_imagpng.obj &
 	$(OBJS)\monodll_imagpnm.obj &
+	$(OBJS)\monodll_imagtga.obj &
 	$(OBJS)\monodll_imagtiff.obj &
 	$(OBJS)\monodll_imagxpm.obj &
 	$(OBJS)\monodll_layout.obj &
@@ -351,6 +354,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_matrix.obj &
 	$(OBJS)\monodll_menucmn.obj &
 	$(OBJS)\monodll_nbkbase.obj &
+	$(OBJS)\monodll_overlaycmn.obj &
 	$(OBJS)\monodll_paper.obj &
 	$(OBJS)\monodll_pickerbase.obj &
 	$(OBJS)\monodll_popupcmn.obj &
@@ -419,6 +423,7 @@ ____MONOLIB_GUI_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_aboutdlgg.obj &
 	$(OBJS)\monolib_bmpcboxg.obj &
 	$(OBJS)\monolib_calctrl.obj &
+	$(OBJS)\monolib_collpaneg.obj &
 	$(OBJS)\monolib_datavgen.obj &
 	$(OBJS)\monolib_datectlg.obj &
 	$(OBJS)\monolib_grid.obj &
@@ -528,7 +533,8 @@ ____MONOLIB_GUI_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_richtexthtml.obj &
 	$(OBJS)\monolib_richtextformatdlg.obj &
 	$(OBJS)\monolib_richtextsymboldlg.obj &
-	$(OBJS)\monolib_richtextstyledlg.obj
+	$(OBJS)\monolib_richtextstyledlg.obj &
+	$(OBJS)\monolib_richtextprint.obj
 !endif
 ____CORE_SRC_FILENAMES_1_OBJECTS =
 !ifeq USE_GUI 1
@@ -562,7 +568,6 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_utils.obj &
 	$(OBJS)\monolib_window.obj &
 	$(OBJS)\monolib_accel.obj &
-	$(OBJS)\monolib_collpaneg.obj &
 	$(OBJS)\monolib_colrdlgg.obj &
 	$(OBJS)\monolib_dirdlgg.obj &
 	$(OBJS)\monolib_fdrepdlg.obj &
@@ -634,6 +639,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_datacmn.obj &
 	$(OBJS)\monolib_dcbase.obj &
 	$(OBJS)\monolib_dcbufcmn.obj &
+	$(OBJS)\monolib_dcgraph.obj &
 	$(OBJS)\monolib_dlgcmn.obj &
 	$(OBJS)\monolib_dndcmn.obj &
 	$(OBJS)\monolib_dobjcmn.obj &
@@ -669,6 +675,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_imagpcx.obj &
 	$(OBJS)\monolib_imagpng.obj &
 	$(OBJS)\monolib_imagpnm.obj &
+	$(OBJS)\monolib_imagtga.obj &
 	$(OBJS)\monolib_imagtiff.obj &
 	$(OBJS)\monolib_imagxpm.obj &
 	$(OBJS)\monolib_layout.obj &
@@ -677,6 +684,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_matrix.obj &
 	$(OBJS)\monolib_menucmn.obj &
 	$(OBJS)\monolib_nbkbase.obj &
+	$(OBJS)\monolib_overlaycmn.obj &
 	$(OBJS)\monolib_paper.obj &
 	$(OBJS)\monolib_pickerbase.obj &
 	$(OBJS)\monolib_popupcmn.obj &
@@ -798,7 +806,6 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_utils.obj &
 	$(OBJS)\coredll_window.obj &
 	$(OBJS)\coredll_accel.obj &
-	$(OBJS)\coredll_collpaneg.obj &
 	$(OBJS)\coredll_colrdlgg.obj &
 	$(OBJS)\coredll_dirdlgg.obj &
 	$(OBJS)\coredll_fdrepdlg.obj &
@@ -870,6 +877,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_datacmn.obj &
 	$(OBJS)\coredll_dcbase.obj &
 	$(OBJS)\coredll_dcbufcmn.obj &
+	$(OBJS)\coredll_dcgraph.obj &
 	$(OBJS)\coredll_dlgcmn.obj &
 	$(OBJS)\coredll_dndcmn.obj &
 	$(OBJS)\coredll_dobjcmn.obj &
@@ -905,6 +913,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_imagpcx.obj &
 	$(OBJS)\coredll_imagpng.obj &
 	$(OBJS)\coredll_imagpnm.obj &
+	$(OBJS)\coredll_imagtga.obj &
 	$(OBJS)\coredll_imagtiff.obj &
 	$(OBJS)\coredll_imagxpm.obj &
 	$(OBJS)\coredll_layout.obj &
@@ -913,6 +922,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_matrix.obj &
 	$(OBJS)\coredll_menucmn.obj &
 	$(OBJS)\coredll_nbkbase.obj &
+	$(OBJS)\coredll_overlaycmn.obj &
 	$(OBJS)\coredll_paper.obj &
 	$(OBJS)\coredll_pickerbase.obj &
 	$(OBJS)\coredll_popupcmn.obj &
@@ -1006,7 +1016,6 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_utils.obj &
 	$(OBJS)\corelib_window.obj &
 	$(OBJS)\corelib_accel.obj &
-	$(OBJS)\corelib_collpaneg.obj &
 	$(OBJS)\corelib_colrdlgg.obj &
 	$(OBJS)\corelib_dirdlgg.obj &
 	$(OBJS)\corelib_fdrepdlg.obj &
@@ -1078,6 +1087,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_datacmn.obj &
 	$(OBJS)\corelib_dcbase.obj &
 	$(OBJS)\corelib_dcbufcmn.obj &
+	$(OBJS)\corelib_dcgraph.obj &
 	$(OBJS)\corelib_dlgcmn.obj &
 	$(OBJS)\corelib_dndcmn.obj &
 	$(OBJS)\corelib_dobjcmn.obj &
@@ -1113,6 +1123,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_imagpcx.obj &
 	$(OBJS)\corelib_imagpng.obj &
 	$(OBJS)\corelib_imagpnm.obj &
+	$(OBJS)\corelib_imagtga.obj &
 	$(OBJS)\corelib_imagtiff.obj &
 	$(OBJS)\corelib_imagxpm.obj &
 	$(OBJS)\corelib_layout.obj &
@@ -1121,6 +1132,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_matrix.obj &
 	$(OBJS)\corelib_menucmn.obj &
 	$(OBJS)\corelib_nbkbase.obj &
+	$(OBJS)\corelib_overlaycmn.obj &
 	$(OBJS)\corelib_paper.obj &
 	$(OBJS)\corelib_pickerbase.obj &
 	$(OBJS)\corelib_popupcmn.obj &
@@ -1696,6 +1708,8 @@ MONODLL_CXXFLAGS = $(____DOS_CFLAG_p) -bd $(__DEBUGINFO) $(__OPTIMIZEFLAG) &
 MONODLL_OBJECTS =  &
 	$(OBJS)\monodll_dummy.obj &
 	$(OBJS)\monodll_appbase.obj &
+	$(OBJS)\monodll_arcall.obj &
+	$(OBJS)\monodll_arcfind.obj &
 	$(OBJS)\monodll_archive.obj &
 	$(OBJS)\monodll_clntdata.obj &
 	$(OBJS)\monodll_cmdline.obj &
@@ -1711,12 +1725,16 @@ MONODLL_OBJECTS =  &
 	$(OBJS)\monodll_extended.obj &
 	$(OBJS)\monodll_ffile.obj &
 	$(OBJS)\monodll_file.obj &
+	$(OBJS)\monodll_fileback.obj &
 	$(OBJS)\monodll_fileconf.obj &
 	$(OBJS)\monodll_filefn.obj &
 	$(OBJS)\monodll_filename.obj &
 	$(OBJS)\monodll_filesys.obj &
+	$(OBJS)\monodll_filtall.obj &
+	$(OBJS)\monodll_filtfind.obj &
 	$(OBJS)\monodll_fmapbase.obj &
-	$(OBJS)\monodll_fs_zip.obj &
+	$(OBJS)\monodll_fs_arc.obj &
+	$(OBJS)\monodll_fs_filter.obj &
 	$(OBJS)\monodll_hash.obj &
 	$(OBJS)\monodll_hashmap.obj &
 	$(OBJS)\monodll_init.obj &
@@ -1741,6 +1759,7 @@ MONODLL_OBJECTS =  &
 	$(OBJS)\monodll_stream.obj &
 	$(OBJS)\monodll_string.obj &
 	$(OBJS)\monodll_sysopt.obj &
+	$(OBJS)\monodll_tarstrm.obj &
 	$(OBJS)\monodll_textbuf.obj &
 	$(OBJS)\monodll_textfile.obj &
 	$(OBJS)\monodll_tokenzr.obj &
@@ -1791,6 +1810,8 @@ MONOLIB_CXXFLAGS = $(____DOS_CFLAG_p) $(__DEBUGINFO) $(__OPTIMIZEFLAG) &
 MONOLIB_OBJECTS =  &
 	$(OBJS)\monolib_dummy.obj &
 	$(OBJS)\monolib_appbase.obj &
+	$(OBJS)\monolib_arcall.obj &
+	$(OBJS)\monolib_arcfind.obj &
 	$(OBJS)\monolib_archive.obj &
 	$(OBJS)\monolib_clntdata.obj &
 	$(OBJS)\monolib_cmdline.obj &
@@ -1806,12 +1827,16 @@ MONOLIB_OBJECTS =  &
 	$(OBJS)\monolib_extended.obj &
 	$(OBJS)\monolib_ffile.obj &
 	$(OBJS)\monolib_file.obj &
+	$(OBJS)\monolib_fileback.obj &
 	$(OBJS)\monolib_fileconf.obj &
 	$(OBJS)\monolib_filefn.obj &
 	$(OBJS)\monolib_filename.obj &
 	$(OBJS)\monolib_filesys.obj &
+	$(OBJS)\monolib_filtall.obj &
+	$(OBJS)\monolib_filtfind.obj &
 	$(OBJS)\monolib_fmapbase.obj &
-	$(OBJS)\monolib_fs_zip.obj &
+	$(OBJS)\monolib_fs_arc.obj &
+	$(OBJS)\monolib_fs_filter.obj &
 	$(OBJS)\monolib_hash.obj &
 	$(OBJS)\monolib_hashmap.obj &
 	$(OBJS)\monolib_init.obj &
@@ -1836,6 +1861,7 @@ MONOLIB_OBJECTS =  &
 	$(OBJS)\monolib_stream.obj &
 	$(OBJS)\monolib_string.obj &
 	$(OBJS)\monolib_sysopt.obj &
+	$(OBJS)\monolib_tarstrm.obj &
 	$(OBJS)\monolib_textbuf.obj &
 	$(OBJS)\monolib_textfile.obj &
 	$(OBJS)\monolib_tokenzr.obj &
@@ -1888,6 +1914,8 @@ BASEDLL_CXXFLAGS = $(____DOS_CFLAG_p) -bd $(__DEBUGINFO) $(__OPTIMIZEFLAG) &
 BASEDLL_OBJECTS =  &
 	$(OBJS)\basedll_dummy.obj &
 	$(OBJS)\basedll_appbase.obj &
+	$(OBJS)\basedll_arcall.obj &
+	$(OBJS)\basedll_arcfind.obj &
 	$(OBJS)\basedll_archive.obj &
 	$(OBJS)\basedll_clntdata.obj &
 	$(OBJS)\basedll_cmdline.obj &
@@ -1903,12 +1931,16 @@ BASEDLL_OBJECTS =  &
 	$(OBJS)\basedll_extended.obj &
 	$(OBJS)\basedll_ffile.obj &
 	$(OBJS)\basedll_file.obj &
+	$(OBJS)\basedll_fileback.obj &
 	$(OBJS)\basedll_fileconf.obj &
 	$(OBJS)\basedll_filefn.obj &
 	$(OBJS)\basedll_filename.obj &
 	$(OBJS)\basedll_filesys.obj &
+	$(OBJS)\basedll_filtall.obj &
+	$(OBJS)\basedll_filtfind.obj &
 	$(OBJS)\basedll_fmapbase.obj &
-	$(OBJS)\basedll_fs_zip.obj &
+	$(OBJS)\basedll_fs_arc.obj &
+	$(OBJS)\basedll_fs_filter.obj &
 	$(OBJS)\basedll_hash.obj &
 	$(OBJS)\basedll_hashmap.obj &
 	$(OBJS)\basedll_init.obj &
@@ -1933,6 +1965,7 @@ BASEDLL_OBJECTS =  &
 	$(OBJS)\basedll_stream.obj &
 	$(OBJS)\basedll_string.obj &
 	$(OBJS)\basedll_sysopt.obj &
+	$(OBJS)\basedll_tarstrm.obj &
 	$(OBJS)\basedll_textbuf.obj &
 	$(OBJS)\basedll_textfile.obj &
 	$(OBJS)\basedll_tokenzr.obj &
@@ -1971,6 +2004,8 @@ BASELIB_CXXFLAGS = $(____DOS_CFLAG_p) $(__DEBUGINFO) $(__OPTIMIZEFLAG) &
 BASELIB_OBJECTS =  &
 	$(OBJS)\baselib_dummy.obj &
 	$(OBJS)\baselib_appbase.obj &
+	$(OBJS)\baselib_arcall.obj &
+	$(OBJS)\baselib_arcfind.obj &
 	$(OBJS)\baselib_archive.obj &
 	$(OBJS)\baselib_clntdata.obj &
 	$(OBJS)\baselib_cmdline.obj &
@@ -1986,12 +2021,16 @@ BASELIB_OBJECTS =  &
 	$(OBJS)\baselib_extended.obj &
 	$(OBJS)\baselib_ffile.obj &
 	$(OBJS)\baselib_file.obj &
+	$(OBJS)\baselib_fileback.obj &
 	$(OBJS)\baselib_fileconf.obj &
 	$(OBJS)\baselib_filefn.obj &
 	$(OBJS)\baselib_filename.obj &
 	$(OBJS)\baselib_filesys.obj &
+	$(OBJS)\baselib_filtall.obj &
+	$(OBJS)\baselib_filtfind.obj &
 	$(OBJS)\baselib_fmapbase.obj &
-	$(OBJS)\baselib_fs_zip.obj &
+	$(OBJS)\baselib_fs_arc.obj &
+	$(OBJS)\baselib_fs_filter.obj &
 	$(OBJS)\baselib_hash.obj &
 	$(OBJS)\baselib_hashmap.obj &
 	$(OBJS)\baselib_init.obj &
@@ -2016,6 +2055,7 @@ BASELIB_OBJECTS =  &
 	$(OBJS)\baselib_stream.obj &
 	$(OBJS)\baselib_string.obj &
 	$(OBJS)\baselib_sysopt.obj &
+	$(OBJS)\baselib_tarstrm.obj &
 	$(OBJS)\baselib_textbuf.obj &
 	$(OBJS)\baselib_textfile.obj &
 	$(OBJS)\baselib_tokenzr.obj &
@@ -2123,6 +2163,7 @@ ADVDLL_OBJECTS =  &
 	$(OBJS)\advdll_aboutdlgg.obj &
 	$(OBJS)\advdll_bmpcboxg.obj &
 	$(OBJS)\advdll_calctrl.obj &
+	$(OBJS)\advdll_collpaneg.obj &
 	$(OBJS)\advdll_datavgen.obj &
 	$(OBJS)\advdll_datectlg.obj &
 	$(OBJS)\advdll_grid.obj &
@@ -2152,6 +2193,7 @@ ADVLIB_OBJECTS =  &
 	$(OBJS)\advlib_aboutdlgg.obj &
 	$(OBJS)\advlib_bmpcboxg.obj &
 	$(OBJS)\advlib_calctrl.obj &
+	$(OBJS)\advlib_collpaneg.obj &
 	$(OBJS)\advlib_datavgen.obj &
 	$(OBJS)\advlib_datectlg.obj &
 	$(OBJS)\advlib_grid.obj &
@@ -2532,7 +2574,8 @@ RICHTEXTDLL_OBJECTS =  &
 	$(OBJS)\richtextdll_richtexthtml.obj &
 	$(OBJS)\richtextdll_richtextformatdlg.obj &
 	$(OBJS)\richtextdll_richtextsymboldlg.obj &
-	$(OBJS)\richtextdll_richtextstyledlg.obj
+	$(OBJS)\richtextdll_richtextstyledlg.obj &
+	$(OBJS)\richtextdll_richtextprint.obj
 RICHTEXTLIB_CXXFLAGS = $(____DOS_CFLAG_p) $(__DEBUGINFO) $(__OPTIMIZEFLAG) &
 	-d__WXMGL__ -d__WXUNIVERSAL__ $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) &
 	$(__RTTI_DEFINE_p) -dwxNO_THREADS $(__UNICODE_DEFINE_p) &
@@ -2550,7 +2593,8 @@ RICHTEXTLIB_OBJECTS =  &
 	$(OBJS)\richtextlib_richtexthtml.obj &
 	$(OBJS)\richtextlib_richtextformatdlg.obj &
 	$(OBJS)\richtextlib_richtextsymboldlg.obj &
-	$(OBJS)\richtextlib_richtextstyledlg.obj
+	$(OBJS)\richtextlib_richtextstyledlg.obj &
+	$(OBJS)\richtextlib_richtextprint.obj
 GLDLL_CXXFLAGS = $(____DOS_CFLAG_p) -bd $(__DEBUGINFO) $(__OPTIMIZEFLAG) &
 	-d__WXMGL__ -d__WXUNIVERSAL__ $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) &
 	$(__RTTI_DEFINE_p) -dwxNO_THREADS $(__UNICODE_DEFINE_p) &
@@ -3155,7 +3199,7 @@ $(SETUPHDIR)\wx\setup.h :
 build_cfg_file : .SYMBOLIC $(SETUPHDIR)
 	@echo WXVER_MAJOR=2 >$(BUILD_CFG_FILE)
 	@echo WXVER_MINOR=7 >>$(BUILD_CFG_FILE)
-	@echo WXVER_RELEASE=1 >>$(BUILD_CFG_FILE)
+	@echo WXVER_RELEASE=2 >>$(BUILD_CFG_FILE)
 	@echo BUILD=$(BUILD) >>$(BUILD_CFG_FILE)
 	@echo MONOLITHIC=$(MONOLITHIC) >>$(BUILD_CFG_FILE)
 	@echo SHARED=$(SHARED) >>$(BUILD_CFG_FILE)
@@ -3542,6 +3586,12 @@ $(OBJS)\monodll_dummy.obj :  .AUTODEPEND ..\..\src\common\dummy.cpp
 $(OBJS)\monodll_appbase.obj :  .AUTODEPEND ..\..\src\common\appbase.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
+$(OBJS)\monodll_arcall.obj :  .AUTODEPEND ..\..\src\common\arcall.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_arcfind.obj :  .AUTODEPEND ..\..\src\common\arcfind.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
 $(OBJS)\monodll_archive.obj :  .AUTODEPEND ..\..\src\common\archive.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
@@ -3587,6 +3637,9 @@ $(OBJS)\monodll_ffile.obj :  .AUTODEPEND ..\..\src\common\ffile.cpp
 $(OBJS)\monodll_file.obj :  .AUTODEPEND ..\..\src\common\file.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
+$(OBJS)\monodll_fileback.obj :  .AUTODEPEND ..\..\src\common\fileback.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
 $(OBJS)\monodll_fileconf.obj :  .AUTODEPEND ..\..\src\common\fileconf.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
@@ -3599,10 +3652,19 @@ $(OBJS)\monodll_filename.obj :  .AUTODEPEND ..\..\src\common\filename.cpp
 $(OBJS)\monodll_filesys.obj :  .AUTODEPEND ..\..\src\common\filesys.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
+$(OBJS)\monodll_filtall.obj :  .AUTODEPEND ..\..\src\common\filtall.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_filtfind.obj :  .AUTODEPEND ..\..\src\common\filtfind.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
 $(OBJS)\monodll_fmapbase.obj :  .AUTODEPEND ..\..\src\common\fmapbase.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
-$(OBJS)\monodll_fs_zip.obj :  .AUTODEPEND ..\..\src\common\fs_zip.cpp
+$(OBJS)\monodll_fs_arc.obj :  .AUTODEPEND ..\..\src\common\fs_arc.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_fs_filter.obj :  .AUTODEPEND ..\..\src\common\fs_filter.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_hash.obj :  .AUTODEPEND ..\..\src\common\hash.cpp
@@ -3675,6 +3737,9 @@ $(OBJS)\monodll_string.obj :  .AUTODEPEND ..\..\src\common\string.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_sysopt.obj :  .AUTODEPEND ..\..\src\common\sysopt.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_tarstrm.obj :  .AUTODEPEND ..\..\src\common\tarstrm.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_textbuf.obj :  .AUTODEPEND ..\..\src\common\textbuf.cpp
@@ -3849,9 +3914,6 @@ $(OBJS)\monodll_window.obj :  .AUTODEPEND ..\..\src\mgl\window.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_accel.obj :  .AUTODEPEND ..\..\src\generic\accel.cpp
-	$(CXX) -bt=dos -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
-
-$(OBJS)\monodll_collpaneg.obj :  .AUTODEPEND ..\..\src\generic\collpaneg.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_colrdlgg.obj :  .AUTODEPEND ..\..\src\generic\colrdlgg.cpp
@@ -4067,6 +4129,9 @@ $(OBJS)\monodll_dcbase.obj :  .AUTODEPEND ..\..\src\common\dcbase.cpp
 $(OBJS)\monodll_dcbufcmn.obj :  .AUTODEPEND ..\..\src\common\dcbufcmn.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
+$(OBJS)\monodll_dcgraph.obj :  .AUTODEPEND ..\..\src\common\dcgraph.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
 $(OBJS)\monodll_dlgcmn.obj :  .AUTODEPEND ..\..\src\common\dlgcmn.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
@@ -4172,6 +4237,9 @@ $(OBJS)\monodll_imagpng.obj :  .AUTODEPEND ..\..\src\common\imagpng.cpp
 $(OBJS)\monodll_imagpnm.obj :  .AUTODEPEND ..\..\src\common\imagpnm.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
+$(OBJS)\monodll_imagtga.obj :  .AUTODEPEND ..\..\src\common\imagtga.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
 $(OBJS)\monodll_imagtiff.obj :  .AUTODEPEND ..\..\src\common\imagtiff.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
@@ -4194,6 +4262,9 @@ $(OBJS)\monodll_menucmn.obj :  .AUTODEPEND ..\..\src\common\menucmn.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_nbkbase.obj :  .AUTODEPEND ..\..\src\common\nbkbase.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_overlaycmn.obj :  .AUTODEPEND ..\..\src\common\overlaycmn.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_paper.obj :  .AUTODEPEND ..\..\src\common\paper.cpp
@@ -4362,6 +4433,9 @@ $(OBJS)\monodll_bmpcboxg.obj :  .AUTODEPEND ..\..\src\generic\bmpcboxg.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_calctrl.obj :  .AUTODEPEND ..\..\src\generic\calctrl.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_collpaneg.obj :  .AUTODEPEND ..\..\src\generic\collpaneg.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_datavgen.obj :  .AUTODEPEND ..\..\src\generic\datavgen.cpp
@@ -4694,6 +4768,9 @@ $(OBJS)\monodll_richtextsymboldlg.obj :  .AUTODEPEND ..\..\src\richtext\richtext
 $(OBJS)\monodll_richtextstyledlg.obj :  .AUTODEPEND ..\..\src\richtext\richtextstyledlg.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
+$(OBJS)\monodll_richtextprint.obj :  .AUTODEPEND ..\..\src\richtext\richtextprint.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
 $(OBJS)\monodll_xml.obj :  .AUTODEPEND ..\..\src\xml\xml.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
@@ -4704,6 +4781,12 @@ $(OBJS)\monolib_dummy.obj :  .AUTODEPEND ..\..\src\common\dummy.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_appbase.obj :  .AUTODEPEND ..\..\src\common\appbase.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_arcall.obj :  .AUTODEPEND ..\..\src\common\arcall.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_arcfind.obj :  .AUTODEPEND ..\..\src\common\arcfind.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_archive.obj :  .AUTODEPEND ..\..\src\common\archive.cpp
@@ -4751,6 +4834,9 @@ $(OBJS)\monolib_ffile.obj :  .AUTODEPEND ..\..\src\common\ffile.cpp
 $(OBJS)\monolib_file.obj :  .AUTODEPEND ..\..\src\common\file.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
+$(OBJS)\monolib_fileback.obj :  .AUTODEPEND ..\..\src\common\fileback.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
 $(OBJS)\monolib_fileconf.obj :  .AUTODEPEND ..\..\src\common\fileconf.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
@@ -4763,10 +4849,19 @@ $(OBJS)\monolib_filename.obj :  .AUTODEPEND ..\..\src\common\filename.cpp
 $(OBJS)\monolib_filesys.obj :  .AUTODEPEND ..\..\src\common\filesys.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
+$(OBJS)\monolib_filtall.obj :  .AUTODEPEND ..\..\src\common\filtall.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_filtfind.obj :  .AUTODEPEND ..\..\src\common\filtfind.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
 $(OBJS)\monolib_fmapbase.obj :  .AUTODEPEND ..\..\src\common\fmapbase.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
-$(OBJS)\monolib_fs_zip.obj :  .AUTODEPEND ..\..\src\common\fs_zip.cpp
+$(OBJS)\monolib_fs_arc.obj :  .AUTODEPEND ..\..\src\common\fs_arc.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_fs_filter.obj :  .AUTODEPEND ..\..\src\common\fs_filter.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_hash.obj :  .AUTODEPEND ..\..\src\common\hash.cpp
@@ -4839,6 +4934,9 @@ $(OBJS)\monolib_string.obj :  .AUTODEPEND ..\..\src\common\string.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_sysopt.obj :  .AUTODEPEND ..\..\src\common\sysopt.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_tarstrm.obj :  .AUTODEPEND ..\..\src\common\tarstrm.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_textbuf.obj :  .AUTODEPEND ..\..\src\common\textbuf.cpp
@@ -5013,9 +5111,6 @@ $(OBJS)\monolib_window.obj :  .AUTODEPEND ..\..\src\mgl\window.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_accel.obj :  .AUTODEPEND ..\..\src\generic\accel.cpp
-	$(CXX) -bt=dos -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
-
-$(OBJS)\monolib_collpaneg.obj :  .AUTODEPEND ..\..\src\generic\collpaneg.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_colrdlgg.obj :  .AUTODEPEND ..\..\src\generic\colrdlgg.cpp
@@ -5231,6 +5326,9 @@ $(OBJS)\monolib_dcbase.obj :  .AUTODEPEND ..\..\src\common\dcbase.cpp
 $(OBJS)\monolib_dcbufcmn.obj :  .AUTODEPEND ..\..\src\common\dcbufcmn.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
+$(OBJS)\monolib_dcgraph.obj :  .AUTODEPEND ..\..\src\common\dcgraph.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
 $(OBJS)\monolib_dlgcmn.obj :  .AUTODEPEND ..\..\src\common\dlgcmn.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
@@ -5336,6 +5434,9 @@ $(OBJS)\monolib_imagpng.obj :  .AUTODEPEND ..\..\src\common\imagpng.cpp
 $(OBJS)\monolib_imagpnm.obj :  .AUTODEPEND ..\..\src\common\imagpnm.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
+$(OBJS)\monolib_imagtga.obj :  .AUTODEPEND ..\..\src\common\imagtga.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
 $(OBJS)\monolib_imagtiff.obj :  .AUTODEPEND ..\..\src\common\imagtiff.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
@@ -5358,6 +5459,9 @@ $(OBJS)\monolib_menucmn.obj :  .AUTODEPEND ..\..\src\common\menucmn.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_nbkbase.obj :  .AUTODEPEND ..\..\src\common\nbkbase.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_overlaycmn.obj :  .AUTODEPEND ..\..\src\common\overlaycmn.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_paper.obj :  .AUTODEPEND ..\..\src\common\paper.cpp
@@ -5526,6 +5630,9 @@ $(OBJS)\monolib_bmpcboxg.obj :  .AUTODEPEND ..\..\src\generic\bmpcboxg.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_calctrl.obj :  .AUTODEPEND ..\..\src\generic\calctrl.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_collpaneg.obj :  .AUTODEPEND ..\..\src\generic\collpaneg.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_datavgen.obj :  .AUTODEPEND ..\..\src\generic\datavgen.cpp
@@ -5858,6 +5965,9 @@ $(OBJS)\monolib_richtextsymboldlg.obj :  .AUTODEPEND ..\..\src\richtext\richtext
 $(OBJS)\monolib_richtextstyledlg.obj :  .AUTODEPEND ..\..\src\richtext\richtextstyledlg.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
+$(OBJS)\monolib_richtextprint.obj :  .AUTODEPEND ..\..\src\richtext\richtextprint.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
 $(OBJS)\monolib_xml.obj :  .AUTODEPEND ..\..\src\xml\xml.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
@@ -5868,6 +5978,12 @@ $(OBJS)\basedll_dummy.obj :  .AUTODEPEND ..\..\src\common\dummy.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
 $(OBJS)\basedll_appbase.obj :  .AUTODEPEND ..\..\src\common\appbase.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
+
+$(OBJS)\basedll_arcall.obj :  .AUTODEPEND ..\..\src\common\arcall.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
+
+$(OBJS)\basedll_arcfind.obj :  .AUTODEPEND ..\..\src\common\arcfind.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
 $(OBJS)\basedll_archive.obj :  .AUTODEPEND ..\..\src\common\archive.cpp
@@ -5915,6 +6031,9 @@ $(OBJS)\basedll_ffile.obj :  .AUTODEPEND ..\..\src\common\ffile.cpp
 $(OBJS)\basedll_file.obj :  .AUTODEPEND ..\..\src\common\file.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
+$(OBJS)\basedll_fileback.obj :  .AUTODEPEND ..\..\src\common\fileback.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
+
 $(OBJS)\basedll_fileconf.obj :  .AUTODEPEND ..\..\src\common\fileconf.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
@@ -5927,10 +6046,19 @@ $(OBJS)\basedll_filename.obj :  .AUTODEPEND ..\..\src\common\filename.cpp
 $(OBJS)\basedll_filesys.obj :  .AUTODEPEND ..\..\src\common\filesys.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
+$(OBJS)\basedll_filtall.obj :  .AUTODEPEND ..\..\src\common\filtall.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
+
+$(OBJS)\basedll_filtfind.obj :  .AUTODEPEND ..\..\src\common\filtfind.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
+
 $(OBJS)\basedll_fmapbase.obj :  .AUTODEPEND ..\..\src\common\fmapbase.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
-$(OBJS)\basedll_fs_zip.obj :  .AUTODEPEND ..\..\src\common\fs_zip.cpp
+$(OBJS)\basedll_fs_arc.obj :  .AUTODEPEND ..\..\src\common\fs_arc.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
+
+$(OBJS)\basedll_fs_filter.obj :  .AUTODEPEND ..\..\src\common\fs_filter.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
 $(OBJS)\basedll_hash.obj :  .AUTODEPEND ..\..\src\common\hash.cpp
@@ -6005,6 +6133,9 @@ $(OBJS)\basedll_string.obj :  .AUTODEPEND ..\..\src\common\string.cpp
 $(OBJS)\basedll_sysopt.obj :  .AUTODEPEND ..\..\src\common\sysopt.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
+$(OBJS)\basedll_tarstrm.obj :  .AUTODEPEND ..\..\src\common\tarstrm.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
+
 $(OBJS)\basedll_textbuf.obj :  .AUTODEPEND ..\..\src\common\textbuf.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
@@ -6068,6 +6199,12 @@ $(OBJS)\baselib_dummy.obj :  .AUTODEPEND ..\..\src\common\dummy.cpp
 $(OBJS)\baselib_appbase.obj :  .AUTODEPEND ..\..\src\common\appbase.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
+$(OBJS)\baselib_arcall.obj :  .AUTODEPEND ..\..\src\common\arcall.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
+
+$(OBJS)\baselib_arcfind.obj :  .AUTODEPEND ..\..\src\common\arcfind.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
+
 $(OBJS)\baselib_archive.obj :  .AUTODEPEND ..\..\src\common\archive.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
@@ -6113,6 +6250,9 @@ $(OBJS)\baselib_ffile.obj :  .AUTODEPEND ..\..\src\common\ffile.cpp
 $(OBJS)\baselib_file.obj :  .AUTODEPEND ..\..\src\common\file.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
+$(OBJS)\baselib_fileback.obj :  .AUTODEPEND ..\..\src\common\fileback.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
+
 $(OBJS)\baselib_fileconf.obj :  .AUTODEPEND ..\..\src\common\fileconf.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
@@ -6125,10 +6265,19 @@ $(OBJS)\baselib_filename.obj :  .AUTODEPEND ..\..\src\common\filename.cpp
 $(OBJS)\baselib_filesys.obj :  .AUTODEPEND ..\..\src\common\filesys.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
+$(OBJS)\baselib_filtall.obj :  .AUTODEPEND ..\..\src\common\filtall.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
+
+$(OBJS)\baselib_filtfind.obj :  .AUTODEPEND ..\..\src\common\filtfind.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
+
 $(OBJS)\baselib_fmapbase.obj :  .AUTODEPEND ..\..\src\common\fmapbase.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
-$(OBJS)\baselib_fs_zip.obj :  .AUTODEPEND ..\..\src\common\fs_zip.cpp
+$(OBJS)\baselib_fs_arc.obj :  .AUTODEPEND ..\..\src\common\fs_arc.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
+
+$(OBJS)\baselib_fs_filter.obj :  .AUTODEPEND ..\..\src\common\fs_filter.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_hash.obj :  .AUTODEPEND ..\..\src\common\hash.cpp
@@ -6201,6 +6350,9 @@ $(OBJS)\baselib_string.obj :  .AUTODEPEND ..\..\src\common\string.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_sysopt.obj :  .AUTODEPEND ..\..\src\common\sysopt.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
+
+$(OBJS)\baselib_tarstrm.obj :  .AUTODEPEND ..\..\src\common\tarstrm.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_textbuf.obj :  .AUTODEPEND ..\..\src\common\textbuf.cpp
@@ -6428,9 +6580,6 @@ $(OBJS)\coredll_window.obj :  .AUTODEPEND ..\..\src\mgl\window.cpp
 $(OBJS)\coredll_accel.obj :  .AUTODEPEND ..\..\src\generic\accel.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
-$(OBJS)\coredll_collpaneg.obj :  .AUTODEPEND ..\..\src\generic\collpaneg.cpp
-	$(CXX) -bt=dos -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
-
 $(OBJS)\coredll_colrdlgg.obj :  .AUTODEPEND ..\..\src\generic\colrdlgg.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
@@ -6644,6 +6793,9 @@ $(OBJS)\coredll_dcbase.obj :  .AUTODEPEND ..\..\src\common\dcbase.cpp
 $(OBJS)\coredll_dcbufcmn.obj :  .AUTODEPEND ..\..\src\common\dcbufcmn.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
+$(OBJS)\coredll_dcgraph.obj :  .AUTODEPEND ..\..\src\common\dcgraph.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+
 $(OBJS)\coredll_dlgcmn.obj :  .AUTODEPEND ..\..\src\common\dlgcmn.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
@@ -6749,6 +6901,9 @@ $(OBJS)\coredll_imagpng.obj :  .AUTODEPEND ..\..\src\common\imagpng.cpp
 $(OBJS)\coredll_imagpnm.obj :  .AUTODEPEND ..\..\src\common\imagpnm.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
+$(OBJS)\coredll_imagtga.obj :  .AUTODEPEND ..\..\src\common\imagtga.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+
 $(OBJS)\coredll_imagtiff.obj :  .AUTODEPEND ..\..\src\common\imagtiff.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
@@ -6771,6 +6926,9 @@ $(OBJS)\coredll_menucmn.obj :  .AUTODEPEND ..\..\src\common\menucmn.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
 $(OBJS)\coredll_nbkbase.obj :  .AUTODEPEND ..\..\src\common\nbkbase.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+
+$(OBJS)\coredll_overlaycmn.obj :  .AUTODEPEND ..\..\src\common\overlaycmn.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
 $(OBJS)\coredll_paper.obj :  .AUTODEPEND ..\..\src\common\paper.cpp
@@ -7028,9 +7186,6 @@ $(OBJS)\corelib_window.obj :  .AUTODEPEND ..\..\src\mgl\window.cpp
 $(OBJS)\corelib_accel.obj :  .AUTODEPEND ..\..\src\generic\accel.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
-$(OBJS)\corelib_collpaneg.obj :  .AUTODEPEND ..\..\src\generic\collpaneg.cpp
-	$(CXX) -bt=dos -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
-
 $(OBJS)\corelib_colrdlgg.obj :  .AUTODEPEND ..\..\src\generic\colrdlgg.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
@@ -7244,6 +7399,9 @@ $(OBJS)\corelib_dcbase.obj :  .AUTODEPEND ..\..\src\common\dcbase.cpp
 $(OBJS)\corelib_dcbufcmn.obj :  .AUTODEPEND ..\..\src\common\dcbufcmn.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
+$(OBJS)\corelib_dcgraph.obj :  .AUTODEPEND ..\..\src\common\dcgraph.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+
 $(OBJS)\corelib_dlgcmn.obj :  .AUTODEPEND ..\..\src\common\dlgcmn.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
@@ -7349,6 +7507,9 @@ $(OBJS)\corelib_imagpng.obj :  .AUTODEPEND ..\..\src\common\imagpng.cpp
 $(OBJS)\corelib_imagpnm.obj :  .AUTODEPEND ..\..\src\common\imagpnm.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
+$(OBJS)\corelib_imagtga.obj :  .AUTODEPEND ..\..\src\common\imagtga.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+
 $(OBJS)\corelib_imagtiff.obj :  .AUTODEPEND ..\..\src\common\imagtiff.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
@@ -7371,6 +7532,9 @@ $(OBJS)\corelib_menucmn.obj :  .AUTODEPEND ..\..\src\common\menucmn.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
 $(OBJS)\corelib_nbkbase.obj :  .AUTODEPEND ..\..\src\common\nbkbase.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+
+$(OBJS)\corelib_overlaycmn.obj :  .AUTODEPEND ..\..\src\common\overlaycmn.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
 $(OBJS)\corelib_paper.obj :  .AUTODEPEND ..\..\src\common\paper.cpp
@@ -7544,6 +7708,9 @@ $(OBJS)\advdll_bmpcboxg.obj :  .AUTODEPEND ..\..\src\generic\bmpcboxg.cpp
 $(OBJS)\advdll_calctrl.obj :  .AUTODEPEND ..\..\src\generic\calctrl.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(ADVDLL_CXXFLAGS) $<
 
+$(OBJS)\advdll_collpaneg.obj :  .AUTODEPEND ..\..\src\generic\collpaneg.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(ADVDLL_CXXFLAGS) $<
+
 $(OBJS)\advdll_datavgen.obj :  .AUTODEPEND ..\..\src\generic\datavgen.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(ADVDLL_CXXFLAGS) $<
 
@@ -7602,6 +7769,9 @@ $(OBJS)\advlib_bmpcboxg.obj :  .AUTODEPEND ..\..\src\generic\bmpcboxg.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(ADVLIB_CXXFLAGS) $<
 
 $(OBJS)\advlib_calctrl.obj :  .AUTODEPEND ..\..\src\generic\calctrl.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(ADVLIB_CXXFLAGS) $<
+
+$(OBJS)\advlib_collpaneg.obj :  .AUTODEPEND ..\..\src\generic\collpaneg.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(ADVLIB_CXXFLAGS) $<
 
 $(OBJS)\advlib_datavgen.obj :  .AUTODEPEND ..\..\src\generic\datavgen.cpp
@@ -8261,6 +8431,9 @@ $(OBJS)\richtextdll_richtextsymboldlg.obj :  .AUTODEPEND ..\..\src\richtext\rich
 $(OBJS)\richtextdll_richtextstyledlg.obj :  .AUTODEPEND ..\..\src\richtext\richtextstyledlg.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(RICHTEXTDLL_CXXFLAGS) $<
 
+$(OBJS)\richtextdll_richtextprint.obj :  .AUTODEPEND ..\..\src\richtext\richtextprint.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(RICHTEXTDLL_CXXFLAGS) $<
+
 $(OBJS)\richtextlib_dummy.obj :  .AUTODEPEND ..\..\src\common\dummy.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(RICHTEXTLIB_CXXFLAGS) $<
 
@@ -8286,6 +8459,9 @@ $(OBJS)\richtextlib_richtextsymboldlg.obj :  .AUTODEPEND ..\..\src\richtext\rich
 	$(CXX) -bt=dos -zq -fo=$^@ $(RICHTEXTLIB_CXXFLAGS) $<
 
 $(OBJS)\richtextlib_richtextstyledlg.obj :  .AUTODEPEND ..\..\src\richtext\richtextstyledlg.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(RICHTEXTLIB_CXXFLAGS) $<
+
+$(OBJS)\richtextlib_richtextprint.obj :  .AUTODEPEND ..\..\src\richtext\richtextprint.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(RICHTEXTLIB_CXXFLAGS) $<
 
 $(OBJS)\gldll_dummy.obj :  .AUTODEPEND ..\..\src\common\dummy.cpp
