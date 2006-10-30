@@ -95,7 +95,8 @@ All (GUI):
   formatting.
 - Support for loading TGA files added (Seth Jackson)
 - Added wxTB_RIGHT style for right-aligned toolbars (Igor Korot)
-- Added events API to wxHtmlWindow (Francesco Montorsi).
+- wxHtmlWindow now generates events on link clicks (Francesco Montorsi).
+- wxHtmlWindow now also generates wxEVT_COMMAND_TEXT_COPY event
 
 Unix Ports:
 

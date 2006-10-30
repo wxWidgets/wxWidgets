@@ -409,6 +409,7 @@ protected:
     void OnKeyUp(wxKeyEvent& event);
     void OnDoubleClick(wxMouseEvent& event);
     void OnCopy(wxCommandEvent& event);
+    void OnClipboardEvent(wxClipboardTextEvent& event);
     void OnMouseEnter(wxMouseEvent& event);
     void OnMouseLeave(wxMouseEvent& event);
     void OnMouseCaptureLost(wxMouseCaptureLostEvent& event);

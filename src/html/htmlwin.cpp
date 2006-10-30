@@ -1394,13 +1394,23 @@ void wxHtmlWindow::OnMouseLeave(wxMouseEvent& event)
 
 void wxHtmlWindow::OnKeyUp(wxKeyEvent& event)
 {
-    if ( IsSelectionEnabled() && event.GetKeyCode() == 'C' && event.CmdDown() )
+    if ( IsSelectionEnabled() &&
+            (event.GetKeyCode() == 'C' && event.CmdDown()) )
     {
-        (void) CopySelection();
+        wxClipboardTextEvent evt(wxEVT_COMMAND_TEXT_COPY, GetId());
+
+        evt.SetEventObject(this);
+
+        GetEventHandler()->ProcessEvent(evt);
     }
 }
 
 void wxHtmlWindow::OnCopy(wxCommandEvent& WXUNUSED(event))
+{
+    (void) CopySelection();
+}
+
+void wxHtmlWindow::OnClipboardEvent(wxClipboardTextEvent& WXUNUSED(event))
 {
     (void) CopySelection();
 }
@@ -1545,6 +1555,7 @@ BEGIN_EVENT_TABLE(wxHtmlWindow, wxScrolledWindow)
     EVT_MOUSE_CAPTURE_LOST(wxHtmlWindow::OnMouseCaptureLost)
     EVT_KEY_UP(wxHtmlWindow::OnKeyUp)
     EVT_MENU(wxID_COPY, wxHtmlWindow::OnCopy)
+    EVT_TEXT_COPY(wxID_ANY, wxHtmlWindow::OnClipboardEvent)
 #endif // wxUSE_CLIPBOARD
 END_EVENT_TABLE()
 

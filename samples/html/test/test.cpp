@@ -28,6 +28,8 @@
 #include "wx/fs_inet.h"
 #include "wx/filedlg.h"
 #include "wx/utils.h"
+#include "wx/clipbrd.h"
+#include "wx/dataobj.h"
 
 #include "../../sample.xpm"
 
@@ -53,6 +55,11 @@ public:
                                              wxString *WXUNUSED(redirect)) const;
 
 private:
+    void OnClipboardEvent(wxClipboardTextEvent& event);
+
+#if wxUSE_CLIPBOARD
+    DECLARE_EVENT_TABLE()
+#endif // wxUSE_CLIPBOARD
     DECLARE_NO_COPY_CLASS(MyHtmlWindow)
 };
 
@@ -335,3 +342,32 @@ wxHtmlOpeningStatus MyHtmlWindow::OnOpeningURL(wxHtmlURLType WXUNUSED(type),
     GetRelatedFrame()->SetStatusText(url + _T(" lately opened"),1);
     return wxHTML_OPEN;
 }
+
+#if wxUSE_CLIPBOARD
+BEGIN_EVENT_TABLE(MyHtmlWindow, wxHtmlWindow)
+    EVT_TEXT_COPY(wxID_ANY, MyHtmlWindow::OnClipboardEvent)
+END_EVENT_TABLE()
+
+void MyHtmlWindow::OnClipboardEvent(wxClipboardTextEvent& WXUNUSED(event))
+{
+    // explicitly call wxHtmlWindow::CopySelection() method
+    // and show the first 100 characters of the text copied in the status bar
+    if ( CopySelection() )
+    {
+        wxTextDataObject data;
+        if ( wxTheClipboard && wxTheClipboard->GetData(data) )
+        {
+            const wxString text = data.GetText();
+            const size_t maxTextLength = 100;
+
+            wxLogStatus(wxString::Format(_T("Clipboard: '%s%s'"),
+                        wxString(text, maxTextLength).c_str(),
+                        (text.length() > maxTextLength) ? _T("...")
+                                                        : _T("")));
+            return;
+        }
+    }
+
+    wxLogStatus(_T("Clipboard: nothing"));
+}
+#endif // wxUSE_CLIPBOARD
