@@ -36,7 +36,7 @@ public:
                m_join == data.m_join &&
                m_cap == data.m_cap &&
                m_colour == data.m_colour &&
-               (m_style != wxSTIPPLE || m_stipple.IsRefTo(&data.m_stipple)) &&
+               (m_style != wxSTIPPLE || m_stipple.IsSameAs(data.m_stipple)) &&
                (m_style != wxUSER_DASH ||
                 (m_nbDash == data.m_nbDash &&
                     memcmp(m_dash, data.m_dash, m_nbDash*sizeof(wxDash)) == 0));

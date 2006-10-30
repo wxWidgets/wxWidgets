@@ -41,7 +41,7 @@ public:
     bool operator == (const wxBrushRefData& data) const
     {
         return (m_style == data.m_style &&
-                m_stipple.IsRefTo(&data.m_stipple) &&
+                m_stipple.IsSameAs(data.m_stipple) &&
                 m_colour == data.m_colour);
     }
 

@@ -1661,7 +1661,7 @@ void wxWindowMac::DoGetClientSize( int *x, int *y ) const
 
 bool wxWindowMac::SetCursor(const wxCursor& cursor)
 {
-    if (m_cursor.IsRefTo(&cursor))
+    if (m_cursor.IsSameAs(cursor))
         return false;
 
     if (!cursor.IsOk())

@@ -397,7 +397,7 @@ bool classname##VariantData::Eq(wxVariantData& data) const \
 
 
 // implements a wxVariantData-derived class using for the Eq() method a shallow
-// comparison (through wxObject::IsRefTo function)
+// comparison (through wxObject::IsSameAs function)
 #define IMPLEMENT_VARIANT_OBJECT_EXPORTED_SHALLOWCMP(classname,expdecl) \
 IMPLEMENT_VARIANT_OBJECT_EXPORTED_NO_EQ(classname,expdecl) \
 \
@@ -407,7 +407,7 @@ bool classname##VariantData::Eq(wxVariantData& data) const \
 \
     classname##VariantData & otherData = (classname##VariantData &) data;\
 \
-    return (otherData.m_value.IsRefTo(&m_value));\
+    return (otherData.m_value.IsSameAs(m_value));\
 }\
 
 

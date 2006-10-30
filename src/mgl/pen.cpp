@@ -42,7 +42,7 @@ class wxPenRefData: public wxObjectRefData
                m_capStyle == data.m_capStyle &&
                m_joinStyle == data.m_joinStyle &&
                m_colour == data.m_colour &&
-               (m_style != wxSTIPPLE || m_stipple.IsRefTo(&data.m_stipple)) &&
+               (m_style != wxSTIPPLE || m_stipple.IsSameAs(data.m_stipple)) &&
                (m_style != wxUSER_DASH ||
                 (m_dash == data.m_dash &&
                     memcmp(m_dash, data.m_dash, m_countDashes*sizeof(wxDash)) == 0));

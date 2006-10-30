@@ -116,12 +116,15 @@ this one or is derived from it.
   bool tmp = obj->IsKindOf(CLASSINFO(wxFrame));
 \end{verbatim}
 
-\membersection{wxObject::IsRefTo}\label{wxobjectisrefto}
+\membersection{wxObject::IsSameAs}\label{wxobjectissameas}
 
-\func{bool}{IsRefTo}{\param{const wxObject *}{ obj}}
+\func{bool}{IsSameAs}{\param{const wxObject\& }{ obj}}
 
-Returns \true if this object is referencing the \arg{obj}'s data.
-Note that this function only does a {\tt shallow} comparison.
+Returns \true if this object has the same data pointer as \arg{obj}. Notice
+that \true is returned if the data pointers are \NULL in both objects.
+
+This function only does a \emph{shallow} comparison, i.e. it doesn't compare
+the objects pointed to by the data pointers of these objects.
 
 \membersection{wxObject::Ref}\label{wxobjectref}
 

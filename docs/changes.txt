@@ -30,7 +30,7 @@ Changes in behaviour which may result in compilation errors
   used to work in somewhat unexpected way as it compared only internal pointers
   and not the object data. The code using it will have to be updated:
   * If the object was compared with wxNullXXX, use IsOk() method instead
-  * If valid object need to be compated, use IsRefTo() to reproduce the old
+  * If valid object need to be compated, use IsSameAs() to reproduce the old
     behaviour or change the code to avoid comparing bitmaps &c
 - wxFontData::GetColour() now returns a const colour.
 - wxDC objects can't be created directly now (this never worked, now it doesn't

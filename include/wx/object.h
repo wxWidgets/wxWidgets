@@ -476,9 +476,8 @@ public:
     // Make sure this object has only one reference
     void UnShare() { AllocExclusive(); }
 
-    // Do a shallow comparison of our referenced data with the given object's
-    // refdata
-    bool IsRefTo(const wxObject *p) const { return m_refData == p->m_refData; }
+    // check if this object references the same data as the other one
+    bool IsSameAs(const wxObject& o) const { return m_refData == o.m_refData; }
 
 protected:
     // ensure that our data is not shared with anybody else: if we have no
