@@ -344,6 +344,13 @@ Note (4): if Watcom can't read the precompiled header when building a sample,
           try deleting .pch files in build\msw\wat_* and compiling
           the sample again.
 
+Note (5): wxUSE_STD_STRING is disabled in wx/string.h for Watcom as this
+          compiler doesn't come with standard C++ library headers by default.
+          If you install STLPort or another STL implementation, you'll need to
+          edit wx/string.h and remove the check for Digital Mars in it (search
+          for __WATCOM__).
+
+
 Metrowerks CodeWarrior compilation
 ----------------------------------------------------------------
 
@@ -595,6 +602,12 @@ using bakefile tool according to the instructions in build\bakefiles\README:
     cd build\bakefiles
     bakefile_gen -f dmars -b wx.bkl
     bakefile_gen -f dmars -b ../../samples/minimal/minimal.bkl
+
+
+Note that wxUSE_STD_STRING is disabled in wx/string.h for Digital Mars as this
+compiler doesn't come with standard C++ library headers by default. If you
+install STLPort or another STL implementation, you'll need to edit wx/string.h
+and remove the check for Digital Mars in it (search for __DMC__).
 
 
 16-bit compilation is no longer supported.

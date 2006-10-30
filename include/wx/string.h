@@ -169,6 +169,17 @@ inline int Stricmp(const char *psz1, const char *psz2)
 // deal with STL/non-STL/non-STL-but-wxUSE_STD_STRING
 // ----------------------------------------------------------------------------
 
+#if wxUSE_STL || wxUSE_STD_STRING
+    // these compilers come without standard C++ library headers by default,
+    // remove the tests here if you do have them (e.g. from STLPort)
+    #if defined(__DMC__) || defined(__WATCOMC__)
+        #undef wxUSE_STL
+        #undef wxUSE_STD_STRING
+        #define wxUSE_STL 0
+        #define wxUSE_STD_STRING 0
+    #endif
+#endif // wxUSE_STL || wxUSE_STD_STRING
+
 // in both cases we need to define wxStdString
 #if wxUSE_STL || wxUSE_STD_STRING
 
