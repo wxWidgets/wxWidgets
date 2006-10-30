@@ -200,7 +200,7 @@ bool wxWindowsPrintNativeData::TransferTo( wxPrintData &data )
         }
         if (devMode->dmFields & DM_MEDIATYPE)
         {
-            wxASSERT(devMode->dmMediaType != wxPRINTMEDIA_DEFAULT);
+            wxASSERT( (int)devMode->dmMediaType != wxPRINTMEDIA_DEFAULT );
             data.SetMedia(devMode->dmMediaType);
         }
         //// Printer name
