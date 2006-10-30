@@ -399,9 +399,7 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
         (EventHandlerRef *)&comboEventHandler);
 #else
     m_choice = new wxComboBoxChoice(this, style );
-
-    m_choice = new wxComboBoxChoice(this, style );
-    m_choice->SetSizeHints( wxSize( POPUPWIDTH , POPUPHEIGHT ) );
+    m_choice->SetMinSize( wxSize( POPUPWIDTH , POPUPHEIGHT ) );
 
     wxSize csize = size;
     if ( style & wxCB_READONLY )
