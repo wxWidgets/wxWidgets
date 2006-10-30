@@ -179,7 +179,7 @@ void wxWindowDC::InitForWin(wxWindow *win, const wxRect *rect)
                r.x, r.y, r.GetRight(), r.GetBottom(),
                origin.x, origin.y);
 
-    Init(surface);
+    DFBInit(surface);
     SetFont(win->GetFont());
 
     // offset coordinates to account for subsurface's origin coordinates:

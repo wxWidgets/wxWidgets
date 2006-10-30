@@ -38,7 +38,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxScreenDC, wxDC)
 
 wxScreenDC::wxScreenDC()
 {
-    Init(wxIDirectFB::Get()->GetPrimarySurface());
+    DFBInit(wxIDirectFB::Get()->GetPrimarySurface());
 }
 
 #warning "FIXME: does wxScreenDC need Flip call in dtor?"

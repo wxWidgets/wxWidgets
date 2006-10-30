@@ -59,5 +59,5 @@ void wxMemoryDC::DoSelect(const wxBitmap& bitmap)
     }
 
     // init the DC for drawing to this bitmap
-    Init(bitmap.GetDirectFBSurface());
+    DFBInit(bitmap.GetDirectFBSurface());
 }

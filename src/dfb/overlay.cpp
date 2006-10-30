@@ -78,7 +78,7 @@ void wxOverlayImpl::BeginDrawing(wxWindowDC *dc)
     // another DC, so we have to change the DC to draw on the overlay's surface.
     // Setting m_shouldFlip is done to avoid flipping and drawing of overlays
     // in ~wxWindowDC (we do it EndDrawing).
-    dc->Init(m_surface);
+    dc->DFBInit(m_surface);
     dc->SetDeviceOrigin(-origin.x, -origin.y);
     dc->m_shouldFlip = false;
 

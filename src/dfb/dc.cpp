@@ -53,10 +53,10 @@ wxDC::wxDC()
 
 wxDC::wxDC(const wxIDirectFBSurfacePtr& surface)
 {
-    Init(surface);
+    DFBInit(surface);
 }
 
-void wxDC::Init(const wxIDirectFBSurfacePtr& surface)
+void wxDC::DFBInit(const wxIDirectFBSurfacePtr& surface)
 {
     m_ok = (surface != NULL);
     wxCHECK_RET( surface != NULL, _T("invalid surface") );

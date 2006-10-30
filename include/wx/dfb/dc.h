@@ -117,7 +117,7 @@ public:
 protected:
     // initializes the DC from a surface, must be called if default ctor
     // was used
-    void Init(const wxIDirectFBSurfacePtr& surface);
+    void DFBInit(const wxIDirectFBSurfacePtr& surface);
 
     virtual bool DoFloodFill(wxCoord x, wxCoord y, const wxColour& col,
                              int style = wxFLOOD_SURFACE);
