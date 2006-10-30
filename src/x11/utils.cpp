@@ -272,8 +272,11 @@ void wxCloseDisplay()
 
 bool wxSetDisplay(const wxString& displayName)
 {
-    Display *
-        dpy = XOpenDisplay(displayName.empty() ? NULL : displayName.mb_str());
+    Display *dpy = XOpenDisplay
+                   (
+                    displayName.empty() ? NULL
+                                        : (const char *)displayName.mb_str()
+                   );
 
     if ( !dpy )
     {
