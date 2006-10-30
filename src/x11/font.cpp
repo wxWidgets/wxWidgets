@@ -246,20 +246,21 @@ void wxFontRefData::InitFromNative()
     switch (pango_font_description_get_weight( desc ))
     {
         case PANGO_WEIGHT_ULTRALIGHT:
-            m_weight = wxFONTWEIGHT_LIGHT;
-            break;
         case PANGO_WEIGHT_LIGHT:
             m_weight = wxFONTWEIGHT_LIGHT;
             break;
+
+        default:
+            wxFAIL_MSG(_T("unknown Pango font weight"));
+            // fall through
+
         case PANGO_WEIGHT_NORMAL:
             m_weight = wxFONTWEIGHT_NORMAL;
             break;
+
+        case PANGO_WEIGHT_SEMIBOLD:
         case PANGO_WEIGHT_BOLD:
-            m_weight = wxFONTWEIGHT_BOLD;
-            break;
         case PANGO_WEIGHT_ULTRABOLD:
-            m_weight = wxFONTWEIGHT_BOLD;
-            break;
         case PANGO_WEIGHT_HEAVY:
             m_weight = wxFONTWEIGHT_BOLD;
             break;
