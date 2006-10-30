@@ -35,7 +35,11 @@
 #endif
 
 #include <ctype.h>
-#include <errno.h>
+
+#ifndef __WXWINCE__
+    #include <errno.h>
+#endif
+
 #include <string.h>
 #include <stdlib.h>
 
@@ -1604,7 +1608,7 @@ wxString& wxString::Trim(bool bFromRight)
             reverse_iterator psz = rbegin();
             while ( (psz != rend()) && wxSafeIsspace(*psz) )
                 psz++;
-            
+
             // truncate at trailing space start
             erase(psz.base(), end());
         }
@@ -1688,14 +1692,20 @@ bool wxStringToIntType(const wxChar *start,
     wxCHECK_MSG( val, false, _T("NULL output pointer") );
     wxASSERT_MSG( !base || (base > 1 && base <= 36), _T("invalid base") );
 
+#ifndef __WXWINCE__
     errno = 0;
+#endif
 
     wxChar *end;
     *val = (*func)(start, &end, base);
 
     // return true only if scan was stopped by the terminating NUL and if the
     // string was not empty to start with and no under/overflow occurred
-    return !*end && (end != start) && (errno != ERANGE);
+    return !*end && (end != start)
+#ifndef __WXWINCE__
+        && (errno != ERANGE)
+#endif
+    ;
 }
 
 #define wxSTR2INT(val, b, func) return wxStringToIntType(c_str(), val, b, func)
@@ -1756,7 +1766,9 @@ bool wxString::ToDouble(double *val) const
 {
     wxCHECK_MSG( val, false, _T("NULL pointer in wxString::ToDouble") );
 
+#ifndef __WXWINCE__
     errno = 0;
+#endif
 
     const wxChar *start = c_str();
     wxChar *end;
@@ -1764,7 +1776,11 @@ bool wxString::ToDouble(double *val) const
 
     // return true only if scan was stopped by the terminating NUL and if the
     // string was not empty to start with and no under/overflow occurred
-    return !*end && (end != start) && (errno != ERANGE);
+    return !*end && (end != start)
+#ifndef __WXWINCE__
+        && (errno != ERANGE)
+#endif
+    ;
 }
 
 // ---------------------------------------------------------------------------
