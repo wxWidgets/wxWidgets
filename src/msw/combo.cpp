@@ -68,13 +68,13 @@
 #define TEXTCTRLXADJUST_XP          1
 #define TEXTCTRLYADJUST_XP          3
 #define TEXTCTRLXADJUST_CLASSIC     1
-#define TEXTCTRLYADJUST_CLASSIC     3
+#define TEXTCTRLYADJUST_CLASSIC     2
 
 #define COMBOBOX_ANIMATION_RESOLUTION   10
 
 #define COMBOBOX_ANIMATION_DURATION     200  // In milliseconds
 
-#define wxMSW_DESKTOP_USERPREFERENCESMASK_COMBOBOXANIM    (1<<26)
+#define wxMSW_DESKTOP_USERPREFERENCESMASK_COMBOBOXANIM    (1<<2)
 
 
 // ============================================================================
@@ -85,7 +85,9 @@
 BEGIN_EVENT_TABLE(wxComboCtrl, wxComboCtrlBase)
     EVT_PAINT(wxComboCtrl::OnPaintEvent)
     EVT_MOUSE_EVENTS(wxComboCtrl::OnMouseEvent)
+#if wxUSE_COMBOCTRL_POPUP_ANIMATION
     EVT_TIMER(wxID_ANY, wxComboCtrl::OnTimerEvent)
+#endif
 END_EVENT_TABLE()
 
 
@@ -543,16 +545,28 @@ static wxUint32 GetUserPreferencesMask()
     if ( valueSet )
         return userPreferencesMask;
 
-    wxRegKey key(wxRegKey::HKCU, wxT("Control Panel\\Desktop"));
-    if( key.Open(wxRegKey::Read) )
+    wxRegKey* pKey = NULL;
+    wxRegKey key1(wxRegKey::HKCU, wxT("Software\\Policies\\Microsoft\\Control Panel"));
+    wxRegKey key2(wxRegKey::HKCU, wxT("Software\\Policies\\Microsoft\\Windows\\Control Panel"));
+    wxRegKey key3(wxRegKey::HKCU, wxT("Control Panel\\Desktop"));
+
+    if ( key1.Exists() )
+        pKey = &key1;
+    else if ( key2.Exists() )
+        pKey = &key2;
+    else if ( key3.Exists() )
+        pKey = &key3;
+
+    if ( pKey && pKey->Open(wxRegKey::Read) )
     {
         wxMemoryBuffer buf;
-        if ( key.QueryValue(wxT("UserPreferencesMask"), buf) )
+        if ( pKey->HasValue(wxT("UserPreferencesMask")) &&
+             pKey->QueryValue(wxT("UserPreferencesMask"), buf) )
         {
             if ( buf.GetDataLen() >= 4 )
             {
-                wxByte* p = (wxByte*) buf.GetData();
-                userPreferencesMask = p[3] + (p[2]<<8) + (p[1]<<16) + (p[0]<<24);
+                wxUint32* p = (wxUint32*) buf.GetData();
+                userPreferencesMask = *p;
             }
         }
     }
