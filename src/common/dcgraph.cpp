@@ -3,7 +3,7 @@
 // Purpose:     graphics context methods common to all platforms
 // Author:      Stefan Csomor
 // Modified by:
-// Created:     
+// Created:
 // RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
@@ -25,6 +25,10 @@
     #include "wx/bitmap.h"
     #include "wx/dcmemory.h"
     #include "wx/region.h"
+#endif
+
+#ifndef wxMAC_USE_CORE_GRAPHICS_BLEND_MODES
+    #define wxMAC_USE_CORE_GRAPHICS_BLEND_MODES 0
 #endif
 
 //-----------------------------------------------------------------------------
@@ -58,7 +62,7 @@ wxGCDC::wxGCDC()
 }
 
 void wxGCDC::SetGraphicsContext( wxGraphicsContext* ctx )
-{ 
+{
     delete m_graphicContext;
     m_graphicContext = ctx;
     if ( m_graphicContext )
@@ -298,7 +302,7 @@ void wxGCDC::ComputeScaleAndOrigin()
     m_matrixCurrent.Translate( m_deviceOriginX, m_deviceOriginY );
     m_matrixCurrent.Scale( m_scaleX, m_scaleY );
     m_matrixCurrent.Translate( m_logicalOriginX, m_logicalOriginY );
-    
+
     m_graphicContext->SetTransform( m_matrixOriginal );
     m_graphicContext->ConcatTransform( m_matrixCurrent );
 }
@@ -701,7 +705,7 @@ bool wxGCDC::DoBlit(
 {
     wxCHECK_MSG( Ok(), false, wxT("wxGCDC(cg)::DoBlit - invalid DC") );
     wxCHECK_MSG( source->Ok(), false, wxT("wxGCDC(cg)::DoBlit - invalid source DC") );
-    
+
     if ( logical_func == wxNO_OP )
         return true;
     else if ( logical_func != wxCOPY )
@@ -718,9 +722,9 @@ bool wxGCDC::DoBlit(
 
     wxRect subrect(source-> LogicalToDeviceX(xsrc),source-> LogicalToDeviceY(ysrc),
         source-> LogicalToDeviceXRel(width),source-> LogicalToDeviceYRel(height));
-        
+
     wxBitmap blit = source->GetAsBitmap( &subrect );
-        
+
     if ( blit.Ok() )
     {
         m_graphicContext->DrawBitmap( blit, xdest , ydest , width , height );
@@ -837,7 +841,7 @@ void wxGCDC::Clear(void)
     wxPen p = *wxTRANSPARENT_PEN;
     m_graphicContext->SetPen( p );
     DoDrawRectangle( 0, 0, 32000 , 32000 );
-    m_graphicContext->SetPen( m_pen );    
+    m_graphicContext->SetPen( m_pen );
     m_graphicContext->SetBrush( m_brush );
 }
 
