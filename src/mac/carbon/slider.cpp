@@ -345,9 +345,15 @@ void wxSlider::DoSetSizeHints( int minW, int minH,
     wxSize size = GetBestSize();
 
     if (GetWindowStyle() & wxSL_VERTICAL)
-        wxWindow::DoSetSizeHints(size.x, minH, size.x, maxH, incW, incH);
+    {
+        SetMinSize( wxSize(size.x,minH) );
+        SetMaxSize( wxSize(size.x,maxH) );
+    }
     else
-        wxWindow::DoSetSizeHints(minW, size.y, maxW, size.y, incW, incH);
+    {
+        SetMinSize( wxSize(minW,size.y) );
+        SetMaxSize( wxSize(maxW,size.y) );
+    }
 }
 
 wxSize wxSlider::DoGetBestSize() const
