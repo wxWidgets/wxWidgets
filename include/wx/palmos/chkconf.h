@@ -52,9 +52,6 @@
 #undef wxUSE_CLIPBOARD
 #define wxUSE_CLIPBOARD 0
 
-#undef wxUSE_DISPLAY
-#define wxUSE_DISPLAY 0
-
 #undef wxUSE_COMBOBOX
 #define wxUSE_COMBOBOX 0
 
@@ -63,6 +60,9 @@
 
 #undef wxUSE_DIRDLG
 #define wxUSE_DIRDLG 0
+
+#undef wxUSE_DISPLAY
+#define wxUSE_DISPLAY 0
 
 #undef wxUSE_DOC_VIEW_ARCHITECTURE
 #define wxUSE_DOC_VIEW_ARCHITECTURE 0
@@ -105,6 +105,9 @@
 
 #undef wxUSE_FONTMAP
 #define wxUSE_FONTMAP 0
+
+#undef wxUSE_FS_ARCHIVE
+#define wxUSE_FS_ARCHIVE 0
 
 #undef wxUSE_FS_INET
 #define wxUSE_FS_INET 0
@@ -261,6 +264,9 @@
 
 #undef wxUSE_STATLINE
 #define wxUSE_STATLINE 0
+
+#undef wxUSE_TARSTREAM
+#define wxUSE_TARSTREAM 0
 
 #undef wxUSE_TEXTBUFFER
 #define wxUSE_TEXTBUFFER 0

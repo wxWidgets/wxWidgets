@@ -62,7 +62,6 @@ BASE_CMN_SRC = \
 ../../src/common/filename.cpp \
 ../../src/common/filesys.cpp \
 ../../src/common/fmapbase.cpp \
-../../src/common/fs_zip.cpp \
 ../../src/common/hash.cpp \
 ../../src/common/hashmap.cpp \
 ../../src/common/init.cpp \
