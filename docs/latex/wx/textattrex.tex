@@ -81,6 +81,7 @@ for a text control.
 #define wxTEXT_ATTR_BULLET_TEXT             0x00080000
 #define wxTEXT_ATTR_BULLET_NAME             0x00100000
 #define wxTEXT_ATTR_URL                     0x00200000
+#define wxTEXT_ATTR_PAGE_BREAK              0x00400000
 \end{verbatim}
 }
 
@@ -264,6 +265,12 @@ Returns \true if the attribute object specifies line spacing.
 
 Returns \true if the attribute object specifies a list style name.
 
+\membersection{wxTextAttrEx::HasPageBreak}\label{wxtextattrexhaspagebreak}
+
+\constfunc{bool}{HasPageBreak}{\void}
+
+Returns \true if the attribute object specifies a page break before this paragraph.
+
 \membersection{wxTextAttrEx::HasParagraphSpacingAfter}\label{wxtextattrexhasparagraphspacingafter}
 
 \constfunc{bool}{HasParagraphSpacingAfter}{\void}
@@ -390,6 +397,12 @@ defined for convenience:
 \func{void}{SetListStyleName}{\param{const wxString\& }{name}}
 
 Sets the list style name.
+
+\membersection{wxTextAttrEx::SetPageBreak}\label{wxtextattrexsetpagebreak}
+
+\func{void}{SetPageBreak}{\param{bool}{ pageBreak = true}}
+
+Specifies a page break before this paragraph.
 
 \membersection{wxTextAttrEx::SetParagraphSpacingAfter}\label{wxtextattrexsetparagraphspacingafter}
 
