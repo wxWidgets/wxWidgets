@@ -28,16 +28,18 @@ public:
     bool operator != (const wxAnimation& anim) const
         { return m_refData != anim.m_refData; }
 
-    bool IsOk() const
+    virtual bool IsOk() const
         { return m_refData != NULL; }
 
-    size_t GetFrameCount() const;
-    int GetDelay(size_t i) const;
-    wxImage GetFrame(size_t i) const;
-    wxSize GetSize() const;
+    virtual size_t GetFrameCount() const;
+    virtual int GetDelay(size_t i) const;
+    virtual wxImage GetFrame(size_t i) const;
+    virtual wxSize GetSize() const;
 
-    bool LoadFile(const wxString& filename, wxAnimationType type = wxANIMATION_TYPE_ANY);
-    bool Load(wxInputStream &stream, wxAnimationType type = wxANIMATION_TYPE_ANY);
+    virtual bool LoadFile(const wxString& filename,
+                          wxAnimationType type = wxANIMATION_TYPE_ANY);
+    virtual bool Load(wxInputStream& stream,
+                      wxAnimationType type = wxANIMATION_TYPE_ANY);
 
 public:     // extended interface used by the generic implementation of wxAnimationCtrl
 
