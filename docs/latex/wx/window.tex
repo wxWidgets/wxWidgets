@@ -1091,14 +1091,16 @@ by name.
 \constfunc{wxSize}{GetMaxSize}{\void}
 
 Returns the maximum size of the window, an indication to the sizer layout mechanism
-that this is the maximum possible size.
+that this is the maximum possible size. 
 
 \membersection{wxWindow::GetMinSize}\label{wxwindowgetminsize}
 
-\constfunc{wxSize}{GetMinSize}{\void}
+\constfunc{virtual wxSize}{GetMinSize}{\void}
 
 Returns the minimum size of the window, an indication to the sizer layout mechanism
-that this is the minimum required size.
+that this is the minimum required size. It normally just returns the value set
+by \helpref{SetMinSize}{wxwindowsetminsize}, but it can be overridden to do the
+calculation on demand.
 
 \membersection{wxWindow::GetName}\label{wxwindowgetname}
 
