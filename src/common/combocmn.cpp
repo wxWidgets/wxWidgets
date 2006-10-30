@@ -1581,8 +1581,9 @@ void wxComboCtrlBase::OnFocusEvent( wxFocusEvent& event )
     if ( event.GetEventType() == wxEVT_SET_FOCUS )
     {
 #ifndef __WXMAC__
-        if ( m_text && m_text != ::wxWindow::FindFocus() )
-            m_text->SetFocus();
+        wxWindow* tc = GetTextCtrl();
+        if ( tc && tc != DoFindFocus() )
+            tc->SetFocus();
 #endif
     }
 
@@ -1777,6 +1778,8 @@ void wxComboCtrlBase::ShowPopup()
         popup = m_popup;
     }
 
+    winPopup->Enable();
+    
     wxASSERT( !m_popup || m_popup == popup ); // Consistency check.
 
     wxSize adjustedSize = m_popupInterface->GetAdjustedSize(widthPopup,
@@ -1923,19 +1926,12 @@ void wxComboCtrlBase::OnPopupDismiss()
     if ( IsPopupWindowState(Hidden) )
         return;
 
-    // NB: Focus setting is really funny, atleast on wxMSW. First of all,
-    //     we need to have SetFocus at the end. Otherwise wxTextCtrl may
-    //     freeze until focus goes somewhere else. Second, wxTreeCtrl as
-    //     popup, when dismissing, "steals" focus back to itself unless
-    //     SetFocus is called also here, exactly before m_popupWinState
-    //     is set to false. Which is truly weird since SetFocus is just
-    //     wxWindowMSW method and does not call event handler or anything like
-    //     that (ie. does not care about m_popupWinState).
-
-    SetFocus();
-
-    // This should preferably be set before focus.
+    // This must be set before focus - otherwise there will be recursive
+    // OnPopupDismisses.
     m_popupWinState = Hidden;
+
+    //SetFocus();
+    m_winPopup->Disable();
 
     // Inform popup control itself
     m_popupInterface->OnDismiss();
