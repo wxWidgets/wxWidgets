@@ -729,10 +729,8 @@ bool wxLaunchDefaultBrowser(const wxString& urlOrig, int flags)
     // set the scheme of url to http if it does not have one
     // RR: This doesn't work if the url is just a local path
     wxString url(urlOrig);
-#if 0
     if ( !wxURI(url).HasScheme() )
         url.Prepend(wxT("http://"));
-#endif
 
 
 #if defined(__WXMSW__)
