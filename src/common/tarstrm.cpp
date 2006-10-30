@@ -270,7 +270,7 @@ bool wxTarHeaderBlock::SetOctal(int id, wxTarNumber n)
     char *p = field + Len(id);
     *--p = 0;
     while (p > field) {
-        *--p = '0' + (n & 7);
+        *--p = char('0' + (n & 7));
         n >>= 3;
     }
     return n == 0;
@@ -1048,10 +1048,10 @@ bool wxTarOutputStream::PutNextEntry(wxTarEntry *entry)
             wxTAR_LNKTYPE, wxTAR_SYMTYPE, wxTAR_CHRTYPE, wxTAR_BLKTYPE,
             wxTAR_DIRTYPE, wxTAR_FIFOTYPE, 0
         };
-        char typeflag = e->GetTypeFlag();
+        int typeflag = e->GetTypeFlag();
 
         // pax does now allow data for wxTAR_LNKTYPE
-        if (!m_pax || typeflag - wxTAR_LNKTYPE != 0)
+        if (!m_pax || typeflag != wxTAR_LNKTYPE)
             if (strchr(nodata, typeflag) != NULL)
                 CloseEntry();
     }
@@ -1169,7 +1169,7 @@ bool wxTarOutputStream::WriteHeaders(wxTarEntry& entry)
     if (entry.GetCreateTime().IsValid())
         SetHeaderDate(_T("ctime"), entry.GetCreateTime());
 
-    *m_hdr->Get(TAR_TYPEFLAG) = entry.GetTypeFlag();
+    *m_hdr->Get(TAR_TYPEFLAG) = char(entry.GetTypeFlag());
 
     strcpy(m_hdr->Get(TAR_MAGIC), USTAR_MAGIC);
     strcpy(m_hdr->Get(TAR_VERSION), USTAR_VERSION); 
@@ -1339,7 +1339,8 @@ void wxTarOutputStream::SetHeaderDate(const wxString& key,
     wxLongLong ll = datetime.IsValid() ? datetime.GetValue() : wxLongLong(0);
     wxLongLong secs = ll / 1000L;
 
-    if (key != _T("mtime") || !m_hdr->SetOctal(TAR_MTIME, secs.GetValue())
+    if (key != _T("mtime")
+        || !m_hdr->SetOctal(TAR_MTIME, wxTarNumber(secs.GetValue()))
         || secs <= 0 || secs >= 0x7fffffff)
     {
         wxString str;
