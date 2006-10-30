@@ -1057,7 +1057,7 @@ size_t wxFileDataObject::GetDataSize() const
 
 #if wxUSE_UNICODE_MSLU
     size_t sizeOfChar;
-    if ( wxGetOsVersion() == wxWIN95 )
+    if ( wxGetOsVersion() == wxOS_WINDOWS_9X )
     {
         // Win9x always uses ANSI file names and MSLU doesn't help with this
         sizeOfChar = sizeof(char);
@@ -1111,7 +1111,7 @@ bool wxFileDataObject::GetDataHere(void *WXUNUSED_IN_WINCE(pData)) const
     pDrop->pFiles = sizeof(DROPFILES);
     pDrop->fNC = FALSE;                 // not non-client coords
 #if wxUSE_UNICODE_MSLU
-    pDrop->fWide = wxGetOsVersion() != wxWIN95 ? TRUE : FALSE;
+    pDrop->fWide = wxGetOsVersion() != wxOS_WINDOWS_9X ? TRUE : FALSE;
 #else
     pDrop->fWide = wxUSE_UNICODE;
 #endif
