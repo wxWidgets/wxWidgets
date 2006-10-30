@@ -353,16 +353,6 @@ public:
     void CacheBestSize(const wxSize& size) const
         { wxConstCast(this, wxWindowBase)->m_bestSizeCache = size; }
 
-        // There are times (and windows) where 'Best' size and 'Min' size
-        // are vastly out of sync.  This should be remedied somehow, but in
-        // the meantime, this method will return the larger of BestSize
-        // (the window's smallest legible size), and any user specified
-        // MinSize hint.
-    wxSize GetAdjustedBestSize() const
-    {
-        wxSize  s( GetBestSize() );
-        return wxSize( wxMax( s.x, GetMinWidth() ), wxMax( s.y, GetMinHeight() ) );
-    }
 
         // This function will merge the window's best size into the window's
         // minimum size, giving priority to the min size components, and
