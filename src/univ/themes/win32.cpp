@@ -3229,13 +3229,11 @@ bool wxWin32ScrollBarInputHandler::OnScrollTimer(wxScrollBar *scrollbar,
     bool stop = false;
     if ( action == wxACTION_SCROLL_PAGE_DOWN )
     {
-        stop = m_renderer->HitTestScrollbar(scrollbar, m_ptStartScrolling)
-                != wxHT_SCROLLBAR_BAR_2;
+        stop = scrollbar->HitTestBar(m_ptStartScrolling) != wxHT_SCROLLBAR_BAR_2;
     }
     else if ( action == wxACTION_SCROLL_PAGE_UP )
     {
-        stop = m_renderer->HitTestScrollbar(scrollbar, m_ptStartScrolling)
-                != wxHT_SCROLLBAR_BAR_1;
+        stop = scrollbar->HitTestBar(m_ptStartScrolling) != wxHT_SCROLLBAR_BAR_1;
     }
 
     if ( stop )
@@ -3297,7 +3295,7 @@ bool wxWin32ScrollBarInputHandler::HandleMouseMove(wxInputConsumer *control,
             return false;
         }
 
-        ht = m_renderer->HitTestScrollbar(scrollbar, event.GetPosition());
+        ht = scrollbar->HitTestBar(event.GetPosition());
         if ( ht == m_htLast )
         {
             // yes it did, resume scrolling
@@ -3327,7 +3325,7 @@ bool wxWin32ScrollBarInputHandler::HandleMouseMove(wxInputConsumer *control,
         // Always let thumb jump back if we leave the scrollbar
         if ( event.Moving() )
         {
-            ht = m_renderer->HitTestScrollbar(scrollbar, event.GetPosition());
+            ht = scrollbar->HitTestBar(event.GetPosition());
         }
         else // event.Leaving()
         {
@@ -3346,7 +3344,7 @@ bool wxWin32ScrollBarInputHandler::HandleMouseMove(wxInputConsumer *control,
             if (pos.y > -40 && pos.y < scrollbar->GetSize().y+40)
                pos.y = 5;
         }
-        ht = m_renderer->HitTestScrollbar(scrollbar, pos );
+        ht = scrollbar->HitTestBar(pos);
 #endif
 
         // if we're dragging the thumb and the mouse stays in the scrollbar, it

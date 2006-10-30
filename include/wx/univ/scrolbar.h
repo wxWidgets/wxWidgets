@@ -121,6 +121,9 @@ public:
     // for wxControlRenderer::DrawScrollbar() only
     const wxScrollArrows& GetArrows() const { return m_arrows; }
 
+    // returns one of wxHT_SCROLLBAR_XXX constants
+    wxHitTest HitTestBar(const wxPoint& pt) const;
+
     // idle processing
     virtual void OnInternalIdle();
 
@@ -140,6 +143,30 @@ protected:
 
     // is this scrollbar attached to a window or a standalone control?
     bool IsStandalone() const;
+
+    // scrollbar geometry methods:
+
+    // gets the bounding box for a scrollbar element for the given (by default
+    // - current) thumb position
+    wxRect GetScrollbarRect(wxScrollBar::Element elem, int thumbPos = -1) const;
+
+    // returns the size of the scrollbar shaft excluding the arrows
+    wxCoord GetScrollbarSize() const;
+
+    // translate the scrollbar position (in logical units) into physical
+    // coordinate (in pixels) and the other way round
+    wxCoord ScrollbarToPixel(int thumbPos = -1);
+    int PixelToScrollbar(wxCoord coord);
+
+    // return the starting and ending positions, in pixels, of the thumb of a
+    // scrollbar with the given logical position, thumb size and range and the
+    // given physical length
+    static void GetScrollBarThumbSize(wxCoord length,
+                                      int thumbPos,
+                                      int thumbSize,
+                                      int range,
+                                      wxCoord *thumbStart,
+                                      wxCoord *thumbEnd);
 
 private:
     // total range of the scrollbar in logical units
@@ -164,6 +191,9 @@ private:
 
     // the object handling the arrows
     wxScrollArrows m_arrows;
+
+    friend WXDLLEXPORT class wxControlRenderer; // for geometry methods
+    friend class wxStdScrollBarInputHandler; // for geometry methods
 
     DECLARE_EVENT_TABLE()
     DECLARE_DYNAMIC_CLASS(wxScrollBar)

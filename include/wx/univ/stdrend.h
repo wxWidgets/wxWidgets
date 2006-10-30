@@ -136,21 +136,6 @@ public:
 
     virtual wxCoord GetListboxItemHeight(wxCoord fontHeight);
 
-#if wxUSE_SCROLLBAR
-    virtual wxRect GetScrollbarRect(const wxScrollBar *scrollbar,
-                                    wxScrollBar::Element elem,
-                                    int thumbPos = -1) const;
-
-    virtual wxCoord GetScrollbarSize(const wxScrollBar *scrollbar);
-
-    virtual wxHitTest HitTestScrollbar(const wxScrollBar *scrollbar,
-                                       const wxPoint& pt) const;
-
-    virtual wxCoord ScrollbarToPixel(const wxScrollBar *scrollbar,
-                                     int thumbPos = -1);
-    virtual int PixelToScrollbar(const wxScrollBar *scrollbar, wxCoord coord);
-#endif // wxUSE_SCROLLBAR
-
 #if wxUSE_STATUSBAR
     virtual void DrawStatusField(wxDC& dc,
                                  const wxRect& rect,
@@ -348,16 +333,6 @@ protected:
     // return the width of the border around the text area in the text control
     virtual int GetTextBorderWidth(const wxTextCtrl *text) const;
 #endif // wxUSE_TEXTCTRL
-
-    // return the starting and ending positions, in pixels, of the thumb of a
-    // scrollbar with the given logical position, thumb size and range and the
-    // given physical length
-    static void GetScrollBarThumbSize(wxCoord length,
-                                      int thumbPos,
-                                      int thumbSize,
-                                      int range,
-                                      wxCoord *thumbStart,
-                                      wxCoord *thumbEnd);
 
     // GDI objects we often use
     wxPen m_penBlack,

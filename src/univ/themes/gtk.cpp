@@ -197,12 +197,9 @@ public:
     virtual void AdjustSize(wxSize *size, const wxWindow *window);
 
     // geometry and hit testing
+#if wxUSE_SCROLLBAR
     virtual wxSize GetScrollbarArrowSize() const
         { return m_sizeScrollbarArrow; }
-#if wxUSE_SCROLLBAR
-    virtual wxRect GetScrollbarRect(const wxScrollBar *scrollbar,
-                                    wxScrollBar::Element elem,
-                                    int thumbPos = -1) const;
 #endif // wxUSE_SCROLLBAR
 
     virtual wxSize GetCheckBitmapSize() const
@@ -2228,24 +2225,6 @@ void wxGTKRenderer::DrawScrollbarShaft(wxDC& dc,
     DrawThumbBorder(dc, &rectBar, orient);
     DrawSolidRect(dc, wxSCHEME_COLOUR(m_scheme, SCROLLBAR), rectBar);
 }
-
-#if wxUSE_SCROLLBAR
-wxRect wxGTKRenderer::GetScrollbarRect(const wxScrollBar *scrollbar,
-                                       wxScrollBar::Element elem,
-                                       int thumbPos) const
-{
-    // as GTK scrollbars can't be disabled, it makes no sense to remove the
-    // thumb for a scrollbar with range 0 - instead, make it fill the entire
-    // scrollbar shaft
-    if ( (elem == wxScrollBar::Element_Thumb) && !scrollbar->GetRange() )
-    {
-        elem = wxScrollBar::Element_Bar_2;
-    }
-
-    return wxStdRenderer::GetScrollbarRect(scrollbar, elem, thumbPos);
-}
-
-#endif // wxUSE_SCROLLBAR
 
 // ----------------------------------------------------------------------------
 // size adjustments

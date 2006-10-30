@@ -56,7 +56,6 @@ class WXDLLEXPORT wxScrollBar;
 #include "wx/string.h"
 #include "wx/gdicmn.h"
 #include "wx/icon.h"
-#include "wx/scrolbar.h"            // for wxScrollBar::Element
 
 // helper class used by wxMenu-related functions
 class WXDLLEXPORT wxMenuGeometryInfo
@@ -382,30 +381,8 @@ public:
     virtual void AdjustSize(wxSize *size, const wxWindow *window) = 0;
 
 #if wxUSE_SCROLLBAR
-
     // get the size of a scrollbar arrow
     virtual wxSize GetScrollbarArrowSize() const = 0;
-
-    // gets the bounding box for a scrollbar element for the given (by default
-    // - current) thumb position
-    virtual wxRect GetScrollbarRect(const wxScrollBar *scrollbar,
-                                    wxScrollBar::Element elem,
-                                    int thumbPos = -1) const = 0;
-
-    // returns the size of the scrollbar shaft excluding the arrows
-    virtual wxCoord GetScrollbarSize(const wxScrollBar *scrollbar) = 0;
-
-    // returns one of wxHT_SCROLLBAR_XXX constants
-    virtual wxHitTest HitTestScrollbar(const wxScrollBar *scrollbar,
-                                       const wxPoint& pt) const = 0;
-
-    // translate the scrollbar position (in logical units) into physical
-    // coordinate (in pixels) and the other way round
-    virtual wxCoord ScrollbarToPixel(const wxScrollBar *scrollbar,
-                                     int thumbPos = -1) = 0;
-    virtual int PixelToScrollbar(const wxScrollBar *scrollbar,
-                                 wxCoord coord) = 0;
-
 #endif // wxUSE_SCROLLBAR
 
     // get the height of a listbox item from the base font height
@@ -787,21 +764,6 @@ public:
 #if wxUSE_SCROLLBAR
     virtual wxSize GetScrollbarArrowSize() const
         { return m_renderer->GetScrollbarArrowSize(); }
-    virtual wxRect GetScrollbarRect(const wxScrollBar *scrollbar,
-                                    wxScrollBar::Element elem,
-                                    int thumbPos = -1) const
-        { return m_renderer->GetScrollbarRect(scrollbar, elem, thumbPos); }
-    virtual wxCoord GetScrollbarSize(const wxScrollBar *scrollbar)
-        { return m_renderer->GetScrollbarSize(scrollbar); }
-    virtual wxHitTest HitTestScrollbar(const wxScrollBar *scrollbar,
-                                       const wxPoint& pt) const
-        { return m_renderer->HitTestScrollbar(scrollbar, pt); }
-    virtual wxCoord ScrollbarToPixel(const wxScrollBar *scrollbar,
-                                     int thumbPos = -1)
-        { return m_renderer->ScrollbarToPixel(scrollbar, thumbPos); }
-    virtual int PixelToScrollbar(const wxScrollBar *scrollbar,
-                                 wxCoord coord)
-        { return m_renderer->PixelToScrollbar(scrollbar, coord); }
 #endif // wxUSE_SCROLLBAR
 
     virtual wxCoord GetListboxItemHeight(wxCoord fontHeight)

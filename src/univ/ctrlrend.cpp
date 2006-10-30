@@ -243,7 +243,7 @@ void wxControlRenderer::DrawScrollbar(const wxScrollBar *scrollbar,
         wxScrollBar::Element elem =
             (wxScrollBar::Element)(wxScrollBar::Element_Bar_1 + nBar);
 
-        wxRect rectBar = m_renderer->GetScrollbarRect(scrollbar, elem);
+        wxRect rectBar = scrollbar->GetScrollbarRect(elem);
 
         if ( rgnUpdate.Contains(rectBar) )
         {
@@ -268,7 +268,7 @@ void wxControlRenderer::DrawScrollbar(const wxScrollBar *scrollbar,
         wxScrollBar::Element elem =
             (wxScrollBar::Element)(wxScrollBar::Element_Arrow_Line_1 + nArrow);
 
-        wxRect rectArrow = m_renderer->GetScrollbarRect(scrollbar, elem);
+        wxRect rectArrow = scrollbar->GetScrollbarRect(elem);
         if ( rgnUpdate.Contains(rectArrow) )
         {
             wxLogTrace(_T("scrollbar"),
@@ -293,7 +293,7 @@ void wxControlRenderer::DrawScrollbar(const wxScrollBar *scrollbar,
 
     // and the thumb
     wxScrollBar::Element elem = wxScrollBar::Element_Thumb;
-    wxRect rectThumb = m_renderer->GetScrollbarRect(scrollbar, elem);
+    wxRect rectThumb = scrollbar->GetScrollbarRect(elem);
     if ( rectThumb.width && rectThumb.height && rgnUpdate.Contains(rectThumb) )
     {
         wxLogTrace(_T("scrollbar"),
