@@ -15,7 +15,6 @@ handle it and create a stream to decompress it:
     factory = wxFilterClassFactory::Find(filename, wxSTREAM_FILEEXT);
     if (factory)
         stream = factory->NewStream(new wxFFileInputStream(filename));
-
 \end{verbatim}
 
 \helpref{Find()}{wxfilterclassfactoryfind} can also search
@@ -184,3 +183,4 @@ Removing from the list isn't a thread safe operation
 so can't be done when other threads are running that will be using the list.
 
 The list does not own the factories, so removing a factory does not delete it.
+
