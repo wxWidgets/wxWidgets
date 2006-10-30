@@ -1341,7 +1341,19 @@ void wxGridCellBoolEditor::BeginEdit(int row, int col, wxGrid* grid)
     else
     {
         wxString cellval( grid->GetTable()->GetValue(row, col) );
-        m_startValue = !( !cellval || (cellval == wxT("0")) );
+
+        if ( cellval == ms_stringValues[false] )
+            m_startValue = false;
+        else if ( cellval == ms_stringValues[true] )
+            m_startValue = true;
+        else
+        {
+            // do not try to be smart here and convert it to true or false
+            // because we'll still overwrite it with something different and
+            // this risks to be very surprising for the user code, let them
+            // know about it
+            wxFAIL_MSG( _T("invalid value for a cell with bool editor!") );
+        }
     }
 
     CBox()->SetValue(m_startValue);
