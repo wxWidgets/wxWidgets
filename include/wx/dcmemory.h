@@ -19,7 +19,7 @@
 //       different wxDC classes (wxPaintDC, wxWindowDC, etc), so that
 //       we cannot derive wxMemoryDCBase from wxDC and then use it as the
 //       only base class for native impl of wxMemoryDC...
-class wxMemoryDCBase
+class WXDLLEXPORT wxMemoryDCBase
 {
 public:
     wxMemoryDCBase() { }
