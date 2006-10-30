@@ -85,9 +85,27 @@ enum wxPaneDockArtGradients
 
 enum wxPaneButtonState
 {
-    wxAUI_BUTTON_STATE_NORMAL = 0,
-    wxAUI_BUTTON_STATE_HOVER = 1,
-    wxAUI_BUTTON_STATE_PRESSED = 2
+    wxAUI_BUTTON_STATE_NORMAL   = 0,
+    wxAUI_BUTTON_STATE_HOVER    = 1 << 1,
+    wxAUI_BUTTON_STATE_PRESSED  = 1 << 2,
+    wxAUI_BUTTON_STATE_DISABLED = 1 << 3,
+    wxAUI_BUTTON_STATE_HIDDEN   = 1 << 4
+};
+
+enum wxAuiButtonId
+{
+    wxAUI_BUTTON_CLOSE = 101,
+    wxAUI_BUTTON_MAXIMIZE = 102,
+    wxAUI_BUTTON_MINIMIZE = 103,
+    wxAUI_BUTTON_PIN = 104,
+    wxAUI_BUTTON_OPTIONS = 105,
+    wxAUI_BUTTON_LEFT = 106,
+    wxAUI_BUTTON_RIGHT = 107,
+    wxAUI_BUTTON_UP = 108,
+    wxAUI_BUTTON_DOWN = 109,
+    wxAUI_BUTTON_CUSTOM1 = 201,
+    wxAUI_BUTTON_CUSTOM2 = 202,
+    wxAUI_BUTTON_CUSTOM3 = 203
 };
 
 enum wxPaneInsertLevel
@@ -96,6 +114,7 @@ enum wxPaneInsertLevel
     wxAUI_INSERT_ROW = 1,
     wxAUI_INSERT_DOCK = 2
 };
+
 
 
 

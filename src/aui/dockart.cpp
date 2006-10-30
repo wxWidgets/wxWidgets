@@ -589,13 +589,13 @@ void wxDefaultDockArt::DrawPaneButton(wxDC& dc, wxWindow *WXUNUSED(window),
     switch (button)
     {
         default:
-        case wxPaneInfo::buttonClose:
+        case wxAUI_BUTTON_CLOSE:
             if (pane.state & wxPaneInfo::optionActive)
                 bmp = m_active_close_bitmap;
                  else
                 bmp = m_inactive_close_bitmap;
             break;
-        case wxPaneInfo::buttonPin:
+        case wxAUI_BUTTON_PIN:
             if (pane.state & wxPaneInfo::optionActive)
                 bmp = m_active_pin_bitmap;
                  else

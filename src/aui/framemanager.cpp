@@ -821,7 +821,7 @@ bool wxFrameManager::AddPane(wxWindow* window, const wxPaneInfo& pane_info)
         pinfo.buttons.size() == 0)
     {
         wxPaneButton button;
-        button.button_id = wxPaneInfo::buttonClose;
+        button.button_id = wxAUI_BUTTON_CLOSE;
         pinfo.buttons.Add(button);
     }
 
@@ -3931,7 +3931,7 @@ void wxFrameManager::OnPaneButton(wxFrameManagerEvent& evt)
 
     wxPaneInfo& pane = *(evt.pane);
 
-    if (evt.button == wxPaneInfo::buttonClose)
+    if (evt.button == wxAUI_BUTTON_CLOSE)
     {
         // fire pane close event
         wxFrameManagerEvent e(wxEVT_AUI_PANECLOSE);

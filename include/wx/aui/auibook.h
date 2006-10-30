@@ -47,7 +47,22 @@ public:
                          bool active,
                          wxRect* out_rect,
                          int* x_extent) = 0;     
-                         
+    
+    virtual void DrawButton(
+                         wxDC* dc,
+                         const wxRect& in_rect,
+                         int bitmap_id,
+                         int button_state,
+                         int orientation,
+                         const wxBitmap& bitmap_override,
+                         wxRect* out_rect) = 0;
+                 
+    virtual wxSize GetTabSize(
+                         wxDC* dc,
+                         const wxString& caption,
+                         bool active,
+                         int* x_extent) = 0;
+                       
     virtual void SetNormalFont(const wxFont& font) = 0;
     virtual void SetSelectedFont(const wxFont& font) = 0;
     virtual void SetMeasuringFont(const wxFont& font) = 0;
@@ -72,7 +87,22 @@ public:
                  bool active,
                  wxRect* out_rect,
                  int* x_extent);
-              
+    
+    void DrawButton(
+                 wxDC* dc,
+                 const wxRect& in_rect,
+                 int bitmap_id,
+                 int button_state,
+                 int orientation,
+                 const wxBitmap& bitmap_override,
+                 wxRect* out_rect);
+    
+    wxSize GetTabSize(
+                 wxDC* dc,
+                 const wxString& caption,
+                 bool active,
+                 int* x_extent);
+                                   
     void SetNormalFont(const wxFont& font);
     void SetSelectedFont(const wxFont& font);
     void SetMeasuringFont(const wxFont& font);
@@ -87,6 +117,12 @@ private:
     wxBrush m_normal_bkbrush;
     wxBrush m_selected_bkbrush;
     wxBrush m_bkbrush;
+    wxBitmap m_active_close_bmp;
+    wxBitmap m_disabled_close_bmp;
+    wxBitmap m_active_left_bmp;
+    wxBitmap m_disabled_left_bmp;
+    wxBitmap m_active_right_bmp;
+    wxBitmap m_disabled_right_bmp;
 };
 
 
@@ -143,9 +179,10 @@ class WXDLLIMPEXP_AUI wxAuiTabContainerButton
 {
 public:
     int id;               // button's id
-    int cur_state;        // current state (normal, hover, pressed)
+    int cur_state;        // current state (normal, hover, pressed, etc.)
     int location;         // buttons location (wxLEFT or wxRIGHT)
-    wxBitmap bitmap;      // button's bitmap
+    wxBitmap bitmap;      // button's hover bitmap
+    wxBitmap dis_bitmap;  // button's disabled bitmap
     wxRect rect;          // button's hit rectangle
 };
 
@@ -185,8 +222,14 @@ public:
     void SetMeasuringFont(const wxFont& measuring_font);
     void DoShowHide();
     void SetRect(const wxRect& rect);
-    void AddButton(int id, int location, const wxBitmap& bmp);
+    void AddButton(int id,
+                   int location,
+                   const wxBitmap& normal_bitmap = wxNullBitmap,
+                   const wxBitmap& disabled_bitmap = wxNullBitmap);
 
+    size_t GetTabOffset() const;
+    void SetTabOffset(size_t offset);
+    
 protected:
 
     virtual void Render(wxDC* dc);
@@ -197,6 +240,7 @@ private:
     wxAuiNotebookPageArray m_pages;
     wxAuiTabContainerButtonArray m_buttons;
     wxRect m_rect;
+    size_t m_tab_offset;
 };
 
 
@@ -221,7 +265,9 @@ protected:
     void OnLeftUp(wxMouseEvent& evt);
     void OnMotion(wxMouseEvent& evt);
     void OnLeaveWindow(wxMouseEvent& evt);
+    void OnButton(wxAuiNotebookEvent& evt);
 
+    
 protected:
 
     wxPoint m_click_pt;
@@ -303,7 +349,7 @@ protected:
     void OnTabDragMotion(wxCommandEvent& evt);
     void OnTabEndDrag(wxCommandEvent& evt);
     void OnTabButton(wxCommandEvent& evt);
-
+    
 protected:
 
     wxFrameManager m_mgr;
@@ -346,7 +392,7 @@ typedef void (wxEvtHandler::*wxAuiNotebookEventFunction)(wxAuiNotebookEvent&);
     wx__DECLARE_EVT1(wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGED, winid, wxAuiNotebookEventHandler(fn))
 #define EVT_AUINOTEBOOK_PAGE_CHANGING(winid, fn) \
     wx__DECLARE_EVT1(wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGING, winid, wxAuiNotebookEventHandler(fn))
-#define EVT_AUINOTEBOOK_PAGE_BUTTON(winid, fn) \
+#define EVT_AUINOTEBOOK_BUTTON(winid, fn) \
     wx__DECLARE_EVT1(wxEVT_COMMAND_AUINOTEBOOK_BUTTON, winid, wxAuiNotebookEventHandler(fn))
 #define EVT_AUINOTEBOOK_BEGIN_DRAG(winid, fn) \
     wx__DECLARE_EVT1(wxEVT_COMMAND_AUINOTEBOOK_BEGIN_DRAG, winid, wxAuiNotebookEventHandler(fn))
