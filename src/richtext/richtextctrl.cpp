@@ -426,12 +426,12 @@ void wxRichTextCtrl::OnMoveMouse(wxMouseEvent& event)
             {
                 if (attr.HasFlag(wxTEXT_ATTR_URL))
                 {
-                    if (GetCursor() != m_urlCursor)
+                    if (!GetCursor().IsRefTo(&m_urlCursor))
                         SetCursor(m_urlCursor);
                 }
                 else if (!attr.HasFlag(wxTEXT_ATTR_URL))
                 {
-                    if (GetCursor() != m_textCursor)
+                    if (!GetCursor().IsRefTo(&m_textCursor))
                         SetCursor(m_textCursor);
                 }
             }
