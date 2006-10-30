@@ -348,12 +348,15 @@ void wxDefaultTabArt::DrawButton(
     
     if (orientation == wxLEFT)
     {
+        rect.SetX(in_rect.x);
+        rect.SetY(((in_rect.y + in_rect.height)/2) - (bmp.GetHeight()/2));
         rect.SetWidth(bmp.GetWidth());
         rect.SetHeight(bmp.GetHeight());
     }
      else
     {
-        rect = wxRect(in_rect.x + in_rect.width - bmp.GetWidth(), in_rect.y,
+        rect = wxRect(in_rect.x + in_rect.width - bmp.GetWidth(),
+                      ((in_rect.y + in_rect.height)/2) - (bmp.GetHeight()/2),
                       bmp.GetWidth(), bmp.GetHeight());
     }
     
@@ -624,16 +627,25 @@ void wxAuiTabContainer::Render(wxDC* raw_dc)
     // find out if size of tabs is larger than can be
     // afforded on screen
     int total_width = 0;
-    
+    int visible_width = 0;
     for (i = 0; i < page_count; ++i)
     {
         wxAuiNotebookPage& page = m_pages.Item(i);
         int x_extent = 0;
         wxSize size = m_art->GetTabSize(&dc, page.caption, page.active, &x_extent);
+        
         if (i+1 < page_count)
             total_width += x_extent;
              else
             total_width += size.x;
+            
+        if (i >= m_tab_offset)
+        {
+            if (i+1 < page_count)
+                visible_width += x_extent;
+                 else
+                visible_width += size.x;
+        }
     }
     
     if (total_width > m_rect.GetWidth() - 20 || m_tab_offset != 0)
@@ -660,6 +672,26 @@ void wxAuiTabContainer::Render(wxDC* raw_dc)
             {
                 button.cur_state |= wxAUI_BUTTON_STATE_HIDDEN;
             }
+        }
+    }
+
+    // determine whether left button should be enabled
+    for (i = 0; i < button_count; ++i)
+    {
+        wxAuiTabContainerButton& button = m_buttons.Item(i);
+        if (button.id == wxAUI_BUTTON_LEFT)
+        {
+            if (m_tab_offset == 0)
+                button.cur_state |= wxAUI_BUTTON_STATE_DISABLED;
+                 else
+                button.cur_state &= ~wxAUI_BUTTON_STATE_DISABLED;
+        }
+        if (button.id == wxAUI_BUTTON_RIGHT)
+        {
+            if (visible_width < m_rect.GetWidth() - ((int)button_count*16))
+                button.cur_state |= wxAUI_BUTTON_STATE_DISABLED;
+                 else
+                button.cur_state &= ~wxAUI_BUTTON_STATE_DISABLED;
         }
     }
 
@@ -992,10 +1024,13 @@ void wxAuiTabCtrl::OnLeftUp(wxMouseEvent&)
         Refresh();
         Update();
 
-        wxAuiNotebookEvent evt(wxEVT_COMMAND_AUINOTEBOOK_BUTTON, m_windowId);
-        evt.SetInt(m_hover_button->id);
-        evt.SetEventObject(this);
-        GetEventHandler()->ProcessEvent(evt);
+        if (!(m_hover_button->cur_state & wxAUI_BUTTON_STATE_DISABLED))
+        {
+            wxAuiNotebookEvent evt(wxEVT_COMMAND_AUINOTEBOOK_BUTTON, m_windowId);
+            evt.SetInt(m_hover_button->id);
+            evt.SetEventObject(this);
+            GetEventHandler()->ProcessEvent(evt);
+        }
     }
 
     m_click_pt = wxDefaultPosition;
