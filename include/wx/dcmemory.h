@@ -13,6 +13,7 @@
 #define _WX_DCMEMORY_H_BASE_
 
 #include "wx/defs.h"
+#include "wx/bitmap.h"
 
 // NOTE: different native implementations of wxMemoryDC will derive from
 //       different wxDC classes (wxPaintDC, wxWindowDC, etc), so that
