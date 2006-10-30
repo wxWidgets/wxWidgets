@@ -133,6 +133,7 @@ bool wxGenericAboutDialog::Create(const wxAboutDialogInfo& info)
 #endif // wxUSE_HYPERLINKCTRL/!wxUSE_HYPERLINKCTRL
     }
 
+#if wxUSE_COLLPANE
     // add licence
     if ( info.HasLicence() )
     {
@@ -145,6 +146,7 @@ bool wxGenericAboutDialog::Create(const wxAboutDialogInfo& info)
 
         m_sizerText->Add(licensepnl, wxSizerFlags(1).Expand().Border(wxBOTTOM));
     }
+#endif // wxUSE_COLLPANE
 
     // TODO: add credits (developers, artists, doc writers, translators)
 
