@@ -1,4 +1,5 @@
 bcc_lib
+dmc_lib
 evc_armv4_lib
 evc_emulator_lib
 gcc_lib
