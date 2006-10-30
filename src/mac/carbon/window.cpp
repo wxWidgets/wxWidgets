@@ -1661,10 +1661,10 @@ void wxWindowMac::DoGetClientSize( int *x, int *y ) const
 
 bool wxWindowMac::SetCursor(const wxCursor& cursor)
 {
-    if (m_cursor == cursor)
+    if (m_cursor.IsRefTo(&cursor))
         return false;
 
-    if (wxNullCursor == cursor)
+    if (!cursor.IsOk())
     {
         if ( ! wxWindowBase::SetCursor( *wxSTANDARD_CURSOR ) )
             return false ;
@@ -2692,7 +2692,7 @@ void wxWindowMac::OnSetFocus( wxFocusEvent& event )
         Rect rect ;
 
         m_peer->GetRect( &rect ) ;
-        // auf den umgebenden Rahmen zurŸck
+        // auf den umgebenden Rahmen zurÂŸck
         InsetRect( &rect, -1 , -1 ) ;
 
         wxTopLevelWindowMac* top = MacGetTopLevelWindow();

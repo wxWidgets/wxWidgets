@@ -33,12 +33,12 @@ public:
     bool operator == ( const wxBrushRefData& brush ) const
     {
         return m_style == brush.m_style &&
-                m_stipple.IsRefTo(&data.m_stipple) &&
+                m_stipple.IsRefTo(&brush.m_stipple) &&
                 m_colour == brush.m_colour &&
                 m_macBrushKind == brush.m_macBrushKind &&
                 m_macThemeBrush == brush.m_macThemeBrush &&
                 m_macThemeBackground == brush.m_macThemeBackground &&
-                m_macThemeBackgroundExtent == brush.m_macThemeBackgroundExtent;
+                EqualRect(&m_macThemeBackgroundExtent, &brush.m_macThemeBackgroundExtent);
     }
 
 

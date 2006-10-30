@@ -76,7 +76,7 @@ public:
     return m_refData ? penData && *M_PENDATA == *penData : !penData;
   }
 
-  inline bool operator != (const wxPen& pen) const { return *(this == pen); }
+  inline bool operator != (const wxPen& pen) const { return !(*this == pen); }
 
   virtual bool Ok() const { return IsOk(); }
   virtual bool IsOk() const { return (m_refData != NULL) ; }
