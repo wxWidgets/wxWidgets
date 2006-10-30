@@ -873,6 +873,7 @@ bool wxLaunchDefaultBrowser(const wxString& urlOrig, int flags)
     bool ok = false;
     wxString cmd;
 
+#if wxUSE_MIMETYPE
     wxFileType *ft = wxTheMimeTypesManager->GetFileTypeFromExtension(_T("html"));
     if ( ft )
     {
@@ -882,6 +883,7 @@ bool wxLaunchDefaultBrowser(const wxString& urlOrig, int flags)
         ok = ft->GetOpenCommand(&cmd, wxFileType::MessageParameters(url));
         delete ft;
     }
+#endif // wxUSE_MIMETYPE
 
     if ( !ok || cmd.empty() )
     {
