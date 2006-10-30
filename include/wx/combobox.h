@@ -59,6 +59,10 @@ public:
     virtual bool CanUndo() const = 0;
     virtual bool CanRedo() const = 0;
 
+    // may return value different from GetSelection() when the combobox
+    // dropdown is shown and the user selected, but not yet accepted, a value
+    // different from the old one in it
+    virtual int GetCurrentSelection() const { return GetSelection(); }
 
     // redeclare inherited SetSelection() overload here as well to avoid
     // virtual function hiding

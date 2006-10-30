@@ -40,6 +40,13 @@ public:
 
     // all generic methods are in wxControlWithItems
 
+    // get the current selection: this can only be different from the normal
+    // selection if the popup items list is currently opened and the user
+    // selected some item in it but didn't close the list yet; otherwise (and
+    // currently always on platforms other than MSW) this is the same as
+    // GetSelection()
+    virtual int GetCurrentSelection() const { return GetSelection(); }
+
     // set/get the number of columns in the control (as they're not supported on
     // most platforms, they do nothing by default)
     virtual void SetColumns(int WXUNUSED(n) = 1 ) { }
@@ -78,5 +85,4 @@ private:
 
 #endif // wxUSE_CHOICE
 
-#endif
-    // _WX_CHOICE_H_BASE_
+#endif // _WX_CHOICE_H_BASE_

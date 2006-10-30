@@ -66,7 +66,6 @@ public:
     void Clear();
 
     int GetSelection() const;
-    int GetCurrentSelection() const { return GetSelection(); }
     void SetSelection(int n);
 
     virtual unsigned int GetCount() const;

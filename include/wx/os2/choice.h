@@ -98,7 +98,6 @@ public:
 
     virtual unsigned int GetCount() const;
     virtual int      GetSelection(void) const;
-    virtual int      GetCurrentSelection(void) const { return GetSelection(); }
     virtual void     SetSelection(int n);
 
     virtual wxString GetString(unsigned int n) const;

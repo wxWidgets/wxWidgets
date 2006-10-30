@@ -75,7 +75,6 @@ public:
     virtual unsigned int GetCount() const ;
     virtual int GetSelection() const ;
     virtual void SetSelection(int n);
-    int GetCurrentSelection() const { return GetSelection(); }
 
     virtual int FindString(const wxString& s, bool bCase = false) const;
     virtual wxString GetString(unsigned int n) const ;
