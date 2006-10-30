@@ -96,7 +96,7 @@ typedef void (wxEvtHandler::*wxCollapsiblePaneEventFunction)(wxCollapsiblePaneEv
     #include "wx/generic/collpaneg.h"
 
     // use a typedef and not a #define to avoid problems with XRC forward declarations
-    typedef wxCollapsiblePane wxGenericCollapsiblePane
+    typedef wxGenericCollapsiblePane wxCollapsiblePane;
 #endif
 
 #endif      // wxUSE_COLLPANE
