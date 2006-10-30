@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        sizer.h
+// Name:        wx/sizer.h
 // Purpose:     provide wxSizer class for layout
 // Author:      Robert Roebling and Robin Dunn
 // Modified by: Ron Lee, Vadim Zeitlin (wxSizerFlags)
@@ -467,7 +467,7 @@ public:
     wxSizerItem* PrependStretchSpacer(int prop = 1);
 
     // set (or possibly unset if window is NULL) or get the window this sizer
-    // is used in 
+    // is used in
     void SetContainingWindow(wxWindow *window);
     wxWindow *GetContainingWindow() const { return m_containingWindow; }
 
@@ -484,9 +484,9 @@ public:
     virtual bool Detach( wxSizer *sizer );
     virtual bool Detach( int index );
 
-    virtual bool Replace( wxWindow *oldwin, wxWindow *newwin, bool recursive = false );  
-    virtual bool Replace( wxSizer *oldsz, wxSizer *newsz, bool recursive = false );  
-    virtual bool Replace( size_t index, wxSizerItem *newitem );  
+    virtual bool Replace( wxWindow *oldwin, wxWindow *newwin, bool recursive = false );
+    virtual bool Replace( wxSizer *oldsz, wxSizer *newsz, bool recursive = false );
+    virtual bool Replace( size_t index, wxSizerItem *newitem );
 
     virtual void Clear( bool delete_windows = false );
     virtual void DeleteWindows();
@@ -1050,4 +1050,3 @@ wxSizer::InsertStretchSpacer(size_t index, int prop)
 
 
 #endif // __WXSIZER_H__
-

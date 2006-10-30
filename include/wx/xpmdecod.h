@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        xpmdecod.h
+// Name:        wx/xpmdecod.h
 // Purpose:     wxXPMDecoder, XPM reader for wxImage and wxBitmap
 // Author:      Vaclav Slavik
 // CVS-ID:      $Id$
@@ -45,4 +45,3 @@ public:
 #endif // wxUSE_IMAGE && wxUSE_XPM
 
 #endif  // _WX_XPM_H_
-

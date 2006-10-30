@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        cmndata.h
+// Name:        wx/cmndata.h
 // Purpose:     Common GDI data classes
 // Author:      Julian Smart and others
 // Modified by:
@@ -210,13 +210,13 @@ public:
 
     wxString GetFilename() const { return m_filename; }
     void SetFilename( const wxString &filename ) { m_filename = filename; }
-    
+
     void operator=(const wxPrintData& data);
 
     char* GetPrivData() const { return m_privData; }
     int GetPrivDataLen() const { return m_privDataLen; }
     void SetPrivData( char *privData, int len );
-   
+
 
 #if WXWIN_COMPATIBILITY_2_4
     // PostScript-specific data
@@ -262,12 +262,12 @@ private:
     wxPrintQuality  m_printQuality;
     wxPaperSize     m_paperId;
     wxSize          m_paperSize;
-    
+
     wxString        m_filename;
-    
+
     char* m_privData;
     int   m_privDataLen;
-    
+
     wxPrintNativeDataBase  *m_nativeData;
 
 private:

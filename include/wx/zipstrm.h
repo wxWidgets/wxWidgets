@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        zipstrm.h
+// Name:        wx/zipstrm.h
 // Purpose:     Streams for Zip files
 // Author:      Mike Wetherell
 // RCS-ID:      $Id$
@@ -25,7 +25,7 @@
        || !defined __GNUC_MINOR__ \
        || !defined __GNUC_PATCHLEVEL__ \
        || __GNUC__ * 10000 + __GNUC_MINOR__ * 100 + __GNUC_PATCHLEVEL__ < 30402)
-#define WXZIPFIX WXDLLIMPEXP_BASE 
+#define WXZIPFIX WXDLLIMPEXP_BASE
 #else
 #define WXZIPFIX
 #endif
@@ -52,7 +52,7 @@ enum wxZipMethod
 };
 
 // Originating File-System.
-// 
+//
 // These are Pkware's values. Note that Info-zip disagree on some of them,
 // most notably NTFS.
 //
@@ -267,7 +267,7 @@ private:
 
 
 /////////////////////////////////////////////////////////////////////////////
-// wxZipOutputStream 
+// wxZipOutputStream
 
 WX_DECLARE_LIST_WITH_DECL(wxZipEntry, wxZipEntryList_, class WXDLLIMPEXP_BASE);
 
@@ -302,7 +302,7 @@ public:
 
     int  GetLevel() const                       { return m_level; }
     void WXZIPFIX SetLevel(int level);
-    
+
 protected:
     virtual size_t WXZIPFIX OnSysWrite(const void *buffer, size_t size);
     virtual wxFileOffset OnSysTell() const      { return m_entrySize; }
@@ -352,7 +352,7 @@ private:
 
 
 /////////////////////////////////////////////////////////////////////////////
-// wxZipInputStream 
+// wxZipInputStream
 
 class WXDLLIMPEXP_BASE wxZipInputStream : public wxArchiveInputStream
 {
@@ -408,7 +408,7 @@ private:
     wxUint32 ReadSignature();
     bool FindEndRecord();
     bool LoadEndRecord();
-    
+
     bool AtHeader() const       { return m_headerSize == 0; }
     bool AfterHeader() const    { return m_headerSize > 0 && !m_decomp; }
     bool IsOpened() const       { return m_decomp != NULL; }

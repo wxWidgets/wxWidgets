@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        imagtga.h
+// Name:        wx/imagtga.h
 // Purpose:     wxImage TGA handler
 // Author:      Seth Jackson
 // RCS-ID:      $Id$

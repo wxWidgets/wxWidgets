@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        include/wx/fileback.h
+// Name:        wx/fileback.h
 // Purpose:     Back an input stream with memory or a file
 // Author:      Mike Wetherell
 // RCS-ID:      $Id$

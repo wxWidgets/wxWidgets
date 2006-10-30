@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        prntbase.h
+// Name:        wx/prntbase.h
 // Purpose:     Base classes for printing framework
 // Author:      Julian Smart
 // Modified by:

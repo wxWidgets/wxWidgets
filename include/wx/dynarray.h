@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        dynarray.h
+// Name:        wx/dynarray.h
 // Purpose:     auto-resizable (i.e. dynamic) array support
 // Author:      Vadim Zeitlin
 // Modified by:
@@ -1007,4 +1007,3 @@ WX_DEFINE_USER_EXPORTED_ARRAY_PTR(void *, wxArrayPtrVoid, class WXDLLIMPEXP_BASE
     }
 
 #endif // _DYNARRAY_H
-

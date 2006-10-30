@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        caret.h
+// Name:        wx/caret.h
 // Purpose:     wxCaretBase class - the interface of wxCaret
 // Author:      Vadim Zeitlin
 // Modified by:
@@ -250,4 +250,3 @@ private:
 #endif // wxUSE_CARET
 
 #endif // _WX_CARET_H_BASE_
-

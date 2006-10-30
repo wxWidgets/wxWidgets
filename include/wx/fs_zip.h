@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        include/wx/fs_zip.h
+// Name:        wx/fs_zip.h
 // Purpose:     wxZipFSHandler typedef for compatibility
 // Author:      Mike Wetherell
 // Copyright:   (c) 2006 Mike Wetherell

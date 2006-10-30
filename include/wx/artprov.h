@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        artprov.h
+// Name:        wx/artprov.h
 // Purpose:     wxArtProvider class
 // Author:      Vaclav Slavik
 // Modified by:
@@ -146,7 +146,7 @@ public:
                           const wxArtClient& client = wxART_OTHER,
                           const wxSize& size = wxDefaultSize);
 
-    // Get the size hint of an icon from a specific wxArtClient, queries 
+    // Get the size hint of an icon from a specific wxArtClient, queries
     // the topmost provider if platform_dependent = false
     static wxSize GetSizeHint(const wxArtClient& client, bool platform_dependent = false);
 
@@ -172,7 +172,7 @@ protected:
     static void CleanUpProviders();
 
     // Get the default size of an icon for a specific client
-    virtual wxSize DoGetSizeHint(const wxArtClient& client) 
+    virtual wxSize DoGetSizeHint(const wxArtClient& client)
     {
         return GetSizeHint(client, true);
     }

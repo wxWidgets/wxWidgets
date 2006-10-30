@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        zstream.h
+// Name:        wx/zstream.h
 // Purpose:     Memory stream classes
 // Author:      Guilhem Lavaux
 // Modified by: Mike Wetherell

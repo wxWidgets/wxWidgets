@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        gifdecod.h
+// Name:        wx/gifdecod.h
 // Purpose:     wxGIFDecoder, GIF reader for wxImage and wxAnimation
 // Author:      Guillermo Rodriguez Garcia <guille@iies.es>
 // Version:     3.02
@@ -114,4 +114,3 @@ private:
 
 #endif  // wxUSE_STREAM && wxUSE_GIF
 #endif  // _WX_GIFDECOD_H
-

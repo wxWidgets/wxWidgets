@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        archive.h
+// Name:        wx/archive.h
 // Purpose:     Streams for archive formats
 // Author:      Mike Wetherell
 // RCS-ID:      $Id$
@@ -55,7 +55,7 @@ public:
     virtual void SetIsReadOnly(bool isReadOnly = true) = 0;
     virtual void SetName(const wxString& name,
                          wxPathFormat format = wxPATH_NATIVE) = 0;
-    
+
     wxArchiveEntry *Clone() const { return DoClone(); }
 
     void SetNotifier(wxArchiveNotifier& notifier);
@@ -94,14 +94,14 @@ public:
     typedef wxArchiveEntry entry_type;
 
     virtual ~wxArchiveInputStream() { }
-    
+
     virtual bool OpenEntry(wxArchiveEntry& entry) = 0;
     virtual bool CloseEntry() = 0;
 
     wxArchiveEntry *GetNextEntry()  { return DoGetNextEntry(); }
 
     virtual char Peek()             { return wxInputStream::Peek(); }
-    
+
 protected:
     wxArchiveInputStream(wxInputStream& stream, wxMBConv& conv);
     wxArchiveInputStream(wxInputStream *stream, wxMBConv& conv);
@@ -123,7 +123,7 @@ private:
 //
 // Only one entry can be open for output at a time; another call to
 // PutNextEntry closes the current entry and begins the next.
-// 
+//
 // The overload 'bool PutNextEntry(wxArchiveEntry *entry)' takes ownership
 // of the entry object.
 
@@ -207,7 +207,7 @@ public:
         if (m_rep)
             m_rep->AddRef();
     }
-    
+
     ~wxArchiveIterator() {
         if (m_rep)
             m_rep->UnRef();
@@ -255,13 +255,13 @@ private:
         typename Arc::entry_type* m_entry;
         T m_value;
         int m_ref;
-        
+
     public:
         Rep(Arc& arc, typename Arc::entry_type* entry)
             : m_arc(arc), m_entry(entry), m_value(), m_ref(1) { }
         ~Rep()
             { delete m_entry; }
-        
+
         void AddRef() {
             m_ref++;
         }
@@ -278,7 +278,7 @@ private:
                 return NULL;
             }
             if (m_ref > 1) {
-                m_ref--; 
+                m_ref--;
                 return new Rep(m_arc, entry);
             }
             delete m_entry;

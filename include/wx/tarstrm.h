@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        tarstrm.h
+// Name:        wx/tarstrm.h
 // Purpose:     Streams for Tar files
 // Author:      Mike Wetherell
 // RCS-ID:      $Id$

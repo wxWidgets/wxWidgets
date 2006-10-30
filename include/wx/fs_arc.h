@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        fs_arc.h
+// Name:        wx/fs_arc.h
 // Purpose:     Archive file system
 // Author:      Vaclav Slavik, Mike Wetherell
 // Copyright:   (c) 1999 Vaclav Slavik, (c) 2006 Mike Wetherell
