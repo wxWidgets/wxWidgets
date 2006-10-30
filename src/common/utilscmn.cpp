@@ -729,7 +729,8 @@ bool wxLaunchDefaultBrowser(const wxString& urlOrig, int flags)
     // set the scheme of url to http if it does not have one
     // RR: This doesn't work if the url is just a local path
     wxString url(urlOrig);
-    if ( !wxURI(url).HasScheme() )
+    wxURI uri(url);
+    if ( !uri.HasScheme() )
         url.Prepend(wxT("http://"));
 
 
@@ -740,7 +741,13 @@ bool wxLaunchDefaultBrowser(const wxString& urlOrig, int flags)
     {
         // ShellExecuteEx() opens the URL in an existing window by default so
         // we can't use it if we need a new window
-        wxRegKey key(wxRegKey::HKCR, url.BeforeFirst(':') + _T("\\shell\\open"));
+        wxRegKey key(wxRegKey::HKCR, uri.GetScheme() + _T("\\shell\\open"));
+        if ( !key.Exists() )
+        {
+            // try default browser, it must be registered at least for http URLs
+            key.SetName(wxRegKey::HKCR, _T("http\\shell\\open"));
+        }
+
         if ( key.Exists() )
         {
             wxRegKey keyDDE(key, wxT("DDEExec"));
