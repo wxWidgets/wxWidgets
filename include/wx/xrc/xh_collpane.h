@@ -15,12 +15,10 @@
 
 #if wxUSE_XRC && wxUSE_COLLPANE
 
-#include "wx/collpane.h"
+class WXDLLIMPEXP_ADV wxCollapsiblePane;
 
 class WXDLLIMPEXP_XRC wxCollapsiblePaneXmlHandler : public wxXmlResourceHandler
 {
-    DECLARE_DYNAMIC_CLASS(wxCollapsiblePaneXmlHandler)
-
 public:
     wxCollapsiblePaneXmlHandler();
     virtual wxObject *DoCreateResource();
@@ -29,6 +27,8 @@ public:
 private:
     bool m_isInside;
     wxCollapsiblePane *m_collpane;
+
+    DECLARE_DYNAMIC_CLASS(wxCollapsiblePaneXmlHandler)
 };
 
 #endif // wxUSE_XRC && wxUSE_COLLPANE

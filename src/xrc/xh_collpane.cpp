@@ -17,8 +17,12 @@
 
 #if wxUSE_XRC && wxUSE_COLLPANE
 
+#ifndef WX_PRECOMP
+    #include "wx/log.h"
+#endif
+
+#include "wx/collpane.h"
 #include "wx/xrc/xh_collpane.h"
-#include "wx/log.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxCollapsiblePaneXmlHandler, wxXmlResourceHandler)
 
