@@ -643,7 +643,7 @@ bool wxRichTextListStylePage::TransferDataFromWindow()
         attr->SetLineSpacing(lineSpacing);
 
     /// BULLETS
-    if (true) // m_hasBulletStyle)
+    // if (m_hasBulletStyle)
     {
         long bulletStyle = 0;
 
