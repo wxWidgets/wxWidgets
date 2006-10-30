@@ -3412,16 +3412,14 @@ bool wxWindowGTK::SetCursor( const wxCursor &cursor )
 {
     wxCHECK_MSG( (m_widget != NULL), false, wxT("invalid window") );
 
-    if (cursor == m_cursor)
+    if ( cursor.IsSameAs(m_cursor) )
        return false;
 
     if (g_isIdle)
         wxapp_install_idle_handler();
 
-    if (cursor == wxNullCursor)
-       return wxWindowBase::SetCursor( *wxSTANDARD_CURSOR );
-    else
-       return wxWindowBase::SetCursor( cursor );
+    return wxWindowBase::SetCursor( cursor.IsOk() ? cursor
+                                                  : *wxSTANDARD_CURSOR );
 }
 
 void wxWindowGTK::WarpPointer( int x, int y )
