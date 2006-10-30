@@ -3286,6 +3286,10 @@ Open the \arg{url} in user's default browser. If \arg{flags} parameter contains
 
 Returns \true if the application was successfully launched.
 
+Note that for some configurations of the running user, the application which
+is launched to open the given URL may be URL-dependent (e.g. a browser may be used for
+local URLs while another one may be used for remote URLs).
+
 \wxheading{Include files}
 
 <wx/utils.h>

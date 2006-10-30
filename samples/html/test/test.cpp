@@ -66,7 +66,8 @@ public:
     // event handlers (these functions should _not_ be virtual)
     void OnQuit(wxCommandEvent& event);
     void OnPageOpen(wxCommandEvent& event);
-    void OnDefaultBrowser(wxCommandEvent& event);
+    void OnDefaultLocalBrowser(wxCommandEvent& event);
+    void OnDefaultWebBrowser(wxCommandEvent& event);
     void OnBack(wxCommandEvent& event);
     void OnForward(wxCommandEvent& event);
     void OnProcessor(wxCommandEvent& event);
@@ -108,7 +109,8 @@ enum
 {
     // menu items
     ID_PageOpen = wxID_HIGHEST,
-    ID_DefaultBrowser,
+    ID_DefaultLocalBrowser,
+    ID_DefaultWebBrowser,
     ID_Back,
     ID_Forward,
     ID_Processor
@@ -121,7 +123,8 @@ enum
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(wxID_EXIT,  MyFrame::OnQuit)
     EVT_MENU(ID_PageOpen, MyFrame::OnPageOpen)
-    EVT_MENU(ID_DefaultBrowser, MyFrame::OnDefaultBrowser)
+    EVT_MENU(ID_DefaultLocalBrowser, MyFrame::OnDefaultLocalBrowser)
+    EVT_MENU(ID_DefaultWebBrowser, MyFrame::OnDefaultWebBrowser)
     EVT_MENU(ID_Back, MyFrame::OnBack)
     EVT_MENU(ID_Forward, MyFrame::OnForward)
     EVT_MENU(ID_Processor, MyFrame::OnProcessor)
@@ -180,7 +183,8 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     wxMenu *menuNav = new wxMenu;
 
     menuFile->Append(ID_PageOpen, _("&Open HTML page..."));
-    menuFile->Append(ID_DefaultBrowser, _("&Open current page with default browser"));
+    menuFile->Append(ID_DefaultLocalBrowser, _("&Open current page with default browser"));
+    menuFile->Append(ID_DefaultWebBrowser, _("Open a &web page with default browser"));
     menuFile->AppendSeparator();
     menuFile->Append(ID_Processor, _("&Remove bold attribute"),
                      wxEmptyString, wxITEM_CHECK);
@@ -260,12 +264,21 @@ void MyFrame::OnPageOpen(wxCommandEvent& WXUNUSED(event))
 #endif // wxUSE_FILEDLG
 }
 
-void MyFrame::OnDefaultBrowser(wxCommandEvent& WXUNUSED(event))
+void MyFrame::OnDefaultLocalBrowser(wxCommandEvent& WXUNUSED(event))
 {
     wxString page = m_Html->GetOpenedPage();
     if (!page.empty())
     {
         wxLaunchDefaultBrowser(page);
+    }
+}
+
+void MyFrame::OnDefaultWebBrowser(wxCommandEvent& WXUNUSED(event))
+{
+    wxString page = m_Html->GetOpenedPage();
+    if (!page.empty())
+    {
+        wxLaunchDefaultBrowser(wxT("http://www.google.com"));
     }
 }
 

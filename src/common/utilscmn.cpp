@@ -855,11 +855,19 @@ bool wxLaunchDefaultBrowser(const wxString& urlOrig, int flags)
     // (non-Mac, non-MSW)
 
 #ifdef __UNIX__
-    if (wxTheApp->GetTraits()->GetDesktopEnvironment() == wxT("GNOME"))
+
+    wxString desktop = wxTheApp->GetTraits()->GetDesktopEnvironment();
+
+    // GNOME and KDE desktops have some applications which should be always installed
+    // together with their main parts, which give us the
+    if (desktop == wxT("GNOME"))
     {
         wxArrayString errors;
         wxArrayString output;
-        long res = wxExecute( wxT("gconftool-2 --get /desktop/gnome/applications/browser/exec"), output, errors, wxEXEC_NODISABLE );
+
+        // gconf will tell us the path of the application to use as browser
+        long res = wxExecute( wxT("gconftool-2 --get /desktop/gnome/applications/browser/exec"),
+                              output, errors, wxEXEC_NODISABLE );
         if (res >= 0 && errors.GetCount() == 0)
         {
             wxString cmd = output[0];
@@ -867,6 +875,12 @@ bool wxLaunchDefaultBrowser(const wxString& urlOrig, int flags)
             if (wxExecute(cmd))
                 return true;
         }
+    }
+    else if (desktop == wxT("KDE"))
+    {
+        // kfmclient directly opens the given URL
+        if (wxExecute(wxT("kfmclient openURL ") + url))
+            return true;
     }
 #endif
 
