@@ -27,6 +27,7 @@
     #include "wx/utils.h"
     #include "wx/dc.h"
     #include "wx/app.h"
+    #include "wx/math.h"
     #include "wx/msgdlg.h"
     #include "wx/layout.h"
     #include "wx/choice.h"
@@ -617,10 +618,10 @@ void wxPrintout::FitThisSizeToPageMargins(const wxSize& imageSize, const wxPageS
     GetPageSizeMM(&mw, &mh);
     float mmToDeviceX = float(pw) / mw;
     float mmToDeviceY = float(ph) / mh;
-    wxRect pageMarginsRect(paperRect.x + wxCoordRound(mmToDeviceX * topLeft.x),
-        paperRect.y + wxCoordRound(mmToDeviceY * topLeft.y),
-        paperRect.width - wxCoordRound(mmToDeviceX * (topLeft.x + bottomRight.x)),
-        paperRect.height - wxCoordRound(mmToDeviceY * (topLeft.y + bottomRight.y)));
+    wxRect pageMarginsRect(paperRect.x + wxRound(mmToDeviceX * topLeft.x),
+        paperRect.y + wxRound(mmToDeviceY * topLeft.y),
+        paperRect.width - wxRound(mmToDeviceX * (topLeft.x + bottomRight.x)),
+        paperRect.height - wxRound(mmToDeviceY * (topLeft.y + bottomRight.y)));
     wxCoord w, h;
     m_printoutDC->GetSize(&w, &h);
     float scaleX = (float(pageMarginsRect.width) * w) / (float(pw) * imageSize.x);
@@ -708,10 +709,10 @@ wxRect wxPrintout::GetLogicalPaperRect() const
     // This DC doesn't match the printed page, so we have to scale.
     float scaleX = float(w) / pw;
     float scaleY = float(h) / ph;
-    return wxRect(m_printoutDC->DeviceToLogicalX(wxCoordRound(paperRect.x * scaleX)), 
-        m_printoutDC->DeviceToLogicalY(wxCoordRound(paperRect.y * scaleY)), 
-        m_printoutDC->DeviceToLogicalXRel(wxCoordRound(paperRect.width * scaleX)), 
-        m_printoutDC->DeviceToLogicalYRel(wxCoordRound(paperRect.height * scaleY)));
+    return wxRect(m_printoutDC->DeviceToLogicalX(wxRound(paperRect.x * scaleX)), 
+        m_printoutDC->DeviceToLogicalY(wxRound(paperRect.y * scaleY)), 
+        m_printoutDC->DeviceToLogicalXRel(wxRound(paperRect.width * scaleX)), 
+        m_printoutDC->DeviceToLogicalYRel(wxRound(paperRect.height * scaleY)));
 }
 
 wxRect wxPrintout::GetLogicalPageRect() const
@@ -740,10 +741,10 @@ wxRect wxPrintout::GetLogicalPageMarginsRect(const wxPageSetupDialogData& pageSe
     GetPageSizeMM(&mw, &mh);
     float mmToDeviceX = float(pw) / mw;
     float mmToDeviceY = float(ph) / mh;
-    wxRect pageMarginsRect(paperRect.x + wxCoordRound(mmToDeviceX * topLeft.x),
-        paperRect.y + wxCoordRound(mmToDeviceY * topLeft.y),
-        paperRect.width - wxCoordRound(mmToDeviceX * (topLeft.x + bottomRight.x)),
-        paperRect.height - wxCoordRound(mmToDeviceY * (topLeft.y + bottomRight.y)));
+    wxRect pageMarginsRect(paperRect.x + wxRound(mmToDeviceX * topLeft.x),
+        paperRect.y + wxRound(mmToDeviceY * topLeft.y),
+        paperRect.width - wxRound(mmToDeviceX * (topLeft.x + bottomRight.x)),
+        paperRect.height - wxRound(mmToDeviceY * (topLeft.y + bottomRight.y)));
     wxCoord w, h;
     m_printoutDC->GetSize(&w, &h);
     if (w == pw && h == ph) {
@@ -756,10 +757,10 @@ wxRect wxPrintout::GetLogicalPageMarginsRect(const wxPageSetupDialogData& pageSe
     // This DC doesn't match the printed page, so we have to scale.
     float scaleX = float(w) / pw;
     float scaleY = float(h) / ph;
-    return wxRect(m_printoutDC->DeviceToLogicalX(wxCoordRound(pageMarginsRect.x * scaleX)), 
-        m_printoutDC->DeviceToLogicalY(wxCoordRound(pageMarginsRect.y * scaleY)), 
-        m_printoutDC->DeviceToLogicalXRel(wxCoordRound(pageMarginsRect.width * scaleX)), 
-        m_printoutDC->DeviceToLogicalYRel(wxCoordRound(pageMarginsRect.height * scaleY)));
+    return wxRect(m_printoutDC->DeviceToLogicalX(wxRound(pageMarginsRect.x * scaleX)), 
+        m_printoutDC->DeviceToLogicalY(wxRound(pageMarginsRect.y * scaleY)), 
+        m_printoutDC->DeviceToLogicalXRel(wxRound(pageMarginsRect.width * scaleX)), 
+        m_printoutDC->DeviceToLogicalYRel(wxRound(pageMarginsRect.height * scaleY)));
 }
 
 void wxPrintout::SetLogicalOrigin(wxCoord x, wxCoord y)

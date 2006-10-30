@@ -203,14 +203,14 @@ CGPathRef wxMacCGPath::GetPath() const
     return m_path ;
 }
 
-void wxMacCGPath::AddArcToPoint( wxCoord x1, wxCoord y1 , wxCoord x2, wxCoord y2, wxCoord r ) 
+void wxMacCGPath::AddArcToPoint( wxCoord x1, wxCoord y1 , wxCoord x2, wxCoord y2, wxCoord r )
 {
-    CGPathAddArcToPoint( m_path, NULL , x1, y1, x2, y2, r); 
+    CGPathAddArcToPoint( m_path, NULL , x1, y1, x2, y2, r);
 }
 
-void wxMacCGPath::AddArc( wxCoord x, wxCoord y, wxCoord r, double startAngle, double endAngle, bool clockwise ) 
+void wxMacCGPath::AddArc( wxCoord x, wxCoord y, wxCoord r, double startAngle, double endAngle, bool clockwise )
 {
-    CGPathAddArc( m_path, NULL , x, y, r, startAngle, endAngle, clockwise); 
+    CGPathAddArc( m_path, NULL , x, y, r, startAngle, endAngle, clockwise);
 }
 
 //-----------------------------------------------------------------------------
@@ -272,8 +272,8 @@ void wxMacCGContext::StrokePath( const wxGraphicPath *p )
         width = 1 ;
     if ( m_pen.GetStyle() == wxTRANSPARENT )
         width = 0 ;
-        
-    bool offset = ( width % 2 ) == 1 ; 
+
+    bool offset = ( width % 2 ) == 1 ;
 
     if ( offset )
         CGContextTranslateCTM( m_cgContext, 0.5, 0.5 );
@@ -303,8 +303,8 @@ void wxMacCGContext::DrawPath( const wxGraphicPath *p , int fillStyle )
         width = 1 ;
     if ( m_pen.GetStyle() == wxTRANSPARENT )
         width = 0 ;
-        
-    bool offset = ( width % 2 ) == 1 ; 
+
+    bool offset = ( width % 2 ) == 1 ;
 
     if ( offset )
         CGContextTranslateCTM( m_cgContext, 0.5, 0.5 );
@@ -383,7 +383,7 @@ void wxMacCGContext::SetNativeContext( CGContextRef cg )
     m_cgContext = cg ;
 }
 
-void wxMacCGContext::Translate( wxCoord dx , wxCoord dy ) 
+void wxMacCGContext::Translate( wxCoord dx , wxCoord dy )
 {
     CGContextTranslateCTM( m_cgContext, dx, dy );
 }
@@ -393,17 +393,17 @@ void wxMacCGContext::Scale( wxCoord xScale , wxCoord yScale )
     CGContextScaleCTM( m_cgContext , xScale , yScale ) ;
 }
 
-void wxMacCGContext::DrawBitmap( const wxBitmap &bmp, wxCoord x, wxCoord y, wxCoord w, wxCoord h ) 
+void wxMacCGContext::DrawBitmap( const wxBitmap &bmp, wxCoord x, wxCoord y, wxCoord w, wxCoord h )
 {
     CGImageRef image = (CGImageRef)( bmp.CGImageCreate() ) ;
-    HIRect r = CGRectMake( 0 , 0 , w , h ); 
+    HIRect r = CGRectMake( 0 , 0 , w , h );
 
     CGContextSaveGState( m_cgContext );
     CGContextTranslateCTM( m_cgContext, x , y + h );
     CGContextScaleCTM( m_cgContext, 1, -1 );
-        
+
     // in case image is a mask, set the foreground color
-    CGContextSetRGBFillColor( m_cgContext , m_textForegroundColor.Red() / 255.0 , m_textForegroundColor.Green() / 255.0 , 
+    CGContextSetRGBFillColor( m_cgContext , m_textForegroundColor.Red() / 255.0 , m_textForegroundColor.Green() / 255.0 ,
         m_textForegroundColor.Blue() / 255.0 , m_textForegroundColor.Alpha() / 255.0 ) ;
     CGContextDrawImage( m_cgContext, r, image );
     CGContextRestoreGState( m_cgContext );
@@ -411,7 +411,7 @@ void wxMacCGContext::DrawBitmap( const wxBitmap &bmp, wxCoord x, wxCoord y, wxCo
     CGImageRelease( image ) ;
 }
 
-void wxMacCGContext::DrawIcon( const wxIcon &icon, wxCoord x, wxCoord y, wxCoord w, wxCoord h ) 
+void wxMacCGContext::DrawIcon( const wxIcon &icon, wxCoord x, wxCoord y, wxCoord w, wxCoord h )
 {
     CGRect r = CGRectMake( 0 , 0 , w , h ) ;
     CGContextSaveGState( m_cgContext );
@@ -427,12 +427,12 @@ void wxMacCGContext::PushState()
     CGContextSaveGState( m_cgContext );
 }
 
-void wxMacCGContext::PopState() 
+void wxMacCGContext::PopState()
 {
     CGContextRestoreGState( m_cgContext );
 }
 
-void wxMacCGContext::SetTextColor( const wxColour &col ) 
+void wxMacCGContext::SetTextColor( const wxColour &col )
 {
     m_textForegroundColor = col ;
 }
@@ -662,7 +662,7 @@ void wxMacCGContext::SetPen( const wxPen &pen )
 
         if ( stroke )
         {
-            CGContextSetRGBStrokeColor( m_cgContext , pen.GetColour().Red() / 255.0 , pen.GetColour().Green() / 255.0 , 
+            CGContextSetRGBStrokeColor( m_cgContext , pen.GetColour().Red() / 255.0 , pen.GetColour().Green() / 255.0 ,
                     pen.GetColour().Blue() / 255.0 , pen.GetColour().Alpha() / 255.0 ) ;
 
             // TODO: * m_dc->m_scaleX
@@ -788,7 +788,7 @@ void wxMacCGContext::SetPen( const wxPen &pen )
                         CGContextSetStrokeColorSpace( m_cgContext , patternSpace ) ;
                         wxMacCFRefHolder<CGPatternRef> pattern( *( new HatchPattern( pen.GetStyle() , CGContextGetCTM( m_cgContext ) ) ) );
 
-                        CGFloat  colorArray[4] = { pen.GetColour().Red() / 255.0 , pen.GetColour().Green() / 255.0 , 
+                        CGFloat  colorArray[4] = { pen.GetColour().Red() / 255.0 , pen.GetColour().Green() / 255.0 ,
                             pen.GetColour().Blue() / 255.0 , pen.GetColour().Alpha() / 255.0 } ;
 
                         CGContextSetStrokePattern( m_cgContext, pattern , colorArray ) ;
@@ -841,7 +841,7 @@ void wxMacCGContext::SetBrush( const wxBrush &brush )
         {
             if ( brush.GetStyle() == wxSOLID )
             {
-                CGContextSetRGBFillColor( m_cgContext , brush.GetColour().Red() / 255.0 , brush.GetColour().Green() / 255.0 , 
+                CGContextSetRGBFillColor( m_cgContext , brush.GetColour().Red() / 255.0 , brush.GetColour().Green() / 255.0 ,
                     brush.GetColour().Blue() / 255.0 , brush.GetColour().Alpha() / 255.0 ) ;
             }
             else if ( brush.IsHatch() )
@@ -850,7 +850,7 @@ void wxMacCGContext::SetBrush( const wxBrush &brush )
                 CGContextSetFillColorSpace( m_cgContext , patternSpace ) ;
                 wxMacCFRefHolder<CGPatternRef> pattern( *( new HatchPattern( brush.GetStyle() , CGContextGetCTM( m_cgContext ) ) ) );
 
-                CGFloat  colorArray[4] = { brush.GetColour().Red() / 255.0 , brush.GetColour().Green() / 255.0 , 
+                CGFloat  colorArray[4] = { brush.GetColour().Red() / 255.0 , brush.GetColour().Green() / 255.0 ,
                     brush.GetColour().Blue() / 255.0 , brush.GetColour().Alpha() / 255.0 } ;
 
                 CGContextSetFillPattern( m_cgContext, pattern , colorArray ) ;
@@ -879,7 +879,7 @@ void wxMacCGContext::SetBrush( const wxBrush &brush )
     }
 }
 
-void wxMacCGContext::DrawText( const wxString &str, wxCoord x, wxCoord y, double angle ) 
+void wxMacCGContext::DrawText( const wxString &str, wxCoord x, wxCoord y, double angle )
 {
     OSStatus status = noErr ;
     ATSUTextLayout atsuLayout ;
@@ -1006,14 +1006,14 @@ void wxMacCGContext::DrawText( const wxString &str, wxCoord x, wxCoord y, double
     free( ubuf ) ;
 #endif
 }
-    
+
 void wxMacCGContext::GetTextExtent( const wxString &str, wxCoord *width, wxCoord *height,
                             wxCoord *descent, wxCoord *externalLeading ) const
 {
     wxCHECK_RET( m_macATSUIStyle != NULL, wxT("wxDC(cg)::DoGetTextExtent - no valid font set") ) ;
 
     OSStatus status = noErr ;
-    
+
     ATSUTextLayout atsuLayout ;
     UniCharCount chars = str.length() ;
     UniChar* ubuf = NULL ;
@@ -1064,7 +1064,7 @@ void wxMacCGContext::GetTextExtent( const wxString &str, wxCoord *width, wxCoord
     ::ATSUDisposeTextLayout(atsuLayout);
 }
 
-void wxMacCGContext::GetPartialTextExtents(const wxString& text, wxArrayInt& widths) const 
+void wxMacCGContext::GetPartialTextExtents(const wxString& text, wxArrayInt& widths) const
 {
     widths.Empty();
     widths.Add(0, text.length());
@@ -1121,7 +1121,7 @@ void wxMacCGContext::GetPartialTextExtents(const wxString& text, wxArrayInt& wid
     ::ATSUDisposeTextLayout(atsuLayout);
 }
 
-void wxMacCGContext::SetFont( const wxFont &font ) 
+void wxMacCGContext::SetFont( const wxFont &font )
 {
     if ( m_macATSUIStyle )
     {
@@ -1498,7 +1498,7 @@ void wxDC::SetPen( const wxPen &pen )
 {
     if ( m_pen == pen )
         return ;
-    
+
     m_pen = pen;
     if ( m_graphicContext )
     {
@@ -1691,7 +1691,7 @@ void wxDC::DoDrawArc( wxCoord x1, wxCoord y1,
     }
 
     bool fill = m_brush.GetStyle() != wxTRANSPARENT ;
-    
+
     wxGraphicPath* path = m_graphicContext->CreatePath() ;
     m_graphicContext->PushState() ;
     m_graphicContext->Translate( xxc, yyc ) ;
@@ -1908,8 +1908,8 @@ void wxDC::DoDrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
         penwidth = 1 ;
     if ( m_pen.GetStyle() == wxTRANSPARENT )
         penwidth = 0 ;
-        
-    bool offset = ( penwidth % 2 ) == 1 ; 
+
+    bool offset = ( penwidth % 2 ) == 1 ;
 
     wxGraphicPath* path = m_graphicContext->CreatePath() ;
     // if we are offsetting the entire rectangle is moved 0.5, so the border line gets off by 1
@@ -1917,7 +1917,7 @@ void wxDC::DoDrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
         path->AddRectangle( xx , yy , ww-1 , hh-1 ) ;
     else
         path->AddRectangle( xx , yy , ww , hh ) ;
-        
+
     m_graphicContext->DrawPath( path ) ;
     delete path ;
 }
@@ -2000,7 +2000,7 @@ void wxDC::DoDrawEllipse(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
         hh = -hh;
         yy = yy - hh;
     }
-    
+
     wxGraphicPath* path = m_graphicContext->CreatePath() ;
     m_graphicContext->PushState() ;
     m_graphicContext->Translate(xx + ww / 2, yy + hh / 2);
@@ -2086,7 +2086,7 @@ bool wxDC::DoBlit(
     else
     {
         wxFAIL_MSG( wxT("Blitting is only supported from bitmap contexts, and only with wxCOPY logical operation.") ) ;
-        return false ; 
+        return false ;
     }
 
     return true;
@@ -2135,7 +2135,7 @@ void wxDC::DoGetTextExtent( const wxString &str, wxCoord *width, wxCoord *height
     }
 
     wxCoord h , d , e , w ;
-    
+
     m_graphicContext->GetTextExtent( str, &w, &h, &d, &e ) ;
 
     if ( height )
@@ -2286,42 +2286,42 @@ void wxDC::Clear(void)
 */ // TODO
 wxCoord wxDCBase::DeviceToLogicalX(wxCoord x) const
 {
-    return wxCoordRound((double)(x - m_deviceOriginX) / m_scaleX) * m_signX + m_logicalOriginX;
+    return wxRound((double)(x - m_deviceOriginX) / m_scaleX) * m_signX + m_logicalOriginX;
 }
 
 wxCoord wxDCBase::DeviceToLogicalY(wxCoord y) const
 {
-    return wxCoordRound((double)(y - m_deviceOriginY) / m_scaleY) * m_signY + m_logicalOriginY;
+    return wxRound((double)(y - m_deviceOriginY) / m_scaleY) * m_signY + m_logicalOriginY;
 }
 
 wxCoord wxDCBase::DeviceToLogicalXRel(wxCoord x) const
 {
-    return wxCoordRound((double)(x) / m_scaleX);
+    return wxRound((double)(x) / m_scaleX);
 }
 
 wxCoord wxDCBase::DeviceToLogicalYRel(wxCoord y) const
 {
-    return wxCoordRound((double)(y) / m_scaleY);
+    return wxRound((double)(y) / m_scaleY);
 }
 
 wxCoord wxDCBase::LogicalToDeviceX(wxCoord x) const
 {
-    return wxCoordRound((double)(x - m_logicalOriginX) * m_scaleX) * m_signX + m_deviceOriginX;
+    return wxRound((double)(x - m_logicalOriginX) * m_scaleX) * m_signX + m_deviceOriginX;
 }
 
 wxCoord wxDCBase::LogicalToDeviceY(wxCoord y) const
 {
-    return wxCoordRound((double)(y - m_logicalOriginY) * m_scaleY) * m_signY + m_deviceOriginY;
+    return wxRound((double)(y - m_logicalOriginY) * m_scaleY) * m_signY + m_deviceOriginY;
 }
 
 wxCoord wxDCBase::LogicalToDeviceXRel(wxCoord x) const
 {
-    return wxCoordRound((double)(x) * m_scaleX);
+    return wxRound((double)(x) * m_scaleX);
 }
 
 wxCoord wxDCBase::LogicalToDeviceYRel(wxCoord y) const
 {
-    return wxCoordRound((double)(y) * m_scaleY);
+    return wxRound((double)(y) * m_scaleY);
 }
 
 #endif // wxMAC_USE_CORE_GRAPHICS
