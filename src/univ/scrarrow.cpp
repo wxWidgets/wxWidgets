@@ -24,6 +24,7 @@
 #endif
 
 #ifndef WX_PRECOMP
+    #include "wx/window.h"
 #endif
 
 #include "wx/univ/scrtimer.h"
@@ -298,4 +299,3 @@ bool wxScrollArrows::HandleMouse(const wxMouseEvent& event) const
 
     return true;
 }
-
