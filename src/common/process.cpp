@@ -49,6 +49,7 @@ void wxProcess::Init(wxEvtHandler *parent, int id, int flags)
         SetNextHandler(parent);
 
     m_id         = id;
+    m_pid        = 0;
     m_redirect   = (flags & wxPROCESS_REDIRECT) != 0;
 
 #if wxUSE_STREAMS
@@ -63,12 +64,15 @@ wxProcess *wxProcess::Open(const wxString& cmd, int flags)
 {
     wxASSERT_MSG( !(flags & wxEXEC_SYNC), wxT("wxEXEC_SYNC should not be used." ));
     wxProcess *process = new wxProcess(wxPROCESS_REDIRECT);
-    if ( !wxExecute(cmd, flags, process) )
+    long pid = wxExecute(cmd, flags, process);
+    if( !pid )
     {
         // couldn't launch the process
         delete process;
         return NULL;
     }
+
+    process->SetPid(pid);
 
     return process;
 }

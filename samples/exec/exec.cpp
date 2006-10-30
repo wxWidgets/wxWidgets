@@ -774,6 +774,8 @@ void MyFrame::OnPOpen(wxCommandEvent& WXUNUSED(event))
         return;
     }
 
+    wxLogVerbose(_T("PID of the new process: %ld"), process->GetPid());
+
     wxOutputStream *out = process->GetOutputStream();
     if ( !out )
     {

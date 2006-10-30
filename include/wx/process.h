@@ -62,6 +62,9 @@ public:
 
     virtual ~wxProcess();
 
+    // get the process ID of the process executed by Open()
+    long GetPid() const { return m_pid; }
+
     // may be overridden to be notified about process termination
     virtual void OnTerminate(int pid, int status);
 
@@ -103,8 +106,10 @@ public:
 
 protected:
     void Init(wxEvtHandler *parent, int id, int flags);
+    void SetPid(long pid) { m_pid = pid; }
 
     int m_id;
+    long m_pid;
 
 #if wxUSE_STREAMS
     // these streams are connected to stdout, stderr and stdin of the child
