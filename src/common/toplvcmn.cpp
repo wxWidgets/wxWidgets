@@ -140,6 +140,16 @@ bool wxTopLevelWindowBase::IsLastBeforeExit() const
 // wxTopLevelWindow geometry
 // ----------------------------------------------------------------------------
 
+void wxTopLevelWindowBase::SetMinSize(const wxSize& minSize)
+{
+    SetSizeHints( minSize.x, minSize.y, GetMaxWidth(), GetMaxHeight() );    
+}
+
+void wxTopLevelWindowBase::SetMaxSize(const wxSize& maxSize)
+{
+    SetSizeHints( GetMinWidth(), GetMinHeight(), maxSize.x, maxSize.y );
+}
+
 // set the min/max size of the window
 void wxTopLevelWindowBase::DoSetSizeHints(int minW, int minH,
                                   int maxW, int maxH,

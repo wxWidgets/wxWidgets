@@ -250,6 +250,12 @@ public:
     virtual void DoUpdateWindowUI(wxUpdateUIEvent& event) ;
 
 protected:
+
+    // a different API for SetSizeHints
+    virtual void SetMinSize(const wxSize& minSize);
+    virtual void SetMaxSize(const wxSize& maxSize);
+
+    // set size hints for "window manager"
     virtual void DoSetSizeHints( int minW, int minH,
                                  int maxW = wxDefaultCoord, int maxH = wxDefaultCoord,
                                  int incW = wxDefaultCoord, int incH = wxDefaultCoord );
