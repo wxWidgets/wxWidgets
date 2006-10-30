@@ -194,11 +194,16 @@ event_emission_hook(GSignalInvocationHint*, guint, const GValue*, gpointer)
     return false;
 }
 
+// add emission hook for "event" signal, to re-install idle handler when needed
 static inline void wxAddEmissionHook()
 {
-    // add emission hook for "event" signal, to re-install idle handler when needed
-    guint sig_id = g_signal_lookup("event", GTK_TYPE_WIDGET);
-    g_signal_add_emission_hook(sig_id, 0, event_emission_hook, NULL, NULL);
+    GType widgetType = GTK_TYPE_WIDGET;
+    // if GtkWidget type is loaded
+    if (g_type_class_peek(widgetType) != NULL)
+    {
+        guint sig_id = g_signal_lookup("event", widgetType);
+        g_signal_add_emission_hook(sig_id, 0, event_emission_hook, NULL, NULL);
+    }
 }
 
 static gint wxapp_idle_callback( gpointer WXUNUSED(data) )
