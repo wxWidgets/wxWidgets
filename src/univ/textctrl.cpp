@@ -3732,7 +3732,7 @@ void wxTextCtrl::RefreshTextRange(wxTextPos start, wxTextPos end)
         {
             // intermediate line or the last one but we need to refresh it
             // until the end anyhow - do it
-            posCount = wxSTRING_MAXLEN;
+            posCount = wxString::npos;
         }
         else // last line
         {
