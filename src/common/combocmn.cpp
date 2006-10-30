@@ -828,7 +828,7 @@ wxComboCtrlBase::CreateTextCtrl(int style, const wxValidator& validator)
             m_ignoreEvtText = 0;
 
         m_text = new wxTextCtrl(this, wxID_ANY, m_valueString,
-                                wxDefaultPosition, wxDefaultSize,
+                                wxDefaultPosition, wxSize(-1,10)
                                 style, validator);
     }
 }
