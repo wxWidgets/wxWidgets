@@ -64,7 +64,8 @@ public:
 
     ~wxClassInfo();
 
-    wxObject *CreateObject() const { return m_objectConstructor ? (*m_objectConstructor)() : 0; }
+    wxObject *CreateObject() const
+        { return m_objectConstructor ? (*m_objectConstructor)() : 0; }
     bool IsDynamic() const { return (NULL != m_objectConstructor); }
 
     const wxChar       *GetClassName() const { return m_className; }
@@ -76,7 +77,8 @@ public:
     const wxClassInfo  *GetBaseClass2() const { return m_baseInfo2; }
     int                 GetSize() const { return m_objectSize; }
 
-    wxObjectConstructorFn      GetConstructor() const { return m_objectConstructor; }
+    wxObjectConstructorFn      GetConstructor() const
+        { return m_objectConstructor; }
     static const wxClassInfo  *GetFirst() { return sm_first; }
     const wxClassInfo         *GetNext() const { return m_next; }
     static wxClassInfo        *FindClass(const wxChar *className);
@@ -352,8 +354,9 @@ inline void* wxCheckCast(void *ptr)
     #define _WX_WANT_DELETE_VOID_CONSTCHAR_SIZET
 #endif
 
-// Only VC++ 6.0 and CodeWarrior compilers get overloaded delete that matches new
-#if ( defined(__VISUALC__) && (__VISUALC__ >= 1200) ) || (defined(__MWERKS__) && (__MWERKS__ >= 0x2400))
+// Only VC++ 6 and CodeWarrior get overloaded delete that matches new
+#if (defined(__VISUALC__) && (__VISUALC__ >= 1200)) || \
+        (defined(__MWERKS__) && (__MWERKS__ >= 0x2400))
     #define _WX_WANT_DELETE_VOID_WXCHAR_INT
 #endif
 
@@ -473,7 +476,8 @@ public:
     // Make sure this object has only one reference
     void UnShare() { AllocExclusive(); }
 
-    // Do a shallow comparison of our referenced data with the given object's refdata
+    // Do a shallow comparison of our referenced data with the given object's
+    // refdata
     bool IsRefTo(const wxObject *p) const { return m_refData == p->m_refData; }
 
 protected:
@@ -482,8 +486,8 @@ protected:
     // it is copied using CloneRefData(), otherwise nothing is done
     void AllocExclusive();
 
-    // both methods must be implemented if AllocExclusive() is used, not pure virtual
-    // only because of the backwards compatibility reasons
+    // both methods must be implemented if AllocExclusive() is used, not pure
+    // virtual only because of the backwards compatibility reasons
 
     // create a new m_refData
     virtual wxObjectRefData *CreateRefData() const;
