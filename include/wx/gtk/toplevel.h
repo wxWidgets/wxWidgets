@@ -121,6 +121,12 @@ protected:
                            int width, int height,
                            int sizeFlags = wxSIZE_AUTO);
 
+    // a different API for SetSizeHints
+    virtual void SetMinSize(const wxSize& minSize);
+    virtual void SetMaxSize(const wxSize& maxSize);
+
+    // give hints to the Window Manager for how the size
+    // of the TLW can be changed by dragging
     virtual void DoSetSizeHints( int minW, int minH,
                                  int maxW = wxDefaultCoord, int maxH = wxDefaultCoord,
                                  int incW = wxDefaultCoord, int incH = wxDefaultCoord );

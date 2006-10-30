@@ -958,6 +958,16 @@ void wxTopLevelWindowGTK::DoSetClientSize( int width, int height )
               width + m_miniEdge*2, height  + m_miniEdge*2 + m_miniTitle, 0);
 }
 
+void wxTopLevelWindowGTK::SetMinSize(const wxSize& minSize)
+{
+    SetSizeHints( minSize.x, minSize.y, GetMaxWidth(), GetMaxHeight() );    
+}
+
+void wxTopLevelWindowGTK::SetMaxSize(const wxSize& maxSize)
+{
+    SetSizeHints( GetMinWidth(), GetMinHeight(), maxSize.x, maxSize.y );
+}
+
 void wxTopLevelWindowGTK::DoSetSizeHints( int minW, int minH,
                                           int maxW, int maxH,
                                           int incW, int incH )
