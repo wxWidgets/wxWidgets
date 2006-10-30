@@ -920,13 +920,15 @@ inline void *wxUIntToPtr(wxUIntPtr p)
 /*  we will need to define this */
 #undef wxLongLongIsLong
 
-/*  first check for generic cases which are long on 64bit machine and "long */
-/*  long", then check for specific compilers */
-#if defined(SIZEOF_LONG) && (SIZEOF_LONG == 8)
-    #define wxLongLong_t long
-    #define wxLongLongSuffix l
-    #define wxLongLongFmtSpec _T("l")
-    #define wxLongLongIsLong
+/*  first check for compilers which have the real long long */
+#if (defined(SIZEOF_LONG_LONG) && SIZEOF_LONG_LONG >= 8)  || \
+        defined(__GNUC__) || \
+        defined(__CYGWIN__) || \
+        defined(__WXMICROWIN__) || \
+        (defined(__DJGPP__) && __DJGPP__ >= 2)
+    #define wxLongLong_t long long
+    #define wxLongLongSuffix ll
+    #define wxLongLongFmtSpec _T("ll")
 #elif defined(__WXPALMOS__)
     #define wxLongLong_t int64_t
     #define wxLongLongSuffix ll
@@ -951,14 +953,6 @@ inline void *wxUIntToPtr(wxUIntPtr p)
     #define wxLongLong_t long long
     #define wxLongLongSuffix ll
     #define wxLongLongFmtSpec _T("I64")
-#elif (defined(SIZEOF_LONG_LONG) && SIZEOF_LONG_LONG >= 8)  || \
-        defined(__GNUC__) || \
-        defined(__CYGWIN__) || \
-        defined(__WXMICROWIN__) || \
-        (defined(__DJGPP__) && __DJGPP__ >= 2)
-    #define wxLongLong_t long long
-    #define wxLongLongSuffix ll
-    #define wxLongLongFmtSpec _T("ll")
 #elif defined(__MWERKS__)
     #if __option(longlong)
         #define wxLongLong_t long long
@@ -970,6 +964,11 @@ inline void *wxUIntToPtr(wxUIntPtr p)
     #endif
 #elif defined(__VISAGECPP__) && __IBMCPP__ >= 400
     #define wxLongLong_t long long
+#elif defined(SIZEOF_LONG) && (SIZEOF_LONG == 8)
+    #define wxLongLong_t long
+    #define wxLongLongSuffix l
+    #define wxLongLongFmtSpec _T("l")
+    #define wxLongLongIsLong
 #endif
 
 
