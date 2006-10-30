@@ -23,6 +23,10 @@
     #pragma hdrstop
 #endif
 
+#ifndef WX_PRECOMP
+    #include "wx/window.h"
+#endif // WX_PRECOMP
+
 #include "wx/univ/renderer.h"
 #include "wx/univ/inphand.h"
 #include "wx/univ/theme.h"
@@ -108,4 +112,3 @@ bool wxInputConsumer::PerformAction(const wxControlAction& WXUNUSED(action),
 {
     return false;
 }
-
