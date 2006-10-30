@@ -209,6 +209,11 @@ samples/checklst/*.bmp
 samples/checklst/*.pro
 samples/checklst/*.bkl
 
+samples/collpane/collpane.bkl
+samples/collpane/collpane.cpp
+samples/collpane/collpane.dsp
+samples/collpane/makefile.*
+
 samples/combo/*.cpp
 samples/combo/*.h
 samples/combo/makefile*
