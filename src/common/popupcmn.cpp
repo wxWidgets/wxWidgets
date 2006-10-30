@@ -36,9 +36,7 @@
 
 #ifdef __WXUNIVERSAL__
     #include "wx/univ/renderer.h"
-#if wxUSE_SCROLLBAR
     #include "wx/scrolbar.h"
-#endif
 #endif // __WXUNIVERSAL__
 
 #ifdef __WXGTK__
