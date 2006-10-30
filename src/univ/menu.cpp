@@ -988,7 +988,7 @@ bool wxPopupMenuWindow::ProcessKeyDown(int key)
 
                     int idxAccel = item->GetAccelIndex();
                     if ( idxAccel != -1 &&
-                         wxTolower(item->GetLabel()[(size_t)idxAccel])
+                         (wxChar)wxTolower(item->GetLabel()[(size_t)idxAccel])
                             == chAccel )
                     {
                         // ok, found an item with this accel
@@ -2330,8 +2330,7 @@ int wxMenuBar::FindNextItemForAccel(int idxStart, int key, bool *unique) const
 
         int idxAccel = info.GetAccelIndex();
         if ( idxAccel != -1 &&
-             wxTolower(info.GetLabel()[(size_t)idxAccel])
-                == chAccel )
+             (wxChar)wxTolower(info.GetLabel()[(size_t)idxAccel]) == chAccel )
         {
             // ok, found an item with this accel
             if ( idxFound == -1 )
