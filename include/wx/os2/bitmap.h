@@ -85,6 +85,13 @@ public:
 
     // Initialize with XPM data
     wxBitmap(const char* const* bits);
+#if defined (__GNUC__) && __GNUC__ < 3
+    // needed for old GCC
+    wxBitmap(char** data)
+    {
+        *this = wxBitmap(wx_const_cast(const char* const*, data));
+    }
+#endif
 
     // Load a resource
     wxBitmap( int             nId

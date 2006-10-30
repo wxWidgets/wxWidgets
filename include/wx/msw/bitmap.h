@@ -45,7 +45,7 @@ public:
 
     // Initialize with XPM data
     wxBitmap(const char* const* data);
-#ifdef __BORLANDC__
+#if defined(__BORLANDC__) || (defined (__GNUC__) && __GNUC__ < 3)
     // needed for Borland 5.5
     wxBitmap(char** data)
     {

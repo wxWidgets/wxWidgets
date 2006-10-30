@@ -54,6 +54,13 @@ public:
     wxBitmap( int width, int height, int depth = -1 );
     wxBitmap( const char bits[], int width, int height, int depth = 1 );
     wxBitmap( const char* const* bits );
+#if defined (__GNUC__) && __GNUC__ < 3
+    // needed for old GCC
+    wxBitmap(char** data)
+    {
+        *this = wxBitmap(wx_const_cast(const char* const*, data));
+    }
+#endif
     wxBitmap( const wxString &filename, wxBitmapType type = wxBITMAP_TYPE_XPM );
     wxBitmap( const wxImage& image, int depth = -1 ) { (void)CreateFromImage(image, depth); }
     virtual ~wxBitmap();
