@@ -53,8 +53,9 @@ public:
                    bool scrollbarLike = false) const;
 
     // process a mouse move, enter or leave event, possibly calling
-    // wxControlWithArrows::SetArrowState() if wxControlWithArrows::HitTest()
-    // says that the mosue has left/entered an arrow
+    // wxControlWithArrows::SetArrowState() if
+    // wxControlWithArrows::HitTestArrow() says that the mouse has left/entered
+    // an arrow
     bool HandleMouseMove(const wxMouseEvent& event) const;
 
     // process a mouse click event
@@ -101,7 +102,7 @@ public:
                               int flag, bool set = true) = 0;
 
     // hit testing: return on which arrow the point is (or Arrow_None)
-    virtual wxScrollArrows::Arrow HitTest(const wxPoint& pt) const = 0;
+    virtual wxScrollArrows::Arrow HitTestArrow(const wxPoint& pt) const = 0;
 
     // called when the arrow is pressed, return true to continue scrolling and
     // false to stop it

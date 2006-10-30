@@ -173,7 +173,7 @@ bool wxScrollArrows::HandleMouseMove(const wxMouseEvent& event) const
     }
     else // Moving() or Entering(), treat them the same here
     {
-        arrow = m_control->HitTest(event.GetPosition());
+        arrow = m_control->HitTestArrow(event.GetPosition());
     }
 
 #if wxUSE_TIMER
@@ -234,7 +234,7 @@ bool wxScrollArrows::HandleMouse(const wxMouseEvent& event) const
     {
         if ( !m_captureData )
         {
-            Arrow arrow = m_control->HitTest(event.GetPosition());
+            Arrow arrow = m_control->HitTestArrow(event.GetPosition());
             if ( arrow == Arrow_None )
             {
                 // mouse pressed over something else

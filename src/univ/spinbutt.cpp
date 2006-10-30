@@ -324,7 +324,7 @@ void wxSpinButton::CalcArrowRects(wxRect *rect1, wxRect *rect2) const
     }
 }
 
-wxScrollArrows::Arrow wxSpinButton::HitTest(const wxPoint& pt) const
+wxScrollArrows::Arrow wxSpinButton::HitTestArrow(const wxPoint& pt) const
 {
     wxRect rectArrow1, rectArrow2;
     CalcArrowRects(&rectArrow1, &rectArrow2);

@@ -116,7 +116,7 @@ public:
     virtual int GetArrowState(wxScrollArrows::Arrow arrow) const;
     virtual void SetArrowFlag(wxScrollArrows::Arrow arrow, int flag, bool set);
     virtual bool OnArrow(wxScrollArrows::Arrow arrow);
-    virtual wxScrollArrows::Arrow HitTest(const wxPoint& pt) const;
+    virtual wxScrollArrows::Arrow HitTestArrow(const wxPoint& pt) const;
 
     // for wxControlRenderer::DrawScrollbar() only
     const wxScrollArrows& GetArrows() const { return m_arrows; }

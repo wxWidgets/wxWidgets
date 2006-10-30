@@ -298,7 +298,7 @@ wxSize wxScrollBar::DoGetBestClientSize() const
     return size;
 }
 
-wxScrollArrows::Arrow wxScrollBar::HitTest(const wxPoint& pt) const
+wxScrollArrows::Arrow wxScrollBar::HitTestArrow(const wxPoint& pt) const
 {
     switch ( m_renderer->HitTestScrollbar(this, pt) )
     {
