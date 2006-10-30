@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: $Id$\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-10-29 14:59+0100\n"
-"PO-Revision-Date: 2006-10-29 16:46+0100\n"
+"POT-Creation-Date: 2006-10-30 00:43+0100\n"
+"PO-Revision-Date: 2006-10-30 20:46+0100\n"
 "Last-Translator: Mattia Barbon <mbarbon@cpan.org>\n"
 "Language-Team: wxWidgets translators <wx-translators@lists.wxwidgets.org>\n"
 "MIME-Version: 1.0\n"
@@ -46,9 +46,8 @@ msgstr " - "
 
 #: ../src/common/strconv.cpp:3063
 #: ../src/common/strconv.cpp:3071
-#, fuzzy
 msgid " Couldn't create the UnicodeConverter"
-msgstr "Impossibile creare un timer"
+msgstr "Impossibile creare l'UnicodeConverter"
 
 #: ../src/html/htmprint.cpp:579
 #: ../src/richtext/richtextprint.cpp:535
@@ -127,11 +126,11 @@ msgid "%i of %i"
 msgstr "%i di %i"
 
 #: ../src/generic/filedlgg.cpp:360
-#, fuzzy, c-format
+#, c-format
 msgid "%ld byte"
 msgid_plural "%ld bytes"
-msgstr[0] "%ld byte"
-msgstr[1] "%ld byte"
+msgstr[0] ""
+msgstr[1] ""
 
 #: ../src/common/cmdline.cpp:870
 #, c-format
@@ -161,7 +160,7 @@ msgstr "%s: avviso"
 #: ../src/common/tarstrm.cpp:1235
 #, c-format
 msgid "%s did not fit the tar header for entry '%s'"
-msgstr ""
+msgstr "%s non ha trovato l'intestazione del file TAR per la voce '%s'"
 
 #: ../src/common/fldlgcmn.cpp:93
 #, c-format
@@ -191,9 +190,8 @@ msgid "%s: ill-formed resource file syntax."
 msgstr "%s: sintassi errata nel file di risorsa."
 
 #: ../src/common/stockitem.cpp:110
-#, fuzzy
 msgid "&About"
-msgstr "&Informazioni su..."
+msgstr "&Informazioni su"
 
 #: ../src/html/helpfrm.cpp:122
 #: ../src/html/helpfrm.cpp:124
@@ -206,18 +204,16 @@ msgstr "Dimensione &effettiva"
 
 #: ../src/richtext/richtextindentspage.cpp:135
 #: ../src/richtext/richtextliststylepage.cpp:319
-#, fuzzy
 msgid "&Alignment"
-msgstr "Allinea a destra"
+msgstr "&Allineamento"
 
 #: ../src/common/stockitem.cpp:112
 msgid "&Apply"
 msgstr "&Applica"
 
 #: ../src/richtext/richtextstyledlg.cpp:238
-#, fuzzy
 msgid "&Apply Style"
-msgstr "&Applica"
+msgstr "&Applica lo stile"
 
 #: ../src/msw/mdi.cpp:175
 msgid "&Arrange Icons"
@@ -229,7 +225,7 @@ msgstr "&Indietro"
 
 #: ../src/richtext/richtextstylepage.cpp:112
 msgid "&Based on:"
-msgstr ""
+msgstr "&Basato su:"
 
 #: ../src/common/stockitem.cpp:113
 msgid "&Bold"
@@ -238,7 +234,7 @@ msgstr "&Grassetto"
 #: ../src/richtext/richtextbulletspage.cpp:155
 #: ../src/richtext/richtextliststylepage.cpp:209
 msgid "&Bullet style:"
-msgstr ""
+msgstr "Stile del &punto:"
 
 #: ../src/common/stockitem.cpp:114
 #: ../src/generic/fontdlgg.cpp:377
@@ -254,7 +250,7 @@ msgstr "&Sovrapponi finestre"
 
 #: ../src/richtext/richtextsymboldlg.cpp:438
 msgid "&Character code:"
-msgstr ""
+msgstr "&Codice carattere:"
 
 #: ../src/common/stockitem.cpp:115
 msgid "&Clear"
@@ -269,9 +265,8 @@ msgid "&Close"
 msgstr "&Chiudi"
 
 #: ../src/richtext/richtextfontpage.cpp:201
-#, fuzzy
 msgid "&Colour:"
-msgstr "C&olore:"
+msgstr "&Colore:"
 
 #: ../src/common/stockitem.cpp:117
 #: ../src/mac/carbon/textctrl.cpp:1118
@@ -293,9 +288,8 @@ msgid "&Delete"
 msgstr "Ca&ncella"
 
 #: ../src/richtext/richtextstyledlg.cpp:256
-#, fuzzy
 msgid "&Delete Style..."
-msgstr "Elimina elemento"
+msgstr "&Elimina lo stile"
 
 #: ../src/generic/logg.cpp:718
 msgid "&Details"
@@ -307,12 +301,11 @@ msgstr "&Giù"
 
 #: ../src/common/stockitem.cpp:120
 msgid "&Edit"
-msgstr ""
+msgstr "&Modifica"
 
 #: ../src/richtext/richtextstyledlg.cpp:250
-#, fuzzy
 msgid "&Edit Style..."
-msgstr "Modifica elemento"
+msgstr "&Modifica lo stile"
 
 #: ../src/common/stockitem.cpp:122
 #: ../src/html/helpfrm.cpp:126
@@ -333,22 +326,20 @@ msgstr "&Tipo carattere:"
 
 #: ../src/richtext/richtextliststylepage.cpp:193
 msgid "&Font for Level..."
-msgstr ""
+msgstr "&Font per questo livello..."
 
 #: ../src/richtext/richtextfontpage.cpp:122
 #: ../src/richtext/richtextsymboldlg.cpp:399
-#, fuzzy
 msgid "&Font:"
-msgstr "&Tipo carattere:"
+msgstr "&Font:"
 
 #: ../src/common/stockitem.cpp:126
 msgid "&Forward"
 msgstr "&Avanti"
 
 #: ../src/richtext/richtextsymboldlg.cpp:450
-#, fuzzy
 msgid "&From:"
-msgstr "Da:"
+msgstr "&Da:"
 
 #: ../src/common/prntbase.cpp:1147
 msgid "&Goto..."
@@ -368,13 +359,12 @@ msgstr "&Home"
 #: ../src/richtext/richtextindentspage.cpp:191
 #: ../src/richtext/richtextliststylepage.cpp:372
 msgid "&Indentation (tenths of a mm)"
-msgstr ""
+msgstr "&Rientro (decimi di millimetro)"
 
 #: ../src/richtext/richtextindentspage.cpp:174
 #: ../src/richtext/richtextliststylepage.cpp:356
-#, fuzzy
 msgid "&Indeterminate"
-msgstr "&Sottolineato"
+msgstr "&Indeterminato"
 
 #: ../src/common/stockitem.cpp:131
 msgid "&Index"
@@ -386,23 +376,22 @@ msgstr "&Corsivo"
 
 #: ../src/richtext/richtextindentspage.cpp:160
 #: ../src/richtext/richtextliststylepage.cpp:342
-#, fuzzy
 msgid "&Justified"
-msgstr "Giustificato"
+msgstr "&Giustificato"
 
 #: ../src/richtext/richtextindentspage.cpp:146
 #: ../src/richtext/richtextliststylepage.cpp:328
 msgid "&Left"
-msgstr ""
+msgstr "&Sinistra"
 
 #: ../src/richtext/richtextindentspage.cpp:202
 #: ../src/richtext/richtextliststylepage.cpp:381
 msgid "&Left:"
-msgstr ""
+msgstr "&Sinistra:"
 
 #: ../src/richtext/richtextliststylepage.cpp:182
 msgid "&List level:"
-msgstr ""
+msgstr "&Livello:"
 
 #: ../src/generic/logg.cpp:511
 msgid "&Log"
@@ -433,9 +422,8 @@ msgid "&Next Tip"
 msgstr "&Prossimo suggerimento"
 
 #: ../src/richtext/richtextstylepage.cpp:122
-#, fuzzy
 msgid "&Next style:"
-msgstr "&Successivo >"
+msgstr "Stile &successivo >"
 
 #: ../src/common/stockitem.cpp:138
 msgid "&No"
@@ -447,7 +435,7 @@ msgstr "&Note:"
 
 #: ../src/richtext/richtextbulletspage.cpp:261
 msgid "&Number:"
-msgstr ""
+msgstr "&Numero:"
 
 #: ../src/common/stockitem.cpp:139
 #: ../src/generic/fontdlgg.cpp:382
@@ -477,7 +465,7 @@ msgstr "C&orpo:"
 
 #: ../src/richtext/richtexttabspage.cpp:113
 msgid "&Position (tenths of a mm):"
-msgstr ""
+msgstr "&Posizione (decimi di millimetro):"
 
 #: ../src/common/stockitem.cpp:142
 msgid "&Preferences"
@@ -521,7 +509,7 @@ msgstr "&Ripeti "
 
 #: ../src/richtext/richtextstyledlg.cpp:244
 msgid "&Rename Style..."
-msgstr ""
+msgstr "&Rinomina lo stile:"
 
 #: ../src/generic/fdrepdlg.cpp:178
 msgid "&Replace"
@@ -529,7 +517,7 @@ msgstr "&Sostituisci"
 
 #: ../src/richtext/richtextstyledlg.cpp:274
 msgid "&Restart numbering"
-msgstr ""
+msgstr "&Ricomincia la numerazione"
 
 #: ../src/univ/themes/win32.cpp:3733
 msgid "&Restore"
@@ -537,15 +525,13 @@ msgstr "&Ripristina"
 
 #: ../src/richtext/richtextindentspage.cpp:153
 #: ../src/richtext/richtextliststylepage.cpp:335
-#, fuzzy
 msgid "&Right"
-msgstr "Leggero"
+msgstr "&Destra"
 
 #: ../src/richtext/richtextindentspage.cpp:226
 #: ../src/richtext/richtextliststylepage.cpp:403
-#, fuzzy
 msgid "&Right:"
-msgstr "&Peso:"
+msgstr "&Destra:"
 
 #: ../src/common/stockitem.cpp:151
 msgid "&Save"
@@ -564,14 +550,13 @@ msgid "&Size"
 msgstr "&Ridimensiona"
 
 #: ../src/richtext/richtextfontpage.cpp:140
-#, fuzzy
 msgid "&Size:"
-msgstr "&Ridimensiona"
+msgstr "&Dimensione:"
 
 #: ../src/richtext/richtextindentspage.cpp:248
 #: ../src/richtext/richtextliststylepage.cpp:423
 msgid "&Spacing (tenths of a mm)"
-msgstr ""
+msgstr "&Spaziatura (decimi di millimetro)"
 
 #: ../src/common/stockitem.cpp:154
 msgid "&Stop"
@@ -583,19 +568,17 @@ msgid "&Style:"
 msgstr "&Stile:"
 
 #: ../src/richtext/richtextstyledlg.cpp:191
-#, fuzzy
 msgid "&Styles:"
-msgstr "&Stile:"
+msgstr "&Stili:"
 
 #: ../src/richtext/richtextsymboldlg.cpp:412
 msgid "&Subset:"
-msgstr ""
+msgstr "&Sottoinsieme:"
 
 #: ../src/richtext/richtextbulletspage.cpp:216
 #: ../src/richtext/richtextliststylepage.cpp:268
-#, fuzzy
 msgid "&Symbol:"
-msgstr "&Stile:"
+msgstr "&Simbolo:"
 
 #: ../src/common/stockitem.cpp:156
 #: ../src/generic/fontdlgg.cpp:351
@@ -603,9 +586,8 @@ msgid "&Underline"
 msgstr "&Sottolineato"
 
 #: ../src/richtext/richtextfontpage.cpp:188
-#, fuzzy
 msgid "&Underlining:"
-msgstr "&Sottolineato"
+msgstr "&Sottolineatura:"
 
 #: ../src/common/cmdproc.cpp:266
 #: ../src/common/stockitem.cpp:157
@@ -828,48 +810,42 @@ msgstr "<<"
 #: ../src/mac/carbon/fontdlg.cpp:545
 #: ../src/mac/carbon/fontdlg.cpp:752
 #: ../src/mac/carbon/fontdlg.cpp:772
-#, fuzzy
 msgid "<Any Decorative>"
-msgstr "Decorativo"
+msgstr "<Qualunque Decorativo>"
 
 #: ../src/mac/carbon/fontdlg.cpp:546
 #: ../src/mac/carbon/fontdlg.cpp:754
 #: ../src/mac/carbon/fontdlg.cpp:774
-#, fuzzy
 msgid "<Any Modern>"
-msgstr "Modern"
+msgstr "<Qualunque Modern>"
 
 #: ../src/mac/carbon/fontdlg.cpp:544
 #: ../src/mac/carbon/fontdlg.cpp:750
 #: ../src/mac/carbon/fontdlg.cpp:770
-#, fuzzy
 msgid "<Any Roman>"
-msgstr "Roman"
+msgstr "<Qualunque Roman>"
 
 #: ../src/mac/carbon/fontdlg.cpp:547
 #: ../src/mac/carbon/fontdlg.cpp:756
 #: ../src/mac/carbon/fontdlg.cpp:776
-#, fuzzy
 msgid "<Any Script>"
-msgstr "Script"
+msgstr "<Qualunque Script>"
 
 #: ../src/mac/carbon/fontdlg.cpp:548
 #: ../src/mac/carbon/fontdlg.cpp:761
 #: ../src/mac/carbon/fontdlg.cpp:780
-#, fuzzy
 msgid "<Any Swiss>"
-msgstr "Svizzero"
+msgstr "<Qualunque Svizzero>"
 
 #: ../src/mac/carbon/fontdlg.cpp:549
 #: ../src/mac/carbon/fontdlg.cpp:758
 #: ../src/mac/carbon/fontdlg.cpp:778
-#, fuzzy
 msgid "<Any Teletype>"
-msgstr "Teletype"
+msgstr "<Qualunque Teletype>"
 
 #: ../src/mac/carbon/fontdlg.cpp:543
 msgid "<Any>"
-msgstr ""
+msgstr "<Qualunque>"
 
 #: ../src/generic/filedlgg.cpp:331
 #: ../src/generic/filedlgg.cpp:354
@@ -928,7 +904,7 @@ msgstr "Una collezione non vuota deve contenere nodi 'element'"
 #: ../src/richtext/richtextliststylepage.cpp:304
 #: ../src/richtext/richtextliststylepage.cpp:306
 msgid "A standard bullet name."
-msgstr ""
+msgstr "Il nome di una puntatura standard."
 
 #: ../src/common/paper.cpp:161
 msgid "A2 420 x 594 mm"
@@ -1020,9 +996,8 @@ msgid "ASCII"
 msgstr "ASCII"
 
 #: ../src/generic/aboutdlgg.cpp:105
-#, fuzzy
 msgid "About "
-msgstr "&Informazioni su..."
+msgstr "Informazioni su"
 
 #: ../src/common/stockitem.cpp:111
 msgid "Add"
@@ -1097,7 +1072,7 @@ msgstr "Chiamata verso l'ISP già in corso."
 
 #: ../src/common/menucmn.cpp:314
 msgid "Alt-"
-msgstr ""
+msgstr "Alt-"
 
 #: ../src/generic/animateg.cpp:163
 #, c-format
@@ -1112,7 +1087,7 @@ msgstr "Aggiungere registro al file '%s' (scegliere [No] per sovrascriverlo)?"
 #: ../src/richtext/richtextbulletspage.cpp:281
 #: ../src/richtext/richtextliststylepage.cpp:486
 msgid "Arabic"
-msgstr ""
+msgstr "Numeri arabi"
 
 #: ../src/common/fmapbase.cpp:111
 msgid "Arabic (ISO-8859-6)"
@@ -1130,7 +1105,7 @@ msgstr "Attributi"
 #: ../src/richtext/richtextbulletspage.cpp:244
 #: ../src/richtext/richtextliststylepage.cpp:294
 msgid "Available fonts."
-msgstr ""
+msgstr "Font disponibili."
 
 #: ../src/common/paper.cpp:139
 msgid "B4 (ISO) 250 x 353 mm"
@@ -1186,7 +1161,7 @@ msgstr ""
 
 #: ../src/common/fmapbase.cpp:152
 msgid "BIG5"
-msgstr ""
+msgstr "BIG5"
 
 #: ../src/common/imagbmp.cpp:474
 #: ../src/common/imagbmp.cpp:490
@@ -1220,7 +1195,7 @@ msgstr "BMP: l'oggetto wxImage non ha una propria wxPalette."
 #: ../src/mac/carbon/fontdlg.cpp:343
 #: ../src/richtext/richtextformatdlg.cpp:481
 msgid "Background colour"
-msgstr ""
+msgstr "Colore di sfondo"
 
 #: ../src/common/fmapbase.cpp:118
 msgid "Baltic (ISO-8859-13)"
@@ -1238,7 +1213,7 @@ msgstr "Prima di un paragrafo:"
 #: ../src/richtext/richtextbulletspage.cpp:288
 #: ../src/richtext/richtextliststylepage.cpp:493
 msgid "Bitmap"
-msgstr ""
+msgstr "Immagine"
 
 #: ../contrib/src/deprecated/resource.cpp:2534
 #, c-format
@@ -1260,15 +1235,15 @@ msgstr "Margine inferiore (mm):"
 #: ../src/richtext/richtextbulletspage.cpp:191
 #: ../src/richtext/richtextliststylepage.cpp:244
 msgid "Bullet &Alignment:"
-msgstr ""
+msgstr "Puntatura e allineamento"
 
 #: ../src/richtext/richtextliststylepage.cpp:309
 msgid "Bullet style"
-msgstr ""
+msgstr "Stile del punto"
 
 #: ../src/richtext/richtextformatdlg.cpp:290
 msgid "Bullets"
-msgstr ""
+msgstr "Puntatura"
 
 #: ../src/common/paper.cpp:100
 msgid "C sheet, 17 x 22 in"
@@ -1670,9 +1645,8 @@ msgstr "Celtico (ISO-8859-14)"
 
 #: ../src/richtext/richtextindentspage.cpp:167
 #: ../src/richtext/richtextliststylepage.cpp:349
-#, fuzzy
 msgid "Cen&tred"
-msgstr "Centrato"
+msgstr "Cen&trato"
 
 #: ../src/common/stockitem.cpp:133
 msgid "Centered"
@@ -1684,79 +1658,73 @@ msgstr "Europeo Centrale (ISO-8859-2)"
 
 #: ../src/richtext/richtextbulletspage.cpp:196
 #: ../src/richtext/richtextliststylepage.cpp:249
-#, fuzzy
 msgid "Centre"
-msgstr "Centrato"
+msgstr "Centro"
 
 #: ../src/richtext/richtextindentspage.cpp:169
 #: ../src/richtext/richtextindentspage.cpp:171
 #: ../src/richtext/richtextliststylepage.cpp:351
 #: ../src/richtext/richtextliststylepage.cpp:353
-#, fuzzy
 msgid "Centre text."
-msgstr "Impossibile creare mutex"
+msgstr "Centra il testo."
 
 #: ../src/richtext/richtextbulletspage.cpp:229
 #: ../src/richtext/richtextliststylepage.cpp:280
-#, fuzzy
 msgid "Ch&oose..."
-msgstr "&Vai a..."
+msgstr "&Scegli..."
 
 #: ../src/richtext/richtextbuffer.cpp:2573
 msgid "Change List Style"
-msgstr ""
+msgstr "Modifica lo stile della lista"
 
 #: ../src/richtext/richtextbuffer.cpp:1608
 msgid "Change Style"
-msgstr ""
+msgstr "Modifica lo stile"
 
 #: ../src/richtext/richtextstyles.cpp:753
 msgid "Character styles"
-msgstr ""
+msgstr "Stili di carattere"
 
 #: ../src/richtext/richtextbulletspage.cpp:170
 #: ../src/richtext/richtextbulletspage.cpp:172
 #: ../src/richtext/richtextliststylepage.cpp:223
 #: ../src/richtext/richtextliststylepage.cpp:225
 msgid "Check to add a period after the bullet."
-msgstr ""
+msgstr "Spunta per aggiungere un punto dopo il pallino"
 
 #: ../src/richtext/richtextbulletspage.cpp:184
 #: ../src/richtext/richtextbulletspage.cpp:186
 #: ../src/richtext/richtextliststylepage.cpp:237
 #: ../src/richtext/richtextliststylepage.cpp:239
 msgid "Check to add a right parenthesis."
-msgstr ""
+msgstr "Spunta per aggiungere una parentesi chiusa a destra."
 
 #: ../src/richtext/richtextbulletspage.cpp:177
 #: ../src/richtext/richtextbulletspage.cpp:179
 #: ../src/richtext/richtextliststylepage.cpp:230
 #: ../src/richtext/richtextliststylepage.cpp:232
 msgid "Check to enclose the bullet in parentheses."
-msgstr ""
+msgstr "Spunta pe racchiudere la puntatura in una coppia di parentesi"
 
 #: ../src/mac/carbon/fontdlg.cpp:479
 #: ../src/mac/carbon/fontdlg.cpp:481
-#, fuzzy
 msgid "Check to make the font bold."
-msgstr "Click per annullare la selezione del font"
+msgstr "Click per rendere il font grassetto"
 
 #: ../src/mac/carbon/fontdlg.cpp:486
 #: ../src/mac/carbon/fontdlg.cpp:488
-#, fuzzy
 msgid "Check to make the font italic."
-msgstr "Click per annullare la selezione del font"
+msgstr "Click per rendere il font corsivo"
 
 #: ../src/mac/carbon/fontdlg.cpp:495
 #: ../src/mac/carbon/fontdlg.cpp:497
-#, fuzzy
 msgid "Check to make the font underlined."
-msgstr "Sottolineato"
+msgstr "Click per rendere il font sottolineato"
 
 #: ../src/richtext/richtextstyledlg.cpp:276
 #: ../src/richtext/richtextstyledlg.cpp:278
 msgid "Check to restart numbering."
-msgstr ""
+msgstr "Spunta per ricominciare la numerazione."
 
 #: ../src/msw/dialup.cpp:787
 msgid "Choose ISP to dial"
@@ -1789,22 +1757,20 @@ msgstr "Eliminare il contenuto del registro"
 
 #: ../src/richtext/richtextstyledlg.cpp:239
 #: ../src/richtext/richtextstyledlg.cpp:241
-#, fuzzy
 msgid "Click to apply the selected style."
-msgstr "Click per annullare la selezione del font"
+msgstr "Click per applicare lo stile corrente."
 
 #: ../src/richtext/richtextbulletspage.cpp:230
 #: ../src/richtext/richtextbulletspage.cpp:232
 #: ../src/richtext/richtextliststylepage.cpp:281
 #: ../src/richtext/richtextliststylepage.cpp:283
 msgid "Click to browse for a symbol."
-msgstr ""
+msgstr "Click per selezionare un simbolo."
 
 #: ../src/mac/carbon/fontdlg.cpp:526
 #: ../src/mac/carbon/fontdlg.cpp:528
-#, fuzzy
 msgid "Click to cancel changes to the font."
-msgstr "Click per annullare la selezione del font"
+msgstr "Click per annullare le modifiche al font"
 
 #: ../src/generic/fontdlgg.cpp:379
 #: ../src/generic/fontdlgg.cpp:398
@@ -1813,39 +1779,33 @@ msgstr "Click per annullare la selezione del font"
 
 #: ../src/richtext/richtextstyledlg.cpp:291
 #: ../src/richtext/richtextstyledlg.cpp:293
-#, fuzzy
 msgid "Click to cancel this window."
-msgstr "Chiudi questa finestra"
+msgstr "Click per annullare questa finestra."
 
 #: ../src/mac/carbon/fontdlg.cpp:507
 #: ../src/mac/carbon/fontdlg.cpp:509
-#, fuzzy
 msgid "Click to change the font colour."
-msgstr "Click per annullare la selezione del font"
+msgstr "Click per modificare il colore del font"
 
 #: ../src/richtext/richtextfontpage.cpp:205
 #: ../src/richtext/richtextfontpage.cpp:207
-#, fuzzy
 msgid "Click to change the text colour."
-msgstr "Click per annullare la selezione del font"
+msgstr "Click per modificare il colore del testo."
 
 #: ../src/richtext/richtextliststylepage.cpp:194
 #: ../src/richtext/richtextliststylepage.cpp:196
-#, fuzzy
 msgid "Click to choose the font for this level."
-msgstr "Click per annullare la selezione del font"
+msgstr "Click per selezionare il font per il livello corrente"
 
 #: ../src/richtext/richtextstyledlg.cpp:266
 #: ../src/richtext/richtextstyledlg.cpp:268
-#, fuzzy
 msgid "Click to close this window."
-msgstr "Chiudi questa finestra"
+msgstr "Click per chiudere questa finestra."
 
 #: ../src/mac/carbon/fontdlg.cpp:533
 #: ../src/mac/carbon/fontdlg.cpp:535
-#, fuzzy
 msgid "Click to confirm changes to the font."
-msgstr "Click per confermare la selezione del font"
+msgstr "Click per confermare le modifiche al font"
 
 #: ../src/generic/fontdlgg.cpp:384
 #: ../src/generic/fontdlgg.cpp:386
@@ -1856,61 +1816,53 @@ msgstr "Click per confermare la selezione del font"
 
 #: ../src/richtext/richtextstyledlg.cpp:285
 #: ../src/richtext/richtextstyledlg.cpp:287
-#, fuzzy
 msgid "Click to confirm your selection."
-msgstr "Click per confermare la selezione del font"
+msgstr "Click per confermare la selezione."
 
 #: ../src/richtext/richtextstyledlg.cpp:219
 #: ../src/richtext/richtextstyledlg.cpp:221
 msgid "Click to create a new character style."
-msgstr ""
+msgstr "Click per creare un nuovo stile di carattere"
 
 #: ../src/richtext/richtextstyledlg.cpp:231
 #: ../src/richtext/richtextstyledlg.cpp:233
-#, fuzzy
 msgid "Click to create a new list style."
-msgstr "Click per annullare la selezione del font"
+msgstr "Click per creare un nuovo stile di lista"
 
 #: ../src/richtext/richtextstyledlg.cpp:225
 #: ../src/richtext/richtextstyledlg.cpp:227
 msgid "Click to create a new paragraph style."
-msgstr ""
+msgstr "Click per creare un nuovo stile di paragrafo"
 
 #: ../src/richtext/richtexttabspage.cpp:137
 #: ../src/richtext/richtexttabspage.cpp:139
-#, fuzzy
 msgid "Click to create a new tab position."
-msgstr "Click per annullare la selezione del font"
+msgstr "Click per creare un nuovo punto di tabulazione."
 
 #: ../src/richtext/richtexttabspage.cpp:149
 #: ../src/richtext/richtexttabspage.cpp:151
-#, fuzzy
 msgid "Click to delete all tab positions."
-msgstr "Click per annullare la selezione del font"
+msgstr "Click per eliminare tutti i punti di tabulazione."
 
 #: ../src/richtext/richtextstyledlg.cpp:257
 #: ../src/richtext/richtextstyledlg.cpp:259
-#, fuzzy
 msgid "Click to delete the selected style."
-msgstr "Click per annullare la selezione del font"
+msgstr "Click per eliminare lo stile selezionato"
 
 #: ../src/richtext/richtexttabspage.cpp:143
 #: ../src/richtext/richtexttabspage.cpp:145
-#, fuzzy
 msgid "Click to delete the selected tab position."
-msgstr "Click per annullare la selezione del font"
+msgstr "Click per eliminare il punto di tabulazione selezionato."
 
 #: ../src/richtext/richtextstyledlg.cpp:251
 #: ../src/richtext/richtextstyledlg.cpp:253
-#, fuzzy
 msgid "Click to edit the selected style."
-msgstr "Click per annullare la selezione del font"
+msgstr "Click per modificare lo stile selezionato."
 
 #: ../src/richtext/richtextstyledlg.cpp:245
 #: ../src/richtext/richtextstyledlg.cpp:247
-#, fuzzy
 msgid "Click to rename the selected style."
-msgstr "Click per annullare la selezione del font"
+msgstr "Click per rinominare lo stile selezionato."
 
 #: ../src/generic/dbgrptg.cpp:93
 #: ../src/generic/progdlgg.cpp:658
@@ -1933,7 +1885,7 @@ msgstr "Chiudi &tutto"
 
 #: ../src/common/stockitem.cpp:211
 msgid "Close current document"
-msgstr ""
+msgstr "Chiudi il documento corrente"
 
 #: ../src/generic/logg.cpp:510
 msgid "Close this window"
@@ -1944,12 +1896,11 @@ msgstr "Chiudi questa finestra"
 #: ../src/richtext/richtextsymboldlg.cpp:497
 #: ../src/richtext/richtextsymboldlg.cpp:499
 msgid "Closes the dialog without inserting a symbol."
-msgstr ""
+msgstr "Chiude la finestra di dialogo senza inserire il simbolo."
 
 #: ../src/mac/carbon/fontdlg.cpp:503
-#, fuzzy
 msgid "Colour:"
-msgstr "C&olore:"
+msgstr "Colore:"
 
 #: ../src/html/helpwnd.cpp:1528
 msgid "Compressed HTML Help file (*.chm)|*.chm|"
@@ -1997,9 +1948,8 @@ msgid "Copies:"
 msgstr "Copie:"
 
 #: ../src/common/stockitem.cpp:203
-#, fuzzy
 msgid "Copy selection"
-msgstr "Selezione"
+msgstr "Copia selezione"
 
 #: ../src/html/chm.cpp:703
 #, c-format
@@ -2086,14 +2036,12 @@ msgid "Couldn't create cursor."
 msgstr "Impossibile creare un cursore."
 
 #: ../src/mac/carbon/overlay.cpp:113
-#, fuzzy
 msgid "Couldn't create the overlay window"
-msgstr "Impossibile creare un timer"
+msgstr "Impossibile creare la finestra di overlay"
 
 #: ../src/mac/carbon/overlay.cpp:157
-#, fuzzy
 msgid "Couldn't end the context on the overlay window"
-msgstr "Impossibile ottenere un puntatore al thread corrente"
+msgstr "Impossibile finalizzare il contesto della finestra di overlay"
 
 #: ../src/common/dynlib.cpp:199
 #, c-format
@@ -2106,9 +2054,8 @@ msgid "Couldn't get the current thread pointer"
 msgstr "Impossibile ottenere un puntatore al thread corrente"
 
 #: ../src/mac/carbon/overlay.cpp:119
-#, fuzzy
 msgid "Couldn't init the context on the overlay window"
-msgstr "Impossibile ottenere un puntatore al thread corrente"
+msgstr "Impossibile inizializzare il contesto della finestra di overlay"
 
 #: ../src/common/imagpng.cpp:621
 msgid "Couldn't load a PNG image - file is corrupted or not enough memory."
@@ -2163,9 +2110,8 @@ msgid "Create new directory"
 msgstr "Crea una nuova cartella"
 
 #: ../src/common/menucmn.cpp:316
-#, fuzzy
 msgid "Ctrl-"
-msgstr "ctrl"
+msgstr "Ctrl-"
 
 #: ../src/common/stockitem.cpp:118
 #: ../src/mac/carbon/textctrl.cpp:1117
@@ -2179,9 +2125,8 @@ msgid "Current directory:"
 msgstr "Cartella corrente:"
 
 #: ../src/common/stockitem.cpp:204
-#, fuzzy
 msgid "Cut selection"
-msgstr "Selezione"
+msgstr "taglia selezione"
 
 #: ../src/common/fmapbase.cpp:110
 msgid "Cyrillic (ISO-8859-5)"
@@ -2228,9 +2173,8 @@ msgid "DIB Header: Unknown encoding in file."
 msgstr "Header DIB: Codifica del file sconosciuta."
 
 #: ../src/common/menucmn.cpp:98
-#, fuzzy
 msgid "DIVIDE"
-msgstr "<DRIVE>"
+msgstr ""
 
 #: ../src/common/paper.cpp:123
 msgid "DL Envelope, 110 x 220 mm"
@@ -2266,39 +2210,34 @@ msgid "Default printer"
 msgstr "Stampante predefinita"
 
 #: ../src/richtext/richtextbuffer.cpp:4827
-#, fuzzy
 msgid "Delete"
-msgstr "Ca&ncella"
+msgstr "Cancella"
 
 #: ../src/richtext/richtexttabspage.cpp:148
-#, fuzzy
 msgid "Delete A&ll"
-msgstr "&Seleziona tutto"
+msgstr "&Candella tutti"
 
 #: ../src/richtext/richtextstyledlg.cpp:736
-#, fuzzy
 msgid "Delete Style"
-msgstr "Elimina elemento"
+msgstr "Elimina stile"
 
 #: ../src/richtext/richtextctrl.cpp:560
 #: ../src/richtext/richtextctrl.cpp:589
-#, fuzzy
 msgid "Delete Text"
-msgstr "Elimina elemento"
+msgstr "Elimina testo"
 
 #: ../contrib/src/gizmos/editlbox.cpp:156
 msgid "Delete item"
 msgstr "Elimina elemento"
 
 #: ../src/common/stockitem.cpp:205
-#, fuzzy
 msgid "Delete selection"
-msgstr "Selezione"
+msgstr "Elimina selezione"
 
 #: ../src/richtext/richtextstyledlg.cpp:736
-#, fuzzy, c-format
+#, c-format
 msgid "Delete style %s?"
-msgstr "Elimina elemento"
+msgstr "Eliminare stile %s?"
 
 #: ../src/unix/snglinst.cpp:296
 #, c-format
@@ -2316,7 +2255,7 @@ msgstr "Desktop"
 
 #: ../src/generic/aboutdlgg.cpp:70
 msgid "Developed by "
-msgstr ""
+msgstr "Sviluppato da"
 
 #: ../src/msw/dialup.cpp:396
 msgid "Dial up functions are unavailable because the remote access service (RAS) is not installed on this machine. Please install it."
@@ -2363,7 +2302,7 @@ msgstr "Mostra riquadro di dialogo per le opzioni"
 
 #: ../src/html/helpwnd.cpp:335
 msgid "Displays help as you browse the books on the left."
-msgstr ""
+msgstr "Visualizza la guida mentre sfogli i manuali sulla sinistra."
 
 #: ../src/msw/mimetype.cpp:667
 msgid ""
@@ -2386,7 +2325,7 @@ msgstr "Salvare le modifiche al documento %s?"
 
 #: ../src/generic/aboutdlgg.cpp:73
 msgid "Documentation by "
-msgstr ""
+msgstr "Documentazione di"
 
 #: ../src/common/sizer.cpp:2019
 msgid "Don't Save"
@@ -2448,11 +2387,11 @@ msgstr "Tempo trascorso : "
 
 #: ../src/richtext/richtextstyledlg.cpp:570
 msgid "Enter a character style name"
-msgstr ""
+msgstr "Immetti il nome dello stile di carattere"
 
 #: ../src/richtext/richtextstyledlg.cpp:772
 msgid "Enter a list style name"
-msgstr ""
+msgstr "Immetti il nome dello stile di lista"
 
 #: ../src/common/prntbase.cpp:1072
 #, c-format
@@ -2461,7 +2400,7 @@ msgstr "Immettere un numero di pagina compreso tra %d e %d:"
 
 #: ../src/richtext/richtextstyledlg.cpp:618
 msgid "Enter a paragraph style name"
-msgstr ""
+msgstr "Immetti il nome dello stile di paragrafo"
 
 #: ../src/generic/dbgrptg.cpp:170
 #, c-format
@@ -3124,26 +3063,23 @@ msgstr "Folio, 8 1/2 x 13 pollici"
 #: ../src/mac/carbon/fontdlg.cpp:410
 #: ../src/richtext/richtextformatdlg.cpp:272
 msgid "Font"
-msgstr ""
+msgstr "Font"
 
 #: ../src/richtext/richtextfontpage.cpp:175
-#, fuzzy
 msgid "Font &weight:"
-msgstr "Il peso del carattere"
+msgstr "&Peso del font"
 
 #: ../src/html/helpwnd.cpp:1192
 msgid "Font size:"
 msgstr "Corpo:"
 
 #: ../src/richtext/richtextfontpage.cpp:162
-#, fuzzy
 msgid "Font st&yle:"
-msgstr "Corpo:"
+msgstr "St&ile:"
 
 #: ../src/mac/carbon/fontdlg.cpp:452
-#, fuzzy
 msgid "Font:"
-msgstr "Corpo:"
+msgstr "Font:"
 
 #: ../src/unix/utilsunx.cpp:545
 msgid "Fork failed"
@@ -3152,7 +3088,7 @@ msgstr "Fork fallita"
 #: ../include/wx/richtext/richtextformatdlg.h:121
 #: ../include/wx/richtext/richtextformatdlg.h:133
 msgid "Formatting"
-msgstr ""
+msgstr "Formattazione"
 
 #: ../src/common/xtixml.cpp:232
 msgid "Forward hrefs are not supported"
@@ -3232,7 +3168,7 @@ msgstr "Indietro"
 
 #: ../src/html/htmlhelp.cpp:541
 msgid "Go back to the previous HTML page"
-msgstr ""
+msgstr "Ritorna alla pagina HTML precedente"
 
 #: ../src/html/helpwnd.cpp:640
 msgid "Go forward"
@@ -3240,7 +3176,7 @@ msgstr "Avanti"
 
 #: ../src/html/htmlhelp.cpp:543
 msgid "Go forward to the next HTML page"
-msgstr ""
+msgstr "Avanza alla pagina HTML successiva"
 
 #: ../src/html/helpwnd.cpp:645
 msgid "Go one level up in document hierarchy"
@@ -3261,7 +3197,7 @@ msgstr "Vai alla pagina"
 
 #: ../src/generic/aboutdlgg.cpp:76
 msgid "Graphics art by "
-msgstr ""
+msgstr "Grafica di"
 
 #: ../src/common/fmapbase.cpp:112
 msgid "Greek (ISO-8859-7)"
@@ -3295,7 +3231,7 @@ msgstr "File HTML (*.html;*.htm)|*.html;*.htm|"
 
 #: ../src/html/htmprint.cpp:379
 msgid "HTML pagination algorithm generated more than the allowed maximum number of pages and it can continue any longer!"
-msgstr ""
+msgstr "L'algoritmo di paginazione HTML ha generato un numero di pagine maggiore di quello consentito e non è in grado di proseguire!"
 
 #: ../src/common/fmapbase.cpp:113
 msgid "Hebrew (ISO-8859-8)"
@@ -3336,12 +3272,12 @@ msgstr "Help book (*.htb)|*.htb|Help books (*.zip)|*.zip|"
 #: ../src/generic/helpext.cpp:274
 #, c-format
 msgid "Help directory \"%s\" not found."
-msgstr ""
+msgstr "Cartella \"%s\" della guida non trovata."
 
 #: ../src/generic/helpext.cpp:282
-#, fuzzy, c-format
+#, c-format
 msgid "Help file \"%s\" not found."
-msgstr "file di catalogo non trovato per il dominio '%s'."
+msgstr "File della guida \"%s\" non trovato."
 
 #: ../src/html/helpctrl.cpp:51
 #, c-format
@@ -3508,7 +3444,7 @@ msgstr "Indenta"
 
 #: ../src/richtext/richtextformatdlg.cpp:278
 msgid "Indents && Spacing"
-msgstr ""
+msgstr "Rientri e spaziatura"
 
 #: ../src/html/htmlhelp.cpp:578
 #: ../src/html/helpwnd.cpp:493
@@ -3525,14 +3461,13 @@ msgstr "Inizializzazione fallita in \"post init\", esco."
 
 #: ../src/richtext/richtextsymboldlg.cpp:475
 #: ../src/richtext/richtextsymboldlg.cpp:502
-#, fuzzy
 msgid "Insert"
-msgstr "Indenta"
+msgstr "Inserisci"
 
 #: ../src/richtext/richtextbuffer.cpp:4724
 #: ../src/richtext/richtextbuffer.cpp:5503
 msgid "Insert Image"
-msgstr ""
+msgstr "Inserisci un'immagine"
 
 #: ../src/richtext/richtextbuffer.cpp:4600
 #: ../src/richtext/richtextbuffer.cpp:4644
@@ -3540,14 +3475,14 @@ msgstr ""
 #: ../src/richtext/richtextctrl.cpp:532
 #: ../src/richtext/richtextctrl.cpp:748
 msgid "Insert Text"
-msgstr ""
+msgstr "Inserisci del testo"
 
 #: ../src/richtext/richtextsymboldlg.cpp:477
 #: ../src/richtext/richtextsymboldlg.cpp:479
 #: ../src/richtext/richtextsymboldlg.cpp:504
 #: ../src/richtext/richtextsymboldlg.cpp:506
 msgid "Inserts the chosen symbol."
-msgstr ""
+msgstr "Inserisce il simbolo scelto"
 
 #: ../src/common/xtistrm.cpp:700
 msgid "Internal error, illegal wxCustomTypeInfo"
@@ -3672,7 +3607,7 @@ msgstr "Giustificato"
 #: ../src/richtext/richtextliststylepage.cpp:344
 #: ../src/richtext/richtextliststylepage.cpp:346
 msgid "Justify text left and right."
-msgstr ""
+msgstr "Justifica il testo a sinistra e a destra."
 
 #: ../src/common/fmapbase.cpp:121
 msgid "KOI8-R"
@@ -3799,12 +3734,12 @@ msgstr "Ledger, 17 x 11 pollici"
 #: ../src/richtext/richtextliststylepage.cpp:252
 #: ../src/richtext/richtextliststylepage.cpp:253
 msgid "Left"
-msgstr ""
+msgstr "Sinistra"
 
 #: ../src/richtext/richtextindentspage.cpp:214
 #: ../src/richtext/richtextliststylepage.cpp:392
 msgid "Left (&first line):"
-msgstr ""
+msgstr "Sinistra (&prima riga):"
 
 #: ../src/generic/prntdlgg.cpp:874
 msgid "Left margin (mm):"
@@ -3815,7 +3750,7 @@ msgstr "Margine sinistro (mm):"
 #: ../src/richtext/richtextliststylepage.cpp:330
 #: ../src/richtext/richtextliststylepage.cpp:332
 msgid "Left-align text."
-msgstr ""
+msgstr "Allinea a sinistra"
 
 #: ../src/common/paper.cpp:146
 msgid "Legal Extra 9 1/2 x 15 in"
@@ -3860,12 +3795,12 @@ msgstr "Leggero"
 #: ../src/generic/helpext.cpp:301
 #, c-format
 msgid "Line %lu of map file \"%s\" has invalid syntax, skipped."
-msgstr ""
+msgstr "La riga %lu del file di mappa \"%s\" è stata scartata in quanto scorretta."
 
 #: ../src/richtext/richtextindentspage.cpp:282
 #: ../src/richtext/richtextliststylepage.cpp:454
 msgid "Line spacing:"
-msgstr ""
+msgstr "Interlinea:"
 
 #: ../src/html/chm.cpp:820
 msgid "Link contained '//', converted to absolute link."
@@ -3873,22 +3808,21 @@ msgstr "Il collegamnto conteneva '//', è stato convertito a un collegamento asso
 
 #: ../src/richtext/richtextformatdlg.cpp:296
 msgid "List Style"
-msgstr ""
+msgstr "Stile di lista"
 
 #: ../src/richtext/richtextstyles.cpp:754
 msgid "List styles"
-msgstr ""
+msgstr "Stili di lista"
 
 #: ../src/richtext/richtextfontpage.cpp:151
 #: ../src/richtext/richtextfontpage.cpp:153
 msgid "Lists font sizes in points."
-msgstr ""
+msgstr "Elenca le dimensioni in punti del font."
 
 #: ../src/richtext/richtextfontpage.cpp:132
 #: ../src/richtext/richtextfontpage.cpp:134
-#, fuzzy
 msgid "Lists the available fonts."
-msgstr "Spiacente, suggerimenti non disponibili!"
+msgstr "Elenca i font disponibili."
 
 #: ../src/common/fldlgcmn.cpp:269
 #, c-format
@@ -3922,12 +3856,12 @@ msgstr "Long conversion non supportata"
 #: ../src/richtext/richtextbulletspage.cpp:283
 #: ../src/richtext/richtextliststylepage.cpp:488
 msgid "Lower case letters"
-msgstr ""
+msgstr "Lettere minuscole"
 
 #: ../src/richtext/richtextbulletspage.cpp:285
 #: ../src/richtext/richtextliststylepage.cpp:490
 msgid "Lower case roman numerals"
-msgstr ""
+msgstr "Numeri romani minuscoli"
 
 #: ../src/gtk/mdi.cpp:466
 #: ../src/gtk1/mdi.cpp:462
@@ -4007,15 +3941,15 @@ msgstr "Nome"
 
 #: ../src/richtext/richtextstyledlg.cpp:218
 msgid "New &Character Style..."
-msgstr ""
+msgstr "Nuovo stile di &carattere..."
 
 #: ../src/richtext/richtextstyledlg.cpp:230
 msgid "New &List Style..."
-msgstr ""
+msgstr "Nuovo stile di &lista..."
 
 #: ../src/richtext/richtextstyledlg.cpp:224
 msgid "New &Paragraph Style..."
-msgstr ""
+msgstr "Nuovo stile di &paragrafo..."
 
 #: ../src/richtext/richtextstyledlg.cpp:570
 #: ../src/richtext/richtextstyledlg.cpp:575
@@ -4023,9 +3957,8 @@ msgstr ""
 #: ../src/richtext/richtextstyledlg.cpp:623
 #: ../src/richtext/richtextstyledlg.cpp:772
 #: ../src/richtext/richtextstyledlg.cpp:777
-#, fuzzy
 msgid "New Style"
-msgstr "Nuova elemento"
+msgstr "Nuovo stile"
 
 #: ../src/generic/dirdlgg.cpp:100
 msgid "New directory"
@@ -4152,7 +4085,7 @@ msgstr "Nessun colore inutilizzato nell'immagine."
 #: ../src/generic/helpext.cpp:309
 #, c-format
 msgid "No valid mappings found in the file \"%s\"."
-msgstr ""
+msgstr "Il file \"%s\" non contiene mappature valide."
 
 #: ../src/common/fmapbase.cpp:115
 msgid "Nordic (ISO-8859-10)"
@@ -4172,9 +4105,8 @@ msgid "Normal font:"
 msgstr "Carattere normale:"
 
 #: ../src/richtext/richtextfontpage.cpp:228
-#, fuzzy
 msgid "Not underlined"
-msgstr "sottolineato"
+msgstr "Non sottolineato"
 
 #: ../src/common/paper.cpp:117
 msgid "Note, 8 1/2 x 11 in"
@@ -4183,7 +4115,7 @@ msgstr "Nota, 8 1/2 x 11 pollici"
 #: ../src/richtext/richtextbulletspage.cpp:286
 #: ../src/richtext/richtextliststylepage.cpp:491
 msgid "Numbered outline"
-msgstr ""
+msgstr "Numeri gerarchici"
 
 #: ../src/mac/carbon/msgdlg.cpp:65
 #: ../src/msw/dialog.cpp:180
@@ -4449,7 +4381,7 @@ msgstr "Dimensione del foglio"
 
 #: ../src/richtext/richtextstyles.cpp:752
 msgid "Paragraph styles"
-msgstr ""
+msgstr "Stili di paragrafo"
 
 #: ../src/common/xtistrm.cpp:421
 msgid "Passing a already registered object to SetObject"
@@ -4465,19 +4397,17 @@ msgid "Passing an unkown object to GetObject"
 msgstr "Passato un oggetto sconosciuto a GetObject"
 
 #: ../src/richtext/richtextctrl.cpp:2077
-#, fuzzy
 msgid "Paste"
-msgstr "Incoll&a"
+msgstr "Incolla"
 
 #: ../src/common/stockitem.cpp:207
-#, fuzzy
 msgid "Paste selection"
-msgstr "Selezione"
+msgstr "Incolla la selezione"
 
 #: ../src/richtext/richtextbulletspage.cpp:168
 #: ../src/richtext/richtextliststylepage.cpp:221
 msgid "Peri&od"
-msgstr ""
+msgstr "Punt&o"
 
 #: ../src/generic/filedlgg.cpp:512
 msgid "Permissions"
@@ -4529,7 +4459,7 @@ msgstr "File PostScript"
 
 #: ../src/html/htmlhelp.cpp:509
 msgid "Preparing help window..."
-msgstr ""
+msgstr "Preparazione della finestra di aiuto in corso..."
 
 #: ../src/generic/fontdlgg.cpp:362
 #: ../src/html/helpwnd.cpp:1207
@@ -4650,9 +4580,8 @@ msgid "Question"
 msgstr "Domanda"
 
 #: ../src/common/stockitem.cpp:208
-#, fuzzy
 msgid "Quit this program"
-msgstr "Stampa questa pagina"
+msgstr "Esci dal programma"
 
 #: ../src/common/menucmn.cpp:71
 msgid "RETURN"
@@ -4674,7 +4603,7 @@ msgstr "Pronto"
 
 #: ../src/common/stockitem.cpp:209
 msgid "Redo last action"
-msgstr ""
+msgstr "Ripristina l'ultima azione"
 
 #: ../src/xrc/xmlres.cpp:681
 #, c-format
@@ -4714,7 +4643,7 @@ msgstr "Valore '%s' del registro di sistema già presente."
 #: ../src/richtext/richtextfontpage.cpp:222
 #: ../src/richtext/richtextfontpage.cpp:225
 msgid "Regular"
-msgstr ""
+msgstr "Normale"
 
 #: ../src/generic/helpext.cpp:461
 msgid "Relevant entries:"
@@ -4739,25 +4668,23 @@ msgstr "Il renderer \"%s\" ha versione %d.%d che non è compatibile, quindi non è
 
 #: ../src/richtext/richtextbuffer.cpp:2732
 msgid "Renumber List"
-msgstr ""
+msgstr "Rinumera la lista"
 
 #: ../src/common/stockitem.cpp:123
 msgid "Rep&lace"
 msgstr "&Sostituisci"
 
 #: ../src/richtext/richtextctrl.cpp:2206
-#, fuzzy
 msgid "Replace"
-msgstr "&Sostituisci"
+msgstr "Sostituisci"
 
 #: ../src/generic/fdrepdlg.cpp:181
 msgid "Replace &all"
 msgstr "Sostituisci t&utto"
 
 #: ../src/common/stockitem.cpp:206
-#, fuzzy
 msgid "Replace selection"
-msgstr "Sostituisci t&utto"
+msgstr "Sostituisci la selezione"
 
 #: ../src/generic/fdrepdlg.cpp:123
 msgid "Replace with:"
@@ -4773,9 +4700,8 @@ msgstr "Ritorna alla versione salvata"
 
 #: ../src/richtext/richtextbulletspage.cpp:197
 #: ../src/richtext/richtextliststylepage.cpp:250
-#, fuzzy
 msgid "Right"
-msgstr "Leggero"
+msgstr "Destra"
 
 #: ../src/generic/prntdlgg.cpp:886
 msgid "Right margin (mm):"
@@ -4786,7 +4712,7 @@ msgstr "Margine destro (mm):"
 #: ../src/richtext/richtextliststylepage.cpp:337
 #: ../src/richtext/richtextliststylepage.cpp:339
 msgid "Right-align text."
-msgstr ""
+msgstr "Allinea a destra"
 
 #: ../src/generic/fontdlgg.cpp:229
 msgid "Roman"
@@ -4795,7 +4721,7 @@ msgstr "Roman"
 #: ../src/richtext/richtextbulletspage.cpp:249
 #: ../src/richtext/richtextliststylepage.cpp:299
 msgid "S&tandard bullet name:"
-msgstr ""
+msgstr "Nome di una puntatura s&tandard:"
 
 #: ../src/common/menucmn.cpp:100
 msgid "SCROLL_LOCK"
@@ -4848,13 +4774,12 @@ msgid "Save as"
 msgstr "Salva con nome"
 
 #: ../src/common/stockitem.cpp:212
-#, fuzzy
 msgid "Save current document"
-msgstr "Scegliere una visualizzazione del documento"
+msgstr "Salvare il documento corrente"
 
 #: ../src/common/stockitem.cpp:213
 msgid "Save current document with a different filename"
-msgstr ""
+msgstr "Salva il documento con un nome differente"
 
 #: ../src/generic/logg.cpp:506
 msgid "Save log contents to file"
@@ -4935,17 +4860,17 @@ msgstr "Seleziona tutto"
 #: ../src/richtext/richtextfontpage.cpp:180
 #: ../src/richtext/richtextfontpage.cpp:182
 msgid "Select regular or bold."
-msgstr ""
+msgstr "Seleziona tra normale e grassetto."
 
 #: ../src/richtext/richtextfontpage.cpp:167
 #: ../src/richtext/richtextfontpage.cpp:169
 msgid "Select regular or italic style."
-msgstr ""
+msgstr "Seleziona tra normale e corsivo."
 
 #: ../src/richtext/richtextfontpage.cpp:193
 #: ../src/richtext/richtextfontpage.cpp:195
 msgid "Select underlining or no underlining."
-msgstr ""
+msgstr "Seleziona sottolineato/non sottolineato"
 
 #: ../src/motif/filedlg.cpp:223
 msgid "Selection"
@@ -4954,7 +4879,7 @@ msgstr "Selezione"
 #: ../src/richtext/richtextliststylepage.cpp:186
 #: ../src/richtext/richtextliststylepage.cpp:188
 msgid "Selects the list level to edit."
-msgstr ""
+msgstr "Seleziona il livello da modificare."
 
 #: ../src/common/cmdline.cpp:755
 #, c-format
@@ -4974,23 +4899,20 @@ msgid "Several active dialup connections found, choosing one randomly."
 msgstr "Trovate più connessioni attive, ne viene scelta una a caso."
 
 #: ../src/common/menucmn.cpp:318
-#, fuzzy
 msgid "Shift-"
-msgstr "shift"
+msgstr "Maiusc-"
 
 #: ../src/generic/dirdlgg.cpp:168
-#, fuzzy
 msgid "Show &hidden directories"
-msgstr "Visualizza le cartelle nascoste"
+msgstr "Visualizza le &cartelle nascoste"
 
 #: ../src/generic/filedlgg.cpp:1157
-#, fuzzy
 msgid "Show &hidden files"
-msgstr "Visualizza i file nascosti"
+msgstr "Visualizza i &file nascosti"
 
 #: ../src/common/stockitem.cpp:202
 msgid "Show about dialog"
-msgstr ""
+msgstr "Visualizza la finestra di informazioni sul programma"
 
 #: ../src/html/helpwnd.cpp:470
 msgid "Show all"
@@ -5012,29 +4934,29 @@ msgstr "Visualizza/nascondi la barra di navigazione"
 #: ../src/richtext/richtextsymboldlg.cpp:420
 #: ../src/richtext/richtextsymboldlg.cpp:422
 msgid "Shows a Unicode subset."
-msgstr ""
+msgstr "Visualizza un sottoinsieme di Unicode."
 
 #: ../src/richtext/richtextbulletspage.cpp:273
 #: ../src/richtext/richtextbulletspage.cpp:275
 #: ../src/richtext/richtextliststylepage.cpp:476
 #: ../src/richtext/richtextliststylepage.cpp:478
 msgid "Shows a preview of the bullet settings."
-msgstr ""
+msgstr "Visualizza l'anteprima delle impostazioni di puntatura."
 
 #: ../src/richtext/richtextfontpage.cpp:213
 #: ../src/richtext/richtextfontpage.cpp:215
 msgid "Shows a preview of the font settings."
-msgstr ""
+msgstr "Visualizza l'anteprima delle impostazioni del font."
 
 #: ../src/mac/carbon/fontdlg.cpp:517
 #: ../src/mac/carbon/fontdlg.cpp:519
 msgid "Shows a preview of the font."
-msgstr ""
+msgstr "Visualizza l'anteprima del font."
 
 #: ../src/richtext/richtextindentspage.cpp:303
 #: ../src/richtext/richtextindentspage.cpp:305
 msgid "Shows a preview of the paragraph settings."
-msgstr ""
+msgstr "Visualizza l'anteprima delle impostazioni di paragrafo."
 
 #: ../src/generic/fontdlgg.cpp:367
 #: ../src/generic/fontdlgg.cpp:369
@@ -5059,9 +4981,8 @@ msgid "Size"
 msgstr "Dimensione"
 
 #: ../src/mac/carbon/fontdlg.cpp:462
-#, fuzzy
 msgid "Size:"
-msgstr "Dimensione"
+msgstr "Dimensione:"
 
 #: ../src/generic/progdlgg.cpp:218
 #: ../src/generic/progdlgg.cpp:236
@@ -5102,7 +5023,7 @@ msgstr "Spiacente, l'anteprima di stampa richiede una stampante installata."
 #: ../src/richtext/richtextstyledlg.cpp:623
 #: ../src/richtext/richtextstyledlg.cpp:777
 msgid "Sorry, that name is taken. Please choose another."
-msgstr ""
+msgstr "Spiacente, il nome è già in uso, si prega di sceglierne uno differente."
 
 #: ../src/common/docview.cpp:1278
 #: ../src/common/docview.cpp:1628
@@ -5119,14 +5040,13 @@ msgid "Sound file '%s' is in unsupported format."
 msgstr "File sonoro '%s' ha un formato non supportato."
 
 #: ../src/richtext/richtextliststylepage.cpp:471
-#, fuzzy
 msgid "Spacing"
-msgstr "Ricerca in corso..."
+msgstr "Spaziatura"
 
 #: ../src/richtext/richtextbulletspage.cpp:289
 #: ../src/richtext/richtextliststylepage.cpp:494
 msgid "Standard"
-msgstr ""
+msgstr "Standard"
 
 #: ../src/common/paper.cpp:106
 msgid "Statement, 5 1/2 x 8 1/2 in"
@@ -5155,18 +5075,16 @@ msgid "String conversions not supported"
 msgstr "Conversione a stringa non supportata"
 
 #: ../src/richtext/richtextformatdlg.cpp:266
-#, fuzzy
 msgid "Style"
-msgstr "&Stile:"
+msgstr "Stile"
 
 #: ../include/wx/richtext/richtextstyledlg.h:42
 msgid "Style Organiser"
-msgstr ""
+msgstr "Gestore degli stili"
 
 #: ../src/mac/carbon/fontdlg.cpp:471
-#, fuzzy
 msgid "Style:"
-msgstr "&Stile:"
+msgstr "Stile:"
 
 #: ../src/xrc/xmlres.cpp:788
 #, c-format
@@ -5188,17 +5106,16 @@ msgstr "Svizzero"
 #: ../src/richtext/richtextbulletspage.cpp:287
 #: ../src/richtext/richtextliststylepage.cpp:492
 msgid "Symbol"
-msgstr ""
+msgstr "Simbolo"
 
 #: ../src/richtext/richtextbulletspage.cpp:237
 #: ../src/richtext/richtextliststylepage.cpp:288
-#, fuzzy
 msgid "Symbol &font:"
-msgstr "Carattere normale:"
+msgstr "Font del simbolo:"
 
 #: ../include/wx/richtext/richtextsymboldlg.h:44
 msgid "Symbols"
-msgstr ""
+msgstr "Simboli"
 
 #: ../src/common/menucmn.cpp:81
 msgid "TAB"
@@ -5244,7 +5161,7 @@ msgstr "Tabloid, 11 x 17 pollici"
 
 #: ../src/richtext/richtextformatdlg.cpp:284
 msgid "Tabs"
-msgstr ""
+msgstr "Tabulazioni"
 
 #: ../src/generic/fontdlgg.cpp:234
 msgid "Teletype"
@@ -5271,13 +5188,12 @@ msgstr "Il server FTP non supporta il comando PORT."
 #: ../src/richtext/richtextliststylepage.cpp:214
 #: ../src/richtext/richtextliststylepage.cpp:216
 msgid "The available bullet styles."
-msgstr ""
+msgstr "Tipi di puntatura disponibili."
 
 #: ../src/richtext/richtextstyledlg.cpp:195
 #: ../src/richtext/richtextstyledlg.cpp:197
-#, fuzzy
 msgid "The available styles."
-msgstr "Lo stile del carattere"
+msgstr "Gli stili disponibili."
 
 #: ../src/richtext/richtextbulletspage.cpp:201
 #: ../src/richtext/richtextbulletspage.cpp:203
@@ -5288,12 +5204,12 @@ msgstr "Lo stile del carattere"
 #: ../src/richtext/richtextliststylepage.cpp:275
 #: ../src/richtext/richtextliststylepage.cpp:277
 msgid "The bullet character."
-msgstr ""
+msgstr "Il carattere di puntatura"
 
 #: ../src/richtext/richtextsymboldlg.cpp:442
 #: ../src/richtext/richtextsymboldlg.cpp:444
 msgid "The character code."
-msgstr ""
+msgstr "Il codice del carattere."
 
 #: ../src/common/fontmap.cpp:201
 #, c-format
@@ -5314,7 +5230,7 @@ msgstr "Il formato '%d' degli appunti non esiste."
 #: ../src/richtext/richtextstylepage.cpp:127
 #: ../src/richtext/richtextstylepage.cpp:129
 msgid "The default style for the next paragraph."
-msgstr ""
+msgstr "Lo stile di default per il paragrafo successivo."
 
 #: ../src/generic/dirdlgg.cpp:229
 #, c-format
@@ -5347,9 +5263,8 @@ msgstr ""
 #: ../src/richtext/richtextindentspage.cpp:223
 #: ../src/richtext/richtextliststylepage.cpp:398
 #: ../src/richtext/richtextliststylepage.cpp:400
-#, fuzzy
 msgid "The first line indent."
-msgstr "Il corpo del font"
+msgstr "Il rientro della prima riga."
 
 #: ../src/generic/fontdlgg.cpp:321
 #: ../src/generic/fontdlgg.cpp:323
@@ -5364,7 +5279,7 @@ msgstr "La famiglia di caratteri"
 #: ../src/richtext/richtextsymboldlg.cpp:404
 #: ../src/richtext/richtextsymboldlg.cpp:406
 msgid "The font from which to take the symbol."
-msgstr ""
+msgstr "Il font da cui prendere il simbolo."
 
 #: ../src/generic/fontdlgg.cpp:334
 #: ../src/generic/fontdlgg.cpp:336
@@ -5375,9 +5290,8 @@ msgstr "Il corpo del font"
 
 #: ../src/mac/carbon/fontdlg.cpp:466
 #: ../src/mac/carbon/fontdlg.cpp:468
-#, fuzzy
 msgid "The font size in points."
-msgstr "Il corpo del font"
+msgstr "La dimensione in punti del font."
 
 #: ../src/generic/fontdlgg.cpp:293
 #: ../src/generic/fontdlgg.cpp:295
@@ -5393,21 +5307,20 @@ msgstr "Il peso del carattere"
 #: ../src/richtext/richtextindentspage.cpp:211
 #: ../src/richtext/richtextliststylepage.cpp:387
 #: ../src/richtext/richtextliststylepage.cpp:389
-#, fuzzy
 msgid "The left indent."
-msgstr "Il peso del carattere"
+msgstr "Il rientro dal margine sinistro."
 
 #: ../src/richtext/richtextindentspage.cpp:295
 #: ../src/richtext/richtextindentspage.cpp:297
 #: ../src/richtext/richtextliststylepage.cpp:466
 #: ../src/richtext/richtextliststylepage.cpp:468
 msgid "The line spacing."
-msgstr ""
+msgstr "L'interlinea"
 
 #: ../src/richtext/richtextbulletspage.cpp:265
 #: ../src/richtext/richtextbulletspage.cpp:267
 msgid "The list item number."
-msgstr ""
+msgstr "Il numero della voce della lista."
 
 #: ../src/common/filename.cpp:1224
 #, c-format
@@ -5424,7 +5337,7 @@ msgstr[1] ""
 #: ../src/richtext/richtextsymboldlg.cpp:462
 #: ../src/richtext/richtextsymboldlg.cpp:464
 msgid "The range to show."
-msgstr ""
+msgstr "Intervallo da visualizzare."
 
 #: ../src/generic/dbgrptg.cpp:309
 msgid ""
@@ -5444,48 +5357,44 @@ msgstr "Il parametro '%s' è obbligatorio."
 #: ../src/richtext/richtextliststylepage.cpp:409
 #: ../src/richtext/richtextliststylepage.cpp:411
 msgid "The right indent."
-msgstr ""
+msgstr "Rientro da destra."
 
 #: ../src/richtext/richtextindentspage.cpp:279
 #: ../src/richtext/richtextliststylepage.cpp:449
 #: ../src/richtext/richtextliststylepage.cpp:451
 msgid "The spacing after the paragraph."
-msgstr ""
+msgstr "Spazio dopo il paragrafo."
 
 #: ../src/richtext/richtextindentspage.cpp:266
 #: ../src/richtext/richtextindentspage.cpp:268
 #: ../src/richtext/richtextliststylepage.cpp:438
 #: ../src/richtext/richtextliststylepage.cpp:440
 msgid "The spacing before the paragraph."
-msgstr ""
+msgstr "Spazio prima del paragrafo."
 
 #: ../src/richtext/richtextstylepage.cpp:107
 #: ../src/richtext/richtextstylepage.cpp:109
-#, fuzzy
 msgid "The style name."
-msgstr "Lo stile del carattere"
+msgstr "Il nome dello stile."
 
 #: ../src/richtext/richtextstylepage.cpp:117
 #: ../src/richtext/richtextstylepage.cpp:119
 msgid "The style on which this style is based."
-msgstr ""
+msgstr "Lo stile su cui si basa questo stile"
 
 #: ../src/richtext/richtextstyledlg.cpp:207
 #: ../src/richtext/richtextstyledlg.cpp:209
-#, fuzzy
 msgid "The style preview."
-msgstr "Visualizza l'anteprima del font"
+msgstr "Le anteprime degli stili."
 
 #: ../src/richtext/richtexttabspage.cpp:117
 #: ../src/richtext/richtexttabspage.cpp:119
-#, fuzzy
 msgid "The tab position."
-msgstr "Il corpo del font"
+msgstr "Il punto di tabulazione."
 
 #: ../src/richtext/richtexttabspage.cpp:123
-#, fuzzy
 msgid "The tab positions."
-msgstr "Il corpo del font"
+msgstr "I punti di tabulazione."
 
 #: ../src/common/textcmn.cpp:254
 #: ../src/richtext/richtextctrl.cpp:1781
@@ -5558,7 +5467,7 @@ msgstr "Per:"
 
 #: ../src/richtext/richtextbuffer.cpp:4953
 msgid "Too many EndStyle calls!"
-msgstr ""
+msgstr "Troppe chiamate a EndStyle!"
 
 #: ../src/common/imagpng.cpp:294
 msgid "Too many colours in PNG, the image may be slightly blurred."
@@ -5570,7 +5479,7 @@ msgstr "Margine superiore (mm):"
 
 #: ../src/generic/aboutdlgg.cpp:79
 msgid "Translations by "
-msgstr ""
+msgstr "Tradotto da"
 
 #: ../src/common/fs_mem.cpp:193
 #, c-format
@@ -5592,14 +5501,13 @@ msgstr "Tipo"
 
 #: ../src/richtext/richtextfontpage.cpp:126
 #: ../src/richtext/richtextfontpage.cpp:128
-#, fuzzy
 msgid "Type a font name."
-msgstr "La famiglia di caratteri"
+msgstr "Digita un nome di font"
 
 #: ../src/richtext/richtextfontpage.cpp:144
 #: ../src/richtext/richtextfontpage.cpp:146
 msgid "Type a size in points."
-msgstr ""
+msgstr "Digita la dimensione in punti."
 
 #: ../src/common/xtistrm.cpp:277
 #: ../src/common/xtixml.cpp:348
@@ -5622,7 +5530,7 @@ msgstr "ASCII"
 #: ../src/common/strconv.cpp:2771
 #: ../src/common/strconv.cpp:2775
 msgid "Unable to create TextEncodingConverter"
-msgstr ""
+msgstr "Impossibile creare TextEncodingConverter"
 
 #: ../src/html/htmlwin.cpp:508
 #, c-format
@@ -5646,12 +5554,12 @@ msgstr "Sottolineato"
 
 #: ../src/common/stockitem.cpp:210
 msgid "Undo last action"
-msgstr ""
+msgstr "Annulla l'ultima azione"
 
 #: ../src/common/cmdline.cpp:691
-#, fuzzy, c-format
+#, c-format
 msgid "Unexpected characters following option '%s'."
-msgstr "Parametro '%s' non atteso"
+msgstr "Caratteri non attesi dopo l'opzione '%s'."
 
 #: ../contrib/src/deprecated/resource.cpp:1848
 #: ../contrib/src/deprecated/resource.cpp:1862
@@ -5787,12 +5695,12 @@ msgstr "&Su"
 #: ../src/richtext/richtextbulletspage.cpp:282
 #: ../src/richtext/richtextliststylepage.cpp:487
 msgid "Upper case letters"
-msgstr ""
+msgstr "Lettere maiuscole"
 
 #: ../src/richtext/richtextbulletspage.cpp:284
 #: ../src/richtext/richtextliststylepage.cpp:489
 msgid "Upper case roman numerals"
-msgstr ""
+msgstr "Numeri romani maiuscoli"
 
 #: ../src/common/cmdline.cpp:975
 #, c-format
@@ -5804,7 +5712,7 @@ msgstr "Utilizzo: %s"
 #: ../src/richtext/richtextliststylepage.cpp:358
 #: ../src/richtext/richtextliststylepage.cpp:360
 msgid "Use the current alignment setting."
-msgstr ""
+msgstr "Utilizza le impostazioni di allineamento correnti."
 
 #: ../src/common/valtext.cpp:177
 msgid "Validation conflict"
@@ -6348,7 +6256,7 @@ msgstr "errore nel codice di controllo"
 
 #: ../src/common/tarstrm.cpp:744
 msgid "checksum failure reading tar header block"
-msgstr "checksum errato durante la lettura dell'intestazione del file tar"
+msgstr "checksum errato durante la lettura dell'intestazione del file TAR"
 
 #: ../src/html/chm.cpp:348
 msgid "compression error"
@@ -6500,7 +6408,7 @@ msgstr "genera messaggi del registro dettagliati"
 #: ../src/richtext/richtextbuffer.cpp:7520
 #: ../src/richtext/richtextbuffer.cpp:7591
 msgid "image"
-msgstr ""
+msgstr "immagine"
 
 #: ../src/common/tarstrm.cpp:721
 msgid "incomplete header block in tar"
@@ -6512,7 +6420,7 @@ msgstr "Event handler si stringa non corretto, manca punto"
 
 #: ../src/common/tarstrm.cpp:1297
 msgid "incorrect size given for tar entry"
-msgstr "valore della dimensione errato per una voce del file tar"
+msgstr "valore della dimensione errato per una voce del file TAR"
 
 #: ../src/msw/dialup.cpp:882
 msgid "initiate"
@@ -6520,7 +6428,7 @@ msgstr "iniziare"
 
 #: ../src/common/tarstrm.cpp:917
 msgid "invalid data in extended tar header"
-msgstr "dati errati nell'intestazione estesa del file tar"
+msgstr "dati errati nell'intestazione estesa del file TAR"
 
 #: ../src/common/file.cpp:453
 msgid "invalid eof() return value."
@@ -6672,7 +6580,7 @@ msgstr "str"
 #: ../src/common/tarstrm.cpp:1417
 #: ../src/common/tarstrm.cpp:1439
 msgid "tar entry not open"
-msgstr ""
+msgstr "voce del file TAR non aperta"
 
 #: ../src/common/datetime.cpp:3928
 msgid "tenth"
@@ -6797,7 +6705,7 @@ msgstr "wxGetTimeOfDay fallita."
 
 #: ../include/wx/richtext/richtextbulletspage.h:39
 msgid "wxRichTextBulletsPage"
-msgstr ""
+msgstr "Puntatura e numerazione"
 
 #: ../include/wx/richtext/richtextfontpage.h:38
 #: ../include/wx/richtext/richtextindentspage.h:37
@@ -6837,7 +6745,7 @@ msgstr "wxWidgets non può aprire il display. Abbandona."
 
 #: ../src/richtext/richtextsymboldlg.cpp:433
 msgid "xxxx"
-msgstr ""
+msgstr "xxxx"
 
 #: ../src/common/datetime.cpp:3747
 msgid "yesterday"
