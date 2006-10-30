@@ -59,7 +59,7 @@ clean:
 	rm -f collpane
 
 collpane: $(COLLPANE_OBJECTS)
-	$(CXX) -o $@ $(COLLPANE_OBJECTS) $(LDFLAGS)   `$(WX_CONFIG) --libs core,base`
+	$(CXX) -o $@ $(COLLPANE_OBJECTS) $(LDFLAGS)   `$(WX_CONFIG) --libs adv,core,base`
 
 collpane_collpane.o: ./collpane.cpp
 	$(CXX) -c -o $@ $(COLLPANE_CXXFLAGS) $(CPPDEPS) $<
