@@ -373,11 +373,7 @@ caret.
 \item As the selection is expanded, the text jumps slightly due to kerning differences between
 drawing a single text string versus drawing several fragments separately. This could
 be improved by using wxDC::GetPartialTextExtents to calculate exactly where the separate fragments
-should be drawn.
-Alternatively, it might be possible to use the difference between the width of text from
-a to b+1, versus the width of the text from a to b added to the width of b to b+1.
-Note that this problem also applies to separation of text fragments due to difference in their attributes.
-\item Selection doesn't work properly for text that contains tabs.
+should be drawn. Note that this problem also applies to separation of text fragments due to difference in their attributes.
 \end{itemize}
 
 \wxheading{Features}
@@ -386,6 +382,8 @@ This is a list of some of the features that have yet to be implemented. Help wit
 
 \begin{itemize}\itemsep=0pt
 \item RTF input and output
+\item Conversion from HTML
+\item Open Office input and output
 \item Floating images, with content wrapping around them
 \item A ruler control
 \item Standard editing toolbars
@@ -393,6 +391,7 @@ This is a list of some of the features that have yet to be implemented. Help wit
 \item Bitmap bullets
 \item Borders
 \item Text frames
+\item Justified text, in print/preview at least
 \end{itemize}
 
 There are also things that could be done to take advantage of the underlying text capabilities of the platform;
