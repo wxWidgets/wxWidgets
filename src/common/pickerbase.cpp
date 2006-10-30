@@ -119,7 +119,7 @@ void wxPickerBase::PostCreation()
     m_sizer->Add(m_picker, HasTextCtrl() ? 0 : 1, GetDefaultPickerCtrlFlag(), 5);
 
     SetSizer(m_sizer);
-    m_sizer->SetSizeHints(this);
+    SetMinSize( m_sizer->GetMinSize() );
 }
 
 void wxPickerBase::OnTextCtrlKillFocus(wxFocusEvent &)
