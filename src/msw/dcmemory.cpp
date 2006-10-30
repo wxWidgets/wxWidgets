@@ -47,16 +47,6 @@ IMPLEMENT_DYNAMIC_CLASS(wxMemoryDC, wxDC)
 // wxMemoryDC
 // ----------------------------------------------------------------------------
 
-wxMemoryDC::wxMemoryDC( const wxBitmap& bitmap )
-{
-    CreateCompatible(NULL);
-
-    Init();
-    
-    if ( bitmap.IsOk() )
-        SelectObject(bitmap);
-}
-
 wxMemoryDC::wxMemoryDC(wxDC *dc)
 {
     wxCHECK_RET( dc, _T("NULL dc in wxMemoryDC ctor") );
@@ -91,7 +81,7 @@ bool wxMemoryDC::CreateCompatible(wxDC *dc)
     return m_ok;
 }
 
-void wxMemoryDC::SelectObject(const wxBitmap& bitmap)
+void wxMemoryDC::DoSelect( const wxBitmap& bitmap)
 {
     // select old bitmap out of the device context
     if ( m_oldBitmap )

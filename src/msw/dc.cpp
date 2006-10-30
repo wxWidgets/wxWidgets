@@ -930,7 +930,7 @@ void wxDC::DoDrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
         // transparent pen) one pixel smaller in both directions and we want them
         // to have the same size regardless of which pen is used - adjust
 
-        // I wonder if this shouldn´t be done after the LOG2DEV() conversions. RR.
+        // I wonder if this shouldnt be done after the LOG2DEV() conversions. RR.
         if ( m_pen.GetStyle() == wxTRANSPARENT )
         {
             // Apparently not needed for WinCE (see e.g. Life! demo)
@@ -1245,7 +1245,8 @@ void wxDC::DoDrawBitmap( const wxBitmap &bmp, wxCoord x, wxCoord y, bool useMask
             // Rather than reproduce wxDC::Blit, let's do it at the wxWin API
             // level
             wxMemoryDC memDC;
-            memDC.SelectObject(bmp);
+
+            memDC.SelectObjectAsSource(bmp);
 
             Blit(x, y, width, height, &memDC, 0, 0, wxCOPY, useMask);
 

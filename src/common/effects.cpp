@@ -102,7 +102,7 @@ bool wxEffects::TileBitmap(const wxRect& rect, wxDC& dc, const wxBitmap& bitmap)
     }
 #endif // wxUSE_PALETTE
 
-    dcMem.SelectObject(bitmap);
+    dcMem.SelectObjectAsSource(bitmap);
 
     int i, j;
     for (i = rect.x; i < rect.x + rect.width; i += w)

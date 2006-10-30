@@ -28,15 +28,6 @@ IMPLEMENT_DYNAMIC_CLASS(wxMemoryDC, wxDC)
 // Memory DC
 /////////////////////////////////////////////////////////////////////////////
 
-wxMemoryDC::wxMemoryDC( const wxBitmap& bitmap )
-{
-    CreateCompatible(NULL);
-    Init();
-
-    if ( bitmap.IsOk() )
-        SelectObject(bitmap);
-} // end of wxMemoryDC::wxMemoryDC
-
 wxMemoryDC::wxMemoryDC(
   wxDC*                             pOldDC
 )
@@ -121,7 +112,7 @@ bool wxMemoryDC::CreateCompatible( wxDC* WXUNUSED(pDC) )
     return m_ok;
 } // end of wxMemoryDC::CreateCompatible
 
-void wxMemoryDC::SelectObject(
+void wxMemoryDC::DoSelect(
   const wxBitmap&                   rBitmap
 )
 {
@@ -168,6 +159,7 @@ void wxMemoryDC::SelectObject(
                    );
         m_vSelectedBitmap.SetSelectedInto(NULL);
     }
+
     m_vSelectedBitmap = rBitmap;
 
 

@@ -23,13 +23,13 @@ class WXDLLIMPEXP_CORE wxMemoryDC;
 // wxMemoryDC
 //-----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxMemoryDC : public wxWindowDC
+class WXDLLIMPEXP_CORE wxMemoryDC : public wxWindowDC, public wxMemoryDCBase
 {
 public:
-    wxMemoryDC( const wxBitmap& bitmap = wxNullBitmap );
+    wxMemoryDC() : wxWindowDC() { Init(); }
+    wxMemoryDC(wxBitmap& bitmap) : wxWindowDC() { Init(); SelectObject(bitmap); }
     wxMemoryDC( wxDC *dc ); // Create compatible DC
     virtual ~wxMemoryDC();
-    virtual void SelectObject( const wxBitmap& bitmap );
 
     // these get reimplemented for mono-bitmaps to behave
     // more like their Win32 couterparts. They now interpret
@@ -47,6 +47,10 @@ public:
 
 protected:
     void DoGetSize( int *width, int *height ) const;
+    virtual void DoSelect(const wxBitmap& bitmap);
+
+private:
+    void Init();
     virtual wxBitmap DoGetAsBitmap(const wxRect *subrect) const 
     { return subrect == NULL ? GetSelectedBitmap() : GetSelectedBitmap().GetSubBitmap(*subrect); }
 

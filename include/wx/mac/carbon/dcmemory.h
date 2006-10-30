@@ -14,15 +14,16 @@
 
 #include "wx/dcclient.h"
 
-class WXDLLEXPORT wxMemoryDC: public wxPaintDC
+class WXDLLEXPORT wxMemoryDC: public wxPaintDC, public wxMemoryDCBase
 {
   DECLARE_DYNAMIC_CLASS(wxMemoryDC)
 
-  public:
-    wxMemoryDC( const wxBitmap& bitmap = wxNullBitmap );
+public:
+    wxMemoryDC() { Init(); }
+    wxMemoryDC(wxBitmap& bitmap) { Init(); SelectObject(bitmap); }
     wxMemoryDC( wxDC *dc ); // Create compatible DC
     virtual ~wxMemoryDC(void);
-    virtual void SelectObject( const wxBitmap& bitmap );
+
     const wxBitmap& GetSelectedBitmap() const { return m_selected; }
     wxBitmap    GetSelectedBitmap() { return m_selected; }
 
@@ -32,8 +33,11 @@ protected:
     virtual void DoGetSize( int *width, int *height ) const;
     virtual wxBitmap DoGetAsBitmap(const wxRect *subrect) const 
     { return subrect == NULL ? GetSelectedBitmap() : GetSelectedBitmap().GetSubBitmap(*subrect); }
+    virtual void DoSelect(const wxBitmap& bitmap);
 
-  private:
+private:
+    void Init();
+
     wxBitmap  m_selected;
 };
 

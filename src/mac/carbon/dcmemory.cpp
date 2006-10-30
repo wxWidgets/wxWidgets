@@ -22,8 +22,7 @@
 
 IMPLEMENT_DYNAMIC_CLASS(wxMemoryDC,wxPaintDC)
 
-wxMemoryDC::wxMemoryDC( const wxBitmap& bitmap )
-: m_selected()
+void wxMemoryDC::Init()
 {
     m_ok = true;
     SetBackground(*wxWHITE_BRUSH);
@@ -31,20 +30,12 @@ wxMemoryDC::wxMemoryDC( const wxBitmap& bitmap )
     SetPen(*wxBLACK_PEN);
     SetFont(*wxNORMAL_FONT);
     m_ok = false;
-
-    if ( bitmap.IsOk() )
-        SelectObject(bitmap);
 }
 
 wxMemoryDC::wxMemoryDC( wxDC *WXUNUSED(dc) )
 : m_selected()
 {
-    m_ok = true;
-    SetBackground(*wxWHITE_BRUSH);
-    SetBrush(*wxWHITE_BRUSH);
-    SetPen(*wxBLACK_PEN);
-    SetFont(*wxNORMAL_FONT);
-    m_ok = false;
+    Init();
 }
 
 wxMemoryDC::~wxMemoryDC()
@@ -63,7 +54,7 @@ wxMemoryDC::~wxMemoryDC()
     }
 }
 
-void wxMemoryDC::SelectObject( const wxBitmap& bitmap )
+void wxMemoryDC::DoSelect( const wxBitmap& bitmap )
 {
     if ( m_selected.Ok() )
     {

@@ -24,25 +24,21 @@
 
 IMPLEMENT_DYNAMIC_CLASS(wxMemoryDC,wxWindowDC)
 
-wxMemoryDC::wxMemoryDC( const wxBitmap& bitmap )
-    : wxDC()
+void wxMemoryDC::Init()
 {
     m_isMemDC = true;
-
-    if ( bitmap.IsOk() )
-        SelectObject(bitmap);
 }
 
 wxMemoryDC::wxMemoryDC(wxDC *WXUNUSED(dc)) : wxDC()
 {
-    m_isMemDC = true;
+    Init();
 }
 
 wxMemoryDC::~wxMemoryDC()
 {
 }
 
-void wxMemoryDC::SelectObject(const wxBitmap& bitmap)
+void wxMemoryDC::DoSelect(const wxBitmap& bitmap)
 {
     if ( bitmap.Ok() )
     {

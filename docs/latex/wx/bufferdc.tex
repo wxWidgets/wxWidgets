@@ -62,7 +62,7 @@ buffering on the systems which already do it automatically.
 
 \func{}{wxBufferedDC}{\param{wxDC *}{dc}, \param{const wxSize\& }{area}, \param{int }{style = wxBUFFER\_CLIENT\_AREA}}
 
-\func{}{wxBufferedDC}{\param{wxDC *}{dc}, \param{const wxBitmap\& }{buffer}, \param{int }{style = wxBUFFER\_CLIENT\_AREA}}
+\func{}{wxBufferedDC}{\param{wxDC *}{dc}, \param{wxBitmap\& }{buffer}, \param{int }{style = wxBUFFER\_CLIENT\_AREA}}
 
 If you use the first, default, constructor, you must call one of the 
 \helpref{Init}{wxbuffereddcinit} methods later in order to use the object.
@@ -93,7 +93,7 @@ device context).}
 
 \func{void}{Init}{\param{wxDC *}{dc}, \param{const wxSize\& }{area}, \param{int }{style = wxBUFFER\_CLIENT\_AREA}}
 
-\func{void}{Init}{\param{wxDC *}{dc}, \param{const wxBitmap\& }{buffer}, \param{int }{style = wxBUFFER\_CLIENT\_AREA}}
+\func{void}{Init}{\param{wxDC *}{dc}, \param{wxBitmap\& }{buffer}, \param{int }{style = wxBUFFER\_CLIENT\_AREA}}
 
 These functions initialize the object created using the default constructor.
 Please see \helpref{constructors documentation}{wxbuffereddcctor} for details.
@@ -143,7 +143,7 @@ already does this internally for the real underlying wxPaintDC.
 
 \membersection{wxBufferedPaintDC::wxBufferedPaintDC}\label{wxbufferedpaintdcctor}
 
-\func{}{wxBufferedPaintDC}{\param{wxWindow *}{window}, \param{const wxBitmap\& }{buffer}, \param{int }{style = wxBUFFER\_CLIENT\_AREA}}
+\func{}{wxBufferedPaintDC}{\param{wxWindow *}{window}, \param{wxBitmap\& }{buffer}, \param{int }{style = wxBUFFER\_CLIENT\_AREA}}
 
 \func{}{wxBufferedPaintDC}{\param{wxWindow *}{window}, \param{int }{style = wxBUFFER\_CLIENT\_AREA}}
 

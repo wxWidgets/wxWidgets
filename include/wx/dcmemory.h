@@ -14,6 +14,39 @@
 
 #include "wx/defs.h"
 
+// NOTE: different native implementations of wxMemoryDC will derive from
+//       different wxDC classes (wxPaintDC, wxWindowDC, etc), so that
+//       we cannot derive wxMemoryDCBase from wxDC and then use it as the
+//       only base class for native impl of wxMemoryDC...
+class wxMemoryDCBase
+{
+public:
+    wxMemoryDCBase() { }
+
+    // avoid warnings about having virtual functions but non virtual dtor
+    virtual ~wxMemoryDCBase() { }
+
+    // select the given bitmap to draw on it
+    void SelectObject(wxBitmap& bmp)
+    {
+        // make sure that the given wxBitmap is not sharing its data with other
+        // wxBitmap instances as its contents will be modified by any drawing
+        // operation done on this DC
+        if (bmp.IsOk())
+            bmp.UnShare();
+
+        DoSelect(bmp);
+    }
+
+    // select the given bitmap for read-only
+    virtual void SelectObjectAsSource(const wxBitmap& bmp)
+    {
+        DoSelect(bmp);
+    }
+
+    virtual void DoSelect(const wxBitmap& bmp) = 0;
+};
+
 #if defined(__WXPALMOS__)
 #include "wx/palmos/dcmemory.h"
 #elif defined(__WXMSW__)

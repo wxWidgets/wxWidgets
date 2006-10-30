@@ -21,8 +21,7 @@
 
 IMPLEMENT_DYNAMIC_CLASS(wxMemoryDC,wxWindowDC)
 
-wxMemoryDC::wxMemoryDC( const wxBitmap& bitmap )
-   : wxWindowDC()
+void wxMemoryDC::Init()
 {
     m_ok = false;
 
@@ -34,22 +33,12 @@ wxMemoryDC::wxMemoryDC( const wxBitmap& bitmap )
     pango_context_set_language( m_context, gtk_get_default_language() );
     m_layout = pango_layout_new( m_context );
     m_fontdesc = pango_font_description_copy( pango_context_get_font_description( m_context ) );
-
-    if ( bitmap.IsOk() )
-        SelectObject(bitmap);
 }
 
 wxMemoryDC::wxMemoryDC( wxDC *WXUNUSED(dc) )
   : wxWindowDC()
 {
-    m_ok = false;
-
-    m_cmap = gtk_widget_get_default_colormap();
-
-    m_context = gdk_pango_context_get();
-    pango_context_set_language( m_context, gtk_get_default_language() );
-    m_layout = pango_layout_new( m_context );
-    m_fontdesc = pango_font_description_copy( pango_context_get_font_description( m_context ) );
+    Init();
 }
 
 wxMemoryDC::~wxMemoryDC()
@@ -57,9 +46,10 @@ wxMemoryDC::~wxMemoryDC()
     g_object_unref(m_context);
 }
 
-void wxMemoryDC::SelectObject( const wxBitmap& bitmap )
+void wxMemoryDC::DoSelect( const wxBitmap& bitmap )
 {
     Destroy();
+
     m_selected = bitmap;
     if (m_selected.Ok())
     {

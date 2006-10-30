@@ -23,13 +23,13 @@ class WXDLLEXPORT wxMemoryDC;
 // wxMemoryDC
 //-----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxMemoryDC : public wxDC
+class WXDLLEXPORT wxMemoryDC : public wxDC, public wxMemoryDCBase
 {
 public:
-    wxMemoryDC( const wxBitmap& bitmap = wxNullBitmap );
+    wxMemoryDC() { Init(); }
+    wxMemoryDC(wxBitmap& bitmap) { Init(); SelectObject(bitmap); }
     wxMemoryDC(wxDC *dc); // Create compatible DC
     virtual ~wxMemoryDC();
-    virtual void SelectObject(const wxBitmap& bitmap);
 
     // these get reimplemented for mono-bitmaps to behave
     // more like their Win32 couterparts. They now interpret
@@ -45,7 +45,12 @@ public:
     
     wxBitmap GetSelectedObject() const { return m_selected; }
 
+protected:
+    virtual void DoSelect(const wxBitmap& bitmap);
+
 private:
+    void Init();
+
     DECLARE_DYNAMIC_CLASS(wxMemoryDC)
 };
 

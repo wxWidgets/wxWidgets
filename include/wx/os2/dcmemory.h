@@ -14,18 +14,20 @@
 
 #include "wx/dcclient.h"
 
-class WXDLLEXPORT wxMemoryDC: public wxDC
+class WXDLLEXPORT wxMemoryDC: public wxDC, public wxMemoryDCBase
 {
 public:
-    wxMemoryDC( const wxBitmap& bitmap = wxNullBitmap );
+    wxMemoryDC() { CreateCompatible(NULL); Init(); }
+    wxMemoryDC(wxBitmap& bitmap) { CreateCompatible(NULL); Init(); SelectObject(bitmap); }
     wxMemoryDC(wxDC* pDC); // Create compatible DC
 
-    virtual void SelectObject(const wxBitmap& rBitmap);
 protected:
     // override some base class virtuals
     virtual void DoGetSize( int* pWidth
                            ,int* pHeight
                           ) const;
+    virtual void DoSelect(const wxBitmap& bitmap);
+
     // create DC compatible with the given one or screen if dc == NULL
     bool CreateCompatible(wxDC* pDC);
 

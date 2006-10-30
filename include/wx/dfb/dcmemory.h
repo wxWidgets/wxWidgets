@@ -14,19 +14,23 @@
 #include "wx/dc.h"
 #include "wx/bitmap.h"
 
-class WXDLLIMPEXP_CORE wxMemoryDC : public wxDC
+class WXDLLIMPEXP_CORE wxMemoryDC : public wxDC, public wxMemoryDCBase
 {
 public:
-    wxMemoryDC( const wxBitmap& bitmap = wxNullBitmap );
+    wxMemoryDC() { Init(); }
+    wxMemoryDC(wxBitmap& bitmap) { Init(); SelectObject(bitmap); }
     wxMemoryDC(wxDC *dc); // create compatible DC
-
-    virtual void SelectObject(const wxBitmap& bitmap);
 
     // implementation from now on:
 
     wxBitmap GetSelectedObject() const { return m_bmp; }
 
+protected:
+    virtual void DoSelect(const wxBitmap& bitmap);
+
 private:
+    void Init();
+
     wxBitmap m_bmp;
 
     DECLARE_DYNAMIC_CLASS(wxMemoryDC)

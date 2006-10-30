@@ -14,15 +14,19 @@
 
 #include "wx/dc.h"
 
-class WXDLLEXPORT wxMemoryDC: public wxDC
+class WXDLLEXPORT wxMemoryDC: public wxDC, public wxMemoryDCBase
 {
     DECLARE_DYNAMIC_CLASS(wxMemoryDC)
+
 public:
-    wxMemoryDC( const wxBitmap& bitmap = wxNullBitmap );
+    wxMemoryDC() { Init(); }
+    wxMemoryDC(wxBitmap& bitmap) { Init(); SelectObject(bitmap); }
     wxMemoryDC( wxDC *dc ); // Create compatible DC
     virtual ~wxMemoryDC(void);
-    virtual void SelectObject(const wxBitmap& bitmap);
+
     virtual void DoGetSize(int *width, int *height) const;
+    virtual void DoSelect(const wxBitmap& bitmap);
+
 protected:
     wxBitmap m_selectedBitmap;
     WX_NSImage m_cocoaNSImage;
@@ -34,6 +38,9 @@ protected:
     virtual bool CocoaDoBlitOnFocusedDC(wxCoord xdest, wxCoord ydest,
         wxCoord width, wxCoord height, wxCoord xsrc, wxCoord ysrc,
         int logicalFunc, bool useMask, wxCoord xsrcMask, wxCoord ysrcMask);
+
+private:
+    void Init();
 };
 
 #endif

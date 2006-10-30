@@ -399,7 +399,8 @@ void wxPrinterDC::DoDrawBitmap(const wxBitmap& bmp,
     {
         // no support for StretchDIBits() or an error occurred if we got here
         wxMemoryDC memDC;
-        memDC.SelectObject(bmp);
+
+        memDC.SelectObjectAsSource(bmp);
 
         Blit(x, y, width, height, &memDC, 0, 0, wxCOPY, useMask);
 

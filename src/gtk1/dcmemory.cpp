@@ -21,33 +21,27 @@
 
 IMPLEMENT_DYNAMIC_CLASS(wxMemoryDC,wxWindowDC)
 
-wxMemoryDC::wxMemoryDC( const wxBitmap& bitmap )
-    : wxWindowDC()
+void wxMemoryDC::Init()
 {
     m_ok = false;
 
     m_cmap = gtk_widget_get_default_colormap();
-
-    if ( bitmap.IsOk() )
-        SelectObject(bitmap);
 }
 
 wxMemoryDC::wxMemoryDC( wxDC *WXUNUSED(dc) )
           : wxWindowDC()
 {
-    m_ok = false;
-
-    m_cmap = gtk_widget_get_default_colormap();
-
+    Init();
 }
 
 wxMemoryDC::~wxMemoryDC()
 {
 }
 
-void wxMemoryDC::SelectObject( const wxBitmap& bitmap )
+void wxMemoryDC::DoSelect( const wxBitmap& bitmap )
 {
     Destroy();
+
     m_selected = bitmap;
     if (m_selected.Ok())
     {

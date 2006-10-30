@@ -23,8 +23,7 @@
 
 IMPLEMENT_DYNAMIC_CLASS(wxMemoryDC,wxWindowDC)
 
-wxMemoryDC::wxMemoryDC( const wxBitmap& bitmap )
-    : wxWindowDC()
+void wxMemoryDC::Init()
 {
     m_ok = false;
 
@@ -32,27 +31,19 @@ wxMemoryDC::wxMemoryDC( const wxBitmap& bitmap )
 
     int screen = DefaultScreen( wxGlobalDisplay() );
     m_cmap = (WXColormap) DefaultColormap( wxGlobalDisplay(), screen );
-
-    if ( bitmap.IsOk() )
-        SelectObject(bitmap);
 }
 
 wxMemoryDC::wxMemoryDC( wxDC *WXUNUSED(dc) )
   : wxWindowDC()
 {
-    m_ok = false;
-
-    m_display = (WXDisplay *) wxGlobalDisplay();
-
-    int screen = DefaultScreen( wxGlobalDisplay() );
-    m_cmap = (WXColormap) DefaultColormap( wxGlobalDisplay(), screen );
+    Init();
 }
 
 wxMemoryDC::~wxMemoryDC()
 {
 }
 
-void wxMemoryDC::SelectObject( const wxBitmap& bitmap )
+void wxMemoryDC::DoSelect( const wxBitmap& bitmap )
 {
     Destroy();
 
