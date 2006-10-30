@@ -1308,7 +1308,7 @@ void wxDbTable::BuildWhereClause(wxString &pWhereClause, int typeOfWhere,
                 case SQL_C_WCHAR:
 #endif
                 //case SQL_C_WXCHAR:  SQL_C_WXCHAR is covered by either SQL_C_CHAR or SQL_C_WCHAR
-                    colValue.Printf(wxT("'%s'"), GetDb()->EscapeSqlChars((UCHAR FAR *)colDefs[colNumber].PtrDataObj).c_str());
+                    colValue.Printf(wxT("'%s'"), GetDb()->EscapeSqlChars((wxChar *)colDefs[colNumber].PtrDataObj).c_str());
                     break;
                 case SQL_C_SHORT:
                 case SQL_C_SSHORT:
