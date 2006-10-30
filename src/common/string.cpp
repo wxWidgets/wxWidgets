@@ -1677,6 +1677,8 @@ int wxString::Find(const wxChar *pszSub) const
 
 // the implementation of all the functions below is exactly the same so factor
 // it out
+#ifndef __WATCOMC__
+
 template <typename T>
 bool wxStringToIntType(const wxChar *start,
                        T *val,
@@ -1696,22 +1698,51 @@ bool wxStringToIntType(const wxChar *start,
     return !*end && (end != start) && (errno != ERANGE);
 }
 
+#else
+
+//  FIXME, TODO, ASAP !!! - ugly trick to make release for Open Watcom possible
+//  without changing code flow for other compilers
+
+#define wxStringToIntType(start, val, base, func)                             \
+    wxCHECK_MSG( val, false, _T("NULL output pointer") );                     \
+    wxASSERT_MSG( !base || (base > 1 && base <= 36), _T("invalid base") );    \
+                                                                              \
+    errno = 0;                                                                \
+                                                                              \
+    wxChar *end;                                                              \
+    *val = (*func)(start, &end, base);                                        \
+                                                                              \
+    return !*end && (end != start) && (errno != ERANGE)
+
+#endif
+
 bool wxString::ToLong(long *val, int base) const
 {
-    return wxStringToIntType(c_str(), val, base, wxStrtol);
+#ifndef __WATCOMC__
+    return
+#endif
+           wxStringToIntType(c_str(), val, base, wxStrtol);
 }
 
 bool wxString::ToULong(unsigned long *val, int base) const
 {
-    return wxStringToIntType(c_str(), val, base, wxStrtoul);
+#ifndef __WATCOMC__
+    return
+#endif
+           wxStringToIntType(c_str(), val, base, wxStrtoul);
 }
 
 bool wxString::ToLongLong(wxLongLong_t *val, int base) const
 {
 #ifdef wxHAS_STRTOLL
-    return wxStringToIntType(c_str(), val, base, wxStrtoll);
+#ifndef __WATCOMC__
+    return
+#endif
+           wxStringToIntType(c_str(), val, base, wxStrtoll);
 #else
     // TODO: implement this ourselves
+    wxUnusedVar(val);
+    wxUnusedVar(base);
     return false;
 #endif // wxHAS_STRTOLL
 }
@@ -1719,9 +1750,14 @@ bool wxString::ToLongLong(wxLongLong_t *val, int base) const
 bool wxString::ToULongLong(wxULongLong_t *val, int base) const
 {
 #ifdef wxHAS_STRTOLL
-    return wxStringToIntType(c_str(), val, base, wxStrtoull);
+#ifndef __WATCOMC__
+    return
+#endif
+           wxStringToIntType(c_str(), val, base, wxStrtoull);
 #else
     // TODO: implement this ourselves
+    wxUnusedVar(val);
+    wxUnusedVar(base);
     return false;
 #endif
 }
