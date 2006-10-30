@@ -19,6 +19,9 @@
     #include "wx/object.h"
     #include "wx/dcprint.h"
     #include "wx/msgdlg.h"
+    #include "wx/textctrl.h"
+    #include "wx/sizer.h"
+    #include "wx/stattext.h"
 #endif
 
 #include "wx/mac/printdlg.h"

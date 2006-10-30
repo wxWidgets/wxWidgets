@@ -74,6 +74,7 @@ private:
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxMacPageSetupDialog)
 };
 
+class WXDLLEXPORT wxTextCtrl;
 
 /*
 * wxMacPageMarginsDialog
