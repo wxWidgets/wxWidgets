@@ -1281,33 +1281,25 @@ bool wxBitmap::HasAlpha() const
 
 void wxBitmap::SetWidth(int w)
 {
-    if (!M_BITMAPDATA)
-        m_refData = new wxBitmapRefData;
-
+    AllocExclusive();
     M_BITMAPDATA->SetWidth(w);
 }
 
 void wxBitmap::SetHeight(int h)
 {
-    if (!M_BITMAPDATA)
-        m_refData = new wxBitmapRefData;
-
+    AllocExclusive();
     M_BITMAPDATA->SetHeight(h);
 }
 
 void wxBitmap::SetDepth(int d)
 {
-    if (!M_BITMAPDATA)
-        m_refData = new wxBitmapRefData;
-
+    AllocExclusive();
     M_BITMAPDATA->SetDepth(d);
 }
 
 void wxBitmap::SetOk(bool isOk)
 {
-    if (!M_BITMAPDATA)
-        m_refData = new wxBitmapRefData;
-
+    AllocExclusive();
     M_BITMAPDATA->SetOk(isOk);
 }
 
@@ -1321,18 +1313,14 @@ wxPalette *wxBitmap::GetPalette() const
 
 void wxBitmap::SetPalette(const wxPalette& palette)
 {
-    if (!M_BITMAPDATA)
-        m_refData = new wxBitmapRefData;
-
+    AllocExclusive();
     M_BITMAPDATA->m_bitmapPalette = palette ;
 }
 #endif // wxUSE_PALETTE
 
 void wxBitmap::SetMask(wxMask *mask)
 {
-    if (!M_BITMAPDATA)
-        m_refData = new wxBitmapRefData;
-
+    AllocExclusive();
     // Remove existing mask if there is one.
     delete M_BITMAPDATA->m_bitmapMask;
 

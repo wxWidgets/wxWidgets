@@ -108,11 +108,6 @@ wxCursor::~wxCursor()
 // other wxCursor functions
 // ----------------------------------------------------------------------------
 
-bool wxCursor::operator==(const wxCursor& cursor) const
-{
-    return false;
-}
-
 wxGDIImageRefData *wxCursor::CreateData() const
 {
     return NULL;

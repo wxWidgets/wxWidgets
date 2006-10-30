@@ -132,11 +132,6 @@ public:
 
     int GetBitmapType() const;
 
-    inline bool operator == (const wxBitmap& bitmap) const
-    {   return m_refData == bitmap.m_refData; }
-    inline bool operator != (const wxBitmap& bitmap) const
-    {   return m_refData != bitmap.m_refData; }
-
     // wxObjectRefData
     wxObjectRefData *CreateRefData() const;
     wxObjectRefData *CloneRefData(const wxObjectRefData *data) const;

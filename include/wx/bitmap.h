@@ -127,8 +127,6 @@ public:
     wxBitmap(const char* const* bits);
     wxBitmap(const wxString &filename, wxBitmapType type = wxBITMAP_TYPE_XPM);
     wxBitmap(const wxImage& image, int depth = -1);
-    bool operator == (const wxBitmap& bmp) const;
-    bool operator != (const wxBitmap& bmp) const;
 
     bool Create(int width, int height, int depth = -1);
 

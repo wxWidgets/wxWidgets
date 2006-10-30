@@ -1,6 +1,6 @@
 \section{Reference counting}\label{trefcount}
 
-\subsection{Reference counting and why you shouldn't care about it}\label{refcount}
+\subsection{Why you shouldn't care about it}\label{refcount}
 
 Many wxWidgets objects use a technique known as \it{reference counting}, also known
 as {\it copy on write} (COW).
@@ -19,22 +19,54 @@ is not seen from the outside of the class - in any case, the result of any
 operation on it is the same.
 
 \subsection{List of reference-counted wxWidgets classes}\label{refcountlist}
+\subsection{Object comparison}\label{refcountequality}
+
+The $==$ and $!=$ operators of \helpref{wxWidgets COW objects}{refcountlist}
+always do a {\tt deep} comparison.
+
+This means that the equality operator will return \true if two objects are
+identic and not only if they share the same data.
+
+Note that wxWidgets follows the {\it STL philosophy}: when a comparison operator cannot
+be implemented efficiently (like for e.g. wxImage's $==$ operator which would need to
+compare pixel-by-pixel the entire image's data), it's not implemented at all.
+
+That's why not all reference-counted wxWidgets classes provide comparison operators.
+
+Also note that if you only need to do a {\tt shallow} comparison between two
+\helpref{wxObject}{wxobject}-derived classes, you should not use the $==$ and $!=$ operators
+but rather the \helpref{wxObject::IsRefTo}{wxobjectisrefto} function.
+
+
+\subsection{Object destruction}\label{refcountdestruct}
+
+When a COW object destructor is called, it may not delete the data: if it's shared,
+the destructor will just decrement the shared data's reference count without destroying it.
+
+Only when the destructor of the last object owning the data is called, the data is really
+destroyed. As for all other COW-things, this happens transparently to the class users so
+that you shouldn't care about it.
+
 
 The following classes in wxWidgets have efficient (i.e. fast) assignment operators
 and copy constructors since they are reference-counted:
 
 \helpref{wxAcceleratorTable}{wxacceleratortable}\\
+\helpref{wxAnimation}{wxanimation}\\
+\helpref{wxBitmap}{wxbitmap}\\
 \helpref{wxBrush}{wxbrush}\\
 \helpref{wxCursor}{wxcursor}\\
 \helpref{wxFont}{wxfont}\\
+\helpref{wxIcon}{wxicon}\\
 \helpref{wxImage}{wximage}\\
 \helpref{wxMetafile}{wxmetafile}\\
 \helpref{wxPalette}{wxpalette}\\
 \helpref{wxPen}{wxpen}\\
 \helpref{wxRegion}{wxregion}\\
-\helpref{wxRegionIterator}{wxregioniterator}\\
 \helpref{wxString}{wxstring}
 
+Note that the list above reports the objects which are reference-counted in all ports of
+wxWidgets; some ports may use this tecnique also for other classes.
 \subsection{Make your own reference-counted class}\label{wxobjectoverview}
 
 Reference counting can be implemented easily using \helpref{wxObject}{wxobject}

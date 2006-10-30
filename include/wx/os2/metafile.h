@@ -66,12 +66,6 @@ public:
     void SetHMETAFILE(WXHANDLE mf) ;
     inline int GetWindowsMappingMode(void) { return M_METAFILEDATA->m_windowsMappingMode; }
     void SetWindowsMappingMode(int mm);
-
-    // Operators
-    inline bool operator== (const wxMetafile& metafile) const
-        { return m_refData == metafile.m_refData; }
-    inline bool operator!= (const wxMetafile& metafile) const
-        { return m_refData != metafile.m_refData; }
 };
 
 class WXDLLEXPORT wxMetafileDC: public wxDC

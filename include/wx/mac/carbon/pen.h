@@ -28,6 +28,20 @@ public:
 
     wxPenRefData& operator=(const wxPenRefData& data);
 
+    bool operator==(const wxPenRefData& data) const
+    {
+        // we intentionally don't compare m_hPen fields here
+        return m_style == data.m_style &&
+               m_width == data.m_width &&
+               m_join == data.m_join &&
+               m_cap == data.m_cap &&
+               m_colour == data.m_colour &&
+               (m_style != wxSTIPPLE || m_stipple.IsRefTo(&data.m_stipple)) &&
+               (m_style != wxUSER_DASH ||
+                (m_nbDash == data.m_nbDash &&
+                    memcmp(m_dash, data.m_dash, m_nbDash*sizeof(wxDash)) == 0));
+    }
+
 protected:
   int           m_width;
   int           m_style;
@@ -54,8 +68,15 @@ public:
   wxPen(const wxBitmap& stipple, int width);
   virtual ~wxPen();
 
-  inline bool operator == (const wxPen& pen) const { return m_refData == pen.m_refData; }
-  inline bool operator != (const wxPen& pen) const { return m_refData != pen.m_refData; }
+  inline bool operator == (const wxPen& pen) const
+  {
+    const wxPenRefData *penData = (wxPenRefData *)pen.m_refData;
+
+    // an invalid pen is only equal to another invalid pen
+    return m_refData ? penData && *M_PENDATA == *penData : !penData;
+  }
+
+  inline bool operator != (const wxPen& pen) const { return *(this == pen); }
 
   virtual bool Ok() const { return IsOk(); }
   virtual bool IsOk() const { return (m_refData != NULL) ; }

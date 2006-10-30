@@ -35,8 +35,6 @@ public:
     wxPalette();
     wxPalette(int n, const unsigned char *red, const unsigned char *green, const unsigned char *blue);
     virtual ~wxPalette();
-    bool operator == (const wxPalette& palette) const;
-    bool operator != (const wxPalette& palette) const;
     virtual bool Ok() const { return IsOk(); }
     virtual bool IsOk() const;
 

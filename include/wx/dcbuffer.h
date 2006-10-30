@@ -169,7 +169,7 @@ public:
         if (style & wxBUFFER_VIRTUAL_AREA)
             window->PrepareDC( m_paintdc );
 
-        if( buffer != wxNullBitmap )
+        if( buffer.IsOk() )
             Init(&m_paintdc, buffer, style);
         else
             Init(&m_paintdc, window->GetClientSize(), style);

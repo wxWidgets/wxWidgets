@@ -39,8 +39,6 @@ public:
 
     bool Ok() const { return IsOk(); }
     bool IsOk() const;
-    bool operator==(const wxBitmap& bmp) const;
-    bool operator!=(const wxBitmap& bmp) const { return !(*this == bmp); }
 
     bool Create(const wxIDirectFBSurfacePtr& surface);
     bool Create(int width, int height, int depth = -1);

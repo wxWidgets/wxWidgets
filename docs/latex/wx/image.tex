@@ -224,6 +224,7 @@ platform-dependent bitmap}
 \func{}{\destruct{wxImage}}{\void}
 
 Destructor.
+See \helpref{reference-counted object destruction}{refcountdestruct} for more info.
 
 
 \membersection{wxImage::AddHandler}\label{wximageaddhandler}
@@ -1300,36 +1301,6 @@ Assignment operator, using \helpref{reference counting}{trefcount}.
 Returns 'this' object.
 
 
-\membersection{wxImage::operator $==$}\label{wximageequal}
-
-\constfunc{bool}{operator $==$}{\param{const wxImage\& }{image}}
-
-Equality operator. This operator tests whether the internal data pointers are
-equal (a fast test).
-
-\wxheading{Parameters}
-
-\docparam{image}{Image to compare with 'this'}
-
-\wxheading{Return value}
-
-Returns true if the images were effectively equal, false otherwise.
-
-
-\membersection{wxImage::operator $!=$}\label{wximagenotequal}
-
-\constfunc{bool}{operator $!=$}{\param{const wxImage\& }{image}}
-
-Inequality operator. This operator tests whether the internal data pointers are
-unequal (a fast test).
-
-\wxheading{Parameters}
-
-\docparam{image}{Image to compare with 'this'}
-
-\wxheading{Return value}
-
-Returns true if the images were unequal, false otherwise.
 
 \section{\class{wxImageHandler}}\label{wximagehandler}
 

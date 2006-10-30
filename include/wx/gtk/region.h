@@ -94,6 +94,7 @@ class WXDLLIMPEXP_CORE wxRegionIterator: public wxObject
 public:
     wxRegionIterator();
     wxRegionIterator(const wxRegion& region);
+    ~wxRegionIterator();
 
     void Reset() { m_current = 0u; }
     void Reset(const wxRegion& region);
@@ -113,8 +114,14 @@ public:
     wxRect GetRect() const;
 
 private:
+    void Init();
+    void CreateRects( const wxRegion& r );
+
     size_t   m_current;
     wxRegion m_region;
+
+    wxRect *m_rects;
+    size_t  m_numRects;
 
 private:
     DECLARE_DYNAMIC_CLASS(wxRegionIterator)

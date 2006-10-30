@@ -38,8 +38,6 @@ public:
     wxBitmap(const wxString &filename, wxBitmapType type = wxBITMAP_TYPE_RESOURCE);
     wxBitmap(const wxImage& image, int depth = -1);
     virtual ~wxBitmap() {}
-    bool operator == (const wxBitmap& bmp) const;
-    bool operator != (const wxBitmap& bmp) const;
     bool Ok() const { return IsOk(); }
     bool IsOk() const;
 

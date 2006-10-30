@@ -86,6 +86,7 @@ red, blue or green component.
 \func{}{\destruct{wxPalette}}{\void}
 
 Destructor.
+See \helpref{reference-counted object destruction}{refcountdestruct} for more info.
 
 \membersection{wxPalette::Create}\label{wxpalettecreate}
 
@@ -181,20 +182,4 @@ Returns true if palette data is present.
 \func{wxPalette\&}{operator $=$}{\param{const wxPalette\& }{palette}}
 
 Assignment operator, using \helpref{reference counting}{trefcount}.
-
-\membersection{wxPalette::operator $==$}\label{wxpaletteequals}
-
-\func{bool}{operator $==$}{\param{const wxPalette\& }{palette}}
-
-Equality operator. Two palettes are equal if they contain pointers
-to the same underlying palette data. It does not compare each attribute,
-so two independently-created palettes using the same parameters will
-fail the test.
-
-\membersection{wxPalette::operator $!=$}\label{wxpalettenotequals}
-
-\func{bool}{operator $!=$}{\param{const wxPalette\& }{palette}}
-
-Inequality operator. Two palettes are not equal if they contain pointers
-to different underlying palette data. It does not compare each attribute.
 

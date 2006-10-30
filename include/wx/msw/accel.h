@@ -30,10 +30,6 @@ public:
     // initialize from array
     wxAcceleratorTable(int n, const wxAcceleratorEntry entries[]);
 
-    bool operator==(const wxAcceleratorTable& accel) const;
-    bool operator!=(const wxAcceleratorTable& accel) const
-        { return !(*this == accel); }
-
     bool Ok() const { return IsOk(); }
     bool IsOk() const;
     void SetHACCEL(WXHACCEL hAccel);

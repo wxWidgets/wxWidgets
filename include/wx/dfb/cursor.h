@@ -34,8 +34,6 @@ public:
 
     bool Ok() const { return IsOk(); }
     bool IsOk() const;
-    bool operator==(const wxCursor& cursor) const;
-    bool operator!=(const wxCursor& cursor) const { return !(*this == cursor); }
 
     // implementation
     wxBitmap GetBitmap() const;

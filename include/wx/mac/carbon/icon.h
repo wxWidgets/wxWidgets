@@ -36,8 +36,6 @@ public:
     bool LoadFile(const wxString& name ,wxBitmapType flags = wxBITMAP_TYPE_ICON_RESOURCE )
       { return LoadFile( name , flags , -1 , -1 ) ; }
 
-    bool operator==(const wxIcon& icon) const { return m_refData == icon.m_refData; }
-    bool operator!=(const wxIcon& icon) const { return !(*this == icon); }
 
     // create from bitmap (which should have a mask unless it's monochrome):
     // there shouldn't be any implicit bitmap -> icon conversion (i.e. no

@@ -33,11 +33,6 @@ public:
 
     wxAnimation& operator= (const wxAnimation&);
 
-    bool operator == (const wxAnimation& anim) const
-        { return m_pixbuf == anim.m_pixbuf; }
-    bool operator != (const wxAnimation& anim) const
-        { return m_pixbuf != anim.m_pixbuf; }
-
     virtual bool IsOk() const
         { return m_pixbuf != NULL; }
 

@@ -44,8 +44,7 @@ Default constructor.
 
 \func{}{wxAnimation}{\param{const wxAnimation\& }{anim}}
 
-Copy constructor.
-wxAnimation objects are reference counted so that this operation is very fast.
+Copy constructor, uses \helpref{reference counting}{trefcount}.
 
 \func{}{wxAnimation}{\param{const wxString\& }{name}, \param{wxAnimationType}{ type = wxANIMATION\_TYPE\_ANY}}
 
@@ -60,10 +59,8 @@ Loads an animation from a file.
 
 \func{}{\destruct{wxAnimation}}{\void}
 
-Destroys the wxAnimation object and possibly the underlying animation data.
-Because reference counting is used, the animation may not actually be
-destroyed at this point - only when the reference count is zero will the
-data be deleted.
+Destructor.
+See \helpref{reference-counted object destruction}{refcountdestruct} for more info.
 
 
 \membersection{wxAnimation::GetDelay}\label{wxanimationgetdelay}
@@ -150,4 +147,11 @@ Loads an animation from a file.
 \wxheading{Return value}
 
 \true if the operation succeeded, \false otherwise.
+
+
+\membersection{wxAnimation::operator $=$}\label{wxanimationassignment}
+
+\func{wxAnimation\&}{operator $=$}{\param{const wxAnimation\& }{brush}}
+
+Assignment operator, using \helpref{reference counting}{trefcount}.
 

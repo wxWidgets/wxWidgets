@@ -1066,16 +1066,6 @@ wxBitmap::~wxBitmap()
 {
 }
 
-bool wxBitmap::operator == ( const wxBitmap& bmp ) const
-{
-    return m_refData == bmp.m_refData;
-}
-
-bool wxBitmap::operator != ( const wxBitmap& bmp ) const
-{
-    return m_refData != bmp.m_refData;
-}
-
 bool wxBitmap::IsOk() const
 {
     return (m_refData != NULL) &&
@@ -1114,6 +1104,7 @@ void wxBitmap::SetMask( wxMask *mask )
 {
     wxCHECK_RET( Ok(), wxT("invalid bitmap") );
 
+    AllocExclusive();
     if (M_BMPDATA->m_mask) delete M_BMPDATA->m_mask;
 
     M_BMPDATA->m_mask = mask;
@@ -1248,25 +1239,19 @@ void wxBitmap::SetPalette(const wxPalette& WXUNUSED(palette))
 
 void wxBitmap::SetHeight( int height )
 {
-    if (!m_refData)
-        m_refData = new wxBitmapRefData();
-
+    AllocExclusive();
     M_BMPDATA->m_height = height;
 }
 
 void wxBitmap::SetWidth( int width )
 {
-    if (!m_refData)
-        m_refData = new wxBitmapRefData();
-
+    AllocExclusive();
     M_BMPDATA->m_width = width;
 }
 
 void wxBitmap::SetDepth( int depth )
 {
-    if (!m_refData)
-        m_refData = new wxBitmapRefData();
-
+    AllocExclusive();
     M_BMPDATA->m_bpp = depth;
 }
 

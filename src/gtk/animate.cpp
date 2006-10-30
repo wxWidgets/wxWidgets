@@ -213,7 +213,7 @@ bool wxAnimationCtrl::Create( wxWindow *parent, wxWindowID id,
     PostCreation(size);
     SetBestSize(size);
 
-    if (anim != wxNullAnimation)
+    if (anim.IsOk())
         SetAnimation(anim);
 
     // init the timer used for animation

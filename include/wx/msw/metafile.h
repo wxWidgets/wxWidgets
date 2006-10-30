@@ -68,12 +68,6 @@ public:
     int GetWindowsMappingMode() const { return M_METAFILEDATA->m_windowsMappingMode; }
     void SetWindowsMappingMode(int mm);
 
-    // Operators
-    bool operator==(const wxMetafile& metafile) const
-        { return m_refData == metafile.m_refData; }
-    bool operator!=(const wxMetafile& metafile) const
-        { return m_refData != metafile.m_refData; }
-
 private:
     DECLARE_DYNAMIC_CLASS(wxMetafile)
 };

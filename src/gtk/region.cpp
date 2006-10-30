@@ -336,30 +336,33 @@ GdkRegion *wxRegion::GetRegion() const
 // wxRegionIterator
 // ----------------------------------------------------------------------------
 
-class wxRIRefData: public wxObjectRefData
+wxRegionIterator::wxRegionIterator()
 {
-public:
-    wxRIRefData() { Init(); }
-    virtual ~wxRIRefData();
-
-    void CreateRects( const wxRegion& r );
-
-    void Init() { m_rects = NULL; m_numRects = 0; }
-
-    wxRect *m_rects;
-    size_t  m_numRects;
-};
-
-wxRIRefData::~wxRIRefData()
-{
-    delete [] m_rects;
+    Init();
+    Reset();
 }
 
-void wxRIRefData::CreateRects( const wxRegion& region )
+wxRegionIterator::wxRegionIterator( const wxRegion& region )
 {
-    delete [] m_rects;
-
     Init();
+    Reset(region);
+}
+
+void wxRegionIterator::Init()
+{
+    m_rects = NULL;
+    m_numRects = 0;
+}
+
+wxRegionIterator::~wxRegionIterator()
+{
+    wxDELETEA(m_rects);
+}
+
+void wxRegionIterator::CreateRects( const wxRegion& region )
+{
+    wxDELETEA(m_rects);
+    m_numRects = 0;
 
     GdkRegion *gdkregion = region.GetRegion();
     if (!gdkregion)
@@ -386,28 +389,16 @@ void wxRIRefData::CreateRects( const wxRegion& region )
     g_free( gdkrects );
 }
 
-wxRegionIterator::wxRegionIterator()
-{
-    m_refData = new wxRIRefData();
-    Reset();
-}
-
-wxRegionIterator::wxRegionIterator( const wxRegion& region )
-{
-    m_refData = new wxRIRefData();
-    Reset(region);
-}
-
 void wxRegionIterator::Reset( const wxRegion& region )
 {
     m_region = region;
-    ((wxRIRefData*)m_refData)->CreateRects(region);
+    CreateRects(region);
     Reset();
 }
 
 bool wxRegionIterator::HaveRects() const
 {
-    return m_current < ((wxRIRefData*)m_refData)->m_numRects;
+    return m_current < m_numRects;
 }
 
 wxRegionIterator& wxRegionIterator::operator ++ ()
@@ -421,6 +412,7 @@ wxRegionIterator& wxRegionIterator::operator ++ ()
 wxRegionIterator wxRegionIterator::operator ++ (int)
 {
     wxRegionIterator tmp = *this;
+
     if (HaveRects())
         ++m_current;
 
@@ -431,35 +423,35 @@ wxCoord wxRegionIterator::GetX() const
 {
     wxCHECK_MSG( HaveRects(), 0, _T("invalid wxRegionIterator") );
 
-    return ((wxRIRefData*)m_refData)->m_rects[m_current].x;
+    return m_rects[m_current].x;
 }
 
 wxCoord wxRegionIterator::GetY() const
 {
     wxCHECK_MSG( HaveRects(), 0, _T("invalid wxRegionIterator") );
 
-    return ((wxRIRefData*)m_refData)->m_rects[m_current].y;
+    return m_rects[m_current].y;
 }
 
 wxCoord wxRegionIterator::GetW() const
 {
     wxCHECK_MSG( HaveRects(), 0, _T("invalid wxRegionIterator") );
 
-    return ((wxRIRefData*)m_refData)->m_rects[m_current].width;
+    return m_rects[m_current].width;
 }
 
 wxCoord wxRegionIterator::GetH() const
 {
     wxCHECK_MSG( HaveRects(), 0, _T("invalid wxRegionIterator") );
 
-    return ((wxRIRefData*)m_refData)->m_rects[m_current].height;
+    return m_rects[m_current].height;
 }
 
 wxRect wxRegionIterator::GetRect() const
 {
     wxRect r;
     if( HaveRects() )
-        r = ((wxRIRefData*)m_refData)->m_rects[m_current];
+        r = m_rects[m_current];
 
     return r;
 }

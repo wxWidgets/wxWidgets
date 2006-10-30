@@ -267,16 +267,6 @@ wxBitmap::wxBitmap(const char bits[], int width, int height, int depth)
     delete bdc;
 }
 
-bool wxBitmap::operator == (const wxBitmap& bmp) const
-{
-    return (m_refData == bmp.m_refData);
-}
-
-bool wxBitmap::operator != (const wxBitmap& bmp) const
-{
-    return (m_refData != bmp.m_refData);
-}
-
 bool wxBitmap::IsOk() const
 {
     return (m_refData != NULL && M_BMPDATA->m_bitmap != NULL);
@@ -314,6 +304,7 @@ void wxBitmap::SetMask(wxMask *mask)
 {
     wxCHECK_RET( Ok(), wxT("invalid bitmap") );
 
+    AllocExclusive();
     delete M_BMPDATA->m_mask;
     M_BMPDATA->m_mask = mask;
 }
@@ -357,6 +348,7 @@ void wxBitmap::SetMonoPalette(const wxColour& fg, const wxColour& bg)
 {
     wxCHECK_RET( Ok(), wxT("invalid bitmap") );
 
+    AllocExclusive();
     palette_t *mono = M_BMPDATA->m_bitmap->pal;
 
     wxCHECK_RET( M_BMPDATA->m_bpp == 1, wxT("bitmap is not 1bpp") );
@@ -482,6 +474,7 @@ void wxBitmap::SetPalette(const wxPalette& palette)
     wxCHECK_RET( Ok(), wxT("invalid bitmap") );
     wxCHECK_RET( GetDepth() > 1 && GetDepth() <= 8, wxT("cannot set palette for bitmap of this depth") );
 
+    AllocExclusive();
     delete M_BMPDATA->m_palette;
     M_BMPDATA->m_palette = NULL;
 
@@ -496,21 +489,21 @@ void wxBitmap::SetPalette(const wxPalette& palette)
 
 void wxBitmap::SetHeight(int height)
 {
-    if (!m_refData) m_refData = new wxBitmapRefData();
+    AllocExclusive();
 
     M_BMPDATA->m_height = height;
 }
 
 void wxBitmap::SetWidth(int width)
 {
-    if (!m_refData) m_refData = new wxBitmapRefData();
+    AllocExclusive();
 
     M_BMPDATA->m_width = width;
 }
 
 void wxBitmap::SetDepth(int depth)
 {
-    if (!m_refData) m_refData = new wxBitmapRefData();
+    AllocExclusive();
 
     M_BMPDATA->m_bpp = depth;
 }

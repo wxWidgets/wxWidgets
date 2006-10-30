@@ -68,25 +68,6 @@ bool wxCursor::IsOk() const
     return m_refData && M_CURSOR->m_bitmap.Ok();
 }
 
-bool wxCursor::operator==(const wxCursor& cursor) const
-{
-    if ( Ok() )
-    {
-        if ( !cursor.Ok() )
-            return false;
-        else if ( M_CURSOR->m_id != M_CURSOR_OF(cursor)->m_id )
-            return false;
-        else if ( M_CURSOR->m_id == -1 ) // non-stock cursor
-            return (m_refData == cursor.m_refData);
-        else
-            return true; // IDs != -1 and are the same
-    }
-    else
-    {
-        return !cursor.Ok();
-    }
-}
-
 wxObjectRefData *wxCursor::CreateRefData() const
 {
     return new wxCursorRefData;

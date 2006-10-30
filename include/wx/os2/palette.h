@@ -62,11 +62,6 @@ public:
     virtual bool Ok() const { return IsOk(); }
     virtual bool IsOk(void) const { return (m_refData != NULL) ; }
 
-    inline bool       operator == (const wxPalette& rPalette) const
-        { return m_refData == rPalette.m_refData; }
-    inline bool       operator != (const wxPalette& rPalette) const
-        { return m_refData != rPalette.m_refData; }
-
     virtual bool FreeResource(bool bForce = false);
 
     inline WXHPALETTE GetHPALETTE(void) const { return (M_PALETTEDATA ? M_PALETTEDATA->m_hPalette : 0); }

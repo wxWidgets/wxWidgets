@@ -44,9 +44,6 @@ public:
     virtual bool Ok() const { return IsOk(); }
     virtual bool IsOk(void) const { return (m_refData != NULL) ; }
 
-    inline bool operator == (const wxPalette& palette) const { return m_refData == palette.m_refData; }
-    inline bool operator != (const wxPalette& palette) const { return m_refData != palette.m_refData; }
-
     virtual bool FreeResource(bool force = false);
 
     // implemetation

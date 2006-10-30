@@ -44,10 +44,9 @@ public:
     virtual void MacSetTheme(short macThemeBrush) ;
     virtual void MacSetThemeBackground(unsigned long macThemeBackground ,  WXRECTPTR extent) ;
 
-    bool operator == (const wxBrush& brush) const
-    { return m_refData == brush.m_refData; }
+    bool operator == (const wxBrush& brush) const;
     bool operator != (const wxBrush& brush) const
-    { return m_refData != brush.m_refData; }
+        { return !(*this == brush); }
 
     wxMacBrushKind MacGetBrushKind()  const ;
 

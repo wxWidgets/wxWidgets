@@ -229,7 +229,10 @@ wxCursor down_cursor = wxCursor(down_bits, 32, 32,
 
 \func{}{\destruct{wxCursor}}{\void}
 
-Destroys the cursor. A cursor can be reused for more
+Destroys the cursor.
+See \helpref{reference-counted object destruction}{refcountdestruct} for more info.
+
+A cursor can be reused for more
 than one window, and does not get destroyed when the window is
 destroyed. wxWidgets destroys all cursors on application exit, although
 it is best to clean them up explicitly.
@@ -245,21 +248,4 @@ Returns true if cursor data is present.
 \func{wxCursor\&}{operator $=$}{\param{const wxCursor\& }{cursor}}
 
 Assignment operator, using \helpref{reference counting}{trefcount}.
-
-\membersection{wxCursor::operator $==$}\label{wxcursorequals}
-
-\func{bool}{operator $==$}{\param{const wxCursor\& }{cursor}}
-
-Equality operator. Two cursors are equal if they contain pointers
-to the same underlying cursor data. It does not compare each attribute,
-so two independently-created cursors using the same parameters will
-fail the test.
-
-\membersection{wxCursor::operator $!=$}\label{wxcursornotequals}
-
-\func{bool}{operator $!=$}{\param{const wxCursor\& }{cursor}}
-
-Inequality operator. Two cursors are not equal if they contain pointers
-to different underlying cursor data. It does not compare each attribute.
-
 

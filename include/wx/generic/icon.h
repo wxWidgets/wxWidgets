@@ -44,11 +44,6 @@ public:
     {
     }
 
-    bool operator==(const wxIcon& icon) const
-        { return m_refData == icon.m_refData; }
-    bool operator!=(const wxIcon& icon) const
-        { return !(*this == icon); }
-
     // create from bitmap (which should have a mask unless it's monochrome):
     // there shouldn't be any implicit bitmap -> icon conversion (i.e. no
     // ctors, assignment operators...), but it's ok to have such function

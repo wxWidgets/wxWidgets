@@ -116,6 +116,13 @@ this one or is derived from it.
   bool tmp = obj->IsKindOf(CLASSINFO(wxFrame));
 \end{verbatim}
 
+\membersection{wxObject::IsRefTo}\label{wxobjectisrefto}
+
+\func{bool}{IsRefTo}{\param{const wxObject *}{ obj}}
+
+Returns \true if this object is referencing the \arg{obj}'s data.
+Note that this function only does a {\tt shallow} comparison.
+
 \membersection{wxObject::Ref}\label{wxobjectref}
 
 \func{void}{Ref}{\param{const wxObject\& }{clone}}
@@ -164,6 +171,17 @@ The {\bf m\_refData} member is set to NULL.
 \helpref{wxObject::Ref}{wxobjectref}, \helpref{wxObject::m\_refData}{wxobjectmrefdata},\rtfsp
 \helpref{wxObject::SetRefData}{wxobjectsetrefdata}, \helpref{wxObject::GetRefData}{wxobjectgetrefdata},\rtfsp
 \helpref{wxObjectRefData}{wxobjectrefdata}
+
+\membersection{wxObject::UnShare}\label{wxobjectunshare}
+
+\func{void}{UnShare}{\void}
+
+Ensure that this object's data is not shared with any other object.
+
+if we have no
+data, it is created using CreateRefData() below, if we have shared data
+it is copied using CloneRefData(), otherwise nothing is done.
+
 
 \membersection{wxObject::operator new}\label{wxobjectnew}
 

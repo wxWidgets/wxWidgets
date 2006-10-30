@@ -310,16 +310,6 @@ wxCursor::~wxCursor()
 {
 }
 
-bool wxCursor::operator == ( const wxCursor& cursor ) const
-{
-    return m_refData == cursor.m_refData;
-}
-
-bool wxCursor::operator != ( const wxCursor& cursor ) const
-{
-    return m_refData != cursor.m_refData;
-}
-
 bool wxCursor::IsOk() const
 {
     return (m_refData != NULL);

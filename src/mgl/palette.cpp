@@ -63,16 +63,6 @@ wxPalette::~wxPalette()
 {
 }
 
-bool wxPalette::operator == (const wxPalette& palette) const
-{
-    return m_refData == palette.m_refData;
-}
-
-bool wxPalette::operator != (const wxPalette& palette) const
-{
-    return m_refData != palette.m_refData;
-}
-
 bool wxPalette::IsOk(void) const
 {
     return (m_refData != NULL);

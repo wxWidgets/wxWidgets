@@ -76,6 +76,13 @@ public:
     wxBrushRefData();
     wxBrushRefData(const wxBrushRefData& data);
 
+    bool operator == (const wxBrushRefData& data) const
+    {
+        return (m_style == data.m_style &&
+                m_stipple.IsRefTo(&data.m_stipple) &&
+                m_colour == data.m_colour);
+    }
+
     int            m_style;
     wxColour       m_colour;
     wxBitmap       m_stipple;
@@ -145,7 +152,11 @@ wxBrush::wxBrush(const wxBitmap &stippleBitmap)
 
 bool wxBrush::operator == (const wxBrush& brush) const
 {
-    return m_refData == brush.m_refData;
+    if (m_refData == brush.m_refData) return true;
+
+    if (!m_refData || !brush.m_refData) return false;
+
+    return *(wxBrushRefData*)m_refData == *(wxBrushRefData*)brush.m_refData;
 }
 
 bool wxBrush::operator != (const wxBrush& brush) const

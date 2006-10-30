@@ -999,25 +999,19 @@ wxMask *wxBitmap::GetMask() const
 
 void wxBitmap::SetWidth(int w)
 {
-    if (!M_BITMAPDATA)
-        m_refData = new wxBitmapRefData;
-
+    AllocExclusive();
     M_BITMAPDATA->m_width = w;
 }
 
 void wxBitmap::SetHeight(int h)
 {
-    if (!M_BITMAPDATA)
-        m_refData = new wxBitmapRefData;
-
+    AllocExclusive();
     M_BITMAPDATA->m_height = h;
 }
 
 void wxBitmap::SetDepth(int d)
 {
-    if (!M_BITMAPDATA)
-        m_refData = new wxBitmapRefData;
-
+    AllocExclusive();
     M_BITMAPDATA->m_depth = d;
 }
 

@@ -124,7 +124,7 @@ bool wxBrushRefData::operator==(const wxBrushRefData& data) const
     // don't compare HBRUSHes
     return m_style == data.m_style &&
            m_colour == data.m_colour &&
-           m_stipple == data.m_stipple;
+           m_stipple.IsRefTo(&data.m_stipple);
 }
 
 void wxBrushRefData::DoSetStipple(const wxBitmap& stipple)

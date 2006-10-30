@@ -194,12 +194,6 @@ bool wxBitmap::IsOk() const
     return (m_refData != NULL && M_BITMAP->m_surface);
 }
 
-bool wxBitmap::operator==(const wxBitmap& bmp) const
-{
-    // FIXME: is this the right way to compare bitmaps?
-    return (m_refData == bmp.m_refData);
-}
-
 int wxBitmap::GetHeight() const
 {
     wxCHECK_MSG( Ok(), -1, wxT("invalid bitmap") );
@@ -236,6 +230,7 @@ void wxBitmap::SetMask(wxMask *mask)
 {
     wxCHECK_RET( Ok(), wxT("invalid bitmap") );
 
+    AllocExclusive();
     delete M_BITMAP->m_mask;
     M_BITMAP->m_mask = mask;
 }
@@ -328,6 +323,7 @@ void wxBitmap::SetPalette(const wxPalette& palette)
     wxCHECK_RET( Ok(), wxT("invalid bitmap") );
     wxCHECK_RET( GetDepth() > 1 && GetDepth() <= 8, wxT("cannot set palette for bitmap of this depth") );
 
+    AllocExclusive();
     delete M_BITMAP->m_palette;
     M_BITMAP->m_palette = NULL;
 

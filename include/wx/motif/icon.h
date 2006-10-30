@@ -55,11 +55,6 @@ public:
     // ctors, assignment operators...), but it's ok to have such function
     void CopyFromBitmap(const wxBitmap& bmp);
 
-    bool operator == (const wxIcon& icon) const
-        { return m_refData == icon.m_refData; }
-    bool operator != (const wxIcon& icon) const
-        { return !(*this == icon); }
-
 
     DECLARE_DYNAMIC_CLASS(wxIcon)
 };

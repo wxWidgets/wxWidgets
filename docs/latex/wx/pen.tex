@@ -154,11 +154,9 @@ is found in the colour database.
 \func{}{\destruct{wxPen}}{\void}
 
 Destructor.
+See \helpref{reference-counted object destruction}{refcountdestruct} for more info.
 
 \wxheading{Remarks}
-
-The destructor may not delete the underlying pen object of the native windowing
-system, since wxBrush uses a reference counting system for efficiency.
 
 Although all remaining pens are deleted when the application exits,
 the application should try to clean up all pens itself. This is because
@@ -335,17 +333,15 @@ Assignment operator, using \helpref{reference counting}{trefcount}.
 
 \func{bool}{operator $==$}{\param{const wxPen\& }{pen}}
 
-Equality operator. Two pens are equal if they contain pointers
-to the same underlying pen data. It does not compare each attribute,
-so two independently-created pens using the same parameters will
-fail the test.
+Equality operator.
+See \helpref{reference-counted object comparison}{refcountequality} for more info.
 
 \membersection{wxPen::operator $!=$}\label{wxpennotequals}
 
 \func{bool}{operator $!=$}{\param{const wxPen\& }{pen}}
 
-Inequality operator. Two pens are not equal if they contain pointers
-to different underlying pen data. It does not compare each attribute.
+Inequality operator.
+See \helpref{reference-counted object comparison}{refcountequality} for more info.
 
 \section{\class{wxPenList}}\label{wxpenlist}
 

@@ -33,6 +33,21 @@ class wxPenRefData: public wxObjectRefData
         wxPenRefData();
         wxPenRefData(const wxPenRefData& data);
 
+    bool operator==(const wxPenRefData& data) const
+    {
+        // we intentionally don't compare m_hPen fields here
+        return m_style == data.m_style &&
+               m_width == data.m_width &&
+               m_pixPattern == data.m_pixPattern &&
+               m_capStyle == data.m_capStyle &&
+               m_joinStyle == data.m_joinStyle &&
+               m_colour == data.m_colour &&
+               (m_style != wxSTIPPLE || m_stipple.IsRefTo(&data.m_stipple)) &&
+               (m_style != wxUSER_DASH ||
+                (m_dash == data.m_dash &&
+                    memcmp(m_dash, data.m_dash, m_countDashes*sizeof(wxDash)) == 0));
+    }
+
         int            m_width;
         int            m_style;
         wxColour       m_colour;
@@ -109,7 +124,11 @@ wxPen::wxPen(const wxBitmap& stipple, int width)
 
 bool wxPen::operator == (const wxPen& pen) const
 {
-    return m_refData == pen.m_refData;
+    if (m_refData == pen.m_refData) return true;
+
+    if (!m_refData || !pen.m_refData) return false;
+
+    return ( *(wxPenRefData*)m_refData == *(wxPenRefData*)pen.m_refData );
 }
 
 bool wxPen::operator != (const wxPen& pen) const

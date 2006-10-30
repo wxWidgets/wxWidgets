@@ -187,12 +187,6 @@ public:
 
     void SetMask(wxMask* pMask) ;
 
-    inline bool operator==(const wxBitmap& rBitmap) const
-      { return m_refData == rBitmap.m_refData; }
-
-    inline bool operator!=(const wxBitmap& rBitmap) const
-      { return m_refData != rBitmap.m_refData; }
-
     // Implementation
 public:
     inline void SetHBITMAP(WXHBITMAP hBmp)

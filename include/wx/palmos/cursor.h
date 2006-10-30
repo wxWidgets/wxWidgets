@@ -32,10 +32,6 @@ public:
     wxCursor(int idCursor);
     virtual ~wxCursor();
 
-    bool operator==(const wxCursor& cursor) const;
-    bool operator!=(const wxCursor& cursor) const
-        { return !(*this == cursor); }
-
     // implementation only
     void SetHCURSOR(WXHCURSOR cursor) { SetHandle((WXHANDLE)cursor); }
     WXHCURSOR GetHCURSOR() const { return (WXHCURSOR)GetHandle(); }

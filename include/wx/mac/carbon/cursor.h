@@ -38,9 +38,6 @@ public:
   virtual bool Ok() const { return IsOk(); }
   virtual bool IsOk() const ;
 
-  inline bool operator == (const wxCursor& cursor) const { return m_refData == cursor.m_refData; }
-  inline bool operator != (const wxCursor& cursor) const { return m_refData != cursor.m_refData; }
-
     void MacInstall() const ;
 
   void SetHCURSOR(WXHCURSOR cursor);

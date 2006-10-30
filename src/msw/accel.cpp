@@ -130,16 +130,6 @@ wxAcceleratorTable::wxAcceleratorTable(int n, const wxAcceleratorEntry entries[]
     M_ACCELDATA->m_ok = (M_ACCELDATA->m_hAccel != 0);
 }
 
-bool wxAcceleratorTable::operator==(const wxAcceleratorTable& accel) const
-{
-    const wxAcceleratorRefData *
-        accelData = (wxAcceleratorRefData *)accel.m_refData;
-
-    return m_refData ? (accelData &&
-                           M_ACCELDATA->m_hAccel == accelData->m_hAccel)
-                     : !accelData;
-}
-
 bool wxAcceleratorTable::IsOk() const
 {
     return (M_ACCELDATA && (M_ACCELDATA->m_ok));

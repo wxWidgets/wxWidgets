@@ -23,11 +23,6 @@ WX_DECLARE_LIST_WITH_DECL(wxAnimationDecoder, wxAnimationDecoderList, class WXDL
 class WXDLLIMPEXP_ADV wxAnimation : public wxAnimationBase
 {
 public:
-    bool operator == (const wxAnimation& anim) const
-        { return m_refData == anim.m_refData; }
-    bool operator != (const wxAnimation& anim) const
-        { return m_refData != anim.m_refData; }
-
     virtual bool IsOk() const
         { return m_refData != NULL; }
 

@@ -64,8 +64,6 @@ public:
     wxBitmap( const wxString &filename, wxBitmapType type = wxBITMAP_TYPE_XPM );
     wxBitmap( const wxImage& image, int depth = -1 ) { (void)CreateFromImage(image, depth); }
     virtual ~wxBitmap();
-    bool operator == ( const wxBitmap& bmp ) const;
-    bool operator != ( const wxBitmap& bmp ) const { return !(*this == bmp); }
     bool Ok() const { return IsOk(); }
     bool IsOk() const;
 

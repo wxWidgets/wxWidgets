@@ -631,7 +631,7 @@ bool wxWizard::ShowPage(wxWizardPage *page, bool goingForward)
         if ( !bmpPrev.Ok() )
             bmpPrev = m_bitmap;
 
-        if ( bmp != bmpPrev )
+        if ( !bmp.IsRefTo(&bmpPrev) )
             m_statbmp->SetBitmap(bmp);
     }
 #endif // wxUSE_STATBMP

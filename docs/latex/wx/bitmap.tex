@@ -206,10 +206,8 @@ wxImage to a wxBitmap.}
 
 \func{}{\destruct{wxBitmap}}{\void}
 
-Destroys the wxBitmap object and possibly the underlying bitmap data.
-Because reference counting is used, the bitmap may not actually be
-destroyed at this point - only when the reference count is zero will the
-data be deleted.
+Destructor.
+See \helpref{reference-counted object destruction}{refcountdestruct} for more info.
 
 If the application omits to delete the bitmap explicitly, the bitmap will be
 destroyed automatically by wxWidgets when the application exits.
@@ -595,33 +593,4 @@ Assignment operator, using \helpref{reference counting}{trefcount}.
 
 Returns 'this' object.
 
-\membersection{wxBitmap::operator $==$}\label{wxbitmapequal}
-
-\func{bool}{operator $==$}{\param{const wxBitmap\& }{bitmap}}
-
-Equality operator. This operator tests whether the internal data pointers are
-equal (a fast test).
-
-\wxheading{Parameters}
-
-\docparam{bitmap}{Bitmap to compare with 'this'}
-
-\wxheading{Return value}
-
-Returns true if the bitmaps were effectively equal, false otherwise.
-
-\membersection{wxBitmap::operator $!=$}\label{wxbitmapnotequal}
-
-\func{bool}{operator $!=$}{\param{const wxBitmap\& }{bitmap}}
-
-Inequality operator. This operator tests whether the internal data pointers are
-unequal (a fast test).
-
-\wxheading{Parameters}
-
-\docparam{bitmap}{Bitmap to compare with 'this'}
-
-\wxheading{Return value}
-
-Returns true if the bitmaps were unequal, false otherwise.
 

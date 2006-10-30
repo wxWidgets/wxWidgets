@@ -48,8 +48,6 @@ public:
             );
     wxCursor(int nCursorType);
     inline ~wxCursor() { }
-    inline bool operator == (const wxCursor& rCursor) const { return m_refData == rCursor.m_refData; }
-    inline bool operator != (const wxCursor& rCursor) const { return m_refData != rCursor.m_refData; }
 
     inline WXHCURSOR GetHCURSOR(void) const { return (M_CURSORDATA ? M_CURSORDATA->m_hCursor : 0); }
     inline void      SetHCURSOR(WXHCURSOR hCursor) { SetHandle((WXHANDLE)hCursor); }

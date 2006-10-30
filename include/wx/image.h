@@ -392,11 +392,6 @@ public:
     // -1.0..1.0 where -1.0 is -360 degrees and 1.0 is 360 degrees
     void RotateHue(double angle);
 
-    bool operator == (const wxImage& image) const
-        { return m_refData == image.m_refData; }
-    bool operator != (const wxImage& image) const
-        { return m_refData != image.m_refData; }
-
     static wxList& GetHandlers() { return sm_handlers; }
     static void AddHandler( wxImageHandler *handler );
     static void InsertHandler( wxImageHandler *handler );

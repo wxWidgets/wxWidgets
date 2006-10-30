@@ -30,6 +30,18 @@ public:
     wxBrushRefData(const wxBrushRefData& data);
     virtual ~wxBrushRefData();
 
+    bool operator == ( const wxBrushRefData& brush ) const
+    {
+        return m_style == brush.m_style &&
+                m_stipple.IsRefTo(&data.m_stipple) &&
+                m_colour == brush.m_colour &&
+                m_macBrushKind == brush.m_macBrushKind &&
+                m_macThemeBrush == brush.m_macThemeBrush &&
+                m_macThemeBackground == brush.m_macThemeBackground &&
+                m_macThemeBackgroundExtent == brush.m_macThemeBackgroundExtent;
+    }
+
+
 protected:
     wxMacBrushKind m_macBrushKind ;
     int           m_style;
@@ -232,4 +244,13 @@ wxBitmap *wxBrush::GetStipple() const
 wxMacBrushKind wxBrush::MacGetBrushKind() const
 {
     return (M_BRUSHDATA ? M_BRUSHDATA->m_macBrushKind : kwxMacBrushColour);
+}
+
+bool wxBrush::operator == ( const wxBrush& brush ) const
+{
+    if (m_refData == brush.m_refData) return true;
+
+    if (!m_refData || !brush.m_refData) return false;
+
+    return ( *(wxBrushRefData*)m_refData == *(wxBrushRefData*)brush.m_refData );
 }

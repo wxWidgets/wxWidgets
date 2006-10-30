@@ -708,11 +708,6 @@ wxImage wxBitmap::ConvertToImage() const
     return image;
 }
 
-bool wxBitmap::operator == ( const wxBitmap& bmp ) const
-{
-    return m_refData == bmp.m_refData;
-}
-
 bool wxBitmap::IsOk() const
 {
     return (m_refData != NULL) &&

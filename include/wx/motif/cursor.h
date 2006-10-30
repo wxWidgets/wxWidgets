@@ -42,11 +42,6 @@ public:
     virtual bool Ok() const { return IsOk(); }
     virtual bool IsOk() const;
 
-    bool operator == (const wxCursor& cursor) const
-        { return m_refData == cursor.m_refData; }
-    bool operator != (const wxCursor& cursor) const
-        { return m_refData != cursor.m_refData; }
-
     // Motif-specific.
     // Create/get a cursor for the current display
     WXCursor GetXCursor(WXDisplay* display) const;

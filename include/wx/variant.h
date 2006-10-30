@@ -332,7 +332,7 @@ expdecl wxVariant& operator << ( wxVariant &variant, const classname &object );
 #define IMPLEMENT_VARIANT_OBJECT(classname) \
     IMPLEMENT_VARIANT_OBJECT_EXPORTED(classname,EMPTY_PARAMETER_VALUE)
 
-#define IMPLEMENT_VARIANT_OBJECT_EXPORTED(classname,expdecl) \
+#define IMPLEMENT_VARIANT_OBJECT_EXPORTED_NO_EQ(classname,expdecl) \
 class classname##VariantData: public wxVariantData \
 { \
 public:\
@@ -354,15 +354,6 @@ private: \
 };\
 \
 IMPLEMENT_CLASS(classname##VariantData, wxVariantData)\
-\
-bool classname##VariantData::Eq(wxVariantData& data) const \
-{\
-    wxASSERT( wxIsKindOf((&data), classname##VariantData) );\
-\
-    classname##VariantData & otherData = (classname##VariantData &) data;\
-\
-    return (otherData.m_value == m_value);\
-}\
 \
 wxString classname##VariantData::GetType() const\
 {\
@@ -389,6 +380,36 @@ expdecl wxVariant& operator << ( wxVariant &variant, const classname &value )\
     variant.SetData( data );\
     return variant;\
 }
+
+// implements a wxVariantData-derived class using for the Eq() method the operator==
+// which must have been provided by "classname"
+#define IMPLEMENT_VARIANT_OBJECT_EXPORTED(classname,expdecl) \
+IMPLEMENT_VARIANT_OBJECT_EXPORTED_NO_EQ(classname,expdecl) \
+\
+bool classname##VariantData::Eq(wxVariantData& data) const \
+{\
+    wxASSERT( wxIsKindOf((&data), classname##VariantData) );\
+\
+    classname##VariantData & otherData = (classname##VariantData &) data;\
+\
+    return otherData.m_value == m_value;\
+}\
+
+
+// implements a wxVariantData-derived class using for the Eq() method a shallow
+// comparison (through wxObject::IsRefTo function)
+#define IMPLEMENT_VARIANT_OBJECT_EXPORTED_SHALLOWCMP(classname,expdecl) \
+IMPLEMENT_VARIANT_OBJECT_EXPORTED_NO_EQ(classname,expdecl) \
+\
+bool classname##VariantData::Eq(wxVariantData& data) const \
+{\
+    wxASSERT( wxIsKindOf((&data), classname##VariantData) );\
+\
+    classname##VariantData & otherData = (classname##VariantData &) data;\
+\
+    return (otherData.m_value.IsRefTo(&m_value));\
+}\
+
 
 // Since we want type safety wxVariant we need to fetch and dynamic_cast
 // in a seemingly safe way so the compiler can check, so we define

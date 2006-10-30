@@ -157,9 +157,6 @@ public:
     wxMask *GetMask() const;
     void SetMask(wxMask *mask) ;
 
-    inline bool operator == (const wxBitmap& bitmap) const { return m_refData == bitmap.m_refData; }
-    inline bool operator != (const wxBitmap& bitmap) const { return m_refData != bitmap.m_refData; }
-
     static void InitStandardHandlers();
 
     // raw bitmap access support functions, for internal use only

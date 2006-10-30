@@ -47,9 +47,6 @@ public:
     virtual bool Ok() const { return IsOk(); }
     virtual bool IsOk() const { return (m_refData != NULL) ; }
 
-    inline bool operator == (const wxPalette& palette) const { return m_refData == palette.m_refData; }
-    inline bool operator != (const wxPalette& palette) const { return m_refData != palette.m_refData; }
-
     virtual int GetColoursCount() const;
     
 private:

@@ -85,6 +85,12 @@ initial accelerator table for a window.
 
 <wx/accel.h>
 
+\wxheading{Predefined objects}
+
+Objects:
+
+{\bf wxNullAcceleratorTable}
+
 \wxheading{Example}
 
 {\small%
@@ -150,6 +156,7 @@ and cmd values like you would construct wxAcceleratorEntry objects with.}
 \func{}{\destruct{wxAcceleratorTable}}{\void}
 
 Destroys the wxAcceleratorTable object.
+See \helpref{reference-counted object destruction}{refcountdestruct} for more info.
 
 \membersection{wxAcceleratorTable::IsOk}\label{wxacceleratortableisok}
 
@@ -170,35 +177,3 @@ Assignment operator, using \helpref{reference counting}{trefcount}.
 \wxheading{Return value}
 
 Returns reference to this object.
-
-\membersection{wxAcceleratorTable::operator $==$}\label{wxacceleratortableequal}
-
-\func{bool}{operator $==$}{\param{const wxAcceleratorTable\& }{accel}}
-
-Equality operator. This operator tests whether the internal data pointers are
-equal (a fast test).
-
-\wxheading{Parameters}
-
-\docparam{accel}{Accelerator table to compare with}
-
-\wxheading{Return value}
-
-Returns true if the accelerator tables were effectively equal, false otherwise.
-
-\membersection{wxAcceleratorTable::operator $!=$}\label{wxacceleratortablenotequal}
-
-\func{bool}{operator $!=$}{\param{const wxAcceleratorTable\& }{accel}}
-
-Inequality operator. This operator tests whether the internal data pointers are
-unequal (a fast test).
-
-\wxheading{Parameters}
-
-\docparam{accel}{Accelerator table to compare with}
-
-\wxheading{Return value}
-
-Returns true if the accelerator tables were unequal, false otherwise.
-
-

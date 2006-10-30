@@ -35,8 +35,6 @@ public:
               int hotSpotX=-1, int hotSpotY=-1,
               const char maskBits[]=0, wxColour *fg=0, wxColour *bg=0 );
     virtual ~wxCursor();
-    bool operator == ( const wxCursor& cursor ) const;
-    bool operator != ( const wxCursor& cursor ) const;
     bool Ok() const { return IsOk(); }
     bool IsOk() const;
 

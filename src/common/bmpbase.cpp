@@ -28,8 +28,8 @@
 // ----------------------------------------------------------------------------
 
 #if wxUSE_VARIANT
-IMPLEMENT_VARIANT_OBJECT_EXPORTED(wxBitmap,WXDLLEXPORT)
-IMPLEMENT_VARIANT_OBJECT_EXPORTED(wxIcon,WXDLLEXPORT)
+IMPLEMENT_VARIANT_OBJECT_EXPORTED_SHALLOWCMP(wxBitmap,WXDLLEXPORT)
+IMPLEMENT_VARIANT_OBJECT_EXPORTED_SHALLOWCMP(wxIcon,WXDLLEXPORT)
 #endif
 
 // ----------------------------------------------------------------------------

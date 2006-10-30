@@ -24,11 +24,6 @@ public:
 
     virtual ~wxAcceleratorTable();
 
-    bool operator == (const wxAcceleratorTable& accel) const
-    { return m_refData == accel.m_refData; }
-    bool operator != (const wxAcceleratorTable& accel) const
-    { return m_refData != accel.m_refData; }
-
     bool Ok() const { return IsOk(); }
     bool IsOk() const;
 

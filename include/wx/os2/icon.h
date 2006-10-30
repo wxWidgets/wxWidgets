@@ -64,11 +64,6 @@ public:
                   ,int             nDesiredHeight = -1
                  );
 
-    inline bool operator == (const wxIcon& rIcon) const
-       { return m_refData == rIcon.m_refData; }
-    inline bool operator != (const wxIcon& rIcon) const
-       { return m_refData != rIcon.m_refData; }
-
     wxIconRefData *GetIconData() const { return (wxIconRefData *)m_refData; }
 
     inline void SetHICON(WXHICON hIcon) { SetHandle((WXHANDLE)hIcon); }

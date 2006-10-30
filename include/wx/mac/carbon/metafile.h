@@ -57,12 +57,6 @@ public:
     // Implementation
     WXHMETAFILE GetHMETAFILE() const ;
     void SetHMETAFILE(WXHMETAFILE mf) ;
-
-    // Operators
-    inline bool operator == (const wxMetafile& metafile) const { return m_refData == metafile.m_refData; }
-    inline bool operator != (const wxMetafile& metafile) const { return m_refData != metafile.m_refData; }
-
-protected:
 };
 
 class WXDLLEXPORT wxMetafileDC: public wxDC

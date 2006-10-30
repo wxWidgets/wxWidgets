@@ -135,11 +135,9 @@ If a stipple brush is created, the brush style will be set to wxSTIPPLE.
 \func{}{\destruct{wxBrush}}{\void}
 
 Destructor.
+See \helpref{reference-counted object destruction}{refcountdestruct} for more info.
 
 \wxheading{Remarks}
-
-The destructor may not delete the underlying brush object of the native windowing
-system, since wxBrush uses a reference counting system for efficiency.
 
 Although all remaining brushes are deleted when the application exits,
 the application should try to clean up all brushes itself. This is because
@@ -300,18 +298,17 @@ Assignment operator, using \helpref{reference counting}{trefcount}.
 
 \func{bool}{operator $==$}{\param{const wxBrush\& }{brush}}
 
-Equality operator. Two brushes are equal if they contain pointers
-to the same underlying brush data. It does not compare each attribute,
-so two independently-created brushes using the same parameters will
-fail the test.
+Equality operator.
+See \helpref{reference-counted object comparison}{refcountequality} for more info.
 
 
 \membersection{wxBrush::operator $!=$}\label{wxbrushnotequals}
 
 \func{bool}{operator $!=$}{\param{const wxBrush\& }{brush}}
 
-Inequality operator. Two brushes are not equal if they contain pointers
-to different underlying brush data. It does not compare each attribute.
+Inequality operator.
+See \helpref{reference-counted object comparison}{refcountequality} for more info.
+
 
 \section{\class{wxBrushList}}\label{wxbrushlist}
 
