@@ -36,6 +36,10 @@ public:
 
     wxTabArt() { }
     virtual ~wxTabArt() { }
+    
+    virtual void SetNormalFont(const wxFont& font) = 0;
+    virtual void SetSelectedFont(const wxFont& font) = 0;
+    virtual void SetMeasuringFont(const wxFont& font) = 0;
 
     virtual void DrawBackground(
                          wxDC* dc,
@@ -62,10 +66,8 @@ public:
                          const wxString& caption,
                          bool active,
                          int* x_extent) = 0;
-                       
-    virtual void SetNormalFont(const wxFont& font) = 0;
-    virtual void SetSelectedFont(const wxFont& font) = 0;
-    virtual void SetMeasuringFont(const wxFont& font) = 0;
+                         
+    virtual int GetBestTabCtrlSize(wxWindow* wnd) = 0;      
 };
 
 
@@ -76,6 +78,10 @@ public:
 
     wxDefaultTabArt();
     virtual ~wxDefaultTabArt();
+    
+    void SetNormalFont(const wxFont& font);
+    void SetSelectedFont(const wxFont& font);
+    void SetMeasuringFont(const wxFont& font);
     
     void DrawBackground(
                  wxDC* dc,
@@ -102,11 +108,9 @@ public:
                  const wxString& caption,
                  bool active,
                  int* x_extent);
-                                   
-    void SetNormalFont(const wxFont& font);
-    void SetSelectedFont(const wxFont& font);
-    void SetMeasuringFont(const wxFont& font);
-   
+    
+    int GetBestTabCtrlSize(wxWindow* wnd);
+
 private:
 
     wxFont m_normal_font;

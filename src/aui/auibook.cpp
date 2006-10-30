@@ -198,32 +198,26 @@ void wxDefaultTabArt::DrawTab(wxDC* dc,
 {
     wxCoord normal_textx, normal_texty;
     wxCoord selected_textx, selected_texty;
-    wxCoord measured_textx, measured_texty;
     wxCoord textx, texty;
-
-
+    
     // if the caption is empty, measure some temporary text
     wxString caption = caption_text;
     if (caption_text.empty())
         caption = wxT("Xj");
-        
-    // measure text
-    dc->SetFont(m_measuring_font);
-    dc->GetTextExtent(caption, &measured_textx, &measured_texty);
-
+            
     dc->SetFont(m_selected_font);
     dc->GetTextExtent(caption, &selected_textx, &selected_texty);
-
+    
     dc->SetFont(m_normal_font);
     dc->GetTextExtent(caption, &normal_textx, &normal_texty);
+        
+    // figure out the size of the tab
+    wxSize tab_size = GetTabSize(dc, caption, active, x_extent);
 
-    caption = caption_text;
-
-    wxCoord tab_height = measured_texty + 4;
-    wxCoord tab_width = measured_textx + tab_height + 5;
+    wxCoord tab_height = tab_size.y;
+    wxCoord tab_width = tab_size.x;
     wxCoord tab_x = in_rect.x;
     wxCoord tab_y = in_rect.y + in_rect.height - tab_height;
-
 
     // select pen, brush and font for the tab to be drawn
 
@@ -274,10 +268,9 @@ void wxDefaultTabArt::DrawTab(wxDC* dc,
 
     dc->DrawText(caption,
                  tab_x + (tab_height/3) + (tab_width/2) - (textx/2),
-                 tab_y + tab_height - texty - 2);
+                 (tab_y + tab_height)/2 - (texty/2) + 1);
 
     *out_rect = wxRect(tab_x, tab_y, tab_width, tab_height);
-    *x_extent = tab_width - (tab_height/2) - 1;
 }
 
 
@@ -368,7 +361,14 @@ void wxDefaultTabArt::DrawButton(
 
 
 
-
+int wxDefaultTabArt::GetBestTabCtrlSize(wxWindow* wnd)
+{
+    wxClientDC dc(wnd);
+    dc.SetFont(m_measuring_font);
+    int x_ext = 0;
+    wxSize s = GetTabSize(&dc, wxT("ABCDEFGHIj"), true, &x_ext);
+    return s.y+3;
+}
 
 void wxDefaultTabArt::SetNormalFont(const wxFont& font)
 {
@@ -1306,11 +1306,7 @@ void wxAuiMultiNotebook::InitNotebook()
     m_selected_font.SetWeight(wxBOLD);
 
     // choose a default for the tab height
-    wxClientDC dc(this);
-    int tx, ty;
-    dc.SetFont(m_selected_font);
-    dc.GetTextExtent(wxT("ABCDEFGHhijklm"), &tx, &ty);
-    m_tab_ctrl_height = (ty*150)/100;
+    m_tab_ctrl_height = m_tabs.GetArtProvider()->GetBestTabCtrlSize(this);
 
     m_dummy_wnd = new wxWindow(this, wxID_ANY, wxPoint(0,0), wxSize(0,0));
     m_dummy_wnd->SetSize(200, 200);
