@@ -293,46 +293,52 @@ wxPortId wxGUIAppTraits::GetToolkitVersion(int *verMaj, int *verMin) const
 #if wxUSE_DETECT_SM
 static wxString GetSM()
 {
-    Display     *dpy;
-    SmcConn     smc_conn;
-    char        *vendor;
-    char        *client_id_ret;
-    dpy = XOpenDisplay(NULL);
-
-    smc_conn = SmcOpenConnection(NULL, NULL,
-	                             999, 999,
-	                             0 /* mask */, NULL /* callbacks */,
-	                             NULL, &client_id_ret, 0, NULL);
-
-    if (smc_conn)
+    class Dpy
     {
-        vendor = SmcVendor(smc_conn);
-        wxString ret = wxString::FromAscii( vendor );
-        free(vendor);
+    public:
+        Dpy() { m_dpy = XOpenDisplay(NULL); }
+        ~Dpy() { if ( m_dpy ) XCloseDisplay(m_dpy); }
 
-        SmcCloseConnection(smc_conn, 0, NULL);
-        free(client_id_ret);
+        operator Display *() const { return m_dpy; }
+    private:
+        Display *m_dpy;
+    } dpy;
 
-        XCloseDisplay(dpy);
-        
-        return ret;
-    }
-    
-    return wxEmptyString;
+    if ( !dpy )
+        return wxEmptyString;
+
+    char *client_id;
+    SmcConn smc_conn = SmcOpenConnection(NULL, NULL,
+                                         999, 999,
+                                         0 /* mask */, NULL /* callbacks */,
+                                         NULL, &client_id,
+                                         0, NULL);
+
+    if ( !smc_conn )
+        return wxEmptyString;
+
+    char *vendor = SmcVendor(smc_conn);
+    wxString ret = wxString::FromAscii( vendor );
+    free(vendor);
+
+    SmcCloseConnection(smc_conn, 0, NULL);
+    free(client_id);
+
+    return ret;
 }
-#endif
+#endif // wxUSE_DETECT_SM
 
 wxString wxGUIAppTraits::GetDesktopEnvironment() const
 {
 #if wxUSE_DETECT_SM
-    wxString SM = GetSM();
-    
+    const wxString SM = GetSM();
+
     if (SM == wxT("GnomeSM"))
         return wxT("GNOME");
-        
+
     if (SM == wxT("KDE"))
         return wxT("KDE");
-#endif
+#endif // wxUSE_DETECT_SM
 
     return wxEmptyString;
 }
