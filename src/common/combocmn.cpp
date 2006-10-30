@@ -830,9 +830,6 @@ wxComboCtrlBase::CreateTextCtrl(int style, const wxValidator& validator)
         m_text = new wxTextCtrl(this, wxID_ANY, m_valueString,
                                 wxDefaultPosition, wxDefaultSize,
                                 style, validator);
-
-        // This is required for some platforms (GTK+ atleast)
-        m_text->SetSizeHints(2,4);
     }
 }
 
