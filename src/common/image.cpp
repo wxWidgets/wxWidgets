@@ -2781,18 +2781,7 @@ unsigned long wxImage::ComputeHistogram( wxImageHistogram &h ) const
  * Rotation code by Carlos Moreno
  */
 
-// GRG: I've removed wxRotationPoint - we already have wxRealPoint which
-//      does exactly the same thing. And I also got rid of wxRotationPixel
-//      bacause of potential problems in architectures where alignment
-//      is an issue, so I had to rewrite parts of the code.
-
-static const double gs_Epsilon = 1e-10;
-
-static inline int wxCint (double x)
-{
-    return (x > 0) ? (int) (x + 0.5) : (int) (x - 0.5);
-}
-
+static const double wxROTATE_EPSILON = 1e-10;
 
 // Auxiliary function to rotate a point (x,y) with respect to point p0
 // make it inline and use a straight return to facilitate optimization
@@ -2800,15 +2789,19 @@ static inline int wxCint (double x)
 // repeating the time-consuming calls to these functions -- sin/cos can
 // be computed and stored in the calling function.
 
-inline wxRealPoint rotated_point (const wxRealPoint & p, double cos_angle, double sin_angle, const wxRealPoint & p0)
+static inline wxRealPoint
+wxRotatePoint(const wxRealPoint& p, double cos_angle, double sin_angle,
+              const wxRealPoint& p0)
 {
-    return wxRealPoint (p0.x + (p.x - p0.x) * cos_angle - (p.y - p0.y) * sin_angle,
-                        p0.y + (p.y - p0.y) * cos_angle + (p.x - p0.x) * sin_angle);
+    return wxRealPoint(p0.x + (p.x - p0.x) * cos_angle - (p.y - p0.y) * sin_angle,
+                       p0.y + (p.y - p0.y) * cos_angle + (p.x - p0.x) * sin_angle);
 }
 
-inline wxRealPoint rotated_point (double x, double y, double cos_angle, double sin_angle, const wxRealPoint & p0)
+static inline wxRealPoint
+wxRotatePoint(double x, double y, double cos_angle, double sin_angle,
+              const wxRealPoint & p0)
 {
-    return rotated_point (wxRealPoint(x,y), cos_angle, sin_angle, p0);
+    return wxRotatePoint (wxRealPoint(x,y), cos_angle, sin_angle, p0);
 }
 
 wxImage wxImage::Rotate(double angle, const wxPoint & centre_of_rotation, bool interpolating, wxPoint * offset_after_rotation) const
@@ -2845,10 +2838,10 @@ wxImage wxImage::Rotate(double angle, const wxPoint & centre_of_rotation, bool i
 
     const wxRealPoint p0(centre_of_rotation.x, centre_of_rotation.y);
 
-    wxRealPoint p1 = rotated_point (0, 0, cos_angle, sin_angle, p0);
-    wxRealPoint p2 = rotated_point (0, GetHeight(), cos_angle, sin_angle, p0);
-    wxRealPoint p3 = rotated_point (GetWidth(), 0, cos_angle, sin_angle, p0);
-    wxRealPoint p4 = rotated_point (GetWidth(), GetHeight(), cos_angle, sin_angle, p0);
+    wxRealPoint p1 = wxRotatePoint (0, 0, cos_angle, sin_angle, p0);
+    wxRealPoint p2 = wxRotatePoint (0, GetHeight(), cos_angle, sin_angle, p0);
+    wxRealPoint p3 = wxRotatePoint (GetWidth(), 0, cos_angle, sin_angle, p0);
+    wxRealPoint p4 = wxRotatePoint (GetWidth(), GetHeight(), cos_angle, sin_angle, p0);
 
     int x1a = (int) floor (wxMin (wxMin(p1.x, p2.x), wxMin(p3.x, p4.x)));
     int y1a = (int) floor (wxMin (wxMin(p1.y, p2.y), wxMin(p3.y, p4.y)));
@@ -2905,7 +2898,7 @@ wxImage wxImage::Rotate(double angle, const wxPoint & centre_of_rotation, bool i
         {
             for (x = 0; x < rotated.GetWidth(); x++)
             {
-                wxRealPoint src = rotated_point (x + x1a, y + y1a, cos_angle, -sin_angle, p0);
+                wxRealPoint src = wxRotatePoint (x + x1a, y + y1a, cos_angle, -sin_angle, p0);
 
                 if (-0.25 < src.x && src.x < GetWidth() - 0.75 &&
                     -0.25 < src.y && src.y < GetHeight() - 0.75)
@@ -2917,22 +2910,22 @@ wxImage wxImage::Rotate(double angle, const wxPoint & centre_of_rotation, bool i
 
                     if (0 < src.x && src.x < GetWidth() - 1)
                     {
-                        x1 = wxCint(floor(src.x));
-                        x2 = wxCint(ceil(src.x));
+                        x1 = wxRound(floor(src.x));
+                        x2 = wxRound(ceil(src.x));
                     }
                     else    // else means that x is near one of the borders (0 or width-1)
                     {
-                        x1 = x2 = wxCint (src.x);
+                        x1 = x2 = wxRound (src.x);
                     }
 
                     if (0 < src.y && src.y < GetHeight() - 1)
                     {
-                        y1 = wxCint(floor(src.y));
-                        y2 = wxCint(ceil(src.y));
+                        y1 = wxRound(floor(src.y));
+                        y2 = wxRound(ceil(src.y));
                     }
                     else
                     {
-                        y1 = y2 = wxCint (src.y);
+                        y1 = y2 = wxRound (src.y);
                     }
 
                     // get four points and the distances (square of the distance,
@@ -2941,7 +2934,7 @@ wxImage wxImage::Rotate(double angle, const wxPoint & centre_of_rotation, bool i
                     // GRG: Do not calculate the points until they are
                     //      really needed -- this way we can calculate
                     //      just one, instead of four, if d1, d2, d3
-                    //      or d4 are < gs_Epsilon
+                    //      or d4 are < wxROTATE_EPSILON
 
                     const double d1 = (src.x - x1) * (src.x - x1) + (src.y - y1) * (src.y - y1);
                     const double d2 = (src.x - x2) * (src.x - x2) + (src.y - y1) * (src.y - y1);
@@ -2954,7 +2947,8 @@ wxImage wxImage::Rotate(double angle, const wxPoint & centre_of_rotation, bool i
                     // If the point is exactly at one point of the grid of the source
                     // image, then don't interpolate -- just assign the pixel
 
-                    if (d1 < gs_Epsilon)        // d1,d2,d3,d4 are positive -- no need for abs()
+                    // d1,d2,d3,d4 are positive -- no need for abs()
+                    if (d1 < wxROTATE_EPSILON)
                     {
                         unsigned char *p = data[y1] + (3 * x1);
                         *(dst++) = *(p++);
@@ -2964,7 +2958,7 @@ wxImage wxImage::Rotate(double angle, const wxPoint & centre_of_rotation, bool i
                         if (has_alpha)
                             *(alpha_dst++) = *(alpha[y1] + x1);
                     }
-                    else if (d2 < gs_Epsilon)
+                    else if (d2 < wxROTATE_EPSILON)
                     {
                         unsigned char *p = data[y1] + (3 * x2);
                         *(dst++) = *(p++);
@@ -2974,7 +2968,7 @@ wxImage wxImage::Rotate(double angle, const wxPoint & centre_of_rotation, bool i
                         if (has_alpha)
                             *(alpha_dst++) = *(alpha[y1] + x2);
                     }
-                    else if (d3 < gs_Epsilon)
+                    else if (d3 < wxROTATE_EPSILON)
                     {
                         unsigned char *p = data[y2] + (3 * x2);
                         *(dst++) = *(p++);
@@ -2984,7 +2978,7 @@ wxImage wxImage::Rotate(double angle, const wxPoint & centre_of_rotation, bool i
                         if (has_alpha)
                             *(alpha_dst++) = *(alpha[y2] + x2);
                     }
-                    else if (d4 < gs_Epsilon)
+                    else if (d4 < wxROTATE_EPSILON)
                     {
                         unsigned char *p = data[y2] + (3 * x1);
                         *(dst++) = *(p++);
@@ -3051,10 +3045,10 @@ wxImage wxImage::Rotate(double angle, const wxPoint & centre_of_rotation, bool i
         {
             for (x = 0; x < rotated.GetWidth(); x++)
             {
-                wxRealPoint src = rotated_point (x + x1a, y + y1a, cos_angle, -sin_angle, p0);
+                wxRealPoint src = wxRotatePoint (x + x1a, y + y1a, cos_angle, -sin_angle, p0);
 
-                const int xs = wxCint (src.x);      // wxCint rounds to the
-                const int ys = wxCint (src.y);      // closest integer
+                const int xs = wxRound (src.x);      // wxRound rounds to the
+                const int ys = wxRound (src.y);      // closest integer
 
                 if (0 <= xs && xs < GetWidth() &&
                     0 <= ys && ys < GetHeight())
