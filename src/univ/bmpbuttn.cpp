@@ -96,14 +96,12 @@ void wxBitmapButton::OnSetBitmap()
 bool wxBitmapButton::ChangeBitmap(const wxBitmap& bmp)
 {
     wxBitmap bitmap = bmp.Ok() ? bmp : m_bmpNormal;
-    if ( bitmap != m_bitmap )
-    {
-        m_bitmap = bitmap;
+    if ( bitmap.IsSameAs(m_bitmap) )
+        return false;
 
-        return true;
-    }
+    m_bitmap = bitmap;
 
-    return false;
+    return true;
 }
 
 bool wxBitmapButton::Enable(bool enable)
