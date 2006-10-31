@@ -2523,147 +2523,148 @@ SWIG_Python_MustGetPtr(PyObject *obj, swig_type_info *ty, int argnum, int flags)
 #define SWIGTYPE_p_wxHtmlBookRecArray swig_types[57]
 #define SWIGTYPE_p_wxHtmlBookRecord swig_types[58]
 #define SWIGTYPE_p_wxHtmlCell swig_types[59]
-#define SWIGTYPE_p_wxHtmlColourCell swig_types[60]
-#define SWIGTYPE_p_wxHtmlContainerCell swig_types[61]
-#define SWIGTYPE_p_wxHtmlDCRenderer swig_types[62]
-#define SWIGTYPE_p_wxHtmlEasyPrinting swig_types[63]
-#define SWIGTYPE_p_wxHtmlFilter swig_types[64]
-#define SWIGTYPE_p_wxHtmlFontCell swig_types[65]
-#define SWIGTYPE_p_wxHtmlHelpController swig_types[66]
-#define SWIGTYPE_p_wxHtmlHelpData swig_types[67]
-#define SWIGTYPE_p_wxHtmlHelpDialog swig_types[68]
-#define SWIGTYPE_p_wxHtmlHelpFrame swig_types[69]
-#define SWIGTYPE_p_wxHtmlHelpFrameCfg swig_types[70]
-#define SWIGTYPE_p_wxHtmlHelpWindow swig_types[71]
-#define SWIGTYPE_p_wxHtmlLinkInfo swig_types[72]
-#define SWIGTYPE_p_wxHtmlModalHelp swig_types[73]
-#define SWIGTYPE_p_wxHtmlParser swig_types[74]
-#define SWIGTYPE_p_wxHtmlPrintout swig_types[75]
-#define SWIGTYPE_p_wxHtmlRenderingInfo swig_types[76]
-#define SWIGTYPE_p_wxHtmlRenderingState swig_types[77]
-#define SWIGTYPE_p_wxHtmlRenderingStyle swig_types[78]
-#define SWIGTYPE_p_wxHtmlSearchStatus swig_types[79]
-#define SWIGTYPE_p_wxHtmlSelection swig_types[80]
-#define SWIGTYPE_p_wxHtmlTag swig_types[81]
-#define SWIGTYPE_p_wxHtmlTagHandler swig_types[82]
-#define SWIGTYPE_p_wxHtmlWidgetCell swig_types[83]
-#define SWIGTYPE_p_wxHtmlWinParser swig_types[84]
-#define SWIGTYPE_p_wxHtmlWindow swig_types[85]
-#define SWIGTYPE_p_wxHtmlWindowEvent swig_types[86]
-#define SWIGTYPE_p_wxHtmlWindowInterface swig_types[87]
-#define SWIGTYPE_p_wxHtmlWordCell swig_types[88]
-#define SWIGTYPE_p_wxICOHandler swig_types[89]
-#define SWIGTYPE_p_wxIconizeEvent swig_types[90]
-#define SWIGTYPE_p_wxIdleEvent swig_types[91]
-#define SWIGTYPE_p_wxImage swig_types[92]
-#define SWIGTYPE_p_wxImageHandler swig_types[93]
-#define SWIGTYPE_p_wxIndividualLayoutConstraint swig_types[94]
-#define SWIGTYPE_p_wxInitDialogEvent swig_types[95]
-#define SWIGTYPE_p_wxJPEGHandler swig_types[96]
-#define SWIGTYPE_p_wxKeyEvent swig_types[97]
-#define SWIGTYPE_p_wxLayoutAlgorithm swig_types[98]
-#define SWIGTYPE_p_wxLayoutConstraints swig_types[99]
-#define SWIGTYPE_p_wxMDIChildFrame swig_types[100]
-#define SWIGTYPE_p_wxMDIClientWindow swig_types[101]
-#define SWIGTYPE_p_wxMDIParentFrame swig_types[102]
-#define SWIGTYPE_p_wxMaximizeEvent swig_types[103]
-#define SWIGTYPE_p_wxMenu swig_types[104]
-#define SWIGTYPE_p_wxMenuBar swig_types[105]
-#define SWIGTYPE_p_wxMenuEvent swig_types[106]
-#define SWIGTYPE_p_wxMenuItem swig_types[107]
-#define SWIGTYPE_p_wxMessageDialog swig_types[108]
-#define SWIGTYPE_p_wxMiniFrame swig_types[109]
-#define SWIGTYPE_p_wxMouseCaptureChangedEvent swig_types[110]
-#define SWIGTYPE_p_wxMouseCaptureLostEvent swig_types[111]
-#define SWIGTYPE_p_wxMouseEvent swig_types[112]
-#define SWIGTYPE_p_wxMoveEvent swig_types[113]
-#define SWIGTYPE_p_wxMultiChoiceDialog swig_types[114]
-#define SWIGTYPE_p_wxNavigationKeyEvent swig_types[115]
-#define SWIGTYPE_p_wxNcPaintEvent swig_types[116]
-#define SWIGTYPE_p_wxNotifyEvent swig_types[117]
-#define SWIGTYPE_p_wxNumberEntryDialog swig_types[118]
-#define SWIGTYPE_p_wxObject swig_types[119]
-#define SWIGTYPE_p_wxPCXHandler swig_types[120]
-#define SWIGTYPE_p_wxPNGHandler swig_types[121]
-#define SWIGTYPE_p_wxPNMHandler swig_types[122]
-#define SWIGTYPE_p_wxPageSetupDialog swig_types[123]
-#define SWIGTYPE_p_wxPageSetupDialogData swig_types[124]
-#define SWIGTYPE_p_wxPaintEvent swig_types[125]
-#define SWIGTYPE_p_wxPaletteChangedEvent swig_types[126]
-#define SWIGTYPE_p_wxPanel swig_types[127]
-#define SWIGTYPE_p_wxPaperSize swig_types[128]
-#define SWIGTYPE_p_wxPasswordEntryDialog swig_types[129]
-#define SWIGTYPE_p_wxPoint swig_types[130]
-#define SWIGTYPE_p_wxPopupWindow swig_types[131]
-#define SWIGTYPE_p_wxPreviewCanvas swig_types[132]
-#define SWIGTYPE_p_wxPreviewControlBar swig_types[133]
-#define SWIGTYPE_p_wxPreviewFrame swig_types[134]
-#define SWIGTYPE_p_wxPrintData swig_types[135]
-#define SWIGTYPE_p_wxPrintDialog swig_types[136]
-#define SWIGTYPE_p_wxPrintDialogData swig_types[137]
-#define SWIGTYPE_p_wxPrintPreview swig_types[138]
-#define SWIGTYPE_p_wxPrinter swig_types[139]
-#define SWIGTYPE_p_wxProgressDialog swig_types[140]
-#define SWIGTYPE_p_wxPyApp swig_types[141]
-#define SWIGTYPE_p_wxPyCommandEvent swig_types[142]
-#define SWIGTYPE_p_wxPyEvent swig_types[143]
-#define SWIGTYPE_p_wxPyHtmlFilter swig_types[144]
-#define SWIGTYPE_p_wxPyHtmlListBox swig_types[145]
-#define SWIGTYPE_p_wxPyHtmlTagHandler swig_types[146]
-#define SWIGTYPE_p_wxPyHtmlWinTagHandler swig_types[147]
-#define SWIGTYPE_p_wxPyHtmlWindow swig_types[148]
-#define SWIGTYPE_p_wxPyImageHandler swig_types[149]
-#define SWIGTYPE_p_wxPyPanel swig_types[150]
-#define SWIGTYPE_p_wxPyPopupTransientWindow swig_types[151]
-#define SWIGTYPE_p_wxPyPreviewControlBar swig_types[152]
-#define SWIGTYPE_p_wxPyPreviewFrame swig_types[153]
-#define SWIGTYPE_p_wxPyPrintPreview swig_types[154]
-#define SWIGTYPE_p_wxPyPrintout swig_types[155]
-#define SWIGTYPE_p_wxPyScrolledWindow swig_types[156]
-#define SWIGTYPE_p_wxPySizer swig_types[157]
-#define SWIGTYPE_p_wxPyTaskBarIcon swig_types[158]
-#define SWIGTYPE_p_wxPyVListBox swig_types[159]
-#define SWIGTYPE_p_wxPyVScrolledWindow swig_types[160]
-#define SWIGTYPE_p_wxPyValidator swig_types[161]
-#define SWIGTYPE_p_wxPyWindow swig_types[162]
-#define SWIGTYPE_p_wxQueryLayoutInfoEvent swig_types[163]
-#define SWIGTYPE_p_wxQueryNewPaletteEvent swig_types[164]
-#define SWIGTYPE_p_wxSashEvent swig_types[165]
-#define SWIGTYPE_p_wxSashLayoutWindow swig_types[166]
-#define SWIGTYPE_p_wxSashWindow swig_types[167]
-#define SWIGTYPE_p_wxScrollEvent swig_types[168]
-#define SWIGTYPE_p_wxScrollWinEvent swig_types[169]
-#define SWIGTYPE_p_wxScrolledWindow swig_types[170]
-#define SWIGTYPE_p_wxSetCursorEvent swig_types[171]
-#define SWIGTYPE_p_wxShowEvent swig_types[172]
-#define SWIGTYPE_p_wxSingleChoiceDialog swig_types[173]
-#define SWIGTYPE_p_wxSize swig_types[174]
-#define SWIGTYPE_p_wxSizeEvent swig_types[175]
-#define SWIGTYPE_p_wxSizer swig_types[176]
-#define SWIGTYPE_p_wxSizerItem swig_types[177]
-#define SWIGTYPE_p_wxSplashScreen swig_types[178]
-#define SWIGTYPE_p_wxSplashScreenWindow swig_types[179]
-#define SWIGTYPE_p_wxSplitterEvent swig_types[180]
-#define SWIGTYPE_p_wxSplitterWindow swig_types[181]
-#define SWIGTYPE_p_wxStaticBoxSizer swig_types[182]
-#define SWIGTYPE_p_wxStatusBar swig_types[183]
-#define SWIGTYPE_p_wxStdDialogButtonSizer swig_types[184]
-#define SWIGTYPE_p_wxString swig_types[185]
-#define SWIGTYPE_p_wxSysColourChangedEvent swig_types[186]
-#define SWIGTYPE_p_wxTIFFHandler swig_types[187]
-#define SWIGTYPE_p_wxTaskBarIconEvent swig_types[188]
-#define SWIGTYPE_p_wxTextEntryDialog swig_types[189]
-#define SWIGTYPE_p_wxTipWindow swig_types[190]
-#define SWIGTYPE_p_wxTopLevelWindow swig_types[191]
-#define SWIGTYPE_p_wxUpdateUIEvent swig_types[192]
-#define SWIGTYPE_p_wxValidator swig_types[193]
-#define SWIGTYPE_p_wxVisualAttributes swig_types[194]
-#define SWIGTYPE_p_wxWindow swig_types[195]
-#define SWIGTYPE_p_wxWindowCreateEvent swig_types[196]
-#define SWIGTYPE_p_wxWindowDestroyEvent swig_types[197]
-#define SWIGTYPE_p_wxXPMHandler swig_types[198]
-static swig_type_info *swig_types[200];
-static swig_module_info swig_module = {swig_types, 199, 0, 0, 0, 0};
+#define SWIGTYPE_p_wxHtmlCellEvent swig_types[60]
+#define SWIGTYPE_p_wxHtmlColourCell swig_types[61]
+#define SWIGTYPE_p_wxHtmlContainerCell swig_types[62]
+#define SWIGTYPE_p_wxHtmlDCRenderer swig_types[63]
+#define SWIGTYPE_p_wxHtmlEasyPrinting swig_types[64]
+#define SWIGTYPE_p_wxHtmlFilter swig_types[65]
+#define SWIGTYPE_p_wxHtmlFontCell swig_types[66]
+#define SWIGTYPE_p_wxHtmlHelpController swig_types[67]
+#define SWIGTYPE_p_wxHtmlHelpData swig_types[68]
+#define SWIGTYPE_p_wxHtmlHelpDialog swig_types[69]
+#define SWIGTYPE_p_wxHtmlHelpFrame swig_types[70]
+#define SWIGTYPE_p_wxHtmlHelpFrameCfg swig_types[71]
+#define SWIGTYPE_p_wxHtmlHelpWindow swig_types[72]
+#define SWIGTYPE_p_wxHtmlLinkEvent swig_types[73]
+#define SWIGTYPE_p_wxHtmlLinkInfo swig_types[74]
+#define SWIGTYPE_p_wxHtmlModalHelp swig_types[75]
+#define SWIGTYPE_p_wxHtmlParser swig_types[76]
+#define SWIGTYPE_p_wxHtmlPrintout swig_types[77]
+#define SWIGTYPE_p_wxHtmlRenderingInfo swig_types[78]
+#define SWIGTYPE_p_wxHtmlRenderingState swig_types[79]
+#define SWIGTYPE_p_wxHtmlRenderingStyle swig_types[80]
+#define SWIGTYPE_p_wxHtmlSearchStatus swig_types[81]
+#define SWIGTYPE_p_wxHtmlSelection swig_types[82]
+#define SWIGTYPE_p_wxHtmlTag swig_types[83]
+#define SWIGTYPE_p_wxHtmlTagHandler swig_types[84]
+#define SWIGTYPE_p_wxHtmlWidgetCell swig_types[85]
+#define SWIGTYPE_p_wxHtmlWinParser swig_types[86]
+#define SWIGTYPE_p_wxHtmlWindow swig_types[87]
+#define SWIGTYPE_p_wxHtmlWindowInterface swig_types[88]
+#define SWIGTYPE_p_wxHtmlWordCell swig_types[89]
+#define SWIGTYPE_p_wxICOHandler swig_types[90]
+#define SWIGTYPE_p_wxIconizeEvent swig_types[91]
+#define SWIGTYPE_p_wxIdleEvent swig_types[92]
+#define SWIGTYPE_p_wxImage swig_types[93]
+#define SWIGTYPE_p_wxImageHandler swig_types[94]
+#define SWIGTYPE_p_wxIndividualLayoutConstraint swig_types[95]
+#define SWIGTYPE_p_wxInitDialogEvent swig_types[96]
+#define SWIGTYPE_p_wxJPEGHandler swig_types[97]
+#define SWIGTYPE_p_wxKeyEvent swig_types[98]
+#define SWIGTYPE_p_wxLayoutAlgorithm swig_types[99]
+#define SWIGTYPE_p_wxLayoutConstraints swig_types[100]
+#define SWIGTYPE_p_wxMDIChildFrame swig_types[101]
+#define SWIGTYPE_p_wxMDIClientWindow swig_types[102]
+#define SWIGTYPE_p_wxMDIParentFrame swig_types[103]
+#define SWIGTYPE_p_wxMaximizeEvent swig_types[104]
+#define SWIGTYPE_p_wxMenu swig_types[105]
+#define SWIGTYPE_p_wxMenuBar swig_types[106]
+#define SWIGTYPE_p_wxMenuEvent swig_types[107]
+#define SWIGTYPE_p_wxMenuItem swig_types[108]
+#define SWIGTYPE_p_wxMessageDialog swig_types[109]
+#define SWIGTYPE_p_wxMiniFrame swig_types[110]
+#define SWIGTYPE_p_wxMouseCaptureChangedEvent swig_types[111]
+#define SWIGTYPE_p_wxMouseCaptureLostEvent swig_types[112]
+#define SWIGTYPE_p_wxMouseEvent swig_types[113]
+#define SWIGTYPE_p_wxMoveEvent swig_types[114]
+#define SWIGTYPE_p_wxMultiChoiceDialog swig_types[115]
+#define SWIGTYPE_p_wxNavigationKeyEvent swig_types[116]
+#define SWIGTYPE_p_wxNcPaintEvent swig_types[117]
+#define SWIGTYPE_p_wxNotifyEvent swig_types[118]
+#define SWIGTYPE_p_wxNumberEntryDialog swig_types[119]
+#define SWIGTYPE_p_wxObject swig_types[120]
+#define SWIGTYPE_p_wxPCXHandler swig_types[121]
+#define SWIGTYPE_p_wxPNGHandler swig_types[122]
+#define SWIGTYPE_p_wxPNMHandler swig_types[123]
+#define SWIGTYPE_p_wxPageSetupDialog swig_types[124]
+#define SWIGTYPE_p_wxPageSetupDialogData swig_types[125]
+#define SWIGTYPE_p_wxPaintEvent swig_types[126]
+#define SWIGTYPE_p_wxPaletteChangedEvent swig_types[127]
+#define SWIGTYPE_p_wxPanel swig_types[128]
+#define SWIGTYPE_p_wxPaperSize swig_types[129]
+#define SWIGTYPE_p_wxPasswordEntryDialog swig_types[130]
+#define SWIGTYPE_p_wxPoint swig_types[131]
+#define SWIGTYPE_p_wxPopupWindow swig_types[132]
+#define SWIGTYPE_p_wxPreviewCanvas swig_types[133]
+#define SWIGTYPE_p_wxPreviewControlBar swig_types[134]
+#define SWIGTYPE_p_wxPreviewFrame swig_types[135]
+#define SWIGTYPE_p_wxPrintData swig_types[136]
+#define SWIGTYPE_p_wxPrintDialog swig_types[137]
+#define SWIGTYPE_p_wxPrintDialogData swig_types[138]
+#define SWIGTYPE_p_wxPrintPreview swig_types[139]
+#define SWIGTYPE_p_wxPrinter swig_types[140]
+#define SWIGTYPE_p_wxProgressDialog swig_types[141]
+#define SWIGTYPE_p_wxPyApp swig_types[142]
+#define SWIGTYPE_p_wxPyCommandEvent swig_types[143]
+#define SWIGTYPE_p_wxPyEvent swig_types[144]
+#define SWIGTYPE_p_wxPyHtmlFilter swig_types[145]
+#define SWIGTYPE_p_wxPyHtmlListBox swig_types[146]
+#define SWIGTYPE_p_wxPyHtmlTagHandler swig_types[147]
+#define SWIGTYPE_p_wxPyHtmlWinTagHandler swig_types[148]
+#define SWIGTYPE_p_wxPyHtmlWindow swig_types[149]
+#define SWIGTYPE_p_wxPyImageHandler swig_types[150]
+#define SWIGTYPE_p_wxPyPanel swig_types[151]
+#define SWIGTYPE_p_wxPyPopupTransientWindow swig_types[152]
+#define SWIGTYPE_p_wxPyPreviewControlBar swig_types[153]
+#define SWIGTYPE_p_wxPyPreviewFrame swig_types[154]
+#define SWIGTYPE_p_wxPyPrintPreview swig_types[155]
+#define SWIGTYPE_p_wxPyPrintout swig_types[156]
+#define SWIGTYPE_p_wxPyScrolledWindow swig_types[157]
+#define SWIGTYPE_p_wxPySizer swig_types[158]
+#define SWIGTYPE_p_wxPyTaskBarIcon swig_types[159]
+#define SWIGTYPE_p_wxPyVListBox swig_types[160]
+#define SWIGTYPE_p_wxPyVScrolledWindow swig_types[161]
+#define SWIGTYPE_p_wxPyValidator swig_types[162]
+#define SWIGTYPE_p_wxPyWindow swig_types[163]
+#define SWIGTYPE_p_wxQueryLayoutInfoEvent swig_types[164]
+#define SWIGTYPE_p_wxQueryNewPaletteEvent swig_types[165]
+#define SWIGTYPE_p_wxSashEvent swig_types[166]
+#define SWIGTYPE_p_wxSashLayoutWindow swig_types[167]
+#define SWIGTYPE_p_wxSashWindow swig_types[168]
+#define SWIGTYPE_p_wxScrollEvent swig_types[169]
+#define SWIGTYPE_p_wxScrollWinEvent swig_types[170]
+#define SWIGTYPE_p_wxScrolledWindow swig_types[171]
+#define SWIGTYPE_p_wxSetCursorEvent swig_types[172]
+#define SWIGTYPE_p_wxShowEvent swig_types[173]
+#define SWIGTYPE_p_wxSingleChoiceDialog swig_types[174]
+#define SWIGTYPE_p_wxSize swig_types[175]
+#define SWIGTYPE_p_wxSizeEvent swig_types[176]
+#define SWIGTYPE_p_wxSizer swig_types[177]
+#define SWIGTYPE_p_wxSizerItem swig_types[178]
+#define SWIGTYPE_p_wxSplashScreen swig_types[179]
+#define SWIGTYPE_p_wxSplashScreenWindow swig_types[180]
+#define SWIGTYPE_p_wxSplitterEvent swig_types[181]
+#define SWIGTYPE_p_wxSplitterWindow swig_types[182]
+#define SWIGTYPE_p_wxStaticBoxSizer swig_types[183]
+#define SWIGTYPE_p_wxStatusBar swig_types[184]
+#define SWIGTYPE_p_wxStdDialogButtonSizer swig_types[185]
+#define SWIGTYPE_p_wxString swig_types[186]
+#define SWIGTYPE_p_wxSysColourChangedEvent swig_types[187]
+#define SWIGTYPE_p_wxTIFFHandler swig_types[188]
+#define SWIGTYPE_p_wxTaskBarIconEvent swig_types[189]
+#define SWIGTYPE_p_wxTextEntryDialog swig_types[190]
+#define SWIGTYPE_p_wxTipWindow swig_types[191]
+#define SWIGTYPE_p_wxTopLevelWindow swig_types[192]
+#define SWIGTYPE_p_wxUpdateUIEvent swig_types[193]
+#define SWIGTYPE_p_wxValidator swig_types[194]
+#define SWIGTYPE_p_wxVisualAttributes swig_types[195]
+#define SWIGTYPE_p_wxWindow swig_types[196]
+#define SWIGTYPE_p_wxWindowCreateEvent swig_types[197]
+#define SWIGTYPE_p_wxWindowDestroyEvent swig_types[198]
+#define SWIGTYPE_p_wxXPMHandler swig_types[199]
+static swig_type_info *swig_types[201];
+static swig_module_info swig_module = {swig_types, 200, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -14914,124 +14915,96 @@ SWIGINTERN PyObject *HtmlHelpWindow_swiginit(PyObject *SWIGUNUSEDPARM(self), PyO
   return SWIG_Python_InitShadowInstance(args);
 }
 
-SWIGINTERN PyObject *_wrap_new_HtmlWindowEvent(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+SWIGINTERN PyObject *_wrap_new_HtmlCellEvent(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
-  wxEventType arg1 = (wxEventType) wxEVT_NULL ;
-  int arg2 = (int) 0 ;
-  wxHtmlWindowEvent *result = 0 ;
+  wxEventType arg1 ;
+  int arg2 ;
+  wxHtmlCell *arg3 = (wxHtmlCell *) 0 ;
+  wxPoint *arg4 = 0 ;
+  wxMouseEvent *arg5 = 0 ;
+  wxHtmlCellEvent *result = 0 ;
   int val1 ;
   int ecode1 = 0 ;
   int val2 ;
   int ecode2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  wxPoint temp4 ;
+  void *argp5 = 0 ;
+  int res5 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  PyObject * obj4 = 0 ;
   char *  kwnames[] = {
-    (char *) "commandType",(char *) "id", NULL 
+    (char *) "commandType",(char *) "id",(char *) "cell",(char *) "pt",(char *) "ev", NULL 
   };
   
-  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"|OO:new_HtmlWindowEvent",kwnames,&obj0,&obj1)) SWIG_fail;
-  if (obj0) {
-    ecode1 = SWIG_AsVal_int(obj0, &val1);
-    if (!SWIG_IsOK(ecode1)) {
-      SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "new_HtmlWindowEvent" "', expected argument " "1"" of type '" "wxEventType""'");
-    } 
-    arg1 = static_cast< wxEventType >(val1);
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOOO:new_HtmlCellEvent",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4)) SWIG_fail;
+  ecode1 = SWIG_AsVal_int(obj0, &val1);
+  if (!SWIG_IsOK(ecode1)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "new_HtmlCellEvent" "', expected argument " "1"" of type '" "wxEventType""'");
+  } 
+  arg1 = static_cast< wxEventType >(val1);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "new_HtmlCellEvent" "', expected argument " "2"" of type '" "int""'");
+  } 
+  arg2 = static_cast< int >(val2);
+  res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p_wxHtmlCell, 0 |  0 );
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "new_HtmlCellEvent" "', expected argument " "3"" of type '" "wxHtmlCell *""'"); 
   }
-  if (obj1) {
-    ecode2 = SWIG_AsVal_int(obj1, &val2);
-    if (!SWIG_IsOK(ecode2)) {
-      SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "new_HtmlWindowEvent" "', expected argument " "2"" of type '" "int""'");
-    } 
-    arg2 = static_cast< int >(val2);
+  arg3 = reinterpret_cast< wxHtmlCell * >(argp3);
+  {
+    arg4 = &temp4;
+    if ( ! wxPoint_helper(obj3, &arg4)) SWIG_fail;
   }
+  res5 = SWIG_ConvertPtr(obj4, &argp5, SWIGTYPE_p_wxMouseEvent,  0  | 0);
+  if (!SWIG_IsOK(res5)) {
+    SWIG_exception_fail(SWIG_ArgError(res5), "in method '" "new_HtmlCellEvent" "', expected argument " "5"" of type '" "wxMouseEvent const &""'"); 
+  }
+  if (!argp5) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_HtmlCellEvent" "', expected argument " "5"" of type '" "wxMouseEvent const &""'"); 
+  }
+  arg5 = reinterpret_cast< wxMouseEvent * >(argp5);
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    result = (wxHtmlWindowEvent *)new wxHtmlWindowEvent(arg1,arg2);
+    result = (wxHtmlCellEvent *)new wxHtmlCellEvent(arg1,arg2,arg3,(wxPoint const &)*arg4,(wxMouseEvent const &)*arg5);
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_wxHtmlWindowEvent, SWIG_POINTER_NEW |  0 );
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_wxHtmlCellEvent, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
   return NULL;
 }
 
 
-SWIGINTERN PyObject *_wrap_HtmlWindowEvent_SetURL(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+SWIGINTERN PyObject *_wrap_HtmlCellEvent_GetCell(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  wxHtmlWindowEvent *arg1 = (wxHtmlWindowEvent *) 0 ;
-  wxString *arg2 = 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  bool temp2 = false ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  char *  kwnames[] = {
-    (char *) "self",(char *) "url", NULL 
-  };
-  
-  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:HtmlWindowEvent_SetURL",kwnames,&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxHtmlWindowEvent, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "HtmlWindowEvent_SetURL" "', expected argument " "1"" of type '" "wxHtmlWindowEvent *""'"); 
-  }
-  arg1 = reinterpret_cast< wxHtmlWindowEvent * >(argp1);
-  {
-    arg2 = wxString_in_helper(obj1);
-    if (arg2 == NULL) SWIG_fail;
-    temp2 = true;
-  }
-  {
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    (arg1)->SetURL((wxString const &)*arg2);
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) SWIG_fail;
-  }
-  resultobj = SWIG_Py_Void();
-  {
-    if (temp2)
-    delete arg2;
-  }
-  return resultobj;
-fail:
-  {
-    if (temp2)
-    delete arg2;
-  }
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_HtmlWindowEvent_GetURL(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  wxHtmlWindowEvent *arg1 = (wxHtmlWindowEvent *) 0 ;
-  wxString *result = 0 ;
+  wxHtmlCellEvent *arg1 = (wxHtmlCellEvent *) 0 ;
+  wxHtmlCell *result = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject *swig_obj[1] ;
   
   if (!args) SWIG_fail;
   swig_obj[0] = args;
-  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxHtmlWindowEvent, 0 |  0 );
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxHtmlCellEvent, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "HtmlWindowEvent_GetURL" "', expected argument " "1"" of type '" "wxHtmlWindowEvent const *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "HtmlCellEvent_GetCell" "', expected argument " "1"" of type '" "wxHtmlCellEvent const *""'"); 
   }
-  arg1 = reinterpret_cast< wxHtmlWindowEvent * >(argp1);
+  arg1 = reinterpret_cast< wxHtmlCellEvent * >(argp1);
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    {
-      wxString const &_result_ref = ((wxHtmlWindowEvent const *)arg1)->GetURL();
-      result = (wxString *) &_result_ref;
-    }
+    result = (wxHtmlCell *)((wxHtmlCellEvent const *)arg1)->GetCell();
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
   {
-#if wxUSE_UNICODE
-    resultobj = PyUnicode_FromWideChar(result->c_str(), result->Len());
-#else
-    resultobj = PyString_FromStringAndSize(result->c_str(), result->Len());
-#endif
+    resultobj = wxPyMake_wxObject(result, 0); 
   }
   return resultobj;
 fail:
@@ -15039,14 +15012,222 @@ fail:
 }
 
 
-SWIGINTERN PyObject *HtmlWindowEvent_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_HtmlCellEvent_GetPoint(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxHtmlCellEvent *arg1 = (wxHtmlCellEvent *) 0 ;
+  wxPoint result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxHtmlCellEvent, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "HtmlCellEvent_GetPoint" "', expected argument " "1"" of type '" "wxHtmlCellEvent const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxHtmlCellEvent * >(argp1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = ((wxHtmlCellEvent const *)arg1)->GetPoint();
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_NewPointerObj((new wxPoint(static_cast< const wxPoint& >(result))), SWIGTYPE_p_wxPoint, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_HtmlCellEvent_GetMouseEvent(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxHtmlCellEvent *arg1 = (wxHtmlCellEvent *) 0 ;
+  wxMouseEvent result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxHtmlCellEvent, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "HtmlCellEvent_GetMouseEvent" "', expected argument " "1"" of type '" "wxHtmlCellEvent const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxHtmlCellEvent * >(argp1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = ((wxHtmlCellEvent const *)arg1)->GetMouseEvent();
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_NewPointerObj((new wxMouseEvent(static_cast< const wxMouseEvent& >(result))), SWIGTYPE_p_wxMouseEvent, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_HtmlCellEvent_SetLinkClicked(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxHtmlCellEvent *arg1 = (wxHtmlCellEvent *) 0 ;
+  bool arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  bool val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "linkclicked", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:HtmlCellEvent_SetLinkClicked",kwnames,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxHtmlCellEvent, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "HtmlCellEvent_SetLinkClicked" "', expected argument " "1"" of type '" "wxHtmlCellEvent *""'"); 
+  }
+  arg1 = reinterpret_cast< wxHtmlCellEvent * >(argp1);
+  ecode2 = SWIG_AsVal_bool(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "HtmlCellEvent_SetLinkClicked" "', expected argument " "2"" of type '" "bool""'");
+  } 
+  arg2 = static_cast< bool >(val2);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    (arg1)->SetLinkClicked(arg2);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_HtmlCellEvent_GetLinkClicked(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxHtmlCellEvent *arg1 = (wxHtmlCellEvent *) 0 ;
+  bool result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxHtmlCellEvent, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "HtmlCellEvent_GetLinkClicked" "', expected argument " "1"" of type '" "wxHtmlCellEvent const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxHtmlCellEvent * >(argp1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = (bool)((wxHtmlCellEvent const *)arg1)->GetLinkClicked();
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  {
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+  }
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *HtmlCellEvent_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
   if (!SWIG_Python_UnpackTuple(args,(char*)"swigregister", 1, 1,&obj)) return NULL;
-  SWIG_TypeNewClientData(SWIGTYPE_p_wxHtmlWindowEvent, SWIG_NewClientData(obj));
+  SWIG_TypeNewClientData(SWIGTYPE_p_wxHtmlCellEvent, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
 
-SWIGINTERN PyObject *HtmlWindowEvent_swiginit(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *HtmlCellEvent_swiginit(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  return SWIG_Python_InitShadowInstance(args);
+}
+
+SWIGINTERN PyObject *_wrap_new_HtmlLinkEvent(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  int arg1 ;
+  wxHtmlLinkInfo *arg2 = 0 ;
+  wxHtmlLinkEvent *result = 0 ;
+  int val1 ;
+  int ecode1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "id",(char *) "linkinfo", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:new_HtmlLinkEvent",kwnames,&obj0,&obj1)) SWIG_fail;
+  ecode1 = SWIG_AsVal_int(obj0, &val1);
+  if (!SWIG_IsOK(ecode1)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "new_HtmlLinkEvent" "', expected argument " "1"" of type '" "int""'");
+  } 
+  arg1 = static_cast< int >(val1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_wxHtmlLinkInfo,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "new_HtmlLinkEvent" "', expected argument " "2"" of type '" "wxHtmlLinkInfo const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_HtmlLinkEvent" "', expected argument " "2"" of type '" "wxHtmlLinkInfo const &""'"); 
+  }
+  arg2 = reinterpret_cast< wxHtmlLinkInfo * >(argp2);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = (wxHtmlLinkEvent *)new wxHtmlLinkEvent(arg1,(wxHtmlLinkInfo const &)*arg2);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_wxHtmlLinkEvent, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_HtmlLinkEvent_GetLinkInfo(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxHtmlLinkEvent *arg1 = (wxHtmlLinkEvent *) 0 ;
+  wxHtmlLinkInfo *result = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxHtmlLinkEvent, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "HtmlLinkEvent_GetLinkInfo" "', expected argument " "1"" of type '" "wxHtmlLinkEvent const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxHtmlLinkEvent * >(argp1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    {
+      wxHtmlLinkInfo const &_result_ref = ((wxHtmlLinkEvent const *)arg1)->GetLinkInfo();
+      result = (wxHtmlLinkInfo *) &_result_ref;
+    }
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_wxHtmlLinkInfo, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *HtmlLinkEvent_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *obj;
+  if (!SWIG_Python_UnpackTuple(args,(char*)"swigregister", 1, 1,&obj)) return NULL;
+  SWIG_TypeNewClientData(SWIGTYPE_p_wxHtmlLinkEvent, SWIG_NewClientData(obj));
+  return SWIG_Py_Void();
+}
+
+SWIGINTERN PyObject *HtmlLinkEvent_swiginit(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   return SWIG_Python_InitShadowInstance(args);
 }
 
@@ -17894,11 +18075,18 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"HtmlHelpWindow_GetTreeCtrl", (PyCFunction)_wrap_HtmlHelpWindow_GetTreeCtrl, METH_O, NULL},
 	 { (char *)"HtmlHelpWindow_swigregister", HtmlHelpWindow_swigregister, METH_VARARGS, NULL},
 	 { (char *)"HtmlHelpWindow_swiginit", HtmlHelpWindow_swiginit, METH_VARARGS, NULL},
-	 { (char *)"new_HtmlWindowEvent", (PyCFunction) _wrap_new_HtmlWindowEvent, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"HtmlWindowEvent_SetURL", (PyCFunction) _wrap_HtmlWindowEvent_SetURL, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"HtmlWindowEvent_GetURL", (PyCFunction)_wrap_HtmlWindowEvent_GetURL, METH_O, NULL},
-	 { (char *)"HtmlWindowEvent_swigregister", HtmlWindowEvent_swigregister, METH_VARARGS, NULL},
-	 { (char *)"HtmlWindowEvent_swiginit", HtmlWindowEvent_swiginit, METH_VARARGS, NULL},
+	 { (char *)"new_HtmlCellEvent", (PyCFunction) _wrap_new_HtmlCellEvent, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"HtmlCellEvent_GetCell", (PyCFunction)_wrap_HtmlCellEvent_GetCell, METH_O, NULL},
+	 { (char *)"HtmlCellEvent_GetPoint", (PyCFunction)_wrap_HtmlCellEvent_GetPoint, METH_O, NULL},
+	 { (char *)"HtmlCellEvent_GetMouseEvent", (PyCFunction)_wrap_HtmlCellEvent_GetMouseEvent, METH_O, NULL},
+	 { (char *)"HtmlCellEvent_SetLinkClicked", (PyCFunction) _wrap_HtmlCellEvent_SetLinkClicked, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"HtmlCellEvent_GetLinkClicked", (PyCFunction)_wrap_HtmlCellEvent_GetLinkClicked, METH_O, NULL},
+	 { (char *)"HtmlCellEvent_swigregister", HtmlCellEvent_swigregister, METH_VARARGS, NULL},
+	 { (char *)"HtmlCellEvent_swiginit", HtmlCellEvent_swiginit, METH_VARARGS, NULL},
+	 { (char *)"new_HtmlLinkEvent", (PyCFunction) _wrap_new_HtmlLinkEvent, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"HtmlLinkEvent_GetLinkInfo", (PyCFunction)_wrap_HtmlLinkEvent_GetLinkInfo, METH_O, NULL},
+	 { (char *)"HtmlLinkEvent_swigregister", HtmlLinkEvent_swigregister, METH_VARARGS, NULL},
+	 { (char *)"HtmlLinkEvent_swiginit", HtmlLinkEvent_swiginit, METH_VARARGS, NULL},
 	 { (char *)"new_HtmlHelpFrame", (PyCFunction) _wrap_new_HtmlHelpFrame, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"new_PreHtmlHelpFrame", (PyCFunction) _wrap_new_PreHtmlHelpFrame, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"HtmlHelpFrame_Create", (PyCFunction) _wrap_HtmlHelpFrame_Create, METH_VARARGS | METH_KEYWORDS, NULL},
@@ -17999,6 +18187,9 @@ static void *_p_wxScrollEventTo_p_wxEvent(void *x) {
 static void *_p_wxFindDialogEventTo_p_wxEvent(void *x) {
     return (void *)((wxEvent *) (wxCommandEvent *) ((wxFindDialogEvent *) x));
 }
+static void *_p_wxHtmlCellEventTo_p_wxEvent(void *x) {
+    return (void *)((wxEvent *) (wxCommandEvent *) ((wxHtmlCellEvent *) x));
+}
 static void *_p_wxNotifyEventTo_p_wxEvent(void *x) {
     return (void *)((wxEvent *) (wxCommandEvent *) ((wxNotifyEvent *) x));
 }
@@ -18062,6 +18253,9 @@ static void *_p_wxMouseCaptureChangedEventTo_p_wxEvent(void *x) {
 static void *_p_wxSysColourChangedEventTo_p_wxEvent(void *x) {
     return (void *)((wxEvent *)  ((wxSysColourChangedEvent *) x));
 }
+static void *_p_wxHtmlLinkEventTo_p_wxEvent(void *x) {
+    return (void *)((wxEvent *) (wxCommandEvent *) ((wxHtmlLinkEvent *) x));
+}
 static void *_p_wxDropFilesEventTo_p_wxEvent(void *x) {
     return (void *)((wxEvent *)  ((wxDropFilesEvent *) x));
 }
@@ -18079,9 +18273,6 @@ static void *_p_wxQueryLayoutInfoEventTo_p_wxEvent(void *x) {
 }
 static void *_p_wxShowEventTo_p_wxEvent(void *x) {
     return (void *)((wxEvent *)  ((wxShowEvent *) x));
-}
-static void *_p_wxHtmlWindowEventTo_p_wxEvent(void *x) {
-    return (void *)((wxEvent *) (wxCommandEvent *)(wxNotifyEvent *) ((wxHtmlWindowEvent *) x));
 }
 static void *_p_wxCommandEventTo_p_wxEvent(void *x) {
     return (void *)((wxEvent *)  ((wxCommandEvent *) x));
@@ -18118,12 +18309,6 @@ static void *_p_wxHtmlWordCellTo_p_wxHtmlCell(void *x) {
 }
 static void *_p_wxHtmlFontCellTo_p_wxHtmlCell(void *x) {
     return (void *)((wxHtmlCell *)  ((wxHtmlFontCell *) x));
-}
-static void *_p_wxHtmlWindowEventTo_p_wxNotifyEvent(void *x) {
-    return (void *)((wxNotifyEvent *)  ((wxHtmlWindowEvent *) x));
-}
-static void *_p_wxSplitterEventTo_p_wxNotifyEvent(void *x) {
-    return (void *)((wxNotifyEvent *)  ((wxSplitterEvent *) x));
 }
 static void *_p_wxSplashScreenTo_p_wxEvtHandler(void *x) {
     return (void *)((wxEvtHandler *) (wxWindow *)(wxTopLevelWindow *)(wxFrame *) ((wxSplashScreen *) x));
@@ -18398,6 +18583,9 @@ static void *_p_wxCloseEventTo_p_wxObject(void *x) {
 static void *_p_wxHtmlEasyPrintingTo_p_wxObject(void *x) {
     return (void *)((wxObject *)  ((wxHtmlEasyPrinting *) x));
 }
+static void *_p_wxHtmlCellEventTo_p_wxObject(void *x) {
+    return (void *)((wxObject *) (wxEvent *)(wxCommandEvent *) ((wxHtmlCellEvent *) x));
+}
 static void *_p_wxScrollEventTo_p_wxObject(void *x) {
     return (void *)((wxObject *) (wxEvent *)(wxCommandEvent *) ((wxScrollEvent *) x));
 }
@@ -18653,9 +18841,6 @@ static void *_p_wxJPEGHandlerTo_p_wxObject(void *x) {
 static void *_p_wxPNMHandlerTo_p_wxObject(void *x) {
     return (void *)((wxObject *) (wxImageHandler *) ((wxPNMHandler *) x));
 }
-static void *_p_wxHtmlWindowEventTo_p_wxObject(void *x) {
-    return (void *)((wxObject *) (wxEvent *)(wxCommandEvent *)(wxNotifyEvent *) ((wxHtmlWindowEvent *) x));
-}
 static void *_p_wxShowEventTo_p_wxObject(void *x) {
     return (void *)((wxObject *) (wxEvent *) ((wxShowEvent *) x));
 }
@@ -18758,6 +18943,9 @@ static void *_p_wxPaletteChangedEventTo_p_wxObject(void *x) {
 static void *_p_wxHtmlHelpControllerTo_p_wxObject(void *x) {
     return (void *)((wxObject *) (wxHelpControllerBase *) ((wxHtmlHelpController *) x));
 }
+static void *_p_wxHtmlLinkEventTo_p_wxObject(void *x) {
+    return (void *)((wxObject *) (wxEvent *)(wxCommandEvent *) ((wxHtmlLinkEvent *) x));
+}
 static void *_p_wxPanelTo_p_wxObject(void *x) {
     return (void *)((wxObject *) (wxEvtHandler *)(wxWindow *) ((wxPanel *) x));
 }
@@ -18805,6 +18993,75 @@ static void *_p_wxHtmlWordCellTo_p_wxObject(void *x) {
 }
 static void *_p_wxMenuBarTo_p_wxObject(void *x) {
     return (void *)((wxObject *) (wxEvtHandler *)(wxWindow *) ((wxMenuBar *) x));
+}
+static void *_p_wxFrameTo_p_wxTopLevelWindow(void *x) {
+    return (void *)((wxTopLevelWindow *)  ((wxFrame *) x));
+}
+static void *_p_wxMiniFrameTo_p_wxTopLevelWindow(void *x) {
+    return (void *)((wxTopLevelWindow *) (wxFrame *) ((wxMiniFrame *) x));
+}
+static void *_p_wxFontDialogTo_p_wxTopLevelWindow(void *x) {
+    return (void *)((wxTopLevelWindow *) (wxDialog *) ((wxFontDialog *) x));
+}
+static void *_p_wxDirDialogTo_p_wxTopLevelWindow(void *x) {
+    return (void *)((wxTopLevelWindow *) (wxDialog *) ((wxDirDialog *) x));
+}
+static void *_p_wxColourDialogTo_p_wxTopLevelWindow(void *x) {
+    return (void *)((wxTopLevelWindow *) (wxDialog *) ((wxColourDialog *) x));
+}
+static void *_p_wxDialogTo_p_wxTopLevelWindow(void *x) {
+    return (void *)((wxTopLevelWindow *)  ((wxDialog *) x));
+}
+static void *_p_wxHtmlHelpDialogTo_p_wxTopLevelWindow(void *x) {
+    return (void *)((wxTopLevelWindow *) (wxDialog *) ((wxHtmlHelpDialog *) x));
+}
+static void *_p_wxSplashScreenTo_p_wxTopLevelWindow(void *x) {
+    return (void *)((wxTopLevelWindow *) (wxFrame *) ((wxSplashScreen *) x));
+}
+static void *_p_wxTipWindowTo_p_wxTopLevelWindow(void *x) {
+    return (void *)((wxTopLevelWindow *) (wxFrame *) ((wxTipWindow *) x));
+}
+static void *_p_wxMDIParentFrameTo_p_wxTopLevelWindow(void *x) {
+    return (void *)((wxTopLevelWindow *) (wxFrame *) ((wxMDIParentFrame *) x));
+}
+static void *_p_wxMDIChildFrameTo_p_wxTopLevelWindow(void *x) {
+    return (void *)((wxTopLevelWindow *) (wxFrame *) ((wxMDIChildFrame *) x));
+}
+static void *_p_wxNumberEntryDialogTo_p_wxTopLevelWindow(void *x) {
+    return (void *)((wxTopLevelWindow *) (wxDialog *) ((wxNumberEntryDialog *) x));
+}
+static void *_p_wxPasswordEntryDialogTo_p_wxTopLevelWindow(void *x) {
+    return (void *)((wxTopLevelWindow *) (wxDialog *)(wxTextEntryDialog *) ((wxPasswordEntryDialog *) x));
+}
+static void *_p_wxTextEntryDialogTo_p_wxTopLevelWindow(void *x) {
+    return (void *)((wxTopLevelWindow *) (wxDialog *) ((wxTextEntryDialog *) x));
+}
+static void *_p_wxSingleChoiceDialogTo_p_wxTopLevelWindow(void *x) {
+    return (void *)((wxTopLevelWindow *) (wxDialog *) ((wxSingleChoiceDialog *) x));
+}
+static void *_p_wxMultiChoiceDialogTo_p_wxTopLevelWindow(void *x) {
+    return (void *)((wxTopLevelWindow *) (wxDialog *) ((wxMultiChoiceDialog *) x));
+}
+static void *_p_wxFileDialogTo_p_wxTopLevelWindow(void *x) {
+    return (void *)((wxTopLevelWindow *) (wxDialog *) ((wxFileDialog *) x));
+}
+static void *_p_wxMessageDialogTo_p_wxTopLevelWindow(void *x) {
+    return (void *)((wxTopLevelWindow *) (wxDialog *) ((wxMessageDialog *) x));
+}
+static void *_p_wxProgressDialogTo_p_wxTopLevelWindow(void *x) {
+    return (void *)((wxTopLevelWindow *) (wxFrame *) ((wxProgressDialog *) x));
+}
+static void *_p_wxFindReplaceDialogTo_p_wxTopLevelWindow(void *x) {
+    return (void *)((wxTopLevelWindow *) (wxDialog *) ((wxFindReplaceDialog *) x));
+}
+static void *_p_wxHtmlHelpFrameTo_p_wxTopLevelWindow(void *x) {
+    return (void *)((wxTopLevelWindow *) (wxFrame *) ((wxHtmlHelpFrame *) x));
+}
+static void *_p_wxPreviewFrameTo_p_wxTopLevelWindow(void *x) {
+    return (void *)((wxTopLevelWindow *) (wxFrame *) ((wxPreviewFrame *) x));
+}
+static void *_p_wxPyPreviewFrameTo_p_wxTopLevelWindow(void *x) {
+    return (void *)((wxTopLevelWindow *) (wxFrame *)(wxPreviewFrame *) ((wxPyPreviewFrame *) x));
 }
 static void *_p_wxSplashScreenTo_p_wxWindow(void *x) {
     return (void *)((wxWindow *) (wxTopLevelWindow *)(wxFrame *) ((wxSplashScreen *) x));
@@ -18959,75 +19216,6 @@ static void *_p_wxPyHtmlWindowTo_p_wxScrolledWindow(void *x) {
 static void *_p_wxPreviewCanvasTo_p_wxScrolledWindow(void *x) {
     return (void *)((wxScrolledWindow *)  ((wxPreviewCanvas *) x));
 }
-static void *_p_wxFrameTo_p_wxTopLevelWindow(void *x) {
-    return (void *)((wxTopLevelWindow *)  ((wxFrame *) x));
-}
-static void *_p_wxMiniFrameTo_p_wxTopLevelWindow(void *x) {
-    return (void *)((wxTopLevelWindow *) (wxFrame *) ((wxMiniFrame *) x));
-}
-static void *_p_wxFontDialogTo_p_wxTopLevelWindow(void *x) {
-    return (void *)((wxTopLevelWindow *) (wxDialog *) ((wxFontDialog *) x));
-}
-static void *_p_wxDirDialogTo_p_wxTopLevelWindow(void *x) {
-    return (void *)((wxTopLevelWindow *) (wxDialog *) ((wxDirDialog *) x));
-}
-static void *_p_wxColourDialogTo_p_wxTopLevelWindow(void *x) {
-    return (void *)((wxTopLevelWindow *) (wxDialog *) ((wxColourDialog *) x));
-}
-static void *_p_wxDialogTo_p_wxTopLevelWindow(void *x) {
-    return (void *)((wxTopLevelWindow *)  ((wxDialog *) x));
-}
-static void *_p_wxHtmlHelpDialogTo_p_wxTopLevelWindow(void *x) {
-    return (void *)((wxTopLevelWindow *) (wxDialog *) ((wxHtmlHelpDialog *) x));
-}
-static void *_p_wxSplashScreenTo_p_wxTopLevelWindow(void *x) {
-    return (void *)((wxTopLevelWindow *) (wxFrame *) ((wxSplashScreen *) x));
-}
-static void *_p_wxTipWindowTo_p_wxTopLevelWindow(void *x) {
-    return (void *)((wxTopLevelWindow *) (wxFrame *) ((wxTipWindow *) x));
-}
-static void *_p_wxMDIParentFrameTo_p_wxTopLevelWindow(void *x) {
-    return (void *)((wxTopLevelWindow *) (wxFrame *) ((wxMDIParentFrame *) x));
-}
-static void *_p_wxMDIChildFrameTo_p_wxTopLevelWindow(void *x) {
-    return (void *)((wxTopLevelWindow *) (wxFrame *) ((wxMDIChildFrame *) x));
-}
-static void *_p_wxNumberEntryDialogTo_p_wxTopLevelWindow(void *x) {
-    return (void *)((wxTopLevelWindow *) (wxDialog *) ((wxNumberEntryDialog *) x));
-}
-static void *_p_wxPasswordEntryDialogTo_p_wxTopLevelWindow(void *x) {
-    return (void *)((wxTopLevelWindow *) (wxDialog *)(wxTextEntryDialog *) ((wxPasswordEntryDialog *) x));
-}
-static void *_p_wxTextEntryDialogTo_p_wxTopLevelWindow(void *x) {
-    return (void *)((wxTopLevelWindow *) (wxDialog *) ((wxTextEntryDialog *) x));
-}
-static void *_p_wxSingleChoiceDialogTo_p_wxTopLevelWindow(void *x) {
-    return (void *)((wxTopLevelWindow *) (wxDialog *) ((wxSingleChoiceDialog *) x));
-}
-static void *_p_wxMultiChoiceDialogTo_p_wxTopLevelWindow(void *x) {
-    return (void *)((wxTopLevelWindow *) (wxDialog *) ((wxMultiChoiceDialog *) x));
-}
-static void *_p_wxFileDialogTo_p_wxTopLevelWindow(void *x) {
-    return (void *)((wxTopLevelWindow *) (wxDialog *) ((wxFileDialog *) x));
-}
-static void *_p_wxMessageDialogTo_p_wxTopLevelWindow(void *x) {
-    return (void *)((wxTopLevelWindow *) (wxDialog *) ((wxMessageDialog *) x));
-}
-static void *_p_wxProgressDialogTo_p_wxTopLevelWindow(void *x) {
-    return (void *)((wxTopLevelWindow *) (wxFrame *) ((wxProgressDialog *) x));
-}
-static void *_p_wxFindReplaceDialogTo_p_wxTopLevelWindow(void *x) {
-    return (void *)((wxTopLevelWindow *) (wxDialog *) ((wxFindReplaceDialog *) x));
-}
-static void *_p_wxHtmlHelpFrameTo_p_wxTopLevelWindow(void *x) {
-    return (void *)((wxTopLevelWindow *) (wxFrame *) ((wxHtmlHelpFrame *) x));
-}
-static void *_p_wxPreviewFrameTo_p_wxTopLevelWindow(void *x) {
-    return (void *)((wxTopLevelWindow *) (wxFrame *) ((wxPreviewFrame *) x));
-}
-static void *_p_wxPyPreviewFrameTo_p_wxTopLevelWindow(void *x) {
-    return (void *)((wxTopLevelWindow *) (wxFrame *)(wxPreviewFrame *) ((wxPyPreviewFrame *) x));
-}
 static void *_p_wxColourDialogTo_p_wxDialog(void *x) {
     return (void *)((wxDialog *)  ((wxColourDialog *) x));
 }
@@ -19106,11 +19294,17 @@ static void *_p_wxSashEventTo_p_wxCommandEvent(void *x) {
 static void *_p_wxWindowDestroyEventTo_p_wxCommandEvent(void *x) {
     return (void *)((wxCommandEvent *)  ((wxWindowDestroyEvent *) x));
 }
+static void *_p_wxHtmlLinkEventTo_p_wxCommandEvent(void *x) {
+    return (void *)((wxCommandEvent *)  ((wxHtmlLinkEvent *) x));
+}
 static void *_p_wxSplitterEventTo_p_wxCommandEvent(void *x) {
     return (void *)((wxCommandEvent *) (wxNotifyEvent *) ((wxSplitterEvent *) x));
 }
 static void *_p_wxClipboardTextEventTo_p_wxCommandEvent(void *x) {
     return (void *)((wxCommandEvent *)  ((wxClipboardTextEvent *) x));
+}
+static void *_p_wxHtmlCellEventTo_p_wxCommandEvent(void *x) {
+    return (void *)((wxCommandEvent *)  ((wxHtmlCellEvent *) x));
 }
 static void *_p_wxScrollEventTo_p_wxCommandEvent(void *x) {
     return (void *)((wxCommandEvent *)  ((wxScrollEvent *) x));
@@ -19132,9 +19326,6 @@ static void *_p_wxWindowCreateEventTo_p_wxCommandEvent(void *x) {
 }
 static void *_p_wxNotifyEventTo_p_wxCommandEvent(void *x) {
     return (void *)((wxCommandEvent *)  ((wxNotifyEvent *) x));
-}
-static void *_p_wxHtmlWindowEventTo_p_wxCommandEvent(void *x) {
-    return (void *)((wxCommandEvent *) (wxNotifyEvent *) ((wxHtmlWindowEvent *) x));
 }
 static void *_p_wxFindDialogEventTo_p_wxCommandEvent(void *x) {
     return (void *)((wxCommandEvent *)  ((wxFindDialogEvent *) x));
@@ -19163,6 +19354,7 @@ static swig_type_info _swigt__p_wxContextMenuEvent = {"_p_wxContextMenuEvent", 0
 static swig_type_info _swigt__p_wxChildFocusEvent = {"_p_wxChildFocusEvent", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_wxDateEvent = {"_p_wxDateEvent", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_wxWindowCreateEvent = {"_p_wxWindowCreateEvent", 0, 0, 0, 0, 0};
+static swig_type_info _swigt__p_wxNotifyEvent = {"_p_wxNotifyEvent", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_wxFindDialogEvent = {"_p_wxFindDialogEvent", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_wxUpdateUIEvent = {"_p_wxUpdateUIEvent", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_wxConfigBase = {"_p_wxConfigBase", "wxConfigBase *", 0, 0, (void*)0, 0};
@@ -19204,8 +19396,8 @@ static swig_type_info _swigt__p_wxPaletteChangedEvent = {"_p_wxPaletteChangedEve
 static swig_type_info _swigt__p_wxDisplayChangedEvent = {"_p_wxDisplayChangedEvent", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_wxMouseCaptureChangedEvent = {"_p_wxMouseCaptureChangedEvent", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_wxSysColourChangedEvent = {"_p_wxSysColourChangedEvent", 0, 0, 0, 0, 0};
-static swig_type_info _swigt__p_wxFocusEvent = {"_p_wxFocusEvent", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_wxDropFilesEvent = {"_p_wxDropFilesEvent", 0, 0, 0, 0, 0};
+static swig_type_info _swigt__p_wxFocusEvent = {"_p_wxFocusEvent", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_wxQueryLayoutInfoEvent = {"_p_wxQueryLayoutInfoEvent", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_wxShowEvent = {"_p_wxShowEvent", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_wxNavigationKeyEvent = {"_p_wxNavigationKeyEvent", 0, 0, 0, 0, 0};
@@ -19253,6 +19445,7 @@ static swig_type_info _swigt__p_wxHelpSearchMode = {"_p_wxHelpSearchMode", "wxHe
 static swig_type_info _swigt__p_wxHtmlBookRecArray = {"_p_wxHtmlBookRecArray", "wxHtmlBookRecArray *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_wxHtmlBookRecord = {"_p_wxHtmlBookRecord", "wxHtmlBookRecord *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_wxHtmlCell = {"_p_wxHtmlCell", "wxHtmlCell *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_wxHtmlCellEvent = {"_p_wxHtmlCellEvent", "wxHtmlCellEvent *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_wxHtmlColourCell = {"_p_wxHtmlColourCell", "wxHtmlColourCell *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_wxHtmlContainerCell = {"_p_wxHtmlContainerCell", "wxHtmlContainerCell *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_wxHtmlDCRenderer = {"_p_wxHtmlDCRenderer", "wxHtmlDCRenderer *", 0, 0, (void*)0, 0};
@@ -19265,6 +19458,7 @@ static swig_type_info _swigt__p_wxHtmlHelpDialog = {"_p_wxHtmlHelpDialog", "wxHt
 static swig_type_info _swigt__p_wxHtmlHelpFrame = {"_p_wxHtmlHelpFrame", "wxHtmlHelpFrame *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_wxHtmlHelpFrameCfg = {"_p_wxHtmlHelpFrameCfg", "wxHtmlHelpFrameCfg *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_wxHtmlHelpWindow = {"_p_wxHtmlHelpWindow", "wxHtmlHelpWindow *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_wxHtmlLinkEvent = {"_p_wxHtmlLinkEvent", "wxHtmlLinkEvent *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_wxHtmlLinkInfo = {"_p_wxHtmlLinkInfo", "wxHtmlLinkInfo *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_wxHtmlModalHelp = {"_p_wxHtmlModalHelp", "wxHtmlModalHelp *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_wxHtmlParser = {"_p_wxHtmlParser", "wxHtmlParser *", 0, 0, (void*)0, 0};
@@ -19279,11 +19473,9 @@ static swig_type_info _swigt__p_wxHtmlTagHandler = {"_p_wxHtmlTagHandler", "wxHt
 static swig_type_info _swigt__p_wxHtmlWidgetCell = {"_p_wxHtmlWidgetCell", "wxHtmlWidgetCell *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_wxHtmlWinParser = {"_p_wxHtmlWinParser", "wxHtmlWinParser *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_wxHtmlWindow = {"_p_wxHtmlWindow", "wxHtmlWindow *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_wxHtmlWindowEvent = {"_p_wxHtmlWindowEvent", "wxHtmlWindowEvent *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_wxHtmlWindowInterface = {"_p_wxHtmlWindowInterface", "wxHtmlWindowInterface *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_wxHtmlWordCell = {"_p_wxHtmlWordCell", "wxHtmlWordCell *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_wxMouseEvent = {"_p_wxMouseEvent", "wxMouseEvent *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_wxNotifyEvent = {"_p_wxNotifyEvent", "wxNotifyEvent *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_wxObject = {"_p_wxObject", "wxObject *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_wxIndividualLayoutConstraint = {"_p_wxIndividualLayoutConstraint", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_wxMenuItem = {"_p_wxMenuItem", 0, 0, 0, 0, 0};
@@ -19293,8 +19485,8 @@ static swig_type_info _swigt__p_wxLayoutAlgorithm = {"_p_wxLayoutAlgorithm", 0, 
 static swig_type_info _swigt__p_wxFindReplaceData = {"_p_wxFindReplaceData", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_wxPrintDialogData = {"_p_wxPrintDialogData", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_wxPrinter = {"_p_wxPrinter", 0, 0, 0, 0, 0};
-static swig_type_info _swigt__p_wxGridSizer = {"_p_wxGridSizer", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_wxFlexGridSizer = {"_p_wxFlexGridSizer", 0, 0, 0, 0, 0};
+static swig_type_info _swigt__p_wxGridSizer = {"_p_wxGridSizer", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_wxAcceleratorTable = {"_p_wxAcceleratorTable", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_wxColourData = {"_p_wxColourData", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_wxStdDialogButtonSizer = {"_p_wxStdDialogButtonSizer", 0, 0, 0, 0, 0};
@@ -19403,6 +19595,7 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_wxHtmlBookRecArray,
   &_swigt__p_wxHtmlBookRecord,
   &_swigt__p_wxHtmlCell,
+  &_swigt__p_wxHtmlCellEvent,
   &_swigt__p_wxHtmlColourCell,
   &_swigt__p_wxHtmlContainerCell,
   &_swigt__p_wxHtmlDCRenderer,
@@ -19415,6 +19608,7 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_wxHtmlHelpFrame,
   &_swigt__p_wxHtmlHelpFrameCfg,
   &_swigt__p_wxHtmlHelpWindow,
+  &_swigt__p_wxHtmlLinkEvent,
   &_swigt__p_wxHtmlLinkInfo,
   &_swigt__p_wxHtmlModalHelp,
   &_swigt__p_wxHtmlParser,
@@ -19429,7 +19623,6 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_wxHtmlWidgetCell,
   &_swigt__p_wxHtmlWinParser,
   &_swigt__p_wxHtmlWindow,
-  &_swigt__p_wxHtmlWindowEvent,
   &_swigt__p_wxHtmlWindowInterface,
   &_swigt__p_wxHtmlWordCell,
   &_swigt__p_wxICOHandler,
@@ -19564,9 +19757,10 @@ static swig_cast_info _swigc__p_wxContextMenuEvent[] = {{&_swigt__p_wxContextMen
 static swig_cast_info _swigc__p_wxChildFocusEvent[] = {{&_swigt__p_wxChildFocusEvent, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxDateEvent[] = {{&_swigt__p_wxDateEvent, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxWindowCreateEvent[] = {{&_swigt__p_wxWindowCreateEvent, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_wxNotifyEvent[] = {{&_swigt__p_wxNotifyEvent, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxFindDialogEvent[] = {{&_swigt__p_wxFindDialogEvent, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxUpdateUIEvent[] = {{&_swigt__p_wxUpdateUIEvent, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_wxCommandEvent[] = {  {&_swigt__p_wxSashEvent, _p_wxSashEventTo_p_wxCommandEvent, 0, 0},  {&_swigt__p_wxWindowDestroyEvent, _p_wxWindowDestroyEventTo_p_wxCommandEvent, 0, 0},  {&_swigt__p_wxSplitterEvent, _p_wxSplitterEventTo_p_wxCommandEvent, 0, 0},  {&_swigt__p_wxClipboardTextEvent, _p_wxClipboardTextEventTo_p_wxCommandEvent, 0, 0},  {&_swigt__p_wxScrollEvent, _p_wxScrollEventTo_p_wxCommandEvent, 0, 0},  {&_swigt__p_wxPyCommandEvent, _p_wxPyCommandEventTo_p_wxCommandEvent, 0, 0},  {&_swigt__p_wxCommandEvent, 0, 0, 0},  {&_swigt__p_wxContextMenuEvent, _p_wxContextMenuEventTo_p_wxCommandEvent, 0, 0},  {&_swigt__p_wxChildFocusEvent, _p_wxChildFocusEventTo_p_wxCommandEvent, 0, 0},  {&_swigt__p_wxDateEvent, _p_wxDateEventTo_p_wxCommandEvent, 0, 0},  {&_swigt__p_wxWindowCreateEvent, _p_wxWindowCreateEventTo_p_wxCommandEvent, 0, 0},  {&_swigt__p_wxNotifyEvent, _p_wxNotifyEventTo_p_wxCommandEvent, 0, 0},  {&_swigt__p_wxHtmlWindowEvent, _p_wxHtmlWindowEventTo_p_wxCommandEvent, 0, 0},  {&_swigt__p_wxFindDialogEvent, _p_wxFindDialogEventTo_p_wxCommandEvent, 0, 0},  {&_swigt__p_wxUpdateUIEvent, _p_wxUpdateUIEventTo_p_wxCommandEvent, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_wxCommandEvent[] = {  {&_swigt__p_wxSashEvent, _p_wxSashEventTo_p_wxCommandEvent, 0, 0},  {&_swigt__p_wxWindowDestroyEvent, _p_wxWindowDestroyEventTo_p_wxCommandEvent, 0, 0},  {&_swigt__p_wxHtmlLinkEvent, _p_wxHtmlLinkEventTo_p_wxCommandEvent, 0, 0},  {&_swigt__p_wxSplitterEvent, _p_wxSplitterEventTo_p_wxCommandEvent, 0, 0},  {&_swigt__p_wxClipboardTextEvent, _p_wxClipboardTextEventTo_p_wxCommandEvent, 0, 0},  {&_swigt__p_wxHtmlCellEvent, _p_wxHtmlCellEventTo_p_wxCommandEvent, 0, 0},  {&_swigt__p_wxScrollEvent, _p_wxScrollEventTo_p_wxCommandEvent, 0, 0},  {&_swigt__p_wxPyCommandEvent, _p_wxPyCommandEventTo_p_wxCommandEvent, 0, 0},  {&_swigt__p_wxCommandEvent, 0, 0, 0},  {&_swigt__p_wxContextMenuEvent, _p_wxContextMenuEventTo_p_wxCommandEvent, 0, 0},  {&_swigt__p_wxChildFocusEvent, _p_wxChildFocusEventTo_p_wxCommandEvent, 0, 0},  {&_swigt__p_wxDateEvent, _p_wxDateEventTo_p_wxCommandEvent, 0, 0},  {&_swigt__p_wxWindowCreateEvent, _p_wxWindowCreateEventTo_p_wxCommandEvent, 0, 0},  {&_swigt__p_wxNotifyEvent, _p_wxNotifyEventTo_p_wxCommandEvent, 0, 0},  {&_swigt__p_wxFindDialogEvent, _p_wxFindDialogEventTo_p_wxCommandEvent, 0, 0},  {&_swigt__p_wxUpdateUIEvent, _p_wxUpdateUIEventTo_p_wxCommandEvent, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxConfigBase[] = {  {&_swigt__p_wxConfigBase, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxCursor[] = {  {&_swigt__p_wxCursor, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxDC[] = {  {&_swigt__p_wxDC, 0, 0, 0},{0, 0, 0, 0}};
@@ -19605,15 +19799,15 @@ static swig_cast_info _swigc__p_wxPaletteChangedEvent[] = {{&_swigt__p_wxPalette
 static swig_cast_info _swigc__p_wxDisplayChangedEvent[] = {{&_swigt__p_wxDisplayChangedEvent, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxMouseCaptureChangedEvent[] = {{&_swigt__p_wxMouseCaptureChangedEvent, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxSysColourChangedEvent[] = {{&_swigt__p_wxSysColourChangedEvent, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_wxFocusEvent[] = {{&_swigt__p_wxFocusEvent, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxDropFilesEvent[] = {{&_swigt__p_wxDropFilesEvent, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_wxFocusEvent[] = {{&_swigt__p_wxFocusEvent, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxQueryLayoutInfoEvent[] = {{&_swigt__p_wxQueryLayoutInfoEvent, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxShowEvent[] = {{&_swigt__p_wxShowEvent, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxNavigationKeyEvent[] = {{&_swigt__p_wxNavigationKeyEvent, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxKeyEvent[] = {{&_swigt__p_wxKeyEvent, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxScrollWinEvent[] = {{&_swigt__p_wxScrollWinEvent, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxTaskBarIconEvent[] = {{&_swigt__p_wxTaskBarIconEvent, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_wxEvent[] = {  {&_swigt__p_wxContextMenuEvent, _p_wxContextMenuEventTo_p_wxEvent, 0, 0},  {&_swigt__p_wxMenuEvent, _p_wxMenuEventTo_p_wxEvent, 0, 0},  {&_swigt__p_wxCloseEvent, _p_wxCloseEventTo_p_wxEvent, 0, 0},  {&_swigt__p_wxMouseEvent, _p_wxMouseEventTo_p_wxEvent, 0, 0},  {&_swigt__p_wxEraseEvent, _p_wxEraseEventTo_p_wxEvent, 0, 0},  {&_swigt__p_wxSetCursorEvent, _p_wxSetCursorEventTo_p_wxEvent, 0, 0},  {&_swigt__p_wxSplitterEvent, _p_wxSplitterEventTo_p_wxEvent, 0, 0},  {&_swigt__p_wxInitDialogEvent, _p_wxInitDialogEventTo_p_wxEvent, 0, 0},  {&_swigt__p_wxFindDialogEvent, _p_wxFindDialogEventTo_p_wxEvent, 0, 0},  {&_swigt__p_wxScrollEvent, _p_wxScrollEventTo_p_wxEvent, 0, 0},  {&_swigt__p_wxNotifyEvent, _p_wxNotifyEventTo_p_wxEvent, 0, 0},  {&_swigt__p_wxPyEvent, _p_wxPyEventTo_p_wxEvent, 0, 0},  {&_swigt__p_wxMouseCaptureLostEvent, _p_wxMouseCaptureLostEventTo_p_wxEvent, 0, 0},  {&_swigt__p_wxCalculateLayoutEvent, _p_wxCalculateLayoutEventTo_p_wxEvent, 0, 0},  {&_swigt__p_wxEvent, 0, 0, 0},  {&_swigt__p_wxIdleEvent, _p_wxIdleEventTo_p_wxEvent, 0, 0},  {&_swigt__p_wxWindowCreateEvent, _p_wxWindowCreateEventTo_p_wxEvent, 0, 0},  {&_swigt__p_wxQueryNewPaletteEvent, _p_wxQueryNewPaletteEventTo_p_wxEvent, 0, 0},  {&_swigt__p_wxMaximizeEvent, _p_wxMaximizeEventTo_p_wxEvent, 0, 0},  {&_swigt__p_wxIconizeEvent, _p_wxIconizeEventTo_p_wxEvent, 0, 0},  {&_swigt__p_wxActivateEvent, _p_wxActivateEventTo_p_wxEvent, 0, 0},  {&_swigt__p_wxSizeEvent, _p_wxSizeEventTo_p_wxEvent, 0, 0},  {&_swigt__p_wxMoveEvent, _p_wxMoveEventTo_p_wxEvent, 0, 0},  {&_swigt__p_wxDateEvent, _p_wxDateEventTo_p_wxEvent, 0, 0},  {&_swigt__p_wxPaintEvent, _p_wxPaintEventTo_p_wxEvent, 0, 0},  {&_swigt__p_wxNcPaintEvent, _p_wxNcPaintEventTo_p_wxEvent, 0, 0},  {&_swigt__p_wxClipboardTextEvent, _p_wxClipboardTextEventTo_p_wxEvent, 0, 0},  {&_swigt__p_wxUpdateUIEvent, _p_wxUpdateUIEventTo_p_wxEvent, 0, 0},  {&_swigt__p_wxPaletteChangedEvent, _p_wxPaletteChangedEventTo_p_wxEvent, 0, 0},  {&_swigt__p_wxDisplayChangedEvent, _p_wxDisplayChangedEventTo_p_wxEvent, 0, 0},  {&_swigt__p_wxMouseCaptureChangedEvent, _p_wxMouseCaptureChangedEventTo_p_wxEvent, 0, 0},  {&_swigt__p_wxSysColourChangedEvent, _p_wxSysColourChangedEventTo_p_wxEvent, 0, 0},  {&_swigt__p_wxFocusEvent, _p_wxFocusEventTo_p_wxEvent, 0, 0},  {&_swigt__p_wxDropFilesEvent, _p_wxDropFilesEventTo_p_wxEvent, 0, 0},  {&_swigt__p_wxChildFocusEvent, _p_wxChildFocusEventTo_p_wxEvent, 0, 0},  {&_swigt__p_wxSashEvent, _p_wxSashEventTo_p_wxEvent, 0, 0},  {&_swigt__p_wxQueryLayoutInfoEvent, _p_wxQueryLayoutInfoEventTo_p_wxEvent, 0, 0},  {&_swigt__p_wxHtmlWindowEvent, _p_wxHtmlWindowEventTo_p_wxEvent, 0, 0},  {&_swigt__p_wxShowEvent, _p_wxShowEventTo_p_wxEvent, 0, 0},  {&_swigt__p_wxCommandEvent, _p_wxCommandEventTo_p_wxEvent, 0, 0},  {&_swigt__p_wxPyCommandEvent, _p_wxPyCommandEventTo_p_wxEvent, 0, 0},  {&_swigt__p_wxWindowDestroyEvent, _p_wxWindowDestroyEventTo_p_wxEvent, 0, 0},  {&_swigt__p_wxNavigationKeyEvent, _p_wxNavigationKeyEventTo_p_wxEvent, 0, 0},  {&_swigt__p_wxKeyEvent, _p_wxKeyEventTo_p_wxEvent, 0, 0},  {&_swigt__p_wxScrollWinEvent, _p_wxScrollWinEventTo_p_wxEvent, 0, 0},  {&_swigt__p_wxTaskBarIconEvent, _p_wxTaskBarIconEventTo_p_wxEvent, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_wxEvent[] = {  {&_swigt__p_wxContextMenuEvent, _p_wxContextMenuEventTo_p_wxEvent, 0, 0},  {&_swigt__p_wxMenuEvent, _p_wxMenuEventTo_p_wxEvent, 0, 0},  {&_swigt__p_wxCloseEvent, _p_wxCloseEventTo_p_wxEvent, 0, 0},  {&_swigt__p_wxMouseEvent, _p_wxMouseEventTo_p_wxEvent, 0, 0},  {&_swigt__p_wxEraseEvent, _p_wxEraseEventTo_p_wxEvent, 0, 0},  {&_swigt__p_wxSetCursorEvent, _p_wxSetCursorEventTo_p_wxEvent, 0, 0},  {&_swigt__p_wxSplitterEvent, _p_wxSplitterEventTo_p_wxEvent, 0, 0},  {&_swigt__p_wxInitDialogEvent, _p_wxInitDialogEventTo_p_wxEvent, 0, 0},  {&_swigt__p_wxFindDialogEvent, _p_wxFindDialogEventTo_p_wxEvent, 0, 0},  {&_swigt__p_wxScrollEvent, _p_wxScrollEventTo_p_wxEvent, 0, 0},  {&_swigt__p_wxHtmlCellEvent, _p_wxHtmlCellEventTo_p_wxEvent, 0, 0},  {&_swigt__p_wxPyEvent, _p_wxPyEventTo_p_wxEvent, 0, 0},  {&_swigt__p_wxNotifyEvent, _p_wxNotifyEventTo_p_wxEvent, 0, 0},  {&_swigt__p_wxMouseCaptureLostEvent, _p_wxMouseCaptureLostEventTo_p_wxEvent, 0, 0},  {&_swigt__p_wxCalculateLayoutEvent, _p_wxCalculateLayoutEventTo_p_wxEvent, 0, 0},  {&_swigt__p_wxEvent, 0, 0, 0},  {&_swigt__p_wxIdleEvent, _p_wxIdleEventTo_p_wxEvent, 0, 0},  {&_swigt__p_wxWindowCreateEvent, _p_wxWindowCreateEventTo_p_wxEvent, 0, 0},  {&_swigt__p_wxQueryNewPaletteEvent, _p_wxQueryNewPaletteEventTo_p_wxEvent, 0, 0},  {&_swigt__p_wxMaximizeEvent, _p_wxMaximizeEventTo_p_wxEvent, 0, 0},  {&_swigt__p_wxIconizeEvent, _p_wxIconizeEventTo_p_wxEvent, 0, 0},  {&_swigt__p_wxActivateEvent, _p_wxActivateEventTo_p_wxEvent, 0, 0},  {&_swigt__p_wxSizeEvent, _p_wxSizeEventTo_p_wxEvent, 0, 0},  {&_swigt__p_wxMoveEvent, _p_wxMoveEventTo_p_wxEvent, 0, 0},  {&_swigt__p_wxDateEvent, _p_wxDateEventTo_p_wxEvent, 0, 0},  {&_swigt__p_wxPaintEvent, _p_wxPaintEventTo_p_wxEvent, 0, 0},  {&_swigt__p_wxNcPaintEvent, _p_wxNcPaintEventTo_p_wxEvent, 0, 0},  {&_swigt__p_wxClipboardTextEvent, _p_wxClipboardTextEventTo_p_wxEvent, 0, 0},  {&_swigt__p_wxUpdateUIEvent, _p_wxUpdateUIEventTo_p_wxEvent, 0, 0},  {&_swigt__p_wxPaletteChangedEvent, _p_wxPaletteChangedEventTo_p_wxEvent, 0, 0},  {&_swigt__p_wxDisplayChangedEvent, _p_wxDisplayChangedEventTo_p_wxEvent, 0, 0},  {&_swigt__p_wxMouseCaptureChangedEvent, _p_wxMouseCaptureChangedEventTo_p_wxEvent, 0, 0},  {&_swigt__p_wxSysColourChangedEvent, _p_wxSysColourChangedEventTo_p_wxEvent, 0, 0},  {&_swigt__p_wxHtmlLinkEvent, _p_wxHtmlLinkEventTo_p_wxEvent, 0, 0},  {&_swigt__p_wxDropFilesEvent, _p_wxDropFilesEventTo_p_wxEvent, 0, 0},  {&_swigt__p_wxFocusEvent, _p_wxFocusEventTo_p_wxEvent, 0, 0},  {&_swigt__p_wxChildFocusEvent, _p_wxChildFocusEventTo_p_wxEvent, 0, 0},  {&_swigt__p_wxSashEvent, _p_wxSashEventTo_p_wxEvent, 0, 0},  {&_swigt__p_wxQueryLayoutInfoEvent, _p_wxQueryLayoutInfoEventTo_p_wxEvent, 0, 0},  {&_swigt__p_wxShowEvent, _p_wxShowEventTo_p_wxEvent, 0, 0},  {&_swigt__p_wxCommandEvent, _p_wxCommandEventTo_p_wxEvent, 0, 0},  {&_swigt__p_wxPyCommandEvent, _p_wxPyCommandEventTo_p_wxEvent, 0, 0},  {&_swigt__p_wxWindowDestroyEvent, _p_wxWindowDestroyEventTo_p_wxEvent, 0, 0},  {&_swigt__p_wxNavigationKeyEvent, _p_wxNavigationKeyEventTo_p_wxEvent, 0, 0},  {&_swigt__p_wxKeyEvent, _p_wxKeyEventTo_p_wxEvent, 0, 0},  {&_swigt__p_wxScrollWinEvent, _p_wxScrollWinEventTo_p_wxEvent, 0, 0},  {&_swigt__p_wxTaskBarIconEvent, _p_wxTaskBarIconEventTo_p_wxEvent, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxSplashScreen[] = {{&_swigt__p_wxSplashScreen, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxMiniFrame[] = {{&_swigt__p_wxMiniFrame, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxPyPanel[] = {{&_swigt__p_wxPyPanel, 0, 0, 0},{0, 0, 0, 0}};
@@ -19655,6 +19849,7 @@ static swig_cast_info _swigc__p_wxHelpSearchMode[] = {  {&_swigt__p_wxHelpSearch
 static swig_cast_info _swigc__p_wxHtmlBookRecArray[] = {  {&_swigt__p_wxHtmlBookRecArray, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxHtmlBookRecord[] = {  {&_swigt__p_wxHtmlBookRecord, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxHtmlCell[] = {  {&_swigt__p_wxHtmlCell, 0, 0, 0},  {&_swigt__p_wxHtmlContainerCell, _p_wxHtmlContainerCellTo_p_wxHtmlCell, 0, 0},  {&_swigt__p_wxHtmlWidgetCell, _p_wxHtmlWidgetCellTo_p_wxHtmlCell, 0, 0},  {&_swigt__p_wxHtmlColourCell, _p_wxHtmlColourCellTo_p_wxHtmlCell, 0, 0},  {&_swigt__p_wxHtmlWordCell, _p_wxHtmlWordCellTo_p_wxHtmlCell, 0, 0},  {&_swigt__p_wxHtmlFontCell, _p_wxHtmlFontCellTo_p_wxHtmlCell, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_wxHtmlCellEvent[] = {  {&_swigt__p_wxHtmlCellEvent, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxHtmlColourCell[] = {  {&_swigt__p_wxHtmlColourCell, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxHtmlContainerCell[] = {  {&_swigt__p_wxHtmlContainerCell, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxHtmlDCRenderer[] = {  {&_swigt__p_wxHtmlDCRenderer, 0, 0, 0},{0, 0, 0, 0}};
@@ -19667,6 +19862,7 @@ static swig_cast_info _swigc__p_wxHtmlHelpDialog[] = {  {&_swigt__p_wxHtmlHelpDi
 static swig_cast_info _swigc__p_wxHtmlHelpFrame[] = {  {&_swigt__p_wxHtmlHelpFrame, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxHtmlHelpFrameCfg[] = {  {&_swigt__p_wxHtmlHelpFrameCfg, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxHtmlHelpWindow[] = {  {&_swigt__p_wxHtmlHelpWindow, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_wxHtmlLinkEvent[] = {  {&_swigt__p_wxHtmlLinkEvent, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxHtmlLinkInfo[] = {  {&_swigt__p_wxHtmlLinkInfo, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxHtmlModalHelp[] = {  {&_swigt__p_wxHtmlModalHelp, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxHtmlParser[] = {  {&_swigt__p_wxHtmlParser, 0, 0, 0},  {&_swigt__p_wxHtmlWinParser, _p_wxHtmlWinParserTo_p_wxHtmlParser, 0, 0},{0, 0, 0, 0}};
@@ -19681,11 +19877,9 @@ static swig_cast_info _swigc__p_wxHtmlTagHandler[] = {  {&_swigt__p_wxHtmlTagHan
 static swig_cast_info _swigc__p_wxHtmlWidgetCell[] = {  {&_swigt__p_wxHtmlWidgetCell, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxHtmlWinParser[] = {  {&_swigt__p_wxHtmlWinParser, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxHtmlWindow[] = {  {&_swigt__p_wxHtmlWindow, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_wxHtmlWindowEvent[] = {  {&_swigt__p_wxHtmlWindowEvent, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxHtmlWindowInterface[] = {  {&_swigt__p_wxHtmlWindowInterface, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxHtmlWordCell[] = {  {&_swigt__p_wxHtmlWordCell, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxMouseEvent[] = {  {&_swigt__p_wxMouseEvent, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_wxNotifyEvent[] = {  {&_swigt__p_wxHtmlWindowEvent, _p_wxHtmlWindowEventTo_p_wxNotifyEvent, 0, 0},  {&_swigt__p_wxSplitterEvent, _p_wxSplitterEventTo_p_wxNotifyEvent, 0, 0},  {&_swigt__p_wxNotifyEvent, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxIndividualLayoutConstraint[] = {{&_swigt__p_wxIndividualLayoutConstraint, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxMenuItem[] = {{&_swigt__p_wxMenuItem, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxImage[] = {{&_swigt__p_wxImage, 0, 0, 0},{0, 0, 0, 0}};
@@ -19694,8 +19888,8 @@ static swig_cast_info _swigc__p_wxLayoutAlgorithm[] = {{&_swigt__p_wxLayoutAlgor
 static swig_cast_info _swigc__p_wxFindReplaceData[] = {{&_swigt__p_wxFindReplaceData, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxPrintDialogData[] = {{&_swigt__p_wxPrintDialogData, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxPrinter[] = {{&_swigt__p_wxPrinter, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_wxGridSizer[] = {{&_swigt__p_wxGridSizer, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxFlexGridSizer[] = {{&_swigt__p_wxFlexGridSizer, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_wxGridSizer[] = {{&_swigt__p_wxGridSizer, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxAcceleratorTable[] = {{&_swigt__p_wxAcceleratorTable, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxColourData[] = {{&_swigt__p_wxColourData, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxStdDialogButtonSizer[] = {{&_swigt__p_wxStdDialogButtonSizer, 0, 0, 0},{0, 0, 0, 0}};
@@ -19725,7 +19919,7 @@ static swig_cast_info _swigc__p_wxGIFHandler[] = {{&_swigt__p_wxGIFHandler, 0, 0
 static swig_cast_info _swigc__p_wxPCXHandler[] = {{&_swigt__p_wxPCXHandler, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxJPEGHandler[] = {{&_swigt__p_wxJPEGHandler, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxPNMHandler[] = {{&_swigt__p_wxPNMHandler, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_wxObject[] = {  {&_swigt__p_wxUpdateUIEvent, _p_wxUpdateUIEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxPreviewCanvas, _p_wxPreviewCanvasTo_p_wxObject, 0, 0},  {&_swigt__p_wxEvent, _p_wxEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxInitDialogEvent, _p_wxInitDialogEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxFindDialogEvent, _p_wxFindDialogEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxIndividualLayoutConstraint, _p_wxIndividualLayoutConstraintTo_p_wxObject, 0, 0},  {&_swigt__p_wxHtmlFontCell, _p_wxHtmlFontCellTo_p_wxObject, 0, 0},  {&_swigt__p_wxPyPreviewFrame, _p_wxPyPreviewFrameTo_p_wxObject, 0, 0},  {&_swigt__p_wxPreviewFrame, _p_wxPreviewFrameTo_p_wxObject, 0, 0},  {&_swigt__p_wxHtmlTag, _p_wxHtmlTagTo_p_wxObject, 0, 0},  {&_swigt__p_wxMenuItem, _p_wxMenuItemTo_p_wxObject, 0, 0},  {&_swigt__p_wxImage, _p_wxImageTo_p_wxObject, 0, 0},  {&_swigt__p_wxPySizer, _p_wxPySizerTo_p_wxObject, 0, 0},  {&_swigt__p_wxPyHtmlFilter, _p_wxPyHtmlFilterTo_p_wxObject, 0, 0},  {&_swigt__p_wxLayoutAlgorithm, _p_wxLayoutAlgorithmTo_p_wxObject, 0, 0},  {&_swigt__p_wxPyTaskBarIcon, _p_wxPyTaskBarIconTo_p_wxObject, 0, 0},  {&_swigt__p_wxPyApp, _p_wxPyAppTo_p_wxObject, 0, 0},  {&_swigt__p_wxPreviewControlBar, _p_wxPreviewControlBarTo_p_wxObject, 0, 0},  {&_swigt__p_wxPyPreviewControlBar, _p_wxPyPreviewControlBarTo_p_wxObject, 0, 0},  {&_swigt__p_wxFindReplaceData, _p_wxFindReplaceDataTo_p_wxObject, 0, 0},  {&_swigt__p_wxPyValidator, _p_wxPyValidatorTo_p_wxObject, 0, 0},  {&_swigt__p_wxValidator, _p_wxValidatorTo_p_wxObject, 0, 0},  {&_swigt__p_wxCloseEvent, _p_wxCloseEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxMouseEvent, _p_wxMouseEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxEraseEvent, _p_wxEraseEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxHtmlEasyPrinting, _p_wxHtmlEasyPrintingTo_p_wxObject, 0, 0},  {&_swigt__p_wxScrollEvent, _p_wxScrollEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxPageSetupDialogData, _p_wxPageSetupDialogDataTo_p_wxObject, 0, 0},  {&_swigt__p_wxPrintDialogData, _p_wxPrintDialogDataTo_p_wxObject, 0, 0},  {&_swigt__p_wxPrinter, _p_wxPrinterTo_p_wxObject, 0, 0},  {&_swigt__p_wxControlWithItems, _p_wxControlWithItemsTo_p_wxObject, 0, 0},  {&_swigt__p_wxObject, 0, 0, 0},  {&_swigt__p_wxHtmlParser, _p_wxHtmlParserTo_p_wxObject, 0, 0},  {&_swigt__p_wxHtmlWinParser, _p_wxHtmlWinParserTo_p_wxObject, 0, 0},  {&_swigt__p_wxGridSizer, _p_wxGridSizerTo_p_wxObject, 0, 0},  {&_swigt__p_wxFlexGridSizer, _p_wxFlexGridSizerTo_p_wxObject, 0, 0},  {&_swigt__p_wxAcceleratorTable, _p_wxAcceleratorTableTo_p_wxObject, 0, 0},  {&_swigt__p_wxControl, _p_wxControlTo_p_wxObject, 0, 0},  {&_swigt__p_wxHtmlHelpFrame, _p_wxHtmlHelpFrameTo_p_wxObject, 0, 0},  {&_swigt__p_wxHtmlWidgetCell, _p_wxHtmlWidgetCellTo_p_wxObject, 0, 0},  {&_swigt__p_wxColourData, _p_wxColourDataTo_p_wxObject, 0, 0},  {&_swigt__p_wxIdleEvent, _p_wxIdleEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxWindowCreateEvent, _p_wxWindowCreateEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxQueryNewPaletteEvent, _p_wxQueryNewPaletteEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxMaximizeEvent, _p_wxMaximizeEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxIconizeEvent, _p_wxIconizeEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxActivateEvent, _p_wxActivateEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxSizeEvent, _p_wxSizeEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxMoveEvent, _p_wxMoveEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxDateEvent, _p_wxDateEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxMouseCaptureLostEvent, _p_wxMouseCaptureLostEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxCalculateLayoutEvent, _p_wxCalculateLayoutEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxPyPrintout, _p_wxPyPrintoutTo_p_wxObject, 0, 0},  {&_swigt__p_wxHtmlPrintout, _p_wxHtmlPrintoutTo_p_wxObject, 0, 0},  {&_swigt__p_wxMDIChildFrame, _p_wxMDIChildFrameTo_p_wxObject, 0, 0},  {&_swigt__p_wxStdDialogButtonSizer, _p_wxStdDialogButtonSizerTo_p_wxObject, 0, 0},  {&_swigt__p_wxMenu, _p_wxMenuTo_p_wxObject, 0, 0},  {&_swigt__p_wxWindowDestroyEvent, _p_wxWindowDestroyEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxNavigationKeyEvent, _p_wxNavigationKeyEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxKeyEvent, _p_wxKeyEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxSashEvent, _p_wxSashEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxPyVListBox, _p_wxPyVListBoxTo_p_wxObject, 0, 0},  {&_swigt__p_wxPyHtmlListBox, _p_wxPyHtmlListBoxTo_p_wxObject, 0, 0},  {&_swigt__p_wxFontData, _p_wxFontDataTo_p_wxObject, 0, 0},  {&_swigt__p_wxPrintData, _p_wxPrintDataTo_p_wxObject, 0, 0},  {&_swigt__p_wxMiniFrame, _p_wxMiniFrameTo_p_wxObject, 0, 0},  {&_swigt__p_wxFrame, _p_wxFrameTo_p_wxObject, 0, 0},  {&_swigt__p_wxPyPanel, _p_wxPyPanelTo_p_wxObject, 0, 0},  {&_swigt__p_wxQueryLayoutInfoEvent, _p_wxQueryLayoutInfoEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxSplashScreen, _p_wxSplashScreenTo_p_wxObject, 0, 0},  {&_swigt__p_wxFileSystem, _p_wxFileSystemTo_p_wxObject, 0, 0},  {&_swigt__p_wxPrintPreview, _p_wxPrintPreviewTo_p_wxObject, 0, 0},  {&_swigt__p_wxPyPrintPreview, _p_wxPyPrintPreviewTo_p_wxObject, 0, 0},  {&_swigt__p_wxLayoutConstraints, _p_wxLayoutConstraintsTo_p_wxObject, 0, 0},  {&_swigt__p_wxSizer, _p_wxSizerTo_p_wxObject, 0, 0},  {&_swigt__p_wxBoxSizer, _p_wxBoxSizerTo_p_wxObject, 0, 0},  {&_swigt__p_wxStaticBoxSizer, _p_wxStaticBoxSizerTo_p_wxObject, 0, 0},  {&_swigt__p_wxGridBagSizer, _p_wxGridBagSizerTo_p_wxObject, 0, 0},  {&_swigt__p_wxHtmlContainerCell, _p_wxHtmlContainerCellTo_p_wxObject, 0, 0},  {&_swigt__p_wxPaintEvent, _p_wxPaintEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxNcPaintEvent, _p_wxNcPaintEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxClipboardTextEvent, _p_wxClipboardTextEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxFSFile, _p_wxFSFileTo_p_wxObject, 0, 0},  {&_swigt__p_wxSetCursorEvent, _p_wxSetCursorEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxSplitterEvent, _p_wxSplitterEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxGBSizerItem, _p_wxGBSizerItemTo_p_wxObject, 0, 0},  {&_swigt__p_wxSizerItem, _p_wxSizerItemTo_p_wxObject, 0, 0},  {&_swigt__p_wxPrintDialog, _p_wxPrintDialogTo_p_wxObject, 0, 0},  {&_swigt__p_wxPageSetupDialog, _p_wxPageSetupDialogTo_p_wxObject, 0, 0},  {&_swigt__p_wxFontDialog, _p_wxFontDialogTo_p_wxObject, 0, 0},  {&_swigt__p_wxDirDialog, _p_wxDirDialogTo_p_wxObject, 0, 0},  {&_swigt__p_wxColourDialog, _p_wxColourDialogTo_p_wxObject, 0, 0},  {&_swigt__p_wxDialog, _p_wxDialogTo_p_wxObject, 0, 0},  {&_swigt__p_wxHtmlHelpDialog, _p_wxHtmlHelpDialogTo_p_wxObject, 0, 0},  {&_swigt__p_wxPyEvent, _p_wxPyEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxNotifyEvent, _p_wxNotifyEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxPyHtmlWinTagHandler, _p_wxPyHtmlWinTagHandlerTo_p_wxObject, 0, 0},  {&_swigt__p_wxPyHtmlTagHandler, _p_wxPyHtmlTagHandlerTo_p_wxObject, 0, 0},  {&_swigt__p_wxEvtHandler, _p_wxEvtHandlerTo_p_wxObject, 0, 0},  {&_swigt__p_wxTIFFHandler, _p_wxTIFFHandlerTo_p_wxObject, 0, 0},  {&_swigt__p_wxXPMHandler, _p_wxXPMHandlerTo_p_wxObject, 0, 0},  {&_swigt__p_wxImageHandler, _p_wxImageHandlerTo_p_wxObject, 0, 0},  {&_swigt__p_wxPyImageHandler, _p_wxPyImageHandlerTo_p_wxObject, 0, 0},  {&_swigt__p_wxBMPHandler, _p_wxBMPHandlerTo_p_wxObject, 0, 0},  {&_swigt__p_wxICOHandler, _p_wxICOHandlerTo_p_wxObject, 0, 0},  {&_swigt__p_wxCURHandler, _p_wxCURHandlerTo_p_wxObject, 0, 0},  {&_swigt__p_wxANIHandler, _p_wxANIHandlerTo_p_wxObject, 0, 0},  {&_swigt__p_wxPNGHandler, _p_wxPNGHandlerTo_p_wxObject, 0, 0},  {&_swigt__p_wxGIFHandler, _p_wxGIFHandlerTo_p_wxObject, 0, 0},  {&_swigt__p_wxPCXHandler, _p_wxPCXHandlerTo_p_wxObject, 0, 0},  {&_swigt__p_wxJPEGHandler, _p_wxJPEGHandlerTo_p_wxObject, 0, 0},  {&_swigt__p_wxPNMHandler, _p_wxPNMHandlerTo_p_wxObject, 0, 0},  {&_swigt__p_wxHtmlWindowEvent, _p_wxHtmlWindowEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxShowEvent, _p_wxShowEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxPyPopupTransientWindow, _p_wxPyPopupTransientWindowTo_p_wxObject, 0, 0},  {&_swigt__p_wxPopupWindow, _p_wxPopupWindowTo_p_wxObject, 0, 0},  {&_swigt__p_wxSashLayoutWindow, _p_wxSashLayoutWindowTo_p_wxObject, 0, 0},  {&_swigt__p_wxSplashScreenWindow, _p_wxSplashScreenWindowTo_p_wxObject, 0, 0},  {&_swigt__p_wxSplitterWindow, _p_wxSplitterWindowTo_p_wxObject, 0, 0},  {&_swigt__p_wxSashWindow, _p_wxSashWindowTo_p_wxObject, 0, 0},  {&_swigt__p_wxWindow, _p_wxWindowTo_p_wxObject, 0, 0},  {&_swigt__p_wxTopLevelWindow, _p_wxTopLevelWindowTo_p_wxObject, 0, 0},  {&_swigt__p_wxMDIClientWindow, _p_wxMDIClientWindowTo_p_wxObject, 0, 0},  {&_swigt__p_wxHtmlHelpWindow, _p_wxHtmlHelpWindowTo_p_wxObject, 0, 0},  {&_swigt__p_wxPyVScrolledWindow, _p_wxPyVScrolledWindowTo_p_wxObject, 0, 0},  {&_swigt__p_wxPyHtmlWindow, _p_wxPyHtmlWindowTo_p_wxObject, 0, 0},  {&_swigt__p_wxPyScrolledWindow, _p_wxPyScrolledWindowTo_p_wxObject, 0, 0},  {&_swigt__p_wxScrolledWindow, _p_wxScrolledWindowTo_p_wxObject, 0, 0},  {&_swigt__p_wxTipWindow, _p_wxTipWindowTo_p_wxObject, 0, 0},  {&_swigt__p_wxHelpControllerBase, _p_wxHelpControllerBaseTo_p_wxObject, 0, 0},  {&_swigt__p_wxHtmlDCRenderer, _p_wxHtmlDCRendererTo_p_wxObject, 0, 0},  {&_swigt__p_wxFindReplaceDialog, _p_wxFindReplaceDialogTo_p_wxObject, 0, 0},  {&_swigt__p_wxMessageDialog, _p_wxMessageDialogTo_p_wxObject, 0, 0},  {&_swigt__p_wxNumberEntryDialog, _p_wxNumberEntryDialogTo_p_wxObject, 0, 0},  {&_swigt__p_wxPasswordEntryDialog, _p_wxPasswordEntryDialogTo_p_wxObject, 0, 0},  {&_swigt__p_wxTextEntryDialog, _p_wxTextEntryDialogTo_p_wxObject, 0, 0},  {&_swigt__p_wxSingleChoiceDialog, _p_wxSingleChoiceDialogTo_p_wxObject, 0, 0},  {&_swigt__p_wxMultiChoiceDialog, _p_wxMultiChoiceDialogTo_p_wxObject, 0, 0},  {&_swigt__p_wxFileDialog, _p_wxFileDialogTo_p_wxObject, 0, 0},  {&_swigt__p_wxProgressDialog, _p_wxProgressDialogTo_p_wxObject, 0, 0},  {&_swigt__p_wxHtmlLinkInfo, _p_wxHtmlLinkInfoTo_p_wxObject, 0, 0},  {&_swigt__p_wxPyWindow, _p_wxPyWindowTo_p_wxObject, 0, 0},  {&_swigt__p_wxDisplayChangedEvent, _p_wxDisplayChangedEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxMouseCaptureChangedEvent, _p_wxMouseCaptureChangedEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxSysColourChangedEvent, _p_wxSysColourChangedEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxPaletteChangedEvent, _p_wxPaletteChangedEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxHtmlHelpController, _p_wxHtmlHelpControllerTo_p_wxObject, 0, 0},  {&_swigt__p_wxPanel, _p_wxPanelTo_p_wxObject, 0, 0},  {&_swigt__p_wxScrollWinEvent, _p_wxScrollWinEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxTaskBarIconEvent, _p_wxTaskBarIconEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxHtmlCell, _p_wxHtmlCellTo_p_wxObject, 0, 0},  {&_swigt__p_wxContextMenuEvent, _p_wxContextMenuEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxMenuEvent, _p_wxMenuEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxCommandEvent, _p_wxCommandEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxPyCommandEvent, _p_wxPyCommandEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxHtmlColourCell, _p_wxHtmlColourCellTo_p_wxObject, 0, 0},  {&_swigt__p_wxStatusBar, _p_wxStatusBarTo_p_wxObject, 0, 0},  {&_swigt__p_wxFocusEvent, _p_wxFocusEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxDropFilesEvent, _p_wxDropFilesEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxChildFocusEvent, _p_wxChildFocusEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxMDIParentFrame, _p_wxMDIParentFrameTo_p_wxObject, 0, 0},  {&_swigt__p_wxHtmlWordCell, _p_wxHtmlWordCellTo_p_wxObject, 0, 0},  {&_swigt__p_wxMenuBar, _p_wxMenuBarTo_p_wxObject, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_wxObject[] = {  {&_swigt__p_wxUpdateUIEvent, _p_wxUpdateUIEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxPreviewCanvas, _p_wxPreviewCanvasTo_p_wxObject, 0, 0},  {&_swigt__p_wxEvent, _p_wxEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxInitDialogEvent, _p_wxInitDialogEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxFindDialogEvent, _p_wxFindDialogEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxIndividualLayoutConstraint, _p_wxIndividualLayoutConstraintTo_p_wxObject, 0, 0},  {&_swigt__p_wxHtmlFontCell, _p_wxHtmlFontCellTo_p_wxObject, 0, 0},  {&_swigt__p_wxPyPreviewFrame, _p_wxPyPreviewFrameTo_p_wxObject, 0, 0},  {&_swigt__p_wxPreviewFrame, _p_wxPreviewFrameTo_p_wxObject, 0, 0},  {&_swigt__p_wxHtmlTag, _p_wxHtmlTagTo_p_wxObject, 0, 0},  {&_swigt__p_wxMenuItem, _p_wxMenuItemTo_p_wxObject, 0, 0},  {&_swigt__p_wxImage, _p_wxImageTo_p_wxObject, 0, 0},  {&_swigt__p_wxPySizer, _p_wxPySizerTo_p_wxObject, 0, 0},  {&_swigt__p_wxPyHtmlFilter, _p_wxPyHtmlFilterTo_p_wxObject, 0, 0},  {&_swigt__p_wxLayoutAlgorithm, _p_wxLayoutAlgorithmTo_p_wxObject, 0, 0},  {&_swigt__p_wxPyTaskBarIcon, _p_wxPyTaskBarIconTo_p_wxObject, 0, 0},  {&_swigt__p_wxPyApp, _p_wxPyAppTo_p_wxObject, 0, 0},  {&_swigt__p_wxPreviewControlBar, _p_wxPreviewControlBarTo_p_wxObject, 0, 0},  {&_swigt__p_wxPyPreviewControlBar, _p_wxPyPreviewControlBarTo_p_wxObject, 0, 0},  {&_swigt__p_wxFindReplaceData, _p_wxFindReplaceDataTo_p_wxObject, 0, 0},  {&_swigt__p_wxPyValidator, _p_wxPyValidatorTo_p_wxObject, 0, 0},  {&_swigt__p_wxValidator, _p_wxValidatorTo_p_wxObject, 0, 0},  {&_swigt__p_wxCloseEvent, _p_wxCloseEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxMouseEvent, _p_wxMouseEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxEraseEvent, _p_wxEraseEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxHtmlEasyPrinting, _p_wxHtmlEasyPrintingTo_p_wxObject, 0, 0},  {&_swigt__p_wxHtmlCellEvent, _p_wxHtmlCellEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxScrollEvent, _p_wxScrollEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxPageSetupDialogData, _p_wxPageSetupDialogDataTo_p_wxObject, 0, 0},  {&_swigt__p_wxPrintDialogData, _p_wxPrintDialogDataTo_p_wxObject, 0, 0},  {&_swigt__p_wxPrinter, _p_wxPrinterTo_p_wxObject, 0, 0},  {&_swigt__p_wxControlWithItems, _p_wxControlWithItemsTo_p_wxObject, 0, 0},  {&_swigt__p_wxObject, 0, 0, 0},  {&_swigt__p_wxHtmlWinParser, _p_wxHtmlWinParserTo_p_wxObject, 0, 0},  {&_swigt__p_wxHtmlParser, _p_wxHtmlParserTo_p_wxObject, 0, 0},  {&_swigt__p_wxFlexGridSizer, _p_wxFlexGridSizerTo_p_wxObject, 0, 0},  {&_swigt__p_wxGridSizer, _p_wxGridSizerTo_p_wxObject, 0, 0},  {&_swigt__p_wxAcceleratorTable, _p_wxAcceleratorTableTo_p_wxObject, 0, 0},  {&_swigt__p_wxControl, _p_wxControlTo_p_wxObject, 0, 0},  {&_swigt__p_wxHtmlHelpFrame, _p_wxHtmlHelpFrameTo_p_wxObject, 0, 0},  {&_swigt__p_wxHtmlWidgetCell, _p_wxHtmlWidgetCellTo_p_wxObject, 0, 0},  {&_swigt__p_wxColourData, _p_wxColourDataTo_p_wxObject, 0, 0},  {&_swigt__p_wxIdleEvent, _p_wxIdleEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxWindowCreateEvent, _p_wxWindowCreateEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxQueryNewPaletteEvent, _p_wxQueryNewPaletteEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxMaximizeEvent, _p_wxMaximizeEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxIconizeEvent, _p_wxIconizeEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxActivateEvent, _p_wxActivateEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxSizeEvent, _p_wxSizeEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxMoveEvent, _p_wxMoveEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxDateEvent, _p_wxDateEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxMouseCaptureLostEvent, _p_wxMouseCaptureLostEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxCalculateLayoutEvent, _p_wxCalculateLayoutEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxPyPrintout, _p_wxPyPrintoutTo_p_wxObject, 0, 0},  {&_swigt__p_wxHtmlPrintout, _p_wxHtmlPrintoutTo_p_wxObject, 0, 0},  {&_swigt__p_wxMDIChildFrame, _p_wxMDIChildFrameTo_p_wxObject, 0, 0},  {&_swigt__p_wxStdDialogButtonSizer, _p_wxStdDialogButtonSizerTo_p_wxObject, 0, 0},  {&_swigt__p_wxMenu, _p_wxMenuTo_p_wxObject, 0, 0},  {&_swigt__p_wxWindowDestroyEvent, _p_wxWindowDestroyEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxNavigationKeyEvent, _p_wxNavigationKeyEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxKeyEvent, _p_wxKeyEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxSashEvent, _p_wxSashEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxPyVListBox, _p_wxPyVListBoxTo_p_wxObject, 0, 0},  {&_swigt__p_wxPyHtmlListBox, _p_wxPyHtmlListBoxTo_p_wxObject, 0, 0},  {&_swigt__p_wxFontData, _p_wxFontDataTo_p_wxObject, 0, 0},  {&_swigt__p_wxPrintData, _p_wxPrintDataTo_p_wxObject, 0, 0},  {&_swigt__p_wxMiniFrame, _p_wxMiniFrameTo_p_wxObject, 0, 0},  {&_swigt__p_wxFrame, _p_wxFrameTo_p_wxObject, 0, 0},  {&_swigt__p_wxPyPanel, _p_wxPyPanelTo_p_wxObject, 0, 0},  {&_swigt__p_wxQueryLayoutInfoEvent, _p_wxQueryLayoutInfoEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxSplashScreen, _p_wxSplashScreenTo_p_wxObject, 0, 0},  {&_swigt__p_wxFileSystem, _p_wxFileSystemTo_p_wxObject, 0, 0},  {&_swigt__p_wxPrintPreview, _p_wxPrintPreviewTo_p_wxObject, 0, 0},  {&_swigt__p_wxPyPrintPreview, _p_wxPyPrintPreviewTo_p_wxObject, 0, 0},  {&_swigt__p_wxLayoutConstraints, _p_wxLayoutConstraintsTo_p_wxObject, 0, 0},  {&_swigt__p_wxSizer, _p_wxSizerTo_p_wxObject, 0, 0},  {&_swigt__p_wxBoxSizer, _p_wxBoxSizerTo_p_wxObject, 0, 0},  {&_swigt__p_wxStaticBoxSizer, _p_wxStaticBoxSizerTo_p_wxObject, 0, 0},  {&_swigt__p_wxGridBagSizer, _p_wxGridBagSizerTo_p_wxObject, 0, 0},  {&_swigt__p_wxHtmlContainerCell, _p_wxHtmlContainerCellTo_p_wxObject, 0, 0},  {&_swigt__p_wxPaintEvent, _p_wxPaintEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxNcPaintEvent, _p_wxNcPaintEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxClipboardTextEvent, _p_wxClipboardTextEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxFSFile, _p_wxFSFileTo_p_wxObject, 0, 0},  {&_swigt__p_wxSetCursorEvent, _p_wxSetCursorEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxSplitterEvent, _p_wxSplitterEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxGBSizerItem, _p_wxGBSizerItemTo_p_wxObject, 0, 0},  {&_swigt__p_wxSizerItem, _p_wxSizerItemTo_p_wxObject, 0, 0},  {&_swigt__p_wxPrintDialog, _p_wxPrintDialogTo_p_wxObject, 0, 0},  {&_swigt__p_wxPageSetupDialog, _p_wxPageSetupDialogTo_p_wxObject, 0, 0},  {&_swigt__p_wxFontDialog, _p_wxFontDialogTo_p_wxObject, 0, 0},  {&_swigt__p_wxDirDialog, _p_wxDirDialogTo_p_wxObject, 0, 0},  {&_swigt__p_wxColourDialog, _p_wxColourDialogTo_p_wxObject, 0, 0},  {&_swigt__p_wxDialog, _p_wxDialogTo_p_wxObject, 0, 0},  {&_swigt__p_wxHtmlHelpDialog, _p_wxHtmlHelpDialogTo_p_wxObject, 0, 0},  {&_swigt__p_wxNotifyEvent, _p_wxNotifyEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxPyEvent, _p_wxPyEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxPyHtmlWinTagHandler, _p_wxPyHtmlWinTagHandlerTo_p_wxObject, 0, 0},  {&_swigt__p_wxPyHtmlTagHandler, _p_wxPyHtmlTagHandlerTo_p_wxObject, 0, 0},  {&_swigt__p_wxEvtHandler, _p_wxEvtHandlerTo_p_wxObject, 0, 0},  {&_swigt__p_wxTIFFHandler, _p_wxTIFFHandlerTo_p_wxObject, 0, 0},  {&_swigt__p_wxXPMHandler, _p_wxXPMHandlerTo_p_wxObject, 0, 0},  {&_swigt__p_wxImageHandler, _p_wxImageHandlerTo_p_wxObject, 0, 0},  {&_swigt__p_wxPyImageHandler, _p_wxPyImageHandlerTo_p_wxObject, 0, 0},  {&_swigt__p_wxBMPHandler, _p_wxBMPHandlerTo_p_wxObject, 0, 0},  {&_swigt__p_wxICOHandler, _p_wxICOHandlerTo_p_wxObject, 0, 0},  {&_swigt__p_wxCURHandler, _p_wxCURHandlerTo_p_wxObject, 0, 0},  {&_swigt__p_wxANIHandler, _p_wxANIHandlerTo_p_wxObject, 0, 0},  {&_swigt__p_wxPNGHandler, _p_wxPNGHandlerTo_p_wxObject, 0, 0},  {&_swigt__p_wxGIFHandler, _p_wxGIFHandlerTo_p_wxObject, 0, 0},  {&_swigt__p_wxPCXHandler, _p_wxPCXHandlerTo_p_wxObject, 0, 0},  {&_swigt__p_wxJPEGHandler, _p_wxJPEGHandlerTo_p_wxObject, 0, 0},  {&_swigt__p_wxPNMHandler, _p_wxPNMHandlerTo_p_wxObject, 0, 0},  {&_swigt__p_wxShowEvent, _p_wxShowEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxPyPopupTransientWindow, _p_wxPyPopupTransientWindowTo_p_wxObject, 0, 0},  {&_swigt__p_wxPopupWindow, _p_wxPopupWindowTo_p_wxObject, 0, 0},  {&_swigt__p_wxSashLayoutWindow, _p_wxSashLayoutWindowTo_p_wxObject, 0, 0},  {&_swigt__p_wxSplashScreenWindow, _p_wxSplashScreenWindowTo_p_wxObject, 0, 0},  {&_swigt__p_wxSplitterWindow, _p_wxSplitterWindowTo_p_wxObject, 0, 0},  {&_swigt__p_wxSashWindow, _p_wxSashWindowTo_p_wxObject, 0, 0},  {&_swigt__p_wxWindow, _p_wxWindowTo_p_wxObject, 0, 0},  {&_swigt__p_wxTopLevelWindow, _p_wxTopLevelWindowTo_p_wxObject, 0, 0},  {&_swigt__p_wxMDIClientWindow, _p_wxMDIClientWindowTo_p_wxObject, 0, 0},  {&_swigt__p_wxHtmlHelpWindow, _p_wxHtmlHelpWindowTo_p_wxObject, 0, 0},  {&_swigt__p_wxPyVScrolledWindow, _p_wxPyVScrolledWindowTo_p_wxObject, 0, 0},  {&_swigt__p_wxPyHtmlWindow, _p_wxPyHtmlWindowTo_p_wxObject, 0, 0},  {&_swigt__p_wxPyScrolledWindow, _p_wxPyScrolledWindowTo_p_wxObject, 0, 0},  {&_swigt__p_wxScrolledWindow, _p_wxScrolledWindowTo_p_wxObject, 0, 0},  {&_swigt__p_wxTipWindow, _p_wxTipWindowTo_p_wxObject, 0, 0},  {&_swigt__p_wxHelpControllerBase, _p_wxHelpControllerBaseTo_p_wxObject, 0, 0},  {&_swigt__p_wxHtmlDCRenderer, _p_wxHtmlDCRendererTo_p_wxObject, 0, 0},  {&_swigt__p_wxFindReplaceDialog, _p_wxFindReplaceDialogTo_p_wxObject, 0, 0},  {&_swigt__p_wxMessageDialog, _p_wxMessageDialogTo_p_wxObject, 0, 0},  {&_swigt__p_wxNumberEntryDialog, _p_wxNumberEntryDialogTo_p_wxObject, 0, 0},  {&_swigt__p_wxPasswordEntryDialog, _p_wxPasswordEntryDialogTo_p_wxObject, 0, 0},  {&_swigt__p_wxTextEntryDialog, _p_wxTextEntryDialogTo_p_wxObject, 0, 0},  {&_swigt__p_wxSingleChoiceDialog, _p_wxSingleChoiceDialogTo_p_wxObject, 0, 0},  {&_swigt__p_wxMultiChoiceDialog, _p_wxMultiChoiceDialogTo_p_wxObject, 0, 0},  {&_swigt__p_wxFileDialog, _p_wxFileDialogTo_p_wxObject, 0, 0},  {&_swigt__p_wxProgressDialog, _p_wxProgressDialogTo_p_wxObject, 0, 0},  {&_swigt__p_wxHtmlLinkInfo, _p_wxHtmlLinkInfoTo_p_wxObject, 0, 0},  {&_swigt__p_wxPyWindow, _p_wxPyWindowTo_p_wxObject, 0, 0},  {&_swigt__p_wxDisplayChangedEvent, _p_wxDisplayChangedEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxMouseCaptureChangedEvent, _p_wxMouseCaptureChangedEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxSysColourChangedEvent, _p_wxSysColourChangedEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxPaletteChangedEvent, _p_wxPaletteChangedEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxHtmlHelpController, _p_wxHtmlHelpControllerTo_p_wxObject, 0, 0},  {&_swigt__p_wxHtmlLinkEvent, _p_wxHtmlLinkEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxPanel, _p_wxPanelTo_p_wxObject, 0, 0},  {&_swigt__p_wxScrollWinEvent, _p_wxScrollWinEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxTaskBarIconEvent, _p_wxTaskBarIconEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxHtmlCell, _p_wxHtmlCellTo_p_wxObject, 0, 0},  {&_swigt__p_wxContextMenuEvent, _p_wxContextMenuEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxMenuEvent, _p_wxMenuEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxCommandEvent, _p_wxCommandEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxPyCommandEvent, _p_wxPyCommandEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxHtmlColourCell, _p_wxHtmlColourCellTo_p_wxObject, 0, 0},  {&_swigt__p_wxStatusBar, _p_wxStatusBarTo_p_wxObject, 0, 0},  {&_swigt__p_wxDropFilesEvent, _p_wxDropFilesEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxFocusEvent, _p_wxFocusEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxChildFocusEvent, _p_wxChildFocusEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxMDIParentFrame, _p_wxMDIParentFrameTo_p_wxObject, 0, 0},  {&_swigt__p_wxHtmlWordCell, _p_wxHtmlWordCellTo_p_wxObject, 0, 0},  {&_swigt__p_wxMenuBar, _p_wxMenuBarTo_p_wxObject, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxPageSetupDialogData[] = {  {&_swigt__p_wxPageSetupDialogData, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxPanel[] = {  {&_swigt__p_wxPanel, 0, 0, 0},  {&_swigt__p_wxScrolledWindow, _p_wxScrolledWindowTo_p_wxPanel, 0, 0},  {&_swigt__p_wxPyScrolledWindow, _p_wxPyScrolledWindowTo_p_wxPanel, 0, 0},  {&_swigt__p_wxPyHtmlWindow, _p_wxPyHtmlWindowTo_p_wxPanel, 0, 0},  {&_swigt__p_wxPyVScrolledWindow, _p_wxPyVScrolledWindowTo_p_wxPanel, 0, 0},  {&_swigt__p_wxPyVListBox, _p_wxPyVListBoxTo_p_wxPanel, 0, 0},  {&_swigt__p_wxPyHtmlListBox, _p_wxPyHtmlListBoxTo_p_wxPanel, 0, 0},  {&_swigt__p_wxPyPanel, _p_wxPyPanelTo_p_wxPanel, 0, 0},  {&_swigt__p_wxPreviewCanvas, _p_wxPreviewCanvasTo_p_wxPanel, 0, 0},  {&_swigt__p_wxPreviewControlBar, _p_wxPreviewControlBarTo_p_wxPanel, 0, 0},  {&_swigt__p_wxPyPreviewControlBar, _p_wxPyPreviewControlBarTo_p_wxPanel, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxPaperSize[] = {  {&_swigt__p_wxPaperSize, 0, 0, 0},{0, 0, 0, 0}};
@@ -19805,6 +19999,7 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_wxHtmlBookRecArray,
   _swigc__p_wxHtmlBookRecord,
   _swigc__p_wxHtmlCell,
+  _swigc__p_wxHtmlCellEvent,
   _swigc__p_wxHtmlColourCell,
   _swigc__p_wxHtmlContainerCell,
   _swigc__p_wxHtmlDCRenderer,
@@ -19817,6 +20012,7 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_wxHtmlHelpFrame,
   _swigc__p_wxHtmlHelpFrameCfg,
   _swigc__p_wxHtmlHelpWindow,
+  _swigc__p_wxHtmlLinkEvent,
   _swigc__p_wxHtmlLinkInfo,
   _swigc__p_wxHtmlModalHelp,
   _swigc__p_wxHtmlParser,
@@ -19831,7 +20027,6 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_wxHtmlWidgetCell,
   _swigc__p_wxHtmlWinParser,
   _swigc__p_wxHtmlWindow,
-  _swigc__p_wxHtmlWindowEvent,
   _swigc__p_wxHtmlWindowInterface,
   _swigc__p_wxHtmlWordCell,
   _swigc__p_wxICOHandler,
@@ -20537,6 +20732,9 @@ SWIGEXPORT void SWIG_init(void) {
   SWIG_Python_SetConstant(d, "ID_HTML_SEARCHBUTTON",SWIG_From_int(static_cast< int >(wxID_HTML_SEARCHBUTTON)));
   SWIG_Python_SetConstant(d, "ID_HTML_SEARCHCHOICE",SWIG_From_int(static_cast< int >(wxID_HTML_SEARCHCHOICE)));
   SWIG_Python_SetConstant(d, "ID_HTML_COUNTINFO",SWIG_From_int(static_cast< int >(wxID_HTML_COUNTINFO)));
+  PyDict_SetItemString(d, "wxEVT_COMMAND_HTML_CELL_CLICKED", PyInt_FromLong(wxEVT_COMMAND_HTML_CELL_CLICKED));
+  PyDict_SetItemString(d, "wxEVT_COMMAND_HTML_CELL_HOVER", PyInt_FromLong(wxEVT_COMMAND_HTML_CELL_HOVER));
+  PyDict_SetItemString(d, "wxEVT_COMMAND_HTML_LINK_CLICKED", PyInt_FromLong(wxEVT_COMMAND_HTML_LINK_CLICKED));
   
   wxPyPtrTypeMap_Add("wxHtmlTagHandler",    "wxPyHtmlTagHandler");
   wxPyPtrTypeMap_Add("wxHtmlWinTagHandler", "wxPyHtmlWinTagHandler");

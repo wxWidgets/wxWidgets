@@ -14415,6 +14415,62 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_delete_Process(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxPyProcess *arg1 = (wxPyProcess *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxPyProcess, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_Process" "', expected argument " "1"" of type '" "wxPyProcess *""'"); 
+  }
+  arg1 = reinterpret_cast< wxPyProcess * >(argp1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    delete arg1;
+    
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Process_GetPid(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxPyProcess *arg1 = (wxPyProcess *) 0 ;
+  long result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxPyProcess, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Process_GetPid" "', expected argument " "1"" of type '" "wxPyProcess const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxPyProcess * >(argp1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = (long)((wxPyProcess const *)arg1)->GetPid();
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_From_long(static_cast< long >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_Process__setCallbackInfo(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   wxPyProcess *arg1 = (wxPyProcess *) 0 ;
@@ -39366,6 +39422,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Process_Exists", (PyCFunction) _wrap_Process_Exists, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Process_Open", (PyCFunction) _wrap_Process_Open, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"new_Process", (PyCFunction) _wrap_new_Process, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"delete_Process", (PyCFunction)_wrap_delete_Process, METH_O, NULL},
+	 { (char *)"Process_GetPid", (PyCFunction)_wrap_Process_GetPid, METH_O, NULL},
 	 { (char *)"Process__setCallbackInfo", (PyCFunction) _wrap_Process__setCallbackInfo, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Process_OnTerminate", (PyCFunction) _wrap_Process_OnTerminate, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Process_Redirect", (PyCFunction)_wrap_Process_Redirect, METH_O, NULL},
@@ -42096,6 +42154,7 @@ SWIGEXPORT void SWIG_init(void) {
   SWIG_Python_SetConstant(d, "DateTime_GMT10",SWIG_From_int(static_cast< int >(wxDateTime::GMT10)));
   SWIG_Python_SetConstant(d, "DateTime_GMT11",SWIG_From_int(static_cast< int >(wxDateTime::GMT11)));
   SWIG_Python_SetConstant(d, "DateTime_GMT12",SWIG_From_int(static_cast< int >(wxDateTime::GMT12)));
+  SWIG_Python_SetConstant(d, "DateTime_GMT13",SWIG_From_int(static_cast< int >(wxDateTime::GMT13)));
   SWIG_Python_SetConstant(d, "DateTime_WET",SWIG_From_int(static_cast< int >(wxDateTime::WET)));
   SWIG_Python_SetConstant(d, "DateTime_WEST",SWIG_From_int(static_cast< int >(wxDateTime::WEST)));
   SWIG_Python_SetConstant(d, "DateTime_CET",SWIG_From_int(static_cast< int >(wxDateTime::CET)));
@@ -42121,6 +42180,8 @@ SWIGEXPORT void SWIG_init(void) {
   SWIG_Python_SetConstant(d, "DateTime_A_CST",SWIG_From_int(static_cast< int >(wxDateTime::A_CST)));
   SWIG_Python_SetConstant(d, "DateTime_A_EST",SWIG_From_int(static_cast< int >(wxDateTime::A_EST)));
   SWIG_Python_SetConstant(d, "DateTime_A_ESST",SWIG_From_int(static_cast< int >(wxDateTime::A_ESST)));
+  SWIG_Python_SetConstant(d, "DateTime_NZST",SWIG_From_int(static_cast< int >(wxDateTime::NZST)));
+  SWIG_Python_SetConstant(d, "DateTime_NZDT",SWIG_From_int(static_cast< int >(wxDateTime::NZDT)));
   SWIG_Python_SetConstant(d, "DateTime_UTC",SWIG_From_int(static_cast< int >(wxDateTime::UTC)));
   SWIG_Python_SetConstant(d, "DateTime_Gregorian",SWIG_From_int(static_cast< int >(wxDateTime::Gregorian)));
   SWIG_Python_SetConstant(d, "DateTime_Julian",SWIG_From_int(static_cast< int >(wxDateTime::Julian)));

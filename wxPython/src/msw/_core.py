@@ -708,6 +708,16 @@ class Object(object):
         args[0].this.own(False)
         return _core_.Object_Destroy(*args, **kwargs)
 
+    def IsSameAs(*args, **kwargs):
+        """
+        IsSameAs(self, Object p) -> bool
+
+        For wx.Objects that use C++ reference counting internally, this method
+        can be used to determine if two objects are referencing the same data
+        object.
+        """
+        return _core_.Object_IsSameAs(*args, **kwargs)
+
     ClassName = property(GetClassName,doc="See `GetClassName`") 
 _core_.Object_swigregister(Object)
 _wxPySetDictionary = _core_._wxPySetDictionary
@@ -734,6 +744,7 @@ BITMAP_TYPE_PICT = _core_.BITMAP_TYPE_PICT
 BITMAP_TYPE_ICON = _core_.BITMAP_TYPE_ICON
 BITMAP_TYPE_ANI = _core_.BITMAP_TYPE_ANI
 BITMAP_TYPE_IFF = _core_.BITMAP_TYPE_IFF
+BITMAP_TYPE_TGA = _core_.BITMAP_TYPE_TGA
 BITMAP_TYPE_MACCURSOR = _core_.BITMAP_TYPE_MACCURSOR
 BITMAP_TYPE_ANY = _core_.BITMAP_TYPE_ANY
 CURSOR_NONE = _core_.CURSOR_NONE
@@ -8594,18 +8605,11 @@ class Window(EvtHandler):
         """
         return _core_.Window_GetBestFittingSize(*args, **kwargs)
 
-    def GetAdjustedBestSize(*args, **kwargs):
-        """
-        GetAdjustedBestSize(self) -> Size
-
-        This method is similar to GetBestSize, except in one
-        thing. GetBestSize should return the minimum untruncated size of the
-        window, while this method will return the largest of BestSize and any
-        user specified minimum size. ie. it is the minimum size the window
-        should currently be drawn at, not the minimal size it can possibly
-        tolerate.
-        """
-        return _core_.Window_GetAdjustedBestSize(*args, **kwargs)
+    def GetAdjustedBestSize(self):
+        s = self.GetBestSize()
+        return wx.Size(max(s.width,  self.GetMinWidth()),
+                       max(s.height, self.GetMinHeight()))
+    GetAdjustedBestSize = wx._deprecated(GetAdjustedBestSize, 'Use `GetBestFittingSize` instead.')
 
     def Center(*args, **kwargs):
         """

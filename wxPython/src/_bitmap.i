@@ -24,6 +24,22 @@
 //---------------------------------------------------------------------------
 
 %{
+// See http://tinyurl.com/e5adr for what premultiplying alpha means.  It
+// appears to me that the other platforms are already doing it, so I'll just
+// automatically do it for wxMSW here.
+#ifdef __WXMSW__
+#define wxPy_premultiply(p, a)   ((p) * (a) / 0xff)
+#define wxPy_unpremultiply(p, a) ((a) ? ((p) * 0xff / (a)) : (p))    
+#else
+#define wxPy_premultiply(p, a)   (p)
+#define wxPy_unpremultiply(p, a) (p)    
+#endif
+%}
+
+//---------------------------------------------------------------------------
+
+
+%{
 #include <wx/image.h>
     
     static char** ConvertListOfStrings(PyObject* listOfStrings) {
@@ -298,21 +314,87 @@ the ``type`` parameter.", "");
     
 #ifdef __WXMSW__
     bool CopyFromCursor(const wxCursor& cursor);
-
-// WXWIN_COMPATIBILITY_2_4
-  #if 0
-    int GetQuality();
-    void SetQuality(int q);
-    %pythoncode { GetQuality = wx._deprecated(GetQuality) }
-    %pythoncode { SetQuality = wx._deprecated(SetQuality) }
-  #endif
 #endif
 
+    %extend {
+        DocStr(CopyFromBuffer,
+               "Copy data from a RGB buffer object to replace the bitmap pixel data.
+See `wxBitmapFromBuffer` for more details.", "");
+        void CopyFromBuffer(buffer data, int DATASIZE)
+        {
+            int height=self->GetHeight();
+            int width=self->GetWidth();
+
+            if (DATASIZE != width * height * 3) {
+                wxPyErr_SetString(PyExc_ValueError, "Invalid data buffer size.");
+            }
+            wxNativePixelData pixData(*self, wxPoint(0,0), wxSize(width, height));
+            if (! pixData) {
+                // raise an exception...
+                wxPyErr_SetString(PyExc_RuntimeError,
+                                  "Failed to gain raw access to bitmap data.");
+                return;
+            }
+
+            wxNativePixelData::Iterator p(pixData);
+            for (int y=0; y<height; y++) {
+                wxNativePixelData::Iterator rowStart = p;
+                for (int x=0; x<width; x++) {
+                    p.Red()   = *(data++);
+                    p.Green() = *(data++);
+                    p.Blue()  = *(data++);
+                    ++p;
+                }
+                p = rowStart;
+                p.OffsetY(pixData, 1);
+            }
+        }
+
+        DocStr(CopyFromBufferRGBA,
+               "Copy data from a RGBA buffer object to replace the bitmap pixel data.
+See `wxBitmapFromBufferRGBA` for more details.", "");
+        void CopyFromBufferRGBA(buffer data, int DATASIZE)
+        {
+            int height=self->GetHeight();
+            int width=self->GetWidth();
+            
+            if (DATASIZE != width * height * 4) {
+                wxPyErr_SetString(PyExc_ValueError, "Invalid data buffer size.");
+            }
+            wxAlphaPixelData pixData(*self, wxPoint(0,0), wxSize(width, height));
+            if (! pixData) {
+                // raise an exception...
+                wxPyErr_SetString(PyExc_RuntimeError,
+                                  "Failed to gain raw access to bitmap data.");
+                return;
+            }
+
+            pixData.UseAlpha();
+            wxAlphaPixelData::Iterator p(pixData);
+            for (int y=0; y<height; y++) {
+                wxAlphaPixelData::Iterator rowStart = p;
+                for (int x=0; x<width; x++) {
+                    byte a = data[3];
+                    p.Red()   = wxPy_premultiply(*(data++), a);
+                    p.Green() = wxPy_premultiply(*(data++), a);
+                    p.Blue()  = wxPy_premultiply(*(data++), a);
+                    p.Alpha() = a; data++;
+                    ++p;
+                }
+                p = rowStart;
+                p.OffsetY(pixData, 1);
+            }
+        }        
+    }
+
+    
     %pythoncode { def __nonzero__(self): return self.IsOk() }
 
+    // TODO: Should these just be removed since the C++ operators are
+    // gone?  Or is using IsSameAs for wxPython ok?    
     %extend {
-        bool __eq__(const wxBitmap* other) { return other ? (*self == *other) : false; }
-        bool __ne__(const wxBitmap* other) { return other ? (*self != *other) : true;  }
+        bool __eq__(const wxBitmap* other) { return other ? self->IsSameAs(*other) : false; }
+        bool __ne__(const wxBitmap* other) { return other ? !self->IsSameAs(*other) : true;  }
     }
 
     %property(Depth, GetDepth, SetDepth, doc="See `GetDepth` and `SetDepth`");
@@ -330,19 +412,6 @@ the ``type`` parameter.", "");
 // Factory functions for creating wxBitmaps from Python buffer objects.  They
 // use the Abstract Pixel API to be able to set RGB and A bytes directly into
 // the wxBitmap's pixel buffer.
-
-%{
-// See http://tinyurl.com/e5adr for what premultiplying alpha means.  It
-// appears to me that the other platforms are already doing it, so I'll just
-// automatically do it for wxMSW here.
-#ifdef __WXMSW__
-#define wxPy_premultiply(p, a)   ((p) * (a) / 0xff)
-#define wxPy_unpremultiply(p, a) ((a) ? ((p) * 0xff / (a)) : (p))    
-#else
-#define wxPy_premultiply(p, a)   (p)
-#define wxPy_unpremultiply(p, a) (p)    
-#endif
-%}
 
 
 %newobject _BitmapFromBufferAlpha;

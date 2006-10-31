@@ -1263,7 +1263,12 @@ public:
 };
 
 
-#if wxUSE_IFF
+
+#if 0
+%{
+#include <wx/imagiff.h>
+%}
+
 DocStr(wxIFFHandler,
 "A `wx.ImageHandler` for IFF image files.", "");
 class wxIFFHandler : public wxImageHandler {
@@ -1271,6 +1276,21 @@ public:
     wxIFFHandler();
 };
 #endif
+
+
+#if 0
+%{
+#include <wx/imagtga.h>
+%}
+
+DocStr(wxTGAHandler,
+"A `wx.ImageHandler` for TGA image files.", "");
+class wxTGAHandler : public wxImageHandler {
+public:
+    wxTGAHandler();
+};
+#endif
+
 
 //---------------------------------------------------------------------------
 

@@ -194,6 +194,20 @@ AUI_GRADIENT_HORIZONTAL = _aui.AUI_GRADIENT_HORIZONTAL
 AUI_BUTTON_STATE_NORMAL = _aui.AUI_BUTTON_STATE_NORMAL
 AUI_BUTTON_STATE_HOVER = _aui.AUI_BUTTON_STATE_HOVER
 AUI_BUTTON_STATE_PRESSED = _aui.AUI_BUTTON_STATE_PRESSED
+AUI_BUTTON_STATE_DISABLED = _aui.AUI_BUTTON_STATE_DISABLED
+AUI_BUTTON_STATE_HIDDEN = _aui.AUI_BUTTON_STATE_HIDDEN
+AUI_BUTTON_CLOSE = _aui.AUI_BUTTON_CLOSE
+AUI_BUTTON_MAXIMIZE = _aui.AUI_BUTTON_MAXIMIZE
+AUI_BUTTON_MINIMIZE = _aui.AUI_BUTTON_MINIMIZE
+AUI_BUTTON_PIN = _aui.AUI_BUTTON_PIN
+AUI_BUTTON_OPTIONS = _aui.AUI_BUTTON_OPTIONS
+AUI_BUTTON_LEFT = _aui.AUI_BUTTON_LEFT
+AUI_BUTTON_RIGHT = _aui.AUI_BUTTON_RIGHT
+AUI_BUTTON_UP = _aui.AUI_BUTTON_UP
+AUI_BUTTON_DOWN = _aui.AUI_BUTTON_DOWN
+AUI_BUTTON_CUSTOM1 = _aui.AUI_BUTTON_CUSTOM1
+AUI_BUTTON_CUSTOM2 = _aui.AUI_BUTTON_CUSTOM2
+AUI_BUTTON_CUSTOM3 = _aui.AUI_BUTTON_CUSTOM3
 AUI_INSERT_PANE = _aui.AUI_INSERT_PANE
 AUI_INSERT_ROW = _aui.AUI_INSERT_ROW
 AUI_INSERT_DOCK = _aui.AUI_INSERT_DOCK
@@ -1442,17 +1456,6 @@ class TabArt(object):
     __repr__ = _swig_repr
     __swig_destroy__ = _aui.delete_TabArt
     __del__ = lambda self : None;
-    def DrawBackground(*args, **kwargs):
-        """DrawBackground(self, DC dc, Rect rect)"""
-        return _aui.TabArt_DrawBackground(*args, **kwargs)
-
-    def DrawTab(*args, **kwargs):
-        """
-        DrawTab(self, DC dc, Rect in_rect, String caption, bool active, Rect out_rect, 
-            int x_extent)
-        """
-        return _aui.TabArt_DrawTab(*args, **kwargs)
-
     def SetNormalFont(*args, **kwargs):
         """SetNormalFont(self, Font font)"""
         return _aui.TabArt_SetNormalFont(*args, **kwargs)
@@ -1464,6 +1467,32 @@ class TabArt(object):
     def SetMeasuringFont(*args, **kwargs):
         """SetMeasuringFont(self, Font font)"""
         return _aui.TabArt_SetMeasuringFont(*args, **kwargs)
+
+    def DrawBackground(*args, **kwargs):
+        """DrawBackground(self, DC dc, Rect rect)"""
+        return _aui.TabArt_DrawBackground(*args, **kwargs)
+
+    def DrawTab(*args, **kwargs):
+        """
+        DrawTab(self, DC dc, Rect in_rect, String caption, bool active, Rect out_rect, 
+            int x_extent)
+        """
+        return _aui.TabArt_DrawTab(*args, **kwargs)
+
+    def DrawButton(*args, **kwargs):
+        """
+        DrawButton(self, DC dc, Rect in_rect, int bitmap_id, int button_state, 
+            int orientation, Bitmap bitmap_override, Rect out_rect)
+        """
+        return _aui.TabArt_DrawButton(*args, **kwargs)
+
+    def GetTabSize(*args, **kwargs):
+        """GetTabSize(self, DC dc, String caption, bool active, int x_extent) -> Size"""
+        return _aui.TabArt_GetTabSize(*args, **kwargs)
+
+    def GetBestTabCtrlSize(*args, **kwargs):
+        """GetBestTabCtrlSize(self, Window wnd) -> int"""
+        return _aui.TabArt_GetBestTabCtrlSize(*args, **kwargs)
 
 _aui.TabArt_swigregister(TabArt)
 
@@ -1533,6 +1562,7 @@ class AuiTabContainerButton(object):
     cur_state = property(_aui.AuiTabContainerButton_cur_state_get, _aui.AuiTabContainerButton_cur_state_set)
     location = property(_aui.AuiTabContainerButton_location_get, _aui.AuiTabContainerButton_location_set)
     bitmap = property(_aui.AuiTabContainerButton_bitmap_get, _aui.AuiTabContainerButton_bitmap_set)
+    dis_bitmap = property(_aui.AuiTabContainerButton_dis_bitmap_get, _aui.AuiTabContainerButton_dis_bitmap_set)
     rect = property(_aui.AuiTabContainerButton_rect_get, _aui.AuiTabContainerButton_rect_set)
 _aui.AuiTabContainerButton_swigregister(AuiTabContainerButton)
 
@@ -1629,8 +1659,19 @@ class AuiTabContainer(object):
         return _aui.AuiTabContainer_SetRect(*args, **kwargs)
 
     def AddButton(*args, **kwargs):
-        """AddButton(self, int id, int location, Bitmap bmp)"""
+        """
+        AddButton(self, int id, int location, Bitmap normal_bitmap=wxNullBitmap, 
+            Bitmap disabled_bitmap=wxNullBitmap)
+        """
         return _aui.AuiTabContainer_AddButton(*args, **kwargs)
+
+    def GetTabOffset(*args, **kwargs):
+        """GetTabOffset(self) -> size_t"""
+        return _aui.AuiTabContainer_GetTabOffset(*args, **kwargs)
+
+    def SetTabOffset(*args, **kwargs):
+        """SetTabOffset(self, size_t offset)"""
+        return _aui.AuiTabContainer_SetTabOffset(*args, **kwargs)
 
     ActivePage = property(GetActivePage,SetActivePage,doc="See `GetActivePage` and `SetActivePage`") 
     PageCount = property(GetPageCount,doc="See `GetPageCount`") 
@@ -1753,7 +1794,7 @@ class PyDockArt(DefaultDockArt):
     __repr__ = _swig_repr
 _aui.PyDockArt_swigregister(PyDockArt)
 
-class PyTabArt(TabArt):
+class PyTabArt(DefaultTabArt):
     """
     This version of the `TabArt` class has been instrumented to be
     subclassable in Python and to reflect all calls to the C++ base class

@@ -24073,6 +24073,34 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_PrintData_GetMedia(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxPrintData *arg1 = (wxPrintData *) 0 ;
+  int result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxPrintData, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "PrintData_GetMedia" "', expected argument " "1"" of type '" "wxPrintData const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxPrintData * >(argp1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = (int)((wxPrintData const *)arg1)->GetMedia();
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_From_int(static_cast< int >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_PrintData_SetNoCopies(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   wxPrintData *arg1 = (wxPrintData *) 0 ;
@@ -24486,6 +24514,44 @@ SWIGINTERN PyObject *_wrap_PrintData_SetPrintMode(PyObject *SWIGUNUSEDPARM(self)
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
     (arg1)->SetPrintMode(arg2);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_PrintData_SetMedia(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxPrintData *arg1 = (wxPrintData *) 0 ;
+  int arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "media", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:PrintData_SetMedia",kwnames,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxPrintData, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "PrintData_SetMedia" "', expected argument " "1"" of type '" "wxPrintData *""'"); 
+  }
+  arg1 = reinterpret_cast< wxPrintData * >(argp1);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "PrintData_SetMedia" "', expected argument " "2"" of type '" "int""'");
+  } 
+  arg2 = static_cast< int >(val2);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    (arg1)->SetMedia(arg2);
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
@@ -31978,6 +32044,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"PrintData_GetQuality", (PyCFunction)_wrap_PrintData_GetQuality, METH_O, NULL},
 	 { (char *)"PrintData_GetBin", (PyCFunction)_wrap_PrintData_GetBin, METH_O, NULL},
 	 { (char *)"PrintData_GetPrintMode", (PyCFunction)_wrap_PrintData_GetPrintMode, METH_O, NULL},
+	 { (char *)"PrintData_GetMedia", (PyCFunction)_wrap_PrintData_GetMedia, METH_O, NULL},
 	 { (char *)"PrintData_SetNoCopies", (PyCFunction) _wrap_PrintData_SetNoCopies, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"PrintData_SetCollate", (PyCFunction) _wrap_PrintData_SetCollate, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"PrintData_SetOrientation", (PyCFunction) _wrap_PrintData_SetOrientation, METH_VARARGS | METH_KEYWORDS, NULL},
@@ -31989,6 +32056,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"PrintData_SetQuality", (PyCFunction) _wrap_PrintData_SetQuality, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"PrintData_SetBin", (PyCFunction) _wrap_PrintData_SetBin, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"PrintData_SetPrintMode", (PyCFunction) _wrap_PrintData_SetPrintMode, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"PrintData_SetMedia", (PyCFunction) _wrap_PrintData_SetMedia, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"PrintData_GetFilename", (PyCFunction)_wrap_PrintData_GetFilename, METH_O, NULL},
 	 { (char *)"PrintData_SetFilename", (PyCFunction) _wrap_PrintData_SetFilename, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"PrintData_GetPrivData", (PyCFunction)_wrap_PrintData_GetPrivData, METH_O, NULL},

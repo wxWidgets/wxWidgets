@@ -34,6 +34,11 @@ enum wxToolBarToolStyle
 enum {
     wxTB_HORIZONTAL,
     wxTB_VERTICAL,
+    wxTB_TOP,
+    wxTB_LEFT,
+    wxTB_BOTTOM,
+    wxTB_RIGHT,
+
     wxTB_3DBUTTONS,
     wxTB_FLAT,
     wxTB_DOCKABLE,
@@ -43,8 +48,7 @@ enum {
     wxTB_NOALIGN,
     wxTB_HORZ_LAYOUT,
     wxTB_HORZ_TEXT,
-    wxTB_NO_TOOLTIPS,
-    wxTB_BOTTOM
+    wxTB_NO_TOOLTIPS
 };
 
 

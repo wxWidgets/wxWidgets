@@ -364,8 +364,7 @@ public :
 class wxGraphicsMatrix : public wxGraphicsObject
 {
 public :
-    // wxGraphicsMatrix(wxGraphicsRenderer* renderer);     *** This class is an ABC
-
+    wxGraphicsMatrix(); 
     virtual ~wxGraphicsMatrix();
 
     DocDeclStr(
@@ -439,7 +438,7 @@ public :
 class wxGraphicsPath : public wxGraphicsObject
 {
 public :
-    //wxGraphicsPath(wxGraphicsRenderer* renderer);            *** This class is an ABC, so we can't allow instances to be created directly
+    wxGraphicsPath();
     virtual ~wxGraphicsPath();
 
 
@@ -570,7 +569,7 @@ const wxGraphicsPath    wxNullGraphicsPath;
 class wxGraphicsContext : public wxGraphicsObject
 {
 public:
-    // wxGraphicsContext()         This is also an ABC, use Create to make an instance...
+    // wxGraphicsContext()         This is an ABC, use Create to make an instance...
     virtual ~wxGraphicsContext();
 
     %newobject Create;

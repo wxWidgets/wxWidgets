@@ -1569,19 +1569,46 @@ public:
     %property(TreeCtrl, GetTreeCtrl, doc="See `GetTreeCtrl`");
 };
 
+//---------------------------------------------------------------------------
 
-class wxHtmlWindowEvent: public wxNotifyEvent
+
+%constant wxEventType wxEVT_COMMAND_HTML_CELL_CLICKED;
+%constant wxEventType wxEVT_COMMAND_HTML_CELL_HOVER;
+%constant wxEventType wxEVT_COMMAND_HTML_LINK_CLICKED;
+
+
+class wxHtmlCellEvent : public wxCommandEvent
 {
 public:
-    wxHtmlWindowEvent(wxEventType commandType = wxEVT_NULL, int id = 0):
-        wxNotifyEvent(commandType, id);
+    wxHtmlCellEvent(wxEventType commandType, int id,
+                    wxHtmlCell *cell, const wxPoint &pt,
+                    const wxMouseEvent &ev);
 
-    void SetURL(const wxString& url);
-    const wxString& GetURL() const;
+    wxHtmlCell* GetCell() const;
+    wxPoint GetPoint() const;
+    wxMouseEvent GetMouseEvent() const;
 
-    %property(URL, GetURL, SetURL, doc="See `GetURL` and `SetURL`");
+    void SetLinkClicked(bool linkclicked);
+    bool GetLinkClicked() const;
 };
 
+
+class wxHtmlLinkEvent : public wxCommandEvent
+{
+public:
+    wxHtmlLinkEvent(int id, const wxHtmlLinkInfo &linkinfo);
+    
+    const wxHtmlLinkInfo &GetLinkInfo() const;
+};
+
+
+%pythoncode {
+    EVT_HTML_CELL_CLICKED = wx.PyEventBinder( wxEVT_COMMAND_HTML_CELL_CLICKED, 1 )
+    EVT_HTML_CELL_HOVER   = wx.PyEventBinder( wxEVT_COMMAND_HTML_CELL_HOVER, 1 )
+    EVT_HTML_LINK_CLICKED = wx.PyEventBinder( wxEVT_COMMAND_HTML_LINK_CLICKED, 1 )
+}
+        
+//---------------------------------------------------------------------------
 
 
 MustHaveApp(wxHtmlHelpFrame);

@@ -3911,6 +3911,10 @@ class PrintData(_core.Object):
         """GetPrintMode(self) -> int"""
         return _windows_.PrintData_GetPrintMode(*args, **kwargs)
 
+    def GetMedia(*args, **kwargs):
+        """GetMedia(self) -> int"""
+        return _windows_.PrintData_GetMedia(*args, **kwargs)
+
     def SetNoCopies(*args, **kwargs):
         """SetNoCopies(self, int v)"""
         return _windows_.PrintData_SetNoCopies(*args, **kwargs)
@@ -3954,6 +3958,10 @@ class PrintData(_core.Object):
     def SetPrintMode(*args, **kwargs):
         """SetPrintMode(self, int printMode)"""
         return _windows_.PrintData_SetPrintMode(*args, **kwargs)
+
+    def SetMedia(*args, **kwargs):
+        """SetMedia(self, int media)"""
+        return _windows_.PrintData_SetMedia(*args, **kwargs)
 
     def GetFilename(*args, **kwargs):
         """GetFilename(self) -> String"""

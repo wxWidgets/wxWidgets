@@ -578,16 +578,14 @@ the results.
 ", "");
     
 
-    DocDeclStr(
-        wxSize , GetAdjustedBestSize() const,
-        "This method is similar to GetBestSize, except in one
-thing. GetBestSize should return the minimum untruncated size of the
-window, while this method will return the largest of BestSize and any
-user specified minimum size. ie. it is the minimum size the window
-should currently be drawn at, not the minimal size it can possibly
-tolerate.", "");
+    %pythoncode {
+        def GetAdjustedBestSize(self):
+            s = self.GetBestSize()
+            return wx.Size(max(s.width,  self.GetMinWidth()),
+                           max(s.height, self.GetMinHeight()))
+        GetAdjustedBestSize = wx._deprecated(GetAdjustedBestSize, 'Use `GetBestFittingSize` instead.')
+    }
     
-
 
 
     DocDeclStr(
@@ -670,12 +668,12 @@ the virtual area of the window outside the given bounds.", "");
         "", "");
     
     DocDeclStr(
-        void , SetMinSize(const wxSize& minSize),
+        virtual void , SetMinSize(const wxSize& minSize),
         "A more convenient method than `SetSizeHints` for setting just the
 min size.", "");
     
     DocDeclStr(
-        void , SetMaxSize(const wxSize& maxSize),
+        virtual void , SetMaxSize(const wxSize& maxSize),
         "A more convenient method than `SetSizeHints` for setting just the
 max size.", "");
     

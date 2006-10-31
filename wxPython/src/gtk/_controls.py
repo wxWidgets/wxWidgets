@@ -3471,6 +3471,10 @@ TOOL_STYLE_SEPARATOR = _controls_.TOOL_STYLE_SEPARATOR
 TOOL_STYLE_CONTROL = _controls_.TOOL_STYLE_CONTROL
 TB_HORIZONTAL = _controls_.TB_HORIZONTAL
 TB_VERTICAL = _controls_.TB_VERTICAL
+TB_TOP = _controls_.TB_TOP
+TB_LEFT = _controls_.TB_LEFT
+TB_BOTTOM = _controls_.TB_BOTTOM
+TB_RIGHT = _controls_.TB_RIGHT
 TB_3DBUTTONS = _controls_.TB_3DBUTTONS
 TB_FLAT = _controls_.TB_FLAT
 TB_DOCKABLE = _controls_.TB_DOCKABLE
@@ -3481,7 +3485,6 @@ TB_NOALIGN = _controls_.TB_NOALIGN
 TB_HORZ_LAYOUT = _controls_.TB_HORZ_LAYOUT
 TB_HORZ_TEXT = _controls_.TB_HORZ_TEXT
 TB_NO_TOOLTIPS = _controls_.TB_NO_TOOLTIPS
-TB_BOTTOM = _controls_.TB_BOTTOM
 class ToolBarToolBase(_core.Object):
     """Proxy of C++ ToolBarToolBase class"""
     thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')

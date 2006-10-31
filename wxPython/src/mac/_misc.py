@@ -1886,6 +1886,16 @@ class Process(_core.EvtHandler):
         _misc_.Process_swiginit(self,_misc_.new_Process(*args, **kwargs))
         self._setCallbackInfo(self, Process)
 
+    __swig_destroy__ = _misc_.delete_Process
+    __del__ = lambda self : None;
+    def GetPid(*args, **kwargs):
+        """
+        GetPid(self) -> long
+
+        get the process ID of the process executed by Open()
+        """
+        return _misc_.Process_GetPid(*args, **kwargs)
+
     def _setCallbackInfo(*args, **kwargs):
         """_setCallbackInfo(self, PyObject self, PyObject _class)"""
         return _misc_.Process__setCallbackInfo(*args, **kwargs)
@@ -3369,6 +3379,7 @@ class DateTime(object):
     GMT10 = _misc_.DateTime_GMT10
     GMT11 = _misc_.DateTime_GMT11
     GMT12 = _misc_.DateTime_GMT12
+    GMT13 = _misc_.DateTime_GMT13
     WET = _misc_.DateTime_WET
     WEST = _misc_.DateTime_WEST
     CET = _misc_.DateTime_CET
@@ -3394,6 +3405,8 @@ class DateTime(object):
     A_CST = _misc_.DateTime_A_CST
     A_EST = _misc_.DateTime_A_EST
     A_ESST = _misc_.DateTime_A_ESST
+    NZST = _misc_.DateTime_NZST
+    NZDT = _misc_.DateTime_NZDT
     UTC = _misc_.DateTime_UTC
     Gregorian = _misc_.DateTime_Gregorian
     Julian = _misc_.DateTime_Julian

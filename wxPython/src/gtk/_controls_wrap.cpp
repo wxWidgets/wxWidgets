@@ -49044,6 +49044,10 @@ SWIGEXPORT void SWIG_init(void) {
   SWIG_Python_SetConstant(d, "TOOL_STYLE_CONTROL",SWIG_From_int(static_cast< int >(wxTOOL_STYLE_CONTROL)));
   SWIG_Python_SetConstant(d, "TB_HORIZONTAL",SWIG_From_int(static_cast< int >(wxTB_HORIZONTAL)));
   SWIG_Python_SetConstant(d, "TB_VERTICAL",SWIG_From_int(static_cast< int >(wxTB_VERTICAL)));
+  SWIG_Python_SetConstant(d, "TB_TOP",SWIG_From_int(static_cast< int >(wxTB_TOP)));
+  SWIG_Python_SetConstant(d, "TB_LEFT",SWIG_From_int(static_cast< int >(wxTB_LEFT)));
+  SWIG_Python_SetConstant(d, "TB_BOTTOM",SWIG_From_int(static_cast< int >(wxTB_BOTTOM)));
+  SWIG_Python_SetConstant(d, "TB_RIGHT",SWIG_From_int(static_cast< int >(wxTB_RIGHT)));
   SWIG_Python_SetConstant(d, "TB_3DBUTTONS",SWIG_From_int(static_cast< int >(wxTB_3DBUTTONS)));
   SWIG_Python_SetConstant(d, "TB_FLAT",SWIG_From_int(static_cast< int >(wxTB_FLAT)));
   SWIG_Python_SetConstant(d, "TB_DOCKABLE",SWIG_From_int(static_cast< int >(wxTB_DOCKABLE)));
@@ -49054,7 +49058,6 @@ SWIGEXPORT void SWIG_init(void) {
   SWIG_Python_SetConstant(d, "TB_HORZ_LAYOUT",SWIG_From_int(static_cast< int >(wxTB_HORZ_LAYOUT)));
   SWIG_Python_SetConstant(d, "TB_HORZ_TEXT",SWIG_From_int(static_cast< int >(wxTB_HORZ_TEXT)));
   SWIG_Python_SetConstant(d, "TB_NO_TOOLTIPS",SWIG_From_int(static_cast< int >(wxTB_NO_TOOLTIPS)));
-  SWIG_Python_SetConstant(d, "TB_BOTTOM",SWIG_From_int(static_cast< int >(wxTB_BOTTOM)));
   SWIG_addvarlink(SWIG_globals(),(char*)"ListCtrlNameStr",ListCtrlNameStr_get, ListCtrlNameStr_set);
   SWIG_Python_SetConstant(d, "LC_VRULES",SWIG_From_int(static_cast< int >(wxLC_VRULES)));
   SWIG_Python_SetConstant(d, "LC_HRULES",SWIG_From_int(static_cast< int >(wxLC_HRULES)));

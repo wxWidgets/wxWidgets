@@ -352,6 +352,12 @@ position.", "
     :param srcPtMask:   Source position on the mask. 
 ",
         BlitPointSize);
+
+
+    DocDeclStr(
+        wxBitmap , GetAsBitmap(const wxRect *subrect = NULL) const,
+        "", "");
+    
     
 
     DocStr(
@@ -1316,7 +1322,7 @@ of it) before a bitmap can be reselected into another memory DC.
 class wxMemoryDC : public wxDC {
 public:
     DocCtorStr(
-        wxMemoryDC(const wxBitmap& bitmap = wxNullBitmap),
+        wxMemoryDC(wxBitmap& bitmap = wxNullBitmap),
         "Constructs a new memory device context.
 
 Use the Ok member to test whether the constructor was successful in
@@ -1333,7 +1339,7 @@ drawing on it.", "
 
     
     DocDeclStr(
-        void , SelectObject(const wxBitmap& bitmap),
+        void , SelectObject(wxBitmap& bitmap),
         "Selects the bitmap into the device context, to use as the memory
 bitmap. Selecting the bitmap into a memory DC allows you to draw into
 the DC, and therefore the bitmap, and also to use Blit to copy the
@@ -1343,6 +1349,12 @@ If the argument is wx.NullBitmap (or some other uninitialised
 `wx.Bitmap`) the current bitmap is selected out of the device context,
 and the original bitmap restored, allowing the current bitmap to be
 destroyed safely.", "");
+
+    
+    DocDeclStr(
+        void , SelectObjectAsSource(const wxBitmap& bmp),
+        "", "");
+    
     
 };
 

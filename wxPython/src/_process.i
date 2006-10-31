@@ -101,6 +101,14 @@ public:
 
     %pythonAppend wxPyProcess  "self._setCallbackInfo(self, Process)"
     wxPyProcess(wxEvtHandler *parent = NULL, int id = -1);
+    ~wxPyProcess();
+
+
+    DocDeclStr(
+        long , GetPid() const,
+        "get the process ID of the process executed by Open()", "");
+    
+
 
     void _setCallbackInfo(PyObject* self, PyObject* _class);
 

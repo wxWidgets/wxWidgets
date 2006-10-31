@@ -38,6 +38,13 @@ public:
         }
     }
 
+    DocDeclStr(
+        bool , IsSameAs(const wxObject& p) const,
+        "For wx.Objects that use C++ reference counting internally, this method
+can be used to determine if two objects are referencing the same data
+object.", "");
+    
+
     %property(ClassName, GetClassName, doc="See `GetClassName`");
 };
 

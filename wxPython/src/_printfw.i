@@ -82,6 +82,7 @@ public:
     int GetQuality();
     wxPrintBin GetBin();
     wxPrintMode GetPrintMode() const;
+    int GetMedia() const;
     
     void SetNoCopies(int v);
     void SetCollate(bool flag);
@@ -95,7 +96,8 @@ public:
     void SetQuality(int quality);
     void SetBin(wxPrintBin bin);
     void SetPrintMode(wxPrintMode printMode);
- 
+    void SetMedia(int media);
+    
     wxString GetFilename() const;
     void SetFilename( const wxString &filename );
 

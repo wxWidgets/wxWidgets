@@ -671,6 +671,24 @@ class Bitmap(GDIObject):
         """
         return _gdi_.Bitmap_SetSize(*args, **kwargs)
 
+    def CopyFromBuffer(*args, **kwargs):
+        """
+        CopyFromBuffer(self, buffer data)
+
+        Copy data from a RGB buffer object to replace the bitmap pixel data.
+        See `wxBitmapFromBuffer` for more .
+        """
+        return _gdi_.Bitmap_CopyFromBuffer(*args, **kwargs)
+
+    def CopyFromBufferRGBA(*args, **kwargs):
+        """
+        CopyFromBufferRGBA(self, buffer data)
+
+        Copy data from a RGBA buffer object to replace the bitmap pixel data.
+        See `wxBitmapFromBufferRGBA` for more .
+        """
+        return _gdi_.Bitmap_CopyFromBufferRGBA(*args, **kwargs)
+
     def __nonzero__(self): return self.IsOk() 
     def __eq__(*args, **kwargs):
         """__eq__(self, Bitmap other) -> bool"""
@@ -3366,6 +3384,10 @@ class DC(_core.Object):
         """
         return _gdi_.DC_BlitPointSize(*args, **kwargs)
 
+    def GetAsBitmap(*args, **kwargs):
+        """GetAsBitmap(self, Rect subrect=None) -> Bitmap"""
+        return _gdi_.DC_GetAsBitmap(*args, **kwargs)
+
     def SetClippingRegion(*args, **kwargs):
         """
         SetClippingRegion(self, int x, int y, int width, int height)
@@ -4510,6 +4532,10 @@ class MemoryDC(DC):
         """
         return _gdi_.MemoryDC_SelectObject(*args, **kwargs)
 
+    def SelectObjectAsSource(*args, **kwargs):
+        """SelectObjectAsSource(self, Bitmap bmp)"""
+        return _gdi_.MemoryDC_SelectObjectAsSource(*args, **kwargs)
+
 _gdi_.MemoryDC_swigregister(MemoryDC)
 
 def MemoryDCFromDC(*args, **kwargs):
@@ -4993,8 +5019,10 @@ _gdi_.GraphicsFont_swigregister(GraphicsFont)
 class GraphicsMatrix(GraphicsObject):
     """Proxy of C++ GraphicsMatrix class"""
     thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
-    def __init__(self): raise AttributeError, "No constructor defined"
     __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
+        """__init__(self) -> GraphicsMatrix"""
+        _gdi_.GraphicsMatrix_swiginit(self,_gdi_.new_GraphicsMatrix(*args, **kwargs))
     __swig_destroy__ = _gdi_.delete_GraphicsMatrix
     __del__ = lambda self : None;
     def Concat(*args, **kwargs):
@@ -5099,8 +5127,10 @@ _gdi_.GraphicsMatrix_swigregister(GraphicsMatrix)
 class GraphicsPath(GraphicsObject):
     """Proxy of C++ GraphicsPath class"""
     thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
-    def __init__(self): raise AttributeError, "No constructor defined"
     __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
+        """__init__(self) -> GraphicsPath"""
+        _gdi_.GraphicsPath_swiginit(self,_gdi_.new_GraphicsPath(*args, **kwargs))
     __swig_destroy__ = _gdi_.delete_GraphicsPath
     __del__ = lambda self : None;
     def MoveToPoint(*args):
@@ -5253,8 +5283,8 @@ class GraphicsPath(GraphicsObject):
 
     def Contains(*args):
         """
-        Contains(self, Double x, Double y, int fillStyle=WINDING_RULE) -> bool
-        Contains(self, wxPoint2DDouble c, int fillStyle=WINDING_RULE) -> bool
+        Contains(self, Double x, Double y, int fillStyle=ODDEVEN_RULE) -> bool
+        Contains(self, wxPoint2DDouble c, int fillStyle=ODDEVEN_RULE) -> bool
         """
         return _gdi_.GraphicsPath_Contains(*args)
 
@@ -5475,7 +5505,7 @@ class GraphicsContext(GraphicsObject):
 
     def FillPath(*args, **kwargs):
         """
-        FillPath(self, GraphicsPath path, int fillStyle=WINDING_RULE)
+        FillPath(self, GraphicsPath path, int fillStyle=ODDEVEN_RULE)
 
         fills a path with the current brush
         """
@@ -5483,7 +5513,7 @@ class GraphicsContext(GraphicsObject):
 
     def DrawPath(*args, **kwargs):
         """
-        DrawPath(self, GraphicsPath path, int fillStyle=WINDING_RULE)
+        DrawPath(self, GraphicsPath path, int fillStyle=ODDEVEN_RULE)
 
         draws a path by first filling and then stroking
         """
@@ -5543,7 +5573,7 @@ class GraphicsContext(GraphicsObject):
 
     def DrawLines(*args, **kwargs):
         """
-        DrawLines(self, size_t points, int fillStyle=WINDING_RULE)
+        DrawLines(self, size_t points, int fillStyle=ODDEVEN_RULE)
 
         draws a polygon
         """

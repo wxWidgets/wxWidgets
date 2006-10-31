@@ -1664,23 +1664,57 @@ def PreHtmlHelpWindow(*args, **kwargs):
     self._setOORInfo(self)
     return val
 
-class HtmlWindowEvent(_core.NotifyEvent):
-    """Proxy of C++ HtmlWindowEvent class"""
+wxEVT_COMMAND_HTML_CELL_CLICKED = _html.wxEVT_COMMAND_HTML_CELL_CLICKED
+wxEVT_COMMAND_HTML_CELL_HOVER = _html.wxEVT_COMMAND_HTML_CELL_HOVER
+wxEVT_COMMAND_HTML_LINK_CLICKED = _html.wxEVT_COMMAND_HTML_LINK_CLICKED
+class HtmlCellEvent(_core.CommandEvent):
+    """Proxy of C++ HtmlCellEvent class"""
     thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
     __repr__ = _swig_repr
     def __init__(self, *args, **kwargs): 
-        """__init__(self, EventType commandType=wxEVT_NULL, int id=0) -> HtmlWindowEvent"""
-        _html.HtmlWindowEvent_swiginit(self,_html.new_HtmlWindowEvent(*args, **kwargs))
-    def SetURL(*args, **kwargs):
-        """SetURL(self, String url)"""
-        return _html.HtmlWindowEvent_SetURL(*args, **kwargs)
+        """
+        __init__(self, EventType commandType, int id, HtmlCell cell, Point pt, 
+            MouseEvent ev) -> HtmlCellEvent
+        """
+        _html.HtmlCellEvent_swiginit(self,_html.new_HtmlCellEvent(*args, **kwargs))
+    def GetCell(*args, **kwargs):
+        """GetCell(self) -> HtmlCell"""
+        return _html.HtmlCellEvent_GetCell(*args, **kwargs)
 
-    def GetURL(*args, **kwargs):
-        """GetURL(self) -> String"""
-        return _html.HtmlWindowEvent_GetURL(*args, **kwargs)
+    def GetPoint(*args, **kwargs):
+        """GetPoint(self) -> Point"""
+        return _html.HtmlCellEvent_GetPoint(*args, **kwargs)
 
-    URL = property(GetURL,SetURL,doc="See `GetURL` and `SetURL`") 
-_html.HtmlWindowEvent_swigregister(HtmlWindowEvent)
+    def GetMouseEvent(*args, **kwargs):
+        """GetMouseEvent(self) -> MouseEvent"""
+        return _html.HtmlCellEvent_GetMouseEvent(*args, **kwargs)
+
+    def SetLinkClicked(*args, **kwargs):
+        """SetLinkClicked(self, bool linkclicked)"""
+        return _html.HtmlCellEvent_SetLinkClicked(*args, **kwargs)
+
+    def GetLinkClicked(*args, **kwargs):
+        """GetLinkClicked(self) -> bool"""
+        return _html.HtmlCellEvent_GetLinkClicked(*args, **kwargs)
+
+_html.HtmlCellEvent_swigregister(HtmlCellEvent)
+
+class HtmlLinkEvent(_core.CommandEvent):
+    """Proxy of C++ HtmlLinkEvent class"""
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
+        """__init__(self, int id, HtmlLinkInfo linkinfo) -> HtmlLinkEvent"""
+        _html.HtmlLinkEvent_swiginit(self,_html.new_HtmlLinkEvent(*args, **kwargs))
+    def GetLinkInfo(*args, **kwargs):
+        """GetLinkInfo(self) -> HtmlLinkInfo"""
+        return _html.HtmlLinkEvent_GetLinkInfo(*args, **kwargs)
+
+_html.HtmlLinkEvent_swigregister(HtmlLinkEvent)
+
+EVT_HTML_CELL_CLICKED = wx.PyEventBinder( wxEVT_COMMAND_HTML_CELL_CLICKED, 1 )
+EVT_HTML_CELL_HOVER   = wx.PyEventBinder( wxEVT_COMMAND_HTML_CELL_HOVER, 1 )
+EVT_HTML_LINK_CLICKED = wx.PyEventBinder( wxEVT_COMMAND_HTML_LINK_CLICKED, 1 )
 
 class HtmlHelpFrame(_windows.Frame):
     """Proxy of C++ HtmlHelpFrame class"""

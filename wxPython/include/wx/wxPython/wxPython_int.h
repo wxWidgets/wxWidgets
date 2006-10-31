@@ -912,6 +912,29 @@ extern wxPyApp *wxPythonApp;
 
 //---------------------------------------------------------------------------
 
+#define DEC_PYCALLBACK_INT_WIN(CBNAME)    \
+    int CBNAME(wxWindow* a)
+
+
+#define IMP_PYCALLBACK_INT_WIN(CLASS, PCLASS, CBNAME)                           \
+    int CLASS::CBNAME(wxWindow* a) {                                            \
+        int rval=0;                                                             \
+        bool found;                                                             \
+        wxPyBlock_t blocked = wxPyBeginBlockThreads();                          \
+        if ((found = wxPyCBH_findCallback(m_myInst, #CBNAME))) {                \
+            PyObject* obj = wxPyMake_wxObject(a, false);                        \
+            rval = wxPyCBH_callCallback(m_myInst, Py_BuildValue("(O)",obj));    \
+            Py_DECREF(obj);                                                     \
+        }                                                                       \
+        wxPyEndBlockThreads(blocked);                                           \
+        if (! found)                                                            \
+            rval = PCLASS::CBNAME(a);                                           \
+        return rval;                                                            \
+    }
+
+
+//---------------------------------------------------------------------------
+
 #define DEC_PYCALLBACK__DC(CBNAME)                      \
     void CBNAME(wxDC& a)
 

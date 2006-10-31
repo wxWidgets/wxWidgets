@@ -4510,6 +4510,50 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_Object_IsSameAs(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxObject *arg1 = (wxObject *) 0 ;
+  wxObject *arg2 = 0 ;
+  bool result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "p", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:Object_IsSameAs",kwnames,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxObject, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Object_IsSameAs" "', expected argument " "1"" of type '" "wxObject const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxObject * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_wxObject,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Object_IsSameAs" "', expected argument " "2"" of type '" "wxObject const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Object_IsSameAs" "', expected argument " "2"" of type '" "wxObject const &""'"); 
+  }
+  arg2 = reinterpret_cast< wxObject * >(argp2);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = (bool)((wxObject const *)arg1)->IsSameAs((wxObject const &)*arg2);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  {
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+  }
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *Object_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
   if (!SWIG_Python_UnpackTuple(args,(char*)"swigregister", 1, 1,&obj)) return NULL;
@@ -34630,34 +34674,6 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_Window_GetAdjustedBestSize(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  wxWindow *arg1 = (wxWindow *) 0 ;
-  wxSize result;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject *swig_obj[1] ;
-  
-  if (!args) SWIG_fail;
-  swig_obj[0] = args;
-  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxWindow, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Window_GetAdjustedBestSize" "', expected argument " "1"" of type '" "wxWindow const *""'"); 
-  }
-  arg1 = reinterpret_cast< wxWindow * >(argp1);
-  {
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    result = ((wxWindow const *)arg1)->GetAdjustedBestSize();
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) SWIG_fail;
-  }
-  resultobj = SWIG_NewPointerObj((new wxSize(static_cast< const wxSize& >(result))), SWIGTYPE_p_wxSize, SWIG_POINTER_OWN |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
 SWIGINTERN PyObject *_wrap_Window_Center(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   wxWindow *arg1 = (wxWindow *) 0 ;
@@ -56392,6 +56408,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"_wxPySetDictionary", __wxPySetDictionary, METH_VARARGS, NULL},
 	 { (char *)"Object_GetClassName", (PyCFunction)_wrap_Object_GetClassName, METH_O, NULL},
 	 { (char *)"Object_Destroy", (PyCFunction)_wrap_Object_Destroy, METH_O, NULL},
+	 { (char *)"Object_IsSameAs", (PyCFunction) _wrap_Object_IsSameAs, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Object_swigregister", Object_swigregister, METH_VARARGS, NULL},
 	 { (char *)"Size_width_set", _wrap_Size_width_set, METH_VARARGS, NULL},
 	 { (char *)"Size_width_get", (PyCFunction)_wrap_Size_width_get, METH_O, NULL},
@@ -57365,7 +57382,6 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Window_InvalidateBestSize", (PyCFunction)_wrap_Window_InvalidateBestSize, METH_O, NULL},
 	 { (char *)"Window_CacheBestSize", (PyCFunction) _wrap_Window_CacheBestSize, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Window_GetBestFittingSize", (PyCFunction)_wrap_Window_GetBestFittingSize, METH_O, NULL},
-	 { (char *)"Window_GetAdjustedBestSize", (PyCFunction)_wrap_Window_GetAdjustedBestSize, METH_O, NULL},
 	 { (char *)"Window_Center", (PyCFunction) _wrap_Window_Center, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Window_CenterOnParent", (PyCFunction) _wrap_Window_CenterOnParent, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Window_Fit", (PyCFunction)_wrap_Window_Fit, METH_O, NULL},
@@ -60151,6 +60167,7 @@ SWIGEXPORT void SWIG_init(void) {
   SWIG_Python_SetConstant(d, "BITMAP_TYPE_ICON",SWIG_From_int(static_cast< int >(wxBITMAP_TYPE_ICON)));
   SWIG_Python_SetConstant(d, "BITMAP_TYPE_ANI",SWIG_From_int(static_cast< int >(wxBITMAP_TYPE_ANI)));
   SWIG_Python_SetConstant(d, "BITMAP_TYPE_IFF",SWIG_From_int(static_cast< int >(wxBITMAP_TYPE_IFF)));
+  SWIG_Python_SetConstant(d, "BITMAP_TYPE_TGA",SWIG_From_int(static_cast< int >(wxBITMAP_TYPE_TGA)));
   SWIG_Python_SetConstant(d, "BITMAP_TYPE_MACCURSOR",SWIG_From_int(static_cast< int >(wxBITMAP_TYPE_MACCURSOR)));
   SWIG_Python_SetConstant(d, "BITMAP_TYPE_ANY",SWIG_From_int(static_cast< int >(wxBITMAP_TYPE_ANY)));
   SWIG_Python_SetConstant(d, "CURSOR_NONE",SWIG_From_int(static_cast< int >(wxCURSOR_NONE)));
