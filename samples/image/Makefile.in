@@ -179,7 +179,7 @@ image.app/Contents/PkgInfo: image$(EXEEXT) $(top_srcdir)/src/mac/carbon/Info.pli
 
 data: 
 	@mkdir -p .
-	@for f in horse.png horse.jpg horse.bmp horse.gif horse.pcx horse.pnm horse_ag.pnm horse_rg.pnm horse.tif horse.xpm horse.cur horse.ico horse3.ani smile.xbm toucan.png cmyk.jpg; do \
+	@for f in horse.png horse.jpg horse.bmp horse.gif horse.pcx horse.pnm horse_ag.pnm horse_rg.pnm horse.tif horse.tga horse.xpm horse.cur horse.ico horse3.ani smile.xbm toucan.png cmyk.jpg; do \
 	if test ! -f ./$$f -a ! -d ./$$f ; \
 	then x=yep ; \
 	else x=`find $(srcdir)/$$f -newer ./$$f -print` ; \
