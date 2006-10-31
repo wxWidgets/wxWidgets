@@ -40,6 +40,12 @@ wxToolBarXmlHandler::wxToolBarXmlHandler()
     XRC_ADD_STYLE(wxTB_NOALIGN);
     XRC_ADD_STYLE(wxTB_HORZ_LAYOUT);
     XRC_ADD_STYLE(wxTB_HORZ_TEXT);
+
+    XRC_ADD_STYLE(wxTB_TOP);
+    XRC_ADD_STYLE(wxTB_LEFT);
+    XRC_ADD_STYLE(wxTB_RIGHT);
+    XRC_ADD_STYLE(wxTB_BOTTOM);
+
     AddWindowStyles();
 }
 
