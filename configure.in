@@ -574,6 +574,7 @@ if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_IMAGE=no
   DEFAULT_wxUSE_GIF=no
   DEFAULT_wxUSE_PCX=no
+  DEFAULT_wxUSE_TGA=no
   DEFAULT_wxUSE_PNM=no
   DEFAULT_wxUSE_IFF=no
   DEFAULT_wxUSE_XPM=no
@@ -795,7 +796,8 @@ else
   DEFAULT_wxUSE_IMAGE=yes
   DEFAULT_wxUSE_GIF=yes
   DEFAULT_wxUSE_PCX=yes
-  DEFAULT_wxUSE_IFF=no
+  DEFAULT_wxUSE_TGA=yes
+  DEFAULT_wxUSE_IFF=no  dnl why is this set to "no"?
   DEFAULT_wxUSE_PNM=yes
   DEFAULT_wxUSE_XPM=yes
   DEFAULT_wxUSE_ICO_CUR=yes
@@ -1272,6 +1274,7 @@ WX_ARG_ENABLE(palette,     [  --enable-palette        use wxPalette class], wxUS
 WX_ARG_ENABLE(image,       [  --enable-image          use wxImage class], wxUSE_IMAGE)
 WX_ARG_ENABLE(gif,         [  --enable-gif            use gif images (GIF file format)], wxUSE_GIF)
 WX_ARG_ENABLE(pcx,         [  --enable-pcx            use pcx images (PCX file format)], wxUSE_PCX)
+WX_ARG_ENABLE(tga,         [  --enable-tga            use tga images (TGA file format)], wxUSE_TGA)
 WX_ARG_ENABLE(iff,         [  --enable-iff            use iff images (IFF file format)], wxUSE_IFF)
 WX_ARG_ENABLE(pnm,         [  --enable-pnm            use pnm images (PNM file format)], wxUSE_PNM)
 WX_ARG_ENABLE(xpm,         [  --enable-xpm            use xpm images (XPM file format)], wxUSE_XPM)
@@ -7033,6 +7036,10 @@ if test "$wxUSE_IMAGE" = "yes" ; then
 
     if test "$wxUSE_PCX" = "yes" ; then
       AC_DEFINE(wxUSE_PCX)
+    fi
+
+    if test "$wxUSE_TGA" = "yes" ; then
+      AC_DEFINE(wxUSE_TGA)
     fi
 
     if test "$wxUSE_IFF" = "yes" ; then
