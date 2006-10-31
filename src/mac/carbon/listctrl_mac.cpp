@@ -296,6 +296,11 @@ bool wxMacListCtrlEventDelegate::ProcessEvent( wxEvent& event )
     event.SetEventObject( m_list );
     event.SetId( m_id );
     
+    if ( !event.IsKindOf( CLASSINFO( wxCommandEvent ) ) )
+    {
+        if (m_list->GetEventHandler()->ProcessEvent( event ))
+            return true;
+    } 
     return wxEvtHandler::ProcessEvent(event);
 }
 
