@@ -291,3 +291,16 @@ void wxBrush::SetPS(
     M_BRUSHDATA->m_hBrush = hPS;
     RealizeResource();
 } // end of WxWinGdi_CPen::SetPS
+
+
+bool wxBrush::operator == (
+    const wxBrush& brush
+) const
+{
+    if (m_refData == brush.m_refData) return true;
+
+    if (!m_refData || !brush.m_refData) return false;
+
+    return ( *(wxBrushRefData*)m_refData == *(wxBrushRefData*)brush.m_refData );
+} // end of wxBrush::operator ==
+

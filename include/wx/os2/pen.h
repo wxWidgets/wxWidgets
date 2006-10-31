@@ -35,8 +35,8 @@ public:
                m_nJoin == data.m_nJoin &&
                m_nCap == data.m_nCap &&
                m_vColour == data.m_vColour &&
-               (m_style != wxSTIPPLE || m_stipple.IsSameAs(data.m_stipple)) &&
-               (m_style != wxUSER_DASH ||
+               (m_nStyle != wxSTIPPLE || m_vStipple.IsSameAs(data.m_vStipple)) &&
+               (m_nStyle != wxUSER_DASH ||
                 (m_dash == data.m_dash &&
                     memcmp(m_dash, data.m_dash, m_nbDash*sizeof(wxDash)) == 0));
     }
@@ -72,7 +72,7 @@ public:
 
     inline bool   operator == (const wxPen& rPen) const
     {
-        const wxPenRefData *penData = (wxPenRefData *)pen.m_refData;
+        const wxPenRefData *penData = (wxPenRefData *)rPen.m_refData;
 
         // an invalid pen is only equal to another invalid pen
         return m_refData ? penData && *M_PENDATA == *penData : !penData;

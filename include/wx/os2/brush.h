@@ -26,6 +26,13 @@ public:
     wxBrushRefData(const wxBrushRefData& rData);
     virtual ~wxBrushRefData();
 
+    bool operator == (const wxBrushRefData& data) const
+    {
+        return (m_nStyle == data.m_nStyle &&
+                m_vStipple.IsSameAs(data.m_vStipple) &&
+                m_vColour == data.m_vColour);
+    }
+
 protected:
     int         m_nStyle;
     wxBitmap    m_vStipple ;
