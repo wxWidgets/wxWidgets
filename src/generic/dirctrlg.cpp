@@ -613,7 +613,7 @@ bool wxGenericDirCtrl::Create(wxWindow *parent,
 
     ExpandRoot();
 
-    SetBestSize(size);
+    SetInitialSize(size);
     DoResize();
 
     return true;
