@@ -323,7 +323,7 @@ void wxRadioBox::SendNotificationEvent()
 
 unsigned int wxRadioBox::GetCount() const
 {
-    return m_radioButtons->GetCount();
+    return m_radioButtons ? m_radioButtons->GetCount() : 0u;
 }
 
 void wxRadioBox::SetString(unsigned int item, const wxString& label)
