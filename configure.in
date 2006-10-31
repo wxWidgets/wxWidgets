@@ -1458,7 +1458,6 @@ if test "$wants_win32" = 1 ; then
     AC_DEFINE(__WINDOWS__)
     AC_DEFINE(__GNUWIN32__)
     AC_DEFINE(STRICT)
-    AC_DEFINE(WINVER, 0x0400)
 fi
 if test "$doesnt_want_win32" = 1 ; then
     USE_UNIX=1

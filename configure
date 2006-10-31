@@ -11947,10 +11947,6 @@ _ACEOF
 #define STRICT 1
 _ACEOF
 
-    cat >>confdefs.h <<\_ACEOF
-#define WINVER 0x0400
-_ACEOF
-
 fi
 if test "$doesnt_want_win32" = 1 ; then
     USE_UNIX=1
