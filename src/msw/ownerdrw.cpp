@@ -429,7 +429,7 @@ bool wxOwnerDrawn::OnDrawItem(wxDC& dc,
         if ( bmp.Ok() )
         {
             wxMemoryDC dcMem(&dc);
-            dcMem.SelectObject(bmp);
+            dcMem.SelectObjectAsSource(bmp);
 
             // center bitmap
             int nBmpWidth = bmp.GetWidth(),
