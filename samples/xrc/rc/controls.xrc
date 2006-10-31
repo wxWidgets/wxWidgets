@@ -21,7 +21,7 @@
             <border>5</border>
             <object class="wxNotebook" name="controls_notebook">
                 <usenotebooksizer>1</usenotebooksizer>
-                <size>550,200</size>
+                <size>550,250</size>
                 <object class="notebookpage">
                     <label>wxTreebook</label>
                                 <object class="wxTreebook" name="controls_treebook">
@@ -1100,7 +1100,6 @@
                                 <flag>wxALIGN_CENTRE|wxALL</flag>
                                 <border>5</border>
                                 <object class="wxButton" name="controls_animation_button_play">
-                                    <size>200,180</size>
                                     <label>Play</label>
                                 </object>
                             </object>
