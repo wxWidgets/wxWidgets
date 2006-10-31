@@ -1319,7 +1319,8 @@ bool wxWindowDC::DoBlit( wxCoord xdest, wxCoord ydest,
             // a clipped bitmap and therefore needs to move the origin
             // accordingly
             wxRegion tmp( xx,yy,ww,hh );
-            tmp.Intersect( m_currentClippingRegion );
+            if (!m_currentClippingRegion.IsNull())
+                tmp.Intersect( m_currentClippingRegion );
             tmp.GetBox(cx,cy,cw,ch);
 
             // Scale and clipped bitmap
