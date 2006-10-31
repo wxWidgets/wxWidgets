@@ -99,18 +99,8 @@
     };
 #endif // W_OK
 
-// there is no distinction between text and binary files under Unix, so define
-// O_BINARY as 0 if the system headers don't do it already
-#if defined(__UNIX__) && !defined(O_BINARY)
-    #define   O_BINARY    (0)
-#endif  //__UNIX__
-
 #ifdef __SALFORDC__
     #include <unix.h>
-#endif
-
-#ifndef MAX_PATH
-    #define MAX_PATH 512
 #endif
 
 // some broken compilers don't have 3rd argument in open() and creat()
@@ -132,6 +122,12 @@
 #include  "wx/file.h"
 #include  "wx/filefn.h"
 
+// there is no distinction between text and binary files under Unix, so define
+// O_BINARY as 0 if the system headers don't do it already
+#if defined(__UNIX__) && !defined(O_BINARY)
+    #define   O_BINARY    (0)
+#endif  //__UNIX__
+
 #ifdef __WXMSW__
     #include "wx/msw/mslu.h"
 #endif
@@ -140,6 +136,9 @@
     #include "wx/msw/private.h"
 #endif
 
+#ifndef MAX_PATH
+    #define MAX_PATH 512
+#endif
 
 // ============================================================================
 // implementation of wxFile
