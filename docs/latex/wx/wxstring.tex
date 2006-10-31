@@ -1,12 +1,14 @@
 \section{\class{wxString}}\label{wxstring}
 
 wxString is a class representing a character string. Please see the 
-\helpref{wxString overview}{wxstringoverview} for more information about it. As explained
-there, wxString implements about 90\% of methods of the std::string class (iterators
-are not supported, nor all methods which use them).
-These standard functions are not documented in this manual so please see the STL documentation.
+\helpref{wxString overview}{wxstringoverview} for more information about it.
+
+As explained there, wxString implements most of the methods of the std::string
+class.
+These standard functions are not documented in this manual, please see the
+\urlref{STL documentation}{http://www.cppreference.com/cppstl.html}).
 The behaviour of all these functions is identical to the behaviour described
-there (except that wxString is sensitive to null character).
+there.
 
 You may notice that wxString sometimes has many functions which do the same
 thing like, for example, \helpref{Length()}{wxstringlength}, 
@@ -15,11 +17,6 @@ length. In all cases of such duplication the {\tt std::string}-compatible
 method ({\tt length()} in this case, always the lowercase version) should be
 used as it will ensure smoother transition to {\tt std::string} when wxWidgets
 starts using it instead of wxString.
-
-Also please note that in this manual \texttt{char} is sometimes used instead of 
-\texttt{wxChar} because it hasn't been fully updated yet. Please substitute as
-necessary and refer to the sources in case of a doubt.
-
 
 \wxheading{Derived from}
 
@@ -37,7 +34,7 @@ Objects:
 
 \wxheading{See also}
 
-\overview{Overview}{wxstringoverview}
+\helpref{wxString overview}{wxstringoverview}, \helpref{Unicode overview}{unicode}
 
 \latexignore{\rtfignore{\wxheading{Function groups}}}
 
@@ -113,7 +110,7 @@ so is the default version of \helpref{IsSameAs}{wxstringissameas}. For case
 insensitive comparisons you should use \helpref{CmpNoCase}{wxstringcmpnocase} or
 give a second parameter to IsSameAs. This last function is may be more
 convenient if only equality of the strings matters because it returns a boolean
-true value if the strings are the same and not 0 (which is usually false in C)
+\true value if the strings are the same and not 0 (which is usually false in C)
 as {\tt Cmp()} does.
 
 \helpref{Matches}{wxstringmatches} is a poor man's regular expression matcher:
@@ -177,11 +174,13 @@ functions.
 
 The string provides functions for conversion to signed and unsigned integer and
 floating point numbers. All three functions take a pointer to the variable to
-put the numeric value in and return true if the {\bf entire} string could be
+put the numeric value in and return \true if the {\bf entire} string could be
 converted to a number.
 
 \helpref{ToLong}{wxstringtolong}\\
+\helpref{ToLongLong}{wxstringtolonglong}\\
 \helpref{ToULong}{wxstringtoulong}\\
+\helpref{ToULongLong}{wxstringtoulonglong}\\
 \helpref{ToDouble}{wxstringtodouble}
 
 
@@ -231,8 +230,8 @@ must} be called!
 Other string functions.
 
 \helpref{Trim}{wxstringtrim}\\
-\helpref{Pad}{wxstringpad}\\
-\helpref{Truncate}{wxstringtruncate}
+\helpref{Truncate}{wxstringtruncate}\\
+\helpref{Pad}{wxstringpad}
 
 
 \membersection{wxWidgets 1.xx compatibility functions}\label{backwardcompatibilityinwxstring}
@@ -240,23 +239,23 @@ Other string functions.
 These functions are deprecated, please consider using new wxWidgets 2.0
 functions instead of them (or, even better, std::string compatible variants).
 
-\helpref{SubString}{wxstringsubstring}\\
-\helpref{sprintf}{wxstringsprintf}\\
+% keep ordered alphabetically
 \helpref{CompareTo}{wxstringcompareto}\\
-\helpref{Length}{wxstringlength}\\
-\helpref{Freq}{wxstringfreq}\\
-\helpref{LowerCase}{wxstringlowercase}\\
-\helpref{UpperCase}{wxstringuppercase}\\
-\helpref{Strip}{wxstringstrip}\\
-\helpref{Index}{wxstringindex}\\
-\helpref{Remove}{wxstringremove}\\
-\helpref{First}{wxstringfirst}\\
-\helpref{Last}{wxstringlast}\\
 \helpref{Contains}{wxstringcontains}\\
-\helpref{IsNull}{wxstringisnull}\\
+\helpref{First}{wxstringfirst}\\
+\helpref{Freq}{wxstringfreq}\\
+\helpref{Index}{wxstringindex}\\
 \helpref{IsAscii}{wxstringisascii}\\
+\helpref{IsNull}{wxstringisnull}\\
 \helpref{IsNumber}{wxstringisnumber}\\
-\helpref{IsWord}{wxstringisword}
+\helpref{IsWord}{wxstringisword}\\
+\helpref{Last}{wxstringlast}\\
+\helpref{Length}{wxstringlength}\\
+\helpref{LowerCase}{wxstringlowercase}\\
+\helpref{Remove}{wxstringremove}\\
+\helpref{Strip}{wxstringstrip}\\
+\helpref{SubString}{wxstringsubstring}\\
+\helpref{UpperCase}{wxstringuppercase}
 
 
 \membersection{std::string compatibility functions}\label{wxstringat}
@@ -429,11 +428,11 @@ Default constructor. Initializes the string to {\tt ""} (empty string).
 
 Copy constructor.
 
-\func{}{wxString}{\param{char}{ ch}, \param{size\_t}{ n = 1}}
+\func{}{wxString}{\param{wxChar}{ ch}, \param{size\_t}{ n = 1}}
 
 Constructs a string of {\it n} copies of character {\it ch}.
 
-\func{}{wxString}{\param{const char*}{ psz}, \param{size\_t}{ nLength = wxSTRING\_MAXLEN}}
+\func{}{wxString}{\param{const wxChar*}{ psz}, \param{size\_t}{ nLength = wxSTRING\_MAXLEN}}
 
 Takes first {\it nLength} characters from the C string {\it psz}.
 The default value of {\tt wxSTRING\_MAXLEN} means to take all the string.
@@ -449,14 +448,12 @@ results otherwise.
 
 For compilers using unsigned char: takes first {\it nLength} characters from the C string {\it psz}.
 The default value of {\tt wxSTRING\_MAXLEN} means take all the string.
-
-{\bf Note:} In Unicode build, all of the above constructors take
-{\tt wchar\_t} arguments instead of {\tt char}.
+For ANSI builds only (note the use of {\tt char} instead of {\tt wxChar}).
 
 \wxheading{Constructors with conversion}
 
-The following constructors allow you to construct wxString from wide string
-in ANSI build or from C string in Unicode build.
+The following constructors allow you to construct wxString from a wide string
+in ANSI build or from a C string in Unicode build.
 
 \func{}{wxString}{\param{const wchar\_t*}{ psz}, \param{wxMBConv\&}{ conv}, \param{size\_t}{ nLength = wxSTRING\_MAXLEN}}
 
@@ -527,11 +524,11 @@ greater than {\it nLen}
 
 \membersection{wxString::Append}\label{wxstringappend}
 
-\func{wxString\&}{Append}{\param{const char*}{ psz}}
+\func{wxString\&}{Append}{\param{const wxChar*}{ psz}}
 
 Concatenates {\it psz} to this string, returning a reference to it.
 
-\func{wxString\&}{Append}{\param{char}{ ch}, \param{int}{ count = 1}}
+\func{wxString\&}{Append}{\param{wxChar}{ ch}, \param{int}{ count = 1}}
 
 Concatenates character {\it ch} to this string, {\it count} times, returning a reference
 to it.
@@ -539,7 +536,7 @@ to it.
 
 \membersection{wxString::AfterFirst}\label{wxstringafterfirst}
 
-\constfunc{wxString}{AfterFirst}{\param{char}{ ch}}
+\constfunc{wxString}{AfterFirst}{\param{wxChar}{ ch}}
 
 Gets all the characters after the first occurrence of {\it ch}.
 Returns the empty string if {\it ch} is not found.
@@ -547,7 +544,7 @@ Returns the empty string if {\it ch} is not found.
 
 \membersection{wxString::AfterLast}\label{wxstringafterlast}
 
-\constfunc{wxString}{AfterLast}{\param{char}{ ch}}
+\constfunc{wxString}{AfterLast}{\param{wxChar}{ ch}}
 
 Gets all the characters after the last occurrence of {\it ch}.
 Returns the whole string if {\it ch} is not found.
@@ -555,7 +552,7 @@ Returns the whole string if {\it ch} is not found.
 
 \membersection{wxString::BeforeFirst}\label{wxstringbeforefirst}
 
-\constfunc{wxString}{BeforeFirst}{\param{char}{ ch}}
+\constfunc{wxString}{BeforeFirst}{\param{wxChar}{ ch}}
 
 Gets all characters before the first occurrence of {\it ch}.
 Returns the whole string if {\it ch} is not found.
@@ -563,7 +560,7 @@ Returns the whole string if {\it ch} is not found.
 
 \membersection{wxString::BeforeLast}\label{wxstringbeforelast}
 
-\constfunc{wxString}{BeforeLast}{\param{char}{ ch}}
+\constfunc{wxString}{BeforeLast}{\param{wxChar}{ ch}}
 
 Gets all characters before the last occurrence of {\it ch}.
 Returns the empty string if {\it ch} is not found.
@@ -595,7 +592,7 @@ See also: \helpref{Empty}{wxstringempty}
 
 \constfunc{int}{Cmp}{\param{const wxString\&}{ s}}
 
-\constfunc{int}{Cmp}{\param{const char*}{ psz}}
+\constfunc{int}{Cmp}{\param{const wxChar*}{ psz}}
 
 Case-sensitive comparison.
 
@@ -610,7 +607,7 @@ See also \helpref{CmpNoCase}{wxstringcmpnocase}, \helpref{IsSameAs}{wxstringissa
 
 \constfunc{int}{CmpNoCase}{\param{const wxString\&}{ s}}
 
-\constfunc{int}{CmpNoCase}{\param{const char*}{ psz}}
+\constfunc{int}{CmpNoCase}{\param{const wxChar*}{ psz}}
 
 Case-insensitive comparison.
 
@@ -624,20 +621,23 @@ See also \helpref{Cmp}{wxstringcmp}, \helpref{IsSameAs}{wxstringissameas}.
 \membersection{wxString::CompareTo}\label{wxstringcompareto}
 
 \begin{verbatim}
-#define NO_POS ((int)(-1)) // undefined position
-enum caseCompare {exact, ignoreCase};
+enum wxString::caseCompare {exact, ignoreCase};
 \end{verbatim}
 
-\constfunc{int}{CompareTo}{\param{const char*}{ psz}, \param{caseCompare}{ cmp = exact}}
+\constfunc{int}{CompareTo}{\param{const wxChar*}{ psz}, \param{caseCompare}{ cmp = exact}}
 
 Case-sensitive comparison. Returns 0 if equal, 1 if greater or -1 if less.
+
+This is a wxWidgets 1.xx compatibility function; use \helpref{Cmp}{wxstringcmp} instead.
 
 
 \membersection{wxString::Contains}\label{wxstringcontains}
 
 \constfunc{bool}{Contains}{\param{const wxString\&}{ str}}
 
-Returns 1 if target appears anywhere in wxString; else 0.
+Returns \true if target appears anywhere in wxString; else \false.
+
+This is a wxWidgets 1.xx compatibility function; you should not use it in new code.
 
 
 \membersection{wxString::Empty}\label{wxstringempty}
@@ -651,24 +651,26 @@ See also: \helpref{Clear()}{wxstringclear}.
 
 \membersection{wxString::Find}\label{wxstringfind}
 
-\constfunc{int}{Find}{\param{char}{ ch}, \param{bool}{ fromEnd = false}}
+\constfunc{int}{Find}{\param{wxChar}{ ch}, \param{bool}{ fromEnd = false}}
 
-Searches for the given character. Returns the starting index, or -1 if not found.
+Searches for the given character. Returns the starting index, or {\tt wxNOT_FOUND} if not found.
 
-\constfunc{int}{Find}{\param{const char*}{ sz}}
+\constfunc{int}{Find}{\param{const wxChar*}{ sz}}
 
-Searches for the given string. Returns the starting index, or -1 if not found.
+Searches for the given string. Returns the starting index, or {\tt wxNOT_FOUND} if not found.
 
 
 \membersection{wxString::First}\label{wxstringfirst}
 
-\func{int}{First}{\param{char}{ c}}
+\func{int}{First}{\param{wxChar}{ c}}
 
-\constfunc{int}{First}{\param{const char*}{ psz}}
+\constfunc{int}{First}{\param{const wxChar*}{ psz}}
 
 \constfunc{int}{First}{\param{const wxString\&}{ str}}
 
 Same as \helpref{Find}{wxstringfind}.
+
+This is a wxWidgets 1.xx compatibility function; you should not use it in new code.
 
 
 \membersection{wxString::fn\_str}\label{wxstringfnstr}
@@ -717,9 +719,11 @@ This static function returns the string containing the result of calling
 
 \membersection{wxString::Freq}\label{wxstringfreq}
 
-\constfunc{int}{Freq}{\param{char }{ch}}
+\constfunc{int}{Freq}{\param{wxChar }{ch}}
 
 Returns the number of occurrences of {\it ch} in the string.
+
+This is a wxWidgets 1.xx compatibility function; you should not use it in new code.
 
 
 \membersection{wxString::FromAscii}\label{wxstringfromascii}
@@ -730,14 +734,14 @@ Returns the number of occurrences of {\it ch} in the string.
 
 Converts the string or character from an ASCII, 7-bit form
 to the native wxString representation. Most useful when using
-a Unicode build of wxWidgets.
+a Unicode build of wxWidgets (note the use of {\tt char} instead of {\tt wxChar}).
 Use \helpref{wxString constructors}{wxstringconstruct} if you
 need to convert from another charset.
 
 
 \membersection{wxString::GetChar}\label{wxstringgetchar}
 
-\constfunc{char}{GetChar}{\param{size\_t}{ n}}
+\constfunc{wxChar}{GetChar}{\param{size\_t}{ n}}
 
 Returns the character at position {\it n} (read-only).
 
@@ -751,7 +755,7 @@ wxWidgets compatibility conversion. Returns a constant pointer to the data in th
 
 \membersection{wxString::GetWritableChar}\label{wxstringgetwritablechar}
 
-\func{char\&}{GetWritableChar}{\param{size\_t}{ n}}
+\func{wxChar\&}{GetWritableChar}{\param{size\_t}{ n}}
 
 Returns a reference to the character at position {\it n}.
 
@@ -770,66 +774,67 @@ to put the string back into a reasonable state.
 
 \membersection{wxString::Index}\label{wxstringindex}
 
-\constfunc{size\_t}{Index}{\param{char}{ ch}}
+\constfunc{size\_t}{Index}{\param{wxChar}{ ch}}
 
-\constfunc{size\_t}{Index}{\param{const char*}{ sz}}
+\constfunc{size\_t}{Index}{\param{const wxChar*}{ sz}}
 
 Same as \helpref{wxString::Find}{wxstringfind}.
 
-% TODO
-%\membersection{wxString::insert}\label{wxstringinsert}
-% Wrong!
-%\func{void}{insert}{\param{const wxString\&}{ str}, \param{size\_t}{ index}}
-%
-%Add new element at the given position.
-%
+This is a wxWidgets 1.xx compatibility function; you should not use it in new code.
+
 
 \membersection{wxString::IsAscii}\label{wxstringisascii}
 
 \constfunc{bool}{IsAscii}{\void}
 
-Returns true if the string contains only ASCII characters.
+Returns \true if the string contains only ASCII characters.
+
+This is a wxWidgets 1.xx compatibility function; you should not use it in new code.
 
 
 \membersection{wxString::IsEmpty}\label{wxstringisempty}
 
 \constfunc{bool}{IsEmpty}{\void}
 
-Returns true if the string is empty.
+Returns \true if the string is empty.
 
 
 \membersection{wxString::IsNull}\label{wxstringisnull}
 
 \constfunc{bool}{IsNull}{\void}
 
-Returns true if the string is empty (same as \helpref{IsEmpty}{wxstringisempty}).
+Returns \true if the string is empty (same as \helpref{IsEmpty}{wxstringisempty}).
+
+This is a wxWidgets 1.xx compatibility function; you should not use it in new code.
 
 
 \membersection{wxString::IsNumber}\label{wxstringisnumber}
 
 \constfunc{bool}{IsNumber}{\void}
 
-Returns true if the string is an integer (with possible sign).
+Returns \true if the string is an integer (with possible sign).
+
+This is a wxWidgets 1.xx compatibility function; you should not use it in new code.
 
 
 \membersection{wxString::IsSameAs}\label{wxstringissameas}
 
-\constfunc{bool}{IsSameAs}{\param{const char*}{ psz}, \param{bool}{ caseSensitive = true}}
+\constfunc{bool}{IsSameAs}{\param{const wxChar*}{ psz}, \param{bool}{ caseSensitive = true}}
 
 Test for string equality, case-sensitive (default) or not.
 
-caseSensitive is true by default (case matters).
+caseSensitive is \true by default (case matters).
 
-Returns true if strings are equal, false otherwise.
+Returns \true if strings are equal, \false otherwise.
 
 See also \helpref{Cmp}{wxstringcmp}, \helpref{CmpNoCase}{wxstringcmpnocase}
 
-\constfunc{bool}{IsSameAs}{\param{char}{ c}, \param{bool}{ caseSensitive = true}}
+\constfunc{bool}{IsSameAs}{\param{wxChar}{ c}, \param{bool}{ caseSensitive = true}}
 
 Test whether the string is equal to the single character {\it c}. The test is
-case-sensitive if {\it caseSensitive} is true (default) or not if it is false.
+case-sensitive if {\it caseSensitive} is \true (default) or not if it is \false.
 
-Returns true if the string is equal to the character, false otherwise.
+Returns \true if the string is equal to the character, \false otherwise.
 
 See also \helpref{Cmp}{wxstringcmp}, \helpref{CmpNoCase}{wxstringcmpnocase}
 
@@ -838,18 +843,22 @@ See also \helpref{Cmp}{wxstringcmp}, \helpref{CmpNoCase}{wxstringcmpnocase}
 
 \constfunc{bool}{IsWord}{\void}
 
-Returns true if the string is a word. TODO: what's the definition of a word?
+Returns \true if the string is a word.
+
+This is a wxWidgets 1.xx compatibility function; you should not use it in new code.
 
 
 \membersection{wxString::Last}\label{wxstringlast}
 
-\constfunc{char}{Last}{\void}
+\constfunc{wxChar}{Last}{\void}
 
 Returns the last character.
 
-\func{char\&}{Last}{\void}
+\func{wxChar\&}{Last}{\void}
 
 Returns a reference to the last character (writable).
+
+This is a wxWidgets 1.xx compatibility function; you should not use it in new code.
 
 
 \membersection{wxString::Left}\label{wxstringleft}
@@ -872,6 +881,8 @@ Returns the length of the string.
 
 Returns the length of the string (same as Len).
 
+This is a wxWidgets 1.xx compatibility function; you should not use it in new code.
+
 
 \membersection{wxString::Lower}\label{wxstringlower}
 
@@ -885,6 +896,8 @@ Returns this string converted to the lower case.
 \func{void}{LowerCase}{\void}
 
 Same as MakeLower.
+
+This is a wxWidgets 1.xx compatibility function; you should not use it in new code.
 
 
 \membersection{wxString::MakeLower}\label{wxstringmakelower}
@@ -903,9 +916,9 @@ Converts all characters to upper case and returns the result.
 
 \membersection{wxString::Matches}\label{wxstringmatches}
 
-\constfunc{bool}{Matches}{\param{const char*}{ szMask}}
+\constfunc{bool}{Matches}{\param{const wxChar*}{ szMask}}
 
-Returns true if the string contents matches a mask containing '*' and '?'.
+Returns \true if the string contents matches a mask containing '*' and '?'.
 
 
 \membersection{wxString::mb\_str}\label{wxstringmbstr}
@@ -937,7 +950,7 @@ the string if {\it count} is the default value.
 
 \membersection{wxString::Pad}\label{wxstringpad}
 
-\func{wxString\&}{Pad}{\param{size\_t}{ count}, \param{char}{ pad = ' '}, \param{bool}{ fromRight = true}}
+\func{wxString\&}{Pad}{\param{size\_t}{ count}, \param{wxChar}{ pad = ' '}, \param{bool}{ fromRight = true}}
 
 Adds {\it count} copies of {\it pad} to the beginning, or to the end of the string (the default).
 
@@ -953,7 +966,7 @@ Prepends {\it str} to this string, returning a reference to this string.
 
 \membersection{wxString::Printf}\label{wxstringprintf}
 
-\func{int}{Printf}{\param{const char* }{pszFormat}, \param{}{...}}
+\func{int}{Printf}{\param{const wxChar* }{pszFormat}, \param{}{...}}
 
 Similar to the standard function {\it sprintf()}. Returns the number of
 characters written, or an integer less than zero on error.
@@ -979,7 +992,7 @@ dangerous {\it vsprintf()} will be used then which may lead to buffer overflows.
 
 \membersection{wxString::PrintfV}\label{wxstringprintfv}
 
-\func{int}{PrintfV}{\param{const char* }{pszFormat}, \param{va\_list}{ argPtr}}
+\func{int}{PrintfV}{\param{const wxChar* }{pszFormat}, \param{va\_list}{ argPtr}}
 
 Similar to vprintf. Returns the number of characters written, or an integer less than zero
 on error.
@@ -995,6 +1008,8 @@ Same as Truncate. Removes the portion from {\it pos} to the end of the string.
 
 Removes {\it len} characters from the string, starting at {\it pos}.
 
+This is a wxWidgets 1.xx compatibility function; you should not use it in new code.
+
 
 \membersection{wxString::RemoveLast}\label{wxstringremovelast}
 
@@ -1005,7 +1020,7 @@ Removes the last character.
 
 \membersection{wxString::Replace}\label{wxstringreplace}
 
-\func{size\_t}{Replace}{\param{const char*}{ szOld}, \param{const char*}{ szNew}, \param{bool}{ replaceAll = true}}
+\func{size\_t}{Replace}{\param{const wxChar*}{ szOld}, \param{const wxChar*}{ szNew}, \param{bool}{ replaceAll = true}}
 
 Replace first (or all) occurrences of substring with another one.
 
@@ -1023,7 +1038,7 @@ Returns the last {\it count} characters.
 
 \membersection{wxString::SetChar}\label{wxstringsetchar}
 
-\func{void}{SetChar}{\param{size\_t}{ n}, \param{char}{ch}}
+\func{void}{SetChar}{\param{size\_t}{ n}, \param{wxChar}{ch}}
 
 Sets the character at position {\it n}.
 
@@ -1036,21 +1051,14 @@ Minimizes the string's memory. This can be useful after a call to
 \helpref{Alloc()}{wxstringalloc} if too much memory were preallocated.
 
 
-\membersection{wxString::sprintf}\label{wxstringsprintf}
-
-\func{void}{sprintf}{\param{const char* }{ fmt}}
-
-The same as Printf.
-
-
 \membersection{wxString::StartsWith}\label{wxstringstartswith}
 
 \constfunc{bool}{StartsWith}{\param{const wxChar }{*prefix}, \param{wxString }{*rest = NULL}}
 
 This function can be used to test if the string starts with the specified 
-{\it prefix}. If it does, the function will return {\tt true} and put the rest
+{\it prefix}. If it does, the function will return \true and put the rest
 of the string (i.e. after the prefix) into {\it rest} string if it is not 
-{\tt NULL}. Otherwise, the function returns {\tt false} and doesn't modify the 
+{\tt NULL}. Otherwise, the function returns \false and doesn't modify the
 {\it rest}.
 
 
@@ -1059,16 +1067,16 @@ of the string (i.e. after the prefix) into {\it rest} string if it is not
 \constfunc{bool}{EndsWith}{\param{const wxChar }{*suffix}, \param{wxString }{*rest = NULL}}
 
 This function can be used to test if the string ends with the specified 
-{\it suffix}. If it does, the function will return {\tt true} and put the
+{\it suffix}. If it does, the function will return \true and put the
 beginning of the string before the suffix into {\it rest} string if it is not 
-{\tt NULL}. Otherwise, the function returns {\tt false} and doesn't
+{\tt NULL}. Otherwise, the function returns \false and doesn't
 modify the {\it rest}.
 
 
 \membersection{wxString::Strip}\label{wxstringstrip}
 
 \begin{verbatim}
-enum stripType {leading = 0x1, trailing = 0x2, both = 0x3};
+enum wxString::stripType {leading = 0x1, trailing = 0x2, both = 0x3};
 \end{verbatim}
 
 \constfunc{wxString}{Strip}{\param{stripType}{ s = trailing}}
@@ -1076,16 +1084,18 @@ enum stripType {leading = 0x1, trailing = 0x2, both = 0x3};
 Strip characters at the front and/or end. The same as Trim except that it
 doesn't change this string.
 
+This is a wxWidgets 1.xx compatibility function; you should not use it in new code.
+
 
 \membersection{wxString::SubString}\label{wxstringsubstring}
 
 \constfunc{wxString}{SubString}{\param{size\_t}{ from}, \param{size\_t}{ to}}
 
-Deprecated, use \helpref{Mid}{wxstringmid} instead (but note that parameters
-have different meaning).
-
 Returns the part of the string between the indices {\it from} and {\it to}
 inclusive.
+
+This is a wxWidgets 1.xx compatibility function, use \helpref{Mid}{wxstringmid}
+instead (but note that parameters have different meaning).
 
 
 \membersection{wxString::ToAscii}\label{wxstringtoascii}
@@ -1108,8 +1118,8 @@ powerful means of converting wxString to C string.
 
 \constfunc{bool}{ToDouble}{\param{double}{ *val}}
 
-Attempts to convert the string to a floating point number. Returns true on
-success (the number is stored in the location pointed to by {\it val}) or false
+Attempts to convert the string to a floating point number. Returns \true on
+success (the number is stored in the location pointed to by {\it val}) or \false
 if the string does not represent such number.
 
 \wxheading{See also}
@@ -1123,8 +1133,8 @@ if the string does not represent such number.
 \constfunc{bool}{ToLong}{\param{long}{ *val}, \param{int }{base = $10$}}
 
 Attempts to convert the string to a signed integer in base {\it base}. Returns
-{\tt true} on success in which case the number is stored in the location
-pointed to by {\it val} or {\tt false} if the string does not represent a
+\true on success in which case the number is stored in the location
+pointed to by {\it val} or \false if the string does not represent a
 valid number in the given base.
 
 The value of {\it base} must be comprised between $2$ and $36$, inclusive, or
@@ -1163,8 +1173,8 @@ with C99 support and Microsoft Visual C++ version 7 and higher do support this.
 \constfunc{bool}{ToULong}{\param{unsigned long}{ *val}, \param{int }{base = $10$}}
 
 Attempts to convert the string to an unsigned integer in base {\it base}.
-Returns {\tt true} on success in which case the number is stored in the
-location pointed to by {\it val} or {\tt false} if the string does not
+Returns \true on success in which case the number is stored in the
+location pointed to by {\it val} or \false if the string does not
 represent a valid number in the given base. Please notice that this function
 behaves in the same way as the standard \texttt{strtoul()} and so it simply
 converts negative numbers to unsigned representation instead of rejecting them
@@ -1235,6 +1245,8 @@ Returns this string converted to upper case.
 
 The same as MakeUpper.
 
+This is a wxWidgets 1.xx compatibility function; you should not use it in new code.
+
 
 \membersection{wxString::wc\_str}\label{wxstringwcstr}
 
@@ -1259,8 +1271,8 @@ The macro wxWX2WCbuf is defined as the correct return type (without const).
 
 \constfunc{bool}{operator!}{\void}
 
-Empty string is false, so !string will only return true if the string is empty.
-This allows the tests for NULLness of a {\it const char *} pointer and emptiness
+Empty string is \false, so !string will only return \true if the string is empty.
+This allows the tests for NULLness of a {\it const wxChar *} pointer and emptiness
 of the string to look the same in the code and makes it easier to port old code
 to wxString.
 
@@ -1271,13 +1283,9 @@ See also \helpref{IsEmpty()}{wxstringisempty}.
 
 \func{wxString\&}{operator $=$}{\param{const wxString\&}{ str}}
 
-\func{wxString\&}{operator $=$}{\param{const char*}{ psz}}
+\func{wxString\&}{operator $=$}{\param{const wxChar*}{ psz}}
 
-\func{wxString\&}{operator $=$}{\param{char}{ c}}
-
-\func{wxString\&}{operator $=$}{\param{const unsigned char*}{ psz}}
-
-\func{wxString\&}{operator $=$}{\param{const wchar\_t*}{ pwz}}
+\func{wxString\&}{operator $=$}{\param{wxChar}{ c}}
 
 Assignment: the effect of each operation is the same as for the corresponding
 constructor (see \helpref{wxString constructors}{wxstringconstruct}).
@@ -1290,20 +1298,20 @@ concatenation of the operands.
 
 \func{wxString}{operator $+$}{\param{const wxString\&}{ x}, \param{const wxString\&}{ y}}
 
-\func{wxString}{operator $+$}{\param{const wxString\&}{ x}, \param{const char*}{ y}}
+\func{wxString}{operator $+$}{\param{const wxString\&}{ x}, \param{const wxChar*}{ y}}
 
-\func{wxString}{operator $+$}{\param{const wxString\&}{ x}, \param{char}{ y}}
+\func{wxString}{operator $+$}{\param{const wxString\&}{ x}, \param{wxChar}{ y}}
 
-\func{wxString}{operator $+$}{\param{const char*}{ x}, \param{const wxString\&}{ y}}
+\func{wxString}{operator $+$}{\param{const wxChar*}{ x}, \param{const wxString\&}{ y}}
 
 
 \membersection{wxString::operator $+=$}\label{wxstringplusequal}
 
 \func{void}{operator $+=$}{\param{const wxString\&}{ str}}
 
-\func{void}{operator $+=$}{\param{const char*}{ psz}}
+\func{void}{operator $+=$}{\param{const wxChar*}{ psz}}
 
-\func{void}{operator $+=$}{\param{char}{ c}}
+\func{void}{operator $+=$}{\param{wxChar}{ c}}
 
 Concatenation in place: the argument is appended to the string.
 
@@ -1332,9 +1340,9 @@ Same as Mid (substring extraction).
 
 \func{wxString\&}{operator \cinsert}{\param{const wxString\&}{ str}}
 
-\func{wxString\&}{operator \cinsert}{\param{const char*}{ psz}}
+\func{wxString\&}{operator \cinsert}{\param{const wxChar*}{ psz}}
 
-\func{wxString\&}{operator \cinsert}{\param{char }{ch}}
+\func{wxString\&}{operator \cinsert}{\param{wxChar }{ch}}
 
 Same as $+=$.
 
@@ -1356,9 +1364,9 @@ value into the string. Precision or format cannot be set using them, you can use
 Extraction from a stream.
 
 
-\membersection{wxString::operator const char*}\label{wxstringoperatorconstcharpt}
+\membersection{wxString::operator const wxChar*}\label{wxstringoperatorconstcharpt}
 
-\constfunc{}{operator const char*}{\void}
+\constfunc{}{operator const wxChar*}{\void}
 
 Implicit conversion to a C string.
 
@@ -1367,27 +1375,27 @@ Implicit conversion to a C string.
 
 \func{bool}{operator $==$}{\param{const wxString\&}{ x}, \param{const wxString\&}{ y}}
 
-\func{bool}{operator $==$}{\param{const wxString\&}{ x}, \param{const char*}{ t}}
+\func{bool}{operator $==$}{\param{const wxString\&}{ x}, \param{const wxChar*}{ t}}
 
 \func{bool}{operator $!=$}{\param{const wxString\&}{ x}, \param{const wxString\&}{ y}}
 
-\func{bool}{operator $!=$}{\param{const wxString\&}{ x}, \param{const char*}{ t}}
+\func{bool}{operator $!=$}{\param{const wxString\&}{ x}, \param{const wxChar*}{ t}}
 
 \func{bool}{operator $>$}{\param{const wxString\&}{ x}, \param{const wxString\&}{ y}}
 
-\func{bool}{operator $>$}{\param{const wxString\&}{ x}, \param{const char*}{ t}}
+\func{bool}{operator $>$}{\param{const wxString\&}{ x}, \param{const wxChar*}{ t}}
 
 \func{bool}{operator $>=$}{\param{const wxString\&}{ x}, \param{const wxString\&}{ y}}
 
-\func{bool}{operator $>=$}{\param{const wxString\&}{ x}, \param{const char*}{ t}}
+\func{bool}{operator $>=$}{\param{const wxString\&}{ x}, \param{const wxChar*}{ t}}
 
 \func{bool}{operator $<$}{\param{const wxString\&}{ x}, \param{const wxString\&}{ y}}
 
-\func{bool}{operator $<$}{\param{const wxString\&}{ x}, \param{const char*}{ t}}
+\func{bool}{operator $<$}{\param{const wxString\&}{ x}, \param{const wxChar*}{ t}}
 
 \func{bool}{operator $<=$}{\param{const wxString\&}{ x}, \param{const wxString\&}{ y}}
 
-\func{bool}{operator $<=$}{\param{const wxString\&}{ x}, \param{const char*}{ t}}
+\func{bool}{operator $<=$}{\param{const wxString\&}{ x}, \param{const wxChar*}{ t}}
 
 \wxheading{Remarks}
 
