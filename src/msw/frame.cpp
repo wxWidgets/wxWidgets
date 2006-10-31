@@ -357,9 +357,32 @@ void wxFrame::PositionStatusBar()
     int sw, sh;
     m_frameStatusBar->GetSize(&sw, &sh);
 
+    int x = 0;
+#if wxUSE_TOOLBAR
+    wxToolBar * const toolbar = GetToolBar();
+    if ( toolbar && !toolbar->HasFlag(wxTB_TOP) )
+    {
+        const wxSize sizeTB = toolbar->GetSize();
+
+        if ( toolbar->HasFlag(wxTB_LEFT | wxTB_RIGHT) )
+        {
+            if ( toolbar->HasFlag(wxTB_LEFT) )
+                x -= sizeTB.x;
+
+            w += sizeTB.x;
+        }
+        else // wxTB_BOTTOM
+        {
+            // we need to position the status bar below the toolbar
+            h += sizeTB.y;
+        }
+    }
+    //else: no adjustments necessary for the toolbar on top
+#endif // wxUSE_TOOLBAR
+
     // Since we wish the status bar to be directly under the client area,
     // we use the adjusted sizes without using wxSIZE_NO_ADJUSTMENTS.
-    m_frameStatusBar->SetSize(0, h, w, sh);
+    m_frameStatusBar->SetSize(x, h, w, sh);
 }
 
 #endif // wxUSE_STATUSBAR
