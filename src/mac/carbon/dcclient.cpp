@@ -165,11 +165,12 @@ wxWindowDC::wxWindowDC(wxWindow *window)
 wxWindowDC::~wxWindowDC()
 {
 #if wxMAC_USE_CORE_GRAPHICS
-    if ( m_release && m_graphicContext )
+    if ( m_release )
     {
+        // this must not necessarily be the current context, we must restore the state of the
+        // cg we started with above (before the CGContextTranslateCTM call)
         CGContextRef cg = (CGContextRef) m_window->MacGetCGContextRef();
         CGContextRestoreGState(cg);
-        //CGContextRef cg = (CGContextRef) m_graphicContext->GetNativeContext() ;
     }
 #endif
 }
