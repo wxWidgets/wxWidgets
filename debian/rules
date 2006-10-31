@@ -57,10 +57,10 @@ endif
 DEBIAN_WXFLAVOUR := $(shell pwd | sed -e 's@.*/wxwidgets[0-9.]\+-\?\(.*\)-[0-9.]\+-\?.*@\1@')
 
 
-wx_major_version_number := $(shell cat configure.in | sed -n 's/^wx_major_version_number=//p')
-wx_minor_version_number := $(shell cat configure.in | sed -n 's/^wx_minor_version_number=//p')
-wx_release_number       := $(shell cat configure.in | sed -n 's/^wx_release_number=//p')
-wx_subrelease_number    := $(shell cat configure.in | sed -n 's/^wx_subrelease_number=//p')
+wx_major_version_number := $(shell sed -n 's/^wx_major_version_number=//p' configure.in)
+wx_minor_version_number := $(shell sed -n 's/^wx_minor_version_number=//p' configure.in)
+wx_release_number       := $(shell sed -n 's/^wx_release_number=//p' configure.in)
+wx_subrelease_number    := $(shell sed -n 's/^wx_subrelease_number=//p' configure.in)
 
 ##release   := $(shell dpkg-parsechangelog | sed -n 's/^Source: wxwidgets//p' | sed 's/-ansi//')
 release  := $(wx_major_version_number).$(wx_minor_version_number)
