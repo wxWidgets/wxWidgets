@@ -323,7 +323,7 @@
     #define  wxStrtol    _tcstol
     #define  wxStrtoul   _tcstoul
     #ifdef __VISUALC__
-        #if __VISUALC__ >= 1300
+        #if __VISUALC__ >= 1300 && !defined(__WXWINCE__)
             #define wxStrtoll  _tcstoi64
             #define wxStrtoull _tcstoui64
         #endif /* VC++ 7+ */
@@ -913,7 +913,7 @@ WXDLLIMPEXP_BASE bool wxOKlibc(); /* for internal use */
             The only compiler with positional parameters support under Windows
             is VC++ 8.0 which provides a new xxprintf_p() functions family
          */
-        #if defined(__VISUALC__) && __VISUALC__ >= 1400
+        #if defined(__VISUALC__) && __VISUALC__ >= 1400 && !defined(__WXWINCE__)
             #if wxUSE_UNICODE
                 #define wxVsnprintf_    _vswprintf_p
             #else

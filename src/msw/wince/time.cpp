@@ -500,6 +500,9 @@ strftime(char * const s, const size_t maxsize, const char *format, const struct 
 extern "C"
 {
 
+/* Not needed in VS Studio 2005, how about earlier versions? */
+
+#if 0
 size_t wcsftime(wchar_t *s,
                 const size_t maxsize,
                 const wchar_t *format,
@@ -516,6 +519,7 @@ size_t wcsftime(wchar_t *s,
 
     return sz;
 }
+#endif
 
 } /* extern "C" */
 
