@@ -4271,8 +4271,8 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
                     dc.DrawRectangleRect(itemrect)
 
         else:
-        
-            if item.IsSelected() and image != _NO_IMAGE:
+
+            if item.IsSelected():
             
                 # If it's selected, and there's an image, then we should
                 # take care to leave the area under the image painted in the
