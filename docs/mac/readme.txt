@@ -1,4 +1,4 @@
-Welcome to wxWidgets/Mac 2.6.2
+Welcome to wxWidgets/Mac 2.7.2
 
 More Information is available from the wxWidgets project home page at
 

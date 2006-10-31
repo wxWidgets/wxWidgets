@@ -1,4 +1,4 @@
-   Welcome to wxWidgets 2.7.0 for GTK+
+   Welcome to wxWidgets 2.7.2 for GTK+
    -----------------------------------
 
 You have downloaded version 2.7 of the GTK+ port of the 
