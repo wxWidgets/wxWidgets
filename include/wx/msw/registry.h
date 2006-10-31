@@ -48,16 +48,11 @@ public:
     HKCR,       // classes root
     HKCU,       // current user
     HKLM,       // local machine
-    HKUSR       // users
-#ifndef __WXWINCE__
-    ,
-    HKPD        // performance data (WinNT/2K only)
-#endif
-#if WINVER >= 0x0400
-    ,
-    HKCC,       // current config (starting from Win95/NT 4.0)
-    HKDD        // dynamic data (Win95/98 only)
-#endif  // Winver
+    HKUSR,      // users
+    HKPD,       // performance data (WinNT/2K only)
+    HKCC,       // current config
+    HKDD,       // dynamic data (Win95/98 only)
+    HKMAX
   };
 
   // access mode for the key

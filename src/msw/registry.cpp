@@ -51,6 +51,18 @@
 typedef unsigned char *RegString;
 typedef BYTE* RegBinary;
 
+#ifndef HKEY_PERFORMANCE_DATA
+    #define HKEY_PERFORMANCE_DATA ((HKEY)0x80000004)
+#endif
+
+#ifndef HKEY_CURRENT_CONFIG
+    #define HKEY_CURRENT_CONFIG ((HKEY)0x80000005)
+#endif
+
+#ifndef HKEY_DYN_DATA
+    #define HKEY_DYN_DATA ((HKEY)0x80000006)
+#endif
+
 // ----------------------------------------------------------------------------
 // constants
 // ----------------------------------------------------------------------------
@@ -69,15 +81,9 @@ aStdKeys[] =
   { HKEY_CURRENT_USER,      wxT("HKEY_CURRENT_USER"),      wxT("HKCU") },
   { HKEY_LOCAL_MACHINE,     wxT("HKEY_LOCAL_MACHINE"),     wxT("HKLM") },
   { HKEY_USERS,             wxT("HKEY_USERS"),             wxT("HKU")  }, // short name?
-#ifndef __WXWINCE__
   { HKEY_PERFORMANCE_DATA,  wxT("HKEY_PERFORMANCE_DATA"),  wxT("HKPD") },
-#endif
-#ifdef HKEY_CURRENT_CONFIG
   { HKEY_CURRENT_CONFIG,    wxT("HKEY_CURRENT_CONFIG"),    wxT("HKCC") },
-#endif
-#ifdef HKEY_DYN_DATA
   { HKEY_DYN_DATA,          wxT("HKEY_DYN_DATA"),          wxT("HKDD") }, // short name?
-#endif
 };
 
 // the registry name separator (perhaps one day MS will change it to '/' ;-)
