@@ -383,8 +383,11 @@ public:
     virtual void FitInside();
 
 
-        // Methods for setting size hints. This is only used
-        // for toplevel windows.
+        // SetSizeHints is actually for setting the size hints
+        // for the wxTLW for a Window Manager - hence the name -
+        // and it is therefore overridden in wxTLW to do that.
+        // In wxWindow(Base), it has (unfortunately) been abused
+        // to mean the same as SetMinSize() and SetMaxSize().
         
     virtual void SetSizeHints( int minW, int minH,
                                int maxW = wxDefaultCoord, int maxH = wxDefaultCoord,
@@ -396,11 +399,9 @@ public:
                        const wxSize& incSize=wxDefaultSize)
     { DoSetSizeHints(minSize.x, minSize.y, maxSize.x, maxSize.y, incSize.x, incSize.y); }
 
-    virtual void DoSetSizeHints( int WXUNUSED(minW), int WXUNUSED(minH),
-                                 int WXUNUSED(maxW), int WXUNUSED(maxH),
-                                 int WXUNUSED(incW), int WXUNUSED(incH) )
-    {
-    }
+    virtual void DoSetSizeHints( int minW, int minH,
+                                 int maxW, int maxH,
+                                 int incW, int incH );
 
         // Methods for setting virtual size hints
         // FIXME: What are virtual size hints?

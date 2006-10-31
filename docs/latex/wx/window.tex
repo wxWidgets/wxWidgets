@@ -3299,8 +3299,13 @@ implements the following methods:\par
 
 \membersection{wxWindow::SetSizeHints}\label{wxwindowsetsizehints}
 
-This method does nothing for a normal wxWindow and is only kept
-for backwards compatibility. The actual implementation is in
+Use of this function for windows which are not toplevel windows
+(such as wxDialog or wxFrame) is discouraged. Please use 
+\helpref{SetMinSize}{wxwindowsetminsize} and \helpref{SetMaxSize}{wxwindowsetmaxsize}
+instead.
+
+\wxheading{See also}
+
 \helpref{wxTopLevelWindow::SetSizeHints}{wxtoplevelwindowsetsizehints}.
 
 

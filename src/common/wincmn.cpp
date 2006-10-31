@@ -660,6 +660,21 @@ void wxWindowBase::DoSetWindowVariant( wxWindowVariant variant )
     SetFont(font);
 }
 
+void wxWindowBase::DoSetSizeHints( int minW, int minH,
+                                   int maxW, int maxH,
+                                   int incW, int incH )
+{
+    wxCHECK_RET( (minW == wxDefaultCoord || maxW == wxDefaultCoord || minW <= maxW) &&
+                    (minH == wxDefaultCoord || maxH == wxDefaultCoord || minH <= maxH),
+                 _T("min width/height must be less than max width/height!") );
+
+    m_minWidth = minW;
+    m_maxWidth = maxW;
+    m_minHeight = minH;
+    m_maxHeight = maxH;
+}
+
+
 void wxWindowBase::SetVirtualSizeHints( int minW, int minH,
                                         int maxW, int maxH )
 {
