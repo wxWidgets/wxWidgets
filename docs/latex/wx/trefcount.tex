@@ -18,7 +18,6 @@ transparently to the class users and that whether an object is shared or not
 is not seen from the outside of the class - in any case, the result of any
 operation on it is the same.
 
-\subsection{List of reference-counted wxWidgets classes}\label{refcountlist}
 \subsection{Object comparison}\label{refcountequality}
 
 The $==$ and $!=$ operators of \helpref{wxWidgets COW objects}{refcountlist}
@@ -47,6 +46,8 @@ Only when the destructor of the last object owning the data is called, the data 
 destroyed. As for all other COW-things, this happens transparently to the class users so
 that you shouldn't care about it.
 
+
+\subsection{List of reference-counted wxWidgets classes}\label{refcountlist}
 
 The following classes in wxWidgets have efficient (i.e. fast) assignment operators
 and copy constructors since they are reference-counted:
