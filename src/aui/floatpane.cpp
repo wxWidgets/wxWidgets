@@ -52,6 +52,16 @@ wxFloatingPane::wxFloatingPane(wxWindow* parent,
     m_owner_mgr = owner_mgr;
     m_moving = false;
     m_mgr.SetManagedWindow(this);
+    m_solid_drag = true;
+    
+    // find out if the system supports solid window drag.
+    // on non-msw systems, this is assumed to be the case
+    #ifdef __WXMSW__
+    BOOL b = TRUE;
+    SystemParametersInfo(38 /*SPI_GETDRAGFULLWINDOWS*/, 0, &b, 0);
+    m_solid_drag = b ? true : false;
+    #endif
+    
     SetExtraStyle(wxWS_EX_PROCESS_IDLE);
 }
 
@@ -126,6 +136,20 @@ void wxFloatingPane::OnClose(wxCloseEvent& evt)
 
 void wxFloatingPane::OnMoveEvent(wxMoveEvent& event)
 {
+    if (!m_solid_drag)
+    {
+        // systems without solid window dragging need to be
+        // handled slightly differently, due to the lack of
+        // the constant stream of EVT_MOVING events
+        if (!isMouseDown())
+            return;
+        OnMoveStart();
+        OnMoving(event.GetRect(), wxNORTH);
+        m_moving = true;
+        return;
+    }
+    
+    
     wxRect win_rect = GetRect();
 
     if (win_rect == m_last_rect)
@@ -194,7 +218,7 @@ void wxFloatingPane::OnMoveEvent(wxMoveEvent& event)
     if (m_last3_rect.IsEmpty())
         return;
         
-    OnMoving(event.GetRect(), dir );
+    OnMoving(event.GetRect(), dir);
 }
 
 void wxFloatingPane::OnIdle(wxIdleEvent& event)
@@ -206,7 +230,7 @@ void wxFloatingPane::OnIdle(wxIdleEvent& event)
             m_moving = false;
             OnMoveFinished();
         }
-            else
+         else
         {
             event.RequestMore();
         }
