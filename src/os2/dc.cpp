@@ -656,7 +656,7 @@ void wxDC::DoDrawLine(
     }
     else
     {
-        if (m_vSelectedBitmap != wxNullBitmap)
+        if (m_vSelectedBitmap.Ok())
         {
             m_vRclPaint.yTop = m_vSelectedBitmap.GetHeight();
             m_vRclPaint.xRight = m_vSelectedBitmap.GetWidth();
@@ -986,7 +986,7 @@ void wxDC::DoDrawRectangle(
         vY = OS2Y(vY,vHeight);
     else
     {
-        if (m_vSelectedBitmap != wxNullBitmap)
+        if (m_vSelectedBitmap.Ok())
         {
             m_vRclPaint.yTop = m_vSelectedBitmap.GetHeight();
             m_vRclPaint.xRight = m_vSelectedBitmap.GetWidth();
@@ -1076,7 +1076,7 @@ void wxDC::DoDrawRoundedRectangle(
         vY = OS2Y(vY,vHeight);
     else
     {
-        if (m_vSelectedBitmap != wxNullBitmap)
+        if (m_vSelectedBitmap.Ok())
         {
             m_vRclPaint.yTop = m_vSelectedBitmap.GetHeight();
             m_vRclPaint.xRight = m_vSelectedBitmap.GetWidth();
@@ -1743,7 +1743,7 @@ void wxDC::DrawAnyText( const wxString& rsText,
     }
     else
     {
-        if (m_vSelectedBitmap != wxNullBitmap)
+        if (m_vSelectedBitmap.Ok())
         {
             m_vRclPaint.yTop = m_vSelectedBitmap.GetHeight();
             m_vRclPaint.xRight = m_vSelectedBitmap.GetWidth();
