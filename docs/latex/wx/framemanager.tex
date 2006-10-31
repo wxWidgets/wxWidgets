@@ -101,18 +101,19 @@ enum wxFrameManagerDock
 \begin{verbatim}
 enum wxFrameManagerOption
 {
-    wxAUI_MGR_ALLOW_FLOATING        = 1 << 0,
-    wxAUI_MGR_ALLOW_ACTIVE_PANE     = 1 << 1,
-    wxAUI_MGR_TRANSPARENT_DRAG      = 1 << 2,
-    wxAUI_MGR_TRANSPARENT_HINT      = 1 << 3,
-    wxAUI_MGR_TRANSPARENT_HINT_FADE = 1 << 4,
-    wxAUI_MGR_DISABLE_VENETIAN_BLINDS = 1 << 5,
-    wxAUI_MGR_DISABLE_VENETIAN_BLINDS_FADE = 1 << 6,
+    wxAUI_MGR_ALLOW_FLOATING           = 1 << 0,
+    wxAUI_MGR_ALLOW_ACTIVE_PANE        = 1 << 1,
+    wxAUI_MGR_TRANSPARENT_DRAG         = 1 << 2,
+    wxAUI_MGR_TRANSPARENT_HINT         = 1 << 3,
+    wxAUI_MGR_VENETIAN_BLINDS_HINT     = 1 << 4,
+    wxAUI_MGR_RECTANGLE_HINT           = 1 << 5,
+    wxAUI_MGR_HINT_FADE                = 1 << 6,
+    wxAUI_MGR_NO_VENETIAN_BLINDS_FADE  = 1 << 7,
 
     wxAUI_MGR_DEFAULT = wxAUI_MGR_ALLOW_FLOATING |
                         wxAUI_MGR_TRANSPARENT_HINT |
-                        wxAUI_MGR_TRANSPARENT_HINT_FADE |
-                        wxAUI_MGR_DISABLE_VENETIAN_BLINDS_FADE
+                        wxAUI_MGR_HINT_FADE |
+                        wxAUI_MGR_NO_VENETIAN_BLINDS_FADE
 }
 \end{verbatim}
 
