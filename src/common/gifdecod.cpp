@@ -869,7 +869,6 @@ wxGIFErrorCode wxGIFDecoder::LoadGIF(wxInputStream& stream)
             if ((buf[8] & 0x80) == 0x80)
             {
                 unsigned int local_ncolors = 2 << (buf[8] & 0x07);
-                wxFileOffset pos = stream.TellI();
                 wxFileOffset numBytes = 3 * local_ncolors;
                 stream.SeekI(numBytes, wxFromCurrent);
             }
