@@ -3964,7 +3964,7 @@ void wxFrameManager::OnPaneButton(wxFrameManagerEvent& evt)
             Update();
         }
     }
-     else if (evt.button == wxPaneInfo::buttonPin)
+     else if (evt.button == wxAUI_BUTTON_PIN)
     {
         if ((m_flags & wxAUI_MGR_ALLOW_FLOATING) &&
             pane.IsFloatable())
