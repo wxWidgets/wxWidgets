@@ -150,7 +150,7 @@ public:
 #endif
     wxEvent *Clone() const { return new wxAuiNotebookEvent(*this); }
 
-    void SetSelection(int s) { selection = s; }
+    void SetSelection(int s) { selection = s; m_commandInt = s; }
     void SetOldSelection(int s) { old_selection = s; }
     int GetSelection() const { return selection; }
     int GetOldSelection() const { return old_selection; }
@@ -278,7 +278,7 @@ protected:
 protected:
 
     wxPoint m_click_pt;
-    int m_click_tab;
+    wxWindow* m_click_tab;
     bool m_is_dragging;
     wxAuiTabContainerButton* m_hover_button;
 
@@ -368,6 +368,8 @@ protected:
     wxFont m_selected_font;
     wxFont m_normal_font;
     int m_tab_ctrl_height;
+    
+    int m_last_drag_x;
 
 #ifndef SWIG
     DECLARE_EVENT_TABLE()

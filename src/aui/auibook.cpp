@@ -1001,7 +1001,7 @@ void wxAuiTabCtrl::OnLeftDown(wxMouseEvent& evt)
     CaptureMouse();
     m_click_pt = wxDefaultPosition;
     m_is_dragging = false;
-    m_click_tab = -1;
+    m_click_tab = NULL;
 
     wxWindow* wnd;
     if (TabHitTest(evt.m_x, evt.m_y, &wnd))
@@ -1014,7 +1014,7 @@ void wxAuiTabCtrl::OnLeftDown(wxMouseEvent& evt)
 
         m_click_pt.x = evt.m_x;
         m_click_pt.y = evt.m_y;
-        m_click_tab = e.GetSelection();
+        m_click_tab = wnd;
     }
 
     if (m_hover_button)
@@ -1033,8 +1033,8 @@ void wxAuiTabCtrl::OnLeftUp(wxMouseEvent&)
     if (m_is_dragging)
     {
         wxAuiNotebookEvent evt(wxEVT_COMMAND_AUINOTEBOOK_END_DRAG, m_windowId);
-        evt.SetSelection(m_click_tab);
-        evt.SetOldSelection(m_click_tab);
+        evt.SetSelection(GetIdxFromWindow(m_click_tab));
+        evt.SetOldSelection(evt.GetSelection());
         evt.SetEventObject(this);
         GetEventHandler()->ProcessEvent(evt);
         return;
@@ -1057,7 +1057,7 @@ void wxAuiTabCtrl::OnLeftUp(wxMouseEvent&)
 
     m_click_pt = wxDefaultPosition;
     m_is_dragging = false;
-    m_click_tab = -1;
+    m_click_tab = NULL;
 }
 
 void wxAuiTabCtrl::OnMotion(wxMouseEvent& evt)
@@ -1103,8 +1103,8 @@ void wxAuiTabCtrl::OnMotion(wxMouseEvent& evt)
     if (m_is_dragging)
     {
         wxAuiNotebookEvent evt(wxEVT_COMMAND_AUINOTEBOOK_DRAG_MOTION, m_windowId);
-        evt.SetSelection(m_click_tab);
-        evt.SetOldSelection(m_click_tab);
+        evt.SetSelection(GetIdxFromWindow(m_click_tab));
+        evt.SetOldSelection(evt.GetSelection());
         evt.SetEventObject(this);
         GetEventHandler()->ProcessEvent(evt);
         return;
@@ -1118,8 +1118,8 @@ void wxAuiTabCtrl::OnMotion(wxMouseEvent& evt)
         abs(pos.y - m_click_pt.y) > drag_y_threshold)
     {
         wxAuiNotebookEvent evt(wxEVT_COMMAND_AUINOTEBOOK_BEGIN_DRAG, m_windowId);
-        evt.SetSelection(m_click_tab);
-        evt.SetOldSelection(m_click_tab);
+        evt.SetSelection(GetIdxFromWindow(m_click_tab));
+        evt.SetOldSelection(evt.GetSelection());
         evt.SetEventObject(this);
         GetEventHandler()->ProcessEvent(evt);
 
@@ -1715,6 +1715,7 @@ void wxAuiMultiNotebook::OnTabClicked(wxCommandEvent& command_evt)
 
 void wxAuiMultiNotebook::OnTabBeginDrag(wxCommandEvent&)
 {
+    m_last_drag_x = 0;
 }
 
 void wxAuiMultiNotebook::OnTabDragMotion(wxCommandEvent& evt)
@@ -1725,17 +1726,46 @@ void wxAuiMultiNotebook::OnTabDragMotion(wxCommandEvent& evt)
 
     wxAuiTabCtrl* src_tabs = (wxAuiTabCtrl*)evt.GetEventObject();
 
-    wxAuiTabCtrl* tab_ctrl = GetTabCtrlFromPoint(client_pt);
-    if (tab_ctrl == src_tabs)
+    wxAuiTabCtrl* dest_tabs = GetTabCtrlFromPoint(client_pt);
+    if (dest_tabs == src_tabs)
     {
-        // inner-tabctrl dragging is not yet implemented
+        // always hide the hint for inner-tabctrl drag
         m_mgr.HideHint();
+                
+        wxPoint pt = dest_tabs->ScreenToClient(screen_pt);
+        wxWindow* dest_location_tab;
+        
+        // this is an inner-tab drag/reposition
+        if (dest_tabs->TabHitTest(pt.x, pt.y, &dest_location_tab))
+        {
+            int src_idx = evt.GetSelection();
+            int dest_idx = dest_tabs->GetIdxFromWindow(dest_location_tab);
+            
+            // prevent jumpy drag
+            if ((src_idx == dest_idx) || dest_idx == -1 ||
+                (src_idx > dest_idx && m_last_drag_x <= pt.x) ||
+                (src_idx < dest_idx && m_last_drag_x >= pt.x))
+            {
+                m_last_drag_x = pt.x;
+                return;
+            }
+
+
+            wxWindow* src_tab = dest_tabs->GetWindowFromIdx(src_idx);
+            dest_tabs->MovePage(src_tab, dest_idx);
+            dest_tabs->SetActivePage((size_t)dest_idx);
+            dest_tabs->DoShowHide();
+            dest_tabs->Refresh();
+            m_last_drag_x = pt.x;
+
+        }
+        
         return;
     }
 
-    if (tab_ctrl)
+    if (dest_tabs)
     {
-        wxRect hint_rect = tab_ctrl->GetRect();
+        wxRect hint_rect = dest_tabs->GetRect();
         ClientToScreen(&hint_rect.x, &hint_rect.y);
         m_mgr.ShowHint(hint_rect);
     }
@@ -1772,26 +1802,7 @@ void wxAuiMultiNotebook::OnTabEndDrag(wxCommandEvent& command_evt)
         dest_tabs = tab_frame->m_tabs;
 
         if (dest_tabs == src_tabs)
-        {
-            wxPoint pt = dest_tabs->ScreenToClient(mouse_screen_pt);
-            wxWindow* dest_location_tab;
-            
-            // -- this is an inner-tab drag/reposition
-            if (dest_tabs->TabHitTest(pt.x, pt.y, &dest_location_tab))
-            {
-                wxWindow* src_tab = src_tabs->GetWindowFromIdx(evt.GetSelection());
-                int dest_idx = dest_tabs->GetIdxFromWindow(dest_location_tab);
-                if (dest_idx != -1)
-                {
-                    dest_tabs->MovePage(src_tab, dest_idx);
-                    dest_tabs->SetActivePage((size_t)dest_idx);
-                    dest_tabs->DoShowHide();
-                    dest_tabs->Refresh();
-                }
-            }
-            
             return;
-        }
     }
      else
     {
