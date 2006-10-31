@@ -94,7 +94,10 @@ class WXDLLIMPEXP_CORE wxRegionIterator: public wxObject
 public:
     wxRegionIterator();
     wxRegionIterator(const wxRegion& region);
+    wxRegionIterator(const wxRegionIterator& ri) : wxObject(ri) { Init(); *this = ri; }
     ~wxRegionIterator();
+
+    wxRegionIterator& operator=(const wxRegionIterator& ri);
 
     void Reset() { m_current = 0u; }
     void Reset(const wxRegion& region);

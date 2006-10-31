@@ -455,3 +455,23 @@ wxRect wxRegionIterator::GetRect() const
 
     return r;
 }
+
+wxRegionIterator& wxRegionIterator::operator=(const wxRegionIterator& ri)
+{
+    wxDELETEA(m_rects);
+
+    m_current = ri.m_current;
+    m_numRects = ri.m_numRects;
+    if ( m_numRects )
+    {
+        m_rects = new wxRect[m_numRects];
+        for ( long n = 0; n < m_numRects; n++ )
+            m_rects[n] = ri.m_rects[n];
+    }
+    else
+    {
+        m_rects = NULL;
+    }
+
+    return *this;
+}
