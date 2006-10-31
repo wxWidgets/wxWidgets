@@ -28852,7 +28852,9 @@ ALL_DIST: distrib_clean
 	# copy some files from include/ that are not installed:
 	mkdir $(DISTDIR)/include
 	mkdir $(DISTDIR)/include/wx
+	mkdir $(DISTDIR)/include/wx/private
 	$(CP_P) $(INCDIR)/wx/fmappriv.h $(DISTDIR)/include/wx
+	$(CP_P) $(INCDIR)/wx/private/*.h $(DISTDIR)/include/wx/private
 	# copy wxpresets
 	mkdir $(DISTDIR)/build
 	mkdir $(DISTDIR)/build/bakefiles
@@ -28877,6 +28879,10 @@ ALL_GUI_DIST: ALL_DIST
 	if test -f $(DOCDIR)/$(TOOLKITDIR)/todo.txt ; then \
 	  $(CP_P) $(DOCDIR)/$(TOOLKITDIR)/todo.txt $(DISTDIR)/TODO.txt ; fi
 	mkdir $(DISTDIR)/include/wx/$(TOOLKITDIR)
+	if test -d $(INCDIR)/wx/$(TOOLKITDIR)/private; then \
+	    mkdir $(DISTDIR)/include/wx/$(TOOLKITDIR)/private && \
+	    $(CP_P) $(INCDIR)/wx/$(TOOLKITDIR)/private/*.h $(DISTDIR)/include/wx/$(TOOLKITDIR)/private; \
+	fi
 	mkdir $(DISTDIR)/include/wx/generic
 	mkdir $(DISTDIR)/include/wx/html
 	mkdir $(DISTDIR)/include/wx/richtext
@@ -29039,6 +29045,8 @@ GTK_DIST: UNIV_DIST
 X11_DIST: UNIV_DIST
 	$(CP_P) $(WXDIR)/wxX11.spec $(DISTDIR)
 	$(CP_P) $(INCDIR)/wx/x11/*.h $(DISTDIR)/include/wx/x11
+	mkdir $(DISTDIR)/include/wx/gtk/private
+	$(CP_P) $(INCDIR)/wx/gtk/private/string.h $(DISTDIR)/include/wx/gtk/private
 	$(CP_P) $(X11DIR)/*.cpp $(DISTDIR)/src/x11
 	$(CP_P) $(X11DIR)/*.c $(DISTDIR)/src/x11
 	$(CP_P) $(X11DIR)/*.xbm $(DISTDIR)/src/x11
