@@ -1001,7 +1001,7 @@ bool wxStdScrollBarInputHandler::HandleMouse(wxInputConsumer *consumer,
     {
         // determine which part of the window mouse is in
         wxScrollBar *scrollbar = wxStaticCast(consumer->GetInputWindow(), wxScrollBar);
-        wxHitTest ht = scrollbar->HitTest(event.GetPosition());
+        wxHitTest ht = scrollbar->HitTestBar(event.GetPosition());
 
         // when the mouse is pressed on any scrollbar element, we capture it
         // and hold capture until the same mouse button is released
