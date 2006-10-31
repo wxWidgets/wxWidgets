@@ -232,20 +232,22 @@ void wxFrame::DoSetClientSize(int width, int height)
     wxPoint pt = GetClientAreaOrigin();
     width += pt.x;
     height += pt.y;
+
 #if wxUSE_TOOLBAR
-    if ( width )
+    wxToolBar * const toolbar = GetToolBar();
+    if ( toolbar )
     {
-        wxToolBar *toolbar = GetToolBar();
-        if ( toolbar && toolbar->HasFlag(wxTB_RIGHT) )
+        if ( toolbar->HasFlag(wxTB_RIGHT | wxTB_BOTTOM) )
         {
-            width -= toolbar->GetClientSize().x;
+            const wxSize sizeTB = toolbar->GetSize();
+            if ( toolbar->HasFlag(wxTB_RIGHT) )
+                width -= sizeTB.x;
+            else // wxTB_BOTTOM
+                height -= sizeTB.y;
         }
-        if ( toolbar && toolbar->HasFlag( wxTB_BOTTOM ) )
-        {
-            height -= toolbar->GetClientSize().y;
-        }
+        //else: toolbar already taken into account by GetClientAreaOrigin()
     }
-#endif
+#endif // wxUSE_TOOLBAR
 
     wxTopLevelWindow::DoSetClientSize(width, height);
 }
@@ -262,24 +264,29 @@ void wxFrame::DoGetClientSize(int *x, int *y) const
 
     if ( y )
         *y -= pt.y;
+
 #if wxUSE_TOOLBAR
-    if( y )
+    wxToolBar * const toolbar = GetToolBar();
+    if ( toolbar )
     {
-        wxToolBar *toolbar = GetToolBar();
-        if( toolbar && toolbar->HasFlag( wxTB_BOTTOM ) )
+        if ( toolbar->HasFlag(wxTB_RIGHT | wxTB_BOTTOM) )
         {
-            *y -= toolbar->GetClientSize().y;
+            const wxSize sizeTB = toolbar->GetSize();
+            if ( toolbar->HasFlag(wxTB_RIGHT) )
+            {
+                if ( x )
+                    *x -= sizeTB.x;
+            }
+            else // wxTB_BOTTOM
+            {
+                if ( y )
+                    *y -= sizeTB.y;
+            }
         }
+        //else: toolbar already taken into account by GetClientAreaOrigin()
     }
-    if ( x )
-    {
-        wxToolBar *toolbar = GetToolBar();
-        if ( toolbar && toolbar->HasFlag(wxTB_RIGHT) )
-        {
-            *x -= toolbar->GetClientSize().x;
-        }
-    }
-#endif
+#endif // wxUSE_TOOLBAR
+
 #if wxUSE_STATUSBAR
     // adjust client area height to take the status bar into account
     if ( y )
@@ -346,13 +353,7 @@ void wxFrame::PositionStatusBar()
 
     int w, h;
     GetClientSize(&w, &h);
-#if wxUSE_TOOLBAR
-    wxToolBar *toolbar = GetToolBar();
-    if( toolbar && toolbar->HasFlag( wxTB_BOTTOM ) )
-        h += toolbar->GetClientRect().height;
-    if( toolbar && toolbar->HasFlag( wxTB_RIGHT ) )
-        w += toolbar->GetClientRect().width;
-#endif
+
     int sw, sh;
     m_frameStatusBar->GetSize(&sw, &sh);
 
@@ -360,6 +361,7 @@ void wxFrame::PositionStatusBar()
     // we use the adjusted sizes without using wxSIZE_NO_ADJUSTMENTS.
     m_frameStatusBar->SetSize(0, h, w, sh);
 }
+
 #endif // wxUSE_STATUSBAR
 
 #if wxUSE_MENUS_NATIVE
@@ -620,24 +622,27 @@ void wxFrame::PositionToolBar()
             height -= statbar->GetClientSize().y;
         }
 #endif // wxUSE_STATUSBAR
-    int tx, ty, tw, th;
-    toolbar->GetPosition( &tx, &ty );
-    toolbar->GetSize( &tw, &th );
-    if( ( toolbar->GetWindowStyleFlag() & wxTB_HORIZONTAL ) || ( toolbar->GetWindowStyleFlag() & wxTB_VERTICAL ) )
-    {
-        x = 0;
-        y = 0;
-    }
-    else if( toolbar->GetWindowStyleFlag() & wxTB_BOTTOM )
-    {
-        x = 0;
-        y = height - th;
-    }
-    else if( toolbar->HasFlag(wxTB_RIGHT) )
-    {
-        x = width - tw;
-        y = 0;
-    }
+
+        int tx, ty, tw, th;
+        toolbar->GetPosition( &tx, &ty );
+        toolbar->GetSize( &tw, &th );
+
+        if ( toolbar->HasFlag(wxTB_BOTTOM) )
+        {
+            x = 0;
+            y = height - th;
+        }
+        else if ( toolbar->HasFlag(wxTB_RIGHT) )
+        {
+            x = width - tw;
+            y = 0;
+        }
+        else // left or top
+        {
+            x = 0;
+            y = 0;
+        }
+
 #if defined(WINCE_WITH_COMMANDBAR)
         // We're using a commandbar - so we have to allow for it.
         if (GetMenuBar() && GetMenuBar()->GetCommandBar())
@@ -646,28 +651,28 @@ void wxFrame::PositionToolBar()
             ::GetWindowRect((HWND) GetMenuBar()->GetCommandBar(), &rect);
             y = rect.bottom - rect.top;
         }
-#endif
-    if( ( toolbar->GetWindowStyleFlag() & wxTB_HORIZONTAL ) || ( toolbar->GetWindowStyleFlag() & wxTB_VERTICAL ) )
-    {
-        // Adjust
-        if (ty < 0 && (-ty == th))
-            ty = 0;
-        if (tx < 0 && (-tx == tw))
-            tx = 0;
-    }
-    else if( toolbar->GetWindowStyleFlag() & wxTB_BOTTOM )
-    {
-        if( ty < 0 && ( -ty == th ) )
-            ty = height - th;
-        if( tx < 0 && ( -tx == tw ) )
-            tx = 0;
-    }
-        else if( toolbar->HasFlag(wxTB_RIGHT) )
+#endif // WINCE_WITH_COMMANDBAR
+
+        if ( toolbar->HasFlag(wxTB_BOTTOM) )
+        {
+            if ( ty < 0 && ( -ty == th ) )
+                ty = height - th;
+            if ( tx < 0 && (-tx == tw ) )
+                tx = 0;
+        }
+        else if ( toolbar->HasFlag(wxTB_RIGHT) )
         {
             if( ty < 0 && ( -ty == th ) )
                 ty = 0;
             if( tx < 0 && ( -tx == tw ) )
                 tx = width - tw;
+        }
+        else // left or top
+        {
+            if (ty < 0 && (-ty == th))
+                ty = 0;
+            if (tx < 0 && (-tx == tw))
+                tx = 0;
         }
 
         int desiredW = tw;
@@ -680,8 +685,6 @@ void wxFrame::PositionToolBar()
         else
         {
             desiredW = width;
-//            if ( toolbar->GetWindowStyleFlag() & wxTB_FLAT )
-//                desiredW -= 3;
         }
 
         // use the 'real' MSW position here, don't offset relativly to the
@@ -1110,19 +1113,18 @@ wxPoint wxFrame::GetClientAreaOrigin() const
 
 #if wxUSE_TOOLBAR && !defined(__WXUNIVERSAL__) && \
   (!defined(__WXWINCE__) || (_WIN32_WCE >= 400 && !defined(__POCKETPC__) && !defined(__SMARTPHONE__)))
-    wxToolBar *toolbar = GetToolBar();
+    wxToolBar * const toolbar = GetToolBar();
     if ( toolbar && toolbar->IsShown() )
     {
-        int w, h;
-        toolbar->GetSize(&w, &h);
+        const wxSize sizeTB = toolbar->GetSize();
 
-        if ( toolbar->GetWindowStyleFlag() & wxTB_VERTICAL )
+        if ( toolbar->HasFlag(wxTB_TOP) )
         {
-            pt.x += w;
+            pt.y += sizeTB.y;
         }
-        else if( ( toolbar->GetWindowStyleFlag() & wxTB_TOP ) )
+        else if ( toolbar->HasFlag(wxTB_LEFT) )
         {
-            pt.y += h;
+            pt.x += sizeTB.x;
         }
     }
 #endif // wxUSE_TOOLBAR
