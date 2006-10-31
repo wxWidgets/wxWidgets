@@ -95,9 +95,9 @@ public:
 protected:
     wxRadioBoxBase()
     {
+        m_numCols =
+        m_numRows =
         m_majorDim = 0;
-        m_numCols = 0;
-        m_numRows = 0;
 
 #if wxUSE_TOOLTIPS
         m_itemsTooltips = NULL;
