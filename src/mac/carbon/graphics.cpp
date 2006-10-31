@@ -1248,14 +1248,15 @@ void wxMacCoreGraphicsContext::EnsureIsValid()
         wxASSERT_MSG( status == noErr , wxT("Cannot nest wxDCs on the same window") );
 
         CGContextConcatCTM( m_cgContext, m_windowTransform );
-        CGContextSaveGState( m_cgContext );
-        m_releaseContext = true;
-        if ( !HIShapeIsEmpty(m_clipRgn) )
-        {
-            HIShapeReplacePathInCGContext( m_clipRgn, m_cgContext );
-            CGContextClip( m_cgContext );
-        }
-    }
+		CGContextSaveGState( m_cgContext );
+		m_releaseContext = true;
+		if ( !HIShapeIsEmpty(m_clipRgn) )
+		{
+			HIShapeReplacePathInCGContext( m_clipRgn, m_cgContext );
+			CGContextClip( m_cgContext );
+		}
+		CGContextSaveGState( m_cgContext );
+	}
 }
 
 
