@@ -185,10 +185,8 @@ wxObject* wxSizerXmlHandler::Handle_sizer()
 
     wxCHECK_MSG(m_parentSizer != NULL ||
                 (parentNode && parentNode->GetType() == wxXML_ELEMENT_NODE &&
-                 m_parentAsWindow != NULL &&
-                 (m_parentAsWindow->IsKindOf(CLASSINFO(wxWindow)))
-                    ), NULL,
-                wxT("Incorrect use of sizer: parent is not a 'wxWindow'."));
+                 m_parentAsWindow), NULL,
+                wxT("Sizer must have a window parent node"));
 
     if (m_class == wxT("wxBoxSizer"))
         sizer = Handle_wxBoxSizer();
