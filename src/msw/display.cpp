@@ -39,6 +39,7 @@
 #include "wx/sysopt.h"
 
 #include "wx/display_impl.h"
+#include "wx/msw/wrapwin.h"
 #include "wx/msw/missing.h"
 
 // define this to use DirectDraw for display mode switching: this is disabled
