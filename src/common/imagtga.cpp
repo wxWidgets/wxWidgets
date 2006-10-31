@@ -218,13 +218,10 @@ int ReadTGA(wxImage* image, wxInputStream& stream)
             b[i] = buf[0];
         }
 
-        #if wxUSE_PALETTE
-
+#if wxUSE_PALETTE
         // Set the palette of the image.
-
         image->SetPalette(wxPalette(paletteLength, r, g, b));
-
-        #endif // wxUSE_PALETTE
+#endif // wxUSE_PALETTE
 
         delete[] r;
         delete[] g;
@@ -235,6 +232,7 @@ int ReadTGA(wxImage* image, wxInputStream& stream)
 
     switch (imageType)
     {
+#if wxUSE_PALETTE
         // Raw indexed.
 
         case 1:
@@ -296,6 +294,7 @@ int ReadTGA(wxImage* image, wxInputStream& stream)
             }
         }
         break;
+#endif // wxUSE_PALETTE
 
         // Raw RGB.
 
@@ -428,6 +427,7 @@ int ReadTGA(wxImage* image, wxInputStream& stream)
         }
         break;
 
+#if wxUSE_PALETTE
         // RLE indexed.
 
         case 9:
@@ -489,6 +489,7 @@ int ReadTGA(wxImage* image, wxInputStream& stream)
             }
         }
         break;
+#endif // wxUSE_PALETTE
 
         // RLE RGB.
 
