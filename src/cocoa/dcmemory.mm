@@ -30,19 +30,15 @@
 
 IMPLEMENT_DYNAMIC_CLASS(wxMemoryDC,wxDC)
 
-wxMemoryDC::wxMemoryDC( const wxBitmap& bitmap )
+void wxMemoryDC::Init()
 {
     m_cocoaNSImage = NULL;
     m_ok = false;
-
-    if ( bitmap.IsOk() )
-        SelectObject(bitmap);
 }
 
 wxMemoryDC::wxMemoryDC( wxDC *WXUNUSED(dc) )
 {
-    m_cocoaNSImage = NULL;
-    m_ok = false;
+    Init();
 }
 
 wxMemoryDC::~wxMemoryDC(void)
@@ -75,7 +71,7 @@ bool wxMemoryDC::CocoaUnlockFocus()
 
 // NOTE: The AppKit is unable to draw onto an NSBitmapImageRep so we must
 // instead copy the data to an offscreen window, then copy it back
-void wxMemoryDC::SelectObject( const wxBitmap& bitmap )
+void wxMemoryDC::DoSelect( const wxBitmap& bitmap )
 {
     wxAutoNSAutoreleasePool pool;
     if(m_selectedBitmap.Ok())
