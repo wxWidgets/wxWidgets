@@ -5645,13 +5645,14 @@ if test "$wxUSE_SOUND" = "yes"; then
 fi
 
 if test "$WXGTK20" = 1; then
+    PKG_PROG_PKG_CONFIG()
+
     if test "$wxUSE_PRINTING_ARCHITECTURE" = "yes" ; then
         if test "$wxUSE_LIBGNOMEPRINT" = "yes" ; then
 
                 PKG_CHECK_MODULES(LIBGNOMEPRINTUI,
                                   [libgnomeprintui-2.2 >= 2.8],
                     [
-dnl                     EXTRALIBS_GNOMEPRINT="$LIBGNOMEPRINTUI_LIBS"
                         CXXFLAGS="$LIBGNOMEPRINTUI_CFLAGS $CXXFLAGS"
                         AC_DEFINE(wxUSE_LIBGNOMEPRINT)
                     ],
@@ -5662,16 +5663,13 @@ dnl                     EXTRALIBS_GNOMEPRINT="$LIBGNOMEPRINTUI_LIBS"
                 )
         fi
     fi
-fi
 
-if test "$WXGTK20" = 1; then
     if test "$wxUSE_MIMETYPE" = "yes" ; then
         if test "$wxUSE_LIBGNOMEVFS" = "yes" ; then
 
                 PKG_CHECK_MODULES(GNOMEVFS,
                                   [gnome-vfs-2.0 >= 2.0],
                     [
-dnl                     EXTRALIBS_GNOMEVFS="$LIBGNOMEVFS_LIBS"
                         CXXFLAGS="$GNOMEVFS_CFLAGS $CXXFLAGS"
                         AC_DEFINE(wxUSE_LIBGNOMEVFS)
                     ],
@@ -5682,9 +5680,7 @@ dnl                     EXTRALIBS_GNOMEVFS="$LIBGNOMEVFS_LIBS"
                 )
         fi
     fi
-fi
 
-if test "$WXGTK20" = 1; then
     if test "$wxUSE_LIBHILDON" = "yes" ; then
         PKG_CHECK_MODULES(HILDON,
                           [hildon-lgpl >= 0.9],
