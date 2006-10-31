@@ -1,7 +1,7 @@
 /* XPM */
 static char *cut_xpm[] = {
 /* columns rows colors chars-per-pixel */
-"16 15 25 1",
+"16 16 25 1",
 "6 c #D8BDC0",
 ": c #C3C3C4",
 "- c #FFFFFF",
@@ -42,5 +42,6 @@ static char *cut_xpm[] = {
 " ,2 4<   <5 2,  ",
 " <, ,2   2, ,<  ",
 " 23,<5   5<,32  ",
-" 6225     522>  "
+" 6225     522>  ",
+"                "
 };

@@ -1,7 +1,7 @@
 /* XPM */
 static char *paste_xpm[] = {
 /* columns rows colors chars-per-pixel */
-"16 15 25 1",
+"16 16 25 1",
 "< c #FEECE4",
 "> c #FEE3D7",
 "O c #FFFFFF",
@@ -42,5 +42,6 @@ static char *paste_xpm[] = {
 ".3<<>--#.O21=:. ",
 ".45<<>--....... ",
 ".6453<>----.    ",
-"............    "
+"............    ",
+"                "
 };

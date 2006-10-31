@@ -1,7 +1,7 @@
 /* XPM */
 static char *open_xpm[] = {
 /* columns rows colors chars-per-pixel */
-"16 15 36 1",
+"16 16 36 1",
 "6 c #9BACC2",
 "< c #9AEA53",
 "9 c #94A5BD",
@@ -53,5 +53,6 @@ static char *open_xpm[] = {
 "Xw2O963:>>er0t; ",
 "X&y2O963:>,er;  ",
 "uXXXXXXXXXXXX;  ",
+"                ",
 "                "
 };

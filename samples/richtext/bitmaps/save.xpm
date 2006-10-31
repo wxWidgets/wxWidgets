@@ -1,7 +1,7 @@
 /* XPM */
 static char *save_xpm[] = {
 /* columns rows colors chars-per-pixel */
-"16 15 21 1",
+"16 16 21 1",
 "O c #FFFFFF",
 "> c #D5D6D8",
 "; c #446A8C",
@@ -38,5 +38,6 @@ static char *save_xpm[] = {
 " @@$%X;;:>,O$@ .",
 " @@$%X;;<12O$@ .",
 " @@$<<2OOOOO$@ .",
-".             .."
+".             ..",
+"                "
 };
