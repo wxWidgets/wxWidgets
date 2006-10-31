@@ -58,10 +58,14 @@ There are {\bf two} protocols used in this example: "zip" and "file".
 The following virtual file system handlers are part of wxWidgets so far:
 
 \begin{twocollist}
+\twocolitem{{\bf wxArchiveFSHandler}}{A handler for archives such as zip
+and tar. Include file is <wx/fs\_arc.h>. URLs examples:
+"archive.zip\#zip:filename", "archive.tar.gz\#gzip:\#tar:filename".}
+\twocolitem{{\bf wxFilterFSHandler}}{A handler for compression schemes such
+as gzip. Header is <wx/fs\_filter.h>. URLs are in the form, e.g.:
+"document.ps.gz\#gzip:".}
 \twocolitem{{\bf wxInternetFSHandler}}{A handler for accessing documents
 via HTTP or FTP protocols. Include file is <wx/fs\_inet.h>.}
-\twocolitem{{\bf wxZipFSHandler}}{A handler for ZIP archives. 
-Include file is <wx/fs\_zip.h>. URL is in form "archive.zip\#zip:filename".}
 \twocolitem{{\bf wxMemoryFSHandler}}{This handler allows you to access 
 data stored in memory (such as bitmaps) as if they were regular files.
 See \helpref{wxMemoryFSHandler documentation}{wxmemoryfshandler} for details.

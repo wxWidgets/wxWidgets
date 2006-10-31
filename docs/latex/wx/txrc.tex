@@ -36,7 +36,7 @@ These are the typical steps for using XRC files in your application.
 \begin{itemize}\itemsep=0pt
 \item Include the appropriate headers: normally "wx/xrc/xmlres.h" will suffice;
 \item If you are going to use \helpref{XRS files}{binaryresourcefiles}, install
-wxFileSystem ZIP handler first with {\tt wxFileSystem::AddHandler(new wxZipFSHandler);}
+wxFileSystem archive handler first with {\tt wxFileSystem::AddHandler(new wxArchiveFSHandler);}
 \item call {\tt wxXmlResource::Get()->InitAllHandlers()} from your wxApp::OnInit function,
 and then call {\tt wxXmlResource::Get()->Load("myfile.xrc")} to load the resource file;
 \item to create a dialog from a resource, create it using the default constructor, and then
@@ -97,14 +97,14 @@ For example:
 
 XRS file is essentially a renamed ZIP archive which means that you can manipulate
 it with standard ZIP tools. Note that if you are using XRS files, you have
-to initialize the \helpref{wxFileSystem}{wxfilesystem} ZIP handler first! It is a simple
+to initialize the \helpref{wxFileSystem}{wxfilesystem} archive handler first! It is a simple
 thing to do:
 
 \begin{verbatim}
   #include <wx/filesys.h>
-  #include <wx/fs_zip.h>
+  #include <wx/fs_arc.h>
   ...
-  wxFileSystem::AddHandler(new wxZipFSHandler);
+  wxFileSystem::AddHandler(new wxArchiveFSHandler);
 \end{verbatim}
 
 \subsection{Using embedded resources}\label{embeddedresource}
