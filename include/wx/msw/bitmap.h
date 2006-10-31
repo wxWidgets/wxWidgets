@@ -198,6 +198,9 @@ class WXDLLEXPORT wxMask : public wxObject
 public:
     wxMask();
 
+    // Copy constructor
+    wxMask(const wxMask &mask);
+
     // Construct a mask from a bitmap and a colour indicating the transparent
     // area
     wxMask(const wxBitmap& bitmap, const wxColour& colour);

@@ -205,8 +205,13 @@ wxBitmapRefData::wxBitmapRefData(const wxBitmapRefData& data)
     m_selectedInto = NULL;
 #endif
 
-    // can't copy the mask as the other bitmap destroys it
+    // (deep) copy the mask if present
     m_bitmapMask = NULL;
+    if (data.m_bitmapMask)
+        m_bitmapMask = new wxMask(*data.m_bitmapMask);
+
+    // FIXME: we don't copy m_hBitmap currently but we should, see wxBitmap::
+    //        CloneRefData()
 
     wxASSERT_MSG( !data.m_isDIB,
                     _T("can't copy bitmap locked for raw access!") );
@@ -252,6 +257,10 @@ wxObjectRefData *wxBitmap::CloneRefData(const wxObjectRefData *dataOrig) const
     if ( !data )
         return NULL;
 
+    // FIXME: this method is backwards, it should just create a new
+    //        wxBitmapRefData using its copy ctor but instead it modifies this
+    //        bitmap itself and then returns its m_refData -- which works, of
+    //        course (except in !wxUSE_WXDIB), but is completely illogical
     wxBitmap *self = wx_const_cast(wxBitmap *, this);
 
 #if wxUSE_WXDIB
@@ -264,8 +273,17 @@ wxObjectRefData *wxBitmap::CloneRefData(const wxObjectRefData *dataOrig) const
     else
 #endif // wxUSE_WXDIB
     {
-        // don't copy the bitmap data, but do copy the size, depth, ...
+        // copy the bitmap data
         self->m_refData = new wxBitmapRefData(*data);
+    }
+
+    // copy also the mask
+    wxMask * const maskSrc = data->GetMask();
+    if ( maskSrc )
+    {
+        wxBitmapRefData *selfdata = wx_static_cast(wxBitmapRefData *, m_refData);
+
+        selfdata->SetMask(new wxMask(*maskSrc));
     }
 
     return m_refData;
@@ -1325,6 +1343,38 @@ void wxBitmap::UngetRawData(wxPixelDataBase& dataBase)
 wxMask::wxMask()
 {
     m_maskBitmap = 0;
+}
+
+// Copy constructor
+wxMask::wxMask(const wxMask &mask)
+{
+    BITMAP bmp;
+
+    HDC srcDC = CreateCompatibleDC(0);
+    HDC destDC = CreateCompatibleDC(0);
+
+    // GetBitmapDimensionEx won't work if SetBitmapDimensionEx wasn't used
+    // so we'll use GetObject() API here:
+    if (::GetObject((HGDIOBJ)mask.m_maskBitmap, sizeof(bmp), &bmp) == 0)
+    {
+        wxFAIL_MSG(wxT("Cannot retrieve the dimensions of the wxMask to copy"));
+        return;
+    }
+
+    // create our HBITMAP
+    int w = bmp.bmWidth, h = bmp.bmHeight;
+    m_maskBitmap = (WXHBITMAP)CreateCompatibleBitmap(srcDC, w, h);
+
+    // copy the mask's HBITMAP into our HBITMAP
+    SelectObject(srcDC, (HBITMAP) mask.m_maskBitmap);
+    SelectObject(destDC, (HBITMAP) m_maskBitmap);
+
+    BitBlt(destDC, 0, 0, w, h, srcDC, 0, 0, SRCCOPY);
+    
+    SelectObject(srcDC, 0);
+    DeleteDC(srcDC);
+    SelectObject(destDC, 0);
+    DeleteDC(destDC);
 }
 
 // Construct a mask from a bitmap and a colour indicating
