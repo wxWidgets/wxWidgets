@@ -3668,6 +3668,19 @@ class TIFFHandler(ImageHandler):
         _core_.TIFFHandler_swiginit(self,_core_.new_TIFFHandler(*args, **kwargs))
 _core_.TIFFHandler_swigregister(TIFFHandler)
 
+class TGAHandler(ImageHandler):
+    """A `wx.ImageHandler` for TGA image files."""
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
+        """
+        __init__(self) -> TGAHandler
+
+        A `wx.ImageHandler` for TGA image files.
+        """
+        _core_.TGAHandler_swiginit(self,_core_.new_TGAHandler(*args, **kwargs))
+_core_.TGAHandler_swigregister(TGAHandler)
+
 QUANTIZE_INCLUDE_WINDOWS_COLOURS = _core_.QUANTIZE_INCLUDE_WINDOWS_COLOURS
 QUANTIZE_FILL_DESTINATION_IMAGE = _core_.QUANTIZE_FILL_DESTINATION_IMAGE
 class Quantize(object):
@@ -8378,15 +8391,16 @@ class Window(EvtHandler):
         """
         return _core_.Window_MoveXY(*args, **kwargs)
 
-    def SetBestFittingSize(*args, **kwargs):
+    def SetInitialSize(*args, **kwargs):
         """
-        SetBestFittingSize(self, Size size=DefaultSize)
+        SetInitialSize(self, Size size=DefaultSize)
 
         A 'Smart' SetSize that will fill in default size components with the
         window's *best size* values.  Also set's the minsize for use with sizers.
         """
-        return _core_.Window_SetBestFittingSize(*args, **kwargs)
+        return _core_.Window_SetInitialSize(*args, **kwargs)
 
+    SetBestFittingSize = wx._deprecated(SetInitialSize, 'Use `SetInitialSize`') 
     def Raise(*args, **kwargs):
         """
         Raise(self)
@@ -8594,22 +8608,23 @@ class Window(EvtHandler):
         """
         return _core_.Window_CacheBestSize(*args, **kwargs)
 
-    def GetBestFittingSize(*args, **kwargs):
+    def GetEffectiveMinSize(*args, **kwargs):
         """
-        GetBestFittingSize(self) -> Size
+        GetEffectiveMinSize(self) -> Size
 
         This function will merge the window's best size into the window's
         minimum size, giving priority to the min size components, and returns
         the results.
 
         """
-        return _core_.Window_GetBestFittingSize(*args, **kwargs)
+        return _core_.Window_GetEffectiveMinSize(*args, **kwargs)
 
+    GetBestFittingSize = wx._deprecated(GetEffectiveMinSize, , 'Use `GetEffectiveMinSize` instead.') 
     def GetAdjustedBestSize(self):
         s = self.GetBestSize()
         return wx.Size(max(s.width,  self.GetMinWidth()),
                        max(s.height, self.GetMinHeight()))
-    GetAdjustedBestSize = wx._deprecated(GetAdjustedBestSize, 'Use `GetBestFittingSize` instead.')
+    GetAdjustedBestSize = wx._deprecated(GetAdjustedBestSize, 'Use `GetEffectiveMinSize` instead.')
 
     def Center(*args, **kwargs):
         """
@@ -10340,7 +10355,7 @@ class Window(EvtHandler):
     AutoLayout = property(GetAutoLayout,SetAutoLayout,doc="See `GetAutoLayout` and `SetAutoLayout`") 
     BackgroundColour = property(GetBackgroundColour,SetBackgroundColour,doc="See `GetBackgroundColour` and `SetBackgroundColour`") 
     BackgroundStyle = property(GetBackgroundStyle,SetBackgroundStyle,doc="See `GetBackgroundStyle` and `SetBackgroundStyle`") 
-    BestFittingSize = property(GetBestFittingSize,SetBestFittingSize,doc="See `GetBestFittingSize` and `SetBestFittingSize`") 
+    EffectiveMinSize = property(GetEffectiveMinSize,doc="See `GetEffectiveMinSize`") 
     BestSize = property(GetBestSize,doc="See `GetBestSize`") 
     BestVirtualSize = property(GetBestVirtualSize,doc="See `GetBestVirtualSize`") 
     Border = property(GetBorder,doc="See `GetBorder`") 

@@ -5746,10 +5746,6 @@ class PyControl(_core.Control):
         """_setCallbackInfo(self, PyObject self, PyObject _class)"""
         return _controls_.PyControl__setCallbackInfo(*args, **kwargs)
 
-    def SetBestSize(*args, **kwargs):
-        """SetBestSize(self, Size size)"""
-        return _controls_.PyControl_SetBestSize(*args, **kwargs)
-
     def DoEraseBackground(*args, **kwargs):
         """DoEraseBackground(self, DC dc) -> bool"""
         return _controls_.PyControl_DoEraseBackground(*args, **kwargs)

@@ -1591,6 +1591,10 @@ class AuiTabContainer(object):
         """InsertPage(self, Window page, AuiNotebookPage info, size_t idx) -> bool"""
         return _aui.AuiTabContainer_InsertPage(*args, **kwargs)
 
+    def MovePage(*args, **kwargs):
+        """MovePage(self, Window page, size_t new_idx) -> bool"""
+        return _aui.AuiTabContainer_MovePage(*args, **kwargs)
+
     def RemovePage(*args, **kwargs):
         """RemovePage(self, Window page) -> bool"""
         return _aui.AuiTabContainer_RemovePage(*args, **kwargs)
@@ -1690,6 +1694,8 @@ class AuiTabCtrl(_core.Control,AuiTabContainer):
         _aui.AuiTabCtrl_swiginit(self,_aui.new_AuiTabCtrl(*args, **kwargs))
         self._setOORInfo(self)
 
+    __swig_destroy__ = _aui.delete_AuiTabCtrl
+    __del__ = lambda self : None;
 _aui.AuiTabCtrl_swigregister(AuiTabCtrl)
 
 class AuiMultiNotebook(_core.Control):
