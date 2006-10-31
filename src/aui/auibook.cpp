@@ -952,6 +952,9 @@ wxAuiTabCtrl::wxAuiTabCtrl(wxWindow* parent,
     m_hover_button = NULL;
 }
 
+wxAuiTabCtrl::~wxAuiTabCtrl()
+{
+}
 
 void wxAuiTabCtrl::OnPaint(wxPaintEvent&)
 {

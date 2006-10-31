@@ -260,6 +260,8 @@ public:
                  const wxSize& size = wxDefaultSize,
                  long style = 0);
 
+    ~wxAuiTabCtrl();
+    
 protected:
 
     void OnPaint(wxPaintEvent& evt);

@@ -486,7 +486,8 @@ wxFrameManager::wxFrameManager(wxWindow* managed_wnd, unsigned int flags)
     m_hint_wnd = NULL;
     m_flags = flags;
     m_skipping = false;
-
+    m_frame = NULL;
+    
     if (managed_wnd)
     {
         SetManagedWindow(managed_wnd);
@@ -741,7 +742,10 @@ void wxFrameManager::SetManagedWindow(wxWindow* wnd)
 // will result in a crash upon program exit
 void wxFrameManager::UnInit()
 {
-    m_frame->RemoveEventHandler(this);
+    if (m_frame)
+    {
+        m_frame->RemoveEventHandler(this);
+    }
 }
 
 // GetManagedWindow() returns the window pointer being managed
