@@ -1278,7 +1278,6 @@ public:
 #endif
 
 
-#if 0
 %{
 #include <wx/imagtga.h>
 %}
@@ -1289,7 +1288,6 @@ class wxTGAHandler : public wxImageHandler {
 public:
     wxTGAHandler();
 };
-#endif
 
 
 //---------------------------------------------------------------------------
