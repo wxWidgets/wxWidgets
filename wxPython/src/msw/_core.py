@@ -8619,7 +8619,7 @@ class Window(EvtHandler):
         """
         return _core_.Window_GetEffectiveMinSize(*args, **kwargs)
 
-    GetBestFittingSize = wx._deprecated(GetEffectiveMinSize, , 'Use `GetEffectiveMinSize` instead.') 
+    GetBestFittingSize = wx._deprecated(GetEffectiveMinSize, 'Use `GetEffectiveMinSize` instead.') 
     def GetAdjustedBestSize(self):
         s = self.GetBestSize()
         return wx.Size(max(s.width,  self.GetMinWidth()),

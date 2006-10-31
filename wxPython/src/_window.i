@@ -576,7 +576,7 @@ some properties of the window change.)", "");
 minimum size, giving priority to the min size components, and returns
 the results.
 ", "");
-    %pythoncode { GetBestFittingSize = wx._deprecated(GetEffectiveMinSize, , 'Use `GetEffectiveMinSize` instead.') }
+    %pythoncode { GetBestFittingSize = wx._deprecated(GetEffectiveMinSize, 'Use `GetEffectiveMinSize` instead.') }
 
     %pythoncode {
         def GetAdjustedBestSize(self):
