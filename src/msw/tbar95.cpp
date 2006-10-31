@@ -234,6 +234,8 @@ bool wxToolBar::Create(wxWindow *parent,
     if ( !CreateControl(parent, id, pos, size, style, wxDefaultValidator, name) )
         return false;
 
+    FixupStyle();
+
     // MSW-specific initialisation
     if ( !MSWCreateToolbar(pos, size) )
         return false;

@@ -123,6 +123,15 @@ wxToolBarBase::wxToolBarBase()
     m_defaultHeight = 15;
 }
 
+void wxToolBarBase::FixupStyle()
+{
+    if ( !HasFlag(wxTB_TOP | wxTB_LEFT | wxTB_RIGHT | wxTB_BOTTOM) )
+    {
+        // this is the default
+        m_windowStyle |= wxTB_TOP;
+    }
+}
+
 wxToolBarToolBase *wxToolBarBase::DoAddTool(int id,
                                             const wxString& label,
                                             const wxBitmap& bitmap,

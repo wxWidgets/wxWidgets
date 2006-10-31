@@ -792,6 +792,8 @@ bool wxToolBar::Create(
     if ( !wxToolBarBase::Create( parent, id, pos, size, style, wxDefaultValidator, name ) )
         return false;
 
+    FixupStyle();
+
     OSStatus err = noErr;
 
 #if wxMAC_USE_NATIVE_TOOLBAR

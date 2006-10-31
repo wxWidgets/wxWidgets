@@ -287,6 +287,8 @@ bool wxToolBar::Create( wxWindow *parent,
         return false;
     }
 
+    FixupStyle();
+
     m_toolbar = GTK_TOOLBAR( gtk_toolbar_new() );
     GtkSetStyle();
 

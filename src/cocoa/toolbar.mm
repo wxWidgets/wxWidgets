@@ -186,7 +186,13 @@ bool wxToolBar::Create( wxWindow *parent,
                         const wxString& name )
 {
     // Call wxControl::Create so we get a wxNonControlNSControl
-    return wxToolBarBase::Create(parent,winid,pos,size,style,wxDefaultValidator,name);
+    if ( !wxToolBarBase::Create(parent, winid, pos, size, style,
+                                wxDefaultValidator, name) )
+        return false;
+
+    FixupStyle();
+
+    return true;
 }
 
 wxToolBarToolBase *wxToolBar::CreateTool(int toolid,

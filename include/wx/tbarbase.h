@@ -564,6 +564,13 @@ protected:
     // helper functions
     // ----------------
 
+    // call this from derived class ctor/Create() to ensure that we have either
+    // wxTB_HORIZONTAL or wxTB_VERTICAL style, there is a lot of existing code
+    // which randomly checks either one or the other of them and gets confused
+    // if neither is set (and making one of them 0 is not an option neither as
+    // then the existing tests would break down)
+    void FixupStyle();
+
     // un-toggle all buttons in the same radio group
     void UnToggleRadioGroup(wxToolBarToolBase *tool);
 

@@ -204,6 +204,8 @@ bool wxToolBar::Create(wxWindow *parent,
                                    wxDefaultValidator, name ) )
         return false;
 
+    FixupStyle();
+
     m_backgroundColour = wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE);
 
     Widget parentWidget = (Widget) parent->GetClientWidget();

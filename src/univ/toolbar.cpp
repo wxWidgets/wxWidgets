@@ -190,6 +190,8 @@ bool wxToolBar::Create(wxWindow *parent,
         return false;
     }
 
+    FixupStyle();
+
     CreateInputHandler(wxINP_HANDLER_TOOLBAR);
 
     SetInitialSize(size);

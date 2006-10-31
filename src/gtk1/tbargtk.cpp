@@ -285,6 +285,8 @@ bool wxToolBar::Create( wxWindow *parent,
         return false;
     }
 
+    FixupStyle();
+
     GtkOrientation orient;
     GtkToolbarStyle gtkStyle;
     GetGtkStyle(style, &orient, &gtkStyle);
