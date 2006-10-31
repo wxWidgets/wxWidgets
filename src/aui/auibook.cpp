@@ -1797,12 +1797,22 @@ void wxAuiMultiNotebook::OnTabEndDrag(wxCommandEvent& command_evt)
     // If the pointer is in an existing tab frame, do a tab insert
     wxWindow* hit_wnd = ::wxFindWindowAtPoint(mouse_screen_pt);
     wxTabFrame* tab_frame = (wxTabFrame*)GetTabFrameFromTabCtrl(hit_wnd);
+    int insert_idx = -1;
     if (tab_frame)
     {
         dest_tabs = tab_frame->m_tabs;
 
         if (dest_tabs == src_tabs)
             return;
+        
+            
+        wxPoint pt = dest_tabs->ScreenToClient(mouse_screen_pt);
+        wxWindow* target = NULL;
+        dest_tabs->TabHitTest(pt.x, pt.y, &target);
+        if (target)
+        {
+            insert_idx = dest_tabs->GetIdxFromWindow(target);
+        }
     }
      else
     {
@@ -1837,7 +1847,9 @@ void wxAuiMultiNotebook::OnTabEndDrag(wxCommandEvent& command_evt)
 
 
     // add the page to the destination tabs
-    dest_tabs->AddPage(page_info.window, page_info);
+    if (insert_idx == -1)
+        insert_idx = dest_tabs->GetPageCount();
+    dest_tabs->InsertPage(page_info.window, page_info, insert_idx);
 
     if (src_tabs->GetPageCount() == 0)
     {
