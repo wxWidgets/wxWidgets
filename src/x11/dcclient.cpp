@@ -165,7 +165,7 @@ static void wxFreePoolGC( GC gc )
 
 IMPLEMENT_DYNAMIC_CLASS(wxWindowDC, wxDC)
 
-wxWindowDC::wxWindowDC()
+void wxWindowDC::Init()
 {
     m_display = (WXDisplay *) NULL;
     m_penGC = (WXGC *) NULL;
@@ -178,7 +178,7 @@ wxWindowDC::wxWindowDC()
     m_owner = (wxWindow *)NULL;
 
 #if wxUSE_UNICODE
-    m_context = (PangoContext *)NULL;
+    m_context = wxTheApp->GetPangoContext();
     m_fontdesc = (PangoFontDescription *)NULL;
 #endif
 }
@@ -187,15 +187,8 @@ wxWindowDC::wxWindowDC( wxWindow *window )
 {
     wxASSERT_MSG( window, wxT("DC needs a window") );
 
-    m_display = (WXDisplay *) NULL;
-    m_penGC = (WXGC *) NULL;
-    m_brushGC = (WXGC *) NULL;
-    m_textGC = (WXGC *) NULL;
-    m_bgGC = (WXGC *) NULL;
-    m_cmap = (WXColormap *) NULL;
-    m_owner = (wxWindow *)NULL;
-    m_isMemDC = false;
-    m_isScreenDC = false;
+    Init();
+
     m_font = window->GetFont();
 
     m_window = (WXWindow*) window->GetMainWindow();
@@ -212,7 +205,6 @@ wxWindowDC::wxWindowDC( wxWindow *window )
     m_display = (WXDisplay *) wxGlobalDisplay();
 
 #if wxUSE_UNICODE
-    m_context = wxTheApp->GetPangoContext();
     m_fontdesc = window->GetFont().GetNativeFontInfo()->description;
 #endif
 

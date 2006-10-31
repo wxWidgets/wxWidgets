@@ -32,7 +32,7 @@ class WXDLLIMPEXP_CORE wxClientDC;
 class WXDLLIMPEXP_CORE wxWindowDC : public wxDC
 {
 public:
-    wxWindowDC();
+    wxWindowDC() { Init(); }
     wxWindowDC( wxWindow *win );
 
     virtual ~wxWindowDC();
@@ -117,6 +117,8 @@ protected:
         wxCoord *descent = NULL,
         wxCoord *externalLeading = NULL,
         wxFont *theFont = NULL) const;
+
+    void Init();
 
     WXDisplay    *m_display;
     WXWindow      m_window;
