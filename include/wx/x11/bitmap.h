@@ -137,9 +137,12 @@ public:
 
     WXDisplay *GetDisplay() const;
 
+protected:
+    virtual wxObjectRefData *CreateRefData() const;
+    virtual wxObjectRefData *CloneRefData(const wxObjectRefData *data) const;
+
 private:
     DECLARE_DYNAMIC_CLASS(wxBitmap)
 };
 
-#endif
-// _WX_BITMAP_H_
+#endif // _WX_BITMAP_H_
