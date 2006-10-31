@@ -715,12 +715,12 @@ wxGIFErrorCode wxGIFDecoder::LoadGIF(wxInputStream& stream)
             {
                 while ((i = (unsigned char)stream.GetC()) != 0)
                 {
-                    stream.SeekI(i, wxFromCurrent);
-                    if (stream.Eof())
+                    if (stream.Eof() || (stream.LastRead() == 0))
                     {
                         done = true;
                         break;
                     }
+                    stream.SeekI(i, wxFromCurrent);
                 }
             }
         }
@@ -846,6 +846,11 @@ wxGIFErrorCode wxGIFDecoder::LoadGIF(wxInputStream& stream)
             /* skip all data */
             while ((i = (unsigned char)stream.GetC()) != 0)
             {
+                if (stream.Eof() || (stream.LastRead() == 0))
+                {
+                    Destroy();
+                    return wxGIF_INVFORMAT;
+                }
                 stream.SeekI(i, wxFromCurrent);
             }
         }
@@ -867,19 +872,24 @@ wxGIFErrorCode wxGIFDecoder::LoadGIF(wxInputStream& stream)
                 wxFileOffset pos = stream.TellI();
                 wxFileOffset numBytes = 3 * local_ncolors;
                 stream.SeekI(numBytes, wxFromCurrent);
-                if (stream.TellI() != (pos + numBytes))
-                {
-                    Destroy();
-                    return wxGIF_INVFORMAT;
-                }
             }
 
             /* initial code size */
             (void) stream.GetC();
+            if (stream.Eof() || (stream.LastRead() == 0))
+            {
+                Destroy();
+                return wxGIF_INVFORMAT;
+            }
 
             /* skip all data */
             while ((i = (unsigned char)stream.GetC()) != 0)
             {
+                if (stream.Eof() || (stream.LastRead() == 0))
+                {
+                    Destroy();
+                    return wxGIF_INVFORMAT;
+                }
                 stream.SeekI(i, wxFromCurrent);
             }
         }
