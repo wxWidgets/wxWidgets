@@ -1095,7 +1095,7 @@ void wxWindowMac::MacPostControlCreate(const wxPoint& pos, const wxSize& size)
     m_peer->SetLabel( wxStripMenuCodes(m_label, wxStrip_Mnemonics) ) ;
 
     if (!m_macIsUserPane)
-        SetInitialBestSize(size);
+        SetInitialSize(size);
 
     SetCursor( *wxSTANDARD_CURSOR ) ;
 }

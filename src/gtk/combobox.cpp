@@ -378,7 +378,7 @@ bool wxComboBox::Create( wxWindow *parent, wxWindowID id, const wxString& value,
 //        gtk_widget_set_size_request( m_widget, setsize.x, setsize.y );
     }
 
-    SetBestSize(size); // need this too because this is a wxControlWithItems
+    SetInitialSize(size); // need this too because this is a wxControlWithItems
 
 
     return true;

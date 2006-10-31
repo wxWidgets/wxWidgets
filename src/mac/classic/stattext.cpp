@@ -49,7 +49,7 @@ bool wxStaticText::Create(wxWindow *parent, wxWindowID id,
         return false;
     }
 
-    SetBestSize( size ) ;
+    SetInitialSize( size ) ;
 
     return true;
 }

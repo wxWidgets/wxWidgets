@@ -92,7 +92,7 @@ class AnalogClock(wx.PyWindow):
         self.Bind(wx.EVT_MENU, self._OnShowAbout, id=popup2)
 
         # Set initial size based on given size, or best size
-        self.SetBestFittingSize(size)
+        self.SetInitialSize(size)
 
         # Do initial drawing (in case there is not an initial size event)
         self.RecalcCoords(self.GetSize())

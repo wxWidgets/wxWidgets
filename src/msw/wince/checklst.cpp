@@ -116,7 +116,7 @@ bool wxCheckListBox::Create(wxWindow *parent, wxWindowID id,
     m_itemsClientData.SetCount(n);
 
     // now we can compute our best size correctly, so do it if necessary
-    SetBestSize(size);
+    SetInitialSize(size);
 
     return true;
 }

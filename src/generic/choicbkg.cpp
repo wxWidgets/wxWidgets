@@ -122,7 +122,6 @@ wxChoicebook::Create(wxWindow *parent,
 wxSize wxChoicebook::GetControllerSize() const
 {
     const wxSize sizeClient = GetClientSize(),
-                 // sizeChoice = m_bookctrl->GetBestFittingSize();
                  sizeChoice = m_controlSizer->CalcMin();
 
     wxSize size;

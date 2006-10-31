@@ -57,7 +57,7 @@ bool wxStaticText::Create(wxWindow *parent,
         return false;
 
     SetLabel(label);
-    SetBestSize(size);
+    SetInitialSize(size);
 
     return true;
 }

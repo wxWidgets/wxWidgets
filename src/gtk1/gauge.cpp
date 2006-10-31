@@ -52,7 +52,7 @@ bool wxGauge::Create( wxWindow *parent,
     m_parent->DoAddChild( this );
 
     PostCreation(size);
-    SetBestSize(size);
+    SetInitialSize(size);
 
     return true;
 }

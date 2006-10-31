@@ -93,7 +93,7 @@ bool wxCheckListBox::Create(
     InsertItems( n , choices , 0 );
 
     // Needed because it is a wxControlWithItems
-    SetBestSize( size );
+    SetInitialSize( size );
 
     return true;
 }

@@ -737,7 +737,7 @@ bool wxRichTextStyleListCtrl::Create(wxWindow* parent, wxWindowID id, const wxPo
 
     SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW));
     if (size != wxDefaultSize)
-        SetBestFittingSize(size);
+        SetInitialSize(size);
 
     bool showSelector = ((style & wxRICHTEXTSTYLELIST_HIDE_TYPE_SELECTOR) == 0);
 

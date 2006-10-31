@@ -240,14 +240,14 @@ class MultiSplitterWindow(wx.PyPanel):
         sashsize = self._GetSashSize()
         if self._orient == wx.HORIZONTAL:
             for win in self._windows:
-                winbest = win.GetAdjustedBestSize()
+                winbest = win.GetEffectiveMinSize()
                 best.width += max(self._minimumPaneSize, winbest.width)
                 best.height = max(best.height, winbest.height)
             best.width += sashsize * (len(self._windows)-1)
 
         else:
             for win in self._windows:
-                winbest = win.GetAdjustedBestSize()
+                winbest = win.GetEffectiveMinSize()
                 best.height += max(self._minimumPaneSize, winbest.height)
                 best.width = max(best.width, winbest.width)
             best.height += sashsize * (len(self._windows)-1)

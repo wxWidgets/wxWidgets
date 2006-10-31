@@ -128,9 +128,9 @@ bool wxButton::Create(wxWindow *parent,
     SetLabel(label);
 
     if (bitmap.Ok())
-        SetImageLabel(bitmap); // SetBestSize called by SetImageLabel()
+        SetImageLabel(bitmap); // SetInitialSize called by SetImageLabel()
     else
-        SetBestSize(size);
+        SetInitialSize(size);
 
     CreateInputHandler(wxINP_HANDLER_BUTTON);
 
@@ -327,7 +327,7 @@ void wxButton::SetImageMargins(wxCoord x, wxCoord y)
     m_marginBmpX = x + 2;
     m_marginBmpY = y + 2;
 
-    SetBestSize(wxDefaultSize);
+    SetInitialSize(wxDefaultSize);
 }
 
 void wxButton::SetDefault()

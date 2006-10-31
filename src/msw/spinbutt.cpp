@@ -195,7 +195,7 @@ bool wxSpinButton::Create(wxWindow *parent,
 
     SubclassWin(m_hWnd);
 
-    SetBestSize(size);
+    SetInitialSize(size);
 
     return true;
 }

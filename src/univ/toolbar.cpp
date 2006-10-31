@@ -192,7 +192,7 @@ bool wxToolBar::Create(wxWindow *parent,
 
     CreateInputHandler(wxINP_HANDLER_TOOLBAR);
 
-    SetBestSize(size);
+    SetInitialSize(size);
 
     return true;
 }
@@ -421,7 +421,7 @@ bool wxToolBar::Realize()
     m_needsLayout = true;
     DoLayout();
 
-    SetBestSize(wxDefaultSize);
+    SetInitialSize(wxDefaultSize);
 
     return true;
 }

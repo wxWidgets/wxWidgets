@@ -580,7 +580,7 @@ wxSize wxWindowBase::DoGetBestSize() const
 }
 
 
-wxSize wxWindowBase::GetBestFittingSize() const
+wxSize wxWindowBase::GetEffectiveMinSize() const
 {
     // merge the best size with the min size, giving priority to the min size
     wxSize min = GetMinSize();
@@ -594,14 +594,14 @@ wxSize wxWindowBase::GetBestFittingSize() const
 }
 
 
-void wxWindowBase::SetBestFittingSize(const wxSize& size)
+void wxWindowBase::SetInitialSize(const wxSize& size)
 {
     // Set the min size to the size passed in.  This will usually either be
     // wxDefaultSize or the size passed to this window's ctor/Create function.
     SetMinSize(size);
 
     // Merge the size with the best size if needed
-    wxSize best = GetBestFittingSize();
+    wxSize best = GetEffectiveMinSize();
 
     // If the current size doesn't match then change it
     if (GetSize() != best)

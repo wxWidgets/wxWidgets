@@ -299,7 +299,7 @@ class Frame(wx.Frame):
         w = b.GenButton(p, -1, "Generic Button")
         w.SetFont(wx.Font(20, wx.SWISS, wx.NORMAL, wx.BOLD, False))
         w.SetBezelWidth(5)
-        w.SetBestSize()
+        w.SetInitialSize()
         w.SetBackgroundColour("Navy")
         w.SetForegroundColour(wx.WHITE)
         self.DoWidget(w)

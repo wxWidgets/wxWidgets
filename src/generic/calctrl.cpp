@@ -235,7 +235,7 @@ bool wxCalendarCtrl::Create(wxWindow *parent,
     // we need to set the position as well because the main control position
     // is not the same as the one specified in pos if we have the controls
     // above it
-    SetBestSize(size);
+    SetInitialSize(size);
     SetPosition(pos);
 
     // Since we don't paint the whole background make sure that the platform
@@ -790,7 +790,7 @@ void wxCalendarCtrl::DoMoveWindow(int x, int y, int width, int height)
 
     if ( !HasFlag(wxCAL_SEQUENTIAL_MONTH_SELECTION) && m_staticMonth )
     {
-        wxSize sizeCombo = m_comboMonth->GetBestFittingSize();
+        wxSize sizeCombo = m_comboMonth->GetEffectiveMinSize();
         wxSize sizeStatic = m_staticMonth->GetSize();
         wxSize sizeSpin = m_spinYear->GetSize();
 

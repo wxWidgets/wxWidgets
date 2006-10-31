@@ -98,7 +98,7 @@ bool wxSpinButton::Create(wxWindow *parent,
                                    wxDefaultValidator, name) )
         return false;
 
-    SetBestSize(size);
+    SetInitialSize(size);
 
     CreateInputHandler(wxINP_HANDLER_SPINBTN);
 

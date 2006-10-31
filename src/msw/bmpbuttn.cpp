@@ -184,7 +184,7 @@ bool wxBitmapButton::Create(wxWindow *parent, wxWindowID id,
     SubclassWin(m_hWnd);
 
     SetPosition(pos);
-    SetBestSize(size);
+    SetInitialSize(size);
 
     return true;
 }

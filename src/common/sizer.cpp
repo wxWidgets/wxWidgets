@@ -276,7 +276,7 @@ wxSize wxSizerItem::CalcMin()
     {
         // Since the size of the window may change during runtime, we
         // should use the current minimal/best size.
-        m_minSize = m_window->GetBestFittingSize();
+        m_minSize = m_window->GetEffectiveMinSize();
     }
 
     return GetMinSizeWithBorder();

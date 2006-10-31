@@ -153,7 +153,7 @@ bool wxChoice::CreateAndInit(wxWindow *parent,
     }
 
     // and now we may finally size the control properly (if needed)
-    SetBestSize(size);
+    SetInitialSize(size);
 
     return true;
 }

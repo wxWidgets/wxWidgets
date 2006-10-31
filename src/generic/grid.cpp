@@ -4163,7 +4163,7 @@ wxGrid::wxGrid( wxWindow *parent,
     m_rowMinHeights(GRID_HASH_SIZE)
 {
     Create();
-    SetBestFittingSize(size);
+    SetInitialSize(size);
 }
 
 bool wxGrid::Create(wxWindow *parent, wxWindowID id,
@@ -4178,7 +4178,7 @@ bool wxGrid::Create(wxWindow *parent, wxWindowID id,
     m_rowMinHeights = wxLongToLongHashMap(GRID_HASH_SIZE);
 
     Create();
-    SetBestFittingSize(size);
+    SetInitialSize(size);
 
     return true;
 }

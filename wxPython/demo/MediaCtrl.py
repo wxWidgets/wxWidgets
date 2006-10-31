@@ -95,7 +95,7 @@ class TestPanel(wx.Panel):
                           "ERROR",
                           wx.ICON_ERROR | wx.OK)
         else:
-            self.mc.SetBestFittingSize()
+            self.mc.SetInitialSize()
             self.GetSizer().Layout()
             self.slider.SetRange(0, self.mc.Length())
 
@@ -108,7 +108,7 @@ class TestPanel(wx.Panel):
                           "ERROR",
                           wx.ICON_ERROR | wx.OK)
         else:
-            self.mc.SetBestFittingSize()
+            self.mc.SetInitialSize()
             self.GetSizer().Layout()
             self.slider.SetRange(0, self.mc.Length())
 

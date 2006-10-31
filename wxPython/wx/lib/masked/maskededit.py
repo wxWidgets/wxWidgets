@@ -1992,7 +1992,7 @@ class MaskedEditMixin:
                 width = self.GetSize().width
                 height = self.GetBestSize().height
 ##                dbg('setting client size to:', (width, height))
-                self.SetBestFittingSize((width, height))
+                self.SetInitialSize((width, height))
 
             # Set value/type-specific formatting
             self._applyFormatting()
@@ -2076,7 +2076,7 @@ class MaskedEditMixin:
                     #  the outside size that does include the borders.  What you are
                     #  calculating (in _CalcSize) is the client size, but the sizers
                     #  deal with the full size and so that is the minimum size that
-                    #  we need to set with SetBestFittingSize.  The root of the problem is
+                    #  we need to set with SetInitialSize.  The root of the problem is
                     #  that in _calcSize the current client size height is returned,
                     #  instead of a height based on the current font.  So I suggest using
                     #  _calcSize to just get the width, and then use GetBestSize to
@@ -2084,7 +2084,7 @@ class MaskedEditMixin:
                     self.SetClientSize(self._CalcSize())
                     width = self.GetSize().width
                     height = self.GetBestSize().height
-                    self.SetBestFittingSize((width, height))
+                    self.SetInitialSize((width, height))
 
 
             # Set value/type-specific formatting

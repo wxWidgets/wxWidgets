@@ -83,7 +83,7 @@ bool wxColourButton::Create( wxWindow *parent, wxWindowID id,
         m_parent->DoAddChild( this );
 
         PostCreation(size);
-        SetBestSize(size);
+        SetInitialSize(size);
     }
     else
         return wxGenericColourButton::Create(parent, id, col, pos, size,

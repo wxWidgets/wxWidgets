@@ -152,7 +152,7 @@ bool wxControl::PalmCreateControl(int style,
 
     m_palmControl = true;
 
-    SetInitialBestSize(size);
+    SetInitialSize(size);
     SetLabel(label);
     Show();
     return true;
@@ -202,7 +202,7 @@ bool wxControl::PalmCreateField(const wxString& label,
 
     m_palmField = true;
 
-    SetInitialBestSize(size);
+    SetInitialSize(size);
     SetLabel(label);
     Show();
     return true;

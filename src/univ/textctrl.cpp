@@ -740,7 +740,7 @@ bool wxTextCtrl::Create(wxWindow *parent,
 
     RecalcFontMetrics();
     SetValue(value);
-    SetBestSize(size);
+    SetInitialSize(size);
 
     m_isEditable = !(style & wxTE_READONLY);
 

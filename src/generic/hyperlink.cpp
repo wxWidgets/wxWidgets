@@ -115,7 +115,7 @@ bool wxHyperlinkCtrl::Create(wxWindow *parent, wxWindowID id,
     f.SetUnderlined(true);
     SetFont(f);
 
-    SetBestFittingSize(size);
+    SetInitialSize(size);
     
     return true;
 }

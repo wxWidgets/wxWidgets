@@ -189,15 +189,6 @@ public:
     virtual bool ShouldInheritColours() const { return false; }
 
 protected:
-    // we can't compute our best size before the items are added to the control
-    // which is done after calling SetInitialBestSize() (it is called from the
-    // base class ctor and the items are added in the derived class ctor), so
-    // don't do anything at all here as our size will be changed later anyhow
-    //
-    // of course, all derived classes *must* call SetBestSize() from their
-    // ctors for this to work!
-    virtual void SetInitialBestSize(const wxSize& WXUNUSED(size)) { }
-
     // fill in the client object or data field of the event as appropriate
     //
     // calls InitCommandEvent() and, if n != wxNOT_FOUND, also sets the per

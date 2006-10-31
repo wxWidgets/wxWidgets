@@ -115,7 +115,7 @@ bool wxMediaCtrl::Create(wxWindow* parent, wxWindowID id,
             }
         }
 
-        SetBestFittingSize(size);
+        SetInitialSize(size);
         return true;
     }
     else
@@ -134,7 +134,7 @@ bool wxMediaCtrl::Create(wxWindow* parent, wxWindowID id,
             {
                 if (Load(fileName))
                 {
-                    SetBestFittingSize(size);
+                    SetInitialSize(size);
                     return true;
                 }
                 else
@@ -142,7 +142,7 @@ bool wxMediaCtrl::Create(wxWindow* parent, wxWindowID id,
             }
             else
             {
-                SetBestFittingSize(size);
+                SetInitialSize(size);
                 return true;
             }
         }
@@ -178,7 +178,7 @@ bool wxMediaCtrl::Create(wxWindow* parent, wxWindowID id,
             return false;
         }
 
-        SetBestFittingSize(size);
+        SetInitialSize(size);
         return true;
     }
     else
@@ -195,7 +195,7 @@ bool wxMediaCtrl::Create(wxWindow* parent, wxWindowID id,
 
             if (Load(location))
             {
-                SetBestFittingSize(size);
+                SetInitialSize(size);
                 return true;
             }
             else

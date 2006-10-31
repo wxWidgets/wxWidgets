@@ -211,7 +211,7 @@ bool wxAnimationCtrl::Create( wxWindow *parent, wxWindowID id,
     m_parent->DoAddChild( this );
 
     PostCreation(size);
-    SetBestSize(size);
+    SetInitialSize(size);
 
     if (anim.IsOk())
         SetAnimation(anim);

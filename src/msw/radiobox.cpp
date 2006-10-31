@@ -211,7 +211,7 @@ bool wxRadioBox::Create(wxWindow *parent,
     SetSize(pos.x, pos.y, size.x, size.y);
 
     // Now that we have items determine what is the best size and set it.
-    SetBestSize(size);
+    SetInitialSize(size);
 
     return true;
 }

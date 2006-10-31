@@ -107,7 +107,7 @@ bool wxChoice::Create(
     int  nEditHeight;
     wxGetCharSize( GetHWND(), NULL, &nEditHeight, &vFont );
     nEditHeight = EDIT_HEIGHT_FROM_CHAR_HEIGHT(nEditHeight);
-    SetBestFittingSize(wxSize(-1,nEditHeight+4));   // +2x2 for the border
+    SetInitialSize(wxSize(-1,nEditHeight+4));   // +2x2 for the border
 
     return true;
 } // end of wxChoice::Create

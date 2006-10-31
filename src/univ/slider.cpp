@@ -171,7 +171,7 @@ bool wxSlider::Create(wxWindow *parent,
 
     // call this after setting the range as the best size depends (at least if
     // we have wxSL_LABELS style) on the range
-    SetBestSize(size);
+    SetInitialSize(size);
 
     CreateInputHandler(wxINP_HANDLER_SLIDER);
 

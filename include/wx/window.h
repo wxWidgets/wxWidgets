@@ -357,12 +357,15 @@ public:
         // This function will merge the window's best size into the window's
         // minimum size, giving priority to the min size components, and
         // returns the results.
-    wxSize GetBestFittingSize() const;
+    wxSize GetEffectiveMinSize() const;
+    wxDEPRECATED( wxSize GetBestFittingSize() const );  // replaced by GetEffectiveMinSize
 
         // A 'Smart' SetSize that will fill in default size values with 'best'
         // size.  Sets the minsize to what was passed in.
-    void SetBestFittingSize(const wxSize& size=wxDefaultSize);
+    void SetInitialSize(const wxSize& size=wxDefaultSize);
+    wxDEPRECATED( void SetBestFittingSize(const wxSize& size=wxDefaultSize) );  // replaced by SetInitialSize
 
+    
         // the generic centre function - centers the window on parent by`
         // default or on screen if it doesn't have parent or
         // wxCENTER_ON_SCREEN flag is given
@@ -1275,18 +1278,8 @@ protected:
     // recalculated each time the value is needed.
     wxSize m_bestSizeCache;
 
-    // keep the old name for compatibility, at least until all the internal
-    // usages of it are changed to SetBestFittingSize
-    void SetBestSize(const wxSize& size) { SetBestFittingSize(size); }
-
-    // set the initial window size if none is given (i.e. at least one of the
-    // components of the size passed to ctor/Create() is wxDefaultCoord)
-    //
-    // normally just calls SetBestSize() for controls, but can be overridden
-    // not to do it for the controls which have to do some additional
-    // initialization (e.g. add strings to list box) before their best size
-    // can be accurately calculated
-    virtual void SetInitialBestSize(const wxSize& WXUNUSED(size)) {}
+    wxDEPRECATED( void SetBestSize(const wxSize& size) );  // use SetInitialSize
+    wxDEPRECATED( virtual void SetInitialBestSize(const wxSize& size) );  // use SetInitialSize
 
 
 
@@ -1392,6 +1385,30 @@ private:
     DECLARE_NO_COPY_CLASS(wxWindowBase)
     DECLARE_EVENT_TABLE()
 };
+
+
+
+// Inlines for some deprecated methods
+inline wxSize wxWindowBase::GetBestFittingSize() const
+{
+    return GetEffectiveMinSize();
+}
+
+inline void wxWindowBase::SetBestFittingSize(const wxSize& size)
+{
+    SetInitialSize(size);
+}
+
+inline void wxWindowBase::SetBestSize(const wxSize& size)
+{
+    SetInitialSize(size);
+}
+
+inline void wxWindowBase::SetInitialBestSize(const wxSize& size)
+{
+    SetInitialSize(size);
+}
+
 
 // ----------------------------------------------------------------------------
 // now include the declaration of wxWindow class

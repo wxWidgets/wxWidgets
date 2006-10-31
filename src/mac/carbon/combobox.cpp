@@ -394,7 +394,7 @@ bool wxComboBox::Create(wxWindow *parent,
     }
 
     // Needed because it is a wxControlWithItems
-    SetBestSize(size);
+    SetInitialSize(size);
     SetStringSelection(value);
 
     return true;

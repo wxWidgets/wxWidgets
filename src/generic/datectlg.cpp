@@ -419,7 +419,7 @@ bool wxDatePickerCtrlGeneric::Create(wxWindow *parent,
 
     m_popup->SetDateValue(date.IsValid() ? date : wxDateTime::Today());
 
-    SetBestFittingSize(size);
+    SetInitialSize(size);
 
     return true;
 }

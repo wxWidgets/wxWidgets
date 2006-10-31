@@ -38,7 +38,7 @@ class ScrolledPanel( wx.PyScrolledWindow ):
         wx.PyScrolledWindow.__init__(self, parent, id,
                                      pos=pos, size=size,
                                      style=style, name=name)
-        self.SetBestFittingSize(size)
+        self.SetInitialSize(size)
         self.Bind(wx.EVT_CHILD_FOCUS, self.OnChildFocus)
 
 

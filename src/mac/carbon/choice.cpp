@@ -101,7 +101,7 @@ bool wxChoice::Create(wxWindow *parent,
         SetSelection( 0 );
 
     // Needed because it is a wxControlWithItems
-    SetBestSize( size );
+    SetInitialSize( size );
 
     return true;
 }

@@ -149,8 +149,8 @@ bool wxComboCtrl::Create(wxWindow *parent,
     // Prepare background for double-buffering
     SetBackgroundStyle( wxBG_STYLE_CUSTOM );
 
-    // SetBestSize should be called last
-    SetBestSize(size);
+    // SetInitialSize should be called last
+    SetInitialSize(size);
 
     return true;
 }

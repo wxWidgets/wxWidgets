@@ -276,9 +276,6 @@ protected:
     // helper: get the next page wrapping if we reached the end
     int GetNextPage(bool forward) const;
 
-    // Always rely on GetBestSize, which will look at all the pages
-    virtual void SetInitialBestSize(const wxSize& WXUNUSED(size)) { }
-
     // Lay out controls
     void DoSize();
 

@@ -865,7 +865,7 @@ bool wxGenericTreeCtrl::Create(wxWindow *parent,
 
     m_dottedPen = wxPen( wxT("grey"), 0, 0 );
 
-    SetBestSize(size);
+    SetInitialSize(size);
 
     return true;
 }

@@ -61,7 +61,7 @@ bool wxStaticBitmap::Create(wxWindow *parent,
     SetBitmap(label);
 
     // and adjust our size to fit it after this
-    SetBestSize(size);
+    SetInitialSize(size);
 
     return true;
 }

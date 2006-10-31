@@ -620,7 +620,7 @@ class BPArt:
             if isVertical:
                 dc.DrawLine(rect.x, coord, rect.x + rect.width, coord) 
             else:
-                dc.DrawLine(coord, rect.y, coord, rect.y + rect.width)
+                dc.DrawLine(coord, rect.y, coord, rect.y + rect.height)
                 
             rf += rstep
             gf += gstep

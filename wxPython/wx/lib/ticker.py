@@ -50,7 +50,7 @@ class Ticker(wx.PyControl):
         self._ppf = ppf  #pixels per frame
         self.SetDirection(direction)
         self.SetText(text)
-        self.SetBestFittingSize(size)
+        self.SetInitialSize(size)
         self.SetForegroundColour(fgcolor)
         self.SetBackgroundColour(bgcolor)
         wx.EVT_TIMER(self, -1, self.OnTick)

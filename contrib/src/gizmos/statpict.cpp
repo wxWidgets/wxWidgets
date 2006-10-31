@@ -67,7 +67,7 @@ bool wxStaticPicture::Create(wxWindow *parent, wxWindowID id,
 
     bool ret = wxControl::Create( parent, id, pos, size, style, wxDefaultValidator, name );
 
-    SetBestSize( size ) ;
+    SetInitialSize( size ) ;
 
     return ret;
 }

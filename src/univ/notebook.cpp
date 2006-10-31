@@ -153,7 +153,7 @@ bool wxNotebook::Create(wxWindow *parent,
 
     m_sizePad = GetRenderer()->GetTabPadding();
 
-    SetBestSize(size);
+    SetInitialSize(size);
 
     CreateInputHandler(wxINP_HANDLER_NOTEBOOK);
 

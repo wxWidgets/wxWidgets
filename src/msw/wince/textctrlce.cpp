@@ -256,7 +256,7 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
         sizeText.y = EDIT_HEIGHT_FROM_CHAR_HEIGHT(cy);
     }
 
-    SetBestSize(size);
+    SetInitialSize(size);
 
     (void)::ShowWindow(GetBuddyHwnd(), SW_SHOW);
 

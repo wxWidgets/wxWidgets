@@ -94,7 +94,7 @@ bool wxFileButton::Create( wxWindow *parent, wxWindowID id,
         m_parent->DoAddChild( this );
 
         PostCreation(size);
-        SetBestSize(size);
+        SetInitialSize(size);
     }
     else
         return wxGenericFileButton::Create(parent, id, label, path, message, wildcard,
@@ -241,7 +241,7 @@ bool wxDirButton::Create( wxWindow *parent, wxWindowID id,
         m_parent->DoAddChild( this );
 
         PostCreation(size);
-        SetBestSize(size);
+        SetInitialSize(size);
     }
     else
         return wxGenericDirButton::Create(parent, id, label, path, message, wildcard,

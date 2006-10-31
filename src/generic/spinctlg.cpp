@@ -183,7 +183,7 @@ bool wxSpinCtrl::Create(wxWindow *parent,
 
     m_btn->SetRange(min, max);
     m_btn->SetValue(initial);
-    SetBestSize(size);
+    SetInitialSize(size);
     Move(pos);
 
     // have to disable this window to avoid interfering it with message

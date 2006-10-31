@@ -758,16 +758,18 @@ background, such as a tiled bitmap. Currently the style has no effect on other p
 \helpref{wxWindow::GetForegroundColour}{wxwindowgetforegroundcolour},\rtfsp
 \helpref{wxWindow::SetBackgroundStyle}{wxwindowsetbackgroundstyle}
 
-\membersection{wxWindow::GetBestFittingSize}\label{wxwindowgetbestfittingsize}
+\membersection{wxWindow::GetEffectiveMinSize}\label{wxwindowgeteffectiveminsize}
 
-\constfunc{wxSize}{GetBestFittingSize}{\void}
+\constfunc{wxSize}{GetEffectiveMinSize}{\void}
 
-Merges the window's best size into the min size and returns the result.
+Merges the window's best size into the min size and returns the
+result.  This is the value used by sizers to determine the appropriate
+ammount of sapce to allocate for the widget.
 
 \wxheading{See also}
 
 \helpref{wxWindow::GetBestSize}{wxwindowgetbestsize},\rtfsp
-\helpref{wxWindow::SetBestFittingSize}{wxwindowsetbestfittingsize}
+\helpref{wxWindow::SetInitialSize}{wxwindowsetinitialsize}
 
 
 \membersection{wxWindow::GetBestSize}\label{wxwindowgetbestsize}
@@ -2661,9 +2663,9 @@ background, such as a tiled bitmap. Currently the style has no effect on other p
 \helpref{wxWindow::GetBackgroundStyle}{wxwindowgetbackgroundstyle}
 
 
-\membersection{wxWindow::SetBestFittingSize}\label{wxwindowsetbestfittingsize}
+\membersection{wxWindow::SetInitialSize}\label{wxwindowsetinitialsize}
 
-\func{void}{SetBestFittingSize}{\param{const wxSize\& }{size = wxDefaultSize}}
+\func{void}{SetInitialSize}{\param{const wxSize\& }{size = wxDefaultSize}}
 
 A {\it smart} SetSize that will fill in default size components with the
 window's {\it best} size values.  Also sets the window's minsize to
@@ -2672,11 +2674,15 @@ partial size is passed to this function then the sizers will use that
 size instead of the results of GetBestSize to determine the minimum
 needs of the window for layout.
 
+Most controls will use this to set their initial size, and their min
+size to the passed in value (if any.)
+
+
 \wxheading{See also}
 
 \helpref{wxWindow::SetSize}{wxwindowsetsize},\rtfsp
 \helpref{wxWindow::GetBestSize}{wxwindowgetbestsize},\rtfsp
-\helpref{wxWindow::GetBestFittingSize}{wxwindowgetbestfittingsize}
+\helpref{wxWindow::GetEffectiveMinSize}{wxwindowgeteffectiveminsize}
 
 
 \membersection{wxWindow::SetCaret}\label{wxwindowsetcaret}

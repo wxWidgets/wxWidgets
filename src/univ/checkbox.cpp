@@ -84,7 +84,7 @@ bool wxCheckBox::Create(wxWindow *parent,
         return false;
 
     SetLabel(label);
-    SetBestSize(size);
+    SetInitialSize(size);
 
     CreateInputHandler(wxINP_HANDLER_CHECKBOX);
 

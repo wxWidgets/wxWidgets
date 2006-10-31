@@ -4826,7 +4826,7 @@ bool wxGenericListCtrl::Create(wxWindow *parent,
             m_headerWin->Show( false );
     }
 
-    SetBestSize(size);
+    SetInitialSize(size);
 
     return true;
 }

@@ -177,7 +177,7 @@ bool wxListBox::Create(wxWindow *parent,
     }
 
     // now we can compute our best size correctly, so do it if necessary
-    SetBestSize(size);
+    SetInitialSize(size);
 
     return true;
 }

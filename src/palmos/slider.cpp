@@ -155,7 +155,7 @@ bool wxSlider::Create(wxWindow *parent, wxWindowID id,
     if(slider==NULL)
         return false;
 
-    SetInitialBestSize(size);
+    SetInitialSize(size);
     Show();
     return true;
 }

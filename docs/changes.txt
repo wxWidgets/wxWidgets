@@ -64,6 +64,9 @@ Deprecated methods since 2.6.x and their replacements
 
 - wxGetWorkingDirectory() deprecated in favour of wxGetCwd().
 - wxDC::BeginDrawing() and wxDC::EndDrawing() deprecated, don't use them.
+- wxWindowBase::GetBestFittingSize --> wxWindowBase::GetEffectiveMinSize
+- wxWindowBase::SetBestFittingSize --> wxWindowBase::SetInitialSize
+
 
 
 Major new features in 2.7 release

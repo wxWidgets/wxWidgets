@@ -1543,7 +1543,6 @@ class CustomTreeCtrl(CT.CustomTreeCtrl):
         
         self.PopupMenu(menu)
         menu.Destroy()
-        event.Skip()
         
 
     def OnItemBackground(self, event):
@@ -1559,7 +1558,6 @@ class CustomTreeCtrl(CT.CustomTreeCtrl):
             col1 = data.GetColour().Get()
             self.SetItemBackgroundColour(self.current, col1)
         dlg.Destroy()
-        event.Skip()
 
 
     def OnItemForeground(self, event):
@@ -1575,13 +1573,11 @@ class CustomTreeCtrl(CT.CustomTreeCtrl):
             col1 = data.GetColour().Get()
             self.SetItemTextColour(self.current, col1)
         dlg.Destroy()
-        event.Skip()
 
 
     def OnItemBold(self, event):
 
         self.SetItemBold(self.current, not self.itemdict["isbold"])
-        event.Skip()
 
 
     def OnItemFont(self, event):
@@ -1602,13 +1598,11 @@ class CustomTreeCtrl(CT.CustomTreeCtrl):
             self.SetItemFont(self.current, font)
 
         dlg.Destroy()
-        event.Skip()
         
 
     def OnItemHyperText(self, event):
 
         self.SetItemHyperText(self.current, not self.itemdict["ishtml"])
-        event.Skip()
 
 
     def OnEnableWindow(self, event):
@@ -1616,13 +1610,10 @@ class CustomTreeCtrl(CT.CustomTreeCtrl):
         enable = self.GetItemWindowEnabled(self.current)
         self.SetItemWindowEnabled(self.current, not enable)
 
-        event.Skip()
-
 
     def OnDisableItem(self, event):
 
         self.EnableItem(self.current, False)
-        event.Skip()
         
 
     def OnItemIcons(self, event):
@@ -1634,7 +1625,6 @@ class CustomTreeCtrl(CT.CustomTreeCtrl):
         dlg = TreeIcons(self, -1, bitmaps=bitmaps)
         wx.EndBusyCursor()
         dlg.ShowModal()
-        event.Skip()
 
 
     def SetNewIcons(self, bitmaps):
@@ -1668,7 +1658,6 @@ class CustomTreeCtrl(CT.CustomTreeCtrl):
         dlg.ShowModal()
         dlg.Destroy()
                 
-        event.Skip()
         
 
     def OnItemDelete(self, event):
@@ -1686,7 +1675,6 @@ class CustomTreeCtrl(CT.CustomTreeCtrl):
         self.Delete(self.current)
         self.current = None
         
-        event.Skip()        
 
 
     def OnItemPrepend(self, event):
@@ -1699,7 +1687,6 @@ class CustomTreeCtrl(CT.CustomTreeCtrl):
             self.EnsureVisible(newitem)
 
         dlg.Destroy()
-        event.Skip()
 
 
     def OnItemAppend(self, event):
@@ -1712,7 +1699,6 @@ class CustomTreeCtrl(CT.CustomTreeCtrl):
             self.EnsureVisible(newitem)
 
         dlg.Destroy()
-        event.Skip()
         
 
     def OnBeginEdit(self, event):

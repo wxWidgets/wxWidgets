@@ -218,7 +218,7 @@ void wxGenericCollapsiblePane::SetLabel(const wxString &label)
 {
     m_strLabel = label;
     m_pButton->SetLabel(GetBtnLabel());
-    m_pButton->SetBestFittingSize();
+    m_pButton->SetInitialSize();
 
     Layout();
 }

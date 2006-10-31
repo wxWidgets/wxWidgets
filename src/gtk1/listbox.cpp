@@ -558,7 +558,7 @@ bool wxListBox::Create( wxWindow *parent, wxWindowID id,
     m_parent->DoAddChild( this );
 
     PostCreation(size);
-    SetBestSize(size); // need this too because this is a wxControlWithItems
+    SetInitialSize(size); // need this too because this is a wxControlWithItems
 
     return true;
 }

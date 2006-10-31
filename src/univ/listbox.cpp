@@ -196,7 +196,7 @@ bool wxListBox::Create(wxWindow *parent,
 
     Set(n, choices);
 
-    SetBestSize(size);
+    SetInitialSize(size);
 
     CreateInputHandler(wxINP_HANDLER_LISTBOX);
 

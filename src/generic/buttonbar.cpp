@@ -351,7 +351,7 @@ bool wxButtonToolBar::Realize()
     m_needsLayout = true;
     DoLayout();
 
-    SetBestSize(wxSize(m_maxWidth, m_maxHeight));
+    SetInitialSize(wxSize(m_maxWidth, m_maxHeight));
 
     return true;
 }

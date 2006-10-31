@@ -166,7 +166,7 @@ bool wxStaticBitmap::Create(wxWindow *parent,
     SetImageNoCopy(image);
 
     // GetBestSize will work properly now, so set the best size if needed
-    SetBestSize(size);
+    SetInitialSize(size);
 
     return true;
 }

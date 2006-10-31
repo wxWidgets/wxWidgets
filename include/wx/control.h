@@ -84,17 +84,6 @@ protected:
     // initialize the common fields of wxCommandEvent
     void InitCommandEvent(wxCommandEvent& event) const;
 
-    // set the initial window size if none is given (i.e. at least one of the
-    // components of the size passed to ctor/Create() is -1)
-    //
-    // normally just calls SetBestSize() but can be overridden not to do it for
-    // the controls which have to do some additional initialization (e.g. add
-    // strings to list box) before their best size can be accurately calculated
-    virtual void SetInitialBestSize(const wxSize& size)
-    {
-        SetBestSize(size);
-    }
-
     DECLARE_NO_COPY_CLASS(wxControlBase)
 };
 

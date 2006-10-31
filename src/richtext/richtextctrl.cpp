@@ -157,7 +157,7 @@ bool wxRichTextCtrl::Create( wxWindow* parent, wxWindowID id, const wxString& va
     SetBackgroundStyle(wxBG_STYLE_CUSTOM);
 
     // Tell the sizers to use the given or best size
-    SetBestFittingSize(size);
+    SetInitialSize(size);
 
 #if wxRICHTEXT_BUFFERED_PAINTING
     // Create a buffer

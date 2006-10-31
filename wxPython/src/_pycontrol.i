@@ -34,7 +34,6 @@ public:
                 const wxString& name = wxPyControlNameStr)
         : wxControl(parent, id, pos, size, style, validator, name) {}
 
-    void SetBestSize(const wxSize& size) { wxControl::SetBestSize(size); }
 
     bool DoEraseBackground(wxDC* dc) {
 #ifdef __WXMSW__
@@ -133,7 +132,6 @@ public:
     
     void _setCallbackInfo(PyObject* self, PyObject* _class);
 
-    void SetBestSize(const wxSize& size);
     bool DoEraseBackground(wxDC* dc);
     
     void DoMoveWindow(int x, int y, int width, int height);

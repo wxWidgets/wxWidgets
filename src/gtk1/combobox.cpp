@@ -283,7 +283,7 @@ bool wxComboBox::Create( wxWindow *parent, wxWindowID id, const wxString& value,
     gtk_signal_connect_after( GTK_OBJECT(combo->list), "select-child",
       GTK_SIGNAL_FUNC(gtk_combo_select_child_callback), (gpointer)this );
 
-    SetBestSize(size); // need this too because this is a wxControlWithItems
+    SetInitialSize(size); // need this too because this is a wxControlWithItems
 
     // This is required for tool bar support
 //    wxSize setsize = GetSize();

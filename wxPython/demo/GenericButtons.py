@@ -43,7 +43,6 @@ class TestPanel(wx.Panel):
         self.Bind(wx.EVT_BUTTON, self.OnBiggerButton, b)
         b.SetFont(wx.Font(20, wx.SWISS, wx.NORMAL, wx.BOLD, False))
         b.SetBezelWidth(5)
-        ###b.SetBestSize()
         b.SetMinSize(wx.DefaultSize)
         b.SetBackgroundColour("Navy")
         b.SetForegroundColour(wx.WHITE)
@@ -76,7 +75,7 @@ class TestPanel(wx.Panel):
         mask = wx.Mask(bmp, wx.BLUE)
         bmp.SetMask(mask)
         b.SetBitmapSelected(bmp)
-        b.SetBestSize()
+        b.SetInitialSize()
         sizer.Add(b)
 
         # A toggle button
@@ -96,7 +95,7 @@ class TestPanel(wx.Panel):
         bmp.SetMask(mask)
         b.SetBitmapSelected(bmp)
         b.SetToggle(True)
-        b.SetBestSize()
+        b.SetInitialSize()
         sizer.Add(b)
 
         # A bitmap button with text.
@@ -111,7 +110,7 @@ class TestPanel(wx.Panel):
         bmp.SetMask(mask)
         b.SetBitmapSelected(bmp)
         b.SetUseFocusIndicator(False)
-        b.SetBestSize()
+        b.SetInitialSize()
         sizer.Add(b)
 
 

@@ -181,7 +181,7 @@ ScoreDialog::ScoreDialog(wxWindow* parent, ScoreFile* file) :
     ScoreCanvas* list = new ScoreCanvas(this, m_scoreFile, wxDefaultPosition, sz);
 #endif
 
-    list->SetBestFittingSize(sz);
+    list->SetInitialSize(sz);
 
     // locate and resize with sizers
     wxBoxSizer *topsizer = new wxBoxSizer( wxVERTICAL );

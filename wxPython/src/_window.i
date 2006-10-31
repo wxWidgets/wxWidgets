@@ -448,10 +448,10 @@ equal to -1.
         MoveXY);
     
     DocDeclStr(
-        void , SetBestFittingSize(const wxSize& size=wxDefaultSize),
+        void , SetInitialSize(const wxSize& size=wxDefaultSize),
         "A 'Smart' SetSize that will fill in default size components with the
 window's *best size* values.  Also set's the minsize for use with sizers.", "");
-    
+    %pythoncode { SetBestFittingSize = wx._deprecated(SetInitialSize, 'Use `SetInitialSize`') }
 
     
     DocDeclStr(
@@ -571,19 +571,19 @@ some properties of the window change.)", "");
 
     
     DocDeclStr(
-        wxSize , GetBestFittingSize() const,
+        wxSize , GetEffectiveMinSize() const,
         "This function will merge the window's best size into the window's
 minimum size, giving priority to the min size components, and returns
 the results.
 ", "");
-    
+    %pythoncode { GetBestFittingSize = wx._deprecated(GetEffectiveMinSize, , 'Use `GetEffectiveMinSize` instead.') }
 
     %pythoncode {
         def GetAdjustedBestSize(self):
             s = self.GetBestSize()
             return wx.Size(max(s.width,  self.GetMinWidth()),
                            max(s.height, self.GetMinHeight()))
-        GetAdjustedBestSize = wx._deprecated(GetAdjustedBestSize, 'Use `GetBestFittingSize` instead.')
+        GetAdjustedBestSize = wx._deprecated(GetAdjustedBestSize, 'Use `GetEffectiveMinSize` instead.')
     }
     
 
@@ -2077,7 +2077,7 @@ opaque.", "");
     %property(AutoLayout, GetAutoLayout, SetAutoLayout, doc="See `GetAutoLayout` and `SetAutoLayout`");
     %property(BackgroundColour, GetBackgroundColour, SetBackgroundColour, doc="See `GetBackgroundColour` and `SetBackgroundColour`");
     %property(BackgroundStyle, GetBackgroundStyle, SetBackgroundStyle, doc="See `GetBackgroundStyle` and `SetBackgroundStyle`");
-    %property(BestFittingSize, GetBestFittingSize, SetBestFittingSize, doc="See `GetBestFittingSize` and `SetBestFittingSize`");
+    %property(EffectiveMinSize, GetEffectiveMinSize, doc="See `GetEffectiveMinSize`");
     %property(BestSize, GetBestSize, doc="See `GetBestSize`");
     %property(BestVirtualSize, GetBestVirtualSize, doc="See `GetBestVirtualSize`");
     %property(Border, GetBorder, doc="See `GetBorder`");
