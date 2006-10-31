@@ -1312,8 +1312,15 @@ void wxMacCoreGraphicsContext::ResetClip()
 {
     if ( m_cgContext )
     {
+        // there is no way for clearing the clip, we can only revert to the stored
+        // state, but then we have to make sure everything else is NOT restored
+        CGAffineTransform transform = CGContextGetCTM( m_cgContext );
         CGContextRestoreGState( m_cgContext );
         CGContextSaveGState( m_cgContext );
+        CGAffineTransform transformNew = CGContextGetCTM( m_cgContext );
+        transformNew = CGAffineTransformInvert( transformNew ) ;
+        CGContextConcatCTM( m_cgContext, transformNew);
+        CGContextConcatCTM( m_cgContext, transform);
     }
     else
     {
