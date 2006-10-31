@@ -477,6 +477,25 @@ bool wxAuiTabContainer::InsertPage(wxWindow* page,
     return true;
 }
 
+bool wxAuiTabContainer::MovePage(wxWindow* page,
+                                 size_t new_idx)
+{
+    int idx = GetIdxFromWindow(page);
+    if (idx == -1)
+        return false;
+    
+    // get page entry, make a copy of it
+    wxAuiNotebookPage p = GetPage(idx);
+    
+    // remove old page entry
+    RemovePage(page);
+    
+    // insert page where it should be
+    InsertPage(page, p, new_idx);
+        
+    return true;
+}
+
 bool wxAuiTabContainer::RemovePage(wxWindow* wnd)
 {
     size_t i, page_count = m_pages.GetCount();
@@ -1753,7 +1772,26 @@ void wxAuiMultiNotebook::OnTabEndDrag(wxCommandEvent& command_evt)
         dest_tabs = tab_frame->m_tabs;
 
         if (dest_tabs == src_tabs)
+        {
+            wxPoint pt = dest_tabs->ScreenToClient(mouse_screen_pt);
+            wxWindow* dest_location_tab;
+            
+            // -- this is an inner-tab drag/reposition
+            if (dest_tabs->TabHitTest(pt.x, pt.y, &dest_location_tab))
+            {
+                wxWindow* src_tab = src_tabs->GetWindowFromIdx(evt.GetSelection());
+                int dest_idx = dest_tabs->GetIdxFromWindow(dest_location_tab);
+                if (dest_idx != -1)
+                {
+                    dest_tabs->MovePage(src_tab, dest_idx);
+                    dest_tabs->SetActivePage((size_t)dest_idx);
+                    dest_tabs->DoShowHide();
+                    dest_tabs->Refresh();
+                }
+            }
+            
             return;
+        }
     }
      else
     {
