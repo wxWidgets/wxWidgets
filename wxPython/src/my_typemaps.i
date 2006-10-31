@@ -125,7 +125,10 @@ MAKE_INT_ARRAY_TYPEMAPS(styles, styles_field)
 
 
 %typemap(out) wxCharBuffer {
-    $result = PyString_FromString((char*)$1.data());
+    if ($1.data())
+        $result = PyString_FromString((char*)$1.data());
+    else
+        $result = PyString_FromString("");
 }
 
 
