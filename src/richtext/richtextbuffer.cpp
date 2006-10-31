@@ -2561,9 +2561,7 @@ bool wxRichTextParagraphLayoutBox::SetListStyle(const wxRichTextRange& range, wx
 {
     bool withUndo = ((flags & wxRICHTEXT_SETSTYLE_WITH_UNDO) != 0);
     // bool applyMinimal = ((flags & wxRICHTEXT_SETSTYLE_OPTIMIZE) != 0);
-#ifdef __WXDEBUG__
     bool specifyLevel = ((flags & wxRICHTEXT_SETSTYLE_SPECIFY_LEVEL) != 0);
-#endif // __WXDEBUG__
     bool renumber = ((flags & wxRICHTEXT_SETSTYLE_RENUMBER) != 0);
 
     // Current number, if numbering
@@ -2703,7 +2701,9 @@ bool wxRichTextParagraphLayoutBox::DoNumberList(const wxRichTextRange& range, co
 {
     bool withUndo = ((flags & wxRICHTEXT_SETSTYLE_WITH_UNDO) != 0);
     // bool applyMinimal = ((flags & wxRICHTEXT_SETSTYLE_OPTIMIZE) != 0);
+#ifdef __WXDEBUG__
     bool specifyLevel = ((flags & wxRICHTEXT_SETSTYLE_SPECIFY_LEVEL) != 0);
+#endif
 
     bool renumber = ((flags & wxRICHTEXT_SETSTYLE_RENUMBER) != 0);
 
