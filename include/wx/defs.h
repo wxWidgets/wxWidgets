@@ -1553,8 +1553,8 @@ enum wxBorder
 #define wxTC_LEFT             0x0020
 #define wxTC_RIGHT            0x0040
 #define wxTC_BOTTOM           0x0080
-#define wxTC_MULTILINE        wxNB_MULTILINE
-#define wxTC_OWNERDRAW        0x0200
+#define wxTC_MULTILINE        0x0200    /* == wxNB_MULTILINE */
+#define wxTC_OWNERDRAW        0x0400
 
 /*
  * wxStatusBar95 flags
