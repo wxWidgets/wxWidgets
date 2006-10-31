@@ -56,7 +56,14 @@ endif
 # to correctly set the release below.
 DEBIAN_WXFLAVOUR := $(shell pwd | sed -e 's@.*/wxwidgets[0-9.]\+-\?\(.*\)-[0-9.]\+-\?.*@\1@')
 
-release   := $(shell dpkg-parsechangelog | sed -n 's/^Source: wxwidgets//p' | sed 's/-ansi//')
+
+wx_major_version_number := $(shell cat configure.in | sed -n 's/^wx_major_version_number=//p')
+wx_minor_version_number := $(shell cat configure.in | sed -n 's/^wx_minor_version_number=//p')
+wx_release_number       := $(shell cat configure.in | sed -n 's/^wx_release_number=//p')
+wx_subrelease_number    := $(shell cat configure.in | sed -n 's/^wx_subrelease_number=//p')
+
+##release   := $(shell dpkg-parsechangelog | sed -n 's/^Source: wxwidgets//p' | sed 's/-ansi//')
+release  := $(wx_major_version_number).$(wx_minor_version_number)
 
 # This is broken completely now by bakefiles changes.  Until we add
 # some hocus pocus to the main tree, to export these values from it
@@ -64,8 +71,8 @@ release   := $(shell dpkg-parsechangelog | sed -n 's/^Source: wxwidgets//p' | se
 # specify $soversion below.  Re-automate if incompatible changes
 # result in it actually changing.
 #soversion := $(shell grep '^WX_CURRENT=' configure.in | sed 's/WX_CURRENT=\([0-9]\+\).*/\1/')
-soversion := 0
-sorelease := $(release:%-$(DEBIAN_WXFLAVOUR)=%)-$(soversion)$(addprefix -,$(DEBIAN_WXFLAVOUR))
+##soversion := 0
+##sorelease := $(release:%-$(DEBIAN_WXFLAVOUR)=%)-$(soversion)$(addprefix -,$(DEBIAN_WXFLAVOUR))
 
 # In some places we use the full version number, including the micro version,
 # for the development releases (which can be incompatible for the same major
@@ -73,7 +80,7 @@ sorelease := $(release:%-$(DEBIAN_WXFLAVOUR)=%)-$(soversion)$(addprefix -,$(DEBI
 # are supposed to be compatible), this variable contains the appropriate value
 ifeq ($(shell echo `echo $(release) | sed 's/.\+\.\(.\+\)/\1/'`%2 | bc),1)
     # development release
-    compatible_release := $(release).$(soversion)
+    compatible_release := $(release).$(wx_release_number)
 else
     compatible_release := $(release)
 endif
@@ -144,11 +151,11 @@ else
 endif
 
 # Packages to build:
-package_wxbase_lib      := libwxbase$(sorelease)$(unicode_suffix)
+package_wxbase_lib      := libwxbase$(release)$(unicode_suffix)
 package_wxbase_dev      := libwxbase$(release)$(unicode_suffix)-dev
 package_wxbase_dbg      := libwxbase$(release)$(unicode_suffix)-dbg
 
-package_gtk_lib         := libwxgtk$(sorelease)$(unicode_suffix)
+package_gtk_lib         := libwxgtk$(release)$(unicode_suffix)
 package_gtk_dev         := libwxgtk$(release)$(unicode_suffix)-dev
 package_gtk_dbg         := libwxgtk$(release)$(unicode_suffix)-dbg
 
@@ -274,7 +281,7 @@ debian/python-version:
 	echo python_ver := python$(shell python -c "import sys;print sys.version[:3]") > $@
 
 debian/control: $(addprefix debian/,control.in python-version)
-	sed -e 's/=V/$(release)/g;s/=SOV/$(sorelease)/g;s/=PY/$(python_ver)/g;s/=U/$(unicode_suffix)/g'\
+	sed -e 's/=V/$(release)/g;s/=SOV/$(release)/g;s/=PY/$(python_ver)/g;s/=U/$(unicode_suffix)/g'\
 		< debian/control.in > debian/control
 
 control-files-stamp: debian/control
@@ -356,7 +363,7 @@ control-files-stamp: debian/control
 #			> debian/$(package_common).menu;
 	@echo "generating control file lintian-override";                    \
 		sed -e 's/=V/$(release)/g;                                  '\
-'			s/=SOV/$(sorelease)/g'                               \
+'			s/=SOV/$(release)/g'                                 \
 			< debian/lintian-override.in                         \
 			> debian/lintian-override;                           \
 	touch $@
