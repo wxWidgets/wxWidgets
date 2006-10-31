@@ -795,15 +795,22 @@ void wxMacCoreGraphicsMatrixData::Invert()
 bool wxMacCoreGraphicsMatrixData::IsEqual( const wxGraphicsMatrixData* t) const
 {
     const CGAffineTransform* tm = (CGAffineTransform*) t->GetNativeMatrix();
-    return (
-        m_matrix.a == tm->a &&
-        m_matrix.b == tm->b &&
-        m_matrix.c == tm->c &&
-        m_matrix.d == tm->d &&
-        m_matrix.tx == tm->tx &&
-        m_matrix.ty == tm->ty ) ;
-
-    return CGAffineTransformEqualToTransform(m_matrix, *((CGAffineTransform*) t->GetNativeMatrix()));
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_4
+    if ( CGAffineTransformEqualToTransform )
+    {
+        return CGAffineTransformEqualToTransform(m_matrix, *((CGAffineTransform*) t->GetNativeMatrix()));
+    }
+    else
+#endif
+    {
+        return (
+            m_matrix.a == tm->a &&
+            m_matrix.b == tm->b &&
+            m_matrix.c == tm->c &&
+            m_matrix.d == tm->d &&
+            m_matrix.tx == tm->tx &&
+            m_matrix.ty == tm->ty ) ;
+    }
 }
 
 // return true if this is the identity matrix
@@ -1042,7 +1049,18 @@ void wxMacCoreGraphicsPathData::GetBox(wxDouble *x, wxDouble *y, wxDouble *w, wx
 
 bool wxMacCoreGraphicsPathData::Contains( wxDouble x, wxDouble y, int fillStyle) const
 {
-    return CGPathContainsPoint( m_path, NULL, CGPointMake(x,y), fillStyle == wxODDEVEN_RULE );
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_4
+    if ( CGPathContainsPoint )
+    {
+        return CGPathContainsPoint( m_path, NULL, CGPointMake(x,y), fillStyle == wxODDEVEN_RULE );
+    }
+    else
+#endif
+    {
+        // TODO : implementation for 10.3
+        CGRect bounds = CGPathGetBoundingBox( m_path ) ;
+        return CGRectContainsPoint( bounds, CGPointMake(x,y) ) == 1;
+    }
 }
 
 //
