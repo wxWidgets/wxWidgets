@@ -119,6 +119,10 @@ public:
         const wxMouseEvent *e = ev.GetLinkInfo().GetEvent();
         if (e == NULL || e->LeftUp())
             m_Window->NotifyPageChanged();
+
+        // skip the event so that normal processing (i.e. following the link)
+        // is done:
+        ev.Skip();
     }
 
     // Returns full location with anchor (helper)
