@@ -1,7 +1,7 @@
-Installing wxWidgets 2.7.0
+Installing wxWidgets 2.7.2
 --------------------------
 
-This is wxWidgets 2.7.0 for IBM OS/2 Warp3 and Warp4. This is an unstable
+This is wxWidgets 2.7.2 for IBM OS/2 Warp3 and Warp4. This is an unstable
 development release and OS/2 is considered to be in beta.
 
 IMPORTANT NOTE: If you experience problems installing, please
@@ -17,7 +17,7 @@ Unarchiving
 At this time there is no comprehensive setup.exe type installation program.
 wxWidgets for OS/2 requires you download various .zip files and unpack them
 to your desired location on your system.  Pick a location say,
-C:\wx\wxWidgets-2.7.0, copy the .zip files to there and unzip them ensuring you
+C:\wx\wxWidgets-2.7.2, copy the .zip files to there and unzip them ensuring you
 unzip the subdirectories as well.  You will need:
 
 - All common, generic and OS2-specific wxWidgets source;
@@ -30,7 +30,7 @@ unzip the subdirectories as well.  You will need:
 - PNG library source;
 - ZLIB library source;
 
-All but the documentation is included in wxOS2-2.7.0.zip, documentation
+All but the documentation is included in wxOS2-2.7.2.zip, documentation
 must be downloaded separately from the wxWidgets Web site.
 
 Other add-on packages are available from the wxWidgets Web site, such as:
@@ -46,27 +46,27 @@ General installation notes
 After unzipping everything your directory tree should look something like
 this:
 
-x:\wx\wxWidgets-2.7.0\docs (your HTML reference manual)
-x:\wx\wxWidgets-2.7.0\include\wx
-x:\wx\wxWidgets-2.7.0\include\wx\generic
-x:\wx\wxWidgets-2.7.0\include\wx\html
-x:\wx\wxWidgets-2.7.0\include\wx\os2
-x:\wx\wxWidgets-2.7.0\samples\....  (all the sample directories)
-x:\wx\wxWidgets-2.7.0\src
-x:\wx\wxWidgets-2.7.0\src\common
-x:\wx\wxWidgets-2.7.0\src\generic
-x:\wx\wxWidgets-2.7.0\src\html
-x:\wx\wxWidgets-2.7.0\src\jpeg
-x:\wx\wxWidgets-2.7.0\src\os2
-x:\wx\wxWidgets-2.7.0\src\png
-x:\wx\wxWidgets-2.7.0\src\tiff
-x:\wx\wxWidgets-2.7.0\src\zlib
+x:\wx\wxWidgets-2.7.2\docs (your HTML reference manual)
+x:\wx\wxWidgets-2.7.2\include\wx
+x:\wx\wxWidgets-2.7.2\include\wx\generic
+x:\wx\wxWidgets-2.7.2\include\wx\html
+x:\wx\wxWidgets-2.7.2\include\wx\os2
+x:\wx\wxWidgets-2.7.2\samples\....  (all the sample directories)
+x:\wx\wxWidgets-2.7.2\src
+x:\wx\wxWidgets-2.7.2\src\common
+x:\wx\wxWidgets-2.7.2\src\generic
+x:\wx\wxWidgets-2.7.2\src\html
+x:\wx\wxWidgets-2.7.2\src\jpeg
+x:\wx\wxWidgets-2.7.2\src\os2
+x:\wx\wxWidgets-2.7.2\src\png
+x:\wx\wxWidgets-2.7.2\src\tiff
+x:\wx\wxWidgets-2.7.2\src\zlib
 
 If you are using VisualAge, you will also need to ensure you have a
-\lib directory as well, x:\wx\wxWidgets-2.7.0\lib
+\lib directory as well, x:\wx\wxWidgets-2.7.2\lib
 and you will have to set a WXWIN environment variable in your
 config.sys,
-SET WXWIN=X:\WX\WXWINDOWS-2.7.0;
+SET WXWIN=X:\WX\WXWINDOWS-2.7.2;
 
 Compilation
 -----------
@@ -176,13 +176,13 @@ developping cross-platform applications you might want to compile (and
 update) e.g. wxGTK or wxX11 as well.
 
 In the following, let's assume you decided to build in
-\wx\wxWidgets-2.7.0\build\pm. Now we need to set some environment
+\wx\wxWidgets-2.7.2\build\pm. Now we need to set some environment
 variables, namely MAKESHELL (to a Unix like shell, let's assume ash)
 and INSTALL (to point to the install script. If you omit this, configure
 might find something like the system's tcpip\pcomos\install.exe which will
 not do the thing you want), e.g.
 SET MAKESHELL=ash
-SET INSTALL=/wx/wxWidgets-2.7.0/install-sh -c
+SET INSTALL=/wx/wxWidgets-2.7.2/install-sh -c
 
 Be warned that depending on the precise version of your make, the
 variable that needs to be set might be MAKE_SHELL instead of MAKESHELL.
@@ -225,7 +225,7 @@ Finally, if you also want to build a different port, e.g. wxGTK, you
 essentially have to use the procedure described above, the only difference
 being that you have to pass a switch to configure indicating which port
 to build. If you do not do this in a separate build directory (e.g.
-\wxWidgets-2.7.0\build\gtk), you'll have to do a `make clean' first.
+\wxWidgets-2.7.2\build\gtk), you'll have to do a `make clean' first.
 The magical switches that have to be passed to configure for the various
 ports are --with-gtk (wxGTK), --with-motif (wxMotif), --with-x11 (wxX11),
 and --disable-gui (wxBase). Note that contrary to the native, PM based
