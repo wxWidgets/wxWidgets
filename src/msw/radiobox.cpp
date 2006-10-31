@@ -206,10 +206,6 @@ bool wxRadioBox::Create(wxWindow *parent,
     SetWindowPos(GetHwnd(), HWND_BOTTOM, 0, 0, 0, 0, SWP_NOMOVE|SWP_NOSIZE);
 #endif
 
-    // Have to invalidate the best size as it may have been calculated
-    // before the number of buttons was known
-    InvalidateBestSize();
-
     SetMajorDim(majorDim == 0 ? n : majorDim, style);
     SetSelection(0);
     SetSize(pos.x, pos.y, size.x, size.y);
@@ -509,6 +505,13 @@ wxSize wxRadioBox::GetTotalButtonSize(const wxSize& sizeBtn) const
 
 wxSize wxRadioBox::DoGetBestSize() const
 {
+    if ( !m_radioButtons )
+    {
+        // if we're not fully initialized yet, we can't meaningfully compute
+        // our best size, we'll do it later
+        return wxSize(1, 1);
+    }
+
     wxSize best = GetTotalButtonSize(GetMaxButtonSize());
     CacheBestSize(best);
     return best;
