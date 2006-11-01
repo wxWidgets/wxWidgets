@@ -187,6 +187,16 @@ wxDefaultDockArt::wxDefaultDockArt()
         0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff};
 #endif
 
+    static unsigned char maximize_bits[] = {
+        0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x07, 0xf0, 0xf7, 0xf7, 0x07, 0xf0,
+        0xf7, 0xf7, 0xf7, 0xf7, 0xf7, 0xf7, 0xf7, 0xf7, 0xf7, 0xf7, 0x07, 0xf0,
+        0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff};
+
+    static unsigned char restore_bits[]={
+        0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x1f, 0xf0, 0x1f, 0xf0, 0xdf, 0xf7,
+        0x07, 0xf4, 0x07, 0xf4, 0xf7, 0xf5, 0xf7, 0xf1, 0xf7, 0xfd, 0xf7, 0xfd,
+        0x07, 0xfc, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff};
+        
     static unsigned char pin_bits[]={
         0xff,0xff,0xff,0xff,0xff,0xff,0x1f,0xfc,0xdf,0xfc,0xdf,0xfc,
         0xdf,0xfc,0xdf,0xfc,0xdf,0xfc,0x0f,0xf8,0x7f,0xff,0x7f,0xff,
@@ -194,15 +204,29 @@ wxDefaultDockArt::wxDefaultDockArt()
 
 #ifdef __WXMAC__
     m_inactive_close_bitmap = BitmapFromBits(close_bits, 16, 16, *wxWHITE);
-#else
-    m_inactive_close_bitmap = BitmapFromBits(close_bits, 16, 16, m_inactive_caption_text_colour);
-#endif
-    m_inactive_pin_bitmap = BitmapFromBits(pin_bits, 16, 16, m_inactive_caption_text_colour);
-#ifdef __WXMAC__
     m_active_close_bitmap = BitmapFromBits(close_bits, 16, 16, *wxWHITE );
 #else
+    m_inactive_close_bitmap = BitmapFromBits(close_bits, 16, 16, m_inactive_caption_text_colour);
     m_active_close_bitmap = BitmapFromBits(close_bits, 16, 16, m_active_caption_text_colour);
 #endif
+
+#ifdef __WXMAC__
+    m_inactive_maximize_bitmap = BitmapFromBits(maximize_bits, 16, 16, *wxWHITE);
+    m_active_maximize_bitmap = BitmapFromBits(maximize_bits, 16, 16, *wxWHITE );
+#else
+    m_inactive_maximize_bitmap = BitmapFromBits(maximize_bits, 16, 16, m_inactive_caption_text_colour);
+    m_active_maximize_bitmap = BitmapFromBits(maximize_bits, 16, 16, m_active_caption_text_colour);
+#endif
+
+#ifdef __WXMAC__
+    m_inactive_restore_bitmap = BitmapFromBits(restore_bits, 16, 16, *wxWHITE);
+    m_active_restore_bitmap = BitmapFromBits(restore_bits, 16, 16, *wxWHITE );
+#else
+    m_inactive_restore_bitmap = BitmapFromBits(restore_bits, 16, 16, m_inactive_caption_text_colour);
+    m_active_restore_bitmap = BitmapFromBits(restore_bits, 16, 16, m_active_caption_text_colour);
+#endif
+
+    m_inactive_pin_bitmap = BitmapFromBits(pin_bits, 16, 16, m_inactive_caption_text_colour);
     m_active_pin_bitmap = BitmapFromBits(pin_bits, 16, 16, m_active_caption_text_colour);
 
     // default metric values
@@ -589,6 +613,19 @@ void wxDefaultDockArt::DrawPaneButton(wxDC& dc, wxWindow *WXUNUSED(window),
     switch (button)
     {
         default:
+        case wxAUI_BUTTON_MAXIMIZE_RESTORE:
+            if (pane.IsMaximized()) {
+                if (pane.state & wxPaneInfo::optionActive)
+                    bmp = m_active_restore_bitmap;
+                    else
+                    bmp = m_inactive_restore_bitmap;
+            } else {
+                if (pane.state & wxPaneInfo::optionActive)
+                    bmp = m_active_maximize_bitmap;
+                    else
+                    bmp = m_inactive_maximize_bitmap;
+            }
+            break;
         case wxAUI_BUTTON_CLOSE:
             if (pane.state & wxPaneInfo::optionActive)
                 bmp = m_active_close_bitmap;

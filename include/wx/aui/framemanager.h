@@ -95,7 +95,7 @@ enum wxPaneButtonState
 enum wxAuiButtonId
 {
     wxAUI_BUTTON_CLOSE = 101,
-    wxAUI_BUTTON_MAXIMIZE = 102,
+    wxAUI_BUTTON_MAXIMIZE_RESTORE = 102,
     wxAUI_BUTTON_MINIMIZE = 103,
     wxAUI_BUTTON_PIN = 104,
     wxAUI_BUTTON_OPTIONS = 105,
@@ -237,6 +237,7 @@ public:
     bool IsFloatable() const { return HasFlag(optionFloatable); }
     bool IsMovable() const { return HasFlag(optionMovable); }
     bool IsDestroyOnClose() const { return HasFlag(optionDestroyOnClose); }
+    bool IsMaximized() const { return HasFlag(optionMaximized); }
     bool HasCaption() const { return HasFlag(optionCaption); }
     bool HasGripper() const { return HasFlag(optionGripper); }
     bool HasBorder() const { return HasFlag(optionPaneBorder); }
@@ -279,6 +280,8 @@ public:
     wxPaneInfo& Hide() { return SetFlag(optionHidden, true); }
     wxPaneInfo& Show(bool show = true) { return SetFlag(optionHidden, !show); }
     wxPaneInfo& CaptionVisible(bool visible = true) { return SetFlag(optionCaption, visible); }
+    wxPaneInfo& Maximize() { return SetFlag(optionMaximized, true); }
+    wxPaneInfo& Restore() { return SetFlag(optionMaximized, false); }
     wxPaneInfo& PaneBorder(bool visible = true) { return SetFlag(optionPaneBorder, visible); }
     wxPaneInfo& Gripper(bool visible = true) { return SetFlag(optionGripper, visible); }
     wxPaneInfo& GripperTop(bool attop = true) { return SetFlag(optionGripperTop, attop); }
@@ -293,6 +296,10 @@ public:
     wxPaneInfo& RightDockable(bool b = true) { return SetFlag(optionRightDockable, b); }
     wxPaneInfo& Floatable(bool b = true) { return SetFlag(optionFloatable, b); }
     wxPaneInfo& Movable(bool b = true) { return SetFlag(optionMovable, b); }
+
+    wxPaneInfo& SaveHidden() { return SetFlag(optionSavedHidden, HasFlag(optionHidden)); }
+    wxPaneInfo& RestoreHidden() { return SetFlag(optionHidden, HasFlag(optionSavedHidden)); }
+
     wxPaneInfo& Dockable(bool b = true)
     {
         return TopDockable(b).BottomDockable(b).LeftDockable(b).RightDockable(b);
@@ -362,6 +369,8 @@ public:
         optionToolbar         = 1 << 13,
         optionActive          = 1 << 14,
         optionGripperTop      = 1 << 15,
+        optionMaximized       = 1 << 16,
+        optionSavedHidden     = 1 << 17,
 
         buttonClose           = 1 << 24,
         buttonMaximize        = 1 << 25,
@@ -448,6 +457,9 @@ public:
     bool DetachPane(wxWindow* window);
     
     void ClosePane(wxPaneInfo& pane_info);
+    void MaximizePane(wxPaneInfo& pane_info);
+    void RestorePane(wxPaneInfo& pane_info);
+    void RestoreMaximizedPane();
 
     wxString SavePaneInfo(wxPaneInfo& pane);
     void LoadPaneInfo(wxString pane_part, wxPaneInfo &pane);
@@ -578,6 +590,7 @@ protected:
     wxWindow* m_action_window;   // action frame or window (NULL if none)
     wxRect m_action_hintrect;    // hint rectangle for the action
     bool m_skipping;
+    bool m_has_maximized;
     wxRect m_last_rect;
     wxDockUIPart* m_hover_button;// button uipart being hovered over
     wxRect m_last_hint;          // last hint rectangle
@@ -755,6 +768,8 @@ public:
 BEGIN_DECLARE_EVENT_TYPES()
     DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_AUI, wxEVT_AUI_PANEBUTTON, 0)
     DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_AUI, wxEVT_AUI_PANECLOSE, 0)
+    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_AUI, wxEVT_AUI_PANEMAXIMIZE, 0)
+    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_AUI, wxEVT_AUI_PANERESTORE, 0)
     DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_AUI, wxEVT_AUI_RENDER, 0)
 END_DECLARE_EVENT_TYPES()
 
@@ -767,6 +782,10 @@ typedef void (wxEvtHandler::*wxFrameManagerEventFunction)(wxFrameManagerEvent&);
    wx__DECLARE_EVT0(wxEVT_AUI_PANEBUTTON, wxFrameManagerEventHandler(func))
 #define EVT_AUI_PANECLOSE(func) \
    wx__DECLARE_EVT0(wxEVT_AUI_PANECLOSE, wxFrameManagerEventHandler(func))
+#define EVT_AUI_PANEMAXIMIZE(func) \
+   wx__DECLARE_EVT0(wxEVT_AUI_PANEMAXIMIZE, wxFrameManagerEventHandler(func))
+#define EVT_AUI_PANERESTORE(func) \
+   wx__DECLARE_EVT0(wxEVT_AUI_PANERESTORE, wxFrameManagerEventHandler(func))
 #define EVT_AUI_RENDER(func) \
    wx__DECLARE_EVT0(wxEVT_AUI_RENDER, wxFrameManagerEventHandler(func))
 
@@ -774,11 +793,15 @@ typedef void (wxEvtHandler::*wxFrameManagerEventFunction)(wxFrameManagerEvent&);
 
 %constant wxEventType wxEVT_AUI_PANEBUTTON;
 %constant wxEventType wxEVT_AUI_PANECLOSE;
+%constant wxEventType wxEVT_AUI_PANEMAXIMIZE;
+%constant wxEventType wxEVT_AUI_PANERESTORE;
 %constant wxEventType wxEVT_AUI_RENDER;
 
 %pythoncode {
     EVT_AUI_PANEBUTTON = wx.PyEventBinder( wxEVT_AUI_PANEBUTTON )
     EVT_AUI_PANECLOSE = wx.PyEventBinder( wxEVT_AUI_PANECLOSE )
+    EVT_AUI_PANECLOSE = wx.PyEventBinder( wxEVT_AUI_PANEMAXIMIZE )
+    EVT_AUI_PANECLOSE = wx.PyEventBinder( wxEVT_AUI_PANERESTORE )
     EVT_AUI_RENDER = wx.PyEventBinder( wxEVT_AUI_RENDER )
 }
 #endif // SWIG

@@ -54,6 +54,8 @@ wxPaneInfo wxNullPaneInfo;
 wxDockInfo wxNullDockInfo;
 DEFINE_EVENT_TYPE(wxEVT_AUI_PANEBUTTON)
 DEFINE_EVENT_TYPE(wxEVT_AUI_PANECLOSE)
+DEFINE_EVENT_TYPE(wxEVT_AUI_PANEMAXIMIZE)
+DEFINE_EVENT_TYPE(wxEVT_AUI_PANERESTORE)
 DEFINE_EVENT_TYPE(wxEVT_AUI_RENDER)
 
 #ifdef __WXMAC__
@@ -486,6 +488,7 @@ wxFrameManager::wxFrameManager(wxWindow* managed_wnd, unsigned int flags)
     m_hint_wnd = NULL;
     m_flags = flags;
     m_skipping = false;
+    m_has_maximized = false;
     m_frame = NULL;
     
     if (managed_wnd)
@@ -821,8 +824,14 @@ bool wxFrameManager::AddPane(wxWindow* window, const wxPaneInfo& pane_info)
     if (pinfo.dock_proportion == 0)
         pinfo.dock_proportion = 100000;
 
-    if (pinfo.HasCloseButton() &&
-        pinfo.buttons.size() == 0)
+    if (pinfo.HasMaximizeButton())
+    {
+        wxPaneButton button;
+        button.button_id = wxAUI_BUTTON_MAXIMIZE_RESTORE;
+        pinfo.buttons.Add(button);
+    }
+
+    if (pinfo.HasCloseButton())
     {
         wxPaneButton button;
         button.button_id = wxAUI_BUTTON_CLOSE;
@@ -1007,6 +1016,11 @@ bool wxFrameManager::DetachPane(wxWindow* window)
 // flags
 void wxFrameManager::ClosePane(wxPaneInfo& pane_info)
 {
+    // if we were maximized, restore
+    if(pane_info.IsMaximized()) {
+        RestorePane(pane_info);
+    }
+
     // first, hide the window
     if (pane_info.window && pane_info.window->IsShown()) {
         pane_info.window->Show(false);
@@ -1035,6 +1049,70 @@ void wxFrameManager::ClosePane(wxPaneInfo& pane_info)
     else 
     {
         pane_info.Hide();
+    }
+}
+
+void wxFrameManager::MaximizePane(wxPaneInfo& pane_info)
+{
+    int i, pane_count;
+
+    // un-maximize and hide all other panes
+    for (i = 0, pane_count = m_panes.GetCount(); i < pane_count; ++i)
+    {
+        wxPaneInfo& p = m_panes.Item(i);
+        if(!p.IsToolbar()) {
+            p.Restore();
+            p.SaveHidden();
+            p.Hide();
+        }
+    }
+
+    // mark ourselves maximized
+    pane_info.Maximize();
+    pane_info.Show();
+    m_has_maximized = true;
+
+    // last, show the window
+    if (pane_info.window && !pane_info.window->IsShown()) {
+        pane_info.window->Show(true);
+    }
+}
+
+void wxFrameManager::RestorePane(wxPaneInfo& pane_info)
+{
+    int i, pane_count;
+
+    // restore all the panes
+    for (i = 0, pane_count = m_panes.GetCount(); i < pane_count; ++i)
+    {
+        wxPaneInfo& p = m_panes.Item(i);
+        if(!p.IsToolbar()) {
+            p.RestoreHidden();
+        }
+    }
+
+    // mark ourselves non-maximized
+    pane_info.Restore();
+    m_has_maximized = false;
+
+    // last, show the window
+    if (pane_info.window && !pane_info.window->IsShown()) {
+        pane_info.window->Show(true);
+    }
+}
+
+void wxFrameManager::RestoreMaximizedPane()
+{
+    int i, pane_count;
+
+    // restore all the panes
+    for (i = 0, pane_count = m_panes.GetCount(); i < pane_count; ++i)
+    {
+        wxPaneInfo& p = m_panes.Item(i);
+        if(p.IsMaximized()) {
+            RestorePane(p);
+            break;
+        }
     }
 }
 
@@ -1549,7 +1627,7 @@ void wxFrameManager::LayoutAddDock(wxSizer* cont,
     int orientation = dock.IsHorizontal() ? wxHORIZONTAL : wxVERTICAL;
 
     // resizable bottom and right docks have a sash before them
-    if (!dock.fixed && (dock.dock_direction == wxAUI_DOCK_BOTTOM ||
+    if (!m_has_maximized && !dock.fixed && (dock.dock_direction == wxAUI_DOCK_BOTTOM ||
                         dock.dock_direction == wxAUI_DOCK_RIGHT))
     {
         sizer_item = cont->Add(sash_size, sash_size, 0, wxEXPAND);
@@ -1568,6 +1646,7 @@ void wxFrameManager::LayoutAddDock(wxSizer* cont,
     wxSizer* dock_sizer = new wxBoxSizer(orientation);
 
     // add each pane to the dock
+    bool has_maximized_pane = false;
     int pane_i, pane_count = dock.panes.GetCount();
 
     if (dock.fixed)
@@ -1583,6 +1662,9 @@ void wxFrameManager::LayoutAddDock(wxSizer* cont,
         {
             wxPaneInfo& pane = *(dock.panes.Item(pane_i));
             int pane_pos = pane_positions.Item(pane_i);
+            if(pane.IsMaximized()) {
+                has_maximized_pane = true;
+            }
 
             int amount = pane_pos - offset;
             if (amount > 0)
@@ -1626,10 +1708,13 @@ void wxFrameManager::LayoutAddDock(wxSizer* cont,
         for (pane_i = 0; pane_i < pane_count; ++pane_i)
         {
             wxPaneInfo& pane = *(dock.panes.Item(pane_i));
+            if(pane.IsMaximized()) {
+                has_maximized_pane = true;
+            }
 
             // if this is not the first pane being added,
             // we need to add a pane sizer
-            if (pane_i > 0)
+            if (!m_has_maximized && pane_i > 0)
             {
                 sizer_item = dock_sizer->Add(sash_size, sash_size, 0, wxEXPAND);
 
@@ -1647,7 +1732,7 @@ void wxFrameManager::LayoutAddDock(wxSizer* cont,
         }
     }
 
-    if (dock.dock_direction == wxAUI_DOCK_CENTER)
+    if (dock.dock_direction == wxAUI_DOCK_CENTER || has_maximized_pane)
         sizer_item = cont->Add(dock_sizer, 1, wxEXPAND);
          else
         sizer_item = cont->Add(dock_sizer, 0, wxEXPAND);
@@ -1667,7 +1752,7 @@ void wxFrameManager::LayoutAddDock(wxSizer* cont,
         cont->SetItemMinSize(dock_sizer, dock.size, 0);
 
     //  top and left docks have a sash after them
-    if (!dock.fixed && (dock.dock_direction == wxAUI_DOCK_TOP ||
+    if (!m_has_maximized && !dock.fixed && (dock.dock_direction == wxAUI_DOCK_TOP ||
                         dock.dock_direction == wxAUI_DOCK_LEFT))
     {
         sizer_item = cont->Add(sash_size, sash_size, 0, wxEXPAND);
@@ -1699,6 +1784,7 @@ wxSizer* wxFrameManager::LayoutAll(wxPaneInfoArray& panes,
     // empty all docks out
     for (i = 0, dock_count = docks.GetCount(); i < dock_count; ++i)
         docks.Item(i).panes.Empty();
+
 
     // iterate through all known panes, filing each
     // of them into the appropriate dock. If the
@@ -1984,7 +2070,7 @@ wxSizer* wxFrameManager::LayoutAll(wxPaneInfoArray& panes,
                 for (row = 0,row_count = arr.GetCount(); row<row_count; ++row)
                    LayoutAddDock(middle, *arr.Item(row), uiparts, spacer_only);
             }
-             else
+             else if (!m_has_maximized)
             {
                 // there are no center docks, add a background area
                 wxSizerItem* sizer_item = middle->Add(1,1, 1, wxEXPAND);
@@ -3194,6 +3280,8 @@ void wxFrameManager::OnFloatingPaneMoved(wxWindow* wnd, wxDirection dir)
         if (m_flags & wxAUI_MGR_TRANSPARENT_DRAG)
             pane.frame->SetTransparent(255);
 #endif
+    } else if(m_has_maximized) {
+        RestoreMaximizedPane();
     }
 
     Update();
@@ -3425,7 +3513,7 @@ void wxFrameManager::UpdateButtonOnScreen(wxDockUIPart* button_ui_part,
              else
             state = wxAUI_BUTTON_STATE_HOVER;
     }
-    else
+     else
     {
         if (event.LeftDown())
             state = wxAUI_BUTTON_STATE_HOVER;
@@ -3440,11 +3528,14 @@ void wxFrameManager::UpdateButtonOnScreen(wxDockUIPart* button_ui_part,
     if (pt.x != 0 || pt.y != 0)
         cdc.SetDeviceOrigin(pt.x, pt.y);
 
-    m_art->DrawPaneButton(cdc, m_frame,
-              button_ui_part->button->button_id,
-              state,
-              button_ui_part->rect,
-              *hit_test->pane);
+    if (hit_test->pane)
+    {
+        m_art->DrawPaneButton(cdc, m_frame,
+                  button_ui_part->button->button_id,
+                  state,
+                  button_ui_part->rect,
+                  *hit_test->pane);
+    }
 }
 
 void wxFrameManager::OnLeftDown(wxMouseEvent& event)
@@ -3828,6 +3919,9 @@ void wxFrameManager::OnMotion(wxMouseEvent& event)
                                                       pt.y - m_action_offset.y);
 
                     // float the window
+                    if(pane_info->IsMaximized()) {
+                        RestorePane(*pane_info);
+                    }
                     pane_info->Float();
                     Update();
 
@@ -3902,12 +3996,16 @@ void wxFrameManager::OnMotion(wxMouseEvent& event)
             {
                 // make the old button normal
                 if (m_hover_button)
+                {
                     UpdateButtonOnScreen(m_hover_button, event);
-
+                    Repaint();
+                }
+                
                 // mouse is over a button, so repaint the
                 // button in hover mode
                 UpdateButtonOnScreen(part, event);
                 m_hover_button = part;
+                
             }
         }
          else
@@ -3970,6 +4068,32 @@ void wxFrameManager::OnPaneButton(wxFrameManagerEvent& evt)
         if (!e.GetVeto())
         {
             ClosePane(pane);
+            Update();
+        }
+    }
+    else if (evt.button == wxAUI_BUTTON_MAXIMIZE_RESTORE && !pane.IsMaximized())
+    {
+        // fire pane close event
+        wxFrameManagerEvent e(wxEVT_AUI_PANEMAXIMIZE);
+        e.SetPane(evt.pane);
+        ProcessMgrEvent(e);
+
+        if (!e.GetVeto())
+        {
+            MaximizePane(pane);
+            Update();
+        }
+    }
+    else if (evt.button == wxAUI_BUTTON_MAXIMIZE_RESTORE && pane.IsMaximized())
+    {
+        // fire pane close event
+        wxFrameManagerEvent e(wxEVT_AUI_PANERESTORE);
+        e.SetPane(evt.pane);
+        ProcessMgrEvent(e);
+
+        if (!e.GetVeto())
+        {
+            RestorePane(pane);
             Update();
         }
     }

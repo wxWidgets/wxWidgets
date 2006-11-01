@@ -742,7 +742,6 @@ MyFrame::MyFrame(wxWindow* parent,
     tb5->AddTool(103, wxT("Test"), wxArtProvider::GetBitmap(wxART_MISSING_IMAGE));
     tb5->Realize();
 
-
     // add a bunch of panes
     m_mgr.AddPane(CreateSizeReportCtrl(), wxPaneInfo().
                   Name(wxT("test1")).Caption(wxT("Pane Caption")).
@@ -750,11 +749,13 @@ MyFrame::MyFrame(wxWindow* parent,
 
     m_mgr.AddPane(CreateSizeReportCtrl(), wxPaneInfo().
                   Name(wxT("test2")).Caption(wxT("Client Size Reporter")).
-                  Bottom().Position(1));
+                  Bottom().Position(1).
+                  PinButton(true).CloseButton(true).MaximizeButton(true));
 
     m_mgr.AddPane(CreateSizeReportCtrl(), wxPaneInfo().
                   Name(wxT("test3")).Caption(wxT("Client Size Reporter")).
-                  Bottom());
+                  Bottom().
+                  PinButton(true).CloseButton(true).MaximizeButton(true));
 
     m_mgr.AddPane(CreateSizeReportCtrl(), wxPaneInfo().
                   Name(wxT("test4")).Caption(wxT("Pane Caption")).
@@ -766,20 +767,24 @@ MyFrame::MyFrame(wxWindow* parent,
 
     m_mgr.AddPane(CreateSizeReportCtrl(), wxPaneInfo().
                   Name(wxT("test6")).Caption(wxT("Client Size Reporter")).
-                  Right().Row(1));
+                  Right().Row(1).
+                  PinButton(true).CloseButton(true).MaximizeButton(true));
 
     m_mgr.AddPane(CreateSizeReportCtrl(), wxPaneInfo().
                   Name(wxT("test7")).Caption(wxT("Client Size Reporter")).
-                  Left().Layer(1));
+                  Left().Layer(1).
+                  PinButton(true).CloseButton(true).MaximizeButton(true));
 
     m_mgr.AddPane(CreateTreeCtrl(), wxPaneInfo().
                   Name(wxT("test8")).Caption(wxT("Tree Pane")).
-                  Left().Layer(1).Position(1));
+                  Left().Layer(1).Position(1).
+                  CloseButton(true).MaximizeButton(true));
 
     m_mgr.AddPane(CreateSizeReportCtrl(), wxPaneInfo().
                   Name(wxT("test9")).Caption(wxT("Min Size 200x100")).
                   BestSize(wxSize(200,100)).MinSize(wxSize(200,100)).
-                  Bottom().Layer(1));
+                  Bottom().Layer(1).
+                  CloseButton(true).MaximizeButton(true));
 
     wxWindow* wnd10 = CreateTextCtrl(wxT("This pane will prompt the user before hiding."));
     m_mgr.AddPane(wnd10, wxPaneInfo().
@@ -816,7 +821,6 @@ MyFrame::MyFrame(wxWindow* parent,
                   CenterPane().PaneBorder(false));
 
     // add the toolbars to the manager
-
     m_mgr.AddPane(tb1, wxPaneInfo().
                   Name(wxT("tb1")).Caption(wxT("Big Toolbar")).
                   ToolbarPane().Top().
@@ -847,7 +851,6 @@ MyFrame::MyFrame(wxWindow* parent,
                   wxPaneInfo().Name(wxT("tb6")).
                   ToolbarPane().Top().Row(2).Position(1).
                   LeftDockable(false).RightDockable(false));
-
 
     // make some default perspectives
 
@@ -1121,7 +1124,8 @@ void MyFrame::OnCreateSizeReport(wxCommandEvent& WXUNUSED(event))
 {
     m_mgr.AddPane(CreateSizeReportCtrl(), wxPaneInfo().
                   Name(wxT("Test")).Caption(wxT("Client Size Reporter")).
-                  Float().FloatingPosition(GetStartPosition()));
+                  Float().FloatingPosition(GetStartPosition()).
+                  PinButton(true).CloseButton(true).MaximizeButton(true));
     m_mgr.Update();
 }
 

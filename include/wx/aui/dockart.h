@@ -143,8 +143,12 @@ protected:
     wxFont m_caption_font;
     wxBitmap m_inactive_close_bitmap;
     wxBitmap m_inactive_pin_bitmap;
+    wxBitmap m_inactive_maximize_bitmap;
+    wxBitmap m_inactive_restore_bitmap;
     wxBitmap m_active_close_bitmap;
     wxBitmap m_active_pin_bitmap;
+    wxBitmap m_active_maximize_bitmap;
+    wxBitmap m_active_restore_bitmap;
     wxPen m_gripper_pen1;
     wxPen m_gripper_pen2;
     wxPen m_gripper_pen3;

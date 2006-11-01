@@ -50,6 +50,7 @@ wxFloatingPane::wxFloatingPane(wxWindow* parent,
                         pane.floating_pos, pane.floating_size,
                         style | 
                         (pane.HasCloseButton()?wxCLOSE_BOX:0) |
+                        (pane.HasMaximizeButton()?wxMAXIMIZE:0) |
                         (pane.IsFixed()?0:wxRESIZE_BORDER)
                         )
 {
