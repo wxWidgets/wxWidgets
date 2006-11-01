@@ -41,12 +41,7 @@
     #if wxUSE_MFC
         #include <afxwin.h>
     #else // !wxUSE_MFC
-        #ifndef STRICT
-            #define STRICT 1
-        #endif
-
-        #include <windows.h>
-        #include "wx/msw/winundef.h"
+        #include "wx/msw/wrapwin.h"
     #endif // wxUSE_MFC/!wxUSE_MFC
 
     // If you use the wxDbCreateDataSource() function with MSW/VC6,
@@ -63,8 +58,7 @@
     #include "odbcinst.h"
 #else
     #if defined(__WINDOWS__) && ( defined(HAVE_W32API_H) || defined(__BORLANDC__) )
-        #include <windows.h>
-        #include "wx/msw/winundef.h"
+        #include "wx/msw/wrapwin.h"
     #endif
     extern "C" {
     #if defined(wxUSE_BUILTIN_IODBC) && wxUSE_BUILTIN_IODBC
