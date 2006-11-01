@@ -2824,6 +2824,9 @@ SWIG_AsVal_double (PyObject *obj, double* val)
 SWIGINTERN void wxTopLevelWindow_MacSetMetalAppearance(wxTopLevelWindow *self,bool on){ /*wxPyRaiseNotImplemented();*/ }
 SWIGINTERN bool wxTopLevelWindow_MacGetMetalAppearance(wxTopLevelWindow const *self){ /*wxPyRaiseNotImplemented();*/ return false; }
 
+#define wxDEFAULT_MINIFRAME_STYLE wxCAPTION | wxRESIZE_BORDER | wxTINY_CAPTION_HORIZ
+
+
 
 SWIGINTERN wxRect wxStatusBar_GetFieldRect(wxStatusBar *self,int i){
             wxRect r;
@@ -8014,7 +8017,7 @@ SWIGINTERN PyObject *_wrap_new_MiniFrame(PyObject *SWIGUNUSEDPARM(self), PyObjec
   wxPoint *arg4 = (wxPoint *) &arg4_defvalue ;
   wxSize const &arg5_defvalue = wxDefaultSize ;
   wxSize *arg5 = (wxSize *) &arg5_defvalue ;
-  long arg6 = (long) wxDEFAULT_FRAME_STYLE ;
+  long arg6 = (long) wxDEFAULT_MINIFRAME_STYLE ;
   wxString const &arg7_defvalue = wxPyFrameNameStr ;
   wxString *arg7 = (wxString *) &arg7_defvalue ;
   wxMiniFrame *result = 0 ;
@@ -8145,7 +8148,7 @@ SWIGINTERN PyObject *_wrap_MiniFrame_Create(PyObject *SWIGUNUSEDPARM(self), PyOb
   wxPoint *arg5 = (wxPoint *) &arg5_defvalue ;
   wxSize const &arg6_defvalue = wxDefaultSize ;
   wxSize *arg6 = (wxSize *) &arg6_defvalue ;
-  long arg7 = (long) wxDEFAULT_FRAME_STYLE ;
+  long arg7 = (long) wxDEFAULT_MINIFRAME_STYLE ;
   wxString const &arg8_defvalue = wxPyFrameNameStr ;
   wxString *arg8 = (wxString *) &arg8_defvalue ;
   bool result;
@@ -34432,6 +34435,7 @@ SWIGEXPORT void SWIG_init(void) {
   SWIG_Python_SetConstant(d, "USER_ATTENTION_INFO",SWIG_From_int(static_cast< int >(wxUSER_ATTENTION_INFO)));
   SWIG_Python_SetConstant(d, "USER_ATTENTION_ERROR",SWIG_From_int(static_cast< int >(wxUSER_ATTENTION_ERROR)));
   SWIG_Python_SetConstant(d, "Dialog_ButtonSizerFlags",SWIG_From_int(static_cast< int >(wxDialog::ButtonSizerFlags)));
+  SWIG_Python_SetConstant(d, "DEFAULT_MINIFRAME_STYLE",SWIG_From_int(static_cast< int >(wxDEFAULT_MINIFRAME_STYLE)));
   SWIG_Python_SetConstant(d, "SPLASH_CENTRE_ON_PARENT",SWIG_From_int(static_cast< int >(wxSPLASH_CENTRE_ON_PARENT)));
   SWIG_Python_SetConstant(d, "SPLASH_CENTRE_ON_SCREEN",SWIG_From_int(static_cast< int >(wxSPLASH_CENTRE_ON_SCREEN)));
   SWIG_Python_SetConstant(d, "SPLASH_NO_CENTRE",SWIG_From_int(static_cast< int >(wxSPLASH_NO_CENTRE)));

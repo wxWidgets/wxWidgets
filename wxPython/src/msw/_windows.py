@@ -753,6 +753,7 @@ def Dialog_GetClassDefaultAttributes(*args, **kwargs):
 
 #---------------------------------------------------------------------------
 
+DEFAULT_MINIFRAME_STYLE = _windows_.DEFAULT_MINIFRAME_STYLE
 class MiniFrame(Frame):
     """Proxy of C++ MiniFrame class"""
     thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -761,7 +762,7 @@ class MiniFrame(Frame):
         """
         __init__(self, Window parent, int id=-1, String title=EmptyString, 
             Point pos=DefaultPosition, Size size=DefaultSize, 
-            long style=DEFAULT_FRAME_STYLE, String name=FrameNameStr) -> MiniFrame
+            long style=DEFAULT_MINIFRAME_STYLE, String name=FrameNameStr) -> MiniFrame
         """
         _windows_.MiniFrame_swiginit(self,_windows_.new_MiniFrame(*args, **kwargs))
         self._setOORInfo(self)
@@ -770,7 +771,7 @@ class MiniFrame(Frame):
         """
         Create(self, Window parent, int id=-1, String title=EmptyString, 
             Point pos=DefaultPosition, Size size=DefaultSize, 
-            long style=DEFAULT_FRAME_STYLE, String name=FrameNameStr) -> bool
+            long style=DEFAULT_MINIFRAME_STYLE, String name=FrameNameStr) -> bool
         """
         return _windows_.MiniFrame_Create(*args, **kwargs)
 
