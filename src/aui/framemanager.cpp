@@ -503,9 +503,9 @@ wxAuiManager::~wxAuiManager()
 }
 
 // Creates a floating frame for the windows
-wxAuiFloatingPane * wxAuiManager::CreateFloatingFrame(wxWindow* parent, const wxAuiPaneInfo& p)
+wxAuiFloatingFrame * wxAuiManager::CreateFloatingFrame(wxWindow* parent, const wxAuiPaneInfo& p)
 {
-    return new wxAuiFloatingPane(parent, this, p);
+    return new wxAuiFloatingFrame(parent, this, p);
 }
 
 // GetPane() looks up a wxAuiPaneInfo structure based
@@ -2206,7 +2206,7 @@ void wxAuiManager::Update()
             {
                 // we need to create a frame for this
                 // pane, which has recently been floated
-                wxAuiFloatingPane* frame = CreateFloatingFrame(m_frame, p);
+                wxAuiFloatingFrame* frame = CreateFloatingFrame(m_frame, p);
 
 #if wxCHECK_VERSION(2,7,0)
                 // on MSW and Mac, if the owner desires transparent dragging, and

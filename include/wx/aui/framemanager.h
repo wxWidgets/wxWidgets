@@ -410,11 +410,11 @@ public:
 
 
 
-class WXDLLIMPEXP_AUI wxAuiFloatingPane;
+class WXDLLIMPEXP_AUI wxAuiFloatingFrame;
 
 class WXDLLIMPEXP_AUI wxAuiManager : public wxEvtHandler
 {
-friend class wxAuiFloatingPane;
+friend class wxAuiFloatingFrame;
 
 public:
 
@@ -473,7 +473,7 @@ public:
 
 
 public:
-    virtual wxAuiFloatingPane* CreateFloatingFrame(wxWindow* parent, const wxAuiPaneInfo& p);
+    virtual wxAuiFloatingFrame* CreateFloatingFrame(wxWindow* parent, const wxAuiPaneInfo& p);
 
     void DrawHintRect(wxWindow* pane_window,
                       const wxPoint& pt,

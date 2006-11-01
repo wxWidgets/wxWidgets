@@ -24,15 +24,15 @@
 
 #if defined( __WXMSW__ ) || defined( __WXMAC__ ) ||  defined( __WXGTK__ )
 #include "wx/minifram.h"
-#define wxAuiFloatingPaneBaseClass wxMiniFrame
+#define wxAuiFloatingFrameBaseClass wxMiniFrame
 #else
-#define wxAuiFloatingPaneBaseClass wxFrame
+#define wxAuiFloatingFrameBaseClass wxFrame
 #endif
 
-class WXDLLIMPEXP_AUI wxAuiFloatingPane : public wxAuiFloatingPaneBaseClass
+class WXDLLIMPEXP_AUI wxAuiFloatingFrame : public wxAuiFloatingFrameBaseClass
 {
 public:
-    wxAuiFloatingPane(wxWindow* parent,
+    wxAuiFloatingFrame(wxWindow* parent,
                    wxAuiManager* owner_mgr,
                    const wxAuiPaneInfo& pane,
                    wxWindowID id = wxID_ANY,
@@ -40,7 +40,7 @@ public:
                                 wxFRAME_NO_TASKBAR | wxFRAME_FLOAT_ON_PARENT | 
                                 wxCLIP_CHILDREN
                    );
-    virtual ~wxAuiFloatingPane();
+    virtual ~wxAuiFloatingFrame();
     void SetPaneWindow(const wxAuiPaneInfo& pane);
     
 protected:
@@ -70,7 +70,7 @@ private:
 
 #ifndef SWIG
     DECLARE_EVENT_TABLE()
-    DECLARE_CLASS(wxAuiFloatingPaneBaseClass)
+    DECLARE_CLASS(wxAuiFloatingFrameBaseClass)
 #endif // SWIG
 };
 
