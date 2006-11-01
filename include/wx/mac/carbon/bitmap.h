@@ -34,10 +34,12 @@ class WXDLLEXPORT wxPixelDataBase;
 class WXDLLEXPORT wxMask: public wxObject
 {
     DECLARE_DYNAMIC_CLASS(wxMask)
-    DECLARE_NO_COPY_CLASS(wxMask)
 
 public:
     wxMask();
+
+    // Copy constructor
+    wxMask(const wxMask& mask);
 
     // Construct a mask from a bitmap and a colour indicating
     // the transparent area
@@ -181,6 +183,11 @@ public:
     // makes sure that no cached images will be constructed until terminated
     void *BeginRawAccess() ;
     void EndRawAccess() ;
+
+protected:
+    // ref counting code
+    virtual wxObjectRefData *CreateRefData() const;
+    virtual wxObjectRefData *CloneRefData(const wxObjectRefData *data) const;
 };
 #endif
   // _WX_BITMAP_H_

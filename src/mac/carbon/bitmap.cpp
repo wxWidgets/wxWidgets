@@ -153,6 +153,28 @@ void wxBitmapRefData::Init()
     m_hasAlpha = false;
 }
 
+wxBitmapRefData::wxBitmapRefData(const wxBitmapRefData &tocopy)
+{
+    Init();
+    Create(tocopy.m_width, tocopy.m_height, tocopy.m_depth); 
+    
+    if (tocopy.m_bitmapMask)
+        m_bitmapMask = new wxMask(*tocopy.m_bitmapMask);
+
+    unsigned char* dest = (unsigned char*)GetRawAccess();
+    unsigned char* source = (unsigned char*)tocopy.GetRawAccess();
+    size_t numbytes = tocopy.m_width * tocopy.m_height * 4;
+    
+    for (size_t i=0; i<numbytes; i++)
+    {
+        *dest++ = *source++;
+    }
+    
+    UseAlpha(tocopy.m_hasAlpha);
+
+    // TODO:  Copy palette?
+}
+
 wxBitmapRefData::wxBitmapRefData()
 {
     Init() ;
@@ -883,6 +905,16 @@ wxBitmap::wxBitmap(const wxString& filename, wxBitmapType type)
     LoadFile(filename, type);
 }
 
+wxObjectRefData* wxBitmap::CreateRefData() const
+{
+    return new wxBitmapRefData;
+}
+
+wxObjectRefData* wxBitmap::CloneRefData(const wxObjectRefData* data) const
+{
+    return new wxBitmapRefData(*wx_static_cast(const wxBitmapRefData *, data));
+}
+
 void * wxBitmap::GetRawAccess() const
 {
     wxCHECK_MSG( Ok() , NULL , wxT("invalid bitmap") ) ;
@@ -1339,6 +1371,26 @@ WXHBITMAP wxBitmap::GetHBITMAP(WXHBITMAP* mask) const
 wxMask::wxMask()
 {
     Init() ;
+}
+
+wxMask::wxMask(const wxMask &tocopy)
+{
+    Init();
+
+    m_bytesPerRow = tocopy.m_bytesPerRow;
+    m_width = tocopy.m_width;
+    m_height = tocopy.m_height;
+
+    size_t size = m_bytesPerRow * m_height;
+    unsigned char* dest = (unsigned char*)m_memBuf.GetWriteBuf( size );
+    unsigned char* source = (unsigned char*)tocopy.m_memBuf.GetData();
+    for (size_t i=0; i<size; i++)
+    {
+        *dest++ = *source++;
+    }
+
+    m_memBuf.UngetWriteBuf( size ) ;
+    RealizeNative() ;
 }
 
 // Construct a mask from a bitmap and a colour indicating

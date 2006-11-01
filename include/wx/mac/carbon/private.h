@@ -1168,13 +1168,13 @@ void wxMacMemoryBufferReleaseProc(void *info, const void *data, size_t size);
 
 class WXDLLEXPORT wxBitmapRefData: public wxGDIRefData
 {
-    DECLARE_NO_COPY_CLASS(wxBitmapRefData)
-
     friend class WXDLLEXPORT wxIcon;
     friend class WXDLLEXPORT wxCursor;
 public:
     wxBitmapRefData(int width , int height , int depth);
     wxBitmapRefData();
+    wxBitmapRefData(const wxBitmapRefData &tocopy);
+
     virtual ~wxBitmapRefData();
 
     void Free();
