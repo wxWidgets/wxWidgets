@@ -197,6 +197,8 @@ public:
     virtual void SetTitle( const wxString &title );
     virtual void SetBitmap( const wxBitmap &bitmap );
 
+    virtual void SetOwner( wxDataViewCtrl *owner );
+
     virtual void SetAlignment( wxAlignment align );
     
     virtual void SetSortable( bool sortable );
@@ -265,6 +267,9 @@ public:
     virtual bool IsSelected( unsigned int row ) const;
     virtual int GetSelection() const;
     virtual int GetSelections(wxArrayInt& aSelections) const;
+
+    static wxVisualAttributes
+    GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
     
 private:
     friend class wxDataViewCtrlDC;

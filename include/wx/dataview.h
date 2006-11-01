@@ -285,7 +285,7 @@ public:
 
     unsigned int GetModelColumn()           { return m_model_column; }
 
-    void SetOwner( wxDataViewCtrl *owner )  { m_owner = owner; }
+    virtual void SetOwner( wxDataViewCtrl *owner )  { m_owner = owner; }
     wxDataViewCtrl *GetOwner()              { return m_owner; }
 
     virtual int GetWidth() = 0;

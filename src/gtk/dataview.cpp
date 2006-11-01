@@ -299,6 +299,9 @@ wxgtk_list_store_get_value (GtkTreeModel *tree_model,
     GtkWxListStore *list_store = (GtkWxListStore *) tree_model;
     g_return_if_fail (GTK_IS_WX_LIST_STORE (tree_model) );
 
+    wxPrintf( wxT("Hi\n") );
+
+#if 0
     wxDataViewListModel *model = list_store->model;
     wxString mtype = model->GetColType( (unsigned int) column );
     if (mtype == wxT("string"))
@@ -311,6 +314,7 @@ wxgtk_list_store_get_value (GtkTreeModel *tree_model,
     else
     {
     }
+#endif
 
 #if 0
   GtkTreeDataList *list;
@@ -946,7 +950,11 @@ bool wxDataViewTextRenderer::SetValue( const wxVariant &value )
 
     GValue gvalue = { 0, };
     g_value_init( &gvalue, G_TYPE_STRING );
+#if wxUSE_UNICODE
     g_value_set_string( &gvalue, wxGTK_CONV( tmp ) );
+#else
+    g_value_set_string( &gvalue, wxGTK_CONV_FONT( tmp, GetOwner()->GetOwner()->GetFont() ) );
+#endif
     g_object_set_property( G_OBJECT(m_renderer), "text", &gvalue );
     g_value_unset( &gvalue );
 
@@ -1221,7 +1229,11 @@ wxDataViewProgressRenderer::wxDataViewProgressRenderer( const wxString &label,
 
         GValue gvalue = { 0, };
         g_value_init( &gvalue, G_TYPE_STRING );
+#if wxUSE_UNICODE
         g_value_set_string( &gvalue, wxGTK_CONV(m_label) );
+#else
+        g_value_set_string( &gvalue, wxGTK_CONV_SYS(m_label) );
+#endif
         g_object_set_property( G_OBJECT(m_renderer), "text", &gvalue );
         g_value_unset( &gvalue );
     }
@@ -1463,10 +1475,11 @@ wxDataViewColumn::wxDataViewColumn( const wxString &title, wxDataViewRenderer *c
         gtk_tree_view_column_set_sort_indicator( column, true );
 
     if (width > 0)
-    {
         gtk_tree_view_column_set_fixed_width( column, width );
-        gtk_tree_view_column_set_sizing( column, GTK_TREE_VIEW_COLUMN_FIXED );
-    }
+    else
+        gtk_tree_view_column_set_fixed_width( column, 70 );  // FIXME
+        
+    gtk_tree_view_column_set_sizing( column, GTK_TREE_VIEW_COLUMN_FIXED );
 
     gtk_tree_view_column_pack_end( column, renderer, FALSE );
 
@@ -1496,10 +1509,11 @@ wxDataViewColumn::wxDataViewColumn( const wxBitmap &bitmap, wxDataViewRenderer *
         gtk_tree_view_column_set_sort_indicator( column, true );
 
     if (width > 0)
-    {
         gtk_tree_view_column_set_fixed_width( column, width );
-        gtk_tree_view_column_set_sizing( column, GTK_TREE_VIEW_COLUMN_FIXED );
-    }
+    else
+        gtk_tree_view_column_set_fixed_width( column, 70 );  // FIXME
+        
+    gtk_tree_view_column_set_sizing( column, GTK_TREE_VIEW_COLUMN_FIXED );
 
     gtk_tree_view_column_pack_end( column, renderer, FALSE );
 
@@ -1529,6 +1543,18 @@ void wxDataViewColumn::OnInternalIdle()
     }
 }
 
+void wxDataViewColumn::SetOwner( wxDataViewCtrl *owner )
+{
+    wxDataViewColumnBase::SetOwner( owner );
+    
+    GtkTreeViewColumn *column = (GtkTreeViewColumn *)m_column;
+    
+#if wxUSE_UNICODE
+#else
+    gtk_tree_view_column_set_title( column, wxGTK_CONV_FONT(GetTitle(), GetOwner()->GetFont() ) );
+#endif
+}
+
 void wxDataViewColumn::SetTitle( const wxString &title )
 {
     wxDataViewColumnBase::SetTitle( title );
@@ -1544,7 +1570,14 @@ void wxDataViewColumn::SetTitle( const wxString &title )
         m_isConnected = false;
     }
 
+#if wxUSE_UNICODE
     gtk_tree_view_column_set_title( column, wxGTK_CONV(title) );
+#else
+    if (GetOwner())
+        gtk_tree_view_column_set_title( column, wxGTK_CONV_FONT(title, GetOwner()->GetFont() ) );
+    else
+        gtk_tree_view_column_set_title( column, "" );
+#endif
 
     gtk_tree_view_column_set_widget( column, NULL );
 }
@@ -1646,6 +1679,9 @@ int wxDataViewColumn::GetFixedWidth()
 static void
 wxdataview_selection_changed_callback( GtkTreeSelection* selection, wxDataViewCtrl *dv )
 {
+    if (!GTK_WIDGET_REALIZED(dv->m_widget))
+        return;
+    
     wxDataViewEvent event( wxEVT_COMMAND_DATAVIEW_ROW_SELECTED, dv->GetId() );
     event.SetRow( dv->GetSelection() );
     event.SetModel( dv->GetModel() );
@@ -1703,6 +1739,11 @@ bool wxDataViewCtrl::Create(wxWindow *parent, wxWindowID id,
     m_treeview = gtk_tree_view_new();
     gtk_container_add (GTK_CONTAINER (m_widget), m_treeview);
 
+#ifdef __WXGTK26__
+    if (!gtk_check_version(2,6,0))
+        gtk_tree_view_set_fixed_height_mode( GTK_TREE_VIEW(m_treeview), TRUE );
+#endif
+
     if (style & wxDV_MULTIPLE)
     {
         GtkTreeSelection *selection = gtk_tree_view_get_selection( GTK_TREE_VIEW(m_treeview) );
@@ -1715,13 +1756,13 @@ bool wxDataViewCtrl::Create(wxWindow *parent, wxWindowID id,
 
     m_parent->DoAddChild( this );
 
+    PostCreation(size);
+
     GtkTreeSelection *selection = gtk_tree_view_get_selection( GTK_TREE_VIEW(m_treeview) );
     g_signal_connect_after (selection, "changed",
                             G_CALLBACK (wxdataview_selection_changed_callback), this);
     g_signal_connect_after (m_treeview, "row_activated",
                             G_CALLBACK (wxdataview_row_activated_callback), this);
-
-    PostCreation(size);
 
     return true;
 }
@@ -1905,6 +1946,13 @@ int wxDataViewCtrl::GetSelections(wxArrayInt& aSelections) const
     }
     
     return 0;
+}
+
+// static
+wxVisualAttributes
+wxDataViewCtrl::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
+{
+    return GetDefaultAttributesFromGTKWidget(gtk_tree_view_new);
 }
 
 
