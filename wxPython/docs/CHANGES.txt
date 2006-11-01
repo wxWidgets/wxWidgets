@@ -17,9 +17,7 @@ Added New Zealand NZST and NZDT timezone support to wx.DateTime.
 wx.Window.GetAdjustedBestSize is deprecated.  In every conceivable
 scenario GetBestFitting size is probably what you want to use instead.
 
-
-
-
+wx.Image: Gained support for TGA image file format.
 
 
 

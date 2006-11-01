@@ -1630,7 +1630,7 @@ class HtmlHelpWindow(_core.Window):
         return _html.HtmlHelpWindow_RefreshLists(*args, **kwargs)
 
     def GetHtmlWindow(*args, **kwargs):
-        """GetHtmlWindow(self) -> wxHtmlWindow"""
+        """GetHtmlWindow(self) -> HtmlWindow"""
         return _html.HtmlHelpWindow_GetHtmlWindow(*args, **kwargs)
 
     def GetSplitterWindow(*args, **kwargs):

@@ -4837,6 +4837,14 @@ class BufferedDC(MemoryDC):
         """
         return _gdi_.BufferedDC_UnMask(*args, **kwargs)
 
+    def SetStyle(*args, **kwargs):
+        """SetStyle(self, int style)"""
+        return _gdi_.BufferedDC_SetStyle(*args, **kwargs)
+
+    def GetStyle(*args, **kwargs):
+        """GetStyle(self) -> int"""
+        return _gdi_.BufferedDC_GetStyle(*args, **kwargs)
+
 _gdi_.BufferedDC_swigregister(BufferedDC)
 
 class BufferedPaintDC(BufferedDC):

@@ -24348,7 +24348,7 @@ SWIGINTERN PyObject *PaintDC_swiginit(PyObject *SWIGUNUSEDPARM(self), PyObject *
 SWIGINTERN PyObject *_wrap_new_BufferedDC__SWIG_0(PyObject *SWIGUNUSEDPARM(self), int nobjs, PyObject **swig_obj) {
   PyObject *resultobj = 0;
   wxDC *arg1 = (wxDC *) 0 ;
-  wxBitmap const &arg2_defvalue = wxNullBitmap ;
+  wxBitmap &arg2_defvalue = wxNullBitmap ;
   wxBitmap *arg2 = (wxBitmap *) &arg2_defvalue ;
   int arg3 = (int) wxBUFFER_CLIENT_AREA ;
   wxBufferedDC *result = 0 ;
@@ -24366,12 +24366,12 @@ SWIGINTERN PyObject *_wrap_new_BufferedDC__SWIG_0(PyObject *SWIGUNUSEDPARM(self)
   }
   arg1 = reinterpret_cast< wxDC * >(argp1);
   if (swig_obj[1]) {
-    res2 = SWIG_ConvertPtr(swig_obj[1], &argp2, SWIGTYPE_p_wxBitmap,  0  | 0);
+    res2 = SWIG_ConvertPtr(swig_obj[1], &argp2, SWIGTYPE_p_wxBitmap,  0 );
     if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "new_BufferedDC" "', expected argument " "2"" of type '" "wxBitmap const &""'"); 
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "new_BufferedDC" "', expected argument " "2"" of type '" "wxBitmap &""'"); 
     }
     if (!argp2) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_BufferedDC" "', expected argument " "2"" of type '" "wxBitmap const &""'"); 
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_BufferedDC" "', expected argument " "2"" of type '" "wxBitmap &""'"); 
     }
     arg2 = reinterpret_cast< wxBitmap * >(argp2);
   }
@@ -24385,7 +24385,7 @@ SWIGINTERN PyObject *_wrap_new_BufferedDC__SWIG_0(PyObject *SWIGUNUSEDPARM(self)
   {
     if (!wxPyCheckForApp()) SWIG_fail;
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    result = (wxBufferedDC *)new wxBufferedDC(arg1,(wxBitmap const &)*arg2,arg3);
+    result = (wxBufferedDC *)new wxBufferedDC(arg1,*arg2,arg3);
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
@@ -24449,7 +24449,8 @@ SWIGINTERN PyObject *_wrap_new_BufferedDC(PyObject *self, PyObject *args) {
     int _v = 0;
     if (argc > 1) {
       {
-        int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_wxBitmap, 0);
+        void *vptr = 0;
+        int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_wxBitmap, 0);
         _v = SWIG_CheckState(res);
       }
       if (!_v) goto check_1;
@@ -24523,6 +24524,72 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_BufferedDC_SetStyle(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxBufferedDC *arg1 = (wxBufferedDC *) 0 ;
+  int arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "style", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:BufferedDC_SetStyle",kwnames,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxBufferedDC, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "BufferedDC_SetStyle" "', expected argument " "1"" of type '" "wxBufferedDC *""'"); 
+  }
+  arg1 = reinterpret_cast< wxBufferedDC * >(argp1);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "BufferedDC_SetStyle" "', expected argument " "2"" of type '" "int""'");
+  } 
+  arg2 = static_cast< int >(val2);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    (arg1)->SetStyle(arg2);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_BufferedDC_GetStyle(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxBufferedDC *arg1 = (wxBufferedDC *) 0 ;
+  int result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxBufferedDC, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "BufferedDC_GetStyle" "', expected argument " "1"" of type '" "wxBufferedDC const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxBufferedDC * >(argp1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = (int)((wxBufferedDC const *)arg1)->GetStyle();
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_From_int(static_cast< int >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *BufferedDC_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
   if (!SWIG_Python_UnpackTuple(args,(char*)"swigregister", 1, 1,&obj)) return NULL;
@@ -24537,7 +24604,7 @@ SWIGINTERN PyObject *BufferedDC_swiginit(PyObject *SWIGUNUSEDPARM(self), PyObjec
 SWIGINTERN PyObject *_wrap_new_BufferedPaintDC(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   wxWindow *arg1 = (wxWindow *) 0 ;
-  wxBitmap const &arg2_defvalue = wxNullBitmap ;
+  wxBitmap &arg2_defvalue = wxNullBitmap ;
   wxBitmap *arg2 = (wxBitmap *) &arg2_defvalue ;
   int arg3 = (int) wxBUFFER_CLIENT_AREA ;
   wxBufferedPaintDC *result = 0 ;
@@ -24561,12 +24628,12 @@ SWIGINTERN PyObject *_wrap_new_BufferedPaintDC(PyObject *SWIGUNUSEDPARM(self), P
   }
   arg1 = reinterpret_cast< wxWindow * >(argp1);
   if (obj1) {
-    res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_wxBitmap,  0  | 0);
+    res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_wxBitmap,  0 );
     if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "new_BufferedPaintDC" "', expected argument " "2"" of type '" "wxBitmap const &""'"); 
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "new_BufferedPaintDC" "', expected argument " "2"" of type '" "wxBitmap &""'"); 
     }
     if (!argp2) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_BufferedPaintDC" "', expected argument " "2"" of type '" "wxBitmap const &""'"); 
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_BufferedPaintDC" "', expected argument " "2"" of type '" "wxBitmap &""'"); 
     }
     arg2 = reinterpret_cast< wxBitmap * >(argp2);
   }
@@ -24580,7 +24647,7 @@ SWIGINTERN PyObject *_wrap_new_BufferedPaintDC(PyObject *SWIGUNUSEDPARM(self), P
   {
     if (!wxPyCheckForApp()) SWIG_fail;
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    result = (wxBufferedPaintDC *)new wxBufferedPaintDC(arg1,(wxBitmap const &)*arg2,arg3);
+    result = (wxBufferedPaintDC *)new wxBufferedPaintDC(arg1,*arg2,arg3);
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
@@ -38653,6 +38720,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"new_BufferedDC", _wrap_new_BufferedDC, METH_VARARGS, NULL},
 	 { (char *)"delete_BufferedDC", (PyCFunction)_wrap_delete_BufferedDC, METH_O, NULL},
 	 { (char *)"BufferedDC_UnMask", (PyCFunction)_wrap_BufferedDC_UnMask, METH_O, NULL},
+	 { (char *)"BufferedDC_SetStyle", (PyCFunction) _wrap_BufferedDC_SetStyle, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"BufferedDC_GetStyle", (PyCFunction)_wrap_BufferedDC_GetStyle, METH_O, NULL},
 	 { (char *)"BufferedDC_swigregister", BufferedDC_swigregister, METH_VARARGS, NULL},
 	 { (char *)"BufferedDC_swiginit", BufferedDC_swiginit, METH_VARARGS, NULL},
 	 { (char *)"new_BufferedPaintDC", (PyCFunction) _wrap_new_BufferedPaintDC, METH_VARARGS | METH_KEYWORDS, NULL},
