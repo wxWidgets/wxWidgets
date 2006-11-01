@@ -467,8 +467,8 @@ class WXDLLIMPEXP_BASE wxIntegerHash
 #if defined wxLongLong_t && !defined wxLongLongIsLong
     size_t longlongHash( wxLongLong_t x ) const
     {
-        return longHash( wx_truncate_cast(long, x) ) ^
-               longHash( wx_truncate_cast(long, x >> (sizeof(long) * 8)) );
+        return longHash( wx_truncate_cast(wxUint32, x) ) ^
+               longHash( wx_truncate_cast(wxUint32, x >> (sizeof(wxUint32) * 8)) );
     }
 #endif
 
