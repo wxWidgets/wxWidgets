@@ -82,7 +82,7 @@ void wxRendererMac::DrawHeaderButton( wxWindow *win,
     wxHeaderSortIconType sortArrow,
     wxHeaderButtonParams* params )
 {
-##if !wxMAC_USE_CORE_GRAPHICS
+#if !wxMAC_USE_CORE_GRAPHICS
     const wxCoord x = dc.LogicalToDeviceX(rect.x);
     const wxCoord y = dc.LogicalToDeviceY(rect.y);
     const wxCoord w = dc.LogicalToDeviceXRel(rect.width);
