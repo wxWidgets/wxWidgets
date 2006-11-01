@@ -911,6 +911,33 @@ bool wxListCtrl::GetItemRect(long item, wxRect& rect, int code) const
     if (m_genericImpl)
         return m_genericImpl->GetItemRect(item, rect, code);
 
+
+    if (m_dbImpl)
+    {
+        DataBrowserItemID id;
+        DataBrowserPropertyID col = kMinColumnId;
+        Rect bounds;
+        DataBrowserPropertyPart part = kDataBrowserPropertyEnclosingPart;
+        if ( code == wxLIST_RECT_LABEL )
+            part = kDataBrowserPropertyTextPart;
+        else if ( code == wxLIST_RECT_ICON )
+            part = kDataBrowserPropertyIconPart;
+            
+        if ( !(GetWindowStyleFlag() & wxLC_VIRTUAL) )
+        {
+            wxMacDataItem* thisItem = m_dbImpl->GetItemFromLine(item);
+            id = (DataBrowserItemID) thisItem;
+        }
+        else
+            id = item;
+            
+        GetDataBrowserItemPartBounds( m_dbImpl->GetControlRef(), id, col, part, &bounds );
+        
+        rect.x = bounds.left;
+        rect.y = bounds.top;
+        rect.width = GetClientSize().x; // we need the width of the whole row, not just the item.
+        rect.height = bounds.bottom - bounds.top;
+    }
     return true;
 }
 
@@ -921,6 +948,14 @@ bool wxListCtrl::GetItemPosition(long item, wxPoint& pos) const
         return m_genericImpl->GetItemPosition(item, pos);
 
     bool success = false;
+    
+    if (m_dbImpl)
+    {
+        wxRect itemRect;
+        GetItemRect(item, itemRect);
+        pos = itemRect.GetPosition();
+        success = true;
+    }
 
     return success;
 }
@@ -1370,6 +1405,42 @@ wxListCtrl::HitTest(const wxPoint& point, int& flags, long *ptrSubItem) const
     if (m_genericImpl)
         return m_genericImpl->HitTest(point, flags, ptrSubItem);
 
+    flags = wxLIST_HITTEST_NOWHERE;
+    if (m_dbImpl)
+    {
+        int colHeaderHeight = 22; // TODO: Find a way to get this value from the db control?
+        UInt16 rowHeight = 0;
+        m_dbImpl->GetDefaultRowHeight(&rowHeight);
+        
+        int y = point.y;
+        if ( !(GetWindowStyleFlag() & wxLC_NO_HEADER) )
+            y -= colHeaderHeight;
+        
+        int row = y / rowHeight;
+        DataBrowserItemID id;
+        m_dbImpl->GetItemID( (DataBrowserTableViewRowIndex) row, &id );
+        
+        // TODO: Use GetDataBrowserItemPartBounds to return if we are in icon or label
+        if ( !(GetWindowStyleFlag() & wxLC_VIRTUAL ) )
+        {
+            wxMacListCtrlItem* lcItem;
+            lcItem = (wxMacListCtrlItem*) id;
+            if (lcItem)
+            {
+                flags = wxLIST_HITTEST_ONITEM;
+                return row;
+            }
+        }
+        else
+        {
+            if (row < GetItemCount() )
+            {
+                flags = wxLIST_HITTEST_ONITEM;
+                return row;
+            }
+        }
+    
+    }
     return -1;
 }
 
@@ -2034,9 +2105,14 @@ void wxMacDataBrowserListCtrlControl::DrawItem(
             iconLabel.green = 0;
             iconLabel.blue = 0;
             
+            CGContextSaveGState(context);
+            CGContextTranslateCTM(context, 0,iconCGRect.origin.y + CGRectGetMaxY(iconCGRect));
+            CGContextScaleCTM(context,1.0f,-1.0f);
             PlotIconRefInContext(context, &iconCGRect, kAlignNone, 
               active ? kTransformNone : kTransformDisabled, &iconLabel, 
               kPlotIconRefNormalFlags, icon);
+              
+            CGContextRestoreGState(context);
         }
     }
     
