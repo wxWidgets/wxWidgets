@@ -1,9 +1,9 @@
-\section{\class{wxPaneInfo}}\label{wxpaneinfo}
+\section{\class{wxAuiPaneInfo}}\label{wxauipaneinfo}
 
-wxPaneInfo is part of the wxAUI class framework.
+wxAuiPaneInfo is part of the wxAUI class framework.
 See also \helpref{wxAUI overview}{wxauioverview}.
 
-wxPaneInfo specifies all the parameters for a pane.
+wxAuiPaneInfo specifies all the parameters for a pane.
 These parameters specify where the pane is on the
 screen, whether it is docked or floating, or hidden.
 In addition, these parameters specify the pane's
@@ -20,7 +20,7 @@ No base class
 
 \wxheading{See also}
 
-\helpref{wxFrameManager}{wxframemanager}
+\helpref{wxAuiManager}{wxauimanager}
 
 \wxheading{Data structures}
 
@@ -77,378 +77,378 @@ enum wxPaneInsertLevel
 \latexignore{\rtfignore{\wxheading{Members}}}
 
 
-\membersection{wxPaneInfo::wxPaneInfo}\label{wxpaneinfowxpaneinfo}
+\membersection{wxAuiPaneInfo::wxAuiPaneInfo}\label{wxauipaneinfowxauipaneinfo}
 
-\func{}{wxPaneInfo}{\void}
+\func{}{wxAuiPaneInfo}{\void}
 
 
-\func{}{wxPaneInfo}{\param{const wxPaneInfo\& }{c}}
+\func{}{wxAuiPaneInfo}{\param{const wxAuiPaneInfo\& }{c}}
 
 
-\membersection{wxPaneInfo::\destruct{wxPaneInfo}}\label{wxpaneinfodtor}
+\membersection{wxAuiPaneInfo::\destruct{wxAuiPaneInfo}}\label{wxauipaneinfodtor}
 
-\func{}{\destruct{wxPaneInfo}}{\void}
+\func{}{\destruct{wxAuiPaneInfo}}{\void}
 
 
-\membersection{wxPaneInfo::BestSize}\label{wxpaneinfobestsize}
+\membersection{wxAuiPaneInfo::BestSize}\label{wxauipaneinfobestsize}
 
-\func{wxPaneInfo\&}{BestSize}{\param{const wxSize\& }{size}}
+\func{wxAuiPaneInfo\&}{BestSize}{\param{const wxSize\& }{size}}
 
 
-\func{wxPaneInfo\&}{BestSize}{\param{int }{x}, \param{int }{y}}
+\func{wxAuiPaneInfo\&}{BestSize}{\param{int }{x}, \param{int }{y}}
 
 
-\membersection{wxPaneInfo::Bottom}\label{wxpaneinfobottom}
+\membersection{wxAuiPaneInfo::Bottom}\label{wxauipaneinfobottom}
 
-\func{wxPaneInfo\&}{Bottom}{\void}
+\func{wxAuiPaneInfo\&}{Bottom}{\void}
 
 
-\membersection{wxPaneInfo::BottomDockable}\label{wxpaneinfobottomdockable}
+\membersection{wxAuiPaneInfo::BottomDockable}\label{wxauipaneinfobottomdockable}
 
-\func{wxPaneInfo\&}{BottomDockable}{\param{bool }{b = true}}
+\func{wxAuiPaneInfo\&}{BottomDockable}{\param{bool }{b = true}}
 
 
-\membersection{wxPaneInfo::Caption}\label{wxpaneinfocaption}
+\membersection{wxAuiPaneInfo::Caption}\label{wxauipaneinfocaption}
 
-\func{wxPaneInfo\&}{Caption}{\param{const wxString\& }{c}}
+\func{wxAuiPaneInfo\&}{Caption}{\param{const wxString\& }{c}}
 
 
-\membersection{wxPaneInfo::CaptionVisible}\label{wxpaneinfocaptionvisible}
+\membersection{wxAuiPaneInfo::CaptionVisible}\label{wxauipaneinfocaptionvisible}
 
-\func{wxPaneInfo\&}{CaptionVisible}{\param{bool }{visible = true}}
+\func{wxAuiPaneInfo\&}{CaptionVisible}{\param{bool }{visible = true}}
 
 
-\membersection{wxPaneInfo::Center}\label{wxpaneinfocenter}
+\membersection{wxAuiPaneInfo::Center}\label{wxauipaneinfocenter}
 
-\func{wxPaneInfo\&}{Center}{\void}
+\func{wxAuiPaneInfo\&}{Center}{\void}
 
 
-\membersection{wxPaneInfo::CenterPane}\label{wxpaneinfocenterpane}
+\membersection{wxAuiPaneInfo::CenterPane}\label{wxauipaneinfocenterpane}
 
-\func{wxPaneInfo\&}{CenterPane}{\void}
+\func{wxAuiPaneInfo\&}{CenterPane}{\void}
 
 
-\membersection{wxPaneInfo::Centre}\label{wxpaneinfocentre}
+\membersection{wxAuiPaneInfo::Centre}\label{wxauipaneinfocentre}
 
-\func{wxPaneInfo\&}{Centre}{\void}
+\func{wxAuiPaneInfo\&}{Centre}{\void}
 
 
-\membersection{wxPaneInfo::CentrePane}\label{wxpaneinfocentrepane}
+\membersection{wxAuiPaneInfo::CentrePane}\label{wxauipaneinfocentrepane}
 
-\func{wxPaneInfo\&}{CentrePane}{\void}
+\func{wxAuiPaneInfo\&}{CentrePane}{\void}
 
 
-\membersection{wxPaneInfo::CloseButton}\label{wxpaneinfoclosebutton}
+\membersection{wxAuiPaneInfo::CloseButton}\label{wxauipaneinfoclosebutton}
 
-\func{wxPaneInfo\&}{CloseButton}{\param{bool }{visible = true}}
+\func{wxAuiPaneInfo\&}{CloseButton}{\param{bool }{visible = true}}
 
 
-\membersection{wxPaneInfo::DefaultPane}\label{wxpaneinfodefaultpane}
+\membersection{wxAuiPaneInfo::DefaultPane}\label{wxauipaneinfodefaultpane}
 
-\func{wxPaneInfo\&}{DefaultPane}{\void}
+\func{wxAuiPaneInfo\&}{DefaultPane}{\void}
 
 
-\membersection{wxPaneInfo::DestroyOnClose}\label{wxpaneinfodestroyonclose}
+\membersection{wxAuiPaneInfo::DestroyOnClose}\label{wxauipaneinfodestroyonclose}
 
-\func{wxPaneInfo\&}{DestroyOnClose}{\param{bool }{b = true}}
+\func{wxAuiPaneInfo\&}{DestroyOnClose}{\param{bool }{b = true}}
 
 
-\membersection{wxPaneInfo::Direction}\label{wxpaneinfodirection}
+\membersection{wxAuiPaneInfo::Direction}\label{wxauipaneinfodirection}
 
-\func{wxPaneInfo\&}{Direction}{\param{int }{direction}}
+\func{wxAuiPaneInfo\&}{Direction}{\param{int }{direction}}
 
 
-\membersection{wxPaneInfo::Dock}\label{wxpaneinfodock}
+\membersection{wxAuiPaneInfo::Dock}\label{wxauipaneinfodock}
 
-\func{wxPaneInfo\&}{Dock}{\void}
+\func{wxAuiPaneInfo\&}{Dock}{\void}
 
 
-\membersection{wxPaneInfo::Dockable}\label{wxpaneinfodockable}
+\membersection{wxAuiPaneInfo::Dockable}\label{wxauipaneinfodockable}
 
-\func{wxPaneInfo\&}{Dockable}{\param{bool }{b = true}}
+\func{wxAuiPaneInfo\&}{Dockable}{\param{bool }{b = true}}
 
 
-\membersection{wxPaneInfo::Fixed}\label{wxpaneinfofixed}
+\membersection{wxAuiPaneInfo::Fixed}\label{wxauipaneinfofixed}
 
-\func{wxPaneInfo\&}{Fixed}{\void}
+\func{wxAuiPaneInfo\&}{Fixed}{\void}
 
 
-\membersection{wxPaneInfo::Float}\label{wxpaneinfofloat}
+\membersection{wxAuiPaneInfo::Float}\label{wxauipaneinfofloat}
 
-\func{wxPaneInfo\&}{Float}{\void}
+\func{wxAuiPaneInfo\&}{Float}{\void}
 
 
-\membersection{wxPaneInfo::Floatable}\label{wxpaneinfofloatable}
+\membersection{wxAuiPaneInfo::Floatable}\label{wxauipaneinfofloatable}
 
-\func{wxPaneInfo\&}{Floatable}{\param{bool }{b = true}}
+\func{wxAuiPaneInfo\&}{Floatable}{\param{bool }{b = true}}
 
 
-\membersection{wxPaneInfo::FloatingPosition}\label{wxpaneinfofloatingposition}
+\membersection{wxAuiPaneInfo::FloatingPosition}\label{wxauipaneinfofloatingposition}
 
-\func{wxPaneInfo\&}{FloatingPosition}{\param{const wxPoint\& }{pos}}
+\func{wxAuiPaneInfo\&}{FloatingPosition}{\param{const wxPoint\& }{pos}}
 
 
-\func{wxPaneInfo\&}{FloatingPosition}{\param{int }{x}, \param{int }{y}}
+\func{wxAuiPaneInfo\&}{FloatingPosition}{\param{int }{x}, \param{int }{y}}
 
 
-\membersection{wxPaneInfo::FloatingSize}\label{wxpaneinfofloatingsize}
+\membersection{wxAuiPaneInfo::FloatingSize}\label{wxauipaneinfofloatingsize}
 
-\func{wxPaneInfo\&}{FloatingSize}{\param{const wxSize\& }{size}}
+\func{wxAuiPaneInfo\&}{FloatingSize}{\param{const wxSize\& }{size}}
 
 
-\func{wxPaneInfo\&}{FloatingSize}{\param{int }{x}, \param{int }{y}}
+\func{wxAuiPaneInfo\&}{FloatingSize}{\param{int }{x}, \param{int }{y}}
 
 
-\membersection{wxPaneInfo::Gripper}\label{wxpaneinfogripper}
+\membersection{wxAuiPaneInfo::Gripper}\label{wxauipaneinfogripper}
 
-\func{wxPaneInfo\&}{Gripper}{\param{bool }{visible = true}}
+\func{wxAuiPaneInfo\&}{Gripper}{\param{bool }{visible = true}}
 
 
-\membersection{wxPaneInfo::GripperTop}\label{wxpaneinfogrippertop}
+\membersection{wxAuiPaneInfo::GripperTop}\label{wxauipaneinfogrippertop}
 
-\func{wxPaneInfo\&}{GripperTop}{\param{bool }{attop = true}}
+\func{wxAuiPaneInfo\&}{GripperTop}{\param{bool }{attop = true}}
 
 
-\membersection{wxPaneInfo::HasBorder}\label{wxpaneinfohasborder}
+\membersection{wxAuiPaneInfo::HasBorder}\label{wxauipaneinfohasborder}
 
 \constfunc{bool}{HasBorder}{\void}
 
 
-\membersection{wxPaneInfo::HasCaption}\label{wxpaneinfohascaption}
+\membersection{wxAuiPaneInfo::HasCaption}\label{wxauipaneinfohascaption}
 
 \constfunc{bool}{HasCaption}{\void}
 
 
-\membersection{wxPaneInfo::HasCloseButton}\label{wxpaneinfohasclosebutton}
+\membersection{wxAuiPaneInfo::HasCloseButton}\label{wxauipaneinfohasclosebutton}
 
 \constfunc{bool}{HasCloseButton}{\void}
 
 
-\membersection{wxPaneInfo::HasFlag}\label{wxpaneinfohasflag}
+\membersection{wxAuiPaneInfo::HasFlag}\label{wxauipaneinfohasflag}
 
 \constfunc{bool}{HasFlag}{\param{unsigned int }{flag}}
 
 
-\membersection{wxPaneInfo::HasGripper}\label{wxpaneinfohasgripper}
+\membersection{wxAuiPaneInfo::HasGripper}\label{wxauipaneinfohasgripper}
 
 \constfunc{bool}{HasGripper}{\void}
 
 
-\membersection{wxPaneInfo::HasGripperTop}\label{wxpaneinfohasgrippertop}
+\membersection{wxAuiPaneInfo::HasGripperTop}\label{wxauipaneinfohasgrippertop}
 
 \constfunc{bool}{HasGripperTop}{\void}
 
 
-\membersection{wxPaneInfo::HasMaximizeButton}\label{wxpaneinfohasmaximizebutton}
+\membersection{wxAuiPaneInfo::HasMaximizeButton}\label{wxauipaneinfohasmaximizebutton}
 
 \constfunc{bool}{HasMaximizeButton}{\void}
 
 
-\membersection{wxPaneInfo::HasMinimizeButton}\label{wxpaneinfohasminimizebutton}
+\membersection{wxAuiPaneInfo::HasMinimizeButton}\label{wxauipaneinfohasminimizebutton}
 
 \constfunc{bool}{HasMinimizeButton}{\void}
 
 
-\membersection{wxPaneInfo::HasPinButton}\label{wxpaneinfohaspinbutton}
+\membersection{wxAuiPaneInfo::HasPinButton}\label{wxauipaneinfohaspinbutton}
 
 \constfunc{bool}{HasPinButton}{\void}
 
 
-\membersection{wxPaneInfo::Hide}\label{wxpaneinfohide}
+\membersection{wxAuiPaneInfo::Hide}\label{wxauipaneinfohide}
 
-\func{wxPaneInfo\&}{Hide}{\void}
+\func{wxAuiPaneInfo\&}{Hide}{\void}
 
 
-\membersection{wxPaneInfo::IsBottomDockable}\label{wxpaneinfoisbottomdockable}
+\membersection{wxAuiPaneInfo::IsBottomDockable}\label{wxauipaneinfoisbottomdockable}
 
 \constfunc{bool}{IsBottomDockable}{\void}
 
 
-\membersection{wxPaneInfo::IsDocked}\label{wxpaneinfoisdocked}
+\membersection{wxAuiPaneInfo::IsDocked}\label{wxauipaneinfoisdocked}
 
 \constfunc{bool}{IsDocked}{\void}
 
 
-\membersection{wxPaneInfo::IsFixed}\label{wxpaneinfoisfixed}
+\membersection{wxAuiPaneInfo::IsFixed}\label{wxauipaneinfoisfixed}
 
 \constfunc{bool}{IsFixed}{\void}
 
 
-\membersection{wxPaneInfo::IsFloatable}\label{wxpaneinfoisfloatable}
+\membersection{wxAuiPaneInfo::IsFloatable}\label{wxauipaneinfoisfloatable}
 
 \constfunc{bool}{IsFloatable}{\void}
 
 
-\membersection{wxPaneInfo::IsFloating}\label{wxpaneinfoisfloating}
+\membersection{wxAuiPaneInfo::IsFloating}\label{wxauipaneinfoisfloating}
 
 \constfunc{bool}{IsFloating}{\void}
 
 
-\membersection{wxPaneInfo::IsLeftDockable}\label{wxpaneinfoisleftdockable}
+\membersection{wxAuiPaneInfo::IsLeftDockable}\label{wxauipaneinfoisleftdockable}
 
 \constfunc{bool}{IsLeftDockable}{\void}
 
 
-\membersection{wxPaneInfo::IsMovable}\label{wxpaneinfoismovable}
+\membersection{wxAuiPaneInfo::IsMovable}\label{wxauipaneinfoismovable}
 
 \constfunc{bool}{IsMovable}{\void}
 
 
-\membersection{wxPaneInfo::IsOk}\label{wxpaneinfoisok}
+\membersection{wxAuiPaneInfo::IsOk}\label{wxauipaneinfoisok}
 
 \constfunc{bool}{IsOk}{\void}
 
 
-\membersection{wxPaneInfo::IsResizable}\label{wxpaneinfoisresizable}
+\membersection{wxAuiPaneInfo::IsResizable}\label{wxauipaneinfoisresizable}
 
 \constfunc{bool}{IsResizable}{\void}
 
 
-\membersection{wxPaneInfo::IsRightDockable}\label{wxpaneinfoisrightdockable}
+\membersection{wxAuiPaneInfo::IsRightDockable}\label{wxauipaneinfoisrightdockable}
 
 \constfunc{bool}{IsRightDockable}{\void}
 
 
-\membersection{wxPaneInfo::IsShown}\label{wxpaneinfoisshown}
+\membersection{wxAuiPaneInfo::IsShown}\label{wxauipaneinfoisshown}
 
 \constfunc{bool}{IsShown}{\void}
 
 
-\membersection{wxPaneInfo::IsToolbar}\label{wxpaneinfoistoolbar}
+\membersection{wxAuiPaneInfo::IsToolbar}\label{wxauipaneinfoistoolbar}
 
 \constfunc{bool}{IsToolbar}{\void}
 
 
-\membersection{wxPaneInfo::IsTopDockable}\label{wxpaneinfoistopdockable}
+\membersection{wxAuiPaneInfo::IsTopDockable}\label{wxauipaneinfoistopdockable}
 
 \constfunc{bool}{IsTopDockable}{\void}
 
 
-\membersection{wxPaneInfo::Layer}\label{wxpaneinfolayer}
+\membersection{wxAuiPaneInfo::Layer}\label{wxauipaneinfolayer}
 
-\func{wxPaneInfo\&}{Layer}{\param{int }{layer}}
-
-
-\membersection{wxPaneInfo::Left}\label{wxpaneinfoleft}
-
-\func{wxPaneInfo\&}{Left}{\void}
+\func{wxAuiPaneInfo\&}{Layer}{\param{int }{layer}}
 
 
-\membersection{wxPaneInfo::LeftDockable}\label{wxpaneinfoleftdockable}
+\membersection{wxAuiPaneInfo::Left}\label{wxauipaneinfoleft}
 
-\func{wxPaneInfo\&}{LeftDockable}{\param{bool }{b = true}}
-
-
-\membersection{wxPaneInfo::MaxSize}\label{wxpaneinfomaxsize}
-
-\func{wxPaneInfo\&}{MaxSize}{\param{const wxSize\& }{size}}
+\func{wxAuiPaneInfo\&}{Left}{\void}
 
 
-\func{wxPaneInfo\&}{MaxSize}{\param{int }{x}, \param{int }{y}}
+\membersection{wxAuiPaneInfo::LeftDockable}\label{wxauipaneinfoleftdockable}
+
+\func{wxAuiPaneInfo\&}{LeftDockable}{\param{bool }{b = true}}
 
 
-\membersection{wxPaneInfo::MaximizeButton}\label{wxpaneinfomaximizebutton}
+\membersection{wxAuiPaneInfo::MaxSize}\label{wxauipaneinfomaxsize}
 
-\func{wxPaneInfo\&}{MaximizeButton}{\param{bool }{visible = true}}
-
-
-\membersection{wxPaneInfo::MinSize}\label{wxpaneinfominsize}
-
-\func{wxPaneInfo\&}{MinSize}{\param{const wxSize\& }{size}}
+\func{wxAuiPaneInfo\&}{MaxSize}{\param{const wxSize\& }{size}}
 
 
-\func{wxPaneInfo\&}{MinSize}{\param{int }{x}, \param{int }{y}}
+\func{wxAuiPaneInfo\&}{MaxSize}{\param{int }{x}, \param{int }{y}}
 
 
-\membersection{wxPaneInfo::MinimizeButton}\label{wxpaneinfominimizebutton}
+\membersection{wxAuiPaneInfo::MaximizeButton}\label{wxauipaneinfomaximizebutton}
 
-\func{wxPaneInfo\&}{MinimizeButton}{\param{bool }{visible = true}}
-
-
-\membersection{wxPaneInfo::Movable}\label{wxpaneinfomovable}
-
-\func{wxPaneInfo\&}{Movable}{\param{bool }{b = true}}
+\func{wxAuiPaneInfo\&}{MaximizeButton}{\param{bool }{visible = true}}
 
 
-\membersection{wxPaneInfo::Name}\label{wxpaneinfoname}
+\membersection{wxAuiPaneInfo::MinSize}\label{wxauipaneinfominsize}
 
-\func{wxPaneInfo\&}{Name}{\param{const wxString\& }{n}}
-
-
-\membersection{wxPaneInfo::PaneBorder}\label{wxpaneinfopaneborder}
-
-\func{wxPaneInfo\&}{PaneBorder}{\param{bool }{visible = true}}
+\func{wxAuiPaneInfo\&}{MinSize}{\param{const wxSize\& }{size}}
 
 
-\membersection{wxPaneInfo::PinButton}\label{wxpaneinfopinbutton}
-
-\func{wxPaneInfo\&}{PinButton}{\param{bool }{visible = true}}
+\func{wxAuiPaneInfo\&}{MinSize}{\param{int }{x}, \param{int }{y}}
 
 
-\membersection{wxPaneInfo::Position}\label{wxpaneinfoposition}
+\membersection{wxAuiPaneInfo::MinimizeButton}\label{wxauipaneinfominimizebutton}
 
-\func{wxPaneInfo\&}{Position}{\param{int }{pos}}
-
-
-\membersection{wxPaneInfo::Resizable}\label{wxpaneinforesizable}
-
-\func{wxPaneInfo\&}{Resizable}{\param{bool }{resizable = true}}
+\func{wxAuiPaneInfo\&}{MinimizeButton}{\param{bool }{visible = true}}
 
 
-\membersection{wxPaneInfo::Right}\label{wxpaneinforight}
+\membersection{wxAuiPaneInfo::Movable}\label{wxauipaneinfomovable}
 
-\func{wxPaneInfo\&}{Right}{\void}
-
-
-\membersection{wxPaneInfo::RightDockable}\label{wxpaneinforightdockable}
-
-\func{wxPaneInfo\&}{RightDockable}{\param{bool }{b = true}}
+\func{wxAuiPaneInfo\&}{Movable}{\param{bool }{b = true}}
 
 
-\membersection{wxPaneInfo::Row}\label{wxpaneinforow}
+\membersection{wxAuiPaneInfo::Name}\label{wxauipaneinfoname}
 
-\func{wxPaneInfo\&}{Row}{\param{int }{row}}
+\func{wxAuiPaneInfo\&}{Name}{\param{const wxString\& }{n}}
 
 
-\membersection{wxPaneInfo::SafeSet}\label{wxpaneinfosafeset}
+\membersection{wxAuiPaneInfo::PaneBorder}\label{wxauipaneinfopaneborder}
 
-\func{void}{SafeSet}{\param{wxPaneInfo }{source}}
+\func{wxAuiPaneInfo\&}{PaneBorder}{\param{bool }{visible = true}}
+
+
+\membersection{wxAuiPaneInfo::PinButton}\label{wxauipaneinfopinbutton}
+
+\func{wxAuiPaneInfo\&}{PinButton}{\param{bool }{visible = true}}
+
+
+\membersection{wxAuiPaneInfo::Position}\label{wxauipaneinfoposition}
+
+\func{wxAuiPaneInfo\&}{Position}{\param{int }{pos}}
+
+
+\membersection{wxAuiPaneInfo::Resizable}\label{wxauipaneinforesizable}
+
+\func{wxAuiPaneInfo\&}{Resizable}{\param{bool }{resizable = true}}
+
+
+\membersection{wxAuiPaneInfo::Right}\label{wxauipaneinforight}
+
+\func{wxAuiPaneInfo\&}{Right}{\void}
+
+
+\membersection{wxAuiPaneInfo::RightDockable}\label{wxauipaneinforightdockable}
+
+\func{wxAuiPaneInfo\&}{RightDockable}{\param{bool }{b = true}}
+
+
+\membersection{wxAuiPaneInfo::Row}\label{wxauipaneinforow}
+
+\func{wxAuiPaneInfo\&}{Row}{\param{int }{row}}
+
+
+\membersection{wxAuiPaneInfo::SafeSet}\label{wxauipaneinfosafeset}
+
+\func{void}{SafeSet}{\param{wxAuiPaneInfo }{source}}
 
 Write the safe parts of a newly loaded PaneInfo structure "source" into "this"
 used on loading perspectives etc.
 
 
-\membersection{wxPaneInfo::SetFlag}\label{wxpaneinfosetflag}
+\membersection{wxAuiPaneInfo::SetFlag}\label{wxauipaneinfosetflag}
 
-\func{wxPaneInfo\&}{SetFlag}{\param{unsigned int }{flag}, \param{bool }{option\_state}}
-
-
-\membersection{wxPaneInfo::Show}\label{wxpaneinfoshow}
-
-\func{wxPaneInfo\&}{Show}{\param{bool }{show = true}}
+\func{wxAuiPaneInfo\&}{SetFlag}{\param{unsigned int }{flag}, \param{bool }{option\_state}}
 
 
-\membersection{wxPaneInfo::ToolbarPane}\label{wxpaneinfotoolbarpane}
+\membersection{wxAuiPaneInfo::Show}\label{wxauipaneinfoshow}
 
-\func{wxPaneInfo\&}{ToolbarPane}{\void}
-
-
-\membersection{wxPaneInfo::Top}\label{wxpaneinfotop}
-
-\func{wxPaneInfo\&}{Top}{\void}
+\func{wxAuiPaneInfo\&}{Show}{\param{bool }{show = true}}
 
 
-\membersection{wxPaneInfo::TopDockable}\label{wxpaneinfotopdockable}
+\membersection{wxAuiPaneInfo::ToolbarPane}\label{wxauipaneinfotoolbarpane}
 
-\func{wxPaneInfo\&}{TopDockable}{\param{bool }{b = true}}
-
-
-\membersection{wxPaneInfo::Window}\label{wxpaneinfowindow}
-
-\func{wxPaneInfo\&}{Window}{\param{wxWindow* }{w}}
+\func{wxAuiPaneInfo\&}{ToolbarPane}{\void}
 
 
-\membersection{wxPaneInfo::operator=}\label{wxpaneinfooperatorassign}
+\membersection{wxAuiPaneInfo::Top}\label{wxauipaneinfotop}
 
-\func{wxPaneInfo\& operator}{operator=}{\param{const wxPaneInfo\& }{c}}
+\func{wxAuiPaneInfo\&}{Top}{\void}
+
+
+\membersection{wxAuiPaneInfo::TopDockable}\label{wxauipaneinfotopdockable}
+
+\func{wxAuiPaneInfo\&}{TopDockable}{\param{bool }{b = true}}
+
+
+\membersection{wxAuiPaneInfo::Window}\label{wxauipaneinfowindow}
+
+\func{wxAuiPaneInfo\&}{Window}{\param{wxWindow* }{w}}
+
+
+\membersection{wxAuiPaneInfo::operator=}\label{wxauipaneinfooperatorassign}
+
+\func{wxAuiPaneInfo\& operator}{operator=}{\param{const wxAuiPaneInfo\& }{c}}
 
