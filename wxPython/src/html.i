@@ -1546,7 +1546,7 @@ public:
     void RefreshLists();
 
     // Gets the HTML window
-    wxHtmlWindow* GetHtmlWindow() const;
+    wxPyHtmlWindow* GetHtmlWindow() const;
 
     // Gets the splitter window
     wxSplitterWindow* GetSplitterWindow();
