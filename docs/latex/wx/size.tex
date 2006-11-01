@@ -142,12 +142,13 @@ corresponding dimensions of the \arg{size}.
 
 \membersection{wxSize::Scale}\label{wxsizescale}
 
-\func{void}{Scale}{\param{float}{ xscale}, \param{float}{ yscale}}
+\func{wxSize\&}{Scale}{\param{float}{ xscale}, \param{float}{ yscale}}
 
 Scales the dimensions of this object by the given factors.
 If you want to scale both dimensions by the same factor you can also use
 the \helpref{operator *=}{wxsizeoperators}
 
+Returns a reference to this object (so that you can concatenate other operations in the same line).
 
 
 \membersection{wxSize::Set}\label{wxsizeset}

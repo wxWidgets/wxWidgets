@@ -239,8 +239,8 @@ public:
     void DecBy(int d) { DecBy(d, d); }
 
 
-    void Scale(float xscale, float yscale)
-        { x = (int)(x*xscale); y = (int)(y*yscale); }
+    wxSize& Scale(float xscale, float yscale)
+        { x = (int)(x*xscale); y = (int)(y*yscale); return *this; }
 
     // accessors
     void Set(int xx, int yy) { x = xx; y = yy; }
