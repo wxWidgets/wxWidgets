@@ -33,6 +33,9 @@
         // 'expression' : signed/unsigned mismatch
         #pragma warning(default:4018)
 
+        // 'identifier' : unreferenced formal parameter
+        #pragma warning(default:4100)
+
         // 'conversion' : conversion from 'type1' to 'type2',
         // possible loss of data
         #pragma warning(default:4244)
