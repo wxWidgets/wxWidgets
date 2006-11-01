@@ -218,14 +218,14 @@ void wxAuiMDIParentFrame::SetActiveChild(wxAuiMDIChildFrame* pChildFrame)
     m_pActiveChild = pChildFrame;
 }
 
-wxAuiTabMDIClientWindow *wxAuiMDIParentFrame::GetClientWindow() const
+wxAuiMDIClientWindow *wxAuiMDIParentFrame::GetClientWindow() const
 {
     return m_pClientWindow;
 }
 
-wxAuiTabMDIClientWindow *wxAuiMDIParentFrame::OnCreateClient()
+wxAuiMDIClientWindow *wxAuiMDIParentFrame::OnCreateClient()
 {
-    m_pClientWindow = new wxAuiTabMDIClientWindow( this );
+    m_pClientWindow = new wxAuiMDIClientWindow( this );
     return m_pClientWindow;
 }
 
@@ -374,7 +374,7 @@ bool wxAuiMDIChildFrame::Create(wxAuiMDIParentFrame* parent,
                                 long style,
                                 const wxString& name)
 {
-    wxAuiTabMDIClientWindow* pClientWindow = parent->GetClientWindow();
+    wxAuiMDIClientWindow* pClientWindow = parent->GetClientWindow();
     wxASSERT_MSG((pClientWindow != (wxWindow*) NULL), wxT("Missing MDI client window."));
 
     wxPanel::Create(pClientWindow, id, wxDefaultPosition, size, style|wxNO_BORDER, name);
@@ -397,7 +397,7 @@ bool wxAuiMDIChildFrame::Destroy()
     wxAuiMDIParentFrame* pParentFrame = GetMDIParentFrame();
     wxASSERT_MSG(pParentFrame, wxT("Missing MDI Parent Frame"));
 
-    wxAuiTabMDIClientWindow* pClientWindow = pParentFrame->GetClientWindow();
+    wxAuiMDIClientWindow* pClientWindow = pParentFrame->GetClientWindow();
     wxASSERT_MSG(pClientWindow, wxT("Missing MDI Client Window"));
 
     if (pParentFrame->GetActiveChild() == this)
@@ -451,7 +451,7 @@ void wxAuiMDIChildFrame::SetTitle(const wxString& title)
     wxAuiMDIParentFrame* pParentFrame = GetMDIParentFrame();
     wxASSERT_MSG(pParentFrame, wxT("Missing MDI Parent Frame"));
 
-    wxAuiTabMDIClientWindow* pClientWindow = pParentFrame->GetClientWindow();
+    wxAuiMDIClientWindow* pClientWindow = pParentFrame->GetClientWindow();
     if (pClientWindow != NULL)
     {
         size_t pos;
@@ -476,7 +476,7 @@ void wxAuiMDIChildFrame::Activate()
     wxAuiMDIParentFrame* pParentFrame = GetMDIParentFrame();
     wxASSERT_MSG(pParentFrame, wxT("Missing MDI Parent Frame"));
 
-    wxAuiTabMDIClientWindow* pClientWindow = pParentFrame->GetClientWindow();
+    wxAuiMDIClientWindow* pClientWindow = pParentFrame->GetClientWindow();
 
     if (pClientWindow != NULL)
     {
@@ -572,31 +572,31 @@ void wxAuiMDIChildFrame::ApplyMDIChildFrameRect()
 
 
 //-----------------------------------------------------------------------------
-// wxAuiTabMDIClientWindow
+// wxAuiMDIClientWindow
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxAuiTabMDIClientWindow, wxAuiNotebook)
+IMPLEMENT_DYNAMIC_CLASS(wxAuiMDIClientWindow, wxAuiNotebook)
 
-BEGIN_EVENT_TABLE(wxAuiTabMDIClientWindow, wxAuiNotebook)
-    EVT_AUINOTEBOOK_PAGE_CHANGED(wxID_ANY, wxAuiTabMDIClientWindow::OnPageChanged)
-    EVT_SIZE(wxAuiTabMDIClientWindow::OnSize)
+BEGIN_EVENT_TABLE(wxAuiMDIClientWindow, wxAuiNotebook)
+    EVT_AUINOTEBOOK_PAGE_CHANGED(wxID_ANY, wxAuiMDIClientWindow::OnPageChanged)
+    EVT_SIZE(wxAuiMDIClientWindow::OnSize)
 END_EVENT_TABLE()
 
-wxAuiTabMDIClientWindow::wxAuiTabMDIClientWindow()
+wxAuiMDIClientWindow::wxAuiMDIClientWindow()
 {
 }
 
-wxAuiTabMDIClientWindow::wxAuiTabMDIClientWindow(wxAuiMDIParentFrame* parent, long style)
+wxAuiMDIClientWindow::wxAuiMDIClientWindow(wxAuiMDIParentFrame* parent, long style)
 {
     CreateClient(parent, style);
 }
 
-wxAuiTabMDIClientWindow::~wxAuiTabMDIClientWindow()
+wxAuiMDIClientWindow::~wxAuiMDIClientWindow()
 {
     DestroyChildren();
 }
 
-bool wxAuiTabMDIClientWindow::CreateClient(wxAuiMDIParentFrame* parent, long style)
+bool wxAuiMDIClientWindow::CreateClient(wxAuiMDIParentFrame* parent, long style)
 {
     SetWindowStyleFlag(style);
 
@@ -617,12 +617,12 @@ bool wxAuiTabMDIClientWindow::CreateClient(wxAuiMDIParentFrame* parent, long sty
     return true;
 }
 
-int wxAuiTabMDIClientWindow::SetSelection(size_t nPage)
+int wxAuiMDIClientWindow::SetSelection(size_t nPage)
 {
     return wxAuiNotebook::SetSelection(nPage);
 }
 
-void wxAuiTabMDIClientWindow::PageChanged(int old_selection, int new_selection)
+void wxAuiMDIClientWindow::PageChanged(int old_selection, int new_selection)
 {
     // don't do anything if the page doesn't actually change
     if (old_selection == new_selection)
@@ -640,7 +640,7 @@ void wxAuiTabMDIClientWindow::PageChanged(int old_selection, int new_selection)
     if (old_selection != -1)
     {
         wxAuiMDIChildFrame* old_child = (wxAuiMDIChildFrame*)GetPage(old_selection);
-        wxASSERT_MSG(old_child, wxT("wxAuiTabMDIClientWindow::PageChanged - null page pointer"));
+        wxASSERT_MSG(old_child, wxT("wxAuiMDIClientWindow::PageChanged - null page pointer"));
 
         wxActivateEvent event(wxEVT_ACTIVATE, false, old_child->GetId());
         event.SetEventObject(old_child);
@@ -651,7 +651,7 @@ void wxAuiTabMDIClientWindow::PageChanged(int old_selection, int new_selection)
     if (new_selection != -1)
     {
         wxAuiMDIChildFrame* active_child = (wxAuiMDIChildFrame*)GetPage(new_selection);
-        wxASSERT_MSG(active_child, wxT("wxAuiTabMDIClientWindow::PageChanged - null page pointer"));
+        wxASSERT_MSG(active_child, wxT("wxAuiMDIClientWindow::PageChanged - null page pointer"));
 
         wxActivateEvent event(wxEVT_ACTIVATE, true, active_child->GetId());
         event.SetEventObject(active_child);
@@ -665,13 +665,13 @@ void wxAuiTabMDIClientWindow::PageChanged(int old_selection, int new_selection)
     }
 }
 
-void wxAuiTabMDIClientWindow::OnPageChanged(wxAuiNotebookEvent& evt)
+void wxAuiMDIClientWindow::OnPageChanged(wxAuiNotebookEvent& evt)
 {
     PageChanged(evt.GetOldSelection(), evt.GetSelection());
     evt.Skip();
 }
 
-void wxAuiTabMDIClientWindow::OnSize(wxSizeEvent& evt)
+void wxAuiMDIClientWindow::OnSize(wxSizeEvent& evt)
 {
     wxAuiNotebook::OnSize(evt);
 

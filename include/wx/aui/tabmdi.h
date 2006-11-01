@@ -28,7 +28,7 @@
 //-----------------------------------------------------------------------------
 
 class WXDLLIMPEXP_AUI wxAuiMDIParentFrame;
-class WXDLLIMPEXP_AUI wxAuiTabMDIClientWindow;
+class WXDLLIMPEXP_AUI wxAuiMDIClientWindow;
 class WXDLLIMPEXP_AUI wxAuiMDIChildFrame;
 
 //-----------------------------------------------------------------------------
@@ -71,8 +71,8 @@ public:
     wxAuiMDIChildFrame *GetActiveChild() const;
     inline void SetActiveChild(wxAuiMDIChildFrame* pChildFrame);
 
-    wxAuiTabMDIClientWindow *GetClientWindow() const;
-    virtual wxAuiTabMDIClientWindow *OnCreateClient();
+    wxAuiMDIClientWindow *GetClientWindow() const;
+    virtual wxAuiMDIClientWindow *OnCreateClient();
 
     virtual void Cascade() { /* Has no effect */ }
     virtual void Tile(wxOrientation WXUNUSED(orient) = wxHORIZONTAL) { }
@@ -81,7 +81,7 @@ public:
     virtual void ActivatePrevious();
 
 protected:
-    wxAuiTabMDIClientWindow   *m_pClientWindow;
+    wxAuiMDIClientWindow   *m_pClientWindow;
     wxAuiMDIChildFrame     *m_pActiveChild;
 
 #if wxUSE_MENUS
@@ -221,19 +221,19 @@ private:
     DECLARE_DYNAMIC_CLASS(wxAuiMDIChildFrame)
     DECLARE_EVENT_TABLE()
 
-    friend class wxAuiTabMDIClientWindow;
+    friend class wxAuiMDIClientWindow;
 };
 
 //-----------------------------------------------------------------------------
-// wxAuiTabMDIClientWindow
+// wxAuiMDIClientWindow
 //-----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_AUI wxAuiTabMDIClientWindow : public wxAuiNotebook
+class WXDLLIMPEXP_AUI wxAuiMDIClientWindow : public wxAuiNotebook
 {
 public:
-    wxAuiTabMDIClientWindow();
-    wxAuiTabMDIClientWindow(wxAuiMDIParentFrame *parent, long style = 0);
-    ~wxAuiTabMDIClientWindow();
+    wxAuiMDIClientWindow();
+    wxAuiMDIClientWindow(wxAuiMDIParentFrame *parent, long style = 0);
+    ~wxAuiMDIClientWindow();
 
     virtual bool CreateClient(wxAuiMDIParentFrame *parent,
                               long style = wxVSCROLL | wxHSCROLL);
@@ -247,7 +247,7 @@ protected:
     void OnSize(wxSizeEvent& evt);
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxAuiTabMDIClientWindow)
+    DECLARE_DYNAMIC_CLASS(wxAuiMDIClientWindow)
     DECLARE_EVENT_TABLE()
 };
 #endif // wxUSE_AUI
