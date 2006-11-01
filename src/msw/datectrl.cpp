@@ -254,7 +254,7 @@ void wxDatePickerCtrl::SetValue(const wxDateTime& dt)
         wxLogDebug(_T("DateTime_SetSystemtime() failed"));
     }
 
-    m_date = dt;
+    wxFromSystemTime(&m_date, st);
 }
 
 wxDateTime wxDatePickerCtrl::GetValue() const
