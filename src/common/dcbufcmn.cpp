@@ -55,8 +55,6 @@ public:
             delete ms_buffer;
             ms_buffer = new wxBitmap(w, h);
         }
-
-        // return a copy of the static instance
         return ms_buffer;
     }
 
