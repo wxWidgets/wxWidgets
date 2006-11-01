@@ -1221,7 +1221,7 @@ wxDataViewProgressRenderer::wxDataViewProgressRenderer( const wxString &label,
 
         GValue gvalue = { 0, };
         g_value_init( &gvalue, G_TYPE_STRING );
-        g_value_set_boolean( &gvalue, wxGTK_CONV(m_label) );
+        g_value_set_string( &gvalue, wxGTK_CONV(m_label) );
         g_object_set_property( G_OBJECT(m_renderer), "text", &gvalue );
         g_value_unset( &gvalue );
     }
@@ -1242,10 +1242,10 @@ bool wxDataViewProgressRenderer::SetValue( const wxVariant &value )
 #ifdef __WXGTK26__
     if (!gtk_check_version(2,6,0))
     {
-        gint tmp = (int) value;
+        gint tmp = (long) value;
         GValue gvalue = { 0, };
         g_value_init( &gvalue, G_TYPE_INT );
-        g_value_set_boolean( &gvalue, tmp );
+        g_value_set_int( &gvalue, tmp );
         g_object_set_property( G_OBJECT(m_renderer), "value", &gvalue );
         g_value_unset( &gvalue );
     }
