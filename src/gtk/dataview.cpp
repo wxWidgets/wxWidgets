@@ -299,8 +299,6 @@ wxgtk_list_store_get_value (GtkTreeModel *tree_model,
     GtkWxListStore *list_store = (GtkWxListStore *) tree_model;
     g_return_if_fail (GTK_IS_WX_LIST_STORE (tree_model) );
 
-    wxPrintf( wxT("Hi\n") );
-
 #if 0
     wxDataViewListModel *model = list_store->model;
     wxString mtype = model->GetColType( (unsigned int) column );
