@@ -46,7 +46,7 @@ public:
     virtual bool OnInit() { return true; }
     virtual void OnExit() { wxDELETE(ms_buffer); }
 
-    static wxBitmap GetBuffer(int w, int h)
+    static wxBitmap* GetBuffer(int w, int h)
     {
         if ( !ms_buffer ||
                 w > ms_buffer->GetWidth() ||
@@ -56,7 +56,8 @@ public:
             ms_buffer = new wxBitmap(w, h);
         }
 
-        return *ms_buffer;
+        // return a copy of the static instance
+        return ms_buffer;
     }
 
 private:
@@ -65,7 +66,7 @@ private:
     DECLARE_DYNAMIC_CLASS(wxSharedDCBufferManager)
 };
 
-wxBitmap* wxSharedDCBufferManager::ms_buffer;
+wxBitmap* wxSharedDCBufferManager::ms_buffer = NULL;
 
 IMPLEMENT_DYNAMIC_CLASS(wxSharedDCBufferManager, wxModule)
 
@@ -75,7 +76,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxSharedDCBufferManager, wxModule)
 
 void wxBufferedDC::UseBuffer(wxCoord w, wxCoord h)
 {
-    if ( !m_buffer.IsOk() )
+    if ( !m_buffer || !m_buffer->IsOk() )
     {
         if ( w == -1 || h == -1 )
             m_dc->GetSize(&w, &h);
@@ -83,6 +84,6 @@ void wxBufferedDC::UseBuffer(wxCoord w, wxCoord h)
         m_buffer = wxSharedDCBufferManager::GetBuffer(w, h);
     }
 
-    SelectObject(m_buffer);
+    SelectObject(*m_buffer);
 }
 

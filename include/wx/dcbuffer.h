@@ -43,15 +43,16 @@ public:
     // Default ctor, must subsequently call Init for two stage construction.
     wxBufferedDC()
         : m_dc(NULL),
+          m_buffer(NULL),
           m_style(0)
     {
     }
 
     // Construct a wxBufferedDC using a user supplied buffer.
     wxBufferedDC(wxDC *dc,
-                 const wxBitmap& buffer = wxNullBitmap,
+                 wxBitmap& buffer = wxNullBitmap,
                  int style = wxBUFFER_CLIENT_AREA)
-        : m_dc(NULL)
+        : m_dc(NULL), m_buffer(NULL)
     {
         Init(dc, buffer, style);
     }
@@ -60,7 +61,7 @@ public:
     // (where area is usually something like the size of the window
     // being buffered)
     wxBufferedDC(wxDC *dc, const wxSize& area, int style = wxBUFFER_CLIENT_AREA)
-        : m_dc(NULL)
+        : m_dc(NULL), m_buffer(NULL)
     {
         Init(dc, area, style);
     }
@@ -74,12 +75,12 @@ public:
 
     // These reimplement the actions of the ctors for two stage creation
     void Init(wxDC *dc,
-              const wxBitmap& buffer = wxNullBitmap,
+              wxBitmap& buffer = wxNullBitmap,
               int style = wxBUFFER_CLIENT_AREA)
     {
         InitCommon(dc, style);
 
-        m_buffer = buffer;
+        m_buffer = &buffer;
 
         UseBuffer();
     }
@@ -100,7 +101,7 @@ public:
     void UnMask()
     {
         wxCHECK_RET( m_dc, _T("no underlying wxDC?") );
-        wxASSERT_MSG( m_buffer.IsOk(), _T("invalid backing store") );
+        wxASSERT_MSG( m_buffer && m_buffer->IsOk(), _T("invalid backing store") );
 
         wxCoord x = 0,
                 y = 0;
@@ -108,7 +109,7 @@ public:
         if ( m_style & wxBUFFER_CLIENT_AREA )
             GetDeviceOrigin(&x, &y);
 
-        m_dc->Blit(0, 0, m_buffer.GetWidth(), m_buffer.GetHeight(),
+        m_dc->Blit(0, 0, m_buffer->GetWidth(), m_buffer->GetHeight(),
                    this, -x, -y );
         m_dc = NULL;
     }
@@ -142,7 +143,7 @@ private:
     wxDC *m_dc;
 
     // the buffer (selected in this DC), initially invalid
-    wxBitmap m_buffer;
+    wxBitmap *m_buffer;
 
     // the buffering style
     int m_style;
@@ -162,7 +163,7 @@ class WXDLLEXPORT wxBufferedPaintDC : public wxBufferedDC
 {
 public:
     // If no bitmap is supplied by the user, a temporary one will be created.
-    wxBufferedPaintDC(wxWindow *window, const wxBitmap& buffer, int style = wxBUFFER_CLIENT_AREA)
+    wxBufferedPaintDC(wxWindow *window, wxBitmap& buffer, int style = wxBUFFER_CLIENT_AREA)
         : m_paintdc(window)
     {
         // If we're buffering the virtual window, scale the paint DC as well
