@@ -54,7 +54,7 @@ public:
     wxBitmap( int width, int height, int depth = -1 );
     wxBitmap( const char bits[], int width, int height, int depth = 1 );
     wxBitmap( const char* const* bits );
-#if defined (__GNUC__) && __GNUC__ < 3
+#ifdef wxNEEDS_CHARPP
     // needed for old GCC
     wxBitmap(char** data)
     {

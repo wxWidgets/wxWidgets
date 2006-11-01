@@ -86,7 +86,7 @@ public:
 
     // Initialize with XPM data
     wxBitmap(const char* const* bits);
-#if defined (__GNUC__) && __GNUC__ < 3
+#ifdef wxNEEDS_CHARPP
     // needed for old GCC
     wxBitmap(char** data)
     {

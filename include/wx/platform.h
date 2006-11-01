@@ -535,6 +535,10 @@
     #define wxCHECK_GCC_VERSION( major, minor ) 0
 #endif
 
+#if defined(__BORLANDC__) || (defined(__GNUC__) && __GNUC__ < 3)
+#define wxNEEDS_CHARPP
+#endif
+
 /*
    This macro can be used to check that the version of mingw32 compiler is
    at least maj.min
