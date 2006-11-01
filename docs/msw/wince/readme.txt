@@ -118,7 +118,7 @@ you need to adjust the library settings of each wxWidgets and sample project.
 Edit the configuration properties for each configuration and in the Librarian,
 add a relative path ..\..\lib to each library path. For example:
 
-..\$(PlatformName)\$(ConfigurationName)\wx_mono.lib
+..\..\lib\$(PlatformName)\$(ConfigurationName)\wx_mono.lib
 
 Then, for a sample you want to compile, edit the configuration properties
 and make sure ..\..\lib\$(PlatformName)\$(ConfigurationName) is in the Linker/General/Additional
