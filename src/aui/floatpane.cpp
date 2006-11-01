@@ -32,6 +32,10 @@
 #ifndef WX_PRECOMP
 #endif
 
+#ifdef __WXMSW__
+#include "wx/msw/private.h"
+#endif
+
 IMPLEMENT_CLASS( wxFloatingPane, wxFloatingPaneBaseClass )
 
 wxFloatingPane::wxFloatingPane(wxWindow* parent,
@@ -56,17 +60,21 @@ wxFloatingPane::wxFloatingPane(wxWindow* parent,
     
     // find out if the system supports solid window drag.
     // on non-msw systems, this is assumed to be the case
-    #ifdef __WXMSW__
-    BOOL b = TRUE;
+#ifdef __WXMSW__
+    bool b = TRUE;
     SystemParametersInfo(38 /*SPI_GETDRAGFULLWINDOWS*/, 0, &b, 0);
     m_solid_drag = b ? true : false;
-    #endif
+#endif
     
     SetExtraStyle(wxWS_EX_PROCESS_IDLE);
 }
 
 wxFloatingPane::~wxFloatingPane()
 {
+    // if we do not do this, then we can crash...
+    if(m_owner_mgr && m_owner_mgr->m_action_window == this) {
+        m_owner_mgr->m_action_window = NULL;
+    }
     m_mgr.UnInit();
 }
 
