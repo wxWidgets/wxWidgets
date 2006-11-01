@@ -61,7 +61,7 @@ wxFloatingPane::wxFloatingPane(wxWindow* parent,
     // find out if the system supports solid window drag.
     // on non-msw systems, this is assumed to be the case
 #ifdef __WXMSW__
-    bool b = TRUE;
+    BOOL b = TRUE;
     SystemParametersInfo(38 /*SPI_GETDRAGFULLWINDOWS*/, 0, &b, 0);
     m_solid_drag = b ? true : false;
 #endif
