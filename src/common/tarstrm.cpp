@@ -1161,7 +1161,7 @@ bool wxTarOutputStream::WriteHeaders(wxTarEntry& entry)
 
     if (entry.GetSize() == wxInvalidOffset)
         entry.SetSize(0);
-    m_large = SetHeaderNumber(TAR_SIZE, entry.GetSize());
+    m_large = !SetHeaderNumber(TAR_SIZE, entry.GetSize());
 
     SetHeaderDate(_T("mtime"), entry.GetDateTime());
     if (entry.GetAccessTime().IsValid())
