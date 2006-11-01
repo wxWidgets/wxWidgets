@@ -27,7 +27,7 @@ public:
            const wxString& title,
            const wxPoint& pos = wxDefaultPosition,
            const wxSize& size = wxDefaultSize,
-           long style = wxDEFAULT_FRAME_STYLE|wxTINY_CAPTION_HORIZ,
+           long style = wxCAPTION | wxRESIZE_BORDER | wxTINY_CAPTION_HORIZ,
            const wxString& name = wxFrameNameStr)
   {
       // Use wxFrame constructor in absence of more specific code.

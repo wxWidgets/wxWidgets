@@ -20,7 +20,6 @@ take up too much screen area.
 \begin{twocollist}\itemsep=0pt
 \twocolitem{\windowstyle{wxICONIZE}}{Display the frame iconized (minimized) (Windows only).}
 \twocolitem{\windowstyle{wxCAPTION}}{Puts a caption on the frame.}
-\twocolitem{\windowstyle{wxDEFAULT\_FRAME\_STYLE}}{Defined as {\bf wxMINIMIZE\_BOX \pipe wxMAXIMIZE\_BOX \pipe wxTHICK\_FRAME \pipe wxSYSTEM\_MENU \pipe wxCAPTION \pipe wxCLOSE\_BOX}.}
 \twocolitem{\windowstyle{wxMINIMIZE}}{Identical to {\bf wxICONIZE}.}
 \twocolitem{\windowstyle{wxMINIMIZE\_BOX}}{Displays a minimize box on the frame (Windows and Motif only).}
 \twocolitem{\windowstyle{wxMAXIMIZE}}{Displays the frame maximized (Windows only).}
@@ -56,7 +55,7 @@ Default constructor.
 
 \func{}{wxMiniFrame}{\param{wxWindow* }{parent}, \param{wxWindowID }{id},\rtfsp
 \param{const wxString\& }{title}, \param{const wxPoint\&}{ pos = wxDefaultPosition},\rtfsp
-\param{const wxSize\&}{ size = wxDefaultSize}, \param{long}{ style = wxDEFAULT\_FRAME\_STYLE},\rtfsp
+\param{const wxSize\&}{ size = wxDefaultSize}, \param{long}{ style = wxCAPTION | wxRESIZE\_BORDER},\rtfsp
 \param{const wxString\& }{name = ``frame"}}
 
 Constructor, creating the window.
@@ -100,7 +99,7 @@ Destructor. Destroys all child windows and menu bar if present.
 
 \func{bool}{Create}{\param{wxWindow* }{parent}, \param{wxWindowID }{id},\rtfsp
 \param{const wxString\& }{title}, \param{const wxPoint\&}{ pos = wxDefaultPosition},\rtfsp
-\param{const wxSize\&}{ size = wxDefaultSize}, \param{long}{ style = wxDEFAULT\_FRAME\_STYLE},\rtfsp
+\param{const wxSize\&}{ size = wxDefaultSize}, \param{long}{ style = wxCAPTION | wxRESIZE\_BORDER},\rtfsp
 \param{const wxString\& }{name = ``frame"}}
 
 Used in two-step frame construction. See \helpref{wxMiniFrame::wxMiniFrame}{wxminiframector}\rtfsp
