@@ -5953,8 +5953,8 @@ bool wxRichTextAction::Do()
                         
                         if (pt.y > lastY)
                         {
-                            node2 = NULL;
-                            node = NULL;
+                            node2 = wxRichTextLineList::compatibility_iterator();
+                            node = wxRichTextObjectList::compatibility_iterator();
                         }
                         else if (range.GetStart() > GetPosition() && pt.y >= firstVisiblePt.y)
                         {                    
@@ -6118,8 +6118,8 @@ void wxRichTextAction::UpdateAppearance(long caretPosition, bool sendUpdateEvent
                         
                         if (pt.y > lastY) // going past the end of the window, no more info
                         {
-                            node2 = NULL;
-                            node = NULL;
+                            node2 = wxRichTextLineList::compatibility_iterator();
+                            node = wxRichTextObjectList::compatibility_iterator();
                         }
                         else
                         {
@@ -6139,8 +6139,9 @@ void wxRichTextAction::UpdateAppearance(long caretPosition, bool sendUpdateEvent
                                     foundEnd = true;
                                     lastY = pt.y - firstVisiblePt.y;
 
-                                    node2 = NULL;
-                                    node = NULL;
+                                    node2 = wxRichTextLineList::compatibility_iterator();
+                                    node = wxRichTextObjectList::compatibility_iterator();
+
                                     break;
                                 }                    
                             }
