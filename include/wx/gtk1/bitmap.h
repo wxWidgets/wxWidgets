@@ -135,6 +135,9 @@ public:
 protected:
     bool CreateFromImage(const wxImage& image, int depth);
 
+    virtual wxObjectRefData *CreateRefData() const;
+    virtual wxObjectRefData *CloneRefData(const wxObjectRefData *data) const;
+
 private:
     // to be called from CreateFromImage only!
     bool CreateFromImageAsBitmap(const wxImage& image);

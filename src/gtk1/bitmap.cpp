@@ -228,6 +228,8 @@ class wxBitmapRefData: public wxObjectRefData
 {
 public:
     wxBitmapRefData();
+    wxBitmapRefData(const wxBitmapRefData& data);
+    bool Create(int width, int height, int bpp);
     virtual ~wxBitmapRefData();
 
     GdkPixmap      *m_pixmap;
@@ -236,7 +238,9 @@ public:
     int             m_width;
     int             m_height;
     int             m_bpp;
+#if wxUSE_PALETTE
     wxPalette      *m_palette;
+#endif // wxUSE_PALETTE
 };
 
 wxBitmapRefData::wxBitmapRefData()
@@ -247,7 +251,86 @@ wxBitmapRefData::wxBitmapRefData()
     m_width = 0;
     m_height = 0;
     m_bpp = 0;
+#if wxUSE_PALETTE
     m_palette = (wxPalette *) NULL;
+#endif // wxUSE_PALETTE
+}
+
+wxBitmapRefData::wxBitmapRefData(const wxBitmapRefData& data)
+{
+    Create(data.m_width, data.m_height, data.m_bpp);
+
+    m_mask = data.m_mask ? new wxMask(*data.m_mask) : NULL;
+
+#if wxUSE_PALETTE
+    wxASSERT_MSG( !data.m_palette,
+                  _T("copying bitmaps palette not implemented") );
+#endif // wxUSE_PALETTE
+
+
+    // copy the bitmap data by simply drawing the source bitmap on this one
+    GdkPixmap **dst;
+    if ( data.m_pixmap )
+    {
+        dst = &m_pixmap;
+    }
+    else if ( data.m_bitmap )
+    {
+        dst = &m_bitmap;
+    }
+    else // invalid bitmap?
+    {
+        return;
+    }
+
+    GdkGC *gc = gdk_gc_new(*dst);
+    if ( m_bpp == 1 )
+    {
+        gdk_wx_draw_bitmap(m_bitmap, gc, data.m_bitmap, 0, 0, 0, 0, -1, -1);
+    }
+    else // colour pixmap
+    {
+        gdk_draw_pixmap(m_pixmap, gc, data.m_pixmap, 0, 0, 0, 0, -1, -1);
+    }
+
+    gdk_gc_unref(gc);
+}
+
+bool wxBitmapRefData::Create(int width, int height, int bpp)
+{
+    m_width = width;
+    m_height = height;
+    m_bpp = bpp;
+
+    m_mask = NULL;
+#if wxUSE_PALETTE
+    m_palette = NULL;
+#endif
+
+    // to understand how this compiles you should know that GdkPixmap and
+    // GdkBitmap are one and the same type in GTK+ 1
+    GdkPixmap **ppix;
+    if ( m_bpp != 1 )
+    {
+        const GdkVisual * const visual = wxTheApp->GetGdkVisual();
+
+        wxCHECK_MSG( (bpp == -1) || (bpp == visual->depth) || (bpp == 32), false,
+                        wxT("invalid bitmap depth") );
+
+        m_bpp = visual->depth;
+
+        ppix = &m_pixmap;
+        m_bitmap = NULL;
+    }
+    else // mono bitmap
+    {
+        ppix = &m_bitmap;
+        m_pixmap = NULL;
+    }
+
+    *ppix = gdk_pixmap_new( wxGetRootWindow()->window, width, height, m_bpp );
+
+    return *ppix != NULL;
 }
 
 wxBitmapRefData::~wxBitmapRefData()
@@ -277,6 +360,16 @@ wxBitmap::wxBitmap( int width, int height, int depth )
     Create( width, height, depth );
 }
 
+wxObjectRefData *wxBitmap::CreateRefData() const
+{
+    return new wxBitmapRefData;
+}
+
+wxObjectRefData *wxBitmap::CloneRefData(const wxObjectRefData *data) const
+{
+    return new wxBitmapRefData(*wx_static_cast(const wxBitmapRefData *, data));
+}
+
 bool wxBitmap::Create( int width, int height, int depth )
 {
     UnRef();
@@ -286,30 +379,8 @@ bool wxBitmap::Create( int width, int height, int depth )
         return false;
     }
 
-    GdkVisual *visual = wxTheApp->GetGdkVisual();
-
-    if (depth == -1)
-        depth = visual->depth;
-
-    wxCHECK_MSG( (depth == visual->depth) || (depth == 1) || (depth == 32), false,
-                    wxT("invalid bitmap depth") );
-
     m_refData = new wxBitmapRefData();
-    M_BMPDATA->m_mask = (wxMask *) NULL;
-    M_BMPDATA->m_width = width;
-    M_BMPDATA->m_height = height;
-    if (depth == 1)
-    {
-        M_BMPDATA->m_bitmap = gdk_pixmap_new( wxGetRootWindow()->window, width, height, 1 );
-        M_BMPDATA->m_bpp = 1;
-    }
-    else
-    {
-        M_BMPDATA->m_pixmap = gdk_pixmap_new( wxGetRootWindow()->window, width, height, depth );
-        M_BMPDATA->m_bpp = visual->depth;
-    }
-
-    return Ok();
+    return M_BMPDATA->Create(width, height, depth);
 }
 
 wxBitmap::wxBitmap(const char* const* bits)
