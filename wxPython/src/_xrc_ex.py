@@ -10,7 +10,12 @@ TheXmlResource = XmlResource_Get()
 
 
 def _my_import(name):
-    mod = __import__(name)
+    try:
+        mod = __import__(name)
+    except ImportError:
+        import traceback
+        print traceback.format_exc()
+        raise
     components = name.split('.')
     for comp in components[1:]:
         mod = getattr(mod, comp)
