@@ -19,6 +19,19 @@ scenario GetBestFitting size is probably what you want to use instead.
 
 wx.Image: Gained support for TGA image file format.
 
+wx.aui: The classes in the wx.aui module have been renamed to be more
+consistent with each other, and make it easier to recognize in the
+docs and etc. that they belong together.
+
+    FrameManager -->       AuiManager
+    FrameManagerEvent -->  AuiManagerEvent
+    PaneInfo -->           AuiPaneInfo
+    FloatingPane -->       AuiFloatingPane
+    DockArt -->            AuiDockArt
+    TabArt -->             AuiTabArt
+    AuiMultiNotebook -->   AuiNotebook
+    AuiNotebookEvent -->   AuiNotebookEvent
+       
 
 
 
@@ -136,20 +149,20 @@ base_Whatever that is marked as deprecated.  So now instead of writing
 your overridden methods like this::
 
     def OnBeginDocument(self, start, end):
-	# do something here
-	return self.base_OnBeginDocument(start, end)
+        # do something here
+        return self.base_OnBeginDocument(start, end)
 
 You can now call the base class method the normal way, like this::
 
     def OnBeginDocument(self, start, end):
-	# do something here
-	return Printout.OnBeginDocument(self, start, end)
+        # do something here
+        return Printout.OnBeginDocument(self, start, end)
 
 Or like this with super()::
 
     def OnBeginDocument(self, start, end):
-	# do something here
-	return super(MyPrintout, self).OnBeginDocument(start, end)
+        # do something here
+        return super(MyPrintout, self).OnBeginDocument(start, end)
 
 Note that the old way with the "base_*" function still works, but you
 will get a DeprecationWarning from calling base_OnBeginDocument.  The
@@ -483,7 +496,7 @@ data types (wx.Point, wx.Size, wx.Colour, etc.) to no longer raise a
 TypeError if the compared object is not compatible, but to just return
 a boolean as expected.  For example::
 
-	  wx.Colour(64,0,64) == 123      ==> False
+          wx.Colour(64,0,64) == 123      ==> False
 
 wxMSW: Fixed (again) sizing/positioning issues of calling Realize on
 a wx.ToolBar that is not manaaged directly by a frame and that is
@@ -912,9 +925,9 @@ as it considered close enough since the version numbers match.  If you
 want to force the options to be required then you can just add a True
 parameter, like this::
 
-	 import wxversion
-	 wxversion.select("2.6-unicode", True)
-	 import wx
+         import wxversion
+         wxversion.select("2.6-unicode", True)
+         import wx
 
 Tweaked wx.lib.buttons such that flat buttons (e.g. have no bevel and
 a wx.BORDER_NONE style flag) paint themed backgrounds if there are
@@ -1785,11 +1798,11 @@ good way to explore and play with the objects in the currently running
 sample.  For example, load the Button sample and then do the following
 in the PyShell::
 
-	>>> b = frame.demoPage.GetChildren()[0]
-	>>> for x in range(0, 500, 10):
-	...     b.Move((x, 50))
-	...     app.Yield(True)
-	...     wx.MilliSleep(10)
+        >>> b = frame.demoPage.GetChildren()[0]
+        >>> for x in range(0, 500, 10):
+        ...     b.Move((x, 50))
+        ...     app.Yield(True)
+        ...     wx.MilliSleep(10)
 
 
 wxGTK: Applied wxNO_BORDER patch (#1098374) for text control and combo

@@ -44,7 +44,7 @@ interface:
     effects\" such as transparent window dragging as well as frame
     animation.
 
-**PyAUI adheres to the following principles**
+**wx.aui adheres to the following principles**
 
   - Use native floating frames to obtain a native look and feel for
     all platforms;
@@ -69,7 +69,7 @@ The following example shows a simple implementation that utilizes
                      size=(800, 600), style=wx.DEFAULT_FRAME_STYLE):
             wx.Frame.__init__(self, parent, id, title, pos, size, style)
 
-            self._mgr = wx.aui.FrameManager(self)
+            self._mgr = wx.aui.AuiManager(self)
 
             # create several text controls
             text1 = wx.TextCtrl(self, -1, 'Pane 1 - sample text',
@@ -141,30 +141,30 @@ The following example shows a simple implementation that utilizes
 
 // We'll skip making wrappers for these, they have overloads that take a
 // wxSize or wxPoint
-%ignore wxPaneInfo::MaxSize(int x, int y);
-%ignore wxPaneInfo::MinSize(int x, int y);
-%ignore wxPaneInfo::BestSize(int x, int y);
-%ignore wxPaneInfo::FloatingPosition(int x, int y);
-%ignore wxPaneInfo::FloatingSize(int x, int y);
+%ignore wxAuiPaneInfo::MaxSize(int x, int y);
+%ignore wxAuiPaneInfo::MinSize(int x, int y);
+%ignore wxAuiPaneInfo::BestSize(int x, int y);
+%ignore wxAuiPaneInfo::FloatingPosition(int x, int y);
+%ignore wxAuiPaneInfo::FloatingSize(int x, int y);
 
 // But for these we will do the overloading (see %pythoncode below) so let's
 // rename the C++ versions
-%rename(_GetPaneByWidget) wxFrameManager::GetPane(wxWindow* window);
-%rename(_GetPaneByName)   wxFrameManager::GetPane(const wxString& name);
+%rename(_GetPaneByWidget) wxAuiManager::GetPane(wxWindow* window);
+%rename(_GetPaneByName)   wxAuiManager::GetPane(const wxString& name);
 
-%rename(_AddPane1) wxFrameManager::AddPane(wxWindow* window, const wxPaneInfo& pane_info);
-%rename(_AddPane2) wxFrameManager::AddPane(wxWindow* window, int direction = wxLEFT,
-                                           const wxString& caption = wxEmptyString);
+%rename(_AddPane1) wxAuiManager::AddPane(wxWindow* window, const wxAuiPaneInfo& pane_info);
+%rename(_AddPane2) wxAuiManager::AddPane(wxWindow* window, int direction = wxLEFT,
+                                         const wxString& caption = wxEmptyString);
 
-%rename(AddPaneAtPos) wxFrameManager::AddPane(wxWindow* window,
-                                              const wxPaneInfo& pane_info,
-                                              const wxPoint& drop_pos);
+%rename(AddPaneAtPos) wxAuiManager::AddPane(wxWindow* window,
+                                            const wxPaneInfo& pane_info,
+                                            const wxPoint& drop_pos);
 
 // A typemap for the return value of wxFrameManager::GetAllPanes
-%typemap(out) wxPaneInfoArray& {
+%typemap(out) wxAuiPaneInfoArray& {
     $result = PyList_New(0);
     for (size_t i=0; i < $1->GetCount(); i++) {
-        PyObject* pane_obj = SWIG_NewPointerObj((void*)(&$1->Item(i)), SWIGTYPE_p_wxPaneInfo, 0);
+        PyObject* pane_obj = SWIG_NewPointerObj((void*)(&$1->Item(i)), SWIGTYPE_p_wxAuiPaneInfo, 0);
         PyList_Append($result, pane_obj);
     }
 }
@@ -174,10 +174,10 @@ The following example shows a simple implementation that utilizes
 
 %pythonAppend wxAuiTabCtrl::wxAuiTabCtrl "self._setOORInfo(self)";
 
-%pythonAppend wxAuiMultiNotebook::wxAuiMultiNotebook    "self._setOORInfo(self)";
-%pythonAppend wxAuiMultiNotebook::wxAuiMultiNotebook()  "self._setOORInfo(self)";
-%ignore wxAuiMultiNotebook::~wxAuiMultiNotebook;
-%rename(PreAuiMultiNotebook) wxAuiMultiNotebook::wxAuiMultiNotebook();
+%pythonAppend wxAuiNotebook::wxAuiNotebook    "self._setOORInfo(self)";
+%pythonAppend wxAuiNotebook::wxAuiNotebook()  "self._setOORInfo(self)";
+%ignore wxAuiiNotebook::~wxAuiNotebook;
+%rename(PreAuiNotebook) wxAuiNotebook::wxAuiNotebook();
 
 //---------------------------------------------------------------------------
 // Get all our defs from the REAL header files.
@@ -190,7 +190,7 @@ The following example shows a simple implementation that utilizes
 // Methods to inject into the FrameManager class that will sort out calls to
 // the overloaded versions of GetPane and AddPane
 
-%extend wxFrameManager {
+%extend wxAuiManager {
     %pythoncode {
     def GetPane(self, item):
         """
@@ -228,7 +228,7 @@ The following example shows a simple implementation that utilizes
         pane info, and defaults to ``wx.LEFT``.  The pane caption may
         also be specified as an extra parameter in this form.
         """
-        if type(info) == PaneInfo:
+        if type(info) == AuiPaneInfo:
             return self._AddPane1(window, info)
         else:
             # This Is AddPane2
@@ -248,25 +248,25 @@ The following example shows a simple implementation that utilizes
     }
 }
 
-%extend wxDockInfo {
-    ~wxDockInfo() {}
+%extend wxAuiDockInfo {
+    ~wxAuiDockInfo() {}
 }
 
-%extend wxDockUIPart {
-    ~wxDockUIPart() {}
+%extend wxAuiDockUIPart {
+    ~wxAuiDockUIPart() {}
 }
 
-%extend wxPaneButton {
-    ~wxPaneButton() {}
+%extend wxAuiPaneButton {
+    ~wxAuiPaneButton() {}
 }
 
 //---------------------------------------------------------------------------
 
 %{
 // A wxDocArt class that knows how to forward virtuals to Python methods
-class wxPyDockArt :  public wxDefaultDockArt
+class wxPyAuiDockArt :  public wxAuiDefaultDockArt
 {
-    wxPyDockArt() : wxDefaultDockArt() {}
+    wxPyAuiDockArt() : wxAuiDefaultDockArt() {}
 
     DEC_PYCALLBACK_INT_INT(GetMetric);
     DEC_PYCALLBACK_VOID_INTINT(SetMetric);
@@ -294,7 +294,7 @@ class wxPyDockArt :  public wxDefaultDockArt
         }
         wxPyEndBlockThreads(blocked);
         if (! found)
-            wxDefaultDockArt::DrawSash(dc, window, orientation, rect);
+            wxAuiDefaultDockArt::DrawSash(dc, window, orientation, rect);
     }
 
     virtual void DrawBackground(wxDC& dc,
@@ -316,14 +316,14 @@ class wxPyDockArt :  public wxDefaultDockArt
         }
         wxPyEndBlockThreads(blocked);
         if (! found)
-            wxDefaultDockArt::DrawBackground(dc, window, orientation, rect);
+            wxAuiDefaultDockArt::DrawBackground(dc, window, orientation, rect);
     }
 
     virtual void DrawCaption(wxDC& dc,
                           wxWindow* window,
                           const wxString& text,
                           const wxRect& rect,
-                          wxPaneInfo& pane)
+                          wxAuiPaneInfo& pane)
     {
         bool found;
         wxPyBlock_t blocked = wxPyBeginBlockThreads();
@@ -332,7 +332,7 @@ class wxPyDockArt :  public wxDefaultDockArt
             PyObject* owin = wxPyMake_wxObject(window, false);
             PyObject* otext = wx2PyString(text);
             PyObject* orect = wxPyConstructObject((void*)&rect, wxT("wxRect"), 0);
-            PyObject* opane = wxPyConstructObject((void*)&pane, wxT("wxPaneInfo"), 0);
+            PyObject* opane = wxPyConstructObject((void*)&pane, wxT("wxAuiPaneInfo"), 0);
             wxPyCBH_callCallback(m_myInst, Py_BuildValue("(OOOOO)",
                                                          odc, owin, otext, orect, opane));
             Py_DECREF(odc);
@@ -343,13 +343,13 @@ class wxPyDockArt :  public wxDefaultDockArt
        }
         wxPyEndBlockThreads(blocked);
         if (! found)
-            wxDefaultDockArt::DrawCaption(dc, window, text, rect, pane);
+            wxAuiDefaultDockArt::DrawCaption(dc, window, text, rect, pane);
     }
 
     virtual void DrawGripper(wxDC& dc,
                           wxWindow* window,
                           const wxRect& rect,
-                          wxPaneInfo& pane)
+                          wxAuiPaneInfo& pane)
     {
         bool found;
         wxPyBlock_t blocked = wxPyBeginBlockThreads();
@@ -357,7 +357,7 @@ class wxPyDockArt :  public wxDefaultDockArt
             PyObject* odc = wxPyMake_wxObject(&dc, false);
             PyObject* owin = wxPyMake_wxObject(window, false);
             PyObject* orect = wxPyConstructObject((void*)&rect, wxT("wxRect"), 0);
-            PyObject* opane = wxPyConstructObject((void*)&pane, wxT("wxPaneInfo"), 0);
+            PyObject* opane = wxPyConstructObject((void*)&pane, wxT("wxAuiPaneInfo"), 0);
             wxPyCBH_callCallback(m_myInst, Py_BuildValue("(OOOO)", odc, owin, orect, opane));
             Py_DECREF(odc);
             Py_DECREF(orect);
@@ -365,13 +365,13 @@ class wxPyDockArt :  public wxDefaultDockArt
         }
         wxPyEndBlockThreads(blocked);
         if (! found)
-            wxDefaultDockArt::DrawGripper(dc, window, rect, pane);
+            wxAuiDefaultDockArt::DrawGripper(dc, window, rect, pane);
     }
 
     virtual void DrawBorder(wxDC& dc,
                           wxWindow* window,
                           const wxRect& rect,
-                          wxPaneInfo& pane)
+                          wxAuiPaneInfo& pane)
     {
         bool found;
         wxPyBlock_t blocked = wxPyBeginBlockThreads();
@@ -379,7 +379,7 @@ class wxPyDockArt :  public wxDefaultDockArt
             PyObject* odc = wxPyMake_wxObject(&dc, false);
             PyObject* owin = wxPyMake_wxObject(window, false);
             PyObject* orect = wxPyConstructObject((void*)&rect, wxT("wxRect"), 0);
-            PyObject* opane = wxPyConstructObject((void*)&pane, wxT("wxPaneInfo"), 0);
+            PyObject* opane = wxPyConstructObject((void*)&pane, wxT("wxAuiPaneInfo"), 0);
             wxPyCBH_callCallback(m_myInst, Py_BuildValue("(OOO)", odc, orect, opane));
             Py_DECREF(odc);
             Py_DECREF(owin);
@@ -388,7 +388,7 @@ class wxPyDockArt :  public wxDefaultDockArt
        }
         wxPyEndBlockThreads(blocked);
         if (! found)
-            wxDefaultDockArt::DrawBorder(dc, window, rect, pane);
+            wxAuiDefaultDockArt::DrawBorder(dc, window, rect, pane);
     }
 
     virtual void DrawPaneButton(wxDC& dc,
@@ -396,7 +396,7 @@ class wxPyDockArt :  public wxDefaultDockArt
                           int button,
                           int button_state,
                           const wxRect& rect,
-                          wxPaneInfo& pane)
+                          wxAuiPaneInfo& pane)
     {
         bool found;
         wxPyBlock_t blocked = wxPyBeginBlockThreads();
@@ -404,7 +404,7 @@ class wxPyDockArt :  public wxDefaultDockArt
             PyObject* odc = wxPyMake_wxObject(&dc, false);
             PyObject* owin = wxPyMake_wxObject(window, false);
             PyObject* orect = wxPyConstructObject((void*)&rect, wxT("wxRect"), 0);
-            PyObject* opane = wxPyConstructObject((void*)&pane, wxT("wxPaneInfo"), 0);
+            PyObject* opane = wxPyConstructObject((void*)&pane, wxT("wxAuiPaneInfo"), 0);
             wxPyCBH_callCallback(m_myInst, Py_BuildValue("(OOiIOO)",
                                                          odc, owin, button, button_state,
                                                          orect, opane));
@@ -415,39 +415,39 @@ class wxPyDockArt :  public wxDefaultDockArt
         }
         wxPyEndBlockThreads(blocked);
         if (! found)
-            wxDefaultDockArt::DrawPaneButton(dc, window, button, button_state, rect, pane);
+            wxAuiDefaultDockArt::DrawPaneButton(dc, window, button, button_state, rect, pane);
     }
 
     PYPRIVATE;
 
 };
 
-IMP_PYCALLBACK_INT_INT(wxPyDockArt, wxDefaultDockArt, GetMetric);
-IMP_PYCALLBACK_VOID_INTINT(wxPyDockArt, wxDefaultDockArt, SetMetric);
-IMP_PYCALLBACK__INTFONT(wxPyDockArt, wxDefaultDockArt, SetFont);
-IMP_PYCALLBACK_FONT_INT(wxPyDockArt, wxDefaultDockArt, GetFont);
-IMP_PYCALLBACK_COLOUR_INT(wxPyDockArt, wxDefaultDockArt, GetColour);
-IMP_PYCALLBACK__INTCOLOUR(wxPyDockArt, wxDefaultDockArt, SetColour);
+IMP_PYCALLBACK_INT_INT(wxPyAuiDockArt, wxAuiDefaultDockArt, GetMetric);
+IMP_PYCALLBACK_VOID_INTINT(wxPyAuiDockArt, wxAuiDefaultDockArt, SetMetric);
+IMP_PYCALLBACK__INTFONT(wxPyAuiDockArt, wxAuiDefaultDockArt, SetFont);
+IMP_PYCALLBACK_FONT_INT(wxPyAuiDockArt, wxAuiDefaultDockArt, GetFont);
+IMP_PYCALLBACK_COLOUR_INT(wxPyAuiDockArt, wxAuiDefaultDockArt, GetColour);
+IMP_PYCALLBACK__INTCOLOUR(wxPyAuiDockArt, wxAuiDefaultDockArt, SetColour);
 
 %}
 
 
-DocStr(wxPyDockArt,
-"This version of the `DockArt` class has been instrumented to be
+DocStr(wxPyAuiDockArt,
+"This version of the `AuiDockArt` class has been instrumented to be
 subclassable in Python and to reflect all calls to the C++ base class
 methods to the Python methods implemented in the derived class.", "");
 
-class wxPyDockArt :  public wxDefaultDockArt
+class wxPyAuiDockArt :  public wxAuiDefaultDockArt
 {
-    %pythonAppend wxPyDockArt     "self._setCallbackInfo(self, PyDockArt)"
-    wxPyDocArt();
+    %pythonAppend wxPyAuiDockArt     "self._setCallbackInfo(self, PyAuiDockArt)"
+    wxPyAuiDocArt();
 
 };
 
 
 //---------------------------------------------------------------------------
 
-%extend wxAuiMultiNotebook {
+%extend wxAuiNotebook {
     %property(PageCount, GetPageCount, doc="See `GetPageCount`");
     %property(Selection, GetSelection, SetSelection, doc="See `GetSelection` and `SetSelection`");
 }
@@ -466,7 +466,7 @@ class wxPyDockArt :  public wxDefaultDockArt
 }
 
 
-%extend wxFrameManager {
+%extend wxAuiManager {
     %property(AllPanes, GetAllPanes, doc="See `GetAllPanes`");
     %property(ArtProvider, GetArtProvider, SetArtProvider, doc="See `GetArtProvider` and `SetArtProvider`");
     %property(Flags, GetFlags, SetFlags, doc="See `GetFlags` and `SetFlags`");
@@ -474,7 +474,7 @@ class wxPyDockArt :  public wxDefaultDockArt
 }
 
 
-%extend wxFrameManagerEvent {
+%extend wxAuiManagerEvent {
     %property(Button, GetButton, SetButton, doc="See `GetButton` and `SetButton`");
     %property(DC, GetDC, SetDC, doc="See `GetDC` and `SetDC`");
     %property(Pane, GetPane, SetPane, doc="See `GetPane` and `SetPane`");
@@ -485,9 +485,9 @@ class wxPyDockArt :  public wxDefaultDockArt
 
 %{
 // A wxTabArt class that knows how to forward virtuals to Python methods
-class wxPyTabArt :  public wxDefaultTabArt
+class wxPyAuiTabArt :  public wxAuiDefaultTabArt
 {
-    wxPyTabArt() : wxDefaultTabArt() {}
+    wxPyAuiTabArt() : wxAuiDefaultTabArt() {}
 
     
     virtual void DrawBackground( wxDC* dc,
@@ -504,13 +504,14 @@ class wxPyTabArt :  public wxDefaultTabArt
         }
         wxPyEndBlockThreads(blocked);
         if (!found)
-            wxDefaultTabArt::DrawBackground(dc, rect);
+            wxAuiDefaultTabArt::DrawBackground(dc, rect);
     }
 
     virtual void DrawTab( wxDC* dc,
                           const wxRect& in_rect,
                           const wxString& caption,
                           bool active,
+                          bool with_close_button,
                           wxRect* out_rect,
                           int* x_extent)
     {
@@ -522,7 +523,10 @@ class wxPyTabArt :  public wxDefaultTabArt
             PyObject* orect = wxPyConstructObject((void*)&in_rect, wxT("wxRect"), 0);
             PyObject* otext = wx2PyString(caption);
             PyObject* ro;
-            ro = wxPyCBH_callCallbackObj(m_myInst, Py_BuildValue("(OOOi)", odc, orect, otext, (int)active));
+            ro = wxPyCBH_callCallbackObj(m_myInst, Py_BuildValue(
+                                             "(OOOii)",
+                                             odc, orect, otext,
+                                             (int)active, (int)with_close_button));
             if (ro) {
                 if (PySequence_Check(ro) && PyObject_Length(ro) == 2) {
                     PyObject* o1 = PySequence_GetItem(ro, 0);
@@ -549,7 +553,7 @@ class wxPyTabArt :  public wxDefaultTabArt
         }
         wxPyEndBlockThreads(blocked);
         if (!found)
-            wxDefaultTabArt::DrawTab(dc, in_rect, caption, active, out_rect, x_extent);
+            wxAuiDefaultTabArt::DrawTab(dc, in_rect, caption, active, with_close_button, out_rect, x_extent);
     }
 
 
@@ -584,13 +588,14 @@ class wxPyTabArt :  public wxDefaultTabArt
         }
         wxPyEndBlockThreads(blocked);
         if (!found)
-            wxDefaultTabArt::DrawButton(dc, in_rect, bitmap_id, button_state, orientation, bitmap_override, out_rect);
+            wxAuiDefaultTabArt::DrawButton(dc, in_rect, bitmap_id, button_state, orientation, bitmap_override, out_rect);
     }
 
     
     virtual wxSize GetTabSize( wxDC* dc,
                                const wxString& caption,
                                bool active,
+                               bool with_close_button,
                                int* x_extent)
     {
         bool found;
@@ -601,7 +606,8 @@ class wxPyTabArt :  public wxDefaultTabArt
             PyObject* odc = wxPyMake_wxObject(dc, false);
             PyObject* otext = wx2PyString(caption);
             PyObject* ro;
-            ro = wxPyCBH_callCallbackObj(m_myInst, Py_BuildValue("(OOi)", odc, otext, (int)active));
+            ro = wxPyCBH_callCallbackObj(m_myInst, Py_BuildValue(
+                                             "(OOi)", odc, otext, (int)active, (int)with_close_button));
             if (ro) {
                 if (PySequence_Check(ro) && PyObject_Length(ro) == 2) {
                     PyObject* o1 = PySequence_GetItem(ro, 0);
@@ -627,7 +633,7 @@ class wxPyTabArt :  public wxDefaultTabArt
         }
         wxPyEndBlockThreads(blocked);
         if (!found)
-            rv = wxDefaultTabArt::GetTabSize(dc, caption, active, x_extent);
+            rv = wxAuiDefaultTabArt::GetTabSize(dc, caption, active, with_close_button, x_extent);
         return rv;
     }
    
@@ -642,22 +648,22 @@ class wxPyTabArt :  public wxDefaultTabArt
 };
 
 
-IMP_PYCALLBACK__FONT(wxPyTabArt, wxDefaultTabArt, SetNormalFont);
-IMP_PYCALLBACK__FONT(wxPyTabArt, wxDefaultTabArt, SetSelectedFont);
-IMP_PYCALLBACK__FONT(wxPyTabArt, wxDefaultTabArt, SetMeasuringFont);
-IMP_PYCALLBACK_INT_WIN(wxPyTabArt, wxDefaultTabArt, GetBestTabCtrlSize);
+IMP_PYCALLBACK__FONT(wxPyAuiTabArt, wxAuiDefaultTabArt, SetNormalFont);
+IMP_PYCALLBACK__FONT(wxPyAuiTabArt, wxAuiDefaultTabArt, SetSelectedFont);
+IMP_PYCALLBACK__FONT(wxPyAuiTabArt, wxAuiDefaultTabArt, SetMeasuringFont);
+IMP_PYCALLBACK_INT_WIN(wxPyAuiTabArt, wxAuiDefaultTabArt, GetBestTabCtrlSize);
 %}
 
 
-DocStr(wxPyTabArt,
+DocStr(wxPyAuiTabArt,
 "This version of the `TabArt` class has been instrumented to be
 subclassable in Python and to reflect all calls to the C++ base class
 methods to the Python methods implemented in the derived class.", "");
 
-class wxPyTabArt :  public wxDefaultTabArt
+class wxPyAuiTabArt :  public wxAuiDefaultTabArt
 {
-    %pythonAppend wxPyTabArt     "self._setCallbackInfo(self, PyTabArt)"
-    wxPyTabArt();
+    %pythonAppend wxPyAuiTabArt     "self._setCallbackInfo(self, PyAuiTabArt)"
+    wxPyAuiTabArt();
 
 };
 

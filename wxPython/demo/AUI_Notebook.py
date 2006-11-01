@@ -18,7 +18,7 @@ class TestPanel(wx.Panel):
         self.log = log
         wx.Panel.__init__(self, parent, -1)
 
-        self.nb = wx.aui.AuiMultiNotebook(self)
+        self.nb = wx.aui.AuiNotebook(self)
         page = wx.TextCtrl(self.nb, -1, text, style=wx.TE_MULTILINE)
         self.nb.AddPage(page, "Welcome")
 
