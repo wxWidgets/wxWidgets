@@ -38,6 +38,7 @@ class WXDLLEXPORT wxBitmapRefData : public wxGDIImageRefData
 {
 public:
     wxBitmapRefData();
+    wxBitmapRefData(const wxBitmapRefData &tocopy);
     virtual ~wxBitmapRefData() { Free(); }
 
     virtual void Free();
@@ -215,6 +216,10 @@ protected:
 
     bool CreateFromImage(const wxImage& image, int depth);
 
+   // ref counting code
+    virtual wxObjectRefData *CreateRefData() const;
+    virtual wxObjectRefData *CloneRefData(const wxObjectRefData *data) const;
+
 private:
     bool CopyFromIconOrCursor(const wxGDIImage& rIcon);
 
@@ -230,6 +235,7 @@ class WXDLLEXPORT wxMask : public wxObject
 {
 public:
     wxMask();
+    wxMask( const wxMask& tocopy);
 
     // Construct a mask from a bitmap and a colour indicating the transparent
     // area

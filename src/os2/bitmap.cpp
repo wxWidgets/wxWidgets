@@ -57,6 +57,20 @@ wxBitmapRefData::wxBitmapRefData()
     m_hBitmap       = (WXHBITMAP) NULL;
 } // end of wxBitmapRefData::wxBitmapRefData
 
+wxBitmapRefData::wxBitmapRefData(const wxBitmapRefData &tocopy)
+{
+    m_nQuality = tocopy.m_nQuality;
+    m_pSelectedInto = NULL;     // don't copy this
+    m_nNumColors    = tocopy.m_nNumColors;
+
+    // copy the mask
+    if (tocopy.m_pBitmapMask)
+        m_pBitmapMask = new wxMask(*tocopy.m_pBitmapMask);
+
+    // TODO: how to copy an HBITMAP?
+    m_hBitmap       = tocopy.m_hBitmap;
+}
+
 void wxBitmapRefData::Free()
 {
     if ( m_pSelectedInto )
@@ -80,6 +94,16 @@ void wxBitmapRefData::Free()
 // ----------------------------------------------------------------------------
 // wxBitmap creation
 // ----------------------------------------------------------------------------
+
+wxObjectRefData* wxBitmap::CreateRefData() const
+{
+    return new wxBitmapRefData;
+}
+
+wxObjectRefData* wxBitmap::CloneRefData(const wxObjectRefData* data) const
+{
+    return new wxBitmapRefData(*wx_static_cast(const wxBitmapRefData *, data));
+}
 
 // this function should be called from all wxBitmap ctors
 void wxBitmap::Init()
@@ -1194,6 +1218,12 @@ wxBitmap wxBitmap::GetBitmapForDC(wxDC& WXUNUSED(rDc)) const
 wxMask::wxMask()
 {
     m_hMaskBitmap = 0;
+} // end of wxMask::wxMask
+
+wxMask::wxMask(const wxMask& tocopy)
+{
+    // TODO: how to copy a WXHBITMAP?
+    m_hMaskBitmap = tocopy.m_hMaskBitmap;
 } // end of wxMask::wxMask
 
 // Construct a mask from a bitmap and a colour indicating
