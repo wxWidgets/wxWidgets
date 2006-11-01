@@ -425,6 +425,14 @@ public:
 //---------------------------------------------------------------------------
 %newgroup
 
+%{
+#define wxDEFAULT_MINIFRAME_STYLE wxCAPTION | wxRESIZE_BORDER | wxTINY_CAPTION_HORIZ
+%}
+
+enum  {
+    wxDEFAULT_MINIFRAME_STYLE
+};
+
 
 MustHaveApp(wxMiniFrame);
 
@@ -439,7 +447,7 @@ public:
             const wxString& title = wxPyEmptyString,
             const wxPoint& pos = wxDefaultPosition,
             const wxSize& size = wxDefaultSize,
-            long style = wxDEFAULT_FRAME_STYLE,
+            long style = wxDEFAULT_MINIFRAME_STYLE,
             const wxString& name = wxPyFrameNameStr);
     %RenameCtor(PreMiniFrame, wxMiniFrame());
 
@@ -448,7 +456,7 @@ public:
             const wxString& title = wxPyEmptyString,
             const wxPoint& pos = wxDefaultPosition,
             const wxSize& size = wxDefaultSize,
-            long style = wxDEFAULT_FRAME_STYLE,
+            long style = wxDEFAULT_MINIFRAME_STYLE,
             const wxString& name = wxPyFrameNameStr);
 };
 
