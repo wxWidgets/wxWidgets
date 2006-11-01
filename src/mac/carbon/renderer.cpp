@@ -192,11 +192,18 @@ void wxRendererMac::DrawTreeItemButton( wxWindow *win,
     const wxRect& rect,
     int flags )
 {
+#if 0  // The rect has already been adjusted, if that ever changes then uncomment this code.
     const wxCoord x = dc.LogicalToDeviceX(rect.x /*- 1*/);
     const wxCoord y = dc.LogicalToDeviceY(rect.y /*- 1*/);
     const wxCoord w = dc.LogicalToDeviceXRel(rect.width);
     const wxCoord h = dc.LogicalToDeviceYRel(rect.height);
-
+#else
+    const wxCoord x = rect.x;
+    const wxCoord y = rect.y;
+    const wxCoord w = rect.width;
+    const wxCoord h = rect.height;
+#endif    
+    
     dc.SetBrush( *wxTRANSPARENT_BRUSH );
 
     HIRect headerRect = CGRectMake( x, y, w, h );
