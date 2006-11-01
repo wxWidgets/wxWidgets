@@ -1552,7 +1552,7 @@ public:
 
 ");
     wxBufferedDC( wxDC* dc,
-                  const wxBitmap& buffer=wxNullBitmap,
+                  wxBitmap& buffer=wxNullBitmap,
                   int style = wxBUFFER_CLIENT_AREA );
     wxBufferedDC( wxDC* dc,
                   const wxSize& area,
@@ -1574,7 +1574,10 @@ associated with this object, if any.", "");
         "Blits the buffer to the dc, and detaches the dc from the buffer (so it
 can be effectively used once only).  This is usually only called in
 the destructor.", "");
-    
+
+    // Set and get the style
+    void SetStyle(int style);
+    int GetStyle() const;    
 };
 
 
@@ -1608,7 +1611,7 @@ public:
 
     DocCtorStr(
         wxBufferedPaintDC( wxWindow *window,
-                           const wxBitmap &buffer = wxNullBitmap,
+                           wxBitmap &buffer = wxNullBitmap,
                            int style = wxBUFFER_CLIENT_AREA),
         "Create a buffered paint DC.  As with `wx.BufferedDC`, you may either
 provide the bitmap to be used for buffering or let this object create
