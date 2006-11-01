@@ -2216,7 +2216,7 @@ bool wxFileName::GetTimes(wxDateTime *dtAccess,
     // not 9x
     bool ok;
     FILETIME ftAccess, ftCreate, ftWrite;
-    if ( IsDir() )
+    if ( DirExists() ) // Don't use IsDir, because it returns false even if it's a directory
     {
         // implemented in msw/dir.cpp
         extern bool wxGetDirectoryTimes(const wxString& dirname,
