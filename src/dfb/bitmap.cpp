@@ -69,8 +69,7 @@ public:
 
     wxBitmapRefData(const wxBitmapRefData& data)
     {
-        if ( data.m_surface )
-            m_surface = data.m_surface->Clone();
+        m_surface = data.m_surface ? data.m_surface->Clone() : NULL;
 
         m_mask = data.m_mask ? new wxMask(*data.m_mask) : NULL;
 #if wxUSE_PALETTE
@@ -78,7 +77,7 @@ public:
 #endif
     }
 
-    ~wxBitmapRefData()
+    virtual ~wxBitmapRefData()
     {
         delete m_mask;
 #if wxUSE_PALETTE
