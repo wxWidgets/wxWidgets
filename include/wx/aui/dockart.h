@@ -29,12 +29,12 @@
 // functionality to the wxAui dock manager.  This allows the dock
 // manager to have plugable look-and-feels
 
-class WXDLLIMPEXP_AUI wxDockArt
+class WXDLLIMPEXP_AUI wxAuiDockArt
 {
 public:
 
-    wxDockArt() { }
-    virtual ~wxDockArt() { }
+    wxAuiDockArt() { }
+    virtual ~wxAuiDockArt() { }
 
     virtual int GetMetric(int id) = 0;
     virtual void SetMetric(int id, int new_val) = 0;
@@ -59,36 +59,36 @@ public:
                           wxWindow *window,
                           const wxString& text,
                           const wxRect& rect,
-                          wxPaneInfo& pane) = 0;
+                          wxAuiPaneInfo& pane) = 0;
 
     virtual void DrawGripper(wxDC& dc,
                           wxWindow *window,
                           const wxRect& rect,
-                          wxPaneInfo& pane) = 0;
+                          wxAuiPaneInfo& pane) = 0;
 
     virtual void DrawBorder(wxDC& dc,
                           wxWindow *window,
                           const wxRect& rect,
-                          wxPaneInfo& pane) = 0;
+                          wxAuiPaneInfo& pane) = 0;
 
     virtual void DrawPaneButton(wxDC& dc,
                           wxWindow *window,
                           int button,
                           int button_state,
                           const wxRect& rect,
-                          wxPaneInfo& pane) = 0;
+                          wxAuiPaneInfo& pane) = 0;
 };
 
 
-// this is the default art provider for wxFrameManager.  Dock art
+// this is the default art provider for wxAuiManager.  Dock art
 // can be customized by creating a class derived from this one,
 // or replacing this class entirely
 
-class WXDLLIMPEXP_AUI wxDefaultDockArt : public wxDockArt
+class WXDLLIMPEXP_AUI wxAuiDefaultDockArt : public wxAuiDockArt
 {
 public:
 
-    wxDefaultDockArt();
+    wxAuiDefaultDockArt();
 
     int GetMetric(int metric_id);
     void SetMetric(int metric_id, int new_val);
@@ -111,24 +111,24 @@ public:
                   wxWindow *window,
                   const wxString& text,
                   const wxRect& rect,
-                  wxPaneInfo& pane);
+                  wxAuiPaneInfo& pane);
 
     void DrawGripper(wxDC& dc,
                   wxWindow *window,
                   const wxRect& rect,
-                  wxPaneInfo& pane);
+                  wxAuiPaneInfo& pane);
 
     void DrawBorder(wxDC& dc,
                   wxWindow *window,
                   const wxRect& rect,
-                  wxPaneInfo& pane);
+                  wxAuiPaneInfo& pane);
 
     void DrawPaneButton(wxDC& dc,
                   wxWindow *window,
                   int button,
                   int button_state,
                   const wxRect& rect,
-                  wxPaneInfo& pane);
+                  wxAuiPaneInfo& pane);
 
 protected:
 

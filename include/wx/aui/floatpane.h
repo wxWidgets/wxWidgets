@@ -24,24 +24,24 @@
 
 #if defined( __WXMSW__ ) || defined( __WXMAC__ ) ||  defined( __WXGTK__ )
 #include "wx/minifram.h"
-#define wxFloatingPaneBaseClass wxMiniFrame
+#define wxAuiFloatingPaneBaseClass wxMiniFrame
 #else
-#define wxFloatingPaneBaseClass wxFrame
+#define wxAuiFloatingPaneBaseClass wxFrame
 #endif
 
-class WXDLLIMPEXP_AUI wxFloatingPane : public wxFloatingPaneBaseClass
+class WXDLLIMPEXP_AUI wxAuiFloatingPane : public wxAuiFloatingPaneBaseClass
 {
 public:
-    wxFloatingPane(wxWindow* parent,
-                   wxFrameManager* owner_mgr,
-                   const wxPaneInfo& pane,
+    wxAuiFloatingPane(wxWindow* parent,
+                   wxAuiManager* owner_mgr,
+                   const wxAuiPaneInfo& pane,
                    wxWindowID id = wxID_ANY,
                    long style = wxRESIZE_BORDER | wxSYSTEM_MENU | wxCAPTION |
                                 wxFRAME_NO_TASKBAR | wxFRAME_FLOAT_ON_PARENT | 
                                 wxCLIP_CHILDREN
                    );
-    virtual ~wxFloatingPane();
-    void SetPaneWindow(const wxPaneInfo& pane);
+    virtual ~wxAuiFloatingPane();
+    void SetPaneWindow(const wxAuiPaneInfo& pane);
     
 protected:
     virtual void OnMoveStart();
@@ -65,12 +65,12 @@ private:
     wxSize m_last_size;
     wxDirection m_lastDirection;
 
-    wxFrameManager* m_owner_mgr;
-    wxFrameManager m_mgr;
+    wxAuiManager* m_owner_mgr;
+    wxAuiManager m_mgr;
 
 #ifndef SWIG
     DECLARE_EVENT_TABLE()
-    DECLARE_CLASS(wxFloatingPaneBaseClass)
+    DECLARE_CLASS(wxAuiFloatingPaneBaseClass)
 #endif // SWIG
 };
 

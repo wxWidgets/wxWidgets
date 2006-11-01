@@ -55,12 +55,12 @@ enum wxAuiNotebookOption
 
 // tab art class
 
-class WXDLLIMPEXP_AUI wxTabArt
+class WXDLLIMPEXP_AUI wxAuiTabArt
 {
 public:
 
-    wxTabArt() { }
-    virtual ~wxTabArt() { }
+    wxAuiTabArt() { }
+    virtual ~wxAuiTabArt() { }
     
     virtual void SetNormalFont(const wxFont& font) = 0;
     virtual void SetSelectedFont(const wxFont& font) = 0;
@@ -98,13 +98,13 @@ public:
 };
 
 
-class WXDLLIMPEXP_AUI wxDefaultTabArt : public wxTabArt
+class WXDLLIMPEXP_AUI wxAuiDefaultTabArt : public wxAuiTabArt
 {
 
 public:
 
-    wxDefaultTabArt();
-    virtual ~wxDefaultTabArt();
+    wxAuiDefaultTabArt();
+    virtual ~wxAuiDefaultTabArt();
     
     void SetNormalFont(const wxFont& font);
     void SetSelectedFont(const wxFont& font);
@@ -233,8 +233,8 @@ public:
     wxAuiTabContainer();
     virtual ~wxAuiTabContainer();
 
-    void SetArtProvider(wxTabArt* art);
-    wxTabArt* GetArtProvider();
+    void SetArtProvider(wxAuiTabArt* art);
+    wxAuiTabArt* GetArtProvider();
 
     void SetFlags(unsigned int flags);
     unsigned int GetFlags() const;
@@ -273,7 +273,7 @@ protected:
 
 private:
 
-    wxTabArt* m_art;
+    wxAuiTabArt* m_art;
     wxAuiNotebookPageArray m_pages;
     wxAuiTabContainerButtonArray m_buttons;
     wxRect m_rect;
@@ -323,20 +323,20 @@ protected:
 
 
 
-class WXDLLIMPEXP_AUI wxAuiMultiNotebook : public wxControl
+class WXDLLIMPEXP_AUI wxAuiNotebook : public wxControl
 {
 
 public:
 
-    wxAuiMultiNotebook();
+    wxAuiNotebook();
 
-    wxAuiMultiNotebook(wxWindow* parent,
+    wxAuiNotebook(wxWindow* parent,
                        wxWindowID id = wxID_ANY,
                        const wxPoint& pos = wxDefaultPosition,
                        const wxSize& size = wxDefaultSize,
                        long style = wxAUI_NB_DEFAULT_STYLE);
 
-    virtual ~wxAuiMultiNotebook();
+    virtual ~wxAuiNotebook();
 
     bool Create(wxWindow* parent,
                 wxWindowID id = wxID_ANY,
@@ -364,8 +364,8 @@ public:
     size_t GetPageCount() const;
     wxWindow* GetPage(size_t page_idx) const;
 
-    void SetArtProvider(wxTabArt* art);
-    wxTabArt* GetArtProvider();
+    void SetArtProvider(wxAuiTabArt* art);
+    wxAuiTabArt* GetArtProvider();
 
 protected:
 
@@ -381,7 +381,7 @@ protected:
     void InitNotebook(long style);
 
     void OnChildFocus(wxChildFocusEvent& evt);
-    void OnRender(wxFrameManagerEvent& evt);
+    void OnRender(wxAuiManagerEvent& evt);
     void OnEraseBackground(wxEraseEvent& evt);
     void OnSize(wxSizeEvent& evt);
     void OnTabClicked(wxCommandEvent& evt);
@@ -392,7 +392,7 @@ protected:
     
 protected:
 
-    wxFrameManager m_mgr;
+    wxAuiManager m_mgr;
     wxAuiTabContainer m_tabs;
     int m_curpage;
     int m_tab_id_counter;

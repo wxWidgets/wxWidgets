@@ -97,7 +97,7 @@ public:
 
     ~MyFrame();
 
-    wxDockArt* GetDockArt();
+    wxAuiDockArt* GetDockArt();
     void DoUpdate();
 
 private:
@@ -107,7 +107,7 @@ private:
     wxSizeReportCtrl* CreateSizeReportCtrl(int width = 80, int height = 80);
     wxPoint GetStartPosition();
     wxHtmlWindow* CreateHTMLCtrl(wxWindow* parent = NULL);
-    wxAuiMultiNotebook* CreateNotebook();
+    wxAuiNotebook* CreateNotebook();
 
     wxString GetIntroText();
 
@@ -134,11 +134,11 @@ private:
     void OnManagerFlag(wxCommandEvent& evt);
     void OnUpdateUI(wxUpdateUIEvent& evt);
 
-    void OnPaneClose(wxFrameManagerEvent& evt);
+    void OnPaneClose(wxAuiManagerEvent& evt);
     
 private:
 
-    wxFrameManager m_mgr;
+    wxAuiManager m_mgr;
     wxArrayString m_perspectives;
     wxMenu* m_perspectives_menu;
 
@@ -156,7 +156,7 @@ public:
     wxSizeReportCtrl(wxWindow* parent, wxWindowID id = wxID_ANY,
                      const wxPoint& pos = wxDefaultPosition,
                      const wxSize& size = wxDefaultSize,
-                     wxFrameManager* mgr = NULL)
+                     wxAuiManager* mgr = NULL)
                      : wxControl(parent, id, pos, size, wxNO_BORDER)
     {
         m_mgr = mgr;
@@ -186,7 +186,7 @@ private:
 
         if (m_mgr)
         {
-            wxPaneInfo pi = m_mgr->GetPane(this);
+            wxAuiPaneInfo pi = m_mgr->GetPane(this);
 
             s.Printf(wxT("Layer: %d"), pi.dock_layer);
             dc.GetTextExtent(s, &w, &h);
@@ -217,7 +217,7 @@ private:
     }
 private:
 
-    wxFrameManager* m_mgr;
+    wxAuiManager* m_mgr;
 
     DECLARE_EVENT_TABLE()
 };
@@ -597,7 +597,7 @@ MyFrame::MyFrame(wxWindow* parent,
                  long style)
         : wxFrame(parent, id, title, pos, size, style)
 {
-    // tell wxFrameManager to manage this frame
+    // tell wxAuiManager to manage this frame
     m_mgr.SetManagedWindow(this);
 
     // set frame icon
@@ -664,7 +664,7 @@ MyFrame::MyFrame(wxWindow* parent,
 
 
     // min size for the frame itself isn't completely done.
-    // see the end up wxFrameManager::Update() for the test
+    // see the end up wxAuiManager::Update() for the test
     // code. For now, just hard code a frame minimum size
     SetMinSize(wxSize(400,300));
 
@@ -743,112 +743,112 @@ MyFrame::MyFrame(wxWindow* parent,
     tb5->Realize();
 
     // add a bunch of panes
-    m_mgr.AddPane(CreateSizeReportCtrl(), wxPaneInfo().
+    m_mgr.AddPane(CreateSizeReportCtrl(), wxAuiPaneInfo().
                   Name(wxT("test1")).Caption(wxT("Pane Caption")).
                   Top());
 
-    m_mgr.AddPane(CreateSizeReportCtrl(), wxPaneInfo().
+    m_mgr.AddPane(CreateSizeReportCtrl(), wxAuiPaneInfo().
                   Name(wxT("test2")).Caption(wxT("Client Size Reporter")).
                   Bottom().Position(1).
                   PinButton(true).CloseButton(true).MaximizeButton(true));
 
-    m_mgr.AddPane(CreateSizeReportCtrl(), wxPaneInfo().
+    m_mgr.AddPane(CreateSizeReportCtrl(), wxAuiPaneInfo().
                   Name(wxT("test3")).Caption(wxT("Client Size Reporter")).
                   Bottom().
                   PinButton(true).CloseButton(true).MaximizeButton(true));
 
-    m_mgr.AddPane(CreateSizeReportCtrl(), wxPaneInfo().
+    m_mgr.AddPane(CreateSizeReportCtrl(), wxAuiPaneInfo().
                   Name(wxT("test4")).Caption(wxT("Pane Caption")).
                   Left());
 
-    m_mgr.AddPane(CreateSizeReportCtrl(), wxPaneInfo().
+    m_mgr.AddPane(CreateSizeReportCtrl(), wxAuiPaneInfo().
                   Name(wxT("test5")).Caption(wxT("No Close Button")).
                   Right().CloseButton(false));
 
-    m_mgr.AddPane(CreateSizeReportCtrl(), wxPaneInfo().
+    m_mgr.AddPane(CreateSizeReportCtrl(), wxAuiPaneInfo().
                   Name(wxT("test6")).Caption(wxT("Client Size Reporter")).
                   Right().Row(1).
                   PinButton(true).CloseButton(true).MaximizeButton(true));
 
-    m_mgr.AddPane(CreateSizeReportCtrl(), wxPaneInfo().
+    m_mgr.AddPane(CreateSizeReportCtrl(), wxAuiPaneInfo().
                   Name(wxT("test7")).Caption(wxT("Client Size Reporter")).
                   Left().Layer(1).
                   PinButton(true).CloseButton(true).MaximizeButton(true));
 
-    m_mgr.AddPane(CreateTreeCtrl(), wxPaneInfo().
+    m_mgr.AddPane(CreateTreeCtrl(), wxAuiPaneInfo().
                   Name(wxT("test8")).Caption(wxT("Tree Pane")).
                   Left().Layer(1).Position(1).
                   CloseButton(true).MaximizeButton(true));
 
-    m_mgr.AddPane(CreateSizeReportCtrl(), wxPaneInfo().
+    m_mgr.AddPane(CreateSizeReportCtrl(), wxAuiPaneInfo().
                   Name(wxT("test9")).Caption(wxT("Min Size 200x100")).
                   BestSize(wxSize(200,100)).MinSize(wxSize(200,100)).
                   Bottom().Layer(1).
                   CloseButton(true).MaximizeButton(true));
 
     wxWindow* wnd10 = CreateTextCtrl(wxT("This pane will prompt the user before hiding."));
-    m_mgr.AddPane(wnd10, wxPaneInfo().
+    m_mgr.AddPane(wnd10, wxAuiPaneInfo().
                   Name(wxT("test10")).Caption(wxT("Text Pane with Hide Prompt")).
                   Bottom().Layer(1).Position(1));
 
-    m_mgr.AddPane(CreateSizeReportCtrl(), wxPaneInfo().
+    m_mgr.AddPane(CreateSizeReportCtrl(), wxAuiPaneInfo().
                   Name(wxT("test11")).Caption(wxT("Fixed Pane")).
                   Bottom().Layer(1).Position(2).Fixed());
 
 
-    m_mgr.AddPane(new SettingsPanel(this,this), wxPaneInfo().
+    m_mgr.AddPane(new SettingsPanel(this,this), wxAuiPaneInfo().
                   Name(wxT("settings")).Caption(wxT("Dock Manager Settings")).
                   Dockable(false).Float().Hide());
 
     // create some center panes
 
-    m_mgr.AddPane(CreateGrid(), wxPaneInfo().Name(wxT("grid_content")).
+    m_mgr.AddPane(CreateGrid(), wxAuiPaneInfo().Name(wxT("grid_content")).
                   CenterPane().Hide());
 
-    m_mgr.AddPane(CreateTreeCtrl(), wxPaneInfo().Name(wxT("tree_content")).
+    m_mgr.AddPane(CreateTreeCtrl(), wxAuiPaneInfo().Name(wxT("tree_content")).
                   CenterPane().Hide());
 
-    m_mgr.AddPane(CreateSizeReportCtrl(), wxPaneInfo().Name(wxT("sizereport_content")).
+    m_mgr.AddPane(CreateSizeReportCtrl(), wxAuiPaneInfo().Name(wxT("sizereport_content")).
                   CenterPane().Hide());
 
-    m_mgr.AddPane(CreateTextCtrl(), wxPaneInfo().Name(wxT("text_content")).
+    m_mgr.AddPane(CreateTextCtrl(), wxAuiPaneInfo().Name(wxT("text_content")).
                   CenterPane().Hide());
 
-    m_mgr.AddPane(CreateHTMLCtrl(), wxPaneInfo().Name(wxT("html_content")).
+    m_mgr.AddPane(CreateHTMLCtrl(), wxAuiPaneInfo().Name(wxT("html_content")).
                   CenterPane());
 
-    m_mgr.AddPane(CreateNotebook(), wxPaneInfo().Name(wxT("notebook_content")).
+    m_mgr.AddPane(CreateNotebook(), wxAuiPaneInfo().Name(wxT("notebook_content")).
                   CenterPane().PaneBorder(false));
 
     // add the toolbars to the manager
-    m_mgr.AddPane(tb1, wxPaneInfo().
+    m_mgr.AddPane(tb1, wxAuiPaneInfo().
                   Name(wxT("tb1")).Caption(wxT("Big Toolbar")).
                   ToolbarPane().Top().
                   LeftDockable(false).RightDockable(false));
 
-    m_mgr.AddPane(tb2, wxPaneInfo().
+    m_mgr.AddPane(tb2, wxAuiPaneInfo().
                   Name(wxT("tb2")).Caption(wxT("Toolbar 2")).
                   ToolbarPane().Top().Row(1).
                   LeftDockable(false).RightDockable(false));
 
-    m_mgr.AddPane(tb3, wxPaneInfo().
+    m_mgr.AddPane(tb3, wxAuiPaneInfo().
                   Name(wxT("tb3")).Caption(wxT("Toolbar 3")).
                   ToolbarPane().Top().Row(1).Position(1).
                   LeftDockable(false).RightDockable(false));
 
-    m_mgr.AddPane(tb4, wxPaneInfo().
+    m_mgr.AddPane(tb4, wxAuiPaneInfo().
                   Name(wxT("tb4")).Caption(wxT("Sample Bookmark Toolbar")).
                   ToolbarPane().Top().Row(2).
                   LeftDockable(false).RightDockable(false));
 
-    m_mgr.AddPane(tb5, wxPaneInfo().
+    m_mgr.AddPane(tb5, wxAuiPaneInfo().
                   Name(wxT("tb5")).Caption(wxT("Sample Vertical Toolbar")).
                   ToolbarPane().Left().
                   GripperTop().
                   TopDockable(false).BottomDockable(false));
 
     m_mgr.AddPane(new wxButton(this, wxID_ANY, _("Test Button")),
-                  wxPaneInfo().Name(wxT("tb6")).
+                  wxAuiPaneInfo().Name(wxT("tb6")).
                   ToolbarPane().Top().Row(2).Position(1).
                   LeftDockable(false).RightDockable(false));
 
@@ -857,7 +857,7 @@ MyFrame::MyFrame(wxWindow* parent,
     wxString perspective_all = m_mgr.SavePerspective();
 
     int i, count;
-    wxPaneInfoArray& all_panes = m_mgr.GetAllPanes();
+    wxAuiPaneInfoArray& all_panes = m_mgr.GetAllPanes();
     for (i = 0, count = all_panes.GetCount(); i < count; ++i)
         if (!all_panes.Item(i).IsToolbar())
             all_panes.Item(i).Hide();
@@ -871,7 +871,7 @@ MyFrame::MyFrame(wxWindow* parent,
     m_perspectives.Add(perspective_default);
     m_perspectives.Add(perspective_all);
 
-    // "commit" all changes made to wxFrameManager
+    // "commit" all changes made to wxAuiManager
     m_mgr.Update();
 }
 
@@ -880,7 +880,7 @@ MyFrame::~MyFrame()
     m_mgr.UnInit();
 }
 
-wxDockArt* MyFrame::GetDockArt()
+wxAuiDockArt* MyFrame::GetDockArt()
 {
     return m_mgr.GetArtProvider();
 }
@@ -903,7 +903,7 @@ void MyFrame::OnSize(wxSizeEvent& event)
 void MyFrame::OnSettings(wxCommandEvent& WXUNUSED(event))
 {
     // show the settings pane, and float it
-    wxPaneInfo& floating_pane = m_mgr.GetPane(wxT("settings")).Float().Show();
+    wxAuiPaneInfo& floating_pane = m_mgr.GetPane(wxT("settings")).Float().Show();
 
     if (floating_pane.floating_pos == wxDefaultPosition)
         floating_pane.FloatingPosition(GetStartPosition());
@@ -1018,7 +1018,7 @@ void MyFrame::OnUpdateUI(wxUpdateUIEvent& event)
     }
 }
 
-void MyFrame::OnPaneClose(wxFrameManagerEvent& evt)
+void MyFrame::OnPaneClose(wxAuiManagerEvent& evt)
 {
     if (evt.pane->name == wxT("test10"))
     {
@@ -1078,7 +1078,7 @@ wxPoint MyFrame::GetStartPosition()
 
 void MyFrame::OnCreateTree(wxCommandEvent& WXUNUSED(event))
 {
-    m_mgr.AddPane(CreateTreeCtrl(), wxPaneInfo().
+    m_mgr.AddPane(CreateTreeCtrl(), wxAuiPaneInfo().
                   Name(wxT("Test")).Caption(wxT("Tree Control")).
                   Float().FloatingPosition(GetStartPosition()).
                   FloatingSize(wxSize(150,300)));
@@ -1087,7 +1087,7 @@ void MyFrame::OnCreateTree(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnCreateGrid(wxCommandEvent& WXUNUSED(event))
 {
-    m_mgr.AddPane(CreateGrid(), wxPaneInfo().
+    m_mgr.AddPane(CreateGrid(), wxAuiPaneInfo().
                   Name(wxT("Test")).Caption(wxT("Grid")).
                   Float().FloatingPosition(GetStartPosition()).
                   FloatingSize(wxSize(300,200)));
@@ -1096,7 +1096,7 @@ void MyFrame::OnCreateGrid(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnCreateHTML(wxCommandEvent& WXUNUSED(event))
 {
-    m_mgr.AddPane(CreateHTMLCtrl(), wxPaneInfo().
+    m_mgr.AddPane(CreateHTMLCtrl(), wxAuiPaneInfo().
                   Name(wxT("Test")).Caption(wxT("HTML Control")).
                   Float().FloatingPosition(GetStartPosition()).
                   FloatingSize(wxSize(300,200)));
@@ -1105,7 +1105,7 @@ void MyFrame::OnCreateHTML(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnCreateNotebook(wxCommandEvent& WXUNUSED(event))
 {
-    m_mgr.AddPane(CreateNotebook(), wxPaneInfo().
+    m_mgr.AddPane(CreateNotebook(), wxAuiPaneInfo().
                   Name(wxT("Test")).Caption(wxT("Notebook")).
                   Float().FloatingPosition(GetStartPosition()).
                   FloatingSize(wxSize(300,200)));
@@ -1114,7 +1114,7 @@ void MyFrame::OnCreateNotebook(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnCreateText(wxCommandEvent& WXUNUSED(event))
 {
-    m_mgr.AddPane(CreateTextCtrl(), wxPaneInfo().
+    m_mgr.AddPane(CreateTextCtrl(), wxAuiPaneInfo().
                   Name(wxT("Test")).Caption(wxT("Text Control")).
                   Float().FloatingPosition(GetStartPosition()));
     m_mgr.Update();
@@ -1122,7 +1122,7 @@ void MyFrame::OnCreateText(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnCreateSizeReport(wxCommandEvent& WXUNUSED(event))
 {
-    m_mgr.AddPane(CreateSizeReportCtrl(), wxPaneInfo().
+    m_mgr.AddPane(CreateSizeReportCtrl(), wxAuiPaneInfo().
                   Name(wxT("Test")).Caption(wxT("Client Size Reporter")).
                   Float().FloatingPosition(GetStartPosition()).
                   PinButton(true).CloseButton(true).MaximizeButton(true));
@@ -1235,9 +1235,9 @@ wxHtmlWindow* MyFrame::CreateHTMLCtrl(wxWindow* parent)
     return ctrl;
 }
 
-wxAuiMultiNotebook* MyFrame::CreateNotebook()
+wxAuiNotebook* MyFrame::CreateNotebook()
 {
-   wxAuiMultiNotebook* ctrl = new wxAuiMultiNotebook( this, wxID_ANY,
+   wxAuiNotebook* ctrl = new wxAuiNotebook( this, wxID_ANY,
                                     wxDefaultPosition, wxSize(400,300),
                                     wxAUI_NB_DEFAULT_STYLE | wxNO_BORDER );
                                     

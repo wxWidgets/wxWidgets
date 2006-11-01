@@ -46,14 +46,14 @@
 #endif
 
 
-// -- wxDefaultDockArt class implementation --
+// -- wxAuiDefaultDockArt class implementation --
 
-// wxDefaultDockArt is an art provider class which does all of the drawing for
-// wxFrameManager.  This allows the library caller to customize the dock art
+// wxAuiDefaultDockArt is an art provider class which does all of the drawing for
+// wxAuiManager.  This allows the library caller to customize the dock art
 // (probably by deriving from this class), or to completely replace all drawing
 // with custom dock art (probably by writing a new stand-alone class derived
-// from the wxDockArt base class). The active dock art class can be set via
-// wxFrameManager::SetDockArt()
+// from the wxAuiDockArt base class). The active dock art class can be set via
+// wxAuiManager::SetDockArt()
 
 
 // StepColour() it a utility function that simply darkens
@@ -126,7 +126,7 @@ static void DrawGradientRectangle(wxDC& dc,
 
 }
 
-wxDefaultDockArt::wxDefaultDockArt()
+wxAuiDefaultDockArt::wxAuiDefaultDockArt()
 {
 #ifdef __WXMAC__
     wxBrush toolbarbrush;
@@ -246,7 +246,7 @@ wxDefaultDockArt::wxDefaultDockArt()
     m_gradient_type = wxAUI_GRADIENT_VERTICAL;
 }
 
-int wxDefaultDockArt::GetMetric(int id)
+int wxAuiDefaultDockArt::GetMetric(int id)
 {
     switch (id)
     {
@@ -262,7 +262,7 @@ int wxDefaultDockArt::GetMetric(int id)
     return 0;
 }
 
-void wxDefaultDockArt::SetMetric(int id, int new_val)
+void wxAuiDefaultDockArt::SetMetric(int id, int new_val)
 {
     switch (id)
     {
@@ -276,7 +276,7 @@ void wxDefaultDockArt::SetMetric(int id, int new_val)
     }
 }
 
-wxColour wxDefaultDockArt::GetColour(int id)
+wxColour wxAuiDefaultDockArt::GetColour(int id)
 {
     switch (id)
     {
@@ -296,7 +296,7 @@ wxColour wxDefaultDockArt::GetColour(int id)
     return wxColour();
 }
 
-void wxDefaultDockArt::SetColour(int id, const wxColor& colour)
+void wxAuiDefaultDockArt::SetColour(int id, const wxColor& colour)
 {
     switch (id)
     {
@@ -318,20 +318,20 @@ void wxDefaultDockArt::SetColour(int id, const wxColor& colour)
     }
 }
 
-void wxDefaultDockArt::SetFont(int id, const wxFont& font)
+void wxAuiDefaultDockArt::SetFont(int id, const wxFont& font)
 {
     if (id == wxAUI_ART_CAPTION_FONT)
         m_caption_font = font;
 }
 
-wxFont wxDefaultDockArt::GetFont(int id)
+wxFont wxAuiDefaultDockArt::GetFont(int id)
 {
     if (id == wxAUI_ART_CAPTION_FONT)
         return m_caption_font;
     return wxNullFont;
 }
 
-void wxDefaultDockArt::DrawSash(wxDC& dc, wxWindow *window, int orientation, const wxRect& rect)
+void wxAuiDefaultDockArt::DrawSash(wxDC& dc, wxWindow *window, int orientation, const wxRect& rect)
 {
 #if defined(__WXMAC__)
     HIRect splitterRect = CGRectMake( rect.x , rect.y , rect.width , rect.height );
@@ -406,7 +406,7 @@ void wxDefaultDockArt::DrawSash(wxDC& dc, wxWindow *window, int orientation, con
 }
 
 
-void wxDefaultDockArt::DrawBackground(wxDC& dc, wxWindow *WXUNUSED(window), int, const wxRect& rect)
+void wxAuiDefaultDockArt::DrawBackground(wxDC& dc, wxWindow *WXUNUSED(window), int, const wxRect& rect)
 {
     dc.SetPen(*wxTRANSPARENT_PEN);
 #ifdef __WXMAC__
@@ -419,8 +419,8 @@ void wxDefaultDockArt::DrawBackground(wxDC& dc, wxWindow *WXUNUSED(window), int,
     dc.DrawRectangle(rect.x, rect.y, rect.width, rect.height);
 }
 
-void wxDefaultDockArt::DrawBorder(wxDC& dc, wxWindow *WXUNUSED(window), const wxRect& _rect,
-                                  wxPaneInfo& pane)
+void wxAuiDefaultDockArt::DrawBorder(wxDC& dc, wxWindow *WXUNUSED(window), const wxRect& _rect,
+                                  wxAuiPaneInfo& pane)
 {
     dc.SetPen(m_border_pen);
     dc.SetBrush(*wxTRANSPARENT_BRUSH);
@@ -454,7 +454,7 @@ void wxDefaultDockArt::DrawBorder(wxDC& dc, wxWindow *WXUNUSED(window), const wx
 }
 
 
-void wxDefaultDockArt::DrawCaptionBackground(wxDC& dc, const wxRect& rect, bool active)
+void wxAuiDefaultDockArt::DrawCaptionBackground(wxDC& dc, const wxRect& rect, bool active)
 {
     if (m_gradient_type == wxAUI_GRADIENT_NONE)
     {
@@ -501,18 +501,18 @@ void wxDefaultDockArt::DrawCaptionBackground(wxDC& dc, const wxRect& rect, bool 
 }
 
 
-void wxDefaultDockArt::DrawCaption(wxDC& dc, wxWindow *WXUNUSED(window),
+void wxAuiDefaultDockArt::DrawCaption(wxDC& dc, wxWindow *WXUNUSED(window),
                                    const wxString& text,
                                    const wxRect& rect,
-                                   wxPaneInfo& pane)
+                                   wxAuiPaneInfo& pane)
 {
     dc.SetPen(*wxTRANSPARENT_PEN);
     dc.SetFont(m_caption_font);
 
     DrawCaptionBackground(dc, rect,
-                          (pane.state & wxPaneInfo::optionActive)?true:false);
+                          (pane.state & wxAuiPaneInfo::optionActive)?true:false);
 
-    if (pane.state & wxPaneInfo::optionActive)
+    if (pane.state & wxAuiPaneInfo::optionActive)
         dc.SetTextForeground(m_active_caption_text_colour);
     else
         dc.SetTextForeground(m_inactive_caption_text_colour);
@@ -526,9 +526,9 @@ void wxDefaultDockArt::DrawCaption(wxDC& dc, wxWindow *WXUNUSED(window),
     dc.DestroyClippingRegion();
 }
 
-void wxDefaultDockArt::DrawGripper(wxDC& dc, wxWindow *WXUNUSED(window),
+void wxAuiDefaultDockArt::DrawGripper(wxDC& dc, wxWindow *WXUNUSED(window),
                                    const wxRect& rect,
-                                   wxPaneInfo& pane)
+                                   wxAuiPaneInfo& pane)
 {
     dc.SetPen(*wxTRANSPARENT_PEN);
     dc.SetBrush(m_gripper_brush);
@@ -577,11 +577,11 @@ void wxDefaultDockArt::DrawGripper(wxDC& dc, wxWindow *WXUNUSED(window),
     }
 }
 
-void wxDefaultDockArt::DrawPaneButton(wxDC& dc, wxWindow *WXUNUSED(window),
+void wxAuiDefaultDockArt::DrawPaneButton(wxDC& dc, wxWindow *WXUNUSED(window),
                                       int button,
                                       int button_state,
                                       const wxRect& _rect,
-                                      wxPaneInfo& pane)
+                                      wxAuiPaneInfo& pane)
 {
     wxRect rect = _rect;
 
@@ -594,7 +594,7 @@ void wxDefaultDockArt::DrawPaneButton(wxDC& dc, wxWindow *WXUNUSED(window),
     if (button_state == wxAUI_BUTTON_STATE_HOVER ||
         button_state == wxAUI_BUTTON_STATE_PRESSED)
     {
-        if (pane.state & wxPaneInfo::optionActive)
+        if (pane.state & wxAuiPaneInfo::optionActive)
         {
             dc.SetBrush(wxBrush(StepColour(m_active_caption_colour, 120)));
             dc.SetPen(wxPen(StepColour(m_active_caption_colour, 70)));
@@ -615,25 +615,25 @@ void wxDefaultDockArt::DrawPaneButton(wxDC& dc, wxWindow *WXUNUSED(window),
         default:
         case wxAUI_BUTTON_MAXIMIZE_RESTORE:
             if (pane.IsMaximized()) {
-                if (pane.state & wxPaneInfo::optionActive)
+                if (pane.state & wxAuiPaneInfo::optionActive)
                     bmp = m_active_restore_bitmap;
                     else
                     bmp = m_inactive_restore_bitmap;
             } else {
-                if (pane.state & wxPaneInfo::optionActive)
+                if (pane.state & wxAuiPaneInfo::optionActive)
                     bmp = m_active_maximize_bitmap;
                     else
                     bmp = m_inactive_maximize_bitmap;
             }
             break;
         case wxAUI_BUTTON_CLOSE:
-            if (pane.state & wxPaneInfo::optionActive)
+            if (pane.state & wxAuiPaneInfo::optionActive)
                 bmp = m_active_close_bitmap;
                  else
                 bmp = m_inactive_close_bitmap;
             break;
         case wxAUI_BUTTON_PIN:
-            if (pane.state & wxPaneInfo::optionActive)
+            if (pane.state & wxAuiPaneInfo::optionActive)
                 bmp = m_active_pin_bitmap;
                  else
                 bmp = m_inactive_pin_bitmap;
