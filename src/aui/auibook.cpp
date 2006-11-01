@@ -193,6 +193,7 @@ void wxDefaultTabArt::DrawTab(wxDC* dc,
                               const wxRect& in_rect,
                               const wxString& caption_text,
                               bool active,
+                              bool with_close_button,
                               wxRect* out_rect,
                               int* x_extent)
 {
@@ -212,7 +213,7 @@ void wxDefaultTabArt::DrawTab(wxDC* dc,
     dc->GetTextExtent(caption, &normal_textx, &normal_texty);
         
     // figure out the size of the tab
-    wxSize tab_size = GetTabSize(dc, caption, active, x_extent);
+    wxSize tab_size = GetTabSize(dc, caption, active, with_close_button, x_extent);
 
     wxCoord tab_height = tab_size.y;
     wxCoord tab_width = tab_size.x;
@@ -264,11 +265,41 @@ void wxDefaultTabArt::DrawTab(wxDC* dc,
     //dc->DrawLines(active ? 6 : 7, points);
     dc->DrawLines(7, points);
 
-    // -- draw text --
 
+    int text_offset;
+
+    int close_button_width = 0;
+    if (with_close_button)
+    {
+        close_button_width = m_active_close_bmp.GetWidth();
+        text_offset = tab_x + (tab_height/2) + ((tab_width-close_button_width)/2) - (textx/2);
+    }
+     else
+    {
+        text_offset = tab_x + (tab_height/3) + (tab_width/2) - (textx/2);
+    }
+    
+
+    // draw tab text
     dc->DrawText(caption,
-                 tab_x + (tab_height/3) + (tab_width/2) - (textx/2),
+                 text_offset,
                  (tab_y + tab_height)/2 - (texty/2) + 1);
+
+
+    // draw close button if necessary
+    if (with_close_button)
+    {
+        wxBitmap bmp;
+        if (active)
+            bmp = m_active_close_bmp;
+             else
+            bmp = m_disabled_close_bmp;
+            
+        wxRect rect(tab_x + tab_width - close_button_width - 1, tab_y + 1,
+                    close_button_width, tab_height - 1);
+        DrawButtonS(*dc, rect, bmp, *wxWHITE, wxAUI_BUTTON_STATE_NORMAL);
+    }
+
 
     *out_rect = wxRect(tab_x, tab_y, tab_width, tab_height);
 }
@@ -277,6 +308,7 @@ void wxDefaultTabArt::DrawTab(wxDC* dc,
 wxSize wxDefaultTabArt::GetTabSize(wxDC* dc,
                                    const wxString& caption,
                                    bool WXUNUSED(active),
+                                   bool with_close_button,
                                    int* x_extent)
 {
     wxCoord measured_textx, measured_texty;
@@ -286,6 +318,9 @@ wxSize wxDefaultTabArt::GetTabSize(wxDC* dc,
     
     wxCoord tab_height = measured_texty + 4;
     wxCoord tab_width = measured_textx + tab_height + 5;
+
+    if (with_close_button)
+        tab_width += m_active_close_bmp.GetWidth();
 
     *x_extent = tab_width - (tab_height/2) - 1;
 
@@ -366,7 +401,7 @@ int wxDefaultTabArt::GetBestTabCtrlSize(wxWindow* wnd)
     wxClientDC dc(wnd);
     dc.SetFont(m_measuring_font);
     int x_ext = 0;
-    wxSize s = GetTabSize(&dc, wxT("ABCDEFGHIj"), true, &x_ext);
+    wxSize s = GetTabSize(&dc, wxT("ABCDEFGHIj"), true, false, &x_ext);
     return s.y+3;
 }
 
@@ -406,6 +441,7 @@ void wxDefaultTabArt::SetMeasuringFont(const wxFont& font)
 wxAuiTabContainer::wxAuiTabContainer()
 {
     m_tab_offset = 0;
+    m_flags = 0;
     m_art = new wxDefaultTabArt;
     
     AddButton(wxAUI_BUTTON_LEFT, wxLEFT);       
@@ -428,6 +464,17 @@ wxTabArt* wxAuiTabContainer::GetArtProvider()
 {
     return m_art;
 }
+
+void wxAuiTabContainer::SetFlags(unsigned int flags)
+{
+    m_flags = flags;
+}
+
+unsigned int wxAuiTabContainer::GetFlags() const
+{
+    return m_flags;
+}
+
 
 void wxAuiTabContainer::SetNormalFont(const wxFont& font)
 {
@@ -650,8 +697,18 @@ void wxAuiTabContainer::Render(wxDC* raw_dc)
     for (i = 0; i < page_count; ++i)
     {
         wxAuiNotebookPage& page = m_pages.Item(i);
+        
+        // determine if a close button is on this tab
+        bool close_button = false;
+        if ((m_flags & wxAUI_NB_CLOSE_ON_ALL_TABS) != 0 ||
+            ((m_flags & wxAUI_NB_CLOSE_ON_ACTIVE_TAB) != 0 && page.active))
+        {
+            close_button = true;
+        }
+        
+    
         int x_extent = 0;
-        wxSize size = m_art->GetTabSize(&dc, page.caption, page.active, &x_extent);
+        wxSize size = m_art->GetTabSize(&dc, page.caption, page.active, close_button, &x_extent);
         
         if (i+1 < page_count)
             total_width += x_extent;
@@ -783,10 +840,12 @@ void wxAuiTabContainer::Render(wxDC* raw_dc)
 
     offset = left_buttons_width;
     
-    
+    // set a clipping region to the tabs don't draw over the buttons
     dc.SetClippingRegion(left_buttons_width, 0,
                  m_rect.GetWidth() - right_buttons_width - left_buttons_width - 2,
                  m_rect.GetHeight());
+           
+           
                          
     // draw the tabs
 
@@ -803,12 +862,21 @@ void wxAuiTabContainer::Render(wxDC* raw_dc)
     {
         wxAuiNotebookPage& page = m_pages.Item(i);
 
+        // determine if a close button is on this tab
+        bool close_button = false;
+        if ((m_flags & wxAUI_NB_CLOSE_ON_ALL_TABS) != 0 ||
+            ((m_flags & wxAUI_NB_CLOSE_ON_ACTIVE_TAB) != 0 && page.active))
+        {
+            close_button = true;
+        }
+
         rect.x = offset;
 
         m_art->DrawTab(&dc, 
                 rect,
                 page.caption,
                 page.active,
+                close_button,
                 &page.rect,
                 &x_extent);
 
@@ -826,11 +894,20 @@ void wxAuiTabContainer::Render(wxDC* raw_dc)
     {
         wxAuiNotebookPage& page = m_pages.Item(active);
 
+        // determine if a close button is on this tab
+        bool close_button = false;
+        if ((m_flags & wxAUI_NB_CLOSE_ON_ALL_TABS) != 0 ||
+            ((m_flags & wxAUI_NB_CLOSE_ON_ACTIVE_TAB) != 0 && page.active))
+        {
+            close_button = true;
+        }
+
         rect.x = active_offset;
         m_art->DrawTab(&dc,
                 rect,
                 page.caption,
                 page.active,
+                close_button,
                 &page.rect,
                 &x_extent);
     }
@@ -1297,7 +1374,7 @@ wxAuiMultiNotebook::wxAuiMultiNotebook(wxWindow *parent,
                              const wxSize& size,
                              long style) : wxControl(parent, id, pos, size, style)
 {
-    InitNotebook();
+    InitNotebook(style);
 }
 
 bool wxAuiMultiNotebook::Create(wxWindow* parent,
@@ -1309,20 +1386,21 @@ bool wxAuiMultiNotebook::Create(wxWindow* parent,
     if (!wxControl::Create(parent, id, pos, size, style))
         return false;
 
-    InitNotebook();
+    InitNotebook(style);
 
     return true;
 }
 
 // InitNotebook() contains common initialization
 // code called by all constructors
-void wxAuiMultiNotebook::InitNotebook()
+void wxAuiMultiNotebook::InitNotebook(long style)
 {
     m_curpage = -1;
     m_tab_id_counter = 10000;
     m_dummy_wnd = NULL;
     m_tab_ctrl_height = 20;
-
+    m_flags = (unsigned int)style;
+    
     m_normal_font = *wxNORMAL_FONT;
     m_selected_font = *wxNORMAL_FONT;
     m_selected_font.SetWeight(wxBOLD);
@@ -1654,6 +1732,7 @@ wxAuiTabCtrl* wxAuiMultiNotebook::GetActiveTabCtrl()
                                         wxDefaultPosition,
                                         wxDefaultSize,
                                         wxNO_BORDER);
+    tabframe->m_tabs->SetFlags(m_flags);
     m_mgr.AddPane(tabframe,
                   wxPaneInfo().Center().CaptionVisible(false));
 
@@ -1824,6 +1903,8 @@ void wxAuiMultiNotebook::OnTabEndDrag(wxCommandEvent& command_evt)
                                             wxDefaultPosition,
                                             wxDefaultSize,
                                             wxNO_BORDER);
+        new_tabs->m_tabs->SetFlags(m_flags);
+
         m_mgr.AddPane(new_tabs,
                       wxPaneInfo().Bottom().CaptionVisible(false),
                       mouse_client_pt);

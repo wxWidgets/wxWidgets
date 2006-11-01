@@ -27,8 +27,33 @@
 #include "wx/control.h"
 
 
-// tab art class
 
+enum wxAuiNotebookOption
+{
+    wxAUI_NB_TOP                 = 1 << 0,
+    wxAUI_NB_LEFT                = 1 << 1,  // not implemented yet
+    wxAUI_NB_RIGHT               = 1 << 2,  // not implemented yet
+    wxAUI_NB_BOTTOM              = 1 << 3,  // not implemented yet
+    wxAUI_NB_TAB_SPLIT           = 1 << 4,
+    wxAUI_NB_TAB_MOVE            = 1 << 5,
+    wxAUI_NB_SCROLL_BUTTONS      = 1 << 6,
+    wxAUI_NB_CLOSE_BUTTON        = 1 << 7,
+    wxAUI_NB_PAGELIST_BUTTON     = 1 << 8,
+    wxAUI_NB_CLOSE_ON_ACTIVE_TAB = 1 << 9,
+    wxAUI_NB_CLOSE_ON_ALL_TABS   = 1 << 10,
+    
+    wxAUI_NB_DEFAULT_STYLE = wxAUI_NB_TOP |
+                             wxAUI_NB_TAB_SPLIT |
+                             wxAUI_NB_TAB_MOVE |
+                             wxAUI_NB_SCROLL_BUTTONS// |
+                             //wxAUI_NB_CLOSE_ON_ALL_TABS
+};
+
+
+
+
+
+// tab art class
 
 class WXDLLIMPEXP_AUI wxTabArt
 {
@@ -49,6 +74,7 @@ public:
                          const wxRect& in_rect,
                          const wxString& caption,
                          bool active,
+                         bool with_close_button,
                          wxRect* out_rect,
                          int* x_extent) = 0;     
     
@@ -65,6 +91,7 @@ public:
                          wxDC* dc,
                          const wxString& caption,
                          bool active,
+                         bool with_close_button,
                          int* x_extent) = 0;
                          
     virtual int GetBestTabCtrlSize(wxWindow* wnd) = 0;      
@@ -91,6 +118,7 @@ public:
                  const wxRect& in_rect,
                  const wxString& caption,
                  bool active,
+                 bool with_close_button,
                  wxRect* out_rect,
                  int* x_extent);
     
@@ -107,6 +135,7 @@ public:
                  wxDC* dc,
                  const wxString& caption,
                  bool active,
+                 bool with_close_button,
                  int* x_extent);
     
     int GetBestTabCtrlSize(wxWindow* wnd);
@@ -207,6 +236,9 @@ public:
     void SetArtProvider(wxTabArt* art);
     wxTabArt* GetArtProvider();
 
+    void SetFlags(unsigned int flags);
+    unsigned int GetFlags() const;
+
     bool AddPage(wxWindow* page, const wxAuiNotebookPage& info);
     bool InsertPage(wxWindow* page, const wxAuiNotebookPage& info, size_t idx);
     bool MovePage(wxWindow* page, size_t new_idx);
@@ -246,6 +278,7 @@ private:
     wxAuiTabContainerButtonArray m_buttons;
     wxRect m_rect;
     size_t m_tab_offset;
+    unsigned int m_flags;
 };
 
 
@@ -301,7 +334,7 @@ public:
                        wxWindowID id = wxID_ANY,
                        const wxPoint& pos = wxDefaultPosition,
                        const wxSize& size = wxDefaultSize,
-                       long style = 0);
+                       long style = wxAUI_NB_DEFAULT_STYLE);
 
     virtual ~wxAuiMultiNotebook();
 
@@ -345,7 +378,7 @@ protected:
 protected:
 
     void DoSizing();
-    void InitNotebook();
+    void InitNotebook(long style);
 
     void OnChildFocus(wxChildFocusEvent& evt);
     void OnRender(wxFrameManagerEvent& evt);
@@ -370,6 +403,7 @@ protected:
     int m_tab_ctrl_height;
     
     int m_last_drag_x;
+    unsigned int m_flags;
 
 #ifndef SWIG
     DECLARE_EVENT_TABLE()

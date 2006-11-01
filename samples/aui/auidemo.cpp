@@ -1234,7 +1234,8 @@ wxHtmlWindow* MyFrame::CreateHTMLCtrl(wxWindow* parent)
 wxAuiMultiNotebook* MyFrame::CreateNotebook()
 {
    wxAuiMultiNotebook* ctrl = new wxAuiMultiNotebook( this, wxID_ANY,
-                                    wxDefaultPosition, wxSize(400,300), wxNO_BORDER );
+                                    wxDefaultPosition, wxSize(400,300),
+                                    wxAUI_NB_DEFAULT_STYLE | wxNO_BORDER );
                                     
    ctrl->AddPage(CreateHTMLCtrl(ctrl), wxT("Welcome"));
                                     
