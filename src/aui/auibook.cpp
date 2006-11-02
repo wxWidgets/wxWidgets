@@ -296,8 +296,10 @@ void wxAuiDefaultTabArt::DrawTab(wxDC* dc,
              else
             bmp = m_disabled_close_bmp;
             
-        wxRect rect(tab_x + tab_width - close_button_width - 1, tab_y + 1,
-                    close_button_width, tab_height - 1);
+        wxRect rect(tab_x + tab_width - close_button_width - 1,
+                    tab_y + (tab_height/2) - (bmp.GetHeight()/2) + 1,
+                    close_button_width,
+                    tab_height - 1);
         DrawButtonS(*dc, rect, bmp, *wxWHITE, close_button_state);
         
         *out_button_rect = rect;
