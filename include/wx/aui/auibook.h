@@ -37,8 +37,8 @@ enum wxAuiNotebookOption
     wxAUI_NB_TAB_SPLIT           = 1 << 4,
     wxAUI_NB_TAB_MOVE            = 1 << 5,
     wxAUI_NB_SCROLL_BUTTONS      = 1 << 6,
-    wxAUI_NB_CLOSE_BUTTON        = 1 << 7,
-    wxAUI_NB_PAGELIST_BUTTON     = 1 << 8,
+    wxAUI_NB_PAGELIST_BUTTON     = 1 << 7,
+    wxAUI_NB_CLOSE_BUTTON        = 1 << 8,
     wxAUI_NB_CLOSE_ON_ACTIVE_TAB = 1 << 9,
     wxAUI_NB_CLOSE_ON_ALL_TABS   = 1 << 10,
     
@@ -337,10 +337,10 @@ public:
     wxAuiNotebook();
 
     wxAuiNotebook(wxWindow* parent,
-                       wxWindowID id = wxID_ANY,
-                       const wxPoint& pos = wxDefaultPosition,
-                       const wxSize& size = wxDefaultSize,
-                       long style = wxAUI_NB_DEFAULT_STYLE);
+                  wxWindowID id = wxID_ANY,
+                  const wxPoint& pos = wxDefaultPosition,
+                  const wxSize& size = wxDefaultSize,
+                  long style = wxAUI_NB_DEFAULT_STYLE);
 
     virtual ~wxAuiNotebook();
 
@@ -363,12 +363,15 @@ public:
 
     bool DeletePage(size_t page);
     bool RemovePage(size_t page);
+    
+    void SetWindowStyleFlag(long style);
 
     bool SetPageText(size_t page, const wxString& text);
     size_t SetSelection(size_t new_page);
     int GetSelection() const;
     size_t GetPageCount() const;
     wxWindow* GetPage(size_t page_idx) const;
+
 
     void SetArtProvider(wxAuiTabArt* art);
     wxAuiTabArt* GetArtProvider();
@@ -412,6 +415,7 @@ protected:
     unsigned int m_flags;
 
 #ifndef SWIG
+    DECLARE_CLASS(wxAuiNotebook)
     DECLARE_EVENT_TABLE()
 #endif
 };

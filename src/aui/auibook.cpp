@@ -42,7 +42,7 @@ DEFINE_EVENT_TYPE(wxEVT_COMMAND_AUINOTEBOOK_END_DRAG)
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_AUINOTEBOOK_DRAG_MOTION)
 
 
-
+IMPLEMENT_CLASS(wxAuiNotebook, wxControl)
 IMPLEMENT_DYNAMIC_CLASS(wxAuiNotebookEvent, wxEvent)
 
 
@@ -1518,6 +1518,33 @@ wxAuiTabArt* wxAuiNotebook::GetArtProvider()
 {
     return m_tabs.GetArtProvider();
 }
+
+void wxAuiNotebook::SetWindowStyleFlag(long style)
+{
+    wxControl::SetWindowStyleFlag(style);
+    
+    m_flags = (unsigned int)style;
+    
+    // if the control is already initialized
+    if (m_mgr.GetManagedWindow() == (wxWindow*)this)
+    {
+        // let all of the tab children know about the new style
+        
+        wxAuiPaneInfoArray& all_panes = m_mgr.GetAllPanes();
+        size_t i, pane_count = all_panes.GetCount();
+        for (i = 0; i < pane_count; ++i)
+        {
+            wxAuiPaneInfo& pane = all_panes.Item(i);
+            if (pane.name == wxT("dummy"))
+                continue;
+            wxAuiTabCtrl* tabctrl = ((wxTabFrame*)pane.window)->m_tabs;
+            tabctrl->SetFlags(m_flags);
+            tabctrl->Refresh();
+            tabctrl->Update();
+        }
+    }
+}
+
 
 bool wxAuiNotebook::AddPage(wxWindow* page,
                             const wxString& caption,
