@@ -1852,8 +1852,8 @@ void wxTextCtrl::Freeze()
             g_object_ref(m_buffer);
             GtkTextBuffer* buf_new = gtk_text_buffer_new(NULL);
             gtk_text_view_set_buffer(GTK_TEXT_VIEW(m_text), buf_new);
-            // gtk_text_view_set_buffer adds its own reference
-            g_object_unref(buf_new);
+            // FIXME: this leaks the new buffer, since gtk_text_view_set_buffer
+            // adds its own reference, but unrefing it here can cause a crash later
         }
     }
 }
