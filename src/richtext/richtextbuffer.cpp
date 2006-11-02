@@ -909,8 +909,12 @@ wxRichTextRange wxRichTextParagraphLayoutBox::AddParagraph(const wxString& text,
 {
 #if wxRICHTEXT_USE_DYNAMIC_STYLES
     // Don't use the base style, just the default style, and the base style will
-    // be combined at display time
-    wxTextAttrEx style(GetDefaultStyle());
+    // be combined at display time.
+    // Divide into paragraph and character styles.
+    
+    wxTextAttrEx defaultCharStyle;
+    wxTextAttrEx defaultParaStyle;
+    wxRichTextSplitParaCharStyles(GetDefaultStyle(), defaultParaStyle, defaultCharStyle);
 #else
     wxTextAttrEx style(GetAttributes());
 
@@ -918,10 +922,14 @@ wxRichTextRange wxRichTextParagraphLayoutBox::AddParagraph(const wxString& text,
     // then the attributes will remain the 'basic style' (i.e. the
     // layout box's style).
     wxRichTextApplyStyle(style, GetDefaultStyle());
+
+    wxTextAttrEx defaultCharStyle = style;
+    wxTextAttrEx defaultParaStyle = style;
 #endif
-    wxRichTextParagraph* para = new wxRichTextParagraph(text, this, & style);
-    if (paraStyle)
-        para->SetAttributes(*paraStyle);
+    wxTextAttrEx* pStyle = paraStyle ? paraStyle : (wxTextAttrEx*) & defaultParaStyle;
+    wxTextAttrEx* cStyle = & defaultCharStyle;
+
+    wxRichTextParagraph* para = new wxRichTextParagraph(text, this, pStyle, cStyle);
 
     AppendChild(para);
 
@@ -936,22 +944,26 @@ wxRichTextRange wxRichTextParagraphLayoutBox::AddParagraphs(const wxString& text
 {
 #if wxRICHTEXT_USE_DYNAMIC_STYLES
     // Don't use the base style, just the default style, and the base style will
-    // be combined at display time
-    wxTextAttrEx style(GetDefaultStyle());
+    // be combined at display time.
+    // Divide into paragraph and character styles.
+    
+    wxTextAttrEx defaultCharStyle;
+    wxTextAttrEx defaultParaStyle;
+    wxRichTextSplitParaCharStyles(GetDefaultStyle(), defaultParaStyle, defaultCharStyle);
 #else
     wxTextAttrEx style(GetAttributes());
-
-    //wxLogDebug("Initial style = %s", style.GetFont().GetFaceName());
-    //wxLogDebug("Initial size = %d", style.GetFont().GetPointSize());
 
     // Apply default style. If the style has no attributes set,
     // then the attributes will remain the 'basic style' (i.e. the
     // layout box's style).
     wxRichTextApplyStyle(style, GetDefaultStyle());
 
-    //wxLogDebug("Style after applying default style = %s", style.GetFont().GetFaceName());
-    //wxLogDebug("Size after applying default style = %d", style.GetFont().GetPointSize());
+    wxTextAttrEx defaultCharStyle = style;
+    wxTextAttrEx defaultParaStyle = style;
 #endif
+
+    wxTextAttrEx* pStyle = paraStyle ? paraStyle : (wxTextAttrEx*) & defaultParaStyle;
+    wxTextAttrEx* cStyle = & defaultCharStyle;
 
     wxRichTextParagraph* firstPara = NULL;
     wxRichTextParagraph* lastPara = NULL;
@@ -961,9 +973,7 @@ wxRichTextRange wxRichTextParagraphLayoutBox::AddParagraphs(const wxString& text
     size_t i = 0;
     size_t len = text.length();
     wxString line;
-    wxRichTextParagraph* para = new wxRichTextParagraph(wxEmptyString, this, & style);
-    if (paraStyle)
-        para->SetAttributes(*paraStyle);
+    wxRichTextParagraph* para = new wxRichTextParagraph(wxEmptyString, this, pStyle, cStyle);
 
     AppendChild(para);
 
@@ -978,14 +988,9 @@ wxRichTextRange wxRichTextParagraphLayoutBox::AddParagraphs(const wxString& text
             wxRichTextPlainText* plainText = (wxRichTextPlainText*) para->GetChildren().GetFirst()->GetData();
             plainText->SetText(line);
 
-            para = new wxRichTextParagraph(wxEmptyString, this, & style);
-            if (paraStyle)
-                para->SetAttributes(*paraStyle);
+            para = new wxRichTextParagraph(wxEmptyString, this, pStyle, cStyle);
 
             AppendChild(para);
-
-            //if (!firstPara)
-            //    firstPara = para;
 
             lastPara = para;
             line = wxEmptyString;
@@ -1002,18 +1007,6 @@ wxRichTextRange wxRichTextParagraphLayoutBox::AddParagraphs(const wxString& text
         plainText->SetText(line);
     }
 
-/*
-    if (firstPara)
-        range.SetStart(firstPara->GetRange().GetStart());
-    else if (lastPara)
-        range.SetStart(lastPara->GetRange().GetStart());
-
-    if (lastPara)
-        range.SetEnd(lastPara->GetRange().GetEnd());
-    else if (firstPara)
-        range.SetEnd(firstPara->GetRange().GetEnd());
-*/
-
     UpdateRanges();
 
     SetDirty(false);
@@ -1026,8 +1019,12 @@ wxRichTextRange wxRichTextParagraphLayoutBox::AddImage(const wxImage& image, wxT
 {
 #if wxRICHTEXT_USE_DYNAMIC_STYLES
     // Don't use the base style, just the default style, and the base style will
-    // be combined at display time
-    wxTextAttrEx style(GetDefaultStyle());
+    // be combined at display time.
+    // Divide into paragraph and character styles.
+    
+    wxTextAttrEx defaultCharStyle;
+    wxTextAttrEx defaultParaStyle;
+    wxRichTextSplitParaCharStyles(GetDefaultStyle(), defaultParaStyle, defaultCharStyle);
 #else
     wxTextAttrEx style(GetAttributes());
 
@@ -1035,14 +1032,17 @@ wxRichTextRange wxRichTextParagraphLayoutBox::AddImage(const wxImage& image, wxT
     // then the attributes will remain the 'basic style' (i.e. the
     // layout box's style).
     wxRichTextApplyStyle(style, GetDefaultStyle());
+
+    wxTextAttrEx defaultCharStyle = style;
+    wxTextAttrEx defaultParaStyle = style;
 #endif
 
-    wxRichTextParagraph* para = new wxRichTextParagraph(this, & style);
-    AppendChild(para);
-    para->AppendChild(new wxRichTextImage(image, this));
+    wxTextAttrEx* pStyle = paraStyle ? paraStyle : (wxTextAttrEx*) & defaultParaStyle;
+    wxTextAttrEx* cStyle = & defaultCharStyle;
 
-    if (paraStyle)
-        para->SetAttributes(*paraStyle);
+    wxRichTextParagraph* para = new wxRichTextParagraph(this, pStyle);
+    AppendChild(para);
+    para->AppendChild(new wxRichTextImage(image, this, cStyle));
 
     UpdateRanges();
     SetDirty(true);
@@ -1054,8 +1054,6 @@ wxRichTextRange wxRichTextParagraphLayoutBox::AddImage(const wxImage& image, wxT
 /// Insert fragment into this box at the given position. If partialParagraph is true,
 /// it is assumed that the last (or only) paragraph is just a piece of data with no paragraph
 /// marker.
-/// TODO: if fragment is inserted inside styled fragment, must apply that style to
-/// to the data (if it has a default style, anyway).
 
 bool wxRichTextParagraphLayoutBox::InsertFragment(long position, wxRichTextParagraphLayoutBox& fragment)
 {
@@ -1084,6 +1082,11 @@ bool wxRichTextParagraphLayoutBox::InsertFragment(long position, wxRichTextParag
             // Iterate through the fragment paragraph inserting the content into this paragraph.
             wxRichTextParagraph* firstPara = wxDynamicCast(firstParaNode->GetData(), wxRichTextParagraph);
             wxASSERT (firstPara != NULL);
+
+            // Apply the new paragraph attributes to the existing paragraph
+            wxTextAttrEx attr(para->GetAttributes());
+            wxRichTextApplyStyle(attr, firstPara->GetAttributes());
+            para->SetAttributes(attr);
 
             wxRichTextObjectList::compatibility_iterator objectNode = firstPara->GetChildren().GetFirst();
             while (objectNode)
@@ -1191,9 +1194,6 @@ bool wxRichTextParagraphLayoutBox::InsertFragment(long position, wxRichTextParag
                 if (finalPara->GetChildCount() == 0)
                 {
                     wxRichTextPlainText* text = new wxRichTextPlainText(wxEmptyString);
-#if !wxRICHTEXT_USE_DYNAMIC_STYLES
-                    text->SetAttributes(finalPara->GetAttributes());
-#endif
 
                     finalPara->AppendChild(text);
                 }
@@ -2297,19 +2297,7 @@ bool wxRichTextParagraphLayoutBox::GetStyleForRange(const wxRichTextRange& range
 /// Set default style
 bool wxRichTextParagraphLayoutBox::SetDefaultStyle(const wxTextAttrEx& style)
 {
-    // I don't think the default style should be combined with the previous
-    // default style.
     m_defaultAttributes = style;
-
-#if 0
-    // keep the old attributes if the new style doesn't specify them unless the
-    // new style is empty - then reset m_defaultStyle (as there is no other way
-    // to do it)
-    if ( style.IsDefault() )
-        m_defaultAttributes = style;
-    else
-        m_defaultAttributes = wxTextAttrEx::CombineEx(style, m_defaultAttributes, NULL);
-#endif
     return true;
 }
 
@@ -2915,13 +2903,6 @@ bool wxRichTextParagraphLayoutBox::PromoteList(int promoteBy, const wxRichTextRa
 /// position of the paragraph that it had to start looking from.
 bool wxRichTextParagraphLayoutBox::FindNextParagraphNumber(wxRichTextParagraph* previousParagraph, wxRichTextAttr& attr) const
 {
-#if 0
-    wxRichTextObjectList::compatibility_iterator node = m_children.Find(previousParagraph);
-    
-    if (!node)
-        return false;
-#endif
-    
     if (!previousParagraph->GetAttributes().HasFlag(wxTEXT_ATTR_BULLET_STYLE) || previousParagraph->GetAttributes().GetBulletStyle() == wxTEXT_ATTR_BULLET_STYLE_NONE)
         return false;
     
@@ -2985,21 +2966,17 @@ wxArrayInt wxRichTextParagraph::sm_defaultTabs;
 wxRichTextParagraph::wxRichTextParagraph(wxRichTextObject* parent, wxTextAttrEx* style):
     wxRichTextBox(parent)
 {
-    if (parent && !style)
-        SetAttributes(parent->GetAttributes());
     if (style)
         SetAttributes(*style);
 }
 
-wxRichTextParagraph::wxRichTextParagraph(const wxString& text, wxRichTextObject* parent, wxTextAttrEx* style):
+wxRichTextParagraph::wxRichTextParagraph(const wxString& text, wxRichTextObject* parent, wxTextAttrEx* paraStyle, wxTextAttrEx* charStyle):
     wxRichTextBox(parent)
 {
-    if (parent && !style)
-        SetAttributes(parent->GetAttributes());
-    if (style)
-        SetAttributes(*style);
+    if (paraStyle)
+        SetAttributes(*paraStyle);
 
-    AppendChild(new wxRichTextPlainText(text, this));
+    AppendChild(new wxRichTextPlainText(text, this, charStyle));
 }
 
 wxRichTextParagraph::~wxRichTextParagraph()
@@ -4105,8 +4082,6 @@ IMPLEMENT_DYNAMIC_CLASS(wxRichTextPlainText, wxRichTextObject)
 wxRichTextPlainText::wxRichTextPlainText(const wxString& text, wxRichTextObject* parent, wxTextAttrEx* style):
     wxRichTextObject(parent)
 {
-    if (parent && !style)
-        SetAttributes(parent->GetAttributes());
     if (style)
         SetAttributes(*style);
 
@@ -4609,6 +4584,13 @@ bool wxRichTextBuffer::InsertParagraphsWithUndo(long pos, const wxRichTextParagr
 {
     wxRichTextAction* action = new wxRichTextAction(NULL, _("Insert Text"), wxRICHTEXT_INSERT, this, ctrl, false);
 
+#if wxRICHTEXT_USE_DYNAMIC_STYLES
+    wxTextAttrEx attr(GetDefaultStyle());
+#else
+    wxTextAttrEx attr(GetBasicStyle());
+    wxRichTextApplyStyle(attr, GetDefaultStyle());
+#endif
+
     wxTextAttrEx* p = NULL;
     wxTextAttrEx paraAttr;
     if (flags & wxRICHTEXT_INSERT_WITH_PREVIOUS_PARAGRAPH_STYLE)
@@ -4617,13 +4599,8 @@ bool wxRichTextBuffer::InsertParagraphsWithUndo(long pos, const wxRichTextParagr
         if (!paraAttr.IsDefault())
             p = & paraAttr;
     }
-
-#if wxRICHTEXT_USE_DYNAMIC_STYLES
-    wxTextAttrEx attr(GetDefaultStyle());
-#else
-    wxTextAttrEx attr(GetBasicStyle());
-    wxRichTextApplyStyle(attr, GetDefaultStyle());
-#endif
+    else
+        p = & attr;
 
     action->GetNewParagraphs() = paragraphs;
 
@@ -4661,13 +4638,6 @@ bool wxRichTextBuffer::InsertTextWithUndo(long pos, const wxString& text, wxRich
         if (!paraAttr.IsDefault())
             p = & paraAttr;
     }
-
-#if wxRICHTEXT_USE_DYNAMIC_STYLES
-    wxTextAttrEx attr(GetDefaultStyle());
-#else
-    wxTextAttrEx attr(GetBasicStyle());
-    wxRichTextApplyStyle(attr, GetDefaultStyle());
-#endif
 
     action->GetNewParagraphs().AddParagraphs(text, p);
 
@@ -6234,17 +6204,21 @@ bool wxRichTextRange::LimitTo(const wxRichTextRange& range)
 
 IMPLEMENT_DYNAMIC_CLASS(wxRichTextImage, wxRichTextObject)
 
-wxRichTextImage::wxRichTextImage(const wxImage& image, wxRichTextObject* parent):
+wxRichTextImage::wxRichTextImage(const wxImage& image, wxRichTextObject* parent, wxTextAttrEx* charStyle):
     wxRichTextObject(parent)
 {
     m_image = image;
+    if (charStyle)
+        SetAttributes(*charStyle);
 }
 
-wxRichTextImage::wxRichTextImage(const wxRichTextImageBlock& imageBlock, wxRichTextObject* parent):
+wxRichTextImage::wxRichTextImage(const wxRichTextImageBlock& imageBlock, wxRichTextObject* parent, wxTextAttrEx* charStyle):
     wxRichTextObject(parent)
 {
     m_imageBlock = imageBlock;
     m_imageBlock.Load(m_image);
+    if (charStyle)
+        SetAttributes(*charStyle);
 }
 
 /// Load wxImage from the block
@@ -6904,6 +6878,20 @@ bool wxRichTextApplyStyle(wxTextAttrEx& destStyle, const wxRichTextAttr& style, 
             destStyle.SetPageBreak();
     }
 
+    return true;
+}
+
+/// Split into paragraph and character styles
+bool wxRichTextSplitParaCharStyles(const wxTextAttrEx& style, wxTextAttrEx& parStyle, wxTextAttrEx& charStyle)
+{
+    wxTextAttrEx defaultCharStyle1(style);
+    wxTextAttrEx defaultParaStyle1(style);
+    defaultCharStyle1.SetFlags(defaultCharStyle1.GetFlags()&wxTEXT_ATTR_CHARACTER);
+    defaultParaStyle1.SetFlags(defaultParaStyle1.GetFlags()&wxTEXT_ATTR_PARAGRAPH);
+
+    wxRichTextApplyStyle(charStyle, defaultCharStyle1);
+    wxRichTextApplyStyle(parStyle, defaultParaStyle1);
+    
     return true;
 }
 

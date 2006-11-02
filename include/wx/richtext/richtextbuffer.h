@@ -1227,7 +1227,7 @@ public:
 // Constructors
 
     wxRichTextParagraph(wxRichTextObject* parent = NULL, wxTextAttrEx* style = NULL);
-    wxRichTextParagraph(const wxString& text, wxRichTextObject* parent = NULL, wxTextAttrEx* style = NULL);
+    wxRichTextParagraph(const wxString& text, wxRichTextObject* parent = NULL, wxTextAttrEx* paraStyle = NULL, wxTextAttrEx* charStyle = NULL);
     virtual ~wxRichTextParagraph();
     wxRichTextParagraph(const wxRichTextParagraph& obj): wxRichTextBox() { Copy(obj); }
 
@@ -1500,8 +1500,8 @@ public:
 // Constructors
 
     wxRichTextImage(wxRichTextObject* parent = NULL): wxRichTextObject(parent) { }
-    wxRichTextImage(const wxImage& image, wxRichTextObject* parent = NULL);
-    wxRichTextImage(const wxRichTextImageBlock& imageBlock, wxRichTextObject* parent = NULL);
+    wxRichTextImage(const wxImage& image, wxRichTextObject* parent = NULL, wxTextAttrEx* charStyle = NULL);
+    wxRichTextImage(const wxRichTextImageBlock& imageBlock, wxRichTextObject* parent = NULL, wxTextAttrEx* charStyle = NULL);
     wxRichTextImage(const wxRichTextImage& obj): wxRichTextObject() { Copy(obj); }
 
 // Overrideables
@@ -2266,6 +2266,9 @@ WXDLLIMPEXP_RICHTEXT bool wxRichTextApplyStyle(wxTextAttrEx& destStyle, const wx
 WXDLLIMPEXP_RICHTEXT bool wxRichTextApplyStyle(wxRichTextAttr& destStyle, const wxTextAttrEx& style);
 WXDLLIMPEXP_RICHTEXT bool wxRichTextApplyStyle(wxTextAttrEx& destStyle, const wxRichTextAttr& style, wxRichTextAttr* compareWith = NULL);
 WXDLLIMPEXP_RICHTEXT bool wxRichTextApplyStyle(wxRichTextAttr& destStyle, const wxRichTextAttr& style, wxRichTextAttr* compareWith = NULL);
+
+/// Split into paragraph and character styles
+WXDLLIMPEXP_RICHTEXT bool wxRichTextSplitParaCharStyles(const wxTextAttrEx& style, wxTextAttrEx& parStyle, wxTextAttrEx& charStyle);
 
 /// Compare tabs
 WXDLLIMPEXP_RICHTEXT bool wxRichTextTabsEq(const wxArrayInt& tabs1, const wxArrayInt& tabs2);
