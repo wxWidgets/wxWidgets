@@ -601,10 +601,10 @@ bool wxAuiMDIClientWindow::CreateClient(wxAuiMDIParentFrame* parent, long style)
     SetWindowStyleFlag(style);
 
     if (!wxAuiNotebook::Create(parent,
-                                    wxID_ANY,
-                                    wxPoint(0,0),
-                                    wxSize(100, 100),
-                                    wxNO_BORDER))
+                               wxID_ANY,
+                               wxPoint(0,0),
+                               wxSize(100, 100),
+                               wxAUI_NB_DEFAULT_STYLE | wxNO_BORDER))
     {
         return false;
     }

@@ -1921,6 +1921,12 @@ void wxAuiNotebook::OnTabDragMotion(wxCommandEvent& evt)
     {
         // always hide the hint for inner-tabctrl drag
         m_mgr.HideHint();
+        
+        // if tab moving is not allowed, leave
+        if (!(m_flags & wxAUI_NB_TAB_MOVE))
+        {
+            return;
+        }
                 
         wxPoint pt = dest_tabs->ScreenToClient(screen_pt);
         wxWindow* dest_location_tab;
@@ -1953,6 +1959,13 @@ void wxAuiNotebook::OnTabDragMotion(wxCommandEvent& evt)
         return;
     }
 
+
+    // if tab moving is not allowed, leave
+    if (!(m_flags & wxAUI_NB_TAB_SPLIT))
+    {
+        return;
+    }
+
     if (dest_tabs)
     {
         wxRect hint_rect = dest_tabs->GetRect();
@@ -1973,7 +1986,12 @@ void wxAuiNotebook::OnTabEndDrag(wxCommandEvent& command_evt)
 
     m_mgr.HideHint();
 
-
+    // if tab moving is not allowed, leave
+    if (!(m_flags & wxAUI_NB_TAB_SPLIT))
+    {
+        return;
+    }
+    
     // get the mouse position, which will be used to determine the drop point
     wxPoint mouse_screen_pt = ::wxGetMousePosition();
     wxPoint mouse_client_pt = ScreenToClient(mouse_screen_pt);
