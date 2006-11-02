@@ -968,10 +968,8 @@ void GridFrame::OnCellValueChanged( wxGridEvent& ev )
     int row = ev.GetRow(),
         col = ev.GetCol();
 
-    wxString value = grid->GetCellValue(row, col);
-
     wxLogMessage(_T("Value changed for cell at row %d, col %d: now \"%s\""),
-                 row, col, (const wxChar*) value);
+                 row, col, grid->GetCellValue(row, col).c_str());
 
     ev.Skip();
 }
