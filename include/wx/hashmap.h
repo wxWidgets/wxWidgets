@@ -465,11 +465,17 @@ class WXDLLIMPEXP_BASE wxIntegerHash
     WX_HASH_MAP_NAMESPACE::hash<unsigned short> ushortHash;
 
 #if defined wxLongLong_t && !defined wxLongLongIsLong
+    // hash<wxLongLong_t> ought to work, but some 32-bit compilers have been
+    // found where the hash doesn't work with 64-bit values.
+    #if SIZEOF_LONG == 4 && (!defined SIZEOF_LONG_LONG || SIZEOF_LONG_LONG == 8)
     size_t longlongHash( wxLongLong_t x ) const
     {
-        return longHash( wx_truncate_cast(wxUint32, x) ) ^
-               longHash( wx_truncate_cast(wxUint32, x >> (sizeof(wxUint32) * 8)) );
+        return longHash( wx_truncate_cast(long, x) ) ^
+               longHash( wx_truncate_cast(long, x >> (sizeof(long) * 8)) );
     }
+    #else
+    WX_HASH_MAP_NAMESPACE::hash<wxLongLong_t> longlongHash;
+    #endif
 #endif
 
 public:
