@@ -45,8 +45,8 @@ enum wxAuiNotebookOption
     wxAUI_NB_DEFAULT_STYLE = wxAUI_NB_TOP |
                              wxAUI_NB_TAB_SPLIT |
                              wxAUI_NB_TAB_MOVE |
-                             wxAUI_NB_SCROLL_BUTTONS// |
-                             //wxAUI_NB_CLOSE_ON_ALL_TABS
+                             wxAUI_NB_SCROLL_BUTTONS |
+                             wxAUI_NB_CLOSE_ON_ACTIVE_TAB
 };
 
 
@@ -74,8 +74,9 @@ public:
                          const wxRect& in_rect,
                          const wxString& caption,
                          bool active,
-                         bool with_close_button,
-                         wxRect* out_rect,
+                         int close_button_state,
+                         wxRect* out_tab_rect,
+                         wxRect* out_button_rect,
                          int* x_extent) = 0;     
     
     virtual void DrawButton(
@@ -91,7 +92,7 @@ public:
                          wxDC* dc,
                          const wxString& caption,
                          bool active,
-                         bool with_close_button,
+                         int close_button_state,
                          int* x_extent) = 0;
                          
     virtual int GetBestTabCtrlSize(wxWindow* wnd) = 0;      
@@ -118,8 +119,9 @@ public:
                  const wxRect& in_rect,
                  const wxString& caption,
                  bool active,
-                 bool with_close_button,
-                 wxRect* out_rect,
+                 int close_button_state,
+                 wxRect* out_tab_rect,
+                 wxRect* out_button_rect,
                  int* x_extent);
     
     void DrawButton(
@@ -135,7 +137,7 @@ public:
                  wxDC* dc,
                  const wxString& caption,
                  bool active,
-                 bool with_close_button,
+                 int close_button_state,
                  int* x_extent);
     
     int GetBestTabCtrlSize(wxWindow* wnd);
@@ -211,9 +213,10 @@ public:
 class WXDLLIMPEXP_AUI wxAuiTabContainerButton
 {
 public:
+
     int id;               // button's id
     int cur_state;        // current state (normal, hover, pressed, etc.)
-    int location;         // buttons location (wxLEFT or wxRIGHT)
+    int location;         // buttons location (wxLEFT, wxRIGHT, or wxCENTER)
     wxBitmap bitmap;      // button's hover bitmap
     wxBitmap dis_bitmap;  // button's disabled bitmap
     wxRect rect;          // button's hit rectangle
@@ -259,6 +262,8 @@ public:
     void SetMeasuringFont(const wxFont& measuring_font);
     void DoShowHide();
     void SetRect(const wxRect& rect);
+    
+    void RemoveButton(int id);
     void AddButton(int id,
                    int location,
                    const wxBitmap& normal_bitmap = wxNullBitmap,
@@ -276,6 +281,7 @@ private:
     wxAuiTabArt* m_art;
     wxAuiNotebookPageArray m_pages;
     wxAuiTabContainerButtonArray m_buttons;
+    wxAuiTabContainerButtonArray m_tab_close_buttons;
     wxRect m_rect;
     size_t m_tab_offset;
     unsigned int m_flags;
