@@ -1919,6 +1919,11 @@ void wxAuiNotebook::OnTabDragMotion(wxCommandEvent& evt)
     wxAuiTabCtrl* dest_tabs = GetTabCtrlFromPoint(client_pt);
     if (dest_tabs == src_tabs)
     {
+        if (src_tabs)
+        {
+            src_tabs->SetCursor(wxCursor(wxCURSOR_ARROW));
+        }
+        
         // always hide the hint for inner-tabctrl drag
         m_mgr.HideHint();
         
@@ -1966,6 +1971,13 @@ void wxAuiNotebook::OnTabDragMotion(wxCommandEvent& evt)
         return;
     }
 
+
+    if (src_tabs)
+    {
+        src_tabs->SetCursor(wxCursor(wxCURSOR_SIZING));
+    }
+    
+    
     if (dest_tabs)
     {
         wxRect hint_rect = dest_tabs->GetRect();
@@ -1992,13 +2004,19 @@ void wxAuiNotebook::OnTabEndDrag(wxCommandEvent& command_evt)
         return;
     }
     
+    // set cursor back to an arrow
+    wxAuiTabCtrl* src_tabs = (wxAuiTabCtrl*)evt.GetEventObject();
+    if (src_tabs)
+    {
+        src_tabs->SetCursor(wxCursor(wxCURSOR_ARROW));
+    }
+    
     // get the mouse position, which will be used to determine the drop point
     wxPoint mouse_screen_pt = ::wxGetMousePosition();
     wxPoint mouse_client_pt = ScreenToClient(mouse_screen_pt);
 
 
     // the src tab control is the control that fired this event
-    wxAuiTabCtrl* src_tabs = (wxAuiTabCtrl*)evt.GetEventObject();
     wxAuiTabCtrl* dest_tabs = NULL;
 
 
@@ -2072,6 +2090,8 @@ void wxAuiNotebook::OnTabEndDrag(wxCommandEvent& command_evt)
 
     SetSelection(m_tabs.GetIdxFromWindow(page_info.window));
 }
+
+
 
 wxAuiTabCtrl* wxAuiNotebook::GetTabCtrlFromPoint(const wxPoint& pt)
 {
