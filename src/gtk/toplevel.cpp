@@ -908,26 +908,40 @@ void wxTopLevelWindowGTK::DoSetSize( int x, int y, int width, int height, int si
     if ((maxWidth != -1) && (m_width > maxWidth)) m_width = maxWidth;
     if ((maxHeight != -1) && (m_height > maxHeight)) m_height = maxHeight;
 
+    bool do_move = false;
+    bool do_resize = false;
+
     if ((m_x != -1) || (m_y != -1))
     {
         if ((m_x != old_x) || (m_y != old_y))
         {
-            gtk_widget_set_uposition( m_widget, m_x, m_y );
+            if (m_widget->window)
+                do_move = true;
+            else
+                gtk_window_move( GTK_WINDOW(m_widget), m_x, m_y );
         }
     }
 
     if ((m_width != old_width) || (m_height != old_height))
     {
         if (m_widget->window)
-            gdk_window_resize( m_widget->window, m_width, m_height );
+            do_resize = true;
         else
-            gtk_window_set_default_size( GTK_WINDOW(m_widget), m_width, m_height );
+            gtk_window_resize( GTK_WINDOW(m_widget), m_width, m_height );
 
         /* we set the size in GtkOnSize, i.e. mostly the actual resizing is
            done either directly before the frame is shown or in idle time
            so that different calls to SetSize() don't lead to flicker. */
         m_sizeSet = false;
     }
+
+    if (do_move && do_resize)
+        gdk_window_move_resize( m_widget->window, m_x, m_y, m_width, m_height );
+    else if (do_move)
+        gdk_window_move( m_widget->window, m_x, m_y );
+    else if (do_resize)
+        gdk_window_resize( m_widget->window, m_width, m_height );
+    
 
     m_resizing = false;
 }
