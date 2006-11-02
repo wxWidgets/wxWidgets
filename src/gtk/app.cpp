@@ -224,16 +224,6 @@ static gint wxapp_idle_callback( gpointer WXUNUSED(data) )
     // thread so we must lock it here ourselves.
     gdk_threads_enter();
 
-    // Indicate that we are now in idle mode and event handlers
-    // will have to reinstall the idle handler again.
-    {
-#if wxUSE_THREADS
-        wxMutexLocker lock(gs_idleTagsMutex);
-#endif
-        g_isIdle = true;
-        wxTheApp->m_idleTag = 0;
-    }
-
     bool moreIdles;
 
     // Send idle event to all who request them as long as
@@ -245,7 +235,17 @@ static gint wxapp_idle_callback( gpointer WXUNUSED(data) )
     gdk_threads_leave();
 
     if (!moreIdles)
+    {
+#if wxUSE_THREADS
+        wxMutexLocker lock(gs_idleTagsMutex);
+#endif
+        // Indicate that we are now in idle mode and event handlers
+        // will have to reinstall the idle handler again.
+        g_isIdle = true;
+        wxTheApp->m_idleTag = 0;
+
         wxAddEmissionHook();
+    }
 
     // Return FALSE if no more idle events are to be sent
     return moreIdles;
