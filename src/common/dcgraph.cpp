@@ -109,7 +109,18 @@ void wxGCDC::DoDrawBitmap( const wxBitmap &bmp, wxCoord x, wxCoord y, bool WXUNU
     wxCHECK_RET( Ok(), wxT("wxGCDC(cg)::DoDrawBitmap - invalid DC") );
     wxCHECK_RET( bmp.Ok(), wxT("wxGCDC(cg)::DoDrawBitmap - invalid bitmap") );
 
-    m_graphicContext->DrawBitmap( bmp, x , y , bmp.GetWidth() , bmp.GetHeight() );
+    if ( bmp.GetDepth() == 1 )
+    {
+        m_graphicContext->SetPen(*wxTRANSPARENT_PEN);
+        m_graphicContext->SetBrush( wxBrush( m_textBackgroundColour , wxSOLID ) );
+        m_graphicContext->DrawRectangle( x , y , bmp.GetWidth() , bmp.GetHeight() );        
+        m_graphicContext->SetBrush( wxBrush( m_textForegroundColour , wxSOLID ) );
+        m_graphicContext->DrawBitmap( bmp, x , y , bmp.GetWidth() , bmp.GetHeight() );
+        m_graphicContext->SetBrush( m_graphicContext->CreateBrush(m_brush));
+        m_graphicContext->SetPen( m_graphicContext->CreatePen(m_pen));
+    }
+    else
+        m_graphicContext->DrawBitmap( bmp, x , y , bmp.GetWidth() , bmp.GetHeight() );
 }
 
 void wxGCDC::DoDrawIcon( const wxIcon &icon, wxCoord x, wxCoord y )
