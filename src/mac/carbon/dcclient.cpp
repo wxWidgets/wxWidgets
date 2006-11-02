@@ -112,7 +112,9 @@ static wxBrush MacGetBackgroundBrush( wxWindow* window )
 wxWindowDC::wxWindowDC()
 {
     m_window = NULL ;
+#if wxMAC_USE_CORE_GRAPHICS
     m_release = false;
+#endif
 }
 
 wxWindowDC::wxWindowDC(wxWindow *window)
