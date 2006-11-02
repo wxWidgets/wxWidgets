@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 22 August 2006                                                      *
+# Date : 31 October 2006                                                     *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -41,6 +41,7 @@ OBJECTS = \
 	clipbrd.obj,\
 	colordlg.obj,\
 	colour.obj,\
+	collpane.obj,\
 	cursor.obj,\
 	data.obj,\
 	dataobj.obj,\
@@ -115,6 +116,7 @@ SOURCES =\
 	clipbrd.cpp,\
 	colordlg.cpp,\
 	colour.cpp,\
+	collpane.cpp,\
         combobox.cpp,\
 	control.cpp,\
 	cursor.cpp,\
@@ -200,6 +202,7 @@ choice.obj : choice.cpp
 clipbrd.obj :clipbrd.cpp
 colordlg.obj : colordlg.cpp
 colour.obj : colour.cpp
+collpane.obj : collpane.cpp
 combobox.obj : combobox.cpp
 control.obj : control.cpp
 cursor.obj : cursor.cpp

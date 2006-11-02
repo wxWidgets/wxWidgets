@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 9 October  2006                                                     *
+# Date : 31 October  2006                                                    *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -53,7 +53,8 @@ OBJECTS=xh_bmp.obj,xh_bmpbt.obj,xh_bttn.obj,xh_cald.obj,xh_chckb.obj,\
 	xh_unkwn.obj,xh_wizrd.obj,xmlres.obj,xmlrsall.obj,xh_listbk.obj,\
 	xh_choicbk.obj,xh_dirpicker.obj,xh_hyperlink.obj,xh_filepicker.obj,\
 	xh_fontpicker.obj,xh_clrpicker.obj,xh_odcombo.obj,xh_mdi.obj,\
-	xh_grid.obj,xh_datectrl.obj,xh_treebk.obj,xh_bmpcbox.obj
+	xh_grid.obj,xh_datectrl.obj,xh_treebk.obj,xh_bmpcbox.obj,\
+	xh_animatctrl.obj,xh_htmllbox.obj
 
 SOURCES =xh_bmp.cpp,xh_bmpbt.cpp,xh_bttn.cpp,xh_cald.cpp,xh_chckb.cpp,\
 	xh_chckl.cpp,xh_choic.cpp,xh_combo.cpp,xh_dlg.cpp,xh_frame.cpp,\
@@ -65,7 +66,8 @@ SOURCES =xh_bmp.cpp,xh_bmpbt.cpp,xh_bttn.cpp,xh_cald.cpp,xh_chckb.cpp,\
 	xh_unkwn.cpp,xh_wizrd.cpp,xmlres.cpp,xmlrsall.cpp,xh_listbk.cpp,\
 	xh_choicbk.cpp,xh_dirpicker.cpp,xh_hyperlink.cpp,xh_filepicker.cpp,\
 	xh_fontpicker.cpp,xh_clrpicker.cpp,xh_odcombo.cpp,xh_mdi.cpp,\
-	xh_grid.cpp,xh_datectrl.cpp,xh_treebk.cpp,xh_bmpcbox.cpp
+	xh_grid.cpp,xh_datectrl.cpp,xh_treebk.cpp,xh_bmpcbox.cpp,\
+	xh_animatctrl.cpp,xh_htmllbox.obj
   
 all : $(SOURCES)
 	$(MMS)$(MMSQUALIFIERS) $(OBJECTS)
@@ -137,3 +139,5 @@ xh_grid.obj : xh_grid.cpp
 xh_datectrl.obj : xh_datectrl.cpp
 xh_treebk.obj : xh_treebk.cpp
 xh_bmpcbox.obj : xh_bmpcbox.cpp
+xh_animatctrl.obj : xh_animatctrl.cpp
+xh_htmllbox.obj : xh_htmllbox.cpp

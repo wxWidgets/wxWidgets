@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 9 October 2006                                                      *
+# Date : 31 October 2006                                                     *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -45,6 +45,8 @@ CC_DEFINE =
 	cc $(CFLAGS)$(CC_DEFINE) $(MMS$TARGET_NAME).c
 
 OBJECTS = \
+		aboutdlgg.obj,\
+		animateg.obj,\
 		busyinfo.obj,\
 		calctrl.obj,\
 		caret.obj,\
@@ -63,6 +65,7 @@ OBJECTS = \
 		gridctrl.obj,\
 		gridsel.obj,\
 		helpext.obj,\
+		htmllbox.obj,\
 		imaglist.obj,\
 		laywin.obj,\
 		listbkg.obj,\
@@ -94,12 +97,15 @@ OBJECTS = \
 		bmpcboxg.obj
 
 SOURCES = \
+		aboutdlgg.cpp,\
 		accel.cpp,\
+		animateg.cpp,\
 		busyinfo.cpp,\
 		calctrl.cpp,\
 		caret.cpp,\
 		choicbkg.cpp,\
 		choicdgg.cpp,\
+		collpaneg.cpp,\
 		colrdlgg.cpp,\
 		clrpickerg.cpp,\
 		datectlg.cpp,\
@@ -114,6 +120,7 @@ SOURCES = \
 		gridctrl.cpp,\
 		gridsel.cpp,\
 		helpext.cpp,\
+		htmllbox.cpp,\
 		imaglist.cpp,\
 		laywin.cpp,\
 		listbkg.cpp,\
@@ -159,15 +166,21 @@ SOURCES = \
 		icon.cpp,bmpcboxg.cpp
 
 .ifdef __WXMOTIF__
-OBJECTS0=,statusbr.obj,statline.obj,notebook.obj,spinctlg.obj
+OBJECTS0=,statusbr.obj,statline.obj,notebook.obj,spinctlg.obj,collpaneg.obj,\
+	combog.obj
 .else
 .ifdef __WXX11__
 OBJECTS0=,accel.obj,filedlgg.obj,dragimgg.obj,fdrepdlg.obj,htmllbox.obj,\
 	listbkg.obj,mdig.obj,spinctlg.obj,splash.obj,timer.obj,\
-	vlbox.obj,vscroll.obj,combog.obj,icon.obj
+	vlbox.obj,vscroll.obj,combog.obj,icon.obj,collpaneg.obj
+.else
+.ifdef __WXGTK__
+OBJECTS0=,accel.obj,statusbr.obj,filedlgg.obj,paletteg.obj,vlbox.obj,\
+	vscroll.obj,combog.obj,icon.obj,collpaneg.obj
 .else
 OBJECTS0=,accel.obj,statusbr.obj,filedlgg.obj,paletteg.obj,vlbox.obj,\
 	vscroll.obj,combog.obj,icon.obj
+.endif
 .endif
 .endif
 
@@ -189,12 +202,15 @@ all : $(SOURCES)
 .endif
 .endif
 
+aboutdlgg.obj : aboutdlgg.cpp
 accel.obj : accel.cpp
+animateg.obj : animateg.cpp
 busyinfo.obj : busyinfo.cpp
 calctrl.obj : calctrl.cpp
 caret.obj : caret.cpp
 choicdgg.obj : choicdgg.cpp
 clrpickerg.obj : clrpickerg.cpp
+collpaneg.obj : collpaneg.cpp
 colrdlgg.obj : colrdlgg.cpp
 datectlg.obj : datectlg.cpp
 dcpsg.obj : dcpsg.cpp
@@ -207,6 +223,7 @@ grid.obj : grid.cpp
 gridctrl.obj : gridctrl.cpp
 gridsel.obj : gridsel.cpp
 helpext.obj : helpext.cpp
+htmllbox.obj : htmllbox.cpp
 icon.obj : icon.cpp
 imaglist.obj : imaglist.cpp
 laywin.obj : laywin.cpp

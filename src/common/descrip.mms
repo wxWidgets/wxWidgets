@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 20 September 2006                                                   *
+# Date : 1 November 2006                                                     *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -50,6 +50,8 @@ LEX=flex
 	cc $(CFLAGS)$(CC_DEFINE) $(MMS$TARGET_NAME).c
 
 OBJECTS = \
+		anidecod.obj,\
+		animatecmn.obj,\
 		appbase.obj,\
 		appcmn.obj,\
 		artprov.obj,\
@@ -76,6 +78,7 @@ OBJECTS = \
 		dbgrid.obj,\
 		dbtable.obj,\
 		dcbase.obj,\
+		dcbufcmn.obj,\
 		dircmn.obj,\
 		dlgcmn.obj,\
 		dobjcmn.obj,\
@@ -91,6 +94,7 @@ OBJECTS = \
 		fddlgcmn.obj,\
 		ffile.obj,\
 		file.obj,\
+		fileback.obj,\
 		fileconf.obj,\
 		filename.obj,\
 		filefn.obj,\
@@ -103,7 +107,6 @@ OBJECTS = \
 		framecmn.obj
 
 OBJECTS1=fs_inet.obj,\
-		fs_zip.obj,\
 		ftp.obj,\
 		gaugecmn.obj,\
 		gbsizer.obj,\
@@ -125,6 +128,7 @@ OBJECTS1=fs_inet.obj,\
 		imagpcx.obj,\
 		imagpng.obj,\
 		imagpnm.obj,\
+		imagtga.obj,\
 		imagtiff.obj,\
 		imagxpm.obj,\
 		intl.obj,\
@@ -196,7 +200,7 @@ OBJECTS2=tbarbase.obj,\
 		pickerbase.obj,\
 		listctrlcmn.obj
 
-OBJECTS_MOTIF=radiocmn.obj
+OBJECTS_MOTIF=radiocmn.obj,combocmn.obj
 
 OBJECTS_X11=accesscmn.obj,dndcmn.obj,dpycmn.obj,dseldlg.obj,\
 	dynload.obj,effects.obj,fddlgcmn.obj,fs_mem.obj,\
@@ -205,6 +209,8 @@ OBJECTS_X11=accesscmn.obj,dndcmn.obj,dpycmn.obj,dseldlg.obj,\
 	combocmn.obj
 
 SOURCES = \
+		anidecod.cpp,\
+		animatecmn.cpp,\
 		appbase.cpp,\
 		appcmn.cpp,\
 		artprov.cpp,\
@@ -231,6 +237,7 @@ SOURCES = \
 		dbgrid.cpp,\
 		dbtable.cpp,\
 		dcbase.cpp,\
+		dcbufcmn.cpp,\
 		dircmn.cpp,\
 		dlgcmn.cpp,\
 		dobjcmn.cpp,\
@@ -246,6 +253,7 @@ SOURCES = \
 		ffile.cpp,\
 		fddlgcmn.cpp,\
 		file.cpp,\
+		fileback.cpp,\
 		fileconf.cpp,\
 		filename.cpp,\
 		filefn.cpp,\
@@ -257,7 +265,6 @@ SOURCES = \
 		fontmap.cpp,\
 		framecmn.cpp,\
 		fs_inet.cpp,\
-		fs_zip.cpp,\
 		ftp.cpp,\
 		gaugecmn.cpp,\
 		gbsizer.cpp,\
@@ -279,6 +286,7 @@ SOURCES = \
 		imagpcx.cpp,\
 		imagpng.cpp,\
 		imagpnm.cpp,\
+		imagtga.cpp,\
 		imagtiff.cpp,\
 		imagxpm.cpp,\
 		intl.cpp,\
@@ -400,6 +408,8 @@ all : $(SOURCES)
 .endif
 .endif
 
+anidecod.obj : anidecod.cpp
+animatecmn.obj : animatecmn.cpp
 appbase.obj : appbase.cpp
 appcmn.obj : appcmn.cpp
 artprov.obj : artprov.cpp
@@ -426,6 +436,7 @@ db.obj : db.cpp
 dbgrid.obj : dbgrid.cpp
 dbtable.obj : dbtable.cpp
 dcbase.obj : dcbase.cpp
+dcbufcmn.obj : dcbufcmn.cpp
 dircmn.obj : dircmn.cpp
 dlgcmn.obj : dlgcmn.cpp
 dobjcmn.obj : dobjcmn.cpp
@@ -440,6 +451,7 @@ extended.obj : extended.c
 ffile.obj : ffile.cpp
 fddlgcmn.obj : fddlgcmn.cpp
 file.obj : file.cpp
+fileback.obj : fileback.cpp
 fileconf.obj : fileconf.cpp
 filefn.obj : filefn.cpp
 filename.obj : filename.cpp
@@ -451,7 +463,6 @@ fontenumcmn.obj : fontenumcmn.cpp
 fontmap.obj : fontmap.cpp
 framecmn.obj : framecmn.cpp
 fs_inet.obj : fs_inet.cpp
-fs_zip.obj : fs_zip.cpp
 ftp.obj : ftp.cpp
 gaugecmn.obj : gaugecmn.cpp
 gbsizer.obj : gbsizer.cpp
@@ -473,6 +484,7 @@ imagjpeg.obj : imagjpeg.cpp
 imagpcx.obj : imagpcx.cpp
 imagpng.obj : imagpng.cpp
 imagpnm.obj : imagpnm.cpp
+imagtga.obj : imagtga.cpp
 imagtiff.obj : imagtiff.cpp
 imagxpm.obj : imagxpm.cpp
 intl.obj : intl.cpp
