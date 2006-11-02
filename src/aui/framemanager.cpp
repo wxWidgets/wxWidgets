@@ -799,6 +799,10 @@ bool wxAuiManager::AddPane(wxWindow* window, const wxAuiPaneInfo& pane_info)
     if (GetPane(pane_info.window).IsOk())
         return false;
 
+    // if the new pane is docked then we should undo maximize
+    if(pane_info.IsDocked())
+        RestoreMaximizedPane();
+
     m_panes.Add(pane_info);
 
     wxAuiPaneInfo& pinfo = m_panes.Last();
@@ -946,6 +950,9 @@ bool wxAuiManager::InsertPane(wxWindow* window, const wxAuiPaneInfo& pane_info,
         }
          else
         {
+            // if the new pane is docked then we should undo maximize
+            RestoreMaximizedPane();
+
             existing_pane.Direction(pane_info.dock_direction);
             existing_pane.Layer(pane_info.dock_layer);
             existing_pane.Row(pane_info.dock_row);
@@ -3545,12 +3552,12 @@ void wxAuiManager::OnLeftDown(wxMouseEvent& event)
     wxAuiDockUIPart* part = HitTest(event.GetX(), event.GetY());
     if (part)
     {
-        if (part->dock && part->dock->dock_direction == wxAUI_DOCK_CENTER)
-            return;
-
         if (part->type == wxAuiDockUIPart::typeDockSizer ||
             part->type == wxAuiDockUIPart::typePaneSizer)
         {
+            if (part->dock && part->dock->dock_direction == wxAUI_DOCK_CENTER)
+                return;
+        
             // a dock may not be resized if it has a single
             // pane which is not resizable
             if (part->type == wxAuiDockUIPart::typeDockSizer && part->dock &&
@@ -3582,6 +3589,9 @@ void wxAuiManager::OnLeftDown(wxMouseEvent& event)
          else if (part->type == wxAuiDockUIPart::typeCaption ||
                   part->type == wxAuiDockUIPart::typeGripper)
         {
+            if (part->dock && part->dock->dock_direction == wxAUI_DOCK_CENTER)
+                return;
+
             if (GetFlags() & wxAUI_MGR_ALLOW_ACTIVE_PANE)
             {
                 // set the caption as active
