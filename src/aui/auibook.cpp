@@ -29,6 +29,7 @@
 
 #include "wx/aui/tabmdi.h"
 #include "wx/dcbuffer.h"
+#include "wx/menu.h"
 
 #include "wx/arrimpl.cpp"
 WX_DEFINE_OBJARRAY(wxAuiNotebookPageArray)
