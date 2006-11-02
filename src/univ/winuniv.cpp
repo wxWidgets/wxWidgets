@@ -196,6 +196,14 @@ wxWindow::~wxWindow()
 {
     m_isBeingDeleted = true;
 
+#if wxUSE_SCROLLBAR
+    // clear pointers to scrollbar before deleting the children: they are
+    // children and so will be deleted by DestroyChildren() call below and if
+    // any code using the scrollbars would be called in the process or from
+    // ~wxWindowBase, the app would crash:
+    m_scrollbarVert = m_scrollbarHorz = NULL;
+#endif
+
     // we have to destroy our children before we're destroyed because our
     // children suppose that we're of type wxWindow, not just wxWindowNative,
     // and so bad things may happen if they're deleted from the base class dtor
