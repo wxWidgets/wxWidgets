@@ -88,7 +88,7 @@
     #define TEST_WCHAR
     #define TEST_ZIP
 #else // #if TEST_ALL
-    #define TEST_INFO_FUNCTIONS
+    #define TEST_CMDLINE
 #endif
 
 // some tests are interactive, define this to run them
@@ -136,7 +136,7 @@ static wxString MakePrintable(const wxChar *s)
 
 static void ShowCmdLine(const wxCmdLineParser& parser)
 {
-    wxString s = _T("Input files: ");
+    wxString s = _T("Command line parsed successfully:\nInput files: ");
 
     size_t count = parser.GetParamCount();
     for ( size_t param = 0; param < count; param++ )
@@ -2814,11 +2814,13 @@ static void TestFileStream()
         fsOut.Write("foo", 3);
     }
 
-    wxFileInputStream fsIn(filename);
-    wxPrintf(_T("File stream size: %u\n"), fsIn.GetSize());
-    while ( !fsIn.Eof() )
     {
-        wxPutchar(fsIn.GetC());
+        wxFileInputStream fsIn(filename);
+        wxPrintf(_T("File stream size: %u\n"), fsIn.GetSize());
+        while ( !fsIn.Eof() )
+        {
+            wxPutchar(fsIn.GetC());
+        }
     }
 
     if ( !wxRemoveFile(filename) )
