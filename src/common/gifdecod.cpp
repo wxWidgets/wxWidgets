@@ -630,7 +630,7 @@ wxGIFErrorCode wxGIFDecoder::LoadGIF(wxInputStream& stream)
     m_szAnimation.SetWidth( buf[0] + 256 * buf[1] );
     m_szAnimation.SetHeight( buf[2] + 256 * buf[3] );
 
-    if ((m_szAnimation.GetWidth() == 0) || (m_szAnimation.GetHeight() == 0))
+    if (anim && ((m_szAnimation.GetWidth() == 0) || (m_szAnimation.GetHeight() == 0)))
     {
         return wxGIF_INVFORMAT;
     }
@@ -755,8 +755,8 @@ wxGIFErrorCode wxGIFDecoder::LoadGIF(wxInputStream& stream)
             pimg->w = buf[4] + 256 * buf[5];
             pimg->h = buf[6] + 256 * buf[7];
 
-            if ((pimg->w == 0) || (pimg->w > (unsigned int)m_szAnimation.GetWidth()) || 
-                (pimg->h == 0) || (pimg->h > (unsigned int)m_szAnimation.GetHeight()))
+            if (anim && ((pimg->w == 0) || (pimg->w > (unsigned int)m_szAnimation.GetWidth()) || 
+			 (pimg->h == 0) || (pimg->h > (unsigned int)m_szAnimation.GetHeight())))
             {
                 Destroy();
                 return wxGIF_INVFORMAT;
