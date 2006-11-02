@@ -991,8 +991,8 @@ AUI_NB_BOTTOM = _aui.AUI_NB_BOTTOM
 AUI_NB_TAB_SPLIT = _aui.AUI_NB_TAB_SPLIT
 AUI_NB_TAB_MOVE = _aui.AUI_NB_TAB_MOVE
 AUI_NB_SCROLL_BUTTONS = _aui.AUI_NB_SCROLL_BUTTONS
-AUI_NB_CLOSE_BUTTON = _aui.AUI_NB_CLOSE_BUTTON
 AUI_NB_PAGELIST_BUTTON = _aui.AUI_NB_PAGELIST_BUTTON
+AUI_NB_CLOSE_BUTTON = _aui.AUI_NB_CLOSE_BUTTON
 AUI_NB_CLOSE_ON_ACTIVE_TAB = _aui.AUI_NB_CLOSE_ON_ACTIVE_TAB
 AUI_NB_CLOSE_ON_ALL_TABS = _aui.AUI_NB_CLOSE_ON_ALL_TABS
 AUI_NB_DEFAULT_STYLE = _aui.AUI_NB_DEFAULT_STYLE
@@ -1021,8 +1021,9 @@ class AuiTabArt(object):
 
     def DrawTab(*args, **kwargs):
         """
-        DrawTab(self, DC dc, Rect in_rect, String caption, bool active, bool with_close_button, 
-            Rect out_rect, int x_extent)
+        DrawTab(self, DC dc, Rect in_rect, String caption, bool active, int close_button_state, 
+            Rect out_tab_rect, Rect out_button_rect, 
+            int x_extent)
         """
         return _aui.AuiTabArt_DrawTab(*args, **kwargs)
 
@@ -1035,7 +1036,7 @@ class AuiTabArt(object):
 
     def GetTabSize(*args, **kwargs):
         """
-        GetTabSize(self, DC dc, String caption, bool active, bool with_close_button, 
+        GetTabSize(self, DC dc, String caption, bool active, int close_button_state, 
             int x_extent) -> Size
         """
         return _aui.AuiTabArt_GetTabSize(*args, **kwargs)
@@ -1219,6 +1220,10 @@ class AuiTabContainer(object):
     def SetRect(*args, **kwargs):
         """SetRect(self, Rect rect)"""
         return _aui.AuiTabContainer_SetRect(*args, **kwargs)
+
+    def RemoveButton(*args, **kwargs):
+        """RemoveButton(self, int id)"""
+        return _aui.AuiTabContainer_RemoveButton(*args, **kwargs)
 
     def AddButton(*args, **kwargs):
         """

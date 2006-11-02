@@ -3099,12 +3099,13 @@ class wxPyAuiTabArt :  public wxAuiDefaultTabArt
                           const wxRect& in_rect,
                           const wxString& caption,
                           bool active,
-                          bool with_close_button,
-                          wxRect* out_rect,
+                          int close_button_state,
+                          wxRect* out_tab_rect,
+                          wxRect* out_button_rect,
                           int* x_extent)
     {
         bool found;
-        const char* errmsg = "DrawTab should return a sequence containing (out_rect, x_extent)";
+        const char* errmsg = "DrawTab should return a sequence containing (tab_rect, button_rect, x_extent)";
         wxPyBlock_t blocked = wxPyBeginBlockThreads();
         if ((found = wxPyCBH_findCallback(m_myInst, "DrawTab"))) {
             PyObject* odc = wxPyMake_wxObject(dc, false);
@@ -3114,20 +3115,24 @@ class wxPyAuiTabArt :  public wxAuiDefaultTabArt
             ro = wxPyCBH_callCallbackObj(m_myInst, Py_BuildValue(
                                              "(OOOii)",
                                              odc, orect, otext,
-                                             (int)active, (int)with_close_button));
+                                             (int)active, close_button_state));
             if (ro) {
-                if (PySequence_Check(ro) && PyObject_Length(ro) == 2) {
+                if (PySequence_Check(ro) && PyObject_Length(ro) == 3) {
                     PyObject* o1 = PySequence_GetItem(ro, 0);
                     PyObject* o2 = PySequence_GetItem(ro, 1);
-                    if (!wxRect_helper(o1, &out_rect)) 
+                    PyObject* o3 = PySequence_GetItem(ro, 2);
+                    if (!wxRect_helper(o1, &out_tab_rect)) 
                         PyErr_SetString(PyExc_TypeError, errmsg);
-                    else if (!PyInt_Check(o2)) 
+                    else if (!wxRect_helper(o2, &out_button_rect)) 
+                        PyErr_SetString(PyExc_TypeError, errmsg);
+                    else if (!PyInt_Check(o3)) 
                         PyErr_SetString(PyExc_TypeError, errmsg);
                     else
-                        *x_extent = PyInt_AsLong(o2);
+                        *x_extent = PyInt_AsLong(o3);
                     
                     Py_DECREF(o1);
                     Py_DECREF(o2);
+                    Py_DECREF(o3);
                 }
                 else {
                     PyErr_SetString(PyExc_TypeError, errmsg);
@@ -3141,7 +3146,7 @@ class wxPyAuiTabArt :  public wxAuiDefaultTabArt
         }
         wxPyEndBlockThreads(blocked);
         if (!found)
-            wxAuiDefaultTabArt::DrawTab(dc, in_rect, caption, active, with_close_button, out_rect, x_extent);
+            wxAuiDefaultTabArt::DrawTab(dc, in_rect, caption, active, close_button_state, out_tab_rect, out_button_rect, x_extent);
     }
 
 
@@ -3183,7 +3188,7 @@ class wxPyAuiTabArt :  public wxAuiDefaultTabArt
     virtual wxSize GetTabSize( wxDC* dc,
                                const wxString& caption,
                                bool active,
-                               bool with_close_button,
+                               int  close_button_state,
                                int* x_extent)
     {
         bool found;
@@ -3195,7 +3200,7 @@ class wxPyAuiTabArt :  public wxAuiDefaultTabArt
             PyObject* otext = wx2PyString(caption);
             PyObject* ro;
             ro = wxPyCBH_callCallbackObj(m_myInst, Py_BuildValue(
-                                             "(OOi)", odc, otext, (int)active, (int)with_close_button));
+                                             "(OOi)", odc, otext, (int)active, close_button_state));
             if (ro) {
                 if (PySequence_Check(ro) && PyObject_Length(ro) == 2) {
                     PyObject* o1 = PySequence_GetItem(ro, 0);
@@ -3221,7 +3226,7 @@ class wxPyAuiTabArt :  public wxAuiDefaultTabArt
         }
         wxPyEndBlockThreads(blocked);
         if (!found)
-            rv = wxAuiDefaultTabArt::GetTabSize(dc, caption, active, with_close_button, x_extent);
+            rv = wxAuiDefaultTabArt::GetTabSize(dc, caption, active, close_button_state, x_extent);
         return rv;
     }
    
@@ -11553,9 +11558,10 @@ SWIGINTERN PyObject *_wrap_AuiTabArt_DrawTab(PyObject *SWIGUNUSEDPARM(self), PyO
   wxRect *arg3 = 0 ;
   wxString *arg4 = 0 ;
   bool arg5 ;
-  bool arg6 ;
+  int arg6 ;
   wxRect *arg7 = (wxRect *) 0 ;
-  int *arg8 = (int *) 0 ;
+  wxRect *arg8 = (wxRect *) 0 ;
+  int *arg9 = (int *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   void *argp2 = 0 ;
@@ -11564,12 +11570,14 @@ SWIGINTERN PyObject *_wrap_AuiTabArt_DrawTab(PyObject *SWIGUNUSEDPARM(self), PyO
   bool temp4 = false ;
   bool val5 ;
   int ecode5 = 0 ;
-  bool val6 ;
+  int val6 ;
   int ecode6 = 0 ;
   void *argp7 = 0 ;
   int res7 = 0 ;
   void *argp8 = 0 ;
   int res8 = 0 ;
+  void *argp9 = 0 ;
+  int res9 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
@@ -11578,11 +11586,12 @@ SWIGINTERN PyObject *_wrap_AuiTabArt_DrawTab(PyObject *SWIGUNUSEDPARM(self), PyO
   PyObject * obj5 = 0 ;
   PyObject * obj6 = 0 ;
   PyObject * obj7 = 0 ;
+  PyObject * obj8 = 0 ;
   char *  kwnames[] = {
-    (char *) "self",(char *) "dc",(char *) "in_rect",(char *) "caption",(char *) "active",(char *) "with_close_button",(char *) "out_rect",(char *) "x_extent", NULL 
+    (char *) "self",(char *) "dc",(char *) "in_rect",(char *) "caption",(char *) "active",(char *) "close_button_state",(char *) "out_tab_rect",(char *) "out_button_rect",(char *) "x_extent", NULL 
   };
   
-  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOOOOOO:AuiTabArt_DrawTab",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6,&obj7)) SWIG_fail;
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOOOOOOO:AuiTabArt_DrawTab",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6,&obj7,&obj8)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxAuiTabArt, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AuiTabArt_DrawTab" "', expected argument " "1"" of type '" "wxAuiTabArt *""'"); 
@@ -11607,24 +11616,29 @@ SWIGINTERN PyObject *_wrap_AuiTabArt_DrawTab(PyObject *SWIGUNUSEDPARM(self), PyO
     SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "AuiTabArt_DrawTab" "', expected argument " "5"" of type '" "bool""'");
   } 
   arg5 = static_cast< bool >(val5);
-  ecode6 = SWIG_AsVal_bool(obj5, &val6);
+  ecode6 = SWIG_AsVal_int(obj5, &val6);
   if (!SWIG_IsOK(ecode6)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode6), "in method '" "AuiTabArt_DrawTab" "', expected argument " "6"" of type '" "bool""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode6), "in method '" "AuiTabArt_DrawTab" "', expected argument " "6"" of type '" "int""'");
   } 
-  arg6 = static_cast< bool >(val6);
+  arg6 = static_cast< int >(val6);
   res7 = SWIG_ConvertPtr(obj6, &argp7,SWIGTYPE_p_wxRect, 0 |  0 );
   if (!SWIG_IsOK(res7)) {
     SWIG_exception_fail(SWIG_ArgError(res7), "in method '" "AuiTabArt_DrawTab" "', expected argument " "7"" of type '" "wxRect *""'"); 
   }
   arg7 = reinterpret_cast< wxRect * >(argp7);
-  res8 = SWIG_ConvertPtr(obj7, &argp8,SWIGTYPE_p_int, 0 |  0 );
+  res8 = SWIG_ConvertPtr(obj7, &argp8,SWIGTYPE_p_wxRect, 0 |  0 );
   if (!SWIG_IsOK(res8)) {
-    SWIG_exception_fail(SWIG_ArgError(res8), "in method '" "AuiTabArt_DrawTab" "', expected argument " "8"" of type '" "int *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res8), "in method '" "AuiTabArt_DrawTab" "', expected argument " "8"" of type '" "wxRect *""'"); 
   }
-  arg8 = reinterpret_cast< int * >(argp8);
+  arg8 = reinterpret_cast< wxRect * >(argp8);
+  res9 = SWIG_ConvertPtr(obj8, &argp9,SWIGTYPE_p_int, 0 |  0 );
+  if (!SWIG_IsOK(res9)) {
+    SWIG_exception_fail(SWIG_ArgError(res9), "in method '" "AuiTabArt_DrawTab" "', expected argument " "9"" of type '" "int *""'"); 
+  }
+  arg9 = reinterpret_cast< int * >(argp9);
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    (arg1)->DrawTab(arg2,(wxRect const &)*arg3,(wxString const &)*arg4,arg5,arg6,arg7,arg8);
+    (arg1)->DrawTab(arg2,(wxRect const &)*arg3,(wxString const &)*arg4,arg5,arg6,arg7,arg8,arg9);
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
@@ -11742,7 +11756,7 @@ SWIGINTERN PyObject *_wrap_AuiTabArt_GetTabSize(PyObject *SWIGUNUSEDPARM(self), 
   wxDC *arg2 = (wxDC *) 0 ;
   wxString *arg3 = 0 ;
   bool arg4 ;
-  bool arg5 ;
+  int arg5 ;
   int *arg6 = (int *) 0 ;
   wxSize result;
   void *argp1 = 0 ;
@@ -11752,7 +11766,7 @@ SWIGINTERN PyObject *_wrap_AuiTabArt_GetTabSize(PyObject *SWIGUNUSEDPARM(self), 
   bool temp3 = false ;
   bool val4 ;
   int ecode4 = 0 ;
-  bool val5 ;
+  int val5 ;
   int ecode5 = 0 ;
   void *argp6 = 0 ;
   int res6 = 0 ;
@@ -11763,7 +11777,7 @@ SWIGINTERN PyObject *_wrap_AuiTabArt_GetTabSize(PyObject *SWIGUNUSEDPARM(self), 
   PyObject * obj4 = 0 ;
   PyObject * obj5 = 0 ;
   char *  kwnames[] = {
-    (char *) "self",(char *) "dc",(char *) "caption",(char *) "active",(char *) "with_close_button",(char *) "x_extent", NULL 
+    (char *) "self",(char *) "dc",(char *) "caption",(char *) "active",(char *) "close_button_state",(char *) "x_extent", NULL 
   };
   
   if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOOOO:AuiTabArt_GetTabSize",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5)) SWIG_fail;
@@ -11787,11 +11801,11 @@ SWIGINTERN PyObject *_wrap_AuiTabArt_GetTabSize(PyObject *SWIGUNUSEDPARM(self), 
     SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "AuiTabArt_GetTabSize" "', expected argument " "4"" of type '" "bool""'");
   } 
   arg4 = static_cast< bool >(val4);
-  ecode5 = SWIG_AsVal_bool(obj4, &val5);
+  ecode5 = SWIG_AsVal_int(obj4, &val5);
   if (!SWIG_IsOK(ecode5)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "AuiTabArt_GetTabSize" "', expected argument " "5"" of type '" "bool""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "AuiTabArt_GetTabSize" "', expected argument " "5"" of type '" "int""'");
   } 
-  arg5 = static_cast< bool >(val5);
+  arg5 = static_cast< int >(val5);
   res6 = SWIG_ConvertPtr(obj5, &argp6,SWIGTYPE_p_int, 0 |  0 );
   if (!SWIG_IsOK(res6)) {
     SWIG_exception_fail(SWIG_ArgError(res6), "in method '" "AuiTabArt_GetTabSize" "', expected argument " "6"" of type '" "int *""'"); 
@@ -13851,6 +13865,44 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_AuiTabContainer_RemoveButton(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxAuiTabContainer *arg1 = (wxAuiTabContainer *) 0 ;
+  int arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "id", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:AuiTabContainer_RemoveButton",kwnames,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxAuiTabContainer, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AuiTabContainer_RemoveButton" "', expected argument " "1"" of type '" "wxAuiTabContainer *""'"); 
+  }
+  arg1 = reinterpret_cast< wxAuiTabContainer * >(argp1);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "AuiTabContainer_RemoveButton" "', expected argument " "2"" of type '" "int""'");
+  } 
+  arg2 = static_cast< int >(val2);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    (arg1)->RemoveButton(arg2);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_AuiTabContainer_AddButton(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   wxAuiTabContainer *arg1 = (wxAuiTabContainer *) 0 ;
@@ -15176,6 +15228,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"AuiTabContainer_SetMeasuringFont", (PyCFunction) _wrap_AuiTabContainer_SetMeasuringFont, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"AuiTabContainer_DoShowHide", (PyCFunction)_wrap_AuiTabContainer_DoShowHide, METH_O, NULL},
 	 { (char *)"AuiTabContainer_SetRect", (PyCFunction) _wrap_AuiTabContainer_SetRect, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"AuiTabContainer_RemoveButton", (PyCFunction) _wrap_AuiTabContainer_RemoveButton, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"AuiTabContainer_AddButton", (PyCFunction) _wrap_AuiTabContainer_AddButton, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"AuiTabContainer_GetTabOffset", (PyCFunction)_wrap_AuiTabContainer_GetTabOffset, METH_O, NULL},
 	 { (char *)"AuiTabContainer_SetTabOffset", (PyCFunction) _wrap_AuiTabContainer_SetTabOffset, METH_VARARGS | METH_KEYWORDS, NULL},
@@ -17954,8 +18007,8 @@ SWIGEXPORT void SWIG_init(void) {
   SWIG_Python_SetConstant(d, "AUI_NB_TAB_SPLIT",SWIG_From_int(static_cast< int >(wxAUI_NB_TAB_SPLIT)));
   SWIG_Python_SetConstant(d, "AUI_NB_TAB_MOVE",SWIG_From_int(static_cast< int >(wxAUI_NB_TAB_MOVE)));
   SWIG_Python_SetConstant(d, "AUI_NB_SCROLL_BUTTONS",SWIG_From_int(static_cast< int >(wxAUI_NB_SCROLL_BUTTONS)));
-  SWIG_Python_SetConstant(d, "AUI_NB_CLOSE_BUTTON",SWIG_From_int(static_cast< int >(wxAUI_NB_CLOSE_BUTTON)));
   SWIG_Python_SetConstant(d, "AUI_NB_PAGELIST_BUTTON",SWIG_From_int(static_cast< int >(wxAUI_NB_PAGELIST_BUTTON)));
+  SWIG_Python_SetConstant(d, "AUI_NB_CLOSE_BUTTON",SWIG_From_int(static_cast< int >(wxAUI_NB_CLOSE_BUTTON)));
   SWIG_Python_SetConstant(d, "AUI_NB_CLOSE_ON_ACTIVE_TAB",SWIG_From_int(static_cast< int >(wxAUI_NB_CLOSE_ON_ACTIVE_TAB)));
   SWIG_Python_SetConstant(d, "AUI_NB_CLOSE_ON_ALL_TABS",SWIG_From_int(static_cast< int >(wxAUI_NB_CLOSE_ON_ALL_TABS)));
   SWIG_Python_SetConstant(d, "AUI_NB_DEFAULT_STYLE",SWIG_From_int(static_cast< int >(wxAUI_NB_DEFAULT_STYLE)));

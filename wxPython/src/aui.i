@@ -511,12 +511,13 @@ class wxPyAuiTabArt :  public wxAuiDefaultTabArt
                           const wxRect& in_rect,
                           const wxString& caption,
                           bool active,
-                          bool with_close_button,
-                          wxRect* out_rect,
+                          int close_button_state,
+                          wxRect* out_tab_rect,
+                          wxRect* out_button_rect,
                           int* x_extent)
     {
         bool found;
-        const char* errmsg = "DrawTab should return a sequence containing (out_rect, x_extent)";
+        const char* errmsg = "DrawTab should return a sequence containing (tab_rect, button_rect, x_extent)";
         wxPyBlock_t blocked = wxPyBeginBlockThreads();
         if ((found = wxPyCBH_findCallback(m_myInst, "DrawTab"))) {
             PyObject* odc = wxPyMake_wxObject(dc, false);
@@ -526,20 +527,24 @@ class wxPyAuiTabArt :  public wxAuiDefaultTabArt
             ro = wxPyCBH_callCallbackObj(m_myInst, Py_BuildValue(
                                              "(OOOii)",
                                              odc, orect, otext,
-                                             (int)active, (int)with_close_button));
+                                             (int)active, close_button_state));
             if (ro) {
-                if (PySequence_Check(ro) && PyObject_Length(ro) == 2) {
+                if (PySequence_Check(ro) && PyObject_Length(ro) == 3) {
                     PyObject* o1 = PySequence_GetItem(ro, 0);
                     PyObject* o2 = PySequence_GetItem(ro, 1);
-                    if (!wxRect_helper(o1, &out_rect)) 
+                    PyObject* o3 = PySequence_GetItem(ro, 2);
+                    if (!wxRect_helper(o1, &out_tab_rect)) 
                         PyErr_SetString(PyExc_TypeError, errmsg);
-                    else if (!PyInt_Check(o2)) 
+                    else if (!wxRect_helper(o2, &out_button_rect)) 
+                        PyErr_SetString(PyExc_TypeError, errmsg);
+                    else if (!PyInt_Check(o3)) 
                         PyErr_SetString(PyExc_TypeError, errmsg);
                     else
-                        *x_extent = PyInt_AsLong(o2);
+                        *x_extent = PyInt_AsLong(o3);
                     
                     Py_DECREF(o1);
                     Py_DECREF(o2);
+                    Py_DECREF(o3);
                 }
                 else {
                     PyErr_SetString(PyExc_TypeError, errmsg);
@@ -553,7 +558,7 @@ class wxPyAuiTabArt :  public wxAuiDefaultTabArt
         }
         wxPyEndBlockThreads(blocked);
         if (!found)
-            wxAuiDefaultTabArt::DrawTab(dc, in_rect, caption, active, with_close_button, out_rect, x_extent);
+            wxAuiDefaultTabArt::DrawTab(dc, in_rect, caption, active, close_button_state, out_tab_rect, out_button_rect, x_extent);
     }
 
 
@@ -595,7 +600,7 @@ class wxPyAuiTabArt :  public wxAuiDefaultTabArt
     virtual wxSize GetTabSize( wxDC* dc,
                                const wxString& caption,
                                bool active,
-                               bool with_close_button,
+                               int  close_button_state,
                                int* x_extent)
     {
         bool found;
@@ -607,7 +612,7 @@ class wxPyAuiTabArt :  public wxAuiDefaultTabArt
             PyObject* otext = wx2PyString(caption);
             PyObject* ro;
             ro = wxPyCBH_callCallbackObj(m_myInst, Py_BuildValue(
-                                             "(OOi)", odc, otext, (int)active, (int)with_close_button));
+                                             "(OOi)", odc, otext, (int)active, close_button_state));
             if (ro) {
                 if (PySequence_Check(ro) && PyObject_Length(ro) == 2) {
                     PyObject* o1 = PySequence_GetItem(ro, 0);
@@ -633,7 +638,7 @@ class wxPyAuiTabArt :  public wxAuiDefaultTabArt
         }
         wxPyEndBlockThreads(blocked);
         if (!found)
-            rv = wxAuiDefaultTabArt::GetTabSize(dc, caption, active, with_close_button, x_extent);
+            rv = wxAuiDefaultTabArt::GetTabSize(dc, caption, active, close_button_state, x_extent);
         return rv;
     }
    
