@@ -93,70 +93,85 @@ enum wxPaneInsertLevel
 \membersection{wxAuiPaneInfo::BestSize}\label{wxauipaneinfobestsize}
 
 \func{wxAuiPaneInfo\&}{BestSize}{\param{const wxSize\& }{size}}
-
-
 \func{wxAuiPaneInfo\&}{BestSize}{\param{int }{x}, \param{int }{y}}
 
+BestSize() sets the ideal size for the pane.  The docking manager will attempt to use this size as much as possible when docking or floating the pane.
 
 \membersection{wxAuiPaneInfo::Bottom}\label{wxauipaneinfobottom}
 
 \func{wxAuiPaneInfo\&}{Bottom}{\void}
 
+Bottom() sets the pane dock position to the bottom side of the frame.  This is the same thing as calling Direction(wxAUI_DOCK_BOTTOM).
 
 \membersection{wxAuiPaneInfo::BottomDockable}\label{wxauipaneinfobottomdockable}
 
 \func{wxAuiPaneInfo\&}{BottomDockable}{\param{bool }{b = true}}
 
+BottomDockable() indicates whether a pane can be docked at the bottom of the frame.
 
 \membersection{wxAuiPaneInfo::Caption}\label{wxauipaneinfocaption}
 
 \func{wxAuiPaneInfo\&}{Caption}{\param{const wxString\& }{c}}
 
+Caption() sets the caption of the pane.
 
 \membersection{wxAuiPaneInfo::CaptionVisible}\label{wxauipaneinfocaptionvisible}
 
 \func{wxAuiPaneInfo\&}{CaptionVisible}{\param{bool }{visible = true}}
 
-
-\membersection{wxAuiPaneInfo::Center}\label{wxauipaneinfocenter}
-
-\func{wxAuiPaneInfo\&}{Center}{\void}
-
-
-\membersection{wxAuiPaneInfo::CenterPane}\label{wxauipaneinfocenterpane}
-
-\func{wxAuiPaneInfo\&}{CenterPane}{\void}
-
+CaptionVisible indicates that a pane caption should be visible.  If false, no pane caption is drawn.
 
 \membersection{wxAuiPaneInfo::Centre}\label{wxauipaneinfocentre}
 
 \func{wxAuiPaneInfo\&}{Centre}{\void}
+\func{wxAuiPaneInfo\&}{Center}{\void}
 
+Center() sets the pane dock position to the left side of the frame.  This is the same thing as calling Direction(wxAUI_DOCK_CENTRE).
 
 \membersection{wxAuiPaneInfo::CentrePane}\label{wxauipaneinfocentrepane}
 
 \func{wxAuiPaneInfo\&}{CentrePane}{\void}
+\func{wxAuiPaneInfo\&}{CenterPane}{\void}
 
+CentrePane() specifies that the pane should adopt the default centre pane settings.
+
+\membersection{wxAuiPaneInfo::Centre}\label{wxauipaneinfocentre}
+
+\func{wxAuiPaneInfo\&}{Centre}{\void}
+\func{wxAuiPaneInfo\&}{Center}{\void}
+
+Centre() sets the pane to the center position of the frame.  The centre pane is the space in the middle after all border panes (left, top, right, bottom) are subtracted from the layout.
+
+\membersection{wxAuiPaneInfo::CentrePane}\label{wxauipaneinfocentrepane}
+
+\func{wxAuiPaneInfo\&}{CentrePane}{\void}
+\func{wxAuiPaneInfo\&}{CenterPane}{\void}
+
+CentrePane() specifies that the pane should adopt the default center pane settings.  Centre panes usually do not have caption bars.  This function provides an easy way of preparing a pane to be displayed in the center dock position.
 
 \membersection{wxAuiPaneInfo::CloseButton}\label{wxauipaneinfoclosebutton}
 
 \func{wxAuiPaneInfo\&}{CloseButton}{\param{bool }{visible = true}}
 
+CloseButton() indicates that a close button should be drawn for the pane.
 
 \membersection{wxAuiPaneInfo::DefaultPane}\label{wxauipaneinfodefaultpane}
 
 \func{wxAuiPaneInfo\&}{DefaultPane}{\void}
 
+DefaultPane() specifies that the pane should adopt the default pane settings.
 
 \membersection{wxAuiPaneInfo::DestroyOnClose}\label{wxauipaneinfodestroyonclose}
 
 \func{wxAuiPaneInfo\&}{DestroyOnClose}{\param{bool }{b = true}}
 
+DestroyOnClose() indicates whether a pane should be detroyed when it is closed.  Normally a pane is simply hidden when the close button is clicked.  Setting DestroyOnClose to true will cause the window to be destroyed when the user clicks the pane's close button.
 
 \membersection{wxAuiPaneInfo::Direction}\label{wxauipaneinfodirection}
 
 \func{wxAuiPaneInfo\&}{Direction}{\param{int }{direction}}
 
+Direction() determines the direction of the docked pane.  It is functionally the same as calling Left(), Right(), Top() or Bottom(), except that docking direction may be specified programmatically via the parameter.
 
 \membersection{wxAuiPaneInfo::Dock}\label{wxauipaneinfodock}
 
@@ -167,248 +182,287 @@ enum wxPaneInsertLevel
 
 \func{wxAuiPaneInfo\&}{Dockable}{\param{bool }{b = true}}
 
+Dockable() specifies whether a frame can be docked or not.  It is the same as specifying TopDockable(b).BottomDockable(b).LeftDockable(b).RightDockable(b).
 
 \membersection{wxAuiPaneInfo::Fixed}\label{wxauipaneinfofixed}
 
 \func{wxAuiPaneInfo\&}{Fixed}{\void}
 
+Fixed() forces a pane to be fixed size so that it cannot be resized.  After calling Fixed(), IsFixed() will return true.
 
 \membersection{wxAuiPaneInfo::Float}\label{wxauipaneinfofloat}
 
 \func{wxAuiPaneInfo\&}{Float}{\void}
 
+Float() indicates that a pane should be floated.
 
 \membersection{wxAuiPaneInfo::Floatable}\label{wxauipaneinfofloatable}
 
 \func{wxAuiPaneInfo\&}{Floatable}{\param{bool }{b = true}}
 
+Floatable() sets whether the user will be able to undock a pane and turn it into a floating window.
 
 \membersection{wxAuiPaneInfo::FloatingPosition}\label{wxauipaneinfofloatingposition}
 
 \func{wxAuiPaneInfo\&}{FloatingPosition}{\param{const wxPoint\& }{pos}}
-
-
 \func{wxAuiPaneInfo\&}{FloatingPosition}{\param{int }{x}, \param{int }{y}}
 
+FloatingPosition() sets the position of the floating pane.
 
 \membersection{wxAuiPaneInfo::FloatingSize}\label{wxauipaneinfofloatingsize}
 
 \func{wxAuiPaneInfo\&}{FloatingSize}{\param{const wxSize\& }{size}}
-
-
 \func{wxAuiPaneInfo\&}{FloatingSize}{\param{int }{x}, \param{int }{y}}
 
+FloatingSize() sets the size of the floating pane.
 
 \membersection{wxAuiPaneInfo::Gripper}\label{wxauipaneinfogripper}
 
 \func{wxAuiPaneInfo\&}{Gripper}{\param{bool }{visible = true}}
 
+Gripper() indicates that a gripper should be drawn for the pane.
 
 \membersection{wxAuiPaneInfo::GripperTop}\label{wxauipaneinfogrippertop}
 
 \func{wxAuiPaneInfo\&}{GripperTop}{\param{bool }{attop = true}}
 
+GripperTop() indicates that a gripper should be drawn at the top of the pane.
 
 \membersection{wxAuiPaneInfo::HasBorder}\label{wxauipaneinfohasborder}
 
 \constfunc{bool}{HasBorder}{\void}
 
+HasBorder() returns true if the pane displays a border.
 
 \membersection{wxAuiPaneInfo::HasCaption}\label{wxauipaneinfohascaption}
 
 \constfunc{bool}{HasCaption}{\void}
 
+HasCaption() returns true if the pane displays a caption.
 
 \membersection{wxAuiPaneInfo::HasCloseButton}\label{wxauipaneinfohasclosebutton}
 
 \constfunc{bool}{HasCloseButton}{\void}
 
+HasCloseButton() returns true if the pane displays a button to close the pane.
 
 \membersection{wxAuiPaneInfo::HasFlag}\label{wxauipaneinfohasflag}
 
 \constfunc{bool}{HasFlag}{\param{unsigned int }{flag}}
 
+HasFlag() returns true if the the property specified by flag is active for the pane.
 
 \membersection{wxAuiPaneInfo::HasGripper}\label{wxauipaneinfohasgripper}
 
 \constfunc{bool}{HasGripper}{\void}
 
+HasGripper() returns true if the pane displays a gripper.
 
 \membersection{wxAuiPaneInfo::HasGripperTop}\label{wxauipaneinfohasgrippertop}
 
 \constfunc{bool}{HasGripperTop}{\void}
 
+HasGripper() returns true if the pane displays a gripper at the top.
 
 \membersection{wxAuiPaneInfo::HasMaximizeButton}\label{wxauipaneinfohasmaximizebutton}
 
 \constfunc{bool}{HasMaximizeButton}{\void}
 
+HasMaximizeButton() returns true if the pane displays a button to maximize the pane.
 
 \membersection{wxAuiPaneInfo::HasMinimizeButton}\label{wxauipaneinfohasminimizebutton}
 
 \constfunc{bool}{HasMinimizeButton}{\void}
 
+HasMinimizeButton() returns true if the pane displays a button to minimize the pane.
 
 \membersection{wxAuiPaneInfo::HasPinButton}\label{wxauipaneinfohaspinbutton}
 
 \constfunc{bool}{HasPinButton}{\void}
 
+HasPinButton() returns true if the pane displays a button to float the pane.
 
 \membersection{wxAuiPaneInfo::Hide}\label{wxauipaneinfohide}
 
 \func{wxAuiPaneInfo\&}{Hide}{\void}
 
+Hide() indicates that a pane should be hidden.
 
 \membersection{wxAuiPaneInfo::IsBottomDockable}\label{wxauipaneinfoisbottomdockable}
 
 \constfunc{bool}{IsBottomDockable}{\void}
 
+IsBottomDockable() returns true if the pane can be docked at the bottom of the managed frame.
 
 \membersection{wxAuiPaneInfo::IsDocked}\label{wxauipaneinfoisdocked}
 
 \constfunc{bool}{IsDocked}{\void}
 
+IsDocked() returns true if the pane is docked.
 
 \membersection{wxAuiPaneInfo::IsFixed}\label{wxauipaneinfoisfixed}
 
 \constfunc{bool}{IsFixed}{\void}
 
+IsFixed() returns true if the pane cannot be resized.
 
 \membersection{wxAuiPaneInfo::IsFloatable}\label{wxauipaneinfoisfloatable}
 
 \constfunc{bool}{IsFloatable}{\void}
 
+IsFloatable() returns true if the pane can be undocked and displayed as a floating window.
 
 \membersection{wxAuiPaneInfo::IsFloating}\label{wxauipaneinfoisfloating}
 
 \constfunc{bool}{IsFloating}{\void}
 
+IsFloating() returns true if the pane is floating.
 
 \membersection{wxAuiPaneInfo::IsLeftDockable}\label{wxauipaneinfoisleftdockable}
 
 \constfunc{bool}{IsLeftDockable}{\void}
 
+IsLeftDockable() returns true if the pane can be docked on the left of the managed frame.
 
 \membersection{wxAuiPaneInfo::IsMovable}\label{wxauipaneinfoismovable}
 
 \constfunc{bool}{IsMovable}{\void}
 
+IsMoveable() returns true if the docked frame can be undocked or moved to another dock position.
 
 \membersection{wxAuiPaneInfo::IsOk}\label{wxauipaneinfoisok}
 
 \constfunc{bool}{IsOk}{\void}
 
+IsOk() returns true if the wxAuiPaneInfo structure is valid.  A pane structure is valid if it has an associated window.
 
 \membersection{wxAuiPaneInfo::IsResizable}\label{wxauipaneinfoisresizable}
 
 \constfunc{bool}{IsResizable}{\void}
 
+IsResizable() returns true if the pane can be resized.
 
 \membersection{wxAuiPaneInfo::IsRightDockable}\label{wxauipaneinfoisrightdockable}
 
 \constfunc{bool}{IsRightDockable}{\void}
 
+IsRightDockable() returns true if the pane can be docked on the right of the managed frame.
 
 \membersection{wxAuiPaneInfo::IsShown}\label{wxauipaneinfoisshown}
 
 \constfunc{bool}{IsShown}{\void}
 
+IsShown() returns true if the pane is currently shown.
 
 \membersection{wxAuiPaneInfo::IsToolbar}\label{wxauipaneinfoistoolbar}
 
 \constfunc{bool}{IsToolbar}{\void}
 
+IsToolbar() returns true if the pane contains a toolbar.
 
 \membersection{wxAuiPaneInfo::IsTopDockable}\label{wxauipaneinfoistopdockable}
 
 \constfunc{bool}{IsTopDockable}{\void}
 
+IsTopDockable() returns true if the pane can be docked at the top of the managed frame.
 
 \membersection{wxAuiPaneInfo::Layer}\label{wxauipaneinfolayer}
 
 \func{wxAuiPaneInfo\&}{Layer}{\param{int }{layer}}
 
+Layer() determines the layer of the docked pane.  The dock layer is similar to an onion, the inner-most layer being layer 0.  Each shell moving in the outward direction has a higher layer number.  This allows for more complex docking layout formation.
 
 \membersection{wxAuiPaneInfo::Left}\label{wxauipaneinfoleft}
 
 \func{wxAuiPaneInfo\&}{Left}{\void}
 
+Left() sets the pane dock position to the left side of the frame.  This is the same thing as calling Direction(wxAUI_DOCK_LEFT).
 
 \membersection{wxAuiPaneInfo::LeftDockable}\label{wxauipaneinfoleftdockable}
 
 \func{wxAuiPaneInfo\&}{LeftDockable}{\param{bool }{b = true}}
 
+LeftDockable() indicates whether a pane can be docked on the left of the frame.
 
 \membersection{wxAuiPaneInfo::MaxSize}\label{wxauipaneinfomaxsize}
 
 \func{wxAuiPaneInfo\&}{MaxSize}{\param{const wxSize\& }{size}}
-
-
 \func{wxAuiPaneInfo\&}{MaxSize}{\param{int }{x}, \param{int }{y}}
 
+MaxSize() sets the maximum size of the pane.
 
 \membersection{wxAuiPaneInfo::MaximizeButton}\label{wxauipaneinfomaximizebutton}
 
 \func{wxAuiPaneInfo\&}{MaximizeButton}{\param{bool }{visible = true}}
 
+MaximizeButton() indicates that a maximize button should be drawn for the pane.
 
 \membersection{wxAuiPaneInfo::MinSize}\label{wxauipaneinfominsize}
 
 \func{wxAuiPaneInfo\&}{MinSize}{\param{const wxSize\& }{size}}
-
-
 \func{wxAuiPaneInfo\&}{MinSize}{\param{int }{x}, \param{int }{y}}
 
+MinSize() sets the minimum size of the pane.  Please note that this is only partially supported as of this writing.
 
 \membersection{wxAuiPaneInfo::MinimizeButton}\label{wxauipaneinfominimizebutton}
 
 \func{wxAuiPaneInfo\&}{MinimizeButton}{\param{bool }{visible = true}}
 
+MinimizeButton() indicates that a minimize button should be drawn for the pane.
 
 \membersection{wxAuiPaneInfo::Movable}\label{wxauipaneinfomovable}
 
 \func{wxAuiPaneInfo\&}{Movable}{\param{bool }{b = true}}
 
+Movable indicates whether a frame can be moved.
 
 \membersection{wxAuiPaneInfo::Name}\label{wxauipaneinfoname}
 
 \func{wxAuiPaneInfo\&}{Name}{\param{const wxString\& }{n}}
 
+Name() sets the name of the pane so it can be referenced in lookup functions.  If a name is not specified by the user, a random name is assigned to the pane when it is added to the manager.
 
 \membersection{wxAuiPaneInfo::PaneBorder}\label{wxauipaneinfopaneborder}
 
 \func{wxAuiPaneInfo\&}{PaneBorder}{\param{bool }{visible = true}}
 
+PaneBorder indicates that a border should be drawn for the pane.
 
 \membersection{wxAuiPaneInfo::PinButton}\label{wxauipaneinfopinbutton}
 
 \func{wxAuiPaneInfo\&}{PinButton}{\param{bool }{visible = true}}
 
+PinButton() indicates that a pin button should be drawn for the pane.
 
 \membersection{wxAuiPaneInfo::Position}\label{wxauipaneinfoposition}
 
 \func{wxAuiPaneInfo\&}{Position}{\param{int }{pos}}
 
+Position() determines the position of the docked pane.
 
 \membersection{wxAuiPaneInfo::Resizable}\label{wxauipaneinforesizable}
 
 \func{wxAuiPaneInfo\&}{Resizable}{\param{bool }{resizable = true}}
 
+Resizable() allows a pane to be resized if the parameter is true, and forces it to be a fixed size if the parameter is false.  This is simply an antonym for Fixed().
 
 \membersection{wxAuiPaneInfo::Right}\label{wxauipaneinforight}
 
 \func{wxAuiPaneInfo\&}{Right}{\void}
 
+Right() sets the pane dock position to the right side of the frame.
 
 \membersection{wxAuiPaneInfo::RightDockable}\label{wxauipaneinforightdockable}
 
 \func{wxAuiPaneInfo\&}{RightDockable}{\param{bool }{b = true}}
 
+RightDockable() indicates whether a pane can be docked on the right of the frame.
 
 \membersection{wxAuiPaneInfo::Row}\label{wxauipaneinforow}
 
 \func{wxAuiPaneInfo\&}{Row}{\param{int }{row}}
 
+Row() determines the row of the docked pane.
 
 \membersection{wxAuiPaneInfo::SafeSet}\label{wxauipaneinfosafeset}
 
@@ -417,38 +471,45 @@ enum wxPaneInsertLevel
 Write the safe parts of a newly loaded PaneInfo structure "source" into "this"
 used on loading perspectives etc.
 
-
 \membersection{wxAuiPaneInfo::SetFlag}\label{wxauipaneinfosetflag}
 
 \func{wxAuiPaneInfo\&}{SetFlag}{\param{unsigned int }{flag}, \param{bool }{option\_state}}
 
+SetFlag() turns the property given by flag on or off with the option_state parameter.
 
 \membersection{wxAuiPaneInfo::Show}\label{wxauipaneinfoshow}
 
 \func{wxAuiPaneInfo\&}{Show}{\param{bool }{show = true}}
 
+Show() indicates that a pane should be shown.
 
 \membersection{wxAuiPaneInfo::ToolbarPane}\label{wxauipaneinfotoolbarpane}
 
 \func{wxAuiPaneInfo\&}{ToolbarPane}{\void}
 
+ToolbarPane() specifies that the pane should adopt the default toolbar pane settings.
 
 \membersection{wxAuiPaneInfo::Top}\label{wxauipaneinfotop}
 
 \func{wxAuiPaneInfo\&}{Top}{\void}
 
+Top() sets the pane dock position to the top of the frame.
 
 \membersection{wxAuiPaneInfo::TopDockable}\label{wxauipaneinfotopdockable}
 
 \func{wxAuiPaneInfo\&}{TopDockable}{\param{bool }{b = true}}
 
+TopDockable() indicates whether a pane can be docked at the top of the frame.
 
 \membersection{wxAuiPaneInfo::Window}\label{wxauipaneinfowindow}
 
 \func{wxAuiPaneInfo\&}{Window}{\param{wxWindow* }{w}}
 
+Window() assigns the window pointer that the wxAuiPaneInfo should use.  This normally does not need to be specified, as the window pointer is automatically assigned to the wxAuiPaneInfo structure as soon as it is added to the manager.
 
 \membersection{wxAuiPaneInfo::operator=}\label{wxauipaneinfooperatorassign}
 
 \func{wxAuiPaneInfo\& operator}{operator=}{\param{const wxAuiPaneInfo\& }{c}}
+
+Makes a copy of the wxAuiPaneInfo object.
 
