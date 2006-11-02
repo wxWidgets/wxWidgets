@@ -84,6 +84,7 @@ class MyFrame : public wxFrame
         ID_VerticalGradient,
         ID_HorizontalGradient,
         ID_Settings,
+        ID_NotebookNoCloseButton,
         ID_NotebookCloseButton,
         ID_NotebookCloseButtonAll,
         ID_NotebookCloseButtonActive,
@@ -565,6 +566,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(ID_NoVenetianFade, MyFrame::OnManagerFlag)
     EVT_MENU(ID_TransparentDrag, MyFrame::OnManagerFlag)
     EVT_MENU(ID_AllowActivePane, MyFrame::OnManagerFlag)
+    EVT_MENU(ID_NotebookNoCloseButton, MyFrame::OnNotebookFlag)
     EVT_MENU(ID_NotebookCloseButton, MyFrame::OnNotebookFlag)
     EVT_MENU(ID_NotebookCloseButtonAll, MyFrame::OnNotebookFlag)
     EVT_MENU(ID_NotebookCloseButtonActive, MyFrame::OnNotebookFlag)
@@ -580,6 +582,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(ID_NotebookContent, MyFrame::OnChangeContentPane)
     EVT_MENU(wxID_EXIT, MyFrame::OnExit)
     EVT_MENU(wxID_ABOUT, MyFrame::OnAbout)
+    EVT_UPDATE_UI(ID_NotebookNoCloseButton, MyFrame::OnUpdateUI)
     EVT_UPDATE_UI(ID_NotebookCloseButton, MyFrame::OnUpdateUI)
     EVT_UPDATE_UI(ID_NotebookCloseButtonAll, MyFrame::OnUpdateUI)
     EVT_UPDATE_UI(ID_NotebookCloseButtonActive, MyFrame::OnUpdateUI)
@@ -656,6 +659,7 @@ MyFrame::MyFrame(wxWindow* parent,
     options_menu->Append(ID_Settings, _("Settings Pane"));
 
     wxMenu* notebook_menu = new wxMenu;
+    notebook_menu->AppendRadioItem(ID_NotebookNoCloseButton, _("No Close Button"));
     notebook_menu->AppendRadioItem(ID_NotebookCloseButton, _("Close Button at Right"));
     notebook_menu->AppendRadioItem(ID_NotebookCloseButtonAll, _("Close Button on All Tabs"));
     notebook_menu->AppendRadioItem(ID_NotebookCloseButtonActive, _("Close Button on Active Tab"));
@@ -999,7 +1003,8 @@ void MyFrame::OnNotebookFlag(wxCommandEvent& event)
 {
     int id = event.GetId();
     
-    if (id == ID_NotebookCloseButton ||
+    if (id == ID_NotebookNoCloseButton ||
+        id == ID_NotebookCloseButton ||
         id == ID_NotebookCloseButtonAll ||
         id == ID_NotebookCloseButtonActive)
     {
@@ -1009,6 +1014,7 @@ void MyFrame::OnNotebookFlag(wxCommandEvent& event)
                               
         switch (id)
         {
+            case ID_NotebookNoCloseButton: break;
             case ID_NotebookCloseButton: m_notebook_style |= wxAUI_NB_CLOSE_BUTTON; break;
             case ID_NotebookCloseButtonAll: m_notebook_style |= wxAUI_NB_CLOSE_ON_ALL_TABS; break;
             case ID_NotebookCloseButtonActive: m_notebook_style |= wxAUI_NB_CLOSE_ON_ACTIVE_TAB; break;
@@ -1076,6 +1082,9 @@ void MyFrame::OnUpdateUI(wxUpdateUIEvent& event)
             event.Check((flags & wxAUI_MGR_NO_VENETIAN_BLINDS_FADE) != 0);
             break;
             
+        case ID_NotebookNoCloseButton:
+            event.Check((m_notebook_style & (wxAUI_NB_CLOSE_BUTTON|wxAUI_NB_CLOSE_ON_ALL_TABS|wxAUI_NB_CLOSE_ON_ACTIVE_TAB)) != 0);
+            break;
         case ID_NotebookCloseButton:
             event.Check((m_notebook_style & wxAUI_NB_CLOSE_BUTTON) != 0);
             break;
