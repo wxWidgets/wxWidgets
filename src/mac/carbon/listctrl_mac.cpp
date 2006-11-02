@@ -397,7 +397,7 @@ bool wxListCtrl::Create(wxWindow *parent,
     {
         m_macIsUserPane = true;
 
-        if ( !wxWindow::Create(parent, id, pos, size, style, name) )
+        if ( !wxWindow::Create(parent, id, pos, size, style & wxNO_BORDER, name) )
             return false;
         m_genericImpl = new wxGenericListCtrlHook(this, id, pos, size, style, validator, name);
         m_genericImpl->PushEventHandler( new wxMacListCtrlEventDelegate( this, GetId() ) );
@@ -488,6 +488,14 @@ void wxListCtrl::DoSetSize( int x, int y, int width, int height, int sizeFlags )
 
     if (m_genericImpl)
         m_genericImpl->SetSize(x, y, width, height, sizeFlags);
+}
+
+wxSize wxListCtrl::DoGetBestSize() const
+{
+    if (m_genericImpl)
+        return m_genericImpl->GetBestSize();
+        
+    return wxWindow::DoGetBestSize();
 }
 
 bool wxListCtrl::SetFont(const wxFont& font)

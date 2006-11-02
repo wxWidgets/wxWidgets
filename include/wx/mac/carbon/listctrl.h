@@ -331,6 +331,8 @@ protected:
                          int width, int height,
                          int sizeFlags = wxSIZE_AUTO);
 
+  virtual wxSize DoGetBestSize() const;
+
   // common part of all ctors
   void Init();
   
