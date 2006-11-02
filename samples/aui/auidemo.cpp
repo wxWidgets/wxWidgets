@@ -88,6 +88,8 @@ class MyFrame : public wxFrame
         ID_NotebookCloseButton,
         ID_NotebookCloseButtonAll,
         ID_NotebookCloseButtonActive,
+        ID_NotebookAllowTabMove,
+        ID_NotebookAllowTabSplit,
         ID_FirstPerspective = ID_CreatePerspective+1000
     };
 
@@ -570,6 +572,8 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(ID_NotebookCloseButton, MyFrame::OnNotebookFlag)
     EVT_MENU(ID_NotebookCloseButtonAll, MyFrame::OnNotebookFlag)
     EVT_MENU(ID_NotebookCloseButtonActive, MyFrame::OnNotebookFlag)
+    EVT_MENU(ID_NotebookAllowTabMove, MyFrame::OnNotebookFlag)
+    EVT_MENU(ID_NotebookAllowTabSplit, MyFrame::OnNotebookFlag)
     EVT_MENU(ID_NoGradient, MyFrame::OnGradient)
     EVT_MENU(ID_VerticalGradient, MyFrame::OnGradient)
     EVT_MENU(ID_HorizontalGradient, MyFrame::OnGradient)
@@ -586,6 +590,8 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_UPDATE_UI(ID_NotebookCloseButton, MyFrame::OnUpdateUI)
     EVT_UPDATE_UI(ID_NotebookCloseButtonAll, MyFrame::OnUpdateUI)
     EVT_UPDATE_UI(ID_NotebookCloseButtonActive, MyFrame::OnUpdateUI)
+    EVT_UPDATE_UI(ID_NotebookAllowTabMove, MyFrame::OnUpdateUI)
+    EVT_UPDATE_UI(ID_NotebookAllowTabSplit, MyFrame::OnUpdateUI)
     EVT_UPDATE_UI(ID_AllowFloating, MyFrame::OnUpdateUI)
     EVT_UPDATE_UI(ID_TransparentHint, MyFrame::OnUpdateUI)
     EVT_UPDATE_UI(ID_VenetianBlindsHint, MyFrame::OnUpdateUI)
@@ -663,6 +669,9 @@ MyFrame::MyFrame(wxWindow* parent,
     notebook_menu->AppendRadioItem(ID_NotebookCloseButton, _("Close Button at Right"));
     notebook_menu->AppendRadioItem(ID_NotebookCloseButtonAll, _("Close Button on All Tabs"));
     notebook_menu->AppendRadioItem(ID_NotebookCloseButtonActive, _("Close Button on Active Tab"));
+    notebook_menu->AppendSeparator();
+    notebook_menu->AppendCheckItem(ID_NotebookAllowTabMove, _("Allow Tab Move"));
+    notebook_menu->AppendCheckItem(ID_NotebookAllowTabSplit, _("Allow Notebook Split"));
 
     m_perspectives_menu = new wxMenu;
     m_perspectives_menu->Append(ID_CreatePerspective, _("Create Perspective"));
@@ -1019,8 +1028,18 @@ void MyFrame::OnNotebookFlag(wxCommandEvent& event)
             case ID_NotebookCloseButtonAll: m_notebook_style |= wxAUI_NB_CLOSE_ON_ALL_TABS; break;
             case ID_NotebookCloseButtonActive: m_notebook_style |= wxAUI_NB_CLOSE_ON_ACTIVE_TAB; break;
         }
+    }
+    
+    if (id == ID_NotebookAllowTabMove)
+    {
+        m_notebook_style ^= wxAUI_NB_TAB_MOVE;
+    }
+    
+    if (id == ID_NotebookAllowTabSplit)
+    {
+        m_notebook_style ^= wxAUI_NB_TAB_SPLIT;
+    }
         
-    }    
         
         
     size_t i, count;
@@ -1093,6 +1112,12 @@ void MyFrame::OnUpdateUI(wxUpdateUIEvent& event)
             break;
         case ID_NotebookCloseButtonActive:
             event.Check((m_notebook_style & wxAUI_NB_CLOSE_ON_ACTIVE_TAB) != 0);
+            break;
+        case ID_NotebookAllowTabSplit:
+            event.Check((m_notebook_style & wxAUI_NB_TAB_SPLIT) != 0);
+            break;
+        case ID_NotebookAllowTabMove:
+            event.Check((m_notebook_style & wxAUI_NB_TAB_MOVE) != 0);
             break;
     }
 }
