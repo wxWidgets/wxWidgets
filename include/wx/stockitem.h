@@ -65,13 +65,9 @@ WXDLLEXPORT wxString wxGetStockHelpString(wxWindowID id,
 
 #ifdef __WXGTK20__
 
-#include <gdk/gdktypes.h>
-
 // Translates stock ID to GTK+'s stock item string indentifier:
 WXDLLEXPORT const char *wxGetStockGtkID(wxWindowID id);
 
-// Returns stock accelerator modifier and key code for the given ID
-WXDLLEXPORT bool wxGetStockGtkAccelerator(const char *id, GdkModifierType *mod, guint *key);
 #endif
 
 #endif // _WX_STOCKITEM_H_

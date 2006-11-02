@@ -101,5 +101,12 @@ extern "C" gboolean gtk_icon_size_lookup  (GtkIconSize  size,
                                            gint         *height);
 #endif
 
+#ifdef __WXGTK20__
+#include <gdk/gdktypes.h>
+
+// Returns stock accelerator modifier and key code for the given ID
+WXDLLEXPORT bool wxGetStockGtkAccelerator(const char *id, GdkModifierType *mod, guint *key);
+#endif
+
 #endif // _WX_GTK_PRIVATE_H_
 

@@ -24,6 +24,10 @@
 #include "wx/stockitem.h"
 #include "wx/gtk/private.h"
 
+#ifdef __WXGTK20__
+#include <gdk/gdktypes.h>
+#endif
+
 // FIXME: is this right? somehow I don't think so (VZ)
 
 #define gtk_accel_group_attach(g, o) gtk_window_add_accel_group((o), (g))
@@ -1674,3 +1678,125 @@ bool wxWindowGTK::DoPopupMenu( wxMenu *menu, int x, int y )
 }
 
 #endif // wxUSE_MENUS_NATIVE
+
+#ifdef __WXGTK20__
+
+#include <gtk/gtk.h>
+
+const char *wxGetStockGtkID(wxWindowID id)
+{
+    #define STOCKITEM(wx,gtk)      \
+        case wx:                   \
+            return gtk;
+
+    #define STOCKITEM_MISSING(wx)  \
+        case wx:                 \
+            return NULL;
+
+    #if GTK_CHECK_VERSION(2,4,0)
+        #define STOCKITEM_24(wx,gtk) STOCKITEM(wx,gtk)
+    #else
+        #define STOCKITEM_24(wx,gtk) STOCKITEM_MISSING(wx)
+    #endif
+
+    #if GTK_CHECK_VERSION(2,6,0)
+        #define STOCKITEM_26(wx,gtk) STOCKITEM(wx,gtk)
+    #else
+        #define STOCKITEM_26(wx,gtk) STOCKITEM_MISSING(wx)
+    #endif
+
+    #if GTK_CHECK_VERSION(2,10,0)
+        #define STOCKITEM_210(wx,gtk) STOCKITEM(wx,gtk)
+    #else
+        #define STOCKITEM_210(wx,gtk) STOCKITEM_MISSING(wx)
+    #endif
+
+
+    switch (id)
+    {
+        STOCKITEM_26(wxID_ABOUT,         GTK_STOCK_ABOUT)
+        STOCKITEM(wxID_ADD,              GTK_STOCK_ADD)
+        STOCKITEM(wxID_APPLY,            GTK_STOCK_APPLY)
+        STOCKITEM(wxID_BOLD,             GTK_STOCK_BOLD)
+        STOCKITEM(wxID_CANCEL,           GTK_STOCK_CANCEL)
+        STOCKITEM(wxID_CLEAR,            GTK_STOCK_CLEAR)
+        STOCKITEM(wxID_CLOSE,            GTK_STOCK_CLOSE)
+        STOCKITEM(wxID_COPY,             GTK_STOCK_COPY)
+        STOCKITEM(wxID_CUT,              GTK_STOCK_CUT)
+        STOCKITEM(wxID_DELETE,           GTK_STOCK_DELETE)
+        STOCKITEM_26(wxID_EDIT,          GTK_STOCK_EDIT)
+        STOCKITEM(wxID_FIND,             GTK_STOCK_FIND)
+        STOCKITEM_26(wxID_FILE,          GTK_STOCK_FILE)
+        STOCKITEM(wxID_REPLACE,          GTK_STOCK_FIND_AND_REPLACE)
+        STOCKITEM(wxID_BACKWARD,         GTK_STOCK_GO_BACK)
+        STOCKITEM(wxID_DOWN,             GTK_STOCK_GO_DOWN)
+        STOCKITEM(wxID_FORWARD,          GTK_STOCK_GO_FORWARD)
+        STOCKITEM(wxID_UP,               GTK_STOCK_GO_UP)
+        STOCKITEM(wxID_HELP,             GTK_STOCK_HELP)
+        STOCKITEM(wxID_HOME,             GTK_STOCK_HOME)
+        STOCKITEM_24(wxID_INDENT,        GTK_STOCK_INDENT)
+        STOCKITEM(wxID_INDEX,            GTK_STOCK_INDEX)
+        STOCKITEM(wxID_ITALIC,           GTK_STOCK_ITALIC)
+        STOCKITEM(wxID_JUSTIFY_CENTER,   GTK_STOCK_JUSTIFY_CENTER)
+        STOCKITEM(wxID_JUSTIFY_FILL,     GTK_STOCK_JUSTIFY_FILL)
+        STOCKITEM(wxID_JUSTIFY_LEFT,     GTK_STOCK_JUSTIFY_LEFT)
+        STOCKITEM(wxID_JUSTIFY_RIGHT,    GTK_STOCK_JUSTIFY_RIGHT)
+        STOCKITEM(wxID_NEW,              GTK_STOCK_NEW)
+        STOCKITEM(wxID_NO,               GTK_STOCK_NO)
+        STOCKITEM(wxID_OK,               GTK_STOCK_OK)
+        STOCKITEM(wxID_OPEN,             GTK_STOCK_OPEN)
+        STOCKITEM(wxID_PASTE,            GTK_STOCK_PASTE)
+        STOCKITEM(wxID_PREFERENCES,      GTK_STOCK_PREFERENCES)
+        STOCKITEM(wxID_PRINT,            GTK_STOCK_PRINT)
+        STOCKITEM(wxID_PREVIEW,          GTK_STOCK_PRINT_PREVIEW)
+        STOCKITEM(wxID_PROPERTIES,       GTK_STOCK_PROPERTIES)
+        STOCKITEM(wxID_EXIT,             GTK_STOCK_QUIT)
+        STOCKITEM(wxID_REDO,             GTK_STOCK_REDO)
+        STOCKITEM(wxID_REFRESH,          GTK_STOCK_REFRESH)
+        STOCKITEM(wxID_REMOVE,           GTK_STOCK_REMOVE)
+        STOCKITEM(wxID_REVERT_TO_SAVED,  GTK_STOCK_REVERT_TO_SAVED)
+        STOCKITEM(wxID_SAVE,             GTK_STOCK_SAVE)
+        STOCKITEM(wxID_SAVEAS,           GTK_STOCK_SAVE_AS)
+        STOCKITEM_210(wxID_SELECTALL,    GTK_STOCK_SELECT_ALL)
+        STOCKITEM(wxID_STOP,             GTK_STOCK_STOP)
+        STOCKITEM(wxID_UNDELETE,         GTK_STOCK_UNDELETE)
+        STOCKITEM(wxID_UNDERLINE,        GTK_STOCK_UNDERLINE)
+        STOCKITEM(wxID_UNDO,             GTK_STOCK_UNDO)
+        STOCKITEM_24(wxID_UNINDENT,      GTK_STOCK_UNINDENT)
+        STOCKITEM(wxID_YES,              GTK_STOCK_YES)
+        STOCKITEM(wxID_ZOOM_100,         GTK_STOCK_ZOOM_100)
+        STOCKITEM(wxID_ZOOM_FIT,         GTK_STOCK_ZOOM_FIT)
+        STOCKITEM(wxID_ZOOM_IN,          GTK_STOCK_ZOOM_IN)
+        STOCKITEM(wxID_ZOOM_OUT,         GTK_STOCK_ZOOM_OUT)
+
+        default:
+            wxFAIL_MSG( _T("invalid stock item ID") );
+            break;
+    };
+
+    #undef STOCKITEM
+
+    return NULL;
+}
+
+bool wxGetStockGtkAccelerator(const char *id, GdkModifierType *mod, guint *key)
+{
+    if (!id)
+        return false;
+
+    GtkStockItem stock_item;
+    if (gtk_stock_lookup (id, &stock_item))
+    {
+        if (key) *key = stock_item.keyval;
+        if (mod) *mod = stock_item.modifier;
+
+        // some GTK stock items have zero values for the keyval;
+        // it means that they do not have an accelerator...
+        if (stock_item.keyval)
+            return true;
+    }
+
+    return false;
+}
+
+#endif // __WXGTK20__
