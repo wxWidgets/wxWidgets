@@ -1494,7 +1494,33 @@ void wxMacCoreGraphicsContext::DrawBitmap( const wxBitmap &bmp, wxDouble x, wxDo
 
     CGImageRef image = (CGImageRef)( bmp.CGImageCreate() );
     HIRect r = CGRectMake( x , y , w , h );
-    HIViewDrawCGImage( m_cgContext , &r , image );
+    if ( bmp.GetDepth() == 1 )
+    {
+        // is is a mask, the '1' in the mask tell where to draw the current brush
+        if (  !m_brush.IsNull() )
+        {
+            if ( ((wxMacCoreGraphicsBrushData*)m_brush.GetRefData())->IsShading() )
+            {
+                // TODO clip to mask
+            /*
+                CGContextSaveGState( m_cgContext );
+                CGContextAddPath( m_cgContext , (CGPathRef) path.GetNativePath() );
+                CGContextClip( m_cgContext );
+                CGContextDrawShading( m_cgContext, ((wxMacCoreGraphicsBrushData*)m_brush.GetRefData())->GetShading() );
+                CGContextRestoreGState( m_cgContext);
+            */
+            }
+            else
+            {
+                ((wxMacCoreGraphicsBrushData*)m_brush.GetRefData())->Apply(this);
+                HIViewDrawCGImage( m_cgContext , &r , image );
+            }
+        }
+    }
+    else
+    {
+        HIViewDrawCGImage( m_cgContext , &r , image );
+    }
     CGImageRelease( image );
 }
 
