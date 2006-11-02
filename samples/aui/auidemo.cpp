@@ -84,6 +84,9 @@ class MyFrame : public wxFrame
         ID_VerticalGradient,
         ID_HorizontalGradient,
         ID_Settings,
+        ID_NotebookCloseButton,
+        ID_NotebookCloseButtonAll,
+        ID_NotebookCloseButtonActive,
         ID_FirstPerspective = ID_CreatePerspective+1000
     };
 
@@ -132,6 +135,7 @@ private:
 
     void OnGradient(wxCommandEvent& evt);
     void OnManagerFlag(wxCommandEvent& evt);
+    void OnNotebookFlag(wxCommandEvent& evt);
     void OnUpdateUI(wxUpdateUIEvent& evt);
 
     void OnPaneClose(wxAuiManagerEvent& evt);
@@ -141,6 +145,7 @@ private:
     wxAuiManager m_mgr;
     wxArrayString m_perspectives;
     wxMenu* m_perspectives_menu;
+    long m_notebook_style;
 
     DECLARE_EVENT_TABLE()
 };
@@ -560,6 +565,9 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(ID_NoVenetianFade, MyFrame::OnManagerFlag)
     EVT_MENU(ID_TransparentDrag, MyFrame::OnManagerFlag)
     EVT_MENU(ID_AllowActivePane, MyFrame::OnManagerFlag)
+    EVT_MENU(ID_NotebookCloseButton, MyFrame::OnNotebookFlag)
+    EVT_MENU(ID_NotebookCloseButtonAll, MyFrame::OnNotebookFlag)
+    EVT_MENU(ID_NotebookCloseButtonActive, MyFrame::OnNotebookFlag)
     EVT_MENU(ID_NoGradient, MyFrame::OnGradient)
     EVT_MENU(ID_VerticalGradient, MyFrame::OnGradient)
     EVT_MENU(ID_HorizontalGradient, MyFrame::OnGradient)
@@ -572,6 +580,9 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(ID_NotebookContent, MyFrame::OnChangeContentPane)
     EVT_MENU(wxID_EXIT, MyFrame::OnExit)
     EVT_MENU(wxID_ABOUT, MyFrame::OnAbout)
+    EVT_UPDATE_UI(ID_NotebookCloseButton, MyFrame::OnUpdateUI)
+    EVT_UPDATE_UI(ID_NotebookCloseButtonAll, MyFrame::OnUpdateUI)
+    EVT_UPDATE_UI(ID_NotebookCloseButtonActive, MyFrame::OnUpdateUI)
     EVT_UPDATE_UI(ID_AllowFloating, MyFrame::OnUpdateUI)
     EVT_UPDATE_UI(ID_TransparentHint, MyFrame::OnUpdateUI)
     EVT_UPDATE_UI(ID_VenetianBlindsHint, MyFrame::OnUpdateUI)
@@ -602,6 +613,9 @@ MyFrame::MyFrame(wxWindow* parent,
 
     // set frame icon
     SetIcon(wxIcon(sample_xpm));
+
+    // set up default notebook style
+    m_notebook_style = wxAUI_NB_DEFAULT_STYLE | wxNO_BORDER;
 
     // create menu
     wxMenuBar* mb = new wxMenuBar;
@@ -641,6 +655,11 @@ MyFrame::MyFrame(wxWindow* parent,
     options_menu->AppendSeparator();
     options_menu->Append(ID_Settings, _("Settings Pane"));
 
+    wxMenu* notebook_menu = new wxMenu;
+    notebook_menu->AppendRadioItem(ID_NotebookCloseButton, _("Close Button at Right"));
+    notebook_menu->AppendRadioItem(ID_NotebookCloseButtonAll, _("Close Button on All Tabs"));
+    notebook_menu->AppendRadioItem(ID_NotebookCloseButtonActive, _("Close Button on Active Tab"));
+
     m_perspectives_menu = new wxMenu;
     m_perspectives_menu->Append(ID_CreatePerspective, _("Create Perspective"));
     m_perspectives_menu->Append(ID_CopyPerspectiveCode, _("Copy Perspective Data To Clipboard"));
@@ -655,6 +674,7 @@ MyFrame::MyFrame(wxWindow* parent,
     mb->Append(view_menu, _("View"));
     mb->Append(m_perspectives_menu, _("Perspectives"));
     mb->Append(options_menu, _("Options"));
+    mb->Append(notebook_menu, _("Notebook"));
     mb->Append(help_menu, _("Help"));
 
     SetMenuBar(mb);
@@ -974,6 +994,46 @@ void MyFrame::OnManagerFlag(wxCommandEvent& event)
     m_mgr.Update();
 }
 
+
+void MyFrame::OnNotebookFlag(wxCommandEvent& event)
+{
+    int id = event.GetId();
+    
+    if (id == ID_NotebookCloseButton ||
+        id == ID_NotebookCloseButtonAll ||
+        id == ID_NotebookCloseButtonActive)
+    {
+        m_notebook_style &= ~(wxAUI_NB_CLOSE_BUTTON |
+                              wxAUI_NB_CLOSE_ON_ACTIVE_TAB |
+                              wxAUI_NB_CLOSE_ON_ALL_TABS);
+                              
+        switch (id)
+        {
+            case ID_NotebookCloseButton: m_notebook_style |= wxAUI_NB_CLOSE_BUTTON; break;
+            case ID_NotebookCloseButtonAll: m_notebook_style |= wxAUI_NB_CLOSE_ON_ALL_TABS; break;
+            case ID_NotebookCloseButtonActive: m_notebook_style |= wxAUI_NB_CLOSE_ON_ACTIVE_TAB; break;
+        }
+        
+    }    
+        
+        
+    size_t i, count;
+    wxAuiPaneInfoArray& all_panes = m_mgr.GetAllPanes();
+    for (i = 0, count = all_panes.GetCount(); i < count; ++i)
+    {  
+        wxAuiPaneInfo& pane = all_panes.Item(i);
+        
+        if (pane.window->IsKindOf(CLASSINFO(wxAuiNotebook)))
+        {
+            pane.window->SetWindowStyleFlag(m_notebook_style);
+            pane.window->Refresh();
+        }
+    }
+
+
+}
+
+
 void MyFrame::OnUpdateUI(wxUpdateUIEvent& event)
 {
     unsigned int flags = m_mgr.GetFlags();
@@ -1014,6 +1074,16 @@ void MyFrame::OnUpdateUI(wxUpdateUIEvent& event)
             break;
         case ID_NoVenetianFade:
             event.Check((flags & wxAUI_MGR_NO_VENETIAN_BLINDS_FADE) != 0);
+            break;
+            
+        case ID_NotebookCloseButton:
+            event.Check((m_notebook_style & wxAUI_NB_CLOSE_BUTTON) != 0);
+            break;
+        case ID_NotebookCloseButtonAll:
+            event.Check((m_notebook_style & wxAUI_NB_CLOSE_ON_ALL_TABS) != 0);
+            break;
+        case ID_NotebookCloseButtonActive:
+            event.Check((m_notebook_style & wxAUI_NB_CLOSE_ON_ACTIVE_TAB) != 0);
             break;
     }
 }
@@ -1239,7 +1309,7 @@ wxAuiNotebook* MyFrame::CreateNotebook()
 {
    wxAuiNotebook* ctrl = new wxAuiNotebook( this, wxID_ANY,
                                     wxDefaultPosition, wxSize(400,300),
-                                    wxAUI_NB_DEFAULT_STYLE | wxNO_BORDER );
+                                    m_notebook_style );
                                     
    ctrl->AddPage(CreateHTMLCtrl(ctrl), wxT("Welcome"));
                                     
@@ -1282,6 +1352,8 @@ wxAuiNotebook* MyFrame::CreateNotebook()
    
    ctrl->AddPage( new wxTextCtrl( ctrl, wxID_ANY, wxT("Some more text"),
                 wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE|wxNO_BORDER) , wxT("wxTextCtrl 8") );
+
+
 
    return ctrl;
 }
