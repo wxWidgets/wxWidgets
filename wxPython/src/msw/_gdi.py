@@ -4580,69 +4580,6 @@ _gdi_.DCClipper_swigregister(DCClipper)
 
 #---------------------------------------------------------------------------
 
-class MemoryDC(DC):
-    """
-    A memory device context provides a means to draw graphics onto a
-    bitmap. A bitmap must be selected into the new memory DC before it may
-    be used for anything. Typical usage is as follows::
-
-        dc = wx.MemoryDC()
-        dc.SelectObject(bitmap)
-        # draw on the dc using any of the Draw methods
-        dc.SelectObject(wx.NullBitmap)
-        # the bitmap now contains wahtever was drawn upon it
-
-    Note that the memory DC *must* be deleted (or the bitmap selected out
-    of it) before a bitmap can be reselected into another memory DC.
-
-    """
-    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
-    __repr__ = _swig_repr
-    def __init__(self, *args, **kwargs): 
-        """
-        __init__(self, Bitmap bitmap=NullBitmap) -> MemoryDC
-
-        Constructs a new memory device context.
-
-        Use the Ok member to test whether the constructor was successful in
-        creating a usable device context. If a bitmap is not given to this
-        constructor then don't forget to select a bitmap into the DC before
-        drawing on it.
-        """
-        _gdi_.MemoryDC_swiginit(self,_gdi_.new_MemoryDC(*args, **kwargs))
-    def SelectObject(*args, **kwargs):
-        """
-        SelectObject(self, Bitmap bitmap)
-
-        Selects the bitmap into the device context, to use as the memory
-        bitmap. Selecting the bitmap into a memory DC allows you to draw into
-        the DC, and therefore the bitmap, and also to use Blit to copy the
-        bitmap to a window.
-
-        If the argument is wx.NullBitmap (or some other uninitialised
-        `wx.Bitmap`) the current bitmap is selected out of the device context,
-        and the original bitmap restored, allowing the current bitmap to be
-        destroyed safely.
-        """
-        return _gdi_.MemoryDC_SelectObject(*args, **kwargs)
-
-    def SelectObjectAsSource(*args, **kwargs):
-        """SelectObjectAsSource(self, Bitmap bmp)"""
-        return _gdi_.MemoryDC_SelectObjectAsSource(*args, **kwargs)
-
-_gdi_.MemoryDC_swigregister(MemoryDC)
-
-def MemoryDCFromDC(*args, **kwargs):
-    """
-    MemoryDCFromDC(DC oldDC) -> MemoryDC
-
-    Creates a DC that is compatible with the oldDC.
-    """
-    val = _gdi_.new_MemoryDCFromDC(*args, **kwargs)
-    return val
-
-#---------------------------------------------------------------------------
-
 class ScreenDC(DC):
     """
     A wxScreenDC can be used to paint anywhere on the screen. This should
@@ -4781,6 +4718,69 @@ class PaintDC(ClientDC):
         """
         _gdi_.PaintDC_swiginit(self,_gdi_.new_PaintDC(*args, **kwargs))
 _gdi_.PaintDC_swigregister(PaintDC)
+
+#---------------------------------------------------------------------------
+
+class MemoryDC(WindowDC):
+    """
+    A memory device context provides a means to draw graphics onto a
+    bitmap. A bitmap must be selected into the new memory DC before it may
+    be used for anything. Typical usage is as follows::
+
+        dc = wx.MemoryDC()
+        dc.SelectObject(bitmap)
+        # draw on the dc using any of the Draw methods
+        dc.SelectObject(wx.NullBitmap)
+        # the bitmap now contains wahtever was drawn upon it
+
+    Note that the memory DC *must* be deleted (or the bitmap selected out
+    of it) before a bitmap can be reselected into another memory DC.
+
+    """
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
+        """
+        __init__(self, Bitmap bitmap=NullBitmap) -> MemoryDC
+
+        Constructs a new memory device context.
+
+        Use the Ok member to test whether the constructor was successful in
+        creating a usable device context. If a bitmap is not given to this
+        constructor then don't forget to select a bitmap into the DC before
+        drawing on it.
+        """
+        _gdi_.MemoryDC_swiginit(self,_gdi_.new_MemoryDC(*args, **kwargs))
+    def SelectObject(*args, **kwargs):
+        """
+        SelectObject(self, Bitmap bitmap)
+
+        Selects the bitmap into the device context, to use as the memory
+        bitmap. Selecting the bitmap into a memory DC allows you to draw into
+        the DC, and therefore the bitmap, and also to use Blit to copy the
+        bitmap to a window.
+
+        If the argument is wx.NullBitmap (or some other uninitialised
+        `wx.Bitmap`) the current bitmap is selected out of the device context,
+        and the original bitmap restored, allowing the current bitmap to be
+        destroyed safely.
+        """
+        return _gdi_.MemoryDC_SelectObject(*args, **kwargs)
+
+    def SelectObjectAsSource(*args, **kwargs):
+        """SelectObjectAsSource(self, Bitmap bmp)"""
+        return _gdi_.MemoryDC_SelectObjectAsSource(*args, **kwargs)
+
+_gdi_.MemoryDC_swigregister(MemoryDC)
+
+def MemoryDCFromDC(*args, **kwargs):
+    """
+    MemoryDCFromDC(DC oldDC) -> MemoryDC
+
+    Creates a DC that is compatible with the oldDC.
+    """
+    val = _gdi_.new_MemoryDCFromDC(*args, **kwargs)
+    return val
 
 #---------------------------------------------------------------------------
 
@@ -5071,63 +5071,134 @@ _gdi_.PrinterDC_swigregister(PrinterDC)
 #---------------------------------------------------------------------------
 
 class GraphicsObject(_core.Object):
-    """Proxy of C++ GraphicsObject class"""
+    """
+    This class is the superclass of native graphics objects like pens
+    etc. It provides the internal reference counting.  It is not to be
+    instantiated by user code.
+    """
     thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
     __repr__ = _swig_repr
     def __init__(self, *args, **kwargs): 
-        """__init__(self, GraphicsRenderer renderer=None) -> GraphicsObject"""
+        """
+        __init__(self, GraphicsRenderer renderer=None) -> GraphicsObject
+
+        This class is the superclass of native graphics objects like pens
+        etc. It provides the internal reference counting.  It is not to be
+        instantiated by user code.
+        """
         _gdi_.GraphicsObject_swiginit(self,_gdi_.new_GraphicsObject(*args, **kwargs))
     __swig_destroy__ = _gdi_.delete_GraphicsObject
     __del__ = lambda self : None;
     def IsNull(*args, **kwargs):
-        """IsNull(self) -> bool"""
+        """
+        IsNull(self) -> bool
+
+        Is this object valid (false) or still empty (true)?
+        """
         return _gdi_.GraphicsObject_IsNull(*args, **kwargs)
 
     def GetRenderer(*args, **kwargs):
-        """GetRenderer(self) -> GraphicsRenderer"""
+        """
+        GetRenderer(self) -> GraphicsRenderer
+
+        Returns the renderer that was used to create this instance, or
+        ``None`` if it has not been initialized yet.
+        """
         return _gdi_.GraphicsObject_GetRenderer(*args, **kwargs)
 
 _gdi_.GraphicsObject_swigregister(GraphicsObject)
 
 class GraphicsPen(GraphicsObject):
-    """Proxy of C++ GraphicsPen class"""
+    """
+    A wx.GraphicsPen is a native representation of a pen. It is used for
+    stroking a path on a `wx.GraphicsContext`. The contents are specific and
+    private to the respective renderer. The only way to get a valid instance
+    is via a CreatePen call on the graphics context or the renderer
+    instance.
+    """
     thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
     __repr__ = _swig_repr
     def __init__(self, *args, **kwargs): 
-        """__init__(self) -> GraphicsPen"""
+        """
+        __init__(self) -> GraphicsPen
+
+        A wx.GraphicsPen is a native representation of a pen. It is used for
+        stroking a path on a `wx.GraphicsContext`. The contents are specific and
+        private to the respective renderer. The only way to get a valid instance
+        is via a CreatePen call on the graphics context or the renderer
+        instance.
+        """
         _gdi_.GraphicsPen_swiginit(self,_gdi_.new_GraphicsPen(*args, **kwargs))
     __swig_destroy__ = _gdi_.delete_GraphicsPen
     __del__ = lambda self : None;
 _gdi_.GraphicsPen_swigregister(GraphicsPen)
 
 class GraphicsBrush(GraphicsObject):
-    """Proxy of C++ GraphicsBrush class"""
+    """
+    A wx.GraphicsBrush is a native representation of a brush. It is used
+    for filling a path on a `wx.GraphicsContext`. The contents are
+    specific and private to the respective renderer. The only way to get a
+    valid instance is via a Create...Brush call on the graphics context or
+    the renderer instance.
+    """
     thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
     __repr__ = _swig_repr
     def __init__(self, *args, **kwargs): 
-        """__init__(self) -> GraphicsBrush"""
+        """
+        __init__(self) -> GraphicsBrush
+
+        A wx.GraphicsBrush is a native representation of a brush. It is used
+        for filling a path on a `wx.GraphicsContext`. The contents are
+        specific and private to the respective renderer. The only way to get a
+        valid instance is via a Create...Brush call on the graphics context or
+        the renderer instance.
+        """
         _gdi_.GraphicsBrush_swiginit(self,_gdi_.new_GraphicsBrush(*args, **kwargs))
     __swig_destroy__ = _gdi_.delete_GraphicsBrush
     __del__ = lambda self : None;
 _gdi_.GraphicsBrush_swigregister(GraphicsBrush)
 
 class GraphicsFont(GraphicsObject):
-    """Proxy of C++ GraphicsFont class"""
+    """
+    A `wx.GraphicsFont` is a native representation of a font (including
+    text colour). The contents are specific an private to the respective
+    renderer.  The only way to get a valid instance is via a CreateFont
+    call on the graphics context or the renderer instance.
+    """
     thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
     __repr__ = _swig_repr
     def __init__(self, *args, **kwargs): 
-        """__init__(self) -> GraphicsFont"""
+        """
+        __init__(self) -> GraphicsFont
+
+        A `wx.GraphicsFont` is a native representation of a font (including
+        text colour). The contents are specific an private to the respective
+        renderer.  The only way to get a valid instance is via a CreateFont
+        call on the graphics context or the renderer instance.
+        """
         _gdi_.GraphicsFont_swiginit(self,_gdi_.new_GraphicsFont(*args, **kwargs))
     __swig_destroy__ = _gdi_.delete_GraphicsFont
     __del__ = lambda self : None;
 _gdi_.GraphicsFont_swigregister(GraphicsFont)
 
 class GraphicsMatrix(GraphicsObject):
-    """Proxy of C++ GraphicsMatrix class"""
+    """
+    A wx.GraphicsMatrix is a native representation of an affine
+    matrix. The contents are specific an private to the respective
+    renderer. The only way to get a valid instance is via a CreateMatrix
+    call on the graphics context or the renderer instance.
+    """
     thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
     __repr__ = _swig_repr
     def __init__(self, *args, **kwargs): 
-        """__init__(self) -> GraphicsMatrix"""
+        """
+        __init__(self) -> GraphicsMatrix
+
+        A wx.GraphicsMatrix is a native representation of an affine
+        matrix. The contents are specific an private to the respective
+        renderer. The only way to get a valid instance is via a CreateMatrix
+        call on the graphics context or the renderer instance.
+        """
         _gdi_.GraphicsMatrix_swiginit(self,_gdi_.new_GraphicsMatrix(*args, **kwargs))
     __swig_destroy__ = _gdi_.delete_GraphicsMatrix
     __del__ = lambda self : None;
@@ -5135,24 +5206,17 @@ class GraphicsMatrix(GraphicsObject):
         """
         Concat(self, GraphicsMatrix t)
 
-        concatenates the matrix
+        Concatenates the passed in matrix to the current matrix.
         """
         return _gdi_.GraphicsMatrix_Concat(*args, **kwargs)
-
-    def Copy(*args, **kwargs):
-        """
-        Copy(self, GraphicsMatrix t)
-
-        Copy the passed in matrix to this one.
-        """
-        return _gdi_.GraphicsMatrix_Copy(*args, **kwargs)
 
     def Set(*args, **kwargs):
         """
         Set(self, Double a=1.0, Double b=0.0, Double c=0.0, Double d=1.0, 
             Double tx=0.0, Double ty=0.0)
 
-        sets the matrix to the respective values
+        Sets the matrix to the specified values (default values are the
+        identity matrix.)
         """
         return _gdi_.GraphicsMatrix_Set(*args, **kwargs)
 
@@ -5160,7 +5224,7 @@ class GraphicsMatrix(GraphicsObject):
         """
         Invert(self)
 
-        makes this the inverse matrix
+        Inverts the matrix.
         """
         return _gdi_.GraphicsMatrix_Invert(*args, **kwargs)
 
@@ -5168,7 +5232,7 @@ class GraphicsMatrix(GraphicsObject):
         """
         IsEqual(self, GraphicsMatrix t) -> bool
 
-        returns true if the elements of the transformation matrix are equal
+        Returns ``True`` if the elements of the transformation matrix are equal
         """
         return _gdi_.GraphicsMatrix_IsEqual(*args, **kwargs)
 
@@ -5176,7 +5240,7 @@ class GraphicsMatrix(GraphicsObject):
         """
         IsIdentity(self) -> bool
 
-        return true if this is the identity matrix
+        Returns ``True`` if this is the identity matrix
         """
         return _gdi_.GraphicsMatrix_IsIdentity(*args, **kwargs)
 
@@ -5184,7 +5248,7 @@ class GraphicsMatrix(GraphicsObject):
         """
         Translate(self, Double dx, Double dy)
 
-        add the translation to this matrix
+        Add a translation to this matrix.
         """
         return _gdi_.GraphicsMatrix_Translate(*args, **kwargs)
 
@@ -5192,7 +5256,7 @@ class GraphicsMatrix(GraphicsObject):
         """
         Scale(self, Double xScale, Double yScale)
 
-        add the scale to this matrix
+        Scales this matrix.
         """
         return _gdi_.GraphicsMatrix_Scale(*args, **kwargs)
 
@@ -5200,7 +5264,7 @@ class GraphicsMatrix(GraphicsObject):
         """
         Rotate(self, Double angle)
 
-        add the rotation to this matrix (radians)
+        Rotates this matrix.  The angle should be specified in radians.
         """
         return _gdi_.GraphicsMatrix_Rotate(*args, **kwargs)
 
@@ -5208,7 +5272,7 @@ class GraphicsMatrix(GraphicsObject):
         """
         TransformPoint(self, x, y) --> (x, y)
 
-        applies that matrix to the point
+        Applies this matrix to a point, returns the resulting point values
         """
         return _gdi_.GraphicsMatrix_TransformPoint(*args, **kwargs)
 
@@ -5216,7 +5280,8 @@ class GraphicsMatrix(GraphicsObject):
         """
         TransformDistance(self, dx, dy) --> (dx, dy)
 
-        applies the matrix except for translations
+        Applies this matrix to a distance (ie. performs all transforms except
+        translations)
         """
         return _gdi_.GraphicsMatrix_TransformDistance(*args, **kwargs)
 
@@ -5224,7 +5289,10 @@ class GraphicsMatrix(GraphicsObject):
         """
         GetNativeMatrix(self) -> void
 
-        returns the native representation
+        Returns the native representation of the matrix. For CoreGraphics this
+        is a CFAffineMatrix pointer. For GDIPlus a Matrix Pointer and for
+        Cairo a cairo_matrix_t pointer.  NOTE: For wxPython we still need a
+        way to make this value usable.
         """
         return _gdi_.GraphicsMatrix_GetNativeMatrix(*args, **kwargs)
 
@@ -5244,7 +5312,7 @@ class GraphicsPath(GraphicsObject):
         MoveToPoint(self, Double x, Double y)
         MoveToPoint(self, Point2D p)
 
-        Begins a new subpath at (x,y)
+        Begins a new subpath at the specified point.
         """
         return _gdi_.GraphicsPath_MoveToPoint(*args)
 
@@ -5253,7 +5321,7 @@ class GraphicsPath(GraphicsObject):
         AddLineToPoint(self, Double x, Double y)
         AddLineToPoint(self, Point2D p)
 
-        Adds a straight line from the current point to (x,y) 
+        Adds a straight line from the current point to the specified point.
         """
         return _gdi_.GraphicsPath_AddLineToPoint(*args)
 
@@ -5272,7 +5340,7 @@ class GraphicsPath(GraphicsObject):
         """
         AddPath(self, GraphicsPath path)
 
-        adds another path
+        Adds another path
         """
         return _gdi_.GraphicsPath_AddPath(*args, **kwargs)
 
@@ -5280,7 +5348,7 @@ class GraphicsPath(GraphicsObject):
         """
         CloseSubpath(self)
 
-        closes the current sub-path
+        Closes the current sub-path.
         """
         return _gdi_.GraphicsPath_CloseSubpath(*args, **kwargs)
 
@@ -5317,7 +5385,7 @@ class GraphicsPath(GraphicsObject):
         """
         AddRectangle(self, Double x, Double y, Double w, Double h)
 
-        Appends a rectangle as a new closed subpath
+        Appends a rectangle as a new closed subpath.
         """
         return _gdi_.GraphicsPath_AddRectangle(*args, **kwargs)
 
@@ -5325,7 +5393,7 @@ class GraphicsPath(GraphicsObject):
         """
         AddCircle(self, Double x, Double y, Double r)
 
-        Appends a circle as a new closed subpath with the given radius.
+        Appends a circle around (x,y) with radius r as a new closed subpath.
         """
         return _gdi_.GraphicsPath_AddCircle(*args, **kwargs)
 
@@ -5333,7 +5401,7 @@ class GraphicsPath(GraphicsObject):
         """
         AddArcToPoint(self, Double x1, Double y1, Double x2, Double y2, Double r)
 
-        Draws a an arc to two tangents connecting (current) to (x1,y1) and (x1,y1)
+        Appends an arc to two tangents connecting (current) to (x1,y1) and (x1,y1)
         to (x2,y2), also a straight line from (current) to (x1,y1)
         """
         return _gdi_.GraphicsPath_AddArcToPoint(*args, **kwargs)
@@ -5342,7 +5410,7 @@ class GraphicsPath(GraphicsObject):
         """
         AddEllipse(self, Double x, Double y, Double w, Double h)
 
-        appends an ellipse
+        Appends an ellipse fitting into the passed in rectangle.
         """
         return _gdi_.GraphicsPath_AddEllipse(*args, **kwargs)
 
@@ -5350,7 +5418,7 @@ class GraphicsPath(GraphicsObject):
         """
         AddRoundedRectangle(self, Double x, Double y, Double w, Double h, Double radius)
 
-        appends a rounded rectangle
+        Appends a rounded rectangle.
         """
         return _gdi_.GraphicsPath_AddRoundedRectangle(*args, **kwargs)
 
@@ -5358,7 +5426,9 @@ class GraphicsPath(GraphicsObject):
         """
         GetNativePath(self) -> void
 
-        returns the native path
+        Returns the native path (CGPathRef for Core Graphics, Path pointer for
+        GDIPlus and a cairo_path_t pointer for cairo).  NOTE: For wxPython we
+        still need a way to make this value usable.
         """
         return _gdi_.GraphicsPath_GetNativePath(*args, **kwargs)
 
@@ -5366,8 +5436,9 @@ class GraphicsPath(GraphicsObject):
         """
         UnGetNativePath(self, void p)
 
-        give the native path returned by GetNativePath() back (there might be some
-        deallocations necessary)
+        Gives back the native path returned by GetNativePath() because there
+        might be some deallocations necessary (eg on cairo the native path
+        returned by GetNativePath is newly allocated each time).
         """
         return _gdi_.GraphicsPath_UnGetNativePath(*args, **kwargs)
 
@@ -5375,7 +5446,7 @@ class GraphicsPath(GraphicsObject):
         """
         Transform(self, GraphicsMatrix matrix)
 
-        transforms each point of this path by the matrix
+        Transforms each point of this path by the matrix
         """
         return _gdi_.GraphicsPath_Transform(*args, **kwargs)
 
@@ -5383,7 +5454,7 @@ class GraphicsPath(GraphicsObject):
         """
         GetBox(self) -> wxRect2DDouble
 
-        gets the bounding box enclosing all points (possibly including control points)
+        Gets the bounding box enclosing all points (possibly including control points)
         """
         return _gdi_.GraphicsPath_GetBox(*args, **kwargs)
 
@@ -5391,13 +5462,21 @@ class GraphicsPath(GraphicsObject):
         """
         Contains(self, Double x, Double y, int fillStyle=ODDEVEN_RULE) -> bool
         Contains(self, wxPoint2DDouble c, int fillStyle=ODDEVEN_RULE) -> bool
+
+        Returns ``True`` if the point is within the path.
         """
         return _gdi_.GraphicsPath_Contains(*args)
 
 _gdi_.GraphicsPath_swigregister(GraphicsPath)
 
 class GraphicsContext(GraphicsObject):
-    """Proxy of C++ GraphicsContext class"""
+    """
+    A `wx.GraphicsContext` instance is the object that is drawn upon. It is
+    created by a renderer using the CreateContext calls, this can be done
+    either directly using a renderer instance, or indirectly using the
+    static convenience CreateXXX functions of wx.GraphicsContext that
+    always delegate the task to the default renderer.
+    """
     thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
     def __init__(self): raise AttributeError, "No constructor defined"
     __repr__ = _swig_repr
@@ -5407,6 +5486,8 @@ class GraphicsContext(GraphicsObject):
         """
         Create(WindowDC dc) -> GraphicsContext
         Create(Window window) -> GraphicsContext
+
+        Creates a wx.GraphicsContext either from a window or a DC.
         """
         val = _gdi_.GraphicsContext_Create(*args)
         val.__dc = args[0] # save a ref so the dc will not be deleted before self
@@ -5414,12 +5495,22 @@ class GraphicsContext(GraphicsObject):
 
     Create = staticmethod(Create)
     def CreateFromNative(*args, **kwargs):
-        """CreateFromNative(void context) -> GraphicsContext"""
+        """
+        CreateFromNative(void context) -> GraphicsContext
+
+        Creates a wx.GraphicsContext from a native context. This native context
+        must be eg a CGContextRef for Core Graphics, a Graphics pointer for
+        GDIPlus or a cairo_t pointer for Cairo.
+        """
         return _gdi_.GraphicsContext_CreateFromNative(*args, **kwargs)
 
     CreateFromNative = staticmethod(CreateFromNative)
     def CreateFromNativeWindow(*args, **kwargs):
-        """CreateFromNativeWindow(void window) -> GraphicsContext"""
+        """
+        CreateFromNativeWindow(void window) -> GraphicsContext
+
+        Creates a wx.GraphicsContext from a native window.
+        """
         return _gdi_.GraphicsContext_CreateFromNativeWindow(*args, **kwargs)
 
     CreateFromNativeWindow = staticmethod(CreateFromNativeWindow)
@@ -5427,16 +5518,24 @@ class GraphicsContext(GraphicsObject):
         """
         CreatePath(self) -> GraphicsPath
 
-        creates a path instance that corresponds to the type of graphics context, ie GDIPlus, Cairo, CoreGraphics ...
+        Creates a native graphics path which is initially empty.
         """
         return _gdi_.GraphicsContext_CreatePath(*args, **kwargs)
 
     def CreatePen(*args, **kwargs):
-        """CreatePen(self, Pen pen) -> GraphicsPen"""
+        """
+        CreatePen(self, Pen pen) -> GraphicsPen
+
+        Creates a native pen from a `wx.Pen`.
+        """
         return _gdi_.GraphicsContext_CreatePen(*args, **kwargs)
 
     def CreateBrush(*args, **kwargs):
-        """CreateBrush(self, Brush brush) -> GraphicsBrush"""
+        """
+        CreateBrush(self, Brush brush) -> GraphicsBrush
+
+        Creates a native brush from a `wx.Brush`.
+        """
         return _gdi_.GraphicsContext_CreateBrush(*args, **kwargs)
 
     def CreateLinearGradientBrush(*args, **kwargs):
@@ -5444,8 +5543,8 @@ class GraphicsContext(GraphicsObject):
         CreateLinearGradientBrush(self, Double x1, Double y1, Double x2, Double y2, Colour c1, 
             Colour c2) -> GraphicsBrush
 
-        sets the brush to a linear gradient, starting at (x1,y1) with color c1
-        to (x2,y2) with color c2
+        Creates a native brush, having a linear gradient, starting at (x1,y1)
+        with color c1 to (x2,y2) with color c2.
         """
         return _gdi_.GraphicsContext_CreateLinearGradientBrush(*args, **kwargs)
 
@@ -5454,10 +5553,9 @@ class GraphicsContext(GraphicsObject):
         CreateRadialGradientBrush(self, Double xo, Double yo, Double xc, Double yc, Double radius, 
             Colour oColor, Colour cColor) -> GraphicsBrush
 
-        sets the brush to a radial gradient originating at (xo,yc) with color
-        oColor and ends on a circle around (xc,yc) with radius r and color
-        cColor
-
+        Creates a native brush, having a radial gradient originating at 
+        point (xo,yc) with color oColour and ends on a circle around (xc,yc) with
+        radius r and color cColour.
         """
         return _gdi_.GraphicsContext_CreateRadialGradientBrush(*args, **kwargs)
 
@@ -5465,7 +5563,7 @@ class GraphicsContext(GraphicsObject):
         """
         CreateFont(self, Font font, Colour col=*wxBLACK) -> GraphicsFont
 
-        sets the font
+        Creates a native graphics font from a `wx.Font` and a text colour.
         """
         return _gdi_.GraphicsContext_CreateFont(*args, **kwargs)
 
@@ -5474,7 +5572,8 @@ class GraphicsContext(GraphicsObject):
         CreateMatrix(self, Double a=1.0, Double b=0.0, Double c=0.0, Double d=1.0, 
             Double tx=0.0, Double ty=0.0) -> GraphicsMatrix
 
-        create a 'native' matrix corresponding to these values
+        Creates a native affine transformation matrix from the passed in
+        values. The defaults result in an identity matrix.
         """
         return _gdi_.GraphicsContext_CreateMatrix(*args, **kwargs)
 
@@ -5498,7 +5597,7 @@ class GraphicsContext(GraphicsObject):
         """
         ClipRegion(self, Region region)
 
-        clips drawings to the region
+        Clips drawings to the region, combined to current clipping region.
         """
         return _gdi_.GraphicsContext_ClipRegion(*args, **kwargs)
 
@@ -5506,7 +5605,7 @@ class GraphicsContext(GraphicsObject):
         """
         Clip(self, Double x, Double y, Double w, Double h)
 
-        clips drawings to the rect
+        Clips drawings to the rectangle.
         """
         return _gdi_.GraphicsContext_Clip(*args, **kwargs)
 
@@ -5514,7 +5613,7 @@ class GraphicsContext(GraphicsObject):
         """
         ResetClip(self)
 
-        resets the clipping to original extent
+        Resets the clipping to original shape.
         """
         return _gdi_.GraphicsContext_ResetClip(*args, **kwargs)
 
@@ -5522,7 +5621,8 @@ class GraphicsContext(GraphicsObject):
         """
         GetNativeContext(self) -> void
 
-        returns the native context
+        Returns the native context (CGContextRef for Core Graphics, Graphics
+        pointer for GDIPlus and cairo_t pointer for cairo).
         """
         return _gdi_.GraphicsContext_GetNativeContext(*args, **kwargs)
 
@@ -5530,7 +5630,7 @@ class GraphicsContext(GraphicsObject):
         """
         Translate(self, Double dx, Double dy)
 
-        translate the current transformation matrix CTM of the context
+        Translates the current transformation matrix.
         """
         return _gdi_.GraphicsContext_Translate(*args, **kwargs)
 
@@ -5538,7 +5638,7 @@ class GraphicsContext(GraphicsObject):
         """
         Scale(self, Double xScale, Double yScale)
 
-        scale the current transformation matrix CTM of the context
+        Scale the current transformation matrix of the context.
         """
         return _gdi_.GraphicsContext_Scale(*args, **kwargs)
 
@@ -5546,7 +5646,8 @@ class GraphicsContext(GraphicsObject):
         """
         Rotate(self, Double angle)
 
-        rotate (radians) the current transformation matrix CTM of the context
+        Rotate the current transformation matrix of the context.  ``angle`` is
+        specified in radians.
         """
         return _gdi_.GraphicsContext_Rotate(*args, **kwargs)
 
@@ -5554,7 +5655,8 @@ class GraphicsContext(GraphicsObject):
         """
         ConcatTransform(self, GraphicsMatrix matrix)
 
-        concatenates this transform with the current transform of this context
+        Concatenates the passed in transform with the current transform of
+        this context.
         """
         return _gdi_.GraphicsContext_ConcatTransform(*args, **kwargs)
 
@@ -5562,7 +5664,7 @@ class GraphicsContext(GraphicsObject):
         """
         SetTransform(self, GraphicsMatrix matrix)
 
-        sets the transform of this context
+        Sets the current transform of this context.
         """
         return _gdi_.GraphicsContext_SetTransform(*args, **kwargs)
 
@@ -5570,7 +5672,7 @@ class GraphicsContext(GraphicsObject):
         """
         GetTransform(self) -> GraphicsMatrix
 
-        gets the matrix of this context
+        Gets the current transformation matrix of this context.
         """
         return _gdi_.GraphicsContext_GetTransform(*args, **kwargs)
 
@@ -5579,7 +5681,7 @@ class GraphicsContext(GraphicsObject):
         SetPen(self, GraphicsPen pen)
         SetPen(self, Pen pen)
 
-        sets the stroke pen
+        Sets the stroke pen
         """
         return _gdi_.GraphicsContext_SetPen(*args)
 
@@ -5588,7 +5690,7 @@ class GraphicsContext(GraphicsObject):
         SetBrush(self, GraphicsBrush brush)
         SetBrush(self, Brush brush)
 
-        sets the brush for filling
+        Sets the brush for filling
         """
         return _gdi_.GraphicsContext_SetBrush(*args)
 
@@ -5597,7 +5699,7 @@ class GraphicsContext(GraphicsObject):
         SetFont(self, GraphicsFont font)
         SetFont(self, Font font, Colour colour=*wxBLACK)
 
-        sets the font
+        Sets the font
         """
         return _gdi_.GraphicsContext_SetFont(*args)
 
@@ -5605,7 +5707,7 @@ class GraphicsContext(GraphicsObject):
         """
         StrokePath(self, GraphicsPath path)
 
-        strokes along a path with the current pen
+        Strokes along a path with the current pen.
         """
         return _gdi_.GraphicsContext_StrokePath(*args, **kwargs)
 
@@ -5613,7 +5715,7 @@ class GraphicsContext(GraphicsObject):
         """
         FillPath(self, GraphicsPath path, int fillStyle=ODDEVEN_RULE)
 
-        fills a path with the current brush
+        Fills a path with the current brush.
         """
         return _gdi_.GraphicsContext_FillPath(*args, **kwargs)
 
@@ -5621,43 +5723,80 @@ class GraphicsContext(GraphicsObject):
         """
         DrawPath(self, GraphicsPath path, int fillStyle=ODDEVEN_RULE)
 
-        draws a path by first filling and then stroking
+        Draws the path by first filling and then stroking.
         """
         return _gdi_.GraphicsContext_DrawPath(*args, **kwargs)
 
     def DrawText(*args, **kwargs):
-        """DrawText(self, String str, Double x, Double y)"""
+        """
+        DrawText(self, String str, Double x, Double y)
+
+        Draws a text at the defined position.
+        """
         return _gdi_.GraphicsContext_DrawText(*args, **kwargs)
 
     def DrawRotatedText(*args, **kwargs):
-        """DrawRotatedText(self, String str, Double x, Double y, Double angle)"""
+        """
+        DrawRotatedText(self, String str, Double x, Double y, Double angle)
+
+        Draws a text at the defined position, at the given angle.
+        """
         return _gdi_.GraphicsContext_DrawRotatedText(*args, **kwargs)
 
     def GetFullTextExtent(*args, **kwargs):
-        """GetFullTextExtent(self, text) --> (width, height, descent, externalLeading)"""
+        """
+        GetFullTextExtent(self, text) --> (width, height, descent, externalLeading)
+
+        Gets the dimensions of the string using the currently selected
+        font. ``text`` is the string to measure, ``w`` and ``h`` are the total
+        width and height respectively, ``descent`` is the dimension from the
+        baseline of the font to the bottom of the descender, and
+        ``externalLeading`` is any extra vertical space added to the font by
+        the font designer (usually is zero).
+        """
         return _gdi_.GraphicsContext_GetFullTextExtent(*args, **kwargs)
 
     def GetTextExtent(*args, **kwargs):
-        """GetTextExtent(self, text) --> (width, height)"""
+        """
+        GetTextExtent(self, text) --> (width, height)
+
+        Gets the dimensions of the string using the currently selected
+        font. ``text`` is the string to measure, ``w`` and ``h`` are the total
+        width and height respectively.
+        """
         return _gdi_.GraphicsContext_GetTextExtent(*args, **kwargs)
 
     def GetPartialTextExtents(*args, **kwargs):
-        """GetPartialTextExtents(self, text) -> [widths]"""
+        """
+        GetPartialTextExtents(self, text) -> [widths]
+
+        Returns a list of widths from the beginning of ``text`` to the
+        coresponding character in ``text``.
+        """
         return _gdi_.GraphicsContext_GetPartialTextExtents(*args, **kwargs)
 
     def DrawBitmap(*args, **kwargs):
-        """DrawBitmap(self, Bitmap bmp, Double x, Double y, Double w, Double h)"""
+        """
+        DrawBitmap(self, Bitmap bmp, Double x, Double y, Double w, Double h)
+
+        Draws the bitmap. In case of a mono bitmap, this is treated as a mask
+        and the current brush is used for filling.
+        """
         return _gdi_.GraphicsContext_DrawBitmap(*args, **kwargs)
 
     def DrawIcon(*args, **kwargs):
-        """DrawIcon(self, Icon icon, Double x, Double y, Double w, Double h)"""
+        """
+        DrawIcon(self, Icon icon, Double x, Double y, Double w, Double h)
+
+        Draws the icon.
+        """
         return _gdi_.GraphicsContext_DrawIcon(*args, **kwargs)
 
     def StrokeLine(*args, **kwargs):
         """
         StrokeLine(self, Double x1, Double y1, Double x2, Double y2)
 
-        strokes a single line
+        Strokes a single line.
         """
         return _gdi_.GraphicsContext_StrokeLine(*args, **kwargs)
 
@@ -5665,7 +5804,7 @@ class GraphicsContext(GraphicsObject):
         """
         StrokeLines(self, List points)
 
-        stroke lines connecting each of the points
+        Stroke lines connecting each of the points
         """
         return _gdi_.GraphicsContext_StrokeLines(*args, **kwargs)
 
@@ -5673,7 +5812,7 @@ class GraphicsContext(GraphicsObject):
         """
         StrokeLineSegements(self, PyObject beginPoints, PyObject endPoints)
 
-        stroke disconnected lines from begin to end points
+        Stroke disconnected lines from begin to end points
         """
         return _gdi_.GraphicsContext_StrokeLineSegements(*args, **kwargs)
 
@@ -5681,7 +5820,7 @@ class GraphicsContext(GraphicsObject):
         """
         DrawLines(self, size_t points, int fillStyle=ODDEVEN_RULE)
 
-        draws a polygon
+        Draws a polygon.
         """
         return _gdi_.GraphicsContext_DrawLines(*args, **kwargs)
 
@@ -5689,7 +5828,7 @@ class GraphicsContext(GraphicsObject):
         """
         DrawRectangle(self, Double x, Double y, Double w, Double h)
 
-        draws a rectangle
+        Draws a rectangle.
         """
         return _gdi_.GraphicsContext_DrawRectangle(*args, **kwargs)
 
@@ -5697,7 +5836,7 @@ class GraphicsContext(GraphicsObject):
         """
         DrawEllipse(self, Double x, Double y, Double w, Double h)
 
-        draws an ellipse
+        Draws an ellipse.
         """
         return _gdi_.GraphicsContext_DrawEllipse(*args, **kwargs)
 
@@ -5705,7 +5844,7 @@ class GraphicsContext(GraphicsObject):
         """
         DrawRoundedRectangle(self, Double x, Double y, Double w, Double h, Double radius)
 
-        draws a rounded rectangle
+        Draws a rounded rectangle
         """
         return _gdi_.GraphicsContext_DrawRoundedRectangle(*args, **kwargs)
 
@@ -5729,17 +5868,29 @@ def GraphicsContext_Create(*args):
   """
     Create(WindowDC dc) -> GraphicsContext
     GraphicsContext_Create(Window window) -> GraphicsContext
+
+    Creates a wx.GraphicsContext either from a window or a DC.
     """
   val = _gdi_.GraphicsContext_Create(*args)
   val.__dc = args[0] # save a ref so the dc will not be deleted before self
   return val
 
 def GraphicsContext_CreateFromNative(*args, **kwargs):
-  """GraphicsContext_CreateFromNative(void context) -> GraphicsContext"""
+  """
+    GraphicsContext_CreateFromNative(void context) -> GraphicsContext
+
+    Creates a wx.GraphicsContext from a native context. This native context
+    must be eg a CGContextRef for Core Graphics, a Graphics pointer for
+    GDIPlus or a cairo_t pointer for Cairo.
+    """
   return _gdi_.GraphicsContext_CreateFromNative(*args, **kwargs)
 
 def GraphicsContext_CreateFromNativeWindow(*args, **kwargs):
-  """GraphicsContext_CreateFromNativeWindow(void window) -> GraphicsContext"""
+  """
+    GraphicsContext_CreateFromNativeWindow(void window) -> GraphicsContext
+
+    Creates a wx.GraphicsContext from a native window.
+    """
   return _gdi_.GraphicsContext_CreateFromNativeWindow(*args, **kwargs)
 
 class GraphicsRenderer(_core.Object):

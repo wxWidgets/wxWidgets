@@ -3289,6 +3289,7 @@ class PyWindow(_core.Window):
         """_setCallbackInfo(self, PyObject self, PyObject _class)"""
         return _windows_.PyWindow__setCallbackInfo(*args, **kwargs)
 
+    SetBestSize = wx.Window.SetInitialSize 
     def DoEraseBackground(*args, **kwargs):
         """DoEraseBackground(self, DC dc) -> bool"""
         return _windows_.PyWindow_DoEraseBackground(*args, **kwargs)
@@ -3465,6 +3466,7 @@ class PyPanel(Panel):
         """_setCallbackInfo(self, PyObject self, PyObject _class)"""
         return _windows_.PyPanel__setCallbackInfo(*args, **kwargs)
 
+    SetBestSize = wx.Window.SetInitialSize 
     def DoEraseBackground(*args, **kwargs):
         """DoEraseBackground(self, DC dc) -> bool"""
         return _windows_.PyPanel_DoEraseBackground(*args, **kwargs)
@@ -3641,6 +3643,7 @@ class PyScrolledWindow(ScrolledWindow):
         """_setCallbackInfo(self, PyObject self, PyObject _class)"""
         return _windows_.PyScrolledWindow__setCallbackInfo(*args, **kwargs)
 
+    SetBestSize = wx.Window.SetInitialSize 
     def DoEraseBackground(*args, **kwargs):
         """DoEraseBackground(self, DC dc) -> bool"""
         return _windows_.PyScrolledWindow_DoEraseBackground(*args, **kwargs)

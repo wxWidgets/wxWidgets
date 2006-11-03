@@ -3901,9 +3901,6 @@ public:
 
 #endif
 
-SWIGINTERN void wxGraphicsMatrix_Copy(wxGraphicsMatrix *self,wxGraphicsMatrix const &t){
-            *self = t;
-        }
 SWIGINTERN PyObject *wxGraphicsContext_GetTextExtent(wxGraphicsContext *self,wxString const &text){
             wxDouble width = 0.0,
                      height = 0.0;
@@ -23914,167 +23911,6 @@ SWIGINTERN PyObject *DCClipper_swiginit(PyObject *SWIGUNUSEDPARM(self), PyObject
   return SWIG_Python_InitShadowInstance(args);
 }
 
-SWIGINTERN PyObject *_wrap_new_MemoryDC(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
-  PyObject *resultobj = 0;
-  wxBitmap &arg1_defvalue = wxNullBitmap ;
-  wxBitmap *arg1 = (wxBitmap *) &arg1_defvalue ;
-  wxMemoryDC *result = 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  char *  kwnames[] = {
-    (char *) "bitmap", NULL 
-  };
-  
-  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"|O:new_MemoryDC",kwnames,&obj0)) SWIG_fail;
-  if (obj0) {
-    res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_wxBitmap,  0 );
-    if (!SWIG_IsOK(res1)) {
-      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_MemoryDC" "', expected argument " "1"" of type '" "wxBitmap &""'"); 
-    }
-    if (!argp1) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_MemoryDC" "', expected argument " "1"" of type '" "wxBitmap &""'"); 
-    }
-    arg1 = reinterpret_cast< wxBitmap * >(argp1);
-  }
-  {
-    if (!wxPyCheckForApp()) SWIG_fail;
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    result = (wxMemoryDC *)new wxMemoryDC(*arg1);
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) SWIG_fail;
-  }
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_wxMemoryDC, SWIG_POINTER_NEW |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_new_MemoryDCFromDC(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
-  PyObject *resultobj = 0;
-  wxDC *arg1 = (wxDC *) 0 ;
-  wxMemoryDC *result = 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  char *  kwnames[] = {
-    (char *) "oldDC", NULL 
-  };
-  
-  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:new_MemoryDCFromDC",kwnames,&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxDC, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_MemoryDCFromDC" "', expected argument " "1"" of type '" "wxDC *""'"); 
-  }
-  arg1 = reinterpret_cast< wxDC * >(argp1);
-  {
-    if (!wxPyCheckForApp()) SWIG_fail;
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    result = (wxMemoryDC *)new wxMemoryDC(arg1);
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) SWIG_fail;
-  }
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_wxMemoryDC, SWIG_POINTER_OWN |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_MemoryDC_SelectObject(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
-  PyObject *resultobj = 0;
-  wxMemoryDC *arg1 = (wxMemoryDC *) 0 ;
-  wxBitmap *arg2 = 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  char *  kwnames[] = {
-    (char *) "self",(char *) "bitmap", NULL 
-  };
-  
-  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:MemoryDC_SelectObject",kwnames,&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxMemoryDC, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "MemoryDC_SelectObject" "', expected argument " "1"" of type '" "wxMemoryDC *""'"); 
-  }
-  arg1 = reinterpret_cast< wxMemoryDC * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_wxBitmap,  0 );
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "MemoryDC_SelectObject" "', expected argument " "2"" of type '" "wxBitmap &""'"); 
-  }
-  if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "MemoryDC_SelectObject" "', expected argument " "2"" of type '" "wxBitmap &""'"); 
-  }
-  arg2 = reinterpret_cast< wxBitmap * >(argp2);
-  {
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    (arg1)->SelectObject(*arg2);
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) SWIG_fail;
-  }
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_MemoryDC_SelectObjectAsSource(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
-  PyObject *resultobj = 0;
-  wxMemoryDC *arg1 = (wxMemoryDC *) 0 ;
-  wxBitmap *arg2 = 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  char *  kwnames[] = {
-    (char *) "self",(char *) "bmp", NULL 
-  };
-  
-  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:MemoryDC_SelectObjectAsSource",kwnames,&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxMemoryDC, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "MemoryDC_SelectObjectAsSource" "', expected argument " "1"" of type '" "wxMemoryDC *""'"); 
-  }
-  arg1 = reinterpret_cast< wxMemoryDC * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_wxBitmap,  0  | 0);
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "MemoryDC_SelectObjectAsSource" "', expected argument " "2"" of type '" "wxBitmap const &""'"); 
-  }
-  if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "MemoryDC_SelectObjectAsSource" "', expected argument " "2"" of type '" "wxBitmap const &""'"); 
-  }
-  arg2 = reinterpret_cast< wxBitmap * >(argp2);
-  {
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    (arg1)->SelectObjectAsSource((wxBitmap const &)*arg2);
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) SWIG_fail;
-  }
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *MemoryDC_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *obj;
-  if (!SWIG_Python_UnpackTuple(args,(char*)"swigregister", 1, 1,&obj)) return NULL;
-  SWIG_TypeNewClientData(SWIGTYPE_p_wxMemoryDC, SWIG_NewClientData(obj));
-  return SWIG_Py_Void();
-}
-
-SWIGINTERN PyObject *MemoryDC_swiginit(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  return SWIG_Python_InitShadowInstance(args);
-}
-
 SWIGINTERN PyObject *_wrap_new_ScreenDC(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   wxScreenDC *result = 0 ;
@@ -24342,6 +24178,167 @@ SWIGINTERN PyObject *PaintDC_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObje
 }
 
 SWIGINTERN PyObject *PaintDC_swiginit(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  return SWIG_Python_InitShadowInstance(args);
+}
+
+SWIGINTERN PyObject *_wrap_new_MemoryDC(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxBitmap &arg1_defvalue = wxNullBitmap ;
+  wxBitmap *arg1 = (wxBitmap *) &arg1_defvalue ;
+  wxMemoryDC *result = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  char *  kwnames[] = {
+    (char *) "bitmap", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"|O:new_MemoryDC",kwnames,&obj0)) SWIG_fail;
+  if (obj0) {
+    res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_wxBitmap,  0 );
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_MemoryDC" "', expected argument " "1"" of type '" "wxBitmap &""'"); 
+    }
+    if (!argp1) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_MemoryDC" "', expected argument " "1"" of type '" "wxBitmap &""'"); 
+    }
+    arg1 = reinterpret_cast< wxBitmap * >(argp1);
+  }
+  {
+    if (!wxPyCheckForApp()) SWIG_fail;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = (wxMemoryDC *)new wxMemoryDC(*arg1);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_wxMemoryDC, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_MemoryDCFromDC(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxDC *arg1 = (wxDC *) 0 ;
+  wxMemoryDC *result = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  char *  kwnames[] = {
+    (char *) "oldDC", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:new_MemoryDCFromDC",kwnames,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxDC, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_MemoryDCFromDC" "', expected argument " "1"" of type '" "wxDC *""'"); 
+  }
+  arg1 = reinterpret_cast< wxDC * >(argp1);
+  {
+    if (!wxPyCheckForApp()) SWIG_fail;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = (wxMemoryDC *)new wxMemoryDC(arg1);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_wxMemoryDC, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_MemoryDC_SelectObject(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxMemoryDC *arg1 = (wxMemoryDC *) 0 ;
+  wxBitmap *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "bitmap", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:MemoryDC_SelectObject",kwnames,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxMemoryDC, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "MemoryDC_SelectObject" "', expected argument " "1"" of type '" "wxMemoryDC *""'"); 
+  }
+  arg1 = reinterpret_cast< wxMemoryDC * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_wxBitmap,  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "MemoryDC_SelectObject" "', expected argument " "2"" of type '" "wxBitmap &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "MemoryDC_SelectObject" "', expected argument " "2"" of type '" "wxBitmap &""'"); 
+  }
+  arg2 = reinterpret_cast< wxBitmap * >(argp2);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    (arg1)->SelectObject(*arg2);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_MemoryDC_SelectObjectAsSource(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxMemoryDC *arg1 = (wxMemoryDC *) 0 ;
+  wxBitmap *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "bmp", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:MemoryDC_SelectObjectAsSource",kwnames,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxMemoryDC, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "MemoryDC_SelectObjectAsSource" "', expected argument " "1"" of type '" "wxMemoryDC *""'"); 
+  }
+  arg1 = reinterpret_cast< wxMemoryDC * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_wxBitmap,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "MemoryDC_SelectObjectAsSource" "', expected argument " "2"" of type '" "wxBitmap const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "MemoryDC_SelectObjectAsSource" "', expected argument " "2"" of type '" "wxBitmap const &""'"); 
+  }
+  arg2 = reinterpret_cast< wxBitmap * >(argp2);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    (arg1)->SelectObjectAsSource((wxBitmap const &)*arg2);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *MemoryDC_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *obj;
+  if (!SWIG_Python_UnpackTuple(args,(char*)"swigregister", 1, 1,&obj)) return NULL;
+  SWIG_TypeNewClientData(SWIGTYPE_p_wxMemoryDC, SWIG_NewClientData(obj));
+  return SWIG_Py_Void();
+}
+
+SWIGINTERN PyObject *MemoryDC_swiginit(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   return SWIG_Python_InitShadowInstance(args);
 }
 
@@ -25502,45 +25499,6 @@ SWIGINTERN PyObject *_wrap_GraphicsMatrix_Concat(PyObject *SWIGUNUSEDPARM(self),
   arg2 = reinterpret_cast< wxGraphicsMatrix * >(argp2);
   {
     (arg1)->Concat((wxGraphicsMatrix const &)*arg2);
-    if (PyErr_Occurred()) SWIG_fail;
-  }
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_GraphicsMatrix_Copy(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
-  PyObject *resultobj = 0;
-  wxGraphicsMatrix *arg1 = (wxGraphicsMatrix *) 0 ;
-  wxGraphicsMatrix *arg2 = 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  char *  kwnames[] = {
-    (char *) "self",(char *) "t", NULL 
-  };
-  
-  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:GraphicsMatrix_Copy",kwnames,&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxGraphicsMatrix, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "GraphicsMatrix_Copy" "', expected argument " "1"" of type '" "wxGraphicsMatrix *""'"); 
-  }
-  arg1 = reinterpret_cast< wxGraphicsMatrix * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_wxGraphicsMatrix,  0  | 0);
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "GraphicsMatrix_Copy" "', expected argument " "2"" of type '" "wxGraphicsMatrix const &""'"); 
-  }
-  if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "GraphicsMatrix_Copy" "', expected argument " "2"" of type '" "wxGraphicsMatrix const &""'"); 
-  }
-  arg2 = reinterpret_cast< wxGraphicsMatrix * >(argp2);
-  {
-    wxGraphicsMatrix_Copy(arg1,(wxGraphicsMatrix const &)*arg2);
     if (PyErr_Occurred()) SWIG_fail;
   }
   resultobj = SWIG_Py_Void();
@@ -38696,12 +38654,6 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"delete_DCClipper", (PyCFunction)_wrap_delete_DCClipper, METH_O, NULL},
 	 { (char *)"DCClipper_swigregister", DCClipper_swigregister, METH_VARARGS, NULL},
 	 { (char *)"DCClipper_swiginit", DCClipper_swiginit, METH_VARARGS, NULL},
-	 { (char *)"new_MemoryDC", (PyCFunction) _wrap_new_MemoryDC, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"new_MemoryDCFromDC", (PyCFunction) _wrap_new_MemoryDCFromDC, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"MemoryDC_SelectObject", (PyCFunction) _wrap_MemoryDC_SelectObject, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"MemoryDC_SelectObjectAsSource", (PyCFunction) _wrap_MemoryDC_SelectObjectAsSource, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"MemoryDC_swigregister", MemoryDC_swigregister, METH_VARARGS, NULL},
-	 { (char *)"MemoryDC_swiginit", MemoryDC_swiginit, METH_VARARGS, NULL},
 	 { (char *)"new_ScreenDC", (PyCFunction)_wrap_new_ScreenDC, METH_NOARGS, NULL},
 	 { (char *)"ScreenDC_StartDrawingOnTopWin", (PyCFunction) _wrap_ScreenDC_StartDrawingOnTopWin, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"ScreenDC_StartDrawingOnTop", (PyCFunction) _wrap_ScreenDC_StartDrawingOnTop, METH_VARARGS | METH_KEYWORDS, NULL},
@@ -38717,6 +38669,12 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"new_PaintDC", (PyCFunction) _wrap_new_PaintDC, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"PaintDC_swigregister", PaintDC_swigregister, METH_VARARGS, NULL},
 	 { (char *)"PaintDC_swiginit", PaintDC_swiginit, METH_VARARGS, NULL},
+	 { (char *)"new_MemoryDC", (PyCFunction) _wrap_new_MemoryDC, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"new_MemoryDCFromDC", (PyCFunction) _wrap_new_MemoryDCFromDC, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"MemoryDC_SelectObject", (PyCFunction) _wrap_MemoryDC_SelectObject, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"MemoryDC_SelectObjectAsSource", (PyCFunction) _wrap_MemoryDC_SelectObjectAsSource, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"MemoryDC_swigregister", MemoryDC_swigregister, METH_VARARGS, NULL},
+	 { (char *)"MemoryDC_swiginit", MemoryDC_swiginit, METH_VARARGS, NULL},
 	 { (char *)"new_BufferedDC", _wrap_new_BufferedDC, METH_VARARGS, NULL},
 	 { (char *)"delete_BufferedDC", (PyCFunction)_wrap_delete_BufferedDC, METH_O, NULL},
 	 { (char *)"BufferedDC_UnMask", (PyCFunction)_wrap_BufferedDC_UnMask, METH_O, NULL},
@@ -38771,7 +38729,6 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"new_GraphicsMatrix", (PyCFunction)_wrap_new_GraphicsMatrix, METH_NOARGS, NULL},
 	 { (char *)"delete_GraphicsMatrix", (PyCFunction)_wrap_delete_GraphicsMatrix, METH_O, NULL},
 	 { (char *)"GraphicsMatrix_Concat", (PyCFunction) _wrap_GraphicsMatrix_Concat, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"GraphicsMatrix_Copy", (PyCFunction) _wrap_GraphicsMatrix_Copy, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"GraphicsMatrix_Set", (PyCFunction) _wrap_GraphicsMatrix_Set, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"GraphicsMatrix_Invert", (PyCFunction)_wrap_GraphicsMatrix_Invert, METH_O, NULL},
 	 { (char *)"GraphicsMatrix_IsEqual", (PyCFunction) _wrap_GraphicsMatrix_IsEqual, METH_VARARGS | METH_KEYWORDS, NULL},
@@ -39085,11 +39042,20 @@ static void *_p_wxBufferedDCTo_p_wxMemoryDC(void *x) {
 static void *_p_wxBufferedPaintDCTo_p_wxMemoryDC(void *x) {
     return (void *)((wxMemoryDC *) (wxBufferedDC *) ((wxBufferedPaintDC *) x));
 }
+static void *_p_wxBufferedDCTo_p_wxWindowDC(void *x) {
+    return (void *)((wxWindowDC *) (wxMemoryDC *) ((wxBufferedDC *) x));
+}
+static void *_p_wxMemoryDCTo_p_wxWindowDC(void *x) {
+    return (void *)((wxWindowDC *)  ((wxMemoryDC *) x));
+}
 static void *_p_wxClientDCTo_p_wxWindowDC(void *x) {
     return (void *)((wxWindowDC *)  ((wxClientDC *) x));
 }
 static void *_p_wxPaintDCTo_p_wxWindowDC(void *x) {
     return (void *)((wxWindowDC *) (wxClientDC *) ((wxPaintDC *) x));
+}
+static void *_p_wxBufferedPaintDCTo_p_wxWindowDC(void *x) {
+    return (void *)((wxWindowDC *) (wxMemoryDC *)(wxBufferedDC *) ((wxBufferedPaintDC *) x));
 }
 static void *_p_wxPyLocaleTo_p_wxLocale(void *x) {
     return (void *)((wxLocale *)  ((wxPyLocale *) x));
@@ -39143,16 +39109,16 @@ static void *_p_wxScreenDCTo_p_wxDC(void *x) {
     return (void *)((wxDC *)  ((wxScreenDC *) x));
 }
 static void *_p_wxBufferedDCTo_p_wxDC(void *x) {
-    return (void *)((wxDC *) (wxMemoryDC *) ((wxBufferedDC *) x));
+    return (void *)((wxDC *) (wxWindowDC *)(wxMemoryDC *) ((wxBufferedDC *) x));
 }
 static void *_p_wxMirrorDCTo_p_wxDC(void *x) {
     return (void *)((wxDC *)  ((wxMirrorDC *) x));
 }
-static void *_p_wxMemoryDCTo_p_wxDC(void *x) {
-    return (void *)((wxDC *)  ((wxMemoryDC *) x));
-}
 static void *_p_wxWindowDCTo_p_wxDC(void *x) {
     return (void *)((wxDC *)  ((wxWindowDC *) x));
+}
+static void *_p_wxMemoryDCTo_p_wxDC(void *x) {
+    return (void *)((wxDC *) (wxWindowDC *) ((wxMemoryDC *) x));
 }
 static void *_p_wxMetaFileDCTo_p_wxDC(void *x) {
     return (void *)((wxDC *)  ((wxMetaFileDC *) x));
@@ -39164,7 +39130,7 @@ static void *_p_wxPaintDCTo_p_wxDC(void *x) {
     return (void *)((wxDC *) (wxWindowDC *)(wxClientDC *) ((wxPaintDC *) x));
 }
 static void *_p_wxBufferedPaintDCTo_p_wxDC(void *x) {
-    return (void *)((wxDC *) (wxMemoryDC *)(wxBufferedDC *) ((wxBufferedPaintDC *) x));
+    return (void *)((wxDC *) (wxWindowDC *)(wxMemoryDC *)(wxBufferedDC *) ((wxBufferedPaintDC *) x));
 }
 static void *_p_wxAutoBufferedPaintDCTo_p_wxDC(void *x) {
     return (void *)((wxDC *)  ((wxAutoBufferedPaintDC *) x));
@@ -39281,7 +39247,7 @@ static void *_p_wxFSFileTo_p_wxObject(void *x) {
     return (void *)((wxObject *)  ((wxFSFile *) x));
 }
 static void *_p_wxMemoryDCTo_p_wxObject(void *x) {
-    return (void *)((wxObject *) (wxDC *) ((wxMemoryDC *) x));
+    return (void *)((wxObject *) (wxDC *)(wxWindowDC *) ((wxMemoryDC *) x));
 }
 static void *_p_wxRegionTo_p_wxObject(void *x) {
     return (void *)((wxObject *) (wxGDIObject *) ((wxRegion *) x));
@@ -39401,7 +39367,7 @@ static void *_p_wxPaintDCTo_p_wxObject(void *x) {
     return (void *)((wxObject *) (wxDC *)(wxWindowDC *)(wxClientDC *) ((wxPaintDC *) x));
 }
 static void *_p_wxBufferedPaintDCTo_p_wxObject(void *x) {
-    return (void *)((wxObject *) (wxDC *)(wxMemoryDC *)(wxBufferedDC *) ((wxBufferedPaintDC *) x));
+    return (void *)((wxObject *) (wxDC *)(wxWindowDC *)(wxMemoryDC *)(wxBufferedDC *) ((wxBufferedPaintDC *) x));
 }
 static void *_p_wxAutoBufferedPaintDCTo_p_wxObject(void *x) {
     return (void *)((wxObject *) (wxDC *) ((wxAutoBufferedPaintDC *) x));
@@ -39434,7 +39400,7 @@ static void *_p_wxPaletteTo_p_wxObject(void *x) {
     return (void *)((wxObject *) (wxGDIObject *) ((wxPalette *) x));
 }
 static void *_p_wxBufferedDCTo_p_wxObject(void *x) {
-    return (void *)((wxObject *) (wxDC *)(wxMemoryDC *) ((wxBufferedDC *) x));
+    return (void *)((wxObject *) (wxDC *)(wxWindowDC *)(wxMemoryDC *) ((wxBufferedDC *) x));
 }
 static void *_p_wxImageListTo_p_wxObject(void *x) {
     return (void *)((wxObject *)  ((wxImageList *) x));
@@ -40072,7 +40038,7 @@ static swig_cast_info _swigc__p_wxSplitterRenderParams[] = {  {&_swigt__p_wxSpli
 static swig_cast_info _swigc__p_wxStockGDI[] = {  {&_swigt__p_wxStockGDI, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxString[] = {  {&_swigt__p_wxString, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxWindow[] = {  {&_swigt__p_wxControl, _p_wxControlTo_p_wxWindow, 0, 0},  {&_swigt__p_wxWindow, 0, 0, 0},  {&_swigt__p_wxControlWithItems, _p_wxControlWithItemsTo_p_wxWindow, 0, 0},  {&_swigt__p_wxMenuBar, _p_wxMenuBarTo_p_wxWindow, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_wxWindowDC[] = {  {&_swigt__p_wxWindowDC, 0, 0, 0},  {&_swigt__p_wxClientDC, _p_wxClientDCTo_p_wxWindowDC, 0, 0},  {&_swigt__p_wxPaintDC, _p_wxPaintDCTo_p_wxWindowDC, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_wxWindowDC[] = {  {&_swigt__p_wxBufferedDC, _p_wxBufferedDCTo_p_wxWindowDC, 0, 0},  {&_swigt__p_wxWindowDC, 0, 0, 0},  {&_swigt__p_wxMemoryDC, _p_wxMemoryDCTo_p_wxWindowDC, 0, 0},  {&_swigt__p_wxBufferedPaintDC, _p_wxBufferedPaintDCTo_p_wxWindowDC, 0, 0},  {&_swigt__p_wxClientDC, _p_wxClientDCTo_p_wxWindowDC, 0, 0},  {&_swigt__p_wxPaintDC, _p_wxPaintDCTo_p_wxWindowDC, 0, 0},{0, 0, 0, 0}};
 
 static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_buffer,

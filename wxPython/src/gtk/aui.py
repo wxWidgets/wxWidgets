@@ -201,6 +201,7 @@ AUI_BUTTON_MAXIMIZE_RESTORE = _aui.AUI_BUTTON_MAXIMIZE_RESTORE
 AUI_BUTTON_MINIMIZE = _aui.AUI_BUTTON_MINIMIZE
 AUI_BUTTON_PIN = _aui.AUI_BUTTON_PIN
 AUI_BUTTON_OPTIONS = _aui.AUI_BUTTON_OPTIONS
+AUI_BUTTON_WINDOWLIST = _aui.AUI_BUTTON_WINDOWLIST
 AUI_BUTTON_LEFT = _aui.AUI_BUTTON_LEFT
 AUI_BUTTON_RIGHT = _aui.AUI_BUTTON_RIGHT
 AUI_BUTTON_UP = _aui.AUI_BUTTON_UP
@@ -991,7 +992,7 @@ AUI_NB_BOTTOM = _aui.AUI_NB_BOTTOM
 AUI_NB_TAB_SPLIT = _aui.AUI_NB_TAB_SPLIT
 AUI_NB_TAB_MOVE = _aui.AUI_NB_TAB_MOVE
 AUI_NB_SCROLL_BUTTONS = _aui.AUI_NB_SCROLL_BUTTONS
-AUI_NB_PAGELIST_BUTTON = _aui.AUI_NB_PAGELIST_BUTTON
+AUI_NB_WINDOWLIST_BUTTON = _aui.AUI_NB_WINDOWLIST_BUTTON
 AUI_NB_CLOSE_BUTTON = _aui.AUI_NB_CLOSE_BUTTON
 AUI_NB_CLOSE_ON_ACTIVE_TAB = _aui.AUI_NB_CLOSE_ON_ACTIVE_TAB
 AUI_NB_CLOSE_ON_ALL_TABS = _aui.AUI_NB_CLOSE_ON_ALL_TABS
@@ -1016,27 +1017,32 @@ class AuiTabArt(object):
         return _aui.AuiTabArt_SetMeasuringFont(*args, **kwargs)
 
     def DrawBackground(*args, **kwargs):
-        """DrawBackground(self, DC dc, Rect rect)"""
+        """DrawBackground(self, DC dc, Window wnd, Rect rect)"""
         return _aui.AuiTabArt_DrawBackground(*args, **kwargs)
 
     def DrawTab(*args, **kwargs):
         """
-        DrawTab(self, DC dc, Rect in_rect, String caption, bool active, int close_button_state, 
-            Rect out_tab_rect, Rect out_button_rect, 
-            int x_extent)
+        DrawTab(self, DC dc, Window wnd, Rect in_rect, String caption, bool active, 
+            int close_button_state, Rect out_tab_rect, 
+            Rect out_button_rect, int x_extent)
         """
         return _aui.AuiTabArt_DrawTab(*args, **kwargs)
 
     def DrawButton(*args, **kwargs):
         """
-        DrawButton(self, DC dc, Rect in_rect, int bitmap_id, int button_state, 
-            int orientation, Bitmap bitmap_override, Rect out_rect)
+        DrawButton(self, DC dc, Window wnd, Rect in_rect, int bitmap_id, int button_state, 
+            int orientation, Bitmap bitmap_override, 
+            Rect out_rect)
         """
         return _aui.AuiTabArt_DrawButton(*args, **kwargs)
 
+    def ShowWindowList(*args, **kwargs):
+        """ShowWindowList(self, Window wnd, wxArrayString items, int active_idx) -> int"""
+        return _aui.AuiTabArt_ShowWindowList(*args, **kwargs)
+
     def GetTabSize(*args, **kwargs):
         """
-        GetTabSize(self, DC dc, String caption, bool active, int close_button_state, 
+        GetTabSize(self, DC dc, Window wnd, String caption, bool active, int close_button_state, 
             int x_extent) -> Size
         """
         return _aui.AuiTabArt_GetTabSize(*args, **kwargs)

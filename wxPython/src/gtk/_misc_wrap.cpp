@@ -4016,6 +4016,7 @@ IMP_PYCALLBACK_BOOL_INTINT(wxPyFileDropTarget, wxFileDropTarget, OnDrop);
 SWIGINTERN bool wxClipboardLocker___nonzero__(wxClipboardLocker *self){ return !!(*self); }
 
 #include <wx/display.h>
+#include <wx/vidmode.h>
 
 SWIGINTERN bool wxVideoMode___eq__(wxVideoMode *self,wxVideoMode const *other){ return other ? (*self == *other) : false; }
 SWIGINTERN bool wxVideoMode___ne__(wxVideoMode *self,wxVideoMode const *other){ return other ? (*self != *other) : true;  }
