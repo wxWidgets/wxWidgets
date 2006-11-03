@@ -647,7 +647,7 @@ bool wxMGLBitmapHandler::SaveFile(const wxBitmap *bitmap, const wxString& name,
     int w = bitmap->GetWidth(),
         h = bitmap->GetHeight();
 
-    mem.SelectObject(*bitmap);
+    mem.SelectObjectAsSource(*bitmap);
     tdc = mem.GetMGLDC();
 
     switch (type)

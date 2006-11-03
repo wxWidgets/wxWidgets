@@ -35,7 +35,7 @@ void wxBitmapToPixPattern(const wxBitmap& bitmap,
 
     if ( pix != NULL )
     {
-        mem.SelectObject(bitmap);
+        mem.SelectObjectAsSource(bitmap);
         dc = mem.GetMGLDC();
         wxCurrentDCSwitcher curDC(dc);
         dc->beginPixel();
@@ -50,7 +50,7 @@ void wxBitmapToPixPattern(const wxBitmap& bitmap,
 
     if ( mask && bitmap.GetMask() )
     {
-        mem.SelectObject(bitmap.GetMask()->GetBitmap());
+        mem.SelectObjectAsSource(bitmap.GetMask()->GetBitmap());
         dc = mem.GetMGLDC();
         wxCurrentDCSwitcher curDC(dc);
         dc->beginPixel();
