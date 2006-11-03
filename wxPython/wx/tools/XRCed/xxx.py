@@ -475,6 +475,7 @@ class xxxWizard(xxxContainer):
     default = {'title': ''}
     winStyles = []
     exStyles = ['wxWIZARD_EX_HELPBUTTON']
+    styles = ['fg', 'bg', 'font', 'exstyle']
 
 class xxxWizardPage(xxxContainer):
     allParams = ['bitmap']
