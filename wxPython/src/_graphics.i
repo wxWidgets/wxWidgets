@@ -325,16 +325,34 @@ typedef double wxDouble;
 //---------------------------------------------------------------------------
 
 
+DocStr(wxGraphicsObject,
+"This class is the superclass of native graphics objects like pens
+etc. It provides the internal reference counting.  It is not to be
+instantiated by user code.", "");
 class wxGraphicsObject : public wxObject
 {
 public :
     wxGraphicsObject( wxGraphicsRenderer* renderer = NULL );
     virtual ~wxGraphicsObject();
-    bool IsNull() const ;
-    wxGraphicsRenderer* GetRenderer() const;
+    
+    DocDeclStr(
+        bool , IsNull() const ,
+        "Is this object valid (false) or still empty (true)?", "");
+    
+    DocDeclStr(
+        wxGraphicsRenderer* , GetRenderer() const,
+        "Returns the renderer that was used to create this instance, or
+``None`` if it has not been initialized yet.", "");
+    
 };
 
 
+DocStr(wxGraphicsPen,
+"A wx.GraphicsPen is a native representation of a pen. It is used for
+stroking a path on a `wx.GraphicsContext`. The contents are specific and
+private to the respective renderer. The only way to get a valid instance
+is via a CreatePen call on the graphics context or the renderer
+instance.", "");
 class wxGraphicsPen : public wxGraphicsObject
 {
 public :
@@ -342,7 +360,12 @@ public :
     virtual ~wxGraphicsPen();
 };
 
-
+DocStr(wxGraphicsBrush,
+"A wx.GraphicsBrush is a native representation of a brush. It is used
+for filling a path on a `wx.GraphicsContext`. The contents are
+specific and private to the respective renderer. The only way to get a
+valid instance is via a Create...Brush call on the graphics context or
+the renderer instance.", "");
 class wxGraphicsBrush : public wxGraphicsObject
 {
 public :
@@ -351,6 +374,11 @@ public :
 };
 
 
+DocStr(wxGraphicsFont,
+"A `wx.GraphicsFont` is a native representation of a font (including
+text colour). The contents are specific an private to the respective
+renderer.  The only way to get a valid instance is via a CreateFont
+call on the graphics context or the renderer instance.", "");
 class wxGraphicsFont : public wxGraphicsObject
 {
 public :
@@ -361,6 +389,11 @@ public :
 
 //---------------------------------------------------------------------------
 
+DocStr(wxGraphicsMatrix,
+"A wx.GraphicsMatrix is a native representation of an affine
+matrix. The contents are specific an private to the respective
+renderer. The only way to get a valid instance is via a CreateMatrix
+call on the graphics context or the renderer instance.", "");
 class wxGraphicsMatrix : public wxGraphicsObject
 {
 public :
@@ -369,68 +402,73 @@ public :
 
     DocDeclStr(
         virtual void , Concat( const wxGraphicsMatrix& t ),
-        "concatenates the matrix", "");
+        "Concatenates the passed in matrix to the current matrix.", "");
 
-    %extend  {
-        DocStr(Copy,
-               "Copy the passed in matrix to this one.", "");
-        void Copy( const wxGraphicsMatrix& t ) {
-            *self = t;
-        }
-    }
+//     %extend  {
+//         DocStr(Copy,
+//                "Copy the passed in matrix to this one.", "");
+//         void Copy( const wxGraphicsMatrix& t ) {
+//             *self = t;
+//         }
+//     }
 
 
     DocDeclStr(
         virtual void , Set(wxDouble a=1.0, wxDouble b=0.0, wxDouble c=0.0, wxDouble d=1.0,
                            wxDouble tx=0.0, wxDouble ty=0.0),
-        "sets the matrix to the respective values", "");
+        "Sets the matrix to the specified values (default values are the
+identity matrix.)", "");
 
 
     DocDeclStr(
         virtual void , Invert(),
-        "makes this the inverse matrix", "");
+        "Inverts the matrix.", "");
 
 
     DocDeclStr(
         virtual bool , IsEqual( const wxGraphicsMatrix& t) const,
-        "returns true if the elements of the transformation matrix are equal", "");
+        "Returns ``True`` if the elements of the transformation matrix are equal", "");
 
 
     DocDeclStr(
         virtual bool , IsIdentity() const,
-        "return true if this is the identity matrix", "");
+        "Returns ``True`` if this is the identity matrix", "");
 
 
     DocDeclStr(
         virtual void , Translate( wxDouble dx , wxDouble dy ),
-        "add the translation to this matrix", "");
+        "Add a translation to this matrix.", "");
 
 
     DocDeclStr(
         virtual void , Scale( wxDouble xScale , wxDouble yScale ),
-        "add the scale to this matrix", "");
+        "Scales this matrix.", "");
 
 
     DocDeclStr(
         virtual void , Rotate( wxDouble angle ),
-        "add the rotation to this matrix (radians)", "");
+        "Rotates this matrix.  The angle should be specified in radians.", "");
 
 
     DocDeclAStr(
         virtual void , TransformPoint( wxDouble *INOUT, wxDouble *INOUT ) const,
         "TransformPoint(self, x, y) --> (x, y)",
-        "applies that matrix to the point", "");
+        "Applies this matrix to a point, returns the resulting point values", "");
 
 
     DocDeclAStr(
         virtual void , TransformDistance( wxDouble *INOUT, wxDouble *INOUT ) const,
         "TransformDistance(self, dx, dy) --> (dx, dy)",
-        "applies the matrix except for translations", "");
+        "Applies this matrix to a distance (ie. performs all transforms except
+translations)", "");
 
 
     DocDeclStr(
         virtual void * , GetNativeMatrix() const,
-        "returns the native representation", "");
+        "Returns the native representation of the matrix. For CoreGraphics this
+is a CFAffineMatrix pointer. For GDIPlus a Matrix Pointer and for
+Cairo a cairo_matrix_t pointer.  NOTE: For wxPython we still need a
+way to make this value usable.", "");
 };
 
 //---------------------------------------------------------------------------
@@ -444,14 +482,14 @@ public :
 
     %nokwargs MoveToPoint;
     DocStr(MoveToPoint,
-        "Begins a new subpath at (x,y)", "");
+           "Begins a new subpath at the specified point.", "");
     virtual void  MoveToPoint( wxDouble x, wxDouble y );
     void MoveToPoint( const wxPoint2D& p);
 
 
     %nokwargs AddLineToPoint;
     DocStr(AddLineToPoint,
-        "Adds a straight line from the current point to (x,y) ", "");
+        "Adds a straight line from the current point to the specified point.", "");
     virtual void AddLineToPoint( wxDouble x, wxDouble y );
     void AddLineToPoint( const wxPoint2D& p);
 
@@ -469,12 +507,12 @@ points and an end point", "");
 
     DocDeclStr(
         virtual void , AddPath( const wxGraphicsPath& path ),
-        "adds another path", "");
+        "Adds another path", "");
 
 
     DocDeclStr(
         virtual void , CloseSubpath(),
-        "closes the current sub-path", "");
+        "Closes the current sub-path.", "");
 
 
     DocDeclStr(
@@ -499,54 +537,57 @@ point and an end point", "");
 
     DocDeclStr(
         virtual void , AddRectangle( wxDouble x, wxDouble y, wxDouble w, wxDouble h ),
-        "Appends a rectangle as a new closed subpath", "");
+        "Appends a rectangle as a new closed subpath.", "");
 
 
     DocDeclStr(
         virtual void , AddCircle( wxDouble x, wxDouble y, wxDouble r ),
-        "Appends a circle as a new closed subpath with the given radius.", "");
+        "Appends a circle around (x,y) with radius r as a new closed subpath.", "");
 
 
     DocDeclStr(
         virtual void , AddArcToPoint( wxDouble x1, wxDouble y1 , wxDouble x2, wxDouble y2, wxDouble r ) ,
-        "Draws a an arc to two tangents connecting (current) to (x1,y1) and (x1,y1)
+        "Appends an arc to two tangents connecting (current) to (x1,y1) and (x1,y1)
 to (x2,y2), also a straight line from (current) to (x1,y1)", "");
 
 
     DocDeclStr(
         virtual void , AddEllipse( wxDouble x, wxDouble y, wxDouble w, wxDouble h),
-        "appends an ellipse", "");
+        "Appends an ellipse fitting into the passed in rectangle.", "");
 
 
     DocDeclStr(
         virtual void , AddRoundedRectangle( wxDouble x, wxDouble y, wxDouble w, wxDouble h, wxDouble radius),
-        "appends a rounded rectangle", "");
+        "Appends a rounded rectangle.", "");
 
 
     DocDeclStr(
         virtual void * , GetNativePath() const,
-        "returns the native path", "");
+        "Returns the native path (CGPathRef for Core Graphics, Path pointer for
+GDIPlus and a cairo_path_t pointer for cairo).  NOTE: For wxPython we
+still need a way to make this value usable.", "");
 
 
     DocDeclStr(
         virtual void , UnGetNativePath(void *p) const,
-        "give the native path returned by GetNativePath() back (there might be some
-deallocations necessary)", "");
+        "Gives back the native path returned by GetNativePath() because there
+might be some deallocations necessary (eg on cairo the native path
+returned by GetNativePath is newly allocated each time).", "");
 
 
     DocDeclStr(
         virtual void , Transform( const wxGraphicsMatrix& matrix ),
-        "transforms each point of this path by the matrix", "");
+        "Transforms each point of this path by the matrix", "");
 
 
     DocDeclStr(
         wxRect2DDouble , GetBox() const,
-        "gets the bounding box enclosing all points (possibly including control points)", "");
+        "Gets the bounding box enclosing all points (possibly including control points)", "");
 
 
     %nokwargs Contains;
     DocStr(Contains,
-        "", "");
+        "Returns ``True`` if the point is within the path.", "");
     virtual bool Contains( wxDouble x, wxDouble y, int fillStyle = wxODDEVEN_RULE) const;
     bool Contains( const wxPoint2DDouble& c, int fillStyle = wxODDEVEN_RULE) const;
 
@@ -565,71 +606,87 @@ const wxGraphicsPath    wxNullGraphicsPath;
 
 //---------------------------------------------------------------------------
 
+DocStr(wxGraphicsContext,
+"A `wx.GraphicsContext` instance is the object that is drawn upon. It is
+created by a renderer using the CreateContext calls, this can be done
+either directly using a renderer instance, or indirectly using the
+static convenience CreateXXX functions of wx.GraphicsContext that
+always delegate the task to the default renderer.", "");
 
 class wxGraphicsContext : public wxGraphicsObject
 {
 public:
-    // wxGraphicsContext()         This is an ABC, use Create to make an instance...
+    //wxGraphicsContext();         This is an ABC, use Create to make an instance...
     virtual ~wxGraphicsContext();
 
     %newobject Create;
     %nokwargs Create;
     %pythonAppend Create
         "val.__dc = args[0] # save a ref so the dc will not be deleted before self";
+    DocStr(Create,
+           "Creates a wx.GraphicsContext either from a window or a DC.", "");
     static wxGraphicsContext* Create( const wxWindowDC& dc);
-
     static wxGraphicsContext* Create( wxWindow* window ) ;
 
+    
     %newobject CreateFromNative;
-    static wxGraphicsContext* CreateFromNative( void * context ) ;
+    DocDeclStr(
+        static wxGraphicsContext* , CreateFromNative( void * context ) ,
+        "Creates a wx.GraphicsContext from a native context. This native context
+must be eg a CGContextRef for Core Graphics, a Graphics pointer for
+GDIPlus or a cairo_t pointer for Cairo.", "");
+    
 
     %newobject CreateFromNative;
-    static wxGraphicsContext* CreateFromNativeWindow( void * window ) ;
+    DocDeclStr(
+        static wxGraphicsContext* , CreateFromNativeWindow( void * window ) ,
+        "Creates a wx.GraphicsContext from a native window.", "");
+    
 
 
     DocDeclStr(
         virtual wxGraphicsPath , CreatePath(),
-        "creates a path instance that corresponds to the type of graphics context, ie GDIPlus, Cairo, CoreGraphics ...", "");
+        "Creates a native graphics path which is initially empty.", "");
 
 
     DocDeclStr(
         virtual wxGraphicsPen , CreatePen(const wxPen& pen),
-        "", "");
+        "Creates a native pen from a `wx.Pen`.", "");
 
 
     DocDeclStr(
         virtual wxGraphicsBrush , CreateBrush(const wxBrush& brush ),
-        "", "");
+        "Creates a native brush from a `wx.Brush`.", "");
 
 
     DocDeclStr(
         virtual wxGraphicsBrush ,
         CreateLinearGradientBrush( wxDouble x1, wxDouble y1, wxDouble x2, wxDouble y2,
                                    const wxColour& c1, const wxColour& c2),
-        "sets the brush to a linear gradient, starting at (x1,y1) with color c1
-to (x2,y2) with color c2", "");
+        "Creates a native brush, having a linear gradient, starting at (x1,y1)
+with color c1 to (x2,y2) with color c2.", "");
 
     
     DocDeclStr(
         virtual wxGraphicsBrush ,
         CreateRadialGradientBrush( wxDouble xo, wxDouble yo, wxDouble xc, wxDouble yc, wxDouble radius,
                                    const wxColour &oColor, const wxColour &cColor),
-        "sets the brush to a radial gradient originating at (xo,yc) with color
-oColor and ends on a circle around (xc,yc) with radius r and color
-cColor
-", "");
+        "Creates a native brush, having a radial gradient originating at 
+point (xo,yc) with color oColour and ends on a circle around (xc,yc) with
+radius r and color cColour.", "");
 
 
     DocDeclStr(
         virtual wxGraphicsFont , CreateFont( const wxFont &font , const wxColour &col = *wxBLACK ),
-        "sets the font", "");
+        "Creates a native graphics font from a `wx.Font` and a text colour.", "");
 
 
     DocDeclStr(
         virtual wxGraphicsMatrix , CreateMatrix( wxDouble a=1.0, wxDouble b=0.0,
                                                  wxDouble c=0.0, wxDouble d=1.0,
                                                  wxDouble tx=0.0, wxDouble ty=0.0),
-        "create a 'native' matrix corresponding to these values", "");
+        "Creates a native affine transformation matrix from the passed in
+values. The defaults result in an identity matrix.", "");
 
 
 
@@ -645,70 +702,73 @@ cColor
 
     DocDeclStrName(
         virtual void , Clip( const wxRegion &region ),
-        "clips drawings to the region", "",
+        "Clips drawings to the region, combined to current clipping region.", "",
         ClipRegion);
 
     
     DocDeclStr(
         virtual void , Clip( wxDouble x, wxDouble y, wxDouble w, wxDouble h ),
-        "clips drawings to the rect", "");
+        "Clips drawings to the rectangle.", "");
 
 
     DocDeclStr(
         virtual void , ResetClip(),
-        "resets the clipping to original extent", "");
+        "Resets the clipping to original shape.", "");
 
 
     DocDeclStr(
         virtual void * , GetNativeContext(),
-        "returns the native context", "");
+        "Returns the native context (CGContextRef for Core Graphics, Graphics
+pointer for GDIPlus and cairo_t pointer for cairo).", "");
 
     
     DocDeclStr(
         virtual void , Translate( wxDouble dx , wxDouble dy ),
-        "translate the current transformation matrix CTM of the context", "");
+        "Translates the current transformation matrix.", "");
 
 
     DocDeclStr(
         virtual void , Scale( wxDouble xScale , wxDouble yScale ),
-        "scale the current transformation matrix CTM of the context", "");
+        "Scale the current transformation matrix of the context.", "");
 
 
     DocDeclStr(
         virtual void , Rotate( wxDouble angle ),
-        "rotate (radians) the current transformation matrix CTM of the context", "");
+        "Rotate the current transformation matrix of the context.  ``angle`` is
+specified in radians.", "");
 
 
     DocDeclStr(
         virtual void , ConcatTransform( const wxGraphicsMatrix& matrix ),
-        "concatenates this transform with the current transform of this context", "");
+        "Concatenates the passed in transform with the current transform of
+this context.", "");
     
 
     DocDeclStr(
         virtual void , SetTransform( const wxGraphicsMatrix& matrix ),
-        "sets the transform of this context", "");
+        "Sets the current transform of this context.", "");
     
 
     DocDeclStr(
         virtual wxGraphicsMatrix , GetTransform() const,
-        "gets the matrix of this context", "");
+        "Gets the current transformation matrix of this context.", "");
     
     
 
 
-    DocStr(SetPen, "sets the stroke pen", "");
+    DocStr(SetPen, "Sets the stroke pen", "");
     %nokwargs SetPen;
     virtual void SetPen( const wxGraphicsPen& pen );
     void SetPen( const wxPen& pen );
 
     
-    DocStr(SetBrush, "sets the brush for filling", "");
+    DocStr(SetBrush, "Sets the brush for filling", "");
     %nokwargs SetBrush;
     virtual void SetBrush( const wxGraphicsBrush& brush );
     void SetBrush( const wxBrush& brush );
 
     
-    DocStr(SetFont, "sets the font", "");
+    DocStr(SetFont, "Sets the font", "");
     %nokwargs SetFont;
     virtual void SetFont( const wxGraphicsFont& font );
     void SetFont( const wxFont& font, const wxColour& colour = *wxBLACK);
@@ -717,27 +777,27 @@ cColor
    
     DocDeclStr(
         virtual void , StrokePath( const wxGraphicsPath& path ),
-        "strokes along a path with the current pen", "");
+        "Strokes along a path with the current pen.", "");
 
     
     DocDeclStr(
         virtual void , FillPath( const wxGraphicsPath& path, int fillStyle = wxODDEVEN_RULE ),
-        "fills a path with the current brush", "");
+        "Fills a path with the current brush.", "");
 
    
     DocDeclStr(
         virtual void , DrawPath( const wxGraphicsPath& path, int fillStyle = wxODDEVEN_RULE ),
-        "draws a path by first filling and then stroking", "");
+        "Draws the path by first filling and then stroking.", "");
 
 
     DocDeclStr(
         virtual void , DrawText( const wxString &str, wxDouble x, wxDouble y ),
-        "", "");
+        "Draws a text at the defined position.", "");
 
 
     DocDeclStrName(
         virtual void , DrawText( const wxString &str, wxDouble x, wxDouble y, wxDouble angle ),
-        "", "",
+        "Draws a text at the defined position, at the given angle.", "",
         DrawRotatedText);
 
 
@@ -748,13 +808,20 @@ cColor
                                       wxDouble *OUTPUT /*descent*/,
                                       wxDouble *OUTPUT /*externalLeading*/ ) const ,
         "GetFullTextExtent(self, text) --> (width, height, descent, externalLeading)",
-        "", "",
+        "Gets the dimensions of the string using the currently selected
+font. ``text`` is the string to measure, ``w`` and ``h`` are the total
+width and height respectively, ``descent`` is the dimension from the
+baseline of the font to the bottom of the descender, and
+``externalLeading`` is any extra vertical space added to the font by
+the font designer (usually is zero).", "",
         GetFullTextExtent);
 
     %extend {
         DocAStr(GetTextExtent,
                 "GetTextExtent(self, text) --> (width, height)",
-                "", "");
+                "Gets the dimensions of the string using the currently selected
+font. ``text`` is the string to measure, ``w`` and ``h`` are the total
+width and height respectively.", "");
 
         PyObject* GetTextExtent( const wxString &text )
         {
@@ -773,7 +840,8 @@ cColor
     %extend {
         DocAStr(GetPartialTextExtents,
                 "GetPartialTextExtents(self, text) -> [widths]",
-                "", "");
+                "Returns a list of widths from the beginning of ``text`` to the
+coresponding character in ``text``.", "");
         wxArrayDouble GetPartialTextExtents(const wxString& text) {
             wxArrayDouble widths;
             self->GetPartialTextExtents(text, widths);
@@ -784,29 +852,30 @@ cColor
 
     DocDeclStr(
         virtual void , DrawBitmap( const wxBitmap &bmp, wxDouble x, wxDouble y, wxDouble w, wxDouble h ),
-        "", "");
+        "Draws the bitmap. In case of a mono bitmap, this is treated as a mask
+and the current brush is used for filling.", "");
 
 
     DocDeclStr(
         virtual void , DrawIcon( const wxIcon &icon, wxDouble x, wxDouble y, wxDouble w, wxDouble h ),
-        "", "");
+        "Draws the icon.", "");
 
 
 
     DocDeclStr(
         virtual void , StrokeLine( wxDouble x1, wxDouble y1, wxDouble x2, wxDouble y2),
-        "strokes a single line", "");
+        "Strokes a single line.", "");
 
     
     DocDeclAStr(
         virtual void , StrokeLines( size_t points, const wxPoint2D *points_array),
         "StrokeLines(self, List points)",
-        "stroke lines connecting each of the points", "");
+        "Stroke lines connecting each of the points", "");
 
 
     %extend {
         DocStr(StrokeLineSegements,
-               "stroke disconnected lines from begin to end points", "");
+               "Stroke disconnected lines from begin to end points", "");
         void StrokeLineSegements(PyObject* beginPoints, PyObject* endPoints)
         {
             size_t c1, c2, count;
@@ -827,22 +896,22 @@ cColor
     DocDeclStr(
         virtual void , DrawLines( size_t points, const wxPoint2D *points_array,
                                   int fillStyle = wxODDEVEN_RULE ),
-        "draws a polygon", "");
+        "Draws a polygon.", "");
 
 
     DocDeclStr(
         virtual void , DrawRectangle( wxDouble x, wxDouble y, wxDouble w, wxDouble h),
-        "draws a rectangle", "");
+        "Draws a rectangle.", "");
 
 
     DocDeclStr(
         virtual void , DrawEllipse( wxDouble x, wxDouble y, wxDouble w, wxDouble h),
-        "draws an ellipse", "");
+        "Draws an ellipse.", "");
 
 
     DocDeclStr(
         virtual void , DrawRoundedRectangle( wxDouble x, wxDouble y, wxDouble w, wxDouble h, wxDouble radius),
-        "draws a rounded rectangle", "");
+        "Draws a rounded rectangle", "");
 
     
 
