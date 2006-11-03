@@ -17,7 +17,7 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#if wxUSE_COLLPANE && defined( __WXGTK24__ )
+#if wxUSE_COLLPANE && defined(__WXGTK24__) && !defined(__WXUNIVERSAL__)
 
 #include "wx/collpane.h"
 #include "wx/gtk/private.h"
@@ -324,5 +324,5 @@ void wxCollapsiblePane::OnSize(wxSizeEvent &ev)
     m_pPane->Layout();
 }
 
-#endif //  wxUSE_COLLPANE && defined( __WXGTK24__ )
+#endif // wxUSE_COLLPANE && defined(__WXGTK24__) && !defined(__WXUNIVERSAL__)
 
