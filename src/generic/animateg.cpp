@@ -343,7 +343,7 @@ void wxAnimationCtrl::SetAnimation(const wxAnimation& animation)
 
 void wxAnimationCtrl::SetInactiveBitmap(const wxBitmap &bmp)
 {
-    wxAnimationCtrlBase::SetInactiveBitmap(bmp);
+    m_bmpStatic = bmp;
 
     // if not playing, update the backing store now
     if (!IsPlaying())
@@ -630,10 +630,21 @@ void wxAnimationCtrl::OnSize(wxSizeEvent &WXUNUSED(event))
 {
     // NB: resizing an animation control may take a lot of time
     //     for big animations as the backing store must be
-    //     extended and rebuilt. Try to avoid it!!
+    //     extended and rebuilt. Try to avoid it e.g. using
+    //     a null proportion value for your wxAnimationCtrls
+    //     when using them inside sizers.
     if (m_animation.IsOk())
+    {
+        // be careful to change the backing store *only* if we are 
+        // playing the animation as otherwise we may be displaying 
+        // the inactive bitmap and overwriting the backing store 
+        // with the last played frame is wrong in this case
+        if (IsPlaying())
+        {
         if (!RebuildBackingStoreUpToFrame(m_currentFrame))
             Stop();     // in case we are playing
+        }
+    }
 }
 
 #endif      // wxUSE_ANIMATIONCTRL

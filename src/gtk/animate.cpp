@@ -320,7 +320,7 @@ void wxAnimationCtrl::Stop()
 
 void wxAnimationCtrl::SetInactiveBitmap(const wxBitmap &bmp)
 {
-    wxAnimationCtrlBase::SetInactiveBitmap(bmp);
+    m_bmpStatic = bmp;
 
     // update the pixbuf associated with m_widget now...
     if (!IsPlaying())

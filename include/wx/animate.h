@@ -82,7 +82,7 @@ public:     // public API
 
     virtual bool IsPlaying() const = 0;
 
-    virtual void SetInactiveBitmap(const wxBitmap &bmp);
+    virtual void SetInactiveBitmap(const wxBitmap &bmp) = 0;
     wxBitmap GetInactiveBitmap() const
         { return m_bmpStatic; }
 

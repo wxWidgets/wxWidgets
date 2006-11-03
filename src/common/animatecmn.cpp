@@ -30,11 +30,5 @@ wxAnimation wxNullAnimation;
 IMPLEMENT_ABSTRACT_CLASS(wxAnimationBase, wxObject)
 IMPLEMENT_ABSTRACT_CLASS(wxAnimationCtrlBase, wxControl)
 
-void wxAnimationCtrlBase::SetInactiveBitmap(const wxBitmap &bmp)
-{ 
-    m_bmpStatic = bmp; 
-    m_bmpStatic.UnShare();
-}
-
 
 #endif      // wxUSE_ANIMATIONCTRL
