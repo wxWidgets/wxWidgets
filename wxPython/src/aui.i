@@ -179,6 +179,10 @@ The following example shows a simple implementation that utilizes
 %ignore wxAuiiNotebook::~wxAuiNotebook;
 %rename(PreAuiNotebook) wxAuiNotebook::wxAuiNotebook();
 
+
+
+%ignore wxAuiDefaultTabArt::SetWindow;        // Link error...
+
 //---------------------------------------------------------------------------
 // Get all our defs from the REAL header files.
 %include framemanager.h
@@ -491,23 +495,27 @@ class wxPyAuiTabArt :  public wxAuiDefaultTabArt
 
     
     virtual void DrawBackground( wxDC* dc,
+                                 wxWindow* wnd,
                                  const wxRect& rect )
     {
         bool found;
         wxPyBlock_t blocked = wxPyBeginBlockThreads();
         if ((found = wxPyCBH_findCallback(m_myInst, "DrawBackground"))) {
             PyObject* odc = wxPyMake_wxObject(dc, false);
+            PyObject* ownd = wxPyMake_wxObject(wnd, false);
             PyObject* orect = wxPyConstructObject((void*)&rect, wxT("wxRect"), 0);
-            wxPyCBH_callCallback(m_myInst, Py_BuildValue("(OO)", odc, orect));
+            wxPyCBH_callCallback(m_myInst, Py_BuildValue("(OOO)", odc, ownd, orect));
             Py_DECREF(odc);
+            Py_DECREF(ownd);
             Py_DECREF(orect);
         }
         wxPyEndBlockThreads(blocked);
         if (!found)
-            wxAuiDefaultTabArt::DrawBackground(dc, rect);
+            wxAuiDefaultTabArt::DrawBackground(dc, wnd, rect);
     }
 
     virtual void DrawTab( wxDC* dc,
+                          wxWindow* wnd,
                           const wxRect& in_rect,
                           const wxString& caption,
                           bool active,
@@ -521,12 +529,13 @@ class wxPyAuiTabArt :  public wxAuiDefaultTabArt
         wxPyBlock_t blocked = wxPyBeginBlockThreads();
         if ((found = wxPyCBH_findCallback(m_myInst, "DrawTab"))) {
             PyObject* odc = wxPyMake_wxObject(dc, false);
+            PyObject* ownd = wxPyMake_wxObject(wnd, false);
             PyObject* orect = wxPyConstructObject((void*)&in_rect, wxT("wxRect"), 0);
             PyObject* otext = wx2PyString(caption);
             PyObject* ro;
             ro = wxPyCBH_callCallbackObj(m_myInst, Py_BuildValue(
-                                             "(OOOii)",
-                                             odc, orect, otext,
+                                             "(OOOOii)",
+                                             odc, ownd, orect, otext,
                                              (int)active, close_button_state));
             if (ro) {
                 if (PySequence_Check(ro) && PyObject_Length(ro) == 3) {
@@ -553,16 +562,18 @@ class wxPyAuiTabArt :  public wxAuiDefaultTabArt
             }
 
             Py_DECREF(odc);
+            Py_DECREF(ownd);
             Py_DECREF(orect);
             Py_DECREF(otext);
         }
         wxPyEndBlockThreads(blocked);
         if (!found)
-            wxAuiDefaultTabArt::DrawTab(dc, in_rect, caption, active, close_button_state, out_tab_rect, out_button_rect, x_extent);
+            wxAuiDefaultTabArt::DrawTab(dc, wnd, in_rect, caption, active, close_button_state, out_tab_rect, out_button_rect, x_extent);
     }
 
 
     virtual void DrawButton( wxDC* dc,
+                             wxWindow* wnd,
                              const wxRect& in_rect,
                              int bitmap_id,
                              int button_state,
@@ -575,10 +586,11 @@ class wxPyAuiTabArt :  public wxAuiDefaultTabArt
         wxPyBlock_t blocked = wxPyBeginBlockThreads();
         if ((found = wxPyCBH_findCallback(m_myInst, "DrawButton"))) {
             PyObject* odc = wxPyMake_wxObject(dc, false);
+            PyObject* ownd = wxPyMake_wxObject(wnd, false);
             PyObject* orect = wxPyConstructObject((void*)&in_rect, wxT("wxRect"), 0);
             PyObject* obmp = wxPyConstructObject((void*)&bitmap_override, wxT("wxBitmap"), 0);
             PyObject* ro;
-            ro = wxPyCBH_callCallbackObj(m_myInst, Py_BuildValue("(OOiiiO)", odc, orect,
+            ro = wxPyCBH_callCallbackObj(m_myInst, Py_BuildValue("(OOOiiiO)", odc, ownd, orect,
                                                                  bitmap_id, button_state, orientation,
                                                                  obmp));
             if (ro) {
@@ -588,16 +600,24 @@ class wxPyAuiTabArt :  public wxAuiDefaultTabArt
             }
 
             Py_DECREF(odc);
+            Py_DECREF(ownd);
             Py_DECREF(orect);
             Py_DECREF(obmp);
         }
         wxPyEndBlockThreads(blocked);
         if (!found)
-            wxAuiDefaultTabArt::DrawButton(dc, in_rect, bitmap_id, button_state, orientation, bitmap_override, out_rect);
+            wxAuiDefaultTabArt::DrawButton(dc, wnd, in_rect, bitmap_id, button_state, orientation, bitmap_override, out_rect);
     }
 
+
+// TODO    
+//     virtual int ShowWindowList(
+//                          wxWindow* wnd,
+//                          const wxArrayString& items,
+//                          int active_idx);
     
     virtual wxSize GetTabSize( wxDC* dc,
+                               wxWindow* wnd,
                                const wxString& caption,
                                bool active,
                                int  close_button_state,
@@ -609,10 +629,11 @@ class wxPyAuiTabArt :  public wxAuiDefaultTabArt
         wxPyBlock_t blocked = wxPyBeginBlockThreads();
         if ((found = wxPyCBH_findCallback(m_myInst, "GetTabSize"))) {
             PyObject* odc = wxPyMake_wxObject(dc, false);
+            PyObject* ownd = wxPyMake_wxObject(wnd, false);
             PyObject* otext = wx2PyString(caption);
             PyObject* ro;
             ro = wxPyCBH_callCallbackObj(m_myInst, Py_BuildValue(
-                                             "(OOi)", odc, otext, (int)active, close_button_state));
+                                             "(OOOi)", odc, ownd, otext, (int)active, close_button_state));
             if (ro) {
                 if (PySequence_Check(ro) && PyObject_Length(ro) == 2) {
                     PyObject* o1 = PySequence_GetItem(ro, 0);
@@ -634,15 +655,18 @@ class wxPyAuiTabArt :  public wxAuiDefaultTabArt
             }
 
             Py_DECREF(odc);
+            Py_DECREF(ownd);
             Py_DECREF(otext);
         }
         wxPyEndBlockThreads(blocked);
         if (!found)
-            rv = wxAuiDefaultTabArt::GetTabSize(dc, caption, active, close_button_state, x_extent);
+            rv = wxAuiDefaultTabArt::GetTabSize(dc, wnd, caption, active, close_button_state, x_extent);
         return rv;
     }
-   
-   
+
+// TODO    
+//     virtual int GetBestTabCtrlSize(wxWindow* wnd);      
+  
 
     DEC_PYCALLBACK__FONT(SetNormalFont);
     DEC_PYCALLBACK__FONT(SetSelectedFont);
