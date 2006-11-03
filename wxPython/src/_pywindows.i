@@ -159,6 +159,7 @@ public:
     
     void _setCallbackInfo(PyObject* self, PyObject* _class);
 
+    %pythoncode { SetBestSize = wx.Window.SetInitialSize }
     bool DoEraseBackground(wxDC* dc);
     
     void DoMoveWindow(int x, int y, int width, int height);
@@ -340,6 +341,7 @@ public:
 
     void _setCallbackInfo(PyObject* self, PyObject* _class);
 
+    %pythoncode { SetBestSize = wx.Window.SetInitialSize }
     bool DoEraseBackground(wxDC* dc);
     
     void DoMoveWindow(int x, int y, int width, int height);
@@ -513,6 +515,7 @@ public:
 
     void _setCallbackInfo(PyObject* self, PyObject* _class);
 
+    %pythoncode { SetBestSize = wx.Window.SetInitialSize }
     bool DoEraseBackground(wxDC* dc);
     
     void DoMoveWindow(int x, int y, int width, int height);
