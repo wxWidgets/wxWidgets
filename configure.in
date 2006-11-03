@@ -1027,7 +1027,7 @@ WX_ARG_ENABLE(loggui,      [  --enable-loggui         use standard GUI logger], 
 WX_ARG_ENABLE(logwin,      [  --enable-logwin         use wxLogWindow], wxUSE_LOGWINDOW)
 WX_ARG_ENABLE(logdialog,   [  --enable-logdialog      use wxLogDialog], wxUSE_LOGDIALOG)
 WX_ARG_ENABLE(webkit,      [  --enable-webkit         use wxWebKitCtrl (Mac)], wxUSE_WEBKIT)
-WX_ARG_ENABLE(html,        [  --enable-richtext       use wxRichTextCtrl], wxUSE_RICHTEXT)
+WX_ARG_ENABLE(richtext,    [  --enable-richtext       use wxRichTextCtrl], wxUSE_RICHTEXT)
 WX_ARG_ENABLE(graphics_ctx, [  --enable-graphics_ctx   use graphics context 2D drawing API], wxUSE_GRAPHICS_CONTEXT)
 
 dnl ---------------------------------------------------------------------------
