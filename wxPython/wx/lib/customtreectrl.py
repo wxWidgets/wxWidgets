@@ -95,8 +95,9 @@ Base Functionalities
 CustomTreeCtrl supports all the wx.TreeCtrl styles, except:
   - TR_EXTENDED: supports for this style is on the todo list (Am I sure of this?).
 
-Plus it has 2 more styles to handle checkbox-type items:
+Plus it has 3 more styles to handle checkbox-type items:
   - TR_AUTO_CHECK_CHILD : automatically checks/unchecks the item children;
+  - TR_AUTO_CHECK_PARENT : automatically checks/unchecks the item parent;
   - TR_AUTO_TOGGLE_CHILD: automatically toggles the item children.
 
 All the methods available in wx.TreeCtrl are also available in CustomTreeCtrl.
@@ -190,8 +191,9 @@ TR_HIDE_ROOT = wx.TR_HIDE_ROOT                                 # don't display r
 
 TR_FULL_ROW_HIGHLIGHT = wx.TR_FULL_ROW_HIGHLIGHT               # highlight full horz space
 
-TR_AUTO_CHECK_CHILD = 0x4000                                   # only meaningful for checkboxes
-TR_AUTO_TOGGLE_CHILD = 0x8000                                  # only meaningful for checkboxes
+TR_AUTO_CHECK_CHILD = 0x04000                                   # only meaningful for checkboxes
+TR_AUTO_TOGGLE_CHILD = 0x08000                                  # only meaningful for checkboxes
+TR_AUTO_CHECK_PARENT = 0x10000                                   # only meaningful for checkboxes
 
 TR_DEFAULT_STYLE = wx.TR_DEFAULT_STYLE                         # default style for the tree control
 
@@ -1764,6 +1766,7 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
             TR_HIDE_ROOT                            # don't display root node
             TR_FULL_ROW_HIGHLIGHT                   # highlight full horizontal space
             TR_AUTO_CHECK_CHILD                     # only meaningful for checkboxes
+            TR_AUTO_CHECK_PARENT                    # only meaningful for checkboxes
             TR_AUTO_TOGGLE_CHILD                    # only meaningful for checkboxes
 
         validator: window validator.
@@ -2154,6 +2157,9 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
         if self._windowStyle & TR_AUTO_CHECK_CHILD:
             ischeck = self.IsItemChecked(item)
             self.AutoCheckChild(item, ischeck)
+        if self._windowStyle & TR_AUTO_CHECK_PARENT:
+            ischeck = self.IsItemChecked(item)
+            self.AutoCheckParent(item, ischeck)
         elif self._windowStyle & TR_AUTO_TOGGLE_CHILD:
             self.AutoToggleChild(item)
 
@@ -2200,6 +2206,28 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
                 self.CheckItem2(child, checked, torefresh=torefresh)
             self.AutoCheckChild(child, checked)
             (child, cookie) = self.GetNextChild(item, cookie)
+
+
+    def AutoCheckParent(self, item, checked):
+        """Traverses up the tree and checks/unchecks parent items.
+        Meaningful only for check items."""
+
+        if not item:
+            raise "\nERROR: Invalid Tree Item. "
+
+        parent = item.GetParent()
+        if not parent or parent.GetType() != 1:
+            return
+
+        (child, cookie) = self.GetFirstChild(parent)
+        while child:
+            if child.GetType() == 1 and child.IsEnabled():
+                if checked != child.IsChecked():
+                    return
+            (child, cookie) = self.GetNextChild(parent, cookie)
+
+        self.CheckItem2(parent, checked, torefresh=True)
+        self.AutoCheckParent(parent, checked)
 
 
     def CheckChilds(self, item, checked=True):
