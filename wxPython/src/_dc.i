@@ -1302,65 +1302,6 @@ public:
 //---------------------------------------------------------------------------
 %newgroup
 
-MustHaveApp(wxMemoryDC);
-
-DocStr(wxMemoryDC,
-"A memory device context provides a means to draw graphics onto a
-bitmap. A bitmap must be selected into the new memory DC before it may
-be used for anything. Typical usage is as follows::
-
-    dc = wx.MemoryDC()
-    dc.SelectObject(bitmap)
-    # draw on the dc using any of the Draw methods
-    dc.SelectObject(wx.NullBitmap)
-    # the bitmap now contains wahtever was drawn upon it
-
-Note that the memory DC *must* be deleted (or the bitmap selected out
-of it) before a bitmap can be reselected into another memory DC.
-", "");
-
-class wxMemoryDC : public wxDC {
-public:
-    DocCtorStr(
-        wxMemoryDC(wxBitmap& bitmap = wxNullBitmap),
-        "Constructs a new memory device context.
-
-Use the Ok member to test whether the constructor was successful in
-creating a usable device context. If a bitmap is not given to this
-constructor then don't forget to select a bitmap into the DC before
-drawing on it.", "
-
-:see: `MemoryDCFromDC`");
-
-    DocCtorStrName(
-        wxMemoryDC(wxDC* oldDC),
-        "Creates a DC that is compatible with the oldDC.", "",
-        MemoryDCFromDC);
-
-    
-    DocDeclStr(
-        void , SelectObject(wxBitmap& bitmap),
-        "Selects the bitmap into the device context, to use as the memory
-bitmap. Selecting the bitmap into a memory DC allows you to draw into
-the DC, and therefore the bitmap, and also to use Blit to copy the
-bitmap to a window.
-
-If the argument is wx.NullBitmap (or some other uninitialised
-`wx.Bitmap`) the current bitmap is selected out of the device context,
-and the original bitmap restored, allowing the current bitmap to be
-destroyed safely.", "");
-
-    
-    DocDeclStr(
-        void , SelectObjectAsSource(const wxBitmap& bmp),
-        "", "");
-    
-    
-};
-
-//---------------------------------------------------------------------------
-%newgroup
-
 MustHaveApp(wxScreenDC);
 
 DocStr(wxScreenDC,
@@ -1474,6 +1415,66 @@ public:
         "Constructor. Pass the window on which you wish to paint.", "");
 };
 
+
+
+//---------------------------------------------------------------------------
+%newgroup
+
+MustHaveApp(wxMemoryDC);
+
+DocStr(wxMemoryDC,
+"A memory device context provides a means to draw graphics onto a
+bitmap. A bitmap must be selected into the new memory DC before it may
+be used for anything. Typical usage is as follows::
+
+    dc = wx.MemoryDC()
+    dc.SelectObject(bitmap)
+    # draw on the dc using any of the Draw methods
+    dc.SelectObject(wx.NullBitmap)
+    # the bitmap now contains wahtever was drawn upon it
+
+Note that the memory DC *must* be deleted (or the bitmap selected out
+of it) before a bitmap can be reselected into another memory DC.
+", "");
+
+class wxMemoryDC : public wxWindowDC {
+public:
+    DocCtorStr(
+        wxMemoryDC(wxBitmap& bitmap = wxNullBitmap),
+        "Constructs a new memory device context.
+
+Use the Ok member to test whether the constructor was successful in
+creating a usable device context. If a bitmap is not given to this
+constructor then don't forget to select a bitmap into the DC before
+drawing on it.", "
+
+:see: `MemoryDCFromDC`");
+
+    DocCtorStrName(
+        wxMemoryDC(wxDC* oldDC),
+        "Creates a DC that is compatible with the oldDC.", "",
+        MemoryDCFromDC);
+
+    
+    DocDeclStr(
+        void , SelectObject(wxBitmap& bitmap),
+        "Selects the bitmap into the device context, to use as the memory
+bitmap. Selecting the bitmap into a memory DC allows you to draw into
+the DC, and therefore the bitmap, and also to use Blit to copy the
+bitmap to a window.
+
+If the argument is wx.NullBitmap (or some other uninitialised
+`wx.Bitmap`) the current bitmap is selected out of the device context,
+and the original bitmap restored, allowing the current bitmap to be
+destroyed safely.", "");
+
+    
+    DocDeclStr(
+        void , SelectObjectAsSource(const wxBitmap& bmp),
+        "", "");
+    
+    
+};
 
 
 //---------------------------------------------------------------------------
