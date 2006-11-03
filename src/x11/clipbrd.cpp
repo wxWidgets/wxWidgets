@@ -32,11 +32,14 @@ Atom  g_clipboardAtom   = 0;
 Atom  g_targetsAtom     = 0;
 #endif
 
-#ifdef __WXDEBUG__
+// avoid warnings about unused static variable
+#if defined(__WXDEBUG__) && defined(HAVE_VARIADIC_MACROS)
+
 // the trace mask we use with wxLogTrace() - call
 // wxLog::AddTraceMask(TRACE_CLIPBOARD) to enable the trace messages from here
 // (there will be a *lot* of them!)
 static const wxChar *TRACE_CLIPBOARD = _T("clipboard");
+
 #endif // __WXDEBUG__
 
 //-----------------------------------------------------------------------------
