@@ -1091,15 +1091,16 @@ void wxDC::SetPalette(const wxPalette& palette)
 {
     wxCHECK_RET( Ok(), wxT("invalid dc") );
 
-    if ( palette == wxNullPalette )
+    if ( !palette.Ok() )
     {
         if ( m_oldPalette.Ok() )
             SetPalette(m_oldPalette);
         return;
     }
 
-    if ( !palette.Ok() ) return;
-    if ( m_palette == palette ) return;
+    if ( palette.IsSameAs(m_palette) )
+        return;
+
     m_oldPalette = m_palette;
     m_palette = palette;
 
