@@ -46,8 +46,9 @@ samples/ with demos/ where needed).
    lives in docs/latex/wx/tsamples.tex; look at the descriptions for other
    samples, if you are not familiar with LaTeX.
 
-6. Add sample's files to build/bakefiles/make_dist.mk and
-   distrib/msw/{generic.rsp,makefile.rsp,vc.rsp,dmc.rsp,wince.rsp}.
+6. Add any non-standard sample's files to build/bakefiles/make_dist.mk (the
+   makefiles copies all bmp, cpp, h, ico, png, rc, xpm and makefiles by
+   default) and update distrib/scripts/manifests/generic.rsp.
 
 === EOF ===
 
