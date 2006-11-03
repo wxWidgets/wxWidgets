@@ -344,6 +344,9 @@ static gint wxapp_poll_func( GPollFD *ufds, guint nfds, gint timeout )
 
 void wxapp_install_idle_handler()
 {
+    if (wxTheApp == NULL)
+        return;
+
 #if wxUSE_THREADS
     wxMutexLocker lock(gs_idleTagsMutex);
 #endif
