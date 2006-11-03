@@ -662,7 +662,7 @@ void wxWindowBase::DoSetWindowVariant( wxWindowVariant variant )
 
 void wxWindowBase::DoSetSizeHints( int minW, int minH,
                                    int maxW, int maxH,
-                                   int incW, int incH )
+                                   int WXUNUSED(incW), int WXUNUSED(incH) )
 {
     wxCHECK_RET( (minW == wxDefaultCoord || maxW == wxDefaultCoord || minW <= maxW) &&
                     (minH == wxDefaultCoord || maxH == wxDefaultCoord || minH <= maxH),
