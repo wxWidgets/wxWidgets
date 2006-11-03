@@ -29,16 +29,17 @@
 
 class wxPenRefData: public wxObjectRefData
 {
-    public:
-        wxPenRefData();
-        wxPenRefData(const wxPenRefData& data);
+public:
+    wxPenRefData();
+    wxPenRefData(const wxPenRefData& data);
 
     bool operator==(const wxPenRefData& data) const
     {
         // we intentionally don't compare m_hPen fields here
         return m_style == data.m_style &&
                m_width == data.m_width &&
-               m_pixPattern == data.m_pixPattern &&
+               memcmp(m_pixPattern,
+                      data.m_pixPattern, sizeof(m_pixPattern)) == 0 &&
                m_capStyle == data.m_capStyle &&
                m_joinStyle == data.m_joinStyle &&
                m_colour == data.m_colour &&
@@ -48,17 +49,17 @@ class wxPenRefData: public wxObjectRefData
                     memcmp(m_dash, data.m_dash, m_countDashes*sizeof(wxDash)) == 0));
     }
 
-        int            m_width;
-        int            m_style;
-        wxColour       m_colour;
-        wxBitmap       m_stipple;
-        pixpattern24_t m_pixPattern;
+    int            m_width;
+    int            m_style;
+    wxColour       m_colour;
+    wxBitmap       m_stipple;
+    pixpattern24_t m_pixPattern;
 
-        // not used by wxMGL, but we want to preserve values
-        int            m_joinStyle;
-        int            m_capStyle;
-        int            m_countDashes;
-        wxDash        *m_dash;
+    // not used by wxMGL, but we want to preserve values
+    int            m_joinStyle;
+    int            m_capStyle;
+    int            m_countDashes;
+    wxDash        *m_dash;
 };
 
 wxPenRefData::wxPenRefData()
