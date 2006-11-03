@@ -7,7 +7,7 @@ TODO for XRCed
 
 + tree icons
 
-- replace object with another, keeping children
++ replace object with another, keeping children
 
 + write tmp file for current dialog/panel/etc.
 
@@ -26,4 +26,6 @@ TODO for XRCed
 
 + disable some window creation when it's not valid
 
-- selecting object by clicking in test window
++ selecting object by clicking in test window
+
+- hidden items should not be highlighted
