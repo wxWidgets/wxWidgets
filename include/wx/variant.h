@@ -376,8 +376,8 @@ expdecl wxVariant& operator << ( wxVariant &variant, const classname &value )\
     return variant;\
 }
 
-// implements a wxVariantData-derived class using for the Eq() method the operator==
-// which must have been provided by "classname"
+// implements a wxVariantData-derived class using for the Eq() method the
+// operator== which must have been provided by "classname"
 #define IMPLEMENT_VARIANT_OBJECT_EXPORTED(classname,expdecl) \
 IMPLEMENT_VARIANT_OBJECT_EXPORTED_NO_EQ(classname,expdecl) \
 \
@@ -393,6 +393,8 @@ bool classname##VariantData::Eq(wxVariantData& data) const \
 
 // implements a wxVariantData-derived class using for the Eq() method a shallow
 // comparison (through wxObject::IsSameAs function)
+#define IMPLEMENT_VARIANT_OBJECT_SHALLOWCMP(classname) \
+    IMPLEMENT_VARIANT_OBJECT_EXPORTED_SHALLOWCMP(classname, wxEMPTY_PARAMETER_VALUE)
 #define IMPLEMENT_VARIANT_OBJECT_EXPORTED_SHALLOWCMP(classname,expdecl) \
 IMPLEMENT_VARIANT_OBJECT_EXPORTED_NO_EQ(classname,expdecl) \
 \
