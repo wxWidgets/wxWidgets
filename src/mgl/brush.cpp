@@ -16,7 +16,7 @@
 
 #include "wx/brush.h"
 #include "wx/mgl/private.h"
-#include "wx/mgl/dcmemory.h"
+#include "wx/dcmemory.h"
 
 
 // ---------------------------------------------------------------------------
