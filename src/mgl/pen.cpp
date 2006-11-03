@@ -38,8 +38,8 @@ public:
         // we intentionally don't compare m_hPen fields here
         return m_style == data.m_style &&
                m_width == data.m_width &&
-               memcmp(m_pixPattern,
-                      data.m_pixPattern, sizeof(m_pixPattern)) == 0 &&
+               memcmp(&m_pixPattern,
+                      &data.m_pixPattern, sizeof(m_pixPattern)) == 0 &&
                m_capStyle == data.m_capStyle &&
                m_joinStyle == data.m_joinStyle &&
                m_colour == data.m_colour &&
