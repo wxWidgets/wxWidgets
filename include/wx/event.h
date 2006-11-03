@@ -13,6 +13,7 @@
 #define _WX_EVENT_H__
 
 #include "wx/defs.h"
+#include "wx/cpp.h"
 #include "wx/object.h"
 #include "wx/clntdata.h"
 
@@ -94,8 +95,6 @@ typedef int wxEventType;
 #define DECLARE_EVENT_TABLE_ENTRY(type, winid, idLast, fn, obj) \
     wxEventTableEntry(type, winid, idLast, fn, obj)
 
-#define EMPTY_PARAMETER_VALUE /* Fake macro parameter value */
-
 #define BEGIN_DECLARE_EVENT_TYPES()
 #define END_DECLARE_EVENT_TYPES()
 #define DECLARE_EXPORTED_EVENT_TYPE(expdecl, name, value) \
@@ -103,7 +102,7 @@ typedef int wxEventType;
 #define DECLARE_EVENT_TYPE(name, value) \
     DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_CORE, name, value)
 #define DECLARE_LOCAL_EVENT_TYPE(name, value) \
-    DECLARE_EXPORTED_EVENT_TYPE(EMPTY_PARAMETER_VALUE, name, value)
+    DECLARE_EXPORTED_EVENT_TYPE(wxEMPTY_PARAMETER_VALUE, name, value)
 #define DEFINE_EVENT_TYPE(name) const wxEventType name = wxNewEventType();
 #define DEFINE_LOCAL_EVENT_TYPE(name) DEFINE_EVENT_TYPE(name)
 

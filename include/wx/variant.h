@@ -20,6 +20,7 @@
 #include "wx/string.h"
 #include "wx/arrstr.h"
 #include "wx/list.h"
+#include "wx/cpp.h"
 
 #if wxUSE_DATETIME
     #include "wx/datetime.h"
@@ -316,21 +317,15 @@ private:
     DECLARE_DYNAMIC_CLASS(wxVariant)
 };
 
-/* Fake macro parameter value */
-#ifdef EMPTY_PARAMETER_VALUE
-    #undef EMPTY_PARAMETER_VALUE
-#endif
-#define EMPTY_PARAMETER_VALUE
-
 #define DECLARE_VARIANT_OBJECT(classname) \
-    DECLARE_VARIANT_OBJECT_EXPORTED(classname,EMPTY_PARAMETER_VALUE)
+    DECLARE_VARIANT_OBJECT_EXPORTED(classname, wxEMPTY_PARAMETER_VALUE)
 
 #define DECLARE_VARIANT_OBJECT_EXPORTED(classname,expdecl) \
 expdecl classname& operator << ( classname &object, const wxVariant &variant ); \
 expdecl wxVariant& operator << ( wxVariant &variant, const classname &object );
 
 #define IMPLEMENT_VARIANT_OBJECT(classname) \
-    IMPLEMENT_VARIANT_OBJECT_EXPORTED(classname,EMPTY_PARAMETER_VALUE)
+    IMPLEMENT_VARIANT_OBJECT_EXPORTED(classname, wxEMPTY_PARAMETER_VALUE)
 
 #define IMPLEMENT_VARIANT_OBJECT_EXPORTED_NO_EQ(classname,expdecl) \
 class classname##VariantData: public wxVariantData \

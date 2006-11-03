@@ -47,5 +47,11 @@
 /* Create a "unique" name with the given prefix */
 #define wxMAKE_UNIQUE_NAME(text)    wxCONCAT_LINE(text)
 
+/*
+   This macro can be passed as argument to another macro when you don't have
+   anything to pass in fact.
+ */
+#define wxEMPTY_PARAMETER_VALUE /* Fake macro parameter value */
+
 #endif // _WX_CPP_H_
 
