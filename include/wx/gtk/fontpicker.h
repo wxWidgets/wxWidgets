@@ -27,7 +27,7 @@ public:
     wxFontButton() {}
     wxFontButton(wxWindow *parent,
                  wxWindowID id,
-                 const wxFont& initial = *wxNORMAL_FONT,
+                 const wxFont& initial = wxNullFont,
                  const wxPoint& pos = wxDefaultPosition,
                  const wxSize& size = wxDefaultSize,
                  long style = wxFONTBTN_DEFAULT_STYLE,
@@ -44,7 +44,7 @@ public:     // overrides
 
     bool Create(wxWindow *parent,
                 wxWindowID id,
-                const wxFont& initial = *wxNORMAL_FONT,
+                const wxFont& initial = wxNullFont,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = wxFONTBTN_DEFAULT_STYLE,

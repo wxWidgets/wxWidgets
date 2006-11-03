@@ -64,7 +64,7 @@ bool wxGenericFontButton::Create( wxWindow *parent, wxWindowID id,
             wxCommandEventHandler(wxGenericFontButton::OnButtonClick),
             NULL, this);
 
-    m_selectedFont = initial;
+    m_selectedFont = initial.IsOk() ? initial : *wxNORMAL_FONT;
     UpdateFont();
     InitFontData();
 

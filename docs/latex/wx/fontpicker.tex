@@ -64,7 +64,7 @@ user's input is valid, i.e. recognizable). }
 
 \func{}{wxFontPickerCtrl}{\param{wxWindow *}{parent},\rtfsp
 \param{wxWindowID}{ id},\rtfsp
-\param{const wxFont\& }{font = *wxNORMAL\_FONT},\rtfsp
+\param{const wxFont\& }{font = wxNullFont},\rtfsp
 \param{const wxPoint\& }{pos = wxDefaultPosition},\rtfsp
 \param{const wxSize\& }{size = wxDefaultSize},\rtfsp
 \param{long}{ style = wxFNTP\_DEFAULT\_STYLE},\rtfsp
@@ -79,7 +79,7 @@ all the parameters.
 
 \func{bool}{Create}{\param{wxWindow *}{parent},\rtfsp
 \param{wxWindowID}{ id},\rtfsp
-\param{const wxFont\& }{font = *wxNORMAL\_FONT},\rtfsp
+\param{const wxFont\& }{font = wxNullFont},\rtfsp
 \param{const wxPoint\& }{pos = wxDefaultPosition},\rtfsp
 \param{const wxSize\& }{size = wxDefaultSize},\rtfsp
 \param{long}{ style = wxFNTP\_DEFAULT\_STYLE},\rtfsp
@@ -92,7 +92,8 @@ all the parameters.
 
 \docparam{id}{The identifier for the control.}
 
-\docparam{font}{The initial font shown in the control.}
+\docparam{font}{The initial font shown in the control. The default 
+\texttt{wxNORMAL\_FONT} value means to use the default font.}
 
 \docparam{pos}{Initial position.}
 

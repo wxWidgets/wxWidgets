@@ -58,7 +58,9 @@ bool wxFontPickerCtrl::Create( wxWindow *parent, wxWindowID id,
                         long style, const wxValidator& validator,
                         const wxString &name )
 {
-    if (!wxPickerBase::CreateBase(parent, id, Font2String(initial),
+    if (!wxPickerBase::CreateBase(parent, id,
+                                  Font2String(initial.IsOk() ? initial
+                                                             : *wxNORMAL_FONT),
                                   pos, size, style, validator, name))
         return false;
 

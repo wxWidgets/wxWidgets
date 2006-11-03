@@ -107,7 +107,7 @@ public:
 
     wxFontPickerCtrl(wxWindow *parent,
                      wxWindowID id,
-                     const wxFont& initial = *wxNORMAL_FONT,
+                     const wxFont& initial = wxNullFont,
                      const wxPoint& pos = wxDefaultPosition,
                      const wxSize& size = wxDefaultSize,
                      long style = wxFNTP_DEFAULT_STYLE,
@@ -121,7 +121,7 @@ public:
 
     bool Create(wxWindow *parent,
                 wxWindowID id,
-                const wxFont& initial = *wxNORMAL_FONT,
+                const wxFont& initial = wxNullFont,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = wxFNTP_DEFAULT_STYLE,

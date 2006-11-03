@@ -29,7 +29,7 @@ public:
     wxGenericFontButton() {}
     wxGenericFontButton(wxWindow *parent,
                         wxWindowID id,
-                        const wxFont &initial = *wxNORMAL_FONT,
+                        const wxFont &initial = wxNullFont,
                         const wxPoint& pos = wxDefaultPosition,
                         const wxSize& size = wxDefaultSize,
                         long style = wxFONTBTN_DEFAULT_STYLE,
