@@ -45,6 +45,7 @@ samples/aui/makefile.dm?
 samples/calendar/makefile.dm?
 samples/caret/makefile.dm?
 samples/checklst/makefile.dm?
+samples/collpane/makefile.dm?
 samples/combo/makefile.dm?
 samples/config/makefile.dm?
 samples/console/makefile.dm?

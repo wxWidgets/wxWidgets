@@ -10,6 +10,7 @@ samples/aui/Makefile.in
 samples/calendar/Makefile.in
 samples/caret/Makefile.in
 samples/checklst/Makefile.in
+samples/collpane/Makefile.in
 samples/combo/Makefile.in
 samples/config/Makefile.in
 samples/console/Makefile.in

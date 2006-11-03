@@ -37,6 +37,8 @@ samples/caret/caret.dsp
 
 samples/checklst/checklst.dsp
 
+samples/collpane/collpane.dsp
+
 samples/combo/combo.dsp
 
 samples/config/config.dsp

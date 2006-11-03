@@ -27,6 +27,10 @@ samples/caret/caret.vcw
 samples/checklst/checklst.vcp
 samples/checklst/checklst.vcw
 
+samples/collpane/collpane.vcp
+samples/collpane/collpane.vcw
+
+samples/config/config.vcp
 samples/combo/combo.vcp
 samples/combo/combo.vcw
 
