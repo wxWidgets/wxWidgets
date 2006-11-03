@@ -78,6 +78,10 @@
        // solves a type definition mismatch between IODBC and MOTIF on OpenVMS
       #define BOOL int
       #endif
+      #if defined( __DARWIN__ )
+       // solves a type definition mismatch between IODBC and Cocoa
+      #define BOOL signed char
+      #endif 
         #include <sql.h>
         #include <sqlext.h>
         //#if wxUSE_UNICODE
