@@ -17,6 +17,7 @@
 
 %{
 #include <wx/display.h>
+#include <wx/vidmode.h>
 %}
 
 
