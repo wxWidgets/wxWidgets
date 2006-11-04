@@ -1,0 +1,297 @@
+\section{\class{wxAuiManager}}\label{wxauimanager}
+
+wxAuiManager is the central class of the wxAUI class framework.
+
+See also \helpref{wxAUI overview}{wxauioverview}.
+
+wxAuiManager manages the panes associated with it
+for a particular wxFrame, using a pane's wxAuiPaneInfo information to
+determine each pane's docking and floating behavior. wxAuiManager
+uses wxWidgets' sizer mechanism to plan the layout of each frame. It
+uses a replaceable dock art class to do all drawing, so all drawing is
+localized in one area, and may be customized depending on an
+applications' specific needs.
+
+wxAuiManager works as follows: The programmer adds panes to the class,
+or makes changes to existing pane properties (dock position, floating
+state, show state, etc.). To apply these changes, wxAuiManager's
+Update() function is called. This batch processing can be used to avoid
+flicker, by modifying more than one pane at a time, and then "committing"
+all of the changes at once by calling Update().
+
+Panes can be added quite easily:
+
+\begin{verbatim}
+wxTextCtrl* text1 = new wxTextCtrl(this, -1);
+wxTextCtrl* text2 = new wxTextCtrl(this, -1);
+m_mgr.AddPane(text1, wxLEFT, wxT("Pane Caption"));
+m_mgr.AddPane(text2, wxBOTTOM, wxT("Pane Caption"));
+m_mgr.Update();
+\end{verbatim}
+
+Later on, the positions can be modified easily. The following will float
+an existing pane in a tool window:
+
+\begin{verbatim}
+m_mgr.GetPane(text1).Float();
+\end{verbatim}
+
+\wxheading{Layers, Rows and Directions, Positions}
+
+Inside wxAUI, the docking layout is figured out by checking several
+pane parameters. Four of these are important for determining where a
+pane will end up:
+
+{\bf Direction:}
+Each docked pane has a direction, Top, Bottom, Left, Right, or
+Center. This is fairly self-explanatory. The pane will be placed in the
+location specified by this variable.
+
+{\bf Position:}
+More than one pane can be placed inside of a dock. Imagine to panes
+being docked on the left side of a window. One pane can be placed over
+another. In proportionally managed docks, the pane position indicates
+it's sequential position, starting with zero. So, in our scenario with
+two panes docked on the left side, the top pane in the dock would have
+position 0, and the second one would occupy position 1.
+
+{\bf Row:}
+A row can allow for two docks to be placed next to each other. One of
+the most common places for this to happen is in the toolbar. Multiple
+toolbar rows are allowed, the first row being in row 0, and the second
+in row 1. Rows can also be used on vertically docked panes.
+
+
+{\bf Layer:}
+A layer is akin to an onion. Layer 0 is the very center of the
+managed pane. Thus, if a pane is in layer 0, it will be closest to the
+center window (also sometimes known as the "content window").
+Increasing layers "swallow up" all layers of a lower value. This can
+look very similar to multiple rows, but is different because all panes
+in a lower level yield to panes in higher levels. The best way to
+understand layers is by running the wxAUI sample.
+
+\wxheading{Derived from}
+
+\helpref{wxEvent}{wxevent}
+
+\wxheading{Include files}
+
+<wx/aui/aui.h>
+
+\wxheading{See also}
+
+\helpref{wxAuiPaneInfo}{wxauipaneinfo},
+\helpref{wxAuiDockArt}{wxauidockart}
+
+\wxheading{Data structures}
+
+\begin{verbatim}
+enum wxAuiManagerDock
+{
+    wxAUI_DOCK_NONE = 0,
+    wxAUI_DOCK_TOP = 1,
+    wxAUI_DOCK_RIGHT = 2,
+    wxAUI_DOCK_BOTTOM = 3,
+    wxAUI_DOCK_LEFT = 4,
+    wxAUI_DOCK_CENTER = 5,
+    wxAUI_DOCK_CENTRE = wxAUI_DOCK_CENTER
+}
+\end{verbatim}
+
+\begin{verbatim}
+enum wxAuiManagerOption
+{
+    wxAUI_MGR_ALLOW_FLOATING           = 1 << 0,
+    wxAUI_MGR_ALLOW_ACTIVE_PANE        = 1 << 1,
+    wxAUI_MGR_TRANSPARENT_DRAG         = 1 << 2,
+    wxAUI_MGR_TRANSPARENT_HINT         = 1 << 3,
+    wxAUI_MGR_VENETIAN_BLINDS_HINT     = 1 << 4,
+    wxAUI_MGR_RECTANGLE_HINT           = 1 << 5,
+    wxAUI_MGR_HINT_FADE                = 1 << 6,
+    wxAUI_MGR_NO_VENETIAN_BLINDS_FADE  = 1 << 7,
+
+    wxAUI_MGR_DEFAULT = wxAUI_MGR_ALLOW_FLOATING |
+                        wxAUI_MGR_TRANSPARENT_HINT |
+                        wxAUI_MGR_HINT_FADE |
+                        wxAUI_MGR_NO_VENETIAN_BLINDS_FADE
+}
+\end{verbatim}
+
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+
+\membersection{wxAuiManager::wxAuiManager}\label{wxauimanagerwxauimanager}
+
+\func{}{wxAuiManager}{\param{wxWindow* }{managed\_wnd = NULL}, \param{unsigned int }{flags = wxAUI\_MGR\_DEFAULT}}
+
+Constructor. \arg{frame} specifies the wxFrame which should be managed.
+\arg{flags}  specifies options which allow the frame management behavior
+to be modified.
+
+\membersection{wxAuiManager::\destruct{wxAuiManager}}\label{wxauimanagerdtor}
+
+\func{}{\destruct{wxAuiManager}}{\void}
+
+\membersection{wxAuiManager::AddPane}\label{wxauimanageraddpane}
+
+\func{bool}{AddPane}{\param{wxWindow* }{window}, \param{const wxAuiPaneInfo\& }{pane\_info}}
+
+\func{bool}{AddPane}{\param{wxWindow* }{window}, \param{int }{direction = wxLEFT}, \param{const wxString\& }{caption = wxEmptyString}}
+
+\func{bool}{AddPane}{\param{wxWindow* }{window}, \param{const wxAuiPaneInfo\& }{pane\_info}, \param{const wxPoint\& }{drop\_pos}}
+
+
+AddPane() tells the frame manager to start managing a child window. There are several versions of this function. The first version allows the full spectrum of pane parameter possibilities. The second version is used for simpler user interfaces which do not require as much configuration.  The last version allows a drop position to be specified, which will determine where the pane will be added.
+
+\membersection{wxAuiManager::DetachPane}\label{wxauimanagerdetachpane}
+
+\func{bool}{DetachPane}{\param{wxWindow* }{window}}
+
+Tells the wxAuiManager to stop managing the pane specified by window.
+The window, if in a floated frame, is reparented to the frame managed
+by wxAuiManager.
+
+\membersection{wxAuiManager::GetAllPanes}\label{wxauimanagergetallpanes}
+
+\func{wxAuiPaneInfoArray\&}{GetAllPanes}{\void}
+
+Returns an array of all panes managed by the frame manager.
+
+\membersection{wxAuiManager::GetArtProvider}\label{wxauimanagergetartprovider}
+
+\constfunc{wxAuiDockArt*}{GetArtProvider}{\void}
+
+Returns the current art provider being used.
+
+See also: \helpref{wxAuiDockArt}{wxauidockart}.
+
+\membersection{wxAuiManager::GetFlags}\label{wxauimanagergetflags}
+
+\constfunc{unsigned int}{GetFlags}{\void}
+
+Returns the current manager's flags.
+
+\membersection{wxAuiManager::GetManagedWindow}\label{wxauimanagergetmanagedwindow}
+
+\constfunc{wxWindow*}{GetManagedWindow}{\void}
+
+Returns the frame currently being managed by wxAuiManager.
+
+\membersection{wxAuiManager::GetPane}\label{wxauimanagergetpane}
+
+\func{wxAuiPaneInfo\&}{GetPane}{\param{wxWindow* }{window}}
+
+\func{wxAuiPaneInfo\&}{GetPane}{\param{const wxString\& }{name}}
+
+{\it GetPane} is used to lookup a wxAuiPaneInfo object
+either by window pointer or by pane name, which acts as a unique id for
+a window pane. The returned wxAuiPaneInfo object may then be modified to
+change a pane's look, state or position. After one or more
+modifications to wxAuiPaneInfo, wxAuiManager::Update() should be called
+to commit the changes to the user interface. If the lookup failed
+(meaning the pane could not be found in the manager), a call to the
+returned wxAuiPaneInfo's IsOk() method will return false.
+
+\membersection{wxAuiManager::HideHint}\label{wxauimanagerhidehint}
+
+\func{void}{HideHint}{\void}
+
+HideHint() hides any docking hint that may be visible.
+
+\membersection{wxAuiManager::InsertPane}\label{wxauimanagerinsertpane}
+
+\func{bool}{InsertPane}{\param{wxWindow* }{window}, \param{const wxAuiPaneInfo\& }{insert\_location}, \param{int }{insert\_level = wxAUI\_INSERT\_PANE}}
+
+This method is used to insert either a previously unmanaged pane window
+into the frame manager, or to insert a currently managed pane somewhere 
+else. {\it InsertPane} will push all panes, rows, or docks aside and
+insert the window into the position specified by \arg{insert\_location}. 
+Because \arg{insert\_location} can specify either a pane, dock row, or dock
+layer, the \arg{insert\_level} parameter is used to disambiguate this. The
+parameter \arg{insert\_level} can take a value of wxAUI\_INSERT\_PANE, wxAUI\_INSERT\_ROW 
+or wxAUI\_INSERT\_DOCK.
+
+\membersection{wxAuiManager::LoadPaneInfo}\label{wxauimanagerloadpaneinfo}
+
+\func{void}{LoadPaneInfo}{\param{wxString }{pane\_part}, \param{wxAuiPaneInfo\& }{pane}}
+
+LoadPaneInfo() is similar to to LoadPerspective, with the exception that it only loads information about a single pane.  It is used in combination with SavePaneInfo().
+
+\membersection{wxAuiManager::LoadPerspective}\label{wxauimanagerloadperspective}
+
+\func{bool}{LoadPerspective}{\param{const wxString\& }{perspective}, \param{bool }{update = true}}
+
+Loads a saved perspective. If update is true, wxAuiManager::Update()
+is automatically invoked, thus realizing the saved perspective on screen.
+
+\membersection{wxAuiManager::ProcessDockResult}\label{wxauimanagerprocessdockresult}
+
+\func{bool}{ProcessDockResult}{\param{wxAuiPaneInfo\& }{target}, \param{const wxAuiPaneInfo\& }{new\_pos}}
+
+ProcessDockResult() is a protected member of the wxAUI layout manager.  It can be overridden by derived classes to provide custom docking calculations.
+
+\membersection{wxAuiManager::SavePaneInfo}\label{wxauimanagersavepaneinfo}
+
+\func{wxString}{SavePaneInfo}{\param{wxAuiPaneInfo\& }{pane}}
+
+SavePaneInfo() is similar to SavePerspective, with the exception that it only saves information about a single pane.  It is used in combination with LoadPaneInfo().
+
+\membersection{wxAuiManager::SavePerspective}\label{wxauimanagersaveperspective}
+
+\func{wxString}{SavePerspective}{\void}
+
+Saves the entire user interface layout into an encoded wxString, which
+can then be stored by the application (probably using wxConfig). When
+a perspective is restored using LoadPerspective(), the entire user
+interface will return to the state it was when the perspective was saved.
+
+\membersection{wxAuiManager::SetArtProvider}\label{wxauimanagersetartprovider}
+
+\func{void}{SetArtProvider}{\param{wxAuiDockArt* }{art\_provider}}
+
+Instructs wxAuiManager to use art provider specified by parameter
+\arg{art\_provider} for all drawing calls. This allows plugable
+look-and-feel features. The previous art provider object, if any,
+will be deleted by wxAuiManager.
+
+See also: \helpref{wxAuiDockArt}{wxauidockart}.
+
+\membersection{wxAuiManager::SetFlags}\label{wxauimanagersetflags}
+
+\func{void}{SetFlags}{\param{unsigned int }{flags}}
+
+This method is used to specify wxAuiManager's settings flags. \arg{flags}
+specifies options which allow the frame management behavior to be modified.
+
+\membersection{wxAuiManager::SetManagedWindow}\label{wxauimanagersetmanagedwindow}
+
+\func{void}{SetManagedWindow}{\param{wxWindow* }{managed\_wnd}}
+
+Called to specify the frame or window which is to be managed by wxAuiManager.  Frame management is not restricted to just frames.  Child windows or custom controls are also allowed.
+
+\membersection{wxAuiManager::ShowHint}\label{wxauimanagershowhint}
+
+\func{void}{ShowHint}{\param{const wxRect\& }{rect}}
+
+This function is used by controls to explicitly show a hint window at the specified rectangle.  It is rarely called, and is mostly used by controls implementing custom pane drag/drop behaviour.  The specified rectangle should be in screen coordinates.
+
+\membersection{wxAuiManager::UnInit}\label{wxauimanageruninit}
+
+\func{void}{UnInit}{\void}
+
+Uninitializes the framework and should be called before a managed frame or window is destroyed. UnInit() is usually called in the managed wxFrame's destructor.  It is necessary to call this function before the managed frame or window is destroyed, otherwise the manager cannot remove its custom event handlers from a window.
+
+\membersection{wxAuiManager::Update}\label{wxauimanagerupdate}
+
+\func{void}{Update}{\void}
+
+This method is called after any number of changes are
+made to any of the managed panes. Update() must be invoked after
+AddPane() or InsertPane() are called in order to "realize" or "commit"
+the changes. In addition, any number of changes may be made to
+wxAuiPaneInfo structures (retrieved with wxAuiManager::GetPane), but to
+realize the changes, Update() must be called. This construction allows
+pane flicker to be avoided by updating the whole layout at one time.
+
