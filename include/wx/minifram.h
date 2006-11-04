@@ -30,6 +30,11 @@
 #include "wx/mac/minifram.h"
 #elif defined(__WXPM__)
 #include "wx/os2/minifram.h"
+#else
+// TODO: it seems that wxMiniFrame could be just defined here generically
+//       instead of having all the above port-specific headers
+#include "wx/frame.h"
+typedef wxFrame wxMiniFrame;
 #endif
 
 #endif
