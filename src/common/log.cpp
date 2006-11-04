@@ -37,6 +37,7 @@
 #endif //WX_PRECOMP
 
 #include "wx/apptrait.h"
+#include "wx/datetime.h"
 #include "wx/file.h"
 #include "wx/msgout.h"
 #include "wx/textfile.h"
@@ -411,6 +412,7 @@ void wxLog::ClearTraceMasks()
 
 void wxLog::TimeStamp(wxString *str)
 {
+#if wxUSE_DATETIME
     if ( ms_timestamp )
     {
         wxChar buf[256];
@@ -424,6 +426,7 @@ void wxLog::TimeStamp(wxString *str)
         str->Empty();
         *str << buf << wxT(": ");
     }
+#endif // wxUSE_DATETIME
 }
 
 void wxLog::DoLog(wxLogLevel level, const wxChar *szString, time_t t)
