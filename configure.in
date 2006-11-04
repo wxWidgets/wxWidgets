@@ -1427,9 +1427,32 @@ case "${host}" in
   *-*-cygwin*)
       if test "$wxUSE_MSW" = 1 ; then
         wants_win32=1
-        BAKEFILE_FORCE_PLATFORM=win32
       else
-        doesnt_want_win32=1
+        dnl when we use cygwin compiler with -mno-cygwin option it uses mingw32
+        dnl headers and libraries, so it's Windows-like in this case
+        AC_CACHE_CHECK([if -mno-cygwin is in effect], wx_cv_nocygwin,
+            [
+                AC_TRY_COMPILE(
+                    [],
+                    [
+                        #ifdef __MINGW32__
+                            choke me
+                        #endif
+                    ],
+                    wx_cv_nocygwin=no,
+                    wx_cv_nocygwin=yes
+                )
+            ]
+        )
+
+        if test "$wx_cv_nocygwin" = "yes"; then
+            wants_win32=1
+        else
+            doesnt_want_win32=1
+        fi
+      fi
+      if test "$wants_win32" = 1 ; then
+        BAKEFILE_FORCE_PLATFORM=win32
       fi
   ;;
   *-*-mingw*)
