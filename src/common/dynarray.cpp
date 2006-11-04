@@ -403,6 +403,7 @@ void name::insert(iterator it, const_iterator first, const_iterator last)   \
 #endif
 
 _WX_DEFINE_BASEARRAY(const void *, wxBaseArrayPtrVoid)
+_WX_DEFINE_BASEARRAY(char,         wxBaseArrayChar)
 _WX_DEFINE_BASEARRAY(short,        wxBaseArrayShort)
 _WX_DEFINE_BASEARRAY(int,          wxBaseArrayInt)
 _WX_DEFINE_BASEARRAY(long,         wxBaseArrayLong)

@@ -125,12 +125,18 @@ int wxCMPFUNC_CONV name ## RevCompare(T* first, T* second)                    \
 
 typedef unsigned short ushort;
 
+DEFINE_COMPARE(Char, char);
 DEFINE_COMPARE(UShort, ushort);
 DEFINE_COMPARE(Int, int);
+
+WX_DEFINE_ARRAY_CHAR(char, wxArrayChar);
+WX_DEFINE_SORTED_ARRAY_CHAR(char, wxSortedArrayCharNoCmp);
+WX_DEFINE_SORTED_ARRAY_CMP_CHAR(char, CharCompareValues, wxSortedArrayChar);
 
 WX_DEFINE_ARRAY_SHORT(ushort, wxArrayUShort);
 WX_DEFINE_SORTED_ARRAY_SHORT(ushort, wxSortedArrayUShortNoCmp);
 WX_DEFINE_SORTED_ARRAY_CMP_SHORT(ushort, UShortCompareValues, wxSortedArrayUShort);
+
 WX_DEFINE_SORTED_ARRAY_CMP_INT(int, IntCompareValues, wxSortedArrayInt);
 
 // ----------------------------------------------------------------------------
@@ -148,6 +154,7 @@ private:
         CPPUNIT_TEST( wxObjArrayTest );
         CPPUNIT_TEST( wxArrayUShortTest );
         CPPUNIT_TEST( wxArrayIntTest );
+        CPPUNIT_TEST( wxArrayCharTest );
         CPPUNIT_TEST( TestSTL );
         CPPUNIT_TEST( Alloc );
     CPPUNIT_TEST_SUITE_END();
@@ -156,6 +163,7 @@ private:
     void wxObjArrayTest();
     void wxArrayUShortTest();
     void wxArrayIntTest();
+    void wxArrayCharTest();
     void TestSTL();
     void Alloc();
 
@@ -358,6 +366,8 @@ void ArraysTestCase::wxArray ## name ## Test()                                \
 }
 
 TestArrayOf(UShort);
+
+TestArrayOf(Char);
 
 TestArrayOf(Int);
 
