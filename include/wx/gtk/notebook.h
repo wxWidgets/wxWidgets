@@ -116,15 +116,10 @@ public:
     // the additional page data (the pages themselves are in m_pages array)
     wxGtkNotebookPagesList m_pagesData;
 
-    // for reasons explained in gtk/notebook.cpp we store the current
-    // selection internally instead of querying the notebook for it
-    int m_selection;
-
-    // flag set to true while we're inside "switch_page" callback
-    bool m_inSwitchPage;
-
-    // flag set to true when the switch-page signal has been programatically generated
-    bool m_skipNextPageChangeEvent;
+    // we need to store the old selection since there
+    // is no other way to know about it at the time
+    // of the change selection event
+    int m_oldSelection;
 
 protected:
     // set all page's attributes
