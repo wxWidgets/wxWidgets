@@ -134,10 +134,7 @@ void wxOverlayImpl::Init( wxWindowDC* dc, int x , int y , int width , int height
 
 void wxOverlayImpl::BeginDrawing( wxWindowDC* dc)
 {
-// TODO CS
     dc->SetGraphicsContext( wxGraphicsContext::CreateFromNative( m_overlayContext ) );
-    // triggers an application of the already set device origins to the native context
-    dc->SetUserScale(1,1);
     wxSize size = dc->GetSize() ;
     dc->SetClippingRegion( 0 , 0 , size.x , size.y ) ;
 }

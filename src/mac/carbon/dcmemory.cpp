@@ -100,9 +100,6 @@ void wxMemoryDC::DoSelect( const wxBitmap& bitmap )
             CGContextScaleCTM( bmCtx , 1 , -1 ) ;
 
 			SetGraphicsContext( wxGraphicsContext::CreateFromNative( bmCtx ) );
-            m_graphicContext->SetPen( m_pen ) ;
-            m_graphicContext->SetBrush( m_brush ) ;
-            m_graphicContext->SetFont( m_font , m_textForegroundColour) ;
         }
         m_ok = (m_graphicContext != NULL) ;
 

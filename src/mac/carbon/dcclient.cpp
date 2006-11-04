@@ -145,8 +145,6 @@ wxWindowDC::wxWindowDC(wxWindow *window)
 
         SetGraphicsContext( wxGraphicsContext::CreateFromNative( cg ) );
     }
-    m_graphicContext->SetPen( m_pen ) ;
-    m_graphicContext->SetBrush( m_brush ) ;
     SetClippingRegion( 0 , 0 , m_width , m_height ) ;
 #else
     int x , y ;

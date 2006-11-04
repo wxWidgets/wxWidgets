@@ -36,9 +36,6 @@ class WXDLLEXPORT wxPrinterDC: public wxDC
 
     wxPrintData& GetPrintData() { return m_printData; }
     virtual wxSize GetPPI() const;
-#if wxMAC_USE_CORE_GRAPHICS
-    void MacSetCGContext( void * cg ) ;
-#endif    
  protected:
     virtual void DoGetSize( int *width, int *height ) const;
     wxPrintData   m_printData ;

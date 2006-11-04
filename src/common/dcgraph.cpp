@@ -71,6 +71,9 @@ void wxGCDC::SetGraphicsContext( wxGraphicsContext* ctx )
         m_ok = true;
         // apply the stored transformations to the passed in context
         ComputeScaleAndOrigin();
+        m_graphicContext->SetFont( m_font , m_textForegroundColour );
+        m_graphicContext->SetPen( m_pen );
+        m_graphicContext->SetBrush( m_brush);
     }
 }
 
@@ -78,12 +81,6 @@ wxGCDC::wxGCDC(const wxWindowDC& dc)
 {
     Init();
     SetGraphicsContext( wxGraphicsContext::Create(dc) );
-    if ( dc.GetFont().Ok())
-        m_graphicContext->SetFont( m_graphicContext->CreateFont(dc.GetFont(),dc.GetTextForeground()));
-    if ( dc.GetPen().Ok())
-        m_graphicContext->SetPen( m_graphicContext->CreatePen(dc.GetPen()));
-    if ( dc.GetBrush().Ok())
-        m_graphicContext->SetBrush( m_graphicContext->CreateBrush(dc.GetBrush()));
 }
 
 void wxGCDC::Init()

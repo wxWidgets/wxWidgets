@@ -1869,6 +1869,8 @@ public :
     virtual wxGraphicsContext * CreateContextFromNativeWindow( void * window );
 
     virtual wxGraphicsContext * CreateContext( wxWindow* window );
+    
+    virtual wxGraphicsContext * CreateMeasuringContext();
 
     // Path
 
@@ -1932,6 +1934,11 @@ wxGraphicsContext * wxMacCoreGraphicsRenderer::CreateContextFromNativeWindow( vo
 wxGraphicsContext * wxMacCoreGraphicsRenderer::CreateContext( wxWindow* window )
 {
     return new wxMacCoreGraphicsContext(this, window );
+}
+
+wxGraphicsContext * wxMacCoreGraphicsRenderer::CreateMeasuringContext()
+{
+    return new wxMacCoreGraphicsContext(this);
 }
 
 // Path

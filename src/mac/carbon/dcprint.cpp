@@ -230,7 +230,7 @@ void wxMacCarbonPrinterDC::StartPage( wxPrinterDC* dc )
         m_err = noErr ;
     }
 #if wxMAC_USE_CORE_GRAPHICS
-    dc->MacSetCGContext(pageContext) ;
+    dc->SetGraphicsContext( wxGraphicsContext::CreateFromNative( pageContext ) );
 #endif
 }
 
@@ -247,7 +247,8 @@ void wxMacCarbonPrinterDC::EndPage( wxPrinterDC* dc )
         PMSessionEndDocument(native->m_macPrintSession);
     }
 #if wxMAC_USE_CORE_GRAPHICS
-    dc->MacSetCGContext(NULL) ;
+    // the cg context we got when starting the page isn't valid anymore, so replace it
+    dc->SetGraphicsContext( wxGraphicsContext::Create() );
 #endif
 }
 
@@ -291,10 +292,9 @@ wxPrinterDC::wxPrinterDC(const wxPrintData& printdata)
             m_mm_to_pix_y = mm2inches * sz.y;        
         }
 #if wxMAC_USE_CORE_GRAPHICS
-/*
-        // the cgContext will only be handed over page by page
-        m_graphicContext = new wxMacCGContext() ;
-		*/
+        // we need at least a measuring context because people start measuring before a page
+        // gets printed at all
+        SetGraphicsContext( wxGraphicsContext::Create() );
 #endif
     }
 }
@@ -306,23 +306,9 @@ wxSize wxPrinterDC::GetPPI() const
 
 wxPrinterDC::~wxPrinterDC(void)
 {
-#if wxMAC_USE_CORE_GRAPHICS
-/*
-    // this context was borrowed
-    ((wxMacCGContext*)(m_graphicContext))->SetNativeContext( NULL ) ;
-	*/
-#endif
     delete m_nativePrinterDC ;
 }
 
-#if wxMAC_USE_CORE_GRAPHICS
-void wxPrinterDC::MacSetCGContext( void * cg )
-{
-    SetGraphicsContext( wxGraphicsContext::CreateFromNative( cg ) );
-    m_graphicContext->SetPen( m_pen ) ;
-    m_graphicContext->SetBrush( m_brush ) ;
-}
-#endif
 bool wxPrinterDC::StartDoc( const wxString& message )
 {
     wxASSERT_MSG( Ok() , wxT("Called wxPrinterDC::StartDoc from an invalid object") ) ;

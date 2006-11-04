@@ -509,7 +509,7 @@ void wxGraphicsContext::SetPen( const wxGraphicsPen& pen )
 
 void wxGraphicsContext::SetPen( const wxPen& pen )
 {
-    if ( pen.GetStyle() == wxTRANSPARENT )
+    if ( !pen.Ok() || pen.GetStyle() == wxTRANSPARENT )
         SetPen( wxNullGraphicsPen );
     else
         SetPen( CreatePen( pen ) );
@@ -523,7 +523,7 @@ void wxGraphicsContext::SetBrush( const wxGraphicsBrush& brush )
 
 void wxGraphicsContext::SetBrush( const wxBrush& brush )
 {
-    if ( brush.GetStyle() == wxTRANSPARENT )
+    if ( !brush.Ok() || brush.GetStyle() == wxTRANSPARENT )
         SetBrush( wxNullGraphicsBrush );
     else
         SetBrush( CreateBrush( brush ) );
@@ -680,6 +680,11 @@ wxGraphicsContext* wxGraphicsContext::CreateFromNativeWindow( void * window )
 wxGraphicsContext* wxGraphicsContext::Create( wxWindow* window )
 {
     return wxGraphicsRenderer::GetDefaultRenderer()->CreateContext(window);
+}
+
+wxGraphicsContext* wxGraphicsContext::Create()
+{
+    return wxGraphicsRenderer::GetDefaultRenderer()->CreateMeasuringContext();
 }
 
 //-----------------------------------------------------------------------------

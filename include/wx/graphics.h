@@ -393,6 +393,9 @@ public:
 
     static wxGraphicsContext* Create( wxWindow* window ) ;
 
+    // create a context that can be used for measuring texts only, no drawing allowed
+    static wxGraphicsContext * Create();
+
     wxGraphicsPath CreatePath() const;
     
     virtual wxGraphicsPen CreatePen(const wxPen& pen) const;
@@ -604,6 +607,9 @@ public :
     virtual wxGraphicsContext * CreateContextFromNativeWindow( void * window ) = 0;
 
     virtual wxGraphicsContext * CreateContext( wxWindow* window ) = 0;
+
+    // create a context that can be used for measuring texts only, no drawing allowed
+    virtual wxGraphicsContext * CreateMeasuringContext() = 0;
 
     // Path
     
