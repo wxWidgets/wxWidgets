@@ -445,12 +445,9 @@ label:
 				continue;
 			case 'z':
 				{
-				int		diff;
+				int		diff = -timezone;
 				char const *	sign;
 
-				if (t->tm_isdst < 0)
-					continue;
-                continue;
 				if (diff < 0) {
 					sign = "-";
 					diff = -diff;
