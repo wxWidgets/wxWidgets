@@ -3884,8 +3884,8 @@ if test "$wxUSE_OPENGL" = "yes"; then
             CPPFLAGS="$ac_path_to_include $CPPFLAGS"
         fi
 
-        AC_CHECK_HEADER(GL/gl.h,
-            [
+        AC_CHECK_HEADER(GL/gl.h, [
+            AC_CHECK_HEADER(GL/glu.h, [
                 found_gl=0
 
                 AC_MSG_CHECKING([for -lGL])
@@ -3933,6 +3933,7 @@ if test "$wxUSE_OPENGL" = "yes"; then
                     fi
                 fi
             ])
+        ])
 
         if test "x$OPENGL_LIBS" = "x"; then
             dnl it should be an error and not a warning because OpenGL is not on
