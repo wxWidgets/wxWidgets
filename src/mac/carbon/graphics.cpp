@@ -796,7 +796,7 @@ bool wxMacCoreGraphicsMatrixData::IsEqual( const wxGraphicsMatrixData* t) const
 {
     const CGAffineTransform* tm = (CGAffineTransform*) t->GetNativeMatrix();
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_4
-    if ( CGAffineTransformEqualToTransform )
+    if ( CGAffineTransformEqualToTransform!=NULL )
     {
         return CGAffineTransformEqualToTransform(m_matrix, *((CGAffineTransform*) t->GetNativeMatrix()));
     }
@@ -1050,7 +1050,7 @@ void wxMacCoreGraphicsPathData::GetBox(wxDouble *x, wxDouble *y, wxDouble *w, wx
 bool wxMacCoreGraphicsPathData::Contains( wxDouble x, wxDouble y, int fillStyle) const
 {
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_4
-    if ( CGPathContainsPoint )
+    if ( CGPathContainsPoint!=NULL )
     {
         return CGPathContainsPoint( m_path, NULL, CGPointMake(x,y), fillStyle == wxODDEVEN_RULE );
     }
