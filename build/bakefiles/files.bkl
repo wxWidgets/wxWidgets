@@ -2529,6 +2529,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 
 <set var="UNIV_SRC" hints="files">
     src/generic/accel.cpp
+    src/generic/animateg.cpp
     src/generic/colrdlgg.cpp
     src/generic/dirdlgg.cpp
     src/generic/fdrepdlg.cpp
@@ -2577,6 +2578,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/univ/winuniv.cpp
 </set>
 <set var="UNIV_HDR" hints="files">
+    wx/generic/animate.h
     wx/generic/accel.h
     wx/generic/dirdlgg.h
     wx/generic/fdrepdlg.h
@@ -2812,10 +2814,8 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 </set>
 
 <set var="ADVANCED_X11_SRC" hints="files">
-    src/generic/animateg.cpp
 </set>
 <set var="ADVANCED_X11_HDR" hints="files">
-    wx/generic/animate.h
 </set>
 
 <!-- ====================================================================== -->
