@@ -1595,7 +1595,6 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_automtn.o \
 	$(OBJS)\monodll_uuid.o \
 	$(OBJS)\monodll_accel.o \
-	$(OBJS)\monodll_animateg.o \
 	$(OBJS)\monodll_colrdlgg.o \
 	$(OBJS)\monodll_dirdlgg.o \
 	$(OBJS)\monodll_fdrepdlg.o \
@@ -2213,7 +2212,6 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_automtn.o \
 	$(OBJS)\monolib_uuid.o \
 	$(OBJS)\monolib_accel.o \
-	$(OBJS)\monolib_animateg.o \
 	$(OBJS)\monolib_colrdlgg.o \
 	$(OBJS)\monolib_dirdlgg.o \
 	$(OBJS)\monolib_fdrepdlg.o \
@@ -2750,7 +2748,6 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_automtn.o \
 	$(OBJS)\coredll_uuid.o \
 	$(OBJS)\coredll_accel.o \
-	$(OBJS)\coredll_animateg.o \
 	$(OBJS)\coredll_colrdlgg.o \
 	$(OBJS)\coredll_dirdlgg.o \
 	$(OBJS)\coredll_fdrepdlg.o \
@@ -3204,7 +3201,6 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_automtn.o \
 	$(OBJS)\corelib_uuid.o \
 	$(OBJS)\corelib_accel.o \
-	$(OBJS)\corelib_animateg.o \
 	$(OBJS)\corelib_colrdlgg.o \
 	$(OBJS)\corelib_dirdlgg.o \
 	$(OBJS)\corelib_fdrepdlg.o \
@@ -6582,18 +6578,6 @@ $(OBJS)\monodll_vscroll.o: ../../src/generic/vscroll.cpp
 endif
 
 ifeq ($(USE_GUI),1)
-$(OBJS)\monodll_animateg.o: ../../src/generic/animateg.cpp
-	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
-endif
-
-ifeq ($(USE_GUI),1)
-ifeq ($(WXUNIV),1)
-$(OBJS)\monodll_animateg.o: ../../src/generic/animateg.cpp
-	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
-endif
-endif
-
-ifeq ($(USE_GUI),1)
 $(OBJS)\monodll_animatecmn.o: ../../src/common/animatecmn.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -6690,6 +6674,11 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\monodll_wizard.o: ../../src/generic/wizard.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\monodll_animateg.o: ../../src/generic/animateg.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 endif
 
@@ -8673,18 +8662,6 @@ $(OBJS)\monolib_vscroll.o: ../../src/generic/vscroll.cpp
 endif
 
 ifeq ($(USE_GUI),1)
-$(OBJS)\monolib_animateg.o: ../../src/generic/animateg.cpp
-	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
-endif
-
-ifeq ($(USE_GUI),1)
-ifeq ($(WXUNIV),1)
-$(OBJS)\monolib_animateg.o: ../../src/generic/animateg.cpp
-	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
-endif
-endif
-
-ifeq ($(USE_GUI),1)
 $(OBJS)\monolib_animatecmn.o: ../../src/common/animatecmn.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -8781,6 +8758,11 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\monolib_wizard.o: ../../src/generic/wizard.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\monolib_animateg.o: ../../src/generic/animateg.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 endif
 
@@ -9518,9 +9500,6 @@ $(OBJS)\coredll_treectrl.o: ../../src/msw/treectrl.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\coredll_fontdlg.o: ../../src/msw/fontdlg.cpp
-	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\coredll_animateg.o: ../../src/generic/animateg.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\coredll_colrdlgg.o: ../../src/generic/colrdlgg.cpp
@@ -10881,9 +10860,6 @@ $(OBJS)\corelib_treectrl.o: ../../src/msw/treectrl.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\corelib_fontdlg.o: ../../src/msw/fontdlg.cpp
-	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\corelib_animateg.o: ../../src/generic/animateg.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\corelib_colrdlgg.o: ../../src/generic/colrdlgg.cpp

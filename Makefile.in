@@ -1585,6 +1585,7 @@ COND_WXUSE_EXPAT_BUILTIN___wxexpat___depname = \
 @COND_TOOLKIT_WINCE@	wx/msw/wince/chkconf.h
 @COND_TOOLKIT_WINCE@NET_WINCE_SRC = src/msw/wince/net.cpp
 @COND_TOOLKIT_WINCE@NET_WINCE_HDR = wx/msw/wince/net.h
+@COND_TOOLKIT_MSW@MSW_HTML_HDR = wx/msw/helpbest.h
 @COND_TOOLKIT_COCOA@OPENGL_HDR = wx/cocoa/glcanvas.h
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_@OPENGL_HDR = wx/gtk1/glcanvas.h
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@OPENGL_HDR = wx/gtk/glcanvas.h
@@ -2753,9 +2754,7 @@ COND_WXUNIV_1_ADVANCED_HDR =  \
 	wx/wave.h \
 	wx/wizard.h \
 	$(ADVANCED_PLATFORM_HDR) \
-	wx/unix/joystick.h \
-	wx/unix/sound.h \
-	wx/unix/taskbarx11.h
+	wx/generic/animate.h
 @COND_WXUNIV_1@ADVANCED_HDR = $(COND_WXUNIV_1_ADVANCED_HDR)
 @COND_TOOLKIT_COCOA@MEDIA_PLATFORM_HDR = 
 @COND_TOOLKIT_GTK@MEDIA_PLATFORM_HDR = 
@@ -3027,7 +3026,7 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/html/winpars.h \
 	wx/wxhtml.h \
 	wx/htmllbox.h \
-	wx/msw/helpbest.h \
+	$(MSW_HTML_HDR) \
 	$(OPENGL_HDR) \
 	wx/debugrpt.h \
 	wx/dbgrid.h \
