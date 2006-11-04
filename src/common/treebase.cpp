@@ -157,29 +157,6 @@ wxSize wxTreeCtrlBase::DoGetBestSize() const
     {
         // iterate over all items recursively
         wxGetBestTreeSize(this, GetRootItem(), size);
-
-        // but the above doesn't take into account the icon items nor the tree
-        // "+"/"-" buttons which have about the same size
-        wxCoord iconWidth, iconHeight;
-        if ( !m_imageListNormal ||
-                !m_imageListNormal->GetImageCount() ||
-                    !m_imageListNormal->GetSize(0, iconWidth, iconHeight) )
-        {
-            // FIXME: what is the default size of the tree buttons?
-            iconWidth =
-            iconHeight = 16;
-        }
-
-        // account for the icons if we have them
-        if ( m_imageListNormal )
-        {
-            // FIXME: and how to get the margin? better be large...
-            size.x += iconWidth + 10;
-        }
-
-        // and for the buttons always
-        if ( !HasFlag(wxTR_NO_BUTTONS) )
-            size.x += iconWidth;
     }
 
     // need some minimal size even for empty tree
