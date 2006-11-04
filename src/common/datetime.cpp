@@ -16,10 +16,6 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-// TODO: for $DEITY sake, someone please fix the #ifdef __WXWINCE__ everywhere,
-//       the proper way to do it is to implement (subset of) wxStrftime() for
-//       CE instead of this horror!!
-
 /*
  * Implementation notes:
  *
@@ -179,6 +175,11 @@ wxCUSTOM_TYPE_INFO(wxDateTime, wxToStringConverter<wxDateTime> , wxFromStringCon
         #define WX_TIMEZONE timezone
     #endif
 #endif // !WX_TIMEZONE && !WX_GMTOFF_IN_TM
+
+// everyone has strftime except Win CE unless VC8 is used
+#if !defined(__WXWINCE__) || defined(__VISUALC8__)
+    #define HAVE_STRFTIME
+#endif
 
 // NB: VC8 safe time functions could/should be used for wxMSW as well probably
 #if defined(__WXWINCE__) && defined(__VISUALC8__)
@@ -425,7 +426,8 @@ static long GetTruncatedJDN(wxDateTime::wxDateTime_t day,
             - JDN_OFFSET;
 }
 
-#ifndef __WXWINCE__
+#ifdef HAVE_STRFTIME
+
 // this function is a wrapper around strftime(3) adding error checking
 static wxString CallStrftime(const wxChar *format, const tm* tm)
 {
@@ -443,7 +445,8 @@ static wxString CallStrftime(const wxChar *format, const tm* tm)
     s = buf;
     return s;
 }
-#endif
+
+#endif // HAVE_STRFTIME
 
 #ifdef HAVE_STRPTIME
 
@@ -900,7 +903,7 @@ wxString wxDateTime::GetMonthName(wxDateTime::Month month,
                                   wxDateTime::NameFlags flags)
 {
     wxCHECK_MSG( month != Inv_Month, wxEmptyString, _T("invalid month") );
-#ifndef __WXWINCE__
+#ifdef HAVE_STRFTIME
     // notice that we must set all the fields to avoid confusing libc (GNU one
     // gets confused to a crash if we don't do this)
     tm tm;
@@ -908,7 +911,7 @@ wxString wxDateTime::GetMonthName(wxDateTime::Month month,
     tm.tm_mon = month;
 
     return CallStrftime(flags == Name_Abbr ? _T("%b") : _T("%B"), &tm);
-#else
+#else // !HAVE_STRFTIME
     wxString ret;
     switch(month)
     {
@@ -950,7 +953,7 @@ wxString wxDateTime::GetMonthName(wxDateTime::Month month,
             break;
     }
     return ret;
-#endif
+#endif // HAVE_STRFTIME/!HAVE_STRFTIME
 }
 
 /* static */
@@ -958,7 +961,7 @@ wxString wxDateTime::GetWeekDayName(wxDateTime::WeekDay wday,
                                     wxDateTime::NameFlags flags)
 {
     wxCHECK_MSG( wday != Inv_WeekDay, wxEmptyString, _T("invalid weekday") );
-#ifndef __WXWINCE__
+#ifdef HAVE_STRFTIME
     // take some arbitrary Sunday (but notice that the day should be such that
     // after adding wday to it below we still have a valid date, e.g. don't
     // take 28 here!)
@@ -976,7 +979,7 @@ wxString wxDateTime::GetWeekDayName(wxDateTime::WeekDay wday,
 
     // ... and call strftime()
     return CallStrftime(flags == Name_Abbr ? _T("%a") : _T("%A"), &tm);
-#else
+#else // !HAVE_STRFTIME
     wxString ret;
     switch(wday)
     {
@@ -1003,8 +1006,7 @@ wxString wxDateTime::GetWeekDayName(wxDateTime::WeekDay wday,
             break;
     }
     return ret;
-
-#endif
+#endif // HAVE_STRFTIME/!HAVE_STRFTIME
 }
 
 /* static */
@@ -1082,9 +1084,9 @@ wxDateTime::Country wxDateTime::GetCountry()
             ms_country = USA;
         }
     }
-#else
+#else // __WXWINCE__
      ms_country = USA;
-#endif
+#endif // !__WXWINCE__/__WXWINCE__
 
     return ms_country;
 }
@@ -2249,9 +2251,11 @@ wxString wxDateTime::Format(const wxChar *format, const TimeZone& tz) const
 {
     wxCHECK_MSG( format, wxEmptyString, _T("NULL format in wxDateTime::Format") );
 
+    time_t time = GetTicks();
+
     // we have to use our own implementation if the date is out of range of
     // strftime() or if we use non standard specificators
-    time_t time = GetTicks();
+#ifdef HAVE_STRFTIME
     if ( (time != (time_t)-1) && !wxStrstr(format, _T("%l")) )
     {
         // use strftime()
@@ -2286,15 +2290,14 @@ wxString wxDateTime::Format(const wxChar *format, const TimeZone& tz) const
                 tm = (struct tm *)NULL;
             }
         }
-#ifndef __WXWINCE__
-    //Windows CE doesn't support strftime or wcsftime, so we use the generic implementation
+
         if ( tm )
         {
             return CallStrftime(format, tm);
         }
-#endif
-        //else: use generic code below
     }
+    //else: use generic code below
+#endif // HAVE_STRFTIME
 
     // we only parse ANSI C format specifications here, no POSIX 2
     // complications, no GNU extensions but we do add support for a "%l" format
@@ -2371,7 +2374,7 @@ wxString wxDateTime::Format(const wxChar *format, const TimeZone& tz) const
 
                 case _T('c'):       // locale default date and time  representation
                 case _T('x'):       // locale default date representation
-#ifndef __WXWINCE__
+#ifdef HAVE_STRFTIME
                     //
                     // the problem: there is no way to know what do these format
                     // specifications correspond to for the current locale.
@@ -2515,11 +2518,11 @@ wxString wxDateTime::Format(const wxChar *format, const TimeZone& tz) const
 
                         res += str;
                     }
-#else
-                    //Use "%m/%d/%y %H:%M:%S" format instead
+#else // !HAVE_STRFTIME
+                    // Use "%m/%d/%y %H:%M:%S" format instead
                     res += wxString::Format(wxT("%02d/%02d/%04d %02d:%02d:%02d"),
                             tm.mon+1,tm.mday, tm.year, tm.hour, tm.min, tm.sec);
-#endif
+#endif // HAVE_STRFTIME/!HAVE_STRFTIME
                     break;
 
                 case _T('d'):       // day of a month (01-31)
@@ -2556,11 +2559,11 @@ wxString wxDateTime::Format(const wxChar *format, const TimeZone& tz) const
                     break;
 
                 case _T('p'):       // AM or PM string
-#ifndef __WXWINCE__
+#ifdef HAVE_STRFTIME
                     res += CallStrftime(_T("%p"), &tmTimeOnly);
-#else
+#else // !HAVE_STRFTIME
                     res += (tmTimeOnly.tm_hour > 12) ? wxT("pm") : wxT("am");
-#endif
+#endif // HAVE_STRFTIME/!HAVE_STRFTIME
                     break;
 
                 case _T('S'):       // second as a decimal number (00-61)
@@ -2583,11 +2586,11 @@ wxString wxDateTime::Format(const wxChar *format, const TimeZone& tz) const
 
                 case _T('X'):       // locale default time representation
                     // just use strftime() to format the time for us
-#ifndef __WXWINCE__
+#ifdef HAVE_STRFTIME
                     res += CallStrftime(_T("%X"), &tmTimeOnly);
-#else
+#else // !HAVE_STRFTIME
                     res += wxString::Format(wxT("%02d:%02d:%02d"),tm.hour, tm.min, tm.sec);
-#endif
+#endif // HAVE_STRFTIME/!HAVE_STRFTIME
                     break;
 
                 case _T('y'):       // year without century (00-99)
@@ -2599,7 +2602,7 @@ wxString wxDateTime::Format(const wxChar *format, const TimeZone& tz) const
                     break;
 
                 case _T('Z'):       // timezone name
-#ifndef __WXWINCE__
+#ifdef HAVE_STRFTIME
                     res += CallStrftime(_T("%Z"), &tmTimeOnly);
 #endif
                     break;
