@@ -106,16 +106,14 @@ wxTreeCtrlBase::~wxTreeCtrlBase()
         delete m_imageListState;
 }
 
-static void wxGetBestTreeSize(const wxTreeCtrlBase* treeCtrl, const wxTreeItemId& id, wxSize& size)
+static void
+wxGetBestTreeSize(const wxTreeCtrlBase* treeCtrl, wxTreeItemId id, wxSize& size)
 {
     wxRect rect;
 
-    if ( treeCtrl->GetBoundingRect(id, rect, true) )
+    if ( treeCtrl->GetBoundingRect(id, rect, true /* just the item */) )
     {
-        if ( size.x < rect.x + rect.width )
-            size.x = rect.x + rect.width;
-        if ( size.y < rect.y + rect.height )
-            size.y = rect.y + rect.height;
+        size.IncTo(wxSize(rect.GetRight(), rect.GetBottom()));
     }
 
     wxTreeItemIdValue cookie;
@@ -155,8 +153,34 @@ wxSize wxTreeCtrlBase::DoGetBestSize() const
             }
         }
     }
-    else
+    else // use precise, if potentially slow, size computation method
+    {
+        // iterate over all items recursively
         wxGetBestTreeSize(this, GetRootItem(), size);
+
+        // but the above doesn't take into account the icon items nor the tree
+        // "+"/"-" buttons which have about the same size
+        wxCoord iconWidth, iconHeight;
+        if ( !m_imageListNormal ||
+                !m_imageListNormal->GetImageCount() ||
+                    !m_imageListNormal->GetSize(0, iconWidth, iconHeight) )
+        {
+            // FIXME: what is the default size of the tree buttons?
+            iconWidth =
+            iconHeight = 16;
+        }
+
+        // account for the icons if we have them
+        if ( m_imageListNormal )
+        {
+            // FIXME: and how to get the margin? better be large...
+            size.x += iconWidth + 10;
+        }
+
+        // and for the buttons always
+        if ( !HasFlag(wxTR_NO_BUTTONS) )
+            size.x += iconWidth;
+    }
 
     // need some minimal size even for empty tree
     if ( !size.x || !size.y )
