@@ -414,7 +414,8 @@ wxTarEntry::~wxTarEntry()
 }
 
 wxTarEntry::wxTarEntry(const wxTarEntry& e)
-  : m_Name(e.m_Name),
+  : wxArchiveEntry(),
+    m_Name(e.m_Name),
     m_Mode(e.m_Mode),
     m_IsModeSet(e.m_IsModeSet),
     m_UserId(e.m_UserId),
