@@ -605,6 +605,10 @@ wxFontMapperBase::NonInteractiveCharsetToEncoding(const wxString& charset)
 
                     switch ( value )
                     {
+                        case 866:
+                            encoding = wxFONTENCODING_CP866;
+                            break;
+
                         case 874:
                             encoding = wxFONTENCODING_CP874;
                             break;
