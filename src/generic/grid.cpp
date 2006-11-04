@@ -7708,10 +7708,10 @@ void wxGrid::DrawAllGridLines( wxDC& dc, const wxRegion & WXUNUSED(reg) )
     int i, j, cell_rows, cell_cols;
     wxRect rect;
 
-    for (j=topRow; j<bottomRow; j++)
+    for (j=topRow; j<=bottomRow; j++)
     {
         int colPos;
-        for (colPos=leftCol; colPos<rightCol; colPos++)
+        for (colPos=leftCol; colPos<=rightCol; colPos++)
         {
             i = GetColAt( colPos );
 
@@ -7736,9 +7736,9 @@ void wxGrid::DrawAllGridLines( wxDC& dc, const wxRegion & WXUNUSED(reg) )
     int i, j, cell_rows, cell_cols;
     wxRect rect;
 
-    for (j=topRow; j<bottomRow; j++)
+    for (j=topRow; j<=bottomRow; j++)
     {
-        for (i=leftCol; i<rightCol; i++)
+        for (i=leftCol; i<=rightCol; i++)
         {
             GetCellSize( j, i, &cell_rows, &cell_cols );
             if ((cell_rows > 1) || (cell_cols > 1))
