@@ -973,6 +973,7 @@ WX_DEFINE_USER_EXPORTED_ARRAY_PTR(void *, wxArrayPtrVoid, class WXDLLIMPEXP_BASE
 #define WX_PREPEND_ARRAY(array, other)                                        \
     {                                                                         \
         size_t wxAAcnt = (other).size();                                      \
+        (array).Alloc(wxAAcnt);                                               \
         for ( size_t wxAAn = 0; wxAAn < wxAAcnt; wxAAn++ )                    \
         {                                                                     \
             (array).Insert((other)[wxAAn], wxAAn);                            \
@@ -983,6 +984,7 @@ WX_DEFINE_USER_EXPORTED_ARRAY_PTR(void *, wxArrayPtrVoid, class WXDLLIMPEXP_BASE
 #define WX_APPEND_ARRAY(array, other)                                         \
     {                                                                         \
         size_t wxAAcnt = (other).size();                                      \
+        (array).Alloc(wxAAcnt);                                               \
         for ( size_t wxAAn = 0; wxAAn < wxAAcnt; wxAAn++ )                    \
         {                                                                     \
             (array).push_back((other)[wxAAn]);                                \
