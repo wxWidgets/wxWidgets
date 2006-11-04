@@ -325,8 +325,6 @@ wxListbook::InsertPage(size_t n,
     if ( selNew != -1 )
         SetSelection(selNew);
 
-    InvalidateBestSize();
-    // GetListView()->InvalidateBestSize();
     GetListView()->Arrange();
 
     if (GetPageCount() == 1)

@@ -168,14 +168,14 @@ public:
     // remove one page from the notebook, without deleting it
     virtual bool RemovePage(size_t n)
     {
-        InvalidateBestSize();
+        DoInvalidateBestSize();
         return DoRemovePage(n) != NULL;
     }
 
     // remove all pages and delete them
     virtual bool DeleteAllPages()
     {
-        InvalidateBestSize();
+        DoInvalidateBestSize();
         WX_CLEAR_ARRAY(m_pages);
         return true;
     }
@@ -186,7 +186,7 @@ public:
                          bool bSelect = false,
                          int imageId = -1)
     {
-        InvalidateBestSize();
+        DoInvalidateBestSize();
         return InsertPage(GetPageCount(), page, text, bSelect, imageId);
     }
 
@@ -228,6 +228,7 @@ public:
 
     // we do have multiple pages
     virtual bool HasMultiplePages() const { return true; }
+
 
 protected:
     // flags for DoSetSelection()
@@ -279,6 +280,11 @@ protected:
     // Lay out controls
     void DoSize();
 
+    // This method also invalidates the size of the controller and should be
+    // called instead of just InvalidateBestSize() whenever pages are added or
+    // removed as this also affects the controller
+    void DoInvalidateBestSize();
+
 #if wxUSE_HELP
     // Show the help for the corresponding page
     void OnHelp(wxHelpEvent& event);
@@ -308,10 +314,10 @@ protected:
     bool m_fitToCurrentPage;
 
     // the sizer containing the choice control
-    wxSizer*    m_controlSizer;
+    wxSizer *m_controlSizer;
 
     // the margin around the choice control
-    int         m_controlMargin;
+    int m_controlMargin;
 
 private:
 

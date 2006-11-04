@@ -258,8 +258,6 @@ bool wxTreebook::DoInsertSubPage(size_t pagePos,
 
     wxTreeItemId newId = tree->AppendItem(parentId, text, imageId);
 
-    tree->InvalidateBestSize();
-
     if ( !newId.IsOk() )
     {
         (void)wxBookCtrlBase::DoRemovePage(newPos);

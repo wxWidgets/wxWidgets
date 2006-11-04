@@ -257,7 +257,6 @@ wxChoicebook::InsertPage(size_t n,
     if ( selNew != wxNOT_FOUND )
         SetSelection(selNew);
 
-    InvalidateBestSize();
     return true;
 }
 

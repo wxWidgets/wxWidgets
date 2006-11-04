@@ -125,6 +125,18 @@ void wxBookCtrlBase::AssignImageList(wxImageList* imageList)
 // geometry
 // ----------------------------------------------------------------------------
 
+void wxBookCtrlBase::DoInvalidateBestSize()
+{
+    // notice that it is not necessary to invalidate our own best size
+    // explicitly if we have m_bookctrl as it will already invalidate the best
+    // size of its parent when its own size is invalidated and its parent is
+    // this control
+    if ( m_bookctrl )
+        m_bookctrl->InvalidateBestSize();
+    else
+        wxControl::InvalidateBestSize();
+}
+
 void wxBookCtrlBase::SetPageSize(const wxSize& size)
 {
     SetClientSize(CalcSizeFromPage(size));
@@ -159,136 +171,6 @@ wxSize wxBookCtrlBase::DoGetBestSize() const
     wxSize best = CalcSizeFromPage(bestSize);
     CacheBestSize(best);
     return best;
-}
-
-#if wxUSE_HELP
-
-void wxBookCtrlBase::OnHelp(wxHelpEvent& event)
-{
-    // determine where does this even originate from to avoid redirecting it
-    // back to the page which generated it (resulting in an infinite loop)
-
-    // notice that we have to check in the hard(er) way instead of just testing
-    // if the event object == this because the book control can have other
-    // subcontrols inside it (e.g. wxSpinButton in case of a notebook in wxUniv)
-    wxWindow *source = wxStaticCast(event.GetEventObject(), wxWindow);
-    while ( source && source != this && source->GetParent() != this )
-    {
-        source = source->GetParent();
-    }
-
-    if ( source && m_pages.Index(source) == wxNOT_FOUND )
-    {
-        // this event is for the book control itself, redirect it to the
-        // corresponding page
-        wxWindow *page = NULL;
-
-        if ( event.GetOrigin() == wxHelpEvent::Origin_HelpButton )
-        {
-            // show help for the page under the mouse
-            const int pagePos = HitTest(ScreenToClient(event.GetPosition()));
-
-            if ( pagePos != wxNOT_FOUND)
-            {
-                page = GetPage((size_t)pagePos);
-            }
-        }
-        else // event from keyboard or unknown source
-        {
-            // otherwise show the current page help
-            page = GetCurrentPage();
-        }
-
-        if ( page )
-        {
-            // change event object to the page to avoid infinite recursion if
-            // we get this event ourselves if the page doesn't handle it
-            event.SetEventObject(page);
-
-            if ( page->GetEventHandler()->ProcessEvent(event) )
-            {
-                // don't call event.Skip()
-                return;
-            }
-        }
-    }
-    //else: event coming from one of our pages already
-
-    event.Skip();
-}
-
-#endif // wxUSE_HELP
-
-// ----------------------------------------------------------------------------
-// pages management
-// ----------------------------------------------------------------------------
-
-bool
-wxBookCtrlBase::InsertPage(size_t nPage,
-                           wxWindow *page,
-                           const wxString& WXUNUSED(text),
-                           bool WXUNUSED(bSelect),
-                           int WXUNUSED(imageId))
-{
-    wxCHECK_MSG( page || AllowNullPage(), false,
-                 _T("NULL page in wxBookCtrlBase::InsertPage()") );
-    wxCHECK_MSG( nPage <= m_pages.size(), false,
-                 _T("invalid page index in wxBookCtrlBase::InsertPage()") );
-
-    m_pages.Insert(page, nPage);
-    if ( page )
-        page->SetSize(GetPageRect());
-
-    InvalidateBestSize();
-
-    return true;
-}
-
-bool wxBookCtrlBase::DeletePage(size_t nPage)
-{
-    wxWindow *page = DoRemovePage(nPage);
-    if ( !(page || AllowNullPage()) )
-        return false;
-
-    // delete NULL is harmless
-    delete page;
-
-    return true;
-}
-
-wxWindow *wxBookCtrlBase::DoRemovePage(size_t nPage)
-{
-    wxCHECK_MSG( nPage < m_pages.size(), NULL,
-                 _T("invalid page index in wxBookCtrlBase::DoRemovePage()") );
-
-    wxWindow *pageRemoved = m_pages[nPage];
-    m_pages.RemoveAt(nPage);
-    InvalidateBestSize();
-
-    return pageRemoved;
-}
-
-int wxBookCtrlBase::GetNextPage(bool forward) const
-{
-    int nPage;
-
-    int nMax = GetPageCount();
-    if ( nMax-- ) // decrement it to get the last valid index
-    {
-        int nSel = GetSelection();
-
-        // change selection wrapping if it becomes invalid
-        nPage = forward ? nSel == nMax ? 0
-                                       : nSel + 1
-                        : nSel == 0 ? nMax
-                                    : nSel - 1;
-    }
-    else // notebook is empty, no next page
-    {
-        nPage = wxNOT_FOUND;
-    }
-
-    return nPage;
 }
 
 wxRect wxBookCtrlBase::GetPageRect() const
@@ -421,6 +303,140 @@ wxSize wxBookCtrlBase::GetControllerSize() const
     }
 
     return size;
+}
+
+// ----------------------------------------------------------------------------
+// miscellaneous stuff
+// ----------------------------------------------------------------------------
+
+#if wxUSE_HELP
+
+void wxBookCtrlBase::OnHelp(wxHelpEvent& event)
+{
+    // determine where does this even originate from to avoid redirecting it
+    // back to the page which generated it (resulting in an infinite loop)
+
+    // notice that we have to check in the hard(er) way instead of just testing
+    // if the event object == this because the book control can have other
+    // subcontrols inside it (e.g. wxSpinButton in case of a notebook in wxUniv)
+    wxWindow *source = wxStaticCast(event.GetEventObject(), wxWindow);
+    while ( source && source != this && source->GetParent() != this )
+    {
+        source = source->GetParent();
+    }
+
+    if ( source && m_pages.Index(source) == wxNOT_FOUND )
+    {
+        // this event is for the book control itself, redirect it to the
+        // corresponding page
+        wxWindow *page = NULL;
+
+        if ( event.GetOrigin() == wxHelpEvent::Origin_HelpButton )
+        {
+            // show help for the page under the mouse
+            const int pagePos = HitTest(ScreenToClient(event.GetPosition()));
+
+            if ( pagePos != wxNOT_FOUND)
+            {
+                page = GetPage((size_t)pagePos);
+            }
+        }
+        else // event from keyboard or unknown source
+        {
+            // otherwise show the current page help
+            page = GetCurrentPage();
+        }
+
+        if ( page )
+        {
+            // change event object to the page to avoid infinite recursion if
+            // we get this event ourselves if the page doesn't handle it
+            event.SetEventObject(page);
+
+            if ( page->GetEventHandler()->ProcessEvent(event) )
+            {
+                // don't call event.Skip()
+                return;
+            }
+        }
+    }
+    //else: event coming from one of our pages already
+
+    event.Skip();
+}
+
+#endif // wxUSE_HELP
+
+// ----------------------------------------------------------------------------
+// pages management
+// ----------------------------------------------------------------------------
+
+bool
+wxBookCtrlBase::InsertPage(size_t nPage,
+                           wxWindow *page,
+                           const wxString& WXUNUSED(text),
+                           bool WXUNUSED(bSelect),
+                           int WXUNUSED(imageId))
+{
+    wxCHECK_MSG( page || AllowNullPage(), false,
+                 _T("NULL page in wxBookCtrlBase::InsertPage()") );
+    wxCHECK_MSG( nPage <= m_pages.size(), false,
+                 _T("invalid page index in wxBookCtrlBase::InsertPage()") );
+
+    m_pages.Insert(page, nPage);
+    if ( page )
+        page->SetSize(GetPageRect());
+
+    DoInvalidateBestSize();
+
+    return true;
+}
+
+bool wxBookCtrlBase::DeletePage(size_t nPage)
+{
+    wxWindow *page = DoRemovePage(nPage);
+    if ( !(page || AllowNullPage()) )
+        return false;
+
+    // delete NULL is harmless
+    delete page;
+
+    return true;
+}
+
+wxWindow *wxBookCtrlBase::DoRemovePage(size_t nPage)
+{
+    wxCHECK_MSG( nPage < m_pages.size(), NULL,
+                 _T("invalid page index in wxBookCtrlBase::DoRemovePage()") );
+
+    wxWindow *pageRemoved = m_pages[nPage];
+    m_pages.RemoveAt(nPage);
+    DoInvalidateBestSize();
+
+    return pageRemoved;
+}
+
+int wxBookCtrlBase::GetNextPage(bool forward) const
+{
+    int nPage;
+
+    int nMax = GetPageCount();
+    if ( nMax-- ) // decrement it to get the last valid index
+    {
+        int nSel = GetSelection();
+
+        // change selection wrapping if it becomes invalid
+        nPage = forward ? nSel == nMax ? 0
+                                       : nSel + 1
+                        : nSel == 0 ? nMax
+                                    : nSel - 1;
+    }
+    else // notebook is empty, no next page
+    {
+        nPage = wxNOT_FOUND;
+    }
+
+    return nPage;
 }
 
 int wxBookCtrlBase::DoSetSelection(size_t n, int flags)
