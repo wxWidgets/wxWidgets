@@ -1172,6 +1172,8 @@ public :
 
     virtual wxGraphicsContext * CreateContext( wxWindow* window );
 
+    virtual wxGraphicsContext * CreateMeasuringContext();
+
     // Path
 
     virtual wxGraphicsPath CreatePath();
@@ -1235,6 +1237,12 @@ wxGraphicsContext * wxCairoRenderer::CreateContextFromNativeWindow( void * windo
 #else
     return NULL;
 #endif
+}
+
+wxGraphicsContext * wxCairoRenderer::CreateMeasuringContext()
+{
+    return NULL;
+    // TODO
 }
 
 wxGraphicsContext * wxCairoRenderer::CreateContext( wxWindow* window )

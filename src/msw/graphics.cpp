@@ -1232,6 +1232,8 @@ public :
 
     virtual wxGraphicsContext * CreateContext( wxWindow* window );
 
+    virtual wxGraphicsContext * CreateMeasuringContext();
+
     // Path
 
     virtual wxGraphicsPath CreatePath();
@@ -1308,6 +1310,14 @@ wxGraphicsContext * wxGDIPlusRenderer::CreateContext( const wxWindowDC& dc)
 {
     EnsureIsLoaded();
     return new wxGDIPlusContext(this,(HDC) dc.GetHDC());
+}
+
+wxGraphicsContext * wxGDIPlusRenderer::CreateMeasuringContext()
+{
+    EnsureIsLoaded();
+    return NULL;
+    // TODO use GetDC(NULL) but then we have to release it from the context
+    //return new wxGDIPlusContext(this,(HDC) dc.GetHDC());
 }
 
 wxGraphicsContext * wxGDIPlusRenderer::CreateContextFromNativeContext( void * context )
