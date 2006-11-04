@@ -1224,25 +1224,26 @@ void MyFrame::ShowFullAboutDialog(wxCommandEvent& WXUNUSED(event))
     wxAboutBox(info);
 }
 
+// a trivial example of a custom dialog class
+class MyAboutDialog : public wxGenericAboutDialog
+{
+public:
+    MyAboutDialog(const wxAboutDialogInfo& info)
+    {
+        Create(info);
+    }
+
+    // add some custom controls
+    virtual void DoAddCustomControls()
+    {
+        AddControl(new wxStaticLine(this), wxSizerFlags().Expand());
+        AddText(_T("Some custom text"));
+        AddControl(new wxStaticLine(this), wxSizerFlags().Expand());
+    }
+};
+
 void MyFrame::ShowCustomAboutDialog(wxCommandEvent& WXUNUSED(event))
 {
-    class MyAboutDialog : public wxGenericAboutDialog
-    {
-    public:
-        MyAboutDialog(const wxAboutDialogInfo& info)
-        {
-            Create(info);
-        }
-
-        // add some custom controls
-        virtual void DoAddCustomControls()
-        {
-            AddControl(new wxStaticLine(this), wxSizerFlags().Expand());
-            AddText(_T("Some custom text"));
-            AddControl(new wxStaticLine(this), wxSizerFlags().Expand());
-        }
-    };
-
     wxAboutDialogInfo info;
     InitAboutInfoAll(info);
 
