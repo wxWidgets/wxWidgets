@@ -623,16 +623,13 @@ wxToolBar* wxFrame::CreateToolBar(long style, wxWindowID id, const wxString& nam
 
 void wxFrame::PositionToolBar()
 {
-    int x = 0, y = 0;
+    // TODO: we want to do something different in WinCE, because the toolbar
+    //       should be associated with the commandbar, instead of being
+    //       independent window.
+#if !defined(WINCE_WITHOUT_COMMANDBAR)
     wxToolBar *toolbar = GetToolBar();
     if ( toolbar && toolbar->IsShown() )
     {
-#if defined(WINCE_WITHOUT_COMMANDBAR)
-        // We want to do something different in WinCE, because
-        // the toolbar should be associated with the commandbar,
-        // and not an independent window.
-        // TODO
-#else
         // don't call our (or even wxTopLevelWindow) version because we want
         // the real (full) client area size, not excluding the tool/status bar
         int width, height;
@@ -650,6 +647,7 @@ void wxFrame::PositionToolBar()
         toolbar->GetPosition( &tx, &ty );
         toolbar->GetSize( &tw, &th );
 
+        int x = 0, y = 0;
         if ( toolbar->HasFlag(wxTB_BOTTOM) )
         {
             x = 0;
@@ -742,8 +740,8 @@ void wxFrame::PositionToolBar()
         if (tx != 0 || ty != 0 || widthChanging || heightChanging)
             toolbar->SetSize(x, y, desiredW, desiredH, wxSIZE_NO_ADJUSTMENTS);
 
-#endif // __WXWINCE__
     }
+#endif // !WINCE_WITH_COMMANDBAR
 }
 
 #endif // wxUSE_TOOLBAR
