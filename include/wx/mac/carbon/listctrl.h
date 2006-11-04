@@ -16,6 +16,8 @@
 
 class wxMacDataBrowserListCtrlControl;
 class wxMacListControl;
+class wxListCtrlTextCtrlWrapper;
+class wxListCtrlRenameTimer;
 
 WX_DECLARE_EXPORTED_LIST(wxListItem, wxColumnList);
 
@@ -318,6 +320,25 @@ class WXDLLEXPORT wxListCtrl: public wxControl
   virtual bool SetBackgroundColour(const wxColour& colour);
   virtual wxColour GetBackgroundColour();
   
+  // functions for editing/timer
+  void OnRenameTimer();
+  bool OnRenameAccept(long itemEdit, const wxString& value);
+  void OnRenameCancelled(long itemEdit);
+
+  void ChangeCurrent(long current);
+  void ResetCurrent() { ChangeCurrent((long)-1); }
+  bool HasCurrent() const { return m_current != (long)-1; }
+  
+  void OnLeftDown(wxMouseEvent& event);
+  void OnDblClick(wxMouseEvent& event);
+  
+  void FinishEditing(wxTextCtrl *text)
+  {
+      delete text;
+      m_textctrlWrapper = NULL;
+      SetFocus();
+  }
+  
   // with CG, we need to get the context from an kEventControlDraw event
   // unfortunately, the DataBrowser callbacks don't provide the context
   // and we need it, so we need to set/remove it before and after draw 
@@ -333,6 +354,9 @@ protected:
 
   virtual wxSize DoGetBestSize() const;
 
+  long               m_current;
+  wxListCtrlTextCtrlWrapper *m_textctrlWrapper;
+  wxListCtrlRenameTimer *m_renameTimer;
   // common part of all ctors
   void Init();
   
@@ -364,6 +388,9 @@ protected:
                                   // keep track of inserted/deleted columns
 
   int               m_count; // for virtual lists, store item count
+  
+private: 
+  DECLARE_EVENT_TABLE()
 };
 
 #endif

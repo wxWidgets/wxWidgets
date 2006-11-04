@@ -36,6 +36,7 @@
 
 #include "wx/imaglist.h"
 #include "wx/sysopt.h"
+#include "wx/timer.h"
 
 #define wxMAC_ALWAYS_USE_GENERIC_LISTCTRL wxT("mac.listctrl.always_use_generic")
 
@@ -304,6 +305,203 @@ bool wxMacListCtrlEventDelegate::ProcessEvent( wxEvent& event )
     return wxEvtHandler::ProcessEvent(event);
 }
 
+//-----------------------------------------------------------------------------
+// wxListCtrlRenameTimer (internal)
+//-----------------------------------------------------------------------------
+
+class wxListCtrlRenameTimer: public wxTimer
+{
+private:
+    wxListCtrl *m_owner;
+
+public:
+    wxListCtrlRenameTimer( wxListCtrl *owner );
+    void Notify();
+};
+
+//-----------------------------------------------------------------------------
+// wxListCtrlTextCtrlWrapper: wraps a wxTextCtrl to make it work for inline editing
+//-----------------------------------------------------------------------------
+
+class wxListCtrlTextCtrlWrapper : public wxEvtHandler
+{
+public:
+    // NB: text must be a valid object but not Create()d yet
+    wxListCtrlTextCtrlWrapper(wxListCtrl *owner,
+                          wxTextCtrl *text,
+                          long itemEdit);
+
+    wxTextCtrl *GetText() const { return m_text; }
+
+    void AcceptChangesAndFinish();
+
+protected:
+    void OnChar( wxKeyEvent &event );
+    void OnKeyUp( wxKeyEvent &event );
+    void OnKillFocus( wxFocusEvent &event );
+
+    bool AcceptChanges();
+    void Finish();
+
+private:
+    wxListCtrl         *m_owner;
+    wxTextCtrl         *m_text;
+    wxString            m_startValue;
+    long              m_itemEdited;
+    bool                m_finished;
+    bool                m_aboutToFinish;
+
+    DECLARE_EVENT_TABLE()
+};
+
+//-----------------------------------------------------------------------------
+// wxListCtrlRenameTimer (internal)
+//-----------------------------------------------------------------------------
+
+wxListCtrlRenameTimer::wxListCtrlRenameTimer( wxListCtrl *owner )
+{
+    m_owner = owner;
+}
+
+void wxListCtrlRenameTimer::Notify()
+{
+    m_owner->OnRenameTimer();
+}
+
+//-----------------------------------------------------------------------------
+// wxListCtrlTextCtrlWrapper (internal)
+//-----------------------------------------------------------------------------
+
+BEGIN_EVENT_TABLE(wxListCtrlTextCtrlWrapper, wxEvtHandler)
+    EVT_CHAR           (wxListCtrlTextCtrlWrapper::OnChar)
+    EVT_KEY_UP         (wxListCtrlTextCtrlWrapper::OnKeyUp)
+    EVT_KILL_FOCUS     (wxListCtrlTextCtrlWrapper::OnKillFocus)
+END_EVENT_TABLE()
+
+wxListCtrlTextCtrlWrapper::wxListCtrlTextCtrlWrapper(wxListCtrl *owner,
+                                             wxTextCtrl *text,
+                                             long itemEdit)
+              : m_startValue(owner->GetItemText(itemEdit)),
+                m_itemEdited(itemEdit)
+{
+    m_owner = owner;
+    m_text = text;
+    m_finished = false;
+    m_aboutToFinish = false;
+
+    wxRect rectLabel;
+    owner->GetItemRect(itemEdit, rectLabel);
+
+    m_text->Create(owner, wxID_ANY, m_startValue,
+                   wxPoint(rectLabel.x+8,rectLabel.y),
+                   wxSize(rectLabel.width,rectLabel.height));
+    m_text->SetFocus();
+
+    m_text->PushEventHandler(this);
+}
+
+void wxListCtrlTextCtrlWrapper::Finish()
+{
+    if ( !m_finished )
+    {
+        m_finished = true;
+
+        m_text->RemoveEventHandler(this);
+        m_owner->FinishEditing(m_text);
+
+        wxPendingDelete.Append( this );
+    }
+}
+
+bool wxListCtrlTextCtrlWrapper::AcceptChanges()
+{
+    const wxString value = m_text->GetValue();
+
+    if ( value == m_startValue )
+        // nothing changed, always accept
+        return true;
+
+    if ( !m_owner->OnRenameAccept(m_itemEdited, value) )
+        // vetoed by the user
+        return false;
+
+    // accepted, do rename the item
+    m_owner->SetItemText(m_itemEdited, value);
+
+    return true;
+}
+
+void wxListCtrlTextCtrlWrapper::AcceptChangesAndFinish()
+{
+    m_aboutToFinish = true;
+
+    // Notify the owner about the changes
+    AcceptChanges();
+
+    // Even if vetoed, close the control (consistent with MSW)
+    Finish();
+}
+
+void wxListCtrlTextCtrlWrapper::OnChar( wxKeyEvent &event )
+{
+    switch ( event.m_keyCode )
+    {
+        case WXK_RETURN:
+            AcceptChangesAndFinish();
+            break;
+
+        case WXK_ESCAPE:
+            m_owner->OnRenameCancelled( m_itemEdited );
+            Finish();
+            break;
+
+        default:
+            event.Skip();
+    }
+}
+
+void wxListCtrlTextCtrlWrapper::OnKeyUp( wxKeyEvent &event )
+{
+    if (m_finished)
+    {
+        event.Skip();
+        return;
+    }
+
+    // auto-grow the textctrl:
+    wxSize parentSize = m_owner->GetSize();
+    wxPoint myPos = m_text->GetPosition();
+    wxSize mySize = m_text->GetSize();
+    int sx, sy;
+    m_text->GetTextExtent(m_text->GetValue() + _T("MM"), &sx, &sy);
+    if (myPos.x + sx > parentSize.x)
+        sx = parentSize.x - myPos.x;
+    if (mySize.x > sx)
+        sx = mySize.x;
+    m_text->SetSize(sx, wxDefaultCoord);
+
+    event.Skip();
+}
+
+void wxListCtrlTextCtrlWrapper::OnKillFocus( wxFocusEvent &event )
+{
+    if ( !m_finished && !m_aboutToFinish )
+    {
+        if ( !AcceptChanges() )
+            m_owner->OnRenameCancelled( m_itemEdited );
+
+        Finish();
+    }
+
+    // We must let the native text control handle focus
+    event.Skip();
+}
+
+BEGIN_EVENT_TABLE(wxListCtrl, wxControl)
+    EVT_LEFT_DOWN(wxListCtrl::OnLeftDown)
+    EVT_LEFT_DCLICK(wxListCtrl::OnDblClick)
+END_EVENT_TABLE()
+
 // ============================================================================
 // implementation
 // ============================================================================
@@ -336,6 +534,9 @@ void wxListCtrl::Init()
     m_colsInfo = wxColumnList();
     m_textColor = wxNullColour;
     m_bgColor = wxNullColour;
+    m_textctrlWrapper = NULL;
+    m_current = -1;
+    m_renameTimer = new wxListCtrlRenameTimer( this );
 }
 
 class wxGenericListCtrlHook : public wxGenericListCtrl
@@ -378,6 +579,35 @@ protected:
 
 };
 
+void wxListCtrl::OnLeftDown(wxMouseEvent& event)
+{
+    if ( m_textctrlWrapper )
+    {
+        m_current = -1;
+        m_textctrlWrapper->AcceptChangesAndFinish();
+    }
+    
+    int hitResult;
+    long current = HitTest(event.GetPosition(), hitResult);
+    if ((current == m_current) &&
+        (hitResult == wxLIST_HITTEST_ONITEM) &&
+        HasFlag(wxLC_EDIT_LABELS) )
+    {
+        m_renameTimer->Start( 100, true );
+    }
+    else
+    {
+        m_current = current;
+    }
+    event.Skip();
+}
+
+void wxListCtrl::OnDblClick(wxMouseEvent& event)
+{
+    m_current = -1;
+    event.Skip();
+}
+
 bool wxListCtrl::Create(wxWindow *parent,
                         wxWindowID id,
                         const wxPoint& pos,
@@ -393,7 +623,7 @@ bool wxListCtrl::Create(wxWindow *parent,
     // Also, use generic list control in VIRTUAL mode.
     if ( (wxSystemOptions::HasOption( wxMAC_ALWAYS_USE_GENERIC_LISTCTRL )
             && (wxSystemOptions::GetOptionInt( wxMAC_ALWAYS_USE_GENERIC_LISTCTRL ) == 1)) ||
-            (style & wxLC_ICON) || (style & wxLC_SMALL_ICON) || (style & wxLC_LIST) || (style & wxLC_EDIT_LABELS) )
+            (style & wxLC_ICON) || (style & wxLC_SMALL_ICON) || (style & wxLC_LIST) )
     {
         m_macIsUserPane = true;
 
@@ -436,6 +666,8 @@ wxListCtrl::~wxListCtrl()
         delete m_imageListSmall;
     if (m_ownsImageListState)
         delete m_imageListState;
+        
+    delete m_renameTimer;
 }
 
 // ----------------------------------------------------------------------------
@@ -943,8 +1175,9 @@ bool wxListCtrl::GetItemRect(long item, wxRect& rect, int code) const
         
         rect.x = bounds.left;
         rect.y = bounds.top;
-        rect.width = GetClientSize().x; // we need the width of the whole row, not just the item.
+        rect.width = bounds.right - bounds.left; //GetClientSize().x; // we need the width of the whole row, not just the item.
         rect.height = bounds.bottom - bounds.top;
+        //fprintf("id = %d, bounds = %d, %d, %d, %d\n", id, rect.x, rect.y, rect.width, rect.height);
     }
     return true;
 }
@@ -1333,8 +1566,29 @@ wxTextCtrl* wxListCtrl::EditLabel(long item, wxClassInfo* textControlClass)
 
     if (m_dbImpl)
     {
-        wxMacDataItem* id = m_dbImpl->GetItemFromLine(item);
-        verify_noerr( SetDataBrowserEditItem(m_dbImpl->GetControlRef(), (DataBrowserItemID)id, kMinColumnId) );
+        wxCHECK_MSG( (item >= 0) && ((long)item < GetItemCount()), NULL,
+                     wxT("wrong index in wxListCtrl::EditLabel()") );
+
+        wxASSERT_MSG( textControlClass->IsKindOf(CLASSINFO(wxTextCtrl)),
+                     wxT("EditLabel() needs a text control") );
+
+        long itemEdit = (long)item;
+
+        wxListEvent le( wxEVT_COMMAND_LIST_BEGIN_LABEL_EDIT, GetParent()->GetId() );
+        le.SetEventObject( this );
+        le.m_itemIndex = item;
+        le.m_col = 0;
+        GetItem( le.m_item );
+
+        if ( GetParent()->GetEventHandler()->ProcessEvent( le ) && !le.IsAllowed() )
+        {
+            // vetoed by user code
+            return NULL;
+        }
+
+        wxTextCtrl * const text = (wxTextCtrl *)textControlClass->CreateObject();
+        m_textctrlWrapper = new wxListCtrlTextCtrlWrapper(this, text, item);
+        return m_textctrlWrapper->GetText();
     }
     return NULL;
 }
@@ -1421,6 +1675,11 @@ wxListCtrl::HitTest(const wxPoint& point, int& flags, long *ptrSubItem) const
         m_dbImpl->GetDefaultRowHeight(&rowHeight);
         
         int y = point.y;
+        // get the actual row by taking scroll position into account
+        UInt32 offsetX, offsetY;
+        m_dbImpl->GetScrollPosition( &offsetY, &offsetX );
+        y += offsetY;
+        
         if ( !(GetWindowStyleFlag() & wxLC_NO_HEADER) )
             y -= colHeaderHeight;
         
@@ -1617,6 +1876,39 @@ bool wxListCtrl::SortItems(wxListCtrlCompare fn, long data)
     }
 
     return true;
+}
+
+void wxListCtrl::OnRenameTimer()
+{
+    wxCHECK_RET( HasCurrent(), wxT("unexpected rename timer") );
+
+    EditLabel( m_current );
+}
+
+bool wxListCtrl::OnRenameAccept(long itemEdit, const wxString& value)
+{
+    wxListEvent le( wxEVT_COMMAND_LIST_END_LABEL_EDIT, GetId() );
+    le.SetEventObject( this );
+    le.m_itemIndex = itemEdit;
+
+    GetItem( le.m_item );
+    le.m_item.m_text = value;
+    return !GetEventHandler()->ProcessEvent( le ) ||
+                le.IsAllowed();
+}
+
+void wxListCtrl::OnRenameCancelled(long itemEdit)
+{
+    // let owner know that the edit was cancelled
+    wxListEvent le( wxEVT_COMMAND_LIST_END_LABEL_EDIT, GetParent()->GetId() );
+
+    le.SetEditCanceled(true);
+
+    le.SetEventObject( this );
+    le.m_itemIndex = itemEdit;
+
+    GetItem( le.m_item );
+    GetEventHandler()->ProcessEvent( le );
 }
 
 // ----------------------------------------------------------------------------
