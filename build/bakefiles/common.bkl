@@ -200,7 +200,7 @@
     </set>
 
     <set var="LIBDIRNAME" make_var="1">
-        <if cond="FORMAT=='autoconf'">$(top_builddir)lib</if>
+        <if cond="FORMAT=='autoconf'">$(wx_top_builddir)/lib</if>
         <if cond="FORMAT!='autoconf'">
             $(nativePaths(TOP_SRCDIR))lib$(DIRSEP)$(COMPILER)$(DIR_SUFFIX_CPU)_$(LIBTYPE_SUFFIX)$(CFG)
         </if>

@@ -355,6 +355,8 @@ to run the tests, include CppUnit library here.
         <option name="WITH_PLUGIN_SDL">
             <values>0,1</values>
         </option>
+
+        <option name="wx_top_builddir"/>
     </if>
 
 

@@ -44,6 +44,11 @@ WX_SUBVERSION=$WX_VERSION.$wx_subrelease_number
 WX_MSW_VERSION=$wx_major_version_number$wx_minor_version_number$wx_release_number
 
 
+dnl Autoconf-2.60 changed the meaning of top_builddir variable, so we have
+dnl to use our own replacement that will work with both 2.5x and 2.60+:
+wx_top_builddir="`pwd`"
+AC_SUBST(wx_top_builddir)
+
 
 dnl ------------------------------------------------------------------------
 dnl Check platform (host system)
@@ -3969,11 +3974,11 @@ fi
 if test "$wxUSE_SHARED" = "yes"; then
 
     dnl use versioned symbols if available on the platform
-    WX_VERSIONED_SYMBOLS([\$(top_builddir)version-script])
+    WX_VERSIONED_SYMBOLS([\$(wx_top_builddir)/version-script])
 
     case "${host}" in
       *-*-linux* | *-*-gnu* )
-        SAMPLES_RPATH_FLAG="-Wl,-rpath,\$(top_builddir)lib"
+        SAMPLES_RPATH_FLAG="-Wl,-rpath,\$(wx_top_builddir)/lib"
         WXCONFIG_RPATH="-Wl,-rpath,\$libdir"
         ;;
 
@@ -3992,7 +3997,7 @@ if test "$wxUSE_SHARED" = "yes"; then
                 [],[],
                 [
                     AC_MSG_RESULT([yes])
-                    SAMPLES_RPATH_FLAG="-Wl,-rpath,\$(top_builddir)lib"
+                    SAMPLES_RPATH_FLAG="-Wl,-rpath,\$(wx_top_builddir)/lib"
                     WXCONFIG_RPATH="-Wl,-rpath,\$libdir"
                 ],[
                     AC_MSG_RESULT([no])
@@ -4002,7 +4007,7 @@ if test "$wxUSE_SHARED" = "yes"; then
                         [],[],
                         [
                             AC_MSG_RESULT([yes])
-                            SAMPLES_RPATH_FLAG="-Wl,-R,\$(top_builddir)lib"
+                            SAMPLES_RPATH_FLAG="-Wl,-R,\$(wx_top_builddir)/lib"
                             WXCONFIG_RPATH="-Wl,-R,\$libdir"
                         ],[
                             AC_MSG_RESULT([no])
@@ -4010,7 +4015,7 @@ if test "$wxUSE_SHARED" = "yes"; then
                 ])
             LDFLAGS="$saveLdflags"
         else
-            SAMPLES_RPATH_FLAG="-R\$(top_builddir)lib"
+            SAMPLES_RPATH_FLAG="-R\$(wx_top_builddir)/lib"
             WXCONFIG_RPATH="-R\$libdir"
         fi
       ;;
@@ -4018,7 +4023,7 @@ if test "$wxUSE_SHARED" = "yes"; then
       *-*-darwin* )
         install_name_tool=`which install_name_tool`
         if test "$install_name_tool" -a -x "$install_name_tool"; then
-            SAMPLES_RPATH_POSTLINK="\$(top_builddir)change-install-names \$(LIBDIRNAME) \$(prefix) \$@"
+            SAMPLES_RPATH_POSTLINK="\$(wx_top_builddir)/change-install-names \$(LIBDIRNAME) \$(prefix) \$@"
             cat <<EOF >change-install-names
 #!/bin/sh
 libnames=\`cd \${1} ; ls -1 | grep '\.[[0-9]][[0-9]]*\.dylib\$'\`
@@ -4039,7 +4044,7 @@ EOF
         ;;
 
       *-*-hpux* )
-        SAMPLES_RPATH_FLAG="-Wl,+b,\$(top_builddir)lib"
+        SAMPLES_RPATH_FLAG="-Wl,+b,\$(wx_top_builddir)/lib"
         WXCONFIG_RPATH="-Wl,+b,\$libdir"
         ;;
 
@@ -4147,7 +4152,7 @@ if test "$wxUSE_MAC" = 1 -o "$wxUSE_COCOA" = 1; then
     WX_RESOURCES_MACOSX_DATA="libwx_${TOOLCHAIN_NAME}.${wx_release_number}.rsrc"
 
     dnl add the resources target for wxMac
-    LIBWXMACRES="\$(top_builddir)lib/${WX_RESOURCES_MACOSX_ASCII}"
+    LIBWXMACRES="\$(wx_top_builddir)/lib/${WX_RESOURCES_MACOSX_ASCII}"
 
     AC_CHECK_PROG(REZ, Rez, Rez, /Developer/Tools/Rez)
     AC_CHECK_PROG(DEREZ, DeRez, DeRez, /Developer/Tools/DeRez)
@@ -7421,7 +7426,7 @@ dnl come first and the one with setup.h should be before $(top_srcdir)/include
 dnl in case the latter contains setup.h used by non-autoconf makefiles (e.g.
 dnl CodeWarrior):
 CPPFLAGS=`echo $WXCONFIG_CPPFLAGS \
- -I\\${top_builddir}lib/wx/include/${TOOLCHAIN_FULLNAME} \
+ -I\\${wx_top_builddir}/lib/wx/include/${TOOLCHAIN_FULLNAME} \
  -I\\${top_srcdir}/include $TOOLKIT_INCLUDE \
  $CPPFLAGS `
 
