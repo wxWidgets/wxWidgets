@@ -82,7 +82,8 @@
 static wxString TimeStamp(const wxChar *format, time_t t)
 {
     wxChar buf[4096];
-    if ( !wxStrftime(buf, WXSIZEOF(buf), format, localtime(&t)) )
+    struct tm tm;
+    if ( !wxStrftime(buf, WXSIZEOF(buf), format, wxLocaltime_r(&t, &tm)) )
     {
         // buffer is too small?
         wxFAIL_MSG(_T("strftime() failed"));

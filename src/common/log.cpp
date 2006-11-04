@@ -416,7 +416,10 @@ void wxLog::TimeStamp(wxString *str)
         wxChar buf[256];
         time_t timeNow;
         (void)time(&timeNow);
-        wxStrftime(buf, WXSIZEOF(buf), ms_timestamp, localtime(&timeNow));
+
+        struct tm tm;
+        wxStrftime(buf, WXSIZEOF(buf),
+                    ms_timestamp, wxLocaltime_r(&timeNow, &tm));
 
         str->Empty();
         *str << buf << wxT(": ");
