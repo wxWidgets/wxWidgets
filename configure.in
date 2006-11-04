@@ -1417,83 +1417,6 @@ else
 fi
 
 dnl ---------------------------------------------------------------------------
-dnl When we are using Cygwin with Motif/GTK+, we want it to appear like
-dnl 'just' a POSIX platform, so the Win32 API must not be available
-dnl ---------------------------------------------------------------------------
-dnl (Windows-only piece)
-wants_win32=0
-doesnt_want_win32=0
-case "${host}" in
-  *-*-cygwin*)
-      if test "$wxUSE_MSW" = 1 ; then
-        wants_win32=1
-      else
-        dnl when we use cygwin compiler with -mno-cygwin option it uses mingw32
-        dnl headers and libraries, so it's Windows-like in this case
-        AC_CACHE_CHECK([if -mno-cygwin is in effect], wx_cv_nocygwin,
-            [
-                AC_TRY_COMPILE(
-                    [],
-                    [
-                        #ifdef __MINGW32__
-                            choke me
-                        #endif
-                    ],
-                    wx_cv_nocygwin=no,
-                    wx_cv_nocygwin=yes
-                )
-            ]
-        )
-
-        if test "$wx_cv_nocygwin" = "yes"; then
-            wants_win32=1
-        else
-            doesnt_want_win32=1
-        fi
-      fi
-      if test "$wants_win32" = 1 ; then
-        BAKEFILE_FORCE_PLATFORM=win32
-      fi
-  ;;
-  *-*-mingw*)
-      wants_win32=1
-  ;;
-esac
-
-dnl ---------------------------------------------------------------------------
-dnl Wine is a virtual platform, we need to patch things up a bit
-dnl ---------------------------------------------------------------------------
-if test "$wxUSE_WINE" = "yes"; then
-    wants_win32=1
-    dnl FIXME: we should do a better job of testing for these
-    CC=winegcc
-    CXX=wineg++
-    LDFLAGS_GUI="-mwindows"
-fi
-
-dnl NB: The two tests bellow are *NOT* mutually exclusive! They should only
-dnl     take effect on Cygwin/Mingw and not other platforms.
-if test "$wants_win32" = 1 ; then
-    USE_UNIX=0
-    USE_WIN32=1
-    AC_DEFINE(__WIN32__)
-    AC_DEFINE(__WIN95__)
-    AC_DEFINE(__WINDOWS__)
-    AC_DEFINE(__GNUWIN32__)
-    AC_DEFINE(STRICT)
-fi
-if test "$doesnt_want_win32" = 1 ; then
-    USE_UNIX=1
-    USE_WIN32=0
-fi
-dnl (end of Windows-only piece)
-
-if test "$USE_UNIX" = 1 ; then
-    wxUSE_UNIX=yes
-    AC_DEFINE(__UNIX__)
-fi
-
-dnl ---------------------------------------------------------------------------
 dnl Checks for programs
 dnl ---------------------------------------------------------------------------
 
@@ -1704,6 +1627,77 @@ case "${host}" in
     )
   ;;
 esac
+
+dnl Determine whether we want to use Cygwin as Windows or POSIX platform: the
+dnl latter makes more sense for wxGTK/Motif/X11 ports
+wants_win32=0
+doesnt_want_win32=0
+case "${host}" in
+  *-*-cygwin*)
+      if test "$wxUSE_MSW" = 1 ; then
+        wants_win32=1
+      else
+        dnl when we use cygwin compiler with -mno-cygwin option it uses mingw32
+        dnl headers and libraries, so it's Windows-like in this case
+        AC_CACHE_CHECK([if -mno-cygwin is in effect], wx_cv_nocygwin,
+            [
+                AC_TRY_COMPILE(
+                    [],
+                    [
+                        #ifdef __MINGW32__
+                            choke me
+                        #endif
+                    ],
+                    wx_cv_nocygwin=no,
+                    wx_cv_nocygwin=yes
+                )
+            ]
+        )
+
+        if test "$wx_cv_nocygwin" = "yes"; then
+            wants_win32=1
+        else
+            doesnt_want_win32=1
+        fi
+      fi
+      if test "$wants_win32" = 1 ; then
+        BAKEFILE_FORCE_PLATFORM=win32
+      fi
+  ;;
+  *-*-mingw*)
+      wants_win32=1
+  ;;
+esac
+
+if test "$wxUSE_WINE" = "yes"; then
+    wants_win32=1
+    dnl FIXME: we should do a better job of testing for these
+    CC=winegcc
+    CXX=wineg++
+    LDFLAGS_GUI="-mwindows"
+fi
+
+dnl NB: The two tests bellow are *NOT* mutually exclusive! They should only
+dnl     take effect on Cygwin/Mingw and not other platforms.
+if test "$wants_win32" = 1 ; then
+    USE_UNIX=0
+    USE_WIN32=1
+    AC_DEFINE(__WIN32__)
+    AC_DEFINE(__WIN95__)
+    AC_DEFINE(__WINDOWS__)
+    AC_DEFINE(__GNUWIN32__)
+    AC_DEFINE(STRICT)
+fi
+if test "$doesnt_want_win32" = 1 ; then
+    USE_UNIX=1
+    USE_WIN32=0
+fi
+dnl (end of Windows-only piece)
+
+if test "$USE_UNIX" = 1 ; then
+    wxUSE_UNIX=yes
+    AC_DEFINE(__UNIX__)
+fi
 
 dnl This case is for OS/2 vs. everything else
 case "${host}" in
