@@ -629,7 +629,9 @@ bool wxListCtrl::Create(wxWindow *parent,
 
         if ( !wxWindow::Create(parent, id, pos, size, style & wxNO_BORDER, name) )
             return false;
-        m_genericImpl = new wxGenericListCtrlHook(this, id, pos, size, style, validator, name);
+        
+        // since the generic control is a child, make sure we position it at 0, 0
+        m_genericImpl = new wxGenericListCtrlHook(this, id, wxPoint(0, 0), size, style, validator, name);
         m_genericImpl->PushEventHandler( new wxMacListCtrlEventDelegate( this, GetId() ) );
         return true;
     }
@@ -719,14 +721,11 @@ void wxListCtrl::DoSetSize( int x, int y, int width, int height, int sizeFlags )
     wxControl::DoSetSize(x, y, width, height, sizeFlags);
 
     if (m_genericImpl)
-        m_genericImpl->SetSize(x, y, width, height, sizeFlags);
+        m_genericImpl->SetSize(0, 0, width, height, sizeFlags);
 }
 
 wxSize wxListCtrl::DoGetBestSize() const
 {
-    if (m_genericImpl)
-        return m_genericImpl->GetBestSize();
-
     return wxWindow::DoGetBestSize();
 }
 
