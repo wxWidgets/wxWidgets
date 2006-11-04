@@ -133,7 +133,11 @@ WX_DEFINE_SORTED_ARRAY_INT(int, ArrayOfSortedInts);
 \end{verbatim}
 
 i.e. there is only one {\tt DEFINE} macro and no need for separate
-{\tt DECLARE} one.
+{\tt DECLARE} one. For the arrays of the primitive types, the macros 
+{\tt WX\_DEFINE\_ARRAY\_CHAR/SHORT/INT/SIZE\_T/LONG/DOUBLE} should be used
+depending on the sizeof of the values (notice that storing values of smaller
+type, e.g. shorts, in an array of larger one, e.g. {\tt ARRAY\_INT}, does
+\emph{not} work on all architectures!).
 
 
 \wxheading{See also:}
