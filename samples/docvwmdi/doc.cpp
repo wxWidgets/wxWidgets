@@ -19,10 +19,15 @@
 #ifndef WX_PRECOMP
 #include "wx/wx.h"
 #endif
-#include "wx/txtstrm.h"
 
 #if !wxUSE_DOC_VIEW_ARCHITECTURE
 #error You must set wxUSE_DOC_VIEW_ARCHITECTURE to 1 in setup.h!
+#endif
+
+#if wxUSE_STD_IOSTREAM
+    #include "wx/ioswrap.h"
+#else
+    #include "wx/txtstrm.h"
 #endif
 
 #include "doc.h"
