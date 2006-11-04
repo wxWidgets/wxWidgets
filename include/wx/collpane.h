@@ -27,7 +27,7 @@
 #define wxCP_DEFAULT_STYLE          (wxNO_BORDER)
 #define wxCP_NO_TLW_RESIZE          (0x0002)
 
-class WXDLLIMPEXP_ADV wxCollapsiblePaneBase : public wxControl
+class WXDLLIMPEXP_CORE wxCollapsiblePaneBase : public wxControl
 {
 public:
     wxCollapsiblePaneBase() {}
@@ -50,10 +50,10 @@ public:
 // ----------------------------------------------------------------------------
 
 BEGIN_DECLARE_EVENT_TYPES()
-    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_ADV, wxEVT_COMMAND_COLLPANE_CHANGED, 1102)
+    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_CORE, wxEVT_COMMAND_COLLPANE_CHANGED, 1102)
 END_DECLARE_EVENT_TYPES()
 
-class WXDLLIMPEXP_ADV wxCollapsiblePaneEvent : public wxCommandEvent
+class WXDLLIMPEXP_CORE wxCollapsiblePaneEvent : public wxCommandEvent
 {
 public:
     wxCollapsiblePaneEvent() {}

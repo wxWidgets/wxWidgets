@@ -19,14 +19,14 @@ class WXDLLEXPORT wxButton;
 class WXDLLEXPORT wxStaticLine;
 
 // class name
-extern WXDLLIMPEXP_DATA_ADV(const wxChar) wxGenericCollapsiblePaneNameStr[];
+extern WXDLLIMPEXP_DATA_CORE(const wxChar) wxGenericCollapsiblePaneNameStr[];
 
 
 // ----------------------------------------------------------------------------
 // wxGenericCollapsiblePane
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_ADV wxGenericCollapsiblePane : public wxCollapsiblePaneBase
+class WXDLLIMPEXP_CORE wxGenericCollapsiblePane : public wxCollapsiblePaneBase
 {
 public:
     wxGenericCollapsiblePane() { Init(); }
