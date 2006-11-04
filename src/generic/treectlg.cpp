@@ -2232,8 +2232,12 @@ void wxGenericTreeCtrl::PaintItem(wxGenericTreeItem *item, wxDC& dc)
     if ( HasFlag(wxTR_FULL_ROW_HIGHLIGHT) )
     {
         int x, y, w, h;
-
+        // TODO : using DoGetPosition should be wrong on any platform, the dc is focused on this window
+#ifdef __WXMAC__
+        x=y=0;
+#else
         DoGetPosition(&x, &y);
+#endif
         DoGetSize(&w, &h);
         dc.DrawRectangle(x, item->GetY()+offset, w, total_h-offset);
     }
