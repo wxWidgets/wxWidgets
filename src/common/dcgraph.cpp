@@ -69,6 +69,8 @@ void wxGCDC::SetGraphicsContext( wxGraphicsContext* ctx )
     {
         m_matrixOriginal = m_graphicContext->GetTransform();
         m_ok = true;
+        // apply the stored transformations to the passed in context
+        ComputeScaleAndOrigin();
     }
 }
 
@@ -309,14 +311,17 @@ void wxGCDC::ComputeScaleAndOrigin()
     m_scaleX = m_logicalScaleX * m_userScaleX;
     m_scaleY = m_logicalScaleY * m_userScaleY;
 
-    m_matrixCurrent = m_graphicContext->CreateMatrix();
-    m_matrixCurrent.Translate( m_deviceOriginX, m_deviceOriginY );
-    m_matrixCurrent.Scale( m_scaleX, m_scaleY );
-    // the logical origin sets the origin to have new coordinates
-    m_matrixCurrent.Translate( -m_logicalOriginX, -m_logicalOriginY );
+    if ( m_graphicContext )
+    {
+        m_matrixCurrent = m_graphicContext->CreateMatrix();
+        m_matrixCurrent.Translate( m_deviceOriginX, m_deviceOriginY );
+        m_matrixCurrent.Scale( m_scaleX, m_scaleY );
+        // the logical origin sets the origin to have new coordinates
+        m_matrixCurrent.Translate( -m_logicalOriginX, -m_logicalOriginY );
 
-    m_graphicContext->SetTransform( m_matrixOriginal );
-    m_graphicContext->ConcatTransform( m_matrixCurrent );
+        m_graphicContext->SetTransform( m_matrixOriginal );
+        m_graphicContext->ConcatTransform( m_matrixCurrent );
+    }
 }
 
 void wxGCDC::SetPalette( const wxPalette& WXUNUSED(palette) )
