@@ -19,9 +19,14 @@
 #ifndef WX_PRECOMP
 #include "wx/wx.h"
 #endif
-#include "wx/txtstrm.h"
 #ifdef __WXMAC__
 #include "wx/filename.h"
+#endif
+
+#if wxUSE_STD_IOSTREAM
+    #include "wx/ioswrap.h"
+#else
+    #include "wx/txtstrm.h"
 #endif
 
 #if !wxUSE_DOC_VIEW_ARCHITECTURE
