@@ -33531,6 +33531,8 @@ if test "$wxUSE_OPENGL" = "yes"; then
     elif test "$wxUSE_MSW" = 1; then
         OPENGL_LIBS="-lopengl32 -lglu32"
     else
+                        echo "$as_me:$LINENO: checking for OpenGL headers" >&5
+echo $ECHO_N "checking for OpenGL headers... $ECHO_C" >&6
 
 ac_find_includes=
 for ac_dir in $SEARCH_INCLUDE /opt/graphics/OpenGL/include /usr/include;
@@ -33558,6 +33560,9 @@ echo "${ECHO_T}found in $ac_find_includes" >&6
   fi
 
             CPPFLAGS="$ac_path_to_include $CPPFLAGS"
+        else
+            echo "$as_me:$LINENO: result: not found" >&5
+echo "${ECHO_T}not found" >&6
         fi
 
         if test "${ac_cv_header_GL_gl_h+set}" = set; then

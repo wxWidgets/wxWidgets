@@ -3877,11 +3877,14 @@ if test "$wxUSE_OPENGL" = "yes"; then
     else
         dnl adjust CPPFLAGS to include GL/gl.h location if necessary
         dnl (/opt/graphics/OpenGL is for HP-UX systems, bug 925307)
+        AC_MSG_CHECKING([for OpenGL headers])
         WX_PATH_FIND_INCLUDES([$SEARCH_INCLUDE /opt/graphics/OpenGL/include], GL/gl.h)
         if test "$ac_find_includes" != "" ; then
             AC_MSG_RESULT(found in $ac_find_includes)
             WX_INCLUDE_PATH_EXIST($ac_find_includes, $CPPFLAGS)
             CPPFLAGS="$ac_path_to_include $CPPFLAGS"
+        else
+            AC_MSG_RESULT([not found])
         fi
 
         AC_CHECK_HEADER(GL/gl.h, [
