@@ -287,7 +287,7 @@ extern LONG APIENTRY wxSubclassedGenericControlProc(WXHWND hWnd, WXDWORD message
 // OS/2 convention of the mask is opposed to the wxWidgets one, so we need
 // to invert the mask each time we pass one/get one to/from Windows
 extern HBITMAP wxInvertMask(HBITMAP hbmpMask, int w = 0, int h = 0);
-extern HBITMAP wxFlipBmp(HBITMAP hbmp, int w = 0, int h = 0);
+extern HBITMAP wxCopyBmp(HBITMAP hbmp, bool flip=false, int w=0, int h=0);
 
 // ---------------------------------------------------------------------------
 // global data

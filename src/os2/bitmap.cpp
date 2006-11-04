@@ -67,8 +67,7 @@ wxBitmapRefData::wxBitmapRefData(const wxBitmapRefData &tocopy)
     if (tocopy.m_pBitmapMask)
         m_pBitmapMask = new wxMask(*tocopy.m_pBitmapMask);
 
-    // TODO: how to copy an HBITMAP?
-    m_hBitmap       = tocopy.m_hBitmap;
+    m_hBitmap = wxCopyBmp(tocopy.m_hBitmap);
 }
 
 void wxBitmapRefData::Free()
@@ -1222,8 +1221,7 @@ wxMask::wxMask()
 
 wxMask::wxMask(const wxMask& tocopy)
 {
-    // TODO: how to copy a WXHBITMAP?
-    m_hMaskBitmap = tocopy.m_hMaskBitmap;
+    m_hMaskBitmap = wxCopyBmp(tocopy.m_hMaskBitmap);
 } // end of wxMask::wxMask
 
 // Construct a mask from a bitmap and a colour indicating
@@ -1628,9 +1626,9 @@ HBITMAP wxInvertMask(
     return hBmpInvMask;
 } // end of WxWinGdi_InvertMask
 
-HBITMAP wxFlipBmp( HBITMAP hBmp, int nWidth, int nHeight )
+HBITMAP wxCopyBmp( HBITMAP hBmp, bool flip, int nWidth, int nHeight )
 {
-    wxCHECK_MSG( hBmp, 0, _T("invalid bitmap in wxFlipBmp") );
+    wxCHECK_MSG( hBmp, 0, _T("invalid bitmap in wxCopyBmp") );
 
     //
     // Get width/height from the bitmap if not given
@@ -1673,7 +1671,11 @@ HBITMAP wxFlipBmp( HBITMAP hBmp, int nWidth, int nHeight )
                                     {nWidth, 0},
                                     {0,      0},
                                     {nWidth, nHeight} };
-
+    if (!flip)
+    {
+        vPoint[0].y = 0;
+        vPoint[1].y = nHeight;
+    }
     memset(&vBmih, '\0', 16);
     vBmih.cbFix     = 16;
     vBmih.cx        = nWidth;
