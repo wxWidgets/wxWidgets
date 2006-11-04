@@ -1779,7 +1779,7 @@ int WXDLLEXPORT wxParseCommonDialogsFilter(const wxString& filterStr,
     return filters.GetCount();
 }
 
-#if defined( __WINDOWS__ )
+#if defined(__WINDOWS__) && !(defined(__UNIX__) || defined(__OS2__))
 static bool wxCheckWin32Permission(const wxString& path, DWORD access)
 {
     // quoting the MSDN: "To obtain a handle to a directory, call the
