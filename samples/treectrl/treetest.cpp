@@ -76,6 +76,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     MENU_LINK(SetBgColour)
     MENU_LINK(ResetStyle)
 
+    MENU_LINK(Highlight)
     MENU_LINK(Dump)
 #ifndef NO_MULTIPLE_SELECTION
     MENU_LINK(DumpSelected)
@@ -454,6 +455,26 @@ void MyFrame::DoSort(bool reverse)
     CHECK_ITEM( item );
 
     m_treeCtrl->DoSortChildren(item, reverse);
+}
+
+void MyFrame::OnHighlight(wxCommandEvent& WXUNUSED(event))
+{
+    wxTreeItemId id = m_treeCtrl->GetSelection();
+
+    CHECK_ITEM( id );
+
+    wxRect r;
+    if ( !m_treeCtrl->GetBoundingRect(id, r, true /* text, not full row */) )
+    {
+        wxLogMessage(_T("Failed to get bounding item rect"));
+        return;
+    }
+
+    wxClientDC dc(m_treeCtrl);
+    dc.SetBrush(*wxRED);
+    dc.SetPen(*wxTRANSPARENT_PEN);
+    dc.DrawRectangle(r);
+    m_treeCtrl->Update();
 }
 
 void MyFrame::OnDump(wxCommandEvent& WXUNUSED(event))
@@ -1230,6 +1251,8 @@ void MyTreeCtrl::ShowMenu(wxTreeItemId id, const wxPoint& pt)
 #if wxUSE_MENUS
     wxMenu menu(title);
     menu.Append(TreeTest_About, wxT("&About..."));
+    menu.AppendSeparator();
+    menu.Append(TreeTest_Highlight, wxT("&Highlight item"));
     menu.Append(TreeTest_Dump, wxT("&Dump"));
 
     PopupMenu(&menu, pt);

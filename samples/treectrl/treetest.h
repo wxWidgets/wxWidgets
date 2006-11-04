@@ -177,6 +177,7 @@ public:
     void OnSetFgColour(wxCommandEvent& event);
     void OnSetBgColour(wxCommandEvent& event);
 
+    void OnHighlight(wxCommandEvent& event);
     void OnDump(wxCommandEvent& event);
 #ifndef NO_MULTIPLE_SELECTION
     void OnDumpSelected(wxCommandEvent& event);
@@ -258,6 +259,7 @@ enum
     TreeTest_SetFgColour,
     TreeTest_SetBgColour,
     TreeTest_ResetStyle,
+    TreeTest_Highlight,
     TreeTest_Dump,
     TreeTest_DumpSelected,
     TreeTest_Count,
