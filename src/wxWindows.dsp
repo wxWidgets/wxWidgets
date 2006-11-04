@@ -4275,10 +4275,6 @@ SOURCE=..\include\wx\generic\collpaneg.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\include\wx\generic\collpaneg.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\include\wx\generic\colrdlgg.h
 # End Source File
 # Begin Source File

@@ -4094,6 +4094,10 @@ SOURCE=..\..\src\generic\clrpickerg.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\generic\collpaneg.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\generic\colrdlgg.cpp
 
 !IF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"

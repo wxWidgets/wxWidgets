@@ -1515,6 +1515,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_choicdgg.o \
 	$(OBJS)\monodll_choicbkg.o \
 	$(OBJS)\monodll_clrpickerg.o \
+	$(OBJS)\monodll_collpaneg.o \
 	$(OBJS)\monodll_combog.o \
 	$(OBJS)\monodll_dcpsg.o \
 	$(OBJS)\monodll_dirctrlg.o \
@@ -1739,6 +1740,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_choicdgg.o \
 	$(OBJS)\monodll_choicbkg.o \
 	$(OBJS)\monodll_clrpickerg.o \
+	$(OBJS)\monodll_collpaneg.o \
 	$(OBJS)\monodll_combog.o \
 	$(OBJS)\monodll_dcpsg.o \
 	$(OBJS)\monodll_dirctrlg.o \
@@ -1772,7 +1774,6 @@ ____ADVANCED_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_aboutdlgg.o \
 	$(OBJS)\monodll_bmpcboxg.o \
 	$(OBJS)\monodll_calctrl.o \
-	$(OBJS)\monodll_collpaneg.o \
 	$(OBJS)\monodll_datavgen.o \
 	$(OBJS)\monodll_datectlg.o \
 	$(OBJS)\monodll_grid.o \
@@ -1802,7 +1803,6 @@ ____ADVANCED_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_aboutdlgg.o \
 	$(OBJS)\monodll_bmpcboxg.o \
 	$(OBJS)\monodll_calctrl.o \
-	$(OBJS)\monodll_collpaneg.o \
 	$(OBJS)\monodll_datavgen.o \
 	$(OBJS)\monodll_datectlg.o \
 	$(OBJS)\monodll_grid.o \
@@ -2132,6 +2132,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_choicdgg.o \
 	$(OBJS)\monolib_choicbkg.o \
 	$(OBJS)\monolib_clrpickerg.o \
+	$(OBJS)\monolib_collpaneg.o \
 	$(OBJS)\monolib_combog.o \
 	$(OBJS)\monolib_dcpsg.o \
 	$(OBJS)\monolib_dirctrlg.o \
@@ -2356,6 +2357,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_choicdgg.o \
 	$(OBJS)\monolib_choicbkg.o \
 	$(OBJS)\monolib_clrpickerg.o \
+	$(OBJS)\monolib_collpaneg.o \
 	$(OBJS)\monolib_combog.o \
 	$(OBJS)\monolib_dcpsg.o \
 	$(OBJS)\monolib_dirctrlg.o \
@@ -2389,7 +2391,6 @@ ____ADVANCED_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_aboutdlgg.o \
 	$(OBJS)\monolib_bmpcboxg.o \
 	$(OBJS)\monolib_calctrl.o \
-	$(OBJS)\monolib_collpaneg.o \
 	$(OBJS)\monolib_datavgen.o \
 	$(OBJS)\monolib_datectlg.o \
 	$(OBJS)\monolib_grid.o \
@@ -2419,7 +2420,6 @@ ____ADVANCED_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_aboutdlgg.o \
 	$(OBJS)\monolib_bmpcboxg.o \
 	$(OBJS)\monolib_calctrl.o \
-	$(OBJS)\monolib_collpaneg.o \
 	$(OBJS)\monolib_datavgen.o \
 	$(OBJS)\monolib_datectlg.o \
 	$(OBJS)\monolib_grid.o \
@@ -2668,6 +2668,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_choicdgg.o \
 	$(OBJS)\coredll_choicbkg.o \
 	$(OBJS)\coredll_clrpickerg.o \
+	$(OBJS)\coredll_collpaneg.o \
 	$(OBJS)\coredll_combog.o \
 	$(OBJS)\coredll_dcpsg.o \
 	$(OBJS)\coredll_dirctrlg.o \
@@ -2892,6 +2893,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_choicdgg.o \
 	$(OBJS)\coredll_choicbkg.o \
 	$(OBJS)\coredll_clrpickerg.o \
+	$(OBJS)\coredll_collpaneg.o \
 	$(OBJS)\coredll_combog.o \
 	$(OBJS)\coredll_dcpsg.o \
 	$(OBJS)\coredll_dirctrlg.o \
@@ -3121,6 +3123,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_choicdgg.o \
 	$(OBJS)\corelib_choicbkg.o \
 	$(OBJS)\corelib_clrpickerg.o \
+	$(OBJS)\corelib_collpaneg.o \
 	$(OBJS)\corelib_combog.o \
 	$(OBJS)\corelib_dcpsg.o \
 	$(OBJS)\corelib_dirctrlg.o \
@@ -3345,6 +3348,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_choicdgg.o \
 	$(OBJS)\corelib_choicbkg.o \
 	$(OBJS)\corelib_clrpickerg.o \
+	$(OBJS)\corelib_collpaneg.o \
 	$(OBJS)\corelib_combog.o \
 	$(OBJS)\corelib_dcpsg.o \
 	$(OBJS)\corelib_dirctrlg.o \
@@ -3386,7 +3390,6 @@ ____ADVANCED_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\advdll_aboutdlgg.o \
 	$(OBJS)\advdll_bmpcboxg.o \
 	$(OBJS)\advdll_calctrl.o \
-	$(OBJS)\advdll_collpaneg.o \
 	$(OBJS)\advdll_datavgen.o \
 	$(OBJS)\advdll_datectlg.o \
 	$(OBJS)\advdll_grid.o \
@@ -3416,7 +3419,6 @@ ____ADVANCED_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\advdll_aboutdlgg.o \
 	$(OBJS)\advdll_bmpcboxg.o \
 	$(OBJS)\advdll_calctrl.o \
-	$(OBJS)\advdll_collpaneg.o \
 	$(OBJS)\advdll_datavgen.o \
 	$(OBJS)\advdll_datectlg.o \
 	$(OBJS)\advdll_grid.o \
@@ -3453,7 +3455,6 @@ ____ADVANCED_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\advlib_aboutdlgg.o \
 	$(OBJS)\advlib_bmpcboxg.o \
 	$(OBJS)\advlib_calctrl.o \
-	$(OBJS)\advlib_collpaneg.o \
 	$(OBJS)\advlib_datavgen.o \
 	$(OBJS)\advlib_datectlg.o \
 	$(OBJS)\advlib_grid.o \
@@ -3483,7 +3484,6 @@ ____ADVANCED_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\advlib_aboutdlgg.o \
 	$(OBJS)\advlib_bmpcboxg.o \
 	$(OBJS)\advlib_calctrl.o \
-	$(OBJS)\advlib_collpaneg.o \
 	$(OBJS)\advlib_datavgen.o \
 	$(OBJS)\advlib_datectlg.o \
 	$(OBJS)\advlib_grid.o \
@@ -6458,6 +6458,11 @@ $(OBJS)\monodll_clrpickerg.o: ../../src/generic/clrpickerg.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\monodll_collpaneg.o: ../../src/generic/collpaneg.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\monodll_combog.o: ../../src/generic/combog.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -6599,11 +6604,6 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\monodll_calctrl.o: ../../src/generic/calctrl.cpp
-	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
-endif
-
-ifeq ($(USE_GUI),1)
-$(OBJS)\monodll_collpaneg.o: ../../src/generic/collpaneg.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 endif
 
@@ -8542,6 +8542,11 @@ $(OBJS)\monolib_clrpickerg.o: ../../src/generic/clrpickerg.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\monolib_collpaneg.o: ../../src/generic/collpaneg.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\monolib_combog.o: ../../src/generic/combog.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -8683,11 +8688,6 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\monolib_calctrl.o: ../../src/generic/calctrl.cpp
-	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
-endif
-
-ifeq ($(USE_GUI),1)
-$(OBJS)\monolib_collpaneg.o: ../../src/generic/collpaneg.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 endif
 
@@ -10653,6 +10653,11 @@ $(OBJS)\coredll_clrpickerg.o: ../../src/generic/clrpickerg.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\coredll_collpaneg.o: ../../src/generic/collpaneg.cpp
+	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\coredll_combog.o: ../../src/generic/combog.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -12013,6 +12018,11 @@ $(OBJS)\corelib_clrpickerg.o: ../../src/generic/clrpickerg.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\corelib_collpaneg.o: ../../src/generic/collpaneg.cpp
+	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\corelib_combog.o: ../../src/generic/combog.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -12156,9 +12166,6 @@ $(OBJS)\advdll_bmpcboxg.o: ../../src/generic/bmpcboxg.cpp
 $(OBJS)\advdll_calctrl.o: ../../src/generic/calctrl.cpp
 	$(CXX) -c -o $@ $(ADVDLL_CXXFLAGS) $(CPPDEPS) $<
 
-$(OBJS)\advdll_collpaneg.o: ../../src/generic/collpaneg.cpp
-	$(CXX) -c -o $@ $(ADVDLL_CXXFLAGS) $(CPPDEPS) $<
-
 $(OBJS)\advdll_datavgen.o: ../../src/generic/datavgen.cpp
 	$(CXX) -c -o $@ $(ADVDLL_CXXFLAGS) $(CPPDEPS) $<
 
@@ -12238,9 +12245,6 @@ $(OBJS)\advlib_bmpcboxg.o: ../../src/generic/bmpcboxg.cpp
 	$(CXX) -c -o $@ $(ADVLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\advlib_calctrl.o: ../../src/generic/calctrl.cpp
-	$(CXX) -c -o $@ $(ADVLIB_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\advlib_collpaneg.o: ../../src/generic/collpaneg.cpp
 	$(CXX) -c -o $@ $(ADVLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\advlib_datavgen.o: ../../src/generic/datavgen.cpp
