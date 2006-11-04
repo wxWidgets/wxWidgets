@@ -88,7 +88,7 @@
     #define TEST_WCHAR
     #define TEST_ZIP
 #else // #if TEST_ALL
-    #define TEST_CMDLINE
+    #define TEST_FILE
 #endif
 
 // some tests are interactive, define this to run them
@@ -715,6 +715,24 @@ static void TestFileCopy()
     if ( !wxRemoveFile(filename2) )
     {
         wxPuts(_T("ERROR: failed to remove the file"));
+    }
+
+    wxPuts(wxEmptyString);
+}
+
+static void TestTempFile()
+{
+    wxPuts(_T("*** wxTempFile test ***"));
+
+    wxTempFile tmpFile;
+    if ( tmpFile.Open(_T("test2")) && tmpFile.Write(_T("the answer is 42")) )
+    {
+        if ( tmpFile.Commit() )
+            wxPuts(_T("File committed."));
+        else
+            wxPuts(_T("ERROR: could't commit temp file."));
+
+        wxRemoveFile(_T("test2"));
     }
 
     wxPuts(wxEmptyString);
@@ -4304,6 +4322,7 @@ int main(int argc, char **argv)
     TestFileRead();
     TestTextFileRead();
     TestFileCopy();
+    TestTempFile();
 #endif // TEST_FILE
 
 #ifdef TEST_FILENAME
