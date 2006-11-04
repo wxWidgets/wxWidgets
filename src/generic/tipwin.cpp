@@ -34,10 +34,6 @@
     #include "wx/settings.h"
 #endif // WX_PRECOMP
 
-#ifdef __WXGTK__
-    #include <gtk/gtk.h>
-#endif
-
 // ----------------------------------------------------------------------------
 // constants
 // ----------------------------------------------------------------------------
@@ -157,8 +153,7 @@ wxTipWindow::wxTipWindow(wxWindow *parent,
     Position(wxPoint(x, y), wxSize(0,0));
     Popup(m_view);
     #ifdef __WXGTK__
-        if (!GTK_WIDGET_HAS_GRAB(m_widget))
-            gtk_grab_add( m_widget );
+        m_view->CaptureMouse();
     #endif
 #else
     Move(x, y);
@@ -174,8 +169,8 @@ wxTipWindow::~wxTipWindow()
     }
     #ifdef wxUSE_POPUPWIN
         #ifdef __WXGTK__
-            if (GTK_WIDGET_HAS_GRAB(m_widget))
-                gtk_grab_remove( m_widget );
+            if ( m_view->HasCapture() )
+                m_view->ReleaseMouse();
         #endif
     #endif
 }
@@ -228,8 +223,8 @@ void wxTipWindow::Close()
 #if wxUSE_POPUPWIN
     Show(false);
     #ifdef __WXGTK__
-        if (GTK_WIDGET_HAS_GRAB(m_widget))
-            gtk_grab_remove( m_widget );
+        if ( m_view->HasCapture() )
+            m_view->ReleaseMouse();
     #endif
     Destroy();
 #else
