@@ -37,6 +37,9 @@ clean:
 
 distclean: clean
 	rm -f config.cache config.log config.status bk-deps bk-make-pch shared-ld-sh Makefile
+	(cd cube && $(MAKE) distclean)
+	(cd isosurf && $(MAKE) distclean)
+	(cd penguin && $(MAKE) distclean)
 
 cube: 
 	(cd cube && $(MAKE) all)

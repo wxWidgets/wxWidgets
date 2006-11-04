@@ -14,9 +14,11 @@ EXEEXT = @EXEEXT@
 WINDRES = @WINDRES@
 REZ = @REZ@
 SETFILE = @SETFILE@
+BK_DEPS = @BK_DEPS@
+BK_MAKE_PCH = @BK_MAKE_PCH@
 srcdir = @srcdir@
 top_srcdir = @top_srcdir@
-top_builddir = @top_builddir@
+LIBS = @LIBS@
 CXX = @CXX@
 CXXFLAGS = @CXXFLAGS@
 CPPFLAGS = @CPPFLAGS@
@@ -33,13 +35,14 @@ EXTRALIBS_GUI = @EXTRALIBS_GUI@
 HOST_SUFFIX = @HOST_SUFFIX@
 SAMPLES_RPATH_FLAG = @SAMPLES_RPATH_FLAG@
 SAMPLES_RPATH_POSTLINK = @SAMPLES_RPATH_POSTLINK@
+wx_top_builddir = @wx_top_builddir@
 
 ### Variables: ###
 
 DESTDIR = 
 WX_RELEASE = 2.7
 WX_VERSION = $(WX_RELEASE).2
-LIBDIRNAME = $(top_builddir)lib
+LIBDIRNAME = $(wx_top_builddir)/lib
 TEST_CXXFLAGS = $(__test_PCH_INC) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) \
 	-I$(srcdir) $(__DLLFLAG_p) -DwxUSE_GUI=0 $(CPPUNIT_CFLAGS) $(CPPFLAGS) \
@@ -108,7 +111,7 @@ PRINTFBENCH_ODEP =  $(___pch_testprec_printfbench_testprec_h_gch___depname)
 ### Conditionally set variables: ###
 
 @COND_DEPS_TRACKING_0@CXXC = $(CXX)
-@COND_DEPS_TRACKING_1@CXXC = $(top_builddir)./bk-deps $(CXX)
+@COND_DEPS_TRACKING_1@CXXC = $(BK_DEPS) $(CXX)
 @COND_USE_GUI_0@PORTNAME = base
 @COND_USE_GUI_1@PORTNAME = $(TOOLKIT_LOWERCASE)$(TOOLKIT_VERSION)
 @COND_TOOLKIT_MAC@WXBASEPORT = _carbon
@@ -228,16 +231,16 @@ distclean: clean
 	rm -f config.cache config.log config.status bk-deps bk-make-pch shared-ld-sh Makefile
 
 test$(EXEEXT): $(TEST_OBJECTS)
-	$(CXX) -o $@ $(TEST_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME)  $(SAMPLES_RPATH_FLAG) $(CPPUNIT_LIBS)  $(__WXLIB_NET_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE)
+	$(CXX) -o $@ $(TEST_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME)  $(SAMPLES_RPATH_FLAG) $(CPPUNIT_LIBS)  $(LIBS) $(__WXLIB_NET_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE)
 	
 	$(__test___mac_setfilecmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
 @COND_USE_PCH_1@.pch/testprec_test/testprec.h.gch: 
-@COND_USE_PCH_1@	$(top_builddir)./bk-make-pch .pch/testprec_test/testprec.h.gch testprec.h $(CXX) $(TEST_CXXFLAGS)
+@COND_USE_PCH_1@	$(BK_MAKE_PCH) .pch/testprec_test/testprec.h.gch testprec.h $(CXX) $(TEST_CXXFLAGS)
 
 @COND_USE_GUI_1@test_gui$(EXEEXT): $(TEST_GUI_OBJECTS) $(__test_gui___win32rc)
-@COND_USE_GUI_1@	$(CXX) -o $@ $(TEST_GUI_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME) $(SAMPLES_RPATH_FLAG) $(CPPUNIT_LIBS)   $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(EXTRALIBS_FOR_GUI) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE)
+@COND_USE_GUI_1@	$(CXX) -o $@ $(TEST_GUI_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME) $(SAMPLES_RPATH_FLAG) $(CPPUNIT_LIBS)   $(LIBS) $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(EXTRALIBS_FOR_GUI) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE)
 @COND_USE_GUI_1@	$(__test_gui___mac_rezcmd)
 @COND_USE_GUI_1@	$(__test_gui___mac_setfilecmd)
 @COND_USE_GUI_1@	$(SAMPLES_RPATH_POSTLINK)
@@ -265,7 +268,7 @@ test_gui.app/Contents/PkgInfo: $(__test_gui___depname) $(top_srcdir)/src/mac/car
 @COND_PLATFORM_MACOSX_1@test_gui_bundle: $(____test_gui_BUNDLE_TGT_REF_DEP)
 
 @COND_USE_PCH_1@.pch/testprec_test_gui/testprec.h.gch: 
-@COND_USE_PCH_1@	$(top_builddir)./bk-make-pch .pch/testprec_test_gui/testprec.h.gch testprec.h $(CXX) $(TEST_GUI_CXXFLAGS)
+@COND_USE_PCH_1@	$(BK_MAKE_PCH) .pch/testprec_test_gui/testprec.h.gch testprec.h $(CXX) $(TEST_GUI_CXXFLAGS)
 
 data: 
 	@mkdir -p .
@@ -280,13 +283,13 @@ data:
 	done
 
 printfbench$(EXEEXT): $(PRINTFBENCH_OBJECTS)
-	$(CXX) -o $@ $(PRINTFBENCH_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME)  $(SAMPLES_RPATH_FLAG) $(CPPUNIT_LIBS)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE)
+	$(CXX) -o $@ $(PRINTFBENCH_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME)  $(SAMPLES_RPATH_FLAG) $(CPPUNIT_LIBS)  $(LIBS) $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE)
 	
 	$(__printfbench___mac_setfilecmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
 @COND_USE_PCH_1@.pch/testprec_printfbench/testprec.h.gch: 
-@COND_USE_PCH_1@	$(top_builddir)./bk-make-pch .pch/testprec_printfbench/testprec.h.gch testprec.h $(CXX) $(PRINTFBENCH_CXXFLAGS)
+@COND_USE_PCH_1@	$(BK_MAKE_PCH) .pch/testprec_printfbench/testprec.h.gch testprec.h $(CXX) $(PRINTFBENCH_CXXFLAGS)
 
 test_test.o: $(srcdir)/test.cpp $(TEST_ODEP)
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/test.cpp

@@ -33,7 +33,7 @@ MAKEARGS = CC="$(CC)" CXX="$(CXX)" CFLAGS="$(CFLAGS)" CXXFLAGS="$(CXXFLAGS)" \
 
 ### Targets: ###
 
-all: access animate artprov aui calendar caret checklst config combo console controls dataview db dialogs dialup display dnd docview docvwmdi dragimag drawing dynamic erase event exec except font grid help htlbox html image internat ipc joytest keyboard layout listbox listctrl mdi mediaplayer memcheck menu minifram minimal mobile multimon nativdlg notebook oleauto opengl ownerdrw png popup printing propsize regtest render richtext rotate sashtest scroll scrollsub shaped sockets sound splash splitter statbar taskbar text thread toolbar treectrl typetest validate vscroll widgets wizard mfc
+all: access animate artprov aui calendar caret checklst collpane config combo console controls dataview db dialogs dialup display dnd docview docvwmdi dragimag drawing dynamic erase event exec except font grid help htlbox html image internat ipc joytest keyboard layout listbox listctrl mdi mediaplayer memcheck menu minifram minimal mobile multimon nativdlg notebook oleauto opengl ownerdrw png popup printing propsize regtest render richtext rotate sashtest scroll scrollsub shaped sockets sound splash splitter statbar taskbar text thread toolbar treectrl typetest validate vscroll widgets wizard mfc
 
 clean: 
 	-if exist .\*.o del .\*.o
@@ -45,6 +45,7 @@ clean:
 	$(MAKE) -C calendar -f makefile.gcc $(MAKEARGS) clean
 	$(MAKE) -C caret -f makefile.gcc $(MAKEARGS) clean
 	$(MAKE) -C checklst -f makefile.gcc $(MAKEARGS) clean
+	$(MAKE) -C collpane -f makefile.gcc $(MAKEARGS) clean
 	$(MAKE) -C config -f makefile.gcc $(MAKEARGS) clean
 	$(MAKE) -C combo -f makefile.gcc $(MAKEARGS) clean
 	$(MAKE) -C console -f makefile.gcc $(MAKEARGS) clean
@@ -139,6 +140,9 @@ caret:
 
 checklst: 
 	$(MAKE) -C checklst -f makefile.gcc $(MAKEARGS) all
+
+collpane: 
+	$(MAKE) -C collpane -f makefile.gcc $(MAKEARGS) all
 
 config: 
 	$(MAKE) -C config -f makefile.gcc $(MAKEARGS) all
@@ -359,7 +363,7 @@ wizard:
 mfc: 
 	$(MAKE) -C mfc -f makefile.gcc $(MAKEARGS) all
 
-.PHONY: all clean access animate artprov aui calendar caret checklst config combo console controls dataview db dialogs dialup display dnd docview docvwmdi dragimag drawing dynamic erase event exec except font grid help htlbox html image internat ipc joytest keyboard layout listbox listctrl mdi mediaplayer memcheck menu minifram minimal mobile multimon nativdlg notebook oleauto opengl ownerdrw png popup printing propsize regtest render richtext rotate sashtest scroll scrollsub shaped sockets sound splash splitter statbar taskbar text thread toolbar treectrl typetest validate vscroll widgets wizard mfc
+.PHONY: all clean access animate artprov aui calendar caret checklst collpane config combo console controls dataview db dialogs dialup display dnd docview docvwmdi dragimag drawing dynamic erase event exec except font grid help htlbox html image internat ipc joytest keyboard layout listbox listctrl mdi mediaplayer memcheck menu minifram minimal mobile multimon nativdlg notebook oleauto opengl ownerdrw png popup printing propsize regtest render richtext rotate sashtest scroll scrollsub shaped sockets sound splash splitter statbar taskbar text thread toolbar treectrl typetest validate vscroll widgets wizard mfc
 
 
 # Dependencies tracking:

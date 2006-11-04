@@ -40,6 +40,12 @@ clean:
 
 distclean: clean
 	rm -f config.cache config.log config.status bk-deps bk-make-pch shared-ld-sh Makefile
+	(cd bombs && $(MAKE) distclean)
+	(cd dbbrowse && $(MAKE) distclean)
+	(cd forty && $(MAKE) distclean)
+	(cd fractal && $(MAKE) distclean)
+	(cd life && $(MAKE) distclean)
+	(cd poem && $(MAKE) distclean)
 
 bombs: 
 	(cd bombs && $(MAKE) all)

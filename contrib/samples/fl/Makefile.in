@@ -15,9 +15,10 @@ WINDRES = @WINDRES@
 REZ = @REZ@
 SETFILE = @SETFILE@
 NM = @NM@
+BK_DEPS = @BK_DEPS@
 srcdir = @srcdir@
 top_srcdir = @top_srcdir@
-top_builddir = @top_builddir@
+LIBS = @LIBS@
 LDFLAGS_GUI = @LDFLAGS_GUI@
 CXX = @CXX@
 CXXFLAGS = @CXXFLAGS@
@@ -33,13 +34,14 @@ EXTRALIBS_GUI = @EXTRALIBS_GUI@
 HOST_SUFFIX = @HOST_SUFFIX@
 SAMPLES_RPATH_FLAG = @SAMPLES_RPATH_FLAG@
 SAMPLES_RPATH_POSTLINK = @SAMPLES_RPATH_POSTLINK@
+wx_top_builddir = @wx_top_builddir@
 
 ### Variables: ###
 
 DESTDIR = 
 WX_RELEASE = 2.7
 WX_VERSION = $(WX_RELEASE).2
-LIBDIRNAME = $(top_builddir)lib
+LIBDIRNAME = $(wx_top_builddir)/lib
 FL_DEMO1_CXXFLAGS = -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) \
 	-I$(srcdir) $(__DLLFLAG_p) -I$(srcdir)/../../../samples \
@@ -84,7 +86,7 @@ FL_SAMPLE3_OBJECTS =  \
 ### Conditionally set variables: ###
 
 @COND_DEPS_TRACKING_0@CXXC = $(CXX)
-@COND_DEPS_TRACKING_1@CXXC = $(top_builddir)./bk-deps $(CXX)
+@COND_DEPS_TRACKING_1@CXXC = $(BK_DEPS) $(CXX)
 @COND_USE_GUI_0@PORTNAME = base
 @COND_USE_GUI_1@PORTNAME = $(TOOLKIT_LOWERCASE)$(TOOLKIT_VERSION)
 @COND_TOOLKIT_MAC@WXBASEPORT = _carbon
@@ -267,7 +269,7 @@ distclean: clean
 	rm -f config.cache config.log config.status bk-deps bk-make-pch shared-ld-sh Makefile
 
 fl_demo1$(EXEEXT): $(FL_DEMO1_OBJECTS) $(__fl_demo1___win32rc)
-	$(CXX) -o $@ $(FL_DEMO1_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME) $(LDFLAGS_GUI) $(SAMPLES_RPATH_FLAG)  -lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_fl-$(WX_RELEASE)$(HOST_SUFFIX)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(EXTRALIBS_FOR_GUI) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE)
+	$(CXX) -o $@ $(FL_DEMO1_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME) $(LDFLAGS_GUI) $(SAMPLES_RPATH_FLAG)  $(LIBS) -lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_fl-$(WX_RELEASE)$(HOST_SUFFIX)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(EXTRALIBS_FOR_GUI) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE)
 	$(__fl_demo1___mac_rezcmd)
 	$(__fl_demo1___mac_setfilecmd)
 	$(__fl_demo1___os2_emxbindcmd)
@@ -296,7 +298,7 @@ fl_demo1.app/Contents/PkgInfo: fl_demo1$(EXEEXT) $(top_srcdir)/src/mac/carbon/In
 @COND_PLATFORM_MACOSX_1@fl_demo1_bundle: $(____fl_demo1_BUNDLE_TGT_REF_DEP)
 
 fl_demo2$(EXEEXT): $(FL_DEMO2_OBJECTS) $(__fl_demo2___win32rc)
-	$(CXX) -o $@ $(FL_DEMO2_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME) $(LDFLAGS_GUI) $(SAMPLES_RPATH_FLAG)  -lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_fl-$(WX_RELEASE)$(HOST_SUFFIX)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(EXTRALIBS_FOR_GUI) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE)
+	$(CXX) -o $@ $(FL_DEMO2_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME) $(LDFLAGS_GUI) $(SAMPLES_RPATH_FLAG)  $(LIBS) -lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_fl-$(WX_RELEASE)$(HOST_SUFFIX)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(EXTRALIBS_FOR_GUI) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE)
 	$(__fl_demo2___mac_rezcmd)
 	$(__fl_demo2___mac_setfilecmd)
 	$(__fl_demo2___os2_emxbindcmd)
@@ -325,7 +327,7 @@ fl_demo2.app/Contents/PkgInfo: fl_demo2$(EXEEXT) $(top_srcdir)/src/mac/carbon/In
 @COND_PLATFORM_MACOSX_1@fl_demo2_bundle: $(____fl_demo2_BUNDLE_TGT_REF_DEP)
 
 fl_sample1$(EXEEXT): $(FL_SAMPLE1_OBJECTS) $(__fl_sample1___win32rc)
-	$(CXX) -o $@ $(FL_SAMPLE1_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME) $(LDFLAGS_GUI) $(SAMPLES_RPATH_FLAG)  -lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_fl-$(WX_RELEASE)$(HOST_SUFFIX)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(EXTRALIBS_FOR_GUI) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE)
+	$(CXX) -o $@ $(FL_SAMPLE1_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME) $(LDFLAGS_GUI) $(SAMPLES_RPATH_FLAG)  $(LIBS) -lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_fl-$(WX_RELEASE)$(HOST_SUFFIX)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(EXTRALIBS_FOR_GUI) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE)
 	$(__fl_sample1___mac_rezcmd)
 	$(__fl_sample1___mac_setfilecmd)
 	$(__fl_sample1___os2_emxbindcmd)
@@ -354,7 +356,7 @@ fl_sample1.app/Contents/PkgInfo: fl_sample1$(EXEEXT) $(top_srcdir)/src/mac/carbo
 @COND_PLATFORM_MACOSX_1@fl_sample1_bundle: $(____fl_sample1_BUNDLE_TGT_REF_DEP)
 
 fl_sample2$(EXEEXT): $(FL_SAMPLE2_OBJECTS) $(__fl_sample2___win32rc)
-	$(CXX) -o $@ $(FL_SAMPLE2_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME) $(LDFLAGS_GUI) $(SAMPLES_RPATH_FLAG)  -lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_fl-$(WX_RELEASE)$(HOST_SUFFIX)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(EXTRALIBS_FOR_GUI) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE)
+	$(CXX) -o $@ $(FL_SAMPLE2_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME) $(LDFLAGS_GUI) $(SAMPLES_RPATH_FLAG)  $(LIBS) -lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_fl-$(WX_RELEASE)$(HOST_SUFFIX)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(EXTRALIBS_FOR_GUI) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE)
 	$(__fl_sample2___mac_rezcmd)
 	$(__fl_sample2___mac_setfilecmd)
 	$(__fl_sample2___os2_emxbindcmd)
@@ -383,7 +385,7 @@ fl_sample2.app/Contents/PkgInfo: fl_sample2$(EXEEXT) $(top_srcdir)/src/mac/carbo
 @COND_PLATFORM_MACOSX_1@fl_sample2_bundle: $(____fl_sample2_BUNDLE_TGT_REF_DEP)
 
 fl_sample3$(EXEEXT): $(FL_SAMPLE3_OBJECTS) $(__fl_sample3___win32rc)
-	$(CXX) -o $@ $(FL_SAMPLE3_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME) $(LDFLAGS_GUI) $(SAMPLES_RPATH_FLAG)  -lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_fl-$(WX_RELEASE)$(HOST_SUFFIX)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(EXTRALIBS_FOR_GUI) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE)
+	$(CXX) -o $@ $(FL_SAMPLE3_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME) $(LDFLAGS_GUI) $(SAMPLES_RPATH_FLAG)  $(LIBS) -lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_fl-$(WX_RELEASE)$(HOST_SUFFIX)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(EXTRALIBS_FOR_GUI) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE)
 	$(__fl_sample3___mac_rezcmd)
 	$(__fl_sample3___mac_setfilecmd)
 	$(__fl_sample3___os2_emxbindcmd)

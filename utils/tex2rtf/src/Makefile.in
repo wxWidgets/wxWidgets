@@ -18,10 +18,11 @@ STRIP = @STRIP@
 NM = @NM@
 INSTALL_PROGRAM = @INSTALL_PROGRAM@
 INSTALL_DIR = @INSTALL_DIR@
+BK_DEPS = @BK_DEPS@
 srcdir = @srcdir@
 top_srcdir = @top_srcdir@
-top_builddir = @top_builddir@
 bindir = @bindir@
+LIBS = @LIBS@
 LDFLAGS_GUI = @LDFLAGS_GUI@
 CXX = @CXX@
 CXXFLAGS = @CXXFLAGS@
@@ -36,12 +37,13 @@ EXTRALIBS = @EXTRALIBS@
 EXTRALIBS_HTML = @EXTRALIBS_HTML@
 EXTRALIBS_GUI = @EXTRALIBS_GUI@
 HOST_SUFFIX = @HOST_SUFFIX@
+wx_top_builddir = @wx_top_builddir@
 
 ### Variables: ###
 
 DESTDIR = 
 WX_RELEASE = 2.7
-LIBDIRNAME = $(top_builddir)lib
+LIBDIRNAME = $(wx_top_builddir)/lib
 TEX2RTF_CXXFLAGS = -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) \
 	-I$(srcdir) $(__DLLFLAG_p) -DwxUSE_GUI=0 -DNO_GUI $(CPPFLAGS) $(CXXFLAGS)
@@ -73,7 +75,7 @@ TEX2RTF_GUI_OBJECTS =  \
 ### Conditionally set variables: ###
 
 @COND_DEPS_TRACKING_0@CXXC = $(CXX)
-@COND_DEPS_TRACKING_1@CXXC = $(top_builddir)./bk-deps $(CXX)
+@COND_DEPS_TRACKING_1@CXXC = $(BK_DEPS) $(CXX)
 @COND_USE_GUI_0@PORTNAME = base
 @COND_USE_GUI_1@PORTNAME = $(TOOLKIT_LOWERCASE)$(TOOLKIT_VERSION)
 @COND_TOOLKIT_MAC@WXBASEPORT = _carbon
@@ -119,6 +121,7 @@ COND_MONOLITHIC_0___WXLIB_CORE_p = \
 	-lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core-$(WX_RELEASE)$(HOST_SUFFIX)
 @COND_MONOLITHIC_0@__WXLIB_CORE_p = $(COND_MONOLITHIC_0___WXLIB_CORE_p)
 @COND_USE_GUI_1@__install_tex2rtf_gui___depname = install_tex2rtf_gui
+@COND_USE_GUI_1@__uninstall_tex2rtf_gui___depname = uninstall_tex2rtf_gui
 @COND_USE_GUI_1_WXUSE_LIBTIFF_BUILTIN@__LIB_TIFF_p \
 @COND_USE_GUI_1_WXUSE_LIBTIFF_BUILTIN@	= \
 @COND_USE_GUI_1_WXUSE_LIBTIFF_BUILTIN@	-lwxtiff$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)
@@ -161,7 +164,7 @@ all: tex2rtf$(EXEEXT) $(__tex2rtf_gui___depname)
 
 install: all install_tex2rtf $(__install_tex2rtf_gui___depname)
 
-uninstall: 
+uninstall: uninstall_tex2rtf $(__uninstall_tex2rtf_gui___depname)
 
 install-strip: install
 	$(STRIP) $(DESTDIR)$(bindir)/tex2rtf$(EXEEXT)
@@ -177,7 +180,7 @@ distclean: clean
 	rm -f config.cache config.log config.status bk-deps bk-make-pch shared-ld-sh Makefile
 
 tex2rtf$(EXEEXT): $(TEX2RTF_OBJECTS)
-	$(CXX) -o $@ $(TEX2RTF_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME)   $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE)
+	$(CXX) -o $@ $(TEX2RTF_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME)   $(LIBS) $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE)
 	
 	$(__tex2rtf___mac_setfilecmd)
 
@@ -185,8 +188,11 @@ install_tex2rtf:
 	$(INSTALL_DIR) $(DESTDIR)$(bindir)
 	$(INSTALL_PROGRAM) tex2rtf$(EXEEXT) $(DESTDIR)$(bindir)
 
+uninstall_tex2rtf: 
+	rm -f $(DESTDIR)$(bindir)/tex2rtf$(EXEEXT)
+
 @COND_USE_GUI_1@tex2rtf_gui$(EXEEXT): $(TEX2RTF_GUI_OBJECTS) $(__tex2rtf_gui___win32rc)
-@COND_USE_GUI_1@	$(CXX) -o $@ $(TEX2RTF_GUI_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME) $(LDFLAGS_GUI)  $(__WXLIB_HTML_p) $(EXTRALIBS_HTML) $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(EXTRALIBS_FOR_GUI) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE)
+@COND_USE_GUI_1@	$(CXX) -o $@ $(TEX2RTF_GUI_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME) $(LDFLAGS_GUI)  $(LIBS) $(__WXLIB_HTML_p) $(EXTRALIBS_HTML) $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(EXTRALIBS_FOR_GUI) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE)
 @COND_USE_GUI_1@	$(__tex2rtf_gui___mac_rezcmd)
 @COND_USE_GUI_1@	$(__tex2rtf_gui___mac_setfilecmd)
 @COND_USE_GUI_1@	$(__tex2rtf_gui___os2_emxbindcmd)
@@ -194,6 +200,9 @@ install_tex2rtf:
 @COND_USE_GUI_1@install_tex2rtf_gui: 
 @COND_USE_GUI_1@	$(INSTALL_DIR) $(DESTDIR)$(bindir)
 @COND_USE_GUI_1@	$(INSTALL_PROGRAM) tex2rtf_gui$(EXEEXT) $(DESTDIR)$(bindir)
+
+@COND_USE_GUI_1@uninstall_tex2rtf_gui: 
+@COND_USE_GUI_1@	rm -f $(DESTDIR)$(bindir)/tex2rtf_gui$(EXEEXT)
 
 tex2rtf_tex2rtf.o: $(srcdir)/tex2rtf.cpp
 	$(CXXC) -c -o $@ $(TEX2RTF_CXXFLAGS) $(srcdir)/tex2rtf.cpp
@@ -250,4 +259,4 @@ tex2rtf_gui_table.o: $(srcdir)/table.cpp
 # Include dependency info, if present:
 @IF_GNU_MAKE@-include .deps/*.d
 
-.PHONY: all install uninstall clean distclean install_tex2rtf install_tex2rtf_gui
+.PHONY: all install uninstall clean distclean install_tex2rtf uninstall_tex2rtf install_tex2rtf_gui uninstall_tex2rtf_gui

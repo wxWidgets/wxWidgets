@@ -68,6 +68,32 @@ public:
     void OnQuit(wxCommandEvent& event);
     void OnAbout(wxCommandEvent& event);
 
+    void OnPaint(wxPaintEvent&)
+    {
+        wxPaintDC dc(this);
+
+        wxBitmap bmp(100, 100, 1);
+        {
+            wxMemoryDC memdc(bmp);
+            memdc.SetBackground(*wxWHITE);
+            memdc.SetTextForeground(*wxBLACK);
+            memdc.Clear();
+            memdc.DrawText(_T("Hello wx!"), 10, 10);
+        }
+
+        wxBitmap bmp2 = bmp;
+        {
+            wxMemoryDC memdc(bmp2);
+            memdc.SetBackground(*wxWHITE);
+            memdc.SetTextForeground(*wxRED);
+            memdc.Clear();
+            memdc.DrawText(_T("Goodbye!"), 10, 10);
+        }
+
+        dc.DrawBitmap(bmp, 10, 10);
+        dc.DrawBitmap(bmp2, 120, 10);
+    }
+
 private:
     // any class wishing to process wxWidgets events must use this macro
     DECLARE_EVENT_TABLE()
@@ -145,6 +171,7 @@ bool MyApp::OnInit()
 MyFrame::MyFrame(const wxString& title)
        : wxFrame(NULL, wxID_ANY, title)
 {
+    Connect(wxEVT_PAINT, wxPaintEventHandler(MyFrame::OnPaint));
     // set the frame icon
     SetIcon(wxICON(sample));
 
@@ -166,6 +193,13 @@ MyFrame::MyFrame(const wxString& title)
     // ... and attach this menu bar to the frame
     SetMenuBar(menuBar);
 #endif // wxUSE_MENUS
+
+    wxTextCtrl *m_textctrl = new wxTextCtrl(this, -1, _T(""), wxPoint(100,
+                100), wxSize(100, 100), wxTE_MULTILINE);
+    wxTextAttr t_style ( *wxRED );
+    m_textctrl->SetDefaultStyle(t_style);
+    m_textctrl->Clear();
+    m_textctrl->WriteText(_T("Must be red"));
 
 #if wxUSE_STATUSBAR
     // create a status bar just for fun (by default with 1 pane only)

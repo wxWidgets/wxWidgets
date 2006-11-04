@@ -23,13 +23,16 @@ STRIP = @STRIP@
 INSTALL_PROGRAM = @INSTALL_PROGRAM@
 INSTALL_DATA = @INSTALL_DATA@
 INSTALL_DIR = @INSTALL_DIR@
+BK_DEPS = @BK_DEPS@
+BK_MAKE_PCH = @BK_MAKE_PCH@
 srcdir = @srcdir@
 top_srcdir = @top_srcdir@
-top_builddir = @top_builddir@
 libdir = @libdir@
 includedir = @includedir@
 DLLPREFIX = @DLLPREFIX@
+LIBS = @LIBS@
 AR = @AR@
+AROPTIONS = @AROPTIONS@
 RANLIB = @RANLIB@
 CXX = @CXX@
 CXXFLAGS = @CXXFLAGS@
@@ -45,6 +48,7 @@ TOOLCHAIN_FULLNAME = @TOOLCHAIN_FULLNAME@
 EXTRALIBS = @EXTRALIBS@
 EXTRALIBS_GUI = @EXTRALIBS_GUI@
 HOST_SUFFIX = @HOST_SUFFIX@
+wx_top_builddir = @wx_top_builddir@
 EXTRALIBS_ESD = @EXTRALIBS_ESD@
 
 ### Variables: ###
@@ -53,7 +57,7 @@ DESTDIR =
 WX_RELEASE = 2.7
 WX_RELEASE_NODOT = 27
 WX_VERSION_NODOT = $(WX_RELEASE_NODOT)2
-LIBDIRNAME = $(top_builddir)lib
+LIBDIRNAME = $(wx_top_builddir)/lib
 MMEDIADLL_CXXFLAGS = $(__mmediadll_PCH_INC) -D__WX$(TOOLKIT)__ \
 	$(__WXUNIV_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
 	$(__THREAD_DEFINE_p) -I$(srcdir)/../../include -DWXUSINGDLL \
@@ -106,7 +110,7 @@ MMEDIALIB_ODEP =  $(___pch_wxprec_mmedialib_wx_wxprec_h_gch___depname)
 ### Conditionally set variables: ###
 
 @COND_DEPS_TRACKING_0@CXXC = $(CXX)
-@COND_DEPS_TRACKING_1@CXXC = $(top_builddir)./bk-deps $(CXX)
+@COND_DEPS_TRACKING_1@CXXC = $(BK_DEPS) $(CXX)
 @COND_PLATFORM_MACOSX_1@WXMACVERSION_CMD = \
 @COND_PLATFORM_MACOSX_1@	-compatibility_version 2.0 -current_version 2.0
 @COND_USE_GUI_0@PORTNAME = base
@@ -136,6 +140,7 @@ COND_SHARED_1___mmediadll___depname = \
 @COND_USE_RTTI_0@__RTTI_DEFINE_p_1 = --define wxNO_RTTI
 @COND_USE_THREADS_0@__THREAD_DEFINE_p_1 = --define wxNO_THREADS
 @COND_SHARED_1@__install_mmediadll___depname = install_mmediadll
+@COND_SHARED_1@__uninstall_mmediadll___depname = uninstall_mmediadll
 COND_PLATFORM_MACOSX_1___mmediadll___macinstnamecmd = -install_name \
 	$(libdir)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_mmedia$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(__mmediadll___targetsuf2)
 @COND_PLATFORM_MACOSX_1@__mmediadll___macinstnamecmd = $(COND_PLATFORM_MACOSX_1___mmediadll___macinstnamecmd)
@@ -189,6 +194,10 @@ COND_USE_SOSYMLINKS_1___mmediadll___so_symlinks_inst_cmd = rm -f \
 	$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_mmedia$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(__mmediadll___targetsuf2) \
 	$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_mmedia-$(WX_RELEASE)$(HOST_SUFFIX).$(DLLIMP_SUFFIX)
 @COND_USE_SOSYMLINKS_1@__mmediadll___so_symlinks_inst_cmd = $(COND_USE_SOSYMLINKS_1___mmediadll___so_symlinks_inst_cmd)
+COND_USE_SOSYMLINKS_1___mmediadll___so_symlinks_uninst_cmd = rm -f \
+	$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_mmedia$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(__mmediadll___targetsuf2) \
+	$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_mmedia-$(WX_RELEASE)$(HOST_SUFFIX).$(DLLIMP_SUFFIX)
+@COND_USE_SOSYMLINKS_1@__mmediadll___so_symlinks_uninst_cmd = $(COND_USE_SOSYMLINKS_1___mmediadll___so_symlinks_uninst_cmd)
 @COND_TOOLKIT_MSW@__RCDEFDIR_p = --include-dir \
 @COND_TOOLKIT_MSW@	$(LIBDIRNAME)/wx/include/$(TOOLCHAIN_FULLNAME)
 @COND_PLATFORM_WIN32_1@__mmediadll___win32rc = mmediadll_version_rc.o
@@ -232,6 +241,7 @@ COND_SHARED_0___mmedialib___depname = \
 	$(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_mmedia-$(WX_RELEASE)$(HOST_SUFFIX)$(LIBEXT)
 @COND_SHARED_0@__mmedialib___depname = $(COND_SHARED_0___mmedialib___depname)
 @COND_SHARED_0@__install_mmedialib___depname = install_mmedialib
+@COND_SHARED_0@__uninstall_mmedialib___depname = uninstall_mmedialib
 @COND_GCC_PCH_1@__mmedialib_PCH_INC = -I.pch/wxprec_mmedialib
 @COND_ICC_PCH_1@__mmedialib_PCH_INC = -use_pch \
 @COND_ICC_PCH_1@	.pch/wxprec_mmedialib/wx/wxprec.h.gch
@@ -264,7 +274,10 @@ install: all $(__install_mmediadll___depname) $(__install_mmedialib___depname)
 	$(INSTALL_DATA) $(srcdir)/../../include//$$f $(DESTDIR)$(includedir)/wx-$(WX_RELEASE)$(WX_FLAVOUR)/$$f; \
 	done
 
-uninstall: 
+uninstall: $(__uninstall_mmediadll___depname) $(__uninstall_mmedialib___depname)
+	for f in wx/mmedia/cdbase.h wx/mmedia/cdunix.h wx/mmedia/cdwin.h wx/mmedia/sndaiff.h wx/mmedia/sndbase.h wx/mmedia/sndcodec.h wx/mmedia/sndcpcm.h wx/mmedia/sndesd.h wx/mmedia/sndfile.h wx/mmedia/sndg72x.h wx/mmedia/sndmsad.h wx/mmedia/sndoss.h wx/mmedia/sndpcm.h wx/mmedia/sndulaw.h wx/mmedia/sndwav.h wx/mmedia/sndwin.h wx/mmedia/vidbase.h wx/mmedia/vidwin.h wx/mmedia/vidxanm.h; do \
+	rm -f $(DESTDIR)$(includedir)/wx-$(WX_RELEASE)$(WX_FLAVOUR)/$$f; \
+	done
 
 install-strip: install
 	$(STRIP) $(DESTDIR)$(libdir)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_mmedia$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(__mmediadll___targetsuf3)
@@ -281,7 +294,7 @@ distclean: clean
 	rm -f config.cache config.log config.status bk-deps bk-make-pch shared-ld-sh Makefile
 
 @COND_SHARED_1@$(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_mmedia$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(__mmediadll___targetsuf3): $(MMEDIADLL_OBJECTS) $(__mmediadll___win32rc)
-@COND_SHARED_1@	$(SHARED_LD_CXX) $@ $(MMEDIADLL_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME) $(__mmediadll___macinstnamecmd) $(__mmediadll___importlib) $(__mmediadll___soname_flags) $(WXMACVERSION_CMD) $(EXTRALIBS_ESD)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(EXTRALIBS_FOR_GUI) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE) $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)
+@COND_SHARED_1@	$(SHARED_LD_CXX) $@ $(MMEDIADLL_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME) $(__mmediadll___macinstnamecmd) $(__mmediadll___importlib) $(__mmediadll___soname_flags) $(WXMACVERSION_CMD) $(EXTRALIBS_ESD)  $(LIBS) $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(EXTRALIBS_FOR_GUI) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE) $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)
 @COND_SHARED_1@	
 @COND_SHARED_1@	$(__mmediadll___so_symlinks_cmd)
 
@@ -291,20 +304,28 @@ distclean: clean
 @COND_SHARED_1@	$(INSTALL_PROGRAM) $(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_mmedia$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(__mmediadll___targetsuf3) $(DESTDIR)$(libdir)
 @COND_SHARED_1@	(cd $(DESTDIR)$(libdir) ; $(__mmediadll___so_symlinks_inst_cmd))
 
+@COND_SHARED_1@uninstall_mmediadll: 
+@COND_SHARED_1@	rm -f $(DESTDIR)$(libdir)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_mmedia-$(WX_RELEASE)$(HOST_SUFFIX).$(DLLIMP_SUFFIX)
+@COND_SHARED_1@	rm -f $(DESTDIR)$(libdir)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_mmedia$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(__mmediadll___targetsuf3)
+@COND_SHARED_1@	(cd $(DESTDIR)$(libdir) ; $(__mmediadll___so_symlinks_uninst_cmd))
+
 @COND_USE_PCH_1@.pch/wxprec_mmediadll/wx/wxprec.h.gch: 
-@COND_USE_PCH_1@	$(top_builddir)./bk-make-pch .pch/wxprec_mmediadll/wx/wxprec.h.gch wx/wxprec.h $(CXX) $(MMEDIADLL_CXXFLAGS)
+@COND_USE_PCH_1@	$(BK_MAKE_PCH) .pch/wxprec_mmediadll/wx/wxprec.h.gch wx/wxprec.h $(CXX) $(MMEDIADLL_CXXFLAGS)
 
 @COND_SHARED_0@$(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_mmedia-$(WX_RELEASE)$(HOST_SUFFIX)$(LIBEXT): $(MMEDIALIB_OBJECTS)
 @COND_SHARED_0@	rm -f $@
-@COND_SHARED_0@	$(AR) rcu $@ $(MMEDIALIB_OBJECTS)
+@COND_SHARED_0@	$(AR) $(AROPTIONS) $@ $(MMEDIALIB_OBJECTS)
 @COND_SHARED_0@	$(RANLIB) $@
 
 @COND_SHARED_0@install_mmedialib: 
 @COND_SHARED_0@	$(INSTALL_DIR) $(DESTDIR)$(libdir)
 @COND_SHARED_0@	$(INSTALL_DATA) $(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_mmedia-$(WX_RELEASE)$(HOST_SUFFIX)$(LIBEXT) $(DESTDIR)$(libdir)
 
+@COND_SHARED_0@uninstall_mmedialib: 
+@COND_SHARED_0@	rm -f $(DESTDIR)$(libdir)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_mmedia-$(WX_RELEASE)$(HOST_SUFFIX)$(LIBEXT)
+
 @COND_USE_PCH_1@.pch/wxprec_mmedialib/wx/wxprec.h.gch: 
-@COND_USE_PCH_1@	$(top_builddir)./bk-make-pch .pch/wxprec_mmedialib/wx/wxprec.h.gch wx/wxprec.h $(CXX) $(MMEDIALIB_CXXFLAGS)
+@COND_USE_PCH_1@	$(BK_MAKE_PCH) .pch/wxprec_mmedialib/wx/wxprec.h.gch wx/wxprec.h $(CXX) $(MMEDIALIB_CXXFLAGS)
 
 mmediadll_version_rc.o: $(srcdir)/../../../src/msw/version.rc $(MMEDIADLL_ODEP)
 	$(WINDRES) -i$< -o$@   --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_1)  $(__EXCEPTIONS_DEFINE_p_1) $(__RTTI_DEFINE_p_1) $(__THREAD_DEFINE_p_1)   --define WXDLLNAME=$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_mmedia$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG) $(__RCDEFDIR_p) --include-dir $(top_srcdir)/include
@@ -457,4 +478,4 @@ mmedialib_vidbase.o: $(srcdir)/vidbase.cpp $(MMEDIALIB_ODEP)
 # Include dependency info, if present:
 @IF_GNU_MAKE@-include .deps/*.d
 
-.PHONY: all install uninstall clean distclean install_mmediadll install_mmedialib
+.PHONY: all install uninstall clean distclean install_mmediadll uninstall_mmediadll install_mmedialib uninstall_mmedialib

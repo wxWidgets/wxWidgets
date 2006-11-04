@@ -939,7 +939,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
 
 #if wxUSE_SPINCTRL
     m_spinctrl = new wxSpinCtrl( panel, ID_SPINCTRL, wxEmptyString, wxPoint(200, 160), wxSize(80, wxDefaultCoord) );
-    //m_spinctrl->SetRange(10,30);
+    m_spinctrl->SetRange(-10,30);
     m_spinctrl->SetValue(15);
 #endif // wxUSE_SPINCTRL
 

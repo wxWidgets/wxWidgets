@@ -24,7 +24,7 @@ all: emulator helpview tex2rtf helpgen
 
 install: all install_tex2rtf install_helpgen
 
-uninstall: 
+uninstall: uninstall_tex2rtf uninstall_helpgen
 
 install-strip: install install-strip_tex2rtf install-strip_helpgen
 
@@ -38,6 +38,10 @@ clean:
 
 distclean: clean
 	rm -f config.cache config.log config.status bk-deps bk-make-pch shared-ld-sh Makefile
+	(cd emulator/src && $(MAKE) distclean)
+	(cd helpview/src && $(MAKE) distclean)
+	(cd tex2rtf/src && $(MAKE) distclean)
+	(cd HelpGen && $(MAKE) distclean)
 
 emulator: 
 	(cd emulator/src && $(MAKE) all)
@@ -51,6 +55,9 @@ tex2rtf:
 install_tex2rtf: 
 	(cd tex2rtf/src && $(MAKE) install)
 
+uninstall_tex2rtf: 
+	(cd tex2rtf/src && $(MAKE) uninstall)
+
 install-strip_tex2rtf: 
 	(cd tex2rtf/src && $(MAKE) install-strip)
 
@@ -60,6 +67,9 @@ helpgen:
 install_helpgen: 
 	(cd HelpGen && $(MAKE) install)
 
+uninstall_helpgen: 
+	(cd HelpGen && $(MAKE) uninstall)
+
 install-strip_helpgen: 
 	(cd HelpGen && $(MAKE) install-strip)
 
@@ -67,4 +77,4 @@ install-strip_helpgen:
 # Include dependency info, if present:
 @IF_GNU_MAKE@-include .deps/*.d
 
-.PHONY: all install uninstall clean distclean emulator helpview tex2rtf install_tex2rtf install-strip_tex2rtf helpgen install_helpgen install-strip_helpgen
+.PHONY: all install uninstall clean distclean emulator helpview tex2rtf install_tex2rtf uninstall_tex2rtf install-strip_tex2rtf helpgen install_helpgen uninstall_helpgen install-strip_helpgen

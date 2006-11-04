@@ -42,6 +42,14 @@ clean:
 
 distclean: clean
 	rm -f config.cache config.log config.status bk-deps bk-make-pch shared-ld-sh Makefile
+	(cd about && $(MAKE) distclean)
+	(cd help && $(MAKE) distclean)
+	(cd helpview && $(MAKE) distclean)
+	(cd printing && $(MAKE) distclean)
+	(cd test && $(MAKE) distclean)
+	(cd virtual && $(MAKE) distclean)
+	(cd widget && $(MAKE) distclean)
+	(cd zip && $(MAKE) distclean)
 
 about: 
 	(cd about && $(MAKE) all)

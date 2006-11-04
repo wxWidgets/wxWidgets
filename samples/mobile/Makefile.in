@@ -36,6 +36,8 @@ clean:
 
 distclean: clean
 	rm -f config.cache config.log config.status bk-deps bk-make-pch shared-ld-sh Makefile
+	(cd styles && $(MAKE) distclean)
+	(cd wxedit && $(MAKE) distclean)
 
 styles: 
 	(cd styles && $(MAKE) all)

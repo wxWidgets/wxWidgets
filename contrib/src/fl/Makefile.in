@@ -23,13 +23,16 @@ STRIP = @STRIP@
 INSTALL_PROGRAM = @INSTALL_PROGRAM@
 INSTALL_DATA = @INSTALL_DATA@
 INSTALL_DIR = @INSTALL_DIR@
+BK_DEPS = @BK_DEPS@
+BK_MAKE_PCH = @BK_MAKE_PCH@
 srcdir = @srcdir@
 top_srcdir = @top_srcdir@
-top_builddir = @top_builddir@
 libdir = @libdir@
 includedir = @includedir@
 DLLPREFIX = @DLLPREFIX@
+LIBS = @LIBS@
 AR = @AR@
+AROPTIONS = @AROPTIONS@
 RANLIB = @RANLIB@
 CXX = @CXX@
 CXXFLAGS = @CXXFLAGS@
@@ -45,6 +48,7 @@ TOOLCHAIN_FULLNAME = @TOOLCHAIN_FULLNAME@
 EXTRALIBS = @EXTRALIBS@
 EXTRALIBS_GUI = @EXTRALIBS_GUI@
 HOST_SUFFIX = @HOST_SUFFIX@
+wx_top_builddir = @wx_top_builddir@
 
 ### Variables: ###
 
@@ -52,7 +56,7 @@ DESTDIR =
 WX_RELEASE = 2.7
 WX_RELEASE_NODOT = 27
 WX_VERSION_NODOT = $(WX_RELEASE_NODOT)2
-LIBDIRNAME = $(top_builddir)lib
+LIBDIRNAME = $(wx_top_builddir)/lib
 FLDLL_CXXFLAGS = $(__fldll_PCH_INC) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) \
 	-I$(srcdir)/../../include -DWXUSINGDLL -DWXMAKINGDLL_FL $(PIC_FLAG) \
@@ -103,7 +107,7 @@ FLLIB_ODEP =  $(___pch_wxprec_fllib_wx_wxprec_h_gch___depname)
 ### Conditionally set variables: ###
 
 @COND_DEPS_TRACKING_0@CXXC = $(CXX)
-@COND_DEPS_TRACKING_1@CXXC = $(top_builddir)./bk-deps $(CXX)
+@COND_DEPS_TRACKING_1@CXXC = $(BK_DEPS) $(CXX)
 @COND_PLATFORM_MACOSX_1@WXMACVERSION_CMD = \
 @COND_PLATFORM_MACOSX_1@	-compatibility_version 2.0 -current_version 2.0
 @COND_USE_GUI_0@PORTNAME = base
@@ -133,6 +137,7 @@ COND_SHARED_1___fldll___depname = \
 @COND_USE_RTTI_0@__RTTI_DEFINE_p_1 = --define wxNO_RTTI
 @COND_USE_THREADS_0@__THREAD_DEFINE_p_1 = --define wxNO_THREADS
 @COND_SHARED_1@__install_fldll___depname = install_fldll
+@COND_SHARED_1@__uninstall_fldll___depname = uninstall_fldll
 COND_PLATFORM_MACOSX_1___fldll___macinstnamecmd = -install_name \
 	$(libdir)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_fl$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(__fldll___targetsuf2)
 @COND_PLATFORM_MACOSX_1@__fldll___macinstnamecmd = $(COND_PLATFORM_MACOSX_1___fldll___macinstnamecmd)
@@ -186,6 +191,10 @@ COND_USE_SOSYMLINKS_1___fldll___so_symlinks_inst_cmd = rm -f \
 	$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_fl$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(__fldll___targetsuf2) \
 	$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_fl-$(WX_RELEASE)$(HOST_SUFFIX).$(DLLIMP_SUFFIX)
 @COND_USE_SOSYMLINKS_1@__fldll___so_symlinks_inst_cmd = $(COND_USE_SOSYMLINKS_1___fldll___so_symlinks_inst_cmd)
+COND_USE_SOSYMLINKS_1___fldll___so_symlinks_uninst_cmd = rm -f \
+	$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_fl$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(__fldll___targetsuf2) \
+	$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_fl-$(WX_RELEASE)$(HOST_SUFFIX).$(DLLIMP_SUFFIX)
+@COND_USE_SOSYMLINKS_1@__fldll___so_symlinks_uninst_cmd = $(COND_USE_SOSYMLINKS_1___fldll___so_symlinks_uninst_cmd)
 @COND_TOOLKIT_MSW@__RCDEFDIR_p = --include-dir \
 @COND_TOOLKIT_MSW@	$(LIBDIRNAME)/wx/include/$(TOOLCHAIN_FULLNAME)
 @COND_PLATFORM_WIN32_1@__fldll___win32rc = fldll_version_rc.o
@@ -220,6 +229,7 @@ COND_SHARED_0___fllib___depname = \
 	$(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_fl-$(WX_RELEASE)$(HOST_SUFFIX)$(LIBEXT)
 @COND_SHARED_0@__fllib___depname = $(COND_SHARED_0___fllib___depname)
 @COND_SHARED_0@__install_fllib___depname = install_fllib
+@COND_SHARED_0@__uninstall_fllib___depname = uninstall_fllib
 @COND_GCC_PCH_1@__fllib_PCH_INC = -I.pch/wxprec_fllib
 @COND_ICC_PCH_1@__fllib_PCH_INC = -use_pch \
 @COND_ICC_PCH_1@	.pch/wxprec_fllib/wx/wxprec.h.gch
@@ -243,7 +253,10 @@ install: all $(__install_fldll___depname) $(__install_fllib___depname)
 	$(INSTALL_DATA) $(srcdir)/../../include//$$f $(DESTDIR)$(includedir)/wx-$(WX_RELEASE)$(WX_FLAVOUR)/$$f; \
 	done
 
-uninstall: 
+uninstall: $(__uninstall_fldll___depname) $(__uninstall_fllib___depname)
+	for f in wx/fl/antiflickpl.h wx/fl/bardragpl.h wx/fl/barhintspl.h wx/fl/cbcustom.h wx/fl/controlbar.h wx/fl/dynbarhnd.h wx/fl/dyntbar.h wx/fl/dyntbarhnd.h wx/fl/fldefs.h wx/fl/frmview.h wx/fl/garbagec.h wx/fl/gcupdatesmgr.h wx/fl/hintanimpl.h wx/fl/newbmpbtn.h wx/fl/panedrawpl.h wx/fl/rowdragpl.h wx/fl/rowlayoutpl.h wx/fl/toolwnd.h wx/fl/updatesmgr.h; do \
+	rm -f $(DESTDIR)$(includedir)/wx-$(WX_RELEASE)$(WX_FLAVOUR)/$$f; \
+	done
 
 install-strip: install
 	$(STRIP) $(DESTDIR)$(libdir)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_fl$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(__fldll___targetsuf3)
@@ -260,7 +273,7 @@ distclean: clean
 	rm -f config.cache config.log config.status bk-deps bk-make-pch shared-ld-sh Makefile
 
 @COND_SHARED_1@$(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_fl$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(__fldll___targetsuf3): $(FLDLL_OBJECTS) $(__fldll___win32rc)
-@COND_SHARED_1@	$(SHARED_LD_CXX) $@ $(FLDLL_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME) $(__fldll___macinstnamecmd) $(__fldll___importlib) $(__fldll___soname_flags) $(WXMACVERSION_CMD)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(EXTRALIBS_FOR_GUI) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE) $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)
+@COND_SHARED_1@	$(SHARED_LD_CXX) $@ $(FLDLL_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME) $(__fldll___macinstnamecmd) $(__fldll___importlib) $(__fldll___soname_flags) $(WXMACVERSION_CMD)  $(LIBS) $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(EXTRALIBS_FOR_GUI) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE) $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)
 @COND_SHARED_1@	
 @COND_SHARED_1@	$(__fldll___so_symlinks_cmd)
 
@@ -270,20 +283,28 @@ distclean: clean
 @COND_SHARED_1@	$(INSTALL_PROGRAM) $(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_fl$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(__fldll___targetsuf3) $(DESTDIR)$(libdir)
 @COND_SHARED_1@	(cd $(DESTDIR)$(libdir) ; $(__fldll___so_symlinks_inst_cmd))
 
+@COND_SHARED_1@uninstall_fldll: 
+@COND_SHARED_1@	rm -f $(DESTDIR)$(libdir)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_fl-$(WX_RELEASE)$(HOST_SUFFIX).$(DLLIMP_SUFFIX)
+@COND_SHARED_1@	rm -f $(DESTDIR)$(libdir)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_fl$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(__fldll___targetsuf3)
+@COND_SHARED_1@	(cd $(DESTDIR)$(libdir) ; $(__fldll___so_symlinks_uninst_cmd))
+
 @COND_USE_PCH_1@.pch/wxprec_fldll/wx/wxprec.h.gch: 
-@COND_USE_PCH_1@	$(top_builddir)./bk-make-pch .pch/wxprec_fldll/wx/wxprec.h.gch wx/wxprec.h $(CXX) $(FLDLL_CXXFLAGS)
+@COND_USE_PCH_1@	$(BK_MAKE_PCH) .pch/wxprec_fldll/wx/wxprec.h.gch wx/wxprec.h $(CXX) $(FLDLL_CXXFLAGS)
 
 @COND_SHARED_0@$(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_fl-$(WX_RELEASE)$(HOST_SUFFIX)$(LIBEXT): $(FLLIB_OBJECTS)
 @COND_SHARED_0@	rm -f $@
-@COND_SHARED_0@	$(AR) rcu $@ $(FLLIB_OBJECTS)
+@COND_SHARED_0@	$(AR) $(AROPTIONS) $@ $(FLLIB_OBJECTS)
 @COND_SHARED_0@	$(RANLIB) $@
 
 @COND_SHARED_0@install_fllib: 
 @COND_SHARED_0@	$(INSTALL_DIR) $(DESTDIR)$(libdir)
 @COND_SHARED_0@	$(INSTALL_DATA) $(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_fl-$(WX_RELEASE)$(HOST_SUFFIX)$(LIBEXT) $(DESTDIR)$(libdir)
 
+@COND_SHARED_0@uninstall_fllib: 
+@COND_SHARED_0@	rm -f $(DESTDIR)$(libdir)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_fl-$(WX_RELEASE)$(HOST_SUFFIX)$(LIBEXT)
+
 @COND_USE_PCH_1@.pch/wxprec_fllib/wx/wxprec.h.gch: 
-@COND_USE_PCH_1@	$(top_builddir)./bk-make-pch .pch/wxprec_fllib/wx/wxprec.h.gch wx/wxprec.h $(CXX) $(FLLIB_CXXFLAGS)
+@COND_USE_PCH_1@	$(BK_MAKE_PCH) .pch/wxprec_fllib/wx/wxprec.h.gch wx/wxprec.h $(CXX) $(FLLIB_CXXFLAGS)
 
 fldll_version_rc.o: $(srcdir)/../../../src/msw/version.rc $(FLDLL_ODEP)
 	$(WINDRES) -i$< -o$@   --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_1)  $(__EXCEPTIONS_DEFINE_p_1) $(__RTTI_DEFINE_p_1) $(__THREAD_DEFINE_p_1)   --define WXDLLNAME=$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_fl$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG) $(__RCDEFDIR_p) --include-dir $(top_srcdir)/include
@@ -394,4 +415,4 @@ fllib_updatesmgr.o: $(srcdir)/updatesmgr.cpp $(FLLIB_ODEP)
 # Include dependency info, if present:
 @IF_GNU_MAKE@-include .deps/*.d
 
-.PHONY: all install uninstall clean distclean install_fldll install_fllib
+.PHONY: all install uninstall clean distclean install_fldll uninstall_fldll install_fllib uninstall_fllib

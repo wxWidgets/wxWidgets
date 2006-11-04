@@ -21,11 +21,12 @@ STRIP = @STRIP@
 NM = @NM@
 INSTALL_PROGRAM = @INSTALL_PROGRAM@
 INSTALL_DIR = @INSTALL_DIR@
+BK_DEPS = @BK_DEPS@
 srcdir = @srcdir@
 top_srcdir = @top_srcdir@
-top_builddir = @top_builddir@
 libdir = @libdir@
 DLLPREFIX_MODULE = @DLLPREFIX_MODULE@
+LIBS = @LIBS@
 LDFLAGS_GUI = @LDFLAGS_GUI@
 CXX = @CXX@
 CXXFLAGS = @CXXFLAGS@
@@ -41,6 +42,7 @@ EXTRALIBS_GUI = @EXTRALIBS_GUI@
 HOST_SUFFIX = @HOST_SUFFIX@
 SAMPLES_RPATH_FLAG = @SAMPLES_RPATH_FLAG@
 SAMPLES_RPATH_POSTLINK = @SAMPLES_RPATH_POSTLINK@
+wx_top_builddir = @wx_top_builddir@
 
 ### Variables: ###
 
@@ -49,7 +51,7 @@ WX_RELEASE = 2.7
 WX_RELEASE_NODOT = 27
 WX_VERSION = $(WX_RELEASE).2
 WX_VERSION_NODOT = $(WX_RELEASE_NODOT)2
-LIBDIRNAME = $(top_builddir)lib
+LIBDIRNAME = $(wx_top_builddir)/lib
 PLUGINS_INST_DIR = $(libdir)/wx/$(PLUGIN_VERSION0)
 RENDER_CXXFLAGS = -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) \
@@ -67,7 +69,7 @@ RENDDLL_OBJECTS =  \
 ### Conditionally set variables: ###
 
 @COND_DEPS_TRACKING_0@CXXC = $(CXX)
-@COND_DEPS_TRACKING_1@CXXC = $(top_builddir)./bk-deps $(CXX)
+@COND_DEPS_TRACKING_1@CXXC = $(BK_DEPS) $(CXX)
 @COND_USE_GUI_0@PORTNAME = base
 @COND_USE_GUI_1@PORTNAME = $(TOOLKIT_LOWERCASE)$(TOOLKIT_VERSION)
 @COND_TOOLKIT_MAC@WXBASEPORT = _carbon
@@ -121,6 +123,7 @@ COND_SHARED_1___renddll___depname = \
 	$(DLLPREFIX_MODULE)renddll_$(PORTNAME)$(WXUNIVNAME)$(PLUGINSUFFIX)$(PLUGVERDELIM)$(PLUGIN_VERSION0)$(WXCOMPILER).$(SO_SUFFIX_MODULE)
 @COND_SHARED_1@__renddll___depname = $(COND_SHARED_1___renddll___depname)
 @COND_SHARED_1@__install_renddll___depname = install_renddll
+@COND_SHARED_1@__uninstall_renddll___depname = uninstall_renddll
 COND_TOOLKIT_MAC___MACOSX_RESOURCES_p_1 = $(REZ) -d __DARWIN__ -t APPL -d \
 	__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_1) $(__EXCEPTIONS_DEFINE_p_1) \
 	$(__RTTI_DEFINE_p_1) $(__THREAD_DEFINE_p_1) -i $(srcdir) $(__DLLFLAG_p_1) -i \
@@ -165,7 +168,7 @@ all: render$(EXEEXT) $(__render_bundle___depname) $(__renddll___depname)
 
 install: all $(__install_renddll___depname)
 
-uninstall: 
+uninstall: $(__uninstall_renddll___depname)
 
 install-strip: install
 	$(STRIP) $(DESTDIR)$(PLUGINS_INST_DIR)/$(DLLPREFIX_MODULE)renddll_$(PORTNAME)$(WXUNIVNAME)$(PLUGINSUFFIX)$(PLUGVERDELIM)$(PLUGIN_VERSION0)$(WXCOMPILER).$(SO_SUFFIX_MODULE)
@@ -181,7 +184,7 @@ distclean: clean
 	rm -f config.cache config.log config.status bk-deps bk-make-pch shared-ld-sh Makefile
 
 render$(EXEEXT): $(RENDER_OBJECTS) $(__render___win32rc)
-	$(CXX) -o $@ $(RENDER_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME) $(LDFLAGS_GUI) $(SAMPLES_RPATH_FLAG)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(EXTRALIBS_FOR_GUI) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE)
+	$(CXX) -o $@ $(RENDER_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME) $(LDFLAGS_GUI) $(SAMPLES_RPATH_FLAG)  $(LIBS) $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(EXTRALIBS_FOR_GUI) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE)
 	$(__render___mac_rezcmd)
 	$(__render___mac_setfilecmd)
 	$(__render___os2_emxbindcmd)
@@ -210,11 +213,14 @@ render.app/Contents/PkgInfo: render$(EXEEXT) $(top_srcdir)/src/mac/carbon/Info.p
 @COND_PLATFORM_MACOSX_1@render_bundle: $(____render_BUNDLE_TGT_REF_DEP)
 
 @COND_SHARED_1@$(DLLPREFIX_MODULE)renddll_$(PORTNAME)$(WXUNIVNAME)$(PLUGINSUFFIX)$(PLUGVERDELIM)$(PLUGIN_VERSION0)$(WXCOMPILER).$(SO_SUFFIX_MODULE): $(RENDDLL_OBJECTS)
-@COND_SHARED_1@	$(SHARED_LD_MODULE_CXX) $@ $(RENDDLL_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(EXTRALIBS_FOR_GUI) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE)
+@COND_SHARED_1@	$(SHARED_LD_MODULE_CXX) $@ $(RENDDLL_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME)  $(LIBS) $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(EXTRALIBS_FOR_GUI) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE)
 
 @COND_SHARED_1@install_renddll: 
 @COND_SHARED_1@	$(INSTALL_DIR) $(DESTDIR)$(PLUGINS_INST_DIR)
 @COND_SHARED_1@	$(INSTALL_PROGRAM) $(DLLPREFIX_MODULE)renddll_$(PORTNAME)$(WXUNIVNAME)$(PLUGINSUFFIX)$(PLUGVERDELIM)$(PLUGIN_VERSION0)$(WXCOMPILER).$(SO_SUFFIX_MODULE) $(DESTDIR)$(PLUGINS_INST_DIR)
+
+@COND_SHARED_1@uninstall_renddll: 
+@COND_SHARED_1@	rm -f $(DESTDIR)$(PLUGINS_INST_DIR)/$(DLLPREFIX_MODULE)renddll_$(PORTNAME)$(WXUNIVNAME)$(PLUGINSUFFIX)$(PLUGVERDELIM)$(PLUGIN_VERSION0)$(WXCOMPILER).$(SO_SUFFIX_MODULE)
 
 render_sample_rc.o: $(srcdir)/../../samples/sample.rc
 	$(WINDRES) -i$< -o$@   --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2)  $(__EXCEPTIONS_DEFINE_p_2) $(__RTTI_DEFINE_p_2) $(__THREAD_DEFINE_p_2)   --include-dir $(srcdir) $(__DLLFLAG_p_2) --include-dir $(srcdir)/../../samples $(__RCDEFDIR_p_1) --include-dir $(top_srcdir)/include
@@ -229,4 +235,4 @@ renddll_renddll.o: $(srcdir)/renddll.cpp
 # Include dependency info, if present:
 @IF_GNU_MAKE@-include .deps/*.d
 
-.PHONY: all install uninstall clean distclean render_bundle install_renddll
+.PHONY: all install uninstall clean distclean render_bundle install_renddll uninstall_renddll
