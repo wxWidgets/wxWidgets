@@ -2528,7 +2528,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 
 <set var="UNIV_SRC" hints="files">
     src/generic/accel.cpp
-    src/generic/animateg.cpp
     src/generic/colrdlgg.cpp
     src/generic/dirdlgg.cpp
     src/generic/fdrepdlg.cpp
@@ -2577,7 +2576,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/univ/winuniv.cpp
 </set>
 <set var="UNIV_HDR" hints="files">
-    wx/generic/animate.h
     wx/generic/accel.h
     wx/generic/dirdlgg.h
     wx/generic/fdrepdlg.h
@@ -2626,7 +2624,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/univ/toplevel.h
     wx/univ/window.h
 </set>
-
 
 <!-- ====================================================================== -->
 <!--                               wxAdvanced                               -->
@@ -2812,9 +2809,12 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/generic/animate.h
 </set>
 
-<set var="ADVANCED_X11_SRC" hints="files">
+<set var="ADVANCED_UNIV_SRC" hints="files">
+    src/generic/animateg.cpp
 </set>
-<set var="ADVANCED_X11_HDR" hints="files">
+
+<set var="ADVANCED_UNIV_HDR" hints="files">
+    wx/generic/animate.h
 </set>
 
 <!-- ====================================================================== -->
@@ -3343,7 +3343,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
         <if cond="TOOLKIT=='MOTIF'">$(ADVANCED_UNIX_SRC) $(ADVANCED_MOTIF_SRC)</if>
         <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION=='2'">$(ADVANCED_UNIX_SRC) $(ADVANCED_GTK_SRC)</if>
         <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION==''">$(ADVANCED_UNIX_SRC) $(ADVANCED_GTK1_SRC)</if>
-        <if cond="TOOLKIT=='X11'">$(ADVANCED_UNIX_SRC) $(ADVANCED_X11_SRC)</if>
+        <if cond="TOOLKIT=='X11'">$(ADVANCED_UNIX_SRC)</if>
         <if cond="TOOLKIT=='PM'">$(ADVANCED_OS2_SRC)</if>
     </set>
     <set var="ADVANCED_PLATFORM_HDR" hints="files">
@@ -3354,7 +3354,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
         <if cond="TOOLKIT=='MOTIF'">$(ADVANCED_UNIX_HDR) $(ADVANCED_MOTIF_HDR)</if>
         <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION=='2'">$(ADVANCED_UNIX_HDR) $(ADVANCED_GTK_HDR)</if>
         <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION==''">$(ADVANCED_UNIX_HDR) $(ADVANCED_GTK1_HDR)</if>
-        <if cond="TOOLKIT=='X11'">$(ADVANCED_UNIX_HDR) $(ADVANCED_X11_HDR)</if>
+        <if cond="TOOLKIT=='X11'">$(ADVANCED_UNIX_HDR)</if>
         <if cond="TOOLKIT=='PM'">$(ADVANCED_OS2_HDR)</if>
     </set>
 
@@ -3370,11 +3370,11 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 
     <set var="ADVANCED_SRC" hints="files">
         <if cond="WXUNIV=='0'">$(ADVANCED_CMN_SRC) $(ADVANCED_PLATFORM_SRC) $(ADVANCED_PLATFORM_NATIVE_SRC)</if>
-        <if cond="WXUNIV=='1'">$(ADVANCED_CMN_SRC) $(ADVANCED_PLATFORM_SRC)</if>
+        <if cond="WXUNIV=='1'">$(ADVANCED_CMN_SRC) $(ADVANCED_PLATFORM_SRC) $(ADVANCED_UNIV_SRC</if>
     </set>
     <set var="ADVANCED_HDR" hints="files">
         <if cond="WXUNIV=='0'">$(ADVANCED_CMN_HDR) $(ADVANCED_CMN_NATIVE_HDR) $(ADVANCED_PLATFORM_HDR) $(ADVANCED_PLATFORM_NATIVE_HDR)</if>
-        <if cond="WXUNIV=='1'">$(ADVANCED_CMN_HDR) $(ADVANCED_PLATFORM_HDR)</if>
+        <if cond="WXUNIV=='1'">$(ADVANCED_CMN_HDR) $(ADVANCED_PLATFORM_HDR) $(ADVANCED_UNIX_HDR)</if>
     </set>
 
     <!-- wxMedia files: -->
