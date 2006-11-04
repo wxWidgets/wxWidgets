@@ -2914,6 +2914,9 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     <!-- wxHTML users: -->
     src/generic/htmllbox.cpp
 </set>
+<set var="MSW_HTML_HDR" hints="files">
+    <if cond="TOOLKIT=='MSW'">wx/msw/helpbest.h</if>
+</set>
 <set var="HTML_HDR" hints="files">
     wx/html/helpctrl.h
     wx/html/helpdata.h
@@ -2933,7 +2936,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/wxhtml.h
     <!-- wxHTML users: -->
     wx/htmllbox.h
-    wx/msw/helpbest.h
+    $(MSW_HTML_HDR)
 </set>
 
 
