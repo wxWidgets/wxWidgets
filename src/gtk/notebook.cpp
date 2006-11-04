@@ -608,17 +608,7 @@ wxNotebookPage *wxNotebook::DoRemovePage( size_t page )
     // we don't need to unparent the client->m_widget; GTK+ will do
     // that for us (and will throw a warning if we do it!)
 
-    // gtk_notebook_remove_page() sends "switch_page" signal with some strange
-    // new page index (when deleting selected page 0, new page is 1 although,
-    // clearly, the selection should stay 0), so suppress this
-    g_signal_handlers_disconnect_by_func (m_widget,
-                                          (gpointer) gtk_notebook_page_change_callback,
-                                          this);
-
     gtk_notebook_remove_page( GTK_NOTEBOOK(m_widget), page );
-
-    g_signal_connect (m_widget, "switch_page",
-                      G_CALLBACK (gtk_notebook_page_change_callback), this);
 
     wxGtkNotebookPage* p = GetNotebookPage(page);
     m_pagesData.DeleteObject(p);
