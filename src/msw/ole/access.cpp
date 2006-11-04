@@ -1748,6 +1748,8 @@ int wxConvertToWindowsRole(wxAccRole wxrole)
 {
     switch (wxrole)
     {
+    case wxROLE_NONE:
+        return 0;
     case wxROLE_SYSTEM_ALERT:
         return ROLE_SYSTEM_ALERT;
     case wxROLE_SYSTEM_ANIMATION:
