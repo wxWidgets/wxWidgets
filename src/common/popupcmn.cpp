@@ -34,6 +34,8 @@
     #include "wx/log.h"
 #endif //WX_PRECOMP
 
+#include "wx/recguard.h"
+
 #ifdef __WXUNIVERSAL__
     #include "wx/univ/renderer.h"
     #include "wx/scrolbar.h"
@@ -561,6 +563,16 @@ void wxPopupFocusHandler::OnKillFocus(wxFocusEvent& event)
 
 void wxPopupFocusHandler::OnKeyDown(wxKeyEvent& event)
 {
+    // we can be associated with the popup itself in which case we should avoid
+    // infinite recursion
+    static int s_inside;
+    wxRecursionGuard guard(s_inside);
+    if ( guard.IsInside() )
+    {
+        event.Skip();
+        return;
+    }
+
     // let the window have it first, it might process the keys
     if ( !m_popup->GetEventHandler()->ProcessEvent(event) )
     {
