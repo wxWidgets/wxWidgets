@@ -621,12 +621,6 @@ void wxSimpleHtmlListBox::Delete(unsigned int n)
 
 void wxSimpleHtmlListBox::Append(const wxArrayString& strings)
 {
-    // we know how many items are going to be added - avoid too many reallocs
-    // m_items.Alloc(strings.GetCount());
-    // FIXME: Alloc() will clear all the old contents.
-    //        Suggested fix = make Grow() public and make WX_APPEND_ARRAY take
-    //        care of calling it automatically
-
     // append all given items at once
     WX_APPEND_ARRAY(m_items, strings);
     m_HTMLclientData.Add(NULL, strings.GetCount());
