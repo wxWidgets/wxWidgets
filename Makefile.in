@@ -3257,6 +3257,7 @@ COND_TOOLKIT_MAC___BASE_MACOSX_SRC_OBJECTS =  \
 	monodll_utilsexc_base.o \
 	monodll_baseunix.o \
 	monodll_dlunix.o \
+	monodll_snglinst.o \
 	monodll_stdpaths.o
 @COND_TOOLKIT_MAC@__BASE_MACOSX_SRC_OBJECTS = $(COND_TOOLKIT_MAC___BASE_MACOSX_SRC_OBJECTS)
 COND_TOOLKIT_MOTIF___BASE_MACOSX_SRC_OBJECTS =  \
@@ -4523,12 +4524,9 @@ COND_TOOLKIT_WINCE___GUI_SRC_OBJECTS =  \
 	monodll_tbarwce.o \
 	monodll_textctrlce.o
 @COND_TOOLKIT_WINCE@__GUI_SRC_OBJECTS = $(COND_TOOLKIT_WINCE___GUI_SRC_OBJECTS)
-COND_PLATFORM_MACOSX_1___MAC_OSX_SRC_OBJECTS =  \
-	monodll_snglinst.o \
-	monodll_webkit.o \
-	monodll_fontdlgosx.o \
-	monodll_colordlgosx.o
-@COND_PLATFORM_MACOSX_1@__MAC_OSX_SRC_OBJECTS = $(COND_PLATFORM_MACOSX_1___MAC_OSX_SRC_OBJECTS)
+@COND_PLATFORM_MACOSX_1@__MAC_OSX_SRC_OBJECTS = \
+@COND_PLATFORM_MACOSX_1@	monodll_webkit.o monodll_fontdlgosx.o \
+@COND_PLATFORM_MACOSX_1@	monodll_colordlgosx.o
 @COND_TOOLKIT_COCOA@__LOWLEVEL_SRC_OBJECTS_1 = \
 @COND_TOOLKIT_COCOA@	monodll_gsockosx.o monodll_hid.o monodll_utilsexc_cf.o
 COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_1 =  \
@@ -5013,6 +5011,7 @@ COND_TOOLKIT_MAC___BASE_MACOSX_SRC_OBJECTS_1 =  \
 	monolib_utilsexc_base.o \
 	monolib_baseunix.o \
 	monolib_dlunix.o \
+	monolib_snglinst.o \
 	monolib_stdpaths.o
 @COND_TOOLKIT_MAC@__BASE_MACOSX_SRC_OBJECTS_1 = $(COND_TOOLKIT_MAC___BASE_MACOSX_SRC_OBJECTS_1)
 COND_TOOLKIT_MOTIF___BASE_MACOSX_SRC_OBJECTS_1 =  \
@@ -6280,12 +6279,9 @@ COND_TOOLKIT_WINCE___GUI_SRC_OBJECTS_1 =  \
 	monolib_tbarwce.o \
 	monolib_textctrlce.o
 @COND_TOOLKIT_WINCE@__GUI_SRC_OBJECTS_1 = $(COND_TOOLKIT_WINCE___GUI_SRC_OBJECTS_1)
-COND_PLATFORM_MACOSX_1___MAC_OSX_SRC_OBJECTS_1 =  \
-	monolib_snglinst.o \
-	monolib_webkit.o \
-	monolib_fontdlgosx.o \
-	monolib_colordlgosx.o
-@COND_PLATFORM_MACOSX_1@__MAC_OSX_SRC_OBJECTS_1 = $(COND_PLATFORM_MACOSX_1___MAC_OSX_SRC_OBJECTS_1)
+@COND_PLATFORM_MACOSX_1@__MAC_OSX_SRC_OBJECTS_1 = \
+@COND_PLATFORM_MACOSX_1@	monolib_webkit.o monolib_fontdlgosx.o \
+@COND_PLATFORM_MACOSX_1@	monolib_colordlgosx.o
 @COND_TOOLKIT_COCOA@__LOWLEVEL_SRC_OBJECTS_3 = \
 @COND_TOOLKIT_COCOA@	monolib_gsockosx.o monolib_hid.o monolib_utilsexc_cf.o
 COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_3 =  \
@@ -6807,6 +6803,7 @@ COND_TOOLKIT_MAC___BASE_MACOSX_SRC_OBJECTS_2 =  \
 	basedll_utilsexc_base.o \
 	basedll_baseunix.o \
 	basedll_dlunix.o \
+	basedll_snglinst.o \
 	basedll_stdpaths.o
 @COND_TOOLKIT_MAC@__BASE_MACOSX_SRC_OBJECTS_2 = $(COND_TOOLKIT_MAC___BASE_MACOSX_SRC_OBJECTS_2)
 COND_TOOLKIT_MOTIF___BASE_MACOSX_SRC_OBJECTS_2 =  \
@@ -6967,6 +6964,7 @@ COND_TOOLKIT_MAC___BASE_MACOSX_SRC_OBJECTS_3 =  \
 	baselib_utilsexc_base.o \
 	baselib_baseunix.o \
 	baselib_dlunix.o \
+	baselib_snglinst.o \
 	baselib_stdpaths.o
 @COND_TOOLKIT_MAC@__BASE_MACOSX_SRC_OBJECTS_3 = $(COND_TOOLKIT_MAC___BASE_MACOSX_SRC_OBJECTS_3)
 COND_TOOLKIT_MOTIF___BASE_MACOSX_SRC_OBJECTS_3 =  \
@@ -8247,12 +8245,9 @@ COND_TOOLKIT_WINCE___GUI_SRC_OBJECTS_2 =  \
 	coredll_tbarwce.o \
 	coredll_textctrlce.o
 @COND_TOOLKIT_WINCE@__GUI_SRC_OBJECTS_2 = $(COND_TOOLKIT_WINCE___GUI_SRC_OBJECTS_2)
-COND_PLATFORM_MACOSX_1___MAC_OSX_SRC_OBJECTS_2 =  \
-	coredll_snglinst.o \
-	coredll_webkit.o \
-	coredll_fontdlgosx.o \
-	coredll_colordlgosx.o
-@COND_PLATFORM_MACOSX_1@__MAC_OSX_SRC_OBJECTS_2 = $(COND_PLATFORM_MACOSX_1___MAC_OSX_SRC_OBJECTS_2)
+@COND_PLATFORM_MACOSX_1@__MAC_OSX_SRC_OBJECTS_2 = \
+@COND_PLATFORM_MACOSX_1@	coredll_webkit.o coredll_fontdlgosx.o \
+@COND_PLATFORM_MACOSX_1@	coredll_colordlgosx.o
 @COND_TOOLKIT_COCOA@__LOWLEVEL_SRC_OBJECTS_5 = \
 @COND_TOOLKIT_COCOA@	coredll_gsockosx.o coredll_hid.o coredll_utilsexc_cf.o
 COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_5 =  \
@@ -9684,12 +9679,9 @@ COND_TOOLKIT_WINCE___GUI_SRC_OBJECTS_3 =  \
 	corelib_tbarwce.o \
 	corelib_textctrlce.o
 @COND_TOOLKIT_WINCE@__GUI_SRC_OBJECTS_3 = $(COND_TOOLKIT_WINCE___GUI_SRC_OBJECTS_3)
-COND_PLATFORM_MACOSX_1___MAC_OSX_SRC_OBJECTS_3 =  \
-	corelib_snglinst.o \
-	corelib_webkit.o \
-	corelib_fontdlgosx.o \
-	corelib_colordlgosx.o
-@COND_PLATFORM_MACOSX_1@__MAC_OSX_SRC_OBJECTS_3 = $(COND_PLATFORM_MACOSX_1___MAC_OSX_SRC_OBJECTS_3)
+@COND_PLATFORM_MACOSX_1@__MAC_OSX_SRC_OBJECTS_3 = \
+@COND_PLATFORM_MACOSX_1@	corelib_webkit.o corelib_fontdlgosx.o \
+@COND_PLATFORM_MACOSX_1@	corelib_colordlgosx.o
 @COND_TOOLKIT_COCOA@__LOWLEVEL_SRC_OBJECTS_7 = \
 @COND_TOOLKIT_COCOA@	corelib_gsockosx.o corelib_hid.o corelib_utilsexc_cf.o
 COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_7 =  \
@@ -13052,6 +13044,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_UNIX_1@monodll_snglinst.o: $(srcdir)/src/unix/snglinst.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/snglinst.cpp
 
+@COND_PLATFORM_MACOSX_1_TOOLKIT_MAC@monodll_snglinst.o: $(srcdir)/src/unix/snglinst.cpp $(MONODLL_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_MAC@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/snglinst.cpp
+
 @COND_PLATFORM_MACOSX_1_TOOLKIT_COCOA@monodll_snglinst.o: $(srcdir)/src/unix/snglinst.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_COCOA@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/snglinst.cpp
 
@@ -13066,9 +13061,6 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 
 @COND_PLATFORM_MACOSX_1_TOOLKIT_@monodll_snglinst.o: $(srcdir)/src/unix/snglinst.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/snglinst.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@monodll_snglinst.o: $(srcdir)/src/unix/snglinst.cpp $(MONODLL_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/snglinst.cpp
 
 @COND_PLATFORM_WIN32_1@monodll_snglinst.o: $(srcdir)/src/msw/snglinst.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_WIN32_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/snglinst.cpp
@@ -17150,6 +17142,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_UNIX_1@monolib_snglinst.o: $(srcdir)/src/unix/snglinst.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/snglinst.cpp
 
+@COND_PLATFORM_MACOSX_1_TOOLKIT_MAC@monolib_snglinst.o: $(srcdir)/src/unix/snglinst.cpp $(MONOLIB_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_MAC@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/snglinst.cpp
+
 @COND_PLATFORM_MACOSX_1_TOOLKIT_COCOA@monolib_snglinst.o: $(srcdir)/src/unix/snglinst.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_COCOA@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/snglinst.cpp
 
@@ -17164,9 +17159,6 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_PLATFORM_MACOSX_1_TOOLKIT_@monolib_snglinst.o: $(srcdir)/src/unix/snglinst.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/snglinst.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@monolib_snglinst.o: $(srcdir)/src/unix/snglinst.cpp $(MONOLIB_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/snglinst.cpp
 
 @COND_PLATFORM_WIN32_1@monolib_snglinst.o: $(srcdir)/src/msw/snglinst.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_WIN32_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/snglinst.cpp
@@ -20726,6 +20718,9 @@ basedll_uma.o: $(srcdir)/src/mac/carbon/uma.cpp $(BASEDLL_ODEP)
 @COND_PLATFORM_UNIX_1@basedll_snglinst.o: $(srcdir)/src/unix/snglinst.cpp $(BASEDLL_ODEP)
 @COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/unix/snglinst.cpp
 
+@COND_PLATFORM_MACOSX_1_TOOLKIT_MAC@basedll_snglinst.o: $(srcdir)/src/unix/snglinst.cpp $(BASEDLL_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_MAC@	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/unix/snglinst.cpp
+
 @COND_PLATFORM_MACOSX_1_TOOLKIT_COCOA@basedll_snglinst.o: $(srcdir)/src/unix/snglinst.cpp $(BASEDLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_COCOA@	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/unix/snglinst.cpp
 
@@ -21311,6 +21306,9 @@ baselib_uma.o: $(srcdir)/src/mac/carbon/uma.cpp $(BASELIB_ODEP)
 @COND_PLATFORM_UNIX_1@baselib_snglinst.o: $(srcdir)/src/unix/snglinst.cpp $(BASELIB_ODEP)
 @COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/unix/snglinst.cpp
 
+@COND_PLATFORM_MACOSX_1_TOOLKIT_MAC@baselib_snglinst.o: $(srcdir)/src/unix/snglinst.cpp $(BASELIB_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_MAC@	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/unix/snglinst.cpp
+
 @COND_PLATFORM_MACOSX_1_TOOLKIT_COCOA@baselib_snglinst.o: $(srcdir)/src/unix/snglinst.cpp $(BASELIB_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_COCOA@	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/unix/snglinst.cpp
 
@@ -21730,9 +21728,6 @@ coredll_statbrma.o: $(srcdir)/src/mac/carbon/statbrma.cpp $(COREDLL_ODEP)
 
 coredll_statlmac.o: $(srcdir)/src/mac/carbon/statlmac.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/mac/carbon/statlmac.cpp
-
-coredll_snglinst.o: $(srcdir)/src/unix/snglinst.cpp $(COREDLL_ODEP)
-	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/unix/snglinst.cpp
 
 coredll_webkit.o: $(srcdir)/src/html/htmlctrl/webkit/webkit.mm $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/html/htmlctrl/webkit/webkit.mm
@@ -24658,9 +24653,6 @@ corelib_statbrma.o: $(srcdir)/src/mac/carbon/statbrma.cpp $(CORELIB_ODEP)
 
 corelib_statlmac.o: $(srcdir)/src/mac/carbon/statlmac.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/mac/carbon/statlmac.cpp
-
-corelib_snglinst.o: $(srcdir)/src/unix/snglinst.cpp $(CORELIB_ODEP)
-	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/unix/snglinst.cpp
 
 corelib_webkit.o: $(srcdir)/src/html/htmlctrl/webkit/webkit.mm $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/html/htmlctrl/webkit/webkit.mm

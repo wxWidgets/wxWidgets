@@ -199,6 +199,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     $(BASE_MAC_SRC)
     src/unix/baseunix.cpp
     src/unix/dlunix.cpp
+    src/unix/snglinst.cpp
     src/unix/stdpaths.cpp
 </set>
 <set var="BASE_MACOSX_WXMAC_HDR" hints="files">
@@ -2053,8 +2054,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 
 <set var="MAC_OSX_SRC" hints="files">
 <if cond="PLATFORM_MACOSX=='1'">
-    <!-- Unix files used by wxMac: -->
-    src/unix/snglinst.cpp
     <!-- wxWebKit files -->
     src/html/htmlctrl/webkit/webkit.mm
     <!-- Native color/font dialogs -->
