@@ -243,6 +243,9 @@ void wxFontRefData::InitFromNative()
             break;
     }
 
+// Not defined in some Pango versions
+#define wxPANGO_WEIGHT_SEMIBOLD 600
+
     switch (pango_font_description_get_weight( desc ))
     {
         case PANGO_WEIGHT_ULTRALIGHT:
@@ -258,7 +261,7 @@ void wxFontRefData::InitFromNative()
             m_weight = wxFONTWEIGHT_NORMAL;
             break;
 
-        case PANGO_WEIGHT_SEMIBOLD:
+        case wxPANGO_WEIGHT_SEMIBOLD:
         case PANGO_WEIGHT_BOLD:
         case PANGO_WEIGHT_ULTRABOLD:
         case PANGO_WEIGHT_HEAVY:
