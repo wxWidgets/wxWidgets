@@ -4198,8 +4198,12 @@ wxGrid::~wxGrid()
              total ? (gs_nAttrCacheHits*100) / total : 0);
 #endif
 
-    if (m_ownTable)
+    // if we own the table, just delete it, otherwise at least don't leave it
+    // with dangling view pointer
+    if ( m_ownTable )
         delete m_table;
+    else if ( m_table->GetView() == this )
+        m_table->SetView(NULL);
 
     delete m_typeRegistry;
     delete m_selection;
