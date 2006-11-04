@@ -3875,11 +3875,9 @@ if test "$wxUSE_OPENGL" = "yes"; then
     elif test "$wxUSE_MSW" = 1; then
         OPENGL_LIBS="-lopengl32 -lglu32"
     else
-        dnl David Elliott: Without this snippet AC_CHECK_HEADER fails to find
-        dnl GL/gl.h on Mac OS X where it is located in
-        dnl /usr/X11R6/include/GL/gl.h:
-
-        WX_PATH_FIND_INCLUDES($SEARCH_INCLUDE, GL/gl.h)
+        dnl adjust CPPFLAGS to include GL/gl.h location if necessary
+        dnl (/opt/graphics/OpenGL is for HP-UX systems, bug 925307)
+        WX_PATH_FIND_INCLUDES([$SEARCH_INCLUDE /opt/graphics/OpenGL/include], GL/gl.h)
         if test "$ac_find_includes" != "" ; then
             AC_MSG_RESULT(found in $ac_find_includes)
             WX_INCLUDE_PATH_EXIST($ac_find_includes, $CPPFLAGS)
@@ -3891,9 +3889,9 @@ if test "$wxUSE_OPENGL" = "yes"; then
                 found_gl=0
 
                 AC_MSG_CHECKING([for -lGL])
-                WX_PATH_FIND_LIBRARIES([$SEARCH_LIB],GL)
+                WX_PATH_FIND_LIBRARIES([$SEARCH_LIB /opt/graphics/OpenGL/lib],GL)
                 if test "$ac_find_libraries" != "" ; then
-                    AC_MSG_RESULT([yes])
+                    AC_MSG_RESULT([found in $ac_find_libraries])
 
                     WX_LINK_PATH_EXIST([$ac_find_libraries],[$LDFLAGS])
                     if test "$ac_path_to_link" != " -L/usr/lib" ; then
