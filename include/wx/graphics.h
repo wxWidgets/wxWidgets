@@ -494,6 +494,10 @@ public:
 
     virtual void DrawText( const wxString &str, wxDouble x, wxDouble y, wxDouble angle );
 
+    virtual void DrawText( const wxString &str, wxDouble x, wxDouble y, const wxGraphicsBrush& backgroundBrush ) ;
+
+    virtual void DrawText( const wxString &str, wxDouble x, wxDouble y, wxDouble angle, const wxGraphicsBrush& backgroundBrush );
+
     virtual void GetTextExtent( const wxString &text, wxDouble *width, wxDouble *height,
         wxDouble *descent, wxDouble *externalLeading ) const  = 0;
 

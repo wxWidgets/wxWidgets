@@ -762,7 +762,10 @@ void wxGCDC::DoDrawRotatedText(const wxString& str, wxCoord x, wxCoord y,
     if ( m_logicalFunction != wxCOPY )
         return;
 
-     m_graphicContext->DrawText( str, x ,y , DegToRad(angle ));
+    if ( m_backgroundMode == wxTRANSPARENT )
+        m_graphicContext->DrawText( str, x ,y , DegToRad(angle ));
+    else
+        m_graphicContext->DrawText( str, x ,y , DegToRad(angle ), m_graphicContext->CreateBrush( wxBrush(m_textBackgroundColour,wxSOLID) ) );
 }
 
 void wxGCDC::DoDrawText(const wxString& str, wxCoord x, wxCoord y)
@@ -774,7 +777,10 @@ void wxGCDC::DoDrawText(const wxString& str, wxCoord x, wxCoord y)
     if ( m_logicalFunction != wxCOPY )
         return;
 
-    m_graphicContext->DrawText( str, x ,y);
+    if ( m_backgroundMode == wxTRANSPARENT )
+        m_graphicContext->DrawText( str, x ,y);
+    else
+        m_graphicContext->DrawText( str, x ,y , m_graphicContext->CreateBrush( wxBrush(m_textBackgroundColour,wxSOLID) ) );
 }
 
 bool wxGCDC::CanGetTextExtent() const

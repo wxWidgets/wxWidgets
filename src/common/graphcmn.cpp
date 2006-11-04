@@ -558,6 +558,47 @@ void wxGraphicsContext::DrawText( const wxString &str, wxDouble x, wxDouble y, w
     Translate(-x,-y);
 }
 
+void wxGraphicsContext::DrawText( const wxString &str, wxDouble x, wxDouble y, const wxGraphicsBrush& backgroundBrush ) 
+{
+    wxGraphicsBrush formerBrush = m_brush;
+    wxDouble width;
+    wxDouble height;
+    wxDouble descent;
+    wxDouble externalLeading;
+    GetTextExtent( str , &width, &height, &descent, &externalLeading );
+    SetBrush( backgroundBrush );
+
+    wxGraphicsPath path = CreatePath();
+    path.AddRectangle( x , y, width, height );
+    FillPath( path );
+
+    DrawText( str, x ,y);
+    SetBrush( formerBrush );
+}
+
+void wxGraphicsContext::DrawText( const wxString &str, wxDouble x, wxDouble y, wxDouble angle, const wxGraphicsBrush& backgroundBrush )
+{
+    wxGraphicsBrush formerBrush = m_brush;
+
+    wxDouble width;
+    wxDouble height;
+    wxDouble descent;
+    wxDouble externalLeading;
+    GetTextExtent( str , &width, &height, &descent, &externalLeading );
+    SetBrush( backgroundBrush );
+
+    wxGraphicsPath path = CreatePath();
+    path.MoveToPoint( x , y );
+    path.AddLineToPoint( (int) (x + sin(angle) * height) , (int) (y + cos(angle) * height) );
+    path.AddLineToPoint(
+        (int) (x + sin(angle) * height + cos(angle) * width) ,
+        (int) (y + cos(angle) * height - sin(angle) * width));
+    path.AddLineToPoint((int) (x + cos(angle) * width) , (int) (y - sin(angle) * width) );
+    FillPath( path );
+    DrawText( str, x ,y, angle);
+    SetBrush( formerBrush );
+}
+
 void wxGraphicsContext::StrokeLine( wxDouble x1, wxDouble y1, wxDouble x2, wxDouble y2)
 {
     wxGraphicsPath path = CreatePath();
