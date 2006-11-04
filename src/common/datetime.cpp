@@ -141,6 +141,13 @@ wxCUSTOM_TYPE_INFO(wxDateTime, wxToStringConverter<wxDateTime> , wxFromStringCon
     #include <wtime.h>
 #endif
 
+// define a special symbol for VC8 instead of writing tests for 1400 repeatedly
+#ifdef __VISUALC__
+    #if __VISUALC__ >= 1400
+        #define __VISUALC8__
+    #endif
+#endif
+
 #if !defined(WX_TIMEZONE) && !defined(WX_GMTOFF_IN_TM)
     #if defined(__WXPALMOS__)
         #define WX_GMTOFF_IN_TM
@@ -166,10 +173,29 @@ wxCUSTOM_TYPE_INFO(wxDateTime, wxToStringConverter<wxDateTime> , wxFromStringCon
         #define WX_TIMEZONE wxGetTimeZone()
     #elif defined(__DARWIN__)
         #define WX_GMTOFF_IN_TM
+    #elif defined(__WXWINCE__) && defined(__VISUALC8__)
+        #define WX_TIMEZONE _timezone
     #else // unknown platform - try timezone
         #define WX_TIMEZONE timezone
     #endif
 #endif // !WX_TIMEZONE && !WX_GMTOFF_IN_TM
+
+// NB: VC8 safe time functions could/should be used for wxMSW as well probably
+#if defined(__WXWINCE__) && defined(__VISUALC8__)
+
+struct tm *wxLocaltime_r(const time_t *t, struct tm* tm)
+{
+    __time64_t t64 = *t;
+    return _localtime64_s(tm, &t64) == 0 ? tm : NULL;
+}
+
+struct tm *wxGmtime_r(const time_t* t, struct tm* tm)
+{
+    __time64_t t64 = *t;
+    return _gmtime64_s(tm, &t64) == 0 ? tm : NULL;
+}
+
+#else // !wxWinCE with VC8
 
 #if (!defined(HAVE_LOCALTIME_R) || !defined(HAVE_GMTIME_R)) && wxUSE_THREADS && !defined(__WINDOWS__)
 static wxMutex timeLock;
@@ -186,7 +212,7 @@ struct tm *wxLocaltime_r(const time_t* ticks, struct tm* temp)
   memcpy(temp, localtime(ticks), sizeof(struct tm));
   return temp;
 }
-#endif
+#endif // !HAVE_LOCALTIME_R
 
 #ifndef HAVE_GMTIME_R
 struct tm *wxGmtime_r(const time_t* ticks, struct tm* temp)
@@ -199,7 +225,9 @@ struct tm *wxGmtime_r(const time_t* ticks, struct tm* temp)
   memcpy(temp, gmtime(ticks), sizeof(struct tm));
   return temp;
 }
-#endif
+#endif // !HAVE_GMTIME_R
+
+#endif // wxWinCE with VC8/other platforms
 
 // ----------------------------------------------------------------------------
 // macros

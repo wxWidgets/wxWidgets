@@ -2,7 +2,7 @@
 // Name:        src/msw/wince/time.cpp
 // Purpose:     Implements missing time functionality for WinCE
 // Author:      Marco Cavallini (MCK) - wx@koansoftware.com
-// Modified by:
+// Modified by: Vadim Zeitlin for VC8 support
 // Created:     31-08-2003
 // RCS-ID:      $Id$
 // Copyright:   (c) Marco Cavallini
@@ -29,6 +29,30 @@
 #endif
 
 #include "wx/msw/wince/time.h"
+
+#if defined(__VISUALC__) && (__VISUALC__ >= 1400)
+
+// VC8 does provide the time functions but not the standard ones
+#include <altcecrt.h>
+
+time_t __cdecl time(time_t *t)
+{
+    __time64_t t64;
+    if ( !_time64(&t64) )
+        return (time_t)-1;
+
+    if ( t )
+        *t = (time_t)t64;
+
+    return (time_t)t64;
+}
+
+time_t __cdecl mktime(struct tm *t)
+{
+    return (time_t)_mktime64(t);
+}
+
+#else // !VC8
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 //                                                                                         //
@@ -499,7 +523,6 @@ extern "C"
 
 /* Not needed in VS Studio 2005 */
 
-#if !(__VISUALC__ >= 1400)
 size_t wcsftime(wchar_t *s,
                 const size_t maxsize,
                 const wchar_t *format,
@@ -516,7 +539,6 @@ size_t wcsftime(wchar_t *s,
 
     return sz;
 }
-#endif
 
 } /* extern "C" */
 
@@ -737,4 +759,4 @@ time_t __cdecl mktime(struct tm *t)
 
 } // extern "C"
 
-
+#endif // VC8/!VC8
