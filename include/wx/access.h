@@ -18,6 +18,8 @@
 
 #include "wx/defs.h"
 
+#if wxUSE_ACCESSIBILITY
+
 #include "wx/variant.h"
 
 typedef enum
@@ -369,5 +371,7 @@ private:
     #include "wx/msw/ole/access.h"
 #endif
 
-#endif
-    // _WX_ACCESSBASE_H_
+#endif // wxUSE_ACCESSIBILITY
+
+#endif // _WX_ACCESSBASE_H_
+
