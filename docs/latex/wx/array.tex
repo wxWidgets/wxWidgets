@@ -250,7 +250,8 @@ does exactly the same as \helpref{Item()}{wxarrayitem} method.
 \helpref{Add}{wxarrayadd}\\
 \helpref{Insert}{wxarrayinsert}\\
 \helpref{SetCount}{wxarraysetcount}\\
-\helpref{WX\_APPEND\_ARRAY}{wxappendarray}
+\helpref{WX\_APPEND\_ARRAY}{wxappendarray}\\
+\helpref{WX\_PREPEND\_ARRAY}{wxprependarray}
 
 \membersection{Removing items}\label{arrayremoving}
 
@@ -403,6 +404,13 @@ WX_DEFINE_OBJARRAY(wxArrayOfMyClass);
 \func{void}{WX\_APPEND\_ARRAY}{\param{wxArray\& }{array}, \param{wxArray\& }{other}}
 
 This macro may be used to append all elements of the {\it other} array to the
+{\it array}. The two arrays must be of the same type.
+
+\membersection{WX\_PREPEND\_ARRAY}\label{wxprependarray}
+
+\func{void}{WX\_PREPEND\_ARRAY}{\param{wxArray\& }{array}, \param{wxArray\& }{other}}
+
+This macro may be used to prepend all elements of the {\it other} array to the
 {\it array}. The two arrays must be of the same type.
 
 \membersection{WX\_CLEAR\_ARRAY}\label{wxcleararray}
