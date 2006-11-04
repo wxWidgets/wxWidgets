@@ -256,6 +256,7 @@ MyFrame::MyFrame()
 
     wxMenu *menuPageOperations = new wxMenu;
     menuPageOperations->Append(ID_ADD_PAGE, wxT("&Add page\tAlt-A"));
+    menuPageOperations->Append(ID_ADD_PAGE_NO_SELECT, wxT("&Add page (don't select)\tAlt-B"));
     menuPageOperations->Append(ID_INSERT_PAGE, wxT("&Insert page\tAlt-I"));
     menuPageOperations->Append(ID_DELETE_CUR_PAGE, wxT("&Delete current page\tAlt-D"));
     menuPageOperations->Append(ID_DELETE_LAST_PAGE, wxT("D&elete last page\tAlt-L"));
@@ -515,6 +516,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
 
     // Operations menu
     EVT_MENU(ID_ADD_PAGE, MyFrame::OnAddPage)
+    EVT_MENU(ID_ADD_PAGE_NO_SELECT, MyFrame::OnAddPageNoSelect)
     EVT_MENU(ID_INSERT_PAGE, MyFrame::OnInsertPage)
     EVT_MENU(ID_DELETE_CUR_PAGE, MyFrame::OnDeleteCurPage)
     EVT_MENU(ID_DELETE_LAST_PAGE, MyFrame::OnDeleteLastPage)
@@ -674,6 +676,24 @@ void MyFrame::OnAddPage(wxCommandEvent& WXUNUSED(event))
                             ++s_pageAdded
                           ),
                           true,
+                          GetIconIndex(currBook));
+    }
+}
+
+void MyFrame::OnAddPageNoSelect(wxCommandEvent& WXUNUSED(event))
+{
+    wxBookCtrlBase *currBook = GetCurrentBook();
+
+    if ( currBook )
+    {
+        static unsigned s_pageAdded = 0;
+        currBook->AddPage(CreateNewPage(),
+                          wxString::Format
+                          (
+                            ADDED_PAGE_NAME wxT("%u"),
+                            ++s_pageAdded
+                          ),
+                          false,
                           GetIconIndex(currBook));
     }
 }

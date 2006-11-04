@@ -44,6 +44,7 @@ public:
     void OnExit(wxCommandEvent& event);
 
     void OnAddPage(wxCommandEvent& event);
+    void OnAddPageNoSelect(wxCommandEvent& event);
     void OnInsertPage(wxCommandEvent& event);
     void OnDeleteCurPage(wxCommandEvent& event);
     void OnDeleteLastPage(wxCommandEvent& event);
@@ -142,6 +143,7 @@ enum ID_COMMANDS
     ID_SHOW_IMAGES,
     ID_MULTI,
     ID_ADD_PAGE,
+    ID_ADD_PAGE_NO_SELECT,
     ID_INSERT_PAGE,
     ID_DELETE_CUR_PAGE,
     ID_DELETE_LAST_PAGE,
