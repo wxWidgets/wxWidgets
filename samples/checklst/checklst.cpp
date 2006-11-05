@@ -127,7 +127,7 @@ BEGIN_EVENT_TABLE(CheckListBoxFrame, wxFrame)
     EVT_MENU(Menu_Selection, CheckListBoxFrame::OnToggleSelection)
     EVT_MENU(Menu_Extended, CheckListBoxFrame::OnToggleExtended)
     EVT_MENU(Menu_Sorting, CheckListBoxFrame::OnToggleSorting)
-    
+
     EVT_MENU(Menu_InsertItemsStart, CheckListBoxFrame::OnInsertItemsStart)
     EVT_MENU(Menu_InsertItemsMiddle, CheckListBoxFrame::OnInsertItemsMiddle)
     EVT_MENU(Menu_InsertItemsEnd, CheckListBoxFrame::OnInsertItemsEnd)
@@ -269,8 +269,6 @@ void CheckListBoxFrame::CreateCheckListbox(long flags)
          flags
         );
 
-    //m_pListBox->SetBackgroundColour(*wxGREEN);
-
     delete [] astrChoices;
 
     // set grey background for every second entry
@@ -406,7 +404,7 @@ void CheckListBoxFrame::OnToggleExtended(wxCommandEvent& event)
 
     sizer->Insert(0, m_pListBox, 1, wxGROW | wxALL, 10);
 
-    m_panel->Layout();    
+    m_panel->Layout();
 }
 
 void CheckListBoxFrame::OnToggleSorting(wxCommandEvent& event)
@@ -420,7 +418,7 @@ void CheckListBoxFrame::OnToggleSorting(wxCommandEvent& event)
 
     sizer->Insert(0, m_pListBox, 1, wxGROW | wxALL, 10);
 
-    m_panel->Layout();    
+    m_panel->Layout();
 }
 
 void CheckListBoxFrame::OnListboxSelect(wxCommandEvent& event)
