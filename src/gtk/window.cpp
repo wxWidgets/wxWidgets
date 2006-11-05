@@ -4236,6 +4236,7 @@ void wxWindowGTK::ScrollWindow( int dx, int dy, const wxRect* WXUNUSED(rect) )
 
     m_clipPaintRegion = false;
 
+#if wxUSE_CARET
     bool restoreCaret = (GetCaret() != NULL && GetCaret()->IsVisible());
     if (restoreCaret)
     {
@@ -4255,6 +4256,7 @@ void wxWindowGTK::ScrollWindow( int dx, int dy, const wxRect* WXUNUSED(rect) )
      
         RefreshRect(caretRect);
     }
+#endif
 }
 
 void wxWindowGTK::GtkScrolledWindowSetBorder(GtkWidget* w, int wxstyle)
