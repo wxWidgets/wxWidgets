@@ -64,8 +64,9 @@ void wxDCBase::DoDrawCheckMark(wxCoord x1, wxCoord y1,
     wxCoord x2 = x1 + width,
             y2 = y1 + height;
 
-    // this is to yield width of 3 for width == height == 10
-    SetPen(wxPen(GetTextForeground(), (width + height + 1) / 7, wxSOLID));
+    // the pen width is calibrated to give 3 for width == height == 10
+    wxDCPenChanger pen((wxDC&)*this,
+                        wxPen(GetTextForeground(), (width + height + 1)/7));
 
     // we're drawing a scaled version of wx/generic/tick.xpm here
     wxCoord x3 = x1 + (4*width) / 10,   // x of the tick bottom
