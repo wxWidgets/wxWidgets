@@ -707,7 +707,8 @@ ____ADVANCED_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_aboutdlg.obj &
 	$(OBJS)\monodll_sound.obj &
 	$(OBJS)\monodll_taskbar.obj &
-	$(OBJS)\monodll_joystick.obj
+	$(OBJS)\monodll_joystick.obj &
+	$(OBJS)\monodll_animateg.obj
 !endif
 __monolib___depname =
 !ifeq MONOLITHIC 1
@@ -1328,7 +1329,8 @@ ____ADVANCED_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_aboutdlg.obj &
 	$(OBJS)\monolib_sound.obj &
 	$(OBJS)\monolib_taskbar.obj &
-	$(OBJS)\monolib_joystick.obj
+	$(OBJS)\monolib_joystick.obj &
+	$(OBJS)\monolib_animateg.obj
 !endif
 __basedll___depname =
 !ifeq MONOLITHIC 0
@@ -2337,7 +2339,8 @@ ____ADVANCED_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\advdll_aboutdlg.obj &
 	$(OBJS)\advdll_sound.obj &
 	$(OBJS)\advdll_taskbar.obj &
-	$(OBJS)\advdll_joystick.obj
+	$(OBJS)\advdll_joystick.obj &
+	$(OBJS)\advdll_animateg.obj
 !endif
 __advlib___depname =
 !ifeq MONOLITHIC 0
@@ -2404,7 +2407,8 @@ ____ADVANCED_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\advlib_aboutdlg.obj &
 	$(OBJS)\advlib_sound.obj &
 	$(OBJS)\advlib_taskbar.obj &
-	$(OBJS)\advlib_joystick.obj
+	$(OBJS)\advlib_joystick.obj &
+	$(OBJS)\advlib_animateg.obj
 !endif
 __mediadll___depname =
 !ifeq MONOLITHIC 0
@@ -6911,6 +6915,13 @@ $(OBJS)\monodll_animateg.obj :  .AUTODEPEND ..\..\src\generic\animateg.cpp
 !endif
 
 !ifeq USE_GUI 1
+!ifeq WXUNIV 1
+$(OBJS)\monodll_animateg.obj :  .AUTODEPEND ..\..\src\generic\animateg.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+!endif
+!endif
+
+!ifeq USE_GUI 1
 $(OBJS)\monodll_taskbarcmn.obj :  .AUTODEPEND ..\..\src\common\taskbarcmn.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
@@ -8992,6 +9003,13 @@ $(OBJS)\monolib_wizard.obj :  .AUTODEPEND ..\..\src\generic\wizard.cpp
 !ifeq USE_GUI 1
 $(OBJS)\monolib_animateg.obj :  .AUTODEPEND ..\..\src\generic\animateg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+!ifeq WXUNIV 1
+$(OBJS)\monolib_animateg.obj :  .AUTODEPEND ..\..\src\generic\animateg.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+!endif
 !endif
 
 !ifeq USE_GUI 1
@@ -12439,6 +12457,11 @@ $(OBJS)\advdll_wizard.obj :  .AUTODEPEND ..\..\src\generic\wizard.cpp
 $(OBJS)\advdll_animateg.obj :  .AUTODEPEND ..\..\src\generic\animateg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(ADVDLL_CXXFLAGS) $<
 
+!ifeq WXUNIV 1
+$(OBJS)\advdll_animateg.obj :  .AUTODEPEND ..\..\src\generic\animateg.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(ADVDLL_CXXFLAGS) $<
+!endif
+
 $(OBJS)\advdll_taskbarcmn.obj :  .AUTODEPEND ..\..\src\common\taskbarcmn.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(ADVDLL_CXXFLAGS) $<
 
@@ -12519,6 +12542,11 @@ $(OBJS)\advlib_wizard.obj :  .AUTODEPEND ..\..\src\generic\wizard.cpp
 
 $(OBJS)\advlib_animateg.obj :  .AUTODEPEND ..\..\src\generic\animateg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(ADVLIB_CXXFLAGS) $<
+
+!ifeq WXUNIV 1
+$(OBJS)\advlib_animateg.obj :  .AUTODEPEND ..\..\src\generic\animateg.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(ADVLIB_CXXFLAGS) $<
+!endif
 
 $(OBJS)\advlib_taskbarcmn.obj :  .AUTODEPEND ..\..\src\common\taskbarcmn.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(ADVLIB_CXXFLAGS) $<

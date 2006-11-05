@@ -3372,7 +3372,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 
     <set var="ADVANCED_SRC" hints="files">
         <if cond="WXUNIV=='0'">$(ADVANCED_CMN_SRC) $(ADVANCED_PLATFORM_SRC) $(ADVANCED_PLATFORM_NATIVE_SRC)</if>
-        <if cond="WXUNIV=='1'">$(ADVANCED_CMN_SRC) $(ADVANCED_PLATFORM_SRC) $(ADVANCED_UNIV_SRC</if>
+        <if cond="WXUNIV=='1'">$(ADVANCED_CMN_SRC) $(ADVANCED_PLATFORM_SRC) $(ADVANCED_UNIV_SRC)</if>
     </set>
     <set var="ADVANCED_HDR" hints="files">
         <if cond="WXUNIV=='0'">$(ADVANCED_CMN_HDR) $(ADVANCED_CMN_NATIVE_HDR) $(ADVANCED_PLATFORM_HDR) $(ADVANCED_PLATFORM_NATIVE_HDR)</if>

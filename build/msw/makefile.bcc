@@ -1809,7 +1809,8 @@ ____ADVANCED_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_aboutdlg.obj \
 	$(OBJS)\monodll_sound.obj \
 	$(OBJS)\monodll_taskbar.obj \
-	$(OBJS)\monodll_joystick.obj
+	$(OBJS)\monodll_joystick.obj \
+	$(OBJS)\monodll_animateg.obj
 !endif
 !if "$(MONOLITHIC)" == "1" && "$(SHARED)" == "0"
 __monolib___depname = \
@@ -2420,7 +2421,8 @@ ____ADVANCED_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_aboutdlg.obj \
 	$(OBJS)\monolib_sound.obj \
 	$(OBJS)\monolib_taskbar.obj \
-	$(OBJS)\monolib_joystick.obj
+	$(OBJS)\monolib_joystick.obj \
+	$(OBJS)\monolib_animateg.obj
 !endif
 !if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "1"
 __basedll___depname = \
@@ -3391,7 +3393,8 @@ ____ADVANCED_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\advdll_aboutdlg.obj \
 	$(OBJS)\advdll_sound.obj \
 	$(OBJS)\advdll_taskbar.obj \
-	$(OBJS)\advdll_joystick.obj
+	$(OBJS)\advdll_joystick.obj \
+	$(OBJS)\advdll_animateg.obj
 !endif
 !if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "0" && "$(USE_GUI)" == "1"
 __advlib___depname = \
@@ -3452,7 +3455,8 @@ ____ADVANCED_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\advlib_aboutdlg.obj \
 	$(OBJS)\advlib_sound.obj \
 	$(OBJS)\advlib_taskbar.obj \
-	$(OBJS)\advlib_joystick.obj
+	$(OBJS)\advlib_joystick.obj \
+	$(OBJS)\advlib_animateg.obj
 !endif
 !if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "1" && "$(USE_GUI)" == "1" && "$(USE_MEDIA)" == "1"
 __mediadll___depname = \
@@ -6465,6 +6469,11 @@ $(OBJS)\monodll_animateg.obj: ..\..\src\generic\animateg.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) $**
 !endif
 
+!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
+$(OBJS)\monodll_animateg.obj: ..\..\src\generic\animateg.cpp
+	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) $**
+!endif
+
 !if "$(USE_GUI)" == "1"
 $(OBJS)\monodll_taskbarcmn.obj: ..\..\src\common\taskbarcmn.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) $**
@@ -8445,6 +8454,11 @@ $(OBJS)\monolib_wizard.obj: ..\..\src\generic\wizard.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
+$(OBJS)\monolib_animateg.obj: ..\..\src\generic\animateg.cpp
+	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) $**
+!endif
+
+!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
 $(OBJS)\monolib_animateg.obj: ..\..\src\generic\animateg.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) $**
 !endif
@@ -11694,6 +11708,11 @@ $(OBJS)\advdll_wizard.obj: ..\..\src\generic\wizard.cpp
 $(OBJS)\advdll_animateg.obj: ..\..\src\generic\animateg.cpp
 	$(CXX) -q -c -P -o$@ $(ADVDLL_CXXFLAGS) $**
 
+!if "$(WXUNIV)" == "1"
+$(OBJS)\advdll_animateg.obj: ..\..\src\generic\animateg.cpp
+	$(CXX) -q -c -P -o$@ $(ADVDLL_CXXFLAGS) $**
+!endif
+
 $(OBJS)\advdll_taskbarcmn.obj: ..\..\src\common\taskbarcmn.cpp
 	$(CXX) -q -c -P -o$@ $(ADVDLL_CXXFLAGS) $**
 
@@ -11774,6 +11793,11 @@ $(OBJS)\advlib_wizard.obj: ..\..\src\generic\wizard.cpp
 
 $(OBJS)\advlib_animateg.obj: ..\..\src\generic\animateg.cpp
 	$(CXX) -q -c -P -o$@ $(ADVLIB_CXXFLAGS) $**
+
+!if "$(WXUNIV)" == "1"
+$(OBJS)\advlib_animateg.obj: ..\..\src\generic\animateg.cpp
+	$(CXX) -q -c -P -o$@ $(ADVLIB_CXXFLAGS) $**
+!endif
 
 $(OBJS)\advlib_taskbarcmn.obj: ..\..\src\common\taskbarcmn.cpp
 	$(CXX) -q -c -P -o$@ $(ADVLIB_CXXFLAGS) $**

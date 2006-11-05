@@ -1822,7 +1822,8 @@ ____ADVANCED_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_aboutdlg.o \
 	$(OBJS)\monodll_sound.o \
 	$(OBJS)\monodll_taskbar.o \
-	$(OBJS)\monodll_joystick.o
+	$(OBJS)\monodll_joystick.o \
+	$(OBJS)\monodll_animateg.o
 endif
 ifeq ($(MONOLITHIC),1)
 ifeq ($(SHARED),0)
@@ -2439,7 +2440,8 @@ ____ADVANCED_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_aboutdlg.o \
 	$(OBJS)\monolib_sound.o \
 	$(OBJS)\monolib_taskbar.o \
-	$(OBJS)\monolib_joystick.o
+	$(OBJS)\monolib_joystick.o \
+	$(OBJS)\monolib_animateg.o
 endif
 ifeq ($(MONOLITHIC),0)
 ifeq ($(SHARED),1)
@@ -3438,7 +3440,8 @@ ____ADVANCED_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\advdll_aboutdlg.o \
 	$(OBJS)\advdll_sound.o \
 	$(OBJS)\advdll_taskbar.o \
-	$(OBJS)\advdll_joystick.o
+	$(OBJS)\advdll_joystick.o \
+	$(OBJS)\advdll_animateg.o
 endif
 ifeq ($(MONOLITHIC),0)
 ifeq ($(SHARED),0)
@@ -3503,7 +3506,8 @@ ____ADVANCED_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\advlib_aboutdlg.o \
 	$(OBJS)\advlib_sound.o \
 	$(OBJS)\advlib_taskbar.o \
-	$(OBJS)\advlib_joystick.o
+	$(OBJS)\advlib_joystick.o \
+	$(OBJS)\advlib_animateg.o
 endif
 ifeq ($(MONOLITHIC),0)
 ifeq ($(SHARED),1)
@@ -6683,6 +6687,13 @@ $(OBJS)\monodll_animateg.o: ../../src/generic/animateg.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+ifeq ($(WXUNIV),1)
+$(OBJS)\monodll_animateg.o: ../../src/generic/animateg.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\monodll_taskbarcmn.o: ../../src/common/taskbarcmn.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -8764,6 +8775,13 @@ endif
 ifeq ($(USE_GUI),1)
 $(OBJS)\monolib_animateg.o: ../../src/generic/animateg.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+ifeq ($(WXUNIV),1)
+$(OBJS)\monolib_animateg.o: ../../src/generic/animateg.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+endif
 endif
 
 ifeq ($(USE_GUI),1)
@@ -12211,6 +12229,11 @@ $(OBJS)\advdll_wizard.o: ../../src/generic/wizard.cpp
 $(OBJS)\advdll_animateg.o: ../../src/generic/animateg.cpp
 	$(CXX) -c -o $@ $(ADVDLL_CXXFLAGS) $(CPPDEPS) $<
 
+ifeq ($(WXUNIV),1)
+$(OBJS)\advdll_animateg.o: ../../src/generic/animateg.cpp
+	$(CXX) -c -o $@ $(ADVDLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
 $(OBJS)\advdll_taskbarcmn.o: ../../src/common/taskbarcmn.cpp
 	$(CXX) -c -o $@ $(ADVDLL_CXXFLAGS) $(CPPDEPS) $<
 
@@ -12291,6 +12314,11 @@ $(OBJS)\advlib_wizard.o: ../../src/generic/wizard.cpp
 
 $(OBJS)\advlib_animateg.o: ../../src/generic/animateg.cpp
 	$(CXX) -c -o $@ $(ADVLIB_CXXFLAGS) $(CPPDEPS) $<
+
+ifeq ($(WXUNIV),1)
+$(OBJS)\advlib_animateg.o: ../../src/generic/animateg.cpp
+	$(CXX) -c -o $@ $(ADVLIB_CXXFLAGS) $(CPPDEPS) $<
+endif
 
 $(OBJS)\advlib_taskbarcmn.o: ../../src/common/taskbarcmn.cpp
 	$(CXX) -c -o $@ $(ADVLIB_CXXFLAGS) $(CPPDEPS) $<
