@@ -892,6 +892,7 @@ MustHaveApp(wxPyPreviewFrame);
 class wxPyPreviewFrame : public wxPreviewFrame
 {
 public:
+    %disownarg(wxPrintPreview*);
     %pythonAppend wxPyPreviewFrame "self._setCallbackInfo(self, PyPreviewFrame); self._setOORInfo(self)"
 
     wxPyPreviewFrame(wxPrintPreview* preview, wxFrame* parent,
