@@ -395,7 +395,7 @@ wxMacCoreGraphicsPenData::wxMacCoreGraphicsPenData( wxGraphicsRenderer* renderer
                 if ( bmp && bmp->Ok() )
                 {
                     m_colorSpace.Set( CGColorSpaceCreatePattern( NULL ) );
-                    m_pattern.Set( *( new ImagePattern( bmp , CGAffineTransformMakeTranslation( 0,0 ) ) ) );
+                    m_pattern.Set( *( new ImagePattern( bmp , CGAffineTransformMakeScale( 1,-1 ) ) ) );
                     m_patternColorComponents = new CGFloat[1] ;
                     m_patternColorComponents[0] = 1.0;
                     m_isPattern = true;
@@ -407,7 +407,7 @@ wxMacCoreGraphicsPenData::wxMacCoreGraphicsPenData( wxGraphicsRenderer* renderer
             {
                 m_isPattern = true;
                 m_colorSpace.Set( CGColorSpaceCreatePattern( wxMacGetGenericRGBColorSpace() ) );
-                m_pattern.Set( *( new HatchPattern( pen.GetStyle() , CGAffineTransformMakeTranslation( 0,0 ) ) ) );
+                m_pattern.Set( *( new HatchPattern( pen.GetStyle() , CGAffineTransformMakeScale( 1,-1 ) ) ) );
                 m_patternColorComponents = new CGFloat[4] ;
                 m_patternColorComponents[0] = pen.GetColour().Red() / 255.0;
                 m_patternColorComponents[1] = pen.GetColour().Green() / 255.0;
@@ -450,6 +450,8 @@ void wxMacCoreGraphicsPenData::Apply( wxGraphicsContext* context )
 
     if ( m_isPattern )
     {
+        CGAffineTransform matrix = CGContextGetCTM( cg );
+        CGContextSetPatternPhase( cg, CGSizeMake(matrix.tx, matrix.ty) );
         CGContextSetStrokeColorSpace( cg , m_colorSpace );
         CGContextSetStrokePattern( cg, m_pattern , m_patternColorComponents );
     }
@@ -531,7 +533,7 @@ wxMacCoreGraphicsBrushData::wxMacCoreGraphicsBrushData(wxGraphicsRenderer* rende
     {
         m_isPattern = true;
         m_colorSpace.Set( CGColorSpaceCreatePattern( wxMacGetGenericRGBColorSpace() ) );
-        m_pattern.Set( *( new HatchPattern( brush.GetStyle() , CGAffineTransformMakeTranslation( 0,0 ) ) ) );
+        m_pattern.Set( *( new HatchPattern( brush.GetStyle() , CGAffineTransformMakeScale( 1,-1 ) ) ) );
 
         m_patternColorComponents = new CGFloat[4] ;
         m_patternColorComponents[0] = brush.GetColour().Red() / 255.0;
@@ -549,7 +551,7 @@ wxMacCoreGraphicsBrushData::wxMacCoreGraphicsBrushData(wxGraphicsRenderer* rende
             m_patternColorComponents = new CGFloat[1] ;
             m_patternColorComponents[0] = 1.0;
             m_colorSpace.Set( CGColorSpaceCreatePattern( NULL ) );
-            m_pattern.Set( *( new ImagePattern( bmp , CGAffineTransformMakeTranslation( 0,0 ) ) ) );
+            m_pattern.Set( *( new ImagePattern( bmp , CGAffineTransformMakeScale( 1,-1 ) ) ) );
         }
     }
 }
@@ -582,11 +584,14 @@ void wxMacCoreGraphicsBrushData::Apply( wxGraphicsContext* context )
 
     if ( m_isShading )
     {
+        // nothing to set as shades are processed by clipping using the path and filling
     }
     else
     {
         if ( m_isPattern )
         {
+            CGAffineTransform matrix = CGContextGetCTM( cg );
+            CGContextSetPatternPhase( cg, CGSizeMake(matrix.tx, matrix.ty) );
             CGContextSetFillColorSpace( cg , m_colorSpace );
             CGContextSetFillPattern( cg, m_pattern , m_patternColorComponents );
         }
@@ -1646,28 +1651,8 @@ void wxMacCoreGraphicsContext::DrawText( const wxString &str, wxDouble x, wxDoub
     wxASSERT_MSG( status == noErr , wxT("couldn't measure the rotated text") );
 
     Rect rect;
-/*
-    // TODO
-    if ( m_backgroundMode == wxSOLID )
-    {
-        wxGraphicsPath* path = m_graphicContext->CreatePath();
-        path->MoveToPoint( drawX , drawY );
-        path->AddLineToPoint(
-            (int) (drawX + sin(angle / RAD2DEG) * FixedToInt(ascent + descent)) ,
-            (int) (drawY + cos(angle / RAD2DEG) * FixedToInt(ascent + descent)) );
-        path->AddLineToPoint(
-            (int) (drawX + sin(angle / RAD2DEG) * FixedToInt(ascent + descent ) + cos(angle / RAD2DEG) * FixedToInt(textAfter)) ,
-            (int) (drawY + cos(angle / RAD2DEG) * FixedToInt(ascent + descent) - sin(angle / RAD2DEG) * FixedToInt(textAfter)) );
-        path->AddLineToPoint(
-            (int) (drawX + cos(angle / RAD2DEG) * FixedToInt(textAfter)) ,
-            (int) (drawY - sin(angle / RAD2DEG) * FixedToInt(textAfter)) );
-
-        m_graphicContext->FillPath( path , m_textBackgroundColour );
-        delete path;
-    }
-*/
-    x += (int)(sin(angle / RAD2DEG) * FixedToInt(ascent));
-    y += (int)(cos(angle / RAD2DEG) * FixedToInt(ascent));
+    x += (int)(sin(angle) * FixedToInt(ascent));
+    y += (int)(cos(angle) * FixedToInt(ascent));
 
     status = ::ATSUMeasureTextImage( atsuLayout, kATSUFromTextBeginning, kATSUToTextEnd,
         IntToFixed(x) , IntToFixed(y) , &rect );
