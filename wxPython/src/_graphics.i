@@ -807,7 +807,8 @@ this context.", "");
         }
 
         DocStr(DrawRotatedText,
-               "", "");
+               "Draws a text string at the defined position, at the specified angle,
+which is given in radians.", "");
         void DrawRotatedText(  const wxString &str, wxDouble x, wxDouble y, wxDouble angle,
                                const wxGraphicsBrush& backgroundBrush = wxNullGraphicsBrush )
         {
