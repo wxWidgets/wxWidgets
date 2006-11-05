@@ -146,6 +146,9 @@ FNB_DROPDOWN_TABS_LIST = 16384
 FNB_ALLOW_FOREIGN_DND = 32768
 """Allows drag 'n' drop operations between different L{FlatNotebook}s"""
 
+FNB_HIDE_ON_SINGLE_TAB = 65536
+"""Hides the Page Container when there is one or fewer tabs"""
+
 VERTICAL_BORDER_PADDING = 4
 
 # Button size is a 16x16 xpm bitmap
@@ -181,7 +184,7 @@ FNB_DROP_DOWN_ARROW = 6 # On the drop down arrow button
 FNB_NOWHERE = 0         # Anywhere else
 """Indicates mouse coordinates not on any tab of the notebook"""
 
-FNB_DEFAULT_STYLE = FNB_MOUSE_MIDDLE_CLOSES_TABS
+FNB_DEFAULT_STYLE = FNB_MOUSE_MIDDLE_CLOSES_TABS | FNB_HIDE_ON_SINGLE_TAB
 """L{FlatNotebook} default style"""
 
 # FlatNotebook Events:
@@ -3327,6 +3330,10 @@ class FlatNotebook(wx.Panel):
             # refreshing the tab container is not enough
             self.SetSelection(self._pages._iActivePage)
 
+        if not self._pages.HasFlag(FNB_HIDE_ON_SINGLE_TAB):
+            #For Redrawing the Tabs once you remove the Hide tyle
+            self._pages._ReShow()
+
 
     def RemovePage(self, page):
         """ Deletes the specified page, without deleting the associated window. """
@@ -3579,12 +3586,24 @@ class PageContainer(wx.Panel):
         pass
 
     
+    def _ReShow(self):
+        """ Handles the Redraw of the tabs when the FNB_HIDE_ON_SINGLE_TAB has been removed """
+        self.Show()
+        self.GetParent()._mainSizer.Layout()
+        self.Refresh()
+
+
     def OnPaint(self, event):
         """ Handles the wx.EVT_PAINT event for L{PageContainer}."""
 
         dc = wx.BufferedPaintDC(self)
         renderer = self._mgr.GetRenderer(self.GetParent().GetWindowStyleFlag())
         renderer.DrawTabs(self, dc)
+
+        if self.HasFlag(FNB_HIDE_ON_SINGLE_TAB) and len(self._pagesInfoVec) <= 1:
+            self.Hide()
+            self.GetParent()._mainSizer.Layout()
+            self.Refresh()
 
 
     def AddPage(self, caption, selected=True, imgindex=-1):

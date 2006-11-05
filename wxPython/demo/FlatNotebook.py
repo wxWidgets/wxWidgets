@@ -58,6 +58,7 @@ MENU_DISABLE_TAB = wx.NewId()
 MENU_ENABLE_DRAG_N_DROP = wx.NewId()
 MENU_DCLICK_CLOSES_TAB = wx.NewId()
 MENU_USE_VC8_STYLE = wx.NewId()
+MENU_HIDE_ON_SINGLE_TAB = wx.NewId()
 
 MENU_SET_ACTIVE_TEXT_COLOR = wx.NewId()
 MENU_DRAW_TAB_X = wx.NewId()
@@ -196,6 +197,11 @@ class FlatNotebookDemo(wx.Frame):
 
         self.Bind(wx.EVT_MENU_RANGE, self.OnSelectColor, id=MENU_SELECT_GRADIENT_COLOR_FROM,
                   id2=MENU_SELECT_GRADIENT_COLOR_BORDER)        
+
+        item = wx.MenuItem(self._editMenu, MENU_HIDE_ON_SINGLE_TAB, "Hide Page Container when only one Tab",
+                           "Hide Page Container when only one Tab", wx.ITEM_CHECK)
+        self.Bind(wx.EVT_MENU, self.OnStyle, item)
+        self._editMenu.AppendItem(item)
 
         item = wx.MenuItem(self._editMenu, MENU_HIDE_NAV_BUTTONS, "Hide Navigation Buttons",
                            "Hide Navigation Buttons", wx.ITEM_CHECK)
@@ -372,6 +378,15 @@ class FlatNotebookDemo(wx.Frame):
                 style &= ~fnb.FNB_NO_NAV_BUTTONS
                 style &= ~fnb.FNB_DROPDOWN_TABS_LIST
             
+            self.book.SetWindowStyleFlag(style)
+
+        elif eventid == MENU_HIDE_ON_SINGLE_TAB:
+            if event.IsChecked():
+                # Hide the navigation buttons
+                style |= fnb.FNB_HIDE_ON_SINGLE_TAB
+            else:
+                style &= ~(fnb.FNB_HIDE_ON_SINGLE_TAB)
+
             self.book.SetWindowStyleFlag(style)
 
         elif eventid == MENU_HIDE_X:

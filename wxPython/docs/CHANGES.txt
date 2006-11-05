@@ -36,6 +36,13 @@ wx.lib.customtreectrl: A patch from Frame Niessink which adds an
 additional style that (un)checks a parent when all children are
 (un)checked, i.e. TR_AUTO_CHECK_PARENT.
 
+wx.animate.AnimationCtrl fixed to display inactive bitmap at start
+(patch 1590192)
+
+Patch from Dj Gilcrease adding the FNB_HIDE_ON_SINGLE_TAB flag for
+wx.lib.flatnotebook. 
+
+
 
 
 
