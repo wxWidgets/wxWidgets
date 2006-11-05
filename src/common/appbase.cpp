@@ -280,15 +280,6 @@ void wxAppConsole::ProcessPendingEvents()
 
     // iterate until the list becomes empty
     wxList::compatibility_iterator node = wxPendingEvents->GetFirst();
-    
-    while (node && 
-           ((wxEvtHandler *)node->GetData())->IsEventHandlingInProgress() &&
-           ((wxEvtHandler *)node->GetData())->IsReentranceAllowed() == false)
-    {   
-        // skip over event
-        node = node->GetNext();
-    }
-    
     while (node)
     {
         wxEvtHandler *handler = (wxEvtHandler *)node->GetData();
@@ -303,14 +294,6 @@ void wxAppConsole::ProcessPendingEvents()
         wxENTER_CRIT_SECT( *wxPendingEventsLocker );
 
         node = wxPendingEvents->GetFirst();
-        
-        while (node && 
-               ((wxEvtHandler *)node->GetData())->IsEventHandlingInProgress() &&
-               ((wxEvtHandler *)node->GetData())->IsReentranceAllowed() == false)
-        {   
-            // skip over event
-            node = node->GetNext();
-        }
     }
 
     wxLEAVE_CRIT_SECT( *wxPendingEventsLocker );

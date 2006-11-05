@@ -2456,11 +2456,6 @@ public:
     void SetClientData( void *data ) { DoSetClientData(data); }
     void *GetClientData() const { return DoGetClientData(); }
 
-    // reentrance guard
-    void AllowReentrance( bool allow = true ) { m_reentranceAllowed = allow; }
-    bool IsReentranceAllowed()                { return m_reentranceAllowed; }
-    bool IsEventHandlingInProgress()          { return m_eventHandlingInProgress; } 
-    
     // check if the given event table entry matches this event and call the
     // handler if it does
     //
@@ -2530,9 +2525,6 @@ protected:
 #  endif
 #endif
 
-    bool                m_reentranceAllowed;          // Reentrance is allowed for this handler?
-    bool                m_eventHandlingInProgress;    // Eventhandling is in progress?
-    
     // Is event handler enabled?
     bool                m_enabled;
 

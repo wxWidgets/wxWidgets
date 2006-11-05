@@ -1011,9 +1011,6 @@ wxEvtHandler::wxEvtHandler()
     m_eventsLocker = new wxCriticalSection;
 #  endif
 #endif
-    // reentrace not allowed by default
-    m_reentranceAllowed = false;
-    m_eventHandlingInProgress = false;
     
     // no client data (yet)
     m_clientData = NULL;
@@ -1140,9 +1137,6 @@ void wxEvtHandler::ProcessPendingEvents()
     wxCHECK_RET( m_pendingEvents,
                  wxT("Please call wxApp::ProcessPendingEvents() instead") );
     
-    // eventhandling is now in progess
-    m_eventHandlingInProgress = true;
-
     wxENTER_CRIT_SECT( Lock() );
 
     // we leave the loop once we have processed all events that were present at
@@ -1175,9 +1169,6 @@ void wxEvtHandler::ProcessPendingEvents()
     }
 
     wxLEAVE_CRIT_SECT( Lock() );
-    
-    // eventhandling no longer in progess
-    m_eventHandlingInProgress = false;
 }
 
 /*
