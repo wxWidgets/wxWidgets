@@ -3465,6 +3465,17 @@ void wxAuiManager::OnSize(wxSizeEvent& event)
     {
         DoFrameLayout();
         Repaint();
+        
+#if wxUSE_MDI
+        if (m_frame->IsKindOf(CLASSINFO(wxMDIParentFrame)))
+        {
+            // for MDI parent frames, this event must not
+            // be "skipped".  In other words, the parent frame
+            // must not be allowed to resize the client window
+            // after we are finished processing sizing changes
+            return;
+        }
+#endif
     }
     event.Skip();
 }
