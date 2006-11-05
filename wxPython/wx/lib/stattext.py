@@ -137,7 +137,10 @@ class GenStaticText(wx.PyControl):
             dc.SetBackground(backBrush)
             dc.Clear()
 
-        dc.SetTextForeground(self.GetForegroundColour())
+        if self.IsEnabled():
+             dc.SetTextForeground(self.GetForegroundColour())
+         else:
+             dc.SetTextForeground(wx.SystemSettings.GetColour(wx.SYS_COLOUR_GRAYTEXT))
         dc.SetFont(self.GetFont())
         label = self.GetLabel()
         style = self.GetWindowStyleFlag()
