@@ -6,6 +6,8 @@
 # a short(er) DLL name from it.
 
 dllFile="$1"
+dirName=`echo $dllFile | sed 's-\(.*[/\\]\)[^/\\]*$-\1-'`
+dllFile=`echo $dllFile | sed 's-.*[/\\]\([^/\\]*\)$-\1-'`
 case $dllFile in
 *wx_base_*)
     dllFile=`echo $dllFile | sed 's/base_\(...\)/b\1/'`
@@ -26,5 +28,5 @@ case $dllFile in
     ;;
 esac
 dllFile="`echo $dllFile | sed 's/\.//' | sed 's/_//' | sed 's/-//'`"
-echo $dllFile
+echo $dirName$dllFile
 exit 0
