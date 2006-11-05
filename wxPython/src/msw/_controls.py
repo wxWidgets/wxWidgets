@@ -6965,7 +6965,7 @@ class FontPickerCtrl(PickerBase):
     __repr__ = _swig_repr
     def __init__(self, *args, **kwargs): 
         """
-        __init__(self, Window parent, int id=-1, Font initial=*wxNORMAL_FONT, 
+        __init__(self, Window parent, int id=-1, Font initial=wxNullFont, 
             Point pos=DefaultPosition, Size size=DefaultSize, 
             long style=FNTP_DEFAULT_STYLE, Validator validator=DefaultValidator, 
             String name=FontPickerCtrlNameStr) -> FontPickerCtrl
@@ -6975,7 +6975,7 @@ class FontPickerCtrl(PickerBase):
 
     def Create(*args, **kwargs):
         """
-        Create(self, Window parent, int id=-1, Font initial=*wxNORMAL_FONT, 
+        Create(self, Window parent, int id=-1, Font initial=wxNullFont, 
             Point pos=DefaultPosition, Size size=DefaultSize, 
             long style=FNTP_DEFAULT_STYLE, Validator validator=DefaultValidator, 
             String name=FontPickerCtrlNameStr) -> bool

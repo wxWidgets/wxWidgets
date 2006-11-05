@@ -44856,7 +44856,7 @@ SWIGINTERN PyObject *_wrap_new_FontPickerCtrl(PyObject *SWIGUNUSEDPARM(self), Py
   PyObject *resultobj = 0;
   wxWindow *arg1 = (wxWindow *) 0 ;
   int arg2 = (int) -1 ;
-  wxFont const &arg3_defvalue = *wxNORMAL_FONT ;
+  wxFont const &arg3_defvalue = wxNullFont ;
   wxFont *arg3 = (wxFont *) &arg3_defvalue ;
   wxPoint const &arg4_defvalue = wxDefaultPosition ;
   wxPoint *arg4 = (wxPoint *) &arg4_defvalue ;
@@ -44998,7 +44998,7 @@ SWIGINTERN PyObject *_wrap_FontPickerCtrl_Create(PyObject *SWIGUNUSEDPARM(self),
   wxFontPickerCtrl *arg1 = (wxFontPickerCtrl *) 0 ;
   wxWindow *arg2 = (wxWindow *) 0 ;
   int arg3 = (int) -1 ;
-  wxFont const &arg4_defvalue = *wxNORMAL_FONT ;
+  wxFont const &arg4_defvalue = wxNullFont ;
   wxFont *arg4 = (wxFont *) &arg4_defvalue ;
   wxPoint const &arg5_defvalue = wxDefaultPosition ;
   wxPoint *arg5 = (wxPoint *) &arg5_defvalue ;

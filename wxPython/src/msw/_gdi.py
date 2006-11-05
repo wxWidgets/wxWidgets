@@ -5494,6 +5494,17 @@ class GraphicsContext(GraphicsObject):
         return val
 
     Create = staticmethod(Create)
+    def CreateMeasuringContext(*args):
+        """
+        CreateMeasuringContext() -> GraphicsContext
+
+        Create a lightwieght context that can be used for measuring text only.
+        """
+        val = _gdi_.GraphicsContext_CreateMeasuringContext(*args)
+        val.__dc = args[0] # save a ref so the dc will not be deleted before self
+        return val
+
+    CreateMeasuringContext = staticmethod(CreateMeasuringContext)
     def CreateFromNative(*args, **kwargs):
         """
         CreateFromNative(void context) -> GraphicsContext
@@ -5729,18 +5740,14 @@ class GraphicsContext(GraphicsObject):
 
     def DrawText(*args, **kwargs):
         """
-        DrawText(self, String str, Double x, Double y)
+        DrawText(self, String str, Double x, Double y, GraphicsBrush backgroundBrush=NullGraphicsBrush)
 
-        Draws a text at the defined position.
+        Draws a text string at the defined position.
         """
         return _gdi_.GraphicsContext_DrawText(*args, **kwargs)
 
     def DrawRotatedText(*args, **kwargs):
-        """
-        DrawRotatedText(self, String str, Double x, Double y, Double angle)
-
-        Draws a text at the defined position, at the given angle.
-        """
+        """DrawRotatedText(self, String str, Double x, Double y, Double angle, GraphicsBrush backgroundBrush=NullGraphicsBrush)"""
         return _gdi_.GraphicsContext_DrawRotatedText(*args, **kwargs)
 
     def GetFullTextExtent(*args, **kwargs):
@@ -5875,6 +5882,16 @@ def GraphicsContext_Create(*args):
   val.__dc = args[0] # save a ref so the dc will not be deleted before self
   return val
 
+def GraphicsContext_CreateMeasuringContext(*args):
+  """
+    GraphicsContext_CreateMeasuringContext() -> GraphicsContext
+
+    Create a lightwieght context that can be used for measuring text only.
+    """
+  val = _gdi_.GraphicsContext_CreateMeasuringContext(*args)
+  val.__dc = args[0] # save a ref so the dc will not be deleted before self
+  return val
+
 def GraphicsContext_CreateFromNative(*args, **kwargs):
   """
     GraphicsContext_CreateFromNative(void context) -> GraphicsContext
@@ -5911,6 +5928,10 @@ class GraphicsRenderer(_core.Object):
         CreateContext(self, Window window) -> GraphicsContext
         """
         return _gdi_.GraphicsRenderer_CreateContext(*args)
+
+    def CreateMeasuringContext(*args, **kwargs):
+        """CreateMeasuringContext(self) -> GraphicsContext"""
+        return _gdi_.GraphicsRenderer_CreateMeasuringContext(*args, **kwargs)
 
     def CreateContextFromNativeContext(*args, **kwargs):
         """CreateContextFromNativeContext(self, void context) -> GraphicsContext"""

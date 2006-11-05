@@ -3758,18 +3758,6 @@ class EvtHandler(Object):
         """ProcessPendingEvents(self)"""
         return _core_.EvtHandler_ProcessPendingEvents(*args, **kwargs)
 
-    def AllowReentrance(*args, **kwargs):
-        """AllowReentrance(self, bool allow=True)"""
-        return _core_.EvtHandler_AllowReentrance(*args, **kwargs)
-
-    def IsReentranceAllowed(*args, **kwargs):
-        """IsReentranceAllowed(self) -> bool"""
-        return _core_.EvtHandler_IsReentranceAllowed(*args, **kwargs)
-
-    def IsEventHandlingInProgress(*args, **kwargs):
-        """IsEventHandlingInProgress(self) -> bool"""
-        return _core_.EvtHandler_IsEventHandlingInProgress(*args, **kwargs)
-
     def Connect(*args, **kwargs):
         """Connect(self, int id, int lastId, int eventType, PyObject func)"""
         return _core_.EvtHandler_Connect(*args, **kwargs)

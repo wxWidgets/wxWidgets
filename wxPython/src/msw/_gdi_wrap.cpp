@@ -3883,6 +3883,18 @@ public:
 
 #endif
 
+SWIGINTERN void wxGraphicsContext_DrawText(wxGraphicsContext *self,wxString const &str,wxDouble x,wxDouble y,wxGraphicsBrush const &backgroundBrush=wxNullGraphicsBrush){
+            if ( !backgroundBrush.IsNull() )
+                self->DrawText(str, x, y, backgroundBrush);
+            else
+                self->DrawText(str, x, y);
+        }
+SWIGINTERN void wxGraphicsContext_DrawRotatedText(wxGraphicsContext *self,wxString const &str,wxDouble x,wxDouble y,wxDouble angle,wxGraphicsBrush const &backgroundBrush=wxNullGraphicsBrush){
+            if ( !backgroundBrush.IsNull() )
+                self->DrawText(str, x, y, angle, backgroundBrush);
+            else
+                self->DrawText(str, x, y, angle);
+        }
 SWIGINTERN PyObject *wxGraphicsContext_GetTextExtent(wxGraphicsContext *self,wxString const &text){
             wxDouble width = 0.0,
                      height = 0.0;
@@ -28365,6 +28377,22 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_GraphicsContext_CreateMeasuringContext(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxGraphicsContext *result = 0 ;
+  
+  if (!SWIG_Python_UnpackTuple(args,"GraphicsContext_CreateMeasuringContext",0,0,0)) SWIG_fail;
+  {
+    result = (wxGraphicsContext *)wxGraphicsContext::Create();
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_wxGraphicsContext, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_GraphicsContext_CreateFromNative(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   void *arg1 = (void *) 0 ;
@@ -29704,6 +29732,8 @@ SWIGINTERN PyObject *_wrap_GraphicsContext_DrawText(PyObject *SWIGUNUSEDPARM(sel
   wxString *arg2 = 0 ;
   wxDouble arg3 ;
   wxDouble arg4 ;
+  wxGraphicsBrush const &arg5_defvalue = wxNullGraphicsBrush ;
+  wxGraphicsBrush *arg5 = (wxGraphicsBrush *) &arg5_defvalue ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   bool temp2 = false ;
@@ -29711,15 +29741,18 @@ SWIGINTERN PyObject *_wrap_GraphicsContext_DrawText(PyObject *SWIGUNUSEDPARM(sel
   int ecode3 = 0 ;
   double val4 ;
   int ecode4 = 0 ;
+  void *argp5 = 0 ;
+  int res5 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
   PyObject * obj3 = 0 ;
+  PyObject * obj4 = 0 ;
   char *  kwnames[] = {
-    (char *) "self",(char *) "str",(char *) "x",(char *) "y", NULL 
+    (char *) "self",(char *) "str",(char *) "x",(char *) "y",(char *) "backgroundBrush", NULL 
   };
   
-  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOO:GraphicsContext_DrawText",kwnames,&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOO|O:GraphicsContext_DrawText",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxGraphicsContext, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "GraphicsContext_DrawText" "', expected argument " "1"" of type '" "wxGraphicsContext *""'"); 
@@ -29740,8 +29773,18 @@ SWIGINTERN PyObject *_wrap_GraphicsContext_DrawText(PyObject *SWIGUNUSEDPARM(sel
     SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "GraphicsContext_DrawText" "', expected argument " "4"" of type '" "wxDouble""'");
   } 
   arg4 = static_cast< wxDouble >(val4);
+  if (obj4) {
+    res5 = SWIG_ConvertPtr(obj4, &argp5, SWIGTYPE_p_wxGraphicsBrush,  0  | 0);
+    if (!SWIG_IsOK(res5)) {
+      SWIG_exception_fail(SWIG_ArgError(res5), "in method '" "GraphicsContext_DrawText" "', expected argument " "5"" of type '" "wxGraphicsBrush const &""'"); 
+    }
+    if (!argp5) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "GraphicsContext_DrawText" "', expected argument " "5"" of type '" "wxGraphicsBrush const &""'"); 
+    }
+    arg5 = reinterpret_cast< wxGraphicsBrush * >(argp5);
+  }
   {
-    (arg1)->DrawText((wxString const &)*arg2,arg3,arg4);
+    wxGraphicsContext_DrawText(arg1,(wxString const &)*arg2,arg3,arg4,(wxGraphicsBrush const &)*arg5);
     if (PyErr_Occurred()) SWIG_fail;
   }
   resultobj = SWIG_Py_Void();
@@ -29766,6 +29809,8 @@ SWIGINTERN PyObject *_wrap_GraphicsContext_DrawRotatedText(PyObject *SWIGUNUSEDP
   wxDouble arg3 ;
   wxDouble arg4 ;
   wxDouble arg5 ;
+  wxGraphicsBrush const &arg6_defvalue = wxNullGraphicsBrush ;
+  wxGraphicsBrush *arg6 = (wxGraphicsBrush *) &arg6_defvalue ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   bool temp2 = false ;
@@ -29775,16 +29820,19 @@ SWIGINTERN PyObject *_wrap_GraphicsContext_DrawRotatedText(PyObject *SWIGUNUSEDP
   int ecode4 = 0 ;
   double val5 ;
   int ecode5 = 0 ;
+  void *argp6 = 0 ;
+  int res6 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
   PyObject * obj3 = 0 ;
   PyObject * obj4 = 0 ;
+  PyObject * obj5 = 0 ;
   char *  kwnames[] = {
-    (char *) "self",(char *) "str",(char *) "x",(char *) "y",(char *) "angle", NULL 
+    (char *) "self",(char *) "str",(char *) "x",(char *) "y",(char *) "angle",(char *) "backgroundBrush", NULL 
   };
   
-  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOOO:GraphicsContext_DrawRotatedText",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4)) SWIG_fail;
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOOO|O:GraphicsContext_DrawRotatedText",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxGraphicsContext, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "GraphicsContext_DrawRotatedText" "', expected argument " "1"" of type '" "wxGraphicsContext *""'"); 
@@ -29810,8 +29858,18 @@ SWIGINTERN PyObject *_wrap_GraphicsContext_DrawRotatedText(PyObject *SWIGUNUSEDP
     SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "GraphicsContext_DrawRotatedText" "', expected argument " "5"" of type '" "wxDouble""'");
   } 
   arg5 = static_cast< wxDouble >(val5);
+  if (obj5) {
+    res6 = SWIG_ConvertPtr(obj5, &argp6, SWIGTYPE_p_wxGraphicsBrush,  0  | 0);
+    if (!SWIG_IsOK(res6)) {
+      SWIG_exception_fail(SWIG_ArgError(res6), "in method '" "GraphicsContext_DrawRotatedText" "', expected argument " "6"" of type '" "wxGraphicsBrush const &""'"); 
+    }
+    if (!argp6) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "GraphicsContext_DrawRotatedText" "', expected argument " "6"" of type '" "wxGraphicsBrush const &""'"); 
+    }
+    arg6 = reinterpret_cast< wxGraphicsBrush * >(argp6);
+  }
   {
-    (arg1)->DrawText((wxString const &)*arg2,arg3,arg4,arg5);
+    wxGraphicsContext_DrawRotatedText(arg1,(wxString const &)*arg2,arg3,arg4,arg5,(wxGraphicsBrush const &)*arg6);
     if (PyErr_Occurred()) SWIG_fail;
   }
   resultobj = SWIG_Py_Void();
@@ -30704,6 +30762,32 @@ check_1:
   
 fail:
   SWIG_SetErrorMsg(PyExc_NotImplementedError,"No matching function for overloaded 'GraphicsRenderer_CreateContext'");
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_GraphicsRenderer_CreateMeasuringContext(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxGraphicsRenderer *arg1 = (wxGraphicsRenderer *) 0 ;
+  wxGraphicsContext *result = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxGraphicsRenderer, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "GraphicsRenderer_CreateMeasuringContext" "', expected argument " "1"" of type '" "wxGraphicsRenderer *""'"); 
+  }
+  arg1 = reinterpret_cast< wxGraphicsRenderer * >(argp1);
+  {
+    result = (wxGraphicsContext *)(arg1)->CreateMeasuringContext();
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_wxGraphicsContext, 0 |  0 );
+  return resultobj;
+fail:
   return NULL;
 }
 
@@ -39743,6 +39827,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"GraphicsPath_swiginit", GraphicsPath_swiginit, METH_VARARGS, NULL},
 	 { (char *)"delete_GraphicsContext", (PyCFunction)_wrap_delete_GraphicsContext, METH_O, NULL},
 	 { (char *)"GraphicsContext_Create", _wrap_GraphicsContext_Create, METH_VARARGS, NULL},
+	 { (char *)"GraphicsContext_CreateMeasuringContext", (PyCFunction)_wrap_GraphicsContext_CreateMeasuringContext, METH_NOARGS, NULL},
 	 { (char *)"GraphicsContext_CreateFromNative", (PyCFunction) _wrap_GraphicsContext_CreateFromNative, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"GraphicsContext_CreateFromNativeWindow", (PyCFunction) _wrap_GraphicsContext_CreateFromNativeWindow, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"GraphicsContext_CreatePath", (PyCFunction)_wrap_GraphicsContext_CreatePath, METH_O, NULL},
@@ -39789,6 +39874,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"delete_GraphicsRenderer", (PyCFunction)_wrap_delete_GraphicsRenderer, METH_O, NULL},
 	 { (char *)"GraphicsRenderer_GetDefaultRenderer", (PyCFunction)_wrap_GraphicsRenderer_GetDefaultRenderer, METH_NOARGS, NULL},
 	 { (char *)"GraphicsRenderer_CreateContext", _wrap_GraphicsRenderer_CreateContext, METH_VARARGS, NULL},
+	 { (char *)"GraphicsRenderer_CreateMeasuringContext", (PyCFunction)_wrap_GraphicsRenderer_CreateMeasuringContext, METH_O, NULL},
 	 { (char *)"GraphicsRenderer_CreateContextFromNativeContext", (PyCFunction) _wrap_GraphicsRenderer_CreateContextFromNativeContext, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"GraphicsRenderer_CreateContextFromNativeWindow", (PyCFunction) _wrap_GraphicsRenderer_CreateContextFromNativeWindow, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"GraphicsRenderer_CreatePath", (PyCFunction)_wrap_GraphicsRenderer_CreatePath, METH_O, NULL},
