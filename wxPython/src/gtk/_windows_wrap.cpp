@@ -30848,7 +30848,6 @@ SWIGINTERN PyObject *_wrap_new_PyPreviewFrame(PyObject *SWIGUNUSEDPARM(self), Py
   wxString const &arg7_defvalue = wxPyFrameNameStr ;
   wxString *arg7 = (wxString *) &arg7_defvalue ;
   wxPyPreviewFrame *result = 0 ;
-  void *argp1 = 0 ;
   int res1 = 0 ;
   void *argp2 = 0 ;
   int res2 = 0 ;
@@ -30870,11 +30869,10 @@ SWIGINTERN PyObject *_wrap_new_PyPreviewFrame(PyObject *SWIGUNUSEDPARM(self), Py
   };
   
   if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO|OOOO:new_PyPreviewFrame",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxPrintPreview, 0 |  0 );
+  res1 = SWIG_ConvertPtr(obj0, SWIG_as_voidptrptr(&arg1), SWIGTYPE_p_wxPrintPreview, SWIG_POINTER_DISOWN |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_PyPreviewFrame" "', expected argument " "1"" of type '" "wxPrintPreview *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_PyPreviewFrame" "', expected argument " "1"" of type '" "wxPrintPreview *""'");
   }
-  arg1 = reinterpret_cast< wxPrintPreview * >(argp1);
   res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_wxFrame, 0 |  0 );
   if (!SWIG_IsOK(res2)) {
     SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "new_PyPreviewFrame" "', expected argument " "2"" of type '" "wxFrame *""'"); 
@@ -31157,7 +31155,6 @@ SWIGINTERN PyObject *_wrap_new_PyPreviewControlBar(PyObject *SWIGUNUSEDPARM(self
   wxString const &arg7_defvalue = wxPyPanelNameStr ;
   wxString *arg7 = (wxString *) &arg7_defvalue ;
   wxPyPreviewControlBar *result = 0 ;
-  void *argp1 = 0 ;
   int res1 = 0 ;
   long val2 ;
   int ecode2 = 0 ;
@@ -31180,11 +31177,10 @@ SWIGINTERN PyObject *_wrap_new_PyPreviewControlBar(PyObject *SWIGUNUSEDPARM(self
   };
   
   if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO|OOOO:new_PyPreviewControlBar",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxPrintPreview, 0 |  0 );
+  res1 = SWIG_ConvertPtr(obj0, SWIG_as_voidptrptr(&arg1), SWIGTYPE_p_wxPrintPreview, SWIG_POINTER_DISOWN |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_PyPreviewControlBar" "', expected argument " "1"" of type '" "wxPrintPreview *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_PyPreviewControlBar" "', expected argument " "1"" of type '" "wxPrintPreview *""'");
   }
-  arg1 = reinterpret_cast< wxPrintPreview * >(argp1);
   ecode2 = SWIG_AsVal_long(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
     SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "new_PyPreviewControlBar" "', expected argument " "2"" of type '" "long""'");
@@ -31284,7 +31280,6 @@ SWIGINTERN PyObject *_wrap_PyPreviewControlBar_SetPrintPreview(PyObject *SWIGUNU
   wxPrintPreview *arg2 = (wxPrintPreview *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  void *argp2 = 0 ;
   int res2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
@@ -31298,11 +31293,10 @@ SWIGINTERN PyObject *_wrap_PyPreviewControlBar_SetPrintPreview(PyObject *SWIGUNU
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "PyPreviewControlBar_SetPrintPreview" "', expected argument " "1"" of type '" "wxPyPreviewControlBar *""'"); 
   }
   arg1 = reinterpret_cast< wxPyPreviewControlBar * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_wxPrintPreview, 0 |  0 );
+  res2 = SWIG_ConvertPtr(obj1, SWIG_as_voidptrptr(&arg2), SWIGTYPE_p_wxPrintPreview, SWIG_POINTER_DISOWN |  0 );
   if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "PyPreviewControlBar_SetPrintPreview" "', expected argument " "2"" of type '" "wxPrintPreview *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "PyPreviewControlBar_SetPrintPreview" "', expected argument " "2"" of type '" "wxPrintPreview *""'");
   }
-  arg2 = reinterpret_cast< wxPrintPreview * >(argp2);
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
     (arg1)->SetPrintPreview(arg2);

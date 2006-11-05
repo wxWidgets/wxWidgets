@@ -5622,7 +5622,12 @@ class GraphicsContext(GraphicsObject):
         return _gdi_.GraphicsContext_DrawText(*args, **kwargs)
 
     def DrawRotatedText(*args, **kwargs):
-        """DrawRotatedText(self, String str, Double x, Double y, Double angle, GraphicsBrush backgroundBrush=NullGraphicsBrush)"""
+        """
+        DrawRotatedText(self, String str, Double x, Double y, Double angle, GraphicsBrush backgroundBrush=NullGraphicsBrush)
+
+        Draws a text string at the defined position, at the specified angle,
+        which is given in radians.
+        """
         return _gdi_.GraphicsContext_DrawRotatedText(*args, **kwargs)
 
     def GetFullTextExtent(*args, **kwargs):
