@@ -628,6 +628,10 @@ public:
     static wxGraphicsContext* Create( const wxWindowDC& dc);
     static wxGraphicsContext* Create( wxWindow* window ) ;
 
+    DocDeclStrName(
+        static wxGraphicsContext* , Create(),
+        "Create a lightwieght context that can be used for measuring text only.", "",
+        CreateMeasuringContext);
     
     %newobject CreateFromNative;
     DocDeclStr(
@@ -790,15 +794,30 @@ this context.", "");
         "Draws the path by first filling and then stroking.", "");
 
 
-    DocDeclStr(
-        virtual void , DrawText( const wxString &str, wxDouble x, wxDouble y ),
-        "Draws a text at the defined position.", "");
+    %extend {
+        DocStr(DrawText,
+               "Draws a text string at the defined position.", "");
+        void DrawText( const wxString &str, wxDouble x, wxDouble y,
+                       const wxGraphicsBrush& backgroundBrush = wxNullGraphicsBrush )
+        {
+            if ( !backgroundBrush.IsNull() )
+                self->DrawText(str, x, y, backgroundBrush);
+            else
+                self->DrawText(str, x, y);
+        }
 
-
-    DocDeclStrName(
-        virtual void , DrawText( const wxString &str, wxDouble x, wxDouble y, wxDouble angle ),
-        "Draws a text at the defined position, at the given angle.", "",
-        DrawRotatedText);
+        DocStr(DrawRotatedText,
+               "", "");
+        void DrawRotatedText(  const wxString &str, wxDouble x, wxDouble y, wxDouble angle,
+                               const wxGraphicsBrush& backgroundBrush = wxNullGraphicsBrush )
+        {
+            if ( !backgroundBrush.IsNull() )
+                self->DrawText(str, x, y, angle, backgroundBrush);
+            else
+                self->DrawText(str, x, y, angle);
+        }
+    }
+   
 
 
     DocDeclAStrName(
@@ -938,6 +957,9 @@ public :
     %newobject CreateContext;
     virtual wxGraphicsContext * CreateContext( const wxWindowDC& dc) ;
     virtual wxGraphicsContext * CreateContext( wxWindow* window );
+    
+    // create a context that can be used for measuring texts only, no drawing allowed
+    virtual wxGraphicsContext * CreateMeasuringContext();
     
     %newobject CreateContextFromNativeContext;
     virtual wxGraphicsContext * CreateContextFromNativeContext( void * context );
