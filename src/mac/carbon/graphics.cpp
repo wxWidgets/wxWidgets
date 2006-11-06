@@ -1275,7 +1275,12 @@ void wxMacCoreGraphicsContext::EnsureIsValid()
 		m_releaseContext = true;
 		if ( !HIShapeIsEmpty(m_clipRgn) )
 		{
-			HIShapeReplacePathInCGContext( m_clipRgn, m_cgContext );
+            // the clip region is in device coordinates, so we convert this again to user coordinates
+            wxMacCFRefHolder<HIMutableShapeRef> hishape ;
+            hishape.Set( HIShapeCreateMutableCopy( m_clipRgn ) );
+            CGPoint transformedOrigin = CGPointApplyAffineTransform( CGPointZero,m_windowTransform);
+            HIShapeOffset( hishape, -transformedOrigin.x, -transformedOrigin.y );
+			HIShapeReplacePathInCGContext( hishape, m_cgContext );
 			CGContextClip( m_cgContext );
 		}
 		CGContextSaveGState( m_cgContext );
@@ -1294,7 +1299,15 @@ void wxMacCoreGraphicsContext::Clip( const wxRegion &region )
     }
     else
     {
-        m_clipRgn.Set(HIShapeCreateWithQDRgn( (RgnHandle) region.GetWXHRGN() ));
+        // this offsetting to device coords is not really correct, but since we cannot apply affine transforms
+        // to regions we try at least to have correct translations
+        wxMacCFRefHolder<HIShapeRef> hishape ;
+        hishape.Set( HIShapeCreateWithQDRgn( (RgnHandle) region.GetWXHRGN() ));
+        HIMutableShapeRef mutableShape = HIShapeCreateMutableCopy( hishape );
+        
+        CGPoint transformedOrigin = CGPointApplyAffineTransform( CGPointZero, m_windowTransform );
+        HIShapeOffset( mutableShape, transformedOrigin.x, transformedOrigin.y );
+        m_clipRgn.Set(mutableShape);
     }
 }
 
@@ -1308,6 +1321,9 @@ void wxMacCoreGraphicsContext::Clip( wxDouble x, wxDouble y, wxDouble w, wxDoubl
     }
     else
     {
+        // the clipping itself must be stored as device coordinates, otherwise 
+        // we cannot apply it back correctly
+        r.origin= CGPointApplyAffineTransform( r.origin, m_windowTransform );
         m_clipRgn.Set(HIShapeCreateWithRect(&r));
     }
 }
