@@ -46704,9 +46704,9 @@ _ACEOF
 fi
 
 if test "$wxUSE_DIALUP_MANAGER" = "yes"; then
-    if test "$wxUSE_MAC" = 1 -o "$wxUSE_COCOA" = 1 ; then
-        { echo "$as_me:$LINENO: WARNING: Dialup manager not yet supported under Mac OS X... disabled" >&5
-echo "$as_me: WARNING: Dialup manager not yet supported under Mac OS X... disabled" >&2;}
+    if test "$wxUSE_MAC" = 1 -o "$wxUSE_COCOA" = 1 -o "$wxUSE_MGL" = 1; then
+        { echo "$as_me:$LINENO: WARNING: Dialup manager not supported on this platform ... disabled" >&5
+echo "$as_me: WARNING: Dialup manager not supported on this platform... disabled" >&2;}
     else
         cat >>confdefs.h <<\_ACEOF
 #define wxUSE_DIALUP_MANAGER 1

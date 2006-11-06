@@ -6896,8 +6896,8 @@ if test "$wxUSE_POPUPWIN" = "yes"; then
 fi
 
 if test "$wxUSE_DIALUP_MANAGER" = "yes"; then
-    if test "$wxUSE_MAC" = 1 -o "$wxUSE_COCOA" = 1 ; then
-        AC_MSG_WARN([Dialup manager not yet supported under Mac OS X... disabled])
+    if test "$wxUSE_MAC" = 1 -o "$wxUSE_COCOA" = 1 -o "$wxUSE_MGL" = 1; then
+        AC_MSG_WARN([Dialup manager not supported on this platform ... disabled])
     else
         AC_DEFINE(wxUSE_DIALUP_MANAGER)
         SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS dialup"
