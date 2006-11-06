@@ -7705,8 +7705,7 @@ void wxGrid::DrawAllGridLines( wxDC& dc, const wxRegion & WXUNUSED(reg) )
     int rightCol = GetColPos( internalXToCol(right) );
     int bottomRow = internalYToRow(bottom);
 
-#ifndef __WXMAC__
-    // CS: I don't know why suddenly unscrolled coordinates are used for clipping
+#if !defined(__WXMAC__) || wxMAC_USE_CORE_GRAPHICS
     wxRegion clippedcells(0, 0, cw, ch);
 
     int i, j, cell_rows, cell_cols;
