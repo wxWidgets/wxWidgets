@@ -896,7 +896,8 @@ wxGDIPlusContext::~wxGDIPlusContext()
 
 void wxGDIPlusContext::Clip( const wxRegion &region )
 {
-    m_context->SetClip((HRGN)region.GetHRGN(),CombineModeIntersect);
+    Region rgn((HRGN)region.GetHRGN());
+    m_context->SetClip(&rgn,CombineModeIntersect);
 }
 
 void wxGDIPlusContext::Clip( wxDouble x, wxDouble y, wxDouble w, wxDouble h )
