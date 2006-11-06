@@ -2180,7 +2180,7 @@ void wxAuiNotebook::OnTabDragMotion(wxCommandEvent& evt)
         wxWindow* tab_ctrl = ::wxFindWindowAtPoint(screen_pt);
         
         // make sure we are not over the hint window
-        if (!tab_ctrl->IsKindOf(CLASSINFO(wxFrame)))
+        if (tab_ctrl && !tab_ctrl->IsKindOf(CLASSINFO(wxFrame)))
         {
             while (tab_ctrl)
             {
