@@ -22,12 +22,16 @@ if [ $KIND = daily ]; then
     cp $STAGING_DIR/* $destdir
 
     if [ $skipupload != yes ]; then 
-	destdir=$UPLOAD_DAILY_ROOT/$DAILY
-	echo "Copying to the starship at $destdir..."
-	ssh $UPLOAD_HOST "mkdir -p $destdir"
-	scp -p $STAGING_DIR/* $UPLOAD_HOST:/$destdir
-	#ssh $UPLOAD_HOST "cd $destdir && ls -al"
-
+	destdir=$UPLOAD_PREVIEW_ROOT/$DAILY
+	echo "Copying to $UPLOAD_HOST at $destdir..."
+	if [ $UPLOAD_METHOD = ssh ]; then
+	    ssh $UPLOAD_HOST "mkdir -p $destdir"
+	    scp -p $STAGING_DIR/* $UPLOAD_HOST:/$destdir
+	fi
+	if [ $UPLOAD_METHOD = ftp ]; then
+	    lftp -c "open $UPLOAD_HOST; mkdir $destdir"
+	    lftp -c "open $UPLOAD_HOST; cd $destdir; mput $STAGING_DIR/*"
+	fi
 
         # TODO: something to remove old builds from starship, keeping 
         # only N days worth
@@ -44,11 +48,11 @@ Date: $DATE
 
 Hi,
 
-A new test build of wxPython has been uploaded to starship.  
+A new test build of wxPython has been uploaded.  
 
    Version: $VERSION
-   URL:     http://starship.python.net/crew/robind/wxPython/daily/$DAILY
-   Changes: http://starship.python.net/crew/robind/wxPython/daily/$DAILY/CHANGES.html
+   URL:     $UPLOAD_URL_ROOT/preview/$DAILY
+   Changes: $UPLOAD_URL_ROOT/preview/$DAILY/CHANGES.html
 
 Have fun!
 R'bot
@@ -72,10 +76,16 @@ if [ $KIND = release ]; then
     cp $STAGING_DIR/* $destdir
 
     if [ $skipupload != yes ]; then 
-	echo "Copying to the starship..."
-	destdir=$UPLOAD_PREVIEW_ROOT/$VERSION
-	ssh $UPLOAD_HOST "mkdir -p $destdir"
-	scp -p $STAGING_DIR/* $UPLOAD_HOST:/$destdir
+	echo "Copying to $UPLOAD_HOST..."
+	destdir=$UPLOAD_RELEASE_ROOT/$VERSION
+	if [ $UPLOAD_METHOD = ssh ]; then
+	    ssh $UPLOAD_HOST "mkdir -p $destdir"
+	    scp -p $STAGING_DIR/* $UPLOAD_HOST:/$destdir
+	fi
+	if [ $UPLOAD_METHOD = ftp ]; then
+	    lftp -c "open $UPLOAD_HOST; mkdir $destdir"
+	    lftp -c "open $UPLOAD_HOST; cd $destdir; mput $STAGING_DIR/*"
+	fi
 
         # Send email to wxPython-dev
 	DATE=`date`
@@ -92,8 +102,8 @@ Hi,
 A new RC build of wxPython has been uploaded to starship.  
 
    Version: $VERSION
-   URL:     http://starship.python.net/crew/robind/wxPython/rc/$VERSION
-   Changes: http://starship.python.net/crew/robind/wxPython/rc/$VERSION/CHANGES.html
+   URL:     $UPLOAD_URL_ROOT/release/$VERSION
+   Changes: $UPLOAD_URL_ROOT/release/$VERSION/CHANGES.html
 
 Have fun!
 R'bot
