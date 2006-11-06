@@ -51081,6 +51081,10 @@ echo "${ECHO_T}no" >&6
 
 
 
+if test "$USE_UNIX" != "1" -a "$USE_WIN32" != "1"; then
+    DISABLED_CONTRIB="$DISABLED_CONTRIB net"
+fi
+
 for subdir in `echo $SUBDIRS`; do
     if test -d ${srcdir}/${subdir} ; then
         if test "$wxUSE_GUI" = "yes"; then

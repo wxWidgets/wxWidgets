@@ -7929,6 +7929,10 @@ fi
 dnl Add tests to the list of subdirs if cppunit 1.8.0+ is detected
 AM_PATH_CPPUNIT(1.8.0, [SUBDIRS="$SUBDIRS tests"])
 
+if test "$USE_UNIX" != "1" -a "$USE_WIN32" != "1"; then
+    DISABLED_CONTRIB="$DISABLED_CONTRIB net"
+fi
+
 for subdir in `echo $SUBDIRS`; do
     if test -d ${srcdir}/${subdir} ; then
         if test "$wxUSE_GUI" = "yes"; then
