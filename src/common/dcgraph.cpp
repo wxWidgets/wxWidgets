@@ -158,6 +158,7 @@ void wxGCDC::DoSetClippingRegion( wxCoord x, wxCoord y, wxCoord w, wxCoord h )
 
 void wxGCDC::DoSetClippingRegionAsRegion( const wxRegion &region )
 {
+    // region is in device coordinates
     wxCHECK_RET( Ok(), wxT("wxGCDC(cg)::DoSetClippingRegionAsRegion - invalid DC") );
 
     if (region.Empty())
@@ -166,10 +167,13 @@ void wxGCDC::DoSetClippingRegionAsRegion( const wxRegion &region )
         return;
     }
 
+    wxRegion logRegion( region );
     wxCoord x, y, w, h;
-    region.GetBox( x, y, w, h );
 
-    m_graphicContext->Clip( region );
+    logRegion.Offset( DeviceToLogicalX(0), DeviceToLogicalY(0) );
+    logRegion.GetBox( x, y, w, h );
+
+    m_graphicContext->Clip( logRegion );
     if ( m_clipping )
     {
         m_clipX1 = wxMax( m_clipX1, x );
@@ -480,7 +484,9 @@ void wxGCDC::DoDrawArc( wxCoord x1, wxCoord y1,
     wxGraphicsPath path = m_graphicContext->CreatePath();
     if ( fill && ((x1!=x2)||(y1!=y2)) )
         path.MoveToPoint( xc, yc );
-    path.AddArc( xc, yc , rad , DegToRad(sa) , DegToRad(ea), false );
+    // since these angles (ea,sa) are measured counter-clockwise, we invert them to
+    // get clockwise angles
+    path.AddArc( xc, yc , rad , DegToRad(-sa) , DegToRad(-ea), false );
     if ( fill && ((x1!=x2)||(y1!=y2)) )
         path.AddLineToPoint( xc, yc );
     m_graphicContext->DrawPath(path);
