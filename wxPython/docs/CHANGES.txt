@@ -4,7 +4,7 @@ Recent Changes for wxPython
 
 2.7.2.0
 -------
-*
+* 7-Nov-2006
 
 Patch [ 1583183 ] Fixes printing/print preview inconsistencies
 
@@ -15,7 +15,7 @@ Added wxTB_RIGHT style for right-aligned toolbars (Igor Korot)
 Added New Zealand NZST and NZDT timezone support to wx.DateTime.
 
 wx.Window.GetAdjustedBestSize is deprecated.  In every conceivable
-scenario GetBestFitting size is probably what you want to use instead.
+scenario GetEffectiveMinSize is probably what you want to use instead.
 
 wx.Image: Gained support for TGA image file format.
 
@@ -33,14 +33,24 @@ docs and etc. that they belong together.
     AuiNotebookEvent -->   AuiNotebookEvent
        
 wx.lib.customtreectrl: A patch from Frame Niessink which adds an
-additional style that (un)checks a parent when all children are
-(un)checked, i.e. TR_AUTO_CHECK_PARENT.
+additional style (TR_AUTO_CHECK_PARENT) that (un)checks a parent when
+all children are (un)checked.
 
 wx.animate.AnimationCtrl fixed to display inactive bitmap at start
 (patch 1590192)
 
-Patch from Dj Gilcrease adding the FNB_HIDE_ON_SINGLE_TAB flag for
-wx.lib.flatnotebook. 
+Patch from Dj Gilcrease adding the FNB_HIDE_ON_SINGLE_TAB style flag
+for wx.lib.flatnotebook.
+
+wx.Window.GetBestFittingSize has been renamed to GetEffectiveMinSize.
+SetBestFittingSize has been renamed to SetInitialSize, since it is
+most often used only to set the initial (and minimal) size of a
+widget.
+
+The QuickTime backend for wx.media.MediaCtrl on MS Windows works
+again.  Just pass szBackend=wx.media.MEDIABACKEND_QUICKTIME to the
+constructor to use it instead of the default ActiveMovie backend,
+(assuming the quicktime DLLs are available on the system.)
 
 
 
