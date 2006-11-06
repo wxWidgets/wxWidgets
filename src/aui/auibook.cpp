@@ -177,18 +177,18 @@ wxAuiDefaultTabArt::~wxAuiDefaultTabArt()
 {
 }
 
-void wxAuiDefaultTabArt::DrawBackground(wxDC* dc,
+void wxAuiDefaultTabArt::DrawBackground(wxDC& dc,
                                         wxWindow* WXUNUSED(wnd),
                                         const wxRect& rect)
 {
     // draw background
-    dc->SetBrush(m_bkbrush);
-    dc->SetPen(*wxTRANSPARENT_PEN);
-    dc->DrawRectangle(-1, -1, rect.GetWidth()+2, rect.GetHeight()+2);
+    dc.SetBrush(m_bkbrush);
+    dc.SetPen(*wxTRANSPARENT_PEN);
+    dc.DrawRectangle(-1, -1, rect.GetWidth()+2, rect.GetHeight()+2);
 
     // draw base line
-    dc->SetPen(*wxGREY_PEN);
-    dc->DrawLine(0, rect.GetHeight()-1, rect.GetWidth(), rect.GetHeight()-1);
+    dc.SetPen(*wxGREY_PEN);
+    dc.DrawLine(0, rect.GetHeight()-1, rect.GetWidth(), rect.GetHeight()-1);
 }
 
 
@@ -201,7 +201,7 @@ void wxAuiDefaultTabArt::DrawBackground(wxDC* dc,
 // out_rect - actual output rectangle
 // x_extent - the advance x; where the next tab should start
 
-void wxAuiDefaultTabArt::DrawTab(wxDC* dc,
+void wxAuiDefaultTabArt::DrawTab(wxDC& dc,
                                  wxWindow* wnd,
                                  const wxRect& in_rect,
                                  const wxString& caption_text,
@@ -220,11 +220,11 @@ void wxAuiDefaultTabArt::DrawTab(wxDC* dc,
     if (caption_text.empty())
         caption = wxT("Xj");
             
-    dc->SetFont(m_selected_font);
-    dc->GetTextExtent(caption, &selected_textx, &selected_texty);
+    dc.SetFont(m_selected_font);
+    dc.GetTextExtent(caption, &selected_textx, &selected_texty);
     
-    dc->SetFont(m_normal_font);
-    dc->GetTextExtent(caption, &normal_textx, &normal_texty);
+    dc.SetFont(m_normal_font);
+    dc.GetTextExtent(caption, &normal_textx, &normal_texty);
         
     // figure out the size of the tab
     wxSize tab_size = GetTabSize(dc, wnd, caption, active, close_button_state, x_extent);
@@ -238,17 +238,17 @@ void wxAuiDefaultTabArt::DrawTab(wxDC* dc,
 
     if (active)
     {
-        dc->SetPen(m_selected_bkpen);
-        dc->SetBrush(m_selected_bkbrush);
-        dc->SetFont(m_selected_font);
+        dc.SetPen(m_selected_bkpen);
+        dc.SetBrush(m_selected_bkbrush);
+        dc.SetFont(m_selected_font);
         textx = selected_textx;
         texty = selected_texty;
     }
      else
     {
-        dc->SetPen(m_normal_bkpen);
-        dc->SetBrush(m_normal_bkbrush);
-        dc->SetFont(m_normal_font);
+        dc.SetPen(m_normal_bkpen);
+        dc.SetBrush(m_normal_bkbrush);
+        dc.SetFont(m_normal_font);
         textx = normal_textx;
         texty = normal_texty;
     }
@@ -272,12 +272,12 @@ void wxAuiDefaultTabArt::DrawTab(wxDC* dc,
     points[6] = points[0];
 
 
-    dc->DrawPolygon(6, points);
+    dc.DrawPolygon(6, points);
 
-    dc->SetPen(*wxGREY_PEN);
+    dc.SetPen(*wxGREY_PEN);
 
-    //dc->DrawLines(active ? 6 : 7, points);
-    dc->DrawLines(7, points);
+    //dc.DrawLines(active ? 6 : 7, points);
+    dc.DrawLines(7, points);
 
 
     int text_offset;
@@ -295,7 +295,7 @@ void wxAuiDefaultTabArt::DrawTab(wxDC* dc,
     
 
     // draw tab text
-    dc->DrawText(caption,
+    dc.DrawText(caption,
                  text_offset,
                  (tab_y + tab_height)/2 - (texty/2) + 1);
 
@@ -313,7 +313,7 @@ void wxAuiDefaultTabArt::DrawTab(wxDC* dc,
                     tab_y + (tab_height/2) - (bmp.GetHeight()/2) + 1,
                     close_button_width,
                     tab_height - 1);
-        DrawButtonS(*dc, rect, bmp, *wxWHITE, close_button_state);
+        DrawButtonS(dc, rect, bmp, *wxWHITE, close_button_state);
         
         *out_button_rect = rect;
     }
@@ -323,7 +323,7 @@ void wxAuiDefaultTabArt::DrawTab(wxDC* dc,
 }
 
 
-wxSize wxAuiDefaultTabArt::GetTabSize(wxDC* dc,
+wxSize wxAuiDefaultTabArt::GetTabSize(wxDC& dc,
                                       wxWindow* WXUNUSED(wnd),
                                       const wxString& caption,
                                       bool WXUNUSED(active),
@@ -332,8 +332,8 @@ wxSize wxAuiDefaultTabArt::GetTabSize(wxDC* dc,
 {
     wxCoord measured_textx, measured_texty;
     
-    dc->SetFont(m_measuring_font);
-    dc->GetTextExtent(caption, &measured_textx, &measured_texty);
+    dc.SetFont(m_measuring_font);
+    dc.GetTextExtent(caption, &measured_textx, &measured_texty);
     
     wxCoord tab_height = measured_texty + 4;
     wxCoord tab_width = measured_textx + tab_height + 5;
@@ -348,7 +348,7 @@ wxSize wxAuiDefaultTabArt::GetTabSize(wxDC* dc,
 
 
 void wxAuiDefaultTabArt::DrawButton(
-                                    wxDC* dc,
+                                    wxDC& dc,
                                     wxWindow* WXUNUSED(wnd),
                                     const wxRect& in_rect,
                                     int bitmap_id,
@@ -415,7 +415,7 @@ void wxAuiDefaultTabArt::DrawButton(
     }
     
         
-    DrawButtonS(*dc, rect, bmp, *wxWHITE, button_state);
+    DrawButtonS(dc, rect, bmp, *wxWHITE, button_state);
     
     *out_rect = rect;
 }
@@ -500,7 +500,7 @@ int wxAuiDefaultTabArt::GetBestTabCtrlSize(wxWindow* wnd)
     wxClientDC dc(wnd);
     dc.SetFont(m_measuring_font);
     int x_ext = 0;
-    wxSize s = GetTabSize(&dc,
+    wxSize s = GetTabSize(dc,
                           wnd,
                           wxT("ABCDEFGHIj"),
                           true,
@@ -852,7 +852,7 @@ void wxAuiTabContainer::Render(wxDC* raw_dc, wxWindow* wnd)
         
     
         int x_extent = 0;
-        wxSize size = m_art->GetTabSize(&dc,
+        wxSize size = m_art->GetTabSize(dc,
                             wnd,
                             page.caption,
                             page.active,
@@ -925,7 +925,7 @@ void wxAuiTabContainer::Render(wxDC* raw_dc, wxWindow* wnd)
 
 
     // draw background
-    m_art->DrawBackground(&dc, wnd, m_rect);
+    m_art->DrawBackground(dc, wnd, m_rect);
 
     // draw buttons
     int left_buttons_width = 0;
@@ -948,7 +948,7 @@ void wxAuiTabContainer::Render(wxDC* raw_dc, wxWindow* wnd)
         button_rect.SetY(1);
         button_rect.SetWidth(offset);
 
-        m_art->DrawButton(&dc,
+        m_art->DrawButton(dc,
                           wnd,
                           button_rect,
                           button.id,
@@ -978,7 +978,7 @@ void wxAuiTabContainer::Render(wxDC* raw_dc, wxWindow* wnd)
    
         wxRect button_rect(offset, 1, 1000, m_rect.height);
 
-        m_art->DrawButton(&dc,
+        m_art->DrawButton(dc,
                           wnd,
                           button_rect,
                           button.id,
@@ -1053,7 +1053,7 @@ void wxAuiTabContainer::Render(wxDC* raw_dc, wxWindow* wnd)
 
         rect.x = offset;
 
-        m_art->DrawTab(&dc,
+        m_art->DrawTab(dc,
                        wnd,
                        rect,
                        page.caption,
@@ -1088,7 +1088,7 @@ void wxAuiTabContainer::Render(wxDC* raw_dc, wxWindow* wnd)
         }
 
         rect.x = active_offset;
-        m_art->DrawTab(&dc,
+        m_art->DrawTab(dc,
                        wnd,
                        rect,
                        page.caption,

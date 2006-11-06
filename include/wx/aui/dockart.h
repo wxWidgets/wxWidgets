@@ -46,33 +46,33 @@ public:
     void SetColor(int id, const wxColour& color) { SetColour(id, color); }
 
     virtual void DrawSash(wxDC& dc,
-                          wxWindow *window,
+                          wxWindow* window,
                           int orientation,
                           const wxRect& rect) = 0;
 
     virtual void DrawBackground(wxDC& dc,
-                          wxWindow *window,
+                          wxWindow* window,
                           int orientation,
                           const wxRect& rect) = 0;
 
     virtual void DrawCaption(wxDC& dc,
-                          wxWindow *window,
+                          wxWindow* window,
                           const wxString& text,
                           const wxRect& rect,
                           wxAuiPaneInfo& pane) = 0;
 
     virtual void DrawGripper(wxDC& dc,
-                          wxWindow *window,
+                          wxWindow* window,
                           const wxRect& rect,
                           wxAuiPaneInfo& pane) = 0;
 
     virtual void DrawBorder(wxDC& dc,
-                          wxWindow *window,
+                          wxWindow* window,
                           const wxRect& rect,
                           wxAuiPaneInfo& pane) = 0;
 
     virtual void DrawPaneButton(wxDC& dc,
-                          wxWindow *window,
+                          wxWindow* window,
                           int button,
                           int button_state,
                           const wxRect& rect,

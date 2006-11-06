@@ -67,11 +67,11 @@ public:
     virtual void SetMeasuringFont(const wxFont& font) = 0;
 
     virtual void DrawBackground(
-                         wxDC* dc,
+                         wxDC& dc,
                          wxWindow* wnd,
                          const wxRect& rect) = 0;
 
-    virtual void DrawTab(wxDC* dc,
+    virtual void DrawTab(wxDC& dc,
                          wxWindow* wnd,
                          const wxRect& in_rect,
                          const wxString& caption,
@@ -82,7 +82,7 @@ public:
                          int* x_extent) = 0;     
     
     virtual void DrawButton(
-                         wxDC* dc,
+                         wxDC& dc,
                          wxWindow* wnd,
                          const wxRect& in_rect,
                          int bitmap_id,
@@ -90,19 +90,19 @@ public:
                          int orientation,
                          const wxBitmap& bitmap_override,
                          wxRect* out_rect) = 0;
-    
-    virtual int ShowWindowList(
-                         wxWindow* wnd,
-                         const wxArrayString& items,
-                         int active_idx) = 0;
                  
     virtual wxSize GetTabSize(
-                         wxDC* dc,
+                         wxDC& dc,
                          wxWindow* wnd,
                          const wxString& caption,
                          bool active,
                          int close_button_state,
                          int* x_extent) = 0;
+                         
+    virtual int ShowWindowList(
+                         wxWindow* wnd,
+                         const wxArrayString& items,
+                         int active_idx) = 0;
     
     virtual int GetBestTabCtrlSize(wxWindow* wnd) = 0;    
 };
@@ -122,11 +122,11 @@ public:
     void SetMeasuringFont(const wxFont& font);
     
     void DrawBackground(
-                 wxDC* dc,
+                 wxDC& dc,
                  wxWindow* wnd,
                  const wxRect& rect);
 
-    void DrawTab(wxDC* dc,
+    void DrawTab(wxDC& dc,
                  wxWindow* wnd,
                  const wxRect& in_rect,
                  const wxString& caption,
@@ -137,7 +137,7 @@ public:
                  int* x_extent);
     
     void DrawButton(
-                 wxDC* dc,
+                 wxDC& dc,
                  wxWindow* wnd,
                  const wxRect& in_rect,
                  int bitmap_id,
@@ -145,20 +145,20 @@ public:
                  int orientation,
                  const wxBitmap& bitmap_override,
                  wxRect* out_rect);
-    
-    int ShowWindowList(
-                 wxWindow* wnd,
-                 const wxArrayString& items,
-                 int active_idx);
-
+                 
     wxSize GetTabSize(
-                 wxDC* dc,
+                 wxDC& dc,
                  wxWindow* wnd,
                  const wxString& caption,
                  bool active,
                  int close_button_state,
                  int* x_extent);
-    
+                  
+    int ShowWindowList(
+                 wxWindow* wnd,
+                 const wxArrayString& items,
+                 int active_idx);
+
     int GetBestTabCtrlSize(wxWindow* wnd);    
 
 private:
