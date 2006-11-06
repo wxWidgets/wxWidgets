@@ -25,7 +25,11 @@ class TestPanel(wx.Panel):
 
         # Create some controls
         try:
-            self.mc = wx.media.MediaCtrl(self, style=wx.SIMPLE_BORDER)
+            self.mc = wx.media.MediaCtrl(self, style=wx.SIMPLE_BORDER,
+                                         #szBackend=wx.media.MEDIABACKEND_DIRECTSHOW
+                                         #szBackend=wx.media.MEDIABACKEND_QUICKTIME
+                                         #szBackend=wx.media.MEDIABACKEND_WMP10
+                                         )
         except NotImplementedError:
             self.Destroy()
             raise
