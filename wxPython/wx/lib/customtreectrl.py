@@ -494,9 +494,9 @@ class DragImage(wx.DragImage):
         text = item.GetText()
         font = item.Attr().GetFont()
         colour = item.Attr().GetTextColour()
-        if colour is None:
+        if not colour:
             colour = wx.BLACK
-        if font is None:
+        if not font:
             font = treeCtrl._normalFont
     
         backcolour = treeCtrl.GetBackgroundColour()
