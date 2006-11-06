@@ -105,8 +105,10 @@ public:
     virtual ~MyFrame();
 
     // event handlers (these functions should _not_ be virtual)
+#if wxUSE_DYNLIB_CLASS
     void OnLoad(wxCommandEvent& event);
     void OnUnload(wxCommandEvent& event);
+#endif // wxUSE_DYNLIB_CLASS
     void OnQuit(wxCommandEvent& event);
     void OnAbout(wxCommandEvent& event);
 
@@ -149,8 +151,10 @@ END_EVENT_TABLE()
 enum
 {
     // our menu items
+#if wxUSE_DYNLIB_CLASS
     Render_Load = 100,
     Render_Unload,
+#endif // wxUSE_DYNLIB_CLASS
 
     // standard menu items
     Render_Quit = wxID_EXIT,
@@ -169,8 +173,10 @@ enum
 // handlers) which process them. It can be also done at run-time, but for the
 // simple menu events like this the static method is much simpler.
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
+#if wxUSE_DYNLIB_CLASS
     EVT_MENU(Render_Load,  MyFrame::OnLoad)
     EVT_MENU(Render_Unload,MyFrame::OnUnload)
+#endif // wxUSE_DYNLIB_CLASS
     EVT_MENU(Render_Quit,  MyFrame::OnQuit)
 
     EVT_MENU(Render_About, MyFrame::OnAbout)
@@ -218,8 +224,10 @@ MyFrame::MyFrame()
 #if wxUSE_MENUS
     // create a menu bar
     wxMenu *menuFile = new wxMenu;
+#if wxUSE_DYNLIB_CLASS
     menuFile->Append(Render_Load, _T("&Load renderer...\tCtrl-L"));
     menuFile->Append(Render_Unload, _T("&Unload renderer\tCtrl-U"));
+#endif // wxUSE_DYNLIB_CLASS
     menuFile->Append(Render_Quit, _T("E&xit\tCtrl-Q"), _T("Quit this program"));
 
     // the "About" item should be in the help menu
@@ -253,6 +261,8 @@ MyFrame::~MyFrame()
 
 
 // event handlers
+
+#if wxUSE_DYNLIB_CLASS
 
 void MyFrame::OnLoad(wxCommandEvent& WXUNUSED(event))
 {
@@ -305,6 +315,8 @@ void MyFrame::OnUnload(wxCommandEvent& WXUNUSED(event))
         wxLogWarning(_T("No renderer to unload."));
     }
 }
+
+#endif // wxUSE_DYNLIB_CLASS
 
 void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 {
