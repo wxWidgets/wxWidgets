@@ -991,6 +991,7 @@ AUI_NB_RIGHT = _aui.AUI_NB_RIGHT
 AUI_NB_BOTTOM = _aui.AUI_NB_BOTTOM
 AUI_NB_TAB_SPLIT = _aui.AUI_NB_TAB_SPLIT
 AUI_NB_TAB_MOVE = _aui.AUI_NB_TAB_MOVE
+AUI_NB_TAB_EXTERNAL_MOVE = _aui.AUI_NB_TAB_EXTERNAL_MOVE
 AUI_NB_SCROLL_BUTTONS = _aui.AUI_NB_SCROLL_BUTTONS
 AUI_NB_WINDOWLIST_BUTTON = _aui.AUI_NB_WINDOWLIST_BUTTON
 AUI_NB_CLOSE_BUTTON = _aui.AUI_NB_CLOSE_BUTTON
@@ -1036,16 +1037,16 @@ class AuiTabArt(object):
         """
         return _aui.AuiTabArt_DrawButton(*args, **kwargs)
 
-    def ShowWindowList(*args, **kwargs):
-        """ShowWindowList(self, Window wnd, wxArrayString items, int active_idx) -> int"""
-        return _aui.AuiTabArt_ShowWindowList(*args, **kwargs)
-
     def GetTabSize(*args, **kwargs):
         """
         GetTabSize(self, DC dc, Window wnd, String caption, bool active, int close_button_state, 
             int x_extent) -> Size
         """
         return _aui.AuiTabArt_GetTabSize(*args, **kwargs)
+
+    def ShowWindowList(*args, **kwargs):
+        """ShowWindowList(self, Window wnd, wxArrayString items, int active_idx) -> int"""
+        return _aui.AuiTabArt_ShowWindowList(*args, **kwargs)
 
     def GetBestTabCtrlSize(*args, **kwargs):
         """GetBestTabCtrlSize(self, Window wnd) -> int"""
@@ -1075,10 +1076,6 @@ class AuiNotebookEvent(_core.NotifyEvent):
         """SetSelection(self, int s)"""
         return _aui.AuiNotebookEvent_SetSelection(*args, **kwargs)
 
-    def SetOldSelection(*args, **kwargs):
-        """SetOldSelection(self, int s)"""
-        return _aui.AuiNotebookEvent_SetOldSelection(*args, **kwargs)
-
     def GetSelection(*args, **kwargs):
         """
         GetSelection(self) -> int
@@ -1088,12 +1085,25 @@ class AuiNotebookEvent(_core.NotifyEvent):
         """
         return _aui.AuiNotebookEvent_GetSelection(*args, **kwargs)
 
+    def SetOldSelection(*args, **kwargs):
+        """SetOldSelection(self, int s)"""
+        return _aui.AuiNotebookEvent_SetOldSelection(*args, **kwargs)
+
     def GetOldSelection(*args, **kwargs):
         """GetOldSelection(self) -> int"""
         return _aui.AuiNotebookEvent_GetOldSelection(*args, **kwargs)
 
+    def SetDragSource(*args, **kwargs):
+        """SetDragSource(self, AuiNotebook s)"""
+        return _aui.AuiNotebookEvent_SetDragSource(*args, **kwargs)
+
+    def GetDragSource(*args, **kwargs):
+        """GetDragSource(self) -> AuiNotebook"""
+        return _aui.AuiNotebookEvent_GetDragSource(*args, **kwargs)
+
     old_selection = property(_aui.AuiNotebookEvent_old_selection_get, _aui.AuiNotebookEvent_old_selection_set)
     selection = property(_aui.AuiNotebookEvent_selection_get, _aui.AuiNotebookEvent_selection_set)
+    drag_source = property(_aui.AuiNotebookEvent_drag_source_get, _aui.AuiNotebookEvent_drag_source_set)
     OldSelection = property(GetOldSelection,SetOldSelection,doc="See `GetOldSelection` and `SetOldSelection`") 
     Selection = property(GetSelection,SetSelection,doc="See `GetSelection` and `SetSelection`") 
 _aui.AuiNotebookEvent_swigregister(AuiNotebookEvent)
@@ -1347,18 +1357,22 @@ def PreAuiNotebook(*args, **kwargs):
     self._setOORInfo(self)
     return val
 
+wxEVT_COMMAND_AUINOTEBOOK_PAGE_CLOSE = _aui.wxEVT_COMMAND_AUINOTEBOOK_PAGE_CLOSE
 wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGED = _aui.wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGED
 wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGING = _aui.wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGING
 wxEVT_COMMAND_AUINOTEBOOK_BUTTON = _aui.wxEVT_COMMAND_AUINOTEBOOK_BUTTON
 wxEVT_COMMAND_AUINOTEBOOK_BEGIN_DRAG = _aui.wxEVT_COMMAND_AUINOTEBOOK_BEGIN_DRAG
 wxEVT_COMMAND_AUINOTEBOOK_END_DRAG = _aui.wxEVT_COMMAND_AUINOTEBOOK_END_DRAG
 wxEVT_COMMAND_AUINOTEBOOK_DRAG_MOTION = _aui.wxEVT_COMMAND_AUINOTEBOOK_DRAG_MOTION
+wxEVT_COMMAND_AUINOTEBOOK_ALLOW_DND = _aui.wxEVT_COMMAND_AUINOTEBOOK_ALLOW_DND
+EVT_AUINOTEBOOK_PAGE_CLOSE = wx.PyEventBinder( wxEVT_COMMAND_AUINOTEBOOK_PAGE_CLOSE, 1 )
 EVT_AUINOTEBOOK_PAGE_CHANGED = wx.PyEventBinder( wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGED, 1 )
 EVT_AUINOTEBOOK_PAGE_CHANGING = wx.PyEventBinder( wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGING, 1 )
 EVT_AUINOTEBOOK_BUTTON = wx.PyEventBinder( wxEVT_COMMAND_AUINOTEBOOK_BUTTON, 1 )
 EVT_AUINOTEBOOK_BEGIN_DRAG = wx.PyEventBinder( wxEVT_COMMAND_AUINOTEBOOK_BEGIN_DRAG, 1 )
 EVT_AUINOTEBOOK_END_DRAG = wx.PyEventBinder( wxEVT_COMMAND_AUINOTEBOOK_END_DRAG, 1 )
 EVT_AUINOTEBOOK_DRAG_MOTION = wx.PyEventBinder( wxEVT_COMMAND_AUINOTEBOOK_DRAG_MOTION, 1 )
+EVT_AUINOTEBOOK_ALLOW_DND = wx.PyEventBinder( wxEVT_COMMAND_AUINOTEBOOK_ALLOW_DND, 1 )
 
 class PyAuiDockArt(AuiDefaultDockArt):
     """

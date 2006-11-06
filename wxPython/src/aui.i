@@ -494,14 +494,14 @@ class wxPyAuiTabArt :  public wxAuiDefaultTabArt
     wxPyAuiTabArt() : wxAuiDefaultTabArt() {}
 
     
-    virtual void DrawBackground( wxDC* dc,
+    virtual void DrawBackground( wxDC& dc,
                                  wxWindow* wnd,
                                  const wxRect& rect )
     {
         bool found;
         wxPyBlock_t blocked = wxPyBeginBlockThreads();
         if ((found = wxPyCBH_findCallback(m_myInst, "DrawBackground"))) {
-            PyObject* odc = wxPyMake_wxObject(dc, false);
+            PyObject* odc = wxPyMake_wxObject(&dc, false);
             PyObject* ownd = wxPyMake_wxObject(wnd, false);
             PyObject* orect = wxPyConstructObject((void*)&rect, wxT("wxRect"), 0);
             wxPyCBH_callCallback(m_myInst, Py_BuildValue("(OOO)", odc, ownd, orect));
@@ -514,7 +514,7 @@ class wxPyAuiTabArt :  public wxAuiDefaultTabArt
             wxAuiDefaultTabArt::DrawBackground(dc, wnd, rect);
     }
 
-    virtual void DrawTab( wxDC* dc,
+    virtual void DrawTab( wxDC& dc,
                           wxWindow* wnd,
                           const wxRect& in_rect,
                           const wxString& caption,
@@ -528,7 +528,7 @@ class wxPyAuiTabArt :  public wxAuiDefaultTabArt
         const char* errmsg = "DrawTab should return a sequence containing (tab_rect, button_rect, x_extent)";
         wxPyBlock_t blocked = wxPyBeginBlockThreads();
         if ((found = wxPyCBH_findCallback(m_myInst, "DrawTab"))) {
-            PyObject* odc = wxPyMake_wxObject(dc, false);
+            PyObject* odc = wxPyMake_wxObject(&dc, false);
             PyObject* ownd = wxPyMake_wxObject(wnd, false);
             PyObject* orect = wxPyConstructObject((void*)&in_rect, wxT("wxRect"), 0);
             PyObject* otext = wx2PyString(caption);
@@ -572,7 +572,7 @@ class wxPyAuiTabArt :  public wxAuiDefaultTabArt
     }
 
 
-    virtual void DrawButton( wxDC* dc,
+    virtual void DrawButton( wxDC& dc,
                              wxWindow* wnd,
                              const wxRect& in_rect,
                              int bitmap_id,
@@ -585,7 +585,7 @@ class wxPyAuiTabArt :  public wxAuiDefaultTabArt
         const char* errmsg = "DrawButton should return a wxRect";
         wxPyBlock_t blocked = wxPyBeginBlockThreads();
         if ((found = wxPyCBH_findCallback(m_myInst, "DrawButton"))) {
-            PyObject* odc = wxPyMake_wxObject(dc, false);
+            PyObject* odc = wxPyMake_wxObject(&dc, false);
             PyObject* ownd = wxPyMake_wxObject(wnd, false);
             PyObject* orect = wxPyConstructObject((void*)&in_rect, wxT("wxRect"), 0);
             PyObject* obmp = wxPyConstructObject((void*)&bitmap_override, wxT("wxBitmap"), 0);
@@ -610,13 +610,7 @@ class wxPyAuiTabArt :  public wxAuiDefaultTabArt
     }
 
 
-// TODO    
-//     virtual int ShowWindowList(
-//                          wxWindow* wnd,
-//                          const wxArrayString& items,
-//                          int active_idx);
-    
-    virtual wxSize GetTabSize( wxDC* dc,
+    virtual wxSize GetTabSize( wxDC& dc,
                                wxWindow* wnd,
                                const wxString& caption,
                                bool active,
@@ -628,7 +622,7 @@ class wxPyAuiTabArt :  public wxAuiDefaultTabArt
         const char* errmsg = "GetTabSize should return a sequence containing (size, x_extent)";
         wxPyBlock_t blocked = wxPyBeginBlockThreads();
         if ((found = wxPyCBH_findCallback(m_myInst, "GetTabSize"))) {
-            PyObject* odc = wxPyMake_wxObject(dc, false);
+            PyObject* odc = wxPyMake_wxObject(&dc, false);
             PyObject* ownd = wxPyMake_wxObject(wnd, false);
             PyObject* otext = wx2PyString(caption);
             PyObject* ro;
@@ -663,6 +657,12 @@ class wxPyAuiTabArt :  public wxAuiDefaultTabArt
             rv = wxAuiDefaultTabArt::GetTabSize(dc, wnd, caption, active, close_button_state, x_extent);
         return rv;
     }
+
+// TODO    
+//     virtual int ShowWindowList(
+//                          wxWindow* wnd,
+//                          const wxArrayString& items,
+//                          int active_idx);
 
 // TODO    
 //     virtual int GetBestTabCtrlSize(wxWindow* wnd);      
