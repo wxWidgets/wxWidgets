@@ -29,6 +29,14 @@ END_EVENT_TABLE()
 // WX_IMPLEMENT_COCOA_OWNER(wxGLCanvas,NSOpenGLView,NSView,NSView)
 
 wxGLCanvas::wxGLCanvas(wxWindow *parent,
+            wxWindowID winid, const wxPoint& pos, const wxSize& size,
+            long style, const wxString& name,
+            int *attribList, const wxPalette& palette)
+{
+    Create(parent,winid,pos,size,style,name);
+}
+
+wxGLCanvas::wxGLCanvas(wxWindow *parent,
             const wxGLContext *shared,
             wxWindowID winid, const wxPoint& pos, const wxSize& size,
             long style, const wxString& name,
