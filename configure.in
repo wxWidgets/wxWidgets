@@ -6313,7 +6313,10 @@ if test "$wxUSE_GUI" = "yes" -a "$wxUSE_JOYSTICK" = "yes"; then
 
     dnl joystick support is only for Linux 2.1.x or greater
     else
-        AC_CHECK_HEADERS(linux/joystick.h, wxUSE_JOYSTICK=yes)
+        dnl wxJoystick not supported by wxMGL at all
+        if test "$wxUSE_MGL" != "1"; then
+            AC_CHECK_HEADERS(linux/joystick.h, wxUSE_JOYSTICK=yes)
+        fi
     fi
 
     if test "$wxUSE_JOYSTICK" = "yes"; then

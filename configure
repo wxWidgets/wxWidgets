@@ -45477,6 +45477,7 @@ echo "${ECHO_T}$wxUSE_JOYSTICK" >&6
         fi
 
         else
+                if test "$wxUSE_MGL" != "1"; then
 
 for ac_header in linux/joystick.h
 do
@@ -45626,6 +45627,7 @@ fi
 
 done
 
+        fi
     fi
 
     if test "$wxUSE_JOYSTICK" = "yes"; then
