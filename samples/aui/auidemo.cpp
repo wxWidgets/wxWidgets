@@ -138,6 +138,7 @@ private:
     void OnRestorePerspective(wxCommandEvent& evt);
     void OnSettings(wxCommandEvent& evt);
     void OnAllowNotebookDnD(wxAuiNotebookEvent& evt);
+    void OnNotebookPageClose(wxAuiNotebookEvent& evt);
     void OnExit(wxCommandEvent& evt);
     void OnAbout(wxCommandEvent& evt);
 
@@ -619,6 +620,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
                    MyFrame::OnRestorePerspective)
     EVT_AUI_PANECLOSE(MyFrame::OnPaneClose)
     EVT_AUINOTEBOOK_ALLOW_DND(wxID_ANY, MyFrame::OnAllowNotebookDnD)
+    EVT_AUINOTEBOOK_PAGE_CLOSE(wxID_ANY, MyFrame::OnNotebookPageClose)
 END_EVENT_TABLE()
 
 
@@ -1206,6 +1208,20 @@ void MyFrame::OnCopyPerspectiveCode(wxCommandEvent& WXUNUSED(evt))
 void MyFrame::OnRestorePerspective(wxCommandEvent& evt)
 {
     m_mgr.LoadPerspective(m_perspectives.Item(evt.GetId() - ID_FirstPerspective));
+}
+
+void MyFrame::OnNotebookPageClose(wxAuiNotebookEvent& evt)
+{    
+    wxAuiNotebook* ctrl = (wxAuiNotebook*)evt.GetEventObject();
+    if (ctrl->GetPage(evt.GetSelection())->IsKindOf(CLASSINFO(wxHtmlWindow)))
+    {
+        int res = wxMessageBox(wxT("Are you sure you want to close/hide this notebook page?"),
+                       wxT("wxAUI"),
+                       wxYES_NO,
+                       this);
+        if (res != wxYES)
+            evt.Veto();
+    }
 }
 
 void MyFrame::OnAllowNotebookDnD(wxAuiNotebookEvent& evt)

@@ -35,6 +35,7 @@
 WX_DEFINE_OBJARRAY(wxAuiNotebookPageArray)
 WX_DEFINE_OBJARRAY(wxAuiTabContainerButtonArray)
 
+DEFINE_EVENT_TYPE(wxEVT_COMMAND_AUINOTEBOOK_PAGE_CLOSE)
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGING)
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGED)
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_AUINOTEBOOK_BUTTON)
@@ -2532,6 +2533,17 @@ void wxAuiNotebook::OnTabButton(wxCommandEvent& command_evt)
         if (selection != -1)
         {
             wxWindow* close_wnd = tabs->GetWindowFromIdx(selection);
+
+
+            // ask owner if it's ok to close the tab
+            wxAuiNotebookEvent e(wxEVT_COMMAND_AUINOTEBOOK_PAGE_CLOSE, m_windowId);
+            e.SetSelection(m_tabs.GetIdxFromWindow(close_wnd));
+            e.SetOldSelection(evt.GetSelection());
+            e.SetEventObject(this);
+            GetEventHandler()->ProcessEvent(e);
+            if (!e.IsAllowed())
+                return;
+
 
             if (close_wnd->IsKindOf(CLASSINFO(wxAuiMDIChildFrame)))
             {

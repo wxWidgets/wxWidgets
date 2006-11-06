@@ -463,6 +463,7 @@ protected:
 #ifndef SWIG
 
 BEGIN_DECLARE_EVENT_TYPES()
+    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_AUI, wxEVT_COMMAND_AUINOTEBOOK_PAGE_CLOSE, 0)
     DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_AUI, wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGED, 0)
     DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_AUI, wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGING, 0)
     DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_AUI, wxEVT_COMMAND_AUINOTEBOOK_BUTTON, 0)
@@ -476,7 +477,9 @@ typedef void (wxEvtHandler::*wxAuiNotebookEventFunction)(wxAuiNotebookEvent&);
 
 #define wxAuiNotebookEventHandler(func) \
     (wxObjectEventFunction)(wxEventFunction)wxStaticCastEvent(wxAuiNotebookEventFunction, &func)
-
+    
+#define EVT_AUINOTEBOOK_PAGE_CLOSE(winid, fn) \
+    wx__DECLARE_EVT1(wxEVT_COMMAND_AUINOTEBOOK_PAGE_CLOSE, winid, wxAuiNotebookEventHandler(fn))
 #define EVT_AUINOTEBOOK_PAGE_CHANGED(winid, fn) \
     wx__DECLARE_EVT1(wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGED, winid, wxAuiNotebookEventHandler(fn))
 #define EVT_AUINOTEBOOK_PAGE_CHANGING(winid, fn) \
@@ -495,6 +498,7 @@ typedef void (wxEvtHandler::*wxAuiNotebookEventFunction)(wxAuiNotebookEvent&);
 #else
 
 // wxpython/swig event work
+%constant wxEventType wxEVT_COMMAND_AUINOTEBOOK_PAGE_CLOSE;
 %constant wxEventType wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGED;
 %constant wxEventType wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGING;
 %constant wxEventType wxEVT_COMMAND_AUINOTEBOOK_BUTTON;
@@ -504,6 +508,7 @@ typedef void (wxEvtHandler::*wxAuiNotebookEventFunction)(wxAuiNotebookEvent&);
 %constant wxEventType wxEVT_COMMAND_AUINOTEBOOK_ALLOW_DND;
 
 %pythoncode {
+    EVT_AUINOTEBOOK_PAGE_CLOSE = wx.PyEventBinder( wxEVT_COMMAND_AUINOTEBOOK_PAGE_CLOSE, 1 )
     EVT_AUINOTEBOOK_PAGE_CHANGED = wx.PyEventBinder( wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGED, 1 )
     EVT_AUINOTEBOOK_PAGE_CHANGING = wx.PyEventBinder( wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGING, 1 )
     EVT_AUINOTEBOOK_BUTTON = wx.PyEventBinder( wxEVT_COMMAND_AUINOTEBOOK_BUTTON, 1 )
