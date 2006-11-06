@@ -462,6 +462,11 @@ void wxScrollHelper::HandleOnScroll(wxScrollWinEvent& event)
         return;
     }
 
+    // flush all pending repaints before we change m_{x,y}ScrollPosition, as
+    // otherwise invalidated area could be updated incorrectly later when
+    // ScrollWindow() makes sure they're repainted before scrolling them
+    m_targetWindow->Update();
+
     int orient = event.GetOrientation();
     if (orient == wxHORIZONTAL)
     {
@@ -893,6 +898,11 @@ void wxScrollHelper::Scroll( int x_pos, int y_pos )
 
     int w = 0, h = 0;
     GetTargetSize(&w, &h);
+
+    // flush all pending repaints before we change m_{x,y}ScrollPosition, as
+    // otherwise invalidated area could be updated incorrectly later when
+    // ScrollWindow() makes sure they're repainted before scrolling them
+    m_targetWindow->Update();
 
     if ((x_pos != -1) && (m_xScrollPixelsPerLine))
     {
