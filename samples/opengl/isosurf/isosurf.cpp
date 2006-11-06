@@ -272,7 +272,7 @@ bool MyApp::OnInit()
     int gl_attrib[20] = { WX_GL_RGBA, WX_GL_MIN_RED, 1, WX_GL_MIN_GREEN, 1,
         WX_GL_MIN_BLUE, 1, WX_GL_DEPTH_SIZE, 1,
         WX_GL_DOUBLEBUFFER,
-#  ifdef __WXMAC__
+#  if defined(__WXMAC__) || defined(__WXCOCOA__)
         GL_NONE };
 #  else
         None };
