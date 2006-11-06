@@ -43337,8 +43337,16 @@ rm -f conftest.err conftest.$ac_objext \
         WITH_PLUGIN_SDL=1
       fi
     fi
+  else
+        if test "$wxUSE_MGL" = 1; then
+        { echo "$as_me:$LINENO: WARNING: wxSound not supported in MGL under DOS... disabled" >&5
+echo "$as_me: WARNING: wxSound not supported in MGL under DOS... disabled" >&2;}
+        wxUSE_SOUND="no"
+    fi
   fi
+fi
 
+if test "$wxUSE_SOUND" = "yes"; then
   cat >>confdefs.h <<\_ACEOF
 #define wxUSE_SOUND 1
 _ACEOF
@@ -46705,7 +46713,7 @@ fi
 
 if test "$wxUSE_DIALUP_MANAGER" = "yes"; then
     if test "$wxUSE_MAC" = 1 -o "$wxUSE_COCOA" = 1 -o "$wxUSE_MGL" = 1; then
-        { echo "$as_me:$LINENO: WARNING: Dialup manager not supported on this platform ... disabled" >&5
+        { echo "$as_me:$LINENO: WARNING: Dialup manager not supported on this platform... disabled" >&5
 echo "$as_me: WARNING: Dialup manager not supported on this platform... disabled" >&2;}
     else
         cat >>confdefs.h <<\_ACEOF
@@ -49767,7 +49775,7 @@ fi
     BAKEFILE_BAKEFILE_M4_VERSION="0.2.0"
 
 
-BAKEFILE_AUTOCONF_INC_M4_VERSION="0.2.0"
+BAKEFILE_AUTOCONF_INC_M4_VERSION="0.2.1"
 
 
 

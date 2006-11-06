@@ -5662,8 +5662,16 @@ if test "$wxUSE_SOUND" = "yes"; then
         WITH_PLUGIN_SDL=1
       fi
     fi
+  else
+    dnl wxMGL doesn't support sound under DOS, only under Unix
+    if test "$wxUSE_MGL" = 1; then
+        AC_MSG_WARN([wxSound not supported in MGL under DOS... disabled])
+        wxUSE_SOUND="no"
+    fi
   fi
+fi
 
+if test "$wxUSE_SOUND" = "yes"; then
   AC_DEFINE(wxUSE_SOUND)
   SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS sound"
 fi
@@ -6897,7 +6905,7 @@ fi
 
 if test "$wxUSE_DIALUP_MANAGER" = "yes"; then
     if test "$wxUSE_MAC" = 1 -o "$wxUSE_COCOA" = 1 -o "$wxUSE_MGL" = 1; then
-        AC_MSG_WARN([Dialup manager not supported on this platform ... disabled])
+        AC_MSG_WARN([Dialup manager not supported on this platform... disabled])
     else
         AC_DEFINE(wxUSE_DIALUP_MANAGER)
         SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS dialup"
