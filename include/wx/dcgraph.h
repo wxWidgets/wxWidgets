@@ -36,6 +36,9 @@ class WXDLLEXPORT wxGCDC:
 
 public:
     wxGCDC(const wxWindowDC& dc);
+#ifdef __WXMSW__
+    wxGCDC( const wxMemoryDC& dc);
+#endif    
     wxGCDC();
     virtual ~wxGCDC();
 

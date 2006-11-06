@@ -18,6 +18,7 @@
 #include "wx/dynarray.h"
 
 class WXDLLIMPEXP_CORE wxWindowDC;
+class WXDLLIMPEXP_CORE wxMemoryDC;
 class WXDLLIMPEXP_CORE wxGraphicsContext;
 class WXDLLIMPEXP_CORE wxGraphicsPath;
 class WXDLLIMPEXP_CORE wxGraphicsMatrix;
@@ -387,6 +388,10 @@ public:
     
     static wxGraphicsContext* Create( const wxWindowDC& dc) ;
     
+#ifdef __WXMSW__
+    static wxGraphicsContext * Create( const wxMemoryDC& dc) ;
+#endif    
+
     static wxGraphicsContext* CreateFromNative( void * context ) ;
 
     static wxGraphicsContext* CreateFromNativeWindow( void * window ) ;
@@ -605,7 +610,9 @@ public :
     // Context
 
     virtual wxGraphicsContext * CreateContext( const wxWindowDC& dc) = 0 ;
-    
+#ifdef __WXMSW__
+    virtual wxGraphicsContext * CreateContext( const wxMemoryDC& dc) = 0 ;
+#endif    
     virtual wxGraphicsContext * CreateContextFromNativeContext( void * context ) = 0;
 
     virtual wxGraphicsContext * CreateContextFromNativeWindow( void * window ) = 0;

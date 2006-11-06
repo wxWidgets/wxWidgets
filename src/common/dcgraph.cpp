@@ -83,6 +83,14 @@ wxGCDC::wxGCDC(const wxWindowDC& dc)
     SetGraphicsContext( wxGraphicsContext::Create(dc) );
 }
 
+#ifdef __WXMSW__
+wxGCDC::wxGCDC(const wxMemoryDC& dc)
+{
+    Init();
+    SetGraphicsContext( wxGraphicsContext::Create(dc) );
+}
+#endif    
+
 void wxGCDC::Init()
 {
     m_ok = false;

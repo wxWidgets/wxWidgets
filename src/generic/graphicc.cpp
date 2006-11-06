@@ -1166,6 +1166,10 @@ public :
 
     virtual wxGraphicsContext * CreateContext( const wxWindowDC& dc);
 
+#ifdef __WXMSW__
+    virtual wxGraphicsContext * CreateContext( const wxMemoryDC& dc);
+#endif
+
     virtual wxGraphicsContext * CreateContextFromNativeContext( void * context );
 
     virtual wxGraphicsContext * CreateContextFromNativeWindow( void * window );
@@ -1223,6 +1227,13 @@ wxGraphicsContext * wxCairoRenderer::CreateContext( const wxWindowDC& dc)
 {
     return new wxCairoContext(this,dc);
 }
+
+#ifdef __WXMSW__
+wxGraphicsContext * wxCairoRenderer::CreateContext( const wxMemoryDC& dc)
+{
+    return NULL;
+}
+#endif
 
 wxGraphicsContext * wxCairoRenderer::CreateContextFromNativeContext( void * context )
 {
