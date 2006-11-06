@@ -7102,8 +7102,10 @@ void wxGrid::SetCurrentCell( const wxGridCellCoords& coords )
         return;
     }
 
+#if !(defined(__WXMAC__) && wxMAC_USE_CORE_GRAPHICS)
     wxClientDC dc( m_gridWin );
     PrepareDC( dc );
+#endif
 
     if ( m_currentCellCoords != wxGridNoCellCoords )
     {
@@ -7126,15 +7128,21 @@ void wxGrid::SetCurrentCell( const wxGridCellCoords& coords )
             // Otherwise refresh redraws the highlight!
             m_currentCellCoords = coords;
 
+#if defined(__WXMAC__) && wxMAC_USE_CORE_GRAPHICS
+            m_gridWin->Refresh(true /*, & r */);
+#else
             DrawGridCellArea( dc, cells );
             DrawAllGridLines( dc, r );
+#endif
         }
     }
 
     m_currentCellCoords = coords;
 
     wxGridCellAttr *attr = GetCellAttr( coords );
+#if !(defined(__WXMAC__) && wxMAC_USE_CORE_GRAPHICS)
     DrawCellHighlight( dc, attr );
+#endif
     attr->DecRef();
 }
 
@@ -7510,7 +7518,7 @@ void wxGrid::DrawCell( wxDC& dc, const wxGridCellCoords& coords )
         // edit control is erased by this code after being rendered.
         // On wxMac (QD build only), the cell editor is a wxTextCntl and is rendered
         // implicitly, causing this out-of order render.
-#if !defined(__WXMAC__) || wxMAC_USE_CORE_GRAPHICS
+#if !defined(__WXMAC__)
         wxGridCellEditor *editor = attr->GetEditor(this, row, col);
         editor->PaintBackground(rect, attr);
         editor->DecRef();
