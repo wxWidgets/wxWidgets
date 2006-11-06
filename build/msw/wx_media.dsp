@@ -474,6 +474,10 @@ SOURCE=..\..\src\msw\mediactrl_am.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\msw\mediactrl_qt.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\msw\mediactrl_wmp10.cpp
 # End Source File
 # Begin Source File
