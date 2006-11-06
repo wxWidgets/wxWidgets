@@ -1929,6 +1929,7 @@ ____ADVANCED_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_animatecmn.obj \
 	$(OBJS)\monodll_datavcmn.obj \
 	$(OBJS)\monodll_aboutdlgg.obj \
+	$(OBJS)\monodll_animateg.obj \
 	$(OBJS)\monodll_bmpcboxg.obj \
 	$(OBJS)\monodll_calctrl.obj \
 	$(OBJS)\monodll_datavgen.obj \
@@ -1945,7 +1946,6 @@ ____ADVANCED_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_splash.obj \
 	$(OBJS)\monodll_tipdlg.obj \
 	$(OBJS)\monodll_wizard.obj \
-	$(OBJS)\monodll_animateg.obj \
 	$(OBJS)\monodll_taskbarcmn.obj \
 	$(OBJS)\monodll_aboutdlg.obj \
 	$(OBJS)\monodll_sound.obj \
@@ -1958,6 +1958,7 @@ ____ADVANCED_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_animatecmn.obj \
 	$(OBJS)\monodll_datavcmn.obj \
 	$(OBJS)\monodll_aboutdlgg.obj \
+	$(OBJS)\monodll_animateg.obj \
 	$(OBJS)\monodll_bmpcboxg.obj \
 	$(OBJS)\monodll_calctrl.obj \
 	$(OBJS)\monodll_datavgen.obj \
@@ -1974,13 +1975,11 @@ ____ADVANCED_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_splash.obj \
 	$(OBJS)\monodll_tipdlg.obj \
 	$(OBJS)\monodll_wizard.obj \
-	$(OBJS)\monodll_animateg.obj \
 	$(OBJS)\monodll_taskbarcmn.obj \
 	$(OBJS)\monodll_aboutdlg.obj \
 	$(OBJS)\monodll_sound.obj \
 	$(OBJS)\monodll_taskbar.obj \
-	$(OBJS)\monodll_joystick.obj \
-	$(OBJS)\monodll_animateg.obj
+	$(OBJS)\monodll_joystick.obj
 !endif
 !if "$(MONOLITHIC)" == "1" && "$(SHARED)" == "0"
 __monolib___depname = \
@@ -2548,6 +2547,7 @@ ____ADVANCED_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_animatecmn.obj \
 	$(OBJS)\monolib_datavcmn.obj \
 	$(OBJS)\monolib_aboutdlgg.obj \
+	$(OBJS)\monolib_animateg.obj \
 	$(OBJS)\monolib_bmpcboxg.obj \
 	$(OBJS)\monolib_calctrl.obj \
 	$(OBJS)\monolib_datavgen.obj \
@@ -2564,7 +2564,6 @@ ____ADVANCED_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_splash.obj \
 	$(OBJS)\monolib_tipdlg.obj \
 	$(OBJS)\monolib_wizard.obj \
-	$(OBJS)\monolib_animateg.obj \
 	$(OBJS)\monolib_taskbarcmn.obj \
 	$(OBJS)\monolib_aboutdlg.obj \
 	$(OBJS)\monolib_sound.obj \
@@ -2577,6 +2576,7 @@ ____ADVANCED_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_animatecmn.obj \
 	$(OBJS)\monolib_datavcmn.obj \
 	$(OBJS)\monolib_aboutdlgg.obj \
+	$(OBJS)\monolib_animateg.obj \
 	$(OBJS)\monolib_bmpcboxg.obj \
 	$(OBJS)\monolib_calctrl.obj \
 	$(OBJS)\monolib_datavgen.obj \
@@ -2593,13 +2593,11 @@ ____ADVANCED_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_splash.obj \
 	$(OBJS)\monolib_tipdlg.obj \
 	$(OBJS)\monolib_wizard.obj \
-	$(OBJS)\monolib_animateg.obj \
 	$(OBJS)\monolib_taskbarcmn.obj \
 	$(OBJS)\monolib_aboutdlg.obj \
 	$(OBJS)\monolib_sound.obj \
 	$(OBJS)\monolib_taskbar.obj \
-	$(OBJS)\monolib_joystick.obj \
-	$(OBJS)\monolib_animateg.obj
+	$(OBJS)\monolib_joystick.obj
 !endif
 !if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "1"
 __basedll___depname = \
@@ -3562,6 +3560,7 @@ ____ADVANCED_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\advdll_animatecmn.obj \
 	$(OBJS)\advdll_datavcmn.obj \
 	$(OBJS)\advdll_aboutdlgg.obj \
+	$(OBJS)\advdll_animateg.obj \
 	$(OBJS)\advdll_bmpcboxg.obj \
 	$(OBJS)\advdll_calctrl.obj \
 	$(OBJS)\advdll_datavgen.obj \
@@ -3578,7 +3577,6 @@ ____ADVANCED_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\advdll_splash.obj \
 	$(OBJS)\advdll_tipdlg.obj \
 	$(OBJS)\advdll_wizard.obj \
-	$(OBJS)\advdll_animateg.obj \
 	$(OBJS)\advdll_taskbarcmn.obj \
 	$(OBJS)\advdll_aboutdlg.obj \
 	$(OBJS)\advdll_sound.obj \
@@ -3591,6 +3589,7 @@ ____ADVANCED_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\advdll_animatecmn.obj \
 	$(OBJS)\advdll_datavcmn.obj \
 	$(OBJS)\advdll_aboutdlgg.obj \
+	$(OBJS)\advdll_animateg.obj \
 	$(OBJS)\advdll_bmpcboxg.obj \
 	$(OBJS)\advdll_calctrl.obj \
 	$(OBJS)\advdll_datavgen.obj \
@@ -3607,13 +3606,11 @@ ____ADVANCED_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\advdll_splash.obj \
 	$(OBJS)\advdll_tipdlg.obj \
 	$(OBJS)\advdll_wizard.obj \
-	$(OBJS)\advdll_animateg.obj \
 	$(OBJS)\advdll_taskbarcmn.obj \
 	$(OBJS)\advdll_aboutdlg.obj \
 	$(OBJS)\advdll_sound.obj \
 	$(OBJS)\advdll_taskbar.obj \
-	$(OBJS)\advdll_joystick.obj \
-	$(OBJS)\advdll_animateg.obj
+	$(OBJS)\advdll_joystick.obj
 !endif
 !if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "0" && "$(USE_GUI)" == "1"
 __advlib___depname = \
@@ -3630,6 +3627,7 @@ ____ADVANCED_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\advlib_animatecmn.obj \
 	$(OBJS)\advlib_datavcmn.obj \
 	$(OBJS)\advlib_aboutdlgg.obj \
+	$(OBJS)\advlib_animateg.obj \
 	$(OBJS)\advlib_bmpcboxg.obj \
 	$(OBJS)\advlib_calctrl.obj \
 	$(OBJS)\advlib_datavgen.obj \
@@ -3646,7 +3644,6 @@ ____ADVANCED_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\advlib_splash.obj \
 	$(OBJS)\advlib_tipdlg.obj \
 	$(OBJS)\advlib_wizard.obj \
-	$(OBJS)\advlib_animateg.obj \
 	$(OBJS)\advlib_taskbarcmn.obj \
 	$(OBJS)\advlib_aboutdlg.obj \
 	$(OBJS)\advlib_sound.obj \
@@ -3659,6 +3656,7 @@ ____ADVANCED_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\advlib_animatecmn.obj \
 	$(OBJS)\advlib_datavcmn.obj \
 	$(OBJS)\advlib_aboutdlgg.obj \
+	$(OBJS)\advlib_animateg.obj \
 	$(OBJS)\advlib_bmpcboxg.obj \
 	$(OBJS)\advlib_calctrl.obj \
 	$(OBJS)\advlib_datavgen.obj \
@@ -3675,13 +3673,11 @@ ____ADVANCED_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\advlib_splash.obj \
 	$(OBJS)\advlib_tipdlg.obj \
 	$(OBJS)\advlib_wizard.obj \
-	$(OBJS)\advlib_animateg.obj \
 	$(OBJS)\advlib_taskbarcmn.obj \
 	$(OBJS)\advlib_aboutdlg.obj \
 	$(OBJS)\advlib_sound.obj \
 	$(OBJS)\advlib_taskbar.obj \
-	$(OBJS)\advlib_joystick.obj \
-	$(OBJS)\advlib_animateg.obj
+	$(OBJS)\advlib_joystick.obj
 !endif
 !if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "1" && "$(USE_GUI)" == "1" && "$(USE_MEDIA)" == "1"
 __mediadll___depname = \
@@ -6725,6 +6721,11 @@ $(OBJS)\monodll_aboutdlgg.obj: ..\..\src\generic\aboutdlgg.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
+$(OBJS)\monodll_animateg.obj: ..\..\src\generic\animateg.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) $**
+!endif
+
+!if "$(USE_GUI)" == "1"
 $(OBJS)\monodll_bmpcboxg.obj: ..\..\src\generic\bmpcboxg.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) $**
 !endif
@@ -6801,16 +6802,6 @@ $(OBJS)\monodll_tipdlg.obj: ..\..\src\generic\tipdlg.cpp
 
 !if "$(USE_GUI)" == "1"
 $(OBJS)\monodll_wizard.obj: ..\..\src\generic\wizard.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) $**
-!endif
-
-!if "$(USE_GUI)" == "1"
-$(OBJS)\monodll_animateg.obj: ..\..\src\generic\animateg.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) $**
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
-$(OBJS)\monodll_animateg.obj: ..\..\src\generic\animateg.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) $**
 !endif
 
@@ -8717,6 +8708,11 @@ $(OBJS)\monolib_aboutdlgg.obj: ..\..\src\generic\aboutdlgg.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
+$(OBJS)\monolib_animateg.obj: ..\..\src\generic\animateg.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) $**
+!endif
+
+!if "$(USE_GUI)" == "1"
 $(OBJS)\monolib_bmpcboxg.obj: ..\..\src\generic\bmpcboxg.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) $**
 !endif
@@ -8793,16 +8789,6 @@ $(OBJS)\monolib_tipdlg.obj: ..\..\src\generic\tipdlg.cpp
 
 !if "$(USE_GUI)" == "1"
 $(OBJS)\monolib_wizard.obj: ..\..\src\generic\wizard.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) $**
-!endif
-
-!if "$(USE_GUI)" == "1"
-$(OBJS)\monolib_animateg.obj: ..\..\src\generic\animateg.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) $**
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
-$(OBJS)\monolib_animateg.obj: ..\..\src\generic\animateg.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) $**
 !endif
 
@@ -12000,6 +11986,9 @@ $(OBJS)\advdll_datavcmn.obj: ..\..\src\common\datavcmn.cpp
 $(OBJS)\advdll_aboutdlgg.obj: ..\..\src\generic\aboutdlgg.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(ADVDLL_CXXFLAGS) $**
 
+$(OBJS)\advdll_animateg.obj: ..\..\src\generic\animateg.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(ADVDLL_CXXFLAGS) $**
+
 $(OBJS)\advdll_bmpcboxg.obj: ..\..\src\generic\bmpcboxg.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(ADVDLL_CXXFLAGS) $**
 
@@ -12048,14 +12037,6 @@ $(OBJS)\advdll_tipdlg.obj: ..\..\src\generic\tipdlg.cpp
 $(OBJS)\advdll_wizard.obj: ..\..\src\generic\wizard.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(ADVDLL_CXXFLAGS) $**
 
-$(OBJS)\advdll_animateg.obj: ..\..\src\generic\animateg.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(ADVDLL_CXXFLAGS) $**
-
-!if "$(WXUNIV)" == "1"
-$(OBJS)\advdll_animateg.obj: ..\..\src\generic\animateg.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(ADVDLL_CXXFLAGS) $**
-!endif
-
 $(OBJS)\advdll_taskbarcmn.obj: ..\..\src\common\taskbarcmn.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(ADVDLL_CXXFLAGS) $**
 
@@ -12084,6 +12065,9 @@ $(OBJS)\advlib_datavcmn.obj: ..\..\src\common\datavcmn.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(ADVLIB_CXXFLAGS) $**
 
 $(OBJS)\advlib_aboutdlgg.obj: ..\..\src\generic\aboutdlgg.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(ADVLIB_CXXFLAGS) $**
+
+$(OBJS)\advlib_animateg.obj: ..\..\src\generic\animateg.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(ADVLIB_CXXFLAGS) $**
 
 $(OBJS)\advlib_bmpcboxg.obj: ..\..\src\generic\bmpcboxg.cpp
@@ -12133,14 +12117,6 @@ $(OBJS)\advlib_tipdlg.obj: ..\..\src\generic\tipdlg.cpp
 
 $(OBJS)\advlib_wizard.obj: ..\..\src\generic\wizard.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(ADVLIB_CXXFLAGS) $**
-
-$(OBJS)\advlib_animateg.obj: ..\..\src\generic\animateg.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(ADVLIB_CXXFLAGS) $**
-
-!if "$(WXUNIV)" == "1"
-$(OBJS)\advlib_animateg.obj: ..\..\src\generic\animateg.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(ADVLIB_CXXFLAGS) $**
-!endif
 
 $(OBJS)\advlib_taskbarcmn.obj: ..\..\src\common\taskbarcmn.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(ADVLIB_CXXFLAGS) $**

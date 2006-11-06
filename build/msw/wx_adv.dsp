@@ -625,57 +625,6 @@ SOURCE=..\..\src\generic\aboutdlgg.cpp
 # Begin Source File
 
 SOURCE=..\..\src\generic\animateg.cpp
-
-!IF  "$(CFG)" == "adv - Win32 DLL Universal Unicode Release"
-
-
-!ELSEIF  "$(CFG)" == "adv - Win32 DLL Universal Unicode Debug"
-
-
-!ELSEIF  "$(CFG)" == "adv - Win32 DLL Universal Release"
-
-
-!ELSEIF  "$(CFG)" == "adv - Win32 DLL Universal Debug"
-
-
-!ELSEIF  "$(CFG)" == "adv - Win32 DLL Unicode Release"
-
-
-!ELSEIF  "$(CFG)" == "adv - Win32 DLL Unicode Debug"
-
-
-!ELSEIF  "$(CFG)" == "adv - Win32 DLL Release"
-
-
-!ELSEIF  "$(CFG)" == "adv - Win32 DLL Debug"
-
-
-!ELSEIF  "$(CFG)" == "adv - Win32 Universal Unicode Release"
-
-
-!ELSEIF  "$(CFG)" == "adv - Win32 Universal Unicode Debug"
-
-
-!ELSEIF  "$(CFG)" == "adv - Win32 Universal Release"
-
-
-!ELSEIF  "$(CFG)" == "adv - Win32 Universal Debug"
-
-
-!ELSEIF  "$(CFG)" == "adv - Win32 Unicode Release"
-
-
-!ELSEIF  "$(CFG)" == "adv - Win32 Unicode Debug"
-
-
-!ELSEIF  "$(CFG)" == "adv - Win32 Release"
-
-
-!ELSEIF  "$(CFG)" == "adv - Win32 Debug"
-
-
-!ENDIF
-
 # End Source File
 # Begin Source File
 
