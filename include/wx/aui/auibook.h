@@ -27,6 +27,8 @@
 #include "wx/control.h"
 
 
+class wxAuiNotebook;
+
 
 enum wxAuiNotebookOption
 {
@@ -36,11 +38,13 @@ enum wxAuiNotebookOption
     wxAUI_NB_BOTTOM              = 1 << 3,  // not implemented yet
     wxAUI_NB_TAB_SPLIT           = 1 << 4,
     wxAUI_NB_TAB_MOVE            = 1 << 5,
-    wxAUI_NB_SCROLL_BUTTONS      = 1 << 6,
-    wxAUI_NB_WINDOWLIST_BUTTON   = 1 << 7,
-    wxAUI_NB_CLOSE_BUTTON        = 1 << 8,
-    wxAUI_NB_CLOSE_ON_ACTIVE_TAB = 1 << 9,
-    wxAUI_NB_CLOSE_ON_ALL_TABS   = 1 << 10,
+    wxAUI_NB_TAB_EXTERNAL_MOVE   = 1 << 6,
+    wxAUI_NB_SCROLL_BUTTONS      = 1 << 7,
+    wxAUI_NB_WINDOWLIST_BUTTON   = 1 << 8,
+    wxAUI_NB_CLOSE_BUTTON        = 1 << 9,
+    wxAUI_NB_CLOSE_ON_ACTIVE_TAB = 1 << 10,
+    wxAUI_NB_CLOSE_ON_ALL_TABS   = 1 << 11,
+    
     
     wxAUI_NB_DEFAULT_STYLE = wxAUI_NB_TOP |
                              wxAUI_NB_TAB_SPLIT |
@@ -192,24 +196,33 @@ public:
                        int win_id = 0)
           : wxNotifyEvent(command_type, win_id)
     {
+        old_selection = -1;
+        selection = -1;
+        drag_source = NULL;
     }
 #ifndef SWIG
     wxAuiNotebookEvent(const wxAuiNotebookEvent& c) : wxNotifyEvent(c)
     {
         old_selection = c.old_selection;
         selection = c.selection;
+        drag_source = c.drag_source;
     }
 #endif
     wxEvent *Clone() const { return new wxAuiNotebookEvent(*this); }
 
     void SetSelection(int s) { selection = s; m_commandInt = s; }
-    void SetOldSelection(int s) { old_selection = s; }
     int GetSelection() const { return selection; }
+    
+    void SetOldSelection(int s) { old_selection = s; }
     int GetOldSelection() const { return old_selection; }
+    
+    void SetDragSource(wxAuiNotebook* s) { drag_source = s; }
+    wxAuiNotebook* GetDragSource() const { return drag_source; }
 
 public:
     int old_selection;
     int selection;
+    wxAuiNotebook* drag_source;
 
 #ifndef SWIG
 private:
@@ -343,6 +356,7 @@ protected:
     wxAuiTabContainerButton* m_hover_button;
 
 #ifndef SWIG
+    DECLARE_CLASS(wxAuiTabCtrl)
     DECLARE_EVENT_TABLE()
 #endif
 };
@@ -455,6 +469,7 @@ BEGIN_DECLARE_EVENT_TYPES()
     DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_AUI, wxEVT_COMMAND_AUINOTEBOOK_BEGIN_DRAG, 0)
     DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_AUI, wxEVT_COMMAND_AUINOTEBOOK_END_DRAG, 0)
     DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_AUI, wxEVT_COMMAND_AUINOTEBOOK_DRAG_MOTION, 0)
+    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_AUI, wxEVT_COMMAND_AUINOTEBOOK_ALLOW_DND, 0)
 END_DECLARE_EVENT_TYPES()
 
 typedef void (wxEvtHandler::*wxAuiNotebookEventFunction)(wxAuiNotebookEvent&);
@@ -474,6 +489,8 @@ typedef void (wxEvtHandler::*wxAuiNotebookEventFunction)(wxAuiNotebookEvent&);
     wx__DECLARE_EVT1(wxEVT_COMMAND_AUINOTEBOOK_END_DRAG, winid, wxAuiNotebookEventHandler(fn))
 #define EVT_AUINOTEBOOK_DRAG_MOTION(winid, fn) \
     wx__DECLARE_EVT1(wxEVT_COMMAND_AUINOTEBOOK_DRAG_MOTION, winid, wxAuiNotebookEventHandler(fn))
+#define EVT_AUINOTEBOOK_ALLOW_DND(winid, fn) \
+    wx__DECLARE_EVT1(wxEVT_COMMAND_AUINOTEBOOK_ALLOW_DND, winid, wxAuiNotebookEventHandler(fn))
 
 #else
 
@@ -484,6 +501,7 @@ typedef void (wxEvtHandler::*wxAuiNotebookEventFunction)(wxAuiNotebookEvent&);
 %constant wxEventType wxEVT_COMMAND_AUINOTEBOOK_BEGIN_DRAG;
 %constant wxEventType wxEVT_COMMAND_AUINOTEBOOK_END_DRAG;
 %constant wxEventType wxEVT_COMMAND_AUINOTEBOOK_DRAG_MOTION;
+%constant wxEventType wxEVT_COMMAND_AUINOTEBOOK_ALLOW_DND;
 
 %pythoncode {
     EVT_AUINOTEBOOK_PAGE_CHANGED = wx.PyEventBinder( wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGED, 1 )
@@ -492,6 +510,7 @@ typedef void (wxEvtHandler::*wxAuiNotebookEventFunction)(wxAuiNotebookEvent&);
     EVT_AUINOTEBOOK_BEGIN_DRAG = wx.PyEventBinder( wxEVT_COMMAND_AUINOTEBOOK_BEGIN_DRAG, 1 )
     EVT_AUINOTEBOOK_END_DRAG = wx.PyEventBinder( wxEVT_COMMAND_AUINOTEBOOK_END_DRAG, 1 )
     EVT_AUINOTEBOOK_DRAG_MOTION = wx.PyEventBinder( wxEVT_COMMAND_AUINOTEBOOK_DRAG_MOTION, 1 )
+    EVT_AUINOTEBOOK_ALLOW_DND = wx.PyEventBinder( wxEVT_COMMAND_AUINOTEBOOK_ALLOW_DND, 1 )
 }
 #endif
 

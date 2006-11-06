@@ -90,6 +90,7 @@ class MyFrame : public wxFrame
         ID_NotebookCloseButtonAll,
         ID_NotebookCloseButtonActive,
         ID_NotebookAllowTabMove,
+        ID_NotebookAllowTabExternalMove,
         ID_NotebookAllowTabSplit,
         ID_NotebookWindowList,
         ID_NotebookScrollButtons,
@@ -136,6 +137,7 @@ private:
     void OnCopyPerspectiveCode(wxCommandEvent& evt);
     void OnRestorePerspective(wxCommandEvent& evt);
     void OnSettings(wxCommandEvent& evt);
+    void OnAllowNotebookDnD(wxAuiNotebookEvent& evt);
     void OnExit(wxCommandEvent& evt);
     void OnAbout(wxCommandEvent& evt);
 
@@ -577,6 +579,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(ID_NotebookCloseButtonAll, MyFrame::OnNotebookFlag)
     EVT_MENU(ID_NotebookCloseButtonActive, MyFrame::OnNotebookFlag)
     EVT_MENU(ID_NotebookAllowTabMove, MyFrame::OnNotebookFlag)
+    EVT_MENU(ID_NotebookAllowTabExternalMove, MyFrame::OnNotebookFlag)
     EVT_MENU(ID_NotebookAllowTabSplit, MyFrame::OnNotebookFlag)
     EVT_MENU(ID_NotebookScrollButtons, MyFrame::OnNotebookFlag)
     EVT_MENU(ID_NotebookWindowList, MyFrame::OnNotebookFlag)
@@ -597,6 +600,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_UPDATE_UI(ID_NotebookCloseButtonAll, MyFrame::OnUpdateUI)
     EVT_UPDATE_UI(ID_NotebookCloseButtonActive, MyFrame::OnUpdateUI)
     EVT_UPDATE_UI(ID_NotebookAllowTabMove, MyFrame::OnUpdateUI)
+    EVT_UPDATE_UI(ID_NotebookAllowTabExternalMove, MyFrame::OnUpdateUI)
     EVT_UPDATE_UI(ID_NotebookAllowTabSplit, MyFrame::OnUpdateUI)
     EVT_UPDATE_UI(ID_NotebookScrollButtons, MyFrame::OnUpdateUI)
     EVT_UPDATE_UI(ID_NotebookWindowList, MyFrame::OnUpdateUI)
@@ -614,6 +618,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU_RANGE(MyFrame::ID_FirstPerspective, MyFrame::ID_FirstPerspective+1000,
                    MyFrame::OnRestorePerspective)
     EVT_AUI_PANECLOSE(MyFrame::OnPaneClose)
+    EVT_AUINOTEBOOK_ALLOW_DND(wxID_ANY, MyFrame::OnAllowNotebookDnD)
 END_EVENT_TABLE()
 
 
@@ -632,7 +637,7 @@ MyFrame::MyFrame(wxWindow* parent,
     SetIcon(wxIcon(sample_xpm));
 
     // set up default notebook style
-    m_notebook_style = wxAUI_NB_DEFAULT_STYLE | wxNO_BORDER;
+    m_notebook_style = wxAUI_NB_DEFAULT_STYLE | wxAUI_NB_TAB_EXTERNAL_MOVE | wxNO_BORDER;
 
     // create menu
     wxMenuBar* mb = new wxMenuBar;
@@ -680,6 +685,7 @@ MyFrame::MyFrame(wxWindow* parent,
     notebook_menu->AppendRadioItem(ID_NotebookCloseButtonActive, _("Close Button on Active Tab"));
     notebook_menu->AppendSeparator();
     notebook_menu->AppendCheckItem(ID_NotebookAllowTabMove, _("Allow Tab Move"));
+    notebook_menu->AppendCheckItem(ID_NotebookAllowTabExternalMove, _("Allow External Tab Move"));
     notebook_menu->AppendCheckItem(ID_NotebookAllowTabSplit, _("Allow Notebook Split"));
     notebook_menu->AppendCheckItem(ID_NotebookScrollButtons, _("Scroll Buttons Visible"));
     notebook_menu->AppendCheckItem(ID_NotebookWindowList, _("Window List Button Visible"));
@@ -1045,6 +1051,10 @@ void MyFrame::OnNotebookFlag(wxCommandEvent& event)
     {
         m_notebook_style ^= wxAUI_NB_TAB_MOVE;
     }
+    if (id == ID_NotebookAllowTabExternalMove)
+    {
+        m_notebook_style ^= wxAUI_NB_TAB_EXTERNAL_MOVE;
+    }
      else if (id == ID_NotebookAllowTabSplit)
     {
         m_notebook_style ^= wxAUI_NB_TAB_SPLIT;
@@ -1137,6 +1147,9 @@ void MyFrame::OnUpdateUI(wxUpdateUIEvent& event)
         case ID_NotebookAllowTabMove:
             event.Check((m_notebook_style & wxAUI_NB_TAB_MOVE) != 0);
             break;
+        case ID_NotebookAllowTabExternalMove:
+            event.Check((m_notebook_style & wxAUI_NB_TAB_EXTERNAL_MOVE) != 0);
+            break;
         case ID_NotebookScrollButtons:
             event.Check((m_notebook_style & wxAUI_NB_SCROLL_BUTTONS) != 0);
             break;
@@ -1177,7 +1190,7 @@ void MyFrame::OnCreatePerspective(wxCommandEvent& WXUNUSED(event))
     m_perspectives.Add(m_mgr.SavePerspective());
 }
 
-void MyFrame::OnCopyPerspectiveCode(wxCommandEvent& WXUNUSED(event))
+void MyFrame::OnCopyPerspectiveCode(wxCommandEvent& WXUNUSED(evt))
 {
     wxString s = m_mgr.SavePerspective();
 
@@ -1190,11 +1203,17 @@ void MyFrame::OnCopyPerspectiveCode(wxCommandEvent& WXUNUSED(event))
 #endif
 }
 
-void MyFrame::OnRestorePerspective(wxCommandEvent& event)
+void MyFrame::OnRestorePerspective(wxCommandEvent& evt)
 {
-    m_mgr.LoadPerspective(m_perspectives.Item(event.GetId() - ID_FirstPerspective));
+    m_mgr.LoadPerspective(m_perspectives.Item(evt.GetId() - ID_FirstPerspective));
 }
 
+void MyFrame::OnAllowNotebookDnD(wxAuiNotebookEvent& evt)
+{    
+    // for the purpose of this test application, explicitly
+    // allow all noteboko drag and drop events
+    evt.Allow();
+}
 
 wxPoint MyFrame::GetStartPosition()
 {

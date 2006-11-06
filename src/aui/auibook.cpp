@@ -41,9 +41,11 @@ DEFINE_EVENT_TYPE(wxEVT_COMMAND_AUINOTEBOOK_BUTTON)
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_AUINOTEBOOK_BEGIN_DRAG)
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_AUINOTEBOOK_END_DRAG)
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_AUINOTEBOOK_DRAG_MOTION)
+DEFINE_EVENT_TYPE(wxEVT_COMMAND_AUINOTEBOOK_ALLOW_DND)
 
 
 IMPLEMENT_CLASS(wxAuiNotebook, wxControl)
+IMPLEMENT_CLASS(wxAuiTabCtrl, wxControl)
 IMPLEMENT_DYNAMIC_CLASS(wxAuiNotebookEvent, wxEvent)
 
 
@@ -1743,6 +1745,29 @@ bool wxAuiNotebook::InsertPage(size_t page_idx,
 bool wxAuiNotebook::DeletePage(size_t page_idx)
 {    
     wxWindow* wnd = m_tabs.GetWindowFromIdx(page_idx);
+
+    if (!RemovePage(page_idx))
+        return false;
+
+
+    // actually destroy the window now
+    if (wnd->IsKindOf(CLASSINFO(wxAuiMDIChildFrame)))
+    {
+        // delete the child frame with pending delete, as is
+        // customary with frame windows
+        if (!wxPendingDelete.Member(wnd))
+            wxPendingDelete.Append(wnd);
+    }
+     else
+    {
+        wnd->Destroy();
+    }
+    
+    return true;
+    
+/*
+
+    wxWindow* wnd = m_tabs.GetWindowFromIdx(page_idx);
     wxWindow* new_active = NULL;
 
     // find out which onscreen tab ctrl owns this tab
@@ -1806,6 +1831,7 @@ bool wxAuiNotebook::DeletePage(size_t page_idx)
     }
     
     return true;
+    */
 }
 
 
@@ -1814,21 +1840,58 @@ bool wxAuiNotebook::DeletePage(size_t page_idx)
 // but does not destroy the window
 bool wxAuiNotebook::RemovePage(size_t page_idx)
 {
-    // remove the tab from our own catalog
     wxWindow* wnd = m_tabs.GetWindowFromIdx(page_idx);
+    wxWindow* new_active = NULL;
+
+    // find out which onscreen tab ctrl owns this tab
+    wxAuiTabCtrl* ctrl;
+    int ctrl_idx;
+    if (!FindTab(wnd, &ctrl, &ctrl_idx))
+        return false;
+
+    // find a new page and set it as active
+    int new_idx = ctrl_idx+1;
+    if (new_idx >= (int)ctrl->GetPageCount())
+        new_idx = ctrl_idx-1;
+
+    if (new_idx >= 0 && new_idx < (int)ctrl->GetPageCount())
+    {
+        new_active = ctrl->GetWindowFromIdx(new_idx);
+    }
+     else
+    {
+        // set the active page to the first page that
+        // isn't the one being deleted
+        size_t i, page_count = m_tabs.GetPageCount();
+        for (i = 0; i < page_count; ++i)
+        {
+            wxWindow* w = m_tabs.GetWindowFromIdx(i);
+            if (wnd != w)
+            {
+                new_active = m_tabs.GetWindowFromIdx(i);
+                break;
+            }
+        }
+    }
+
+    // remove the tab from main catalog
     if (!m_tabs.RemovePage(wnd))
         return false;
 
     // remove the tab from the onscreen tab ctrl
-    wxAuiTabCtrl* ctrl;
-    int ctrl_idx;
-    if (FindTab(wnd, &ctrl, &ctrl_idx))
-    {
-        ctrl->RemovePage(wnd);
-        return true;
-    }
+    ctrl->RemovePage(wnd);
 
-    return false;
+
+    RemoveEmptyTabFrames();
+
+    // set new active pane
+    if (new_active)
+    {
+        m_curpage = -1;
+        SetSelection(m_tabs.GetIdxFromWindow(new_active));
+    }
+    
+    return true;
 }
 
 // SetPageText() changes the tab caption of the specified page
@@ -2059,8 +2122,8 @@ void wxAuiNotebook::OnTabDragMotion(wxCommandEvent& evt)
     wxPoint zero(0,0);
 
     wxAuiTabCtrl* src_tabs = (wxAuiTabCtrl*)evt.GetEventObject();
-
     wxAuiTabCtrl* dest_tabs = GetTabCtrlFromPoint(client_pt);
+    
     if (dest_tabs == src_tabs)
     {
         if (src_tabs)
@@ -2109,6 +2172,39 @@ void wxAuiNotebook::OnTabDragMotion(wxCommandEvent& evt)
     }
 
 
+    // if external drag is allowed, check if the tab is being dragged
+    // over a different wxAuiNotebook control
+    if (m_flags & wxAUI_NB_TAB_EXTERNAL_MOVE)
+    {
+        wxWindow* tab_ctrl = ::wxFindWindowAtPoint(screen_pt);
+        
+        // if we are over a hint window, leave
+        if (tab_ctrl->IsKindOf(CLASSINFO(wxFrame)))
+            return;
+        
+        while (tab_ctrl)
+        {
+            if (tab_ctrl->IsKindOf(CLASSINFO(wxAuiTabCtrl)))
+                break;
+            tab_ctrl = tab_ctrl->GetParent();
+        }
+        
+        if (tab_ctrl)
+        {
+            wxAuiNotebook* nb = (wxAuiNotebook*)tab_ctrl->GetParent();
+            
+            if (nb != this)
+            {
+                wxRect hint_rect = tab_ctrl->GetRect();
+                tab_ctrl->ClientToScreen(&hint_rect.x, &hint_rect.y);
+                m_mgr.ShowHint(hint_rect);
+                return;
+            }
+            
+        }
+    }
+
+
     // if tab moving is not allowed, leave
     if (!(m_flags & wxAUI_NB_TAB_SPLIT))
     {
@@ -2142,16 +2238,12 @@ void wxAuiNotebook::OnTabEndDrag(wxCommandEvent& command_evt)
 
     m_mgr.HideHint();
 
-    // if tab moving is not allowed, leave
-    if (!(m_flags & wxAUI_NB_TAB_SPLIT))
-    {
-        return;
-    }
     
-    // set cursor back to an arrow
     wxAuiTabCtrl* src_tabs = (wxAuiTabCtrl*)evt.GetEventObject();
+    wxAuiTabCtrl* dest_tabs = NULL;
     if (src_tabs)
     {
+        // set cursor back to an arrow
         src_tabs->SetCursor(wxCursor(wxCURSOR_ARROW));
     }
     
@@ -2160,79 +2252,167 @@ void wxAuiNotebook::OnTabEndDrag(wxCommandEvent& command_evt)
     wxPoint mouse_client_pt = ScreenToClient(mouse_screen_pt);
 
 
-    // the src tab control is the control that fired this event
-    wxAuiTabCtrl* dest_tabs = NULL;
 
-
-    // If the pointer is in an existing tab frame, do a tab insert
-    wxWindow* hit_wnd = ::wxFindWindowAtPoint(mouse_screen_pt);
-    wxTabFrame* tab_frame = (wxTabFrame*)GetTabFrameFromTabCtrl(hit_wnd);
-    int insert_idx = -1;
-    if (tab_frame)
+    // check for an external move
+    if (m_flags & wxAUI_NB_TAB_EXTERNAL_MOVE)
     {
-        dest_tabs = tab_frame->m_tabs;
-
-        if (dest_tabs == src_tabs)
-            return;
+        wxWindow* tab_ctrl = ::wxFindWindowAtPoint(mouse_screen_pt);
         
-            
-        wxPoint pt = dest_tabs->ScreenToClient(mouse_screen_pt);
-        wxWindow* target = NULL;
-        dest_tabs->TabHitTest(pt.x, pt.y, &target);
-        if (target)
+        while (tab_ctrl)
         {
-            insert_idx = dest_tabs->GetIdxFromWindow(target);
+            if (tab_ctrl->IsKindOf(CLASSINFO(wxAuiTabCtrl)))
+                break;
+            tab_ctrl = tab_ctrl->GetParent();
+        }
+        
+        if (tab_ctrl)
+        {
+            wxAuiNotebook* nb = (wxAuiNotebook*)tab_ctrl->GetParent();
+            
+            if (nb != this)
+            {
+                // find out from the destination control
+                // if it's ok to drop this tab here
+                wxAuiNotebookEvent e(wxEVT_COMMAND_AUINOTEBOOK_ALLOW_DND, m_windowId);
+                e.SetSelection(evt.GetSelection());
+                e.SetOldSelection(evt.GetSelection());
+                e.SetEventObject(this);
+                e.SetDragSource(this);
+                e.Veto(); // dropping must be explicitly approved by control owner
+                
+                nb->GetEventHandler()->ProcessEvent(e);
+                
+                if (!e.IsAllowed())
+                {
+                    // no answer or negative answer
+                    m_mgr.HideHint();
+                    return;
+                }
+                
+                // drop was allowed
+                int src_idx = evt.GetSelection();
+                wxWindow* src_page = src_tabs->GetWindowFromIdx(src_idx);
+                
+                // get main index of the page
+                int main_idx = m_tabs.GetIdxFromWindow(src_page);
+                
+                // make a copy of the page info
+                wxAuiNotebookPage page_info = m_tabs.GetPage((size_t)main_idx);
+                
+                // remove the page from the source notebook
+                RemovePage(main_idx);
+                
+                // reparent the page
+                src_page->Reparent(nb);
+                
+                
+                // found out the insert idx
+                wxAuiTabCtrl* dest_tabs = (wxAuiTabCtrl*)tab_ctrl;
+                wxPoint pt = dest_tabs->ScreenToClient(mouse_screen_pt);
+
+                wxWindow* target = NULL;
+                int insert_idx = -1;
+                dest_tabs->TabHitTest(pt.x, pt.y, &target);
+                if (target)
+                {
+                    insert_idx = dest_tabs->GetIdxFromWindow(target);
+                }
+
+                
+                // add the page to the new notebook
+                if (insert_idx == -1)
+                    insert_idx = dest_tabs->GetPageCount();
+                dest_tabs->InsertPage(page_info.window, page_info, insert_idx);
+                nb->m_tabs.AddPage(page_info.window, page_info);
+
+                nb->DoSizing();
+                dest_tabs->DoShowHide();
+                dest_tabs->Refresh();
+        
+                // set the selection in the destination tab control
+                nb->SetSelection(nb->m_tabs.GetIdxFromWindow(page_info.window));
+
+                return;
+            }
         }
     }
-     else
+
+
+
+
+    // only perform a tab split if it's allowed
+    if (m_flags & wxAUI_NB_TAB_SPLIT)
     {
-        // If there is no tabframe at all, create one
-        wxTabFrame* new_tabs = new wxTabFrame;
-        new_tabs->SetTabCtrlHeight(m_tab_ctrl_height);
-        new_tabs->m_tabs = new wxAuiTabCtrl(this,
-                                            m_tab_id_counter++,
-                                            wxDefaultPosition,
-                                            wxDefaultSize,
-                                            wxNO_BORDER);
-        new_tabs->m_tabs->SetFlags(m_flags);
+        // If the pointer is in an existing tab frame, do a tab insert
+        wxWindow* hit_wnd = ::wxFindWindowAtPoint(mouse_screen_pt);
+        wxTabFrame* tab_frame = (wxTabFrame*)GetTabFrameFromTabCtrl(hit_wnd);
+        int insert_idx = -1;
+        if (tab_frame)
+        {
+            dest_tabs = tab_frame->m_tabs;
 
-        m_mgr.AddPane(new_tabs,
-                      wxAuiPaneInfo().Bottom().CaptionVisible(false),
-                      mouse_client_pt);
-        m_mgr.Update();
-        dest_tabs = new_tabs->m_tabs;
+            if (dest_tabs == src_tabs)
+                return;
+            
+                
+            wxPoint pt = dest_tabs->ScreenToClient(mouse_screen_pt);
+            wxWindow* target = NULL;
+            dest_tabs->TabHitTest(pt.x, pt.y, &target);
+            if (target)
+            {
+                insert_idx = dest_tabs->GetIdxFromWindow(target);
+            }
+        }
+         else
+        {
+            // If there is no tabframe at all, create one
+            wxTabFrame* new_tabs = new wxTabFrame;
+            new_tabs->SetTabCtrlHeight(m_tab_ctrl_height);
+            new_tabs->m_tabs = new wxAuiTabCtrl(this,
+                                                m_tab_id_counter++,
+                                                wxDefaultPosition,
+                                                wxDefaultSize,
+                                                wxNO_BORDER);
+            new_tabs->m_tabs->SetFlags(m_flags);
+
+            m_mgr.AddPane(new_tabs,
+                          wxAuiPaneInfo().Bottom().CaptionVisible(false),
+                          mouse_client_pt);
+            m_mgr.Update();
+            dest_tabs = new_tabs->m_tabs;
+        }
+
+
+
+        // remove the page from the source tabs
+        wxAuiNotebookPage page_info = src_tabs->GetPage(evt.GetSelection());
+        page_info.active = false;
+        src_tabs->RemovePage(page_info.window);
+        if (src_tabs->GetPageCount() > 0)
+        {
+            src_tabs->SetActivePage((size_t)0);
+            src_tabs->DoShowHide();
+            src_tabs->Refresh();
+        }
+
+
+
+        // add the page to the destination tabs
+        if (insert_idx == -1)
+            insert_idx = dest_tabs->GetPageCount();
+        dest_tabs->InsertPage(page_info.window, page_info, insert_idx);
+
+        if (src_tabs->GetPageCount() == 0)
+        {
+            RemoveEmptyTabFrames();
+        }
+
+        DoSizing();
+        dest_tabs->DoShowHide();
+        dest_tabs->Refresh();
+
+        SetSelection(m_tabs.GetIdxFromWindow(page_info.window));
     }
-
-
-
-    // remove the page from the source tabs
-    wxAuiNotebookPage page_info = src_tabs->GetPage(evt.GetSelection());
-    page_info.active = false;
-    src_tabs->RemovePage(page_info.window);
-    if (src_tabs->GetPageCount() > 0)
-    {
-        src_tabs->SetActivePage((size_t)0);
-        src_tabs->DoShowHide();
-        src_tabs->Refresh();
-    }
-
-
-
-    // add the page to the destination tabs
-    if (insert_idx == -1)
-        insert_idx = dest_tabs->GetPageCount();
-    dest_tabs->InsertPage(page_info.window, page_info, insert_idx);
-
-    if (src_tabs->GetPageCount() == 0)
-    {
-        RemoveEmptyTabFrames();
-    }
-
-    DoSizing();
-    dest_tabs->DoShowHide();
-    dest_tabs->Refresh();
-
-    SetSelection(m_tabs.GetIdxFromWindow(page_info.window));
 }
 
 
