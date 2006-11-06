@@ -62,6 +62,7 @@ class MyFrame : public wxFrame
         ID_CreateGrid,
         ID_CreateText,
         ID_CreateHTML,
+        ID_CreateNotebook,
         ID_CreateSizeReport,
         ID_GridContent,
         ID_TextContent,
@@ -559,6 +560,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(MyFrame::ID_CreateText, MyFrame::OnCreateText)
     EVT_MENU(MyFrame::ID_CreateHTML, MyFrame::OnCreateHTML)
     EVT_MENU(MyFrame::ID_CreateSizeReport, MyFrame::OnCreateSizeReport)
+    EVT_MENU(MyFrame::ID_CreateNotebook, MyFrame::OnCreateNotebook)
     EVT_MENU(MyFrame::ID_CreatePerspective, MyFrame::OnCreatePerspective)
     EVT_MENU(MyFrame::ID_CopyPerspectiveCode, MyFrame::OnCopyPerspectiveCode)
     EVT_MENU(ID_AllowFloating, MyFrame::OnManagerFlag)
@@ -643,6 +645,7 @@ MyFrame::MyFrame(wxWindow* parent,
     view_menu->Append(ID_CreateHTML, _("Create HTML Control"));
     view_menu->Append(ID_CreateTree, _("Create Tree"));
     view_menu->Append(ID_CreateGrid, _("Create Grid"));
+    view_menu->Append(ID_CreateNotebook, _("Create Notebook"));
     view_menu->Append(ID_CreateSizeReport, _("Create Size Reporter"));
     view_menu->AppendSeparator();
     view_menu->Append(ID_GridContent, _("Use a Grid for the Content Pane"));
@@ -1233,7 +1236,8 @@ void MyFrame::OnCreateNotebook(wxCommandEvent& WXUNUSED(event))
     m_mgr.AddPane(CreateNotebook(), wxAuiPaneInfo().
                   Name(wxT("Test")).Caption(wxT("Notebook")).
                   Float().FloatingPosition(GetStartPosition()).
-                  FloatingSize(wxSize(300,200)));
+                  //FloatingSize(300,200).
+                  CloseButton(true).MaximizeButton(true));
     m_mgr.Update();
 }
 
@@ -1362,9 +1366,13 @@ wxHtmlWindow* MyFrame::CreateHTMLCtrl(wxWindow* parent)
 
 wxAuiNotebook* MyFrame::CreateNotebook()
 {
-   wxAuiNotebook* ctrl = new wxAuiNotebook( this, wxID_ANY,
-                                    wxDefaultPosition, wxSize(400,300),
-                                    m_notebook_style );
+   // create the notebook off-window to avoid flicker
+   wxSize client_size = GetClientSize();
+   
+   wxAuiNotebook* ctrl = new wxAuiNotebook(this, wxID_ANY,
+                                    wxPoint(client_size.x, client_size.y),
+                                    wxSize(430,200),
+                                    m_notebook_style);
                                     
    ctrl->AddPage(CreateHTMLCtrl(ctrl), wxT("Welcome"));
                                     
@@ -1407,8 +1415,6 @@ wxAuiNotebook* MyFrame::CreateNotebook()
    
    ctrl->AddPage( new wxTextCtrl( ctrl, wxID_ANY, wxT("Some more text"),
                 wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE|wxNO_BORDER) , wxT("wxTextCtrl 8") );
-
-
 
    return ctrl;
 }
