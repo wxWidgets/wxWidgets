@@ -3868,6 +3868,13 @@ public:
         wxPyEndBlockThreads(blocked);
      }
 
+    wxGCDC(const wxWindow*) {
+        wxPyBlock_t blocked = wxPyBeginBlockThreads();
+        PyErr_SetString(PyExc_NotImplementedError,
+                        "wxGCDC is not available on this platform.");
+        wxPyEndBlockThreads(blocked);
+     }
+
     wxGCDC() {
         wxPyBlock_t blocked = wxPyBeginBlockThreads();
         PyErr_SetString(PyExc_NotImplementedError,
@@ -31284,19 +31291,15 @@ SWIGINTERN PyObject *GraphicsRenderer_swigregister(PyObject *SWIGUNUSEDPARM(self
   return SWIG_Py_Void();
 }
 
-SWIGINTERN PyObject *_wrap_new_GCDC(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+SWIGINTERN PyObject *_wrap_new_GCDC__SWIG_0(PyObject *SWIGUNUSEDPARM(self), int nobjs, PyObject **swig_obj) {
   PyObject *resultobj = 0;
   wxWindowDC *arg1 = 0 ;
   wxGCDC *result = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  char *  kwnames[] = {
-    (char *) "dc", NULL 
-  };
   
-  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:new_GCDC",kwnames,&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_wxWindowDC,  0  | 0);
+  if ((nobjs < 1) || (nobjs > 1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1, SWIGTYPE_p_wxWindowDC,  0  | 0);
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_GCDC" "', expected argument " "1"" of type '" "wxWindowDC const &""'"); 
   }
@@ -31314,6 +31317,60 @@ SWIGINTERN PyObject *_wrap_new_GCDC(PyObject *SWIGUNUSEDPARM(self), PyObject *ar
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_wxGCDC, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_GCDC__SWIG_1(PyObject *SWIGUNUSEDPARM(self), int nobjs, PyObject **swig_obj) {
+  PyObject *resultobj = 0;
+  wxWindow *arg1 = (wxWindow *) 0 ;
+  wxGCDC *result = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  
+  if ((nobjs < 1) || (nobjs > 1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxWindow, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_GCDC" "', expected argument " "1"" of type '" "wxWindow *""'"); 
+  }
+  arg1 = reinterpret_cast< wxWindow * >(argp1);
+  {
+    if (!wxPyCheckForApp()) SWIG_fail;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = (wxGCDC *)new wxGCDC(arg1);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_wxGCDC, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_GCDC(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[2];
+  
+  if (!(argc = SWIG_Python_UnpackTuple(args,"new_GCDC",0,1,argv))) SWIG_fail;
+  --argc;
+  if (argc == 1) {
+    int _v = 0;
+    {
+      int res = SWIG_ConvertPtr(argv[0], 0, SWIGTYPE_p_wxWindowDC, 0);
+      _v = SWIG_CheckState(res);
+    }
+    if (!_v) goto check_1;
+    return _wrap_new_GCDC__SWIG_0(self, argc, argv);
+  }
+check_1:
+  
+  if (argc == 1) {
+    return _wrap_new_GCDC__SWIG_1(self, argc, argv);
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"No matching function for overloaded 'new_GCDC'");
   return NULL;
 }
 
@@ -39885,7 +39942,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"GraphicsRenderer_CreateRadialGradientBrush", (PyCFunction) _wrap_GraphicsRenderer_CreateRadialGradientBrush, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"GraphicsRenderer_CreateFont", (PyCFunction) _wrap_GraphicsRenderer_CreateFont, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"GraphicsRenderer_swigregister", GraphicsRenderer_swigregister, METH_VARARGS, NULL},
-	 { (char *)"new_GCDC", (PyCFunction) _wrap_new_GCDC, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"new_GCDC", _wrap_new_GCDC, METH_VARARGS, NULL},
 	 { (char *)"delete_GCDC", (PyCFunction)_wrap_delete_GCDC, METH_O, NULL},
 	 { (char *)"GCDC_GetGraphicsContext", (PyCFunction)_wrap_GCDC_GetGraphicsContext, METH_O, NULL},
 	 { (char *)"GCDC_SetGraphicsContext", (PyCFunction) _wrap_GCDC_SetGraphicsContext, METH_VARARGS | METH_KEYWORDS, NULL},

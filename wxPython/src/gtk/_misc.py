@@ -273,9 +273,6 @@ def SystemOptions_IsFalse(*args, **kwargs):
   """SystemOptions_IsFalse(String name) -> bool"""
   return _misc_.SystemOptions_IsFalse(*args, **kwargs)
 
-# Until the new native control for wxMac is up to par, still use the generic one.
-SystemOptions.SetOptionInt("mac.listctrl.always_use_generic", 1)
-
 #---------------------------------------------------------------------------
 
 

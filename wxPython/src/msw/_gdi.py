@@ -5993,9 +5993,12 @@ class GCDC(DC):
     """Proxy of C++ GCDC class"""
     thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
     __repr__ = _swig_repr
-    def __init__(self, *args, **kwargs): 
-        """__init__(self, WindowDC dc) -> GCDC"""
-        _gdi_.GCDC_swiginit(self,_gdi_.new_GCDC(*args, **kwargs))
+    def __init__(self, *args): 
+        """
+        __init__(self, WindowDC dc) -> GCDC
+        __init__(self, Window window) -> GCDC
+        """
+        _gdi_.GCDC_swiginit(self,_gdi_.new_GCDC(*args))
         self.__dc = args[0] # save a ref so the other dc will not be deleted before self
 
     __swig_destroy__ = _gdi_.delete_GCDC
