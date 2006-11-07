@@ -488,7 +488,7 @@ wxSize wxAuiDefaultTabArt::GetTabSize(wxDC& dc,
     dc.GetTextExtent(wxT("ABCDEFXj"), &tmp, &measured_texty);
     
     // add padding around the text
-    wxCoord tab_width = measured_textx + 14;
+    wxCoord tab_width = measured_textx + 16;
     wxCoord tab_height = measured_texty + 10;
 
     if (close_button_state != wxAUI_BUTTON_STATE_HIDDEN)
