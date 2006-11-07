@@ -372,7 +372,7 @@ void wxAuiDefaultTabArt::DrawTab(wxDC& dc,
     }
 
     
-    // -- create points that will make the tab outline --
+    // create points that will make the tab outline
     
     wxPoint points[6];
     points[0].x = tab_x;
@@ -389,13 +389,13 @@ void wxAuiDefaultTabArt::DrawTab(wxDC& dc,
     points[5].y = tab_y + tab_height - 4;
 
 
-    // -- draw gradient background --
+    // draw gradient background
     if (active)
-    {
+    {        
         wxColour c = m_bkbrush.GetColour();
         dc.SetPen(wxPen(c));
         
-        int x, y, last_y = -1;
+        int y, last_y = -1;
         for (y = points[0].y; y > points[2].y; --y)
         {
             if (y < tab_y+(tab_height*3/5) && y != last_y)
@@ -405,20 +405,17 @@ void wxAuiDefaultTabArt::DrawTab(wxDC& dc,
                 dc.SetPen(wxPen(c));
             }
             
-            for (x = points[0].x+1; x < points[5].x; ++x)
-            {
-                dc.DrawPoint(x,y);
-            }
+            dc.DrawLine(points[0].x+1, y, points[5].x, y);
         }
     }
 
-    // -- draw tab outline --
+    // draw tab outline 
     dc.SetPen(*wxGREY_PEN);
     dc.SetBrush(*wxTRANSPARENT_BRUSH);
     dc.DrawPolygon(6, points);
-
-    // -- there are two horizontal grey lines at the bottom of the tab control,
-    //    this gets rid of the top one of those lines in the tab control --
+    
+    // there are two horizontal grey lines at the bottom of the tab control,
+    // this gets rid of the top one of those lines in the tab control
     if (active)
     {
         wxColour c = m_bkbrush.GetColour();
