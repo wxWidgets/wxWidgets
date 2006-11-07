@@ -11788,6 +11788,10 @@ SWIGINTERN PyObject *_wrap_HtmlDCRenderer_Render(PyObject *SWIGUNUSEDPARM(self),
     for (i=0; i<len; i++) {
       PyObject* item = PySequence_GetItem(obj3, i);
       PyObject* number  = PyNumber_Int(item);
+      if (!number) {
+        PyErr_SetString(PyExc_TypeError, "Sequence of integers expected.");
+        SWIG_fail;
+      }       
       arg4->Add(PyInt_AS_LONG(number));
       Py_DECREF(item);
       Py_DECREF(number);

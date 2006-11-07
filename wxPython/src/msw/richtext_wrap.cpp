@@ -3787,6 +3787,10 @@ SWIGINTERN PyObject *_wrap_RichTextAttr_SetTabs(PyObject *SWIGUNUSEDPARM(self), 
     for (i=0; i<len; i++) {
       PyObject* item = PySequence_GetItem(obj1, i);
       PyObject* number  = PyNumber_Int(item);
+      if (!number) {
+        PyErr_SetString(PyExc_TypeError, "Sequence of integers expected.");
+        SWIG_fail;
+      }       
       arg2->Add(PyInt_AS_LONG(number));
       Py_DECREF(item);
       Py_DECREF(number);

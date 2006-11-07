@@ -242,6 +242,10 @@ MAKE_INT_ARRAY_TYPEMAPS(styles, styles_field)
     for (i=0; i<len; i++) {
         PyObject* item = PySequence_GetItem($input, i);
         PyObject* number  = PyNumber_Int(item);
+        if (!number) {
+            PyErr_SetString(PyExc_TypeError, "Sequence of integers expected.");
+            SWIG_fail;
+        }       
         $1->Add(PyInt_AS_LONG(number));
         Py_DECREF(item);
         Py_DECREF(number);
