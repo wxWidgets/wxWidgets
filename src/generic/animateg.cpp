@@ -373,15 +373,11 @@ bool wxAnimationCtrl::Play(bool looped)
     if (!m_animation.IsOk())
         return false;
 
-    int oldframe = m_currentFrame;
     m_looped = looped;
     m_currentFrame = 0;
 
-    // small optimization: if the back store was already updated to the
-    // first frame, don't rebuild it
-    if (oldframe != 0)
-        if (!RebuildBackingStoreUpToFrame(0))
-            return false;
+    if (!RebuildBackingStoreUpToFrame(0))
+        return false;
 
     m_isPlaying = true;
 
