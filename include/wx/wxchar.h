@@ -881,10 +881,8 @@ WXDLLIMPEXP_BASE bool wxOKlibc(); /* for internal use */
 /*
    MinGW MSVCRT has non-standard vswprintf() (for MSVC compatibility
    presumably) and normally _vsnwprintf() is used instead
-
-   vswprintf() under (early versions of) OS X is buggy
  */
-#if defined(HAVE_VSWPRINTF) && (defined(__MINGW32__) || defined(__DARWIN__))
+#if defined(HAVE_VSWPRINTF) && defined(__MINGW32__)
     #undef HAVE_VSWPRINTF
 #endif
 
