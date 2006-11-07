@@ -386,7 +386,7 @@ void wxAuiDefaultTabArt::DrawTab(wxDC& dc,
 
     // draw gradient background
     if (active)
-    {        
+    {           
         wxColour c = m_bkbrush.GetColour();
         dc.SetPen(wxPen(c));
         
@@ -415,7 +415,7 @@ void wxAuiDefaultTabArt::DrawTab(wxDC& dc,
     {
         wxColour c = m_bkbrush.GetColour();
         dc.SetPen(wxPen(c));
-        dc.DrawLine(points[0].x+1, points[0].y, points[5].x, points[5].y);
+        dc.DrawLine(points[0].x, points[0].y, points[5].x+1, points[5].y);
     }
     
     int text_offset;
