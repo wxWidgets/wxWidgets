@@ -1,25 +1,49 @@
 /*
 :Author: David Goodger
 :Contact: goodger@users.sourceforge.net
-:date: $Date$
-:version: $Revision$
-:copyright: This stylesheet has been placed in the public domain.
+:Date: $Date$
+:Revision: $Revision$
+:Copyright: This stylesheet has been placed in the public domain.
 
 Default cascading style sheet for the HTML output of Docutils.
+
+See http://docutils.sf.net/docs/howto/html-stylesheets.html for how to
+customize this style sheet.
 */
 
-.first {
-  margin-top: 0 }
+/* used to remove borders from tables and images */
+.borderless, table.borderless td, table.borderless th {
+  border: 0 }
 
-.last {
-  margin-bottom: 0 }
+table.borderless td, table.borderless th {
+  /* Override padding for "table.docutils td" with "! important".
+     The right padding separates the table cells. */
+  padding: 0 0.5em 0 0 ! important }
+
+.first {
+  /* Override more specific margin styles with "! important". */
+  margin-top: 0 ! important }
+
+.last, .with-subtitle {
+  margin-bottom: 0 ! important }
+
+.hidden {
+  display: none }
 
 a.toc-backref {
   text-decoration: none ;
   color: black }
 
-dd {
+blockquote.epigraph {
+  margin: 2em 5em ; }
+
+dl.docutils dd {
   margin-bottom: 0.5em }
+
+/* Uncomment (and remove this text!) to get bold-faced definition list terms
+dl.docutils dt {
+  font-weight: bold }
+*/
 
 div.abstract {
   margin: 2em 5em }
@@ -28,11 +52,17 @@ div.abstract p.topic-title {
   font-weight: bold ;
   text-align: center }
 
-div.attention, div.caution, div.danger, div.error, div.hint,
-div.important, div.note, div.tip, div.warning {
+div.admonition, div.attention, div.caution, div.danger, div.error,
+div.hint, div.important, div.note, div.tip, div.warning {
   margin: 2em ;
   border: medium outset ;
   padding: 1em }
+
+div.admonition p.admonition-title, div.hint p.admonition-title,
+div.important p.admonition-title, div.note p.admonition-title,
+div.tip p.admonition-title {
+  font-weight: bold ;
+  font-family: sans-serif }
 
 div.attention p.admonition-title, div.caution p.admonition-title,
 div.danger p.admonition-title, div.error p.admonition-title,
@@ -41,10 +71,14 @@ div.warning p.admonition-title {
   font-weight: bold ;
   font-family: sans-serif }
 
-div.hint p.admonition-title, div.important p.admonition-title,
-div.note p.admonition-title, div.tip p.admonition-title {
-  font-weight: bold ;
-  font-family: sans-serif }
+/* Uncomment (and remove this text!) to get reduced vertical space in
+   compound paragraphs.
+div.compound .compound-first, div.compound .compound-middle {
+  margin-bottom: 0.5em }
+
+div.compound .compound-last, div.compound .compound-middle {
+  margin-top: 0.5em }
+*/
 
 div.dedication {
   margin: 2em 5em ;
@@ -56,18 +90,35 @@ div.dedication p.topic-title {
   font-style: normal }
 
 div.figure {
-  margin-left: 2em }
+  margin-left: 2em ;
+  margin-right: 2em }
 
 div.footer, div.header {
+  clear: both;
   font-size: smaller }
+
+div.line-block {
+  display: block ;
+  margin-top: 1em ;
+  margin-bottom: 1em }
+
+div.line-block div.line-block {
+  margin-top: 0 ;
+  margin-bottom: 0 ;
+  margin-left: 1.5em }
 
 div.sidebar {
   margin-left: 1em ;
   border: medium outset ;
-  padding: 0em 1em ;
+  padding: 1em ;
   background-color: #ffffee ;
   width: 40% ;
-  float: right }
+  float: right ;
+  clear: right }
+
+div.sidebar p.rubric {
+  font-family: sans-serif ;
+  font-size: medium }
 
 div.system-messages {
   margin: 5em }
@@ -86,14 +137,24 @@ div.system-message p.system-message-title {
 div.topic {
   margin: 2em }
 
+h1.section-subtitle, h2.section-subtitle, h3.section-subtitle,
+h4.section-subtitle, h5.section-subtitle, h6.section-subtitle {
+  margin-top: 0.4em }
+
 h1.title {
   text-align: center }
 
 h2.subtitle {
   text-align: center }
 
-hr {
+hr.docutils {
   width: 75% }
+
+img.align-left {
+  clear: left }
+
+img.align-right {
+  clear: right }
 
 ol.simple, ul.simple {
   margin-bottom: 1em }
@@ -113,6 +174,10 @@ ol.lowerroman {
 ol.upperroman {
   list-style: upper-roman }
 
+p.attribution {
+  text-align: right ;
+  margin-left: 50% }
+
 p.caption {
   font-style: italic }
 
@@ -122,6 +187,12 @@ p.credits {
 
 p.label {
   white-space: nowrap }
+
+p.rubric {
+  font-weight: bold ;
+  font-size: larger ;
+  color: maroon ;
+  text-align: center }
 
 p.sidebar-title {
   font-family: sans-serif ;
@@ -138,10 +209,6 @@ p.topic-title {
 pre.address {
   margin-bottom: 0 ;
   margin-top: 0 ;
-  font-family: serif ;
-  font-size: 100% }
-
-pre.line-block {
   font-family: serif ;
   font-size: 100% }
 
@@ -164,44 +231,48 @@ span.interpreted {
 span.option {
   white-space: nowrap }
 
-span.option-argument {
-  font-style: italic }
-
 span.pre {
   white-space: pre }
 
 span.problematic {
   color: red }
 
-table {
-  margin-top: 0.5em ;
-  margin-bottom: 0.5em }
+span.section-subtitle {
+  /* font-size relative to parent (h1..h6 element) */
+  font-size: 80% }
 
 table.citation {
-  border-left: solid thin gray ;
-  padding-left: 0.5ex }
+  border-left: solid 1px gray;
+  margin-left: 1px }
 
 table.docinfo {
   margin: 2em 4em }
 
-table.footnote {
-  border-left: solid thin black ;
-  padding-left: 0.5ex }
+table.docutils {
+  margin-top: 0.5em ;
+  margin-bottom: 0.5em }
 
-td, th {
+table.footnote {
+  border-left: solid 1px black;
+  margin-left: 1px }
+
+table.docutils td, table.docutils th,
+table.docinfo td, table.docinfo th {
   padding-left: 0.5em ;
   padding-right: 0.5em ;
   vertical-align: top }
 
-th.docinfo-name, th.field-name {
+table.docutils th.field-name, table.docinfo th.docinfo-name {
   font-weight: bold ;
   text-align: left ;
-  white-space: nowrap }
+  white-space: nowrap ;
+  padding-left: 0 }
 
-h1 tt, h2 tt, h3 tt, h4 tt, h5 tt, h6 tt {
+h1 tt.docutils, h2 tt.docutils, h3 tt.docutils,
+h4 tt.docutils, h5 tt.docutils, h6 tt.docutils {
   font-size: 100% }
 
-tt {
+tt.docutils {
   background-color: #eeeeee }
 
 ul.auto-toc {
