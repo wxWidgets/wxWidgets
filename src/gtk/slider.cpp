@@ -346,6 +346,13 @@ void wxSlider::SetValue( int value )
         BlockScrollEvent();
         gtk_range_set_value(GTK_RANGE (m_widget), value);
         UnblockScrollEvent();
+
+        // keep m_pos in sync in case the value_changed callback didn't didn't
+        // get called, such as when the widget is first created
+        if (GetValue() != value)
+        {
+            m_pos = gtk_range_get_value(GTK_RANGE(m_widget));
+        }
     }
 }
 
