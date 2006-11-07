@@ -46,7 +46,7 @@ overview = """<html><body>
 <h2><center>wx.animate.AnimationCtrl</center></h2>
 
 wx.animate.AnimationCtrl is like a wx.StaticBitmap but is able to
-display an animation by extracing frames from a multi-images GIF file.
+display an animation by extracing frames from a multi-image GIF file.
 
 </body></html>
 """
