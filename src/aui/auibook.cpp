@@ -264,7 +264,7 @@ void wxAuiDefaultTabArt::SetSizingInfo(const wxSize& tab_ctrl_size,
 {
     m_fixed_tab_width = 100;
     
-    int tot_width = tab_ctrl_size.x;
+    int tot_width = (int)tab_ctrl_size.x - GetIndentSize() - 4;
     if (tab_count > 0)
     {
         m_fixed_tab_width = tot_width/(int)tab_count;
@@ -710,7 +710,7 @@ void wxAuiSimpleTabArt::SetSizingInfo(const wxSize& tab_ctrl_size,
 {
     m_fixed_tab_width = 100;
     
-    int tot_width = tab_ctrl_size.x;
+    int tot_width = (int)tab_ctrl_size.x - GetIndentSize() - 4;
     if (tab_count > 0)
     {
         m_fixed_tab_width = tot_width/(int)tab_count;
@@ -2730,11 +2730,13 @@ void wxAuiNotebook::OnTabDragMotion(wxCommandEvent& evt)
     }
 
 
+    // if there are less than two panes, split can't happen, so leave
+    if (m_tabs.GetPageCount() < 2)
+        return;
+    
     // if tab moving is not allowed, leave
     if (!(m_flags & wxAUI_NB_TAB_SPLIT))
-    {
         return;
-    }
 
 
     if (src_tabs)
@@ -2866,7 +2868,7 @@ void wxAuiNotebook::OnTabEndDrag(wxCommandEvent& command_evt)
 
 
     // only perform a tab split if it's allowed
-    if (m_flags & wxAUI_NB_TAB_SPLIT)
+    if ((m_flags & wxAUI_NB_TAB_SPLIT) && m_tabs.GetPageCount() >= 2)
     {
         // If the pointer is in an existing tab frame, do a tab insert
         wxWindow* hit_wnd = ::wxFindWindowAtPoint(mouse_screen_pt);
