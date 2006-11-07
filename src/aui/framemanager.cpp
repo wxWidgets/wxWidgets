@@ -834,7 +834,14 @@ bool wxAuiManager::AddPane(wxWindow* window, const wxAuiPaneInfo& pane_info)
         button.button_id = wxAUI_BUTTON_MAXIMIZE_RESTORE;
         pinfo.buttons.Add(button);
     }
-
+    
+    if (pinfo.HasPinButton())
+    {
+        wxAuiPaneButton button;
+        button.button_id = wxAUI_BUTTON_PIN;
+        pinfo.buttons.Add(button);
+    }
+    
     if (pinfo.HasCloseButton())
     {
         wxAuiPaneButton button;

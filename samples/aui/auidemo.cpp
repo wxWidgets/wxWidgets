@@ -815,12 +815,12 @@ MyFrame::MyFrame(wxWindow* parent,
     m_mgr.AddPane(CreateSizeReportCtrl(), wxAuiPaneInfo().
                   Name(wxT("test2")).Caption(wxT("Client Size Reporter")).
                   Bottom().Position(1).
-                  PinButton(true).CloseButton(true).MaximizeButton(true));
+                  CloseButton(true).MaximizeButton(true));
 
     m_mgr.AddPane(CreateSizeReportCtrl(), wxAuiPaneInfo().
                   Name(wxT("test3")).Caption(wxT("Client Size Reporter")).
                   Bottom().
-                  PinButton(true).CloseButton(true).MaximizeButton(true));
+                  CloseButton(true).MaximizeButton(true));
 
     m_mgr.AddPane(CreateSizeReportCtrl(), wxAuiPaneInfo().
                   Name(wxT("test4")).Caption(wxT("Pane Caption")).
@@ -833,12 +833,12 @@ MyFrame::MyFrame(wxWindow* parent,
     m_mgr.AddPane(CreateSizeReportCtrl(), wxAuiPaneInfo().
                   Name(wxT("test6")).Caption(wxT("Client Size Reporter")).
                   Right().Row(1).
-                  PinButton(true).CloseButton(true).MaximizeButton(true));
+                  CloseButton(true).MaximizeButton(true));
 
     m_mgr.AddPane(CreateSizeReportCtrl(), wxAuiPaneInfo().
                   Name(wxT("test7")).Caption(wxT("Client Size Reporter")).
                   Left().Layer(1).
-                  PinButton(true).CloseButton(true).MaximizeButton(true));
+                  CloseButton(true).MaximizeButton(true));
 
     m_mgr.AddPane(CreateTreeCtrl(), wxAuiPaneInfo().
                   Name(wxT("test8")).Caption(wxT("Tree Pane")).
@@ -1328,7 +1328,7 @@ void MyFrame::OnCreateSizeReport(wxCommandEvent& WXUNUSED(event))
     m_mgr.AddPane(CreateSizeReportCtrl(), wxAuiPaneInfo().
                   Name(wxT("Test")).Caption(wxT("Client Size Reporter")).
                   Float().FloatingPosition(GetStartPosition()).
-                  PinButton(true).CloseButton(true).MaximizeButton(true));
+                  CloseButton(true).MaximizeButton(true));
     m_mgr.Update();
 }
 

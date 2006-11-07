@@ -129,6 +129,34 @@ static void DrawGradientRectangle(wxDC& dc,
 
 }
 
+static wxString ChopText(wxDC& dc, const wxString& text, int max_size)
+{
+    wxCoord x,y;
+    
+    // first check if the text fits with no problems
+    dc.GetTextExtent(text, &x, &y);
+    if (x <= max_size)
+        return text;
+        
+    size_t i, len = text.Length();
+    size_t last_good_length = 0;
+    for (i = 0; i < len; ++i)
+    {
+        wxString s = text.Left(i);
+        s += wxT("...");
+        
+        dc.GetTextExtent(s, &x, &y);
+        if (x > max_size)
+            break;
+        
+        last_good_length = i;
+    }
+
+    wxString ret = text.Left(last_good_length);
+    ret += wxT("...");
+    return ret;
+}
+
 wxAuiDefaultDockArt::wxAuiDefaultDockArt()
 {
 #ifdef __WXMAC__
@@ -522,8 +550,20 @@ void wxAuiDefaultDockArt::DrawCaption(wxDC& dc, wxWindow *WXUNUSED(window),
     wxCoord w,h;
     dc.GetTextExtent(wxT("ABCDEFHXfgkj"), &w, &h);
 
-    dc.SetClippingRegion(rect);
-    dc.DrawText(text, rect.x+3, rect.y+(rect.height/2)-(h/2)-1);
+    wxRect clip_rect = rect;
+    clip_rect.width -= 3; // text offset
+    clip_rect.width -= 2; // button padding
+    if (pane.HasCloseButton())
+        clip_rect.width -= m_button_size;
+    if (pane.HasPinButton())
+        clip_rect.width -= m_button_size;    
+    if (pane.HasMaximizeButton())
+        clip_rect.width -= m_button_size;    
+
+    wxString draw_text = ChopText(dc, text, clip_rect.width);
+
+    dc.SetClippingRegion(clip_rect);
+    dc.DrawText(draw_text, rect.x+3, rect.y+(rect.height/2)-(h/2)-1);
     dc.DestroyClippingRegion();
 }
 
