@@ -385,6 +385,10 @@ void wxAuiDefaultDockArt::DrawSash(wxDC& dc, wxWindow *window, int orientation, 
 #endif
 
 #elif defined(__WXGTK__)
+    // clear out the rectangle first
+    dc.SetPen(*wxTRANSPARENT_PEN);
+    dc.SetBrush(m_sash_brush);
+    dc.DrawRectangle(rect.x, rect.y, rect.width, rect.height);
 
     GdkRectangle gdk_rect;
     if (orientation == wxVERTICAL )
