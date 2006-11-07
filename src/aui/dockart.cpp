@@ -131,22 +131,23 @@ wxAuiDefaultDockArt::wxAuiDefaultDockArt()
 #ifdef __WXMAC__
     wxBrush toolbarbrush;
     toolbarbrush.MacSetTheme( kThemeBrushToolbarBackground );
-    wxColor base_color = toolbarbrush.GetColour();
+    wxColor base_colour = toolbarbrush.GetColour();
 #else
-    wxColor base_color = wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE);
+    wxColor base_colour = wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE);
 #endif
 
-    wxColor darker1_color = StepColour(base_color, 85);
-    wxColor darker2_color = StepColour(base_color, 70);
-    wxColor darker3_color = StepColour(base_color, 60);
-    wxColor darker4_color = StepColour(base_color, 50);
-    wxColor darker5_color = StepColour(base_color, 40);
+    m_base_colour = base_colour;
+    wxColor darker1_colour = StepColour(base_colour, 85);
+    wxColor darker2_colour = StepColour(base_colour, 70);
+    wxColor darker3_colour = StepColour(base_colour, 60);
+    wxColor darker4_colour = StepColour(base_colour, 50);
+    wxColor darker5_colour = StepColour(base_colour, 40);
 
     m_active_caption_colour = LightContrastColour(wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT));
     m_active_caption_gradient_colour = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT);
     m_active_caption_text_colour = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT);
-    m_inactive_caption_colour = StepColour(darker1_color, 80);
-    m_inactive_caption_gradient_colour = darker1_color;
+    m_inactive_caption_colour = StepColour(darker1_colour, 80);
+    m_inactive_caption_gradient_colour = darker1_colour;
     m_inactive_caption_text_colour = *wxBLACK;
 
 #ifdef __WXMAC__
@@ -154,13 +155,13 @@ wxAuiDefaultDockArt::wxAuiDefaultDockArt()
     m_background_brush = toolbarbrush;
     m_gripper_brush = toolbarbrush;
 #else
-    m_sash_brush = wxBrush(base_color);
-    m_background_brush = wxBrush(base_color);
-    m_gripper_brush = wxBrush(base_color);
+    m_sash_brush = wxBrush(base_colour);
+    m_background_brush = wxBrush(base_colour);
+    m_gripper_brush = wxBrush(base_colour);
 #endif
-    m_border_pen = wxPen(darker2_color);
-    m_gripper_pen1 = wxPen(darker5_color);
-    m_gripper_pen2 = wxPen(darker3_color);
+    m_border_pen = wxPen(darker2_colour);
+    m_gripper_pen1 = wxPen(darker5_colour);
+    m_gripper_pen2 = wxPen(darker3_colour);
     m_gripper_pen3 = *wxWHITE_PEN;
 
 #ifdef __WXMAC__
