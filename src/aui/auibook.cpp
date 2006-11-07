@@ -1624,6 +1624,10 @@ void wxAuiTabContainer::Render(wxDC* raw_dc, wxWindow* wnd)
         rect.x = offset;
         rect.width = m_rect.width - right_buttons_width - offset - 2;
 
+        if (rect.width <= 0)
+            break;
+
+
 
 
         m_art->DrawTab(dc,
