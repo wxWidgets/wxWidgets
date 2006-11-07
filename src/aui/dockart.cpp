@@ -109,9 +109,12 @@ static void DrawGradientRectangle(wxDC& dc,
 
     for (int i = 0; i <= high; ++i)
     {
-        int r = start_color.Red() +  ((i*rd*100)/high)/100;
-        int g = start_color.Green() + ((i*gd*100)/high)/100;
-        int b = start_color.Blue() + ((i*bd*100)/high)/100;
+        int r,g,b;
+        
+        
+        r = start_color.Red() + ((i*rd*100)/high)/100;
+        g = start_color.Green() + ((i*gd*100)/high)/100;
+        b = start_color.Blue() + ((i*bd*100)/high)/100;
 
         wxPen p(wxColor((unsigned char)r,
                         (unsigned char)g,
@@ -143,11 +146,11 @@ wxAuiDefaultDockArt::wxAuiDefaultDockArt()
     wxColor darker4_colour = StepColour(base_colour, 50);
     wxColor darker5_colour = StepColour(base_colour, 40);
 
-    m_active_caption_colour = LightContrastColour(wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT));
-    m_active_caption_gradient_colour = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT);
+    m_active_caption_colour = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT);
+    m_active_caption_gradient_colour = LightContrastColour(wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT));
     m_active_caption_text_colour = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT);
-    m_inactive_caption_colour = StepColour(darker1_colour, 80);
-    m_inactive_caption_gradient_colour = darker1_colour;
+    m_inactive_caption_colour = darker1_colour;
+    m_inactive_caption_gradient_colour = StepColour(base_colour, 97);
     m_inactive_caption_text_colour = *wxBLACK;
 
 #ifdef __WXMAC__
@@ -473,25 +476,27 @@ void wxAuiDefaultDockArt::DrawCaptionBackground(wxDC& dc, const wxRect& rect, bo
             // on mac the gradients are expected to become darker from the top
 #ifdef __WXMAC__
             DrawGradientRectangle(dc, rect,
-                                 m_active_caption_gradient_colour,
                                  m_active_caption_colour,
+                                 m_active_caption_gradient_colour,
                                  m_gradient_type);
 #else
+            // on other platforms, active gradients become lighter at the top
             DrawGradientRectangle(dc, rect,
-                                 m_active_caption_colour,
                                  m_active_caption_gradient_colour,
+                                 m_active_caption_colour,
                                  m_gradient_type);
 #endif
         }
          else
         {
-            // on mac the gradients are expected to become darker from the top
 #ifdef __WXMAC__
+            // on mac the gradients are expected to become darker from the top
             DrawGradientRectangle(dc, rect,
                                  m_inactive_caption_gradient_colour,
                                  m_inactive_caption_colour,
                                  m_gradient_type);
 #else
+            // on other platforms, inactive gradients become lighter at the bottom
             DrawGradientRectangle(dc, rect,
                                  m_inactive_caption_colour,
                                  m_inactive_caption_gradient_colour,
