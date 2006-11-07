@@ -1384,15 +1384,16 @@ wxTreeCtrl* MyFrame::CreateTreeCtrl()
     wxTreeCtrl* tree = new wxTreeCtrl(this, wxID_ANY,
                                       wxPoint(0,0), wxSize(160,250),
                                       wxTR_DEFAULT_STYLE | wxNO_BORDER);
-
-    wxTreeItemId root = tree->AddRoot(wxT("wxAUI Project"));
-    wxArrayTreeItemIds items;
-
-
+                                      
     wxImageList* imglist = new wxImageList(16, 16, true, 2);
     imglist->Add(wxArtProvider::GetBitmap(wxART_FOLDER, wxART_OTHER, wxSize(16,16)));
     imglist->Add(wxArtProvider::GetBitmap(wxART_NORMAL_FILE, wxART_OTHER, wxSize(16,16)));
     tree->AssignImageList(imglist);
+
+    wxTreeItemId root = tree->AddRoot(wxT("wxAUI Project"), 0);
+    wxArrayTreeItemIds items;
+
+
 
     items.Add(tree->AppendItem(root, wxT("Item 1"), 0));
     items.Add(tree->AppendItem(root, wxT("Item 2"), 0));
