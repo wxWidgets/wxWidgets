@@ -751,6 +751,7 @@ class Calendar( wx.PyControl ):
     # determine the calendar rectangle click area and draw a selection
 
     def ProcessClick(self, event):
+        self.SetFocus()
         self.x, self.y = event.GetX(), event.GetY()
         self.shiftkey = event.ShiftDown()
         self.ctrlkey = event.ControlDown()
