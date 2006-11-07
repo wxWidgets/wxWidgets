@@ -3638,10 +3638,14 @@ static void wxDC_GetBoundingBox(wxDC* dc, int* x1, int* y1, int* x2, int* y2) {
 // C++ stub classes for platforms or build configurations that don't have
 // wxGraphicsContext yet.
 
+class wxGraphicsRenderer;
+class wxGraphicsMatrix;
+
 
 class wxGraphicsObject : public wxObject
 {
 public :
+    wxGraphicsObject() {}
     wxGraphicsObject( wxGraphicsRenderer*  ) {
         PyErr_SetString(PyExc_NotImplementedError,
                         "wx.GraphicsObject is not available on this platform.");
@@ -3656,6 +3660,7 @@ public :
 
 class wxGraphicsPen : public wxGraphicsObject
 {
+public:
     wxGraphicsPen()  {}
     virtual ~wxGraphicsPen() {}
 } ;
@@ -3686,6 +3691,7 @@ wxGraphicsFont wxNullGraphicsFont;
 class wxGraphicsPath : public wxGraphicsObject
 {
 public :
+    wxGraphicsPath() { }
     wxGraphicsPath(wxGraphicsRenderer* ) {
         PyErr_SetString(PyExc_NotImplementedError,
                         "wx.GraphicsPath is not available on this platform.");
@@ -3698,10 +3704,10 @@ public :
     void AddLineToPoint( const wxPoint2DDouble& ) {}
     void AddCurveToPoint( wxDouble, wxDouble, wxDouble, wxDouble, wxDouble, wxDouble ) {}
     void AddCurveToPoint( const wxPoint2DDouble&, const wxPoint2DDouble&, const wxPoint2DDouble&) {}
-    void AddPath( const wxGraphicsPath* ) {}
+    void AddPath( const wxGraphicsPath& ) {}
     void CloseSubpath() {}
-    void GetCurrentPoint( wxDouble&, wxDouble&) {}
-    wxPoint2DDouble GetCurrentPoint() { reutrn wxPoint2D(0,0); }
+    void GetCurrentPoint( wxDouble&, wxDouble&) const {}
+    wxPoint2DDouble GetCurrentPoint() const { return wxPoint2D(0,0); }
     void AddArc( wxDouble, wxDouble, wxDouble, wxDouble, wxDouble, bool ) {}
     void AddArc( const wxPoint2DDouble& , wxDouble, wxDouble , wxDouble , bool ) {}
 
@@ -3713,13 +3719,13 @@ public :
     void AddEllipse( wxDouble , wxDouble , wxDouble , wxDouble ) {}
     void AddRoundedRectangle( wxDouble , wxDouble , wxDouble , wxDouble , wxDouble ) {}
     void * GetNativePath() const { return NULL; }
-    void UnGetNativePath(void *) {}
-    void Transform( wxGraphicsMatrix* ) {}
-    void GetBox(wxDouble *, wxDouble *, wxDouble *, wxDouble *) {}
-    wxRect2D GetBox() { return wxRect2D(0,0,0,0); }
+    void UnGetNativePath(void *) const {}
+    void Transform( const wxGraphicsMatrix& ) {}
+    void GetBox(wxDouble *, wxDouble *, wxDouble *, wxDouble *) const {}
+    wxRect2D GetBox() const { return wxRect2D(0,0,0,0); }
 
-    bool Contains( wxDouble , wxDouble , int ) { return false; }
-    bool Contains( const wxPoint2DDouble& , int ) { return false; }
+    bool Contains( wxDouble , wxDouble , int ) const { return false; }
+    bool Contains( const wxPoint2DDouble& , int ) const { return false; }
 };
 wxGraphicsPath wxNullGraphicsPath;
 
@@ -3727,23 +3733,24 @@ wxGraphicsPath wxNullGraphicsPath;
 class wxGraphicsMatrix : public wxGraphicsObject
 {
 public :
+    wxGraphicsMatrix() { }
     wxGraphicsMatrix(wxGraphicsRenderer* ) {
         PyErr_SetString(PyExc_NotImplementedError,
                         "wx.GraphicsMatrix is not available on this platform.");
     }
     virtual ~wxGraphicsMatrix() {}
-    virtual void Concat( const wxGraphicsMatrix * ) {}
-    virtual void Copy( const wxGraphicsMatrix * )  {}
+    virtual void Concat( const wxGraphicsMatrix & ) {}
+    virtual void Copy( const wxGraphicsMatrix & )  {}
     virtual void Set(wxDouble , wxDouble , wxDouble , wxDouble ,
                      wxDouble , wxDouble ) {}
     virtual void Invert() {}
-    virtual bool IsEqual( const wxGraphicsMatrix* t) const  {}
-    virtual bool IsIdentity() { return false; }
+    virtual bool IsEqual( const wxGraphicsMatrix& t) const  { return false; }
+    virtual bool IsIdentity() const { return false; }
     virtual void Translate( wxDouble , wxDouble ) {}
     virtual void Scale( wxDouble , wxDouble  ) {}
     virtual void Rotate( wxDouble  ) {}
-    virtual void TransformPoint( wxDouble *, wxDouble * ) {}
-    virtual void TransformDistance( wxDouble *, wxDouble * ) {}
+    virtual void TransformPoint( wxDouble *, wxDouble * ) const {}
+    virtual void TransformDistance( wxDouble *, wxDouble * ) const {}
     virtual void * GetNativeMatrix() const { return NULL; }
 };
 wxGraphicsMatrix wxNullGraphicsMatrix;
@@ -3760,43 +3767,52 @@ public:
 
     virtual ~wxGraphicsContext() {}
 
+    static wxGraphicsContext* Create()   {
+        PyErr_SetString(PyExc_NotImplementedError,
+                        "wx.GraphicsContext is not available on this platform.");
+        return NULL;
+    }
     static wxGraphicsContext* Create( const wxWindowDC& )  {
         PyErr_SetString(PyExc_NotImplementedError,
                         "wx.GraphicsContext is not available on this platform.");
+        return NULL;
     }
 
     static wxGraphicsContext* CreateFromNative( void *  )  {
         PyErr_SetString(PyExc_NotImplementedError,
                         "wx.GraphicsContext is not available on this platform.");
+        return NULL;
     }
 
     static wxGraphicsContext* CreateFromNativeWindow( void *  )  {
         PyErr_SetString(PyExc_NotImplementedError,
                         "wx.GraphicsContext is not available on this platform.");
+        return NULL;
     }
 
     static wxGraphicsContext* Create( wxWindow*  )  {
         PyErr_SetString(PyExc_NotImplementedError,
                         "wx.GraphicsContext is not available on this platform.");
+        return NULL;
     }
 
-    wxGraphicsPath * CreatePath()  { return NULL; }
+    wxGraphicsPath CreatePath()  { return wxNullGraphicsPath; }
 
-    virtual wxGraphicsPen CreatePen(const wxPen& )  { return NULL; }
+    virtual wxGraphicsPen CreatePen(const wxPen& )  { return wxNullGraphicsPen; }
 
-    virtual wxGraphicsBrush CreateBrush(const wxBrush& ) { return NULL; }
+    virtual wxGraphicsBrush CreateBrush(const wxBrush& ) { return wxNullGraphicsBrush; }
 
     virtual wxGraphicsBrush CreateLinearGradientBrush( wxDouble , wxDouble , wxDouble , wxDouble ,
-                                                        const wxColour&, const wxColour&) { return NULL; }
+                                                        const wxColour&, const wxColour&) { return wxNullGraphicsBrush; }
 
     virtual wxGraphicsBrush CreateRadialGradientBrush( wxDouble xo, wxDouble yo,
                                                         wxDouble xc, wxDouble yc, wxDouble radius,
-                                                        const wxColour &oColor, const wxColour &cColor) { return NULL; }
+                                                        const wxColour &oColor, const wxColour &cColor) { return wxNullGraphicsBrush; }
 
-    virtual wxGraphicsFont CreateFont( const wxFont &, const wxColour & )  { return NULL; }
+    virtual wxGraphicsFont CreateFont( const wxFont &, const wxColour & )  { return wxNullGraphicsFont; }
 
-    virtual wxGraphicsMatrix* CreateMatrix( wxDouble, wxDouble, wxDouble, wxDouble,
-                                            wxDouble, wxDouble)  { return NULL; }
+    virtual wxGraphicsMatrix CreateMatrix( wxDouble, wxDouble, wxDouble, wxDouble,
+                                            wxDouble, wxDouble)  { return wxNullGraphicsMatrix; }
 
     virtual void PushState() {}
     virtual void PopState() {}
@@ -3807,9 +3823,9 @@ public:
     virtual void Translate( wxDouble , wxDouble ) {}
     virtual void Scale( wxDouble , wxDouble ) {}
     virtual void Rotate( wxDouble ) {}
-    virtual void ConcatTransform( const wxGraphicsMatrix* ) {}
-    virtual void SetTransform( const wxGraphicsMatrix* ) {}
-    virtual void GetTransform( wxGraphicsMatrix* ) {}
+    virtual void ConcatTransform( const wxGraphicsMatrix& ) {}
+    virtual void SetTransform( const wxGraphicsMatrix& ) {}
+    virtual wxGraphicsMatrix GetTransform() const { return wxNullGraphicsMatrix; }
 
     virtual void SetPen( const wxGraphicsPen& ) {}
     void SetPen( const wxPen& ) {}
@@ -3820,12 +3836,14 @@ public:
     virtual void SetFont( const wxGraphicsFont& ) {}
     void SetFont( const wxFont&, const wxColour& ) {}
 
-    virtual void StrokePath( const wxGraphicsPath * ) {}
-    virtual void FillPath( const wxGraphicsPath *, int ) {}
-    virtual void DrawPath( const wxGraphicsPath *, int ) {}
+    virtual void StrokePath( const wxGraphicsPath & ) {}
+    virtual void FillPath( const wxGraphicsPath &, int ) {}
+    virtual void DrawPath( const wxGraphicsPath &, int ) {}
 
     virtual void DrawText( const wxString &, wxDouble , wxDouble  )  {}
     virtual void DrawText( const wxString &, wxDouble , wxDouble , wxDouble ) {}
+    virtual void DrawText( const wxString &, wxDouble , wxDouble , wxGraphicsBrush )  {}
+    virtual void DrawText( const wxString &, wxDouble , wxDouble , wxDouble , wxGraphicsBrush ) {}
     virtual void GetTextExtent( const wxString &, wxDouble *, wxDouble *,
                                 wxDouble *, wxDouble * ) const {}
     virtual void GetPartialTextExtents(const wxString& , wxArrayDouble& ) const  {}
@@ -3838,6 +3856,7 @@ public:
     virtual void StrokeLines( size_t , const wxPoint2DDouble *, const wxPoint2DDouble *) {}
     virtual void DrawLines( size_t , const wxPoint2DDouble *, int ) {}
     virtual void DrawRectangle( wxDouble , wxDouble , wxDouble , wxDouble ) {}
+    virtual void DrawRoundedRectangle( wxDouble , wxDouble , wxDouble , wxDouble , wxDouble ) {}
     virtual void DrawEllipse( wxDouble , wxDouble , wxDouble , wxDouble ) {}
     virtual void DrawRoundedRectangle( wxDouble  wxDouble , wxDouble , wxDouble , wxDouble ) {}
     virtual bool ShouldOffset() const { return false; }
@@ -3854,28 +3873,30 @@ public :
 
     virtual ~wxGraphicsRenderer() {}
 
-    static wxGraphicsRenderer* GetDefaultRenderer(
+    static wxGraphicsRenderer* GetDefaultRenderer() {
         PyErr_SetString(PyExc_NotImplementedError,
                         "wx.GraphicsRenderer is not available on this platform.");
-    );
+        return NULL;
+    }
 
     virtual wxGraphicsContext * CreateContext( const wxWindowDC& ) { return NULL; }
     virtual wxGraphicsContext * CreateContextFromNativeContext( void *  ) { return NULL; }
     virtual wxGraphicsContext * CreateContextFromNativeWindow( void *  )  { return NULL; }
     virtual wxGraphicsContext * CreateContext( wxWindow*  ) { return NULL; }
+    virtual wxGraphicsContext * CreateMeasuringContext() { return NULL; }
 
-    virtual wxGraphicsPath * CreatePath()  { return NULL; }
+    virtual wxGraphicsPath CreatePath()  { return wxNullGraphicsPath; }
 
-    virtual wxGraphicsMatrix * CreateMatrix( wxDouble , wxDouble , wxDouble , wxDouble ,
-                                             wxDouble , wxDouble ) { return NULL; }
+    virtual wxGraphicsMatrix CreateMatrix( wxDouble , wxDouble , wxDouble , wxDouble ,
+                                             wxDouble , wxDouble ) { return wxNullGraphicsMatrix; }
 
-    virtual wxGraphicsPen CreatePen(const wxPen& )  { return wxNullGaphicsPen; }
-    virtual wxGraphicsBrush CreateBrush(const wxBrush&  )  { return wxNullGaphicsBrush; }
-    virtual wxGraphicsBrush CreateLinearGradientBrush(xDouble , wxDouble , wxDouble , wxDouble ,
-                                                      const wxColour&, const wxColour&)  { return wxNullGaphicsBrush; }
+    virtual wxGraphicsPen CreatePen(const wxPen& )  { return wxNullGraphicsPen; }
+    virtual wxGraphicsBrush CreateBrush(const wxBrush&  )  { return wxNullGraphicsBrush; }
+    virtual wxGraphicsBrush CreateLinearGradientBrush(wxDouble , wxDouble , wxDouble , wxDouble ,
+                                                      const wxColour&, const wxColour&)  { return wxNullGraphicsBrush; }
     virtual wxGraphicsBrush CreateRadialGradientBrush(wxDouble , wxDouble , wxDouble , wxDouble , wxDouble ,
-                                                      const wxColour &, const wxColour &)  { return wxNullGaphicsBrush; }
-    virtual wxGraphicsFont CreateFont( const wxFont & , const wxColour & ) { return wxNullGaphicsFont; }
+                                                      const wxColour &, const wxColour &)  { return wxNullGraphicsBrush; }
+    virtual wxGraphicsFont CreateFont( const wxFont & , const wxColour & ) { return wxNullGraphicsFont; }
 };
 
 
