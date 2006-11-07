@@ -346,9 +346,7 @@ void wxAuiDefaultTabArt::DrawTab(wxDC& dc,
     wxCoord tab_y = in_rect.y + in_rect.height - tab_height;
 
 
-    //dc.SetClippingRegion(left_buttons_width, 0,
-    //             m_rect.GetWidth() - right_buttons_width - left_buttons_width - 2,
-    //             m_rect.GetHeight());
+    caption = caption_text;
 
     dc.SetClippingRegion(in_rect);
                   
@@ -792,6 +790,8 @@ void wxAuiSimpleTabArt::DrawTab(wxDC& dc,
     wxCoord tab_width = tab_size.x;
     wxCoord tab_x = in_rect.x;
     wxCoord tab_y = in_rect.y + in_rect.height - tab_height;
+
+    caption = caption_text;
 
     // select pen, brush and font for the tab to be drawn
 
