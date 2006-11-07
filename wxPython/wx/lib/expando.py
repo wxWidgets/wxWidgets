@@ -158,7 +158,7 @@ class ExpandoTextCtrl(wx.TextCtrl):
         return sz.height
 
 
-    if wx.VERSION < (2,7) and 'wxGTK' in wx.PlatformInfo:
+    if 'wxGTK' in wx.PlatformInfo: ## and wx.VERSION < (2,7):   it's broke again in 2.7.2...
         # the wxGTK version of GetNumberOfLines in 2.6 doesn't count
         # wrapped lines, so we need to implement our own.  This is
         # fixed in 2.7.
