@@ -27,11 +27,12 @@
 #endif
 
 // NB: Some compilers define boolean type in Windows headers
-//     (e.g. Watcom C++, but not Open Watcom).
+//     (e.g. Watcom C++, but not some Open Watcom versions).
 //     This causes a conflict with jmorecfg.h header from libjpeg, so we have
 //     to make sure libjpeg won't try to define boolean itself. This is done by
 //     defining HAVE_BOOLEAN.
-#if defined(__WXMSW__) && (defined(__MWERKS__) || defined(__DIGITALMARS__))
+#if defined(__WXMSW__) && (defined(__MWERKS__) || defined(__DIGITALMARS__) || \
+       (defined(__WATCOMC__) && !wxONLY_WATCOM_EARLIER_THAN(1,6)))
     #define HAVE_BOOLEAN
     #include "wx/msw/wrapwin.h"
 #endif
