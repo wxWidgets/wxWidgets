@@ -525,9 +525,32 @@ wxMacCoreGraphicsBrushData::wxMacCoreGraphicsBrushData(wxGraphicsRenderer* rende
 
     if ( brush.GetStyle() == wxSOLID )
     {
-        float components[4] = { brush.GetColour().Red() / 255.0 , brush.GetColour().Green() / 255.0 ,
+        if ( brush.MacGetBrushKind() == kwxMacBrushTheme )
+        {
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_4
+            if ( HIThemeBrushCreateCGColor != 0 )
+            {
+                CGColorRef color ;
+                HIThemeBrushCreateCGColor( brush.MacGetTheme(), &color );
+                m_color.Set( color ) ;
+            }
+            else
+#endif
+            {
+                // as close as we can get, unfortunately < 10.4 things get difficult
+                RGBColor color;
+                GetThemeBrushAsColor( brush.MacGetTheme(), 32, true, &color );
+                float components[4] = {  (CGFloat) color.red / 65536,
+                    (CGFloat) color.green / 65536, (CGFloat) color.blue / 65536, 1 } ;
+                m_color.Set( CGColorCreate( wxMacGetGenericRGBColorSpace() , components ) ) ;
+            }
+        }
+        else
+        {
+            float components[4] = { brush.GetColour().Red() / 255.0 , brush.GetColour().Green() / 255.0 ,
                 brush.GetColour().Blue() / 255.0 , brush.GetColour().Alpha() / 255.0 } ;
-        m_color.Set( CGColorCreate( wxMacGetGenericRGBColorSpace() , components ) ) ;
+            m_color.Set( CGColorCreate( wxMacGetGenericRGBColorSpace() , components ) ) ;
+        }
     }
     else if ( brush.IsHatch() )
     {
