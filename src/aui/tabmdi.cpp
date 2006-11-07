@@ -173,14 +173,12 @@ void wxAuiMDIParentFrame::SetChildMenuBar(wxAuiMDIChildFrame* pChild)
 
 bool wxAuiMDIParentFrame::ProcessEvent(wxEvent& event)
 {
-    // Stops the same event being processed repeatedly
-    static wxEventType inEvent = wxEVT_NULL;
-    if (inEvent == event.GetEventType())
+    // stops the same event being processed repeatedly
+    if (m_pLastEvt == &event)
         return false;
-
-    inEvent = event.GetEventType();
-
-    // Let the active child (if any) process the event first.
+    m_pLastEvt = &event;
+    
+    // let the active child (if any) process the event first.
     bool res = false;
     if (m_pActiveChild &&
         event.IsCommandEvent() &&
@@ -196,14 +194,15 @@ bool wxAuiMDIParentFrame::ProcessEvent(wxEvent& event)
         res = m_pActiveChild->GetEventHandler()->ProcessEvent(event);
     }
 
-    // If the event was not handled this frame will handle it!
     if (!res)
     {
-        //res = GetEventHandler()->ProcessEvent(event);
+        // if the event was not handled this frame will handle it,
+        // which is why we need the protection code at the beginning
+        // of this method
         res = wxEvtHandler::ProcessEvent(event);
     }
 
-    inEvent = wxEVT_NULL;
+    m_pLastEvt = NULL;
 
     return res;
 }
@@ -255,6 +254,7 @@ void wxAuiMDIParentFrame::ActivatePrevious()
 
 void wxAuiMDIParentFrame::Init()
 {
+    m_pLastEvt = NULL;
     m_pClientWindow = NULL;
     m_pActiveChild = NULL;
 #if wxUSE_MENUS
