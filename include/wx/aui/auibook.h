@@ -180,7 +180,7 @@ public:
 
     int GetBestTabCtrlSize(wxWindow* wnd);    
 
-private:
+protected:
 
     wxFont m_normal_font;
     wxFont m_selected_font;
@@ -263,7 +263,7 @@ public:
 
     int GetBestTabCtrlSize(wxWindow* wnd);    
 
-private:
+protected:
 
     wxFont m_normal_font;
     wxFont m_selected_font;

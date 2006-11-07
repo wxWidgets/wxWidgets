@@ -1863,9 +1863,13 @@ void wxAuiTabCtrl::OnLeftDown(wxMouseEvent& evt)
     m_is_dragging = false;
     m_click_tab = NULL;
 
+
     wxWindow* wnd;
     if (TabHitTest(evt.m_x, evt.m_y, &wnd))
     {
+        if (m_flags & wxAUI_NB_CLOSE_ON_ACTIVE_TAB)
+            m_hover_button = NULL;
+        
         wxAuiNotebookEvent e(wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGING, m_windowId);
         e.SetSelection(GetIdxFromWindow(wnd));
         e.SetOldSelection(GetActivePage());
@@ -1876,7 +1880,7 @@ void wxAuiTabCtrl::OnLeftDown(wxMouseEvent& evt)
         m_click_pt.y = evt.m_y;
         m_click_tab = wnd;
     }
-
+    
     if (m_hover_button)
     {
         m_hover_button->cur_state = wxAUI_BUTTON_STATE_PRESSED;
