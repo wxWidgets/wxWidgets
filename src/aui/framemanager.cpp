@@ -1542,6 +1542,13 @@ void wxAuiManager::LayoutAddPane(wxSizer* cont,
             part.sizer_item = sizer_item;
             uiparts.Add(part);
         }
+        
+        // if we have buttons, add a little space to the right
+        // of them to ease visual crowding
+        if (button_count >= 1)
+        {
+            caption_sizer->Add(3,1);
+        }
 
         // add the caption sizer
         sizer_item = vert_pane_sizer->Add(caption_sizer, 0, wxEXPAND);
