@@ -619,7 +619,7 @@ static int wxOpenWithDeleteOnClose(const wxString& filename)
     HANDLE h = ::CreateFile(filename, access, 0, NULL,
                             disposition, attributes, NULL);
 
-    return wxOpenOSFHandle(h, 0);
+    return wxOpenOSFHandle(h, wxO_BINARY);
 }
 #endif // wxOpenOSFHandle
 
@@ -649,7 +649,7 @@ static bool wxTempOpen(wxFFile *file, const wxString& path, bool *deleteOnClose)
     return file->Open(path, _T("w+b"));
 #else // wx_fdopen
     int fd = wxTempOpen(path, deleteOnClose);
-    if (fd != -1)
+    if (fd == -1)
         return false;
     file->Attach(wx_fdopen(fd, "w+b"));
     return file->IsOpened();
