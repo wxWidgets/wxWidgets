@@ -430,13 +430,9 @@ bool wxQTMediaBackend::Load(const wxString& fileName)
         newMovieActive,
         NULL); // wasChanged
 
-    //
-    // check GetMoviesStickyError() because it may not find the
-    // proper codec and play black video and other strange effects,
-    // not to mention mess up the dynamic backend loading scheme
-    // of wxMediaCtrl - so it just does what the QuickTime player does
-    //
-    if (err == noErr && ::GetMoviesStickyError() == noErr)
+    // Do not use ::GetMoviesStickyError() here because it returns -2009
+    // a.k.a. invalid track on valid mpegs	     
+    if (err == noErr && ::GetMoviesError() == noErr)
     {
         ::CloseMovieFile(movieResFile);
 
