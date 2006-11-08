@@ -57,7 +57,8 @@ void wxOverlayImpl::Init(wxWindowDC *dc, int x, int y, int width, int height)
     m_window = dc->GetWindow();
 
     m_rect = wxRect(x, y, width, height);
-    m_rect.Offset(m_window->GetClientAreaOrigin());
+    if ( wxDynamicCast(dc, wxClientDC) )
+        m_rect.Offset(m_window->GetClientAreaOrigin());
 
     // FIXME: create surface with transparency or key color (?)
     m_surface =
@@ -72,7 +73,9 @@ void wxOverlayImpl::Init(wxWindowDC *dc, int x, int y, int width, int height)
 
 void wxOverlayImpl::BeginDrawing(wxWindowDC *dc)
 {
-    wxPoint origin(m_rect.GetPosition() - m_window->GetClientAreaOrigin());
+    wxPoint origin(m_rect.GetPosition());
+    if ( wxDynamicCast(dc, wxClientDC) )
+        origin -= m_window->GetClientAreaOrigin();
 
     // drawing on overlay "hijacks" existing wxWindowDC rather then using
     // another DC, so we have to change the DC to draw on the overlay's surface.
