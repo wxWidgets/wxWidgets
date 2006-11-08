@@ -69,11 +69,18 @@ Deprecated methods since 2.6.x and their replacements
 
 
 
-Major new features in 2.7 release
+Major new features in 2.8 release
 ---------------------------------
 
 - New AUI library supporting docking windows and much more.
 
+
+2.8.0
+-----
+
+All:
+
+- wxArrayString::Alloc() now works as reserve() and doesn't clear array contents
 
 2.7.2
 -----

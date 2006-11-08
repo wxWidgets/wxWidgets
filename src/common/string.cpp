@@ -2191,13 +2191,16 @@ void wxArrayString::Alloc(size_t nSize)
 {
   // only if old buffer was not big enough
   if ( nSize > m_nSize ) {
-    Free();
-    wxDELETEA(m_pItems);
-    m_pItems = new wxChar *[nSize];
+    wxChar **pNew = new wxChar *[nSize];
+    if ( !pNew )
+        return;
+
+    memcpy(pNew, m_pItems, m_nCount*sizeof(wxChar *));
+    delete [] m_pItems;
+
+    m_pItems = pNew;
     m_nSize  = nSize;
   }
-
-  m_nCount = 0;
 }
 
 // minimizes the memory usage by freeing unused memory
