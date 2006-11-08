@@ -185,7 +185,7 @@ bool WXDLLEXPORT wxOKlibc()
 #endif
 
 // some limits of our implementation
-#define wxMAX_SVNPRINTF_ARGUMENTS         16
+#define wxMAX_SVNPRINTF_ARGUMENTS         64
 #define wxMAX_SVNPRINTF_FLAGBUFFER_LEN    32
 #define wxMAX_SVNPRINTF_SCRATCHBUFFER_LEN   512
 
