@@ -3534,10 +3534,12 @@ void wxAuiManager::OnSetCursor(wxSetCursorEvent& event)
 
 
 void wxAuiManager::UpdateButtonOnScreen(wxAuiDockUIPart* button_ui_part,
-                                          const wxMouseEvent& event)
+                                        const wxMouseEvent& event)
 {
     wxAuiDockUIPart* hit_test = HitTest(event.GetX(), event.GetY());
-
+    if (!hit_test)
+        return;
+        
     int state = wxAUI_BUTTON_STATE_NORMAL;
 
     if (hit_test == button_ui_part)
