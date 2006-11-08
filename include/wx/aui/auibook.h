@@ -456,6 +456,7 @@ protected:
     wxWindow* m_click_tab;
     bool m_is_dragging;
     wxAuiTabContainerButton* m_hover_button;
+    wxAuiTabContainerButton* m_pressed_button;
 
 #ifndef SWIG
     DECLARE_CLASS(wxAuiTabCtrl)

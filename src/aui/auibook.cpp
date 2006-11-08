@@ -1834,6 +1834,7 @@ wxAuiTabCtrl::wxAuiTabCtrl(wxWindow* parent,
     m_click_pt = wxDefaultPosition;
     m_is_dragging = false;
     m_hover_button = NULL;
+    m_pressed_button = NULL;
 }
 
 wxAuiTabCtrl::~wxAuiTabCtrl()
@@ -1867,14 +1868,12 @@ void wxAuiTabCtrl::OnLeftDown(wxMouseEvent& evt)
     m_click_pt = wxDefaultPosition;
     m_is_dragging = false;
     m_click_tab = NULL;
+    m_pressed_button = NULL;
 
 
     wxWindow* wnd;
     if (TabHitTest(evt.m_x, evt.m_y, &wnd))
-    {
-        if (m_flags & wxAUI_NB_CLOSE_ON_ACTIVE_TAB)
-            m_hover_button = NULL;
-        
+    {        
         wxAuiNotebookEvent e(wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGING, m_windowId);
         e.SetSelection(GetIdxFromWindow(wnd));
         e.SetOldSelection(GetActivePage());
@@ -1888,13 +1887,14 @@ void wxAuiTabCtrl::OnLeftDown(wxMouseEvent& evt)
     
     if (m_hover_button)
     {
-        m_hover_button->cur_state = wxAUI_BUTTON_STATE_PRESSED;
+        m_pressed_button = m_hover_button;
+        m_pressed_button->cur_state = wxAUI_BUTTON_STATE_PRESSED;
         Refresh();
         Update();
     }
 }
 
-void wxAuiTabCtrl::OnLeftUp(wxMouseEvent&)
+void wxAuiTabCtrl::OnLeftUp(wxMouseEvent& evt)
 {
     if (GetCapture() == this)
         ReleaseMouse();
@@ -1909,19 +1909,31 @@ void wxAuiTabCtrl::OnLeftUp(wxMouseEvent&)
         return;
     }
 
-    if (m_hover_button)
+    if (m_pressed_button)
     {
-        m_hover_button->cur_state = wxAUI_BUTTON_STATE_HOVER;
+        // make sure we're still clicking the button
+        wxAuiTabContainerButton* button = NULL;
+        if (!ButtonHitTest(evt.m_x, evt.m_y, &button))
+            return;
+            
+        if (button != m_pressed_button)
+        {
+            m_pressed_button = NULL;
+            return;
+        }
+
         Refresh();
         Update();
 
-        if (!(m_hover_button->cur_state & wxAUI_BUTTON_STATE_DISABLED))
+        if (!(m_pressed_button->cur_state & wxAUI_BUTTON_STATE_DISABLED))
         {
             wxAuiNotebookEvent evt(wxEVT_COMMAND_AUINOTEBOOK_BUTTON, m_windowId);
-            evt.SetInt(m_hover_button->id);
+            evt.SetInt(m_pressed_button->id);
             evt.SetEventObject(this);
             GetEventHandler()->ProcessEvent(evt);
         }
+        
+        m_pressed_button = NULL;
     }
 
     m_click_pt = wxDefaultPosition;
