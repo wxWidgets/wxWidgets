@@ -144,6 +144,12 @@ public:
     virtual void SetTitle(const wxString& title);
     virtual wxString GetTitle() const;
 
+    virtual void SetIcons(const wxIconBundle& icons);
+    virtual const wxIconBundle& GetIcons() const;
+    
+    virtual void SetIcon(const wxIcon& icon);
+    virtual const wxIcon& GetIcon() const;
+
     virtual void Activate();
     virtual bool Destroy();
 
@@ -176,9 +182,6 @@ public:
     virtual wxToolBar *GetToolBar() const { return (wxToolBar*)NULL; }
 #endif
 
-    // no icon
-    void SetIcon(const wxIcon& WXUNUSED(icon)) { }
-    void SetIcons(const wxIconBundle& WXUNUSED(icons)) { }
 
     // no maximize etc
     virtual void Maximize(bool WXUNUSED(maximize) = true) { /* Has no effect */ }
@@ -197,20 +200,9 @@ public:
 
     void SetMDIParentFrame(wxAuiMDIParentFrame* parent);
     wxAuiMDIParentFrame* GetMDIParentFrame() const;
-
-protected:
-    wxAuiMDIParentFrame *m_pMDIParentFrame;
-    wxRect            m_mdi_newrect;
-    wxRect            m_mdi_currect;
-    wxString          m_title;
-
-#if wxUSE_MENUS
-    wxMenuBar        *m_pMenuBar;
-#endif // wxUSE_MENUS
-
+    
 protected:
     void Init();
-
     virtual bool Show(bool show = true);
     virtual void DoSetSize(int x, int y, int width, int height, int size_flags);
     virtual void DoMoveWindow(int x, int y, int width, int height);
@@ -221,6 +213,20 @@ public:
     // changing the panel... it messes the UI layout when we would allow it.
     void ApplyMDIChildFrameRect();
     void DoShow(bool show);
+
+protected:
+    wxAuiMDIParentFrame* m_pMDIParentFrame;
+    wxRect m_mdi_newrect;
+    wxRect m_mdi_currect;
+    wxString m_title;
+    wxIcon m_icon;
+    wxIconBundle m_icon_bundle;
+
+#if wxUSE_MENUS
+    wxMenuBar* m_pMenuBar;
+#endif // wxUSE_MENUS
+
+
 
 private:
     DECLARE_DYNAMIC_CLASS(wxAuiMDIChildFrame)

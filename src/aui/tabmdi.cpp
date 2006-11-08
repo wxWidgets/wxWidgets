@@ -495,6 +495,46 @@ wxString wxAuiMDIChildFrame::GetTitle() const
     return m_title;
 }
 
+void wxAuiMDIChildFrame::SetIcons(const wxIconBundle& icons)
+{
+    // get icon with the system icon size
+    SetIcon(icons.GetIcon(-1));
+    m_icon_bundle = icons;
+}
+
+const wxIconBundle& wxAuiMDIChildFrame::GetIcons() const
+{
+    return m_icon_bundle;
+}
+
+void wxAuiMDIChildFrame::SetIcon(const wxIcon& icon)
+{
+    wxAuiMDIParentFrame* pParentFrame = GetMDIParentFrame();
+    wxASSERT_MSG(pParentFrame, wxT("Missing MDI Parent Frame"));
+
+    m_icon = icon;
+    
+    wxBitmap bmp;
+    bmp.CopyFromIcon(m_icon);
+    
+    wxAuiMDIClientWindow* pClientWindow = pParentFrame->GetClientWindow();
+    if (pClientWindow != NULL)
+    {
+        int idx = pClientWindow->GetPageIndex(this);
+        
+        if (idx != -1)
+        {
+            pClientWindow->SetPageBitmap((size_t)idx, bmp);
+        }
+    }
+}
+
+const wxIcon& wxAuiMDIChildFrame::GetIcon() const
+{
+    return m_icon;
+}
+    
+    
 void wxAuiMDIChildFrame::Activate()
 {
     wxAuiMDIParentFrame* pParentFrame = GetMDIParentFrame();

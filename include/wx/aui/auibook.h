@@ -385,7 +385,7 @@ public:
     virtual ~wxAuiTabContainer();
 
     void SetArtProvider(wxAuiTabArt* art);
-    wxAuiTabArt* GetArtProvider();
+    wxAuiTabArt* GetArtProvider() const;
 
     void SetFlags(unsigned int flags);
     unsigned int GetFlags() const;
@@ -517,13 +517,16 @@ public:
     void SetWindowStyleFlag(long style);
 
     bool SetPageText(size_t page, const wxString& text);
+    bool SetPageBitmap(size_t page, const wxBitmap& bitmap);
     size_t SetSelection(size_t new_page);
     int GetSelection() const;
     size_t GetPageCount() const;
     wxWindow* GetPage(size_t page_idx) const;
 
+    int GetPageIndex(wxWindow* page_wnd) const;
+
     void SetArtProvider(wxAuiTabArt* art);
-    wxAuiTabArt* GetArtProvider();
+    wxAuiTabArt* GetArtProvider() const;
 
 protected:
 

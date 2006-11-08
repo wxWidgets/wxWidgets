@@ -1181,7 +1181,7 @@ void wxAuiTabContainer::SetArtProvider(wxAuiTabArt* art)
     }
 }
 
-wxAuiTabArt* wxAuiTabContainer::GetArtProvider()
+wxAuiTabArt* wxAuiTabContainer::GetArtProvider() const
 {
     return m_art;
 }
@@ -2381,7 +2381,7 @@ int wxAuiNotebook::CalculateTabCtrlHeight()
 }
 
 
-wxAuiTabArt* wxAuiNotebook::GetArtProvider()
+wxAuiTabArt* wxAuiNotebook::GetArtProvider() const
 {
     return m_tabs.GetArtProvider();
 }
@@ -2548,6 +2548,15 @@ bool wxAuiNotebook::RemovePage(size_t page_idx)
     return true;
 }
 
+// GetPageIndex() returns the index of the page, or -1 if the
+// page could not be located in the notebook
+int wxAuiNotebook::GetPageIndex(wxWindow* page_wnd) const
+{
+    return m_tabs.GetIdxFromWindow(page_wnd);
+}
+
+
+
 // SetPageText() changes the tab caption of the specified page
 bool wxAuiNotebook::SetPageText(size_t page_idx, const wxString& text)
 {
@@ -2571,6 +2580,34 @@ bool wxAuiNotebook::SetPageText(size_t page_idx, const wxString& text)
 
     return true;
 }
+
+
+bool wxAuiNotebook::SetPageBitmap(size_t page_idx, const wxBitmap& bitmap)
+{
+    if (page_idx >= m_tabs.GetPageCount())
+        return false;
+        
+    // update our own tab catalog
+    wxAuiNotebookPage& page_info = m_tabs.GetPage(page_idx);
+    page_info.bitmap = bitmap;
+    
+    // tab height might have changed
+    SetTabCtrlHeight(CalculateTabCtrlHeight());
+    
+    // update what's on screen
+    wxAuiTabCtrl* ctrl;
+    int ctrl_idx;
+    if (FindTab(page_info.window, &ctrl, &ctrl_idx))
+    {
+        wxAuiNotebookPage& info = ctrl->GetPage(ctrl_idx);
+        info.bitmap = bitmap;
+        ctrl->Refresh();
+        ctrl->Update();
+    }
+    
+    return true;
+}
+
 
 // GetSelection() returns the index of the currently active page
 int wxAuiNotebook::GetSelection() const
