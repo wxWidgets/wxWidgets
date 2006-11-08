@@ -147,7 +147,7 @@ void FileNameTestCase::TestConstruction()
         CPPUNIT_ASSERT_MESSAGE
         (
             wxString::Format("Normalize(%s) failed", fni.fullname).c_str(),
-            fn.Normalize(wxPATH_NORM_ALL, _T(""), fni.format)
+            fn.Normalize(wxPATH_NORM_ALL, _T("/foo/bar/baz"), fni.format)
         );
 
         if ( *fni.volume && *fni.path )
