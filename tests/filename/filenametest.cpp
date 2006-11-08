@@ -144,6 +144,9 @@ void FileNameTestCase::TestConstruction()
         wxString fullname = fn.GetFullPath(fni.format);
         CPPUNIT_ASSERT_EQUAL( wxString(fni.fullname), fullname );
 
+        // notice that we use a dummy working directory to ensure that paths
+        // with "../.." in them could be normalized, otherwise this would fail
+        // if the test is run from root directory or its direct subdirectory
         CPPUNIT_ASSERT_MESSAGE
         (
             wxString::Format("Normalize(%s) failed", fni.fullname).c_str(),
