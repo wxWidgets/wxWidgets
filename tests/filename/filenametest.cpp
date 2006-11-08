@@ -25,6 +25,16 @@
 #include "wx/filefn.h"
 
 // ----------------------------------------------------------------------------
+// local functions
+// ----------------------------------------------------------------------------
+
+// define stream inserter for wxFileName to use it in CPPUNIT_ASSERT_EQUAL()
+inline std::ostream& operator<<(std::ostream& o, const wxFileName& fn)
+{
+    return o << fn.GetFullPath();
+}
+
+// ----------------------------------------------------------------------------
 // test data
 // ----------------------------------------------------------------------------
 
@@ -132,9 +142,13 @@ void FileNameTestCase::TestConstruction()
         wxFileName fn(fni.fullname, fni.format);
 
         wxString fullname = fn.GetFullPath(fni.format);
-        CPPUNIT_ASSERT( fullname == fni.fullname );
+        CPPUNIT_ASSERT_EQUAL( wxString(fni.fullname), fullname );
 
-        CPPUNIT_ASSERT( fn.Normalize(wxPATH_NORM_ALL, _T(""), fni.format) );
+        CPPUNIT_ASSERT_MESSAGE
+        (
+            wxString::Format("Normalize(%s) failed", fni.fullname).c_str(),
+            fn.Normalize(wxPATH_NORM_ALL, _T(""), fni.format)
+        );
 
         if ( *fni.volume && *fni.path )
         {
@@ -144,10 +158,10 @@ void FileNameTestCase::TestConstruction()
             pathWithVolume += wxFileName::GetVolumeSeparator(fni.format);
             pathWithVolume += fni.path;
 
-            CPPUNIT_ASSERT( fn == wxFileName(pathWithVolume,
+            CPPUNIT_ASSERT_EQUAL( wxFileName(pathWithVolume,
                                              fni.name,
                                              fni.ext,
-                                             fni.format) );
+                                             fni.format), fn );
         }
     }
 }
@@ -158,7 +172,7 @@ void FileNameTestCase::TestComparison()
     wxFileName fn2(wxT("/tmp/dir2/../file2"));
     fn1.Normalize();
     fn2.Normalize();
-    CPPUNIT_ASSERT(fn1.GetPath() == fn2.GetPath());
+    CPPUNIT_ASSERT_EQUAL(fn1.GetPath(), fn2.GetPath());
 }
 
 void FileNameTestCase::TestSplit()
@@ -170,15 +184,15 @@ void FileNameTestCase::TestSplit()
         wxFileName::SplitPath(fni.fullname,
                               &volume, &path, &name, &ext, fni.format);
 
-        CPPUNIT_ASSERT( volume == fni.volume );
-        CPPUNIT_ASSERT( path == fni.path );
-        CPPUNIT_ASSERT( name == fni.name );
-        CPPUNIT_ASSERT( ext == fni.ext );
+        CPPUNIT_ASSERT_EQUAL( wxString(fni.volume), volume );
+        CPPUNIT_ASSERT_EQUAL( wxString(fni.path), path );
+        CPPUNIT_ASSERT_EQUAL( wxString(fni.name), name );
+        CPPUNIT_ASSERT_EQUAL( wxString(fni.ext), ext );
     }
 
     // special case of empty extension
     wxFileName fn(_T("foo."));
-    CPPUNIT_ASSERT( fn.GetFullPath() == _T("foo.") );
+    CPPUNIT_ASSERT_EQUAL( wxString(_T("foo.")), fn.GetFullPath() );
 }
 
 void FileNameTestCase::TestSetPath()
@@ -215,7 +229,7 @@ void FileNameTestCase::TestNormalize()
 
     static struct FileNameTest
     {
-        wxString original;
+        const wxChar *original;
         int flags;
         wxString expected;
     } tests[] =
@@ -250,12 +264,16 @@ void FileNameTestCase::TestNormalize()
     // set the env var ABCDEF
     wxSetEnv(_T("ABCDEF"), _T("abcdef"));
 
-    for (size_t i=0; i < WXSIZEOF(tests); i++)
+    for ( size_t i = 0; i < WXSIZEOF(tests); i++ )
     {
         wxFileName fn(tests[i].original, wxPATH_UNIX);
 
         // be sure this normalization does not fail
-        CPPUNIT_ASSERT( fn.Normalize(tests[i].flags, cwd, wxPATH_UNIX) );
+        CPPUNIT_ASSERT_MESSAGE
+        (
+            wxString::Format("Normalize(%s) failed", tests[i].original).c_str(),
+            fn.Normalize(tests[i].flags, cwd, wxPATH_UNIX)
+        );
 
         // compare result with expected string
         CPPUNIT_ASSERT_EQUAL( tests[i].expected, fn.GetFullPath(wxPATH_UNIX) );
@@ -271,13 +289,13 @@ wxString wxTestStripExtension(wxString szFile)
 void FileNameTestCase::TestStrip()
 {
     //test a crash
-    CPPUNIT_ASSERT( wxTestStripExtension( _T("") ) == _T("") );
+    CPPUNIT_ASSERT_EQUAL( wxString(_T("")), wxTestStripExtension(_T("")) );
 
     //others
-    CPPUNIT_ASSERT( wxTestStripExtension( _T(".") ) == _T("") );
-    CPPUNIT_ASSERT( wxTestStripExtension( _T(".wav") ) == _T("") );
-    CPPUNIT_ASSERT( wxTestStripExtension( _T("good.wav") ) == _T("good") );
-    CPPUNIT_ASSERT( wxTestStripExtension( _T("good.wav.wav") ) == _T("good.wav") );
+    CPPUNIT_ASSERT_EQUAL( wxString(_T("")), wxTestStripExtension(_T(".")) );
+    CPPUNIT_ASSERT_EQUAL( wxString(_T("")), wxTestStripExtension(_T(".wav")) );
+    CPPUNIT_ASSERT_EQUAL( wxString(_T("good")), wxTestStripExtension(_T("good.wav")) );
+    CPPUNIT_ASSERT_EQUAL( wxString(_T("good.wav")), wxTestStripExtension(_T("good.wav.wav")) );
 }
 
 #ifdef __WINDOWS__
