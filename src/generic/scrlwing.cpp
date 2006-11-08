@@ -462,26 +462,10 @@ void wxScrollHelper::HandleOnScroll(wxScrollWinEvent& event)
         return;
     }
 
-    // flush all pending repaints before we change m_{x,y}ScrollPosition, as
-    // otherwise invalidated area could be updated incorrectly later when
-    // ScrollWindow() makes sure they're repainted before scrolling them
-    m_targetWindow->Update();
-
-    int orient = event.GetOrientation();
-    if (orient == wxHORIZONTAL)
-    {
-        m_xScrollPosition += nScrollInc;
-        m_win->SetScrollPos(wxHORIZONTAL, m_xScrollPosition);
-    }
-    else
-    {
-        m_yScrollPosition += nScrollInc;
-        m_win->SetScrollPos(wxVERTICAL, m_yScrollPosition);
-    }
-
     bool needsRefresh = false;
     int dx = 0,
         dy = 0;
+    int orient = event.GetOrientation();
     if (orient == wxHORIZONTAL)
     {
        if ( m_xScrollingEnabled )
@@ -503,6 +487,25 @@ void wxScrollHelper::HandleOnScroll(wxScrollWinEvent& event)
         {
             needsRefresh = true;
         }
+    }
+
+    if ( !needsRefresh )
+    {
+        // flush all pending repaints before we change m_{x,y}ScrollPosition, as
+        // otherwise invalidated area could be updated incorrectly later when
+        // ScrollWindow() makes sure they're repainted before scrolling them
+        m_targetWindow->Update();
+    }
+
+    if (orient == wxHORIZONTAL)
+    {
+        m_xScrollPosition += nScrollInc;
+        m_win->SetScrollPos(wxHORIZONTAL, m_xScrollPosition);
+    }
+    else
+    {
+        m_yScrollPosition += nScrollInc;
+        m_win->SetScrollPos(wxVERTICAL, m_yScrollPosition);
     }
 
     if ( needsRefresh )
@@ -899,15 +902,13 @@ void wxScrollHelper::Scroll( int x_pos, int y_pos )
     int w = 0, h = 0;
     GetTargetSize(&w, &h);
 
-    // flush all pending repaints before we change m_{x,y}ScrollPosition, as
-    // otherwise invalidated area could be updated incorrectly later when
-    // ScrollWindow() makes sure they're repainted before scrolling them
-    m_targetWindow->Update();
+    // compute new position:
+    int new_x = m_xScrollPosition;
+    int new_y = m_yScrollPosition;
 
     if ((x_pos != -1) && (m_xScrollPixelsPerLine))
     {
-        int old_x = m_xScrollPosition;
-        m_xScrollPosition = x_pos;
+        new_x = x_pos;
 
         // Calculate page size i.e. number of scroll units you get on the
         // current client window
@@ -916,20 +917,12 @@ void wxScrollHelper::Scroll( int x_pos, int y_pos )
 
         // Correct position if greater than extent of canvas minus
         // the visible portion of it or if below zero
-        m_xScrollPosition = wxMin( m_xScrollLines-noPagePositions, m_xScrollPosition );
-        m_xScrollPosition = wxMax( 0, m_xScrollPosition );
-
-        if (old_x != m_xScrollPosition)
-        {
-            m_win->SetScrollPos( wxHORIZONTAL, m_xScrollPosition );
-            m_targetWindow->ScrollWindow( (old_x-m_xScrollPosition)*m_xScrollPixelsPerLine, 0,
-                                          GetScrollRect() );
-        }
+        new_x = wxMin( m_xScrollLines-noPagePositions, new_x );
+        new_x = wxMax( 0, new_x );
     }
     if ((y_pos != -1) && (m_yScrollPixelsPerLine))
     {
-        int old_y = m_yScrollPosition;
-        m_yScrollPosition = y_pos;
+        new_y = y_pos;
 
         // Calculate page size i.e. number of scroll units you get on the
         // current client window
@@ -938,15 +931,35 @@ void wxScrollHelper::Scroll( int x_pos, int y_pos )
 
         // Correct position if greater than extent of canvas minus
         // the visible portion of it or if below zero
-        m_yScrollPosition = wxMin( m_yScrollLines-noPagePositions, m_yScrollPosition );
-        m_yScrollPosition = wxMax( 0, m_yScrollPosition );
+        new_y = wxMin( m_yScrollLines-noPagePositions, new_y );
+        new_y = wxMax( 0, new_y );
+    }
 
-        if (old_y != m_yScrollPosition)
-        {
-            m_win->SetScrollPos( wxVERTICAL, m_yScrollPosition );
-            m_targetWindow->ScrollWindow( 0, (old_y-m_yScrollPosition)*m_yScrollPixelsPerLine,
-                                          GetScrollRect() );
-        }
+    if ( new_x == m_xScrollPosition && new_y == m_yScrollPosition )
+        return; // nothing to do, the position didn't change
+
+    // flush all pending repaints before we change m_{x,y}ScrollPosition, as
+    // otherwise invalidated area could be updated incorrectly later when
+    // ScrollWindow() makes sure they're repainted before scrolling them
+    m_targetWindow->Update();
+
+    // update the position and scroll the window now:
+    if (m_xScrollPosition != new_x)
+    {
+        int old_x = m_xScrollPosition;
+        m_xScrollPosition = new_x;
+        m_win->SetScrollPos( wxHORIZONTAL, new_x );
+        m_targetWindow->ScrollWindow( (old_x-new_x)*m_xScrollPixelsPerLine, 0,
+                                      GetScrollRect() );
+    }
+
+    if (m_yScrollPosition != new_y)
+    {
+        int old_y = m_yScrollPosition;
+        m_yScrollPosition = new_y;
+        m_win->SetScrollPos( wxVERTICAL, new_y );
+        m_targetWindow->ScrollWindow( 0, (old_y-new_y)*m_yScrollPixelsPerLine,
+                                      GetScrollRect() );
     }
 }
 
