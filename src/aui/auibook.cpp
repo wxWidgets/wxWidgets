@@ -2728,8 +2728,12 @@ void wxAuiNotebook::OnTabDragMotion(wxCommandEvent& evt)
     {
         wxWindow* tab_ctrl = ::wxFindWindowAtPoint(screen_pt);
         
+        // if we aren't over any window, stop here
+        if (!tab_ctrl)
+            return;
+            
         // make sure we are not over the hint window
-        if (tab_ctrl && !tab_ctrl->IsKindOf(CLASSINFO(wxFrame)))
+        if (!tab_ctrl->IsKindOf(CLASSINFO(wxFrame)))
         {
             while (tab_ctrl)
             {
@@ -2744,12 +2748,20 @@ void wxAuiNotebook::OnTabDragMotion(wxCommandEvent& evt)
                 
                 if (nb != this)
                 {
-                    wxRect hint_rect = tab_ctrl->GetRect();
+                    wxRect hint_rect = tab_ctrl->GetClientRect();
                     tab_ctrl->ClientToScreen(&hint_rect.x, &hint_rect.y);
                     m_mgr.ShowHint(hint_rect);
                     return;
                 }
-                
+            }
+        }
+         else
+        {
+            if (!dest_tabs)
+            {
+                // we are either over a hint window, or not over a tab
+                // window, and there is no where to drag to, so exit
+                return;
             }
         }
     }
