@@ -20,6 +20,9 @@
 #if wxUSE_COLLPANE && defined(__WXGTK24__) && !defined(__WXUNIVERSAL__)
 
 #include "wx/collpane.h"
+#include "wx/toplevel.h"
+#include "wx/sizer.h"
+
 #include "wx/gtk/private.h"
 #include "wx/gtk/win_gtk.h"
 
@@ -71,26 +74,20 @@ static void gtk_collapsiblepane_expanded_callback (GObject    *object,
         sz = p->m_szCollapsed;
     }
 
-#if 1
-    // this does work but in the expanded->collapsed transition it provokes
-    // a lot of flicker!!!
+    // VERY IMPORTANT:
+    // just calling
+    //          p->OnStateChange(sz);
+    // here would work work BUT:
+    //     1) in the expanded->collapsed transition it provokes a lot of flickering
+    //     2) in the collapsed->expanded transition using the "Change status" wxButton
+    //        in samples/collpane application some strange warnings would be generated
+    //        by the "clearlooks" theme, if that's your theme.
     //
-    // It also has the problem that in the collapsed->expanded transition with the
-    // "clearlooks" GTK theme I get:
-    //
-    // ** (collpane:18928): CRITICAL **: clearlooks_style_draw_focus: assertion `height >= -1' failed
-    // ** (collpane:18928): CRITICAL **: clearlooks_style_draw_focus: assertion `height >= -1' failed
-    //
-    // Not sure however if this is a ClearLooks bug or rather my bug.
-    // Note that those warnings only appear:
-    //  1) if you're using clearlooks theme
-    //  2) if you use the "Change status" wxButton in samples/collpane application
-    p->OnStateChange(sz);
+    // So we prefer to use some GTK+ native optimized calls, which prevent too many resize
+    // calculations to happen. Note that the following code has been very carefully designed
+    // and tested - be VERY careful when changing it!
 
-#else       // flicker-free code
-
-
-    // need to update our size hints
+    // 1) need to update our size hints
     // NB: this function call won't actually do any long operation
     //     (redraw/relayouting/resizing) so that it's flicker-free
     p->SetMinSize(sz);
@@ -105,39 +102,35 @@ static void gtk_collapsiblepane_expanded_callback (GObject    *object,
         top = wxDynamicCast(wxGetTopLevelParent(p), wxTopLevelWindow);
     if ( top && top->GetSizer() )
     {
-        // recalculate minimal size of the top window
+        // 2) recalculate minimal size of the top window
         wxSize sz = top->GetSizer()->CalcMin();
-
-        // FIXME:
-        // THE PROBLEM WITH THIS CODE IS THAT IN THE EXPANDED->COLLAPSED TRANSITION
-        // IT DOES *NOT* SHRINK THE TOP WINDOW.
-        // However it's flicker-free, native code and it also does not have the
-        // ** (collpane:18928): CRITICAL **: clearlooks_style_draw_focus: assertion `height >= -1' failed
-        // problem
 
         if (top->m_mainWidget)
         {
-            wxLogDebug(wxT("setting min size to %d;%d"), sz.x, sz.y);
+            // 3) MAGIC HACK: if you ever used GtkExpander in a GTK+ program you know
+            //    that this magic call is required to make it possible to shrink the
+            //    top level window in the expanded->collapsed transition.
+            //    This may be sometimes undesired but *is* necessary and if you look
+            //    carefully, all GTK+ programs using GtkExpander perform this trick
+            //    (e.g. the standard "open file" dialog of GTK+>=2.4 is not resizeable
+            //     when the expander is collapsed!)
+            gtk_window_set_resizable (GTK_WINDOW (top->m_widget), p->IsExpanded());
 
-            // set size hints
-            GdkGeometry     geom;
+            // 4) set size hints: note that this code has been taken and adapted
+            //    from src/gtk/toplevel.cpp
+            GdkGeometry geom;
 
             geom.min_width = sz.x;
             geom.min_height = sz.y;
 
             gtk_window_set_geometry_hints( GTK_WINDOW(top->m_widget),
-                                        (GtkWidget*) NULL,
-                                        &geom,
-                                        GDK_HINT_MIN_SIZE );
-            //gtk_window_set_default_size( GTK_WINDOW(top->m_widget), sz.x, sz.y );
+                                           (GtkWidget*) NULL,
+                                           &geom,
+                                           GDK_HINT_MIN_SIZE );
 
-
-            /* I revert back to wxGTK's original behaviour. m_mainWidget holds the
-            * menubar, the toolbar and the client area, which is represented by
-            * m_wxwindow.
-            * this hurts in the eye, but I don't want to call SetSize()
-            * because I don't want to call any non-native functions here. */
-
+            // 5) set size: also this code has been adapted from src/gtk/toplevel.cpp
+            //    to do the size changes immediately and not delaying them in the idle
+            //    time
             top->m_width = sz.x;
             top->m_height = sz.y;
 
@@ -150,7 +143,6 @@ static void gtk_collapsiblepane_expanded_callback (GObject    *object,
             if (client_h < 0)
                 client_h = 0;
 
-            // Let the parent perform the resize
             gtk_pizza_set_size( GTK_PIZZA(top->m_mainWidget),
                                 top->m_wxwindow,
                                 client_x, client_y, client_w, client_h );
@@ -159,7 +151,7 @@ static void gtk_collapsiblepane_expanded_callback (GObject    *object,
 
         }
     }
-#endif
+
     if ( p->m_bIgnoreNextChange )
     {
         // change generated programmatically - do not send an event!
