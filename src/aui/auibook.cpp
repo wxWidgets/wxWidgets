@@ -1651,6 +1651,9 @@ void wxAuiTabContainer::Render(wxDC* raw_dc, wxWindow* wnd)
         offset += m_art->GetIndentSize();     
     
     // prepare the tab-close-button array
+    while (m_tab_close_buttons.GetCount() > page_count)
+        m_tab_close_buttons.RemoveAt(m_tab_close_buttons.GetCount()-1);
+    
     while (m_tab_close_buttons.GetCount() < page_count)
     {
         wxAuiTabContainerButton tempbtn;
@@ -1660,9 +1663,10 @@ void wxAuiTabContainer::Render(wxDC* raw_dc, wxWindow* wnd)
         m_tab_close_buttons.Add(tempbtn);
     }
     
+    
+    // buttons before the tab offset must be set to hidden
     for (i = 0; i < m_tab_offset; ++i)
     {
-        // buttons before the tab offset must be set to hidden
         m_tab_close_buttons.Item(i).cur_state = wxAUI_BUTTON_STATE_HIDDEN;
     }
         
@@ -1707,9 +1711,6 @@ void wxAuiTabContainer::Render(wxDC* raw_dc, wxWindow* wnd)
         if (rect.width <= 0)
             break;
 
-
-
-
         m_art->DrawTab(dc,
                        wnd,
                        rect,
@@ -1730,6 +1731,14 @@ void wxAuiTabContainer::Render(wxDC* raw_dc, wxWindow* wnd)
         
         offset += x_extent;
     }
+
+
+    // make sure to deactivate buttons which are off the screen to the right
+    for (++i; i < m_tab_close_buttons.GetCount(); ++i)
+    {
+        m_tab_close_buttons.Item(i).cur_state = wxAUI_BUTTON_STATE_HIDDEN;
+    }
+
 
     // draw the active tab again so it stands in the foreground
     if (active >= m_tab_offset && active < m_pages.GetCount())
