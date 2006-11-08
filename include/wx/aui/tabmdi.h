@@ -21,6 +21,7 @@
 #include "wx/frame.h"
 #include "wx/panel.h"
 #include "wx/notebook.h"
+#include "wx/icon.h"
 #include "wx/aui/auibook.h"
 
 //-----------------------------------------------------------------------------
