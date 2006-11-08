@@ -219,7 +219,12 @@ typedef pid_t GPid;
 
 #define wxUSE_STD_IOSTREAM  0
 
-#define wxUSE_STD_STRING  0
+#if defined(__DMC__) || defined(__WATCOMC__) \
+     || (defined(_MSC_VER) && _MSC_VER < 1200)
+    #define wxUSE_STD_STRING  0
+#else
+    #define wxUSE_STD_STRING  0
+#endif
 
 #define wxUSE_PRINTF_POS_PARAMS 0
 
