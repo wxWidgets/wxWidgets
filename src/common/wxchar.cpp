@@ -189,68 +189,23 @@ bool WXDLLEXPORT wxOKlibc()
 #define wxMAX_SVNPRINTF_FLAGBUFFER_LEN    32
 #define wxMAX_SVNPRINTF_SCRATCHBUFFER_LEN   512
 
+// prefer snprintf over sprintf
+#if defined(__VISUALC__) || \
+        (defined(__BORLANDC__) && __BORLANDC__ >= 0x540)
+    #define system_sprintf(buff, max, flags, data)      \
+        ::_snprintf(buff, max, flags, data)
+#elif defined(HAVE_SNPRINTF)
+    #define system_sprintf(buff, max, flags, data)      \
+        ::snprintf(buff, max, flags, data)
+#else       // NB: at least sprintf() should always be available
+    // since 'max' is not used in this case, wxVsnprintf() should always
+    // ensure that 'buff' is big enough for all common needs
+    // (see wxMAX_SVNPRINTF_FLAGBUFFER_LEN and wxMAX_SVNPRINTF_SCRATCHBUFFER_LEN)
+    #define system_sprintf(buff, max, flags, data)      \
+        ::sprintf(buff, flags, data)
 
-// wxVsnprintf() needs to use a *system* implementation of swnprintf()
-// in order to perform some internal tasks.
-// NB: we cannot just use wxSnprintf() because for some systems it maybe
-//     implemented later in this file using wxVsnprintf() and that would
-//     result in an endless recursion and thus in a stack overflow
-#if wxUSE_UNICODE
-    #if defined(__WINDOWS__) && !defined(HAVE_SWPRINTF)
-        // all compilers under Windows should have swprintf()
-        #define HAVE_SWPRINTF
-    #endif
-
-    // NB: MSVC 6 has only non-standard swprintf() declaration and while MSVC 7
-    //     and 7.1 do have the standard one, it's completely broken unless
-    //     /Zc:wchar_t is used while the other one works so use it instead, and
-    //     only VC8 has a working standard-compliant swprintf()
-    #if defined(__WXWINCE__) || \
-        (defined(__VISUALC__) && __VISUALC__ < 1400) || \
-        defined(__GNUWIN32__) || \
-        defined(__BORLANDC__)
-        #ifndef HAVE_BROKEN_SWPRINTF_DECL
-            #define HAVE_BROKEN_SWPRINTF_DECL
-        #endif
-    #endif
-
-    // problem: on some systems swprintf takes the 'max' argument while on
-    // others it doesn't
-    #if defined(HAVE_BROKEN_SWPRINTF_DECL)
-        // like when using sprintf(), since 'max' is not used, wxVsnprintf()
-        // should always ensure that 'buff' is big enough for all common needs
-        #define system_sprintf(buff, max, flags, data)      \
-            ::swprintf(buff, flags, data)
-
-        #define SYSTEM_SPRINTF_IS_UNSAFE
-    #else
-        #if !defined(HAVE_SWPRINTF)
-            #error wxVsnprintf() needs a system swprintf() implementation!
-        #endif
-
-        #define system_sprintf(buff, max, flags, data)      \
-            ::swprintf(buff, max, flags, data)
-    #endif
-#else // !wxUSE_UNICODE
-    #if defined(__VISUALC__) || \
-            (defined(__BORLANDC__) && __BORLANDC__ >= 0x540)
-        #define system_sprintf(buff, max, flags, data)      \
-            ::_snprintf(buff, max, flags, data)
-    #elif defined(HAVE_SNPRINTF)
-        #define system_sprintf(buff, max, flags, data)      \
-            ::snprintf(buff, max, flags, data)
-    #else       // NB: at least sprintf() should always be available
-        // since 'max' is not used in this case, wxVsnprintf() should always
-        // ensure that 'buff' is big enough for all common needs
-        // (see wxMAX_SVNPRINTF_FLAGBUFFER_LEN and wxMAX_SVNPRINTF_SCRATCHBUFFER_LEN)
-        #define system_sprintf(buff, max, flags, data)      \
-            ::sprintf(buff, flags, data)
-
-        #define SYSTEM_SPRINTF_IS_UNSAFE
-    #endif
-#endif // wxUSE_UNICODE/!wxUSE_UNICODE
-
-
+    #define SYSTEM_SPRINTF_IS_UNSAFE
+#endif
 
 // the conversion specifiers accepted by wxVsnprintf_
 enum wxPrintfArgType {
@@ -344,7 +299,7 @@ public:
     //     thus could be safely declared as a char[] buffer, we want it to be wxChar
     //     so that in Unicode builds we can avoid to convert its contents to Unicode
     //     chars when copying it in user's buffer.
-    wxChar m_szFlags[wxMAX_SVNPRINTF_FLAGBUFFER_LEN];
+    char m_szFlags[wxMAX_SVNPRINTF_FLAGBUFFER_LEN];
 
 
 public:
@@ -383,7 +338,7 @@ void wxPrintfConvSpec::Init()
 
     // this character will never be removed from m_szFlags array and
     // is important when calling sprintf() in wxPrintfConvSpec::Process() !
-    m_szFlags[0] = wxT('%');
+    m_szFlags[0] = '%';
 }
 
 bool wxPrintfConvSpec::Parse(const wxChar *format)
@@ -402,7 +357,7 @@ bool wxPrintfConvSpec::Parse(const wxChar *format)
 #define CHECK_PREC \
         if (in_prec && !prec_dot) \
         { \
-            m_szFlags[flagofs++] = wxT('.'); \
+            m_szFlags[flagofs++] = '.'; \
             prec_dot = true; \
         }
 
@@ -422,13 +377,13 @@ bool wxPrintfConvSpec::Parse(const wxChar *format)
             case wxT('+'):
             case wxT('\''):
                 CHECK_PREC
-                m_szFlags[flagofs++] = ch;
+                m_szFlags[flagofs++] = char(ch);
                 break;
 
             case wxT('-'):
                 CHECK_PREC
                 m_bAlignLeft = true;
-                m_szFlags[flagofs++] = ch;
+                m_szFlags[flagofs++] = char(ch);
                 break;
 
             case wxT('.'):
@@ -443,7 +398,7 @@ bool wxPrintfConvSpec::Parse(const wxChar *format)
             case wxT('h'):
                 ilen = -1;
                 CHECK_PREC
-                m_szFlags[flagofs++] = ch;
+                m_szFlags[flagofs++] = char(ch);
                 break;
 
             case wxT('l'):
@@ -453,20 +408,20 @@ bool wxPrintfConvSpec::Parse(const wxChar *format)
                 else
                 ilen = 1;
                 CHECK_PREC
-                m_szFlags[flagofs++] = ch;
+                m_szFlags[flagofs++] = char(ch);
                 break;
 
             case wxT('q'):
             case wxT('L'):
                 ilen = 2;
                 CHECK_PREC
-                m_szFlags[flagofs++] = ch;
+                m_szFlags[flagofs++] = char(ch);
                 break;
 
             case wxT('Z'):
                 ilen = 3;
                 CHECK_PREC
-                m_szFlags[flagofs++] = ch;
+                m_szFlags[flagofs++] = char(ch);
                 break;
 
             case wxT('*'):
@@ -487,7 +442,7 @@ bool wxPrintfConvSpec::Parse(const wxChar *format)
 
                 // save the * in our formatting buffer...
                 // will be replaced later by Process()
-                m_szFlags[flagofs++] = ch;
+                m_szFlags[flagofs++] = char(ch);
                 break;
 
             case wxT('1'): case wxT('2'): case wxT('3'):
@@ -499,7 +454,7 @@ bool wxPrintfConvSpec::Parse(const wxChar *format)
                     while ( (*m_pArgEnd >= wxT('0')) &&
                             (*m_pArgEnd <= wxT('9')) )
                     {
-                        m_szFlags[flagofs++] = (*m_pArgEnd);
+                        m_szFlags[flagofs++] = char(*m_pArgEnd);
                         len = len*10 + (*m_pArgEnd - wxT('0'));
                         m_pArgEnd++;
                     }
@@ -541,8 +496,8 @@ bool wxPrintfConvSpec::Parse(const wxChar *format)
             case wxT('x'):
             case wxT('X'):
                 CHECK_PREC
-                m_szFlags[flagofs++] = ch;
-                m_szFlags[flagofs] = wxT('\0');
+                m_szFlags[flagofs++] = char(ch);
+                m_szFlags[flagofs] = '\0';
                 if (ilen == 0)
                     m_type = wxPAT_INT;
                 else if (ilen == -1)
@@ -569,8 +524,8 @@ bool wxPrintfConvSpec::Parse(const wxChar *format)
             case wxT('g'):
             case wxT('G'):
                 CHECK_PREC
-                m_szFlags[flagofs++] = ch;
-                m_szFlags[flagofs] = wxT('\0');
+                m_szFlags[flagofs++] = char(ch);
+                m_szFlags[flagofs] = '\0';
                 if (ilen == 2)
                     m_type = wxPAT_LONGDOUBLE;
                 else
@@ -580,7 +535,7 @@ bool wxPrintfConvSpec::Parse(const wxChar *format)
 
             case wxT('p'):
                 m_type = wxPAT_POINTER;
-                m_szFlags[flagofs++] = ch;
+                m_szFlags[flagofs++] = char(ch);
                 m_szFlags[flagofs] = '\0';
                 done = true;
                 break;
@@ -665,14 +620,14 @@ bool wxPrintfConvSpec::Parse(const wxChar *format)
 
 void wxPrintfConvSpec::ReplaceAsteriskWith(int width)
 {
-    wxChar temp[wxMAX_SVNPRINTF_FLAGBUFFER_LEN];
+    char temp[wxMAX_SVNPRINTF_FLAGBUFFER_LEN];
 
     // find the first * in our flag buffer
-    wxChar *pwidth = wxStrchr(m_szFlags, wxT('*'));
+    char *pwidth = strchr(m_szFlags, '*');
     wxASSERT(pwidth);
 
     // save what follows the * (the +1 is to skip the asterisk itself!)
-    wxStrcpy(temp, pwidth+1);
+    strcpy(temp, pwidth+1);
     if (width < 0)
     {
         pwidth[0] = wxT('-');
@@ -682,12 +637,12 @@ void wxPrintfConvSpec::ReplaceAsteriskWith(int width)
     // replace * with the actual integer given as width
 #ifndef SYSTEM_SPRINTF_IS_UNSAFE
     int maxlen = (m_szFlags + wxMAX_SVNPRINTF_FLAGBUFFER_LEN - pwidth) /
-                        sizeof(wxChar);
+                        sizeof(*m_szFlags);
 #endif
-    int offset = system_sprintf(pwidth, maxlen, wxT("%d"), abs(width));
+    int offset = system_sprintf(pwidth, maxlen, "%d", abs(width));
 
     // restore after the expanded * what was following it
-    wxStrcpy(pwidth+offset, temp);
+    strcpy(pwidth+offset, temp);
 }
 
 bool wxPrintfConvSpec::LoadArg(wxPrintfArg *p, va_list &argptr)
@@ -778,7 +733,7 @@ int wxPrintfConvSpec::Process(wxChar *buf, size_t lenMax, wxPrintfArg *p)
     // buffer to avoid dynamic memory allocation each time for small strings;
     // note that this buffer is used only to hold results of number formatting,
     // %s directly writes user's string in buf, without using szScratch
-    wxChar szScratch[wxMAX_SVNPRINTF_SCRATCHBUFFER_LEN];
+    char szScratch[wxMAX_SVNPRINTF_SCRATCHBUFFER_LEN];
     size_t lenScratch = 0, lenCur = 0;
 
 #define APPEND_CH(ch) \
@@ -967,10 +922,6 @@ int wxPrintfConvSpec::Process(wxChar *buf, size_t lenMax, wxPrintfArg *p)
             return -1;
     }
 
-#ifdef HAVE_BROKEN_SWPRINTF_DECL
-    wxUnusedVar(lenScratch);    // avoid dummy warnings
-#endif
-
     // if we used system's sprintf() then we now need to append the s_szScratch
     // buffer to the given one...
     switch (m_type)
@@ -984,9 +935,9 @@ int wxPrintfConvSpec::Process(wxChar *buf, size_t lenMax, wxPrintfArg *p)
         case wxPAT_LONGDOUBLE:
         case wxPAT_DOUBLE:
         case wxPAT_POINTER:
-#if wxUSE_STRUTILS
+            wxASSERT(lenScratch < wxMAX_SVNPRINTF_SCRATCHBUFFER_LEN);
+#if !wxUSE_UNICODE
             {
-                wxASSERT( /* lenScratch >= 0 && */ lenScratch < wxMAX_SVNPRINTF_SCRATCHBUFFER_LEN);
                 if (lenMax < lenScratch)
                 {
                     // fill output buffer and then return -1
@@ -998,7 +949,39 @@ int wxPrintfConvSpec::Process(wxChar *buf, size_t lenMax, wxPrintfArg *p)
             }
 #else
             {
-                APPEND_STR(szScratch);
+                // Copy the char scratch to the wide output. This requires
+                // conversion, but we can optimise by making use of the fact
+                // that we are formatting numbers, this should mean only 7-bit
+                // ascii characters are involved.
+                wxChar *bufptr = buf;
+                const wxChar *bufend = buf + lenMax;
+                const char *scratchptr = szScratch;
+
+                // Simply copy each char to a wxChar, stopping on the first
+                // null or non-ascii byte. Checking '(signed char)*scratchptr
+                // > 0' is an extra optimisation over '*scratchptr != 0 &&
+                // isascii(*scratchptr)', though it assumes signed char is
+                // 8-bit 2 complement.
+                while ((signed char)*scratchptr > 0 && bufptr != bufend)
+                    *bufptr++ = *scratchptr++;
+
+                if (bufptr == bufend)
+                    return -1;
+
+                lenCur += bufptr - buf;
+
+                // check if the loop stopped on a non-ascii char, if yes then
+                // fall back to wxMB2WX
+                if (*scratchptr)
+                {
+                    size_t len = wxMB2WX(bufptr, scratchptr, bufend - bufptr);
+
+                    if (len && len != (size_t)(-1))
+                        if (bufptr[len - 1])
+                            return -1;
+                        else
+                            lenCur += len;
+                }
             }
 #endif
             break;
