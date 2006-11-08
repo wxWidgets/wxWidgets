@@ -105,7 +105,7 @@ static void gtk_window_own_expose_callback( GtkWidget *widget, GdkEventExpose *g
         dc.DrawText( win->GetTitle(), 6, 3 );
 
         if (style & wxCLOSE_BOX)
-            dc.DrawBitmap( win->m_closeButton, win->m_width-19, 3, true );
+            dc.DrawBitmap( win->m_closeButton, win->m_width-19, 2, true );
     }
 }
 }
