@@ -137,6 +137,7 @@ bool wxRichTextCtrl::Create( wxWindow* parent, wxWindowID id, const wxString& va
     if (style & wxTE_READONLY)
         SetEditable(false);
 
+    // The base attributes must all have default values
     wxTextAttrEx attributes;
     attributes.SetFont(GetFont());
     attributes.SetTextColour(*wxBLACK);
@@ -145,6 +146,8 @@ bool wxRichTextCtrl::Create( wxWindow* parent, wxWindowID id, const wxString& va
     attributes.SetLineSpacing(10);
     attributes.SetParagraphSpacingAfter(10);
     attributes.SetParagraphSpacingBefore(0);
+    attributes.SetTextEffects(0);
+    attributes.SetTextEffectFlags(wxTEXT_ATTR_EFFECT_STRIKETHROUGH|wxTEXT_ATTR_EFFECT_CAPITALS);
 
     SetBasicStyle(attributes);
 

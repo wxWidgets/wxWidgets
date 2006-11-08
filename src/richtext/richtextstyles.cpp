@@ -45,6 +45,7 @@ void wxRichTextStyleDefinition::Copy(const wxRichTextStyleDefinition& def)
     m_name = def.m_name;
     m_baseStyle = def.m_baseStyle;
     m_style = def.m_style;
+    m_description = def.m_description;
 }
 
 bool wxRichTextStyleDefinition::Eq(const wxRichTextStyleDefinition& def) const
@@ -376,6 +377,9 @@ void wxRichTextStyleSheet::Copy(const wxRichTextStyleSheet& sheet)
         wxRichTextListStyleDefinition* def = (wxRichTextListStyleDefinition*) node->GetData();
         AddListStyle(new wxRichTextListStyleDefinition(*def));
     }
+    
+    SetName(sheet.GetName());
+    SetDescription(sheet.GetDescription());
 }
 
 /// Equality

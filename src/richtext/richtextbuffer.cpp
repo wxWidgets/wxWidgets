@@ -1853,7 +1853,7 @@ static bool wxHasStyle(long flags, long style)
 
 /// Combines 'style' with 'currentStyle' for the purpose of summarising the attributes of a range of
 /// content.
-bool wxRichTextParagraphLayoutBox::CollectStyle(wxTextAttrEx& currentStyle, const wxTextAttrEx& style, long& multipleStyleAttributes)
+bool wxRichTextParagraphLayoutBox::CollectStyle(wxTextAttrEx& currentStyle, const wxTextAttrEx& style, long& multipleStyleAttributes, int& multipleTextEffectAttributes)
 {
     if (style.HasFont())
     {
@@ -2066,7 +2066,7 @@ bool wxRichTextParagraphLayoutBox::CollectStyle(wxTextAttrEx& currentStyle, cons
     {
         if (currentStyle.HasParagraphSpacingAfter())
         {
-            if (currentStyle.HasParagraphSpacingAfter() != style.HasParagraphSpacingAfter())
+            if (currentStyle.GetParagraphSpacingAfter() != style.GetParagraphSpacingAfter())
             {
                 // Clash of style - mark as such
                 multipleStyleAttributes |= wxTEXT_ATTR_PARA_SPACING_AFTER;
@@ -2081,7 +2081,7 @@ bool wxRichTextParagraphLayoutBox::CollectStyle(wxTextAttrEx& currentStyle, cons
     {
         if (currentStyle.HasParagraphSpacingBefore())
         {
-            if (currentStyle.HasParagraphSpacingBefore() != style.HasParagraphSpacingBefore())
+            if (currentStyle.GetParagraphSpacingBefore() != style.GetParagraphSpacingBefore())
             {
                 // Clash of style - mark as such
                 multipleStyleAttributes |= wxTEXT_ATTR_PARA_SPACING_BEFORE;
@@ -2096,7 +2096,7 @@ bool wxRichTextParagraphLayoutBox::CollectStyle(wxTextAttrEx& currentStyle, cons
     {
         if (currentStyle.HasLineSpacing())
         {
-            if (currentStyle.HasLineSpacing() != style.HasLineSpacing())
+            if (currentStyle.GetLineSpacing() != style.GetLineSpacing())
             {
                 // Clash of style - mark as such
                 multipleStyleAttributes |= wxTEXT_ATTR_LINE_SPACING;
@@ -2111,7 +2111,7 @@ bool wxRichTextParagraphLayoutBox::CollectStyle(wxTextAttrEx& currentStyle, cons
     {
         if (currentStyle.HasCharacterStyleName())
         {
-            if (currentStyle.HasCharacterStyleName() != style.HasCharacterStyleName())
+            if (currentStyle.GetCharacterStyleName() != style.GetCharacterStyleName())
             {
                 // Clash of style - mark as such
                 multipleStyleAttributes |= wxTEXT_ATTR_CHARACTER_STYLE_NAME;
@@ -2126,7 +2126,7 @@ bool wxRichTextParagraphLayoutBox::CollectStyle(wxTextAttrEx& currentStyle, cons
     {
         if (currentStyle.HasParagraphStyleName())
         {
-            if (currentStyle.HasParagraphStyleName() != style.HasParagraphStyleName())
+            if (currentStyle.GetParagraphStyleName() != style.GetParagraphStyleName())
             {
                 // Clash of style - mark as such
                 multipleStyleAttributes |= wxTEXT_ATTR_PARAGRAPH_STYLE_NAME;
@@ -2141,7 +2141,7 @@ bool wxRichTextParagraphLayoutBox::CollectStyle(wxTextAttrEx& currentStyle, cons
     {
         if (currentStyle.HasListStyleName())
         {
-            if (currentStyle.HasListStyleName() != style.HasListStyleName())
+            if (currentStyle.GetListStyleName() != style.GetListStyleName())
             {
                 // Clash of style - mark as such
                 multipleStyleAttributes |= wxTEXT_ATTR_LIST_STYLE_NAME;
@@ -2156,7 +2156,7 @@ bool wxRichTextParagraphLayoutBox::CollectStyle(wxTextAttrEx& currentStyle, cons
     {
         if (currentStyle.HasBulletStyle())
         {
-            if (currentStyle.HasBulletStyle() != style.HasBulletStyle())
+            if (currentStyle.GetBulletStyle() != style.GetBulletStyle())
             {
                 // Clash of style - mark as such
                 multipleStyleAttributes |= wxTEXT_ATTR_BULLET_STYLE;
@@ -2171,7 +2171,7 @@ bool wxRichTextParagraphLayoutBox::CollectStyle(wxTextAttrEx& currentStyle, cons
     {
         if (currentStyle.HasBulletNumber())
         {
-            if (currentStyle.HasBulletNumber() != style.HasBulletNumber())
+            if (currentStyle.GetBulletNumber() != style.GetBulletNumber())
             {
                 // Clash of style - mark as such
                 multipleStyleAttributes |= wxTEXT_ATTR_BULLET_NUMBER;
@@ -2186,7 +2186,7 @@ bool wxRichTextParagraphLayoutBox::CollectStyle(wxTextAttrEx& currentStyle, cons
     {
         if (currentStyle.HasBulletText())
         {
-            if (currentStyle.HasBulletText() != style.HasBulletText())
+            if (currentStyle.GetBulletText() != style.GetBulletText())
             {
                 // Clash of style - mark as such
                 multipleStyleAttributes |= wxTEXT_ATTR_BULLET_TEXT;
@@ -2204,7 +2204,7 @@ bool wxRichTextParagraphLayoutBox::CollectStyle(wxTextAttrEx& currentStyle, cons
     {
         if (currentStyle.HasBulletName())
         {
-            if (currentStyle.HasBulletName() != style.HasBulletName())
+            if (currentStyle.GetBulletName() != style.GetBulletName())
             {
                 // Clash of style - mark as such
                 multipleStyleAttributes |= wxTEXT_ATTR_BULLET_NAME;
@@ -2221,7 +2221,7 @@ bool wxRichTextParagraphLayoutBox::CollectStyle(wxTextAttrEx& currentStyle, cons
     {
         if (currentStyle.HasURL())
         {
-            if (currentStyle.HasURL() != style.HasURL())
+            if (currentStyle.GetURL() != style.GetURL())
             {
                 // Clash of style - mark as such
                 multipleStyleAttributes |= wxTEXT_ATTR_URL;
@@ -2231,6 +2231,33 @@ bool wxRichTextParagraphLayoutBox::CollectStyle(wxTextAttrEx& currentStyle, cons
         else
         {
             currentStyle.SetURL(style.GetURL());
+        }
+    }
+
+    if (style.HasTextEffects() && !wxHasStyle(multipleStyleAttributes, wxTEXT_ATTR_EFFECTS))
+    {
+        if (currentStyle.HasTextEffects())
+        {
+            // We need to find the bits in the new style that are different:
+            // just look at those bits that are specified by the new style.
+                
+            int currentRelevantTextEffects = currentStyle.GetTextEffects() & style.GetTextEffectFlags();
+            int newRelevantTextEffects = style.GetTextEffects() & style.GetTextEffectFlags();
+
+            if (currentRelevantTextEffects != newRelevantTextEffects)
+            {
+                // Find the text effects that were different, using XOR
+                int differentEffects = currentRelevantTextEffects ^ newRelevantTextEffects;
+                    
+                // Clash of style - mark as such
+                multipleTextEffectAttributes |= differentEffects;
+                currentStyle.SetTextEffectFlags(currentStyle.GetTextEffectFlags() & ~differentEffects);
+            }
+        }
+        else
+        {
+            currentStyle.SetTextEffects(style.GetTextEffects());
+            currentStyle.SetTextEffectFlags(style.GetTextEffectFlags());
         }
     }
 
@@ -2247,7 +2274,8 @@ bool wxRichTextParagraphLayoutBox::GetStyleForRange(const wxRichTextRange& range
 
     // The attributes that aren't valid because of multiple styles within the range
     long multipleStyleAttributes = 0;
-
+    int multipleTextEffectAttributes = 0;
+    
     wxRichTextObjectList::compatibility_iterator node = GetChildren().GetFirst();
     while (node)
     {
@@ -2258,7 +2286,7 @@ bool wxRichTextParagraphLayoutBox::GetStyleForRange(const wxRichTextRange& range
             {
                 wxTextAttrEx paraStyle = para->GetCombinedAttributes();
 
-                CollectStyle(style, paraStyle, multipleStyleAttributes);
+                CollectStyle(style, paraStyle, multipleStyleAttributes, multipleTextEffectAttributes);
             }
             else
             {
@@ -2268,7 +2296,7 @@ bool wxRichTextParagraphLayoutBox::GetStyleForRange(const wxRichTextRange& range
                 // First collect paragraph attributes only
                 wxTextAttrEx paraStyle = para->GetCombinedAttributes();
                 paraStyle.SetFlags(paraStyle.GetFlags() & wxTEXT_ATTR_PARAGRAPH);
-                CollectStyle(style, paraStyle, multipleStyleAttributes);
+                CollectStyle(style, paraStyle, multipleStyleAttributes, multipleTextEffectAttributes);
 
                 wxRichTextObjectList::compatibility_iterator childNode = para->GetChildren().GetFirst();
 
@@ -2282,7 +2310,7 @@ bool wxRichTextParagraphLayoutBox::GetStyleForRange(const wxRichTextRange& range
                         // Now collect character attributes only
                         childStyle.SetFlags(childStyle.GetFlags() & wxTEXT_ATTR_CHARACTER);
 
-                        CollectStyle(style, childStyle, multipleStyleAttributes);
+                        CollectStyle(style, childStyle, multipleStyleAttributes, multipleTextEffectAttributes);
                     }
 
                     childNode = childNode->GetNext();
@@ -4106,6 +4134,8 @@ bool wxRichTextPlainText::Draw(wxDC& dc, const wxRichTextRange& range, const wxR
 
     long len = range.GetLength();
     wxString stringChunk = m_text.Mid(range.GetStart() - offset, (size_t) len);
+    if (textAttr.HasTextEffects() && (textAttr.GetTextEffects() & wxTEXT_ATTR_EFFECT_CAPITALS))
+        stringChunk.MakeUpper();
 
     int charHeight = dc.GetCharHeight();
 
@@ -4278,6 +4308,15 @@ bool wxRichTextPlainText::DrawTabbedString(wxDC& dc, const wxTextAttrEx& attr, c
                     dc.DrawRectangle(selRect);
                 }
                 dc.DrawText(stringChunk, x, y);
+
+                if (attr.HasTextEffects() && (attr.GetTextEffects() & wxTEXT_ATTR_EFFECT_STRIKETHROUGH))
+                {
+                    wxPen oldPen = dc.GetPen();
+                    dc.SetPen(wxPen(attr.GetTextColour(), 1));
+                    dc.DrawLine(x, (int) (y+(h/2)+0.5), x+w, (int) (y+(h/2)+0.5));
+                    dc.SetPen(oldPen);
+                }
+
                 x = nextTabPos;
             }
         }
@@ -4293,6 +4332,15 @@ bool wxRichTextPlainText::DrawTabbedString(wxDC& dc, const wxTextAttrEx& attr, c
             dc.DrawRectangle(selRect);
         }
         dc.DrawText(str, x, y);
+
+        if (attr.HasTextEffects() && (attr.GetTextEffects() & wxTEXT_ATTR_EFFECT_STRIKETHROUGH))
+        {
+            wxPen oldPen = dc.GetPen();
+            dc.SetPen(wxPen(attr.GetTextColour(), 1));
+            dc.DrawLine(x, (int) (y+(h/2)+0.5), x+w, (int) (y+(h/2)+0.5));
+            dc.SetPen(oldPen);
+        }
+
         x += w;
     }
     return true;
@@ -4314,8 +4362,12 @@ bool wxRichTextPlainText::Layout(wxDC& dc, const wxRect& WXUNUSED(rect), int WXU
     if (textAttr.GetFont().Ok())
         dc.SetFont(textAttr.GetFont());
 
+    wxString str = m_text;    
+    if (textAttr.HasTextEffects() && (textAttr.GetTextEffects() & wxTEXT_ATTR_EFFECT_CAPITALS))
+        str.MakeUpper();
+
     wxCoord w, h;
-    dc.GetTextExtent(m_text, & w, & h, & m_descent);
+    dc.GetTextExtent(str, & w, & h, & m_descent);
     m_size = wxSize(w, dc.GetCharHeight());
 
     return true;
@@ -4355,6 +4407,10 @@ bool wxRichTextPlainText::GetRangeSize(const wxRichTextRange& range, wxSize& siz
     int startPos = range.GetStart() - GetRange().GetStart();
     long len = range.GetLength();
     wxString stringChunk = m_text.Mid(startPos, (size_t) len);
+
+    if (textAttr.HasTextEffects() && (textAttr.GetTextEffects() & wxTEXT_ATTR_EFFECT_CAPITALS))
+        stringChunk.MakeUpper();
+
     wxCoord w, h;
     int width = 0;
     if (stringChunk.Find(wxT('\t')) != wxNOT_FOUND)
@@ -6329,6 +6385,8 @@ bool wxTextAttrEq(const wxTextAttrEx& attr1, const wxRichTextAttr& attr2)
         attr1.GetFont().GetWeight() == attr2.GetFontWeight() &&
         attr1.GetFont().GetFaceName() == attr2.GetFontFaceName() &&
         attr1.GetFont().GetUnderlined() == attr2.GetFontUnderlined() &&
+        attr1.GetTextEffects() == attr2.GetTextEffects() &&
+        attr1.GetTextEffectFlags() == attr2.GetTextEffectFlags() &&
         attr1.GetAlignment() == attr2.GetAlignment() &&
         attr1.GetLeftIndent() == attr2.GetLeftIndent() &&
         attr1.GetRightIndent() == attr2.GetRightIndent() &&
@@ -6438,6 +6496,14 @@ bool wxTextAttrEqPartial(const wxTextAttrEx& attr1, const wxTextAttrEx& attr2, i
         (attr1.HasPageBreak() != attr2.HasPageBreak()))
          return false;
 
+    if (flags & wxTEXT_ATTR_EFFECTS)
+    {
+        if (attr1.HasTextEffects() != attr2.HasTextEffects())
+            return false;
+        if (!wxRichTextBitlistsEqPartial(attr1.GetTextEffects(), attr2.GetTextEffects(), attr2.GetTextEffectFlags()))
+            return false;
+    }
+
     return true;
 }
 
@@ -6532,6 +6598,14 @@ bool wxTextAttrEqPartial(const wxTextAttrEx& attr1, const wxRichTextAttr& attr2,
         (attr1.HasPageBreak() != attr2.HasPageBreak()))
          return false;
 
+    if (flags & wxTEXT_ATTR_EFFECTS)
+    {
+        if (attr1.HasTextEffects() != attr2.HasTextEffects())
+            return false;
+        if (!wxRichTextBitlistsEqPartial(attr1.GetTextEffects(), attr2.GetTextEffects(), attr2.GetTextEffectFlags()))
+            return false;
+    }
+
     return true;
 }
 
@@ -6549,7 +6623,6 @@ bool wxRichTextTabsEq(const wxArrayInt& tabs1, const wxArrayInt& tabs2)
     }
     return true;
 }
-
 
 /// Apply one style to another
 bool wxRichTextApplyStyle(wxTextAttrEx& destStyle, const wxTextAttrEx& style)
@@ -6657,6 +6730,20 @@ bool wxRichTextApplyStyle(wxTextAttrEx& destStyle, const wxTextAttrEx& style)
 
     if (style.HasPageBreak())
         destStyle.SetPageBreak();
+
+    if (style.HasTextEffects())
+    {
+        int destBits = destStyle.GetTextEffects();
+        int destFlags = destStyle.GetTextEffectFlags();
+
+        int srcBits = style.GetTextEffects();
+        int srcFlags = style.GetTextEffectFlags();
+            
+        wxRichTextCombineBitlists(destBits, srcBits, destFlags, srcFlags);
+            
+        destStyle.SetTextEffects(destBits);
+        destStyle.SetTextEffectFlags(destFlags);
+    }
 
     return true;
 }
@@ -6878,7 +6965,52 @@ bool wxRichTextApplyStyle(wxTextAttrEx& destStyle, const wxRichTextAttr& style, 
             destStyle.SetPageBreak();
     }
 
+    if (style.HasTextEffects())
+    {
+        if (!(compareWith && compareWith->HasTextEffects() && compareWith->GetTextEffects() == style.GetTextEffects()))
+        {
+            int destBits = destStyle.GetTextEffects();
+            int destFlags = destStyle.GetTextEffectFlags();
+
+            int srcBits = style.GetTextEffects();
+            int srcFlags = style.GetTextEffectFlags();
+            
+            wxRichTextCombineBitlists(destBits, srcBits, destFlags, srcFlags);
+            
+            destStyle.SetTextEffects(destBits);
+            destStyle.SetTextEffectFlags(destFlags);
+        }
+    }
+
     return true;
+}
+
+/// Combine two bitlists, specifying the bits of interest with separate flags.
+bool wxRichTextCombineBitlists(int& valueA, int valueB, int& flagsA, int flagsB)
+{
+    // We want to apply B's bits to A, taking into account each's flags which indicate which bits
+    // are to be taken into account. A zero in B's bits should reset that bit in A but only if B's flags
+    // indicate it.
+    
+    // First, reset the 0 bits from B. We make a mask so we're only dealing with B's zero
+    // bits at this point, ignoring any 1 bits in B or 0 bits in B that are not relevant.
+    int valueA2 = ~(~valueB & flagsB) & valueA;
+    
+    // Now combine the 1 bits.
+    int valueA3 = (valueB & flagsB) | valueA2;
+    
+    valueA = valueA3;
+    flagsA = (flagsA | flagsB);
+    
+    return true;
+}
+
+/// Compare two bitlists
+bool wxRichTextBitlistsEqPartial(int valueA, int valueB, int flags)
+{
+    int relevantBitsA = valueA & flags;
+    int relevantBitsB = valueB & flags;
+    return (relevantBitsA != relevantBitsB);
 }
 
 /// Split into paragraph and character styles
@@ -7003,6 +7135,8 @@ void wxRichTextAttr::Init()
     m_paragraphSpacingBefore = 0;
     m_lineSpacing = 0;
     m_bulletStyle = wxTEXT_ATTR_BULLET_STYLE_NONE;
+    m_textEffects = wxTEXT_ATTR_EFFECT_NONE;
+    m_textEffectFlags = wxTEXT_ATTR_EFFECT_NONE;
     m_bulletNumber = 0;
 }
 
@@ -7023,6 +7157,8 @@ void wxRichTextAttr::Copy(const wxRichTextAttr& attr)
     m_fontWeight = attr.m_fontWeight;
     m_fontUnderlined = attr.m_fontUnderlined;
     m_fontFaceName = attr.m_fontFaceName;
+    m_textEffects = attr.m_textEffects;
+    m_textEffectFlags = attr.m_textEffectFlags;
 
     m_paragraphSpacingAfter = attr.m_paragraphSpacingAfter;
     m_paragraphSpacingBefore = attr.m_paragraphSpacingBefore;
@@ -7048,6 +7184,8 @@ void wxRichTextAttr::operator= (const wxRichTextAttr& attr)
 // operators
 void wxRichTextAttr::operator= (const wxTextAttrEx& attr)
 {
+    m_flags = attr.GetFlags();
+
     m_colText = attr.GetTextColour();
     m_colBack = attr.GetBackgroundColour();
     m_textAlignment = attr.GetAlignment();
@@ -7055,7 +7193,8 @@ void wxRichTextAttr::operator= (const wxTextAttrEx& attr)
     m_leftSubIndent = attr.GetLeftSubIndent();
     m_rightIndent = attr.GetRightIndent();
     m_tabs = attr.GetTabs();
-    m_flags = attr.GetFlags();
+    m_textEffects = attr.GetTextEffects();
+    m_textEffectFlags = attr.GetTextEffectFlags();
 
     m_paragraphSpacingAfter = attr.GetParagraphSpacingAfter();
     m_paragraphSpacingBefore = attr.GetParagraphSpacingBefore();
@@ -7110,6 +7249,9 @@ bool wxRichTextAttr::operator== (const wxRichTextAttr& attr) const
             GetBulletFont() == attr.GetBulletFont() &&
             GetBulletName() == attr.GetBulletName() &&
 
+            GetTextEffects() == attr.GetTextEffects() &&
+            GetTextEffectFlags() == attr.GetTextEffectFlags() &&
+
             m_fontSize == attr.m_fontSize &&
             m_fontStyle == attr.m_fontStyle &&
             m_fontWeight == attr.m_fontWeight &&
@@ -7141,6 +7283,8 @@ void wxRichTextAttr::CopyTo(wxTextAttrEx& attr) const
     attr.SetCharacterStyleName(m_characterStyleName);
     attr.SetParagraphStyleName(m_paragraphStyleName);
     attr.SetListStyleName(m_listStyleName);
+    attr.SetTextEffects(m_textEffects);
+    attr.SetTextEffectFlags(m_textEffectFlags);
 
     attr.SetURL(m_urlTarget);
 
@@ -7272,6 +7416,12 @@ wxRichTextAttr wxRichTextAttr::Combine(const wxRichTextAttr& attr,
     if (attr.HasPageBreak())
         newAttr.SetPageBreak();
 
+    if (attr.HasTextEffects())
+    {
+        newAttr.SetTextEffects(attr.GetTextEffects());
+        newAttr.SetTextEffectFlags(attr.GetTextEffectFlags());
+    }
+
     return newAttr;
 }
 
@@ -7291,6 +7441,8 @@ void wxTextAttrEx::Init()
     m_paragraphSpacingBefore = 0;
     m_lineSpacing = 0;
     m_bulletStyle = wxTEXT_ATTR_BULLET_STYLE_NONE;
+    m_textEffects = wxTEXT_ATTR_EFFECT_NONE;
+    m_textEffectFlags = wxTEXT_ATTR_EFFECT_NONE;
     m_bulletNumber = 0;
 }
 
@@ -7311,6 +7463,8 @@ void wxTextAttrEx::Copy(const wxTextAttrEx& attr)
     m_bulletFont = attr.m_bulletFont;
     m_bulletName = attr.m_bulletName;
     m_urlTarget = attr.m_urlTarget;
+    m_textEffects = attr.m_textEffects;
+    m_textEffectFlags = attr.m_textEffectFlags;
 }
 
 // Assignment from a wxTextAttrEx object
@@ -7332,6 +7486,7 @@ bool wxTextAttrEx::operator== (const wxTextAttrEx& attr) const
         GetTextColour() == attr.GetTextColour() &&
         GetBackgroundColour() == attr.GetBackgroundColour() &&
         GetFont() == attr.GetFont() &&
+        GetTextEffects() == attr.GetTextEffects() &&
         GetAlignment() == attr.GetAlignment() &&
         GetLeftIndent() == attr.GetLeftIndent() &&
         GetRightIndent() == attr.GetRightIndent() &&
@@ -7499,6 +7654,12 @@ wxTextAttrEx wxTextAttrEx::CombineEx(const wxTextAttrEx& attr,
     if (attr.HasURL())
         newAttr.SetURL(attr.GetURL());
 
+    if (attr.HasTextEffects())
+    {
+        newAttr.SetTextEffects(attr.GetTextEffects());
+        newAttr.SetTextEffectFlags(attr.GetTextEffectFlags());
+    }
+
     return newAttr;
 }
 
@@ -7571,12 +7732,12 @@ bool wxRichTextPlainTextHandler::DoLoadFile(wxRichTextBuffer *buffer, wxInputStr
         }
     }
 
+    buffer->ResetAndClearCommands();
     buffer->Clear();
     buffer->AddParagraphs(str);
     buffer->UpdateRanges();
 
     return true;
-
 }
 
 bool wxRichTextPlainTextHandler::DoSaveFile(wxRichTextBuffer *buffer, wxOutputStream& stream)

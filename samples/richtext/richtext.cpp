@@ -735,8 +735,8 @@ MyFrame::MyFrame(const wxString& title, wxWindowID id, const wxPoint& pos,
     r.EndItalic();
 
     r.EndBold();
-
     r.Newline();
+
     r.WriteImage(wxBitmap(zebra_xpm));
 
     r.EndAlignment();
@@ -745,6 +745,7 @@ MyFrame::MyFrame(const wxString& title, wxWindowID id, const wxPoint& pos,
     r.Newline();
 
     r.WriteText(wxT("What can you do with this thing? "));
+
     r.WriteImage(wxBitmap(smiley_xpm));
     r.WriteText(wxT(" Well, you can change text "));
 
@@ -1100,7 +1101,7 @@ void MyFrame::OnFont(wxCommandEvent& WXUNUSED(event))
 
     if (formatDlg.ShowModal() == wxID_OK)
     {
-        formatDlg.ApplyStyle(m_richTextCtrl, range);
+        formatDlg.ApplyStyle(m_richTextCtrl, range, wxRICHTEXT_SETSTYLE_WITH_UNDO|wxRICHTEXT_SETSTYLE_OPTIMIZE|wxRICHTEXT_SETSTYLE_CHARACTERS_ONLY);
     }
 
     // Old method using wxFontDialog

@@ -408,6 +408,8 @@ void wxRichTextFontPreviewCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
         long w = 0, h = 0;
 
         wxString text(_("ABCDEFGabcdefg12345"));
+        if (GetTextEffects() & wxTEXT_ATTR_EFFECT_CAPITALS)
+            text.MakeUpper();
 
         dc.GetTextExtent( text, &w, &h);
         int cx = wxMax(2, (size.x/2) - (w/2));
@@ -416,6 +418,13 @@ void wxRichTextFontPreviewCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
         dc.SetTextForeground(GetForegroundColour());
         dc.SetClippingRegion(2, 2, size.x-4, size.y-4);
         dc.DrawText(text, cx, cy);
+        
+        if (GetTextEffects() & wxTEXT_ATTR_EFFECT_STRIKETHROUGH)
+        {
+            dc.SetPen(wxPen(GetForegroundColour(), 1));
+            dc.DrawLine(cx, (int) (cy + h/2 + 0.5), cx + w, (int) (cy + h/2 + 0.5));
+        }
+        
         dc.DestroyClippingRegion();
     }
 }

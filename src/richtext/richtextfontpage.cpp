@@ -38,6 +38,10 @@ BEGIN_EVENT_TABLE( wxRichTextFontPage, wxPanel )
 
     EVT_COMBOBOX( ID_RICHTEXTFONTPAGE_UNDERLINING_CTRL, wxRichTextFontPage::OnUnderliningCtrlSelected )
 
+    EVT_CHECKBOX( ID_RICHTEXTFONTPAGE_STRIKETHROUGHCTRL, wxRichTextFontPage::OnStrikethroughctrlClick )
+
+    EVT_CHECKBOX( ID_RICHTEXTFONTPAGE_CAPSCTRL, wxRichTextFontPage::OnCapsctrlClick )
+
 ////@end wxRichTextFontPage event table entries
 
 END_EVENT_TABLE()
@@ -75,6 +79,8 @@ void wxRichTextFontPage::Init()
     m_weightCtrl = NULL;
     m_underliningCtrl = NULL;
     m_colourCtrl = NULL;
+    m_strikethroughCtrl = NULL;
+    m_capitalsCtrl = NULL;
     m_previewCtrl = NULL;
 ////@end wxRichTextFontPage member initialisation
 }
@@ -122,7 +128,7 @@ void wxRichTextFontPage::CreateControls()
     wxStaticText* itemStaticText6 = new wxStaticText( itemPanel1, wxID_STATIC, _("&Font:"), wxDefaultPosition, wxDefaultSize, 0 );
     itemBoxSizer5->Add(itemStaticText6, 0, wxALIGN_LEFT|wxLEFT|wxRIGHT|wxTOP|wxADJUST_MINSIZE, 5);
 
-    m_faceTextCtrl = new wxTextCtrl( itemPanel1, ID_RICHTEXTFONTPAGE_FACETEXTCTRL, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+    m_faceTextCtrl = new wxTextCtrl( itemPanel1, ID_RICHTEXTFONTPAGE_FACETEXTCTRL, _T(""), wxDefaultPosition, wxDefaultSize, 0 );
     m_faceTextCtrl->SetHelpText(_("Type a font name."));
     if (ShowToolTips())
         m_faceTextCtrl->SetToolTip(_("Type a font name."));
@@ -140,7 +146,7 @@ void wxRichTextFontPage::CreateControls()
     wxStaticText* itemStaticText10 = new wxStaticText( itemPanel1, wxID_STATIC, _("&Size:"), wxDefaultPosition, wxDefaultSize, 0 );
     itemBoxSizer9->Add(itemStaticText10, 0, wxALIGN_LEFT|wxLEFT|wxRIGHT|wxTOP|wxADJUST_MINSIZE, 5);
 
-    m_sizeTextCtrl = new wxTextCtrl( itemPanel1, ID_RICHTEXTFONTPAGE_SIZETEXTCTRL, wxEmptyString, wxDefaultPosition, wxSize(50, -1), 0 );
+    m_sizeTextCtrl = new wxTextCtrl( itemPanel1, ID_RICHTEXTFONTPAGE_SIZETEXTCTRL, _T(""), wxDefaultPosition, wxSize(50, -1), 0 );
     m_sizeTextCtrl->SetHelpText(_("Type a size in points."));
     if (ShowToolTips())
         m_sizeTextCtrl->SetToolTip(_("Type a size in points."));
@@ -163,7 +169,7 @@ void wxRichTextFontPage::CreateControls()
     itemBoxSizer14->Add(itemStaticText15, 0, wxALIGN_LEFT|wxLEFT|wxRIGHT|wxTOP|wxADJUST_MINSIZE, 5);
 
     wxString* m_styleCtrlStrings = NULL;
-    m_styleCtrl = new wxComboBox( itemPanel1, ID_RICHTEXTFONTPAGE_STYLECTRL, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, m_styleCtrlStrings, wxCB_READONLY );
+    m_styleCtrl = new wxComboBox( itemPanel1, ID_RICHTEXTFONTPAGE_STYLECTRL, _T(""), wxDefaultPosition, wxDefaultSize, 0, m_styleCtrlStrings, wxCB_READONLY );
     m_styleCtrl->SetHelpText(_("Select regular or italic style."));
     if (ShowToolTips())
         m_styleCtrl->SetToolTip(_("Select regular or italic style."));
@@ -176,7 +182,7 @@ void wxRichTextFontPage::CreateControls()
     itemBoxSizer17->Add(itemStaticText18, 0, wxALIGN_LEFT|wxLEFT|wxRIGHT|wxTOP|wxADJUST_MINSIZE, 5);
 
     wxString* m_weightCtrlStrings = NULL;
-    m_weightCtrl = new wxComboBox( itemPanel1, ID_RICHTEXTFONTPAGE_WEIGHTCTRL, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, m_weightCtrlStrings, wxCB_READONLY );
+    m_weightCtrl = new wxComboBox( itemPanel1, ID_RICHTEXTFONTPAGE_WEIGHTCTRL, _T(""), wxDefaultPosition, wxDefaultSize, 0, m_weightCtrlStrings, wxCB_READONLY );
     m_weightCtrl->SetHelpText(_("Select regular or bold."));
     if (ShowToolTips())
         m_weightCtrl->SetToolTip(_("Select regular or bold."));
@@ -189,7 +195,7 @@ void wxRichTextFontPage::CreateControls()
     itemBoxSizer20->Add(itemStaticText21, 0, wxALIGN_LEFT|wxLEFT|wxRIGHT|wxTOP|wxADJUST_MINSIZE, 5);
 
     wxString* m_underliningCtrlStrings = NULL;
-    m_underliningCtrl = new wxComboBox( itemPanel1, ID_RICHTEXTFONTPAGE_UNDERLINING_CTRL, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, m_underliningCtrlStrings, wxCB_READONLY );
+    m_underliningCtrl = new wxComboBox( itemPanel1, ID_RICHTEXTFONTPAGE_UNDERLINING_CTRL, _T(""), wxDefaultPosition, wxDefaultSize, 0, m_underliningCtrlStrings, wxCB_READONLY );
     m_underliningCtrl->SetHelpText(_("Select underlining or no underlining."));
     if (ShowToolTips())
         m_underliningCtrl->SetToolTip(_("Select underlining or no underlining."));
@@ -206,6 +212,23 @@ void wxRichTextFontPage::CreateControls()
     if (ShowToolTips())
         m_colourCtrl->SetToolTip(_("Click to change the text colour."));
     itemBoxSizer23->Add(m_colourCtrl, 0, wxALIGN_LEFT|wxALL, 5);
+
+    wxBoxSizer* itemBoxSizer26 = new wxBoxSizer(wxHORIZONTAL);
+    itemBoxSizer3->Add(itemBoxSizer26, 0, wxGROW, 5);
+
+    m_strikethroughCtrl = new wxCheckBox( itemPanel1, ID_RICHTEXTFONTPAGE_STRIKETHROUGHCTRL, _("&Strikethrough"), wxDefaultPosition, wxDefaultSize, wxCHK_3STATE );
+    m_strikethroughCtrl->SetValue(false);
+    m_strikethroughCtrl->SetHelpText(_("Check to show a line through the text."));
+    if (ShowToolTips())
+        m_strikethroughCtrl->SetToolTip(_("Check to show a line through the text."));
+    itemBoxSizer26->Add(m_strikethroughCtrl, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+
+    m_capitalsCtrl = new wxCheckBox( itemPanel1, ID_RICHTEXTFONTPAGE_CAPSCTRL, _("Ca&pitals"), wxDefaultPosition, wxDefaultSize, wxCHK_3STATE );
+    m_capitalsCtrl->SetValue(false);
+    m_capitalsCtrl->SetHelpText(_("Check to show the text in capitals."));
+    if (ShowToolTips())
+        m_capitalsCtrl->SetToolTip(_("Check to show the text in capitals."));
+    itemBoxSizer26->Add(m_capitalsCtrl, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
     itemBoxSizer3->Add(5, 5, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 5);
 
@@ -329,6 +352,26 @@ bool wxRichTextFontPage::TransferDataFromWindow()
     }
     else
         attr->SetFlags(attr->GetFlags() & (~ wxTEXT_ATTR_TEXT_COLOUR));
+        
+    if (m_strikethroughCtrl->Get3StateValue() != wxCHK_UNDETERMINED)
+    {
+        attr->SetTextEffectFlags(attr->GetTextEffectFlags() | wxTEXT_ATTR_EFFECT_STRIKETHROUGH);
+
+        if (m_strikethroughCtrl->Get3StateValue() == wxCHK_CHECKED)
+            attr->SetTextEffects(attr->GetTextEffects() | wxTEXT_ATTR_EFFECT_STRIKETHROUGH);
+        else
+            attr->SetTextEffects(attr->GetTextEffects() & ~wxTEXT_ATTR_EFFECT_STRIKETHROUGH);
+    }
+
+    if (m_capitalsCtrl->Get3StateValue() != wxCHK_UNDETERMINED)
+    {
+        attr->SetTextEffectFlags(attr->GetTextEffectFlags() | wxTEXT_ATTR_EFFECT_CAPITALS);
+    
+        if (m_capitalsCtrl->Get3StateValue() == wxCHK_CHECKED)
+            attr->SetTextEffects(attr->GetTextEffects() | wxTEXT_ATTR_EFFECT_CAPITALS);
+        else
+            attr->SetTextEffects(attr->GetTextEffects() & ~wxTEXT_ATTR_EFFECT_CAPITALS);
+    }
 
     return true;
 }
@@ -406,6 +449,34 @@ bool wxRichTextFontPage::TransferDataToWindow()
         m_colourPresent = true;
     }
 
+    if (attr->HasTextEffects())
+    {
+        if (attr->GetTextEffectFlags() & wxTEXT_ATTR_EFFECT_STRIKETHROUGH)
+        {
+            if (attr->GetTextEffects() & wxTEXT_ATTR_EFFECT_STRIKETHROUGH)
+                m_strikethroughCtrl->Set3StateValue(wxCHK_CHECKED);
+            else
+                m_strikethroughCtrl->Set3StateValue(wxCHK_UNCHECKED);
+        }
+        else
+            m_strikethroughCtrl->Set3StateValue(wxCHK_UNDETERMINED);
+
+        if (attr->GetTextEffectFlags() & wxTEXT_ATTR_EFFECT_CAPITALS)
+        {
+            if (attr->GetTextEffects() & wxTEXT_ATTR_EFFECT_CAPITALS)
+                m_capitalsCtrl->Set3StateValue(wxCHK_CHECKED);
+            else
+                m_capitalsCtrl->Set3StateValue(wxCHK_UNCHECKED);
+        }
+        else
+            m_capitalsCtrl->Set3StateValue(wxCHK_UNDETERMINED);
+    }
+    else
+    {
+        m_strikethroughCtrl->Set3StateValue(wxCHK_UNDETERMINED);
+        m_capitalsCtrl->Set3StateValue(wxCHK_UNDETERMINED);
+    }
+
     UpdatePreview();
 
     m_dontUpdate = false;
@@ -472,8 +543,21 @@ void wxRichTextFontPage::UpdatePreview()
 
         font.SetUnderlined(underlined);
     }
+    
+    int textEffects = 0;
+
+    if (m_strikethroughCtrl->Get3StateValue() == wxCHK_CHECKED)
+    {
+        textEffects |= wxTEXT_ATTR_EFFECT_STRIKETHROUGH;
+    }
+
+    if (m_capitalsCtrl->Get3StateValue() == wxCHK_CHECKED)
+    {
+        textEffects |= wxTEXT_ATTR_EFFECT_CAPITALS;
+    }
 
     m_previewCtrl->SetFont(font);
+    m_previewCtrl->SetTextEffects(textEffects);
     m_previewCtrl->Refresh();
 }
 
@@ -628,3 +712,22 @@ void wxRichTextFontPage::OnColourClicked( wxCommandEvent& WXUNUSED(event) )
 
     UpdatePreview();
 }
+/*!
+ * wxEVT_COMMAND_CHECKBOX_CLICKED event handler for ID_RICHTEXTFONTPAGE_STRIKETHROUGHCTRL
+ */
+
+void wxRichTextFontPage::OnStrikethroughctrlClick( wxCommandEvent& WXUNUSED(event) )
+{
+    UpdatePreview();
+}
+
+/*!
+ * wxEVT_COMMAND_CHECKBOX_CLICKED event handler for ID_RICHTEXTFONTPAGE_CAPSCTRL
+ */
+
+void wxRichTextFontPage::OnCapsctrlClick( wxCommandEvent& WXUNUSED(event) )
+{
+    UpdatePreview();
+}
+
+

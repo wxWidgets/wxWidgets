@@ -222,9 +222,15 @@ public:
         wxWindow(parent, id, pos, sz, style)
     {
         SetBackgroundColour(*wxWHITE);
+        m_textEffects = 0;
     }
 
+    void SetTextEffects(int effects) { m_textEffects = effects; }
+    int GetTextEffects() const { return m_textEffects; }
+
 private:
+    int m_textEffects;
+
     void OnPaint(wxPaintEvent& event);
     DECLARE_EVENT_TABLE()
 };

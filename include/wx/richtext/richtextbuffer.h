@@ -199,6 +199,7 @@ class WXDLLIMPEXP_RICHTEXT wxRichTextBuffer;
 #define wxTEXT_ATTR_BULLET_NAME             0x00100000
 #define wxTEXT_ATTR_URL                     0x00200000
 #define wxTEXT_ATTR_PAGE_BREAK              0x00400000
+#define wxTEXT_ATTR_EFFECTS                 0x00800000
 
 /*!
  * Styles for wxTextAttrEx::SetBulletStyle
@@ -223,6 +224,22 @@ class WXDLLIMPEXP_RICHTEXT wxRichTextBuffer;
 #define wxTEXT_ATTR_BULLET_STYLE_ALIGN_CENTRE       0x00002000
 
 /*!
+ * Styles for wxTextAttrEx::SetTextEffects
+ */
+
+#define wxTEXT_ATTR_EFFECT_NONE                     0x00000000
+#define wxTEXT_ATTR_EFFECT_CAPITALS                 0x00000001
+#define wxTEXT_ATTR_EFFECT_SMALL_CAPITALS           0x00000002
+#define wxTEXT_ATTR_EFFECT_STRIKETHROUGH            0x00000004
+#define wxTEXT_ATTR_EFFECT_DOUBLE_STRIKETHROUGH     0x00000008
+#define wxTEXT_ATTR_EFFECT_SHADOW                   0x00000010
+#define wxTEXT_ATTR_EFFECT_EMBOSS                   0x00000020
+#define wxTEXT_ATTR_EFFECT_OUTLINE                  0x00000040
+#define wxTEXT_ATTR_EFFECT_ENGRAVE                  0x00000080
+#define wxTEXT_ATTR_EFFECT_SUPERSCRIPT              0x00000100
+#define wxTEXT_ATTR_EFFECT_SUBSCRIPT                0x00000200
+
+/*!
  * Line spacing values
  */
 
@@ -234,7 +251,7 @@ class WXDLLIMPEXP_RICHTEXT wxRichTextBuffer;
  * Character and paragraph combined styles
  */
 
-#define wxTEXT_ATTR_CHARACTER (wxTEXT_ATTR_FONT | wxTEXT_ATTR_BACKGROUND_COLOUR | wxTEXT_ATTR_TEXT_COLOUR | wxTEXT_ATTR_CHARACTER_STYLE_NAME | wxTEXT_ATTR_URL)
+#define wxTEXT_ATTR_CHARACTER (wxTEXT_ATTR_FONT|wxTEXT_ATTR_EFFECTS|wxTEXT_ATTR_BACKGROUND_COLOUR|wxTEXT_ATTR_TEXT_COLOUR|wxTEXT_ATTR_CHARACTER_STYLE_NAME|wxTEXT_ATTR_URL)
 
 #define wxTEXT_ATTR_PARAGRAPH (wxTEXT_ATTR_ALIGNMENT|wxTEXT_ATTR_LEFT_INDENT|wxTEXT_ATTR_RIGHT_INDENT|wxTEXT_ATTR_TABS|\
     wxTEXT_ATTR_PARA_SPACING_BEFORE|wxTEXT_ATTR_PARA_SPACING_AFTER|wxTEXT_ATTR_LINE_SPACING|\
@@ -348,6 +365,8 @@ public:
     void SetBulletFont(const wxString& bulletFont) { m_bulletFont = bulletFont; }
     void SetURL(const wxString& url) { m_urlTarget = url; SetFlags(GetFlags() | wxTEXT_ATTR_URL); }
     void SetPageBreak(bool pageBreak = true) { SetFlags(pageBreak ? (GetFlags() | wxTEXT_ATTR_PAGE_BREAK) : (GetFlags() & ~wxTEXT_ATTR_PAGE_BREAK)); }
+    void SetTextEffects(int effects) { m_textEffects = effects; SetFlags(GetFlags() | wxTEXT_ATTR_EFFECTS); }
+    void SetTextEffectFlags(int effects) { m_textEffectFlags = effects; }
 
     const wxString& GetCharacterStyleName() const { return m_characterStyleName; }
     const wxString& GetParagraphStyleName() const { return m_paragraphStyleName; }
@@ -361,6 +380,8 @@ public:
     const wxString& GetBulletName() const { return m_bulletName; }
     const wxString& GetBulletFont() const { return m_bulletFont; }
     const wxString& GetURL() const { return m_urlTarget; }
+    int GetTextEffects() const { return m_textEffects; }
+    int GetTextEffectFlags() const { return m_textEffectFlags; }
 
     bool HasWeight() const { return (GetFlags() & wxTEXT_ATTR_FONT_WEIGHT) != 0; }
     bool HasSize() const { return (GetFlags() & wxTEXT_ATTR_FONT_SIZE) != 0; }
@@ -380,6 +401,8 @@ public:
     bool HasBulletName() const { return HasFlag(wxTEXT_ATTR_BULLET_NAME); }
     bool HasURL() const { return HasFlag(wxTEXT_ATTR_URL); }
     bool HasPageBreak() const { return HasFlag(wxTEXT_ATTR_PAGE_BREAK); }
+    bool HasTextEffects() const { return HasFlag(wxTEXT_ATTR_EFFECTS); }
+    bool HasTextEffect(int effect) const { return HasFlag(wxTEXT_ATTR_EFFECTS) && ((GetTextEffectFlags() & effect) != 0); }
 
     // Is this a character style?
     bool IsCharacterStyle() const { return (0 != (GetFlags() & wxTEXT_ATTR_CHARACTER)); }
@@ -388,11 +411,7 @@ public:
     // returns false if we have any attributes set, true otherwise
     bool IsDefault() const
     {
-        return !HasTextColour() && !HasBackgroundColour() && !HasFont() && !HasAlignment() &&
-               !HasTabs() && !HasLeftIndent() && !HasRightIndent() &&
-               !HasParagraphSpacingAfter() && !HasParagraphSpacingBefore() && !HasLineSpacing() &&
-               !HasCharacterStyleName() && !HasParagraphStyleName() && !HasListStyleName() &&
-               !HasBulletNumber() && !HasBulletStyle() && !HasBulletText() && !HasBulletName() && !HasURL();
+        return (GetFlags() == 0);
     }
 
     // return the attribute having the valid font and colours: it uses the
@@ -409,6 +428,8 @@ private:
     int                 m_lineSpacing;
     int                 m_bulletStyle;
     int                 m_bulletNumber;
+    int                 m_textEffects;
+    int                 m_textEffectFlags;
     wxString            m_bulletText;
     wxString            m_bulletFont;
     wxString            m_bulletName;
@@ -496,6 +517,8 @@ public:
     void SetBulletName(const wxString& name) { m_bulletName = name; m_flags |= wxTEXT_ATTR_BULLET_NAME; }
     void SetURL(const wxString& url) { m_urlTarget = url; m_flags |= wxTEXT_ATTR_URL; }
     void SetPageBreak(bool pageBreak = true) { SetFlags(pageBreak ? (GetFlags() | wxTEXT_ATTR_PAGE_BREAK) : (GetFlags() & ~wxTEXT_ATTR_PAGE_BREAK)); }
+    void SetTextEffects(int effects) { m_textEffects = effects; SetFlags(GetFlags() | wxTEXT_ATTR_EFFECTS); }
+    void SetTextEffectFlags(int effects) { m_textEffectFlags = effects; }
 
     const wxColour& GetTextColour() const { return m_colText; }
     const wxColour& GetBackgroundColour() const { return m_colBack; }
@@ -524,6 +547,8 @@ public:
     const wxString& GetBulletFont() const { return m_bulletFont; }
     const wxString& GetBulletName() const { return m_bulletName; }
     const wxString& GetURL() const { return m_urlTarget; }
+    int GetTextEffects() const { return m_textEffects; }
+    int GetTextEffectFlags() const { return m_textEffectFlags; }
 
     // accessors
     bool HasTextColour() const { return m_colText.Ok() && HasFlag(wxTEXT_ATTR_TEXT_COLOUR) ; }
@@ -551,6 +576,8 @@ public:
     bool HasBulletName() const { return (m_flags & wxTEXT_ATTR_BULLET_NAME) != 0; }
     bool HasURL() const { return HasFlag(wxTEXT_ATTR_URL); }
     bool HasPageBreak() const { return HasFlag(wxTEXT_ATTR_PAGE_BREAK); }
+    bool HasTextEffects() const { return HasFlag(wxTEXT_ATTR_EFFECTS); }
+    bool HasTextEffect(int effect) const { return HasFlag(wxTEXT_ATTR_EFFECTS) && ((GetTextEffectFlags() & effect) != 0); }
 
     bool HasFlag(long flag) const { return (m_flags & flag) != 0; }
 
@@ -561,11 +588,7 @@ public:
     // returns false if we have any attributes set, true otherwise
     bool IsDefault() const
     {
-        return !HasTextColour() && !HasBackgroundColour() && !HasFont() && !HasAlignment() &&
-               !HasTabs() && !HasLeftIndent() && !HasRightIndent() &&
-               !HasParagraphSpacingAfter() && !HasParagraphSpacingBefore() && !HasLineSpacing() &&
-               !HasCharacterStyleName() && !HasParagraphStyleName() && !HasListStyleName() &&
-               !HasBulletNumber() && !HasBulletStyle() && !HasBulletText() && !HasBulletName() && !HasURL();
+        return GetFlags() == 0;
     }
 
     // return the attribute having the valid font and colours: it uses the
@@ -591,6 +614,8 @@ private:
     int                 m_lineSpacing;
     int                 m_bulletStyle;
     int                 m_bulletNumber;
+    int                 m_textEffects;
+    int                 m_textEffectFlags;
     wxString            m_bulletText;
     wxString            m_bulletFont;
     wxString            m_bulletName;
@@ -1036,7 +1061,7 @@ public:
 
     /// Combines 'style' with 'currentStyle' for the purpose of summarising the attributes of a range of
     /// content.
-    bool CollectStyle(wxTextAttrEx& currentStyle, const wxTextAttrEx& style, long& multipleStyleAttributes);
+    bool CollectStyle(wxTextAttrEx& currentStyle, const wxTextAttrEx& style, long& multipleStyleAttributes, int& multipleTextEffectAttributes);
 
     /// Set list style
     virtual bool SetListStyle(const wxRichTextRange& range, wxRichTextListStyleDefinition* def, int flags = wxRICHTEXT_SETSTYLE_WITH_UNDO, int startFrom = 1, int specifiedLevel = -1);
@@ -2266,6 +2291,12 @@ WXDLLIMPEXP_RICHTEXT bool wxRichTextApplyStyle(wxTextAttrEx& destStyle, const wx
 WXDLLIMPEXP_RICHTEXT bool wxRichTextApplyStyle(wxRichTextAttr& destStyle, const wxTextAttrEx& style);
 WXDLLIMPEXP_RICHTEXT bool wxRichTextApplyStyle(wxTextAttrEx& destStyle, const wxRichTextAttr& style, wxRichTextAttr* compareWith = NULL);
 WXDLLIMPEXP_RICHTEXT bool wxRichTextApplyStyle(wxRichTextAttr& destStyle, const wxRichTextAttr& style, wxRichTextAttr* compareWith = NULL);
+
+/// Combine two bitlists
+WXDLLIMPEXP_RICHTEXT bool wxRichTextCombineBitlists(int& valueA, int valueB, int& flagsA, int flagsB);
+
+/// Compare two bitlists
+WXDLLIMPEXP_RICHTEXT bool wxRichTextBitlistsEqPartial(int valueA, int valueB, int flags);
 
 /// Split into paragraph and character styles
 WXDLLIMPEXP_RICHTEXT bool wxRichTextSplitParaCharStyles(const wxTextAttrEx& style, wxTextAttrEx& parStyle, wxTextAttrEx& charStyle);

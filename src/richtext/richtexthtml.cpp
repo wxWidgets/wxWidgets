@@ -100,8 +100,13 @@ bool wxRichTextHTMLHandler::DoSaveFile(wxRichTextBuffer *buffer, wxOutputStream&
                 {
                     wxTextAttrEx charStyle(para->GetCombinedAttributes(obj->GetAttributes()));
                     BeginCharacterFormatting(currentCharStyle, charStyle, paraStyle, stream);
+                    
+                    wxString text = textObj->GetText();
 
-                    str << textObj->GetText();
+                    if (charStyle.HasTextEffects() && (charStyle.GetTextEffects() & wxTEXT_ATTR_EFFECT_CAPITALS))
+                        text.MakeUpper();
+
+                    str << text;
 
                     EndCharacterFormatting(currentCharStyle, charStyle, paraStyle, stream);
                 }
@@ -320,6 +325,12 @@ void wxRichTextHTMLHandler::OutputParagraphFormatting(const wxTextAttrEx& WXUNUS
         wxTextOutputStream str(stream);
         wxString align = GetAlignment(thisStyle);
         str << wxString::Format(wxT("<p align=\"%s\">"), align.c_str());
+    }
+    
+    if (thisStyle.HasPageBreak())
+    {
+        wxTextOutputStream str(stream);
+        str << wxT("<div style=\"page-break-after:always\"></div>\n");
     }
 }
 

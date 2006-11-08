@@ -85,6 +85,10 @@ public:
     void SetName(const wxString& name) { m_name = name; }
     const wxString& GetName() const { return m_name; }
 
+    /// Sets and gets the style description
+    void SetDescription(const wxString& descr) { m_description = descr; }
+    const wxString& GetDescription() const { return m_description; }
+
     /// Sets and gets the name of the style that this style is based on
     void SetBaseStyle(const wxString& name) { m_baseStyle = name; }
     const wxString& GetBaseStyle() const { return m_baseStyle; }
@@ -97,6 +101,7 @@ public:
 protected:
     wxString        m_name;
     wxString        m_baseStyle;
+    wxString        m_description;
     wxRichTextAttr  m_style;
 };
 
@@ -327,6 +332,14 @@ public:
     wxRichTextStyleSheet* GetPreviousSheet() const { return m_previousSheet; }
     void SetPreviousSheet(wxRichTextStyleSheet* sheet) { m_previousSheet = sheet; }
 
+    /// Sets and gets the name of the style sheet
+    void SetName(const wxString& name) { m_name = name; }
+    const wxString& GetName() const { return m_name; }
+
+    /// Sets and gets the style description
+    void SetDescription(const wxString& descr) { m_description = descr; }
+    const wxString& GetDescription() const { return m_description; }
+
 /// Implementation
 
     /// Add a definition to one of the style lists
@@ -340,12 +353,15 @@ public:
 
 protected:
 
-    wxList  m_characterStyleDefinitions;
-    wxList  m_paragraphStyleDefinitions;
-    wxList  m_listStyleDefinitions;
+    wxString                m_description;
+    wxString                m_name;
 
-    wxRichTextStyleSheet* m_previousSheet;
-    wxRichTextStyleSheet* m_nextSheet;
+    wxList                  m_characterStyleDefinitions;
+    wxList                  m_paragraphStyleDefinitions;
+    wxList                  m_listStyleDefinitions;
+
+    wxRichTextStyleSheet*   m_previousSheet;
+    wxRichTextStyleSheet*   m_nextSheet;
 };
 
 #if wxUSE_HTML

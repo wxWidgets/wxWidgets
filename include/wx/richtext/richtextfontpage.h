@@ -97,6 +97,12 @@ public:
     /// wxEVT_COMMAND_COMBOBOX_SELECTED event handler for ID_RICHTEXTFONTPAGE_UNDERLINING_CTRL
     void OnUnderliningCtrlSelected( wxCommandEvent& event );
 
+    /// wxEVT_COMMAND_CHECKBOX_CLICKED event handler for ID_RICHTEXTFONTPAGE_STRIKETHROUGHCTRL
+    void OnStrikethroughctrlClick( wxCommandEvent& event );
+
+    /// wxEVT_COMMAND_CHECKBOX_CLICKED event handler for ID_RICHTEXTFONTPAGE_CAPSCTRL
+    void OnCapsctrlClick( wxCommandEvent& event );
+
 ////@end wxRichTextFontPage event handler declarations
 
 ////@begin wxRichTextFontPage member function declarations
@@ -120,6 +126,8 @@ public:
     wxComboBox* m_weightCtrl;
     wxComboBox* m_underliningCtrl;
     wxRichTextColourSwatchCtrl* m_colourCtrl;
+    wxCheckBox* m_strikethroughCtrl;
+    wxCheckBox* m_capitalsCtrl;
     wxRichTextFontPreviewCtrl* m_previewCtrl;
     /// Control identifiers
     enum {
@@ -132,6 +140,8 @@ public:
         ID_RICHTEXTFONTPAGE_WEIGHTCTRL = 10004,
         ID_RICHTEXTFONTPAGE_UNDERLINING_CTRL = 10008,
         ID_RICHTEXTFONTPAGE_COLOURCTRL = 10009,
+        ID_RICHTEXTFONTPAGE_STRIKETHROUGHCTRL = 10010,
+        ID_RICHTEXTFONTPAGE_CAPSCTRL = 10011,
         ID_RICHTEXTFONTPAGE_PREVIEWCTRL = 10003
     };
 ////@end wxRichTextFontPage member variables
