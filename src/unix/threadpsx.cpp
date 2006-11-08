@@ -1701,7 +1701,7 @@ static void ScheduleThreadForDeletion()
 
     wxLogTrace(TRACE_THREADS, _T("%lu thread%s waiting to be deleted"),
                (unsigned long)gs_nThreadsBeingDeleted,
-               gs_nThreadsBeingDeleted == 1 ? "" : "s");
+               gs_nThreadsBeingDeleted == 1 ? _T("") : _T("s"));
 }
 
 static void DeleteThread(wxThread *This)
