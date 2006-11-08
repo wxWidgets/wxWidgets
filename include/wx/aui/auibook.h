@@ -39,12 +39,11 @@ enum wxAuiNotebookOption
     wxAUI_NB_TAB_SPLIT           = 1 << 4,
     wxAUI_NB_TAB_MOVE            = 1 << 5,
     wxAUI_NB_TAB_EXTERNAL_MOVE   = 1 << 6,
-    wxAUI_NB_TAB_FIXED_WIDTH     = 1 << 7,
-    wxAUI_NB_SCROLL_BUTTONS      = 1 << 8,
-    wxAUI_NB_WINDOWLIST_BUTTON   = 1 << 9,
-    wxAUI_NB_CLOSE_BUTTON        = 1 << 10,
-    wxAUI_NB_CLOSE_ON_ACTIVE_TAB = 1 << 11,
-    wxAUI_NB_CLOSE_ON_ALL_TABS   = 1 << 12,
+    wxAUI_NB_SCROLL_BUTTONS      = 1 << 7,
+    wxAUI_NB_WINDOWLIST_BUTTON   = 1 << 8,
+    wxAUI_NB_CLOSE_BUTTON        = 1 << 9,
+    wxAUI_NB_CLOSE_ON_ACTIVE_TAB = 1 << 10,
+    wxAUI_NB_CLOSE_ON_ALL_TABS   = 1 << 11,
     
     
     wxAUI_NB_DEFAULT_STYLE = wxAUI_NB_TOP |
@@ -53,6 +52,7 @@ enum wxAuiNotebookOption
                              wxAUI_NB_SCROLL_BUTTONS |
                              wxAUI_NB_CLOSE_ON_ACTIVE_TAB
 };
+
 
 
 
@@ -66,12 +66,6 @@ public:
     wxAuiTabArt() { }
     virtual ~wxAuiTabArt() { }
     
-    virtual wxAuiTabArt* Clone() = 0;
-    virtual void SetFlags(unsigned int flags) = 0;
-
-    virtual void SetSizingInfo(const wxSize& tab_ctrl_size,
-                               size_t tab_count) = 0;
-                               
     virtual void SetNormalFont(const wxFont& font) = 0;
     virtual void SetSelectedFont(const wxFont& font) = 0;
     virtual void SetMeasuringFont(const wxFont& font) = 0;
@@ -100,9 +94,7 @@ public:
                          int orientation,
                          const wxBitmap& bitmap_override,
                          wxRect* out_rect) = 0;
-               
-    virtual int GetIndentSize() = 0;
-  
+                 
     virtual wxSize GetTabSize(
                          wxDC& dc,
                          wxWindow* wnd,
@@ -120,90 +112,6 @@ public:
 };
 
 
-class WXDLLIMPEXP_AUI wxAuiSimpleTabArt : public wxAuiTabArt
-{
-
-public:
-
-    wxAuiSimpleTabArt();
-    virtual ~wxAuiSimpleTabArt();
-    
-    wxAuiTabArt* Clone();
-    void SetFlags(unsigned int flags);
-
-    void SetSizingInfo(const wxSize& tab_ctrl_size,
-                       size_t tab_count);
-
-    void SetNormalFont(const wxFont& font);
-    void SetSelectedFont(const wxFont& font);
-    void SetMeasuringFont(const wxFont& font);
-
-    void DrawBackground(
-                 wxDC& dc,
-                 wxWindow* wnd,
-                 const wxRect& rect);
-                                          
-    void DrawTab(wxDC& dc,
-                 wxWindow* wnd,
-                 const wxRect& in_rect,
-                 const wxString& caption,
-                 bool active,
-                 int close_button_state,
-                 wxRect* out_tab_rect,
-                 wxRect* out_button_rect,
-                 int* x_extent);
-    
-    void DrawButton(
-                 wxDC& dc,
-                 wxWindow* wnd,
-                 const wxRect& in_rect,
-                 int bitmap_id,
-                 int button_state,
-                 int orientation,
-                 const wxBitmap& bitmap_override,
-                 wxRect* out_rect);
-             
-    int GetIndentSize();
-    
-    wxSize GetTabSize(
-                 wxDC& dc,
-                 wxWindow* wnd,
-                 const wxString& caption,
-                 bool active,
-                 int close_button_state,
-                 int* x_extent);
-                  
-    int ShowWindowList(
-                 wxWindow* wnd,
-                 const wxArrayString& items,
-                 int active_idx);
-
-    int GetBestTabCtrlSize(wxWindow* wnd);    
-
-protected:
-
-    wxFont m_normal_font;
-    wxFont m_selected_font;
-    wxFont m_measuring_font;
-    wxPen m_normal_bkpen;
-    wxPen m_selected_bkpen;
-    wxBrush m_normal_bkbrush;
-    wxBrush m_selected_bkbrush;
-    wxBrush m_bkbrush;
-    wxBitmap m_active_close_bmp;
-    wxBitmap m_disabled_close_bmp;
-    wxBitmap m_active_left_bmp;
-    wxBitmap m_disabled_left_bmp;
-    wxBitmap m_active_right_bmp;
-    wxBitmap m_disabled_right_bmp;
-    wxBitmap m_active_windowlist_bmp;
-    wxBitmap m_disabled_windowlist_bmp;
-    
-    int m_fixed_tab_width;
-    unsigned int m_flags;
-};
-
-
 class WXDLLIMPEXP_AUI wxAuiDefaultTabArt : public wxAuiTabArt
 {
 
@@ -212,20 +120,16 @@ public:
     wxAuiDefaultTabArt();
     virtual ~wxAuiDefaultTabArt();
     
-    wxAuiTabArt* Clone();
-    void SetFlags(unsigned int flags);
-    void SetSizingInfo(const wxSize& tab_ctrl_size,
-                       size_t tab_count);
-
+    void SetWindow(wxWindow* wnd);
     void SetNormalFont(const wxFont& font);
     void SetSelectedFont(const wxFont& font);
     void SetMeasuringFont(const wxFont& font);
-
+    
     void DrawBackground(
                  wxDC& dc,
                  wxWindow* wnd,
                  const wxRect& rect);
-                     
+
     void DrawTab(wxDC& dc,
                  wxWindow* wnd,
                  const wxRect& in_rect,
@@ -245,8 +149,6 @@ public:
                  int orientation,
                  const wxBitmap& bitmap_override,
                  wxRect* out_rect);
-    
-    int GetIndentSize();
                  
     wxSize GetTabSize(
                  wxDC& dc,
@@ -263,7 +165,7 @@ public:
 
     int GetBestTabCtrlSize(wxWindow* wnd);    
 
-protected:
+private:
 
     wxFont m_normal_font;
     wxFont m_selected_font;
@@ -281,11 +183,7 @@ protected:
     wxBitmap m_disabled_right_bmp;
     wxBitmap m_active_windowlist_bmp;
     wxBitmap m_disabled_windowlist_bmp;
-    
-    int m_fixed_tab_width;
-    unsigned int m_flags;
 };
-
 
 
 

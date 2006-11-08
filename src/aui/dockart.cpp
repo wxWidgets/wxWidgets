@@ -109,12 +109,9 @@ static void DrawGradientRectangle(wxDC& dc,
 
     for (int i = 0; i <= high; ++i)
     {
-        int r,g,b;
-        
-        
-        r = start_color.Red() + ((i*rd*100)/high)/100;
-        g = start_color.Green() + ((i*gd*100)/high)/100;
-        b = start_color.Blue() + ((i*bd*100)/high)/100;
+        int r = start_color.Red() +  ((i*rd*100)/high)/100;
+        int g = start_color.Green() + ((i*gd*100)/high)/100;
+        int b = start_color.Blue() + ((i*bd*100)/high)/100;
 
         wxPen p(wxColor((unsigned char)r,
                         (unsigned char)g,
@@ -129,56 +126,27 @@ static void DrawGradientRectangle(wxDC& dc,
 
 }
 
-static wxString ChopText(wxDC& dc, const wxString& text, int max_size)
-{
-    wxCoord x,y;
-    
-    // first check if the text fits with no problems
-    dc.GetTextExtent(text, &x, &y);
-    if (x <= max_size)
-        return text;
-        
-    size_t i, len = text.Length();
-    size_t last_good_length = 0;
-    for (i = 0; i < len; ++i)
-    {
-        wxString s = text.Left(i);
-        s += wxT("...");
-        
-        dc.GetTextExtent(s, &x, &y);
-        if (x > max_size)
-            break;
-        
-        last_good_length = i;
-    }
-
-    wxString ret = text.Left(last_good_length);
-    ret += wxT("...");
-    return ret;
-}
-
 wxAuiDefaultDockArt::wxAuiDefaultDockArt()
 {
 #ifdef __WXMAC__
     wxBrush toolbarbrush;
     toolbarbrush.MacSetTheme( kThemeBrushToolbarBackground );
-    wxColor base_colour = toolbarbrush.GetColour();
+    wxColor base_color = toolbarbrush.GetColour();
 #else
-    wxColor base_colour = wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE);
+    wxColor base_color = wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE);
 #endif
 
-    m_base_colour = base_colour;
-    wxColor darker1_colour = StepColour(base_colour, 85);
-    wxColor darker2_colour = StepColour(base_colour, 70);
-    wxColor darker3_colour = StepColour(base_colour, 60);
-    wxColor darker4_colour = StepColour(base_colour, 50);
-    wxColor darker5_colour = StepColour(base_colour, 40);
+    wxColor darker1_color = StepColour(base_color, 85);
+    wxColor darker2_color = StepColour(base_color, 70);
+    wxColor darker3_color = StepColour(base_color, 60);
+    wxColor darker4_color = StepColour(base_color, 50);
+    wxColor darker5_color = StepColour(base_color, 40);
 
-    m_active_caption_colour = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT);
-    m_active_caption_gradient_colour = LightContrastColour(wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT));
+    m_active_caption_colour = LightContrastColour(wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT));
+    m_active_caption_gradient_colour = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT);
     m_active_caption_text_colour = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT);
-    m_inactive_caption_colour = darker1_colour;
-    m_inactive_caption_gradient_colour = StepColour(base_colour, 97);
+    m_inactive_caption_colour = StepColour(darker1_color, 80);
+    m_inactive_caption_gradient_colour = darker1_color;
     m_inactive_caption_text_colour = *wxBLACK;
 
 #ifdef __WXMAC__
@@ -186,13 +154,13 @@ wxAuiDefaultDockArt::wxAuiDefaultDockArt()
     m_background_brush = toolbarbrush;
     m_gripper_brush = toolbarbrush;
 #else
-    m_sash_brush = wxBrush(base_colour);
-    m_background_brush = wxBrush(base_colour);
-    m_gripper_brush = wxBrush(base_colour);
+    m_sash_brush = wxBrush(base_color);
+    m_background_brush = wxBrush(base_color);
+    m_gripper_brush = wxBrush(base_color);
 #endif
-    m_border_pen = wxPen(darker2_colour);
-    m_gripper_pen1 = wxPen(darker5_colour);
-    m_gripper_pen2 = wxPen(darker3_colour);
+    m_border_pen = wxPen(darker2_color);
+    m_gripper_pen1 = wxPen(darker5_color);
+    m_gripper_pen2 = wxPen(darker3_color);
     m_gripper_pen3 = *wxWHITE_PEN;
 
 #ifdef __WXMAC__
@@ -207,16 +175,16 @@ wxAuiDefaultDockArt::wxAuiDefaultDockArt()
          0xFF, 0xFF, 0xFF, 0xFF, 0x0F, 0xFE, 0x03, 0xF8, 0x01, 0xF0, 0x19, 0xF3,
          0xB8, 0xE3, 0xF0, 0xE1, 0xE0, 0xE0, 0xF0, 0xE1, 0xB8, 0xE3, 0x19, 0xF3,
          0x01, 0xF0, 0x03, 0xF8, 0x0F, 0xFE, 0xFF, 0xFF };
-#elif defined( __WXGTK__) 	 
-     static unsigned char close_bits[]={ 	 
-         0xff, 0xff, 0xff, 0xff, 0x07, 0xf0, 0xfb, 0xef, 0xdb, 0xed, 0x8b, 0xe8, 	 
-         0x1b, 0xec, 0x3b, 0xee, 0x1b, 0xec, 0x8b, 0xe8, 0xdb, 0xed, 0xfb, 0xef, 	 
-         0x07, 0xf0, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff }; 	 
+#elif defined( __WXGTK__)
+    static unsigned char close_bits[]={
+         0xff, 0xff, 0xff, 0xff, 0x07, 0xf0, 0xfb, 0xef, 0xdb, 0xed, 0x8b, 0xe8,
+         0x1b, 0xec, 0x3b, 0xee, 0x1b, 0xec, 0x8b, 0xe8, 0xdb, 0xed, 0xfb, 0xef,
+         0x07, 0xf0, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff };
 #else
     static unsigned char close_bits[]={
-         0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xe7, 0xf3, 0xcf, 0xf9,
-         0x9f, 0xfc, 0x3f, 0xfe, 0x3f, 0xfe, 0x9f, 0xfc, 0xcf, 0xf9, 0xe7, 0xf3,
-         0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff};
+        0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xef,0xfb,0xcf,0xf9,
+        0x9f,0xfc,0x3f,0xfe,0x3f,0xfe,0x9f,0xfc,0xcf,0xf9,0xef,0xfb,
+        0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff};
 #endif
 
     static unsigned char maximize_bits[] = {
@@ -390,10 +358,6 @@ void wxAuiDefaultDockArt::DrawSash(wxDC& dc, wxWindow *window, int orientation, 
 #endif
 
 #elif defined(__WXGTK__)
-    // clear out the rectangle first
-    dc.SetPen(*wxTRANSPARENT_PEN);
-    dc.SetBrush(m_sash_brush);
-    dc.DrawRectangle(rect.x, rect.y, rect.width, rect.height);
 
     GdkRectangle gdk_rect;
     if (orientation == wxVERTICAL )
@@ -508,27 +472,25 @@ void wxAuiDefaultDockArt::DrawCaptionBackground(wxDC& dc, const wxRect& rect, bo
             // on mac the gradients are expected to become darker from the top
 #ifdef __WXMAC__
             DrawGradientRectangle(dc, rect,
-                                 m_active_caption_colour,
                                  m_active_caption_gradient_colour,
+                                 m_active_caption_colour,
                                  m_gradient_type);
 #else
-            // on other platforms, active gradients become lighter at the top
             DrawGradientRectangle(dc, rect,
-                                 m_active_caption_gradient_colour,
                                  m_active_caption_colour,
+                                 m_active_caption_gradient_colour,
                                  m_gradient_type);
 #endif
         }
          else
         {
-#ifdef __WXMAC__
             // on mac the gradients are expected to become darker from the top
+#ifdef __WXMAC__
             DrawGradientRectangle(dc, rect,
                                  m_inactive_caption_gradient_colour,
                                  m_inactive_caption_colour,
                                  m_gradient_type);
 #else
-            // on other platforms, inactive gradients become lighter at the bottom
             DrawGradientRectangle(dc, rect,
                                  m_inactive_caption_colour,
                                  m_inactive_caption_gradient_colour,
@@ -559,20 +521,8 @@ void wxAuiDefaultDockArt::DrawCaption(wxDC& dc, wxWindow *WXUNUSED(window),
     wxCoord w,h;
     dc.GetTextExtent(wxT("ABCDEFHXfgkj"), &w, &h);
 
-    wxRect clip_rect = rect;
-    clip_rect.width -= 3; // text offset
-    clip_rect.width -= 2; // button padding
-    if (pane.HasCloseButton())
-        clip_rect.width -= m_button_size;
-    if (pane.HasPinButton())
-        clip_rect.width -= m_button_size;    
-    if (pane.HasMaximizeButton())
-        clip_rect.width -= m_button_size;    
-
-    wxString draw_text = ChopText(dc, text, clip_rect.width);
-
-    dc.SetClippingRegion(clip_rect);
-    dc.DrawText(draw_text, rect.x+3, rect.y+(rect.height/2)-(h/2)-1);
+    dc.SetClippingRegion(rect);
+    dc.DrawText(text, rect.x+3, rect.y+(rect.height/2)-(h/2)-1);
     dc.DestroyClippingRegion();
 }
 

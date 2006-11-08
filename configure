@@ -45477,7 +45477,6 @@ echo "${ECHO_T}$wxUSE_JOYSTICK" >&6
         fi
 
         else
-                if test "$wxUSE_MGL" != "1"; then
 
 for ac_header in linux/joystick.h
 do
@@ -45627,7 +45626,6 @@ fi
 
 done
 
-        fi
     fi
 
     if test "$wxUSE_JOYSTICK" = "yes"; then
@@ -51082,10 +51080,6 @@ echo "${ECHO_T}no" >&6
 
 
 
-
-if test "$USE_UNIX" != "1" -a "$USE_WIN32" != "1"; then
-    DISABLED_CONTRIB="$DISABLED_CONTRIB net"
-fi
 
 for subdir in `echo $SUBDIRS`; do
     if test -d ${srcdir}/${subdir} ; then

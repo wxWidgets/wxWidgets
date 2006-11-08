@@ -6313,10 +6313,7 @@ if test "$wxUSE_GUI" = "yes" -a "$wxUSE_JOYSTICK" = "yes"; then
 
     dnl joystick support is only for Linux 2.1.x or greater
     else
-        dnl wxJoystick not supported by wxMGL at all
-        if test "$wxUSE_MGL" != "1"; then
-            AC_CHECK_HEADERS(linux/joystick.h, wxUSE_JOYSTICK=yes)
-        fi
+        AC_CHECK_HEADERS(linux/joystick.h, wxUSE_JOYSTICK=yes)
     fi
 
     if test "$wxUSE_JOYSTICK" = "yes"; then
@@ -7931,10 +7928,6 @@ else dnl we build wxBase only
 fi
 dnl Add tests to the list of subdirs if cppunit 1.8.0+ is detected
 AM_PATH_CPPUNIT(1.8.0, [SUBDIRS="$SUBDIRS tests"])
-
-if test "$USE_UNIX" != "1" -a "$USE_WIN32" != "1"; then
-    DISABLED_CONTRIB="$DISABLED_CONTRIB net"
-fi
 
 for subdir in `echo $SUBDIRS`; do
     if test -d ${srcdir}/${subdir} ; then

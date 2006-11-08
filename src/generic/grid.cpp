@@ -4202,7 +4202,7 @@ wxGrid::~wxGrid()
     // with dangling view pointer
     if ( m_ownTable )
         delete m_table;
-    else if ( m_table->GetView() == this )
+    else if ( m_table && m_table->GetView() == this )
         m_table->SetView(NULL);
 
     delete m_typeRegistry;

@@ -152,7 +152,6 @@ protected:
     wxPen m_gripper_pen1;
     wxPen m_gripper_pen2;
     wxPen m_gripper_pen3;
-    wxColour m_base_colour;
     wxColour m_active_caption_colour;
     wxColour m_active_caption_gradient_colour;
     wxColour m_active_caption_text_colour;

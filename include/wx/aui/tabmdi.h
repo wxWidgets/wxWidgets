@@ -81,9 +81,8 @@ public:
     virtual void ActivatePrevious();
 
 protected:
-    wxAuiMDIClientWindow*   m_pClientWindow;
-    wxAuiMDIChildFrame*     m_pActiveChild;
-    wxEvent*                m_pLastEvt;
+    wxAuiMDIClientWindow   *m_pClientWindow;
+    wxAuiMDIChildFrame     *m_pActiveChild;
 
 #if wxUSE_MENUS
     wxMenu              *m_pWindowMenu;

@@ -834,14 +834,7 @@ bool wxAuiManager::AddPane(wxWindow* window, const wxAuiPaneInfo& pane_info)
         button.button_id = wxAUI_BUTTON_MAXIMIZE_RESTORE;
         pinfo.buttons.Add(button);
     }
-    
-    if (pinfo.HasPinButton())
-    {
-        wxAuiPaneButton button;
-        button.button_id = wxAUI_BUTTON_PIN;
-        pinfo.buttons.Add(button);
-    }
-    
+
     if (pinfo.HasCloseButton())
     {
         wxAuiPaneButton button;
@@ -1548,13 +1541,6 @@ void wxAuiManager::LayoutAddPane(wxSizer* cont,
             part.cont_sizer = caption_sizer;
             part.sizer_item = sizer_item;
             uiparts.Add(part);
-        }
-        
-        // if we have buttons, add a little space to the right
-        // of them to ease visual crowding
-        if (button_count >= 1)
-        {
-            caption_sizer->Add(3,1);
         }
 
         // add the caption sizer

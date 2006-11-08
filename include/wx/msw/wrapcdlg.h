@@ -22,7 +22,5 @@
     #include <commdlg.h>
 #endif
 
-#include "wx/msw/winundef.h"
-
 #endif // _WX_MSW_WRAPCDLG_H_
 
