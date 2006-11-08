@@ -57,6 +57,10 @@ public:
                 long style = wxDEFAULT_FRAME_STYLE | wxVSCROLL | wxHSCROLL,
                 const wxString& name = wxFrameNameStr );
 
+    void SetArtProvider(wxAuiTabArt* provider);
+    wxAuiTabArt* GetArtProvider();
+    wxAuiNotebook* GetNotebook() const;
+    
 #if wxUSE_MENUS
     wxMenu* GetWindowMenu() const { return m_pWindowMenu; };
     void SetWindowMenu(wxMenu* pMenu);

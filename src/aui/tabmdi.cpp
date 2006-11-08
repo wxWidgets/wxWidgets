@@ -114,6 +114,30 @@ bool wxAuiMDIParentFrame::Create(wxWindow *parent,
     return true;
 }
 
+
+void wxAuiMDIParentFrame::SetArtProvider(wxAuiTabArt* provider)
+{
+    if (m_pClientWindow)
+    {
+        m_pClientWindow->SetArtProvider(provider);
+    }
+}
+
+wxAuiTabArt* wxAuiMDIParentFrame::GetArtProvider()
+{
+    if (!m_pClientWindow)
+        return NULL;
+    
+    return m_pClientWindow->GetArtProvider();
+}
+
+wxAuiNotebook* wxAuiMDIParentFrame::GetNotebook() const
+{
+    return static_cast<wxAuiNotebook*>(m_pClientWindow);
+}
+
+
+
 #if wxUSE_MENUS
 void wxAuiMDIParentFrame::SetWindowMenu(wxMenu* pMenu)
 {
