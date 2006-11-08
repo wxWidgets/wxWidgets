@@ -95,14 +95,15 @@ public:
 
     wxRichTextCtrl( );
     wxRichTextCtrl( wxWindow* parent, wxWindowID id = -1, const wxString& value = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
-        long style = wxRE_MULTILINE );
+        long style = wxRE_MULTILINE, const wxValidator& validator = wxDefaultValidator, const wxString& name = wxTextCtrlNameStr);
+
     virtual ~wxRichTextCtrl( );
 
 // Operations
 
     /// Creation
     bool Create( wxWindow* parent, wxWindowID id = -1, const wxString& value = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
-        long style = wxRE_MULTILINE );
+        long style = wxRE_MULTILINE, const wxValidator& validator = wxDefaultValidator, const wxString& name = wxTextCtrlNameStr );
 
     /// Member initialisation
     void Init();

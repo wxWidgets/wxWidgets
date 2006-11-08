@@ -109,18 +109,22 @@ wxRichTextCtrl::wxRichTextCtrl(wxWindow* parent,
                                const wxString& value,
                                const wxPoint& pos,
                                const wxSize& size,
-                               long style)
+                               long style,
+                               const wxValidator& validator,
+                               const wxString& name)
               : wxScrollHelper(this)
 {
     Init();
-    Create(parent, id, value, pos, size, style);
+    Create(parent, id, value, pos, size, style, validator, name);
 }
 
 /// Creation
-bool wxRichTextCtrl::Create( wxWindow* parent, wxWindowID id, const wxString& value, const wxPoint& pos, const wxSize& size, long style)
+bool wxRichTextCtrl::Create( wxWindow* parent, wxWindowID id, const wxString& value, const wxPoint& pos, const wxSize& size, long style,
+                             const wxValidator& validator, const wxString& name)
 {
     if (!wxTextCtrlBase::Create(parent, id, pos, size,
-                                style|wxFULL_REPAINT_ON_RESIZE))
+                                style|wxFULL_REPAINT_ON_RESIZE,
+                                validator, name))
         return false;
 
     if (!GetFont().Ok())
