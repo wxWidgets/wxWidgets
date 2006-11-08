@@ -221,6 +221,7 @@ wxAuiDefaultTabArt::wxAuiDefaultTabArt()
     m_measuring_font = m_selected_font;
     
     m_fixed_tab_width = 100;
+    m_tab_ctrl_height = 0;
 
     wxColour base_colour = wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE);
 
@@ -284,6 +285,8 @@ void wxAuiDefaultTabArt::SetSizingInfo(const wxSize& tab_ctrl_size,
         
     if (m_fixed_tab_width > 220)
         m_fixed_tab_width = 220;
+        
+    m_tab_ctrl_height = tab_ctrl_size.y;
 }
                        
                        
@@ -316,6 +319,7 @@ void wxAuiDefaultTabArt::DrawTab(wxDC& dc,
                                  wxWindow* wnd,
                                  const wxRect& in_rect,
                                  const wxString& caption_text,
+                                 const wxBitmap& bitmap,
                                  bool active,
                                  int close_button_state,
                                  wxRect* out_tab_rect,
@@ -338,9 +342,15 @@ void wxAuiDefaultTabArt::DrawTab(wxDC& dc,
     dc.GetTextExtent(caption, &normal_textx, &normal_texty);
         
     // figure out the size of the tab
-    wxSize tab_size = GetTabSize(dc, wnd, caption, active, close_button_state, x_extent);
+    wxSize tab_size = GetTabSize(dc,
+                                 wnd,
+                                 caption,
+                                 bitmap,
+                                 active,
+                                 close_button_state,
+                                 x_extent);
 
-    wxCoord tab_height = tab_size.y;
+    wxCoord tab_height = m_tab_ctrl_height - 3;
     wxCoord tab_width = tab_size.x;
     wxCoord tab_x = in_rect.x;
     wxCoord tab_y = in_rect.y + in_rect.height - tab_height;
@@ -388,6 +398,9 @@ void wxAuiDefaultTabArt::DrawTab(wxDC& dc,
     points[5].x = tab_x + tab_width;
     points[5].y = tab_y + tab_height - 4;
 
+    int drawn_tab_yoff = points[1].y;
+    int drawn_tab_height = points[0].y - points[1].y;
+
 
     // draw gradient background
     if (active)
@@ -423,17 +436,33 @@ void wxAuiDefaultTabArt::DrawTab(wxDC& dc,
         dc.DrawLine(points[0].x, points[0].y, points[5].x+1, points[5].y);
     }
     
-    int text_offset;
 
+    int text_offset = tab_x + 8;
     int close_button_width = 0;
-    
     if (close_button_state != wxAUI_BUTTON_STATE_HIDDEN)
     {
         close_button_width = m_active_close_bmp.GetWidth();
     }
     
-    text_offset = tab_x + 8;
     
+    if (bitmap.IsOk())
+    {
+        int bitmap_offset = tab_x + 8;
+        
+        // draw bitmap
+        dc.DrawBitmap(bitmap,
+                      bitmap_offset,
+                      drawn_tab_yoff + (drawn_tab_height/2) - (bitmap.GetHeight()/2) + 1,
+                      true);
+        
+        text_offset = bitmap_offset + bitmap.GetWidth();
+        text_offset += 3; // bitmap padding
+    }
+     else
+    {
+        text_offset = tab_x + 8;
+    }
+        
 
     wxString draw_text = ChopText(dc,
                           caption,
@@ -442,7 +471,7 @@ void wxAuiDefaultTabArt::DrawTab(wxDC& dc,
     // draw tab text
     dc.DrawText(draw_text,
                 text_offset,
-                (tab_y + tab_height)/2 - (texty/2));
+                drawn_tab_yoff + (drawn_tab_height)/2 - (texty/2) - 1);
 
 
 
@@ -481,6 +510,7 @@ int wxAuiDefaultTabArt::GetIndentSize()
 wxSize wxAuiDefaultTabArt::GetTabSize(wxDC& dc,
                                       wxWindow* WXUNUSED(wnd),
                                       const wxString& caption,
+                                      const wxBitmap& bitmap,
                                       bool WXUNUSED(active),
                                       int close_button_state,
                                       int* x_extent)
@@ -493,12 +523,24 @@ wxSize wxAuiDefaultTabArt::GetTabSize(wxDC& dc,
     dc.GetTextExtent(wxT("ABCDEFXj"), &tmp, &measured_texty);
     
     // add padding around the text
-    wxCoord tab_width = measured_textx + 16;
-    wxCoord tab_height = measured_texty + 10;
+    wxCoord tab_width = measured_textx;
+    wxCoord tab_height = measured_texty;
 
+    // if the close button is showing, add space for it
     if (close_button_state != wxAUI_BUTTON_STATE_HIDDEN)
         tab_width += m_active_close_bmp.GetWidth() + 3;
 
+    // if there's a bitmap, add space for it
+    if (bitmap.IsOk())
+    {
+        tab_width += bitmap.GetWidth();
+        tab_width += 3; // right side bitmap padding
+        tab_height = wxMax(tab_height, bitmap.GetHeight());
+    }
+
+    // add padding
+    tab_width += 16;
+    tab_height += 10;
 
     if (m_flags & wxAUI_NB_TAB_FIXED_WIDTH)
     {
@@ -627,18 +669,34 @@ int wxAuiDefaultTabArt::ShowWindowList(wxWindow* wnd,
     return -1;
 }
 
-int wxAuiDefaultTabArt::GetBestTabCtrlSize(wxWindow* wnd)
+int wxAuiDefaultTabArt::GetBestTabCtrlSize(wxWindow* wnd,
+                                           wxAuiNotebookPageArray& pages)
 {
     wxClientDC dc(wnd);
     dc.SetFont(m_measuring_font);
-    int x_ext = 0;
-    wxSize s = GetTabSize(dc,
-                          wnd,
-                          wxT("ABCDEFGHIj"),
-                          true,
-                          wxAUI_BUTTON_STATE_HIDDEN,
-                          &x_ext);
-    return s.y+3;
+    
+    int max_y = 0;
+    size_t i, page_count = pages.GetCount();
+    for (i = 0; i < page_count; ++i)
+    {
+        wxAuiNotebookPage& page = pages.Item(i);
+
+        // we don't use the caption text because we don't
+        // want tab heights to be different in the case
+        // of a very short piece of text on one tab and a very
+        // tall piece of text on another tab
+        int x_ext = 0;
+        wxSize s = GetTabSize(dc,
+                              wnd,
+                              wxT("ABCDEFGHIj"),
+                              page.bitmap,
+                              true,
+                              wxAUI_BUTTON_STATE_HIDDEN,
+                              &x_ext);
+        max_y = wxMax(max_y, s.y);
+    }
+    
+    return max_y+2;
 }
 
 void wxAuiDefaultTabArt::SetNormalFont(const wxFont& font)
@@ -760,6 +818,7 @@ void wxAuiSimpleTabArt::DrawTab(wxDC& dc,
                                 wxWindow* wnd,
                                 const wxRect& in_rect,
                                 const wxString& caption_text,
+                                const wxBitmap& bitmap,
                                 bool active,
                                 int close_button_state,
                                 wxRect* out_tab_rect,
@@ -782,7 +841,13 @@ void wxAuiSimpleTabArt::DrawTab(wxDC& dc,
     dc.GetTextExtent(caption, &normal_textx, &normal_texty);
         
     // figure out the size of the tab
-    wxSize tab_size = GetTabSize(dc, wnd, caption, active, close_button_state, x_extent);
+    wxSize tab_size = GetTabSize(dc,
+                                 wnd,
+                                 caption,
+                                 bitmap,
+                                 active,
+                                 close_button_state,
+                                 x_extent);
 
     wxCoord tab_height = tab_size.y;
     wxCoord tab_width = tab_size.x;
@@ -898,6 +963,7 @@ int wxAuiSimpleTabArt::GetIndentSize()
 wxSize wxAuiSimpleTabArt::GetTabSize(wxDC& dc,
                                      wxWindow* WXUNUSED(wnd),
                                      const wxString& caption,
+                                     const wxBitmap& WXUNUSED(bitmap),
                                      bool WXUNUSED(active),
                                      int close_button_state,
                                      int* x_extent)
@@ -1040,7 +1106,8 @@ int wxAuiSimpleTabArt::ShowWindowList(wxWindow* wnd,
     return -1;
 }
 
-int wxAuiSimpleTabArt::GetBestTabCtrlSize(wxWindow* wnd)
+int wxAuiSimpleTabArt::GetBestTabCtrlSize(wxWindow* wnd,
+                                          wxAuiNotebookPageArray& WXUNUSED(pages))
 {
     wxClientDC dc(wnd);
     dc.SetFont(m_measuring_font);
@@ -1048,6 +1115,7 @@ int wxAuiSimpleTabArt::GetBestTabCtrlSize(wxWindow* wnd)
     wxSize s = GetTabSize(dc,
                           wnd,
                           wxT("ABCDEFGHIj"),
+                          wxNullBitmap,
                           true,
                           wxAUI_BUTTON_STATE_HIDDEN,
                           &x_ext);
@@ -1440,6 +1508,7 @@ void wxAuiTabContainer::Render(wxDC* raw_dc, wxWindow* wnd)
         wxSize size = m_art->GetTabSize(dc,
                             wnd,
                             page.caption,
+                            page.bitmap,
                             page.active,
                             close_button ?
                               wxAUI_BUTTON_STATE_NORMAL :
@@ -1645,6 +1714,7 @@ void wxAuiTabContainer::Render(wxDC* raw_dc, wxWindow* wnd)
                        wnd,
                        rect,
                        page.caption,
+                       page.bitmap,
                        page.active,
                        tab_button.cur_state,
                        &page.rect,
@@ -1681,6 +1751,7 @@ void wxAuiTabContainer::Render(wxDC* raw_dc, wxWindow* wnd)
                        wnd,
                        active_rect,
                        page.caption,
+                       page.bitmap,
                        page.active,
                        tab_button.cur_state,
                        &page.rect,
@@ -2263,24 +2334,43 @@ void wxAuiNotebook::SetArtProvider(wxAuiTabArt* art)
 {
     m_tabs.SetArtProvider(art);
     
-    // choose a default for the tab height
-    m_tab_ctrl_height = art->GetBestTabCtrlSize(this);
-    
-    wxAuiPaneInfoArray& all_panes = m_mgr.GetAllPanes();
-    size_t i, pane_count = all_panes.GetCount();
-    for (i = 0; i < pane_count; ++i)
-    {
-        wxAuiPaneInfo& pane = all_panes.Item(i);
-        if (pane.name == wxT("dummy"))
-            continue;
-        wxTabFrame* tab_frame = (wxTabFrame*)pane.window;
-        wxAuiTabCtrl* tabctrl = tab_frame->m_tabs;
-        tab_frame->SetTabCtrlHeight(m_tab_ctrl_height);
-        tabctrl->SetArtProvider(art->Clone());
-        tab_frame->DoSizing();
-    }
-    
+    SetTabCtrlHeight(CalculateTabCtrlHeight());
 }
+
+void wxAuiNotebook::SetTabCtrlHeight(int height)
+{
+    // if the tab control height needs to change, update
+    // all of our tab controls with the new height
+    if (m_tab_ctrl_height != height)
+    {
+        wxAuiTabArt* art = m_tabs.GetArtProvider();
+        
+        m_tab_ctrl_height = height;
+        
+        wxAuiPaneInfoArray& all_panes = m_mgr.GetAllPanes();
+        size_t i, pane_count = all_panes.GetCount();
+        for (i = 0; i < pane_count; ++i)
+        {
+            wxAuiPaneInfo& pane = all_panes.Item(i);
+            if (pane.name == wxT("dummy"))
+                continue;
+            wxTabFrame* tab_frame = (wxTabFrame*)pane.window;
+            wxAuiTabCtrl* tabctrl = tab_frame->m_tabs;
+            tab_frame->SetTabCtrlHeight(m_tab_ctrl_height);
+            tabctrl->SetArtProvider(art->Clone());
+            tab_frame->DoSizing();
+        }
+    }
+}
+
+int wxAuiNotebook::CalculateTabCtrlHeight()
+{
+    // find out new best tab height
+    wxAuiTabArt* art = m_tabs.GetArtProvider();
+  
+    return art->GetBestTabCtrlSize(this, m_tabs.GetPages());
+}
+
 
 wxAuiTabArt* wxAuiNotebook::GetArtProvider()
 {
@@ -2347,6 +2437,7 @@ bool wxAuiNotebook::InsertPage(size_t page_idx,
          else
         active_tabctrl->InsertPage(page, info, page_idx);
 
+    SetTabCtrlHeight(CalculateTabCtrlHeight());
     DoSizing();
     active_tabctrl->DoShowHide();
 

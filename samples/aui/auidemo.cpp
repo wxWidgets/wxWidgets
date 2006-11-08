@@ -1448,8 +1448,10 @@ wxAuiNotebook* MyFrame::CreateNotebook()
                                     wxPoint(client_size.x, client_size.y),
                                     wxSize(430,200),
                                     m_notebook_style);
+   
+   wxBitmap page_bmp = wxArtProvider::GetBitmap(wxART_NORMAL_FILE, wxART_OTHER, wxSize(16,16));
                                     
-   ctrl->AddPage(CreateHTMLCtrl(ctrl), wxT("Welcome to wxAUI"));
+   ctrl->AddPage(CreateHTMLCtrl(ctrl), wxT("Welcome to wxAUI") , false, page_bmp);
                                     
    wxPanel *panel = new wxPanel( ctrl, wxID_ANY );
    wxFlexGridSizer *flex = new wxFlexGridSizer( 2 );
@@ -1465,10 +1467,10 @@ wxAuiNotebook* MyFrame::CreateNotebook()
                 wxSP_ARROW_KEYS, 5, 50, 5 ), 0, wxALL|wxALIGN_CENTRE, 5 );
    flex->Add( 5,5 );   flex->Add( 5,5 );
    panel->SetSizer( flex );
-   ctrl->AddPage( panel, wxT("wxPanel") );
+   ctrl->AddPage( panel, wxT("wxPanel"), false, page_bmp );
    
    ctrl->AddPage( new wxTextCtrl( ctrl, wxID_ANY, wxT("Some text"),
-                wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE|wxNO_BORDER) , wxT("wxTextCtrl 1") );
+                wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE|wxNO_BORDER) , wxT("wxTextCtrl 1"), false, page_bmp );
                 
    ctrl->AddPage( new wxTextCtrl( ctrl, wxID_ANY, wxT("Some more text"),
                 wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE|wxNO_BORDER) , wxT("wxTextCtrl 2") );
