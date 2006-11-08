@@ -258,6 +258,23 @@
     #define wxUSE_STD_IOSTREAM 0
 #endif
 
+// Enable conversion to standard C++ string if 1.
+//
+// Default is 1 for most compilers.
+//
+// Currently the Digital Mars and Watcom compilers come without standard C++
+// library headers by default, wxUSE_STD_STRING can be set to 1 if you do have
+// them (e.g. from STLPort).
+//
+// VC++ 5.0 does include standard C++ library header, however they produce
+// many warnings that can't be turned off when compiled at warning level 4.
+#if defined(__DMC__) || defined(__WATCOMC__) \
+        || (defined(_MSC_VER) && _MSC_VER < 1200)
+    #define wxUSE_STD_STRING  0
+#else
+    #define wxUSE_STD_STRING  1
+#endif
+
 // Support for positional parameters (e.g. %1$d, %2$s ...) in wxVsnprintf.
 // Note that if the system's implementation does not support positional
 // parameters, setting this to 1 forces the use of the wxWidgets implementation
