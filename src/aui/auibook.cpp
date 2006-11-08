@@ -1736,7 +1736,9 @@ bool wxAuiTabContainer::ButtonHitTest(int x, int y,
     for (i = 0; i < button_count; ++i)
     {
         wxAuiTabContainerButton& button = m_buttons.Item(i);
-        if (button.rect.Contains(x,y))
+        if (button.rect.Contains(x,y) &&
+            !(button.cur_state & (wxAUI_BUTTON_STATE_HIDDEN |
+                                   wxAUI_BUTTON_STATE_DISABLED)))
         {
             if (hit)
                 *hit = &button;
@@ -1748,7 +1750,9 @@ bool wxAuiTabContainer::ButtonHitTest(int x, int y,
     for (i = 0; i < button_count; ++i)
     {
         wxAuiTabContainerButton& button = m_tab_close_buttons.Item(i);
-        if (button.rect.Contains(x,y))
+        if (button.rect.Contains(x,y) &&
+            !(button.cur_state & (wxAUI_BUTTON_STATE_HIDDEN |
+                                   wxAUI_BUTTON_STATE_DISABLED)))
         {
             if (hit)
                 *hit = &button;
@@ -1873,7 +1877,7 @@ void wxAuiTabCtrl::OnLeftDown(wxMouseEvent& evt)
 
     wxWindow* wnd;
     if (TabHitTest(evt.m_x, evt.m_y, &wnd))
-    {        
+    {
         wxAuiNotebookEvent e(wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGING, m_windowId);
         e.SetSelection(GetIdxFromWindow(wnd));
         e.SetOldSelection(GetActivePage());
