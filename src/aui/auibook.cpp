@@ -1403,6 +1403,9 @@ void wxAuiTabContainer::SetTabOffset(size_t offset)
 // provide custom drawing capabilities
 void wxAuiTabContainer::Render(wxDC* raw_dc, wxWindow* wnd)
 {
+    if (!raw_dc || !raw_dc->IsOk())
+        return;
+
     wxMemoryDC dc;
     wxBitmap bmp;
     size_t i;
@@ -1413,6 +1416,8 @@ void wxAuiTabContainer::Render(wxDC* raw_dc, wxWindow* wnd)
     bmp.Create(m_rect.GetWidth(), m_rect.GetHeight());
     dc.SelectObject(bmp);
 
+    if (!dc.IsOk())
+        return;
 
     // find out if size of tabs is larger than can be
     // afforded on screen
