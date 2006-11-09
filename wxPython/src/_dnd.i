@@ -179,7 +179,6 @@ public:
     // wxDragNone if this not specified
     wxDragResult GetDefaultAction();
     
-    %property(Data, GetData, doc="See `GetData`");
     %property(DataObject, GetDataObject, SetDataObject, doc="See `GetDataObject` and `SetDataObject`");
     %property(DefaultAction, GetDefaultAction, SetDefaultAction, doc="See `GetDefaultAction` and `SetDefaultAction`");
 };
