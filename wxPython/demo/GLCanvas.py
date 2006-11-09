@@ -1,5 +1,6 @@
 
 import wx
+import sys
 
 try:
     from wx import glcanvas
@@ -230,7 +231,7 @@ class ConeCanvas(MyCanvasBase):
         # position viewer
         glTranslatef(0.0, 0.0, -2.0);
         #
-        glutInit([])
+        glutInit(sys.argv)
 
 
     def OnDraw(self):
