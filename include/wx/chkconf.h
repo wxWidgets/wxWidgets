@@ -1466,6 +1466,18 @@
 #   endif
 #endif /* wxUSE_HELP */
 
+#if wxUSE_MS_HTML_HELP
+    /*
+        this doesn't make sense for platforms other than MSW but we still
+        define it in wx/setup_inc.h so don't complain if it happens to be
+        defined under another platform but just silently fix it.
+     */
+#   ifndef __WXMSW__
+#       undef wxUSE_MS_HTML_HELP
+#       define wxUSE_MS_HTML_HELP 0
+#   endif
+#endif /* wxUSE_MS_HTML_HELP */
+
 #if wxUSE_WXHTML_HELP
 #   if !wxUSE_HELP || !wxUSE_HTML || !wxUSE_COMBOBOX || !wxUSE_NOTEBOOK || !wxUSE_SPINCTRL
 #       ifdef wxABORT_ON_CONFIG_ERROR
