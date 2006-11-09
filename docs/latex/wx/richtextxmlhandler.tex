@@ -6,6 +6,17 @@ and load and save through the buffer or control API, or you can
 create an instance of the handler on the stack and call its
 functions directly.
 
+\wxheading{Handler flags}
+
+The following flags can be used with this handler, via
+the handler's SetFlags function or the buffer or control's
+SetHandlerFlags function:
+
+\twocolwidtha{7cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{\windowstyle{wxRICHTEXT\_HANDLER\_INCLUDE\_STYLESHEET}}{Include the style sheet in loading and saving operations.}
+\end{twocollist}
+
 \wxheading{Derived from}
 
 \helpref{wxRichTextFileHandler}{wxrichtextfilehandler}

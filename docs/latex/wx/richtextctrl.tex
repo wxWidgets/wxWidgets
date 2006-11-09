@@ -19,7 +19,9 @@ wxTextCtrlBase
 
 \func{}{wxRichTextCtrl}{\void}
 
-\func{}{wxRichTextCtrl}{\param{wxWindow* }{parent}, \param{wxWindowID }{id = wxID\_ANY}, \param{const wxString\& }{value = wxEmptyString}, \param{const wxPoint\& }{pos = wxDefaultPosition}, \param{const wxSize\& }{size = wxDefaultSize}, \param{long }{style = wxRE\_MULTILINE}}
+\func{}{wxRichTextCtrl}{\param{wxWindow* }{parent}, \param{wxWindowID }{id = wxID\_ANY}, \param{const wxString\& }{value = wxEmptyString},
+ \param{const wxPoint\& }{pos = wxDefaultPosition}, \param{const wxSize\& }{size = wxDefaultSize}, \param{long }{style = wxRE\_MULTILINE},
+ \param{const wxValidator\& }{validator = wxDefaultValidator}, \param{const wxString\& }{name = wxTextCtrlNameStr}}
 
 Constructors.
 
@@ -345,7 +347,9 @@ Copies the selected content (if any) to the clipboard.
 
 \membersection{wxRichTextCtrl::Create}\label{wxrichtextctrlcreate}
 
-\func{bool}{Create}{\param{wxWindow* }{parent}, \param{wxWindowID }{id = wxID\_ANY}, \param{const wxString\& }{value = wxEmptyString}, \param{const wxPoint\& }{pos = wxDefaultPosition}, \param{const wxSize\& }{size = wxDefaultSize}, \param{long }{style = wxRE\_MULTILINE}}
+\func{bool}{Create}{\param{wxWindow* }{parent}, \param{wxWindowID }{id = wxID\_ANY}, \param{const wxString\& }{value = wxEmptyString},
+ \param{const wxPoint\& }{pos = wxDefaultPosition}, \param{const wxSize\& }{size = wxDefaultSize}, \param{long }{style = wxRE\_MULTILINE},
+ \param{const wxValidator\& }{validator = wxDefaultValidator}, \param{const wxString\& }{name = wxTextCtrlNameStr}}
 
 Creates the underlying window.
 
@@ -590,6 +594,13 @@ Gets the current filename associated with the control.
 \constfunc{long}{GetFirstVisiblePosition}{\void}
 
 Returns the first visible position in the current view.
+
+\membersection{wxRichTextCtrl::GetHandlerFlags}\label{wxrichtextfilehandlergethandlerflags}
+
+\constfunc{int}{GetHandlerFlags}{\void}
+
+Returns flags that change the behaviour of loading or saving. See the documentation for each
+handler class to see what flags are relevant for each handler.
 
 \membersection{wxRichTextCtrl::GetInsertionPoint}\label{wxrichtextctrlgetinsertionpoint}
 
@@ -1270,6 +1281,13 @@ Sets the current filename.
 \func{bool}{SetFont}{\param{const wxFont\& }{font}}
 
 Sets the font, and also the basic and default attributes (see \helpref{SetDefaultStyle}{wxrichtextctrlsetdefaultstyle}).
+
+\membersection{wxRichTextCtrl::SetHandlerFlags}\label{wxrichtextctrlsethandlerflags}
+
+\func{void}{SetHandlerFlags}{\param{int }{flags}}
+
+Sets flags that change the behaviour of loading or saving. See the documentation for each
+handler class to see what flags are relevant for each handler.
 
 \membersection{wxRichTextCtrl::SetInsertionPoint}\label{wxrichtextctrlsetinsertionpoint}
 

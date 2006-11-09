@@ -64,6 +64,13 @@ Returns the encoding associated with the handler (if any).
 
 Returns the extension associated with the handler.
 
+\membersection{wxRichTextFileHandler::GetFlags}\label{wxrichtextfilehandlergetflags}
+
+\constfunc{int}{GetFlags}{\void}
+
+Returns flags that change the behaviour of loading or saving. See the documentation for each
+handler class to see what flags are relevant for each handler.
+
 \membersection{wxRichTextFileHandler::GetName}\label{wxrichtextfilehandlergetname}
 
 \constfunc{wxString}{GetName}{\void}
@@ -109,6 +116,18 @@ Sets the encoding to use when saving a file. If empty, a suitable encoding is ch
 \func{void}{SetExtension}{\param{const wxString\& }{ext}}
 
 Sets the default extension to recognise.
+
+\membersection{wxRichTextFileHandler::SetFlags}\label{wxrichtextfilehandlersetflags}
+
+\func{void}{SetFlags}{\param{int }{flags}}
+
+Sets flags that change the behaviour of loading or saving. See the documentation for each
+handler class to see what flags are relevant for each handler.
+
+You call this function directly if you are using a file handler explicitly (without
+going through the text control or buffer LoadFile/SaveFile API). Or, you can
+call the control or buffer's SetHandlerFlags function to set the flags that will
+be used for subsequent load and save operations.
 
 \membersection{wxRichTextFileHandler::SetName}\label{wxrichtextfilehandlersetname}
 

@@ -85,6 +85,12 @@ Returns the {\it n}th character style.
 
 Returns the number of character styles.
 
+\membersection{wxRichTextStyleSheet::GetDescription}\label{wxrichtextstylesheetgetdescription}
+
+\constfunc{const wxString\&}{GetDescription}{\void}
+
+Returns the style sheet's description.
+
 \membersection{wxRichTextStyleSheet::GetListStyle}\label{wxrichtextstylesheetgetliststyle}
 
 \constfunc{wxRichTextListStyleDefinition*}{GetListStyle}{\param{size\_t }{n}}
@@ -96,6 +102,12 @@ Returns the {\it n}th list style.
 \constfunc{size\_t}{GetListStyleCount}{\void}
 
 Returns the number of list styles.
+
+\membersection{wxRichTextStyleSheet::GetName}\label{wxrichtextstylesheetgetname}
+
+\constfunc{const wxString\&}{GetName}{\void}
+
+Returns the style sheet's name.
 
 \membersection{wxRichTextStyleSheet::GetParagraphStyle}\label{wxrichtextstylesheetgetparagraphstyle}
 
@@ -132,4 +144,16 @@ Removes a list style.
 \func{bool}{RemoveParagraphStyle}{\param{wxRichTextStyleDefinition* }{def}, \param{bool }{deleteStyle = false}}
 
 Removes a paragraph style.
+
+\membersection{wxRichTextStyleSheet::SetDescription}\label{wxrichtextstylesheetsetdescription}
+
+\func{void}{SetDescription}{\param{const wxString\& }{descr}}
+
+Sets the style sheet's description.
+
+\membersection{wxRichTextStyleSheet::SetName}\label{wxrichtextstylesheetsetname}
+
+\func{void}{SetName}{\param{const wxString\& }{name}}
+
+Sets the style sheet's name.
 

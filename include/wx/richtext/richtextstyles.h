@@ -408,7 +408,7 @@ public:
     /// Creates a suitable HTML fragment for a definition
     wxString CreateHTML(wxRichTextStyleDefinition* def) const;
 
-    /// Associates the control with a style manager
+    /// Associates the control with a style sheet
     void SetStyleSheet(wxRichTextStyleSheet* styleSheet) { m_styleSheet = styleSheet; }
     wxRichTextStyleSheet* GetStyleSheet() const { return m_styleSheet; }
 
@@ -514,7 +514,7 @@ public:
     /// Updates the style list box
     void UpdateStyles();
 
-    /// Associates the control with a style manager
+    /// Associates the control with a style sheet
     void SetStyleSheet(wxRichTextStyleSheet* styleSheet);
     wxRichTextStyleSheet* GetStyleSheet() const;
 
@@ -638,7 +638,7 @@ public:
     /// Updates the list
     void UpdateStyles() { m_stylePopup->UpdateStyles(); }
 
-    /// Associates the control with a style manager
+    /// Associates the control with a style sheet
     void SetStyleSheet(wxRichTextStyleSheet* styleSheet) { m_stylePopup->SetStyleSheet(styleSheet); }
     wxRichTextStyleSheet* GetStyleSheet() const { return m_stylePopup->GetStyleSheet(); }
 

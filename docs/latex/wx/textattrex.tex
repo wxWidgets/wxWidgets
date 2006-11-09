@@ -82,10 +82,11 @@ for a text control.
 #define wxTEXT_ATTR_BULLET_NAME             0x00100000
 #define wxTEXT_ATTR_URL                     0x00200000
 #define wxTEXT_ATTR_PAGE_BREAK              0x00400000
+#define wxTEXT_ATTR_EFFECTS                 0x00800000
 \end{verbatim}
 }
 
-The following styles can be passed to wxRichTextAttr::SetBulletStyle:
+The following styles can be passed to wxTextAttrEx::SetBulletStyle:
 
 {\small
 \begin{verbatim}
@@ -108,7 +109,9 @@ The following styles can be passed to wxRichTextAttr::SetBulletStyle:
 \end{verbatim}
 }
 
-The following constants can be passed to wxRichTextAttr::SetLineSpacing:
+Of these, wxTEXT\_ATTR\_BULLET\_STYLE\_BITMAP is unimplemented.
+
+The following constants can be passed to wxTextAttrEx::SetLineSpacing:
 
 {\small
 \begin{verbatim}
@@ -117,6 +120,26 @@ The following constants can be passed to wxRichTextAttr::SetLineSpacing:
 #define wxTEXT_ATTR_LINE_SPACING_TWICE          20
 \end{verbatim}
 }
+
+The following styles can be passed to wxTextAttrEx::SetTextEffects:
+
+{\small
+\begin{verbatim}
+#define wxTEXT_ATTR_EFFECT_NONE                     0x00000000
+#define wxTEXT_ATTR_EFFECT_CAPITALS                 0x00000001
+#define wxTEXT_ATTR_EFFECT_SMALL_CAPITALS           0x00000002
+#define wxTEXT_ATTR_EFFECT_STRIKETHROUGH            0x00000004
+#define wxTEXT_ATTR_EFFECT_DOUBLE_STRIKETHROUGH     0x00000008
+#define wxTEXT_ATTR_EFFECT_SHADOW                   0x00000010
+#define wxTEXT_ATTR_EFFECT_EMBOSS                   0x00000020
+#define wxTEXT_ATTR_EFFECT_OUTLINE                  0x00000040
+#define wxTEXT_ATTR_EFFECT_ENGRAVE                  0x00000080
+#define wxTEXT_ATTR_EFFECT_SUPERSCRIPT              0x00000100
+#define wxTEXT_ATTR_EFFECT_SUBSCRIPT                0x00000200
+\end{verbatim}
+}
+
+Of these, only wxTEXT\_ATTR\_EFFECT\_CAPITALS and wxTEXT\_ATTR\_EFFECT\_STRIKETHROUGH are implemented.
 
 \wxheading{See also}
 
@@ -172,7 +195,7 @@ Returns the bullet number.
 Returns the bullet style.
 See \helpref{wxTextAttrEx::SetBulletStyle}{wxtextattrexsetbulletstyle} for a list of available styles.
 
-\membersection{wxTextAttrEx::GetBulletText}\label{wxrichtextattrgetbullettext}
+\membersection{wxTextAttrEx::GetBulletText}\label{wxtextattrexgetbullettext}
 
 \constfunc{const wxString\&}{GetBulletText}{\void}
 
@@ -214,6 +237,19 @@ Returns the space in tenths of a millimeter before the paragraph.
 \constfunc{const wxString\&}{GetParagraphStyleName}{\void}
 
 Returns the name of the paragraph style.
+
+\membersection{wxTextAttrEx::GetTextEffectFlags}\label{wxtextattrexgettexteffectflags}
+
+\constfunc{int}{GetTextEffectFlags}{\void}
+
+Returns the text effect bits of interest. See \helpref{wxTextAttr::SetFlags}{wxtextattrsetflags} for further information.
+
+\membersection{wxTextAttrEx::GetTextEffects}\label{wxtextattrexgettexteffects}
+
+\constfunc{int}{GetTextEffects}{\void}
+
+Returns the text effects, a bit list of styles. See \helpref{wxTextAttrEx::SetTextEffects}{wxtextattrexsettexteffects} for
+details.
 
 \membersection{wxTextAttrEx::GetURL}\label{wxtextattrexgeturl}
 
@@ -364,6 +400,8 @@ Sets the bullet style. The following styles can be passed:
 \end{verbatim}
 }
 
+Currently wxTEXT\_ATTR\_BULLET\_STYLE\_BITMAP is not supported.
+
 \membersection{wxTextAttrEx::SetBulletText}\label{wxtextattrexsetbullettext}
 
 \func{void}{SetBulletText}{\param{const wxString\& }{text}}
@@ -421,6 +459,44 @@ Sets the spacing before a paragraph, in tenths of a millimetre.
 \func{void}{SetParagraphStyleName}{\param{const wxString\& }{name}}
 
 Sets the name of the paragraph style.
+
+\membersection{wxTextAttrEx::SetTextEffectFlags}\label{wxtextattrexsettexteffectflags}
+
+\func{void}{SetTextEffectFlags}{\param{int }{flags}}
+
+Sets the text effect bits of interest. You should also pass wxTEXT\_ATTR\_EFFECTS to \helpref{wxTextAttr::SetFlags}{wxtextattrsetflags}.
+
+\membersection{wxTextAttrEx::SetTextEffects}\label{wxtextattrexsettexteffects}
+
+\func{void}{SetTextEffects}{\param{int }{effects}}
+
+Sets the text effects, a bit list of styles.
+
+The following styles can be passed:
+
+{\small
+\begin{verbatim}
+#define wxTEXT_ATTR_EFFECT_NONE                     0x00000000
+#define wxTEXT_ATTR_EFFECT_CAPITALS                 0x00000001
+#define wxTEXT_ATTR_EFFECT_SMALL_CAPITALS           0x00000002
+#define wxTEXT_ATTR_EFFECT_STRIKETHROUGH            0x00000004
+#define wxTEXT_ATTR_EFFECT_DOUBLE_STRIKETHROUGH     0x00000008
+#define wxTEXT_ATTR_EFFECT_SHADOW                   0x00000010
+#define wxTEXT_ATTR_EFFECT_EMBOSS                   0x00000020
+#define wxTEXT_ATTR_EFFECT_OUTLINE                  0x00000040
+#define wxTEXT_ATTR_EFFECT_ENGRAVE                  0x00000080
+#define wxTEXT_ATTR_EFFECT_SUPERSCRIPT              0x00000100
+#define wxTEXT_ATTR_EFFECT_SUBSCRIPT                0x00000200
+\end{verbatim}
+}
+
+Of these, only wxTEXT\_ATTR\_EFFECT\_CAPITALS and wxTEXT\_ATTR\_EFFECT\_STRIKETHROUGH are implemented.
+wxTEXT\_ATTR\_EFFECT\_CAPITALS capitalises text when displayed (leaving the case of the actual buffer
+text unchanged), and wxTEXT\_ATTR\_EFFECT\_STRIKETHROUGH draws a line through text.
+
+To set effects, you should also pass wxTEXT\_ATTR\_EFFECTS to \helpref{wxTextAttr::SetFlags}{wxtextattrsetflags}, and call\rtfsp
+\helpref{wxTextAttrEx::SetTextEffectFlags}{wxtextattrexsettexteffectflags} with the styles (taken from the
+above set) that you are interested in setting.
 
 \membersection{wxTextAttrEx::SetURL}\label{wxtextattrexseturl}
 

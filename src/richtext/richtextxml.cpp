@@ -917,6 +917,10 @@ wxString wxRichTextXMLHandler::CreateStyle(const wxTextAttrEx& attr, bool isPara
         str << wxT(" texteffects=\"");
         str << attr.GetTextEffects();
         str << wxT("\"");
+
+        str << wxT(" texteffectflags=\"");
+        str << attr.GetTextEffectFlags();
+        str << wxT("\"");
     }
 
     if (!attr.GetCharacterStyleName().empty())
@@ -1080,6 +1084,12 @@ bool wxRichTextXMLHandler::GetStyle(wxTextAttrEx& attr, wxXmlNode* node, bool is
     if (!value.IsEmpty())
     {
         attr.SetTextEffects(wxAtoi(value));
+    }
+
+    value = node->GetPropVal(wxT("texteffectflags"), wxEmptyString);
+    if (!value.IsEmpty())
+    {
+        attr.SetTextEffectFlags(wxAtoi(value));
     }
 
     // Set paragraph attributes

@@ -7,9 +7,9 @@ standard \helpref{wxTextAttr}{wxtextattr} class with wxRichTextCtrl.
 
 When setting up a wxRichTextAttr object, pass a bitlist mask to \helpref{SetFlags}{wxrichtextattrsetflags} to
 indicate which style elements should be changed. As a convenience, when you call a setter such
-s SetFont, the relevant bit will be set.
+as SetFont, the relevant bit will be set.
 
-wxRichTextAttr stores attributes without a wxFont object, so is a much more
+wxRichTextAttr stores attributes without a wxFont object, so is a more
 efficient way to query styles than using a \helpref{wxTextAttr}{wxtextattr} or \helpref{wxTextAttrEx}{wxtextattrex} object.
 
 \wxheading{Derived from}
@@ -22,7 +22,7 @@ No base class
 
 \wxheading{Constants}
 
-The following values can be passed to SetAlignment to determine
+The following values can be passed to wxRichTextAttr::SetAlignment to determine
 paragraph alignment.
 
 {\small
@@ -39,7 +39,10 @@ enum wxTextAttrAlignment
 \end{verbatim}
 }
 
-These values are passed in a bitlist to SetFlags to determine
+Of these, wxTEXT\_ALIGNMENT\_JUSTIFIED is unimplemented. In future justification may be supported
+when printing or previewing, only.
+
+The following values are passed in a bitlist to wxRichTextAttr::SetFlags to determine
 what attributes will be considered when setting the attributes
 for a text control.
 
@@ -47,20 +50,20 @@ for a text control.
 \begin{verbatim}
 // Standard wxTextAttr constants
 
-#define wxTEXT_ATTR_TEXT_COLOUR             0x0001
-#define wxTEXT_ATTR_BACKGROUND_COLOUR       0x0002
-#define wxTEXT_ATTR_FONT_FACE               0x0004
-#define wxTEXT_ATTR_FONT_SIZE               0x0008
-#define wxTEXT_ATTR_FONT_WEIGHT             0x0010
-#define wxTEXT_ATTR_FONT_ITALIC             0x0020
-#define wxTEXT_ATTR_FONT_UNDERLINE          0x0040
+#define wxTEXT_ATTR_TEXT_COLOUR             0x00000001
+#define wxTEXT_ATTR_BACKGROUND_COLOUR       0x00000002
+#define wxTEXT_ATTR_FONT_FACE               0x00000004
+#define wxTEXT_ATTR_FONT_SIZE               0x00000008
+#define wxTEXT_ATTR_FONT_WEIGHT             0x00000010
+#define wxTEXT_ATTR_FONT_ITALIC             0x00000020
+#define wxTEXT_ATTR_FONT_UNDERLINE          0x00000040
 #define wxTEXT_ATTR_FONT \
   wxTEXT_ATTR_FONT_FACE | wxTEXT_ATTR_FONT_SIZE | wxTEXT_ATTR_FONT_WEIGHT \
 | wxTEXT_ATTR_FONT_ITALIC | wxTEXT_ATTR_FONT_UNDERLINE
-#define wxTEXT_ATTR_ALIGNMENT               0x0080
-#define wxTEXT_ATTR_LEFT_INDENT             0x0100
-#define wxTEXT_ATTR_RIGHT_INDENT            0x0200
-#define wxTEXT_ATTR_TABS                    0x0400
+#define wxTEXT_ATTR_ALIGNMENT               0x00000080
+#define wxTEXT_ATTR_LEFT_INDENT             0x00000100
+#define wxTEXT_ATTR_RIGHT_INDENT            0x00000200
+#define wxTEXT_ATTR_TABS                    0x00000400
 
 // Extra formatting flags not in wxTextAttr
 
@@ -76,6 +79,7 @@ for a text control.
 #define wxTEXT_ATTR_BULLET_NAME             0x00100000
 #define wxTEXT_ATTR_URL                     0x00200000
 #define wxTEXT_ATTR_PAGE_BREAK              0x00400000
+#define wxTEXT_ATTR_EFFECTS                 0x00800000
 \end{verbatim}
 }
 
@@ -102,6 +106,8 @@ The following styles can be passed to wxRichTextAttr::SetBulletStyle:
 \end{verbatim}
 }
 
+Of these, wxTEXT\_ATTR\_BULLET\_STYLE\_BITMAP is unimplemented.
+
 The following constants can be passed to wxRichTextAttr::SetLineSpacing:
 
 {\small
@@ -111,6 +117,26 @@ The following constants can be passed to wxRichTextAttr::SetLineSpacing:
 #define wxTEXT_ATTR_LINE_SPACING_TWICE          20
 \end{verbatim}
 }
+
+The following styles can be passed to wxTextAttrEx::SetTextEffects:
+
+{\small
+\begin{verbatim}
+#define wxTEXT_ATTR_EFFECT_NONE                     0x00000000
+#define wxTEXT_ATTR_EFFECT_CAPITALS                 0x00000001
+#define wxTEXT_ATTR_EFFECT_SMALL_CAPITALS           0x00000002
+#define wxTEXT_ATTR_EFFECT_STRIKETHROUGH            0x00000004
+#define wxTEXT_ATTR_EFFECT_DOUBLE_STRIKETHROUGH     0x00000008
+#define wxTEXT_ATTR_EFFECT_SHADOW                   0x00000010
+#define wxTEXT_ATTR_EFFECT_EMBOSS                   0x00000020
+#define wxTEXT_ATTR_EFFECT_OUTLINE                  0x00000040
+#define wxTEXT_ATTR_EFFECT_ENGRAVE                  0x00000080
+#define wxTEXT_ATTR_EFFECT_SUPERSCRIPT              0x00000100
+#define wxTEXT_ATTR_EFFECT_SUBSCRIPT                0x00000200
+\end{verbatim}
+}
+
+Of these, only wxTEXT\_ATTR\_EFFECT\_CAPITALS and wxTEXT\_ATTR\_EFFECT\_STRIKETHROUGH are implemented.
 
 \wxheading{See also}
 
@@ -307,6 +333,19 @@ is measured from the left margin and therefore each value must be larger than th
 \constfunc{const wxColour\&}{GetTextColour}{\void}
 
 Returns the text foreground colour.
+
+\membersection{wxRichTextAttr::GetTextEffectFlags}\label{wxrichtextattrgettexteffectflags}
+
+\constfunc{int}{GetTextEffectFlags}{\void}
+
+Returns the text effect bits of interest. See \helpref{wxRichTextAttr::SetFlags}{wxrichtextattrsetflags} for further information.
+
+\membersection{wxRichTextAttr::GetTextEffects}\label{wxrichtextattrgettexteffects}
+
+\constfunc{int}{GetTextEffects}{\void}
+
+Returns the text effects, a bit list of styles. See \helpref{wxRichTextAttr::SetTextEffects}{wxrichtextattrsettexteffects} for
+details.
 
 \membersection{wxRichTextAttr::GetURL}\label{wxrichtextattrgeturl}
 
@@ -507,6 +546,9 @@ enum wxTextAttrAlignment
 \end{verbatim}
 }
 
+Of these, wxTEXT\_ALIGNMENT\_JUSTIFIED is unimplemented. In future justification may be supported
+when printing or previewing, only.
+
 \membersection{wxRichTextAttr::SetBackgroundColour}\label{wxrichtextattrsetbackgroundcolour}
 
 \func{void}{SetBackgroundColour}{\param{const wxColour\& }{colBack}}
@@ -561,6 +603,8 @@ Sets the bullet style. The following styles can be passed:
 \end{verbatim}
 }
 
+Currently wxTEXT\_ATTR\_BULLET\_STYLE\_BITMAP is not supported.
+
 \membersection{wxRichTextAttr::SetBulletText}\label{wxrichtextattrsetbullettext}
 
 \func{void}{SetBulletText}{\param{const wxString& }{text}}
@@ -584,20 +628,20 @@ flags can be passed in a bitlist:
 \begin{verbatim}
 // Standard wxTextAttr constants
 
-#define wxTEXT_ATTR_TEXT_COLOUR             0x0001
-#define wxTEXT_ATTR_BACKGROUND_COLOUR       0x0002
-#define wxTEXT_ATTR_FONT_FACE               0x0004
-#define wxTEXT_ATTR_FONT_SIZE               0x0008
-#define wxTEXT_ATTR_FONT_WEIGHT             0x0010
-#define wxTEXT_ATTR_FONT_ITALIC             0x0020
-#define wxTEXT_ATTR_FONT_UNDERLINE          0x0040
+#define wxTEXT_ATTR_TEXT_COLOUR             0x00000001
+#define wxTEXT_ATTR_BACKGROUND_COLOUR       0x00000002
+#define wxTEXT_ATTR_FONT_FACE               0x00000004
+#define wxTEXT_ATTR_FONT_SIZE               0x00000008
+#define wxTEXT_ATTR_FONT_WEIGHT             0x00000010
+#define wxTEXT_ATTR_FONT_ITALIC             0x00000020
+#define wxTEXT_ATTR_FONT_UNDERLINE          0x00000040
 #define wxTEXT_ATTR_FONT \
   wxTEXT_ATTR_FONT_FACE | wxTEXT_ATTR_FONT_SIZE | wxTEXT_ATTR_FONT_WEIGHT \
 | wxTEXT_ATTR_FONT_ITALIC | wxTEXT_ATTR_FONT_UNDERLINE
-#define wxTEXT_ATTR_ALIGNMENT               0x0080
-#define wxTEXT_ATTR_LEFT_INDENT             0x0100
-#define wxTEXT_ATTR_RIGHT_INDENT            0x0200
-#define wxTEXT_ATTR_TABS                    0x0400
+#define wxTEXT_ATTR_ALIGNMENT               0x00000080
+#define wxTEXT_ATTR_LEFT_INDENT             0x00000100
+#define wxTEXT_ATTR_RIGHT_INDENT            0x00000200
+#define wxTEXT_ATTR_TABS                    0x00000400
 
 // Extra formatting flags not in wxTextAttr
 
@@ -612,6 +656,8 @@ flags can be passed in a bitlist:
 #define wxTEXT_ATTR_BULLET_TEXT             0x00080000
 #define wxTEXT_ATTR_BULLET_NAME             0x00100000
 #define wxTEXT_ATTR_URL                     0x00200000
+#define wxTEXT_ATTR_PAGE_BREAK              0x00400000
+#define wxTEXT_ATTR_EFFECTS                 0x00800000
 \end{verbatim}
 }
 
@@ -725,6 +771,45 @@ Each stop is measured from the left margin and therefore each value must be larg
 \func{void}{SetTextColour}{\param{const wxColour\& }{colText}}
 
 Sets the text foreground colout.
+
+\membersection{wxRichTextAttr::SetTextEffectFlags}\label{wxrichtextattrsettexteffectflags}
+
+\func{void}{SetTextEffectFlags}{\param{int }{flags}}
+
+Sets the text effect bits of interest. You should also pass wxTEXT\_ATTR\_EFFECTS to \helpref{wxRichTextAttr::SetFlags}{wxrichtextattrsetflags}.
+See \helpref{wxRichTextAttr::SetFlags}{wxrichtextattrsetflags} for further information.
+
+\membersection{wxRichTextAttr::SetTextEffects}\label{wxrichtextattrsettexteffects}
+
+\func{void}{SetTextEffects}{\param{int }{effects}}
+
+Sets the text effects, a bit list of styles.
+
+The following styles can be passed:
+
+{\small
+\begin{verbatim}
+#define wxTEXT_ATTR_EFFECT_NONE                     0x00000000
+#define wxTEXT_ATTR_EFFECT_CAPITALS                 0x00000001
+#define wxTEXT_ATTR_EFFECT_SMALL_CAPITALS           0x00000002
+#define wxTEXT_ATTR_EFFECT_STRIKETHROUGH            0x00000004
+#define wxTEXT_ATTR_EFFECT_DOUBLE_STRIKETHROUGH     0x00000008
+#define wxTEXT_ATTR_EFFECT_SHADOW                   0x00000010
+#define wxTEXT_ATTR_EFFECT_EMBOSS                   0x00000020
+#define wxTEXT_ATTR_EFFECT_OUTLINE                  0x00000040
+#define wxTEXT_ATTR_EFFECT_ENGRAVE                  0x00000080
+#define wxTEXT_ATTR_EFFECT_SUPERSCRIPT              0x00000100
+#define wxTEXT_ATTR_EFFECT_SUBSCRIPT                0x00000200
+\end{verbatim}
+}
+
+Of these, only wxTEXT\_ATTR\_EFFECT\_CAPITALS and wxTEXT\_ATTR\_EFFECT\_STRIKETHROUGH are implemented.
+wxTEXT\_ATTR\_EFFECT\_CAPITALS capitalises text when displayed (leaving the case of the actual buffer
+text unchanged), and wxTEXT\_ATTR\_EFFECT\_STRIKETHROUGH draws a line through text.
+
+To set effects, you should also pass wxTEXT\_ATTR\_EFFECTS to \helpref{wxRichTextAttr::SetFlags}{wxrichtextattrsetflags}, and call\rtfsp
+\helpref{wxRichTextAttr::SetTextEffectFlags}{wxrichtextattrsettexteffectflags} with the styles (taken from the
+above set) that you are interested in setting.
 
 \membersection{wxRichTextAttr::SetURL}\label{wxrichtextattrseturl}
 
