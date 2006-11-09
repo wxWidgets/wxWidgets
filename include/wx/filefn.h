@@ -282,7 +282,12 @@ enum wxFileKind
             #endif
         #else // !wxUSE_UNICODE_MSLU
             #ifdef __BORLANDC__
-                #define   wxOpen       _wopen
+                #if __BORLANDC__ >= 0x550 && __BORLANDC__ <= 0x551
+                    WXDLLIMPEXP_BASE int wxOpen(const wxChar *pathname,
+                                                int flags, mode_t mode);
+                #else
+                    #define   wxOpen       _wopen
+                #endif
                 #define   wxAccess     _waccess
                 #define   wxMkDir      _mkdir
                 #define   wxRmDir      _rmdir
