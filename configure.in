@@ -1444,12 +1444,6 @@ dnl is -traditional needed for correct compilations
 dnl   adds -traditional for gcc if needed
 AC_PROG_GCC_TRADITIONAL
 
-dnl do all checks from now on using the C++ compiler: this saves us a lot of
-dnl problems with various functions which may be available in libc but not
-dnl declared in the header and various pointer conversions which compile with
-dnl the C compiler but not in C++
-AC_LANG_PUSH(C++)
-
 dnl C++-compiler checks
 dnl   defines CXX with the compiler to use
 dnl   defines GXX with yes if using gxx
@@ -1715,7 +1709,6 @@ case "${host}" in
       dnl not "g++/c++".
       dnl ---------------------------------------------------------------------
       dnl (OS/2-only piece)
-      AC_LANG_PUSH(C)
       if test "$wxUSE_MOTIF" = 1 -o "$wxUSE_GTK" = 1 -o "$wxUSE_X11" = 1; then
           dnl More complete Unix emulation for unix-like ports
           dnl by linking in POSIX/2's cExt (if available).
@@ -1759,7 +1752,6 @@ case "${host}" in
               wx_cv_gccversion="EMX2"
           )
       ])
-      AC_LANG_POP
       if test "$wx_cv_gccversion" = "EMX2"; then
           LIBS="$LIBS -lstdcpp"
           LDFLAGS="$LDFLAGS -Zsysv-signals"
@@ -2495,9 +2487,9 @@ fi
 dnl check for C99 string to long long conversion functions, assume that if we
 dnl have the unsigned variants, then we have the signed ones as well
 if test "wxUSE_UNICODE" = "yes"; then
-    AC_CHECK_FUNCS(wcstoull)
+    WX_CHECK_FUNCS(wcstoull)
 else
-    AC_CHECK_FUNCS(strtoull)
+    WX_CHECK_FUNCS(strtoull)
 fi
 
 dnl ---------------------------------------------------------------------------
@@ -2972,8 +2964,6 @@ if test "$wxUSE_GUI" = "yes"; then
 
     if test "$wxUSE_GTK" = 1; then
         dnl GTK+ test program must be compiled with C compiler
-        AC_LANG_PUSH(C)
-
         AC_MSG_CHECKING([for GTK+ version])
 
         gtk_version_cached=1
@@ -3136,8 +3126,6 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
             dnl test for XIM support in libgdk
             AC_CHECK_LIB(gdk, gdk_im_open, AC_DEFINE(HAVE_XIM))
         fi
-
-        AC_LANG_POP
 
         dnl we need poll() in src/gtk/app.cpp (we know that Darwin doesn't
         dnl have it but we do the check for the others)
@@ -4339,6 +4327,8 @@ dnl stupidly, provides a dummy function declaration inside its extension)
 dnl succeeds, even with C++ compiler, but the compilation of wxWidgets fails
 dnl
 dnl so we first check if the function is in the library
+dnl
+dnl FIXME: replace this mess with WX_CHECK_FUNCS()
 AC_CHECK_FUNCS(snprintf vsnprintf)
 
 if test "$ac_cv_func_vsnprintf" = "yes"; then
@@ -4540,8 +4530,7 @@ if test "$wxUSE_UNICODE" = yes; then
         fi
     fi
 
-    dnl also look if we have wide char IO functions
-    AC_CHECK_FUNCS(wputc wputchar putws fputws wprintf vswprintf)
+    WX_CHECK_FUNCS(wputc wputchar putws fputws wprintf vswprintf)
 
     dnl MinGW has a vswprintf with a different prototype, and
     dnl a _vsnwprintf with the correct prototype, but AC_CHECK_FUNCS
@@ -4555,18 +4544,14 @@ if test "$wxUSE_UNICODE" = yes; then
 fi
 
 if test "x$ac_cv_header_fnmatch_h" = "xyes"; then
-    AC_CHECK_FUNCS(fnmatch)
+    WX_CHECK_FUNCS(fnmatch)
 fi
 
 if test "$wxUSE_FILE" = "yes"; then
-    AC_CHECK_FUNCS(fsync)
+    WX_CHECK_FUNCS(fsync)
 fi
 
-AC_CHECK_FUNCS(round)
-if test "$ac_cv_func_round" = yes; then
-    AC_CHECK_DECLS(round,,,[#include <math.h>])
-fi
-
+WX_CHECK_FUNCS(round,,,[#include <math.h>])
 
 dnl the following tests are for Unix(like) systems only
 if test "$TOOLKIT" != "MSW"; then
@@ -4824,9 +4809,8 @@ if test "$HAVE_SOME_SLEEP_FUNC" != 1; then
                     POSIX4_LINK=" -lposix4"
                 ],
                 [
-                    AC_CHECK_FUNCS(usleep,
-                        AC_DEFINE(HAVE_USLEEP),
-                        AC_MSG_WARN([wxSleep() function will not work])
+                    WX_CHECK_FUNCS(usleep,,
+                                    AC_MSG_WARN([wxSleep() function will not work])
                     )
                 ]
             )
@@ -4835,7 +4819,7 @@ if test "$HAVE_SOME_SLEEP_FUNC" != 1; then
 fi
 
 dnl check for uname (POSIX) and gethostname (BSD)
-AC_CHECK_FUNCS(uname gethostname, break)
+WX_CHECK_FUNCS(uname gethostname, break)
 
 WX_CHECK_FUNCS(strtok_r, [], [], [#define _REENTRANT])
 
@@ -7327,9 +7311,6 @@ AC_SUBST(CORE_GUI_LIBS)
 dnl ---------------------------------------------------------------------------
 dnl Output the makefiles and such from the results found above
 dnl ---------------------------------------------------------------------------
-
-dnl no more tests from here
-AC_LANG_POP
 
 dnl all additional libraries (except wxWidgets itself) we link with
 

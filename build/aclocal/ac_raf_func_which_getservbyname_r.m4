@@ -23,6 +23,9 @@ AC_DEFUN([AC_raf_FUNC_WHICH_GETSERVBYNAME_R],
 AC_CACHE_CHECK(how many arguments getservbyname_r() takes,
     ac_cv_func_which_getservbyname_r,
     [
+        dnl we need to use C++ to detect missing prototypes
+        AC_LANG_PUSH(C++)
+
         AC_TRY_COMPILE([#include <netdb.h>],
             [
                 char *name;
@@ -60,6 +63,7 @@ AC_CACHE_CHECK(how many arguments getservbyname_r() takes,
                 )
             ]
         )
+        AC_LANG_POP()
     ]
 )
 
