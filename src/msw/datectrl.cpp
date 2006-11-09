@@ -156,6 +156,8 @@ wxDatePickerCtrl::Create(wxWindow *parent,
 
     if ( dt.IsValid() || (style & wxDP_ALLOWNONE) )
         SetValue(dt);
+    else
+        SetValue(wxDateTime::Today());
 
     return true;
 }
