@@ -1055,7 +1055,7 @@
 // Should we use MS HTML help for wxHelpController? If disabled, neither
 // wxCHMHelpController nor wxBestHelpController are available.
 //
-// Default is 1
+// Default is 1 under MSW, 0 is always used for the other platforms.
 //
 // Recommended setting: 1, only set to 0 if you have trouble compiling
 // wxCHMHelpController (could be a problem with really ancient compilers)
