@@ -223,7 +223,18 @@ wxAuiDefaultTabArt::wxAuiDefaultTabArt()
     m_fixed_tab_width = 100;
     m_tab_ctrl_height = 0;
 
-    m_base_colour = wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE);
+#ifdef __WXMAC__
+    wxBrush toolbarbrush;
+    toolbarbrush.MacSetTheme( kThemeBrushToolbarBackground );
+    wxColor base_colour = toolbarbrush.GetColour();
+#else
+    wxColor base_colour = wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE);
+#endif
+
+    m_base_colour = base_colour;
+    wxColor darker2_colour = StepColour(base_colour, 70);
+    
+    m_border_pen = wxPen(darker2_colour);
     m_base_colour_pen = wxPen(m_base_colour);
     m_base_colour_brush = wxBrush(m_base_colour);
     
@@ -286,20 +297,20 @@ void wxAuiDefaultTabArt::DrawBackground(wxDC& dc,
                                         const wxRect& rect)
 {
     // draw background
-    wxRect r(rect.x, rect.y, rect.width+2, rect.height-2);
-    //wxColor start_colour = m_base_colour;
-    //wxColor end_colour = StepColour(start_colour, 110);
+    wxRect r(rect.x, rect.y, rect.width+2, rect.height-3);
     wxColor start_colour = StepColour(m_base_colour, 90);
     wxColor end_colour = StepColour(m_base_colour, 110);
     dc.GradientFillLinear(r, start_colour, end_colour, wxSOUTH);
     
     // draw base lines
-    dc.SetPen(*wxGREY_PEN);
-    dc.DrawLine(0, rect.GetHeight()-4, rect.GetWidth(), rect.GetHeight()-4);
-    dc.DrawLine(0, rect.GetHeight()-1, rect.GetWidth(), rect.GetHeight()-1);
+    int y = rect.GetHeight();
+    int w = rect.GetWidth();
+    dc.SetPen(m_border_pen);
+    dc.DrawLine(0, y-4, w, y-4);
+    dc.DrawLine(0, y-1, w, y-1);
     dc.SetPen(wxPen(start_colour));
-    dc.DrawLine(0, rect.GetHeight()-3, rect.GetWidth(), rect.GetHeight()-3);
-    dc.DrawLine(0, rect.GetHeight()-2, rect.GetWidth(), rect.GetHeight()-2);
+    dc.DrawLine(0, y-3, w, y-3);
+    dc.DrawLine(0, y-2, w, y-2);
 }
 
 
@@ -355,9 +366,6 @@ void wxAuiDefaultTabArt::DrawTab(wxDC& dc,
 
     caption = caption_text;
 
-    dc.SetClippingRegion(in_rect);
-                  
-
 
     // select pen, brush and font for the tab to be drawn
 
@@ -377,56 +385,72 @@ void wxAuiDefaultTabArt::DrawTab(wxDC& dc,
     
     // create points that will make the tab outline
     
-    wxPoint points[6];
-    points[0].x = tab_x;
-    points[0].y = tab_y + tab_height - 4;
-    points[1].x = tab_x;
-    points[1].y = tab_y + 2;
-    points[2].x = tab_x + 2;
-    points[2].y = tab_y;
-    points[3].x = tab_x + tab_width - 2;
-    points[3].y = tab_y;
-    points[4].x = tab_x + tab_width;
-    points[4].y = tab_y + 2;
-    points[5].x = tab_x + tab_width;
-    points[5].y = tab_y + tab_height - 4;
+    wxPoint clip_points[6];
+    clip_points[0] = wxPoint(tab_x,             tab_y+tab_height-3);
+    clip_points[1] = wxPoint(tab_x,             tab_y+2);
+    clip_points[2] = wxPoint(tab_x+2,           tab_y);
+    clip_points[3] = wxPoint(tab_x+tab_width-1, tab_y);
+    clip_points[4] = wxPoint(tab_x+tab_width+1, tab_y+2);
+    clip_points[5] = wxPoint(tab_x+tab_width+1, tab_y+tab_height-3);
 
-    int drawn_tab_yoff = points[1].y;
-    int drawn_tab_height = points[0].y - points[1].y;
+    // set the clipping region for the tab --
+    wxRegion clipping_region(6, clip_points);
+    dc.SetClippingRegion(clipping_region);
+
+    wxPoint border_points[6];
+    border_points[0] = wxPoint(tab_x,             tab_y+tab_height-4);
+    border_points[1] = wxPoint(tab_x,             tab_y+2);
+    border_points[2] = wxPoint(tab_x+2,           tab_y);
+    border_points[3] = wxPoint(tab_x+tab_width-2, tab_y);
+    border_points[4] = wxPoint(tab_x+tab_width,   tab_y+2);
+    border_points[5] = wxPoint(tab_x+tab_width,   tab_y+tab_height-4);
+
+    
+    int drawn_tab_yoff = border_points[1].y;
+    int drawn_tab_height = border_points[0].y - border_points[1].y;
+
 
     if (active)
-    {        
+    {
         // draw active tab   
         
-        // move rectangle in a bit so that the inside border has
-        // a bevelled look
-        wxRect r(tab_x, tab_y+1, tab_width, tab_height-3);
-        r.x += 2;
-        r.width -= 2;
-        
         // draw base background color
+        wxRect r(tab_x, tab_y, tab_width, tab_height);
+        dc.SetPen(m_base_colour_pen);
+        dc.SetBrush(m_base_colour_brush);
+        dc.DrawRectangle(r.x, r.y, r.width, r.height);
+        
+        // this white helps fill out the gradient at the top of the tab
         dc.SetPen(*wxWHITE_PEN);
         dc.SetBrush(*wxWHITE_BRUSH);
-        dc.DrawRectangle(r.x, r.y, r.width-1, r.height-1);
+        dc.DrawRectangle(r.x+2, r.y+2, r.width-3, r.height);
+        
+        // these two points help the rounded corners appear more antialiased
+        dc.SetPen(m_base_colour_pen);
+        dc.DrawPoint(r.x+2, r.y+2);
+        dc.DrawPoint(r.x+r.width-2, r.y+2);
         
         // set rectangle down a bit for gradient drawing
         r.SetHeight(r.GetHeight()/2);
+        r.x += 2;
+        r.width -= 2;
         r.y += r.height;
         
         // draw gradient background
-        wxColor start_color = m_base_colour;
+        wxColor start_color = StepColour(m_base_colour, 95);
         wxColor end_color = *wxWHITE;
         dc.GradientFillLinear(r, start_color, end_color, wxNORTH);
     }
      else
     {
         // draw inactive tab
+        
         wxRect r(tab_x, tab_y+1, tab_width, tab_height-3);
         
         // draw base background color for inactive tabs
         dc.SetPen(m_base_colour_pen);
         dc.SetBrush(m_base_colour_brush);
-        dc.DrawRectangle(r.x, r.y, r.width-1, r.height-1);
+        dc.DrawRectangle(r.x, r.y, r.width, r.height);
 
         // start the gradent up a bit and leave the inside border inset
         // by a pixel for a 3D look.  Only the top half of the inactive
@@ -442,16 +466,20 @@ void wxAuiDefaultTabArt::DrawTab(wxDC& dc,
     }
     
     // draw tab outline 
-    dc.SetPen(*wxGREY_PEN);
+    dc.SetPen(m_border_pen);
     dc.SetBrush(*wxTRANSPARENT_BRUSH);
-    dc.DrawPolygon(6, points);
+    dc.DrawPolygon(6, border_points);
     
     // there are two horizontal grey lines at the bottom of the tab control,
     // this gets rid of the top one of those lines in the tab control
     if (active)
     {
-        dc.SetPen(m_base_colour_pen);
-        dc.DrawLine(points[0].x, points[0].y, points[5].x+1, points[5].y);
+        wxColor start_color = StepColour(m_base_colour, 93);
+        dc.SetPen(wxPen(start_color));
+        dc.DrawLine(border_points[0].x,
+                    border_points[0].y,
+                    border_points[5].x+1,
+                    border_points[5].y);
     }
     
 

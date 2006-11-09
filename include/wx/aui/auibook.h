@@ -265,6 +265,7 @@ protected:
     wxFont m_measuring_font;
     wxColour m_base_colour;
     wxPen m_base_colour_pen;
+    wxPen m_border_pen;
     wxBrush m_base_colour_brush;
     wxBitmap m_active_close_bmp;
     wxBitmap m_disabled_close_bmp;
