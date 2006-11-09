@@ -553,14 +553,10 @@
 // XML parsing classes. Note that their API will change in the future, so
 // using wxXmlDocument and wxXmlNode in your app is not recommended.
 //
-// Default is 1
+// Default is the same as wxUSE_XRC, i.e. 1 by default.
 //
 // Recommended setting: 1 (required by XRC)
-#if wxUSE_XRC
-#  define wxUSE_XML       1
-#else
-#  define wxUSE_XML       0
-#endif
+#define wxUSE_XML       wxUSE_XRC
 
 // Use wxWidget's AUI docking system
 //
@@ -1064,7 +1060,7 @@
 // Should we use MS HTML help for wxHelpController? If disabled, neither
 // wxCHMHelpController nor wxBestHelpController are available.
 //
-// Default is 1
+// Default is 1 under MSW, 0 is always used for the other platforms.
 //
 // Recommended setting: 1, only set to 0 if you have trouble compiling
 // wxCHMHelpController (could be a problem with really ancient compilers)

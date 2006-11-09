@@ -294,11 +294,7 @@
 
 #define wxUSE_XRC       0
 
-#if wxUSE_XRC
-#define wxUSE_XML       0
-#else
-#  define wxUSE_XML       0
-#endif
+#define wxUSE_XML       wxUSE_XRC
 
 #define wxUSE_AUI       0
 
