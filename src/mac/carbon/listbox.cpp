@@ -537,7 +537,7 @@ wxMacDataBrowserListControl::wxMacDataBrowserListControl( wxWindow *peer, const 
     }
     else if ( style & wxLB_EXTENDED )
     {
-        // default behaviour
+        options |= kDataBrowserCmdTogglesSelection;
     }
     else
     {
