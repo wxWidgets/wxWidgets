@@ -518,6 +518,7 @@ class wxPyAuiTabArt :  public wxAuiDefaultTabArt
                           wxWindow* wnd,
                           const wxRect& in_rect,
                           const wxString& caption,
+                          const wxBitmap& bitmap,
                           bool active,
                           int close_button_state,
                           wxRect* out_tab_rect,
@@ -532,10 +533,11 @@ class wxPyAuiTabArt :  public wxAuiDefaultTabArt
             PyObject* ownd = wxPyMake_wxObject(wnd, false);
             PyObject* orect = wxPyConstructObject((void*)&in_rect, wxT("wxRect"), 0);
             PyObject* otext = wx2PyString(caption);
+            PyObject* obmp = wxPyMake_wxObject((wxObject*)&bitmap, false);
             PyObject* ro;
             ro = wxPyCBH_callCallbackObj(m_myInst, Py_BuildValue(
-                                             "(OOOOii)",
-                                             odc, ownd, orect, otext,
+                                             "(OOOOOii)",
+                                             odc, ownd, orect, otext, obmp,
                                              (int)active, close_button_state));
             if (ro) {
                 if (PySequence_Check(ro) && PyObject_Length(ro) == 3) {
@@ -565,10 +567,11 @@ class wxPyAuiTabArt :  public wxAuiDefaultTabArt
             Py_DECREF(ownd);
             Py_DECREF(orect);
             Py_DECREF(otext);
+            Py_DECREF(obmp);
         }
         wxPyEndBlockThreads(blocked);
         if (!found)
-            wxAuiDefaultTabArt::DrawTab(dc, wnd, in_rect, caption, active, close_button_state, out_tab_rect, out_button_rect, x_extent);
+            wxAuiDefaultTabArt::DrawTab(dc, wnd, in_rect, caption, bitmap, active, close_button_state, out_tab_rect, out_button_rect, x_extent);
     }
 
 
@@ -613,6 +616,7 @@ class wxPyAuiTabArt :  public wxAuiDefaultTabArt
     virtual wxSize GetTabSize( wxDC& dc,
                                wxWindow* wnd,
                                const wxString& caption,
+                               const wxBitmap& bitmap,
                                bool active,
                                int  close_button_state,
                                int* x_extent)
@@ -625,9 +629,10 @@ class wxPyAuiTabArt :  public wxAuiDefaultTabArt
             PyObject* odc = wxPyMake_wxObject(&dc, false);
             PyObject* ownd = wxPyMake_wxObject(wnd, false);
             PyObject* otext = wx2PyString(caption);
+            PyObject* obmp = wxPyMake_wxObject((wxObject*)&bitmap, false);
             PyObject* ro;
             ro = wxPyCBH_callCallbackObj(m_myInst, Py_BuildValue(
-                                             "(OOOi)", odc, ownd, otext, (int)active, close_button_state));
+                                             "(OOOOii)", odc, ownd, otext, obmp, (int)active, close_button_state));
             if (ro) {
                 if (PySequence_Check(ro) && PyObject_Length(ro) == 2) {
                     PyObject* o1 = PySequence_GetItem(ro, 0);
@@ -651,10 +656,11 @@ class wxPyAuiTabArt :  public wxAuiDefaultTabArt
             Py_DECREF(odc);
             Py_DECREF(ownd);
             Py_DECREF(otext);
+            Py_DECREF(obmp);
         }
         wxPyEndBlockThreads(blocked);
         if (!found)
-            rv = wxAuiDefaultTabArt::GetTabSize(dc, wnd, caption, active, close_button_state, x_extent);
+            rv = wxAuiDefaultTabArt::GetTabSize(dc, wnd, caption, bitmap, active, close_button_state, x_extent);
         return rv;
     }
 
@@ -663,15 +669,21 @@ class wxPyAuiTabArt :  public wxAuiDefaultTabArt
 //                          wxWindow* wnd,
 //                          const wxArrayString& items,
 //                          int active_idx);
+// 
+//     virtual int GetBestTabCtrlSize(wxWindow* wnd,
+//                                    wxAuiNotebookPageArray& pages);      
+//     virtual wxAuiTabArt* Clone();
+//     virtual void SetFlags(unsigned int flags);
+//     virtual void SetSizingInfo(const wxSize& tab_ctrl_size,
+//                                size_t tab_count);
+//     virtual int GetIndentSize();
+    
 
-// TODO    
-//     virtual int GetBestTabCtrlSize(wxWindow* wnd);      
-  
 
     DEC_PYCALLBACK__FONT(SetNormalFont);
     DEC_PYCALLBACK__FONT(SetSelectedFont);
     DEC_PYCALLBACK__FONT(SetMeasuringFont);
-    DEC_PYCALLBACK_INT_WIN(GetBestTabCtrlSize);
+//    DEC_PYCALLBACK_INT_WIN(GetBestTabCtrlSize);
 
     PYPRIVATE;
 };
@@ -680,7 +692,7 @@ class wxPyAuiTabArt :  public wxAuiDefaultTabArt
 IMP_PYCALLBACK__FONT(wxPyAuiTabArt, wxAuiDefaultTabArt, SetNormalFont);
 IMP_PYCALLBACK__FONT(wxPyAuiTabArt, wxAuiDefaultTabArt, SetSelectedFont);
 IMP_PYCALLBACK__FONT(wxPyAuiTabArt, wxAuiDefaultTabArt, SetMeasuringFont);
-IMP_PYCALLBACK_INT_WIN(wxPyAuiTabArt, wxAuiDefaultTabArt, GetBestTabCtrlSize);
+//IMP_PYCALLBACK_INT_WIN(wxPyAuiTabArt, wxAuiDefaultTabArt, GetBestTabCtrlSize);
 %}
 
 
