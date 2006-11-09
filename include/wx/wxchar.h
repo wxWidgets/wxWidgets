@@ -109,6 +109,10 @@
         /* include stdlib.h for wchar_t */
         #include <stdlib.h>
     #endif /* HAVE_WCHAR_H */
+
+    #ifdef HAVE_WIDEC_H
+        #include <widec.h>
+    #endif
 #endif /* wxUSE_WCHAR_T */
 
 /* ---------------------------------------------------------------------------- */

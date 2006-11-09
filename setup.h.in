@@ -1058,6 +1058,9 @@
 /* Define if you have the <wctype.h> header file.  */
 #undef HAVE_WCTYPE_H
 
+/* Define if you have <widec.h> (Solaris only) */
+#undef HAVE_WIDEC_H
+
 /* Define if you have the <iconv.h> header file and iconv() symbol.  */
 #undef HAVE_ICONV
 
