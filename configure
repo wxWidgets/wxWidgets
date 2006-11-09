@@ -34014,7 +34014,7 @@ if test "$wxUSE_SHARED" = "yes"; then
 
     case "${host}" in
         *-*-cygwin* | *-*-mingw* )
-                                                                                                found_versioning=no
+                                                                                                wx_cv_version_script=no
             ;;
 
         *)
@@ -50945,7 +50945,11 @@ fi
           ac_config_files="$ac_config_files lib/wx/config/inplace-${TOOLCHAIN_FULLNAME}:wx-config-inplace.in"
 
 
-                    ac_config_files="$ac_config_files version-script Makefile"
+if test "$wx_cv_version_script" = "yes"; then
+              ac_config_files="$ac_config_files version-script"
+
+fi
+          ac_config_files="$ac_config_files Makefile"
 
 
           ac_config_commands="$ac_config_commands wx-config"

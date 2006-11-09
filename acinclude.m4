@@ -544,7 +544,7 @@ AC_DEFUN([WX_VERSIONED_SYMBOLS],
             dnl to use it for cygwin/mingw32, keep in mind that replacing last
             dnl comma with the equal sign works) so
             dnl simply disable it
-            found_versioning=no
+            wx_cv_version_script=no
             ;;
 
         *)

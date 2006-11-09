@@ -7904,7 +7904,10 @@ AC_CONFIG_FILES([ lib/wx/config/inplace-${TOOLCHAIN_FULLNAME}:wx-config-inplace.
                 [ chmod +x lib/wx/config/inplace-${TOOLCHAIN_FULLNAME} ],
                 [ TOOLCHAIN_FULLNAME="${TOOLCHAIN_FULLNAME}" ])
 
-AC_CONFIG_FILES([ version-script Makefile ])
+if test "$wx_cv_version_script" = "yes"; then
+    AC_CONFIG_FILES(version-script)
+fi
+AC_CONFIG_FILES(Makefile)
 
 AC_CONFIG_COMMANDS([wx-config],
                    [ rm -f wx-config
