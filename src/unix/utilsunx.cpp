@@ -790,7 +790,13 @@ static bool wxGetHostNameInternal(wxChar *buf, int sz)
         buf[sz] = wxT('\0');
     }
 #elif defined(HAVE_GETHOSTNAME)
-    bool ok = gethostname(buf, sz) != -1;
+    char cbuf[sz];
+    bool ok = gethostname(cbuf, sz) != -1;
+    if ( ok )
+    {
+        wxStrncpy(buf, wxConvertMB2WX(cbuf), sz - 1);
+        buf[sz] = wxT('\0');
+    }
 #else // no uname, no gethostname
     wxFAIL_MSG(wxT("don't know host name for this machine"));
 
