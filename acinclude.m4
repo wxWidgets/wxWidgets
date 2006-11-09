@@ -404,7 +404,7 @@ dnl this macro checks for a command line argument and caches the result
 dnl usage: WX_ARG_WITH(option, helpmessage, variable-name, [withstring])
 AC_DEFUN([WX_ARG_WITH],
         [
-	  withstring=$4
+          withstring=$4
           AC_MSG_CHECKING([for --${withstring:-with}-$1])
           no_cache=0
           AC_ARG_WITH($1, [$2],
@@ -446,7 +446,7 @@ dnl message when running configure instead of the default "checking for
 dnl --enable-foo" one whih is useful for the options enabled by default
 AC_DEFUN([WX_ARG_ENABLE],
         [
-	  enablestring=$4
+          enablestring=$4
           AC_MSG_CHECKING([for --${enablestring:-enable}-$1])
           no_cache=0
           AC_ARG_ENABLE($1, [$2],
@@ -488,12 +488,12 @@ dnl   WX_ARG_ENABLE_PARAM(option, helpmessage, variable-name, enablestring)
 dnl
 dnl Example:
 dnl   WX_ARG_ENABLE_PARAM(foo, [[  --enable-foo[=bar] use foo]], wxUSE_FOO)
-dnl 
+dnl
 dnl  --enable-foo       wxUSE_FOO=yes
 dnl  --disable-foo      wxUSE_FOO=no
 dnl  --enable-foo=bar   wxUSE_FOO=bar
 dnl  <not given>        value from configarg.cache or wxUSE_FOO=no
-dnl 
+dnl
 AC_DEFUN([WX_ARG_ENABLE_PARAM],
         [
           enablestring=$4
@@ -535,81 +535,80 @@ dnl call WX_VERSIONED_SYMBOLS(versionfile)
 dnl ---------------------------------------------------------------------------
 AC_DEFUN([WX_VERSIONED_SYMBOLS],
 [
-  found_versioning=no
+    case "${host}" in
+        *-*-cygwin* | *-*-mingw* )
+            dnl although ld does support version script option on these
+            dnl platforms, it doesn't make much sense to use it under Win32
+            dnl and, moreover, this breaks linking because of a bug in handling
+            dnl paths in -Wl,--version-script,path option (if we ever do need
+            dnl to use it for cygwin/mingw32, keep in mind that replacing last
+            dnl comma with the equal sign works) so
+            dnl simply disable it
+            found_versioning=no
+            ;;
 
-  dnl FIXME - doesn't work, Solaris linker doesn't accept wildcards
-  dnl         in the script.
-  dnl dnl Check for known non-gcc cases:
-  dnl case "${host}" in
-  dnl   *-*-solaris2* )
-  dnl     if test "x$GCC" != "xyes" ; then
-  dnl         LDFLAGS_VERSIONING="-M $1"
-  dnl         found_versioning=yes
-  dnl     fi
-  dnl   ;;
-  dnl esac
-  
-  dnl Generic check for GCC or GCC-like behaviour (Intel C++, GCC):
-  if test $found_versioning = no ; then
-      AC_CACHE_CHECK([if the linker accepts --version-script], wx_cv_version_script,
-      [
-        echo "VER_1 { *; };" >conftest.sym
-        echo "int main() { return 0; }" >conftest.cpp
-  
-        if AC_TRY_COMMAND([
-                $CXX -o conftest.output $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.cpp
-                -Wl,--version-script,conftest.sym >/dev/null 2>conftest.stderr]) ; then
-          if test -s conftest.stderr ; then
-              wx_cv_version_script=no
-          else
-              wx_cv_version_script=yes
-          fi
-        else
-          wx_cv_version_script=no
-        fi
+        *)
+            AC_CACHE_CHECK([if the linker accepts --version-script], wx_cv_version_script,
+            [
+                echo "VER_1 { *; };" >conftest.sym
+                echo "int main() { return 0; }" >conftest.cpp
 
-        dnl There's a problem in some old linkers with --version-script that
-        dnl can cause linking to fail when you have objects with vtables in
-        dnl libs 3 deep.  This is known to happen in netbsd and openbsd with
-        dnl ld 2.11.2.
-        dnl 
-        dnl To test for this we need to make some shared libs and
-        dnl unfortunately we can't be sure of the right way to do that. If the
-        dnl first two compiles don't succeed then it looks like the test isn't
-        dnl working and the result is ignored, but if OTOH the first two
-        dnl succeed but the third does not then the bug has been detected and
-        dnl the --version-script flag is dropped.
-        if test $wx_cv_version_script = yes
-        then
-          echo "struct B { virtual ~B() { } }; \
-                struct D : public B { }; \
-                void F() { D d; }" > conftest.cpp
+                if AC_TRY_COMMAND([
+                        $CXX -o conftest.output $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.cpp
+                        -Wl,--version-script,conftest.sym >/dev/null 2>conftest.stderr]) ; then
+                  if test -s conftest.stderr ; then
+                      wx_cv_version_script=no
+                  else
+                      wx_cv_version_script=yes
+                  fi
+                else
+                  wx_cv_version_script=no
+                fi
 
-          if AC_TRY_COMMAND([
-                $CXX -shared -fPIC -o conftest1.output $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.cpp
-                -Wl,--version-script,conftest.sym >/dev/null 2>/dev/null]) &&
-             AC_TRY_COMMAND([
-                $CXX -shared -fPIC -o conftest2.output $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.cpp
-                -Wl,--version-script,conftest.sym conftest1.output >/dev/null 2>/dev/null])
-          then
-            if AC_TRY_COMMAND([
-                  $CXX -shared -fPIC -o conftest3.output $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.cpp
-                  -Wl,--version-script,conftest.sym conftest2.output conftest1.output >/dev/null 2>/dev/null])
-            then
-              wx_cv_version_script=yes
-            else
-              wx_cv_version_script=no
+                dnl There's a problem in some old linkers with --version-script that
+                dnl can cause linking to fail when you have objects with vtables in
+                dnl libs 3 deep.  This is known to happen in netbsd and openbsd with
+                dnl ld 2.11.2.
+                dnl
+                dnl To test for this we need to make some shared libs and
+                dnl unfortunately we can't be sure of the right way to do that. If the
+                dnl first two compiles don't succeed then it looks like the test isn't
+                dnl working and the result is ignored, but if OTOH the first two
+                dnl succeed but the third does not then the bug has been detected and
+                dnl the --version-script flag is dropped.
+                if test $wx_cv_version_script = yes
+                then
+                  echo "struct B { virtual ~B() { } }; \
+                        struct D : public B { }; \
+                        void F() { D d; }" > conftest.cpp
+
+                  if AC_TRY_COMMAND([
+                        $CXX -shared -fPIC -o conftest1.output $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.cpp
+                        -Wl,--version-script,conftest.sym >/dev/null 2>/dev/null]) &&
+                     AC_TRY_COMMAND([
+                        $CXX -shared -fPIC -o conftest2.output $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.cpp
+                        -Wl,--version-script,conftest.sym conftest1.output >/dev/null 2>/dev/null])
+                  then
+                    if AC_TRY_COMMAND([
+                          $CXX -shared -fPIC -o conftest3.output $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.cpp
+                          -Wl,--version-script,conftest.sym conftest2.output conftest1.output >/dev/null 2>/dev/null])
+                    then
+                      wx_cv_version_script=yes
+                    else
+                      wx_cv_version_script=no
+                    fi
+                  fi
+                fi
+
+                rm -f conftest.output conftest.stderr conftest.sym conftest.cpp
+                rm -f conftest1.output conftest2.output conftest3.output
+            ])
+
+            if test $wx_cv_version_script = yes ; then
+                LDFLAGS_VERSIONING="-Wl,--version-script,$1"
             fi
-          fi
-        fi
-
-        rm -f conftest.output conftest.stderr conftest.sym conftest.cpp
-        rm -f conftest1.output conftest2.output conftest3.output
-      ])
-      if test $wx_cv_version_script = yes ; then
-        LDFLAGS_VERSIONING="-Wl,--version-script,$1"
-      fi
-  fi
+            ;;
+    esac
 ])
 
 

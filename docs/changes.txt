@@ -82,6 +82,10 @@ All:
 
 - wxArrayString::Alloc() now works as reserve() and doesn't clear array contents
 
+wxMSW:
+
+- Fixed version script problems when using configure with cygwin/mingw32
+
 2.7.2
 -----
 

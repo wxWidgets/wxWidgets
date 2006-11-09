@@ -2645,7 +2645,7 @@ done
 
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-gui" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-gui... $ECHO_C" >&6
           no_cache=0
@@ -2686,7 +2686,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-monolithic" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-monolithic... $ECHO_C" >&6
           no_cache=0
@@ -2727,7 +2727,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-plugins" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-plugins... $ECHO_C" >&6
           no_cache=0
@@ -2768,7 +2768,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  withstring=without
+          withstring=without
           echo "$as_me:$LINENO: checking for --${withstring:-with}-subdirs" >&5
 echo $ECHO_N "checking for --${withstring:-with}-subdirs... $ECHO_C" >&6
           no_cache=0
@@ -2813,7 +2813,7 @@ echo "${ECHO_T}no" >&6
 if test "$wxUSE_GUI" = "yes"; then
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-universal" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-universal... $ECHO_C" >&6
           no_cache=0
@@ -2920,7 +2920,7 @@ if test "${with_x11+set}" = set; then
   wxUSE_X11="$withval" wxUSE_UNIVERSAL="yes" CACHE_X11=1 TOOLKIT_GIVEN=1
 fi;
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-nanox" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-nanox... $ECHO_C" >&6
           no_cache=0
@@ -2967,7 +2967,7 @@ if test "${enable_gtk2+set}" = set; then
   wxUSE_GTK2="$enableval"
 fi;
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-gpe" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-gpe... $ECHO_C" >&6
           no_cache=0
@@ -3245,7 +3245,7 @@ echo "$as_me: error: Invalid value for --with-libxpm: should be yes, no, sys, or
           fi
 
 
-	  withstring=
+          withstring=
           echo "$as_me:$LINENO: checking for --${withstring:-with}-libmspack" >&5
 echo $ECHO_N "checking for --${withstring:-with}-libmspack... $ECHO_C" >&6
           no_cache=0
@@ -3287,7 +3287,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  withstring=
+          withstring=
           echo "$as_me:$LINENO: checking for --${withstring:-with}-sdl" >&5
 echo $ECHO_N "checking for --${withstring:-with}-sdl... $ECHO_C" >&6
           no_cache=0
@@ -3329,7 +3329,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  withstring=
+          withstring=
           echo "$as_me:$LINENO: checking for --${withstring:-with}-gnomeprint" >&5
 echo $ECHO_N "checking for --${withstring:-with}-gnomeprint... $ECHO_C" >&6
           no_cache=0
@@ -3371,7 +3371,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  withstring=
+          withstring=
           echo "$as_me:$LINENO: checking for --${withstring:-with}-gnomevfs" >&5
 echo $ECHO_N "checking for --${withstring:-with}-gnomevfs... $ECHO_C" >&6
           no_cache=0
@@ -3413,7 +3413,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  withstring=
+          withstring=
           echo "$as_me:$LINENO: checking for --${withstring:-with}-hildon" >&5
 echo $ECHO_N "checking for --${withstring:-with}-hildon... $ECHO_C" >&6
           no_cache=0
@@ -3455,7 +3455,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  withstring=
+          withstring=
           echo "$as_me:$LINENO: checking for --${withstring:-with}-opengl" >&5
 echo $ECHO_N "checking for --${withstring:-with}-opengl... $ECHO_C" >&6
           no_cache=0
@@ -3509,7 +3509,7 @@ fi
 fi
 
 
-	  withstring=
+          withstring=
           echo "$as_me:$LINENO: checking for --${withstring:-with}-dmalloc" >&5
 echo $ECHO_N "checking for --${withstring:-with}-dmalloc... $ECHO_C" >&6
           no_cache=0
@@ -3789,7 +3789,7 @@ echo "$as_me: error: Invalid value for --with-expat: should be yes, no, sys, or 
 
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-shared" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-shared... $ECHO_C" >&6
           no_cache=0
@@ -3830,7 +3830,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-optimise" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-optimise... $ECHO_C" >&6
           no_cache=0
@@ -3871,7 +3871,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-debug" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-debug... $ECHO_C" >&6
           no_cache=0
@@ -3912,7 +3912,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-stl" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-stl... $ECHO_C" >&6
           no_cache=0
@@ -3955,7 +3955,7 @@ echo "${ECHO_T}no" >&6
 if test "$USE_OS2" = "1"; then
     DEFAULT_wxUSE_OMF=no
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-omf" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-omf... $ECHO_C" >&6
           no_cache=0
@@ -4008,7 +4008,7 @@ elif test "$wxUSE_DEBUG" = "no"; then
 fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-debug_flag" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-debug_flag... $ECHO_C" >&6
           no_cache=0
@@ -4049,7 +4049,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-debug_info" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-debug_info... $ECHO_C" >&6
           no_cache=0
@@ -4090,7 +4090,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-debug_gdb" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-debug_gdb... $ECHO_C" >&6
           no_cache=0
@@ -4131,7 +4131,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-debug_cntxt" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-debug_cntxt... $ECHO_C" >&6
           no_cache=0
@@ -4172,7 +4172,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-mem_tracing" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-mem_tracing... $ECHO_C" >&6
           no_cache=0
@@ -4213,7 +4213,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-profile" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-profile... $ECHO_C" >&6
           no_cache=0
@@ -4254,7 +4254,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-no_rtti" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-no_rtti... $ECHO_C" >&6
           no_cache=0
@@ -4295,7 +4295,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-no_exceptions" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-no_exceptions... $ECHO_C" >&6
           no_cache=0
@@ -4336,7 +4336,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-permissive" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-permissive... $ECHO_C" >&6
           no_cache=0
@@ -4377,7 +4377,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-no_deps" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-no_deps... $ECHO_C" >&6
           no_cache=0
@@ -4451,7 +4451,7 @@ echo "${ECHO_T}$wxUSE_UNIVERSAL_BINARY" >&6
 
 
 
-	  enablestring=enable
+          enablestring=enable
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-compat24" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-compat24... $ECHO_C" >&6
           no_cache=0
@@ -4492,7 +4492,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=disable
+          enablestring=disable
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-compat26" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-compat26... $ECHO_C" >&6
           no_cache=0
@@ -4534,7 +4534,7 @@ echo "${ECHO_T}no" >&6
 
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-rpath" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-rpath... $ECHO_C" >&6
           no_cache=0
@@ -4578,7 +4578,7 @@ echo "${ECHO_T}no" >&6
 
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-intl" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-intl... $ECHO_C" >&6
           no_cache=0
@@ -4619,7 +4619,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-config" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-config... $ECHO_C" >&6
           no_cache=0
@@ -4661,7 +4661,7 @@ echo "${ECHO_T}no" >&6
 
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-protocols" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-protocols... $ECHO_C" >&6
           no_cache=0
@@ -4702,7 +4702,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-ftp" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-ftp... $ECHO_C" >&6
           no_cache=0
@@ -4743,7 +4743,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-http" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-http... $ECHO_C" >&6
           no_cache=0
@@ -4784,7 +4784,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-fileproto" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-fileproto... $ECHO_C" >&6
           no_cache=0
@@ -4825,7 +4825,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-sockets" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-sockets... $ECHO_C" >&6
           no_cache=0
@@ -4866,7 +4866,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-ole" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-ole... $ECHO_C" >&6
           no_cache=0
@@ -4907,7 +4907,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-dataobj" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-dataobj... $ECHO_C" >&6
           no_cache=0
@@ -4949,7 +4949,7 @@ echo "${ECHO_T}no" >&6
 
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-ipc" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-ipc... $ECHO_C" >&6
           no_cache=0
@@ -4991,7 +4991,7 @@ echo "${ECHO_T}no" >&6
 
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-apple_ieee" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-apple_ieee... $ECHO_C" >&6
           no_cache=0
@@ -5032,7 +5032,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-arcstream" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-arcstream... $ECHO_C" >&6
           no_cache=0
@@ -5073,7 +5073,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-backtrace" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-backtrace... $ECHO_C" >&6
           no_cache=0
@@ -5114,7 +5114,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-catch_segvs" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-catch_segvs... $ECHO_C" >&6
           no_cache=0
@@ -5155,7 +5155,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-cmdline" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-cmdline... $ECHO_C" >&6
           no_cache=0
@@ -5196,7 +5196,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-datetime" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-datetime... $ECHO_C" >&6
           no_cache=0
@@ -5237,7 +5237,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-debugreport" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-debugreport... $ECHO_C" >&6
           no_cache=0
@@ -5278,7 +5278,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-dialupman" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-dialupman... $ECHO_C" >&6
           no_cache=0
@@ -5319,7 +5319,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-dynlib" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-dynlib... $ECHO_C" >&6
           no_cache=0
@@ -5360,7 +5360,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-dynamicloader" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-dynamicloader... $ECHO_C" >&6
           no_cache=0
@@ -5401,7 +5401,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-exceptions" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-exceptions... $ECHO_C" >&6
           no_cache=0
@@ -5442,7 +5442,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-ffile" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-ffile... $ECHO_C" >&6
           no_cache=0
@@ -5483,7 +5483,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-file" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-file... $ECHO_C" >&6
           no_cache=0
@@ -5524,7 +5524,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-filesystem" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-filesystem... $ECHO_C" >&6
           no_cache=0
@@ -5565,7 +5565,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-fontmap" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-fontmap... $ECHO_C" >&6
           no_cache=0
@@ -5606,7 +5606,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-fs_archive" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-fs_archive... $ECHO_C" >&6
           no_cache=0
@@ -5647,7 +5647,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-fs_inet" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-fs_inet... $ECHO_C" >&6
           no_cache=0
@@ -5688,7 +5688,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-fs_zip" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-fs_zip... $ECHO_C" >&6
           no_cache=0
@@ -5729,7 +5729,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-geometry" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-geometry... $ECHO_C" >&6
           no_cache=0
@@ -5770,7 +5770,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-log" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-log... $ECHO_C" >&6
           no_cache=0
@@ -5811,7 +5811,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-longlong" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-longlong... $ECHO_C" >&6
           no_cache=0
@@ -5852,7 +5852,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-mimetype" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-mimetype... $ECHO_C" >&6
           no_cache=0
@@ -5893,7 +5893,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-mslu" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-mslu... $ECHO_C" >&6
           no_cache=0
@@ -5934,7 +5934,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-snglinst" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-snglinst... $ECHO_C" >&6
           no_cache=0
@@ -5975,7 +5975,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-std_iostreams" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-std_iostreams... $ECHO_C" >&6
           no_cache=0
@@ -6016,7 +6016,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-std_string" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-std_string... $ECHO_C" >&6
           no_cache=0
@@ -6057,7 +6057,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-stdpaths" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-stdpaths... $ECHO_C" >&6
           no_cache=0
@@ -6098,7 +6098,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-stopwatch" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-stopwatch... $ECHO_C" >&6
           no_cache=0
@@ -6139,7 +6139,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-streams" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-streams... $ECHO_C" >&6
           no_cache=0
@@ -6180,7 +6180,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-system_options" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-system_options... $ECHO_C" >&6
           no_cache=0
@@ -6221,7 +6221,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-tarstream" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-tarstream... $ECHO_C" >&6
           no_cache=0
@@ -6262,7 +6262,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-textbuf" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-textbuf... $ECHO_C" >&6
           no_cache=0
@@ -6303,7 +6303,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-textfile" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-textfile... $ECHO_C" >&6
           no_cache=0
@@ -6344,7 +6344,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-timer" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-timer... $ECHO_C" >&6
           no_cache=0
@@ -6385,7 +6385,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-unicode" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-unicode... $ECHO_C" >&6
           no_cache=0
@@ -6426,7 +6426,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-sound" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-sound... $ECHO_C" >&6
           no_cache=0
@@ -6467,7 +6467,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-mediactrl" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-mediactrl... $ECHO_C" >&6
           no_cache=0
@@ -6508,7 +6508,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-gstreamer8" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-gstreamer8... $ECHO_C" >&6
           no_cache=0
@@ -6549,7 +6549,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-printfposparam" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-printfposparam... $ECHO_C" >&6
           no_cache=0
@@ -6590,7 +6590,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-zipstream" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-zipstream... $ECHO_C" >&6
           no_cache=0
@@ -6632,7 +6632,7 @@ echo "${ECHO_T}no" >&6
 
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-url" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-url... $ECHO_C" >&6
           no_cache=0
@@ -6673,7 +6673,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-variant" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-variant... $ECHO_C" >&6
           no_cache=0
@@ -6714,7 +6714,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-protocol" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-protocol... $ECHO_C" >&6
           no_cache=0
@@ -6755,7 +6755,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-protocol_http" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-protocol_http... $ECHO_C" >&6
           no_cache=0
@@ -6796,7 +6796,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-protocol_ftp" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-protocol_ftp... $ECHO_C" >&6
           no_cache=0
@@ -6837,7 +6837,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-protocol_file" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-protocol_file... $ECHO_C" >&6
           no_cache=0
@@ -6881,7 +6881,7 @@ echo "${ECHO_T}no" >&6
 
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-threads" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-threads... $ECHO_C" >&6
           no_cache=0
@@ -6926,7 +6926,7 @@ if test "$wxUSE_GUI" = "yes"; then
 
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-docview" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-docview... $ECHO_C" >&6
           no_cache=0
@@ -6967,7 +6967,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-help" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-help... $ECHO_C" >&6
           no_cache=0
@@ -7008,7 +7008,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-mshtmlhelp" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-mshtmlhelp... $ECHO_C" >&6
           no_cache=0
@@ -7049,7 +7049,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-html" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-html... $ECHO_C" >&6
           no_cache=0
@@ -7090,7 +7090,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-htmlhelp" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-htmlhelp... $ECHO_C" >&6
           no_cache=0
@@ -7131,7 +7131,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-xrc" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-xrc... $ECHO_C" >&6
           no_cache=0
@@ -7172,7 +7172,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-aui" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-aui... $ECHO_C" >&6
           no_cache=0
@@ -7213,7 +7213,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-constraints" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-constraints... $ECHO_C" >&6
           no_cache=0
@@ -7254,7 +7254,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-printarch" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-printarch... $ECHO_C" >&6
           no_cache=0
@@ -7295,7 +7295,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-mdi" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-mdi... $ECHO_C" >&6
           no_cache=0
@@ -7336,7 +7336,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-mdidoc" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-mdidoc... $ECHO_C" >&6
           no_cache=0
@@ -7377,7 +7377,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-loggui" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-loggui... $ECHO_C" >&6
           no_cache=0
@@ -7418,7 +7418,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-logwin" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-logwin... $ECHO_C" >&6
           no_cache=0
@@ -7459,7 +7459,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-logdialog" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-logdialog... $ECHO_C" >&6
           no_cache=0
@@ -7500,7 +7500,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-webkit" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-webkit... $ECHO_C" >&6
           no_cache=0
@@ -7541,7 +7541,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-richtext" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-richtext... $ECHO_C" >&6
           no_cache=0
@@ -7582,7 +7582,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-graphics_ctx" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-graphics_ctx... $ECHO_C" >&6
           no_cache=0
@@ -7624,7 +7624,7 @@ echo "${ECHO_T}no" >&6
 
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-postscript" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-postscript... $ECHO_C" >&6
           no_cache=0
@@ -7668,7 +7668,7 @@ echo "${ECHO_T}no" >&6
 
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-prologio" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-prologio... $ECHO_C" >&6
           no_cache=0
@@ -7709,7 +7709,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-resources" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-resources... $ECHO_C" >&6
           no_cache=0
@@ -7752,7 +7752,7 @@ echo "${ECHO_T}no" >&6
 
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-clipboard" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-clipboard... $ECHO_C" >&6
           no_cache=0
@@ -7793,7 +7793,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-dnd" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-dnd... $ECHO_C" >&6
           no_cache=0
@@ -7834,7 +7834,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-metafile" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-metafile... $ECHO_C" >&6
           no_cache=0
@@ -7878,7 +7878,7 @@ echo "${ECHO_T}no" >&6
 
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-controls" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-controls... $ECHO_C" >&6
           no_cache=0
@@ -8026,7 +8026,7 @@ elif test "$wxUSE_CONTROLS" = "no"; then
 fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-accel" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-accel... $ECHO_C" >&6
           no_cache=0
@@ -8067,7 +8067,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-animatectrl" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-animatectrl... $ECHO_C" >&6
           no_cache=0
@@ -8108,7 +8108,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-button" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-button... $ECHO_C" >&6
           no_cache=0
@@ -8149,7 +8149,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-bmpbutton" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-bmpbutton... $ECHO_C" >&6
           no_cache=0
@@ -8190,7 +8190,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-bmpcombobox" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-bmpcombobox... $ECHO_C" >&6
           no_cache=0
@@ -8231,7 +8231,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-calendar" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-calendar... $ECHO_C" >&6
           no_cache=0
@@ -8272,7 +8272,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-caret" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-caret... $ECHO_C" >&6
           no_cache=0
@@ -8313,7 +8313,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-checkbox" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-checkbox... $ECHO_C" >&6
           no_cache=0
@@ -8354,7 +8354,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-checklst" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-checklst... $ECHO_C" >&6
           no_cache=0
@@ -8395,7 +8395,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-choice" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-choice... $ECHO_C" >&6
           no_cache=0
@@ -8436,7 +8436,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-choicebook" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-choicebook... $ECHO_C" >&6
           no_cache=0
@@ -8477,7 +8477,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-collpane" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-collpane... $ECHO_C" >&6
           no_cache=0
@@ -8518,7 +8518,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-colourpicker" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-colourpicker... $ECHO_C" >&6
           no_cache=0
@@ -8559,7 +8559,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-combobox" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-combobox... $ECHO_C" >&6
           no_cache=0
@@ -8600,7 +8600,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-comboctrl" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-comboctrl... $ECHO_C" >&6
           no_cache=0
@@ -8641,7 +8641,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-datepick" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-datepick... $ECHO_C" >&6
           no_cache=0
@@ -8682,7 +8682,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-dirpicker" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-dirpicker... $ECHO_C" >&6
           no_cache=0
@@ -8723,7 +8723,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-display" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-display... $ECHO_C" >&6
           no_cache=0
@@ -8764,7 +8764,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-detect_sm" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-detect_sm... $ECHO_C" >&6
           no_cache=0
@@ -8805,7 +8805,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-filepicker" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-filepicker... $ECHO_C" >&6
           no_cache=0
@@ -8846,7 +8846,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-fontpicker" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-fontpicker... $ECHO_C" >&6
           no_cache=0
@@ -8887,7 +8887,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-gauge" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-gauge... $ECHO_C" >&6
           no_cache=0
@@ -8928,7 +8928,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-grid" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-grid... $ECHO_C" >&6
           no_cache=0
@@ -8969,7 +8969,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-dataviewctrl" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-dataviewctrl... $ECHO_C" >&6
           no_cache=0
@@ -9010,7 +9010,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-hyperlink" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-hyperlink... $ECHO_C" >&6
           no_cache=0
@@ -9051,7 +9051,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-imaglist" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-imaglist... $ECHO_C" >&6
           no_cache=0
@@ -9092,7 +9092,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-listbook" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-listbook... $ECHO_C" >&6
           no_cache=0
@@ -9133,7 +9133,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-listbox" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-listbox... $ECHO_C" >&6
           no_cache=0
@@ -9174,7 +9174,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-listctrl" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-listctrl... $ECHO_C" >&6
           no_cache=0
@@ -9215,7 +9215,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-notebook" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-notebook... $ECHO_C" >&6
           no_cache=0
@@ -9256,7 +9256,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-odcombobox" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-odcombobox... $ECHO_C" >&6
           no_cache=0
@@ -9297,7 +9297,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-radiobox" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-radiobox... $ECHO_C" >&6
           no_cache=0
@@ -9338,7 +9338,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-radiobtn" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-radiobtn... $ECHO_C" >&6
           no_cache=0
@@ -9379,7 +9379,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-sash" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-sash... $ECHO_C" >&6
           no_cache=0
@@ -9420,7 +9420,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-scrollbar" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-scrollbar... $ECHO_C" >&6
           no_cache=0
@@ -9461,7 +9461,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-slider" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-slider... $ECHO_C" >&6
           no_cache=0
@@ -9502,7 +9502,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-spinbtn" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-spinbtn... $ECHO_C" >&6
           no_cache=0
@@ -9543,7 +9543,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-spinctrl" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-spinctrl... $ECHO_C" >&6
           no_cache=0
@@ -9584,7 +9584,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-splitter" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-splitter... $ECHO_C" >&6
           no_cache=0
@@ -9625,7 +9625,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-statbmp" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-statbmp... $ECHO_C" >&6
           no_cache=0
@@ -9666,7 +9666,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-statbox" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-statbox... $ECHO_C" >&6
           no_cache=0
@@ -9707,7 +9707,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-statline" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-statline... $ECHO_C" >&6
           no_cache=0
@@ -9748,7 +9748,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-stattext" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-stattext... $ECHO_C" >&6
           no_cache=0
@@ -9789,7 +9789,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-statusbar" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-statusbar... $ECHO_C" >&6
           no_cache=0
@@ -9830,7 +9830,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-tabdialog" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-tabdialog... $ECHO_C" >&6
           no_cache=0
@@ -9871,7 +9871,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-textctrl" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-textctrl... $ECHO_C" >&6
           no_cache=0
@@ -9912,7 +9912,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-togglebtn" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-togglebtn... $ECHO_C" >&6
           no_cache=0
@@ -9953,7 +9953,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-toolbar" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-toolbar... $ECHO_C" >&6
           no_cache=0
@@ -9994,7 +9994,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-tbarnative" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-tbarnative... $ECHO_C" >&6
           no_cache=0
@@ -10035,7 +10035,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-treebook" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-treebook... $ECHO_C" >&6
           no_cache=0
@@ -10076,7 +10076,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-toolbook" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-toolbook... $ECHO_C" >&6
           no_cache=0
@@ -10117,7 +10117,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-treectrl" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-treectrl... $ECHO_C" >&6
           no_cache=0
@@ -10158,7 +10158,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-tipwindow" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-tipwindow... $ECHO_C" >&6
           no_cache=0
@@ -10199,7 +10199,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-popupwin" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-popupwin... $ECHO_C" >&6
           no_cache=0
@@ -10242,7 +10242,7 @@ echo "${ECHO_T}no" >&6
 
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-commondlg" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-commondlg... $ECHO_C" >&6
           no_cache=0
@@ -10283,7 +10283,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-aboutdlg" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-aboutdlg... $ECHO_C" >&6
           no_cache=0
@@ -10324,7 +10324,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-choicedlg" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-choicedlg... $ECHO_C" >&6
           no_cache=0
@@ -10365,7 +10365,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-coldlg" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-coldlg... $ECHO_C" >&6
           no_cache=0
@@ -10406,7 +10406,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-filedlg" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-filedlg... $ECHO_C" >&6
           no_cache=0
@@ -10447,7 +10447,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-finddlg" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-finddlg... $ECHO_C" >&6
           no_cache=0
@@ -10488,7 +10488,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-fontdlg" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-fontdlg... $ECHO_C" >&6
           no_cache=0
@@ -10529,7 +10529,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-dirdlg" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-dirdlg... $ECHO_C" >&6
           no_cache=0
@@ -10570,7 +10570,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-msgdlg" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-msgdlg... $ECHO_C" >&6
           no_cache=0
@@ -10611,7 +10611,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-numberdlg" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-numberdlg... $ECHO_C" >&6
           no_cache=0
@@ -10652,7 +10652,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-splash" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-splash... $ECHO_C" >&6
           no_cache=0
@@ -10693,7 +10693,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-textdlg" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-textdlg... $ECHO_C" >&6
           no_cache=0
@@ -10734,7 +10734,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-tipdlg" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-tipdlg... $ECHO_C" >&6
           no_cache=0
@@ -10775,7 +10775,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-progressdlg" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-progressdlg... $ECHO_C" >&6
           no_cache=0
@@ -10816,7 +10816,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-wizarddlg" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-wizarddlg... $ECHO_C" >&6
           no_cache=0
@@ -10859,7 +10859,7 @@ echo "${ECHO_T}no" >&6
 
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-menus" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-menus... $ECHO_C" >&6
           no_cache=0
@@ -10900,7 +10900,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-miniframe" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-miniframe... $ECHO_C" >&6
           no_cache=0
@@ -10941,7 +10941,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-tooltips" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-tooltips... $ECHO_C" >&6
           no_cache=0
@@ -10982,7 +10982,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-splines" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-splines... $ECHO_C" >&6
           no_cache=0
@@ -11023,7 +11023,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-mousewheel" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-mousewheel... $ECHO_C" >&6
           no_cache=0
@@ -11064,7 +11064,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-validators" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-validators... $ECHO_C" >&6
           no_cache=0
@@ -11105,7 +11105,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-busyinfo" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-busyinfo... $ECHO_C" >&6
           no_cache=0
@@ -11146,7 +11146,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-joystick" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-joystick... $ECHO_C" >&6
           no_cache=0
@@ -11187,7 +11187,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-metafile" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-metafile... $ECHO_C" >&6
           no_cache=0
@@ -11228,7 +11228,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-dragimage" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-dragimage... $ECHO_C" >&6
           no_cache=0
@@ -11269,7 +11269,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-accessibility" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-accessibility... $ECHO_C" >&6
           no_cache=0
@@ -11312,7 +11312,7 @@ echo "${ECHO_T}no" >&6
 
 if test "$wxUSE_MSW" = "1"; then
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-dccache" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-dccache... $ECHO_C" >&6
           no_cache=0
@@ -11356,7 +11356,7 @@ fi
 
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-palette" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-palette... $ECHO_C" >&6
           no_cache=0
@@ -11397,7 +11397,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-image" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-image... $ECHO_C" >&6
           no_cache=0
@@ -11438,7 +11438,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-gif" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-gif... $ECHO_C" >&6
           no_cache=0
@@ -11479,7 +11479,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-pcx" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-pcx... $ECHO_C" >&6
           no_cache=0
@@ -11520,7 +11520,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-tga" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-tga... $ECHO_C" >&6
           no_cache=0
@@ -11561,7 +11561,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-iff" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-iff... $ECHO_C" >&6
           no_cache=0
@@ -11602,7 +11602,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-pnm" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-pnm... $ECHO_C" >&6
           no_cache=0
@@ -11643,7 +11643,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-xpm" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-xpm... $ECHO_C" >&6
           no_cache=0
@@ -11684,7 +11684,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-ico_cur" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-ico_cur... $ECHO_C" >&6
           no_cache=0
@@ -11737,7 +11737,7 @@ fi;
 
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-official_build" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-official_build... $ECHO_C" >&6
           no_cache=0
@@ -34012,85 +34012,89 @@ fi
 if test "$wxUSE_SHARED" = "yes"; then
 
 
-  found_versioning=no
+    case "${host}" in
+        *-*-cygwin* | *-*-mingw* )
+                                                                                                found_versioning=no
+            ;;
 
-
-    if test $found_versioning = no ; then
-      echo "$as_me:$LINENO: checking if the linker accepts --version-script" >&5
+        *)
+            echo "$as_me:$LINENO: checking if the linker accepts --version-script" >&5
 echo $ECHO_N "checking if the linker accepts --version-script... $ECHO_C" >&6
 if test "${wx_cv_version_script+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
 else
 
-        echo "VER_1 { *; };" >conftest.sym
-        echo "int main() { return 0; }" >conftest.cpp
+                echo "VER_1 { *; };" >conftest.sym
+                echo "int main() { return 0; }" >conftest.cpp
 
-        if { ac_try='
-                $CXX -o conftest.output $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.cpp
-                -Wl,--version-script,conftest.sym >/dev/null 2>conftest.stderr'
+                if { ac_try='
+                        $CXX -o conftest.output $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.cpp
+                        -Wl,--version-script,conftest.sym >/dev/null 2>conftest.stderr'
   { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
   (eval $ac_try) 2>&5
   ac_status=$?
   echo "$as_me:$LINENO: \$? = $ac_status" >&5
   (exit $ac_status); }; } ; then
-          if test -s conftest.stderr ; then
-              wx_cv_version_script=no
-          else
-              wx_cv_version_script=yes
-          fi
-        else
-          wx_cv_version_script=no
-        fi
+                  if test -s conftest.stderr ; then
+                      wx_cv_version_script=no
+                  else
+                      wx_cv_version_script=yes
+                  fi
+                else
+                  wx_cv_version_script=no
+                fi
 
-                                                                                                if test $wx_cv_version_script = yes
-        then
-          echo "struct B { virtual ~B() { } }; \
-                struct D : public B { }; \
-                void F() { D d; }" > conftest.cpp
+                                                                                                                                                                                                if test $wx_cv_version_script = yes
+                then
+                  echo "struct B { virtual ~B() { } }; \
+                        struct D : public B { }; \
+                        void F() { D d; }" > conftest.cpp
 
-          if { ac_try='
-                $CXX -shared -fPIC -o conftest1.output $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.cpp
-                -Wl,--version-script,conftest.sym >/dev/null 2>/dev/null'
+                  if { ac_try='
+                        $CXX -shared -fPIC -o conftest1.output $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.cpp
+                        -Wl,--version-script,conftest.sym >/dev/null 2>/dev/null'
   { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
   (eval $ac_try) 2>&5
   ac_status=$?
   echo "$as_me:$LINENO: \$? = $ac_status" >&5
   (exit $ac_status); }; } &&
-             { ac_try='
-                $CXX -shared -fPIC -o conftest2.output $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.cpp
-                -Wl,--version-script,conftest.sym conftest1.output >/dev/null 2>/dev/null'
+                     { ac_try='
+                        $CXX -shared -fPIC -o conftest2.output $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.cpp
+                        -Wl,--version-script,conftest.sym conftest1.output >/dev/null 2>/dev/null'
   { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
   (eval $ac_try) 2>&5
   ac_status=$?
   echo "$as_me:$LINENO: \$? = $ac_status" >&5
   (exit $ac_status); }; }
-          then
-            if { ac_try='
-                  $CXX -shared -fPIC -o conftest3.output $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.cpp
-                  -Wl,--version-script,conftest.sym conftest2.output conftest1.output >/dev/null 2>/dev/null'
+                  then
+                    if { ac_try='
+                          $CXX -shared -fPIC -o conftest3.output $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.cpp
+                          -Wl,--version-script,conftest.sym conftest2.output conftest1.output >/dev/null 2>/dev/null'
   { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
   (eval $ac_try) 2>&5
   ac_status=$?
   echo "$as_me:$LINENO: \$? = $ac_status" >&5
   (exit $ac_status); }; }
-            then
-              wx_cv_version_script=yes
-            else
-              wx_cv_version_script=no
-            fi
-          fi
-        fi
+                    then
+                      wx_cv_version_script=yes
+                    else
+                      wx_cv_version_script=no
+                    fi
+                  fi
+                fi
 
-        rm -f conftest.output conftest.stderr conftest.sym conftest.cpp
-        rm -f conftest1.output conftest2.output conftest3.output
+                rm -f conftest.output conftest.stderr conftest.sym conftest.cpp
+                rm -f conftest1.output conftest2.output conftest3.output
 
 fi
 echo "$as_me:$LINENO: result: $wx_cv_version_script" >&5
 echo "${ECHO_T}$wx_cv_version_script" >&6
-      if test $wx_cv_version_script = yes ; then
-        LDFLAGS_VERSIONING="-Wl,--version-script,\$(wx_top_builddir)/version-script"
-      fi
-  fi
+
+            if test $wx_cv_version_script = yes ; then
+                LDFLAGS_VERSIONING="-Wl,--version-script,\$(wx_top_builddir)/version-script"
+            fi
+            ;;
+    esac
 
 
     case "${host}" in
