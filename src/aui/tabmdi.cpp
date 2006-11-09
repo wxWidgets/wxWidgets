@@ -401,7 +401,14 @@ bool wxAuiMDIChildFrame::Create(wxAuiMDIParentFrame* parent,
     wxAuiMDIClientWindow* pClientWindow = parent->GetClientWindow();
     wxASSERT_MSG((pClientWindow != (wxWindow*) NULL), wxT("Missing MDI client window."));
 
-    wxPanel::Create(pClientWindow, id, wxDefaultPosition, size, style|wxNO_BORDER, name);
+    wxSize cli_size = pClientWindow->GetClientSize();
+
+    // create the window off-screen to prevent flicker
+    wxPanel::Create(pClientWindow,
+		    id,
+		    wxPoint(cli_size.x+1, cli_size.y+1),
+		    size,
+		    style|wxNO_BORDER, name);
 
     SetMDIParentFrame(parent);
 
