@@ -168,7 +168,6 @@ ____MONOLIB_GUI_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_xh_panel.obj &
 	$(OBJS)\monodll_xh_radbt.obj &
 	$(OBJS)\monodll_xh_radbx.obj &
-	$(OBJS)\monodll_xh_richtext.obj &
 	$(OBJS)\monodll_xh_scrol.obj &
 	$(OBJS)\monodll_xh_scwin.obj &
 	$(OBJS)\monodll_xh_htmllbox.obj &
@@ -791,7 +790,6 @@ ____MONOLIB_GUI_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_xh_panel.obj &
 	$(OBJS)\monolib_xh_radbt.obj &
 	$(OBJS)\monolib_xh_radbx.obj &
-	$(OBJS)\monolib_xh_richtext.obj &
 	$(OBJS)\monolib_xh_scrol.obj &
 	$(OBJS)\monolib_xh_scwin.obj &
 	$(OBJS)\monolib_xh_htmllbox.obj &
@@ -3705,7 +3703,6 @@ XRCDLL_OBJECTS =  &
 	$(OBJS)\xrcdll_xh_panel.obj &
 	$(OBJS)\xrcdll_xh_radbt.obj &
 	$(OBJS)\xrcdll_xh_radbx.obj &
-	$(OBJS)\xrcdll_xh_richtext.obj &
 	$(OBJS)\xrcdll_xh_scrol.obj &
 	$(OBJS)\xrcdll_xh_scwin.obj &
 	$(OBJS)\xrcdll_xh_htmllbox.obj &
@@ -3771,7 +3768,6 @@ XRCLIB_OBJECTS =  &
 	$(OBJS)\xrclib_xh_panel.obj &
 	$(OBJS)\xrclib_xh_radbt.obj &
 	$(OBJS)\xrclib_xh_radbx.obj &
-	$(OBJS)\xrclib_xh_richtext.obj &
 	$(OBJS)\xrclib_xh_scrol.obj &
 	$(OBJS)\xrclib_xh_scwin.obj &
 	$(OBJS)\xrclib_xh_htmllbox.obj &
@@ -5508,9 +5504,6 @@ $(OBJS)\monodll_xh_radbt.obj :  .AUTODEPEND ..\..\src\xrc\xh_radbt.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_xh_radbx.obj :  .AUTODEPEND ..\..\src\xrc\xh_radbx.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
-
-$(OBJS)\monodll_xh_richtext.obj :  .AUTODEPEND ..\..\src\xrc\xh_richtext.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_xh_scrol.obj :  .AUTODEPEND ..\..\src\xrc\xh_scrol.cpp
@@ -7598,9 +7591,6 @@ $(OBJS)\monolib_xh_radbt.obj :  .AUTODEPEND ..\..\src\xrc\xh_radbt.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_xh_radbx.obj :  .AUTODEPEND ..\..\src\xrc\xh_radbx.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
-
-$(OBJS)\monolib_xh_richtext.obj :  .AUTODEPEND ..\..\src\xrc\xh_richtext.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_xh_scrol.obj :  .AUTODEPEND ..\..\src\xrc\xh_scrol.cpp
@@ -12933,9 +12923,6 @@ $(OBJS)\xrcdll_xh_radbt.obj :  .AUTODEPEND ..\..\src\xrc\xh_radbt.cpp
 $(OBJS)\xrcdll_xh_radbx.obj :  .AUTODEPEND ..\..\src\xrc\xh_radbx.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
 
-$(OBJS)\xrcdll_xh_richtext.obj :  .AUTODEPEND ..\..\src\xrc\xh_richtext.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
-
 $(OBJS)\xrcdll_xh_scrol.obj :  .AUTODEPEND ..\..\src\xrc\xh_scrol.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
 
@@ -13102,9 +13089,6 @@ $(OBJS)\xrclib_xh_radbt.obj :  .AUTODEPEND ..\..\src\xrc\xh_radbt.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
 
 $(OBJS)\xrclib_xh_radbx.obj :  .AUTODEPEND ..\..\src\xrc\xh_radbx.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
-
-$(OBJS)\xrclib_xh_richtext.obj :  .AUTODEPEND ..\..\src\xrc\xh_richtext.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
 
 $(OBJS)\xrclib_xh_scrol.obj :  .AUTODEPEND ..\..\src\xrc\xh_scrol.cpp

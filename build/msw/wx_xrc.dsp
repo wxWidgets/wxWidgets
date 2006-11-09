@@ -1102,10 +1102,6 @@ SOURCE=..\..\include\wx\xrc\xh_radbx.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\wx\xrc\xh_richtext.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\include\wx\xrc\xh_scrol.h
 # End Source File
 # Begin Source File
@@ -1323,10 +1319,6 @@ SOURCE=..\..\src\xrc\xh_radbt.cpp
 # Begin Source File
 
 SOURCE=..\..\src\xrc\xh_radbx.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\xrc\xh_richtext.cpp
 # End Source File
 # Begin Source File
 

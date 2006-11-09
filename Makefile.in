@@ -1341,7 +1341,6 @@ XRCDLL_OBJECTS =  \
 	xrcdll_xh_panel.o \
 	xrcdll_xh_radbt.o \
 	xrcdll_xh_radbx.o \
-	xrcdll_xh_richtext.o \
 	xrcdll_xh_scrol.o \
 	xrcdll_xh_scwin.o \
 	xrcdll_xh_htmllbox.o \
@@ -1403,7 +1402,6 @@ XRCLIB_OBJECTS =  \
 	xrclib_xh_panel.o \
 	xrclib_xh_radbt.o \
 	xrclib_xh_radbx.o \
-	xrclib_xh_richtext.o \
 	xrclib_xh_scrol.o \
 	xrclib_xh_scwin.o \
 	xrclib_xh_htmllbox.o \
@@ -3068,7 +3066,6 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/xrc/xh_panel.h \
 	wx/xrc/xh_radbt.h \
 	wx/xrc/xh_radbx.h \
-	wx/xrc/xh_richtext.h \
 	wx/xrc/xh_scrol.h \
 	wx/xrc/xh_scwin.h \
 	wx/xrc/xh_htmllbox.h \
@@ -3382,7 +3379,6 @@ COND_USE_GUI_1___MONOLIB_GUI_SRC_OBJECTS =  \
 	monodll_xh_panel.o \
 	monodll_xh_radbt.o \
 	monodll_xh_radbx.o \
-	monodll_xh_richtext.o \
 	monodll_xh_scrol.o \
 	monodll_xh_scwin.o \
 	monodll_xh_htmllbox.o \
@@ -5147,7 +5143,6 @@ COND_USE_GUI_1___MONOLIB_GUI_SRC_OBJECTS_1 =  \
 	monolib_xh_panel.o \
 	monolib_xh_radbt.o \
 	monolib_xh_radbx.o \
-	monolib_xh_richtext.o \
 	monolib_xh_scrol.o \
 	monolib_xh_scwin.o \
 	monolib_xh_htmllbox.o \
@@ -13100,9 +13095,6 @@ monodll_xh_radbt.o: $(srcdir)/src/xrc/xh_radbt.cpp $(MONODLL_ODEP)
 monodll_xh_radbx.o: $(srcdir)/src/xrc/xh_radbx.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/xrc/xh_radbx.cpp
 
-monodll_xh_richtext.o: $(srcdir)/src/xrc/xh_richtext.cpp $(MONODLL_ODEP)
-	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/xrc/xh_richtext.cpp
-
 monodll_xh_scrol.o: $(srcdir)/src/xrc/xh_scrol.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/xrc/xh_scrol.cpp
 
@@ -17182,9 +17174,6 @@ monolib_xh_radbt.o: $(srcdir)/src/xrc/xh_radbt.cpp $(MONOLIB_ODEP)
 
 monolib_xh_radbx.o: $(srcdir)/src/xrc/xh_radbx.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_radbx.cpp
-
-monolib_xh_richtext.o: $(srcdir)/src/xrc/xh_richtext.cpp $(MONOLIB_ODEP)
-	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_richtext.cpp
 
 monolib_xh_scrol.o: $(srcdir)/src/xrc/xh_scrol.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_scrol.cpp
@@ -28523,9 +28512,6 @@ xrcdll_xh_radbt.o: $(srcdir)/src/xrc/xh_radbt.cpp $(XRCDLL_ODEP)
 xrcdll_xh_radbx.o: $(srcdir)/src/xrc/xh_radbx.cpp $(XRCDLL_ODEP)
 	$(CXXC) -c -o $@ $(XRCDLL_CXXFLAGS) $(srcdir)/src/xrc/xh_radbx.cpp
 
-xrcdll_xh_richtext.o: $(srcdir)/src/xrc/xh_richtext.cpp $(XRCDLL_ODEP)
-	$(CXXC) -c -o $@ $(XRCDLL_CXXFLAGS) $(srcdir)/src/xrc/xh_richtext.cpp
-
 xrcdll_xh_scrol.o: $(srcdir)/src/xrc/xh_scrol.cpp $(XRCDLL_ODEP)
 	$(CXXC) -c -o $@ $(XRCDLL_CXXFLAGS) $(srcdir)/src/xrc/xh_scrol.cpp
 
@@ -28690,9 +28676,6 @@ xrclib_xh_radbt.o: $(srcdir)/src/xrc/xh_radbt.cpp $(XRCLIB_ODEP)
 
 xrclib_xh_radbx.o: $(srcdir)/src/xrc/xh_radbx.cpp $(XRCLIB_ODEP)
 	$(CXXC) -c -o $@ $(XRCLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_radbx.cpp
-
-xrclib_xh_richtext.o: $(srcdir)/src/xrc/xh_richtext.cpp $(XRCLIB_ODEP)
-	$(CXXC) -c -o $@ $(XRCLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_richtext.cpp
 
 xrclib_xh_scrol.o: $(srcdir)/src/xrc/xh_scrol.cpp $(XRCLIB_ODEP)
 	$(CXXC) -c -o $@ $(XRCLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_scrol.cpp
