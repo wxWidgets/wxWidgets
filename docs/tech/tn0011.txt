@@ -17,6 +17,8 @@
        {wx}/docs/changes.txt
        {wx}/docs/gtk/changes.txt
        {wx}/build/bakefiles/wxpresets/presets/wx_win32.bkl
+       {wx}/build/script/wxwidgets.iss - AppVerName
+       {wx}/build/script/wxwidgets.iss - [Icons] section
 
 
 2. When to update the version numbers:
@@ -31,6 +33,9 @@
 Version: $Id$
 
 $Log$
+Revision 1.5  2006/11/09 21:22:18  ABX
+Mention changes for setup.exe
+
 Revision 1.4  2005/10/06 09:09:18  VZ
 another file where the version should be updated
 
