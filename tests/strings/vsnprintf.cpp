@@ -87,9 +87,12 @@ private:
         CPPUNIT_TEST( S );
         CPPUNIT_TEST( Asterisk );
         CPPUNIT_TEST( Percent );
+#ifdef wxLongLong_t
         CPPUNIT_TEST( LongLong );
+#endif
 
         CPPUNIT_TEST( BigToSmallBuffer );
+        CPPUNIT_TEST( Scratch );
     CPPUNIT_TEST_SUITE_END();
 
     void D();
@@ -103,10 +106,13 @@ private:
     void S();
     void Asterisk();
     void Percent();
+#ifdef wxLongLong_t
     void LongLong();
+#endif
     void Unicode();
 
     void BigToSmallBuffer();
+    void Scratch();
     void Misc(wxChar *buffer, int size);
 
     DECLARE_NO_COPY_CLASS(VsnprintfTestCase)
@@ -297,13 +303,15 @@ void VsnprintfTestCase::Percent()
     // Compare(wxT("%"), wxT("%%%"));
 }
 
+#ifdef wxLongLong_t
 void VsnprintfTestCase::LongLong()
 {
-    CMP3("123456789", "%lld", (long long int)123456789);
-    CMP3("-123456789", "%lld", (long long int)-123456789);
+    CMP3("123456789", "%lld", (wxLongLong_t)123456789);
+    CMP3("-123456789", "%lld", (wxLongLong_t)-123456789);
 
-    CMP3("123456789", "%llu", (unsigned long long int)123456789);
+    CMP3("123456789", "%llu", (wxULongLong_t)123456789);
 }
+#endif
 
 void VsnprintfTestCase::Misc(wxChar *buffer, int size)
 {
@@ -350,4 +358,74 @@ void VsnprintfTestCase::BigToSmallBuffer()
     Misc(buf2, 16);
     Misc(buf3, 4);
     Misc(&buf4, 1);
+}
+
+static void DoScratch(
+        int expectedLen,
+        const wxString& expectedString,
+        size_t max,
+        const wxChar *format, ...)
+{
+    const size_t BUFSIZE = 16;
+    wxChar buf[BUFSIZE + 1];
+    size_t i;
+    static int count = 0;
+
+    wxASSERT(max <= BUFSIZE);
+
+    for (i = 0; i < BUFSIZE; i++)
+        buf[i] = '*';
+    buf[BUFSIZE] = 0;
+
+    va_list ap;
+    va_start(ap, format);
+    
+    int n = wxVsnprintf(buf, max, format, ap);
+
+    va_end(ap);
+
+    // Prepare messages so that it is possible to see from the error which
+    // test was running.
+    wxString errStr, overflowStr;
+    errStr << _T("No.: ") << ++count << _T(", expected: ") << expectedLen
+           << _T(" '") << expectedString << _T("', result: ");
+    overflowStr << errStr << _T("buffer overflow");
+    errStr << n << _T(" '") << buf << _T("'");
+
+    // turn them into std::strings
+    std::string errMsg(errStr.mb_str());
+    std::string overflowMsg(overflowStr.mb_str());
+
+    CPPUNIT_ASSERT_MESSAGE(errMsg,
+            (expectedLen == -1 && size_t(n) >= max) || expectedLen == n);
+
+    CPPUNIT_ASSERT_MESSAGE(errMsg, expectedString == buf);
+
+    for (i = max; i < BUFSIZE; i++)
+        CPPUNIT_ASSERT_MESSAGE(overflowMsg, buf[i] == '*');
+}
+
+// Originally intended to test the final copy from the scratch, hence the
+// name, but turns up problems elsewhere too.
+//
+void VsnprintfTestCase::Scratch()
+{
+    // expectedLen, expectedString, max, format, ...
+    DoScratch(5, wxT("-1234"), 8, wxT("%d"), -1234);
+    DoScratch(7, wxT("1234567"), 8,  wxT("%d"), 1234567);
+    DoScratch(-1, wxT("1234567"), 8,  wxT("%d"), 12345678);
+    DoScratch(-1, wxT("-123456"), 8,  wxT("%d"), -1234567890);
+
+    DoScratch(6, wxT("123456"), 8,  wxT("123456"));
+    DoScratch(7, wxT("1234567"), 8,  wxT("1234567"));
+    DoScratch(-1, wxT("1234567"), 8,  wxT("12345678"));
+
+    DoScratch(6, wxT("123450"), 8,  wxT("12345%d"), 0);
+    DoScratch(7, wxT("1234560"), 8,  wxT("123456%d"), 0);
+    DoScratch(-1, wxT("1234567"), 8,  wxT("1234567%d"), 0);
+    DoScratch(-1, wxT("1234567"), 8,  wxT("12345678%d"), 0);
+
+    DoScratch(6, wxT("12%45%"), 8,  wxT("12%%45%%"));
+    DoScratch(7, wxT("12%45%7"), 8,  wxT("12%%45%%7"));
+    DoScratch(-1, wxT("12%45%7"), 8,  wxT("12%%45%%78"));
 }
