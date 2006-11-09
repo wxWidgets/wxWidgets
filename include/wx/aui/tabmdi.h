@@ -255,6 +255,7 @@ public:
 protected:
 
     void PageChanged(int old_selection, int new_selection);
+    void OnPageClose(wxAuiNotebookEvent& event);
     void OnPageChanged(wxAuiNotebookEvent& event);
     void OnSize(wxSizeEvent& evt);
 

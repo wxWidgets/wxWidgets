@@ -433,11 +433,16 @@ bool wxAuiMDIChildFrame::Destroy()
 
     if (pParentFrame->GetActiveChild() == this)
     {
+        // deactivate ourself
+        wxActivateEvent event(wxEVT_ACTIVATE, false, GetId());
+        event.SetEventObject(this);
+        GetEventHandler()->ProcessEvent(event);
+        
         pParentFrame->SetActiveChild(NULL);
         pParentFrame->SetChildMenuBar(NULL);
     }
 
-    const size_t page_count = pClientWindow->GetPageCount();
+    size_t page_count = pClientWindow->GetPageCount();
     for (size_t pos = 0; pos < page_count; pos++)
     {
         if (pClientWindow->GetPage(pos) == this)
@@ -650,6 +655,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxAuiMDIClientWindow, wxAuiNotebook)
 
 BEGIN_EVENT_TABLE(wxAuiMDIClientWindow, wxAuiNotebook)
     EVT_AUINOTEBOOK_PAGE_CHANGED(wxID_ANY, wxAuiMDIClientWindow::OnPageChanged)
+    EVT_AUINOTEBOOK_PAGE_CLOSE(wxID_ANY, wxAuiMDIClientWindow::OnPageClose)
     EVT_SIZE(wxAuiMDIClientWindow::OnSize)
 END_EVENT_TABLE()
 
@@ -698,15 +704,17 @@ void wxAuiMDIClientWindow::PageChanged(int old_selection, int new_selection)
     // don't do anything if the page doesn't actually change
     if (old_selection == new_selection)
         return;
-
+        
+    /*
     // don't do anything if the new page is already active
     if (new_selection != -1)
     {
         wxAuiMDIChildFrame* child = (wxAuiMDIChildFrame*)GetPage(new_selection);
         if (child->GetMDIParentFrame()->GetActiveChild() == child)
             return;
-    }
-
+    }*/
+    
+    
     // notify old active child that it has been deactivated
     if (old_selection != -1)
     {
@@ -717,29 +725,43 @@ void wxAuiMDIClientWindow::PageChanged(int old_selection, int new_selection)
         event.SetEventObject(old_child);
         old_child->GetEventHandler()->ProcessEvent(event);
     }
-
+     
     // notify new active child that it has been activated
     if (new_selection != -1)
     {
         wxAuiMDIChildFrame* active_child = (wxAuiMDIChildFrame*)GetPage(new_selection);
         wxASSERT_MSG(active_child, wxT("wxAuiMDIClientWindow::PageChanged - null page pointer"));
-
+        
         wxActivateEvent event(wxEVT_ACTIVATE, true, active_child->GetId());
         event.SetEventObject(active_child);
         active_child->GetEventHandler()->ProcessEvent(event);
-
+        
         if (active_child->GetMDIParentFrame())
         {
             active_child->GetMDIParentFrame()->SetActiveChild(active_child);
             active_child->GetMDIParentFrame()->SetChildMenuBar(active_child);
         }
     }
+    
+
+}
+
+void wxAuiMDIClientWindow::OnPageClose(wxAuiNotebookEvent& evt)
+{
+    wxAuiMDIChildFrame* wnd;
+    wnd = static_cast<wxAuiMDIChildFrame*>(GetPage(evt.GetSelection()));
+    
+    wnd->Close();
+    
+    // regardless of the result of wnd->Close(), we've
+    // already taken care of the close operations, so
+    // suppress further processing
+    evt.Veto();
 }
 
 void wxAuiMDIClientWindow::OnPageChanged(wxAuiNotebookEvent& evt)
 {
     PageChanged(evt.GetOldSelection(), evt.GetSelection());
-    evt.Skip();
 }
 
 void wxAuiMDIClientWindow::OnSize(wxSizeEvent& evt)
