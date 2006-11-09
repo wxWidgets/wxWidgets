@@ -34,11 +34,6 @@
 #include "wx/tipwin.h"
 #include "wx/cshelp.h"
 
-// wxUSE_MS_HTML_HELP is not defined under platforms other than MSW
-#ifndef wxUSE_MS_HTML_HELP
-    #define wxUSE_MS_HTML_HELP 0
-#endif
-
 #if wxUSE_MS_HTML_HELP
     #include "wx/msw/helpchm.h"     // for ShowContextHelpPopup
     #include "wx/utils.h"           // for wxGetMousePosition()
