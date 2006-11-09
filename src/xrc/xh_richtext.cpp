@@ -15,7 +15,7 @@
     #pragma hdrstop
 #endif
 
-#if wxUSE_XRC && wxUSE_RICHTEXT
+#if wxUSE_XRC && wxUSE_RICHTEXT && wxUSE_RICHTEXT_XML_HANDLER
 
 #include "wx/xrc/xh_richtext.h"
 

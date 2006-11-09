@@ -67,6 +67,5 @@
 #include "wx/xrc/xh_bmpcbox.h"
 #include "wx/xrc/xh_animatctrl.h"
 #include "wx/xrc/xh_collpane.h"
-#include "wx/xrc/xh_richtext.h"
 
 #endif // _WX_XH_ALL_H_
