@@ -130,8 +130,12 @@ bool wxMacCarbonPrintData::TransferFrom( const wxPrintData &data )
 {
     ValidateOrCreate() ;
     PMSetCopies( (PMPrintSettings) m_macPrintSettings , data.GetNoCopies() , false ) ;
-    PMSetOrientation( (PMPageFormat) m_macPageFormat , ( data.GetOrientation() == wxLANDSCAPE ) ?
-        kPMLandscape : kPMPortrait , false ) ;
+    if ( data.IsOrientationReversed() )
+        PMSetOrientation( (PMPageFormat) m_macPageFormat , ( data.GetOrientation() == wxLANDSCAPE ) ?
+            kPMReverseLandscape : kPMReversePortrait , false ) ;
+    else
+        PMSetOrientation( (PMPageFormat) m_macPageFormat , ( data.GetOrientation() == wxLANDSCAPE ) ?
+            kPMLandscape : kPMPortrait , false ) ;
     // collate cannot be set
 #if 0 // not yet tested
     if ( !m_printerName.empty() )
@@ -188,9 +192,15 @@ bool wxMacCarbonPrintData::TransferTo( wxPrintData &data )
     if ( err == noErr )
     {
         if ( orientation == kPMPortrait || orientation == kPMReversePortrait )
+        {
             data.SetOrientation( wxPORTRAIT  );
+            data.SetOrientationReversed( orientation == kPMReversePortrait );
+        }
         else
+        {
             data.SetOrientation( wxLANDSCAPE );
+            data.SetOrientationReversed( orientation == kPMReverseLandscape );
+        }
     }
 
     // collate cannot be set

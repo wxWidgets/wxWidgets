@@ -178,6 +178,7 @@ public:
     int GetNoCopies() const { return m_printNoCopies; }
     bool GetCollate() const { return m_printCollate; }
     int  GetOrientation() const { return m_printOrientation; }
+    bool IsOrientationReversed() const { return m_printOrientationReversed; }
 
     // Is this data OK for showing the print dialog?
     bool Ok() const { return IsOk(); }
@@ -197,6 +198,7 @@ public:
     void SetNoCopies(int v) { m_printNoCopies = v; }
     void SetCollate(bool flag) { m_printCollate = flag; }
     void SetOrientation(int orient) { m_printOrientation = orient; }
+    void SetOrientationReversed(bool reversed) { m_printOrientationReversed = reversed; }
 
     void SetPrinterName(const wxString& name) { m_printerName = name; }
     void SetColour(bool colour) { m_colour = colour; }
@@ -254,6 +256,7 @@ private:
 
     int             m_printNoCopies;
     int             m_printOrientation;
+    bool            m_printOrientationReversed;
     bool            m_printCollate;
 
     wxString        m_printerName;
