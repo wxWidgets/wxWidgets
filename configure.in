@@ -1820,26 +1820,12 @@ dnl ------------------------------------------------------------------------
 dnl Check for headers
 dnl ------------------------------------------------------------------------
 
-dnl defines HAVE_STDLIB_H
-AC_CHECK_HEADERS(stdlib.h)
-dnl defines HAVE_MALLOC_H
-AC_CHECK_HEADERS(malloc.h)
-dnl defines HAVE_UNISTD_H
-AC_CHECK_HEADERS(unistd.h)
-dnl defines HAVE_WCHAR_H
-AC_CHECK_HEADERS(wchar.h)
+AC_CHECK_HEADERS(stdlib.h fnmatch.h langinfo.h malloc.h unistd.h wchar.h)
 
 dnl maybe wchar_t is in wcstr.h if we don't have wchar.h?
 if test "$ac_cv_header_wchar_h" != "yes"; then
-    dnl defines HAVE_WCSTR_H
     AC_CHECK_HEADERS(wcstr.h)
 fi
-
-dnl defines HAVE_FNMATCH_H
-AC_CHECK_HEADERS(fnmatch.h)
-
-dnl defines HAVE_LANGINFO_H (GNU libc locale parameters)
-AC_CHECK_HEADERS(langinfo.h)
 
 case "${host}" in
   *-pc-os2_emx | *-pc-os2-emx )
