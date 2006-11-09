@@ -1668,10 +1668,13 @@ void wxAuiTabContainer::Render(wxDC* raw_dc, wxWindow* wnd)
     if (offset == 0)
         offset += m_art->GetIndentSize();     
     
-    // prepare the tab-close-button array
-    while (m_tab_close_buttons.GetCount() > page_count)
-        m_tab_close_buttons.RemoveAt(m_tab_close_buttons.GetCount()-1);
     
+    // prepare the tab-close-button array
+    // make sure tab button entries which aren't used are marked as hidden
+    for (i = page_count; i < m_tab_close_buttons.GetCount(); ++i)
+        m_tab_close_buttons.Item(i).cur_state = wxAUI_BUTTON_STATE_HIDDEN;
+    
+    // make sure there are enough tab button entries to accommodate all tabs
     while (m_tab_close_buttons.GetCount() < page_count)
     {
         wxAuiTabContainerButton tempbtn;
@@ -1981,11 +1984,16 @@ void wxAuiTabCtrl::OnLeftDown(wxMouseEvent& evt)
     wxWindow* wnd;
     if (TabHitTest(evt.m_x, evt.m_y, &wnd))
     {
-        wxAuiNotebookEvent e(wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGING, m_windowId);
-        e.SetSelection(GetIdxFromWindow(wnd));
-        e.SetOldSelection(GetActivePage());
-        e.SetEventObject(this);
-        GetEventHandler()->ProcessEvent(e);
+        int new_selection = GetIdxFromWindow(wnd);
+        
+        if (new_selection != GetActivePage())
+        {
+            wxAuiNotebookEvent e(wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGING, m_windowId);
+            e.SetSelection(new_selection);
+            e.SetOldSelection(GetActivePage());
+            e.SetEventObject(this);
+            GetEventHandler()->ProcessEvent(e);
+        }
 
         m_click_pt.x = evt.m_x;
         m_click_pt.y = evt.m_y;
@@ -2489,7 +2497,6 @@ bool wxAuiNotebook::DeletePage(size_t page_idx)
     if (!RemovePage(page_idx))
         return false;
 
-
     // actually destroy the window now
     if (wnd->IsKindOf(CLASSINFO(wxAuiMDIChildFrame)))
     {
@@ -2646,10 +2653,12 @@ size_t wxAuiNotebook::SetSelection(size_t new_page)
     evt.SetEventObject(this);
     if (!GetEventHandler()->ProcessEvent(evt) || evt.IsAllowed())
     {
+        int old_curpage = m_curpage;
+        m_curpage = new_page;
+            
         // program allows the page change
         evt.SetEventType(wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGED);
         (void)GetEventHandler()->ProcessEvent(evt);
-
 
 
         wxAuiTabCtrl* ctrl;
@@ -2662,8 +2671,6 @@ size_t wxAuiNotebook::SetSelection(size_t new_page)
             DoSizing();
             ctrl->DoShowHide();
 
-            int old_curpage = m_curpage;
-            m_curpage = new_page;
 
 
             // set fonts
