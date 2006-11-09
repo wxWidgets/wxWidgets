@@ -263,11 +263,9 @@ protected:
     wxFont m_normal_font;
     wxFont m_selected_font;
     wxFont m_measuring_font;
-    wxPen m_normal_bkpen;
-    wxPen m_selected_bkpen;
-    wxBrush m_normal_bkbrush;
-    wxBrush m_selected_bkbrush;
-    wxBrush m_bkbrush;
+    wxColour m_base_colour;
+    wxPen m_base_colour_pen;
+    wxBrush m_base_colour_brush;
     wxBitmap m_active_close_bmp;
     wxBitmap m_disabled_close_bmp;
     wxBitmap m_active_left_bmp;
