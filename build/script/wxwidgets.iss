@@ -3,7 +3,7 @@
 
 [Setup]
 AppName=wxWidgets
-AppVerName=wxWidgets CVS HEAD
+AppVerName=wxWidgets 2.8.0
 AppPublisher=wxWidgets
 AppPublisherURL=http://www.wxwidgets.org
 AppSupportURL=http://www.wxwidgets.org
@@ -13,7 +13,7 @@ DefaultGroupName=wxWidgets
 DisableProgramGroupPage=yes
 LicenseFile=C:\wx\inno\wxWidgets\docs\licence.txt
 InfoBeforeFile=C:\wx\inno\wxWidgets\docs\readme.txt
-InfoAfterFile=C:\wx\inno\wxWidgets\BuildCVS.txt
+#InfoAfterFile=C:\wx\inno\wxWidgets\BuildCVS.txt
 OutputDir=c:\daily
 OutputBaseFilename=wx-cvs-Msw-setup
 SetupIconFile=C:\wx\inno\wxWidgets\art\wxwin.ico
@@ -28,8 +28,7 @@ Source: "C:\wx\inno\wxWidgets\*"; DestDir: "{app}"; Flags: ignoreversion recurse
 Filename: "{app}\wx.url"; Section: "InternetShortcut"; Key: "URL"; String: "http://www.wxwidgets.org"
 
 [Icons]
-Name: "{group}\wx-cvs-msw"; Filename: "{app}\wx.exe"
-Name: "{group}\{cm:ProgramOnTheWeb,wx-cvs-msw}"; Filename: "{app}\wx.url"
+Name: "{group}\{cm:ProgramOnTheWeb,wxWidgets 2.8.0}"; Filename: "{app}\wx.url"
 
 [UninstallDelete]
 Type: files; Name: "{app}\wx.url"
