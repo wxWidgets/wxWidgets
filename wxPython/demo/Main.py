@@ -247,7 +247,7 @@ _treeList = [
     # Images
     ('Using Images', [
         'AlphaDrawing',
-        'AnimationCtrl',
+        'AnimateCtrl',
         'ArtProvider',
         'BitmapFromBuffer',
         'Cursor',
