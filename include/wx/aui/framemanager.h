@@ -801,8 +801,8 @@ typedef void (wxEvtHandler::*wxAuiManagerEventFunction)(wxAuiManagerEvent&);
 %pythoncode {
     EVT_AUI_PANEBUTTON = wx.PyEventBinder( wxEVT_AUI_PANEBUTTON )
     EVT_AUI_PANECLOSE = wx.PyEventBinder( wxEVT_AUI_PANECLOSE )
-    EVT_AUI_PANECLOSE = wx.PyEventBinder( wxEVT_AUI_PANEMAXIMIZE )
-    EVT_AUI_PANECLOSE = wx.PyEventBinder( wxEVT_AUI_PANERESTORE )
+    EVT_AUI_PANEMAXIMIZE = wx.PyEventBinder( wxEVT_AUI_PANEMAXIMIZE )
+    EVT_AUI_PANERESTORE = wx.PyEventBinder( wxEVT_AUI_PANERESTORE )
     EVT_AUI_RENDER = wx.PyEventBinder( wxEVT_AUI_RENDER )
 }
 #endif // SWIG
