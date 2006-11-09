@@ -720,6 +720,11 @@ public:
     {
         return m_hasFocus ? m_highlightBrush : m_highlightUnfocusedBrush;
     }
+    
+    bool HasFocus() const
+    {
+        return m_hasFocus;
+    }
 
 //protected:
     // the array of all line objects for a non virtual list control (for the
@@ -1381,7 +1386,12 @@ bool wxListLineData::SetAttributes(wxDC *dc,
     wxColour colText;
     if ( highlighted )
 #ifdef __WXMAC__
-        colText = *wxWHITE;
+    {
+        if (m_owner->HasFocus())
+            colText = *wxWHITE;
+        else
+            colText = *wxBLACK;
+    }
 #else
         colText = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT);
 #endif
