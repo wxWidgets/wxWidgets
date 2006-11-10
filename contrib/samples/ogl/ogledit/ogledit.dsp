@@ -65,8 +65,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxmswuniv27u_ogl.lib wxmswuniv27u_deprecated.lib wxmswuniv27u_core.lib wxbase27u.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswunivudll\ogledit.exe" /libpath:".\..\..\..\..\lib\vc_dll" /subsystem:windows
-# ADD LINK32 wxmswuniv27u_ogl.lib wxmswuniv27u_deprecated.lib wxmswuniv27u_core.lib wxbase27u.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswunivudll\ogledit.exe" /libpath:".\..\..\..\..\lib\vc_dll" /subsystem:windows
+# ADD BASE LINK32 wxmswuniv28u_ogl.lib wxmswuniv28u_deprecated.lib wxmswuniv28u_core.lib wxbase28u.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswunivudll\ogledit.exe" /libpath:".\..\..\..\..\lib\vc_dll" /subsystem:windows
+# ADD LINK32 wxmswuniv28u_ogl.lib wxmswuniv28u_deprecated.lib wxmswuniv28u_core.lib wxbase28u.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswunivudll\ogledit.exe" /libpath:".\..\..\..\..\lib\vc_dll" /subsystem:windows
 
 !ELSEIF  "$(CFG)" == "ogledit - Win32 DLL Universal Unicode Debug"
 
@@ -90,8 +90,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxmswuniv27ud_ogl.lib wxmswuniv27ud_deprecated.lib wxmswuniv27ud_core.lib wxbase27ud.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswunivuddll\ogledit.exe" /debug /libpath:".\..\..\..\..\lib\vc_dll" /subsystem:windows
-# ADD LINK32 wxmswuniv27ud_ogl.lib wxmswuniv27ud_deprecated.lib wxmswuniv27ud_core.lib wxbase27ud.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswunivuddll\ogledit.exe" /debug /libpath:".\..\..\..\..\lib\vc_dll" /subsystem:windows
+# ADD BASE LINK32 wxmswuniv28ud_ogl.lib wxmswuniv28ud_deprecated.lib wxmswuniv28ud_core.lib wxbase28ud.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswunivuddll\ogledit.exe" /debug /libpath:".\..\..\..\..\lib\vc_dll" /subsystem:windows
+# ADD LINK32 wxmswuniv28ud_ogl.lib wxmswuniv28ud_deprecated.lib wxmswuniv28ud_core.lib wxbase28ud.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswunivuddll\ogledit.exe" /debug /libpath:".\..\..\..\..\lib\vc_dll" /subsystem:windows
 
 !ELSEIF  "$(CFG)" == "ogledit - Win32 DLL Universal Release"
 
@@ -115,8 +115,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxmswuniv27_ogl.lib wxmswuniv27_deprecated.lib wxmswuniv27_core.lib wxbase27.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswunivdll\ogledit.exe" /libpath:".\..\..\..\..\lib\vc_dll" /subsystem:windows
-# ADD LINK32 wxmswuniv27_ogl.lib wxmswuniv27_deprecated.lib wxmswuniv27_core.lib wxbase27.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswunivdll\ogledit.exe" /libpath:".\..\..\..\..\lib\vc_dll" /subsystem:windows
+# ADD BASE LINK32 wxmswuniv28_ogl.lib wxmswuniv28_deprecated.lib wxmswuniv28_core.lib wxbase28.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswunivdll\ogledit.exe" /libpath:".\..\..\..\..\lib\vc_dll" /subsystem:windows
+# ADD LINK32 wxmswuniv28_ogl.lib wxmswuniv28_deprecated.lib wxmswuniv28_core.lib wxbase28.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswunivdll\ogledit.exe" /libpath:".\..\..\..\..\lib\vc_dll" /subsystem:windows
 
 !ELSEIF  "$(CFG)" == "ogledit - Win32 DLL Universal Debug"
 
@@ -140,8 +140,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxmswuniv27d_ogl.lib wxmswuniv27d_deprecated.lib wxmswuniv27d_core.lib wxbase27d.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswunivddll\ogledit.exe" /debug /libpath:".\..\..\..\..\lib\vc_dll" /subsystem:windows
-# ADD LINK32 wxmswuniv27d_ogl.lib wxmswuniv27d_deprecated.lib wxmswuniv27d_core.lib wxbase27d.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswunivddll\ogledit.exe" /debug /libpath:".\..\..\..\..\lib\vc_dll" /subsystem:windows
+# ADD BASE LINK32 wxmswuniv28d_ogl.lib wxmswuniv28d_deprecated.lib wxmswuniv28d_core.lib wxbase28d.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswunivddll\ogledit.exe" /debug /libpath:".\..\..\..\..\lib\vc_dll" /subsystem:windows
+# ADD LINK32 wxmswuniv28d_ogl.lib wxmswuniv28d_deprecated.lib wxmswuniv28d_core.lib wxbase28d.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswunivddll\ogledit.exe" /debug /libpath:".\..\..\..\..\lib\vc_dll" /subsystem:windows
 
 !ELSEIF  "$(CFG)" == "ogledit - Win32 DLL Unicode Release"
 
@@ -165,8 +165,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxmsw27u_ogl.lib wxmsw27u_deprecated.lib wxmsw27u_core.lib wxbase27u.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswudll\ogledit.exe" /libpath:".\..\..\..\..\lib\vc_dll" /subsystem:windows
-# ADD LINK32 wxmsw27u_ogl.lib wxmsw27u_deprecated.lib wxmsw27u_core.lib wxbase27u.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswudll\ogledit.exe" /libpath:".\..\..\..\..\lib\vc_dll" /subsystem:windows
+# ADD BASE LINK32 wxmsw28u_ogl.lib wxmsw28u_deprecated.lib wxmsw28u_core.lib wxbase28u.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswudll\ogledit.exe" /libpath:".\..\..\..\..\lib\vc_dll" /subsystem:windows
+# ADD LINK32 wxmsw28u_ogl.lib wxmsw28u_deprecated.lib wxmsw28u_core.lib wxbase28u.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswudll\ogledit.exe" /libpath:".\..\..\..\..\lib\vc_dll" /subsystem:windows
 
 !ELSEIF  "$(CFG)" == "ogledit - Win32 DLL Unicode Debug"
 
@@ -190,8 +190,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxmsw27ud_ogl.lib wxmsw27ud_deprecated.lib wxmsw27ud_core.lib wxbase27ud.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswuddll\ogledit.exe" /debug /libpath:".\..\..\..\..\lib\vc_dll" /subsystem:windows
-# ADD LINK32 wxmsw27ud_ogl.lib wxmsw27ud_deprecated.lib wxmsw27ud_core.lib wxbase27ud.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswuddll\ogledit.exe" /debug /libpath:".\..\..\..\..\lib\vc_dll" /subsystem:windows
+# ADD BASE LINK32 wxmsw28ud_ogl.lib wxmsw28ud_deprecated.lib wxmsw28ud_core.lib wxbase28ud.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswuddll\ogledit.exe" /debug /libpath:".\..\..\..\..\lib\vc_dll" /subsystem:windows
+# ADD LINK32 wxmsw28ud_ogl.lib wxmsw28ud_deprecated.lib wxmsw28ud_core.lib wxbase28ud.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswuddll\ogledit.exe" /debug /libpath:".\..\..\..\..\lib\vc_dll" /subsystem:windows
 
 !ELSEIF  "$(CFG)" == "ogledit - Win32 DLL Release"
 
@@ -215,8 +215,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxmsw27_ogl.lib wxmsw27_deprecated.lib wxmsw27_core.lib wxbase27.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswdll\ogledit.exe" /libpath:".\..\..\..\..\lib\vc_dll" /subsystem:windows
-# ADD LINK32 wxmsw27_ogl.lib wxmsw27_deprecated.lib wxmsw27_core.lib wxbase27.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswdll\ogledit.exe" /libpath:".\..\..\..\..\lib\vc_dll" /subsystem:windows
+# ADD BASE LINK32 wxmsw28_ogl.lib wxmsw28_deprecated.lib wxmsw28_core.lib wxbase28.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswdll\ogledit.exe" /libpath:".\..\..\..\..\lib\vc_dll" /subsystem:windows
+# ADD LINK32 wxmsw28_ogl.lib wxmsw28_deprecated.lib wxmsw28_core.lib wxbase28.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswdll\ogledit.exe" /libpath:".\..\..\..\..\lib\vc_dll" /subsystem:windows
 
 !ELSEIF  "$(CFG)" == "ogledit - Win32 DLL Debug"
 
@@ -240,8 +240,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxmsw27d_ogl.lib wxmsw27d_deprecated.lib wxmsw27d_core.lib wxbase27d.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswddll\ogledit.exe" /debug /libpath:".\..\..\..\..\lib\vc_dll" /subsystem:windows
-# ADD LINK32 wxmsw27d_ogl.lib wxmsw27d_deprecated.lib wxmsw27d_core.lib wxbase27d.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswddll\ogledit.exe" /debug /libpath:".\..\..\..\..\lib\vc_dll" /subsystem:windows
+# ADD BASE LINK32 wxmsw28d_ogl.lib wxmsw28d_deprecated.lib wxmsw28d_core.lib wxbase28d.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswddll\ogledit.exe" /debug /libpath:".\..\..\..\..\lib\vc_dll" /subsystem:windows
+# ADD LINK32 wxmsw28d_ogl.lib wxmsw28d_deprecated.lib wxmsw28d_core.lib wxbase28d.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswddll\ogledit.exe" /debug /libpath:".\..\..\..\..\lib\vc_dll" /subsystem:windows
 
 !ELSEIF  "$(CFG)" == "ogledit - Win32 Universal Unicode Release"
 
@@ -265,8 +265,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxmswuniv27u_ogl.lib wxmswuniv27u_deprecated.lib wxmswuniv27u_core.lib wxbase27u.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswunivu\ogledit.exe" /libpath:".\..\..\..\..\lib\vc_lib" /subsystem:windows
-# ADD LINK32 wxmswuniv27u_ogl.lib wxmswuniv27u_deprecated.lib wxmswuniv27u_core.lib wxbase27u.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswunivu\ogledit.exe" /libpath:".\..\..\..\..\lib\vc_lib" /subsystem:windows
+# ADD BASE LINK32 wxmswuniv28u_ogl.lib wxmswuniv28u_deprecated.lib wxmswuniv28u_core.lib wxbase28u.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswunivu\ogledit.exe" /libpath:".\..\..\..\..\lib\vc_lib" /subsystem:windows
+# ADD LINK32 wxmswuniv28u_ogl.lib wxmswuniv28u_deprecated.lib wxmswuniv28u_core.lib wxbase28u.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswunivu\ogledit.exe" /libpath:".\..\..\..\..\lib\vc_lib" /subsystem:windows
 
 !ELSEIF  "$(CFG)" == "ogledit - Win32 Universal Unicode Debug"
 
@@ -290,8 +290,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxmswuniv27ud_ogl.lib wxmswuniv27ud_deprecated.lib wxmswuniv27ud_core.lib wxbase27ud.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswunivud\ogledit.exe" /debug /libpath:".\..\..\..\..\lib\vc_lib" /subsystem:windows
-# ADD LINK32 wxmswuniv27ud_ogl.lib wxmswuniv27ud_deprecated.lib wxmswuniv27ud_core.lib wxbase27ud.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswunivud\ogledit.exe" /debug /libpath:".\..\..\..\..\lib\vc_lib" /subsystem:windows
+# ADD BASE LINK32 wxmswuniv28ud_ogl.lib wxmswuniv28ud_deprecated.lib wxmswuniv28ud_core.lib wxbase28ud.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswunivud\ogledit.exe" /debug /libpath:".\..\..\..\..\lib\vc_lib" /subsystem:windows
+# ADD LINK32 wxmswuniv28ud_ogl.lib wxmswuniv28ud_deprecated.lib wxmswuniv28ud_core.lib wxbase28ud.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswunivud\ogledit.exe" /debug /libpath:".\..\..\..\..\lib\vc_lib" /subsystem:windows
 
 !ELSEIF  "$(CFG)" == "ogledit - Win32 Universal Release"
 
@@ -315,8 +315,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxmswuniv27_ogl.lib wxmswuniv27_deprecated.lib wxmswuniv27_core.lib wxbase27.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswuniv\ogledit.exe" /libpath:".\..\..\..\..\lib\vc_lib" /subsystem:windows
-# ADD LINK32 wxmswuniv27_ogl.lib wxmswuniv27_deprecated.lib wxmswuniv27_core.lib wxbase27.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswuniv\ogledit.exe" /libpath:".\..\..\..\..\lib\vc_lib" /subsystem:windows
+# ADD BASE LINK32 wxmswuniv28_ogl.lib wxmswuniv28_deprecated.lib wxmswuniv28_core.lib wxbase28.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswuniv\ogledit.exe" /libpath:".\..\..\..\..\lib\vc_lib" /subsystem:windows
+# ADD LINK32 wxmswuniv28_ogl.lib wxmswuniv28_deprecated.lib wxmswuniv28_core.lib wxbase28.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswuniv\ogledit.exe" /libpath:".\..\..\..\..\lib\vc_lib" /subsystem:windows
 
 !ELSEIF  "$(CFG)" == "ogledit - Win32 Universal Debug"
 
@@ -340,8 +340,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxmswuniv27d_ogl.lib wxmswuniv27d_deprecated.lib wxmswuniv27d_core.lib wxbase27d.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswunivd\ogledit.exe" /debug /libpath:".\..\..\..\..\lib\vc_lib" /subsystem:windows
-# ADD LINK32 wxmswuniv27d_ogl.lib wxmswuniv27d_deprecated.lib wxmswuniv27d_core.lib wxbase27d.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswunivd\ogledit.exe" /debug /libpath:".\..\..\..\..\lib\vc_lib" /subsystem:windows
+# ADD BASE LINK32 wxmswuniv28d_ogl.lib wxmswuniv28d_deprecated.lib wxmswuniv28d_core.lib wxbase28d.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswunivd\ogledit.exe" /debug /libpath:".\..\..\..\..\lib\vc_lib" /subsystem:windows
+# ADD LINK32 wxmswuniv28d_ogl.lib wxmswuniv28d_deprecated.lib wxmswuniv28d_core.lib wxbase28d.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswunivd\ogledit.exe" /debug /libpath:".\..\..\..\..\lib\vc_lib" /subsystem:windows
 
 !ELSEIF  "$(CFG)" == "ogledit - Win32 Unicode Release"
 
@@ -365,8 +365,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxmsw27u_ogl.lib wxmsw27u_deprecated.lib wxmsw27u_core.lib wxbase27u.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswu\ogledit.exe" /libpath:".\..\..\..\..\lib\vc_lib" /subsystem:windows
-# ADD LINK32 wxmsw27u_ogl.lib wxmsw27u_deprecated.lib wxmsw27u_core.lib wxbase27u.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswu\ogledit.exe" /libpath:".\..\..\..\..\lib\vc_lib" /subsystem:windows
+# ADD BASE LINK32 wxmsw28u_ogl.lib wxmsw28u_deprecated.lib wxmsw28u_core.lib wxbase28u.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswu\ogledit.exe" /libpath:".\..\..\..\..\lib\vc_lib" /subsystem:windows
+# ADD LINK32 wxmsw28u_ogl.lib wxmsw28u_deprecated.lib wxmsw28u_core.lib wxbase28u.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswu\ogledit.exe" /libpath:".\..\..\..\..\lib\vc_lib" /subsystem:windows
 
 !ELSEIF  "$(CFG)" == "ogledit - Win32 Unicode Debug"
 
@@ -390,8 +390,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxmsw27ud_ogl.lib wxmsw27ud_deprecated.lib wxmsw27ud_core.lib wxbase27ud.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswud\ogledit.exe" /debug /libpath:".\..\..\..\..\lib\vc_lib" /subsystem:windows
-# ADD LINK32 wxmsw27ud_ogl.lib wxmsw27ud_deprecated.lib wxmsw27ud_core.lib wxbase27ud.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswud\ogledit.exe" /debug /libpath:".\..\..\..\..\lib\vc_lib" /subsystem:windows
+# ADD BASE LINK32 wxmsw28ud_ogl.lib wxmsw28ud_deprecated.lib wxmsw28ud_core.lib wxbase28ud.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswud\ogledit.exe" /debug /libpath:".\..\..\..\..\lib\vc_lib" /subsystem:windows
+# ADD LINK32 wxmsw28ud_ogl.lib wxmsw28ud_deprecated.lib wxmsw28ud_core.lib wxbase28ud.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswud\ogledit.exe" /debug /libpath:".\..\..\..\..\lib\vc_lib" /subsystem:windows
 
 !ELSEIF  "$(CFG)" == "ogledit - Win32 Release"
 
@@ -415,8 +415,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxmsw27_ogl.lib wxmsw27_deprecated.lib wxmsw27_core.lib wxbase27.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib /nologo /machine:i386 /out:"vc_msw\ogledit.exe" /libpath:".\..\..\..\..\lib\vc_lib" /subsystem:windows
-# ADD LINK32 wxmsw27_ogl.lib wxmsw27_deprecated.lib wxmsw27_core.lib wxbase27.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib /nologo /machine:i386 /out:"vc_msw\ogledit.exe" /libpath:".\..\..\..\..\lib\vc_lib" /subsystem:windows
+# ADD BASE LINK32 wxmsw28_ogl.lib wxmsw28_deprecated.lib wxmsw28_core.lib wxbase28.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib /nologo /machine:i386 /out:"vc_msw\ogledit.exe" /libpath:".\..\..\..\..\lib\vc_lib" /subsystem:windows
+# ADD LINK32 wxmsw28_ogl.lib wxmsw28_deprecated.lib wxmsw28_core.lib wxbase28.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib /nologo /machine:i386 /out:"vc_msw\ogledit.exe" /libpath:".\..\..\..\..\lib\vc_lib" /subsystem:windows
 
 !ELSEIF  "$(CFG)" == "ogledit - Win32 Debug"
 
@@ -440,8 +440,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxmsw27d_ogl.lib wxmsw27d_deprecated.lib wxmsw27d_core.lib wxbase27d.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswd\ogledit.exe" /debug /libpath:".\..\..\..\..\lib\vc_lib" /subsystem:windows
-# ADD LINK32 wxmsw27d_ogl.lib wxmsw27d_deprecated.lib wxmsw27d_core.lib wxbase27d.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswd\ogledit.exe" /debug /libpath:".\..\..\..\..\lib\vc_lib" /subsystem:windows
+# ADD BASE LINK32 wxmsw28d_ogl.lib wxmsw28d_deprecated.lib wxmsw28d_core.lib wxbase28d.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswd\ogledit.exe" /debug /libpath:".\..\..\..\..\lib\vc_lib" /subsystem:windows
+# ADD LINK32 wxmsw28d_ogl.lib wxmsw28d_deprecated.lib wxmsw28d_core.lib wxbase28d.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswd\ogledit.exe" /debug /libpath:".\..\..\..\..\lib\vc_lib" /subsystem:windows
 
 !ENDIF
 
