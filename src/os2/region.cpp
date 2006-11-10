@@ -151,10 +151,8 @@ wxRegion::wxRegion(
                                      );
 } // end of wxRegion::wxRegion
 
-wxRegion::wxRegion(
-  const wxPoint&                    rTopLeft
-, const wxPoint&                    rBottomRight
-)
+wxRegion::wxRegion(const wxPoint& rTopLeft,
+                   const wxPoint& rBottomRight)
 {
     RECTL                           vRect;
     SIZEL                           vSize = {0, 0};
@@ -188,9 +186,7 @@ wxRegion::wxRegion(
                                      );
 } // end of wxRegion::wxRegion
 
-wxRegion::wxRegion(
-  const wxRect&                     rRect
-)
+wxRegion::wxRegion(const wxRect& rRect)
 {
     RECTL                           vRect;
     SIZEL                           vSize = {0, 0};
@@ -224,6 +220,11 @@ wxRegion::wxRegion(
                                       ,&vRect
                                      );
 } // end of wxRegion::wxRegion
+
+wxRegion::wxRegion(size_t n, const wxPoint *points, int WXUNUSED(fillStyle))
+{
+    // TO DO
+}
 
 //
 // Destroy the region.
