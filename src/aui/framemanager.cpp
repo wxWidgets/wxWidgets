@@ -3035,15 +3035,19 @@ void wxAuiManager::HideHint()
 
 
 
-// DrawHintRect() draws a drop hint rectangle. First calls DoDrop() to
-// determine the exact position the pane would be at were if dropped.  If
-// the pame would indeed become docked at the specified drop point,
-// DrawHintRect() then calls ShowHint() to indicate this drop rectangle.
-// "pane_window" is the window pointer of the pane being dragged, pt is
-// the mouse position, in client coordinates
-void wxAuiManager::DrawHintRect(wxWindow* pane_window,
-                                  const wxPoint& pt,
-                                  const wxPoint& offset)
+
+// CalculateHintRect() calculates the drop hint rectangle.  The method
+// first calls DoDrop() to determine the exact position the pane would
+// be at were if dropped.  If the pane would indeed become docked at the
+// specified drop point, the the rectangle hint will be returned in
+// screen coordinates.  Otherwise, an empty rectangle is returned.
+// |pane_window| is the window pointer of the pane being dragged, |pt| is
+// the mouse position, in client coordinates.  |offset| describes the offset
+// that the mouse is from the upper-left corner of the item being dragged
+
+wxRect wxAuiManager::CalculateHintRect(wxWindow* pane_window,
+                                       const wxPoint& pt,
+                                       const wxPoint& offset)
 {
     wxRect rect;
 
@@ -3061,7 +3065,7 @@ void wxAuiManager::DrawHintRect(wxWindow* pane_window,
     hint.Show();
 
     if (!hint.IsOk())
-        return;
+        return rect;
 
     CopyDocksAndPanes(docks, panes, m_docks, m_panes);
 
@@ -3080,8 +3084,7 @@ void wxAuiManager::DrawHintRect(wxWindow* pane_window,
     // find out where the new pane would be
     if (!DoDrop(docks, panes, hint, pt, offset))
     {
-        HideHint();
-        return;
+        return rect;
     }
 
     panes.Add(hint);
@@ -3109,13 +3112,33 @@ void wxAuiManager::DrawHintRect(wxWindow* pane_window,
 
     if (rect.IsEmpty())
     {
-        HideHint();
-        return;
+        return rect;
     }
 
     // actually show the hint rectangle on the screen
     m_frame->ClientToScreen(&rect.x, &rect.y);
-    ShowHint(rect);
+
+    return rect;
+}
+
+// DrawHintRect() calculates the hint rectangle by calling
+// CalculateHintRect().  If there is a rectangle, it shows it
+// by calling ShowHint(), otherwise it hides any hint
+// rectangle currently shown
+void wxAuiManager::DrawHintRect(wxWindow* pane_window,
+                                const wxPoint& pt,
+                                const wxPoint& offset)
+{
+    wxRect rect = CalculateHintRect(pane_window, pt, offset);
+    
+    if (rect.IsEmpty())
+    {
+        HideHint();
+    }
+     else
+    {
+        ShowHint(rect);
+    }
 }
 
 void wxAuiManager::OnFloatingPaneMoveStart(wxWindow* wnd)

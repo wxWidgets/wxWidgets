@@ -476,9 +476,14 @@ public:
 public:
     virtual wxAuiFloatingFrame* CreateFloatingFrame(wxWindow* parent, const wxAuiPaneInfo& p);
 
+    wxRect CalculateHintRect(wxWindow* pane_window,
+                             const wxPoint& pt,
+                             const wxPoint& offset);
+                      
     void DrawHintRect(wxWindow* pane_window,
                       const wxPoint& pt,
                       const wxPoint& offset);
+                      
     virtual void ShowHint(const wxRect& rect);
     virtual void HideHint();
 

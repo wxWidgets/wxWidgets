@@ -3132,6 +3132,17 @@ void wxAuiNotebook::OnTabEndDrag(wxCommandEvent& command_evt)
         }
          else
         {
+            wxPoint zero(0,0);
+            wxRect rect = m_mgr.CalculateHintRect(m_dummy_wnd,
+                                                  mouse_client_pt,
+                                                  zero);
+            if (rect.IsEmpty())
+            {
+                // there is no suitable drop location here, exit out
+                return;
+            }
+        
+        
             // If there is no tabframe at all, create one
             wxTabFrame* new_tabs = new wxTabFrame;
             new_tabs->SetTabCtrlHeight(m_tab_ctrl_height);
