@@ -15,7 +15,9 @@
             <label>_Reload resource\tCtrl-R</label>
             <help>Reload basic dialog resource</help>
         </object>
-        <object class="wxMenuItem" name="exit_tool_or_menuitem">
+
+        <!-- we use wxID_EXIT name here to get the default menu item stock icon -->
+        <object class="wxMenuItem" name="wxID_EXIT">
             <label>E_xit\tAlt-X</label>
             <help>Exit this application</help>
         </object>
@@ -70,7 +72,9 @@
     </object>    
     <object class="wxMenu" name="help_menu">
         <label>_Help</label>
-        <object class="wxMenuItem" name="about_tool_or_menuitem">
+
+        <!-- we use wxID_ABOUT name here to get the default menu item stock icon -->
+        <object class="wxMenuItem" name="wxID_ABOUT">
             <label>_About...</label>
             <help>About this application</help>
         </object>
