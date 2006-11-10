@@ -380,7 +380,18 @@ wxAuiMDIChildFrame::wxAuiMDIChildFrame(wxAuiMDIParentFrame *parent,
                                        const wxString& name)
 {
     Init();
-    Create(parent, id, title, wxDefaultPosition, size, style, name);
+    
+    // There are two ways to create an tabbed mdi child fram without
+    // making it the active document.  Either Show(false) can be called
+    // before Create() (as is customary on some ports with wxFrame-type
+    // windows), or wxMINIMIZE can be passed in the style flags.  Note that
+    // wxAuiMDIChildFrame is not really derived from wxFrame, as wxMDIChildFrame
+    // is, but those are the expected symantics.  No style flag is passed
+    // onto the panel underneath.
+    if (style & wxMINIMIZE)
+        m_activate_on_create = false;
+        
+    Create(parent, id, title, wxDefaultPosition, size, 0, name);
 }
 
 wxAuiMDIChildFrame::~wxAuiMDIChildFrame()
@@ -401,6 +412,10 @@ bool wxAuiMDIChildFrame::Create(wxAuiMDIParentFrame* parent,
     wxAuiMDIClientWindow* pClientWindow = parent->GetClientWindow();
     wxASSERT_MSG((pClientWindow != (wxWindow*) NULL), wxT("Missing MDI client window."));
 
+    // see comment in constructor
+    if (style & wxMINIMIZE)
+        m_activate_on_create = false;
+
     wxSize cli_size = pClientWindow->GetClientSize();
 
     // create the window off-screen to prevent flicker
@@ -408,7 +423,9 @@ bool wxAuiMDIChildFrame::Create(wxAuiMDIParentFrame* parent,
 		    id,
 		    wxPoint(cli_size.x+1, cli_size.y+1),
 		    size,
-		    style|wxNO_BORDER, name);
+		    wxNO_BORDER, name);
+
+    DoShow(false);
 
     SetMDIParentFrame(parent);
 
@@ -417,9 +434,9 @@ bool wxAuiMDIChildFrame::Create(wxAuiMDIParentFrame* parent,
 
     m_title = title;
 
-    pClientWindow->AddPage(this, title, true);
+    pClientWindow->AddPage(this, title, m_activate_on_create);
     pClientWindow->Refresh();
-
+    
     return true;
 }
 
@@ -604,14 +621,17 @@ wxAuiMDIParentFrame* wxAuiMDIChildFrame::GetMDIParentFrame() const
 
 void wxAuiMDIChildFrame::Init()
 {
+    m_activate_on_create = true;
     m_pMDIParentFrame = NULL;
 #if wxUSE_MENUS
     m_pMenuBar = NULL;
 #endif // wxUSE_MENUS
 }
 
-bool wxAuiMDIChildFrame::Show(bool WXUNUSED(show))
+bool wxAuiMDIChildFrame::Show(bool show)
 {
+    m_activate_on_create = show;
+    
     // do nothing
     return true;
 }
@@ -687,7 +707,7 @@ bool wxAuiMDIClientWindow::CreateClient(wxAuiMDIParentFrame* parent, long style)
     }
 
     wxColour bkcolour = wxSystemSettings::GetColour(wxSYS_COLOUR_APPWORKSPACE);
-    SetBackgroundColour(bkcolour);
+    SetOwnBackgroundColour(bkcolour);
 
     m_mgr.GetArtProvider()->SetColour(wxAUI_ART_BACKGROUND_COLOUR, bkcolour);
 

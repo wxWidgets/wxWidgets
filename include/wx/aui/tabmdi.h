@@ -222,6 +222,7 @@ protected:
     wxString m_title;
     wxIcon m_icon;
     wxIconBundle m_icon_bundle;
+    bool m_activate_on_create;
 
 #if wxUSE_MENUS
     wxMenuBar* m_pMenuBar;
@@ -255,8 +256,8 @@ public:
 protected:
 
     void PageChanged(int old_selection, int new_selection);
-    void OnPageClose(wxAuiNotebookEvent& event);
-    void OnPageChanged(wxAuiNotebookEvent& event);
+    void OnPageClose(wxAuiNotebookEvent& evt);
+    void OnPageChanged(wxAuiNotebookEvent& evt);
     void OnSize(wxSizeEvent& evt);
 
 private:
