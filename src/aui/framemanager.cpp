@@ -67,6 +67,16 @@ DEFINE_EVENT_TYPE(wxEVT_AUI_RENDER)
 
 IMPLEMENT_DYNAMIC_CLASS(wxAuiManagerEvent, wxEvent)
 
+
+// private manager flags (not yet on the public API)
+enum wxAuiPrivateManagerOption
+{
+    wxAUI_MGR_NO_DOCK_SIZE_LIMIT = 1 << 28,
+};
+
+
+
+
 class wxPseudoTransparentFrame : public wxFrame
 {
 public:
@@ -1915,12 +1925,15 @@ wxSizer* wxAuiManager::LayoutAll(wxAuiPaneInfoArray& panes,
                 }
             }
 
-            // new dock's size may not be more than 1/3 of the frame size
-            if (dock.IsHorizontal())
-                size = wxMin(size, cli_size.y/3);
-                 else
-                size = wxMin(size, cli_size.x/3);
-
+            if (!(m_flags & wxAUI_MGR_NO_DOCK_SIZE_LIMIT))
+            {
+                // new dock's size may not be more than 1/3 of the frame size
+                if (dock.IsHorizontal())
+                    size = wxMin(size, cli_size.y/3);
+                     else
+                    size = wxMin(size, cli_size.x/3);
+            }
+            
             if (size < 10)
                 size = 10;
             dock.size = size;
