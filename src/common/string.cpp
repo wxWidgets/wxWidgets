@@ -1682,17 +1682,11 @@ int wxString::Find(const wxChar *pszSub) const
 // the implementation of all the functions below is exactly the same so factor
 // it out
 
-#ifdef __WATCOMC__
-    #define STR2INTLINK _WCRTLINK
-#else
-    #define STR2INTLINK
-#endif
-
-template <typename T>
+template <typename T, typename F>
 bool wxStringToIntType(const wxChar *start,
                        T *val,
                        int base,
-                       T STR2INTLINK (*func)(const wxChar *, wxChar **, int))
+                       F func)
 {
     wxCHECK_MSG( val, false, _T("NULL output pointer") );
     wxASSERT_MSG( !base || (base > 1 && base <= 36), _T("invalid base") );
