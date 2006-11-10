@@ -668,7 +668,7 @@ MyFrame::MyFrame(wxWindow* parent,
     view_menu->Append(ID_TextContent, _("Use a Text Control for the Content Pane"));
     view_menu->Append(ID_HTMLContent, _("Use an HTML Control for the Content Pane"));
     view_menu->Append(ID_TreeContent, _("Use a Tree Control for the Content Pane"));
-    view_menu->Append(ID_NotebookContent, _("Use a AUI wxMultiNotebook control for the Content Pane"));
+    view_menu->Append(ID_NotebookContent, _("Use a wxAuiNotebook control for the Content Pane"));
     view_menu->Append(ID_SizeReportContent, _("Use a Size Reporter for the Content Pane"));
 
     wxMenu* options_menu = new wxMenu;
