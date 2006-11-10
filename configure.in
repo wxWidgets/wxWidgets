@@ -6007,6 +6007,7 @@ if test "$wxUSE_DATETIME" = "yes"; then
     AC_CACHE_CHECK(for timezone variable in <time.h>,
                    wx_cv_var_timezone,
                    [
+                        AC_LANG_PUSH(C++)
                         AC_TRY_COMPILE(
                             [
                                 #include <time.h>
@@ -6052,6 +6053,7 @@ if test "$wxUSE_DATETIME" = "yes"; then
                                 )
                             ]
                         )
+                        AC_LANG_POP()
                    ]
     )
 
