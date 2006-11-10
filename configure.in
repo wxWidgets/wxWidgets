@@ -1974,6 +1974,9 @@ AC_CACHE_CHECK(
     [whether the compiler supports variadic macros],
     [wx_cv_have_variadic_macros],
     [
+        dnl C compiler might support variadic macros when C++ one doesn't
+        dnl (happens with gcc/g++ 2.95.4), so must use C++ one explicitly
+        AC_LANG_PUSH(C++)
         AC_COMPILE_IFELSE(
             AC_LANG_PROGRAM(
                 [
@@ -1987,6 +1990,7 @@ AC_CACHE_CHECK(
             [wx_cv_have_variadic_macros=yes],
             [wx_cv_have_variadic_macros=no]
             )
+        AC_LANG_POP()
     ]
 )
 
