@@ -92,7 +92,7 @@ private:
 #endif
 
         CPPUNIT_TEST( BigToSmallBuffer );
-        CPPUNIT_TEST( Scratch );
+        CPPUNIT_TEST( Miscellaneous );
     CPPUNIT_TEST_SUITE_END();
 
     void D();
@@ -112,7 +112,7 @@ private:
     void Unicode();
 
     void BigToSmallBuffer();
-    void Scratch();
+    void Miscellaneous();
     void Misc(wxChar *buffer, int size);
 
     DECLARE_NO_COPY_CLASS(VsnprintfTestCase)
@@ -360,7 +360,7 @@ void VsnprintfTestCase::BigToSmallBuffer()
     Misc(&buf4, 1);
 }
 
-static void DoScratch(
+static void DoMisc(
         int expectedLen,
         const wxString& expectedString,
         size_t max,
@@ -405,27 +405,27 @@ static void DoScratch(
         CPPUNIT_ASSERT_MESSAGE(overflowMsg, buf[i] == '*');
 }
 
-// Originally intended to test the final copy from the scratch, hence the
-// name, but turns up problems elsewhere too.
-//
-void VsnprintfTestCase::Scratch()
+void VsnprintfTestCase::Miscellaneous()
 {
     // expectedLen, expectedString, max, format, ...
-    DoScratch(5, wxT("-1234"), 8, wxT("%d"), -1234);
-    DoScratch(7, wxT("1234567"), 8,  wxT("%d"), 1234567);
-    DoScratch(-1, wxT("1234567"), 8,  wxT("%d"), 12345678);
-    DoScratch(-1, wxT("-123456"), 8,  wxT("%d"), -1234567890);
+    DoMisc(5, wxT("-1234"), 8, wxT("%d"), -1234);
+    DoMisc(7, wxT("1234567"), 8,  wxT("%d"), 1234567);
+    DoMisc(-1, wxT("1234567"), 8,  wxT("%d"), 12345678);
+    DoMisc(-1, wxT("-123456"), 8,  wxT("%d"), -1234567890);
 
-    DoScratch(6, wxT("123456"), 8,  wxT("123456"));
-    DoScratch(7, wxT("1234567"), 8,  wxT("1234567"));
-    DoScratch(-1, wxT("1234567"), 8,  wxT("12345678"));
+    DoMisc(6, wxT("123456"), 8,  wxT("123456"));
+    DoMisc(7, wxT("1234567"), 8,  wxT("1234567"));
+    DoMisc(-1, wxT("1234567"), 8,  wxT("12345678"));
 
-    DoScratch(6, wxT("123450"), 8,  wxT("12345%d"), 0);
-    DoScratch(7, wxT("1234560"), 8,  wxT("123456%d"), 0);
-    DoScratch(-1, wxT("1234567"), 8,  wxT("1234567%d"), 0);
-    DoScratch(-1, wxT("1234567"), 8,  wxT("12345678%d"), 0);
+    DoMisc(6, wxT("123450"), 8,  wxT("12345%d"), 0);
+    DoMisc(7, wxT("1234560"), 8,  wxT("123456%d"), 0);
+    DoMisc(-1, wxT("1234567"), 8,  wxT("1234567%d"), 0);
+    DoMisc(-1, wxT("1234567"), 8,  wxT("12345678%d"), 0);
 
-    DoScratch(6, wxT("12%45%"), 8,  wxT("12%%45%%"));
-    DoScratch(7, wxT("12%45%7"), 8,  wxT("12%%45%%7"));
-    DoScratch(-1, wxT("12%45%7"), 8,  wxT("12%%45%%78"));
+    DoMisc(6, wxT("12%45%"), 8,  wxT("12%%45%%"));
+    DoMisc(7, wxT("12%45%7"), 8,  wxT("12%%45%%7"));
+    DoMisc(-1, wxT("12%45%7"), 8,  wxT("12%%45%%78"));
+
+    DoMisc(5, wxT("%%%%%"), 6,  wxT("%%%%%%%%%%"));
+    DoMisc(6, wxT("%%%%12"), 7,  wxT("%%%%%%%%%d"), 12);
 }
