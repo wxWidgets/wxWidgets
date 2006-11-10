@@ -21839,6 +21839,12 @@ if test "${wx_cv_STDC_EXT_required+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
 else
 
+                    ac_ext=cc
+ac_cpp='$CXXCPP $CPPFLAGS'
+ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
+
                     cat >conftest.$ac_ext <<_ACEOF
 /* confdefs.h.  */
 _ACEOF
@@ -21867,7 +21873,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   cat conftest.err >&5
   echo "$as_me:$LINENO: \$? = $ac_status" >&5
   (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_c_werror_flag"			 || test ! -s conftest.err'
+	 { ac_try='test -z "$ac_cxx_werror_flag"			 || test ! -s conftest.err'
   { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
   (eval $ac_try) 2>&5
   ac_status=$?
@@ -21888,6 +21894,12 @@ wx_cv_STDC_EXT_required=yes
 
 fi
 rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
+                    ac_ext=c
+ac_cpp='$CPP $CPPFLAGS'
+ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_c_compiler_gnu
+
 
 
 fi
@@ -23134,6 +23146,13 @@ if test "x$COMPAQCXX" = "xyes"; then
                                 CXXFLAGS="-w0 -msg_disable basclsnondto,unrimpret,intconlosbit"
 fi
 
+ac_ext=cc
+ac_cpp='$CXXCPP $CPPFLAGS'
+ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
+
+
 if test "$wxUSE_STD_STRING" = "yes" -o "$wxUSE_STL" = "yes"; then
     if test "$wxUSE_UNICODE" = "yes"; then
         std_string="std::wstring"
@@ -23145,7 +23164,11 @@ if test "$wxUSE_STD_STRING" = "yes" -o "$wxUSE_STL" = "yes"; then
 
         echo "$as_me:$LINENO: checking for $std_string in <string>" >&5
 echo $ECHO_N "checking for $std_string in <string>... $ECHO_C" >&6
-    cat >conftest.$ac_ext <<_ACEOF
+if test "${wx_cv_class_stdstring+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+
+            cat >conftest.$ac_ext <<_ACEOF
 /* confdefs.h.  */
 _ACEOF
 cat confdefs.h >>conftest.$ac_ext
@@ -23169,7 +23192,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   cat conftest.err >&5
   echo "$as_me:$LINENO: \$? = $ac_status" >&5
   (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_c_werror_flag"			 || test ! -s conftest.err'
+	 { ac_try='test -z "$ac_cxx_werror_flag"			 || test ! -s conftest.err'
   { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
   (eval $ac_try) 2>&5
   ac_status=$?
@@ -23181,44 +23204,59 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   ac_status=$?
   echo "$as_me:$LINENO: \$? = $ac_status" >&5
   (exit $ac_status); }; }; then
-  echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6
-                    cat >>confdefs.h <<\_ACEOF
-#define HAVE_STD_WSTRING 1
-_ACEOF
-
+  wx_cv_class_stdstring=yes
 else
   echo "$as_me: failed program was:" >&5
 sed 's/^/| /' conftest.$ac_ext >&5
 
-echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6
-                    echo "$as_me:$LINENO: checking if std::basic_string<$char_type> works" >&5
+wx_cv_class_stdstring=no
+
+fi
+rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
+
+
+fi
+echo "$as_me:$LINENO: result: $wx_cv_class_stdstring" >&5
+echo "${ECHO_T}$wx_cv_class_stdstring" >&6
+
+    if test "$wx_cv_class_stdstring" = yes; then
+        if test "$wxUSE_UNICODE" = "yes"; then
+            cat >>confdefs.h <<\_ACEOF
+#define HAVE_STD_WSTRING 1
+_ACEOF
+
+        fi
+                    else
+        echo "$as_me:$LINENO: checking if std::basic_string<$char_type> works" >&5
 echo $ECHO_N "checking if std::basic_string<$char_type> works... $ECHO_C" >&6
-                    cat >conftest.$ac_ext <<_ACEOF
+if test "${wx_cv_class_stdbasicstring+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+
+                cat >conftest.$ac_ext <<_ACEOF
 /* confdefs.h.  */
 _ACEOF
 cat confdefs.h >>conftest.$ac_ext
 cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
 
-                        #ifdef HAVE_WCHAR_H
-                        #  ifdef __CYGWIN__
-                        #    include <stddef.h>
-                        #  endif
-                        #  include <wchar.h>
-                        #endif
-                        #ifdef HAVE_STDLIB_H
-                        #  include <stdlib.h>
-                        #endif
-                        #include <stdio.h>
-                        #include <string>
+                    #ifdef HAVE_WCHAR_H
+                    #  ifdef __CYGWIN__
+                    #    include <stddef.h>
+                    #  endif
+                    #  include <wchar.h>
+                    #endif
+                    #ifdef HAVE_STDLIB_H
+                    #  include <stdlib.h>
+                    #endif
+                    #include <stdio.h>
+                    #include <string>
 
 int
 main ()
 {
 std::basic_string<$char_type> foo;
-                         const $char_type* dummy = foo.c_str();
+                     const $char_type* dummy = foo.c_str();
   ;
   return 0;
 }
@@ -23232,7 +23270,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   cat conftest.err >&5
   echo "$as_me:$LINENO: \$? = $ac_status" >&5
   (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_c_werror_flag"			 || test ! -s conftest.err'
+	 { ac_try='test -z "$ac_cxx_werror_flag"			 || test ! -s conftest.err'
   { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
   (eval $ac_try) 2>&5
   ac_status=$?
@@ -23244,34 +23282,37 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   ac_status=$?
   echo "$as_me:$LINENO: \$? = $ac_status" >&5
   (exit $ac_status); }; }; then
-  echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6
+  wx_cv_class_stdbasicstring=yes
 else
   echo "$as_me: failed program was:" >&5
 sed 's/^/| /' conftest.$ac_ext >&5
 
-echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6
-                         if test "$wxUSE_STL" = "yes"; then
-                             { { echo "$as_me:$LINENO: error: Can't use --enable-stl without $std_string or std::basic_string<$char_type>" >&5
+wx_cv_class_stdbasicstring=no
+
+fi
+rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
+
+
+fi
+echo "$as_me:$LINENO: result: $wx_cv_class_stdbasicstring" >&5
+echo "${ECHO_T}$wx_cv_class_stdbasicstring" >&6
+
+        if test "$wx_cv_class_stdbasicstring" != yes; then
+            if test "$wxUSE_STL" = "yes"; then
+                { { echo "$as_me:$LINENO: error: Can't use --enable-stl without $std_string or std::basic_string<$char_type>" >&5
 echo "$as_me: error: Can't use --enable-stl without $std_string or std::basic_string<$char_type>" >&2;}
    { (exit 1); exit 1; }; }
-                         elif grep wxUSE_STD_STRING $wx_arg_cache_file >/dev/null; then
-                             { { echo "$as_me:$LINENO: error: Can't use --enable-std_string without $std_string or std::basic_string<$char_type>" >&5
+            elif grep wxUSE_STD_STRING $wx_arg_cache_file >/dev/null; then
+                { { echo "$as_me:$LINENO: error: Can't use --enable-std_string without $std_string or std::basic_string<$char_type>" >&5
 echo "$as_me: error: Can't use --enable-std_string without $std_string or std::basic_string<$char_type>" >&2;}
    { (exit 1); exit 1; }; }
-                         else
-                             { echo "$as_me:$LINENO: WARNING: No $std_string or std::basic_string<$char_type>, switching to --disable-std_string" >&5
+            else
+                { echo "$as_me:$LINENO: WARNING: No $std_string or std::basic_string<$char_type>, switching to --disable-std_string" >&5
 echo "$as_me: WARNING: No $std_string or std::basic_string<$char_type>, switching to --disable-std_string" >&2;}
-                             wxUSE_STD_STRING=no
-                         fi
-
-
-fi
-rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
-
-fi
-rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
+                wxUSE_STD_STRING=no
+            fi
+        fi
+    fi
 fi
 
 if test "$wxUSE_STD_IOSTREAM" = "yes"; then
@@ -23308,7 +23349,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   cat conftest.err >&5
   echo "$as_me:$LINENO: \$? = $ac_status" >&5
   (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_c_werror_flag"			 || test ! -s conftest.err'
+	 { ac_try='test -z "$ac_cxx_werror_flag"			 || test ! -s conftest.err'
   { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
   (eval $ac_try) 2>&5
   ac_status=$?
@@ -23374,7 +23415,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   cat conftest.err >&5
   echo "$as_me:$LINENO: \$? = $ac_status" >&5
   (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_c_werror_flag"			 || test ! -s conftest.err'
+	 { ac_try='test -z "$ac_cxx_werror_flag"			 || test ! -s conftest.err'
   { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
   (eval $ac_try) 2>&5
   ac_status=$?
@@ -23424,25 +23465,28 @@ fi
 if test "$wxUSE_STL" = "yes"; then
         echo "$as_me:$LINENO: checking for basic STL functionality" >&5
 echo $ECHO_N "checking for basic STL functionality... $ECHO_C" >&6
-    cat >conftest.$ac_ext <<_ACEOF
+if test "${wx_cv_lib_stl+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  cat >conftest.$ac_ext <<_ACEOF
 /* confdefs.h.  */
 _ACEOF
 cat confdefs.h >>conftest.$ac_ext
 cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
 #include <string>
-                    #include <functional>
-                    #include <algorithm>
-                    #include <vector>
-                    #include <list>
+            #include <functional>
+            #include <algorithm>
+            #include <vector>
+            #include <list>
 int
 main ()
 {
 std::vector<int> moo;
-                     std::list<int> foo;
-                     std::vector<int>::iterator it =
-                         std::find_if(moo.begin(), moo.end(),
-                                      std::bind2nd(std::less<int>(), 3));
+             std::list<int> foo;
+             std::vector<int>::iterator it =
+                 std::find_if(moo.begin(), moo.end(),
+                              std::bind2nd(std::less<int>(), 3));
   ;
   return 0;
 }
@@ -23456,7 +23500,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   cat conftest.err >&5
   echo "$as_me:$LINENO: \$? = $ac_status" >&5
   (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_c_werror_flag"			 || test ! -s conftest.err'
+	 { ac_try='test -z "$ac_cxx_werror_flag"			 || test ! -s conftest.err'
   { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
   (eval $ac_try) 2>&5
   ac_status=$?
@@ -23468,23 +23512,32 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   ac_status=$?
   echo "$as_me:$LINENO: \$? = $ac_status" >&5
   (exit $ac_status); }; }; then
-  echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6
+  wx_cv_lib_stl=yes
 else
   echo "$as_me: failed program was:" >&5
 sed 's/^/| /' conftest.$ac_ext >&5
 
-echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6
-                     { { echo "$as_me:$LINENO: error: Basic STL functionality missing" >&5
-echo "$as_me: error: Basic STL functionality missing" >&2;}
-   { (exit 1); exit 1; }; }
+wx_cv_lib_stl=no
+
 fi
 rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
 
+fi
+echo "$as_me:$LINENO: result: $wx_cv_lib_stl" >&5
+echo "${ECHO_T}$wx_cv_lib_stl" >&6
+
+    if test "$wx_cv_lib_stl" != yes; then
+         { { echo "$as_me:$LINENO: error: Can't use --enable-stl as basic STL functionality is missing" >&5
+echo "$as_me: error: Can't use --enable-stl as basic STL functionality is missing" >&2;}
+   { (exit 1); exit 1; }; }
+    fi
+
         echo "$as_me:$LINENO: checking for compliant std::string::compare" >&5
 echo $ECHO_N "checking for compliant std::string::compare... $ECHO_C" >&6
-    cat >conftest.$ac_ext <<_ACEOF
+if test "${wx_cv_func_stdstring_compare+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  cat >conftest.$ac_ext <<_ACEOF
 /* confdefs.h.  */
 _ACEOF
 cat confdefs.h >>conftest.$ac_ext
@@ -23495,12 +23548,12 @@ int
 main ()
 {
 std::string foo, bar;
-                    foo.compare(bar);
-                    foo.compare(1, 1, bar);
-                    foo.compare(1, 1, bar, 1, 1);
-                    foo.compare("");
-                    foo.compare(1, 1, "");
-                    foo.compare(1, 1, "", 2);
+            foo.compare(bar);
+            foo.compare(1, 1, bar);
+            foo.compare(1, 1, bar, 1, 1);
+            foo.compare("");
+            foo.compare(1, 1, "");
+            foo.compare(1, 1, "", 2);
   ;
   return 0;
 }
@@ -23514,7 +23567,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   cat conftest.err >&5
   echo "$as_me:$LINENO: \$? = $ac_status" >&5
   (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_c_werror_flag"			 || test ! -s conftest.err'
+	 { ac_try='test -z "$ac_cxx_werror_flag"			 || test ! -s conftest.err'
   { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
   (eval $ac_try) 2>&5
   ac_status=$?
@@ -23526,20 +23579,26 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   ac_status=$?
   echo "$as_me:$LINENO: \$? = $ac_status" >&5
   (exit $ac_status); }; }; then
-  echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6
-                    cat >>confdefs.h <<\_ACEOF
-#define HAVE_STD_STRING_COMPARE 1
-_ACEOF
-
+  wx_cv_func_stdstring_compare=yes
 else
   echo "$as_me: failed program was:" >&5
 sed 's/^/| /' conftest.$ac_ext >&5
 
-echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6
+wx_cv_func_stdstring_compare=no
+
 fi
 rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
+
+fi
+echo "$as_me:$LINENO: result: $wx_cv_func_stdstring_compare" >&5
+echo "${ECHO_T}$wx_cv_func_stdstring_compare" >&6
+
+    if test "$wx_cv_func_stdstring_compare" = yes; then
+        cat >>confdefs.h <<\_ACEOF
+#define HAVE_STD_STRING_COMPARE 1
+_ACEOF
+
+    fi
 
         if test "${ac_cv_header_hash_map+set}" = set; then
   echo "$as_me:$LINENO: checking for hash_map" >&5
@@ -23571,7 +23630,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   cat conftest.err >&5
   echo "$as_me:$LINENO: \$? = $ac_status" >&5
   (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_c_werror_flag"			 || test ! -s conftest.err'
+	 { ac_try='test -z "$ac_cxx_werror_flag"			 || test ! -s conftest.err'
   { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
   (eval $ac_try) 2>&5
   ac_status=$?
@@ -23614,8 +23673,8 @@ if { (eval echo "$as_me:$LINENO: \"$ac_cpp conftest.$ac_ext\"") >&5
   echo "$as_me:$LINENO: \$? = $ac_status" >&5
   (exit $ac_status); } >/dev/null; then
   if test -s conftest.err; then
-    ac_cpp_err=$ac_c_preproc_warn_flag
-    ac_cpp_err=$ac_cpp_err$ac_c_werror_flag
+    ac_cpp_err=$ac_cxx_preproc_warn_flag
+    ac_cpp_err=$ac_cpp_err$ac_cxx_werror_flag
   else
     ac_cpp_err=
   fi
@@ -23635,7 +23694,7 @@ echo "$as_me:$LINENO: result: $ac_header_preproc" >&5
 echo "${ECHO_T}$ac_header_preproc" >&6
 
 # So?  What about this header?
-case $ac_header_compiler:$ac_header_preproc:$ac_c_preproc_warn_flag in
+case $ac_header_compiler:$ac_header_preproc:$ac_cxx_preproc_warn_flag in
   yes:no: )
     { echo "$as_me:$LINENO: WARNING: hash_map: accepted by the compiler, rejected by the preprocessor!" >&5
 echo "$as_me: WARNING: hash_map: accepted by the compiler, rejected by the preprocessor!" >&2;}
@@ -23678,21 +23737,24 @@ echo "${ECHO_T}$ac_cv_header_hash_map" >&6
 
 fi
 if test $ac_cv_header_hash_map = yes; then
-  echo "$as_me:$LINENO: checking for hash_map and hash_set" >&5
-echo $ECHO_N "checking for hash_map and hash_set... $ECHO_C" >&6
-                     cat >conftest.$ac_ext <<_ACEOF
+  echo "$as_me:$LINENO: checking for standard hash_map and hash_set" >&5
+echo $ECHO_N "checking for standard hash_map and hash_set... $ECHO_C" >&6
+if test "${wx_cv_class_stdhashmapset+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  cat >conftest.$ac_ext <<_ACEOF
 /* confdefs.h.  */
 _ACEOF
 cat confdefs.h >>conftest.$ac_ext
 cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
 #include <hash_map>
-                                     #include <hash_set>
+                #include <hash_set>
 int
 main ()
 {
 std::hash_map<double*, char*, std::hash<double*>, std::equal_to<double*> > test1;
-                                     std::hash_set<char*, std::hash<char*>, std::equal_to<char*> > test2;
+                 std::hash_set<char*, std::hash<char*>, std::equal_to<char*> > test2;
   ;
   return 0;
 }
@@ -23706,7 +23768,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   cat conftest.err >&5
   echo "$as_me:$LINENO: \$? = $ac_status" >&5
   (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_c_werror_flag"			 || test ! -s conftest.err'
+	 { ac_try='test -z "$ac_cxx_werror_flag"			 || test ! -s conftest.err'
   { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
   (eval $ac_try) 2>&5
   ac_status=$?
@@ -23718,28 +23780,34 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   ac_status=$?
   echo "$as_me:$LINENO: \$? = $ac_status" >&5
   (exit $ac_status); }; }; then
-  echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6
-                                     cat >>confdefs.h <<\_ACEOF
-#define HAVE_HASH_MAP 1
-_ACEOF
-
-                                     cat >>confdefs.h <<\_ACEOF
-#define HAVE_STD_HASH_MAP 1
-_ACEOF
-
+  wx_cv_class_stdhashmapset=yes
 else
   echo "$as_me: failed program was:" >&5
 sed 's/^/| /' conftest.$ac_ext >&5
 
-echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6
+wx_cv_class_stdhashmapset=no
 fi
 rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
 
+
+fi
+echo "$as_me:$LINENO: result: $wx_cv_class_stdhashmapset" >&5
+echo "${ECHO_T}$wx_cv_class_stdhashmapset" >&6
+
 fi
 
 
+
+    if test "$wx_cv_class_stdhashmapset" = yes; then
+        cat >>confdefs.h <<\_ACEOF
+#define HAVE_HASH_MAP 1
+_ACEOF
+
+        cat >>confdefs.h <<\_ACEOF
+#define HAVE_STD_HASH_MAP 1
+_ACEOF
+
+    fi
 
     if test "${ac_cv_header_ext_hash_map+set}" = set; then
   echo "$as_me:$LINENO: checking for ext/hash_map" >&5
@@ -23771,7 +23839,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   cat conftest.err >&5
   echo "$as_me:$LINENO: \$? = $ac_status" >&5
   (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_c_werror_flag"			 || test ! -s conftest.err'
+	 { ac_try='test -z "$ac_cxx_werror_flag"			 || test ! -s conftest.err'
   { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
   (eval $ac_try) 2>&5
   ac_status=$?
@@ -23814,8 +23882,8 @@ if { (eval echo "$as_me:$LINENO: \"$ac_cpp conftest.$ac_ext\"") >&5
   echo "$as_me:$LINENO: \$? = $ac_status" >&5
   (exit $ac_status); } >/dev/null; then
   if test -s conftest.err; then
-    ac_cpp_err=$ac_c_preproc_warn_flag
-    ac_cpp_err=$ac_cpp_err$ac_c_werror_flag
+    ac_cpp_err=$ac_cxx_preproc_warn_flag
+    ac_cpp_err=$ac_cpp_err$ac_cxx_werror_flag
   else
     ac_cpp_err=
   fi
@@ -23835,7 +23903,7 @@ echo "$as_me:$LINENO: result: $ac_header_preproc" >&5
 echo "${ECHO_T}$ac_header_preproc" >&6
 
 # So?  What about this header?
-case $ac_header_compiler:$ac_header_preproc:$ac_c_preproc_warn_flag in
+case $ac_header_compiler:$ac_header_preproc:$ac_cxx_preproc_warn_flag in
   yes:no: )
     { echo "$as_me:$LINENO: WARNING: ext/hash_map: accepted by the compiler, rejected by the preprocessor!" >&5
 echo "$as_me: WARNING: ext/hash_map: accepted by the compiler, rejected by the preprocessor!" >&2;}
@@ -23878,21 +23946,24 @@ echo "${ECHO_T}$ac_cv_header_ext_hash_map" >&6
 
 fi
 if test $ac_cv_header_ext_hash_map = yes; then
-  echo "$as_me:$LINENO: checking for hash_map and hash_set" >&5
-echo $ECHO_N "checking for hash_map and hash_set... $ECHO_C" >&6
-                     cat >conftest.$ac_ext <<_ACEOF
+  echo "$as_me:$LINENO: checking for GNU hash_map and hash_set" >&5
+echo $ECHO_N "checking for GNU hash_map and hash_set... $ECHO_C" >&6
+if test "${wx_cv_class_gnuhashmapset+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  cat >conftest.$ac_ext <<_ACEOF
 /* confdefs.h.  */
 _ACEOF
 cat confdefs.h >>conftest.$ac_ext
 cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
 #include <ext/hash_map>
-                                     #include <ext/hash_set>
+                #include <ext/hash_set>
 int
 main ()
 {
 __gnu_cxx::hash_map<double*, char*, __gnu_cxx::hash<double*>, std::equal_to<double*> > test1;
-                                     __gnu_cxx::hash_set<char*, __gnu_cxx::hash<char*>, std::equal_to<char*> > test2;
+                 __gnu_cxx::hash_set<char*, __gnu_cxx::hash<char*>, std::equal_to<char*> > test2;
   ;
   return 0;
 }
@@ -23906,7 +23977,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   cat conftest.err >&5
   echo "$as_me:$LINENO: \$? = $ac_status" >&5
   (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_c_werror_flag"			 || test ! -s conftest.err'
+	 { ac_try='test -z "$ac_cxx_werror_flag"			 || test ! -s conftest.err'
   { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
   (eval $ac_try) 2>&5
   ac_status=$?
@@ -23918,29 +23989,42 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   ac_status=$?
   echo "$as_me:$LINENO: \$? = $ac_status" >&5
   (exit $ac_status); }; }; then
-  echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6
-                                     cat >>confdefs.h <<\_ACEOF
-#define HAVE_EXT_HASH_MAP 1
-_ACEOF
-
-                                     cat >>confdefs.h <<\_ACEOF
-#define HAVE_GNU_CXX_HASH_MAP 1
-_ACEOF
-
+  wx_cv_class_gnuhashmapset=yes
 else
   echo "$as_me: failed program was:" >&5
 sed 's/^/| /' conftest.$ac_ext >&5
 
-echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6
+wx_cv_class_gnuhashmapset=no
 fi
 rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
 
+
+fi
+echo "$as_me:$LINENO: result: $wx_cv_class_gnuhashmapset" >&5
+echo "${ECHO_T}$wx_cv_class_gnuhashmapset" >&6
+
 fi
 
 
+
+    if test "$wx_cv_class_gnuhashmapset" = yes; then
+         cat >>confdefs.h <<\_ACEOF
+#define HAVE_EXT_HASH_MAP 1
+_ACEOF
+
+         cat >>confdefs.h <<\_ACEOF
+#define HAVE_GNU_CXX_HASH_MAP 1
+_ACEOF
+
+    fi
 fi
+
+ac_ext=c
+ac_cpp='$CPP $CPPFLAGS'
+ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_c_compiler_gnu
+
 
 
 SEARCH_INCLUDE="\
@@ -26314,6 +26398,12 @@ if test "${wx_cv_expat_is_not_broken+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
 else
 
+                ac_ext=cc
+ac_cpp='$CXXCPP $CPPFLAGS'
+ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
+
                 cat >conftest.$ac_ext <<_ACEOF
 /* confdefs.h.  */
 _ACEOF
@@ -26338,7 +26428,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   cat conftest.err >&5
   echo "$as_me:$LINENO: \$? = $ac_status" >&5
   (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_c_werror_flag"			 || test ! -s conftest.err'
+	 { ac_try='test -z "$ac_cxx_werror_flag"			 || test ! -s conftest.err'
   { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
   (eval $ac_try) 2>&5
   ac_status=$?
@@ -26359,6 +26449,12 @@ wx_cv_expat_is_not_broken=no
 
 fi
 rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
+                ac_ext=c
+ac_cpp='$CPP $CPPFLAGS'
+ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_c_compiler_gnu
+
 
 
 fi
@@ -30652,6 +30748,7 @@ else
         echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
 
+                    CFLAGS="$PANGOX_CFLAGS $CFLAGS"
                     CXXFLAGS="$PANGOX_CFLAGS $CXXFLAGS"
                     GUI_TK_LIBRARY="$GUI_TK_LIBRARY $PANGOX_LIBS"
 
@@ -30734,6 +30831,7 @@ else
         echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
 
+                    CFLAGS="$PANGOFT2_CFLAGS $CFLAGS"
                     CXXFLAGS="$PANGOFT2_CFLAGS $CXXFLAGS"
                     GUI_TK_LIBRARY="$GUI_TK_LIBRARY $PANGOFT2_LIBS"
 
@@ -30818,13 +30916,12 @@ echo "${ECHO_T}yes" >&6
 #define HAVE_PANGO_XFT 1
 _ACEOF
 
+                    CFLAGS="$PANGOXFT_CFLAGS $CFLAGS"
                     CXXFLAGS="$PANGOXFT_CFLAGS $CXXFLAGS"
                     GUI_TK_LIBRARY="$GUI_TK_LIBRARY $PANGOXFT_LIBS"
 
 fi
-            save_CXXFLAGS="$CXXFLAGS"
             save_LIBS="$LIBS"
-            CXXFLAGS="$PANGOX_CFLAGS $CXXFLAGS"
             LIBS="$LIBS $PANGOX_LIBS"
 
 for ac_func in pango_font_family_is_monospace
@@ -30927,7 +31024,6 @@ _ACEOF
 fi
 done
 
-            CXXFLAGS="$save_CXXFLAGS"
             LIBS="$save_LIBS"
         fi
 
@@ -30982,8 +31078,8 @@ echo "${ECHO_T}found in $ac_find_includes" >&6
 
             TOOLKIT_INCLUDE="$TOOLKIT_INCLUDE$ac_path_to_include"
         else
-            save_CXXFLAGS=$CXXFLAGS
-            CXXFLAGS="$TOOLKIT_INCLUDE $CXXFLAGS"
+            save_CFLAGS=$CFLAGS
+            CFLAGS="$TOOLKIT_INCLUDE $CFLAGS"
 
             cat >conftest.$ac_ext <<_ACEOF
 /* confdefs.h.  */
@@ -31046,7 +31142,7 @@ echo "$as_me: error: please set CPPFLAGS to contain the location of Xm/Xm.h" >&2
 fi
 rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
 
-            CXXFLAGS=$save_CXXFLAGS
+            CFLAGS=$save_CFLAGS
         fi
 
 
@@ -31084,8 +31180,8 @@ echo "${ECHO_T}found in $ac_find_libraries" >&6
 
             GUI_TK_LIBRARY="$GUI_TK_LIBRARY$ac_path_to_link"
         else
-                                                save_CXXFLAGS=$CXXFLAGS
-            CXXFLAGS="$TOOLKIT_INCLUDE $CXXFLAGS"
+                                                save_CFLAGS=$CFLAGS
+            CFLAGS="$TOOLKIT_INCLUDE $CFLAGS"
             save_LIBS="$LIBS"
             LIBS="$GUI_TK_LIBRARY -lXm -lXmu -lXext -lX11"
 
@@ -31151,7 +31247,7 @@ fi
 rm -f conftest.err conftest.$ac_objext \
       conftest$ac_exeext conftest.$ac_ext
 
-            CXXFLAGS=$save_CXXFLAGS
+            CFLAGS=$save_CFLAGS
             LIBS="$save_LIBS"
         fi
 
@@ -31166,8 +31262,8 @@ echo $ECHO_N "checking if we need -lXp and/or -lSM -lICE... $ECHO_C" >&6
                     if test "$libs_found" = "0"; then
                         save_LIBS="$LIBS"
                         LIBS="$GUI_TK_LIBRARY -lXm ${libp} -lXmu -lXext -lXt${libsm_ice} -lX11"
-                        save_CXXFLAGS=$CXXFLAGS
-                        CXXFLAGS="$TOOLKIT_INCLUDE $CXXFLAGS"
+                        save_CFLAGS=$CFLAGS
+                        CFLAGS="$TOOLKIT_INCLUDE $CFLAGS"
 
                         cat >conftest.$ac_ext <<_ACEOF
 /* confdefs.h.  */
@@ -31231,7 +31327,7 @@ rm -f conftest.err conftest.$ac_objext \
       conftest$ac_exeext conftest.$ac_ext
 
                         LIBS="$save_LIBS"
-                        CXXFLAGS=$save_CXXFLAGS
+                        CFLAGS=$save_CFLAGS
                     fi
                 done
             fi
@@ -31313,8 +31409,8 @@ if test $ac_cv_lib_Sgm_SgCreateList = yes; then
 fi
 
 
-        save_CXXFLAGS=$CXXFLAGS
-        CXXFLAGS="$TOOLKIT_INCLUDE $CXXFLAGS"
+        save_CFLAGS=$CFLAGS
+        CFLAGS="$TOOLKIT_INCLUDE $CFLAGS"
 
         echo "$as_me:$LINENO: checking for Motif 2" >&5
 echo $ECHO_N "checking for Motif 2... $ECHO_C" >&6
@@ -31457,7 +31553,7 @@ _ACEOF
 
         fi
 
-        CXXFLAGS=$save_CXXFLAGS
+        CFLAGS=$save_CFLAGS
 
         GUI_TK_LIBRARY="$GUI_TK_LIBRARY${libsgm_link} -lXm${libp_link} -lXmu -lXext -lXt${libsm_ice_link} -lX11"
         TOOLKIT=MOTIF
@@ -31504,8 +31600,8 @@ if test "${wx_cv_x11_xpm_h+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
 else
 
-                        save_CXXFLAGS=$CXXFLAGS
-                        CXXFLAGS="$TOOLKIT_INCLUDE $CXXFLAGS"
+                        save_CFLAGS=$CFLAGS
+                        CFLAGS="$TOOLKIT_INCLUDE $CFLAGS"
 
                         cat >conftest.$ac_ext <<_ACEOF
 /* confdefs.h.  */
@@ -31558,7 +31654,7 @@ wx_cv_x11_xpm_h=no
 fi
 rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
 
-                        CXXFLAGS=$save_CXXFLAGS
+                        CFLAGS=$save_CFLAGS
 
 
 fi
@@ -31651,8 +31747,8 @@ fi
 
 
         if test "$wxHAVE_XEXT_LIB" = 1; then
-            save_CXXFLAGS="$CXXFLAGS"
-            CXXFLAGS="$TOOLKIT_INCLUDE $CXXFLAGS"
+            save_CFLAGS="$CFLAGS"
+            CFLAGS="$TOOLKIT_INCLUDE $CFLAGS"
 
             echo "$as_me:$LINENO: checking for X11/extensions/shape.h" >&5
 echo $ECHO_N "checking for X11/extensions/shape.h... $ECHO_C" >&6
@@ -31717,7 +31813,7 @@ echo "${ECHO_T}not found" >&6
 
 fi
 rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
-            CXXFLAGS="$save_CXXFLAGS"
+            CFLAGS="$save_CFLAGS"
 
         fi
     fi
@@ -34142,7 +34238,12 @@ _ACEOF
 fi
 
 
-echo "$as_me:$LINENO: checking if size_t is unsigned int" >&5
+ac_ext=cc
+ac_cpp='$CXXCPP $CPPFLAGS'
+ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
+ echo "$as_me:$LINENO: checking if size_t is unsigned int" >&5
 echo $ECHO_N "checking if size_t is unsigned int... $ECHO_C" >&6
 if test "${wx_cv_size_t_is_uint+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
@@ -34178,7 +34279,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   cat conftest.err >&5
   echo "$as_me:$LINENO: \$? = $ac_status" >&5
   (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_c_werror_flag"			 || test ! -s conftest.err'
+	 { ac_try='test -z "$ac_cxx_werror_flag"			 || test ! -s conftest.err'
   { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
   (eval $ac_try) 2>&5
   ac_status=$?
@@ -34246,7 +34347,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   cat conftest.err >&5
   echo "$as_me:$LINENO: \$? = $ac_status" >&5
   (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_c_werror_flag"			 || test ! -s conftest.err'
+	 { ac_try='test -z "$ac_cxx_werror_flag"			 || test ! -s conftest.err'
   { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
   (eval $ac_try) 2>&5
   ac_status=$?
@@ -34279,6 +34380,12 @@ _ACEOF
 
     fi
 fi
+
+ac_ext=c
+ac_cpp='$CPP $CPPFLAGS'
+ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 
 echo "$as_me:$LINENO: checking for pw_gecos in struct passwd" >&5
@@ -35768,7 +35875,7 @@ cat confdefs.h >>conftest.$ac_ext
 cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
 
-
+                #include <fnmatch.h>
                 $ac_includes_default
 
 int
@@ -36340,6 +36447,12 @@ if test "${wx_cv_type_sa_handler+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
 else
 
+                ac_ext=cc
+ac_cpp='$CXXCPP $CPPFLAGS'
+ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
+
         cat >conftest.$ac_ext <<_ACEOF
 /* confdefs.h.  */
 _ACEOF
@@ -36369,7 +36482,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   cat conftest.err >&5
   echo "$as_me:$LINENO: \$? = $ac_status" >&5
   (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_c_werror_flag"			 || test ! -s conftest.err'
+	 { ac_try='test -z "$ac_cxx_werror_flag"			 || test ! -s conftest.err'
   { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
   (eval $ac_try) 2>&5
   ac_status=$?
@@ -36393,6 +36506,12 @@ sed 's/^/| /' conftest.$ac_ext >&5
 
 fi
 rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
+        ac_ext=c
+ac_cpp='$CPP $CPPFLAGS'
+ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_c_compiler_gnu
+
 
 fi
 echo "$as_me:$LINENO: result: $wx_cv_type_sa_handler" >&5
@@ -36411,6 +36530,12 @@ echo $ECHO_N "checking for backtrace() in <execinfo.h>... $ECHO_C" >&6
 if test "${wx_cv_func_backtrace+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
 else
+
+            ac_ext=cc
+ac_cpp='$CXXCPP $CPPFLAGS'
+ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 
             cat >conftest.$ac_ext <<_ACEOF
 /* confdefs.h.  */
@@ -36442,7 +36567,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   cat conftest.err >&5
   echo "$as_me:$LINENO: \$? = $ac_status" >&5
   (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_c_werror_flag"			 || test ! -s conftest.err'
+	 { ac_try='test -z "$ac_cxx_werror_flag"			 || test ! -s conftest.err'
   { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
   (eval $ac_try) 2>&5
   ac_status=$?
@@ -36463,6 +36588,12 @@ wx_cv_func_backtrace=no
 
 fi
 rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
+            ac_ext=c
+ac_cpp='$CPP $CPPFLAGS'
+ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_c_compiler_gnu
+
 
 
 fi
@@ -36480,6 +36611,12 @@ echo $ECHO_N "checking for __cxa_demangle() in <cxxabi.h>... $ECHO_C" >&6
 if test "${wx_cv_func_cxa_demangle+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
 else
+
+                ac_ext=cc
+ac_cpp='$CXXCPP $CPPFLAGS'
+ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 
                 cat >conftest.$ac_ext <<_ACEOF
 /* confdefs.h.  */
@@ -36508,7 +36645,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
   cat conftest.err >&5
   echo "$as_me:$LINENO: \$? = $ac_status" >&5
   (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_c_werror_flag"			 || test ! -s conftest.err'
+	 { ac_try='test -z "$ac_cxx_werror_flag"			 || test ! -s conftest.err'
   { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
   (eval $ac_try) 2>&5
   ac_status=$?
@@ -36530,6 +36667,12 @@ wx_cv_func_cxa_demangle=no
 fi
 rm -f conftest.err conftest.$ac_objext \
       conftest$ac_exeext conftest.$ac_ext
+                ac_ext=c
+ac_cpp='$CPP $CPPFLAGS'
+ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_c_compiler_gnu
+
 
 
 fi
@@ -36730,7 +36873,13 @@ echo $ECHO_N "checking for statfs declaration... $ECHO_C" >&6
 if test "${wx_cv_func_statfs_decl+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
 else
-  cat >conftest.$ac_ext <<_ACEOF
+  ac_ext=cc
+ac_cpp='$CXXCPP $CPPFLAGS'
+ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
+
+        cat >conftest.$ac_ext <<_ACEOF
 /* confdefs.h.  */
 _ACEOF
 cat confdefs.h >>conftest.$ac_ext
@@ -36764,7 +36913,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   cat conftest.err >&5
   echo "$as_me:$LINENO: \$? = $ac_status" >&5
   (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_c_werror_flag"			 || test ! -s conftest.err'
+	 { ac_try='test -z "$ac_cxx_werror_flag"			 || test ! -s conftest.err'
   { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
   (eval $ac_try) 2>&5
   ac_status=$?
@@ -36785,6 +36934,12 @@ wx_cv_func_statfs_decl=no
 
 fi
 rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
+        ac_ext=c
+ac_cpp='$CPP $CPPFLAGS'
+ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_c_compiler_gnu
+
 
 fi
 echo "$as_me:$LINENO: result: $wx_cv_func_statfs_decl" >&5
@@ -36869,7 +37024,13 @@ echo $ECHO_N "checking for statvfs argument type... $ECHO_C" >&6
 if test "${wx_cv_type_statvfs_t+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
 else
-  cat >conftest.$ac_ext <<_ACEOF
+  ac_ext=cc
+ac_cpp='$CXXCPP $CPPFLAGS'
+ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
+
+            cat >conftest.$ac_ext <<_ACEOF
 /* confdefs.h.  */
 _ACEOF
 cat confdefs.h >>conftest.$ac_ext
@@ -36902,7 +37063,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   cat conftest.err >&5
   echo "$as_me:$LINENO: \$? = $ac_status" >&5
   (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_c_werror_flag"			 || test ! -s conftest.err'
+	 { ac_try='test -z "$ac_cxx_werror_flag"			 || test ! -s conftest.err'
   { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
   (eval $ac_try) 2>&5
   ac_status=$?
@@ -36953,7 +37114,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   cat conftest.err >&5
   echo "$as_me:$LINENO: \$? = $ac_status" >&5
   (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_c_werror_flag"			 || test ! -s conftest.err'
+	 { ac_try='test -z "$ac_cxx_werror_flag"			 || test ! -s conftest.err'
   { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
   (eval $ac_try) 2>&5
   ac_status=$?
@@ -36978,6 +37139,12 @@ rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
 
 fi
 rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
+            ac_ext=c
+ac_cpp='$CPP $CPPFLAGS'
+ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_c_compiler_gnu
+
 
 fi
 echo "$as_me:$LINENO: result: $wx_cv_type_statvfs_t" >&5
@@ -37611,7 +37778,90 @@ done
 fi
 
 
-  for wx_func in uname gethostname
+  for wx_func in uname
+  do
+    echo "$as_me:$LINENO: checking for $wx_func" >&5
+echo $ECHO_N "checking for $wx_func... $ECHO_C" >&6
+if eval "test \"\${wx_cv_func_$wx_func+set}\" = set"; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+
+        cat >conftest.$ac_ext <<_ACEOF
+
+            /* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+                #include <sys/utsname.h>
+                $ac_includes_default
+
+int
+main ()
+{
+
+                #ifndef $wx_func
+                  &$wx_func;
+                #endif
+
+
+  ;
+  return 0;
+}
+
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+  (eval $ac_link) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+	 { ac_try='test -z "$ac_c_werror_flag"			 || test ! -s conftest.err'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+	 { ac_try='test -s conftest$ac_exeext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  eval wx_cv_func_$wx_func=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+eval wx_cv_func_$wx_func=no
+fi
+rm -f conftest.err conftest.$ac_objext \
+      conftest$ac_exeext conftest.$ac_ext
+
+fi
+echo "$as_me:$LINENO: result: `eval echo '${'wx_cv_func_$wx_func'}'`" >&5
+echo "${ECHO_T}`eval echo '${'wx_cv_func_$wx_func'}'`" >&6
+
+    if eval test \$wx_cv_func_$wx_func = yes
+    then
+      cat >>confdefs.h <<_ACEOF
+#define HAVE_`echo $wx_func | tr 'a-z' 'A-Z'` 1
+_ACEOF
+
+
+    else
+      :
+
+    fi
+  done
+
+if test "$wx_cv_func_uname" != yes; then
+
+  for wx_func in gethostname
   do
     echo "$as_me:$LINENO: checking for $wx_func" >&5
 echo $ECHO_N "checking for $wx_func... $ECHO_C" >&6
@@ -37685,13 +37935,14 @@ echo "${ECHO_T}`eval echo '${'wx_cv_func_$wx_func'}'`" >&6
 #define HAVE_`echo $wx_func | tr 'a-z' 'A-Z'` 1
 _ACEOF
 
-      break
+
     else
       :
 
     fi
   done
 
+fi
 
 
   for wx_func in strtok_r
@@ -38713,7 +38964,7 @@ if test "$TOOLKIT" != "MSW" -a "$USE_OS2" != 1; then
 
 
     THREADS_LINK=
-    THREADS_CXXFLAGS=
+    THREADS_CFLAGS=
 
     if test "$wxUSE_THREADS" = "yes" ; then
         if test "$USE_BEOS" = 1; then
@@ -38779,7 +39030,7 @@ echo $ECHO_N "checking whether pthreads work without any flags... $ECHO_C" >&6
                 -*)
                     echo "$as_me:$LINENO: checking whether pthreads work with $flag" >&5
 echo $ECHO_N "checking whether pthreads work with $flag... $ECHO_C" >&6
-                    THREADS_CXXFLAGS="$flag"
+                    THREADS_CFLAGS="$flag"
                     ;;
 
                 *)
@@ -38790,9 +39041,9 @@ echo $ECHO_N "checking for the pthreads library -l$flag... $ECHO_C" >&6
               esac
 
               save_LIBS="$LIBS"
-              save_CXXFLAGS="$CXXFLAGS"
+              save_CFLAGS="$CFLAGS"
               LIBS="$THREADS_LINK $LIBS"
-              CXXFLAGS="$THREADS_CXXFLAGS $CXXFLAGS"
+              CFLAGS="$THREADS_CFLAGS $CFLAGS"
 
               cat >conftest.$ac_ext <<_ACEOF
 /* confdefs.h.  */
@@ -38840,7 +39091,7 @@ rm -f conftest.err conftest.$ac_objext \
       conftest$ac_exeext conftest.$ac_ext
 
               LIBS="$save_LIBS"
-              CXXFLAGS="$save_CXXFLAGS"
+              CFLAGS="$save_CFLAGS"
 
               echo "$as_me:$LINENO: result: $THREADS_OK" >&5
 echo "${ECHO_T}$THREADS_OK" >&6
@@ -38849,7 +39100,7 @@ echo "${ECHO_T}$THREADS_OK" >&6
               fi
 
               THREADS_LINK=""
-              THREADS_CXXFLAGS=""
+              THREADS_CFLAGS=""
       done
 
       if test "x$THREADS_OK" != "xyes"; then
@@ -38857,7 +39108,7 @@ echo "${ECHO_T}$THREADS_OK" >&6
           { echo "$as_me:$LINENO: WARNING: No thread support on this system... disabled" >&5
 echo "$as_me: WARNING: No thread support on this system... disabled" >&2;}
       else
-                              LDFLAGS="$THREADS_CXXFLAGS $LDFLAGS"
+                              LDFLAGS="$THREADS_CFLAGS $LDFLAGS"
           LIBS="$THREADS_LINK $LIBS"
 
           echo "$as_me:$LINENO: checking if more special flags are required for pthreads" >&5
@@ -38884,10 +39135,10 @@ echo $ECHO_N "checking if more special flags are required for pthreads... $ECHO_
           echo "$as_me:$LINENO: result: ${flag}" >&5
 echo "${ECHO_T}${flag}" >&6
           if test "x$flag" != xno; then
-              THREADS_CXXFLAGS="$THREADS_CXXFLAGS $flag"
+              THREADS_CFLAGS="$THREADS_CFLAGS $flag"
           fi
 
-                    WXCONFIG_CXXFLAGS="$WXCONFIG_CXXFLAGS $THREADS_CXXFLAGS"
+                    WXCONFIG_CFLAGS="$WXCONFIG_CFLAGS $THREADS_CFLAGS"
       fi
     fi
 
@@ -40166,8 +40417,8 @@ if test "${wx_cv_cflags_mthread+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
 else
 
-                    CXXFLAGS_OLD="$CXXFLAGS"
-                    CXXFLAGS="-mthreads $CXXFLAGS"
+                    CFLAGS_OLD="$CFLAGS"
+                    CFLAGS="-mthreads $CFLAGS"
                     cat >conftest.$ac_ext <<_ACEOF
 /* confdefs.h.  */
 _ACEOF
@@ -40220,15 +40471,14 @@ echo "$as_me:$LINENO: result: $wx_cv_cflags_mthread" >&5
 echo "${ECHO_T}$wx_cv_cflags_mthread" >&6
 
             if test "$wx_cv_cflags_mthread" = "yes"; then
-                                WXCONFIG_CXXFLAGS="$WXCONFIG_CXXFLAGS -mthreads"
+                                WXCONFIG_CFLAGS="$WXCONFIG_CFLAGS -mthreads"
                 LDFLAGS="$LDFLAGS -mthreads"
             else
-                                CXXFLAGS="$CXXFLAGS_OLD"
+                                CFLAGS="$CFLAGS_OLD"
             fi
         ;;
         *-pc-os2*emx )
             WXCONFIG_CFLAGS="$WXCONFIG_CFLAGS -Zmt -D__ST_MT_ERRNO__"
-            WXCONFIG_CXXFLAGS="$WXCONFIG_CXXFLAGS -Zmt -D__ST_MT_ERRNO__"
             LDFLAGS="$LDFLAGS -Zmt"
         ;;
       esac
@@ -42397,6 +42647,7 @@ fi
 echo "${ECHO_T}yes" >&6
 
                     EXTRALIBS_SDL="$SDL_LIBS"
+                    CFLAGS="$SDL_CFLAGS $CFLAGS"
                     CXXFLAGS="$SDL_CFLAGS $CXXFLAGS"
                     cat >>confdefs.h <<\_ACEOF
 #define wxUSE_LIBSDL 1
@@ -42705,6 +42956,7 @@ else
         echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
 
+                        CFLAGS="$LIBGNOMEPRINTUI_CFLAGS $CFLAGS"
                         CXXFLAGS="$LIBGNOMEPRINTUI_CFLAGS $CXXFLAGS"
                         cat >>confdefs.h <<\_ACEOF
 #define wxUSE_LIBGNOMEPRINT 1
@@ -42796,6 +43048,7 @@ else
         echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
 
+                        CFLAGS="$GNOMEVFS_CFLAGS $CFLAGS"
                         CXXFLAGS="$GNOMEVFS_CFLAGS $CXXFLAGS"
                         cat >>confdefs.h <<\_ACEOF
 #define wxUSE_LIBGNOMEVFS 1
@@ -42886,6 +43139,7 @@ else
 echo "${ECHO_T}yes" >&6
 
                 EXTRALIBS_HILDON="$HILDON_LIBS"
+                CFLAGS="$CFLAGS $HILDON_CFLAGS"
                 CXXFLAGS="$CXXFLAGS $HILDON_CFLAGS"
                 cat >>confdefs.h <<\_ACEOF
 #define wxUSE_LIBHILDON 1
@@ -43298,6 +43552,12 @@ if test "${wx_cv_func_strptime_decl+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
 else
 
+                ac_ext=cc
+ac_cpp='$CXXCPP $CPPFLAGS'
+ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
+
                 cat >conftest.$ac_ext <<_ACEOF
 /* confdefs.h.  */
 _ACEOF
@@ -43327,7 +43587,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   cat conftest.err >&5
   echo "$as_me:$LINENO: \$? = $ac_status" >&5
   (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_c_werror_flag"			 || test ! -s conftest.err'
+	 { ac_try='test -z "$ac_cxx_werror_flag"			 || test ! -s conftest.err'
   { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
   (eval $ac_try) 2>&5
   ac_status=$?
@@ -43348,6 +43608,12 @@ wx_cv_func_strptime_decl=no
 
 fi
 rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
+                ac_ext=c
+ac_cpp='$CPP $CPPFLAGS'
+ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_c_compiler_gnu
+
 
 
 fi
@@ -44143,6 +44409,12 @@ if test "${wx_cv_type_getsockname3+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
 else
 
+                ac_ext=cc
+ac_cpp='$CXXCPP $CPPFLAGS'
+ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
+
                 cat >conftest.$ac_ext <<_ACEOF
 /* confdefs.h.  */
 _ACEOF
@@ -44173,7 +44445,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   cat conftest.err >&5
   echo "$as_me:$LINENO: \$? = $ac_status" >&5
   (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_c_werror_flag"			 || test ! -s conftest.err'
+	 { ac_try='test -z "$ac_cxx_werror_flag"			 || test ! -s conftest.err'
   { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
   (eval $ac_try) 2>&5
   ac_status=$?
@@ -44191,9 +44463,9 @@ else
 sed 's/^/| /' conftest.$ac_ext >&5
 
 
-                                                                                                                                                                        CXXFLAGS_OLD="$CXXFLAGS"
+                                                                                                                                                                        CFLAGS_OLD="$CFLAGS"
                         if test "$GCC" = yes ; then
-                            CXXFLAGS="-Werror $CXXFLAGS"
+                            CFLAGS="-Werror $CFLAGS"
                         fi
 
                         cat >conftest.$ac_ext <<_ACEOF
@@ -44226,7 +44498,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   cat conftest.err >&5
   echo "$as_me:$LINENO: \$? = $ac_status" >&5
   (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_c_werror_flag"			 || test ! -s conftest.err'
+	 { ac_try='test -z "$ac_cxx_werror_flag"			 || test ! -s conftest.err'
   { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
   (eval $ac_try) 2>&5
   ac_status=$?
@@ -44273,7 +44545,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   cat conftest.err >&5
   echo "$as_me:$LINENO: \$? = $ac_status" >&5
   (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_c_werror_flag"			 || test ! -s conftest.err'
+	 { ac_try='test -z "$ac_cxx_werror_flag"			 || test ! -s conftest.err'
   { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
   (eval $ac_try) 2>&5
   ac_status=$?
@@ -44298,11 +44570,17 @@ rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
 fi
 rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
 
-                        CXXFLAGS="$CXXFLAGS_OLD"
+                        CFLAGS="$CFLAGS_OLD"
 
 
 fi
 rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
+                ac_ext=c
+ac_cpp='$CPP $CPPFLAGS'
+ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_c_compiler_gnu
+
 
 fi
 echo "$as_me:$LINENO: result: $wx_cv_type_getsockname3" >&5
@@ -44372,9 +44650,9 @@ else
 sed 's/^/| /' conftest.$ac_ext >&5
 
 
-                                                                                                                                                                        CXXFLAGS_OLD="$CXXFLAGS"
+                                                                                                                                                                        CFLAGS_OLD="$CFLAGS"
                         if test "$GCC" = yes ; then
-                            CXXFLAGS="-Werror $CXXFLAGS"
+                            CFLAGS="-Werror $CFLAGS"
                         fi
 
                         cat >conftest.$ac_ext <<_ACEOF
@@ -44479,7 +44757,7 @@ rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
 fi
 rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
 
-                        CXXFLAGS="$CXXFLAGS_OLD"
+                        CFLAGS="$CFLAGS_OLD"
 
 
 fi
@@ -44589,6 +44867,12 @@ if test "$wxUSE_GUI" = "yes" -a "$wxUSE_JOYSTICK" = "yes"; then
         if test "$USE_DARWIN" = 1; then
                         echo "$as_me:$LINENO: checking headers have declarations needed for joystick support" >&5
 echo $ECHO_N "checking headers have declarations needed for joystick support... $ECHO_C" >&6
+            ac_ext=cc
+ac_cpp='$CXXCPP $CPPFLAGS'
+ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
+
             cat >conftest.$ac_ext <<_ACEOF
 /* confdefs.h.  */
 _ACEOF
@@ -44615,7 +44899,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   cat conftest.err >&5
   echo "$as_me:$LINENO: \$? = $ac_status" >&5
   (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_c_werror_flag"			 || test ! -s conftest.err'
+	 { ac_try='test -z "$ac_cxx_werror_flag"			 || test ! -s conftest.err'
   { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
   (eval $ac_try) 2>&5
   ac_status=$?
@@ -44635,6 +44919,12 @@ sed 's/^/| /' conftest.$ac_ext >&5
 
 fi
 rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
+            ac_ext=c
+ac_cpp='$CPP $CPPFLAGS'
+ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_c_compiler_gnu
+
             echo "$as_me:$LINENO: result: $wxUSE_JOYSTICK" >&5
 echo "${ECHO_T}$wxUSE_JOYSTICK" >&6
         fi
