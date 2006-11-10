@@ -68,7 +68,7 @@ private:
 
 public:
     WXCOLORREF m_pixel ;
-    void FromRGBColor( const WXCOLORREF* color ) ;
+    void FromRGBColor( WXCOLORREF* color ) ;
 
 
 private:
