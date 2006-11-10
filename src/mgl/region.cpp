@@ -102,6 +102,24 @@ wxRegion::wxRegion(const MGLRegion& region)
     M_REGION = region;
 }
 
+wxRegion::wxRegion(size_t n, const wxPoint *points, int WXUNUSED(fillStyle))
+{
+    m_refData = new wxRegionRefData;
+    point_t *pts = new point_t[n];
+
+    for (size_t i = 0; i < n; i++)
+    {
+        pts[i].x = points[i].x;
+        pts[i].y = points[i].y;
+    }
+
+    region_t* rgn = MGL_rgnPolygon(n, pts, 1, 0, 0);
+
+    M_REGION = rgn;
+
+    delete [] pts;
+}
+
 wxRegion::~wxRegion()
 {
     // m_refData unrefed in ~wxObject

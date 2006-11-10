@@ -1,3 +1,13 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Name:        region.tex
+%% Purpose:     wxRegion documentation
+%% Author:      wxTeam
+%% Created:
+%% RCS-ID:      $Id$
+%% Copyright:   (c) wxTeam
+%% License:     wxWindows license
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \section{\class{wxRegion}}\label{wxregion}
 
 A wxRegion represents a simple or complex region on a device context or window. It uses
@@ -46,8 +56,6 @@ Copy constructor, uses \helpref{reference counting}{trefcount}.
 Constructs a region corresponding to the polygon made of {\it n} points in the
 provided array. {\it fillStyle} parameter may have values
 {\tt wxWINDING\_RULE} or {\tt wxODDEVEN\_RULE}.
-
-{\bf NB:} This constructor is only implemented for Win32 and GTK+ wxWidgets ports.
 
 \func{}{wxRegion}{\param{const wxBitmap\&}{ bmp}}
 
@@ -384,4 +392,3 @@ Increment operator. Increments the iterator to the next region.
 Returns {\tt true} if there are still some rectangles; otherwise returns {\tt false}.
 
 You can use this to test the iterator object as if it were of type bool.
-

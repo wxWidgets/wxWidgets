@@ -408,11 +408,11 @@ void wxAuiDefaultTabArt::DrawTab(wxDC& dc,
     clip_points[5] = wxPoint(tab_x+clip_width+1, tab_y+tab_height-3);
 
     // FIXME: these ports don't provide wxRegion ctor from array of points
-#if !defined(__WXMGL__) && !defined(__WXDFB__)
+#if !defined(__WXDFB__)
     // set the clipping region for the tab --
     wxRegion clipping_region(WXSIZEOF(clip_points), clip_points);
     dc.SetClippingRegion(clipping_region);
-#endif // !wxMGL && !wxDFB
+#endif // !wxDFB
 
     wxPoint border_points[6];
     border_points[0] = wxPoint(tab_x,             tab_y+tab_height-4);

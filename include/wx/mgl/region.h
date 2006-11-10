@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        region.h
+// Name:        wx/mgl/region.h
 // Purpose:     wxRegion class
 // Author:      Vaclav Slavik
 // Created:     2001/03/12
@@ -23,12 +23,13 @@ public:
     wxRegion(const wxPoint& topLeft, const wxPoint& bottomRight);
     wxRegion(const wxRect& rect);
     wxRegion(const MGLRegion& region);
-    wxRegion( const wxBitmap& bmp)
+    wxRegion(size_t n, const wxPoint *points, int fillStyle = wxODDEVEN_RULE );
+    wxRegion(const wxBitmap& bmp)
     {
         Union(bmp);
     }
-    wxRegion( const wxBitmap& bmp,
-              const wxColour& transColour, int tolerance = 0)
+    wxRegion(const wxBitmap& bmp,
+             const wxColour& transColour, int tolerance = 0)
     {
         Union(bmp, transColour, tolerance);
     }
