@@ -389,13 +389,17 @@ void wxAuiDefaultTabArt::DrawTab(wxDC& dc,
     
     // create points that will make the tab outline
     
+    int clip_width = tab_width;
+    if (tab_x + clip_width > in_rect.x + in_rect.width)
+        clip_width = (in_rect.x + in_rect.width) - tab_x;
+        
     wxPoint clip_points[6];
-    clip_points[0] = wxPoint(tab_x,             tab_y+tab_height-3);
-    clip_points[1] = wxPoint(tab_x,             tab_y+2);
-    clip_points[2] = wxPoint(tab_x+2,           tab_y);
-    clip_points[3] = wxPoint(tab_x+tab_width-1, tab_y);
-    clip_points[4] = wxPoint(tab_x+tab_width+1, tab_y+2);
-    clip_points[5] = wxPoint(tab_x+tab_width+1, tab_y+tab_height-3);
+    clip_points[0] = wxPoint(tab_x,              tab_y+tab_height-3);
+    clip_points[1] = wxPoint(tab_x,              tab_y+2);
+    clip_points[2] = wxPoint(tab_x+2,            tab_y);
+    clip_points[3] = wxPoint(tab_x+clip_width-1, tab_y);
+    clip_points[4] = wxPoint(tab_x+clip_width+1, tab_y+2);
+    clip_points[5] = wxPoint(tab_x+clip_width+1, tab_y+tab_height-3);
 
     // set the clipping region for the tab --
     wxRegion clipping_region(6, clip_points);
