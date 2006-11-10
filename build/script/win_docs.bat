@@ -23,6 +23,7 @@ echo CVS update  >>  c:\temp.log
 
 rem add bakefile build...
 set PATH=%PATH%;C:\wx\Bakefile\src
+cd %WXWIN%\build\bakefiles
 bakefile_gen 
 
 
