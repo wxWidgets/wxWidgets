@@ -468,39 +468,46 @@ void wxComboBox::SetEditable(bool editable)
 
 void wxComboBox::SetInsertionPoint(long pos)
 {
-    // TODO
+    if ( m_text )
+        m_text->SetInsertionPoint(pos);
 }
 
 void wxComboBox::SetInsertionPointEnd()
 {
-    // TODO
+    if ( m_text )
+        m_text->SetInsertionPointEnd();
 }
 
 long wxComboBox::GetInsertionPoint() const
 {
-    // TODO
+    if ( m_text )
+        return m_text->GetInsertionPoint();
     return 0;
 }
 
 wxTextPos wxComboBox::GetLastPosition() const
 {
-    // TODO
+    if ( m_text )
+        return m_text->GetLastPosition();
     return 0;
 }
 
 void wxComboBox::Replace(long from, long to, const wxString& value)
 {
-    // TODO
+    if ( m_text )
+        m_text->Replace(from,to,value);
 }
 
 void wxComboBox::Remove(long from, long to)
 {
-    // TODO
+    if ( m_text )
+        m_text->Remove(from,to);
 }
 
 void wxComboBox::SetSelection(long from, long to)
 {
-    // TODO
+    if ( m_text )
+        m_text->SetSelection(from,to);
 }
 
 int wxComboBox::DoAppend(const wxString& item)
