@@ -627,7 +627,7 @@ bool wxListCtrl::Create(wxWindow *parent,
     {
         m_macIsUserPane = true;
 
-        if ( !wxWindow::Create(parent, id, pos, size, style & wxNO_BORDER, name) )
+        if ( !wxWindow::Create(parent, id, pos, size, style | wxNO_BORDER, name) )
             return false;
         
         // since the generic control is a child, make sure we position it at 0, 0
