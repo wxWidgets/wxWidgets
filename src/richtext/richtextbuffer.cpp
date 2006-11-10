@@ -2261,6 +2261,21 @@ bool wxRichTextParagraphLayoutBox::CollectStyle(wxTextAttrEx& currentStyle, cons
         }
     }
 
+    if (style.HasOutlineLevel() && !wxHasStyle(multipleStyleAttributes, wxTEXT_ATTR_OUTLINE_LEVEL))
+    {
+        if (currentStyle.HasOutlineLevel())
+        {
+            if (currentStyle.GetOutlineLevel() != style.GetOutlineLevel())
+            {
+                // Clash of style - mark as such
+                multipleStyleAttributes |= wxTEXT_ATTR_OUTLINE_LEVEL;
+                currentStyle.SetFlags(currentStyle.GetFlags() & ~wxTEXT_ATTR_OUTLINE_LEVEL);
+            }
+        }
+        else
+            currentStyle.SetOutlineLevel(style.GetOutlineLevel());
+    }
+
     return true;
 }
 
@@ -5185,8 +5200,7 @@ bool wxRichTextBuffer::BeginCharacterStyle(const wxString& characterStyle)
         wxRichTextCharacterStyleDefinition* def = GetStyleSheet()->FindCharacterStyle(characterStyle);
         if (def)
         {
-            wxTextAttrEx attr;
-            def->GetStyle().CopyTo(attr);
+            wxTextAttrEx attr = def->GetStyle();
             return BeginStyle(attr);
         }
     }
@@ -5201,8 +5215,7 @@ bool wxRichTextBuffer::BeginParagraphStyle(const wxString& paragraphStyle)
         wxRichTextParagraphStyleDefinition* def = GetStyleSheet()->FindParagraphStyle(paragraphStyle);
         if (def)
         {
-            wxTextAttrEx attr;
-            def->GetStyle().CopyTo(attr);
+            wxTextAttrEx attr = def->GetStyle();
             return BeginStyle(attr);
         }
     }
@@ -5237,7 +5250,7 @@ bool wxRichTextBuffer::BeginURL(const wxString& url, const wxString& characterSt
         wxRichTextCharacterStyleDefinition* def = GetStyleSheet()->FindCharacterStyle(characterStyle);
         if (def)
         {
-            def->GetStyle().CopyTo(attr);
+            attr = def->GetStyle();
         }
     }
     attr.SetURL(url);
@@ -6400,6 +6413,7 @@ bool wxTextAttrEq(const wxTextAttrEx& attr1, const wxRichTextAttr& attr2)
         attr1.GetBulletText() == attr2.GetBulletText() &&
         attr1.GetBulletName() == attr2.GetBulletName() &&
         attr1.GetBulletFont() == attr2.GetBulletFont() &&
+        attr1.GetOutlineLevel() == attr2.GetOutlineLevel() &&
         attr1.GetCharacterStyleName() == attr2.GetCharacterStyleName() &&
         attr1.GetParagraphStyleName() == attr2.GetParagraphStyleName() &&
         attr1.GetListStyleName() == attr2.GetListStyleName() &&
@@ -6504,6 +6518,10 @@ bool wxTextAttrEqPartial(const wxTextAttrEx& attr1, const wxTextAttrEx& attr2, i
             return false;
     }
 
+    if ((flags & wxTEXT_ATTR_OUTLINE_LEVEL) &&
+        (attr1.GetOutlineLevel() != attr2.GetOutlineLevel()))
+         return false;
+
     return true;
 }
 
@@ -6605,6 +6623,10 @@ bool wxTextAttrEqPartial(const wxTextAttrEx& attr1, const wxRichTextAttr& attr2,
         if (!wxRichTextBitlistsEqPartial(attr1.GetTextEffects(), attr2.GetTextEffects(), attr2.GetTextEffectFlags()))
             return false;
     }
+
+    if ((flags & wxTEXT_ATTR_OUTLINE_LEVEL) &&
+        (attr1.GetOutlineLevel() != attr2.GetOutlineLevel()))
+         return false;
 
     return true;
 }
@@ -6745,13 +6767,15 @@ bool wxRichTextApplyStyle(wxTextAttrEx& destStyle, const wxTextAttrEx& style)
         destStyle.SetTextEffectFlags(destFlags);
     }
 
+    if (style.HasOutlineLevel())
+        destStyle.SetOutlineLevel(style.GetOutlineLevel());
+
     return true;
 }
 
 bool wxRichTextApplyStyle(wxRichTextAttr& destStyle, const wxTextAttrEx& style)
 {
-    wxTextAttrEx destStyle2;
-    destStyle.CopyTo(destStyle2);
+    wxTextAttrEx destStyle2 = destStyle;
     wxRichTextApplyStyle(destStyle2, style);
     destStyle = destStyle2;
     return true;
@@ -6982,6 +7006,12 @@ bool wxRichTextApplyStyle(wxTextAttrEx& destStyle, const wxRichTextAttr& style, 
         }
     }
 
+    if (style.HasOutlineLevel())
+    {
+        if (!(compareWith && compareWith->HasOutlineLevel() && compareWith->GetOutlineLevel() == style.GetOutlineLevel()))
+            destStyle.SetOutlineLevel(style.GetOutlineLevel());
+    }
+
     return true;
 }
 
@@ -7137,6 +7167,7 @@ void wxRichTextAttr::Init()
     m_bulletStyle = wxTEXT_ATTR_BULLET_STYLE_NONE;
     m_textEffects = wxTEXT_ATTR_EFFECT_NONE;
     m_textEffectFlags = wxTEXT_ATTR_EFFECT_NONE;
+    m_outlineLevel = 0;
     m_bulletNumber = 0;
 }
 
@@ -7171,6 +7202,7 @@ void wxRichTextAttr::Copy(const wxRichTextAttr& attr)
     m_bulletText = attr.m_bulletText;
     m_bulletFont = attr.m_bulletFont;
     m_bulletName = attr.m_bulletName;
+    m_outlineLevel = attr.m_outlineLevel;
 
     m_urlTarget = attr.m_urlTarget;
 }
@@ -7207,6 +7239,7 @@ void wxRichTextAttr::operator= (const wxTextAttrEx& attr)
     m_bulletText = attr.GetBulletText();
     m_bulletName = attr.GetBulletName();
     m_bulletFont = attr.GetBulletFont();
+    m_outlineLevel = attr.GetOutlineLevel();
 
     m_urlTarget = attr.GetURL();
 
@@ -7218,7 +7251,32 @@ void wxRichTextAttr::operator= (const wxTextAttrEx& attr)
 wxRichTextAttr::operator wxTextAttrEx () const
 {
     wxTextAttrEx attr;
-    CopyTo(attr);
+    attr.SetTextColour(GetTextColour());
+    attr.SetBackgroundColour(GetBackgroundColour());
+    attr.SetAlignment(GetAlignment());
+    attr.SetTabs(GetTabs());
+    attr.SetLeftIndent(GetLeftIndent(), GetLeftSubIndent());
+    attr.SetRightIndent(GetRightIndent());
+    attr.SetFont(CreateFont());
+
+    attr.SetParagraphSpacingAfter(m_paragraphSpacingAfter);
+    attr.SetParagraphSpacingBefore(m_paragraphSpacingBefore);
+    attr.SetLineSpacing(m_lineSpacing);
+    attr.SetBulletStyle(m_bulletStyle);
+    attr.SetBulletNumber(m_bulletNumber);
+    attr.SetBulletText(m_bulletText);
+    attr.SetBulletName(m_bulletName);
+    attr.SetBulletFont(m_bulletFont);
+    attr.SetCharacterStyleName(m_characterStyleName);
+    attr.SetParagraphStyleName(m_paragraphStyleName);
+    attr.SetListStyleName(m_listStyleName);
+    attr.SetTextEffects(m_textEffects);
+    attr.SetTextEffectFlags(m_textEffectFlags);
+    attr.SetOutlineLevel(m_outlineLevel);
+
+    attr.SetURL(m_urlTarget);
+
+    attr.SetFlags(GetFlags()); // Important: set after SetFont and others, since they set flags
     return attr;
 }
 
@@ -7252,43 +7310,15 @@ bool wxRichTextAttr::operator== (const wxRichTextAttr& attr) const
             GetTextEffects() == attr.GetTextEffects() &&
             GetTextEffectFlags() == attr.GetTextEffectFlags() &&
 
-            m_fontSize == attr.m_fontSize &&
-            m_fontStyle == attr.m_fontStyle &&
-            m_fontWeight == attr.m_fontWeight &&
-            m_fontUnderlined == attr.m_fontUnderlined &&
-            m_fontFaceName == attr.m_fontFaceName &&
+            GetOutlineLevel() == attr.GetOutlineLevel() &&
+
+            GetFontSize() == attr.GetFontSize() &&
+            GetFontStyle() == attr.GetFontStyle() &&
+            GetFontWeight() == attr.GetFontWeight() &&
+            GetFontUnderlined() == attr.GetFontUnderlined() &&
+            GetFontFaceName() == attr.GetFontFaceName() &&
             
-            m_urlTarget == attr.m_urlTarget;
-}
-
-// Copy to a wxTextAttr
-void wxRichTextAttr::CopyTo(wxTextAttrEx& attr) const
-{
-    attr.SetTextColour(GetTextColour());
-    attr.SetBackgroundColour(GetBackgroundColour());
-    attr.SetAlignment(GetAlignment());
-    attr.SetTabs(GetTabs());
-    attr.SetLeftIndent(GetLeftIndent(), GetLeftSubIndent());
-    attr.SetRightIndent(GetRightIndent());
-    attr.SetFont(CreateFont());
-
-    attr.SetParagraphSpacingAfter(m_paragraphSpacingAfter);
-    attr.SetParagraphSpacingBefore(m_paragraphSpacingBefore);
-    attr.SetLineSpacing(m_lineSpacing);
-    attr.SetBulletStyle(m_bulletStyle);
-    attr.SetBulletNumber(m_bulletNumber);
-    attr.SetBulletText(m_bulletText);
-    attr.SetBulletName(m_bulletName);
-    attr.SetBulletFont(m_bulletFont);
-    attr.SetCharacterStyleName(m_characterStyleName);
-    attr.SetParagraphStyleName(m_paragraphStyleName);
-    attr.SetListStyleName(m_listStyleName);
-    attr.SetTextEffects(m_textEffects);
-    attr.SetTextEffectFlags(m_textEffectFlags);
-
-    attr.SetURL(m_urlTarget);
-
-    attr.SetFlags(GetFlags()); // Important: set after SetFont and others, since they set flags
+            GetURL() == attr.GetURL();
 }
 
 // Create font from font attributes.
@@ -7422,6 +7452,9 @@ wxRichTextAttr wxRichTextAttr::Combine(const wxRichTextAttr& attr,
         newAttr.SetTextEffectFlags(attr.GetTextEffectFlags());
     }
 
+    if (attr.HasOutlineLevel())
+        newAttr.SetOutlineLevel(attr.GetOutlineLevel());
+
     return newAttr;
 }
 
@@ -7444,6 +7477,7 @@ void wxTextAttrEx::Init()
     m_textEffects = wxTEXT_ATTR_EFFECT_NONE;
     m_textEffectFlags = wxTEXT_ATTR_EFFECT_NONE;
     m_bulletNumber = 0;
+    m_outlineLevel = 0;
 }
 
 // Copy
@@ -7465,6 +7499,7 @@ void wxTextAttrEx::Copy(const wxTextAttrEx& attr)
     m_urlTarget = attr.m_urlTarget;
     m_textEffects = attr.m_textEffects;
     m_textEffectFlags = attr.m_textEffectFlags;
+    m_outlineLevel = attr.m_outlineLevel;
 }
 
 // Assignment from a wxTextAttrEx object
@@ -7483,10 +7518,12 @@ void wxTextAttrEx::operator= (const wxTextAttr& attr)
 bool wxTextAttrEx::operator== (const wxTextAttrEx& attr) const
 {
     return (
+        GetFlags() == attr.GetFlags() &&
         GetTextColour() == attr.GetTextColour() &&
         GetBackgroundColour() == attr.GetBackgroundColour() &&
         GetFont() == attr.GetFont() &&
         GetTextEffects() == attr.GetTextEffects() &&
+        GetTextEffectFlags() == attr.GetTextEffectFlags() &&
         GetAlignment() == attr.GetAlignment() &&
         GetLeftIndent() == attr.GetLeftIndent() &&
         GetRightIndent() == attr.GetRightIndent() &&
@@ -7503,6 +7540,7 @@ bool wxTextAttrEx::operator== (const wxTextAttrEx& attr) const
         GetCharacterStyleName() == attr.GetCharacterStyleName() &&
         GetParagraphStyleName() == attr.GetParagraphStyleName() &&
         GetListStyleName() == attr.GetListStyleName() &&
+        GetOutlineLevel() == attr.GetOutlineLevel() &&
         GetURL() == attr.GetURL());
 }
 
@@ -7659,6 +7697,9 @@ wxTextAttrEx wxTextAttrEx::CombineEx(const wxTextAttrEx& attr,
         newAttr.SetTextEffects(attr.GetTextEffects());
         newAttr.SetTextEffectFlags(attr.GetTextEffectFlags());
     }
+
+    if (attr.HasOutlineLevel())
+        newAttr.SetOutlineLevel(attr.GetOutlineLevel());
 
     return newAttr;
 }

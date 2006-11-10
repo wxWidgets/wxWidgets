@@ -200,6 +200,7 @@ class WXDLLIMPEXP_RICHTEXT wxRichTextBuffer;
 #define wxTEXT_ATTR_URL                     0x00200000
 #define wxTEXT_ATTR_PAGE_BREAK              0x00400000
 #define wxTEXT_ATTR_EFFECTS                 0x00800000
+#define wxTEXT_ATTR_OUTLINE_LEVEL           0x01000000
 
 /*!
  * Styles for wxTextAttrEx::SetBulletStyle
@@ -256,7 +257,7 @@ class WXDLLIMPEXP_RICHTEXT wxRichTextBuffer;
 #define wxTEXT_ATTR_PARAGRAPH (wxTEXT_ATTR_ALIGNMENT|wxTEXT_ATTR_LEFT_INDENT|wxTEXT_ATTR_RIGHT_INDENT|wxTEXT_ATTR_TABS|\
     wxTEXT_ATTR_PARA_SPACING_BEFORE|wxTEXT_ATTR_PARA_SPACING_AFTER|wxTEXT_ATTR_LINE_SPACING|\
     wxTEXT_ATTR_BULLET_STYLE|wxTEXT_ATTR_BULLET_NUMBER|wxTEXT_ATTR_BULLET_TEXT|wxTEXT_ATTR_BULLET_NAME|\
-    wxTEXT_ATTR_PARAGRAPH_STYLE_NAME|wxTEXT_ATTR_LIST_STYLE_NAME)
+    wxTEXT_ATTR_PARAGRAPH_STYLE_NAME|wxTEXT_ATTR_LIST_STYLE_NAME|wxTEXT_ATTR_OUTLINE_LEVEL)
 
 #define wxTEXT_ATTR_ALL (wxTEXT_ATTR_CHARACTER|wxTEXT_ATTR_PARAGRAPH)
 
@@ -367,6 +368,7 @@ public:
     void SetPageBreak(bool pageBreak = true) { SetFlags(pageBreak ? (GetFlags() | wxTEXT_ATTR_PAGE_BREAK) : (GetFlags() & ~wxTEXT_ATTR_PAGE_BREAK)); }
     void SetTextEffects(int effects) { m_textEffects = effects; SetFlags(GetFlags() | wxTEXT_ATTR_EFFECTS); }
     void SetTextEffectFlags(int effects) { m_textEffectFlags = effects; }
+    void SetOutlineLevel(int level) { m_outlineLevel = level; SetFlags(GetFlags() | wxTEXT_ATTR_OUTLINE_LEVEL); }
 
     const wxString& GetCharacterStyleName() const { return m_characterStyleName; }
     const wxString& GetParagraphStyleName() const { return m_paragraphStyleName; }
@@ -382,6 +384,7 @@ public:
     const wxString& GetURL() const { return m_urlTarget; }
     int GetTextEffects() const { return m_textEffects; }
     int GetTextEffectFlags() const { return m_textEffectFlags; }
+    int GetOutlineLevel() const { return m_outlineLevel; }
 
     bool HasWeight() const { return (GetFlags() & wxTEXT_ATTR_FONT_WEIGHT) != 0; }
     bool HasSize() const { return (GetFlags() & wxTEXT_ATTR_FONT_SIZE) != 0; }
@@ -403,6 +406,7 @@ public:
     bool HasPageBreak() const { return HasFlag(wxTEXT_ATTR_PAGE_BREAK); }
     bool HasTextEffects() const { return HasFlag(wxTEXT_ATTR_EFFECTS); }
     bool HasTextEffect(int effect) const { return HasFlag(wxTEXT_ATTR_EFFECTS) && ((GetTextEffectFlags() & effect) != 0); }
+    bool HasOutlineLevel() const { return HasFlag(wxTEXT_ATTR_OUTLINE_LEVEL); }
 
     // Is this a character style?
     bool IsCharacterStyle() const { return (0 != (GetFlags() & wxTEXT_ATTR_CHARACTER)); }
@@ -430,6 +434,7 @@ private:
     int                 m_bulletNumber;
     int                 m_textEffects;
     int                 m_textEffectFlags;
+    int                 m_outlineLevel;
     wxString            m_bulletText;
     wxString            m_bulletFont;
     wxString            m_bulletName;
@@ -479,9 +484,6 @@ public:
     // Making a wxTextAttrEx object.
     operator wxTextAttrEx () const ;
 
-    // Copy to a wxTextAttr
-    void CopyTo(wxTextAttrEx& attr) const;
-
     // Create font from font attributes.
     wxFont CreateFont() const;
 
@@ -519,6 +521,7 @@ public:
     void SetPageBreak(bool pageBreak = true) { SetFlags(pageBreak ? (GetFlags() | wxTEXT_ATTR_PAGE_BREAK) : (GetFlags() & ~wxTEXT_ATTR_PAGE_BREAK)); }
     void SetTextEffects(int effects) { m_textEffects = effects; SetFlags(GetFlags() | wxTEXT_ATTR_EFFECTS); }
     void SetTextEffectFlags(int effects) { m_textEffectFlags = effects; }
+    void SetOutlineLevel(int level) { m_outlineLevel = level; SetFlags(GetFlags() | wxTEXT_ATTR_OUTLINE_LEVEL); }
 
     const wxColour& GetTextColour() const { return m_colText; }
     const wxColour& GetBackgroundColour() const { return m_colBack; }
@@ -549,6 +552,7 @@ public:
     const wxString& GetURL() const { return m_urlTarget; }
     int GetTextEffects() const { return m_textEffects; }
     int GetTextEffectFlags() const { return m_textEffectFlags; }
+    int GetOutlineLevel() const { return m_outlineLevel; }
 
     // accessors
     bool HasTextColour() const { return m_colText.Ok() && HasFlag(wxTEXT_ATTR_TEXT_COLOUR) ; }
@@ -578,6 +582,7 @@ public:
     bool HasPageBreak() const { return HasFlag(wxTEXT_ATTR_PAGE_BREAK); }
     bool HasTextEffects() const { return HasFlag(wxTEXT_ATTR_EFFECTS); }
     bool HasTextEffect(int effect) const { return HasFlag(wxTEXT_ATTR_EFFECTS) && ((GetTextEffectFlags() & effect) != 0); }
+    bool HasOutlineLevel() const { return HasFlag(wxTEXT_ATTR_OUTLINE_LEVEL); }
 
     bool HasFlag(long flag) const { return (m_flags & flag) != 0; }
 
@@ -616,6 +621,7 @@ private:
     int                 m_bulletNumber;
     int                 m_textEffects;
     int                 m_textEffectFlags;
+    int                 m_outlineLevel;
     wxString            m_bulletText;
     wxString            m_bulletFont;
     wxString            m_bulletName;
@@ -1136,7 +1142,7 @@ public:
 
     /// Set basic (overall) style
     virtual void SetBasicStyle(const wxTextAttrEx& style) { m_attributes = style; }
-    virtual void SetBasicStyle(const wxRichTextAttr& style) { style.CopyTo(m_attributes); }
+    virtual void SetBasicStyle(const wxRichTextAttr& style) { m_attributes = style; }
 
     /// Get basic (overall) style
     virtual const wxTextAttrEx& GetBasicStyle() const { return m_attributes; }

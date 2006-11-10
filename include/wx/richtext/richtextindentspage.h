@@ -99,6 +99,9 @@ public:
     /// wxEVT_COMMAND_TEXT_UPDATED event handler for ID_RICHTEXTINDENTSSPACINGPAGE_INDENT_RIGHT
     void OnIndentRightUpdated( wxCommandEvent& event );
 
+    /// wxEVT_COMMAND_COMBOBOX_SELECTED event handler for ID_RICHTEXTINDENTSSPACINGPAGE_OUTLINELEVEL
+    void OnRichtextOutlinelevelSelected( wxCommandEvent& event );
+
     /// wxEVT_COMMAND_TEXT_UPDATED event handler for ID_RICHTEXTINDENTSSPACINGPAGE_SPACING_BEFORE
     void OnSpacingBeforeUpdated( wxCommandEvent& event );
 
@@ -131,6 +134,7 @@ public:
     wxTextCtrl* m_indentLeft;
     wxTextCtrl* m_indentLeftFirst;
     wxTextCtrl* m_indentRight;
+    wxComboBox* m_outlineLevelCtrl;
     wxTextCtrl* m_spacingBefore;
     wxTextCtrl* m_spacingAfter;
     wxComboBox* m_spacingLine;
@@ -146,6 +150,7 @@ public:
         ID_RICHTEXTINDENTSSPACINGPAGE_INDENT_LEFT = 10103,
         ID_RICHTEXTINDENTSSPACINGPAGE_INDENT_LEFT_FIRST = 10104,
         ID_RICHTEXTINDENTSSPACINGPAGE_INDENT_RIGHT = 10113,
+        ID_RICHTEXTINDENTSSPACINGPAGE_OUTLINELEVEL = 10105,
         ID_RICHTEXTINDENTSSPACINGPAGE_SPACING_BEFORE = 10114,
         ID_RICHTEXTINDENTSSPACINGPAGE_SPACING_AFTER = 10116,
         ID_RICHTEXTINDENTSSPACINGPAGE_SPACING_LINE = 10115,

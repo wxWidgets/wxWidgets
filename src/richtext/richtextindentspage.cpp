@@ -42,6 +42,8 @@ BEGIN_EVENT_TABLE( wxRichTextIndentsSpacingPage, wxPanel )
 
     EVT_TEXT( ID_RICHTEXTINDENTSSPACINGPAGE_INDENT_RIGHT, wxRichTextIndentsSpacingPage::OnIndentRightUpdated )
 
+    EVT_COMBOBOX( ID_RICHTEXTINDENTSSPACINGPAGE_OUTLINELEVEL, wxRichTextIndentsSpacingPage::OnRichtextOutlinelevelSelected )
+
     EVT_TEXT( ID_RICHTEXTINDENTSSPACINGPAGE_SPACING_BEFORE, wxRichTextIndentsSpacingPage::OnSpacingBeforeUpdated )
 
     EVT_TEXT( ID_RICHTEXTINDENTSSPACINGPAGE_SPACING_AFTER, wxRichTextIndentsSpacingPage::OnSpacingAfterUpdated )
@@ -84,6 +86,7 @@ void wxRichTextIndentsSpacingPage::Init()
     m_indentLeft = NULL;
     m_indentLeftFirst = NULL;
     m_indentRight = NULL;
+    m_outlineLevelCtrl = NULL;
     m_spacingBefore = NULL;
     m_spacingAfter = NULL;
     m_spacingLine = NULL;
@@ -203,87 +206,110 @@ void wxRichTextIndentsSpacingPage::CreateControls()
     itemFlexGridSizer22->Add(itemStaticText23, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL|wxADJUST_MINSIZE, 5);
 
     wxBoxSizer* itemBoxSizer24 = new wxBoxSizer(wxHORIZONTAL);
-    itemFlexGridSizer22->Add(itemBoxSizer24, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    itemFlexGridSizer22->Add(itemBoxSizer24, 0, wxGROW|wxALIGN_CENTER_VERTICAL, 5);
 
     m_indentLeft = new wxTextCtrl( itemPanel1, ID_RICHTEXTINDENTSSPACINGPAGE_INDENT_LEFT, _T(""), wxDefaultPosition, wxSize(50, -1), 0 );
     m_indentLeft->SetHelpText(_("The left indent."));
     if (ShowToolTips())
         m_indentLeft->SetToolTip(_("The left indent."));
-    itemBoxSizer24->Add(m_indentLeft, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+    itemBoxSizer24->Add(m_indentLeft, 1, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
     wxStaticText* itemStaticText26 = new wxStaticText( itemPanel1, wxID_STATIC, _("Left (&first line):"), wxDefaultPosition, wxDefaultSize, 0 );
     itemFlexGridSizer22->Add(itemStaticText26, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL|wxADJUST_MINSIZE, 5);
 
     wxBoxSizer* itemBoxSizer27 = new wxBoxSizer(wxHORIZONTAL);
-    itemFlexGridSizer22->Add(itemBoxSizer27, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    itemFlexGridSizer22->Add(itemBoxSizer27, 0, wxGROW|wxALIGN_CENTER_VERTICAL, 5);
 
     m_indentLeftFirst = new wxTextCtrl( itemPanel1, ID_RICHTEXTINDENTSSPACINGPAGE_INDENT_LEFT_FIRST, _T(""), wxDefaultPosition, wxSize(50, -1), 0 );
     m_indentLeftFirst->SetHelpText(_("The first line indent."));
     if (ShowToolTips())
         m_indentLeftFirst->SetToolTip(_("The first line indent."));
-    itemBoxSizer27->Add(m_indentLeftFirst, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+    itemBoxSizer27->Add(m_indentLeftFirst, 1, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
     wxStaticText* itemStaticText29 = new wxStaticText( itemPanel1, wxID_STATIC, _("&Right:"), wxDefaultPosition, wxDefaultSize, 0 );
     itemFlexGridSizer22->Add(itemStaticText29, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL|wxADJUST_MINSIZE, 5);
 
     wxBoxSizer* itemBoxSizer30 = new wxBoxSizer(wxHORIZONTAL);
-    itemFlexGridSizer22->Add(itemBoxSizer30, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    itemFlexGridSizer22->Add(itemBoxSizer30, 0, wxGROW|wxALIGN_CENTER_VERTICAL, 5);
 
     m_indentRight = new wxTextCtrl( itemPanel1, ID_RICHTEXTINDENTSSPACINGPAGE_INDENT_RIGHT, _T(""), wxDefaultPosition, wxSize(50, -1), 0 );
     m_indentRight->SetHelpText(_("The right indent."));
     if (ShowToolTips())
         m_indentRight->SetToolTip(_("The right indent."));
-    itemBoxSizer30->Add(m_indentRight, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+    itemBoxSizer30->Add(m_indentRight, 1, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+
+    wxStaticText* itemStaticText32 = new wxStaticText( itemPanel1, wxID_STATIC, _("&Outline level:"), wxDefaultPosition, wxDefaultSize, 0 );
+    itemFlexGridSizer22->Add(itemStaticText32, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL|wxADJUST_MINSIZE, 5);
+
+    wxString m_outlineLevelCtrlStrings[] = {
+        _("Normal"),
+        _("1"),
+        _("2"),
+        _("3"),
+        _("4"),
+        _("5"),
+        _("6"),
+        _("7"),
+        _("8"),
+        _("9")
+    };
+    m_outlineLevelCtrl = new wxComboBox( itemPanel1, ID_RICHTEXTINDENTSSPACINGPAGE_OUTLINELEVEL, _("Normal"), wxDefaultPosition, wxDefaultSize, 10, m_outlineLevelCtrlStrings, wxCB_READONLY );
+    m_outlineLevelCtrl->SetStringSelection(_("Normal"));
+    m_outlineLevelCtrl->SetHelpText(_("The outline level."));
+    if (ShowToolTips())
+        m_outlineLevelCtrl->SetToolTip(_("The outline level."));
+    itemFlexGridSizer22->Add(m_outlineLevelCtrl, 1, wxGROW|wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
     itemBoxSizer4->Add(2, 1, 1, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM, 5);
 
-    wxStaticLine* itemStaticLine33 = new wxStaticLine( itemPanel1, wxID_STATIC, wxDefaultPosition, wxDefaultSize, wxLI_VERTICAL );
-    itemBoxSizer4->Add(itemStaticLine33, 0, wxGROW|wxTOP|wxBOTTOM, 5);
+    wxStaticLine* itemStaticLine35 = new wxStaticLine( itemPanel1, wxID_STATIC, wxDefaultPosition, wxDefaultSize, wxLI_VERTICAL );
+    itemBoxSizer4->Add(itemStaticLine35, 0, wxGROW|wxTOP|wxBOTTOM, 5);
 
     itemBoxSizer4->Add(2, 1, 1, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM, 5);
 
-    wxBoxSizer* itemBoxSizer35 = new wxBoxSizer(wxVERTICAL);
-    itemBoxSizer4->Add(itemBoxSizer35, 0, wxGROW, 5);
+    wxBoxSizer* itemBoxSizer37 = new wxBoxSizer(wxVERTICAL);
+    itemBoxSizer4->Add(itemBoxSizer37, 0, wxGROW, 5);
 
-    wxStaticText* itemStaticText36 = new wxStaticText( itemPanel1, wxID_STATIC, _("&Spacing (tenths of a mm)"), wxDefaultPosition, wxDefaultSize, 0 );
-    itemBoxSizer35->Add(itemStaticText36, 0, wxALIGN_LEFT|wxLEFT|wxRIGHT|wxTOP|wxADJUST_MINSIZE, 5);
+    wxStaticText* itemStaticText38 = new wxStaticText( itemPanel1, wxID_STATIC, _("&Spacing (tenths of a mm)"), wxDefaultPosition, wxDefaultSize, 0 );
+    itemBoxSizer37->Add(itemStaticText38, 0, wxALIGN_LEFT|wxLEFT|wxRIGHT|wxTOP|wxADJUST_MINSIZE, 5);
 
-    wxBoxSizer* itemBoxSizer37 = new wxBoxSizer(wxHORIZONTAL);
-    itemBoxSizer35->Add(itemBoxSizer37, 0, wxALIGN_LEFT|wxALL, 5);
+    wxBoxSizer* itemBoxSizer39 = new wxBoxSizer(wxHORIZONTAL);
+    itemBoxSizer37->Add(itemBoxSizer39, 0, wxALIGN_LEFT|wxALL, 5);
 
-    itemBoxSizer37->Add(5, 5, 0, wxALIGN_CENTER_VERTICAL, 5);
+    itemBoxSizer39->Add(5, 5, 0, wxALIGN_CENTER_VERTICAL, 5);
 
-    wxFlexGridSizer* itemFlexGridSizer39 = new wxFlexGridSizer(2, 2, 0, 0);
-    itemBoxSizer37->Add(itemFlexGridSizer39, 0, wxALIGN_CENTER_VERTICAL, 5);
+    wxFlexGridSizer* itemFlexGridSizer41 = new wxFlexGridSizer(2, 2, 0, 0);
+    itemFlexGridSizer41->AddGrowableCol(1);
+    itemBoxSizer39->Add(itemFlexGridSizer41, 0, wxALIGN_CENTER_VERTICAL, 5);
 
-    wxStaticText* itemStaticText40 = new wxStaticText( itemPanel1, wxID_STATIC, _("Before a paragraph:"), wxDefaultPosition, wxDefaultSize, 0 );
-    itemFlexGridSizer39->Add(itemStaticText40, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL|wxADJUST_MINSIZE, 5);
+    wxStaticText* itemStaticText42 = new wxStaticText( itemPanel1, wxID_STATIC, _("&Before a paragraph:"), wxDefaultPosition, wxDefaultSize, 0 );
+    itemFlexGridSizer41->Add(itemStaticText42, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL|wxADJUST_MINSIZE, 5);
 
-    wxBoxSizer* itemBoxSizer41 = new wxBoxSizer(wxHORIZONTAL);
-    itemFlexGridSizer39->Add(itemBoxSizer41, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    wxBoxSizer* itemBoxSizer43 = new wxBoxSizer(wxHORIZONTAL);
+    itemFlexGridSizer41->Add(itemBoxSizer43, 0, wxGROW|wxALIGN_CENTER_VERTICAL, 5);
 
     m_spacingBefore = new wxTextCtrl( itemPanel1, ID_RICHTEXTINDENTSSPACINGPAGE_SPACING_BEFORE, _T(""), wxDefaultPosition, wxSize(50, -1), 0 );
     m_spacingBefore->SetHelpText(_("The spacing before the paragraph."));
     if (ShowToolTips())
         m_spacingBefore->SetToolTip(_("The spacing before the paragraph."));
-    itemBoxSizer41->Add(m_spacingBefore, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+    itemBoxSizer43->Add(m_spacingBefore, 1, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
-    wxStaticText* itemStaticText43 = new wxStaticText( itemPanel1, wxID_STATIC, _("After a paragraph:"), wxDefaultPosition, wxDefaultSize, 0 );
-    itemFlexGridSizer39->Add(itemStaticText43, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL|wxADJUST_MINSIZE, 5);
+    wxStaticText* itemStaticText45 = new wxStaticText( itemPanel1, wxID_STATIC, _("&After a paragraph:"), wxDefaultPosition, wxDefaultSize, 0 );
+    itemFlexGridSizer41->Add(itemStaticText45, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL|wxADJUST_MINSIZE, 5);
 
-    wxBoxSizer* itemBoxSizer44 = new wxBoxSizer(wxHORIZONTAL);
-    itemFlexGridSizer39->Add(itemBoxSizer44, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    wxBoxSizer* itemBoxSizer46 = new wxBoxSizer(wxHORIZONTAL);
+    itemFlexGridSizer41->Add(itemBoxSizer46, 1, wxGROW|wxALIGN_CENTER_VERTICAL, 5);
 
     m_spacingAfter = new wxTextCtrl( itemPanel1, ID_RICHTEXTINDENTSSPACINGPAGE_SPACING_AFTER, _T(""), wxDefaultPosition, wxSize(50, -1), 0 );
     if (ShowToolTips())
         m_spacingAfter->SetToolTip(_("The spacing after the paragraph."));
-    itemBoxSizer44->Add(m_spacingAfter, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+    itemBoxSizer46->Add(m_spacingAfter, 1, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
-    wxStaticText* itemStaticText46 = new wxStaticText( itemPanel1, wxID_STATIC, _("Line spacing:"), wxDefaultPosition, wxDefaultSize, 0 );
-    itemFlexGridSizer39->Add(itemStaticText46, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL|wxADJUST_MINSIZE, 5);
+    wxStaticText* itemStaticText48 = new wxStaticText( itemPanel1, wxID_STATIC, _("L&ine spacing:"), wxDefaultPosition, wxDefaultSize, 0 );
+    itemFlexGridSizer41->Add(itemStaticText48, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL|wxADJUST_MINSIZE, 5);
 
-    wxBoxSizer* itemBoxSizer47 = new wxBoxSizer(wxHORIZONTAL);
-    itemFlexGridSizer39->Add(itemBoxSizer47, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    wxBoxSizer* itemBoxSizer49 = new wxBoxSizer(wxHORIZONTAL);
+    itemFlexGridSizer41->Add(itemBoxSizer49, 0, wxGROW|wxALIGN_CENTER_VERTICAL, 5);
 
     wxString m_spacingLineStrings[] = {
         _("Single"),
@@ -295,7 +321,7 @@ void wxRichTextIndentsSpacingPage::CreateControls()
     m_spacingLine->SetHelpText(_("The line spacing."));
     if (ShowToolTips())
         m_spacingLine->SetToolTip(_("The line spacing."));
-    itemBoxSizer47->Add(m_spacingLine, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+    itemBoxSizer49->Add(m_spacingLine, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
     itemBoxSizer3->Add(5, 5, 1, wxALIGN_CENTER_HORIZONTAL|wxALL, 5);
 
@@ -424,6 +450,10 @@ bool wxRichTextIndentsSpacingPage::TransferDataFromWindow()
         attr->SetFlags(attr->GetFlags() & (~wxTEXT_ATTR_LINE_SPACING));
     else
         attr->SetLineSpacing(lineSpacing);
+        
+    int outlineLevel = m_outlineLevelCtrl->GetSelection();
+    if (outlineLevel != wxNOT_FOUND)
+        attr->SetOutlineLevel(outlineLevel);
 
     return true;
 }
@@ -511,6 +541,19 @@ bool wxRichTextIndentsSpacingPage::TransferDataToWindow()
     }
     else
         m_spacingLine->SetSelection(-1);
+
+    if (attr->HasOutlineLevel())
+    {
+        int outlineLevel = attr->GetOutlineLevel();
+        if (outlineLevel < 0)
+            outlineLevel = 0;
+        if (outlineLevel > 9)
+            outlineLevel = 9;            
+
+        m_outlineLevelCtrl->SetSelection(outlineLevel);
+    }
+    else
+        m_outlineLevelCtrl->SetSelection(-1);
 
     UpdatePreview();
 
@@ -668,6 +711,16 @@ void wxRichTextIndentsSpacingPage::OnSpacingAfterUpdated( wxCommandEvent& WXUNUS
  */
 
 void wxRichTextIndentsSpacingPage::OnSpacingLineSelected( wxCommandEvent& WXUNUSED(event) )
+{
+    if (!m_dontUpdate)
+        UpdatePreview();
+}
+
+/*!
+ * wxEVT_COMMAND_COMBOBOX_SELECTED event handler for ID_RICHTEXTINDENTSSPACINGPAGE_OUTLINELEVEL
+ */
+
+void wxRichTextIndentsSpacingPage::OnRichtextOutlinelevelSelected( wxCommandEvent& WXUNUSED(event) )
 {
     if (!m_dontUpdate)
         UpdatePreview();

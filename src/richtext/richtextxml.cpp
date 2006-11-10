@@ -996,6 +996,10 @@ wxString wxRichTextXMLHandler::CreateStyle(const wxTextAttrEx& attr, bool isPara
         {
             str << wxT(" pagebreak=\"1\"");
         }
+
+        if (attr.HasOutlineLevel())
+            str << wxT(" outlinelevel=\"") << (int) attr.GetOutlineLevel() << wxT("\"");
+
     }
 
     return str;
@@ -1194,6 +1198,12 @@ bool wxRichTextXMLHandler::GetStyle(wxTextAttrEx& attr, wxXmlNode* node, bool is
         if (!value.IsEmpty())
         {
             attr.SetPageBreak(wxAtoi(value) != 0);
+        }
+
+        value = node->GetPropVal(wxT("outlinelevel"), wxEmptyString);
+        if (!value.IsEmpty())
+        {
+            attr.SetOutlineLevel(wxAtoi(value) != 0);
         }
     }
 

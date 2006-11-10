@@ -80,6 +80,7 @@ for a text control.
 #define wxTEXT_ATTR_URL                     0x00200000
 #define wxTEXT_ATTR_PAGE_BREAK              0x00400000
 #define wxTEXT_ATTR_EFFECTS                 0x00800000
+#define wxTEXT_ATTR_OUTLINE_LEVEL           0x01000000
 \end{verbatim}
 }
 
@@ -297,6 +298,12 @@ wxTEXT\_ATTR\_LINE\_SPACING\_HALF, and wxTEXT\_ATTR\_LINE\_SPACING\_TWICE.
 
 Returns the name of the list style.
 
+\membersection{wxRichTextAttr::GetOutlineLevel}\label{wxrichtextattrgetoutlinelevel}
+
+\constfunc{bool}{GetOutlineLevel}{\void}
+
+Returns the outline level.
+
 \membersection{wxRichTextAttr::GetParagraphSpacingAfter}\label{wxrichtextattrgetparagraphspacingafter}
 
 \constfunc{int}{GetParagraphSpacingAfter}{\void}
@@ -439,6 +446,12 @@ Returns \true if the attribute object specifies line spacing.
 
 Returns \true if the attribute object specifies a list style name.
 
+\membersection{wxRichTextAttr::HasOutlineLevel}\label{wxrichtextattrhasoutlinelevel}
+
+\constfunc{bool}{HasOutlineLevel}{\void}
+
+Returns \true if the attribute object specifies an outline level.
+
 \membersection{wxRichTextAttr::HasPageBreak}\label{wxrichtextattrhaspagebreak}
 
 \constfunc{bool}{HasPageBreak}{\void}
@@ -487,11 +500,23 @@ Returns \true if the attribute object specifies tab stops.
 
 Returns \true if the attribute object specifies a text foreground colour.
 
+\membersection{wxRichTextAttr::HasTextEffects}\label{wxrichtextattrhastexteffects}
+
+\constfunc{bool}{HasTextEffects}{\void}
+
+Returns \true if the attribute object specifies text effects.
+
 \membersection{wxRichTextAttr::HasUnderlined}\label{wxrichtextattrhasunderlined}
 
 \constfunc{bool}{HasUnderlined}{\void}
 
 Returns \true if the attribute object specifies either underlining or no underlining.
+
+\membersection{wxRichTextAttr::HasURL}\label{wxrichtextattrhasurl}
+
+\constfunc{bool}{HasURL}{\void}
+
+Returns \true if the attribute object specifies a URL.
 
 \membersection{wxRichTextAttr::HasWeight}\label{wxrichtextattrhasweight}
 
@@ -658,6 +683,7 @@ flags can be passed in a bitlist:
 #define wxTEXT_ATTR_URL                     0x00200000
 #define wxTEXT_ATTR_PAGE_BREAK              0x00400000
 #define wxTEXT_ATTR_EFFECTS                 0x00800000
+#define wxTEXT_ATTR_OUTLINE_LEVEL           0x01000000
 \end{verbatim}
 }
 
@@ -728,6 +754,14 @@ defined for convenience:
 \func{void}{SetListStyleName}{\param{const wxString\& }{name}}
 
 Sets the list style name.
+
+\membersection{wxRichTextAttr::SetOutlineLevel}\label{wxrichtextattrsetoutlinelevel}
+
+\func{void}{SetOutlineLevel}{\param{int}{ level}}
+
+Specifies the outline level. Zero represents normal text. At present, the outline level is
+not used, but may be used in future for determining list levels and for applications
+that need to store document structure information.
 
 \membersection{wxRichTextAttr::SetPageBreak}\label{wxrichtextattrsetpagebreak}
 
