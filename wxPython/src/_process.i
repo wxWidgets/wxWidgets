@@ -17,7 +17,7 @@
 %newgroup
 
 %{
-%}    
+%}
 
 //---------------------------------------------------------------------------
 
@@ -99,29 +99,28 @@ public:
     static wxPyProcess *Open(const wxString& cmd, int flags = wxEXEC_ASYNC);
 
 
-    %pythonAppend wxPyProcess  "self._setCallbackInfo(self, Process)"
+    %pythonAppend wxPyProcess  "self._setCallbackInfo(self, Process); self.this.own(False)"
     wxPyProcess(wxEvtHandler *parent = NULL, int id = -1);
     ~wxPyProcess();
+
+    void _setCallbackInfo(PyObject* self, PyObject* _class);
 
 
     DocDeclStr(
         long , GetPid() const,
         "get the process ID of the process executed by Open()", "");
-    
 
-
-    void _setCallbackInfo(PyObject* self, PyObject* _class);
 
     void OnTerminate(int pid, int status);
     %MAKE_BASE_FUNC(Process, OnTerminate);
-        
+
     // call Redirect before passing the object to wxExecute() to redirect the
     // launched process stdin/stdout, then use GetInputStream() and
     // GetOutputStream() to get access to them
     void Redirect();
     bool IsRedirected();
 
-    
+
     // detach from the parent - should be called by the parent if it's deleted
     // before the process it started terminates
     void Detach();
@@ -157,7 +156,7 @@ public:
     int GetPid();
     int GetExitCode();
     int m_pid, m_exitcode;
-    
+
     %property(ExitCode, GetExitCode, doc="See `GetExitCode`");
     %property(Pid, GetPid, doc="See `GetPid`");
 };
@@ -190,7 +189,7 @@ enum
     // by default synchronous execution disables all program windows to avoid
     // that the user interacts with the program while the child process is
     // running, you can use this flag to prevent this from happening
-    wxEXEC_NODISABLE = 8   
+    wxEXEC_NODISABLE = 8
 };
 
 
@@ -203,7 +202,7 @@ long wxExecute(const wxString& command,
 
 
 %typemap(in,numinputs=0) wxKillError* rc ( wxKillError temp ) { $1 = &temp; }
-%typemap(argout) wxKillError* rc 
+%typemap(argout) wxKillError* rc
 {
     PyObject* o;
     o = PyInt_FromLong((long) (*$1));
