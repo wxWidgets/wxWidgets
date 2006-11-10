@@ -1,9 +1,0 @@
-[Desktop Entry]
-Name=PyCrust
-Comment=GUI Python Shell with Filling
-Exec=/usr/bin/pycrust
-Icon=/usr/share/pixmaps/pycrust.png
-Terminal=false
-Type=Application
-Categories=Application;Development;
-StartupNotify=true
