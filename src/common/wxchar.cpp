@@ -993,19 +993,23 @@ int wxPrintfConvSpec::Process(wxChar *buf, size_t lenMax, wxPrintfArg *p, size_t
     return lenCur;
 }
 
-// differences from standard strncpy:
-// 1) copies everything from 'source' except for '%%' sequence which is copied as '%'
-// 2) returns the number of written characters in 'dest' as it could differ from given 'n'
-// 3) much less optimized, unfortunately...
-static int wxCopyStrWithPercents(wxChar *dest, const wxChar *source, size_t n)
+// Copy chars from source to dest converting '%%' to '%'. Takes at most maxIn
+// chars from source and write at most outMax chars to dest, returns the
+// number of chars actually written. Does not treat null specially.
+//
+static int wxCopyStrWithPercents(
+        size_t maxOut,
+        wxChar *dest,
+        size_t maxIn,
+        const wxChar *source)
 {
     size_t written = 0;
 
-    if (n == 0)
+    if (maxIn == 0)
         return 0;
 
     size_t i;
-    for ( i = 0; i < n-1; source++, i++)
+    for ( i = 0; i < maxIn-1 && written < maxOut; source++, i++)
     {
         dest[written++] = *source;
         if (*(source+1) == wxT('%'))
@@ -1016,7 +1020,7 @@ static int wxCopyStrWithPercents(wxChar *dest, const wxChar *source, size_t n)
         }
     }
 
-    if (i < n)
+    if (i < maxIn && written < maxOut)
         // copy last character inconditionally
         dest[written++] = *source;
 
@@ -1097,8 +1101,10 @@ int WXDLLEXPORT wxVsnprintf_(wxChar *buf, size_t lenMax,
     }
 
     if (posarg_present && nonposarg_present)
+    {
+        buf[0] = 0;
         return -1;      // format strings with both positional and
-                        // non-positional conversion specifier are unsupported !!
+    }                   // non-positional conversion specifier are unsupported !!
 
     // on platforms where va_list is an array type, it is necessary to make a
     // copy to be able to pass it to LoadArg as a reference.
@@ -1119,7 +1125,10 @@ int WXDLLEXPORT wxVsnprintf_(wxChar *buf, size_t lenMax,
 
     // something failed while loading arguments from the variable list...
     if (!ok)
+    {
+        buf[0] = 0;
         return -1;
+    }
 
     // finally, process each conversion specifier with its own argument
     toparse = format;
@@ -1128,19 +1137,17 @@ int WXDLLEXPORT wxVsnprintf_(wxChar *buf, size_t lenMax,
         // copy in the output buffer the portion of the format string between
         // last specifier and the current one
         size_t tocopy = ( arg[i].m_pArgPos - toparse );
-        if (lenCur+tocopy >= lenMax)
+
+        lenCur += wxCopyStrWithPercents(lenMax - lenCur, buf + lenCur,
+                                        tocopy, toparse);
+        if (lenCur == lenMax)
         {
-            // not enough space in the output buffer !
-            // copy until the end of remaining space and then stop
-            wxCopyStrWithPercents(buf+lenCur, toparse, lenMax - lenCur - 1);
-            buf[lenMax-1] = wxT('\0');
+            buf[lenMax - 1] = 0;
             return -1;
         }
 
-        lenCur += wxCopyStrWithPercents(buf+lenCur, toparse, tocopy);
-
         // process this specifier directly in the output buffer
-        int n = arg[i].Process(buf+lenCur, lenMax - lenCur, &argdata[arg[i].m_pos]);
+        int n = arg[i].Process(buf+lenCur, lenMax - lenCur, &argdata[arg[i].m_pos], lenCur);
         if (n == -1)
         {
             buf[lenMax-1] = wxT('\0');  // be sure to always NUL-terminate the string
@@ -1158,11 +1165,14 @@ int WXDLLEXPORT wxVsnprintf_(wxChar *buf, size_t lenMax,
     //       conversion specifier
     // NOTE2: the +1 is because we want to copy also the '\0'
     size_t tocopy = wxStrlen(format) + 1  - ( toparse - format ) ;
-    if (lenCur+tocopy >= lenMax)
-        return -1;      // not enough space in the output buffer !
 
-    // the -1 is because of the '\0'
-    lenCur += wxCopyStrWithPercents(buf+lenCur, toparse, tocopy) - 1;
+    lenCur += wxCopyStrWithPercents(lenMax - lenCur, buf + lenCur, 
+                                    tocopy, toparse) - 1;
+    if (buf[lenCur])
+    {
+        buf[lenCur] = 0;
+        return -1;
+    }
 
     wxASSERT(lenCur == wxStrlen(buf));
     return lenCur;
