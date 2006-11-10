@@ -2116,6 +2116,10 @@ if test "x$COMPAQCXX" = "xyes"; then
     CXXFLAGS="-w0 -msg_disable basclsnondto,unrimpret,intconlosbit"
 fi
 
+dnl the next few tests are all for C++ features and so need to be done using
+dnl C++ compiler
+AC_LANG_PUSH(C++)
+
 dnl check for std::string or std::wstring
 if test "$wxUSE_STD_STRING" = "yes" -o "$wxUSE_STL" = "yes"; then
     if test "$wxUSE_UNICODE" = "yes"; then
@@ -2126,7 +2130,7 @@ if test "$wxUSE_STD_STRING" = "yes" -o "$wxUSE_STL" = "yes"; then
         char_type="char"
     fi
 
-    dnl check if <string> declares std::wstring
+    dnl check if <string> declares std::[w]string
     AC_MSG_CHECKING([for $std_string in <string>])
     AC_TRY_COMPILE([#include <string>],
                    [$std_string foo;],
@@ -2234,6 +2238,9 @@ if test "$wxUSE_STL" = "yes"; then
                                     [AC_MSG_RESULT(no)])
                      ])
 fi
+
+dnl pop C++
+AC_LANG_POP()
 
 dnl ---------------------------------------------------------------------------
 dnl Define search path for includes and libraries: all headers and libs will be
@@ -2797,10 +2804,12 @@ if test "$wxUSE_EXPAT" != "no"; then
             AC_CACHE_CHECK([if expat.h is valid C++ header],
                 wx_cv_expat_is_not_broken,
                 [
+                AC_LANG_PUSH(C++)
                 AC_TRY_COMPILE([#include <expat.h>],[],
                     wx_cv_expat_is_not_broken=yes,
                     wx_cv_expat_is_not_broken=no
                 )
+                AC_LANG_POP()
                 ]
             )
             if test "$wx_cv_expat_is_not_broken" = "yes" ; then
@@ -4185,6 +4194,7 @@ AC_CHECK_TYPES(ssize_t)
 
 dnl check what exactly size_t is on this machine - this is necessary to avoid
 dnl ambiguous overloads in several places, notably wx/string.h and wx/array.h
+AC_LANG_PUSH(C++) dnl tests below use overloaded functions and so need C++
 AC_CACHE_CHECK([if size_t is unsigned int],
     wx_cv_size_t_is_uint,
     [
@@ -4230,6 +4240,8 @@ else
         AC_DEFINE(wxSIZE_T_IS_ULONG)
     fi
 fi
+
+AC_LANG_POP() dnl C++
 
 dnl ---------------------------------------------------------------------------
 dnl Checks for structures
@@ -4573,6 +4585,8 @@ if test "$wxUSE_ON_FATAL_EXCEPTION" = "yes" -a "$wxUSE_UNIX" = "yes"; then
     if test "$wxUSE_ON_FATAL_EXCEPTION" = "yes"; then
       AC_CACHE_CHECK([for sa_handler type], wx_cv_type_sa_handler,
       [
+        dnl C compiler happily compiles the code even if there is type mismatch
+        AC_LANG_PUSH(C++)
         AC_TRY_COMPILE([#include <signal.h>],
                      [
                         extern void testSigHandler(int);
@@ -4584,6 +4598,7 @@ if test "$wxUSE_ON_FATAL_EXCEPTION" = "yes" -a "$wxUSE_UNIX" = "yes"; then
                      ], [
                         wx_cv_type_sa_handler=void
                      ])
+        AC_LANG_POP()
       ])
 
       AC_DEFINE_UNQUOTED(wxTYPE_SA_HANDLER, $wx_cv_type_sa_handler)
@@ -4594,6 +4609,7 @@ dnl backtrace() and backtrace_symbols() for wxStackWalker
 if test "$wxUSE_STACKWALKER" = "yes" -a "$wxUSE_UNIX" = "yes"; then
     AC_CACHE_CHECK([for backtrace() in <execinfo.h>], wx_cv_func_backtrace,
         [
+            AC_LANG_PUSH(C++)
             AC_TRY_COMPILE([#include <execinfo.h>],
                 [
                     void *trace[1];
@@ -4605,6 +4621,7 @@ if test "$wxUSE_STACKWALKER" = "yes" -a "$wxUSE_UNIX" = "yes"; then
                 wx_cv_func_backtrace=yes,
                 wx_cv_func_backtrace=no
             )
+            AC_LANG_POP()
         ]
     )
 
@@ -4615,6 +4632,7 @@ if test "$wxUSE_STACKWALKER" = "yes" -a "$wxUSE_UNIX" = "yes"; then
     else
         AC_CACHE_CHECK([for __cxa_demangle() in <cxxabi.h>], wx_cv_func_cxa_demangle,
             [
+                AC_LANG_PUSH(C++)
                 AC_TRY_LINK([#include <cxxabi.h>],
                     [
                         int rc;
@@ -4623,6 +4641,7 @@ if test "$wxUSE_STACKWALKER" = "yes" -a "$wxUSE_UNIX" = "yes"; then
                     wx_cv_func_cxa_demangle=yes,
                     wx_cv_func_cxa_demangle=no
                 )
+                AC_LANG_POP()
             ]
         )
 
@@ -4669,6 +4688,7 @@ AC_CACHE_CHECK(for statfs, wx_cv_func_statfs,
 if test "$wx_cv_func_statfs" = "yes"; then
     dnl check whether we have its dcelaration too: some systems (AIX 4) lack it
     AC_CACHE_CHECK(for statfs declaration, wx_cv_func_statfs_decl,
+        AC_LANG_PUSH(C++)
         AC_TRY_COMPILE(
             [
                  #if defined(__BSD__)
@@ -4685,6 +4705,7 @@ if test "$wx_cv_func_statfs" = "yes"; then
             wx_cv_func_statfs_decl=yes,
             wx_cv_func_statfs_decl=no
         )
+        AC_LANG_POP()
     )
 
     if test "$wx_cv_func_statfs_decl" = "yes"; then
@@ -4717,6 +4738,7 @@ else
         dnl for this check C++ compiler has to be used as passing incompatible
         dnl pointers is just a warning and not an error in C
         AC_CACHE_CHECK(for statvfs argument type, wx_cv_type_statvfs_t,
+            AC_LANG_PUSH(C++)
             AC_TRY_COMPILE(
                 [
                     #include <sys/statvfs.h>
@@ -4748,6 +4770,7 @@ else
                     )
                 ]
             )
+            AC_LANG_POP()
         )
 
         if test "$wx_cv_type_statvfs_t" != "unknown"; then
@@ -5904,10 +5927,12 @@ dnl ---------------------------------------------------------------------------
 
 if test "$wxUSE_DATETIME" = "yes"; then
     dnl check for strptime and for its declaration as some systems lack it
+    dnl FIXME: use WX_CHECK_FUNCS instead
     AC_CHECK_FUNCS(strptime)
     if test "$ac_cv_func_strptime" = "yes"; then
         AC_CACHE_CHECK([for strptime declaration], wx_cv_func_strptime_decl,
             [
+                AC_LANG_PUSH(C++)
                 AC_TRY_COMPILE(
                     [
                         #include <time.h>
@@ -5919,6 +5944,7 @@ if test "$wxUSE_DATETIME" = "yes"; then
                     wx_cv_func_strptime_decl=yes,
                     wx_cv_func_strptime_decl=no
                 )
+                AC_LANG_POP()
             ]
         )
     fi
@@ -6100,6 +6126,7 @@ if test "$wxUSE_SOCKETS" = "yes" ; then
         AC_CACHE_CHECK([what is the type of the third argument of getsockname],
                        wx_cv_type_getsockname3,
             [
+                AC_LANG_PUSH(C++)
                 AC_TRY_COMPILE(
                     [
                         #include <sys/types.h>
@@ -6149,6 +6176,7 @@ if test "$wxUSE_SOCKETS" = "yes" ; then
                         CXXFLAGS="$CXXFLAGS_OLD"
                     ]
                 )
+                AC_LANG_POP()
             ])
 
         if test "$wx_cv_type_getsockname3" = "unknown"; then
@@ -6286,12 +6314,14 @@ if test "$wxUSE_GUI" = "yes" -a "$wxUSE_JOYSTICK" = "yes"; then
         if test "$USE_DARWIN" = 1; then
             dnl check for a bug in the headers, some have bad setEventCallout
             AC_MSG_CHECKING([headers have declarations needed for joystick support])
+            AC_LANG_PUSH(C++)
             AC_TRY_COMPILE( [ #include <IOKit/hid/IOHIDLib.h> ],
                             [ IOHIDQueueInterface *qi = NULL;
                               IOHIDCallbackFunction cb = NULL;
                               qi->setEventCallout(NULL, cb, NULL, NULL); ],
                             [ wxUSE_JOYSTICK=yes ]
                           )
+            AC_LANG_POP()
             AC_MSG_RESULT($wxUSE_JOYSTICK)
         fi
 
