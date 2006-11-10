@@ -52,7 +52,7 @@ private:
         CPPUNIT_TEST( FileScheme );
 #if TEST_URL
         CPPUNIT_TEST( URLCompat );
-#if wxUSE_PROTOCOL_HTTP
+#if 0 && wxUSE_PROTOCOL_HTTP
         CPPUNIT_TEST( URLProxy  );
 #endif
 #endif
@@ -73,7 +73,9 @@ private:
 
 #if TEST_URL
     void URLCompat();
+#if 0 && wxUSE_PROTOCOL_HTTP
     void URLProxy();
+#endif
 #endif
 
     DECLARE_NO_COPY_CLASS(URITestCase)
@@ -398,7 +400,9 @@ void URITestCase::URLCompat()
 #endif
 }
 
-#if wxUSE_PROTOCOL_HTTP
+// the purpose of this test is unclear, it seems to be unfinished so disabling
+// it for now
+#if 0 && wxUSE_PROTOCOL_HTTP
 void URITestCase::URLProxy()
 {
     wxURL url(wxT("http://www.asite.com/index.html"));
