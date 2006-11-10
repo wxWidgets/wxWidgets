@@ -27,14 +27,10 @@
     #error "OpenGL required: set wxUSE_GLCANVAS to 1 and rebuild the library"
 #endif
 
-#ifdef __WXMAC__
-#  ifdef __DARWIN__
-#    include <OpenGL/glu.h>
-#  else
-#    include <glu.h>
-#  endif
+#ifdef __DARWIN__
+    #include <OpenGL/glu.h>
 #else
-#  include <GL/glu.h>
+    #include <GL/glu.h>
 #endif
 
 #include "dxfrenderer.h"
