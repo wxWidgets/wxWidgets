@@ -62,8 +62,8 @@ call ps2pdf tex2rtf.ps >> c:\temp.log
 echo Zipping
 cd %WXWIN%
 del %DAILY%\*.zip
-zip %DAILY%\wxWidgets-Docs-CHM.zip docs\htmlhelp\wx.chm utils/tex2rtf/docs/*.chm docs/htmlhelp/*.chm
-zip %DAILY%\wxWidgets-Docs-HLP.zip docs\winhelp\wx.hlp docs\winhelp\wx.cnt utils/tex2rtf/docs/*.HLP utils/tex2rtf/docs/*.cnt docs/winhelp/*.hlp docs/winhelp/*.cnt
+zip %DAILY%\wxWidgets-%WXW_VER%-CHM.zip docs\htmlhelp\wx.chm utils/tex2rtf/docs/*.chm docs/htmlhelp/*.chm
+zip %DAILY%\wxWidgets-%WXW_VER%-HLP.zip docs\winhelp\wx.hlp docs\winhelp\wx.cnt utils/tex2rtf/docs/*.HLP utils/tex2rtf/docs/*.cnt docs/winhelp/*.hlp docs/winhelp/*.cnt
 Rem zip %DAILY%\wx-docs-extra-hlp.ZIP utils/tex2rtf/docs/*.HLP utils/tex2rtf/docs/*.cnt docs/winhelp/*.hlp docs/winhelp/*.cnt -x  docs/winhelp/wx.hlp docs/winhelp/wx.*
 Rem zip %DAILY%\wx-docs-extra-chm.ZIP utils/tex2rtf/docs/*.chm docs/htmlhelp/*.chm 
 cd %DAILY%\
@@ -71,7 +71,7 @@ mkdir docs
 mkdir docs\pdf
 del docs\pdf\*.pdf
 move in\*.pdf docs\pdf
-zip wxWidgets-Docs-PDF.zip docs\pdf\*.pdf
+zip wxWidgets-%WXW_VER%-PDF.zip docs\pdf\*.pdf
 Rem zip wx-docs-extra-pdf.ZIP docs\pdf\*.pdf -x docs\pdf\wx.pdf
 
 rem copy chm to inno
@@ -89,5 +89,7 @@ copy %DAILY%\*.ZIP s:\bkl-cronjob\archives\win
 copy %DAILY%\*.exe s:\bkl-cronjob\archives\win\*.EXE
 dir s: /od >> c:\temp.log
 
+echo docs built for %WXW_VER%
+echo docs built for %WXW_VER% >> c:\temp.log
 
 
