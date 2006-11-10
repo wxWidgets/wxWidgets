@@ -36,7 +36,8 @@
 #include "wx/wfstream.h"
 
 #ifdef __WXMSW__
-#include "winioctl.h"
+#include "wx/msw/wrapwin.h"
+#include <winioctl.h>
 #endif
 
 using std::auto_ptr;
