@@ -85,6 +85,10 @@ bool wxGenericCollapsiblePane::Create(wxWindow *parent,
     m_sz->Add(m_pStaticLine, 1, wxALIGN_CENTER|wxLEFT|wxRIGHT, GetBorder());
 #endif
 
+#ifdef __WXWINCE__
+    SetBackgroundColour(parent->GetBackgroundColour());
+#endif
+
     // do not set sz as our sizers since we handle the pane window without using sizers
     m_pPane = new wxWindow(this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
                            wxNO_BORDER);
