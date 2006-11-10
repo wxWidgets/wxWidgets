@@ -317,7 +317,7 @@ public:
     // Process this conversion specifier and puts the result in the given
     // buffer. Returns the number of characters written in 'buf' or -1 if
     // there's not enough space.
-    int Process(wxChar *buf, size_t lenMax, wxPrintfArg *p);
+    int Process(wxChar *buf, size_t lenMax, wxPrintfArg *p, size_t written);
 
     // Loads the argument of this conversion specifier from given va_list.
     bool LoadArg(wxPrintfArg *p, va_list &argptr);
@@ -728,7 +728,7 @@ bool wxPrintfConvSpec::LoadArg(wxPrintfArg *p, va_list &argptr)
     return true;    // loading was successful
 }
 
-int wxPrintfConvSpec::Process(wxChar *buf, size_t lenMax, wxPrintfArg *p)
+int wxPrintfConvSpec::Process(wxChar *buf, size_t lenMax, wxPrintfArg *p, size_t written)
 {
     // buffer to avoid dynamic memory allocation each time for small strings;
     // note that this buffer is used only to hold results of number formatting,
@@ -906,15 +906,15 @@ int wxPrintfConvSpec::Process(wxChar *buf, size_t lenMax, wxPrintfArg *p)
             break;
 
         case wxPAT_NINT:
-            *p->pad_nint = lenCur;
+            *p->pad_nint = written;
             break;
 
         case wxPAT_NSHORTINT:
-            *p->pad_nshortint = (short int)lenCur;
+            *p->pad_nshortint = (short int)written;
             break;
 
         case wxPAT_NLONGINT:
-            *p->pad_nlongint = lenCur;
+            *p->pad_nlongint = written;
             break;
 
         case wxPAT_INVALID:
