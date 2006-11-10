@@ -31,6 +31,10 @@
 #include "wx/dcbuffer.h"
 #include "wx/menu.h"
 
+#ifdef __WXMAC__
+#include "wx/mac/carbon/private.h"
+#endif
+
 #include "wx/arrimpl.cpp"
 WX_DEFINE_OBJARRAY(wxAuiNotebookPageArray)
 WX_DEFINE_OBJARRAY(wxAuiTabContainerButtonArray)
