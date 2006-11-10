@@ -277,6 +277,12 @@ void wxAuiDefaultTabArt::SetSizingInfo(const wxSize& tab_ctrl_size,
     m_fixed_tab_width = 100;
 
     int tot_width = (int)tab_ctrl_size.x - GetIndentSize() - 4;
+    
+    if (m_flags & wxAUI_NB_CLOSE_BUTTON)
+        tot_width -= m_active_close_bmp.GetWidth();
+    if (m_flags & wxAUI_NB_WINDOWLIST_BUTTON)
+        tot_width -= m_active_windowlist_bmp.GetWidth();
+
     if (tab_count > 0)
     {
         m_fixed_tab_width = tot_width/(int)tab_count;
@@ -831,6 +837,12 @@ void wxAuiSimpleTabArt::SetSizingInfo(const wxSize& tab_ctrl_size,
     m_fixed_tab_width = 100;
 
     int tot_width = (int)tab_ctrl_size.x - GetIndentSize() - 4;
+
+    if (m_flags & wxAUI_NB_CLOSE_BUTTON)
+        tot_width -= m_active_close_bmp.GetWidth();
+    if (m_flags & wxAUI_NB_WINDOWLIST_BUTTON)
+        tot_width -= m_active_windowlist_bmp.GetWidth();
+
     if (tab_count > 0)
     {
         m_fixed_tab_width = tot_width/(int)tab_count;
@@ -2469,8 +2481,10 @@ void wxAuiNotebook::SetWindowStyleFlag(long style)
             wxAuiPaneInfo& pane = all_panes.Item(i);
             if (pane.name == wxT("dummy"))
                 continue;
-            wxAuiTabCtrl* tabctrl = ((wxTabFrame*)pane.window)->m_tabs;
+            wxTabFrame* tabframe = (wxTabFrame*)pane.window;
+            wxAuiTabCtrl* tabctrl = tabframe->m_tabs;
             tabctrl->SetFlags(m_flags);
+            tabframe->DoSizing();
             tabctrl->Refresh();
             tabctrl->Update();
         }
