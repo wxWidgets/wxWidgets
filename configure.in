@@ -2131,41 +2131,59 @@ if test "$wxUSE_STD_STRING" = "yes" -o "$wxUSE_STL" = "yes"; then
     fi
 
     dnl check if <string> declares std::[w]string
-    AC_MSG_CHECKING([for $std_string in <string>])
-    AC_TRY_COMPILE([#include <string>],
-                   [$std_string foo;],
-                   [AC_MSG_RESULT(yes)
-                    AC_DEFINE(HAVE_STD_WSTRING)],
-                   [AC_MSG_RESULT(no)
-                    AC_MSG_CHECKING([if std::basic_string<$char_type> works])
-                    AC_TRY_COMPILE([
-                        #ifdef HAVE_WCHAR_H
-                        #  ifdef __CYGWIN__
-                        #    include <stddef.h>
-                        #  endif
-                        #  include <wchar.h>
-                        #endif
-                        #ifdef HAVE_STDLIB_H
-                        #  include <stdlib.h>
-                        #endif
-                        #include <stdio.h>
-                        #include <string>
-                        ],
-                        [std::basic_string<$char_type> foo;
-                         const $char_type* dummy = foo.c_str();],
-                        [AC_MSG_RESULT(yes)],
-                        [AC_MSG_RESULT([no])
-                         if test "$wxUSE_STL" = "yes"; then
-                             AC_MSG_ERROR([Can't use --enable-stl without $std_string or std::basic_string<$char_type>])
-                         elif grep wxUSE_STD_STRING $wx_arg_cache_file >/dev/null; then
-                             AC_MSG_ERROR([Can't use --enable-std_string without $std_string or std::basic_string<$char_type>])
-                         else
-                             AC_MSG_WARN([No $std_string or std::basic_string<$char_type>, switching to --disable-std_string])
-                             wxUSE_STD_STRING=no
-                         fi
-                        ]
-                    )
-                    ])
+    AC_CACHE_CHECK([for $std_string in <string>],
+        wx_cv_class_stdstring,
+        [
+            AC_TRY_COMPILE([#include <string>],
+                [$std_string foo;],
+                wx_cv_class_stdstring=yes,
+                wx_cv_class_stdstring=no
+            )
+        ]
+    )
+
+    if test "$wx_cv_class_stdstring" = yes; then
+        if test "$wxUSE_UNICODE" = "yes"; then
+            AC_DEFINE(HAVE_STD_WSTRING)
+        fi
+        dnl we don't need HAVE_STD_STRING, we just suppose it's available if
+        dnl wxUSE_STD_STRING==yes
+    else
+        AC_CACHE_CHECK([if std::basic_string<$char_type> works],
+            wx_cv_class_stdbasicstring,
+            [
+                AC_TRY_COMPILE([
+                    #ifdef HAVE_WCHAR_H
+                    #  ifdef __CYGWIN__
+                    #    include <stddef.h>
+                    #  endif
+                    #  include <wchar.h>
+                    #endif
+                    #ifdef HAVE_STDLIB_H
+                    #  include <stdlib.h>
+                    #endif
+                    #include <stdio.h>
+                    #include <string>
+                    ],
+                    [std::basic_string<$char_type> foo;
+                     const $char_type* dummy = foo.c_str();],
+                    wx_cv_class_stdbasicstring=yes,
+                    wx_cv_class_stdbasicstring=no
+                )
+            ]
+        )
+
+        if test "$wx_cv_class_stdbasicstring" != yes; then
+            if test "$wxUSE_STL" = "yes"; then
+                AC_MSG_ERROR([Can't use --enable-stl without $std_string or std::basic_string<$char_type>])
+            elif grep wxUSE_STD_STRING $wx_arg_cache_file >/dev/null; then
+                AC_MSG_ERROR([Can't use --enable-std_string without $std_string or std::basic_string<$char_type>])
+            else
+                AC_MSG_WARN([No $std_string or std::basic_string<$char_type>, switching to --disable-std_string])
+                wxUSE_STD_STRING=no
+            fi
+        fi
+    fi
 fi
 
 if test "$wxUSE_STD_IOSTREAM" = "yes"; then
@@ -2184,59 +2202,82 @@ fi
 
 if test "$wxUSE_STL" = "yes"; then
     dnl check for basic STL functionality
-    AC_MSG_CHECKING([for basic STL functionality])
-    AC_TRY_COMPILE([#include <string>
-                    #include <functional>
-                    #include <algorithm>
-                    #include <vector>
-                    #include <list>],
-                    [std::vector<int> moo;
-                     std::list<int> foo;
-                     std::vector<int>::iterator it =
-                         std::find_if(moo.begin(), moo.end(),
-                                      std::bind2nd(std::less<int>(), 3));],
-                    [AC_MSG_RESULT([yes])],
-                    [AC_MSG_RESULT([no])
-                     AC_MSG_ERROR([Basic STL functionality missing])])
+    AC_CACHE_CHECK([for basic STL functionality],
+        wx_cv_lib_stl,
+        [AC_TRY_COMPILE([#include <string>
+            #include <functional>
+            #include <algorithm>
+            #include <vector>
+            #include <list>],
+            [std::vector<int> moo;
+             std::list<int> foo;
+             std::vector<int>::iterator it =
+                 std::find_if(moo.begin(), moo.end(),
+                              std::bind2nd(std::less<int>(), 3));],
+            wx_cv_lib_stl=yes,
+            wx_cv_lib_stl=no,
+    )
+
+    if test "$wx_cv_lib_stl" != yes; then
+         AC_MSG_ERROR([Can't use --enable-stl as basic STL functionality is missing])
+    fi
 
     dnl check for compliant std::string::compare
-    AC_MSG_CHECKING([for compliant std::string::compare])
-    AC_TRY_COMPILE([#include <string>],
-                   [std::string foo, bar;
-                    foo.compare(bar);
-                    foo.compare(1, 1, bar);
-                    foo.compare(1, 1, bar, 1, 1);
-                    foo.compare("");
-                    foo.compare(1, 1, "");
-                    foo.compare(1, 1, "", 2);],
-                   [AC_MSG_RESULT(yes)
-                    AC_DEFINE(HAVE_STD_STRING_COMPARE)],
-                   [AC_MSG_RESULT(no)])
+    AC_CACHE_CHECK([for compliant std::string::compare],
+        wx_cv_func_stdstring_compare,
+        [AC_TRY_COMPILE([#include <string>],
+            [std::string foo, bar;
+            foo.compare(bar);
+            foo.compare(1, 1, bar);
+            foo.compare(1, 1, bar, 1, 1);
+            foo.compare("");
+            foo.compare(1, 1, "");
+            foo.compare(1, 1, "", 2);],
+            wx_cv_func_stdstring_compare=yes,
+            wx_cv_func_stdstring_compare=no
+        )]
+    )
+
+    if test "$wx_cv_func_stdstring_compare" = yes; then
+        AC_DEFINE(HAVE_STD_STRING_COMPARE)
+    fi
 
     dnl check for hash_map and hash_set headers
     AC_CHECK_HEADER([hash_map],
-                    [AC_MSG_CHECKING([for hash_map and hash_set])
-                     AC_TRY_COMPILE([#include <hash_map>
-                                     #include <hash_set>],
-                                    [std::hash_map<double*, char*, std::hash<double*>, std::equal_to<double*> > test1;
-                                     std::hash_set<char*, std::hash<char*>, std::equal_to<char*> > test2;],
-                                    [AC_MSG_RESULT(yes)
-                                     AC_DEFINE(HAVE_HASH_MAP)
-                                     AC_DEFINE(HAVE_STD_HASH_MAP)],
-                                    [AC_MSG_RESULT(no)])
-                     ])
+        [AC_CACHE_CHECK([for standard hash_map and hash_set],
+            wx_cv_class_stdhashmapset,
+            [AC_TRY_COMPILE([#include <hash_map>
+                #include <hash_set>],
+                [std::hash_map<double*, char*, std::hash<double*>, std::equal_to<double*> > test1;
+                 std::hash_set<char*, std::hash<char*>, std::equal_to<char*> > test2;],
+                wx_cv_class_stdhashmapset=yes,
+                wx_cv_class_stdhashmapset=no)
+            ]
+        )]
+    )
+
+    if test "$wx_cv_class_stdhashmapset" = yes; then
+        AC_DEFINE(HAVE_HASH_MAP)
+        AC_DEFINE(HAVE_STD_HASH_MAP)
+    fi
 
     AC_CHECK_HEADER([ext/hash_map],
-                    [AC_MSG_CHECKING([for hash_map and hash_set])
-                     AC_TRY_COMPILE([#include <ext/hash_map>
-                                     #include <ext/hash_set>],
-                                    [__gnu_cxx::hash_map<double*, char*, __gnu_cxx::hash<double*>, std::equal_to<double*> > test1;
-                                     __gnu_cxx::hash_set<char*, __gnu_cxx::hash<char*>, std::equal_to<char*> > test2;],
-                                    [AC_MSG_RESULT(yes)
-                                     AC_DEFINE(HAVE_EXT_HASH_MAP)
-                                     AC_DEFINE(HAVE_GNU_CXX_HASH_MAP)],
-                                    [AC_MSG_RESULT(no)])
-                     ])
+        [AC_CACHE_CHECK([for GNU hash_map and hash_set],
+            wx_cv_class_gnuhashmapset,
+            [AC_TRY_COMPILE([#include <ext/hash_map>
+                #include <ext/hash_set>],
+                [__gnu_cxx::hash_map<double*, char*, __gnu_cxx::hash<double*>, std::equal_to<double*> > test1;
+                 __gnu_cxx::hash_set<char*, __gnu_cxx::hash<char*>, std::equal_to<char*> > test2;],
+                wx_cv_class_gnuhashmapset=yes,
+                wx_cv_class_gnuhashmapset=no)
+            ]
+        )]
+    )
+
+    if test "$wx_cv_class_gnuhashmapset" = yes; then
+         AC_DEFINE(HAVE_EXT_HASH_MAP)
+         AC_DEFINE(HAVE_GNU_CXX_HASH_MAP)
+    fi
 fi
 
 dnl pop C++
