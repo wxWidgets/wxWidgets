@@ -869,7 +869,7 @@ WXDLLIMPEXP_BASE bool wxOKlibc(); /* for internal use */
 #else
     extern
 #endif
-    int snprintf(char *str, size_t size, const char *format, ...);
+    WXDLLIMPEXP_BASE int snprintf(char *str, size_t size, const char *format, ...);
 #endif /* !HAVE_SNPRINTF_DECL */
 
 /* Wrapper for vsnprintf if it's 3rd parameter is non-const. Note: the
