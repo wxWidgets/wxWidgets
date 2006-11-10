@@ -21,6 +21,10 @@ cd \wx\inno\wxWidgets
 cvs up -P
 echo CVS update  >>  c:\temp.log
 
+rem add bakefile build...
+set PATH=%PATH%;C:\wx\Bakefile\src
+bakefile_gen 
+
 
 rem add nmake to the path and build the docs
 call  \vc6
@@ -53,10 +57,6 @@ call ps2pdf ogl.ps >> c:\temp.log
 call ps2pdf svg.ps >> c:\temp.log
 call ps2pdf tex2rtf.ps >> c:\temp.log
 
-cd %WXWIN%\build\script
-iscc wxwidgets.iss >> c:\temp.log
-
-
 echo Zipping
 cd %WXWIN%
 del %DAILY%\*.zip
@@ -72,6 +72,9 @@ move in\*.pdf docs\pdf
 zip wxWidgets-Docs-PDF.zip docs\pdf\*.pdf
 Rem zip wx-docs-extra-pdf.ZIP docs\pdf\*.pdf -x docs\pdf\wx.pdf
 
+copy docs\htmlhelp\wx.chm %WXWIN%\docs\htmlhelp\wx.chm
+cd %WXWIN%\build\script
+iscc wxwidgets.iss >> c:\temp.log
 
 echo setting S
 echo yes > net use s: /delete
