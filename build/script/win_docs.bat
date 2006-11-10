@@ -23,7 +23,8 @@ echo CVS update  >>  c:\temp.log
 
 rem add bakefile build...
 set PATH=%PATH%;C:\wx\Bakefile\src
-cd %WXWIN%\build\bakefiles
+cd \wx\inno\wxWidgets\build\bakefiles
+del .bakefile_gen.state
 bakefile_gen 
 
 
@@ -73,7 +74,9 @@ move in\*.pdf docs\pdf
 zip wxWidgets-Docs-PDF.zip docs\pdf\*.pdf
 Rem zip wx-docs-extra-pdf.ZIP docs\pdf\*.pdf -x docs\pdf\wx.pdf
 
-copy docs\htmlhelp\wx.chm %WXWIN%\docs\htmlhelp\wx.chm
+rem copy chm to inno
+mkdir c:\wx\inno\wxWidgets\docs\htmlhelp
+copy docs\htmlhelp\wx.chm cd \wx\inno\wxWidgets\docs\htmlhelp\wx.chm
 cd %WXWIN%\build\script
 iscc wxwidgets.iss >> c:\temp.log
 
