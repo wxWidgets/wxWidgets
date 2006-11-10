@@ -170,7 +170,6 @@ protected:
 // Open Bit Flags
 enum {
     wxFS_READ = 1,      // Open for reading
-    wxFS_WRITE = 2,     // Open for writing
     wxFS_SEEKABLE = 4   // Returned stream will be seekable
 };
 
