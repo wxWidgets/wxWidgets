@@ -78,8 +78,7 @@
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(XRCID("unload_resource_menuitem"), MyFrame::OnUnloadResourceMenuCommand)
     EVT_MENU(XRCID("reload_resource_menuitem"), MyFrame::OnReloadResourceMenuCommand)
-    EVT_MENU(XRCID("exit_tool_or_menuitem"),  MyFrame::OnExitToolOrMenuCommand)
-    EVT_MENU(XRCID("exit_tool_or_menuitem"),  MyFrame::OnExitToolOrMenuCommand)
+    EVT_MENU(wxID_EXIT,  MyFrame::OnExitToolOrMenuCommand)
     EVT_MENU(XRCID("non_derived_dialog_tool_or_menuitem"), MyFrame::OnNonDerivedDialogToolOrMenuCommand)
     EVT_MENU(XRCID("derived_tool_or_menuitem"), MyFrame::OnDerivedDialogToolOrMenuCommand)
     EVT_MENU(XRCID("controls_tool_or_menuitem"), MyFrame::OnControlsToolOrMenuCommand)
@@ -88,7 +87,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(XRCID("platform_property_tool_or_menuitem"), MyFrame::OnPlatformPropertyToolOrMenuCommand)
     EVT_MENU(XRCID("art_provider_tool_or_menuitem"), MyFrame::OnArtProviderToolOrMenuCommand)
     EVT_MENU(XRCID("variable_expansion_tool_or_menuitem"), MyFrame::OnVariableExpansionToolOrMenuCommand)
-    EVT_MENU(XRCID("about_tool_or_menuitem"), MyFrame::OnAboutToolOrMenuCommand)
+    EVT_MENU(wxID_ABOUT, MyFrame::OnAboutToolOrMenuCommand)
 END_EVENT_TABLE()
 
 //-----------------------------------------------------------------------------
