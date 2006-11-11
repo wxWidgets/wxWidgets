@@ -6256,17 +6256,12 @@ if test "$wxUSE_SOCKETS" = "yes" ; then
                     ],
                     wx_cv_type_getsockopt5=socklen_t,
                     [
-                        dnl the compiler will compile the version with size_t
-                        dnl even if the real type of the last parameter is int
-                        dnl but it should give at least a warning about
-                        dnl converting between incompatible pointer types, so
-                        dnl try to use it to get the correct behaviour at
-                        dnl least with gcc (otherwise we'd always use size_t)
-                        CFLAGS_OLD="$CFLAGS"
-                        if test "$GCC" = yes ; then
-                            CFLAGS="-Werror $CFLAGS"
-                        fi
-
+                        dnl Note that the rules for compatibility of pointers
+                        dnl are somewhat different between C and C++, so code 
+                        dnl that fails in C++ may not even give a warning about
+                        dnl converting between incompatible pointer types in C.
+                        dnl So this test needs to be done in C++ mode.
+                        AC_LANG_PUSH(C++)
                         AC_TRY_COMPILE(
                             [
                                 #include <sys/types.h>
@@ -6290,8 +6285,7 @@ if test "$wxUSE_SOCKETS" = "yes" ; then
                                 wx_cv_type_getsockopt5=unknown
                             )
                         )
-
-                        CFLAGS="$CFLAGS_OLD"
+                        AC_LANG_POP()
                     ]
                 )
             ])
