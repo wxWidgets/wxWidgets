@@ -516,7 +516,7 @@ void wxListBox::GtkInsertItems(const wxArrayString& items,
         wxString label = items[i];
 
         GtkTreeEntry* entry = gtk_tree_entry_new();
-        gtk_tree_entry_set_label(entry, wxConvUTF8.cWX2MB(label));
+        gtk_tree_entry_set_label(entry, wxGTK_CONV(label));
         gtk_tree_entry_set_destroy_func(entry,
                 (GtkTreeEntryDestroy)gtk_tree_entry_destroy_cb,
                             this);
