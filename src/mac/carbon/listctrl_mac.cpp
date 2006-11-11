@@ -390,11 +390,12 @@ wxListCtrlTextCtrlWrapper::wxListCtrlTextCtrlWrapper(wxListCtrl *owner,
     m_aboutToFinish = false;
 
     wxRect rectLabel;
+    int offset = 8;
     owner->GetItemRect(itemEdit, rectLabel);
 
     m_text->Create(owner, wxID_ANY, m_startValue,
-                   wxPoint(rectLabel.x+8,rectLabel.y),
-                   wxSize(rectLabel.width,rectLabel.height));
+                   wxPoint(rectLabel.x+offset,rectLabel.y),
+                   wxSize(rectLabel.width-offset,rectLabel.height));
     m_text->SetFocus();
 
     m_text->PushEventHandler(this);
@@ -627,7 +628,13 @@ bool wxListCtrl::Create(wxWindow *parent,
     {
         m_macIsUserPane = true;
 
-        if ( !wxWindow::Create(parent, id, pos, size, style | wxNO_BORDER, name) )
+        long paneStyle = style;
+        paneStyle &= ~wxSIMPLE_BORDER;
+        paneStyle &= ~wxDOUBLE_BORDER;
+        paneStyle &= ~wxSUNKEN_BORDER;
+        paneStyle &= ~wxRAISED_BORDER;
+        paneStyle &= ~wxSTATIC_BORDER;
+        if ( !wxWindow::Create(parent, id, pos, size, paneStyle | wxNO_BORDER, name) )
             return false;
         
         // since the generic control is a child, make sure we position it at 0, 0
@@ -1041,10 +1048,10 @@ bool wxListCtrl::SetItemState(long item, long state, long stateMask)
         return m_genericImpl->SetItemState(item, state, stateMask);
 
     wxListItem info;
+    info.m_itemId = item;
     info.m_mask = wxLIST_MASK_STATE;
     info.m_stateMask = stateMask;
     info.m_state = state;
-    info.m_itemId = item;
     return SetItem(info);
 }
 
@@ -1168,7 +1175,7 @@ bool wxListCtrl::GetItemRect(long item, wxRect& rect, int code) const
             id = (DataBrowserItemID) thisItem;
         }
         else
-            id = item;
+            id = item+1;
 
         GetDataBrowserItemPartBounds( m_dbImpl->GetControlRef(), id, col, part, &bounds );
 
@@ -1680,6 +1687,9 @@ wxListCtrl::HitTest(const wxPoint& point, int& flags, long *ptrSubItem) const
         if ( !(GetWindowStyleFlag() & wxLC_NO_HEADER) )
             y -= colHeaderHeight;
 
+        if ( y < 0 )
+            return -1;
+            
         int row = y / rowHeight;
         DataBrowserItemID id;
         m_dbImpl->GetItemID( (DataBrowserTableViewRowIndex) row, &id );
@@ -2659,12 +2669,9 @@ Boolean wxMacDataBrowserListCtrlControl::CompareItems(DataBrowserItemID itemOneI
     wxString itemText;
     wxString otherItemText;
     int colId = sortProperty - kMinColumnId;
-    long itemNum = 0;
-    long otherItemNum = 0;
 
     wxListCtrl* list = wxDynamicCast( GetPeer() , wxListCtrl );
 
-    // means we need to
     if (colId >= 0)
     {
         if (!m_isVirtual)
@@ -2672,11 +2679,12 @@ Boolean wxMacDataBrowserListCtrlControl::CompareItems(DataBrowserItemID itemOneI
             wxMacListCtrlItem* item = (wxMacListCtrlItem*)itemOneID;
             wxMacListCtrlItem* otherItem = (wxMacListCtrlItem*)itemTwoID;
             wxListCtrlCompare func = list->GetCompareFunc();
-            if (func != NULL && item->HasColumnInfo(colId) && otherItem->HasColumnInfo(colId))
-                return func(item->GetColumnInfo(colId)->GetData(), otherItem->GetColumnInfo(colId)->GetData(), list->GetCompareFuncData()) >= 0;
+            long item1 = GetLineFromItem(item);
+            long item2 = GetLineFromItem(otherItem);
 
-            itemNum = item->GetOrder();
-            otherItemNum = otherItem->GetOrder();
+            if (func != NULL && item->HasColumnInfo(colId) && otherItem->HasColumnInfo(colId))
+                return func(item1, item2, list->GetCompareFuncData()) >= 0;
+
             if (item->HasColumnInfo(colId))
                 itemText = item->GetColumnInfo(colId)->GetText();
             if (otherItem->HasColumnInfo(colId))
@@ -2684,8 +2692,9 @@ Boolean wxMacDataBrowserListCtrlControl::CompareItems(DataBrowserItemID itemOneI
         }
         else
         {
-            itemNum = (long)itemOneID;
-            otherItemNum = (long)itemTwoID;
+        
+            long itemNum = (long)itemOneID;
+            long otherItemNum = (long)itemTwoID;
             itemText = list->OnGetItemText( itemNum-1, colId );
             otherItemText = list->OnGetItemText( otherItemNum-1, colId );
 
@@ -2751,29 +2760,36 @@ void wxMacDataBrowserListCtrlControl::MacGetColumnInfo( unsigned int row, unsign
     //if (item)
     {
         wxMacListCtrlItem* listItem = dynamic_cast<wxMacListCtrlItem*>(dataItem);
+        
+        if (!listItem->HasColumnInfo( column ))
+            return;
+
         wxListItem* oldItem = listItem->GetColumnInfo( column );
 
-        long mask = item.GetMask();
-        if ( !mask )
-            // by default, get everything for backwards compatibility
-            mask = -1;
+        if (oldItem)
+        {
+            long mask = item.GetMask();
+            if ( !mask )
+                // by default, get everything for backwards compatibility
+                mask = -1;
 
-        if ( mask & wxLIST_MASK_TEXT )
-            item.SetText(oldItem->GetText());
-        if ( mask & wxLIST_MASK_IMAGE )
-            item.SetImage(oldItem->GetImage());
-        if ( mask & wxLIST_MASK_DATA )
-            item.SetData(oldItem->GetData());
-        if ( mask & wxLIST_MASK_STATE )
-            item.SetState(oldItem->GetState());
-        if ( mask & wxLIST_MASK_WIDTH )
-            item.SetWidth(oldItem->GetWidth());
-        if ( mask & wxLIST_MASK_FORMAT )
-            item.SetAlign(oldItem->GetAlign());
+            if ( mask & wxLIST_MASK_TEXT )
+                item.SetText(oldItem->GetText());
+            if ( mask & wxLIST_MASK_IMAGE )
+                item.SetImage(oldItem->GetImage());
+            if ( mask & wxLIST_MASK_DATA )
+                item.SetData(oldItem->GetData());
+            if ( mask & wxLIST_MASK_STATE )
+                item.SetState(oldItem->GetState());
+            if ( mask & wxLIST_MASK_WIDTH )
+                item.SetWidth(oldItem->GetWidth());
+            if ( mask & wxLIST_MASK_FORMAT )
+                item.SetAlign(oldItem->GetAlign());
 
-        item.SetTextColour(oldItem->GetTextColour());
-        item.SetBackgroundColour(oldItem->GetBackgroundColour());
-        item.SetFont(oldItem->GetFont());
+            item.SetTextColour(oldItem->GetTextColour());
+            item.SetBackgroundColour(oldItem->GetBackgroundColour());
+            item.SetFont(oldItem->GetFont());
+        }
     }
 }
 
@@ -2858,9 +2874,17 @@ void wxMacListCtrlItem::SetColumnInfo( unsigned int column, wxListItem* item )
         if (mask & wxLIST_MASK_WIDTH)
             listItem->SetWidth(item->GetWidth());
 
-        listItem->SetTextColour(item->GetTextColour());
-        listItem->SetBackgroundColour(item->GetBackgroundColour());
-        listItem->SetFont(item->GetFont());
+        if ( item->HasAttributes() )
+        {
+            if ( listItem->HasAttributes() )
+                listItem->GetAttributes()->AssignFrom(*item->GetAttributes());
+            else
+            {
+                listItem->SetTextColour(item->GetTextColour());
+                listItem->SetBackgroundColour(item->GetBackgroundColour());
+                listItem->SetFont(item->GetFont());
+            }
+        }
     }
 }
 
