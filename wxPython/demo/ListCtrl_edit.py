@@ -87,18 +87,29 @@ class TestListCtrlPanel(wx.Panel):
         self.log = log
         tID = wx.NewId()
 
+        sizer = wx.BoxSizer(wx.VERTICAL)
+        
+        if wx.Platform == "__WXMAC__":
+            self.useNative = wx.CheckBox(self, -1, "Use native listctrl")
+            self.useNative.SetValue( 
+                not wx.SystemOptions.GetOptionInt("mac.listctrl.always_use_generic") )
+            self.Bind(wx.EVT_CHECKBOX, self.OnUseNative, self.useNative)
+            sizer.Add(self.useNative, 0, wx.ALL | wx.ALIGN_RIGHT, 4)
+
         self.list = TestListCtrl(self, tID,
                                  style=wx.LC_REPORT
                                  | wx.BORDER_NONE
                                  | wx.LC_SORT_ASCENDING
                                  )
 
-        self.Bind(wx.EVT_SIZE, self.OnSize)
+        sizer.Add(self.list, 1, wx.EXPAND | wx.ALL, 4)
+        self.SetSizer(sizer)
+        self.SetAutoLayout(True)
 
 
-    def OnSize(self, event):
-        w,h = self.GetClientSizeTuple()
-        self.list.SetDimensions(0, 0, w, h)
+    def OnUseNative(self, event):
+        wx.SystemOptions.SetOptionInt("mac.listctrl.always_use_generic", not event.IsChecked())
+        wx.GetApp().GetTopWindow().LoadDemo("ListCtrl_edit")
 
 
 

@@ -90,7 +90,16 @@ class TestListCtrlPanel(wx.Panel, listmix.ColumnSorterMixin):
 
         self.log = log
         tID = wx.NewId()
-
+        
+        sizer = wx.BoxSizer(wx.VERTICAL)
+        
+        if wx.Platform == "__WXMAC__":
+            self.useNative = wx.CheckBox(self, -1, "Use native listctrl")
+            self.useNative.SetValue( 
+                not wx.SystemOptions.GetOptionInt("mac.listctrl.always_use_generic") )
+            self.Bind(wx.EVT_CHECKBOX, self.OnUseNative, self.useNative)
+            sizer.Add(self.useNative, 0, wx.ALL | wx.ALIGN_RIGHT, 4)
+            
         self.il = wx.ImageList(16, 16)
 
         self.idx1 = self.il.Add(images.getSmilesBitmap())
@@ -110,6 +119,7 @@ class TestListCtrlPanel(wx.Panel, listmix.ColumnSorterMixin):
                                  )
         
         self.list.SetImageList(self.il, wx.IMAGE_LIST_SMALL)
+        sizer.Add(self.list, 1, wx.EXPAND | wx.ALL, 4)
 
         self.PopulateList()
 
@@ -119,7 +129,8 @@ class TestListCtrlPanel(wx.Panel, listmix.ColumnSorterMixin):
         listmix.ColumnSorterMixin.__init__(self, 3)
         #self.SortListItems(0, True)
 
-        self.Bind(wx.EVT_SIZE, self.OnSize)
+        self.SetSizer(sizer)
+        self.SetAutoLayout(True)
 
         self.Bind(wx.EVT_LIST_ITEM_SELECTED, self.OnItemSelected, self.list)
         self.Bind(wx.EVT_LIST_ITEM_DESELECTED, self.OnItemDeselected, self.list)
@@ -141,6 +152,10 @@ class TestListCtrlPanel(wx.Panel, listmix.ColumnSorterMixin):
         # for wxGTK
         self.list.Bind(wx.EVT_RIGHT_UP, self.OnRightClick)
 
+
+    def OnUseNative(self, event):
+        wx.SystemOptions.SetOptionInt("mac.listctrl.always_use_generic", not event.IsChecked())
+        wx.GetApp().GetTopWindow().LoadDemo("ListCtrl")
 
     def PopulateList(self):
         if 0:
@@ -346,16 +361,7 @@ class TestListCtrlPanel(wx.Panel, listmix.ColumnSorterMixin):
         self.list.EditLabel(self.currentItem)
 
 
-    def OnSize(self, event):
-        w,h = self.GetClientSizeTuple()
-        self.list.SetDimensions(0, 0, w, h)
-
-
-
 #---------------------------------------------------------------------------
-
-# for testing the new native control on wxMac
-#wx.SystemOptions.SetOptionInt("mac.listctrl.always_use_generic", 0)
 
 def runTest(frame, nb, log):
     win = TestListCtrlPanel(nb, log)
