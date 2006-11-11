@@ -37,6 +37,20 @@ _T("[root/group2]\n")
 ;
 
 // ----------------------------------------------------------------------------
+// local functions
+// ----------------------------------------------------------------------------
+
+static wxString Dump(wxFileConfig& fc)
+{
+    wxStringOutputStream sos;
+    fc.Save(sos);
+    return wxTextFile::Translate(sos.GetString(), wxTextFileType_Unix);
+}
+
+// helper macro to test wxFileConfig contents
+#define wxVERIFY_FILECONFIG(t, fc) CPPUNIT_ASSERT_EQUAL(wxString(t), Dump(fc))
+
+// ----------------------------------------------------------------------------
 // test class
 // ----------------------------------------------------------------------------
 
@@ -87,13 +101,6 @@ private:
         return fc.GetPath();
     }
 
-    static wxString Dump(wxFileConfig& fc)
-    {
-        wxStringOutputStream sos;
-        fc.Save(sos);
-        return wxTextFile::Translate(sos.GetString(), wxTextFileType_Unix);
-    }
-
     void CheckGroupEntries(const wxFileConfig& fc,
                            const wxChar *path,
                            size_t nEntries,
@@ -129,22 +136,22 @@ void FileConfigTestCase::AddEntries()
 {
     wxFileConfig fc;
 
-    CPPUNIT_ASSERT( Dump(fc) == _T("") );
+    wxVERIFY_FILECONFIG( _T(""), fc  );
 
     fc.Write(_T("/Foo"), _T("foo"));
-    CPPUNIT_ASSERT( Dump(fc) == _T("Foo=foo\n") );
+    wxVERIFY_FILECONFIG( _T("Foo=foo\n"), fc  );
 
     fc.Write(_T("/Bar/Baz"), _T("baz"));
-    CPPUNIT_ASSERT( Dump(fc) == _T("Foo=foo\n[Bar]\nBaz=baz\n") );
+    wxVERIFY_FILECONFIG( _T("Foo=foo\n[Bar]\nBaz=baz\n"), fc  );
 
     fc.DeleteAll();
-    CPPUNIT_ASSERT( Dump(fc) == _T("") );
+    wxVERIFY_FILECONFIG( _T(""), fc  );
 
     fc.Write(_T("/Bar/Baz"), _T("baz"));
-    CPPUNIT_ASSERT( Dump(fc) == _T("[Bar]\nBaz=baz\n") );
+    wxVERIFY_FILECONFIG( _T("[Bar]\nBaz=baz\n"), fc  );
 
     fc.Write(_T("/Foo"), _T("foo"));
-    CPPUNIT_ASSERT( Dump(fc) == _T("Foo=foo\n[Bar]\nBaz=baz\n") );
+    wxVERIFY_FILECONFIG( _T("Foo=foo\n[Bar]\nBaz=baz\n"), fc  );
 }
 
 void
@@ -260,7 +267,7 @@ void FileConfigTestCase::Save()
 {
     wxStringInputStream sis(testconfig);
     wxFileConfig fc(sis);
-    CPPUNIT_ASSERT( Dump(fc) == testconfig );
+    wxVERIFY_FILECONFIG( testconfig, fc );
 }
 
 void FileConfigTestCase::DeleteEntry()
@@ -271,20 +278,22 @@ void FileConfigTestCase::DeleteEntry()
     CPPUNIT_ASSERT( !fc.DeleteEntry(_T("foo")) );
 
     CPPUNIT_ASSERT( fc.DeleteEntry(_T("root/group1/subgroup/subentry")) );
-    CPPUNIT_ASSERT( Dump(fc) == _T("[root]\n")
-                                _T("entry=value\n")
-                                _T("[root/group1]\n")
-                                _T("[root/group1/subgroup]\n")
-                                _T("subentry2=subvalue2\n")
-                                _T("[root/group2]\n") );
+    wxVERIFY_FILECONFIG( _T("[root]\n")
+                         _T("entry=value\n")
+                         _T("[root/group1]\n")
+                         _T("[root/group1/subgroup]\n")
+                         _T("subentry2=subvalue2\n")
+                         _T("[root/group2]\n"),
+                         fc );
 
     // group should be deleted now as well as it became empty
     wxConfigPathChanger change(&fc, _T("root/group1/subgroup/subentry2"));
     CPPUNIT_ASSERT( fc.DeleteEntry(_T("subentry2")) );
-    CPPUNIT_ASSERT( Dump(fc) == _T("[root]\n")
-                                _T("entry=value\n")
-                                _T("[root/group1]\n")
-                                _T("[root/group2]\n") );
+    wxVERIFY_FILECONFIG( _T("[root]\n")
+                         _T("entry=value\n")
+                         _T("[root/group1]\n")
+                         _T("[root/group2]\n"),
+                         fc );
 }
 
 void FileConfigTestCase::DeleteGroup()
@@ -295,13 +304,15 @@ void FileConfigTestCase::DeleteGroup()
     CPPUNIT_ASSERT( !fc.DeleteGroup(_T("foo")) );
 
     CPPUNIT_ASSERT( fc.DeleteGroup(_T("root/group1")) );
-    CPPUNIT_ASSERT( Dump(fc) == _T("[root]\n")
-                                _T("entry=value\n")
-                                _T("[root/group2]\n") );
+    wxVERIFY_FILECONFIG( _T("[root]\n")
+                         _T("entry=value\n")
+                         _T("[root/group2]\n"),
+                         fc );
 
     CPPUNIT_ASSERT( fc.DeleteGroup(_T("root/group2")) );
-    CPPUNIT_ASSERT( Dump(fc) == _T("[root]\n")
-                                _T("entry=value\n") );
+    wxVERIFY_FILECONFIG( _T("[root]\n")
+                         _T("entry=value\n"),
+                         fc );
 
     CPPUNIT_ASSERT( fc.DeleteGroup(_T("root")) );
     CPPUNIT_ASSERT( Dump(fc).empty() );
@@ -323,26 +334,28 @@ void FileConfigTestCase::RenameEntry()
 
     fc.SetPath(_T("root"));
     CPPUNIT_ASSERT( fc.RenameEntry(_T("entry"), _T("newname")) );
-    CPPUNIT_ASSERT( Dump(fc) == _T("[root]\n")
-                                _T("newname=value\n")
-                                _T("[root/group1]\n")
-                                _T("[root/group1/subgroup]\n")
-                                _T("subentry=subvalue\n")
-                                _T("subentry2=subvalue2\n")
-                                _T("[root/group2]\n") );
+    wxVERIFY_FILECONFIG( _T("[root]\n")
+                         _T("newname=value\n")
+                         _T("[root/group1]\n")
+                         _T("[root/group1/subgroup]\n")
+                         _T("subentry=subvalue\n")
+                         _T("subentry2=subvalue2\n")
+                         _T("[root/group2]\n"),
+                         fc );
 
     fc.SetPath(_T("group1/subgroup"));
     CPPUNIT_ASSERT( !fc.RenameEntry(_T("entry"), _T("newname")) );
     CPPUNIT_ASSERT( !fc.RenameEntry(_T("subentry"), _T("subentry2")) );
 
     CPPUNIT_ASSERT( fc.RenameEntry(_T("subentry"), _T("subentry1")) );
-    CPPUNIT_ASSERT( Dump(fc) == _T("[root]\n")
-                                _T("newname=value\n")
-                                _T("[root/group1]\n")
-                                _T("[root/group1/subgroup]\n")
-                                _T("subentry2=subvalue2\n")
-                                _T("subentry1=subvalue\n")
-                                _T("[root/group2]\n") );
+    wxVERIFY_FILECONFIG( _T("[root]\n")
+                         _T("newname=value\n")
+                         _T("[root/group1]\n")
+                         _T("[root/group1/subgroup]\n")
+                         _T("subentry2=subvalue2\n")
+                         _T("subentry1=subvalue\n")
+                         _T("[root/group2]\n"),
+                         fc );
 }
 
 void FileConfigTestCase::RenameGroup()
@@ -351,13 +364,14 @@ void FileConfigTestCase::RenameGroup()
     wxFileConfig fc(sis);
 
     CPPUNIT_ASSERT( fc.RenameGroup(_T("root"), _T("foot")) );
-    CPPUNIT_ASSERT( Dump(fc) == _T("[foot]\n")
-                                _T("entry=value\n")
-                                _T("[foot/group1]\n")
-                                _T("[foot/group1/subgroup]\n")
-                                _T("subentry=subvalue\n")
-                                _T("subentry2=subvalue2\n")
-                                _T("[foot/group2]\n") );
+    wxVERIFY_FILECONFIG( _T("[foot]\n")
+                         _T("entry=value\n")
+                         _T("[foot/group1]\n")
+                         _T("[foot/group1/subgroup]\n")
+                         _T("subentry=subvalue\n")
+                         _T("subentry2=subvalue2\n")
+                         _T("[foot/group2]\n"),
+                         fc );
 }
 
 void FileConfigTestCase::CreateSubgroupAndEntries()
@@ -366,9 +380,10 @@ void FileConfigTestCase::CreateSubgroupAndEntries()
     fc.Write(_T("sub/sub_first"), _T("sub_one"));
     fc.Write(_T("first"), _T("one"));
 
-    CPPUNIT_ASSERT( Dump(fc) == _T("first=one\n")
-                                _T("[sub]\n")
-                                _T("sub_first=sub_one\n"));
+    wxVERIFY_FILECONFIG( _T("first=one\n")
+                         _T("[sub]\n")
+                         _T("sub_first=sub_one\n"),
+                         fc );
 }
 
 void FileConfigTestCase::CreateEntriesAndSubgroup()
@@ -378,10 +393,11 @@ void FileConfigTestCase::CreateEntriesAndSubgroup()
     fc.Write(_T("second"), _T("two"));
     fc.Write(_T("sub/sub_first"), _T("sub_one"));
 
-    CPPUNIT_ASSERT( Dump(fc) == _T("first=one\n")
-                                _T("second=two\n")
-                                _T("[sub]\n")
-                                _T("sub_first=sub_one\n"));
+    wxVERIFY_FILECONFIG( _T("first=one\n")
+                         _T("second=two\n")
+                         _T("[sub]\n")
+                         _T("sub_first=sub_one\n"),
+                         fc );
 }
 
 static void EmptyConfigAndWriteKey()
