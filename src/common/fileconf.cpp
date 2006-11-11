@@ -1547,7 +1547,16 @@ void wxFileConfigGroup::Rename(const wxString& newName)
 {
     wxCHECK_RET( m_pParent, _T("the root group can't be renamed") );
 
+    if ( newName == m_strName )
+        return;
+
+    // we need to remove the group from the parent and it back under the new
+    // name to keep the parents array of subgroups alphabetically sorted
+    m_pParent->m_aSubgroups.Remove(this);
+
     m_strName = newName;
+
+    m_pParent->m_aSubgroups.Add(this);
 
     // update the group lines recursively
     UpdateGroupAndSubgroupsLines();

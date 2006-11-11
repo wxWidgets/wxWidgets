@@ -81,6 +81,7 @@ Major new features in 2.8 release
 All:
 
 - wxArrayString::Alloc() now works as reserve() and doesn't clear array contents
+- Fixed long standing bug in wxFileConfig groups renaming (Antti Koivisto)
 
 wxMSW:
 
