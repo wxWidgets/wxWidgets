@@ -1,6 +1,6 @@
 rem Uncomment the next line to set the version; used also in wxWidgets.iss
 SET WXW_VER=2.8.0
-if %WXW_VER%="" SET WXW_VER=CVS
+if %WXW_VER%=="" SET WXW_VER=CVS
 
 rem  This builds the docs in %WXWIN% in a number of formats 
 rem  and a clean inno setup in a second tree
