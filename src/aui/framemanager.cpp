@@ -71,7 +71,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxAuiManagerEvent, wxEvent)
 // private manager flags (not yet on the public API)
 enum wxAuiPrivateManagerOption
 {
-    wxAUI_MGR_NO_DOCK_SIZE_LIMIT = 1 << 28,
+    wxAUI_MGR_NO_DOCK_SIZE_LIMIT = 1 << 28
 };
 
 
