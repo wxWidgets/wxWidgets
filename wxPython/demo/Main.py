@@ -69,6 +69,7 @@ _treeList = [
         'AnimateCtrl',
         'AlphaDrawing',
         'GraphicsContext',
+        'CollapsiblePane',
         ]),
 
     # managed windows == things with a (optional) caption you can close
@@ -177,6 +178,7 @@ _treeList = [
         'Calendar',
         'CalendarCtrl',
         'CheckListCtrlMixin',
+        'CollapsiblePane',
         'ContextHelp',
         'DatePickerCtrl',
         'DynamicSashWindow',
@@ -1255,27 +1257,23 @@ class wxPythonDemo(wx.Frame):
 
         # Create a TreeCtrl
         tID = wx.NewId()
+        leftPanel = wx.Panel(splitter)
+        
+        self.filter = wx.TextCtrl(leftPanel)
+        self.filter.Bind(wx.EVT_TEXT, self.RecreateTree)
+        
         self.treeMap = {}
-        self.tree = wx.TreeCtrl(splitter, tID, style =
+        self.tree = wx.TreeCtrl(leftPanel, tID, style =
                                 wx.TR_DEFAULT_STYLE #| wx.TR_HAS_VARIABLE_ROW_HEIGHT
                                )
 
-        root = self.tree.AddRoot("wxPython Overview")
-        firstChild = None
-        for item in _treeList:
-            child = self.tree.AppendItem(root, item[0])
-            if not firstChild: firstChild = child
-            for childItem in item[1]:
-                theDemo = self.tree.AppendItem(child, childItem)
-                self.treeMap[childItem] = theDemo
-
-        self.tree.Expand(root)
-        self.tree.Expand(firstChild)
+        self.root = self.tree.AddRoot("wxPython Overview")
+        self.RecreateTree()
         self.tree.Bind(wx.EVT_TREE_ITEM_EXPANDED, self.OnItemExpanded, id=tID)
         self.tree.Bind(wx.EVT_TREE_ITEM_COLLAPSED, self.OnItemCollapsed, id=tID)
         self.tree.Bind(wx.EVT_TREE_SEL_CHANGED, self.OnSelChanged, id=tID)
         self.tree.Bind(wx.EVT_LEFT_DOWN, self.OnTreeLeftDown)
-
+        
         # Set up a wx.html.HtmlWindow on the Overview Notebook page
         # we put it in a panel first because there seems to be a
         # refresh bug of some sort (wxGTK) when it is directly in
@@ -1319,7 +1317,12 @@ class wxPythonDemo(wx.Frame):
 
         # add the windows to the splitter and split it.
         splitter2.SplitHorizontally(self.nb, self.log, -160)
-        splitter.SplitVertically(self.tree, splitter2, 200)
+        leftBox = wx.BoxSizer(wx.VERTICAL)
+        leftBox.Add(self.tree, 1, wx.EXPAND)
+        leftBox.Add(wx.StaticText(leftPanel, label = "Filter Demos:"), 0, wx.TOP|wx.LEFT, 5)
+        leftBox.Add(self.filter, 0, wx.EXPAND|wx.ALL, 5)
+        leftPanel.SetSizer(leftBox)
+        splitter.SplitVertically(leftPanel, splitter2, 220)
 
         splitter.SetMinimumPaneSize(120)
         splitter2.SetMinimumPaneSize(60)
@@ -1335,7 +1338,7 @@ class wxPythonDemo(wx.Frame):
 
         # select initial items
         self.nb.SetSelection(0)
-        self.tree.SelectItem(root)
+        self.tree.SelectItem(self.root)
 
         # Load 'Main' module
         self.LoadDemo(self.overviewText)
@@ -1353,6 +1356,27 @@ class wxPythonDemo(wx.Frame):
 
 
     #---------------------------------------------
+    
+    def RecreateTree(self, evt=None):
+        self.tree.DeleteAllItems()
+        self.root = self.tree.AddRoot("wxPython Overview")
+        firstChild = None
+        filter = self.filter.GetValue()
+        for category, items in _treeList:
+            if filter:
+                items = [item for item in items if filter in item.lower()]
+            if items:
+                child = self.tree.AppendItem(self.root, category)
+                if not firstChild: firstChild = child
+                for childItem in items:
+                    theDemo = self.tree.AppendItem(child, childItem)
+                    self.treeMap[childItem] = theDemo
+
+        self.tree.Expand(self.root)
+        if firstChild:
+            self.tree.Expand(firstChild)
+
+    
     def WriteText(self, text):
         if text[-1:] == '\n':
             text = text[:-1]

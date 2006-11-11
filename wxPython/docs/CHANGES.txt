@@ -2,6 +2,17 @@ Recent Changes for wxPython
 =====================================================================
 
 
+2.8.0.0
+-------
+*
+
+Lots of fixes and updates to AUI classes.
+
+Added wx.CollapsiblePane.
+
+
+
+
 2.7.2.0
 -------
 * 7-Nov-2006

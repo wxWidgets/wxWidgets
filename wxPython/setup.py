@@ -189,8 +189,7 @@ wxpExtensions.append(ext)
 # Extension for the GDI module
 swig_sources = run_swig(['gdi.i'], 'src', GENDIR, PKGDIR,
                         USE_SWIG, swig_force, swig_args, swig_deps +
-                        ['src/__gdi_rename.i',
-                         'src/_bitmap.i',
+                        ['src/_bitmap.i',
                          'src/_colour.i',
                          'src/_dc.i',
                          'src/_graphics.i',
@@ -233,9 +232,7 @@ wxpExtensions.append(ext)
 # Extension for the windows module
 swig_sources = run_swig(['windows.i'], 'src', GENDIR, PKGDIR,
                         USE_SWIG, swig_force, swig_args, swig_deps +
-                        ['src/__windows_rename.i',
-                         'src/__windows_reverse.txt',
-                         'src/_panel.i',
+                        ['src/_panel.i',
                          'src/_toplvl.i',
                          'src/_statusbar.i',
                          'src/_splitter.i',
@@ -267,9 +264,7 @@ wxpExtensions.append(ext)
 # Extension for the controls module
 swig_sources = run_swig(['controls.i'], 'src', GENDIR, PKGDIR,
                         USE_SWIG, swig_force, swig_args, swig_deps +
-                        [ 'src/__controls_rename.i',
-                          'src/__controls_reverse.txt',
-                          'src/_toolbar.i',
+                        [ 'src/_toolbar.i',
                           'src/_button.i',
                           'src/_checkbox.i',
                           'src/_choice.i',
@@ -293,6 +288,7 @@ swig_sources = run_swig(['controls.i'], 'src', GENDIR, PKGDIR,
                           'src/_datectrl.i',
                           'src/_hyperlink.i',
                           'src/_picker.i',
+                          'src/_collpane.i',
                           ],
                         True)
 ext = Extension('_controls_', swig_sources,
@@ -312,9 +308,7 @@ wxpExtensions.append(ext)
 # Extension for the misc module
 swig_sources = run_swig(['misc.i'], 'src', GENDIR, PKGDIR,
                         USE_SWIG, swig_force, swig_args, swig_deps +
-                        [ 'src/__misc_rename.i',
-                          'src/__misc_reverse.txt',
-                          'src/_settings.i',
+                        [ 'src/_settings.i',
                           'src/_functions.i',
                           'src/_misc.i',
                           'src/_tipdlg.i',
@@ -445,8 +439,7 @@ wxpExtensions.append(ext)
 
 swig_sources = run_swig(['xrc.i'], 'src', GENDIR, PKGDIR,
                         USE_SWIG, swig_force, swig_args, swig_deps +
-                        [ 'src/_xrc_rename.i',
-                          'src/_xrc_ex.py',
+                        [ 'src/_xrc_ex.py',
                           'src/_xmlres.i',
                           'src/_xmlsub.i',
                           'src/_xml.i',
