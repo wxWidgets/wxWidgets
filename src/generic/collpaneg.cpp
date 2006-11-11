@@ -26,6 +26,7 @@
     #include "wx/toplevel.h"
     #include "wx/button.h"
     #include "wx/sizer.h"
+    #include "wx/panel.h"
 #endif // !WX_PRECOMP
 
 #include "wx/statline.h"
