@@ -77,6 +77,7 @@ move in\*.pdf docs\pdf
 zip wxWidgets-%WXW_VER%-PDF.ZIP docs\pdf\*.pdf
 
 rem copy chm to inno
+cd %WXWIN%
 mkdir c:\wx\inno\wxWidgets\docs\htmlhelp
 copy docs\htmlhelp\wx.chm \wx\inno\wxWidgets\docs\htmlhelp\wx.chm
 cd %WXWIN%\build\script
