@@ -22,6 +22,7 @@
 #include "wx/collpane.h"
 #include "wx/toplevel.h"
 #include "wx/sizer.h"
+#include "wx/panel.h"
 
 #include "wx/gtk/private.h"
 #include "wx/gtk/win_gtk.h"
