@@ -5,11 +5,12 @@
 
    There are several places in the wxWidgets source tree that
    define the version number for the library.  When updating the
-   version number all of these places need edited:
+   version number all of these files must be edited:
 
        {wx}/configure.in
        {wx}/*.spec
        {wx}/include/wx/version.h
+       {wx}/include/msvc/wx/setup.h
        {wx}/src/makeb32.env
        {wx}/src/makeg95.env
        {wx}/src/makevc.env
@@ -33,6 +34,9 @@
 Version: $Id$
 
 $Log$
+Revision 1.6  2006/11/11 20:23:18  VZ
+added include/msvc/wx/setup.h
+
 Revision 1.5  2006/11/09 21:22:18  ABX
 Mention changes for setup.exe
 
