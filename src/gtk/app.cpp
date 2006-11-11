@@ -281,7 +281,7 @@ int wxPoll(wxPollFd *ufds, unsigned int nfds, int timeout)
     unsigned int i;
     for ( i = 0; i < nfds; i++ )
     {
-        wxASSERT_MSG( ufds[i].fd < wxFD_SETSIZE, _T("fd out of range") );
+        wxASSERT_MSG( ufds[i].fd < FD_SETSIZE, _T("fd out of range") );
 
         if ( ufds[i].events & G_IO_IN )
             wxFD_SET(ufds[i].fd, &readfds);
