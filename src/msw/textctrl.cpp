@@ -579,9 +579,6 @@ WXDWORD wxTextCtrl::MSWGetStyle(long style, WXDWORD *exstyle) const
     // styles which we alaways add by default
     if ( style & wxTE_MULTILINE )
     {
-        wxASSERT_MSG( !(style & wxTE_PROCESS_ENTER),
-                      wxT("wxTE_PROCESS_ENTER style is ignored for multiline text controls (they always process it)") );
-
         msStyle |= ES_MULTILINE | ES_WANTRETURN;
         if ( !(style & wxTE_NO_VSCROLL) )
         {
