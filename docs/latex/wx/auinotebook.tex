@@ -6,6 +6,16 @@
 
 \section{\class{wxAuiNotebook}}\label{wxauinotebook}
 
+
+wxAuiNotebook is a notebook control which implements many features common in applications with dockable panes.  Specifically, wxAuiNotebook implements functionality which allows the user to rearrange tab order via drag-and-drop, split the tab window into many different spliiter configurations, and toggle through different themes to customize the control's look and feel.
+
+
+
+An effort has been made to try to maintain an API as similar to that of wxNotebook.
+
+The default theme that is used is wxAuiDefaultTabArt, which provides a modern, glossy look and feel.  The theme can be changed by calling \helpref{wxAuiNotebook::SetArtProvider}{wxauinotebooksetartprovider}
+
+
 \wxheading{Derived from}
 
 \helpref{wxControl}{wxcontrol}
@@ -26,6 +36,7 @@
 
 \func{}{wxAuiNotebook}{\param{wxWindow* }{parent}, \param{wxWindowID }{id = wxID\_ANY}, \param{const wxPoint\& }{pos = wxDefaultPosition}, \param{const wxSize\& }{size = wxDefaultSize}, \param{long }{style = wxAUI\_NB\_DEFAULT\_STYLE}}
 
+Constructor.  Creates a wxAuiNotebok control.
 
 \membersection{wxAuiNotebook::\destruct{wxAuiNotebook}}\label{wxauinotebookdtor}
 
@@ -35,11 +46,6 @@
 \membersection{wxAuiNotebook::AddPage}\label{wxauinotebookaddpage}
 
 \func{bool}{AddPage}{\param{wxWindow* }{page}, \param{const wxString\& }{caption}, \param{bool }{select = false}, \param{const wxBitmap\& }{bitmap = wxNullBitmap}}
-
-
-\membersection{wxAuiNotebook::CalculateTabCtrlHeight}\label{wxauinotebookcalculatetabctrlheight}
-
-\func{int}{CalculateTabCtrlHeight}{\void}
 
 
 \membersection{wxAuiNotebook::Create}\label{wxauinotebookcreate}
@@ -92,16 +98,6 @@
 \constfunc{int}{GetSelection}{\void}
 
 
-\membersection{wxAuiNotebook::GetTabCtrlFromPoint}\label{wxauinotebookgettabctrlfrompoint}
-
-\func{wxAuiTabCtrl*}{GetTabCtrlFromPoint}{\param{const wxPoint\& }{pt}}
-
-
-\membersection{wxAuiNotebook::GetTabFrameFromTabCtrl}\label{wxauinotebookgettabframefromtabctrl}
-
-\func{wxWindow*}{GetTabFrameFromTabCtrl}{\param{wxWindow* }{tab\_ctrl}}
-
-
 \membersection{wxAuiNotebook::InitNotebook}\label{wxauinotebookinitnotebook}
 
 \func{void}{InitNotebook}{\param{long }{style}}
@@ -110,56 +106,6 @@
 \membersection{wxAuiNotebook::InsertPage}\label{wxauinotebookinsertpage}
 
 \func{bool}{InsertPage}{\param{size\_t }{page\_idx}, \param{wxWindow* }{page}, \param{const wxString\& }{caption}, \param{bool }{select = false}, \param{const wxBitmap\& }{bitmap = wxNullBitmap}}
-
-
-\membersection{wxAuiNotebook::OnChildFocus}\label{wxauinotebookonchildfocus}
-
-\func{void}{OnChildFocus}{\param{wxChildFocusEvent\& }{evt}}
-
-
-\membersection{wxAuiNotebook::OnEraseBackground}\label{wxauinotebookonerasebackground}
-
-\func{void}{OnEraseBackground}{\param{wxEraseEvent\& }{evt}}
-
-
-\membersection{wxAuiNotebook::OnRender}\label{wxauinotebookonrender}
-
-\func{void}{OnRender}{\param{wxAuiManagerEvent\& }{evt}}
-
-
-\membersection{wxAuiNotebook::OnSize}\label{wxauinotebookonsize}
-
-\func{void}{OnSize}{\param{wxSizeEvent\& }{evt}}
-
-
-\membersection{wxAuiNotebook::OnTabBeginDrag}\label{wxauinotebookontabbegindrag}
-
-\func{void}{OnTabBeginDrag}{\param{wxCommandEvent\& }{evt}}
-
-
-\membersection{wxAuiNotebook::OnTabButton}\label{wxauinotebookontabbutton}
-
-\func{void}{OnTabButton}{\param{wxCommandEvent\& }{evt}}
-
-
-\membersection{wxAuiNotebook::OnTabClicked}\label{wxauinotebookontabclicked}
-
-\func{void}{OnTabClicked}{\param{wxCommandEvent\& }{evt}}
-
-
-\membersection{wxAuiNotebook::OnTabDragMotion}\label{wxauinotebookontabdragmotion}
-
-\func{void}{OnTabDragMotion}{\param{wxCommandEvent\& }{evt}}
-
-
-\membersection{wxAuiNotebook::OnTabEndDrag}\label{wxauinotebookontabenddrag}
-
-\func{void}{OnTabEndDrag}{\param{wxCommandEvent\& }{evt}}
-
-
-\membersection{wxAuiNotebook::RemoveEmptyTabFrames}\label{wxauinotebookremoveemptytabframes}
-
-\func{void}{RemoveEmptyTabFrames}{\void}
 
 
 \membersection{wxAuiNotebook::RemovePage}\label{wxauinotebookremovepage}
