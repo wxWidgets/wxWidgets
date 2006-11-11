@@ -372,6 +372,38 @@ void FileConfigTestCase::RenameGroup()
                          _T("subentry2=subvalue2\n")
                          _T("[foot/group2]\n"),
                          fc );
+
+    fc.SetPath(_T("foot"));
+
+    CPPUNIT_ASSERT( fc.RenameGroup(_T("group1"), _T("groupTmp")) );
+    wxVERIFY_FILECONFIG( _T("[foot]\n")
+                         _T("entry=value\n")
+                         _T("[foot/groupTmp]\n")
+                         _T("[foot/groupTmp/subgroup]\n")
+                         _T("subentry=subvalue\n")
+                         _T("subentry2=subvalue2\n")
+                         _T("[foot/group2]\n"),
+                         fc );
+
+    CPPUNIT_ASSERT( fc.RenameGroup(_T("group2"), _T("group1")) );
+    wxVERIFY_FILECONFIG( _T("[foot]\n")
+                         _T("entry=value\n")
+                         _T("[foot/groupTmp]\n")
+                         _T("[foot/groupTmp/subgroup]\n")
+                         _T("subentry=subvalue\n")
+                         _T("subentry2=subvalue2\n")
+                         _T("[foot/group1]\n"),
+                         fc );
+
+    CPPUNIT_ASSERT( fc.RenameGroup(_T("groupTmp"), _T("group2")) );
+    wxVERIFY_FILECONFIG( _T("[foot]\n")
+                         _T("entry=value\n")
+                         _T("[foot/group2]\n")
+                         _T("[foot/group2/subgroup]\n")
+                         _T("subentry=subvalue\n")
+                         _T("subentry2=subvalue2\n")
+                         _T("[foot/group1]\n"),
+                         fc );
 }
 
 void FileConfigTestCase::CreateSubgroupAndEntries()
