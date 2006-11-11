@@ -10,14 +10,37 @@
 
 \section{\class{wxCollapsiblePane}}\label{wxcollapsiblepane}
 
-A collapsable panel is a container with an embedded button-like control which can be
+A collapsible pane is a container with an embedded button-like control which can be
 used by the user to collapse or expand the pane's contents.
+
+Once constructed you should use the \helpref{GetPane}{wxcollapsiblepanegetpane}
+function to access the pane and add your controls inside it (i.e. use the
+\helpref{GetPane}{wxcollapsiblepanegetpane}'s returned pointer as parent for the
+controls which must go in the pane, NOT the wxCollapsiblePane itself!).
 
 Note that because of its nature of control which can dynamically (and drastically)
 change its size at run-time under user-input, when putting wxCollapsiblePane inside
 a \helpref{wxSizer}{wxsizer} you should be careful to add it with a proportion value
 of zero; this is because otherwise all other windows with non-null proportion values
-would automatically get resized each time the user expands or collaps the pane window.
+would automatically get resized each time the user expands or collapse the pane window
+resulting usually in a weird, flickering effect.
+
+Usage sample:
+\begin{verbatim}
+    wxCollapsiblePane *collpane = new wxCollapsiblePane(this, wxID_ANY, wxT("Details:"));
+
+    // add the pane with a zero proportion value to the 'sz' sizer which contains it
+    sz->Add(collpane, 0, wxGROW|wxALL, 5);
+
+    // now add a test label in the collapsible pane using a sizer to layout it:
+    wxWindow *win = collpane->GetPane();
+    wxSizer *paneSz = new wxBoxSizer(wxVERTICAL);
+    paneSz->Add(new wxStaticText(win, wxID_ANY, wxT("test!")), 1, wxGROW|wxALL, 2);
+    win->SetSizer(paneSz);
+    paneSz->SetSizeHints(win);
+
+\end{verbatim}
+
 
 It is only available if \texttt{wxUSE\_COLLPANE} is set to $1$ (the default).
 
@@ -132,3 +155,9 @@ Collapses or expands the pane window.
 Same as \texttt{\helpref{Collapse}{wxcollapsiblepanecollapse}(false)}.
 
 
+\membersection{wxCollapsiblePane::GetPane}\label{wxcollapsiblepanegetpane}
+
+\constfunc{wxWindow *}{GetPane}{\void}
+
+Returns a pointer to the pane window. Add controls to the returned \helpref{wxWindow}{wxwindow}
+to make them collapsible.
