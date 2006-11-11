@@ -14445,34 +14445,6 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_Process_GetPid(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  wxPyProcess *arg1 = (wxPyProcess *) 0 ;
-  long result;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject *swig_obj[1] ;
-  
-  if (!args) SWIG_fail;
-  swig_obj[0] = args;
-  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxPyProcess, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Process_GetPid" "', expected argument " "1"" of type '" "wxPyProcess const *""'"); 
-  }
-  arg1 = reinterpret_cast< wxPyProcess * >(argp1);
-  {
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    result = (long)((wxPyProcess const *)arg1)->GetPid();
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) SWIG_fail;
-  }
-  resultobj = SWIG_From_long(static_cast< long >(result));
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
 SWIGINTERN PyObject *_wrap_Process__setCallbackInfo(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   wxPyProcess *arg1 = (wxPyProcess *) 0 ;
@@ -14502,6 +14474,34 @@ SWIGINTERN PyObject *_wrap_Process__setCallbackInfo(PyObject *SWIGUNUSEDPARM(sel
     if (PyErr_Occurred()) SWIG_fail;
   }
   resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Process_GetPid(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxPyProcess *arg1 = (wxPyProcess *) 0 ;
+  long result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxPyProcess, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Process_GetPid" "', expected argument " "1"" of type '" "wxPyProcess const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxPyProcess * >(argp1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = (long)((wxPyProcess const *)arg1)->GetPid();
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_From_long(static_cast< long >(result));
   return resultobj;
 fail:
   return NULL;
@@ -39425,8 +39425,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Process_Open", (PyCFunction) _wrap_Process_Open, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"new_Process", (PyCFunction) _wrap_new_Process, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"delete_Process", (PyCFunction)_wrap_delete_Process, METH_O, NULL},
-	 { (char *)"Process_GetPid", (PyCFunction)_wrap_Process_GetPid, METH_O, NULL},
 	 { (char *)"Process__setCallbackInfo", (PyCFunction) _wrap_Process__setCallbackInfo, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"Process_GetPid", (PyCFunction)_wrap_Process_GetPid, METH_O, NULL},
 	 { (char *)"Process_OnTerminate", (PyCFunction) _wrap_Process_OnTerminate, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Process_Redirect", (PyCFunction)_wrap_Process_Redirect, METH_O, NULL},
 	 { (char *)"Process_IsRedirected", (PyCFunction)_wrap_Process_IsRedirected, METH_O, NULL},

@@ -3866,6 +3866,10 @@ class PrintData(_core.Object):
         """GetOrientation(self) -> int"""
         return _windows_.PrintData_GetOrientation(*args, **kwargs)
 
+    def IsOrientationReversed(*args, **kwargs):
+        """IsOrientationReversed(self) -> bool"""
+        return _windows_.PrintData_IsOrientationReversed(*args, **kwargs)
+
     def IsOk(*args, **kwargs):
         """IsOk(self) -> bool"""
         return _windows_.PrintData_IsOk(*args, **kwargs)
@@ -3918,6 +3922,10 @@ class PrintData(_core.Object):
     def SetOrientation(*args, **kwargs):
         """SetOrientation(self, int orient)"""
         return _windows_.PrintData_SetOrientation(*args, **kwargs)
+
+    def SetOrientationReversed(*args, **kwargs):
+        """SetOrientationReversed(self, bool reversed)"""
+        return _windows_.PrintData_SetOrientationReversed(*args, **kwargs)
 
     def SetPrinterName(*args, **kwargs):
         """SetPrinterName(self, String name)"""

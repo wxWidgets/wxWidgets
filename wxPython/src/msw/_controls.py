@@ -7029,5 +7029,124 @@ class FontPickerEvent(_core.CommandEvent):
     Font = property(GetFont,SetFont,doc="See `GetFont` and `SetFont`") 
 _controls_.FontPickerEvent_swigregister(FontPickerEvent)
 
+#---------------------------------------------------------------------------
+
+CP_DEFAULT_STYLE = _controls_.CP_DEFAULT_STYLE
+CP_NO_TLW_RESIZE = _controls_.CP_NO_TLW_RESIZE
+class CollapsiblePane(_core.Control):
+    """
+    A collapsable pane is a container with an embedded button-like
+    control which can be used by the user to collapse or expand the pane's
+    contents.
+
+    Once constructed you should use the `GetPane` function to access the
+    pane and add your controls inside it (i.e. use the window returned
+    from `GetPane` as the parent for the controls which must go in the
+    pane, NOT the wx.CollapsiblePane itself!).
+
+    Note that because of its nature of control which can dynamically (and
+    drastically) change its size at run-time under user-input, when
+    putting a wx.CollapsiblePane inside a `wx.Sizer` you should be careful
+    to add it with a proportion value of zero; this is because otherwise
+    all other windows with non-zero proportion values would automatically
+    get resized each time the user expands or collapses the pane window,
+    usually resulting a weird, flickering effect.
+    """
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
+        """
+        __init__(self, Window parent, int winid=-1, String label=EmptyString, 
+            Point pos=DefaultPosition, Size size=DefaultSize, 
+            long style=CP_DEFAULT_STYLE, Validator val=DefaultValidator, 
+            String name=CollapsiblePaneNameStr) -> CollapsiblePane
+
+        Create and show a wx.CollapsiblePane
+        """
+        _controls_.CollapsiblePane_swiginit(self,_controls_.new_CollapsiblePane(*args, **kwargs))
+        self._setOORInfo(self)
+
+    def Create(*args, **kwargs):
+        """
+        Create(self, Window parent, int winid=-1, String label=EmptyString, 
+            Point pos=DefaultPosition, Size size=DefaultSize, 
+            long style=CP_DEFAULT_STYLE, Validator val=DefaultValidator, 
+            String name=CollapsiblePaneNameStr) -> bool
+        """
+        return _controls_.CollapsiblePane_Create(*args, **kwargs)
+
+    def Collapse(*args, **kwargs):
+        """
+        Collapse(self, bool collapse=True)
+
+        Collapses or expands the pane window.
+        """
+        return _controls_.CollapsiblePane_Collapse(*args, **kwargs)
+
+    def Expand(*args, **kwargs):
+        """
+        Expand(self)
+
+        Same as Collapse(False).
+        """
+        return _controls_.CollapsiblePane_Expand(*args, **kwargs)
+
+    def IsCollapsed(*args, **kwargs):
+        """
+        IsCollapsed(self) -> bool
+
+        Returns ``True`` if the pane window is currently hidden.
+        """
+        return _controls_.CollapsiblePane_IsCollapsed(*args, **kwargs)
+
+    def IsExpanded(*args, **kwargs):
+        """
+        IsExpanded(self) -> bool
+
+        Returns ``True`` if the pane window is currently shown.
+        """
+        return _controls_.CollapsiblePane_IsExpanded(*args, **kwargs)
+
+    def GetPane(*args, **kwargs):
+        """
+        GetPane(self) -> Window
+
+        Returns a reference to the pane window.  Use the returned `wx.Window`
+        as the parent of widgets to make them part of the collapsible area.
+        """
+        return _controls_.CollapsiblePane_GetPane(*args, **kwargs)
+
+_controls_.CollapsiblePane_swigregister(CollapsiblePane)
+CollapsiblePaneNameStr = cvar.CollapsiblePaneNameStr
+
+def PreCollapsiblePane(*args, **kwargs):
+    """
+    PreCollapsiblePane() -> CollapsiblePane
+
+    Precreate a wx.CollapsiblePane for 2-phase creation.
+    """
+    val = _controls_.new_PreCollapsiblePane(*args, **kwargs)
+    return val
+
+wxEVT_COMMAND_COLLPANE_CHANGED = _controls_.wxEVT_COMMAND_COLLPANE_CHANGED
+EVT_COLLAPSIBLEPANE_CHANGED = wx.PyEventBinder( wxEVT_COMMAND_COLLPANE_CHANGED, 1 )
+
+class CollapsiblePaneEvent(_core.CommandEvent):
+    """Proxy of C++ CollapsiblePaneEvent class"""
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
+        """__init__(self, Object generator, int id, bool collapsed) -> CollapsiblePaneEvent"""
+        _controls_.CollapsiblePaneEvent_swiginit(self,_controls_.new_CollapsiblePaneEvent(*args, **kwargs))
+    def GetCollapsed(*args, **kwargs):
+        """GetCollapsed(self) -> bool"""
+        return _controls_.CollapsiblePaneEvent_GetCollapsed(*args, **kwargs)
+
+    def SetCollapsed(*args, **kwargs):
+        """SetCollapsed(self, bool c)"""
+        return _controls_.CollapsiblePaneEvent_SetCollapsed(*args, **kwargs)
+
+_controls_.CollapsiblePaneEvent_swigregister(CollapsiblePaneEvent)
+
 
 

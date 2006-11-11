@@ -23702,6 +23702,36 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_PrintData_IsOrientationReversed(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxPrintData *arg1 = (wxPrintData *) 0 ;
+  bool result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxPrintData, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "PrintData_IsOrientationReversed" "', expected argument " "1"" of type '" "wxPrintData const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxPrintData * >(argp1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = (bool)((wxPrintData const *)arg1)->IsOrientationReversed();
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  {
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+  }
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_PrintData_IsOk(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   wxPrintData *arg1 = (wxPrintData *) 0 ;
@@ -24102,6 +24132,44 @@ SWIGINTERN PyObject *_wrap_PrintData_SetOrientation(PyObject *SWIGUNUSEDPARM(sel
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
     (arg1)->SetOrientation(arg2);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_PrintData_SetOrientationReversed(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxPrintData *arg1 = (wxPrintData *) 0 ;
+  bool arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  bool val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "reversed", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:PrintData_SetOrientationReversed",kwnames,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxPrintData, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "PrintData_SetOrientationReversed" "', expected argument " "1"" of type '" "wxPrintData *""'"); 
+  }
+  arg1 = reinterpret_cast< wxPrintData * >(argp1);
+  ecode2 = SWIG_AsVal_bool(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "PrintData_SetOrientationReversed" "', expected argument " "2"" of type '" "bool""'");
+  } 
+  arg2 = static_cast< bool >(val2);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    (arg1)->SetOrientationReversed(arg2);
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
@@ -31923,6 +31991,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"PrintData_GetNoCopies", (PyCFunction)_wrap_PrintData_GetNoCopies, METH_O, NULL},
 	 { (char *)"PrintData_GetCollate", (PyCFunction)_wrap_PrintData_GetCollate, METH_O, NULL},
 	 { (char *)"PrintData_GetOrientation", (PyCFunction)_wrap_PrintData_GetOrientation, METH_O, NULL},
+	 { (char *)"PrintData_IsOrientationReversed", (PyCFunction)_wrap_PrintData_IsOrientationReversed, METH_O, NULL},
 	 { (char *)"PrintData_IsOk", (PyCFunction)_wrap_PrintData_IsOk, METH_O, NULL},
 	 { (char *)"PrintData_GetPrinterName", (PyCFunction)_wrap_PrintData_GetPrinterName, METH_O, NULL},
 	 { (char *)"PrintData_GetColour", (PyCFunction)_wrap_PrintData_GetColour, METH_O, NULL},
@@ -31936,6 +32005,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"PrintData_SetNoCopies", (PyCFunction) _wrap_PrintData_SetNoCopies, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"PrintData_SetCollate", (PyCFunction) _wrap_PrintData_SetCollate, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"PrintData_SetOrientation", (PyCFunction) _wrap_PrintData_SetOrientation, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"PrintData_SetOrientationReversed", (PyCFunction) _wrap_PrintData_SetOrientationReversed, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"PrintData_SetPrinterName", (PyCFunction) _wrap_PrintData_SetPrinterName, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"PrintData_SetColour", (PyCFunction) _wrap_PrintData_SetColour, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"PrintData_SetDuplex", (PyCFunction) _wrap_PrintData_SetDuplex, METH_VARARGS | METH_KEYWORDS, NULL},

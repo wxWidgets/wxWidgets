@@ -1881,10 +1881,14 @@ class Process(_core.EvtHandler):
     def __init__(self, *args, **kwargs): 
         """__init__(self, EvtHandler parent=None, int id=-1) -> Process"""
         _misc_.Process_swiginit(self,_misc_.new_Process(*args, **kwargs))
-        self._setCallbackInfo(self, Process)
+        self._setCallbackInfo(self, Process); self.this.own(False)
 
     __swig_destroy__ = _misc_.delete_Process
     __del__ = lambda self : None;
+    def _setCallbackInfo(*args, **kwargs):
+        """_setCallbackInfo(self, PyObject self, PyObject _class)"""
+        return _misc_.Process__setCallbackInfo(*args, **kwargs)
+
     def GetPid(*args, **kwargs):
         """
         GetPid(self) -> long
@@ -1892,10 +1896,6 @@ class Process(_core.EvtHandler):
         get the process ID of the process executed by Open()
         """
         return _misc_.Process_GetPid(*args, **kwargs)
-
-    def _setCallbackInfo(*args, **kwargs):
-        """_setCallbackInfo(self, PyObject self, PyObject _class)"""
-        return _misc_.Process__setCallbackInfo(*args, **kwargs)
 
     def OnTerminate(*args, **kwargs):
         """OnTerminate(self, int pid, int status)"""
@@ -5405,7 +5405,6 @@ class DropTarget(object):
         """GetDefaultAction(self) -> int"""
         return _misc_.DropTarget_GetDefaultAction(*args, **kwargs)
 
-    Data = property(GetData,doc="See `GetData`") 
     DataObject = property(GetDataObject,SetDataObject,doc="See `GetDataObject` and `SetDataObject`") 
     DefaultAction = property(GetDefaultAction,SetDefaultAction,doc="See `GetDefaultAction` and `SetDefaultAction`") 
 _misc_.DropTarget_swigregister(DropTarget)
