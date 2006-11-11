@@ -24,7 +24,7 @@
 // wxCollapsiblePaneBase: interface for wxCollapsiblePane
 // ----------------------------------------------------------------------------
 
-#define wxCP_DEFAULT_STYLE          (wxNO_BORDER)
+#define wxCP_DEFAULT_STYLE          (wxTAB_TRAVERSAL | wxNO_BORDER)
 #define wxCP_NO_TLW_RESIZE          (0x0002)
 
 class WXDLLIMPEXP_CORE wxCollapsiblePaneBase : public wxControl

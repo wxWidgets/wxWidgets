@@ -19,7 +19,7 @@ class WXDLLEXPORT wxButton;
 class WXDLLEXPORT wxStaticLine;
 
 // class name
-extern WXDLLIMPEXP_DATA_CORE(const wxChar) wxGenericCollapsiblePaneNameStr[];
+extern WXDLLIMPEXP_DATA_CORE(const wxChar) wxCollapsiblePaneNameStr[];
 
 
 // ----------------------------------------------------------------------------
@@ -36,9 +36,9 @@ public:
                         const wxString& label,
                         const wxPoint& pos = wxDefaultPosition,
                         const wxSize& size = wxDefaultSize,
-                        long style = wxTAB_TRAVERSAL | wxNO_BORDER,
+                        long style = wxCP_DEFAULT_STYLE,
                         const wxValidator& val = wxDefaultValidator,
-                        const wxString& name = wxGenericCollapsiblePaneNameStr)
+                        const wxString& name = wxCollapsiblePaneNameStr)
     {
         Init();
 
@@ -60,9 +60,9 @@ public:
                 const wxString& label,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
-                long style = wxTAB_TRAVERSAL | wxNO_BORDER,
+                long style = wxCP_DEFAULT_STYLE,
                 const wxValidator& val = wxDefaultValidator,
-                const wxString& name = wxGenericCollapsiblePaneNameStr);
+                const wxString& name = wxCollapsiblePaneNameStr);
 
 
     // public wxCollapsiblePane API

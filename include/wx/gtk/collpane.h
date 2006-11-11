@@ -14,8 +14,6 @@
 
 #include "wx/generic/collpaneg.h"
 
-extern WXDLLIMPEXP_DATA_CORE(const wxChar) wxCollapsiblePaneNameStr[];
-
 // ----------------------------------------------------------------------------
 // wxCollapsiblePane
 // ----------------------------------------------------------------------------
@@ -30,7 +28,7 @@ public:
                         const wxString& label,
                         const wxPoint& pos = wxDefaultPosition,
                         const wxSize& size = wxDefaultSize,
-                        long style = wxTAB_TRAVERSAL | wxNO_BORDER,
+                        long style = wxCP_DEFAULT_STYLE,
                         const wxValidator& val = wxDefaultValidator,
                         const wxString& name = wxCollapsiblePaneNameStr)
     {
@@ -49,7 +47,7 @@ public:
                 const wxString& label,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
-                long style = wxTAB_TRAVERSAL | wxNO_BORDER,
+                long style = wxCP_DEFAULT_STYLE,
                 const wxValidator& val = wxDefaultValidator,
                 const wxString& name = wxCollapsiblePaneNameStr);
 

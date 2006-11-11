@@ -28,8 +28,6 @@
 
 #include <gtk/gtkexpander.h>
 
-const wxChar wxCollapsiblePaneNameStr[] = wxT("CollapsiblePane");
-
 // ============================================================================
 // implementation
 // ============================================================================
@@ -224,8 +222,8 @@ bool wxCollapsiblePane::Create(wxWindow *parent,
     m_insertCallback = gtk_collapsiblepane_insert_callback;
 
     // this the real "pane"
-    m_pPane = new wxWindow(this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
-                           wxNO_BORDER);
+    m_pPane = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
+                           wxTAB_TRAVERSAL|wxNO_BORDER);
 
     gtk_widget_show( GTK_WIDGET(m_widget) );
     m_parent->DoAddChild( this );
